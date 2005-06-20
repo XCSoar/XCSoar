@@ -1,0 +1,229 @@
+/*
+XCSoar Glide Computer
+Copyright (C) 2000 - 2004  M Roberts
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+*/
+#include "stdafx.h"
+#include "Logger.h"
+#include "externs.h"
+
+
+#include <windows.h>
+
+#include <tchar.h>
+
+static TCHAR szFileName[MAX_PATH];
+
+
+void LogPoint(double Lattitude, double Longditude, double Altitude)
+{
+	HANDLE hFile;// = INVALID_HANDLE_VALUE;
+	DWORD dwBytesRead;
+
+	SYSTEMTIME st;
+	char szBRecord[500];
+
+	int DegLat, DegLon;
+	double MinLat, MinLon;
+	char NoS, EoW;
+
+
+	DegLat = (int)Lattitude;
+	MinLat = Lattitude - DegLat;
+	NoS = 'N';
+	if(MinLat<0)
+	{
+		NoS = 'S';
+		DegLat *= -1; MinLat *= -1;
+	}
+	MinLat *= 60;
+	MinLat *= 1000;
+
+
+	DegLon = (int)Longditude ;
+	MinLon = Longditude  - DegLon;
+	EoW = 'E';
+	if(MinLon<0)
+	{
+		EoW = 'W';
+		DegLon *= -1; MinLon *= -1;
+	}
+	MinLon *=60;
+	MinLon *= 1000;
+
+	GetLocalTime(&st);
+
+	hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+
+	sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d0AA\r\n", st.wHour, st.wMinute, st.wSecond, DegLat, MinLat, NoS, DegLon, MinLon, EoW, (int)Altitude,(int)Altitude);
+
+	SetFilePointer(hFile, 0, NULL, FILE_END);
+	WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead, NULL);
+
+	CloseHandle(hFile);
+}
+
+void StartLogger(TCHAR *strAssetNumber)
+{
+	SYSTEMTIME st;
+	HANDLE hFile;
+	int i;
+
+	GetLocalTime(&st);
+
+	for(i=1;i<99;i++)
+	{
+		wsprintf(szFileName,TEXT("\\My Documents\\%04d-%02d-%02d-XXX-%c%c%c-%02d"),st.wYear, st.wMonth, st.wDay, strAssetNumber[0],strAssetNumber[1],strAssetNumber[2],i);
+		_tcscat(szFileName,TEXT(".IGC"));
+
+		hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, 0);
+		if(hFile!=INVALID_HANDLE_VALUE )
+		{
+			CloseHandle(hFile);
+			return;
+		}
+	}
+}
+
+void StartDeclaration(void)
+{
+	char start[] = "C0000000N00000000ETAKEOFF (not defined)\r\n";
+	HANDLE hFile;
+	DWORD dwBytesRead;
+
+	hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+
+	SetFilePointer(hFile, 0, NULL, FILE_END);
+	WriteFile(hFile, start, strlen(start), &dwBytesRead, NULL);
+
+	CloseHandle(hFile);
+}
+
+void EndDeclaration(void)
+{
+	char start[] = "C0000000N00000000ELANDING (not defined)\r\n";
+	HANDLE hFile;
+	DWORD dwBytesRead;
+
+	hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+
+	SetFilePointer(hFile, 0, NULL, FILE_END);
+	WriteFile(hFile, start, strlen(start), &dwBytesRead, NULL);
+
+	CloseHandle(hFile);
+}
+
+
+void AddDeclaration(double Lattitude, double Longditude, TCHAR *ID)
+{
+	DWORD dwBytesRead;
+	HANDLE hFile;
+
+	SYSTEMTIME st;
+	char szCRecord[500];
+
+	char IDString[100];
+	int i;
+
+	int DegLat, DegLon;
+	double MinLat, MinLon;
+	char NoS, EoW;
+
+	for(i=0;i<(int)_tcslen(ID);i++)
+	{
+		IDString[i] = (char)ID[i];
+	}
+	IDString[i] = '\0';
+
+	DegLat = (int)Lattitude;
+	MinLat = Lattitude - DegLat;
+	NoS = 'N';
+	if(MinLat<0)
+	{
+		NoS = 'S';
+		DegLat *= -1; MinLat *= -1;
+	}
+	MinLat *= 60;
+	MinLat *= 1000;
+
+
+	DegLon = (int)Longditude ;
+	MinLon = Longditude  - DegLon;
+	EoW = 'E';
+	if(MinLon<0)
+	{
+		EoW = 'W';
+		DegLon *= -1; MinLon *= -1;
+	}
+	MinLon *=60;
+	MinLon *= 1000;
+
+	GetLocalTime(&st);
+
+	hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+
+	sprintf(szCRecord,"C%02d%05.0f%c%03d%05.0f%c%s\r\n", DegLat, MinLat, NoS, DegLon, MinLon, EoW, IDString);
+
+	SetFilePointer(hFile, 0, NULL, FILE_END);
+	WriteFile(hFile, szCRecord, strlen(szCRecord), &dwBytesRead, NULL);
+
+	CloseHandle(hFile);
+}
+
+
+void DoLogger(TCHAR *strAssetNumber)
+{
+	TCHAR TaskMessage[1024];
+  int i;
+
+  if(LoggerActive)
+	{
+		if(MessageBox(hWndMapWindow,TEXT("Stop Logger"),TEXT("Stop Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+		{
+			LoggerActive = FALSE;
+		}
+	}
+	else
+	{
+		_tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
+		for(i=0;i<MAXTASKPOINTS;i++)
+		{
+			if(Task[i].Index == -1)
+			{
+				if(i==0)
+				{
+					_tcscat(TaskMessage,TEXT("None"));
+				}
+				break;
+			}
+			_tcscat(TaskMessage,WayPointList[ Task[i].Index ].Name);
+			_tcscat(TaskMessage,TEXT("\r\n"));
+		}
+
+		if(MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+		{
+			LoggerActive = TRUE;
+			StartLogger(strAssetNumber);
+			StartDeclaration();
+			for(i=0;i<MAXTASKPOINTS;i++)
+			{
+				if(Task[i].Index == -1) break;
+				AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
+			}
+			EndDeclaration();
+		}
+	}
+}
