@@ -1,0 +1,800 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "newres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_XCSOAR              ICON    DISCARDABLE     "XCSoar.ICO"
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""newres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 139, 83
+STYLE WS_CHILD
+EXSTYLE 0x80000000L
+FONT 10, "Arial"
+BEGIN
+    ICON            IDI_XCSOAR,IDC_STATIC,7,7,20,20
+    LTEXT           "XCSoar",IDC_STATIC,32,7,101,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2003,2004",IDC_STATIC,32,25,101,8
+    LTEXT           "Version 3.0",IDC_STATIC,32,16,101,8,SS_NOPREFIX
+    LTEXT           "Processor",IDC_STATIC,11,45,35,8,SS_NOPREFIX
+    LTEXT           "OS Version",IDC_STATIC,10,55,40,8,SS_NOPREFIX
+    LTEXT           "",IDC_PROCESSOR,47,45,66,8
+    LTEXT           "",IDC_OSVERSION,50,55,68,8
+    LTEXT           "",IDC_EXTRA,10,67,117,8
+    GROUPBOX        "System Information",IDC_STATIC,7,36,126,43
+END
+
+IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 139, 43
+STYLE DS_SETFOREGROUND | DS_CENTER | WS_VISIBLE | WS_CAPTION
+CAPTION "Please Wait..."
+FONT 10, "System"
+BEGIN
+    EDITTEXT        IDC_MESSAGE,7,7,120,14,ES_CENTER | ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PROGRESS,23,25,87,14,ES_CENTER | ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDD_SELECT DIALOG DISCARDABLE  0, 0, 140, 123
+STYLE DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Select Option"
+FONT 10, "Arial"
+BEGIN
+    LISTBOX         IDC_CRUISE,4,8,65,100,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
+                    WS_HSCROLL | WS_TABSTOP
+    LISTBOX         IDC_CLIMB,70,8,65,100,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
+                    WS_HSCROLL | WS_TABSTOP
+    PUSHBUTTON      "OK",IDOK,3,109,132,14
+    LTEXT           "Cruise",IDC_STATIC,4,0,21,8
+    LTEXT           "Climb",IDC_STATIC,70,0,21,8
+END
+
+IDD_BUGSBALLAST DIALOG DISCARDABLE  10, 10, 134, 111
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Bugs & Ballast"
+FONT 10, "Arial"
+BEGIN
+    PUSHBUTTON      "^",IDC_BUGSUP,7,12,54,21
+    EDITTEXT        IDC_BUGS,7,33,54,26,ES_AUTOHSCROLL | ES_NUMBER
+    PUSHBUTTON      "v",IDC_BUGSDOWN,7,59,55,20
+    GROUPBOX        "Bugs %",IDC_STATIC1,3,0,61,82
+    PUSHBUTTON      "^",IDC_BALLASTUP,70,12,54,21
+    EDITTEXT        IDC_BALLAST,70,33,54,26,ES_AUTOHSCROLL | ES_NUMBER
+    PUSHBUTTON      "v",IDC_BALLASTDOWN,70,59,55,20
+    GROUPBOX        "Ballast %",IDC_STATIC2,67,0,63,82
+    DEFPUSHBUTTON   "OK",IDOK,3,85,128,21
+END
+
+IDD_COLOURSEL DIALOG DISCARDABLE  0, 0, 140, 55
+STYLE DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Colour Select"
+FONT 8, "System"
+BEGIN
+    CONTROL         136,IDC_BM16,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,70,35,15,13,WS_EX_STATICEDGE
+    CONTROL         121,IDC_BM1,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,22,7,15,13,WS_EX_STATICEDGE
+    CONTROL         122,IDC_BM2,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,38,7,15,13,WS_EX_STATICEDGE
+    CONTROL         123,IDC_BM3,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,54,7,15,13,WS_EX_STATICEDGE
+    CONTROL         124,IDC_BM4,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,70,7,15,13,WS_EX_STATICEDGE
+    CONTROL         125,IDC_BM5,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,86,7,15,13,WS_EX_STATICEDGE
+    CONTROL         126,IDC_BM6,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,102,7,15,13,WS_EX_STATICEDGE
+    CONTROL         127,IDC_BM7,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,22,21,15,13,WS_EX_STATICEDGE
+    CONTROL         128,IDC_BM8,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,38,21,15,13,WS_EX_STATICEDGE
+    CONTROL         129,IDC_BM9,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,54,21,15,13,WS_EX_STATICEDGE
+    CONTROL         130,IDC_BM10,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,70,21,15,13,WS_EX_STATICEDGE
+    CONTROL         131,IDC_BM11,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,86,21,15,13,WS_EX_STATICEDGE
+    CONTROL         132,IDC_BM12,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,102,21,15,13,WS_EX_STATICEDGE
+    CONTROL         133,IDC_BM13,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,22,35,15,13,WS_EX_STATICEDGE
+    CONTROL         134,IDC_BM14,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,38,35,15,13,WS_EX_STATICEDGE
+    CONTROL         135,IDC_BM15,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,54,35,15,13,WS_EX_STATICEDGE
+    CONTROL         138,IDC_BM17,"Static",SS_BITMAP | SS_NOTIFY | 
+                    SS_CENTERIMAGE,86,35,15,13,WS_EX_STATICEDGE
+END
+
+IDD_REGISTER DIALOG DISCARDABLE  0, 0, 140, 80
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    CTEXT           "",IDC_ASSETNUMBER,24,27,94,15,WS_BORDER
+    EDITTEXT        IDC_REGKEY,22,55,95,14,ES_CENTER | ES_UPPERCASE | 
+                    ES_AUTOHSCROLL
+    LTEXT           "Serial Number",IDC_STATIC1,24,17,92,8
+    LTEXT           "Registration Code",IDC_STATIC3,22,46,95,8
+    GROUPBOX        "Registration Details",IDC_STATIC,18,3,103,69
+END
+
+IDD_AIRSPACEALT DIALOG DISCARDABLE  0, 0, 141, 129
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    CONTROL         "Display All Airspace",IDC_ALL,"Button",
+                    BS_AUTORADIOBUTTON,11,19,77,10
+    CONTROL         "Only Display Airspace Below",IDC_CLIP,"Button",
+                    BS_AUTORADIOBUTTON,11,32,105,10
+    CONTROL         "Display Airspace Below Me",IDC_BELOW,"Button",
+                    BS_AUTORADIOBUTTON,11,63,100,10
+    CONTROL         "Auto Airspace Display",IDC_AUTO,"Button",
+                    BS_AUTORADIOBUTTON,11,79,85,10
+    EDITTEXT        IDC_CLIPALT,33,45,59,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ALTTOL,61,95,40,14,ES_AUTOHSCROLL
+    LTEXT           "meters",IDC_STATIC,93,50,23,8
+    LTEXT           "Vertical Margin",IDC_STATIC,30,92,28,17
+    LTEXT           "meters",IDC_STATIC,104,98,23,8
+    GROUPBOX        "Airspace Display",IDC_STATIC,0,0,135,123
+END
+
+IDD_FGLIDE DIALOG DISCARDABLE  10, 10, 140, 41
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    EDITTEXT        IDC_SALT,34,14,45,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Meters",IDC_STATIC1,82,18,23,8
+    GROUPBOX        "Saftey Altitude",IDC_SALTB,30,3,79,30
+END
+
+IDD_POLAR DIALOG DISCARDABLE  10, 10, 134, 128
+STYLE DS_CENTER | WS_CHILD
+FONT 10, "System"
+BEGIN
+    COMBOBOX        IDC_POLAR,6,17,119,44,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    GROUPBOX        "Polar",IDC_STATIC,0,0,130,33
+END
+
+IDD_DISPLAY DIALOG DISCARDABLE  10, 10, 140, 124
+STYLE WS_CHILD
+FONT 8, "System"
+BEGIN
+    CONTROL         "North Up",IDC_NORTHUP,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,24,15,45,10
+    CONTROL         "Track Up",IDC_TRACKUP,"Button",BS_AUTORADIOBUTTON,24,25,
+                    44,10
+    CONTROL         "North Up When Circling",IDC_NORTHCIRCLE,"Button",
+                    BS_AUTORADIOBUTTON | BS_MULTILINE,77,13,47,24
+    GROUPBOX        "Screen",IDC_STATIC,20,7,109,33
+    CONTROL         "Names",IDC_WAYPOINTNAME,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,25,50,37,10
+    CONTROL         "Numbers",IDC_WAYPOINTNUMBERS,"Button",
+                    BS_AUTORADIOBUTTON,65,49,44,10
+    CONTROL         "First 5 Letters",IDC_WAYPOINTFIRSTFIVE,"Button",
+                    BS_AUTORADIOBUTTON,25,70,61,10
+    CONTROL         "First 3 Letters",IDC_WAYPOINTFIRSTTHREE,"Button",
+                    BS_AUTORADIOBUTTON,25,80,61,10
+    CONTROL         "None",IDC_WAYPOINTNONE,"Button",BS_AUTORADIOBUTTON,25,
+                    60,33,10
+    GROUPBOX        "Display",IDC_STATIC,19,41,110,52
+    CONTROL         "Display",IDC_SNAIL,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,24,104,39,10
+    GROUPBOX        "Snail Trail",IDC_STATIC,20,94,109,24
+END
+
+IDD_UNITS DIALOG DISCARDABLE  10, 10, 163, 103
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    DEFPUSHBUTTON   "Button1",IDOK,152,94,6,6
+    CONTROL         "Statute",IDC_SPEED_STATUTE,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,25,17,40,10
+    CONTROL         "Nautical",IDC_SPEED_NAUTICAL,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,25,27,41,10
+    CONTROL         "Metric",IDC_SPEED_METRIC,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,25,37,35,10
+    GROUPBOX        "Speed",IDC_STATIC,19,7,48,42
+    CONTROL         "Statute",IDC_DISTANCE_STATUTE,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,25,60,40,10
+    CONTROL         "Nautical",IDC_DISTANCE_NAUTICAL,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,25,71,41,10
+    CONTROL         "Metric",IDC_DISTANCE_METRIC,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,25,81,35,10
+    GROUPBOX        "Distance",IDC_STATIC,19,50,48,45
+    CONTROL         "Feet",IDC_ALTITUDE_FEET,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,77,15,31,10
+    CONTROL         "Meters",IDC_ALTITUDE_METRES,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,77,26,38,10
+    GROUPBOX        "Altitude",IDC_STATIC,72,7,48,32
+    CONTROL         "Knots",IDC_LIFT_KNOTS,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,75,52,34,10
+    CONTROL         "Meters",IDC_LIFT_METRES,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,75,62,38,10
+    GROUPBOX        "Lift",IDC_STATIC,72,41,48,34
+END
+
+IDD_TASKSETTINGS DIALOG DISCARDABLE  0, 0, 140, 100
+STYLE DS_CENTER | WS_CHILD
+FONT 10, "System"
+BEGIN
+    CONTROL         "Line",IDC_STARTLINE,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,9,12,29,10
+    CONTROL         "Cylinder",IDC_STARTCYLINDER,"Button",BS_AUTORADIOBUTTON,
+                    38,12,42,10
+    LTEXT           "Radius",IDC_STATIC,9,27,23,8
+    EDITTEXT        IDC_STARTRADIUS,35,24,35,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "m",IDC_STATIC,70,28,10,8
+    GROUPBOX        "Start Line",IDC_STATIC,2,2,85,41
+    CONTROL         "FAI Sector",IDC_FAI,"Button",BS_AUTORADIOBUTTON,9,56,47,
+                    10
+    CONTROL         "Cylinder",IDC_CYLINDER,"Button",BS_AUTORADIOBUTTON,10,
+                    69,36,11
+    EDITTEXT        IDC_CYLINDERRADIUS,61,65,27,12,ES_AUTOHSCROLL
+    LTEXT           "Radius",IDC_STATIC1,61,57,22,7
+    LTEXT           "m",IDC_STATIC2,90,68,9,7
+    GROUPBOX        "Turn Point Type",IDC_STATIC,3,45,103,38
+END
+
+IDD_TASK DIALOG DISCARDABLE  5, 5, 134, 166
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Task"
+FONT 10, "System"
+BEGIN
+    LISTBOX         IDC_WAYPOINTS,0,10,68,115,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_HSCROLL | WS_TABSTOP
+    LISTBOX         IDC_TASK,68,10,63,72,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
+                    WS_TABSTOP
+    PUSHBUTTON      "->",IDC_ADD,71,91,30,16
+    PUSHBUTTON      "<-",IDC_REMOVE,101,91,30,16
+    PUSHBUTTON      "Load",IDC_LOAD,3,126,62,16
+    PUSHBUTTON      "Save",IDC_SAVE,68,126,63,16
+    DEFPUSHBUTTON   "OK",IDOK,3,143,128,19
+    LTEXT           "Waypoints",IDC_STATIC1,0,0,35,8
+    LTEXT           "Task",IDC_STATIC2,67,0,16,8
+    LTEXT           "Total",IDC_STATIC3,71,82,17,8
+    LTEXT           "Static",IDC_TASKLENGTH,93,82,37,8
+    PUSHBUTTON      "AAT Settings",IDC_AAT,71,108,60,17
+END
+
+IDD_COLOUR DIALOG DISCARDABLE  0, 0, 140, 74
+STYLE WS_CHILD
+FONT 8, "System"
+BEGIN
+    PUSHBUTTON      "CLASS A",IDC_CLASSA,16,8,35,14
+    PUSHBUTTON      "CLASS B",IDC_CLASSB,16,23,35,14
+    PUSHBUTTON      "CLASS C",IDC_CLASSC,16,38,35,14
+    PUSHBUTTON      "CLASS D",IDC_CLASSD,16,52,35,14
+    PUSHBUTTON      "Prohibit",IDC_PROHIBITED,52,8,35,14
+    PUSHBUTTON      "Restrict",IDC_RESTRICTED,52,23,35,14
+    PUSHBUTTON      "Danger",IDC_DANGER,52,38,35,14
+    PUSHBUTTON      "CTR",IDC_CTR,52,52,35,14
+    PUSHBUTTON      "No Glider",IDC_NOGLIDER,88,8,35,14
+    PUSHBUTTON      "Wave",IDC_WAVE,88,23,35,14
+    PUSHBUTTON      "Other",IDC_OTHER,88,38,35,14
+    PUSHBUTTON      "AAT",IDC_AAT,88,52,35,14
+END
+
+IDD_AIRSPACEPRESS DIALOG DISCARDABLE  0, 0, 139, 120
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Altitude"
+FONT 10, "Arial"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,6,86,125,26
+    EDITTEXT        IDC_QNH,50,22,50,19,ES_AUTOHSCROLL
+    RTEXT           "QNH",IDC_STATIC1,10,23,39,18
+    LTEXT           "mb",IDC_STATIC2,102,22,29,17
+    CTEXT           "",IDC_INHG,30,64,50,19,WS_BORDER
+    LTEXT           """ Hg",IDC_STATIC3,80,64,52,19
+    PUSHBUTTON      "v",IDC_DOWN,50,41,50,19
+    PUSHBUTTON      "^",IDC_UP,50,3,50,19
+END
+
+IDD_COMM DIALOG DISCARDABLE  0, 0, 140, 75
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    COMBOBOX        IDC_COMMPORT,61,12,57,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_PORTSPEED,61,30,57,30,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    RTEXT           "COMM Port",IDC_STATIC,20,13,37,8
+    RTEXT           "Port Speed",IDC_STATIC,13,31,44,12
+END
+
+IDD_PROFILESAVE DIALOG DISCARDABLE  0, 0, 140, 47
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    DEFPUSHBUTTON   "S A V E",IDC_SAVE,15,26,108,14
+    PUSHBUTTON      "Browse",IDC_BROWSE,73,7,50,14
+    EDITTEXT        IDC_FILE,15,7,51,14,ES_RIGHT | ES_AUTOHSCROLL
+END
+
+IDD_PROFILELOAD DIALOG DISCARDABLE  0, 0, 140, 47
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    DEFPUSHBUTTON   "L O A D",IDC_LOAD,15,26,108,14
+    PUSHBUTTON      "Browse",IDC_BROWSE,73,7,50,14
+    EDITTEXT        IDC_FILE,15,7,51,14,ES_RIGHT | ES_AUTOHSCROLL
+END
+
+IDD_AIRSPACEWARN DIALOG DISCARDABLE  0, 0, 113, 80
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    EDITTEXT        IDC_EDIT,20,43,40,14,ES_AUTOHSCROLL
+    CONTROL         "Enable",IDC_ENABLE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,13,18,37,10
+    LTEXT           "Seconds",IDC_STATIC,61,47,28,8
+    GROUPBOX        "Warning Time",IDC_STATIC,11,32,85,32
+    GROUPBOX        "Airspace Warnings",IDC_STATIC,3,4,104,69
+END
+
+IDD_FILES DIALOG DISCARDABLE  0, 0, 141, 92
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    EDITTEXT        IDC_AIRSPACEFILE,4,9,75,14,ES_RIGHT | ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse..",IDC_BROWSEAIRSPACE,81,9,50,14
+    EDITTEXT        IDC_WAYPOINTSFILE,3,39,75,14,ES_RIGHT | ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse..",IDC_BROWSEWAYPOINT,81,39,50,14
+    EDITTEXT        IDC_TERRAINFILE,4,69,75,14,ES_RIGHT | ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse..",IDC_BROWSETERRAIN,81,68,50,14
+    GROUPBOX        "Terrain File Name",IDC_STATIC,0,60,135,26
+    GROUPBOX        "Waypoints File Name",IDC_STATIC,0,30,135,27
+    GROUPBOX        "Airspace File Name",IDC_STATIC,0,0,135,29
+END
+
+IDD_MENU DIALOG DISCARDABLE  0, 0, 91, 132
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP
+EXSTYLE WS_EX_STATICEDGE
+FONT 14, "System"
+BEGIN
+    PUSHBUTTON      "Bugs + Ballast",IDD_BUGS,10,2,71,15
+    PUSHBUTTON      "Pressure",IDD_PRESSURE,10,18,71,15
+    PUSHBUTTON      "Task",IDD_TASK,10,34,71,15
+    PUSHBUTTON      "Settings",IDD_SETTINGS,10,50,71,15
+    CONTROL         "Screen Lock",IDD_LOCK,"Button",BS_AUTOCHECKBOX | 
+                    BS_CENTER | BS_VCENTER | WS_TABSTOP,10,66,71,15
+    PUSHBUTTON      "Logger",IDD_LOGGER,10,82,71,15
+    PUSHBUTTON      "Cancel",IDD_BACK,10,98,71,15
+    PUSHBUTTON      "Exit",IDD_EXIT,10,114,71,15
+END
+
+IDD_SETTINGS DIALOG DISCARDABLE  0, 0, 140, 146
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Assigned Area Task"
+FONT 8, "System"
+BEGIN
+    COMBOBOX        IDC_SETTINGS,2,2,130,87,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+IDD_AAT DIALOG DISCARDABLE  0, 0, 140, 146
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Settings"
+FONT 8, "System"
+BEGIN
+    COMBOBOX        IDC_SETTINGS,2,2,130,87,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDC_XCSOAR ACCELERATORS DISCARDABLE 
+BEGIN
+    "Q",            IDOK,                   VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 132
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 76
+    END
+
+    IDD_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 126
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 36
+    END
+
+    IDD_BUGSBALLAST, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 110
+    END
+
+    IDD_TASK, DIALOG
+    BEGIN
+        RIGHTMARGIN, 121
+        BOTTOMMARGIN, 126
+    END
+
+    IDD_MENU, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 56
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 125
+    END
+
+    IDD_SETTINGS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 129
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 140
+    END
+
+    IDD_AAT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 129
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 140
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_POLAR DLGINIT
+BEGIN
+    IDC_POLAR, 0x403, 2, 0
+0x0000, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_APP_TITLE           "XCSoar"
+    IDC_XCSOAR              "XCSOAR"
+    IDS_CONNECTWAIT         "Waiting For GPS Connection"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_LOCKWAIT            "Waiting for Valid GPS Fix"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.K.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_AATSTART DIALOG DISCARDABLE  0, 0, 81, 94
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    CONTROL         "AAT Enabled",IDC_ENABLE,"Button",BS_AUTORADIOBUTTON,7,
+                    14,57,10
+    CONTROL         "AAT Disabled",IDC_DISABLE,"Button",BS_AUTORADIOBUTTON,6,
+                    27,58,10
+    GROUPBOX        "Task Type",IDC_STATIC,1,0,70,42
+    EDITTEXT        IDC_TIME,4,59,40,14,ES_AUTOHSCROLL
+    LTEXT           "mins",IDC_STATIC,48,63,17,8
+    GROUPBOX        "Task Length",IDC_STATIC,0,49,70,27
+END
+
+IDD_AATTURN DIALOG DISCARDABLE  0, 0, 109, 99
+STYLE DS_CENTER | WS_CHILD
+FONT 8, "System"
+BEGIN
+    CONTROL         "Sector",IDC_SECTOR,"Button",BS_AUTORADIOBUTTON,0,0,37,
+                    10
+    CONTROL         "Circle",IDC_CIRCLE,"Button",BS_AUTORADIOBUTTON,0,67,33,
+                    10
+    LTEXT           "Start Radial",IDC_STATIC,6,17,38,8
+    LTEXT           "Finish Radial",IDC_STATIC,5,34,40,8
+    EDITTEXT        IDC_STARTRADIAL,50,13,40,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_FINISHRADIAL,50,29,40,14,ES_AUTOHSCROLL
+    LTEXT           "Radius",IDC_STATIC,8,48,22,8
+    EDITTEXT        IDC_SECTORRADIUS,50,46,40,14,ES_AUTOHSCROLL
+    LTEXT           "Radius",IDC_STATIC,7,80,22,8
+    EDITTEXT        IDC_CIRCLERADIUS,34,79,40,14,ES_AUTOHSCROLL
+    GROUPBOX        "",IDC_STATIC,0,6,99,58
+    GROUPBOX        "",IDC_STATIC,0,72,100,23
+END
+
+IDD_AATFINISH DIALOG DISCARDABLE  0, 0, 98, 106
+STYLE WS_CHILD
+FONT 8, "System"
+BEGIN
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_AATSTART, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 74
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 87
+    END
+
+    IDD_AATTURN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 102
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 92
+    END
+
+    IDD_AATFINISH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 91
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 99
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menubar
+//
+
+IDM_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "Menu"
+    BEGIN
+        POPUP "File"
+        BEGIN
+            MENUITEM "&About",                      IDM_FILE_ABOUT
+            MENUITEM "&Register",                   IDM_FILE_REGISTER
+            MENUITEM "&Lock",                       IDM_FILE_LOCK
+            MENUITEM "Logger",                      IDM_FILE_LOGGER
+            POPUP "&Profile"
+            BEGIN
+                MENUITEM "&Load",                       IDM_FILE_PROFILE_LOAD
+
+                MENUITEM "&Save",                       IDM_FILE_PROFILE_SAVE
+
+            END
+            MENUITEM "&Exit",                       IDM_FILE_EXIT
+        END
+        MENUITEM "Bugs + Ballast",              IDM_BUGSBALLAST
+        MENUITEM "Pressure",                    IDM_PRESSURE
+        POPUP "Task"
+        BEGIN
+            MENUITEM "Task",                        IDM_TASK_TASK
+            MENUITEM "AAT",                         IDM_TASK_ASSIGNEDAREA
+        END
+        POPUP "Settings"
+        BEGIN
+            POPUP "Airspace"
+            BEGIN
+                MENUITEM "Display",                     IDM_SETTINGS_AIRSPACE_DISPLAY
+
+                MENUITEM "Colours",                     IDM_SETTINGS_AIRSPACE_COLOUR
+
+                MENUITEM "Warnings",                    IDM_SETTINGS_AIRSPACE_WARNINGS
+
+            END
+            MENUITEM "COM Port",                    IDM_SETTINGS_COMM
+            MENUITEM "&Display",                    IDM_SETTINGS_DISPLAY
+            POPUP "&Files"
+            BEGIN
+                MENUITEM "&Airspace",                   IDM_SETTINGS_FILES_AIRSPACE
+
+                MENUITEM "Terrain",                     IDM_SETTINGS_FILES_TERRAIN
+
+                MENUITEM "&Waypoints",                  IDM_SETTINGS_FILES_WAYPOINTS
+
+            END
+            MENUITEM "&Final Glide",                IDM_SETTINGS_FGLIDE
+            MENUITEM "&Polar",                      IDM_SETTINGS_POLAR
+            POPUP "&Task"
+            BEGIN
+                MENUITEM "&Start Line",                 IDM_SETTINGS_TASK_START
+
+                MENUITEM "&Turn Points",                IDM_SETTINGS_TASK_TURN
+
+            END
+            MENUITEM "&Units",                      IDM_SETTINGS_UNITS
+        END
+    END
+END
+
+IDM_MENU1 MENU DISCARDABLE 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "&About",                      IDM_FILE_ABOUT
+        MENUITEM "&Register",                   IDM_FILE_REGISTER
+        MENUITEM "&Lock",                       IDM_FILE_LOCK
+        MENUITEM "Logger",                      IDM_FILE_LOGGER
+        POPUP "&Profile"
+        BEGIN
+            MENUITEM "&Load",                       IDM_FILE_PROFILE_LOAD
+            MENUITEM "&Save",                       IDM_FILE_PROFILE_SAVE
+        END
+        MENUITEM "&Exit",                       IDM_FILE_EXIT
+    END
+    MENUITEM "Bugs Balst",                  IDM_BUGSBALLAST
+    MENUITEM "Pressure",                    IDM_PRESSURE
+    POPUP "Task"
+    BEGIN
+        MENUITEM "Task",                        IDM_TASK_TASK
+        MENUITEM "AAT",                         IDM_TASK_ASSIGNEDAREA
+    END
+    POPUP "Settings"
+    BEGIN
+        POPUP "Airspace"
+        BEGIN
+            MENUITEM "Display",                     IDM_SETTINGS_AIRSPACE_DISPLAY
+
+            MENUITEM "Colours",                     IDM_SETTINGS_AIRSPACE_COLOUR
+
+            MENUITEM "Warnings",                    IDM_SETTINGS_AIRSPACE_WARNINGS
+
+        END
+        MENUITEM "COM Port",                    IDM_SETTINGS_COMM
+        MENUITEM "&Display",                    IDM_SETTINGS_DISPLAY
+        POPUP "&Files"
+        BEGIN
+            MENUITEM "&Airspace",                   IDM_SETTINGS_FILES_AIRSPACE
+
+            MENUITEM "Terrain",                     IDM_SETTINGS_FILES_TERRAIN
+
+            MENUITEM "&Waypoints",                  IDM_SETTINGS_FILES_WAYPOINTS
+
+        END
+        MENUITEM "&Final Glide",                IDM_SETTINGS_FGLIDE
+        MENUITEM "&Polar",                      IDM_SETTINGS_POLAR
+        POPUP "&Task"
+        BEGIN
+            MENUITEM "&Start Line",                 IDM_SETTINGS_TASK_START
+            MENUITEM "&Turn Points",                IDM_SETTINGS_TASK_TURN
+        END
+        MENUITEM "&Units",                      IDM_SETTINGS_UNITS
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP1             BITMAP  DISCARDABLE     "Bitmaps\\bitmap1.bmp"
+IDB_BITMAP2             BITMAP  DISCARDABLE     "Bitmaps\\bitmap2.bmp"
+IDB_BITMAP3             BITMAP  DISCARDABLE     "Bitmaps\\bitmap3.bmp"
+IDB_BITMAP4             BITMAP  DISCARDABLE     "Bitmaps\\bitmap4.bmp"
+IDB_BITMAP5             BITMAP  DISCARDABLE     "Bitmaps\\bitmap5.bmp"
+IDB_BITMAP6             BITMAP  DISCARDABLE     "Bitmaps\\bitmap6.bmp"
+IDB_BITMAP7             BITMAP  DISCARDABLE     "Bitmaps\\bitmap7.bmp"
+IDB_BITMAP8             BITMAP  DISCARDABLE     "Bitmaps\\bitmap8.bmp"
+IDB_BITMAP9             BITMAP  DISCARDABLE     "Bitmaps\\bitmap9.bmp"
+IDB_BITMAP10            BITMAP  DISCARDABLE     "Bitmaps\\bitmap10.bmp"
+IDB_BITMAP11            BITMAP  DISCARDABLE     "Bitmaps\\bitmap11.bmp"
+IDB_BITMAP12            BITMAP  DISCARDABLE     "Bitmaps\\bitmap12.bmp"
+IDB_BITMAP13            BITMAP  DISCARDABLE     "Bitmaps\\bitmap13.bmp"
+IDB_BITMAP14            BITMAP  DISCARDABLE     "Bitmaps\\bitmap14.bmp"
+IDB_BITMAP15            BITMAP  DISCARDABLE     "Bitmaps\\bitmap15.bmp"
+IDB_BITMAP16            BITMAP  DISCARDABLE     "Bitmaps\\bitmap16.bmp"
+IDB_BITMAP17            BITMAP  DISCARDABLE     "Bitmaps\\bitmap17.bmp"
+IDB_BITMAP18            BITMAP  DISCARDABLE     "Bitmaps\\bitmap18.bmp"
+IDB_LANDABLE            BITMAP  DISCARDABLE     "Bitmaps\\Landable.bmp"
+IDB_REACHABLE           BITMAP  DISCARDABLE     "Bitmaps\\Reachable.bmp"
+IDB_TURNPOINT           BITMAP  DISCARDABLE     "Bitmaps\\Turnpoint.bmp"
+IDB_SMALL               BITMAP  DISCARDABLE     "Bitmaps\\small.bmp"
+#endif    // English (U.K.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
