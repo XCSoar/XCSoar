@@ -1,0 +1,394 @@
+============================================================================
+SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
+============================================================================
+
+Summary of new features since v4.0
+- Fullscreen mode (app button 1 in map mode); app button 2 now
+  toggles snail trail
+- Terrain shading via phong model, direction set by wind direction
+- Wind vectors multiple for 10 knot increments
+- Saving/loading wind to registry
+- Time aloft infobox (in Waypoint Group)
+- New wind calculation method
+- Rendering of airspace with cross-hatches
+- Added pilot/aircraft information in logger
+- Added "Remove" button on waypoint details task page
+
+Bug fixes and code improvements
+- Sound files are now in the code as resources, so no need for Audio directory
+- Filtering of files:
+   Waypoints [.txt]
+   Airspace [.txt]
+   Terrain [.dat]
+   Topology [.tpl]
+   Polars [.plr]
+- Reduced extraneous refresh of navboxes
+- Font size improvements
+- Second COMM port disabled if set equal to port 1
+- Audio thread is suspended when quiet
+- Auto McReady now working again
+- Improvements to topology handling
+- Better terrain color map
+- Terrain shading works with elevation files of any resolution.
+- Terrain at sea level or below is rendered as water.
+- Minor improvements to thread safety
+- Larger Menu page buttons
+- Fixed McReady speed calculation with zero distance
+- Bug fixes by Samuel Gisiger (Airspace not displaying, extraneous
+  selection of waypoints at zoom levels)
+- Improved map window responsiveness (only re-drawn when necessary, avoiding
+  CPU waste of unnecessary re-draws).
+- Many hard-wired constants relocated to Sizes.h file
+- Waypoint labels have white background so not obscured by terrain
+- Labels of topological features now supported
+
+============================================================================
+HARDWARE BUTTONS
+============================================================================
+
+Hardware buttons and the cursor operate differently in Map mode or InfoBox mode.
+
+Map mode:
+- 'App key 1' toggles full screen mode
+- 'App key 2' toggles snail trail
+- 'App key 3' toggles audio vario
+- 'App key 4' marks current location with flag
+- 'Enter' cycles through terrain and topology displays
+- 'Left' toggles auto zoom
+- 'Right' toggles map pan
+- 'Up' Zooms in
+- 'Down' Zooms out
+
+InfoBox mode (specific to particular InfoBoxes)
+- 'Up'/'Down' cursor changes values
+- 'Left'/'Right' cursor changes values
+  -- Wind speed: Changes wind bearing
+  -- Ground speed (simulator): Changes glider track
+- 'Enter' toggles special functions
+  -- McReady: Toggles auto-mcready in final glide
+  -- Waypoint: Brings up waypoint details
+  -- LD: Brings up Bugs and Ballast selector
+- 'App key 2/3' Cycles between items in InfoBox groups (see below)
+
+
+============================================================================
+INFOBOX GROUPS
+============================================================================
+
+InfoBoxes are now grouped logically together so that the user can cycle
+through various related values.  These groupings are:
+- Altitude group:
+  Altitude, Altitude AGL, Terrain Height, Barometric Altitude
+
+- Aircraft info group:
+  Bearing, Ground Speed, Track, Airspeed
+
+- LD group:
+  Current LD, Cruise LD, Task LD Finish
+
+- Vario group:
+  Average vario, Last Thermal Average, Last Thermal Gain, Last Thermal Time,
+  Thermal Average, Thermal Gain, Vario
+
+- Wind group:
+  Wind speed, Wind bearing
+
+- MacReady group:
+  MacReady Setting, MacReady Speed, Percent time climbing
+
+- Navigation group:
+  Next distance, Next Alt Difference, Next Alt Required, Task Alt Difference,
+  Task Alt Required, Task Average Speed, Task Distance, AA Time, AA Max Dist,
+  AA Min Dist, AA Max Speed, AA Min Speed
+
+- Waypoint group:
+  Next Waypoint, time aloft
+
+
+============================================================================
+AUDIO
+============================================================================
+
+An audio variometer is now available.  It has an intermittent tone
+that increases with pitch and rate with positive variometer values.
+The quiet part of the tone indicates the average variometer reading.
+With negative values, it has a lower pitch with a longer loud tone.
+The audio can be switched on and off with the application key 3 when
+in map mode.
+
+Support for common electric varios with data output (e.g. Cambridge
+302) is planned.
+
+Support for Netto vario is planned.  A second COMM port may be
+specified in the Settings->COMM page.  When the second COMM port is
+set to the same port as the first, it is disabled.
+
+XCSoar also produces audio messages when turning turnpoints to
+indicate when the glider is in the turnpoint sector.  This makes the
+sound of a camera shutter.
+
+
+============================================================================
+MARKING POINTS
+============================================================================
+
+Marking of the current location is performed with the keypad.  A
+history of marks is maintained in a file.  By default, this file gets
+over-written at program startup.  The marks appear on the map as small
+red flags.
+
+
+============================================================================
+MAIN MENU
+============================================================================
+
+The main menu button now disappears when not in use, to free up space on
+the map display.  To make it appear, select an InfoBox.  The menu will
+disappear again after 10 seconds have elapsed or if a cursor key is pressed
+in the InfoBox.
+
+
+============================================================================
+FLIGHT MODES
+============================================================================
+
+There are now three flight modes: Cruise, Climb, and Final Glide.  The
+mode that is currently active is indicated with a small symbol in the
+bottom right corner of the map display.
+
+Each flight mode has its own set of InfoBoxes.  To customise these, bring up
+the Menu, then click 'InfoBoxes locked'.  Then, click on the InfoBox at the
+position to be changed to bring up a selector dialog.  The configuration of the
+InfoBoxes in each mode can then be modified.  When done, go back into the Menu
+and click 'InfoBoxes editable'.
+
+
+============================================================================
+WAYPOINT DETAILS
+============================================================================
+
+Information about a waypoint may be brought up by clicking on a
+waypoint on the map display, pressing enter in the Waypoint InfoBox,
+or from the Details button in the Settings->Task page.
+
+This dialog spans multiple pages.  The first page shows basic waypoint
+information such as name, comments, location, elevation, and the type
+of waypoint (e.g.  Landable, Turnpoint etc).
+
+The second page has task buttons:
+- Set home: Sets the selected waypoint as the home field
+- Insert here: Inserts the waypoint before the active waypoint in the task.
+- Replace: Replaces the active waypoint in the task with the selected one.
+- Remove: Removes the active waypoint from the task.
+- Final glide to: Cancels the task and sets the selected waypoint as the
+  final waypoint.
+
+The third and fourth pages show images from runway diagrams and
+satellite imagery if available.  More on this in the next version.
+
+
+============================================================================
+MAP DISPLAY
+============================================================================
+
+Infoboxes can be hidden by pressing the App key 1, thereby giving a
+full-screen map display.
+
+Pan mode allows the user to drag the screen around to explore beyond
+the glider's immediate surrounds.  The user can still zoom in or out when in
+pan mode, and select waypoints as usual.
+
+Auto-zoom automatically zooms in when approaching a waypoint to keep
+the waypoint at a reasonable screen distance.  The user can still zoom
+out if desired.  When auto-zoom is active, an 'A' appears next to the
+map scale.
+
+There is a facility to have two zoom settings; one when circling, and
+one in cruise/final glide.  This is the "Circling zoom" option in the
+Settings->Display.  By default, the cruise/final glide zoom is 5 km
+and 0.3 km for circling.  When the user zooms in or out, it affects
+the current mode's zoom setting only, so when leaving the mode the
+previous mode's zoom setting is used.
+
+New icons are used to represent landable waypoints.  These are consistent
+with WinPilot:
+- Unreachable airfields are purple filled circles
+- Reachable airfields in purple filled circles with a green band
+
+A north arrow is displayed on the top right corner of the map display.
+The wind vector is now drawn on top of compass to de-clutter display
+near glider.  Winds below 2kt are not displayed.  In stronger winds,
+multiple vectors are drawn, in 10 kt increments.  For example, 23
+knots will show two long vectors and a short one (two lots of 10 plus
+one of 3).
+
+A new waypoint label mode is available.  'Names in task' shows only waypoint
+labels if the waypoints are in the current task, or the current home.
+
+The map is capable of displaying terrain elevation contours and vector
+topology.  See the section below for more details.
+
+
+============================================================================
+SAFETY HEIGHTS
+============================================================================
+
+Three safety heights are defined as:
+- Arrival height:  height above the final glide destination for safe arrival
+ (typically the circuit height plus some safety margin).
+- Break-off height: height above the ground at which the pilot, if descending
+ below this height, is expected to abort the task and outland.
+- Terrain clearance height: height above terrain for safe clearance on
+ final glide.
+
+
+============================================================================
+THERMAL BAND METER
+============================================================================
+
+Statistics on climb rates in thermals are collected and displayed in a thermal
+band meter.  This is shown above the final glide difference bar on the left
+side of the map display.  It is not shown when the glider is above final glide.
+
+The thermal band meter shows a graph, where the vertical axis is
+height above the break-off height and is scaled according to the
+maximum height achieved.  The horizontal axis is the average climb
+rate achieved at a particular height band.  The horizontal axis is
+scaled according to the MacReady setting, and an arrow indicating this
+setting and the glider's current height is overlaid on the shaded
+area.  This scaling and arrow makes it easy to see how the pilot's
+MacReady setting compares with achieved thermals and to plan the
+desired working height band.
+
+============================================================================
+WIND CALCULATION
+============================================================================
+
+A new method of estimating wind is now used.  It is based on the
+Cumulus program's source code and is far more sophisticated than the
+previous method.  It maintains a history of estimates at different
+times and altitudes and so provides capability to detect wind at
+varying heights.  Quality of estimates, and proximity to the history's
+time and altitude is incorporated in the estimation of the current wind speed.
+
+The actual estimation method considers the maximum and minimum ground
+speed achieved within a single circle, and considers the bearing at
+each point to work out a quality of fit.  The first few circles have
+lower quality, reflecting that usually the glider is centering lift at
+those times.
+
+This new method does not suffer the rather extreme errors involved in
+the previous model's method, which looked at drift during the entire
+circling phase.  However, it has not been extensively tested yet and
+so user reports will be appreciated.
+
+XCSoar loads the previous saved wind settings at startup.  To save the
+current wind setting, press the Enter cursor with a Wind InfoBox
+active.
+
+
+============================================================================
+PROFILES
+============================================================================
+
+The saving and loading of profiles now includes files used by XCSoar:
+ -- Airspace
+ -- Airfield details
+ -- Waypoints
+ -- Terrain
+ -- Topology
+ -- Winpilot polar
+
+
+============================================================================
+DATA LOGGING
+============================================================================
+
+IGC logging is now improved so that the logger outputs at higher rates
+(one per second) when in the turnpoint sector.
+
+
+============================================================================
+GLIDE COMPUTER
+============================================================================
+
+Auto MacRready is selected by pressing 'Enter' on the MacReady InfoBox
+when in Final Glide flight mode.  It adjusts the MacReady setting so
+excess height is converted to higher speed and vica versa.  A mode
+icon, showing a green and red triangle, appears in the bottom right
+corner of the map window when active.
+
+The glide computer now accounts for wind drift during circling to
+provide a 'best thermal track' vector, which indicates the track the
+glider should follow during cruise such that it will arrive at the
+waypoint in minimum time.  This vector is displayed on the map as a blue
+arrow.  When wind is negligable, or in final glide mode, this arrow will
+point along the black line indicating the track to waypoint.
+
+
+============================================================================
+FINAL GLIDE THROUGH TERRAIN
+============================================================================
+
+The final glide path is checked for whether the glider clears terrain by
+the terrain clearance height.  If clearance is not attained, a red cross
+appears on the map at the point where the violation occurs.
+
+A reachable glide footprint is displayed on the map display as a dashed line,
+indicating where the glider would descend through the terrain clearance height.
+This footprint is calculated for tracks extending 180 degrees around the glider.
+The reachable glide footprint is useful in assessing range with respect to
+topology when searching low for lift, and when flying in mountainous areas.
+
+
+============================================================================
+POLARS
+============================================================================
+
+WinPilot polar files may be used.  The aircraft type should be set to 'WinPilot File'
+in the Settings->Polar page, where it is the particular
+file name is also defined.
+
+The user can specify a maximum manoeuvering speed, which limits the
+speed-to-fly in MacReady calculations to realistic values.  This is
+specified in m/s.
+
+
+============================================================================
+TERRAIN AND TOPOLOGY
+============================================================================
+
+The map display can show digital terrain elevation and vector topology.
+
+The terrain data is raster data.  A new technique for cacheing the terrain
+database reduces the file access overhead, allowing very large
+terrain files to be used.  The terrain elevation is shown as colour contours
+correspoinding to the following height map:
+- dark green
+- light green
+- light brown
+- grey
+- white
+- blue-white
+
+Terrain is phong-shaded to improve visibility.  Currently the shading
+is set up so that the virtual lighting position is the wind bearing,
+thus brighter areas are on the upwind side of hills and dark areas in
+the lee of the hill.  Support for a sun ephemeris is underway.
+
+Support for user-defined contours is planned.
+
+The topology data uses ERSI Shapefiles of the following types:
+- Points
+- Lines
+- Areas
+The topology file (extension .tpl) defines which features are to be
+displayed, their color, maximum zoom visibility, icons, and labelling.
+Details on the file format will be provided in a separate document.
+
+The files may be generated from the freely available VMAP0 format, converted
+with the freely available GDAL/OGR utility.
+
+Shape files are also cached and loaded on demand, allowing large files to
+be used.
+

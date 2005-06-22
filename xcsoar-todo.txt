@@ -1,0 +1,534 @@
+
+============================================================================
+USER INTERFACE
+============================================================================
+
+Add left/right/enter buttons
+- [IN PROGRESS] enter on waypoint brings up waypoint info popup
+- [DONE] left/right on wind speed changes direction
+- [DONE] enter on mcready toggles auto-mcready
+- [DONE] left/right on speed changes direction if in sim mode
+- Enter on wind speed toggles auto-wind
+
+Add hardware buttons
+- [DONE] Functions when in map mode
+  -- App key 1: toggle snail display
+  -- App key 3: toggle audio vario
+  -- App key 4: Mark thermal
+  -- RETURN : toggle terrain and topology display (cycles through)
+  -- LEFT: toggle auto zoom
+  -- RIGHT: toggle map pan
+
+- [DONE] Functions when navbox selected
+  -- App key 2/3: Cycles between items in navbox groups
+
+Voice/audio prompts
+- Airspace
+- Distance to goal readout
+- [IN PROGRESS] Speed-up/slow down sounds in final glide (find suitable audio files)
+- Speed-up/slow down in cruise when connected to variometer and ASI
+- [DONE] Audio prompts with turning turnpoints
+
+Mark points
+- [DONE] By request (keypad button).  File gets overwritten at startup.
+- Allow users to toggle whether marked points get overwritten
+- Auto-mark all thermals?  Save to file for later analysis?
+
+Context specific display:
+- Tour (no waypoint selected?)
+- [DONE] Cruise
+  -- focus on map, navigational info
+- [IN PROGRESS] Thermalling
+  -- focus on climb rate, climb band
+  -- map info not really required here so much, turn off terrain?
+  -- [DONE] auto-zoom in
+  -- turn on display trail?
+- [DONE] Final glide/landing
+  -- focus on glide slope, airfield info
+  -- hide thermal band if above glideslope
+- Multiple display pages per mode, so user can configure for each mode,
+  two sets of navboxes and cycle between them.
+
+
+Icons in lower right to show what mode the computer is in
+- [DONE] Cruise
+- [DONE] Climb
+- [DONE] Final glide
+- [DONE] Auto-mcready
+- [DONE] Auto-zoom (shows 'A' next to scale)
+- Auto-wind
+
+
+Waypoint selection
+- [DONE] Allow `replace current waypoint' instead of fly-direct to.
+- Change to double click or click and enter?
+- Really need a new dialog for this, containing:
+  -- Waypoint info
+  -- Buttons for:
+    -- [DONE] Final glide to
+    -- Cruise to (NEED TO IMPLEMENT LOGIC FOR THIS, CURRENTLY ASSUMES LAST WAYPOINT MAKES
+    FINAL GLIDE)
+    -- [DONE] Replace current waypoint
+    -- [DONE] Insert waypoint here
+- Cursor keys to allow moving to next waypoints in direction of cursor.
+
+
+CDI Display
+- [DONE] Integrate Andy's code.
+- Rework to make it use vector graphics, so can display better symbology
+- [DONE] Put in arrows to indicate if track is off CDI scope.
+
+
+Get rid of annoying appearance of Start menu etc.
+- [DONE] Mostly done, still can have start bar appear if switching between programs
+
+Make menu button disappear until user touches navbox
+- [DONE] This is designed to de-clutter the screen, times out in 4 seconds
+- [DONE] Also make CDI appear only in climb mode
+
+Thermal band meter
+- [DONE] Implement thermal band
+  -- Gathers statistics on climb rates at each altitude up to maximum height climbed
+  -- Presents graph on screen as x axis represents average climb rate, y axis height above safety altitude
+  -- Graph is scaled to MacReady setting to make it easy to select good MacReady values
+- [DONE] Switching between use of thermal band meter:
+  -- Final glide bar is useless during cruise
+  -- Thermal band meter is more useful during cruise, gives immediate
+     view of where glider is in relation to desired height band, and
+     could give expected rate of climb (from statistics/history)
+  -- When within, say, 2000ft of final glide on second last leg, change back
+     to final glide bar.
+
+Profiles
+- Ensure all options are set in registry
+  -- Auto mcready
+  -- Auto circle
+  -- Circle zoom
+  -- [DONE] Files
+- Make profiles include ALL registry settings?
+
+Add extra options to processing functions of navbox
+- Bugsballast on LD fin
+- Sort/organise navbox options
+- Rework navbox titles?
+
+Add switching functionality to navboxes
+- [DONE] cycle through families of data with left/right keys, so user can get
+   easy access to data they're not necessarily wanting to have on
+    as a permanent navbox.
+- [DONE] Fixed a bug, multiple keypresses are detected
+
+Status warnings/info icons
+- Terrain out of range
+- GPS signal strength?
+- Vario connected
+
+Map pan mode
+- [DONE] Press right cursor key in map mode to turn on, then drag to move around
+- [DONE] Press right cursor again or toggle autozoom to turn off pan
+
+Niggly things
+- [DONE] Zoom works in opposite direction to usual convention. Now fixed.
+
+============================================================================
+WAYPOINT INFO
+============================================================================
+
+Waypoint information graphics/text
+- Info from ERSA or other sources for airfields
+  -- CTAF/MBZ frequency
+  -- Runways (and preferred runway given wind)
+  -- Notes from ERSA
+  -- Runway diagram?
+- Info for all waypoints
+  -- Computed arrival height AGL
+  -- Waypoint height
+  -- Image of waypoint
+
+Airfield display as different logo (winpilot look)
+- [DONE] Reachable airfields in purple with green band
+- [DONE] Unreachable airfields in purple
+- Display height at arrival on map
+
+
+============================================================================
+MAP DISPLAY
+============================================================================
+
+Auto map scale
+- [DONE] rescale map to nearest setting (when in cruise) that allows current
+  waypoint to remain visible
+- change mode by clicking on map scale symbol
+- [DONE] toggle mode by pressing left cursor key in map view
+- [DONE] indicate mode with A next to scale
+
+Display north arrow
+- [DONE] arrow appears in top right corner of map display
+- [DONE] wind vector now drawn on top of compass to de-clutter display near glider
+- click on it to toggle modes (track-up, north-up etc)
+
+Declutter names
+- Display names only when clicking on screen (like menu timeout?)
+- [DONE] Always show waypoint names if in task or home. (new option)
+
+Symbology
+- [DONE] Replace/augment black line with bearing arrow if waypoint is close
+  -- No need, as blue best track arrow works like this anyway
+
+============================================================================
+DATA LOGGING
+============================================================================
+
+IGC logging:
+- Allow loading/replay of IGC files in simulator mode
+- [DONE] fix logging so it outputs at higher rates when turning turnpoints
+
+Improved snailtrail
+- could be more done to make it more efficient (lower data rates when flying straight)
+
+Thermal marking:
+- Save history of climb modes (stats already calculated)
+- Display of encountered thermals in map
+ -- projected to location of expected arrival to compensate for wind
+
+============================================================================
+TASK MANAGEMENT
+============================================================================
+
+Task manager UI
+- Optionally sort waypoints by distance
+- [DONE] Set home airport (in waypoint details popup)
+- Bigger fonts in task selector
+- Allow user to add new waypoints from interface (current lat/long and via editor)
+- Bring up airfield display box
+
+Task navboxes
+- [DONE] % time thermalling
+- [DONE] V Mcready (in calm air)
+- ETA info
+
+Start/restart task button
+- Stats only collected once starting
+- Check stats reset when starting, don't go crazy when changing task during flight
+
+Audio when going around turnpoints
+- Pips with data logger at fast rate
+- [DONE] Camera click sound when ok to continue to next waypoint
+
+============================================================================
+GLIDE COMPUTER
+============================================================================
+
+Auto mcready in final glide
+- [DONE] Adjusts the mcready setting so excess height is converted
+  to higher speed
+- [DONE] Press button with mcready navbox hilit to toggle
+- [DONE] Mode icon when automcready is set
+- [DONE] Made it lots faster by estimating gradient rather than wandering
+- It's buggy.  Don't use it yet.
+
+Smart mcready management
+- Scale MC value to allow for decreased thermal strength with low altitude
+- Scale MC value to allow for risk of not encountering thermal with low
+  altitude (and take into account wind factor here?)
+- Calculate MC value based on average climb rate
+- Allow user to adjust optimism/pessimism
+
+Thermal band management
+- [DONE] Display thermal climb rate profiles
+- Autoset recommended floor and ceiling or allow user to set height band
+  -- Maybe not important, users can see from display where they are in the band
+
+Clicking on items:
+- [DONE] Press button down to popup waypoint info
+- [DONE] L/D -> bring up dialog for bugs
+- Height AGL -> bring up dialog for pressure QNH
+
+Variometer input
+- [DONE] Comms processing
+  -- Support for JMW's variometer
+- integrate Vmc display value with vario when connected to one
+
+FAI triangles
+- Done? Need to check it obeys the rules
+- 28% rule?
+
+Task optimisation
+- OLC
+
+Calculate and display how much upwind track to avoid drifting downwind during
+thermalling, optimally.
+- [DONE] Calculations
+  -- requires computing the glider's heading based on true airspeed and
+     track (this is what should be displayed for glider rotation)
+  -- requires estimating ETA: allow this to be displayed in navbox?
+  -- Display this on CDI ring at top of display?
+- [DONE] Displayed as blue arrow on map display
+
+
+Final glide through terrain
+- [DONE] Display reachable footprint
+  -- draw dashed line
+  -- this is useful in determining range of outlanding with respect to topology
+- [DONE] Implement different types of safety heights
+  -- Arrival safety height (circuit height), as currently done
+  -- Terrain clearance height
+  -- Break-off point minimum altitude in thermalling
+- [DONE] Display warning if final glide goes through terrain
+  -- implemented as red cross displayed at low point
+- Display warning if below break-off point in cruise, or final glide and if not reachable
+- [DONE] Option to enable display in Settings->Final Glide
+
+
+Work out some way of representing how close different landable fields are
+- Different sized green rings perhaps (bigger rings = closer)
+- Is this really that useful?
+
+
+Final glide correction for kinetic energy if airspeed available
+
+
+Calculations for cloud streets
+- draw rough lines for streets and to indicate traversal track
+
+Check average speed calculation
+
+
+
+============================================================================
+POLARS
+============================================================================
+
+Write routine to load polar from file, using winpilot format.
+- [DONE] Set file in Settings->Files
+- [DONE] Must also set "WinPilot File" as aircraft type in Settings->Polar
+
+Max manoeuvering speed
+- [DONE] Limits Vmc in MacReady calculations
+- [DONE] Unfortunately, has to be implemented in m/s
+
+Allow alternate forms of polar representation
+
+
+============================================================================
+WIND DATA
+============================================================================
+
+Implement auto-wind switch (three modes)
+- Manual
+- Auto with one climb (as it currently uses)
+- Auto incremental
+
+Wind calculations at multiple heights
+
+Wind calculations making use of IAS data
+
+
+============================================================================
+VARIOMETER
+============================================================================
+
+Audio options in settings
+- Switch on/off
+- Volume
+- Scale sensitivity in up/down
+- Deadband
+
+Netto vario options
+
+Second comm port for vario instrument
+- only first one will process GPS info
+- if vario is present, change calculations so vario readings are used
+
+Do netto calculations
+
+Vario
+
+
+============================================================================
+PERFORMANCE AND COMPILATION
+============================================================================
+
+Various speedups
+- [DONE] Add small sleep during map rendering to reduce cpu load
+- [DONE] Recalculate polar/ballast coefficients when needed rather than every
+  mcready lookup
+- [DONE] Should really do profiling to determine what's taking CPU load
+  -- made various speedups
+  -- latlon2screen and DisplayText still using lots
+- [DONE] Don't re-create pens everytime they are needed.
+- Clean up my modifications to mcready calculations
+
+Compilation cleanups
+- ifdef around cleartype to allow PPC2002 compilation
+- get rid of int cast warnings
+- [DONE] get rid of unused resources
+
+Thread model:
+- Don't think it's currently very thread-safe.
+- [DONE] Fix thread create/destroy with popups which causes a noticeable lag
+- [DONE] Separate processing (GUI, COMM ports) from display (MapWindow, navboxes) with locks
+
+Collect globals into structs to make it easier to manage with respect to locks
+
+Memory cleanups
+- Don't think the port thread is being closed well at exit.
+- Periodic hangs
+- Should run memory checker on this.
+
+Display buffering
+- [DONE] Allows display of data at whatever rate it comes in at, but allows maps
+  to only display every second.
+- [DONE] Trigger re-draw if changing zoom, pan
+
+
+============================================================================
+FLIGHT DATA
+============================================================================
+
+Read data from instruments if available
+- [DONE] Implement second COMM port
+- Implement DoCalculations2 for vario-specific calculations
+
+Calculate pressure altitude correction factors for speed, climb rates etc
+
+From ground speed, wind speed and altitude, estimate vario and IAS if not available
+from instruments
+
+
+============================================================================
+TOPOLOGY
+============================================================================
+
+Landscape display
+- [DONE] Elements
+  -- Vector contours
+  -- Bitmap/raster
+  -- Features (roads, bodies of water)
+- [DONE] Data source
+  -- Use VMap0 data, or Australian TOPO1M (equivalent)
+  -- Use OMap code as basis, display of vector data from ESRI Shapefiles
+  -- Conversion from ArcInfo with GDAL
+  -- Use same website for getting data as Cumulus/KFLog uses
+- [DONE] Topology (.tpl) file to specify what vector data to be displayed
+  -- Lives in same directory as shape files
+
+Allow supplemental raster data
+- Shade areas of significant forrest or crop fields
+
+Performance
+- [DONE] Filtering based on zoom level
+- [DONE] Cacheing of shapes in range
+
+User interface
+- [DONE] Button to switch topology on/off (return button)
+- [DONE] This switches between all modes
+  -- No terrain or topology
+  -- Terrain only
+  -- Topology only
+  -- Terrain and topology
+
+
+============================================================================
+TERRAIN ELEVATION
+============================================================================
+
+Implement cacheing for speedups
+- [DONE] Saves last N values, checks existance before doing lookup
+
+Fix rounding bugs
+- [DONE] Terrain now uses rounding to nearest point
+
+Sunlight rendering
+- Need to make use of the normal vector at each point (could be precomputed)
+
+
+============================================================================
+MISCELLANEOUS
+============================================================================
+
+Display warranty/warning dialog
+- [DONE] Lookout warning on startup
+- Need GPL no warranty dialog
+
+Fix application icon
+
+
+---------------
+
+--------------------
+
+TODO now:
+- Fix position of airspace warning box
+
+New in this version
+
+Summary of new features since v4.0
+- Fullscreen mode (app button 1 in map mode); app button 2 now
+  toggles snail trail
+- Terrain shading via phong model, direction set by wind direction
+- Wind vectors multiple for 10 knot increments
+- Saving/loading wind to registry
+- Time aloft infobox (in Waypoint Group)
+- New wind calculations
+- Rendering of airspace with cross-hatches
+
+New wind calculations
+- [DONE] implemented improved method, based on Cumulus
+- [DONE] Save last wind in registry when pressing enter on wind infobox,
+  and loaded on startup
+- [DONE] Wind not updated from user-set value unless new estimate available
+ (thus giving start wind is seed)
+
+Bug fixes and code improvements
+- Sound files are now in the code as resources, so no need for Audio directory
+- Filtering of files:
+   Waypoints [.txt]
+   Airspace [.txt]
+   Terrain [.dat]
+   Topology [.tpl]
+   Polars [.plr]
+- Reduced extraneous refresh of navboxes
+- Font size improvements
+- Second COMM port disabled if set equal to port 1
+- Audio thread is suspended when quiet
+- Auto McReady now working again
+- Improvements to topology handling
+- Better terrain color map
+- Minor improvements to thread safety
+- Larger Menu page buttons
+- Fix McReady speed calculation with zero distance
+- Bug fixes by Samuel Gisiger (Airspace not displaying, extraneous
+  selection of waypoints at zoom levels)
+
+--------------
+
+Resource sounds
+- [DONE] implemented, works
+
+Calculate/display thermal drift as percent of wind speed
+
+Detect flying backwards in strong headwinds
+- Currently, wind calculation will fail if going backwards
+- Can detect this from rapid change in heading (approx 180 degrees)
+- If we know roughly the wind, can estimate what the glider heading is.
+
+Improve GPS lock/connection recovery
+- problem if device is turned off and on again
+- problem when losing fixes?
+
+More infoboxes:
+ -- Time of Day (in waypoint group)
+ -- [DONE] Time aloft (detect time start)
+
+IGC Logging:
+ [DONE] -- Added pilot/aircraft info in log
+ [DONE] -- removed asset number from file name
+
+Bugs+Ballast
+- [DONE] Stopped wrapping of bugs/ballast buttons
+- [DONE] Fixed font
+
+
+Add trackcircling mode: like north up when circling, but orients according
+ to bearing to next waypoint
