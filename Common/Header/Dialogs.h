@@ -31,6 +31,8 @@ LRESULT CALLBACK SaveProfile		(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 LRESULT CALLBACK LoadProfile		(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK SetAirspaceWarnings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK Settings				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK WaypointDetails		(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 void AssignedArea(void);
+LRESULT CALLBACK LoggerDetails 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 #endif

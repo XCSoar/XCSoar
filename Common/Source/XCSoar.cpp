@@ -1,22 +1,23 @@
 /*
-XCSoar Glide Computer
-Copyright (C) 2000 - 2004  M Roberts
+  XCSoar Glide Computer
+  Copyright (C) 2000 - 2004  M Roberts
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "stdafx.h"
+#include "compatibility.h"
 
 #include "XCSoar.h"
 #include "Mapwindow.h"
@@ -30,70 +31,95 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Waypointparser.h"
 #include "Airspace.h"
 #include "Logger.h"
+#include "McReady.h"
+#include "AirfieldDetails.h"
 
 #include <commctrl.h>
 #include <aygshell.h>
 #include <sipapi.h>
 
-HINSTANCE			hInst;					// The current instance
-HWND					hWndCB;					// The command bar handle
-HWND					hWndMainWindow; // Main Windows
-HWND					hWndMapWindow;	// MapWindow
-HWND					hProgress = NULL;	// Progress Dialog Box
+#include "Terrain.h"
+#include "VarioSound.h"
+
+HINSTANCE                       hInst;                                  // The current instance
+HWND                                    hWndCB;                                 // The command bar handle
+HWND                                    hWndMainWindow; // Main Windows
+HWND                                    hWndMapWindow;  // MapWindow
+HWND                                    hProgress = NULL;       // Progress Dialog Box
 HWND          hWndMenuButton = NULL;
 
+HWND                                    hWndCDIWindow = NULL; //CDI Window
 
-HWND					hWndInfoWindow[NUMINFOWINDOWS];
-HWND					hWndTitleWindow[NUMINFOWINDOWS];
+HWND                                    hWndInfoWindow[NUMINFOWINDOWS];
+HWND                                    hWndTitleWindow[NUMINFOWINDOWS];
 
-int						InfoType[NUMINFOWINDOWS] = {3084,1542,257,2827,771,1293,4622,4369};
+int                                     InfoType[NUMINFOWINDOWS] = {921102,725525,262144,74518,657930,2236963,394758,1644825};
 
-BOOL					DisplayLocked = TRUE;
-BOOL					InfoWindowActive = TRUE;
-int						FocusTimeOut = 0;
+BOOL                                    DisplayLocked = TRUE;
+BOOL                                    InfoWindowActive = TRUE;
+int                                             FocusTimeOut = 0;
+int                                             MenuTimeOut = 0;
+
+
+
+HBRUSH hBrushSelected;
+HBRUSH hBrushUnselected;
+COLORREF ColorSelected = RGB(0xC0,0xC0,0xC0);
+COLORREF ColorUnselected = RGB(0xFF,0xFF,0xFF);
 
 // Serial Port Globals
-HANDLE				hReadThread = NULL;              // Handle to the read thread
-HANDLE				hPort = INVALID_HANDLE_VALUE;    // Handle to the serial port
-BOOL					PortAvailable = NULL;
+
+HANDLE                          hPort1 = INVALID_HANDLE_VALUE;    // Handle to the serial port
+HANDLE                          hPort2 = INVALID_HANDLE_VALUE;    // Handle to the serial port
+BOOL                                    Port1Available = NULL;
+BOOL                                    Port2Available = NULL;
 
 // Display Gobals
-HFONT					InfoWindowFont;
-HFONT					TitleWindowFont;
-HFONT					MapWindowFont;
-int						CurrentInfoType;
-int						InfoFocus = 0;
-int						DisplayOrientation = TRACKUP;
-int						DisplayTextType = DISPLAYNONE;
+HFONT                                   InfoWindowFont;
+HFONT                                   TitleWindowFont;
+HFONT                                   MapWindowFont;
 
-int						AltitudeMode = ALLON;
-int						ClipAltitude = 1000;
-int						AltWarningMargin = 100;
-double				QNH = (double)1013.2;
+HFONT                                   CDIWindowFont; // New
+HFONT                                   MapLabelFont;
 
-int						iAirspaceBrush[12];
+int                                             CurrentInfoType;
+int                                             InfoFocus = 0;
+int                                             DisplayOrientation = TRACKUP;
+int                                             DisplayTextType = DISPLAYNONE;
+
+int                                             AltitudeMode = ALLON;
+int                                             ClipAltitude = 1000;
+int                                             AltWarningMargin = 100;
+double                          QNH = (double)1013.2;
+
+int                                             iAirspaceBrush[12];
 
 //SI to Local Units
 double        SPEEDMODIFY = TOKNOTS;
-double				LIFTMODIFY  = TOKNOTS;
-double				DISTANCEMODIFY = TONAUTICALMILES;
+double                          LIFTMODIFY  = TOKNOTS;
+double                          DISTANCEMODIFY = TONAUTICALMILES;
 double        ALTITUDEMODIFY = TOFEET; 
 
 //Flight Data Globals
 double        MACREADY = 0;
-NMEA_INFO			GPS_INFO;
-DERIVED_INFO	CALCULATED_INFO;
+bool          AutoMacReady = false;
+
+NMEA_INFO                       GPS_INFO;
+DERIVED_INFO    CALCULATED_INFO;
 
 //Local Static data
 static int iTimerID;
 static BOOL GPSCONNECT = FALSE;
-static BOOL GPSPROCESS = TRUE;
+static BOOL VARIOCONNECT = FALSE;
 
 // Final Glide Data
-double SAFTEYALTITUDE = 0;
+double SAFETYALTITUDEARRIVAL = 500;
+double SAFETYALTITUDEBREAKOFF = 700;
+double SAFETYALTITUDETERRAIN = 200;
+double SAFTEYSPEED = 50.0;
 double BUGS = 1;
 double BALLAST = 0;
-int		 POLARID = 0;
+int              POLARID = 0;
 double POLAR[POLARSIZE] = {0,0,0};
 double POLARV[POLARSIZE] = {21,27,40};
 double POLARLD[POLARSIZE] = {33,30,20};
@@ -121,13 +147,18 @@ int WarningTime = 30;
 
 // Registration Data
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY"); 
-TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");	
+TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");     
 
 //Snail Trial
 SNAIL_POINT SnailTrail[TRAILSIZE];
 int SnailNext = 0;
 int TrailActive = TRUE;
-int TrailLock = FALSE;
+int CircleZoom = FALSE;
+int WindUpdateMode = 0;
+int EnableTopology = FALSE;
+int EnableTerrain = FALSE;
+int FinalGlideTerrain = FALSE;
+int EnableSound = FALSE;
 
 //IGC Logger
 BOOL LoggerActive = FALSE;
@@ -140,9 +171,10 @@ BOOL TopWindow = TRUE;
 
 BOOL COMPORTCHANGED = FALSE;
 BOOL AIRSPACEFILECHANGED = FALSE;
+BOOL AIRFIELDFILECHANGED = FALSE;
 BOOL WAYPOINTFILECHANGED = FALSE;
 BOOL TERRAINFILECHANGED = FALSE;
-
+BOOL TOPOLOGYFILECHANGED = FALSE;
 
 //Task Information
 TASK_POINT Task[MAXTASKPOINTS +1 ] = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
@@ -153,147 +185,341 @@ double AATTaskLength = 120;
 BOOL AATEnabled = FALSE;
 
 #if UNDER_CE >= 300
-	static SHACTIVATEINFO s_sai;
+static SHACTIVATEINFO s_sai;
 #endif
 
-static	TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:")};
-static	DWORD	dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
-static	DWORD PortIndex = 0;
-static	DWORD SpeedIndex = 2;
+static  TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:")};
+static  DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
+static  DWORD PortIndex1 = 0;
+static  DWORD SpeedIndex1 = 2;
+static  DWORD PortIndex2 = 0;
+static  DWORD SpeedIndex2 = 2;
+
+BOOL InfoBoxesHidden = false;
+
+
+#define GLOBALFONT "Tahoma"
+//#define GLOBALFONT "HelmetCondensed"
+
+void PopupBugsBallast(int updown);
+
+// Groups: 
+//   Altitude 0,1,20,33
+//   Aircraft info 3,6,23,32
+//   LD 4,5,19
+//   Vario 2,7,8,9,21,22,24
+//   Wind 25,26
+//   Mcready 10,34,35
+//   Nav 11,12,13,15,16,17,18,27,28,29,30,31
+//   Waypoint 14,36
 
 SCREEN_INFO Data_Options[] = { 
-																{TEXT("Altitude"),					TEXT("GPS Alt"),		TEXT("%2.0f"), 0, AltitudeProcessing},
-																{TEXT("Altitude AGL"),	    TEXT("A.G.L."),			TEXT("%2.0f"), 0, NoProcessing},
+  // 0  
+  {TEXT("Altitude"), TEXT("GPS Alt"), TEXT("%2.0f"), 0, AltitudeProcessing, 1, 33}, 
 
-																{TEXT("Average"),						TEXT("Average"),		TEXT("%2.1f"), 0, NoProcessing},
-																{TEXT("Bearing"),						TEXT("Bearing"),		TEXT("%2.0f訊"), 0, NoProcessing},
-																{TEXT("Current L/D"),				TEXT("L/D"),				TEXT("%2.0f"), 0, NoProcessing},
-																{TEXT("Cruise L/D"),				TEXT("Cr L/D"),			TEXT("%2.0f"), 0, NoProcessing},
-																{TEXT("Ground Speed"),			TEXT("Speed"),			TEXT("%2.0f"), 0, SpeedProcessing},
-																
-																{TEXT("Last Thermal Avg"),	TEXT("L A"),				TEXT("%2.1f"), 0, NoProcessing},
-																{TEXT("Last Thermal Gain"),	TEXT("L G"),				TEXT("%2.0f"), 0, NoProcessing},
-																{TEXT("Last Thermal Time"),	TEXT("L T"),				TEXT("%2.0f"), 0, NoProcessing},
-																
-																{TEXT("MacReady Setting"),		TEXT("MacReady"),		TEXT("%2.1f"), 0, McReadyProcessing},
+  // 1
+  {TEXT("Altitude AGL"), TEXT("A.G.L."), TEXT("%2.0f"), 0, NoProcessing, 20, 0}, 
 
-																{TEXT("Next Distance"),			TEXT("Dist"),	  		TEXT("%2.1f"), 0, NoProcessing},
-																{TEXT("Next Alt Difference"),TEXT("Alt Dif"),		TEXT("%2.0f"), 0, NoProcessing},
-																{TEXT("Next Alt Required"),	TEXT("Alt Req"),		TEXT("%2.0f"), 0, NoProcessing},
-																{TEXT("Next Waypoint"),			TEXT("Next"),				TEXT(""),			 0, NextUpDown},
-																
-																{TEXT("Task Alt Difference"),TEXT("Dif Fin"),		TEXT("%2.0f"), 0, NoProcessing},
-																{TEXT("Task Alt Required"), TEXT("Req Fin"),		TEXT("%2.0f"), 0, NoProcessing},
-																{TEXT("Task Average Speed"),TEXT("Av Speed"),		TEXT("%2.0f"), 0, NoProcessing},
-																{TEXT("Task Distance"),			TEXT("To Go"),			TEXT("%2.0f"), 0, NoProcessing},
-																{TEXT("Task LD Finish"),		TEXT("LD Fin"),			TEXT("%1.0f"), 0, NoProcessing},
+  // 2
+  {TEXT("Average"), TEXT("Average"), TEXT("%2.1f"), 0, NoProcessing, 7, 24}, 
 
-																
-																{TEXT("Terrain Height"),		TEXT("Terrain"),		TEXT("%2.0f"), 0, NoProcessing},
-																
-																{TEXT("Thermal Average"),		TEXT("T. A"),				TEXT("%2.1f"), 0, NoProcessing},
-																{TEXT("Thermal Gain"),			TEXT("Gain"),				TEXT("%2.0f"), 0, NoProcessing},
-																
-																{TEXT("Track"),							TEXT("Track"),			TEXT("%2.0f訊"), 0, DirectionProcessing},
-																{TEXT("Vario"),							TEXT("Vario"),			TEXT("%2.1f"), 0, NoProcessing},
-																{TEXT("Wind Speed"),				TEXT("Wind S"),			TEXT("%2.0f"), 0, WindSpeedProcessing},
-																{TEXT("Wind Bearing"),			TEXT("Wind B"),			TEXT("%2.0f訊"), 0, WindDirectionProcessing},
-																{TEXT("AA Time"),						TEXT("AA Time"),		TEXT("%2.0f"),	0, NoProcessing},
-																{TEXT("AA Max Dist"),				TEXT("Max D"),			TEXT("%2.0f"),	0, NoProcessing},
-																{TEXT("AA Min Dist"),				TEXT("Min D"),			TEXT("%2.0f"),	0, NoProcessing},
-																{TEXT("AA Max Speed"),			TEXT("Max S"),			TEXT("%2.0f"),	0, NoProcessing},
-																{TEXT("AA Min Speed"),			TEXT("Min S"),			TEXT("%2.0f"),	0, NoProcessing},
-                                {TEXT("Airspeed"),			    TEXT("Airspeed"),		TEXT("%2.0f"),	0, NoProcessing},
-                                {TEXT("Baro Alt"),			    TEXT("Altitude"),		TEXT("%2.0f"),	0, NoProcessing}
-															};
+  // 3
+  {TEXT("Bearing"), TEXT("Bearing"), TEXT("%2.0f訊"), 0, NoProcessing, 6, 32}, 
 
-int NUMSELECTSTRINGS = 34;
+  // 4
+  {TEXT("Current L/D"), TEXT("L/D"), TEXT("%2.0f"), 0, PopupBugsBallast, 5, 19}, 
+
+  // 5
+  {TEXT("Cruise L/D"), TEXT("Cr L/D"), TEXT("%2.0f"), 0, PopupBugsBallast, 19, 4}, 
+
+  // 6
+  {TEXT("Ground Speed"), TEXT("Speed"), TEXT("%2.0f"), 0, SpeedProcessing, 23, 3}, 
+ 
+  // 7
+  {TEXT("Last Thermal Avg"), TEXT("L A"), TEXT("%2.1f"), 0, NoProcessing, 8, 2}, 
+
+  // 8
+  {TEXT("Last Thermal Gain"), TEXT("L G"), TEXT("%2.0f"), 0, NoProcessing, 9, 7}, 
+
+  // 9
+  {TEXT("Last Thermal Time"), TEXT("L T"), TEXT("%2.0f"), 0, NoProcessing, 21, 8}, 
+
+  // 10
+  {TEXT("MacReady Setting"), TEXT("MacReady"), TEXT("%2.1f"), 0, McReadyProcessing, 34, 35}, 
+
+  // 11
+  {TEXT("Next Distance"), TEXT("Dist"), TEXT("%2.1f"), 0, NoProcessing, 12, 31}, 
+
+  // 12
+  {TEXT("Next Alt Difference"), TEXT("Alt Dif"), TEXT("%2.0f"), 0, NoProcessing, 13, 11}, 
+
+  // 13
+  {TEXT("Next Alt Required"), TEXT("Alt Req"), TEXT("%2.0f"), 0, NoProcessing, 15, 12}, 
+
+  // 14
+  {TEXT("Next Waypoint"), TEXT("Next"), TEXT(""), 0, NextUpDown, 36, 36}, 
+ 
+  // 15
+  {TEXT("Task Alt Difference"), TEXT("Dif Fin"), TEXT("%2.0f"), 0, NoProcessing, 16, 13}, 
+
+  // 16
+  {TEXT("Task Alt Required"), TEXT("Req Fin"), TEXT("%2.0f"), 0, NoProcessing, 17, 15}, 
+
+  // 17
+  {TEXT("Task Average Speed"), TEXT("Av Speed"), TEXT("%2.0f"), 0, NoProcessing, 18, 16}, 
+
+  // 18
+  {TEXT("Task Distance"), TEXT("To Go"), TEXT("%2.0f"), 0, NoProcessing, 27, 17}, 
+  
+  // 19
+  {TEXT("Task LD Finish"), TEXT("LD Fin"), TEXT("%1.0f"), 0, NoProcessing, 4, 5}, 
+
+  // 20
+  {TEXT("Terrain Height"), TEXT("Terrain"), TEXT("%2.0f"), 0, NoProcessing, 33, 1}, 
+  
+  // 21
+  {TEXT("Thermal Average"), TEXT("Av Climb"), TEXT("%2.1f"), 0, NoProcessing, 22, 9}, 
+
+  // 22
+  {TEXT("Thermal Gain"), TEXT("Gain"), TEXT("%2.0f"), 0, NoProcessing, 24, 21}, 
+ 
+  // 23
+  {TEXT("Track"), TEXT("Track"), TEXT("%2.0f訊"), 0, DirectionProcessing, 32, 6}, 
+
+  // 24
+  {TEXT("Vario"), TEXT("Vario"), TEXT("%2.1f"), 0, NoProcessing, 2, 22}, 
+
+  // 25
+  {TEXT("Wind Speed"), TEXT("Wind S"), TEXT("%2.0f"), 0, WindSpeedProcessing, 26, 26}, 
+
+  // 26
+  {TEXT("Wind Bearing"), TEXT("Wind B"), TEXT("%2.0f訊"), 0, WindDirectionProcessing, 25, 25}, 
+
+  // 27
+  {TEXT("AA Time"), TEXT("AA Time"), TEXT("%2.0f"), 0, NoProcessing, 28, 18}, 
+
+  // 28
+  {TEXT("AA Max Dist"), TEXT("Max D"), TEXT("%2.0f"), 0, NoProcessing, 29, 27}, 
+
+  // 29
+  {TEXT("AA Min Dist"), TEXT("Min D"), TEXT("%2.0f"), 0, NoProcessing, 30, 28}, 
+
+  // 30
+  {TEXT("AA Max Speed"), TEXT("Max S"), TEXT("%2.0f"), 0, NoProcessing, 31, 29}, 
+
+  // 31
+  {TEXT("AA Min Speed"), TEXT("Min S"), TEXT("%2.0f"), 0, NoProcessing, 11, 30}, 
+
+  // 32
+  {TEXT("Airspeed"), TEXT("Airspeed"), TEXT("%2.0f"), 0, NoProcessing, 3, 23}, 
+
+  // 33
+  {TEXT("Baro Alt"), TEXT("Altitude"), TEXT("%2.0f"), 0, NoProcessing, 0, 20},
+
+  // 34
+  {TEXT("MacReady speed"), TEXT("V Mc"), TEXT("%2.0f"), 0, NoProcessing, 35, 10}, 
+
+  // 35
+  {TEXT("Percentage climb"), TEXT("%% Climb"), TEXT("%2.0f"), 0, NoProcessing, 10, 34},
+
+  // 36
+  {TEXT("Time of day"), TEXT("Time"), TEXT("%04.0f"), 0, NoProcessing, 14, 14},
+
+};
+
+int NUMSELECTSTRINGS = 37;
 
 int ControlWidth, ControlHeight;
-	
+        
+CRITICAL_SECTION  CritSec_FlightData;
+CRITICAL_SECTION  CritSec_TerrainData;
+CRITICAL_SECTION  CritSec_NavBox;
+
 
 // Forward declarations of functions included in this code module:
-ATOM							MyRegisterClass	(HINSTANCE, LPTSTR);
-BOOL							InitInstance	(HINSTANCE, int);
-LRESULT CALLBACK	WndProc			(HWND, UINT, WPARAM, LPARAM);
-LRESULT						MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-void							AssignValues(void);
-void							DisplayText(void);
-void							ReadAssetNumber(void);
-void							ProcessTimer	(void);
-void							SIMProcessTimer(void);
-void							PopUpSelect(int i);
-void							SwitchToMapWindow(void);
-HWND							CreateRpCommandBar(HWND hwnd);
+ATOM                                                    MyRegisterClass (HINSTANCE, LPTSTR);
+BOOL                                                    InitInstance    (HINSTANCE, int);
+LRESULT CALLBACK        WndProc                 (HWND, UINT, WPARAM, LPARAM);
+LRESULT                                         MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+void                                                    AssignValues(void);
+void                                                    DisplayText(void);
+void                                                    ReadAssetNumber(void);
+void                                                    ProcessTimer    (void);
+void                                                    SIMProcessTimer(void);
+void                                                    PopUpSelect(int i);
+void                                                    SwitchToMapWindow(void);
+HWND                                                    CreateRpCommandBar(HWND hwnd);
 
 #ifdef DEBUG
-	void						DebugStore(TCHAR *Str);
+void                                            DebugStore(TCHAR *Str);
 #endif
 
-int WINAPI WinMain(	HINSTANCE hInstance,
-					HINSTANCE hPrevInstance,
-					LPTSTR    lpCmdLine,
-					int       nCmdShow)
+
+extern RECT MapRect;
+extern bool MapDirty;
+extern BOOL GpsUpdated;
+
+void HideMenu() {
+  ShowWindow(hWndMenuButton, SW_HIDE);
+  MenuTimeOut = MENUTIMEOUTMAX;
+}
+
+void ShowMenu() {
+  MenuTimeOut = 0;
+  ShowWindow(hWndMenuButton, SW_SHOW);
+}
+
+
+void FullScreen() {
+  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
+	       GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+  SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+  MapDirty = true;
+}
+
+
+
+
+void RestartCommPorts() {
+  if(Port1Available)
+    {
+      Port1Available = FALSE; Port1Close (hPort1);
+    }
+  PortIndex1 = 0; SpeedIndex1 = 2; ReadPort1Settings(&PortIndex1,&SpeedIndex1);
+  Port1Available = Port1Initialize (COMMPort[PortIndex1],dwSpeed[SpeedIndex1]);
+  
+  if(Port2Available)
+    {
+      Port2Available = FALSE; Port2Close (hPort2);
+    }
+  PortIndex2 = 0; SpeedIndex2 = 2; ReadPort2Settings(&PortIndex2,&SpeedIndex2);
+  if (PortIndex1 != PortIndex2) {
+    Port2Available = Port2Initialize (COMMPort[PortIndex2],dwSpeed[SpeedIndex2]);
+  } else {
+    Port2Available = FALSE;
+  }
+
+  GpsUpdated = TRUE;
+}
+
+
+void FocusOnWindow(int i, bool selected) {
+    //hWndTitleWindow
+  HWND wind = hWndInfoWindow[i];
+
+  if (selected) {
+    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER);
+  } else {
+    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY);
+  }
+
+  wind = hWndTitleWindow[i];
+  if (selected) {
+    SetWindowLong(wind, GWL_USERDATA, 1);	  
+    //    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER);
+  } else {
+    SetWindowLong(wind, GWL_USERDATA, 0);
+    //    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY);
+  }
+
+}
+
+int WINAPI WinMain(     HINSTANCE hInstance,
+                        HINSTANCE hPrevInstance,
+                        LPTSTR    lpCmdLine,
+                        int       nCmdShow)
 {
-	MSG msg;
-	HACCEL hAccelTable;
-	INITCOMMONCONTROLSEX icc;
+  MSG msg;
+  HACCEL hAccelTable;
+  INITCOMMONCONTROLSEX icc;
 
-	icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
-	icc.dwICC = ICC_UPDOWN_CLASS;
-	InitCommonControls();
-	
+  icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
+  icc.dwICC = ICC_UPDOWN_CLASS;
+  InitCommonControls();
+        
+  // Perform application initialization:
+  if (!InitInstance (hInstance, nCmdShow)) 
+    {
+      return FALSE;
+    }
 
-	// Perform application initialization:
-	if (!InitInstance (hInstance, nCmdShow)) 
-	{
-		return FALSE;
-	}
+  hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
-	hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
+  pi = (double)atan(1) * 4;
+  InitSineTable();
 
-	pi = (double)atan(1) * 4;
-	InitSineTable();
-	memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
-	memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
-	memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
-	ReadRegistrySettings();
-	CalculateNewPolarCoef();
+  SHSetAppKeyWndAssoc(VK_APP1, hWndMainWindow);
+  SHSetAppKeyWndAssoc(VK_APP2, hWndMainWindow);
+  SHSetAppKeyWndAssoc(VK_APP3, hWndMainWindow);
+  SHSetAppKeyWndAssoc(VK_APP4, hWndMainWindow);
+  SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
+  SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
+
+  InitializeCriticalSection(&CritSec_FlightData);
+  InitializeCriticalSection(&CritSec_NavBox);
+
+  memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
+  memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
+  memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
+
+  ReadRegistrySettings();  
+  LoadWindFromRegistry();
+  CalculateNewPolarCoef();
+  SetBallast();
   OpenTerrain();
-	ReadWayPoints();
-	if(NumberOfWayPoints)
-	{
-		SetHome();
-	}
-	
-	ReadAirspace();
 
-	CreateDrawingThread();
+  ReadWayPoints();
+  if(NumberOfWayPoints)
+    {
+      SetHome();
+    }
 
+  ReadAirfieldFile();
+      
+  ReadAirspace();
+
+  OpenTopology();
+  ReadTopology();
+
+  //  Sleep(1000); // JMW added this, debugging threads
+
+  VarioSound_Init();
+  VarioSound_EnableSound(false);
+  VarioSound_SetVdead(4);
+  VarioSound_SetV(0);
+
+  AssignValues();
+  DisplayText();
+
+  CreateDrawingThread();
 
 #ifdef _SIM_
-	MessageBox(	hWndMainWindow, TEXT("XCSoar Simulator\r\nNothing is Real!!"), TEXT("Caution"), MB_OK|MB_ICONWARNING);
- 	SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+  MessageBox(   hWndMainWindow, TEXT("Simulator mode\r\nNothing is Real!!"), TEXT("Caution"), MB_OK|MB_ICONWARNING);
+  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
 #else
-	PortIndex = 0;
-	SpeedIndex = 2;
-	ReadPortSettings(&PortIndex,&SpeedIndex);
-	PortAvailable = PortInitialize (COMMPort[PortIndex],dwSpeed[SpeedIndex]);
+  /*
+  MessageBox(   hWndMainWindow, TEXT("Maintain effective\r\nLOOKOUT at all times"), TEXT("Caution"), MB_OK|MB_ICONWARNING);
+  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+
+  */
+
+  RestartCommPorts();
+
 #endif
 
+  FullScreen();
 
+  // Main message loop:
+  while (GetMessage(&msg, NULL, 0, 0)) 
+    {
+      if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
+        {
+          TranslateMessage(&msg);
+          DispatchMessage(&msg);
+        }
+    }
 
-	// Main message loop:
-	while (GetMessage(&msg, NULL, 0, 0)) 
-	{
-		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-	}
-
-	return msg.wParam;
+  return msg.wParam;
 }
 
 //
@@ -309,24 +535,24 @@ int WINAPI WinMain(	HINSTANCE hInstance,
 ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
 {
 
-	WNDCLASS wc;
-	WNDCLASS dc;
+  WNDCLASS wc;
+  WNDCLASS dc;
 
-	GetClassInfo(hInstance,TEXT("DIALOG"),&dc);
+  GetClassInfo(hInstance,TEXT("DIALOG"),&dc);
 
-  wc.style					= CS_HREDRAW | CS_VREDRAW;
-  wc.lpfnWndProc		= (WNDPROC) WndProc;
-  wc.cbClsExtra			= 0;
-  wc.cbWndExtra			= dc.cbWndExtra ;
-  wc.hInstance			= hInstance;
-  wc.hIcon					= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOAR));
-  wc.hCursor				= 0;
-  wc.hbrBackground	= (HBRUSH) GetStockObject(WHITE_BRUSH);
-  wc.lpszMenuName		= 0;
-  wc.lpszClassName	= szWindowClass;
+  wc.style                      = CS_HREDRAW | CS_VREDRAW;
+  wc.lpfnWndProc                = (WNDPROC) WndProc;
+  wc.cbClsExtra                 = 0;
+  wc.cbWndExtra                 = dc.cbWndExtra ;
+  wc.hInstance                  = hInstance;
+  wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOAR));
+  wc.hCursor                    = 0;
+  wc.hbrBackground              = (HBRUSH) GetStockObject(WHITE_BRUSH);
+  wc.lpszMenuName               = 0;
+  wc.lpszClassName              = szWindowClass;
 
-	if (!RegisterClass (&wc))
-   return FALSE;
+  if (!RegisterClass (&wc))
+    return FALSE;
 
   wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
   wc.lpfnWndProc = (WNDPROC)MapWndProc;
@@ -339,7 +565,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.lpszMenuName = 0;
   wc.lpszClassName = TEXT("MapWindowClass");
 
-	return RegisterClass(&wc);
+  return RegisterClass(&wc);
 
 }
 
@@ -355,803 +581,1362 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-	TCHAR	szTitle[MAX_LOADSTRING];			// The title bar text
-	TCHAR	szWindowClass[MAX_LOADSTRING];		// The window class name
-	RECT rc;
-	LOGFONT logfont;
-	int i;
-	int FontHeight, FontWidth;
-	int TitleHeight;
+  TCHAR szTitle[MAX_LOADSTRING];                        // The title bar text
+  TCHAR szWindowClass[MAX_LOADSTRING];                  // The window class name
+  RECT rc;
+  LOGFONT logfont;
+  int i;
+  int FontHeight, FontWidth;
+  int TitleHeight;
 
-	hInst = hInstance;		// Store instance handle in our global variable
-	LoadString(hInstance, IDC_XCSOAR, szWindowClass, MAX_LOADSTRING);
-	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+  hInst = hInstance;            // Store instance handle in our global variable
+  LoadString(hInstance, IDC_XCSOAR, szWindowClass, MAX_LOADSTRING);
+  LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 
-	//If it is already running, then focus on the window
-	hWndMainWindow = FindWindow(szWindowClass, szTitle);	
-	if (hWndMainWindow) 
-	{
-		SetForegroundWindow((HWND)((ULONG) hWndMainWindow | 0x00000001));
-		return 0;
-	} 
+  //If it is already running, then focus on the window
+  hWndMainWindow = FindWindow(szWindowClass, szTitle);  
+  if (hWndMainWindow) 
+    {
+      SetForegroundWindow((HWND)((ULONG) hWndMainWindow | 0x00000001));
+      return 0;
+    } 
 
-	MyRegisterClass(hInst, szWindowClass);
+  MyRegisterClass(hInst, szWindowClass);
 
-	hWndMainWindow = CreateWindow(szWindowClass, szTitle, WS_VISIBLE,
-		0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), 
-		NULL, NULL, hInstance, NULL);
+  hWndMainWindow = CreateWindow(szWindowClass, szTitle, WS_VISIBLE,
+                                0, 0, GetSystemMetrics(SM_CXSCREEN), 
+				GetSystemMetrics(SM_CYSCREEN), 
+                                NULL, NULL, hInstance, NULL);
 
-	if (!hWndMainWindow)
-	{	
-		return FALSE;
-	}
+  SendMessage(hWndMainWindow, WM_SETICON,
+	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOAR);
+  SendMessage(hWndMainWindow, WM_SETICON,
+	      (WPARAM)ICON_SMALL, (LPARAM)IDI_XCSOARS);
 
-	GetClientRect(hWndMainWindow, &rc);
+  if (!hWndMainWindow)
+    {   
+      return FALSE;
+    }
+  FullScreen();
 
-	FontHeight = (rc.bottom - rc.top ) / 10;
-	FontWidth = (rc.right - rc.left ) / 24;
-	
-	memset ((char *)&logfont, 0, sizeof (logfont));
+  hBrushSelected = (HBRUSH)CreateSolidBrush(ColorSelected);
+  hBrushUnselected = (HBRUSH)CreateSolidBrush(ColorUnselected);
+
+  GetClientRect(hWndMainWindow, &rc);
+
+  FontHeight = (rc.bottom - rc.top ) / FONTHEIGHTRATIO;
+  FontWidth = (rc.right - rc.left ) / FONTWIDTHRATIO;
+        
+  memset ((char *)&logfont, 0, sizeof (logfont));
+
+  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
 
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = FontHeight;
   logfont.lfWidth =  FontWidth;
-	logfont.lfWeight = FW_MEDIUM;
+  logfont.lfWeight = FW_BOLD;
   logfont.lfCharSet = ANSI_CHARSET;
+#ifndef NOCLEARTYPE
+  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+#endif
 
   InfoWindowFont = CreateFontIndirect (&logfont);
 
-	memset ((char *)&logfont, 0, sizeof (logfont));
+  memset ((char *)&logfont, 0, sizeof (logfont));
 
+  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
-  logfont.lfHeight = FontHeight/3;
-	logfont.lfWidth =  FontWidth/2;
-	logfont.lfWeight = FW_MEDIUM;
+  logfont.lfHeight = (int)(FontHeight/TITLEFONTHEIGHTRATIO);
+  logfont.lfWidth =  (int)(FontWidth/TITLEFONTWIDTHRATIO);
+  logfont.lfWeight = FW_BOLD;
 
-	TitleWindowFont = CreateFontIndirect (&logfont);
+#ifndef NOCLEARTYPE
+  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+#endif
 
-	GetClientRect(hWndMainWindow, &rc);
+  TitleWindowFont = CreateFontIndirect (&logfont);
 
-	ControlWidth = 2*(rc.right - rc.left) / NUMINFOWINDOWS;
-	ControlHeight = (rc.bottom - rc.top) / 7;
-	TitleHeight = (int)(ControlHeight/4.5);
-	
-	#ifdef _MAP_
-	ControlHeight = 0;
-	#endif
+  memset ((char *)&logfont, 0, sizeof (logfont));
 
-	#ifndef _MAP_
+  // new font for CDI Scale
+        
+  logfont.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE  ;
+  logfont.lfHeight = (int)(FontHeight*CDIFONTHEIGHTRATIO);
+  logfont.lfWidth =  (int)(FontWidth*CDIFONTWIDTHRATIO);
+  logfont.lfWeight = FW_MEDIUM;
 
-	for(i=0;i<NUMINFOWINDOWS/2;i++)
-	{
-		if(i==0)
-		{
-			hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT(""),WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER,
-														i*ControlWidth, rc.top+TitleHeight,ControlWidth,ControlHeight,
-														hWndMainWindow,NULL,hInstance,NULL);
-		}
-		else
-		{
-			hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT("0"),WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
-														i*ControlWidth, rc.top+TitleHeight,ControlWidth,ControlHeight-TitleHeight,
-														hWndMainWindow,NULL,hInstance,NULL);
-		}
-			
-		hWndTitleWindow[i] = CreateWindow(TEXT("STATIC"),Data_Options[InfoType[i]& 0xff].Title,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
-															i*ControlWidth, rc.top,ControlWidth,10,
-															hWndMainWindow,NULL,hInstance,NULL);
+#ifdef NOCLEARTYPE
+  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+#endif
 
-		hWndInfoWindow[i+(NUMINFOWINDOWS/2)] = CreateWindow(TEXT("STATIC"),TEXT("0"),WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
-																									i*ControlWidth, (rc.bottom - ControlHeight+TitleHeight), ControlWidth,ControlHeight-TitleHeight,
-																									hWndMainWindow,NULL,hInstance,NULL);
-			
-		hWndTitleWindow[i+(NUMINFOWINDOWS/2)] = CreateWindow(TEXT("STATIC"),Data_Options[InfoType[i+(NUMINFOWINDOWS/2)]& 0xff].Title,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER,
-																									i*ControlWidth, (rc.bottom - ControlHeight), ControlWidth,TitleHeight,
-																									hWndMainWindow,NULL,hInstance,NULL);
-	}
-		
-	for(i=0;i<NUMINFOWINDOWS;i++)
-	{
-		SendMessage(hWndInfoWindow[i],WM_SETFONT,(WPARAM)InfoWindowFont,MAKELPARAM(TRUE,0));
-		SendMessage(hWndTitleWindow[i],WM_SETFONT,(WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
-	}
-	#endif
+  CDIWindowFont = CreateFontIndirect (&logfont);
 
-	#ifdef _MAP_
-	hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE|WS_CHILD|WS_TABSTOP,
-															0, 0, (rc.right - rc.left), (rc.bottom-rc.top) ,
-															hWndMainWindow,NULL,hInstance,NULL);
-	#else
-	hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE|WS_CHILD|WS_TABSTOP,
-															0, rc.top + ControlHeight, (rc.right - rc.left), ((rc.bottom-rc.top) - (2*ControlHeight)),
-															hWndMainWindow,NULL,hInstance,NULL);
-	
-	#endif
+  // new font for map labels
+        
+  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
+  logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO);
+  logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO);
+  logfont.lfWeight = FW_MEDIUM;
+
+#ifdef NOCLEARTYPE
+  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+#endif
+
+  MapLabelFont = CreateFontIndirect (&logfont);
+
+  ////////
+
+  GetClientRect(hWndMainWindow, &rc);
+
+  ControlWidth = 2*(rc.right - rc.left) / NUMINFOWINDOWS;
+  ControlHeight = (int)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
+  TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO); 
+
+#ifdef _MAP_
+  ControlHeight = 0;
+#endif
+
+#ifndef _MAP_
+
+  for(i=0;i<NUMINFOWINDOWS/2;i++)
+    {
+      if((i==0)&&0) // JMW why is this a special case?
+        {
+          hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT(""),WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER,
+                                           i*ControlWidth, rc.top+TitleHeight,ControlWidth,ControlHeight,
+                                           hWndMainWindow,NULL,hInstance,NULL);
+        }
+      else
+        {
+          hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT("0"),
+                                           WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
+                                           i*ControlWidth, rc.top+TitleHeight,
+                                           ControlWidth,ControlHeight-TitleHeight,
+                                           hWndMainWindow,NULL,hInstance,NULL);
+        }
+                        
+      hWndTitleWindow[i] = CreateWindow(TEXT("STATIC"),
+                                        Data_Options[InfoType[i]& 0xff].Title,
+                                        WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
+                                        i*ControlWidth, rc.top, ControlWidth,TitleHeight,
+                                        hWndMainWindow,NULL,hInstance,NULL);
+
+      hWndInfoWindow[i+(NUMINFOWINDOWS/2)] = CreateWindow(TEXT("STATIC"),TEXT("0"),
+                                                          WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
+                                                          i*ControlWidth, (rc.bottom - ControlHeight+TitleHeight),
+                                                          ControlWidth,ControlHeight-TitleHeight,
+                                                          hWndMainWindow,NULL,hInstance,NULL);
+                         
+      hWndTitleWindow[i+(NUMINFOWINDOWS/2)] = CreateWindow(TEXT("STATIC"),Data_Options[InfoType[i+(NUMINFOWINDOWS/2)]& 0xff].Title,
+                                                           WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER,
+                                                           i*ControlWidth, (rc.bottom - ControlHeight), 
+                                                           ControlWidth, TitleHeight,
+                                                           hWndMainWindow,NULL,hInstance,NULL);
+    }
+                
+  for(i=0;i<NUMINFOWINDOWS;i++)
+    {
+      SendMessage(hWndInfoWindow[i],WM_SETFONT,(WPARAM)InfoWindowFont,MAKELPARAM(TRUE,0));
+      SendMessage(hWndTitleWindow[i],WM_SETFONT,(WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
+    }
+#endif
+
+  //// create map window
+
+  MapRect.top = rc.top+ControlHeight;
+  MapRect.left = rc.left;
+  MapRect.bottom = rc.bottom-ControlHeight;
+  MapRect.right = rc.right;
+
+#ifdef _MAP_
+
+  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE|WS_CHILD|WS_TABSTOP,
+                               0, 0, (rc.right - rc.left), 
+			       (rc.bottom-rc.top) ,
+                               hWndMainWindow,NULL,hInstance,NULL);
+#else
+
+#ifdef OLDWINDOW
+  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE|WS_CHILD|WS_TABSTOP,
+                               0, rc.top + ControlHeight, (rc.right - rc.left), ((rc.bottom-rc.top) - (2*ControlHeight)),
+                               hWndMainWindow,NULL,hInstance,NULL);
+#else
+
+  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE|WS_CHILD|WS_TABSTOP,
+                               0, 0, (rc.right - rc.left), 
+			       (rc.bottom-rc.top) ,
+                               hWndMainWindow,NULL,hInstance,NULL);
+
+#endif
+        
+#endif
+
 
   hWndMenuButton = CreateWindow(TEXT("BUTTON"),TEXT("Menu"),WS_VISIBLE|WS_CHILD,
-																0, 0,0,0,hWndMainWindow,NULL,hInst,NULL);
+                                0, 0,0,0,hWndMainWindow,NULL,hInst,NULL);
 
   SendMessage(hWndMenuButton,WM_SETFONT,(WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
 
-  SetWindowPos(hWndMenuButton,HWND_TOP,0,ControlHeight,ControlWidth,(rc.bottom - rc.top) / 10,SWP_SHOWWINDOW);
-	
-  SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-	
-  ShowWindow(hWndMainWindow, nCmdShow);
-	UpdateWindow(hWndMainWindow);
+  // JMW moved menu button to center, to make room for thermal indicator
+  SetWindowPos(hWndMenuButton,HWND_TOP,(rc.right-rc.left-ControlWidth*MENUBUTTONWIDTHRATIO)/2,
+               ControlHeight+10,
+               (int)(ControlWidth*MENUBUTTONWIDTHRATIO),
+               (int)((rc.bottom - rc.top)/10),SWP_SHOWWINDOW);
 
-	SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+  // start of new code for displaying CDI window
 
-	return TRUE;
+  // JMW changed layout a bit, deleted Waiting for GPS info text as it is misleading here
+
+  hWndCDIWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),WS_VISIBLE|WS_CHILD, 
+                               0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
+  SendMessage(hWndCDIWindow,WM_SETFONT,(WPARAM)CDIWindowFont,MAKELPARAM(TRUE,0));
+
+  SetWindowPos(hWndCDIWindow,hWndMenuButton,
+	  (int)(ControlWidth*0.6),(int)(ControlHeight+1),(int)(ControlWidth*2.8),(int)(TitleHeight*1.4),SWP_SHOWWINDOW);
+  // JMW also made it so it doesn't obscure airspace warnings
+
+  // end of new code for drawing CDI window (see below for destruction of objects)
+
+  /////////////
+
+    FullScreen();
+        
+    ShowWindow(hWndMainWindow, nCmdShow);
+    UpdateWindow(hWndMainWindow);
+
+    SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+
+    return TRUE;
 }
+
+int getInfoType(int i) {
+  if (CALCULATED_INFO.Circling == TRUE)
+    return InfoType[i] & 0xff;
+  else if (CALCULATED_INFO.FinalGlide == TRUE) {
+    return (InfoType[i] >> 16) & 0xff;
+  } else {
+    return (InfoType[i] >> 8) & 0xff;
+  }
+}
+
+
+void setInfoType(int i, char j) {
+  if (CALCULATED_INFO.Circling == TRUE) {
+    InfoType[i] &= 0xffff00;
+    InfoType[i] += (j);
+  } else if (CALCULATED_INFO.FinalGlide == TRUE) {
+    InfoType[i] &= 0x00ffff;
+    InfoType[i] += (j<<16);
+  } else {
+    InfoType[i] &= 0xff00ff;
+    InfoType[i] += (j<<8);
+  }
+}
+
+
+void DoInfoKey(int keycode) {
+  int i;
+
+  HideMenu();
+
+  LockNavBox();
+  LockFlightData();
+  i = getInfoType(InfoFocus);
+
+  Data_Options[i].Process(keycode);
+  UnlockFlightData();
+  UnlockNavBox();
+  
+  LockFlightData();
+  DoCalculations(&GPS_INFO,&CALCULATED_INFO);    
+  //  DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO);       
+  AssignValues();
+  UnlockFlightData();
+  
+  DisplayText();
+          
+  FocusTimeOut = 0;
+}
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	int i;
+  int i, j;
+  static bool lastpress = false;
+  long wdata;
 
-	switch (message) 
-	{
-		case WM_COMMAND:
-			return MainMenu(hWnd, message, wParam, lParam);
-		break;
-		
-		case WM_CREATE:
-			memset (&s_sai, 0, sizeof (s_sai));
+  switch (message) 
+    {
+    case WM_COMMAND:
+      return MainMenu(hWnd, message, wParam, lParam);
+      break;
+                
+    case WM_CTLCOLORSTATIC: 
+      wdata = GetWindowLong((HWND)lParam, GWL_USERDATA);
+      if (wdata) {
+	SetBkColor((HDC)wParam, ColorSelected);
+	return (LRESULT)hBrushSelected;
+      } else {
+	SetBkColor((HDC)wParam, ColorUnselected);
+	return (LRESULT)hBrushUnselected;
+      }
+
+      break;
+    case WM_CREATE:
+      memset (&s_sai, 0, sizeof (s_sai));
       s_sai.cbSize = sizeof (s_sai);
 
-			#ifdef _SIM_
-				iTimerID = SetTimer(hWnd,1000,1000,NULL);
-			#else
-				iTimerID = SetTimer(hWnd,1000,4000,NULL);
-			#endif
-			
-			hWndCB = CreateRpCommandBar(hWnd);
-			AssignValues();
-			DisplayText();
-		break;
+#ifdef _SIM_
+      iTimerID = SetTimer(hWnd,1000,250,NULL);
+#else
+      iTimerID = SetTimer(hWnd,1000,250,NULL);
+#endif
+                        
+      hWndCB = CreateRpCommandBar(hWnd);
 
-		case WM_ACTIVATE:
-			if(LOWORD(wParam) != WA_INACTIVE)
-			{
-				SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-				if(TopWindow)
-					SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-				else
-					SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR|SHFS_SHOWSIPBUTTON|SHFS_SHOWSTARTICON);
-			}
-			SHHandleWMActivate(hWnd, wParam, lParam, &s_sai, FALSE);
-		break;
-		
-		case WM_SETTINGCHANGE:
-			SHHandleWMSettingChange(hWnd, wParam, lParam, &s_sai);
-		break;
-		
-		case WM_SETFOCUS:
-			if(InfoWindowActive)
-				if(DisplayLocked)
-					SetWindowLong(hWndInfoWindow[InfoFocus],GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER);
-				else
-					SetWindowLong(hWndInfoWindow[InfoFocus],GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY);
-			else
-				SetFocus(hWndMapWindow);
-		break;
+      AssignValues();
+      DisplayText();
 
-		case WM_KEYUP:
-			switch (wParam)
-			{
-				case VK_UP :  // SCROLL UP
-					if (CALCULATED_INFO.Circling == TRUE)
-						i = InfoType[InfoFocus] & 0xff;
-					else
-						i = InfoType[InfoFocus] >> 8;
-					Data_Options[i].Process(TRUE);
-					DoCalculations(&GPS_INFO,&CALCULATED_INFO);
-					AssignValues();
-					DisplayText();
-					FocusTimeOut = 0;
-				break;
+      break;
 
-				case VK_DOWN: // SCROLL DOWN
-					if (CALCULATED_INFO.Circling == TRUE)
-						i = InfoType[InfoFocus] & 0xff;
-					else
-						i = InfoType[InfoFocus] >> 8;
-					Data_Options[i].Process(FALSE);
-					DoCalculations(&GPS_INFO,&CALCULATED_INFO);
-					AssignValues();
-					DisplayText();
-					FocusTimeOut = 0;
-				break;
-			}
-		break;
+    case WM_ACTIVATE:
+      if(LOWORD(wParam) != WA_INACTIVE)
+        {
+          SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+          if(TopWindow)
+            SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+          else
+            SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR|SHFS_SHOWSIPBUTTON|SHFS_SHOWSTARTICON);
+        }
+      SHHandleWMActivate(hWnd, wParam, lParam, &s_sai, FALSE);
+      break;
+                
+    case WM_SETTINGCHANGE:
+      SHHandleWMSettingChange(hWnd, wParam, lParam, &s_sai);
+      break;
+                
+    case WM_SETFOCUS:
+      if(InfoWindowActive) {
+	
+        if(DisplayLocked) {
 
-		case WM_TIMER:
-			FrameRate = (double)FrameCount;
-			#ifdef _SIM_
-				SIMProcessTimer();
-				FrameRate = FrameRate;
-			#else
-				ProcessTimer();
-				FrameRate = FrameRate/4;
-			#endif
-			FrameCount = 0;
-			AssignValues();
-			DisplayText();
-		break;
+	  FocusOnWindow(InfoFocus,true);
+	  //	  ShowMenu();
+        }
+        else {
 
-		case WM_INITMENUPOPUP:
-			if(DisplayLocked)
-				CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_CHECKED|MF_BYCOMMAND);
-			else
-				CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_UNCHECKED|MF_BYCOMMAND);
+	  FocusOnWindow(InfoFocus,false);
+	  //	  ShowMenu();
+        }
+      } else {
+	HideMenu();
+        SetFocus(hWndMapWindow);
+      }
+      break;
 
-			if(LoggerActive)
-				CheckMenuItem((HMENU) wParam,IDM_FILE_LOGGER,MF_CHECKED|MF_BYCOMMAND);
-			else
-				CheckMenuItem((HMENU) wParam,IDM_FILE_LOGGER,MF_UNCHECKED|MF_BYCOMMAND);
-		break;
+    case WM_KEYUP:
+      switch (wParam)
+        {
+        case VK_APP1:
 
-		case WM_CLOSE:
-			CloseDrawingThread();
-			NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1; AATEnabled = FALSE;
-			NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
-			CloseTerrain();
+	  HideMenu();
 
-       if(hProgress)
-				DestroyWindow(hProgress);
+	  RequestToggleFullScreen();
 
-			if(iTimerID)
-				KillTimer(hWnd,iTimerID);
-			
-			if(PortAvailable)
-				PortClose (hPort);
+          lastpress = !lastpress;
+          if (!lastpress) {
+            break;
+          }
+          break;
 
-			DestroyWindow(hWndMapWindow);
-			DestroyWindow(hWndMenuButton);
-			
-			for(i=0;i<NUMINFOWINDOWS;i++)
-			{
-				DestroyWindow(hWndInfoWindow[i]);
-				DestroyWindow(hWndTitleWindow[i]);
-			}
-			CommandBar_Destroy(hWndCB);
+        case VK_APP2:
 
-			DeleteObject(InfoWindowFont);
-			DeleteObject(TitleWindowFont);
+	  HideMenu();
 
-			if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
-			if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
-			if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
-			if(WayPointList != NULL) LocalFree((HLOCAL)WayPointList);
+          if (!InfoWindowActive) {
+	    TrailActive = !TrailActive;
+	    if (TrailActive) {
+	      PlayResource(TEXT("IDR_INSERT")); 
+	    } else {
+	      PlayResource(TEXT("IDR_REMOVE")); 
+	    }
+            break;
+          }
 
-			DestroyWindow(hWndMainWindow);
-		break;
+          lastpress = !lastpress;
+          if (!lastpress) {
+            break;
+          }
 
-		case WM_DESTROY:
-			CommandBar_Destroy(hWndCB);
-			PostQuitMessage(0);
-		break;
-		
+          LockFlightData();
+          LockNavBox();
+
+          i = getInfoType(InfoFocus);
+
+          j = Data_Options[i].next_screen;
+          setInfoType(InfoFocus,j);
+
+          UnlockNavBox();
+          AssignValues();
+          UnlockFlightData();
+          DisplayText();
+
+          FocusTimeOut = 0;
+
+          break;
+
+        case VK_APP3:
+
+	  HideMenu();
+
+          if (!InfoWindowActive) {
+            EnableSound = !EnableSound;
+            VarioSound_EnableSound((bool)EnableSound);
+
+	    if (EnableSound) {
+	      PlayResource(TEXT("IDR_INSERT")); 
+	    } else {
+	      PlayResource(TEXT("IDR_REMOVE")); 
+	    }
+
+            break;
+          }
+
+          lastpress = !lastpress;
+          if (!lastpress) {
+            break;
+          }
+
+          LockFlightData();
+          LockNavBox();
+
+          i = getInfoType(InfoFocus);
+
+          j = Data_Options[i].prev_screen;
+          setInfoType(InfoFocus,j);
+
+          UnlockNavBox();
+          AssignValues();
+          UnlockFlightData();
+          DisplayText();
+
+          FocusTimeOut = 0;
+
+          break;
+
+        case VK_APP4:
+
+	  HideMenu();
+
+          if (InfoWindowActive)
+            break;
+
+          LockFlightData();
+
+          MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
+
+          UnlockFlightData();
+
+          break;
+
+        case VK_UP :  // SCROLL UP
+          DoInfoKey(1);
+          break;
+
+        case VK_DOWN: // SCROLL DOWN
+          DoInfoKey(-1);
+          break;
+
+        case VK_RETURN:
+          DoInfoKey(0);
+          break;
+
+        case VK_LEFT: // SCROLL DOWN
+          DoInfoKey(-2);
+          break;
+
+        case VK_RIGHT: // SCROLL DOWN
+          DoInfoKey(2);
+          break;
+        }
+      break;
+
+    case WM_TIMER:
+      FrameRate = (double)FrameCount/4;
+#ifdef _SIM_
+      SIMProcessTimer();
+#else
+      ProcessTimer();
+#endif
+      FrameCount = 0;
+
+      break;
+
+    case WM_INITMENUPOPUP:
+      if(DisplayLocked)
+        CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_CHECKED|MF_BYCOMMAND);
+      else
+        CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_UNCHECKED|MF_BYCOMMAND);
+
+      if(LoggerActive)
+        CheckMenuItem((HMENU) wParam,IDM_FILE_LOGGER,MF_CHECKED|MF_BYCOMMAND);
+      else
+        CheckMenuItem((HMENU) wParam,IDM_FILE_LOGGER,MF_UNCHECKED|MF_BYCOMMAND);
+      break;
+
+    case WM_CLOSE:
+      if(iTimerID)
+        KillTimer(hWnd,iTimerID);
+
+      VarioSound_EnableSound(false);
+      CloseDrawingThread();
+
+      NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1; AATEnabled = FALSE;
+      NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
+      CloseTerrain();
+      CloseTopology();
+
+      if(hProgress)
+        DestroyWindow(hProgress);
+                        
+      if(Port1Available)
+        Port1Close(hPort1);
+      if (Port2Available)
+        Port2Close(hPort2);
+
+      DestroyWindow(hWndMapWindow);
+      DestroyWindow(hWndMenuButton);
+      DestroyWindow(hWndCDIWindow);
+                        
+      for(i=0;i<NUMINFOWINDOWS;i++)
+        {
+          DestroyWindow(hWndInfoWindow[i]);
+          DestroyWindow(hWndTitleWindow[i]);
+        }
+      CommandBar_Destroy(hWndCB);
+
+      DeleteObject(InfoWindowFont);
+      DeleteObject(TitleWindowFont);
+      DeleteObject(CDIWindowFont);
+      DeleteObject(MapLabelFont);
+
+      if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
+      if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
+      if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
+      if(WayPointList != NULL) LocalFree((HLOCAL)WayPointList);
+
+      DestroyWindow(hWndMainWindow);
+
+      DeleteCriticalSection(&CritSec_FlightData);
+      DeleteCriticalSection(&CritSec_NavBox);
+
+      break;
+
+    case WM_DESTROY:
+      CommandBar_Destroy(hWndCB);
+      PostQuitMessage(0);
+      break;
+                
     default:
-			return DefWindowProc(hWnd, message, wParam, lParam);
-   }
-   return 0;
+      return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+  return 0;
 }
+
 
 HWND CreateRpCommandBar(HWND hwnd)
 {
-	SHMENUBARINFO mbi;
+  SHMENUBARINFO mbi;
 
-	memset(&mbi, 0, sizeof(SHMENUBARINFO));
-	mbi.cbSize     = sizeof(SHMENUBARINFO);
-	mbi.hwndParent = hwnd;
-	mbi.dwFlags = SHCMBF_EMPTYBAR|SHCMBF_HIDDEN;
-	mbi.nToolBarId = IDM_MENU;
-	mbi.hInstRes   = hInst;
-	mbi.nBmpId     = 0;
-	mbi.cBmpImages = 0;
+  memset(&mbi, 0, sizeof(SHMENUBARINFO));
+  mbi.cbSize     = sizeof(SHMENUBARINFO);
+  mbi.hwndParent = hwnd;
+  mbi.dwFlags = SHCMBF_EMPTYBAR|SHCMBF_HIDDEN;
+  mbi.nToolBarId = IDM_MENU;
+  mbi.hInstRes   = hInst;
+  mbi.nBmpId     = 0;
+  mbi.cBmpImages = 0;
 
-	if (!SHCreateMenuBar(&mbi)) 
-		return NULL;
+  if (!SHCreateMenuBar(&mbi)) 
+    return NULL;
 
-	return mbi.hwndMB;
+  return mbi.hwndMB;
 }
 
 
 LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	int wmId, wmEvent;
-	HWND wmControl;
-	int i;
-	WORD wID;
+  int wmId, wmEvent;
+  HWND wmControl;
+  int i;
+  WORD wID;
 
-	wmId    = LOWORD(wParam); 
-	wmEvent = HIWORD(wParam); 
-	wmControl = (HWND)lParam;
-	
-	if(wmControl != NULL)
-	{
-    if(wmControl == hWndMenuButton)
+  wmId    = LOWORD(wParam); 
+  wmEvent = HIWORD(wParam); 
+  wmControl = (HWND)lParam;
+        
+  if(wmControl != NULL)
     {
-			wID = DialogBox(hInst, (LPCTSTR)IDD_MENU, hWnd, (DLGPROC)Menu);
-		
-			switch (wID)
-			{	
-				case IDD_EXIT:
-					if(MessageBox(hWnd,TEXT("Do You Wish To Exit?"),TEXT("Exit?"),MB_YESNO|MB_ICONQUESTION) == IDYES)
-					{
-						SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
-						SendMessage (hWnd, WM_CLOSE, 0, 0);
-					}	
-          SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-				return 0;
+      if(wmControl == hWndMenuButton)
+        {
+          wID = DialogBox(hInst, (LPCTSTR)IDD_MENU, hWnd, (DLGPROC)Menu);
+                
+          switch (wID)
+            {   
+            case IDD_EXIT:
+              if(MessageBox(hWnd,TEXT("Do You Wish To Exit?"),TEXT("Exit?"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+                {
+                  SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
+                  SendMessage (hWnd, WM_CLOSE, 0, 0);
+                }       
+              SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+	      HideMenu();
+              return 0;
 
-				case IDD_BUGS:
-          DWORD dwError;
+	    case IDD_BACK:
+	      HideMenu();
+	      FullScreen();
+	      return 0;
 
-					ShowWindow(hWndCB,SW_SHOW);
-					SHFullScreen(hWndMainWindow,SHFS_SHOWSIPBUTTON|SHFS_SHOWTASKBAR);
-					DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWnd, (DLGPROC)SetBugsBallast);
-         	dwError = GetLastError();
-          SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-					SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-					ShowWindow(hWndCB,SW_HIDE);				
-					SwitchToMapWindow();
-				return 0;
-		
-				case IDD_PRESSURE:
-					ShowWindow(hWndCB,SW_SHOW);
-					SHFullScreen(hWndMainWindow,SHFS_SHOWSIPBUTTON|SHFS_SHOWTASKBAR);
-					DialogBox(hInst, (LPCTSTR)IDD_AIRSPACEPRESS, hWnd, (DLGPROC)AirspacePress);
-					ConvertFlightLevels();
-         	SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-					SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-					ShowWindow(hWndCB,SW_HIDE);				
-					SwitchToMapWindow();
-				return 0;	
-	
-				case IDD_TASK:
-					SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
-					DialogBox(hInst, (LPCTSTR)IDD_TASK, hWnd, (DLGPROC)SetTask);
-         	SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);					
-          SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-					ShowWindow(hWndCB,SW_HIDE);				
-					SwitchToMapWindow();
-				return 0;
+            case IDD_BUGS:
+              DWORD dwError;
 
-				case IDD_LOCK:
-					DisplayLocked = ! DisplayLocked;
-					SwitchToMapWindow();
-         	SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-				return 0;
+              ShowWindow(hWndCB,SW_SHOW);
+              SHFullScreen(hWndMainWindow,SHFS_SHOWSIPBUTTON|SHFS_SHOWTASKBAR);
+              DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWnd, (DLGPROC)SetBugsBallast);
+              dwError = GetLastError();
+              ShowWindow(hWndCB,SW_HIDE);                               
+              SwitchToMapWindow();
+	      HideMenu();
+	      FullScreen();
+              return 0;
+                
+            case IDD_PRESSURE:
+              ShowWindow(hWndCB,SW_SHOW);
+              SHFullScreen(hWndMainWindow,SHFS_SHOWSIPBUTTON|SHFS_SHOWTASKBAR);
+              DialogBox(hInst, (LPCTSTR)IDD_AIRSPACEPRESS, hWnd, (DLGPROC)AirspacePress);
+              ConvertFlightLevels();
+              ShowWindow(hWndCB,SW_HIDE);                               
+              SwitchToMapWindow();
+	      HideMenu();
+	      FullScreen();
+              return 0; 
+        
+            case IDD_TASK:
+              SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
+              DialogBox(hInst, (LPCTSTR)IDD_TASK, hWnd, (DLGPROC)SetTask);
+              ShowWindow(hWndCB,SW_HIDE);                               
+              SwitchToMapWindow();
+	      HideMenu();
+	      FullScreen();
+              return 0;
 
-				case IDD_SETTINGS:
-					COMPORTCHANGED = FALSE;
-					AIRSPACEFILECHANGED = FALSE;
-					WAYPOINTFILECHANGED = FALSE;
-					TERRAINFILECHANGED = FALSE;
+            case IDD_LOCK:
+              DisplayLocked = ! DisplayLocked;
+              ShowWindow(hWndCB,SW_HIDE);                               
+              SwitchToMapWindow();
+	      HideMenu();
+	      FullScreen();
 
-          CloseDrawingThread();
-          ShowWindow(hWndCB,SW_SHOW);
-         	SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-					SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
-					DialogBox(hInst, (LPCTSTR)IDD_SETTINGS, hWndMainWindow, (DLGPROC)Settings);
-					ShowWindow(hWndCB,SW_HIDE);				
-					SwitchToMapWindow();
+              return 0;
+
+            case IDD_SETTINGS:
+              COMPORTCHANGED = FALSE;
+              AIRSPACEFILECHANGED = FALSE;
+              WAYPOINTFILECHANGED = FALSE;
+              TERRAINFILECHANGED = FALSE;
+              TOPOLOGYFILECHANGED = FALSE;
+
+              LockFlightData();
+              LockNavBox();
+
+              SuspendDrawingThread();
+
+              ShowWindow(hWndCB,SW_SHOW);
+              SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+
+              SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
+              DialogBox(hInst, (LPCTSTR)IDD_SETTINGS, hWndMainWindow, (DLGPROC)Settings);
+              ShowWindow(hWndCB,SW_HIDE);                               
+              SwitchToMapWindow();
   
-					if(COMPORTCHANGED)
-					{
-						if(PortAvailable)
-						{
-							PortAvailable = FALSE; PortClose (hPort);
-						}
-						PortIndex = 0; SpeedIndex = 2; ReadPortSettings(&PortIndex,&SpeedIndex);
-						PortAvailable = PortInitialize (COMMPort[PortIndex],dwSpeed[SpeedIndex]);
-					}
-					
-					if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED))
-					{
-            CloseTerrain();
-            NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1;
-						if(WayPointList != NULL) LocalFree((HLOCAL)WayPointList);
-            OpenTerrain();
-          	ReadWayPoints();
-          	if(NumberOfWayPoints) SetHome();
-          }
-	
-          if(AIRSPACEFILECHANGED)
-          {
-						NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
-						if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
-						if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
-						if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
-          	ReadAirspace();
-					}
+              if(COMPORTCHANGED)
+                {
 
-          CreateDrawingThread(); 
-          SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);					
-          SwitchToMapWindow();
-					SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-					ShowWindow(hWndCB,SW_HIDE);				
-				return 0;
+		  RestartCommPorts();
 
-				case IDD_LOGGER:
-					TCHAR TaskMessage[1024];
-					if(LoggerActive)
-					{
-						if(MessageBox(hWndMapWindow,TEXT("Stop Logger"),TEXT("Stop Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
-							LoggerActive = FALSE;
-					}
-					else
-					{
-						_tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
-						for(i=0;i<MAXTASKPOINTS;i++)
-						{
-							if(Task[i].Index == -1)
-							{
-								if(i==0)
-									_tcscat(TaskMessage,TEXT("None"));
-								break;
-							}
-							_tcscat(TaskMessage,WayPointList[ Task[i].Index ].Name);
-							_tcscat(TaskMessage,TEXT("\r\n"));
-						}
+                }
+                                        
+              if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED))
+                {
+                  CloseTerrain();
+                  NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1;
+                  if(WayPointList != NULL) LocalFree((HLOCAL)WayPointList);
+                  OpenTerrain();
+                  ReadWayPoints();
+		  ReadAirfieldFile();
 
-						if(MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
-						{
-							LoggerActive = TRUE;
-							StartLogger(strAssetNumber);
-							StartDeclaration();
-							for(i=0;i<MAXTASKPOINTS;i++)
-							{
-								if(Task[i].Index == -1) break;
-								AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
-							}
-							EndDeclaration();
-						}
-					}
-				return 0;
-			}
+                  if(NumberOfWayPoints) SetHome();
+                }
+
+              if (TOPOLOGYFILECHANGED)
+                {
+                  CloseTopology();
+		  OpenTopology();
+                  ReadTopology();
+                }
+        
+              if(AIRSPACEFILECHANGED)
+                {
+                  NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
+                  if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
+                  if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
+                  if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
+                  ReadAirspace();
+                }
+
+              if (AIRFIELDFILECHANGED)
+                {
+                  // JMW TODO
+		  ReadAirfieldFile();
+                }
+
+              UnlockFlightData();
+              UnlockNavBox();
+              ResumeDrawingThread();
+
+              SwitchToMapWindow();
+	      FullScreen();
+              ShowWindow(hWndCB,SW_HIDE);                               
+	      HideMenu();
+              return 0;
+
+            case IDD_LOGGER:
+              TCHAR TaskMessage[1024];
+              if(LoggerActive)
+                {
+                  if(MessageBox(hWndMapWindow,TEXT("Stop Logger"),TEXT("Stop Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+                    LoggerActive = FALSE;
+                }
+              else
+                {
+                  _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
+                  for(i=0;i<MAXTASKPOINTS;i++)
+                    {
+                      if(Task[i].Index == -1)
+                        {
+                          if(i==0)
+                            _tcscat(TaskMessage,TEXT("None"));
+                          break;
+                        }
+                      _tcscat(TaskMessage,WayPointList[ Task[i].Index ].Name);
+                      _tcscat(TaskMessage,TEXT("\r\n"));
+                    }
+
+                  if(MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+                    {
+                      LoggerActive = TRUE;
+                      StartLogger(strAssetNumber);
+		      LoggerHeader();
+                      StartDeclaration();
+                      for(i=0;i<MAXTASKPOINTS;i++)
+                        {
+                          if(Task[i].Index == -1) break;
+                          AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
+                        }
+                      EndDeclaration();
+                    }
+                }
+	      FullScreen();
+              SwitchToMapWindow();
+	      HideMenu();
+
+              return 0;
+            }
+        }
+
+      FullScreen();
+
+      /*
+      SwitchToMapWindow();
+      */
+      FocusTimeOut = 0;
+      if (!InfoWindowActive) {
+	ShowMenu();
+      }
+      for(i=0;i<NUMINFOWINDOWS;i++)
+        {       
+          if(wmControl == hWndInfoWindow[i])
+            {
+	      InfoWindowActive = TRUE;
+	      SetFocus(hWnd);
+
+	      if(DisplayLocked)
+		{
+		  if( i!= InfoFocus)
+		    {
+		      FocusOnWindow(i,true);
+		      FocusOnWindow(InfoFocus,false);
+
+		      InfoFocus = i;
+		      InfoWindowActive = TRUE;
+		    }
+		  DisplayText();
+
 		}
-    
-    SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-		SwitchToMapWindow();
-		FocusTimeOut = 0;
-		for(i=0;i<NUMINFOWINDOWS;i++)
-		{	
-			if(wmControl == hWndInfoWindow[i])
-			{
-				InfoWindowActive = TRUE;
-				SetFocus(hWnd);
-				if(DisplayLocked)
-				{
-					if( i!= InfoFocus)
-					{
-						SetWindowLong(hWndInfoWindow[i],GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER);
-						SetWindowLong(hWndInfoWindow[InfoFocus],GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY);
-						InfoFocus = i;
-						InfoWindowActive = TRUE;
-					}
-				}
-				else
-				{
-					PopUpSelect(i);
-					DisplayText();
-				}
-				return 0;
-			}
+	      else
+		{
+		  PopUpSelect(i);
+		  DisplayText();
 		}
-  }
-	return DefWindowProc(hWnd, message, wParam, lParam);		
+	      return 0;
+	    }
+	}
+
+    }
+  return DefWindowProc(hWnd, message, wParam, lParam);          
 }
 
 #define WAIT 0
-#define FILL 1    
-void ProcessChar (char c)
-{
-	static int i = 0;
-	static int State = WAIT;
-	static TCHAR BuildingString[100];
+#define FILL 1 
+int OK_Flag = 1; // Flag added to signal good or bad EW logger reply to turnpoint info
+int IO_Flag = 1; // Flag added to signal sucessful entry of EW logger into I/O Mode 
 
-	if(!GPSPROCESS)
-		return;
-	
-	if(State == WAIT)
-	{
-		if(c=='$')
-		{
-			BuildingString[0] = c;
-			i=1;
-			State = FILL;
-		}
-	}
-	else
-	{
-		if(i>90)
-		{
-			State = WAIT;
-		}
-		else
-		{
-			if(c=='\n')
-			{
-				BuildingString[i] = '\0';
-				State = WAIT;
-				#ifdef DEBUG
-					DebugStore(BuildingString);
-				#endif
-				if(ParseNMEAString(BuildingString,&GPS_INFO))
-				{
-					GPSCONNECT  = TRUE;
-					if(GPS_INFO.NAVWarning == FALSE)
-					{
-						if(DoCalculations(&GPS_INFO,&CALCULATED_INFO))
-						{
-							AssignValues();
-							DisplayText();
-						}
-					}
-				}
-			}
-			else
-			{
-				BuildingString[i++] = c;
-			}
-		}
-	}
+void ProcessChar1 (char c)
+{
+  static TCHAR BuildingString[100]; 
+  static int i = 0;
+  static int State = WAIT;
+  OK_Flag = 1; // Set flag to failed state
+  IO_Flag = 1; // Set flag to failed state
+        
+  if(State == WAIT)
+    {
+      if(c)  // Modified from "$" so that BuildingString can be
+	     // used for logger acknowledgements
+	     // was if (c=='$')
+        {
+          BuildingString[0] = c;
+          BuildingString[1] = '\0';
+          i=1;
+          State = FILL;
+        }
+    }
+  else
+    {
+      if(i>90)
+        {
+          State = WAIT;
+        }
+      else
+        {
+          if(c=='\n')
+            {
+              BuildingString[i] = '\0';
+              State = WAIT;
+
+              //#ifdef DEBUG
+              //              DebugStore(BuildingString);
+              //#endif
+
+              if(BuildingString[0]=='$')  // Additional "if" to find GPS strings
+                {
+                  LockFlightData();
+
+                  bool dodisplay = false;
+
+                  if(ParseNMEAString(BuildingString,&GPS_INFO))
+                    {
+                      GPSCONNECT  = TRUE;
+                      if(GPS_INFO.NAVWarning == FALSE)
+                        {
+			  /* JMW: wait for main thread to do this,
+			     so don't get multiple updates
+                          if(DoCalculations(&GPS_INFO,&CALCULATED_INFO))
+                            {
+                              AssignValues();
+                              dodisplay = true;
+                            }
+			  */
+                        }
+                    } 
+                  UnlockFlightData();
+                }
+              else //   else parse EW logger string
+                if(_tcscmp(BuildingString,TEXT("OK\r"))==0)     OK_Flag = 0;
+              if(_tcscmp(BuildingString,TEXT("IO Mode.\r"))==0) IO_Flag = 0;
+            }
+          else
+            {
+              BuildingString[i++] = c;
+            }
+        }
+    }
 }
 
-void	AssignValues(void)
+void ProcessChar2 (char c)
 {
-	Data_Options[0].Value = ALTITUDEMODIFY*GPS_INFO.Altitude;
-	Data_Options[1].Value = ALTITUDEMODIFY*CALCULATED_INFO.AltitudeAGL  ;
-	
-	Data_Options[2].Value = LIFTMODIFY*CALCULATED_INFO.Average30s;
-	Data_Options[3].Value = GPS_INFO.WaypointBearing;
-	Data_Options[4].Value = CALCULATED_INFO.LD; 
-	Data_Options[5].Value = CALCULATED_INFO.CruiseLD;
-	Data_Options[6].Value = SPEEDMODIFY*GPS_INFO.Speed;
-	
-	Data_Options[7].Value = LIFTMODIFY*CALCULATED_INFO.LastThermalAverage;
-	Data_Options[8].Value = ALTITUDEMODIFY*CALCULATED_INFO.LastThermalGain;
-	Data_Options[9].Value = CALCULATED_INFO.LastThermalTime;
-	
-	Data_Options[10].Value = MACREADY;
-	
-	Data_Options[11].Value = DISTANCEMODIFY*GPS_INFO.WaypointDistance;
-	Data_Options[12].Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeDifference;
-	Data_Options[13].Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeRequired; 
-	Data_Options[14].Value = 0; // Next Waypoint Text
-	
-	Data_Options[15].Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeDifference;
-	Data_Options[16].Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeRequired;
-	Data_Options[17].Value = SPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
-	Data_Options[18].Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo; 
-	Data_Options[19].Value = CALCULATED_INFO.LDFinish; 
+  static TCHAR BuildingString[100]; 
+  static int i = 0;
+  static int State = WAIT;
+  OK_Flag = 1; // Set flag to failed state
+  IO_Flag = 1; // Set flag to failed state
+        
+  if(State == WAIT)
+    {
+      if(c=='$') // we're only going to parse NMEA strings here
+        {
+          BuildingString[0] = c;
+          BuildingString[1] = '\0';
+          i=1;
+          State = FILL;
+        }
+    }
+  else
+    {
+      if(i>90)
+        {
+          State = WAIT;
+        }
+      else
+        {
+          if(c=='\n')
+            {
+              BuildingString[i] = '\0';
+              State = WAIT;
 
-	
-	Data_Options[20].Value = ALTITUDEMODIFY*CALCULATED_INFO.TerrainAlt ;
-	
-	Data_Options[21].Value = LIFTMODIFY*CALCULATED_INFO.AverageThermal;
-	Data_Options[22].Value = ALTITUDEMODIFY*CALCULATED_INFO.ThermalGain;
-	
-	Data_Options[23].Value = GPS_INFO.TrackBearing;
-	Data_Options[24].Value = LIFTMODIFY*CALCULATED_INFO.Vario;
-	Data_Options[25].Value = SPEEDMODIFY*CALCULATED_INFO.WindSpeed;
-	Data_Options[26].Value = CALCULATED_INFO.WindBearing;
-	Data_Options[27].Value = CALCULATED_INFO.AATTimeToGo / 60;
-	Data_Options[28].Value = DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance ; 
-	Data_Options[29].Value = DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance ; 
-	Data_Options[30].Value = SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
-	Data_Options[31].Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
+              //#ifdef DEBUG
+              //              DebugStore(BuildingString);
+              //#endif
+
+              if(BuildingString[0]=='$')  // Additional "if" to find GPS strings
+                {
+                  LockFlightData();
+
+                  bool dodisplay = false;
+
+                  if(ParseNMEAString(BuildingString,&GPS_INFO))
+                    {
+                      VARIOCONNECT  = TRUE;
+		      
+                      if(DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO))
+                        {
+			  //    AssignValues();
+                          // JMW don't display here, as it is too often
+                        }
+                    } 
+                  UnlockFlightData();
+                }
+              else //   else parse EW logger string
+                if(_tcscmp(BuildingString,TEXT("OK\r"))==0)     OK_Flag = 0;
+              if(_tcscmp(BuildingString,TEXT("IO Mode.\r"))==0) IO_Flag = 0;
+            }
+          else
+            {
+              BuildingString[i++] = c;
+            }
+        }
+    }
+}
+
+
+int SecsToDisplayTime(int d) {
+  int mins;
+  int hours;
+  hours = (d/3600);
+  mins = (d/60-hours*60);
+  return (hours*100+mins);
+}
+
+
+int DetectStartTime() {
+  static int starttime = -1;
+  if (starttime == -1) {
+    if (GPS_INFO.Speed > 5) {
+      starttime = GPS_INFO.Time;
+    } else {
+      return 0;
+    }
+  }
+  return SecsToDisplayTime(GPS_INFO.Time-starttime);
+}
+
+
+void    AssignValues(void)
+{
+  if (InfoBoxesHidden) {
+    // no need to assign values
+    return;
+  }
+
+  LockNavBox();
+
+  Data_Options[0].Value = ALTITUDEMODIFY*GPS_INFO.Altitude;
+  Data_Options[1].Value = ALTITUDEMODIFY*CALCULATED_INFO.AltitudeAGL  ;
+        
+  Data_Options[2].Value = LIFTMODIFY*CALCULATED_INFO.Average30s;
+  Data_Options[3].Value = GPS_INFO.WaypointBearing;
+  Data_Options[4].Value = CALCULATED_INFO.LD; 
+  Data_Options[5].Value = CALCULATED_INFO.CruiseLD;
+  Data_Options[6].Value = SPEEDMODIFY*GPS_INFO.Speed;
+        
+  Data_Options[7].Value = LIFTMODIFY*CALCULATED_INFO.LastThermalAverage;
+  Data_Options[8].Value = ALTITUDEMODIFY*CALCULATED_INFO.LastThermalGain;
+  Data_Options[9].Value = CALCULATED_INFO.LastThermalTime;
+        
+  Data_Options[10].Value = MACREADY;
+        
+  Data_Options[11].Value = DISTANCEMODIFY*GPS_INFO.WaypointDistance;
+  Data_Options[12].Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeDifference;
+  Data_Options[13].Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeRequired; 
+  Data_Options[14].Value = 0; // Next Waypoint Text
+        
+  Data_Options[15].Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeDifference;
+  Data_Options[16].Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeRequired;
+  Data_Options[17].Value = SPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
+  Data_Options[18].Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo; 
+  Data_Options[19].Value = CALCULATED_INFO.LDFinish; 
+        
+  Data_Options[20].Value = ALTITUDEMODIFY*CALCULATED_INFO.TerrainAlt ;
+        
+  Data_Options[21].Value = LIFTMODIFY*CALCULATED_INFO.AverageThermal;
+  Data_Options[22].Value = ALTITUDEMODIFY*CALCULATED_INFO.ThermalGain;
+        
+  Data_Options[23].Value = GPS_INFO.TrackBearing;
+
+  if (GPS_INFO.VarioAvailable) {
+    Data_Options[24].Value = LIFTMODIFY*GPS_INFO.Vario;
+  } else {
+    Data_Options[24].Value = LIFTMODIFY*CALCULATED_INFO.Vario;
+  }
+
+  Data_Options[25].Value = SPEEDMODIFY*CALCULATED_INFO.WindSpeed;
+  Data_Options[26].Value = CALCULATED_INFO.WindBearing;
+  Data_Options[27].Value = CALCULATED_INFO.AATTimeToGo / 60;
+  Data_Options[28].Value = DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance ; 
+  Data_Options[29].Value = DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance ; 
+  Data_Options[30].Value = SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
+  Data_Options[31].Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
   Data_Options[32].Value = SPEEDMODIFY*GPS_INFO.Airspeed;
   Data_Options[33].Value = ALTITUDEMODIFY*GPS_INFO.BaroAltitude;
 
+  Data_Options[34].Value = SPEEDMODIFY*CALCULATED_INFO.VMcReady; 
+
+  Data_Options[35].Value = CALCULATED_INFO.PercentCircling;
+
+  Data_Options[36].Value = DetectStartTime();
+
+  UnlockNavBox();
+
 }
-	
+
+        
 void DisplayText(void)
 {
-	int i;
-	static TCHAR Value[100] = TEXT("");
-	static TCHAR Caption[100] = TEXT("");
-	int DisplayType;
+  
+  if (InfoBoxesHidden) 
+    return;
 
-	#ifdef _MAP_
-		return;
-	#endif
+  int i;
+  static TCHAR Value[100] = TEXT("");
+  static TCHAR Caption[100] = TEXT("");
+  int DisplayType;
+  
+#ifdef _MAP_
+  return;
+#endif
 
-	for(i=0;i<NUMINFOWINDOWS;i++)
-	{
-		if (CALCULATED_INFO.Circling == TRUE)
-			DisplayType = InfoType[i] & 0xff;
-		else
-			DisplayType = InfoType[i] >> 8;
+  LockNavBox();
+  
+  // JMW note: this is updated every GPS time step
+  
+  for(i=0;i<NUMINFOWINDOWS;i++)
+    {
+      LockFlightData();
+      if (CALCULATED_INFO.Circling == TRUE)
+        DisplayType = InfoType[i] & 0xff;
+      else if (CALCULATED_INFO.FinalGlide == TRUE) {
+        DisplayType = (InfoType[i] >> 16) & 0xff;
+      } else {
+        DisplayType = (InfoType[i] >> 8) & 0xff;
+      }
+      UnlockFlightData();
 
-		if(DisplayType == 14) // Waypoint Name
-		{
-			if(ActiveWayPoint >=0)
-			{
-				
-				_stprintf(Caption,Data_Options[DisplayType].Title );
-				if ( DisplayTextType == DISPLAYFIRSTTHREE)
-				{
-					_tcsncpy(Value,WayPointList[ Task[ActiveWayPoint].Index ].Name,3);
-					Value[3] = '\0';
-				}
-				else if( DisplayTextType == DISPLAYNUMBER)
-				{
-					_stprintf(Value,TEXT("%d"),WayPointList[ Task[ActiveWayPoint].Index ].Number );
-				}
-				else
-				{
-					_tcsncpy(Value,WayPointList[ Task[ActiveWayPoint].Index ].Name,5);
-					Value[5] = '\0';
-				}
-			}
-			else
-			{
-				_stprintf(Caption,Data_Options[DisplayType].Title );
-				Value[0] = '\0';
-			}
-		}
-		else
-		{
-			_stprintf(Caption,Data_Options[DisplayType].Title );
-			_stprintf(Value,Data_Options[DisplayType].Format, Data_Options[DisplayType].Value );
-		}
+      if(DisplayType == 14) // Waypoint Name
+        {
+          if(ActiveWayPoint >=0)
+            {
+                                
+              _stprintf(Caption,Data_Options[DisplayType].Title );
+              if ( DisplayTextType == DISPLAYFIRSTTHREE)
+                {
+                  _tcsncpy(Value,WayPointList[ Task[ActiveWayPoint].Index ].Name,3);
+                  Value[3] = '\0';
+                }
+              else if( DisplayTextType == DISPLAYNUMBER)
+                {
+                  _stprintf(Value,TEXT("%d"),WayPointList[ Task[ActiveWayPoint].Index ].Number );
+                }
+              else
+                {
+                  _tcsncpy(Value,WayPointList[ Task[ActiveWayPoint].Index ].Name,5);
+                  Value[5] = '\0';
+                }
+            }
+          else
+            {
+              _stprintf(Caption,Data_Options[DisplayType].Title );
+              Value[0] = '\0';
+            }
+        }
+      else
+        {
+          _stprintf(Caption,Data_Options[DisplayType].Title );
+          _stprintf(Value,Data_Options[DisplayType].Format, Data_Options[DisplayType].Value );
 
-		SetWindowText(hWndInfoWindow[i],Value);
-		SetWindowText(hWndTitleWindow[i],Caption);
-	}
+        }
+
+      SetWindowText(hWndInfoWindow[i],Value);
+      SetWindowText(hWndTitleWindow[i],Caption);
+
+    }
+
+  UnlockNavBox();
+
 }
+
+
 
 void ProcessTimer(void)
 {
-	static BOOL LastGPSCONNECT = FALSE;
-	static BOOL CONNECTWAIT = FALSE;
-	static BOOL LOCKWAIT = FALSE;
-	TCHAR szLoadText[MAX_LOADSTRING];
+  static BOOL LastGPSCONNECT = FALSE;
+  static BOOL LastVARIOCONNECT = FALSE;
+  static BOOL CONNECTWAIT = FALSE;
+  static BOOL LOCKWAIT = FALSE;
+  TCHAR szLoadText[MAX_LOADSTRING];
 
-	SystemIdleTimerReset();
+  SystemIdleTimerReset();
 
-	if(InfoWindowActive)
-	{
-		FocusTimeOut ++;
-		if(FocusTimeOut > 10)
-		{
-			SwitchToMapWindow();
-		}
+  if(InfoWindowActive)
+    {
+      if(FocusTimeOut==FOCUSTIMEOUTMAX)
+        {
+          SwitchToMapWindow();
+        } else {
+  	  FocusTimeOut ++;
+        }
+    } 
+  if(MenuTimeOut==MENUTIMEOUTMAX) {
+    ShowWindow(hWndMenuButton, SW_HIDE);
+  } else {
+    MenuTimeOut++;
+  }
+
+  //    ReadAssetNumber();
+
+  if(!Port1Available)
+    return;
+
+  if (GpsUpdated) {
+    GpsUpdated = FALSE;
+    
+    //    CheckRegistration();
+    
+    // JMW moved logging and snail to Calculations
+    
+    LockFlightData();
+    
+    bool dodisplay = false;
+    if(DoCalculations(&GPS_INFO,&CALCULATED_INFO)) 
+      {
+	AssignValues();
+	DisplayText();
+	MapDirty = true;
+      }
+    
+    UnlockFlightData();
+  }
+  
+  // now check GPS status
+
+  static int itimeout = 0;
+  itimeout++;
+  if (itimeout % 20 != 0) {
+    // timeout if no new data in 5 seconds
+    return;
+  }
+
+  bool gpsconnect = (bool)GPSCONNECT;
+  GPSCONNECT = false;
+  bool varioconnect = (bool)VARIOCONNECT;
+  bool navwarning = (bool)(GPS_INFO.NAVWarning);
+
+  if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
+    {
+      Port1WriteString(TEXT("NMEA\r\n"));
+      
+      if(LOCKWAIT == TRUE)
+        {
+          DestroyWindow(hProgress);
+          SwitchToMapWindow();
+          hProgress = NULL;
+          LOCKWAIT = FALSE;
+        }
+      if(!CONNECTWAIT)
+        {
+          hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
+          LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
+          SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
+          CONNECTWAIT = TRUE;
+          MessageBeep(MB_ICONEXCLAMATION);
+          SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+	  FullScreen();
+
+        } else {
+
+	if (itimeout % 240 == 0) {
+	  // no activity for one minute, so assume device has been
+	  // switched off
+	  RestartCommPorts();
+	  itimeout = 0;
 	}
+      }
+    }
+        
+  if((gpsconnect == TRUE) && (LastGPSCONNECT == FALSE))
+    {
+      itimeout = 0; // reset timeout
+      
+      if(CONNECTWAIT)
+        {
+          DestroyWindow(hProgress);
+          SwitchToMapWindow();
+          hProgress = NULL;
+          CONNECTWAIT = FALSE;
+        }
+    }
+  
+  if((gpsconnect == TRUE) && (LastGPSCONNECT == TRUE))
+    {
+      if((navwarning == TRUE) && (LOCKWAIT == FALSE))
+        {
+          hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
+          LoadString(hInst, IDS_LOCKWAIT, szLoadText, MAX_LOADSTRING);
+          SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
+          LOCKWAIT = TRUE;
+          MessageBeep(MB_ICONEXCLAMATION);
+          SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+	  FullScreen();
 
-	ReadAssetNumber();
+        }
+      else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
+        {
+          DestroyWindow(hProgress);
+          SwitchToMapWindow();
+          hProgress = NULL;
+          LOCKWAIT = FALSE;
+        }
+    }
 
-	if(!PortAvailable)
-	  return;
+  if((varioconnect == TRUE) && (LastVARIOCONNECT == FALSE)) {
+    // vario is connected now
+  }
 
-	CheckRegistration();
+  LastGPSCONNECT = gpsconnect;
 
-	if(LoggerActive)
-		LogPoint(GPS_INFO.Lattitude , GPS_INFO.Longditude , GPS_INFO.Altitude );
-
-	AddSnailPoint();
-
-	
-	if((GPSCONNECT == FALSE) && (LastGPSCONNECT == FALSE))
-	{
-		PortWriteString(TEXT("NMEA\r\n"));
-
-		if(LOCKWAIT == TRUE)
-		{
-			DestroyWindow(hProgress);
-			SwitchToMapWindow();
-			hProgress = NULL;
-			LOCKWAIT = FALSE;
-		}
-		if(!CONNECTWAIT)
-		{
-			hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
-			LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
-			SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
-			CONNECTWAIT = TRUE;
-			MessageBeep(MB_ICONEXCLAMATION);
-			SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-		}
-	}
-	
-	if((GPSCONNECT == TRUE) && (LastGPSCONNECT == FALSE))
-	{
-		if(CONNECTWAIT)
-		{
-			DestroyWindow(hProgress);
-			SwitchToMapWindow();
-			hProgress = NULL;
-			CONNECTWAIT = FALSE;
-		}
-	}
-
-	if((GPSCONNECT == TRUE) && (LastGPSCONNECT == TRUE))
-	{
-		if((GPS_INFO.NAVWarning == TRUE) && (LOCKWAIT == FALSE))
-		{
-			hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
-			LoadString(hInst, IDS_LOCKWAIT, szLoadText, MAX_LOADSTRING);
-			SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
-			LOCKWAIT = TRUE;
-			MessageBeep(MB_ICONEXCLAMATION);
-			SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-		}
-		else if((GPS_INFO.NAVWarning == FALSE) && (LOCKWAIT == TRUE))
-		{
-			DestroyWindow(hProgress);
-			SwitchToMapWindow();
-			hProgress = NULL;
-			LOCKWAIT = FALSE;
-		}
-	}
-	LastGPSCONNECT = GPSCONNECT;
-	GPSCONNECT  = FALSE;
-	
 }
+
 
 void SIMProcessTimer(void)
 {
-	SystemIdleTimerReset();
+  SystemIdleTimerReset();
 
-	ReadAssetNumber();
+  //  ReadAssetNumber();
 
-	if(InfoWindowActive)
-	{
-		FocusTimeOut ++;
-		if(FocusTimeOut > 10)
-		{
-			SwitchToMapWindow();
-		}
-	}
+  if(InfoWindowActive)
+    {
+      if(FocusTimeOut == FOCUSTIMEOUTMAX)
+        {
+          SwitchToMapWindow();
+        } else {
+	FocusTimeOut ++;
+      }
+    } 
 
-	GPS_INFO.Lattitude = FindLattitude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed );
-	GPS_INFO.Longditude = FindLongditude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed);
-	GPS_INFO.Time++;
+  if(MenuTimeOut==MENUTIMEOUTMAX) {
+    ShowWindow(hWndMenuButton, SW_HIDE);
+  } else {
+    MenuTimeOut++;
+  }
 
-	if(DoCalculations(&GPS_INFO,&CALCULATED_INFO))
-	{
-		AssignValues();
-		DisplayText();
-	}
+  static int ktimer=0;
+  ktimer++;
+  if (ktimer % 4 != 0) {
+    return; // only update every 4 clicks
+  }
 
-	if(LoggerActive)
-		LogPoint(GPS_INFO.Lattitude , GPS_INFO.Longditude , GPS_INFO.Altitude );
+  LockFlightData();
 
-	AddSnailPoint();
+  GPS_INFO.Lattitude = FindLattitude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
+  GPS_INFO.Longditude = FindLongditude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
+  GPS_INFO.Time+= 1.0;
 
-}
+  if(DoCalculations(&GPS_INFO,&CALCULATED_INFO))
+    {
+      AssignValues();
+      DisplayText();
+      MapDirty = true;
+    }
 
-void AddSnailPoint(void)
-{
-	if(TrailLock) return;
+  UnlockFlightData();
 
-	SnailTrail[SnailNext].Lattitude = GPS_INFO.Lattitude;
-	SnailTrail[SnailNext].Longditude = GPS_INFO.Longditude;
-	SnailTrail[SnailNext].Vario = CALCULATED_INFO.Vario ;
-	SnailNext ++;
-	SnailNext %= TRAILSIZE;
+
+  // JMW moved logging and snail to Calculations
 }
 
 
 void SwitchToMapWindow(void)
 {
-	InfoWindowActive = FALSE;
-	SetWindowLong(hWndInfoWindow[InfoFocus],GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY);
-	SetFocus(hWndMapWindow);
+  InfoWindowActive = FALSE;
+  FocusOnWindow(InfoFocus,false);
+
+  SetFocus(hWndMapWindow);
+
+  // JMW reactivate menu button
+  // ShowWindow(hWndMenuButton, SW_SHOW);
+
 }
+
+
+void PopupWaypointDetails()
+{
+  DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS, hWndInfoWindow[0], (DLGPROC)WaypointDetails);
+  /*
+  ShowWindow(hWndCB,SW_HIDE);                           
+  FullScreen();
+  SwitchToMapWindow();
+  */
+}
+
+
+void PopupBugsBallast(int UpDown)
+{
+  DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWndInfoWindow[0], (DLGPROC)SetBugsBallast);
+  ShowWindow(hWndCB,SW_HIDE);                           
+  FullScreen();
+  SwitchToMapWindow();
+}
+
 
 void PopUpSelect(int Index)
 {
-	CurrentInfoType = InfoType[Index];
-	InfoType[Index] = DialogBox(hInst, (LPCTSTR)IDD_SELECT, hWndInfoWindow[Index], (DLGPROC)Select);
-	StoreType(Index,InfoType[Index]);
-	SwitchToMapWindow();
-	SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-	ShowWindow(hWndCB,SW_HIDE);				
+  CurrentInfoType = InfoType[Index];
+  InfoType[Index] = DialogBox(hInst, (LPCTSTR)IDD_SELECT, hWndInfoWindow[Index], (DLGPROC)Select);
+  StoreType(Index, InfoType[Index]);
+  ShowWindow(hWndCB,SW_HIDE);                           
+  FullScreen();
+  SwitchToMapWindow();
 }
 
 #ifdef DEBUG
@@ -1159,14 +1944,72 @@ void PopUpSelect(int Index)
 
 void DebugStore(TCHAR *Str)
 {
-	FILE *stream;
-	static TCHAR szFileName[] = TEXT("\\TEMP.TXT");
+  FILE *stream;
+  static TCHAR szFileName[] = TEXT("\\TEMP.TXT");
 
-	stream = _wfopen(szFileName,TEXT("ab"));
+  stream = _wfopen(szFileName,TEXT("ab"));
 
-	fwrite(Str,wcslen(Str),1,stream);
+  fwrite(Str,wcslen(Str),1,stream);
 
-	fclose(stream);
+  fclose(stream);
 }
 
 #endif
+
+static bool ref_navbox = false;
+static bool ref_flightdata = false;
+
+
+void LockNavBox() {
+  // EnterCriticalSection(&CritSec_NavBox);
+  //  while(ref_navbox) {}
+  //ref_navbox = true;
+}
+
+void UnlockNavBox() {
+  //ref_navbox = false;
+  //  LeaveCriticalSection(&CritSec_NavBox);
+}
+
+void LockFlightData() {
+  EnterCriticalSection(&CritSec_FlightData);
+  //  while(ref_flightdata) {}
+  // ref_flightdata = true;
+}
+
+void UnlockFlightData() {
+  //  ref_flightdata = false;
+  LeaveCriticalSection(&CritSec_FlightData);
+}
+
+void LockTerrainData() {
+  EnterCriticalSection(&CritSec_TerrainData);
+  //  while(ref_flightdata) {}
+  // ref_flightdata = true;
+}
+
+void UnlockTerrainData() {
+  //  ref_flightdata = false;
+  LeaveCriticalSection(&CritSec_TerrainData);
+}
+
+
+
+void HideInfoBoxes() {
+  int i;
+  InfoBoxesHidden = true;
+  for (i=0; i<NUMINFOWINDOWS; i++) {
+    ShowWindow(hWndInfoWindow[i], SW_HIDE);
+    ShowWindow(hWndTitleWindow[i], SW_HIDE);
+  }
+}
+
+
+void ShowInfoBoxes() {
+  int i;
+  InfoBoxesHidden = false;
+  for (i=0; i<NUMINFOWINDOWS; i++) {
+    ShowWindow(hWndInfoWindow[i], SW_SHOW);
+    ShowWindow(hWndTitleWindow[i], SW_SHOW);
+  }
+}

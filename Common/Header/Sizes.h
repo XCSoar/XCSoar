@@ -25,4 +25,56 @@
 
 #define TRAILSIZE 1000
 
+// ratio of height of screen to main font height
+#define FONTHEIGHTRATIO 9
+// ratio of width of screen to main font width
+#define FONTWIDTHRATIO 22
+
+// ratio of title font height to main font height
+#define TITLEFONTHEIGHTRATIO 2.3
+// ratio of title font width to main font width
+#define TITLEFONTWIDTHRATIO 1.8
+
+#define CDIFONTHEIGHTRATIO 0.6
+#define CDIFONTWIDTHRATIO 0.75
+
+#define MAPFONTHEIGHTRATIO 0.39
+#define MAPFONTWIDTHRATIO 0.39
+
+#define CONTROLHEIGHTRATIO 7.4
+#define TITLEHEIGHTRATIO 3.1
+
+#define MENUBUTTONWIDTHRATIO 0.6
+
+
+//////////////
+
+// size of terrain cache
+#define MAXTERRAINCACHE 2000
+
+// stepsize of pixel grid, should be multiple of 2
+#define DTQUANT 7
+
+// ratio of smoothed bitmap size to pixel grid
+#define OVS 2
+
+// number of radials to do range footprint calculation on
+#define NUMTERRAINSWEEPS 20
+
+// number of points along final glide to scan for terrain
+#define NUMFINALGLIDETERRAIN 30
+
+// ratio of border size to trigger shape cache reload
+#define BORDERFACTOR 0.6
+
+// maximum number of topologies
+#define MAXTOPOLOGY 20
+
+// timeout in quarter seconds of infobox focus
+#define FOCUSTIMEOUTMAX 24*4
+
+// timeout in quarter seconds of menu button 
+#define MENUTIMEOUTMAX 8*4
+
+
 #endif

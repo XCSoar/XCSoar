@@ -16,8 +16,26 @@ typedef struct _SCREEN_INFO
 	TCHAR Format[FORMAT_SIZE + 1];
 	double Value;
 	void (*Process)(int UpDown);
+  char next_screen;
+  char prev_screen;
 } SCREEN_INFO;
 
-void ProcessChar (char c);
+void ProcessChar1 (char c);
+void ProcessChar2 (char c);
+
+extern void UnlockFlightData();
+extern void LockFlightData();
+extern void UnlockTerrainData();
+extern void LockTerrainData();
+extern void UnlockNavBox();
+extern void LockNavBox();
+void FocusOnWindow(int i, bool selected);
+void FullScreen();
+extern void PopupWaypointDetails();
+
+extern void ShowInfoBoxes();
+extern void HideInfoBoxes();
+extern void ToggleFullScreen();
+extern void RequestToggleFullScreen();
 
 #endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
