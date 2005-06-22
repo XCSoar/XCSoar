@@ -34,17 +34,21 @@ typedef struct _NMEA_INFO
   double WaypointSpeed;
   double CrossTrackError;
   double Time;
-	int		Month;
-	int		Day;
-	int		Year;
+  int		Month;
+  int		Day;
+  int		Year;
   int   NAVWarning;
   double Airspeed;
   double BaroAltitude;
   double MacReady;
-	BOOL BaroAltitudeAvailable;
-	BOOL ExternalWindAvailalbe;
-	double ExternalWindSpeed;
-	double ExternalWindDirection;
+  BOOL BaroAltitudeAvailable;
+  BOOL ExternalWindAvailalbe;
+  double ExternalWindSpeed;
+  double ExternalWindDirection;
+  BOOL VarioAvailable;
+  BOOL AirspeedAvailable;
+  double Vario;
+  double IAS;
 } NMEA_INFO;
 
 int ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO);

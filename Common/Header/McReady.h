@@ -5,6 +5,10 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-double McReadyAltitude(double MCREADY, double Distance, double Bearing, double WindSpeed, double WindBearing);
+double McReadyAltitude(double MCREADY, double Distance, double Bearing, double WindSpeed, double WindBearing,
+						double *BestCruiseTrack, double *VMcReady, int isFinalGlide);
+
+double SinkRate(double Vias);
+void SetBallast();
 
 #endif

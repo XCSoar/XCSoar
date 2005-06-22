@@ -11,6 +11,7 @@
 #define NAME_SIZE 20
 #define COMMENT_SIZE 20
 
+#define TRACKCIRCLE 3
 #define NORTHCIRCLE 2
 #define NORTHUP 1
 #define TRACKUP 0
@@ -20,6 +21,7 @@
 #define DISPLAYFIRSTFIVE 2
 #define DISPLAYNONE 3
 #define DISPLAYFIRSTTHREE 4
+#define DISPLAYNAMEIFINTASK 5
 
 #define ALLON 0
 #define CLIP 1
@@ -48,6 +50,7 @@ typedef struct _WAYPOINT_INFO
 	int Zoom;
 	BOOL Reachable;
 	BOOL Visible;
+        TCHAR *Details;
 } WAYPOINT;
 
 #define OTHER					0
@@ -115,13 +118,30 @@ typedef struct _SNAIL_POINT
 	POINT Screen;
 } SNAIL_POINT;
 
-#define TRAILSIZE 1000
+
 
 LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,LPARAM lParam);
 
 void CloseDrawingThread(void);
 void CreateDrawingThread(void);
+void SuspendDrawingThread(void);
+void ResumeDrawingThread(void);
 
 void DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top );
+
+void LatLon2Screen(float lon, float lat, int *scX, int *scY);
+void LatLon2Screen(double lon, double lat, int *scX, int *scY);
+
+extern double RequestMapScale;
+extern double MapScale;
+
+void ReplaceWaypoint(int index);
+void InsertWaypoint(int index);
+void RemoveWaypoint(int index);
+void FlyDirectTo(int index);
+
+void GetLocationFromScreen(double *X, double *Y);
+
+void DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h);
 
 #endif

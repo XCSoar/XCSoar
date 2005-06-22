@@ -20,28 +20,21 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "Process.h"
 #include "externs.h"
+#include "Utils.h"
 
-void	WindSpeedProcessing(int UpDown)
-{
-	if(UpDown)
-		CALCULATED_INFO.WindSpeed += (1/SPEEDMODIFY);
-	else
-	{
-		CALCULATED_INFO.WindSpeed -= (1/SPEEDMODIFY);
-		if(CALCULATED_INFO.WindSpeed < 0)
-			CALCULATED_INFO.WindSpeed = 0;
-	}
-	return;
-}
+// JMW added key codes,
+// so -1 down
+//     1 up
+//     0 enter
 
 void	AltitudeProcessing(int UpDown)
 {
 	#ifdef _SIM_
-		if(UpDown)
-			GPS_INFO.Altitude += (10/ALTITUDEMODIFY);
-		else
+		if(UpDown==1)
+			GPS_INFO.Altitude += (100/ALTITUDEMODIFY);
+		else if (UpDown==-1)
 		{
-			GPS_INFO.Altitude -= (10/ALTITUDEMODIFY);
+			GPS_INFO.Altitude -= (100/ALTITUDEMODIFY);
 			if(GPS_INFO.Altitude < 0)
 				GPS_INFO.Altitude = 0;
 		}
@@ -52,13 +45,17 @@ void	AltitudeProcessing(int UpDown)
 void	SpeedProcessing(int UpDown)
 {
 	#ifdef _SIM_
-		if(UpDown)
+		if(UpDown==1)
 			GPS_INFO.Speed += (10/SPEEDMODIFY);
-		else
+		else if (UpDown==-1)
 		{
 			GPS_INFO.Speed -= (10/SPEEDMODIFY);
 			if(GPS_INFO.Speed < 0)
 				GPS_INFO.Speed = 0;
+		} else if (UpDown==-2) {
+			DirectionProcessing(-1);
+		} else if (UpDown==2) {
+			DirectionProcessing(1);
 		}
 	#endif
 	return;
@@ -67,7 +64,7 @@ void	SpeedProcessing(int UpDown)
 void	WindDirectionProcessing(int UpDown)
 {
 
-	if(UpDown)
+	if(UpDown==1)
 	{
 		CALCULATED_INFO.WindBearing  += 5;
 		while (CALCULATED_INFO.WindBearing  >= 360)
@@ -75,13 +72,37 @@ void	WindDirectionProcessing(int UpDown)
 			CALCULATED_INFO.WindBearing  -= 360;
 		}
 	}
-	else
+	else if (UpDown==-1)
 	{
 		CALCULATED_INFO.WindBearing  -= 5;
 		while (CALCULATED_INFO.WindBearing  < 0)
 		{
 			CALCULATED_INFO.WindBearing  += 360;
 		}
+	} else if (UpDown == 0) {
+	  SaveWindToRegistry();
+	}
+	return;
+}
+
+
+void	WindSpeedProcessing(int UpDown)
+{
+	if(UpDown==1)
+		CALCULATED_INFO.WindSpeed += (1/SPEEDMODIFY);
+	else if (UpDown== -1)
+	{
+		CALCULATED_INFO.WindSpeed -= (1/SPEEDMODIFY);
+		if(CALCULATED_INFO.WindSpeed < 0)
+			CALCULATED_INFO.WindSpeed = 0;
+	}
+	// JMW added faster way of changing wind direction
+	else if (UpDown== -2) {
+		WindDirectionProcessing(-1);
+	} else if (UpDown== 2) {
+		WindDirectionProcessing(1);
+	} else if (UpDown == 0) {
+	  SaveWindToRegistry();
 	}
 	return;
 }
@@ -89,7 +110,8 @@ void	WindDirectionProcessing(int UpDown)
 void	DirectionProcessing(int UpDown)
 {
 	#ifdef _SIM_
-		if(UpDown)
+
+		if(UpDown==1)
 		{
 			GPS_INFO.TrackBearing   += 5;
 			while (GPS_INFO.TrackBearing  >= 360)
@@ -97,7 +119,7 @@ void	DirectionProcessing(int UpDown)
 				GPS_INFO.TrackBearing  -= 360;
 			}
 		}
-		else
+		else if (UpDown==-1)
 		{
 			GPS_INFO.TrackBearing  -= 5;
 			while (GPS_INFO.TrackBearing  < 0)
@@ -111,22 +133,32 @@ void	DirectionProcessing(int UpDown)
 
 void	McReadyProcessing(int UpDown)
 {
-	if(UpDown)
+	if(UpDown==1) {
 		MACREADY += (double)0.2;
-	else if(MACREADY >= 0)
+
+		if (MACREADY>10.0) { // JMW added sensible limit
+			MACREADY=10.0;
+		}
+	}
+	else if(UpDown==-1)
 	{
 		MACREADY -= (double)0.2;
 		if(MACREADY < 0)
 		{
 			MACREADY = 0;
 		}
+	} else if (UpDown==0)
+	{
+		CALCULATED_INFO.AutoMcReady = !CALCULATED_INFO.AutoMcReady; // JMW toggle automacready
 	}
 	return;
 }
 
+extern void PopupWaypointDetails();
+
 void NextUpDown(int UpDown)
 {
-	if(UpDown)
+	if(UpDown==1)
 	{
 		if(ActiveWayPoint < MAXTASKPOINTS)
 		{
@@ -141,12 +173,17 @@ void NextUpDown(int UpDown)
 			}
 		}
 	}
-	else
+	else if (UpDown==-1)
 	{
 		if(ActiveWayPoint >0)
 		{
 			ActiveWayPoint --;
 		}
+	} else if (UpDown==0) {
+		SelectedWaypoint = Task[ActiveWayPoint].Index;
+		UnlockFlightData();
+		PopupWaypointDetails();
+		LockFlightData();
 	}
 }
 

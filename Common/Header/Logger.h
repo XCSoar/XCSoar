@@ -12,5 +12,11 @@ void LogPoint(double Lattitude, double Longditude, double Altitude);
 void AddDeclaration(double Lattitude, double Longditude, TCHAR *ID);
 void StartDeclaration(void);
 void EndDeclaration(void);
+void LoggerHeader(void);
+
+void EW_Strings(double Lattitude, double Longditude, TCHAR *ID);
+void EW_Download(TCHAR *strAssetNumber);
 
 #endif
+
+

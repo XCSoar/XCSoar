@@ -10,7 +10,6 @@ void				WindSpeedProcessing(int UpDown);
 void				WindDirectionProcessing(int UpDown);
 void				McReadyProcessing(int UpDown);
 void				NextUpDown(int UpDown);
-void				AddSnailPoint(void);
 void				SpeedProcessing(int UpDown);
 void				DirectionProcessing(int UpDown);
 void				AltitudeProcessing(int UpDown);

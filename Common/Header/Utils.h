@@ -17,6 +17,7 @@ void ReadRegistrySettings(void);
 void SetRegistryColour(int i, DWORD c);
 void StoreType(int Index,int InfoType);
 void rotate(double *xin, double *yin, double angle);
+void frotate(float *xin, float *yin, float angle);
 double Distance(double lat1, double lon1, double lat2, double lon2);
 double Bearing(double lat1, double lon1, double lat2, double lon2);
 double Reciprocal(double InBound);
@@ -25,14 +26,17 @@ void SectorEndPoint(double StartLat, double StartLon, double  Radial, double Dis
 void CalculateNewPolarCoef(void);
 int Registered(void);
 void CheckRegistration(void);
+void RefreshTaskWaypoint(int i);
 void CalculateTaskSectors(void);
 void CalculateAATTaskSectors(void);
 double FindLattitude(double Lat, double Lon, double Bearing, double Distance);
 double FindLongditude(double Lat, double Lon, double Bearing, double Distance);
 void ConvertFlightLevels(void);
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
-void ReadPortSettings(DWORD *PortIndex, DWORD *SpeedIndex);
-void WritePortSettings(DWORD PortIndex, DWORD SpeedIndex);
+void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
+void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
+void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex);
+void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
 int  Circle(HDC hdc, long x, long y, int radius, RECT rc);
 void ReadAssetNumber(void);
 void WriteProfile(HWND hwnd, TCHAR *szFile);
@@ -45,5 +49,16 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String);
 void InitSineTable(void);
 double fastcosine(double x);
 double fastsine(double x);
+float ffastcosine(float x);
+float ffastsine(float x);
 double StrToDouble(TCHAR *Source, TCHAR **Stop);
+void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
+void SaveWindToRegistry();
+void LoadWindFromRegistry();
+
+unsigned int isqrt4(unsigned long val);
+int iround(double i);
+long lround(double i);
+
+
 #endif

@@ -13,7 +13,8 @@
 #include "Task.h"
 
 extern HINSTANCE hInst;
-extern HANDLE hPort;            // Serial port handle
+extern HANDLE hPort1;            // Serial port handle
+extern HANDLE hPort2;            // Serial port handle
 extern HANDLE hReadThread;      // Handle to the read thread
 extern LPTSTR lpszDevName;      // Communication port name
 extern TCHAR strAssetNumber[REGKEYSIZE+1];
@@ -31,11 +32,14 @@ extern BOOL DisplayLocked;
 extern SCREEN_INFO Data_Options[];
 extern int NUMSELECTSTRINGS;
 
+extern int HomeWaypoint;
 extern WAYPOINT *WayPointList;
 extern unsigned int NumberOfWayPoints;
 
 extern TASK_POINT Task[];
 extern int ActiveWayPoint;
+
+extern int SelectedWaypoint;
 
 extern int FAISector;
 extern DWORD SectorRadius;
@@ -53,12 +57,18 @@ extern NMEA_INFO		GPS_INFO;
 extern DERIVED_INFO	CALCULATED_INFO;
 
 extern double MACREADY;
+extern bool   AutoMacReady;
+
 extern double SPEEDMODIFY;
 extern double	LIFTMODIFY;
 extern double	DISTANCEMODIFY;
 extern double ALTITUDEMODIFY;
 
-extern double SAFTEYALTITUDE;
+extern double SAFETYALTITUDEARRIVAL;
+extern double SAFETYALTITUDEBREAKOFF;
+extern double SAFETYALTITUDETERRAIN;
+
+extern double SAFTEYSPEED;
 extern double BUGS;
 extern double BALLAST;
 extern int POLARID;
@@ -91,6 +101,11 @@ extern SNAIL_POINT SnailTrail[TRAILSIZE];
 extern int TrailActive;
 extern	int SnailNext;
 extern int TrailLock;
+extern int WindUpdateMode;
+extern int CircleZoom;
+extern int EnableTopology;
+extern int EnableTerrain;
+extern int FinalGlideTerrain;
 
 extern double AATTaskLength;
 extern BOOL AATEnabled;
@@ -100,5 +115,9 @@ extern BOOL COMPORTCHANGED;
 extern BOOL AIRSPACEFILECHANGED;
 extern BOOL WAYPOINTFILECHANGED;
 extern BOOL TERRAINFILECHANGED;
+extern BOOL AIRFIELDFILECHANGED;
+extern BOOL TOPOLOGYFILECHANGED;
+
+extern BOOL InfoBoxesHidden;
 
 #endif

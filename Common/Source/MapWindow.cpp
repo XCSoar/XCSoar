@@ -1,20 +1,20 @@
 /*
-XCSoar Glide Computer
-Copyright (C) 2000 - 2004  M Roberts
+  XCSoar Glide Computer
+  Copyright (C) 2000 - 2004  M Roberts
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "stdafx.h"
 
@@ -25,32 +25,41 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Waypointparser.h"
 
 #include "externs.h"
+#include "VarioSound.h"
 
 #include <windows.h>
 #include <math.h>
 
 #include <tchar.h>
 
+#include "Terrain.h"
 
 static DWORD DrawThread (LPVOID);
 
-static void CalculateScreenPositions(POINT Orig, RECT rc);
+static void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft);
 static void CalculateWaypointReachable(void);
 
-static void GetLocationFromScreen(HWND hWnd, double *X, double *Y);
 
 int		PointVisible(POINT *P, RECT *rc);
 
 
 static void DrawAircraft(HDC hdc, POINT Orig);
-static void DrawWind(HDC hdc, POINT Orig);
+static void DrawBestCruiseTrack(HDC hdc, POINT Orig);
+static void DrawCompass(HDC hdc, RECT rc);
+static void DrawWind(HDC hdc, POINT Orig, RECT rc);
 static void DrawAirSpace(HDC hdc, RECT rc);
 static void DrawWaypoints(HDC hdc, RECT rc);
+static void DrawFlightMode(HDC hdc, RECT rc);
 static void DrawTrail(HDC hdc, POINT Orig, RECT rc);
 static void DrawTask(HDC hdc, RECT rc);
 static void DrawBearing(HDC hdc, POINT Orig);
 static void DrawMapScale(HDC hDC,RECT rc);
 static void DrawFinalGlide(HDC hDC,RECT rc);
+static void DrawThermalBand(HDC hDC,RECT rc);
+static void DrawGlideThroughTerrain(HDC hDC, RECT rc);
+static void DrawCDI();
+
+extern HWND					hWndCDIWindow;
 
 static void DrawSolidLine(HDC , POINT , POINT );
 static void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
@@ -60,1062 +69,1964 @@ int		PointVisible(POINT *P, RECT *rc);
 #define NUMPOINTS 2
 
 static HBITMAP hDrawBitMap = NULL;
+static HBITMAP hDrawBitMapBg = NULL;
+static HBITMAP hDrawBitMapTmp = NULL;
 static HDC hdcDrawWindow = NULL;
+static HDC hdcDrawWindowBg = NULL;
 static HDC hdcScreen = NULL;
 static HDC hDCTemp = NULL;
 
-static BOOL CLOSETHREAD = FALSE;
-static BOOL	THREADRUNNING = FALSE;
-static BOOL PAUSETHREAD = TRUE;
-static BOOL THREADEXIT = FALSE;
+double PanX=0.0;
+double PanY=0.0;
+double PanXr=0.0;
+double PanYr=0.0;
+
+bool EnablePan = FALSE;
+
+extern int iround(double i);
+
+BOOL CLOSETHREAD = FALSE;
+BOOL THREADRUNNING = TRUE;
+//static BOOL	THREADRUNNING = FALSE;
 
 DWORD  dwDrawThreadID;
 HANDLE hDrawThread;
 
-static double RequestMapScale = 10;
-static double MapScale = 10;
+double RequestMapScale = 5;
+double MapScale = 5;
+double DisplayAngle = 0.0;
+double DisplayAircraftAngle = 0.0;
 static double DrawScale;
+
+static bool AutoZoom = false;
 
 static NMEA_INFO DrawInfo;
 static DERIVED_INFO DerivedDrawInfo;
 
+static int dTDisplay=0;
 
-static HBITMAP hLandable, hReachable, hTurnPoint, hSmall;
+static HBITMAP hLandable, hReachable, hTurnPoint, hSmall, hCruise, hClimb,
+  hFinalGlide, hAutoMcReady, hTerrainWarning;
+static HBITMAP hAirspaceBitmap;
 static HBRUSH	hAirspaceBrush[17];
+static HBRUSH   hBackgroundBrush;
 static COLORREF Colours[16] = {RGB(0xFF,0x00,0x00), RGB(0x00,0xFF,0x00), RGB(0x00,0x00,0xFF), RGB(0xFF,0xFF,0x00),
-															 RGB(0xFF,0x00,0xFF), RGB(0x00,0xFF,0xFF), RGB(0x7F,0x00,0x00), RGB(0x00,0x7F,0x00),
-															 RGB(0x00,0x00,0x7F), RGB(0x7F,0x7F,0x00), RGB(0x7F,0x00,0x7F), RGB(0x00,0x7F,0x7F),
-															 RGB(0xFF,0xFF,0xFF), RGB(0xC0,0xC0,0xC0), RGB(0x7F,0x7F,0x7F), RGB(0x00,0x00,0x00)};
+			       RGB(0xFF,0x00,0xFF), RGB(0x00,0xFF,0xFF), RGB(0x7F,0x00,0x00), RGB(0x00,0x7F,0x00),
+			       RGB(0x00,0x00,0x7F), RGB(0x7F,0x7F,0x00), RGB(0x7F,0x00,0x7F), RGB(0x00,0x7F,0x7F),
+			       RGB(0xFF,0xFF,0xFF), RGB(0xC0,0xC0,0xC0), RGB(0x7F,0x7F,0x7F), RGB(0x00,0x00,0x00)};
+
+static COLORREF BackgroundColor = RGB(0xF5,0xF5,0xF5);
+
+static      HPEN hpAircraft, hpAircraftBorder;
+static      HPEN hpWind;
+static      HPEN hpBearing;
+static      HPEN hpBestCruiseTrack;
+static      HPEN hpCompass;
+static      HPEN hpThermalBand, hpThermalBandGlider;
+static      HPEN hpFinalGlideAbove, hpFinalGlideBelow;
+static      HPEN hpMapScale;
+static      HPEN hpTerrainLine;
+
+static      HBRUSH hbCompass;
+static      HBRUSH hbThermalBand;
+static      HBRUSH hbBestCruiseTrack;
+static      HBRUSH hbFinalGlideBelow, hbFinalGlideAbove;
+
+
+int SelectedWaypoint;
+
+
+void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size) {
+  SIZE tsize;
+  RECT brect;
+  if (size==0) {
+    size = _tcslen(Value);
+  }
+
+  HBRUSH hbOld;
+  hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+
+  GetTextExtentPoint(hDC, Value, size, &tsize);
+  brect.left = x-1;
+  brect.right = brect.left+tsize.cx+2;
+  brect.top = y-1;
+  brect.bottom = brect.top+tsize.cy+2;
+
+  ExtTextOut(hDC,
+	     x, y,
+	     ETO_OPAQUE, &brect, Value, size, NULL);
+
+  SelectObject(hDC, hbOld);
+
+}
+
+
+void FlyDirectTo(int index) {
+  ActiveWayPoint = -1; AATEnabled = FALSE;
+  for(int j=0;j<MAXTASKPOINTS;j++)
+    {
+      Task[j].Index = -1;
+    }
+  Task[0].Index = index;
+  ActiveWayPoint = 0;
+}
+
+
+void InsertWaypoint(int index) {
+  int i;
+
+  if (ActiveWayPoint<0) {
+    ActiveWayPoint = 0;
+    Task[ActiveWayPoint].Index = index;
+    return;
+  }
+
+  for (i=MAXTASKPOINTS-1; i>=ActiveWayPoint; i--) {
+    Task[i+1].Index = Task[i].Index;
+    RefreshTaskWaypoint(i+1);
+  }
+  Task[ActiveWayPoint].Index = index;
+
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    if (Task[i].Index>= 0) {
+      RefreshTaskWaypoint(i);
+    }
+  }
+
+  CalculateTaskSectors();
+  CalculateAATTaskSectors();
+}
+
+
+void RemoveWaypoint(int index) {
+  int i;
+
+  if (ActiveWayPoint<0) {
+    return;
+  }
+
+  for (i=ActiveWayPoint; i<MAXTASKPOINTS-1; i++) {
+    Task[i].Index = Task[i+1].Index;
+  }
+  Task[MAXTASKPOINTS-1].Index = 0;
+
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    if (Task[i].Index>= 0) {
+      RefreshTaskWaypoint(i);
+    }
+  }
+
+  CalculateTaskSectors();
+  CalculateAATTaskSectors();
+}
+
+
+void ReplaceWaypoint(int index) {
+  Task[ActiveWayPoint].Index = index;
+
+  RefreshTaskWaypoint(ActiveWayPoint);
+  if (ActiveWayPoint>0) {
+    RefreshTaskWaypoint(ActiveWayPoint-1);
+  }
+  if (ActiveWayPoint+1<MAXTASKPOINTS) {
+    if (Task[ActiveWayPoint+1].Index != -1) {
+      RefreshTaskWaypoint(ActiveWayPoint+1);
+    }
+  }
+
+  CalculateTaskSectors();
+  CalculateAATTaskSectors();
+}
+
+
+
+RECT MapRectBig;
+RECT MapRect;
+RECT MapRectSmall;
+static bool MapFullScreen= false;
+bool RequestFullScreen = false;
+
+bool MapDirty = true;
+
+void RequestToggleFullScreen() {
+  RequestFullScreen = !RequestFullScreen;
+  MapDirty = true;
+}
+
+static DWORD fpsTime0=0;
+
+void RefreshMap() {
+  fpsTime0 = 0;
+  MapDirty = true;
+}
+
+
+void ToggleFullScreen() {
+  MapFullScreen = !MapFullScreen;
+  if (MapFullScreen) {
+    MapRect = MapRectBig;
+    HideInfoBoxes();
+  } else {
+    MapRect = MapRectSmall;
+    ShowInfoBoxes();
+  }
+  RefreshMap();
+}
+
 
 
 LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
-                              LPARAM lParam)
+			     LPARAM lParam)
 {
-	int i,j;
-	TCHAR szMessageBuffer[1024];
-	double X,Y;
-	static DWORD dwDownTime=0, dwUpTime=0;
+  int i;
+  //  TCHAR szMessageBuffer[1024];
+  double X,Y;
+  static double Xstart, Ystart;
+  static double XstartScreen, YstartScreen;
+  double distance;
+  char val;
+
+  static DWORD dwDownTime=0, dwUpTime=0;
 
   switch (uMsg)
-  {
-		case WM_SIZE:
-			hDrawBitMap = CreateCompatibleBitmap (hdcScreen, (int) LOWORD (lParam), (int) HIWORD (lParam));
-			SelectObject(hdcDrawWindow, (HBITMAP)hDrawBitMap);
-		break;
+    {
+    case WM_SIZE:
+      hDrawBitMap = CreateCompatibleBitmap (hdcScreen, (int) LOWORD (lParam), (int) HIWORD (lParam));
+      SelectObject(hdcDrawWindow, (HBITMAP)hDrawBitMap);
+      hDrawBitMapBg = CreateCompatibleBitmap (hdcScreen, (int) LOWORD (lParam), (int) HIWORD (lParam));
+      SelectObject(hdcDrawWindowBg, (HBITMAP)hDrawBitMapBg);
+      hDrawBitMapTmp = CreateCompatibleBitmap (hdcScreen, (int) LOWORD (lParam), (int) HIWORD (lParam));
+      SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
+      break;
 
-		case WM_CREATE:
-			hdcScreen = GetDC(hWnd);
-			hdcDrawWindow = CreateCompatibleDC(hdcScreen);
-			hDCTemp = CreateCompatibleDC(hdcDrawWindow);
-			for(i=0;i<16;i++)
-			{
-				hAirspaceBrush[i] = CreateSolidBrush(Colours[i]);
-			}
+    case WM_CREATE:
+      hdcScreen = GetDC(hWnd);
+      hdcDrawWindow = CreateCompatibleDC(hdcScreen);
+      hdcDrawWindowBg = CreateCompatibleDC(hdcScreen);
+      hDCTemp = CreateCompatibleDC(hdcDrawWindow);
 
-			hAirspaceBrush[i] = (HBRUSH)GetStockObject(HOLLOW_BRUSH);
+      hBackgroundBrush = CreateSolidBrush(BackgroundColor);
 
-			hLandable=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LANDABLE));
-			hReachable=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_REACHABLE));
-			hTurnPoint=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TURNPOINT));
-			hSmall=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SMALL));
-     break;
+      hTerrainWarning=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TERRAINWARNING));
+      hLandable=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LANDABLE));
+      hReachable=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_REACHABLE));
+      hTurnPoint=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TURNPOINT));
+      hSmall=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SMALL));
+      hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE));
+      hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB));
+      hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE));
+      hAutoMcReady=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
 
+      hAirspaceBitmap=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE));
 
-		case WM_DESTROY:
-			CloseDrawingThread();
+      for(i=0;i<16;i++)
+	{
+	  hAirspaceBrush[i] = // CreateSolidBrush(Colours[i]);
+	    CreatePatternBrush((HBITMAP)hAirspaceBitmap);
+	  //      hAirspaceBrush[i] = (HBRUSH)GetStockObject(HOLLOW_BRUSH);
+	}
+
+      /* JMW created all re-used pens here */
+
+      hpAircraft = (HPEN)CreatePen(PS_SOLID, 4, RGB(0xa0,0xa0,0xa0));
+      hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, 3, RGB(0x00,0x00,0x00));
+      hpWind = (HPEN)CreatePen(PS_SOLID, 2, RGB(255,0,0));
+      hpBearing = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
+      hpBestCruiseTrack = (HPEN)CreatePen(PS_SOLID, 1, RGB(0,0,255));
+      hpCompass = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xcf,0xcf,0xFF));
+      hpThermalBand = (HPEN)CreatePen(PS_SOLID, 2, RGB(0x40,0x40,0xFF));
+      hpThermalBandGlider = (HPEN)CreatePen(PS_SOLID, 2, RGB(0x00,0x00,0x30));
+      hpFinalGlideBelow = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xFF,0xA0,0xA0));
+      hpFinalGlideAbove = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xA0,0xFF,0xA0));
+      hpMapScale = (HPEN)CreatePen(PS_SOLID, 1, RGB(0,0,0));
+      hpTerrainLine = (HPEN)CreatePen(PS_DASH, 1, RGB(0x30,0x30,0x30));
+
+      hbCompass=(HBRUSH)CreateSolidBrush(RGB(0x40,0x40,0xFF));
+      hbThermalBand=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0xFF));
+      hbBestCruiseTrack=(HBRUSH)CreateSolidBrush(RGB(0x0,0x0,0xFF));
+      hbFinalGlideBelow=(HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
+      hbFinalGlideAbove=(HBRUSH)CreateSolidBrush(RGB(0x00,0xFF,0x00));
+
+      break;
+
+    case WM_DESTROY:
+      CloseDrawingThread();
 
       ReleaseDC(hWnd, hdcScreen);
-			DeleteDC(hdcDrawWindow);
-			DeleteDC(hDCTemp);
-			DeleteObject(hDrawBitMap);
+      DeleteDC(hdcDrawWindow);
+      DeleteDC(hdcDrawWindowBg);
+      DeleteDC(hDCTemp);
+      DeleteObject(hDrawBitMap);
+      DeleteObject(hDrawBitMapBg);
 
-			DeleteObject(hLandable);DeleteObject(hReachable);DeleteObject(hTurnPoint);DeleteObject(hSmall);
+      DeleteObject(hLandable);
+      DeleteObject(hReachable);
+      DeleteObject(hTurnPoint);
+      DeleteObject(hSmall);
+      DeleteObject(hCruise);
+      DeleteObject(hClimb);
+      DeleteObject(hFinalGlide);
+      DeleteObject(hAutoMcReady);
+      DeleteObject(hTerrainWarning);
 
-			for(i=0;i<16;i++)
-			{
-					DeleteObject(hAirspaceBrush[i]);
-			}
-			PostQuitMessage (0);
-    break;
+      DeleteObject(hAirspaceBitmap);
 
-		case WM_LBUTTONDOWN:
-			dwDownTime = GetTickCount();
-		break;
+      DeleteObject((HPEN)hpAircraft);
+      DeleteObject((HPEN)hpAircraftBorder);
+      DeleteObject((HPEN)hpWind);
+      DeleteObject((HPEN)hpBearing);
+      DeleteObject((HPEN)hpBestCruiseTrack);
+      DeleteObject((HPEN)hpCompass);
+      DeleteObject((HPEN)hpThermalBand);
+      DeleteObject((HPEN)hpThermalBandGlider);
+      DeleteObject((HPEN)hpFinalGlideAbove);
+      DeleteObject((HPEN)hpFinalGlideBelow);
+      DeleteObject((HPEN)hpMapScale);
+      DeleteObject((HPEN)hpTerrainLine);
 
-		case WM_LBUTTONUP:
-			X = LOWORD(lParam); Y = HIWORD(lParam);
-			if(InfoWindowActive)
-			{
-				InfoWindowActive = FALSE;
-				SetFocus(hWnd);
-				SetWindowLong(hWndInfoWindow[InfoFocus],GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY);
-				break;
-			}
-			dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
+      DeleteObject((HBRUSH)hbCompass);
+      DeleteObject((HBRUSH)hbThermalBand);
+      DeleteObject((HBRUSH)hbBestCruiseTrack);
+      DeleteObject((HBRUSH)hbFinalGlideBelow);
+      DeleteObject((HBRUSH)hbFinalGlideAbove);
 
-			GetLocationFromScreen(hWnd, &X, &Y);
+      for(i=0;i<16;i++)
+	{
+	  DeleteObject(hAirspaceBrush[i]);
+	}
+      PostQuitMessage (0);
+      break;
 
-			if(dwDownTime < 1000)
-			{
-				i=FindNearestWayPoint(X, Y, MapScale * 500);
-				if(i != -1)
-				{
-					wsprintf(szMessageBuffer,TEXT("Goto WayPoint\r\n%s\r\n%s"),WayPointList[i].Name,WayPointList[i].Comment);
-					if(MessageBox(hWnd,szMessageBuffer ,TEXT("Go To"),MB_YESNO|MB_ICONQUESTION) == IDYES)
-					{
-						ActiveWayPoint = -1; AATEnabled = FALSE;
-						for(j=0;j<MAXTASKPOINTS;j++)
-						{
-							Task[j].Index = -1;
-						}
-						Task[0].Index = i;
-							ActiveWayPoint = 0;
-					}
-					SetFocus(hWnd);
-          SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-					break;
-				}
-			}
-			else
-			{
-				i= FindAirspaceCircle(X,Y);
-				if(i != -1)
-				{
-					DisplayAirspaceWarning(AirspaceCircle[i].Type , AirspaceCircle[i].Name , AirspaceCircle[i].Base, AirspaceCircle[i].Top );
-					break;
-				}
-				i= FindAirspaceArea(X,Y);
-				if(i != -1)
-				{
-					DisplayAirspaceWarning(AirspaceArea[i].Type , AirspaceArea[i].Name , AirspaceArea[i].Base, AirspaceArea[i].Top );
-					break;
-				}
-			}
-		break;
+    case WM_LBUTTONDOWN:
+      dwDownTime = GetTickCount();
+      Xstart = LOWORD(lParam); Ystart = HIWORD(lParam);
+      XstartScreen = Xstart;
+      YstartScreen = Ystart;
+      GetLocationFromScreen(&Xstart, &Ystart);
+      FullScreen();
+      break;
 
-		case WM_KEYUP:
-			switch (wParam)
-			{
-				case VK_UP :  // SCROLL UP
-						RequestMapScale *=2;
-						if(RequestMapScale>160) RequestMapScale = 160;
-				break;
+    case WM_LBUTTONUP:
+      X = LOWORD(lParam); Y = HIWORD(lParam);
+      if(InfoWindowActive)
+	{
+	  InfoWindowActive = FALSE;
+	  SetFocus(hWnd);
+	  FocusOnWindow(InfoFocus,false);
+	  break;
+	}
+      dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
 
-				case VK_DOWN: // SCROLL DOWN
-						if(RequestMapScale >= 0.01)
-						{
-							RequestMapScale /=2;
-						}
-				break;
-			}
-		break;
-  }
+      distance = (XstartScreen-X)*(XstartScreen-X)+
+	(YstartScreen-Y)*(YstartScreen-Y);
 
-	return (DefWindowProc (hWnd, uMsg, wParam, lParam));
+      GetLocationFromScreen(&X, &Y);
+
+      if (EnablePan && (distance>36)) {
+	PanX += Xstart-X;
+	PanY += Ystart-Y;
+	RefreshMap();
+	break; // disable picking when in pan mode
+      }
+
+      if(dwDownTime < 1000)
+	{
+	  i=FindNearestWayPoint(Xstart, Ystart, MapScale * 500);
+	  if(i != -1)
+	    {
+
+	      // JMW TODO: this prevents tasks being resumed.
+	      // is there a way to achieve this functionality but to
+	      // resume the task?
+	      // ---OR--- allow option: FINAL GLIDE TO HERE or REPLACE CURRENT WAYPOINT
+
+	      SelectedWaypoint = i;
+	      PopupWaypointDetails();
+
+	      /*
+		LockFlightData();
+		wsprintf(szMessageBuffer,TEXT("Fly direct to WayPoint\r\n%s\r\n%s"),WayPointList[i].Name,WayPointList[i].Comment);
+		if(MessageBox(hWnd,szMessageBuffer ,TEXT("Go To"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+		{
+		FlyDirectTo(i);
+		} else {
+		SetFocus(hWnd);
+		SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+
+		if (ActiveWayPoint>=0) {
+		wsprintf(szMessageBuffer,TEXT("Replace current WayPoint\r\n%s\r\n%s"),WayPointList[i].Name,WayPointList[i].Comment);
+		if(MessageBox(hWnd,szMessageBuffer ,TEXT("Go To"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+		{
+		ReplaceWaypoint(i);
+		}
+		}
+		}
+		UnlockFlightData();
+	      */
+
+	      SetFocus(hWnd);
+	      SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+	      break;
+	    }
+	}
+      else
+	{
+	  i= FindAirspaceCircle(Xstart,Ystart);
+	  if(i != -1)
+	    {
+	      DisplayAirspaceWarning(AirspaceCircle[i].Type , AirspaceCircle[i].Name , AirspaceCircle[i].Base, AirspaceCircle[i].Top );
+	      break;
+	    }
+	  i= FindAirspaceArea(Xstart,Ystart);
+	  if(i != -1)
+	    {
+	      DisplayAirspaceWarning(AirspaceArea[i].Type , AirspaceArea[i].Name , AirspaceArea[i].Base, AirspaceArea[i].Top );
+	      break;
+	    }
+	}
+      break;
+
+    case WM_KEYUP:
+      switch (wParam)
+	{
+	case VK_DOWN :  // SCROLL UP
+	  RequestMapScale *= 1.414;
+	  if(RequestMapScale>160) RequestMapScale = 160;
+	  RefreshMap();
+	  break;
+
+	case VK_UP: // SCROLL DOWN
+	  if(RequestMapScale >= 0.01)
+	    {
+	      RequestMapScale /= 1.414;
+	    }
+	  RefreshMap();
+	  break;
+
+	case VK_RIGHT: // Pan mode
+ 	  EnablePan = !EnablePan;
+	  if (EnablePan) {
+	    PlayResource(TEXT("IDR_INSERT"));
+	  } else {
+	    PlayResource(TEXT("IDR_REMOVE"));
+	  }
+	  if (!EnablePan) {
+	    PanX = 0.0;
+	    PanY = 0.0;
+	    RefreshMap();
+	  }
+	  break;
+
+	case VK_RETURN: // Pan mode, cycles through modes
+
+	  if (ClearAirspaceWarnings()) {
+	    // airspace was active, enter was used to acknowledge
+	    break;
+	  }
+
+	  val = 0;
+	  val += (EnableTopology)*0x01;
+	  val += (EnableTerrain)*0x02;
+
+	  val++;
+	  if (val>3) val=0;
+
+	  if (val>0) {
+	    PlayResource(TEXT("IDR_INSERT"));
+	  } else {
+	    PlayResource(TEXT("IDR_REMOVE"));
+	  }
+
+	  EnableTopology = (val & 0x01);
+	  EnableTerrain = (val & 0x02)>>1;
+
+	  RefreshMap();
+	  break;
+
+	case VK_LEFT:
+
+	  AutoZoom = !AutoZoom;
+
+	  if (AutoZoom) {
+	    PlayResource(TEXT("IDR_INSERT"));
+	  } else {
+	    PlayResource(TEXT("IDR_REMOVE"));
+	  }
+
+	  if (AutoZoom) {
+	    EnablePan = false;
+	    PanX = 0.0;
+	    PanY = 0.0;
+	  }
+
+	  break;
+	}
+      break;
+    }
+
+  return (DefWindowProc (hWnd, uMsg, wParam, lParam));
 }
 
 extern int FrameCount;
 
+static void UpdateMapScale()
+{
+  static double AutoMapScale= RequestMapScale;
+  double AutoZoomFactor;
+
+  if(MapScale != RequestMapScale)
+    {
+      MapScale = RequestMapScale;
+
+      DrawScale = MapScale/DISTANCEMODIFY;
+      DrawScale = DrawScale/111000;
+      DrawScale = 30/DrawScale;
+      //      fpsTime0 = 0; // trigger immediate screen update
+    }
+
+  if (AutoZoom) {
+    if(DrawInfo.WaypointDistance > 0)
+      {
+
+	if(
+	   (DisplayOrientation == NORTHUP)
+	   ||
+	   ((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == TRUE) )
+	   )
+	  {
+	    AutoZoomFactor = 2.5;
+	  }
+	else
+	  {
+	    AutoZoomFactor = 4;
+	  }
+
+	if(
+	   (DrawInfo.WaypointDistance < ( AutoZoomFactor * RequestMapScale / DISTANCEMODIFY)))
+	  {
+
+	    MapScale = DrawInfo.WaypointDistance * DISTANCEMODIFY / AutoZoomFactor;
+	    if (MapScale<0.2) {
+	      MapScale = 0.2; // JMW limit this so it doesn't get silly
+	    }
+	    RequestMapScale = MapScale; // JMW fixed bug..
+
+	    DrawScale = DrawInfo.WaypointDistance / AutoZoomFactor;
+	    DrawScale = DrawScale/111000;
+	    DrawScale = 30/DrawScale;
+	  }
+      }
+    //    fpsTime0 = 0; // Trigger immediate screen update
+  }
+}
+
+
+static void CalculateOrigin(RECT rc, POINT *Orig)
+{
+  bool GliderCenter=false;
+
+  if( (DisplayOrientation == NORTHUP)
+      ||
+      (
+       ((DisplayOrientation == NORTHCIRCLE)
+	||(DisplayOrientation==TRACKCIRCLE))
+       && (DerivedDrawInfo.Circling == TRUE) )
+      )
+    {
+      GliderCenter = TRUE;
+
+      if (DisplayOrientation == TRACKCIRCLE) {
+	DisplayAngle = DrawInfo.WaypointBearing;
+	DisplayAircraftAngle = DrawInfo.TrackBearing-DisplayAngle;
+      } else {
+	DisplayAngle = 0.0;
+	DisplayAircraftAngle = DrawInfo.TrackBearing;
+      }
+
+    } else {
+      // normal, glider forward
+      GliderCenter = FALSE;
+      DisplayAngle = DrawInfo.TrackBearing;
+      DisplayAircraftAngle = 0.0;
+
+    }
+
+  if(GliderCenter || EnablePan) {
+    Orig->x = (rc.left + rc.right ) /2;
+    Orig->y = (rc.bottom - rc.top) /2+rc.top;
+  }
+  else
+    {
+      Orig->x = (rc.left + rc.right ) /2;
+      Orig->y = (rc.bottom - rc.top) - ((rc.bottom - rc.top )/5)+rc.top;
+    }
+}
+
+
+
+static void RenderMapWindow(  RECT rc)
+{
+  bool drawmap;
+  DWORD	fpsTime = ::GetTickCount();
+
+  if (fpsTime0==0) {
+    fpsTime0 = fpsTime;
+  }
+
+  if ((fpsTime-fpsTime0>1000)||(fpsTime==fpsTime0)) {
+    fpsTime0 += 1000;
+    drawmap = true;
+  } else {
+    drawmap = false;
+  }
+
+  //  int	dtms = max(0,1000-dTDisplay);
+  // we basically sleep here so we're only updating 1 fps, which is what
+  // the gps data comes in at anyway.
+  //  Sleep(dtms);
+
+  POINT Orig, Orig_Aircraft;
+
+  CalculateOrigin(rc, &Orig);
+
+  CalculateScreenPositions(Orig, rc, &Orig_Aircraft);
+
+  if (drawmap) {
+    CalculateWaypointReachable();
+
+    HGDIOBJ Temp;
+
+    // display border and fill background..
+
+    if(InfoWindowActive) {
+      Temp = SelectObject(hdcDrawWindowBg, GetStockObject(WHITE_BRUSH));
+      SelectObject(hdcDrawWindowBg, GetStockObject(BLACK_PEN));
+    }
+    else {
+      // JMW added light grey background
+      Temp = SelectObject(hdcDrawWindowBg, hBackgroundBrush);
+      SelectObject(hdcDrawWindowBg, GetStockObject(WHITE_PEN));
+    }
+
+    Rectangle(hdcDrawWindowBg,rc.left,rc.top,rc.right,rc.bottom);
+
+    Temp = SelectObject(hdcDrawWindowBg, GetStockObject(BLACK_BRUSH));
+    Temp = SelectObject(hdcDrawWindowBg, GetStockObject(BLACK_PEN));
+
+    // ground first...
+
+    LockTerrainData();
+    terrain_dem.SetCacheTime();
+    UnlockTerrainData();
+
+    if (EnableTerrain) {
+      double sunelevation = 40.0;
+      double sunazimuth = -DerivedDrawInfo.WindBearing;
+      sunazimuth+= DisplayAngle;
+      DrawTerrain(hdcDrawWindowBg, rc, sunazimuth, sunelevation);
+    }
+    if (EnableTopology) {
+      DrawTopology(hdcDrawWindowBg, rc);
+    }
+
+    // then airspace..
+    DrawAirSpace(hdcDrawWindowBg, rc);
+
+    DrawWaypoints(hdcDrawWindowBg,rc);
+
+    if(TrailActive)
+      DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
+
+    if (FinalGlideTerrain) {
+      DrawGlideThroughTerrain(hdcDrawWindowBg, rc);
+    }
+
+    DrawTask(hdcDrawWindowBg, rc);
+
+    DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
+
+    DrawBearing(hdcDrawWindowBg, Orig_Aircraft);
+
+    // finally, draw you!
+
+    DrawAircraft(hdcDrawWindowBg, Orig_Aircraft);
+
+    // marks on top...
+    DrawMarks(hdcDrawWindowBg, rc);
+
+  }
+
+  BitBlt(hdcDrawWindow, 0, 0, MapRectBig.right, MapRectBig.bottom,
+	 hdcDrawWindowBg, 0, 0, SRCCOPY);
+
+  // overlays
+
+  DrawCDI();
+
+  DrawMapScale(hdcDrawWindow,rc );
+
+  DrawCompass(hdcDrawWindow, rc);
+
+  DrawWind(hdcDrawWindow, Orig, rc); // JMW shouldn't need Orig here
+
+  DrawFlightMode(hdcDrawWindow, rc);
+
+  DrawFinalGlide(hdcDrawWindow,rc);
+
+  DrawThermalBand(hdcDrawWindow, rc);
+
+}
+
+
 DWORD DrawThread (LPVOID lpvoid)
 {
-	RECT rc;
-	HGDIOBJ Temp;
-	POINT Orig;
 
-	MapScale = RequestMapScale;
-	DrawScale = MapScale/DISTANCEMODIFY;
-	DrawScale = DrawScale/111000;
-	DrawScale = 30/DrawScale;
+  MapScale = RequestMapScale;
+  DrawScale = MapScale/DISTANCEMODIFY;
+  DrawScale = DrawScale/111000;
+  DrawScale = 30/DrawScale;
 
-	THREADRUNNING = FALSE;
-	THREADEXIT = FALSE;
+  //  THREADRUNNING = FALSE;
 
-	GetClientRect(hWndMapWindow, &rc);
-	SetBkMode(hdcDrawWindow,TRANSPARENT);
+  GetClientRect(hWndMapWindow, &MapRectBig);
 
-	while (!CLOSETHREAD)
-	{
-		while(PAUSETHREAD)
-		{
-			THREADRUNNING = FALSE;
-      SetThreadPriority(hDrawThread,THREAD_PRIORITY_BELOW_NORMAL);
-  //    MessageBeep(0);
-		}
-		THREADRUNNING = TRUE;
+  MapRectSmall = MapRect;
 
+  MapRect = MapRectSmall;
 
-		memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
-		memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
+  SetBkMode(hdcDrawWindow,TRANSPARENT);
+  SetBkMode(hdcDrawWindowBg,TRANSPARENT);
+  SetBkMode(hDCTemp,OPAQUE);
 
-		if(MapScale != RequestMapScale)
-		{
-			MapScale = RequestMapScale;
+  while (!CLOSETHREAD)
+    {
+      if (!THREADRUNNING) {
+	Sleep(100);
+	continue;
+      }
+      if (!MapDirty) {
+	Sleep(50);
+	continue;
+      };
+      MapDirty = false;
 
-			DrawScale = MapScale/DISTANCEMODIFY;
-			DrawScale = DrawScale/111000;
-			DrawScale = 30/DrawScale;
-		}
-/*
-		if(DrawInfo.WaypointDistance > 0)
-		{
-			if(
-				(DisplayOrientation == NORTHUP)
-				||
-				((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == TRUE) )
-			)
-			{
-				AutoZoomFactor = 2.5;
-			}
-			else
-			{
-				AutoZoomFactor = 4;
-			}
+      LockFlightData();
+      memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
+      memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
+      UnlockFlightData();
 
-			if(DrawInfo.WaypointDistance < ( AutoZoomFactor * RequestMapScale / DISTANCEMODIFY))
-			{
-				MapScale = DrawInfo.WaypointDistance * DISTANCEMODIFY / AutoZoomFactor;
+      if (RequestFullScreen != MapFullScreen) {
+	ToggleFullScreen();
+      }
 
-				DrawScale = DrawInfo.WaypointDistance / AutoZoomFactor;
-				DrawScale = DrawScale/111000;
-				DrawScale = 30/DrawScale;
-			}
-		}
-*/
-		Temp = SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+      UpdateMapScale();
 
+      RenderMapWindow(MapRect);
 
-		if(InfoWindowActive)
-			SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
-		else
-			SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+      BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
+	     MapRectBig.bottom-MapRectBig.top,
+	     hdcDrawWindow, 0, 0, SRCCOPY);
 
-		Rectangle(hdcDrawWindow,rc.left,rc.top,rc.right,rc.bottom);
+      FrameCount ++;
 
-  	Temp = SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-		Temp = SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+      // we do caching after screen update, to minimise perceived delay
+      SetTopologyBounds(MapRect);
 
-
-		if(
-				(DisplayOrientation == TRACKUP)
-				||
-				((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-			)
-		{
-			Orig.x = (rc.left + rc.right ) /2;
-			Orig.y = (rc.bottom - rc.top) - ((rc.bottom - rc.top )/6);
-		}
-		else
-		{
-			Orig.x = (rc.left + rc.right ) /2;
-			Orig.y = (rc.bottom - rc.top) /2;
-		}
-
-
-		CalculateScreenPositions(Orig, rc);
-
-		CalculateWaypointReachable();
-
-		DrawAirSpace(hdcDrawWindow, rc);
-
-		DrawWaypoints(hdcDrawWindow,rc);
-
-		DrawWind(hdcDrawWindow, Orig);
-
-		DrawTask(hdcDrawWindow, rc);
-
-		DrawBearing(hdcDrawWindow, Orig);
-
-		DrawMapScale(hdcDrawWindow,rc );
-
-		if(TrailActive)
-			DrawTrail(hdcDrawWindow, Orig, rc);
-
-		DrawFinalGlide(hdcDrawWindow,rc);
-
-		DrawAircraft(hdcDrawWindow, Orig);
-
-		BitBlt(hdcScreen,0, 0, rc.right,rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
-
-		FrameCount ++;
-	}
+    }
   MessageBeep(0);
-	THREADEXIT = TRUE;
   return 0;
 }
 
 
 void DrawAircraft(HDC hdc, POINT Orig)
 {
-	POINT Aircraft[6] = { {-15,0}, {15,0}, {0,-7}, {0,12}, {-5,10}, {5,10} };
-	double dX,dY;
-	int i;
-	HPEN hpSolid, hpOld;
+  POINT Aircraft[7] = { {-15,0}, {15,0}, {0,-6}, {0,12}, {-4,10}, {4,10}, {0,0} };
+  double dX,dY;
+  int i;
+  HPEN hpOld;
 
+  hpOld = (HPEN)SelectObject(hdc, hpAircraft);
 
-	hpSolid = (HPEN)CreatePen(PS_SOLID, 3, RGB(0,0,0));
-	hpOld = (HPEN)SelectObject(hdc, hpSolid);
+  for(i=0;i<7;i++)
+    {
+      dX = (double)Aircraft[i].x ;dY = (double)Aircraft[i].y;
+      rotate(&dX, &dY, DisplayAircraftAngle );
 
-	for(i=0;i<6;i++)
-	{
-		dX = (double)Aircraft[i].x ;dY = (double)Aircraft[i].y;
-		if(
-				(DisplayOrientation == NORTHUP)
-				||
-				((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == TRUE) )
-			)
-			rotate(&dX, &dY, DrawInfo.TrackBearing );
+      Aircraft[i].x =iround(dX+Orig.x);  Aircraft[i].y = iround(dY+Orig.y);
+    }
 
-		Aircraft[i].x =(int)dX;  Aircraft[i].y = (int)dY;
+  DrawSolidLine(hdc,Aircraft[2],Aircraft[3]);
+  DrawSolidLine(hdc,Aircraft[4],Aircraft[5]);
+  DrawSolidLine(hdc,Aircraft[0],Aircraft[6]);
+  DrawSolidLine(hdc,Aircraft[1],Aircraft[6]);
 
-		Aircraft[i].x = Orig.x + Aircraft[i].x;
-		Aircraft[i].y = Orig.y + Aircraft[i].y;
-	}
-	DrawSolidLine(hdc,Aircraft[0],Aircraft[1]);
-	DrawSolidLine(hdc,Aircraft[2],Aircraft[3]);
-	DrawSolidLine(hdc,Aircraft[4],Aircraft[5]);
+  SelectObject(hdc, hpOld);
 
-	SelectObject(hdc, hpOld);
-	DeleteObject((HPEN)hpSolid);
+  // draw it again so can get white border
+  SelectObject(hdc, hpAircraftBorder);
+
+  DrawSolidLine(hdc,Aircraft[2],Aircraft[3]);
+  DrawSolidLine(hdc,Aircraft[4],Aircraft[5]);
+  DrawSolidLine(hdc,Aircraft[0],Aircraft[6]);
+  DrawSolidLine(hdc,Aircraft[1],Aircraft[6]);
+
+  SelectObject(hdc, hpOld);
 }
+
+
+void DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h) {
+  SelectObject(hDCTemp, h);
+  BitBlt(hdc,x-5,y-5,10,10,
+	 hDCTemp,0,0,SRCPAINT);
+  BitBlt(hdc,x-5,y-5,10,10,
+	 hDCTemp,10,0,SRCAND);
+}
+
+
+void DrawFlightMode(HDC hdc, RECT rc)
+{
+
+  if (DerivedDrawInfo.Circling) {
+    SelectObject(hDCTemp,hClimb);
+  } else if (DerivedDrawInfo.FinalGlide) {
+    SelectObject(hDCTemp,hFinalGlide);
+  } else {
+    SelectObject(hDCTemp,hCruise);
+  }
+  //		BitBlt(hdc,rc.right-35,5,24,20,
+  //				 hDCTemp,20,0,SRCAND);
+  BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
+	 hDCTemp,0,0,SRCAND);
+
+  if (DerivedDrawInfo.AutoMcReady) {
+    SelectObject(hDCTemp,hAutoMcReady);
+    BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
+	   hDCTemp,0,0,SRCAND);
+  };
+
+}
+
+
+bool WaypointInTask(int ind) {
+  int i;
+  if( (WayPointList[ind].Flags & HOME) == HOME) {
+    return true;
+  }
+  for(i=0;i<MAXTASKPOINTS;i++)
+    {
+      if(Task[i].Index == ind) return true;
+    }
+  if (ind == HomeWaypoint) {
+    return true;
+  }
+  return false;
+}
+
 
 void DrawWaypoints(HDC hdc, RECT rc)
 {
-	unsigned int i;
-	TCHAR Buffer[10];
+  unsigned int i;
+  TCHAR Buffer[10];
 
-	for(i=0;i<NumberOfWayPoints;i++)
+  for(i=0;i<NumberOfWayPoints;i++)
+    {
+      if(WayPointList[i].Visible )
 	{
-		if(WayPointList[i].Visible )
-		{
-			if(MapScale > 10)
-			{
-				SelectObject(hDCTemp,hSmall);
-			}
-			else if( ((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
-			{
-				if(WayPointList[i].Reachable)
-					SelectObject(hDCTemp,hReachable);
-				else
-					SelectObject(hDCTemp,hLandable);
-			}
-			else
-			{
-					SelectObject(hDCTemp,hTurnPoint);
-			}
+	  if(MapScale > 20)
+	    {
+	      SelectObject(hDCTemp,hSmall);
+	    }
+	  else if( ((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
+	    {
+	      if(WayPointList[i].Reachable)
+		SelectObject(hDCTemp,hReachable);
+	      else
+		SelectObject(hDCTemp,hLandable);
+	    }
+	  else
+	    {
+	      SelectObject(hDCTemp,hTurnPoint);
+	    }
 
-			if((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0))
-			{
-				BitBlt(hdc,WayPointList[i].Screen.x-10 , WayPointList[i].Screen.y-10,20,20,
-							 hDCTemp,20,0,SRCAND);
-				BitBlt(hdc,WayPointList[i].Screen.x-10 , WayPointList[i].Screen.y-10,20,20,
-							 hDCTemp,0,0,SRCPAINT);
+	  if((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0))
+	    {
+	      BitBlt(hdc,WayPointList[i].Screen.x-10 , WayPointList[i].Screen.y-10,20,20,
+		     hDCTemp,0,0,SRCPAINT);
+	      BitBlt(hdc,WayPointList[i].Screen.x-10 , WayPointList[i].Screen.y-10,20,20,
+		     hDCTemp,20,0,SRCAND);
 
-			}
+	    }
 
-			if( ((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
-			{
-				switch(DisplayTextType)
-				{
-					case DISPLAYNAME:
-						ExtTextOut(hdc, WayPointList[i].Screen.x + 5, WayPointList[i].Screen.y, 0, NULL, WayPointList[i].Name, _tcslen(WayPointList[i].Name), NULL);
-					break;
-					case DISPLAYNUMBER:
-						wsprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
-						ExtTextOut(hdc, WayPointList[i].Screen.x + 5, WayPointList[i].Screen.y, 0, NULL, Buffer, _tcslen(Buffer), NULL);
-					break;
-					case DISPLAYFIRSTFIVE:
-						ExtTextOut(hdc, WayPointList[i].Screen.x + 5, WayPointList[i].Screen.y, 0, NULL, WayPointList[i].Name, 5, NULL);
-					break;
-					case DISPLAYFIRSTTHREE:
-						ExtTextOut(hdc, WayPointList[i].Screen.x + 5, WayPointList[i].Screen.y, 0, NULL, WayPointList[i].Name, 3, NULL);
-					break;
-				}
-			}
-		}
+	  // JMW
+	  if (DisplayTextType == DISPLAYNAMEIFINTASK) {
+
+	    if (WaypointInTask(i)) {
+
+	      TextInBox(hdc, WayPointList[i].Name, WayPointList[i].Screen.x+5,
+			WayPointList[i].Screen.y, 0);
+	    }
+
+	  } else
+
+	    if( ((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
+	      {
+		switch(DisplayTextType)
+		  {
+		  case DISPLAYNAME:
+
+		    TextInBox(hdc, WayPointList[i].Name, WayPointList[i].Screen.x+5,
+			      WayPointList[i].Screen.y, 0);
+
+		    break;
+		  case DISPLAYNUMBER:
+		    wsprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
+
+		    TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
+			      WayPointList[i].Screen.y, 0);
+
+		    break;
+		  case DISPLAYFIRSTFIVE:
+
+		    TextInBox(hdc, WayPointList[i].Name, WayPointList[i].Screen.x+5,
+			      WayPointList[i].Screen.y, 5);
+
+		    break;
+		  case DISPLAYFIRSTTHREE:
+		    TextInBox(hdc, WayPointList[i].Name, WayPointList[i].Screen.x+5,
+			      WayPointList[i].Screen.y, 3);
+		    break;
+		  }
+	      }
 	}
+    }
 }
 
 void DrawTask(HDC hdc, RECT rc)
 {
-	int i;
-	double tmp;
+  int i;
+  double tmp;
 
-
-	for(i=0;i<MAXTASKPOINTS-1;i++)
+  for(i=0;i<MAXTASKPOINTS-1;i++)
+    {
+      if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
 	{
-		if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
-		{
-			DrawDashLine(hdc, 3,
-									 WayPointList[Task[i].Index].Screen,
-									 WayPointList[Task[i+1].Index].Screen,
-									 RGB(0,255,0));
-		}
+	  DrawDashLine(hdc, 3,
+		       WayPointList[Task[i].Index].Screen,
+		       WayPointList[Task[i+1].Index].Screen,
+		       RGB(0,255,0));
 	}
+    }
 
-	if((Task[0].Index >=0) &&  (Task[1].Index >=0))
+  if((Task[0].Index >=0) &&  (Task[1].Index >=0))
+    {
+      if(StartLine)
 	{
-		if(StartLine)
-		{
-			DrawDashLine(hdc, 2, WayPointList[Task[0].Index].Screen, Task[0].End, RGB(127,127,127));
-			DrawDashLine(hdc, 2, WayPointList[Task[0].Index].Screen, Task[0].Start , RGB(127,127,127));
-		}
-		tmp = StartRadius*DISTANCEMODIFY/MapScale; tmp = tmp * 30;
-		SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
-		Circle(hdc,WayPointList[Task[0].Index].Screen.x,WayPointList[Task[0].Index].Screen.y,(int)tmp, rc);
+	  DrawDashLine(hdc, 2, WayPointList[Task[0].Index].Screen, Task[0].End, RGB(127,127,127));
+	  DrawDashLine(hdc, 2, WayPointList[Task[0].Index].Screen, Task[0].Start , RGB(127,127,127));
 	}
+      tmp = StartRadius*DISTANCEMODIFY/MapScale; tmp = tmp * 30;
+      SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
+      Circle(hdc,WayPointList[Task[0].Index].Screen.x,WayPointList[Task[0].Index].Screen.y,(int)tmp, rc);
+    }
 
-	for(i=1;i<MAXTASKPOINTS-1;i++)
+  for(i=1;i<MAXTASKPOINTS-1;i++)
+    {
+      if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
 	{
-		if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
+	  if(AATEnabled == TRUE)
+	    {
+	      if(Task[i].AATType == CIRCLE)
 		{
-			if(AATEnabled == TRUE)
-			{
-				if(Task[i].AATType == CIRCLE)
-				{
-					tmp = Task[i].AATCircleRadius * DISTANCEMODIFY/MapScale;
-					tmp = tmp * 30;
-					SelectObject(hdc, hAirspaceBrush[iAirspaceBrush[AATASK]]);SelectObject(hdc, GetStockObject(BLACK_PEN));
-					Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc);
-				}
-				else
-				{
-					SelectObject(hdc, hAirspaceBrush[iAirspaceBrush[AATASK]]);SelectObject(hdc, GetStockObject(BLACK_PEN));
-					DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATStart);
-					DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATFinish);
-				}
-			}
-			else
-			{
-				DrawDashLine(hdc, 2, WayPointList[Task[i].Index].Screen, Task[i].Start, RGB(127,127,127));
-				DrawDashLine(hdc, 2, WayPointList[Task[i].Index].Screen, Task[i].End, RGB(127,127,127));
-
-				if(FAISector != TRUE)
-				{
-					tmp = SectorRadius*DISTANCEMODIFY/MapScale;
-					tmp = tmp * 30;
-					SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
-					Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc);
-				}
-			}
+		  tmp = Task[i].AATCircleRadius * DISTANCEMODIFY/MapScale;
+		  tmp = tmp * 30;
+		  SelectObject(hdc, hAirspaceBrush[iAirspaceBrush[AATASK]]);SelectObject(hdc, GetStockObject(BLACK_PEN));
+		  Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc);
 		}
+	      else
+		{
+		  SelectObject(hdc, hAirspaceBrush[iAirspaceBrush[AATASK]]);SelectObject(hdc, GetStockObject(BLACK_PEN));
+		  DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATStart);
+		  DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATFinish);
+		}
+	    }
+	  else
+	    {
+	      DrawDashLine(hdc, 2, WayPointList[Task[i].Index].Screen, Task[i].Start, RGB(127,127,127));
+	      DrawDashLine(hdc, 2, WayPointList[Task[i].Index].Screen, Task[i].End, RGB(127,127,127));
+
+	      if(FAISector != TRUE)
+		{
+		  tmp = SectorRadius*DISTANCEMODIFY/MapScale;
+		  tmp = tmp * 30;
+		  SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
+		  Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc);
+		}
+	    }
 	}
+    }
 }
 
-void DrawWind(HDC hdc, POINT Orig)
+
+void DrawWind(HDC hdc, POINT Orig, RECT rc)
 {
-	POINT Arrow[4] = { {0,-15}, {0,-35}, {-5,-22}, {5,-22} };
-	double dX,dY;
-	int i;
-	HPEN hpSolid, hpOld;
+  double dX,dY;
+  int i, j;
+  POINT Start;
+  HPEN hpOld;
+  int iwind;
+  int koff;
 
-	hpSolid = (HPEN)CreatePen(PS_SOLID, 2, RGB(255,0,0));
-	hpOld = (HPEN)SelectObject(hdc, hpSolid);
+  if (DerivedDrawInfo.WindSpeed<0.5) {
+    return; // JMW don't bother drawing it if not significant
+  }
 
-	Arrow[1].y =(long)( -15 - 5 * DerivedDrawInfo.WindSpeed );
+  hpOld = (HPEN)SelectObject(hdc, hpWind);
 
-	for(i=0;i<4;i++)
-	{
-		dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
-		if(
-				(DisplayOrientation == TRACKUP)
-				||
-				((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-			)
-			rotate(&dX, &dY, -1*(DrawInfo.TrackBearing - DerivedDrawInfo.WindBearing));
-		else
-			rotate(&dX, &dY, DerivedDrawInfo.WindBearing);
+  int wmag = iround(10.0*DerivedDrawInfo.WindSpeed);
+  int numvecs;
 
-		Arrow[i].x =(int)dX;  Arrow[i].y = (int)dY;
+  numvecs = (wmag/44)+1;
+  for (j=0; j<numvecs; j++) {
+    if (j== numvecs-1) {
+      iwind = wmag % 44;
+    } else {
+      iwind = 44;
+    }
 
-		Arrow[i].x = Orig.x  + Arrow[i].x;
-		Arrow[i].y = Orig.y + Arrow[i].y;
-	}
+    Start.y = 19+rc.top;
+    Start.x = rc.right - 19;
+    POINT Arrow[4] = { {0,7}, {0,0}, {-5,0}, {5,0} };
 
-	DrawSolidLine(hdc,Arrow[0],Arrow[1]);
-	DrawSolidLine(hdc,Arrow[0],Arrow[2]);
-	DrawSolidLine(hdc,Arrow[0],Arrow[3]);
+    koff = 10*(j-(numvecs-1)/2);
+    Arrow[0].y += iwind/2;
+    Arrow[1].y -= 0;
+    Arrow[2].y += iwind/2;
+    Arrow[3].y += iwind/2;
+    Arrow[0].x += koff;
+    Arrow[1].x += koff;
+    Arrow[2].x += koff;
+    Arrow[3].x += koff;
 
-	SelectObject(hdc, hpOld);
-	DeleteObject((HPEN)hpSolid);
+    /* OLD WIND
+       POINT Arrow[4] = { {0,-15}, {0,-35}, {-5,-22}, {5,-22} };
+       Start.x = Orig.x;
+       Start.y = Orig.y;
+       Arrow[1].y =(long)( -15 - 5 * DerivedDrawInfo.WindSpeed );
+    */
+
+    // JMW TODO: if wind is stronger than 10 knots, draw two arrowheads
+
+    for(i=0;i<4;i++)
+      {
+	dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
+	rotate(&dX, &dY, -1*(DisplayAngle - DerivedDrawInfo.WindBearing));
+
+	Arrow[i].x = iround(Start.x+dX);  Arrow[i].y = iround(dY+Start.y);
+
+      }
+
+    DrawSolidLine(hdc,Arrow[0],Arrow[1]);
+    DrawSolidLine(hdc,Arrow[0],Arrow[2]);
+    DrawSolidLine(hdc,Arrow[0],Arrow[3]);
+
+  }
+
+  SelectObject(hdc, hpOld);
 }
+
 
 void DrawBearing(HDC hdc, POINT Orig)
 {
-	POINT Start, End;
-	HPEN hpSolid, hpOld;
+  POINT Start, End;
+  HPEN hpOld;
 
-	hpSolid = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
-	hpOld = (HPEN)SelectObject(hdc, hpSolid);
+  hpOld = (HPEN)SelectObject(hdc, hpBearing);
 
-	if(ActiveWayPoint >= 0)
-	{
-		Start.x = WayPointList[Task[ActiveWayPoint].Index].Screen.x;
-		Start.y = WayPointList[Task[ActiveWayPoint].Index].Screen.y;
-		End.x = Orig.x;
-		End.y = Orig.y;
-		DrawSolidLine(hdc, Start, End);
-	}
+  if(ActiveWayPoint >= 0)
+    {
+      Start.x = WayPointList[Task[ActiveWayPoint].Index].Screen.x;
+      Start.y = WayPointList[Task[ActiveWayPoint].Index].Screen.y;
+      End.x = Orig.x;
+      End.y = Orig.y;
+      DrawSolidLine(hdc, Start, End);
+    }
 
-	SelectObject(hdc, hpOld);
-	DeleteObject((HPEN)hpSolid);
+  SelectObject(hdc, hpOld);
 }
 
-void GetLocationFromScreen(HWND hWnd, double *X, double *Y)
+
+POINT Orig_Screen;
+
+
+// JMW TODO: This should have orig saved so it's faster
+// actually, orig gets calculated with displayorientation everywhere
+// and it is inefficient.
+
+// RETURNS Longitude, Latitude!
+
+void GetLocationFromScreen(double *X, double *Y)
 {
-	int OrigX, OrigY;
-	RECT rc;
 
-	GetClientRect(hWnd, &rc);
-	if(
-			(DisplayOrientation == TRACKUP)
-			||
-			((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-		)
-	{
-		OrigX = (rc.left + rc.right ) /2;
-		OrigY = (rc.bottom - rc.top) - ((rc.bottom - rc.top )/6);
-	}
-	else
-	{
-		OrigX = (rc.left + rc.right ) /2;
-		OrigY = (rc.bottom - rc.top) /2;
-	}
+  *X = (*X-Orig_Screen.x)/DrawScale;
+  *Y = (*Y-Orig_Screen.y)/DrawScale;
 
-	*X = (*X-OrigX)/DrawScale;
-	*Y = (*Y-OrigY)/DrawScale;
+  rotate(X,Y,DisplayAngle);
 
-	if(
-			(DisplayOrientation == TRACKUP)
-			||
-			((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-		)
-		rotate(X,Y,DrawInfo.TrackBearing);
+  *Y = (PanYr)  - *Y;
 
-	*Y = DrawInfo.Lattitude  - *Y;
+  *X = *X / ffastcosine(*Y);
 
-	*X = *X / ((double)cos((*Y) * pi/180));
+  *X = (PanXr) + *X;
+}
 
-	*X = DrawInfo.Longditude + *X;
+
+void DrawMapScale(HDC hDC, RECT rc)
+{
+  TCHAR Scale[20];
+  POINT Start, End;
+  HPEN hpOld;
+
+  hpOld = (HPEN)SelectObject(hDC, hpMapScale);
+
+  Start.x = 5; End.x = 5;
+  Start.y = rc.top+(19* (rc.bottom - rc.top ) )/20; End.y = Start.y - 30;
+  DrawSolidLine(hDC,Start,End);
+
+  Start.x = 10; End.x = 5;
+  End.y = Start.y;
+  DrawSolidLine(hDC,Start,End);
+
+  Start.y = Start.y - 30; End.y = Start.y;
+  DrawSolidLine(hDC,Start,End);
+
+  SelectObject(hDC, hpOld);
+
+  if(MapScale <0.1)
+    {
+      wsprintf(Scale,TEXT("%1.2f"),MapScale);
+    }
+  else if(MapScale <3)
+    {
+      wsprintf(Scale,TEXT("%1.1f"),MapScale);
+    }
+  else
+    {
+      wsprintf(Scale,TEXT("%1.0f"),MapScale);
+    }
+  if (AutoZoom) {
+    wcscat(Scale,TEXT(" A"));
+  }
+  if (EnablePan) {
+    wcscat(Scale,TEXT(" PAN"));
+  }
+
+  ExtTextOut(hDC, 10, End.y+7, 0, NULL, Scale, _tcslen(Scale), NULL);
+
+  // JMW for debugging
+  /*
+    wsprintf(Scale,TEXT("%d"), terraincacheefficiency);
+    ExtTextOut(hDC, 20, End.y+20, 0, NULL, Scale, _tcslen(Scale), NULL);
+
+  */
+
+  //////////////
+
+  hpOld = (HPEN)SelectObject(hDC, hpBearing);
+
+  Start.x = rc.right-1;
+  Start.y = rc.bottom;
+  End.x = rc.right-1;
+  End.y = (rc.bottom-rc.top)*terrain_dem.terraincacheefficiency/100+rc.top;
+  DrawSolidLine(hDC, Start, End);
+
+  SelectObject(hDC, hpOld);
+
 
 }
 
-void DrawMapScale(HDC hDC,RECT rc)
+
+void DrawGlideThroughTerrain(HDC hDC, RECT rc) {
+  POINT Groundline[NUMTERRAINSWEEPS+1];
+  double lat, lon;
+  double distance;
+  double bearing;
+  int scx, scy;
+  HPEN hpOld;
+
+  hpOld = (HPEN)SelectObject(hDC, hpTerrainLine);
+
+  for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
+    bearing = -90+i*180.0/NUMTERRAINSWEEPS+DrawInfo.TrackBearing;
+    distance = FinalGlideThroughTerrain(bearing, &DrawInfo,
+					&DerivedDrawInfo, &lat, &lon);
+    LatLon2Screen(lon, lat, &scx, &scy);
+    Groundline[i].x = scx;
+    Groundline[i].y = scy;
+  }
+  Polyline(hDC, Groundline, NUMTERRAINSWEEPS+1);
+
+  if ((DerivedDrawInfo.TerrainWarningLattitude != 0.0)
+      &&(DerivedDrawInfo.TerrainWarningLongditude != 0.0)) {
+
+    LatLon2Screen(DerivedDrawInfo.TerrainWarningLongditude,
+		  DerivedDrawInfo.TerrainWarningLattitude, &scx, &scy);
+    DrawBitmapIn(hDC, scx, scy, hTerrainWarning);
+
+  }
+
+  SelectObject(hDC, hpOld);
+
+}
+
+void DrawBestCruiseTrack(HDC hdc, POINT Orig)
 {
-	TCHAR Scale[5];
-	POINT Start, End;
-	HPEN hpSolid, hpOld;
+  POINT Arrow[7] = { {-1,-40}, {1,-40}, {1,0}, {6,8}, {-6,8}, {-1,0}, {-1,-40}};
+  double dX,dY;
+  int i;
+  HPEN hpOld;
+  HBRUSH hbOld;
 
-	hpSolid = (HPEN)CreatePen(PS_SOLID, 1, RGB(0,0,0));
-	hpOld = (HPEN)SelectObject(hDC, hpSolid);
+  if (ActiveWayPoint<0) {
+    return; // nothing to draw..
+  }
 
-	Start.x = 5; End.x = 5;
-	Start.y = (19* (rc.bottom - rc.top ) )/20; End.y = Start.y - 30;
-	DrawSolidLine(hDC,Start,End);
+  hpOld = (HPEN)SelectObject(hdc, hpBestCruiseTrack);
+  hbOld = (HBRUSH)SelectObject(hdc, hbBestCruiseTrack);
 
-	Start.x = 10; End.x = 5;
-	End.y = Start.y;
-	DrawSolidLine(hDC,Start,End);
+  int dy = (long)(70); //  DerivedDrawInfo.WindSpeed );
 
-	Start.y = Start.y - 30; End.y = Start.y;
-	DrawSolidLine(hDC,Start,End);
+  Arrow[2].y -= dy;
+  Arrow[3].y -= dy;
+  Arrow[4].y -= dy;
+  Arrow[5].y -= dy;
 
-	if(MapScale <0.1)
-	{
-		wsprintf(Scale,TEXT("%1.2f"),MapScale);
-	}
-	else if(MapScale <1)
-	{
-		wsprintf(Scale,TEXT("%1.1f"),MapScale);
-	}
-	else
-	{
-		wsprintf(Scale,TEXT("%1.0f"),MapScale);
-	}
-	SetBkMode(hDC,TRANSPARENT);
-	ExtTextOut(hDC, 10, End.y+7, 0, NULL, Scale, _tcslen(Scale), NULL);
+  for(i=0;i<7;i++)
+    {
+      dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
+      rotate(&dX, &dY, -1*(DisplayAngle - DerivedDrawInfo.BestCruiseTrack));
 
-	SelectObject(hDC, hpOld);
-	DeleteObject((HPEN)hpSolid);
+      Arrow[i].x = iround(dX+Orig.x);  Arrow[i].y = iround(dY+Orig.y);
+    }
+
+
+  Polygon(hdc,Arrow,7);
+
+  SelectObject(hdc, hpOld);
+  SelectObject(hdc, hbOld);
+}
+
+
+void DrawCompass(HDC hDC,RECT rc)
+{
+  //	TCHAR Scale[5];
+  POINT Start;
+  HPEN hpOld;
+  HBRUSH hbOld;
+
+  Start.y = 19+rc.top;
+  Start.x = rc.right - 19;
+
+  POINT Arrow[5] = { {0,-18}, {-6,10}, {0,0}, {6,10}, {0,-18}};
+  double dX,dY;
+  int i;
+
+  hpOld = (HPEN)SelectObject(hDC, hpCompass);
+  hbOld = (HBRUSH)SelectObject(hDC, hbCompass);
+
+  for(i=0;i<5;i++)
+    {
+      dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
+      rotate(&dX, &dY, -1*DisplayAngle);
+      Arrow[i].x = iround(dX+Start.x);  Arrow[i].y = iround(dY+Start.y);
+
+    }
+
+  Polygon(hDC,Arrow,5);
+
+  /*
+    wsprintf(Scale,TEXT("%1.2f"), DrawInfo.TrackBearing);
+
+    SetBkMode(hDC,TRANSPARENT);
+    ExtTextOut(hDC, 10, End.y+7, 0, NULL, Scale, _tcslen(Scale), NULL);
+  */
+
+  SelectObject(hDC, hbOld);
+  SelectObject(hDC, hpOld);
+
 }
 
 
 void DrawAirSpace(HDC hdc, RECT rc)
 {
-	unsigned i,j;
-	POINT pt[501];
+  unsigned i,j;
+  POINT pt[501];
 
-	for(i=0;i<NumberOfAirspaceCircles;i++)
+  SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
+  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
+  Rectangle(hDCTemp,rc.left,rc.top,rc.right,rc.bottom);
+
+  for(i=0;i<NumberOfAirspaceCircles;i++)
+    {
+      if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
 	{
-		if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
-		{
-			SelectObject(hdc, hAirspaceBrush[iAirspaceBrush[AirspaceCircle[i].Type]]);
+	  SelectObject(hDCTemp, hAirspaceBrush[iAirspaceBrush[AirspaceCircle[i].Type]]);
 
-			AirspaceCircle[i].Visible = Circle(hdc,AirspaceCircle[i].ScreenX ,AirspaceCircle[i].ScreenY ,AirspaceCircle[i].ScreenR ,rc);
-		}
+	  AirspaceCircle[i].Visible =
+	    Circle(hDCTemp,AirspaceCircle[i].ScreenX ,
+		   AirspaceCircle[i].ScreenY ,
+		   AirspaceCircle[i].ScreenR ,rc);
 	}
+    }
 
-	for(i=0;i<NumberOfAirspaceAreas;i++)
-	{
-		if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
-		{
-			for(j= AirspaceArea[i].FirstPoint; j < (AirspaceArea[i].NumPoints + AirspaceArea[i].FirstPoint); j++)
-			{
-				pt[j-AirspaceArea[i].FirstPoint].x = AirspacePoint[j].Screen.x ;
-				pt[j-AirspaceArea[i].FirstPoint].y = AirspacePoint[j].Screen.y ;
-			}
+  /////////
 
-			SelectObject(hdc, hAirspaceBrush[iAirspaceBrush[AirspaceArea[i].Type]]);
+    for(i=0;i<NumberOfAirspaceAreas;i++)
+      {
+	if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
+	  {
+	    for(j= AirspaceArea[i].FirstPoint; j < (AirspaceArea[i].NumPoints + AirspaceArea[i].FirstPoint); j++)
+	      {
+		pt[j-AirspaceArea[i].FirstPoint].x = AirspacePoint[j].Screen.x ;
+		pt[j-AirspaceArea[i].FirstPoint].y = AirspacePoint[j].Screen.y ;
+	      }
 
-			AirspaceArea[i].Visible= PolygonVisible(pt,AirspaceArea[i].NumPoints, rc);
+	    SelectObject(hDCTemp, hAirspaceBrush[iAirspaceBrush[AirspaceArea[i].Type]]);
 
-			if(AirspaceArea[i].Visible)
-				Polygon(hdc,pt,AirspaceArea[i].NumPoints);
-		}
-	}
+	    AirspaceArea[i].Visible= PolygonVisible(pt,AirspaceArea[i].NumPoints, rc);
 
-	SelectObject(hdc,GetStockObject(HOLLOW_BRUSH));
+	    if(AirspaceArea[i].Visible)
+	      Polygon(hDCTemp,pt,AirspaceArea[i].NumPoints);
+	  }
+      }
 
-	for(i=0;i<NumberOfAirspaceCircles;i++)
-	{
-		if(AirspaceCircle[i].Visible)
-		{
-			if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
-			{
-				Circle(hdc,AirspaceCircle[i].ScreenX ,AirspaceCircle[i].ScreenY ,AirspaceCircle[i].ScreenR, rc );
-			}
-		}
-	}
+    SelectObject(hDCTemp,GetStockObject(HOLLOW_BRUSH));
 
-	for(i=0;i<NumberOfAirspaceAreas;i++)
-	{
-		if(AirspaceArea[i].Visible)
-		{
-			if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
-			{
-				for(j= (int)AirspaceArea[i].FirstPoint; j < (int)(AirspaceArea[i].NumPoints+AirspaceArea[i].FirstPoint) ;j++)
-				{
-					pt[j-AirspaceArea[i].FirstPoint].x = AirspacePoint[j].Screen.x ;
-					pt[j-AirspaceArea[i].FirstPoint].y = AirspacePoint[j].Screen.y ;
-				}
-				Polygon(hdc,pt,AirspaceArea[i].NumPoints);
-			}
-		}
-	}
+    for(i=0;i<NumberOfAirspaceCircles;i++)
+      {
+	if(AirspaceCircle[i].Visible)
+	  {
+	    if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
+				     AirspaceCircle[i].Top.Altitude))
+	      {
+		Circle(hDCTemp,
+		       AirspaceCircle[i].ScreenX, AirspaceCircle[i].ScreenY ,
+		       AirspaceCircle[i].ScreenR, rc );
+	      }
+	  }
+      }
+
+    for(i=0;i<NumberOfAirspaceAreas;i++)
+      {
+	if(AirspaceArea[i].Visible)
+	  {
+	    if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
+	      {
+		for(j= (int)AirspaceArea[i].FirstPoint; j < (int)(AirspaceArea[i].NumPoints+AirspaceArea[i].FirstPoint) ;j++)
+		  {
+		    pt[j-AirspaceArea[i].FirstPoint].x = AirspacePoint[j].Screen.x ;
+		    pt[j-AirspaceArea[i].FirstPoint].y = AirspacePoint[j].Screen.y ;
+		  }
+		Polygon(hDCTemp,pt,AirspaceArea[i].NumPoints);
+	      }
+	  }
+      }
+
+    BitBlt(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
+	   hDCTemp,rc.left,rc.top,SRCAND);
+
 }
 
 
 void CreateDrawingThread(void)
 {
-  PAUSETHREAD = FALSE; CLOSETHREAD = FALSE; THREADEXIT = FALSE;
+  CLOSETHREAD = FALSE;
   hDrawThread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )DrawThread, 0, 0, &dwDrawThreadID);
-	SetThreadPriority(hDrawThread,THREAD_PRIORITY_BELOW_NORMAL);
+  SetThreadPriority(hDrawThread,THREAD_PRIORITY_NORMAL);
 }
 
+void SuspendDrawingThread(void)
+{
+  LockTerrainData();
+  THREADRUNNING = FALSE;
+  UnlockTerrainData();
+  //  SuspendThread(hDrawThread);
+}
+
+void ResumeDrawingThread(void)
+{
+  LockTerrainData();
+  THREADRUNNING = TRUE;
+  UnlockTerrainData();
+  //  ResumeThread(hDrawThread);
+}
 
 void CloseDrawingThread(void)
 {
+  LockTerrainData();
   CLOSETHREAD = TRUE;
+  SuspendDrawingThread();
   SetThreadPriority(hDrawThread,THREAD_PRIORITY_ABOVE_NORMAL);
-	TerminateThread(hDrawThread,0);
+  UnlockTerrainData();
 }
+
+void DrawThermalBand(HDC hDC,RECT rc)
+{
+  POINT ThermalProfile[NUMTHERMALBUCKETS+2];
+  POINT GliderBand[4] = { {2,0},{23,0},{22,0},{24,0} };
+
+  if ((DerivedDrawInfo.TaskAltitudeDifference>50)||(DerivedDrawInfo.FinalGlide)) {
+    return;
+  }
+
+  // JMW TODO: gather proper statistics
+  // note these should/may also be relative to ground
+  int i;
+  double mth = DerivedDrawInfo.MaxThermalHeight-DerivedDrawInfo.TerrainAlt;
+  double maxh;
+  double h;
+  double Wt[NUMTHERMALBUCKETS];
+  double Wtot=0.0;
+  int TBSCALEY = ( (rc.bottom - rc.top )/2)-30;
+#define TBSCALEX 20
+
+  // calculate height above safety altitude
+  h = DrawInfo.Altitude-SAFETYALTITUDEBREAKOFF-DerivedDrawInfo.TerrainAlt;
+  // calculate top height
+  if (h>mth) {
+    maxh = h;
+  } else {
+    maxh = mth;
+  }
+  if (h<0) {
+    // JMW TODO: below safety height, maybe give warning here
+    h=0;
+    return;
+  }
+
+  if (maxh>mth) {
+    // above highest thermal
+    return;
+  }
+  // no thermalling has been done above safety altitude
+  if (maxh<0) {
+    return;
+  }
+
+  // calculate averages
+  int numtherm = 0;
+  for (i=0; i<NUMTHERMALBUCKETS; i++) {
+    if (DerivedDrawInfo.ThermalProfileN[i]>0) {
+      Wt[i] = DerivedDrawInfo.ThermalProfileW[i]/DerivedDrawInfo.ThermalProfileN[i];
+      if (Wt[i]<0) {
+	Wt[i]= 0.0;
+      }
+    } else {
+      Wt[i] = 0.0;
+    }
+    if (Wt[i]>0) {
+      numtherm++;
+      Wtot += Wt[i];
+    }
+  }
+  if (numtherm) {
+    Wtot/= numtherm;
+  } else {
+    Wtot = 1.0;
+  }
+
+  double mc = MACREADY/LIFTMODIFY;
+
+  // scale to mcready
+  if (mc>0.5) {
+    Wtot = mc;
+  } else {
+    // use whatever scale thermal average gives
+  }
+
+  // position of thermal band
+  for (i=0; i<NUMTHERMALBUCKETS; i++) {
+    ThermalProfile[1+i].x = 7+iround((Wt[i]/Wtot)*TBSCALEX);
+    ThermalProfile[1+i].y = 5+iround(TBSCALEY*(1.0-(mth/maxh)*(i)/NUMTHERMALBUCKETS))+rc.top;
+  }
+  ThermalProfile[0].x = 7;
+  ThermalProfile[0].y = ThermalProfile[1].y+rc.top;
+  ThermalProfile[NUMTHERMALBUCKETS+1].x = 7;
+  ThermalProfile[NUMTHERMALBUCKETS+1].y = ThermalProfile[NUMTHERMALBUCKETS].y;
+
+
+  // position of thermal band
+  GliderBand[0].y = 5+iround(TBSCALEY*(1.0-h/maxh))+rc.top;
+  GliderBand[1].y = GliderBand[0].y;
+  GliderBand[2].y = GliderBand[0].y-4;
+  GliderBand[3].y = GliderBand[0].y+4;
+  GliderBand[1].x = 7+iround((mc/Wtot)*TBSCALEX);
+  GliderBand[2].x = GliderBand[1].x-4;
+  GliderBand[3].x = GliderBand[1].x-4;
+
+  // drawing info
+  HPEN hpOld;
+  HBRUSH hbOld;
+
+  hpOld = (HPEN)SelectObject(hDC, hpThermalBand);
+  hbOld = (HBRUSH)SelectObject(hDC, hbThermalBand);
+
+  Polygon(hDC,ThermalProfile,NUMTHERMALBUCKETS+2);
+
+  (HPEN)SelectObject(hDC, hpThermalBandGlider);
+
+  DrawSolidLine(hDC,GliderBand[0],GliderBand[1]);
+  DrawSolidLine(hDC,GliderBand[1],GliderBand[2]);
+  DrawSolidLine(hDC,GliderBand[1],GliderBand[3]);
+
+  SelectObject(hDC, hbOld);
+  SelectObject(hDC, hpOld);
+
+}
+
 
 void DrawFinalGlide(HDC hDC,RECT rc)
 {
 
-	POINT Scale[18] = { {5,-50 }, {14,-60 }, {23, -50},
-											{5,-40 }, {14,-50 }, {23, -40},
-											{5,-30 }, {14,-40 }, {23, -30},
-											{5,-20 }, {14,-30 }, {23, -20},
-											{5,-10 }, {14,-20 }, {23, -10},
-											{5, 0  }, {14,-10 }, {23,   0},
-									};
+  POINT Scale[18] = {
+    {5,-50 }, {14,-60 }, {23, -50},
+    {5,-40 }, {14,-50 }, {23, -40},
+    {5,-30 }, {14,-40 }, {23, -30},
+    {5,-20 }, {14,-30 }, {23, -20},
+    {5,-10 }, {14,-20 }, {23, -10},
+    {5, 0  }, {14,-10 }, {23,   0},
+  };
 
-	POINT	GlideBar[5] = { {5,0},{14,-10},{23,0},{23,0},{5,0} };
+  POINT	GlideBar[5] =
+    { {5,0},{14,-10},{23,0},{23,0},{5,0} };
 
-	HPEN hpSolid, hpOld;
-	HBRUSH hbOld, hbBrush;
+  HPEN hpOld;
+  HBRUSH hbOld;
 
-	TCHAR Value[10];
+  TCHAR Value[10];
 
-	double Offset;
-	int i;
+  double Offset;
+  int i;
 
+  if (ActiveWayPoint == -1) {
+    return;
+    // JMW not going anywhere, so nothing to display
+  }
 
-	hpSolid = (HPEN)CreatePen(PS_SOLID, 2, RGB(0xFF,0xFF,0xFF));
-	hpOld = (HPEN)SelectObject(hDC, hpSolid);
-	hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+  Offset = DerivedDrawInfo.TaskAltitudeDifference / 300;	// JMW TODO: should be an angle if in final glide mode
+  Offset *= 20;
 
-	Offset = CALCULATED_INFO.TaskAltitudeDifference / 300;
-	Offset *= 20;
+  if(Offset > 60) Offset = 60;
+  if(Offset < -60) Offset = -60;
 
-	if(Offset > 60) Offset = 60;
-	if(Offset < -60) Offset = -60;
+  if (Offset<0) {
+    hpOld = (HPEN)SelectObject(hDC, hpFinalGlideBelow);
+    hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+  } else {
+    hpOld = (HPEN)SelectObject(hDC, hpFinalGlideAbove);
+    hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+  }
 
+  if(Offset<0)
+    {
+      GlideBar[1].y = 10;
+      (HBRUSH)SelectObject(hDC, hbFinalGlideBelow);
+    }
+  else
+    {
+      (HBRUSH)SelectObject(hDC, hbFinalGlideAbove);
+    }
 
-	if(Offset<0)
-	{
-		hbBrush=(HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
-		GlideBar[1].y = 10;
-	}
-	else
-	{
-		hbBrush=(HBRUSH)CreateSolidBrush(RGB(0x00,0xFF,0x00));
-	}
+  for(i=0;i<5;i++)
+    {
+      GlideBar[i].y += ( (rc.bottom - rc.top )/2)+rc.top;
+    }
+  GlideBar[0].y -= (int)Offset;
+  GlideBar[1].y -= (int)Offset;
+  GlideBar[2].y -= (int)Offset;
 
-	(HBRUSH)SelectObject(hDC, hbBrush);
+  Polygon(hDC,GlideBar,5);
 
-	for(i=0;i<5;i++)
-	{
-			GlideBar[i].y += ( (rc.bottom - rc.top )/2)-20;
-	}
-	GlideBar[0].y -= (int)Offset;
-	GlideBar[1].y -= (int)Offset;
-	GlideBar[2].y -= (int)Offset;
+  wsprintf(Value,TEXT("%1.0f "),ALTITUDEMODIFY*DerivedDrawInfo.TaskAltitudeDifference);
 
-	Polygon(hDC,GlideBar,5);
+  if (Offset>=0) {
+    Offset = (GlideBar[2].y+Offset)+5;
+  } else {
+    Offset = (GlideBar[2].y+Offset)-15;
+  }
 
-	wsprintf(Value,TEXT("%1.0f"),ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeDifference);
-	SetBkMode(hDC,TRANSPARENT);
-	ExtTextOut(hDC, (int)GlideBar[2].x , (int)GlideBar[2].y, 0, NULL, Value, _tcslen(Value), NULL);
+  TextInBox(hDC, Value, GlideBar[0].x, Offset, 0);
 
-	SelectObject(hDC, hbOld);
-	SelectObject(hDC, hpOld);
-	DeleteObject((HPEN)hpSolid);
-	DeleteObject((HBRUSH)hbBrush);
+  SelectObject(hDC, hbOld);
+  SelectObject(hDC, hpOld);
 
 }
+
+
+
+
+static int iSnailNext=0;
 
 void DrawTrail( HDC hdc, POINT Orig, RECT rc)
 {
-	int i;
-	int P1,P2;
-	HPEN	hpNew, hpOld, hpDelete;
-	BYTE Red,Green,Blue;
+  int i;
+  int P1,P2;
+  HPEN	hpNew, hpOld, hpDelete;
+  BYTE Red,Green,Blue;
 
-	if(!TrailActive)
-		return;
+  if(!TrailActive)
+    return;
 
-	TrailLock = TRUE;
+  hpDelete = (HPEN)CreatePen(PS_SOLID, 2, RGB(0xFF,0xFF,0xFF));
+  hpOld = (HPEN)SelectObject(hdc, hpDelete);
 
+  // JMW don't draw first bit from home airport
 
-	hpDelete = (HPEN)CreatePen(PS_SOLID, 2, RGB(0xFF,0xFF,0xFF));
-	hpOld = (HPEN)SelectObject(hdc, hpDelete);
-
-	for(i=0;i<TRAILSIZE;i++)
+  for(i=0;i<TRAILSIZE;i++)
+    {
+      if( i < TRAILSIZE-1)
 	{
-		if( i < TRAILSIZE-1)
-		{
-			P1 = i; P2 = i+1;
-		}
-		else
-		{
-			P1 = i; P2 = 0;
-		}
-
-		if(SnailTrail[P1].Vario ==0)
-		{
-			Red = 0x7f; Green = 0x7f; Blue = 0x7f;
-		}
-		else if(SnailTrail[P1].Vario <0)
-		{
-			Red = 0xff; Green = 0x00; Blue = 0x00;
-		}
-		else
-		{
-			Red = 0x00; Green = 0xff; Blue = 0x00;
-		}
-		hpNew = (HPEN)CreatePen(PS_SOLID, 2, RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
-		SelectObject(hdc,hpNew);
-		DeleteObject((HPEN)hpDelete);
-		hpDelete = hpNew;
-
-
-		if( (P2) == SnailNext) // Last Point of Trail List
-		{
-			if((SnailTrail[P1].Lattitude != 0) || (SnailTrail[P2].Lattitude != 0))
-				DrawSolidLine(hdc,SnailTrail[P1].Screen,Orig);
-		}
-		else
-		{
-			if(PointVisible(&SnailTrail[P1].Screen ,&rc) || PointVisible(&SnailTrail[P2].Screen ,&rc) )
-			{
-				if(( SnailTrail[P1].Lattitude != 0) && (SnailTrail[P2].Lattitude != 0))
-					DrawSolidLine(hdc,SnailTrail[P1].Screen,SnailTrail[P2].Screen);
-			}
-		}
+	  P1 = i; P2 = i+1;
 	}
-	TrailLock = FALSE;
-	SelectObject(hdc, hpOld);
-	DeleteObject((HPEN)hpDelete);
+      else
+	{
+	  P1 = i; P2 = 0;
+	}
+
+      if(SnailTrail[P1].Vario ==0)
+	{
+	  Red = 0x7f; Green = 0x7f; Blue = 0x7f;
+	}
+      else if(SnailTrail[P1].Vario <0)
+	{
+	  Red = 0xff; Green = 0x00; Blue = 0x00;
+	}
+      else
+	{
+	  Red = 0x00; Green = 0xff; Blue = 0x00;
+	}
+      hpNew = (HPEN)CreatePen(PS_SOLID, 2, RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
+      SelectObject(hdc,hpNew);
+      DeleteObject((HPEN)hpDelete);
+      hpDelete = hpNew;
+
+      if( (P2) == iSnailNext) // Last Point of Trail List
+	{
+	  if((SnailTrail[P1].Lattitude != 0) || (SnailTrail[P2].Lattitude != 0))
+	    DrawSolidLine(hdc,SnailTrail[P1].Screen,Orig);
+	}
+      else
+	{
+	  if (P1 != iSnailNext) // JMW trying to fix first line bug
+	    if(PointVisible(&SnailTrail[P1].Screen ,&rc) || PointVisible(&SnailTrail[P2].Screen ,&rc) )
+	      {
+		if(( SnailTrail[P1].Lattitude != 0) && (SnailTrail[P2].Lattitude != 0))
+		  DrawSolidLine(hdc,SnailTrail[P1].Screen,SnailTrail[P2].Screen);
+	      }
+	}
+    }
+  SelectObject(hdc, hpOld);
+  DeleteObject((HPEN)hpDelete);
 }
+
 
 int PointVisible(POINT *P, RECT *rc)
 {
-	if(	( P->x > rc->left )
-			&&
-			( P->x < rc->right )
-			&&
-			( P->y > rc->top  )
-			&&
-			( P->y < rc->bottom  )
-		)
-		return TRUE;
-	else
-		return FALSE;
+  if(	( P->x > rc->left )
+	&&
+	( P->x < rc->right )
+	&&
+	( P->y > rc->top  )
+	&&
+	( P->y < rc->bottom  )
+	)
+    return TRUE;
+  else
+    return FALSE;
 }
 
 
 void DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top )
 {
-	TCHAR szMessageBuffer[1024];
-	TCHAR szTitleBuffer[1024];
+  TCHAR szMessageBuffer[1024];
+  TCHAR szTitleBuffer[1024];
 
-	FormatWarningString(Type, Name , Base, Top, szMessageBuffer, szTitleBuffer );
+  FormatWarningString(Type, Name , Base, Top, szMessageBuffer, szTitleBuffer );
 
-	MessageBox(hWndMapWindow,szMessageBuffer ,szTitleBuffer,MB_OK|MB_ICONWARNING);
+  MessageBox(hWndMapWindow,szMessageBuffer ,szTitleBuffer,MB_OK|MB_ICONWARNING);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
 }
 
-void CalculateScreenPositions(POINT Orig, RECT rc)
-{
-	unsigned int i,j;
-	double X,Y;
-	double tmp;
-
-	for(i=0;i<NumberOfWayPoints;i++)
-	{
-		X = (double)DrawScale*(DrawInfo.Longditude - WayPointList[i].Longditude );
-		X = X * (double)fastcosine(WayPointList[i].Lattitude);
-		Y = (double)DrawScale*(DrawInfo.Lattitude  - WayPointList[i].Lattitude  );
-
-		if(
-				(DisplayOrientation == TRACKUP)
-				||
-				((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-			)
-			rotate(&X, &Y, DrawInfo.TrackBearing );
-
-		WayPointList[i].Screen.x = Orig.x - int(X);
-		WayPointList[i].Screen.y = Orig.y + int(Y);
-
-		if(PointVisible(&WayPointList[i].Screen, &rc) )
-		{
-			WayPointList[i].Visible = TRUE;
-		}
-		else
-		{
-			WayPointList[i].Visible = FALSE;
-		}
-	}
 
 
-	for(i=0;i<NumberOfAirspaceCircles;i++)
-	{
-		if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
-		{
-			X = (double)DrawScale*(DrawInfo.Longditude - AirspaceCircle[i].Longditude );
-			X = X * (double)fastcosine(AirspaceCircle[i].Lattitude);
-			Y = (double)DrawScale*(DrawInfo.Lattitude  - AirspaceCircle[i].Lattitude  );
+void LatLon2Screen(float lon, float lat, int *scX, int *scY) {
+  float X, Y;
+  X = (float)DrawScale*((float)PanXr - lon);
+  X = X * ffastcosine(lat);
+  Y = (float)DrawScale*((float)PanYr  - lat);
 
-			if(
-					(DisplayOrientation == TRACKUP)
-					||
-					((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-				)
-					rotate(&X, &Y, DrawInfo.TrackBearing );
+  frotate(&X, &Y, (float)DisplayAngle );
 
-			AirspaceCircle[i].ScreenX = Orig.x - int(X);
-			AirspaceCircle[i].ScreenY = Orig.y + int(Y);
-
-			tmp = AirspaceCircle[i].Radius * DISTANCEMODIFY/MapScale;
-			tmp = tmp * 30;
-
-			AirspaceCircle[i].ScreenR = (int)tmp;
-		}
-	}
-
-
-	for(i=0;i<NumberOfAirspaceAreas;i++)
-	{
-		if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
-		{
-			for(j=AirspaceArea[i].FirstPoint ; j<(AirspaceArea[i].FirstPoint + AirspaceArea[i].NumPoints) ; j++)
-			{
-				X = (double)DrawScale*(DrawInfo.Longditude - AirspacePoint[j].Longditude);
-				X = X * (double)fastcosine(AirspacePoint[j].Lattitude);
-				Y = (double)DrawScale*(DrawInfo.Lattitude  - AirspacePoint[j].Lattitude  );
-
-				if(
-					(DisplayOrientation == TRACKUP)
-					||
-					((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-				)
-					rotate(&X, &Y, DrawInfo.TrackBearing );
-
-				AirspacePoint[j].Screen.x = Orig.x - int(X);
-				AirspacePoint[j].Screen.y = Orig.y + int(Y);
-			}
-		}
-	}
-
-
-	if(TrailActive)
-	{
-
-		TrailLock = TRUE;
-
-		for(i=0;i<TRAILSIZE;i++)
-		{
-			X = (double)DrawScale*(DrawInfo.Longditude - SnailTrail[i].Longditude );
-			X = X * (double)fastcosine(SnailTrail[i].Lattitude);
-			Y = (double)DrawScale*(DrawInfo.Lattitude  - SnailTrail[i].Lattitude  );
-
-			if(
-					(DisplayOrientation == TRACKUP)
-					||
-					((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-				)
-				rotate(&X, &Y, DrawInfo.TrackBearing );
-
-			SnailTrail[i].Screen.x = Orig.x - int(X);
-			SnailTrail[i].Screen.y = Orig.y + int(Y);
-		}
-	}
-
-
-	for(i=0;i<MAXTASKPOINTS-1;i++)
-	{
-		if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
-		{
-			X = (double)DrawScale*(DrawInfo.Longditude - Task[i].SectorEndLon);
-			X = X * (double)fastcosine(WayPointList[i].Lattitude);
-			Y = (double)DrawScale*(DrawInfo.Lattitude  - Task[i].SectorEndLat);
-
-			if(
-					(DisplayOrientation == TRACKUP)
-					||
-					((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-				)
-				rotate(&X, &Y, DrawInfo.TrackBearing );
-
-			Task[i].End.x  = Orig.x - int(X);
-			Task[i].End.y = Orig.y + int(Y);
-
-			X = (double)DrawScale*(DrawInfo.Longditude - Task[i].SectorStartLon);
-			X = X * (double)fastcosine(WayPointList[i].Lattitude);
-			Y = (double)DrawScale*(DrawInfo.Lattitude  - Task[i].SectorStartLat);
-
-			if(
-					(DisplayOrientation == TRACKUP)
-					||
-					((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-				)
-				rotate(&X, &Y, DrawInfo.TrackBearing );
-
-			Task[i].Start.x = Orig.x - int(X);
-			Task[i].Start.y = Orig.y + int(Y);
-
-			if((AATEnabled) && (Task[i].AATType == SECTOR))
-			{
-				X = (double)DrawScale*(DrawInfo.Longditude - Task[i].AATStartLon );
-				X = X * (double)fastcosine(Task[i].AATStartLat);
-				Y = (double)DrawScale*(DrawInfo.Lattitude  - Task[i].AATStartLat );
-
-				if(
-						(DisplayOrientation == TRACKUP)
-						||
-						((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-					)
-					rotate(&X, &Y, DrawInfo.TrackBearing );
-
-				Task[i].AATStart.x  = Orig.x - int(X);
-				Task[i].AATStart.y  = Orig.y + int(Y);
-
-				X = (double)DrawScale*(DrawInfo.Longditude - Task[i].AATFinishLon );
-				X = X * (double)fastcosine(Task[i].AATFinishLat);
-				Y = (double)DrawScale*(DrawInfo.Lattitude  - Task[i].AATFinishLat );
-
-				if(
-						(DisplayOrientation == TRACKUP)
-						||
-						((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == FALSE) )
-					)
-					rotate(&X, &Y, DrawInfo.TrackBearing );
-
-				Task[i].AATFinish.x  = Orig.x - int(X);
-				Task[i].AATFinish.y  = Orig.y + int(Y);
-			}
-		}
-	}
+  *scX = Orig_Screen.x - iround(X);
+  *scY = Orig_Screen.y + iround(Y);
 }
+
+
+void LatLon2Screen(double lon, double lat, int *scX, int *scY) {
+  double X, Y;
+  X = DrawScale*(PanXr - lon);
+  X = X * fastcosine(lat);
+  Y = DrawScale*(PanYr  - lat);
+
+  rotate(&X, &Y, DisplayAngle );
+
+  *scX = Orig_Screen.x - (int)X; // iround(X);
+  *scY = Orig_Screen.y + (int)Y; // iround(Y);
+}
+
+
+void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
+{
+  unsigned int i,j;
+  double tmp;
+  int scx, scy;
+
+  Orig_Screen = Orig;
+
+  PanXr = DrawInfo.Longditude + PanX;
+  PanYr = DrawInfo.Lattitude + PanY;
+
+  LatLon2Screen(DrawInfo.Longditude, DrawInfo.Lattitude, &scx,
+		&scy);
+  Orig_Aircraft->x = scx;
+  Orig_Aircraft->y = scy;
+
+  for(i=0;i<NumberOfWayPoints;i++)
+    {
+      LatLon2Screen(WayPointList[i].Longditude, WayPointList[i].Lattitude, &scx, &scy);
+
+      WayPointList[i].Screen.x = scx;
+      WayPointList[i].Screen.y = scy;
+
+      if(PointVisible(&WayPointList[i].Screen, &rc) )
+	{
+	  WayPointList[i].Visible = TRUE;
+	}
+      else
+	{
+	  WayPointList[i].Visible = FALSE;
+	}
+    }
+
+
+  for(i=0;i<NumberOfAirspaceCircles;i++)
+    {
+      if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
+	{
+
+	  LatLon2Screen(AirspaceCircle[i].Longditude, AirspaceCircle[i].Lattitude, &scx, &scy);
+
+	  AirspaceCircle[i].ScreenX = scx;
+	  AirspaceCircle[i].ScreenY = scy;
+
+	  tmp = AirspaceCircle[i].Radius * DISTANCEMODIFY/MapScale;
+	  tmp = tmp * 30;
+
+	  AirspaceCircle[i].ScreenR = (int)tmp;
+	}
+    }
+
+
+  for(i=0;i<NumberOfAirspaceAreas;i++)
+    {
+      if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
+	{
+	  for(j=AirspaceArea[i].FirstPoint ; j<(AirspaceArea[i].FirstPoint + AirspaceArea[i].NumPoints) ; j++)
+	    {
+
+	      // bug fix by Samuel Gisiger
+	      LatLon2Screen(AirspacePoint[j].Longditude, AirspacePoint[j].Lattitude, &scx, &scy);
+
+	      AirspacePoint[j].Screen.x = scx;
+	      AirspacePoint[j].Screen.y = scy;
+	    }
+	}
+    }
+
+
+  if(TrailActive)
+    {
+
+      iSnailNext = SnailNext;
+      // set this so that new data doesn't arrive between calculating
+      // this and the screen updates
+
+      for(i=0;i<TRAILSIZE;i++)
+	{
+	  LatLon2Screen(SnailTrail[i].Longditude,
+			SnailTrail[i].Lattitude, &scx, &scy);
+
+	  SnailTrail[i].Screen.x = scx;
+	  SnailTrail[i].Screen.y = scy;
+	}
+
+    }
+
+  for(i=0;i<MAXTASKPOINTS-1;i++)
+    {
+      if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
+	{
+	  LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, &scx, &scy);
+
+	  Task[i].End.x  = scx;
+	  Task[i].End.y = scy;
+
+	  LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, &scx, &scy);
+
+	  Task[i].Start.x  = scx;
+	  Task[i].Start.y = scy;
+
+	  if((AATEnabled) && (Task[i].AATType == SECTOR))
+	    {
+	      LatLon2Screen(Task[i].AATStartLon, Task[i].AATStartLat, &scx, &scy);
+
+	      Task[i].AATStart.x  = scx;
+	      Task[i].AATStart.y = scy;
+
+	      LatLon2Screen(Task[i].AATFinishLon, Task[i].AATFinishLat, &scx, &scy);
+
+	      Task[i].AATFinish.x  = scx;
+	      Task[i].AATFinish.y = scy;
+
+	    }
+	}
+    }
+}
+
 
 void CalculateWaypointReachable(void)
 {
-	unsigned int i;
-	double WaypointDistance, WaypointBearing,AltitudeRequired;
+  unsigned int i;
+  double WaypointDistance, WaypointBearing,AltitudeRequired;
 
-	for(i=0;i<NumberOfWayPoints;i++)
+  for(i=0;i<NumberOfWayPoints;i++)
+    {
+      if(WayPointList[i].Visible )
 	{
-		if(WayPointList[i].Visible )
-		{
-			if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
-			{
-				WaypointDistance = Distance(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
-				WaypointBearing =  Bearing(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
-				AltitudeRequired = McReadyAltitude(MACREADY/LIFTMODIFY,WaypointDistance,WaypointBearing, DerivedDrawInfo.WindSpeed, DerivedDrawInfo.WindBearing);
-				AltitudeRequired = AltitudeRequired * (1/BUGS);	AltitudeRequired = AltitudeRequired + SAFTEYALTITUDE + WayPointList[i].Altitude ;
-				AltitudeRequired = DrawInfo.Altitude - AltitudeRequired;
+	  if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
+	    {
+	      WaypointDistance = Distance(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
+	      WaypointBearing =  Bearing(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
+	      AltitudeRequired = McReadyAltitude(0.0, // JMW was MACREADY/LIFTMODIFY
+						 WaypointDistance,WaypointBearing,
+						 DerivedDrawInfo.WindSpeed,
+						 DerivedDrawInfo.WindBearing,0,0,1);
+	      AltitudeRequired = AltitudeRequired * (1/BUGS);
+	      AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL + WayPointList[i].Altitude ;
+	      AltitudeRequired = DrawInfo.Altitude - AltitudeRequired;
 
-				if(AltitudeRequired >=0)
-					WayPointList[i].Reachable = TRUE;
-				else
-					WayPointList[i].Reachable = FALSE;
-			}
-		}
+	      if(AltitudeRequired >=0)
+		WayPointList[i].Reachable = TRUE;
+	      else
+		WayPointList[i].Reachable = FALSE;
+	    }
 	}
+    }
 }
+
 
 void DrawSolidLine(HDC hdc, POINT ptStart, POINT ptEnd)
 {
-	POINT pt[2];
+  POINT pt[2];
 
-	pt[0].x = ptStart.x;
-	pt[0].y = ptStart.y;
-	pt[1].x = ptEnd.x;
-	pt[1].y = ptEnd.y;
-	Polyline(hdc, pt, NUMPOINTS);
+  pt[0].x = ptStart.x;
+  pt[0].y = ptStart.y;
+  pt[1].x = ptEnd.x;
+  pt[1].y = ptEnd.y;
+  Polyline(hdc, pt, NUMPOINTS);
 }
+
 
 void DrawDashLine(HDC hdc, INT width, POINT ptStart, POINT ptEnd, COLORREF cr)
 {
-	int i;
-	HPEN hpDash,hpOld;
-	POINT pt[2];
-	//Create a dot pen
-	hpDash = (HPEN)CreatePen(PS_DASH, 1, cr);
-	hpOld = (HPEN)SelectObject(hdc, hpDash);
+  int i;
+  HPEN hpDash,hpOld;
+  POINT pt[2];
+  //Create a dot pen
+  hpDash = (HPEN)CreatePen(PS_DASH, 1, cr);
+  hpOld = (HPEN)SelectObject(hdc, hpDash);
 
-	pt[0].x = ptStart.x;
-	pt[0].y = ptStart.y;
-	pt[1].x = ptEnd.x;
-	pt[1].y = ptEnd.y;
+  pt[0].x = ptStart.x;
+  pt[0].y = ptStart.y;
+  pt[1].x = ptEnd.x;
+  pt[1].y = ptEnd.y;
 
-	//increment on smallest variance
-	if(abs(ptStart.x - ptEnd.x) < abs(ptStart.y - ptEnd.y)){
-		for (i = 0; i < width; i++){
-			pt[0].x += 1;
-			pt[1].x += 1;
-			Polyline(hdc, pt, NUMPOINTS);
-		}
-	} else {
-		for (i = 0; i < width; i++){
-			pt[0].y += 1;
-			pt[1].y += 1;
-			Polyline(hdc, pt, NUMPOINTS);
-		}
-	}
+  //increment on smallest variance
+  if(abs(ptStart.x - ptEnd.x) < abs(ptStart.y - ptEnd.y)){
+    for (i = 0; i < width; i++){
+      pt[0].x += 1;
+      pt[1].x += 1;
+      Polyline(hdc, pt, NUMPOINTS);
+    }
+  } else {
+    for (i = 0; i < width; i++){
+      pt[0].y += 1;
+      pt[1].y += 1;
+      Polyline(hdc, pt, NUMPOINTS);
+    }
+  }
 
-	SelectObject(hdc, hpOld);
-	DeleteObject((HPEN)hpDash);
+  SelectObject(hdc, hpOld);
+  DeleteObject((HPEN)hpDash);
 
 }
+
+
+void DrawCDI() {
+  if (DerivedDrawInfo.Circling) {
+    ShowWindow(hWndCDIWindow, SW_SHOW);
+
+    // JMW changed layout here to fit reorganised display
+    // insert waypoint bearing ".<|>." into CDIScale string"
+
+    TCHAR CDIScale[] = TEXT("330..340..350..000..010..020..030..040..050..060..070..080..090..100..110..120..130..140..150..160..170..180..190..200..210..220..230..240..250..260..270..280..290..300..310..320..330..340..350..000..010..020..030..040.");
+    TCHAR CDIDisplay[25] = TEXT("");
+    int j;
+    int CDI_WP_Bearing = (int)DrawInfo.WaypointBearing/2;
+    CDIScale[CDI_WP_Bearing + 9] = 46;
+    CDIScale[CDI_WP_Bearing + 10] = 60;
+    CDIScale[CDI_WP_Bearing + 11] = 124; // "|" character
+    CDIScale[CDI_WP_Bearing + 12] = 62;
+    CDIScale[CDI_WP_Bearing + 13] = 46;
+    for (j=0;j<24;j++) CDIDisplay[j] = CDIScale[(j + (int)(DrawInfo.TrackBearing)/2)];
+    CDIDisplay[24] = NULL;
+    // JMW fix bug! This indicator doesn't always display correctly!
+
+    // JMW added arrows at end of CDI to point to track if way off..
+    int deltacdi = iround(DrawInfo.WaypointBearing-DrawInfo.TrackBearing);
+
+    while (deltacdi>180) {
+      deltacdi-= 360;
+    }
+    while (deltacdi<-180) {
+      deltacdi+= 360;
+    }
+    if (deltacdi>20) {
+      CDIDisplay[21]='>';
+      CDIDisplay[22]='>';
+      CDIDisplay[23]='>';
+    }
+    if (deltacdi<-20) {
+      CDIDisplay[0]='<';
+      CDIDisplay[1]='<';
+      CDIDisplay[2]='<';
+    }
+
+    SetWindowText(hWndCDIWindow,CDIDisplay);
+    // end of new code to display CDI scale
+  } else {
+    ShowWindow(hWndCDIWindow, SW_HIDE);
+  }
+}
+
+
