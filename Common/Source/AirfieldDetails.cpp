@@ -36,17 +36,24 @@ void CloseAirfieldDetails() {
 
 void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
   int i;
+  TCHAR UName[100];
 
   for(i=0;i<NumberOfWayPoints;i++)
     {
       if ((WayPointList[i].Flags & AIRPORT) == AIRPORT) {
-	if (_tcscmp(WayPointList[i].Name,Name)==0) {
+	_tcscpy(UName, WayPointList[i].Name);
+	CharUpper(UName);
+
+	if (_tcscmp(UName, Name)==0) {
 	  
 	  if (WayPointList[i].Details) {
 	    free(WayPointList[i].Details);
 	  }
 	  WayPointList[i].Details = (TCHAR*)malloc((_tcslen(Details)+1)*sizeof(TCHAR));
 	  _tcscpy(WayPointList[i].Details, Details);
+
+	  return;
+
 	}
       }
     }
@@ -81,7 +88,7 @@ void ParseAirfieldDetails() {
 	  }
 	  Name[i-1]= TempString[i];
 	}
-	Name[i]= 0;
+	Name[i-1]= 0;
 
 	inDetails = TRUE;
       } else {

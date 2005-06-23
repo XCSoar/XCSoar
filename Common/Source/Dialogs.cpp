@@ -2273,6 +2273,59 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       jpgimage2.Load (hdcScreen ,path_fname2 );   
       page = 0;
 
+      wsprintf(Temp,TEXT("%s\n%s"),
+               WayPointList[SelectedWaypoint].Name, 
+               WayPointList[SelectedWaypoint].Comment);
+
+      SetDlgItemText(hDlg,IDC_WAYPOINTDETAILSTEXT, Temp);
+
+	Temp[0]= 0;
+
+	/*
+        if( (WayPointList[SelectedWaypoint].Flags & HOME) == HOME) {
+	  wcscat(Temp,TEXT(" Home"));
+        }
+        if ((WayPointList[SelectedWaypoint].Flags & AIRPORT) == AIRPORT) {
+	  wcscat(Temp,TEXT(" Airport"));
+	}
+        if ((WayPointList[SelectedWaypoint].Flags & LANDPOINT) == LANDPOINT) {
+	  wcscat(Temp,TEXT(" Landpoint"));
+	}
+        if ((WayPointList[SelectedWaypoint].Flags & TURNPOINT) == TURNPOINT) {
+	  wcscat(Temp,TEXT(" Turnpoint"));
+	}
+        if ((WayPointList[SelectedWaypoint].Flags & START) == START) {
+	  wcscat(Temp,TEXT(" Start"));
+	}
+        if ((WayPointList[SelectedWaypoint].Flags & RESTRICTED) == RESTRICTED) {
+	  wcscat(Temp,TEXT(" Restricted"));
+	}
+        if ((WayPointList[SelectedWaypoint].Flags & WAYPOINTFLAG) == WAYPOINTFLAG) {
+	  wcscat(Temp,TEXT(" Waypoint"));
+	}
+	wcscat(Temp,TEXT("\r\n"));
+        if (WayPointList[SelectedWaypoint].Reachable) {
+	  wcscat(Temp,TEXT(" Reachable"));
+        } else {
+	  wcscat(Temp,TEXT(" Unreachable"));
+        }
+	wcscat(Temp,TEXT("\r\n"));
+	*/
+	wsprintf(Temp,TEXT("Longitude %-3.4f\r\nLatitude %-3.4f\r\nElevation %5.0f\r\n"),
+		 WayPointList[SelectedWaypoint].Longditude,
+		 WayPointList[SelectedWaypoint].Lattitude,
+		 WayPointList[SelectedWaypoint].Altitude*ALTITUDEMODIFY
+
+		 );
+
+	wcscat(Temp,TEXT("\r\n"));
+
+	if (WayPointList[SelectedWaypoint].Details) {
+	  wcscat(Temp,WayPointList[SelectedWaypoint].Details);
+	}
+
+        SetDlgItemText(hDlg,IDC_WDTEXT, Temp);
+ 
       return TRUE;
 
     case WM_COMMAND:
@@ -2331,12 +2384,16 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       }
     case WM_PAINT:
 
-      wsprintf(Temp,TEXT("%s\n%s"),
-               WayPointList[SelectedWaypoint].Name, 
-               WayPointList[SelectedWaypoint].Comment);
+      // make background white
+      GetClientRect(hDlg, &rc);
+      hdc = BeginPaint(hDlg, &ps);
+      
+      HGDIOBJ gTemp;
+      gTemp = SelectObject(hdcScreen, GetStockObject(WHITE_BRUSH));
+      SelectObject(hdcScreen, GetStockObject(WHITE_PEN));
+      Rectangle(hdcScreen,rc.left,rc.top,rc.right,rc.bottom);
+      EndPaint(hDlg, &ps);
 
-      SetDlgItemText(hDlg,IDC_WAYPOINTDETAILSTEXT, Temp);
- 
       if (page==3) {
         ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_HIDE);
@@ -2347,7 +2404,8 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         GetClientRect(hDlg, &rc);
         hdc = BeginPaint(hDlg, &ps);
-        jpgimage1.Draw (hdcScreen, 0, 45, rc.right - rc.left, rc.bottom -  rc.top-45);
+        jpgimage1.Draw (hdcScreen, 0, 45, 
+			rc.right - rc.left, rc.bottom -  rc.top-45);
         EndPaint(hDlg, &ps);
       }
       if (page==2) {
@@ -2370,67 +2428,9 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         ShowWindow(GetDlgItem(hDlg,IDC_WDSETHOME),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDINSERT),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDTEXT),SW_SHOW);
-
-	Temp[0]= 0;
-
-        if( (WayPointList[SelectedWaypoint].Flags & HOME) == HOME) {
-	  wcscat(Temp,TEXT(" Home"));
-        }
-        if ((WayPointList[SelectedWaypoint].Flags & AIRPORT) == AIRPORT) {
-	  wcscat(Temp,TEXT(" Airport"));
-	}
-        if ((WayPointList[SelectedWaypoint].Flags & LANDPOINT) == LANDPOINT) {
-	  wcscat(Temp,TEXT(" Landpoint"));
-	}
-        if ((WayPointList[SelectedWaypoint].Flags & TURNPOINT) == TURNPOINT) {
-	  wcscat(Temp,TEXT(" Turnpoint"));
-	}
-        if ((WayPointList[SelectedWaypoint].Flags & START) == START) {
-	  wcscat(Temp,TEXT(" Start"));
-	}
-        if ((WayPointList[SelectedWaypoint].Flags & RESTRICTED) == RESTRICTED) {
-	  wcscat(Temp,TEXT(" Restricted"));
-	}
-        if ((WayPointList[SelectedWaypoint].Flags & WAYPOINTFLAG) == WAYPOINTFLAG) {
-	  wcscat(Temp,TEXT(" Waypoint"));
-	}
-	wcscat(Temp,TEXT("\r\n"));
-        if (WayPointList[SelectedWaypoint].Reachable) {
-	  wcscat(Temp,TEXT(" Reachable"));
-        } else {
-	  wcscat(Temp,TEXT(" Unreachable"));
-        }
-	wcscat(Temp,TEXT("\r\n"));
-	wsprintf(Temp2,TEXT("Longitude %-3.4f\r\nLatitude %-3.4f\r\nElevation %5.0f\r\n"),
-		 WayPointList[SelectedWaypoint].Longditude,
-		 WayPointList[SelectedWaypoint].Lattitude,
-		 WayPointList[SelectedWaypoint].Altitude*ALTITUDEMODIFY
-
-		 );
-	wcscat(Temp,Temp2);
-
-	wcscat(Temp,TEXT("\r\n"));
-
-	if (WayPointList[SelectedWaypoint].Details) {
-	  wcscat(Temp,WayPointList[SelectedWaypoint].Details);
-	}
-
-        SetDlgItemText(hDlg,IDC_WDTEXT, Temp);
-
       }
       if (page==1) {
 
-        GetClientRect(hDlg, &rc);
-        hdc = BeginPaint(hDlg, &ps);
-
-        HGDIOBJ gTemp;
-        gTemp = SelectObject(hdc, GetStockObject(WHITE_BRUSH));
-        SelectObject(hdc, GetStockObject(BLACK_PEN));
-        Rectangle(hdc,rc.left,rc.top,rc.right,rc.bottom);
-        EndPaint(hDlg, &ps);
-
-        wsprintf(Temp,TEXT("Tasking"));
-        SetDlgItemText(hDlg,IDC_WAYPOINTDETAILSTEXT, Temp);
         ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_SHOW);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_SHOW);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_SHOW);

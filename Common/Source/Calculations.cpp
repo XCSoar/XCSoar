@@ -1240,17 +1240,20 @@ int LastCi =-1;
 int LastAi =-1;
 HWND hCMessage = NULL;
 HWND hAMessage = NULL;
+int ClearAirspaceWarningTimeout = 0;
 
 bool ClearAirspaceWarnings() {
   if(hCMessage)
     {
       LastCi = -1;LastAi = -1;
       DestroyWindow(hCMessage);
+      ClearAirspaceWarningTimeout = 30;
       hCMessage = NULL;
       return true;
     }
   if(hAMessage)
     {
+      ClearAirspaceWarningTimeout = 30;
       DestroyWindow(hAMessage);
       hAMessage = NULL;
       return true;
@@ -1263,6 +1266,10 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   int i;
   TCHAR szMessageBuffer[1024];
   TCHAR szTitleBuffer[1024];
+
+  if (ClearAirspaceWarningTimeout) {
+    ClearAirspaceWarningTimeout--;
+  }
         
   if(!AIRSPACEWARNINGS)
     {
@@ -1294,12 +1301,18 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           hCMessage = NULL;
         }
 
+      if (ClearAirspaceWarningTimeout>0) {
+	return;
+      }
+
       MessageBeep(MB_ICONEXCLAMATION);
       FormatWarningString(AirspaceCircle[i].Type , AirspaceCircle[i].Name , AirspaceCircle[i].Base, AirspaceCircle[i].Top, szMessageBuffer, szTitleBuffer );
       if(
          (DisplayOrientation == TRACKUP)
          ||
-         ((DisplayOrientation == NORTHCIRCLE) && (Calculated->Circling == FALSE) )      
+         ((DisplayOrientation == NORTHCIRCLE) && (Calculated->Circling == FALSE))
+	  ||
+         ((DisplayOrientation == TRACKCIRCLE) && (Calculated->Circling == FALSE) )      
          )
         hCMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY,
                                  0, MapRect.top+15, 240, 50, hWndMapWindow,NULL,hInst,NULL);
@@ -1338,12 +1351,17 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           hAMessage = NULL;
         }
 
+      if (ClearAirspaceWarningTimeout>0) {
+	return;
+      }
+
       MessageBeep(MB_ICONEXCLAMATION);
       FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name , AirspaceArea[i].Base, AirspaceArea[i].Top, szMessageBuffer, szTitleBuffer );
       if(
          (DisplayOrientation == TRACKUP)
          ||
-         ((DisplayOrientation == NORTHCIRCLE) && (Calculated->Circling == FALSE) )      
+         ((DisplayOrientation == NORTHCIRCLE) && (Calculated->Circling == FALSE) )  	  ||
+         ((DisplayOrientation == TRACKCIRCLE) && (Calculated->Circling == FALSE) )    
          )
 
         hAMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY,

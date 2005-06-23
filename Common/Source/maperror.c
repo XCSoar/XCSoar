@@ -1,4 +1,4 @@
-/* $Id: maperror.c,v 1.1 2005/06/22 01:50:47 scottp Exp $ */
+/* $Id: maperror.c,v 1.2 2005/06/23 12:22:08 jwharington Exp $ */
 
 //#include "map.h"
 #include "maperror.h"

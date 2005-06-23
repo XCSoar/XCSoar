@@ -78,6 +78,101 @@ static float Width = 0;
 static float Zoom = 0;
 static int LineCount;
 
+/////////////////////////////
+
+
+// if file changed, don't load from binary, load from normal and then save it.
+
+void SaveAirspaceBinary() {
+  HANDLE hFile;// = INVALID_HANDLE_VALUE; 
+  DWORD dwBytesRead;   
+
+  hFile = CreateFile(TEXT("xcsoar-airspace.bin"), 
+		     GENERIC_WRITE, FILE_SHARE_WRITE, NULL, 
+		     CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
+
+  WriteFile(hFile, &NumberOfAirspaceAreas, 
+	    sizeof(unsigned int), &dwBytesRead, NULL);
+  WriteFile(hFile, &NumberOfAirspacePoints, 
+	    sizeof(unsigned int), &dwBytesRead, NULL);
+  WriteFile(hFile, &NumberOfAirspaceCircles, 
+	    sizeof(unsigned int), &dwBytesRead, NULL);
+
+  WriteFile(hFile, AirspaceArea, 
+	    sizeof(AIRSPACE_AREA)*NumberOfAirspaceAreas, 
+	    &dwBytesRead, NULL);
+  WriteFile(hFile, AirspacePoint, 
+	    sizeof(AIRSPACE_POINT)*NumberOfAirspacePoints, 
+	    &dwBytesRead, NULL);
+  WriteFile(hFile, AirspaceCircle, 
+	    sizeof(AIRSPACE_CIRCLE)*NumberOfAirspaceCircles, 
+	    &dwBytesRead, NULL);
+
+  CloseHandle(hFile);
+}
+
+
+bool LoadAirspaceBinary() {
+  HANDLE hFile;// = INVALID_HANDLE_VALUE; 
+  DWORD dwNumBytesRead;   
+
+  hFile = CreateFile(TEXT("xcsoar-airspace.bin"),
+		     GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,
+		     OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+		
+  if(hFile != INVALID_HANDLE_VALUE )
+	
+    {
+      ReadFile(hFile,&NumberOfAirspaceAreas,
+	       sizeof(unsigned int),&dwNumBytesRead,NULL);
+
+      ReadFile(hFile,&NumberOfAirspacePoints,
+	       sizeof(unsigned int),&dwNumBytesRead,NULL);
+
+      ReadFile(hFile,&NumberOfAirspaceCircles,
+	       sizeof(unsigned int),&dwNumBytesRead,NULL);
+
+      if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
+      if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
+      if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
+
+      AirspaceArea  = (AIRSPACE_AREA *)  
+	LocalAlloc(LMEM_FIXED, NumberOfAirspaceAreas   * sizeof(AIRSPACE_AREA));
+      AirspacePoint = (AIRSPACE_POINT *) 
+	LocalAlloc(LMEM_FIXED, NumberOfAirspacePoints  * sizeof(AIRSPACE_POINT));
+      AirspaceCircle = (AIRSPACE_CIRCLE *)
+	LocalAlloc(LMEM_FIXED, NumberOfAirspaceCircles * sizeof(AIRSPACE_CIRCLE));
+
+      int i;
+      for (i=0; i<NumberOfAirspaceAreas; i++) {
+
+	ReadFile(hFile,&AirspaceArea[i],
+		 sizeof(AIRSPACE_AREA),
+		 &dwNumBytesRead,NULL);
+      }
+
+      for (i=0; i<NumberOfAirspacePoints; i++) {
+	ReadFile(hFile,&AirspacePoint[i],
+		 sizeof(AIRSPACE_POINT),
+		 &dwNumBytesRead,NULL);
+      }
+
+      for (i=0; i<NumberOfAirspaceCircles; i++) {
+	ReadFile(hFile,&AirspaceCircle[i],
+		 sizeof(AIRSPACE_CIRCLE),
+		 &dwNumBytesRead,NULL);
+      }
+
+      CloseHandle(hFile);
+      return true;
+    }
+  return false; // couldn't find it...
+}
+
+
+///////////////////////////////
+
+
 
 void ReadAirspace(HANDLE hFile)
 {
@@ -779,6 +874,7 @@ void ParseError(TCHAR *Line)
   MessageBox(hWndMainWindow,Message,TEXT("Error in Airspace File"),MB_OK|MB_ICONINFORMATION);
 }
 
+
 extern TCHAR szRegistryAirspaceFile[];
 void ReadAirspace(void)
 {
@@ -786,15 +882,19 @@ void ReadAirspace(void)
 	
   HANDLE hFile;
 
-  GetRegistryString(szRegistryAirspaceFile, szFile, MAX_PATH);
-  hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  if (!LoadAirspaceBinary() || AIRSPACEFILECHANGED) {
+
+    GetRegistryString(szRegistryAirspaceFile, szFile, MAX_PATH);
+    hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 		
-  if(hFile != INVALID_HANDLE_VALUE )
-	
-    {
-      ReadAirspace(hFile);
-      CloseHandle(hFile);
-    }
+    if(hFile != INVALID_HANDLE_VALUE )
+      
+      {
+	ReadAirspace(hFile);
+	CloseHandle(hFile);
+	SaveAirspaceBinary();
+      }
+  }
 }
 
 
@@ -906,3 +1006,6 @@ BOOL CheckAirspaceAltitude(double Base, double Top)
     }
   return TRUE;
 }
+
+
+///////////////////////////////////////////////////
