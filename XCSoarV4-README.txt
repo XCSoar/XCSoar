@@ -13,6 +13,7 @@ Summary of new features since v4.0
 - Rendering of airspace with cross-hatches
 - Added pilot/aircraft information in logger
 - Added "Remove" button on waypoint details task page
+- Acknowledge airspace warnings
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -41,6 +42,8 @@ Bug fixes and code improvements
 - Many hard-wired constants relocated to Sizes.h file
 - Waypoint labels have white background so not obscured by terrain
 - Labels of topological features now supported
+- Fast loading of airspace at startup using binary file
+
 
 ============================================================================
 HARDWARE BUTTONS
@@ -391,4 +394,13 @@ with the freely available GDAL/OGR utility.
 
 Shape files are also cached and loaded on demand, allowing large files to
 be used.
+
+
+
+============================================================================
+AIRSPACE
+============================================================================
+
+Hitting the enter cursor key while in map mode will dismiss any raised
+airspace warnings for 30 seconds.
 
