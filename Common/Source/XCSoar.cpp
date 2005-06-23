@@ -475,13 +475,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
     }
 
   ReadAirfieldFile();
-
   ReadAirspace();
 
   OpenTopology();
   ReadTopology();
-
-  //  Sleep(1000); // JMW added this, debugging threads
 
   VarioSound_Init();
   VarioSound_EnableSound(false);
@@ -1289,16 +1286,19 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
               if(AIRSPACEFILECHANGED)
                 {
-                  NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
+
+                  NumberOfAirspacePoints = 0;
+		  NumberOfAirspaceAreas = 0;
+		  NumberOfAirspaceCircles = 0;
                   if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
                   if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
                   if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
                   ReadAirspace();
+
                 }
 
               if (AIRFIELDFILECHANGED)
                 {
-                  // JMW TODO
 		  ReadAirfieldFile();
                 }
 

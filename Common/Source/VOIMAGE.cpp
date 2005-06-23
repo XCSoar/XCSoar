@@ -139,12 +139,14 @@ BOOL CVOImage::Draw(HDC hdc, int x, int y, int cx, int cy)
 
 	if (g_bStretchBlt)
 	{
-		// Stretch to fit
-		StretchBlt(hdc, x , y, cx, cy, g_hdc,0,0,bmp.bmWidth,bmp.bmHeight,SRCCOPY );
+	  // Stretch to fit
+	  StretchBlt(hdc, x , y, cx, cy, g_hdc,0,0,
+		     bmp.bmWidth,bmp.bmHeight,SRCCOPY );
 	}
 	else
 	{
-		BitBlt(hdc, x, y, bmp.bmWidth, bmp.bmHeight, g_hdc,0,0,SRCCOPY );
+	  BitBlt(hdc, x, y, bmp.bmWidth,
+		 bmp.bmHeight, g_hdc,0,0,SRCCOPY );
 	}
 
 	SelectObject(g_hdc, hOldBitmap);
