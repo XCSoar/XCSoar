@@ -100,7 +100,7 @@ BEGIN
     ICON            IDI_XCSOAR,IDC_STATIC,7,7,20,20
     LTEXT           "XCSoar",IDC_STATIC,32,7,101,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2003,2004,2005",IDC_STATIC,32,25,101,8
-    LTEXT           "Version 4.0  - 8 June 2005",IDC_STATIC,32,16,101,8,
+    LTEXT           "Version 4.1  - 23 June 2005",IDC_STATIC,32,16,101,8,
                     SS_NOPREFIX
     LTEXT           "Processor",IDC_STATIC,11,45,35,8,SS_NOPREFIX
     LTEXT           "OS Version",IDC_STATIC,10,55,40,8,SS_NOPREFIX
