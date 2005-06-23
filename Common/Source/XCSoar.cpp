@@ -662,7 +662,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWidth =  (int)(FontWidth*CDIFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
 
-#ifdef NOCLEARTYPE
+#ifndef NOCLEARTYPE
   logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
 #endif
 
@@ -676,7 +676,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
 
-#ifdef NOCLEARTYPE
+#ifndef NOCLEARTYPE
   logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
 #endif
 
