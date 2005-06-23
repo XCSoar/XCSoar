@@ -179,6 +179,73 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=..\..\Common\Source\AirfieldDetails.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Release"
+
+DEP_CPP_AIRFI=\
+	"..\..\Common\Header\AirfieldDetails.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Debug"
+
+DEP_CPP_AIRFI=\
+	"..\..\Common\Header\AirfieldDetails.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_AIRFI=\
+	"..\..\Common\Header\AirfieldDetails.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_AIRFI=\
+	"..\..\Common\Header\AirfieldDetails.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Source\Airspace.cpp
 
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Release"
@@ -386,6 +453,7 @@ NODEP_CPP_DIALO=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DIALO=\
+	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
@@ -940,6 +1008,7 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1866,8 +1935,10 @@ NODEP_CPP_XCSOA=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_XCSOA=\
+	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -1938,6 +2009,10 @@ SOURCE=..\..\Common\Source\XCSoar.rc
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=..\..\Common\Header\AirfieldDetails.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\Common\Header\Airspace.h
