@@ -75,7 +75,7 @@ typedef struct _AIRSPACE_ALT
 typedef struct _AIRSPACE_AREA
 {
 	TCHAR Name[NAME_SIZE + 1];
-  int Type;
+        int Type;
 	AIRSPACE_ALT Base;
 	AIRSPACE_ALT Top;
 	unsigned FirstPoint;

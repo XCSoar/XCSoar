@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.h,v 1.1 2005/06/22 01:49:22 scottp Exp $
+**   $Id: windanalyser.h,v 1.2 2005/06/23 12:19:54 jwharington Exp $
 **
 ***********************************************************************/
 
