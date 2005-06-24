@@ -70,12 +70,13 @@ void Topology::Close() {
   if (shapefileopen) {
     for (int i=0; i<shpfile.numshapes; i++) {
       if (shpCache[i] != NULL) {
-	delete shpCache[i];
-	shpCache[i]= NULL;
+        delete shpCache[i];
+        shpCache[i]= NULL;
       }
     }
     free(shpCache);
     msSHPCloseFile(&shpfile);
+	shapefileopen = false;  // added sgi
   }
 }
 
