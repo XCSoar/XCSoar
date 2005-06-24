@@ -325,6 +325,7 @@ extern "C" {
   VARIOSOUND_API void VarioSound_Init() {
 
     InitializeCriticalSection(&CritSec_VarioSound);
+	InitializeCriticalSection(&CritSec_VarioSoundV);  // added sgi
 
     variosound_waveOut.Init(variosound_waveOutEventCB,
 			    // THREAD_PRIORITY_TIME_CRITICAL,
@@ -379,6 +380,12 @@ extern "C" {
     //	variosound_sound = !variosound_sound;
   }
 
+
+  VARIOSOUND_API void VarioSound_Close(void) {  // added sgi
+    DeleteCriticalSection(&CritSec_VarioSound);
+    DeleteCriticalSection(&CritSec_VarioSoundV);
+  }
+
 }
 
 
@@ -414,3 +421,4 @@ BOOL PlayResource (LPTSTR lpName)
 
   return bRtn;
 }
+

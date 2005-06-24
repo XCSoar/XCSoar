@@ -457,6 +457,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   InitializeCriticalSection(&CritSec_FlightData);
   InitializeCriticalSection(&CritSec_NavBox);
+  InitializeCriticalSection(&CritSec_TerrainData);  // added sgi
 
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
@@ -1087,6 +1088,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         KillTimer(hWnd,iTimerID);
 
       VarioSound_EnableSound(false);
+	  VarioSound_Close();  // added sgi
+
       CloseDrawingThread();
 
       NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1; AATEnabled = FALSE;
@@ -1127,6 +1130,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       DeleteCriticalSection(&CritSec_FlightData);
       DeleteCriticalSection(&CritSec_NavBox);
+	  DeleteCriticalSection(&CritSec_TerrainData);  // added sgi
 
       break;
 
