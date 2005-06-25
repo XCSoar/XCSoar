@@ -382,6 +382,7 @@ extern "C" {
 
 
   VARIOSOUND_API void VarioSound_Close(void) {  // added sgi
+    variosound_waveOut.StopThread();   // added manually stop the thread
     DeleteCriticalSection(&CritSec_VarioSound);
     DeleteCriticalSection(&CritSec_VarioSoundV);
   }
