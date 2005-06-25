@@ -490,6 +490,7 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	  }
 	break;
       }
+      break; // bug found by sgi
 
     case WM_WINDOWPOSCHANGED:
       lpwp = (LPWINDOWPOS)(lParam);
