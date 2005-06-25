@@ -169,7 +169,7 @@ DWORD Port2ReadThread (LPVOID lpvoid)
   // Specify a set of events to be monitored for the port.
   SetCommMask (hPort2,  EV_RXFLAG |  EV_CTS
 	       | EV_DSR | EV_RLSD | EV_RING
-	       // | EV_RXCHAR
+	       | EV_RXCHAR
 	       );
 
   while ((hPort2 != INVALID_HANDLE_VALUE)&&(!CLOSETHREAD))
@@ -184,12 +184,12 @@ DWORD Port2ReadThread (LPVOID lpvoid)
 
     // Re-specify the set of events to be monitored for the port.
     SetCommMask (hPort2, EV_RXFLAG | EV_CTS | EV_DSR | EV_RING
-    // | EV_RXCHAR
+     | EV_RXCHAR
 		 );
 
     if (
 	(dwCommModemStatus & EV_RXFLAG)
-	//	||(dwCommModemStatus & EV_RXCHAR)
+		||(dwCommModemStatus & EV_RXCHAR)
 	)
     {
 
