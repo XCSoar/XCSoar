@@ -101,6 +101,12 @@ TCHAR szRegistryPilotName[]=  TEXT("PilotName");
 TCHAR szRegistryAircraftType[]=  TEXT("AircraftType");
 TCHAR szRegistryAircraftRego[]=  TEXT("AircraftRego");
 
+TCHAR szRegistrySoundVolume[]=  TEXT("SoundVolume");
+TCHAR szRegistrySoundDeadband[]=  TEXT("SoundDeadband");
+TCHAR szRegistrySoundAudioVario[]=  TEXT("AudioVario");
+TCHAR szRegistrySoundTask[]=  TEXT("SoundTask");
+TCHAR szRegistrySoundModes[]=  TEXT("SoundModes");
+
 
 static double SINETABLE[910];
 static float FSINETABLE[910];
@@ -238,7 +244,6 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryWindUpdateMode,&Temp);
   WindUpdateMode = Temp;
 
-  Temp = -1; // bug fix found by Robin Birch
   GetFromRegistry(szRegistryHomeWaypoint,&Temp);
   HomeWaypoint = Temp;
 
@@ -257,8 +262,28 @@ void ReadRegistrySettings(void)
   Temp = 30;
   GetFromRegistry(szRegistryWarningTime,&Temp);
   WarningTime = Temp;
-}
 
+  Temp = 80;
+  GetFromRegistry(szRegistrySoundVolume,&Temp);
+  SoundVolume = Temp;
+
+  Temp = 4;
+  GetFromRegistry(szRegistrySoundDeadband,&Temp);
+  SoundDeadband = Temp;
+
+  Temp = 1;
+  GetFromRegistry(szRegistrySoundAudioVario,&Temp);
+  EnableSoundVario = Temp;
+
+  Temp = 1;
+  GetFromRegistry(szRegistrySoundTask,&Temp);
+  EnableSoundTask = Temp;
+
+  Temp = 1;
+  GetFromRegistry(szRegistrySoundModes,&Temp);
+  EnableSoundModes = Temp;
+
+}
 
 
 
@@ -1561,6 +1586,16 @@ double StrToDouble(TCHAR *Source, TCHAR **Stop)
   }
 }
 
+
+
+void SaveSoundSettings()
+{
+  SetToRegistry(szRegistrySoundVolume, (DWORD)SoundVolume);
+  SetToRegistry(szRegistrySoundDeadband, (DWORD)SoundDeadband);
+  SetToRegistry(szRegistrySoundAudioVario, (DWORD)EnableSoundVario);
+  SetToRegistry(szRegistrySoundTask, (DWORD)EnableSoundTask);
+  SetToRegistry(szRegistrySoundModes, (DWORD)EnableSoundModes);
+}
 
 
 void SaveWindToRegistry() {

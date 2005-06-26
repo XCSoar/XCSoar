@@ -413,7 +413,9 @@ void SwitchZoomClimb(bool isclimb, bool left) {
   // if AutoZoom
 
   // JMW
-  PlayResource(TEXT("IDR_WAV_DRIP")); 
+  if (EnableSoundTask) {
+    PlayResource(TEXT("IDR_WAV_DRIP")); 
+  }
 
   if (CircleZoom) {
     if (isclimb) {
@@ -785,7 +787,9 @@ int InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 void AnnounceWayPointSwitch() {
   FastLogNum = 5;
-  PlayResource(TEXT("IDR_WAV_TASKTURNPOINT"));
+  if (EnableSoundTask) {
+    PlayResource(TEXT("IDR_WAV_TASKTURNPOINT"));
+  }
 }
 
 
@@ -1493,7 +1497,9 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if (dheight > Calculated->MaxThermalHeight) {
 
+  if (EnableSoundTask) {
     PlayResource(TEXT("IDR_WAV_BEEPBWEEP"));
+  }
 
     // moved beyond ceiling, so redistribute buckets
     double mthnew;

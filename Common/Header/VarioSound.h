@@ -24,7 +24,10 @@ VARIOSOUND_API void VarioSound_SetV(short v);
 VARIOSOUND_API void VarioSound_EnableSound(bool);
 VARIOSOUND_API void VarioSound_SetVdead(short v);
 VARIOSOUND_API void VarioSound_Close(void);  // added sgi
+  void VarioSound_SetSoundVolume(int vpercent);
 }
+
+
 
 /*
 [DllImport("VarioSound.dll",EntryPoint="VarioSound_Init")]
@@ -39,5 +42,4 @@ public static extern void VarioSound_SetV(short i);
 [DllImport("VarioSound.dll",EntryPoint="VarioSound_SetVdead")]
 public static extern void VarioSound_SetVdead(short v);
 
-xEWsOqFU
 */

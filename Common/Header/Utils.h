@@ -55,6 +55,7 @@ double StrToDouble(TCHAR *Source, TCHAR **Stop);
 void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 void SaveWindToRegistry();
 void LoadWindFromRegistry();
+void SaveSoundSettings();
 
 unsigned int isqrt4(unsigned long val);
 int iround(double i);

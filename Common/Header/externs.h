@@ -105,6 +105,13 @@ extern int WindUpdateMode;
 extern int CircleZoom;
 extern int EnableTopology;
 extern int EnableTerrain;
+
+extern int EnableSoundVario;
+extern int EnableSoundTask;
+extern int EnableSoundModes;
+extern int SoundVolume;
+extern int SoundDeadband;
+
 extern int FinalGlideTerrain;
 
 extern double AATTaskLength;

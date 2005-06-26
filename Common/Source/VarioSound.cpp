@@ -275,6 +275,7 @@ extern int iround(double i);
 
 extern "C" {
 
+
   VARIOSOUND_API void VarioSound_SetV(short v) {
     EnterCriticalSection(&CritSec_VarioSoundV);
     variosound_vscale_in = v/100.0;
@@ -387,6 +388,12 @@ extern "C" {
     DeleteCriticalSection(&CritSec_VarioSoundV);
   }
 
+  VARIOSOUND_API void VarioSound_SetSoundVolume(int v) {
+    EnterCriticalSection(&CritSec_VarioSoundV);
+    variosound_waveOut.SetSoundVolume(v);
+    LeaveCriticalSection(&CritSec_VarioSoundV);
+  }
+
 }
 
 
@@ -422,4 +429,8 @@ BOOL PlayResource (LPTSTR lpName)
 
   return bRtn; 
 }
+
+
+
+/////////////////////////// Audio volume controls
 
