@@ -715,7 +715,7 @@ BOOL CWaveOutThread::StopThread()
     }
 
   // This is ugly, wait for 10 seconds, then kill the thread
-  DWORD res = WaitForSingleObject(m_thread, 10000);
+  DWORD res = WaitForSingleObject(m_thread, 1000);
 
   if (res == WAIT_TIMEOUT)
     {
