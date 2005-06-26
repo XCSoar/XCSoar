@@ -115,7 +115,7 @@ public:
    DWORD GetDataLen();
    void SuspendThread();
    void ResumeThread();
-
+   void SetSoundVolume(int volpercent);
 
 protected:
 
@@ -135,6 +135,7 @@ protected:
    unsigned char    *m_pWaveOutBuffer;
    unsigned char    *m_pWaveCopyBuffer;
    HWAVEOUT          m_hWaveOut;
+   int               m_idWaveOut;
    WAVEHDR          *m_pWaveHeaderArray;
    BOOL              m_bPause;
    WAVEFORMATEX      m_wfx;

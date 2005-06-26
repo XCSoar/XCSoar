@@ -25,6 +25,7 @@
 #include "Port.h"
 #include "McReady.h"
 #include "AirfieldDetails.h"
+#include "VarioSound.h"
 
 #include <commdlg.h>
 #include <commctrl.h>
@@ -511,6 +512,87 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     }
   return FALSE;
 }
+
+
+LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
+			       WPARAM wParam, LPARAM lParam)
+{
+  DWORD Up;
+  HANDLE hTemp;
+  int val;
+
+  switch (message)
+    {
+    case WM_INITDIALOG:
+
+      SendDlgItemMessage(hDlg, IDC_AUDIOSLIDER,
+			 TBM_SETRANGE, FALSE, MAKELPARAM(0,100));
+      SendDlgItemMessage(hDlg, IDC_AUDIOSLIDER,
+			 TBM_SETPOS, TRUE, 100-SoundVolume);
+
+      SendDlgItemMessage(hDlg, IDC_AUDIODEADBAND,
+			 TBM_SETRANGE, FALSE, MAKELPARAM(0,20));
+      SendDlgItemMessage(hDlg, IDC_AUDIODEADBAND,
+			 TBM_SETPOS, TRUE, 40-SoundDeadband);
+
+      if(EnableSoundVario == TRUE)
+        {
+          SendDlgItemMessage(hDlg,IDC_AUDIOVARIO,BM_SETCHECK,BST_CHECKED,0);
+        }
+      else
+        {
+          SendDlgItemMessage(hDlg,IDC_AUDIOVARIO,BM_SETCHECK,BST_UNCHECKED,0);
+        }
+
+      if(EnableSoundTask == TRUE)
+        {
+          SendDlgItemMessage(hDlg,IDC_AUDIOEVENTS,BM_SETCHECK,BST_CHECKED,0);
+        }
+      else
+        {
+          SendDlgItemMessage(hDlg,IDC_AUDIOEVENTS,BM_SETCHECK,BST_UNCHECKED,0);
+        }
+
+      if(EnableSoundModes == TRUE)
+        {
+          SendDlgItemMessage(hDlg,IDC_AUDIOUI,BM_SETCHECK,BST_CHECKED,0);
+        }
+      else
+        {
+          SendDlgItemMessage(hDlg,IDC_AUDIOUI,BM_SETCHECK,BST_UNCHECKED,0);
+        }
+
+      return TRUE;
+
+    case WM_VSCROLL:
+      SoundVolume = 100-SendDlgItemMessage(hDlg, IDC_AUDIOSLIDER,
+				       TBM_GETPOS, (WPARAM)0, (LPARAM)0);
+      SoundDeadband = 40-SendDlgItemMessage(hDlg, IDC_AUDIODEADBAND,
+					 TBM_GETPOS, (WPARAM)0, (LPARAM)0);
+      VarioSound_SetSoundVolume(SoundVolume);
+      VarioSound_SetVdead(SoundDeadband);
+      return TRUE;
+
+    case WM_COMMAND:
+      switch (LOWORD(wParam))
+        {
+        case IDC_AUDIOVARIO:
+          EnableSoundVario = !EnableSoundVario;
+	  VarioSound_EnableSound((bool)EnableSoundVario);
+          return TRUE;
+        case IDC_AUDIOEVENTS:
+          EnableSoundTask = !EnableSoundTask;
+          return TRUE;
+        case IDC_AUDIOUI:
+          EnableSoundModes = !EnableSoundModes;
+          return TRUE;
+
+        }
+      break;
+    }
+  return FALSE;
+}
+
 
 LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1973,7 +2055,7 @@ LRESULT CALLBACK SaveProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 
 
-#define NUMPAGES 15
+#define NUMPAGES 16
 static const TCHAR *szSettingsTab[] =
 {
   TEXT("About"),
@@ -1991,6 +2073,7 @@ static const TCHAR *szSettingsTab[] =
   TEXT("Task"),
   TEXT("Units"),
   TEXT("Logger details"),
+  TEXT("Audio"),
 };
 
 
@@ -2044,6 +2127,8 @@ LRESULT CALLBACK Settings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       hTabPage[12] = CreateDialog(hInst, (LPCTSTR)IDD_TASKSETTINGS, hDlg, (DLGPROC)TaskSettings);
       hTabPage[13] = CreateDialog(hInst, (LPCTSTR)IDD_UNITS, hDlg, (DLGPROC)SetUnits);
       hTabPage[14] = CreateDialog(hInst, (LPCTSTR)IDD_LOGGERDETAILS, hDlg, (DLGPROC)LoggerDetails);
+
+      hTabPage[15] = CreateDialog(hInst, (LPCTSTR)IDD_AUDIO, hDlg, (DLGPROC)AudioSettings);
 
       MoveWindow(hTabPage[LastShow],0,30,240,300,TRUE);
       ShowWindow(hTabPage[LastShow],SW_SHOW);

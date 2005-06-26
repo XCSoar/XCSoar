@@ -962,7 +962,7 @@ IDR_REMOVE              WAVE    DISCARDABLE     "bitmaps\\Remove.wav"
 // Dialog
 //
 
-IDD_WAYPOINTDETAILS DIALOGEX 0, 0, 136, 154
+IDD_WAYPOINTDETAILS DIALOG DISCARDABLE  0, 0, 136, 154
 STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP
 EXSTYLE WS_EX_STATICEDGE
 FONT 12, "System"
@@ -980,6 +980,25 @@ BEGIN
                     WS_BORDER | WS_VSCROLL | NOT WS_TABSTOP
 END
 
+IDD_AUDIO DIALOG DISCARDABLE  0, 0, 147, 142
+STYLE WS_CHILD
+FONT 8, "System"
+BEGIN
+    CONTROL         "Task",IDC_AUDIOEVENTS,"Button",BS_AUTOCHECKBOX |
+                    WS_TABSTOP,20,97,31,10
+    CONTROL         "Modes",IDC_AUDIOUI,"Button",BS_AUTOCHECKBOX |
+                    WS_TABSTOP,20,110,37,10
+    CONTROL         "Slider1",IDC_AUDIOSLIDER,"msctls_trackbar32",TBS_VERT |
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,77,29,24,100
+    LTEXT           "Master",IDC_STATIC,74,20,23,8
+    CONTROL         "Slider2",IDC_AUDIODEADBAND,"msctls_trackbar32",TBS_VERT |
+                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,109,29,20,100
+    LTEXT           "Deadband",IDC_STATIC,101,20,34,8
+    CONTROL         "Audio vario",IDC_AUDIOVARIO,"Button",BS_AUTOCHECKBOX |
+                    WS_TABSTOP,16,67,53,10
+    GROUPBOX        "Events",IDC_STATIC,14,85,48,40
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -995,6 +1014,14 @@ BEGIN
         RIGHTMARGIN, 129
         TOPMARGIN, 6
         BOTTOMMARGIN, 147
+    END
+
+    IDD_AUDIO, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 140
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 135
     END
 END
 #endif    // APSTUDIO_INVOKED

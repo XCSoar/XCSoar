@@ -616,10 +616,13 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
 	case VK_RIGHT: // Pan mode
  	  EnablePan = !EnablePan;
-	  if (EnablePan) {
-	    PlayResource(TEXT("IDR_INSERT"));
-	  } else {
-	    PlayResource(TEXT("IDR_REMOVE"));
+
+	  if (EnableSoundModes) {
+	    if (EnablePan) {
+	      PlayResource(TEXT("IDR_INSERT"));
+	    } else {
+	      PlayResource(TEXT("IDR_REMOVE"));
+	    }
 	  }
 	  if (!EnablePan) {
 	    PanX = 0.0;
@@ -642,10 +645,12 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	  val++;
 	  if (val>3) val=0;
 
-	  if (val>0) {
-	    PlayResource(TEXT("IDR_INSERT"));
-	  } else {
-	    PlayResource(TEXT("IDR_REMOVE"));
+	  if (EnableSoundModes) {
+	    if (val>0) {
+	      PlayResource(TEXT("IDR_INSERT"));
+	    } else {
+	      PlayResource(TEXT("IDR_REMOVE"));
+	    }
 	  }
 
 	  EnableTopology = (val & 0x01);
@@ -658,10 +663,12 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
 	  AutoZoom = !AutoZoom;
 
-	  if (AutoZoom) {
-	    PlayResource(TEXT("IDR_INSERT"));
-	  } else {
-	    PlayResource(TEXT("IDR_REMOVE"));
+	  if (EnableSoundModes) {
+	    if (AutoZoom) {
+	      PlayResource(TEXT("IDR_INSERT"));
+	    } else {
+	      PlayResource(TEXT("IDR_REMOVE"));
+	    }
 	  }
 
 	  if (AutoZoom) {

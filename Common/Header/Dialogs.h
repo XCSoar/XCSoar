@@ -34,5 +34,6 @@ LRESULT CALLBACK Settings				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 LRESULT CALLBACK WaypointDetails		(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 void AssignedArea(void);
 LRESULT CALLBACK LoggerDetails 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK AudioSettings					(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 #endif

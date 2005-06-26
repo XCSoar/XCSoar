@@ -159,7 +159,11 @@ int WindUpdateMode = 0;
 int EnableTopology = FALSE;
 int EnableTerrain = FALSE;
 int FinalGlideTerrain = FALSE;
-int EnableSound = FALSE;
+int EnableSoundVario = TRUE;
+int EnableSoundModes = TRUE;
+int EnableSoundTask = TRUE;
+int SoundVolume = 80;
+int SoundDeadband = 5;
 
 //IGC Logger
 BOOL LoggerActive = FALSE;
@@ -417,10 +421,8 @@ void FocusOnWindow(int i, bool selected) {
   wind = hWndTitleWindow[i];
   if (selected) {
     SetWindowLong(wind, GWL_USERDATA, 1);
-    //    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER);
   } else {
     SetWindowLong(wind, GWL_USERDATA, 0);
-    //    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY);
   }
 
 }
@@ -483,9 +485,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ReadTopology();
 
   VarioSound_Init();
-  VarioSound_EnableSound(false);
-  VarioSound_SetVdead(4);
+  VarioSound_EnableSound(EnableSoundVario);
+  VarioSound_SetVdead(SoundDeadband);
   VarioSound_SetV(0);
+
+  VarioSound_SetSoundVolume(SoundVolume);
 
   AssignValues();
   DisplayText();
@@ -925,7 +929,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         else {
 
-	  FocusOnWindow(InfoFocus,false);
+	  FocusOnWindow(InfoFocus,true);
 	  //	  ShowMenu();
         }
       } else {
@@ -955,10 +959,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
           if (!InfoWindowActive) {
 	    TrailActive = !TrailActive;
-	    if (TrailActive) {
-	      PlayResource(TEXT("IDR_INSERT"));
-	    } else {
-	      PlayResource(TEXT("IDR_REMOVE"));
+
+	    if (EnableSoundModes) {
+	      if (TrailActive) {
+		PlayResource(TEXT("IDR_INSERT"));
+	      } else {
+		PlayResource(TEXT("IDR_REMOVE"));
+	      }
 	    }
             break;
           }
@@ -990,13 +997,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	  HideMenu();
 
           if (!InfoWindowActive) {
-            EnableSound = !EnableSound;
-            VarioSound_EnableSound((bool)EnableSound);
+            EnableSoundVario = !EnableSoundVario;
+            VarioSound_EnableSound((bool)EnableSoundVario);
 
-	    if (EnableSound) {
-	      PlayResource(TEXT("IDR_INSERT"));
-	    } else {
-	      PlayResource(TEXT("IDR_REMOVE"));
+	    if (EnableSoundModes) {
+	      if (EnableSoundVario) {
+		PlayResource(TEXT("IDR_INSERT"));
+	      } else {
+		PlayResource(TEXT("IDR_REMOVE"));
+	      }
 	    }
 
             break;
@@ -1087,6 +1096,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_CLOSE:
       if(iTimerID)
         KillTimer(hWnd,iTimerID);
+
+      SaveSoundSettings();
 
       VarioSound_EnableSound(false);
 	  VarioSound_Close();  // added sgi
@@ -1279,9 +1290,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                   OpenTerrain();
                   ReadWayPoints();
 		  ReadAirfieldFile();
-		  if (WAYPOINTFILECHANGED) {
-			HomeWaypoint = -1; // reset home
-		  }
+
                   if(NumberOfWayPoints) SetHome();
                 }
 

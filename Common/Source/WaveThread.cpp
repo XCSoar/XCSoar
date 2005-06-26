@@ -229,8 +229,8 @@ BOOL CWaveInThread::StopThread()
       waveInStop(m_hWaveIn);
     }
 
-  // This is ugly, wait for 10 seconds, then kill the thread
-  DWORD res = WaitForSingleObject(m_thread, 10000);
+  // This is ugly, wait for 1 second, then kill the thread
+  DWORD res = WaitForSingleObject(m_thread, 1000);
 
   if (res == WAIT_TIMEOUT)
     {
@@ -492,6 +492,7 @@ CWaveOutThread::CWaveOutThread()
   m_threadId                 = 0;
   m_thread                   = NULL;
   m_hWaveOut                 = NULL;
+  m_idWaveOut                = -1;
   m_pWaveOutBuffer           = NULL;
   m_pWaveCopyBuffer          = NULL;
   m_pWaveHeaderArray         = NULL;
@@ -648,6 +649,7 @@ BOOL CWaveOutThread::StartThread()
 			{
 	                  if (waveOutOpen(&m_hWaveOut, id, &m_wfx, m_threadId, (DWORD)this, CALLBACK_THREAD) == MMSYSERR_NOERROR)
 			    {
+			      m_idWaveOut = id;
 			      waveOutPause(m_hWaveOut);
 
 			      for (i=0 ; i<INTERNAL_WAVEOUT_BUFFER_COUNT ; i++)
@@ -1005,3 +1007,43 @@ DWORD WINAPI CWaveOutThread::ThreadProc(LPVOID lpParameter)
 }
 
 
+void CWaveOutThread::SetSoundVolume(int volpercent) {
+  WAVEFORMATEX wf;
+  DWORD dwVolume=(DWORD)(0xFFFF*1.0*volpercent/100.0);
+  wf.wFormatTag = WAVE_FORMAT_PCM;
+  wf.nChannels = 1;
+  wf.nSamplesPerSec = 8000 * 1000;
+  wf.wBitsPerSample = 8;
+  wf.nBlockAlign = wf.nChannels * wf.wBitsPerSample / 8;
+  wf.nAvgBytesPerSec = wf.nSamplesPerSec * wf.nBlockAlign;
+  wf.cbSize = 0;
+  HWAVEOUT hwo;
+
+  EnterCriticalSection(&m_critSecRtp);
+
+  // this seems to set master volume pretty well.
+  waveOutSetVolume(0, dwVolume);
+
+  /*
+  for (UINT id = 0; id < waveOutGetNumDevs(); id++) {
+    if ((id != m_idWaveOut) || (m_idWaveOut<0)) {
+      // don't change the audio vario volume this way
+
+      if (waveOutOpen(&hwo, id, &wf, 0, 0, CALLBACK_NULL)
+	  == MMSYSERR_NOERROR)
+	{
+	  waveOutSetVolume(hwo, dwVolume);
+	  waveOutClose(hwo);
+	  break;
+	}
+    } else {
+      // assume it's already open
+      if (m_hWaveOut) {
+	waveOutSetVolume(m_hWaveOut, dwVolume);
+      }
+    }
+  }
+  */
+  LeaveCriticalSection(&m_critSecRtp);
+
+}

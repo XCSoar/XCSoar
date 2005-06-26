@@ -137,7 +137,9 @@ void MarkLocation(double lon, double lat)
 {
   LockTerrainData();
 
-  PlayResource(TEXT("IDR_WAV_CLEAR"));
+  if (EnableSoundModes) {
+    PlayResource(TEXT("IDR_WAV_CLEAR"));
+  }
 
   topo_marks->addPoint(lon, lat);
   topo_marks->triggerUpdateCache = true;
