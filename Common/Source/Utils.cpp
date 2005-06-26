@@ -238,6 +238,7 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryWindUpdateMode,&Temp);
   WindUpdateMode = Temp;
 
+  Temp = -1; // bug fix found by Robin Birch
   GetFromRegistry(szRegistryHomeWaypoint,&Temp);
   HomeWaypoint = Temp;
 
