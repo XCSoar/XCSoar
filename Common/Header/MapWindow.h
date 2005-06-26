@@ -138,6 +138,7 @@ extern double MapScale;
 void ReplaceWaypoint(int index);
 void InsertWaypoint(int index);
 void RemoveWaypoint(int index);
+void RemoveTaskPoint(int index);
 void FlyDirectTo(int index);
 
 void GetLocationFromScreen(double *X, double *Y);
