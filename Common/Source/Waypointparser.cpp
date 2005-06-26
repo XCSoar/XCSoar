@@ -37,8 +37,6 @@ static double ReadAltitude(TCHAR *temp);
 
 static TCHAR TempString[210];
 
-int HomeWaypoint = -1;
-
 void ReadWayPointFile(HANDLE hFile)
 {
   int WayPointCount = 0;
@@ -285,9 +283,7 @@ static int CheckFlags(TCHAR *temp)
   if(_tcschr(temp,'A')) Flags += AIRPORT;
   if(_tcschr(temp,'T')) Flags += TURNPOINT;
   if(_tcschr(temp,'L')) Flags += LANDPOINT;
-  if(_tcschr(temp,'H')) {
-    Flags += HOME;
-  }
+  if(_tcschr(temp,'H')) Flags += HOME;
   if(_tcschr(temp,'S')) Flags += START;
   if(_tcschr(temp,'F')) Flags += FINISH;
   if(_tcschr(temp,'R')) Flags += RESTRICTED;
@@ -339,33 +335,33 @@ void ReadWayPoints(void)
 
 void SetHome(void)
 {
-  unsigned int i;
+	TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
+	unsigned int i;
 	 
-  GPS_INFO.Lattitude = WayPointList[0].Lattitude;
-  GPS_INFO.Longditude = WayPointList[0].Longditude;
-
   for(i=0;i<NumberOfWayPoints;i++)
-    {
+  {
       if( (WayPointList[i].Flags & HOME) == HOME)
-	{
-	  if ((HomeWaypoint<0)||(HomeWaypoint>=NumberOfWayPoints)) {
-	    HomeWaypoint = i;
-	    GPS_INFO.Lattitude = WayPointList[i].Lattitude;
-	    GPS_INFO.Longditude = WayPointList[i].Longditude;
-	  } 
-	}
-      if (HomeWaypoint==i) {
-	GPS_INFO.Lattitude = WayPointList[i].Lattitude;
-	GPS_INFO.Longditude = WayPointList[i].Longditude;
-      }
-    }
-  if ((HomeWaypoint<0)||(HomeWaypoint>=NumberOfWayPoints)) {
-    // no home waypoint found at all, assume it's the first
-    HomeWaypoint = 0;
+	  {
+		  HomeWaypoint = i;
+		  GPS_INFO.Lattitude = WayPointList[i].Lattitude;
+		  GPS_INFO.Longditude = WayPointList[i].Longditude;
+	  }
   }
-  //  set to registry, whatever it is...
+//
+// If we haven't found the waypoint or the homewaypoint is out of
+// range then set it to the first in the waypoint list
+//
+  if((HomeWaypoint <0)||(HomeWaypoint >= (int)NumberOfWayPoints))
+  {
+	  HomeWaypoint = 0;
+	  GPS_INFO.Lattitude = WayPointList[0].Lattitude;
+	  GPS_INFO.Longditude = WayPointList[0].Longditude;
+  }
+
+// 
+// Save the home waypoint number in the resgistry
+//
   SetToRegistry(szRegistryHomeWaypoint,HomeWaypoint);
-	
 }
 
 
