@@ -335,32 +335,42 @@ void ReadWayPoints(void)
 
 void SetHome(void)
 {
-	TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
-	unsigned int i;
+  TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
+  unsigned int i;
 
+  // check invalid home waypoint
+  if((HomeWaypoint <0)||(HomeWaypoint >= (int)NumberOfWayPoints))
+    {
+      HomeWaypoint = -1;
+    }
+
+  // search for home in waypoint list
   for(i=0;i<NumberOfWayPoints;i++)
-  {
+    {
       if( (WayPointList[i].Flags & HOME) == HOME)
 	  {
-		  HomeWaypoint = i;
-		  GPS_INFO.Lattitude = WayPointList[i].Lattitude;
-		  GPS_INFO.Longditude = WayPointList[i].Longditude;
+	    if (HomeWaypoint== -1) {
+	      HomeWaypoint = i;
+	    }
 	  }
-  }
+    }
+
 //
 // If we haven't found the waypoint or the homewaypoint is out of
 // range then set it to the first in the waypoint list
 //
-  if((HomeWaypoint <0)||(HomeWaypoint >= (int)NumberOfWayPoints))
-  {
-	  HomeWaypoint = 0;
-	  GPS_INFO.Lattitude = WayPointList[0].Lattitude;
-	  GPS_INFO.Longditude = WayPointList[0].Longditude;
+  if (HomeWaypoint<0) {
+    HomeWaypoint = 0;
   }
 
-//
-// Save the home waypoint number in the resgistry
-//
+  // Assume here we have a home now...
+  GPS_INFO.Lattitude = WayPointList[HomeWaypoint].Lattitude;
+  GPS_INFO.Longditude = WayPointList[HomeWaypoint].Longditude;
+
+
+  //
+  // Save the home waypoint number in the resgistry
+  //
   SetToRegistry(szRegistryHomeWaypoint,HomeWaypoint);
 }
 
