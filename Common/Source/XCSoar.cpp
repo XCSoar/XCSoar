@@ -132,6 +132,7 @@ int FAISector = TRUE;
 DWORD SectorRadius = 500;
 int StartLine = TRUE;
 DWORD StartRadius = 3000;
+int HomeWaypoint = -1;
 
 // Airspace Database
 AIRSPACE_AREA *AirspaceArea = NULL;
