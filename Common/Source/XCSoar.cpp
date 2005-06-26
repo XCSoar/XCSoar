@@ -1249,8 +1249,6 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               TERRAINFILECHANGED = FALSE;
               TOPOLOGYFILECHANGED = FALSE;
 
-              LockFlightData();
-              LockNavBox();
 
               SuspendDrawingThread();
 
@@ -1261,6 +1259,9 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               DialogBox(hInst, (LPCTSTR)IDD_SETTINGS, hWndMainWindow, (DLGPROC)Settings);
               ShowWindow(hWndCB,SW_HIDE);
               SwitchToMapWindow();
+
+              LockFlightData();
+              LockNavBox();
 
               if(COMPORTCHANGED)
                 {
