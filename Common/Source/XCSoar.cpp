@@ -1278,7 +1278,9 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                   OpenTerrain();
                   ReadWayPoints();
 		  ReadAirfieldFile();
-
+		  if (WAYPOINTFILECHANGED) {
+			HomeWaypoint = -1; // reset home
+		  }
                   if(NumberOfWayPoints) SetHome();
                 }
 

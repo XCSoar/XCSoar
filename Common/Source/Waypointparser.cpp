@@ -360,8 +360,11 @@ void SetHome(void)
       }
     }
   if ((HomeWaypoint<0)||(HomeWaypoint>=NumberOfWayPoints)) {
+    // no home waypoint found at all, assume it's the first
     HomeWaypoint = 0;
   }
+  //  set to registry, whatever it is...
+  SetToRegistry(szRegistryHomeWaypoint,HomeWaypoint);
 
 }
 
