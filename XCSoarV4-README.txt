@@ -14,6 +14,7 @@ Summary of new features since v4.0
 - Added pilot/aircraft information in logger
 - Added "Remove" button on waypoint details task page
 - Acknowledge airspace warnings
+- Audio settings page
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -129,6 +130,17 @@ set to the same port as the first, it is disabled.
 XCSoar also produces audio messages when turning turnpoints to
 indicate when the glider is in the turnpoint sector.  This makes the
 sound of a camera shutter.
+
+Sounds are now in three categories:
+- Audio vario
+- Task sounds (beeps on entering/leaving circling, final glide warning,
+  turnpoint notification)
+- Mode sounds (user interface sounds when turning on/off options)
+
+All are switchable and settings are saved in registry.
+
+Master volume and audio vario deadband also settable.  The deadband is
+a soft volume adjustment around zero.
 
 
 ============================================================================
