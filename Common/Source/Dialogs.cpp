@@ -68,6 +68,7 @@ extern TCHAR szRegistryStartLine[];
 extern TCHAR szRegistryStartRadius[];
 extern TCHAR szRegistryAirspaceWarning[];
 extern TCHAR szRegistryWarningTime[];
+extern TCHAR szRegistryAcknowledgementTime[];
 extern TCHAR szRegistryCircleZoom[];
 extern TCHAR szRegistryWindUpdateMode[];
 extern TCHAR szRegistryHomeWaypoint[];
@@ -166,6 +167,7 @@ LRESULT CALLBACK Progress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 extern int MenuTimeOut;
 
+
 LRESULT CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   switch (message)
@@ -182,6 +184,15 @@ LRESULT CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           SetWindowText(GetDlgItem(hDlg,IDD_LOCK),TEXT("InfoBoxes editable"));
         }
 
+      if(TaskAborted)
+        {
+          SetWindowText(GetDlgItem(hDlg,IDC_ABORTTASK),TEXT("Resume"));
+        }
+      else
+        {
+          SetWindowText(GetDlgItem(hDlg,IDC_ABORTTASK),TEXT("Abort"));
+        }
+
       return TRUE;
 
     case WM_COMMAND:
@@ -192,6 +203,7 @@ LRESULT CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
   return FALSE;
 }
+
 
 LRESULT CALLBACK SetUnits(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -783,6 +795,7 @@ LRESULT CALLBACK SetAirspaceWarnings(HWND hDlg, UINT message, WPARAM wParam, LPA
         SendDlgItemMessage(hDlg,IDC_ENABLE,BM_SETCHECK,BST_UNCHECKED,0);
 
       SetDlgItemInt(hDlg,IDC_EDIT,(int)WarningTime,TRUE);
+      SetDlgItemInt(hDlg,IDC_ACKNOW,(int)AcknowledgementTime,TRUE);
 
       return TRUE;
 
@@ -792,6 +805,9 @@ LRESULT CALLBACK SetAirspaceWarnings(HWND hDlg, UINT message, WPARAM wParam, LPA
         {
           WarningTime  = GetDlgItemInt(hDlg,IDC_EDIT,NULL,TRUE);
           SetToRegistry(szRegistryWarningTime,(DWORD)WarningTime);
+          AcknowledgementTime  = GetDlgItemInt(hDlg,IDC_ACKNOW,NULL,TRUE);
+          SetToRegistry(szRegistryAcknowledgementTime,
+                        (DWORD)AcknowledgementTime);
         }
       break;
 
@@ -805,11 +821,15 @@ LRESULT CALLBACK SetAirspaceWarnings(HWND hDlg, UINT message, WPARAM wParam, LPA
           else
             SendDlgItemMessage(hDlg,IDC_ENABLE,BM_SETCHECK,BST_UNCHECKED,0);
 
-          WarningTime  = GetDlgItemInt(hDlg,IDC_EDIT,NULL,TRUE);
-
-
           SetToRegistry(szRegistryAirspaceWarning,(DWORD)AIRSPACEWARNINGS);
+
+          WarningTime  = GetDlgItemInt(hDlg,IDC_EDIT,NULL,TRUE);
           SetToRegistry(szRegistryWarningTime,(DWORD)WarningTime);
+
+          AcknowledgementTime  = GetDlgItemInt(hDlg,IDC_ACKNOW,NULL,TRUE);
+          SetToRegistry(szRegistryAcknowledgementTime,
+                        (DWORD)AcknowledgementTime);
+
         }
       break;
     }
