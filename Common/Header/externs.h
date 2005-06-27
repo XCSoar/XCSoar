@@ -58,6 +58,9 @@ extern unsigned int NumberOfAirspaceCircles;
 extern NMEA_INFO		GPS_INFO;
 extern DERIVED_INFO	CALCULATED_INFO;
 
+extern BOOL GPSCONNECT;
+extern BOOL VARIOCONNECT;
+
 extern double MACREADY;
 extern bool   AutoMacReady;
 
