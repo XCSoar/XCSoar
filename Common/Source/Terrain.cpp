@@ -1,7 +1,7 @@
 // omaplibdemo.cpp : Defines the entry point for the application.
 //
 
-#include "stdafx.h"
+#include "Terrain.h"
 #include "MapWindow.h"
 #include "Topology.h"
 #include "resource.h"
@@ -140,7 +140,7 @@ void MarkLocation(double lon, double lat)
   if (EnableSoundModes) {
     PlayResource(TEXT("IDR_WAV_CLEAR"));
   }
-
+ 
   topo_marks->addPoint(lon, lat);
   topo_marks->triggerUpdateCache = true;
   UnlockTerrainData();
@@ -174,18 +174,10 @@ void DrawTopology( HDC hdc, RECT rc)
 ////////
 
 
-typedef struct _COLORRAMP
-{
-  short h;
-  unsigned char r;
-  unsigned char g;
-  unsigned char b;
-} COLORRAMP;
-
-
-#define NUMTERRAINRAMP 11
+#define NUMTERRAINRAMP 12
 
 COLORRAMP terrain_colors[] = {
+  {-1,          0xff, 0xff, 0xff},
   {0,           0x70, 0xc0, 0xa7},
   {500,         0xca, 0xe7, 0xb9},
   {1000,        0xf4, 0xea, 0xaf},
@@ -200,34 +192,48 @@ COLORRAMP terrain_colors[] = {
 };
 
 
+void ColorRampLookup(short h, BYTE *r, BYTE *g, BYTE *b,
+		     COLORRAMP* ramp_colors, int numramp) {
 
-void TerrainColorMap(short h, BYTE *r, BYTE *g, BYTE *b) {
   int i;
   short tr, tg, tb;
   short f, of;
-  short kh = h*8/4;
 
-  if (kh<0) {
-    *r = 0xff; *g=0xff; *b=0xff;
+  // check if h lower than lowest
+  if (h<=ramp_colors[0].h) {
+    *r = ramp_colors[0].r;
+    *g = ramp_colors[0].g;
+    *b = ramp_colors[0].b;
+    return;
+  }
+  // gone past end, so use last color
+  if (h>=ramp_colors[numramp-1].h) {
+    *r = ramp_colors[numramp-1].r;
+    *g = ramp_colors[numramp-1].g;
+    *b = ramp_colors[numramp-1].b;
+    return;
   }
 
-  for (i=NUMTERRAINRAMP-2; i>=0; i--) {
-    if (kh>=terrain_colors[i].h) {
-      f = (kh-terrain_colors[i].h)*255
-        /(terrain_colors[i+1].h-terrain_colors[i].h);
+  for (i=numramp-2; i>=0; i--) {
+    if (h>=ramp_colors[i].h) {
+      f = (h-ramp_colors[i].h)*255
+        /(ramp_colors[i+1].h-ramp_colors[i].h);
       of = 255-f;
-      tr = f*terrain_colors[i+1].r+of*terrain_colors[i].r;
-      tg = f*terrain_colors[i+1].g+of*terrain_colors[i].g;
-      tb = f*terrain_colors[i+1].b+of*terrain_colors[i].b;
+      tr = f*ramp_colors[i+1].r+of*ramp_colors[i].r;
+      tg = f*ramp_colors[i+1].g+of*ramp_colors[i].g;
+      tb = f*ramp_colors[i+1].b+of*ramp_colors[i].b;
       *r = tr/255;
       *g = tg/255;
       *b = tb/255;
       return;
     }
   }
-  *r = terrain_colors[NUMTERRAINRAMP-1].r;
-  *g = terrain_colors[NUMTERRAINRAMP-1].g;
-  *b = terrain_colors[NUMTERRAINRAMP-1].b;
+
+}
+
+
+void TerrainColorMap(short h, BYTE *r, BYTE *g, BYTE *b) {
+  ColorRampLookup(h*8/4, r, g, b, terrain_colors, NUMTERRAINRAMP);
 }
 
 

@@ -1781,6 +1781,13 @@ void DrawFinalGlide(HDC hDC,RECT rc)
 }
 
 
+#define NUMSNAILRAMP 3
+
+COLORRAMP snail_colors[] = {
+  {-5,          0xff, 0x50, 0x50},
+  {0,           0x6f, 0x6f, 0x6f},
+  {5,           0x50, 0xff, 0x50}
+};
 
 
 static int iSnailNext=0;
@@ -1811,19 +1818,12 @@ void DrawTrail( HDC hdc, POINT Orig, RECT rc)
 	  P1 = i; P2 = 0;
 	}
 
-      if(SnailTrail[P1].Vario ==0)
-	{
-	  Red = 0x7f; Green = 0x7f; Blue = 0x7f;
-	}
-      else if(SnailTrail[P1].Vario <0)
-	{
-	  Red = 0xff; Green = 0x00; Blue = 0x00;
-	}
-      else
-	{
-	  Red = 0x00; Green = 0xff; Blue = 0x00;
-	}
-      hpNew = (HPEN)CreatePen(PS_SOLID, 2, RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
+      ColorRampLookup(SnailTrail[P1].Vario/1.5, &Red, &Green, &Blue,
+		      snail_colors, NUMSNAILRAMP);
+
+      int width = min(8,max(2,SnailTrail[P1].Vario));
+
+      hpNew = (HPEN)CreatePen(PS_SOLID, width, RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
       SelectObject(hdc,hpNew);
       DeleteObject((HPEN)hpDelete);
       hpDelete = hpNew;
