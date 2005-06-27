@@ -39,6 +39,8 @@ extern unsigned int NumberOfWayPoints;
 extern TASK_POINT Task[];
 extern int ActiveWayPoint;
 
+extern bool TaskAborted;
+
 extern int SelectedWaypoint;
 
 extern int FAISector;
@@ -82,6 +84,7 @@ extern BOOL	InfoWindowActive;
 
 extern int AIRSPACEWARNINGS;
 extern int WarningTime;
+extern int AcknowledgementTime;
 
 
 extern int iAirspaceBrush[];

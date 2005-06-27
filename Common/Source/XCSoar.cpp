@@ -104,7 +104,8 @@ double        MACREADY = 0;
 bool          AutoMacReady = false;
 
 NMEA_INFO                       GPS_INFO;
-DERIVED_INFO    CALCULATED_INFO;
+DERIVED_INFO  CALCULATED_INFO;
+bool          TaskAborted = false;
 
 //Local Static data
 static int iTimerID;
@@ -144,6 +145,7 @@ unsigned int NumberOfAirspaceCircles = 0;
 //Airspace Warnings
 int AIRSPACEWARNINGS = TRUE;
 int WarningTime = 30;
+int AcknowledgementTime = 30;
 
 // Registration Data
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY"); 
@@ -1252,6 +1254,19 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      FullScreen();
 
               return 0;
+
+            case IDC_ABORTTASK:
+
+              LockFlightData();
+              ResumeAbortTask();
+              UnlockFlightData();
+
+              ShowWindow(hWndCB,SW_HIDE);                               
+              SwitchToMapWindow();
+	      HideMenu();
+	      FullScreen();
+              return 0;
+
 
             case IDD_SETTINGS:
               COMPORTCHANGED = FALSE;

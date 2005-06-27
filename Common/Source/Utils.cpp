@@ -87,6 +87,7 @@ TCHAR szRegistrySpeedUnitsValue[] =    TEXT("Speed");
 TCHAR szRegistryStartLine[]=		 TEXT("StartLine");
 TCHAR szRegistryStartRadius[]=		 TEXT("StartRadius");
 TCHAR szRegistryWarningTime[]=		 TEXT("WarnTime");
+TCHAR szRegistryAcknowledgementTime[]=		 TEXT("AcknowledgementTime");
 TCHAR szRegistryWindUpdateMode[] =       TEXT("WindUpdateMode");	
 TCHAR szRegistryWindSpeed[] =       TEXT("WindSpeed");	
 TCHAR szRegistryWindBearing[] =       TEXT("WindBearing");	
@@ -262,6 +263,10 @@ void ReadRegistrySettings(void)
   Temp = 30;
   GetFromRegistry(szRegistryWarningTime,&Temp);
   WarningTime = Temp;
+
+  Temp = 30;
+  GetFromRegistry(szRegistryAcknowledgementTime,&Temp);
+  AcknowledgementTime = Temp;
 
   Temp = 80;
   GetFromRegistry(szRegistrySoundVolume,&Temp);

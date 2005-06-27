@@ -52,6 +52,7 @@ static void DrawWaypoints(HDC hdc, RECT rc);
 static void DrawFlightMode(HDC hdc, RECT rc);
 static void DrawTrail(HDC hdc, POINT Orig, RECT rc);
 static void DrawTask(HDC hdc, RECT rc);
+static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
 static void DrawBearing(HDC hdc, POINT Orig);
 static void DrawMapScale(HDC hDC,RECT rc);
 static void DrawFinalGlide(HDC hDC,RECT rc);
@@ -859,7 +860,11 @@ static void RenderMapWindow(  RECT rc)
       DrawGlideThroughTerrain(hdcDrawWindowBg, rc);
     }
 
-    DrawTask(hdcDrawWindowBg, rc);
+    if (TaskAborted) {
+      DrawAbortedTask(hdcDrawWindowBg, rc, Orig_Aircraft);
+    } else {
+      DrawTask(hdcDrawWindowBg, rc);
+    }
     
     DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
 
@@ -1118,6 +1123,24 @@ void DrawWaypoints(HDC hdc, RECT rc)
 	}
     }
 }
+
+
+void DrawAbortedTask(HDC hdc, RECT rc, POINT me)
+{
+  int i;
+	
+  for(i=0;i<MAXTASKPOINTS-1;i++)
+    {
+      if(Task[i].Index >=0)
+	{
+	  DrawDashLine(hdc, 1, 
+		       WayPointList[Task[i].Index].Screen,
+                       me,
+		       RGB(0,255,0));
+	}
+    }
+}
+
 
 void DrawTask(HDC hdc, RECT rc)
 {

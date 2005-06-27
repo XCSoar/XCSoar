@@ -87,5 +87,6 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 				double *retlon); 
 
 bool ClearAirspaceWarnings();
+void ResumeAbortTask();
 
 #endif

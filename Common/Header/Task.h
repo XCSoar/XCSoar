@@ -13,27 +13,27 @@
 typedef struct _TASK_POINT
 {
   int Index;
-	double InBound;
-	double OutBound;
-	double Bisector;
-	double Leg;
-	double SectorStartLat;
-	double SectorStartLon;
-	double SectorEndLat;
-	double SectorEndLon;
-	POINT	 Start;
-	POINT	 End;		
-	int		 AATType;
-	double AATCircleRadius;
-	double AATSectorRadius;
-	double AATStartRadial;
-	double AATFinishRadial;
-	double AATStartLat;
-	double AATStartLon;
-	double AATFinishLat;
-	double AATFinishLon;
-	POINT	 AATStart;
-	POINT	 AATFinish;	
+  double InBound;
+  double OutBound;
+  double Bisector;
+  double Leg;
+  double SectorStartLat;
+  double SectorStartLon;
+  double SectorEndLat;
+  double SectorEndLon;
+  POINT	 Start;
+  POINT	 End;		
+  int		 AATType;
+  double AATCircleRadius;
+  double AATSectorRadius;
+  double AATStartRadial;
+  double AATFinishRadial;
+  double AATStartLat;
+  double AATStartLon;
+  double AATFinishLat;
+  double AATFinishLon;
+  POINT	 AATStart;
+  POINT	 AATFinish;	
 }TASK_POINT;
 
 

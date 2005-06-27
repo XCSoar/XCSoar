@@ -16,6 +16,7 @@ Summary of new features since v4.0
 - Acknowledge airspace warnings
 - Audio settings page
 - Graduated snail trail color and thickness
+- Abort/resume of tasks
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -189,7 +190,13 @@ or from the Details button in the Settings->Task page.
 
 This dialog spans multiple pages.  The first page shows basic waypoint
 information such as name, comments, location, elevation, and the type
-of waypoint (e.g.  Landable, Turnpoint etc).
+of waypoint (e.g.  Landable, Turnpoint etc).  If the airfield details
+file is available, additional information will be presented.  Usually,
+this will contain Enroute Supplement text, such as:
+- Runway summary
+- Communications
+- Remarks
+- ICAO code
 
 The second page has task buttons:
 - Set home: Sets the selected waypoint as the home field
@@ -280,6 +287,7 @@ setting and the glider's current height is overlaid on the shaded
 area.  This scaling and arrow makes it easy to see how the pilot's
 MacReady setting compares with achieved thermals and to plan the
 desired working height band.
+
 
 ============================================================================
 WIND CALCULATION
@@ -420,5 +428,23 @@ AIRSPACE
 ============================================================================
 
 Hitting the enter cursor key while in map mode will dismiss any raised
-airspace warnings for 30 seconds.
+airspace warnings for a period of time specified in the Acknowledgement
+time in Settings->Airspace Warnings.
 
+
+============================================================================
+TASKING
+============================================================================
+
+From the main menu, the user can Abort or Resume a task.  When a task
+is aborted, the nearest landable waypoints are used as a virtual task,
+sorted by distance.  The map window shows the vectors from the
+aircraft to each close landable waypoint instead of the task.  
+
+If the active waypoint prior to aborting is in the close landable
+waypoint list, it will be the active waypoint in the aborted mode.
+Otherwise, the active waypoint will be the closest waypoint.  'Close'
+in this sense means the waypoint with the highest arrival height. 
+
+Resuming a task restores the previously active task and active
+waypoint.

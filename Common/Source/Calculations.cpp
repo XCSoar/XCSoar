@@ -65,6 +65,7 @@ static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 
 static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 
 
@@ -181,7 +182,11 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   DistanceToNext(Basic, Calculated);
   AltitudeRequired(Basic, Calculated, macready);
 
-  TerrainHeight(Basic, Calculated);;
+  TerrainHeight(Basic, Calculated);
+
+  if (TaskAborted) {
+    SortLandableWaypoints(Basic, Calculated);
+  } 
   TaskStatistics(Basic, Calculated, macready);
 
   if(Basic->Time <= LastTime)
@@ -192,7 +197,8 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LastTime = Basic->Time;
 
-  if ((Calculated->FinalGlide)||(fabs(Calculated->TaskAltitudeDifference)>30)) {
+  if ((Calculated->FinalGlide)
+      ||(fabs(Calculated->TaskAltitudeDifference)>30)) {
     FinalGlideAlert(Basic, Calculated);
     if (Calculated->AutoMcReady) {
       DoAutoMcReady(Calculated);
@@ -210,14 +216,26 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   ThermalBand(Basic, Calculated);
 
   DistanceToNext(Basic, Calculated);
-  AltitudeRequired(Basic, Calculated, macready);
-  InSector(Basic, Calculated);
-  InAATSector(Basic, Calculated);
 
+  // do we need to do this twice?
+  if (TaskAborted) {
+
+    SortLandableWaypoints(Basic, Calculated);
+    TaskStatistics(Basic, Calculated, macready);
+
+  } else {
+
+    InSector(Basic, Calculated);
+    InAATSector(Basic, Calculated);
+
+    TaskStatistics(Basic, Calculated, macready);
+    AATStats(Basic, Calculated);  
+
+  }
+
+  AltitudeRequired(Basic, Calculated, macready);
   TerrainHeight(Basic, Calculated);
-  TaskStatistics(Basic, Calculated, macready);
-  AATStats(Basic, Calculated);  
-                        
+                  
   CalculateNextPosition(Basic, Calculated);
 
   AirspaceWarning(Basic, Calculated);
@@ -646,18 +664,24 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macread
 {
   if(ActiveWayPoint >=0)
     {
-      Calculated->NextAltitudeRequired = McReadyAltitude(macready,
-                                                         Basic->WaypointDistance,Basic->WaypointBearing, 
-                                                         Calculated->WindSpeed, Calculated->WindBearing, 
-                                                         0, 0, (ActiveWayPoint == getFinalWaypoint())
-                                                         // ||  
-                                                         // (Calculated->TaskAltitudeDifference>30)
-                                                         // JMW TODO!!!!!!!!!
-                                                         );
-      Calculated->NextAltitudeRequired = Calculated->NextAltitudeRequired * (1/BUGS);
-      Calculated->NextAltitudeRequired = Calculated->NextAltitudeRequired + SAFETYALTITUDEARRIVAL ;
+      Calculated->NextAltitudeRequired = 
+        McReadyAltitude(macready,
+                        Basic->WaypointDistance,Basic->WaypointBearing, 
+                        Calculated->WindSpeed, Calculated->WindBearing, 
+                        0, 0, (ActiveWayPoint == getFinalWaypoint())
+                        // ||  
+                        // (Calculated->TaskAltitudeDifference>30)
+                        // JMW TODO!!!!!!!!!
+                        );
+      Calculated->NextAltitudeRequired = 
+        Calculated->NextAltitudeRequired * (1/BUGS);
 
-      Calculated->NextAltitudeDifference = Basic->Altitude - (Calculated->NextAltitudeRequired + WayPointList[Task[ActiveWayPoint].Index].Altitude);            
+      Calculated->NextAltitudeRequired = 
+        Calculated->NextAltitudeRequired + SAFETYALTITUDEARRIVAL ;
+
+      Calculated->NextAltitudeDifference = 
+        Basic->Altitude - (Calculated->NextAltitudeRequired
+                           + WayPointList[Task[ActiveWayPoint].Index].Altitude);            
     }
   else
     {
@@ -968,42 +992,48 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
   // Calculate Task Distances
   if(ActiveWayPoint >=1)
     {
-      LegDistance = Distance(WayPointList[Task[ActiveWayPoint].Index].Lattitude, 
-                             WayPointList[Task[ActiveWayPoint].Index].Longditude,
-                             WayPointList[Task[ActiveWayPoint-1].Index].Lattitude, 
-                             WayPointList[Task[ActiveWayPoint-1].Index].Longditude);
-
-      LegToGo = Distance(Basic->Lattitude , Basic->Longditude , 
-                         WayPointList[Task[ActiveWayPoint].Index].Lattitude, 
-                         WayPointList[Task[ActiveWayPoint].Index].Longditude);
-
+      LegDistance = 
+        Distance(WayPointList[Task[ActiveWayPoint].Index].Lattitude, 
+                 WayPointList[Task[ActiveWayPoint].Index].Longditude,
+                 WayPointList[Task[ActiveWayPoint-1].Index].Lattitude, 
+                 WayPointList[Task[ActiveWayPoint-1].Index].Longditude);
+      
+      LegToGo = 
+        Distance(Basic->Lattitude , Basic->Longditude , 
+                 WayPointList[Task[ActiveWayPoint].Index].Lattitude, 
+                 WayPointList[Task[ActiveWayPoint].Index].Longditude);
+      
       LegCovered = LegDistance - LegToGo;
-                
+      
       if(LegCovered <=0)
         Calculated->TaskDistanceCovered = 0;
       else
         Calculated->TaskDistanceCovered = LegCovered;
-                
+      
       Calculated->LegDistanceToGo = LegToGo;
       Calculated->LegDistanceCovered = Calculated->TaskDistanceCovered;
-
+      
       if(Basic->Time != Calculated->LegStartTime) 
-        Calculated->LegSpeed = Calculated->LegDistanceCovered / (Basic->Time - Calculated->LegStartTime); 
-
+        Calculated->LegSpeed = Calculated->LegDistanceCovered
+          / (Basic->Time - Calculated->LegStartTime); 
+      
 
       for(i=0;i<ActiveWayPoint-1;i++)
         {
-          LegDistance = Distance(WayPointList[Task[i].Index].Lattitude, 
-                                 WayPointList[Task[i].Index].Longditude,
-                                 WayPointList[Task[i+1].Index].Lattitude, 
-                                 WayPointList[Task[i+1].Index].Longditude); 
-
+          LegDistance = 
+            Distance(WayPointList[Task[i].Index].Lattitude, 
+                     WayPointList[Task[i].Index].Longditude,
+                     WayPointList[Task[i+1].Index].Lattitude, 
+                     WayPointList[Task[i+1].Index].Longditude); 
+          
           Calculated->TaskDistanceCovered += LegDistance;
-
+          
         }
                 
       if(Basic->Time != Calculated->TaskStartTime) 
-        Calculated->TaskSpeed = Calculated->TaskDistanceCovered / (Basic->Time - Calculated->TaskStartTime); 
+        Calculated->TaskSpeed = 
+          Calculated->TaskDistanceCovered 
+          / (Basic->Time - Calculated->TaskStartTime); 
     }
 
   // Calculate Final Glide To Finish
@@ -1034,7 +1064,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
                                     // JMW TODO!!!!!!!!!!!
                                     );
 
-      if (i==FinalWayPoint) {
+      if ((i==FinalWayPoint)||(TaskAborted)) {
         double lat, lon;
         double distancesoarable = 
           FinalGlideThroughTerrain(LegBearing, Basic, Calculated, 
@@ -1063,7 +1093,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
       Calculated->TaskDistanceToGo = LegToGo;
 
       i++;
-      while((Task[i].Index != -1) && (i<MAXTASKPOINTS))
+      while((Task[i].Index != -1) && (i<MAXTASKPOINTS) && (!TaskAborted))
         {
           LegDistance = Distance(WayPointList[Task[i].Index].Lattitude, 
                                  WayPointList[Task[i].Index].Longditude,
@@ -1089,7 +1119,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
           i++;
         }
 
-      if (ActiveWayPoint == FinalWayPoint) {
+      if ((ActiveWayPoint == FinalWayPoint)||(TaskAborted)) {
         // JMW on final glide
         Calculated->FinalGlide = 1;
       } else {
@@ -1099,7 +1129,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
 
       Calculated->TaskAltitudeRequired = TaskAltitudeRequired + SAFETYALTITUDEARRIVAL;
       Calculated->TaskAltitudeDifference = Basic->Altitude - (Calculated->TaskAltitudeRequired + WayPointList[Task[i-1].Index].Altitude);               
-
+      
       if(  (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude) > 0)
         {
           Calculated->LDFinish = Calculated->TaskDistanceToGo / (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude)  ;
@@ -1111,16 +1141,16 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
 
     } else { 
     // no task selected, so work things out at current heading
-
-       McReadyAltitude(macready, 100.0, Basic->TrackBearing, 
-		       Calculated->WindSpeed, 
-		       Calculated->WindBearing, 
-		       &(Calculated->BestCruiseTrack),
-		       &(Calculated->VMcReady),
-		       0
-                                    // ||()
-                                    // JMW TODO!!!!!!!!!!!
-                                    );
+    
+    McReadyAltitude(macready, 100.0, Basic->TrackBearing, 
+                    Calculated->WindSpeed, 
+                    Calculated->WindBearing, 
+                    &(Calculated->BestCruiseTrack),
+                    &(Calculated->VMcReady),
+                    0
+                    // ||()
+                    // JMW TODO!!!!!!!!!!!
+                    );
 
   }
 }
@@ -1221,8 +1251,11 @@ void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         }
     }
 }
+
 extern int AIRSPACEWARNINGS;
 extern int WarningTime;
+extern int AcknowledgementTime;
+
 
 void CalculateNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
@@ -1251,13 +1284,13 @@ bool ClearAirspaceWarnings() {
     {
       LastCi = -1;LastAi = -1;
       DestroyWindow(hCMessage);
-      ClearAirspaceWarningTimeout = 30;
+      ClearAirspaceWarningTimeout = AcknowledgementTime;
       hCMessage = NULL;
       return true;
     }
   if(hAMessage)
     {
-      ClearAirspaceWarningTimeout = 30;
+      ClearAirspaceWarningTimeout = AcknowledgementTime;
       DestroyWindow(hAMessage);
       hAMessage = NULL;
       return true;
@@ -1623,5 +1656,154 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   }
   UnlockTerrainData();
   return 0.0;
+}
+
+
+//////////////////////////////////////////////////////////////////
+
+
+double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic, 
+					DERIVED_INFO *Calculated,
+					int i) {
+  double AltReqd;
+  double wDistance, wBearing;
+
+  wDistance = Distance(Basic->Lattitude, 
+		       Basic->Longditude,
+		       WayPointList[i].Lattitude, 
+		       WayPointList[i].Longditude);
+  
+  wBearing = Bearing(Basic->Lattitude, 
+		     Basic->Longditude,
+		     WayPointList[i].Lattitude, 
+		     WayPointList[i].Longditude); 
+  
+  AltReqd = McReadyAltitude(0.0, 
+			    wDistance, 
+			    wBearing, 
+			    Calculated->WindSpeed, 
+			    Calculated->WindBearing, 
+			    0, 
+			    0,
+			    1
+			    )*(1/BUGS);
+  
+  return ((Basic->Altitude) - AltReqd - WayPointList[i].Altitude);
+}
+
+
+
+void SortLandableWaypoints(NMEA_INFO *Basic, 
+			   DERIVED_INFO *Calculated) {
+  int SortedLandableIndex[MAXTASKPOINTS];
+  double SortedArrivalAltitude[MAXTASKPOINTS];
+  int i, j, k, l;
+  double aa;
+
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    SortedLandableIndex[i]= -1;
+    SortedArrivalAltitude[i] = 0;
+  }
+
+  for (i=0; i<NumberOfWayPoints; i++) {
+    
+    if (!(
+	  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) 
+	  || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT))) {
+      continue; // ignore non-landable fields
+    }
+    
+    aa = CalculateWaypointArrivalAltitude(Basic, Calculated, i);
+    
+    // see if this fits into slot
+    for (k=0; k< MAXTASKPOINTS; k++) {
+      if (
+	  ((aa > SortedArrivalAltitude[k]) // closer than this one
+	   ||(SortedLandableIndex[k]== -1)) // or this one isn't filled
+	  &&(SortedLandableIndex[k]!= i) // and not replacing with same
+	  )
+	{
+	
+	  // ok, got new biggest, put it into the slot.
+	  
+	  for (l=MAXTASKPOINTS-1; l>k; l--) {
+	    if (l>0) {
+	      SortedArrivalAltitude[l] = SortedArrivalAltitude[l-1];
+	      SortedLandableIndex[l] = SortedLandableIndex[l-1];
+	    }
+	  }
+	  
+	  SortedArrivalAltitude[k] = aa;
+	  SortedLandableIndex[k] = i;
+	  k=MAXTASKPOINTS;
+	}
+    }
+  }
+
+  // now we have a sorted list.
+
+  // check if current waypoint is in the sorted list
+
+  int foundActiveWayPoint = -1;
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    if (ActiveWayPoint>=0) {
+      if (SortedLandableIndex[i] == Task[ActiveWayPoint].Index) {
+        foundActiveWayPoint = i;
+      }
+    }
+  }
+
+  if (foundActiveWayPoint != -1) {
+    ActiveWayPoint = foundActiveWayPoint;
+  } else {
+    // if not found, set active waypoint to closest
+    ActiveWayPoint = 0;
+  }
+
+  // set new waypoints in task
+
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    Task[i].Index = SortedLandableIndex[i];
+  }
+
+}
+
+
+void ResumeAbortTask() {
+  static int OldTask[MAXTASKPOINTS];
+  static int OldActiveWayPoint= -1;
+  int i;
+
+  TaskAborted = !TaskAborted;
+
+  if (TaskAborted) {
+
+    // save current task in backup
+
+    for (i=0; i<MAXTASKPOINTS; i++) {
+      OldTask[i]= Task[i].Index;
+    }
+    OldActiveWayPoint = ActiveWayPoint;
+
+  } else {
+
+    // reload backup task
+
+    for (i=0; i<MAXTASKPOINTS; i++) {
+      Task[i].Index = OldTask[i];
+    }
+    ActiveWayPoint = OldActiveWayPoint;
+
+    for (i=0; i<MAXTASKPOINTS; i++) {
+      if (Task[i].Index != -1) {
+        RefreshTaskWaypoint(i);
+      }
+    }
+    CalculateTaskSectors();
+    CalculateAATTaskSectors();
+
+  }
+
+
 }
 
