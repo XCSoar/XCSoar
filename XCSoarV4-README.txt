@@ -15,6 +15,7 @@ Summary of new features since v4.0
 - Added "Remove" button on waypoint details task page
 - Acknowledge airspace warnings
 - Audio settings page
+- Graduated snail trail color and thickness
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -242,6 +243,11 @@ labels if the waypoints are in the current task, or the current home.
 
 The map is capable of displaying terrain elevation contours and vector
 topology.  See the section below for more details.
+
+Snail trail uses graduated color to show the glider's vario
+measurement.  Green indicates lift and the color varies through grey
+(zero lift) to red to indicate sink.  In lift, the trail thickness
+increases proportionally to make it easier to identify.
 
 
 ============================================================================
