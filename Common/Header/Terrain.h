@@ -1,5 +1,17 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
+#include "stdafx.h"
+
+typedef struct _COLORRAMP
+{
+  short h;
+  unsigned char r;
+  unsigned char g;
+  unsigned char b;
+} COLORRAMP;
+
+void ColorRampLookup(short h, BYTE *r, BYTE *g, BYTE *b,
+		     COLORRAMP* ramp_colors, int numramp);
 
 void SetTopologyBounds(RECT rcin);
 void ReadTopology();

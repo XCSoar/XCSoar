@@ -78,7 +78,6 @@ BOOL                                    Port2Available = NULL;
 HFONT                                   InfoWindowFont;
 HFONT                                   TitleWindowFont;
 HFONT                                   MapWindowFont;
-
 HFONT                                   CDIWindowFont; // New
 HFONT                                   MapLabelFont;
 
@@ -1292,7 +1291,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		  ReadAirfieldFile();
 
 		  if (WAYPOINTFILECHANGED) {
-		    HomeWaypoint = -1; // trigger refresh of home
+		    HomeWaypoint = -1;
 		    if(NumberOfWayPoints) SetHome();
 		  }
                 }
