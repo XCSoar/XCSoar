@@ -177,6 +177,11 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   }
 
+  if (Basic->ExternalWindAvailalbe != 0){
+    Calculated->WindSpeed = Basic->ExternalWindSpeed;
+    Calculated->WindBearing = Basic->ExternalWindDirection;
+  }
+
   macready = MACREADY/LIFTMODIFY;
 
   DistanceToNext(Basic, Calculated);
@@ -617,7 +622,7 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           Calculated->LastThermalAverage = ThermalGain/ThermalTime;
           Calculated->LastThermalGain = ThermalGain;
           Calculated->LastThermalTime = ThermalTime;
-          if(ThermalTime > 120)
+          if(ThermalTime > 120 && (Basic->ExternalWindAvailalbe == 0))
             {
 
               Calculated->WindSpeed = ThermalDrift/ThermalTime;

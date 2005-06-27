@@ -49,8 +49,13 @@ typedef struct _NMEA_INFO
   BOOL AirspeedAvailable;
   double Vario;
   double IAS;
+  double Ballast;
+  double Bugs;
+
 } NMEA_INFO;
 
 int ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO);
+BOOL NMEAChecksum(TCHAR *String);
+void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 
 #endif
