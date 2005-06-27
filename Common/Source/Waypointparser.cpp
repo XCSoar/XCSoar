@@ -61,6 +61,8 @@ void ReadWayPointFile(HANDLE hFile)
     return;
   }
 
+  Temp.Details = NULL;
+
   while(ReadString(hFile,200,TempString))
     {
       Tock++; Tock %= 300;
@@ -106,6 +108,7 @@ void ReadWayPointFile(HANDLE hFile)
 		}
 	      if(_tcsstr(TempString,TEXT("**")) != TempString) // Look For Comment
 		{
+                  List->Details = NULL; 
 		  if (ParseWayPointString(TempString,List)) {
 		    List ++;
 		    // bug fix by Samuel Gisiger
