@@ -441,10 +441,15 @@ is aborted, the nearest landable waypoints are used as a virtual task,
 sorted by distance.  The map window shows the vectors from the
 aircraft to each close landable waypoint instead of the task.
 
-If the active waypoint prior to aborting is in the close landable
+If the active waypoint prior to the abort is in the close landable
 waypoint list, it will be the active waypoint in the aborted mode.
 Otherwise, the active waypoint will be the closest waypoint.  'Close'
-in this sense means the waypoint with the highest arrival height.
+in this sense means the waypoint with the highest arrival height,
+assuming flight with zero speed ring setting.
+
+After a task has been aborted, the user can still switch
+between waypoints --- this allows the user to head towards a preferred
+landing site.
 
 Resuming a task restores the previously active task and active
 waypoint.
