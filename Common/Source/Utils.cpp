@@ -1398,6 +1398,7 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
 {
   int i;
   char c;
+  TCHAR wc;
   DWORD dwNumBytesRead;
 
   for(i=0;i<Max;i++)
@@ -1411,7 +1412,8 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
 	      String[i] = '\0';
 	      return TRUE;
 	    }
-	  String[i] = (TCHAR)c;
+          mbstowcs( &wc, &c, 1);
+	  String[i] = wc;
 	}
       else
 	{
