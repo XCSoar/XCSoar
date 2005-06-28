@@ -1,3 +1,5 @@
+//   $Id: AirfieldDetails.cpp,v 1.4 2005/06/28 13:41:03 jwharington Exp $
+
 #include "AirfieldDetails.h"
 
 #include "stdafx.h"

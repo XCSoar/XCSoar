@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.3 2005/06/28 13:02:54 jwharington Exp $
+**   $Id: windstore.cpp,v 1.4 2005/06/28 13:41:13 jwharington Exp $
 **
 ***********************************************************************/
 
