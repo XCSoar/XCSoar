@@ -30,7 +30,7 @@
 #include "externs.h"
 #include "VarioSound.h"
 
-
+static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 static BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO);
@@ -46,6 +46,7 @@ static BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO);
 
+static BOOL Checksum(TCHAR *String);
 static double EastOrWest(double in, TCHAR EoW);
 static double NorthOrSouth(double in, TCHAR NoS);
 static double LeftOrRight(double in, TCHAR LoR);
@@ -82,7 +83,7 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
       return FALSE;
     }
 
-  if(!NMEAChecksum(String))
+  if(!Checksum(String))
     {
       return FALSE;
     }
@@ -414,8 +415,6 @@ BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   LastTime = ThisTime;
 
-  GPSCONNECT = TRUE;
-
   return TRUE;
 }
 
@@ -542,7 +541,7 @@ BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 
-BOOL NMEAChecksum(TCHAR *String)
+BOOL Checksum(TCHAR *String)
 {
   unsigned char CalcCheckSum = 0;
   unsigned char ReadCheckSum;
@@ -635,6 +634,32 @@ BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
+double StaticPressureToAltitude(double ps) {
+  double altitude;
+  // http://wahiduddin.net/calc/density_altitude.htm
+
+  const double k1=0.190263;
+  const double k2=8.417286e-5;
+  double h_gps0 = 0;
+
+  double Pa = pow(
+                  pow(ps-(QNH-1013.25)*100.0,k1)
+                  -(k2*h_gps0)
+                  ,(1.0/k1));
+
+  altitude = 44330.8-4946.54*pow(Pa,k1);
+  return altitude;
+
+}
+
+
+double AirDensity(double altitude) {
+  double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
+  double rho_rat = sqrt(1.225/rho);
+  return rho;
+}
+
+
 BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   double vias, wnet;
@@ -655,11 +680,11 @@ BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
   pstatic = _tcstol(ctemp, &Stop, 10);
 
   // for testing only, this is really static pressure
-  GPS_INFO->BaroAltitude = pstatic*10/ALTITUDEMODIFY;
+  GPS_INFO->BaroAltitude = StaticPressureToAltitude(pstatic*10.0);
+  GPS_INFO->BaroAltitudeAvailable = TRUE;
 
   GPS_INFO->AirspeedAvailable = TRUE;
   GPS_INFO->Airspeed = vias/TOKNOTS;
-  GPS_INFO->BaroAltitudeAvailable = TRUE;
   GPS_INFO->VarioAvailable = TRUE;
   GPS_INFO->Vario = wnet/TOKNOTS;
 

@@ -255,9 +255,6 @@ static double CalculateAngle(TCHAR *temp)
 
   Degrees = (double)_tcstol(temp, &Stop, 10);
   Mins = (double)StrToDouble(Colon, &Stop);
-  if (*Stop == ':') {
-    Mins += ((double)_tcstol(++Stop, &Stop, 10)/60.0);
-  }
 
   //Stop = Colon + _tcsclen(Colon) -1;
 
@@ -270,6 +267,10 @@ static double CalculateAngle(TCHAR *temp)
     {
       Degrees *= -1;
     }
+  else if (*Stop == ':') {
+    Mins += ((double)_tcstol(++Stop, &Stop, 10)/60.0);
+    // feature added by Samuel Gisiger
+  }
   else
     {
       return -9999;

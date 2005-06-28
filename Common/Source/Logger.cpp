@@ -27,6 +27,8 @@
 
 static TCHAR szLoggerFileName[MAX_PATH];
 
+int EW_count = 0;
+
 
 void LogPoint(double Lattitude, double Longditude, double Altitude)
 {
@@ -230,7 +232,107 @@ void AddDeclaration(double Lattitude, double Longditude, TCHAR *ID)
 // Function Added to delare task to EW logger
 void EW_Strings(double Lattitude, double Longditude, TCHAR *ID)
 {
-  // moved to devEW module
+  char EWRecord[100];
+  char EWRecord_CS[100];
+
+  char IDString[100];
+  int i;
+
+  int DegLat, DegLon;
+  double MinLat, MinLon;
+  char NoS, EoW;
+
+  short EoW_Flag, NoS_Flag, EW_Flags;
+
+
+  for(i=0;i<(int)_tcslen(ID);i++)
+    {
+      IDString[i] = (char)ID[i];
+    }
+  IDString[i] = '\0';
+
+  char IDString_trunc[10];
+  int j;
+
+
+  for(j=0;j<3;j++)
+    {
+      IDString_trunc[j] = (char)ID[j];
+    }
+  IDString_trunc[j] = '\0';
+
+
+
+  DegLat = (int)Lattitude;
+  MinLat = Lattitude - DegLat;
+  NoS = 'N';
+  if(MinLat<0)
+    {
+      NoS = 'S';
+      DegLat *= -1; MinLat *= -1;
+    }
+  MinLat *= 60;
+  MinLat *= 1000;
+
+
+  DegLon = (int)Longditude ;
+  MinLon = Longditude  - DegLon;
+  EoW = 'E';
+  if(MinLon<0)
+    {
+      EoW = 'W';
+      DegLon *= -1; MinLon *= -1;
+    }
+  MinLon *=60;
+  MinLon *= 1000;
+
+  //	Calc E/W and N/S flags
+
+  //	Clear flags
+  EoW_Flag = 0;
+  NoS_Flag = 0;
+  EW_Flags = 0;
+
+
+  if (EoW == 'W')
+    {
+      EoW_Flag = 0x08;
+    }
+  else
+    {
+      EoW_Flag = 0x04;
+    }
+  if (NoS == 'N')
+    {
+      NoS_Flag = 0x01;
+    }
+  else
+    {
+      NoS_Flag = 0x02;
+    }
+  //  Do the calculation
+  EW_Flags = EoW_Flag | NoS_Flag;
+
+  // Temporary buffer to calculate checksum
+
+  sprintf(EWRecord,"#STP0%X%X%X%X202020%02X%02X%04X%02X%04X", EW_count, IDString_trunc[0], IDString_trunc[1],IDString_trunc[2], EW_Flags, DegLat, (int)MinLat/10, DegLon, (int)MinLon/10);
+
+  int l,len, m;
+  unsigned char CalcCheckSum = 0;
+
+  for(m=1; m<32; m++)
+    {
+      CalcCheckSum = CalcCheckSum ^ EWRecord[m];
+    }
+
+  sprintf(EWRecord_CS,"#STP0%X%X%X%X202020%02X%02X%04X%02X%04X%02X\r\n", EW_count, IDString_trunc[0], IDString_trunc[1],IDString_trunc[2], EW_Flags, DegLat, (int)MinLat/10, DegLon, (int)MinLon/10, CalcCheckSum);
+  EW_count = EW_count + 1;
+
+  len = strlen(EWRecord_CS);
+
+  for(l=0;l<(len);l++)
+    Port1Write ((BYTE)EWRecord_CS[l]);
+
 }
 
 

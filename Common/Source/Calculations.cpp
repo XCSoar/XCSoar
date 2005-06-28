@@ -177,11 +177,6 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   }
 
-  if (Basic->ExternalWindAvailalbe != 0){
-    Calculated->WindSpeed = Basic->ExternalWindSpeed;
-    Calculated->WindBearing = Basic->ExternalWindDirection;
-  }
-
   macready = MACREADY/LIFTMODIFY;
 
   DistanceToNext(Basic, Calculated);
@@ -259,23 +254,25 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if(Basic->Time > LastTime)
     {
       Gain = Basic->Altitude - LastAlt;
-      Calculated->Vario = Gain / (Basic->Time - LastTime);
-      LastAlt = Basic->Altitude;
-      LastTime = Basic->Time;
 
       if (!Basic->VarioAvailable) {
-        if (Calculated->Circling) {
-          VarioSound_SetV((short)(Calculated->Vario/6.0*100));
-        } else {
-          // JMW switch to Netto
-          // TODO: Correct for TAS/IAS
-          // if (netto) {
-          //      double vnet = Calculated->Vario-SinkRate(Basic->Speed);
-          //      VarioSound_SetV((short)(vnet/10.0*100));
-          // }
-          VarioSound_SetV((short)(Calculated->Vario/6.0*100));
-        }
+        Calculated->Vario = Gain / (Basic->Time - LastTime);
       }
+
+      if (Calculated->Circling) {
+	VarioSound_SetV((short)(Calculated->Vario/6.0*100));
+      } else {
+	// JMW switch to Netto
+	// TODO: Correct for TAS/IAS
+	// if (netto) {
+	//      double vnet = Calculated->Vario-SinkRate(Basic->Speed);
+	//      VarioSound_SetV((short)(vnet/10.0*100));
+	// }
+	VarioSound_SetV((short)(Calculated->Vario/6.0*100));
+      }
+
+      LastAlt = Basic->Altitude;
+      LastTime = Basic->Time;
 
     }
   else
@@ -622,7 +619,7 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           Calculated->LastThermalAverage = ThermalGain/ThermalTime;
           Calculated->LastThermalGain = ThermalGain;
           Calculated->LastThermalTime = ThermalTime;
-          if(ThermalTime > 120 && (Basic->ExternalWindAvailalbe == 0))
+          if(ThermalTime > 120)
             {
 
               Calculated->WindSpeed = ThermalDrift/ThermalTime;
