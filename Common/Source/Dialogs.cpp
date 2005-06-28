@@ -26,7 +26,6 @@
 #include "McReady.h"
 #include "AirfieldDetails.h"
 #include "VarioSound.h"
-#include "device.h"
 
 #include <commdlg.h>
 #include <commctrl.h>
@@ -1240,30 +1239,15 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           if(T2)
             {
               BUGS = (double)T1;
-              double lastBugs = BUGS;
-
-              BUGS = (double)T1;
               BUGS /=100;
               if(BUGS<0.5) BUGS = 0.5;
-
-              if (lastBugs != BUGS){
-                devPutBugs(devA(), BUGS);
-                devPutBugs(devB(), BUGS);
-              }
-          }
+            }
           T1 = GetDlgItemInt(hDlg,IDC_BALLAST,&T2,FALSE);
           if(T2)
             {
-              double lastBallast = BALLAST;
-
               BALLAST = (double)T1;
               BALLAST /=100;
 	      SetBallast();
-
-              if (lastBallast != BALLAST){
-                devPutBallast(devA(), BALLAST);
-                devPutBallast(devB(), BALLAST);
-              }
             }
 
           EndDialog(hDlg, LOWORD(wParam));
