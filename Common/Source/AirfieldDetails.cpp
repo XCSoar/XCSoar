@@ -4,6 +4,9 @@
 #include "Utils.h"
 #include "Sizes.h"
 #include "externs.h"
+#include "Dialogs.h"
+#include "resource.h"
+#include "Utils.h"
 
 HANDLE hAirfieldDetails;
 
@@ -108,8 +111,23 @@ void ParseAirfieldDetails() {
 
 
 void ReadAirfieldFile() {
-  OpenAirfieldDetails();
-  ParseAirfieldDetails();
-  CloseAirfieldDetails();
+
+  HWND hProgress;
+
+  hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
+  SetDlgItemText(hProgress,IDC_MESSAGE,TEXT("Loading Airfield Details File..."));
+
+  SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+  ShowWindow(hProgress,SW_SHOW);
+  UpdateWindow(hProgress);
+
+  {
+    OpenAirfieldDetails();
+    ParseAirfieldDetails();
+    CloseAirfieldDetails();
+  }
+
+  DestroyWindow(hProgress);
+      
 }
 

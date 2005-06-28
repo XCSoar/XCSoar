@@ -543,7 +543,7 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
 			 TBM_SETPOS, TRUE, 100-SoundVolume);
 
       SendDlgItemMessage(hDlg, IDC_AUDIODEADBAND, 
-			 TBM_SETRANGE, FALSE, MAKELPARAM(0,20));
+			 TBM_SETRANGE, FALSE, MAKELPARAM(0,40));
       SendDlgItemMessage(hDlg, IDC_AUDIODEADBAND, 
 			 TBM_SETPOS, TRUE, 40-SoundDeadband);
                
@@ -1630,6 +1630,7 @@ LRESULT CALLBACK AirspaceAlt(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   double INHg;
+  double alt;
   TCHAR Temp[10];
   SHINITDLGINFO shidi;
   static HFONT hFont;
@@ -1654,11 +1655,14 @@ LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       SendDlgItemMessage(hDlg,IDOK,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
       SendDlgItemMessage(hDlg,IDC_QNH,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
       SendDlgItemMessage(hDlg,IDC_INHG,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
+      SendDlgItemMessage(hDlg,IDC_PALTITUDE,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
+
       SendDlgItemMessage(hDlg,IDC_UP,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
       SendDlgItemMessage(hDlg,IDC_DOWN,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
       SendDlgItemMessage(hDlg,IDC_STATIC1,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
       SendDlgItemMessage(hDlg,IDC_STATIC2,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
       SendDlgItemMessage(hDlg,IDC_STATIC3,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
+      SendDlgItemMessage(hDlg,IDC_STATIC4,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
 
       SetDlgItemInt(hDlg,IDC_QNH,(int)QNH,FALSE);
       INHg = (int)QNH;
@@ -1666,6 +1670,12 @@ LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       INHg = INHg*29.91;
       wsprintf(Temp,TEXT("%2.2f"),INHg );
       SetDlgItemText(hDlg,IDC_INHG,Temp);
+
+      LockFlightData();
+      alt =   GPS_INFO.BaroAltitude*ALTITUDEMODIFY;
+      UnlockFlightData();
+      wsprintf(Temp,TEXT("%2.0f"),alt);
+      SetDlgItemText(hDlg,IDC_PALTITUDE,Temp);
 
       return TRUE; 
 
@@ -1688,6 +1698,13 @@ LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
           wsprintf(Temp,TEXT("%2.2f"),INHg );
           SetDlgItemText(hDlg,IDC_INHG,Temp);
           SetDlgItemInt(hDlg,IDC_QNH,(int)QNH,FALSE);
+
+          LockFlightData();
+          alt =   GPS_INFO.BaroAltitude*ALTITUDEMODIFY;
+          UnlockFlightData();
+          wsprintf(Temp,TEXT("%2.0f"),alt);
+          SetDlgItemText(hDlg,IDC_PALTITUDE,Temp);
+
           return TRUE;
 
         case IDC_DOWN:
@@ -2547,6 +2564,10 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
       return FALSE;
 
+    case WM_CLOSE:
+      MapDirty = true;
+      FullScreen();
+      
     }
   return FALSE;
 }

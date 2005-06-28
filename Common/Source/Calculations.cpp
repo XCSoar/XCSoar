@@ -256,7 +256,11 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Gain = Basic->Altitude - LastAlt;
 
       if (!Basic->VarioAvailable) {
+        // estimate value from GPS
         Calculated->Vario = Gain / (Basic->Time - LastTime);
+      } else {
+        // get value from instrument
+        Calculated->Vario = Basic->Vario;
       }
 
       if (Calculated->Circling) {

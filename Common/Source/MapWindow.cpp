@@ -397,11 +397,19 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   static double XstartScreen, YstartScreen;
   double distance;
   char val;
+  static bool first = true;
 
   static DWORD dwDownTime=0, dwUpTime=0;
 
   switch (uMsg)
     {
+    case WM_ERASEBKGND:
+      // JMW trying to reduce flickering
+      if (first || MapDirty) {
+        first = false;
+        return (DefWindowProc (hWnd, uMsg, wParam, lParam));
+      } else
+        return TRUE;
     case WM_SIZE:
       hDrawBitMap = CreateCompatibleBitmap (hdcScreen, (int) LOWORD (lParam), (int) HIWORD (lParam));
       SelectObject(hdcDrawWindow, (HBITMAP)hDrawBitMap);

@@ -227,6 +227,8 @@
 #define IDC_AUDIOVARIO                  1214
 #define IDC_ABORTTASK                   1215
 #define IDC_ACKNOW                      1216
+#define IDC_PALTITUDE                   1217
+#define IDC_STATIC4                     1218
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -262,7 +264,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        237
 #define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1217
+#define _APS_NEXT_CONTROL_VALUE         1219
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

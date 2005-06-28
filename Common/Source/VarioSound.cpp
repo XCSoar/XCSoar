@@ -295,10 +295,15 @@ extern "C" {
     int i;
     double vv;
 
-    if (v==0) {
+    if (v<=0) {
       for (i=0; i<201; i++) {
-	variosound_volumescale[i]= 10;
-      }
+	vv = (i-100)/(double)v;
+	if (vv<0) {
+	  variosound_volumescale[i] = 7;
+	} else {
+	  variosound_volumescale[i]= 10;
+	}
+      } 
     } else {
       for (i=0; i<201; i++) {
 	vv = (i-100)/(double)v;
