@@ -26,7 +26,6 @@
 #include "Airspace.h"
 #include "Logger.h"
 #include "VarioSound.h"
-#include "device.h"
 
 #include <windows.h>
 #include <math.h>
@@ -627,6 +626,8 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           if(ThermalTime > 120)
             {
 
+              /* Don't set it immediately, go through the new
+                 wind model
               Calculated->WindSpeed = ThermalDrift/ThermalTime;
                                         
               if(DriftAngle >=180)
@@ -635,15 +636,15 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 DriftAngle += 180;
 
               Calculated->WindBearing = DriftAngle;
+              */
 
 	      Vector v;
 	      v.x = ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
 	      v.y = ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);
 	      
-	      //	      windanalyser->slot_newEstimate(v, 3);
+              windanalyser->slot_newEstimate(v, 6);
+              // 6 is the code for external estimates
 
-              // JMW: TODO update this so it changes slowly, maybe use my own 
-              // algorithm.
             }
         }
     }
@@ -1167,8 +1168,6 @@ void DoAutoMcReady(DERIVED_INFO *Calculated)
   static double tad=0.0;
   static double dmc=0.0;
 
-  double oldMacReady = MACREADY;
-
   tad = Calculated->TaskAltitudeDifference;
   
   if (tad > 20) {
@@ -1182,11 +1181,6 @@ void DoAutoMcReady(DERIVED_INFO *Calculated)
   }
   if (MACREADY<0.0) {
     MACREADY = 0.0;
-  }
-
-  if (oldMacReady != MACREADY){  
-    devPutMcReady(devA(), MACREADY);
-    devPutMcReady(devB(), MACREADY);
   }
 
   /* NOT WORKING

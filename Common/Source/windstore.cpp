@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.2 2005/06/23 12:22:08 jwharington Exp $
+**   $Id: windstore.cpp,v 1.3 2005/06/28 13:02:54 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -71,7 +71,7 @@ void WindStore::recalculateWind() {
 
   if (found) {
     if ((fabs(CurWind.x-_lastWind.x)>1.0) || 
-	(fabs(CurWind.y-_lastWind.y)>1.0)) {
+	(fabs(CurWind.y-_lastWind.y)>1.0) || updated) {
       _lastWind=CurWind;
       
       // was emit
