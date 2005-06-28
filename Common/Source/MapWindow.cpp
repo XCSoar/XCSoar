@@ -1665,7 +1665,9 @@ void DrawThermalBand(HDC hDC,RECT rc)
   // calculate averages
   int numtherm = 0;
   for (i=0; i<NUMTHERMALBUCKETS; i++) {
-    if (DerivedDrawInfo.ThermalProfileN[i]>0) {
+    if (DerivedDrawInfo.ThermalProfileN[i]>10) {
+      // now requires 10 items in bucket before displaying,
+      // to eliminate kinks
       Wt[i] = DerivedDrawInfo.ThermalProfileW[i]/DerivedDrawInfo.ThermalProfileN[i];
       if (Wt[i]<0) {
 	Wt[i]= 0.0;
