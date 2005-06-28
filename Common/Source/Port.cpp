@@ -14,10 +14,8 @@ HANDLE				hRead1Thread = NULL;              // Handle to the read thread
 
 BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 {
-  DWORD dwError,
-        dwThreadID;
+  DWORD dwError;
   DCB PortDCB;
-  COMMTIMEOUTS CommTimeouts;
 
   // Open the serial port.
   hPort1 = CreateFile (lpszPortName, // Pointer to the name of the port
@@ -83,28 +81,7 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
     return FALSE;
   }
 
-  // Retrieve the time-out parameters for all read and write operations
-  // on the port. 
-  GetCommTimeouts (hPort1, &CommTimeouts);
-
-  // Change the COMMTIMEOUTS structure settings.
-  CommTimeouts.ReadIntervalTimeout = MAXDWORD;
-  CommTimeouts.ReadTotalTimeoutMultiplier = 0;  
-  CommTimeouts.ReadTotalTimeoutConstant = 0; 
-  CommTimeouts.WriteTotalTimeoutMultiplier = 10;  
-  CommTimeouts.WriteTotalTimeoutConstant = 1000;    
-
-  // Set the time-out parameters for all read and write operations
-  // on the port. 
-  if (!SetCommTimeouts (hPort1, &CommTimeouts))
-  {
-    // Could not create the read thread.
-		CloseHandle (hPort1);
-    MessageBox (hWndMainWindow, TEXT("Unable to Set Serial Port Timers"), 
-                TEXT("Error"), MB_OK);
-    dwError = GetLastError ();
-    return FALSE;
-  }
+  Port1SetRxTimeout(0);
 
   // Direct the port to perform extended functions SETDTR and SETRTS
   // SETDTR: Sends the DTR (data-terminal-ready) signal.
@@ -112,24 +89,11 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   EscapeCommFunction (hPort1, SETDTR);
   EscapeCommFunction (hPort1, SETRTS);
 
-  // Create a read thread for reading data from the communication port.
-  if (hRead1Thread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )Port1ReadThread, 0, 0, 
-                                  &dwThreadID))
-  {
-    SetThreadPriority(hRead1Thread,
-		      THREAD_PRIORITY_NORMAL);
-    //THREAD_PRIORITY_ABOVE_NORMAL
-    CloseHandle (hRead1Thread);
+  if (!Port1StartRxThread()){
+    CloseHandle (hPort1);
+    return(FALSE);
   }
-  else
-  {
-    // Could not create the read thread.
-		CloseHandle (hPort1);
-    MessageBox (hWndMainWindow, TEXT("Unable to Start GPS Serial Port Handler"), 
-                TEXT("Error"), MB_OK);
-    dwError = GetLastError ();
-    return FALSE;
-  }
+
 
   return TRUE;
 }
@@ -173,7 +137,7 @@ DWORD Port1ReadThread (LPVOID lpvoid)
 	       | EV_RXCHAR 
 	       );
   
-  while ((hPort1 != INVALID_HANDLE_VALUE)&&(!CLOSETHREAD)) 
+  while ((hPort1 != INVALID_HANDLE_VALUE) && (!CLOSETHREAD)) 
   {
     int i=0;
 
@@ -184,29 +148,28 @@ DWORD Port1ReadThread (LPVOID lpvoid)
     }
 
     // Re-specify the set of events to be monitored for the port.
-    SetCommMask (hPort1, EV_RXFLAG | EV_CTS | EV_DSR | EV_RING
-    		 | EV_RXCHAR 
-		 );
+    SetCommMask (hPort1, EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR);
 
     if (
-	(dwCommModemStatus & EV_RXFLAG)
-		||(dwCommModemStatus & EV_RXCHAR)
-	)
+	    (dwCommModemStatus & EV_RXFLAG)
+		    ||(dwCommModemStatus & EV_RXCHAR)
+	    )
     {
 
       // Loop for waiting for the data.
       do 
       {
-	dwBytesTransferred = 0;
-        // Read the data from the serial port.
-	if (ReadFile (hPort1, inbuf, 1024, &dwBytesTransferred, 0)) {
+        dwBytesTransferred = 0;
+              // Read the data from the serial port.
+        if (ReadFile (hPort1, inbuf, 1024, &dwBytesTransferred, 0)) {
 
-	  for (int j=0; j<dwBytesTransferred; j++) {
-	    ProcessChar1 (inbuf[j]);
-	  }
-	} else {
-	  dwBytesTransferred = 0;
-	}
+	        for (unsigned int j=0; j<dwBytesTransferred; j++) {
+	          ProcessChar1 (inbuf[j]);
+	        }
+
+        } else {
+	        dwBytesTransferred = 0;
+        }
 		  
       } while (dwBytesTransferred != 0);
 
@@ -259,5 +222,100 @@ void Port1WriteString(TCHAR *Text)
 
 	for(i=0;i<len;i++)
 		Port1Write ((BYTE)Text[i]);
+}
+
+                                        // Stop Rx Thread
+                                        // return: TRUE on success, FALSE on error
+BOOL Port1StopRxThread(void){
+  
+  if (hPort1 == INVALID_HANDLE_VALUE) return(FALSE);
+
+  CLOSETHREAD = TRUE;
+  SetCommMask(hPort1, 0);
+
+  return(TRUE);
+
+}
+
+
+                                        // Restart Rx Thread
+                                        // return: TRUE on success, FALSE on error
+BOOL Port1StartRxThread(void){
+
+  DWORD dwThreadID, dwError;
+
+  CLOSETHREAD = FALSE;
+                                        // Create a read thread for reading data from the communication port.
+  if (hRead1Thread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )Port1ReadThread, 0, 0, &dwThreadID))
+  {
+    SetThreadPriority(hRead1Thread, THREAD_PRIORITY_NORMAL); //THREAD_PRIORITY_ABOVE_NORMAL
+    CloseHandle (hRead1Thread);
+  }
+  else                                  // Could not create the read thread.
+  {
+    MessageBox (hWndMainWindow, TEXT("Unable to Start GPS Serial Port Handler"), 
+                TEXT("Error"), MB_OK);
+    dwError = GetLastError ();
+    return FALSE;
+  }
+  return TRUE;
+}
+
+                                        // Get a single Byte
+                                        // return: char readed or EOF on error
+int Port1GetChar(void){
+
+  char  inbuf[2];
+  DWORD dwBytesTransferred;
+
+  if (hPort1 == INVALID_HANDLE_VALUE || !CLOSETHREAD) return(-1);
+  
+  if (ReadFile(hPort1, inbuf, 1, &dwBytesTransferred, 0)) {
+
+    if (dwBytesTransferred == 1)
+      return(inbuf[0]);
+
+  }
+
+  return(EOF);
+
+}
+
+                                        // Set Rx Timeout in ms
+                                        // Timeout: Rx receive timeout in ms
+                                        // return: last set Rx timeout or -1 on error
+int Port1SetRxTimeout(int Timeout){
+
+  COMMTIMEOUTS CommTimeouts;
+  int result;
+  DWORD dwError;
+
+  if (hPort1 == INVALID_HANDLE_VALUE) return(-1);
+
+  GetCommTimeouts(hPort1, &CommTimeouts);
+
+  result = CommTimeouts.ReadTotalTimeoutConstant;
+  
+                                        // Change the COMMTIMEOUTS structure settings.
+  CommTimeouts.ReadIntervalTimeout = MAXDWORD;
+  CommTimeouts.ReadTotalTimeoutMultiplier = 0;  
+  CommTimeouts.ReadTotalTimeoutConstant = Timeout; 
+  CommTimeouts.WriteTotalTimeoutMultiplier = 10;  
+  CommTimeouts.WriteTotalTimeoutConstant = 1000;    
+
+                                        // Set the time-out parameters for all read and write operations
+                                        // on the port. 
+  if (!SetCommTimeouts (hPort1, &CommTimeouts))
+  {
+                                        // Could not create the read thread.
+		CloseHandle (hPort1);
+    MessageBox (hWndMainWindow, TEXT("Unable to Set Serial Port Timers"), 
+                TEXT("Error"), MB_OK);
+    dwError = GetLastError ();
+    return(-1);
+  }
+
+  return(result);
+
 }
 
