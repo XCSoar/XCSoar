@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Process.h"
 #include "externs.h"
 #include "Utils.h"
+#include "device.h"
 
 // JMW added key codes,
 // so -1 down
@@ -133,6 +134,7 @@ void	DirectionProcessing(int UpDown)
 
 void	McReadyProcessing(int UpDown)
 {
+
 	if(UpDown==1) {
 		MACREADY += (double)0.2;
 
@@ -151,6 +153,10 @@ void	McReadyProcessing(int UpDown)
 	{
 		CALCULATED_INFO.AutoMcReady = !CALCULATED_INFO.AutoMcReady; // JMW toggle automacready
 	}
+
+  devPutMcReady(devA(), MACREADY);
+  devPutMcReady(devB(), MACREADY);
+
 	return;
 }
 

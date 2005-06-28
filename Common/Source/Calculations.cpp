@@ -26,6 +26,7 @@
 #include "Airspace.h"
 #include "Logger.h"
 #include "VarioSound.h"
+#include "device.h"
 
 #include <windows.h>
 #include <math.h>
@@ -1166,6 +1167,8 @@ void DoAutoMcReady(DERIVED_INFO *Calculated)
   static double tad=0.0;
   static double dmc=0.0;
 
+  double oldMacReady = MACREADY;
+
   tad = Calculated->TaskAltitudeDifference;
 
   if (tad > 20) {
@@ -1179,6 +1182,11 @@ void DoAutoMcReady(DERIVED_INFO *Calculated)
   }
   if (MACREADY<0.0) {
     MACREADY = 0.0;
+  }
+
+  if (oldMacReady != MACREADY){
+    devPutMcReady(devA(), MACREADY);
+    devPutMcReady(devB(), MACREADY);
   }
 
   /* NOT WORKING
