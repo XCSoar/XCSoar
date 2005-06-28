@@ -21,5 +21,9 @@ void Port2Write (BYTE);
 DWORD Port2ReadThread (LPVOID);
 void Port2WriteString(TCHAR *Text);
 
+BOOL Port1StopRxThread(void);
+BOOL Port1StartRxThread(void);
+int  Port1GetChar(void);
+int  Port1SetRxTimeout(int Timeout);
 
 #endif
