@@ -30,7 +30,6 @@
 #include "externs.h"
 #include "VarioSound.h"
 
-static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 static BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO);
@@ -46,7 +45,6 @@ static BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static BOOL Checksum(TCHAR *String);
 static double EastOrWest(double in, TCHAR EoW);
 static double NorthOrSouth(double in, TCHAR NoS);
 static double LeftOrRight(double in, TCHAR LoR);
@@ -83,7 +81,7 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
       return FALSE;
     }
 
-  if(!Checksum(String))
+  if(!NMEAChecksum(String))
     {
       return FALSE;
     }
@@ -415,6 +413,7 @@ BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   LastTime = ThisTime;
 
+  GPSCONNECT = TRUE;
   return TRUE;
 }
 
@@ -541,7 +540,7 @@ BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 
-BOOL Checksum(TCHAR *String)
+BOOL NMEAChecksum(TCHAR *String)
 {
   unsigned char CalcCheckSum = 0;
   unsigned char ReadCheckSum;
