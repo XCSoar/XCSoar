@@ -15,6 +15,9 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+//   $Id$
+
 */
 #include "stdafx.h"
 
@@ -1236,11 +1239,12 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         {
           SHSipPreference(hDlg,SIP_FORCEDOWN);
 
+	  double lastBugs = BUGS;
+	  double lastBallast = BALLAST;
+
           T1 = GetDlgItemInt(hDlg,IDC_BUGS,&T2,FALSE);
           if(T2)
             {
-              BUGS = (double)T1;
-              double lastBugs = BUGS;
 
               BUGS = (double)T1;
               BUGS /=100;
@@ -1254,7 +1258,6 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           T1 = GetDlgItemInt(hDlg,IDC_BALLAST,&T2,FALSE);
           if(T2)
             {
-              double lastBallast = BALLAST;
               BALLAST = (double)T1;
               BALLAST /=100;
 	      SetBallast();

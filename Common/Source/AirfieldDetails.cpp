@@ -1,3 +1,5 @@
+//   $Id$
+
 #include "AirfieldDetails.h"
 
 #include "stdafx.h"
