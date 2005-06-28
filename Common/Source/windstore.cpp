@@ -71,7 +71,7 @@ void WindStore::recalculateWind() {
 
   if (found) {
     if ((fabs(CurWind.x-_lastWind.x)>1.0) ||
-	(fabs(CurWind.y-_lastWind.y)>1.0)) {
+	(fabs(CurWind.y-_lastWind.y)>1.0) || updated) {
       _lastWind=CurWind;
 
       // was emit

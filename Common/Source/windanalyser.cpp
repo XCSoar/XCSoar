@@ -222,10 +222,8 @@ void WindAnalyser::_calcWind() {
   a.x = 0.0;
   a.y = 0.0;
 
-  if (mmax>0.0) {
-    a.x = -sp*maxVector.x/mmax;
-    a.y = -sp*maxVector.y/mmax;
-  }
+  a.x = -sp*maxVector.x/mmax;
+  a.y = -sp*maxVector.y/mmax;
 
   //take both directions for min and max vector into account
   //create a vector object for the resulting wind
@@ -239,11 +237,16 @@ void WindAnalyser::_calcWind() {
 
 void WindAnalyser::slot_newEstimate(Vector a, int quality)
 {
-  if (circleCount<2) quality--;
-  if (circleCount<1) quality--;
-  if (quality<1) return;   //measurment quality too low
 
-  quality= min(quality,5);  //5 is maximum quality, make sure we honour that.
+  if (quality==6) {
+    quality = 3; // provided externally
+  } else {
+    quality= min(quality,5);  //5 is maximum quality, make sure we honour that.
+
+    if (circleCount<2) quality--;
+    if (circleCount<1) quality--;
+    if (quality<1) return;   //measurment quality too low
+  }
 
   windstore.slot_measurement(a, quality);
 }
