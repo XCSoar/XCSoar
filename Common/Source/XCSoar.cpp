@@ -40,6 +40,9 @@
 
 #include "Terrain.h"
 #include "VarioSound.h"
+#include "device.h"
+#include "devCAI302.h"
+#include "devEW.h"
 
 HINSTANCE                       hInst;                                  // The current instance
 HWND                                    hWndCB;                                 // The command bar handle
@@ -105,14 +108,14 @@ bool          AutoMacReady = false;
 
 NMEA_INFO                       GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
+BOOL GPSCONNECT = FALSE;
+BOOL VARIOCONNECT = FALSE;
 bool          TaskAborted = false;
 
 extern bool MapDirty;
 
 //Local Static data
 static int iTimerID;
-static BOOL GPSCONNECT = FALSE;
-static BOOL VARIOCONNECT = FALSE;
 
 // Final Glide Data
 double SAFETYALTITUDEARRIVAL = 500;
@@ -512,6 +515,19 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   RestartCommPorts();
 
 #endif
+
+  cai302Register();
+  ewRegister();
+	// ... register all supported devices
+
+  devInit();
+  cai302Install(devA());  // hard wired temp fix
+
+  devInit(devA());
+  devInit(devB());
+
+  devOpen(devA(),0);
+  devOpen(devB(),1);
 
   FullScreen();
 
@@ -1381,12 +1397,18 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                       StartLogger(strAssetNumber);
 		      LoggerHeader();
                       StartDeclaration();
+                      devDeclBegin(devA(), TEXT("a pilot"), TEXT("a class"), TEXT("a ID"));
+                      devDeclBegin(devB(), TEXT("a pilot"), TEXT("a class"), TEXT("a ID"));
                       for(i=0;i<MAXTASKPOINTS;i++)
                         {
                           if(Task[i].Index == -1) break;
                           AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
+                          devDeclAddWayPoint(devA(), &WayPointList[Task[i].Index]);
+                          devDeclAddWayPoint(devB(), &WayPointList[Task[i].Index]);
                         }
                       EndDeclaration();
+                      devDeclEnd(devA());
+                      devDeclEnd(devB());
                     }
                 }
 	      FullScreen();
@@ -1436,91 +1458,42 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
-#define WAIT 0
-#define FILL 1
-int OK_Flag = 1; // Flag added to signal good or bad EW logger reply to turnpoint info
-int IO_Flag = 1; // Flag added to signal sucessful entry of EW logger into I/O Mode
 
 void ProcessChar1 (char c)
 {
   static TCHAR BuildingString[100];
   static int i = 0;
-  static int State = WAIT;
-  OK_Flag = 1; // Set flag to failed state
-  IO_Flag = 1; // Set flag to failed state
 
-  if(State == WAIT)
+  if (i<90)
     {
-      if(c)  // Modified from "$" so that BuildingString can be
-	     // used for logger acknowledgements
-	     // was if (c=='$')
+      if(c=='\n')
         {
-          BuildingString[0] = c;
-          BuildingString[1] = '\0';
-          i=1;
-          State = FILL;
-        }
-    }
-  else
-    {
-      if(i>90)
-        {
-          State = WAIT;
+          BuildingString[i] = '\0';
+
+          LockFlightData();
+          devParseNMEA(devGetDeviceOnPort(0), BuildingString, &GPS_INFO);
+          UnlockFlightData();
+
         }
       else
         {
-          if(c=='\n')
-            {
-              BuildingString[i] = '\0';
-              State = WAIT;
-
-              //#ifdef DEBUG
-              //              DebugStore(BuildingString);
-              //#endif
-
-              if(BuildingString[0]=='$')  // Additional "if" to find GPS strings
-                {
-                  LockFlightData();
-
-                  bool dodisplay = false;
-
-                  if(ParseNMEAString(BuildingString,&GPS_INFO))
-                    {
-                      GPSCONNECT  = TRUE;
-                      if(GPS_INFO.NAVWarning == FALSE)
-                        {
-			  /* JMW: wait for main thread to do this,
-			     so don't get multiple updates
-                          if(DoCalculations(&GPS_INFO,&CALCULATED_INFO))
-                            {
-                              AssignValues();
-                              dodisplay = true;
-                            }
-			  */
-                        }
-
-                    }
-                  UnlockFlightData();
-                }
-              else //   else parse EW logger string
-                if(_tcscmp(BuildingString,TEXT("OK\r"))==0)     OK_Flag = 0;
-              if(_tcscmp(BuildingString,TEXT("IO Mode.\r"))==0) IO_Flag = 0;
-            }
-          else
-            {
-              BuildingString[i++] = c;
-            }
+          BuildingString[i++] = c;
+          return;
         }
     }
+
+  i = 0;
 }
 
 void ProcessChar2 (char c)
 {
+#define WAIT 0
+#define FILL 1
   static TCHAR BuildingString[100];
   static int i = 0;
   static int State = WAIT;
-  OK_Flag = 1; // Set flag to failed state
-  IO_Flag = 1; // Set flag to failed state
+  int OK_Flag = 1; // Set flag to failed state
+  int IO_Flag = 1; // Set flag to failed state
 
   if(State == WAIT)
     {
@@ -1821,7 +1794,9 @@ void ProcessTimer(void)
 
   if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
     {
-      Port1WriteString(TEXT("NMEA\r\n"));
+
+      devLinkTimeout(devA());
+      devLinkTimeout(devB());
 
       if(LOCKWAIT == TRUE)
         {
