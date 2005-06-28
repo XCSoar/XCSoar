@@ -211,6 +211,8 @@ DWORD Port2ReadThread (LPVOID lpvoid)
 
     }
 
+    //    Sleep(5); // give port some time to fill
+
     // Retrieve modem control-register values.
     GetCommModemStatus (hPort2, &dwCommModemStatus);
 

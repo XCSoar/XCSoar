@@ -21,7 +21,7 @@
 #include "externs.h"
 #include "Dialogs.h"
 #include "resource.h"
-#include "utils.h"
+#include "Utils.h"
 
 
 #include <windows.h>
@@ -46,6 +46,7 @@ void ReadWayPointFile(HANDLE hFile)
 
   int Tick = 0; int Tock=0;
   DWORD fSize, fPos=0;
+
   HWND hProgress;
 
   hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);

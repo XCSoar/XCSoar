@@ -107,6 +107,8 @@ NMEA_INFO                       GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
 bool          TaskAborted = false;
 
+extern bool MapDirty;
+
 //Local Static data
 static int iTimerID;
 static BOOL GPSCONNECT = FALSE;
@@ -227,7 +229,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Altitude AGL"), TEXT("A.G.L."), TEXT("%2.0f"), 0, NoProcessing, 20, 0},
 
   // 2
-  {TEXT("Average"), TEXT("Average"), TEXT("%2.1f"), 0, NoProcessing, 7, 24},
+  {TEXT("Average"), TEXT("Average"), TEXT("%-2.1f"), 0, NoProcessing, 7, 24},
 
   // 3
   {TEXT("Bearing"), TEXT("Bearing"), TEXT("%2.0f°T"), 0, NoProcessing, 6, 32},
@@ -242,7 +244,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Ground Speed"), TEXT("Speed"), TEXT("%2.0f"), 0, SpeedProcessing, 23, 3},
 
   // 7
-  {TEXT("Last Thermal Avg"), TEXT("L A"), TEXT("%2.1f"), 0, NoProcessing, 8, 2},
+  {TEXT("Last Thermal Avg"), TEXT("L A"), TEXT("%-2.1f"), 0, NoProcessing, 8, 2},
 
   // 8
   {TEXT("Last Thermal Gain"), TEXT("L G"), TEXT("%2.0f"), 0, NoProcessing, 9, 7},
@@ -293,7 +295,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Track"), TEXT("Track"), TEXT("%2.0f°T"), 0, DirectionProcessing, 32, 6},
 
   // 24
-  {TEXT("Vario"), TEXT("Vario"), TEXT("%2.1f"), 0, NoProcessing, 2, 22},
+  {TEXT("Vario"), TEXT("Vario"), TEXT("%-2.1f"), 0, NoProcessing, 2, 22},
 
   // 25
   {TEXT("Wind Speed"), TEXT("Wind S"), TEXT("%2.0f"), 0, WindSpeedProcessing, 26, 26},
@@ -362,7 +364,6 @@ void                                            DebugStore(TCHAR *Str);
 
 
 extern RECT MapRect;
-extern bool MapDirty;
 extern BOOL GpsUpdated;
 
 void HideMenu() {
@@ -377,9 +378,10 @@ void ShowMenu() {
 
 
 void FullScreen() {
+  SHFullScreen(hWndMainWindow,
+               SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
-	       GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-  SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+  	       GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
   MapDirty = true;
 }
 
@@ -568,6 +570,8 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.hbrBackground = (HBRUSH)GetStockObject (WHITE_BRUSH);
   wc.lpszMenuName = 0;
   wc.lpszClassName = TEXT("MapWindowClass");
+
+  MapDirty = true;
 
   return RegisterClass(&wc);
 
@@ -872,6 +876,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
   switch (message)
     {
+    case WM_ERASEBKGND:
+      return TRUE; // JMW trying to reduce screen flicker
+
     case WM_COMMAND:
       return MainMenu(hWnd, message, wParam, lParam);
       break;
@@ -1392,9 +1399,6 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       FullScreen();
 
-      /*
-      SwitchToMapWindow();
-      */
       FocusTimeOut = 0;
       if (!InfoWindowActive) {
 	ShowMenu();
@@ -1494,6 +1498,7 @@ void ProcessChar1 (char c)
                             }
 			  */
                         }
+
                     }
                   UnlockFlightData();
                 }
@@ -1673,8 +1678,9 @@ void DisplayText(void)
     return;
 
   int i;
-  static TCHAR Value[100] = TEXT("");
-  static TCHAR Caption[100] = TEXT("");
+  static TCHAR Value[NUMINFOWINDOWS][100];
+  static TCHAR Caption[NUMINFOWINDOWS][100];
+
   int DisplayType;
 
 #ifdef _MAP_
@@ -1687,7 +1693,9 @@ void DisplayText(void)
 
   for(i=0;i<NUMINFOWINDOWS;i++)
     {
-      LockFlightData();
+      Value[i][0]= 0;
+      Caption[i][0]= 0;
+
       if (CALCULATED_INFO.Circling == TRUE)
         DisplayType = InfoType[i] & 0xff;
       else if (CALCULATED_INFO.FinalGlide == TRUE) {
@@ -1695,46 +1703,51 @@ void DisplayText(void)
       } else {
         DisplayType = (InfoType[i] >> 8) & 0xff;
       }
-      UnlockFlightData();
 
       if(DisplayType == 14) // Waypoint Name
         {
           if(ActiveWayPoint >=0)
             {
 
-              _stprintf(Caption,Data_Options[DisplayType].Title );
+              _stprintf(Caption[i],Data_Options[DisplayType].Title );
               if ( DisplayTextType == DISPLAYFIRSTTHREE)
                 {
-                  _tcsncpy(Value,WayPointList[ Task[ActiveWayPoint].Index ].Name,3);
-                  Value[3] = '\0';
+                  _tcsncpy(Value[i],WayPointList[ Task[ActiveWayPoint].Index ].Name,3);
+                  Value[i][3] = '\0';
                 }
               else if( DisplayTextType == DISPLAYNUMBER)
                 {
-                  _stprintf(Value,TEXT("%d"),WayPointList[ Task[ActiveWayPoint].Index ].Number );
+                  _stprintf(Value[i],TEXT("%d"),WayPointList[ Task[ActiveWayPoint].Index ].Number );
                 }
               else
                 {
-                  _tcsncpy(Value,WayPointList[ Task[ActiveWayPoint].Index ].Name,5);
-                  Value[5] = '\0';
+                  _tcsncpy(Value[i],WayPointList[ Task[ActiveWayPoint].Index ].Name,5);
+                  Value[i][5] = '\0';
                 }
             }
           else
             {
-              _stprintf(Caption,Data_Options[DisplayType].Title );
-              Value[0] = '\0';
+              _stprintf(Caption[i],Data_Options[DisplayType].Title );
+              Value[i][0] = '\0';
             }
         }
       else
         {
-          _stprintf(Caption,Data_Options[DisplayType].Title );
-          _stprintf(Value,Data_Options[DisplayType].Format, Data_Options[DisplayType].Value );
+          _stprintf(Caption[i],Data_Options[DisplayType].Title );
+          _stprintf(Value[i],Data_Options[DisplayType].Format, Data_Options[DisplayType].Value );
 
         }
 
-      SetWindowText(hWndInfoWindow[i],Value);
-      SetWindowText(hWndTitleWindow[i],Caption);
 
     }
+
+  // this is deferred to the end, to speed up display, reduce flickering
+  for(i=0;i<NUMINFOWINDOWS;i++) {
+      SetWindowText(hWndInfoWindow[i],Value[i]);
+      SetWindowText(hWndTitleWindow[i],Caption[i]);
+      UpdateWindow(hWndTitleWindow[i]);
+      UpdateWindow(hWndInfoWindow[i]);
+  }
 
   UnlockNavBox();
 

@@ -123,6 +123,17 @@ bool LoadAirspaceBinary() {
   if(hFile != INVALID_HANDLE_VALUE )
 
     {
+
+
+      HWND hProgress;
+
+      hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
+      SetDlgItemText(hProgress,IDC_MESSAGE,TEXT("Loading Airspace File..."));
+      SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+      ShowWindow(hProgress,SW_SHOW);
+      UpdateWindow(hProgress);
+
+
       ReadFile(hFile,&NumberOfAirspaceAreas,
 	       sizeof(unsigned int),&dwNumBytesRead,NULL);
 
@@ -164,6 +175,8 @@ bool LoadAirspaceBinary() {
       }
 
       CloseHandle(hFile);
+      DestroyWindow(hProgress);
+
       return true;
     }
   return false; // couldn't find it...
@@ -178,7 +191,6 @@ void ReadAirspace(HANDLE hFile)
 {
   int Mode = WAITING;
   int Tick = 0; int Tock=0;
-  HWND hProgress;
   double fSize, fPos;
   DWORD dwPos;
   TCHAR szTemp[100];
@@ -186,6 +198,10 @@ void ReadAirspace(HANDLE hFile)
   LineCount = 0;
 
   ReadMode = COUNT;
+
+
+  HWND hProgress;
+
   hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
   SetDlgItemText(hProgress,IDC_MESSAGE,TEXT("Loading Airspace File..."));
   SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
