@@ -94,11 +94,11 @@ BOOL cai302Open(PDeviceDescriptor_t d, int Port){
 
   d->Port = Port;
 
-  //TCHAR  szTmp[32];
+  TCHAR  szTmp[32];
 
-  // _stprintf(szTmp, TEXT("%cLOG %d\r\n"), CtrlC, 0);
+  _stprintf(szTmp, TEXT("%cLOG %d\r\n"), CtrlC, 0);
 
-  // Port1WriteString(szTmp);
+  Port1WriteString(szTmp);
   return(TRUE);
 }
 
@@ -172,7 +172,7 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
     }
   MinLon *=60;
 
-  _stprintf(szTmp, TEXT("D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d"), 
+  _stprintf(szTmp, TEXT("D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r\n"), 
     DeclIndex,
     DegLat, MinLat, NoS, 
     DegLon, MinLon, EoW, 
@@ -205,7 +205,7 @@ BOOL cai302Install(PDeviceDescriptor_t d){
   d->PutMcReady = cai302PutMcReady;
   d->PutBugs = cai302PutBugs;
   d->PutBallast = cai302PutBallast;
-  d->Open = NULL;
+  d->Open = cai302Open;
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = NULL;

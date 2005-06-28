@@ -62,7 +62,7 @@ PDeviceDescriptor_t devGetDeviceOnPort(int Port){
 
 BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
-  if (d->ParseNMEA != NULL)
+  if (d != NULL && d->ParseNMEA != NULL)
     if ((d->ParseNMEA)(d, String, GPS_INFO))
       return(TRUE);
 
@@ -93,84 +93,84 @@ so don't get multiple updates
 
 
 BOOL devPutMcReady(PDeviceDescriptor_t d, double McReady){
-  if (d->PutMcReady != NULL)
+  if (d != NULL && d->PutMcReady != NULL)
     return ((d->PutMcReady)(d, McReady));
   else
     return(TRUE);
 }
 
 BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs){
-  if (d->PutBugs != NULL)
+  if (d != NULL && d->PutBugs != NULL)
     return ((d->PutBugs)(d, Bugs));
   else
     return(TRUE);
 }
 
 BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast){
-  if (d->PutBallast != NULL)
+  if (d != NULL && d->PutBallast != NULL)
     return ((d->PutBallast)(d, Ballast));
   else
     return(TRUE);
 }
 
 BOOL devOpen(PDeviceDescriptor_t d, int Port){
-  if (d->Open != NULL)
+  if (d != NULL && d->Open != NULL)
     return ((d->Open)(d, Port));
   else
     return(TRUE);
 }
 
 BOOL devClose(PDeviceDescriptor_t d){
-  if (d->Close != NULL)
+  if (d != NULL && d->Close != NULL)
     return ((d->Close)(d));
   else
     return(TRUE);
 }
 
 BOOL devInit(PDeviceDescriptor_t d){
-  if (d->Init != NULL)
+  if (d != NULL && d->Init != NULL)
     return ((d->Init)(d));
   else
     return(TRUE);
 }
 
 BOOL devLinkTimeout(PDeviceDescriptor_t d){
-  if (d->LinkTimeout != NULL)
+  if (d != NULL && d->LinkTimeout != NULL)
     return ((d->LinkTimeout)(d));
   else
     return(TRUE);
 }
 
 BOOL devDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
-  if (d->DeclBegin != NULL)
+  if (d != NULL && d->DeclBegin != NULL)
     return ((d->DeclBegin)(d, PilotsName, Class, ID));
   else
     return(FALSE);
 }
 
 BOOL devDeclEnd(PDeviceDescriptor_t d){
-  if (d->DeclEnd != NULL)
+  if (d != NULL && d->DeclEnd != NULL)
     return ((d->DeclEnd)(d));
   else
     return(FALSE);
 }
 
 BOOL devDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
-  if (d->DeclAddWayPoint != NULL)
+  if (d != NULL && d->DeclAddWayPoint != NULL)
     return ((d->DeclAddWayPoint)(d, wp));
   else
     return(FALSE);
 }
 
 BOOL devIsLogger(PDeviceDescriptor_t d){
-  if (d->IsLogger != NULL)
+  if (d != NULL && d->IsLogger != NULL)
     return ((d->IsLogger)(d));
   else
     return(FALSE);
 }
 
 BOOL devIsGPSSource(PDeviceDescriptor_t d){
-  if (d->IsGPSSource != NULL)
+  if (d != NULL && d->IsGPSSource != NULL)
     return ((d->IsGPSSource)(d));
   else
     return(FALSE);
