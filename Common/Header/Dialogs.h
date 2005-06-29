@@ -36,4 +36,6 @@ void AssignedArea(void);
 LRESULT CALLBACK LoggerDetails 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AudioSettings					(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
+void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio=12);
+
 #endif
