@@ -986,6 +986,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           if (!InfoWindowActive) {
 	    TrailActive = !TrailActive;
 
+
 	    if (EnableSoundModes) {
 	      if (TrailActive) {
 		PlayResource(TEXT("IDR_INSERT"));
@@ -993,6 +994,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PlayResource(TEXT("IDR_REMOVE"));
 	      }
 	    }
+
+      // ARH Let the user know what's happened
+      if (TrailActive)
+        ShowStatusMessage(TEXT("SnailTrail ON"), 2000);
+      else
+        ShowStatusMessage(TEXT("SnailTrail OFF"), 2000);
+
             break;
           }
 
@@ -1033,6 +1041,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PlayResource(TEXT("IDR_REMOVE"));
 	      }
 	    }
+        // ARH Let the user know what's happened
+        if (EnableSoundVario)
+          ShowStatusMessage(TEXT("Vario Sounds ON"), 2000);
+        else
+          ShowStatusMessage(TEXT("Vario Sounds OFF"), 2000);
 
             break;
           }
@@ -1071,6 +1084,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
 
           UnlockFlightData();
+
+          // ARH Let the user know what's happened
+          ShowStatusMessage(TEXT("Dropped marker"), 1500);
+
 
           break;
 
