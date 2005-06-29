@@ -16,10 +16,11 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.11 2005/06/28 13:41:03 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.12 2005/06/29 22:22:00 aharrison24 Exp $
 
 */
 #include "stdafx.h"
+#include "compatibility.h"
 
 #include "dialogs.h"
 #include "resource.h"
@@ -2626,5 +2627,136 @@ LRESULT CALLBACK LoggerDetails(HWND hDlg, UINT message,
   return FALSE;
 }
 
+
+
+// ARH: Status Message functions
+// Used to show a brief status message to the user
+// Could be used to display debug messages
+// or info messages like "Map panning OFF"
+/////////////////////////////////////////////////////
+WNDPROC fnOldStatusMsgWndProc;
+
+// Intercept messages destined for the Status Message window
+LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+
+  switch (message) {
+  case WM_LBUTTONDOWN : // Fall through
+  case WM_TIMER :
+    // Kill the window when timer fires
+    KillTimer(hwnd, wParam);
+    DestroyWindow(hwnd);
+    break;
+  }
+
+  // Pass message on to original window proc
+  return CallWindowProc(fnOldStatusMsgWndProc, hwnd, message, wParam, lParam);
+}
+
+
+
+
+// Pop up a text dialog for a specified time
+// period in milliseconds
+//
+// If delay_ms==0 the window will stay up until clicked
+//
+// Font size is (optionally) set using iFontHeightRatio
+// - specifies the number of rows of text that would fit
+// on the entire screen
+//
+// Insert linebreaks by using carriage return AND
+// linefeed characters.  ie TEXT("Line 1\r\nLine 2")
+// otherwise you'll get funny characters appearing
+void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
+
+  HWND hWnd;
+  HFONT hFont;
+  LOGFONT logfont;
+  RECT rc;
+
+  int fontHeight;
+  int widthMain, heightMain;
+  int widthStatus, heightStatus;
+  int linecount;
+
+  // Check inputs are valid
+  if (delay_ms < 0) return;
+
+  if (iFontHeightRatio < 2)  iFontHeightRatio = 2;
+  if (iFontHeightRatio > 20) iFontHeightRatio = 20;
+  
+  // Get size of main window
+  GetClientRect(hWndMainWindow, &rc);
+  widthMain  = rc.right - rc.left;
+  heightMain = rc.bottom - rc.top;
+
+
+  // Build a font of the correct height
+  fontHeight = (int)((rc.bottom-rc.top)/iFontHeightRatio);
+  
+  memset ((char *)&logfont, 0, sizeof (logfont));  
+  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
+  logfont.lfHeight = fontHeight;
+  logfont.lfWidth =  0;
+  logfont.lfWeight = FW_BOLD;
+
+#ifndef NOCLEARTYPE
+  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY;
+#endif
+
+  hFont = CreateFontIndirect (&logfont);
+
+
+  // Create a child window to contain status message
+  hWnd = CreateWindow(TEXT("EDIT"), text,
+    WS_VISIBLE|WS_CHILD|ES_MULTILINE|ES_CENTER|WS_BORDER|ES_READONLY, 
+    0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
+
+  // Apply font to window
+  SendMessage(hWnd,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
+  
+  // Now find out what size the window needs to be
+  widthStatus  = widthMain * 0.95;
+  heightStatus = fontHeight * 1.2;
+  
+  // Center it in the middle of the Main Window
+  SetWindowPos(hWnd,HWND_TOPMOST,
+	  (widthMain-widthStatus)/2, (heightMain-heightStatus)/2,
+    widthStatus, heightStatus,
+    SWP_SHOWWINDOW);
+
+  // If there are multiple lines of text when using the current
+  // width, then we need to increase the height and reposition
+  linecount = SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
+
+  if (linecount > 1) {
+    heightStatus = heightStatus * linecount;
+
+    if (heightStatus > heightMain) heightStatus = heightMain;
+
+    SetWindowPos(hWnd,HWND_TOPMOST,
+  	  (widthMain-widthStatus)/2, (heightMain-heightStatus)/2,
+      widthStatus, heightStatus,
+      SWP_SHOWWINDOW);
+  }
+
+
+
+  // Subclass window function so that we can trap timer messages
+  fnOldStatusMsgWndProc = (WNDPROC) SetWindowLong(hWnd, GWL_WNDPROC, (LONG) StatusMsgWndTimerProc) ;  
+
+  if (delay_ms) {
+    // Set timer to specified timeout.
+    // Window will close when timer fires
+    if (!SetTimer(hWnd, 1, delay_ms, NULL))
+      DestroyWindow(hWnd);  // Couldn't init timer
+  }
+  
+  // FINALLY, display the window for the user's perusal
+  ShowWindow(hWnd,SW_SHOW);
+  UpdateWindow(hWnd);
+
+}
 
 
