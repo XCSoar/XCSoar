@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.18 2005/06/28 15:05:00 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.19 2005/06/29 23:01:00 aharrison24 Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -986,6 +986,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           if (!InfoWindowActive) {
 	    TrailActive = !TrailActive;
 
+
 	    if (EnableSoundModes) {
 	      if (TrailActive) {
 		PlayResource(TEXT("IDR_INSERT")); 
@@ -993,6 +994,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PlayResource(TEXT("IDR_REMOVE")); 
 	      }
 	    }
+
+      // ARH Let the user know what's happened
+      if (TrailActive)
+        ShowStatusMessage(TEXT("SnailTrail ON"), 2000);
+      else
+        ShowStatusMessage(TEXT("SnailTrail OFF"), 2000);
+
             break;
           }
 
@@ -1033,6 +1041,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PlayResource(TEXT("IDR_REMOVE")); 
 	      }
 	    }
+        // ARH Let the user know what's happened
+        if (EnableSoundVario)
+          ShowStatusMessage(TEXT("Vario Sounds ON"), 2000);
+        else
+          ShowStatusMessage(TEXT("Vario Sounds OFF"), 2000);
 
             break;
           }
@@ -1071,6 +1084,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
 
           UnlockFlightData();
+
+          // ARH Let the user know what's happened
+          ShowStatusMessage(TEXT("Dropped marker"), 1500);
+
 
           break;
 
