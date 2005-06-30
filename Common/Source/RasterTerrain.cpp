@@ -78,10 +78,10 @@ short RasterTerrain::LookupTerrainCache(long SeekPos) {
 }
 
 float RasterTerrain::GetTerrainSlopeStep() {
-    float kpixel = 256.0/(
+    float kpixel = (float)256.0/(
 			  GetTerrainStepSize()
-                          *rounding
-                          *2);
+                          * (float)rounding
+                          * (float)2.0);
     return kpixel;
 }
 
@@ -89,7 +89,7 @@ float RasterTerrain::GetTerrainSlopeStep() {
 
 float RasterTerrain::GetTerrainStepSize() {
   // this is approximate of course..
-  return 250.0/0.0025*TerrainInfo.StepSize;
+  return (float)(250.0/0.0025*TerrainInfo.StepSize);
 }
 
 
