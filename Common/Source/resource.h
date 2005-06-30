@@ -130,7 +130,9 @@
 #define IDC_COMMPORT2                   1060
 #define IDC_COMMPORT                    1061
 #define IDC_NAVBOXOPTION                1062
+#define IDC_DEVICE                      1062
 #define IDC_CTR                         1063
+#define IDC_DEVICE2                     1063
 #define IDC_CYLINDER                    1064
 #define IDC_CYLINDERRADIUS              1065
 #define IDC_DANGER                      1066
@@ -157,6 +159,7 @@
 #define IDC_LIFT_METRES                 1090
 #define IDC_LOAD                        1092
 #define IDC_MESSAGE                     1094
+#define IDC_DECLARE                     1094
 #define IDC_NOGLIDER                    1096
 #define IDC_NORTHUP                     1097
 #define IDC_OSVERSION                   1098
@@ -262,7 +265,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        237
+#define _APS_NEXT_RESOURCE_VALUE        238
 #define _APS_NEXT_COMMAND_VALUE         40025
 #define _APS_NEXT_CONTROL_VALUE         1219
 #define _APS_NEXT_SYMED_VALUE           102

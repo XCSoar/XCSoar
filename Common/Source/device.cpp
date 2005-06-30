@@ -10,23 +10,58 @@
 
 #include "device.h"
 
+#define debugIGNORERESPONCE 0
+
+DeviceRegister_t   DeviceRegister[NUMREGDEV];
 DeviceDescriptor_t DeviceList[NUMDEV];
+int DeviceRegisterCount = 0;
 
-static DeviceRegister_t   DeviceRegister[NUMREGDEV];
 
-static DeviceRegisterCount = 0;
+BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token){
 
-BOOL devRegister(TCHAR *Name, int Flags){
+  int i=0, ch;
+
+  while ((ch = (d->Com.GetChar)()) != EOF){
+
+    if (token[i] == ch) 
+      i++;
+    else
+      i=0;
+
+    if ((unsigned)i == _tcslen(token))
+      return(TRUE);
+
+  }
+
+  #if debugIGNORERESPONCE > 0
+  return(TRUE);
+  #endif
+  return(FALSE);
+
+}
+
+
+BOOL devRegister(TCHAR *Name, int Flags, BOOL (*Installer)(PDeviceDescriptor_t d)){
   if (DeviceRegisterCount >= NUMREGDEV)
-    return(TRUE);
+    return(FALSE);
   DeviceRegister[DeviceRegisterCount].Name = Name;
   DeviceRegister[DeviceRegisterCount].Flags = Flags;
+  DeviceRegister[DeviceRegisterCount].Installer = Installer;
   DeviceRegisterCount++;
+  return(TRUE);
+}
+
+BOOL decRegisterGetName(int Index, TCHAR *Name){
+  Name[0] = '\0';
+  if (Index < 0 || Index >= DeviceRegisterCount) 
+    return (FALSE);
+  _tcscpy(Name, DeviceRegister[Index].Name);
   return(TRUE);
 }
 
 BOOL devInit(void){
   int i;
+  TCHAR DeviceName[DEVNAMESIZE];
 
   for (i=0; i<NUMDEV; i++){
     DeviceList[i].Port = -1;
@@ -45,6 +80,49 @@ BOOL devInit(void){
     DeviceList[i].IsLogger = NULL;
     DeviceList[i].IsGPSSource = NULL;
   }
+
+  ReadDeviceSettings(0, DeviceName);
+
+  for (i=0; i<DeviceRegisterCount; i++){
+    if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
+      DeviceRegister[i].Installer(devA());
+
+      devA()->Com.WriteString = Port1WriteString;
+      devA()->Com.StopRxThread = Port1StopRxThread;
+      devA()->Com.StartRxThread = Port1StartRxThread;
+      devA()->Com.GetChar = Port1GetChar;
+      devA()->Com.SetRxTimeout = Port1SetRxTimeout;
+      devA()->Com.SetBaudrate = Port1SetBaudrate;
+
+      devInit(devA());
+      devOpen(devA(), 0);
+
+      break;
+    }
+  }
+
+
+  ReadDeviceSettings(1, DeviceName);
+
+  for (i=0; i<DeviceRegisterCount; i++){
+    if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
+      DeviceRegister[i].Installer(devB());
+
+/* todo port2 driver's
+      devB()->Com.WriteString = Port2WriteString;
+      devB()->Com.StopRxThread = Port2StopRxThread;
+      devB()->Com.StartRxThread = Port2StartRxThread;
+      devB()->Com.GetChar = Port2GetChar;
+      devB()->Com.SetRxTimeout = Port2SetRxTimeout;
+      devB()->Com.SetBaudrate = Port2SetBaudrate;
+*/
+      devInit(devB());
+      devOpen(devB(), 1);
+
+      break;
+    }
+  }
+
   return(TRUE);
 }
 
@@ -58,6 +136,7 @@ PDeviceDescriptor_t devGetDeviceOnPort(int Port){
   }
   return(NULL);
 }
+
 
 
 BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){

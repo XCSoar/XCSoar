@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.19 2005/06/29 23:01:00 aharrison24 Exp $
+  $Id: XCSoar.cpp,v 1.20 2005/06/30 17:15:11 samgi Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -523,14 +523,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 	// ... register all supported devices
 
   devInit();
-  cai302Install(devA());  // hard wired temp fix
 
-  devInit(devA());
-  devInit(devB());
-
-  devOpen(devA(),0);
-  devOpen(devB(),1);
-  
   FullScreen();
 
   // Main message loop:
@@ -1334,7 +1327,12 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               if(COMPORTCHANGED)
                 {
 
-		  RestartCommPorts();
+                  devClose(devA());
+                  devClose(devA());
+
+                  RestartCommPorts();
+                  
+                  devInit();
 
                 }
                                         
@@ -1416,18 +1414,12 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                       StartLogger(strAssetNumber);
 		      LoggerHeader();
                       StartDeclaration();
-                      devDeclBegin(devA(), TEXT("a pilot"), TEXT("a class"), TEXT("a ID"));
-                      devDeclBegin(devB(), TEXT("a pilot"), TEXT("a class"), TEXT("a ID"));
                       for(i=0;i<MAXTASKPOINTS;i++)
                         {
                           if(Task[i].Index == -1) break;
                           AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
-                          devDeclAddWayPoint(devA(), &WayPointList[Task[i].Index]);
-                          devDeclAddWayPoint(devB(), &WayPointList[Task[i].Index]);
                         }
                       EndDeclaration();
-                      devDeclEnd(devA());
-                      devDeclEnd(devB());
                     }
                 }
 	      FullScreen();

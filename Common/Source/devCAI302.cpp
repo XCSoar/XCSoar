@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.5 2005/06/30 16:51:31 robin-birch Exp $
+// $Id: devCAI302.cpp,v 1.6 2005/06/30 17:14:23 samgi Exp $
 
 
 //
@@ -22,20 +22,12 @@
 
 #define  CtrlC  0x03
 
-typedef struct{
-  void (*WriteString)(TCHAR *Text);
-  BOOL (*StopRxThread)(void);
-  BOOL (*StartRxThread)(void);
-  int  (*GetChar)(void);
-  int  (*SetRxTimeout)(int Timeout);
-}ComPortDriver_t;
 
 // Additional sentance for CAI302 support
 static BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL cai_PCAIB(TCHAR *String, NMEA_INFO *GPS_INFO);
 static cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static ComPortDriver_t ComPortDriver;
 static int  McReadyUpdateTimeout = 0;
 static int  BugsUpdateTimeout = 0;
 static int  BallastUpdateTimeout = 0;
@@ -69,7 +61,7 @@ BOOL cai302PutMcReady(PDeviceDescriptor_t d, double McReady){
 
   _stprintf(szTmp, TEXT("!g,m%d\r\n"), int(((McReady * 10) / KNOTSTOMETRESSECONDS) + 0.5));
 
-  (ComPortDriver.WriteString)(szTmp);
+  (d->Com.WriteString)(szTmp);
 
   McReadyUpdateTimeout = 2;
 
@@ -84,7 +76,7 @@ BOOL cai302PutBugs(PDeviceDescriptor_t d, double Bugs){
 
   _stprintf(szTmp, TEXT("!g,u%d\r\n"), int((Bugs * 100) + 0.5));
 
-  (ComPortDriver.WriteString)(szTmp);
+  (d->Com.WriteString)(szTmp);
 
   BugsUpdateTimeout = 2;
 
@@ -99,7 +91,7 @@ BOOL cai302PutBallast(PDeviceDescriptor_t d, double Ballast){
 
   _stprintf(szTmp, TEXT("!g,b%d\r\n"), int((Ballast * 10) + 0.5));
 
-  (ComPortDriver.WriteString)(szTmp);
+  (d->Com.WriteString)(szTmp);
 
   BallastUpdateTimeout = 2;
 
@@ -112,26 +104,8 @@ BOOL cai302Open(PDeviceDescriptor_t d, int Port){
   
   d->Port = Port;
 
-  if (d->Port == 0){
-    ComPortDriver.WriteString = Port1WriteString;
-    ComPortDriver.StopRxThread = Port1StopRxThread;
-    ComPortDriver.StartRxThread = Port1StartRxThread;
-    ComPortDriver.GetChar = Port1GetChar;
-    ComPortDriver.SetRxTimeout = Port1SetRxTimeout;
-  } else
-  if (d->Port == 1){
-    /*
-    ComPortDriver.WriteString = Port2WriteString;
-    ComPortDriver.StopRxThread = Port2StopRxThread;
-    ComPortDriver.StartRxThread = Port2StartRxThread;
-    ComPortDriver.GetChar = Port2GetChar;
-    ComPortDriver.SetRxTimeout = Port2SetRxTimeout;
-    */
-  } else
-    return(FALSE);
-
-  (ComPortDriver.WriteString)(TEXT("\x03"));
-  (ComPortDriver.WriteString)(TEXT("LOG 0\r"));
+  (d->Com.WriteString)(TEXT("\x03"));
+  (d->Com.WriteString)(TEXT("LOG 0\r"));
 
   return(TRUE);
 }
@@ -140,43 +114,21 @@ BOOL cai302Open(PDeviceDescriptor_t d, int Port){
 static int DeclIndex = 128;
 static int nDeclErrorCode; 
 
-BOOL ExpectString(TCHAR *token){
-
-  int i, ch;
-
-  i = 0;
-
-  while ((ch = (ComPortDriver.GetChar)()) != EOF){
-
-    if (token[i] == ch) 
-      i++;
-    else
-      i=0;
-
-    if ((unsigned)i == _tcslen(token))
-      return(TRUE);
-
-  }
-
-
-  return(FALSE);
-
-}
 
 BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
 
   nDeclErrorCode = 0;
 
-  (ComPortDriver.StopRxThread)();
+  (d->Com.StopRxThread)();
 
-  (ComPortDriver.SetRxTimeout)(250);
-  (ComPortDriver.WriteString)(TEXT("\x03"));
-  ExpectString(TEXT("$$$"));            // empty rx buffer (searching for pattern that never occure)
+  (d->Com.SetRxTimeout)(250);
+  (d->Com.WriteString)(TEXT("\x03"));
+  ExpectString(d, TEXT("$$$"));            // empty rx buffer (searching for pattern that never occure)
 
-  (ComPortDriver.SetRxTimeout)(500);
-  (ComPortDriver.WriteString)(TEXT("DOW 1\r"));
+  (d->Com.SetRxTimeout)(500);
+  (d->Com.WriteString)(TEXT("DOW 1\r"));
 
-  if (!ExpectString(TEXT("dn>"))){
+  if (!ExpectString(d, TEXT("dn>"))){
     nDeclErrorCode = 1;
     return(FALSE);
   };
@@ -195,11 +147,11 @@ BOOL cai302DeclEnd(PDeviceDescriptor_t d){
   if (nDeclErrorCode == 0){
 
     _stprintf(szTmp, TEXT("D,%d\r"), 255 /* end of declaration */);
-    (ComPortDriver.WriteString)(szTmp);
+    (d->Com.WriteString)(szTmp);
 
-    (ComPortDriver.SetRxTimeout)(1500);            // D,255 takes more than 800ms
+    (d->Com.SetRxTimeout)(1500);            // D,255 takes more than 800ms
 
-    if (!ExpectString(TEXT("dn>"))){
+    if (!ExpectString(d, TEXT("dn>"))){
       nDeclErrorCode = 1;
     };
 
@@ -207,15 +159,15 @@ BOOL cai302DeclEnd(PDeviceDescriptor_t d){
 
   }
 
-  (ComPortDriver.SetRxTimeout)(500);
+  (d->Com.SetRxTimeout)(500);
 
-  (ComPortDriver.WriteString)(TEXT("\x03"));
-  ExpectString(TEXT("cmd>"));
+  (d->Com.WriteString)(TEXT("\x03"));
+  ExpectString(d, TEXT("cmd>"));
 
-  (ComPortDriver.WriteString)(TEXT("LOG 0\r"));
+  (d->Com.WriteString)(TEXT("LOG 0\r"));
   
-  (ComPortDriver.SetRxTimeout)(0);
-  (ComPortDriver.StartRxThread)();
+  (d->Com.SetRxTimeout)(0);
+  (d->Com.StartRxThread)();
 
   return(nDeclErrorCode == 0);
 
@@ -267,11 +219,11 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
     (int)wp->Altitude
   );
 
-  (ComPortDriver.WriteString)(szTmp);
+  (d->Com.WriteString)(szTmp);
 
   DeclIndex++;
 
-  if (!ExpectString(TEXT("dn>"))){
+  if (!ExpectString(d, TEXT("dn>"))){
     nDeclErrorCode = 1;
     return(FALSE);
   };
@@ -314,13 +266,15 @@ BOOL cai302Install(PDeviceDescriptor_t d){
 
 
 BOOL cai302Register(void){
-  return(devRegister(TEXT("CAI 302"), 
-      1l << dfGPS
-    | 1l << dfLogger
-    | 1l << dfSpeed
-    | 1l << dfVario
-    | 1l << dfBaroAlt
-    | 1l << dfWind 
+  return(devRegister(
+    TEXT("CAI 302"), 
+    1l << dfGPS
+      | 1l << dfLogger
+      | 1l << dfSpeed
+      | 1l << dfVario
+      | 1l << dfBaroAlt
+      | 1l << dfWind,
+    cai302Install
   ));
 }
 
