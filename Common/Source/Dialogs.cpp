@@ -838,6 +838,29 @@ LRESULT CALLBACK SetAirspaceWarnings(HWND hDlg, UINT message, WPARAM wParam, LPA
   return FALSE;
 }
 
+void settaskUpdateControls(HWND hDlg, int TaskSize){
+
+  long Selection;
+
+
+  AATEnabled = TaskSize >=3;
+
+  EnableWindow(GetDlgItem(hDlg, IDC_AAT), AATEnabled);
+
+  EnableWindow(GetDlgItem(hDlg, IDC_DECLARE), TaskSize >= 2);
+
+  EnableWindow(GetDlgItem(hDlg, IDC_SAVE), TaskSize >= 1);
+
+  Selection = SendDlgItemMessage(hDlg,IDC_WAYPOINTS,LB_GETCURSEL,0,0L);
+  EnableWindow(GetDlgItem(hDlg, IDC_WAYPOINTDETAILS), NumberOfWayPoints > 0 && Selection != LB_ERR);
+  EnableWindow(GetDlgItem(hDlg, IDC_ADD), NumberOfWayPoints > 0 && Selection != LB_ERR);
+
+  Selection = SendDlgItemMessage(hDlg,IDC_TASK,LB_GETCURSEL,0,0L);
+  EnableWindow(GetDlgItem(hDlg, IDC_REMOVE), TaskSize > 0 && Selection != LB_ERR);
+
+}
+
+
 LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   unsigned int i;
@@ -877,13 +900,8 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         }
       ReadNewTask(hDlg);
 
-      if(TaskSize >=3)
-        ShowWindow(GetDlgItem(hDlg,IDC_AAT),SW_SHOW);
-      else
-        {
-          ShowWindow(GetDlgItem(hDlg,IDC_AAT),SW_HIDE);
-          AATEnabled = FALSE;
-        }
+      settaskUpdateControls(hDlg, TaskSize);
+
       return TRUE;
 
     case WM_COMMAND:
@@ -915,13 +933,9 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
               ReadNewTask(hDlg);
             }
-          if(TaskSize >=3)
-            ShowWindow(GetDlgItem(hDlg,IDC_AAT),SW_SHOW);
-          else
-            {
-              ShowWindow(GetDlgItem(hDlg,IDC_AAT),SW_HIDE);
-              AATEnabled = FALSE;
-            }
+
+          settaskUpdateControls(hDlg, TaskSize);
+
           break;
 
         case IDC_REMOVE:
@@ -931,14 +945,13 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
               SendDlgItemMessage(hDlg,IDC_TASK,LB_DELETESTRING,Selection,0L);
               TaskSize --;
               ReadNewTask(hDlg);
+              if (TaskSize > 0){
+                if (Selection >= TaskSize)
+                  Selection = TaskSize-1;
+                SendDlgItemMessage(hDlg, IDC_TASK, LB_SETCURSEL, (LPARAM)(UINT)Selection, 0L);
             }
-          if(TaskSize >=3)
-            ShowWindow(GetDlgItem(hDlg,IDC_AAT),SW_SHOW);
-          else
-            {
-              ShowWindow(GetDlgItem(hDlg,IDC_AAT),SW_HIDE);
-              AATEnabled = FALSE;
             }
+          settaskUpdateControls(hDlg, TaskSize);
           break;
 
         case IDC_WAYPOINTDETAILS:
@@ -970,13 +983,7 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
               if(Task[i].Index >=0)     TaskSize ++;
             }
 
-          if(TaskSize >=3)
-            ShowWindow(GetDlgItem(hDlg,IDC_AAT),SW_SHOW);
-          else
-            {
-              ShowWindow(GetDlgItem(hDlg,IDC_AAT),SW_HIDE);
-              AATEnabled = FALSE;
-            }
+          settaskUpdateControls(hDlg, TaskSize);
           break;
 
         case IDC_SAVE:
@@ -1002,7 +1009,63 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           ShowWindow(hWndCB,SW_HIDE);
           break;
 
+        case IDC_TASK:
+        case IDC_WAYPOINTS:
+          settaskUpdateControls(hDlg, TaskSize);
+        break;
+
+
+        case IDC_DECLARE:{
+
+          WCHAR PilotName[64];
+          WCHAR AircraftType[32];
+          WCHAR AircraftRego[32];
+
+          GetRegistryString(szRegistryPilotName, PilotName, 64);
+          GetRegistryString(szRegistryAircraftType, AircraftType, 32);
+          GetRegistryString(szRegistryAircraftRego, AircraftRego, 32);
+
+
+          if (devIsLogger(devA())){
+
+            if(MessageBox(hWndMapWindow, TEXT("Declare Task?"), devA()->Name, MB_YESNO| MB_ICONQUESTION) == IDYES){
+
+              devDeclBegin(devA(), PilotName, AircraftType, AircraftRego);
+              for(i=0;i<MAXTASKPOINTS;i++)
+                {
+                  if(Task[i].Index == -1) break;
+                  devDeclAddWayPoint(devA(), &WayPointList[Task[i].Index]);
+                }
+              if (devDeclEnd(devA()))
+                MessageBox(hWndMapWindow, TEXT("Task Declared!"), devA()->Name, MB_OK| MB_ICONINFORMATION);
+              else
+                MessageBox(hWndMapWindow, TEXT("Error occure,\r\nTask NOT Declared!"), devA()->Name, MB_OK| MB_ICONERROR);
+
+            }
+          }
+
+          if (devIsLogger(devB())){
+
+            if(MessageBox(hWndMapWindow, TEXT("Declare Task?"), devB()->Name, MB_YESNO| MB_ICONQUESTION) == IDYES){
+
+              devDeclBegin(devB(), PilotName, AircraftType, AircraftRego);
+              for(i=0;i<MAXTASKPOINTS;i++)
+                {
+                  if(Task[i].Index == -1) break;
+                  devDeclAddWayPoint(devB(), &WayPointList[Task[i].Index]);
+                }
+              if (devDeclEnd(devB()))
+                MessageBox(hWndMapWindow, TEXT("Task Declared!"), devB()->Name, MB_OK| MB_ICONINFORMATION);
+              else
+                MessageBox(hWndMapWindow, TEXT("Error occure,\r\nTask NOT Declared!"), devB()->Name, MB_OK| MB_ICONERROR);
+
+            }
+          }
         }
+        break;
+
+        }
+
       break;
     }
   return FALSE;
@@ -1964,10 +2027,23 @@ LRESULT CALLBACK COMMOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
   int i;
   DWORD dwPortIndex = 0;
   DWORD dwSpeedIndex = 2;
+  int Index=0;
+  TCHAR DeviceName[DEVNAMESIZE+1];
 
   switch (message)
     {
     case WM_INITDIALOG:
+      SendDlgItemMessage(hDlg, IDC_DEVICE, CB_ADDSTRING, 0, (LPARAM)(LPCSTR)TEXT("Generic GPS"));
+      for (i=0; i<DeviceRegisterCount; i++){
+        decRegisterGetName(i, DeviceName);
+        SendDlgItemMessage(hDlg, IDC_DEVICE, CB_ADDSTRING, 0, (LPARAM)(LPCSTR)DeviceName);
+        if (devA() != NULL){
+          if (_tcscmp(DeviceName, devA()->Name) == 0)
+            Index = i+1;
+        }
+      }
+      SendDlgItemMessage(hDlg, IDC_DEVICE, CB_SETCURSEL, (WPARAM) Index, 0);
+
       for(i=0;i<10;i++)
         SendDlgItemMessage(hDlg,IDC_COMMPORT,CB_ADDSTRING,0,(LPARAM)(LPCSTR)COMMPort[i]);
       for(i=0;i<8;i++)
@@ -1992,7 +2068,11 @@ LRESULT CALLBACK COMMOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     case WM_COMMAND:
       if (HIWORD(wParam) ==  CBN_SELCHANGE)
         {
+          DWORD x;
           COMPORTCHANGED = TRUE;
+          x = SendDlgItemMessage(hDlg, IDC_DEVICE, CB_GETCURSEL, 0, 0);
+          decRegisterGetName(x-1, DeviceName);
+          WriteDeviceSettings(0, DeviceName);
           dwPortIndex = SendDlgItemMessage(hDlg,IDC_COMMPORT,CB_GETCURSEL, 0,0);
           dwSpeedIndex = SendDlgItemMessage(hDlg,IDC_PORTSPEED,CB_GETCURSEL, 0,0);
           WritePort1Settings(dwPortIndex,dwSpeedIndex);
@@ -2386,7 +2466,6 @@ extern void DrawJPG(HDC hdc, RECT rc);
 LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   TCHAR Temp[2048];
-
   static CVOImage jpgimage1;
   static CVOImage jpgimage2;
   static HDC hdcScreen;
