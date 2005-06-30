@@ -1017,7 +1017,6 @@ void CWaveOutThread::SetSoundVolume(int volpercent) {
   wf.nBlockAlign = wf.nChannels * wf.wBitsPerSample / 8; 
   wf.nAvgBytesPerSec = wf.nSamplesPerSec * wf.nBlockAlign; 
   wf.cbSize = 0; 
-  HWAVEOUT hwo; 
 
   EnterCriticalSection(&m_critSecRtp);
 
