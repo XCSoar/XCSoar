@@ -1705,7 +1705,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
 			   DERIVED_INFO *Calculated) {
   int SortedLandableIndex[MAXTASKPOINTS];
   double SortedArrivalAltitude[MAXTASKPOINTS];
-  int i, j, k, l;
+  int i, k, l;
   double aa;
 
   for (i=0; i<MAXTASKPOINTS; i++) {
@@ -1713,7 +1713,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
     SortedArrivalAltitude[i] = 0;
   }
 
-  for (i=0; i<NumberOfWayPoints; i++) {
+  for (i=0; i<(int)NumberOfWayPoints; i++) {
     
     if (!(
 	  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) 
