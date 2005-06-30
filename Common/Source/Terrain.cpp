@@ -239,9 +239,9 @@ void TerrainColorMap(short h, BYTE *r, BYTE *g, BYTE *b) {
 
 void TerrainIllumination(short illum, BYTE *r, BYTE *g, BYTE *b)
 {
-  static float contrast = 0.6;
-  static short contrastpos = contrast*255;
-  static short contrastneg = (1.0-contrast)*255;
+  static float contrast = (float)0.6;
+  static short contrastpos = (short)contrast * 255;
+  static short contrastneg = (short)(1.0-contrast) * 255;
 
   short il = illum*contrastpos/256+contrastneg;
   *r = (BYTE)((short)*r*il/256);
@@ -311,7 +311,7 @@ public:
     // grid spacing = 250*rounding; m
 
     terrain_dem.SetTerrainRounding(pixelsize);
-    kpixel = terrain_dem.GetTerrainSlopeStep()*3.0; 
+    kpixel = (float)(terrain_dem.GetTerrainSlopeStep()*3.0); 
     // magnify gradient to make it
     // more obvious
 
@@ -348,18 +348,18 @@ public:
       for (int x = 0; x<ixs; x++) {
 
         if (x==0) {
-          nx= (hBuf[pval+1]-hBuf[pval])*kpixel*2;
+          nx= (short)((hBuf[pval+1]-hBuf[pval])*kpixel)*2;
         } else if (x==ixs-1) {
-          nx= (hBuf[pval]-hBuf[pval-1])*kpixel*2;
+          nx= (short)((hBuf[pval]-hBuf[pval-1])*kpixel)*2;
         } else {
-          nx= (hBuf[pval+1]-hBuf[pval-1])*kpixel;
+          nx= (short)((hBuf[pval+1]-hBuf[pval-1])*kpixel);
         }
         if (y==0) {
-          ny= (hBuf[pval+ixs]-hBuf[pval])*kpixel*2;
+          ny= (short)((hBuf[pval+ixs]-hBuf[pval])*kpixel)*2;
         } else if (y==iys-1) {
-          ny= (hBuf[pval]-hBuf[pval-ixs])*kpixel*2;
+          ny= (short)((hBuf[pval]-hBuf[pval-ixs])*kpixel)*2;
         } else {
-          ny= (hBuf[pval+ixs]-hBuf[pval-ixs])*kpixel;
+          ny= (short)((hBuf[pval+ixs]-hBuf[pval-ixs])*kpixel);
         }
         nz= 256;
         mag = isqrt4(nx*nx+ny*ny+nz*nz);
@@ -447,9 +447,9 @@ void DrawTerrain( HDC hdc, RECT rc, double sunazimuth, double sunelevation)
 
   // step 1: calculate sunlight vector
   short sx, sy, sz;
-  sx = 256*fastcosine(sunelevation)*fastsine(sunazimuth);
-  sy = 256*fastcosine(sunelevation)*fastcosine(sunazimuth);
-  sz = 256*fastsine(sunelevation);
+  sx = 256*(short)(fastcosine(sunelevation)*fastsine(sunazimuth));
+  sy = 256*(short)(fastcosine(sunelevation)*fastcosine(sunazimuth));
+  sz = 256*(short)fastsine(sunelevation);
 
   // step 2: fill height buffer
   trenderer->Height(rc);
