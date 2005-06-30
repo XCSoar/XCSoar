@@ -86,7 +86,7 @@ void WindAnalyser::slot_newSample(){
     //circledetection
     if( lastHeading )
     {
-        int diff= nmeaInfo->TrackBearing - lastHeading;
+        int diff= (int)nmeaInfo->TrackBearing - lastHeading;
 
         if( diff > 180 )
             diff -= 360;
@@ -96,7 +96,7 @@ void WindAnalyser::slot_newSample(){
 	diff = abs(diff);
         circleDeg += diff;
     }
-    lastHeading = nmeaInfo->TrackBearing;
+    lastHeading = (int)nmeaInfo->TrackBearing;
 
     if(circleDeg >= 360 )
     {
@@ -168,7 +168,7 @@ void WindAnalyser::slot_newFlightMode(bool left, int marker){
 
     //initialize analyser-parameters
     startmarker=marker;
-    startheading= nmeaInfo->TrackBearing;
+    startheading= (int)nmeaInfo->TrackBearing;
     active=true;
     first = true;
 }
@@ -192,7 +192,7 @@ double angleDiff(Vector a, Vector b) {
 
 
 void WindAnalyser::_calcWind() {
-  int aDiff= angleDiff(minVector, maxVector);
+  int aDiff= (int)angleDiff(minVector, maxVector);
   int quality;
 
   double sp, mmax, mmin;
