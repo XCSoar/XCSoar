@@ -25,5 +25,7 @@ BOOL Port1StopRxThread(void);
 BOOL Port1StartRxThread(void);
 int  Port1GetChar(void);
 int  Port1SetRxTimeout(int Timeout);
+unsigned long Port1SetBaudrate(unsigned long BaudRate);
+
 
 #endif
