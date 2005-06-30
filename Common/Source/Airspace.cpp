@@ -154,7 +154,7 @@ bool LoadAirspaceBinary() {
       AirspaceCircle = (AIRSPACE_CIRCLE *)
 	LocalAlloc(LMEM_FIXED, NumberOfAirspaceCircles * sizeof(AIRSPACE_CIRCLE));
 
-      int i;
+      unsigned int i;
       for (i=0; i<NumberOfAirspaceAreas; i++) {
 
 	ReadFile(hFile,&AirspaceArea[i],
