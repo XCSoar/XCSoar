@@ -2641,10 +2641,8 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
 {
 
   switch (message) {
-  case WM_LBUTTONDOWN : // Fall through
-  case WM_TIMER :
-    // Kill the window when timer fires
-    KillTimer(hwnd, wParam);
+  case WM_TIMER :         // Fall through
+  case WM_LBUTTONDOWN :
     DestroyWindow(hwnd);
     break;
   }
