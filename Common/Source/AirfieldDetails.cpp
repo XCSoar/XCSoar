@@ -43,7 +43,7 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
   int i;
   TCHAR UName[100];
 
-  for(i=0;i<NumberOfWayPoints;i++)
+  for(i=0;i<(int)NumberOfWayPoints;i++)
     {
       if ((WayPointList[i].Flags & AIRPORT) == AIRPORT) {
 	_tcscpy(UName, WayPointList[i].Name);
