@@ -319,3 +319,28 @@ int Port1SetRxTimeout(int Timeout){
 
 }
 
+unsigned long Port1SetBaudrate(unsigned long BaudRate){
+
+  COMSTAT ComStat;
+  DCB     PortDCB;
+  DWORD   dwErrors;
+  unsigned long result = 0;
+
+  do{
+    ClearCommError(hPort1, &dwErrors, &ComStat);
+  } while(ComStat.cbOutQue > 0);
+
+  Sleep(10);
+
+  GetCommState(hPort1, &PortDCB);
+
+  result = PortDCB.BaudRate;
+
+  PortDCB.BaudRate = BaudRate;
+
+  if (!SetCommState(hPort1, &PortDCB))
+    return(0);
+
+  return(result);
+
+}

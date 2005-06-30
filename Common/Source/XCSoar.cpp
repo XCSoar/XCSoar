@@ -523,13 +523,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 	// ... register all supported devices
 
   devInit();
-  cai302Install(devA());  // hard wired temp fix
-
-  devInit(devA());
-  devInit(devB());
-
-  devOpen(devA(),0);
-  devOpen(devB(),1);
 
   FullScreen();
 
@@ -1334,7 +1327,12 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               if(COMPORTCHANGED)
                 {
 
-		  RestartCommPorts();
+                  devClose(devA());
+                  devClose(devA());
+
+                  RestartCommPorts();
+
+                  devInit();
 
                 }
 
@@ -1416,18 +1414,12 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                       StartLogger(strAssetNumber);
 		      LoggerHeader();
                       StartDeclaration();
-                      devDeclBegin(devA(), TEXT("a pilot"), TEXT("a class"), TEXT("a ID"));
-                      devDeclBegin(devB(), TEXT("a pilot"), TEXT("a class"), TEXT("a ID"));
                       for(i=0;i<MAXTASKPOINTS;i++)
                         {
                           if(Task[i].Index == -1) break;
                           AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
-                          devDeclAddWayPoint(devA(), &WayPointList[Task[i].Index]);
-                          devDeclAddWayPoint(devB(), &WayPointList[Task[i].Index]);
                         }
                       EndDeclaration();
-                      devDeclEnd(devA());
-                      devDeclEnd(devB());
                     }
                 }
 	      FullScreen();

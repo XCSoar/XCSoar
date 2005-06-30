@@ -22,6 +22,8 @@
 #include "resource.h"
 #include "externs.h"
 
+#include "device.h"
+
 #include "uniqueid.h"
 #include "XCSoar.h"
 
@@ -108,6 +110,8 @@ TCHAR szRegistrySoundAudioVario[]=  TEXT("AudioVario");
 TCHAR szRegistrySoundTask[]=  TEXT("SoundTask");
 TCHAR szRegistrySoundModes[]=  TEXT("SoundModes");
 
+TCHAR szRegistryDeviceA[]= TEXT("DeviceA");
+TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
 
 static double SINETABLE[910];
 static float FSINETABLE[910];
@@ -1620,6 +1624,24 @@ void LoadWindFromRegistry() {
 
 }
 
+void ReadDeviceSettings(int devIdx, TCHAR *Name){
+
+  if (devIdx == 0)
+    GetRegistryString(szRegistryDeviceA , Name, DEVNAMESIZE);
+
+  if (devIdx == 1)
+    GetRegistryString(szRegistryDeviceB , Name, DEVNAMESIZE);
+
+}
+
+void WriteDeviceSettings(int devIdx, TCHAR *Name){
+
+  if (devIdx == 0)
+    SetRegistryString(szRegistryDeviceA , Name);
+
+  if (devIdx == 1)
+    SetRegistryString(szRegistryDeviceB , Name);
+}
 
 unsigned int isqrt4(unsigned long val) {
   unsigned int temp, g=0;
