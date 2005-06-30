@@ -1354,7 +1354,7 @@ void GetLocationFromScreen(double *X, double *Y)
   
   *Y = (PanYr)  - *Y;
   
-  *X = *X / ffastcosine(*Y);
+  *X = *X / (double)ffastcosine((float)*Y);
   
   *X = (PanXr) + *X;
 }
@@ -1837,7 +1837,7 @@ void DrawFinalGlide(HDC hDC,RECT rc)
     Offset = (GlideBar[2].y+Offset)-15;
   }
   
-  TextInBox(hDC, Value, GlideBar[0].x, Offset, 0);
+  TextInBox(hDC, Value, GlideBar[0].x, (int)Offset, 0);
   
   SelectObject(hDC, hbOld);
   SelectObject(hDC, hpOld);
@@ -1882,10 +1882,10 @@ void DrawTrail( HDC hdc, POINT Orig, RECT rc)
       P1 = i; P2 = 0;
     }
     
-    ColorRampLookup(SnailTrail[P1].Vario/1.5, &Red, &Green, &Blue,
+    ColorRampLookup((short)(SnailTrail[P1].Vario/1.5), &Red, &Green, &Blue,
       snail_colors, NUMSNAILRAMP);
     
-    int width = min(8,max(2,SnailTrail[P1].Vario));
+    int width = min(8,max(2,(int)SnailTrail[P1].Vario));
     
     hpNew = (HPEN)CreatePen(PS_SOLID, width, RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
     SelectObject(hdc,hpNew);
