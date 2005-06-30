@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.4 2005/06/28 21:23:16 samgi Exp $
+// $Id: devCAI302.cpp,v 1.5 2005/06/30 16:51:31 robin-birch Exp $
 
 
 //
@@ -143,6 +143,8 @@ static int nDeclErrorCode;
 BOOL ExpectString(TCHAR *token){
 
   int i, ch;
+
+  i = 0;
 
   while ((ch = (ComPortDriver.GetChar)()) != EOF){
 
