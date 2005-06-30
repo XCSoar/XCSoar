@@ -144,6 +144,8 @@ BOOL ExpectString(TCHAR *token){
 
   int i, ch;
 
+  i = 0;
+
   while ((ch = (ComPortDriver.GetChar)()) != EOF){
 
     if (token[i] == ch)
