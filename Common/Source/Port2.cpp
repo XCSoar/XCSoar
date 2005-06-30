@@ -200,7 +200,7 @@ DWORD Port2ReadThread (LPVOID lpvoid)
         // Read the data from the serial port.
 	if (ReadFile (hPort2, inbuf, 1024, &dwBytesTransferred, 0)) {
 
-	  for (int j=0; j<dwBytesTransferred; j++) {
+	  for (unsigned int j=0; j<dwBytesTransferred; j++) {
 	    ProcessChar2 (inbuf[j]);
 	  }
 	} else {
