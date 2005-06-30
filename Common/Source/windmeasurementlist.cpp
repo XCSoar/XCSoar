@@ -27,7 +27,7 @@ WindMeasurementList::WindMeasurementList(NMEA_INFO *thenmeaInfo, DERIVED_INFO *t
 
 
 WindMeasurementList::~WindMeasurementList(){
-  for (int i=0; i<nummeasurementlist; i++) {
+  for (unsigned int i=0; i<nummeasurementlist; i++) {
     delete measurementlist[i];
   }
 }
@@ -113,7 +113,7 @@ void WindMeasurementList::addMeasurement(Vector vector, double alt, int quality)
   wind->vector.y = vector.y;
   wind->quality=quality;
   wind->altitude=alt;
-  wind->time= nmeaInfo->Time;
+  wind->time= (long)nmeaInfo->Time;
   measurementlist[index] = wind;
   nummeasurementlist++;
 }
@@ -135,7 +135,7 @@ uint WindMeasurementList::getLeastImportantItem() {
     //quality-point (scale: 1 to 5) is equal to 10 minutes.
 
     score=600*(6-measurementlist[i]->quality);
-    score+= nmeaInfo->Time - measurementlist[i]->time;
+    score+= (int)(nmeaInfo->Time - (double)measurementlist[i]->time);
     if (score>maxscore) {
       maxscore=score;
       founditem=i;
