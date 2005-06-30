@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.12 2005/06/29 22:22:00 aharrison24 Exp $
+//   $Id: Dialogs.cpp,v 1.13 2005/06/30 08:56:33 aharrison24 Exp $
 
 */
 #include "stdafx.h"
@@ -2641,10 +2641,8 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
 {
 
   switch (message) {
-  case WM_LBUTTONDOWN : // Fall through
-  case WM_TIMER :
-    // Kill the window when timer fires
-    KillTimer(hwnd, wParam);
+  case WM_TIMER :         // Fall through
+  case WM_LBUTTONDOWN :
     DestroyWindow(hwnd);
     break;
   }
