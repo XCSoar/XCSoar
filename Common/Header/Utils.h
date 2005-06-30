@@ -56,6 +56,8 @@ void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber
 void SaveWindToRegistry();
 void LoadWindFromRegistry();
 void SaveSoundSettings();
+void ReadDeviceSettings(int devIdx, TCHAR *Name);
+void WriteDeviceSettings(int devIdx, TCHAR *Name);
 
 unsigned int isqrt4(unsigned long val);
 int iround(double i);
