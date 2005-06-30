@@ -195,7 +195,8 @@ BOOL CSTScreenBuffer::Draw(HDC* pDC, POINT ptDest)
 BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, RECT rcDest)
 {
   POINT ptDest;
-  int cx, int cy;
+  int cx;
+  int cy;
 
   ptDest.x = rcDest.left;
   ptDest.y = rcDest.top;
