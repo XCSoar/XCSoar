@@ -534,9 +534,6 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
 			       WPARAM wParam, LPARAM lParam)
 {
-  DWORD Up;
-  HANDLE hTemp;
-  int val;
 
   switch (message)
     {
@@ -2389,7 +2386,7 @@ extern void DrawJPG(HDC hdc, RECT rc);
 LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   TCHAR Temp[2048];
-  TCHAR Temp2[100];
+
   static CVOImage jpgimage1;
   static CVOImage jpgimage2;
   static HDC hdcScreen;
@@ -2715,8 +2712,8 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
   SendMessage(hWnd,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
 
   // Now find out what size the window needs to be
-  widthStatus  = widthMain * 0.95;
-  heightStatus = fontHeight * 1.2;
+  widthStatus  = (int)((double)widthMain * 0.95);
+  heightStatus = (int)((double)fontHeight * 1.2);
 
   // Center it in the middle of the Main Window
   SetWindowPos(hWnd,HWND_TOPMOST,
