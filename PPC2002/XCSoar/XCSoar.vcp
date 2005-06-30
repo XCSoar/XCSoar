@@ -186,7 +186,7 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -197,11 +197,12 @@ DEP_CPP_AIRFI=\
 DEP_CPP_AIRFI=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -216,7 +217,7 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -227,11 +228,12 @@ DEP_CPP_AIRFI=\
 DEP_CPP_AIRFI=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -253,7 +255,7 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -269,7 +271,7 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -284,7 +286,7 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -298,8 +300,9 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -322,7 +325,7 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
@@ -340,7 +343,7 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
@@ -361,7 +364,7 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
@@ -377,11 +380,237 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
+	"..\..\Common\Header\vector.h"\
+	"..\..\Common\Header\windanalyser.h"\
+	"..\..\Common\Header\windmeasurementlist.h"\
+	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\devCAI302.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_DEVCA=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_DEVCA=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_DEVCA=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_DEVCA=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\devEW.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_DEVEW=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_DEVEW=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_DEVEW=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_DEVEW=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\device.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_DEVIC=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_DEVIC=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_DEVIC=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_DEVIC=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -404,7 +633,7 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
@@ -420,6 +649,8 @@ NODEP_CPP_DIALO=\
 DEP_CPP_DIALO=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\imgdecmp.h"\
@@ -429,9 +660,10 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	{$(INCLUDE)}"aygshell.h"\
@@ -450,7 +682,7 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
@@ -464,7 +696,10 @@ NODEP_CPP_DIALO=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
 
 DEP_CPP_DIALO=\
+	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\imgdecmp.h"\
@@ -472,16 +707,16 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DIALO=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 
 !ENDIF 
@@ -500,7 +735,7 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -515,7 +750,7 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -530,7 +765,7 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -543,9 +778,11 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -783,7 +1020,7 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -796,12 +1033,13 @@ DEP_CPP_MAPWI=\
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -819,7 +1057,7 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -832,14 +1070,17 @@ DEP_CPP_MAPWI=\
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -898,7 +1139,7 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -912,7 +1153,7 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -926,7 +1167,7 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -938,9 +1179,11 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -958,7 +1201,7 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -972,7 +1215,7 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
@@ -986,7 +1229,7 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -998,10 +1241,12 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1020,7 +1265,7 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -1034,7 +1279,7 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -1048,7 +1293,7 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -1060,9 +1305,11 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1081,7 +1328,7 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -1095,7 +1342,7 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -1109,7 +1356,7 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -1121,9 +1368,11 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1141,7 +1390,7 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -1150,11 +1399,12 @@ DEP_CPP_PROCE=\
 
 DEP_CPP_PROCE=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -1167,7 +1417,7 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -1176,11 +1426,14 @@ DEP_CPP_PROCE=\
 
 DEP_CPP_PROCE=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1197,7 +1450,7 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -1209,7 +1462,7 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -1221,7 +1474,7 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -1233,7 +1486,7 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -1244,35 +1497,35 @@ DEP_CPP_RASTE=\
 # End Source File
 # Begin Source File
 
-SOURCE=.\StdAfx.cpp
+SOURCE=..\..\Common\Source\resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\StdAfx.cpp
 
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_STDAF=\
-	".\StdAfx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
-# ADD CPP /Yc"stdafx.h"
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_STDAF=\
-	".\StdAfx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
-# ADD CPP /Yc"stdafx.h"
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
 
 DEP_CPP_STDAF=\
-	".\StdAfx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
-# ADD CPP /Yc"stdafx.h"
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
 
 DEP_CPP_STDAF=\
-	".\StdAfx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
-# ADD CPP /Yc"stdafx.h"
 
 !ENDIF 
 
@@ -1284,28 +1537,28 @@ SOURCE=..\..\Common\Source\STScreenBuffer.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_STSCR=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_STSCR=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
 
 DEP_CPP_STSCR=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
 
 DEP_CPP_STSCR=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	
 
@@ -1325,7 +1578,7 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Topology.h"\
@@ -1343,9 +1596,10 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
@@ -1361,7 +1615,7 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Topology.h"\
@@ -1377,12 +1631,15 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1402,7 +1659,7 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -1418,7 +1675,7 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -1434,7 +1691,7 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\XCSoar.h"\
@@ -1448,10 +1705,12 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Topology.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1469,7 +1728,7 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\uniqueid.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -1484,7 +1743,7 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\uniqueid.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -1498,7 +1757,7 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\uniqueid.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -1511,8 +1770,9 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\uniqueid.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -1529,7 +1789,7 @@ SOURCE=..\..\Common\Source\VarioSound.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_VARIO=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
@@ -1537,7 +1797,7 @@ DEP_CPP_VARIO=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_VARIO=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
@@ -1545,7 +1805,7 @@ DEP_CPP_VARIO=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
 
 DEP_CPP_VARIO=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
@@ -1553,7 +1813,7 @@ DEP_CPP_VARIO=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
 
 DEP_CPP_VARIO=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
@@ -1570,7 +1830,7 @@ SOURCE=..\..\Common\Source\VOIMAGE.cpp
 DEP_CPP_VOIMA=\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	
 
@@ -1579,7 +1839,7 @@ DEP_CPP_VOIMA=\
 DEP_CPP_VOIMA=\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	
 
@@ -1588,7 +1848,7 @@ DEP_CPP_VOIMA=\
 DEP_CPP_VOIMA=\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	
 
@@ -1597,7 +1857,7 @@ DEP_CPP_VOIMA=\
 DEP_CPP_VOIMA=\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	
 
@@ -1611,28 +1871,28 @@ SOURCE=..\..\Common\Source\WaveThread.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_WAVET=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_WAVET=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
 
 DEP_CPP_WAVET=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
 
 DEP_CPP_WAVET=\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
 
@@ -1651,7 +1911,7 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
@@ -1667,7 +1927,7 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
@@ -1682,7 +1942,7 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
@@ -1696,8 +1956,9 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
@@ -1718,7 +1979,7 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1734,7 +1995,7 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1750,7 +2011,7 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1766,7 +2027,7 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1789,7 +2050,7 @@ DEP_CPP_WINDM=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1803,7 +2064,7 @@ DEP_CPP_WINDM=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1817,7 +2078,7 @@ DEP_CPP_WINDM=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1831,7 +2092,7 @@ DEP_CPP_WINDM=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1852,7 +2113,7 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1867,7 +2128,7 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1882,7 +2143,7 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1897,7 +2158,7 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
@@ -1923,7 +2184,7 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -1944,6 +2205,9 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -1951,7 +2215,7 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -1973,7 +2237,7 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Utils.h"\
@@ -1990,26 +2254,29 @@ NODEP_CPP_XCSOA=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
 
 DEP_CPP_XCSOA=\
+	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_XCSOA=\
-	".\ipapi.h"\
-	".\pcuser.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 
 !ENDIF 
@@ -2048,11 +2315,35 @@ SOURCE=..\..\Common\Header\Calculations.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Header\compatibility.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\devCAI302.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\devEW.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\device.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Header\Dialogs.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\Common\Header\externs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\imgdecmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\imgrendr.h
 # End Source File
 # Begin Source File
 
@@ -2112,6 +2403,10 @@ SOURCE=..\..\Common\Header\Sizes.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Header\StdAfx.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.h
 # End Source File
 # Begin Source File
@@ -2141,6 +2436,10 @@ SOURCE=..\..\Common\Header\Utils.h
 # Begin Source File
 
 SOURCE=..\..\Common\Header\VarioSound.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\vector.h
 # End Source File
 # Begin Source File
 
