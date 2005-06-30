@@ -1,4 +1,4 @@
-//   $Id: AirfieldDetails.cpp,v 1.4 2005/06/28 13:41:03 jwharington Exp $
+//   $Id: AirfieldDetails.cpp,v 1.5 2005/06/30 16:39:15 robin-birch Exp $
 
 #include "AirfieldDetails.h"
 
@@ -43,7 +43,7 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
   int i;
   TCHAR UName[100];
 
-  for(i=0;i<NumberOfWayPoints;i++)
+  for(i=0;i<(int)NumberOfWayPoints;i++)
     {
       if ((WayPointList[i].Flags & AIRPORT) == AIRPORT) {
 	_tcscpy(UName, WayPointList[i].Name);
