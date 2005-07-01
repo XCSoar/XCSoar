@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.20 2005/06/30 17:15:11 samgi Exp $
+  $Id: XCSoar.cpp,v 1.21 2005/07/01 15:36:33 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -96,7 +96,6 @@ int                                             ClipAltitude = 1000;
 int                                             AltWarningMargin = 100;
 double                          QNH = (double)1013.2;
 
-int                                             iAirspaceBrush[12];
 
 //SI to Local Units
 double        SPEEDMODIFY = TOKNOTS;

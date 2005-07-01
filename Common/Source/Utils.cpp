@@ -58,6 +58,23 @@ TCHAR *szRegistryColour[] =     { TEXT("Colour0"),
 				  TEXT("Colour12")
 };		
 
+
+TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
+				  TEXT("Brush1"),
+				  TEXT("Brush2"),
+				  TEXT("Brush3"),
+				  TEXT("Brush4"),
+				  TEXT("Brush5"),
+				  TEXT("Brush6"),
+				  TEXT("Brush7"),
+				  TEXT("Brush8"),
+				  TEXT("Brush9"),
+				  TEXT("Brush10"),
+				  TEXT("Brush11"),
+				  TEXT("Brush12")
+};		
+
+
 TCHAR szRegistryAirspaceWarning[]= TEXT("AirspaceWarn");
 TCHAR szRegistryAltMargin[]=	   TEXT("AltMargin");
 TCHAR szRegistryAltMode[]=  TEXT("AltitudeMode");
@@ -225,10 +242,24 @@ void ReadRegistrySettings(void)
 
   for(i=0;i<12;i++)
     {
-      if(GetFromRegistry(szRegistryColour[i],&Temp)==ERROR_SUCCESS)
+      if(GetFromRegistry(szRegistryBrush[i],&Temp)==ERROR_SUCCESS)
 	iAirspaceBrush[i] =			(int)Temp;
       else
 	iAirspaceBrush[i] =			0;
+
+      if(GetFromRegistry(szRegistryColour[i],&Temp)==ERROR_SUCCESS)
+	iAirspaceColour[i] =			(int)Temp;
+      else
+	iAirspaceColour[i] =			0;
+
+      if (iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
+        iAirspaceColour[i]= 0;
+      }
+
+      if (iAirspaceBrush[i]>= NUMAIRSPACEBRUSHES) {
+        iAirspaceBrush[i]= 0;
+      }
+
     }
 	
   GetFromRegistry(szRegistrySnailTrail,&Temp);
@@ -1115,6 +1146,11 @@ void SetRegistryColour(int i, DWORD c)
 }
 
 
+void SetRegistryBrush(int i, DWORD c)
+{
+  SetToRegistry(szRegistryBrush[i] ,c) ;
+}
+
 
 void ReadAssetNumber(void)
 {
@@ -1272,7 +1308,8 @@ void WriteProfile(HWND hwnd, TCHAR *szFile)
 
   WriteFile(hFile,InfoType,sizeof(InfoType),&dwBytesWritten,NULL);
   WriteFile(hFile,&POLARID,sizeof(POLARID),&dwBytesWritten,NULL);
-  WriteFile(hFile,iAirspaceBrush,11*sizeof(iAirspaceBrush[0]),&dwBytesWritten,NULL);
+  WriteFile(hFile,iAirspaceColour,11*sizeof(iAirspaceBrush[0]),&dwBytesWritten,NULL);
+  WriteFile(hFile,iAirspaceBrush,11*sizeof(iAirspaceColour[0]),&dwBytesWritten,NULL);
 
   ///////
 
@@ -1325,10 +1362,14 @@ void ReadProfile(HWND hwnd, TCHAR *szFile)
   CalculateNewPolarCoef();
   SetToRegistry(szRegistryPolarID,(DWORD)POLARID);
 	
+  ReadFile(hFile,iAirspaceColour,11*sizeof(iAirspaceColour[0]),&dwBytesRead,NULL);
   ReadFile(hFile,iAirspaceBrush,11*sizeof(iAirspaceBrush[0]),&dwBytesRead,NULL);
   for(i=0;i<11;i++)
     {
-      SetRegistryColour(i,iAirspaceBrush[i]);
+
+      SetRegistryColour(i,iAirspaceColour[i]);
+
+      SetRegistryBrush(i,iAirspaceBrush[i]);
     }
 
 

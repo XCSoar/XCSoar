@@ -109,10 +109,18 @@ static int dTDisplay=0;
 
 static HBITMAP hLandable, hReachable, hTurnPoint, hSmall, hCruise, hClimb, 
 hFinalGlide, hAutoMcReady, hTerrainWarning;
-static HBITMAP hAirspaceBitmap;
-static HBRUSH	hAirspaceBrush[17];
+
+// 12 is number of airspace types
+int	iAirspaceBrush[12]; 
+int	iAirspaceColour[12];
+
 static HBRUSH   hBackgroundBrush;
-static COLORREF Colours[16] = {RGB(0xFF,0x00,0x00), RGB(0x00,0xFF,0x00), RGB(0x00,0x00,0xFF), RGB(0xFF,0xFF,0x00),
+
+static HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
+static HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+
+static COLORREF Colours[NUMAIRSPACECOLORS] 
+= {RGB(0xFF,0x00,0x00), RGB(0x00,0xFF,0x00), RGB(0x00,0x00,0xFF), RGB(0xFF,0xFF,0x00),
 RGB(0xFF,0x00,0xFF), RGB(0x00,0xFF,0xFF), RGB(0x7F,0x00,0x00), RGB(0x00,0x7F,0x00),
 RGB(0x00,0x00,0x7F), RGB(0x7F,0x7F,0x00), RGB(0x7F,0x00,0x7F), RGB(0x00,0x7F,0x7F),
 RGB(0xFF,0xFF,0xFF), RGB(0xC0,0xC0,0xC0), RGB(0x7F,0x7F,0x7F), RGB(0x00,0x00,0x00)};
@@ -438,15 +446,17 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE));
     hAutoMcReady=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
     
-    hAirspaceBitmap=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE));
-    
-    for(i=0;i<16;i++)
-    {
-      hAirspaceBrush[i] = // CreateSolidBrush(Colours[i]);
-        CreatePatternBrush((HBITMAP)hAirspaceBitmap);
-      //      hAirspaceBrush[i] = (HBRUSH)GetStockObject(HOLLOW_BRUSH);
+    // airspace brushes and colours
+
+    hAirspaceBitmap[0]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE0));
+    hAirspaceBitmap[1]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE1));
+    hAirspaceBitmap[2]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE2));
+
+    for (i=0; i<NUMAIRSPACEBRUSHES; i++) {
+      hAirspaceBrushes[i] = 
+        CreatePatternBrush((HBITMAP)hAirspaceBitmap[i]);
     }
-    
+        
     /* JMW created all re-used pens here */
     
     hpAircraft = (HPEN)CreatePen(PS_SOLID, 4, RGB(0xa0,0xa0,0xa0));
@@ -490,8 +500,6 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject(hAutoMcReady);
     DeleteObject(hTerrainWarning);
     
-    DeleteObject(hAirspaceBitmap);
-    
     DeleteObject((HPEN)hpAircraft);
     DeleteObject((HPEN)hpAircraftBorder);
     DeleteObject((HPEN)hpWind);
@@ -511,9 +519,10 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject((HBRUSH)hbFinalGlideBelow);
     DeleteObject((HBRUSH)hbFinalGlideAbove);
     
-    for(i=0;i<16;i++)
+    for(i=0;i<NUMAIRSPACEBRUSHES;i++)
     {
-      DeleteObject(hAirspaceBrush[i]);
+      DeleteObject(hAirspaceBrushes[i]);
+      DeleteObject(hAirspaceBitmap[i]);
     }
     PostQuitMessage (0);
     break;
@@ -992,7 +1001,9 @@ DWORD DrawThread (LPVOID lpvoid)
     FrameCount ++;
     
     // we do caching after screen update, to minimise perceived delay
-    SetTopologyBounds(MapRect);
+    if (EnableTopology) {
+      SetTopologyBounds(MapRect);
+    }
     
   }
   MessageBeep(0);
@@ -1185,6 +1196,9 @@ void DrawTask(HDC hdc, RECT rc)
 {
   int i;
   double tmp;
+
+  COLORREF whitecolor = RGB(0xff,0xff, 0xff);
+  COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
   
   for(i=0;i<MAXTASKPOINTS-1;i++)
   {
@@ -1219,12 +1233,34 @@ void DrawTask(HDC hdc, RECT rc)
         {
           tmp = Task[i].AATCircleRadius * DISTANCEMODIFY/MapScale;
           tmp = tmp * 30;
-          SelectObject(hdc, hAirspaceBrush[iAirspaceBrush[AATASK]]);SelectObject(hdc, GetStockObject(BLACK_PEN));
+
+          // this color is used as the black bit
+          SetTextColor(hDCTemp, 
+                   Colours[iAirspaceColour[AATASK]]);
+
+          // this color is the transparent bit
+          SetBkColor(hDCTemp, 
+                     whitecolor);
+
+          SelectObject(hdc, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+          SelectObject(hdc, GetStockObject(BLACK_PEN));
+
           Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc); 
         }
         else
         {
-          SelectObject(hdc, hAirspaceBrush[iAirspaceBrush[AATASK]]);SelectObject(hdc, GetStockObject(BLACK_PEN));
+
+          // this color is used as the black bit
+          SetTextColor(hDCTemp, 
+                   Colours[iAirspaceColour[AATASK]]);
+
+          // this color is the transparent bit
+          SetBkColor(hDCTemp, 
+                     whitecolor);
+
+          SelectObject(hdc, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+          SelectObject(hdc, GetStockObject(BLACK_PEN));
+
           DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATStart);
           DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATFinish);
         }
@@ -1244,6 +1280,11 @@ void DrawTask(HDC hdc, RECT rc)
       }
     }
   }
+
+  // restore original color
+  SetTextColor(hDCTemp, origcolor);
+
+
 }
 
 
@@ -1540,7 +1581,9 @@ void DrawAirSpace(HDC hdc, RECT rc)
 {
   unsigned i,j;
   POINT pt[501];
-  
+  COLORREF whitecolor = RGB(0xff,0xff, 0xff);
+  COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
+
   SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
   SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
   SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
@@ -1548,14 +1591,26 @@ void DrawAirSpace(HDC hdc, RECT rc)
   
   for(i=0;i<NumberOfAirspaceCircles;i++)
   {
-    if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
+    if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, 
+                             AirspaceCircle[i].Top.Altitude))
     {
-      SelectObject(hDCTemp, hAirspaceBrush[iAirspaceBrush[AirspaceCircle[i].Type]]);
       
+      // this color is used as the black bit
+      SetTextColor(hDCTemp, 
+                   Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
+      // this color is the transparent bit
+      SetBkColor(hDCTemp, 
+                 whitecolor);
+
+      // get brush, can be solid or a 1bpp bitmap
+      SelectObject(hDCTemp, 
+                   hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
+
       AirspaceCircle[i].Visible = 
         Circle(hDCTemp,AirspaceCircle[i].ScreenX ,
         AirspaceCircle[i].ScreenY ,
         AirspaceCircle[i].ScreenR ,rc);
+
     }
   }
   
@@ -1571,7 +1626,15 @@ void DrawAirSpace(HDC hdc, RECT rc)
         pt[j-AirspaceArea[i].FirstPoint].y = AirspacePoint[j].Screen.y ;
       }
       
-      SelectObject(hDCTemp, hAirspaceBrush[iAirspaceBrush[AirspaceArea[i].Type]]);
+      // this color is used as the black bit
+      SetTextColor(hDCTemp, 
+                   Colours[iAirspaceColour[AirspaceArea[i].Type]]);
+      // this color is the transparent bit
+      SetBkColor(hDCTemp, 
+                 whitecolor);
+
+      SelectObject(hDCTemp, 
+                   hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
       
       AirspaceArea[i].Visible= PolygonVisible(pt,AirspaceArea[i].NumPoints, rc);
       
@@ -1589,12 +1652,25 @@ void DrawAirSpace(HDC hdc, RECT rc)
       if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, 
         AirspaceCircle[i].Top.Altitude))
       {
+
+      // this color is used as the black bit
+      SetTextColor(hDCTemp, 
+                   Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
+
+      // this color is the transparent bit
+      SetBkColor(hDCTemp, 
+                 whitecolor);
+
         Circle(hDCTemp,
           AirspaceCircle[i].ScreenX, AirspaceCircle[i].ScreenY ,
           AirspaceCircle[i].ScreenR, rc );
       }
     }
   }
+
+  // restore original color
+  SetTextColor(hDCTemp, origcolor);
+
   
   for(i=0;i<NumberOfAirspaceAreas;i++)
   {

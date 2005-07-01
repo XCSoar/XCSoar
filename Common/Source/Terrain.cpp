@@ -196,7 +196,7 @@ void ColorRampLookup(short h, BYTE *r, BYTE *g, BYTE *b,
 		     COLORRAMP* ramp_colors, int numramp) {
 
   int i;
-  short tr, tg, tb;
+  int tr, tg, tb;
   short f, of;
 
   // check if h lower than lowest
@@ -240,13 +240,13 @@ void TerrainColorMap(short h, BYTE *r, BYTE *g, BYTE *b) {
 void TerrainIllumination(short illum, BYTE *r, BYTE *g, BYTE *b)
 {
   static float contrast = (float)0.6;
-  static short contrastpos = (short)contrast * 255;
-  static short contrastneg = (short)(1.0-contrast) * 255;
+  static short contrastpos = (short)(contrast * 255);
+  static short contrastneg = (short)((1.0-contrast) * 255);
 
   short il = illum*contrastpos/256+contrastneg;
-  *r = (BYTE)((short)*r*il/256);
-  *g = (BYTE)((short)*g*il/256);
-  *b = (BYTE)((short)*b*il/256);
+  *r = (BYTE)((int)*r*il/256);
+  *g = (BYTE)((int)*g*il/256);
+  *b = (BYTE)((int)*b*il/256);
 }
 
 
@@ -348,16 +348,16 @@ public:
       for (int x = 0; x<ixs; x++) {
 
         if (x==0) {
-          nx= (short)((hBuf[pval+1]-hBuf[pval])*kpixel)*2;
+          nx= (short)((hBuf[pval+1]-hBuf[pval])*kpixel*2);
         } else if (x==ixs-1) {
-          nx= (short)((hBuf[pval]-hBuf[pval-1])*kpixel)*2;
+          nx= (short)((hBuf[pval]-hBuf[pval-1])*kpixel*2);
         } else {
           nx= (short)((hBuf[pval+1]-hBuf[pval-1])*kpixel);
         }
         if (y==0) {
-          ny= (short)((hBuf[pval+ixs]-hBuf[pval])*kpixel)*2;
+          ny= (short)((hBuf[pval+ixs]-hBuf[pval])*kpixel*2);
         } else if (y==iys-1) {
-          ny= (short)((hBuf[pval]-hBuf[pval-ixs])*kpixel)*2;
+          ny= (short)((hBuf[pval]-hBuf[pval-ixs])*kpixel*2);
         } else {
           ny= (short)((hBuf[pval+ixs]-hBuf[pval-ixs])*kpixel);
         }
@@ -378,10 +378,10 @@ public:
     short *tnyBuf = nyBuf;
     short *tnzBuf = nzBuf;
     short *tilBuf = ilBuf;
-    short mag;
+    int mag;
     for (int i=0; i<ixs*iys; i++) {
       mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256;
-      *tilBuf = max(0,mag);
+      *tilBuf = max(0,(short)mag);
 
       tnxBuf++;
       tnyBuf++;
@@ -447,9 +447,9 @@ void DrawTerrain( HDC hdc, RECT rc, double sunazimuth, double sunelevation)
 
   // step 1: calculate sunlight vector
   short sx, sy, sz;
-  sx = 256*(short)(fastcosine(sunelevation)*fastsine(sunazimuth));
-  sy = 256*(short)(fastcosine(sunelevation)*fastcosine(sunazimuth));
-  sz = 256*(short)fastsine(sunelevation);
+  sx = (short)(256*(fastcosine(sunelevation)*fastsine(sunazimuth)));
+  sy = (short)(256*(fastcosine(sunelevation)*fastcosine(sunazimuth)));
+  sz = (short)(256*fastsine(sunelevation));
 
   // step 2: fill height buffer
   trenderer->Height(rc);
