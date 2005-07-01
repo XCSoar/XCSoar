@@ -798,6 +798,16 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps\\xcsoar.ico"
+IDI_XCSOARS             ICON    DISCARDABLE     "bitmaps\\icon1.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Bitmap
 //
 
@@ -830,16 +840,6 @@ IDB_AUTOMCREADY         BITMAP  DISCARDABLE     "bitmaps\\automcre.bmp"
 IDB_TOWN                BITMAP  DISCARDABLE     "bitmaps\\town.bmp"
 IDB_MARK                BITMAP  DISCARDABLE     "bitmaps\\mark.bmp"
 IDB_TERRAINWARNING      BITMAP  DISCARDABLE     "bitmaps\\terrainw.bmp"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps\\xcsoar.ico"
-IDI_XCSOARS             ICON    DISCARDABLE     "bitmaps\\icon1.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
