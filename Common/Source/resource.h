@@ -238,6 +238,8 @@
 #define IDC_BM18                        1219
 #define IDC_BM19                        1220
 #define IDC_BM20                        1221
+#define IDC_CHECK1                      1222
+#define IDC_BLACKOUTLINE                1222
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -273,7 +275,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        243
 #define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1222
+#define _APS_NEXT_CONTROL_VALUE         1223
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

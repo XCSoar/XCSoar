@@ -92,6 +92,7 @@ extern int AcknowledgementTime;
 
 extern int iAirspaceBrush[];
 extern int iAirspaceColour[];
+extern BOOL bAirspaceBlackOutline;
 
 extern int AltitudeMode;
 extern int ClipAltitude;
