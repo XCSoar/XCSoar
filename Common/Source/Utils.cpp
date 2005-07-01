@@ -76,6 +76,7 @@ TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
 
 
 TCHAR szRegistryAirspaceWarning[]= TEXT("AirspaceWarn");
+TCHAR szRegistryAirspaceBlackOutline[]= TEXT("AirspaceBlackOutline");
 TCHAR szRegistryAltMargin[]=	   TEXT("AltMargin");
 TCHAR szRegistryAltMode[]=  TEXT("AltitudeMode");
 TCHAR szRegistryAltitudeUnitsValue[] = TEXT("Altitude");
@@ -262,6 +263,9 @@ void ReadRegistrySettings(void)
 
     }
 	
+  GetFromRegistry(szRegistryAirspaceBlackOutline,&Temp);
+  bAirspaceBlackOutline = Temp;
+
   GetFromRegistry(szRegistrySnailTrail,&Temp);
   TrailActive = Temp;
 

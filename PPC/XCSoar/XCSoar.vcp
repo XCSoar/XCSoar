@@ -226,7 +226,7 @@ RSC=rc.exe
 # ADD RSC /l 0x409 /i "..\..\Common\Header" /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
 CPP=clarm.exe
 # ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /M$(CECrtMTDebug) /c
-# ADD CPP /nologo /W4 /Zi /Od /I "..\..\Common\Header" /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /FR /YX /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /Zi /Od /I "..\..\Common\Header" /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /FR /YX /M$(CECrtMTDebug) /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
@@ -1494,8 +1494,10 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_DIALO=\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -1677,6 +1679,8 @@ NODEP_CPP_DIALO=\
 DEP_CPP_DIALO=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\imgdecmp.h"\
@@ -1692,10 +1696,8 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DIALO=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86em) Debug"
@@ -2480,6 +2482,7 @@ DEP_CPP_MAPWI=\
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
@@ -2537,6 +2540,7 @@ DEP_CPP_MAPWI=\
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
@@ -3406,6 +3410,7 @@ DEP_CPP_PROCE=\
 
 DEP_CPP_PROCE=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
@@ -4167,6 +4172,7 @@ DEP_CPP_UTILS=\
 
 DEP_CPP_UTILS=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
@@ -4212,6 +4218,7 @@ DEP_CPP_UTILS=\
 
 DEP_CPP_UTILS=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
@@ -5168,8 +5175,10 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_XCSOA=\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -5388,10 +5397,8 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_XCSOA=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86em) Debug"

@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.17 2005/07/01 17:35:01 aharrison24 Exp $
+//   $Id: Dialogs.cpp,v 1.18 2005/07/01 18:46:17 aharrison24 Exp $
 
 */
 #include "stdafx.h"
@@ -72,6 +72,7 @@ extern TCHAR szRegistryFinalGlideTerrain[];
 extern TCHAR szRegistryStartLine[];
 extern TCHAR szRegistryStartRadius[];
 extern TCHAR szRegistryAirspaceWarning[];
+extern TCHAR szRegistryAirspaceBlackOutline[];
 extern TCHAR szRegistryWarningTime[];
 extern TCHAR szRegistryAcknowledgementTime[];
 extern TCHAR szRegistryCircleZoom[];
@@ -1811,6 +1812,12 @@ LRESULT CALLBACK MapColour(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
   switch (message)
     {
     case WM_INITDIALOG:
+      if(bAirspaceBlackOutline) {
+        SendDlgItemMessage(hDlg,IDC_BLACKOUTLINE,BM_SETCHECK,BST_CHECKED,0);
+      } else {
+        SendDlgItemMessage(hDlg,IDC_BLACKOUTLINE,BM_SETCHECK,BST_UNCHECKED,0);
+      }
+
       return TRUE; 
 
     case WM_COMMAND:
@@ -1940,6 +1947,11 @@ LRESULT CALLBACK MapColour(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
           SetRegistryBrush(AATASK,NewBrush);
           return TRUE;
 
+        case IDC_BLACKOUTLINE:
+          bAirspaceBlackOutline = !bAirspaceBlackOutline;
+          SetToRegistry(szRegistryAirspaceBlackOutline,bAirspaceBlackOutline);
+          return TRUE;
+
         }
       break;
     }
@@ -1969,7 +1981,6 @@ LRESULT CALLBACK ColourSelect(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
       Temp = GetWindowLong(GetDlgItem(hDlg,IDC_BM18+NewBrush),GWL_EXSTYLE);
       Temp = Temp | WS_EX_CLIENTEDGE;
       SetWindowLong(GetDlgItem(hDlg,IDC_BM18+NewBrush),GWL_EXSTYLE,Temp);
-
 
       return TRUE; 
 

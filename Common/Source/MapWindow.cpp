@@ -113,6 +113,7 @@ hFinalGlide, hAutoMcReady, hTerrainWarning;
 // 12 is number of airspace types
 int	iAirspaceBrush[12]; 
 int	iAirspaceColour[12];
+BOOL bAirspaceBlackOutline = FALSE;
 
 static HBRUSH   hBackgroundBrush;
 
@@ -1585,7 +1586,13 @@ void DrawAirSpace(HDC hdc, RECT rc)
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
 
   SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
-  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+
+  if (bAirspaceBlackOutline) {
+    SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+  } else {
+    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  }
+
   SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
   Rectangle(hDCTemp,rc.left,rc.top,rc.right,rc.bottom);
   
