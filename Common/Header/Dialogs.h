@@ -38,4 +38,6 @@ LRESULT CALLBACK AudioSettings					(HWND hDlg, UINT message, WPARAM wParam, LPAR
 
 void ShowStatusMessage(TCHAR* text, int delay_ms=2000, int iFontHeightRatio=12);
 
+void StartupScreen();
+
 #endif

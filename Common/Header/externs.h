@@ -122,6 +122,8 @@ extern int EnableSoundModes;
 extern int SoundVolume;
 extern int SoundDeadband;
 
+extern int NettoSpeed;
+
 extern int FinalGlideTerrain;
 
 extern double AATTaskLength;

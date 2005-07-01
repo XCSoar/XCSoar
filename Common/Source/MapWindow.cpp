@@ -1004,7 +1004,7 @@ DWORD DrawThread (LPVOID lpvoid)
     // we do caching after screen update, to minimise perceived delay
     if (EnableTopology) {
       SetTopologyBounds(MapRect);
-    }
+    } 
     
   }
   MessageBeep(0);
@@ -1938,6 +1938,7 @@ COLORRAMP snail_colors[] = {
 
 
 static int iSnailNext=0;
+
 
 void DrawTrail( HDC hdc, POINT Orig, RECT rc)
 {

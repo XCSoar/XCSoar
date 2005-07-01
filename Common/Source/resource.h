@@ -71,6 +71,8 @@
 #define IDB_AIRSPACE0                   240
 #define IDB_AIRSPACE1                   241
 #define IDB_AIRSPACE2                   242
+#define IDD_SPLASH                      243
+#define IDB_SPLASH                      244
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003
@@ -240,6 +242,8 @@
 #define IDC_BM20                        1221
 #define IDC_CHECK1                      1222
 #define IDC_BLACKOUTLINE                1222
+#define IDC_SPLASH                      1223
+#define IDC_NETTOSPEED                  1224
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -273,9 +277,17 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        243
+#define _APS_NEXT_RESOURCE_VALUE        245
 #define _APS_NEXT_COMMAND_VALUE         40025
+<<<<<<< resource.h
+<<<<<<< resource.h
+#define _APS_NEXT_CONTROL_VALUE         1224
+=======
 #define _APS_NEXT_CONTROL_VALUE         1223
+>>>>>>> 1.9
+=======
+#define _APS_NEXT_CONTROL_VALUE         1223
+>>>>>>> 1.9
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

@@ -72,6 +72,8 @@ typedef struct _DERIVED_INFO
   int    ThermalProfileN[NUMTHERMALBUCKETS];
   double ThermalProfileW[NUMTHERMALBUCKETS];
 
+  double NettoVario;
+
 } DERIVED_INFO;
 
 #include "RasterTerrain.h"

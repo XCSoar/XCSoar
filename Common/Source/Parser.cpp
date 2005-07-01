@@ -15,6 +15,8 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+  $Id: Parser.cpp,v 1.6 2005/07/01 22:54:09 jwharington Exp $
 */
 #include "stdafx.h"
 #include "parser.h"
@@ -686,8 +688,6 @@ BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->Airspeed = vias/TOKNOTS;
   GPS_INFO->VarioAvailable = TRUE;
   GPS_INFO->Vario = wnet/TOKNOTS;
-
-  VarioSound_SetV((short)(GPS_INFO->Vario/6.0*100));
 
   return TRUE;
 }

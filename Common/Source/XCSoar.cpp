@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.21 2005/07/01 15:36:33 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.22 2005/07/01 22:54:09 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -106,6 +106,8 @@ double        ALTITUDEMODIFY = TOFEET;
 //Flight Data Globals
 double        MACREADY = 0;
 bool          AutoMacReady = false;
+
+int          NettoSpeed = 1000;
 
 NMEA_INFO                       GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
@@ -473,7 +475,12 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
 
-  ReadRegistrySettings();  
+  ReadRegistrySettings();
+
+  // display start up screen
+  //  StartupScreen();
+  // not working very well at all
+  
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
   SetBallast();
@@ -1784,6 +1791,11 @@ void ProcessTimer(void)
 	DisplayText();
 	MapDirty = true;
       }
+
+    if (!GPS_INFO.VarioAvailable) {
+      // run the function anyway, because this gives audio functions
+      DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO);
+    }
     
     UnlockFlightData();
   }
