@@ -77,4 +77,9 @@
 #define MENUTIMEOUTMAX 8*4
 
 
+///////////////////////
+
+#define NUMAIRSPACECOLORS 16
+#define NUMAIRSPACEBRUSHES 3
+
 #endif

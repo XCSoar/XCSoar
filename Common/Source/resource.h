@@ -68,6 +68,9 @@
 #define IDD_LOGGERDETAILS               231
 #define IDB_AIRSPACE                    235
 #define IDD_AUDIO                       236
+#define IDB_AIRSPACE0                   240
+#define IDB_AIRSPACE1                   241
+#define IDB_AIRSPACE2                   242
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003
@@ -232,6 +235,9 @@
 #define IDC_ACKNOW                      1216
 #define IDC_PALTITUDE                   1217
 #define IDC_STATIC4                     1218
+#define IDC_BM18                        1219
+#define IDC_BM19                        1220
+#define IDC_BM20                        1221
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -265,9 +271,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        238
+#define _APS_NEXT_RESOURCE_VALUE        243
 #define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1219
+#define _APS_NEXT_CONTROL_VALUE         1222
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

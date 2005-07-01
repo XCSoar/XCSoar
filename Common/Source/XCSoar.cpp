@@ -96,7 +96,6 @@ int                                             ClipAltitude = 1000;
 int                                             AltWarningMargin = 100;
 double                          QNH = (double)1013.2;
 
-int                                             iAirspaceBrush[12];
 
 //SI to Local Units
 double        SPEEDMODIFY = TOKNOTS;

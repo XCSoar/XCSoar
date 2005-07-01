@@ -67,13 +67,6 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDB_AIRSPACE            BITMAP  DISCARDABLE     "bitmaps\\airspace.bmp"
 #endif    // Neutral (Default) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -151,45 +144,48 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,3,85,128,21
 END
 
-IDD_COLOURSEL DIALOG DISCARDABLE  0, 0, 140, 55
+IDD_COLOURSEL DIALOG DISCARDABLE  0, 0, 139, 105
 STYLE DS_CENTER | WS_POPUP | WS_CAPTION
-CAPTION "Colour Select"
+CAPTION "Colour and pattern select"
 FONT 8, "System"
 BEGIN
     CONTROL         136,IDC_BM16,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,70,35,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,71,45,15,13
     CONTROL         121,IDC_BM1,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,22,7,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,23,17,15,13
     CONTROL         122,IDC_BM2,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,38,7,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,39,17,15,13
     CONTROL         123,IDC_BM3,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,54,7,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,55,17,15,13
     CONTROL         124,IDC_BM4,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,70,7,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,71,17,15,13
     CONTROL         125,IDC_BM5,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,86,7,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,87,17,15,13
     CONTROL         126,IDC_BM6,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,102,7,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,103,17,15,13
     CONTROL         127,IDC_BM7,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,22,21,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,23,31,15,13
     CONTROL         128,IDC_BM8,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,38,21,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,39,31,15,13
     CONTROL         129,IDC_BM9,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,54,21,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,55,31,15,13
     CONTROL         130,IDC_BM10,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,70,21,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,71,31,15,13
     CONTROL         131,IDC_BM11,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,86,21,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,87,31,15,13
     CONTROL         132,IDC_BM12,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,102,21,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,103,31,15,13
     CONTROL         133,IDC_BM13,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,22,35,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,23,45,15,13
     CONTROL         134,IDC_BM14,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,38,35,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,39,45,15,13
     CONTROL         135,IDC_BM15,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,54,35,15,13,WS_EX_STATICEDGE
-    CONTROL         138,IDC_BM17,"Static",SS_BITMAP | SS_NOTIFY |
-                    SS_CENTERIMAGE,86,35,15,13,WS_EX_STATICEDGE
+                    SS_CENTERIMAGE,55,45,15,13
+    GROUPBOX        "Colour",IDC_STATIC,13,6,111,59
+    CONTROL         240,IDC_BM18,"Static",SS_BITMAP | SS_NOTIFY,23,80,14,12
+    CONTROL         241,IDC_BM19,"Static",SS_BITMAP | SS_NOTIFY,39,80,14,12
+    CONTROL         242,IDC_BM20,"Static",SS_BITMAP | SS_NOTIFY,55,80,14,12
+    GROUPBOX        "Pattern",IDC_STATIC,14,68,110,29
 END
 
 IDD_REGISTER DIALOG DISCARDABLE  0, 0, 140, 80
@@ -547,6 +543,11 @@ BEGIN
     IDD_BUGSBALLAST, DIALOG
     BEGIN
         BOTTOMMARGIN, 110
+    END
+
+    IDD_COLOURSEL, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 103
     END
 
     IDD_FGLIDE, DIALOG
@@ -1053,6 +1054,15 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_AIRSPACE0           BITMAP  DISCARDABLE     "Bitmaps\\airspace0.bmp"
+IDB_AIRSPACE1           BITMAP  DISCARDABLE     "Bitmaps\\airspace1.bmp"
+IDB_AIRSPACE2           BITMAP  DISCARDABLE     "Bitmaps\\airspace2.bmp"
 #endif    // English (Australia) resources
 /////////////////////////////////////////////////////////////////////////////
 

@@ -1804,6 +1804,7 @@ LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 }
 
 int NewColor;
+int NewBrush;
 
 LRESULT CALLBACK MapColour(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1820,87 +1821,122 @@ LRESULT CALLBACK MapColour(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
           return TRUE;
 
         case IDC_CLASSA:
-          NewColor = iAirspaceBrush[CLASSA];
+          NewColor = iAirspaceColour[CLASSA];
+          NewBrush = iAirspaceBrush[CLASSA];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[CLASSA] = NewColor;
+          iAirspaceBrush[CLASSA] = NewBrush;
+          iAirspaceColour[CLASSA] = NewColor;
           SetRegistryColour(CLASSA,NewColor);
           return TRUE;
 
         case IDC_CLASSB:
-          NewColor = iAirspaceBrush[CLASSB];
+          NewBrush = iAirspaceBrush[CLASSB];
+          NewColor = iAirspaceColour[CLASSB];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[CLASSB] = NewColor;
+          iAirspaceBrush[CLASSB] = NewBrush;
+          iAirspaceColour[CLASSB] = NewColor;
           SetRegistryColour(CLASSB,NewColor);
+          SetRegistryBrush(CLASSB,NewBrush);
           return TRUE;
 
         case IDC_CLASSC:
-          NewColor = iAirspaceBrush[CLASSC];
+          NewBrush = iAirspaceBrush[CLASSC];
+          NewColor = iAirspaceColour[CLASSC];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[CLASSC] = NewColor;
+          iAirspaceBrush[CLASSC] = NewBrush;
+          iAirspaceColour[CLASSC] = NewColor;
           SetRegistryColour(CLASSC,NewColor);
+          SetRegistryBrush(CLASSC,NewBrush);
           return TRUE;
 
         case IDC_CLASSD:
-          NewColor = iAirspaceBrush[CLASSD];
+          NewBrush = iAirspaceBrush[CLASSD];
+          NewColor = iAirspaceColour[CLASSD];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[CLASSD] = NewColor;
+          iAirspaceBrush[CLASSD] = NewBrush;
+          iAirspaceColour[CLASSD] = NewColor;
           SetRegistryColour(CLASSD,NewColor);
+          SetRegistryBrush(CLASSD,NewBrush);
           return TRUE;
 
         case IDC_PROHIBITED:
-          NewColor = iAirspaceBrush[PROHIBITED];
+          NewBrush = iAirspaceBrush[PROHIBITED];
+          NewColor = iAirspaceColour[PROHIBITED];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[PROHIBITED] = NewColor;
+          iAirspaceBrush[PROHIBITED] = NewBrush;
+          iAirspaceColour[PROHIBITED] = NewColor;
           SetRegistryColour(PROHIBITED,NewColor);
+          SetRegistryBrush(PROHIBITED,NewBrush);
           return TRUE;
 
         case IDC_DANGER:
-          NewColor = iAirspaceBrush[DANGER];
+          NewBrush = iAirspaceBrush[DANGER];
+          NewColor = iAirspaceColour[DANGER];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[DANGER] = NewColor;
+          iAirspaceBrush[DANGER] = NewBrush;
+          iAirspaceColour[DANGER] = NewColor;
           SetRegistryColour(DANGER,NewColor);
+          SetRegistryBrush(DANGER,NewBrush);
           return TRUE;
 
         case IDC_RESTRICTED:
-          NewColor = iAirspaceBrush[RESTRICT];
+          NewBrush = iAirspaceBrush[RESTRICT];
+          NewColor = iAirspaceColour[RESTRICT];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[RESTRICT] = NewColor;
+          iAirspaceBrush[RESTRICT] = NewBrush;
+          iAirspaceColour[RESTRICT] = NewColor;
           SetRegistryColour(RESTRICT,NewColor);
+          SetRegistryBrush(RESTRICT,NewBrush);
           return TRUE;
 
         case IDC_CTR:
-          NewColor = iAirspaceBrush[CTR];
+          NewBrush = iAirspaceBrush[CTR];
+          NewColor = iAirspaceColour[CTR];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[CTR] = NewColor;
+          iAirspaceBrush[CTR] = NewBrush;
+          iAirspaceColour[CTR] = NewColor;
           SetRegistryColour(CTR,NewColor);
+          SetRegistryBrush(CTR,NewBrush);
           return TRUE;
 
         case IDC_NOGLIDER:
-          NewColor = iAirspaceBrush[NOGLIDER];
+          NewBrush = iAirspaceBrush[NOGLIDER];
+          NewColor = iAirspaceColour[NOGLIDER];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[NOGLIDER] = NewColor;
+          iAirspaceBrush[NOGLIDER] = NewBrush;
+          iAirspaceColour[NOGLIDER] = NewColor;
           SetRegistryColour(NOGLIDER,NewColor);
+          SetRegistryBrush(NOGLIDER,NewBrush);
           return TRUE;
 
         case IDC_WAVE:
-          NewColor = iAirspaceBrush[WAVE];
+          NewBrush = iAirspaceBrush[WAVE];
+          NewColor = iAirspaceColour[WAVE];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[WAVE] = NewColor;
+          iAirspaceBrush[WAVE] = NewBrush;
+          iAirspaceColour[WAVE] = NewColor;
           SetRegistryColour(WAVE,NewColor);
+          SetRegistryBrush(WAVE,NewBrush);
           return TRUE;
 
         case IDC_OTHER:
-          NewColor = iAirspaceBrush[OTHER];
+          NewBrush = iAirspaceBrush[OTHER];
+          NewColor = iAirspaceColour[OTHER];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[OTHER] = NewColor;
+          iAirspaceBrush[OTHER] = NewBrush;
+          iAirspaceColour[OTHER] = NewColor;
           SetRegistryColour(OTHER,NewColor);
+          SetRegistryBrush(OTHER,NewBrush);
           return TRUE;
 
         case IDC_AAT:
-          NewColor = iAirspaceBrush[AATASK];
+          NewBrush = iAirspaceBrush[AATASK];
+          NewColor = iAirspaceColour[AATASK];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[AATASK] = NewColor;
+          iAirspaceBrush[AATASK] = NewBrush;
+          iAirspaceColour[AATASK] = NewColor;
           SetRegistryColour(AATASK,NewColor);
+          SetRegistryBrush(AATASK,NewBrush);
           return TRUE;
 
         }
@@ -1918,8 +1954,13 @@ LRESULT CALLBACK ColourSelect(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
     {
     case WM_INITDIALOG:
       Temp = GetWindowLong(GetDlgItem(hDlg,IDC_BM1+NewColor),GWL_STYLE);
-      Temp = Temp | WS_BORDER;
+      Temp = Temp | WS_BORDER | WS_EX_CLIENTEDGE;
       SetWindowLong(GetDlgItem(hDlg,IDC_BM1+NewColor),GWL_STYLE,Temp);
+
+      Temp = GetWindowLong(GetDlgItem(hDlg,IDC_BM18+NewBrush),GWL_STYLE);
+      Temp = Temp | WS_BORDER | WS_EX_CLIENTEDGE;
+      SetWindowLong(GetDlgItem(hDlg,IDC_BM18+NewBrush),GWL_STYLE,Temp);
+
       return TRUE;
 
     case WM_COMMAND:
@@ -2009,10 +2050,29 @@ LRESULT CALLBACK ColourSelect(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
           EndDialog(hDlg, TRUE);
           return TRUE;
 
+          /*        JMW    No longer required
         case IDC_BM17:
           NewColor = 16;
           EndDialog(hDlg, TRUE);
           return TRUE;
+          */
+
+          // new pattern bits
+        case IDC_BM18:
+          NewBrush = 0;
+          EndDialog(hDlg, TRUE);
+          return TRUE;
+
+        case IDC_BM19:
+          NewBrush = 1;
+          EndDialog(hDlg, TRUE);
+          return TRUE;
+
+        case IDC_BM20:
+          NewBrush = 2;
+          EndDialog(hDlg, TRUE);
+          return TRUE;
+
         }
       break;
     }
