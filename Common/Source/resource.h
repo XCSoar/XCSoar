@@ -279,15 +279,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        245
 #define _APS_NEXT_COMMAND_VALUE         40025
-<<<<<<< resource.h
-<<<<<<< resource.h
-#define _APS_NEXT_CONTROL_VALUE         1224
-=======
-#define _APS_NEXT_CONTROL_VALUE         1223
->>>>>>> 1.9
-=======
-#define _APS_NEXT_CONTROL_VALUE         1223
->>>>>>> 1.9
+#define _APS_NEXT_CONTROL_VALUE         1225
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif
