@@ -1827,6 +1827,7 @@ LRESULT CALLBACK MapColour(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
           iAirspaceBrush[CLASSA] = NewBrush;
           iAirspaceColour[CLASSA] = NewColor;
           SetRegistryColour(CLASSA,NewColor);
+          SetRegistryBrush(CLASSA, NewBrush);
           return TRUE;
 
         case IDC_CLASSB:
@@ -1954,12 +1955,21 @@ LRESULT CALLBACK ColourSelect(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
     {
     case WM_INITDIALOG:
       Temp = GetWindowLong(GetDlgItem(hDlg,IDC_BM1+NewColor),GWL_STYLE);
-      Temp = Temp | WS_BORDER | WS_EX_CLIENTEDGE;
+      Temp = Temp | WS_EX_CLIENTEDGE;
       SetWindowLong(GetDlgItem(hDlg,IDC_BM1+NewColor),GWL_STYLE,Temp);
 
+      Temp = GetWindowLong(GetDlgItem(hDlg,IDC_BM1+NewColor),GWL_EXSTYLE);
+      Temp = Temp | WS_EX_CLIENTEDGE;
+      SetWindowLong(GetDlgItem(hDlg,IDC_BM1+NewColor),GWL_EXSTYLE,Temp);
+
       Temp = GetWindowLong(GetDlgItem(hDlg,IDC_BM18+NewBrush),GWL_STYLE);
-      Temp = Temp | WS_BORDER | WS_EX_CLIENTEDGE;
+      Temp = Temp | WS_BORDER;
       SetWindowLong(GetDlgItem(hDlg,IDC_BM18+NewBrush),GWL_STYLE,Temp);
+
+      Temp = GetWindowLong(GetDlgItem(hDlg,IDC_BM18+NewBrush),GWL_EXSTYLE);
+      Temp = Temp | WS_EX_CLIENTEDGE;
+      SetWindowLong(GetDlgItem(hDlg,IDC_BM18+NewBrush),GWL_EXSTYLE,Temp);
+
 
       return TRUE;
 
