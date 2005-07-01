@@ -1939,6 +1939,7 @@ COLORRAMP snail_colors[] = {
 
 static int iSnailNext=0;
 
+
 void DrawTrail( HDC hdc, POINT Orig, RECT rc)
 {
   int i;

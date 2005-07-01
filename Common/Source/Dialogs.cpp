@@ -81,6 +81,7 @@ extern TCHAR szRegistryHomeWaypoint[];
 extern TCHAR szRegistryPilotName[];
 extern TCHAR szRegistryAircraftType[];
 extern TCHAR szRegistryAircraftRego[];
+extern TCHAR szRegistryNettoSpeed[];
 
 
 void ReadWayPoints(void);
@@ -535,10 +536,15 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
 			       WPARAM wParam, LPARAM lParam)
 {
+  int Temp;
+  int Temp1;
+  LPWINDOWPOS lpwp;
 
   switch (message)
     {
     case WM_INITDIALOG:
+
+      SetDlgItemInt(hDlg,IDC_NETTOSPEED,(int)NettoSpeed,FALSE);
 
       SendDlgItemMessage(hDlg, IDC_AUDIOSLIDER,
 			 TBM_SETRANGE, FALSE, MAKELPARAM(0,100));
@@ -604,6 +610,24 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
 
         }
       break;
+
+    case WM_WINDOWPOSCHANGED:
+      lpwp = (LPWINDOWPOS)(lParam);
+	  if (!lpwp)
+		break;
+
+      if(( lpwp->flags & SWP_HIDEWINDOW) == SWP_HIDEWINDOW)
+        {
+          Temp1 = GetDlgItemInt(hDlg,IDC_NETTOSPEED,&Temp,FALSE);
+          if(Temp)
+            {
+              NettoSpeed = Temp1;
+              SetToRegistry(szRegistryNettoSpeed,(DWORD)NettoSpeed);
+            }
+        }
+      break;
+
+
     }
   return FALSE;
 }
@@ -2915,3 +2939,76 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
 }
 
 
+
+
+bool startupfinished = false;
+
+// Intercept messages destined for the Status Message window
+LRESULT CALLBACK StartupWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+
+  switch (message) {
+    case WM_COMMAND:
+      switch (LOWORD(wParam))
+        {
+        case IDC_SPLASH:
+          DestroyWindow(hwnd);
+          return TRUE;
+        };
+      break;
+  case WM_TIMER :         // Fall through to destroy
+  case WM_LBUTTONDOWN :
+    DestroyWindow(hwnd);
+    break;
+  case WM_CLOSE:
+    startupfinished = true;
+    break;
+  }
+  return DefWindowProc(hwnd, message, wParam, lParam);
+}
+
+
+// Pop up start up screen
+//
+
+
+void OpenStartupScreen() {
+
+  HWND hWnd;
+
+  startupfinished = false;
+
+  // Create a child window to contain status message
+  hWnd =
+    CreateDialog(hInst, (LPCTSTR)IDD_SPLASH, hWndMainWindow,
+                 (DLGPROC)StartupWndTimerProc);
+
+  SetWindowPos(hWndMainWindow,HWND_TOPMOST,0,0,
+               GetSystemMetrics(SM_CXSCREEN),
+               GetSystemMetrics(SM_CYSCREEN),
+               SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+
+  // Subclass window function so that we can trap timer messages
+  // set timeout to 3 seconds
+  SetTimer(hWnd, 2, 3000, NULL);
+
+  MSG msg;
+
+  while (GetMessage(&msg, NULL, 0, 0) && !startupfinished)
+    {
+      DispatchMessage(&msg);
+    }
+
+}
+
+
+
+void StartupScreen() {
+  DWORD dwThreadID;
+  HANDLE splashthread;
+  splashthread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )
+                               OpenStartupScreen, 0, 0, &dwThreadID);
+
+  CloseHandle (splashthread);
+
+}

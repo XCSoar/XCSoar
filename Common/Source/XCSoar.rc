@@ -1015,18 +1015,30 @@ STYLE WS_CHILD
 FONT 8, "System"
 BEGIN
     CONTROL         "Task",IDC_AUDIOEVENTS,"Button",BS_AUTOCHECKBOX |
-                    WS_TABSTOP,20,97,31,10
+                    WS_TABSTOP,17,32,31,10
     CONTROL         "Modes",IDC_AUDIOUI,"Button",BS_AUTOCHECKBOX |
-                    WS_TABSTOP,20,110,37,10
+                    WS_TABSTOP,17,45,37,10
     CONTROL         "Slider1",IDC_AUDIOSLIDER,"msctls_trackbar32",TBS_VERT |
                     TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,77,29,24,100
     LTEXT           "Master",IDC_STATIC,74,20,23,8
     CONTROL         "Slider2",IDC_AUDIODEADBAND,"msctls_trackbar32",TBS_VERT |
                     TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,109,29,20,100
     LTEXT           "Deadband",IDC_STATIC,101,20,34,8
-    CONTROL         "Audio vario",IDC_AUDIOVARIO,"Button",BS_AUTOCHECKBOX |
-                    WS_TABSTOP,16,67,53,10
-    GROUPBOX        "Events",IDC_STATIC,14,85,48,40
+    CONTROL         "Enable",IDC_AUDIOVARIO,"Button",BS_AUTOCHECKBOX |
+                    WS_TABSTOP,16,77,38,10
+    GROUPBOX        "Events",IDC_STATIC,11,20,58,40
+    EDITTEXT        IDC_NETTOSPEED,16,101,28,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "m/s",IDC_STATIC,49,104,18,8
+    LTEXT           "Netto trigger",IDC_STATIC,16,90,45,8
+    GROUPBOX        "Audio vario",IDC_STATIC,11,65,59,57
+END
+
+IDD_SPLASH DIALOG DISCARDABLE  0, 0, 139, 172
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_VISIBLE
+FONT 8, "System"
+BEGIN
+    CONTROL         244,IDC_SPLASH,"Static",SS_BITMAP | SS_NOTIFY |
+                    SS_CENTERIMAGE,7,31,125,102
 END
 
 
@@ -1053,6 +1065,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 135
     END
+
+    IDD_SPLASH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 132
+        TOPMARGIN, 1
+        BOTTOMMARGIN, 170
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -1065,6 +1085,7 @@ END
 IDB_AIRSPACE0           BITMAP  DISCARDABLE     "Bitmaps\\airspace0.bmp"
 IDB_AIRSPACE1           BITMAP  DISCARDABLE     "Bitmaps\\airspace1.bmp"
 IDB_AIRSPACE2           BITMAP  DISCARDABLE     "Bitmaps\\airspace2.bmp"
+IDB_SPLASH              BITMAP  DISCARDABLE     "Bitmaps\\xcsoar-splash.bmp"
 #endif    // English (Australia) resources
 /////////////////////////////////////////////////////////////////////////////
 

@@ -107,6 +107,8 @@ double        ALTITUDEMODIFY = TOFEET;
 double        MACREADY = 0;
 bool          AutoMacReady = false;
 
+int          NettoSpeed = 1000;
+
 NMEA_INFO                       GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
 BOOL GPSCONNECT = FALSE;
@@ -474,6 +476,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
 
   ReadRegistrySettings();
+
+  // display start up screen
+  //  StartupScreen();
+  // not working very well at all
+
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
   SetBallast();
@@ -1784,6 +1791,11 @@ void ProcessTimer(void)
 	DisplayText();
 	MapDirty = true;
       }
+
+    if (!GPS_INFO.VarioAvailable) {
+      // run the function anyway, because this gives audio functions
+      DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO);
+    }
 
     UnlockFlightData();
   }

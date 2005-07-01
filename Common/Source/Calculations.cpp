@@ -137,7 +137,39 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  if (
+      (Basic->AirspeedAvailable &&
+      (Basic->Airspeed >= NettoSpeed))
+      ||
+      (!Basic->AirspeedAvailable &&
+       (Basic->Speed >= NettoSpeed))
+      ) {
+    // TODO: slow/smooth switching between netto and not
 
+    double theSinkRate;
+
+    if (Basic->AirspeedAvailable) {
+      theSinkRate= SinkRate(Basic->Airspeed);
+    } else {
+      // assume zero wind (Speed=Airspeed, very bad I know)
+      theSinkRate= SinkRate(Basic->Speed);
+    }
+
+    if (Basic->VarioAvailable) {
+      Calculated->NettoVario = Basic->Vario - theSinkRate;
+    } else {
+      Calculated->NettoVario = Calculated->Vario - theSinkRate;
+    }
+
+    VarioSound_SetV((short)(Calculated->NettoVario/6.0*100));
+
+  } else {
+    if (Basic->VarioAvailable) {
+      VarioSound_SetV((short)(Basic->Vario/6.0*100));
+    } else {
+      VarioSound_SetV((short)(Calculated->Vario/6.0*100));
+    }
+  }
 }
 
 
@@ -261,18 +293,8 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       } else {
         // get value from instrument
         Calculated->Vario = Basic->Vario;
-      }
-
-      if (Calculated->Circling) {
-	VarioSound_SetV((short)(Calculated->Vario/6.0*100));
-      } else {
-	// JMW switch to Netto
-	// TODO: Correct for TAS/IAS
-	// if (netto) {
-	//      double vnet = Calculated->Vario-SinkRate(Basic->Speed);
-	//      VarioSound_SetV((short)(vnet/10.0*100));
-	// }
-	VarioSound_SetV((short)(Calculated->Vario/6.0*100));
+        // we don't bother with sound here as it is polled at a
+        // faster rate in the DoVarioCalcs methods
       }
 
       LastAlt = Basic->Altitude;

@@ -127,6 +127,7 @@ TCHAR szRegistrySoundDeadband[]=  TEXT("SoundDeadband");
 TCHAR szRegistrySoundAudioVario[]=  TEXT("AudioVario");
 TCHAR szRegistrySoundTask[]=  TEXT("SoundTask");
 TCHAR szRegistrySoundModes[]=  TEXT("SoundModes");
+TCHAR szRegistryNettoSpeed[]= TEXT("NettoSpeed");
 
 TCHAR szRegistryDeviceA[]= TEXT("DeviceA");
 TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
@@ -227,7 +228,6 @@ void ReadRegistrySettings(void)
   if(Temp != 0)
     SAFETYALTITUDETERRAIN = (double)Temp;
 
-
   GetFromRegistry(szRegistrySafteySpeed,&Temp);
   if(Temp != 0)
     SAFTEYSPEED = (double)Temp;
@@ -326,6 +326,10 @@ void ReadRegistrySettings(void)
   Temp = 1;
   GetFromRegistry(szRegistrySoundModes,&Temp);
   EnableSoundModes = Temp;
+
+  Temp = 500;
+  GetFromRegistry(szRegistryNettoSpeed,&Temp);
+  NettoSpeed = (double)Temp;
 
 }
 
