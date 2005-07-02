@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.20 2005/07/02 02:37:03 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.21 2005/07/02 11:32:05 robin-birch Exp $
 
 */
 #include "stdafx.h"
@@ -599,7 +599,7 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
         {
         case IDC_AUDIOVARIO:
           EnableSoundVario = !EnableSoundVario;
-	  VarioSound_EnableSound((bool)EnableSoundVario);
+	  VarioSound_EnableSound(EnableSoundVario); // remove type case RB
           return TRUE;
         case IDC_AUDIOEVENTS:
           EnableSoundTask = !EnableSoundTask;
