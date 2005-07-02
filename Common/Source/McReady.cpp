@@ -92,7 +92,7 @@ double SinkRate(double V, double n) {
   if (n<0.01) {
     n=0.01;
   }
-  double sqrtn = (double)isqrt4((unsigned long)(n*1000))/1000.0;
+  double sqrtn = (double)isqrt4((unsigned long)(n*10000))/100.0;
   return SinkRate(polar_a/sqrtn,polar_b,polar_c*sqrtn,0.0,0.0,V);
 
 }
