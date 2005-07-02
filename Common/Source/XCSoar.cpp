@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.23 2005/07/02 02:37:04 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.24 2005/07/02 11:34:15 robin-birch Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1034,7 +1034,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
           if (!InfoWindowActive) {
             EnableSoundVario = !EnableSoundVario;
-            VarioSound_EnableSound((bool)EnableSoundVario);
+            VarioSound_EnableSound((BOOL)EnableSoundVario);
 
 	    if (EnableSoundModes) {
 	      if (EnableSoundVario) {
@@ -1817,11 +1817,13 @@ void ProcessTimer(void)
     // timeout if no new data in 5 seconds
     return;
   }
-
-  bool gpsconnect = (bool)GPSCONNECT;
-  GPSCONNECT = false;
-  bool varioconnect = (bool)VARIOCONNECT;
-  bool navwarning = (bool)(GPS_INFO.NAVWarning);
+//
+// replace bool with BOOL to correct warnings and match variable declarations RB
+//
+  BOOL gpsconnect = GPSCONNECT;
+  GPSCONNECT = FALSE;
+  BOOL varioconnect = VARIOCONNECT;
+  BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
 
   if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
     {
