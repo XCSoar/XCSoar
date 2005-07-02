@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.19 2005/07/01 22:54:09 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.20 2005/07/02 02:37:03 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -3012,3 +3012,4 @@ void StartupScreen() {
   CloseHandle (splashthread);
 
 }
+

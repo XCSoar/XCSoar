@@ -37,6 +37,9 @@ static double BallastFactor;
 static double polar_a;
 static double polar_b;
 static double polar_c;
+static int Vminsink = 2;
+static int Vbestld = 2;
+
 
 void SetBallast() {
   double BallastWeight;
@@ -46,12 +49,51 @@ void SetBallast() {
   polar_a = POLAR[0] / BallastWeight;
   polar_b = POLAR[1];
   polar_c = POLAR[2] * BallastWeight;
+
+  // do preliminary scan to find min sink and best LD
+  // this speeds up mcready calculations because we have a reduced range
+  // to search across.
+  // this also limits speed to fly to logical values (will never try
+  // to fly slower than min sink speed)
+
+  double minsink = 10000.0;
+  double bestld = 0.0;
+  int i;
+
+  for(i=4;i<SAFTEYSPEED;i+=1)
+    {
+      double vtrack = (double)i; // TAS along bearing in cruise
+      double thesinkrate 
+        =  -SinkRate(polar_a,polar_b,polar_c,0,0,vtrack);
+
+      double ld = vtrack/thesinkrate;
+      if (ld>=bestld) {
+        bestld = ld;
+        Vbestld = i;
+      }
+      if (thesinkrate<= minsink) {
+        minsink = thesinkrate;
+        Vminsink = i;
+      }
+
+    }
+
 }
 
 
 double SinkRate(double V) {
 
   return SinkRate(polar_a,polar_b,polar_c,0.0,0.0,V);
+
+}
+
+
+double SinkRate(double V, double n) {
+  if (n<0.01) {
+    n=0.01;
+  }
+  double sqrtn = (double)isqrt4((unsigned long)(n*1000))/1000.0;
+  return SinkRate(polar_a/sqrtn,polar_b,polar_c*sqrtn,0.0,0.0,V);
 
 }
 
@@ -100,7 +142,7 @@ double McReadyAltitude(double MCREADY, double Distance, double Bearing, double W
     Distance = 1;
   }
 
-  for(i=4;i<SAFTEYSPEED;i+=1)
+  for(i=Vminsink;i<SAFTEYSPEED;i+=1)
     {
       double vtrack = (double)i; // TAS along bearing in cruise
 	    

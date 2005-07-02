@@ -147,12 +147,18 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     // TODO: slow/smooth switching between netto and not
 
     double theSinkRate;
+    double n;
+    if (Basic->AccelerationAvailable) {
+      n = Basic->Gload;
+    } else {
+      n = 1.0;
+    }
 
     if (Basic->AirspeedAvailable) {
-      theSinkRate= SinkRate(Basic->Airspeed);
+      theSinkRate= SinkRate(Basic->Airspeed, n);
     } else {
       // assume zero wind (Speed=Airspeed, very bad I know)
-      theSinkRate= SinkRate(Basic->Speed);
+      theSinkRate= SinkRate(Basic->Speed, n);
     }
 
     if (Basic->VarioAvailable) {
@@ -253,15 +259,15 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (TaskAborted) {
 
     SortLandableWaypoints(Basic, Calculated);
-    TaskStatistics(Basic, Calculated, macready);
+    //    TaskStatistics(Basic, Calculated, macready);
 
   } else {
 
     InSector(Basic, Calculated);
     InAATSector(Basic, Calculated);
 
-    TaskStatistics(Basic, Calculated, macready);
     AATStats(Basic, Calculated);  
+    TaskStatistics(Basic, Calculated, macready);
 
   }
 
@@ -1482,6 +1488,8 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   // Calculate Task Distances
 
   Calculated->TaskDistanceToGo = 0;
+  // JMW: not sure why this is here?
+
   if(ActiveWayPoint >=0)
     {
       i=ActiveWayPoint;

@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: Parser.cpp,v 1.6 2005/07/01 22:54:09 jwharington Exp $
+  $Id: Parser.cpp,v 1.7 2005/07/02 02:37:03 jwharington Exp $
 */
 #include "stdafx.h"
 #include "parser.h"
@@ -594,24 +594,28 @@ BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  double xval, zval;
+  int xval, zval;
   TCHAR ctemp[80];
+  TCHAR *Stop;
 
   ExtractParameter(String,ctemp,0);
   if (ctemp[0]=='+') {
-    xval = StrToDouble(ctemp+1,NULL);
+    xval = _tcstol(ctemp+1, &Stop, 10);
   } else {
-    xval = StrToDouble(ctemp,NULL);
+    xval = _tcstol(ctemp, &Stop, 10);
   }
   ExtractParameter(String,ctemp,1);
   if (ctemp[0]=='+') {
-    zval = StrToDouble(ctemp+1,NULL);
+    zval = _tcstol(ctemp+1, &Stop, 10);
   } else {
-    zval = StrToDouble(ctemp,NULL);
+    zval = _tcstol(ctemp, &Stop, 10);
   }
 
-  xval /= 100.0;
-  zval /= 100.0;
+  int mag = isqrt4(xval*xval+zval*zval);
+  GPS_INFO->AccelX = xval/103.0;
+  GPS_INFO->AccelZ = zval/103.0;
+  GPS_INFO->Gload = mag/103.0;
+  GPS_INFO->AccelerationAvailable = TRUE;
 
   return FALSE;
 }
