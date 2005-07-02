@@ -70,7 +70,7 @@ double variosound_vav_in = 0.0;
 double variosound_vscale=0.0;
 double variosound_vcur = 0.0;
 double variosound_vav=0.0;
-bool variosound_sound = true;
+BOOL variosound_sound = TRUE;
 
 int tp_delay = 50;
 int tp_sound = 20;
@@ -366,15 +366,17 @@ extern "C" {
     VarioSound_EnableSound(false);
  
     variosound_waveOut.StartThread();
-    variosound_sound = true;
+    variosound_sound = TRUE;
     for (i=0; i<BCOUNT; i++) {
       VarioSound_synthesiseSound();
       variosound_waveOut.WriteData(variosound_buffer, BSIZE*FREQZ);
     }
     LeaveCriticalSection(&CritSec_VarioSound);
   }
-
-  VARIOSOUND_API void VarioSound_EnableSound(bool sound) {
+//
+// Modified to use BOOL instead of bool as the parameter.  RB
+//
+  VARIOSOUND_API void VarioSound_EnableSound(BOOL sound) {
     EnterCriticalSection(&CritSec_VarioSound);
     variosound_sound = sound;
     if (sound) {
