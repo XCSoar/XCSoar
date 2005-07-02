@@ -17,6 +17,7 @@ Summary of new features since v4.0
 - Audio settings page
 - Graduated snail trail color and thickness
 - Abort/resume of tasks
+- Added netto vario calculations
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -87,7 +88,7 @@ through various related values.  These groupings are:
   Altitude, Altitude AGL, Terrain Height, Barometric Altitude
 
 - Aircraft info group:
-  Bearing, Ground Speed, Track, Airspeed
+  Bearing, Ground Speed, Track, Airspeed, G loading
 
 - LD group:
   Current LD, Cruise LD, Task LD Finish

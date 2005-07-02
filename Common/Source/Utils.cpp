@@ -329,7 +329,7 @@ void ReadRegistrySettings(void)
 
   Temp = 500;
   GetFromRegistry(szRegistryNettoSpeed,&Temp);
-  NettoSpeed = (double)Temp;
+  NettoSpeed = Temp;
 
 }
 

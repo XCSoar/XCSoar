@@ -3012,3 +3012,4 @@ void StartupScreen() {
   CloseHandle (splashthread);
 
 }
+

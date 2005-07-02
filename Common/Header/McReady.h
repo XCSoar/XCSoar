@@ -9,6 +9,7 @@ double McReadyAltitude(double MCREADY, double Distance, double Bearing, double W
 						double *BestCruiseTrack, double *VMcReady, int isFinalGlide);
 
 double SinkRate(double Vias);
+double SinkRate(double Vias, double loadfactor);
 void SetBallast();
 
 #endif

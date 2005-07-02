@@ -594,24 +594,28 @@ BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  double xval, zval;
+  int xval, zval;
   TCHAR ctemp[80];
+  TCHAR *Stop;
 
   ExtractParameter(String,ctemp,0);
   if (ctemp[0]=='+') {
-    xval = StrToDouble(ctemp+1,NULL);
+    xval = _tcstol(ctemp+1, &Stop, 10);
   } else {
-    xval = StrToDouble(ctemp,NULL);
+    xval = _tcstol(ctemp, &Stop, 10);
   }
   ExtractParameter(String,ctemp,1);
   if (ctemp[0]=='+') {
-    zval = StrToDouble(ctemp+1,NULL);
+    zval = _tcstol(ctemp+1, &Stop, 10);
   } else {
-    zval = StrToDouble(ctemp,NULL);
+    zval = _tcstol(ctemp, &Stop, 10);
   }
 
-  xval /= 100.0;
-  zval /= 100.0;
+  int mag = isqrt4(xval*xval+zval*zval);
+  GPS_INFO->AccelX = xval/103.0;
+  GPS_INFO->AccelZ = zval/103.0;
+  GPS_INFO->Gload = mag/103.0;
+  GPS_INFO->AccelerationAvailable = TRUE;
 
   return FALSE;
 }

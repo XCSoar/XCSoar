@@ -219,7 +219,7 @@ void PopupBugsBallast(int updown);
 
 // Groups:
 //   Altitude 0,1,20,33
-//   Aircraft info 3,6,23,32
+//   Aircraft info 3,6,23,32,37
 //   LD 4,5,19
 //   Vario 2,7,8,9,21,22,24
 //   Wind 25,26
@@ -238,7 +238,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Average"), TEXT("Average"), TEXT("%-2.1f"), 0, NoProcessing, 7, 24},
 
   // 3
-  {TEXT("Bearing"), TEXT("Bearing"), TEXT("%2.0f°T"), 0, NoProcessing, 6, 32},
+  {TEXT("Bearing"), TEXT("Bearing"), TEXT("%2.0f°T"), 0, NoProcessing, 6, 37},
 
   // 4
   {TEXT("Current L/D"), TEXT("L/D"), TEXT("%2.0f"), 0, PopupBugsBallast, 5, 19},
@@ -325,7 +325,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("AA Min Speed"), TEXT("Min S"), TEXT("%2.0f"), 0, NoProcessing, 11, 30},
 
   // 32
-  {TEXT("Airspeed"), TEXT("Airspeed"), TEXT("%2.0f"), 0, NoProcessing, 3, 23},
+  {TEXT("Airspeed"), TEXT("Airspeed"), TEXT("%2.0f"), 0, NoProcessing, 37, 23},
 
   // 33
   {TEXT("Baro Alt"), TEXT("Altitude"), TEXT("%2.0f"), 0, NoProcessing, 0, 20},
@@ -339,9 +339,12 @@ SCREEN_INFO Data_Options[] = {
   // 36
   {TEXT("Time of day"), TEXT("Time"), TEXT("%04.0f"), 0, NoProcessing, 14, 14},
 
+  // 37
+  {TEXT("G load"), TEXT("G"), TEXT("%2.2f"), 0, NoProcessing, 3, 32},
+
 };
 
-int NUMSELECTSTRINGS = 37;
+int NUMSELECTSTRINGS = 38;
 
 int ControlWidth, ControlHeight;
 
@@ -1333,12 +1336,16 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               if(COMPORTCHANGED)
                 {
 
+#ifndef _SIM_
+                  // JMW disabled com opening in sim mode
                   devClose(devA());
                   devClose(devA());
 
                   RestartCommPorts();
 
+
                   devInit();
+#endif
 
                 }
 
@@ -1656,6 +1663,8 @@ void    AssignValues(void)
 
   Data_Options[36].Value = DetectStartTime();
 
+  Data_Options[37].Value = GPS_INFO.Gload;
+
   UnlockNavBox();
 
 }
@@ -1842,7 +1851,9 @@ void ProcessTimer(void)
 	if (itimeout % 240 == 0) {
 	  // no activity for one minute, so assume device has been
 	  // switched off
+#ifndef _SIM_
 	  RestartCommPorts();
+#endif
 	  itimeout = 0;
 	}
       }
@@ -1926,7 +1937,7 @@ void SIMProcessTimer(void)
   GPS_INFO.Longditude = FindLongditude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
   GPS_INFO.Time+= 1.0;
 
-  if(DoCalculations(&GPS_INFO,&CALCULATED_INFO))
+  if (DoCalculations(&GPS_INFO,&CALCULATED_INFO))
     {
       AssignValues();
       DisplayText();
