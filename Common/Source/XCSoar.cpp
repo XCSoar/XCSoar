@@ -1034,7 +1034,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
           if (!InfoWindowActive) {
             EnableSoundVario = !EnableSoundVario;
-            VarioSound_EnableSound((bool)EnableSoundVario);
+            VarioSound_EnableSound((BOOL)EnableSoundVario);
 
 	    if (EnableSoundModes) {
 	      if (EnableSoundVario) {
@@ -1817,11 +1817,13 @@ void ProcessTimer(void)
     // timeout if no new data in 5 seconds
     return;
   }
-
-  bool gpsconnect = (bool)GPSCONNECT;
-  GPSCONNECT = false;
-  bool varioconnect = (bool)VARIOCONNECT;
-  bool navwarning = (bool)(GPS_INFO.NAVWarning);
+//
+// replace bool with BOOL to correct warnings and match variable declarations RB
+//
+  BOOL gpsconnect = GPSCONNECT;
+  GPSCONNECT = FALSE;
+  BOOL varioconnect = VARIOCONNECT;
+  BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
 
   if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
     {
