@@ -599,7 +599,7 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
         {
         case IDC_AUDIOVARIO:
           EnableSoundVario = !EnableSoundVario;
-	  VarioSound_EnableSound((bool)EnableSoundVario);
+	  VarioSound_EnableSound(EnableSoundVario); // remove type case RB
           return TRUE;
         case IDC_AUDIOEVENTS:
           EnableSoundTask = !EnableSoundTask;
