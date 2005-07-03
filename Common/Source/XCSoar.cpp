@@ -812,8 +812,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   SendMessage(hWndMenuButton,WM_SETFONT,(WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
 
   // JMW moved menu button to center, to make room for thermal indicator
-  SetWindowPos(hWndMenuButton,HWND_TOP,(rc.right-rc.left-ControlWidth*MENUBUTTONWIDTHRATIO)/2,
-               ControlHeight+10,
+  SetWindowPos(hWndMenuButton,HWND_TOP,(int)(rc.right-rc.left-ControlWidth*MENUBUTTONWIDTHRATIO)/2,
+               (int)(ControlHeight+10),
                (int)(ControlWidth*MENUBUTTONWIDTHRATIO),
                (int)((rc.bottom - rc.top)/10),SWP_SHOWWINDOW);
 
@@ -1595,12 +1595,12 @@ int DetectStartTime() {
   static int starttime = -1;
   if (starttime == -1) {
     if (GPS_INFO.Speed > 5) {
-      starttime = GPS_INFO.Time;
+      starttime = (int)GPS_INFO.Time;
     } else {
       return 0;
     }
   }
-  return SecsToDisplayTime(GPS_INFO.Time-starttime);
+  return SecsToDisplayTime((int)GPS_INFO.Time-starttime);
 }
 
 

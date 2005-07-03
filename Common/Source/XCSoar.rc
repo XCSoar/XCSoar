@@ -67,6 +67,16 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps\\XCSoar.ICO"
+IDI_XCSOARS             ICON    DISCARDABLE     "bitmaps\\xcsoars.ico"
 #endif    // Neutral (Default) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -625,15 +635,6 @@ END
 #endif    // APSTUDIO_INVOKED
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_XCSOAR              ICON    DISCARDABLE     "XCSoar.ICO"
-
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -802,16 +803,6 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDI_XCSOAR              ICON    DISCARDABLE     "bitmaps\\xcsoar.ico"
-IDI_XCSOARS             ICON    DISCARDABLE     "bitmaps\\icon1.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
