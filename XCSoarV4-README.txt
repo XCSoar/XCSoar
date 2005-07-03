@@ -18,6 +18,7 @@ Summary of new features since v4.0
 - Graduated snail trail color and thickness
 - Abort/resume of tasks
 - Added netto vario calculations
+- Added smart zooming (zooms back out when waypoint changes if in autozoom)
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -225,7 +226,16 @@ pan mode, and select waypoints as usual.
 Auto-zoom automatically zooms in when approaching a waypoint to keep
 the waypoint at a reasonable screen distance.  The user can still zoom
 out if desired.  When auto-zoom is active, an 'A' appears next to the
-map scale.
+map scale.  
+
+When a waypoint changes (automatically, via the task selector, or by
+manually switching waypoints), autozoom returns the zoom level to what
+it was immediately prior to any automatic zooming in it may have
+performed.  This has the effect of allowing users to zoom in and out
+manually in cruise, and when approaching a waypoint, the system
+automatically zooms in.  When passing the waypoint, the system goes
+back to the previous cruise zoom level in effect.
+
 
 There is a facility to have two zoom settings; one when circling, and
 one in cruise/final glide.  This is the "Circling zoom" option in the
@@ -454,3 +464,6 @@ landing site.
 
 Resuming a task restores the previously active task and active
 waypoint.
+
+By default now, aborting a task always sets the active waypoint to the
+closest landable field.

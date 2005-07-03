@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.21 2005/07/02 11:32:05 robin-birch Exp $
+//   $Id: Dialogs.cpp,v 1.22 2005/07/03 11:36:17 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -868,7 +868,10 @@ void settaskUpdateControls(HWND hDlg, int TaskSize){
   long Selection;
 
 
-  AATEnabled = TaskSize >=3;
+  AATEnabled = TaskSize >=3; 
+  // 
+  // JMW not sure this is right,
+  // it is making all my tasks aat by default!
   
   EnableWindow(GetDlgItem(hDlg, IDC_AAT), AATEnabled);
   

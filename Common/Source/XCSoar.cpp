@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.24 2005/07/02 11:34:15 robin-birch Exp $
+  $Id: XCSoar.cpp,v 1.25 2005/07/03 11:36:17 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -514,14 +514,19 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   CreateDrawingThread();
 
 #ifdef _SIM_
+  /*
   MessageBox(   hWndMainWindow, TEXT("Simulator mode\r\nNothing is Real!!"), TEXT("Caution"), MB_OK|MB_ICONWARNING);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+  */
+  ShowStatusMessage(TEXT("Simulation\r\nNothing is real!"), 3000);
+
 #else
   /*
   MessageBox(   hWndMainWindow, TEXT("Maintain effective\r\nLOOKOUT at all times"), TEXT("Caution"), MB_OK|MB_ICONWARNING);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
 
   */
+  ShowStatusMessage(TEXT("Maintain effective\r\nLOOKOUT at all times"), 3000);
 
   RestartCommPorts();
 
