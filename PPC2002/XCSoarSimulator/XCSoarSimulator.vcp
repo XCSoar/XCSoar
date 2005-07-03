@@ -182,6 +182,7 @@ SOURCE=..\..\Common\Source\AirfieldDetails.cpp
 DEP_CPP_AIRFI=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
@@ -252,6 +253,7 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
@@ -320,11 +322,16 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
+	"..\..\Common\Header\vector.h"\
+	"..\..\Common\Header\windanalyser.h"\
+	"..\..\Common\Header\windmeasurementlist.h"\
+	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -384,12 +391,236 @@ DEP_CPP_CALCU=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Source\devCAI302.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+DEP_CPP_DEVCA=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+DEP_CPP_DEVCA=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
+
+DEP_CPP_DEVCA=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
+
+DEP_CPP_DEVCA=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\devEW.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+DEP_CPP_DEVEW=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+DEP_CPP_DEVEW=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
+
+DEP_CPP_DEVEW=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
+
+DEP_CPP_DEVEW=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\device.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+DEP_CPP_DEVIC=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+DEP_CPP_DEVIC=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
+
+DEP_CPP_DEVIC=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
+
+DEP_CPP_DEVIC=\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Source\Dialogs.cpp
 
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
 
 DEP_CPP_DIALO=\
+	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\imgdecmp.h"\
@@ -397,16 +628,16 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DIALO=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
@@ -493,9 +724,11 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -771,14 +1004,17 @@ SOURCE=..\..\Common\Source\MapWindow.cpp
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -887,9 +1123,11 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -945,10 +1183,12 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1005,9 +1245,11 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1064,9 +1306,11 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1120,11 +1364,14 @@ SOURCE=..\..\Common\Source\Process.cpp
 
 DEP_CPP_PROCE=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1304,12 +1551,15 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1379,10 +1629,12 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Topology.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -1442,8 +1694,10 @@ SOURCE=..\..\Common\Source\Utils.cpp
 
 DEP_CPP_UTILS=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
@@ -1625,6 +1879,7 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
@@ -1889,13 +2144,19 @@ SOURCE=..\..\Common\Source\XCSoar.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
 
 DEP_CPP_XCSOA=\
+	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devCAI302.h"\
+	"..\..\Common\Header\devEW.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\Task.h"\
@@ -1904,11 +2165,8 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_XCSOA=\
-	".\ipapi.h"\
-	".\pcuser.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
@@ -2022,11 +2280,35 @@ SOURCE=..\..\Common\Header\Calculations.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Header\compatibility.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\devCAI302.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\devEW.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\device.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Header\Dialogs.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\Common\Header\externs.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\imgdecmp.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\imgrendr.h
 # End Source File
 # Begin Source File
 
