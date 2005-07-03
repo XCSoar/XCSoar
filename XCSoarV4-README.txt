@@ -19,6 +19,7 @@ Summary of new features since v4.0
 - Abort/resume of tasks
 - Added netto vario calculations
 - Added smart zooming (zooms back out when waypoint changes if in autozoom)
+- Added installer and launcher
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -48,6 +49,16 @@ Bug fixes and code improvements
 - Waypoint labels have white background so not obscured by terrain
 - Labels of topological features now supported
 - Fast loading of airspace at startup using binary file
+
+
+============================================================================
+INSTALLATION AND RUNNING
+============================================================================
+
+Connect your PDA to a PC and run the Install-XXX.exe on the PC.  This
+will start ActiveSync and initiate the install on the PDA.
+
+To run, click on either of the XCSoar icons on the Today screen...
 
 
 ============================================================================
