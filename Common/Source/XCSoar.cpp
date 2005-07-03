@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.25 2005/07/03 11:36:17 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.26 2005/07/03 20:17:28 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -812,8 +812,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   SendMessage(hWndMenuButton,WM_SETFONT,(WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
 
   // JMW moved menu button to center, to make room for thermal indicator
-  SetWindowPos(hWndMenuButton,HWND_TOP,(rc.right-rc.left-ControlWidth*MENUBUTTONWIDTHRATIO)/2,
-               ControlHeight+10,
+  SetWindowPos(hWndMenuButton,HWND_TOP,(int)(rc.right-rc.left-ControlWidth*MENUBUTTONWIDTHRATIO)/2,
+               (int)(ControlHeight+10),
                (int)(ControlWidth*MENUBUTTONWIDTHRATIO),
                (int)((rc.bottom - rc.top)/10),SWP_SHOWWINDOW);
 
@@ -1595,12 +1595,12 @@ int DetectStartTime() {
   static int starttime = -1;
   if (starttime == -1) {
     if (GPS_INFO.Speed > 5) {
-      starttime = GPS_INFO.Time;
+      starttime = (int)GPS_INFO.Time;
     } else {
       return 0;
     }
   }
-  return SecsToDisplayTime(GPS_INFO.Time-starttime);
+  return SecsToDisplayTime((int)GPS_INFO.Time-starttime);
 }
 
 

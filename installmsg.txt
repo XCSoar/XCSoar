@@ -1,0 +1,5 @@
+
+This will install XCSoar in the default directory.
+
+Yup.
+

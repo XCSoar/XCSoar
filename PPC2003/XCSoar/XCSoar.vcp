@@ -2667,6 +2667,10 @@ SOURCE=..\..\Common\Source\XCSoar.ico
 
 SOURCE=.\XCSoar.ico
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\Bitmaps\xcsoars.ico
+# End Source File
 # End Group
 # Begin Source File
 

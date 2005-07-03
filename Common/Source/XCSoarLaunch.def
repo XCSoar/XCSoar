@@ -1,0 +1,3 @@
+EXPORTS
+InitializeCustomItem @ 240 NONAME
+CustomItemOptionsDlgProc @ 241 NONAME
