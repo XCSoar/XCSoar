@@ -869,6 +869,9 @@ void settaskUpdateControls(HWND hDlg, int TaskSize){
 
 
   AATEnabled = TaskSize >=3;
+  //
+  // JMW not sure this is right,
+  // it is making all my tasks aat by default!
 
   EnableWindow(GetDlgItem(hDlg, IDC_AAT), AATEnabled);
 

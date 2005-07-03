@@ -514,14 +514,19 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   CreateDrawingThread();
 
 #ifdef _SIM_
+  /*
   MessageBox(   hWndMainWindow, TEXT("Simulator mode\r\nNothing is Real!!"), TEXT("Caution"), MB_OK|MB_ICONWARNING);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+  */
+  ShowStatusMessage(TEXT("Simulation\r\nNothing is real!"), 3000);
+
 #else
   /*
   MessageBox(   hWndMainWindow, TEXT("Maintain effective\r\nLOOKOUT at all times"), TEXT("Caution"), MB_OK|MB_ICONWARNING);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
 
   */
+  ShowStatusMessage(TEXT("Maintain effective\r\nLOOKOUT at all times"), 3000);
 
   RestartCommPorts();
 

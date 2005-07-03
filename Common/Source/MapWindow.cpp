@@ -737,11 +737,19 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
 extern int FrameCount;
 
+
+
+
 static void UpdateMapScale()
 {
   static double AutoMapScale= RequestMapScale;
+  static int AutoMapScaleWaypointIndex = -1;
+  static double StartingAutoMapScale=0.0;
   double AutoZoomFactor;
 
+  bool useraskedforchange = false;
+
+  // if there is user intervention in the scale
   if(MapScale != RequestMapScale)
   {
     MapScale = RequestMapScale;
@@ -749,6 +757,9 @@ static void UpdateMapScale()
     DrawScale = MapScale/DISTANCEMODIFY;
     DrawScale = DrawScale/111000;
     DrawScale = 30/DrawScale;
+
+    useraskedforchange = true;
+
     //      fpsTime0 = 0; // trigger immediate screen update
   }
 
@@ -770,22 +781,84 @@ static void UpdateMapScale()
       }
 
       if(
-        (DrawInfo.WaypointDistance < ( AutoZoomFactor * RequestMapScale / DISTANCEMODIFY)))
+         (DrawInfo.WaypointDistance
+          < ( AutoZoomFactor * RequestMapScale / DISTANCEMODIFY))
+         ||
+         (StartingAutoMapScale==0.0))
       {
+        // waypoint is too close, so zoom in
+        // OR just turned waypoint
 
-        MapScale = DrawInfo.WaypointDistance * DISTANCEMODIFY / AutoZoomFactor;
-        if (MapScale<0.2) {
-          MapScale = 0.2; // JMW limit this so it doesn't get silly
+        // this is the first time this waypoint has gotten close,
+        // so save original map scale
+
+        if (StartingAutoMapScale==0.0) {
+          StartingAutoMapScale = RequestMapScale;
         }
-        RequestMapScale = MapScale; // JMW fixed bug..
 
+        // set scale exactly so that waypoint distance is the zoom factor
+        // across the screen
+        MapScale = DrawInfo.WaypointDistance * DISTANCEMODIFY / AutoZoomFactor;
+
+        // limit zoomed in so doesn't reach silly levels
+        if (MapScale<0.2) {
+          MapScale = 0.2;
+        }
+        RequestMapScale = MapScale;
+
+        // calculate scale factors for display etc.
         DrawScale = DrawInfo.WaypointDistance / AutoZoomFactor;
         DrawScale = DrawScale/111000;
         DrawScale = 30/DrawScale;
+
+
+      }	else {
+
+        if (useraskedforchange) {
+
+          // user asked for a zoom change and it was achieved, so
+          // reset starting map scale
+
+
+          ////?          StartingAutoMapScale = MapScale;
+        }
+
       }
     }
     //    fpsTime0 = 0; // Trigger immediate screen update
+  } else {
+
+    // reset starting map scale for auto zoom if momentarily switch
+    // off autozoom
+    //    StartingAutoMapScale = RequestMapScale;
   }
+
+
+  // if we aren't looking at a waypoint, see if we are now
+  if (AutoMapScaleWaypointIndex == -1) {
+    if (ActiveWayPoint>=0) {
+      AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
+    }
+  }
+
+  // if there is an active waypoint
+  if (ActiveWayPoint>=0) {
+
+    // if the current zoom focused waypoint has changed...
+    if (AutoMapScaleWaypointIndex != Task[ActiveWayPoint].Index) {
+      AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
+
+      // zoom back out to where we were before
+      if (StartingAutoMapScale> 0.0) {
+        RequestMapScale = StartingAutoMapScale;
+      }
+
+      // reset search for new starting zoom level
+      StartingAutoMapScale = 0.0;
+    }
+
+  }
+
 }
 
 

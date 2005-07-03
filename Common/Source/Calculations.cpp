@@ -846,10 +846,15 @@ int InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 void AnnounceWayPointSwitch() {
+
+  // start logging data at faster rate
   FastLogNum = 5;
+
+  // play sound
   if (EnableSoundTask) {
     PlayResource(TEXT("IDR_WAV_TASKTURNPOINT"));
   }
+
 }
 
 
@@ -1822,6 +1827,9 @@ void ResumeAbortTask() {
       OldTask[i]= Task[i].Index;
     }
     OldActiveWayPoint = ActiveWayPoint;
+
+    // force new waypoint to be the closest
+    ActiveWayPoint = -1;
 
   } else {
 
