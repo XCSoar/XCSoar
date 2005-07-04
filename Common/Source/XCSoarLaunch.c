@@ -32,7 +32,7 @@
 #define WINDOW_TITLE			TEXT("XCSoarLaunch")
 #define MAIN_WND_CLASS			TEXT("XCSoarLaunchWndClass")
 
-#define REG_PATH			TEXT("Software\OpenSource\XCSoar")
+#define REG_PATH			TEXT("Software\\OpenSource\\XCSoar")
 
 #define FILE_EXPLORER			TEXT("fexplore.exe")
 
@@ -67,6 +67,7 @@ typedef struct _FILELIST {
 	TCHAR Name[BUF_SIZE];
 	TCHAR FileName[BUF_SIZE];
 	TCHAR CommandLine[BUF_SIZE];
+  TCHAR Description[BUF_SIZE];
 	int Index;
   HBITMAP bitmap;
 } FILELIST;
@@ -92,7 +93,7 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   }
 
   pPos[0]= '\0';
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, REG_PATH, 0, KEY_ALL_ACCESS, &hKey);
+  hRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_PATH, 0, KEY_ALL_ACCESS, &hKey);
   if (hRes != ERROR_SUCCESS)
     {
       RegCloseKey(hKey);
@@ -108,14 +109,15 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 
 static void CreateFileList() {
 
-  GetRegistryString(TEXT("InstallDir"), installDir, 255);
+  GetRegistryString(TEXT("InstallDir"), installDir, BUF_SIZE-1);
 
-  wsprintf(installDir, TEXT("\\Program Files\\XCSoar"));
+  //  wsprintf(installDir, TEXT("\\Program Files\\XCSoar"));
 
   lstrcpy(FileList[0].Name, TEXT("XCSoar"));
 
   wsprintf(FileList[0].FileName, TEXT("%s\\XCSoar.exe"), installDir);
   wsprintf(FileList[0].CommandLine, TEXT("%s\\XCSoar.exe"), installDir);
+  lstrcpy(FileList[0].Description, TEXT("Start XCSoar in flight mode"));
 
   if (FileList[0].bitmap==NULL) {
     FileList[0].bitmap = LoadBitmap(hInst,
@@ -126,7 +128,9 @@ static void CreateFileList() {
   lstrcpy(FileList[1].Name, TEXT("XCSoar Sim"));
 
   wsprintf(FileList[1].FileName, TEXT("%s\\XCSoarSimulator.exe"), installDir);
-           wsprintf(FileList[1].CommandLine, TEXT("%s\\XCSoarSimulator.exe"), installDir);
+  wsprintf(FileList[1].CommandLine, TEXT("%s\\XCSoarSimulator.exe"), installDir);
+
+  lstrcpy(FileList[1].Description, TEXT("Start XCSoar in simulator mode"));
 
   FileList[1].Index = 1;
 
@@ -194,7 +198,7 @@ static BOOL CALLBACK ToolTipProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 		break;
 
 	case WM_PAINT:
-                /*
+
 		hdc = BeginPaint(hDlg, &ps);
 
 		GetClientRect(hDlg,(LPRECT)&rect);
@@ -202,7 +206,7 @@ static BOOL CALLBACK ToolTipProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 		ExtTextOut(hdc, 2, 2, ETO_OPAQUE, NULL, buf, lstrlen(buf), NULL);
 
 		EndPaint(hDlg, &ps);
-                */
+
 		break;
 
 	default:
@@ -440,7 +444,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 			RECT rect;
 			RECT tip_rect;
 
-			SendMessage(hToolTip, WM_SETTEXT, 0, (LPARAM)(FileList + SelItem)->Name);
+			SendMessage(hToolTip, WM_SETTEXT, 0, (LPARAM)(FileList + SelItem)->Description);
 			GetWindowRect(hWnd, &rect);
 			GetWindowRect(hToolTip, &tip_rect);
 			tip_rect.left = rect.left + LOWORD(lParam) - (tip_rect.right - tip_rect.left) - 10;

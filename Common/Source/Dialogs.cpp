@@ -2767,9 +2767,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       return FALSE;
 
     case WM_CLOSE:
-      RequestMapDirty = true;
       FullScreen();
-
     }
   return FALSE;
 }
@@ -2820,6 +2818,7 @@ LRESULT CALLBACK LoggerDetails(HWND hDlg, UINT message,
 /////////////////////////////////////////////////////
 WNDPROC fnOldStatusMsgWndProc;
 
+extern bool RequestFastRefresh;
 
 // Intercept messages destined for the Status Message window
 LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -2828,7 +2827,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
   switch (message) {
   case WM_TIMER :         // Fall through
   case WM_LBUTTONDOWN :
-    RequestMapDirty = true; // trigger screen refresh
+    RequestFastRefresh = true; // trigger screen refresh
     DestroyWindow(hwnd);
     break;
   }
