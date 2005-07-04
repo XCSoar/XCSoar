@@ -2494,7 +2494,7 @@ void DrawMapScale2(HDC hDC, RECT rc, POINT Orig_Aircraft)
 
   double barsize = findMapScaleBarSize(rc);
 
-  TCHAR Scale[20];
+//  TCHAR Scale[20]; Unused variable remm'd out RB
   HPEN hpOld;
 
   hpOld = (HPEN)SelectObject(hDC, hpMapScale);
