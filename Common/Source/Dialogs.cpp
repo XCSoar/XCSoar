@@ -2820,6 +2820,7 @@ LRESULT CALLBACK LoggerDetails(HWND hDlg, UINT message,
 /////////////////////////////////////////////////////
 WNDPROC fnOldStatusMsgWndProc;
 
+
 // Intercept messages destined for the Status Message window
 LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -2827,6 +2828,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
   switch (message) {
   case WM_TIMER :         // Fall through
   case WM_LBUTTONDOWN :
+    MapDirty = true; // trigger screen refresh
     DestroyWindow(hwnd);
     break;
   }

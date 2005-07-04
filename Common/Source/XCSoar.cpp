@@ -116,6 +116,7 @@ BOOL VARIOCONNECT = FALSE;
 bool          TaskAborted = false;
 
 extern bool MapDirty;
+bool InfoBoxesDirty= TRUE;
 
 //Local Static data
 static int iTimerID;
@@ -392,6 +393,7 @@ void FullScreen() {
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
   	       GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
   MapDirty = true;
+  InfoBoxesDirty = true;
 }
 
 
@@ -438,6 +440,159 @@ void FocusOnWindow(int i, bool selected) {
   }
 
 }
+
+extern BOOL CLOSETHREAD;
+
+DWORD CalculationThread (LPVOID lpvoid) {
+  bool infoarrived = false;
+  static int itimeout = 0;
+
+  while (!CLOSETHREAD) {
+    itimeout++;
+
+    if (GpsUpdated) {
+      GpsUpdated = FALSE;
+
+      //    CheckRegistration();
+
+      // JMW moved logging and snail to Calculations
+
+      LockFlightData();
+
+      if(DoCalculations(&GPS_INFO,&CALCULATED_INFO))
+        {
+          InfoBoxesDirty = true;
+          MapDirty = true;
+        }
+
+      if (!GPS_INFO.VarioAvailable) {
+        // run the function anyway, because this gives audio functions
+      DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO);
+      }
+
+      UnlockFlightData();
+
+    } else {
+      Sleep(250); // sleep 250 ms
+    }
+
+#ifndef _SIM_
+    // now check GPS status
+    static BOOL LastGPSCONNECT = FALSE;
+    static BOOL LastVARIOCONNECT = FALSE;
+    static BOOL CONNECTWAIT = FALSE;
+    static BOOL LOCKWAIT = FALSE;
+    TCHAR szLoadText[MAX_LOADSTRING];
+
+    if (itimeout % 20 != 0) {
+      // timeout if no new data in 5 seconds
+      continue;
+    }
+    //
+    // replace bool with BOOL to correct warnings and match variable declarations RB
+    //
+    BOOL gpsconnect = GPSCONNECT;
+    GPSCONNECT = FALSE;
+    BOOL varioconnect = VARIOCONNECT;
+    BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
+
+    if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
+      {
+
+        devLinkTimeout(devA());
+        devLinkTimeout(devB());
+
+        if(LOCKWAIT == TRUE)
+          {
+            DestroyWindow(hProgress);
+            SwitchToMapWindow();
+            hProgress = NULL;
+            LOCKWAIT = FALSE;
+          }
+        if(!CONNECTWAIT)
+          {
+            hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
+            LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
+            SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
+            CONNECTWAIT = TRUE;
+            MessageBeep(MB_ICONEXCLAMATION);
+            SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+            FullScreen();
+
+          } else {
+
+          if (itimeout % 240 == 0) {
+            // no activity for one minute, so assume device has been
+            // switched off
+#ifndef _SIM_
+            RestartCommPorts();
+#endif
+            itimeout = 0;
+          }
+        }
+      }
+
+    if((gpsconnect == TRUE) && (LastGPSCONNECT == FALSE))
+      {
+        itimeout = 0; // reset timeout
+
+        if(CONNECTWAIT)
+          {
+            DestroyWindow(hProgress);
+            SwitchToMapWindow();
+            hProgress = NULL;
+            CONNECTWAIT = FALSE;
+          }
+      }
+
+    if((gpsconnect == TRUE) && (LastGPSCONNECT == TRUE))
+      {
+        if((navwarning == TRUE) && (LOCKWAIT == FALSE))
+          {
+            hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
+            LoadString(hInst, IDS_LOCKWAIT, szLoadText, MAX_LOADSTRING);
+            SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
+            LOCKWAIT = TRUE;
+            MessageBeep(MB_ICONEXCLAMATION);
+            SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+            FullScreen();
+
+          }
+        else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
+          {
+            DestroyWindow(hProgress);
+            SwitchToMapWindow();
+            hProgress = NULL;
+            LOCKWAIT = FALSE;
+          }
+      }
+
+    if((varioconnect == TRUE) && (LastVARIOCONNECT == FALSE)) {
+      // vario is connected now
+    }
+
+    LastGPSCONNECT = gpsconnect;
+
+#endif // end processing of non-simulation mode
+
+  }
+  return 0;
+}
+
+
+void CreateCalculationThread() {
+  HANDLE hCalculationThread;
+  DWORD dwThreadID;
+
+  // Create a read thread for performing calculations
+  if (hCalculationThread =
+      CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )CalculationThread, 0, 0, &dwThreadID))
+  {
+    SetThreadPriority(hCalculationThread, THREAD_PRIORITY_NORMAL); //THREAD_PRIORITY_ABOVE_NORMAL
+    CloseHandle (hCalculationThread);
+  }
+}
+
 
 int WINAPI WinMain(     HINSTANCE hInstance,
                         HINSTANCE hPrevInstance,
@@ -513,6 +668,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   CreateDrawingThread();
 
+  CreateCalculationThread();
+
 #ifdef _SIM_
   /*
   MessageBox(   hWndMainWindow, TEXT("Simulator mode\r\nNothing is Real!!"), TEXT("Caution"), MB_OK|MB_ICONWARNING);
@@ -539,6 +696,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   devInit();
 
   FullScreen();
+  SwitchToMapWindow();
 
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0))
@@ -881,13 +1039,15 @@ void DoInfoKey(int keycode) {
   UnlockFlightData();
   UnlockNavBox();
 
+  /*
   LockFlightData();
-  DoCalculations(&GPS_INFO,&CALCULATED_INFO);
-  //  DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO);
   AssignValues();
-  UnlockFlightData();
-
   DisplayText();
+  UnlockFlightData();
+  */
+  InfoBoxesDirty = true;
+
+  GpsUpdated = TRUE; // emulate update to trigger calculations
 
   FocusTimeOut = 0;
 }
@@ -930,9 +1090,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #endif
 
       hWndCB = CreateRpCommandBar(hWnd);
-
-      AssignValues();
-      DisplayText();
 
       break;
 
@@ -1016,19 +1173,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
           }
 
-          LockFlightData();
-          LockNavBox();
-
           i = getInfoType(InfoFocus);
 
           j = Data_Options[i].next_screen;
           setInfoType(InfoFocus,j);
 
-          UnlockNavBox();
-          AssignValues();
-          UnlockFlightData();
-          DisplayText();
-
+          InfoBoxesDirty = true;
           FocusTimeOut = 0;
 
           break;
@@ -1062,18 +1212,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
           }
 
-          LockFlightData();
-          LockNavBox();
-
           i = getInfoType(InfoFocus);
 
           j = Data_Options[i].prev_screen;
           setInfoType(InfoFocus,j);
 
-          UnlockNavBox();
-          AssignValues();
-          UnlockFlightData();
-          DisplayText();
+          InfoBoxesDirty = true;
 
           FocusTimeOut = 0;
 
@@ -1761,11 +1905,6 @@ void DisplayText(void)
 
 void ProcessTimer(void)
 {
-  static BOOL LastGPSCONNECT = FALSE;
-  static BOOL LastVARIOCONNECT = FALSE;
-  static BOOL CONNECTWAIT = FALSE;
-  static BOOL LOCKWAIT = FALSE;
-  TCHAR szLoadText[MAX_LOADSTRING];
 
   SystemIdleTimerReset();
 
@@ -1774,14 +1913,21 @@ void ProcessTimer(void)
       if(FocusTimeOut==FOCUSTIMEOUTMAX)
         {
           SwitchToMapWindow();
-        } else {
-  	  FocusTimeOut ++;
         }
+      FocusTimeOut ++;
     }
   if(MenuTimeOut==MENUTIMEOUTMAX) {
     ShowWindow(hWndMenuButton, SW_HIDE);
-  } else {
-    MenuTimeOut++;
+  }
+  MenuTimeOut++;
+
+
+  if (InfoBoxesDirty) {
+    InfoBoxesDirty = false;
+    LockFlightData();
+    AssignValues();
+    DisplayText();
+    UnlockFlightData();
   }
 
   //    ReadAssetNumber();
@@ -1789,123 +1935,7 @@ void ProcessTimer(void)
   if(!Port1Available)
     return;
 
-  if (GpsUpdated) {
-    GpsUpdated = FALSE;
-
-    //    CheckRegistration();
-
-    // JMW moved logging and snail to Calculations
-
-    LockFlightData();
-
-    bool dodisplay = false;
-    if(DoCalculations(&GPS_INFO,&CALCULATED_INFO))
-      {
-	AssignValues();
-	DisplayText();
-	MapDirty = true;
-      }
-
-    if (!GPS_INFO.VarioAvailable) {
-      // run the function anyway, because this gives audio functions
-      DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO);
-    }
-
-    UnlockFlightData();
-  }
-
-  // now check GPS status
-
-  static int itimeout = 0;
-  itimeout++;
-  if (itimeout % 20 != 0) {
-    // timeout if no new data in 5 seconds
-    return;
-  }
-//
-// replace bool with BOOL to correct warnings and match variable declarations RB
-//
-  BOOL gpsconnect = GPSCONNECT;
-  GPSCONNECT = FALSE;
-  BOOL varioconnect = VARIOCONNECT;
-  BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
-
-  if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
-    {
-
-      devLinkTimeout(devA());
-      devLinkTimeout(devB());
-
-      if(LOCKWAIT == TRUE)
-        {
-          DestroyWindow(hProgress);
-          SwitchToMapWindow();
-          hProgress = NULL;
-          LOCKWAIT = FALSE;
-        }
-      if(!CONNECTWAIT)
-        {
-          hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
-          LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
-          SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
-          CONNECTWAIT = TRUE;
-          MessageBeep(MB_ICONEXCLAMATION);
-          SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-	  FullScreen();
-
-        } else {
-
-	if (itimeout % 240 == 0) {
-	  // no activity for one minute, so assume device has been
-	  // switched off
-#ifndef _SIM_
-	  RestartCommPorts();
-#endif
-	  itimeout = 0;
-	}
-      }
-    }
-
-  if((gpsconnect == TRUE) && (LastGPSCONNECT == FALSE))
-    {
-      itimeout = 0; // reset timeout
-
-      if(CONNECTWAIT)
-        {
-          DestroyWindow(hProgress);
-          SwitchToMapWindow();
-          hProgress = NULL;
-          CONNECTWAIT = FALSE;
-        }
-    }
-
-  if((gpsconnect == TRUE) && (LastGPSCONNECT == TRUE))
-    {
-      if((navwarning == TRUE) && (LOCKWAIT == FALSE))
-        {
-          hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
-          LoadString(hInst, IDS_LOCKWAIT, szLoadText, MAX_LOADSTRING);
-          SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
-          LOCKWAIT = TRUE;
-          MessageBeep(MB_ICONEXCLAMATION);
-          SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-	  FullScreen();
-
-        }
-      else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
-        {
-          DestroyWindow(hProgress);
-          SwitchToMapWindow();
-          hProgress = NULL;
-          LOCKWAIT = FALSE;
-        }
-    }
-
-  if((varioconnect == TRUE) && (LastVARIOCONNECT == FALSE)) {
-    // vario is connected now
-  }
-
-  LastGPSCONNECT = gpsconnect;
+  // processing moved to its own thread
 
 }
 
@@ -1921,15 +1951,22 @@ void SIMProcessTimer(void)
       if(FocusTimeOut == FOCUSTIMEOUTMAX)
         {
           SwitchToMapWindow();
-        } else {
-	FocusTimeOut ++;
-      }
+        }
+      FocusTimeOut ++;
+
     }
 
   if(MenuTimeOut==MENUTIMEOUTMAX) {
     ShowWindow(hWndMenuButton, SW_HIDE);
-  } else {
-    MenuTimeOut++;
+  }
+  MenuTimeOut++;
+
+  if (InfoBoxesDirty) {
+    InfoBoxesDirty = false;
+    LockFlightData();
+    AssignValues();
+    DisplayText();
+    UnlockFlightData();
   }
 
   static int ktimer=0;
@@ -1944,26 +1981,26 @@ void SIMProcessTimer(void)
   GPS_INFO.Longditude = FindLongditude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
   GPS_INFO.Time+= 1.0;
 
-  if (DoCalculations(&GPS_INFO,&CALCULATED_INFO))
-    {
-      AssignValues();
-      DisplayText();
-      MapDirty = true;
-    }
+  GpsUpdated = TRUE;
 
   UnlockFlightData();
 
-
-  // JMW moved logging and snail to Calculations
 }
 
 
 void SwitchToMapWindow(void)
 {
+  if (InfoWindowActive) {
+    FocusOnWindow(InfoFocus,false);
+  }
   InfoWindowActive = FALSE;
-  FocusOnWindow(InfoFocus,false);
-
   SetFocus(hWndMapWindow);
+  if (  MenuTimeOut< MENUTIMEOUTMAX) {
+    MenuTimeOut = MENUTIMEOUTMAX;
+  }
+  if (  FocusTimeOut< FOCUSTIMEOUTMAX) {
+    FocusTimeOut = FOCUSTIMEOUTMAX;
+  }
 
   // JMW reactivate menu button
   // ShowWindow(hWndMenuButton, SW_SHOW);

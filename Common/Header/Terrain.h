@@ -1,6 +1,7 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 #include "stdafx.h"
+#include "Topology.h"
 
 typedef struct _COLORRAMP
 {
@@ -21,4 +22,5 @@ void DrawTopology( HDC hdc, RECT rc);
 void DrawTerrain(HDC hdc, RECT rc, double sunazimuth, double sunelevation);
 void DrawMarks(HDC hdc, RECT rc);
 void MarkLocation(double lon, double lat);
+rectObj GetRectBounds(RECT rc);
 #endif

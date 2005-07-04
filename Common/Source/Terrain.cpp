@@ -19,14 +19,11 @@ Topology* TopoStore[MAXTOPOLOGY];
 
 TopologyWriter *topo_marks;
 
-
-void SetTopologyBounds(RECT rcin) {
-  static rectObj bounds;
-  rectObj bounds_new;
+rectObj GetRectBounds(RECT rc) {
+  rectObj bounds;
+  double xmin, xmax, ymin, ymax;
   double x;
   double y;
-  double xmin, xmax, ymin, ymax;
-  RECT rc = rcin;
 
   x=0; y=0;
   GetLocationFromScreen(&x, &y);
@@ -53,14 +50,30 @@ void SetTopologyBounds(RECT rcin) {
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
-  double threshold = BORDERFACTOR*max(xmax-xmin, ymax-ymin);
+  bounds.maxx = xmax;
+  bounds.minx = xmin;
+  bounds.maxy = ymax;
+  bounds.miny = ymin;
+  return bounds;
+
+};
+
+
+void SetTopologyBounds(RECT rcin) {
+  static rectObj bounds;
+  rectObj bounds_new;
+
+  bounds = GetRectBounds(rcin);
+
+  double threshold = BORDERFACTOR*max(bounds.maxx-bounds.minx,
+                                      bounds.maxy-bounds.miny);
   bool recompute = false;
 
   // make bounds bigger than screen
-  bounds_new.maxx = xmax+threshold;
-  bounds_new.minx = xmin-threshold;
-  bounds_new.maxy = ymax+threshold;
-  bounds_new.miny = ymin-threshold;
+  bounds_new.maxx = bounds.maxx+threshold;
+  bounds_new.minx = bounds.minx-threshold;
+  bounds_new.maxy = bounds.maxy+threshold;
+  bounds_new.miny = bounds.miny-threshold;
 
   // only recalculate which shapes when bounds change significantly
   // need to have some trigger for this..
