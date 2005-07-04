@@ -42,6 +42,8 @@ static void CalculateWaypointReachable(void);
 
 
 int		PointVisible(POINT *P, RECT *rc);
+int             PointVisible(double lon, double lat);
+rectObj screenbounds_latlon;
 
 
 static void DrawAircraft(HDC hdc, POINT Orig);
@@ -66,7 +68,6 @@ extern HWND					hWndCDIWindow;
 static void DrawSolidLine(HDC , POINT , POINT );
 static void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
 
-int		PointVisible(POINT *P, RECT *rc);
 
 #define NUMPOINTS 2
 
@@ -388,6 +389,7 @@ void ToggleFullScreen() {
   if (MapFullScreen) {
     MapRect = MapRectBig;
     HideInfoBoxes();    
+    FullScreen();
   } else {
     MapRect = MapRectSmall;
     ShowInfoBoxes();
@@ -1050,10 +1052,15 @@ DWORD DrawThread (LPVOID lpvoid)
       continue;
     }
     if (!MapDirty) { 
-      Sleep(50);
+      Sleep(100);
       continue;
     };
     MapDirty = false;
+
+    // draw previous frame so screen is immediately refreshed
+    BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
+	     MapRectBig.bottom-MapRectBig.top, 
+       hdcDrawWindow, 0, 0, SRCCOPY);
     
     LockFlightData();
     memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
@@ -2019,6 +2026,7 @@ void DrawTrail( HDC hdc, POINT Orig, RECT rc)
   int P1,P2;
   HPEN	hpNew, hpOld, hpDelete;
   BYTE Red,Green,Blue;
+  int scx, scy;
   
   if(!TrailActive)
     return;
@@ -2039,33 +2047,57 @@ void DrawTrail( HDC hdc, POINT Orig, RECT rc)
       P1 = i; P2 = 0;
     }
     
-    ColorRampLookup((short)(SnailTrail[P1].Vario/1.5), &Red, &Green, &Blue,
-      snail_colors, NUMSNAILRAMP);
-    
-    int width = min(8,max(2,(int)SnailTrail[P1].Vario));
-    
-    hpNew = (HPEN)CreatePen(PS_SOLID, width, RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
-    SelectObject(hdc,hpNew);
-    DeleteObject((HPEN)hpDelete);
-    hpDelete = hpNew;
-    
-    if( (P2) == iSnailNext) // Last Point of Trail List
-    {
-      if((SnailTrail[P1].Lattitude != 0) || (SnailTrail[P2].Lattitude != 0))
-        DrawSolidLine(hdc,SnailTrail[P1].Screen,Orig);
+    if (P1 == 0) {
+      // set first point up
+      LatLon2Screen(SnailTrail[P1].Longditude, 
+        SnailTrail[P1].Lattitude, &scx, &scy);
+      SnailTrail[P1].Screen.x = scx;
+      SnailTrail[P1].Screen.y = scy;
     }
-    else
-    {
-      if (P1 != iSnailNext) // JMW trying to fix first line bug
-        if(PointVisible(&SnailTrail[P1].Screen ,&rc) || PointVisible(&SnailTrail[P2].Screen ,&rc) )
+    
+    if (P1 != iSnailNext) // JMW trying to fix first line bug
+
+      if(PointVisible(SnailTrail[P1].Longditude , 
+                      SnailTrail[P1].Lattitude) && 
+         PointVisible(SnailTrail[P2].Longditude , 
+                      SnailTrail[P2].Lattitude) )
         {
-          if(( SnailTrail[P1].Lattitude != 0) && (SnailTrail[P2].Lattitude != 0))
-            DrawSolidLine(hdc,SnailTrail[P1].Screen,SnailTrail[P2].Screen);
+          
+          // only need to convert P2, because P1 should already
+          // be converted
+          LatLon2Screen(SnailTrail[P2].Longditude, 
+                        SnailTrail[P2].Lattitude, &scx, &scy);
+          SnailTrail[P2].Screen.x = scx;
+          SnailTrail[P2].Screen.y = scy;
+    
+          ColorRampLookup((short)(SnailTrail[P1].Vario/1.5), 
+                          &Red, &Green, &Blue,
+                          snail_colors, NUMSNAILRAMP);
+          
+          int width = min(8,max(2,(int)SnailTrail[P1].Vario));
+          
+          hpNew = (HPEN)CreatePen(PS_SOLID, width, 
+                                  RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
+          SelectObject(hdc,hpNew);
+          DeleteObject((HPEN)hpDelete);
+          hpDelete = hpNew;
+      
+          DrawSolidLine(hdc,SnailTrail[P1].Screen,SnailTrail[P2].Screen);
         }
-    }
   }
+
   SelectObject(hdc, hpOld);
   DeleteObject((HPEN)hpDelete);
+}
+
+
+int PointVisible(double lon, double lat) {
+  if ((lon> screenbounds_latlon.minx)&&(lon< screenbounds_latlon.maxx)
+      && (lat>screenbounds_latlon.miny)&&(lat< screenbounds_latlon.maxy)) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 
@@ -2124,11 +2156,16 @@ void LatLon2Screen(double lon, double lat, int *scX, int *scY) {
 }
 
 
+
+
 void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
 {
   unsigned int i,j;
   double tmp;
   int scx, scy;
+
+  // compute lat lon extents of visible screen
+  screenbounds_latlon = GetRectBounds(rc);
   
   Orig_Screen = Orig;
   
@@ -2142,14 +2179,17 @@ void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
   
   for(i=0;i<NumberOfWayPoints;i++)
   {
-    LatLon2Screen(WayPointList[i].Longditude, WayPointList[i].Lattitude, &scx, &scy);
     
-    WayPointList[i].Screen.x = scx;
-    WayPointList[i].Screen.y = scy;
-    
-    if(PointVisible(&WayPointList[i].Screen, &rc) )
+    if(PointVisible(WayPointList[i].Longditude, WayPointList[i].Lattitude) )
     {
       WayPointList[i].Visible = TRUE;
+
+      // ok, it is visible, so now get the screen position
+      LatLon2Screen(WayPointList[i].Longditude, WayPointList[i].Lattitude, &scx, &scy);
+      
+      WayPointList[i].Screen.x = scx;
+      WayPointList[i].Screen.y = scy;
+
     }
     else
     {
@@ -2200,6 +2240,8 @@ void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
     // set this so that new data doesn't arrive between calculating
     // this and the screen updates
     
+    /* don't bother doing this now! we are checking visibility from
+       the lat/long.... faster
     for(i=0;i<TRAILSIZE;i++)
     {
       LatLon2Screen(SnailTrail[i].Longditude, 
@@ -2208,6 +2250,7 @@ void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
       SnailTrail[i].Screen.x = scx;
       SnailTrail[i].Screen.y = scy;
     }
+    */
     
   }
   
