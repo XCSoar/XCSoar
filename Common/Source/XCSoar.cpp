@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.29 2005/07/04 16:55:53 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.30 2005/07/04 19:04:53 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -389,14 +389,18 @@ void ShowMenu() {
 
 extern bool RequestMapDirty; // GUI asks for map window refresh
 extern bool MapDirty; // the actual map refresh trigger
+extern bool RequestFastRefresh;
 
 void FullScreen() {
   SHFullScreen(hWndMainWindow,
                SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
   	       GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-  RequestMapDirty = true;
-  InfoBoxesDirty = true;
+
+  RequestFastRefresh = true;
+  InfoBoxesDirty = true; 
+
+  //  RequestMapDirty = true;
 }
 
 
@@ -1313,13 +1317,13 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           switch (wID)
             {   
             case IDD_EXIT:
-              if(MessageBox(hWnd,TEXT("Do You Wish To Exit?"),TEXT("Exit?"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+              if(MessageBox(hWnd,TEXT("Do you wish to exit?"),TEXT("Exit?"),MB_YESNO|MB_ICONQUESTION) == IDYES)
                 {
                   SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
                   SendMessage (hWnd, WM_CLOSE, 0, 0);
                 }       
-              SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
 	      HideMenu();
+              FullScreen();
               return 0;
 
 	    case IDD_BACK:

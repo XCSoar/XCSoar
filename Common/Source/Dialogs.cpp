@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.24 2005/07/04 16:55:52 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.25 2005/07/04 19:04:53 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -2767,9 +2767,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       return FALSE;
 
     case WM_CLOSE:
-      RequestMapDirty = true;
       FullScreen();
-      
     }
   return FALSE;
 }
@@ -2820,6 +2818,7 @@ LRESULT CALLBACK LoggerDetails(HWND hDlg, UINT message,
 /////////////////////////////////////////////////////
 WNDPROC fnOldStatusMsgWndProc;
 
+extern bool RequestFastRefresh;
 
 // Intercept messages destined for the Status Message window
 LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -2828,7 +2827,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
   switch (message) {
   case WM_TIMER :         // Fall through
   case WM_LBUTTONDOWN :
-    RequestMapDirty = true; // trigger screen refresh
+    RequestFastRefresh = true; // trigger screen refresh
     DestroyWindow(hwnd);
     break;
   }

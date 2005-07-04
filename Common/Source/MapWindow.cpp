@@ -372,6 +372,7 @@ bool RequestFullScreen = false;
 
 bool MapDirty = true;
 bool RequestMapDirty = false;
+bool RequestFastRefresh = false;
 
 static DWORD fpsTime0=0;
 
@@ -468,7 +469,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
         
     /* JMW created all re-used pens here */
     
-    hpAircraft = (HPEN)CreatePen(PS_SOLID, 4, RGB(0xa0,0xa0,0xa0));
+    hpAircraft = (HPEN)CreatePen(PS_SOLID, 3, RGB(0xa0,0xa0,0xa0));
     hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, 3, RGB(0x00,0x00,0x00));
     hpWind = (HPEN)CreatePen(PS_SOLID, 2, RGB(255,0,0));
     hpBearing = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
@@ -1026,6 +1027,25 @@ DWORD DrawThread (LPVOID lpvoid)
   SetBkMode(hdcDrawWindow,TRANSPARENT);
   SetBkMode(hdcDrawWindowBg,TRANSPARENT);
   SetBkMode(hDCTemp,OPAQUE);
+
+  ////// This is just here to give fully rendered start screen
+  LockFlightData();
+  memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
+  memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
+  UnlockFlightData();
+  
+  UpdateMapScale();
+  RenderMapWindow(MapRect);
+  SetTopologyBounds(MapRect);
+  //////
+
+  // paint draw window white
+  SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+  Rectangle(hdcDrawWindow,MapRectBig.left,MapRectBig.top,
+            MapRectBig.right,MapRectBig.bottom);
+  BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
+         MapRectBig.bottom-MapRectBig.top, 
+         hdcDrawWindow, 0, 0, SRCCOPY);
 		
   while (!CLOSETHREAD) 
   {
@@ -1033,20 +1053,28 @@ DWORD DrawThread (LPVOID lpvoid)
       Sleep(10);
       continue;
     }
-    if (!MapDirty) { 
+    if (!MapDirty && !RequestFastRefresh) { 
       Sleep(10);
       continue;
-    };
-    MapDirty = false;
-
-    if (RequestFullScreen != MapFullScreen) {
-      ToggleFullScreenStart();
-    }
+    } 
 
     // draw previous frame so screen is immediately refreshed
     BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
-	     MapRectBig.bottom-MapRectBig.top, 
+           MapRectBig.bottom-MapRectBig.top, 
        hdcDrawWindow, 0, 0, SRCCOPY);
+    
+    if (RequestFullScreen != MapFullScreen) {
+      ToggleFullScreenStart();
+    }
+    
+    if (MapDirty) {
+      MapDirty = false;
+    } else {
+      if (RequestFastRefresh) {
+        RequestFastRefresh = false;
+        continue;
+      }
+    }
     
     LockFlightData();
     memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
@@ -1088,7 +1116,7 @@ void DrawAircraft(HDC hdc, POINT Orig)
     dX = (double)Aircraft[i].x ;dY = (double)Aircraft[i].y;
     rotate(&dX, &dY, DisplayAircraftAngle );
     
-    Aircraft[i].x =iround(dX+Orig.x);  Aircraft[i].y = iround(dY+Orig.y);
+    Aircraft[i].x =iround(dX+Orig.x)+1;  Aircraft[i].y = iround(dY+Orig.y)+1;
   }
   
   DrawSolidLine(hdc,Aircraft[2],Aircraft[3]);
@@ -1100,6 +1128,12 @@ void DrawAircraft(HDC hdc, POINT Orig)
   
   // draw it again so can get white border
   SelectObject(hdc, hpAircraftBorder);
+
+  for(i=0;i<7;i++)
+  {
+    
+    Aircraft[i].x -= 1;  Aircraft[i].y -= 1;
+  }
   
   DrawSolidLine(hdc,Aircraft[2],Aircraft[3]);
   DrawSolidLine(hdc,Aircraft[4],Aircraft[5]);
@@ -1472,11 +1506,11 @@ void DrawMapScale(HDC hDC, RECT rc)
   
   hpOld = (HPEN)SelectObject(hDC, hpMapScale);
   
-  Start.x = 5; End.x = 5;
-  Start.y = rc.top+(19* (rc.bottom - rc.top ) )/20; End.y = Start.y - 30;
+  Start.x = rc.right-6; End.x = rc.right-6;
+  Start.y = rc.bottom-30; End.y = Start.y - 30;
   DrawSolidLine(hDC,Start,End);
   
-  Start.x = 10; End.x = 5;
+  Start.x = rc.right-11; End.x = rc.right-6;
   End.y = Start.y;
   DrawSolidLine(hDC,Start,End);
   
@@ -1504,14 +1538,27 @@ void DrawMapScale(HDC hDC, RECT rc)
     wcscat(Scale,TEXT(" PAN"));
   }
   
-  ExtTextOut(hDC, 10, End.y+7, 0, NULL, Scale, _tcslen(Scale), NULL);
+  SIZE tsize;
+  GetTextExtentPoint(hDC, Scale, _tcslen(Scale), &tsize);
+
+  COLORREF whitecolor = RGB(0xd0,0xd0, 0xd0);
+  COLORREF blackcolor = RGB(0x20,0x20, 0x20);
+  COLORREF origcolor = SetTextColor(hDC, whitecolor);
+
+  SetTextColor(hDC, blackcolor);
+
+  ExtTextOut(hDC, rc.right-11-tsize.cx, End.y+8, 0, NULL, Scale, _tcslen(Scale), NULL);
+
+  SetTextColor(hDC, whitecolor);
+  ExtTextOut(hDC, rc.right-10-tsize.cx, End.y+7, 0, NULL, Scale, _tcslen(Scale), NULL);
+  
+  // restore original color
+  SetTextColor(hDC, origcolor);
   
   // JMW for debugging
   /*
   wsprintf(Scale,TEXT("%d"), terraincacheefficiency);
   ExtTextOut(hDC, 20, End.y+20, 0, NULL, Scale, _tcslen(Scale), NULL);
-  
-  */
   
   //////////////
   
@@ -1523,6 +1570,8 @@ void DrawMapScale(HDC hDC, RECT rc)
   End.y = (rc.bottom-rc.top)*terrain_dem_graphics.
     terraincacheefficiency/100+rc.top;
   DrawSolidLine(hDC, Start, End);
+  
+  */
   
   SelectObject(hDC, hpOld);
   
