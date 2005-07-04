@@ -32,7 +32,7 @@
 #define WINDOW_TITLE			TEXT("XCSoarLaunch")
 #define MAIN_WND_CLASS			TEXT("XCSoarLaunchWndClass")
 
-#define REG_PATH				TEXT("Software\\XCSoarLaunch")
+#define REG_PATH			TEXT("Software\OpenSource\XCSoar")
 
 #define FILE_EXPLORER			TEXT("fexplore.exe")
 
@@ -76,11 +76,46 @@ static int FileListCnt=2;
 static int SelItem = -1;
 
 
+TCHAR installDir[BUF_SIZE];
+
+
+
+
+BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
+{
+  HKEY    hKey;
+  DWORD   dwType = REG_SZ;
+  long    hRes;
+  unsigned int i;
+  for (i=0; i<dwSize; i++) {
+    pPos[i]=0;
+  }
+
+  pPos[0]= '\0';
+  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, REG_PATH, 0, KEY_ALL_ACCESS, &hKey);
+  if (hRes != ERROR_SUCCESS)
+    {
+      RegCloseKey(hKey);
+      return FALSE;
+    }
+
+  hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
+  RegCloseKey(hKey);
+  return hRes;
+}
+
+
 
 static void CreateFileList() {
+
+  GetRegistryString(TEXT("InstallDir"), installDir, 255);
+
+  wsprintf(installDir, TEXT("\\Program Files\\XCSoar"));
+
   lstrcpy(FileList[0].Name, TEXT("XCSoar"));
-  lstrcpy(FileList[0].FileName, TEXT("\\Program Files\\XCSoar\\XCSoar.exe"));
-  lstrcpy(FileList[0].CommandLine, TEXT("\\Program Files\\XCSoar\\XCSoar.exe"));
+
+  wsprintf(FileList[0].FileName, TEXT("%s\\XCSoar.exe"), installDir);
+  wsprintf(FileList[0].CommandLine, TEXT("%s\\XCSoar.exe"), installDir);
 
   if (FileList[0].bitmap==NULL) {
     FileList[0].bitmap = LoadBitmap(hInst,
@@ -89,8 +124,10 @@ static void CreateFileList() {
   FileList[0].Index = 0;
 
   lstrcpy(FileList[1].Name, TEXT("XCSoar Sim"));
-  lstrcpy(FileList[1].FileName, TEXT("\\Program Files\\XCSoar\\XCSoarSimulator.exe"));
-  lstrcpy(FileList[1].CommandLine, TEXT("\\Program Files\\XCSoar\\XCSoarSimulator.exe"));
+
+  wsprintf(FileList[1].FileName, TEXT("%s\\XCSoarSimulator.exe"), installDir);
+           wsprintf(FileList[1].CommandLine, TEXT("%s\\XCSoarSimulator.exe"), installDir);
+
   FileList[1].Index = 1;
 
   if (FileList[1].bitmap==NULL) {

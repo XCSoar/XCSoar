@@ -38,9 +38,6 @@ public:
     cachetime = 0;
   }
 
-  TERRAIN_INFO TerrainInfo;
-  HANDLE hTerrain;
-
   TERRAIN_CACHE TerrainCache[MAXTERRAINCACHE];
 
   int terraincacheefficiency;
@@ -51,11 +48,14 @@ public:
   void SetCacheTime();
   void ClearTerrainCache();
   short LookupTerrainCache(long SeekPos);
+  short LookupTerrainCacheFile(long SeekPos);
   short GetTerrainHeight(double Lattitude,
 			 double Longditude);
 
-  void OpenTerrain();
-  void CloseTerrain();
+  static void OpenTerrain();
+  static void CloseTerrain();
+  static TERRAIN_INFO TerrainInfo;
+  static HANDLE hTerrain;
 
   int rounding;
 
@@ -66,6 +66,7 @@ public:
 
 };
 
-extern RasterTerrain terrain_dem;
+extern RasterTerrain terrain_dem_graphics;
+extern RasterTerrain terrain_dem_calculations;
 
 #endif

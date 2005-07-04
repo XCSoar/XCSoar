@@ -235,6 +235,10 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LastTime = Basic->Time;
 
+  LockTerrainDataCalculations();
+  terrain_dem_calculations.SetCacheTime();
+  UnlockTerrainDataCalculations();
+
   if ((Calculated->FinalGlide)
       ||(fabs(Calculated->TaskAltitudeDifference)>30)) {
     FinalGlideAlert(Basic, Calculated);
@@ -991,18 +995,26 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 ///////////////////////////////////
 #include "RasterTerrain.h"
 
-RasterTerrain terrain_dem;
+RasterTerrain terrain_dem_graphics;
+RasterTerrain terrain_dem_calculations;
 
 void OpenTerrain(void) {
-  LockTerrainData();
-  terrain_dem.OpenTerrain();
-  UnlockTerrainData();
+  LockTerrainDataCalculations();
+  LockTerrainDataGraphics();
+  RasterTerrain::OpenTerrain();
+  terrain_dem_graphics.ClearTerrainCache();
+  terrain_dem_calculations.ClearTerrainCache();
+  UnlockTerrainDataCalculations();
+  UnlockTerrainDataGraphics();
 }
 
+
 void CloseTerrain(void) {
-  LockTerrainData();
-  terrain_dem.CloseTerrain();
-  UnlockTerrainData();
+  LockTerrainDataCalculations();
+  LockTerrainDataGraphics();
+  RasterTerrain::CloseTerrain();
+  UnlockTerrainDataCalculations();
+  UnlockTerrainDataGraphics();
 }
 
 
@@ -1010,10 +1022,11 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   double Alt = 0;
 
-  LockTerrainData();
-  terrain_dem.SetTerrainRounding(0);
-  Alt = terrain_dem.GetTerrainHeight(Basic->Lattitude , Basic->Longditude);
-  UnlockTerrainData();
+  LockTerrainDataCalculations();
+  terrain_dem_calculations.SetTerrainRounding(0);
+  Alt = terrain_dem_calculations.
+    GetTerrainHeight(Basic->Lattitude , Basic->Longditude);
+  UnlockTerrainDataCalculations();
 
   if(Alt<0) Alt = 0;
 
@@ -1661,8 +1674,9 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   }
 
   // calculate terrain rounding factor
-  LockTerrainData();
-  terrain_dem.SetTerrainRounding(maxrange/NUMFINALGLIDETERRAIN/1000.0);
+  LockTerrainDataCalculations();
+  terrain_dem_calculations.
+    SetTerrainRounding(maxrange/NUMFINALGLIDETERRAIN/1000.0);
 
   for (int i=0; i<=NUMFINALGLIDETERRAIN; i++) {
     distance = i*maxrange/NUMFINALGLIDETERRAIN;
@@ -1674,7 +1688,9 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     lon = FindLongditude(Basic->Lattitude, Basic->Longditude, bearing, distance);
 
     // find height over terrain
-    h =  terrain_dem.GetTerrainHeight(lat, lon); // latitude, longitude
+    h =  terrain_dem_calculations.
+      GetTerrainHeight(lat, lon); // latitude, longitude
+
     dh = altitude - h -  SAFETYALTITUDETERRAIN;
     //SAFETYALTITUDEARRIVAL;
 
@@ -1684,11 +1700,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
         *retlat = latlast*(1.0-f)+lat*f;
         *retlon = lonlast*(1.0-f)+lon*f;
       }
-      UnlockTerrainData();
+      UnlockTerrainDataCalculations();
       return distancelast*(1.0-f)+distance*(f);
     }
     if (i&&(distance<= 0.0)) {
-      UnlockTerrainData();
+      UnlockTerrainDataCalculations();
       return 0.0;
     }
 
@@ -1697,7 +1713,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     latlast = lat;
     lonlast = lon;
   }
-  UnlockTerrainData();
+  UnlockTerrainDataCalculations();
   return 0.0;
 }
 

@@ -58,6 +58,7 @@ static void DrawTask(HDC hdc, RECT rc);
 static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
 static void DrawBearing(HDC hdc, POINT Orig);
 static void DrawMapScale(HDC hDC,RECT rc);
+static void DrawMapScale2(HDC hDC,RECT rc, POINT Orig_Aircraft);
 static void DrawFinalGlide(HDC hDC,RECT rc);
 static void DrawThermalBand(HDC hDC,RECT rc);
 static void DrawGlideThroughTerrain(HDC hDC, RECT rc);
@@ -370,13 +371,13 @@ static bool MapFullScreen= false;
 bool RequestFullScreen = false;
 
 bool MapDirty = true;
-
+bool RequestMapDirty = false;
 
 static DWORD fpsTime0=0;
 
 void RefreshMap() {
   fpsTime0 = 0;
-  MapDirty = true;
+  RequestMapDirty = true;
 }
 
 
@@ -423,6 +424,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     // JMW trying to reduce flickering
     if (first || MapDirty) {
       first = false;
+      MapDirty = true;
       return (DefWindowProc (hWnd, uMsg, wParam, lParam));
     } else
       return TRUE;
@@ -572,37 +574,12 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       if(i != -1)
       {
 
-        // JMW TODO: this prevents tasks being resumed.
-        // is there a way to achieve this functionality but to
-        // resume the task?
-        // ---OR--- allow option: FINAL GLIDE TO HERE or REPLACE CURRENT WAYPOINT
-
         SelectedWaypoint = i;
         PopupWaypointDetails();
 
-        /*
-        LockFlightData();
-        wsprintf(szMessageBuffer,TEXT("Fly direct to WayPoint\r\n%s\r\n%s"),WayPointList[i].Name,WayPointList[i].Comment);
-        if(MessageBox(hWnd,szMessageBuffer ,TEXT("Go To"),MB_YESNO|MB_ICONQUESTION) == IDYES)
-        {
-        FlyDirectTo(i);
-        } else {
         SetFocus(hWnd);
         SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
 
-          if (ActiveWayPoint>=0) {
-          wsprintf(szMessageBuffer,TEXT("Replace current WayPoint\r\n%s\r\n%s"),WayPointList[i].Name,WayPointList[i].Comment);
-          if(MessageBox(hWnd,szMessageBuffer ,TEXT("Go To"),MB_YESNO|MB_ICONQUESTION) == IDYES)
-          {
-          ReplaceWaypoint(i);
-          }
-          }
-          }
-          UnlockFlightData();
-        */
-
-        SetFocus(hWnd);
-        SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
         break;
       }
     }
@@ -962,9 +939,9 @@ static void RenderMapWindow(  RECT rc)
 
     // ground first...
 
-    LockTerrainData();
-    terrain_dem.SetCacheTime();
-    UnlockTerrainData();
+    LockTerrainDataGraphics();
+    terrain_dem_graphics.SetCacheTime();
+    UnlockTerrainDataGraphics();
 
     if (EnableTerrain) {
       double sunelevation = 40.0;
@@ -1014,7 +991,8 @@ static void RenderMapWindow(  RECT rc)
 
   DrawCDI();
 
-  DrawMapScale(hdcDrawWindow,rc );
+  DrawMapScale(hdcDrawWindow,rc);
+  DrawMapScale2(hdcDrawWindow,rc, Orig_Aircraft);
 
   DrawCompass(hdcDrawWindow, rc);
 
@@ -1542,7 +1520,8 @@ void DrawMapScale(HDC hDC, RECT rc)
   Start.x = rc.right-1;
   Start.y = rc.bottom;
   End.x = rc.right-1;
-  End.y = (rc.bottom-rc.top)*terrain_dem.terraincacheefficiency/100+rc.top;
+  End.y = (rc.bottom-rc.top)*terrain_dem_graphics.
+    terraincacheefficiency/100+rc.top;
   DrawSolidLine(hDC, Start, End);
 
   SelectObject(hDC, hpOld);
@@ -1794,27 +1773,27 @@ void CreateDrawingThread(void)
 
 void SuspendDrawingThread(void)
 {
-  LockTerrainData();
+  LockTerrainDataGraphics();
   THREADRUNNING = FALSE;
-  UnlockTerrainData();
+  UnlockTerrainDataGraphics();
   //  SuspendThread(hDrawThread);
 }
 
 void ResumeDrawingThread(void)
 {
-  LockTerrainData();
+  LockTerrainDataGraphics();
   THREADRUNNING = TRUE;
-  UnlockTerrainData();
+  UnlockTerrainDataGraphics();
   //  ResumeThread(hDrawThread);
 }
 
 void CloseDrawingThread(void)
 {
-  LockTerrainData();
+  LockTerrainDataGraphics();
   CLOSETHREAD = TRUE;
   SuspendDrawingThread();
   SetThreadPriority(hDrawThread,THREAD_PRIORITY_ABOVE_NORMAL);
-  UnlockTerrainData();
+  UnlockTerrainDataGraphics();
 }
 
 void DrawThermalBand(HDC hDC,RECT rc)
@@ -2181,17 +2160,34 @@ void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
   Orig_Aircraft->x = scx;
   Orig_Aircraft->y = scy;
 
+  // get screen coordinates for all task waypoints
+
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    if (Task[i].Index>=0) {
+
+      LatLon2Screen(WayPointList[Task[i].Index].Longditude,
+                    WayPointList[Task[i].Index].Lattitude,
+                    &scx, &scy);
+
+      WayPointList[Task[i].Index].Screen.x = scx;
+      WayPointList[Task[i].Index].Screen.y = scy;
+    }
+
+  }
+
+  // only calculate screen coordinates for waypoints that are visible
+
   for(i=0;i<NumberOfWayPoints;i++)
   {
-
-    LatLon2Screen(WayPointList[i].Longditude, WayPointList[i].Lattitude, &scx, &scy);
-
-    WayPointList[i].Screen.x = scx;
-    WayPointList[i].Screen.y = scy;
 
     if(PointVisible(WayPointList[i].Longditude, WayPointList[i].Lattitude) )
     {
       WayPointList[i].Visible = TRUE;
+
+      LatLon2Screen(WayPointList[i].Longditude, WayPointList[i].Lattitude, &scx, &scy);
+
+      WayPointList[i].Screen.x = scx;
+      WayPointList[i].Screen.y = scy;
 
     }
     else
@@ -2415,3 +2411,93 @@ void DrawCDI() {
 }
 
 
+
+double findMapScaleBarSize(RECT rc) {
+
+  int range = rc.bottom-rc.top;
+  int nbars = 0;
+  int nscale = 1;
+  double pixelsize = MapScale/30; // km/pixel
+
+  // find largest bar size that will fit in display
+
+  double displaysize = range*pixelsize/2; // km
+
+  if (displaysize>100.0) {
+    return 100.0/pixelsize;
+  }
+  if (displaysize>10.0) {
+    return 10.0/pixelsize;
+  }
+  if (displaysize>1.0) {
+    return 1.0/pixelsize;
+  }
+  if (displaysize>0.1) {
+    return 0.1/pixelsize;
+  }
+  // this is as far as is reasonable
+  return 0.1/pixelsize;
+}
+
+
+void DrawMapScale2(HDC hDC, RECT rc, POINT Orig_Aircraft)
+{
+
+  double barsize = findMapScaleBarSize(rc);
+
+  TCHAR Scale[20];
+  HPEN hpOld;
+
+  hpOld = (HPEN)SelectObject(hDC, hpMapScale);
+  HPEN hpWhite = (HPEN)CreatePen(PS_SOLID, 2, RGB(0xd0,0xd0,0xd0));
+  HPEN hpBlack = (HPEN)CreatePen(PS_SOLID, 2, RGB(0x30,0x30,0x30));
+
+  double y;
+  bool color = false;
+  POINT Start, End;
+  bool first=true;
+
+  for (y=(double)Orig_Aircraft.y; y<(double)rc.bottom+barsize; y+= barsize) {
+    if (color) {
+      SelectObject(hDC, hpWhite);
+    } else {
+      SelectObject(hDC, hpBlack);
+    }
+    Start.x = rc.right-1;
+    Start.y = (int)y;
+    if (!first) {
+      DrawSolidLine(hDC,Start,End);
+    } else {
+      first=false;
+    }
+    End = Start;
+    color = !color;
+  }
+
+  color = true;
+  first = true;
+  for (y=(double)Orig_Aircraft.y; y>(double)rc.top-barsize; y-= barsize) {
+    if (color) {
+      SelectObject(hDC, hpWhite);
+    } else {
+      SelectObject(hDC, hpBlack);
+    }
+    Start.x = rc.right-1;
+    Start.y = (int)y;
+    if (!first) {
+      DrawSolidLine(hDC,Start,End);
+    } else {
+      first=false;
+    }
+    End = Start;
+    color = !color;
+  }
+
+
+  // draw text as before
+
+  SelectObject(hDC, hpOld);
+  DeleteObject(hpWhite);
+  DeleteObject(hpBlack);
+
+}
