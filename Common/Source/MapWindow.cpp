@@ -371,10 +371,6 @@ bool RequestFullScreen = false;
 
 bool MapDirty = true;
 
-void RequestToggleFullScreen() {
-  RequestFullScreen = !RequestFullScreen;
-  MapDirty = true;
-}
 
 static DWORD fpsTime0=0;
 
@@ -384,19 +380,27 @@ void RefreshMap() {
 }
 
 
-void ToggleFullScreen() {
-  MapFullScreen = !MapFullScreen;
+void ToggleFullScreenStart() {
+
+  // ok, save the state.
+  MapFullScreen = RequestFullScreen;
+
+  // show infoboxes immediately
+
   if (MapFullScreen) {
     MapRect = MapRectBig;
     HideInfoBoxes();    
-    FullScreen();
   } else {
     MapRect = MapRectSmall;
     ShowInfoBoxes();
   }
-  RefreshMap();
 }
 
+
+void RequestToggleFullScreen() {
+  RequestFullScreen = !RequestFullScreen;
+  RefreshMap();
+}
 
 
 LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
@@ -1048,14 +1052,18 @@ DWORD DrawThread (LPVOID lpvoid)
   while (!CLOSETHREAD) 
   {
     if (!THREADRUNNING) {
-      Sleep(100);
+      Sleep(10);
       continue;
     }
     if (!MapDirty) { 
-      Sleep(100);
+      Sleep(10);
       continue;
     };
     MapDirty = false;
+
+    if (RequestFullScreen != MapFullScreen) {
+      ToggleFullScreenStart();
+    }
 
     // draw previous frame so screen is immediately refreshed
     BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
@@ -1066,11 +1074,7 @@ DWORD DrawThread (LPVOID lpvoid)
     memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
     memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
     UnlockFlightData();
-    
-    if (RequestFullScreen != MapFullScreen) {
-      ToggleFullScreen();
-    }
-    
+        
     UpdateMapScale();
     
     RenderMapWindow(MapRect);
@@ -2179,16 +2183,15 @@ void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
   
   for(i=0;i<NumberOfWayPoints;i++)
   {
+
+    LatLon2Screen(WayPointList[i].Longditude, WayPointList[i].Lattitude, &scx, &scy);
+    
+    WayPointList[i].Screen.x = scx;
+    WayPointList[i].Screen.y = scy;
     
     if(PointVisible(WayPointList[i].Longditude, WayPointList[i].Lattitude) )
     {
       WayPointList[i].Visible = TRUE;
-
-      // ok, it is visible, so now get the screen position
-      LatLon2Screen(WayPointList[i].Longditude, WayPointList[i].Lattitude, &scx, &scy);
-      
-      WayPointList[i].Screen.x = scx;
-      WayPointList[i].Screen.y = scy;
 
     }
     else

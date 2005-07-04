@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.27 2005/07/04 08:09:34 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.28 2005/07/04 10:47:16 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -458,22 +458,22 @@ DWORD CalculationThread (LPVOID lpvoid) {
       // JMW moved logging and snail to Calculations
       
       LockFlightData();
-
       if(DoCalculations(&GPS_INFO,&CALCULATED_INFO)) 
         {
           InfoBoxesDirty = true;
           MapDirty = true;
         }
+      UnlockFlightData();
       
+      LockFlightData();
       if (!GPS_INFO.VarioAvailable) {
         // run the function anyway, because this gives audio functions
-      DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO);
+        DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO);
       }
-      
       UnlockFlightData();
-
+      
     } else {
-      Sleep(250); // sleep 250 ms
+      Sleep(100); // sleep 250 ms
     }
 
 #ifndef _SIM_
@@ -484,7 +484,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
     static BOOL LOCKWAIT = FALSE;
     TCHAR szLoadText[MAX_LOADSTRING];
     
-    if (itimeout % 20 != 0) {
+    if (itimeout % 50 != 0) {
       // timeout if no new data in 5 seconds
       continue;
     }
@@ -1032,11 +1032,12 @@ void DoInfoKey(int keycode) {
   HideMenu();
 
   LockNavBox();
-  LockFlightData();
   i = getInfoType(InfoFocus);
 
+  LockFlightData();
   Data_Options[i].Process(keycode);
   UnlockFlightData();
+
   UnlockNavBox();
   
   /*
@@ -1050,6 +1051,28 @@ void DoInfoKey(int keycode) {
   GpsUpdated = TRUE; // emulate update to trigger calculations
 
   FocusTimeOut = 0;
+}
+
+
+bool Debounce(WPARAM wParam) {
+  static DWORD fpsTimeLast= -1;
+  static WPARAM wlast = 0;
+  DWORD fpsTimeThis = ::GetTickCount();
+  DWORD dT = fpsTimeThis-fpsTimeLast;
+  fpsTimeLast = fpsTimeThis;
+
+  if (wParam != wlast) {
+    wlast = wParam;
+    return true; // button changed, so OK
+  }
+
+  wlast = wParam;
+
+  if (dT>250) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 
@@ -1133,19 +1156,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
         case VK_APP1:
 
-	  HideMenu();
+          if (!Debounce(wParam)) break;
 
 	  RequestToggleFullScreen();
 
-          lastpress = !lastpress;
-          if (!lastpress) {
-            break;
-          }
           break;
 
         case VK_APP2:
 
-	  HideMenu();
+          if (!Debounce(wParam)) break;
 
           if (!InfoWindowActive) {
 	    TrailActive = !TrailActive;
@@ -1160,16 +1179,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	    }
 
       // ARH Let the user know what's happened
-      if (TrailActive)
-        ShowStatusMessage(TEXT("SnailTrail ON"), 2000);
-      else
-        ShowStatusMessage(TEXT("SnailTrail OFF"), 2000);
+            if (TrailActive)
+              ShowStatusMessage(TEXT("SnailTrail ON"), 2000);
+            else
+              ShowStatusMessage(TEXT("SnailTrail OFF"), 2000);
 
-            break;
-          }
-
-          lastpress = !lastpress;
-          if (!lastpress) {
             break;
           }
 
@@ -1178,14 +1192,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           j = Data_Options[i].next_screen;
           setInfoType(InfoFocus,j);
 
-          InfoBoxesDirty = true;
+          LockFlightData();
+          AssignValues();
+          DisplayText();
+          UnlockFlightData();
+
           FocusTimeOut = 0;
 
           break;
 
         case VK_APP3:
 
-	  HideMenu();
+          if (!Debounce(wParam)) break;
 
           if (!InfoWindowActive) {
             EnableSoundVario = !EnableSoundVario;
@@ -1198,17 +1216,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		PlayResource(TEXT("IDR_REMOVE")); 
 	      }
 	    }
-        // ARH Let the user know what's happened
-        if (EnableSoundVario)
-          ShowStatusMessage(TEXT("Vario Sounds ON"), 2000);
-        else
-          ShowStatusMessage(TEXT("Vario Sounds OFF"), 2000);
 
-            break;
-          }
+            // ARH Let the user know what's happened
+            if (EnableSoundVario)
+              ShowStatusMessage(TEXT("Vario Sounds ON"), 2000);
+            else
+              ShowStatusMessage(TEXT("Vario Sounds OFF"), 2000);
 
-          lastpress = !lastpress;
-          if (!lastpress) {
             break;
           }
 
@@ -1217,7 +1231,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           j = Data_Options[i].prev_screen;
           setInfoType(InfoFocus,j);
 
-          InfoBoxesDirty = true;
+          LockFlightData();
+          AssignValues();
+          DisplayText();
+          UnlockFlightData();
 
           FocusTimeOut = 0;
 
@@ -1225,7 +1242,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case VK_APP4:
 
-	  HideMenu();
+          if (!Debounce(wParam)) break;
 
           if (InfoWindowActive)
             break;
