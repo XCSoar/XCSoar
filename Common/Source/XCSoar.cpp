@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.28 2005/07/04 10:47:16 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.29 2005/07/04 16:55:53 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -115,7 +115,6 @@ BOOL GPSCONNECT = FALSE;
 BOOL VARIOCONNECT = FALSE;
 bool          TaskAborted = false;
 
-extern bool MapDirty;
 bool InfoBoxesDirty= TRUE;
 
 //Local Static data
@@ -350,7 +349,8 @@ int NUMSELECTSTRINGS = 38;
 int ControlWidth, ControlHeight;
         
 CRITICAL_SECTION  CritSec_FlightData;
-CRITICAL_SECTION  CritSec_TerrainData;
+CRITICAL_SECTION  CritSec_TerrainDataGraphics;
+CRITICAL_SECTION  CritSec_TerrainDataCalculations;
 CRITICAL_SECTION  CritSec_NavBox;
 
 
@@ -387,12 +387,15 @@ void ShowMenu() {
 }
 
 
+extern bool RequestMapDirty; // GUI asks for map window refresh
+extern bool MapDirty; // the actual map refresh trigger
+
 void FullScreen() {
   SHFullScreen(hWndMainWindow,
                SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
   	       GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-  MapDirty = true;
+  RequestMapDirty = true;
   InfoBoxesDirty = true;
 }
 
@@ -445,10 +448,8 @@ extern BOOL CLOSETHREAD;
 
 DWORD CalculationThread (LPVOID lpvoid) {
   bool infoarrived = false;
-  static int itimeout = 0;
 
   while (!CLOSETHREAD) {
-    itimeout++;
     
     if (GpsUpdated) {
       GpsUpdated = FALSE;
@@ -461,119 +462,20 @@ DWORD CalculationThread (LPVOID lpvoid) {
       if(DoCalculations(&GPS_INFO,&CALCULATED_INFO)) 
         {
           InfoBoxesDirty = true;
-          MapDirty = true;
+          RequestMapDirty = true;
         }
       UnlockFlightData();
       
-      LockFlightData();
       if (!GPS_INFO.VarioAvailable) {
+        LockFlightData();
         // run the function anyway, because this gives audio functions
         DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO);
+        UnlockFlightData();
       }
-      UnlockFlightData();
       
     } else {
       Sleep(100); // sleep 250 ms
     }
-
-#ifndef _SIM_
-    // now check GPS status
-    static BOOL LastGPSCONNECT = FALSE;
-    static BOOL LastVARIOCONNECT = FALSE;
-    static BOOL CONNECTWAIT = FALSE;
-    static BOOL LOCKWAIT = FALSE;
-    TCHAR szLoadText[MAX_LOADSTRING];
-    
-    if (itimeout % 50 != 0) {
-      // timeout if no new data in 5 seconds
-      continue;
-    }
-    //
-    // replace bool with BOOL to correct warnings and match variable declarations RB
-    //
-    BOOL gpsconnect = GPSCONNECT;
-    GPSCONNECT = FALSE;
-    BOOL varioconnect = VARIOCONNECT;
-    BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
-    
-    if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
-      {
-        
-        devLinkTimeout(devA());
-        devLinkTimeout(devB());
-        
-        if(LOCKWAIT == TRUE)
-          {
-            DestroyWindow(hProgress);
-            SwitchToMapWindow();
-            hProgress = NULL;
-            LOCKWAIT = FALSE;
-          }
-        if(!CONNECTWAIT)
-          {
-            hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
-            LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
-            SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
-            CONNECTWAIT = TRUE;
-            MessageBeep(MB_ICONEXCLAMATION);
-            SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-            FullScreen();
-            
-          } else {
-          
-          if (itimeout % 240 == 0) {
-            // no activity for one minute, so assume device has been
-            // switched off
-#ifndef _SIM_
-            RestartCommPorts();
-#endif
-            itimeout = 0;
-          }
-        }
-      }
-    
-    if((gpsconnect == TRUE) && (LastGPSCONNECT == FALSE))
-      {
-        itimeout = 0; // reset timeout
-        
-        if(CONNECTWAIT)
-          {
-            DestroyWindow(hProgress);
-            SwitchToMapWindow();
-            hProgress = NULL;
-            CONNECTWAIT = FALSE;
-          }
-      }
-    
-    if((gpsconnect == TRUE) && (LastGPSCONNECT == TRUE))
-      {
-        if((navwarning == TRUE) && (LOCKWAIT == FALSE))
-          {
-            hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
-            LoadString(hInst, IDS_LOCKWAIT, szLoadText, MAX_LOADSTRING);
-            SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
-            LOCKWAIT = TRUE;
-            MessageBeep(MB_ICONEXCLAMATION);
-            SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-            FullScreen();
-            
-          }
-        else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
-          {
-            DestroyWindow(hProgress);
-            SwitchToMapWindow();
-            hProgress = NULL;
-            LOCKWAIT = FALSE;
-          }
-      }
-    
-    if((varioconnect == TRUE) && (LastVARIOCONNECT == FALSE)) {
-      // vario is connected now
-    }
-
-    LastGPSCONNECT = gpsconnect;
-
-#endif // end processing of non-simulation mode
 
   }
   return 0;
@@ -627,7 +529,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   InitializeCriticalSection(&CritSec_FlightData);
   InitializeCriticalSection(&CritSec_NavBox);
-  InitializeCriticalSection(&CritSec_TerrainData);  // added sgi
+  InitializeCriticalSection(&CritSec_TerrainDataGraphics);
+  InitializeCriticalSection(&CritSec_TerrainDataCalculations);
 
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
@@ -754,7 +657,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.lpszMenuName = 0;
   wc.lpszClassName = TEXT("MapWindowClass");
 
-  MapDirty = true;
+  RequestMapDirty = true;
 
   return RegisterClass(&wc);
 
@@ -991,12 +894,16 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   /////////////
 
+    ShowWindow(hWndCDIWindow, SW_HIDE);
+    ShowWindow(hWndMenuButton, SW_HIDE);
+
     FullScreen();
         
     ShowWindow(hWndMainWindow, nCmdShow);
     UpdateWindow(hWndMainWindow);
 
     SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+
 
     return TRUE;
 }
@@ -1192,10 +1099,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           j = Data_Options[i].next_screen;
           setInfoType(InfoFocus,j);
 
-          LockFlightData();
           AssignValues();
           DisplayText();
-          UnlockFlightData();
 
           FocusTimeOut = 0;
 
@@ -1231,10 +1136,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           j = Data_Options[i].prev_screen;
           setInfoType(InfoFocus,j);
 
-          LockFlightData();
           AssignValues();
           DisplayText();
-          UnlockFlightData();
 
           FocusTimeOut = 0;
 
@@ -1353,7 +1256,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       DeleteCriticalSection(&CritSec_FlightData);
       DeleteCriticalSection(&CritSec_NavBox);
-	  DeleteCriticalSection(&CritSec_TerrainData);  // added sgi
+      DeleteCriticalSection(&CritSec_TerrainDataCalculations); 
+      DeleteCriticalSection(&CritSec_TerrainDataGraphics); 
 
       break;
 
@@ -1938,13 +1842,16 @@ void ProcessTimer(void)
   } 
   MenuTimeOut++;
 
-
+  if (RequestMapDirty) {
+    MapDirty = true;
+    RequestMapDirty = false;
+  }
   if (InfoBoxesDirty) {
     InfoBoxesDirty = false;
-    LockFlightData();
+    //JMWTEST    LockFlightData();
     AssignValues();
     DisplayText();
-    UnlockFlightData();
+    //JMWTEST    UnlockFlightData();
   }
 
   //    ReadAssetNumber();
@@ -1953,6 +1860,112 @@ void ProcessTimer(void)
     return;
 
   // processing moved to its own thread
+
+#ifndef _SIM_
+
+    // now check GPS status
+
+    static int itimeout = 0;
+    itimeout++;
+
+    if (itimeout % 20 != 0) {
+      // timeout if no new data in 5 seconds
+      return;
+    }
+
+    static BOOL LastGPSCONNECT = FALSE;
+    static BOOL LastVARIOCONNECT = FALSE;
+    static BOOL CONNECTWAIT = FALSE;
+    static BOOL LOCKWAIT = FALSE;
+    TCHAR szLoadText[MAX_LOADSTRING];
+    
+    //
+    // replace bool with BOOL to correct warnings and match variable declarations RB
+    //
+    BOOL gpsconnect = GPSCONNECT;
+    GPSCONNECT = FALSE;
+    BOOL varioconnect = VARIOCONNECT;
+    BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
+    
+    if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
+      {
+        
+        devLinkTimeout(devA());
+        devLinkTimeout(devB());
+        
+        if(LOCKWAIT == TRUE)
+          {
+            DestroyWindow(hProgress);
+            SwitchToMapWindow();
+            hProgress = NULL;
+            LOCKWAIT = FALSE;
+          }
+        if(!CONNECTWAIT)
+          {
+            hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
+            LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
+            SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
+            CONNECTWAIT = TRUE;
+            MessageBeep(MB_ICONEXCLAMATION);
+            SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+            FullScreen();
+            
+          } else {
+          
+          if (itimeout % 240 == 0) {
+            // no activity for one minute, so assume device has been
+            // switched off
+#ifndef _SIM_
+            RestartCommPorts();
+#endif
+            itimeout = 0;
+          }
+        }
+      }
+    
+    if((gpsconnect == TRUE) && (LastGPSCONNECT == FALSE))
+      {
+        itimeout = 0; // reset timeout
+        
+        if(CONNECTWAIT)
+          {
+            DestroyWindow(hProgress);
+            SwitchToMapWindow();
+            hProgress = NULL;
+            CONNECTWAIT = FALSE;
+          }
+      }
+    
+    if((gpsconnect == TRUE) && (LastGPSCONNECT == TRUE))
+      {
+        if((navwarning == TRUE) && (LOCKWAIT == FALSE))
+          {
+            hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
+            LoadString(hInst, IDS_LOCKWAIT, szLoadText, MAX_LOADSTRING);
+            SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
+            LOCKWAIT = TRUE;
+            MessageBeep(MB_ICONEXCLAMATION);
+            SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+            FullScreen();
+            
+          }
+        else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
+          {
+            DestroyWindow(hProgress);
+            SwitchToMapWindow();
+            hProgress = NULL;
+            LOCKWAIT = FALSE;
+          }
+      }
+    
+    if((varioconnect == TRUE) && (LastVARIOCONNECT == FALSE)) {
+      // vario is connected now
+    }
+
+    LastGPSCONNECT = gpsconnect;
+
+#endif // end processing of non-simulation mode
+
   
 }
 
@@ -1978,12 +1991,17 @@ void SIMProcessTimer(void)
   } 
   MenuTimeOut++;
 
+  if (RequestMapDirty) {
+    MapDirty = true;
+    RequestMapDirty = false;
+  }
+
   if (InfoBoxesDirty) {
     InfoBoxesDirty = false;
-    LockFlightData();
+    //JMWTEST    LockFlightData();
     AssignValues();
     DisplayText();
-    UnlockFlightData();
+    //JMWTEST    UnlockFlightData();
   }
 
   static int ktimer=0;
@@ -2098,15 +2116,20 @@ void UnlockFlightData() {
   LeaveCriticalSection(&CritSec_FlightData);
 }
 
-void LockTerrainData() {
-  EnterCriticalSection(&CritSec_TerrainData);
-  //  while(ref_flightdata) {}
-  // ref_flightdata = true;
+void LockTerrainDataCalculations() {
+  EnterCriticalSection(&CritSec_TerrainDataCalculations);
 }
 
-void UnlockTerrainData() {
-  //  ref_flightdata = false;
-  LeaveCriticalSection(&CritSec_TerrainData);
+void UnlockTerrainDataCalculations() {
+  LeaveCriticalSection(&CritSec_TerrainDataCalculations);
+}
+
+void LockTerrainDataGraphics() {
+  EnterCriticalSection(&CritSec_TerrainDataGraphics);
+}
+
+void UnlockTerrainDataGraphics() {
+  LeaveCriticalSection(&CritSec_TerrainDataGraphics);
 }
 
 

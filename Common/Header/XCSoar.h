@@ -25,8 +25,10 @@ void ProcessChar2 (char c);
 
 extern void UnlockFlightData();
 extern void LockFlightData();
-extern void UnlockTerrainData();
-extern void LockTerrainData();
+extern void UnlockTerrainDataCalculations();
+extern void LockTerrainDataCalculations();
+extern void UnlockTerrainDataGraphics();
+extern void LockTerrainDataGraphics();
 extern void UnlockNavBox();
 extern void LockNavBox();
 void FocusOnWindow(int i, bool selected);

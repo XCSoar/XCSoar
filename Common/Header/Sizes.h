@@ -65,7 +65,7 @@
 #define NUMFINALGLIDETERRAIN 30
 
 // ratio of border size to trigger shape cache reload
-#define BORDERFACTOR 0.6
+#define BORDERFACTOR 0.9
 
 // maximum number of topologies
 #define MAXTOPOLOGY 20

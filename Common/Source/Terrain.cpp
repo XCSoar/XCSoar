@@ -100,13 +100,13 @@ void SetTopologyBounds(RECT rcin) {
 
     if (EnableTopology) {
       
-      LockTerrainData();
+      LockTerrainDataGraphics();
       for (int z=0; z<MAXTOPOLOGY; z++) {
         if (TopoStore[z]) {
           TopoStore[z]->updateCache(bounds);
         }
       }
-      UnlockTerrainData();
+      UnlockTerrainDataGraphics();
 
     }
     topo_marks->updateCache(bounds);
@@ -122,33 +122,33 @@ void SetTopologyBounds(RECT rcin) {
 
 void ReadTopology() {
 
-  LockTerrainData();
+  LockTerrainDataGraphics();
   topo_marks = 
     new TopologyWriter("My Documents/xcsoar-marks", RGB(0xD0,0xD0,0xD0));
 
   topo_marks->scaleThreshold = 30.0;
 
   topo_marks->loadBitmap(IDB_MARK);
-  UnlockTerrainData();
+  UnlockTerrainDataGraphics();
 }
 
 
 void CloseTopology() {
 
-  LockTerrainData();
+  LockTerrainDataGraphics();
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (TopoStore[z]) {
       delete TopoStore[z];
     }
   }
   delete topo_marks;
-  UnlockTerrainData();
+  UnlockTerrainDataGraphics();
 }
 
 
 void MarkLocation(double lon, double lat)
 {
-  LockTerrainData();
+  LockTerrainDataGraphics();
 
   if (EnableSoundModes) {
     PlayResource(TEXT("IDR_WAV_CLEAR"));
@@ -156,15 +156,15 @@ void MarkLocation(double lon, double lat)
  
   topo_marks->addPoint(lon, lat);
   topo_marks->triggerUpdateCache = true;
-  UnlockTerrainData();
+  UnlockTerrainDataGraphics();
 }
 
 void DrawMarks (HDC hdc, RECT rc)
 {
 
-  LockTerrainData();
+  LockTerrainDataGraphics();
   topo_marks->Paint(hdc, rc);
-  UnlockTerrainData();
+  UnlockTerrainDataGraphics();
 
 }
 
@@ -172,7 +172,7 @@ void DrawMarks (HDC hdc, RECT rc)
 void DrawTopology( HDC hdc, RECT rc)
 {
 
-  LockTerrainData();
+  LockTerrainDataGraphics();
 
   for (int z=0; z<MAXTOPOLOGY; z++) {
     if (TopoStore[z]) {
@@ -180,7 +180,7 @@ void DrawTopology( HDC hdc, RECT rc)
     }
   }
 
-  UnlockTerrainData();
+  UnlockTerrainDataGraphics();
 
 }
 
@@ -319,12 +319,12 @@ public:
     X1 = X0+DTQUANT*ixs;
     Y1 = Y0+DTQUANT*iys;
     short* myhbuf = hBuf;
-    LockTerrainData();
+    LockTerrainDataGraphics();
 
     // grid spacing = 250*rounding; m
 
-    terrain_dem.SetTerrainRounding(pixelsize);
-    kpixel = (float)(terrain_dem.GetTerrainSlopeStep()*3.0); 
+    terrain_dem_graphics.SetTerrainRounding(pixelsize);
+    kpixel = (float)(terrain_dem_graphics.GetTerrainSlopeStep()*3.0); 
     // magnify gradient to make it
     // more obvious
 
@@ -342,12 +342,12 @@ public:
         X = x;
         Y = y;
         GetLocationFromScreen(&X, &Y);
-        *myhbuf = terrain_dem.GetTerrainHeight(Y, X);
+        *myhbuf = terrain_dem_graphics.GetTerrainHeight(Y, X);
 	myhbuf++;
         // latitude, longitude
       }
     }
-    UnlockTerrainData();
+    UnlockTerrainDataGraphics();
   }
 
   float kpixel;
@@ -508,7 +508,7 @@ void OpenTopology() {
   static HANDLE hFile;
   static  TCHAR Directory[MAX_PATH];
 
-  LockTerrainData();
+  LockTerrainDataGraphics();
 
   for (int z=0; z<MAXTOPOLOGY; z++) {
     TopoStore[z] = 0;
@@ -517,7 +517,7 @@ void OpenTopology() {
   GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
 
   if (!szFile[0]) {
-    UnlockTerrainData();
+    UnlockTerrainDataGraphics();
     return;
   }
 
@@ -527,7 +527,7 @@ void OpenTopology() {
   hFile = CreateFile(szFile,GENERIC_READ,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
   if( hFile == NULL)
     {
-      UnlockTerrainData();
+      UnlockTerrainDataGraphics();
       return;
     }
 
@@ -611,6 +611,6 @@ void OpenTopology() {
         }
       CloseHandle (hFile);
     }
-  UnlockTerrainData();
+  UnlockTerrainDataGraphics();
 
 }

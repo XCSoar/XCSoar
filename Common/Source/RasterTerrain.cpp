@@ -4,6 +4,16 @@
 
 // JMW added cacheing of results of terrain lookup to reduce file IO
 
+extern TCHAR szRegistryTerrainFile[];
+
+// static variables shared between rasterterrains because can only
+// have file opened by one reader
+
+TERRAIN_INFO RasterTerrain::TerrainInfo;
+HANDLE RasterTerrain::hTerrain;
+
+CRITICAL_SECTION  CritSec_TerrainFile;
+
 
 void RasterTerrain::SetCacheTime() {
   terraincachehits = 1;
@@ -19,6 +29,31 @@ void RasterTerrain::ClearTerrainCache() {
     TerrainCache[i].recency= 0;
     TerrainCache[i].h= 0;
   }
+}
+
+short RasterTerrain::LookupTerrainCacheFile(long SeekPos) {
+  // put new value in slot tcpmin
+
+  __int16 NewAlt = 0;
+  DWORD dwBytesRead;
+  DWORD SeekRes, dwError;
+  short Alt;
+
+  EnterCriticalSection(&CritSec_TerrainFile);
+
+  SeekRes = SetFilePointer(hTerrain,SeekPos,NULL,FILE_BEGIN);
+  if(SeekRes == 0xFFFFFFFF && (dwError = GetLastError()) != NO_ERROR ) {
+    // error, not found!
+    Alt = -1;
+  } else {
+    ReadFile(hTerrain,&NewAlt,sizeof(__int16),&dwBytesRead,NULL);    
+    Alt = NewAlt;
+    if(Alt<0) Alt = 0;
+  }
+  LeaveCriticalSection(&CritSec_TerrainFile);
+
+  return Alt;
+
 }
 
 
@@ -54,22 +89,8 @@ short RasterTerrain::LookupTerrainCache(long SeekPos) {
     }
   }
 
-  // put new value in slot tcpmin
+  short Alt = LookupTerrainCacheFile(SeekPos);
 
-  __int16 NewAlt = 0;
-  DWORD dwBytesRead;
-  DWORD SeekRes, dwError;
-  short Alt;
-
-  SeekRes = SetFilePointer(hTerrain,SeekPos,NULL,FILE_BEGIN);
-  if(SeekRes == 0xFFFFFFFF && (dwError = GetLastError()) != NO_ERROR ) {
-    // error, not found!
-    Alt = -1;
-  } else {
-    ReadFile(hTerrain,&NewAlt,sizeof(__int16),&dwBytesRead,NULL);    
-    Alt = NewAlt;
-    if(Alt<0) Alt = 0;
-  }
   tcpmin->recency = cachetime;
   tcpmin->h = Alt;
   tcpmin->index = SeekPos;
@@ -151,7 +172,6 @@ short RasterTerrain::GetTerrainHeight(double Lattitude,
 
 
 
-extern TCHAR szRegistryTerrainFile[];
 
 void RasterTerrain::OpenTerrain(void)
 {
@@ -167,8 +187,9 @@ void RasterTerrain::OpenTerrain(void)
       return;
     }
   ReadFile(hTerrain,&TerrainInfo,sizeof(TERRAIN_INFO),&dwBytesRead,NULL);
+
+  InitializeCriticalSection(&CritSec_TerrainFile);
                 
-  ClearTerrainCache();
 }
 
 
@@ -182,5 +203,6 @@ void RasterTerrain::CloseTerrain(void)
   else
     {
       CloseHandle(hTerrain);
+      DeleteCriticalSection(&CritSec_TerrainFile); 
     }
 }

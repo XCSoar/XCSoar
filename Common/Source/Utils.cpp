@@ -496,19 +496,21 @@ void frotate(float *xin, float *yin, float angle)
   *yin = yout;
 }
 
-			
+#define DEG_TO_RAD 0.0174532923889
+#define RAD_TO_DEG 57.2957799433			
+
 double Distance(double lat1, double lon1, double lat2, double lon2)
 {
   double angle;
 
-  lat1 = (lat1/180) * pi;
-  lat2 = (lat2/180) * pi;
-  lon1 = (lon1/180) * pi;
-  lon2 = (lon2/180) * pi;
+  lat1 *= DEG_TO_RAD;
+  lat2 *= DEG_TO_RAD;
+  lon1 *= DEG_TO_RAD;
+  lon2 *= DEG_TO_RAD;
 
   angle = (double)acos( sin(lat1)*sin(lat2) +  
 			cos(lat1)*cos(lat2) * cos(lon1-lon2)  );
-  angle = angle * (180/pi);
+  angle *= RAD_TO_DEG;
 
   return (double)(angle * 111194.9267);
 }
@@ -519,15 +521,16 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
   double angle;
   double d;
 
-  lat1 = (lat1/180) * pi;
-  lat2 = (lat2/180) * pi;
-  lon1 = (lon1/180) * pi;
-  lon2 = (lon2/180) * pi;
-
+  lat1 *= DEG_TO_RAD;
+  lat2 *= DEG_TO_RAD;
+  lon1 *= DEG_TO_RAD;
+  lon2 *= DEG_TO_RAD;
+    
   double clat1 = cos(lat1);
   double clat2 = cos(lat2);
   double slat1 = sin(lat1);
   double slat2 = sin(lat2);
+  
 
   d = (slat1*slat2 +  clat1*clat2 * cos(lon1-lon2) );
   if(d>1) d = 0.99999999999999;
@@ -543,10 +546,13 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
       if(angle<-1) angle = -1;
       angle = acos(angle);
 
+      /* JMW Redundant code?
       if(lat1>lat2)
 	angle = angle * (180/pi);
       else
 	angle = angle * (180/pi);
+      */
+      angle *= RAD_TO_DEG;
     }
   else       
     {
@@ -556,11 +562,13 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
       if(angle<-1) angle = -1;
       angle = acos(angle);
 
-      angle = 360 - (angle * (180/pi));
+      angle = 360 - (angle * RAD_TO_DEG);
     }
 
   return (double)angle;
 }
+
+
 double Reciprocal(double InBound)
 {
   if(InBound >= 180)
@@ -960,23 +968,24 @@ double FindLattitude(double Lat, double Lon, double Bearing, double Distance)
 {
   double result;
 
-  Lat = (Lat/180) * pi;
-  Lon = (Lon/180) * pi;
-  Bearing = (Bearing/180) * pi;
+  Lat *= DEG_TO_RAD;
+  Lon *= DEG_TO_RAD;
+  Bearing *= DEG_TO_RAD;
 
   Distance = Distance/6371000;
  
   result = (double)asin(sin(Lat)*cos(Distance)+cos(Lat)*sin(Distance)*cos(Bearing));
-  return result * (180/pi);;
+  result *= RAD_TO_DEG;
+  return result;
 }
 
 double FindLongditude(double Lat, double Lon, double Bearing, double Distance)
 {
   double result;
 
-  Lat = (Lat/180) * pi;
-  Lon = (Lon/180) * pi;
-  Bearing = (Bearing/180) * pi;
+  Lat *= DEG_TO_RAD;
+  Lon *= DEG_TO_RAD;
+  Bearing *= DEG_TO_RAD;
 
   Distance = Distance/6371000;
 
@@ -988,8 +997,9 @@ double FindLongditude(double Lat, double Lon, double Bearing, double Distance)
       result = (double)fmod((result+pi),(2*pi));
       result = result - pi;
     }
-  return result * (180/pi);
+  return result * RAD_TO_DEG;
 }
+
 
 static double xcoords[64] = {
   0,			0.09801714,		0.195090322,	0.290284677,	0.382683432,	0.471396737,	0.555570233,	0.634393284,
@@ -1407,7 +1417,7 @@ void ReadProfile(HWND hwnd, TCHAR *szFile)
 
 double ScreenAngle(int x1, int y1, int x2, int y2)
 {
-  return 180* (atan2(y2-y1, x2-x1)/pi);
+  return atan2(y2-y1, x2-x1)*RAD_TO_DEG;
 }
 
 void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top, TCHAR *szMessageBuffer, TCHAR *szTitleBuffer )
@@ -1501,7 +1511,7 @@ void InitSineTable(void)
   for(i=0;i<910;i++)
     {
       angle = 0.1 * (double)i;
-      angle = angle*pi/180;
+      angle *= DEG_TO_RAD;
       SINETABLE[i] = (double)sin(angle);
       FSINETABLE[i] = (float)sin(angle);
     }

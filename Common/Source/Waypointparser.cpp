@@ -184,11 +184,11 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
   ctemp[COMMENT_SIZE] = '\0';
   _tcscpy(Temp->Comment, ctemp);
 
-  LockTerrainData();
-  terrain_dem.SetTerrainRounding(0.0);
+  LockTerrainDataGraphics();
+  terrain_dem_graphics.SetTerrainRounding(0.0);
   double myalt = 
-    terrain_dem.GetTerrainHeight(Temp->Lattitude , Temp->Longditude);
-  UnlockTerrainData();
+    terrain_dem_graphics.GetTerrainHeight(Temp->Lattitude , Temp->Longditude);
+  UnlockTerrainDataGraphics();
 
   if(Temp->Altitude == 0)
     Temp->Altitude = myalt;

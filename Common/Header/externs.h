@@ -106,6 +106,7 @@ extern BOOL LoggerActive;
 extern BOOL TopWindow;
 
 extern bool MapDirty;
+extern bool RequestMapDirty;
 
 extern SNAIL_POINT SnailTrail[TRAILSIZE];
 extern int TrailActive;
