@@ -40,6 +40,8 @@ static double polar_c;
 static int Vminsink = 2;
 static int Vbestld = 2;
 
+double sinkratecache[200];
+
 
 void SetBallast() {
   double BallastWeight;
@@ -60,6 +62,10 @@ void SetBallast() {
   double bestld = 0.0;
   int i;
 
+  if ((SAFTEYSPEED==0)||(SAFTEYSPEED>200)) {
+    SAFTEYSPEED=150;
+  }
+
   for(i=4;i<SAFTEYSPEED;i+=1)
     {
       double vtrack = (double)i; // TAS along bearing in cruise
@@ -75,9 +81,16 @@ void SetBallast() {
         minsink = thesinkrate;
         Vminsink = i;
       }
+      sinkratecache[i] = -thesinkrate;
 
     }
 
+}
+
+
+double SinkRateFast(double MC, int v) {
+  int i = max(4,min(v,(int)SAFTEYSPEED));
+  return sinkratecache[i]-MC;
 }
 
 
@@ -152,9 +165,12 @@ double McReadyAltitude(double MCREADY, double Distance, double Bearing, double W
       // SinkRate function returns negative value for sink
 
       if (effectivefinalglide) {
-	sinkrate = -SinkRate(polar_a,polar_b,polar_c,MCREADY,0.0,vtrack);
+        //	sinkrate = -SinkRate(polar_a,polar_b,polar_c,MCREADY,0.0,vtrack);
+        sinkrate = -SinkRateFast(MCREADY, i);
       } else {
-	sinkrate = -SinkRate(polar_a,polar_b,polar_c,0.0,0.0,vtrack);
+
+        //	sinkrate = -SinkRate(polar_a,polar_b,polar_c,0.0,0.0,vtrack);
+        sinkrate = -SinkRateFast(0, i);
       }
       tc = MCREADY/(sinkrate+MCREADY);
 
@@ -218,7 +234,8 @@ double McReadyAltitude(double MCREADY, double Distance, double Bearing, double W
     }
 
   // JMW: TODO calculate and save ETA in waypoints, and add up total ETA for task finish
-  BestSinkRate = SinkRate(polar_a,polar_b,polar_c,0,0,BestSpeed);
+  BestSinkRate = // SinkRate(polar_a,polar_b,polar_c,0,0,BestSpeed);
+    SinkRateFast(0,(int)BestSpeed);
   TimeToDest = Distance / (VMG); // this time does not include thermalling part!
   AltitudeNeeded = -BestSinkRate * TimeToDest;
   // this is the altitude needed to final glide to destination

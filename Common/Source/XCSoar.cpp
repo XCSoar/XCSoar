@@ -396,7 +396,6 @@ void FullScreen() {
                SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
   	       GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-
   RequestFastRefresh = true;
   InfoBoxesDirty = true;
 
@@ -1830,8 +1829,8 @@ void DisplayText(void)
 
   // this is deferred to the end, to speed up display, reduce flickering
   for(i=0;i<NUMINFOWINDOWS;i++) {
-      SetWindowText(hWndInfoWindow[i],Value[i]);
       SetWindowText(hWndTitleWindow[i],Caption[i]);
+      SetWindowText(hWndInfoWindow[i],Value[i]);
       //      UpdateWindow(hWndTitleWindow[i]);
       //      UpdateWindow(hWndInfoWindow[i]);
   }

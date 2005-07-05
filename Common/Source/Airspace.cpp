@@ -891,6 +891,41 @@ void ParseError(TCHAR *Line)
 }
 
 
+
+void FindAirspaceAreaBounds() {
+  unsigned i, j;
+  for(i=0; i<NumberOfAirspaceAreas; i++) {
+    bool first = true;
+
+    for(j= AirspaceArea[i].FirstPoint;
+        j< AirspaceArea[i].FirstPoint+AirspaceArea[i].NumPoints; j++) {
+
+      if (first) {
+        AirspaceArea[i].bounds.minx = AirspacePoint[j].Longditude;
+        AirspaceArea[i].bounds.maxx = AirspacePoint[j].Longditude;
+        AirspaceArea[i].bounds.miny = AirspacePoint[j].Lattitude;
+        AirspaceArea[i].bounds.maxy = AirspacePoint[j].Lattitude;
+        first = false;
+      } else {
+        AirspaceArea[i].bounds.minx = min(AirspacePoint[j].Longditude,
+                                          AirspaceArea[i].bounds.minx);
+        AirspaceArea[i].bounds.maxx = max(AirspacePoint[j].Longditude,
+                                          AirspaceArea[i].bounds.maxx);
+        AirspaceArea[i].bounds.miny = min(AirspacePoint[j].Lattitude,
+                                          AirspaceArea[i].bounds.miny);
+        AirspaceArea[i].bounds.maxy = max(AirspacePoint[j].Lattitude,
+                                          AirspaceArea[i].bounds.maxy);
+      }
+
+
+    }
+  }
+
+
+
+}
+
+
 extern TCHAR szRegistryAirspaceFile[];
 void ReadAirspace(void)
 {
@@ -911,6 +946,9 @@ void ReadAirspace(void)
 	SaveAirspaceBinary();
       }
   }
+
+  FindAirspaceAreaBounds();
+
 }
 
 
@@ -943,7 +981,24 @@ int FindAirspaceCircle(double Longditude,double Lattitude)
   return -1;
 }
 
-int FindAirspaceArea(double Longditude,double Lattitude)
+double fastBearing(double x0, double y0, double x1, double y1) {
+  double dx = x1-x0;
+  double dy = y1-y0;
+  return atan2(dy,dx)*RAD_TO_DEG;
+}
+
+
+
+
+
+//
+// JMW this routine checks if the polygon is closed around the test point
+// by integrating the angles from the test point to each polygon point
+//
+// There must be faster ways of doing this without trigonometry
+//
+
+int FindAirspaceAreaOld(double Longditude,double Lattitude)
 {
   unsigned i,j;
   double AngleSum;
@@ -968,8 +1023,7 @@ int FindAirspaceArea(double Longditude,double Lattitude)
 	      LastPoint = AirspaceArea[i].FirstPoint + AirspaceArea[i].NumPoints - 1;
 
 	      XPoint = AirspacePoint[LastPoint].Screen.x; YPoint = AirspacePoint[LastPoint].Screen.y;
-	      Angle = Bearing(Lattitude, Longditude, AirspacePoint[LastPoint].Lattitude, AirspacePoint[LastPoint].Longditude );
-	      if(Angle > 180) Angle -= 360;	if(Angle < -180) Angle += 360;
+	      Angle = fastBearing(Lattitude, Longditude, AirspacePoint[LastPoint].Lattitude, AirspacePoint[LastPoint].Longditude );
 	      LastAngle = Angle;
 
 	      for(j=FirstPoint;j<=LastPoint;j++)
@@ -977,8 +1031,7 @@ int FindAirspaceArea(double Longditude,double Lattitude)
 
 		  XPoint = AirspacePoint[j].Screen.x; YPoint = AirspacePoint[j].Screen.y;
 
-		  Angle = Bearing(Lattitude, Longditude, AirspacePoint[j].Lattitude, AirspacePoint[j].Longditude );
-		  if(Angle > 180) Angle -= 360;	if(Angle < -180) Angle += 360;
+		  Angle = fastBearing(Lattitude, Longditude, AirspacePoint[j].Lattitude, AirspacePoint[j].Longditude );
 
 		  NewAngle = Angle - LastAngle;  if(NewAngle > 180) NewAngle -= 360; if(NewAngle < -180) NewAngle += 360;
 
@@ -994,6 +1047,7 @@ int FindAirspaceArea(double Longditude,double Lattitude)
     }
   return -1;
 }
+
 
 BOOL CheckAirspaceAltitude(double Base, double Top)
 {
@@ -1025,3 +1079,134 @@ BOOL CheckAirspaceAltitude(double Base, double Top)
 
 
 ///////////////////////////////////////////////////
+
+// Copyright 2001, softSurfer (www.softsurfer.com)
+// This code may be freely used and modified for any purpose
+// providing that this copyright notice is included with it.
+// SoftSurfer makes no warranty for this code, and cannot be held
+// liable for any real or imagined damage resulting from its use.
+// Users of this code must verify correctness for their application.
+
+//    a Point is defined by its coordinates {int x, y;}
+//===================================================================
+
+// isLeft(): tests if a point is Left|On|Right of an infinite line.
+//    Input:  three points P0, P1, and P2
+//    Return: >0 for P2 left of the line through P0 and P1
+//            =0 for P2 on the line
+//            <0 for P2 right of the line
+//    See: the January 2001 Algorithm "Area of 2D and 3D Triangles and Polygons"
+inline double
+isLeft( AIRSPACE_POINT P0, AIRSPACE_POINT P1, AIRSPACE_POINT P2 )
+{
+    return ( (P1.Longditude - P0.Longditude) * (P2.Lattitude - P0.Lattitude)
+            - (P2.Longditude - P0.Longditude) * (P1.Lattitude - P0.Lattitude) );
+}
+//===================================================================
+
+// cn_PnPoly(): crossing number test for a point in a polygon
+//      Input:   P = a point,
+//               V[] = vertex points of a polygon V[n+1] with V[n]=V[0]
+//      Return:  0 = outside, 1 = inside
+// This code is patterned after [Franklin, 2000]
+int
+cn_PnPoly( AIRSPACE_POINT P, AIRSPACE_POINT* V, int n )
+{
+    int    cn = 0;    // the crossing number counter
+
+    // loop through all edges of the polygon
+
+    for (int i=0; i<n; i++) {
+      // edge from V[i] to V[i+1]
+
+       if (((V[i].Lattitude <= P.Lattitude)
+            && (V[i+1].Lattitude > P.Lattitude))    // an upward crossing
+        || ((V[i].Lattitude > P.Lattitude)
+            && (V[i+1].Lattitude <= P.Lattitude))) { // a downward crossing
+
+            // compute the actual edge-ray intersect x-coordinate
+         float vt = (float)((P.Lattitude - V[i].Lattitude)
+                            / (V[i+1].Lattitude - V[i].Lattitude));
+
+            if (P.Longditude < V[i].Longditude
+                + vt * (V[i+1].Longditude - V[i].Longditude)) // P.x < intersect
+                ++cn;   // a valid crossing of y=P.Lattitude right of P.Longditude
+        }
+    }
+    return (cn&1);    // 0 if even (out), and 1 if odd (in)
+
+}
+//===================================================================
+
+// wn_PnPoly(): winding number test for a point in a polygon
+//      Input:   P = a point,
+//               V[] = vertex points of a polygon V[n+1] with V[n]=V[0]
+//      Return:  wn = the winding number (=0 only if P is outside V[])
+int
+wn_PnPoly( AIRSPACE_POINT P, AIRSPACE_POINT* V, int n )
+{
+    int    wn = 0;    // the winding number counter
+
+    // loop through all edges of the polygon
+    for (int i=0; i<n; i++) {   // edge from V[i] to V[i+1]
+        if (V[i].Lattitude <= P.Lattitude) {         // start y <= P.Lattitude
+            if (V[i+1].Lattitude > P.Lattitude)      // an upward crossing
+                if (isLeft( V[i], V[i+1], P) > 0)  // P left of edge
+                    ++wn;            // have a valid up intersect
+        }
+        else {                       // start y > P.Lattitude (no test needed)
+            if (V[i+1].Lattitude <= P.Lattitude)     // a downward crossing
+                if (isLeft( V[i], V[i+1], P) < 0)  // P right of edge
+                    --wn;            // have a valid down intersect
+        }
+    }
+    return wn;
+}
+//===================================================================
+
+
+
+int FindAirspaceArea(double Longditude,double Lattitude)
+{
+  unsigned i;
+
+  if(NumberOfAirspaceAreas == 0)
+    {
+      return -1;
+    }
+
+  AIRSPACE_POINT thispoint;
+
+  thispoint.Longditude = Longditude;
+  thispoint.Lattitude = Lattitude;
+
+  for(i=0;i<NumberOfAirspaceAreas;i++)
+    {
+      if(AirspaceArea[i].Visible )
+        // JMW is this a bug?
+        // surely we should check it whether it is visible or not
+        // in almost all cases it will be, so ok.
+	{
+	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
+	    {
+
+              if (
+                  (Lattitude> AirspaceArea[i].bounds.miny)&&
+                  (Lattitude< AirspaceArea[i].bounds.maxy)&&
+                  (Longditude> AirspaceArea[i].bounds.miny)&&
+                  (Longditude< AirspaceArea[i].bounds.maxy)
+                  )
+                {
+                  if (wn_PnPoly(thispoint,
+                                &AirspacePoint[AirspaceArea[i].FirstPoint],
+                                AirspaceArea[i].NumPoints-1) != 0) {
+                    // we are inside
+                    return i;
+                  }
+                }
+	    }
+	}
+    }
+  return -1;
+}
+

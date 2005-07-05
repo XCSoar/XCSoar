@@ -26,6 +26,7 @@
 
 #include "uniqueid.h"
 #include "XCSoar.h"
+#include "Topology.h"
 
 #include <math.h>
 #include <windows.h>
@@ -496,8 +497,6 @@ void frotate(float *xin, float *yin, float angle)
   *yin = yout;
 }
 
-#define DEG_TO_RAD 0.0174532923889
-#define RAD_TO_DEG 57.2957799433
 
 double Distance(double lat1, double lon1, double lat2, double lon2)
 {
@@ -1029,6 +1028,24 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc)
   POINT pt[65];
   int i;
 
+  rectObj rect;
+  rect.minx = x-radius;
+  rect.maxx = x+radius;
+  rect.miny = y-radius;
+  rect.maxy = y+radius;
+  rectObj rcrect;
+  rcrect.minx = rc.left;
+  rcrect.maxx = rc.right;
+  rcrect.miny = rc.top;
+  rcrect.maxy = rc.bottom;
+
+  if (msRectOverlap(&rect, &rcrect)!=MS_TRUE) {
+    return FALSE;
+  }
+
+  // JMW added faster checking...
+
+
   for(i=0;i<64;i++)
     {
       pt[i].x = x + (long) (radius * xcoords[i]);
@@ -1037,16 +1054,10 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc)
   pt[64].x = x + (long) (radius * xcoords[0]);
   pt[64].y = y + (long) (radius * ycoords[0]);
 
-  if(PolygonVisible(pt, 65, rc))
-    {
-      Polygon(hdc,pt,65);
-      return true;
-    }
-  else
-    {
-      return false;
-    }
+  Polygon(hdc,pt,65);
+  return TRUE;
 }
+
 
 void ConvertFlightLevels(void)
 {
@@ -1082,6 +1093,8 @@ void ConvertFlightLevels(void)
     }
 }
 
+// TODO: BUG
+// NOTE THIS HAS HARD CODED SCREEN COORDINATES
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
 {
   BOOL Sector[9] = {FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE};
