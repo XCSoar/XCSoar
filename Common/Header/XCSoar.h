@@ -40,4 +40,7 @@ extern void HideInfoBoxes();
 extern void ToggleFullScreen();
 extern void RequestToggleFullScreen();
 
+#define DEG_TO_RAD 0.0174532923889
+#define RAD_TO_DEG 57.2957799433			
+
 #endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)

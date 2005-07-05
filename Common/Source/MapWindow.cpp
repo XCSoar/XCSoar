@@ -38,6 +38,7 @@
 static DWORD DrawThread (LPVOID);
 
 static void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft);
+static void CalculateScreenPositionsAirspace(POINT Orig, RECT rc, POINT *Orig_Aircraft);
 static void CalculateWaypointReachable(void);
 
 
@@ -70,7 +71,6 @@ static void DrawSolidLine(HDC , POINT , POINT );
 static void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
 
 
-#define NUMPOINTS 2
 
 static HBITMAP hDrawBitMap = NULL;
 static HBITMAP hDrawBitMapBg = NULL;
@@ -916,6 +916,7 @@ static void RenderMapWindow(  RECT rc)
   CalculateOrigin(rc, &Orig);
   
   CalculateScreenPositions(Orig, rc, &Orig_Aircraft);
+  CalculateScreenPositionsAirspace(Orig, rc, &Orig_Aircraft);
   
   if (drawmap) {
     CalculateWaypointReachable();
@@ -1731,6 +1732,10 @@ void DrawAirSpace(HDC hdc, RECT rc)
         AirspaceCircle[i].ScreenY ,
         AirspaceCircle[i].ScreenR ,rc);
 
+    } else {
+      // JMW think this was missing before
+      AirspaceCircle[i].Visible = false;
+
     }
   }
   
@@ -1746,20 +1751,29 @@ void DrawAirSpace(HDC hdc, RECT rc)
         pt[j-AirspaceArea[i].FirstPoint].y = AirspacePoint[j].Screen.y ;
       }
       
-      // this color is used as the black bit
-      SetTextColor(hDCTemp, 
-                   Colours[iAirspaceColour[AirspaceArea[i].Type]]);
-      // this color is the transparent bit
-      SetBkColor(hDCTemp, 
-                 whitecolor);
 
-      SelectObject(hDCTemp, 
-                   hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
       
-      AirspaceArea[i].Visible= PolygonVisible(pt,AirspaceArea[i].NumPoints, rc);
-      
-      if(AirspaceArea[i].Visible)
+      AirspaceArea[i].Visible = 
+        msRectOverlap(&AirspaceArea[i].bounds, &screenbounds_latlon);
+      // JMW now looks for overlap in lat/lon coordinates
+
+      if(AirspaceArea[i].Visible) {
+
+        // this color is used as the black bit
+        SetTextColor(hDCTemp, 
+                     Colours[iAirspaceColour[AirspaceArea[i].Type]]);
+        // this color is the transparent bit
+        SetBkColor(hDCTemp, 
+                   whitecolor);
+
+        SelectObject(hDCTemp, 
+                     hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
+
         Polygon(hDCTemp,pt,AirspaceArea[i].NumPoints);
+      }
+    } else {
+      // JMW think this was missing before
+      AirspaceArea[i].Visible = false;
     }
   }
   
@@ -2165,8 +2179,7 @@ void DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_
 
 void LatLon2Screen(float lon, float lat, int *scX, int *scY) {
   float X, Y;
-  X = (float)DrawScale*((float)PanXr - lon);
-  X = X * ffastcosine(lat);
+  X = (float)DrawScale*((float)PanXr - lon)*ffastcosine(lat);
   Y = (float)DrawScale*((float)PanYr  - lat);
   
   frotate(&X, &Y, (float)DisplayAngle );
@@ -2178,8 +2191,7 @@ void LatLon2Screen(float lon, float lat, int *scX, int *scY) {
 
 void LatLon2Screen(double lon, double lat, int *scX, int *scY) {
   double X, Y;
-  X = DrawScale*(PanXr - lon);
-  X = X * fastcosine(lat);
+  X = DrawScale*(PanXr - lon)*fastcosine(lat);
   Y = DrawScale*(PanYr  - lat);
   
   rotate(&X, &Y, DisplayAngle );
@@ -2190,11 +2202,51 @@ void LatLon2Screen(double lon, double lat, int *scX, int *scY) {
 
 
 
+void CalculateScreenPositionsAirspace(POINT Orig, RECT rc, POINT *Orig_Aircraft) {
+  unsigned int i,j;
+  double tmp;
+  int scx, scy;
+
+  for(i=0;i<NumberOfAirspaceCircles;i++)
+  {
+    if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
+    {
+      
+      LatLon2Screen(AirspaceCircle[i].Longditude, AirspaceCircle[i].Lattitude, &scx, &scy);
+      
+      AirspaceCircle[i].ScreenX = scx;
+      AirspaceCircle[i].ScreenY = scy;
+      
+      tmp = AirspaceCircle[i].Radius * DISTANCEMODIFY/MapScale;
+      tmp = tmp * 30;
+      
+      AirspaceCircle[i].ScreenR = (int)tmp;
+    }
+  }
+  
+  
+  for(i=0;i<NumberOfAirspaceAreas;i++)
+  {
+    if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
+    {
+      for(j=AirspaceArea[i].FirstPoint ; j<(AirspaceArea[i].FirstPoint + AirspaceArea[i].NumPoints) ; j++)
+      {
+        
+        // bug fix by Samuel Gisiger
+        LatLon2Screen(AirspacePoint[j].Longditude, AirspacePoint[j].Lattitude, &scx, &scy);
+        
+        AirspacePoint[j].Screen.x = scx;
+        AirspacePoint[j].Screen.y = scy;
+      }
+    }
+  }
+  
+}
+
 
 void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
 {
-  unsigned int i,j;
-  double tmp;
+  unsigned int i;
   int scx, scy;
 
   // compute lat lon extents of visible screen
@@ -2246,42 +2298,7 @@ void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
     }
   }
   
-  
-  for(i=0;i<NumberOfAirspaceCircles;i++)
-  {
-    if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
-    {
-      
-      LatLon2Screen(AirspaceCircle[i].Longditude, AirspaceCircle[i].Lattitude, &scx, &scy);
-      
-      AirspaceCircle[i].ScreenX = scx;
-      AirspaceCircle[i].ScreenY = scy;
-      
-      tmp = AirspaceCircle[i].Radius * DISTANCEMODIFY/MapScale;
-      tmp = tmp * 30;
-      
-      AirspaceCircle[i].ScreenR = (int)tmp;
-    }
-  }
-  
-  
-  for(i=0;i<NumberOfAirspaceAreas;i++)
-  {
-    if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
-    {
-      for(j=AirspaceArea[i].FirstPoint ; j<(AirspaceArea[i].FirstPoint + AirspaceArea[i].NumPoints) ; j++)
-      {
-        
-        // bug fix by Samuel Gisiger
-        LatLon2Screen(AirspacePoint[j].Longditude, AirspacePoint[j].Lattitude, &scx, &scy);
-        
-        AirspacePoint[j].Screen.x = scx;
-        AirspacePoint[j].Screen.y = scy;
-      }
-    }
-  }
-  
-  
+    
   if(TrailActive)
   {
     
@@ -2366,6 +2383,7 @@ void CalculateWaypointReachable(void)
 }
 
 
+#define NUMPOINTS 2
 void DrawSolidLine(HDC hdc, POINT ptStart, POINT ptEnd)
 {
   POINT pt[2];

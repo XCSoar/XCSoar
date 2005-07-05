@@ -334,8 +334,7 @@ extern "C" {
 	InitializeCriticalSection(&CritSec_VarioSoundV);  // added sgi
 
     variosound_waveOut.Init(variosound_waveOutEventCB,
-			    // THREAD_PRIORITY_TIME_CRITICAL, 
-			    THREAD_PRIORITY_ABOVE_NORMAL, 
+			    THREAD_PRIORITY_TIME_CRITICAL, 
 			    BCOUNT,
 			    BSIZE*FREQZ,
 			    1,

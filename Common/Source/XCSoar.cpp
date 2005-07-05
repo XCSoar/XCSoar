@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.32 2005/07/05 13:05:09 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.33 2005/07/05 17:36:40 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -396,7 +396,6 @@ void FullScreen() {
                SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
   	       GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-
   RequestFastRefresh = true;
   InfoBoxesDirty = true; 
 
@@ -1830,8 +1829,8 @@ void DisplayText(void)
 
   // this is deferred to the end, to speed up display, reduce flickering
   for(i=0;i<NUMINFOWINDOWS;i++) {
-      SetWindowText(hWndInfoWindow[i],Value[i]);
       SetWindowText(hWndTitleWindow[i],Caption[i]);
+      SetWindowText(hWndInfoWindow[i],Value[i]);
       //      UpdateWindow(hWndTitleWindow[i]);
       //      UpdateWindow(hWndInfoWindow[i]);
   }

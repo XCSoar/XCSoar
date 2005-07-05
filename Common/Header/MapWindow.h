@@ -6,7 +6,7 @@
 #endif // _MSC_VER > 1000
 
 #include <windows.h>
-
+#include "mapshape.h"
 
 #define NAME_SIZE 20
 #define COMMENT_SIZE 20
@@ -85,7 +85,7 @@ typedef struct _AIRSPACE_AREA
 	double MaxLattitude;
 	double MinLongditude;
 	double MaxLongditude;
-
+        rectObj bounds;
 } AIRSPACE_AREA;
 
 typedef struct _AIRSPACE_POINT

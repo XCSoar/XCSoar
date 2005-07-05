@@ -63,17 +63,17 @@ void SetTopologyBounds(RECT rcin) {
   static rectObj bounds;
   rectObj bounds_new;
 
-  bounds = GetRectBounds(rcin);
+  bounds_new = GetRectBounds(rcin);
 
-  double threshold = BORDERFACTOR*max(bounds.maxx-bounds.minx, 
-                                      bounds.maxy-bounds.miny);
+  double threshold = BORDERFACTOR*max(bounds_new.maxx-bounds_new.minx, 
+                                      bounds_new.maxy-bounds_new.miny);
   bool recompute = false;
 
   // make bounds bigger than screen
-  bounds_new.maxx = bounds.maxx+threshold;
-  bounds_new.minx = bounds.minx-threshold;
-  bounds_new.maxy = bounds.maxy+threshold;
-  bounds_new.miny = bounds.miny-threshold;
+  bounds_new.maxx += threshold;
+  bounds_new.minx -= threshold;
+  bounds_new.maxy += threshold;
+  bounds_new.miny -= threshold;
 
   // only recalculate which shapes when bounds change significantly
   // need to have some trigger for this..

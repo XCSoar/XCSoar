@@ -1,5 +1,6 @@
 
-This will install XCSoar on your Pocket PC device.
+IMPORTANT: Delete the xcsoar-airspace.bin file before running any new version
+  of XCSoar.  Otherwise the program will crash on startup.
 
 You may need to separately install the following data files:
 - Waypoints file (Cambridge .dat format), available from the WorldWide Soaring Turnpoint Exchange
