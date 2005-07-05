@@ -112,7 +112,6 @@ void ReadWayPointFile(HANDLE hFile)
                   List->Details = NULL;
 		  if (ParseWayPointString(TempString,List)) {
 		    List ++;
-		    // bug fix by Samuel Gisiger
 		  }
 		}
 	    }
@@ -137,7 +136,6 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
 {
   TCHAR ctemp[80];
   TCHAR *Zoom;
-
 
   ExtractParameter(TempString,ctemp,0);
   Temp->Number = _tcstol(ctemp, &Zoom, 10);

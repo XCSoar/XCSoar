@@ -191,7 +191,7 @@ BOOL TERRAINFILECHANGED = FALSE;
 BOOL TOPOLOGYFILECHANGED = FALSE;
 
 //Task Information
-TASK_POINT Task[MAXTASKPOINTS +1 ] = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
+Task_t Task = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
 int ActiveWayPoint = -1;
 
 // Assigned Area Task
@@ -1218,7 +1218,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       SaveSoundSettings();
 
       VarioSound_EnableSound(false);
-	  VarioSound_Close();  // added sgi
+	    VarioSound_Close();  // added sgi
+
+      devCloseAll();
 
       CloseDrawingThread();
 

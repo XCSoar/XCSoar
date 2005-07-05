@@ -13,7 +13,7 @@
 #define	devA()	(&DeviceList[0])
 #define	devB()	(&DeviceList[1])
 
-typedef	enum DeviceFlags_t {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind};
+typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind} DeviceFlags_t;
 
 typedef struct{
   void (*WriteString)(TCHAR *Text);
@@ -22,6 +22,7 @@ typedef struct{
   int  (*GetChar)(void);
   int  (*SetRxTimeout)(int Timeout);
   unsigned long (*SetBaudrate)(unsigned long BaudRate);
+  int  (*Read)(void *Buffer, size_t Size);
 }ComPortDriver_t;
 
 typedef	struct DeviceDescriptor_t{
@@ -61,6 +62,7 @@ BOOL devRegister(TCHAR *Name,	int	Flags, BOOL (*Installer)(PDeviceDescriptor_t d
 BOOL decRegisterGetName(int Index, TCHAR *Name);
 
 BOOL devInit(void);
+BOOL devCloseAll(void);
 PDeviceDescriptor_t devGetDeviceOnPort(int Port);
 BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token);
 

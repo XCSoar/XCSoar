@@ -8,15 +8,21 @@
 #include <tchar.h>
 
 
-extern BOOL CLOSETHREAD;
-HANDLE				hRead1Thread = NULL;              // Handle to the read thread
+extern BOOL  CLOSETHREAD;
+HANDLE			 hRead1Thread = NULL;              // Handle to the read thread
+static BOOL  Port1CloseThread;
+static BOOL  fRxThreadTerminated;
+static TCHAR sPortName[8];
 
+static DWORD dwMask;
 
 BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 {
   DWORD dwError;
   DCB PortDCB;
+  TCHAR sTmp[127];
 
+  mbstowcs(sPortName, (char *)lpszPortName, strlen((char *)lpszPortName));
   // Open the serial port.
   hPort1 = CreateFile (lpszPortName, // Pointer to the name of the port
                       GENERIC_READ | GENERIC_WRITE,
@@ -24,7 +30,7 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
                       0,            // Share mode
                       NULL,         // Pointer to the security attribute
                       OPEN_EXISTING,// How to open the serial port
-                      0,            // Port attributes
+                      FILE_ATTRIBUTE_NORMAL,            // Port attributes
                       NULL);        // Handle to port with attribute
                                     // to copy
 
@@ -32,7 +38,8 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   if ( hPort1 == INVALID_HANDLE_VALUE )
   {
     // Could not open the port.
-    MessageBox (hWndMainWindow, TEXT("GPS Serial Port Unavailable"),
+    _stprintf(sTmp, TEXT("Unable to Open Port %s"), sPortName),
+    MessageBox (hWndMainWindow, sTmp,
                 TEXT("Error"), MB_OK|MB_ICONINFORMATION);
     dwError = GetLastError ();
     return FALSE;
@@ -75,9 +82,9 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   {
     // Could not create the read thread.
 		CloseHandle (hPort1);
-    MessageBox (hWndMainWindow, TEXT("Unable to Change the GPS Serial Port Settings"),
-                TEXT("Error"), MB_OK);
-    dwError = GetLastError ();
+    _stprintf(sTmp, TEXT("Unable to Change Settings on Port %s"), sPortName),
+    MessageBox (hWndMainWindow, sTmp, TEXT("Error"), MB_OK);
+    // dwError = GetLastError ();
     return FALSE;
   }
 
@@ -132,12 +139,14 @@ DWORD Port1ReadThread (LPVOID lpvoid)
   BYTE inbuf[1024];
 
   // Specify a set of events to be monitored for the port.
-  SetCommMask (hPort1,  EV_RXFLAG |  EV_CTS
-	       | EV_DSR | EV_RLSD | EV_RING
-	       | EV_RXCHAR
-	       );
 
-  while ((hPort1 != INVALID_HANDLE_VALUE) && (!CLOSETHREAD))
+  dwMask = EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR;
+
+  SetCommMask(hPort1, dwMask);
+
+  fRxThreadTerminated = FALSE;
+
+  while ((hPort1 != INVALID_HANDLE_VALUE) && (!CLOSETHREAD) && (!Port1CloseThread))
   {
     int i=0;
 
@@ -148,7 +157,7 @@ DWORD Port1ReadThread (LPVOID lpvoid)
     }
 
     // Re-specify the set of events to be monitored for the port.
-    SetCommMask (hPort1, EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR);
+    SetCommMask (hPort1, dwMask);
 
     if (
 	    (dwCommModemStatus & EV_RXFLAG)
@@ -181,6 +190,7 @@ DWORD Port1ReadThread (LPVOID lpvoid)
     GetCommModemStatus (hPort1, &dwCommModemStatus);
 
   }
+  fRxThreadTerminated = TRUE;
 
   return 0;
 }
@@ -197,8 +207,11 @@ BOOL Port1Close (HANDLE hCommPort)
 
   if (hCommPort != INVALID_HANDLE_VALUE)
   {
-    // Close the communication port.
 
+    Port1StopRxThread();
+    Sleep(20);  // todo ...
+
+    // Close the communication port.
     if (!CloseHandle (hCommPort))
     {
       dwError = GetLastError ();
@@ -230,10 +243,21 @@ BOOL Port1StopRxThread(void){
 
   if (hPort1 == INVALID_HANDLE_VALUE) return(FALSE);
 
-  CLOSETHREAD = TRUE;
-  SetCommMask(hPort1, 0);
+  Port1CloseThread = TRUE;
+  //GetCommMask(hPort1, &dwMask);         // setting the comm event mask with the same value
+  SetCommMask(hPort1, dwMask);          // will cancel any WaitCommEvent!
+                                        // this is a documented CE trick to cancel the WaitCommEvent
 
-  return(TRUE);
+  DWORD tm = GetTickCount()+2000l;
+
+  while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0){
+    Sleep(10);
+  }
+
+  if (!fRxThreadTerminated)
+    MessageBox (hWndMainWindow, TEXT("Port1 RX Thread not Terminated!"), TEXT("Error"), MB_OK);
+
+  return(fRxThreadTerminated);
 
 }
 
@@ -243,8 +267,9 @@ BOOL Port1StopRxThread(void){
 BOOL Port1StartRxThread(void){
 
   DWORD dwThreadID, dwError;
+  TCHAR sTmp[127];
 
-  CLOSETHREAD = FALSE;
+  Port1CloseThread = FALSE;
                                         // Create a read thread for reading data from the communication port.
   if (hRead1Thread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )Port1ReadThread, 0, 0, &dwThreadID))
   {
@@ -253,8 +278,8 @@ BOOL Port1StartRxThread(void){
   }
   else                                  // Could not create the read thread.
   {
-    MessageBox (hWndMainWindow, TEXT("Unable to Start GPS Serial Port Handler"),
-                TEXT("Error"), MB_OK);
+    _stprintf(sTmp, TEXT("Unable to Start RX Thread on Port %s"), sPortName),
+    MessageBox (hWndMainWindow, sTmp, TEXT("Error"), MB_OK);
     dwError = GetLastError ();
     return FALSE;
   }
@@ -268,7 +293,7 @@ int Port1GetChar(void){
   char  inbuf[2];
   DWORD dwBytesTransferred;
 
-  if (hPort1 == INVALID_HANDLE_VALUE || !CLOSETHREAD) return(-1);
+  if (hPort1 == INVALID_HANDLE_VALUE || !Port1CloseThread) return(-1);
 
   if (ReadFile(hPort1, inbuf, 1, &dwBytesTransferred, 0)) {
 
@@ -344,3 +369,19 @@ unsigned long Port1SetBaudrate(unsigned long BaudRate){
   return(result);
 
 }
+int Port1Read(void *Buffer, size_t Size){
+
+  DWORD dwBytesTransferred;
+
+  if (hPort1 == INVALID_HANDLE_VALUE) return(-1);
+
+  if (ReadFile (hPort1, Buffer, Size, &dwBytesTransferred, 0)){
+
+    return(dwBytesTransferred);
+
+  }
+
+  return(-1);
+
+}
+

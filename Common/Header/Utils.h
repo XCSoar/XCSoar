@@ -64,5 +64,7 @@ unsigned int isqrt4(unsigned long val);
 int iround(double i);
 long lround(double i);
 
+WORD crcCalc(void *Buffer, size_t size);
+
 
 #endif
