@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: Parser.cpp,v 1.7 2005/07/02 02:37:03 jwharington Exp $
+  $Id: Parser.cpp,v 1.8 2005/07/05 13:05:09 jwharington Exp $
 */
 #include "stdafx.h"
 #include "parser.h"
@@ -311,6 +311,8 @@ BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
+
+  /* we calculate all this stuff now 
   TCHAR ctemp[80];
 
   ExtractParameter(String,ctemp,0);
@@ -332,6 +334,7 @@ BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->WaypointBearing = StrToDouble(ctemp, NULL);
   ExtractParameter(String,ctemp,11);
   GPS_INFO->WaypointSpeed = KNOTSTOMETRESSECONDS * StrToDouble(ctemp, NULL);
+  */
 
   return TRUE;
 }

@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.31 2005/07/05 10:34:55 samgi Exp $
+  $Id: XCSoar.cpp,v 1.32 2005/07/05 13:05:09 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -453,6 +453,9 @@ extern BOOL CLOSETHREAD;
 DWORD CalculationThread (LPVOID lpvoid) {
   bool infoarrived = false;
 
+  NMEA_INFO     tmp_GPS_INFO;
+  DERIVED_INFO  tmp_CALCULATED_INFO;
+
   while (!CLOSETHREAD) {
     
     if (GpsUpdated) {
@@ -461,21 +464,30 @@ DWORD CalculationThread (LPVOID lpvoid) {
       //    CheckRegistration();
       
       // JMW moved logging and snail to Calculations
-      
+
+      // make local copy before editing...
       LockFlightData();
-      if(DoCalculations(&GPS_INFO,&CALCULATED_INFO)) 
+      memcpy(&tmp_GPS_INFO,&GPS_INFO,sizeof(NMEA_INFO));
+      memcpy(&tmp_CALCULATED_INFO,&CALCULATED_INFO,sizeof(DERIVED_INFO));
+      UnlockFlightData();
+
+      if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) 
         {
           InfoBoxesDirty = true;
           RequestMapDirty = true;
         }
-      UnlockFlightData();
       
       if (!GPS_INFO.VarioAvailable) {
-        LockFlightData();
         // run the function anyway, because this gives audio functions
-        DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO);
-        UnlockFlightData();
+        DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO);
       }
+
+      // values changed, so copy them back now: ONLY CALCULATED INFO
+      // should be changed in DoCalculations, so we only need to write
+      // that one back (otherwise we may write over new data)
+      LockFlightData();
+      memcpy(&CALCULATED_INFO,&tmp_CALCULATED_INFO,sizeof(DERIVED_INFO));
+      UnlockFlightData();
       
     } else {
       Sleep(100); // sleep 250 ms
@@ -1688,7 +1700,7 @@ void    AssignValues(void)
   Data_Options[1].Value = ALTITUDEMODIFY*CALCULATED_INFO.AltitudeAGL  ;
         
   Data_Options[2].Value = LIFTMODIFY*CALCULATED_INFO.Average30s;
-  Data_Options[3].Value = GPS_INFO.WaypointBearing;
+  Data_Options[3].Value = CALCULATED_INFO.WaypointBearing;
   Data_Options[4].Value = CALCULATED_INFO.LD; 
   Data_Options[5].Value = CALCULATED_INFO.CruiseLD;
   Data_Options[6].Value = SPEEDMODIFY*GPS_INFO.Speed;
@@ -1699,7 +1711,7 @@ void    AssignValues(void)
         
   Data_Options[10].Value = MACREADY;
         
-  Data_Options[11].Value = DISTANCEMODIFY*GPS_INFO.WaypointDistance;
+  Data_Options[11].Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
   Data_Options[12].Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeDifference;
   Data_Options[13].Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeRequired; 
   Data_Options[14].Value = 0; // Next Waypoint Text
@@ -1820,8 +1832,8 @@ void DisplayText(void)
   for(i=0;i<NUMINFOWINDOWS;i++) {
       SetWindowText(hWndInfoWindow[i],Value[i]);
       SetWindowText(hWndTitleWindow[i],Caption[i]);
-      UpdateWindow(hWndTitleWindow[i]);
-      UpdateWindow(hWndInfoWindow[i]);
+      //      UpdateWindow(hWndTitleWindow[i]);
+      //      UpdateWindow(hWndInfoWindow[i]);
   }
 
   UnlockNavBox();
