@@ -6,6 +6,7 @@
 #endif // _MSC_VER > 1000
 
 #include <windows.h>
+#include "sizes.h"
 
 #define CIRCLE 0
 #define SECTOR 1
@@ -36,5 +37,6 @@ typedef struct _TASK_POINT
   POINT	 AATFinish;	
 }TASK_POINT;
 
+typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
 
 #endif

@@ -93,6 +93,7 @@ BOOL devInit(void){
       devA()->Com.GetChar = Port1GetChar;
       devA()->Com.SetRxTimeout = Port1SetRxTimeout;
       devA()->Com.SetBaudrate = Port1SetBaudrate;
+      devA()->Com.Read = Port1Read;
 
       devInit(devA());
       devOpen(devA(), 0);
@@ -115,6 +116,7 @@ BOOL devInit(void){
       devB()->Com.GetChar = Port2GetChar;
       devB()->Com.SetRxTimeout = Port2SetRxTimeout;
       devB()->Com.SetBaudrate = Port2SetBaudrate;
+      devA()->Com.Read = Port2Read;
 */
       devInit(devB());
       devOpen(devB(), 1);
@@ -125,6 +127,16 @@ BOOL devInit(void){
 
   return(TRUE);
 }
+
+BOOL devCloseAll(void){
+  int i;
+
+  for (i=0; i<NUMDEV; i++){
+    devClose(&DeviceList[i]);
+  }
+  return(TRUE);
+}
+
 
 PDeviceDescriptor_t devGetDeviceOnPort(int Port){
 

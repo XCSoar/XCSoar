@@ -20,6 +20,12 @@ static unsigned long lLastBaudrate = 0;
 static nDeclErrorCode = 0;
 static int ewDecelTpIndex = 0;
 
+#ifdef _SIM_
+static BOOL fSimMode = TRUE;
+#else
+static BOOL fSimMode = FALSE;
+#endif
+
 
 BOOL EWParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
@@ -54,11 +60,18 @@ void appendCheckSum(TCHAR *String){
 BOOL EWDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
 
   int retries=10;
-  TCHAR sTmp[32];
+  TCHAR sTmp[72];
+  TCHAR sPilot[13];
+  TCHAR sGliderType[9];
+  TCHAR sGliderID[9];
+
   
   nDeclErrorCode = 0;
   ewDecelTpIndex = 0;
   fDeclarationPending = TRUE;
+
+  if (fSimMode) 
+    return(TRUE);
 
   (d->Com.StopRxThread)();
   lLastBaudrate = (d->Com.SetBaudrate)(9600L);    // change to IO Mode baudrate
@@ -80,6 +93,35 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *
     return(FALSE);
   };
 
+  _stprintf(sTmp, TEXT("#SPI"));                  // send SetPilotInfo
+  appendCheckSum(sTmp);
+  (d->Com.WriteString)(sTmp);
+  Sleep(50);
+
+  _tcsncpy(sPilot, PilotsName, 12);               // copy and strip fields
+  sPilot[12] = '\0';
+  _tcsncpy(sGliderType, Class, 8);
+  sGliderType[8] = '\0';
+  _tcsncpy(sGliderID, ID, 8);
+  sGliderID[8] = '\0';
+                                                  // build string (field 4-5 are GPS info, no idea what to write)
+  _stprintf(sTmp, TEXT("%-12s%-8s%-8s%-12s%-12s%-6s\r"), 
+           sPilot, 
+           sGliderType, 
+           sGliderID, 
+           TEXT(""),                              // GPS Model
+           TEXT(""),                              // GPS Serial No.
+           TEXT("")                               // Flight Date, format unknown, left blank (GPS has a RTC)
+  );
+  (d->Com.WriteString)(sTmp);
+
+  if (!ExpectString(d, TEXT("OK\r"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
+  };
+  
+
+  /*  
   _stprintf(sTmp, TEXT("#SUI%02d"), 0);           // send pilot name
   appendCheckSum(sTmp);
   (d->Com.WriteString)(sTmp);
@@ -115,6 +157,7 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *
     nDeclErrorCode = 1;
     return(FALSE);
   };
+  */
 
   for (int i=0; i<6; i++){                        // clear all 6 TP's
     _stprintf(sTmp, TEXT("#CTP%02d"), i);
@@ -133,12 +176,16 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *
 
 BOOL EWDeclEnd(PDeviceDescriptor_t d){
   
-  (d->Com.WriteString)(TEXT("NMEA\r\n"));         // switch to NMEA mode
-  
-  (d->Com.SetBaudrate)(lLastBaudrate);            // restore baudrate
+  if (!fSimMode){
 
-  (d->Com.SetRxTimeout)(0);                       // clear timeout
-  (d->Com.StartRxThread)();                       // restart RX thread
+    (d->Com.WriteString)(TEXT("NMEA\r\n"));         // switch to NMEA mode
+  
+    (d->Com.SetBaudrate)(lLastBaudrate);            // restore baudrate
+
+    (d->Com.SetRxTimeout)(0);                       // clear timeout
+    (d->Com.StartRxThread)();                       // restart RX thread
+
+  }
 
   fDeclarationPending = FALSE;                    // clear decl pending flag
 
@@ -238,13 +285,17 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
     
   appendCheckSum(EWRecord);                       // complete package with CS and CRLF
     
-  (d->Com.WriteString)(EWRecord);                 // put it to the logger
+  if (!fSimMode){
 
-  if (!ExpectString(d, TEXT("OK\r"))){            // wait for response
-    nDeclErrorCode = 1;
-    return(FALSE);
-  };
-  
+    (d->Com.WriteString)(EWRecord);                 // put it to the logger
+
+    if (!ExpectString(d, TEXT("OK\r"))){            // wait for response
+      nDeclErrorCode = 1;
+      return(FALSE);
+    };
+
+  }
+    
   ewDecelTpIndex = ewDecelTpIndex + 1;            // increase TP index
 
   return(TRUE);
@@ -264,7 +315,7 @@ BOOL EWIsGPSSource(PDeviceDescriptor_t d){
 
 BOOL EWLinkTimeout(PDeviceDescriptor_t d){
   
-  if (!fDeclarationPending)
+  if (!fSimMode && !fDeclarationPending)
     Port1WriteString(TEXT("NMEA\r\n"));
 
   return(TRUE);

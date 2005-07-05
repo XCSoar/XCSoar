@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.25 2005/07/04 19:04:53 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.26 2005/07/05 10:34:54 samgi Exp $
 
 */
 #include "stdafx.h"
@@ -92,6 +92,10 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
 void ReadNewTask(HWND hDlg);
 static void LoadTask(TCHAR *FileName,HWND hDlg);
 static void SaveTask(TCHAR *FileName);
+
+
+static Task_t TaskBackup;
+static BOOL fTaskModified = FALSE;
 
 
 LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -599,8 +603,8 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
         {
         case IDC_AUDIOVARIO:
           EnableSoundVario = !EnableSoundVario;
-	  VarioSound_EnableSound(EnableSoundVario); // remove type case RB
-          return TRUE;
+          VarioSound_EnableSound(EnableSoundVario); // remove type case RB
+        return TRUE;
         case IDC_AUDIOEVENTS:
           EnableSoundTask = !EnableSoundTask;
           return TRUE;
@@ -868,16 +872,21 @@ void settaskUpdateControls(HWND hDlg, int TaskSize){
   long Selection;
 
 
-  AATEnabled = TaskSize >=3; 
-  // 
-  // JMW not sure this is right,
-  // it is making all my tasks aat by default!
-  
-  EnableWindow(GetDlgItem(hDlg, IDC_AAT), AATEnabled);
+  if (!fTaskModified)
+    fTaskModified = crcCalc(&Task, sizeof(Task_t)) 
+     != 
+    crcCalc(&TaskBackup, sizeof(Task_t)); 
+
+  if(TaskSize < 3)
+    AATEnabled = FALSE;
+
+  EnableWindow(GetDlgItem(hDlg, IDC_AAT), TaskSize >=3);
   
   EnableWindow(GetDlgItem(hDlg, IDC_DECLARE), TaskSize >= 2);
 
   EnableWindow(GetDlgItem(hDlg, IDC_SAVE), TaskSize >= 1);
+
+  EnableWindow(GetDlgItem(hDlg, IDC_UNDO), fTaskModified); 
 
   Selection = SendDlgItemMessage(hDlg,IDC_WAYPOINTS,LB_GETCURSEL,0,0L);
   EnableWindow(GetDlgItem(hDlg, IDC_WAYPOINTDETAILS), NumberOfWayPoints > 0 && Selection != LB_ERR);
@@ -908,6 +917,8 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       shidi.hDlg = hDlg;
       SHInitDialog(&shidi);
 
+      memcpy(TaskBackup, Task, sizeof(Task_t));
+      fTaskModified = FALSE;
       TaskSize = 0;
 
       // JMW TODO: optinally sort by range...
@@ -944,6 +955,26 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
           return TRUE;
                         
+        case  IDC_UNDO:
+          memcpy(Task, TaskBackup, sizeof(Task_t));
+          TaskSize = 0;
+
+          SendDlgItemMessage(hDlg, IDC_TASK, LB_RESETCONTENT, 0,0L);
+
+          // Fillout Task List
+          for(i=0;i<MAXTASKPOINTS;i++)
+            {
+              if(Task[i].Index >=0)
+                {
+                  SendDlgItemMessage(hDlg,IDC_TASK,LB_ADDSTRING,0,(LPARAM)(LPCTSTR)WayPointList[Task[i].Index].Name);
+                  TaskSize ++;
+                }
+            }
+          ReadNewTask(hDlg);
+          fTaskModified = FALSE;
+          settaskUpdateControls(hDlg, TaskSize);
+
+          break;
         case IDC_ADD:
                                         
           if(TaskSize >= MAXTASKPOINTS)
@@ -984,9 +1015,9 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
         case IDC_WAYPOINTDETAILS:
           SelectedWaypoint = SendDlgItemMessage(hDlg,IDC_WAYPOINTS,LB_GETCURSEL,0,0L);
-	  PopupWaypointDetails();
-	  ReadNewTask(hDlg); // in case user added/removed
-	  break;
+          PopupWaypointDetails();
+          ReadNewTask(hDlg);     // in case user added/removed
+          break;
         case IDC_LOAD:
           memset( &(ofn), 0, sizeof(ofn));
           ofn.lStructSize       = sizeof(ofn);
@@ -1008,8 +1039,11 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           TaskSize = 0;
           for(i=0;i<MAXTASKPOINTS;i++)
             {
-              if(Task[i].Index >=0)     TaskSize ++;
+              if(Task[i].Index >=0)
+                TaskSize ++;
             }
+
+          ReadNewTask(hDlg);     // in case user added/removed
 
           settaskUpdateControls(hDlg, TaskSize);
           break;
@@ -1565,7 +1599,7 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           ofnAirspace.hwndOwner = hDlg;
           ofnAirspace.lpstrFile = szAirspaceFile;
           ofnAirspace.nMaxFile = MAX_PATH;
-          ofnAirspace.lpstrFilter = TEXT("All Files(*.*)\0*.*\0");      
+          ofnAirspace.lpstrFilter = TEXT("Airspace Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");      
           ofnAirspace.lpstrTitle = TEXT("Open File");
           ofnAirspace.Flags = OFN_EXPLORER;
 
@@ -1581,7 +1615,7 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           ofnTerrain.hwndOwner = hDlg;
           ofnTerrain.lpstrFile = szTerrainFile;
           ofnTerrain.nMaxFile = MAX_PATH;       
-          ofnTerrain.lpstrFilter = TEXT("All Files(*.dat)\0*.dat\0");       
+          ofnTerrain.lpstrFilter = TEXT("Terrain Files(*.dat)\0*.dat\0All Files(*.*)\0*.*\0\0");     
           ofnTerrain.lpstrTitle = TEXT("Open File");
           ofnTerrain.Flags = OFN_EXPLORER;
 
@@ -1597,7 +1631,7 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           ofnWaypoint.hwndOwner = hDlg;
           ofnWaypoint.lpstrFile = szWaypointFile;
           ofnWaypoint.nMaxFile = MAX_PATH;      
-          ofnWaypoint.lpstrFilter = TEXT("All Files(*.dat)\0*.dat\0");  
+          ofnWaypoint.lpstrFilter = TEXT("Waypoint Files(*.dat)\0*.dat\0All Files(*.*)\0*.*\0\0"); 
           ofnWaypoint.lpstrTitle = TEXT("Open File");
           ofnWaypoint.Flags = OFN_EXPLORER;
 
@@ -1614,7 +1648,7 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           ofnAirfield.hwndOwner = hDlg;
           ofnAirfield.lpstrFile = szAirfieldFile;
           ofnAirfield.nMaxFile = MAX_PATH;      
-          ofnAirfield.lpstrFilter = TEXT("All Files(*.txt)\0*.txt\0");      
+          ofnAirfield.lpstrFilter = TEXT("Airfield Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");   
           ofnAirfield.lpstrTitle = TEXT("Open File");
           ofnAirfield.Flags = OFN_EXPLORER;
 
@@ -1631,7 +1665,7 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           ofnTopology.hwndOwner = hDlg;
           ofnTopology.lpstrFile = szTopologyFile;
           ofnTopology.nMaxFile = MAX_PATH;      
-          ofnTopology.lpstrFilter = TEXT("All Files(*.tpl)\0*.tpl\0");      
+          ofnTopology.lpstrFilter = TEXT("Topology Files(*.tpl)\0*.tpl\0All Files(*.*)\0*.*\0\0");     
           ofnTopology.lpstrTitle = TEXT("Open File");
           ofnTopology.Flags = OFN_EXPLORER;
 

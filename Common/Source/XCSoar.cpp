@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.30 2005/07/04 19:04:53 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.31 2005/07/05 10:34:55 samgi Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -191,7 +191,7 @@ BOOL TERRAINFILECHANGED = FALSE;
 BOOL TOPOLOGYFILECHANGED = FALSE;
 
 //Task Information
-TASK_POINT Task[MAXTASKPOINTS +1 ] = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
+Task_t Task = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
 int ActiveWayPoint = -1;
 
 // Assigned Area Task
@@ -1218,7 +1218,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       SaveSoundSettings();
 
       VarioSound_EnableSound(false);
-	  VarioSound_Close();  // added sgi
+	    VarioSound_Close();  // added sgi
+
+      devCloseAll();
 
       CloseDrawingThread();
 
@@ -1229,7 +1231,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       if(hProgress)
         DestroyWindow(hProgress);
-                        
+
       if(Port1Available)
         Port1Close(hPort1);
       if (Port2Available)

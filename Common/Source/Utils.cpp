@@ -1461,43 +1461,57 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
   wsprintf(szMessageBuffer,TEXT("%s - %s\r\nBase - %s\r\nTop - %s"),szTitleBuffer, Name, BaseStr, TopStr);
 }
 
-
+// read string from file
+// support national codepage
+// hFile:  file handle
+// Max:    max chars to read from file 
+// String: pointer to string buffer
+// return: True is at least one byte was read from file
+//         False Max > 256 or EOF or read error
 BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
 {
   int i;
   char c;
-  TCHAR wc;
+  char sTmp[257];
   DWORD dwNumBytesRead;
+  DWORD dwTotalNumBytesRead=0;
 
-  for(i=0;i<Max;i++)
-    {
-      dwNumBytesRead = 0;
-      ReadFile(hFile,&c,1,&dwNumBytesRead,NULL);
-      if(dwNumBytesRead != 0)
-	{
-	  if((c == '\n'))
-	    {
-	      String[i] = '\0';
-	      return TRUE;
-	    }
-          mbstowcs( &wc, &c, 1);
-	  String[i] = wc;
-	}
-      else
-	{
-	  if(i>0)
-	    {
-	      String[i] = 0;
-	      return TRUE;
-	    }
-	  else
-	    {
-	      return FALSE;
-	    }
-	}
+  String[0] = '\0';
+  sTmp[0] = 0;
+
+  if (Max >= sizeof(sTmp))
+    return(FALSE);
+
+  for(i=0;i<Max;i++){
+
+    if (ReadFile(hFile,&c,1,&dwNumBytesRead,NULL)){
+
+      dwTotalNumBytesRead += dwNumBytesRead;
+
+      if(dwNumBytesRead != 0){
+      
+        if((c == '\n')){
+          sTmp[i] = '\0';
+          break;
+        }
+
+        sTmp[i] = c;
+        continue;
+
+      }
+
+      sTmp[i] = 0;
+      break;
+
     }
-  String[i] = '\0';
-  return TRUE;
+  }
+
+  sTmp[Max-1] = '\0';
+
+  mbstowcs(String, sTmp, strlen(sTmp)+1);
+  
+  return (dwTotalNumBytesRead>0);
+
 }
 
 
@@ -1685,11 +1699,17 @@ void LoadWindFromRegistry() {
 
 void ReadDeviceSettings(int devIdx, TCHAR *Name){
 
-  if (devIdx == 0)
+  Name[0] = '\0';
+  
+  if (devIdx == 0){
     GetRegistryString(szRegistryDeviceA , Name, DEVNAMESIZE);
+    return;
+  }
 
-  if (devIdx == 1)
+  if (devIdx == 1){
     GetRegistryString(szRegistryDeviceB , Name, DEVNAMESIZE);
+    return;
+  }
 
 }
 
@@ -1768,3 +1788,33 @@ long lround(double i) {
   }
 }
 
+
+static int ByteCRC16(int value, int crcin)
+{
+    int k = (((crcin >> 8) ^ value) & 255) << 8;
+    int crc = 0;
+    int bits = 8;
+    do
+    {
+        if (( crc ^ k ) & 0x8000)
+            crc = (crc << 1) ^ 0x1021;
+        else
+            crc <<= 1;
+        k <<= 1;
+    }
+    while (--bits);
+    return ((crcin << 8) ^ crc);
+}
+
+WORD crcCalc(void *Buffer, size_t size){
+
+  int crc = 0;
+  unsigned char *pB = (unsigned char *)Buffer;
+
+  do {
+    int value = *pB++;
+    crc = ByteCRC16(value, crc);
+  } while (--size);
+  
+  return(crc);
+}
