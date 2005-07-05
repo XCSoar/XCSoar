@@ -685,18 +685,20 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
+  // JMW these things should be in Calculated, not Basic
+
   if(ActiveWayPoint >=0)
     {
-      Basic->WaypointDistance = Distance(Basic->Lattitude, Basic->Longditude,
+      Calculated->WaypointDistance = Distance(Basic->Lattitude, Basic->Longditude,
                                          WayPointList[Task[ActiveWayPoint].Index].Lattitude,
                                          WayPointList[Task[ActiveWayPoint].Index].Longditude);
-      Basic->WaypointBearing = Bearing(Basic->Lattitude, Basic->Longditude,
+      Calculated->WaypointBearing = Bearing(Basic->Lattitude, Basic->Longditude,
                                        WayPointList[Task[ActiveWayPoint].Index].Lattitude,
                                        WayPointList[Task[ActiveWayPoint].Index].Longditude);
     }
   else
     {
-      Basic->WaypointDistance = 0;
+      Calculated->WaypointDistance = 0;
     }
 }
 
@@ -706,7 +708,8 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macread
     {
       Calculated->NextAltitudeRequired =
         McReadyAltitude(macready,
-                        Basic->WaypointDistance,Basic->WaypointBearing,
+                        Calculated->WaypointDistance,
+                        Calculated->WaypointBearing,
                         Calculated->WindSpeed, Calculated->WindBearing,
                         0, 0, (ActiveWayPoint == getFinalWaypoint())
                         // ||
@@ -736,7 +739,7 @@ int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if(FAISector !=  TRUE)
     {
-      if(Basic->WaypointDistance < SectorRadius)
+      if(Calculated->WaypointDistance < SectorRadius)
         {
           return TRUE;
         }
@@ -752,7 +755,7 @@ int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
     if( (AircraftBearing >= -45) && (AircraftBearing <= 45))
       {
-        if(Basic->WaypointDistance < 20000)
+        if(Calculated->WaypointDistance < 20000)
           {
             return TRUE;
           }
@@ -767,12 +770,12 @@ int InAATTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if(Task[ActiveWayPoint].AATType ==  CIRCLE)
     {
-      if(Basic->WaypointDistance < Task[ActiveWayPoint].AATCircleRadius)
+      if(Calculated->WaypointDistance < Task[ActiveWayPoint].AATCircleRadius)
         {
           return TRUE;
         }
     }
-  else if(Basic->WaypointDistance < Task[ActiveWayPoint].AATSectorRadius)
+  else if(Calculated->WaypointDistance < Task[ActiveWayPoint].AATSectorRadius)
     {
 
       AircraftBearing = Bearing(WayPointList[Task[ActiveWayPoint].Index].Lattitude,

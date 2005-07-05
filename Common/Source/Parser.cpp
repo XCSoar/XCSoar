@@ -311,6 +311,8 @@ BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
+
+  /* we calculate all this stuff now
   TCHAR ctemp[80];
 
   ExtractParameter(String,ctemp,0);
@@ -332,6 +334,7 @@ BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->WaypointBearing = StrToDouble(ctemp, NULL);
   ExtractParameter(String,ctemp,11);
   GPS_INFO->WaypointSpeed = KNOTSTOMETRESSECONDS * StrToDouble(ctemp, NULL);
+  */
 
   return TRUE;
 }

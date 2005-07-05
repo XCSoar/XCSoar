@@ -748,7 +748,7 @@ static void UpdateMapScale()
   }
 
   if (AutoZoom) {
-    if(DrawInfo.WaypointDistance > 0)
+    if(DerivedDrawInfo.WaypointDistance > 0)
     {
 
       if(
@@ -765,7 +765,7 @@ static void UpdateMapScale()
       }
 
       if(
-         (DrawInfo.WaypointDistance
+         (DerivedDrawInfo.WaypointDistance
           < ( AutoZoomFactor * RequestMapScale / DISTANCEMODIFY))
          ||
          (StartingAutoMapScale==0.0))
@@ -782,7 +782,8 @@ static void UpdateMapScale()
 
         // set scale exactly so that waypoint distance is the zoom factor
         // across the screen
-        MapScale = DrawInfo.WaypointDistance * DISTANCEMODIFY / AutoZoomFactor;
+        MapScale = DerivedDrawInfo.WaypointDistance * DISTANCEMODIFY
+          / AutoZoomFactor;
 
         // limit zoomed in so doesn't reach silly levels
         if (MapScale<0.2) {
@@ -791,7 +792,7 @@ static void UpdateMapScale()
         RequestMapScale = MapScale;
 
         // calculate scale factors for display etc.
-        DrawScale = DrawInfo.WaypointDistance / AutoZoomFactor;
+        DrawScale = DerivedDrawInfo.WaypointDistance / AutoZoomFactor;
         DrawScale = DrawScale/111000;
         DrawScale = 30/DrawScale;
 
@@ -861,7 +862,7 @@ static void CalculateOrigin(RECT rc, POINT *Orig)
     GliderCenter = TRUE;
 
     if (DisplayOrientation == TRACKCIRCLE) {
-      DisplayAngle = DrawInfo.WaypointBearing;
+      DisplayAngle = DerivedDrawInfo.WaypointBearing;
       DisplayAircraftAngle = DrawInfo.TrackBearing-DisplayAngle;
     } else {
       DisplayAngle = 0.0;
@@ -2422,7 +2423,7 @@ void DrawCDI() {
     TCHAR CDIScale[] = TEXT("330..340..350..000..010..020..030..040..050..060..070..080..090..100..110..120..130..140..150..160..170..180..190..200..210..220..230..240..250..260..270..280..290..300..310..320..330..340..350..000..010..020..030..040.");
     TCHAR CDIDisplay[25] = TEXT("");
     int j;
-    int CDI_WP_Bearing = (int)DrawInfo.WaypointBearing/2;
+    int CDI_WP_Bearing = (int)DerivedDrawInfo.WaypointBearing/2;
     CDIScale[CDI_WP_Bearing + 9] = 46;
     CDIScale[CDI_WP_Bearing + 10] = 60;
     CDIScale[CDI_WP_Bearing + 11] = 124; // "|" character
@@ -2433,7 +2434,7 @@ void DrawCDI() {
     // JMW fix bug! This indicator doesn't always display correctly!
 
     // JMW added arrows at end of CDI to point to track if way off..
-    int deltacdi = iround(DrawInfo.WaypointBearing-DrawInfo.TrackBearing);
+    int deltacdi = iround(DerivedDrawInfo.WaypointBearing-DrawInfo.TrackBearing);
 
     while (deltacdi>180) {
       deltacdi-= 360;
@@ -2495,6 +2496,7 @@ void DrawMapScale2(HDC hDC, RECT rc, POINT Orig_Aircraft)
   double barsize = findMapScaleBarSize(rc);
 
 //  TCHAR Scale[20]; Unused variable remm'd out RB
+
   HPEN hpOld;
 
   hpOld = (HPEN)SelectObject(hDC, hpMapScale);

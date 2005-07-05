@@ -28,10 +28,10 @@ typedef struct _NMEA_INFO
   double TrackBearing;
   double Speed;
   double Altitude;
-  TCHAR  WaypointID[WAY_POINT_ID_SIZE + 1];
-  double WaypointBearing;
-  double WaypointDistance;
-  double WaypointSpeed;
+  //  TCHAR  WaypointID[WAY_POINT_ID_SIZE + 1];
+  //  double WaypointBearing;
+  //  double WaypointDistance;
+  //  double WaypointSpeed; IGNORED NOW
   double CrossTrackError;
   double Time;
   int		Month;

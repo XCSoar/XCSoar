@@ -67,6 +67,12 @@ typedef struct _DERIVED_INFO
   double TerrainWarningLongditude;
   double TerrainWarningLattitude;
 
+  // JMW moved calculated waypoint info here
+
+  double WaypointBearing;
+  double WaypointDistance;
+  double WaypointSpeed;
+
   // JMW thermal band data
   double MaxThermalHeight;
   int    ThermalProfileN[NUMTHERMALBUCKETS];
