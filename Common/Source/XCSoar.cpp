@@ -377,8 +377,11 @@ extern RECT MapRect;
 extern BOOL GpsUpdated;
 
 void HideMenu() {
-  ShowWindow(hWndMenuButton, SW_HIDE);
-  MenuTimeOut = MENUTIMEOUTMAX;
+  // ignore this if the display isn't locked -- must keep menu visible
+  if (DisplayLocked) {
+    ShowWindow(hWndMenuButton, SW_HIDE);
+    MenuTimeOut = MENUTIMEOUTMAX;
+  }
 }
 
 void ShowMenu() {
