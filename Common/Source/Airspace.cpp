@@ -32,6 +32,20 @@
 
 #include "resource.h"
 
+
+#define  BINFILEMAGICNUMBER     0x4ab199f0
+#define  BINFILEVERION          0x00000100
+#define  BINFILEHEADER          "XCSoar Airspace File V1.0"
+
+typedef struct{
+  char     Header[32];
+  DWORD    MagicNumber;
+  DWORD    Version;
+  FILETIME LastWriteSourceFile;
+  DWORD    CrcSourceFile;          // not used at the moment
+}BinFileHeader_t;
+
+
 static bool StartsWith(TCHAR *Text, TCHAR *LookFor);
 static void ReadCoords(TCHAR *Text, double *X, double *Y);
 static void AddAirspaceCircle(AIRSPACE_AREA *Temp, double CenterX, double CenterY, double Radius);
@@ -78,18 +92,30 @@ static float Width = 0;
 static float Zoom = 0;
 static int LineCount;
 
+
+
 /////////////////////////////
 
 
 // if file changed, don't load from binary, load from normal and then save it.
 
-void SaveAirspaceBinary() {
+void SaveAirspaceBinary(FILETIME LastWrite) {
   HANDLE hFile;// = INVALID_HANDLE_VALUE;
   DWORD dwBytesRead;
+  BinFileHeader_t Header;
 
   hFile = CreateFile(TEXT("xcsoar-airspace.bin"),
 		     GENERIC_WRITE, FILE_SHARE_WRITE, NULL,
 		     CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+
+  strncpy(Header.Header, BINFILEHEADER, sizeof(Header.Header));
+  Header.MagicNumber = BINFILEMAGICNUMBER;
+  Header.Version = BINFILEVERION;
+  Header.LastWriteSourceFile = LastWrite;
+  Header.CrcSourceFile = 0;
+
+  WriteFile(hFile, &Header,
+	    sizeof(Header), &dwBytesRead, NULL);
 
   WriteFile(hFile, &NumberOfAirspaceAreas,
 	    sizeof(unsigned int), &dwBytesRead, NULL);
@@ -112,7 +138,7 @@ void SaveAirspaceBinary() {
 }
 
 
-bool LoadAirspaceBinary() {
+bool LoadAirspaceBinary(FILETIME LastWrite) {
   HANDLE hFile;// = INVALID_HANDLE_VALUE;
   DWORD dwNumBytesRead;
 
@@ -123,6 +149,27 @@ bool LoadAirspaceBinary() {
   if(hFile != INVALID_HANDLE_VALUE )
 
     {
+
+
+      BinFileHeader_t Header;
+
+      if ((ReadFile(hFile, &Header, sizeof(Header), &dwNumBytesRead, NULL) == 0)
+          ||
+          (dwNumBytesRead != sizeof(Header))
+          ||
+          (Header.MagicNumber != BINFILEMAGICNUMBER)
+          ||
+          (Header.Version != BINFILEVERION)
+          ||
+          (Header.LastWriteSourceFile.dwLowDateTime != LastWrite.dwLowDateTime)
+          ||
+          (Header.LastWriteSourceFile.dwHighDateTime != LastWrite.dwHighDateTime)
+          ){
+
+        CloseHandle(hFile);
+        return(false);
+
+      }
 
 
       HWND hProgress;
@@ -932,19 +979,23 @@ void ReadAirspace(void)
   TCHAR	szFile[MAX_PATH] = TEXT("\0");
 
   HANDLE hFile;
+  FILETIME LastWriteTime;
 
-  if (!LoadAirspaceBinary() || AIRSPACEFILECHANGED) {
 
-    GetRegistryString(szRegistryAirspaceFile, szFile, MAX_PATH);
-    hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  GetRegistryString(szRegistryAirspaceFile, szFile, MAX_PATH);
+  hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 
-    if(hFile != INVALID_HANDLE_VALUE )
+  if (hFile != INVALID_HANDLE_VALUE ){
 
-      {
-	ReadAirspace(hFile);
-	CloseHandle(hFile);
-	SaveAirspaceBinary();
-      }
+    GetFileTime(hFile, NULL, NULL, &LastWriteTime);
+
+    if (!LoadAirspaceBinary(LastWriteTime) || AIRSPACEFILECHANGED) {
+      ReadAirspace(hFile);
+      SaveAirspaceBinary(LastWriteTime);
+    }
+
+  	CloseHandle(hFile);
+
   }
 
   FindAirspaceAreaBounds();
