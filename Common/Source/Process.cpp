@@ -38,6 +38,10 @@ void	AltitudeProcessing(int UpDown)
 			GPS_INFO.Altitude -= (100/ALTITUDEMODIFY);
 			if(GPS_INFO.Altitude < 0)
 				GPS_INFO.Altitude = 0;
+		} else if (UpDown==-2) {
+			DirectionProcessing(-1);
+		} else if (UpDown==2) {
+			DirectionProcessing(1);
 		}
 	#endif
 	return;
