@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.34 2005/07/06 02:05:31 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.35 2005/07/06 02:07:29 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -377,8 +377,11 @@ extern RECT MapRect;
 extern BOOL GpsUpdated;
 
 void HideMenu() {
-  ShowWindow(hWndMenuButton, SW_HIDE);
-  MenuTimeOut = MENUTIMEOUTMAX;
+  // ignore this if the display isn't locked -- must keep menu visible
+  if (DisplayLocked) {
+    ShowWindow(hWndMenuButton, SW_HIDE);
+    MenuTimeOut = MENUTIMEOUTMAX;
+  }
 }
 
 void ShowMenu() {
