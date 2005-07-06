@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.33 2005/07/05 17:36:40 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.34 2005/07/06 02:05:31 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1381,7 +1381,11 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               DisplayLocked = ! DisplayLocked;
               ShowWindow(hWndCB,SW_HIDE);                               
               SwitchToMapWindow();
-	      HideMenu();
+	      if (!DisplayLocked) {
+		ShowMenu(); // must show menu here otherwise trapped
+	      } else {
+		HideMenu();
+	      }
 	      FullScreen();
 
               return 0;
@@ -1854,10 +1858,12 @@ void ProcessTimer(void)
         } 
       FocusTimeOut ++;
     } 
-  if(MenuTimeOut==MENUTIMEOUTMAX) {
-    ShowWindow(hWndMenuButton, SW_HIDE);
-  } 
-  MenuTimeOut++;
+  if (DisplayLocked) {
+    if(MenuTimeOut==MENUTIMEOUTMAX) {
+      ShowWindow(hWndMenuButton, SW_HIDE);
+    } 
+    MenuTimeOut++;
+  }
 
   if (RequestMapDirty) {
     MapDirty = true;
@@ -2003,10 +2009,12 @@ void SIMProcessTimer(void)
      
     } 
 
-  if(MenuTimeOut==MENUTIMEOUTMAX) {
-    ShowWindow(hWndMenuButton, SW_HIDE);
-  } 
-  MenuTimeOut++;
+  if (DisplayLocked) {
+    if(MenuTimeOut==MENUTIMEOUTMAX) {
+      ShowWindow(hWndMenuButton, SW_HIDE);
+    } 
+    MenuTimeOut++;
+  }
 
   if (RequestMapDirty) {
     MapDirty = true;
