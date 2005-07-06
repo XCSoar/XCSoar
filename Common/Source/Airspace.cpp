@@ -1244,8 +1244,8 @@ int FindAirspaceArea(double Longditude,double Lattitude)
               if (
                   (Lattitude> AirspaceArea[i].bounds.miny)&&
                   (Lattitude< AirspaceArea[i].bounds.maxy)&&
-                  (Longditude> AirspaceArea[i].bounds.miny)&&
-                  (Longditude< AirspaceArea[i].bounds.maxy)
+                  (Longditude> AirspaceArea[i].bounds.minx)&&
+                  (Longditude< AirspaceArea[i].bounds.maxx)
                   )
                 {
                   if (wn_PnPoly(thispoint,
