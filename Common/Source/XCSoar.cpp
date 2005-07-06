@@ -1381,7 +1381,11 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               DisplayLocked = ! DisplayLocked;
               ShowWindow(hWndCB,SW_HIDE);
               SwitchToMapWindow();
-	      HideMenu();
+	      if (!DisplayLocked) {
+		ShowMenu(); // must show menu here otherwise trapped
+	      } else {
+		HideMenu();
+	      }
 	      FullScreen();
 
               return 0;
@@ -1854,10 +1858,12 @@ void ProcessTimer(void)
         }
       FocusTimeOut ++;
     }
-  if(MenuTimeOut==MENUTIMEOUTMAX) {
-    ShowWindow(hWndMenuButton, SW_HIDE);
+  if (DisplayLocked) {
+    if(MenuTimeOut==MENUTIMEOUTMAX) {
+      ShowWindow(hWndMenuButton, SW_HIDE);
+    }
+    MenuTimeOut++;
   }
-  MenuTimeOut++;
 
   if (RequestMapDirty) {
     MapDirty = true;
@@ -2003,10 +2009,12 @@ void SIMProcessTimer(void)
 
     }
 
-  if(MenuTimeOut==MENUTIMEOUTMAX) {
-    ShowWindow(hWndMenuButton, SW_HIDE);
+  if (DisplayLocked) {
+    if(MenuTimeOut==MENUTIMEOUTMAX) {
+      ShowWindow(hWndMenuButton, SW_HIDE);
+    }
+    MenuTimeOut++;
   }
-  MenuTimeOut++;
 
   if (RequestMapDirty) {
     MapDirty = true;
