@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.26 2005/07/05 10:34:54 samgi Exp $
+//   $Id: Dialogs.cpp,v 1.27 2005/07/07 02:55:27 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -2692,6 +2692,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         {
           ::ReleaseDC(hDlg, hdcScreen);
           EndDialog(hDlg, LOWORD(wParam));
+          FullScreen();
           return TRUE;
         }
       if (LOWORD(wParam) == IDC_WDGOTO) {
@@ -2700,6 +2701,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        FullScreen();
         break;
       }
       if (LOWORD(wParam) == IDC_WDREPLACE) {
@@ -2708,6 +2710,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        FullScreen();
         break;
       }
       if (LOWORD(wParam) == IDC_WDREMOVE) {
@@ -2716,6 +2719,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        FullScreen();
         break;
       }
       if (LOWORD(wParam) == IDC_WDINSERT) {
@@ -2724,6 +2728,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        FullScreen();
         break;
       }
       if (LOWORD(wParam) == IDC_WDSETHOME) {
@@ -2733,6 +2738,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        FullScreen();
         break;
       }
       if (LOWORD(wParam) == IDC_WAYPOINTDETAILSNEXT) {

@@ -42,8 +42,8 @@ static void CalculateScreenPositionsAirspace(POINT Orig, RECT rc, POINT *Orig_Ai
 static void CalculateWaypointReachable(void);
 
 
-int		PointVisible(POINT *P, RECT *rc);
-int             PointVisible(double lon, double lat);
+bool		PointVisible(POINT *P, RECT *rc);
+bool            PointVisible(double lon, double lat);
 rectObj screenbounds_latlon;
 
 
@@ -51,6 +51,7 @@ static void DrawAircraft(HDC hdc, POINT Orig);
 static void DrawBestCruiseTrack(HDC hdc, POINT Orig);
 static void DrawCompass(HDC hdc, RECT rc);
 static void DrawWind(HDC hdc, POINT Orig, RECT rc);
+static void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc);
 static void DrawAirSpace(HDC hdc, RECT rc);
 static void DrawWaypoints(HDC hdc, RECT rc);
 static void DrawFlightMode(HDC hdc, RECT rc);
@@ -132,6 +133,7 @@ static COLORREF BackgroundColor = RGB(0xF5,0xF5,0xF5);
 
 static      HPEN hpAircraft, hpAircraftBorder;
 static      HPEN hpWind;
+static      HPEN hpWindThick;
 static      HPEN hpBearing;
 static      HPEN hpBestCruiseTrack;
 static      HPEN hpCompass;
@@ -472,6 +474,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hpAircraft = (HPEN)CreatePen(PS_SOLID, 3, RGB(0xa0,0xa0,0xa0));
     hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, 3, RGB(0x00,0x00,0x00));
     hpWind = (HPEN)CreatePen(PS_SOLID, 2, RGB(255,0,0));
+    hpWindThick = (HPEN)CreatePen(PS_SOLID, 4, RGB(255,220,220));
     hpBearing = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
     hpBestCruiseTrack = (HPEN)CreatePen(PS_SOLID, 1, RGB(0,0,255));
     hpCompass = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xcf,0xcf,0xFF));
@@ -513,6 +516,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject((HPEN)hpAircraft);
     DeleteObject((HPEN)hpAircraftBorder);
     DeleteObject((HPEN)hpWind);
+    DeleteObject((HPEN)hpWindThick);
     DeleteObject((HPEN)hpBearing);
     DeleteObject((HPEN)hpBestCruiseTrack);
     DeleteObject((HPEN)hpCompass);
@@ -963,6 +967,11 @@ static void RenderMapWindow(  RECT rc)
     
     if(TrailActive)
       DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
+
+    // draw wind vector at aircraft
+    if (!DerivedDrawInfo.Circling) {
+      DrawWindAtAircraft(hdcDrawWindowBg, Orig, rc);
+    }    
     
     if (FinalGlideTerrain) {
       DrawGlideThroughTerrain(hdcDrawWindowBg, rc);
@@ -979,7 +988,7 @@ static void RenderMapWindow(  RECT rc)
     DrawBearing(hdcDrawWindowBg, Orig_Aircraft);
     
     // finally, draw you!
-    
+
     DrawAircraft(hdcDrawWindowBg, Orig_Aircraft);
     
     // marks on top...
@@ -999,8 +1008,10 @@ static void RenderMapWindow(  RECT rc)
   
   DrawCompass(hdcDrawWindow, rc);
   
-  DrawWind(hdcDrawWindow, Orig, rc); // JMW shouldn't need Orig here
-  
+  if (DerivedDrawInfo.Circling) {
+    DrawWind(hdcDrawWindow, Orig, rc); // JMW shouldn't need Orig here
+  }
+
   DrawFlightMode(hdcDrawWindow, rc);
   
   DrawFinalGlide(hdcDrawWindow,rc);
@@ -1387,6 +1398,82 @@ void DrawTask(HDC hdc, RECT rc)
 }
 
 
+
+void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
+  double dX,dY;
+  int i, j;
+  POINT Start;
+  HPEN hpOld;
+  int iwind;
+  int koff;
+  
+  if (DerivedDrawInfo.WindSpeed<0.5) {
+    return; // JMW don't bother drawing it if not significant
+  }
+  
+  hpOld = (HPEN)SelectObject(hdc, hpWind);
+  
+  int wmag = iround(10.0*DerivedDrawInfo.WindSpeed);
+  int numvecs;
+  
+  numvecs = (wmag/44)+1;
+  for (j=0; j<numvecs; j++) {
+    if (j== numvecs-1) {
+      iwind = wmag % 44;
+    } else {
+      iwind = 44;
+    }
+    
+    Start.y = Orig.y;
+    Start.x = Orig.x;
+    POINT Arrow[4] = { {0,7}, {0,0}, {-5,0}, {5,0} };
+    
+    koff = 5*(2*j-(numvecs-1));
+    Arrow[0].y += iwind/2;
+    Arrow[1].y -= 0;
+    Arrow[2].y += iwind/2;
+    Arrow[3].y += iwind/2;
+    Arrow[0].x += koff;
+    Arrow[1].x += koff;
+    Arrow[2].x += koff;
+    Arrow[3].x += koff;
+    
+    /* OLD WIND
+    POINT Arrow[4] = { {0,-15}, {0,-35}, {-5,-22}, {5,-22} };
+    Start.x = Orig.x;
+    Start.y = Orig.y;
+    Arrow[1].y =(long)( -15 - 5 * DerivedDrawInfo.WindSpeed );
+    */
+    
+    // JMW TODO: if wind is stronger than 10 knots, draw two arrowheads
+    
+    for(i=0;i<4;i++)
+    {
+      dX = (double)Arrow[i].x ;dY = (double)(Arrow[i].y-iwind/2-25);
+      rotate(&dX, &dY, -1*(DisplayAngle - DerivedDrawInfo.WindBearing));
+      
+      Arrow[i].x = iround(Start.x+dX);  Arrow[i].y = iround(dY+Start.y);
+      
+    }
+
+    SelectObject(hdc, hpWindThick);
+    
+    DrawSolidLine(hdc,Arrow[0],Arrow[1]);
+    DrawSolidLine(hdc,Arrow[0],Arrow[2]);
+    DrawSolidLine(hdc,Arrow[0],Arrow[3]);
+
+    SelectObject(hdc, hpWind);
+
+    DrawSolidLine(hdc,Arrow[0],Arrow[1]);
+    DrawSolidLine(hdc,Arrow[0],Arrow[2]);
+    DrawSolidLine(hdc,Arrow[0],Arrow[3]);
+    
+  }
+  
+  SelectObject(hdc, hpOld);
+}
+
+
 void DrawWind(HDC hdc, POINT Orig, RECT rc)
 {
   double dX,dY;
@@ -1417,7 +1504,8 @@ void DrawWind(HDC hdc, POINT Orig, RECT rc)
     Start.x = rc.right - 19;
     POINT Arrow[4] = { {0,7}, {0,0}, {-5,0}, {5,0} };
     
-    koff = 10*(j-(numvecs-1)/2);
+    koff = 5*(2*j-(numvecs-1));
+
     Arrow[0].y += iwind/2;
     Arrow[1].y -= 0;
     Arrow[2].y += iwind/2;
@@ -1445,6 +1533,14 @@ void DrawWind(HDC hdc, POINT Orig, RECT rc)
       
     }
     
+    SelectObject(hdc, hpWindThick);
+    
+    DrawSolidLine(hdc,Arrow[0],Arrow[1]);
+    DrawSolidLine(hdc,Arrow[0],Arrow[2]);
+    DrawSolidLine(hdc,Arrow[0],Arrow[3]);
+
+    SelectObject(hdc, hpWind);
+
     DrawSolidLine(hdc,Arrow[0],Arrow[1]);
     DrawSolidLine(hdc,Arrow[0],Arrow[2]);
     DrawSolidLine(hdc,Arrow[0],Arrow[3]);
@@ -1734,6 +1830,7 @@ void DrawAirSpace(HDC hdc, RECT rc)
 
     } else {
       // JMW think this was missing before
+      // NOPE, NOT A BUG
       AirspaceCircle[i].Visible = false;
 
     }
@@ -1773,6 +1870,7 @@ void DrawAirSpace(HDC hdc, RECT rc)
       }
     } else {
       // JMW think this was missing before
+      // NOPE, NOT A BUG
       AirspaceArea[i].Visible = false;
     }
   }
@@ -2074,7 +2172,10 @@ void DrawTrail( HDC hdc, POINT Orig, RECT rc)
   HPEN	hpNew, hpOld, hpDelete;
   BYTE Red,Green,Blue;
   int scx, scy;
-  
+  bool p1Visible = false;
+  bool p2Visible = false;
+  bool havep1 = true;
+
   if(!TrailActive)
     return;
   
@@ -2082,7 +2183,9 @@ void DrawTrail( HDC hdc, POINT Orig, RECT rc)
   hpOld = (HPEN)SelectObject(hdc, hpDelete);
   
   // JMW don't draw first bit from home airport
-  
+
+  havep1 = false;
+
   for(i=0;i<TRAILSIZE;i++) 
   {
     if( i < TRAILSIZE-1)
@@ -2096,41 +2199,62 @@ void DrawTrail( HDC hdc, POINT Orig, RECT rc)
     
     if (P1 == 0) {
       // set first point up
+
+      p1Visible = PointVisible(SnailTrail[P1].Longditude , 
+                               SnailTrail[P1].Lattitude);
+    } 
+      
+    p2Visible = PointVisible(SnailTrail[P2].Longditude , 
+                             SnailTrail[P2].Lattitude);
+
+    // the line is invalid
+    if ((P1 == iSnailNext) || (P2 == iSnailNext) || 
+        (!p2Visible) || (!p1Visible)) {
+
+      p1Visible = p2Visible;
+
+      // p2 wasn't computed in screen coordinates, better do it next
+      // time if required
+      havep1 = false;
+      continue;
+    }
+
+    // now we know both points are visible, better get screen coords
+    // if we don't already.
+
+    if (!havep1) {
       LatLon2Screen(SnailTrail[P1].Longditude, 
-        SnailTrail[P1].Lattitude, &scx, &scy);
+                    SnailTrail[P1].Lattitude, &scx, &scy);
       SnailTrail[P1].Screen.x = scx;
       SnailTrail[P1].Screen.y = scy;
+    } else {
+      havep1 = false;
     }
-    
-    if (P1 != iSnailNext) // JMW trying to fix first line bug
 
-      if(PointVisible(SnailTrail[P1].Longditude , 
-                      SnailTrail[P1].Lattitude) && 
-         PointVisible(SnailTrail[P2].Longditude , 
-                      SnailTrail[P2].Lattitude) )
-        {
-          
-          // only need to convert P2, because P1 should already
-          // be converted
-          LatLon2Screen(SnailTrail[P2].Longditude, 
-                        SnailTrail[P2].Lattitude, &scx, &scy);
-          SnailTrail[P2].Screen.x = scx;
-          SnailTrail[P2].Screen.y = scy;
+    LatLon2Screen(SnailTrail[P2].Longditude, 
+                  SnailTrail[P2].Lattitude, &scx, &scy);
+    SnailTrail[P2].Screen.x = scx;
+    SnailTrail[P2].Screen.y = scy;
+    havep1 = true; // next time our p1 will be in screen coords
+
+    // shuffle visibility along
+    p1Visible = p2Visible;
+
+    // ok, we got this far, so draw the line
     
-          ColorRampLookup((short)(SnailTrail[P1].Vario/1.5), 
-                          &Red, &Green, &Blue,
-                          snail_colors, NUMSNAILRAMP);
+    ColorRampLookup((short)(SnailTrail[P1].Vario/1.5), 
+                    &Red, &Green, &Blue,
+                    snail_colors, NUMSNAILRAMP);
           
-          int width = min(8,max(2,(int)SnailTrail[P1].Vario));
-          
-          hpNew = (HPEN)CreatePen(PS_SOLID, width, 
-                                  RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
-          SelectObject(hdc,hpNew);
-          DeleteObject((HPEN)hpDelete);
-          hpDelete = hpNew;
-      
-          DrawSolidLine(hdc,SnailTrail[P1].Screen,SnailTrail[P2].Screen);
-        }
+    int width = min(8,max(2,(int)SnailTrail[P1].Vario));
+    
+    hpNew = (HPEN)CreatePen(PS_SOLID, width, 
+                            RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
+    SelectObject(hdc,hpNew);
+    DeleteObject((HPEN)hpDelete);
+    hpDelete = hpNew;
+    
+    DrawSolidLine(hdc,SnailTrail[P1].Screen,SnailTrail[P2].Screen);
   }
 
   SelectObject(hdc, hpOld);
@@ -2138,7 +2262,7 @@ void DrawTrail( HDC hdc, POINT Orig, RECT rc)
 }
 
 
-int PointVisible(double lon, double lat) {
+bool PointVisible(double lon, double lat) {
   if ((lon> screenbounds_latlon.minx)&&(lon< screenbounds_latlon.maxx)
       && (lat>screenbounds_latlon.miny)&&(lat< screenbounds_latlon.maxy)) {
     return 1;
@@ -2148,7 +2272,7 @@ int PointVisible(double lon, double lat) {
 }
 
 
-int PointVisible(POINT *P, RECT *rc)
+bool PointVisible(POINT *P, RECT *rc)
 {
   if(	( P->x > rc->left ) 
     &&

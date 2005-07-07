@@ -508,8 +508,7 @@ double Distance(double lat1, double lon1, double lat2, double lon2)
   lon2 *= DEG_TO_RAD;
 
   angle = (double)acos( sin(lat1)*sin(lat2) +  
-			cos(lat1)*cos(lat2) * cos(lon1-lon2)  );
-  angle *= RAD_TO_DEG;
+			cos(lat1)*cos(lat2) * cos(lon1-lon2)  )*RAD_TO_DEG;
 
   return (double)(angle * 111194.9267);
 }
