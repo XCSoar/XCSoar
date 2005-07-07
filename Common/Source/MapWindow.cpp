@@ -573,8 +573,8 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     }
     dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
     
-    distance = (XstartScreen-X)*(XstartScreen-X)+
-      (YstartScreen-Y)*(YstartScreen-Y);
+    distance = isqrt4((long)((XstartScreen-X)*(XstartScreen-X)+
+                      (YstartScreen-Y)*(YstartScreen-Y)));
     
     GetLocationFromScreen(&X, &Y);
     
@@ -583,6 +583,14 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       PanY += Ystart-Y;
       RefreshMap();
       break; // disable picking when in pan mode
+    } else {
+#ifdef _SIM_
+      if (distance>36) {
+        double newbearing = Bearing(Ystart, Xstart, Y, X);
+        GPS_INFO.TrackBearing = newbearing;
+        GPS_INFO.Speed = min(100,distance/3);
+      }
+#endif
     }
     
     if(dwDownTime < 1000)
@@ -1053,12 +1061,6 @@ DWORD DrawThread (LPVOID lpvoid)
   SetBkMode(hdcDrawWindowBg,TRANSPARENT);
   SetBkMode(hDCTemp,OPAQUE);
 
-  ////// This is just here to give fully rendered start screen
-  LockFlightData();
-  memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
-  memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
-  UnlockFlightData();
-
   // paint draw window white
   SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
   Rectangle(hdcDrawWindow,MapRectBig.left,MapRectBig.top,
@@ -1072,10 +1074,19 @@ DWORD DrawThread (LPVOID lpvoid)
 
   //////
   
+  ////// This is just here to give fully rendered start screen
+  LockFlightData();
+  memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
+  memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
+  UnlockFlightData();
+
   UpdateMapScale();
   RenderMapWindow(MapRect);
   SetTopologyBounds(MapRect);
+  
   //////
+
+  RequestFastRefresh = true;
 		
   while (!CLOSETHREAD) 
   {

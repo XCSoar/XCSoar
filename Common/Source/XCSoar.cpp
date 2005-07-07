@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.38 2005/07/07 15:59:49 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.39 2005/07/07 17:41:44 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -403,6 +403,8 @@ extern bool MapDirty; // the actual map refresh trigger
 extern bool RequestFastRefresh;
 
 void FullScreen() {
+
+  SetForegroundWindow(hWndMainWindow);
   SHFullScreen(hWndMainWindow,
                SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
   SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
@@ -541,8 +543,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
       return FALSE;
     }
 
-  FullScreen();
-
   hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
   pi = (double)atan(1) * 4;
@@ -573,6 +573,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
   SetBallast();
+
   OpenTerrain();
 
   ReadWayPoints();
@@ -594,12 +595,22 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   VarioSound_SetSoundVolume(SoundVolume);
 
-  AssignValues();
-  DisplayText();
+#ifndef _SIM_
+  RestartCommPorts();
+#endif
+
+  cai302Register();
+  ewRegister();
+  // ... register all supported devices
+
+  devInit();
 
   CreateDrawingThread();
-
   CreateCalculationThread();
+
+  // just about done....
+  FullScreen();
+  SwitchToMapWindow();
 
 #ifdef _SIM_
   /*
@@ -616,18 +627,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   */
   ShowStatusMessage(TEXT("Maintain effective\r\nLOOKOUT at all times"), 3000);
 
-  RestartCommPorts();
-
 #endif
-
-  cai302Register();
-  ewRegister();
-	// ... register all supported devices
-
-  devInit();
-
-  FullScreen();
-  SwitchToMapWindow();
 
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0)) 
@@ -739,7 +739,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     {   
       return FALSE;
     }
-  FullScreen();
 
   hBrushSelected = (HBRUSH)CreateSolidBrush(ColorSelected);
   hBrushUnselected = (HBRUSH)CreateSolidBrush(ColorUnselected);
@@ -930,14 +929,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     ShowWindow(hWndCDIWindow, SW_HIDE);
     ShowWindow(hWndMenuButton, SW_HIDE);
 
-    FullScreen();
-    
     ShowWindow(hWndMainWindow, nCmdShow);
     UpdateWindow(hWndMainWindow);
 
-    SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-
-
+    FullScreen();
+    
     return TRUE;
 }
 

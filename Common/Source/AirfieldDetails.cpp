@@ -1,4 +1,5 @@
-//   $Id: AirfieldDetails.cpp,v 1.5 2005/06/30 16:39:15 robin-birch Exp $
+//   $Id: AirfieldDetails.cpp,v 1.6 2005/07/07 17:41:44 jwharington Exp $
+
 
 #include "AirfieldDetails.h"
 
@@ -9,6 +10,8 @@
 #include "Dialogs.h"
 #include "resource.h"
 #include "Utils.h"
+
+#include <aygshell.h>
 
 HANDLE hAirfieldDetails;
 
@@ -118,9 +121,13 @@ void ReadAirfieldFile() {
 
   hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
   SetDlgItemText(hProgress,IDC_MESSAGE,TEXT("Loading Airfield Details File..."));
-
-  SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
   ShowWindow(hProgress,SW_SHOW);
+  /*
+  SetForegroundWindow(hProgress);
+  SHFullScreen(hProgress,
+               SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+  SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+  */
   UpdateWindow(hProgress);
 
   {
