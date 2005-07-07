@@ -52,7 +52,7 @@ static const int swatchHeight = 24;
 static const int swatchSpacing = 4;
 static const int swatchOuterBorder = 14;
 
-static const int colourSwatchIDBase  = 1;
+static const int colourSwatchIDBase  = 50;
 static const int patternSwatchIDBase = colourSwatchIDBase + NUMAIRSPACECOLORS;
 
 static const int numAirspaceTypes = 12;
