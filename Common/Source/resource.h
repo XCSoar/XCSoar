@@ -75,6 +75,8 @@
 #define IDB_SPLASH                      244
 #define IDD_AIRSPACECOLOUR              247
 #define IDD_AIRSPACECOLOURSEL           248
+#define IDI_XCSOARSWIFT                 250
+#define IDB_SWIFT                       251
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003
@@ -287,7 +289,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        249
+#define _APS_NEXT_RESOURCE_VALUE        252
 #define _APS_NEXT_COMMAND_VALUE         40025
 #define _APS_NEXT_CONTROL_VALUE         1238
 #define _APS_NEXT_SYMED_VALUE           102

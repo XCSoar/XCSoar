@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.37 2005/07/07 12:35:40 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.38 2005/07/07 15:59:49 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -665,7 +665,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.cbClsExtra                 = 0;
   wc.cbWndExtra                 = dc.cbWndExtra ;
   wc.hInstance                  = hInstance;
-  wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOAR));
+  wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
   wc.hCursor                    = 0;
   wc.hbrBackground              = (HBRUSH) GetStockObject(WHITE_BRUSH);
   wc.lpszMenuName               = 0;
@@ -731,9 +731,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                                 NULL, NULL, hInstance, NULL);
 
   SendMessage(hWndMainWindow, WM_SETICON,
-	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOAR);
+	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOARSWIFT);
   SendMessage(hWndMainWindow, WM_SETICON,
-	      (WPARAM)ICON_SMALL, (LPARAM)IDI_XCSOARS);
+	      (WPARAM)ICON_SMALL, (LPARAM)IDI_XCSOARSWIFT);
 
   if (!hWndMainWindow)
     {   
