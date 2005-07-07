@@ -89,6 +89,7 @@ double PanYr=0.0;
 bool EnablePan = FALSE;
 
 extern int iround(double i);
+extern void ShowMenu();
 
 BOOL CLOSETHREAD = FALSE;
 BOOL THREADRUNNING = TRUE;
@@ -544,6 +545,12 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       DeleteObject(hAirspaceBitmap[i]);
     }
     PostQuitMessage (0);
+    break;
+
+  case WM_LBUTTONDBLCLK:
+    // Added by ARH to show menu button when mapwindow is
+    // double clicked.
+    ShowMenu();
     break;
 
   case WM_LBUTTONDOWN:
