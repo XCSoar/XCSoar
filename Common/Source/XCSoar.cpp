@@ -58,12 +58,19 @@ HWND                                    hWndCDIWindow = NULL; //CDI Window
 HWND                                    hWndInfoWindow[NUMINFOWINDOWS];
 HWND                                    hWndTitleWindow[NUMINFOWINDOWS];
 
-int                                     InfoType[NUMINFOWINDOWS] = {921102,725525,262144,74518,657930,2236963,394758,1644825};
+int                                     InfoType[NUMINFOWINDOWS] = {921102,
+                                                                    725525,
+                                                                    262144,
+                                                                    74518,
+                                                                    657930,
+                                                                    2236963,
+                                                                    394758,
+                                                                    1644825};
 
 BOOL                                    DisplayLocked = TRUE;
 BOOL                                    InfoWindowActive = TRUE;
-int                                             FocusTimeOut = 0;
-int                                             MenuTimeOut = 0;
+int                                     FocusTimeOut = 0;
+int                                     MenuTimeOut = 0;
 
 
 
@@ -311,7 +318,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f°T")), WindDirectionProcessing, 25, 25},
 
   // 27
-  {TEXT("AA Time"), TEXT("AA Time"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 28, 18},
+  {TEXT("AA Time"), TEXT("AA Time"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
 
   // 28
   {TEXT("AA Max Dist"), TEXT("Max D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27},
@@ -338,7 +345,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 34},
 
   // 36
-  {TEXT("Time of day"), TEXT("Time"), new InfoBoxFormatter(TEXT("%04.0f")), NoProcessing, 14, 14},
+  {TEXT("Time of day"), TEXT("Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 14},
 
   // 37
   {TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), NoProcessing, 3, 32},
@@ -832,7 +839,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         }
 
       hWndTitleWindow[i] = CreateWindow(TEXT("STATIC"),
-                                        Data_Options[InfoType[i]& 0xff].Title,
+                                        // Data_Options[InfoType[i]& 0xff].Title
+                                        TEXT("\0")
+                                        ,
                                         WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
                                         i*ControlWidth, rc.top, ControlWidth,TitleHeight,
                                         hWndMainWindow,NULL,hInstance,NULL);
@@ -843,11 +852,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                                                           ControlWidth,ControlHeight-TitleHeight,
                                                           hWndMainWindow,NULL,hInstance,NULL);
 
-      hWndTitleWindow[i+(NUMINFOWINDOWS/2)] = CreateWindow(TEXT("STATIC"),Data_Options[InfoType[i+(NUMINFOWINDOWS/2)]& 0xff].Title,
-                                                           WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER,
-                                                           i*ControlWidth, (rc.bottom - ControlHeight),
-                                                           ControlWidth, TitleHeight,
-                                                           hWndMainWindow,NULL,hInstance,NULL);
+      hWndTitleWindow[i+(NUMINFOWINDOWS/2)] =
+        CreateWindow(TEXT("STATIC"),
+                     // Data_Options[InfoType[i+(NUMINFOWINDOWS/2)]& 0xff].Title,
+                     TEXT("\0"),
+                     WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER,
+                     i*ControlWidth, (rc.bottom - ControlHeight),
+                     ControlWidth, TitleHeight,
+                     hWndMainWindow,NULL,hInstance,NULL);
     }
 
   for(i=0;i<NUMINFOWINDOWS;i++)
@@ -1686,26 +1698,7 @@ void ProcessChar2 (char c)
 }
 
 
-int SecsToDisplayTime(int d) {
-  int mins;
-  int hours;
-  hours = (d/3600);
-  mins = (d/60-hours*60);
-  return (hours*100+mins);
-}
-
-
-int DetectStartTime() {
-  static int starttime = -1;
-  if (starttime == -1) {
-    if (GPS_INFO.Speed > 5) {
-      starttime = (int)GPS_INFO.Time;
-    } else {
-      return 0;
-    }
-  }
-  return SecsToDisplayTime((int)GPS_INFO.Time-starttime);
-}
+extern int DetectStartTime();
 
 
 void    AssignValues(void)
@@ -1715,106 +1708,9 @@ void    AssignValues(void)
     return;
   }
 
-  LockNavBox();
+  DetectStartTime();
 
-  Data_Options[0].Formatter->Value = ALTITUDEMODIFY*GPS_INFO.Altitude;
-
-  ((FormatterLowWarning*)Data_Options[1].Formatter)->minimum =
-    ALTITUDEMODIFY*SAFETYALTITUDETERRAIN;
-  Data_Options[1].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.AltitudeAGL  ;
-
-  Data_Options[2].Formatter->Value = LIFTMODIFY*CALCULATED_INFO.Average30s;
-  Data_Options[3].Formatter->Value = CALCULATED_INFO.WaypointBearing;
-
-  if (CALCULATED_INFO.LD== 999) {
-    Data_Options[4].Formatter->Valid = false;
-  } else {
-    Data_Options[4].Formatter->Valid = true;
-    Data_Options[4].Formatter->Value = CALCULATED_INFO.LD;
-  }
-
-  if (CALCULATED_INFO.CruiseLD== 999) {
-    Data_Options[5].Formatter->Valid = false;
-  } else {
-    Data_Options[5].Formatter->Valid = true;
-    Data_Options[5].Formatter->Value = CALCULATED_INFO.CruiseLD;
-  }
-
-  Data_Options[6].Formatter->Value = SPEEDMODIFY*GPS_INFO.Speed;
-
-  Data_Options[7].Formatter->Value = LIFTMODIFY*CALCULATED_INFO.LastThermalAverage;
-  Data_Options[8].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.LastThermalGain;
-  Data_Options[9].Formatter->Value = CALCULATED_INFO.LastThermalTime;
-
-  Data_Options[10].Formatter->Value = MACREADY;
-
-  Data_Options[11].Formatter->Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
-  Data_Options[12].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeDifference;
-  Data_Options[13].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeRequired;
-  Data_Options[14].Formatter->Value = 0; // Next Waypoint Text
-
-  Data_Options[15].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeDifference;
-  Data_Options[16].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeRequired;
-  Data_Options[17].Formatter->Value = SPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
-  Data_Options[18].Formatter->Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo;
-
-  if (CALCULATED_INFO.LDFinish== 999) {
-    Data_Options[19].Formatter->Valid = false;
-  } else {
-    Data_Options[19].Formatter->Valid = true;
-    Data_Options[19].Formatter->Value = CALCULATED_INFO.LDFinish;
-  }
-
-  Data_Options[20].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.TerrainAlt ;
-
-  Data_Options[21].Formatter->Value = LIFTMODIFY*CALCULATED_INFO.AverageThermal;
-  Data_Options[22].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.ThermalGain;
-
-  Data_Options[23].Formatter->Value = GPS_INFO.TrackBearing;
-
-  if (GPS_INFO.VarioAvailable) {
-    Data_Options[24].Formatter->Value = LIFTMODIFY*GPS_INFO.Vario;
-  } else {
-    Data_Options[24].Formatter->Value = LIFTMODIFY*CALCULATED_INFO.Vario;
-  }
-
-  Data_Options[25].Formatter->Value = SPEEDMODIFY*CALCULATED_INFO.WindSpeed;
-  Data_Options[26].Formatter->Value = CALCULATED_INFO.WindBearing;
-  Data_Options[27].Formatter->Value = CALCULATED_INFO.AATTimeToGo / 60;
-  Data_Options[28].Formatter->Value = DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance ;
-  Data_Options[29].Formatter->Value = DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance ;
-  Data_Options[30].Formatter->Value = SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
-  Data_Options[31].Formatter->Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
-
-  if (GPS_INFO.AirspeedAvailable) {
-    Data_Options[32].Formatter->Value = SPEEDMODIFY*GPS_INFO.Airspeed;
-    Data_Options[32].Formatter->Valid = true;
-  } else {
-    Data_Options[32].Formatter->Valid = false;
-  }
-
-  if (GPS_INFO.BaroAltitudeAvailable) {
-    Data_Options[33].Formatter->Value = ALTITUDEMODIFY*GPS_INFO.BaroAltitude;
-    Data_Options[33].Formatter->Valid = true;
-  } else {
-    Data_Options[33].Formatter->Valid = false;
-  }
-
-  Data_Options[34].Formatter->Value = SPEEDMODIFY*CALCULATED_INFO.VMcReady;
-
-  Data_Options[35].Formatter->Value = CALCULATED_INFO.PercentCircling;
-
-  Data_Options[36].Formatter->Value = DetectStartTime();
-
-  if (GPS_INFO.AccelerationAvailable) {
-    Data_Options[37].Formatter->Value = GPS_INFO.Gload;
-    Data_Options[37].Formatter->Valid = true;
-  } else {
-    Data_Options[37].Formatter->Valid = false;
-  }
-
-  UnlockNavBox();
-
+  // nothing to do here now!
 }
 
 
@@ -1849,6 +1745,7 @@ void DisplayText(void)
         DisplayType = (InfoType[i] >> 8) & 0xff;
       }
 
+      Data_Options[DisplayType].Formatter->AssignValue(DisplayType);
       Data_Options[DisplayType].Formatter->Render(hWndInfoWindow[i]);
 
       _stprintf(Caption[i],Data_Options[DisplayType].Title );

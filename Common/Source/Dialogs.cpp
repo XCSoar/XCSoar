@@ -3034,10 +3034,12 @@ void OpenStartupScreen() {
     CreateDialog(hInst, (LPCTSTR)IDD_SPLASH, hWndMainWindow,
                  (DLGPROC)StartupWndTimerProc);
 
+  /*
   SetWindowPos(hWndMainWindow,HWND_TOPMOST,0,0,
                GetSystemMetrics(SM_CXSCREEN),
                GetSystemMetrics(SM_CYSCREEN),
                SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+  */
 
   // Subclass window function so that we can trap timer messages
   // set timeout to 3 seconds

@@ -24,6 +24,8 @@ class InfoBoxFormatter {
   TCHAR Format[FORMAT_SIZE+1];
   TCHAR Text[100];
 
+  virtual void AssignValue(int i);
+
 };
 
 
@@ -45,6 +47,7 @@ class FormatterLowWarning: public InfoBoxFormatter {
 
   virtual void Render(HWND hWnd);
   double minimum;
+  virtual void AssignValue(int i);
 };
 
 
@@ -53,6 +56,11 @@ class FormatterTime: public InfoBoxFormatter {
   FormatterTime(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
   virtual void Render(HWND hWnd);
+  virtual void AssignValue(int i);
+  int hours;
+  int mins;
+  int seconds;
+  void SecsToDisplayTime(int i);
 };
 
 

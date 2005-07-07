@@ -209,6 +209,206 @@ void NoProcessing(int UpDown)
 
 /////////////////////////////////////////////
 
+void FormatterLowWarning::AssignValue(int i) {
+  InfoBoxFormatter::AssignValue(i);
+  switch (i) {
+  case 1:
+    minimum = ALTITUDEMODIFY*SAFETYALTITUDETERRAIN;
+  default:
+    break;
+  }
+
+}
+
+
+void FormatterTime::SecsToDisplayTime(int d) {
+  hours = (d/3600);
+  mins = (d/60-hours*60);
+  seconds = (d-mins*60+hours*3600);
+}
+
+
+
+int DetectStartTime() {
+  static int starttime = -1;
+  if (starttime == -1) {
+    if (GPS_INFO.Speed > 5) {
+      starttime = (int)GPS_INFO.Time;
+    } else {
+      return 0;
+    }
+  }
+  return (int)GPS_INFO.Time-starttime;
+}
+
+
+
+void FormatterTime::AssignValue(int i) {
+  switch (i) {
+  case 27:
+    SecsToDisplayTime(CALCULATED_INFO.AATTimeToGo);
+    break;
+  case 36:
+    SecsToDisplayTime(DetectStartTime());
+    break;
+  default:
+    break;
+  }
+
+}
+
+
+
+void InfoBoxFormatter::AssignValue(int i) {
+  switch (i) {
+  case 0:
+    Value = ALTITUDEMODIFY*GPS_INFO.Altitude;
+    break;
+  case 1:
+    Value = ALTITUDEMODIFY*CALCULATED_INFO.AltitudeAGL  ;
+    break;
+  case 2:
+    Value = LIFTMODIFY*CALCULATED_INFO.Average30s;
+    break;
+  case 3:
+    Value = CALCULATED_INFO.WaypointBearing;
+    break;
+  case 4:
+    if (CALCULATED_INFO.LD== 999) {
+      Valid = false;
+    } else {
+      Valid = true;
+      Value = CALCULATED_INFO.LD;
+    }
+    break;
+  case 5:
+    if (CALCULATED_INFO.CruiseLD== 999) {
+      Valid = false;
+    } else {
+      Valid = true;
+      Value = CALCULATED_INFO.CruiseLD;
+    }
+    break;
+  case 6:
+    Value = SPEEDMODIFY*GPS_INFO.Speed;
+    break;
+  case 7:
+    Value = LIFTMODIFY*CALCULATED_INFO.LastThermalAverage;
+    break;
+  case 8:
+    Value = ALTITUDEMODIFY*CALCULATED_INFO.LastThermalGain;
+    break;
+  case 9:
+    Value = CALCULATED_INFO.LastThermalTime;
+    break;
+  case 10:
+    Value = MACREADY;
+    break;
+  case 11:
+    Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
+    break;
+  case 12:
+    Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeDifference;
+    break;
+  case 13:
+    Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeRequired;
+    break;
+  case 14:
+    Value = 0; // Next Waypoint Text
+    break;
+  case 15:
+    Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeDifference;
+    break;
+  case 16:
+    Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeRequired;
+    break;
+  case 17:
+    Value = SPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
+    break;
+  case 18:
+    Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo;
+    break;
+  case 19:
+    if (CALCULATED_INFO.LDFinish== 999) {
+      Valid = false;
+    } else {
+      Valid = true;
+      Value = CALCULATED_INFO.LDFinish;
+    }
+    break;
+  case 20:
+    Value = ALTITUDEMODIFY*CALCULATED_INFO.TerrainAlt ;
+    break;
+  case 21:
+    Value = LIFTMODIFY*CALCULATED_INFO.AverageThermal;
+    break;
+  case 22:
+    Value = ALTITUDEMODIFY*CALCULATED_INFO.ThermalGain;
+    break;
+  case 23:
+    Value = GPS_INFO.TrackBearing;
+    break;
+  case 24:
+    if (GPS_INFO.VarioAvailable) {
+      Value = LIFTMODIFY*GPS_INFO.Vario;
+    } else {
+      Value = LIFTMODIFY*CALCULATED_INFO.Vario;
+    }
+    break;
+  case 25:
+    Value = SPEEDMODIFY*CALCULATED_INFO.WindSpeed;
+    break;
+  case 26:
+    Value = CALCULATED_INFO.WindBearing;
+    break;
+  case 28:
+    Value = DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance ;
+    break;
+  case 29:
+    Value = DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance ;
+    break;
+  case 30:
+    Value = SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
+    break;
+  case 31:
+    Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
+    break;
+  case 32:
+    if (GPS_INFO.AirspeedAvailable) {
+      Value = SPEEDMODIFY*GPS_INFO.Airspeed;
+      Valid = true;
+    } else {
+      Valid = false;
+    }
+    break;
+  case 33:
+    if (GPS_INFO.BaroAltitudeAvailable) {
+      Value = ALTITUDEMODIFY*GPS_INFO.BaroAltitude;
+      Valid = true;
+    } else {
+      Valid = false;
+    }
+    break;
+  case 34:
+    Value = SPEEDMODIFY*CALCULATED_INFO.VMcReady;
+    break;
+  case 35:
+    Value = CALCULATED_INFO.PercentCircling;
+    break;
+  case 37:
+    if (GPS_INFO.AccelerationAvailable) {
+      Value = GPS_INFO.Gload;
+      Valid = true;
+    } else {
+      Valid = false;
+    }
+    break;
+  default:
+    break;
+
+  };
+}
+
 
 void InfoBoxFormatter::Render(HWND hWnd) {
   if (Valid) {
@@ -241,9 +441,16 @@ void FormatterLowWarning::Render(HWND hWnd) {
 
 
 void FormatterTime::Render(HWND hWnd) {
-  _stprintf(Text,
-            Format,
-            Value );
+  if (hours<1) {
+    _stprintf(Text,
+              TEXT("%02d:%02d"),
+              mins, seconds );
+  } else {
+    _stprintf(Text,
+              TEXT("%02d:%02d"),
+              hours, mins );
+
+  }
   SetWindowLong(hWnd, GWL_USERDATA, 0);
   SetWindowText(hWnd,Text);
 }
