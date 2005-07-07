@@ -29,7 +29,6 @@ LRESULT CALLBACK AirspaceColourSelectDlg(HWND hDlg, UINT message, WPARAM wParam,
 LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 
-
 typedef struct {
   long ID;
   TCHAR *szCaption;
@@ -45,6 +44,7 @@ typedef struct {
 extern COLORREF Colours[];
 extern HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
 extern HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+extern TCHAR szRegistryAirspaceBlackOutline[];
 
 
 static const int swatchWidth  = 24;
@@ -89,6 +89,14 @@ LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARA
   switch (message)
   {
   case WM_INITDIALOG:
+    
+    // Initialize airspace outline checkbox
+    if(bAirspaceBlackOutline) {
+      SendDlgItemMessage(hDlg,IDC_BLACKOUTLINE,BM_SETCHECK,BST_CHECKED,0);
+    } else {
+      SendDlgItemMessage(hDlg,IDC_BLACKOUTLINE,BM_SETCHECK,BST_UNCHECKED,0);
+    }
+    
     // Get handle to the ListView control
     hListView = GetDlgItem(hDlg,IDC_LISTAIRSPACE);
     
@@ -171,6 +179,17 @@ LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARA
     
     break;
     
+    case WM_COMMAND:
+
+      switch (LOWORD(wParam)) {
+      case IDC_BLACKOUTLINE:
+        bAirspaceBlackOutline = !bAirspaceBlackOutline;
+        SetToRegistry(szRegistryAirspaceBlackOutline,bAirspaceBlackOutline);
+        return TRUE;
+      }
+
+      break;
+
     case WM_DESTROY:      
       hListView = NULL;
       if (hFont) {
