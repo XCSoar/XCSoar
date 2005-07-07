@@ -1,0 +1,128 @@
+[Version]
+Signature   = "$Windows NT$"    ; required as-is
+Provider    = "OpenSource"      ; full app name will be "<Provider> <AppName>"
+CESignature = "$Windows CE$"    ; required as-is
+
+[CEStrings]
+AppName     = "XCSoarData"          ; full app name will be "<Provider> <AppName>"
+InstallDir  = "\My Documents\XCSoarData"
+InstallDir  = "\My Documents\XCSoarTopo"
+
+[Strings]
+reg_path = Software\MPSR\XCSoar
+LinkFilename = "XCSoar"
+
+[CEDevice.ARMV4]
+ProcessorType=2577
+VersionMin = 3.0
+VersionMax = 32767.0
+
+[CEDevice.x86]
+ProcessorType = 0
+VersionMin = 3.0
+VersionMax = 32767.0
+
+[CEDevice.mips]
+ProcessorType = 4000
+VersionMin = 3.0
+VersionMax = 32767.0
+
+[CEDevice.sh3]
+ProcessorType = 10003
+VersionMin = 3.0
+VersionMax = 32767.0
+
+[SourceDisksNames]
+1 = ,"Data Files",,XCSoarData
+2 = ,"Topology Files",,XCSoarTopo
+
+
+;[SourceDisksNames.armv4]           ; CPU-dependent files
+;[SourceDisksNames.x86]
+;[SourceDisksNames.sh3]
+;[SourceDisksNames.mips]
+
+[SourceDisksFiles]
+aus_dem.dat = 1
+AirfieldDetailsAustralia.txt = 1
+australia.txt = 1
+benala_c-1.dat = 1
+benalla.tpl = 2
+builtupapop_area.dbf = 2
+builtupapop_area.prj = 2
+builtupapop_area.shp = 2
+builtupapop_area.shx = 2
+inwaterahydro_area.dbf = 2
+inwaterahydro_area.prj = 2
+inwaterahydro_area.shp = 2
+inwaterahydro_area.shx = 2
+mispopppop_point.dbf = 2
+mispopppop_point.prj = 2
+mispopppop_point.shp = 2
+mispopppop_point.shx = 2
+railrdltrans_line.dbf = 2
+railrdltrans_line.prj = 2
+railrdltrans_line.shp = 2
+railrdltrans_line.shx = 2
+roadltrans_line.dbf = 2
+roadltrans_line.prj = 2
+roadltrans_line.shp = 2
+roadltrans_line.shx = 2
+watrcrslhydro_line.dbf = 2
+watrcrslhydro_line.prj = 2
+watrcrslhydro_line.shp = 2
+watrcrslhydro_line.shx = 2
+
+
+[DefaultInstall]
+CopyFiles   = Files.Data,Files.Topo
+AddReg = AddRegistry
+
+[DestinationDirs]
+Files.Data    = 0, %InstallDir%
+Files.Topo    = 0, %InstallDir%
+
+;File copy list.
+[Files.Data]
+aus_dem.dat
+AirfieldDetailsAustralia.txt
+australia.txt
+benala_c-1.dat
+
+[Files.Topo]
+benalla.tpl
+builtupapop_area.dbf
+builtupapop_area.prj
+builtupapop_area.shp
+builtupapop_area.shx
+inwaterahydro_area.dbf
+inwaterahydro_area.prj
+inwaterahydro_area.shp
+inwaterahydro_area.shx
+mispopppop_point.dbf
+mispopppop_point.prj
+mispopppop_point.shp
+mispopppop_point.shx
+railrdltrans_line.dbf
+railrdltrans_line.prj
+railrdltrans_line.shp
+railrdltrans_line.shx
+roadltrans_line.dbf
+roadltrans_line.prj
+roadltrans_line.shp
+roadltrans_line.shx
+watrcrslhydro_line.dbf
+watrcrslhydro_line.prj
+watrcrslhydro_line.shp
+watrcrslhydro_line.shx
+
+[AddRegistry]
+HKCU,%reg_path%,AirfieldFile,0x00000000,%InstallDir%\AirfieldDetailsAustralia.txt
+HKCU,%reg_path%,AirspaceFile,0x00000000,%InstallDir%\australia.txt
+HKCU,%reg_path%,TerrainFile,0x00000000,%InstallDir%\aus_dem.dat
+HKCU,%reg_path%,TopologyFile,0x00000000,%InstallDir%\benalla.tpl
+HKCU,%reg_path%,WPFile,0x00000000,%InstallDir%\benala_c-1.dat
+
+
+
+

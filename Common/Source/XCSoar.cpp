@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.35 2005/07/06 02:07:29 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.36 2005/07/07 09:02:43 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -71,6 +71,7 @@ HBRUSH hBrushSelected;
 HBRUSH hBrushUnselected;
 COLORREF ColorSelected = RGB(0xC0,0xC0,0xC0);
 COLORREF ColorUnselected = RGB(0xFF,0xFF,0xFF);
+COLORREF ColorWarning = RGB(0xFF,0x00,0x00);
 
 // Serial Port Globals
 
@@ -229,118 +230,118 @@ void PopupBugsBallast(int updown);
 
 SCREEN_INFO Data_Options[] = { 
   // 0  
-  {TEXT("Altitude"), TEXT("GPS Alt"), TEXT("%2.0f"), 0, AltitudeProcessing, 1, 33}, 
+  {TEXT("Altitude"), TEXT("GPS Alt"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33}, 
 
   // 1
-  {TEXT("Altitude AGL"), TEXT("A.G.L."), TEXT("%2.0f"), 0, NoProcessing, 20, 0}, 
+  {TEXT("Altitude AGL"), TEXT("A.G.L."), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0}, 
 
   // 2
-  {TEXT("Average"), TEXT("Average"), TEXT("%-2.1f"), 0, NoProcessing, 7, 24}, 
+  {TEXT("Average"), TEXT("Average"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 24}, 
 
   // 3
-  {TEXT("Bearing"), TEXT("Bearing"), TEXT("%2.0f訊"), 0, NoProcessing, 6, 37}, 
+  {TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f訊")), NoProcessing, 6, 37}, 
 
   // 4
-  {TEXT("Current L/D"), TEXT("L/D"), TEXT("%2.0f"), 0, PopupBugsBallast, 5, 19}, 
+  {TEXT("Current L/D"), TEXT("L/D"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 19}, 
 
   // 5
-  {TEXT("Cruise L/D"), TEXT("Cr L/D"), TEXT("%2.0f"), 0, PopupBugsBallast, 19, 4}, 
+  {TEXT("Cruise L/D"), TEXT("Cr L/D"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 19, 4}, 
 
   // 6
-  {TEXT("Ground Speed"), TEXT("Speed"), TEXT("%2.0f"), 0, SpeedProcessing, 23, 3}, 
+  {TEXT("Ground Speed"), TEXT("Speed"), new InfoBoxFormatter(TEXT("%2.0f")), SpeedProcessing, 23, 3}, 
  
   // 7
-  {TEXT("Last Thermal Avg"), TEXT("L A"), TEXT("%-2.1f"), 0, NoProcessing, 8, 2}, 
+  {TEXT("Last Thermal Avg"), TEXT("L A"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2}, 
 
   // 8
-  {TEXT("Last Thermal Gain"), TEXT("L G"), TEXT("%2.0f"), 0, NoProcessing, 9, 7}, 
+  {TEXT("Last Thermal Gain"), TEXT("L G"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 9, 7}, 
 
   // 9
-  {TEXT("Last Thermal Time"), TEXT("L T"), TEXT("%2.0f"), 0, NoProcessing, 21, 8}, 
+  {TEXT("Last Thermal Time"), TEXT("L T"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 21, 8}, 
 
   // 10
-  {TEXT("MacReady Setting"), TEXT("MacReady"), TEXT("%2.1f"), 0, McReadyProcessing, 34, 35}, 
+  {TEXT("MacReady Setting"), TEXT("MacReady"), new InfoBoxFormatter(TEXT("%2.1f")), McReadyProcessing, 34, 35}, 
 
   // 11
-  {TEXT("Next Distance"), TEXT("Dist"), TEXT("%2.1f"), 0, NoProcessing, 12, 31}, 
+  {TEXT("Next Distance"), TEXT("Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31}, 
 
   // 12
-  {TEXT("Next Alt Difference"), TEXT("Alt Dif"), TEXT("%2.0f"), 0, NoProcessing, 13, 11}, 
+  {TEXT("Next Alt Difference"), TEXT("Alt Dif"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 13, 11}, 
 
   // 13
-  {TEXT("Next Alt Required"), TEXT("Alt Req"), TEXT("%2.0f"), 0, NoProcessing, 15, 12}, 
+  {TEXT("Next Alt Required"), TEXT("Alt Req"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 15, 12}, 
 
   // 14
-  {TEXT("Next Waypoint"), TEXT("Next"), TEXT(""), 0, NextUpDown, 36, 36}, 
+  {TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 36}, 
  
   // 15
-  {TEXT("Task Alt Difference"), TEXT("Dif Fin"), TEXT("%2.0f"), 0, NoProcessing, 16, 13}, 
+  {TEXT("Task Alt Difference"), TEXT("Dif Fin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 16, 13}, 
 
   // 16
-  {TEXT("Task Alt Required"), TEXT("Req Fin"), TEXT("%2.0f"), 0, NoProcessing, 17, 15}, 
+  {TEXT("Task Alt Required"), TEXT("Req Fin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15}, 
 
   // 17
-  {TEXT("Task Average Speed"), TEXT("Av Speed"), TEXT("%2.0f"), 0, NoProcessing, 18, 16}, 
+  {TEXT("Task Average Speed"), TEXT("Av Speed"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16}, 
 
   // 18
-  {TEXT("Task Distance"), TEXT("To Go"), TEXT("%2.0f"), 0, NoProcessing, 27, 17}, 
+  {TEXT("Task Distance"), TEXT("To Go"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17}, 
   
   // 19
-  {TEXT("Task LD Finish"), TEXT("LD Fin"), TEXT("%1.0f"), 0, NoProcessing, 4, 5}, 
+  {TEXT("Task LD Finish"), TEXT("LD Fin"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 4, 5}, 
 
   // 20
-  {TEXT("Terrain Height"), TEXT("Terrain"), TEXT("%2.0f"), 0, NoProcessing, 33, 1}, 
+  {TEXT("Terrain Height"), TEXT("Terrain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1}, 
   
   // 21
-  {TEXT("Thermal Average"), TEXT("Av Climb"), TEXT("%2.1f"), 0, NoProcessing, 22, 9}, 
+  {TEXT("Thermal Average"), TEXT("Av Climb"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9}, 
 
   // 22
-  {TEXT("Thermal Gain"), TEXT("Gain"), TEXT("%2.0f"), 0, NoProcessing, 24, 21}, 
+  {TEXT("Thermal Gain"), TEXT("Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21}, 
  
   // 23
-  {TEXT("Track"), TEXT("Track"), TEXT("%2.0f訊"), 0, DirectionProcessing, 32, 6}, 
+  {TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f訊")), DirectionProcessing, 32, 6}, 
 
   // 24
-  {TEXT("Vario"), TEXT("Vario"), TEXT("%-2.1f"), 0, NoProcessing, 2, 22}, 
+  {TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 22}, 
 
   // 25
-  {TEXT("Wind Speed"), TEXT("Wind S"), TEXT("%2.0f"), 0, WindSpeedProcessing, 26, 26}, 
+  {TEXT("Wind Speed"), TEXT("Wind S"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 26}, 
 
   // 26
-  {TEXT("Wind Bearing"), TEXT("Wind B"), TEXT("%2.0f訊"), 0, WindDirectionProcessing, 25, 25}, 
+  {TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f訊")), WindDirectionProcessing, 25, 25}, 
 
   // 27
-  {TEXT("AA Time"), TEXT("AA Time"), TEXT("%2.0f"), 0, NoProcessing, 28, 18}, 
+  {TEXT("AA Time"), TEXT("AA Time"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 28, 18}, 
 
   // 28
-  {TEXT("AA Max Dist"), TEXT("Max D"), TEXT("%2.0f"), 0, NoProcessing, 29, 27}, 
+  {TEXT("AA Max Dist"), TEXT("Max D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27}, 
 
   // 29
-  {TEXT("AA Min Dist"), TEXT("Min D"), TEXT("%2.0f"), 0, NoProcessing, 30, 28}, 
+  {TEXT("AA Min Dist"), TEXT("Min D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 30, 28}, 
 
   // 30
-  {TEXT("AA Max Speed"), TEXT("Max S"), TEXT("%2.0f"), 0, NoProcessing, 31, 29}, 
+  {TEXT("AA Max Speed"), TEXT("Max S"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29}, 
 
   // 31
-  {TEXT("AA Min Speed"), TEXT("Min S"), TEXT("%2.0f"), 0, NoProcessing, 11, 30}, 
+  {TEXT("AA Min Speed"), TEXT("Min S"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 30}, 
 
   // 32
-  {TEXT("Airspeed"), TEXT("Airspeed"), TEXT("%2.0f"), 0, NoProcessing, 37, 23}, 
+  {TEXT("Airspeed"), TEXT("Airspeed"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 37, 23}, 
 
   // 33
-  {TEXT("Baro Alt"), TEXT("Altitude"), TEXT("%2.0f"), 0, NoProcessing, 0, 20},
+  {TEXT("Baro Alt"), TEXT("Altitude"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
 
   // 34
-  {TEXT("MacReady speed"), TEXT("V Mc"), TEXT("%2.0f"), 0, NoProcessing, 35, 10}, 
+  {TEXT("MacReady speed"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10}, 
 
   // 35
-  {TEXT("Percentage climb"), TEXT("%% Climb"), TEXT("%2.0f"), 0, NoProcessing, 10, 34},
+  {TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 34},
 
   // 36
-  {TEXT("Time of day"), TEXT("Time"), TEXT("%04.0f"), 0, NoProcessing, 14, 14},
+  {TEXT("Time of day"), TEXT("Time"), new InfoBoxFormatter(TEXT("%04.0f")), NoProcessing, 14, 14},
 
   // 37
-  {TEXT("G load"), TEXT("G"), TEXT("%2.2f"), 0, NoProcessing, 3, 32},
+  {TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), NoProcessing, 3, 32},
 
 };
 
@@ -532,6 +533,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
     {
       return FALSE;
     }
+
+  FullScreen();
 
   hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
@@ -821,7 +824,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         }
       else
         {
-          hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT("0"),
+          hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT("\0"),
                                            WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
                                            i*ControlWidth, rc.top+TitleHeight,
                                            ControlWidth,ControlHeight-TitleHeight,
@@ -834,7 +837,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                                         i*ControlWidth, rc.top, ControlWidth,TitleHeight,
                                         hWndMainWindow,NULL,hInstance,NULL);
 
-      hWndInfoWindow[i+(NUMINFOWINDOWS/2)] = CreateWindow(TEXT("STATIC"),TEXT("0"),
+      hWndInfoWindow[i+(NUMINFOWINDOWS/2)] = CreateWindow(TEXT("STATIC"),TEXT("\0"),
                                                           WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
                                                           i*ControlWidth, (rc.bottom - ControlHeight+TitleHeight),
                                                           ControlWidth,ControlHeight-TitleHeight,
@@ -1015,16 +1018,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
       return MainMenu(hWnd, message, wParam, lParam);
       break;
-                
+
     case WM_CTLCOLORSTATIC: 
       wdata = GetWindowLong((HWND)lParam, GWL_USERDATA);
-      if (wdata) {
+      if (wdata==1) {
 	SetBkColor((HDC)wParam, ColorSelected);
+        SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
 	return (LRESULT)hBrushSelected;
-      } else {
+      }
+      if (wdata==0) {
 	SetBkColor((HDC)wParam, ColorUnselected);
+        SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
 	return (LRESULT)hBrushUnselected;
       }
+      if (wdata==2) {
+	SetBkColor((HDC)wParam, ColorUnselected);
+        SetTextColor((HDC)wParam, ColorWarning);
+	return (LRESULT)hBrushUnselected;
+      }
+      break;
 
       break;
     case WM_CREATE:
@@ -1232,7 +1244,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       SaveSoundSettings();
 
       VarioSound_EnableSound(false);
-	    VarioSound_Close();  // added sgi
+      VarioSound_Close();  // added sgi
 
       devCloseAll();
 
@@ -1261,6 +1273,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           DestroyWindow(hWndTitleWindow[i]);
         }
       CommandBar_Destroy(hWndCB);
+      for (i=0; i<NUMSELECTSTRINGS; i++) {
+        delete Data_Options[i].Formatter;
+      }
 
       DeleteObject(InfoWindowFont);
       DeleteObject(TitleWindowFont);
@@ -1702,62 +1717,101 @@ void    AssignValues(void)
 
   LockNavBox();
 
-  Data_Options[0].Value = ALTITUDEMODIFY*GPS_INFO.Altitude;
-  Data_Options[1].Value = ALTITUDEMODIFY*CALCULATED_INFO.AltitudeAGL  ;
-        
-  Data_Options[2].Value = LIFTMODIFY*CALCULATED_INFO.Average30s;
-  Data_Options[3].Value = CALCULATED_INFO.WaypointBearing;
-  Data_Options[4].Value = CALCULATED_INFO.LD; 
-  Data_Options[5].Value = CALCULATED_INFO.CruiseLD;
-  Data_Options[6].Value = SPEEDMODIFY*GPS_INFO.Speed;
-        
-  Data_Options[7].Value = LIFTMODIFY*CALCULATED_INFO.LastThermalAverage;
-  Data_Options[8].Value = ALTITUDEMODIFY*CALCULATED_INFO.LastThermalGain;
-  Data_Options[9].Value = CALCULATED_INFO.LastThermalTime;
-        
-  Data_Options[10].Value = MACREADY;
-        
-  Data_Options[11].Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
-  Data_Options[12].Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeDifference;
-  Data_Options[13].Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeRequired; 
-  Data_Options[14].Value = 0; // Next Waypoint Text
-        
-  Data_Options[15].Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeDifference;
-  Data_Options[16].Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeRequired;
-  Data_Options[17].Value = SPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
-  Data_Options[18].Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo; 
-  Data_Options[19].Value = CALCULATED_INFO.LDFinish; 
-        
-  Data_Options[20].Value = ALTITUDEMODIFY*CALCULATED_INFO.TerrainAlt ;
-        
-  Data_Options[21].Value = LIFTMODIFY*CALCULATED_INFO.AverageThermal;
-  Data_Options[22].Value = ALTITUDEMODIFY*CALCULATED_INFO.ThermalGain;
-        
-  Data_Options[23].Value = GPS_INFO.TrackBearing;
+  Data_Options[0].Formatter->Value = ALTITUDEMODIFY*GPS_INFO.Altitude;
 
-  if (GPS_INFO.VarioAvailable) {
-    Data_Options[24].Value = LIFTMODIFY*GPS_INFO.Vario;
+  ((FormatterLowWarning*)Data_Options[1].Formatter)->minimum = 
+    ALTITUDEMODIFY*SAFETYALTITUDETERRAIN;
+  Data_Options[1].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.AltitudeAGL  ;
+        
+  Data_Options[2].Formatter->Value = LIFTMODIFY*CALCULATED_INFO.Average30s;
+  Data_Options[3].Formatter->Value = CALCULATED_INFO.WaypointBearing;
+
+  if (CALCULATED_INFO.LD== 999) {
+    Data_Options[4].Formatter->Valid = false;
   } else {
-    Data_Options[24].Value = LIFTMODIFY*CALCULATED_INFO.Vario;
+    Data_Options[4].Formatter->Valid = true;
+    Data_Options[4].Formatter->Value = CALCULATED_INFO.LD; 
   }
 
-  Data_Options[25].Value = SPEEDMODIFY*CALCULATED_INFO.WindSpeed;
-  Data_Options[26].Value = CALCULATED_INFO.WindBearing;
-  Data_Options[27].Value = CALCULATED_INFO.AATTimeToGo / 60;
-  Data_Options[28].Value = DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance ; 
-  Data_Options[29].Value = DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance ; 
-  Data_Options[30].Value = SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
-  Data_Options[31].Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
-  Data_Options[32].Value = SPEEDMODIFY*GPS_INFO.Airspeed;
-  Data_Options[33].Value = ALTITUDEMODIFY*GPS_INFO.BaroAltitude;
+  if (CALCULATED_INFO.CruiseLD== 999) {
+    Data_Options[5].Formatter->Valid = false;
+  } else {
+    Data_Options[5].Formatter->Valid = true;
+    Data_Options[5].Formatter->Value = CALCULATED_INFO.CruiseLD; 
+  }
 
-  Data_Options[34].Value = SPEEDMODIFY*CALCULATED_INFO.VMcReady; 
+  Data_Options[6].Formatter->Value = SPEEDMODIFY*GPS_INFO.Speed;
+        
+  Data_Options[7].Formatter->Value = LIFTMODIFY*CALCULATED_INFO.LastThermalAverage;
+  Data_Options[8].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.LastThermalGain;
+  Data_Options[9].Formatter->Value = CALCULATED_INFO.LastThermalTime;
+        
+  Data_Options[10].Formatter->Value = MACREADY;
+        
+  Data_Options[11].Formatter->Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
+  Data_Options[12].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeDifference;
+  Data_Options[13].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeRequired; 
+  Data_Options[14].Formatter->Value = 0; // Next Waypoint Text
+        
+  Data_Options[15].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeDifference;
+  Data_Options[16].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeRequired;
+  Data_Options[17].Formatter->Value = SPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
+  Data_Options[18].Formatter->Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo; 
 
-  Data_Options[35].Value = CALCULATED_INFO.PercentCircling;
+  if (CALCULATED_INFO.LDFinish== 999) {
+    Data_Options[19].Formatter->Valid = false;
+  } else {
+    Data_Options[19].Formatter->Valid = true;
+    Data_Options[19].Formatter->Value = CALCULATED_INFO.LDFinish; 
+  }
 
-  Data_Options[36].Value = DetectStartTime();
+  Data_Options[20].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.TerrainAlt ;
+        
+  Data_Options[21].Formatter->Value = LIFTMODIFY*CALCULATED_INFO.AverageThermal;
+  Data_Options[22].Formatter->Value = ALTITUDEMODIFY*CALCULATED_INFO.ThermalGain;
+        
+  Data_Options[23].Formatter->Value = GPS_INFO.TrackBearing;
 
-  Data_Options[37].Value = GPS_INFO.Gload;
+  if (GPS_INFO.VarioAvailable) {
+    Data_Options[24].Formatter->Value = LIFTMODIFY*GPS_INFO.Vario;
+  } else {
+    Data_Options[24].Formatter->Value = LIFTMODIFY*CALCULATED_INFO.Vario;
+  }
+
+  Data_Options[25].Formatter->Value = SPEEDMODIFY*CALCULATED_INFO.WindSpeed;
+  Data_Options[26].Formatter->Value = CALCULATED_INFO.WindBearing;
+  Data_Options[27].Formatter->Value = CALCULATED_INFO.AATTimeToGo / 60;
+  Data_Options[28].Formatter->Value = DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance ; 
+  Data_Options[29].Formatter->Value = DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance ; 
+  Data_Options[30].Formatter->Value = SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
+  Data_Options[31].Formatter->Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
+
+  if (GPS_INFO.AirspeedAvailable) {
+    Data_Options[32].Formatter->Value = SPEEDMODIFY*GPS_INFO.Airspeed;
+    Data_Options[32].Formatter->Valid = true;
+  } else {
+    Data_Options[32].Formatter->Valid = false;
+  }
+
+  if (GPS_INFO.BaroAltitudeAvailable) {
+    Data_Options[33].Formatter->Value = ALTITUDEMODIFY*GPS_INFO.BaroAltitude;
+    Data_Options[33].Formatter->Valid = true;
+  } else {
+    Data_Options[33].Formatter->Valid = false;
+  }
+
+  Data_Options[34].Formatter->Value = SPEEDMODIFY*CALCULATED_INFO.VMcReady; 
+
+  Data_Options[35].Formatter->Value = CALCULATED_INFO.PercentCircling;
+
+  Data_Options[36].Formatter->Value = DetectStartTime();
+
+  if (GPS_INFO.AccelerationAvailable) {
+    Data_Options[37].Formatter->Value = GPS_INFO.Gload;
+    Data_Options[37].Formatter->Valid = true;
+  } else {
+    Data_Options[37].Formatter->Valid = false;
+  }
 
   UnlockNavBox();
 
@@ -1771,7 +1825,6 @@ void DisplayText(void)
     return;
 
   int i;
-  static TCHAR Value[NUMINFOWINDOWS][100];
   static TCHAR Caption[NUMINFOWINDOWS][100];
 
   int DisplayType;
@@ -1786,7 +1839,6 @@ void DisplayText(void)
   
   for(i=0;i<NUMINFOWINDOWS;i++)
     {
-      Value[i][0]= 0;
       Caption[i][0]= 0;
 
       if (CALCULATED_INFO.Circling == TRUE)
@@ -1797,50 +1849,13 @@ void DisplayText(void)
         DisplayType = (InfoType[i] >> 8) & 0xff;
       }
 
-      if(DisplayType == 14) // Waypoint Name
-        {
-          if(ActiveWayPoint >=0)
-            {
-                                
-              _stprintf(Caption[i],Data_Options[DisplayType].Title );
-              if ( DisplayTextType == DISPLAYFIRSTTHREE)
-                {
-                  _tcsncpy(Value[i],WayPointList[ Task[ActiveWayPoint].Index ].Name,3);
-                  Value[i][3] = '\0';
-                }
-              else if( DisplayTextType == DISPLAYNUMBER)
-                {
-                  _stprintf(Value[i],TEXT("%d"),WayPointList[ Task[ActiveWayPoint].Index ].Number );
-                }
-              else
-                {
-                  _tcsncpy(Value[i],WayPointList[ Task[ActiveWayPoint].Index ].Name,5);
-                  Value[i][5] = '\0';
-                }
-            }
-          else
-            {
-              _stprintf(Caption[i],Data_Options[DisplayType].Title );
-              Value[i][0] = '\0';
-            }
-        }
-      else
-        {
-          _stprintf(Caption[i],Data_Options[DisplayType].Title );
-          _stprintf(Value[i],Data_Options[DisplayType].Format, Data_Options[DisplayType].Value );
+      Data_Options[DisplayType].Formatter->Render(hWndInfoWindow[i]);
 
-        }
+      _stprintf(Caption[i],Data_Options[DisplayType].Title );
 
+      SetWindowText(hWndTitleWindow[i],Caption[i]);
 
     }
-
-  // this is deferred to the end, to speed up display, reduce flickering
-  for(i=0;i<NUMINFOWINDOWS;i++) {
-      SetWindowText(hWndTitleWindow[i],Caption[i]);
-      SetWindowText(hWndInfoWindow[i],Value[i]);
-      //      UpdateWindow(hWndTitleWindow[i]);
-      //      UpdateWindow(hWndInfoWindow[i]);
-  }
 
   UnlockNavBox();
 

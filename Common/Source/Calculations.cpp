@@ -408,7 +408,7 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         
         Calculated->LD = DistanceFlown / AltLost;
         if (Calculated->LD<-999) {
-          Calculated->LD = -999;
+          Calculated->LD = 999;
         }
       } else {
         Calculated->LD = 999;
@@ -449,7 +449,7 @@ void CruiseLD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         Calculated->CruiseLD = DistanceFlown / AltLost;
         if(Calculated->CruiseLD< -999)
           {
-            Calculated->CruiseLD = -999;
+            Calculated->CruiseLD = 999;
           }
       } else {
         Calculated->CruiseLD = 999;

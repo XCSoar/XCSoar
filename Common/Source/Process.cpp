@@ -17,6 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 #include "stdafx.h"
+#include <windows.h>
 
 #include "Process.h"
 #include "externs.h"
@@ -201,4 +202,78 @@ void NextUpDown(int UpDown)
 void NoProcessing(int UpDown)
 {
 	return;
+}
+
+
+
+
+/////////////////////////////////////////////
+
+
+void InfoBoxFormatter::Render(HWND hWnd) {
+  if (Valid) {
+    _stprintf(Text,
+              Format, 
+              Value );
+  } else {
+    _stprintf(Text,TEXT("---"));
+  }
+  SetWindowLong(hWnd, GWL_USERDATA, 0);	  
+  SetWindowText(hWnd,Text);
+
+}
+
+
+void FormatterLowWarning::Render(HWND hWnd) {
+  
+  _stprintf(Text,
+            Format, 
+            Value );
+  if (Value<minimum) {
+    SetWindowLong(hWnd, GWL_USERDATA, 2); // red text
+  } else {
+    SetWindowLong(hWnd, GWL_USERDATA, 0);	  
+  }
+  SetWindowText(hWnd,Text);
+
+}
+
+
+
+void FormatterTime::Render(HWND hWnd) {
+  _stprintf(Text,
+            Format, 
+            Value );
+  SetWindowLong(hWnd, GWL_USERDATA, 0);	  
+  SetWindowText(hWnd,Text);
+}
+
+
+void FormatterWaypoint::Render(HWND hWnd) {
+
+  if(ActiveWayPoint >=0)
+    {
+      if ( DisplayTextType == DISPLAYFIRSTTHREE)
+        {
+          _tcsncpy(Text,WayPointList[ Task[ActiveWayPoint].Index ].Name,3);
+          Text[3] = '\0';
+        }
+      else if( DisplayTextType == DISPLAYNUMBER)
+        {
+          _stprintf(Text,TEXT("%d"),WayPointList[ Task[ActiveWayPoint].Index ].Number );
+        }
+      else
+        {
+          _tcsncpy(Text,WayPointList[ Task[ActiveWayPoint].Index ].Name,5);
+          Text[5] = '\0';
+        }
+    }
+  else
+    {
+      Text[0] = '\0';
+    }
+
+  SetWindowLong(hWnd, GWL_USERDATA, 0);	  
+  SetWindowText(hWnd, Text);
+
 }
