@@ -119,6 +119,7 @@ TCHAR szRegistryPolarFile[] = TEXT("PolarFile");
 TCHAR szRegistryTerrainFile[]=	 TEXT("TerrainFile");
 TCHAR szRegistryTopologyFile[]=  TEXT("TopologyFile");
 TCHAR szRegistryWayPointFile[]=  TEXT("WPFile");
+
 TCHAR szRegistryPilotName[]=  TEXT("PilotName");
 TCHAR szRegistryAircraftType[]=  TEXT("AircraftType");
 TCHAR szRegistryAircraftRego[]=  TEXT("AircraftRego");

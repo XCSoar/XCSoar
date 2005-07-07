@@ -70,7 +70,7 @@ HKLM,\Software\Microsoft\Today\Items\%AppName%,Type,0x00010001,4
 HKLM,\Software\Microsoft\Today\Items\%AppName%,Enabled,0x00010001,1
 HKLM,\Software\Microsoft\Today\Items\%AppName%,Options,0x00010001,1
 HKLM,\Software\Microsoft\Today\Items\%AppName%,DLL,0x00000002,"\Windows\XCSoarLaunch.dll"
-HKLM,%reg_path%,InstallDir,0x00000002,%InstallDir%
+HKLM,%reg_path%,InstallDir,0x00000000,%InstallDir%
 
 
 ;[Links]
