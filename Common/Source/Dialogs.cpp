@@ -2692,6 +2692,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         {
           ::ReleaseDC(hDlg, hdcScreen);
           EndDialog(hDlg, LOWORD(wParam));
+          FullScreen();
           return TRUE;
         }
       if (LOWORD(wParam) == IDC_WDGOTO) {
@@ -2700,6 +2701,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        FullScreen();
         break;
       }
       if (LOWORD(wParam) == IDC_WDREPLACE) {
@@ -2708,6 +2710,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        FullScreen();
         break;
       }
       if (LOWORD(wParam) == IDC_WDREMOVE) {
@@ -2716,6 +2719,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        FullScreen();
         break;
       }
       if (LOWORD(wParam) == IDC_WDINSERT) {
@@ -2724,6 +2728,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        FullScreen();
         break;
       }
       if (LOWORD(wParam) == IDC_WDSETHOME) {
@@ -2733,6 +2738,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        FullScreen();
         break;
       }
       if (LOWORD(wParam) == IDC_WAYPOINTDETAILSNEXT) {

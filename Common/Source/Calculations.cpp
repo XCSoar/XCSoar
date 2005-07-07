@@ -116,7 +116,13 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   if (FastLogNum) {
     dtLog = 1.0;
-    dtSnail = 1.0;
+  }
+
+  // draw snail points more often in circling mode
+  if (Calculated->Circling) {
+    dtSnail = 2.0;
+  } else {
+    dtSnail = 5.0;
   }
 
   if (Basic->Time - LogLastTime >= dtLog) {
@@ -1724,6 +1730,26 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 //////////////////////////////////////////////////////////////////
 
 
+void LatLon2Flat(double lon, double lat, int *scx, int *scy) {
+  *scx = (int)(lon*fastcosine(lat)*100);
+  *scy = (int)(lat*100);
+}
+
+int CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,
+                                    int i) {
+  // Do preliminary fast search
+  int scx, scy;
+  LatLon2Flat(WayPointList[i].Longditude,
+              WayPointList[i].Lattitude, &scx, &scy);
+  int dx, dy;
+  dx = scx_aircraft-scx;
+  dy = scy_aircraft-scy;
+
+  return isqrt4(dx*dx+dy*dy);
+}
+
+
+
 double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
 					DERIVED_INFO *Calculated,
 					int i) {
@@ -1750,7 +1776,7 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
 			    1
 			    )*(1/BUGS);
 
-  return ((Basic->Altitude) - AltReqd - WayPointList[i].Altitude);
+  return ((Basic->Altitude) - AltReqd - WayPointList[i].Altitude - SAFETYALTITUDEARRIVAL);
 }
 
 
@@ -1759,12 +1785,19 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
 			   DERIVED_INFO *Calculated) {
   int SortedLandableIndex[MAXTASKPOINTS];
   double SortedArrivalAltitude[MAXTASKPOINTS];
+  int SortedApproxDistance[MAXTASKPOINTS*2];
+  int SortedApproxIndex[MAXTASKPOINTS*2];
   int i, k, l;
   double aa;
+  int ai;
 
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    SortedLandableIndex[i]= -1;
-    SortedArrivalAltitude[i] = 0;
+  // Do preliminary fast search
+  int scx_aircraft, scy_aircraft;
+  LatLon2Flat(Basic->Longditude, Basic->Lattitude, &scx_aircraft, &scy_aircraft);
+
+  for (i=0; i<MAXTASKPOINTS*2; i++) {
+    SortedApproxIndex[i]= -1;
+    SortedApproxDistance[i] = 0;
   }
 
   for (i=0; i<(int)NumberOfWayPoints; i++) {
@@ -1775,30 +1808,98 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
       continue; // ignore non-landable fields
     }
 
-    aa = CalculateWaypointArrivalAltitude(Basic, Calculated, i);
+    ai = CalculateWaypointApproxDistance(scx_aircraft, scy_aircraft, i);
 
     // see if this fits into slot
-    for (k=0; k< MAXTASKPOINTS; k++) {
+    for (k=0; k< MAXTASKPOINTS*2; k++) {
       if (
-	  ((aa > SortedArrivalAltitude[k]) // closer than this one
-	   ||(SortedLandableIndex[k]== -1)) // or this one isn't filled
-	  &&(SortedLandableIndex[k]!= i) // and not replacing with same
+	  ((ai < SortedApproxDistance[k]) // closer than this one
+	   ||(SortedApproxIndex[k]== -1)) // or this one isn't filled
+	  &&(SortedApproxIndex[k]!= i) // and not replacing with same
 	  )
 	{
 
 	  // ok, got new biggest, put it into the slot.
 
-	  for (l=MAXTASKPOINTS-1; l>k; l--) {
+	  for (l=MAXTASKPOINTS*2-1; l>k; l--) {
 	    if (l>0) {
-	      SortedArrivalAltitude[l] = SortedArrivalAltitude[l-1];
-	      SortedLandableIndex[l] = SortedLandableIndex[l-1];
+	      SortedApproxDistance[l] = SortedApproxDistance[l-1];
+	      SortedApproxIndex[l] = SortedApproxIndex[l-1];
 	    }
 	  }
 
-	  SortedArrivalAltitude[k] = aa;
-	  SortedLandableIndex[k] = i;
-	  k=MAXTASKPOINTS;
+	  SortedApproxDistance[k] = ai;
+	  SortedApproxIndex[k] = i;
+	  k=MAXTASKPOINTS*2;
 	}
+    }
+
+  }
+
+
+  // Now do detailed search
+
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    SortedLandableIndex[i]= -1;
+    SortedArrivalAltitude[i] = 0;
+  }
+
+
+  int scanairportsfirst;
+  bool foundreachableairport = false;
+
+  for (scanairportsfirst=0; scanairportsfirst<2; scanairportsfirst++) {
+
+    if (foundreachableairport) {
+      continue; // don't bother filling the rest of the list
+    }
+
+    for (i=0; i<MAXTASKPOINTS*2; i++) {
+      if (SortedApproxIndex[i]<0) { // ignore invalid points
+        continue;
+      }
+
+      if (((WayPointList[SortedApproxIndex[i]].Flags & LANDPOINT) == LANDPOINT) &&
+          (scanairportsfirst==0)) {
+        // we are in the first scan, looking for airports only
+        continue;
+      }
+
+      aa = CalculateWaypointArrivalAltitude(Basic, Calculated, SortedApproxIndex[i]);
+
+      if (scanairportsfirst==0) {
+        if (aa<0) {
+          // in first scan, this airport is unreachable, so ignore it.
+          continue;
+        } else {
+          // this airport is reachable
+          foundreachableairport = true;
+        }
+      }
+
+      // see if this fits into slot
+      for (k=0; k< MAXTASKPOINTS; k++) {
+        if (
+            ((aa > SortedArrivalAltitude[k]) // closer than this one
+             ||(SortedLandableIndex[k]== -1)) // or this one isn't filled
+            &&(SortedLandableIndex[k]!= i) // and not replacing with same
+            )
+          {
+
+            // ok, got new biggest, put it into the slot.
+
+            for (l=MAXTASKPOINTS-1; l>k; l--) {
+              if (l>0) {
+                SortedArrivalAltitude[l] = SortedArrivalAltitude[l-1];
+                SortedLandableIndex[l] = SortedLandableIndex[l-1];
+              }
+            }
+
+            SortedArrivalAltitude[k] = aa;
+            SortedLandableIndex[k] = SortedApproxIndex[i];
+            k=MAXTASKPOINTS;
+          }
+      }
     }
   }
 

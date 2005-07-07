@@ -1241,6 +1241,7 @@ int FindAirspaceArea(double Longditude,double Lattitude)
 	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
 	    {
 
+              // first check if point is within bounding box
               if (
                   (Lattitude> AirspaceArea[i].bounds.miny)&&
                   (Lattitude< AirspaceArea[i].bounds.maxy)&&
@@ -1248,16 +1249,18 @@ int FindAirspaceArea(double Longditude,double Lattitude)
                   (Longditude< AirspaceArea[i].bounds.maxx)
                   )
                 {
+                  // it is within, so now do detailed polygon test
                   if (wn_PnPoly(thispoint,
                                 &AirspacePoint[AirspaceArea[i].FirstPoint],
                                 AirspaceArea[i].NumPoints-1) != 0) {
-                    // we are inside
+                    // we are inside the i'th airspace area
                     return i;
                   }
                 }
 	    }
 	}
     }
+  // not inside any airspace
   return -1;
 }
 
