@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.28 2005/07/07 11:26:48 aharrison24 Exp $
+//   $Id: Dialogs.cpp,v 1.29 2005/07/07 12:35:40 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -3034,10 +3034,12 @@ void OpenStartupScreen() {
     CreateDialog(hInst, (LPCTSTR)IDD_SPLASH, hWndMainWindow, 
                  (DLGPROC)StartupWndTimerProc);
 
+  /*
   SetWindowPos(hWndMainWindow,HWND_TOPMOST,0,0,
                GetSystemMetrics(SM_CXSCREEN),
                GetSystemMetrics(SM_CYSCREEN),
                SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+  */
 
   // Subclass window function so that we can trap timer messages
   // set timeout to 3 seconds

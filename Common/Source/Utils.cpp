@@ -622,7 +622,9 @@ void PolarWinPilot2XCSoar(double POLARV[3], double POLARW[3], double ww[2]) {
   double w1,w2,w3;
 
   v1 = POLARV[0]/3.6; v2 = POLARV[1]/3.6; v3 = POLARV[2]/3.6;
-  //	w1 = -POLARV[0]/POLARLD[0]; w2 = -POLARV[1]/POLARLD[1]; w3 = -POLARV[2]/POLARLD[2];
+  //	w1 = -POLARV[0]/POLARLD[0]; 
+  //    w2 = -POLARV[1]/POLARLD[1]; 
+  //    w3 = -POLARV[2]/POLARLD[2];
   w1 = POLARW[0]; w2 = POLARW[1]; w3 = POLARW[2];
 
   d = v1*v1*(v2-v3)+v2*v2*(v3-v1)+v3*v3*(v1-v2);
@@ -789,8 +791,8 @@ void CalculateNewPolarCoef(void)
   static double Weights[7][3] = { {70,190,1}, 
 				  {70,250,100}, 
 				  {70,240,285}, 
-				  {70,287,165}, 
-				  {70,400,120}, 
+				  {70,287,165},  // w ok!
+				  {70,400,120},  //
 				  {70,527,303}, 
 				  {0,0,0} 
   };

@@ -450,7 +450,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hDCTemp = CreateCompatibleDC(hdcDrawWindow);
     
     hBackgroundBrush = CreateSolidBrush(BackgroundColor);
-    
+
     hTerrainWarning=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TERRAINWARNING));
     hLandable=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LANDABLE));
     hReachable=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_REACHABLE));
@@ -493,6 +493,8 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hbBestCruiseTrack=(HBRUSH)CreateSolidBrush(RGB(0x0,0x0,0xFF));
     hbFinalGlideBelow=(HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
     hbFinalGlideAbove=(HBRUSH)CreateSolidBrush(RGB(0x00,0xFF,0x00));
+
+    //JMWFOO
     
     break;
     
@@ -1049,19 +1051,24 @@ DWORD DrawThread (LPVOID lpvoid)
   memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
   memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
   UnlockFlightData();
-  
-  UpdateMapScale();
-  RenderMapWindow(MapRect);
-  SetTopologyBounds(MapRect);
-  //////
 
   // paint draw window white
   SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
   Rectangle(hdcDrawWindow,MapRectBig.left,MapRectBig.top,
             MapRectBig.right,MapRectBig.bottom);
+
+  //  SelectObject(hdcDrawWindow, hAirspaceBitmap[0]);
+
   BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
          MapRectBig.bottom-MapRectBig.top, 
          hdcDrawWindow, 0, 0, SRCCOPY);
+
+  //////
+  
+  UpdateMapScale();
+  RenderMapWindow(MapRect);
+  SetTopologyBounds(MapRect);
+  //////
 		
   while (!CLOSETHREAD) 
   {
@@ -1419,12 +1426,12 @@ void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
   int wmag = iround(10.0*DerivedDrawInfo.WindSpeed);
   int numvecs;
   
-  numvecs = (wmag/44)+1;
+  numvecs = (wmag/52)+1;
   for (j=0; j<numvecs; j++) {
     if (j== numvecs-1) {
-      iwind = wmag % 44;
+      iwind = wmag % 52;
     } else {
-      iwind = 44;
+      iwind = 52;
     }
     
     Start.y = Orig.y;
@@ -1495,12 +1502,12 @@ void DrawWind(HDC hdc, POINT Orig, RECT rc)
   int wmag = iround(10.0*DerivedDrawInfo.WindSpeed);
   int numvecs;
   
-  numvecs = (wmag/44)+1;
+  numvecs = (wmag/52)+1;
   for (j=0; j<numvecs; j++) {
     if (j== numvecs-1) {
-      iwind = wmag % 44;
+      iwind = wmag % 52;
     } else {
-      iwind = 44;
+      iwind = 52;
     }
     
     Start.y = 19+rc.top;
