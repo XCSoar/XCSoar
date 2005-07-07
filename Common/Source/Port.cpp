@@ -8,6 +8,8 @@
 #include <tchar.h>
 
 
+#define COMMDEBUG 0
+
 extern BOOL  CLOSETHREAD;
 HANDLE			 hRead1Thread = NULL;              // Handle to the read thread
 static BOOL  Port1CloseThread;
@@ -38,7 +40,7 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   if ( hPort1 == INVALID_HANDLE_VALUE ) 
   {
     // Could not open the port.
-    _stprintf(sTmp, TEXT("Unable to Open Port %s"), sPortName),
+    _stprintf(sTmp, TEXT("Unable to Open\r\nPort %s"), sPortName),
     MessageBox (hWndMainWindow, sTmp,
                 TEXT("Error"), MB_OK|MB_ICONINFORMATION);
     dwError = GetLastError ();
@@ -244,7 +246,7 @@ BOOL Port1StopRxThread(void){
   if (hPort1 == INVALID_HANDLE_VALUE) return(FALSE);
 
   Port1CloseThread = TRUE;
-  //GetCommMask(hPort1, &dwMask);         // setting the comm event mask with the same value
+  //GetCommMask(hPort1, &dwMask);       // setting the comm event mask with the same value
   SetCommMask(hPort1, dwMask);          // will cancel any WaitCommEvent!
                                         // this is a documented CE trick to cancel the WaitCommEvent
 
@@ -254,8 +256,10 @@ BOOL Port1StopRxThread(void){
     Sleep(10);
   }
 
+  #if COMMDEBUG > 0
   if (!fRxThreadTerminated)
     MessageBox (hWndMainWindow, TEXT("Port1 RX Thread not Terminated!"), TEXT("Error"), MB_OK);
+  #endif
 
   return(fRxThreadTerminated);
 

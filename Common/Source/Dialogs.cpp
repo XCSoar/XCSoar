@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.29 2005/07/07 12:35:40 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.30 2005/07/07 21:37:15 samgi Exp $
 
 */
 #include "stdafx.h"
@@ -940,6 +940,7 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
               TaskSize ++;
             }
         }
+
       ReadNewTask(hDlg);
 
       settaskUpdateControls(hDlg, TaskSize);
@@ -950,7 +951,7 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       switch (LOWORD(wParam))
         {
         case  IDOK:
-          SHSipPreference(hDlg,SIP_FORCEDOWN);
+          SHSipPreference(hDlg, SIP_FORCEDOWN);
 
           ReadNewTask(hDlg);
 

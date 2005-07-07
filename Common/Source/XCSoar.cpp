@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.39 2005/07/07 17:41:44 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.40 2005/07/07 21:37:15 samgi Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1020,6 +1020,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
   switch (message) 
     {
+
+    case WM_USER:
+
+      if (EnableSoundModes){
+        PlayResource(TEXT("IDR_REMOVE")); 
+      }
+      ShowStatusMessage(TEXT("Closest Airfield\r\nChanged!"), 5000);
+
+    break;
+
     case WM_ERASEBKGND:
       return TRUE; // JMW trying to reduce screen flicker
 

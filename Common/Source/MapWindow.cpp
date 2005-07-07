@@ -481,7 +481,11 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hpWindThick = (HPEN)CreatePen(PS_SOLID, 4, RGB(255,220,220));
     hpBearing = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
     hpBestCruiseTrack = (HPEN)CreatePen(PS_SOLID, 1, RGB(0,0,255));
+    #ifdef MONOCHROME_SCREEN
+    hpCompass = (HPEN)CreatePen(PS_SOLID, 1, RGB(0x00,0x00,0x00));
+    #else
     hpCompass = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xcf,0xcf,0xFF));
+    #endif
     hpThermalBand = (HPEN)CreatePen(PS_SOLID, 2, RGB(0x40,0x40,0xFF));
     hpThermalBandGlider = (HPEN)CreatePen(PS_SOLID, 2, RGB(0x00,0x00,0x30));
     hpFinalGlideBelow = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xFF,0xA0,0xA0));
@@ -489,7 +493,11 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hpMapScale = (HPEN)CreatePen(PS_SOLID, 1, RGB(0,0,0));
     hpTerrainLine = (HPEN)CreatePen(PS_DASH, 1, RGB(0x30,0x30,0x30));
     
+    #ifdef MONOCHROME_SCREEN
+    hbCompass=(HBRUSH)CreateSolidBrush(RGB(0xff,0xff,0xff));
+    #else
     hbCompass=(HBRUSH)CreateSolidBrush(RGB(0x40,0x40,0xFF));
+    #endif
     hbThermalBand=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0xFF));
     hbBestCruiseTrack=(HBRUSH)CreateSolidBrush(RGB(0x0,0x0,0xFF));
     hbFinalGlideBelow=(HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
