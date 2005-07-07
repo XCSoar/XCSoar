@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.27 2005/07/07 02:55:27 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.28 2005/07/07 11:26:48 aharrison24 Exp $
 
 */
 #include "stdafx.h"
@@ -40,6 +40,9 @@
 #include <windows.h>
 
 #include <tchar.h>
+
+
+#define USE_ARH_COLOUR_SELECTOR 1
 
 extern TCHAR szRegistryKey[];
 extern TCHAR szRegistrySpeedUnitsValue[];
@@ -2389,7 +2392,11 @@ LRESULT CALLBACK Settings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       hTabPage[0] = CreateDialog(hInst, (LPCTSTR)IDD_ABOUTBOX, hDlg, (DLGPROC)About);
       hTabPage[1] = CreateDialog(hInst, (LPCTSTR)IDD_REGISTER, hDlg, (DLGPROC)Register);
       hTabPage[2] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACEALT, hDlg, (DLGPROC)AirspaceAlt);
+#if (USE_ARH_COLOUR_SELECTOR == 1)
+      hTabPage[3] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACECOLOUR, hDlg, (DLGPROC)AirspaceColourDlg);
+#else
       hTabPage[3] = CreateDialog(hInst, (LPCTSTR)IDD_COLOUR, hDlg, (DLGPROC)MapColour);
+#endif
       hTabPage[4] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACEWARN, hDlg, (DLGPROC)SetAirspaceWarnings);
       hTabPage[5] = CreateDialog(hInst, (LPCTSTR)IDD_COMM, hDlg, (DLGPROC)COMMOptions);
       hTabPage[6] = CreateDialog(hInst, (LPCTSTR)IDD_DISPLAY, hDlg, (DLGPROC)DisplayOptions);
