@@ -10,7 +10,7 @@ Summary of new features since v4.0
 - Saving/loading wind to registry
 - Time aloft infobox (in Waypoint Group)
 - New wind calculation method
-- Rendering of airspace with cross-hatches
+- Rendering of airspace with cross-hatches and optional black outline
 - Added pilot/aircraft information in logger
 - Added "Remove" button on waypoint details task page
 - Acknowledge airspace warnings
@@ -20,6 +20,7 @@ Summary of new features since v4.0
 - Added netto vario calculations
 - Added smart zooming (zooms back out when waypoint changes if in autozoom)
 - Added installer and launcher
+- Improved colour selector now displays currently chosen colours
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -173,9 +174,9 @@ MAIN MENU
 ============================================================================
 
 The main menu button now disappears when not in use, to free up space on
-the map display.  To make it appear, select an InfoBox.  The menu will 
-disappear again after 10 seconds have elapsed or if a cursor key is pressed
-in the InfoBox.
+the map display.  To make it appear, select an InfoBox or double click the
+map window.  The menu will disappear again after 10 seconds have elapsed or
+if a cursor key is pressed in the InfoBox.
 
 
 ============================================================================
