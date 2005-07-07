@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: Parser.cpp,v 1.8 2005/07/05 13:05:09 jwharington Exp $
+  $Id: Parser.cpp,v 1.9 2005/07/07 15:08:13 jwharington Exp $
 */
 #include "stdafx.h"
 #include "parser.h"
@@ -386,7 +386,7 @@ BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   ExtractParameter(String,ctemp,7);
 
-  if (GPS_INFO->Speed>0) {
+  if (GPS_INFO->Speed>1.0) {
     // JMW don't update bearing unless we're moving
     GPS_INFO->TrackBearing = StrToDouble(ctemp, NULL);
   }
