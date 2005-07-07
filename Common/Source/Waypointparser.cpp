@@ -26,6 +26,7 @@
 
 #include <windows.h>
 #include <Commctrl.h>
+#include <aygshell.h>
 
 #include <tchar.h>
 
@@ -51,9 +52,13 @@ void ReadWayPointFile(HANDLE hFile)
 
   hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
   SetDlgItemText(hProgress,IDC_MESSAGE,TEXT("Loading Waypoints File..."));
-
-  SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
   ShowWindow(hProgress,SW_SHOW);
+  /*
+  SetForegroundWindow(hProgress);
+  SHFullScreen(hProgress,
+               SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+  SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+  */
   UpdateWindow(hProgress);
 
 

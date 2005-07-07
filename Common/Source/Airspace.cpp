@@ -27,6 +27,7 @@
 #include <windows.h>
 #include <Commctrl.h>
 #include <math.h>
+#include <aygshell.h>
 
 #include <tchar.h>
 
@@ -176,8 +177,13 @@ bool LoadAirspaceBinary(FILETIME LastWrite) {
 
       hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
       SetDlgItemText(hProgress,IDC_MESSAGE,TEXT("Loading Airspace File..."));
-      SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
       ShowWindow(hProgress,SW_SHOW);
+      /*
+      SetForegroundWindow(hProgress);
+      SHFullScreen(hProgress,
+                   SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+      SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+      */
       UpdateWindow(hProgress);
 
 
@@ -251,8 +257,14 @@ void ReadAirspace(HANDLE hFile)
 
   hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
   SetDlgItemText(hProgress,IDC_MESSAGE,TEXT("Loading Airspace File..."));
-  SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+
   ShowWindow(hProgress,SW_SHOW);
+      /*
+      SetForegroundWindow(hProgress);
+  SHFullScreen(hProgress,
+               SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+  SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+      */
   UpdateWindow(hProgress);
 
   fSize = (double)GetFileSize(hFile,NULL);
