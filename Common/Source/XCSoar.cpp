@@ -665,7 +665,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.cbClsExtra                 = 0;
   wc.cbWndExtra                 = dc.cbWndExtra ;
   wc.hInstance                  = hInstance;
-  wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOAR));
+  wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
   wc.hCursor                    = 0;
   wc.hbrBackground              = (HBRUSH) GetStockObject(WHITE_BRUSH);
   wc.lpszMenuName               = 0;
@@ -731,9 +731,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                                 NULL, NULL, hInstance, NULL);
 
   SendMessage(hWndMainWindow, WM_SETICON,
-	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOAR);
+	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOARSWIFT);
   SendMessage(hWndMainWindow, WM_SETICON,
-	      (WPARAM)ICON_SMALL, (LPARAM)IDI_XCSOARS);
+	      (WPARAM)ICON_SMALL, (LPARAM)IDI_XCSOARSWIFT);
 
   if (!hWndMainWindow)
     {

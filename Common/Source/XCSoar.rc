@@ -100,7 +100,6 @@ STYLE WS_CHILD
 EXSTYLE 0x80000000L
 FONT 10, "System"
 BEGIN
-    ICON            IDI_XCSOAR,IDC_STATIC,7,7,20,20
     LTEXT           "XCSoar",IDC_STATIC,32,7,101,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2003,2004,2005",IDC_STATIC,32,25,101,8
     LTEXT           "Version 4.2 RC",IDC_STATIC,32,16,101,8,SS_NOPREFIX
@@ -110,17 +109,19 @@ BEGIN
     LTEXT           "",IDC_OSVERSION,50,55,68,8
     LTEXT           "",IDC_EXTRA,10,67,117,8
     GROUPBOX        "System Information",IDC_STATIC,6,36,126,43
+    ICON            IDI_XCSOARSWIFT,IDC_STATIC,10,10,20,20
 END
 
-IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 125, 43
-STYLE DS_SETFOREGROUND | DS_CENTER | WS_VISIBLE | WS_CAPTION
-CAPTION "Please Wait"
+IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 132, 143
+STYLE DS_CENTER | WS_POPUP | WS_VISIBLE
 FONT 10, "System"
 BEGIN
-    EDITTEXT        IDC_MESSAGE,7,7,112,14,ES_CENTER | ES_MULTILINE |
+    EDITTEXT        IDC_MESSAGE,5,108,122,14,ES_CENTER | ES_MULTILINE |
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PROGRESS,7,22,112,14,ES_CENTER | ES_MULTILINE |
+    EDITTEXT        IDC_PROGRESS,5,125,122,14,ES_CENTER | ES_MULTILINE |
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,0,2,
+                    132,103
 END
 
 IDD_SELECT DIALOG DISCARDABLE  0, 0, 140, 123
@@ -546,10 +547,7 @@ BEGIN
 
     IDD_PROGRESS, DIALOG
     BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 119
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 36
+        BOTTOMMARGIN, 139
     END
 
     IDD_BUGSBALLAST, DIALOG
@@ -1105,6 +1103,15 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_XCSOARSWIFT         ICON    DISCARDABLE     "Bitmaps\\xcsoarswift.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Bitmap
 //
 
@@ -1112,6 +1119,7 @@ IDB_AIRSPACE0           BITMAP  DISCARDABLE     "Bitmaps\\airspace0.bmp"
 IDB_AIRSPACE1           BITMAP  DISCARDABLE     "Bitmaps\\airspace1.bmp"
 IDB_AIRSPACE2           BITMAP  DISCARDABLE     "Bitmaps\\airspace2.bmp"
 IDB_SPLASH              BITMAP  DISCARDABLE     "Bitmaps\\xcsoar-splash.bmp"
+IDB_SWIFT               BITMAP  DISCARDABLE     "Bitmaps\\xcsoarswiftsplash.bmp"
 #endif    // English (Australia) resources
 /////////////////////////////////////////////////////////////////////////////
 
