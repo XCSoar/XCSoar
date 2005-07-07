@@ -1919,8 +1919,17 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
   if (foundActiveWayPoint != -1) {
     ActiveWayPoint = foundActiveWayPoint;
   } else {
-    // if not found, set active waypoint to closest
-    ActiveWayPoint = 0;
+    // if not found, keep on field or set active waypoint to closest
+    aa = CalculateWaypointArrivalAltitude(Basic, Calculated, Task[ActiveWayPoint].Index);
+    if (aa <= 0){
+
+      PostMessage(hWndMainWindow, WM_USER, 0, 0);
+
+      ActiveWayPoint = 0;
+    } else {
+      SortedLandableIndex[MAXTASKPOINTS-1] = Task[ActiveWayPoint].Index;
+      ActiveWayPoint = MAXTASKPOINTS-1;
+    }
   }
 
   // set new waypoints in task

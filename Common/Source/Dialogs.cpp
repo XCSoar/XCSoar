@@ -940,6 +940,7 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
               TaskSize ++;
             }
         }
+
       ReadNewTask(hDlg);
 
       settaskUpdateControls(hDlg, TaskSize);
@@ -950,7 +951,7 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       switch (LOWORD(wParam))
         {
         case  IDOK:
-          SHSipPreference(hDlg,SIP_FORCEDOWN);
+          SHSipPreference(hDlg, SIP_FORCEDOWN);
 
           ReadNewTask(hDlg);
 

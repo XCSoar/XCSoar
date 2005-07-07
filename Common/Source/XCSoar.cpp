@@ -1020,6 +1020,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
   switch (message)
     {
+
+    case WM_USER:
+
+      if (EnableSoundModes){
+        PlayResource(TEXT("IDR_REMOVE"));
+      }
+      ShowStatusMessage(TEXT("Closest Airfield\r\nChanged!"), 5000);
+
+    break;
+
     case WM_ERASEBKGND:
       return TRUE; // JMW trying to reduce screen flicker
 
