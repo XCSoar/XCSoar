@@ -487,7 +487,6 @@ LRESULT CALLBACK AirspaceColourSelectDlg(HWND hDlg, UINT message, WPARAM wParam,
           rc = pdis->rcItem;
           InflateRect(&rc, -1, -1); // Don't cover border rectangle
           
-          //SelectObject(pdis->hDC, GetStockObject(HOLLOW_BRUSH));
           DrawEdge(pdis->hDC, &rc, EDGE_RAISED, BF_RECT);
 
         }
@@ -514,7 +513,6 @@ LRESULT CALLBACK AirspaceColourSelectDlg(HWND hDlg, UINT message, WPARAM wParam,
           rc = pdis->rcItem;
           InflateRect(&rc, -1, -1); // Don't cover border rectangle
           
-          //SelectObject(pdis->hDC, GetStockObject(HOLLOW_BRUSH));
           DrawEdge(pdis->hDC, &rc, EDGE_RAISED, BF_RECT);
 
         }
@@ -548,7 +546,6 @@ void buildSwatchControlArray(HWND hDlg, HWND hWndContainer,
   int x, y, px, py;
   
   RECT rc;
-  //HWND hStatic = NULL;
   HWND hButton = NULL;
   
  
@@ -560,13 +557,7 @@ void buildSwatchControlArray(HWND hDlg, HWND hWndContainer,
   
   // Now Create the controls  
   for (i=0, x=0, y=0; i<numSwatches; ++i) {
-    
-/*
-    hStatic = CreateWindow
-      (TEXT("static"), NULL, WS_VISIBLE|WS_CHILD|SS_BITMAP|SS_NOTIFY,
-      0, 0, 0, 0, hDlg, (HMENU)(IDBase+i), hInst, NULL);
-*/
-    
+        
     // We're using ownerdraw buttons
     hButton = CreateWindow(_T("button"), _T(""),
                   WS_CHILD | WS_VISIBLE | BS_OWNERDRAW,
@@ -578,12 +569,7 @@ void buildSwatchControlArray(HWND hDlg, HWND hWndContainer,
     py = rc.top  + swatchOuterBorder + y*(swatchHeight+swatchSpacing);
     
     SetWindowPos(hButton, HWND_TOP, px, py, swatchWidth, swatchHeight, 0);
-    
-    // Set the control's swatch picture
-    //SendMessage(hStatic, STM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM) hBMPs[i]);
-    
-    //ShowWindow(hStatic, SW_SHOW);
-    
+        
     if ((++x) >= cols) {
       y++; x=0;
     }
