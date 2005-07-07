@@ -386,7 +386,7 @@ BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   ExtractParameter(String,ctemp,7);
 
-  if (GPS_INFO->Speed>0) {
+  if (GPS_INFO->Speed>1.0) {
     // JMW don't update bearing unless we're moving
     GPS_INFO->TrackBearing = StrToDouble(ctemp, NULL);
   }
