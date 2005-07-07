@@ -23,6 +23,7 @@ LRESULT CALLBACK TaskSettings		(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 LRESULT CALLBACK Register 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK SetFiles				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AirspaceAlt		(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK MapColour			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ColourSelect		(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AirspacePress	(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);

@@ -768,6 +768,31 @@ FONT 8, "System"
 BEGIN
 END
 
+IDD_AIRSPACECOLOUR DIALOG DISCARDABLE  0, 0, 145, 131
+STYLE WS_CHILD
+FONT 8, "System"
+BEGIN
+    CONTROL         "Use black airspace outline",IDC_BLACKOUTLINE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,11,111,96,13
+    CONTROL         "List2",IDC_LISTAIRSPACE,"SysListView32",LVS_SMALLICON |
+                    LVS_SINGLESEL | LVS_NOLABELWRAP | LVS_NOCOLUMNHEADER |
+                    LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,11,20,114,87,
+                    WS_EX_CLIENTEDGE
+    CTEXT           "Click on item to change style",IDC_STATIC,11,10,114,8
+END
+
+IDD_AIRSPACECOLOURSEL DIALOG DISCARDABLE  0, 0, 139, 132
+STYLE DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Colour and pattern select"
+FONT 8, "System"
+BEGIN
+    GROUPBOX        "Colour",IDC_COLOUR_BOX,14,17,110,59
+    GROUPBOX        "Pattern",IDC_PATTERN_BOX,14,77,110,29
+    PUSHBUTTON      "OK",IDC_OK,13,111,50,14
+    PUSHBUTTON      "Cancel",IDC_CANCEL,74,111,50,14
+    CTEXT           "Class of airspace",IDC_AIRSPACE_CLASS,14,6,110,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -799,6 +824,11 @@ BEGIN
         RIGHTMARGIN, 91
         TOPMARGIN, 7
         BOTTOMMARGIN, 99
+    END
+
+    IDD_AIRSPACECOLOURSEL, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 130
     END
 END
 #endif    // APSTUDIO_INVOKED

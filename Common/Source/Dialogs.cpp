@@ -41,6 +41,9 @@
 
 #include <tchar.h>
 
+
+#define USE_ARH_COLOUR_SELECTOR 1
+
 extern TCHAR szRegistryKey[];
 extern TCHAR szRegistrySpeedUnitsValue[];
 extern TCHAR szRegistryDistanceUnitsValue[];
@@ -2389,7 +2392,11 @@ LRESULT CALLBACK Settings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       hTabPage[0] = CreateDialog(hInst, (LPCTSTR)IDD_ABOUTBOX, hDlg, (DLGPROC)About);
       hTabPage[1] = CreateDialog(hInst, (LPCTSTR)IDD_REGISTER, hDlg, (DLGPROC)Register);
       hTabPage[2] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACEALT, hDlg, (DLGPROC)AirspaceAlt);
+#if (USE_ARH_COLOUR_SELECTOR == 1)
+      hTabPage[3] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACECOLOUR, hDlg, (DLGPROC)AirspaceColourDlg);
+#else
       hTabPage[3] = CreateDialog(hInst, (LPCTSTR)IDD_COLOUR, hDlg, (DLGPROC)MapColour);
+#endif
       hTabPage[4] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACEWARN, hDlg, (DLGPROC)SetAirspaceWarnings);
       hTabPage[5] = CreateDialog(hInst, (LPCTSTR)IDD_COMM, hDlg, (DLGPROC)COMMOptions);
       hTabPage[6] = CreateDialog(hInst, (LPCTSTR)IDD_DISPLAY, hDlg, (DLGPROC)DisplayOptions);
