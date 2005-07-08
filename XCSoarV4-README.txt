@@ -20,6 +20,8 @@ Summary of new features since v4.0
 - Added netto vario calculations
 - Added smart zooming (zooms back out when waypoint changes if in autozoom)
 - Added installer and launcher
+- Bring up menu with double click on map window
+- Can fly in simulator mode by dragging on screen
 - Improved colour selector now displays currently chosen colours
 
 Bug fixes and code improvements
