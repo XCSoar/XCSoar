@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.5 2005/07/08 08:59:43 jwharington Exp $
+**   $Id: windstore.cpp,v 1.6 2005/07/08 10:02:39 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -74,9 +74,11 @@ void WindStore::recalculateWind() {
     if ((fabs(CurWind.x-_lastWind.x)>1.0) || 
 	(fabs(CurWind.y-_lastWind.y)>1.0) || updated) {
       _lastWind=CurWind;
+
+      updated = false;
+      _lastAltitude=nmeaInfo->Altitude;
       
-      slot_Altitude();
-      
+      newWind(CurWind);
     }
   } // otherwise, don't change anything
 
