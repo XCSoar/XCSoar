@@ -40,6 +40,7 @@ extern RECT MapRect;
 
 static void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void CruiseLD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void AverageThermal(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -204,6 +205,27 @@ BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
+void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
+  double x0, y0;
+
+  if ((Basic->Speed>0)||(Calculated->WindSpeed>0)) {
+    x0 = fastsine(Basic->TrackBearing)*Basic->Speed;
+    y0 = fastcosine(Basic->TrackBearing)*Basic->Speed;
+    x0 += fastsine(Calculated->WindBearing)*Calculated->WindSpeed;
+    y0 += fastcosine(Calculated->WindBearing)*Calculated->WindSpeed;
+    
+    Calculated->Heading = atan2(x0,y0)*RAD_TO_DEG;
+    if (Calculated->Heading<0) {
+      Calculated->Heading += 360;
+    }
+  } else {
+    Calculated->Heading = Basic->TrackBearing;
+  }
+
+}
+
+
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
@@ -213,18 +235,20 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     windanalyser = new WindAnalyser(Basic, Calculated);
 
     // seed initial wind store with current conditions
+    /*
     Vector v;
     v.x = Calculated->WindSpeed*cos(Calculated->WindBearing*3.1415926/180.0);
     v.y = Calculated->WindSpeed*sin(Calculated->WindBearing*3.1415926/180.0);
     
-    windanalyser->slot_newEstimate(v, 3);
-
+    windanalyser->slot_newEstimate(v, 6);
+    */
   }
 
   macready = MACREADY/LIFTMODIFY;
 
   DistanceToNext(Basic, Calculated);
   AltitudeRequired(Basic, Calculated, macready);
+  Heading(Basic, Calculated);
 
   TerrainHeight(Basic, Calculated);
 
@@ -636,6 +660,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         }
     }
 
+  // generate new wind vector if altitude changes or a new
+  // estimate is available
   windanalyser->slot_Altitude();
 
 }
@@ -677,8 +703,8 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
               */
 
 	      Vector v;
-	      v.x = ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
-	      v.y = ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);
+	      v.x = -ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
+	      v.y = -ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);
 	      
               windanalyser->slot_newEstimate(v, 6);
               // 6 is the code for external estimates
@@ -1037,7 +1063,12 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     GetTerrainHeight(Basic->Lattitude , Basic->Longditude);
   UnlockTerrainDataCalculations();
 
-  if(Alt<0) Alt = 0;
+  if(Alt<0) {
+    Alt = 0; 
+    Calculated->TerrainValid = false; 
+  } else {
+    Calculated->TerrainValid = true;
+  }
 
   Calculated->TerrainAlt = Alt;
   Calculated->AltitudeAGL = Basic->Altitude - Calculated->TerrainAlt;

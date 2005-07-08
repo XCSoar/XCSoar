@@ -376,7 +376,7 @@ RECT MapRectSmall;
 static bool MapFullScreen= false;
 bool RequestFullScreen = false;
 
-bool MapDirty = true;
+bool MapDirty = false;
 bool RequestMapDirty = false;
 bool RequestFastRefresh = false;
 
@@ -1001,7 +1001,7 @@ static void RenderMapWindow(  RECT rc)
       DrawWindAtAircraft(hdcDrawWindowBg, Orig, rc);
     }    
     
-    if (FinalGlideTerrain) {
+    if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
       DrawGlideThroughTerrain(hdcDrawWindowBg, rc);
     }
     
@@ -1093,8 +1093,6 @@ DWORD DrawThread (LPVOID lpvoid)
   SetTopologyBounds(MapRect);
   
   //////
-
-  RequestFastRefresh = true;
 		
   while (!CLOSETHREAD) 
   {
@@ -1141,9 +1139,7 @@ DWORD DrawThread (LPVOID lpvoid)
     FrameCount ++;
     
     // we do caching after screen update, to minimise perceived delay
-    if (EnableTopology) {
-      SetTopologyBounds(MapRect);
-    } 
+    SetTopologyBounds(MapRect);
     
   }
   MessageBeep(0);
@@ -1162,8 +1158,13 @@ void DrawAircraft(HDC hdc, POINT Orig)
   
   for(i=0;i<7;i++)
   {
+
+// JMW now corrects displayed aircraft heading for wind
+
     dX = (double)Aircraft[i].x ;dY = (double)Aircraft[i].y;
-    rotate(&dX, &dY, DisplayAircraftAngle );
+    rotate(&dX, &dY, DisplayAircraftAngle+
+           (DerivedDrawInfo.Heading-DrawInfo.TrackBearing) 
+           );
     
     Aircraft[i].x =iround(dX+Orig.x)+1;  Aircraft[i].y = iround(dY+Orig.y)+1;
   }
@@ -2193,7 +2194,7 @@ void DrawFinalGlide(HDC hDC,RECT rc)
 
 COLORRAMP snail_colors[] = {
   {-5,          0xff, 0x50, 0x50},
-  {0,           0x6f, 0x6f, 0x6f},
+  {0,           0x8f, 0x8f, 0x8f},
   {5,           0x50, 0xff, 0x50}
 };
 

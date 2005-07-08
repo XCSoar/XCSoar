@@ -100,4 +100,8 @@ extern void RequestToggleFullScreen();
 #define DEG_TO_RAD .0174532925199432958
 #define RAD_TO_DEG 57.29577951		
 
+#ifdef DEBUG
+void DebugStore(char *Str);
+#endif
+
 #endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)

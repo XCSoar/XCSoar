@@ -48,7 +48,7 @@ short RasterTerrain::LookupTerrainCacheFile(long SeekPos) {
   } else {
     ReadFile(hTerrain,&NewAlt,sizeof(__int16),&dwBytesRead,NULL);    
     Alt = NewAlt;
-    if(Alt<0) Alt = 0;
+    if(Alt<0) Alt = -1;
   }
   LeaveCriticalSection(&CritSec_TerrainFile);
 
@@ -134,7 +134,7 @@ short RasterTerrain::GetTerrainHeight(double Lattitude,
   long lx, ly;
         
   if(hTerrain == NULL)
-    return 0;
+    return -1;
 
   if ((Lattitude > TerrainInfo.Top )||
       (Lattitude < TerrainInfo.Bottom )||

@@ -108,11 +108,30 @@ void SetTopologyBounds(RECT rcin) {
       }
       UnlockTerrainDataGraphics();
 
+    } else {
+      // just trigger that they need to be updated next time
+      for (int z=0; z<MAXTOPOLOGY; z++) {
+        if (TopoStore[z]) {
+          TopoStore[z]->triggerUpdateCache;
+        }
+      }
     }
     topo_marks->updateCache(bounds);
   } else {
     if (topo_marks->triggerUpdateCache) 
       topo_marks->updateCache(bounds);    
+  }
+  
+  if (EnableTopology) {
+    // check if any needs to have cache updates because wasnt 
+    // visible previously when bounds moved
+      for (int z=0; z<MAXTOPOLOGY; z++) {
+        if (TopoStore[z]) {
+          if (TopoStore[z]->triggerUpdateCache) {
+            TopoStore[z]->updateCache(bounds);
+          }
+        }
+      }
   }
 }
 

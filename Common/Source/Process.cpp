@@ -67,6 +67,20 @@ void	SpeedProcessing(int UpDown)
 	return;
 }
 
+
+extern TCHAR szRegistryAccelerometerZero[];
+
+
+void	AccelerometerProcessing(int UpDown)
+{
+  DWORD Temp;
+  if (UpDown==0) {
+    AccelerometerZero*= GPS_INFO.Gload;
+    Temp = (int)AccelerometerZero;
+    SetToRegistry(szRegistryAccelerometerZero,Temp);
+  }
+}
+
 void	WindDirectionProcessing(int UpDown)
 {
 	
@@ -266,6 +280,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 1:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.AltitudeAGL  ;
+    Valid = CALCULATED_INFO.TerrainValid;
     break;
   case 2:
     Value = LIFTMODIFY*CALCULATED_INFO.Average30s;
@@ -338,6 +353,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 20:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.TerrainAlt ;
+    Valid = CALCULATED_INFO.TerrainValid;
     break;
   case 21:
     Value = LIFTMODIFY*CALCULATED_INFO.AverageThermal;
@@ -374,20 +390,12 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
     break;
   case 32:
-    if (GPS_INFO.AirspeedAvailable) {
-      Value = SPEEDMODIFY*GPS_INFO.Airspeed;
-      Valid = true;
-    } else {
-      Valid = false;
-    }
+    Valid = GPS_INFO.AirspeedAvailable;
+    Value = SPEEDMODIFY*GPS_INFO.Airspeed;
     break;
   case 33:
-    if (GPS_INFO.BaroAltitudeAvailable) {
-      Value = ALTITUDEMODIFY*GPS_INFO.BaroAltitude;
-      Valid = true;
-    } else {
-      Valid = false;
-    }
+    Valid = GPS_INFO.BaroAltitudeAvailable;
+    Value = ALTITUDEMODIFY*GPS_INFO.BaroAltitude;
     break;
   case 34:
     Value = SPEEDMODIFY*CALCULATED_INFO.VMcReady; 
@@ -396,12 +404,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = CALCULATED_INFO.PercentCircling;
     break;
   case 37:
-    if (GPS_INFO.AccelerationAvailable) {
-      Value = GPS_INFO.Gload;
-      Valid = true;
-    } else {
-      Valid = false;
-    }
+    Valid = GPS_INFO.AccelerationAvailable;
+    Value = GPS_INFO.Gload;
     break;
   default:
     break;
@@ -426,9 +430,13 @@ void InfoBoxFormatter::Render(HWND hWnd) {
 
 void FormatterLowWarning::Render(HWND hWnd) {
   
-  _stprintf(Text,
-            Format, 
-            Value );
+  if (Valid) {
+    _stprintf(Text,
+              Format, 
+              Value );
+  } else {
+    _stprintf(Text,TEXT("---"));
+  }
   if (Value<minimum) {
     SetWindowLong(hWnd, GWL_USERDATA, 2); // red text
   } else {

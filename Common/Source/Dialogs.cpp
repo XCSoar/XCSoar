@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.30 2005/07/07 21:37:15 samgi Exp $
+//   $Id: Dialogs.cpp,v 1.31 2005/07/08 08:59:42 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -3067,3 +3067,36 @@ void StartupScreen() {
 
 }
 
+
+/////////////////////////////////////////////////
+
+static HWND hProgress = NULL;
+
+void CloseProgressDialog() {
+  if (hProgress) {
+    DestroyWindow(hProgress);
+    FullScreen();
+    hProgress = NULL;
+  }
+}
+
+HWND CreateProgressDialog(TCHAR* text) {
+  if (hProgress) {
+  } else {
+    hProgress=
+      CreateDialog(hInst,
+                   (LPCTSTR)IDD_PROGRESS,
+                   hWndMainWindow,
+                   (DLGPROC)Progress);
+    ShowWindow(hProgress,SW_SHOW);
+    
+    SetForegroundWindow(hProgress);
+    SHFullScreen(hProgress,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+    SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,
+                 SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);    
+    
+  }
+  SetDlgItemText(hProgress,IDC_MESSAGE, text);
+  UpdateWindow(hProgress);
+  return hProgress;
+}

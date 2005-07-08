@@ -23,6 +23,7 @@ Summary of new features since v4.0
 - Bring up menu with double click on map window
 - Can fly in simulator mode by dragging on screen
 - Improved colour selector now displays currently chosen colours
+- Added calculation of glider heading from bearing and wind
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -52,6 +53,7 @@ Bug fixes and code improvements
 - Waypoint labels have white background so not obscured by terrain
 - Labels of topological features now supported
 - Fast loading of airspace at startup using binary file
+- Wind calculation more reliable
 
 
 ============================================================================

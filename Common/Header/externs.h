@@ -63,6 +63,7 @@ extern BOOL VARIOCONNECT;
 
 extern double MACREADY;
 extern bool   AutoMacReady;
+extern double AccelerometerZero;
 
 extern double SPEEDMODIFY;
 extern double	LIFTMODIFY;

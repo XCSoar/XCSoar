@@ -11,12 +11,13 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.5 2005/06/30 17:31:23 robin-birch Exp $
+**   $Id: windanalyser.cpp,v 1.6 2005/07/08 08:59:43 jwharington Exp $
 **
 ***********************************************************************/
 
 #include "Calculations.h"
 #include "windanalyser.h"
+#include "XCSoar.h"
 
 /*
   About Windanalysation
@@ -232,21 +233,34 @@ void WindAnalyser::_calcWind() {
   //the speed of the wind is half the difference between the minimum and the maximumspeeds.
   //let the world know about our measurement!
   
-  windstore.slot_measurement(a, quality);
+  slot_newEstimate(a, quality);
 }
 
 void WindAnalyser::slot_newEstimate(Vector a, int quality)
 {
 
+#ifdef DEBUG
+  char Temp[100];
+#endif
+
   if (quality==6) {
     quality = 3; // provided externally
+#ifdef DEBUG
+    sprintf(Temp,"%f %f %d # thermal drift\n",a.x,a.y, quality);
+#endif
   } else {
     quality= min(quality,5);  //5 is maximum quality, make sure we honour that.
-
     if (circleCount<2) quality--;
     if (circleCount<1) quality--;
-    if (quality<1) return;   //measurment quality too low
+#ifdef DEBUG
+    sprintf(Temp,"%f %f %d # circling\n",a.x,a.y, quality);
+#endif
   }
+#ifdef DEBUG
+  DebugStore(Temp);
+#endif
+
+  if (quality<1) return;   //measurment quality too low
 
   windstore.slot_measurement(a, quality);
 }

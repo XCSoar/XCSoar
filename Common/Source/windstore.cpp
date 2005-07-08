@@ -11,11 +11,12 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.4 2005/06/28 13:41:13 jwharington Exp $
+**   $Id: windstore.cpp,v 1.5 2005/07/08 08:59:43 jwharington Exp $
 **
 ***********************************************************************/
 
 #include "windstore.h"
+#include "XCSoar.h"
                    
 WindStore::WindStore(NMEA_INFO *thenmeaInfo, DERIVED_INFO *thederivedInfo) {
   //create the lists
@@ -74,8 +75,7 @@ void WindStore::recalculateWind() {
 	(fabs(CurWind.y-_lastWind.y)>1.0) || updated) {
       _lastWind=CurWind;
       
-      // was emit
-      newWind(_lastWind);
+      slot_Altitude();
       
     }
   } // otherwise, don't change anything
@@ -92,4 +92,11 @@ void WindStore::newWind(Vector &wind) {
     bearing += 360;
   }
   derivedInfo->WindBearing = bearing;
+
+#ifdef DEBUG
+  char Temp[100];
+  sprintf(Temp,"%f %f 0 # estimate\n",wind.x,wind.y);
+  DebugStore(Temp);
+#endif
+
 }

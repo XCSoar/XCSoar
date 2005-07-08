@@ -41,4 +41,7 @@ void ShowStatusMessage(TCHAR* text, int delay_ms=2000, int iFontHeightRatio=12);
 
 void StartupScreen();
 
+HWND CreateProgressDialog(TCHAR *text);
+void CloseProgressDialog();
+
 #endif

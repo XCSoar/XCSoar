@@ -130,6 +130,7 @@ TCHAR szRegistrySoundAudioVario[]=  TEXT("AudioVario");
 TCHAR szRegistrySoundTask[]=  TEXT("SoundTask");
 TCHAR szRegistrySoundModes[]=  TEXT("SoundModes");
 TCHAR szRegistryNettoSpeed[]= TEXT("NettoSpeed");
+TCHAR szRegistryAccelerometerZero[]= TEXT("AccelerometerZero");
 
 TCHAR szRegistryDeviceA[]= TEXT("DeviceA");
 TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
@@ -333,6 +334,15 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryNettoSpeed,&Temp);
   NettoSpeed = Temp;
 
+  Temp = 100;
+  GetFromRegistry(szRegistryAccelerometerZero,&Temp);
+  AccelerometerZero = Temp;
+  if (AccelerometerZero==0.0) {
+    AccelerometerZero= 100.0;
+    Temp = 100;
+    SetToRegistry(szRegistryAccelerometerZero,Temp);
+  }
+  
 }
 
 

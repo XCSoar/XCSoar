@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.41 2005/07/08 07:35:27 scottp Exp $
+  $Id: XCSoar.cpp,v 1.42 2005/07/08 08:59:43 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -50,7 +50,7 @@ HINSTANCE                       hInst;                                  // The c
 HWND                                    hWndCB;                                 // The command bar handle
 HWND                                    hWndMainWindow; // Main Windows
 HWND                                    hWndMapWindow;  // MapWindow
-HWND                                    hProgress = NULL;       // Progress Dialog Box
+HWND                                    hGPSStatus = NULL;       // Progress Dialog Box
 HWND          hWndMenuButton = NULL;
 
 HWND                                    hWndCDIWindow = NULL; //CDI Window
@@ -197,6 +197,7 @@ BOOL AIRFIELDFILECHANGED = FALSE;
 BOOL WAYPOINTFILECHANGED = FALSE;
 BOOL TERRAINFILECHANGED = FALSE;
 BOOL TOPOLOGYFILECHANGED = FALSE;
+bool MenuActive = false;
 
 //Task Information
 Task_t Task = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
@@ -348,7 +349,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Time of day"), TEXT("Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 14},
 
   // 37
-  {TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), NoProcessing, 3, 32},
+  {TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 3, 32},
 
 };
 
@@ -377,7 +378,7 @@ void                                                    SwitchToMapWindow(void);
 HWND                                                    CreateRpCommandBar(HWND hwnd);
 
 #ifdef DEBUG
-void                                            DebugStore(TCHAR *Str);
+void                                            DebugStore(char *Str);
 #endif
 
 
@@ -404,15 +405,15 @@ extern bool RequestFastRefresh;
 
 void FullScreen() {
 
-  SetForegroundWindow(hWndMainWindow);
-  SHFullScreen(hWndMainWindow,
-               SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
-  	       GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+  if (!MenuActive) {
+    SetForegroundWindow(hWndMainWindow);
+    SHFullScreen(hWndMainWindow,
+                 SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+    SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
+                 GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+  }
   RequestFastRefresh = true;
   InfoBoxesDirty = true; 
-
-  //  RequestMapDirty = true;
 }
 
 
@@ -543,6 +544,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
       return FALSE;
     }
 
+  CreateProgressDialog(TEXT("Initialising"));
+
   hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
   pi = (double)atan(1) * 4;
@@ -570,6 +573,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
 
   ReadRegistrySettings();
+
+#ifdef DEBUG
+  DebugStore("# Start\r\n");
+#endif
 
   // display start up screen
   //  StartupScreen();
@@ -610,10 +617,16 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   devInit();
 
-  CreateDrawingThread();
   CreateCalculationThread();
 
+  CreateDrawingThread();
+
+  CloseProgressDialog();
+
   // just about done....
+
+  MapDirty = true;
+
   FullScreen();
   SwitchToMapWindow();
 
@@ -1287,8 +1300,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       CloseTerrain();
       CloseTopology();
 
-      if(hProgress)
-        DestroyWindow(hProgress);
+      if(hGPSStatus)
+        DestroyWindow(hGPSStatus);
 
       if(Port1Available)
         Port1Close(hPort1);
@@ -1454,13 +1467,14 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
             case IDD_SETTINGS:
+
               COMPORTCHANGED = FALSE;
               AIRSPACEFILECHANGED = FALSE;
               WAYPOINTFILECHANGED = FALSE;
               TERRAINFILECHANGED = FALSE;
               TOPOLOGYFILECHANGED = FALSE;
 
-
+              MenuActive = true;
               SuspendDrawingThread();
 
               ShowWindow(hWndCB,SW_SHOW);
@@ -1473,6 +1487,8 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   
               LockFlightData();
               LockNavBox();
+
+              MenuActive = false;
 
               if(COMPORTCHANGED)
                 {
@@ -1529,6 +1545,11 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 {
 		  ReadAirfieldFile();
                 }
+              
+              if (AIRFIELDFILECHANGED 
+                  || AIRSPACEFILECHANGED
+                  || WAYPOINTFILECHANGED)
+                CloseProgressDialog();
 
               UnlockFlightData();
               UnlockNavBox();
@@ -1853,19 +1874,20 @@ void ProcessTimer(void)
         
         if(LOCKWAIT == TRUE)
           {
-            DestroyWindow(hProgress);
+            DestroyWindow(hGPSStatus);
             SwitchToMapWindow();
-            hProgress = NULL;
+            FullScreen();
+            hGPSStatus = NULL;
             LOCKWAIT = FALSE;
           }
         if(!CONNECTWAIT)
           {
-            hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
+            hGPSStatus=CreateDialog(hInst,(LPCTSTR)IDD_GPSSTATUS,hWndMainWindow,(DLGPROC)Progress);
             LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
-            SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
+            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
             CONNECTWAIT = TRUE;
             MessageBeep(MB_ICONEXCLAMATION);
-            SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+            SetWindowPos(hGPSStatus,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
             FullScreen();
             
           } else {
@@ -1887,9 +1909,10 @@ void ProcessTimer(void)
         
         if(CONNECTWAIT)
           {
-            DestroyWindow(hProgress);
+            DestroyWindow(hGPSStatus);
             SwitchToMapWindow();
-            hProgress = NULL;
+            FullScreen();
+            hGPSStatus = NULL;
             CONNECTWAIT = FALSE;
           }
       }
@@ -1898,20 +1921,21 @@ void ProcessTimer(void)
       {
         if((navwarning == TRUE) && (LOCKWAIT == FALSE))
           {
-            hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
+            hGPSStatus=CreateDialog(hInst,(LPCTSTR)IDD_GPSSTATUS,hWndMainWindow,(DLGPROC)Progress);
             LoadString(hInst, IDS_LOCKWAIT, szLoadText, MAX_LOADSTRING);
-            SetDlgItemText(hProgress,IDC_MESSAGE,szLoadText);
+            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
             LOCKWAIT = TRUE;
             MessageBeep(MB_ICONEXCLAMATION);
-            SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+            SetWindowPos(hGPSStatus,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
             FullScreen();
             
           }
         else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
           {
-            DestroyWindow(hProgress);
+            DestroyWindow(hGPSStatus);
             SwitchToMapWindow();
-            hProgress = NULL;
+            FullScreen();
+            hGPSStatus = NULL;
             LOCKWAIT = FALSE;
           }
       }
@@ -2036,14 +2060,14 @@ void PopUpSelect(int Index)
 #ifdef DEBUG
 #include <stdio.h>
 
-void DebugStore(TCHAR *Str)
+void DebugStore(char *Str)
 {
   FILE *stream;
   static TCHAR szFileName[] = TEXT("\\TEMP.TXT");
 
-  stream = _wfopen(szFileName,TEXT("ab"));
+  stream = _wfopen(szFileName,TEXT("a+t"));
 
-  fwrite(Str,wcslen(Str),1,stream);
+  fwrite(Str,strlen(Str),1,stream);
 
   fclose(stream);
 }
