@@ -30,7 +30,10 @@
 		#define VK_APP4     0xC4
 		#define VK_APP5     0xC5
 		#define VK_APP6     0xC6
-
+	    // Note - note used on most builds...
+		// #define VK_APP7     0xC7
+		// #define VK_APP8     0xC8
+ 
 		
 		#ifndef NOCLEARTYPE
 		#define NOCLEARTYPE
