@@ -41,11 +41,10 @@ static TCHAR TempString[210];
 void ReadWayPointFile(HANDLE hFile)
 {
   int WayPointCount = 0;
-  WAYPOINT Temp;
   WAYPOINT *List;
   TCHAR szTemp[100];
 
-  int Tick = 0; int Tock=0;
+  int nTrigger=10;
   DWORD fSize, fPos=0;
 
   HWND hProgress;
@@ -57,71 +56,51 @@ void ReadWayPointFile(HANDLE hFile)
     return;
   }
 
-  Temp.Details = NULL;
+  WayPointList = (WAYPOINT *)LocalAlloc(LPTR, 50 * sizeof(WAYPOINT));
+  WayPointCount = 0;
+  
+  if(WayPointList != NULL) {
 
-  while(ReadString(hFile,200,TempString))
-    {
-      Tock++; Tock %= 300;
-      if(Tock == 0)
-	{
-	  fPos = SetFilePointer(hFile,0,NULL,FILE_CURRENT);
-	  fPos *= 100;	fPos /= 2*fSize;
-			
-	  wsprintf(szTemp,TEXT("%d%%"),int(fPos));	
-	  SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+    List = WayPointList;
+    SetFilePointer(hFile,0,NULL,FILE_BEGIN);
+    fPos = 0;
+    nTrigger = (fSize/10);
+  
+    while(ReadString(hFile,200,TempString)){
 
-	  Tick ++; Tick %=100;
-	}
+        fPos += _tcslen(TempString);
+        
+        if (nTrigger < fPos){
+          nTrigger += (fSize/10);
+          wsprintf(szTemp,TEXT("%d%%"), int((fPos*100)/fSize));
+          SetDlgItemText(hProgress, IDC_PROGRESS, szTemp);
+        }
 
-      if(_tcsstr(TempString,TEXT("**")) != TempString) // Look For Comment
-	{
-	  if(ParseWayPointString(TempString,&Temp))
-	    {
-	      WayPointCount ++;
-	    }
-	} 
-    }
+        if(_tcsstr(TempString,TEXT("**")) != TempString) // Look For Comment
+          {
+            List->Details = NULL; 
+            if (ParseWayPointString(TempString,List)) {
 
-  if(WayPointCount)
-    {
-      WayPointList = (WAYPOINT *)LocalAlloc(LPTR, WayPointCount * sizeof(WAYPOINT));
+              List ++;
+              WayPointCount++;
 
-      if(WayPointList != NULL)
-	{
-	  List = WayPointList;
-	  SetFilePointer(hFile,0,NULL,FILE_BEGIN);
-	
-	  while(ReadString(hFile,200,TempString))
-	    {
-	      Tock++; Tock %= 300;
-	      if(Tock == 0)
-		{
-		  fPos = SetFilePointer(hFile,0,NULL,FILE_CURRENT);
-		  fPos *= 100;	fPos /= 2*fSize;fPos += 50;
-		  wsprintf(szTemp,TEXT("%d%%"),int(fPos));	
-		  SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
-		  Tick ++; Tick %=100;
-		}
-	      if(_tcsstr(TempString,TEXT("**")) != TempString) // Look For Comment
-		{
-                  List->Details = NULL; 
-		  if (ParseWayPointString(TempString,List)) {
-		    List ++;
-		  }
-		}
-	    }
-	  NumberOfWayPoints = WayPointCount;
-	}
-      else
-	{
-	  MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
-	}
+              if ((WayPointCount % 50) == 0){ 
+                if (LocalReAlloc(WayPointList, ((WayPointCount/50)+1) * 50 * sizeof(WAYPOINT), LPTR) == NULL){
+                  // todo error handling
+                }
+              }
+
+            }
+          }
+      }
+      NumberOfWayPoints = WayPointCount;
     }
   else
     {
-      //		MessageBox(hWndMainWindow,TEXT("No Waypoints Found"),TEXT("Warning"),MB_OK|MB_ICONINFORMATION);
+      MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
     }
-  wsprintf(szTemp,TEXT("100%%"));	
+
+  wsprintf(szTemp,TEXT("100%%"));       
   SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
 }
@@ -131,10 +110,10 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
 {
   TCHAR ctemp[80];
   TCHAR *Zoom;
-	
+
   ExtractParameter(TempString,ctemp,0);
   Temp->Number = _tcstol(ctemp, &Zoom, 10);
-	
+        
 
   ExtractParameter(TempString,ctemp,1); //Lattitude
   Temp->Lattitude = CalculateAngle(ctemp);
@@ -206,21 +185,21 @@ void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber)
   while( (CurrentFieldNumber < DesiredFieldNumber) && (index < StringLength) )
     {
       if ( Source[ index ] == ',' )
-	{
-	  CurrentFieldNumber++;
-	}
+        {
+          CurrentFieldNumber++;
+        }
       index++;
     }
 
   if ( CurrentFieldNumber == DesiredFieldNumber )
     {
       while( (index < StringLength)    &&
-	     (Source[ index ] != ',') &&
-	     (Source[ index ] != 0x00) )
-	{
-	  Destination[dest_index] = Source[ index ];
-	  index++; dest_index++;
-	}
+             (Source[ index ] != ',') &&
+             (Source[ index ] != 0x00) )
+        {
+          Destination[dest_index] = Source[ index ];
+          index++; dest_index++;
+        }
       Destination[dest_index] = '\0';
     }
   // strip trailing spaces
@@ -254,7 +233,7 @@ static double CalculateAngle(TCHAR *temp)
   }
 
   Degrees += (Mins/60);
-	
+        
   if((*Stop == 'N') || (*Stop == 'E'))
     {
     }
@@ -266,7 +245,7 @@ static double CalculateAngle(TCHAR *temp)
     {
       return -9999;
     }
-	
+        
   return Degrees;
 }
 
@@ -292,9 +271,9 @@ static double ReadAltitude(TCHAR *temp)
   TCHAR *Stop;
   double Altitude;
 
-	
+        
   Altitude = (double)_tcstol(temp, &Stop, 10);
-	
+        
   if(*Stop == 'F')
     {
       Altitude = Altitude / TOFEET;
@@ -302,20 +281,20 @@ static double ReadAltitude(TCHAR *temp)
   return Altitude;
 }
 
-extern TCHAR szRegistryWayPointFile[];	
+extern TCHAR szRegistryWayPointFile[];  
 void ReadWayPoints(void)
 {
-  TCHAR	szFile[MAX_PATH] = TEXT("\0");
-	
+  TCHAR szFile[MAX_PATH] = TEXT("\0");
+        
   HANDLE hFile;
 
   LockFlightData();
 
   GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
-	
+        
   hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-		
-	
+                
+        
   if(hFile != INVALID_HANDLE_VALUE )
     {
       ReadWayPointFile(hFile);
@@ -342,11 +321,11 @@ void SetHome(void)
   for(i=0;i<NumberOfWayPoints;i++)
     {
       if( (WayPointList[i].Flags & HOME) == HOME)
-	  {
-	    if (HomeWaypoint== -1) {
-	      HomeWaypoint = i;
-	    }
-	  }
+          {
+            if (HomeWaypoint== -1) {
+              HomeWaypoint = i;
+            }
+          }
     }
 
 //
@@ -373,29 +352,29 @@ int FindNearestWayPoint(double X, double Y, double MaxRange)
 {
   unsigned int i;
   int NearestIndex = 0;
-  double	NearestDistance, Dist;
+  double        NearestDistance, Dist;
 
   if(NumberOfWayPoints ==0)
     {
       return -1;
     }
-		
+                
   NearestDistance = Distance(Y,X,WayPointList[0].Lattitude, WayPointList[0].Longditude);
   for(i=1;i<NumberOfWayPoints;i++)
     {
       if (((WayPointList[i].Zoom >= MapScale*10)||
-	   (WayPointList[i].Zoom == 0))
-	   &&(MapScale <= 10)) {
+           (WayPointList[i].Zoom == 0))
+           &&(MapScale <= 10)) {
 
-	    // only look for visible waypoints
-	    // feature added by Samuel Gisiger
-	    Dist = Distance(Y,X,WayPointList[i].Lattitude, WayPointList[i].Longditude);
-	    if(Dist < NearestDistance)
-	      {
-		NearestIndex = i;
-		NearestDistance = Dist;
-	      }
-	  }
+            // only look for visible waypoints
+            // feature added by Samuel Gisiger
+            Dist = Distance(Y,X,WayPointList[i].Lattitude, WayPointList[i].Longditude);
+            if(Dist < NearestDistance)
+              {
+                NearestIndex = i;
+                NearestDistance = Dist;
+              }
+          }
     }
   if(NearestDistance < MaxRange)
     return NearestIndex;

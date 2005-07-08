@@ -35,7 +35,7 @@
 
 
 #define  BINFILEMAGICNUMBER     0x4ab199f0
-#define  BINFILEVERION          0x00000100
+#define  BINFILEVERION          0x00000101
 #define  BINFILEHEADER          "XCSoar Airspace File V1.0"
 
 typedef struct{
@@ -407,6 +407,8 @@ static int Waiting(TCHAR *Text, AIRSPACE_AREA *Temp)
       else if(StartsWith(&Text[3],TEXT("D"))) Temp->Type = CLASSD;
       else if(StartsWith(&Text[3],TEXT("GP"))) Temp->Type = NOGLIDER;
       else if(StartsWith(&Text[3],TEXT("W"))) Temp->Type = WAVE;
+      else if(StartsWith(&Text[3],TEXT("E"))) Temp->Type = CLASSE;
+      else if(StartsWith(&Text[3],TEXT("F"))) Temp->Type = CLASSF;
       else Temp->Type = OTHER;
 
       Rotation = +1;
@@ -570,6 +572,8 @@ static int Command_V(TCHAR *Text, AIRSPACE_AREA *Temp)
       else if(StartsWith(&Text[3],TEXT("D"))) Temp->Type = CLASSD;
       else if(StartsWith(&Text[3],TEXT("GP"))) Temp->Type = NOGLIDER;
       else if(StartsWith(&Text[3],TEXT("W"))) Temp->Type = WAVE;
+      else if(StartsWith(&Text[3],TEXT("E"))) Temp->Type = CLASSE;
+      else if(StartsWith(&Text[3],TEXT("F"))) Temp->Type = CLASSF;
       else Temp->Type = OTHER;
 
       Rotation = 1;
@@ -634,6 +638,8 @@ static int Command_DP(TCHAR *Text, AIRSPACE_AREA *Temp)
       else if(StartsWith(&Text[3],TEXT("D"))) Temp->Type = CLASSD;
       else if(StartsWith(&Text[3],TEXT("GP"))) Temp->Type = NOGLIDER;
       else if(StartsWith(&Text[3],TEXT("W"))) Temp->Type = WAVE;
+      else if(StartsWith(&Text[3],TEXT("E"))) Temp->Type = CLASSE;
+      else if(StartsWith(&Text[3],TEXT("F"))) Temp->Type = CLASSF;
       else Temp->Type = OTHER;
 
       Rotation = 1;

@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.31 2005/07/08 08:59:42 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.32 2005/07/08 21:17:31 samgi Exp $
 
 */
 #include "stdafx.h"
@@ -2873,8 +2873,8 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
 {
 
   switch (message) {
-  case WM_TIMER :         // Fall through
-  case WM_LBUTTONDOWN :
+  case WM_TIMER :              // Fall through
+  case WM_LBUTTONUP :
     RequestFastRefresh = true; // trigger screen refresh
     DestroyWindow(hwnd);
     break;

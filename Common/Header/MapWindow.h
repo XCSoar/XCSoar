@@ -62,9 +62,12 @@ typedef struct _WAYPOINT_INFO
 #define CLASSC				6
 #define CLASSD				7
 #define	NOGLIDER			8
-#define CTR					9
-#define WAVE				10
-#define AATASK					11
+#define CTR					  9
+#define WAVE				  10
+#define AATASK				11
+#define CLASSE				12
+#define CLASSF				13
+#define AIRSPACECLASSCOUNT  14
 
 typedef struct _AIRSPACE_ALT
 {
