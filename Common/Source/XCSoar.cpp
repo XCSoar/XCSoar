@@ -552,6 +552,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SHSetAppKeyWndAssoc(VK_APP2, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP3, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP4, hWndMainWindow);
+  // Typical Record Button
+  //	Why you can't always get this to work
+  //	http://forums.devbuzz.com/m_1185/mpage_1/key_/tm.htm
+  //	To do with the fact it is a global hotkey, but you can with code above
+  //	Also APPA is record key on some systems
   SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
 
@@ -1107,17 +1112,22 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
 
     case WM_KEYUP:
+
+		// TODO: Allow buttons to be configurable
+		// TODO: Allow other events to trigger these (eg: external buttons)
+		// TODO: Document button mapping (not really required if configurable)
+		// TODO: Many of these keys have common interface (eg: App1 almost always Calendar) - document
       switch (wParam)
         {
-        case VK_APP1:
+        case VK_APP1:	// Toggle full screen view
 
           if (!Debounce(wParam)) break;
 
-	  RequestToggleFullScreen();
+		  RequestToggleFullScreen();
 
           break;
 
-        case VK_APP2:
+        case VK_APP2:	// Toggle snail trail
 
           if (!Debounce(wParam)) break;
 
@@ -1154,7 +1164,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
           break;
 
-        case VK_APP3:
+        case VK_APP3:	// Vario sound on/off
 
           if (!Debounce(wParam)) break;
 
@@ -1191,7 +1201,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
           break;
 
-        case VK_APP4:
+        case VK_APP4:	// Add a marker to current location
 
           if (!Debounce(wParam)) break;
 
@@ -1209,6 +1219,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
           break;
+
+        case VK_APP6:	// Show Menu
+			ShowMenu();
+			break;
 
         case VK_UP :  // SCROLL UP
           DoInfoKey(1);
