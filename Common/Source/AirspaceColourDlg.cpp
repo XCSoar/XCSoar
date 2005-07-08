@@ -55,14 +55,16 @@ static const int swatchOuterBorder = 14;
 static const int colourSwatchIDBase  = 50;
 static const int patternSwatchIDBase = colourSwatchIDBase + NUMAIRSPACECOLORS;
 
-static const int numAirspaceTypes = 12;
+static const int numAirspaceTypes = AIRSPACECLASSCOUNT;
 
 
-static airspaceLabel labels[numAirspaceTypes] = {
+static airspaceLabel labels[AIRSPACECLASSCOUNT] = {
   { CLASSA,     _T("Class A")},
   { CLASSB,     _T("Class B")},
   { CLASSC,     _T("Class C")},
   { CLASSD,     _T("Class D")},
+  { CLASSE,     _T("Class E")},
+  { CLASSF,     _T("Class F")},
   { PROHIBITED, _T("Prohibited areas")},
   { DANGER,     _T("Danger areas")},
   { RESTRICT,   _T("Restricted areas")},

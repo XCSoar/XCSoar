@@ -244,7 +244,7 @@ void ReadRegistrySettings(void)
 
   GetRegistryString(szRegistryRegKey, strRegKey, 65);
 
-  for(i=0;i<12;i++)
+  for(i=0;i<AIRSPACECLASSCOUNT;i++)
     {
       if(GetFromRegistry(szRegistryBrush[i],&Temp)==ERROR_SUCCESS)
 	iAirspaceBrush[i] =			(int)Temp;
@@ -1459,6 +1459,8 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
     case CLASSB:			_tcscpy(szTitleBuffer,TEXT("Class B")); break;
     case CLASSC:			_tcscpy(szTitleBuffer,TEXT("Class C")); break;
     case CLASSD:			_tcscpy(szTitleBuffer,TEXT("Class D")); break;
+    case CLASSE:			_tcscpy(szTitleBuffer,TEXT("Class E")); break;
+    case CLASSF:			_tcscpy(szTitleBuffer,TEXT("Class F")); break;
     case NOGLIDER:		_tcscpy(szTitleBuffer,TEXT("No Glider")); break;
     case CTR:					_tcscpy(szTitleBuffer,TEXT("CTR")); break;
     case WAVE:				_tcscpy(szTitleBuffer,TEXT("Wave")); break;
@@ -1489,9 +1491,9 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 // read string from file
 // support national codepage
 // hFile:  file handle
-// Max:    max chars to read from file
+// Max:    max chars to fit in Buffer
 // String: pointer to string buffer
-// return: True is at least one byte was read from file
+// return: True if at least one byte was read from file
 //         False Max > 256 or EOF or read error
 BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
 {

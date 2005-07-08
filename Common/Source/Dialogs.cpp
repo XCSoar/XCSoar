@@ -2873,8 +2873,8 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
 {
 
   switch (message) {
-  case WM_TIMER :         // Fall through
-  case WM_LBUTTONDOWN :
+  case WM_TIMER :              // Fall through
+  case WM_LBUTTONUP :
     RequestFastRefresh = true; // trigger screen refresh
     DestroyWindow(hwnd);
     break;

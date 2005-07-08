@@ -115,8 +115,8 @@ static HBITMAP hLandable, hReachable, hTurnPoint, hSmall, hCruise, hClimb,
 hFinalGlide, hAutoMcReady, hTerrainWarning;
 
 // 12 is number of airspace types
-int	iAirspaceBrush[12];
-int	iAirspaceColour[12];
+int	iAirspaceBrush[AIRSPACECLASSCOUNT];
+int	iAirspaceColour[AIRSPACECLASSCOUNT];
 BOOL bAirspaceBlackOutline = FALSE;
 
 static HBRUSH   hBackgroundBrush;
@@ -2332,8 +2332,10 @@ void DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_
 
   FormatWarningString(Type, Name , Base, Top, szMessageBuffer, szTitleBuffer );
 
-  MessageBox(hWndMapWindow,szMessageBuffer ,szTitleBuffer,MB_OK|MB_ICONWARNING);
-  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+  ShowStatusMessage(szMessageBuffer, 7000, 25);
+
+//  MessageBox(hWndMapWindow,szMessageBuffer ,szTitleBuffer,MB_OK|MB_ICONWARNING);
+//  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
 }
 
 
