@@ -50,17 +50,7 @@ void ReadWayPointFile(HANDLE hFile)
 
   HWND hProgress;
 
-  hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
-  SetDlgItemText(hProgress,IDC_MESSAGE,TEXT("Loading Waypoints File..."));
-  ShowWindow(hProgress,SW_SHOW);
-  /*
-  SetForegroundWindow(hProgress);
-  SHFullScreen(hProgress,
-               SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-  SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-  */
-  UpdateWindow(hProgress);
-
+  hProgress = CreateProgressDialog(TEXT("Loading Waypoints File..."));
 
   fSize = GetFileSize(hFile,NULL);
   if (!fSize) {
@@ -121,19 +111,19 @@ void ReadWayPointFile(HANDLE hFile)
 		}
 	    }
 	  NumberOfWayPoints = WayPointCount;
-	  DestroyWindow(hProgress);
 	}
       else
 	{
-	  DestroyWindow(hProgress);
 	  MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
 	}
     }
   else
     {
-      DestroyWindow(hProgress);
       //		MessageBox(hWndMainWindow,TEXT("No Waypoints Found"),TEXT("Warning"),MB_OK|MB_ICONINFORMATION);
     }
+  wsprintf(szTemp,TEXT("100%%"));
+  SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+
 }
 
 

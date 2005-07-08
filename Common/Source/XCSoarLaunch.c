@@ -50,13 +50,13 @@ static HWND hToolTip;
 
 static TCHAR backbmpfile[BUF_SIZE];
 static int stretch_backbmp = 0;
-static int IconSizeX = 64;
-static int IconSizeY = 32;
-static int HMargin = 2;
-static int VMargin = 2;
+static int IconSizeX = 112;
+static int IconSizeY = 30;
+static int HMargin = 0;
+static int VMargin = 0;
 static int WinLeftMargin = 0;
 static int WinTopMargin = 0;
-static int WinRightMargin = 13;
+static int WinRightMargin = 0;
 static int WinBottomMargin = 5;
 static int ShowIconSec = 1;
 
@@ -121,7 +121,7 @@ static void CreateFileList() {
 
   if (FileList[0].bitmap==NULL) {
     FileList[0].bitmap = LoadBitmap(hInst,
-                                    MAKEINTRESOURCE(IDB_XCSOAR));
+                                    MAKEINTRESOURCE(IDB_XCSOARLSWIFT));
   }
   FileList[0].Index = 0;
 
@@ -136,7 +136,7 @@ static void CreateFileList() {
 
   if (FileList[1].bitmap==NULL) {
     FileList[1].bitmap = LoadBitmap(hInst,
-                                    MAKEINTRESOURCE(IDB_XCSOARSIMULATOR));
+                                    MAKEINTRESOURCE(IDB_XCSOARLSWIFTSIM));
   }
 
 

@@ -142,6 +142,7 @@ void SaveAirspaceBinary(FILETIME LastWrite) {
 bool LoadAirspaceBinary(FILETIME LastWrite) {
   HANDLE hFile;// = INVALID_HANDLE_VALUE;
   DWORD dwNumBytesRead;
+  TCHAR szTemp[100];
 
   hFile = CreateFile(TEXT("xcsoar-airspace.bin"),
 		     GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,
@@ -175,17 +176,10 @@ bool LoadAirspaceBinary(FILETIME LastWrite) {
 
       HWND hProgress;
 
-      hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
-      SetDlgItemText(hProgress,IDC_MESSAGE,TEXT("Loading Airspace File..."));
-      ShowWindow(hProgress,SW_SHOW);
-      /*
-      SetForegroundWindow(hProgress);
-      SHFullScreen(hProgress,
-                   SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-      SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-      */
-      UpdateWindow(hProgress);
+      hProgress = CreateProgressDialog(TEXT("Loading Airspace File..."));
 
+      wsprintf(szTemp,TEXT("0%%"));
+      SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
       ReadFile(hFile,&NumberOfAirspaceAreas,
 	       sizeof(unsigned int),&dwNumBytesRead,NULL);
@@ -228,7 +222,9 @@ bool LoadAirspaceBinary(FILETIME LastWrite) {
       }
 
       CloseHandle(hFile);
-      DestroyWindow(hProgress);
+
+      wsprintf(szTemp,TEXT("100%%"));
+      SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
       return true;
     }
@@ -255,17 +251,10 @@ void ReadAirspace(HANDLE hFile)
 
   HWND hProgress;
 
-  hProgress=CreateDialog(hInst,(LPCTSTR)IDD_PROGRESS,hWndMainWindow,(DLGPROC)Progress);
-  SetDlgItemText(hProgress,IDC_MESSAGE,TEXT("Loading Airspace File..."));
+  hProgress=CreateProgressDialog(TEXT("Loading Airspace File..."));
 
-  ShowWindow(hProgress,SW_SHOW);
-      /*
-      SetForegroundWindow(hProgress);
-  SHFullScreen(hProgress,
-               SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-  SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
-      */
-  UpdateWindow(hProgress);
+  wsprintf(szTemp,TEXT("0%%"));
+  SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
   fSize = (double)GetFileSize(hFile,NULL);
 
@@ -308,7 +297,6 @@ void ReadAirspace(HANDLE hFile)
       if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
       if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
       if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
-      DestroyWindow(hProgress);
       return;
     }
 
@@ -346,7 +334,9 @@ void ReadAirspace(HANDLE hFile)
 	default : Mode = WAITING;
 	}
     }
-  DestroyWindow(hProgress);
+  wsprintf(szTemp,TEXT("100%%"));
+  SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+
 }
 
 

@@ -35,6 +35,8 @@ typedef struct _DERIVED_INFO
   double WindBearing;
   double Bearing;
   double TerrainAlt;
+  bool TerrainValid;
+  double Heading;
   double AltitudeAGL;
   int    Circling;
   int    FinalGlide;
