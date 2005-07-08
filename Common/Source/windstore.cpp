@@ -75,8 +75,10 @@ void WindStore::recalculateWind() {
 	(fabs(CurWind.y-_lastWind.y)>1.0) || updated) {
       _lastWind=CurWind;
 
-      slot_Altitude();
+      updated = false;
+      _lastAltitude=nmeaInfo->Altitude;
 
+      newWind(CurWind);
     }
   } // otherwise, don't change anything
 
