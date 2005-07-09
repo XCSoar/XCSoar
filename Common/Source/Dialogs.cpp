@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.32 2005/07/08 21:17:31 samgi Exp $
+//   $Id: Dialogs.cpp,v 1.33 2005/07/09 20:35:15 samgi Exp $
 
 */
 #include "stdafx.h"
@@ -3080,6 +3080,12 @@ void CloseProgressDialog() {
   }
 }
 
+BOOL StepProgressDialog(void) {
+  SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT, 0, 0);
+  UpdateWindow(hProgress);
+  return(TRUE);
+}
+
 HWND CreateProgressDialog(TCHAR* text) {
   if (hProgress) {
   } else {
@@ -3096,7 +3102,9 @@ HWND CreateProgressDialog(TCHAR* text) {
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);    
     
   }
+  
   SetDlgItemText(hProgress,IDC_MESSAGE, text);
+  SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_SETPOS, 0, 0);
   UpdateWindow(hProgress);
   return hProgress;
 }

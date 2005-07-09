@@ -178,8 +178,8 @@ bool LoadAirspaceBinary(FILETIME LastWrite) {
       
       hProgress = CreateProgressDialog(TEXT("Loading Airspace File..."));
 
-      wsprintf(szTemp,TEXT("0%%"));	
-      SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+      //wsprintf(szTemp,TEXT("0%%"));	
+      //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
       ReadFile(hFile,&NumberOfAirspaceAreas,
 	       sizeof(unsigned int),&dwNumBytesRead,NULL);
@@ -223,8 +223,8 @@ bool LoadAirspaceBinary(FILETIME LastWrite) {
 
       CloseHandle(hFile);
 
-      wsprintf(szTemp,TEXT("100%%"));	
-      SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+      //wsprintf(szTemp,TEXT("100%%"));	
+      //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
       return true;
     }
@@ -253,8 +253,8 @@ void ReadAirspace(HANDLE hFile)
 
   hProgress=CreateProgressDialog(TEXT("Loading Airspace File..."));
 
-  wsprintf(szTemp,TEXT("0%%"));	
-  SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+  //wsprintf(szTemp,TEXT("0%%"));	
+  //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
   fSize = (double)GetFileSize(hFile,NULL);
 
@@ -268,8 +268,11 @@ void ReadAirspace(HANDLE hFile)
 	  //dwPos = LOWORD(dwPos);
 	  fPos = dwPos * 100;
 	  fPos = fPos / (2*fSize);
-	  wsprintf(szTemp,TEXT("%d%%"),int(fPos));	
-	  SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+	  //wsprintf(szTemp,TEXT("%d%%"),int(fPos));	
+	  //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+
+    StepProgressDialog();
+
 	  Tick ++; Tick %=100;
 	}
 
@@ -316,8 +319,11 @@ void ReadAirspace(HANDLE hFile)
 	  fPos *= 100;
 	  fPos = fPos / (2*fSize);
 	  fPos += 50;
-	  wsprintf(szTemp,TEXT("%d%%"),int(fPos));	
-	  SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+	  //wsprintf(szTemp,TEXT("%d%%"),int(fPos));	
+	  //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+
+    StepProgressDialog();
+
 	  Tick ++; Tick %=100;
 	}
 
@@ -334,8 +340,8 @@ void ReadAirspace(HANDLE hFile)
 	default : Mode = WAITING;
 	}
     }
-  wsprintf(szTemp,TEXT("100%%"));	
-  SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
+  //wsprintf(szTemp,TEXT("100%%"));	
+  //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
 }
 

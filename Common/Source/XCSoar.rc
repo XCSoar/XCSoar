@@ -116,13 +116,13 @@ IDD_PROGRESS DIALOG DISCARDABLE  0, 0, 132, 153
 STYLE DS_CENTER | WS_CHILD | WS_VISIBLE
 FONT 10, "System"
 BEGIN
-    EDITTEXT        IDC_MESSAGE,5,118,122,14,ES_CENTER | ES_MULTILINE | 
+    EDITTEXT        IDC_MESSAGE,4,125,124,14,ES_CENTER | ES_MULTILINE | 
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PROGRESS,5,135,122,14,ES_CENTER | ES_MULTILINE | 
-                    ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "Version 4.2",IDC_STATIC,92,107,38,8
+    LTEXT           "Version 4.2",IDC_STATIC,88,115,42,8
     CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,2,2,
                     129,113
+    CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,
+                    4,141,124,8
 END
 
 IDD_SELECT DIALOG DISCARDABLE  0, 0, 140, 123
@@ -870,7 +870,7 @@ IDB_TERRAINWARNING      BITMAP  DISCARDABLE     "bitmaps\\terrainw.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Menubar
+// Menu
 //
 
 IDM_MENU MENU DISCARDABLE 

@@ -567,7 +567,7 @@ void OpenTopology() {
       while(ReadString(hFile,200,TempString))
         {
           
-          if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
+          if(_tcslen(TempString) > 0 && _tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
             {
 
               BYTE red, green, blue;
@@ -609,7 +609,7 @@ void OpenTopology() {
               // Shape field for text display
               PExtractParameter(TempString, ctemp, 6);
     
-			  blue = (BYTE)_tcstol(ctemp, &Stop, 10);
+			        blue = (BYTE)_tcstol(ctemp, &Stop, 10);
   
               if (ShapeField==0) {
                 Topology* newtopo;

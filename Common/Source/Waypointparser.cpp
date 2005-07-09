@@ -72,8 +72,7 @@ void ReadWayPointFile(HANDLE hFile)
         
         if (nTrigger < fPos){
           nTrigger += (fSize/10);
-          wsprintf(szTemp,TEXT("%d%%"), int((fPos*100)/fSize));
-          SetDlgItemText(hProgress, IDC_PROGRESS, szTemp);
+          StepProgressDialog();
         }
 
         if(_tcsstr(TempString,TEXT("**")) != TempString) // Look For Comment
