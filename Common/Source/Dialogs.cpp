@@ -3080,6 +3080,12 @@ void CloseProgressDialog() {
   }
 }
 
+BOOL StepProgressDialog(void) {
+  SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT, 0, 0);
+  UpdateWindow(hProgress);
+  return(TRUE);
+}
+
 HWND CreateProgressDialog(TCHAR* text) {
   if (hProgress) {
   } else {
@@ -3096,7 +3102,9 @@ HWND CreateProgressDialog(TCHAR* text) {
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
 
   }
+
   SetDlgItemText(hProgress,IDC_MESSAGE, text);
+  SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_SETPOS, 0, 0);
   UpdateWindow(hProgress);
   return hProgress;
 }

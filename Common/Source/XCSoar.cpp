@@ -855,12 +855,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                                            hWndMainWindow,NULL,hInstance,NULL);
         }
 
+
       hWndTitleWindow[i] = CreateWindow(TEXT("STATIC"),
                                         // Data_Options[InfoType[i]& 0xff].Title
                                         TEXT("\0")
                                         ,
                                         WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
-                                        i*ControlWidth, rc.top, ControlWidth,TitleHeight,
+                                        i*ControlWidth, rc.top, ControlWidth, TitleHeight,
                                         hWndMainWindow,NULL,hInstance,NULL);
 
       hWndInfoWindow[i+(NUMINFOWINDOWS/2)] = CreateWindow(TEXT("STATIC"),TEXT("\0"),

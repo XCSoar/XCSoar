@@ -1497,11 +1497,13 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 //         False Max > 256 or EOF or read error
 BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
 {
-  int i;
+  int i,j;
   char c;
   char sTmp[257];
   DWORD dwNumBytesRead;
   DWORD dwTotalNumBytesRead=0;
+  char  FileBuffer[512];
+  DWORD dwFilePos;
 
   String[0] = '\0';
   sTmp[0] = 0;
@@ -1509,29 +1511,31 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   if (Max >= sizeof(sTmp))
     return(FALSE);
 
-  for(i=0;i<Max;i++){
 
-    if (ReadFile(hFile,&c,1,&dwNumBytesRead,NULL)){
+  dwFilePos = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
-      dwTotalNumBytesRead += dwNumBytesRead;
+  ReadFile(hFile, FileBuffer, sizeof(FileBuffer), &dwNumBytesRead, NULL);
 
-      if(dwNumBytesRead != 0){
+  i = 0;
+  j = 0;
+  while(i<Max && j<(int)dwNumBytesRead){
 
-        if((c == '\n')){
-          sTmp[i] = '\0';
-          break;
-        }
+    c = FileBuffer[j];
+    j++;
+    dwTotalNumBytesRead++;
 
-        sTmp[i] = c;
-        continue;
-
-      }
-
-      sTmp[i] = 0;
+    if((c == '\n')){
       break;
-
     }
+
+    sTmp[i] = c;
+    i++;
+    continue;
   }
+
+  sTmp[i] = 0;
+
+  SetFilePointer(hFile, dwFilePos+j, NULL, FILE_BEGIN);
 
   sTmp[Max-1] = '\0';
 
