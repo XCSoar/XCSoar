@@ -1,4 +1,4 @@
-//   $Id: AirfieldDetails.cpp,v 1.8 2005/07/10 11:30:42 jwharington Exp $
+//   $Id: AirfieldDetails.cpp,v 1.9 2005/07/10 19:16:47 samgi Exp $
 
 
 #include "AirfieldDetails.h"
@@ -23,10 +23,10 @@ void OpenAirfieldDetails() {
 
   GetRegistryString(szRegistryAirfieldFile, szFile, MAX_PATH);
 
-  hAirfieldDetails = NULL;
+  hAirfieldDetails = INVALID_HANDLE_VALUE;
   hAirfieldDetails = CreateFile(szFile,GENERIC_READ,0,NULL,
 				OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  if( hAirfieldDetails == NULL)
+  if( hAirfieldDetails == INVALID_HANDLE_VALUE)
     {
       return;
     }
@@ -35,7 +35,7 @@ void OpenAirfieldDetails() {
 
 
 void CloseAirfieldDetails() {
-  if (hAirfieldDetails) {
+  if (hAirfieldDetails != INVALID_HANDLE_VALUE) {
     CloseHandle(hAirfieldDetails);
     hAirfieldDetails = NULL;
   }
@@ -79,6 +79,9 @@ void ParseAirfieldDetails() {
   BOOL inDetails = FALSE;
   int i;
   int k=0;
+
+  if (hAirfieldDetails == INVALID_HANDLE_VALUE)
+    return;
 
   while(ReadString(hAirfieldDetails,200,TempString))
     {
