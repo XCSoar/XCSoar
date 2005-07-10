@@ -2077,7 +2077,7 @@ void DrawThermalBand(HDC hDC,RECT rc)
     ThermalProfile[1+i].y = 5+iround(TBSCALEY*(1.0-(mth/maxh)*(i)/NUMTHERMALBUCKETS))+rc.top;
   }
   ThermalProfile[0].x = 7;
-  ThermalProfile[0].y = ThermalProfile[1].y+rc.top;
+  ThermalProfile[0].y = ThermalProfile[1].y;
   ThermalProfile[NUMTHERMALBUCKETS+1].x = 7;
   ThermalProfile[NUMTHERMALBUCKETS+1].y = ThermalProfile[NUMTHERMALBUCKETS].y;
 
