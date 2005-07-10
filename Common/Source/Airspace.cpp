@@ -142,7 +142,7 @@ void SaveAirspaceBinary(FILETIME LastWrite) {
 bool LoadAirspaceBinary(FILETIME LastWrite) {
   HANDLE hFile;// = INVALID_HANDLE_VALUE; 
   DWORD dwNumBytesRead;
-  TCHAR szTemp[100];
+//  TCHAR szTemp[100]; // unused var RB
 
   hFile = CreateFile(TEXT("xcsoar-airspace.bin"),
 		     GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,
@@ -254,7 +254,7 @@ void ReadAirspace(HANDLE hFile)
   int Tick = 0; int Tock=0;
   double fSize, fPos;
   DWORD dwPos;
-  TCHAR szTemp[100];
+//  TCHAR szTemp[100]; // Unused variable RB
 
   LineCount = 0;
 
