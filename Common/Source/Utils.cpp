@@ -56,7 +56,9 @@ TCHAR *szRegistryColour[] =     { TEXT("Colour0"),
 				  TEXT("Colour9"),
 				  TEXT("Colour10"),
 				  TEXT("Colour11"),
-				  TEXT("Colour12")
+				  TEXT("Colour12"),
+				  TEXT("Colour13"),
+				  TEXT("Colour14")
 };
 
 
@@ -72,7 +74,9 @@ TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
 				  TEXT("Brush9"),
 				  TEXT("Brush10"),
 				  TEXT("Brush11"),
-				  TEXT("Brush12")
+				  TEXT("Brush12"),
+				  TEXT("Brush13"),
+				  TEXT("Brush14")
 };
 
 
