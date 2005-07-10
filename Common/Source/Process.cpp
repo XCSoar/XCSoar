@@ -260,7 +260,7 @@ int DetectStartTime() {
 void FormatterTime::AssignValue(int i) {
   switch (i) {
   case 27:
-    SecsToDisplayTime(CALCULATED_INFO.AATTimeToGo);
+    SecsToDisplayTime((int)CALCULATED_INFO.AATTimeToGo);
     break;
   case 36:
     SecsToDisplayTime(DetectStartTime());
