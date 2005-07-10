@@ -41,7 +41,7 @@ static TCHAR TempString[210];
 void ReadWayPointFile(HANDLE hFile)
 {
   int WayPointCount = 0;
-  WAYPOINT *List;
+  WAYPOINT *List, *p;
   TCHAR szTemp[100];
 
   int nTrigger=10;
@@ -70,7 +70,7 @@ void ReadWayPointFile(HANDLE hFile)
 
         fPos += _tcslen(TempString);
         
-        if (nTrigger < fPos){
+        if (nTrigger < (int)fPos){
           nTrigger += (fSize/10);
           StepProgressDialog();
         }
@@ -84,8 +84,13 @@ void ReadWayPointFile(HANDLE hFile)
               WayPointCount++;
 
               if ((WayPointCount % 50) == 0){ 
-                if (LocalReAlloc(WayPointList, ((WayPointCount/50)+1) * 50 * sizeof(WAYPOINT), LPTR) == NULL){
-                  // todo error handling
+                if ((p = (WAYPOINT *)LocalReAlloc(WayPointList, ((WayPointCount/50)+1) * 50 * sizeof(WAYPOINT), LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
+                  MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
+                  return;
+                }
+                if (p != WayPointList){
+                  WayPointList = p;
+                  List = WayPointList + WayPointCount;
                 }
               }
 
@@ -93,7 +98,17 @@ void ReadWayPointFile(HANDLE hFile)
           }
       }
       NumberOfWayPoints = WayPointCount;
+
+      // compact allocated memory
+      p = (WAYPOINT *)LocalAlloc(LPTR, WayPointCount * sizeof(WAYPOINT));
+      memcpy(p, WayPointList, sizeof(WAYPOINT)*WayPointCount);
+      free(WayPointList);
+      WayPointList = (WAYPOINT *)LocalAlloc(LPTR, WayPointCount * sizeof(WAYPOINT));
+      memcpy(WayPointList, p, sizeof(WAYPOINT)*WayPointCount);
+      free(p);
+
     }
+     
   else
     {
       MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
