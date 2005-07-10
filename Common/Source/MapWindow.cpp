@@ -997,7 +997,7 @@ static void RenderMapWindow(  RECT rc)
       DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
 
     // draw wind vector at aircraft
-    if (!DerivedDrawInfo.Circling) {
+    if (!DerivedDrawInfo.Circling && (!EnablePan)) {
       DrawWindAtAircraft(hdcDrawWindowBg, Orig, rc);
     }    
     
@@ -1036,7 +1036,7 @@ static void RenderMapWindow(  RECT rc)
   
   DrawCompass(hdcDrawWindow, rc);
   
-  if (DerivedDrawInfo.Circling) {
+  if (DerivedDrawInfo.Circling || EnablePan) {
     DrawWind(hdcDrawWindow, Orig, rc); // JMW shouldn't need Orig here
   }
 

@@ -202,24 +202,36 @@ bool LoadAirspaceBinary(FILETIME LastWrite) {
 	LocalAlloc(LMEM_FIXED, NumberOfAirspaceCircles * sizeof(AIRSPACE_CIRCLE));
 
       unsigned int i;
+
+      StepProgressDialog();
+
       for (i=0; i<NumberOfAirspaceAreas; i++) {
 
 	ReadFile(hFile,&AirspaceArea[i],
 		 sizeof(AIRSPACE_AREA),
 		 &dwNumBytesRead,NULL);
       }
+      StepProgressDialog();
+      StepProgressDialog();
+      StepProgressDialog();
 
       for (i=0; i<NumberOfAirspacePoints; i++) {
 	ReadFile(hFile,&AirspacePoint[i],
 		 sizeof(AIRSPACE_POINT),
 		 &dwNumBytesRead,NULL);
       }
+      StepProgressDialog();
+      StepProgressDialog();
+      StepProgressDialog();
 
       for (i=0; i<NumberOfAirspaceCircles; i++) {
 	ReadFile(hFile,&AirspaceCircle[i],
 		 sizeof(AIRSPACE_CIRCLE),
 		 &dwNumBytesRead,NULL);
       }
+      StepProgressDialog();
+      StepProgressDialog();
+      StepProgressDialog();
 
       CloseHandle(hFile);
 
@@ -271,7 +283,7 @@ void ReadAirspace(HANDLE hFile)
 	  //wsprintf(szTemp,TEXT("%d%%"),int(fPos));	
 	  //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
-    StepProgressDialog();
+          StepProgressDialog();
 
 	  Tick ++; Tick %=100;
 	}
@@ -322,7 +334,7 @@ void ReadAirspace(HANDLE hFile)
 	  //wsprintf(szTemp,TEXT("%d%%"),int(fPos));	
 	  //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
-    StepProgressDialog();
+          StepProgressDialog();
 
 	  Tick ++; Tick %=100;
 	}

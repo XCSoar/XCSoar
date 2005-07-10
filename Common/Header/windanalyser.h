@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.h,v 1.2 2005/06/23 12:19:54 jwharington Exp $
+**   $Id: windanalyser.h,v 1.3 2005/07/10 11:30:42 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -61,6 +61,7 @@ public:
      */
     void slot_newConstellation();
 
+    void calcThermalDrift();
 private: // Private attributes
     int circleCount; //we are counting the number of circles, the first onces are probably not very round
     bool circleLeft; //true=left, false=right
@@ -76,6 +77,12 @@ private: // Private attributes
     int minSatCnt;
     bool curModeOK;
     bool first;
+    int startcircle;
+
+    Vector climbstartpos;
+    Vector climbendpos;
+    double climbstarttime;
+    double climbendtime;
 
 private: // Private memberfunctions
     void _calcWind();

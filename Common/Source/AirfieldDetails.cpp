@@ -1,4 +1,4 @@
-//   $Id: AirfieldDetails.cpp,v 1.7 2005/07/08 08:59:41 jwharington Exp $
+//   $Id: AirfieldDetails.cpp,v 1.8 2005/07/10 11:30:42 jwharington Exp $
 
 
 #include "AirfieldDetails.h"
@@ -78,6 +78,7 @@ void ParseAirfieldDetails() {
 
   BOOL inDetails = FALSE;
   int i;
+  int k=0;
 
   while(ReadString(hAirfieldDetails,200,TempString))
     {
@@ -99,6 +100,12 @@ void ParseAirfieldDetails() {
 	Name[i-1]= 0;
 
 	inDetails = TRUE;
+
+        if (k % 20 == 0) {
+          StepProgressDialog();
+        }
+        k++;
+
       } else {
 	// append text to details string
 	wcscat(Details,TempString);

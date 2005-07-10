@@ -671,14 +671,17 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static int LastCircling = FALSE;
   double ThermalGain;
   double ThermalTime;
-  double ThermalDrift;
-  double DriftAngle;
+  //  double ThermalDrift;
+  //  double DriftAngle;
 
   if((Calculated->Circling == FALSE) && (LastCircling == TRUE))
     {
       ThermalGain = Calculated->CruiseStartAlt - Calculated->ClimbStartAlt;
       ThermalTime = Calculated->CruiseStartTime - Calculated->ClimbStartTime;
                         
+      /* Thermal drift calculations now done internally
+         to wind analyser
+
       ThermalDrift = Distance(Calculated->CruiseStartLat,  Calculated->CruiseStartLong, Calculated->ClimbStartLat,  Calculated->ClimbStartLong);
       DriftAngle = Bearing(Calculated->ClimbStartLat,  Calculated->ClimbStartLong,Calculated->CruiseStartLat, Calculated->CruiseStartLong);
                         
@@ -690,8 +693,8 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           if(ThermalTime > 120)
             {
 
-              /* Don't set it immediately, go through the new
-                 wind model
+              // Don't set it immediately, go through the new
+              //   wind model
               Calculated->WindSpeed = ThermalDrift/ThermalTime;
                                         
               if(DriftAngle >=180)
@@ -700,17 +703,17 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 DriftAngle += 180;
 
               Calculated->WindBearing = DriftAngle;
-              */
-
+              
+              // NOW DONE INTERNALLY TO WINDANALYSER
 	      Vector v;
 	      v.x = -ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
 	      v.y = -ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);
 	      
               windanalyser->slot_newEstimate(v, 6);
               // 6 is the code for external estimates
-
             }
         }
+      */
     }
   LastCircling = Calculated->Circling;
 }

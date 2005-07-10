@@ -53,11 +53,11 @@ static int stretch_backbmp = 0;
 static int IconSizeX = 112;
 static int IconSizeY = 30;
 static int HMargin = 0;
-static int VMargin = 0;
-static int WinLeftMargin = 0;
-static int WinTopMargin = 0;
-static int WinRightMargin = 0;
-static int WinBottomMargin = 5;
+static int VMargin = 2;
+static int WinLeftMargin = 2;
+static int WinTopMargin = 2;
+static int WinRightMargin = 2;
+static int WinBottomMargin = 2;
 static int ShowIconSec = 1;
 
 

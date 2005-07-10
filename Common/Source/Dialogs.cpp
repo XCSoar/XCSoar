@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.33 2005/07/09 20:35:15 samgi Exp $
+//   $Id: Dialogs.cpp,v 1.34 2005/07/10 11:30:42 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -180,7 +180,6 @@ LRESULT CALLBACK Progress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 extern int MenuTimeOut;
-
 
 LRESULT CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -2613,6 +2612,8 @@ LRESULT CALLBACK AATTurn(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 extern void DrawJPG(HDC hdc, RECT rc);
 #include "VOIMAGE.h"
 
+extern bool MenuActive;
+
 LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   TCHAR Temp[2048];
@@ -2626,18 +2627,20 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
   PAINTSTRUCT ps;
   HDC hdc;
   RECT rc;
+  static bool hasimage1 = false;
+  static bool hasimage2 = false;
         
   switch (message)
     {
     case WM_INITDIALOG:
-                
+                 
       hdcScreen = GetDC(hDlg);
 
       wsprintf(path_modis,TEXT("\\SD Card\\XCSoar\\MODIS\\modis-%03d.jpg"),
 	       SelectedWaypoint+1);
       
-      jpgimage1.Load (hdcScreen ,path_modis );
-      jpgimage2.Load (hdcScreen ,path_fname2 );   
+      hasimage1 = jpgimage1.Load (hdcScreen ,path_modis );
+      hasimage2 = jpgimage2.Load (hdcScreen ,path_fname2 );   
       page = 0;
 
       wsprintf(Temp,TEXT("%s\n%s"),
@@ -2646,53 +2649,23 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
       SetDlgItemText(hDlg,IDC_WAYPOINTDETAILSTEXT, Temp);
 
-	Temp[0]= 0;
-
-	/*
-        if( (WayPointList[SelectedWaypoint].Flags & HOME) == HOME) {
-	  wcscat(Temp,TEXT(" Home"));
-        }
-        if ((WayPointList[SelectedWaypoint].Flags & AIRPORT) == AIRPORT) {
-	  wcscat(Temp,TEXT(" Airport"));
-	}
-        if ((WayPointList[SelectedWaypoint].Flags & LANDPOINT) == LANDPOINT) {
-	  wcscat(Temp,TEXT(" Landpoint"));
-	}
-        if ((WayPointList[SelectedWaypoint].Flags & TURNPOINT) == TURNPOINT) {
-	  wcscat(Temp,TEXT(" Turnpoint"));
-	}
-        if ((WayPointList[SelectedWaypoint].Flags & START) == START) {
-	  wcscat(Temp,TEXT(" Start"));
-	}
-        if ((WayPointList[SelectedWaypoint].Flags & RESTRICTED) == RESTRICTED) {
-	  wcscat(Temp,TEXT(" Restricted"));
-	}
-        if ((WayPointList[SelectedWaypoint].Flags & WAYPOINTFLAG) == WAYPOINTFLAG) {
-	  wcscat(Temp,TEXT(" Waypoint"));
-	}
-	wcscat(Temp,TEXT("\r\n"));
-        if (WayPointList[SelectedWaypoint].Reachable) {
-	  wcscat(Temp,TEXT(" Reachable"));
-        } else {
-	  wcscat(Temp,TEXT(" Unreachable"));
-        }
-	wcscat(Temp,TEXT("\r\n"));
-	*/
-	wsprintf(Temp,TEXT("Longitude %-3.4f\r\nLatitude %-3.4f\r\nElevation %5.0f\r\n"),
-		 WayPointList[SelectedWaypoint].Longditude,
-		 WayPointList[SelectedWaypoint].Lattitude,
-		 WayPointList[SelectedWaypoint].Altitude*ALTITUDEMODIFY
-
-		 );
-
-	wcscat(Temp,TEXT("\r\n"));
-
-	if (WayPointList[SelectedWaypoint].Details) {
-	  wcscat(Temp,WayPointList[SelectedWaypoint].Details);
-	}
-
-        SetDlgItemText(hDlg,IDC_WDTEXT, Temp);
- 
+      Temp[0]= 0;
+      
+      wsprintf(Temp,TEXT("Longitude %-3.4f\r\nLatitude %-3.4f\r\nElevation %5.0f\r\n"),
+               WayPointList[SelectedWaypoint].Longditude,
+               WayPointList[SelectedWaypoint].Lattitude,
+               WayPointList[SelectedWaypoint].Altitude*ALTITUDEMODIFY
+               
+               );
+      
+      wcscat(Temp,TEXT("\r\n"));
+      
+      if (WayPointList[SelectedWaypoint].Details) {
+        wcscat(Temp,WayPointList[SelectedWaypoint].Details);
+      }
+      
+      SetDlgItemText(hDlg,IDC_WDTEXT, Temp);
+      
       return TRUE;
 
     case WM_COMMAND:
@@ -2751,6 +2724,15 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       }
       if (LOWORD(wParam) == IDC_WAYPOINTDETAILSNEXT) {
         page++;
+        
+        // skip pages if images don't exist
+        if (page==2 && !hasimage1) {
+          page++;
+        }
+        if (page==3 && !hasimage2) {
+          page++;
+        }
+        // cycle around to start page
         if (page==4) {
           page=0;
         }
@@ -2767,7 +2749,33 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       Rectangle(hdcScreen,rc.left,rc.top,rc.right,rc.bottom);
       EndPaint(hDlg, &ps);
 
-      if (page==3) {
+      if (page==0) {
+        ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_HIDE);
+        ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_HIDE);
+        ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_HIDE);
+        ShowWindow(GetDlgItem(hDlg,IDC_WDSETHOME),SW_HIDE);
+        ShowWindow(GetDlgItem(hDlg,IDC_WDINSERT),SW_HIDE);
+        ShowWindow(GetDlgItem(hDlg,IDC_WDTEXT),SW_SHOW);
+      }
+      if (page==1) {
+
+        // if this page is up due to task dialog, disable buttons
+        if (MenuActive) {
+          ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_HIDE);
+          ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_HIDE);
+          ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_HIDE);
+          ShowWindow(GetDlgItem(hDlg,IDC_WDINSERT),SW_HIDE);
+        } else {
+          ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_SHOW);
+          ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_SHOW);
+          ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_SHOW);
+          ShowWindow(GetDlgItem(hDlg,IDC_WDINSERT),SW_SHOW);
+        }
+        ShowWindow(GetDlgItem(hDlg,IDC_WDSETHOME),SW_SHOW);
+        ShowWindow(GetDlgItem(hDlg,IDC_WDTEXT),SW_HIDE);
+
+      }
+      if (page==2) {
         ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_HIDE);
@@ -2781,7 +2789,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 			rc.right - rc.left, rc.bottom -  rc.top-45);
         EndPaint(hDlg, &ps);
       }
-      if (page==2) {
+      if (page==3) {
         ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_HIDE);
@@ -2793,23 +2801,6 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         hdc = BeginPaint(hDlg, &ps);
         jpgimage2.Draw (hdcScreen, 0, 45, -1, -1);
         EndPaint(hDlg, &ps);
-      }
-      if (page==0) {
-        ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_HIDE);
-        ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_HIDE);
-        ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_HIDE);
-        ShowWindow(GetDlgItem(hDlg,IDC_WDSETHOME),SW_HIDE);
-        ShowWindow(GetDlgItem(hDlg,IDC_WDINSERT),SW_HIDE);
-        ShowWindow(GetDlgItem(hDlg,IDC_WDTEXT),SW_SHOW);
-      }
-      if (page==1) {
-
-        ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_SHOW);
-        ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_SHOW);
-        ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_SHOW);
-        ShowWindow(GetDlgItem(hDlg,IDC_WDSETHOME),SW_SHOW);
-        ShowWindow(GetDlgItem(hDlg,IDC_WDINSERT),SW_SHOW);
-        ShowWindow(GetDlgItem(hDlg,IDC_WDTEXT),SW_HIDE);
       }
 
       return FALSE;
