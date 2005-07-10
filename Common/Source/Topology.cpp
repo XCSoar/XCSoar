@@ -93,10 +93,6 @@ Topology::~Topology() {
 
 
 void Topology::updateCache(rectObj thebounds) {
-  triggerUpdateCache = false;
-  // JMW TODO: compare thebounds with the shpfile's bounds, and if totally outside,
-  // don't even bother drawing anything
-
 
   if (!shapefileopen) return;
 
@@ -109,8 +105,12 @@ void Topology::updateCache(rectObj thebounds) {
 	shpCache[i]= NULL;
       }
     }
+    // note that the trigger will still be active, because as soon as
+    // the map scale comes within range, we will need to regenerate the cache
     return;
   }
+
+  triggerUpdateCache = false;
 
   msSHPWhichShapes(&shpfile, thebounds, 0);
   if (!shpfile.status) {

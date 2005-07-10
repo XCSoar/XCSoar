@@ -61,6 +61,7 @@ public:
      */
     void slot_newConstellation();
 
+    void calcThermalDrift();
 private: // Private attributes
     int circleCount; //we are counting the number of circles, the first onces are probably not very round
     bool circleLeft; //true=left, false=right
@@ -76,6 +77,12 @@ private: // Private attributes
     int minSatCnt;
     bool curModeOK;
     bool first;
+    int startcircle;
+
+    Vector climbstartpos;
+    Vector climbendpos;
+    double climbstarttime;
+    double climbendtime;
 
 private: // Private memberfunctions
     void _calcWind();

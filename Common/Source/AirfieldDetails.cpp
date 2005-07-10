@@ -78,6 +78,7 @@ void ParseAirfieldDetails() {
 
   BOOL inDetails = FALSE;
   int i;
+  int k=0;
 
   while(ReadString(hAirfieldDetails,200,TempString))
     {
@@ -99,6 +100,12 @@ void ParseAirfieldDetails() {
 	Name[i-1]= 0;
 
 	inDetails = TRUE;
+
+        if (k % 20 == 0) {
+          StepProgressDialog();
+        }
+        k++;
+
       } else {
 	// append text to details string
 	wcscat(Details,TempString);

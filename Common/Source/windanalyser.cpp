@@ -79,7 +79,9 @@ double Magnitude(Vector v) {
 
 /** Called if a new sample is available in the samplelist. */
 void WindAnalyser::slot_newSample(){
+
     if (!active) return; //only work if we are in active mode
+
 
     Vector curVector;
 
@@ -102,6 +104,7 @@ void WindAnalyser::slot_newSample(){
     if(circleDeg >= 360 )
     {
         //full circle made!
+
         fullCircle=true;
         circleDeg = 0;
         circleCount++;  //increase the number of circles flown (used
@@ -133,6 +136,19 @@ void WindAnalyser::slot_newSample(){
 	maxVector.x = v.x; maxVector.y = v.y;
 
 	first = true;
+        if (startcircle>1) {
+          startcircle--;
+        }
+
+        if (startcircle==1) {
+          climbstartpos.x = nmeaInfo->Longditude;
+          climbstartpos.y = nmeaInfo->Lattitude;
+          climbstarttime = nmeaInfo->Time;
+          startcircle = 0;
+        }
+        climbendpos.x = nmeaInfo->Longditude;
+        climbendpos.y = nmeaInfo->Lattitude;
+        climbendtime = nmeaInfo->Time;
 
         //no need to reset fullCircle, it will automaticly be reset in the next itteration.
     }
@@ -147,20 +163,50 @@ void WindAnalyser::slot_Altitude() {
 }
 
 
+void WindAnalyser::calcThermalDrift() {
+  double ThermalTime = climbendtime-climbstarttime;
+  if (ThermalTime>60) {
+    double ThermalDrift= Distance(climbstartpos.y,
+                                  climbstartpos.x,
+                                  climbendpos.y,
+                                  climbendpos.x);
+    double DriftAngle = Bearing(climbstartpos.y,
+                                climbstartpos.x,
+                                climbendpos.y,
+                                climbendpos.x);
+
+    Vector v;
+    v.x = -ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
+    v.y = -ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);
+
+    slot_newEstimate(v, 6);
+
+  }
+}
+
 /** Called if the flightmode changes */
 void WindAnalyser::slot_newFlightMode(bool left, int marker){
     active=false;  //we are inactive by default
     circleCount=0; //reset the circlecounter for each flightmode
 		   //change. The important thing to measure is the
 		   //number of turns in this thermal only.
+
+    startcircle = 3; // ignore first two circles in thermal drift calcs
+
     circleDeg = 0;
     if ((derivedInfo->Circling) && (left)) {
         circleLeft=true;
     } else if ((derivedInfo->Circling) && (!left)) {
         circleLeft=false;
     } else {
-        curModeOK=false;
-        return; //ok, so we are not circling. Exit function.
+
+        // end circling?
+      if (curModeOK) {
+        calcThermalDrift();
+      }
+      curModeOK=false;
+
+      return; //ok, so we are not circling. Exit function.
     }
     //remember that our current mode is ok.
     curModeOK=true;

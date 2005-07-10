@@ -824,6 +824,26 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   MapLabelFont = CreateFontIndirect (&logfont);
 
+
+  // Font for map other text
+
+  // new font for map labels
+
+  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
+  logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO*1.3);
+  logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO*1.3);
+  logfont.lfWeight = FW_MEDIUM;
+
+#ifndef NOCLEARTYPE
+  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+#endif
+
+  MapWindowFont = CreateFontIndirect (&logfont);
+
+  SendMessage(hWndMapWindow,WM_SETFONT,
+              (WPARAM)MapWindowFont,MAKELPARAM(TRUE,0));
+
   ////////
 
   GetClientRect(hWndMainWindow, &rc);
@@ -935,10 +955,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   hWndCDIWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),WS_VISIBLE|WS_CHILD,
                                0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
-  SendMessage(hWndCDIWindow,WM_SETFONT,(WPARAM)CDIWindowFont,MAKELPARAM(TRUE,0));
+  SendMessage(hWndCDIWindow,WM_SETFONT,
+              (WPARAM)CDIWindowFont,MAKELPARAM(TRUE,0));
 
   SetWindowPos(hWndCDIWindow,hWndMenuButton,
-	  (int)(ControlWidth*0.6),(int)(ControlHeight+1),(int)(ControlWidth*2.8),(int)(TitleHeight*1.4),SWP_SHOWWINDOW);
+               (int)(ControlWidth*0.6),(int)(ControlHeight+1),
+               (int)(ControlWidth*2.8),(int)(TitleHeight*1.4),SWP_SHOWWINDOW);
   // JMW also made it so it doesn't obscure airspace warnings
 
   // end of new code for drawing CDI window (see below for destruction of objects)
@@ -950,6 +972,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     ShowWindow(hWndMainWindow, nCmdShow);
     UpdateWindow(hWndMainWindow);
+
+    ShowInfoBoxes();
+
+    for(i=0;i<NUMINFOWINDOWS;i++)
+      {
+        UpdateWindow(hWndInfoWindow[i]);
+        UpdateWindow(hWndTitleWindow[i]);
+      }
 
     FullScreen();
 
@@ -1327,6 +1357,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       DeleteObject(TitleWindowFont);
       DeleteObject(CDIWindowFont);
       DeleteObject(MapLabelFont);
+      DeleteObject(MapWindowFont);
 
       if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
       if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
@@ -1410,32 +1441,38 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             case IDD_BUGS:
               DWORD dwError;
+              MenuActive = true;
 
               ShowWindow(hWndCB,SW_SHOW);
               SHFullScreen(hWndMainWindow,SHFS_SHOWSIPBUTTON|SHFS_SHOWTASKBAR);
               DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWnd, (DLGPROC)SetBugsBallast);
               dwError = GetLastError();
               ShowWindow(hWndCB,SW_HIDE);
+              MenuActive = false;
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
               return 0;
 
             case IDD_PRESSURE:
+              MenuActive = true;
               ShowWindow(hWndCB,SW_SHOW);
               SHFullScreen(hWndMainWindow,SHFS_SHOWSIPBUTTON|SHFS_SHOWTASKBAR);
               DialogBox(hInst, (LPCTSTR)IDD_AIRSPACEPRESS, hWnd, (DLGPROC)AirspacePress);
               ConvertFlightLevels();
               ShowWindow(hWndCB,SW_HIDE);
+              MenuActive = false;
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
               return 0;
 
             case IDD_TASK:
+              MenuActive = true;
               SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
               DialogBox(hInst, (LPCTSTR)IDD_TASK, hWnd, (DLGPROC)SetTask);
               ShowWindow(hWndCB,SW_HIDE);
+              MenuActive = false;
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
@@ -1564,6 +1601,8 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             case IDD_LOGGER:
               TCHAR TaskMessage[1024];
+              MenuActive = true;
+
               if(LoggerActive)
                 {
                   if(MessageBox(hWndMapWindow,TEXT("Stop Logger"),TEXT("Stop Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
@@ -1598,6 +1637,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                       EndDeclaration();
                     }
                 }
+              MenuActive = false;
 	      FullScreen();
               SwitchToMapWindow();
 	      HideMenu();

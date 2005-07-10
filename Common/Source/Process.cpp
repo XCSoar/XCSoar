@@ -321,27 +321,62 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 11:
     Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
+    if (ActiveWayPoint>=0) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
     break;
   case 12:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeDifference;
+    if (ActiveWayPoint>=0) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
     break;
   case 13:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeRequired;
+    if (ActiveWayPoint>=0) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
     break;
   case 14:
     Value = 0; // Next Waypoint Text
     break;
   case 15:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeDifference;
+    if (ActiveWayPoint>=0) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
     break;
   case 16:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeRequired;
+    if (ActiveWayPoint>=0) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
     break;
   case 17:
     Value = SPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
+    if (ActiveWayPoint>=0) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
     break;
   case 18:
     Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo;
+    if (ActiveWayPoint>=0) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
     break;
   case 19:
     if (CALCULATED_INFO.LDFinish== 999) {
@@ -379,15 +414,35 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 28:
     Value = DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance ;
+    if (ActiveWayPoint>=0) {
+      Valid = AATEnabled;
+    } else {
+      Valid = false;
+    }
     break;
   case 29:
     Value = DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance ;
+    if (ActiveWayPoint>=0) {
+      Valid = AATEnabled;
+    } else {
+      Valid = false;
+    }
     break;
   case 30:
     Value = SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
+    if (ActiveWayPoint>=0) {
+      Valid = AATEnabled;
+    } else {
+      Valid = false;
+    }
     break;
   case 31:
     Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
+    if (ActiveWayPoint>=0) {
+      Valid = AATEnabled;
+    } else {
+      Valid = false;
+    }
     break;
   case 32:
     Valid = GPS_INFO.AirspeedAvailable;
