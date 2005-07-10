@@ -1504,7 +1504,7 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   int i,j;
   char c;
   char sTmp[257];
-  DWORD dwNumBytesRead;
+  DWORD dwNumBytesRead=0;
   DWORD dwTotalNumBytesRead=0;
   char  FileBuffer[512];
   DWORD dwFilePos;
@@ -1518,7 +1518,11 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
 
   dwFilePos = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
 
-  ReadFile(hFile, FileBuffer, sizeof(FileBuffer), &dwNumBytesRead, NULL);
+  if (hFile == INVALID_HANDLE_VALUE)
+    return(FALSE);
+
+  if (ReadFile(hFile, FileBuffer, sizeof(FileBuffer), &dwNumBytesRead, NULL) == 0)
+    return(FALSE);
 
   i = 0;
   j = 0;

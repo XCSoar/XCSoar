@@ -23,10 +23,10 @@ void OpenAirfieldDetails() {
 
   GetRegistryString(szRegistryAirfieldFile, szFile, MAX_PATH);
 
-  hAirfieldDetails = NULL;
+  hAirfieldDetails = INVALID_HANDLE_VALUE;
   hAirfieldDetails = CreateFile(szFile,GENERIC_READ,0,NULL,
 				OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  if( hAirfieldDetails == NULL)
+  if( hAirfieldDetails == INVALID_HANDLE_VALUE)
     {
       return;
     }
@@ -35,7 +35,7 @@ void OpenAirfieldDetails() {
 
 
 void CloseAirfieldDetails() {
-  if (hAirfieldDetails) {
+  if (hAirfieldDetails != INVALID_HANDLE_VALUE) {
     CloseHandle(hAirfieldDetails);
     hAirfieldDetails = NULL;
   }
@@ -79,6 +79,9 @@ void ParseAirfieldDetails() {
   BOOL inDetails = FALSE;
   int i;
   int k=0;
+
+  if (hAirfieldDetails == INVALID_HANDLE_VALUE)
+    return;
 
   while(ReadString(hAirfieldDetails,200,TempString))
     {
