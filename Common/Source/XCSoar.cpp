@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.44 2005/07/10 11:30:42 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.45 2005/07/11 15:44:45 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1046,11 +1046,12 @@ bool Debounce(WPARAM wParam) {
   DWORD dT = fpsTimeThis-fpsTimeLast;
   fpsTimeLast = fpsTimeThis;
 
+  /* Disabled by request by Scott Penrose due to problems with O2 XDA buttons
   if (wParam != wlast) {
     wlast = wParam;
     return true; // button changed, so OK
   }
-
+  */
   wlast = wParam;
 
   if (dT>250) {
