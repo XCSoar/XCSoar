@@ -1046,11 +1046,12 @@ bool Debounce(WPARAM wParam) {
   DWORD dT = fpsTimeThis-fpsTimeLast;
   fpsTimeLast = fpsTimeThis;
 
+  /* Disabled by request by Scott Penrose due to problems with O2 XDA buttons
   if (wParam != wlast) {
     wlast = wParam;
     return true; // button changed, so OK
   }
-
+  */
   wlast = wParam;
 
   if (dT>250) {
