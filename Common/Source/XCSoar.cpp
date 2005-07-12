@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.46 2005/07/12 07:31:36 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.47 2005/07/12 23:44:43 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -238,10 +238,10 @@ void PopupBugsBallast(int updown);
 
 SCREEN_INFO Data_Options[] = { 
   // 0  
-  {TEXT("Altitude GPS"), TEXT("Alt GPS"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33}, 
+  {TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33}, 
 
   // 1
-  {TEXT("Altitude AGL"), TEXT("Alt AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0}, 
+  {TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0}, 
 
   // 2
   {TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 24}, 
@@ -298,7 +298,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Final L/D"), TEXT("Fin L/D"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5}, 
 
   // 20
-  {TEXT("Altitude Ground"), TEXT("Alt Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1}, 
+  {TEXT("Ground Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1}, 
   
   // 21
   {TEXT("Thermal Average"), TEXT("TC Avg"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9}, 
@@ -337,7 +337,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 37, 23}, 
 
   // 33
-  {TEXT("Altitude Baro"), TEXT("Alt Baro"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
+  {TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
 
   // 34
   {TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10}, 
