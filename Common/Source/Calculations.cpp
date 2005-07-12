@@ -684,12 +684,14 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       ThermalDrift = Distance(Calculated->CruiseStartLat,  Calculated->CruiseStartLong, Calculated->ClimbStartLat,  Calculated->ClimbStartLong);
       DriftAngle = Bearing(Calculated->ClimbStartLat,  Calculated->ClimbStartLong,Calculated->CruiseStartLat, Calculated->CruiseStartLong);
+      */
                         
       if(ThermalTime >0)
         {
           Calculated->LastThermalAverage = ThermalGain/ThermalTime;
           Calculated->LastThermalGain = ThermalGain;
           Calculated->LastThermalTime = ThermalTime;
+	  /*
           if(ThermalTime > 120)
             {
 
@@ -712,8 +714,8 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
               windanalyser->slot_newEstimate(v, 6);
               // 6 is the code for external estimates
             }
+	  */
         }
-      */
     }
   LastCircling = Calculated->Circling;
 }
