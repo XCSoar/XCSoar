@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.47 2005/07/12 23:44:43 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.48 2005/07/12 23:45:35 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -298,7 +298,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Final L/D"), TEXT("Fin L/D"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5}, 
 
   // 20
-  {TEXT("Ground Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1}, 
+  {TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1}, 
   
   // 21
   {TEXT("Thermal Average"), TEXT("TC Avg"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9}, 
