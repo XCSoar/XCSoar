@@ -483,6 +483,7 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           POLARID = SendDlgItemMessage(hDlg,IDC_POLAR,CB_GETCURSEL, 0,0);
           SetToRegistry(szRegistryPolarID,POLARID);
           CalculateNewPolarCoef();
+          SetBallast();
 	  return TRUE;
         }
       switch (LOWORD(wParam)) {
