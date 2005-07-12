@@ -539,17 +539,22 @@ void frotate(float *xin, float *yin, float angle)
 
 double Distance(double lat1, double lon1, double lat2, double lon2)
 {
-  double angle;
+  double distance, dTmp;
 
   lat1 *= DEG_TO_RAD;
   lat2 *= DEG_TO_RAD;
   lon1 *= DEG_TO_RAD;
   lon2 *= DEG_TO_RAD;
 
-  angle = (double)acos( sin(lat1)*sin(lat2) +  
-			cos(lat1)*cos(lat2) * cos(lon1-lon2)  )*RAD_TO_DEG;
+  dTmp =  sin(lat1)*sin(lat2) +  
+			cos(lat1)*cos(lat2) * cos(lon1-lon2);
 
-  return (double)(angle * 111194.9267);
+  if (dTmp > 1.0)                                   // be shure we dont call acos with 
+    distance = 0;                                   // values greater than 1 (like 1.0000000000001)
+  else
+    distance = (double)acos(dTmp) * (double)(RAD_TO_DEG * 111194.9267);
+
+  return (double)(distance);
 }
 
 
