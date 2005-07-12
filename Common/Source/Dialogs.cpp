@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.34 2005/07/10 11:30:42 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.35 2005/07/12 20:25:30 samgi Exp $
 
 */
 #include "stdafx.h"
@@ -483,6 +483,7 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           POLARID = SendDlgItemMessage(hDlg,IDC_POLAR,CB_GETCURSEL, 0,0);
           SetToRegistry(szRegistryPolarID,POLARID);
           CalculateNewPolarCoef();
+          SetBallast();
 	  return TRUE; 
         }
       switch (LOWORD(wParam)) {
