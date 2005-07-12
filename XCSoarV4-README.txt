@@ -24,6 +24,8 @@ Summary of new features since v4.0
 - Can fly in simulator mode by dragging on screen
 - Improved colour selector now displays currently chosen colours
 - Added calculation of glider heading from bearing and wind
+- Added infoboxes: G-load, time of flight, UTC time, local time, LD to next waypoint
+- Adjusted infobox descriptions and titles.
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -54,7 +56,7 @@ Bug fixes and code improvements
 - Labels of topological features now supported
 - Fast loading of airspace at startup using binary file
 - Wind calculation more reliable
-
+- Fast loading of all startup files
 
 ============================================================================
 INSTALLATION AND RUNNING
@@ -108,7 +110,7 @@ through various related values.  These groupings are:
   Bearing, Ground Speed, Track, Airspeed, G loading
 
 - LD group:
-  Current LD, Cruise LD, Task LD Finish
+  Current LD, Cruise LD, Task LD Finish, LD to Next waypoint
 
 - Vario group:
   Average vario, Last Thermal Average, Last Thermal Gain, Last Thermal Time,
@@ -126,7 +128,7 @@ through various related values.  These groupings are:
   AA Min Dist, AA Max Speed, AA Min Speed
 
 - Waypoint group: 
-  Next Waypoint, time aloft
+  Next Waypoint, time flying, local time, UTC time
 
 
 ============================================================================

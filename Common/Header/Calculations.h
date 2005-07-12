@@ -52,6 +52,7 @@ typedef struct _DERIVED_INFO
   double TaskAltitudeRequired;
   double TaskAltitudeDifference;
   double LDFinish;
+  double LDNext;
   double LegDistanceToGo;
   double LegDistanceCovered;
   double LegStartTime;
