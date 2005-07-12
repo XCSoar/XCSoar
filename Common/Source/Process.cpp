@@ -242,6 +242,13 @@ void FormatterTime::SecsToDisplayTime(int d) {
 }
 
 
+int DetectCurrentTime() {
+  TIME_ZONE_INFORMATION TimeZoneInformation;
+  GetTimeZoneInformation(&TimeZoneInformation);
+  int localtime = ((int)GPS_INFO.Time-TimeZoneInformation.Bias*60);
+  return localtime;
+}
+
 
 int DetectStartTime() {
   static int starttime = -1;
@@ -259,11 +266,20 @@ int DetectStartTime() {
 
 void FormatterTime::AssignValue(int i) {
   switch (i) {
+  case 9:
+    SecsToDisplayTime((int)CALCULATED_INFO.LastThermalTime);
+    break;
   case 27:
     SecsToDisplayTime((int)CALCULATED_INFO.AATTimeToGo);
     break;
   case 36:
     SecsToDisplayTime(DetectStartTime());
+    break;
+  case 39:
+    SecsToDisplayTime(DetectCurrentTime());
+    break;
+  case 40:
+    SecsToDisplayTime((int)(GPS_INFO.Time));
     break;
   default:
     break;
@@ -312,9 +328,6 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 8:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.LastThermalGain;
-    break;
-  case 9:
-    Value = CALCULATED_INFO.LastThermalTime;
     break;
   case 10:
     Value = MACREADY;
@@ -415,7 +428,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 28:
     Value = DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance ;
     if (ActiveWayPoint>=0) {
-      Valid = AATEnabled;
+      Valid = (bool)AATEnabled;
     } else {
       Valid = false;
     }
@@ -423,7 +436,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 29:
     Value = DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance ;
     if (ActiveWayPoint>=0) {
-      Valid = AATEnabled;
+      Valid = (bool)AATEnabled;
     } else {
       Valid = false;
     }
@@ -431,7 +444,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 30:
     Value = SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
     if (ActiveWayPoint>=0) {
-      Valid = AATEnabled;
+      Valid = (bool)AATEnabled;
     } else {
       Valid = false;
     }
@@ -439,7 +452,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 31:
     Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
     if (ActiveWayPoint>=0) {
-      Valid = AATEnabled;
+      Valid = (bool)AATEnabled;
     } else {
       Valid = false;
     }
@@ -461,6 +474,14 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 37:
     Valid = GPS_INFO.AccelerationAvailable;
     Value = GPS_INFO.Gload;
+    break;
+  case 38:
+    if (CALCULATED_INFO.LDNext== 999) {
+      Valid = false;
+    } else {
+      Valid = true;
+      Value = CALCULATED_INFO.LDNext;
+    }
     break;
   default:
     break;

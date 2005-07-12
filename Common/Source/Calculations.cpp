@@ -1189,6 +1189,15 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
       TaskAltitudeRequired = LegAltitude;
       Calculated->TaskDistanceToGo = LegToGo;
 
+      if(  (Basic->Altitude - LegAltitude - SAFETYALTITUDEARRIVAL) > 0)
+        {
+          Calculated->LDNext = Calculated->TaskDistanceToGo / (Basic->Altitude - LegAltitude - SAFETYALTITUDEARRIVAL)  ;
+        }
+      else
+        {
+          Calculated->LDNext = 999;
+        }
+
       i++;
       while((Task[i].Index != -1) && (i<MAXTASKPOINTS) && (!TaskAborted))
         {
@@ -1233,7 +1242,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
         }
       else
         {
-          Calculated->LDFinish = 9999;
+          Calculated->LDFinish = 999;
         }
 
     } else {

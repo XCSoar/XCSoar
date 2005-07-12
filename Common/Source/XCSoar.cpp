@@ -229,82 +229,82 @@ void PopupBugsBallast(int updown);
 // Groups:
 //   Altitude 0,1,20,33
 //   Aircraft info 3,6,23,32,37
-//   LD 4,5,19
+//   LD 4,5,19,38
 //   Vario 2,7,8,9,21,22,24
 //   Wind 25,26
 //   Mcready 10,34,35
 //   Nav 11,12,13,15,16,17,18,27,28,29,30,31
-//   Waypoint 14,36
+//   Waypoint 14,36,39,40
 
 SCREEN_INFO Data_Options[] = {
   // 0
-  {TEXT("Altitude"), TEXT("GPS Alt"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33},
+  {TEXT("Altitude GPS"), TEXT("Alt GPS"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33},
 
   // 1
-  {TEXT("Altitude AGL"), TEXT("A.G.L."), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0},
+  {TEXT("Altitude AGL"), TEXT("Alt AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0},
 
   // 2
-  {TEXT("Average"), TEXT("Average"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 24},
+  {TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 24},
 
   // 3
   {TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f°T")), NoProcessing, 6, 37},
 
   // 4
-  {TEXT("Current L/D"), TEXT("L/D"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 19},
+  {TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 38},
 
   // 5
-  {TEXT("Cruise L/D"), TEXT("Cr L/D"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 19, 4},
+  {TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 19, 4},
 
   // 6
-  {TEXT("Ground Speed"), TEXT("Speed"), new InfoBoxFormatter(TEXT("%2.0f")), SpeedProcessing, 23, 3},
+  {TEXT("Speed ground"), TEXT("V Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), SpeedProcessing, 23, 3},
 
   // 7
-  {TEXT("Last Thermal Avg"), TEXT("L A"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+  {TEXT("Last Thermal Average"), TEXT("TL Avg"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
 
   // 8
-  {TEXT("Last Thermal Gain"), TEXT("L G"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 9, 7},
+  {TEXT("Last Thermal Gain"), TEXT("TL Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 9, 7},
 
   // 9
-  {TEXT("Last Thermal Time"), TEXT("L T"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 21, 8},
+  {TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 21, 8},
 
   // 10
   {TEXT("MacReady Setting"), TEXT("MacReady"), new InfoBoxFormatter(TEXT("%2.1f")), McReadyProcessing, 34, 35},
 
   // 11
-  {TEXT("Next Distance"), TEXT("Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},
+  {TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},
 
   // 12
-  {TEXT("Next Alt Difference"), TEXT("Alt Dif"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 13, 11},
+  {TEXT("Next Altitude Difference"), TEXT("WP AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 13, 11},
 
   // 13
-  {TEXT("Next Alt Required"), TEXT("Alt Req"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 15, 12},
+  {TEXT("Next Altitude Required"), TEXT("WP AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 15, 12},
 
   // 14
-  {TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 36},
+  {TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 40},
 
   // 15
-  {TEXT("Task Alt Difference"), TEXT("Dif Fin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 16, 13},
+  {TEXT("Final Altitude Difference"), TEXT("Fin AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 16, 13},
 
   // 16
-  {TEXT("Task Alt Required"), TEXT("Req Fin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15},
+  {TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15},
 
   // 17
-  {TEXT("Task Average Speed"), TEXT("Av Speed"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+  {TEXT("Speed Task Average"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
 
   // 18
-  {TEXT("Task Distance"), TEXT("To Go"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
+  {TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
 
   // 19
-  {TEXT("Task LD Finish"), TEXT("LD Fin"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 4, 5},
+  {TEXT("Final L/D"), TEXT("Fin L/D"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5},
 
   // 20
-  {TEXT("Terrain Height"), TEXT("Terrain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1},
+  {TEXT("Altitude Ground"), TEXT("Alt Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1},
 
   // 21
-  {TEXT("Thermal Average"), TEXT("Av Climb"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9},
+  {TEXT("Thermal Average"), TEXT("TC Avg"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9},
 
   // 22
-  {TEXT("Thermal Gain"), TEXT("Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
+  {TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
 
   // 23
   {TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f°T")), DirectionProcessing, 32, 6},
@@ -313,7 +313,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 22},
 
   // 25
-  {TEXT("Wind Speed"), TEXT("Wind S"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 26},
+  {TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 26},
 
   // 26
   {TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f°T")), WindDirectionProcessing, 25, 25},
@@ -322,38 +322,47 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("AA Time"), TEXT("AA Time"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
 
   // 28
-  {TEXT("AA Max Dist"), TEXT("Max D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27},
+  {TEXT("AA Distance Max"), TEXT("AA Dmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27},
 
   // 29
-  {TEXT("AA Min Dist"), TEXT("Min D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 30, 28},
+  {TEXT("AA Distance Min"), TEXT("AA Dmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 30, 28},
 
   // 30
-  {TEXT("AA Max Speed"), TEXT("Max S"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
+  {TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
 
   // 31
-  {TEXT("AA Min Speed"), TEXT("Min S"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 30},
+  {TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 30},
 
   // 32
-  {TEXT("Airspeed"), TEXT("Airspeed"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 37, 23},
+  {TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 37, 23},
 
   // 33
-  {TEXT("Baro Alt"), TEXT("Altitude"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
+  {TEXT("Altitude Baro"), TEXT("Alt Baro"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
 
   // 34
-  {TEXT("MacReady speed"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
+  {TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
 
   // 35
   {TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 34},
 
   // 36
-  {TEXT("Time of day"), TEXT("Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 14},
+  {TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 39, 14},
 
   // 37
   {TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 3, 32},
 
+  // 38
+  {TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.2f")), NoProcessing, 4, 19},
+
+  // 39
+  {TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},
+
+  // 40
+  {TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 39},
+
 };
 
-int NUMSELECTSTRINGS = 38;
+int NUMSELECTSTRINGS = 41;
 
 int ControlWidth, ControlHeight;
 
@@ -986,6 +995,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     return TRUE;
 }
 
+
 int getInfoType(int i) {
   if (CALCULATED_INFO.Circling == TRUE)
     return InfoType[i] & 0xff;
@@ -1046,12 +1056,13 @@ bool Debounce(WPARAM wParam) {
   DWORD dT = fpsTimeThis-fpsTimeLast;
   fpsTimeLast = fpsTimeThis;
 
-  /* Disabled by request by Scott Penrose due to problems with O2 XDA buttons
+  /* Disabled by request to prevent button mashing
   if (wParam != wlast) {
     wlast = wParam;
     return true; // button changed, so OK
   }
   */
+
   wlast = wParam;
 
   if (dT>250) {

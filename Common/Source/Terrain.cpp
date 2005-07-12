@@ -109,7 +109,7 @@ void SetTopologyBounds(RECT rcin) {
       UnlockTerrainDataGraphics();
 
     } else {
-      // just trigger that they need to be updated next time
+      // just trigger that they need to be updated next time they are enabled or within zoom
       for (int z=0; z<MAXTOPOLOGY; z++) {
         if (TopoStore[z]) {
           TopoStore[z]->triggerUpdateCache;
