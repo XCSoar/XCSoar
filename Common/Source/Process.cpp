@@ -239,6 +239,7 @@ void FormatterTime::SecsToDisplayTime(int d) {
   hours = (d/3600);
   mins = (d/60-hours*60);
   seconds = (d-mins*60+hours*3600);
+  hours = hours % 24;
 }
 
 
