@@ -2614,6 +2614,8 @@ extern void DrawJPG(HDC hdc, RECT rc);
 #include "VOIMAGE.h"
 
 extern bool MenuActive;
+extern bool RequestFastRefresh;
+
 
 LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -2674,6 +2676,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         {
           ::ReleaseDC(hDlg, hdcScreen);
           EndDialog(hDlg, LOWORD(wParam));
+          RequestFastRefresh= true;
           FullScreen();
           return TRUE;
         }
@@ -2683,6 +2686,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        RequestFastRefresh= true;
         FullScreen();
         break;
       }
@@ -2692,6 +2696,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        RequestFastRefresh= true;
         FullScreen();
         break;
       }
@@ -2701,6 +2706,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        RequestFastRefresh= true;
         FullScreen();
         break;
       }
@@ -2710,6 +2716,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        RequestFastRefresh= true;
         FullScreen();
         break;
       }
@@ -2720,6 +2727,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
+        RequestFastRefresh= true;
         FullScreen();
         break;
       }
@@ -2807,6 +2815,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       return FALSE;
 
     case WM_CLOSE:
+      RequestFastRefresh= true;
       FullScreen();
     }
   return FALSE;

@@ -1054,6 +1054,7 @@ static void RenderMapWindow(  RECT rc)
 }
 
 
+
 DWORD DrawThread (LPVOID lpvoid)
 {
 
@@ -1096,6 +1097,11 @@ DWORD DrawThread (LPVOID lpvoid)
   UpdateMapScale();
   RenderMapWindow(MapRect);
   SetTopologyBounds(MapRect);
+
+  // display end of starting splash stuff
+  CloseProgressDialog();
+
+  FullScreen();
 
   //////
 
