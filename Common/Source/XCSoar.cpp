@@ -1054,7 +1054,6 @@ bool Debounce(WPARAM wParam) {
   static WPARAM wlast = 0;
   DWORD fpsTimeThis = ::GetTickCount();
   DWORD dT = fpsTimeThis-fpsTimeLast;
-  fpsTimeLast = fpsTimeThis;
 
   /* Disabled by request to prevent button mashing
   if (wParam != wlast) {
@@ -1065,7 +1064,8 @@ bool Debounce(WPARAM wParam) {
 
   wlast = wParam;
 
-  if (dT>250) {
+  if (dT>500) {
+	fpsTimeLast = fpsTimeThis;
     return true;
   } else {
     return false;
@@ -1280,15 +1280,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			ShowMenu();
 			break;
 
-        case VK_UP :  // SCROLL UP
+        case VK_UP :  // SCROLL UP (infobox mode)
           DoInfoKey(1);
           break;
 
-        case VK_DOWN: // SCROLL DOWN
-          DoInfoKey(-1);
+        case VK_DOWN: // SCROLL DOWN (infobox mode)
+         DoInfoKey(-1);
           break;
 
         case VK_RETURN:
+        if (!Debounce(wParam)) break;
           DoInfoKey(0);
           break;
 

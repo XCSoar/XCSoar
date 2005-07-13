@@ -637,12 +637,14 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     switch (wParam)
     {
     case VK_DOWN :  // SCROLL UP
+      if (!Debounce(wParam)) break;
       RequestMapScale *= 1.414;
       if(RequestMapScale>160) RequestMapScale = 160;
       RefreshMap();
       break;
 
     case VK_UP: // SCROLL DOWN
+      if (!Debounce(wParam)) break;
       if(RequestMapScale >= 0.01)
       {
         RequestMapScale /= 1.414;
@@ -651,6 +653,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case VK_RIGHT: // Pan mode
+      if (!Debounce(wParam)) break;
       EnablePan = !EnablePan;
 
       if (EnableSoundModes) {
@@ -675,6 +678,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case VK_RETURN: // Pan mode, cycles through modes
+      if (!Debounce(wParam)) break;
 
       if (ClearAirspaceWarnings()) {
         // airspace was active, enter was used to acknowledge
@@ -720,6 +724,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     case VK_LEFT:
 
+      if (!Debounce(wParam)) break;
       AutoZoom = !AutoZoom;
 
       if (EnableSoundModes) {
