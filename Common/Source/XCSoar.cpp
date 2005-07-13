@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.48 2005/07/12 23:45:35 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.49 2005/07/13 03:35:44 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1054,8 +1054,7 @@ bool Debounce(WPARAM wParam) {
   static WPARAM wlast = 0;
   DWORD fpsTimeThis = ::GetTickCount();
   DWORD dT = fpsTimeThis-fpsTimeLast;
-  fpsTimeLast = fpsTimeThis;
-
+  
   /* Disabled by request to prevent button mashing
   if (wParam != wlast) {
     wlast = wParam;
@@ -1065,7 +1064,8 @@ bool Debounce(WPARAM wParam) {
 
   wlast = wParam;
 
-  if (dT>250) {
+  if (dT>500) {
+	fpsTimeLast = fpsTimeThis;
     return true;
   } else {
     return false;
@@ -1280,15 +1280,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			ShowMenu();
 			break;
 
-        case VK_UP :  // SCROLL UP
+        case VK_UP :  // SCROLL UP (infobox mode)
           DoInfoKey(1);
           break;
 
-        case VK_DOWN: // SCROLL DOWN
-          DoInfoKey(-1);
+        case VK_DOWN: // SCROLL DOWN (infobox mode)
+         DoInfoKey(-1);
           break;
 
         case VK_RETURN:
+        if (!Debounce(wParam)) break;
           DoInfoKey(0);
           break;
 

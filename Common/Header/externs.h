@@ -141,4 +141,7 @@ extern BOOL TOPOLOGYFILECHANGED;
 
 extern BOOL InfoBoxesHidden;
 
+bool Debounce(WPARAM wParam);
+
+
 #endif
