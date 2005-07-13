@@ -227,9 +227,9 @@ static BOOL CALLBACK ToolTipProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 {
-  //#ifdef _WCE_PPC2002
+  #ifdef _WCE_PPC2003
 	TODAYDRAWWATERMARKINFO dwi;
-        //#endif
+  #endif
 
 	HDC drawdc, tempdc;
 	HBITMAP hDrawBitMap;
@@ -249,18 +249,17 @@ void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 	hDrawBitMap = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
 	hRetDrawBmp = SelectObject(drawdc, hDrawBitMap);
 
-        //#ifdef _WCE_PPC2002
+        #ifdef _WCE_PPC2003
 
           dwi.hdc = drawdc;
           GetClientRect(hWnd, &dwi.rc);
           dwi.hwnd = hWnd;
           SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
 
-        /*
 #else
 	FillRect(drawdc, &rect, (HBRUSH)GetStockObject(WHITE_BRUSH));
 #endif
-        */
+ 
         
 	x = WinLeftMargin;
 	y = WinTopMargin;
@@ -276,10 +275,20 @@ void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
           }
 
           SelectObject(tempdc, FileList[i].bitmap);
-          TransparentBlt(drawdc, 
+
+#ifdef _WCE_PPC2003
+		  TransparentBlt(drawdc, 
                          x+HMargin, y+VMargin, 
                          IconSizeX, IconSizeY, 
                          tempdc, 0, 0, IconSizeX, IconSizeY, RGB(0, 0, 255));
+
+#else
+		  BitBlt(drawdc, 
+                         x+HMargin, y+VMargin, 
+                         IconSizeX, IconSizeY, 
+                         tempdc, 0, 0, SRCCOPY);
+
+#endif
 
           x+= IconSizeX+HMargin*2;
 
