@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.49 2005/07/13 03:35:44 scottp Exp $
+  $Id: XCSoar.cpp,v 1.50 2005/07/13 07:15:04 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -626,18 +626,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   devInit();
 
+  CreateProgressDialog(TEXT("Initialising display"));
+
   CreateCalculationThread();
 
   CreateDrawingThread();
 
-  CloseProgressDialog();
-
   // just about done....
 
-  MapDirty = true;
-
-  FullScreen();
-  SwitchToMapWindow();
 
 #ifdef _SIM_
   /*
@@ -655,6 +651,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ShowStatusMessage(TEXT("Maintain effective\r\nLOOKOUT at all times"), 3000);
 
 #endif
+
+  SwitchToMapWindow();
+  MapDirty = true;
 
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0)) 
@@ -989,8 +988,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         UpdateWindow(hWndInfoWindow[i]);
         UpdateWindow(hWndTitleWindow[i]);
       }
-
-    FullScreen();
     
     return TRUE;
 }
@@ -1384,6 +1381,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       DeleteCriticalSection(&CritSec_TerrainDataCalculations); 
       DeleteCriticalSection(&CritSec_TerrainDataGraphics); 
 
+      CloseProgressDialog();
+
       break;
 
     case WM_DESTROY:
@@ -1442,7 +1441,9 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 {
                   SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
                   SendMessage (hWnd, WM_CLOSE, 0, 0);
-                }       
+                } else {
+              }
+              MapDirty = true;
 	      HideMenu();
               FullScreen();
               return 0;

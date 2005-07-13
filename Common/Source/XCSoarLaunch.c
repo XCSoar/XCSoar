@@ -23,7 +23,7 @@
 #include <aygshell.h>
 
 #include "resource-launch.h"
-
+#include "compatibility.h"
 
 /**************************************************************************
 	Define
@@ -227,9 +227,9 @@ static BOOL CALLBACK ToolTipProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 {
-  #ifdef _WCE_PPC2003
+#if (WIN32_PLATFORM_PSPC == 500)
 	TODAYDRAWWATERMARKINFO dwi;
-  #endif
+#endif
 
 	HDC drawdc, tempdc;
 	HBITMAP hDrawBitMap;
@@ -249,7 +249,7 @@ void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 	hDrawBitMap = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
 	hRetDrawBmp = SelectObject(drawdc, hDrawBitMap);
 
-        #ifdef _WCE_PPC2003
+#if (WIN32_PLATFORM_PSPC == 500)
 
           dwi.hdc = drawdc;
           GetClientRect(hWnd, &dwi.rc);
@@ -276,7 +276,8 @@ void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 
           SelectObject(tempdc, FileList[i].bitmap);
 
-#ifdef _WCE_PPC2003
+#if (WIN32_PLATFORM_PSPC == 500)
+
 		  TransparentBlt(drawdc, 
                          x+HMargin, y+VMargin, 
                          IconSizeX, IconSizeY, 
