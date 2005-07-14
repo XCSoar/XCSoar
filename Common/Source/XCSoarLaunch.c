@@ -23,7 +23,7 @@
 #include <aygshell.h>
 
 #include "resource-launch.h"
-#include "compatibility.h"
+//#include "compatibility.h"
 
 /**************************************************************************
 	Define
@@ -163,8 +163,6 @@ BOOL WINAPI DllMain(HINSTANCE hModule, DWORD fdwReason, PVOID pvReserved)
 
 	ToolTipProc
 
-	ツールチップ
-
 ******************************************************************************/
 
 static BOOL CALLBACK ToolTipProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -221,8 +219,6 @@ static BOOL CALLBACK ToolTipProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 	OnPaint
 
-	アイコンの描画
-
 ******************************************************************************/
 
 void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
@@ -234,10 +230,10 @@ void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 	HDC drawdc, tempdc;
 	HBITMAP hDrawBitMap;
 	HBITMAP hRetDrawBmp;
-	HBITMAP hRetBmp;
+//	HBITMAP hRetBmp;
 	RECT rect;
 	RECT selrect;
-	BITMAP bmp;
+//	BITMAP bmp;
 	int x, y;
 	int i;
 	HBRUSH hBrush;
@@ -310,8 +306,6 @@ void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 
 	Point2Item
 
-	位置からアイテムを取得
-
 ******************************************************************************/
 
 static int Point2Item(int px, int py)
@@ -341,8 +335,6 @@ static int Point2Item(int px, int py)
 /******************************************************************************
 
 	ShellOpen
-
-	ファイルを実行
 
 ******************************************************************************/
 
@@ -384,8 +376,6 @@ static BOOL ShellOpen(TCHAR *FileName, TCHAR *CommandLine)
 /******************************************************************************
 
 	WndProc
-
-	メインウィンドウプロシージャ
 
 ******************************************************************************/
 
@@ -515,8 +505,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 	InitInstance
 
-	ウィンドウの作成
-
 ******************************************************************************/
 
 
@@ -554,8 +542,6 @@ static HWND InitInstance(HWND pWnd, TODAYLISTITEM *ptli)
 
 	InitializeCustomItem
 
-	初期化
-
 ******************************************************************************/
 
 HWND APIENTRY InitializeCustomItem(TODAYLISTITEM *ptli, HWND pWnd)
@@ -571,17 +557,15 @@ HWND APIENTRY InitializeCustomItem(TODAYLISTITEM *ptli, HWND pWnd)
 
 	CustomItemOptionsDlgProc
 
-	設定画面
-
 ******************************************************************************/
 
 BOOL APIENTRY CustomItemOptionsDlgProc(HWND hDlg, UINT uMsg, UINT wParam, LONG lParam)
 {
 	SHINITDLGINFO shidi;
-	LVCOLUMN lvc;
-	LV_ITEM lvi;
-	int ItemIndex;
-	int i;
+//	LVCOLUMN lvc;
+//	LV_ITEM lvi;
+//	int ItemIndex;
+//	int i;
 
 	switch(uMsg)
 	{
