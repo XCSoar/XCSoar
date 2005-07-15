@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title>Quick start guide</title>
+        </metadata>
+
+        <content>
+
+		<!-- XXX future update to use XML list of images -->
+
+		<screenshots>
+
+			<screenshot 
+				title="Blah blah"
+				src="fig-abort.png" 
+			>
+				Here is my text... and it goes on...
+			</screenshot>
+
+			<screenshot 
+				title="need more titles"
+				src="fig-automc.png"
+			/>
+
+			<screenshot 
+				title="Titles are good"
+				src="fig-buttonsinfo.png"
+			/>
+
+			<screenshot 
+				src="fig-buttonsmap.png"
+			/>
+
+			<screenshot 
+				src="fig-climb.png"
+			/>
+
+			<screenshot 
+				src="fig-fglide.png"
+			/>
+
+			<screenshot 
+				src="fig-fgtt.png"
+			/>
+
+			<screenshot 
+				src="fig-foot.png"
+			/>
+
+			<screenshot 
+				src="fig-map.png"
+			/>
+
+			<screenshot 
+				src="fig-optcruise.png"
+			/>
+
+			<screenshot 
+				src="fig-snail.png"
+			/>
+
+			<screenshot 
+				src="fig-task.png"
+			/>
+
+			<screenshot 
+				src="fig-terrain.png"
+			/>
+
+		</screenshots>
+
+	</content>
+</document>
+

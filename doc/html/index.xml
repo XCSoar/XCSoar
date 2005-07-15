@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title>Welcome</title>
+        </metadata>
+
+        <content>
+		<h2>XCSoar 4.2</h2>
+
+		<screenshot
+			title="4.2 in action"
+			src="quick/fig-buttonsmap.png"
+		/>
+			
+	</content>
+</document>
+

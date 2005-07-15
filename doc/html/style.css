@@ -1,0 +1,95 @@
+
+body {
+	font-family: verdana, arial, helvetica, sans-serif; 
+	color: #333333; 
+	background: #455F8D; 
+	margin: 0px;
+	padding: 0px; 
+}
+
+h1 { 
+	font-size: 1.3em;
+	font-family: verdana, arial, helvetica, sans-serif;
+	color: #333366; 
+}
+
+#page {
+	background: #ffffff; 
+	padding: 0px;  
+	margin: 0px; 
+	width: 100%;
+}
+
+#header { 
+	background: #86A2CC;  
+	padding: 10px;  
+	margin: 0px; 
+	vertical-align: middle;
+}
+
+#header a {
+	text-decoration: none;
+}
+
+#content { 
+	background: #ffffff;  
+	padding: 10px 20px;  
+	margin: 0px; 
+	float: left; 
+}
+
+#navigation { 
+	font-size: 0.7em;
+	padding: 10px ; 
+	width: 150px; 
+	color: #455F8D;
+	font-weight: bold;
+	background: #B8CBE8;
+	float: left; 
+	margin: 0px; 
+}
+
+#navigation ul {
+	padding: 0px;
+	margin: 0px;
+}
+
+#navigation li {
+	list-style-type: none;
+	margin: 6px 0px;
+}
+
+#navigation ul ul {
+	margin: 6px 10px;
+	padding: 0px;
+}
+
+#navigation a, .nav a:link, .nav a:visited { 
+	color: #455F8D;
+	font-weight: bold;
+	text-decoration: none;
+}
+	
+#navigation a:hover { 
+	font-weight: bold;
+	color: #152748;  
+	text-decoration: underline;
+}
+	
+#footer {
+	background-color: #86A2CC;
+	clear: both;	
+	padding: 5px;
+}
+
+
+.screenshots h2 {
+	border-top: solid 1px #433737;
+}
+
+.screenshots img {
+	text-align: center;
+	padding: 50px;
+	display: block;
+}
+

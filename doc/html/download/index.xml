@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title>About</title>
+        </metadata>
+
+        <content>
+		<h2>Download</h2>
+
+		<!-- ============================ -->
+		<h3>Source Code</h3>
+		<ul>
+			<li>
+				<a href="https://sourceforge.net/cvs/?group_id=141663">
+					CVS
+				</a> - considering the high turn over of code,
+				this is the best place to get the source.
+			</li>
+		</ul>
+
+
+		<!-- ============================ -->
+		<h3>Binaries</h3>
+		<ul>
+			<li>
+				<a 
+					href="https://sourceforge.net/project/showfiles.php?group_id=141663&amp;package_id=155526"
+				>
+					including: PocketPC 2002, PocketPC 2003
+				</a>
+			</li>
+		</ul>
+
+
+		<!-- ============================ -->
+		<h3>Data</h3>
+
+		<p>This is by far the big important section of any application
+		like this. We have great plans and great code here for
+		generating data from free sources for any area in the world.
+		However it is by no means a trivial task. As such we are
+		building a set of tools to generate the data. To do so we will
+		need about 3 GB of disk storage for the original files. This is
+		not a problem for us long term, but we are not ready for that.
+		</p>
+		<p>
+		For now, please contact the users list with the data area you
+		need or try and generate it yourself with the tools in CVS.
+		</p>
+		<p>
+		Here are some we have already prepared
+		</p>
+		<ul>
+			<li>
+				<a
+					href="https://sourceforge.net/project/showfiles.php?group_id=141663&amp;package_id=157326"
+				>
+					including:
+					Benalla, Alps, Bayreuth, Germany, Slovakia and UK -
+					more to come
+				</a>
+			</li>
+		</ul>
+
+	</content>
+</document>
+
