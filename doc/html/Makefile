@@ -15,7 +15,9 @@ clean: depends
 	@-rm $(FILES_CLEAN) dest.tar.gz >/dev/null 2>/dev/null
 
 install: build
-	tar cvzf dest.tar.gz $(FILES_DEST)
+	# Note - hard coded readme here now... (temporary)
+	cp ../../source/XCSoarV4-README.txt .
+	tar cvzf dest.tar.gz $(FILES_DEST) XCSoarV4-README.txt
 	scp dest.tar.gz shell.sourceforge.net:/home/groups/x/xc/xcsoar/htdocs/
 	ssh shell.sourceforge.net "cd /home/groups/x/xc/xcsoar/htdocs/; tar xvzf dest.tar.gz"
 

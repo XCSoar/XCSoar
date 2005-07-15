@@ -1,4 +1,4 @@
-FILES_DEST=./about/index.html ./index.html ./quick/index.html ./download/index.html ./logo-small.gif ./quick/fig-abort.png ./quick/fig-automc.png ./quick/fig-buttonsinfo.png ./quick/fig-buttonsmap.png ./quick/fig-climb.png ./quick/fig-fglide.png ./quick/fig-fgtt.png ./quick/fig-foot.png ./quick/fig-map.png ./quick/fig-optcruise.png ./quick/fig-snail.png ./quick/fig-task.png ./quick/fig-terrain.png ./style.css 
+FILES_DEST=./about/index.html ./index.html ./download/index.html ./quick/index.html ./logo-small.gif ./quick/fig-abort.png ./quick/fig-automc.png ./quick/fig-buttonsinfo.png ./quick/fig-buttonsmap.png ./quick/fig-climb.png ./quick/fig-fglide.png ./quick/fig-fgtt.png ./quick/fig-foot.png ./quick/fig-map.png ./quick/fig-optcruise.png ./quick/fig-snail.png ./quick/fig-task.png ./quick/fig-terrain.png ./style.css 
 
-FILES_CLEAN=./about/index.html ./index.html ./quick/index.html ./download/index.html 
+FILES_CLEAN=./about/index.html ./index.html ./download/index.html ./quick/index.html 
 

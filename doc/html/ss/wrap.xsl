@@ -44,6 +44,7 @@
 				      <li><a href="/about/">About XCSoar</a></li>
 				      <li><a href="/download/">Download</a></li>
 				      <li><a href="/quick/">Quick Start</a></li>
+				      <li><a href="/XCSoarV4-README.txt">Version 4 Readme</a></li>
 				</ul>
 			</div>
 			    
