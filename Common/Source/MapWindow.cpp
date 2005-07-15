@@ -597,6 +597,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
         double newbearing = Bearing(Ystart, Xstart, Y, X);
         GPS_INFO.TrackBearing = newbearing;
         GPS_INFO.Speed = min(100,distance/3);
+        break;
       }
 #endif
     }
@@ -1054,7 +1055,6 @@ static void RenderMapWindow(  RECT rc)
 }
 
 
-
 DWORD DrawThread (LPVOID lpvoid)
 {
   
@@ -1097,12 +1097,9 @@ DWORD DrawThread (LPVOID lpvoid)
   UpdateMapScale();
   RenderMapWindow(MapRect);
   SetTopologyBounds(MapRect);
-
-  // display end of starting splash stuff
+  
   CloseProgressDialog();
 
-  FullScreen();
-  
   //////
 		
   while (!CLOSETHREAD) 
@@ -2542,7 +2539,7 @@ void CalculateWaypointReachable(void)
         AltitudeRequired = McReadyAltitude(0.0, // JMW was MACREADY/LIFTMODIFY
           WaypointDistance,WaypointBearing, 
           DerivedDrawInfo.WindSpeed, 
-          DerivedDrawInfo.WindBearing,0,0,1);
+          DerivedDrawInfo.WindBearing,0,0,1,0);
         AltitudeRequired = AltitudeRequired * (1/BUGS);	
         AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL + WayPointList[i].Altitude ;
         AltitudeRequired = DrawInfo.Altitude - AltitudeRequired;				

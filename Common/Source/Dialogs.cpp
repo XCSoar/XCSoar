@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.36 2005/07/13 07:15:03 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.37 2005/07/15 05:27:00 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -494,8 +494,7 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	      {
 		GetDlgItemText(hDlg,IDC_POLARFILE,szFile,MAX_PATH);
 		SetRegistryString(szRegistryPolarFile,szFile);
-		CalculateNewPolarCoef();
-		SetBallast();
+                POLARFILECHANGED = TRUE;
 
 	      }
 	  }
@@ -2630,8 +2629,8 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
   PAINTSTRUCT ps;
   HDC hdc;
   RECT rc;
-  static bool hasimage1 = false;
-  static bool hasimage2 = false;
+  static BOOL hasimage1 = false;
+  static BOOL hasimage2 = false;
         
   switch (message)
     {

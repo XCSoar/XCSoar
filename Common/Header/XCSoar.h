@@ -14,12 +14,12 @@ class InfoBoxFormatter {
  public:
   InfoBoxFormatter(TCHAR *theformat) {
     _tcscpy(Format, theformat);
-    Valid = true;
+    Valid = TRUE;
     Value = 0.0;    
   }
 
   virtual void Render(HWND hWnd);
-  bool Valid;
+  BOOL Valid;
   double Value;
   TCHAR Format[FORMAT_SIZE+1];
   TCHAR Text[100];

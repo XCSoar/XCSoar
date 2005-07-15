@@ -26,6 +26,7 @@ Summary of new features since v4.0
 - Added calculation of glider heading from bearing and wind
 - Added infoboxes: G-load, time of flight, UTC time, local time, LD to next waypoint
 - Adjusted infobox descriptions and titles.
+- Added infoboxes: Time to next waypoint, time to task completion
 
 Bug fixes and code improvements
 - Sound files are now in the code as resources, so no need for Audio directory
@@ -128,7 +129,7 @@ through various related values.  These groupings are:
   AA Min Dist, AA Max Speed, AA Min Speed
 
 - Waypoint group: 
-  Next Waypoint, time flying, local time, UTC time
+  Next Waypoint, time flying, local time, UTC time, time to task finish, time to next waypoint
 
 
 ============================================================================
