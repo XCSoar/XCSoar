@@ -18,24 +18,24 @@
 			<title>
 				XCSoar - <xsl:value-of select="/document/metadata/title"/>
 			</title>
-			<link href="../style.css" rel="stylesheet" type="text/css"/>
+			<link href="/style.css" rel="stylesheet" type="text/css"/>
 		</head>
 		<body>
 		<div id="page">
 
 			<div id="header">
+				<h1>
+				<span>
+				<img
+					align="middle"
+					src="/logo-small.gif"
+					border="0"
+				/>
+				</span>
 			    	<a href="/">
-					<h1>
-						<span>
-							<img
-								align="middle"
-								src="/logo-small.gif"
-								border="0"
-							/>
-							XCSoar - <xsl:value-of select="/document/metadata/title"/>
-						</span>
-					</h1>
+					XCSoar - <xsl:value-of select="/document/metadata/title"/>
 				</a>
+				</h1>
 			</div>
 
 			<div id="navigation">
@@ -44,7 +44,7 @@
 				      <li><a href="/about/">About XCSoar</a></li>
 				      <li><a href="/download/">Download</a></li>
 				      <li><a href="/quick/">Quick Start</a></li>
-				      <li><a href="/XCSoarV4-README.txt">Version 4 Readme</a></li>
+				      <li><a href="/readme.html">Version 4 Readme</a></li>
 				</ul>
 			</div>
 			    
