@@ -204,5 +204,6 @@ void RasterTerrain::CloseTerrain(void)
     {
       CloseHandle(hTerrain);
       DeleteCriticalSection(&CritSec_TerrainFile);
+      hTerrain = NULL;
     }
 }

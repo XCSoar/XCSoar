@@ -43,7 +43,8 @@ TCHAR *szRegistryDisplayType[] =     { TEXT("Info0"),
 				       TEXT("Info7"),
 				       TEXT("Info8"),
 				       TEXT("Info9")
-};
+}; // pL
+
 TCHAR *szRegistryColour[] =     { TEXT("Colour0"),
 				  TEXT("Colour1"),
 				  TEXT("Colour2"),
@@ -59,7 +60,7 @@ TCHAR *szRegistryColour[] =     { TEXT("Colour0"),
 				  TEXT("Colour12"),
 				  TEXT("Colour13"),
 				  TEXT("Colour14")
-};
+}; // pL
 
 
 TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
@@ -77,7 +78,7 @@ TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
 				  TEXT("Brush12"),
 				  TEXT("Brush13"),
 				  TEXT("Brush14")
-};
+}; // pL
 
 
 TCHAR szRegistryAirspaceWarning[]= TEXT("AirspaceWarn");
@@ -96,33 +97,33 @@ TCHAR szRegistryFAISector[] = TEXT("FAISector");
 TCHAR szRegistryFinalGlideTerrain[]= TEXT("FinalGlideTerrain");
 TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
 TCHAR szRegistryLiftUnitsValue[] = TEXT("Lift");
-TCHAR szRegistryPolarID[] = TEXT("Polar");
+TCHAR szRegistryPolarID[] = TEXT("Polar"); // pL
 TCHAR szRegistryPort1Index[]= TEXT("PortIndex");
 TCHAR szRegistryPort2Index[]=		 TEXT("Port2Index");
 TCHAR szRegistryRegKey[]=				 TEXT("RegKey");
 TCHAR szRegistrySafetyAltitudeArrival[] =     TEXT("SafetyAltitudeArrival");
 TCHAR szRegistrySafetyAltitudeBreakOff[] =     TEXT("SafetyAltitudeBreakOff");
 TCHAR szRegistrySafetyAltitudeTerrain[] =     TEXT("SafetyAltitudeTerrain");
-TCHAR szRegistrySafteySpeed[] = TEXT("SafteySpeed");
-TCHAR szRegistrySectorRadius[]=        TEXT("Radius");
+TCHAR szRegistrySafteySpeed[] =          TEXT("SafteySpeed");
+TCHAR szRegistrySectorRadius[]=          TEXT("Radius");
 TCHAR szRegistrySnailTrail[]=		 TEXT("SnailTrail");
 TCHAR szRegistrySpeed1Index[]=		 TEXT("SpeedIndex");
 TCHAR szRegistrySpeed2Index[]=		 TEXT("Speed2Index");
-TCHAR szRegistrySpeedUnitsValue[] =    TEXT("Speed");
+TCHAR szRegistrySpeedUnitsValue[] =      TEXT("Speed");
 TCHAR szRegistryStartLine[]=		 TEXT("StartLine");
 TCHAR szRegistryStartRadius[]=		 TEXT("StartRadius");
 TCHAR szRegistryWarningTime[]=		 TEXT("WarnTime");
-TCHAR szRegistryAcknowledgementTime[]=		 TEXT("AcknowledgementTime");
+TCHAR szRegistryAcknowledgementTime[]=	 TEXT("AcknowledgementTime");
 TCHAR szRegistryWindUpdateMode[] =       TEXT("WindUpdateMode");
-TCHAR szRegistryWindSpeed[] =       TEXT("WindSpeed");
-TCHAR szRegistryWindBearing[] =       TEXT("WindBearing");
+TCHAR szRegistryWindSpeed[] =            TEXT("WindSpeed");
+TCHAR szRegistryWindBearing[] =          TEXT("WindBearing");
 
-TCHAR szRegistryAirfieldFile[]=  TEXT("AirfieldFile");
-TCHAR szRegistryAirspaceFile[]=  TEXT("AirspaceFile");
-TCHAR szRegistryPolarFile[] = TEXT("PolarFile");
-TCHAR szRegistryTerrainFile[]=	 TEXT("TerrainFile");
-TCHAR szRegistryTopologyFile[]=  TEXT("TopologyFile");
-TCHAR szRegistryWayPointFile[]=  TEXT("WPFile");
+TCHAR szRegistryAirfieldFile[]=  TEXT("AirfieldFile"); // pL
+TCHAR szRegistryAirspaceFile[]=  TEXT("AirspaceFile"); // pL
+TCHAR szRegistryPolarFile[] = TEXT("PolarFile"); // pL
+TCHAR szRegistryTerrainFile[]=	 TEXT("TerrainFile"); // pL
+TCHAR szRegistryTopologyFile[]=  TEXT("TopologyFile"); // pL
+TCHAR szRegistryWayPointFile[]=  TEXT("WPFile"); // pL
 
 TCHAR szRegistryPilotName[]=  TEXT("PilotName");
 TCHAR szRegistryAircraftType[]=  TEXT("AircraftType");
@@ -268,6 +269,7 @@ void ReadRegistrySettings(void)
   FAISector = Temp;
 
   GetFromRegistry(szRegistrySectorRadius,&SectorRadius);
+
   GetFromRegistry(szRegistryPolarID,&Temp); POLARID = (int)Temp;
 
   GetRegistryString(szRegistryRegKey, strRegKey, 65);
@@ -1383,19 +1385,22 @@ void WriteProfile(HWND hwnd, TCHAR *szFile)
     }
 
   WriteFile(hFile,InfoType,sizeof(InfoType),&dwBytesWritten,NULL);
+
   WriteFile(hFile,&POLARID,sizeof(POLARID),&dwBytesWritten,NULL);
-  WriteFile(hFile,iAirspaceColour,11*sizeof(iAirspaceBrush[0]),&dwBytesWritten,NULL);
-  WriteFile(hFile,iAirspaceBrush,11*sizeof(iAirspaceColour[0]),&dwBytesWritten,NULL);
+
+  WriteFile(hFile,iAirspaceColour,AIRSPACECLASSCOUNT*sizeof(iAirspaceBrush[0]),&dwBytesWritten,NULL);
+  WriteFile(hFile,iAirspaceBrush,AIRSPACECLASSCOUNT*sizeof(iAirspaceColour[0]),&dwBytesWritten,NULL);
 
   ///////
 
-
+    /* Disabled  due to bugs
     WriteFileRegistryString(hFile, szRegistryAirfieldFile);
     WriteFileRegistryString(hFile, szRegistryAirspaceFile);
     WriteFileRegistryString(hFile, szRegistryPolarFile);
     WriteFileRegistryString(hFile, szRegistryTerrainFile);
     WriteFileRegistryString(hFile, szRegistryTopologyFile);
     WriteFileRegistryString(hFile, szRegistryWayPointFile);
+    */
 
     CloseHandle(hFile);
 }
@@ -1435,12 +1440,14 @@ void ReadProfile(HWND hwnd, TCHAR *szFile)
     }
 
   ReadFile(hFile,&POLARID,sizeof(POLARID),&dwBytesRead,NULL);
-  CalculateNewPolarCoef();
   SetToRegistry(szRegistryPolarID,(DWORD)POLARID);
 
-  ReadFile(hFile,iAirspaceColour,11*sizeof(iAirspaceColour[0]),&dwBytesRead,NULL);
-  ReadFile(hFile,iAirspaceBrush,11*sizeof(iAirspaceBrush[0]),&dwBytesRead,NULL);
-  for(i=0;i<11;i++)
+  ReadFile(hFile,iAirspaceColour,
+           AIRSPACECLASSCOUNT*sizeof(iAirspaceColour[0]),&dwBytesRead,NULL);
+  ReadFile(hFile,iAirspaceBrush,
+           AIRSPACECLASSCOUNT*sizeof(iAirspaceBrush[0]),&dwBytesRead,NULL);
+
+  for(i=0;i<AIRSPACECLASSCOUNT;i++)
     {
 
       SetRegistryColour(i,iAirspaceColour[i]);
@@ -1451,6 +1458,7 @@ void ReadProfile(HWND hwnd, TCHAR *szFile)
 
   ///////
 
+    /* Disabled  due to bugs
     ReadFileRegistryString(hFile, szRegistryAirfieldFile);
     ReadFileRegistryString(hFile, szRegistryAirspaceFile);
     ReadFileRegistryString(hFile, szRegistryPolarFile);
@@ -1463,12 +1471,13 @@ void ReadProfile(HWND hwnd, TCHAR *szFile)
     TOPOLOGYFILECHANGED = TRUE;
     AIRSPACEFILECHANGED = TRUE;
     AIRFIELDFILECHANGED = TRUE;
-    // JMW TODO: WinPilot file changed
+    POLARFILECHANGED = TRUE;
+    */
 
-  CloseHandle(hFile);
+    CloseHandle(hFile);
 
-  // assuming all is ok, we can...
-  ReadRegistrySettings();
+    // assuming all is ok, we can...
+    ReadRegistrySettings();
 
 }
 

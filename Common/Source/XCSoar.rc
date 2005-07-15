@@ -95,14 +95,14 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 139, 83
+IDD_ABOUTBOX DIALOGEX 0, 0, 139, 83
 STYLE WS_CHILD
 EXSTYLE 0x80000000L
 FONT 10, "System"
 BEGIN
     LTEXT           "XCSoar",IDC_STATIC,32,7,101,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2003,2004,2005",IDC_STATIC,32,25,101,8
-    LTEXT           "Version 4.2 RC",IDC_STATIC,32,16,101,8,SS_NOPREFIX
+    LTEXT           "Version 4.2",IDC_STATIC,32,16,101,8,SS_NOPREFIX
     LTEXT           "Processor",IDC_STATIC,10,46,35,8,SS_NOPREFIX
     LTEXT           "OS Version",IDC_STATIC,10,56,40,8,SS_NOPREFIX
     LTEXT           "",IDC_PROCESSOR,47,45,66,8
@@ -870,7 +870,7 @@ IDB_TERRAINWARNING      BITMAP  DISCARDABLE     "bitmaps\\terrainw.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Menu
+// Menubar
 //
 
 IDM_MENU MENU DISCARDABLE

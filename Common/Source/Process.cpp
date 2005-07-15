@@ -240,6 +240,11 @@ void FormatterTime::SecsToDisplayTime(int d) {
   mins = (d/60-hours*60);
   seconds = (d-mins*60+hours*3600);
   hours = hours % 24;
+  if (d<0) {
+    Valid = FALSE;
+  } else {
+    Valid = TRUE;
+  }
 }
 
 
@@ -281,6 +286,12 @@ void FormatterTime::AssignValue(int i) {
     break;
   case 40:
     SecsToDisplayTime((int)(GPS_INFO.Time));
+    break;
+  case 41:
+    SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo));
+    break;
+  case 42:
+    SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo));
     break;
   default:
     break;
@@ -429,7 +440,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 28:
     Value = DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance ;
     if (ActiveWayPoint>=0) {
-      Valid = (bool)AATEnabled;
+      Valid = AATEnabled;
     } else {
       Valid = false;
     }
@@ -437,7 +448,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 29:
     Value = DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance ;
     if (ActiveWayPoint>=0) {
-      Valid = (bool)AATEnabled;
+      Valid = AATEnabled;
     } else {
       Valid = false;
     }
@@ -445,7 +456,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 30:
     Value = SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
     if (ActiveWayPoint>=0) {
-      Valid = (bool)AATEnabled;
+      Valid = AATEnabled;
     } else {
       Valid = false;
     }
@@ -453,7 +464,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 31:
     Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
     if (ActiveWayPoint>=0) {
-      Valid = (bool)AATEnabled;
+      Valid = AATEnabled;
     } else {
       Valid = false;
     }
@@ -526,15 +537,19 @@ void FormatterLowWarning::Render(HWND hWnd) {
 
 
 void FormatterTime::Render(HWND hWnd) {
-  if (hours<1) {
-    _stprintf(Text,
-              TEXT("%02d:%02d"),
-              mins, seconds );
+  if (Valid==FALSE) {
+    _stprintf(Text,TEXT("--:--"));
   } else {
-    _stprintf(Text,
-              TEXT("%02d:%02d"),
-              hours, mins );
+    if (hours<1) {
+      _stprintf(Text,
+                TEXT("%02d:%02d"),
+                mins, seconds );
+    } else {
+      _stprintf(Text,
+                TEXT("%02d:%02d"),
+                hours, mins );
 
+    }
   }
   SetWindowLong(hWnd, GWL_USERDATA, 0);
   SetWindowText(hWnd,Text);

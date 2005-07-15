@@ -748,7 +748,8 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macread
                         Calculated->WaypointDistance,
                         Calculated->WaypointBearing,
                         Calculated->WindSpeed, Calculated->WindBearing,
-                        0, 0, (ActiveWayPoint == getFinalWaypoint())
+                        0, 0, (ActiveWayPoint == getFinalWaypoint()),
+                        0
                         // ||
                         // (Calculated->TaskAltitudeDifference>30)
                         // JMW TODO!!!!!!!!!
@@ -1137,6 +1138,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
 
   // Calculate Final Glide To Finish
   Calculated->TaskDistanceToGo = 0;
+  Calculated->TaskTimeToGo = 0;
   if(ActiveWayPoint >=0)
     {
       i=ActiveWayPoint;
@@ -1158,7 +1160,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
                                     Calculated->WindBearing,
                                     &(Calculated->BestCruiseTrack),
                                     &(Calculated->VMcReady),
-                                    (i==FinalWayPoint)
+                                    (i==FinalWayPoint),
+                                    &(Calculated->LegTimeToGo)
                                     // ||()
                                     // JMW TODO!!!!!!!!!!!
                                     );
@@ -1186,10 +1189,14 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
         Calculated->TerrainWarningLongditude = 0.0;
       }
 
+
       LegAltitude = LegAltitude * (1/BUGS);
 
       TaskAltitudeRequired = LegAltitude;
       Calculated->TaskDistanceToGo = LegToGo;
+      Calculated->TaskTimeToGo = Calculated->LegTimeToGo;
+
+      double LegTimeToGo;
 
       if(  (Basic->Altitude - LegAltitude - SAFETYALTITUDEARRIVAL) > 0)
         {
@@ -1216,13 +1223,14 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
 
           LegAltitude = McReadyAltitude(macready, LegDistance, LegBearing,
                                         Calculated->WindSpeed, Calculated->WindBearing, 0, 0,
-                                        (i==FinalWayPoint) // ||() JMW TODO!!!!!!!!!
-                                        );
+                                        (i==FinalWayPoint), // ||() JMW TODO!!!!!!!!!
+                                        &LegTimeToGo);
           LegAltitude = LegAltitude * (1/BUGS);
 
           TaskAltitudeRequired += LegAltitude;
 
           Calculated->TaskDistanceToGo += LegDistance;
+          Calculated->TaskTimeToGo += LegTimeToGo;
 
           i++;
         }
@@ -1255,10 +1263,10 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
                     Calculated->WindBearing,
                     &(Calculated->BestCruiseTrack),
                     &(Calculated->VMcReady),
-                    0
+                    0,
                     // ||()
                     // JMW TODO!!!!!!!!!!!
-                    );
+                    0);
 
   }
 }
@@ -1712,7 +1720,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   double ialtitude = McReadyAltitude(MACREADY/LIFTMODIFY,
                                      1.0, bearing,
                                      Calculated->WindSpeed,
-                                     Calculated->WindBearing, 0, 0, 1);
+                                     Calculated->WindBearing, 0, 0, 1, 0);
   double maxrange = Basic->Altitude/ialtitude;
   double lat, lon;
   double latlast, lonlast;
@@ -1818,8 +1826,8 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
 			    Calculated->WindBearing,
 			    0,
 			    0,
-			    1
-			    )*(1/BUGS);
+			    1,
+			    0)*(1/BUGS);
 
   return ((Basic->Altitude) - AltReqd - WayPointList[i].Altitude - SAFETYALTITUDEARRIVAL);
 }

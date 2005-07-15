@@ -494,8 +494,7 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	      {
 		GetDlgItemText(hDlg,IDC_POLARFILE,szFile,MAX_PATH);
 		SetRegistryString(szRegistryPolarFile,szFile);
-		CalculateNewPolarCoef();
-		SetBallast();
+                POLARFILECHANGED = TRUE;
 
 	      }
 	  }
@@ -2630,8 +2629,8 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
   PAINTSTRUCT ps;
   HDC hdc;
   RECT rc;
-  static bool hasimage1 = false;
-  static bool hasimage2 = false;
+  static BOOL hasimage1 = false;
+  static BOOL hasimage2 = false;
 
   switch (message)
     {

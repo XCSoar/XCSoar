@@ -197,6 +197,7 @@ BOOL AIRFIELDFILECHANGED = FALSE;
 BOOL WAYPOINTFILECHANGED = FALSE;
 BOOL TERRAINFILECHANGED = FALSE;
 BOOL TOPOLOGYFILECHANGED = FALSE;
+BOOL POLARFILECHANGED = FALSE;
 bool MenuActive = false;
 
 //Task Information
@@ -234,7 +235,7 @@ void PopupBugsBallast(int updown);
 //   Wind 25,26
 //   Mcready 10,34,35
 //   Nav 11,12,13,15,16,17,18,27,28,29,30,31
-//   Waypoint 14,36,39,40
+//   Waypoint 14,36,39,40,41,42
 
 SCREEN_INFO Data_Options[] = {
   // 0
@@ -280,7 +281,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Next Altitude Required"), TEXT("WP AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 15, 12},
 
   // 14
-  {TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 40},
+  {TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 42},
 
   // 15
   {TEXT("Final Altitude Difference"), TEXT("Fin AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 16, 13},
@@ -358,11 +359,18 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},
 
   // 40
-  {TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 39},
+  {TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 41, 39},
+
+  // 41
+  {TEXT("Task Time To Go"), TEXT("Fin ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 42, 40},
+
+  // 42
+  {TEXT("Next Time To Go"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 41},
+
 
 };
 
-int NUMSELECTSTRINGS = 41;
+int NUMSELECTSTRINGS = 43;
 
 int ControlWidth, ControlHeight;
 
@@ -1525,6 +1533,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               WAYPOINTFILECHANGED = FALSE;
               TERRAINFILECHANGED = FALSE;
               TOPOLOGYFILECHANGED = FALSE;
+              POLARFILECHANGED = FALSE;
 
               MenuActive = true;
               SuspendDrawingThread();
@@ -1598,10 +1607,19 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		  ReadAirfieldFile();
                 }
 
+              if (POLARFILECHANGED) {
+                CalculateNewPolarCoef();
+                SetBallast();
+              }
+
               if (AIRFIELDFILECHANGED
                   || AIRSPACEFILECHANGED
-                  || WAYPOINTFILECHANGED)
+                  || WAYPOINTFILECHANGED
+                  || TERRAINFILECHANGED
+                  )
                 CloseProgressDialog();
+
+
 
               UnlockFlightData();
               UnlockNavBox();

@@ -114,7 +114,8 @@ double SinkRate(double V, double n) {
 double McReadyAltitude(double MCREADY, double Distance, double Bearing, double WindSpeed, double WindBearing,
 		       double *BestCruiseTrack,
 		       double *VMcReady,
-		       int isFinalGlide)
+		       int isFinalGlide,
+                       double *TimeToGo)
 {
   int i;
   double BestSpeed, BestGlide, Glide;
@@ -155,6 +156,8 @@ double McReadyAltitude(double MCREADY, double Distance, double Bearing, double W
     Distance = 1;
   }
 
+  double TimeToDestTotal = -1; // initialise to error value
+
   for(i=Vminsink;i<SAFTEYSPEED;i+=1)
     {
       double vtrack = (double)i; // TAS along bearing in cruise
@@ -194,9 +197,9 @@ double McReadyAltitude(double MCREADY, double Distance, double Bearing, double W
 	    tclimb = sinkrate*(tcruise/MCREADY);
 	  }
 	  double tdest = tcruise+tclimb;
-	  if (tdest<1.0) {
-	    tdest = 1.0;
-	  }
+          if (tdest<1.0) {
+            tdest = 1.0;
+          }
 
 	  // JMW TODO: fix this...
 	  if(
@@ -211,6 +214,11 @@ double McReadyAltitude(double MCREADY, double Distance, double Bearing, double W
 		BestGlide = 1/tdest;
 	      }
 	      BestSpeed = vtrack;
+              if (tdest<=1.0) {
+                TimeToDestTotal = -1.0;
+              } else {
+                TimeToDestTotal = tdest;
+              }
 	      if (BestCruiseTrack) {
 		// best track bearing is the track along cruise that
 		// compensates for the drift during climb
@@ -233,10 +241,14 @@ double McReadyAltitude(double MCREADY, double Distance, double Bearing, double W
 
     }
 
-  // JMW: TODO calculate and save ETA in waypoints, and add up total ETA for task finish
-  BestSinkRate = // SinkRate(polar_a,polar_b,polar_c,0,0,BestSpeed);
+  BestSinkRate =
     SinkRateFast(0,(int)BestSpeed);
   TimeToDest = Distance / (VMG); // this time does not include thermalling part!
+
+  if (TimeToGo) {
+    *TimeToGo = TimeToDestTotal;
+  }
+
   AltitudeNeeded = -BestSinkRate * TimeToDest;
   // this is the altitude needed to final glide to destination
 
