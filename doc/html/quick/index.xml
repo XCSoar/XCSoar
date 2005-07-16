@@ -11,61 +11,126 @@
 		<screenshots>
 
 			<screenshot 
-				title="Blah blah"
-				src="fig-abort.png" 
+                                title="Hardware buttons in Map mode"
+				src="fig-buttonsmap.png"
 			>
-				Here is my text... and it goes on...
+The first user interface mode is Map mode, where the assignment of buttons is primarily to control the display of map elements.  Map mode can be selected at any time by touching the map area of the display.
+
 			</screenshot>
 
 			<screenshot 
-				title="need more titles"
-				src="fig-automc.png"
-			/>
-
-			<screenshot 
-				title="Titles are good"
+				title="Hardware buttons in Infobox mode"
 				src="fig-buttonsinfo.png"
-			/>
+			>
+The second user interface mode is Infobox mode, where the assignment of buttons is primarily to control the display of infoboxes and to set user variables, such as MacReady settings, the active waypoint etc.  Infobox mode can be selected at any time by touching the infobox of interest.  If an infobox is selected, the title turns grey, and it is ready to accept user input.  The system reverts to Map mode after 10 seconds have elapsed with no key press.  
+
+			</screenshot>
 
 			<screenshot 
-				src="fig-buttonsmap.png"
-			/>
-
-			<screenshot 
-				src="fig-climb.png"
-			/>
-
-			<screenshot 
-				src="fig-fglide.png"
-			/>
-
-			<screenshot 
-				src="fig-fgtt.png"
-			/>
-
-			<screenshot 
-				src="fig-foot.png"
-			/>
-
-			<screenshot 
+                                title="Map display"
 				src="fig-map.png"
 			/>
 
 			<screenshot 
-				src="fig-optcruise.png"
-			/>
-
-			<screenshot 
+                                title="Snail trail"
 				src="fig-snail.png"
 			/>
 
 			<screenshot 
-				src="fig-task.png"
-			/>
+				title="Aborted task"
+				src="fig-abort.png" 
+			>
+				From the main menu, the task can be aborted if the pilot wishes to terminate the task and find a safe landing point.  The task can later be resumed if the pilot manages to climb away.  If there are reachable landing points, these are sorted and fill the task waypoint list.  If there are no reachable landing points, then the closest ten landing points fill the task waypoint list. 
+
+			</screenshot>
 
 			<screenshot 
+				title="Auto MacReady"
+				src="fig-automc.png"
+			>
+
+                                By selecting the MacReady infobox and pressing the hardware enter button, Auto MacReady mode can be toggled. When the mode is active, the MacReady setting is adjusted to result in fastest arrival on the final glide slope.  If a supported intelligent variometer is connected to XCSoar, its MacReady setting will also be automatically adjusted. 
+			</screenshot>
+
+XCSoar has three flight modes: cruise, climb, and final glide.  The
+flight modes switch automatically.  Infoboxes can be set up for each
+flight mode independently, so the most relevant data to the user is displayed.  A user option "Zoom circling" may be set to enable automatic switching between long distance map scale when in cruise/climb and a short distance map scale when circling.
+
+			<screenshot 
+                                title="Cruise flight mode"
+				src="fig-task.png"
+			>
+
+Cruise flight mode is active when no waypoint is active, or when the
+glider is cruising between waypoints prior to the final task waypoint.
+When wind is present, it is indicated by red arrows pointing at the
+glider, and the glider's approximate heading is represented by the
+glider icon.  Several display orientations are available, such as
+north-up and track-up.
+
+A dashed green line represents the programmed task.
+  
+			</screenshot>
+
+			<screenshot 
+                                title="Flight director"
+				src="fig-optcruise.png"
+			>
+
+In all flight modes, a solid black line is drawn from the glider to
+target.  This is the shortest distance path between glider and target,
+but it is not the optimal track bearing during cruise if wind is
+present.  The optimal track bearing during cruise is indicated by the
+solid blue arrow, and this is calculated to produce the minimum time
+to target given that the glider will drift downwind when it stops to
+circle.
+
+			</screenshot>
+
+			<screenshot 
+				title="Climb flight mode"
+				src="fig-climb.png"
+			>
+As the glider climbs, average climb rate statistics are collected and
+displayed in a thermal profile chart, which may be useful in
+determining the optimum working height band in cross-country tasks.
+This chart is normalised by the current MacReady setting, which is
+therefore easy to set to an appropriate value.  The glider's height
+proportional to the thermal history is represented by the black arrow.
+
+			</screenshot>
+
+			<screenshot 
+                                title="Final glide flight mode"
+				src="fig-fglide.png"
+			>
+
+Final glide mode is very similar to cruise flight mode, except the
+thermal profile is hidden, the mode has its own set of infoboxes, and
+the computer assumes the glider is on a descent path to the target.
+
+			</screenshot>
+
+			<screenshot 
+                                title="Glide through terrain"
+				src="fig-fgtt.png"
+			>
+Final glide calculations check to determine whether the glide slope takes the glider below a terrain safety height above the terrain elevation.  If it does, a red cross appears on the map where the intersection occurs.  
+
+			<screenshot 
+                                title="Terrain safety heights"
 				src="fig-terrain.png"
-			/>
+			>
+			</screenshot>
+
+			<screenshot 
+				src="fig-foot.png"
+			>
+In all flight modes the glider's reach is calculated and displayed as
+a dashed arc.  This line represents the location the glider would
+intersect the terrain safety height above the terrain elevation, for a
+180 degree sweep of bearing from the current glider's bearing.
+			</screenshot>
 
 		</screenshots>
 
