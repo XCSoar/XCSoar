@@ -50,11 +50,11 @@ The second user interface mode is Infobox mode, where the assignment of buttons 
 			>
 
                                 By selecting the MacReady infobox and pressing the hardware enter button, Auto MacReady mode can be toggled. When the mode is active, the MacReady setting is adjusted to result in fastest arrival on the final glide slope.  If a supported intelligent variometer is connected to XCSoar, its MacReady setting will also be automatically adjusted. 
-			</screenshot>
 
 XCSoar has three flight modes: cruise, climb, and final glide.  The
 flight modes switch automatically.  Infoboxes can be set up for each
 flight mode independently, so the most relevant data to the user is displayed.  A user option "Zoom circling" may be set to enable automatic switching between long distance map scale when in cruise/climb and a short distance map scale when circling.
+			</screenshot>
 
 			<screenshot 
                                 title="Cruise flight mode"
@@ -116,6 +116,8 @@ the computer assumes the glider is on a descent path to the target.
 				src="fig-fgtt.png"
 			>
 Final glide calculations check to determine whether the glide slope takes the glider below a terrain safety height above the terrain elevation.  If it does, a red cross appears on the map where the intersection occurs.  
+
+			</screenshot>
 
 			<screenshot 
                                 title="Terrain safety heights"
