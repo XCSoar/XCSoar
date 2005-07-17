@@ -7,6 +7,23 @@
         <content>
 		<h2>XCSoar 4.2</h2>
 
+<p>
+Welcome to the XCSoar website.  XCSoar is a tactical glide computer
+for the Pocket PC operating system.  It runs on old hardware (PPC
+platform) through to WM2003SE.  WM2005 will be supported when devices
+become available.</p>
+
+<p>
+XCSoar is free software according to the GNU Public Licence.  As such,
+you are free to download the source code, and we encourage input from
+users.  Please use the <a
+href="http://sourceforge.net/projects/xcsoar/">sourceforge project
+page</a> to submit bugs and request features.  
+
+At present we are mainly using <a href="http://groups.yahoo.com/group/XCSoar/">this yahoo mailing list</a> for development and announcements.
+</p>
+
+
 		<screenshot
 			title="4.2 in action"
 			src="quick/fig-buttonsmap.png"
