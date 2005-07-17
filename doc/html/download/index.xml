@@ -62,6 +62,21 @@
 			</li>
 		</ul>
 
+                <p>
+                Data formats used by XCSoar and sources of data are listed below.
+                <ul>
+<li> Waypoints: Cambridge .dat format.  The
+<a href="http://soaring.aerobatics.ws/TP/"> Worldwide Soaring Turnpoint Exchange</a> is a good source of waypoint files.</li>
+
+<li> Airspace: OpenAir .txt format.  The
+<a href="http://soaring.aerobatics.ws/SUA/HomePage.html"> Worldwide Soaring Turnpoint Exchange </a> has a section on Special Use Airspace. </li>
+
+<li> Glide polars: WinPilot .plr format.  These can be obtained
+from the <a href="http://www.winpilot.com/polar.asp"> WinPilot </a> site. </li>
+
+                </ul>
+                </p>
+
 	</content>
 </document>
 
