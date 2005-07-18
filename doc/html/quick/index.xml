@@ -164,6 +164,18 @@ intersect the terrain safety height above the terrain elevation, for a
 180 degree sweep of bearing from the current glider's bearing.
 			</screenshot>
 
+			<screenshot 
+                                title="Waypoint actions"
+				src="CEZoom_WaypointActions.png"
+			>
+Waypoint details can be brought up by clicking on a waypoint on the
+map display (zoom dependent), or if the waypoint is in the task, by selecting
+the waypoint using the up/down arrow keys in the Next Waypoint infobox,
+and pressing the enter key.
+
+The waypoint details dialog has several pages.  This one, the waypoint
+action page, allows adjustment of the task in flight etc.
+			</screenshot>
 
 			<screenshot 
                                 title="Airfield data"
