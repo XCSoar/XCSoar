@@ -185,6 +185,74 @@ Images for waypoints can be extracted from the waypoint file using
 a script.  Automatic generation of these images will be supported via the XCSoar website at a later date.
 			</screenshot>
 
+<screenshot
+  title="Menu"
+  src="../settings/CEZoom_Menu.png"
+>
+
+Additional functionality is available from the XCSoar menu.  The menu
+is activated by pressing the menu button which is made visible by
+double tapping on the map display or by touching an infobox.
+
+The following screenshots show the various pages that are activated
+from the menu.  The settings page is described 
+<a href="../settings/index.html"> here </a>.
+
+</screenshot>
+
+<screenshot
+  title="Bugs and Ballast"
+  src="../settings/CEZoom_BugsBallast.png"
+>
+
+This page allows entering the percent of permissible water ballast and
+the degradation of performance (expressed as percent of ideal glide
+angle) due to bugs.  This page can also be activated by pressing the
+enter key on the "L/D" infobox.
+
+</screenshot>
+
+<screenshot
+  title="Pressure"
+  src="../settings/CEZoom_Pressure.png"
+>
+
+This page allows setting the field QNH, used in calibrating barometric
+altimeters if installed, and in estimating altitude expressed as
+Flight Level.  If a barometric altimeter is installed, the altitude is
+displayed as the user adjusts the local pressure.
+
+</screenshot>
+
+<screenshot
+  title="TaskPage"
+  src="../settings/CEZoom_TaskPage.png"
+>
+
+Tasks may be defined by selecting waypoints on the list on the left,
+and using the arrow buttons to add or remove them from the task.  Then
+a task has more than three waypoints defined, it may also be set up as
+an Assigned Area Task.  By selecting a task on the left and pressing
+the details button, the waypoint details page is brought up.
+
+When a supported logger is attached, the task may be declared to the
+logger.
+
+The following screenshots show settings available for AAT tasks.
+</screenshot>
+
+<screenshot
+  title="TaskAATStart"
+  src="../settings/CEZoom_TaskAATStart.png"
+>
+</screenshot>
+
+<screenshot
+  title="TaskAATSecond"
+  src="../settings/CEZoom_TaskAATSecond.png"
+>
+</screenshot>
+
 		</screenshots>
 
 	</content>
