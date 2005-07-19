@@ -2864,7 +2864,30 @@ LRESULT CALLBACK LoggerDetails(HWND hDlg, UINT message,
 // Could be used to display debug messages
 // or info messages like "Map panning OFF"
 /////////////////////////////////////////////////////
-WNDPROC fnOldStatusMsgWndProc;
+
+// Each instance of the StatusMessage window has some
+// unique data associated with it, rather than using
+// global variables.  This allows multiple instances
+// in a thread-safe manner.
+class CStatMsgUserData {
+public:
+  HFONT   hFont;
+  WNDPROC fnOldWndProc;
+  BOOL    bCapturedMouse;
+
+  // Initialize to sensible values
+  CStatMsgUserData()
+    : hFont(NULL), fnOldWndProc(NULL), bCapturedMouse(FALSE) {};
+
+  // Clean up mess
+  ~CStatMsgUserData() {
+    if (hFont) {
+	  DeleteObject(hFont);
+	  hFont = NULL;
+	}
+	fnOldWndProc = NULL;
+  }
+};
 
 extern bool RequestFastRefresh;
 
@@ -2872,16 +2895,56 @@ extern bool RequestFastRefresh;
 LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 
-  switch (message) {
-  case WM_TIMER :              // Fall through
-  case WM_LBUTTONUP :
-    RequestFastRefresh = true; // trigger screen refresh
+  CStatMsgUserData *data;
+  POINT pt;
+  RECT  rc;
+
+  // Grab hold of window specific data
+  data = (CStatMsgUserData*) GetWindowLong(hwnd, GWL_USERDATA);
+
+  if (data==NULL) {
+    // Something wrong here!
     DestroyWindow(hwnd);
-    break;
+    return 0;
+  }
+
+  switch (message) {
+  case WM_LBUTTONDOWN:
+    // Intercept mouse messages while stylus is being dragged
+    // This is necessary to simulate a WM_LBUTTONCLK event
+    SetCapture(hwnd);
+    data->bCapturedMouse = TRUE;
+    return 0;
+  case WM_LBUTTONUP :
+    //if (data->bCapturedMouse) ReleaseCapture();
+    ReleaseCapture();
+
+    if (!data->bCapturedMouse) break;
+
+    data->bCapturedMouse = FALSE;
+
+    // Is stylus still within this window?
+    pt.x = LOWORD(lParam);
+    pt.y = HIWORD(lParam);
+    GetClientRect(hwnd, &rc);
+
+    if (!PtInRect(&rc, pt)) break;
+
+    // Fall through to Timer case
+  case WM_TIMER :
+
+
+    RequestFastRefresh = true; // trigger screen refresh
+
+    // Clean up after ourselves
+    delete data;
+
+    DestroyWindow(hwnd);
+    return 0;
   }
 
   // Pass message on to original window proc
-  return CallWindowProc(fnOldStatusMsgWndProc, hwnd, message, wParam, lParam);
+  return CallWindowProc(data->fnOldWndProc, hwnd, message, wParam, lParam);
 }
 
 
@@ -2901,8 +2964,8 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
 // otherwise you'll get funny characters appearing
 void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
 
+  CStatMsgUserData *data;
   HWND hWnd;
-  HFONT hFont;
   LOGFONT logfont;
   RECT rc;
 
@@ -2916,6 +2979,9 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
 
   if (iFontHeightRatio < 2)  iFontHeightRatio = 2;
   if (iFontHeightRatio > 20) iFontHeightRatio = 20;
+
+  // Initialize window specific data class
+  data = new CStatMsgUserData();
 
   // Get size of main window
   GetClientRect(hWndMainWindow, &rc);
@@ -2936,8 +3002,7 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
   logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY;
 #endif
 
-  hFont = CreateFontIndirect (&logfont);
-
+  data->hFont = CreateFontIndirect (&logfont);
 
   // Create a child window to contain status message
   hWnd = CreateWindow(TEXT("EDIT"), text,
@@ -2945,7 +3010,7 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
     0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
 
   // Apply font to window
-  SendMessage(hWnd,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
+  SendMessage(hWnd,WM_SETFONT,(WPARAM) data->hFont,MAKELPARAM(TRUE,0));
 
   // Now find out what size the window needs to be
   widthStatus  = (int)((double)widthMain * 0.95);
@@ -2955,7 +3020,7 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
   SetWindowPos(hWnd,HWND_TOPMOST,
 	  (widthMain-widthStatus)/2, (heightMain-heightStatus)/2,
     widthStatus, heightStatus,
-    SWP_SHOWWINDOW);
+    0);
 
   // If there are multiple lines of text when using the current
   // width, then we need to increase the height and reposition
@@ -2969,19 +3034,23 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
     SetWindowPos(hWnd,HWND_TOPMOST,
   	  (widthMain-widthStatus)/2, (heightMain-heightStatus)/2,
       widthStatus, heightStatus,
-      SWP_SHOWWINDOW);
+      0);
   }
 
 
+  // Attach window specific data to the window
+  SetWindowLong(hWnd, GWL_USERDATA, (LONG) data);
 
   // Subclass window function so that we can trap timer messages
-  fnOldStatusMsgWndProc = (WNDPROC) SetWindowLong(hWnd, GWL_WNDPROC, (LONG) StatusMsgWndTimerProc) ;
+  data->fnOldWndProc = (WNDPROC) SetWindowLong(hWnd, GWL_WNDPROC, (LONG) StatusMsgWndTimerProc) ;
 
   if (delay_ms) {
     // Set timer to specified timeout.
     // Window will close when timer fires
-    if (!SetTimer(hWnd, 1, delay_ms, NULL))
+    if (!SetTimer(hWnd, 1, delay_ms, NULL)) {
       DestroyWindow(hWnd);  // Couldn't init timer
+      return;
+    }
   }
 
   // FINALLY, display the window for the user's perusal
