@@ -93,6 +93,8 @@ h1 {
 .screenshots img {
 	text-align: center;
 	padding: 50px;
-	display: block;
+	display: block; 
+	margin-left: auto; 
+	margin-right: auto;
 }
 

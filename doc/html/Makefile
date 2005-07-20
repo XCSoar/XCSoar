@@ -8,6 +8,9 @@ FILES_LOCAL=readme.html
 FILES_TMP=dest.tar.gz readme.xml
 
 # ------------------------------------------------------------------------------
+
+SSHUSER= $(USER)
+
 build: depends $(FILES_DEST) $(FILES_LOCAL)
 
 $(FILES_DEST): ss/wrap.xsl
@@ -23,8 +26,8 @@ clean: depends
 
 install: build
 	tar cvzf dest.tar.gz $(FILES_DEST) $(FILES_LOCAL)
-	scp dest.tar.gz shell.sourceforge.net:/home/groups/x/xc/xcsoar/htdocs/
-	ssh shell.sourceforge.net "cd /home/groups/x/xc/xcsoar/htdocs/; tar xvzf dest.tar.gz; chmod -R g+rwX /home/groups/x/xc/xcsoar/htdocs"
+	scp dest.tar.gz $(SSHUSER)@shell.sourceforge.net:/home/groups/x/xc/xcsoar/htdocs/
+	ssh $(SSHUSER)@shell.sourceforge.net "cd /home/groups/x/xc/xcsoar/htdocs/; tar xvzf dest.tar.gz; chmod -R g+rwX /home/groups/x/xc/xcsoar/htdocs"
 
 %.html : %.xml
 	xsltproc ss/wrap.xsl $< > $@

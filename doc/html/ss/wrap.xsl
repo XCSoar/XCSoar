@@ -44,6 +44,7 @@
 				      <li><a href="/about/">About XCSoar</a></li>
 				      <li><a href="/download/">Download</a></li>
 				      <li><a href="/quick/">Quick start</a></li>
+				      <li><a href="/infoboxes/">Infoboxes</a></li>
 				      <li><a href="/settings/">Configuration settings</a></li>
 				      <li><a href="/readme.html">Version 4 Readme</a></li>
 				</ul>
