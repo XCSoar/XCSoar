@@ -24,17 +24,15 @@
 		<div id="page">
 
 			<div id="header">
-				<h1>
-				<span>
 				<img
 					align="middle"
 					src="/logo-small.gif"
 					border="0"
 				/>
-				</span>
-			    	<a href="/">
-					XCSoar - <xsl:value-of select="/document/metadata/title"/>
-				</a>
+				<h1>
+					<a href="/">
+						XCSoar - <xsl:value-of select="/document/metadata/title"/>
+					</a>
 				</h1>
 			</div>
 

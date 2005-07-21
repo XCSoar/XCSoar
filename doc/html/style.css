@@ -2,7 +2,7 @@
 body {
 	font-family: verdana, arial, helvetica, sans-serif; 
 	color: #333333; 
-	background: #455F8D; 
+	background: #ffffff; 
 	margin: 0px;
 	padding: 0px; 
 }
@@ -14,41 +14,54 @@ h1 {
 }
 
 #page {
-	background: #ffffff; 
+	background: transparent url(side-bg.gif) top left;
 	padding: 0px;  
 	margin: 0px; 
 	width: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px; 
 }
 
 #header { 
 	background: #86A2CC;  
 	padding: 10px;  
 	margin: 0px; 
-	vertical-align: middle;
-}
-
-#navigation ul {
+	height: 117px;
 }
 
 #header a {
 	text-decoration: none;
+	color: white;
+	margin-left: 170px;
+}
+
+#header h1 {
+	margin-top: 47;
+}
+
+#header img {
+	position: absolute;
+	top: 0px;
+	left: 0px; 
+	float: left;
 }
 
 #content { 
-	background: #ffffff;  
 	padding: 10px 20px;  
-	margin: 0px; 
-	float: left; 
+	/* Left margin is 10px more than navigation */
+	margin-left: 160px;
 }
 
-#navigation { 
+#navigation {
 	font-size: 0.7em;
 	padding: 10px ; 
 	width: 150px; 
+	height: 100%;
 	color: #455F8D;
 	font-weight: bold;
-	background: #B8CBE8;
-	float: left; 
+	/* background: #B8CBE8; */
+	float: left;
 	margin: 0px; 
 }
 

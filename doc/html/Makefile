@@ -11,7 +11,7 @@ FILES_TMP=dest.tar.gz readme.xml
 
 SSHUSER= $(USER)
 
-build: depends $(FILES_DEST) $(FILES_LOCAL)
+build: depends $(FILES_DEST) $(FILES_LOCAL) dest.tar.gz
 
 $(FILES_DEST): ss/wrap.xsl
 
@@ -24,8 +24,10 @@ readme.xml: ../../source/XCSoarV4-README.txt
 clean: depends
 	@-rm $(FILES_CLEAN) $(FILES_LOCAL) $(FILES_TMP) >/dev/null 2>/dev/null
 
-install: build
+dest.tar.gz: $(FILES_DEST) $(FILES_LOCAL)
 	tar cvzf dest.tar.gz $(FILES_DEST) $(FILES_LOCAL)
+
+install: build
 	scp dest.tar.gz $(SSHUSER)@shell.sourceforge.net:/home/groups/x/xc/xcsoar/htdocs/
 	ssh $(SSHUSER)@shell.sourceforge.net "cd /home/groups/x/xc/xcsoar/htdocs/; tar xvzf dest.tar.gz; chmod -R g+rwX /home/groups/x/xc/xcsoar/htdocs"
 
