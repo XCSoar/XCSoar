@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.38 2005/07/19 01:12:52 aharrison24 Exp $
+//   $Id: Dialogs.cpp,v 1.39 2005/07/21 00:35:27 aharrison24 Exp $
 
 */
 #include "stdafx.h"
@@ -2878,14 +2878,14 @@ public:
   // Initialize to sensible values
   CStatMsgUserData()
     : hFont(NULL), fnOldWndProc(NULL), bCapturedMouse(FALSE) {};
-
+  
   // Clean up mess
   ~CStatMsgUserData() {
     if (hFont) {
-	  DeleteObject(hFont);
-	  hFont = NULL;
-	}
-	fnOldWndProc = NULL;
+      DeleteObject(hFont);
+      hFont = NULL;
+    }
+    fnOldWndProc = NULL;
   }
 };
 
@@ -2905,7 +2905,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
   if (data==NULL) {
     // Something wrong here!
     DestroyWindow(hwnd);
-    return 0;
+    return 1;
   }
 
   switch (message) {
@@ -2919,7 +2919,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
     //if (data->bCapturedMouse) ReleaseCapture();
     ReleaseCapture();
     
-    if (!data->bCapturedMouse) break;
+    if (!data->bCapturedMouse) return 0;
 
     data->bCapturedMouse = FALSE;
 
@@ -2928,7 +2928,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
     pt.y = HIWORD(lParam);
     GetClientRect(hwnd, &rc);
     
-    if (!PtInRect(&rc, pt)) break;
+    if (!PtInRect(&rc, pt)) return 0;
 
     // Fall through to Timer case
   case WM_TIMER :              
@@ -2936,10 +2936,14 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
     
     RequestFastRefresh = true; // trigger screen refresh
 
+    DestroyWindow(hwnd);
+  
+    return 0;
+
+  case WM_DESTROY :
     // Clean up after ourselves
     delete data;
 
-    DestroyWindow(hwnd);
     return 0;
   }
 
