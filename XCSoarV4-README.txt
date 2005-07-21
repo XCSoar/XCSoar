@@ -239,8 +239,8 @@ Infoboxes can be hidden by pressing the App key 1, thereby giving a
 full-screen map display.
 
 Pan mode allows the user to drag the screen around to explore beyond
-the glider's immediate surrounds.  The user can still zoom in or out when in
-pan mode, and select waypoints as usual.
+the glider's immediate surrounds.  The user can still zoom in or out
+when in pan mode, and select waypoints as usual.
 
 Auto-zoom automatically zooms in when approaching a waypoint to keep
 the waypoint at a reasonable screen distance.  The user can still zoom
@@ -263,8 +263,8 @@ and 0.3 km for circling.  When the user zooms in or out, it affects
 the current mode's zoom setting only, so when leaving the mode the
 previous mode's zoom setting is used.
 
-New icons are used to represent landable waypoints.  These are consistent
-with WinPilot:
+New icons are used to represent landable waypoints.  These are
+consistent with WinPilot:
 - Unreachable airfields are purple filled circles
 - Reachable airfields in purple filled circles with a green band
 
@@ -275,8 +275,9 @@ multiple vectors are drawn, in 10 kt increments.  For example, 23
 knots will show two long vectors and a short one (two lots of 10 plus
 one of 3).
 
-A new waypoint label mode is available.  'Names in task' shows only waypoint
-labels if the waypoints are in the current task, or the current home.
+A new waypoint label mode is available.  'Names in task' shows only
+waypoint labels if the waypoints are in the current task, or the
+current home.
 
 The map is capable of displaying terrain elevation contours and vector
 topology.  See the section below for more details.
