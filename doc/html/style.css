@@ -24,10 +24,14 @@ h1 {
 }
 
 #header { 
+	position: absolute;
+	top: 0px;
+	left: 0px; 
+	width: 100%;
 	background: #86A2CC;  
-	padding: 10px;  
+	padding: 0px;  
 	margin: 0px; 
-	height: 117px;
+	height: 137px;
 }
 
 #header a {
@@ -44,10 +48,10 @@ h1 {
 	position: absolute;
 	top: 0px;
 	left: 0px; 
-	float: left;
 }
 
 #content { 
+	margin-top: 137px;
 	padding: 10px 20px;  
 	/* Left margin is 10px more than navigation */
 	margin-left: 160px;
@@ -63,6 +67,7 @@ h1 {
 	/* background: #B8CBE8; */
 	float: left;
 	margin: 0px; 
+	margin-top: 137px;
 }
 
 #navigation ul {
