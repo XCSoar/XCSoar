@@ -53,6 +53,7 @@ XCSoarSetup.dll = 4
 CopyFiles   = TheFiles,Files.Windows
 AddReg = AddRegistry
 ;CEShortcuts = Links
+CESetupDLL=XCSoarSetup.dll
 
 [DestinationDirs]
 Files.Windows       = 0,%CE2%           ; "\Windows" directory
