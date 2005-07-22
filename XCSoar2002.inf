@@ -5,7 +5,7 @@ CESignature = "$Windows CE$"    ; required as-is
 
 [CEStrings]
 AppName     = "XCSoar"          ; full app name will be "<Provider> <AppName>"
-InstallDir  = "\Program Files\XCSoar"
+InstallDir  = %CE1%\%AppName%
 
 [Strings]
 reg_path = Software\OpenSource\XCSoar
@@ -35,6 +35,7 @@ VersionMax = 32767.0
 1 = ,"ARM Files",,PPC2002\XCSoar\ARMRel
 2 = ,"ARM Files",,PPC2002\XCSoarSimulator\ARMRel
 3 = ,"ARM Files",,PPC2002\XCSoarLaunch\ARMRel
+4 = ,"ARM Files",,PPC2002\XCSoarSetup\ARMRel
 
 [SourceDisksNames.x86]
 1 = ,"PPC30 X86 Files",,X86EMDbg
@@ -45,7 +46,8 @@ VersionMax = 32767.0
 [SourceDisksFiles]
 XCSoar.exe = 1
 XCSoarSimulator.exe = 2
-XCSoarLaunch.dll = 3
+XCSoarLaunch.dll = 3 
+XCSoarSetup.dll = 4
 
 [DefaultInstall]
 CopyFiles   = TheFiles,Files.Windows
@@ -61,6 +63,7 @@ TheFiles    = 0,%InstallDir%
 [TheFiles]
 XCSoar.exe
 XCSoarSimulator.exe
+XCSoarSetup.dll
 
 [Files.Windows]
 XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000

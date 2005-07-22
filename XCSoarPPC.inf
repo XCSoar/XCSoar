@@ -1,0 +1,74 @@
+[Version]
+Signature   = "$Windows NT$"    ; required as-is
+Provider    = "OpenSource"      ; full app name will be "<Provider> <AppName>"
+CESignature = "$Windows CE$"    ; required as-is
+
+[CEStrings]
+AppName     = "XCSoar"          ; full app name will be "<Provider> <AppName>"
+InstallDir  = %CE1%\%AppName%
+
+[Strings]
+reg_path = Software\OpenSource\XCSoar
+LinkFilename = "XCSoar"
+
+[CEDevice.PPC_MIPS]
+ProcessorType = 4000
+VersionMin = 3.0
+VersionMax = 32767.0
+
+[CEDevice.PPC_ARM]
+ProcessorType=2577
+VersionMin = 3.0
+VersionMax = 32767.0
+
+[SourceDisksNames.PPC_MIPS]         ; CPU-dependent files
+1 = ,"MIPS Files",,PPC\XCSoar\MIPSRel
+2 = ,"MIPS Files",,PPC\XCSoarSimulator\MIPSRel
+3 = ,"MIPS Files",,PPC\XCSoarLaunch\MIPSRel
+4 = ,"MIPS Files",,PPC\XCSoarSetup\MIPSRel
+
+[SourceDisksNames.PPC_ARM]         ; CPU-dependent files
+1 = ,"MIPS Files",,PPC\XCSoar\ARMRel
+2 = ,"MIPS Files",,PPC\XCSoarSimulator\ARMRel
+3 = ,"MIPS Files",,PPC\XCSoarLaunch\ARMRel
+4 = ,"MIPS Files",,PPC\XCSoarSetup\ARMRel
+
+[SourceDisksFiles]
+XCSoar.exe = 1
+XCSoarSimulator.exe = 2
+XCSoarLaunch.dll = 3
+XCSoarSetup.dll = 4
+
+
+[DefaultInstall]
+CopyFiles   = TheFiles,Files.Windows
+AddReg = AddRegistry
+CESetupDLL=XCSoarSetup.dll
+
+[DestinationDirs]
+Files.Windows       = 0,%CE2%       ; "\Windows" directory
+TheFiles            = 0, %InstallDir%
+
+
+;File copy list.
+[TheFiles]
+XCSoar.exe
+XCSoarSimulator.exe 
+XCSoarSetup.dll 
+
+[Files.Windows]
+XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
+
+[AddRegistry]
+HKLM,\Software\Microsoft\Today\Items\%AppName%,Type,0x00010001,4
+HKLM,\Software\Microsoft\Today\Items\%AppName%,Enabled,0x00010001,1
+HKLM,\Software\Microsoft\Today\Items\%AppName%,Options,0x00010001,0
+HKLM,\Software\Microsoft\Today\Items\%AppName%,DLL,0x00000002,"\Windows\XCSoarLaunch.dll"
+HKLM,%reg_path%,InstallDir,0x00000000,%InstallDir%
+
+
+;[Links]
+;%LinkFilename%,0,"XCSoar.exe",%CE14%         
+;; shortcut to a file, created in the standard destination path %CE14%
+
+
