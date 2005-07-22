@@ -1,12 +1,68 @@
-set EVC="C:\Program Files\Microsoft eMbedded Tools\Common\EVC\Bin\EVC.EXE"
-set EVC4="C:\Program Files\Microsoft eMbedded C++ 4.0\Common\EVC\Bin\EVC.EXE"
+@echo off
+set EVC="%ProgramFiles%\Microsoft eMbedded Tools\Common\EVC\Bin\EVC.EXE"
+set EVC4="%ProgramFiles%\Microsoft eMbedded C++ 4.0\Common\EVC\Bin\EVC.EXE"
 
-%EVC%  PPC/XCSoar/XCSoar.vcp /MAKE ALL /REBUILD
-%EVC%  PPC/XCSoarSimulator/XCSoarSimulator.vcp /MAKE ALL /REBUILD
+:PPC
+
+echo MIPS > processor.lst
+echo ARM >> processor.lst
+
+echo XCSoar > project.lst
+echo XCSoarSimulator >> project.lst
+echo XCSoarLaunch >> project.lst
+echo XCSoarSetup >> project.lst
+
+for /F %%j in (processor.lst) do (
+
+echo Build: PPC %%j *******************
+
+for /F %%i in (project.lst) do (
+
+  echo        %%i
+  %EVC%  PPC/%%i/%%i.vcp /MAKE "%%i - Win32 (WCE %%j) Release" /ceconfig="Pocket PC" /REBUILD
+  if errorlevel 1 echo error build %%k/%%i/%%i.vcp
+
+)
+)
+
+del project.lst
+del processor.lst
 
 
-%EVC%  PPC2002/XCSoar/XCSoar.vcp /MAKE ALL /REBUILD
-%EVC%  PPC2002/XCSoarSimulator/XCSoarSimulator.vcp /MAKE ALL /REBUILD
+echo Build: PPC installer
+call buildcabPPC.bat
+
+
+:PPC2000
+
+echo ARM > processor.lst
+
+echo XCSoar > project.lst
+echo XCSoarSimulator >> project.lst
+echo XCSoarLaunch >> project.lst
+echo XCSoarSetup >> project.lst
+
+for /F %%j in (processor.lst) do (
+
+echo Build: PPC2002 %%j *******************
+
+for /F %%i in (project.lst) do (
+
+  echo        %%i
+  %EVC%  PPC2002/%%i/%%i.vcp /MAKE "%%i - Win32 (WCE %%j) Release" /ceconfig="Pocket PC 2002" /REBUILD
+  if errorlevel 1 echo error build %%k/%%i/%%i.vcp
+
+)
+)
+
+del project.lst
+del processor.lst
+
+
+echo Build: PPC2002 installer
+call buildcab2002.bat
+
+goto end
 
 pause
 
@@ -19,3 +75,6 @@ pause
 
 pause
 
+:error
+
+:end
