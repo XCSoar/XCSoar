@@ -14,7 +14,7 @@
 #endif
 
 
-//#define DebugMessage(Caption, Text)    MessageBox(NULL, TEXT(Text), TEXT(Caption), MB_ICONINFORMATION)
+//#define DebugMessage(Caption, Text)    MessageBox(NULL, Text, Caption, MB_ICONINFORMATION)
 #define DebugMessage(Caption, Text)      ((void)0)
 
 ///////////////////////////////////////////////////////////

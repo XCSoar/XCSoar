@@ -399,7 +399,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 		DestroyWindow(hToolTip);
 		hToolTip = NULL;
 
-		FileListCnt = 0;
+		// FileListCnt = 0;
 		return 0;
 
 	case WM_TODAYCUSTOM_CLEARCACHE:
