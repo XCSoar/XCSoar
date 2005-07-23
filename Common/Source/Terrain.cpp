@@ -26,27 +26,27 @@ rectObj GetRectBounds(RECT rc) {
   double y;
 
   x=0; y=0;
-  GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(&x, &y);
   xmin = x; xmax = x;
   ymin = y; ymax = y;
 
   x = rc.left-100; y = rc.top-100;
-  GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.right+100; y = rc.top-100;
-  GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.left-100; y = rc.bottom+100;
-  GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.right+100; y = rc.bottom+100;
-  GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
@@ -176,6 +176,26 @@ void MarkLocation(double lon, double lat)
   topo_marks->addPoint(lon, lat);
   topo_marks->triggerUpdateCache = true;
   UnlockTerrainDataGraphics();
+
+  //////////
+
+  char message[160];
+
+  sprintf(message,"Lon:%f Lat:%f\r\n", lon, lat);
+
+  FILE *stream;
+  static TCHAR szFileName[] = TEXT("\\xcsoar-marks.txt");
+
+  stream = _wfopen(szFileName,TEXT("a+t"));
+
+  fwrite(message,strlen(message),1,stream);
+
+  fclose(stream);
+
+#ifdef EXPERIMENTAL
+  bsms.SendSMS(message);
+#endif
+
 }
 
 void DrawMarks (HDC hdc, RECT rc)
@@ -313,7 +333,7 @@ public:
     nzBuf = (short*)malloc(sizeof(short)*ixs*iys);
     ilBuf = (short*)malloc(sizeof(short)*ixs*iys);
 
-    pixelsize = MapScale/30.0*DTQUANT;
+    pixelsize = MapWindow::MapScale/30.0*DTQUANT;
 
   }
 
@@ -360,7 +380,7 @@ public:
       for (int x = X0; x<X1; x+= DTQUANT) {
         X = x;
         Y = y;
-        GetLocationFromScreen(&X, &Y);
+        MapWindow::GetLocationFromScreen(&X, &Y);
         *myhbuf = terrain_dem_graphics.GetTerrainHeight(Y, X);
 	myhbuf++;
         // latitude, longitude
@@ -468,13 +488,12 @@ public:
 //////////////////////////////////////////////////
 
 TerrainRenderer *trenderer = NULL;
-extern RECT MapRectBig;
 
 void DrawTerrain( HDC hdc, RECT rc, double sunazimuth, double sunelevation)
 {
 
   if (!trenderer) {
-    trenderer = new TerrainRenderer(MapRectBig);
+    trenderer = new TerrainRenderer(MapWindow::MapRectBig);
   }
 
   // step 1: calculate sunlight vector
@@ -498,7 +517,7 @@ void DrawTerrain( HDC hdc, RECT rc, double sunazimuth, double sunelevation)
   trenderer->FillColorBuffer();
 
   // step 6: draw
-  trenderer->Draw(hdc, MapRectBig);
+  trenderer->Draw(hdc, MapWindow::MapRectBig);
 }
 
 
@@ -506,20 +525,6 @@ void DrawTerrain( HDC hdc, RECT rc, double sunazimuth, double sunelevation)
 
 extern TCHAR szRegistryTopologyFile[];
 
-void ExtractDirectory(TCHAR *Dest, TCHAR *Source) {
-  int len = _tcslen(Source);
-  int found = -1;
-  int i;
-  for (i=0; i<len; i++) {
-    if ((Source[i]=='/')||(Source[i]=='\\')) {
-      found = i;
-    }
-  }
-  for (i=0; i<=found; i++) {
-    Dest[i]= Source[i];
-  }
-  Dest[i]= 0;
-}
 
 
 void OpenTopology() {

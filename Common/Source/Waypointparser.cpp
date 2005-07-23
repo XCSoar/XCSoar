@@ -376,9 +376,9 @@ int FindNearestWayPoint(double X, double Y, double MaxRange)
   NearestDistance = Distance(Y,X,WayPointList[0].Lattitude, WayPointList[0].Longditude);
   for(i=1;i<NumberOfWayPoints;i++)
     {
-      if (((WayPointList[i].Zoom >= MapScale*10)||
+      if (((WayPointList[i].Zoom >= MapWindow::MapScale*10)||
            (WayPointList[i].Zoom == 0))
-           &&(MapScale <= 10)) {
+          &&(MapWindow::MapScale <= 10)) {
 
             // only look for visible waypoints
             // feature added by Samuel Gisiger

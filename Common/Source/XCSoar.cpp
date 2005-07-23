@@ -45,6 +45,7 @@
 #include "device.h"
 #include "devCAI302.h"
 #include "devEW.h"
+#include "Externs.h"
 
 HINSTANCE                       hInst;                                  // The current instance
 HWND                                    hWndCB;                                 // The command bar handle
@@ -71,6 +72,7 @@ BOOL                                    DisplayLocked = TRUE;
 BOOL                                    InfoWindowActive = TRUE;
 int                                     FocusTimeOut = 0;
 int                                     MenuTimeOut = 0;
+int                                     DisplayTimeOut = 0;
 
 
 
@@ -112,8 +114,8 @@ double                          DISTANCEMODIFY = TONAUTICALMILES;
 double        ALTITUDEMODIFY = TOFEET;
 
 //Flight Data Globals
-double        MACREADY = 0;
-bool          AutoMacReady = false;
+double        MCCREADY = 0;
+bool          AutoMcCready = false;
 
 int          NettoSpeed = 1000;
 
@@ -181,6 +183,8 @@ int EnableSoundModes = TRUE;
 int EnableSoundTask = TRUE;
 int SoundVolume = 80;
 int SoundDeadband = 5;
+
+BOOL EnableAutoBlank = false;
 
 //IGC Logger
 BOOL LoggerActive = FALSE;
@@ -269,7 +273,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 21, 8},
 
   // 10
-  {TEXT("MacReady Setting"), TEXT("MacReady"), new InfoBoxFormatter(TEXT("%2.1f")), McReadyProcessing, 34, 35},
+  {TEXT("McCready Setting"), TEXT("McCready"), new InfoBoxFormatter(TEXT("%2.1f")), McCreadyProcessing, 34, 35},
 
   // 11
   {TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},
@@ -335,7 +339,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 30},
 
   // 32
-  {TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 37, 23},
+  {TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 37, 23},
 
   // 33
   {TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
@@ -388,8 +392,11 @@ LRESULT                                         MainMenu(HWND hWnd, UINT message
 void                                                    AssignValues(void);
 void                                                    DisplayText(void);
 void                                                    ReadAssetNumber(void);
-void                                                    ProcessTimer    (void);
-void                                                    SIMProcessTimer(void);
+
+void CommonProcessTimer    (void);
+void ProcessTimer    (void);
+void SIMProcessTimer(void);
+
 void                                                    PopUpSelect(int i);
 void                                                    SwitchToMapWindow(void);
 HWND                                                    CreateRpCommandBar(HWND hwnd);
@@ -399,7 +406,6 @@ void                                            DebugStore(char *Str);
 #endif
 
 
-extern RECT MapRect;
 extern BOOL GpsUpdated;
 
 void HideMenu() {
@@ -407,18 +413,27 @@ void HideMenu() {
   if (DisplayLocked) {
     ShowWindow(hWndMenuButton, SW_HIDE);
     MenuTimeOut = MENUTIMEOUTMAX;
+    DisplayTimeOut = 0;
   }
 }
 
 void ShowMenu() {
   MenuTimeOut = 0;
   ShowWindow(hWndMenuButton, SW_SHOW);
+  DisplayTimeOut = 0;
 }
 
 
-extern bool RequestMapDirty; // GUI asks for map window refresh
-extern bool MapDirty; // the actual map refresh trigger
-extern bool RequestFastRefresh;
+//extern bool MapWindow::RequestMapDirty; // GUI asks for map window refresh
+//extern bool MapWindow::MapDirty; // the actual map refresh trigger
+
+
+#ifdef EXPERIMENTAL
+#include "BlueSMS.h"
+BlueDialupSMS bsms;
+#endif
+
+
 
 void FullScreen() {
 
@@ -429,7 +444,7 @@ void FullScreen() {
     SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
                  GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
   }
-  RequestFastRefresh = true;
+  MapWindow::RequestFastRefresh = true;
   InfoBoxesDirty = true;
 }
 
@@ -478,7 +493,6 @@ void FocusOnWindow(int i, bool selected) {
 
 }
 
-extern BOOL CLOSETHREAD;
 
 DWORD CalculationThread (LPVOID lpvoid) {
   bool infoarrived = false;
@@ -486,7 +500,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
   NMEA_INFO     tmp_GPS_INFO;
   DERIVED_INFO  tmp_CALCULATED_INFO;
 
-  while (!CLOSETHREAD) {
+  while (!MapWindow::CLOSETHREAD) {
 
     if (GpsUpdated) {
       GpsUpdated = FALSE;
@@ -504,7 +518,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
       if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO))
         {
           InfoBoxesDirty = true;
-          RequestMapDirty = true;
+          MapWindow::RequestMapDirty = true;
         }
 
       if (!GPS_INFO.VarioAvailable) {
@@ -634,34 +648,30 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   devInit();
 
-  CreateProgressDialog(TEXT("Initialising display"));
-
   CreateCalculationThread();
 
-  CreateDrawingThread();
+  MapWindow::CreateDrawingThread();
+
+#ifdef EXPERIMENTAL
+  CreateProgressDialog(TEXT("Bluetooth dialup SMS"));
+  bsms.Initialise();
+#endif
+
+  CreateProgressDialog(TEXT("Initialising display"));
 
   // just about done....
 
+  DoSunEphemeris(147.0,-36.0);
+
 
 #ifdef _SIM_
-  /*
-  MessageBox(   hWndMainWindow, TEXT("Simulator mode\r\nNothing is Real!!"), TEXT("Caution"), MB_OK|MB_ICONWARNING);
-  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-  */
   ShowStatusMessage(TEXT("Simulation\r\nNothing is real!"), 3000);
-
 #else
-  /*
-  MessageBox(   hWndMainWindow, TEXT("Maintain effective\r\nLOOKOUT at all times"), TEXT("Caution"), MB_OK|MB_ICONWARNING);
-  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
-
-  */
   ShowStatusMessage(TEXT("Maintain effective\r\nLOOKOUT at all times"), 3000);
-
 #endif
 
   SwitchToMapWindow();
-  MapDirty = true;
+  MapWindow::MapDirty = true;
 
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0))
@@ -709,7 +719,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
     return FALSE;
 
   wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
-  wc.lpfnWndProc = (WNDPROC)MapWndProc;
+  wc.lpfnWndProc = (WNDPROC)MapWindow::MapWndProc;
   wc.cbClsExtra = 0;
   wc.cbWndExtra = dc.cbWndExtra ;
   wc.hInstance = hInstance;
@@ -719,7 +729,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.lpszMenuName = 0;
   wc.lpszClassName = TEXT("MapWindowClass");
 
-  RequestMapDirty = true;
+  MapWindow::RequestMapDirty = true;
 
   return RegisterClass(&wc);
 
@@ -925,10 +935,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   //// create map window
 
-  MapRect.top = rc.top+ControlHeight;
-  MapRect.left = rc.left;
-  MapRect.bottom = rc.bottom-ControlHeight;
-  MapRect.right = rc.right;
+  MapWindow::MapRect.top = rc.top+ControlHeight;
+  MapWindow::MapRect.left = rc.left;
+  MapWindow::MapRect.bottom = rc.bottom-ControlHeight;
+  MapWindow::MapRect.right = rc.right;
 
 #ifdef _MAP_
 
@@ -1051,6 +1061,8 @@ void DoInfoKey(int keycode) {
   GpsUpdated = TRUE; // emulate update to trigger calculations
 
   FocusTimeOut = 0;
+  DisplayTimeOut = 0;
+
 }
 
 
@@ -1066,11 +1078,12 @@ bool Debounce(WPARAM wParam) {
     return true; // button changed, so OK
   }
   */
+  DisplayTimeOut = 0;
 
   wlast = wParam;
 
   if (dT>500) {
-	fpsTimeLast = fpsTimeThis;
+    fpsTimeLast = fpsTimeThis;
     return true;
   } else {
     return false;
@@ -1184,7 +1197,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
           if (!Debounce(wParam)) break;
 
-		  RequestToggleFullScreen();
+          MapWindow::RequestToggleFullScreen();
 
           break;
 
@@ -1342,7 +1355,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       devCloseAll();
 
-      CloseDrawingThread();
+#ifdef EXPERIMENTAL
+      bsms.Shutdown();
+#endif
+
+	  MapWindow::CloseDrawingThread();
 
       NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1; AATEnabled = FALSE;
       NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
@@ -1451,7 +1468,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                   SendMessage (hWnd, WM_CLOSE, 0, 0);
                 } else {
               }
-              MapDirty = true;
+              MapWindow::MapDirty = true;
 	      HideMenu();
               FullScreen();
               return 0;
@@ -1536,7 +1553,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               POLARFILECHANGED = FALSE;
 
               MenuActive = true;
-              SuspendDrawingThread();
+			  MapWindow::SuspendDrawingThread();
 
               ShowWindow(hWndCB,SW_SHOW);
               SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
@@ -1623,7 +1640,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
               UnlockFlightData();
               UnlockNavBox();
-              ResumeDrawingThread();
+			  MapWindow::ResumeDrawingThread();
 
               SwitchToMapWindow();
 	      FullScreen();
@@ -1873,20 +1890,20 @@ void DisplayText(void)
 }
 
 
-
-void ProcessTimer(void)
+void CommonProcessTimer()
 {
-
   SystemIdleTimerReset();
 
   if(InfoWindowActive)
     {
-      if(FocusTimeOut==FOCUSTIMEOUTMAX)
+      if(FocusTimeOut == FOCUSTIMEOUTMAX)
         {
           SwitchToMapWindow();
         }
       FocusTimeOut ++;
+
     }
+
   if (DisplayLocked) {
     if(MenuTimeOut==MENUTIMEOUTMAX) {
       ShowWindow(hWndMenuButton, SW_HIDE);
@@ -1894,10 +1911,18 @@ void ProcessTimer(void)
     MenuTimeOut++;
   }
 
-  if (RequestMapDirty) {
-    MapDirty = true;
-    RequestMapDirty = false;
+  if (DisplayTimeOut >= DISPLAYTIMEOUTMAX) {
+    BlankDisplay(true);
+  } else {
+    BlankDisplay(false);
   }
+  DisplayTimeOut++;
+
+  if (MapWindow::RequestMapDirty) {
+    MapWindow::MapDirty = true;
+    MapWindow::RequestMapDirty = false;
+  }
+
   if (InfoBoxesDirty) {
     InfoBoxesDirty = false;
     //JMWTEST    LockFlightData();
@@ -1906,7 +1931,15 @@ void ProcessTimer(void)
     //JMWTEST    UnlockFlightData();
   }
 
-  //    ReadAssetNumber();
+#ifdef EXPERIMENTAL
+  bsms.Poll();
+#endif
+
+}
+
+void ProcessTimer(void)
+{
+  CommonProcessTimer();
 
   if(!Port1Available)
     return;
@@ -1947,6 +1980,7 @@ void ProcessTimer(void)
 
         if(LOCKWAIT == TRUE)
           {
+            // gps was waiting for fix, now waiting for connection
             DestroyWindow(hGPSStatus);
             SwitchToMapWindow();
             FullScreen();
@@ -1955,6 +1989,7 @@ void ProcessTimer(void)
           }
         if(!CONNECTWAIT)
           {
+            // gps is waiting for connection first time
             hGPSStatus=CreateDialog(hInst,(LPCTSTR)IDD_GPSSTATUS,hWndMainWindow,(DLGPROC)Progress);
             LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
             SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
@@ -1965,12 +2000,22 @@ void ProcessTimer(void)
 
           } else {
 
-          if (itimeout % 240 == 0) {
-            // no activity for one minute, so assume device has been
-            // switched off
+          if (itimeout % 120 == 0) {
+            // we've been waiting for connection a long time
+
+            // no activity for 30 seconds, so assume PDA has been
+            // switched off and on again
+            //
 #ifndef _SIM_
             RestartCommPorts();
 #endif
+#ifdef EXPERIMENTAL
+            // if comm port shut down, probably so did bluetooth dialup
+            // so restart it here also.
+            bsms.Shutdown();
+            bsms.Initialise();
+#endif
+
             itimeout = 0;
           }
         }
@@ -2027,39 +2072,7 @@ void ProcessTimer(void)
 
 void SIMProcessTimer(void)
 {
-  SystemIdleTimerReset();
-
-  //  ReadAssetNumber();
-
-  if(InfoWindowActive)
-    {
-      if(FocusTimeOut == FOCUSTIMEOUTMAX)
-        {
-          SwitchToMapWindow();
-        }
-      FocusTimeOut ++;
-
-    }
-
-  if (DisplayLocked) {
-    if(MenuTimeOut==MENUTIMEOUTMAX) {
-      ShowWindow(hWndMenuButton, SW_HIDE);
-    }
-    MenuTimeOut++;
-  }
-
-  if (RequestMapDirty) {
-    MapDirty = true;
-    RequestMapDirty = false;
-  }
-
-  if (InfoBoxesDirty) {
-    InfoBoxesDirty = false;
-    //JMWTEST    LockFlightData();
-    AssignValues();
-    DisplayText();
-    //JMWTEST    UnlockFlightData();
-  }
+  CommonProcessTimer();
 
   static int ktimer=0;
   ktimer++;
@@ -2130,7 +2143,6 @@ void PopUpSelect(int Index)
   SwitchToMapWindow();
 }
 
-#ifdef DEBUG
 #include <stdio.h>
 
 void DebugStore(char *Str)
@@ -2145,31 +2157,20 @@ void DebugStore(char *Str)
   fclose(stream);
 }
 
-#endif
 
-static bool ref_navbox = false;
-static bool ref_flightdata = false;
 
 
 void LockNavBox() {
-  // EnterCriticalSection(&CritSec_NavBox);
-  //  while(ref_navbox) {}
-  //ref_navbox = true;
 }
 
 void UnlockNavBox() {
-  //ref_navbox = false;
-  //  LeaveCriticalSection(&CritSec_NavBox);
 }
 
 void LockFlightData() {
   EnterCriticalSection(&CritSec_FlightData);
-  //  while(ref_flightdata) {}
-  // ref_flightdata = true;
 }
 
 void UnlockFlightData() {
-  //  ref_flightdata = false;
   LeaveCriticalSection(&CritSec_FlightData);
 }
 
@@ -2208,4 +2209,113 @@ void ShowInfoBoxes() {
     ShowWindow(hWndInfoWindow[i], SW_SHOW);
     ShowWindow(hWndTitleWindow[i], SW_SHOW);
   }
+}
+
+
+
+/////////////////////
+
+
+DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo)
+{
+    // set default return value
+    DWORD result = 0;
+
+    // check incoming pointer
+    if(NULL == pBatteryInfo)
+    {
+        return 0;
+    }
+
+    SYSTEM_POWER_STATUS_EX2 sps;
+
+    // request the power status
+    result = GetSystemPowerStatusEx2(&sps, sizeof(sps), TRUE);
+
+    // only update the caller if the previous call succeeded
+    if(0 != result)
+    {
+        pBatteryInfo->acStatus = sps.ACLineStatus;
+        pBatteryInfo->chargeStatus = sps.BatteryFlag;
+        pBatteryInfo->BatteryLifePercent = sps.BatteryLifePercent;
+    }
+
+    return result;
+}
+
+
+//////////////
+
+// GDI Escapes for ExtEscape()
+#define QUERYESCSUPPORT    8
+// The following are unique to CE
+#define GETVFRAMEPHYSICAL   6144
+#define GETVFRAMELEN    6145
+#define DBGDRIVERSTAT    6146
+#define SETPOWERMANAGEMENT   6147
+#define GETPOWERMANAGEMENT   6148
+
+
+typedef enum _VIDEO_POWER_STATE {
+    VideoPowerOn = 1,
+    VideoPowerStandBy,
+    VideoPowerSuspend,
+    VideoPowerOff
+} VIDEO_POWER_STATE, *PVIDEO_POWER_STATE;
+
+
+typedef struct _VIDEO_POWER_MANAGEMENT {
+    ULONG Length;
+    ULONG DPMSVersion;
+    ULONG PowerState;
+} VIDEO_POWER_MANAGEMENT, *PVIDEO_POWER_MANAGEMENT;
+
+
+void BlankDisplay(bool doblank) {
+  static bool oldblank = false;
+
+  if (!EnableAutoBlank) {
+    return;
+  }
+  if (doblank == oldblank) {
+    return;
+  }
+
+  HDC gdc;
+  int iESC=SETPOWERMANAGEMENT;
+
+  gdc = ::GetDC(NULL);
+  if (ExtEscape(gdc, QUERYESCSUPPORT, sizeof(int), (LPCSTR)&iESC,
+                0, NULL)==0) {
+    // can't do it, not supported
+  } else {
+
+    VIDEO_POWER_MANAGEMENT vpm;
+    vpm.Length = sizeof(VIDEO_POWER_MANAGEMENT);
+    vpm.DPMSVersion = 0x0001;
+
+    if (doblank) {
+      BATTERYINFO BatteryInfo;
+      GetBatteryInfo(&BatteryInfo);
+
+      if (BatteryInfo.acStatus==0) {
+
+        // Power off the display
+        vpm.PowerState = VideoPowerOff;
+        ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm,
+                  0, NULL);
+        oldblank = true;
+      }
+    } else {
+      if (oldblank) { // was blanked
+        // Power on the display
+        vpm.PowerState = VideoPowerOn;
+        ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm,
+                  0, NULL);
+        oldblank = false;
+      }
+    }
+
+  }
+  ::ReleaseDC(NULL, gdc);
 }

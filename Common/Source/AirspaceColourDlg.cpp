@@ -41,9 +41,6 @@ typedef struct {
 } airspaceStyle;
 
 
-extern COLORREF Colours[];
-extern HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
-extern HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 extern TCHAR szRegistryAirspaceBlackOutline[];
 
 
@@ -93,7 +90,7 @@ LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARA
   case WM_INITDIALOG:
 
     // Initialize airspace outline checkbox
-    if(bAirspaceBlackOutline) {
+    if(MapWindow::bAirspaceBlackOutline) {
       SendDlgItemMessage(hDlg,IDC_BLACKOUTLINE,BM_SETCHECK,BST_CHECKED,0);
     } else {
       SendDlgItemMessage(hDlg,IDC_BLACKOUTLINE,BM_SETCHECK,BST_UNCHECKED,0);
@@ -157,7 +154,8 @@ LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARA
 
         // Allow user to choose different style
         if (ChooseAirspaceStyle(hDlg, labels[item].szCaption,
-            &iAirspaceColour[airID], &iAirspaceBrush[airID]))
+                                &MapWindow::iAirspaceColour[airID],
+                                &MapWindow::iAirspaceBrush[airID]))
         {
 
           // Update listbox icons
@@ -166,8 +164,8 @@ LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARA
           UpdateWindow(hListView);
 
           // Write changes to registry
-          SetRegistryColour(airID,iAirspaceColour[airID]);
-          SetRegistryBrush (airID, iAirspaceBrush[airID]);
+          SetRegistryColour(airID,MapWindow::iAirspaceColour[airID]);
+          SetRegistryBrush (airID,MapWindow::iAirspaceBrush[airID]);
         }
 
         // Unselect the item
@@ -185,8 +183,9 @@ LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARA
 
       switch (LOWORD(wParam)) {
       case IDC_BLACKOUTLINE:
-        bAirspaceBlackOutline = !bAirspaceBlackOutline;
-        SetToRegistry(szRegistryAirspaceBlackOutline,bAirspaceBlackOutline);
+        MapWindow::bAirspaceBlackOutline = !MapWindow::bAirspaceBlackOutline;
+        SetToRegistry(szRegistryAirspaceBlackOutline,
+                      MapWindow::bAirspaceBlackOutline);
         return TRUE;
       }
 
@@ -260,7 +259,9 @@ void InitImList(HIMAGELIST hImList)
     airID = labels[i].ID;
 
     // Create swatch
-    hBMP = CreateAirspaceSwatch(swatchWidth, swatchHeight, iAirspaceColour[airID], iAirspaceBrush[airID]);
+    hBMP = CreateAirspaceSwatch(swatchWidth, swatchHeight,
+                                MapWindow::iAirspaceColour[airID],
+                                MapWindow::iAirspaceBrush[airID]);
 
     // Whack it in the image list
     ImageList_Add(hImList, hBMP, NULL);
@@ -283,7 +284,8 @@ void UpdateImListBMP(HIMAGELIST hImList, int item)
   int airID = labels[item].ID;
 
   hBMP = CreateAirspaceSwatch(swatchWidth, swatchHeight,
-    iAirspaceColour[airID], iAirspaceBrush[airID]);
+                              MapWindow::iAirspaceColour[airID],
+                              MapWindow::iAirspaceBrush[airID]);
 
   ImageList_Replace(hImList, item, hBMP, NULL);
 
@@ -311,9 +313,9 @@ HBITMAP CreateAirspaceSwatch(int cx, int cy, int iColour, int iPattern)
 
   // Paint airspace swatch into bitmap
   SelectObject(hdcMem, hBMP);
-  SetTextColor(hdcMem, Colours[iColour]);
+  SetTextColor(hdcMem, MapWindow::Colours[iColour]);
   SetBkColor(hdcMem, RGB(0xFF, 0xFF, 0xFF));
-  SelectObject(hdcMem, hAirspaceBrushes[iPattern]);
+  SelectObject(hdcMem, MapWindow::hAirspaceBrushes[iPattern]);
   Rectangle(hdcMem, 0, 0, cx, cy);
 
   DeleteDC(hdcMem);
@@ -492,7 +494,7 @@ LRESULT CALLBACK AirspaceColourSelectDlg(HWND hDlg, UINT message, WPARAM wParam,
         // This is the part where we draw a colour swatch control
         item = pdis->CtlID - colourSwatchIDBase;
 
-        hBrush = CreateSolidBrush(Colours[item]);
+        hBrush = CreateSolidBrush(MapWindow::Colours[item]);
         FillRect(pdis->hDC, &pdis->rcItem, hBrush);
         DeleteObject(hBrush);
 
@@ -520,7 +522,7 @@ LRESULT CALLBACK AirspaceColourSelectDlg(HWND hDlg, UINT message, WPARAM wParam,
         item = pdis->CtlID - patternSwatchIDBase;
 
         FillRect(pdis->hDC, &pdis->rcItem, (HBRUSH) GetStockObject(WHITE_BRUSH));
-        FillRect(pdis->hDC, &pdis->rcItem, hAirspaceBrushes[item]);
+        FillRect(pdis->hDC, &pdis->rcItem, MapWindow::hAirspaceBrushes[item]);
 
         SelectObject(pdis->hDC, GetStockObject(HOLLOW_BRUSH));
         Rectangle(pdis->hDC, 0, 0, pdis->rcItem.right, pdis->rcItem.bottom);

@@ -520,7 +520,8 @@ BOOL WP0(TCHAR *String, NMEA_INFO *GPS_INFO)
   ExtractParameter(String,ctemp,2);
   GPS_INFO->BaroAltitude = StrToDouble(ctemp, NULL);
   ExtractParameter(String,ctemp,1);
-  GPS_INFO->Airspeed = StrToDouble(ctemp, NULL)/TOKPH;
+  GPS_INFO->IndicatedAirspeed = StrToDouble(ctemp, NULL)/TOKPH;
+  // JMW TODO check, is this indicated or true airspeed?
 
   return FALSE;
 }
@@ -539,7 +540,7 @@ BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
 
   ExtractParameter(String,ctemp,0);
-  MACREADY = LIFTMODIFY*StrToDouble(ctemp,NULL);
+  MCCREADY = LIFTMODIFY*StrToDouble(ctemp,NULL);
   return FALSE;
 }
 
@@ -665,20 +666,38 @@ double StaticPressureToAltitude(double ps) {
 
 double AirDensity(double altitude) {
   double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
-  double rho_rat = sqrt(1.225/rho);
   return rho;
+}
+
+
+double AirDensityRatio(double altitude) {
+  double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
+  double rho_rat = sqrt(1.225/rho);
+  return rho_rat;
 }
 
 
 BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  double vias, wnet;
+  double vias, wnet, vtas;
   TCHAR ctemp[80];
   int pstatic;
   TCHAR *Stop;
 
   ExtractParameter(String,ctemp,0);
-  vias = StrToDouble(ctemp,NULL);
+  vias = StrToDouble(ctemp,NULL)/TOKNOTS;
+
+  double kcal = 1.0;
+  if (vias<33.0) {
+    kcal = (1.0-1.25)/(33.0-15.0)*(vias-15.0)+1.25;
+  } else {
+    kcal = 1.0;
+  }
+  vias = vias*kcal;
+
+
+  vtas = vias*AirDensityRatio(GPS_INFO->BaroAltitude);
+
   ExtractParameter(String,ctemp,1);
   if (ctemp[0]=='+') {
     wnet = StrToDouble(ctemp+1,NULL);
@@ -694,7 +713,8 @@ BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->BaroAltitudeAvailable = TRUE;
 
   GPS_INFO->AirspeedAvailable = TRUE;
-  GPS_INFO->Airspeed = vias/TOKNOTS;
+  GPS_INFO->IndicatedAirspeed = vias;
+  GPS_INFO->TrueAirspeed = vtas;
   GPS_INFO->VarioAvailable = TRUE;
   GPS_INFO->Vario = wnet/TOKNOTS;
 

@@ -85,6 +85,9 @@ extern TCHAR szRegistryPilotName[];
 extern TCHAR szRegistryAircraftType[];
 extern TCHAR szRegistryAircraftRego[];
 extern TCHAR szRegistryNettoSpeed[];
+extern TCHAR szRegistryCDICruise[];
+extern TCHAR szRegistryCDICircling[];
+extern TCHAR szRegistryAutoBlank[];
 
 
 void ReadWayPoints(void);
@@ -152,7 +155,8 @@ LRESULT CALLBACK Register(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       lpwp = (LPWINDOWPOS)(lParam);
       if(( lpwp->flags & SWP_HIDEWINDOW) == SWP_HIDEWINDOW)
         {
-          GetDlgItemText(hDlg,IDC_REGKEY,strRegKey,sizeof(strRegKey));
+          GetDlgItemText(hDlg,IDC_REGKEY,strRegKey,MAX_LOADSTRING
+                         *sizeof(TCHAR));
           SetRegistryString(szRegistryRegKey,strRegKey);
         }
       break;
@@ -656,6 +660,24 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           SendDlgItemMessage(hDlg,IDC_SNAIL,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
+      if(EnableCDICruise == TRUE)
+        {
+          SendDlgItemMessage(hDlg,IDC_CDICRUISE,BM_SETCHECK,BST_CHECKED,0);
+        }
+      else
+        {
+          SendDlgItemMessage(hDlg,IDC_CDICRUISE,BM_SETCHECK,BST_UNCHECKED,0);
+        }
+
+      if(EnableCDICircling == TRUE)
+        {
+          SendDlgItemMessage(hDlg,IDC_CDICIRCLING,BM_SETCHECK,BST_CHECKED,0);
+        }
+      else
+        {
+          SendDlgItemMessage(hDlg,IDC_CDICIRCLING,BM_SETCHECK,BST_UNCHECKED,0);
+        }
+
       if(EnableTopology == TRUE)
         {
           SendDlgItemMessage(hDlg,IDC_DRAWTOPOLOGY,BM_SETCHECK,BST_CHECKED,0);
@@ -674,35 +696,6 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           SendDlgItemMessage(hDlg,IDC_DRAWTERRAIN,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
-      if(CircleZoom == TRUE)
-        {
-          SendDlgItemMessage(hDlg,IDC_CIRCLEZOOM,BM_SETCHECK,BST_CHECKED,0);
-        }
-      else
-        {
-          SendDlgItemMessage(hDlg,IDC_CIRCLEZOOM,BM_SETCHECK,BST_UNCHECKED,0);
-        }
-
-      GetFromRegistry(szRegistryDisplayUpValue,&Up);
-      switch(Up)
-        {
-        case TRACKUP :
-          SendDlgItemMessage(hDlg,IDC_TRACKUP,BM_SETCHECK,BST_CHECKED,0);
-          break;
-
-        case NORTHUP :
-          SendDlgItemMessage(hDlg,IDC_NORTHUP,BM_SETCHECK,BST_CHECKED,0);
-          break;
-
-        case NORTHCIRCLE :
-          SendDlgItemMessage(hDlg,IDC_NORTHCIRCLE,BM_SETCHECK,BST_CHECKED,0);
-          break;
-
-        case TRACKCIRCLE :
-          SendDlgItemMessage(hDlg,IDC_TRACKCIRCLE,BM_SETCHECK,BST_CHECKED,0);
-          break;
-
-        }
       GetFromRegistry(szRegistryDisplayText,&Up);
       switch(Up)
         {
@@ -737,14 +730,20 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
     case WM_COMMAND:
       switch (LOWORD(wParam))
         {
-        case IDC_CIRCLEZOOM:
-          CircleZoom = !CircleZoom;
-          SetToRegistry(szRegistryCircleZoom,CircleZoom);
-          return TRUE;
 
         case IDC_SNAIL:
           TrailActive = !TrailActive;
           SetToRegistry(szRegistrySnailTrail,TrailActive);
+          return TRUE;
+
+        case IDC_CDICRUISE:
+          EnableCDICruise = !EnableCDICruise;
+          SetToRegistry(szRegistryCDICruise,EnableCDICruise);
+          return TRUE;
+
+        case IDC_CDICIRCLING:
+          EnableCDICircling = !EnableCDICircling;
+          SetToRegistry(szRegistryCDICircling,EnableCDICircling);
           return TRUE;
 
         case IDC_DRAWTOPOLOGY:
@@ -755,27 +754,6 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         case IDC_DRAWTERRAIN:
           EnableTerrain = !EnableTerrain;
           SetToRegistry(szRegistryDrawTerrain,EnableTerrain);
-          return TRUE;
-
-        case IDC_NORTHUP:
-          SetToRegistry(szRegistryDisplayUpValue,NORTHUP);
-          DisplayOrientation = NORTHUP;
-          return TRUE;
-
-        case IDC_NORTHCIRCLE:
-          SetToRegistry(szRegistryDisplayUpValue,NORTHCIRCLE);
-          DisplayOrientation = NORTHCIRCLE;
-          return TRUE;
-
-
-        case IDC_TRACKUP:
-          SetToRegistry(szRegistryDisplayUpValue,TRACKUP);
-          DisplayOrientation = TRACKUP;
-          return TRUE;
-
-        case IDC_TRACKCIRCLE:
-          SetToRegistry(szRegistryDisplayUpValue,TRACKCIRCLE);
-          DisplayOrientation = TRACKCIRCLE;
           return TRUE;
 
         case IDC_WAYPOINTNAME:
@@ -814,6 +792,98 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
   return FALSE;
 }
 
+
+
+LRESULT CALLBACK MapDisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+  DWORD Up;
+
+  switch (message)
+    {
+    case WM_INITDIALOG:
+
+      if(CircleZoom == TRUE)
+        {
+          SendDlgItemMessage(hDlg,IDC_CIRCLEZOOM,BM_SETCHECK,BST_CHECKED,0);
+        }
+      else
+        {
+          SendDlgItemMessage(hDlg,IDC_CIRCLEZOOM,BM_SETCHECK,BST_UNCHECKED,0);
+        }
+
+      if(EnableAutoBlank == TRUE)
+        {
+          SendDlgItemMessage(hDlg,IDC_AUTOBLANK,BM_SETCHECK,BST_CHECKED,0);
+        }
+      else
+        {
+          SendDlgItemMessage(hDlg,IDC_AUTOBLANK,BM_SETCHECK,BST_UNCHECKED,0);
+        }
+
+      GetFromRegistry(szRegistryDisplayUpValue,&Up);
+      switch(Up)
+        {
+        case TRACKUP :
+          SendDlgItemMessage(hDlg,IDC_TRACKUP,BM_SETCHECK,BST_CHECKED,0);
+          break;
+
+        case NORTHUP :
+          SendDlgItemMessage(hDlg,IDC_NORTHUP,BM_SETCHECK,BST_CHECKED,0);
+          break;
+
+        case NORTHCIRCLE :
+          SendDlgItemMessage(hDlg,IDC_NORTHCIRCLE,BM_SETCHECK,BST_CHECKED,0);
+          break;
+
+        case TRACKCIRCLE :
+          SendDlgItemMessage(hDlg,IDC_TRACKCIRCLE,BM_SETCHECK,BST_CHECKED,0);
+          break;
+
+        }
+
+      return TRUE;
+
+    case WM_COMMAND:
+      switch (LOWORD(wParam))
+        {
+        case IDC_AUTOBLANK:
+          EnableAutoBlank = !EnableAutoBlank;
+          SetToRegistry(szRegistryAutoBlank,EnableAutoBlank);
+          return TRUE;
+
+        case IDC_CIRCLEZOOM:
+          CircleZoom = !CircleZoom;
+          SetToRegistry(szRegistryCircleZoom,CircleZoom);
+          return TRUE;
+
+        case IDC_NORTHUP:
+          SetToRegistry(szRegistryDisplayUpValue,NORTHUP);
+          DisplayOrientation = NORTHUP;
+          return TRUE;
+
+        case IDC_NORTHCIRCLE:
+          SetToRegistry(szRegistryDisplayUpValue,NORTHCIRCLE);
+          DisplayOrientation = NORTHCIRCLE;
+          return TRUE;
+
+        case IDC_TRACKUP:
+          SetToRegistry(szRegistryDisplayUpValue,TRACKUP);
+          DisplayOrientation = TRACKUP;
+          return TRUE;
+
+        case IDC_TRACKCIRCLE:
+          SetToRegistry(szRegistryDisplayUpValue,TRACKCIRCLE);
+          DisplayOrientation = TRACKCIRCLE;
+          return TRUE;
+
+        }
+      break;
+    }
+  return FALSE;
+}
+
+
+////////////
 
 LRESULT CALLBACK SetAirspaceWarnings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1876,7 +1946,7 @@ LRESULT CALLBACK MapColour(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
   switch (message)
     {
     case WM_INITDIALOG:
-      if(bAirspaceBlackOutline) {
+      if(MapWindow::bAirspaceBlackOutline) {
         SendDlgItemMessage(hDlg,IDC_BLACKOUTLINE,BM_SETCHECK,BST_CHECKED,0);
       } else {
         SendDlgItemMessage(hDlg,IDC_BLACKOUTLINE,BM_SETCHECK,BST_UNCHECKED,0);
@@ -1892,128 +1962,129 @@ LRESULT CALLBACK MapColour(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam
           return TRUE;
 
         case IDC_CLASSA:
-          NewColor = iAirspaceColour[CLASSA];
-          NewBrush = iAirspaceBrush[CLASSA];
+          NewColor = MapWindow::iAirspaceColour[CLASSA];
+          NewBrush = MapWindow::iAirspaceBrush[CLASSA];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[CLASSA] = NewBrush;
-          iAirspaceColour[CLASSA] = NewColor;
+          MapWindow::iAirspaceBrush[CLASSA] = NewBrush;
+          MapWindow::iAirspaceColour[CLASSA] = NewColor;
           SetRegistryColour(CLASSA,NewColor);
           SetRegistryBrush(CLASSA, NewBrush);
           return TRUE;
 
         case IDC_CLASSB:
-          NewBrush = iAirspaceBrush[CLASSB];
-          NewColor = iAirspaceColour[CLASSB];
+          NewBrush = MapWindow::iAirspaceBrush[CLASSB];
+          NewColor = MapWindow::iAirspaceColour[CLASSB];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[CLASSB] = NewBrush;
-          iAirspaceColour[CLASSB] = NewColor;
+          MapWindow::iAirspaceBrush[CLASSB] = NewBrush;
+          MapWindow::iAirspaceColour[CLASSB] = NewColor;
           SetRegistryColour(CLASSB,NewColor);
           SetRegistryBrush(CLASSB,NewBrush);
           return TRUE;
 
         case IDC_CLASSC:
-          NewBrush = iAirspaceBrush[CLASSC];
-          NewColor = iAirspaceColour[CLASSC];
+          NewBrush = MapWindow::iAirspaceBrush[CLASSC];
+          NewColor = MapWindow::iAirspaceColour[CLASSC];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[CLASSC] = NewBrush;
-          iAirspaceColour[CLASSC] = NewColor;
+          MapWindow::iAirspaceBrush[CLASSC] = NewBrush;
+          MapWindow::iAirspaceColour[CLASSC] = NewColor;
           SetRegistryColour(CLASSC,NewColor);
           SetRegistryBrush(CLASSC,NewBrush);
           return TRUE;
 
         case IDC_CLASSD:
-          NewBrush = iAirspaceBrush[CLASSD];
-          NewColor = iAirspaceColour[CLASSD];
+          NewBrush = MapWindow::iAirspaceBrush[CLASSD];
+          NewColor = MapWindow::iAirspaceColour[CLASSD];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[CLASSD] = NewBrush;
-          iAirspaceColour[CLASSD] = NewColor;
+          MapWindow::iAirspaceBrush[CLASSD] = NewBrush;
+          MapWindow::iAirspaceColour[CLASSD] = NewColor;
           SetRegistryColour(CLASSD,NewColor);
           SetRegistryBrush(CLASSD,NewBrush);
           return TRUE;
 
         case IDC_PROHIBITED:
-          NewBrush = iAirspaceBrush[PROHIBITED];
-          NewColor = iAirspaceColour[PROHIBITED];
+          NewBrush = MapWindow::iAirspaceBrush[PROHIBITED];
+          NewColor = MapWindow::iAirspaceColour[PROHIBITED];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[PROHIBITED] = NewBrush;
-          iAirspaceColour[PROHIBITED] = NewColor;
+          MapWindow::iAirspaceBrush[PROHIBITED] = NewBrush;
+          MapWindow::iAirspaceColour[PROHIBITED] = NewColor;
           SetRegistryColour(PROHIBITED,NewColor);
           SetRegistryBrush(PROHIBITED,NewBrush);
           return TRUE;
 
         case IDC_DANGER:
-          NewBrush = iAirspaceBrush[DANGER];
-          NewColor = iAirspaceColour[DANGER];
+          NewBrush = MapWindow::iAirspaceBrush[DANGER];
+          NewColor = MapWindow::iAirspaceColour[DANGER];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[DANGER] = NewBrush;
-          iAirspaceColour[DANGER] = NewColor;
+          MapWindow::iAirspaceBrush[DANGER] = NewBrush;
+          MapWindow::iAirspaceColour[DANGER] = NewColor;
           SetRegistryColour(DANGER,NewColor);
           SetRegistryBrush(DANGER,NewBrush);
           return TRUE;
 
         case IDC_RESTRICTED:
-          NewBrush = iAirspaceBrush[RESTRICT];
-          NewColor = iAirspaceColour[RESTRICT];
+          NewBrush = MapWindow::iAirspaceBrush[RESTRICT];
+          NewColor = MapWindow::iAirspaceColour[RESTRICT];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[RESTRICT] = NewBrush;
-          iAirspaceColour[RESTRICT] = NewColor;
+          MapWindow::iAirspaceBrush[RESTRICT] = NewBrush;
+          MapWindow::iAirspaceColour[RESTRICT] = NewColor;
           SetRegistryColour(RESTRICT,NewColor);
           SetRegistryBrush(RESTRICT,NewBrush);
           return TRUE;
 
         case IDC_CTR:
-          NewBrush = iAirspaceBrush[CTR];
-          NewColor = iAirspaceColour[CTR];
+          NewBrush = MapWindow::iAirspaceBrush[CTR];
+          NewColor = MapWindow::iAirspaceColour[CTR];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[CTR] = NewBrush;
-          iAirspaceColour[CTR] = NewColor;
+          MapWindow::iAirspaceBrush[CTR] = NewBrush;
+          MapWindow::iAirspaceColour[CTR] = NewColor;
           SetRegistryColour(CTR,NewColor);
           SetRegistryBrush(CTR,NewBrush);
           return TRUE;
 
         case IDC_NOGLIDER:
-          NewBrush = iAirspaceBrush[NOGLIDER];
-          NewColor = iAirspaceColour[NOGLIDER];
+          NewBrush = MapWindow::iAirspaceBrush[NOGLIDER];
+          NewColor = MapWindow::iAirspaceColour[NOGLIDER];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[NOGLIDER] = NewBrush;
-          iAirspaceColour[NOGLIDER] = NewColor;
+          MapWindow::iAirspaceBrush[NOGLIDER] = NewBrush;
+          MapWindow::iAirspaceColour[NOGLIDER] = NewColor;
           SetRegistryColour(NOGLIDER,NewColor);
           SetRegistryBrush(NOGLIDER,NewBrush);
           return TRUE;
 
         case IDC_WAVE:
-          NewBrush = iAirspaceBrush[WAVE];
-          NewColor = iAirspaceColour[WAVE];
+          NewBrush = MapWindow::iAirspaceBrush[WAVE];
+          NewColor = MapWindow::iAirspaceColour[WAVE];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[WAVE] = NewBrush;
-          iAirspaceColour[WAVE] = NewColor;
+          MapWindow::iAirspaceBrush[WAVE] = NewBrush;
+          MapWindow::iAirspaceColour[WAVE] = NewColor;
           SetRegistryColour(WAVE,NewColor);
           SetRegistryBrush(WAVE,NewBrush);
           return TRUE;
 
         case IDC_OTHER:
-          NewBrush = iAirspaceBrush[OTHER];
-          NewColor = iAirspaceColour[OTHER];
+          NewBrush = MapWindow::iAirspaceBrush[OTHER];
+          NewColor = MapWindow::iAirspaceColour[OTHER];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[OTHER] = NewBrush;
-          iAirspaceColour[OTHER] = NewColor;
+          MapWindow::iAirspaceBrush[OTHER] = NewBrush;
+          MapWindow::iAirspaceColour[OTHER] = NewColor;
           SetRegistryColour(OTHER,NewColor);
           SetRegistryBrush(OTHER,NewBrush);
           return TRUE;
 
         case IDC_AAT:
-          NewBrush = iAirspaceBrush[AATASK];
-          NewColor = iAirspaceColour[AATASK];
+          NewBrush = MapWindow::iAirspaceBrush[AATASK];
+          NewColor = MapWindow::iAirspaceColour[AATASK];
           DialogBox(hInst, (LPCTSTR)IDD_COLOURSEL, hDlg, (DLGPROC)ColourSelect);
-          iAirspaceBrush[AATASK] = NewBrush;
-          iAirspaceColour[AATASK] = NewColor;
+          MapWindow::iAirspaceBrush[AATASK] = NewBrush;
+          MapWindow::iAirspaceColour[AATASK] = NewColor;
           SetRegistryColour(AATASK,NewColor);
           SetRegistryBrush(AATASK,NewBrush);
           return TRUE;
 
         case IDC_BLACKOUTLINE:
-          bAirspaceBlackOutline = !bAirspaceBlackOutline;
-          SetToRegistry(szRegistryAirspaceBlackOutline,bAirspaceBlackOutline);
+          MapWindow::bAirspaceBlackOutline = !MapWindow::bAirspaceBlackOutline;
+          SetToRegistry(szRegistryAirspaceBlackOutline,
+                        MapWindow::bAirspaceBlackOutline);
           return TRUE;
 
         }
@@ -2332,7 +2403,8 @@ LRESULT CALLBACK SaveProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 
 
-#define NUMPAGES 16
+#define NUMPAGES 17
+
 static const TCHAR *szSettingsTab[] =
 {
   TEXT("About"),
@@ -2341,7 +2413,8 @@ static const TCHAR *szSettingsTab[] =
   TEXT("Airspace colours"),
   TEXT("Airspace warnings"),
   TEXT("COMM"),
-  TEXT("Display"),
+  TEXT("Display Elements"),
+  TEXT("Display Orientation"),
   TEXT("Files"),
   TEXT("Final glide"),
   TEXT("Polar"),
@@ -2400,16 +2473,17 @@ LRESULT CALLBACK Settings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       hTabPage[4] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACEWARN, hDlg, (DLGPROC)SetAirspaceWarnings);
       hTabPage[5] = CreateDialog(hInst, (LPCTSTR)IDD_COMM, hDlg, (DLGPROC)COMMOptions);
       hTabPage[6] = CreateDialog(hInst, (LPCTSTR)IDD_DISPLAY, hDlg, (DLGPROC)DisplayOptions);
-      hTabPage[7] = CreateDialog(hInst, (LPCTSTR)IDD_FILES, hDlg, (DLGPROC)SetFiles);
-      hTabPage[8] = CreateDialog(hInst, (LPCTSTR)IDD_FGLIDE, hDlg, (DLGPROC)FinalGlide);
-      hTabPage[9] = CreateDialog(hInst, (LPCTSTR)IDD_POLAR, hDlg, (DLGPROC)SetPolar);
-      hTabPage[10] = CreateDialog(hInst, (LPCTSTR)IDD_PROFILELOAD, hDlg, (DLGPROC)LoadProfile);
-      hTabPage[11] = CreateDialog(hInst, (LPCTSTR)IDD_PROFILESAVE, hDlg, (DLGPROC)SaveProfile);
-      hTabPage[12] = CreateDialog(hInst, (LPCTSTR)IDD_TASKSETTINGS, hDlg, (DLGPROC)TaskSettings);
-      hTabPage[13] = CreateDialog(hInst, (LPCTSTR)IDD_UNITS, hDlg, (DLGPROC)SetUnits);
-      hTabPage[14] = CreateDialog(hInst, (LPCTSTR)IDD_LOGGERDETAILS, hDlg, (DLGPROC)LoggerDetails);
+      hTabPage[7] = CreateDialog(hInst, (LPCTSTR)IDD_MAPDISPLAY, hDlg, (DLGPROC)MapDisplayOptions);
+      hTabPage[8] = CreateDialog(hInst, (LPCTSTR)IDD_FILES, hDlg, (DLGPROC)SetFiles);
+      hTabPage[9] = CreateDialog(hInst, (LPCTSTR)IDD_FGLIDE, hDlg, (DLGPROC)FinalGlide);
+      hTabPage[10] = CreateDialog(hInst, (LPCTSTR)IDD_POLAR, hDlg, (DLGPROC)SetPolar);
+      hTabPage[11] = CreateDialog(hInst, (LPCTSTR)IDD_PROFILELOAD, hDlg, (DLGPROC)LoadProfile);
+      hTabPage[12] = CreateDialog(hInst, (LPCTSTR)IDD_PROFILESAVE, hDlg, (DLGPROC)SaveProfile);
+      hTabPage[13] = CreateDialog(hInst, (LPCTSTR)IDD_TASKSETTINGS, hDlg, (DLGPROC)TaskSettings);
+      hTabPage[14] = CreateDialog(hInst, (LPCTSTR)IDD_UNITS, hDlg, (DLGPROC)SetUnits);
+      hTabPage[15] = CreateDialog(hInst, (LPCTSTR)IDD_LOGGERDETAILS, hDlg, (DLGPROC)LoggerDetails);
 
-      hTabPage[15] = CreateDialog(hInst, (LPCTSTR)IDD_AUDIO, hDlg, (DLGPROC)AudioSettings);
+      hTabPage[16] = CreateDialog(hInst, (LPCTSTR)IDD_AUDIO, hDlg, (DLGPROC)AudioSettings);
 
       MoveWindow(hTabPage[LastShow],0,30,240,300,TRUE);
       ShowWindow(hTabPage[LastShow],SW_SHOW);
@@ -2613,7 +2687,6 @@ extern void DrawJPG(HDC hdc, RECT rc);
 #include "VOIMAGE.h"
 
 extern bool MenuActive;
-extern bool RequestFastRefresh;
 
 
 LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -2631,6 +2704,13 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
   RECT rc;
   static BOOL hasimage1 = false;
   static BOOL hasimage2 = false;
+  TCHAR Directory[MAX_PATH];
+  TCHAR szWaypointFile[MAX_PATH] = TEXT("\0");
+  double sunsettime;
+  int sunsethours;
+  int sunsetmins;
+
+  // Modis images are now assumed to be colocated with waypoint file
 
   switch (message)
     {
@@ -2638,7 +2718,11 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
       hdcScreen = GetDC(hDlg);
 
-      wsprintf(path_modis,TEXT("\\SD Card\\XCSoar\\MODIS\\modis-%03d.jpg"),
+      GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
+      ExtractDirectory(Directory, szWaypointFile);
+
+      wsprintf(path_modis,TEXT("%s\\modis-%03d.jpg"),
+               Directory,
 	       SelectedWaypoint+1);
 
       hasimage1 = jpgimage1.Load (hdcScreen ,path_modis );
@@ -2653,10 +2737,17 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
       Temp[0]= 0;
 
-      wsprintf(Temp,TEXT("Longitude %-3.4f\r\nLatitude %-3.4f\r\nElevation %5.0f\r\n"),
+      sunsettime = DoSunEphemeris(WayPointList[SelectedWaypoint].Longditude,
+                                  WayPointList[SelectedWaypoint].Lattitude);
+      sunsethours = (int)sunsettime;
+      sunsetmins = (int)((sunsettime-sunsethours)*60);
+
+      wsprintf(Temp,TEXT("Longitude %-3.4f\r\nLatitude %-3.4f\r\nElevation %5.0f\r\nSunset %02d:%02d"),
                WayPointList[SelectedWaypoint].Longditude,
                WayPointList[SelectedWaypoint].Lattitude,
-               WayPointList[SelectedWaypoint].Altitude*ALTITUDEMODIFY
+               WayPointList[SelectedWaypoint].Altitude*ALTITUDEMODIFY,
+               sunsethours,
+               sunsetmins
 
                );
 
@@ -2675,7 +2766,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         {
           ::ReleaseDC(hDlg, hdcScreen);
           EndDialog(hDlg, LOWORD(wParam));
-          RequestFastRefresh= true;
+          MapWindow::RequestFastRefresh= true;
           FullScreen();
           return TRUE;
         }
@@ -2685,7 +2776,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
-        RequestFastRefresh= true;
+        MapWindow::RequestFastRefresh= true;
         FullScreen();
         break;
       }
@@ -2695,7 +2786,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
-        RequestFastRefresh= true;
+        MapWindow::RequestFastRefresh= true;
         FullScreen();
         break;
       }
@@ -2705,7 +2796,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
-        RequestFastRefresh= true;
+        MapWindow::RequestFastRefresh= true;
         FullScreen();
         break;
       }
@@ -2715,7 +2806,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
-        RequestFastRefresh= true;
+        MapWindow::RequestFastRefresh= true;
         FullScreen();
         break;
       }
@@ -2726,7 +2817,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
-        RequestFastRefresh= true;
+        MapWindow::RequestFastRefresh= true;
         FullScreen();
         break;
       }
@@ -2814,7 +2905,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       return FALSE;
 
     case WM_CLOSE:
-      RequestFastRefresh= true;
+      MapWindow::RequestFastRefresh= true;
       FullScreen();
     }
   return FALSE;
@@ -2858,7 +2949,6 @@ LRESULT CALLBACK LoggerDetails(HWND hDlg, UINT message,
 }
 
 
-
 // ARH: Status Message functions
 // Used to show a brief status message to the user
 // Could be used to display debug messages
@@ -2889,7 +2979,6 @@ public:
   }
 };
 
-extern bool RequestFastRefresh;
 
 // Intercept messages destined for the Status Message window
 LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -2934,7 +3023,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
   case WM_TIMER :
 
 
-    RequestFastRefresh = true; // trigger screen refresh
+    MapWindow::RequestFastRefresh = true; // trigger screen refresh
 
     DestroyWindow(hwnd);
 
@@ -3064,81 +3153,6 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
 }
 
 
-
-
-bool startupfinished = false;
-
-// Intercept messages destined for the Status Message window
-LRESULT CALLBACK StartupWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-
-  switch (message) {
-    case WM_COMMAND:
-      switch (LOWORD(wParam))
-        {
-        case IDC_SPLASH:
-          DestroyWindow(hwnd);
-          return TRUE;
-        };
-      break;
-  case WM_TIMER :         // Fall through to destroy
-  case WM_LBUTTONDOWN :
-    DestroyWindow(hwnd);
-    break;
-  case WM_CLOSE:
-    startupfinished = true;
-    break;
-  }
-  return DefWindowProc(hwnd, message, wParam, lParam);
-}
-
-
-// Pop up start up screen
-//
-
-
-void OpenStartupScreen() {
-
-  HWND hWnd;
-
-  startupfinished = false;
-
-  // Create a child window to contain status message
-  hWnd =
-    CreateDialog(hInst, (LPCTSTR)IDD_SPLASH, hWndMainWindow,
-                 (DLGPROC)StartupWndTimerProc);
-
-  /*
-  SetWindowPos(hWndMainWindow,HWND_TOPMOST,0,0,
-               GetSystemMetrics(SM_CXSCREEN),
-               GetSystemMetrics(SM_CYSCREEN),
-               SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
-  */
-
-  // Subclass window function so that we can trap timer messages
-  // set timeout to 3 seconds
-  SetTimer(hWnd, 2, 3000, NULL);
-
-  MSG msg;
-
-  while (GetMessage(&msg, NULL, 0, 0) && !startupfinished)
-    {
-      DispatchMessage(&msg);
-    }
-
-}
-
-
-
-void StartupScreen() {
-  DWORD dwThreadID;
-  HANDLE splashthread;
-  splashthread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )
-                               OpenStartupScreen, 0, 0, &dwThreadID);
-
-  CloseHandle (splashthread);
-
-}
 
 
 /////////////////////////////////////////////////

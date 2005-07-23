@@ -36,7 +36,6 @@
 
 WindAnalyser *windanalyser = NULL;
 
-extern RECT MapRect;
 
 static void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -48,8 +47,8 @@ static void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready);
-static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready);
+static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready);
+static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready);
 static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int      InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int      InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -60,7 +59,7 @@ static void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int      InAATStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int      InAATurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void DoAutoMcReady(DERIVED_INFO *Calculated);
+static void DoAutoMcCready(DERIVED_INFO *Calculated);
 static void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
@@ -146,7 +145,7 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (
       (Basic->AirspeedAvailable &&
-      (Basic->Airspeed >= NettoSpeed))
+      (Basic->IndicatedAirspeed >= NettoSpeed))
       ||
       (!Basic->AirspeedAvailable &&
        (Basic->Speed >= NettoSpeed))
@@ -162,7 +161,7 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
 
     if (Basic->AirspeedAvailable) {
-      theSinkRate= SinkRate(Basic->Airspeed, n);
+      theSinkRate= SinkRate(Basic->IndicatedAirspeed, n);
     } else {
       // assume zero wind (Speed=Airspeed, very bad I know)
       theSinkRate= SinkRate(Basic->Speed, n);
@@ -205,9 +204,12 @@ BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
+BOOL EnableCalibration = FALSE;
+
+
 void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
-  double x0, y0;
+  double x0, y0, mag;
 
   if ((Basic->Speed>0)||(Calculated->WindSpeed>0)) {
     x0 = fastsine(Basic->TrackBearing)*Basic->Speed;
@@ -219,6 +221,22 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     if (Calculated->Heading<0) {
       Calculated->Heading += 360;
     }
+
+    if (EnableCalibration) {
+      mag = isqrt4(x0*x0*100+y0*y0*100)/10.0;
+      if ((Basic->AirspeedAvailable) && (Basic->IndicatedAirspeed>0)) {
+
+        double k = (mag / Basic->TrueAirspeed);
+
+        char buffer[100];
+        sprintf(buffer,"%g %g %g # airspeed \r\n",
+                Basic->IndicatedAirspeed,
+                mag*Basic->IndicatedAirspeed/Basic->TrueAirspeed,
+                k);
+        DebugStore(buffer);
+      }
+    }
+
   } else {
     Calculated->Heading = Basic->TrackBearing;
   }
@@ -229,7 +247,7 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
-  static double macready;
+  static double mccready;
 
   if (!windanalyser) {
     windanalyser = new WindAnalyser(Basic, Calculated);
@@ -244,10 +262,10 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     */
   }
 
-  macready = MACREADY/LIFTMODIFY;
+  mccready = MCCREADY/LIFTMODIFY;
 
   DistanceToNext(Basic, Calculated);
-  AltitudeRequired(Basic, Calculated, macready);
+  AltitudeRequired(Basic, Calculated, mccready);
   Heading(Basic, Calculated);
 
   TerrainHeight(Basic, Calculated);
@@ -255,7 +273,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (TaskAborted) {
     SortLandableWaypoints(Basic, Calculated);
   }
-  TaskStatistics(Basic, Calculated, macready);
+  TaskStatistics(Basic, Calculated, mccready);
 
   if(Basic->Time <= LastTime)
     {
@@ -272,8 +290,8 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if ((Calculated->FinalGlide)
       ||(fabs(Calculated->TaskAltitudeDifference)>30)) {
     FinalGlideAlert(Basic, Calculated);
-    if (Calculated->AutoMcReady) {
-      DoAutoMcReady(Calculated);
+    if (Calculated->AutoMcCready) {
+      DoAutoMcCready(Calculated);
     }
   }
 
@@ -293,7 +311,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (TaskAborted) {
 
     SortLandableWaypoints(Basic, Calculated);
-    //    TaskStatistics(Basic, Calculated, macready);
+    //    TaskStatistics(Basic, Calculated, mccready);
 
   } else {
 
@@ -301,11 +319,11 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     InAATSector(Basic, Calculated);
 
     AATStats(Basic, Calculated);
-    TaskStatistics(Basic, Calculated, macready);
+    TaskStatistics(Basic, Calculated, mccready);
 
   }
 
-  AltitudeRequired(Basic, Calculated, macready);
+  AltitudeRequired(Basic, Calculated, mccready);
   TerrainHeight(Basic, Calculated);
 
   CalculateNextPosition(Basic, Calculated);
@@ -505,12 +523,12 @@ void SwitchZoomClimb(bool isclimb, bool left) {
 
   if (CircleZoom) {
     if (isclimb) {
-      CruiseMapScale = RequestMapScale;
-      RequestMapScale = ClimbMapScale;
+      CruiseMapScale = MapWindow::RequestMapScale;
+      MapWindow::RequestMapScale = ClimbMapScale;
     } else {
       // leaving climb
-      ClimbMapScale = RequestMapScale;
-      RequestMapScale = CruiseMapScale;
+      ClimbMapScale = MapWindow::RequestMapScale;
+      MapWindow::RequestMapScale = CruiseMapScale;
     }
   }
 
@@ -532,6 +550,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static int MODE = CRUISE;
   static bool LEFT = FALSE;
   double Rate;
+  static double LastRate=0;
+  double dRate;
 
   if(Basic->Time <= LastTime)
     return;
@@ -549,6 +569,32 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Rate = (Basic->TrackBearing - LastTrack);
     }
   Rate = Rate / (Basic->Time - LastTime);
+
+  if (Basic->Time-LastTime<2.0) {
+    // time step ok
+
+    // calculate acceleration
+    dRate = (Rate-LastRate)/(Basic->Time-LastTime);
+
+    double dtlead=0.3;
+    // integrate assuming constant acceleration, for one second
+    Calculated->NextTrackBearing = Basic->TrackBearing
+      + dtlead*(Rate+0.5*dtlead*dRate);
+    // s = u.t+ 0.5*a*t*t
+
+    if (Calculated->NextTrackBearing<0) {
+      Calculated->NextTrackBearing+= 360;
+    }
+    if (Calculated->NextTrackBearing>=360) {
+      Calculated->NextTrackBearing-= 360;
+    }
+
+  } else {
+    // time step too big, so just take it at last measurement
+    Calculated->NextTrackBearing = Basic->TrackBearing;
+  }
+
+  LastRate = Rate;
 
   // JMW added percent climb calculator
 
@@ -739,12 +785,12 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
 }
 
-void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
+void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
 {
   if(ActiveWayPoint >=0)
     {
       Calculated->NextAltitudeRequired =
-        McReadyAltitude(macready,
+        McCreadyAltitude(mccready,
                         Calculated->WaypointDistance,
                         Calculated->WaypointBearing,
                         Calculated->WindSpeed, Calculated->WindBearing,
@@ -1083,7 +1129,7 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 /////////////////////////////////////////
 
-void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
+void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
 {
   int i;
   double LegCovered, LegToGo, LegDistance, LegBearing, LegAltitude;
@@ -1153,13 +1199,13 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
                          WayPointList[Task[i].Index].Lattitude,
                          WayPointList[Task[i].Index].Longditude);
 
-      // JMW TODO: use instantaneous macready here again to calculate
+      // JMW TODO: use instantaneous mccready here again to calculate
       // dolphin speed to fly
-      LegAltitude = McReadyAltitude(macready, LegToGo, LegBearing,
+      LegAltitude = McCreadyAltitude(mccready, LegToGo, LegBearing,
                                     Calculated->WindSpeed,
                                     Calculated->WindBearing,
                                     &(Calculated->BestCruiseTrack),
-                                    &(Calculated->VMcReady),
+                                    &(Calculated->VMcCready),
                                     (i==FinalWayPoint),
                                     &(Calculated->LegTimeToGo)
                                     // ||()
@@ -1221,7 +1267,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
                                WayPointList[Task[i].Index].Longditude);
 
 
-          LegAltitude = McReadyAltitude(macready, LegDistance, LegBearing,
+          LegAltitude = McCreadyAltitude(mccready, LegDistance, LegBearing,
                                         Calculated->WindSpeed, Calculated->WindBearing, 0, 0,
                                         (i==FinalWayPoint), // ||() JMW TODO!!!!!!!!!
                                         &LegTimeToGo);
@@ -1258,11 +1304,11 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
     } else {
     // no task selected, so work things out at current heading
 
-    McReadyAltitude(macready, 100.0, Basic->TrackBearing,
+    McCreadyAltitude(mccready, 100.0, Basic->TrackBearing,
                     Calculated->WindSpeed,
                     Calculated->WindBearing,
                     &(Calculated->BestCruiseTrack),
-                    &(Calculated->VMcReady),
+                    &(Calculated->VMcCready),
                     0,
                     // ||()
                     // JMW TODO!!!!!!!!!!!
@@ -1271,7 +1317,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double macready)
   }
 }
 
-void DoAutoMcReady(DERIVED_INFO *Calculated)
+void DoAutoMcCready(DERIVED_INFO *Calculated)
 {
   static double tad=0.0;
   static double dmc=0.0;
@@ -1283,12 +1329,12 @@ void DoAutoMcReady(DERIVED_INFO *Calculated)
   } else if (tad < -20) {
     dmc = dmc*0.2-0.8*0.2;
   }
-  MACREADY += dmc;
-  if (MACREADY>20.0) {
-    MACREADY = 20.0;
+  MCCREADY += dmc;
+  if (MCCREADY>20.0) {
+    MCCREADY = 20.0;
   }
-  if (MACREADY<0.0) {
-    MACREADY = 0.0;
+  if (MCCREADY<0.0) {
+    MCCREADY = 0.0;
   }
 
   /* NOT WORKING
@@ -1303,22 +1349,22 @@ void DoAutoMcReady(DERIVED_INFO *Calculated)
 
   if (fabs(tad)<5.0) {
     tadlast = tad;
-    mclast = MACREADY;
+    mclast = MCCREADY;
     return;
   }
 
   // no change detected, increment until see something
 
   if (fabs(tad-tadlast)>0.0001) {
-    slope = 0.9*slope+0.1*(MACREADY-mclast)/(tad-tadlast);
+    slope = 0.9*slope+0.1*(MCCREADY-mclast)/(tad-tadlast);
   } else {
   }
 
   if (fabs(slope)<0.01) {
     if (tad>0) {
-      mcnew= MACREADY+0.1;
+      mcnew= MCCREADY+0.1;
     } else {
-      mcnew= MACREADY-0.1;
+      mcnew= MCCREADY-0.1;
     }
   } else {
 
@@ -1330,17 +1376,17 @@ void DoAutoMcReady(DERIVED_INFO *Calculated)
     // slope=(5-4)/(100-200)= -0.1
     delta = (-slope*tad);
     delta = min(1.0,max(-1.0,delta));
-    mcnew = MACREADY+0.3*(delta);
+    mcnew = MCCREADY+0.3*(delta);
   }
   tadlast = tad;
-  mclast = MACREADY;
+  mclast = MCCREADY;
 
-  MACREADY = mcnew;
-  if (MACREADY>10.0) {
-    MACREADY = 10.0;
+  MCCREADY = mcnew;
+  if (MCCREADY>10.0) {
+    MCCREADY = 10.0;
   }
-  if (MACREADY<0.0) {
-    MACREADY = 0.0;
+  if (MCCREADY<0.0) {
+    MCCREADY = 0.0;
   }
   */
 }
@@ -1468,7 +1514,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
          ((DisplayOrientation == TRACKCIRCLE) && (Calculated->Circling == FALSE) )
          )
         hCMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY,
-                                 0, MapRect.top+15, 240, 50, hWndMapWindow,NULL,hInst,NULL);
+                                 0, MapWindow::MapRect.top+15, 240, 50, hWndMapWindow,NULL,hInst,NULL);
       else
         hCMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY,
                                  0, 180,240,50,hWndMapWindow,NULL,hInst,NULL);
@@ -1518,7 +1564,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
          )
 
         hAMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY,
-                                 0, 15+MapRect.top, 240,50,hWndMapWindow,NULL,hInst,NULL);
+                                 0, 15+MapWindow::MapRect.top, 240,50,hWndMapWindow,NULL,hInst,NULL);
       else
         hAMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY,
                                  0, 180,240,50,hWndMapWindow,NULL,hInst,NULL);
@@ -1717,7 +1763,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   // returns distance one would arrive at altitude in straight glide
 
   // first estimate max range at this altitude
-  double ialtitude = McReadyAltitude(MACREADY/LIFTMODIFY,
+  double ialtitude = McCreadyAltitude(MCCREADY/LIFTMODIFY,
                                      1.0, bearing,
                                      Calculated->WindSpeed,
                                      Calculated->WindBearing, 0, 0, 1, 0);
@@ -1819,7 +1865,7 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
 		     WayPointList[i].Lattitude,
 		     WayPointList[i].Longditude);
 
-  AltReqd = McReadyAltitude(0.0,
+  AltReqd = McCreadyAltitude(0.0,
 			    wDistance,
 			    wBearing,
 			    Calculated->WindSpeed,

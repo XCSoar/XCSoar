@@ -111,9 +111,9 @@ double SinkRate(double V, double n) {
 }
 
 
-double McReadyAltitude(double MCREADY, double Distance, double Bearing, double WindSpeed, double WindBearing,
+double McCreadyAltitude(double MCREADY, double Distance, double Bearing, double WindSpeed, double WindBearing,
 		       double *BestCruiseTrack,
-		       double *VMcReady,
+		       double *VMcCready,
 		       int isFinalGlide,
                        double *TimeToGo)
 {
@@ -126,10 +126,9 @@ double McReadyAltitude(double MCREADY, double Distance, double Bearing, double W
   double VMG;
 
   CrossBearing = Bearing - WindBearing;
-  CrossBearing = (double)(pi*CrossBearing)/180;
 
-  HeadWind = WindSpeed * (double)cos(CrossBearing);
-  CrossWind = WindSpeed * (double)sin(CrossBearing);
+  HeadWind = WindSpeed * fastcosine(CrossBearing);
+  CrossWind = WindSpeed * fastsine(CrossBearing);
 
   // JMW TODO: Calculate best cruise bearing
   double sinkrate;
@@ -224,10 +223,10 @@ double McReadyAltitude(double MCREADY, double Distance, double Bearing, double W
 		// compensates for the drift during climb
 		*BestCruiseTrack =
 		  atan2(-CrossWind*(1-tc),vtot
-			+HeadWind*(1-tc))*180/3.1415926+Bearing;
+			+HeadWind*(1-tc))*RAD_TO_DEG+Bearing;
 	      }
-	      if (VMcReady) {
-		*VMcReady = vtrack;
+	      if (VMcCready) {
+		*VMcCready = vtrack;
 	      }
 	      VMG = vtot/tc; // speed along track during cruise component
 	    }

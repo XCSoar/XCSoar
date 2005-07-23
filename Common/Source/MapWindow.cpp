@@ -35,149 +35,120 @@
 
 #include "Terrain.h"
 
-static DWORD DrawThread (LPVOID);
 
-static void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft);
-static void CalculateScreenPositionsAirspace(POINT Orig, RECT rc, POINT *Orig_Aircraft);
-static void CalculateWaypointReachable(void);
+///////////////////////////////// Initialisation
+
+RECT MapWindow::MapRect;
+RECT MapWindow::MapRectBig;
+RECT MapWindow::MapRectSmall;
+
+HBITMAP MapWindow::hDrawBitMap = NULL;
+HBITMAP MapWindow::hDrawBitMapBg = NULL;
+HBITMAP MapWindow::hDrawBitMapTmp = NULL;
+HDC MapWindow::hdcDrawWindow = NULL;
+HDC MapWindow::hdcDrawWindowBg = NULL;
+HDC MapWindow::hdcScreen = NULL;
+HDC MapWindow::hDCTemp = NULL;
+
+rectObj MapWindow::screenbounds_latlon;
+
+double MapWindow::PanX=0.0;
+double MapWindow::PanY=0.0;
+double MapWindow::PanXr=0.0;
+double MapWindow::PanYr=0.0;
+
+bool MapWindow::EnablePan = FALSE;
+
+BOOL MapWindow::CLOSETHREAD = FALSE;
+BOOL MapWindow::THREADRUNNING = TRUE;
+
+DWORD  MapWindow::dwDrawThreadID;
+HANDLE MapWindow::hDrawThread;
+
+double MapWindow::RequestMapScale = 5;
+double MapWindow::MapScale = 5;
+double MapWindow::DisplayAngle = 0.0;
+double MapWindow::DisplayAircraftAngle = 0.0;
+double MapWindow::DrawScale;
+
+bool MapWindow::AutoZoom = false;
+
+int MapWindow::dTDisplay=0;
+
+HBITMAP MapWindow::hLandable;
+HBITMAP MapWindow::hReachable;
+HBITMAP MapWindow::hTurnPoint;
+HBITMAP MapWindow::hSmall;
+HBITMAP MapWindow::hCruise;
+HBITMAP MapWindow::hClimb;
+HBITMAP MapWindow::hFinalGlide;
+HBITMAP MapWindow::hAutoMcCready;
+HBITMAP MapWindow::hTerrainWarning;
+
+  // 12 is number of airspace types
+int	MapWindow::iAirspaceBrush[AIRSPACECLASSCOUNT];
+int	MapWindow::iAirspaceColour[AIRSPACECLASSCOUNT];
+BOOL    MapWindow::bAirspaceBlackOutline = FALSE;
+
+HBRUSH  MapWindow::hBackgroundBrush;
+
+HBRUSH  MapWindow::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
+HBITMAP MapWindow::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+
+COLORREF MapWindow::Colours[NUMAIRSPACECOLORS] =
+    {RGB(0xFF,0x00,0x00), RGB(0x00,0xFF,0x00),
+     RGB(0x00,0x00,0xFF), RGB(0xFF,0xFF,0x00),
+     RGB(0xFF,0x00,0xFF), RGB(0x00,0xFF,0xFF),
+     RGB(0x7F,0x00,0x00), RGB(0x00,0x7F,0x00),
+     RGB(0x00,0x00,0x7F), RGB(0x7F,0x7F,0x00),
+     RGB(0x7F,0x00,0x7F), RGB(0x00,0x7F,0x7F),
+     RGB(0xFF,0xFF,0xFF), RGB(0xC0,0xC0,0xC0),
+     RGB(0x7F,0x7F,0x7F), RGB(0x00,0x00,0x00)};
 
 
-bool		PointVisible(POINT *P, RECT *rc);
-bool            PointVisible(double lon, double lat);
-rectObj screenbounds_latlon;
+HBRUSH MapWindow::hbCompass;
+HBRUSH MapWindow::hbThermalBand;
+HBRUSH MapWindow::hbBestCruiseTrack;
+HBRUSH MapWindow::hbFinalGlideBelow;
+HBRUSH MapWindow::hbFinalGlideAbove;
 
+HPEN MapWindow::hpAircraft;
+HPEN MapWindow::hpAircraftBorder;
+HPEN MapWindow::hpWind;
+HPEN MapWindow::hpWindThick;
+HPEN MapWindow::hpBearing;
+HPEN MapWindow::hpBestCruiseTrack;
+HPEN MapWindow::hpCompass;
+HPEN MapWindow::hpThermalBand;
+HPEN MapWindow::hpThermalBandGlider;
+HPEN MapWindow::hpFinalGlideAbove;
+HPEN MapWindow::hpFinalGlideBelow;
+HPEN MapWindow::hpMapScale;
+HPEN MapWindow::hpTerrainLine;
 
-static void DrawAircraft(HDC hdc, POINT Orig);
-static void DrawBestCruiseTrack(HDC hdc, POINT Orig);
-static void DrawCompass(HDC hdc, RECT rc);
-static void DrawWind(HDC hdc, POINT Orig, RECT rc);
-static void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc);
-static void DrawAirSpace(HDC hdc, RECT rc);
-static void DrawWaypoints(HDC hdc, RECT rc);
-static void DrawFlightMode(HDC hdc, RECT rc);
-static void DrawTrail(HDC hdc, POINT Orig, RECT rc);
-static void DrawTask(HDC hdc, RECT rc);
-static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
-static void DrawBearing(HDC hdc, POINT Orig);
-static void DrawMapScale(HDC hDC,RECT rc);
-static void DrawMapScale2(HDC hDC,RECT rc, POINT Orig_Aircraft);
-static void DrawFinalGlide(HDC hDC,RECT rc);
-static void DrawThermalBand(HDC hDC,RECT rc);
-static void DrawGlideThroughTerrain(HDC hDC, RECT rc);
-static void DrawCDI();
+COLORREF MapWindow::BackgroundColor = RGB(0xF5,0xF5,0xF5);
 
-extern HWND					hWndCDIWindow;
+bool MapWindow::RequestFastRefresh = false;
+bool MapWindow::MapDirty = true;
+bool MapWindow::RequestMapDirty = false;
+DWORD MapWindow::fpsTime0 = 0;
+bool MapWindow::MapFullScreen = false;
+bool MapWindow::RequestFullScreen = false;
 
-static void DrawSolidLine(HDC , POINT , POINT );
-static void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
+/////////////////////////////////
 
+extern int DisplayTimeOut;
 
-
-static HBITMAP hDrawBitMap = NULL;
-static HBITMAP hDrawBitMapBg = NULL;
-static HBITMAP hDrawBitMapTmp = NULL;
-static HDC hdcDrawWindow = NULL;
-static HDC hdcDrawWindowBg = NULL;
-static HDC hdcScreen = NULL;
-static HDC hDCTemp = NULL;
-
-double PanX=0.0;
-double PanY=0.0;
-double PanXr=0.0;
-double PanYr=0.0;
-
-bool EnablePan = FALSE;
-
-extern int iround(double i);
-extern void ShowMenu();
-
-BOOL CLOSETHREAD = FALSE;
-BOOL THREADRUNNING = TRUE;
-//static BOOL	THREADRUNNING = FALSE;
-
-DWORD  dwDrawThreadID;
-HANDLE hDrawThread;
-
-double RequestMapScale = 5;
-double MapScale = 5;
-double DisplayAngle = 0.0;
-double DisplayAircraftAngle = 0.0;
-static double DrawScale;
-
-static bool AutoZoom = false;
-
-static NMEA_INFO DrawInfo;
-static DERIVED_INFO DerivedDrawInfo;
-
-static int dTDisplay=0;
-
-static HBITMAP hLandable, hReachable, hTurnPoint, hSmall, hCruise, hClimb,
-hFinalGlide, hAutoMcReady, hTerrainWarning;
-
-// 12 is number of airspace types
-int	iAirspaceBrush[AIRSPACECLASSCOUNT];
-int	iAirspaceColour[AIRSPACECLASSCOUNT];
-BOOL bAirspaceBlackOutline = FALSE;
-
-static HBRUSH   hBackgroundBrush;
-
-// ARH: removed static
-HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
-HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
-
-// ARH: removed static, so that Colours can be read by
-// airspace colour dialog
-COLORREF Colours[NUMAIRSPACECOLORS] =
-{RGB(0xFF,0x00,0x00), RGB(0x00,0xFF,0x00), RGB(0x00,0x00,0xFF), RGB(0xFF,0xFF,0x00),
- RGB(0xFF,0x00,0xFF), RGB(0x00,0xFF,0xFF), RGB(0x7F,0x00,0x00), RGB(0x00,0x7F,0x00),
- RGB(0x00,0x00,0x7F), RGB(0x7F,0x7F,0x00), RGB(0x7F,0x00,0x7F), RGB(0x00,0x7F,0x7F),
- RGB(0xFF,0xFF,0xFF), RGB(0xC0,0xC0,0xC0), RGB(0x7F,0x7F,0x7F), RGB(0x00,0x00,0x00)};
-
-static COLORREF BackgroundColor = RGB(0xF5,0xF5,0xF5);
-
-static      HPEN hpAircraft, hpAircraftBorder;
-static      HPEN hpWind;
-static      HPEN hpWindThick;
-static      HPEN hpBearing;
-static      HPEN hpBestCruiseTrack;
-static      HPEN hpCompass;
-static      HPEN hpThermalBand, hpThermalBandGlider;
-static      HPEN hpFinalGlideAbove, hpFinalGlideBelow;
-static      HPEN hpMapScale;
-static      HPEN hpTerrainLine;
-
-static      HBRUSH hbCompass;
-static      HBRUSH hbThermalBand;
-static      HBRUSH hbBestCruiseTrack;
-static      HBRUSH hbFinalGlideBelow, hbFinalGlideAbove;
-
+NMEA_INFO DrawInfo;
+DERIVED_INFO DerivedDrawInfo;
 
 int SelectedWaypoint;
+BOOL EnableCDICruise = FALSE;
+BOOL EnableCDICircling = FALSE;
 
-
-void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size) {
-  SIZE tsize;
-  RECT brect;
-  if (size==0) {
-    size = _tcslen(Value);
-  }
-
-  HBRUSH hbOld;
-  hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
-
-  GetTextExtentPoint(hDC, Value, size, &tsize);
-  brect.left = x-1;
-  brect.right = brect.left+tsize.cx+2;
-  brect.top = y-1;
-  brect.bottom = brect.top+tsize.cy+2;
-
-  ExtTextOut(hDC,
-    x, y,
-    ETO_OPAQUE, &brect, Value, size, NULL);
-
-  SelectObject(hDC, hbOld);
-
-}
+extern HWND hWndCDIWindow;
+extern int iround(double i);
+extern void ShowMenu();
 
 
 void FlyDirectTo(int index) {
@@ -369,26 +340,42 @@ void ReplaceWaypoint(int index) {
 }
 
 
+///////////////////
 
-RECT MapRectBig;
-RECT MapRect;
-RECT MapRectSmall;
-static bool MapFullScreen= false;
-bool RequestFullScreen = false;
 
-bool MapDirty = false;
-bool RequestMapDirty = false;
-bool RequestFastRefresh = false;
+void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size) {
+  SIZE tsize;
+  RECT brect;
+  if (size==0) {
+    size = _tcslen(Value);
+  }
 
-static DWORD fpsTime0=0;
+  HBRUSH hbOld;
+  hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
 
-void RefreshMap() {
+  GetTextExtentPoint(hDC, Value, size, &tsize);
+  brect.left = x-1;
+  brect.right = brect.left+tsize.cx+2;
+  brect.top = y-1;
+  brect.bottom = brect.top+tsize.cy+2;
+
+  ExtTextOut(hDC,
+    x, y,
+    ETO_OPAQUE, &brect, Value, size, NULL);
+
+  SelectObject(hDC, hbOld);
+
+}
+
+
+
+void MapWindow::RefreshMap() {
   fpsTime0 = 0;
   RequestMapDirty = true;
 }
 
 
-void ToggleFullScreenStart() {
+void MapWindow::ToggleFullScreenStart() {
 
   // ok, save the state.
   MapFullScreen = RequestFullScreen;
@@ -405,14 +392,14 @@ void ToggleFullScreenStart() {
 }
 
 
-void RequestToggleFullScreen() {
+void MapWindow::RequestToggleFullScreen() {
   RequestFullScreen = !RequestFullScreen;
   RefreshMap();
 }
 
 
-LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
-                             LPARAM lParam)
+LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
+                                        LPARAM lParam)
 {
   int i;
   //  TCHAR szMessageBuffer[1024];
@@ -436,6 +423,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     } else
       return TRUE;
   case WM_SIZE:
+
     hDrawBitMap = CreateCompatibleBitmap (hdcScreen, (int) LOWORD (lParam), (int) HIWORD (lParam));
     SelectObject(hdcDrawWindow, (HBITMAP)hDrawBitMap);
     hDrawBitMapBg = CreateCompatibleBitmap (hdcScreen, (int) LOWORD (lParam), (int) HIWORD (lParam));
@@ -445,6 +433,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     break;
 
   case WM_CREATE:
+
     hdcScreen = GetDC(hWnd);
     hdcDrawWindow = CreateCompatibleDC(hdcScreen);
     hdcDrawWindowBg = CreateCompatibleDC(hdcScreen);
@@ -460,7 +449,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE));
     hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB));
     hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE));
-    hAutoMcReady=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
+    hAutoMcCready=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
 
     // airspace brushes and colours
 
@@ -524,7 +513,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject(hCruise);
     DeleteObject(hClimb);
     DeleteObject(hFinalGlide);
-    DeleteObject(hAutoMcReady);
+    DeleteObject(hAutoMcCready);
     DeleteObject(hTerrainWarning);
 
     DeleteObject((HPEN)hpAircraft);
@@ -562,6 +551,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     break;
 
   case WM_LBUTTONDOWN:
+    DisplayTimeOut = 0;
     dwDownTime = GetTickCount();
     Xstart = LOWORD(lParam); Ystart = HIWORD(lParam);
     XstartScreen = Xstart;
@@ -760,9 +750,7 @@ LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 extern int FrameCount;
 
 
-
-
-static void UpdateMapScale()
+void MapWindow::UpdateMapScale()
 {
   static double AutoMapScale= RequestMapScale;
   static int AutoMapScaleWaypointIndex = -1;
@@ -885,9 +873,13 @@ static void UpdateMapScale()
 }
 
 
-static void CalculateOrigin(RECT rc, POINT *Orig)
+void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
 {
   bool GliderCenter=false;
+  double trackbearing = DrawInfo.TrackBearing;
+
+  //  trackbearing = DerivedDrawInfo.NextTrackBearing;
+
 
   if( (DisplayOrientation == NORTHUP)
     ||
@@ -901,16 +893,16 @@ static void CalculateOrigin(RECT rc, POINT *Orig)
 
     if (DisplayOrientation == TRACKCIRCLE) {
       DisplayAngle = DerivedDrawInfo.WaypointBearing;
-      DisplayAircraftAngle = DrawInfo.TrackBearing-DisplayAngle;
+      DisplayAircraftAngle = trackbearing-DisplayAngle;
     } else {
       DisplayAngle = 0.0;
-      DisplayAircraftAngle = DrawInfo.TrackBearing;
+      DisplayAircraftAngle = trackbearing;
     }
 
   } else {
     // normal, glider forward
     GliderCenter = FALSE;
-    DisplayAngle = DrawInfo.TrackBearing;
+    DisplayAngle = trackbearing;
     DisplayAircraftAngle = 0.0;
 
   }
@@ -928,7 +920,7 @@ static void CalculateOrigin(RECT rc, POINT *Orig)
 
 
 
-static void RenderMapWindow(  RECT rc)
+void MapWindow::RenderMapWindow(  RECT rc)
 {
   bool drawmap;
   DWORD	fpsTime = ::GetTickCount();
@@ -994,13 +986,19 @@ static void RenderMapWindow(  RECT rc)
       DrawTopology(hdcDrawWindowBg, rc);
     }
 
+    if(TrailActive)
+      DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
+
+    if (TaskAborted) {
+      DrawAbortedTask(hdcDrawWindowBg, rc, Orig_Aircraft);
+    } else {
+      DrawTask(hdcDrawWindowBg, rc);
+    }
+
     // then airspace..
     DrawAirSpace(hdcDrawWindowBg, rc);
 
     DrawWaypoints(hdcDrawWindowBg,rc);
-
-    if(TrailActive)
-      DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
 
     // draw wind vector at aircraft
     if (!DerivedDrawInfo.Circling && (!EnablePan)) {
@@ -1009,12 +1007,6 @@ static void RenderMapWindow(  RECT rc)
 
     if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
       DrawGlideThroughTerrain(hdcDrawWindowBg, rc);
-    }
-
-    if (TaskAborted) {
-      DrawAbortedTask(hdcDrawWindowBg, rc, Orig_Aircraft);
-    } else {
-      DrawTask(hdcDrawWindowBg, rc);
     }
 
     DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
@@ -1055,7 +1047,7 @@ static void RenderMapWindow(  RECT rc)
 }
 
 
-DWORD DrawThread (LPVOID lpvoid)
+DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
 
   MapScale = RequestMapScale;
@@ -1155,7 +1147,7 @@ DWORD DrawThread (LPVOID lpvoid)
 }
 
 
-void DrawAircraft(HDC hdc, POINT Orig)
+void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
 {
   POINT Aircraft[7] = { {-15,0}, {15,0}, {0,-6}, {0,12}, {-4,10}, {4,10}, {0,0} };
   double dX,dY;
@@ -1202,7 +1194,7 @@ void DrawAircraft(HDC hdc, POINT Orig)
 }
 
 
-void DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h) {
+void MapWindow::DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h) {
   SelectObject(hDCTemp, h);
   BitBlt(hdc,x-5,y-5,10,10,
     hDCTemp,0,0,SRCPAINT);
@@ -1211,7 +1203,7 @@ void DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h) {
 }
 
 
-void DrawFlightMode(HDC hdc, RECT rc)
+void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
 {
 
   if (DerivedDrawInfo.Circling) {
@@ -1226,8 +1218,8 @@ void DrawFlightMode(HDC hdc, RECT rc)
   BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
     hDCTemp,0,0,SRCAND);
 
-  if (DerivedDrawInfo.AutoMcReady) {
-    SelectObject(hDCTemp,hAutoMcReady);
+  if (DerivedDrawInfo.AutoMcCready) {
+    SelectObject(hDCTemp,hAutoMcCready);
     BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
       hDCTemp,0,0,SRCAND);
   };
@@ -1251,7 +1243,7 @@ bool WaypointInTask(int ind) {
 }
 
 
-void DrawWaypoints(HDC hdc, RECT rc)
+void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 {
   unsigned int i;
   TCHAR Buffer[10];
@@ -1330,7 +1322,7 @@ void DrawWaypoints(HDC hdc, RECT rc)
 }
 
 
-void DrawAbortedTask(HDC hdc, RECT rc, POINT me)
+void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
 {
   int i;
 
@@ -1347,7 +1339,7 @@ void DrawAbortedTask(HDC hdc, RECT rc, POINT me)
 }
 
 
-void DrawTask(HDC hdc, RECT rc)
+void MapWindow::DrawTask(HDC hdc, RECT rc)
 {
   int i;
   double tmp;
@@ -1444,7 +1436,7 @@ void DrawTask(HDC hdc, RECT rc)
 
 
 
-void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
+void MapWindow::DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
   double dX,dY;
   int i, j;
   POINT Start;
@@ -1519,7 +1511,7 @@ void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
 }
 
 
-void DrawWind(HDC hdc, POINT Orig, RECT rc)
+void MapWindow::DrawWind(HDC hdc, POINT Orig, RECT rc)
 {
   double dX,dY;
   int i, j;
@@ -1596,7 +1588,7 @@ void DrawWind(HDC hdc, POINT Orig, RECT rc)
 }
 
 
-void DrawBearing(HDC hdc, POINT Orig)
+void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 {
   POINT Start, End;
   HPEN hpOld;
@@ -1625,7 +1617,7 @@ POINT Orig_Screen;
 
 // RETURNS Longitude, Latitude!
 
-void GetLocationFromScreen(double *X, double *Y)
+void MapWindow::GetLocationFromScreen(double *X, double *Y)
 {
 
   *X = (*X-Orig_Screen.x)/DrawScale;
@@ -1641,7 +1633,7 @@ void GetLocationFromScreen(double *X, double *Y)
 }
 
 
-void DrawMapScale(HDC hDC, RECT rc)
+void MapWindow::DrawMapScale(HDC hDC, RECT rc)
 {
   TCHAR Scale[20];
   POINT Start, End;
@@ -1722,7 +1714,7 @@ void DrawMapScale(HDC hDC, RECT rc)
 }
 
 
-void DrawGlideThroughTerrain(HDC hDC, RECT rc) {
+void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
   POINT Groundline[NUMTERRAINSWEEPS+1];
   double lat, lon;
   double distance;
@@ -1755,7 +1747,7 @@ void DrawGlideThroughTerrain(HDC hDC, RECT rc) {
 
 }
 
-void DrawBestCruiseTrack(HDC hdc, POINT Orig)
+void MapWindow::DrawBestCruiseTrack(HDC hdc, POINT Orig)
 {
   POINT Arrow[7] = { {-1,-40}, {1,-40}, {1,0}, {6,8}, {-6,8}, {-1,0}, {-1,-40}};
   double dX,dY;
@@ -1793,7 +1785,7 @@ void DrawBestCruiseTrack(HDC hdc, POINT Orig)
 }
 
 
-void DrawCompass(HDC hDC,RECT rc)
+void MapWindow::DrawCompass(HDC hDC,RECT rc)
 {
   //	TCHAR Scale[5];
   POINT Start;
@@ -1833,7 +1825,7 @@ void DrawCompass(HDC hDC,RECT rc)
 }
 
 
-void DrawAirSpace(HDC hdc, RECT rc)
+void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 {
   unsigned i,j;
   POINT pt[501];
@@ -1971,14 +1963,14 @@ void DrawAirSpace(HDC hdc, RECT rc)
 }
 
 
-void CreateDrawingThread(void)
+void MapWindow::CreateDrawingThread(void)
 {
   CLOSETHREAD = FALSE;
-  hDrawThread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )DrawThread, 0, 0, &dwDrawThreadID);
+  hDrawThread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )MapWindow::DrawThread, 0, 0, &dwDrawThreadID);
   SetThreadPriority(hDrawThread,THREAD_PRIORITY_NORMAL);
 }
 
-void SuspendDrawingThread(void)
+void MapWindow::SuspendDrawingThread(void)
 {
   LockTerrainDataGraphics();
   THREADRUNNING = FALSE;
@@ -1986,7 +1978,7 @@ void SuspendDrawingThread(void)
   //  SuspendThread(hDrawThread);
 }
 
-void ResumeDrawingThread(void)
+void MapWindow::ResumeDrawingThread(void)
 {
   LockTerrainDataGraphics();
   THREADRUNNING = TRUE;
@@ -1994,7 +1986,7 @@ void ResumeDrawingThread(void)
   //  ResumeThread(hDrawThread);
 }
 
-void CloseDrawingThread(void)
+void MapWindow::CloseDrawingThread(void)
 {
   LockTerrainDataGraphics();
   CLOSETHREAD = TRUE;
@@ -2003,7 +1995,8 @@ void CloseDrawingThread(void)
   UnlockTerrainDataGraphics();
 }
 
-void DrawThermalBand(HDC hDC,RECT rc)
+
+void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 {
   POINT ThermalProfile[NUMTHERMALBUCKETS+2];
   POINT GliderBand[4] = { {2,0},{23,0},{22,0},{24,0} };
@@ -2070,7 +2063,7 @@ void DrawThermalBand(HDC hDC,RECT rc)
     Wtot = 1.0;
   }
 
-  double mc = MACREADY/LIFTMODIFY;
+  double mc = MCCREADY/LIFTMODIFY;
 
   // scale to mcready
   if (mc>0.5) {
@@ -2120,7 +2113,7 @@ void DrawThermalBand(HDC hDC,RECT rc)
 }
 
 
-void DrawFinalGlide(HDC hDC,RECT rc)
+void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 {
 
   POINT Scale[18] = {
@@ -2210,7 +2203,7 @@ COLORRAMP snail_colors[] = {
 static int iSnailNext=0;
 
 
-void DrawTrail( HDC hdc, POINT Orig, RECT rc)
+void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 {
   int i;
   int P1,P2;
@@ -2307,7 +2300,7 @@ void DrawTrail( HDC hdc, POINT Orig, RECT rc)
 }
 
 
-bool PointVisible(double lon, double lat) {
+bool MapWindow::PointVisible(double lon, double lat) {
   if ((lon> screenbounds_latlon.minx)&&(lon< screenbounds_latlon.maxx)
       && (lat>screenbounds_latlon.miny)&&(lat< screenbounds_latlon.maxy)) {
     return 1;
@@ -2317,7 +2310,7 @@ bool PointVisible(double lon, double lat) {
 }
 
 
-bool PointVisible(POINT *P, RECT *rc)
+bool MapWindow::PointVisible(POINT *P, RECT *rc)
 {
   if(	( P->x > rc->left )
     &&
@@ -2333,7 +2326,7 @@ bool PointVisible(POINT *P, RECT *rc)
 }
 
 
-void DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top )
+void MapWindow::DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top )
 {
   TCHAR szMessageBuffer[1024];
   TCHAR szTitleBuffer[1024];
@@ -2348,7 +2341,7 @@ void DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_
 
 
 
-void LatLon2Screen(float lon, float lat, int *scX, int *scY) {
+void MapWindow::LatLon2Screen(float lon, float lat, int *scX, int *scY) {
   float X, Y;
   X = (float)DrawScale*((float)PanXr - lon)*ffastcosine(lat);
   Y = (float)DrawScale*((float)PanYr  - lat);
@@ -2360,7 +2353,7 @@ void LatLon2Screen(float lon, float lat, int *scX, int *scY) {
 }
 
 
-void LatLon2Screen(double lon, double lat, int *scX, int *scY) {
+void MapWindow::LatLon2Screen(double lon, double lat, int *scX, int *scY) {
   double X, Y;
   X = DrawScale*(PanXr - lon)*fastcosine(lat);
   Y = DrawScale*(PanYr  - lat);
@@ -2373,7 +2366,8 @@ void LatLon2Screen(double lon, double lat, int *scX, int *scY) {
 
 
 
-void CalculateScreenPositionsAirspace(POINT Orig, RECT rc, POINT *Orig_Aircraft) {
+void MapWindow::CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
+                                                 POINT *Orig_Aircraft) {
   unsigned int i,j;
   double tmp;
   int scx, scy;
@@ -2415,7 +2409,8 @@ void CalculateScreenPositionsAirspace(POINT Orig, RECT rc, POINT *Orig_Aircraft)
 }
 
 
-void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
+void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
+                                         POINT *Orig_Aircraft)
 {
   unsigned int i;
   int scx, scy;
@@ -2523,7 +2518,7 @@ void CalculateScreenPositions(POINT Orig, RECT rc, POINT *Orig_Aircraft)
 }
 
 
-void CalculateWaypointReachable(void)
+void MapWindow::CalculateWaypointReachable(void)
 {
   unsigned int i;
   double WaypointDistance, WaypointBearing,AltitudeRequired;
@@ -2536,7 +2531,7 @@ void CalculateWaypointReachable(void)
       {
         WaypointDistance = Distance(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
         WaypointBearing =  Bearing(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
-        AltitudeRequired = McReadyAltitude(0.0, // JMW was MACREADY/LIFTMODIFY
+        AltitudeRequired = McCreadyAltitude(0.0, // JMW was MCCREADY/LIFTMODIFY
           WaypointDistance,WaypointBearing,
           DerivedDrawInfo.WindSpeed,
           DerivedDrawInfo.WindBearing,0,0,1,0);
@@ -2555,7 +2550,7 @@ void CalculateWaypointReachable(void)
 
 
 #define NUMPOINTS 2
-void DrawSolidLine(HDC hdc, POINT ptStart, POINT ptEnd)
+void MapWindow::DrawSolidLine(HDC hdc, POINT ptStart, POINT ptEnd)
 {
   POINT pt[2];
 
@@ -2567,7 +2562,7 @@ void DrawSolidLine(HDC hdc, POINT ptStart, POINT ptEnd)
 }
 
 
-void DrawDashLine(HDC hdc, INT width, POINT ptStart, POINT ptEnd, COLORREF cr)
+void MapWindow::DrawDashLine(HDC hdc, INT width, POINT ptStart, POINT ptEnd, COLORREF cr)
 {
   int i;
   HPEN hpDash,hpOld;
@@ -2602,8 +2597,20 @@ void DrawDashLine(HDC hdc, INT width, POINT ptStart, POINT ptEnd, COLORREF cr)
 }
 
 
-void DrawCDI() {
+void MapWindow::DrawCDI() {
+  bool dodrawcdi = false;
+
   if (DerivedDrawInfo.Circling) {
+    if (EnableCDICircling) {
+      dodrawcdi = true;
+    }
+  } else {
+    if (EnableCDICruise) {
+      dodrawcdi = true;
+    }
+  }
+
+  if (dodrawcdi) {
     ShowWindow(hWndCDIWindow, SW_SHOW);
 
     // JMW changed layout here to fit reorganised display
@@ -2651,7 +2658,7 @@ void DrawCDI() {
 
 
 
-double findMapScaleBarSize(RECT rc) {
+double MapWindow::findMapScaleBarSize(RECT rc) {
 
   int range = rc.bottom-rc.top;
   int nbars = 0;
@@ -2679,7 +2686,7 @@ double findMapScaleBarSize(RECT rc) {
 }
 
 
-void DrawMapScale2(HDC hDC, RECT rc, POINT Orig_Aircraft)
+void MapWindow::DrawMapScale2(HDC hDC, RECT rc, POINT Orig_Aircraft)
 {
 
   double barsize = findMapScaleBarSize(rc);

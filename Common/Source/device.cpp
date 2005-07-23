@@ -67,7 +67,7 @@ BOOL devInit(void){
     DeviceList[i].Port = -1;
     DeviceList[i].Name[0] = '\0';
     DeviceList[i].ParseNMEA = NULL;
-    DeviceList[i].PutMcReady = NULL;
+    DeviceList[i].PutMcCready = NULL;
     DeviceList[i].PutBugs = NULL;
     DeviceList[i].PutBallast = NULL;
     DeviceList[i].Open = NULL;
@@ -183,9 +183,9 @@ so don't get multiple updates
 }
 
 
-BOOL devPutMcReady(PDeviceDescriptor_t d, double McReady){
-  if (d != NULL && d->PutMcReady != NULL)
-    return ((d->PutMcReady)(d, McReady));
+BOOL devPutMcCready(PDeviceDescriptor_t d, double McCready){
+  if (d != NULL && d->PutMcCready != NULL)
+    return ((d->PutMcCready)(d, McCready));
   else
     return(TRUE);
 }

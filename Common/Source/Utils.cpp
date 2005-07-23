@@ -137,8 +137,13 @@ TCHAR szRegistrySoundModes[]=  TEXT("SoundModes");
 TCHAR szRegistryNettoSpeed[]= TEXT("NettoSpeed");
 TCHAR szRegistryAccelerometerZero[]= TEXT("AccelerometerZero");
 
+TCHAR szRegistryCDICruise[]= TEXT("CDICruise");
+TCHAR szRegistryCDICircling[]= TEXT("CDICircling");
+
 TCHAR szRegistryDeviceA[]= TEXT("DeviceA");
 TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
+
+TCHAR szRegistryAutoBlank[]= TEXT("AutoBlank");
 
 static double SINETABLE[910];
 static float FSINETABLE[910];
@@ -277,27 +282,27 @@ void ReadRegistrySettings(void)
   for(i=0;i<AIRSPACECLASSCOUNT;i++)
     {
       if(GetFromRegistry(szRegistryBrush[i],&Temp)==ERROR_SUCCESS)
-	iAirspaceBrush[i] =			(int)Temp;
+        MapWindow::iAirspaceBrush[i] =			(int)Temp;
       else
-	iAirspaceBrush[i] =			0;
+        MapWindow::iAirspaceBrush[i] =			0;
 
       if(GetFromRegistry(szRegistryColour[i],&Temp)==ERROR_SUCCESS)
-	iAirspaceColour[i] =			(int)Temp;
+        MapWindow::iAirspaceColour[i] =			(int)Temp;
       else
-	iAirspaceColour[i] =			0;
+        MapWindow::iAirspaceColour[i] =			0;
 
-      if (iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
-        iAirspaceColour[i]= 0;
+      if (MapWindow::iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
+        MapWindow::iAirspaceColour[i]= 0;
       }
 
-      if (iAirspaceBrush[i]>= NUMAIRSPACEBRUSHES) {
-        iAirspaceBrush[i]= 0;
+      if (MapWindow::iAirspaceBrush[i]>= NUMAIRSPACEBRUSHES) {
+        MapWindow::iAirspaceBrush[i]= 0;
       }
 
     }
 
   GetFromRegistry(szRegistryAirspaceBlackOutline,&Temp);
-  bAirspaceBlackOutline = Temp;
+  MapWindow::bAirspaceBlackOutline = Temp;
 
   GetFromRegistry(szRegistrySnailTrail,&Temp);
   TrailActive = Temp;
@@ -363,6 +368,18 @@ void ReadRegistrySettings(void)
   Temp = 500;
   GetFromRegistry(szRegistryNettoSpeed,&Temp);
   NettoSpeed = Temp;
+
+  Temp = 0;
+  GetFromRegistry(szRegistryCDICruise,&Temp);
+  EnableCDICruise = Temp;
+
+  Temp = 0;
+  GetFromRegistry(szRegistryCDICircling,&Temp);
+  EnableCDICircling = Temp;
+
+  Temp = 0;
+  GetFromRegistry(szRegistryAutoBlank,&Temp);
+  EnableAutoBlank = Temp;
 
   Temp = 100;
   GetFromRegistry(szRegistryAccelerometerZero,&Temp);
@@ -1040,8 +1057,8 @@ double FindLongditude(double Lat, double Lon, double Bearing, double Distance)
   else
     {
       result = Lon+(double)asin(sin(Bearing)*sin(Distance)/cos(Lat));
-      result = (double)fmod((result+pi),(2*pi));
-      result = result - pi;
+      result = (double)fmod((result+M_PI),(M_2PI));
+      result = result - M_PI;
     }
   return result * RAD_TO_DEG;
 }
@@ -1388,8 +1405,8 @@ void WriteProfile(HWND hwnd, TCHAR *szFile)
 
   WriteFile(hFile,&POLARID,sizeof(POLARID),&dwBytesWritten,NULL);
 
-  WriteFile(hFile,iAirspaceColour,AIRSPACECLASSCOUNT*sizeof(iAirspaceBrush[0]),&dwBytesWritten,NULL);
-  WriteFile(hFile,iAirspaceBrush,AIRSPACECLASSCOUNT*sizeof(iAirspaceColour[0]),&dwBytesWritten,NULL);
+  WriteFile(hFile,MapWindow::iAirspaceColour,AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceBrush[0]),&dwBytesWritten,NULL);
+  WriteFile(hFile,MapWindow::iAirspaceBrush,AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceColour[0]),&dwBytesWritten,NULL);
 
   ///////
 
@@ -1442,17 +1459,19 @@ void ReadProfile(HWND hwnd, TCHAR *szFile)
   ReadFile(hFile,&POLARID,sizeof(POLARID),&dwBytesRead,NULL);
   SetToRegistry(szRegistryPolarID,(DWORD)POLARID);
 
-  ReadFile(hFile,iAirspaceColour,
-           AIRSPACECLASSCOUNT*sizeof(iAirspaceColour[0]),&dwBytesRead,NULL);
-  ReadFile(hFile,iAirspaceBrush,
-           AIRSPACECLASSCOUNT*sizeof(iAirspaceBrush[0]),&dwBytesRead,NULL);
+  ReadFile(hFile,MapWindow::iAirspaceColour,
+           AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceColour[0]),
+           &dwBytesRead,NULL);
+  ReadFile(hFile,MapWindow::iAirspaceBrush,
+           AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceBrush[0]),
+           &dwBytesRead,NULL);
 
   for(i=0;i<AIRSPACECLASSCOUNT;i++)
     {
 
-      SetRegistryColour(i,iAirspaceColour[i]);
+      SetRegistryColour(i,MapWindow::iAirspaceColour[i]);
 
-      SetRegistryBrush(i,iAirspaceBrush[i]);
+      SetRegistryBrush(i,MapWindow::iAirspaceBrush[i]);
     }
 
 
@@ -1894,4 +1913,21 @@ WORD crcCalc(void *Buffer, size_t size){
   } while (--size);
 
   return(crc);
+}
+
+///////////
+
+void ExtractDirectory(TCHAR *Dest, TCHAR *Source) {
+  int len = _tcslen(Source);
+  int found = -1;
+  int i;
+  for (i=0; i<len; i++) {
+    if ((Source[i]=='/')||(Source[i]=='\\')) {
+      found = i;
+    }
+  }
+  for (i=0; i<=found; i++) {
+    Dest[i]= Source[i];
+  }
+  Dest[i]= 0;
 }

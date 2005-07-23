@@ -96,7 +96,7 @@ void Topology::updateCache(rectObj thebounds) {
 
   if (!shapefileopen) return;
 
-  if (MapScale > scaleThreshold) {
+  if (MapWindow::MapScale > scaleThreshold) {
     // not visible, so flush the cache
     // otherwise we waste time on looking up which shapes are in bounds
     for (int i=0; i<shpfile.numshapes; i++) {
@@ -164,25 +164,25 @@ void CalculateScreenBounds(RECT rc, rectObj *screenRect) {
 
   x = rc.left;
   y = rc.top;
-  GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(&x, &y);
   xmin = x; xmax = x;
   ymin = y; ymax = y;
 
   x = rc.right;
   y = rc.top;
-  GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.right;
   y = rc.bottom;
-  GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.left;
   y = rc.bottom;
-  GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
@@ -198,7 +198,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
   if (!shapefileopen) return;
 
-  if (MapScale > scaleThreshold)
+  if (MapWindow::MapScale > scaleThreshold)
     return;
 
   // TODO: only draw inside screen!
@@ -219,13 +219,13 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
   int iskip = 1;
 
-  if (MapScale>0.25*scaleThreshold) {
+  if (MapWindow::MapScale>0.25*scaleThreshold) {
     iskip = 2;
   }
-  if (MapScale>0.5*scaleThreshold) {
+  if (MapWindow::MapScale>0.5*scaleThreshold) {
     iskip = 3;
   }
-  if (MapScale>0.75*scaleThreshold) {
+  if (MapWindow::MapScale>0.75*scaleThreshold) {
     iskip = 4;
   }
 
@@ -259,9 +259,9 @@ void Topology::Paint(HDC hdc, RECT rc) {
 	  tpp_x = shape->line[tt].point[jj].x;
 	  tpp_y = shape->line[tt].point[jj].y;
 
-	  LatLon2Screen(tpp_x, tpp_y, &x, &y);
+	  MapWindow::LatLon2Screen(tpp_x, tpp_y, &x, &y);
 
-	  DrawBitmapIn(hdc, x, y, hBitmap);
+	  MapWindow::DrawBitmapIn(hdc, x, y, hBitmap);
 
 	  shpCache[ixshp]->renderSpecial(hdc,x,y);
 
@@ -282,7 +282,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
 	  tpp_x = shape->line[tt].point[jj].x;
 	  tpp_y = shape->line[tt].point[jj].y;
-	  LatLon2Screen(tpp_x, tpp_y, &x, &y);
+	  MapWindow::LatLon2Screen(tpp_x, tpp_y, &x, &y);
 
 	  if (x<=minx) {
 	    minx = x;
@@ -314,7 +314,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
 	      tpp_x = shape->line[tt].point[jj*iskip].x;
 	      tpp_y = shape->line[tt].point[jj*iskip].y;
-	      LatLon2Screen(tpp_x, tpp_y, &x, &y);
+		  MapWindow::LatLon2Screen(tpp_x, tpp_y, &x, &y);
 
 	      pt[jj].x = x;
 	      pt[jj].y = y;

@@ -8,7 +8,6 @@
 #include <tchar.h>
 
 
-extern BOOL CLOSETHREAD;
 HANDLE				hRead2Thread = NULL;              // Handle to the read thread
 
 BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
@@ -172,7 +171,11 @@ DWORD Port2ReadThread (LPVOID lpvoid)
 	       | EV_RXCHAR
 	       );
 
-  while ((hPort2 != INVALID_HANDLE_VALUE)&&(!CLOSETHREAD))
+  // JMW added purging of port on open to prevent overflow
+  PurgeComm(hPort2,
+            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+
+  while ((hPort2 != INVALID_HANDLE_VALUE)&&(!MapWindow::CLOSETHREAD))
   {
     int i=0;
 
