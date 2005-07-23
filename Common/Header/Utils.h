@@ -65,6 +65,8 @@ int iround(double i);
 long lround(double i);
 
 WORD crcCalc(void *Buffer, size_t size);
+void ExtractDirectory(TCHAR *Dest, TCHAR *Source);
+double DoSunEphemeris(double lon, double lat);
 
 
 #endif

@@ -16,6 +16,7 @@ LRESULT CALLBACK SetUnits				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 LRESULT CALLBACK Select					(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK SetPolar				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK DisplayOptions	(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK MapDisplayOptions	(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK SetTask				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK FinalGlide 		(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK SetBugsBallast	(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
