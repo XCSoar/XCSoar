@@ -12,6 +12,7 @@
 
 #include <windows.h>
 #include "XCSoar.h"
+#include "externs.h"
 
 class SunEphemeris {
 
@@ -92,20 +93,32 @@ class SunEphemeris {
 
  public:
 
-  int CalcSunTimes(float longit, float latit, int y, int m, int day, int h){
+  double twam,altmax,noont,settm,riset,twpm;
+
+  int CalcSunTimes(float longit, float latit){
 
     float intz;
     double tzone,d,lambda;
     double obliq,alpha,delta,LL,equation,ha,hb,twx;
-    double twam,altmax,noont,settm,riset,twpm;
-    time_t sekunnit;
-    struct tm *p;
+    int y, m, day, h;
 
     // testing
-    // m=6; day=10;
 
-    // TEST:
-    tzone = 10;
+    TIME_ZONE_INFORMATION TimeZoneInformation;
+    GetTimeZoneInformation(&TimeZoneInformation);
+
+   
+#ifdef _SIM_
+    m=7; day=21; y=2005; h=0;
+#else
+    m = GPS_INFO.Month;
+    y = GPS_INFO.Year;
+    day = GPS_INFO.Day;
+    h = GPS_INFO.Time/3600;
+#endif
+
+    int localtime = ((int)GPS_INFO.Time-TimeZoneInformation.Bias*60);
+    tzone = -TimeZoneInformation.Bias/60.0;
 
     d = FNday(y, m, day, h);
 
@@ -186,6 +199,16 @@ class SunEphemeris {
     return 0;
   }
 
+
+};
+
+
+SunEphemeris mysun;
+
+double DoSunEphemeris(double lon, double lat) {
+
+  mysun.CalcSunTimes(lon, lat);
+  return mysun.settm;
 
 };
 

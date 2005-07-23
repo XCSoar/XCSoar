@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.7 2005/07/05 10:34:55 samgi Exp $
+// $Id: devCAI302.cpp,v 1.8 2005/07/23 16:06:58 jwharington Exp $
 
 
 //
@@ -111,7 +111,7 @@ static BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL cai_PCAIB(TCHAR *String, NMEA_INFO *GPS_INFO);
 static cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static int  McReadyUpdateTimeout = 0;
+static int  McCreadyUpdateTimeout = 0;
 static int  BugsUpdateTimeout = 0;
 static int  BallastUpdateTimeout = 0;
 
@@ -179,16 +179,16 @@ BOOL cai302ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL cai302PutMcReady(PDeviceDescriptor_t d, double McReady){
+BOOL cai302PutMcCready(PDeviceDescriptor_t d, double McCready){
 
   TCHAR  szTmp[32];
 
-  _stprintf(szTmp, TEXT("!g,m%d\r\n"), int(((McReady * 10) / KNOTSTOMETRESSECONDS) + 0.5));
+  _stprintf(szTmp, TEXT("!g,m%d\r\n"), int(((McCready * 10) / KNOTSTOMETRESSECONDS) + 0.5));
 
   if (!fSimMode)
     (d->Com.WriteString)(szTmp);
 
-  McReadyUpdateTimeout = 2;
+  McCreadyUpdateTimeout = 2;
 
   return(TRUE);
 
@@ -521,7 +521,7 @@ BOOL cai302Install(PDeviceDescriptor_t d){
 
   _tcscpy(d->Name, TEXT("CAI 302"));
   d->ParseNMEA = cai302ParseNMEA;
-  d->PutMcReady = cai302PutMcReady;
+  d->PutMcCready = cai302PutMcCready;
   d->PutBugs = cai302PutBugs;
   d->PutBallast = cai302PutBallast;
   d->Open = cai302Open;
@@ -618,7 +618,7 @@ BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO){
   
   ExtractParameter(String,ctemp,6);
   GPS_INFO->AirspeedAvailable = TRUE;
-  GPS_INFO->Airspeed = (StrToDouble(ctemp,NULL) / 100.0);
+  GPS_INFO->TrueAirspeed = (StrToDouble(ctemp,NULL) / 100.0);
   
   ExtractParameter(String,ctemp,7);
   GPS_INFO->VarioAvailable = TRUE;
@@ -627,10 +627,10 @@ BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO){
 
   ExtractParameter(String,ctemp,10);
   GPS_INFO->MacReady = (StrToDouble(ctemp,NULL) / 10.0) * KNOTSTOMETRESSECONDS;
-  if (McReadyUpdateTimeout <= 0)
-    MACREADY = GPS_INFO->MacReady;
+  if (McCreadyUpdateTimeout <= 0)
+    MCCREADY = GPS_INFO->MacReady;
   else
-    McReadyUpdateTimeout--; 
+    McCreadyUpdateTimeout--; 
 
 
   ExtractParameter(String,ctemp,11);

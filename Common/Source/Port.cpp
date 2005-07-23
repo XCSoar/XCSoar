@@ -10,7 +10,6 @@
 
 #define COMMDEBUG 0
 
-extern BOOL  CLOSETHREAD;
 HANDLE			 hRead1Thread = NULL;              // Handle to the read thread
 static BOOL  Port1CloseThread;
 static BOOL  fRxThreadTerminated;
@@ -147,8 +146,12 @@ DWORD Port1ReadThread (LPVOID lpvoid)
   SetCommMask(hPort1, dwMask);
 
   fRxThreadTerminated = FALSE;
+
+  // JMW added purging of port on open to prevent overflow initially
+  PurgeComm(hPort1, 
+            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
   
-  while ((hPort1 != INVALID_HANDLE_VALUE) && (!CLOSETHREAD) && (!Port1CloseThread)) 
+  while ((hPort1 != INVALID_HANDLE_VALUE) && (!MapWindow::CLOSETHREAD) && (!Port1CloseThread)) 
   {
     int i=0;
 
@@ -373,7 +376,9 @@ unsigned long Port1SetBaudrate(unsigned long BaudRate){
   return(result);
 
 }
+
 int Port1Read(void *Buffer, size_t Size){
+
 
   DWORD dwBytesTransferred;
 

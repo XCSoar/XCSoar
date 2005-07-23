@@ -95,7 +95,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOGEX 0, 0, 139, 83
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 139, 83
 STYLE WS_CHILD
 EXSTYLE 0x80000000L
 FONT 10, "System"
@@ -264,41 +264,35 @@ BEGIN
     GROUPBOX        "WinPilot polar file name",IDC_STATIC,5,36,125,26
 END
 
-IDD_DISPLAY DIALOG DISCARDABLE  10, 10, 143, 133
+IDD_DISPLAY DIALOG DISCARDABLE  10, 10, 141, 131
 STYLE WS_CHILD
 FONT 8, "System"
 BEGIN
-    CONTROL         "North up",IDC_NORTHUP,"Button",BS_AUTORADIOBUTTON | 
-                    WS_GROUP,11,11,44,10
-    CONTROL         "Track up",IDC_TRACKUP,"Button",BS_AUTORADIOBUTTON,11,22,
-                    44,10
-    CONTROL         "North circling",IDC_NORTHCIRCLE,"Button",
-                    BS_AUTORADIOBUTTON | BS_MULTILINE,63,10,57,13
-    CONTROL         "Circling zoom",IDC_CIRCLEZOOM,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,63,22,60,10
-    CONTROL         "Track circling",IDC_TRACKCIRCLE,"Button",
-                    BS_AUTORADIOBUTTON,11,33,59,10
-    GROUPBOX        "Screen",IDC_STATIC,7,3,125,42
     CONTROL         "Names",IDC_WAYPOINTNAME,"Button",BS_AUTORADIOBUTTON | 
-                    WS_GROUP,12,57,37,10
+                    WS_GROUP,12,13,37,10
     CONTROL         "Numbers",IDC_WAYPOINTNUMBERS,"Button",
-                    BS_AUTORADIOBUTTON,61,57,44,10
+                    BS_AUTORADIOBUTTON,61,13,44,10
     CONTROL         "First 5",IDC_WAYPOINTFIRSTFIVE,"Button",
-                    BS_AUTORADIOBUTTON,61,77,37,10
+                    BS_AUTORADIOBUTTON,61,33,37,10
     CONTROL         "First 3",IDC_WAYPOINTFIRSTTHREE,"Button",
-                    BS_AUTORADIOBUTTON,12,77,37,10
+                    BS_AUTORADIOBUTTON,12,33,37,10
     CONTROL         "None",IDC_WAYPOINTNONE,"Button",BS_AUTORADIOBUTTON,12,
-                    67,33,10
+                    23,33,10
     CONTROL         "Names in task",IDC_WAYPOINTNAMEIFINTASK,"Button",
-                    BS_AUTORADIOBUTTON,61,67,60,10
-    GROUPBOX        "Waypoint labels",IDC_STATIC,6,48,126,42
+                    BS_AUTORADIOBUTTON,61,23,60,10
+    GROUPBOX        "Waypoint labels",IDC_STATIC,6,4,126,42
     CONTROL         "Snail trail",IDC_SNAIL,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,62,103,47,10
+                    WS_TABSTOP,62,59,47,10
     CONTROL         "Topology",IDC_DRAWTOPOLOGY,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,11,102,46,10
+                    WS_TABSTOP,11,58,46,10
     CONTROL         "Terrain",IDC_DRAWTERRAIN,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,11,114,40,10
-    GROUPBOX        "Topology",IDC_STATIC,6,92,126,35
+                    WS_TABSTOP,11,70,40,10
+    GROUPBOX        "Topology",IDC_STATIC,6,48,126,35
+    CONTROL         "Cruise/Final Glide",IDC_CDICRUISE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,11,95,73,10
+    CONTROL         "Circling",IDC_CDICIRCLING,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,11,107,40,10
+    GROUPBOX        "Compass Indicator",IDC_STATIC,7,85,126,35
 END
 
 IDD_UNITS DIALOG DISCARDABLE  10, 10, 163, 103
@@ -573,8 +567,8 @@ BEGIN
 
     IDD_DISPLAY, DIALOG
     BEGIN
-        RIGHTMARGIN, 140
-        BOTTOMMARGIN, 129
+        RIGHTMARGIN, 138
+        BOTTOMMARGIN, 127
     END
 
     IDD_TASK, DIALOG
@@ -1075,6 +1069,25 @@ BEGIN
     ICON            IDI_XCSOARSWIFT,IDC_STATIC,7,7,20,20
 END
 
+IDD_MAPDISPLAY DIALOG DISCARDABLE  0, 0, 140, 131
+STYLE WS_CHILD
+FONT 8, "System"
+BEGIN
+    CONTROL         "North up",IDC_NORTHUP,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP,11,11,44,10
+    CONTROL         "Track up",IDC_TRACKUP,"Button",BS_AUTORADIOBUTTON,11,22,
+                    44,10
+    CONTROL         "North circling",IDC_NORTHCIRCLE,"Button",
+                    BS_AUTORADIOBUTTON | BS_MULTILINE,63,10,57,13
+    CONTROL         "Circling zoom",IDC_CIRCLEZOOM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,63,22,60,10
+    CONTROL         "Track circling",IDC_TRACKCIRCLE,"Button",
+                    BS_AUTORADIOBUTTON,11,33,59,10
+    GROUPBOX        "Screen",IDC_STATIC,7,3,125,42
+    CONTROL         "Idle blank screen on battery",IDC_AUTOBLANK,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,12,54,107,10
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1114,6 +1127,14 @@ BEGIN
         RIGHTMARGIN, 130
         TOPMARGIN, 7
         BOTTOMMARGIN, 25
+    END
+
+    IDD_MAPDISPLAY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 133
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 124
     END
 END
 #endif    // APSTUDIO_INVOKED

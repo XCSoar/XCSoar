@@ -23,11 +23,24 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "externs.h"
 #include "Utils.h"
 #include "device.h"
+#include "Dialogs.h"
 
 // JMW added key codes,
 // so -1 down
 //     1 up
 //     0 enter
+
+void	AirspeedProcessing(int UpDown)
+{
+  if (UpDown==0) {
+    EnableCalibration = !EnableCalibration;
+    if (EnableCalibration) 
+      ShowStatusMessage(TEXT("Calibrate ON"), 1000);
+    else 
+      ShowStatusMessage(TEXT("Calibrate OFF"), 1000);
+  }
+
+}
 
 void	AltitudeProcessing(int UpDown)
 {
@@ -151,30 +164,30 @@ void	DirectionProcessing(int UpDown)
 	return;
 }
 
-void	McReadyProcessing(int UpDown)
+void	McCreadyProcessing(int UpDown)
 {
 
 	if(UpDown==1) {
-		MACREADY += (double)0.2;
+		MCCREADY += (double)0.2;
 
-		if (MACREADY>10.0) { // JMW added sensible limit
-			MACREADY=10.0;
+		if (MCCREADY>10.0) { // JMW added sensible limit
+			MCCREADY=10.0;
 		}
 	}
 	else if(UpDown==-1)
 	{
-		MACREADY -= (double)0.2;
-		if(MACREADY < 0)
+		MCCREADY -= (double)0.2;
+		if(MCCREADY < 0)
 		{
-			MACREADY = 0;
+			MCCREADY = 0;
 		}
 	} else if (UpDown==0)
 	{
-		CALCULATED_INFO.AutoMcReady = !CALCULATED_INFO.AutoMcReady; // JMW toggle automacready
+		CALCULATED_INFO.AutoMcCready = !CALCULATED_INFO.AutoMcCready; // JMW toggle automacready
 	}
 
-  devPutMcReady(devA(), MACREADY);
-  devPutMcReady(devB(), MACREADY);
+  devPutMcCready(devA(), MCCREADY);
+  devPutMcCready(devB(), MCCREADY);
 
 	return;
 }
@@ -342,7 +355,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = ALTITUDEMODIFY*CALCULATED_INFO.LastThermalGain;
     break;
   case 10:
-    Value = MACREADY;
+    Value = MCCREADY;
     break;
   case 11:
     Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
@@ -471,14 +484,14 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 32:
     Valid = GPS_INFO.AirspeedAvailable;
-    Value = SPEEDMODIFY*GPS_INFO.Airspeed;
+    Value = SPEEDMODIFY*GPS_INFO.IndicatedAirspeed;
     break;
   case 33:
     Valid = GPS_INFO.BaroAltitudeAvailable;
     Value = ALTITUDEMODIFY*GPS_INFO.BaroAltitude;
     break;
   case 34:
-    Value = SPEEDMODIFY*CALCULATED_INFO.VMcReady; 
+    Value = SPEEDMODIFY*CALCULATED_INFO.VMcCready; 
     break;
   case 35:
     Value = CALCULATED_INFO.PercentCircling;

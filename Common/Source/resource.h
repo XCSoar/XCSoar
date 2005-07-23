@@ -78,6 +78,7 @@
 #define IDI_XCSOARSWIFT                 250
 #define IDB_SWIFT                       251
 #define IDD_GPSSTATUS                   252
+#define IDD_MAPDISPLAY                  255
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003
@@ -247,6 +248,8 @@
 #define IDC_BM20                        1221
 #define IDC_CHECK1                      1222
 #define IDC_BLACKOUTLINE                1222
+#define IDC_CDICRUISE                   1222
+#define IDC_AUTOBLANK                   1222
 #define IDC_SPLASH                      1223
 #define IDC_NETTOSPEED                  1224
 #define IDC_UNDO                        1225
@@ -259,6 +262,7 @@
 #define IDC_BUTTON1                     1237
 #define IDC_GPSMESSAGE                  1238
 #define IDC_PROGRESS1                   1239
+#define IDC_CDICIRCLING                 1240
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -292,9 +296,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        255
+#define _APS_NEXT_RESOURCE_VALUE        256
 #define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1240
+#define _APS_NEXT_CONTROL_VALUE         1241
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif
