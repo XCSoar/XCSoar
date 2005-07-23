@@ -15,7 +15,7 @@ typedef struct _DERIVED_INFO
   double Vario;
   double LD;
   double CruiseLD;
-  double VMcReady;
+  double VMcCready;
   double Average30s;
   double BestCruiseTrack;
   double AverageThermal;
@@ -40,7 +40,7 @@ typedef struct _DERIVED_INFO
   double AltitudeAGL;
   int    Circling;
   int    FinalGlide;
-  int    AutoMcReady;
+  int    AutoMcCready;
   double NextAltitudeRequired;
   double NextAltitudeDifference;
   double FinalAltitudeRequired;
@@ -84,6 +84,9 @@ typedef struct _DERIVED_INFO
   double ThermalProfileW[NUMTHERMALBUCKETS];
 
   double NettoVario;
+
+  // JMW estimated track bearing at next time step
+  double NextTrackBearing;
 
 } DERIVED_INFO;
 

@@ -94,14 +94,35 @@ extern void PopupWaypointDetails();
 
 extern void ShowInfoBoxes();
 extern void HideInfoBoxes();
-extern void ToggleFullScreen();
-extern void RequestToggleFullScreen();
 
 #define DEG_TO_RAD .0174532925199432958
-#define RAD_TO_DEG 57.29577951
+#define RAD_TO_DEG 57.2957795131
+#define M_PI 3.14159265359
+#define M_2PI 6.28318530718
 
-#ifdef DEBUG
 void DebugStore(char *Str);
-#endif
+
+
+typedef struct
+{
+  BYTE acStatus;
+  // 0 offline
+  // 1 online
+  // 255 unknown
+  BYTE chargeStatus;
+  // 1 high
+  // 2 low
+  // 4 critical
+  // 8 charging
+  // 128 no system battery
+  // 255 unknown
+  BYTE BatteryLifePercent;
+  // 0-100 or 255 if unknown
+
+} BATTERYINFO;
+
+
+DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo);
+void BlankDisplay(bool doblank);
 
 #endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)

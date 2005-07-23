@@ -8,13 +8,13 @@
 void				NoProcessing(int UpDown);
 void				WindSpeedProcessing(int UpDown);
 void				WindDirectionProcessing(int UpDown);
-void				McReadyProcessing(int UpDown);
+void				McCreadyProcessing(int UpDown);
 void				AccelerometerProcessing(int UpDown);
 void				NextUpDown(int UpDown);
 void				SpeedProcessing(int UpDown);
 void				DirectionProcessing(int UpDown);
 void				AltitudeProcessing(int UpDown);
-
+void				AirspeedProcessing(int UpDown);
 
 
 #endif

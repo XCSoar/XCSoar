@@ -12,42 +12,44 @@
 #include "Mapwindow.h"
 #include "Task.h"
 
+#ifdef EXPERIMENTAL
+#include "BlueSMS.h"
+#endif
+
+// instance of main program
 extern HINSTANCE hInst;
+
+// comms data
 extern HANDLE hPort1;            // Serial port handle
 extern HANDLE hPort2;            // Serial port handle
 extern HANDLE hReadThread;      // Handle to the read thread
 extern LPTSTR lpszDevName;      // Communication port name
-extern TCHAR strAssetNumber[REGKEYSIZE+1];
-extern TCHAR strRegKey[REGKEYSIZE+1];
 
+// asset/registration data
+extern TCHAR strAssetNumber[];
+extern TCHAR strRegKey[];
+
+// windows
 extern HWND hWndMainWindow;           // HWND Main Window
-extern HWND hWndMapWindow;					// HWND MapWindow
+extern HWND hWndMapWindow;            // HWND MapWindow
 extern HWND hWndCB;
-extern int  CurrentInfoType;     // Used for Popup Menu Select
-extern int	InfoType[NUMINFOWINDOWS]; //
-extern HWND hWndInfoWindow[NUMINFOWINDOWS];
-extern int	InfoFocus;
-extern BOOL DisplayLocked;
 
+// infoboxes
+extern int  CurrentInfoType;          // Used for Popup Menu Select
+extern int  InfoType[NUMINFOWINDOWS]; //
+extern HWND hWndInfoWindow[NUMINFOWINDOWS];
+extern int  InfoFocus;
+extern BOOL DisplayLocked; // if infoboxes are locked
 extern SCREEN_INFO Data_Options[];
 extern int NUMSELECTSTRINGS;
+extern BOOL InfoBoxesHidden;
 
+// waypoint data
 extern int HomeWaypoint;
 extern WAYPOINT *WayPointList;
 extern unsigned int NumberOfWayPoints;
 
-extern TASK_POINT Task[];
-extern int ActiveWayPoint;
-
-extern bool TaskAborted;
-
-extern int SelectedWaypoint;
-
-extern int FAISector;
-extern DWORD SectorRadius;
-extern int StartLine;
-extern DWORD StartRadius;
-
+// airspace data
 extern AIRSPACE_AREA *AirspaceArea;
 extern AIRSPACE_POINT *AirspacePoint;
 extern AIRSPACE_CIRCLE *AirspaceCircle;
@@ -55,83 +57,93 @@ extern unsigned int NumberOfAirspacePoints;
 extern unsigned int NumberOfAirspaceAreas;
 extern unsigned int NumberOfAirspaceCircles;
 
-extern NMEA_INFO		GPS_INFO;
-extern DERIVED_INFO	CALCULATED_INFO;
+// task data
+extern TASK_POINT Task[];
+extern int ActiveWayPoint;
+extern bool TaskAborted;
+extern int SelectedWaypoint;
+extern int FAISector;
+extern DWORD SectorRadius;
+extern int StartLine;
+extern DWORD StartRadius;
+extern double AATTaskLength;
+extern BOOL AATEnabled;
 
+// master flight data
+extern NMEA_INFO GPS_INFO;
+extern DERIVED_INFO CALCULATED_INFO;
+
+// gps detection
 extern BOOL GPSCONNECT;
 extern BOOL VARIOCONNECT;
 
-extern double MACREADY;
-extern bool   AutoMacReady;
-extern double AccelerometerZero;
-
+// units
 extern double SPEEDMODIFY;
-extern double	LIFTMODIFY;
-extern double	DISTANCEMODIFY;
+extern double LIFTMODIFY;
+extern double DISTANCEMODIFY;
 extern double ALTITUDEMODIFY;
 
-extern double SAFETYALTITUDEARRIVAL;
-extern double SAFETYALTITUDEBREAKOFF;
-extern double SAFETYALTITUDETERRAIN;
-
-extern double SAFTEYSPEED;
+// polar info
 extern double BUGS;
 extern double BALLAST;
 extern int POLARID;
 extern double POLAR[POLARSIZE];
 extern double WEIGHTS[POLARSIZE];
 
-extern int DisplayOrientation;
-extern int DisplayTextType;
-
-extern BOOL	InfoWindowActive;
-
-extern int AIRSPACEWARNINGS;
-extern int WarningTime;
-extern int AcknowledgementTime;
-
-
+extern BOOL InfoWindowActive;
 extern int iAirspaceBrush[];
 extern int iAirspaceColour[];
-extern BOOL bAirspaceBlackOutline;
 
-extern int AltitudeMode;
-extern int ClipAltitude;
-extern int AltWarningMargin;
-extern double QNH;
-
-extern double pi;
-
-extern BOOL LoggerActive;
-
+// user interface triggers
 extern BOOL TopWindow;
-
 extern bool MapDirty;
 extern bool RequestMapDirty;
 
+// snail trail
 extern SNAIL_POINT SnailTrail[TRAILSIZE];
-extern int TrailActive;
 extern	int SnailNext;
 extern int TrailLock;
-extern int WindUpdateMode;
+
+// user controls/parameters
+extern double MCCREADY;
+extern bool   AutoMcCready;
+extern double AccelerometerZero;
+extern double SAFETYALTITUDEARRIVAL;
+extern double SAFETYALTITUDEBREAKOFF;
+extern double SAFETYALTITUDETERRAIN;
+extern double SAFTEYSPEED;
+extern BOOL LoggerActive;
+extern int WindUpdateMode; // unused
+extern double QNH;
+extern int NettoSpeed;
+extern BOOL EnableCalibration;
+extern BOOL EnableAutoBlank;
+
+// user interface options
+extern BOOL bAirspaceBlackOutline;
+extern int TrailActive;
 extern int CircleZoom;
 extern int EnableTopology;
 extern int EnableTerrain;
-
 extern int EnableSoundVario;
 extern int EnableSoundTask;
 extern int EnableSoundModes;
 extern int SoundVolume;
 extern int SoundDeadband;
-
-extern int NettoSpeed;
-
+extern int DisplayOrientation;
+extern int DisplayTextType;
+extern int AIRSPACEWARNINGS;
+extern int WarningTime;
+extern int AcknowledgementTime;
+extern int AltitudeMode;
+extern int ClipAltitude;
+extern int AltWarningMargin;
 extern int FinalGlideTerrain;
+extern BOOL EnableCDICruise;
+extern BOOL EnableCDICircling;
+//
 
-extern double AATTaskLength;
-extern BOOL AATEnabled;
-
-
+// used in settings dialog
 extern BOOL COMPORTCHANGED;
 extern BOOL AIRSPACEFILECHANGED;
 extern BOOL WAYPOINTFILECHANGED;
@@ -140,9 +152,11 @@ extern BOOL AIRFIELDFILECHANGED;
 extern BOOL TOPOLOGYFILECHANGED;
 extern BOOL POLARFILECHANGED;
 
-extern BOOL InfoBoxesHidden;
 
 bool Debounce(WPARAM wParam);
 
+#ifdef EXPERIMENTAL
+extern BlueDialupSMS bsms;
+#endif
 
 #endif

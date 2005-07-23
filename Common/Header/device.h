@@ -30,7 +30,7 @@ typedef	struct DeviceDescriptor_t{
   ComPortDriver_t Com;
 	TCHAR	Name[DEVNAMESIZE+1];
 	BOOL (*ParseNMEA)(DeviceDescriptor_t *d, TCHAR *String,	NMEA_INFO	*GPS_INFO);
-	BOOL (*PutMcReady)(DeviceDescriptor_t	*d,	double McReady);
+	BOOL (*PutMcCready)(DeviceDescriptor_t	*d,	double McReady);
 	BOOL (*PutBugs)(DeviceDescriptor_t *d, double	Bugs);
 	BOOL (*PutBallast)(DeviceDescriptor_t	*d,	double Ballast);
 	BOOL (*Open)(DeviceDescriptor_t	*d,	int	Port);
@@ -67,7 +67,7 @@ PDeviceDescriptor_t devGetDeviceOnPort(int Port);
 BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token);
 
 BOOL devParseNMEA(PDeviceDescriptor_t	d, TCHAR *String,	NMEA_INFO	*GPS_INFO);
-BOOL devPutMcReady(PDeviceDescriptor_t d,	double McReady);
+BOOL devPutMcCready(PDeviceDescriptor_t d,	double McCready);
 BOOL devPutBugs(PDeviceDescriptor_t	d, double	Bugs);
 BOOL devPutBallast(PDeviceDescriptor_t d,	double Ballast);
 BOOL devOpen(PDeviceDescriptor_t d,	int	Port);

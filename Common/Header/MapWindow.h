@@ -7,6 +7,7 @@
 
 #include <windows.h>
 #include "mapshape.h"
+#include "Sizes.h"
 
 #define NAME_SIZE 20
 #define COMMENT_SIZE 20
@@ -123,20 +124,161 @@ typedef struct _SNAIL_POINT
 
 
 
-LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,LPARAM lParam);
 
-void CloseDrawingThread(void);
-void CreateDrawingThread(void);
-void SuspendDrawingThread(void);
-void ResumeDrawingThread(void);
+class MapWindow {
+ public:
 
-void DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top );
+  // 12 is number of airspace types
+  static int	iAirspaceBrush[AIRSPACECLASSCOUNT];
+  static int	iAirspaceColour[AIRSPACECLASSCOUNT];
+  static BOOL bAirspaceBlackOutline;
+  static HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
+  static HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+  static COLORREF Colours[NUMAIRSPACECOLORS];
 
-void LatLon2Screen(float lon, float lat, int *scX, int *scY);
-void LatLon2Screen(double lon, double lat, int *scX, int *scY);
+  static BOOL CLOSETHREAD;
 
-extern double RequestMapScale;
-extern double MapScale;
+  static RECT MapRect;
+  static RECT MapRectBig;
+  static double MapScale;
+  static double RequestMapScale;
+
+  static bool MapDirty;
+  static bool RequestMapDirty;
+  static bool RequestFastRefresh;
+  static bool RequestFullScreen;
+
+  static void GetLocationFromScreen(double *X, double *Y);
+  static void DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h);
+  static void RequestToggleFullScreen();
+  static void LatLon2Screen(float lon, float lat, int *scX, int *scY);
+  static void LatLon2Screen(double lon, double lat, int *scX, int *scY);
+
+  static void CloseDrawingThread(void);
+  static void CreateDrawingThread(void);
+  static void SuspendDrawingThread(void);
+  static void ResumeDrawingThread(void);
+
+  static LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,LPARAM lParam);
+
+ private:
+
+  static void CalculateScreenPositions(POINT Orig, RECT rc,
+                                       POINT *Orig_Aircraft);
+  static void CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
+                                               POINT *Orig_Aircraft);
+  static void CalculateWaypointReachable(void);
+
+  static bool PointVisible(POINT *P, RECT *rc);
+  static bool PointVisible(double lon, double lat);
+
+  static void DrawAircraft(HDC hdc, POINT Orig);
+  static void DrawBestCruiseTrack(HDC hdc, POINT Orig);
+  static void DrawCompass(HDC hdc, RECT rc);
+  static void DrawWind(HDC hdc, POINT Orig, RECT rc);
+  static void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc);
+  static void DrawAirSpace(HDC hdc, RECT rc);
+  static void DrawWaypoints(HDC hdc, RECT rc);
+  static void DrawFlightMode(HDC hdc, RECT rc);
+  static void DrawTrail(HDC hdc, POINT Orig, RECT rc);
+  static void DrawTask(HDC hdc, RECT rc);
+  static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
+  static void DrawBearing(HDC hdc, POINT Orig);
+  static void DrawMapScale(HDC hDC,RECT rc);
+  static void DrawMapScale2(HDC hDC,RECT rc, POINT Orig_Aircraft);
+  static void DrawFinalGlide(HDC hDC,RECT rc);
+  static void DrawThermalBand(HDC hDC,RECT rc);
+  static void DrawGlideThroughTerrain(HDC hDC, RECT rc);
+  static void DrawCDI();
+
+  static void DrawSolidLine(HDC , POINT , POINT );
+  static void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
+  static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size);
+  static void ToggleFullScreenStart();
+  static void RefreshMap();
+
+  static HBITMAP hDrawBitMap;
+  static HBITMAP hDrawBitMapBg;
+  static HBITMAP hDrawBitMapTmp;
+  static HDC hdcDrawWindow;
+  static HDC hdcDrawWindowBg;
+  static HDC hdcScreen;
+  static HDC hDCTemp;
+
+  static rectObj screenbounds_latlon;
+
+  static double PanX;
+  static double PanY;
+  static double PanXr;
+  static double PanYr;
+
+  static bool EnablePan;
+
+  static BOOL THREADRUNNING;
+
+  static DWORD  dwDrawThreadID;
+  static HANDLE hDrawThread;
+
+  static double DisplayAngle;
+  static double DisplayAircraftAngle;
+  static double DrawScale;
+
+  static bool AutoZoom;
+
+  static int dTDisplay;
+
+  static HBITMAP hLandable, hReachable,
+    hTurnPoint, hSmall, hCruise, hClimb,
+    hFinalGlide, hAutoMcCready, hTerrainWarning;
+
+  static HBRUSH   hBackgroundBrush;
+
+  static COLORREF BackgroundColor;
+
+  static      HPEN hpAircraft;
+  static      HPEN hpAircraftBorder;
+  static      HPEN hpWind;
+  static      HPEN hpWindThick;
+  static      HPEN hpBearing;
+  static      HPEN hpBestCruiseTrack;
+  static      HPEN hpCompass;
+  static      HPEN hpThermalBand;
+  static      HPEN hpThermalBandGlider;
+  static      HPEN hpFinalGlideAbove;
+  static      HPEN hpFinalGlideBelow;
+  static      HPEN hpMapScale;
+  static      HPEN hpTerrainLine;
+
+  static      HBRUSH hbCompass;
+  static      HBRUSH hbThermalBand;
+  static      HBRUSH hbBestCruiseTrack;
+  static      HBRUSH hbFinalGlideBelow;
+  static      HBRUSH hbFinalGlideAbove;
+
+  static RECT MapRectSmall;
+  static bool MapFullScreen;
+
+  static DWORD fpsTime0;
+
+  ////
+
+  static void DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top );
+
+  static void UpdateMapScale();
+  static void CalculateOrigin(RECT rc, POINT *Orig);
+
+  static DWORD DrawThread (LPVOID);
+
+  static void RenderMapWindow(  RECT rc);
+  static double findMapScaleBarSize(RECT rc);
+
+};
+
+
+////////////////
+
+
+///////
 
 void ReplaceWaypoint(int index);
 void InsertWaypoint(int index);
@@ -144,8 +286,5 @@ void RemoveWaypoint(int index);
 void RemoveTaskPoint(int index);
 void FlyDirectTo(int index);
 
-void GetLocationFromScreen(double *X, double *Y);
-
-void DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h);
 
 #endif

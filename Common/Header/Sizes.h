@@ -76,6 +76,8 @@
 // timeout in quarter seconds of menu button
 #define MENUTIMEOUTMAX 8*4
 
+// timeout of display/battery mode in quarter seconds
+#define DISPLAYTIMEOUTMAX 60*4
 
 ///////////////////////
 
