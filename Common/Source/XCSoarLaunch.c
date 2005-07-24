@@ -41,6 +41,15 @@
 #define BUF_SIZE				256
 
 
+#if (WIN32_PLATFORM_PSPC >= 310) 
+#define USE_WATERMARK
+#endif
+
+#if (WIN32_PLATFORM_PSPC < 500)
+#define USE_MASKS
+#endif
+
+
 /**************************************************************************
 	Global Variables
 **************************************************************************/
@@ -70,6 +79,12 @@ typedef struct _FILELIST {
   TCHAR Description[BUF_SIZE];
 	int Index;
   HBITMAP bitmap;
+
+#ifdef USE_MASKS
+	HBITMAP mask;
+#endif
+
+
 } FILELIST;
 
 static FILELIST FileList[2];
@@ -105,9 +120,53 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   return hRes;
 }
 
+//////////////////////////////////////////////////
+// CreateMaskBMP
+//
+// Given a bitmap and a background colour,
+// creates and returns a handle to a 1bpp
+// mask bitmap.
+//////////////////////////////////////////////////
+static HBITMAP CreateMaskBMP(HBITMAP hBMPOrig, COLORREF bgCol)
+{
+	HDC hDCMask;
+	HDC hDCOrig;
+	
+	BITMAP  BMPinfo;
+	HBITMAP hBMPMask;
 
+	if (!hBMPOrig) return NULL;
+
+	hDCMask = CreateCompatibleDC(NULL);
+	hDCOrig = CreateCompatibleDC(NULL);
+
+	GetObject(hBMPOrig, sizeof(BITMAP), (LPVOID) &BMPinfo);
+	
+	// Create a monochrome mask bitmap
+	hBMPMask = CreateBitmap(BMPinfo.bmWidth, BMPinfo.bmHeight, 1, 1, NULL);
+		
+	// Select BMPs into DCs
+	SelectObject(hDCOrig, hBMPOrig);
+	SelectObject(hDCMask, hBMPMask);
+		
+		
+	// Set background colour of orig bmp dc to the transparent colour
+	SetBkColor(hDCOrig, bgCol);
+		
+	// Create mask of original icon
+	BitBlt(hDCMask, 0, 0, BMPinfo.bmWidth, BMPinfo.bmHeight, hDCOrig, 0, 0, SRCCOPY);
+		
+	DeleteObject(hDCMask);
+	DeleteObject(hDCOrig);
+
+	return hBMPMask;
+}
 
 static void CreateFileList() {
+
+#ifdef USE_MASKS
+	int i;
+#endif
 
   GetRegistryString(TEXT("InstallDir"), installDir, BUF_SIZE-1);
 
@@ -123,6 +182,7 @@ static void CreateFileList() {
     FileList[0].bitmap = LoadBitmap(hInst, 
                                     MAKEINTRESOURCE(IDB_XCSOARLSWIFT));
   }
+
   FileList[0].Index = 0;
 
   lstrcpy(FileList[1].Name, TEXT("XCSoar Sim"));
@@ -139,6 +199,17 @@ static void CreateFileList() {
                                     MAKEINTRESOURCE(IDB_XCSOARLSWIFTSIM));
   }
 
+
+// Create Mask bitmaps if required
+#ifdef USE_MASKS
+
+	for (i=0; i<FileListCnt; ++i) {
+		if (FileList[i].mask==NULL) {
+			FileList[i].mask = CreateMaskBMP(FileList[i].bitmap, RGB(0,0,255));
+		}
+	}
+
+#endif
 
 }
 
@@ -223,7 +294,7 @@ static BOOL CALLBACK ToolTipProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
 void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 {
-#if (WIN32_PLATFORM_PSPC == 500)
+#ifdef USE_WATERMARK
 	TODAYDRAWWATERMARKINFO dwi;
 #endif
 
@@ -245,12 +316,12 @@ void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 	hDrawBitMap = CreateCompatibleBitmap(hdc, rect.right, rect.bottom);
 	hRetDrawBmp = SelectObject(drawdc, hDrawBitMap);
 
-#if (WIN32_PLATFORM_PSPC == 500)
+#ifdef USE_WATERMARK
 
-          dwi.hdc = drawdc;
-          GetClientRect(hWnd, &dwi.rc);
-          dwi.hwnd = hWnd;
-          SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
+  dwi.hdc = drawdc;
+  GetClientRect(hWnd, &dwi.rc);
+  dwi.hwnd = hWnd;
+  SendMessage(GetParent(hWnd), TODAYM_DRAWWATERMARK, 0, (LPARAM)&dwi);
 
 #else
 	FillRect(drawdc, &rect, (HBRUSH)GetStockObject(WHITE_BRUSH));
@@ -259,42 +330,41 @@ void OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
         
 	x = WinLeftMargin;
 	y = WinTopMargin;
-
+	
 	for(i = 0; i < FileListCnt; i++){
-
-          if(SelItem == i){
-            SetRect(&selrect, x, y, x + IconSizeX + (HMargin * 2), 
-                    y + IconSizeY + (VMargin * 2));
-            hBrush = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
-            FillRect(drawdc, &selrect, hBrush);
-            DeleteObject(hBrush);
-          }
-
-          SelectObject(tempdc, FileList[i].bitmap);
-
-#if (WIN32_PLATFORM_PSPC == 500)
-
-		  TransparentBlt(drawdc, 
-                         x+HMargin, y+VMargin, 
-                         IconSizeX, IconSizeY, 
-                         tempdc, 0, 0, IconSizeX, IconSizeY, RGB(0, 0, 255));
-
+		
+		if(SelItem == i){
+			SetRect(&selrect, x, y, x + IconSizeX + (HMargin * 2), 
+				y + IconSizeY + (VMargin * 2));
+			hBrush = CreateSolidBrush(GetSysColor(COLOR_HIGHLIGHT));
+			FillRect(drawdc, &selrect, hBrush);
+			DeleteObject(hBrush);
+		}
+		
+		SelectObject(tempdc, FileList[i].bitmap);
+		
+		
+#ifdef USE_MASKS
+		MaskBlt(drawdc,
+			x+HMargin, y+VMargin,
+			IconSizeX, IconSizeY,
+			tempdc, 0, 0, FileList[i].mask, 0, 0,
+			MAKEROP4(0x00AA0029,SRCCOPY));
 #else
-		  BitBlt(drawdc, 
-                         x+HMargin, y+VMargin, 
-                         IconSizeX, IconSizeY, 
-                         tempdc, 0, 0, SRCCOPY);
-
+		TransparentBlt(drawdc, 
+			x+HMargin, y+VMargin, 
+			IconSizeX, IconSizeY, 
+			tempdc, 0, 0, IconSizeX, IconSizeY, RGB(0, 0, 255));
 #endif
-
-          x+= IconSizeX+HMargin*2;
-
+		
+		x+= IconSizeX+HMargin*2;
+		
 	}
-
+	
 	BitBlt(hdc, ps->rcPaint.left, ps->rcPaint.top, ps->rcPaint.right, ps->rcPaint.bottom,
 		drawdc, ps->rcPaint.left, ps->rcPaint.top, SRCCOPY);
-
-
+	
+	
 	SelectObject(drawdc, hRetDrawBmp);
 	DeleteObject(hDrawBitMap);
 	DeleteDC(drawdc);
