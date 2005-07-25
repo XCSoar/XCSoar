@@ -120,6 +120,7 @@ TCHAR szRegistryWindBearing[] =          TEXT("WindBearing");
 
 TCHAR szRegistryAirfieldFile[]=  TEXT("AirfieldFile"); // pL
 TCHAR szRegistryAirspaceFile[]=  TEXT("AirspaceFile"); // pL
+TCHAR szRegistryAdditionalAirspaceFile[]=  TEXT("AdditionalAirspaceFile"); // pL
 TCHAR szRegistryPolarFile[] = TEXT("PolarFile"); // pL
 TCHAR szRegistryTerrainFile[]=	 TEXT("TerrainFile"); // pL
 TCHAR szRegistryTopologyFile[]=  TEXT("TopologyFile"); // pL
@@ -1413,6 +1414,7 @@ void WriteProfile(HWND hwnd, TCHAR *szFile)
     /* Disabled  due to bugs
     WriteFileRegistryString(hFile, szRegistryAirfieldFile);
     WriteFileRegistryString(hFile, szRegistryAirspaceFile);
+    WriteFileRegistryString(hFile, szRegistryAdditionalAirspaceFile);
     WriteFileRegistryString(hFile, szRegistryPolarFile);
     WriteFileRegistryString(hFile, szRegistryTerrainFile);
     WriteFileRegistryString(hFile, szRegistryTopologyFile);
@@ -1480,6 +1482,7 @@ void ReadProfile(HWND hwnd, TCHAR *szFile)
     /* Disabled  due to bugs
     ReadFileRegistryString(hFile, szRegistryAirfieldFile);
     ReadFileRegistryString(hFile, szRegistryAirspaceFile);
+    ReadFileRegistryString(hFile, szRegistryAdditionalAirspaceFile);
     ReadFileRegistryString(hFile, szRegistryPolarFile);
     ReadFileRegistryString(hFile, szRegistryTerrainFile);
     ReadFileRegistryString(hFile, szRegistryTopologyFile);

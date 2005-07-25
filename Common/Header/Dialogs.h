@@ -23,6 +23,7 @@ LRESULT CALLBACK SetBugsBallast	(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 LRESULT CALLBACK TaskSettings		(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK Register 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK SetFiles				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK SetMapFiles				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AirspaceAlt		(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK MapColour			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -38,7 +39,8 @@ void AssignedArea(void);
 LRESULT CALLBACK LoggerDetails 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AudioSettings					(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-void ShowStatusMessage(TCHAR* text, int delay_ms=2000, int iFontHeightRatio=12);
+void ShowStatusMessage(TCHAR* text, int delay_ms=2000, int iFontHeightRatio=12,
+                       bool docenter=true);
 
 void StartupScreen();
 

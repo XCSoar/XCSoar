@@ -246,7 +246,27 @@ bool LoadAirspaceBinary(FILETIME LastWrite) {
 
 ///////////////////////////////
 
+void CloseAirspace() {
+  NumberOfAirspacePoints = 0;
+  NumberOfAirspaceAreas = 0;
+  NumberOfAirspaceCircles = 0;
+  if(AirspaceArea != NULL)   {
+    LocalFree((HLOCAL)AirspaceArea);
+    AirspaceArea = NULL;
+  }
+  if(AirspacePoint != NULL)  {
+    LocalFree((HLOCAL)AirspacePoint);
+    AirspacePoint = NULL;
+  }
+  if(AirspaceCircle != NULL) {
+    AirspaceCircle = NULL;
+    LocalFree((HLOCAL)AirspaceCircle);
+  }
+}
 
+
+// this can now be called multiple times to load several airspaces.
+// to start afresh, call CloseAirspace()
 
 void ReadAirspace(HANDLE hFile)
 {
@@ -254,19 +274,18 @@ void ReadAirspace(HANDLE hFile)
   int Tick = 0; int Tock=0;
   double fSize, fPos;
   DWORD dwPos;
-//  TCHAR szTemp[100]; // Unused variable RB
+  int OldNumberOfAirspacePoints = NumberOfAirspacePoints;
+  int OldNumberOfAirspaceAreas = NumberOfAirspaceAreas;
+  int OldNumberOfAirspaceCircles = NumberOfAirspaceCircles;
+  int i;
 
   LineCount = 0;
 
   ReadMode = COUNT;
 
-
   HWND hProgress;
 
   hProgress=CreateProgressDialog(TEXT("Loading Airspace File..."));
-
-  //wsprintf(szTemp,TEXT("0%%"));
-  //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
   fSize = (double)GetFileSize(hFile,NULL);
 
@@ -277,11 +296,8 @@ void ReadAirspace(HANDLE hFile)
       if(Tock == 0)
 	{
 	  dwPos = SetFilePointer(hFile,0,NULL,FILE_CURRENT);
-	  //dwPos = LOWORD(dwPos);
 	  fPos = dwPos * 100;
 	  fPos = fPos / (2*fSize);
-	  //wsprintf(szTemp,TEXT("%d%%"),int(fPos));
-	  //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
           StepProgressDialog();
 
@@ -302,24 +318,73 @@ void ReadAirspace(HANDLE hFile)
 	}
     }
 
-  AirspaceCircle = (AIRSPACE_CIRCLE *)LocalAlloc(LMEM_FIXED, NumberOfAirspaceCircles * sizeof(AIRSPACE_CIRCLE));
-  AirspacePoint = (AIRSPACE_POINT *) LocalAlloc(LMEM_FIXED, NumberOfAirspacePoints  * sizeof(AIRSPACE_POINT));
-  AirspaceArea  = (AIRSPACE_AREA *)  LocalAlloc(LMEM_FIXED, NumberOfAirspaceAreas   * sizeof(AIRSPACE_AREA));
+  // initialise the areas
 
+  // old pointers, in case we have multiple airspace files
+  AIRSPACE_CIRCLE* OldAirspaceCircle = AirspaceCircle;
+  AIRSPACE_POINT* OldAirspacePoint = AirspacePoint;
+  AIRSPACE_AREA* OldAirspaceArea = AirspaceArea;
+
+  // allocate new memory
+  AirspaceCircle =
+    (AIRSPACE_CIRCLE *)LocalAlloc(LMEM_FIXED, NumberOfAirspaceCircles * sizeof(AIRSPACE_CIRCLE));
+  AirspacePoint =
+    (AIRSPACE_POINT *) LocalAlloc(LMEM_FIXED, NumberOfAirspacePoints  * sizeof(AIRSPACE_POINT));
+  AirspaceArea  =
+    (AIRSPACE_AREA *)  LocalAlloc(LMEM_FIXED, NumberOfAirspaceAreas   * sizeof(AIRSPACE_AREA));
+
+  // can't allocate memory, so delete everything
   if(( AirspaceCircle == NULL) || (AirspacePoint == NULL) || (AirspaceArea == NULL))
     {
       NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
       if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
       if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
       if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
+
+      if(OldAirspaceArea != NULL)   LocalFree((HLOCAL)OldAirspaceArea);
+      if(OldAirspacePoint != NULL)  LocalFree((HLOCAL)OldAirspacePoint);
+      if(OldAirspaceCircle != NULL) LocalFree((HLOCAL)OldAirspaceCircle);
+
       return;
     }
 
+  if (OldAirspaceCircle != NULL) {
+    // copy old values into new
+    for (i=0; i<OldNumberOfAirspaceCircles; i++) {
+      memcpy(&AirspaceCircle[i],&OldAirspaceCircle[i],sizeof(AIRSPACE_CIRCLE));
+    }
+    // free the old values
+    LocalFree((HLOCAL)OldAirspaceCircle);
+  }
+
+  if (OldAirspaceArea != NULL) {
+    // copy old values into new
+    for (i=0; i<OldNumberOfAirspaceAreas; i++) {
+      memcpy(&AirspaceArea[i],&OldAirspaceArea[i],sizeof(AIRSPACE_AREA));
+    }
+    // free the old values
+    LocalFree((HLOCAL)OldAirspaceArea);
+  }
+
+  if (OldAirspacePoint != NULL) {
+    // copy old values into new
+    for (i=0; i<OldNumberOfAirspacePoints; i++) {
+      memcpy(&AirspacePoint[i],&OldAirspacePoint[i],sizeof(AIRSPACE_POINT));
+    }
+    // free the old values
+    LocalFree((HLOCAL)OldAirspacePoint);
+  }
+
+  // ok, start the read
+
   Mode = WAITING;
   ReadMode = FILL;
-  TempArea.FirstPoint = 0;
-  NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
+  NumberOfAirspacePoints = OldNumberOfAirspacePoints;
+  NumberOfAirspaceAreas = OldNumberOfAirspaceAreas;
+  NumberOfAirspaceCircles = OldNumberOfAirspaceCircles;
+
   SetFilePointer(hFile,0,NULL,FILE_BEGIN);
+  TempArea.FirstPoint = 0;
 
   while(GetNextLine(hFile,TempString))
     {
@@ -352,8 +417,6 @@ void ReadAirspace(HANDLE hFile)
 	default : Mode = WAITING;
 	}
     }
-  //wsprintf(szTemp,TEXT("100%%"));
-  //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
 }
 
@@ -1000,28 +1063,58 @@ void FindAirspaceAreaBounds() {
 
 
 extern TCHAR szRegistryAirspaceFile[];
+extern TCHAR szRegistryAdditionalAirspaceFile[];
+
 void ReadAirspace(void)
 {
-  TCHAR	szFile[MAX_PATH] = TEXT("\0");
+  TCHAR	szFile1[MAX_PATH] = TEXT("\0");
+  TCHAR	szFile2[MAX_PATH] = TEXT("\0");
 
-  HANDLE hFile;
+  HANDLE hFile1;
+  HANDLE hFile2;
   FILETIME LastWriteTime;
+  FILETIME LastWriteTime2;
 
+  GetRegistryString(szRegistryAirspaceFile, szFile1, MAX_PATH);
+  GetRegistryString(szRegistryAdditionalAirspaceFile, szFile2, MAX_PATH);
 
-  GetRegistryString(szRegistryAirspaceFile, szFile, MAX_PATH);
-  hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  hFile1 = CreateFile(szFile1,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  hFile2 = CreateFile(szFile2,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 
-  if (hFile != INVALID_HANDLE_VALUE ){
+  if (hFile1 != INVALID_HANDLE_VALUE ){
 
-    GetFileTime(hFile, NULL, NULL, &LastWriteTime);
+    GetFileTime(hFile1, NULL, NULL, &LastWriteTime);
 
-    if (!LoadAirspaceBinary(LastWriteTime) || AIRSPACEFILECHANGED) {
-      ReadAirspace(hFile);
+    if (hFile2 != INVALID_HANDLE_VALUE) {
+      GetFileTime(hFile2, NULL, NULL, &LastWriteTime2);
+      if (LastWriteTime2.dwHighDateTime>
+          LastWriteTime.dwHighDateTime) {
+        // this file is newer, so use it as the time stamp
+        LastWriteTime = LastWriteTime2;
+      }
+    }
+
+    if (AIRSPACEFILECHANGED ||
+        !LoadAirspaceBinary(LastWriteTime)) {
+
+      ReadAirspace(hFile1);
+
+      // also read any additional airspace
+      if (hFile2 != INVALID_HANDLE_VALUE) {
+
+        ReadAirspace(hFile2);
+
+      }
+
       SaveAirspaceBinary(LastWriteTime);
     }
 
-  	CloseHandle(hFile);
+    CloseHandle(hFile1);
 
+  }
+
+  if (hFile2 != INVALID_HANDLE_VALUE) {
+    CloseHandle(hFile2);
   }
 
   FindAirspaceAreaBounds();

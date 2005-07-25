@@ -573,6 +573,13 @@ void FormatterWaypoint::Render(HWND hWnd) {
 
   if(ActiveWayPoint >=0)
     {
+
+      if (WayPointList[Task[ActiveWayPoint].Index].Reachable) {
+        SetWindowLong(hWnd, GWL_USERDATA, 3); // blue text
+      } else {
+        SetWindowLong(hWnd, GWL_USERDATA, 0); // black text
+      }
+
       if ( DisplayTextType == DISPLAYFIRSTTHREE)
         {
           _tcsncpy(Text,WayPointList[ Task[ActiveWayPoint].Index ].Name,3);
@@ -590,10 +597,11 @@ void FormatterWaypoint::Render(HWND hWnd) {
     }
   else
     {
+      // no waypoint selected
+      SetWindowLong(hWnd, GWL_USERDATA, 0);
       Text[0] = '\0';
     }
 
-  SetWindowLong(hWnd, GWL_USERDATA, 0);
   SetWindowText(hWnd, Text);
 
 }

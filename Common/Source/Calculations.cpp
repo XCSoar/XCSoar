@@ -223,7 +223,7 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
 
     if (EnableCalibration) {
-      mag = isqrt4(x0*x0*100+y0*y0*100)/10.0;
+      mag = isqrt4((unsigned long)(x0*x0*100+y0*y0*100))/10.0;
       if ((Basic->AirspeedAvailable) && (Basic->IndicatedAirspeed>0)) {
 
         double k = (mag / Basic->TrueAirspeed);

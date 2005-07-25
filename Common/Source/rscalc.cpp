@@ -85,7 +85,7 @@ class SunEphemeris {
   void showhrmn(double dhr) {
     int hr,mn;
     hr=(int) dhr;
-    mn = (dhr - (double) hr)*60;
+    mn =(int) (dhr - (double) hr)*60;
 
     //  printf("%0d:%0d",hr,mn);
   };
@@ -97,7 +97,7 @@ class SunEphemeris {
 
   int CalcSunTimes(float longit, float latit){
 
-    float intz;
+    //    float intz;
     double tzone,d,lambda;
     double obliq,alpha,delta,LL,equation,ha,hb,twx;
     int y, m, day, h;
@@ -207,8 +207,8 @@ SunEphemeris mysun;
 
 double DoSunEphemeris(double lon, double lat) {
 
-  mysun.CalcSunTimes(lon, lat);
-  return mysun.settm;
+  mysun.CalcSunTimes((float)lon, (float)lat);
+  return (double)mysun.settm;
 
 };
 

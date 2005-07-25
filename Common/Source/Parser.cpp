@@ -453,6 +453,9 @@ BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO)
   ExtractParameter(String,ctemp,4);
   tmplon = EastOrWest(tmplon,ctemp[0]);
 
+  ExtractParameter(String,ctemp,6);
+  GPS_INFO->SatellitesUsed = (int)(min(12,StrToDouble(ctemp, NULL)));
+
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
     GPS_INFO->Lattitude = tmplat;
     GPS_INFO->Longditude = tmplon;

@@ -60,6 +60,7 @@ extern TCHAR szRegistrySectorRadius[];
 extern TCHAR szRegistryPolarID[];
 extern TCHAR szRegistryWayPointFile[];
 extern TCHAR szRegistryAirspaceFile[];
+extern TCHAR szRegistryAdditionalAirspaceFile[];
 extern TCHAR szRegistryAirfieldFile[];
 extern TCHAR szRegistryTopologyFile[];
 extern TCHAR szRegistryPolarFile[];
@@ -1562,12 +1563,135 @@ LRESULT CALLBACK TaskSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
   return FALSE;
 }
 
+
 LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   static TCHAR  szAirspaceFile[MAX_PATH] = TEXT("\0");
   static OPENFILENAME           ofnAirspace;
+  static TCHAR  szAdditionalAirspaceFile[MAX_PATH] = TEXT("\0");
+  static OPENFILENAME           ofnAdditionalAirspace;
   static TCHAR  szWaypointFile[MAX_PATH] = TEXT("\0");
   static OPENFILENAME           ofnWaypoint;
+
+  static ACTIVE = FALSE;
+  SHINITDLGINFO shidi;
+  TCHAR szFile[MAX_PATH];
+
+  switch (message)
+    {
+    case WM_INITDIALOG:
+      ACTIVE = FALSE;
+      shidi.dwMask = SHIDIM_FLAGS;
+      shidi.dwFlags = SHIDIF_DONEBUTTON | SHIDIF_SIPDOWN | SHIDIF_SIZEDLGFULLSCREEN;
+      shidi.hDlg = hDlg;
+      SHInitDialog(&shidi);
+
+      GetRegistryString(szRegistryAirspaceFile, szAirspaceFile, MAX_PATH);
+      SetDlgItemText(hDlg,IDC_AIRSPACEFILE,szAirspaceFile);
+      GetRegistryString(szRegistryAdditionalAirspaceFile, szAirspaceFile, MAX_PATH);
+      SetDlgItemText(hDlg,IDC_ADDITIONALAIRSPACEFILE,szAdditionalAirspaceFile);
+      GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
+      SetDlgItemText(hDlg,IDC_WAYPOINTSFILE,szWaypointFile);
+
+      ACTIVE = TRUE;
+      return TRUE;
+
+    case WM_COMMAND:
+      switch (LOWORD(wParam))
+        {
+        case IDC_AIRSPACEFILE:
+          if(ACTIVE == TRUE)
+            {
+              if(HIWORD(wParam) == EN_UPDATE)
+                {
+                  AIRSPACEFILECHANGED = TRUE;
+                  GetDlgItemText(hDlg,IDC_AIRSPACEFILE,szFile,MAX_PATH);
+                  SetRegistryString(szRegistryAirspaceFile,szFile);
+                }
+            }
+          break;
+
+        case IDC_ADDITIONALAIRSPACEFILE:
+          if(ACTIVE == TRUE)
+            {
+              if(HIWORD(wParam) == EN_UPDATE)
+                {
+                  AIRSPACEFILECHANGED = TRUE;
+                  GetDlgItemText(hDlg,IDC_ADDITIONALAIRSPACEFILE,szFile,MAX_PATH);
+                  SetRegistryString(szRegistryAdditionalAirspaceFile,szFile);
+                }
+            }
+          break;
+
+        case IDC_WAYPOINTSFILE:
+          if(ACTIVE == TRUE)
+            {
+              if(HIWORD(wParam) == EN_UPDATE)
+                {
+                  WAYPOINTFILECHANGED = TRUE;
+                  GetDlgItemText(hDlg,IDC_WAYPOINTSFILE,szFile,MAX_PATH);
+                  SetRegistryString(szRegistryWayPointFile,szFile);
+                }
+            }
+          break;
+
+        case IDC_BROWSEAIRSPACE:
+          memset( &(ofnAirspace), 0, sizeof(ofnAirspace));
+          ofnAirspace.lStructSize       = sizeof(ofnAirspace);
+          ofnAirspace.hwndOwner = hDlg;
+          ofnAirspace.lpstrFile = szAirspaceFile;
+          ofnAirspace.nMaxFile = MAX_PATH;
+          ofnAirspace.lpstrFilter = TEXT("Airspace Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");
+          ofnAirspace.lpstrTitle = TEXT("Open File");
+          ofnAirspace.Flags = OFN_EXPLORER;
+
+          if(GetOpenFileName(&ofnAirspace))
+            {
+              SetDlgItemText(hDlg,IDC_AIRSPACEFILE,szAirspaceFile);
+            }
+          break;
+
+        case IDC_BROWSEADDITIONALAIRSPACE:
+          memset( &(ofnAdditionalAirspace), 0, sizeof(ofnAdditionalAirspace));
+          ofnAdditionalAirspace.lStructSize       = sizeof(ofnAdditionalAirspace);
+          ofnAdditionalAirspace.hwndOwner = hDlg;
+          ofnAdditionalAirspace.lpstrFile = szAdditionalAirspaceFile;
+          ofnAdditionalAirspace.nMaxFile = MAX_PATH;
+          ofnAdditionalAirspace.lpstrFilter = TEXT("Airspace Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");
+          ofnAdditionalAirspace.lpstrTitle = TEXT("Open File");
+          ofnAdditionalAirspace.Flags = OFN_EXPLORER;
+
+          if(GetOpenFileName(&ofnAdditionalAirspace))
+            {
+              SetDlgItemText(hDlg,IDC_ADDITIONALAIRSPACEFILE,szAdditionalAirspaceFile);
+            }
+          break;
+
+        case IDC_BROWSEWAYPOINT:
+          memset( &(ofnWaypoint), 0, sizeof(ofnWaypoint));
+          ofnWaypoint.lStructSize       = sizeof(ofnWaypoint);
+          ofnWaypoint.hwndOwner = hDlg;
+          ofnWaypoint.lpstrFile = szWaypointFile;
+          ofnWaypoint.nMaxFile = MAX_PATH;
+          ofnWaypoint.lpstrFilter = TEXT("Waypoint Files(*.dat)\0*.dat\0All Files(*.*)\0*.*\0\0");
+          ofnWaypoint.lpstrTitle = TEXT("Open File");
+          ofnWaypoint.Flags = OFN_EXPLORER;
+
+          if(GetOpenFileName(&ofnWaypoint))
+            {
+              SetDlgItemText(hDlg,IDC_WAYPOINTSFILE,szWaypointFile);
+            }
+          break;
+
+        }
+      break;
+    }
+  return FALSE;
+}
+
+
+LRESULT CALLBACK SetMapFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
   static TCHAR  szTerrainFile[MAX_PATH] = TEXT("\0");
   static OPENFILENAME           ofnTerrain;
   static TCHAR  szAirfieldFile[MAX_PATH] = TEXT("\0");
@@ -1588,10 +1712,6 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       shidi.hDlg = hDlg;
       SHInitDialog(&shidi);
 
-      GetRegistryString(szRegistryAirspaceFile, szAirspaceFile, MAX_PATH);
-      SetDlgItemText(hDlg,IDC_AIRSPACEFILE,szAirspaceFile);
-      GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
-      SetDlgItemText(hDlg,IDC_WAYPOINTSFILE,szWaypointFile);
       GetRegistryString(szRegistryTerrainFile, szTerrainFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_TERRAINFILE,szTerrainFile);
       GetRegistryString(szRegistryAirfieldFile, szAirfieldFile, MAX_PATH);
@@ -1605,29 +1725,6 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
       switch (LOWORD(wParam))
         {
-        case IDC_AIRSPACEFILE:
-          if(ACTIVE == TRUE)
-            {
-              if(HIWORD(wParam) == EN_UPDATE)
-                {
-                  AIRSPACEFILECHANGED = TRUE;
-                  GetDlgItemText(hDlg,IDC_AIRSPACEFILE,szFile,MAX_PATH);
-                  SetRegistryString(szRegistryAirspaceFile,szFile);
-                }
-            }
-          break;
-
-        case IDC_WAYPOINTSFILE:
-          if(ACTIVE == TRUE)
-            {
-              if(HIWORD(wParam) == EN_UPDATE)
-                {
-                  WAYPOINTFILECHANGED = TRUE;
-                  GetDlgItemText(hDlg,IDC_WAYPOINTSFILE,szFile,MAX_PATH);
-                  SetRegistryString(szRegistryWayPointFile,szFile);
-                }
-            }
-          break;
 
         case IDC_TERRAINFILE:
           if(ACTIVE == TRUE)
@@ -1666,22 +1763,6 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             }
           break;
 
-        case IDC_BROWSEAIRSPACE:
-          memset( &(ofnAirspace), 0, sizeof(ofnAirspace));
-          ofnAirspace.lStructSize       = sizeof(ofnAirspace);
-          ofnAirspace.hwndOwner = hDlg;
-          ofnAirspace.lpstrFile = szAirspaceFile;
-          ofnAirspace.nMaxFile = MAX_PATH;
-          ofnAirspace.lpstrFilter = TEXT("Airspace Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");
-          ofnAirspace.lpstrTitle = TEXT("Open File");
-          ofnAirspace.Flags = OFN_EXPLORER;
-
-          if(GetOpenFileName(&ofnAirspace))
-            {
-              SetDlgItemText(hDlg,IDC_AIRSPACEFILE,szAirspaceFile);
-            }
-          break;
-
         case IDC_BROWSETERRAIN:
           memset( &(ofnTerrain), 0, sizeof(ofnTerrain));
           ofnTerrain.lStructSize        = sizeof(ofnTerrain);
@@ -1695,22 +1776,6 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           if(GetOpenFileName(&ofnTerrain))
             {
               SetDlgItemText(hDlg,IDC_TERRAINFILE,szTerrainFile);
-            }
-          break;
-
-        case IDC_BROWSEWAYPOINT:
-          memset( &(ofnWaypoint), 0, sizeof(ofnWaypoint));
-          ofnWaypoint.lStructSize       = sizeof(ofnWaypoint);
-          ofnWaypoint.hwndOwner = hDlg;
-          ofnWaypoint.lpstrFile = szWaypointFile;
-          ofnWaypoint.nMaxFile = MAX_PATH;
-          ofnWaypoint.lpstrFilter = TEXT("Waypoint Files(*.dat)\0*.dat\0All Files(*.*)\0*.*\0\0");
-          ofnWaypoint.lpstrTitle = TEXT("Open File");
-          ofnWaypoint.Flags = OFN_EXPLORER;
-
-          if(GetOpenFileName(&ofnWaypoint))
-            {
-              SetDlgItemText(hDlg,IDC_WAYPOINTSFILE,szWaypointFile);
             }
           break;
 
@@ -2403,7 +2468,7 @@ LRESULT CALLBACK SaveProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 
 
-#define NUMPAGES 17
+#define NUMPAGES 18
 
 static const TCHAR *szSettingsTab[] =
 {
@@ -2416,6 +2481,7 @@ static const TCHAR *szSettingsTab[] =
   TEXT("Display Elements"),
   TEXT("Display Orientation"),
   TEXT("Files"),
+  TEXT("Map Files"),
   TEXT("Final glide"),
   TEXT("Polar"),
   TEXT("Profile load"),
@@ -2475,15 +2541,16 @@ LRESULT CALLBACK Settings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       hTabPage[6] = CreateDialog(hInst, (LPCTSTR)IDD_DISPLAY, hDlg, (DLGPROC)DisplayOptions);
       hTabPage[7] = CreateDialog(hInst, (LPCTSTR)IDD_MAPDISPLAY, hDlg, (DLGPROC)MapDisplayOptions);
       hTabPage[8] = CreateDialog(hInst, (LPCTSTR)IDD_FILES, hDlg, (DLGPROC)SetFiles);
-      hTabPage[9] = CreateDialog(hInst, (LPCTSTR)IDD_FGLIDE, hDlg, (DLGPROC)FinalGlide);
-      hTabPage[10] = CreateDialog(hInst, (LPCTSTR)IDD_POLAR, hDlg, (DLGPROC)SetPolar);
-      hTabPage[11] = CreateDialog(hInst, (LPCTSTR)IDD_PROFILELOAD, hDlg, (DLGPROC)LoadProfile);
-      hTabPage[12] = CreateDialog(hInst, (LPCTSTR)IDD_PROFILESAVE, hDlg, (DLGPROC)SaveProfile);
-      hTabPage[13] = CreateDialog(hInst, (LPCTSTR)IDD_TASKSETTINGS, hDlg, (DLGPROC)TaskSettings);
-      hTabPage[14] = CreateDialog(hInst, (LPCTSTR)IDD_UNITS, hDlg, (DLGPROC)SetUnits);
-      hTabPage[15] = CreateDialog(hInst, (LPCTSTR)IDD_LOGGERDETAILS, hDlg, (DLGPROC)LoggerDetails);
+      hTabPage[9] = CreateDialog(hInst, (LPCTSTR)IDD_MAPFILES, hDlg, (DLGPROC)SetMapFiles);
+      hTabPage[10] = CreateDialog(hInst, (LPCTSTR)IDD_FGLIDE, hDlg, (DLGPROC)FinalGlide);
+      hTabPage[11] = CreateDialog(hInst, (LPCTSTR)IDD_POLAR, hDlg, (DLGPROC)SetPolar);
+      hTabPage[12] = CreateDialog(hInst, (LPCTSTR)IDD_PROFILELOAD, hDlg, (DLGPROC)LoadProfile);
+      hTabPage[13] = CreateDialog(hInst, (LPCTSTR)IDD_PROFILESAVE, hDlg, (DLGPROC)SaveProfile);
+      hTabPage[14] = CreateDialog(hInst, (LPCTSTR)IDD_TASKSETTINGS, hDlg, (DLGPROC)TaskSettings);
+      hTabPage[15] = CreateDialog(hInst, (LPCTSTR)IDD_UNITS, hDlg, (DLGPROC)SetUnits);
+      hTabPage[16] = CreateDialog(hInst, (LPCTSTR)IDD_LOGGERDETAILS, hDlg, (DLGPROC)LoggerDetails);
 
-      hTabPage[16] = CreateDialog(hInst, (LPCTSTR)IDD_AUDIO, hDlg, (DLGPROC)AudioSettings);
+      hTabPage[17] = CreateDialog(hInst, (LPCTSTR)IDD_AUDIO, hDlg, (DLGPROC)AudioSettings);
 
       MoveWindow(hTabPage[LastShow],0,30,240,300,TRUE);
       ShowWindow(hTabPage[LastShow],SW_SHOW);
@@ -3055,7 +3122,8 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
 // Insert linebreaks by using carriage return AND
 // linefeed characters.  ie TEXT("Line 1\r\nLine 2")
 // otherwise you'll get funny characters appearing
-void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
+void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
+                       bool docenter) {
 
   CStatMsgUserData *data;
   HWND hWnd;
@@ -3098,9 +3166,16 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio) {
   data->hFont = CreateFontIndirect (&logfont);
 
   // Create a child window to contain status message
-  hWnd = CreateWindow(TEXT("EDIT"), text,
-    WS_VISIBLE|WS_CHILD|ES_MULTILINE|ES_CENTER|WS_BORDER|ES_READONLY,
-    0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
+  if (docenter) {
+    hWnd = CreateWindow(TEXT("EDIT"), text,
+                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|ES_CENTER|WS_BORDER|ES_READONLY,
+                        0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
+  } else {
+    hWnd = CreateWindow(TEXT("EDIT"), text,
+                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|WS_BORDER|ES_READONLY,
+                        0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
+
+  }
 
   // Apply font to window
   SendMessage(hWnd,WM_SETFONT,(WPARAM) data->hFont,MAKELPARAM(TRUE,0));

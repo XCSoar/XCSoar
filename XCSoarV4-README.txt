@@ -2,6 +2,28 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Changes from 4.2 to 4.21
+
+- Better recovery of bluetooth GPS after switching device off and on
+- Marked points appended to file 'xcsoar-marks.txt'
+- CDI display configurable
+- Settings->Display split into two pages
+- Sunset time shown in waypoint details
+- AAT and airspace areas drawn below waypoints and topology
+- Messagebox enhancements
+- MODIS Satelite images now co-located with waypoint file
+- Launcher now uninstalls/reinstalls properly.
+- Proper spelling of McCready (sorry, Paul!)
+- Display blanking automatically after one minute of UI inactivity if in
+  battery mode, reactivated with key press
+- New GPS status icons, less obtrusive.
+- Aircraft disappears when GPS is not connected
+- New "Status" summary page from main menu, giving aircraft position,
+  nearest waypoint range/bearing, local sunset time, GPS status
+- Additional airspace file can be specified for NOTAM airspace updates
+- Settings->File page split into two (map data separated off)
+- Snail trail toggles between no trail, long trail, and short trail
+
 Summary of new features since v4.0
 - Fullscreen mode (app button 1 in map mode); app button 2 now
   toggles snail trail
@@ -239,8 +261,8 @@ Infoboxes can be hidden by pressing the App key 1, thereby giving a
 full-screen map display.
 
 Pan mode allows the user to drag the screen around to explore beyond
-the glider's immediate surrounds.  The user can still zoom in or out
-when in pan mode, and select waypoints as usual.
+the glider's immediate surrounds.  The user can still zoom in or out when in
+pan mode, and select waypoints as usual.
 
 Auto-zoom automatically zooms in when approaching a waypoint to keep
 the waypoint at a reasonable screen distance.  The user can still zoom
@@ -263,8 +285,8 @@ and 0.3 km for circling.  When the user zooms in or out, it affects
 the current mode's zoom setting only, so when leaving the mode the
 previous mode's zoom setting is used.
 
-New icons are used to represent landable waypoints.  These are
-consistent with WinPilot:
+New icons are used to represent landable waypoints.  These are consistent
+with WinPilot:
 - Unreachable airfields are purple filled circles
 - Reachable airfields in purple filled circles with a green band
 
@@ -275,9 +297,8 @@ multiple vectors are drawn, in 10 kt increments.  For example, 23
 knots will show two long vectors and a short one (two lots of 10 plus
 one of 3).
 
-A new waypoint label mode is available.  'Names in task' shows only
-waypoint labels if the waypoints are in the current task, or the
-current home.
+A new waypoint label mode is available.  'Names in task' shows only waypoint
+labels if the waypoints are in the current task, or the current home.
 
 The map is capable of displaying terrain elevation contours and vector
 topology.  See the section below for more details.

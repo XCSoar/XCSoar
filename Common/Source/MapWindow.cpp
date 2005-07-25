@@ -84,6 +84,8 @@ HBITMAP MapWindow::hClimb;
 HBITMAP MapWindow::hFinalGlide;
 HBITMAP MapWindow::hAutoMcCready;
 HBITMAP MapWindow::hTerrainWarning;
+HBITMAP MapWindow::hGPSStatus1;
+HBITMAP MapWindow::hGPSStatus2;
 
   // 12 is number of airspace types
 int	MapWindow::iAirspaceBrush[AIRSPACECLASSCOUNT];
@@ -398,6 +400,9 @@ void MapWindow::RequestToggleFullScreen() {
 }
 
 
+extern BOOL GPSCONNECT;
+
+
 LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
                                         LPARAM lParam)
 {
@@ -450,6 +455,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB));
     hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE));
     hAutoMcCready=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
+    hGPSStatus1=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS1));
+    hGPSStatus2=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS2));
 
     // airspace brushes and colours
 
@@ -515,6 +522,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject(hFinalGlide);
     DeleteObject(hAutoMcCready);
     DeleteObject(hTerrainWarning);
+    DeleteObject(hGPSStatus1);
+    DeleteObject(hGPSStatus2);
 
     DeleteObject((HPEN)hpAircraft);
     DeleteObject((HPEN)hpAircraftBorder);
@@ -1015,7 +1024,9 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     // finally, draw you!
 
-    DrawAircraft(hdcDrawWindowBg, Orig_Aircraft);
+    if (GPSCONNECT) {
+      DrawAircraft(hdcDrawWindowBg, Orig_Aircraft);
+    }
 
     // marks on top...
     DrawMarks(hdcDrawWindowBg, rc);
@@ -1043,6 +1054,8 @@ void MapWindow::RenderMapWindow(  RECT rc)
   DrawFinalGlide(hdcDrawWindow,rc);
 
   DrawThermalBand(hdcDrawWindow, rc);
+
+  DrawGPSStatus(hdcDrawWindow, rc);
 
 }
 
@@ -1097,11 +1110,11 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   while (!CLOSETHREAD)
   {
     if (!THREADRUNNING) {
-      Sleep(10);
+      Sleep(50);
       continue;
     }
     if (!MapDirty && !RequestFastRefresh) {
-      Sleep(10);
+      Sleep(50);
       continue;
     }
 
@@ -1116,12 +1129,16 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
     if (MapDirty) {
       MapDirty = false;
+      // if map is dirty, there's no need for a fast refresh anyway
+      RequestFastRefresh = false;
     } else {
       if (RequestFastRefresh) {
         RequestFastRefresh = false;
         continue;
       }
     }
+
+    // we got this far, so must really need to redraw properly
 
     LockFlightData();
     memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
@@ -1142,13 +1159,13 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     SetTopologyBounds(MapRect);
 
   }
-  MessageBeep(0);
   return 0;
 }
 
 
 void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
 {
+
   POINT Aircraft[7] = { {-15,0}, {15,0}, {0,-6}, {0,12}, {-4,10}, {4,10}, {0,0} };
   double dX,dY;
   int i;
@@ -1200,6 +1217,36 @@ void MapWindow::DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h) {
     hDCTemp,0,0,SRCPAINT);
   BitBlt(hdc,x-5,y-5,10,10,
     hDCTemp,10,0,SRCAND);
+}
+
+
+
+void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
+{
+  TCHAR gpswarningtext1[] = TEXT("GPS Not Connected");
+  TCHAR gpswarningtext2[] = TEXT("GPS 2D Fix");
+
+  if (GPSCONNECT && !(DrawInfo.NAVWarning))
+    // nothing to do
+    return;
+
+  if (!GPSCONNECT) {
+    SelectObject(hDCTemp,hGPSStatus2);
+    BitBlt(hDC,rc.left+2,rc.bottom-20-2,20,20,
+           hDCTemp,0,0,SRCAND);
+
+    TextInBox(hDC, gpswarningtext1, rc.left+24, rc.bottom-19, 0);
+
+  } else
+    if (DrawInfo.NAVWarning) {
+      SelectObject(hDCTemp,hGPSStatus1);
+      BitBlt(hDC,rc.left+2,rc.bottom-20-2,20,20,
+             hDCTemp,0,0,SRCAND);
+
+      TextInBox(hDC, gpswarningtext2, rc.left+24, rc.bottom-19, 0);
+
+    }
+
 }
 
 
@@ -2205,14 +2252,14 @@ static int iSnailNext=0;
 
 void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 {
-  int i;
+  int i, j;
   int P1,P2;
   HPEN	hpNew, hpOld, hpDelete;
   BYTE Red,Green,Blue;
   int scx, scy;
   bool p1Visible = false;
   bool p2Visible = false;
-  bool havep1 = true;
+  bool havep2 = true;
 
   if(!TrailActive)
     return;
@@ -2222,69 +2269,84 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
   // JMW don't draw first bit from home airport
 
-  havep1 = false;
+  havep2 = false;
 
-  for(i=0;i<TRAILSIZE;i++)
+  int ntrail;
+  if (TrailActive==1) {
+    ntrail = TRAILSIZE;
+  } else {
+    ntrail = TRAILSIZE/TRAILSHRINK;
+  }
+
+  for(i=0;i< ntrail;i++)
   {
-    if( i < TRAILSIZE-1)
+    j= iSnailNext-2-i;
+    if (j<0) {
+      j+= TRAILSIZE;
+    }
+    if (j>=TRAILSIZE) {
+      j-= TRAILSIZE;
+    }
+
+    if( j < TRAILSIZE-1)
     {
-      P1 = i; P2 = i+1;
+      P1 = j; P2 = j+1;
     }
     else
     {
-      P1 = i; P2 = 0;
+      P1 = j; P2 = 0;
     }
 
-    if (P1 == 0) {
+    if (i == 0) {
       // set first point up
 
-      p1Visible = PointVisible(SnailTrail[P1].Longditude ,
-                               SnailTrail[P1].Lattitude);
+      p2Visible = PointVisible(SnailTrail[P2].Longditude ,
+                               SnailTrail[P2].Lattitude);
     }
 
-    p2Visible = PointVisible(SnailTrail[P2].Longditude ,
-                             SnailTrail[P2].Lattitude);
+    p1Visible = PointVisible(SnailTrail[P1].Longditude ,
+                             SnailTrail[P1].Lattitude);
 
     // the line is invalid
     if ((P1 == iSnailNext) || (P2 == iSnailNext) ||
         (!p2Visible) || (!p1Visible)) {
 
-      p1Visible = p2Visible;
+      p2Visible = p1Visible;
 
       // p2 wasn't computed in screen coordinates, better do it next
       // time if required
-      havep1 = false;
+      havep2 = false;
       continue;
     }
 
     // now we know both points are visible, better get screen coords
     // if we don't already.
 
-    if (!havep1) {
-      LatLon2Screen(SnailTrail[P1].Longditude,
-                    SnailTrail[P1].Lattitude, &scx, &scy);
-      SnailTrail[P1].Screen.x = scx;
-      SnailTrail[P1].Screen.y = scy;
+    if (!havep2) {
+      LatLon2Screen(SnailTrail[P2].Longditude,
+                    SnailTrail[P2].Lattitude, &scx, &scy);
+      SnailTrail[P2].Screen.x = scx;
+      SnailTrail[P2].Screen.y = scy;
     } else {
-      havep1 = false;
+      havep2 = false;
     }
 
-    LatLon2Screen(SnailTrail[P2].Longditude,
-                  SnailTrail[P2].Lattitude, &scx, &scy);
-    SnailTrail[P2].Screen.x = scx;
-    SnailTrail[P2].Screen.y = scy;
-    havep1 = true; // next time our p1 will be in screen coords
+    LatLon2Screen(SnailTrail[P1].Longditude,
+                  SnailTrail[P1].Lattitude, &scx, &scy);
+    SnailTrail[P1].Screen.x = scx;
+    SnailTrail[P1].Screen.y = scy;
+    havep2 = true; // next time our p2 will be in screen coords
 
     // shuffle visibility along
-    p1Visible = p2Visible;
+    p2Visible = p1Visible;
 
     // ok, we got this far, so draw the line
 
-    ColorRampLookup((short)(SnailTrail[P1].Vario/1.5),
+    ColorRampLookup((short)(SnailTrail[P2].Vario/1.5),
                     &Red, &Green, &Blue,
                     snail_colors, NUMSNAILRAMP);
 
-    int width = min(8,max(2,(int)SnailTrail[P1].Vario));
+    int width = min(8,max(2,(int)SnailTrail[P2].Vario));
 
     hpNew = (HPEN)CreatePen(PS_SOLID, width,
                             RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
@@ -2520,12 +2582,23 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 
 void MapWindow::CalculateWaypointReachable(void)
 {
-  unsigned int i;
+  unsigned int i,j;
+  bool intask;
   double WaypointDistance, WaypointBearing,AltitudeRequired;
 
   for(i=0;i<NumberOfWayPoints;i++)
   {
-    if(WayPointList[i].Visible )
+    // calculate reachable for waypoints in task also
+    intask = false;
+    for (j=0; j<MAXTASKPOINTS; j++) {
+      if (Task[j].Index == -1) break;
+      if ((unsigned int)Task[j].Index == i) {
+        intask = true;
+        break;
+      }
+    }
+
+    if(WayPointList[i].Visible || intask)
     {
       if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
       {
