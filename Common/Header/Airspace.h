@@ -10,5 +10,6 @@ void ReadAirspace(void);
 int FindAirspaceCircle(double Longditude,double Lattitude);
 int FindAirspaceArea(double Longditude,double Lattitude);
 BOOL CheckAirspaceAltitude(double Base, double Top);
+void CloseAirspace(void);
 
 #endif

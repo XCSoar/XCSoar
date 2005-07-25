@@ -56,6 +56,7 @@ typedef struct _NMEA_INFO
   BOOL AccelerationAvailable;
   double AccelX;
   double AccelZ;
+  int SatellitesUsed;
 } NMEA_INFO;
 
 int ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO);

@@ -24,6 +24,9 @@
 #define MAX_LOADSTRING 100
 
 #define TRAILSIZE 1000
+// 1000 points at 3.6 seconds average = one hour
+#define TRAILSHRINK 5
+// short trail is 10 minutes approx
 
 // ratio of height of screen to main font height
 #define FONTHEIGHTRATIO 9

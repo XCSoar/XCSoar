@@ -180,6 +180,7 @@ class MapWindow {
   static void DrawAirSpace(HDC hdc, RECT rc);
   static void DrawWaypoints(HDC hdc, RECT rc);
   static void DrawFlightMode(HDC hdc, RECT rc);
+  static void DrawGPSStatus(HDC hdc, RECT rc);
   static void DrawTrail(HDC hdc, POINT Orig, RECT rc);
   static void DrawTask(HDC hdc, RECT rc);
   static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
@@ -229,7 +230,7 @@ class MapWindow {
   
   static HBITMAP hLandable, hReachable, 
     hTurnPoint, hSmall, hCruise, hClimb, 
-    hFinalGlide, hAutoMcCready, hTerrainWarning;
+    hFinalGlide, hAutoMcCready, hTerrainWarning, hGPSStatus1, hGPSStatus2;
 
   static HBRUSH   hBackgroundBrush;
   

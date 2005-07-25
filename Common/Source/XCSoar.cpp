@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.52 2005/07/23 16:06:56 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.53 2005/07/25 18:46:57 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -51,7 +51,6 @@ HINSTANCE                       hInst;                                  // The c
 HWND                                    hWndCB;                                 // The command bar handle
 HWND                                    hWndMainWindow; // Main Windows
 HWND                                    hWndMapWindow;  // MapWindow
-HWND                                    hGPSStatus = NULL;       // Progress Dialog Box
 HWND          hWndMenuButton = NULL;
 
 HWND                                    hWndCDIWindow = NULL; //CDI Window
@@ -81,6 +80,7 @@ HBRUSH hBrushUnselected;
 COLORREF ColorSelected = RGB(0xC0,0xC0,0xC0);
 COLORREF ColorUnselected = RGB(0xFF,0xFF,0xFF);
 COLORREF ColorWarning = RGB(0xFF,0x00,0x00);
+COLORREF ColorOK = RGB(0x00,0x00,0xFF);
 
 // Serial Port Globals
 
@@ -135,6 +135,8 @@ double SAFETYALTITUDEARRIVAL = 500;
 double SAFETYALTITUDEBREAKOFF = 700;
 double SAFETYALTITUDETERRAIN = 200;
 double SAFTEYSPEED = 50.0;
+
+// polar info
 double BUGS = 1;
 double BALLAST = 0;
 int              POLARID = 0;
@@ -173,6 +175,8 @@ TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
 SNAIL_POINT SnailTrail[TRAILSIZE];
 int SnailNext = 0;
 int TrailActive = TRUE;
+
+// user interface settings
 int CircleZoom = FALSE;
 int WindUpdateMode = 0;
 int EnableTopology = FALSE;
@@ -185,12 +189,13 @@ int SoundVolume = 80;
 int SoundDeadband = 5;
 
 BOOL EnableAutoBlank = false;
+bool ScreenBlanked = false;
+
 
 //IGC Logger
 BOOL LoggerActive = FALSE;
 
 // Others
-double pi;
 double FrameRate = 0;
 int FrameCount = 0;
 BOOL TopWindow = TRUE;
@@ -434,6 +439,79 @@ BlueDialupSMS bsms;
 #endif
 
 
+void ShowStatus() {
+  TCHAR statusmessage[1000];
+  TCHAR Temp[1000];
+  int iwaypoint= -1;
+  double sunsettime;
+  int sunsethours;
+  int sunsetmins;
+  double bearing;
+  double distance;
+
+  statusmessage[0]=0;
+
+  sunsettime = DoSunEphemeris(GPS_INFO.Longditude,
+                              GPS_INFO.Lattitude);
+  sunsethours = (int)sunsettime;
+  sunsetmins = (int)((sunsettime-sunsethours)*60);
+
+  wsprintf(Temp,TEXT("Longitude %-3.4f\r\nLatitude %-3.4f\r\nAltitude %5.0f\r\nSunset %02d:%02d\r\n\r\n"),
+           GPS_INFO.Longditude,
+           GPS_INFO.Lattitude,
+           GPS_INFO.Altitude*ALTITUDEMODIFY,
+           sunsethours,
+           sunsetmins           
+           );
+  wcscat(statusmessage, Temp);
+
+  iwaypoint = FindNearestWayPoint(GPS_INFO.Longditude,
+                                  GPS_INFO.Lattitude,
+                                  100000.0); // big range limit
+  if (iwaypoint>=0) {
+
+    bearing = Bearing(GPS_INFO.Lattitude,
+                      GPS_INFO.Longditude,
+                      WayPointList[iwaypoint].Lattitude,
+                      WayPointList[iwaypoint].Longditude);
+    
+    distance = Distance(GPS_INFO.Lattitude,
+                        GPS_INFO.Longditude,
+                        WayPointList[iwaypoint].Lattitude,
+                        WayPointList[iwaypoint].Longditude)*DISTANCEMODIFY;
+
+    wsprintf(Temp,TEXT("Near: %s\r\nBearing %3d\r\nDistance %4.1f\r\n\r\n"),
+             WayPointList[iwaypoint].Name,
+             (int)bearing,
+             distance);
+    wcscat(statusmessage, Temp);
+
+  }
+
+  if (GPSCONNECT) {
+    if (GPS_INFO.NAVWarning) {
+      wcscat(statusmessage, TEXT("GPS 2D fix\r\n"));      
+    } else {
+      wcscat(statusmessage, TEXT("GPS 3D fix\r\n"));      
+    }
+    wsprintf(Temp,TEXT("Satellites in view: %d\r\n"),
+             GPS_INFO.SatellitesUsed
+             );
+    wcscat(statusmessage, Temp);
+  } else {
+    wcscat(statusmessage, TEXT("GPS disconnected\r\n"));
+  }
+  if (GPS_INFO.VarioAvailable) {
+    wcscat(statusmessage, TEXT("Vario connected\r\n"));
+  } else {
+    wcscat(statusmessage, TEXT("Vario disconnected\r\n"));
+  }
+
+  ShowStatusMessage(statusmessage, 60000, 14, false); 
+  // i think one minute is enough...
+
+}
+
 
 void FullScreen() {
 
@@ -579,7 +657,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
-  pi = (double)atan(1) * 4;
   InitSineTable();
 
   SHSetAppKeyWndAssoc(VK_APP1, hWndMainWindow);
@@ -1080,6 +1157,12 @@ bool Debounce(WPARAM wParam) {
   */
   DisplayTimeOut = 0;
 
+  if (ScreenBlanked) {
+    // prevent key presses working if screen is blanked,
+    // so a key press just triggers turning the display on again
+    return false; 
+  }
+
   wlast = wParam;
 
   if (dT>500) {
@@ -1131,6 +1214,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       if (wdata==2) {
 	SetBkColor((HDC)wParam, ColorUnselected);
         SetTextColor((HDC)wParam, ColorWarning);
+	return (LRESULT)hBrushUnselected;
+      }
+      if (wdata==3) {
+	SetBkColor((HDC)wParam, ColorUnselected);
+        SetTextColor((HDC)wParam, ColorOK);
 	return (LRESULT)hBrushUnselected;
       }
       break;
@@ -1206,7 +1294,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           if (!Debounce(wParam)) break;
 
           if (!InfoWindowActive) {
-	    TrailActive = !TrailActive;
+            TrailActive ++;
+            if (TrailActive>2) {
+              TrailActive=0;
+            }
 
 
 	    if (EnableSoundModes) {
@@ -1218,10 +1309,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	    }
 
       // ARH Let the user know what's happened
-            if (TrailActive)
-              ShowStatusMessage(TEXT("SnailTrail ON"), 2000);
-            else
+            if (TrailActive==0)
               ShowStatusMessage(TEXT("SnailTrail OFF"), 2000);
+            if (TrailActive==1) 
+              ShowStatusMessage(TEXT("SnailTrail ON Long"), 2000);
+            if (TrailActive==2) 
+              ShowStatusMessage(TEXT("SnailTrail ON Short"), 2000);
 
             break;
           }
@@ -1366,9 +1459,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       CloseTerrain();
       CloseTopology();
 
-      if(hGPSStatus)
-        DestroyWindow(hGPSStatus);
-
       if(Port1Available)
         Port1Close(hPort1);
       if (Port2Available)
@@ -1477,6 +1567,14 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      HideMenu();
 	      FullScreen();
 	      return 0;
+
+            case IDD_STATUS:
+              ShowStatus();
+              MenuActive = false;
+              SwitchToMapWindow();
+	      HideMenu();
+	      FullScreen();
+              return 0;
 
             case IDD_BUGS:
               DWORD dwError;
@@ -1608,13 +1706,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         
               if(AIRSPACEFILECHANGED)
                 {
-
-                  NumberOfAirspacePoints = 0; 
-		  NumberOfAirspaceAreas = 0; 
-		  NumberOfAirspaceCircles = 0;
-                  if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
-                  if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
-                  if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
+                  CloseAirspace();
                   ReadAirspace();
 
                 }
@@ -1917,22 +2009,33 @@ void CommonProcessTimer()
     BlankDisplay(false);
   }
   DisplayTimeOut++;
+  
+  if (!ScreenBlanked) {
+    // No need to redraw map or infoboxes if screen is blanked.
+    // This should save lots of battery power due to CPU usage
+    // of drawing the screen
 
-  if (MapWindow::RequestMapDirty) {
-    MapWindow::MapDirty = true;
-    MapWindow::RequestMapDirty = false;
-  }
-
-  if (InfoBoxesDirty) {
-    InfoBoxesDirty = false;
-    //JMWTEST    LockFlightData();
-    AssignValues();
-    DisplayText();
-    //JMWTEST    UnlockFlightData();
+    if (MapWindow::RequestMapDirty) {
+      MapWindow::MapDirty = true;
+      MapWindow::RequestMapDirty = false;
+    }
+    
+    if (InfoBoxesDirty) {
+      InfoBoxesDirty = false;
+      //JMWTEST    LockFlightData();
+      AssignValues();
+      DisplayText();
+      //JMWTEST    UnlockFlightData();
+    }
   }
 
 #ifdef EXPERIMENTAL
-  bsms.Poll();
+
+  if (bsms.Poll()) {
+    // turn screen on if blanked and receive a new message
+    DisplayTimeOut = 0;
+  }
+
 #endif
 
 }
@@ -1940,9 +2043,6 @@ void CommonProcessTimer()
 void ProcessTimer(void)
 {
   CommonProcessTimer();
-
-  if(!Port1Available)
-    return;
 
   // processing moved to its own thread
 
@@ -1981,21 +2081,24 @@ void ProcessTimer(void)
         if(LOCKWAIT == TRUE)
           {
             // gps was waiting for fix, now waiting for connection
-            DestroyWindow(hGPSStatus);
+            MapWindow::MapDirty = true;
             SwitchToMapWindow();
             FullScreen();
-            hGPSStatus = NULL;
             LOCKWAIT = FALSE;
           }
         if(!CONNECTWAIT)
           {
             // gps is waiting for connection first time
-            hGPSStatus=CreateDialog(hInst,(LPCTSTR)IDD_GPSSTATUS,hWndMainWindow,(DLGPROC)Progress);
-            LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
-            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
+
+            MapWindow::MapDirty = true;
+
+            ShowStatusMessage(TEXT("Waiting for GPS Connection"), 5000);
+
+ //            LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
+ //            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
+
             CONNECTWAIT = TRUE;
             MessageBeep(MB_ICONEXCLAMATION);
-            SetWindowPos(hGPSStatus,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
             FullScreen();
             
           } else {
@@ -2006,9 +2109,12 @@ void ProcessTimer(void)
             // no activity for 30 seconds, so assume PDA has been
             // switched off and on again
             //
-#ifndef _SIM_
+            MapWindow::MapDirty = true;
+
+            ShowStatusMessage(TEXT("Restarting Comm Ports"), 1000);
+            MessageBeep(MB_ICONEXCLAMATION);
             RestartCommPorts();
-#endif
+
 #ifdef EXPERIMENTAL
             // if comm port shut down, probably so did bluetooth dialup
             // so restart it here also.
@@ -2027,10 +2133,10 @@ void ProcessTimer(void)
         
         if(CONNECTWAIT)
           {
-            DestroyWindow(hGPSStatus);
+            MapWindow::MapDirty = true;
+
             SwitchToMapWindow();
             FullScreen();
-            hGPSStatus = NULL;
             CONNECTWAIT = FALSE;
           }
       }
@@ -2039,21 +2145,19 @@ void ProcessTimer(void)
       {
         if((navwarning == TRUE) && (LOCKWAIT == FALSE))
           {
-            hGPSStatus=CreateDialog(hInst,(LPCTSTR)IDD_GPSSTATUS,hWndMainWindow,(DLGPROC)Progress);
-            LoadString(hInst, IDS_LOCKWAIT, szLoadText, MAX_LOADSTRING);
-            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
+            ShowStatusMessage(TEXT("Waiting for GPS Fix"), 1000);
+            MapWindow::MapDirty = true;
+
             LOCKWAIT = TRUE;
             MessageBeep(MB_ICONEXCLAMATION);
-            SetWindowPos(hGPSStatus,HWND_TOPMOST,0,0,0,0,SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
             FullScreen();
             
           }
         else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
           {
-            DestroyWindow(hGPSStatus);
+            MapWindow::MapDirty = true;
             SwitchToMapWindow();
             FullScreen();
-            hGPSStatus = NULL;
             LOCKWAIT = FALSE;
           }
       }
@@ -2081,6 +2185,9 @@ void SIMProcessTimer(void)
   }
 
   LockFlightData();
+
+  GPSCONNECT = TRUE;
+  GPS_INFO.NAVWarning = FALSE;
 
   GPS_INFO.Lattitude = FindLattitude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
   GPS_INFO.Longditude = FindLongditude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
@@ -2305,6 +2412,7 @@ void BlankDisplay(bool doblank) {
         ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm, 
                   0, NULL);
         oldblank = true;
+        ScreenBlanked = true;
       }
     } else {
       if (oldblank) { // was blanked
@@ -2313,6 +2421,7 @@ void BlankDisplay(bool doblank) {
         ExtEscape(gdc, SETPOWERMANAGEMENT, vpm.Length, (LPCSTR) &vpm, 
                   0, NULL);
         oldblank = false;
+        ScreenBlanked = false;
       }
     }
     
