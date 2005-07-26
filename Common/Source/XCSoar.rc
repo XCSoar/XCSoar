@@ -118,7 +118,7 @@ FONT 10, "System"
 BEGIN
     EDITTEXT        IDC_MESSAGE,4,125,124,14,ES_CENTER | ES_MULTILINE |
                     ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "Version 4.2",IDC_STATIC,88,115,42,8
+    LTEXT           "Version 4.21",IDC_STATIC,88,115,42,8
     CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,2,2,
                     129,113
     CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,
