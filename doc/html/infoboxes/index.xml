@@ -207,13 +207,15 @@ speed-to-fly is calculated for descent.
 <dd>The distance to the currently selected waypoint.</dd> 
 
 <dt>Next Altitude Difference: WP AltD</dt>
-<dd>Arrival altitude at the next waypoint.</dd>
+<dd>Arrival altitude at the next waypoint relative to
+the safety arrival altitude.</dd>
  
 <dt>Next Altitude Required: WP AltR</dt>
 <dd>Altitude required to reach the next turn point.</dd>
  
 <dt>Final Altitude Difference: Fin AltD</dt>
-<dd>Arrival altitude at the final task turn point.</dd>
+<dd>Arrival altitude at the final task turn point relative to
+the safety arrival altitude.</dd>
  
 <dt>Final Altitude Required: Fin AltR</dt>
 <dd>Altitude required to finish the task. </dd>

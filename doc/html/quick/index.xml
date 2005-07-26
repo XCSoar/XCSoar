@@ -34,6 +34,8 @@ interest.  If an infobox is selected, the title turns grey, and it is
 ready to accept user input.  The system reverts to Map mode after 10
 seconds have elapsed with no key press.
 
+Infobox types are described <a href="../infoboxes/index.html">here</a>.
+
 			</screenshot>
 
 			<screenshot 
