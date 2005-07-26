@@ -27,7 +27,10 @@ clean: depends
 dest.tar.gz: $(FILES_DEST) $(FILES_LOCAL)
 	tar cvzf dest.tar.gz $(FILES_DEST) $(FILES_LOCAL)
 
-install: build
+nightlycvs:
+	ssh $(SSHUSER)@shell.sourceforge.net "cvs -d:pserver:anonymous@cvs1:/cvsroot/xcsoar export -Dtomorrow source && tar czvf /home/groups/x/xc/xcsoar/htdocs/xcsoar-nightlyCVS.tar.gz source && rm -Rf source"
+
+install: build nightlycvs
 	scp dest.tar.gz $(SSHUSER)@shell.sourceforge.net:/home/groups/x/xc/xcsoar/htdocs/
 	ssh $(SSHUSER)@shell.sourceforge.net "cd /home/groups/x/xc/xcsoar/htdocs/; tar xvzf dest.tar.gz; chmod -R g+rwX /home/groups/x/xc/xcsoar/htdocs"
 
