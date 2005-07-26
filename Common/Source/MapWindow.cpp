@@ -400,7 +400,7 @@ void MapWindow::RequestToggleFullScreen() {
 }
 
 
-extern BOOL GPSCONNECT;
+extern BOOL extGPSCONNECT;
 
 
 LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
@@ -1024,7 +1024,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     // finally, draw you!
 
-    if (GPSCONNECT) {
+    if (extGPSCONNECT) {
       DrawAircraft(hdcDrawWindowBg, Orig_Aircraft);
     }
 
@@ -1226,11 +1226,11 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
   TCHAR gpswarningtext1[] = TEXT("GPS Not Connected");
   TCHAR gpswarningtext2[] = TEXT("GPS 2D Fix");
 
-  if (GPSCONNECT && !(DrawInfo.NAVWarning))
+  if (extGPSCONNECT && !(DrawInfo.NAVWarning))
     // nothing to do
     return;
 
-  if (!GPSCONNECT) {
+  if (!extGPSCONNECT) {
     SelectObject(hDCTemp,hGPSStatus2);
     BitBlt(hDC,rc.left+2,rc.bottom-20-2,20,20,
            hDCTemp,0,0,SRCAND);

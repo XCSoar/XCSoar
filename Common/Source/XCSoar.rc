@@ -683,7 +683,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_APP_TITLE           "XCSoar"
     IDC_XCSOAR              "XCSOAR"
-    IDS_CONNECTWAIT         "Waiting for GPS Connection"
+    IDS_CONNECTWAIT         "testing testing testing"
 END
 
 STRINGTABLE DISCARDABLE
