@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.53 2005/07/25 18:46:57 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.54 2005/07/26 08:13:33 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -122,6 +122,8 @@ int          NettoSpeed = 1000;
 NMEA_INFO                       GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
 BOOL GPSCONNECT = FALSE;
+BOOL extGPSCONNECT = FALSE; // this one used by external functions
+
 BOOL VARIOCONNECT = FALSE;
 bool          TaskAborted = false;
 
@@ -488,7 +490,7 @@ void ShowStatus() {
 
   }
 
-  if (GPSCONNECT) {
+  if (extGPSCONNECT) {
     if (GPS_INFO.NAVWarning) {
       wcscat(statusmessage, TEXT("GPS 2D fix\r\n"));      
     } else {
@@ -2068,6 +2070,11 @@ void ProcessTimer(void)
     // replace bool with BOOL to correct warnings and match variable declarations RB
     //
     BOOL gpsconnect = GPSCONNECT;
+
+    if (GPSCONNECT) {
+      extGPSCONNECT = TRUE;
+    }
+
     GPSCONNECT = FALSE;
     BOOL varioconnect = VARIOCONNECT;
     BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
@@ -2091,10 +2098,13 @@ void ProcessTimer(void)
             // gps is waiting for connection first time
 
             MapWindow::MapDirty = true;
+            extGPSCONNECT = FALSE;
 
             ShowStatusMessage(TEXT("Waiting for GPS Connection"), 5000);
 
- //            LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
+            //            LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
+            //            ShowStatusMessage(szLoadText, 5000);
+
  //            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
 
             CONNECTWAIT = TRUE;
@@ -2110,6 +2120,8 @@ void ProcessTimer(void)
             // switched off and on again
             //
             MapWindow::MapDirty = true;
+
+            extGPSCONNECT = FALSE;
 
             ShowStatusMessage(TEXT("Restarting Comm Ports"), 1000);
             MessageBeep(MB_ICONEXCLAMATION);
@@ -2187,6 +2199,8 @@ void SIMProcessTimer(void)
   LockFlightData();
 
   GPSCONNECT = TRUE;
+  extGPSCONNECT = TRUE;
+
   GPS_INFO.NAVWarning = FALSE;
 
   GPS_INFO.Lattitude = FindLattitude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
