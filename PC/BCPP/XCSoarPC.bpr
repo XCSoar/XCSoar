@@ -1,0 +1,222 @@
+# ---------------------------------------------------------------------------
+#  Delphi VCL Extensions (RX)
+#  Copyright (c) 1998 Master-Bank
+# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+!if !$d(BCB)
+BCB = $(MAKEDIR)\..
+!endif
+
+# ---------------------------------------------------------------------------
+# IDE SECTION
+# ---------------------------------------------------------------------------
+# The following section of the project makefile is managed by the BCB IDE.
+# It is recommended to use the IDE to change any of the values in this
+# section.
+# ---------------------------------------------------------------------------
+
+VERSION = BCB.03
+# ---------------------------------------------------------------------------
+PROJECT = XCSoarPC.exe
+OBJFILES = XCSoarPC.obj Unit1.obj ..\..\Common\Source\XCSoar.obj \
+  ..\..\Common\Source\Airspace.obj \
+  ..\..\Common\Source\AirspaceColourDlg.obj \
+  ..\..\Common\Source\Calculations.obj \
+  ..\..\Common\Source\devCAI302.obj \
+  ..\..\Common\Source\devEW.obj \
+  ..\..\Common\Source\device.obj ..\..\Common\Source\Dialogs.obj \
+  ..\..\Common\Source\Logger.obj \
+  ..\..\Common\Source\mapbits.obj \
+  ..\..\Common\Source\maperror.obj \
+  ..\..\Common\Source\mapprimitive.obj \
+  ..\..\Common\Source\mapsearch.obj \
+  ..\..\Common\Source\mapshape.obj \
+  ..\..\Common\Source\maptree.obj \
+  ..\..\Common\Source\MapWindow.obj \
+  ..\..\Common\Source\mapxbase.obj \
+  ..\..\Common\Source\McReady.obj \
+  ..\..\Common\Source\Parser.obj ..\..\Common\Source\Port.obj \
+  ..\..\Common\Source\Port2.obj \
+  ..\..\Common\Source\Process.obj \
+  ..\..\Common\Source\RasterTerrain.obj \
+  ..\..\Common\Source\rscalc.obj \
+  ..\..\Common\Source\StdAfx.obj \
+  ..\..\Common\Source\STScreenBuffer.obj \
+  ..\..\Common\Source\Terrain.obj \
+  ..\..\Common\Source\Topology.obj \
+  ..\..\Common\Source\Utils.obj \
+  ..\..\Common\Source\VarioSound.obj \
+  ..\..\Common\Source\VOIMAGE.obj \
+  ..\..\Common\Source\WaveThread.obj \
+  ..\..\Common\Source\Waypointparser.obj \
+  ..\..\Common\Source\windanalyser.obj \
+  ..\..\Common\Source\windmeasurementlist.obj \
+  ..\..\Common\Source\windstore.obj \
+  ..\..\Common\Source\AirfieldDetails.obj \
+  ..\..\Common\Source\units.obj modDummies.obj
+RESFILES = XCSoarPC.res ..\..\Common\Source\XCSoar.res
+DEFFILE =
+RESDEPEN = $(RESFILES) Unit1.dfm
+LIBFILES =
+LIBRARIES =
+SPARELIBS = vcl35.lib rxctl.lib dclrxctl.lib rxdb.lib vcldb35.lib
+PACKAGES = vcl35.bpi vcldb35.bpi rxctl.bpi rxdb.bpi dclrxctl.bpi
+# ---------------------------------------------------------------------------
+PATHCPP = .;..\..\Common\Source
+PATHASM = .;
+PATHPAS = .;..\..\Common\Source
+PATHRC = .;
+DEBUGLIBPATH = $(BCB)\lib\debug
+RELEASELIBPATH = $(BCB)\lib\release
+# ---------------------------------------------------------------------------
+CFLAG1 = -Od -Hc -w- -Ve -r- -k -y -v -vi- -c -b- -w-par -w-inl -Vx
+CFLAG2 = -I..\..\common\source;.\include;c:\project\xcsoarmy\source\common\header;c:\project\xcsoarmy\source\common\source;$(BCB)\include;$(BCB)\include\vcl \
+  -DUNICODE;_UNICODE;_SIM_;SCREENHEIGHT=320;SCREENWIDTH=240;USEPACKAGES \
+  -H=$(BCB)\lib\vcl35.csm
+CFLAG3 = -Tkh30000
+PFLAGS = -U..\..\common\source;c:\project\xcsoarmy\source\common\source;\\herkules2000\triadis\project\common\vcl_1.00\units\rxlib\260\rx\units;$(BCB)\lib\release;$(BCB)\lib\obj;$(BCB)\lib;$(RELEASELIBPATH) \
+  -I..\..\common\source;.\include;c:\project\xcsoarmy\source\common\header;c:\project\xcsoarmy\source\common\source;$(BCB)\include;$(BCB)\include\vcl \
+  -DUNICODE;_UNICODE;_SIM_;SCREENHEIGHT=320;SCREENWIDTH=240;USEPACKAGES \
+  -$Y -$W -$V- -$O- -v -JPHN -M
+RFLAGS = -i..\..\common\source;.\include;c:\project\xcsoarmy\source\common\header;c:\project\xcsoarmy\source\common\source;$(BCB)\include;$(BCB)\include\vcl \
+  -DUNICODE;_UNICODE;_SIM_;SCREENHEIGHT=320;SCREENWIDTH=240;USEPACKAGES
+AFLAGS = /i.\include /ic:\project\xcsoarmy\source\common\header \
+  /ic:\project\xcsoarmy\source\common\source /i$(BCB)\include \
+  /i$(BCB)\include\vcl /dUNICODE /d_UNICODE /d_SIM_ \
+  /dSCREENHEIGHT=320 /dSCREENWIDTH=240 /dUSEPACKAGES /mx /w2 \
+  /zi
+LFLAGS = -L..\..\common\source;c:\project\xcsoarmy\source\common\source;\\herkules2000\triadis\project\common\vcl_1.00\units\rxlib\260\rx\units;$(BCB)\lib\release;$(BCB)\lib\obj;$(BCB)\lib;$(RELEASELIBPATH) \
+  -D"RX Library Database Components" -aa -Tpe -s -Gn -Gl -Gi -v
+IFLAGS =
+# ---------------------------------------------------------------------------
+ALLOBJ = c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)
+ALLRES = $(RESFILES)
+ALLLIB = $(LIBFILES) $(LIBRARIES) import32.lib \
+  cp32mt.lib
+# ---------------------------------------------------------------------------
+!ifdef IDEOPTIONS
+
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=2055
+CodePage=1252
+
+[Version Info Keys]
+FileVersion=1.0.0.0
+
+[HistoryLists\hlIncludePath]
+Count=2
+Item0=.\include;c:\project\xcsoarmy\source\common\header;c:\project\xcsoarmy\source\common\source;$(BCB)\include;$(BCB)\include\vcl
+Item1=.\include;c:\project\xcsoarmy\source\common\include;c:\project\xcsoarmy\source\common\source;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=1
+Item0=c:\project\xcsoarmy\source\common\source;\\herkules2000\triadis\project\common\vcl_1.00\units\rxlib\260\rx\units;$(BCB)\lib\release;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=7
+Item0=UNICODE;_UNICODE;_SIM_;SCREENHEIGHT=320;SCREENWIDTH=240;USEPACKAGES
+Item1=_UNICODE;_SIM_;SCREENHEIGHT=320;SCREENWIDTH=240;USEPACKAGES
+Item2=_UNICODE;_SIM_;SCREENHEIGHT=640;SCREENWIDTH=480;USEPACKAGES
+Item3=_UNICODE;_SIM_;USEPACKAGES;SCREENHEIGHT=320;SCREENWIRDT=240
+Item4=_UNICODE;USEPACKAGES;_SIM_
+Item5=USEPACKAGES;_UNICODE
+Item6=USEPACKAGES
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+HostApplication=
+
+!endif
+
+# ---------------------------------------------------------------------------
+# MAKE SECTION
+# ---------------------------------------------------------------------------
+# This section of the project file is not used by the BCB IDE.  It is for
+# the benefit of building from the command-line using the MAKE utility.
+# ---------------------------------------------------------------------------
+
+.autodepend
+# ---------------------------------------------------------------------------
+!if !$d(BCC32)
+BCC32 = bcc32
+!endif
+
+!if !$d(DCC32)
+DCC32 = dcc32
+!endif
+
+!if !$d(TASM32)
+TASM32 = tasm32
+!endif
+
+!if !$d(LINKER)
+LINKER = ilink32
+!endif
+
+!if !$d(BRCC32)
+BRCC32 = brcc32
+!endif
+# ---------------------------------------------------------------------------
+!if $d(PATHCPP)
+.PATH.CPP = $(PATHCPP)
+.PATH.C   = $(PATHCPP)
+!endif
+
+!if $d(PATHPAS)
+.PATH.PAS = $(PATHPAS)
+!endif
+
+!if $d(PATHASM)
+.PATH.ASM = $(PATHASM)
+!endif
+
+!if $d(PATHRC)
+.PATH.RC  = $(PATHRC)
+!endif
+# ---------------------------------------------------------------------------
+$(PROJECT): $(OBJFILES) $(RESDEPEN) $(DEFFILE)
+    $(BCB)\BIN\$(LINKER) @&&!
+    $(LFLAGS) +
+    $(ALLOBJ), +
+    $(PROJECT),, +
+    $(ALLLIB), +
+    $(DEFFILE), +
+    $(ALLRES)
+!
+# ---------------------------------------------------------------------------
+.pas.hpp:
+    $(BCB)\BIN\$(DCC32) $(PFLAGS) {$< }
+
+.pas.obj:
+    $(BCB)\BIN\$(DCC32) $(PFLAGS) {$< }
+
+.cpp.obj:
+    $(BCB)\BIN\$(BCC32) $(CFLAG1) $(CFLAG2) $(CFLAG3) -n$(@D) {$< }
+
+.c.obj:
+    $(BCB)\BIN\$(BCC32) $(CFLAG1) $(CFLAG2) $(CFLAG3) -n$(@D) {$< }
+
+.asm.obj:
+    $(BCB)\BIN\$(TASM32) $(AFLAGS) $<, $@
+
+.rc.res:
+    $(BCB)\BIN\$(BRCC32) $(RFLAGS) -fo$@ $<
+# ---------------------------------------------------------------------------
