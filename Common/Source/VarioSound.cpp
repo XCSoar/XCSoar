@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "VarioSound.h"
 #include <math.h>
+#include "XCSoar.h"
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  ul_reason_for_call, 
@@ -29,7 +30,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
 CWaveOutThread variosound_waveOut;
 
-#define BSIZE 10
+#define BSIZE 2
 #define BCOUNT 4
 
 #define LOWFI
@@ -64,12 +65,12 @@ short variosound_volume;
 #define delaymult 5.0
 double koct = log(noct)/log(2);
 
-double variosound_vscale_in =0.0;
-double variosound_vav_in = 0.0;
+short variosound_vscale_in = 0;
+short variosound_vav_in = 0;
 
-double variosound_vscale=0.0;
-double variosound_vcur = 0.0;
-double variosound_vav=0.0;
+short variosound_vscale=0;
+short variosound_vcur = 0;
+short variosound_vav=0;
 BOOL variosound_sound = TRUE;
 
 int tp_delay = 50;
@@ -80,9 +81,14 @@ int tp_avsound = 20;
 char variosound_pvbuf[201*256];
 char variosound_pvbufq[201*256];
 
-short quantisesound(double vv) {
+#ifdef DEBUG
+bool variosound_vscale_timer = false;
+DWORD fpsTimeSound = 0;
+#endif
+
+short quantisesound(short vv) {
 	short k;
-	k = (short)(vv*100)+100;
+	k = vv+100;
 	if (k>200) 
 		return 100;
 	if (k<0)
@@ -99,22 +105,34 @@ void VarioSound_sndparam() {
   
   variosound_vscale = variosound_vscale_in;
   variosound_vav = variosound_vav_in;
+  
+#ifdef DEBUG
+  if (variosound_vscale_timer) {
+    DWORD	fpsTime0 = ::GetTickCount();
+
+    int dt = (fpsTime0-fpsTimeSound);
+    variosound_vscale_timer = false;
+
+    static int kaverage = 0;
+    static int dtave = 0;
+    kaverage++;
+    dtave+= dt;
+    if (kaverage % 10 == 0) {
+      char message[100];
+      sprintf(message,"sound delay %d ms\r\n", dtave/kaverage);
+      DebugStore(message);
+      dtave=0;
+      kaverage=0;
+    }
+  }
+#endif
 
   LeaveCriticalSection(&CritSec_VarioSoundV);
 
-  double vtp = variosound_vscale;
+  variosound_vcur = variosound_vscale; 
+  // (7*variosound_vscale+3*variosound_vcur)/10;
 
-  // FREQZ*tzero = number of samples
-
-  variosound_vcur = //0.8*variosound_vscale+0.2*variosound_vcur;
-    variosound_vscale;
-  //  variosound_vav = 0.9*variosound_vav+0.1*variosound_vcur;
-
-  vtp = variosound_vcur;
-
-  tp_delay = variosound_delaytable[quantisesound(vtp)];
-
-  ///
+  tp_delay = variosound_delaytable[quantisesound(variosound_vcur)];
   tp_sound = variosound_freqtable[quantisesound(variosound_vcur)];
 
   int i;
@@ -167,6 +185,11 @@ void VarioSound_synthesiseSound() {
   static unsigned long ii=0;
   static bool mode_quiet = true;
   static unsigned long inext= 0;
+
+#ifdef DEBUG
+  DWORD	fpsTime0 = ::GetTickCount();
+#endif
+
 
   while (buf < endBuf) {
 
@@ -231,6 +254,28 @@ void VarioSound_synthesiseSound() {
     }
   }
 
+#ifdef DEBUG
+  int dfpsTime = ::GetTickCount()-fpsTime0;
+  static int kaverage = 0;
+  static int dtave = 0;
+  static int timethis = 0;
+  kaverage++;
+  dtave+= dfpsTime;
+  if (kaverage % 100 == 0) {
+
+    char message[100];
+    int dtbig = (::GetTickCount() - timethis)/kaverage;
+    timethis = fpsTime0;
+    sprintf(message,"dt sound %d ns %d ms\r\n", dtave*1000/kaverage,
+            dtbig);
+    DebugStore(message);
+    dtave=0;
+    kaverage=0;
+
+  }
+
+#endif
+
 }
 
 
@@ -278,14 +323,19 @@ extern "C" {
 
   VARIOSOUND_API void VarioSound_SetV(short v) {
     EnterCriticalSection(&CritSec_VarioSoundV);
-    variosound_vscale_in = v/100.0;
-    if (variosound_vscale_in>1.0) {
-      variosound_vscale_in = 1.0;
+    variosound_vscale_in = v;
+    if (variosound_vscale_in>100) {
+      variosound_vscale_in = 100;
     }
-    if (variosound_vscale_in<-1.0) {
-      variosound_vscale_in = -1.0;
+    if (variosound_vscale_in<-100) {
+      variosound_vscale_in = -100;
     }
-    variosound_vav_in = 0.9*variosound_vav_in+0.1*variosound_vscale_in;
+#ifdef DEBUG
+    fpsTimeSound = ::GetTickCount();
+    variosound_vscale_timer = true;
+#endif
+
+    variosound_vav_in = (9*variosound_vav_in+1*variosound_vscale_in)/10;
     LeaveCriticalSection(&CritSec_VarioSoundV);
   }
 

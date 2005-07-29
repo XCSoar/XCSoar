@@ -114,7 +114,8 @@ class SunEphemeris {
     m = GPS_INFO.Month;
     y = GPS_INFO.Year;
     day = GPS_INFO.Day;
-    h = GPS_INFO.Time/3600;
+    h = ((int)GPS_INFO.Time)/3600;
+    h = (h % 24);
 #endif
 
     int localtime = ((int)GPS_INFO.Time-TimeZoneInformation.Bias*60);

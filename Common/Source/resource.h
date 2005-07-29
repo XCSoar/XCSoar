@@ -82,6 +82,7 @@
 #define IDB_GPSSTATUS1                  256
 #define IDB_GPSSTATUS2                  257
 #define IDD_MAPFILES                    258
+#define IDD_ANALYSIS                    259
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003
@@ -122,6 +123,7 @@
 #define IDC_DOWN                        1035
 #define IDC_WAYPOINTDETAILSNEXT         1035
 #define IDC_BALLASTUP                   1036
+#define IDC_BROWSEADDITIONALWAYPOINT    1036
 #define IDC_SETTINGS                    1038
 #define IDC_BUGSDOWN                    1041
 #define IDC_UP                          1041
@@ -215,6 +217,7 @@
 #define IDC_WAYPOINTS                   1178
 #define IDC_WAYPOINTSFILE               1179
 #define IDD_BUGS                        1180
+#define IDC_ADDITIONALWAYPOINTSFILE     1180
 #define IDD_PRESSURE                    1181
 #define IDD_EXIT                        1183
 #define IDC_POLAR                       1184
@@ -266,9 +269,13 @@
 #define IDD_STATUS                      1237
 #define IDC_BROWSEADDITIONALAIRSPACE    1237
 #define IDC_GPSMESSAGE                  1238
+#define IDC_ANALYSIS                    1238
 #define IDC_PROGRESS1                   1239
 #define IDC_CDICIRCLING                 1240
 #define IDC_ADDITIONALAIRSPACEFILE      1241
+#define IDC_ANALYSISLABEL               1242
+#define IDC_ANALYSISTEXT                1243
+#define IDC_ANALYSISNEXT                1244
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -302,9 +309,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        259
+#define _APS_NEXT_RESOURCE_VALUE        260
 #define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1242
+#define _APS_NEXT_CONTROL_VALUE         1245
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

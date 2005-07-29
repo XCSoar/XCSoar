@@ -102,8 +102,10 @@ void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   static double SnailLastTime=0;
   static double LogLastTime=0;
+  static double StatsLastTime=0;
   double dtLog = 5.0;
   double dtSnail = 2.0;
+  double dtStats = 60.0;
 
   if(Basic->Time <= LogLastTime)
     {
@@ -113,6 +115,11 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     {
       SnailLastTime = Basic->Time;
     }
+  if(Basic->Time <= StatsLastTime)
+    {
+      StatsLastTime = Basic->Time;
+    }
+
 
   if (FastLogNum) {
     dtLog = 1.0;
@@ -130,6 +137,9 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       LogPoint(Basic->Lattitude , Basic->Longditude , Basic->Altitude );
     }
     LogLastTime += dtLog;
+    if (LogLastTime< Basic->Time-dtLog) {
+      LogLastTime = Basic->Time-dtLog;
+    }
 
     if (FastLogNum) FastLogNum--;
 
@@ -138,7 +148,21 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (Basic->Time - SnailLastTime >= dtSnail) {
     AddSnailPoint(Basic, Calculated);
     SnailLastTime += dtSnail;
+    if (SnailLastTime< Basic->Time-dtSnail) {
+      SnailLastTime = Basic->Time-dtSnail;
+    }
   }
+
+  if (Basic->Time - StatsLastTime >= dtStats) {
+    flightstats.Altitude.
+      least_squares_update(Basic->Time/3600.0, Basic->Altitude);
+    StatsLastTime += dtStats;
+    if (StatsLastTime< Basic->Time-dtStats) {
+      StatsLastTime = Basic->Time-dtStats;
+    }
+  }
+
+
 }
 
 
@@ -161,10 +185,10 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
 
     if (Basic->AirspeedAvailable) {
-      theSinkRate= SinkRate(Basic->IndicatedAirspeed, n);
+      theSinkRate= GlidePolar::SinkRate(Basic->IndicatedAirspeed, n);
     } else {
       // assume zero wind (Speed=Airspeed, very bad I know)
-      theSinkRate= SinkRate(Basic->Speed, n);
+      theSinkRate= GlidePolar::SinkRate(Basic->Speed, n);
     }
 
     if (Basic->VarioAvailable) {
@@ -657,6 +681,10 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
               Calculated->ClimbStartAlt = StartAlt;
               Calculated->ClimbStartTime = StartTime;
 
+              flightstats.Altitude_Base.
+                least_squares_update(Calculated->ClimbStartTime/3600.0,
+                                     Calculated->ClimbStartAlt);
+
               SwitchZoomClimb(true, LEFT);
 
             }
@@ -676,7 +704,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           StartLong = Basic->Longditude;
           StartLat  = Basic->Lattitude;
           StartAlt  = Basic->Altitude;
-          // JMW Transition to cruise
+          // JMW Transition to cruise, due to not properly turning
           MODE = WAITCRUISE;
         }
     }
@@ -694,6 +722,10 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
               Calculated->CruiseStartLong = StartLong;
               Calculated->CruiseStartAlt = StartAlt;
               Calculated->CruiseStartTime = StartTime;
+
+              flightstats.Altitude_Ceiling.
+                least_squares_update(Calculated->CruiseStartTime/3600.0,
+                                     Calculated->CruiseStartAlt);
 
               SwitchZoomClimb(false, LEFT);
 
@@ -737,6 +769,22 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           Calculated->LastThermalAverage = ThermalGain/ThermalTime;
           Calculated->LastThermalGain = ThermalGain;
           Calculated->LastThermalTime = ThermalTime;
+
+          if (Calculated->LastThermalAverage>0) {
+            flightstats.ThermalAverage.
+              least_squares_update(Calculated->LastThermalAverage);
+
+#ifdef DEBUG
+            char Temp[100];
+            sprintf(Temp,"%f %f # thermal stats\n", 
+                    flightstats.ThermalAverage.m,
+                    flightstats.ThermalAverage.b
+                    );
+            DebugStore(Temp);
+#endif
+          }
+          
+
 	  /*
           if(ThermalTime > 120)
             {
@@ -790,7 +838,7 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccread
   if(ActiveWayPoint >=0)
     {
       Calculated->NextAltitudeRequired = 
-        McCreadyAltitude(mccready,
+        GlidePolar::McCreadyAltitude(mccready,
                         Calculated->WaypointDistance,
                         Calculated->WaypointBearing, 
                         Calculated->WindSpeed, Calculated->WindBearing, 
@@ -1201,7 +1249,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
 
       // JMW TODO: use instantaneous mccready here again to calculate
       // dolphin speed to fly 
-      LegAltitude = McCreadyAltitude(mccready, LegToGo, LegBearing, 
+      LegAltitude = GlidePolar::McCreadyAltitude(mccready, LegToGo, 
+                                                 LegBearing, 
                                     Calculated->WindSpeed, 
                                     Calculated->WindBearing, 
                                     &(Calculated->BestCruiseTrack),
@@ -1267,7 +1316,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
                                WayPointList[Task[i].Index].Longditude); 
 
 
-          LegAltitude = McCreadyAltitude(mccready, LegDistance, LegBearing, 
+          LegAltitude = GlidePolar::McCreadyAltitude(mccready, 
+                                                     LegDistance, LegBearing, 
                                         Calculated->WindSpeed, Calculated->WindBearing, 0, 0,
                                         (i==FinalWayPoint), // ||() JMW TODO!!!!!!!!!
                                         &LegTimeToGo);
@@ -1304,15 +1354,15 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
     } else { 
     // no task selected, so work things out at current heading
     
-    McCreadyAltitude(mccready, 100.0, Basic->TrackBearing, 
-                    Calculated->WindSpeed, 
-                    Calculated->WindBearing, 
-                    &(Calculated->BestCruiseTrack),
-                    &(Calculated->VMcCready),
-                    0,
-                    // ||()
-                    // JMW TODO!!!!!!!!!!!
-                    0);
+    GlidePolar::McCreadyAltitude(mccready, 100.0, Basic->TrackBearing, 
+                                 Calculated->WindSpeed, 
+                                 Calculated->WindBearing, 
+                                 &(Calculated->BestCruiseTrack),
+                                 &(Calculated->VMcCready),
+                                 0,
+                                 // ||()
+                                 // JMW TODO!!!!!!!!!!!
+                                 0);
 
   }
 }
@@ -1441,19 +1491,23 @@ HWND hCMessage = NULL;
 HWND hAMessage = NULL;
 int ClearAirspaceWarningTimeout = 0;
 
-bool ClearAirspaceWarnings() {
+bool ClearAirspaceWarnings(bool ack) {
   if(hCMessage)
     {
       LastCi = -1;LastAi = -1;
       DestroyWindow(hCMessage);
-      ClearAirspaceWarningTimeout = AcknowledgementTime;
+      if (ack) {
+        ClearAirspaceWarningTimeout = AcknowledgementTime;
+      }
       hCMessage = NULL;
       return true;
     }
   if(hAMessage)
     {
-      ClearAirspaceWarningTimeout = AcknowledgementTime;
       DestroyWindow(hAMessage);
+      if (ack) {
+        ClearAirspaceWarningTimeout = AcknowledgementTime;
+      }
       hAMessage = NULL;
       return true;
     }
@@ -1763,10 +1817,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   // returns distance one would arrive at altitude in straight glide
 
   // first estimate max range at this altitude
-  double ialtitude = McCreadyAltitude(MCCREADY/LIFTMODIFY, 
-                                     1.0, bearing, 
-                                     Calculated->WindSpeed, 
-                                     Calculated->WindBearing, 0, 0, 1, 0);
+  double ialtitude = GlidePolar::McCreadyAltitude(MCCREADY/LIFTMODIFY, 
+                                                  1.0, bearing, 
+                                                  Calculated->WindSpeed, 
+                                                  Calculated->WindBearing, 
+                                                  0, 0, 1, 0);
   double maxrange = Basic->Altitude/ialtitude;
   double lat, lon;
   double latlast, lonlast;
@@ -1865,15 +1920,15 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
 		     WayPointList[i].Lattitude, 
 		     WayPointList[i].Longditude); 
   
-  AltReqd = McCreadyAltitude(0.0, 
-			    wDistance, 
-			    wBearing, 
-			    Calculated->WindSpeed, 
-			    Calculated->WindBearing, 
-			    0, 
-			    0,
-			    1,
-			    0)*(1/BUGS);
+  AltReqd = GlidePolar::McCreadyAltitude(0.0, 
+                                         wDistance, 
+                                         wBearing, 
+                                         Calculated->WindSpeed, 
+                                         Calculated->WindBearing, 
+                                         0, 
+                                         0,
+                                         1,
+                                         0)*(1/BUGS);
   
   return ((Basic->Altitude) - AltReqd - WayPointList[i].Altitude - SAFETYALTITUDEARRIVAL);
 }

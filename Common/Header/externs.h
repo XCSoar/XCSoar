@@ -11,6 +11,7 @@
 #include "Calculations.h"
 #include "Mapwindow.h"
 #include "Task.h"
+#include "Statistics.h"
 
 #if (EXPERIMENTAL > 0)
 #include "BlueSMS.h"
@@ -142,6 +143,9 @@ extern int FinalGlideTerrain;
 extern BOOL EnableCDICruise;
 extern BOOL EnableCDICircling;
 //
+
+// statistics
+extern Statistics flightstats;
 
 // used in settings dialog 
 extern BOOL COMPORTCHANGED;

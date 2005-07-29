@@ -124,7 +124,7 @@ typedef struct _SNAIL_POINT
 } SNAIL_POINT;
 
 
-
+void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
 
 class MapWindow {
  public:
@@ -196,7 +196,6 @@ class MapWindow {
     
   static void DrawSolidLine(HDC , POINT , POINT );
   static void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
-//  static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size);
   static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mode);
   static void ToggleFullScreenStart();
   static void RefreshMap();

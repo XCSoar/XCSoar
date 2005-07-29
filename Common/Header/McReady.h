@@ -5,15 +5,36 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-double McCreadyAltitude(double MCREADY, double Distance, 
-                        double Bearing, double WindSpeed, 
-                        double WindBearing, double *BestCruiseTrack, 
-                        double *VMcCready, int isFinalGlide, 
-                        double *timetogo);
 
-double SinkRate(double Vias);
-double SinkRate(double Vias, 
+class GlidePolar {
+ public:
+
+  static double McCreadyAltitude(double MCREADY, double Distance, 
+                                 double Bearing, double WindSpeed, 
+                                 double WindBearing, double *BestCruiseTrack, 
+                                 double *VMcCready, int isFinalGlide, 
+                                 double *timetogo);
+
+
+  static void SetBallast();
+
+  static double BallastFactor;
+  static double polar_a;
+  static double polar_b;
+  static double polar_c;
+  static int Vminsink;
+  static int Vbestld;
+  static double bestld;
+  static double minsink;
+  
+  static double sinkratecache[200];
+
+  static double SinkRateFast(double MC, int v);
+  static double SinkRate(double Vias);
+  static double SinkRate(double Vias, 
                 double loadfactor);
-void SetBallast();
+  static double SinkRate(double a,double b, double c, 
+                         double MC, double HW, double V);
+};
 
 #endif

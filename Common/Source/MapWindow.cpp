@@ -539,7 +539,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hpAircraft = (HPEN)CreatePen(PS_SOLID, 3, RGB(0xa0,0xa0,0xa0));
     hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, 3, RGB(0x00,0x00,0x00));
     #if (MONOCHROME_SCREEN > 0)
-    hpWind = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
+    hpWind = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
     #else
     hpWind = (HPEN)CreatePen(PS_SOLID, 2, RGB(255,0,0));
     #endif
@@ -570,9 +570,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hbFinalGlideBelow=(HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
     hbFinalGlideAbove=(HBRUSH)CreateSolidBrush(RGB(0x00,0xFF,0x00));
     #if (ALTERNATEWINDVECTOR == 1)
-      #if (MONOCHROME_SCREEN > 0)
-      hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
-      #else
+      #if (MONOCHROME_SCREEN > 0)
+      hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
+      #else
       hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
       #endif
     #endif
@@ -626,8 +626,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject((HBRUSH)hbFinalGlideAbove);
     #if (ALTERNATEWINDVECTOR == 1)
     DeleteObject((HBRUSH)hbWind);
-    #endif
-
+    #endif
+
+    DeleteObject(hBackgroundBrush);
     
     for(i=0;i<NUMAIRSPACEBRUSHES;i++)
     {
@@ -764,7 +765,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     case VK_RETURN: // Pan mode, cycles through modes
       if (!Debounce(wParam)) break;
       
-      if (ClearAirspaceWarnings()) {
+      if (ClearAirspaceWarnings(true)) {
         // airspace was active, enter was used to acknowledge
         break;
       }
@@ -1017,6 +1018,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 {
   bool drawmap;
   DWORD	fpsTime = ::GetTickCount();
+  HFONT hfOld;
   
   if (fpsTime0==0) {
     fpsTime0 = fpsTime;
@@ -1062,7 +1064,8 @@ void MapWindow::RenderMapWindow(  RECT rc)
     
     Temp = SelectObject(hdcDrawWindowBg, GetStockObject(BLACK_BRUSH));
     Temp = SelectObject(hdcDrawWindowBg, GetStockObject(BLACK_PEN));
-    
+    hfOld = (HFONT)SelectObject(hdcDrawWindowBg, MapWindowFont);
+  
     // ground first...
     
     LockTerrainDataGraphics();
@@ -1130,6 +1133,8 @@ void MapWindow::RenderMapWindow(  RECT rc)
   // overlays
 
   DrawCDI();
+
+  hfOld = (HFONT)SelectObject(hdcDrawWindow, MapWindowFont);
     
   DrawMapScale(hdcDrawWindow,rc);
   DrawMapScale2(hdcDrawWindow,rc, Orig_Aircraft);
@@ -1939,7 +1944,7 @@ extern int Performance;
   DrawSolidLine(hDC,Start,End);
 
   SelectObject(hDC, hpOld);
-*/
+*/
 
   SIZE tsize;
   GetTextExtentPoint(hDC, Scale, _tcslen(Scale), &tsize);
@@ -2826,7 +2831,8 @@ void MapWindow::CalculateWaypointReachable(void)
         WaypointDistance = Distance(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
 
         WaypointBearing =  Bearing(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
-        AltitudeRequired = McCreadyAltitude(0.0, // JMW was MCCREADY/LIFTMODIFY
+        AltitudeRequired = GlidePolar::McCreadyAltitude(0.0, 
+                                     // JMW was MCCREADY/LIFTMODIFY
           WaypointDistance,WaypointBearing, 
           DerivedDrawInfo.WindSpeed, 
           DerivedDrawInfo.WindBearing,0,0,1,0);
@@ -2860,7 +2866,7 @@ void MapWindow::DrawSolidLine(HDC hdc, POINT ptStart, POINT ptEnd)
 } 
 
 
-void MapWindow::DrawDashLine(HDC hdc, INT width, POINT ptStart, POINT ptEnd, COLORREF cr)
+void DrawDashLine(HDC hdc, INT width, POINT ptStart, POINT ptEnd, COLORREF cr)
 {
   int i;
   HPEN hpDash,hpOld;
