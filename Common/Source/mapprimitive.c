@@ -1,9 +1,8 @@
-//#include "map.h"
+
+#include "stdafx.h"
+
 #include "mapprimitive.h"
 #include "maperror.h"
-#include <string.h>
-
-#include <windows.h>
 
 typedef enum {CLIP_LEFT, CLIP_MIDDLE, CLIP_RIGHT} CLIP_STATE;
 

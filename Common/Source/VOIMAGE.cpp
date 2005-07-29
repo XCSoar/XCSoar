@@ -217,7 +217,7 @@ DWORD CALLBACK CVOImage::GetImageData(LPSTR szBuffer, DWORD dwBufferMax, LPARAM 
 	if ( (HANDLE)lParam == INVALID_HANDLE_VALUE )
 		return 0;
 
-	ReadFile( (HANDLE)lParam, szBuffer, dwBufferMax, &dwNumberOfBytesRead, NULL );
+	ReadFile( (HANDLE)lParam, szBuffer, dwBufferMax, &dwNumberOfBytesRead, (OVERLAPPED *)NULL);
 
 	// Return number of bytes read
 	return dwNumberOfBytesRead;

@@ -53,7 +53,7 @@ protected:
 	HRSRC m_hrsrc;
 };
 
-class CVOImage  
+class CVOImage
 {
 public:
 	HBITMAP Copy();

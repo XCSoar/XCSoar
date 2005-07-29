@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windmeasurementlist.h,v 1.2 2005/06/23 12:19:54 jwharington Exp $
+**   $Id: windmeasurementlist.h,v 1.3 2005/07/29 09:33:25 samgi Exp $
 **
 ***********************************************************************/
 
@@ -57,7 +57,7 @@ protected:
    * getLeastImportantItem is called to identify the item that should be
    * removed if the list is too full. Reimplemented from LimitedList.
    */
-  virtual uint getLeastImportantItem();
+  virtual unsigned int getLeastImportantItem(void);
 
  private:
   DERIVED_INFO *derivedInfo;

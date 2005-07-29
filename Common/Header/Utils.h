@@ -47,6 +47,7 @@ void ReadCompaqID(void);
 void ReadUUID(void);
 void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top, TCHAR *szMessageBuffer, TCHAR *TileBuffer );
 BOOL ReadString(HANDLE hFile, int Max, TCHAR *String);
+BOOL ReadStringX(FILE *fp, int Max, TCHAR *String);
 void InitSineTable(void);
 double fastcosine(double x);
 double fastsine(double x);
@@ -67,6 +68,8 @@ long lround(double i);
 WORD crcCalc(void *Buffer, size_t size);
 void ExtractDirectory(TCHAR *Dest, TCHAR *Source);
 double DoSunEphemeris(double lon, double lat);
+
+void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2));
 
 
 #endif

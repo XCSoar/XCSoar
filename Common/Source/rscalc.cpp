@@ -4,7 +4,7 @@
 // Jarmo Lammi 1999 - 2001
 // Last update July 21st, 2001
 
-#include <math.h>
+#include "stdafx.h"
 
 #define PI 3.1415926
 #define SUN_DIAMETER 0.53     // Sunradius degrees

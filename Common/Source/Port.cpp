@@ -23,7 +23,8 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   DCB PortDCB;
   TCHAR sTmp[127];
 
-  mbstowcs(sPortName, (char *)lpszPortName, strlen((char *)lpszPortName));
+  _tcscpy(sPortName, lpszPortName);
+
   // Open the serial port.
   hPort1 = CreateFile (lpszPortName, // Pointer to the name of the port
                       GENERIC_READ | GENERIC_WRITE,
@@ -122,7 +123,7 @@ void Port1Write (BYTE Byte)
                   1,                  // Number of bytes to write
                   &dwNumBytesWritten, // Pointer to the number of bytes 
                                       // written
-                  NULL))              // Must be NULL for Windows CE
+                  (OVERLAPPED *)NULL))              // Must be NULL for Windows CE
   {
     // WriteFile failed. Report error.
     dwError = GetLastError ();
@@ -175,7 +176,7 @@ DWORD Port1ReadThread (LPVOID lpvoid)
       {
         dwBytesTransferred = 0;
               // Read the data from the serial port.
-        if (ReadFile (hPort1, inbuf, 1024, &dwBytesTransferred, 0)) {
+        if (ReadFile (hPort1, inbuf, 1024, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
 
 	        for (unsigned int j=0; j<dwBytesTransferred; j++) {
 	          ProcessChar1 (inbuf[j]);
@@ -302,7 +303,7 @@ int Port1GetChar(void){
 
   if (hPort1 == INVALID_HANDLE_VALUE || !Port1CloseThread) return(-1);
   
-  if (ReadFile(hPort1, inbuf, 1, &dwBytesTransferred, 0)) {
+  if (ReadFile(hPort1, inbuf, 1, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
 
     if (dwBytesTransferred == 1)
       return(inbuf[0]);
@@ -384,7 +385,7 @@ int Port1Read(void *Buffer, size_t Size){
 
   if (hPort1 == INVALID_HANDLE_VALUE) return(-1);
 
-  if (ReadFile (hPort1, Buffer, Size, &dwBytesTransferred, 0)){
+  if (ReadFile (hPort1, Buffer, Size, &dwBytesTransferred, (OVERLAPPED *)NULL)){
 
     return(dwBytesTransferred);
 

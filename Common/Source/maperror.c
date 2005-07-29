@@ -1,14 +1,10 @@
-/* $Id: maperror.c,v 1.2 2005/06/23 12:22:08 jwharington Exp $ */
+/* $Id: maperror.c,v 1.3 2005/07/29 09:33:28 samgi Exp $ */
 
-//#include "map.h"
+#include "stdafx.h"
+
 #include "maperror.h"
 #include "mapprimitive.h"
 
-//#include "gdfonts.h"
-
-//#include <time.h>
-#include <stdarg.h>
-#include <stdlib.h>
 
 #ifdef NEED_NONBLOCKING_STDERR
 #include <fcntl.h>

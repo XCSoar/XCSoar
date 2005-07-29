@@ -11,9 +11,11 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.7 2005/07/10 11:30:42 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.8 2005/07/29 09:33:29 samgi Exp $
 **
 ***********************************************************************/
+
+#include "stdafx.h"
 
 #include "Calculations.h"
 #include "windanalyser.h"

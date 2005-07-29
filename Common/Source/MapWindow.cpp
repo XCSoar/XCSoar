@@ -16,6 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 #include "stdafx.h"
 
 #include "Mapwindow.h"
@@ -113,6 +114,10 @@ HBRUSH MapWindow::hbThermalBand;
 HBRUSH MapWindow::hbBestCruiseTrack;
 HBRUSH MapWindow::hbFinalGlideBelow;
 HBRUSH MapWindow::hbFinalGlideAbove;
+#if (ALTERNATEWINDVECTOR == 1)
+HBRUSH MapWindow::hbWind;
+#endif
+
 
 HPEN MapWindow::hpAircraft;
 HPEN MapWindow::hpAircraftBorder;
@@ -152,6 +157,8 @@ extern HWND hWndCDIWindow;
 extern int iround(double i);
 extern void ShowMenu();
 
+extern HFONT  MapWindowFont;
+extern HFONT  MapWindowBoldFont;
 
 void FlyDirectTo(int index) {
   ActiveWayPoint = -1; AATEnabled = FALSE;
@@ -345,26 +352,84 @@ void ReplaceWaypoint(int index) {
 ///////////////////
 
 
-void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size) {
+void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mode) {
+
   SIZE tsize;
   RECT brect;
+  HFONT oldFont;
+
+  // mode are flags
+  // bit 0 == fill background add border
+  // bit 1 == fill background
+  // bit 2 == right alligned
+  // bit 3 == landable TP label
+  // bit 4 == center alligned
+  
   if (size==0) {
     size = _tcslen(Value);
   }
   
   HBRUSH hbOld;
   hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+
+  if (Mode & 8)
+    x += 5;  // make space for the green circle
+
+  if (Mode & 1){
+    oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
+  } else {
+    oldFont = (HFONT)SelectObject(hDC, MapWindowFont);
+  }
   
   GetTextExtentPoint(hDC, Value, size, &tsize);
-  brect.left = x-1;
-  brect.right = brect.left+tsize.cx+2;
-  brect.top = y-1;
-  brect.bottom = brect.top+tsize.cy+2;
+
+  if (Mode & 4){
+    x -= tsize.cx;
+  }
   
-  ExtTextOut(hDC, 
-    x, y, 
-    ETO_OPAQUE, &brect, Value, size, NULL);
+  if (Mode & 16){
+    x -= tsize.cx/2;
+    y -= tsize.cy/2;
+  }
+
+  if (Mode & 1){
+
+    brect.left = x-1;
+    brect.right = brect.left+tsize.cx+2;
+    brect.top = y+((tsize.cy+4) / 8);
+    brect.bottom = brect.top+tsize.cy-((tsize.cy+4) / 8);
+
+    if (Mode & 4)
+      x -= 3;
+
+    HPEN oldPen = (HPEN)SelectObject(hDC, hpMapScale);
+    RoundRect(hDC, brect.left-1, brect.top-1, brect.right+1, brect.bottom+1, 8, 8);
+    SelectObject(hDC, oldPen);
+
+    ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+
+
+  } else if (Mode & 2){
+
+    brect.left = x-1;
+    brect.right = brect.left+tsize.cx+1;  
+    brect.top = y+((tsize.cy+4) / 8);
+    brect.bottom = brect.top+tsize.cy-((tsize.cy+4) / 8);
+
+    if (Mode & 4)
+      x -= 2;
+
+    COLORREF oldColor = SetBkColor(hDC, RGB(0xff, 0xff, 0xff));
+    ExtTextOut(hDC, x, y, ETO_OPAQUE, &brect, Value, size, NULL);
+    SetBkColor(hDC, oldColor);
+
+  } else {
+    
+    ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+
+  }
   
+  SelectObject(hDC, oldFont);
   SelectObject(hDC, hbOld);
   
 }
@@ -473,11 +538,17 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     
     hpAircraft = (HPEN)CreatePen(PS_SOLID, 3, RGB(0xa0,0xa0,0xa0));
     hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, 3, RGB(0x00,0x00,0x00));
+    #if (MONOCHROME_SCREEN > 0)
+    hpWind = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
+    #else
     hpWind = (HPEN)CreatePen(PS_SOLID, 2, RGB(255,0,0));
+    #endif
+
     hpWindThick = (HPEN)CreatePen(PS_SOLID, 4, RGB(255,220,220));
+
     hpBearing = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
     hpBestCruiseTrack = (HPEN)CreatePen(PS_SOLID, 1, RGB(0,0,255));
-    #ifdef MONOCHROME_SCREEN
+    #if (MONOCHROME_SCREEN > 0)
     hpCompass = (HPEN)CreatePen(PS_SOLID, 1, RGB(0x00,0x00,0x00));
     #else
     hpCompass = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xcf,0xcf,0xFF));
@@ -489,7 +560,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hpMapScale = (HPEN)CreatePen(PS_SOLID, 1, RGB(0,0,0));
     hpTerrainLine = (HPEN)CreatePen(PS_DASH, 1, RGB(0x30,0x30,0x30));
     
-    #ifdef MONOCHROME_SCREEN
+    #if (MONOCHROME_SCREEN > 0)
     hbCompass=(HBRUSH)CreateSolidBrush(RGB(0xff,0xff,0xff));
     #else
     hbCompass=(HBRUSH)CreateSolidBrush(RGB(0x40,0x40,0xFF));
@@ -498,9 +569,18 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hbBestCruiseTrack=(HBRUSH)CreateSolidBrush(RGB(0x0,0x0,0xFF));
     hbFinalGlideBelow=(HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
     hbFinalGlideAbove=(HBRUSH)CreateSolidBrush(RGB(0x00,0xFF,0x00));
+    #if (ALTERNATEWINDVECTOR == 1)
+      #if (MONOCHROME_SCREEN > 0)
+      hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
+      #else
+      hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
+      #endif
+    #endif
+
 
     //JMWFOO
-    
+
+
     break;
     
   case WM_DESTROY:
@@ -544,6 +624,10 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject((HBRUSH)hbBestCruiseTrack);
     DeleteObject((HBRUSH)hbFinalGlideBelow);
     DeleteObject((HBRUSH)hbFinalGlideAbove);
+    #if (ALTERNATEWINDVECTOR == 1)
+    DeleteObject((HBRUSH)hbWind);
+    #endif
+
     
     for(i=0;i<NUMAIRSPACEBRUSHES;i++)
     {
@@ -611,7 +695,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
         PopupWaypointDetails();
                 
         SetFocus(hWnd);
-        SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+        SetWindowPos(hWndMainWindow,HWND_TOP,0,0,0,0,SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
 
         break;
       }
@@ -1010,10 +1094,17 @@ void MapWindow::RenderMapWindow(  RECT rc)
     DrawWaypoints(hdcDrawWindowBg,rc);
 
     // draw wind vector at aircraft
+    #if (ALTERNATEWINDVECTOR == 0)
     if (!DerivedDrawInfo.Circling && (!EnablePan)) {
       DrawWindAtAircraft(hdcDrawWindowBg, Orig, rc);
-    }    
-    
+    }
+    #endif
+
+    #if (ALTERNATEWINDVECTOR == 1)
+    DrawWindAtAircraft2(hdcDrawWindowBg, Orig, rc);
+    #endif
+
+
     if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
       DrawGlideThroughTerrain(hdcDrawWindowBg, rc);
     }
@@ -1045,9 +1136,11 @@ void MapWindow::RenderMapWindow(  RECT rc)
   
   DrawCompass(hdcDrawWindow, rc);
   
+  #if (ALTERNATEWINDVECTOR == 0)
   if (DerivedDrawInfo.Circling || EnablePan) {
     DrawWind(hdcDrawWindow, Orig, rc); // JMW shouldn't need Orig here
   }
+  #endif
 
   DrawFlightMode(hdcDrawWindow, rc);
   
@@ -1235,7 +1328,7 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
     BitBlt(hDC,rc.left+2,rc.bottom-20-2,20,20,
            hDCTemp,0,0,SRCAND);
 
-    TextInBox(hDC, gpswarningtext1, rc.left+24, rc.bottom-19, 0);
+    TextInBox(hDC, gpswarningtext1, rc.left+24, rc.bottom-19, 0, 2);
 
   } else
     if (DrawInfo.NAVWarning) {
@@ -1243,7 +1336,7 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
       BitBlt(hDC,rc.left+2,rc.bottom-20-2,20,20,
              hDCTemp,0,0,SRCAND);
 
-      TextInBox(hDC, gpswarningtext2, rc.left+24, rc.bottom-19, 0);
+      TextInBox(hDC, gpswarningtext2, rc.left+24, rc.bottom-19, 0, 2);
             
     }
 
@@ -1293,21 +1386,36 @@ bool WaypointInTask(int ind) {
 void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 {
   unsigned int i;
-  TCHAR Buffer[10];
+  TCHAR Buffer[32];
+  TCHAR Buffer2[32];
+  TCHAR sAltUnit[4];
+  int DisplayMode;
   
+
+  if (ALTITUDEMODIFY == TOFEET)
+    _tcscpy(sAltUnit, TEXT("ft"));
+  else if (ALTITUDEMODIFY == TOMETER)
+    _tcscpy(sAltUnit, TEXT("m"));
+  else
+    _tcscpy(sAltUnit, TEXT("?"));
+
   for(i=0;i<NumberOfWayPoints;i++)
   {
     if(WayPointList[i].Visible )
     {
+
+      DisplayMode = 0;
       if(MapScale > 20)
       {
         SelectObject(hDCTemp,hSmall);
       }
       else if( ((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
       {
-        if(WayPointList[i].Reachable)
+        if(WayPointList[i].Reachable){
+
+          DisplayMode = 1|8;
           SelectObject(hDCTemp,hReachable);
-        else
+        } else
           SelectObject(hDCTemp,hLandable);
       }
       else
@@ -1329,8 +1437,8 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         
         if (WaypointInTask(i)) {
           
-          TextInBox(hdc, WayPointList[i].Name, WayPointList[i].Screen.x+5, 
-            WayPointList[i].Screen.y, 0);
+          TextInBox(hdc, WayPointList[i].Name, WayPointList[i].Screen.x+5,
+            WayPointList[i].Screen.y, 0, 0);
         }
         
       } else
@@ -1339,28 +1447,55 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         {	
           switch(DisplayTextType)
           {
+
+
+
           case DISPLAYNAME:
-            
-            TextInBox(hdc, WayPointList[i].Name, WayPointList[i].Screen.x+5, 
-              WayPointList[i].Screen.y, 0);
-            
+
+
+            if (DisplayMode)
+              wsprintf(Buffer, TEXT("%s:%d%s"),WayPointList[i].Name, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
+            else
+              wsprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
+
+            TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
+              WayPointList[i].Screen.y, 0, DisplayMode);
+
             break;
           case DISPLAYNUMBER:
-            wsprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
+
+            if (DisplayMode)
+              wsprintf(Buffer, TEXT("%d:%d%s"),WayPointList[i].Number, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
+            else
+              wsprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
             
-            TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5, 
-              WayPointList[i].Screen.y, 0);
+            TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
+              WayPointList[i].Screen.y, 0, DisplayMode);
             
             break;
           case DISPLAYFIRSTFIVE:
             
-            TextInBox(hdc, WayPointList[i].Name, WayPointList[i].Screen.x+5, 
-              WayPointList[i].Screen.y, 5);
+            _tcsncpy(Buffer2, WayPointList[i].Name, 5);
+            Buffer2[5] = '\0';
+            if (DisplayMode)
+              wsprintf(Buffer, TEXT("%s:%d%s"),Buffer2, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
+            else
+              wsprintf(Buffer, TEXT("%s"),Buffer2);
+
+            TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
+              WayPointList[i].Screen.y, 0, DisplayMode);
             
             break;
           case DISPLAYFIRSTTHREE:
-            TextInBox(hdc, WayPointList[i].Name, WayPointList[i].Screen.x+5, 
-              WayPointList[i].Screen.y, 3);
+            _tcsncpy(Buffer2, WayPointList[i].Name, 3);
+            Buffer2[3] = '\0';
+            if (DisplayMode)
+              wsprintf(Buffer, TEXT("%s:%d%s"),Buffer2, (int)WayPointList[i].AltArivalAGL, sAltUnit);
+            else
+              wsprintf(Buffer, TEXT("%s"),Buffer2);
+
+            TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
+              WayPointList[i].Screen.y, 0, DisplayMode);
             break;
           }
         }
@@ -1557,6 +1692,61 @@ void MapWindow::DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
   SelectObject(hdc, hpOld);
 }
 
+#if (ALTERNATEWINDVECTOR > 0)
+void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
+  double dX,dY;
+  int i;
+  POINT Start;
+  HPEN hpOld;
+  HBRUSH hbOld; 
+  TCHAR sTmp[12];
+  static SIZE tsize = {0,0};
+  
+  if (DerivedDrawInfo.WindSpeed<1) {
+    return; // JMW don't bother drawing it if not significant
+  }
+  
+  if (tsize.cx == 0){
+
+    HFONT oldFont = (HFONT)SelectObject(hdc, MapWindowBoldFont);
+    GetTextExtentPoint(hdc, TEXT("99"), 2, &tsize);
+    SelectObject(hdc, oldFont);
+    tsize.cx = tsize.cx/2;
+  }
+
+  hpOld = (HPEN)SelectObject(hdc, hpWind);
+  hbOld = (HBRUSH)SelectObject(hdc, hbWind);
+  
+  int wmag = iround(4.0*DerivedDrawInfo.WindSpeed);
+  
+  Start.y = Orig.y;
+  Start.x = Orig.x;
+
+  POINT Arrow[6] = { {0,-20}, {-6,-26}, {0,-20}, {6,-26}, {0,-20}, {7 + tsize.cx, -22}};
+
+  for (i=1;i<4;i++)
+    Arrow[i].y -= wmag;
+
+  for(i=0;i<6;i++)
+  {
+    dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
+    rotate(&dX, &dY, -1*(DisplayAngle - DerivedDrawInfo.WindBearing));
+    Arrow[i].x = iround(dX+Start.x);  Arrow[i].y = iround(dY+Start.y);
+    
+  }
+
+
+  _itot(iround(DerivedDrawInfo.WindSpeed * TOKPH), sTmp, 10);
+
+  //  ExtTextOut(hdc, Arrow[5].x - StringSize.cx/2 , Arrow[5].y-StringSize.cy/2 , 0, NULL, sTmp, _tcslen(sTmp), NULL);  
+  TextInBox(hdc, sTmp, Arrow[5].x , Arrow[5].y, 0, 2 | 16);
+
+  Polygon(hdc,Arrow,5);
+
+  SelectObject(hdc, hbOld);
+  SelectObject(hdc, hpOld);
+}
+#endif
 
 void MapWindow::DrawWind(HDC hdc, POINT Orig, RECT rc)
 {
@@ -1703,23 +1893,54 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc)
   
   if(MapScale <0.1)
   {
-    wsprintf(Scale,TEXT("%1.2f"),MapScale);
-  }
+    _stprintf(Scale,TEXT("%1.2f"),MapScale);
+  }                        
   else if(MapScale <3)
   {
-    wsprintf(Scale,TEXT("%1.1f"),MapScale);
+    _stprintf(Scale,TEXT("%1.1f"),MapScale);
   }
   else
   {
-    wsprintf(Scale,TEXT("%1.0f"),MapScale);
+    _stprintf(Scale,TEXT("%1.0f"),MapScale);
   }
+
+  if (DISTANCEMODIFY == TOMILES)
+    _tcscat(Scale,TEXT("sm"));
+  else if (DISTANCEMODIFY == TONAUTICALMILES)
+    _tcscat(Scale,TEXT("nm"));
+  else if (DISTANCEMODIFY == TOKILOMETER)
+    _tcscat(Scale,TEXT("km"));
+
+
   if (AutoZoom) {
-    wcscat(Scale,TEXT(" A"));
+    _tcscat(Scale,TEXT(" A"));
   }
   if (EnablePan) {
-    wcscat(Scale,TEXT(" PAN"));
+    _tcscat(Scale,TEXT(" PAN"));
   }
-  
+
+/*
+extern int CacheEfficiency;
+extern int Performance;
+
+  wsprintf(Scale,TEXT("%d%% %dms"), CacheEfficiency, Performance);
+  TextInBox(hDC, Scale, rc.right-5, rc.bottom-60-4, 0, 2+4);
+
+  hpOld = (HPEN)SelectObject(hDC, hpMapScale);
+  Start.x = rc.right-6; End.x = rc.right-6;
+  Start.y = rc.bottom-30; End.y = Start.y - 30;
+  DrawSolidLine(hDC,Start,End);
+
+  Start.x = rc.right-11; End.x = rc.right-6;
+  End.y = Start.y;
+  DrawSolidLine(hDC,Start,End);
+
+  Start.y = Start.y - 30; End.y = Start.y;
+  DrawSolidLine(hDC,Start,End);
+
+  SelectObject(hDC, hpOld);
+*/
+
   SIZE tsize;
   GetTextExtentPoint(hDC, Scale, _tcslen(Scale), &tsize);
 
@@ -1727,16 +1948,16 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc)
   COLORREF blackcolor = RGB(0x20,0x20, 0x20);
   COLORREF origcolor = SetTextColor(hDC, whitecolor);
 
-  SetTextColor(hDC, blackcolor);
-
+  SetTextColor(hDC, whitecolor);
   ExtTextOut(hDC, rc.right-11-tsize.cx, End.y+8, 0, NULL, Scale, _tcslen(Scale), NULL);
 
-  SetTextColor(hDC, whitecolor);
+  SetTextColor(hDC, blackcolor);
   ExtTextOut(hDC, rc.right-10-tsize.cx, End.y+7, 0, NULL, Scale, _tcslen(Scale), NULL);
-  
+
   // restore original color
   SetTextColor(hDC, origcolor);
-  
+
+
   // JMW for debugging
   /*
   wsprintf(Scale,TEXT("%d"), terraincacheefficiency);
@@ -2222,7 +2443,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
   
   Polygon(hDC,GlideBar,5);
   
-  wsprintf(Value,TEXT("%1.0f "),ALTITUDEMODIFY*DerivedDrawInfo.TaskAltitudeDifference);
+  _stprintf(Value,TEXT("%1.0f "), ALTITUDEMODIFY*DerivedDrawInfo.TaskAltitudeDifference);
   
   if (Offset>=0) {
     Offset = (GlideBar[2].y+Offset)+5;
@@ -2230,7 +2451,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     Offset = (GlideBar[2].y+Offset)-15;
   }
   
-  TextInBox(hDC, Value, GlideBar[0].x, (int)Offset, 0);
+  TextInBox(hDC, Value, GlideBar[0].x, (int)Offset, 0, 2);
   
   SelectObject(hDC, hbOld);
   SelectObject(hDC, hpOld);
@@ -2398,7 +2619,7 @@ void MapWindow::DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base
   ShowStatusMessage(szMessageBuffer, 7000, 25);
 
 //  MessageBox(hWndMapWindow,szMessageBuffer ,szTitleBuffer,MB_OK|MB_ICONWARNING);
-//  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+//  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,0,0,SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
 }
 
 
@@ -2603,6 +2824,7 @@ void MapWindow::CalculateWaypointReachable(void)
       if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
       {
         WaypointDistance = Distance(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
+
         WaypointBearing =  Bearing(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
         AltitudeRequired = McCreadyAltitude(0.0, // JMW was MCCREADY/LIFTMODIFY
           WaypointDistance,WaypointBearing, 
@@ -2612,10 +2834,13 @@ void MapWindow::CalculateWaypointReachable(void)
         AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL + WayPointList[i].Altitude ;
         AltitudeRequired = DrawInfo.Altitude - AltitudeRequired;				
         
-        if(AltitudeRequired >=0)
+        WayPointList[i].AltArivalAGL = AltitudeRequired;
+
+        if(AltitudeRequired >=0){
           WayPointList[i].Reachable = TRUE;
-        else
+        } else {
           WayPointList[i].Reachable = FALSE;
+        }
       }				
     }
   }

@@ -16,21 +16,17 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: Parser.cpp,v 1.12 2005/07/25 18:46:57 jwharington Exp $
+  $Id: Parser.cpp,v 1.13 2005/07/29 09:33:28 samgi Exp $
 */
+
 #include "stdafx.h"
-#include "parser.h"
+
 #include "externs.h"
 #include "utils.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <windows.h>
-
-
-#include <tchar.h>
 #include "externs.h"
 #include "VarioSound.h"
+
+#include "parser.h"
 
 static BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO);
@@ -567,6 +563,8 @@ BOOL NMEAChecksum(TCHAR *String)
     return FALSE;
         
   c1 = pEnd[1], c2 = pEnd[2];
+
+  iswdigit('0');
 
   if(_istdigit(c1))
     v1 = c1 - '0';

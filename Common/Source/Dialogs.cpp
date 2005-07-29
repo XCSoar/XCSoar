@@ -16,10 +16,15 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.41 2005/07/25 18:46:57 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.42 2005/07/29 09:33:26 samgi Exp $
 
 */
 #include "stdafx.h"
+
+#include <commdlg.h>
+#include <commctrl.h>
+#include <Aygshell.h>
+
 #include "compatibility.h"
 
 #include "dialogs.h"
@@ -31,15 +36,8 @@
 #include "AirfieldDetails.h"
 #include "VarioSound.h"
 #include "device.h"
+#include "units.h"
 
-#include <commdlg.h>
-#include <commctrl.h>
-#include <Commdlg.h>
-#include <Aygshell.h>
-
-#include <windows.h>
-
-#include <tchar.h>
 
 
 #define USE_ARH_COLOUR_SELECTOR 1
@@ -604,7 +602,6 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
       VarioSound_SetSoundVolume(SoundVolume);
       VarioSound_SetVdead(SoundDeadband);
       return TRUE;
-
     case WM_COMMAND:
       switch (LOWORD(wParam))
         {
@@ -716,7 +713,7 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           SendDlgItemMessage(hDlg,IDC_WAYPOINTNONE,BM_SETCHECK,BST_CHECKED,0);
           break;
 
-        case 4 : 
+        case 4 :
           SendDlgItemMessage(hDlg,IDC_WAYPOINTFIRSTTHREE,BM_SETCHECK,BST_CHECKED,0);
           break;
 
@@ -827,7 +824,7 @@ LRESULT CALLBACK MapDisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARA
         case TRACKUP : 
           SendDlgItemMessage(hDlg,IDC_TRACKUP,BM_SETCHECK,BST_CHECKED,0);
           break;
-                        
+
         case NORTHUP : 
           SendDlgItemMessage(hDlg,IDC_NORTHUP,BM_SETCHECK,BST_CHECKED,0);
           break;
@@ -866,7 +863,7 @@ LRESULT CALLBACK MapDisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARA
           SetToRegistry(szRegistryDisplayUpValue,NORTHCIRCLE);
           DisplayOrientation = NORTHCIRCLE;
           return TRUE;
-                                                                
+
         case IDC_TRACKUP:
           SetToRegistry(szRegistryDisplayUpValue,TRACKUP);
           DisplayOrientation = TRACKUP;
@@ -1293,7 +1290,7 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
     {
       for(i=0;i<MAXTASKPOINTS;i++)
         {
-          if(!ReadFile(hFile,&Temp,sizeof(TASK_POINT),&dwBytesRead,NULL))
+          if(!ReadFile(hFile,&Temp,sizeof(TASK_POINT),&dwBytesRead, (OVERLAPPED *)NULL))
             {
               break;
             }
@@ -1329,7 +1326,7 @@ void SaveTask(TCHAR *szFileName)
         
   if(hFile!=INVALID_HANDLE_VALUE )
     {
-      WriteFile(hFile,&Task[0],sizeof(TASK_POINT)*MAXTASKPOINTS,&dwBytesWritten,NULL);
+      WriteFile(hFile,&Task[0],sizeof(TASK_POINT)*MAXTASKPOINTS,&dwBytesWritten,(OVERLAPPED *)NULL);
     }
   CloseHandle(hFile);
 }
@@ -1605,8 +1602,8 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
               if(HIWORD(wParam) == EN_UPDATE)
                 {
                   AIRSPACEFILECHANGED = TRUE;
-                  GetDlgItemText(hDlg,IDC_AIRSPACEFILE,szFile,MAX_PATH);
-                  SetRegistryString(szRegistryAirspaceFile,szFile);
+                  GetDlgItemText(hDlg,IDC_AIRSPACEFILE, szAirspaceFile,MAX_PATH);
+                  SetRegistryString(szRegistryAirspaceFile, szAirspaceFile);
                 }
             }
           break;
@@ -1617,8 +1614,8 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
               if(HIWORD(wParam) == EN_UPDATE)
                 {
                   AIRSPACEFILECHANGED = TRUE;
-                  GetDlgItemText(hDlg,IDC_ADDITIONALAIRSPACEFILE,szFile,MAX_PATH);
-                  SetRegistryString(szRegistryAdditionalAirspaceFile,szFile);
+                  GetDlgItemText(hDlg,IDC_ADDITIONALAIRSPACEFILE,szAdditionalAirspaceFile,MAX_PATH);
+                  SetRegistryString(szRegistryAdditionalAirspaceFile,szAdditionalAirspaceFile);
                 }
             }
           break;
@@ -1762,7 +1759,30 @@ LRESULT CALLBACK SetMapFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
                 }
             }
           break;
-                                
+/*                                
+        case IDC_BROWSEAIRSPACE:
+          memset( &(ofnAirspace), 0, sizeof(ofnAirspace));
+          ofnAirspace.lStructSize       = sizeof(ofnAirspace);
+          ofnAirspace.hwndOwner = hDlg;
+          ofnAirspace.lpstrFile = szAirspaceFile;
+          ofnAirspace.nMaxFile = MAX_PATH;
+          ofnAirspace.lpstrFilter = TEXT("Airspace Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");      
+          ofnAirspace.lpstrTitle = TEXT("Open File");
+          ofnAirspace.Flags = OFN_EXPLORER;
+
+//          lpstrInitialDir      FileExists
+// FileExists(const System::AnsiString FileName);
+          int res;
+
+          if(GetOpenFileName(&ofnAirspace))
+            {
+              SetDlgItemText(hDlg,IDC_AIRSPACEFILE,szAirspaceFile);
+            }
+          else {
+            SetDlgItemText(hDlg,IDC_AIRSPACEFILE,TEXT(""));
+          }
+          break;
+*/
         case IDC_BROWSETERRAIN:
           memset( &(ofnTerrain), 0, sizeof(ofnTerrain));
           ofnTerrain.lStructSize        = sizeof(ofnTerrain);
@@ -2450,7 +2470,7 @@ LRESULT CALLBACK SaveProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
           profileofn.lStructSize        = sizeof(profileofn);
           profileofn.hwndOwner = hDlg;
           profileofn.lpstrFile = szFile;
-          profileofn.nMaxFile = MAX_PATH;       
+          profileofn.nMaxFile = MAX_PATH;
           profileofn.lpstrFilter = TEXT("Profiles (*.prf)\0*.prf\0");   
           profileofn.lpstrTitle = TEXT("Save Profile as..");
           profileofn.Flags = OFN_EXPLORER;
@@ -2674,7 +2694,7 @@ LRESULT CALLBACK AATStart(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       return TRUE; 
 
     case WM_COMMAND:
-      if (LOWORD(wParam) == IDC_ENABLE) 
+      if (LOWORD(wParam) == IDC_ENABLE)
         {
           AATEnabled = TRUE;
         }
@@ -2711,7 +2731,7 @@ LRESULT CALLBACK AATTurn(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         SendDlgItemMessage(hDlg,IDC_CIRCLE,BM_SETCHECK,BST_CHECKED,0);
       else
         SendDlgItemMessage(hDlg,IDC_SECTOR,BM_SETCHECK,BST_CHECKED,0);
-                        
+
       SetDlgItemInt(hDlg,IDC_CIRCLERADIUS,(int)Task[Index].AATCircleRadius,TRUE);
       SetDlgItemInt(hDlg,IDC_SECTORRADIUS,(int)Task[Index].AATSectorRadius ,TRUE);
       SetDlgItemInt(hDlg,IDC_STARTRADIAL, (int)Task[Index].AATStartRadial  ,TRUE);
@@ -2749,7 +2769,6 @@ LRESULT CALLBACK AATTurn(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 
-//////////////////
 extern void DrawJPG(HDC hdc, RECT rc);
 #include "VOIMAGE.h"
 
@@ -2758,11 +2777,12 @@ extern bool MenuActive;
 
 LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
+
   TCHAR Temp[2048];
   static CVOImage jpgimage1;
   static CVOImage jpgimage2;
   static HDC hdcScreen;
-  TCHAR path_modis[100]; 
+  TCHAR path_modis[100];
   TCHAR path_fname1[] = TEXT("\\Program Files\\omap\\wms.cgi.jpeg");
   TCHAR path_fname2[] = TEXT("\\Program Files\\omap\\ersa-benalla.jpg");
   static int page = 0;
@@ -2776,28 +2796,31 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
   double sunsettime;
   int sunsethours;
   int sunsetmins;
+  TCHAR sLongditude[16];
+  TCHAR sLattitude[16];
+  int TabStops[] = {45,0};
 
   // Modis images are now assumed to be colocated with waypoint file
-      
+
   switch (message)
     {
     case WM_INITDIALOG:
-                 
+
       hdcScreen = GetDC(hDlg);
 
       GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
       ExtractDirectory(Directory, szWaypointFile);
 
-      wsprintf(path_modis,TEXT("%s\\modis-%03d.jpg"),
+      _stprintf(path_modis,TEXT("%s\\modis-%03d.jpg"),
                Directory,
 	       SelectedWaypoint+1);
-      
+
       hasimage1 = jpgimage1.Load (hdcScreen ,path_modis );
-      hasimage2 = jpgimage2.Load (hdcScreen ,path_fname2 );   
+      hasimage2 = jpgimage2.Load (hdcScreen ,path_fname2 );
       page = 0;
 
-      wsprintf(Temp,TEXT("%s\n%s"),
-               WayPointList[SelectedWaypoint].Name, 
+      _stprintf(Temp,TEXT("%s\n%s"),
+               WayPointList[SelectedWaypoint].Name,
                WayPointList[SelectedWaypoint].Comment);
 
       SetDlgItemText(hDlg,IDC_WAYPOINTDETAILSTEXT, Temp);
@@ -2808,24 +2831,30 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                                   WayPointList[SelectedWaypoint].Lattitude);
       sunsethours = (int)sunsettime;
       sunsetmins = (int)((sunsettime-sunsethours)*60);
-     
-      wsprintf(Temp,TEXT("Longitude %-3.4f\r\nLatitude %-3.4f\r\nElevation %5.0f\r\nSunset %02d:%02d"),
-               WayPointList[SelectedWaypoint].Longditude,
-               WayPointList[SelectedWaypoint].Lattitude,
+
+      Units::LongditudeToString(WayPointList[SelectedWaypoint].Longditude, sLongditude, sizeof(sLongditude)-1);
+      Units::LattitudeToString(WayPointList[SelectedWaypoint].Lattitude, sLattitude, sizeof(sLattitude)-1);
+
+      _stprintf(Temp,TEXT("Longitude\t%s\r\nLatitude\t%s\r\nElevation\t%.0f\r\nSunset\t%02d:%02d"),
+               sLongditude,
+               sLattitude,
                WayPointList[SelectedWaypoint].Altitude*ALTITUDEMODIFY,
                sunsethours,
                sunsetmins
                
                );
       
-      wcscat(Temp,TEXT("\r\n"));
+      _tcscat(Temp,TEXT("\r\n"));
       
       if (WayPointList[SelectedWaypoint].Details) {
-        wcscat(Temp,WayPointList[SelectedWaypoint].Details);
+        _tcscat(Temp,WayPointList[SelectedWaypoint].Details);
       }
       
+      // set tab stops
+      SendMessage(GetDlgItem(hDlg,IDC_WDTEXT), EM_SETTABSTOPS, (WPARAM)(sizeof(TabStops)/sizeof(int)-1), (LPARAM)TabStops);
+
       SetDlgItemText(hDlg,IDC_WDTEXT, Temp);
-      
+
       return TRUE;
 
     case WM_COMMAND:
@@ -3058,23 +3087,39 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
   // Grab hold of window specific data
   data = (CStatMsgUserData*) GetWindowLong(hwnd, GWL_USERDATA);
 
+/*
   if (data==NULL) {
     // Something wrong here!
-    DestroyWindow(hwnd);
+    DestroyWindow(hwnd);  // ups
     return 1;
   }
+*/
 
   switch (message) {
   case WM_LBUTTONDOWN:
+
+    if (data==NULL) {
+      // Something wrong here!
+      DestroyWindow(hwnd);  // ups
+      return 1;
+    }
+
     // Intercept mouse messages while stylus is being dragged
     // This is necessary to simulate a WM_LBUTTONCLK event
     SetCapture(hwnd);
     data->bCapturedMouse = TRUE;
-    return 0;                  
+    return 0;
   case WM_LBUTTONUP :
+
+    if (data==NULL) {
+      // Something wrong here!
+      DestroyWindow(hwnd);  // ups
+      return 1;
+    }
+
     //if (data->bCapturedMouse) ReleaseCapture();
     ReleaseCapture();
-    
+
     if (!data->bCapturedMouse) return 0;
 
     data->bCapturedMouse = FALSE;
@@ -3083,28 +3128,37 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
     pt.x = LOWORD(lParam);
     pt.y = HIWORD(lParam);
     GetClientRect(hwnd, &rc);
-    
+
     if (!PtInRect(&rc, pt)) return 0;
 
     // Fall through to Timer case
-  case WM_TIMER :              
-  
-    
+  case WM_TIMER :
+
     MapWindow::RequestFastRefresh = true; // trigger screen refresh
 
     DestroyWindow(hwnd);
-  
+
     return 0;
 
   case WM_DESTROY :
     // Clean up after ourselves
-    delete data;
+    if (data != NULL){
+      delete data;
+      // hack ... try to find execption point
+      data = NULL;
+      // Attach window specific data to the window
+      SetWindowLong(hwnd, GWL_USERDATA, (LONG) data);
+    }
 
     return 0;
   }
 
   // Pass message on to original window proc
-  return CallWindowProc(data->fnOldWndProc, hwnd, message, wParam, lParam);
+  if (data != NULL)
+    return CallWindowProc(data->fnOldWndProc, hwnd, message, wParam, lParam);
+  else
+    return(0);
+
 }
 
 
@@ -3123,7 +3177,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
 // linefeed characters.  ie TEXT("Line 1\r\nLine 2")
 // otherwise you'll get funny characters appearing
 void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio, 
-                       bool docenter) {
+                       bool docenter, int *TabStops) {
 
   CStatMsgUserData *data;
   HWND hWnd;
@@ -3152,8 +3206,8 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
 
   // Build a font of the correct height
   fontHeight = (int)((rc.bottom-rc.top)/iFontHeightRatio);
-  
-  memset ((char *)&logfont, 0, sizeof (logfont));  
+
+  memset ((char *)&logfont, 0, sizeof (logfont));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = fontHeight;
   logfont.lfWidth =  0;
@@ -3162,19 +3216,25 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
 #ifndef NOCLEARTYPE
   logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY;
 #endif
-  
+
   data->hFont = CreateFontIndirect (&logfont);
 
   // Create a child window to contain status message
   if (docenter) {
     hWnd = CreateWindow(TEXT("EDIT"), text,
-                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|ES_CENTER|WS_BORDER|ES_READONLY, 
+                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                         0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
   } else {
     hWnd = CreateWindow(TEXT("EDIT"), text,
-                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|WS_BORDER|ES_READONLY, 
+                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 
                         0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
 
+  }
+
+  if (TabStops != NULL){
+    int x;
+    for (x=0; TabStops[x] != 0 && x < 10; x++);
+    SendMessage(hWnd, EM_SETTABSTOPS, (WPARAM)x, (LPARAM)TabStops);
   }
 
   // Apply font to window
@@ -3185,7 +3245,7 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
   heightStatus = (int)((double)fontHeight * 1.2);
   
   // Center it in the middle of the Main Window
-  SetWindowPos(hWnd,HWND_TOPMOST,
+  SetWindowPos(hWnd,HWND_TOP,
 	  (widthMain-widthStatus)/2, (heightMain-heightStatus)/2,
     widthStatus, heightStatus,
     0);
@@ -3199,7 +3259,7 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
 
     if (heightStatus > heightMain) heightStatus = heightMain;
 
-    SetWindowPos(hWnd,HWND_TOPMOST,
+    SetWindowPos(hWnd,HWND_TOP,
   	  (widthMain-widthStatus)/2, (heightMain-heightStatus)/2,
       widthStatus, heightStatus,
       0);
@@ -3222,7 +3282,7 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
   }
   
   // FINALLY, display the window for the user's perusal
-  ShowWindow(hWnd,SW_SHOW);
+  ShowWindow(hWnd, SW_SHOW);
   UpdateWindow(hWnd);
 
 }

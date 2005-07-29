@@ -27,6 +27,7 @@ typedef struct{
 
 typedef	struct DeviceDescriptor_t{
 	int	Port;	 
+  FILE  *fhLogFile;
   ComPortDriver_t Com;
 	TCHAR	Name[DEVNAMESIZE+1];
 	BOOL (*ParseNMEA)(DeviceDescriptor_t *d, TCHAR *String,	NMEA_INFO	*GPS_INFO);
@@ -61,7 +62,7 @@ extern int DeviceRegisterCount;
 BOOL devRegister(TCHAR *Name,	int	Flags, BOOL (*Installer)(PDeviceDescriptor_t d));
 BOOL decRegisterGetName(int Index, TCHAR *Name);
 
-BOOL devInit(void);
+BOOL devInit(LPTSTR CommandLine);
 BOOL devCloseAll(void);
 PDeviceDescriptor_t devGetDeviceOnPort(int Port);
 BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token);
@@ -79,6 +80,9 @@ BOOL devDeclEnd(PDeviceDescriptor_t	d);
 BOOL devDeclAddWayPoint(PDeviceDescriptor_t	d, WAYPOINT	*wp);
 BOOL devIsLogger(PDeviceDescriptor_t d);
 BOOL devIsGPSSource(PDeviceDescriptor_t	d);
+
+BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName);
+BOOL devCloseLog(PDeviceDescriptor_t d);
 
 
 #endif

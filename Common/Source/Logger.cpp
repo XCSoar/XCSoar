@@ -73,7 +73,7 @@ void LogPoint(double Lattitude, double Longditude, double Altitude)
   sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d0AA\r\n", st.wHour, st.wMinute, st.wSecond, DegLat, MinLat, NoS, DegLon, MinLon, EoW, (int)Altitude,(int)Altitude);
 
   SetFilePointer(hFile, 0, NULL, FILE_END); 
-  WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead, NULL); 
+  WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead, (OVERLAPPED *)NULL);
 	
   CloseHandle(hFile);
 }
@@ -130,15 +130,15 @@ void LoggerHeader(void)
 
   GetRegistryString(szRegistryPilotName, PilotName, 100);
   sprintf(temp,"HFPLTPILOT:%S\r\n", PilotName);
-  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, NULL); 
+  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
   
   GetRegistryString(szRegistryAircraftType, AircraftType, 100);
   sprintf(temp,"HFGTYGLIDERTYPE:%S\r\n", AircraftType);
-  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, NULL); 
+  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
   GetRegistryString(szRegistryAircraftRego, AircraftRego, 100);
   sprintf(temp,"HFGIDGLIDERID:%S\r\n", AircraftRego);
-  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, NULL); 
+  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
   CloseHandle(hFile);			
 
@@ -153,7 +153,7 @@ void StartDeclaration(void)
   hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
 	
   SetFilePointer(hFile, 0, NULL, FILE_END); 
-  WriteFile(hFile, start, strlen(start), &dwBytesRead, NULL); 
+  WriteFile(hFile, start, strlen(start), &dwBytesRead, (OVERLAPPED *)NULL);
 	
   CloseHandle(hFile);			
 }
@@ -167,7 +167,7 @@ void EndDeclaration(void)
   hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
 	
   SetFilePointer(hFile, 0, NULL, FILE_END); 
-  WriteFile(hFile, start, strlen(start), &dwBytesRead, NULL); 
+  WriteFile(hFile, start, strlen(start), &dwBytesRead,(OVERLAPPED *)NULL);
 	
   CloseHandle(hFile);			
 }
@@ -223,7 +223,7 @@ void AddDeclaration(double Lattitude, double Longditude, TCHAR *ID)
   sprintf(szCRecord,"C%02d%05.0f%c%03d%05.0f%c%s\r\n", DegLat, MinLat, NoS, DegLon, MinLon, EoW, IDString);
 
   SetFilePointer(hFile, 0, NULL, FILE_END); 
-  WriteFile(hFile, szCRecord, strlen(szCRecord), &dwBytesRead, NULL); 
+  WriteFile(hFile, szCRecord, strlen(szCRecord), &dwBytesRead, (OVERLAPPED *)NULL); 
 	
   CloseHandle(hFile);			
 }

@@ -53,7 +53,7 @@
 //////////////
 
 // size of terrain cache
-#define MAXTERRAINCACHE 2000
+#define MAXTERRAINCACHE 8000
 
 // stepsize of pixel grid, should be multiple of 2
 #define DTQUANT 6

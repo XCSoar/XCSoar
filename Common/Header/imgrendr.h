@@ -9,6 +9,7 @@
     error checks: none
 */
 //@@MIDL_FILE_HEADING(  )
+
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
@@ -21,9 +22,9 @@
 
 #ifdef __cplusplus
 extern "C"{
-#endif 
+#endif
 
-/* Forward Declarations */ 
+/* Forward Declarations */
 
 #ifndef __IImageRender_FWD_DEFINED__
 #define __IImageRender_FWD_DEFINED__
@@ -36,7 +37,7 @@ typedef interface IImageRender IImageRender;
 #include "ocidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
-void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
+void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 #ifndef __IImageRender_INTERFACE_DEFINED__
 #define __IImageRender_INTERFACE_DEFINED__
@@ -46,14 +47,14 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
  * at Tue Feb 10 13:46:55 1998
  * using MIDL 3.01.75
  ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+/* [unique][helpstring][uuid][object] */
 
 
 
 EXTERN_C const IID IID_IImageRender;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
-    
+
     interface DECLSPEC_UUID("59032090-154B-11d1-A9BF-006097DE299B")
     IImageRender : public IUnknown
     {
@@ -81,7 +82,7 @@ EXTERN_C const IID IID_IImageRender;
     };
     
 #else 	/* C style interface */
-
+$
     typedef struct IImageRenderVtbl
     {
         BEGIN_INTERFACE

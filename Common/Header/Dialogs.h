@@ -40,7 +40,7 @@ LRESULT CALLBACK LoggerDetails 			(HWND hDlg, UINT message, WPARAM wParam, LPARA
 LRESULT CALLBACK AudioSettings					(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 void ShowStatusMessage(TCHAR* text, int delay_ms=2000, int iFontHeightRatio=12,
-                       bool docenter=true);
+                       bool docenter=true, int *TabStops = NULL);
 
 void StartupScreen();
 

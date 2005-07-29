@@ -24,7 +24,7 @@ CWaveInThread::CWaveInThread()
   m_pWaveHeaderArray         = NULL;
   m_dwActiveThreadPriority   = THREAD_PRIORITY_NORMAL;
   m_wBufferCount             = 0;
-  m_dwSingleBufferSize         = 0;
+  m_dwSingleBufferSize       = 0;
   m_dwBufferSize             = 0;
   m_dwCopyBufferBytes        = 0;
   m_pCopyBufferPos           = NULL;
@@ -704,6 +704,8 @@ BOOL CWaveOutThread::StopThread()
     {
       return FALSE;
     }
+
+  ResumeThread();                                           // be shure the thread is running
 
   SetThreadPriority(m_thread, THREAD_PRIORITY_NORMAL);
 

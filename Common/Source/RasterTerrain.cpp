@@ -1,4 +1,6 @@
 
+#include "stdafx.h"
+
 #include "RasterTerrain.h"
 #include "XCSoar.h"
 
@@ -10,7 +12,7 @@ extern TCHAR szRegistryTerrainFile[];
 // have file opened by one reader
 
 TERRAIN_INFO RasterTerrain::TerrainInfo;
-HANDLE RasterTerrain::hTerrain;
+FILE *RasterTerrain::fpTerrain;
 
 CRITICAL_SECTION  CritSec_TerrainFile;
 
@@ -29,26 +31,54 @@ void RasterTerrain::ClearTerrainCache() {
     TerrainCache[i].recency= 0;
     TerrainCache[i].h= 0;
   }
+  SortThresold = MAXTERRAINCACHE-1; 
+}
+
+int TerrainCacheCompare(const void *elem1, const void *elem2 ){
+  if (((TERRAIN_CACHE *)elem1)->recency > ((TERRAIN_CACHE *)elem2)->recency)
+    return (-1);
+  if (((TERRAIN_CACHE *)elem1)->recency < ((TERRAIN_CACHE *)elem2)->recency)
+    return (+1);
+  if (((TERRAIN_CACHE *)elem1)->index > ((TERRAIN_CACHE *)elem2)->index)
+    return (-1);
+  if (((TERRAIN_CACHE *)elem1)->index < ((TERRAIN_CACHE *)elem2)->index)
+    return (+1);
+  return (0);
+}
+
+void RasterTerrain::OptimizeCash(void){
+
+  qsort(&TerrainCache, MAXTERRAINCACHE, sizeof(_TERRAIN_CACHE), TerrainCacheCompare);
+  SortThresold = MAXTERRAINCACHE-1; 
+
 }
 
 short RasterTerrain::LookupTerrainCacheFile(long SeekPos) {
   // put new value in slot tcpmin
 
   __int16 NewAlt = 0;
-  DWORD dwBytesRead;
-  DWORD SeekRes, dwError;
+  DWORD SeekRes;
   short Alt;
+
+  if(!isTerrainLoaded())
+    return -1;
 
   EnterCriticalSection(&CritSec_TerrainFile);
 
-  SeekRes = SetFilePointer(hTerrain,SeekPos,NULL,FILE_BEGIN);
-  if(SeekRes == 0xFFFFFFFF && (dwError = GetLastError()) != NO_ERROR ) {
+  //SeekRes = SetFilePointer(hTerrain,SeekPos,NULL,FILE_BEGIN);
+  SeekRes = fseek(fpTerrain, SeekPos, SEEK_SET);
+  //if(SeekRes == 0xFFFFFFFF && (dwError = GetLastError()) != NO_ERROR ) {
+  if(SeekRes != 0) {
     // error, not found!
     Alt = -1;
   } else {
-    ReadFile(hTerrain,&NewAlt,sizeof(__int16),&dwBytesRead,NULL);    
-    Alt = NewAlt;
-    if(Alt<0) Alt = -1;
+    if (fread(&NewAlt, 1, sizeof(__int16), fpTerrain) != sizeof(__int16))
+      Alt = -1;
+    else {
+      // ReadFile(hTerrain,&NewAlt,sizeof(__int16),&dwBytesRead,NULL);    
+      Alt = NewAlt;
+      if(Alt<0) Alt = -1;
+    }
   }
   LeaveCriticalSection(&CritSec_TerrainFile);
 
@@ -56,6 +86,13 @@ short RasterTerrain::LookupTerrainCacheFile(long SeekPos) {
 
 }
 
+int TerrainCacheSearch(const void *key, const void *elem2 ){
+  if ((long)key > ((TERRAIN_CACHE *)elem2)->index)
+    return (-1);
+  if ((long)key < ((TERRAIN_CACHE *)elem2)->index)
+    return (+1);
+  return (0);
+}
 
 short RasterTerrain::LookupTerrainCache(long SeekPos) {
   int ifound= -1;
@@ -63,17 +100,26 @@ short RasterTerrain::LookupTerrainCache(long SeekPos) {
   int i;
   _TERRAIN_CACHE* tcp, *tcpmin;
 
+  if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
+    return -1;
+
   terraincacheefficiency = (100*terraincachehits)/(terraincachehits+terraincachemisses);
 
   // search to see if it is found in the cache
+  tcp = (_TERRAIN_CACHE *)bsearch((void *)SeekPos, &TerrainCache, SortThresold, sizeof(_TERRAIN_CACHE), TerrainCacheSearch); 
 
-  tcp = TerrainCache;
-  for (i=0; i<MAXTERRAINCACHE; i++) {
+  if (tcp != NULL){
+    tcp->recency = cachetime;
+    terraincachehits++;
+    return(tcp->h);
+  }
+
+  tcp = &TerrainCache[SortThresold];
+  for (i=SortThresold; i<MAXTERRAINCACHE; i++) {
     if (tcp->index == SeekPos) {
       tcp->recency = cachetime;
-      i=MAXTERRAINCACHE;
       terraincachehits++;
-      return tcp->h;
+      return (tcp->h);
     }
     tcp++;
   }
@@ -81,25 +127,27 @@ short RasterTerrain::LookupTerrainCache(long SeekPos) {
   // if not found..
   terraincachemisses++;
 
-  tcpmin = TerrainCache; recencymin = tcpmin->recency;
-  for (tcp=TerrainCache; tcp<TerrainCache+MAXTERRAINCACHE; tcp++) {    
-    if (tcp->recency < recencymin) {
-      tcpmin = tcp;
-      recencymin = tcp->recency;
-    }
+  if (SortThresold > 0){
+    tcpmin = &TerrainCache[SortThresold];
+
+    short Alt = LookupTerrainCacheFile(SeekPos);
+
+    tcpmin->recency = cachetime;
+    tcpmin->h = Alt;
+    tcpmin->index = SeekPos;
+
+    SortThresold--;
+    return (Alt);
+
   }
 
-  short Alt = LookupTerrainCacheFile(SeekPos);
-
-  tcpmin->recency = cachetime;
-  tcpmin->h = Alt;
-  tcpmin->index = SeekPos;
-
-  return Alt;
+  return (-1);
 }
 
 float RasterTerrain::GetTerrainSlopeStep() {
-    float kpixel = (float)256.0/(
+  if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
+    return 0;
+  float kpixel = (float)256.0/(
 			  GetTerrainStepSize()
                           * (float)rounding
                           * (float)2.0);
@@ -109,12 +157,16 @@ float RasterTerrain::GetTerrainSlopeStep() {
 
 
 float RasterTerrain::GetTerrainStepSize() {
+  if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
+    return 0;
   // this is approximate of course..
   return (float)(250.0/0.0025*TerrainInfo.StepSize);
 }
 
 
 void RasterTerrain::SetTerrainRounding(double dist) {
+  if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
+    return;
   rounding = iround(dist/(GetTerrainStepSize()/1000.0));
   if (rounding<1) {
     rounding = 1;
@@ -133,7 +185,8 @@ short RasterTerrain::GetTerrainHeight(double Lattitude,
   double X,Y;
   long lx, ly;
         
-  if(hTerrain == NULL)
+  //if(hTerrain == NULL)
+  if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
     return -1;
 
   if ((Lattitude > TerrainInfo.Top )||
@@ -180,13 +233,17 @@ void RasterTerrain::OpenTerrain(void)
 
   GetRegistryString(szRegistryTerrainFile, szFile, MAX_PATH);
 
-  hTerrain = NULL;
-  hTerrain = CreateFile(szFile,GENERIC_READ,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  if( hTerrain == NULL)
+  //hTerrain = NULL;
+  //hTerrain = CreateFile(szFile,GENERIC_READ,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  fpTerrain = _tfopen(szFile, TEXT("rb"));
+  //if( hTerrain == NULL)
+  if( fpTerrain == NULL)
     {
       return;
     }
-  ReadFile(hTerrain,&TerrainInfo,sizeof(TERRAIN_INFO),&dwBytesRead,NULL);
+  //ReadFile(hTerrain,&TerrainInfo,sizeof(TERRAIN_INFO),&dwBytesRead,NULL);
+//  setvbuf(fpTerrain, NULL, 0x00 /*_IOFBF*/, 4096*8);
+  dwBytesRead = fread(&TerrainInfo, 1, sizeof(TERRAIN_INFO), fpTerrain);
 
   InitializeCriticalSection(&CritSec_TerrainFile);
                 
@@ -196,14 +253,17 @@ void RasterTerrain::OpenTerrain(void)
 
 void RasterTerrain::CloseTerrain(void)
 {
-  if( hTerrain == NULL)
+  //if( hTerrain == NULL)
+  if( fpTerrain == NULL)
     {
       return;
     }
   else
     {
-      CloseHandle(hTerrain);
+      //CloseHandle(hTerrain);
+      fclose(fpTerrain);
       DeleteCriticalSection(&CritSec_TerrainFile); 
-      hTerrain = NULL;
+      //hTerrain = NULL;
+      fpTerrain = NULL;
     }
 }

@@ -11,11 +11,12 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windmeasurementlist.cpp,v 1.3 2005/06/30 17:35:43 robin-birch Exp $
+**   $Id: windmeasurementlist.cpp,v 1.4 2005/07/29 09:33:29 samgi Exp $
 **
 ***********************************************************************/
 
-#include <math.h>
+#include "stdafx.h"
+
 #include "windmeasurementlist.h"
 
 

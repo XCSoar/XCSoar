@@ -148,7 +148,7 @@ void Port2Write (BYTE Byte)
                   1,                  // Number of bytes to write
                   &dwNumBytesWritten, // Pointer to the number of bytes 
                                       // written
-                  NULL))              // Must be NULL for Windows CE
+                  (OVERLAPPED *)NULL))              // Must be NULL for Windows CE
   {
     // WriteFile failed. Report error.
     dwError = GetLastError ();
@@ -201,7 +201,7 @@ DWORD Port2ReadThread (LPVOID lpvoid)
       {
 	dwBytesTransferred = 0;
         // Read the data from the serial port.
-	if (ReadFile (hPort2, inbuf, 1024, &dwBytesTransferred, 0)) {
+	if (ReadFile (hPort2, inbuf, 1024, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
 
 	  for (unsigned int j=0; j<dwBytesTransferred; j++) {
 	    ProcessChar2 (inbuf[j]);

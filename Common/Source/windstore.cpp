@@ -11,13 +11,15 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.6 2005/07/08 10:02:39 jwharington Exp $
+**   $Id: windstore.cpp,v 1.7 2005/07/29 09:33:29 samgi Exp $
 **
 ***********************************************************************/
 
+#include "stdafx.h"
+
 #include "windstore.h"
 #include "XCSoar.h"
-                   
+
 WindStore::WindStore(NMEA_INFO *thenmeaInfo, DERIVED_INFO *thederivedInfo) {
   //create the lists
   windlist = new WindMeasurementList(thenmeaInfo, thederivedInfo);

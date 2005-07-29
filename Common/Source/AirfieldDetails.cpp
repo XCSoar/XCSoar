@@ -1,7 +1,5 @@
-//   $Id: AirfieldDetails.cpp,v 1.9 2005/07/10 19:16:47 samgi Exp $
+//   $Id: AirfieldDetails.cpp,v 1.10 2005/07/29 09:33:26 samgi Exp $
 
-
-#include "AirfieldDetails.h"
 
 #include "stdafx.h"
 #include "Utils.h"
@@ -12,6 +10,9 @@
 #include "Utils.h"
 
 #include <aygshell.h>
+
+#include "AirfieldDetails.h"
+
 
 HANDLE hAirfieldDetails;
 
