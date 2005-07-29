@@ -195,7 +195,6 @@ class MapWindow {
   static void DrawCDI();
     
   static void DrawSolidLine(HDC , POINT , POINT );
-  static void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
   static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mode);
   static void ToggleFullScreenStart();
   static void RefreshMap();
@@ -280,8 +279,13 @@ class MapWindow {
   static void RenderMapWindow(  RECT rc);
   static double findMapScaleBarSize(RECT rc);
 
+ public:
+  static bool RenderTimeAvailable();
+
 };
 
+
+extern void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
 
 ////////////////
 

@@ -2,6 +2,22 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Changes from 4.21 to 4.22
+
+- Fixed bug when airspace warning display is not refreshed when another
+  window overlaps it.
+- New "Analysis" pages showing barograph, thermal history and glide polar
+- Fixed bug in snail trail, IGC logger update rate
+- Additional waypoint file can be specified for competition waypoints
+- Fixed font for message box, status dialog
+- Minor bugfixes in vario comms thread processing
+- Implemented Borgelt B50 vario parsing (untested)
+- Improvements to performance and latency of audio
+- (terrain cache updates)
+- (file loading improvements)
+- (new wind vector graphics)
+- (new labels for reachable airfields)
+
 Changes from 4.2 to 4.21
 
 - Better recovery of bluetooth GPS after switching device off and on

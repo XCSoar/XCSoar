@@ -307,10 +307,6 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LastTime = Basic->Time;
 
-  LockTerrainDataCalculations();
-  terrain_dem_calculations.SetCacheTime();
-  UnlockTerrainDataCalculations();
-
   if ((Calculated->FinalGlide)
       ||(fabs(Calculated->TaskAltitudeDifference)>30)) {
     FinalGlideAlert(Basic, Calculated);
@@ -1808,6 +1804,10 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 //////////////////////////////////////////////////////////
 // Final glide through terrain and footprint calculations
 
+void ExitFinalGlideThroughTerrain() {
+  UnlockTerrainDataCalculations();
+}
+
 
 double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic, 
                                 DERIVED_INFO *Calculated,
@@ -1838,6 +1838,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   
   // calculate terrain rounding factor
   LockTerrainDataCalculations();
+
   terrain_dem_calculations.
     SetTerrainRounding(maxrange/NUMFINALGLIDETERRAIN/1000.0);
 
@@ -1863,11 +1864,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
         *retlat = latlast*(1.0-f)+lat*f;
         *retlon = lonlast*(1.0-f)+lon*f;
       }
-      UnlockTerrainDataCalculations();
-      return distancelast*(1.0-f)+distance*(f);
+      ExitFinalGlideThroughTerrain();
+     return distancelast*(1.0-f)+distance*(f);
     }
     if (i&&(distance<= 0.0)) {
-      UnlockTerrainDataCalculations();
+      ExitFinalGlideThroughTerrain();
       return 0.0;
     }
 
@@ -1876,7 +1877,8 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     latlast = lat;
     lonlast = lon;
   }
-  UnlockTerrainDataCalculations();
+
+  ExitFinalGlideThroughTerrain();
   return 0.0;
 }
 

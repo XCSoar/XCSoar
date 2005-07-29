@@ -437,7 +437,6 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mod
 
 
 void MapWindow::RefreshMap() {
-  fpsTime0 = 0;
   RequestMapDirty = true;
 }
 
@@ -864,7 +863,6 @@ void MapWindow::UpdateMapScale()
 
     useraskedforchange = true;
 
-    //      fpsTime0 = 0; // trigger immediate screen update
   }
   
   if (AutoZoom) {
@@ -930,7 +928,6 @@ void MapWindow::UpdateMapScale()
 
       }
     }
-    //    fpsTime0 = 0; // Trigger immediate screen update
   } else {
     
     // reset starting map scale for auto zoom if momentarily switch
@@ -1013,29 +1010,26 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
 }
 
 
+bool MapWindow::RenderTimeAvailable() {
+  DWORD	fpsTime = ::GetTickCount();
+  if (fpsTime-fpsTime0<800) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 
 void MapWindow::RenderMapWindow(  RECT rc)
 {
   bool drawmap;
-  DWORD	fpsTime = ::GetTickCount();
   HFONT hfOld;
   
-  if (fpsTime0==0) {
-    fpsTime0 = fpsTime;
-  }
-  
-  if ((fpsTime-fpsTime0>1000)||(fpsTime==fpsTime0)) {
-    fpsTime0 += 1000;
-    drawmap = true;
-  } else {
-    drawmap = false;
-  }
-  
-  //  int	dtms = max(0,1000-dTDisplay);
-  // we basically sleep here so we're only updating 1 fps, which is what
-  // the gps data comes in at anyway.
-  //  Sleep(dtms);
-  
+  DWORD	fpsTime = ::GetTickCount();
+  fpsTime0 = fpsTime;
+
+  drawmap = true;
+    
   POINT Orig, Orig_Aircraft;
   
   CalculateOrigin(rc, &Orig);
@@ -1067,11 +1061,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
     hfOld = (HFONT)SelectObject(hdcDrawWindowBg, MapWindowFont);
   
     // ground first...
-    
-    LockTerrainDataGraphics();
-    terrain_dem_graphics.SetCacheTime();
-    UnlockTerrainDataGraphics();
-    
+
     if (EnableTerrain) {
       double sunelevation = 40.0;
       double sunazimuth = -DerivedDrawInfo.WindBearing;
@@ -1243,6 +1233,10 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
     UnlockFlightData();
         
+    LockTerrainDataCalculations();
+    terrain_dem_calculations.SetCacheTime();
+    UnlockTerrainDataCalculations();
+
     UpdateMapScale();
     
     RenderMapWindow(MapRect);
@@ -1254,8 +1248,28 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     FrameCount ++;
     
     // we do caching after screen update, to minimise perceived delay
+
+    // have some time, do shape file cache update if necessary
     SetTopologyBounds(MapRect);
-    
+
+    // have some time, do graphics terrain cache update if necessary
+    if (EnableTerrain) {
+      if (RenderTimeAvailable()) {
+        OptimizeTerrainCache();
+      }
+    }
+
+    // have some time, do calculations terrain cache update if necessary
+    if (RenderTimeAvailable()) {
+      LockTerrainDataCalculations();
+      if (terrain_dem_calculations.terraincachemisses > 0){
+        DWORD tm =GetTickCount();
+        terrain_dem_calculations.OptimizeCash();
+        tm = GetTickCount()-tm;
+        tm = GetTickCount();
+      }
+      UnlockTerrainDataCalculations();
+    }
   }
   return 0;
 }
@@ -1441,9 +1455,15 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
       if (DisplayTextType == DISPLAYNAMEIFINTASK) {
         
         if (WaypointInTask(i)) {
+
+          if (DisplayMode)
+            wsprintf(Buffer, TEXT("%s:%d%s"),WayPointList[i].Name, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
+          else
+            wsprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
           
-          TextInBox(hdc, WayPointList[i].Name, WayPointList[i].Screen.x+5,
-            WayPointList[i].Screen.y, 0, 0);
+          TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
+              WayPointList[i].Screen.y, 0, DisplayMode);
+          
         }
         
       } else
@@ -1740,8 +1760,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
     
   }
 
-
-  _itot(iround(DerivedDrawInfo.WindSpeed * TOKPH), sTmp, 10);
+  _itot(iround(DerivedDrawInfo.WindSpeed * SPEEDMODIFY), sTmp, 10);
 
   //  ExtTextOut(hdc, Arrow[5].x - StringSize.cx/2 , Arrow[5].y-StringSize.cy/2 , 0, NULL, sTmp, _tcslen(sTmp), NULL);  
   TextInBox(hdc, sTmp, Arrow[5].x , Arrow[5].y, 0, 2 | 16);

@@ -104,7 +104,12 @@ void SetTopologyBounds(RECT rcin) {
       LockTerrainDataGraphics();
       for (int z=0; z<MAXTOPOLOGY; z++) {
         if (TopoStore[z]) {
-          TopoStore[z]->updateCache(bounds);
+          if (MapWindow::RenderTimeAvailable()) {
+            TopoStore[z]->updateCache(bounds);
+          } else {
+            // didn't have time this time
+            TopoStore[z]->triggerUpdateCache=true;          
+          }
         }
       }
       UnlockTerrainDataGraphics();
@@ -113,7 +118,7 @@ void SetTopologyBounds(RECT rcin) {
       // just trigger that they need to be updated next time they are enabled or within zoom
       for (int z=0; z<MAXTOPOLOGY; z++) {
         if (TopoStore[z]) {
-          TopoStore[z]->triggerUpdateCache;
+          TopoStore[z]->triggerUpdateCache=true;
         }
       }
     }
@@ -129,7 +134,9 @@ void SetTopologyBounds(RECT rcin) {
       for (int z=0; z<MAXTOPOLOGY; z++) {
         if (TopoStore[z]) {
           if (TopoStore[z]->triggerUpdateCache) {
-            TopoStore[z]->updateCache(bounds);
+            if (MapWindow::RenderTimeAvailable()) {
+              TopoStore[z]->updateCache(bounds);
+            }
           }
         }
       }
@@ -365,6 +372,8 @@ public:
 
     LockTerrainDataGraphics();
 
+    terrain_dem_graphics.SetCacheTime();
+
     // grid spacing = 250*rounding; m
 
     terrain_dem_graphics.SetTerrainRounding(pixelsize);
@@ -390,12 +399,6 @@ public:
         myhbuf++;
         // latitude, longitude
       }
-    }
-    if (terrain_dem_graphics.terraincachemisses > 0){
-      DWORD tm =GetTickCount();
-      terrain_dem_graphics.OptimizeCash();
-      tm =GetTickCount()-tm;
-      tm =GetTickCount();
     }
 
     UnlockTerrainDataGraphics();
@@ -521,6 +524,26 @@ TerrainRenderer *trenderer = NULL;
 int CacheEfficiency = 0;
 int Performance = 0;
 
+void OptimizeTerrainCache() 
+{
+
+  LockTerrainDataGraphics();
+
+  if(!terrain_dem_graphics.isTerrainLoaded()) {
+    UnlockTerrainDataGraphics();
+    return;
+  }
+  if (terrain_dem_graphics.terraincachemisses > 0){
+    DWORD tm =GetTickCount();
+    terrain_dem_graphics.OptimizeCash();
+    tm =GetTickCount()-tm;
+    tm =GetTickCount();
+  }
+  
+  UnlockTerrainDataGraphics();
+}
+
+
 void DrawTerrain( HDC hdc, RECT rc, double sunazimuth, double sunelevation)
 {
 
@@ -529,14 +552,9 @@ DWORD tm;
   if(!terrain_dem_graphics.isTerrainLoaded())
     return;
 
-tm = GetTickCount();
-
   if (!trenderer) {
     trenderer = new TerrainRenderer(MapWindow::MapRectBig);
   }
-
-tm = GetTickCount()-tm;
-tm = GetTickCount();
 
   // step 1: calculate sunlight vector
   short sx, sy, sz;
@@ -545,36 +563,31 @@ tm = GetTickCount();
   sz = (short)(256*fastsine(sunelevation));
 
   // step 2: fill height buffer
+
+  tm = GetTickCount();
   trenderer->Height(rc);
+  tm = GetTickCount()-tm;
 
-tm = GetTickCount()-tm;
+  CacheEfficiency = terrain_dem_graphics.terraincacheefficiency;
+  Performance = tm;
 
-CacheEfficiency = terrain_dem_graphics.terraincacheefficiency;
-Performance = tm;
-
-tm = GetTickCount();
   // step 3: calculate derivatives of height buffer
   trenderer->Slope();
 
-tm = GetTickCount()-tm;
-tm = GetTickCount();
   // step 4: calculate illumination
 
   trenderer->Illumination(sx, sy, sz);
 
-tm = GetTickCount()-tm;
-tm = GetTickCount();
   // step 5: calculate colors
 
-tm = GetTickCount()-tm;
-tm = GetTickCount();
   trenderer->FillColorBuffer();
+
+  tm = GetTickCount();
 
   // step 6: draw
   trenderer->Draw(hdc, MapWindow::MapRectBig);
 
-tm = GetTickCount()-tm;
-tm = GetTickCount();
+  tm = GetTickCount()-tm;
 }
 
 

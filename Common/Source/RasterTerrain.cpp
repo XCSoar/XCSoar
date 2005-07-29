@@ -19,7 +19,7 @@ CRITICAL_SECTION  CritSec_TerrainFile;
 
 void RasterTerrain::SetCacheTime() {
   terraincachehits = 1;
-  terraincachemisses = 1;
+  terraincachemisses = 0;
   cachetime++;
 }
 
@@ -35,6 +35,17 @@ void RasterTerrain::ClearTerrainCache() {
 }
 
 int TerrainCacheCompare(const void *elem1, const void *elem2 ){
+#ifdef PARANOID
+  if (!elem1 && !elem2) {
+    return(0);
+  }
+  if (elem1 && !elem2) {
+    return(-1);
+  }
+  if (!elem1 && elem2) {
+    return(1);
+  }
+#endif
   if (((TERRAIN_CACHE *)elem1)->recency > ((TERRAIN_CACHE *)elem2)->recency)
     return (-1);
   if (((TERRAIN_CACHE *)elem1)->recency < ((TERRAIN_CACHE *)elem2)->recency)
@@ -48,7 +59,8 @@ int TerrainCacheCompare(const void *elem1, const void *elem2 ){
 
 void RasterTerrain::OptimizeCash(void){
 
-  qsort(&TerrainCache, MAXTERRAINCACHE, sizeof(_TERRAIN_CACHE), TerrainCacheCompare);
+  qsort(&TerrainCache, MAXTERRAINCACHE, 
+        sizeof(_TERRAIN_CACHE), TerrainCacheCompare);
   SortThresold = MAXTERRAINCACHE-1; 
 
 }
@@ -87,6 +99,9 @@ short RasterTerrain::LookupTerrainCacheFile(long SeekPos) {
 }
 
 int TerrainCacheSearch(const void *key, const void *elem2 ){
+#ifdef PARANOID
+  if (!elem2) return (0);
+#endif
   if ((long)key > ((TERRAIN_CACHE *)elem2)->index)
     return (-1);
   if ((long)key < ((TERRAIN_CACHE *)elem2)->index)
@@ -106,13 +121,17 @@ short RasterTerrain::LookupTerrainCache(long SeekPos) {
   terraincacheefficiency = (100*terraincachehits)/(terraincachehits+terraincachemisses);
 
   // search to see if it is found in the cache
-  tcp = (_TERRAIN_CACHE *)bsearch((void *)SeekPos, &TerrainCache, SortThresold, sizeof(_TERRAIN_CACHE), TerrainCacheSearch); 
+  tcp = (_TERRAIN_CACHE *)bsearch((void *)SeekPos, &TerrainCache, 
+                                  SortThresold, sizeof(_TERRAIN_CACHE), 
+                                  TerrainCacheSearch); 
 
   if (tcp != NULL){
     tcp->recency = cachetime;
     terraincachehits++;
     return(tcp->h);
   }
+
+  // bsearch failed, so try exhaustive search
 
   tcp = &TerrainCache[SortThresold];
   for (i=SortThresold; i<MAXTERRAINCACHE; i++) {
@@ -127,22 +146,29 @@ short RasterTerrain::LookupTerrainCache(long SeekPos) {
   // if not found..
   terraincachemisses++;
 
-  if (SortThresold > 0){
-    tcpmin = &TerrainCache[SortThresold];
-
-    short Alt = LookupTerrainCacheFile(SeekPos);
-
-    tcpmin->recency = cachetime;
-    tcpmin->h = Alt;
-    tcpmin->index = SeekPos;
-
-    SortThresold--;
-    return (Alt);
-
+  if (SortThresold>= MAXTERRAINCACHE) {
+    SortThresold= MAXTERRAINCACHE-1;
+  }
+  if (SortThresold<0) {
+    SortThresold = 0;
   }
 
-  return (-1);
+  tcpmin = &TerrainCache[SortThresold];
+  
+  short Alt = LookupTerrainCacheFile(SeekPos);
+  
+  tcpmin->recency = cachetime;
+  tcpmin->h = Alt;
+  tcpmin->index = SeekPos;
+  
+  SortThresold--;
+  if (SortThresold<0) {
+    SortThresold = 0;
+  }
+
+  return (Alt);
 }
+
 
 float RasterTerrain::GetTerrainSlopeStep() {
   if(fpTerrain == NULL || TerrainInfo.StepSize == 0)

@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.56 2005/07/29 15:03:04 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.57 2005/07/29 23:53:22 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -538,9 +538,17 @@ void FullScreen() {
     SetForegroundWindow(hWndMainWindow);
     SHFullScreen(hWndMainWindow,
                  SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+#if (WINDOWSPC>0)
     SetWindowPos(hWndMainWindow,HWND_TOP,
                  0, 0, 0, 0,
                  SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+#else
+    SetWindowPos(hWndMainWindow,HWND_TOP,
+                 0,0,
+                 GetSystemMetrics(SM_CXSCREEN),
+                 GetSystemMetrics(SM_CYSCREEN),
+                 SWP_SHOWWINDOW);
+#endif
   }
   MapWindow::RequestFastRefresh = true;
   InfoBoxesDirty = true;

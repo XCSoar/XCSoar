@@ -30,8 +30,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
 CWaveOutThread variosound_waveOut;
 
-#define BSIZE 2
-#define BCOUNT 4
+#define BSIZE 5
+#define BCOUNT INTERNAL_WAVEOUT_BUFFER_COUNT
 
 #define LOWFI
 #ifdef LOWFI
