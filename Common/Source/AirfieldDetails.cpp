@@ -1,8 +1,6 @@
 //   $Id$
 
 
-#include "AirfieldDetails.h"
-
 #include "stdafx.h"
 #include "Utils.h"
 #include "Sizes.h"
@@ -12,6 +10,9 @@
 #include "Utils.h"
 
 #include <aygshell.h>
+
+#include "AirfieldDetails.h"
+
 
 HANDLE hAirfieldDetails;
 

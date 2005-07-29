@@ -1,5 +1,6 @@
 // omaplibdemo.cpp : Defines the entry point for the application.
 //
+#include "stdafx.h"
 
 #include "Terrain.h"
 #include "MapWindow.h"
@@ -192,7 +193,7 @@ void MarkLocation(double lon, double lat)
 
   fclose(stream);
 
-#ifdef EXPERIMENTAL
+#if (EXPERIMENTAL > 0)
   bsms.SendSMS(message);
 #endif
 
@@ -358,6 +359,10 @@ public:
     X1 = X0+DTQUANT*ixs;
     Y1 = Y0+DTQUANT*iys;
     short* myhbuf = hBuf;
+
+    if(!terrain_dem_graphics.isTerrainLoaded())
+      return;
+
     LockTerrainDataGraphics();
 
     // grid spacing = 250*rounding; m
@@ -382,11 +387,19 @@ public:
         Y = y;
         MapWindow::GetLocationFromScreen(&X, &Y);
         *myhbuf = terrain_dem_graphics.GetTerrainHeight(Y, X);
-	myhbuf++;
+        myhbuf++;
         // latitude, longitude
       }
     }
+    if (terrain_dem_graphics.terraincachemisses > 0){
+      DWORD tm =GetTickCount();
+      terrain_dem_graphics.OptimizeCash();
+      tm =GetTickCount()-tm;
+      tm =GetTickCount();
+    }
+
     UnlockTerrainDataGraphics();
+
   }
 
   float kpixel;
@@ -396,6 +409,10 @@ public:
 
     short nx, ny, nz;
     short pval=0;
+
+    if(!terrain_dem_graphics.isTerrainLoaded())
+      return;
+
     for (int y = 0; y<iys; y++) {
       for (int x = 0; x<ixs; x++) {
 
@@ -431,6 +448,10 @@ public:
     short *tnzBuf = nzBuf;
     short *tilBuf = ilBuf;
     int mag;
+
+    if(!terrain_dem_graphics.isTerrainLoaded())
+      return;
+
     for (int i=0; i<ixs*iys; i++) {
       mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256;
       *tilBuf = max(0,(short)mag);
@@ -445,6 +466,10 @@ public:
   void FillColorBuffer() {
     BYTE r=0xff,g=0xff,b=0xff;
     short pval = 0; // y*ixs+x;
+
+    if(!terrain_dem_graphics.isTerrainLoaded())
+      return;
+
     for (int y = 0; y<iys; y++) {
       for (int x = 0; x<ixs; x++) {
         if (hBuf[pval]<=0) {
@@ -476,6 +501,10 @@ public:
   }
 
   void Draw(HDC hdc, RECT rc) {
+
+    if(!terrain_dem_graphics.isTerrainLoaded())
+      return;
+
     sbuf->Smooth2();
     sbuf->Quantise();
     sbuf->DrawStretch(&hdc, rc);
@@ -489,12 +518,25 @@ public:
 
 TerrainRenderer *trenderer = NULL;
 
+int CacheEfficiency = 0;
+int Performance = 0;
+
 void DrawTerrain( HDC hdc, RECT rc, double sunazimuth, double sunelevation)
 {
+
+DWORD tm;
+
+  if(!terrain_dem_graphics.isTerrainLoaded())
+    return;
+
+tm = GetTickCount();
 
   if (!trenderer) {
     trenderer = new TerrainRenderer(MapWindow::MapRectBig);
   }
+
+tm = GetTickCount()-tm;
+tm = GetTickCount();
 
   // step 1: calculate sunlight vector
   short sx, sy, sz;
@@ -505,19 +547,34 @@ void DrawTerrain( HDC hdc, RECT rc, double sunazimuth, double sunelevation)
   // step 2: fill height buffer
   trenderer->Height(rc);
 
+tm = GetTickCount()-tm;
+
+CacheEfficiency = terrain_dem_graphics.terraincacheefficiency;
+Performance = tm;
+
+tm = GetTickCount();
   // step 3: calculate derivatives of height buffer
   trenderer->Slope();
 
+tm = GetTickCount()-tm;
+tm = GetTickCount();
   // step 4: calculate illumination
 
   trenderer->Illumination(sx, sy, sz);
 
+tm = GetTickCount()-tm;
+tm = GetTickCount();
   // step 5: calculate colors
 
+tm = GetTickCount()-tm;
+tm = GetTickCount();
   trenderer->FillColorBuffer();
 
   // step 6: draw
   trenderer->Draw(hdc, MapWindow::MapRectBig);
+
+tm = GetTickCount()-tm;
+tm = GetTickCount();
 }
 
 

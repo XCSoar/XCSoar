@@ -15,17 +15,9 @@
 // Windows Header Files:
 #include <windows.h>
 
-
-
-		#define VK_APP1     0xC1
-		#define VK_APP2     0xC2
-		#define VK_APP3     0xC3
-		#define VK_APP4     0xC4
-		#define VK_APP5     0xC5
-		#define VK_APP6     0xC6
-
-
 // Local Header Files
+
+#include "options.h"
 
 // TODO: reference additional headers your program requires here
 

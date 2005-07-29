@@ -1,3 +1,6 @@
+
+#include "stdafx.h"
+
 #include "Topology.h"
 #include "externs.h"
 

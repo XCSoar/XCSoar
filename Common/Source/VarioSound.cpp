@@ -291,36 +291,40 @@ extern "C" {
 
 
   VARIOSOUND_API void VarioSound_SetVdead(short v) {
+
+    if (v == 0)
+      return;
+
     EnterCriticalSection(&CritSec_VarioSound);
     int i;
     double vv;
 
     if (v<=0) {
       for (i=0; i<201; i++) {
-	vv = (i-100)/(double)v;
-	if (vv<0) {
-	  variosound_volumescale[i] = 7;
-	} else {
-	  variosound_volumescale[i]= 10;
-	}
+        vv = (i-100)/(double)v;
+        if (vv<0) {
+          variosound_volumescale[i] = 7;
+        } else {
+	         variosound_volumescale[i]= 10;
+       	}
       }
     } else {
       for (i=0; i<201; i++) {
-	vv = (i-100)/(double)v;
-	if (vv<0) {
-	  variosound_volumescale[i] = iround(7*(1.0-1.0/(vv*vv+1)));
-	} else {
-	  variosound_volumescale[i]= iround(10*(1.0-1.0/(vv*vv+1)));
-	}
+        vv = (i-100)/(double)v;
+        if (vv<0) {
+          variosound_volumescale[i] = iround(7*(1.0-1.0/(vv*vv+1)));
+        } else {
+          variosound_volumescale[i]= iround(10*(1.0-1.0/(vv*vv+1)));
+        }
       }
     }
 
     for (i=0; i<201; i++) {
       for (int j=0; j<256; j++) {
-	variosound_pvbuf[i*256+j] =
-	  (variosound_sin[j]*variosound_volumescale[i])/16+128;
-	variosound_pvbufq[i*256+j] =
-	  (variosound_sinquiet[j]*variosound_volumescale[i])/16+128;
+        variosound_pvbuf[i*256+j] =
+          (variosound_sin[j]*variosound_volumescale[i])/16+128;
+        variosound_pvbufq[i*256+j] =
+          (variosound_sinquiet[j]*variosound_volumescale[i])/16+128;
       }
     }
 

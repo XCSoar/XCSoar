@@ -5,11 +5,11 @@
 ** for licence details.
 */
 
+#include "stdafx.h"
+
 #include "mapprimitive.h"
 #include "mapshape.h"
 #include "maperror.h"
-#include <stdlib.h> /* for atof() and atoi() */
-#include <math.h>
 
 /************************************************************************/
 /*                             SfRealloc()                              */

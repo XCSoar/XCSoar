@@ -29,7 +29,7 @@ for /F %%i in (project.lst) do (
 
   echo        %%i
   %EVC%  PPC2002/%%i/%%i.vcp /MAKE "%%i - Win32 (WCE %%j) Release" /ceconfig="Pocket PC 2002" /REBUILD
-  if errorlevel 1 echo error build %%k/%%i/%%i.vcp
+  if errorlevel 1 echo error build PPC2002/%%i/%%i.vcp
 
 )
 )
@@ -66,7 +66,7 @@ for /F %%i in (project.lst) do (
 
   echo        %%i
   %EVC%  PPC/%%i/%%i.vcp /MAKE "%%i - Win32 (WCE %%j) Release" /ceconfig="Pocket PC" /REBUILD
-  if errorlevel 1 echo error build %%k/%%i/%%i.vcp
+  if errorlevel 1 echo error build PPC/%%i/%%i.vcp
 
 )
 )

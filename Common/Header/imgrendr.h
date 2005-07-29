@@ -9,6 +9,7 @@
     error checks: none
 */
 //@@MIDL_FILE_HEADING(  )
+
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
@@ -81,7 +82,7 @@ EXTERN_C const IID IID_IImageRender;
     };
 
 #else 	/* C style interface */
-
+$
     typedef struct IImageRenderVtbl
     {
         BEGIN_INTERFACE

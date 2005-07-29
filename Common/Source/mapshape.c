@@ -5,6 +5,8 @@
 ** for licence details.
 */
 
+#include "stdafx.h"
+
 #include "mapshape.h"
 #include "maperror.h"
 #include "maptree.h"

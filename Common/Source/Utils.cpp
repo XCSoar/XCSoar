@@ -16,21 +16,18 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
+
 #include "stdafx.h"
+
 #include "Utils.h"
 
 #include "resource.h"
 #include "externs.h"
-
 #include "device.h"
-
 #include "uniqueid.h"
 #include "XCSoar.h"
 #include "Topology.h"
 
-#include <math.h>
-#include <windows.h>
-#include <tchar.h>
 
 TCHAR szRegistryKey[] =                TEXT("Software\\MPSR\\XCSoar");
 TCHAR *szRegistryDisplayType[] =     { TEXT("Info0"),
@@ -618,11 +615,14 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
     }
   else
     {
-      angle=(( (slat2-slat1)
-	       * cos(d) ) / (sin(d)*clat1));
-      if(angle >1) angle = 1;
-      if(angle<-1) angle = -1;
-      angle = acos(angle);
+      if (d != 0 && clat1 != 0){
+        angle=(( (slat2-slat1)
+          * cos(d) ) / (sin(d)*clat1));
+        if(angle >1) angle = 1;
+        if(angle<-1) angle = -1;
+        angle = acos(angle);
+      } else
+        angle = 0;
 
       angle = 360 - (angle * RAD_TO_DEG);
     }
@@ -1286,7 +1286,7 @@ void ReadCompaqID(void)
     }
   SetFilePointer(hInFile, 976, NULL, FILE_BEGIN);
   memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
-  ReadFile(hInFile, &strAssetNumber, 64, &dwBytesRead, NULL);
+  ReadFile(hInFile, &strAssetNumber, 64, &dwBytesRead, (OVERLAPPED *)NULL);
   CloseHandle(hInFile);
 }
 
@@ -1386,7 +1386,7 @@ void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
     }
     len = strlen(ctempFile)+1;
     ctempFile[len-1]= '\n';
-    WriteFile(hFile,ctempFile,len, &dwBytesWritten,NULL);
+    WriteFile(hFile,ctempFile,len, &dwBytesWritten, (OVERLAPPED *)NULL);
 }
 
 
@@ -1402,12 +1402,12 @@ void WriteProfile(HWND hwnd, TCHAR *szFile)
       return;
     }
 
-  WriteFile(hFile,InfoType,sizeof(InfoType),&dwBytesWritten,NULL);
+  WriteFile(hFile,InfoType,sizeof(InfoType),&dwBytesWritten, (OVERLAPPED *)NULL);
 
-  WriteFile(hFile,&POLARID,sizeof(POLARID),&dwBytesWritten,NULL);
+  WriteFile(hFile,&POLARID,sizeof(POLARID),&dwBytesWritten, (OVERLAPPED *)NULL);
 
-  WriteFile(hFile,MapWindow::iAirspaceColour,AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceBrush[0]),&dwBytesWritten,NULL);
-  WriteFile(hFile,MapWindow::iAirspaceBrush,AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceColour[0]),&dwBytesWritten,NULL);
+  WriteFile(hFile,MapWindow::iAirspaceColour,AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceBrush[0]),&dwBytesWritten, (OVERLAPPED *)NULL);
+  WriteFile(hFile,MapWindow::iAirspaceBrush,AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceColour[0]),&dwBytesWritten, (OVERLAPPED *)NULL);
 
   ///////
 
@@ -1452,21 +1452,21 @@ void ReadProfile(HWND hwnd, TCHAR *szFile)
     }
 
 
-  ReadFile(hFile,InfoType,sizeof(InfoType),&dwBytesRead,NULL);
+  ReadFile(hFile,InfoType,sizeof(InfoType),&dwBytesRead, (OVERLAPPED *)NULL);
   for(i=0;i<NUMINFOWINDOWS;i++)
     {
       StoreType(i,InfoType[i]);
     }
 
-  ReadFile(hFile,&POLARID,sizeof(POLARID),&dwBytesRead,NULL);
+  ReadFile(hFile,&POLARID,sizeof(POLARID),&dwBytesRead, (OVERLAPPED *)NULL);
   SetToRegistry(szRegistryPolarID,(DWORD)POLARID);
 
   ReadFile(hFile,MapWindow::iAirspaceColour,
            AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceColour[0]),
-           &dwBytesRead,NULL);
+           &dwBytesRead, (OVERLAPPED *)NULL);
   ReadFile(hFile,MapWindow::iAirspaceBrush,
            AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceBrush[0]),
-           &dwBytesRead,NULL);
+           &dwBytesRead, (OVERLAPPED *)NULL);
 
   for(i=0;i<AIRSPACECLASSCOUNT;i++)
     {
@@ -1558,15 +1558,15 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 // Max:    max chars to fit in Buffer
 // String: pointer to string buffer
 // return: True if at least one byte was read from file
-//         False Max > 256 or EOF or read error
+//         False Max > MAX_PATH or EOF or read error
 BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
 {
   int i,j;
   char c;
-  char sTmp[257];
+  char sTmp[MAX_PATH+1];
   DWORD dwNumBytesRead=0;
   DWORD dwTotalNumBytesRead=0;
-  char  FileBuffer[512];
+  char  FileBuffer[MAX_PATH+1];
   DWORD dwFilePos;
 
   String[0] = '\0';
@@ -1581,7 +1581,7 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   if (hFile == INVALID_HANDLE_VALUE)
     return(FALSE);
 
-  if (ReadFile(hFile, FileBuffer, sizeof(FileBuffer), &dwNumBytesRead, NULL) == 0)
+  if (ReadFile(hFile, FileBuffer, sizeof(FileBuffer), &dwNumBytesRead, (OVERLAPPED *)NULL) == 0)
     return(FALSE);
 
   i = 0;
@@ -1613,6 +1613,26 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
 
 }
 
+BOOL ReadStringX(FILE *fp, int Max, TCHAR *String){
+
+  if (fp == NULL || Max < 1 || String == NULL)
+    return (0);
+
+  if (_fgetts(String, 200, fp) != NULL){
+
+    TCHAR *pWC = &String[_tcslen(String)];
+
+    while (pWC > String && (*pWC == '\r' || *pWC == '\n'))
+      pWC--;
+
+    *pWC = '\0';
+
+    return (1);
+  }
+
+  return (0);
+
+}
 
 
 
@@ -1933,4 +1953,120 @@ void ExtractDirectory(TCHAR *Dest, TCHAR *Source) {
     Dest[i]= Source[i];
   }
   Dest[i]= 0;
+}
+
+
+/*
+ * Copyright (c) 1990 Regents of the University of California.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ * 3. [rescinded 22 July 1999]
+ * 4. Neither the name of the University nor the names of its contributors
+ *    may be used to endorse or promote products derived from this software
+ *    without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+/*
+ * Perform a binary search.
+ *
+ * The code below is a bit sneaky.  After a comparison fails, we
+ * divide the work in half by moving either left or right. If lim
+ * is odd, moving left simply involves halving lim: e.g., when lim
+ * is 5 we look at item 2, so we change lim to 2 so that we will
+ * look at items 0 & 1.  If lim is even, the same applies.  If lim
+ * is odd, moving right again involes halving lim, this time moving
+ * the base up one item past p: e.g., when lim is 5 we change base
+ * to item 3 and make lim 2 so that we will look at items 3 and 4.
+ * If lim is even, however, we have to shrink it by one before
+ * halving: e.g., when lim is 4, we still looked at item 2, so we
+ * have to make lim 3, then halve, obtaining 1, so that we will only
+ * look at item 3.
+ */
+
+void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2)){
+	void *base = base0;
+	int lim, cmp;
+	void *p;
+
+	for (lim = nmemb; lim != 0; lim >>= 1) {
+		p = (char *)base + (lim >> 1) * size;
+		cmp = (*compar)(key, p);
+		if (cmp == 0)
+			return (p);
+		if (cmp > 0) {	/* key > p: move right */
+			base = (char *)p + size;
+			lim--;
+		} /* else move left */
+	}
+	return (NULL);
+}
+
+
+
+TCHAR *strtok_r(TCHAR *s, TCHAR *delim, TCHAR **lasts){
+
+  TCHAR *spanp;
+	int   c, sc;
+	TCHAR *tok;
+
+
+	if (s == NULL && (s = *lasts) == NULL)
+		return (NULL);
+
+	/*
+	 * Skip (span) leading delimiters (s += strspn(s, delim), sort of).
+	 */
+
+cont:
+	c = *s++;
+	for (spanp = (TCHAR *)delim; (sc = *spanp++) != 0;) {
+		if (c == sc)
+			goto cont;
+	}
+
+	if (c == 0) {		/* no non-delimiter characters */
+		*lasts = NULL;
+		return (NULL);
+	}
+	tok = s - 1;
+
+	/*
+	 * Scan token (scan for delimiters: s += strcspn(s, delim), sort of).
+	 * Note that delim must have one NUL; we stop if we see that, too.
+	 */
+	for (;;) {
+		c = *s++;
+		spanp = (TCHAR *)delim;
+		do {
+			if ((sc = *spanp++) == c) {
+				if (c == 0)
+					s = NULL;
+				else
+					s[-1] = 0;
+				*lasts = s;
+				return (tok);
+			}
+		} while (sc != 0);
+	}
+	/* NOTREACHED */
 }

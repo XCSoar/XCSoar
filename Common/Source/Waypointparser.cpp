@@ -30,6 +30,8 @@
 
 #include <tchar.h>
 
+TCHAR *strtok_r(TCHAR *s, TCHAR *delim, TCHAR **lasts);
+
 static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 static int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp);
 static double CalculateAngle(TCHAR *temp);
@@ -38,12 +40,11 @@ static double ReadAltitude(TCHAR *temp);
 
 static TCHAR TempString[210];
 
-void ReadWayPointFile(HANDLE hFile)
+void ReadWayPointFile(FILE *fp)
 {
   int WayPointCount = 0;
   WAYPOINT *List, *p;
   TCHAR szTemp[100];
-
   int nTrigger=10;
   DWORD fSize, fPos=0;
 
@@ -51,8 +52,9 @@ void ReadWayPointFile(HANDLE hFile)
 
   hProgress = CreateProgressDialog(TEXT("Loading Waypoints File..."));
 
-  fSize = GetFileSize(hFile,NULL);
-  if (!fSize) {
+  fSize = GetFileSize((void *)_fileno(fp), NULL);
+
+  if (fSize == 0) {
     return;
   }
 
@@ -62,11 +64,11 @@ void ReadWayPointFile(HANDLE hFile)
   if(WayPointList != NULL) {
 
     List = WayPointList;
-    SetFilePointer(hFile,0,NULL,FILE_BEGIN);
+    // SetFilePointer(hFile,0,NULL,FILE_BEGIN);
     fPos = 0;
     nTrigger = (fSize/10);
 
-    while(ReadString(hFile,200,TempString)){
+    while(ReadStringX(fp, 200, TempString)){
 
         fPos += _tcslen(TempString);
 
@@ -114,46 +116,59 @@ void ReadWayPointFile(HANDLE hFile)
       MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
     }
 
+
   wsprintf(szTemp,TEXT("100%%"));
   SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
 
 }
 
 
+
 int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
 {
   TCHAR ctemp[80];
   TCHAR *Zoom;
+  TCHAR *pWClast = NULL;
+  TCHAR *pToken;
 
-  ExtractParameter(TempString,ctemp,0);
-  Temp->Number = _tcstol(ctemp, &Zoom, 10);
+
+  // ExtractParameter(TempString,ctemp,0);
+  pToken = strtok_r(TempString, TEXT(","), &pWClast);
+  Temp->Number = _tcstol(pToken, &Zoom, 10);
 
 
-  ExtractParameter(TempString,ctemp,1); //Lattitude
-  Temp->Lattitude = CalculateAngle(ctemp);
+  //ExtractParameter(TempString,ctemp,1); //Lattitude
+  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  Temp->Lattitude = CalculateAngle(pToken);
   if((Temp->Lattitude > 90) || (Temp->Lattitude < -90))
     {
       return FALSE;
     }
 
 
-  ExtractParameter(TempString,ctemp,2); //Longditude
-  Temp->Longditude  = CalculateAngle(ctemp);
+  //ExtractParameter(TempString,ctemp,2); //Longditude
+  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  Temp->Longditude  = CalculateAngle(pToken);
   if((Temp->Longditude  > 180) || (Temp->Longditude  < -180))
     {
       return FALSE;
     }
 
-  ExtractParameter(TempString,ctemp,3); //Altitude
-  Temp->Altitude = ReadAltitude(ctemp);
+  //ExtractParameter(TempString,ctemp,3); //Altitude
+  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  Temp->Altitude = ReadAltitude(pToken);
 
-  ExtractParameter(TempString,ctemp,4); //Flags
-  Temp->Flags = CheckFlags(ctemp);
+  //ExtractParameter(TempString,ctemp,4); //Flags
+  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  Temp->Flags = CheckFlags(pToken);
 
-  ExtractParameter(TempString,ctemp,5); // Name
-  _tcscpy(Temp->Name, ctemp);
+  //ExtractParameter(TempString,ctemp,5); // Name
+  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  _tcscpy(Temp->Name, pToken);
 
-  ExtractParameter(TempString,ctemp,6); // Comment
+  //ExtractParameter(TempString,ctemp,6); // Comment
+  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  _tcscpy(ctemp, pToken);
   ctemp[COMMENT_SIZE] = '\0';
 
   Temp->Zoom = 0;
@@ -170,14 +185,17 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
   ctemp[COMMENT_SIZE] = '\0';
   _tcscpy(Temp->Comment, ctemp);
 
-  LockTerrainDataGraphics();
-  terrain_dem_graphics.SetTerrainRounding(0.0);
-  double myalt =
-    terrain_dem_graphics.GetTerrainHeight(Temp->Lattitude , Temp->Longditude);
-  UnlockTerrainDataGraphics();
+  if(Temp->Altitude == 0){
 
-  if(Temp->Altitude == 0)
+    LockTerrainDataGraphics();
+    terrain_dem_graphics.SetTerrainRounding(0.0);
+    double myalt =
+      terrain_dem_graphics.GetTerrainHeight(Temp->Lattitude , Temp->Longditude);
+    UnlockTerrainDataGraphics();
+
     Temp->Altitude = myalt;
+
+  }
 
   if (Temp->Details) {
     free(Temp->Details);
@@ -300,19 +318,20 @@ void ReadWayPoints(void)
 {
   TCHAR szFile[MAX_PATH] = TEXT("\0");
 
-  HANDLE hFile;
+  FILE *fp;
 
   LockFlightData();
 
   GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
 
-  hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+//  hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  fp = _tfopen(szFile, TEXT("rt"));
 
 
-  if(hFile != INVALID_HANDLE_VALUE )
+  if(fp != NULL)
     {
-      ReadWayPointFile(hFile);
-      CloseHandle (hFile);
+      ReadWayPointFile(fp);
+      fclose(fp);
     }
 
   UnlockFlightData();

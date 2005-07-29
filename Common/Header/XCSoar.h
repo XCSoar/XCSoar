@@ -6,6 +6,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+
 #include "resource.h"
 #include "sizes.h"
 
@@ -124,5 +125,8 @@ typedef struct
 
 DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo);
 void BlankDisplay(bool doblank);
+
+
+// ******************************************************************
 
 #endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)

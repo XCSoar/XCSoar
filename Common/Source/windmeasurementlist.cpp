@@ -15,7 +15,8 @@
 **
 ***********************************************************************/
 
-#include <math.h>
+#include "stdafx.h"
+
 #include "windmeasurementlist.h"
 
 

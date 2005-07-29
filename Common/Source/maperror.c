@@ -1,14 +1,10 @@
 /* $Id$ */
 
-//#include "map.h"
+#include "stdafx.h"
+
 #include "maperror.h"
 #include "mapprimitive.h"
 
-//#include "gdfonts.h"
-
-//#include <time.h>
-#include <stdarg.h>
-#include <stdlib.h>
 
 #ifdef NEED_NONBLOCKING_STDERR
 #include <fcntl.h>

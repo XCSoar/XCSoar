@@ -50,8 +50,9 @@ typedef struct _WAYPOINT_INFO
 	POINT	Screen;
 	int Zoom;
 	BOOL Reachable;
+	double AltArivalAGL;
 	BOOL Visible;
-        TCHAR *Details;
+  TCHAR *Details;
 } WAYPOINT;
 
 #define OTHER					0
@@ -177,6 +178,7 @@ class MapWindow {
   static void DrawCompass(HDC hdc, RECT rc);
   static void DrawWind(HDC hdc, POINT Orig, RECT rc);
   static void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc);
+  static void DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc);
   static void DrawAirSpace(HDC hdc, RECT rc);
   static void DrawWaypoints(HDC hdc, RECT rc);
   static void DrawFlightMode(HDC hdc, RECT rc);
@@ -194,7 +196,8 @@ class MapWindow {
 
   static void DrawSolidLine(HDC , POINT , POINT );
   static void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
-  static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size);
+//  static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size);
+  static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mode);
   static void ToggleFullScreenStart();
   static void RefreshMap();
 
@@ -205,6 +208,8 @@ class MapWindow {
   static HDC hdcDrawWindowBg;
   static HDC hdcScreen;
   static HDC hDCTemp;
+
+  static HANDLE hRenderEvent;
 
   static rectObj screenbounds_latlon;
 
@@ -255,6 +260,9 @@ class MapWindow {
   static      HBRUSH hbBestCruiseTrack;
   static      HBRUSH hbFinalGlideBelow;
   static      HBRUSH hbFinalGlideAbove;
+  #if (ALTERNATEWINDVECTOR == 1)
+  static      HBRUSH hbWind;
+  #endif
 
   static RECT MapRectSmall;
   static bool MapFullScreen;

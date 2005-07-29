@@ -18,19 +18,15 @@
 
   $Id$
 */
+
 #include "stdafx.h"
-#include "parser.h"
+
 #include "externs.h"
 #include "utils.h"
-#include <string.h>
-#include <math.h>
-#include <stdlib.h>
-#include <windows.h>
-
-
-#include <tchar.h>
 #include "externs.h"
 #include "VarioSound.h"
+
+#include "parser.h"
 
 static BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO);
@@ -567,6 +563,8 @@ BOOL NMEAChecksum(TCHAR *String)
     return FALSE;
 
   c1 = pEnd[1], c2 = pEnd[2];
+
+  iswdigit('0');
 
   if(_istdigit(c1))
     v1 = c1 - '0';

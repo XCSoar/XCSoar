@@ -1513,10 +1513,10 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	  ||
          ((DisplayOrientation == TRACKCIRCLE) && (Calculated->Circling == FALSE) )
          )
-        hCMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY,
+        hCMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                  0, MapWindow::MapRect.top+15, 240, 50, hWndMapWindow,NULL,hInst,NULL);
       else
-        hCMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY,
+        hCMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                  0, 180,240,50,hWndMapWindow,NULL,hInst,NULL);
 
       ShowWindow(hCMessage,SW_SHOW);
@@ -1563,10 +1563,10 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
          ((DisplayOrientation == TRACKCIRCLE) && (Calculated->Circling == FALSE) )
          )
 
-        hAMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY,
+        hAMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                  0, 15+MapWindow::MapRect.top, 240,50,hWndMapWindow,NULL,hInst,NULL);
       else
-        hAMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY,
+        hAMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                  0, 180,240,50,hWndMapWindow,NULL,hInst,NULL);
 
       ShowWindow(hAMessage,SW_SHOW);

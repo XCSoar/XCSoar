@@ -44,6 +44,7 @@ public:
   long terraincachehits;
   long terraincachemisses;
   unsigned int cachetime;
+  int SortThresold;
 
   void SetCacheTime();
   void ClearTerrainCache();
@@ -52,10 +53,12 @@ public:
   short GetTerrainHeight(double Lattitude,
 			 double Longditude);
 
+  void OptimizeCash(void);
+
   static void OpenTerrain();
   static void CloseTerrain();
   static TERRAIN_INFO TerrainInfo;
-  static HANDLE hTerrain;
+  static FILE *fpTerrain;
 
   int rounding;
 
@@ -63,6 +66,10 @@ public:
   float GetTerrainSlopeStep();
 
   void SetTerrainRounding(double dist);
+
+  BOOL isTerrainLoaded(){
+    return(fpTerrain != NULL && TerrainInfo.StepSize != 0);
+  }
 
 };
 

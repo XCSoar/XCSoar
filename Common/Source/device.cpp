@@ -1,7 +1,7 @@
 
-#include <windows.h>
-#include <tchar.h>
+#include "stdafx.h"
 
+#include "options.h"
 
 #include "externs.h"
 #include "utils.h"
@@ -59,12 +59,13 @@ BOOL decRegisterGetName(int Index, TCHAR *Name){
   return(TRUE);
 }
 
-BOOL devInit(void){
+BOOL devInit(LPTSTR CommandLine){
   int i;
   TCHAR DeviceName[DEVNAMESIZE];
 
   for (i=0; i<NUMDEV; i++){
     DeviceList[i].Port = -1;
+    DeviceList[i].fhLogFile = NULL;
     DeviceList[i].Name[0] = '\0';
     DeviceList[i].ParseNMEA = NULL;
     DeviceList[i].PutMcCready = NULL;
@@ -116,7 +117,7 @@ BOOL devInit(void){
       devB()->Com.GetChar = Port2GetChar;
       devB()->Com.SetRxTimeout = Port2SetRxTimeout;
       devB()->Com.SetBaudrate = Port2SetBaudrate;
-      devA()->Com.Read = Port2Read;
+      devB()->Com.Read = Port2Read;
 */
       devInit(devB());
       devOpen(devB(), 1);
@@ -125,14 +126,85 @@ BOOL devInit(void){
     }
   }
 
+  CommandLine = LOGGDEVCOMMANDLINE;
+
+  if (CommandLine != NULL){
+    TCHAR *pC, *pCe;
+    TCHAR wcLogFileName[MAX_PATH];
+    TCHAR sTmp[128];
+
+    pC = _tcsstr(CommandLine, TEXT("-logA="));
+    if (pC != NULL){
+      pC += strlen("-logA=");
+      if (*pC == '"'){
+        pC++;
+        pCe = pC;
+        while (*pCe != '"' && *pCe != '\0') pCe++;
+      } else{
+        pCe = pC;
+        while (*pCe != ' ' && *pCe != '\0') pCe++;
+      }
+      if (pCe != NULL && pCe-1 > pC){
+
+        _tcsncpy(wcLogFileName, pC, pCe-pC);
+        wcLogFileName[pCe-pC] = '\0';
+
+        if (devOpenLog(devA(), wcLogFileName)){
+          _stprintf(sTmp, TEXT("Device A Loggs to\r\n%s"), wcLogFileName),
+          MessageBox (hWndMainWindow, sTmp,
+                TEXT("Information"), MB_OK|MB_ICONINFORMATION);
+        } else {
+          _stprintf(sTmp, TEXT("Unable to Open Log\r\non Device A\r\n%s"), wcLogFileName),
+          MessageBox (hWndMainWindow, sTmp,
+                TEXT("Error"), MB_OK|MB_ICONWARNING);
+        }
+
+      }
+
+    }
+
+    pC = _tcsstr(CommandLine, TEXT("-logB="));
+    if (pC != NULL){
+      pC += strlen("-logA=");
+      if (*pC == '"'){
+        pC++;
+        pCe = pC;
+        while (*pCe != '"' && *pCe != '\0') pCe++;
+      } else{
+        pCe = pC;
+        while (*pCe != ' ' && *pCe != '\0') pCe++;
+      }
+      if (pCe != NULL && pCe > pC){
+
+        _tcsncpy(wcLogFileName, pC, pCe-pC);
+        wcLogFileName[pCe-pC] = '\0';
+
+        if (devOpenLog(devB(), wcLogFileName)){
+          _stprintf(sTmp, TEXT("Device B Loggs to\r\n%s"), wcLogFileName),
+          MessageBox (hWndMainWindow, sTmp,
+                TEXT("Information"), MB_OK|MB_ICONINFORMATION);
+        } else {
+          _stprintf(sTmp, TEXT("Unable to Open Log\r\non Device B\r\n%s"), wcLogFileName),
+          MessageBox (hWndMainWindow, sTmp,
+                TEXT("Error"), MB_OK|MB_ICONWARNING);
+        }
+
+      }
+
+    }
+
+  }
+
   return(TRUE);
 }
+
 
 BOOL devCloseAll(void){
   int i;
 
   for (i=0; i<NUMDEV; i++){
     devClose(&DeviceList[i]);
+    devCloseLog(&DeviceList[i]);
   }
   return(TRUE);
 }
@@ -152,6 +224,34 @@ PDeviceDescriptor_t devGetDeviceOnPort(int Port){
 
 
 BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+
+
+  if (d != NULL && d->fhLogFile != NULL && String != NULL && _tcslen(String) > 0){
+    char  sTmp[500];  // temp multibyte buffer
+    TCHAR *pWC = String;
+    char  *pC  = sTmp;
+    static DWORD lastFlush = 0;
+
+
+    sprintf(pC, "%9d <", GetTickCount());
+    pC = sTmp + strlen(sTmp);
+
+    while (*pWC){
+      if (*pWC != '\r'){
+        *pC = (char)*pWC;
+        pC++;
+      }
+      pWC++;
+    }
+    *pC++ = '>';
+    *pC++ = '\r';
+    *pC++ = '\n';
+    *pC++ = '\0';
+
+    fputs(sTmp, d->fhLogFile);
+
+  }
+
 
   if (d != NULL && d->ParseNMEA != NULL)
     if ((d->ParseNMEA)(d, String, GPS_INFO))
@@ -267,3 +367,18 @@ BOOL devIsGPSSource(PDeviceDescriptor_t d){
     return(FALSE);
 }
 
+BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName){
+  if (d != NULL){
+    d->fhLogFile = _tfopen(FileName, TEXT("wb"));
+    return(d->fhLogFile != NULL);
+  } else
+    return(FALSE);
+}
+
+BOOL devCloseLog(PDeviceDescriptor_t d){
+  if (d != NULL && d->fhLogFile != NULL){
+    fclose(d->fhLogFile);
+    return(TRUE);
+  } else
+    return(FALSE);
+}

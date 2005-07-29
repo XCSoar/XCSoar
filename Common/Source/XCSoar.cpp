@@ -46,6 +46,10 @@
 #include "devCAI302.h"
 #include "devEW.h"
 #include "Externs.h"
+#include "units.h"
+
+
+HWND hWnd1, hWnd2, hWnd3;
 
 HINSTANCE                       hInst;                                  // The current instance
 HWND                                    hWndCB;                                 // The command bar handle
@@ -93,6 +97,9 @@ BOOL                                    Port2Available = NULL;
 HFONT                                   InfoWindowFont;
 HFONT                                   TitleWindowFont;
 HFONT                                   MapWindowFont;
+
+HFONT                                   MapWindowBoldFont;
+
 HFONT                                   CDIWindowFont; // New
 HFONT                                   MapLabelFont;
 
@@ -154,6 +161,7 @@ int FAISector = TRUE;
 DWORD SectorRadius = 500;
 int StartLine = TRUE;
 DWORD StartRadius = 3000;
+
 int HomeWaypoint = -1;
 
 // Airspace Database
@@ -219,9 +227,7 @@ int ActiveWayPoint = -1;
 double AATTaskLength = 120;
 BOOL AATEnabled = FALSE;
 
-#if UNDER_CE >= 300
 static SHACTIVATEINFO s_sai;
-#endif
 
 static  TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:")};
 static  DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
@@ -231,6 +237,7 @@ static  DWORD PortIndex2 = 0;
 static  DWORD SpeedIndex2 = 2;
 
 BOOL InfoBoxesHidden = false;
+
 
 
 #define GLOBALFONT "Tahoma"
@@ -435,7 +442,7 @@ void ShowMenu() {
 //extern bool MapWindow::MapDirty; // the actual map refresh trigger
 
 
-#ifdef EXPERIMENTAL
+#if (EXPERIMENTAL > 0)
 #include "BlueSMS.h"
 BlueDialupSMS bsms;
 #endif
@@ -450,22 +457,28 @@ void ShowStatus() {
   int sunsetmins;
   double bearing;
   double distance;
+  TCHAR sLongditude[16];
+  TCHAR sLattitude[16];
+  int   TabStops[] = {50,80,0};
 
   statusmessage[0]=0;
+
+  Units::LongditudeToString(GPS_INFO.Longditude, sLongditude, sizeof(sLongditude)-1);
+  Units::LattitudeToString(GPS_INFO.Lattitude, sLattitude, sizeof(sLattitude)-1);
 
   sunsettime = DoSunEphemeris(GPS_INFO.Longditude,
                               GPS_INFO.Lattitude);
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime-sunsethours)*60);
 
-  wsprintf(Temp,TEXT("Longitude %-3.4f\r\nLatitude %-3.4f\r\nAltitude %5.0f\r\nSunset %02d:%02d\r\n\r\n"),
-           GPS_INFO.Longditude,
-           GPS_INFO.Lattitude,
+  _stprintf(Temp,TEXT("Longitude\t%s\r\nLatitude\t%s\r\nAltitude\t%.0f\r\nSunset\t%02d:%02d\r\n\r\n"),
+           sLongditude,
+           sLattitude,
            GPS_INFO.Altitude*ALTITUDEMODIFY,
            sunsethours,
            sunsetmins
            );
-  wcscat(statusmessage, Temp);
+  _tcscat(statusmessage, Temp);
 
   iwaypoint = FindNearestWayPoint(GPS_INFO.Longditude,
                                   GPS_INFO.Lattitude,
@@ -482,11 +495,11 @@ void ShowStatus() {
                         WayPointList[iwaypoint].Lattitude,
                         WayPointList[iwaypoint].Longditude)*DISTANCEMODIFY;
 
-    wsprintf(Temp,TEXT("Near: %s\r\nBearing %3d\r\nDistance %4.1f\r\n\r\n"),
+    _stprintf(Temp,TEXT("Near\t%s\r\nBearing\t%d\r\nDistance\t%.1f\r\n\r\n"),
              WayPointList[iwaypoint].Name,
              (int)bearing,
              distance);
-    wcscat(statusmessage, Temp);
+    _tcscat(statusmessage, Temp);
 
   }
 
@@ -496,7 +509,7 @@ void ShowStatus() {
     } else {
       wcscat(statusmessage, TEXT("GPS 3D fix\r\n"));
     }
-    wsprintf(Temp,TEXT("Satellites in view: %d\r\n"),
+    wsprintf(Temp,TEXT("Satellites in view\t%d\r\n"),
              GPS_INFO.SatellitesUsed
              );
     wcscat(statusmessage, Temp);
@@ -509,7 +522,7 @@ void ShowStatus() {
     wcscat(statusmessage, TEXT("Vario disconnected\r\n"));
   }
 
-  ShowStatusMessage(statusmessage, 60000, 14, false);
+  ShowStatusMessage(statusmessage, 60000, 14, false, TabStops);
   // i think one minute is enough...
 
 }
@@ -521,8 +534,9 @@ void FullScreen() {
     SetForegroundWindow(hWndMainWindow);
     SHFullScreen(hWndMainWindow,
                  SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-    SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),
-                 GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+    SetWindowPos(hWndMainWindow,HWND_TOP,
+                 0, 0, 0, 0,
+                 SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
   }
   MapWindow::RequestFastRefresh = true;
   InfoBoxesDirty = true;
@@ -645,6 +659,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   HACCEL hAccelTable;
   INITCOMMONCONTROLSEX icc;
 
+
+
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
@@ -665,10 +681,15 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SHSetAppKeyWndAssoc(VK_APP2, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP3, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP4, hWndMainWindow);
+
   // Typical Record Button
+
   //	Why you can't always get this to work
+
   //	http://forums.devbuzz.com/m_1185/mpage_1/key_/tm.htm
+
   //	To do with the fact it is a global hotkey, but you can with code above
+
   //	Also APPA is record key on some systems
   SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
@@ -725,13 +746,15 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ewRegister();
   // ... register all supported devices
 
-  devInit();
+
+  devInit(lpCmdLine);
+
 
   CreateCalculationThread();
 
   MapWindow::CreateDrawingThread();
 
-#ifdef EXPERIMENTAL
+#if (EXPERIMENTAL > 0)
   CreateProgressDialog(TEXT("Bluetooth dialup SMS"));
   bsms.Initialise();
 #endif
@@ -751,6 +774,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   SwitchToMapWindow();
   MapWindow::MapDirty = true;
+
+//  CloseProgressDialog();
 
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0))
@@ -848,9 +873,25 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   MyRegisterClass(hInst, szWindowClass);
 
-  hWndMainWindow = CreateWindow(szWindowClass, szTitle, WS_VISIBLE,
-                                0, 0, GetSystemMetrics(SM_CXSCREEN),
-				GetSystemMetrics(SM_CYSCREEN),
+  RECT WindowSize;
+
+  WindowSize.left = 0;
+  WindowSize.top = 0;
+  WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
+  WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
+
+  #ifdef SCREENWIDTH
+    WindowSize.right = SCREENWIDTH;
+    WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - SCREENWIDTH) / 2;
+  #endif
+  #ifdef SCREENHEIGHT
+    WindowSize.bottom = SCREENHEIGHT;
+    WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - SCREENHEIGHT) / 2;
+  #endif
+
+
+  hWndMainWindow = CreateWindow(szWindowClass, szTitle, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+                                WindowSize.left, WindowSize.top, WindowSize.right, WindowSize.bottom,
                                 NULL, NULL, hInstance, NULL);
 
   SendMessage(hWndMainWindow, WM_SETICON,
@@ -869,7 +910,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   GetClientRect(hWndMainWindow, &rc);
 
   FontHeight = (rc.bottom - rc.top ) / FONTHEIGHTRATIO;
-  FontWidth = (rc.right - rc.left ) / FONTWIDTHRATIO;
+
+  if ((rc.right - rc.left ) < (rc.bottom - rc.top ))
+    FontWidth = (rc.right - rc.left ) / FONTWIDTHRATIO;
+
+  else
+
+    FontWidth = 0;  // todo sgi
+
 
   memset ((char *)&logfont, 0, sizeof (logfont));
 
@@ -915,7 +963,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   CDIWindowFont = CreateFontIndirect (&logfont);
 
+
+
+
   // new font for map labels
+  memset ((char *)&logfont, 0, sizeof (logfont));
+
 
   _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
@@ -931,6 +984,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 
   // Font for map other text
+  memset ((char *)&logfont, 0, sizeof (logfont));
+
 
   // new font for map labels
 
@@ -946,8 +1001,20 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   MapWindowFont = CreateFontIndirect (&logfont);
 
+
   SendMessage(hWndMapWindow,WM_SETFONT,
               (WPARAM)MapWindowFont,MAKELPARAM(TRUE,0));
+
+  // Font for map bold text
+
+  logfont.lfWeight = FW_BOLD;
+  logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
+
+  MapWindowBoldFont = CreateFontIndirect (&logfont);
+
+
+
+
 
   ////////
 
@@ -961,36 +1028,39 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   ControlHeight = 0;
 #endif
 
+
 #ifndef _MAP_
 
   for(i=0;i<NUMINFOWINDOWS/2;i++)
     {
       if((i==0)&&0) // JMW why is this a special case?
         {
-          hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT(""),WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER,
+          hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT(""),WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                            i*ControlWidth, rc.top+TitleHeight,ControlWidth,ControlHeight,
                                            hWndMainWindow,NULL,hInstance,NULL);
         }
       else
         {
           hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT("\0"),
-                                           WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
+                                           WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                            i*ControlWidth, rc.top+TitleHeight,
                                            ControlWidth,ControlHeight-TitleHeight,
                                            hWndMainWindow,NULL,hInstance,NULL);
         }
 
 
+
       hWndTitleWindow[i] = CreateWindow(TEXT("STATIC"),
                                         // Data_Options[InfoType[i]& 0xff].Title
                                         TEXT("\0")
                                         ,
-                                        WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
+                                        WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                         i*ControlWidth, rc.top, ControlWidth, TitleHeight,
                                         hWndMainWindow,NULL,hInstance,NULL);
 
+
       hWndInfoWindow[i+(NUMINFOWINDOWS/2)] = CreateWindow(TEXT("STATIC"),TEXT("\0"),
-                                                          WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY,
+                                                          WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                                           i*ControlWidth, (rc.bottom - ControlHeight+TitleHeight),
                                                           ControlWidth,ControlHeight-TitleHeight,
                                                           hWndMainWindow,NULL,hInstance,NULL);
@@ -999,7 +1069,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         CreateWindow(TEXT("STATIC"),
                      // Data_Options[InfoType[i+(NUMINFOWINDOWS/2)]& 0xff].Title,
                      TEXT("\0"),
-                     WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER,
+                     WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                      i*ControlWidth, (rc.bottom - ControlHeight),
                      ControlWidth, TitleHeight,
                      hWndMainWindow,NULL,hInstance,NULL);
@@ -1012,6 +1082,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     }
 #endif
 
+
   //// create map window
 
   MapWindow::MapRect.top = rc.top+ControlHeight;
@@ -1021,30 +1092,31 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 #ifdef _MAP_
 
-  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE|WS_CHILD|WS_TABSTOP,
+  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                0, 0, (rc.right - rc.left),
 			       (rc.bottom-rc.top) ,
                                hWndMainWindow,NULL,hInstance,NULL);
 #else
 
 #ifdef OLDWINDOW
-  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE|WS_CHILD|WS_TABSTOP,
+  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                0, rc.top + ControlHeight, (rc.right - rc.left), ((rc.bottom-rc.top) - (2*ControlHeight)),
                                hWndMainWindow,NULL,hInstance,NULL);
 #else
 
-  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE|WS_CHILD|WS_TABSTOP,
+  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                0, 0, (rc.right - rc.left),
 			       (rc.bottom-rc.top) ,
-                               hWndMainWindow,NULL,hInstance,NULL);
+                               hWndMainWindow, NULL ,hInstance,NULL);
 
 #endif
 
 #endif
 
 
-  hWndMenuButton = CreateWindow(TEXT("BUTTON"),TEXT("Menu"),WS_VISIBLE|WS_CHILD,
-                                0, 0,0,0,hWndMainWindow,NULL,hInst,NULL);
+  hWndMenuButton = CreateWindow(TEXT("BUTTON"),TEXT("Menu"),WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+                                0, 0,0,0,hWndMainWindow/*hWndMainWindow*/,NULL,hInst,NULL);
+
 
   SendMessage(hWndMenuButton,WM_SETFONT,(WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
 
@@ -1058,7 +1130,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   // JMW changed layout a bit, deleted Waiting for GPS info text as it is misleading here
 
-  hWndCDIWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),WS_VISIBLE|WS_CHILD,
+  hWndCDIWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),WS_VISIBLE|WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
   SendMessage(hWndCDIWindow,WM_SETFONT,
               (WPARAM)CDIWindowFont,MAKELPARAM(TRUE,0));
@@ -1194,6 +1266,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     break;
 
+
     case WM_ERASEBKGND:
       return TRUE; // JMW trying to reduce screen flicker
 
@@ -1243,7 +1316,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_ACTIVATE:
       if(LOWORD(wParam) != WA_INACTIVE)
         {
-          SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+          SetWindowPos(hWndMainWindow,HWND_TOP,
+                 0, 0, 0, 0,
+                 SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
           if(TopWindow)
             SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
           else
@@ -1277,9 +1352,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_KEYUP:
 
+
+
 		// TODO: Allow buttons to be configurable
+
 		// TODO: Allow other events to trigger these (eg: external buttons)
+
 		// TODO: Document button mapping (not really required if configurable)
+
 		// TODO: Many of these keys have common interface (eg: App1 almost always Calendar) - document
       switch (wParam)
         {
@@ -1390,8 +1470,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           break;
 
         case VK_APP6:	// Show Menu
+
 			ShowMenu();
+
 			break;
+
+
 
         case VK_UP :  // SCROLL UP (infobox mode)
           DoInfoKey(1);
@@ -1403,6 +1487,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case VK_RETURN:
         if (!Debounce(wParam)) break;
+
           DoInfoKey(0);
           break;
 
@@ -1446,15 +1531,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       SaveSoundSettings();
 
       VarioSound_EnableSound(false);
-      VarioSound_Close();  // added sgi
+
+      VarioSound_Close();
+
 
       devCloseAll();
 
-#ifdef EXPERIMENTAL
+#if (EXPERIMENTAL > 0)
       bsms.Shutdown();
 #endif
 
-	  MapWindow::CloseDrawingThread();
+      MapWindow::CloseDrawingThread();
 
       NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1; AATEnabled = FALSE;
       NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
@@ -1485,6 +1572,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       DeleteObject(CDIWindowFont);
       DeleteObject(MapLabelFont);
       DeleteObject(MapWindowFont);
+
+      DeleteObject(MapWindowBoldFont);
+
 
       if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
       if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
@@ -1554,14 +1644,19 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           switch (wID)
             {
             case IDD_EXIT:
-              if(MessageBox(hWnd,TEXT("Do you wish to exit?"),TEXT("Exit?"),MB_YESNO|MB_ICONQUESTION) == IDYES)
-                {
+              if(
+                #ifdef _SIM_
+                (true)
+                #else
+                MessageBox(hWnd,TEXT("Do you wish to exit?"),TEXT("Exit?"),MB_YESNO|MB_ICONQUESTION) == IDYES
+                #endif
+              ) {
                   SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
                   SendMessage (hWnd, WM_CLOSE, 0, 0);
                 } else {
               }
               MapWindow::MapDirty = true;
-	      HideMenu();
+	             HideMenu();
               FullScreen();
               return 0;
 
@@ -1656,7 +1751,9 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			  MapWindow::SuspendDrawingThread();
 
               ShowWindow(hWndCB,SW_SHOW);
-              SetWindowPos(hWndMainWindow,HWND_TOP,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+              SetWindowPos(hWndMainWindow,HWND_TOP,
+                           0, 0, 0, 0,
+                           SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
 
               SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
               DialogBox(hInst, (LPCTSTR)IDD_SETTINGS, hWndMainWindow, (DLGPROC)Settings);
@@ -1674,12 +1771,17 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #ifndef _SIM_
                   // JMW disabled com opening in sim mode
                   devClose(devA());
+
                   devClose(devA());
+
+
 
                   RestartCommPorts();
 
 
-                  devInit();
+
+                  devInit(TEXT(""));
+
 #endif
 
                 }
@@ -2031,7 +2133,7 @@ void CommonProcessTimer()
     }
   }
 
-#ifdef EXPERIMENTAL
+#if (EXPERIMENTAL > 0)
 
   if (bsms.Poll()) {
     // turn screen on if blanked and receive a new message
@@ -2127,7 +2229,7 @@ void ProcessTimer(void)
             MessageBeep(MB_ICONEXCLAMATION);
             RestartCommPorts();
 
-#ifdef EXPERIMENTAL
+#if (EXPERIMENTAL > 0)
             // if comm port shut down, probably so did bluetooth dialup
             // so restart it here also.
             bsms.Shutdown();
@@ -2202,6 +2304,7 @@ void SIMProcessTimer(void)
   extGPSCONNECT = TRUE;
 
   GPS_INFO.NAVWarning = FALSE;
+  GPS_INFO.SatellitesUsed = 6;
 
   GPS_INFO.Lattitude = FindLattitude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
   GPS_INFO.Longditude = FindLongditude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
@@ -2442,3 +2545,4 @@ void BlankDisplay(bool doblank) {
   }
   ::ReleaseDC(NULL, gdc);
 }
+

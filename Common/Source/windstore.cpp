@@ -15,6 +15,8 @@
 **
 ***********************************************************************/
 
+#include "stdafx.h"
+
 #include "windstore.h"
 #include "XCSoar.h"
 

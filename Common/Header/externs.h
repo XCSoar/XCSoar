@@ -12,7 +12,7 @@
 #include "Mapwindow.h"
 #include "Task.h"
 
-#ifdef EXPERIMENTAL
+#if (EXPERIMENTAL > 0)
 #include "BlueSMS.h"
 #endif
 
@@ -155,7 +155,7 @@ extern BOOL POLARFILECHANGED;
 
 bool Debounce(WPARAM wParam);
 
-#ifdef EXPERIMENTAL
+#if (EXPERIMENTAL > 0)
 extern BlueDialupSMS bsms;
 #endif
 

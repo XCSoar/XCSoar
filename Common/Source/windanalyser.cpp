@@ -15,6 +15,8 @@
 **
 ***********************************************************************/
 
+#include "stdafx.h"
+
 #include "Calculations.h"
 #include "windanalyser.h"
 #include "XCSoar.h"

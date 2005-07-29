@@ -58,7 +58,7 @@ static void CalculateSector(TCHAR *Text);
 static void ParseError(TCHAR *Line);
 
 
-static int GetNextLine(HANDLE hFile, TCHAR *Text);
+static int GetNextLine(FILE *fp, TCHAR *Text);
 static int Waiting(TCHAR *Text, AIRSPACE_AREA *Temp);
 static int Command_AC(TCHAR *Text, AIRSPACE_AREA *Temp);
 static int Command_AN(TCHAR *Text, AIRSPACE_AREA *Temp);
@@ -98,9 +98,11 @@ static int LineCount;
 /////////////////////////////
 
 
+#if AIRSPACEUSEBINFILE > 0
 // if file changed, don't load from binary, load from normal and then save it.
 
 void SaveAirspaceBinary(FILETIME LastWrite) {
+
   HANDLE hFile;// = INVALID_HANDLE_VALUE;
   DWORD dwBytesRead;
   BinFileHeader_t Header;
@@ -136,13 +138,15 @@ void SaveAirspaceBinary(FILETIME LastWrite) {
 	    &dwBytesRead, NULL);
 
   CloseHandle(hFile);
+
 }
 
 
 bool LoadAirspaceBinary(FILETIME LastWrite) {
+//  TCHAR szTemp[100]; // unused var RB
+
   HANDLE hFile;// = INVALID_HANDLE_VALUE;
   DWORD dwNumBytesRead;
-//  TCHAR szTemp[100]; // unused var RB
 
   hFile = CreateFile(TEXT("xcsoar-airspace.bin"),
 		     GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,
@@ -241,8 +245,11 @@ bool LoadAirspaceBinary(FILETIME LastWrite) {
       return true;
     }
   return false; // couldn't find it...
-}
 
+return false;
+
+}
+#endif
 
 ///////////////////////////////
 
@@ -268,7 +275,7 @@ void CloseAirspace() {
 // this can now be called multiple times to load several airspaces.
 // to start afresh, call CloseAirspace()
 
-void ReadAirspace(HANDLE hFile)
+void ReadAirspace(FILE *fp)
 {
   int Mode = WAITING;
   int Tick = 0; int Tock=0;
@@ -287,19 +294,19 @@ void ReadAirspace(HANDLE hFile)
 
   hProgress=CreateProgressDialog(TEXT("Loading Airspace File..."));
 
-  fSize = (double)GetFileSize(hFile,NULL);
+  fSize = (double)GetFileSize((void *)_fileno(fp),NULL);
 
   TempArea.FirstPoint = 0;
-  while(GetNextLine(hFile,TempString))
+  while(GetNextLine(fp, TempString))
     {
       Tock++; Tock %= 400;
       if(Tock == 0)
 	{
-	  dwPos = SetFilePointer(hFile,0,NULL,FILE_CURRENT);
+	  dwPos = ftell(fp);
 	  fPos = dwPos * 100;
 	  fPos = fPos / (2*fSize);
 
-          StepProgressDialog();
+    StepProgressDialog();
 
 	  Tick ++; Tick %=100;
 	}
@@ -383,15 +390,16 @@ void ReadAirspace(HANDLE hFile)
   NumberOfAirspaceAreas = OldNumberOfAirspaceAreas;
   NumberOfAirspaceCircles = OldNumberOfAirspaceCircles;
 
-  SetFilePointer(hFile,0,NULL,FILE_BEGIN);
   TempArea.FirstPoint = 0;
+  fseek(fp, 0, SEEK_SET );
+  LineCount = -1;
 
-  while(GetNextLine(hFile,TempString))
+  while(GetNextLine(fp, TempString))
     {
       Tock++; Tock %= 400;
       if(Tock == 0)
 	{
-	  fPos = SetFilePointer(hFile,0,NULL,FILE_CURRENT);
+	  fPos = ftell(fp);
 	  //fPos = LOWORD(fPos);
 	  fPos *= 100;
 	  fPos = fPos / (2*fSize);
@@ -421,39 +429,39 @@ void ReadAirspace(HANDLE hFile)
 }
 
 
-int GetNextLine(HANDLE hFile, TCHAR *Text)
+int GetNextLine(FILE *fp, TCHAR *Text)
 {
   TCHAR *Comment;
   int size;
 
-  while(ReadString(hFile,200,TempString))
+  while(ReadStringX(fp, 200, Text))
     {
       LineCount++;
-      if(_tcslen(TempString) <=2)
+      if(_tcslen(Text) <=2)
 	{
 	}
-      else if(StartsWith(TempString,TEXT("AT ")))
+      else if(StartsWith(Text,TEXT("AT ")))
 	{
 	}
-      else if(StartsWith(TempString,TEXT("SP ")))
+      else if(StartsWith(Text,TEXT("SP ")))
 	{
 	}
-      else if(StartsWith(TempString,TEXT("SB ")))
+      else if(StartsWith(Text,TEXT("SB ")))
 	{
 	}
-      else if(StartsWith(TempString,TEXT("V Z=")))
+      else if(StartsWith(Text,TEXT("V Z=")))
 	{
 	}
-      else if(StartsWith(TempString,TEXT("TC ")))
+      else if(StartsWith(Text,TEXT("TC ")))
 	{
 	}
-      else if(StartsWith(TempString,TEXT("TO ")))
+      else if(StartsWith(Text,TEXT("TO ")))
 	{
 	}
-      else if(StartsWith(TempString,TEXT("TYPE")))
+      else if(StartsWith(Text,TEXT("TYPE")))
 	{
 	}
-      else if(!StartsWith(TempString,TEXT("V T=1")))
+      else if(!StartsWith(Text,TEXT("V T=1")))
 	{
 	  if(Text[0] != '*')
 	    {
@@ -1019,6 +1027,10 @@ void CalculateArc(TCHAR *Text)
 
 void ParseError(TCHAR *Line)
 {
+
+  if (LineCount == -1)                                      // -1 means we are in the second pass
+    return;                                                 // all warnings are still displayed
+
   TCHAR Message[200];
 
   wsprintf(Message,TEXT("Error in Section %s at Line %d Text %s"),TempArea.Name,LineCount,Line);
@@ -1070,23 +1082,24 @@ void ReadAirspace(void)
   TCHAR	szFile1[MAX_PATH] = TEXT("\0");
   TCHAR	szFile2[MAX_PATH] = TEXT("\0");
 
-  HANDLE hFile1;
-  HANDLE hFile2;
+  FILE *fp;
+  FILE *fp2;
   FILETIME LastWriteTime;
   FILETIME LastWriteTime2;
 
   GetRegistryString(szRegistryAirspaceFile, szFile1, MAX_PATH);
   GetRegistryString(szRegistryAdditionalAirspaceFile, szFile2, MAX_PATH);
 
-  hFile1 = CreateFile(szFile1,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  hFile2 = CreateFile(szFile2,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 
-  if (hFile1 != INVALID_HANDLE_VALUE ){
+  fp  = _tfopen(szFile1, TEXT("rt"));
+  fp2 = _tfopen(szFile2, TEXT("rt"));
 
-    GetFileTime(hFile1, NULL, NULL, &LastWriteTime);
+  if (fp != NULL){
 
-    if (hFile2 != INVALID_HANDLE_VALUE) {
-      GetFileTime(hFile2, NULL, NULL, &LastWriteTime2);
+    GetFileTime((void *)_fileno(fp), NULL, NULL, &LastWriteTime);
+
+    if (fp2 != NULL) {
+      GetFileTime((void *)_fileno(fp2), NULL, NULL, &LastWriteTime2);
       if (LastWriteTime2.dwHighDateTime>
           LastWriteTime.dwHighDateTime) {
         // this file is newer, so use it as the time stamp
@@ -1094,27 +1107,31 @@ void ReadAirspace(void)
       }
     }
 
-    if (AIRSPACEFILECHANGED ||
-        !LoadAirspaceBinary(LastWriteTime)) {
+    if (AIRSPACEFILECHANGED
+        #if AIRSPACEUSEBINFILE > 0
+        ||!LoadAirspaceBinary(LastWriteTime)
+        #else
+        || (true)
+        #endif
+      ) {
 
-      ReadAirspace(hFile1);
+      ReadAirspace(fp);
 
       // also read any additional airspace
-      if (hFile2 != INVALID_HANDLE_VALUE) {
-
-        ReadAirspace(hFile2);
-
+      if (fp2 != NULL) {
+        ReadAirspace(fp2);
       }
-
+      #if AIRSPACEUSEBINFILE > 0
       SaveAirspaceBinary(LastWriteTime);
+      #endif
     }
 
-    CloseHandle(hFile1);
+  	fclose(fp);
 
   }
 
-  if (hFile2 != INVALID_HANDLE_VALUE) {
-    CloseHandle(hFile2);
+  if (fp2 != NULL) {
+    fclose(fp2);
   }
 
   FindAirspaceAreaBounds();

@@ -115,48 +115,8 @@ static int  McCreadyUpdateTimeout = 0;
 static int  BugsUpdateTimeout = 0;
 static int  BallastUpdateTimeout = 0;
 
-#if LOGSTREAM > 0
-static HANDLE hLogFile;
-#endif
 
 BOOL cai302ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
-
-  #if LOGSTREAM > 0
-  if (hLogFile != INVALID_HANDLE_VALUE && String != NULL && _tcslen(String) > 0){
-    char  sTmp[500];  // temp multibyte buffer
-    TCHAR *pWC = String;
-    char  *pC  = sTmp;
-    DWORD dwBytesRead;
-    static DWORD lastFlush = 0;
-
-
-    sprintf(pC, "%9d <", GetTickCount());
-    pC = sTmp + strlen(sTmp);
-
-    while (*pWC){
-      if (*pWC != '\r'){
-        *pC = (char)*pWC;
-        pC++;
-      }
-      pWC++;
-    }
-    *pC++ = '>';
-    *pC++ = '\r';
-    *pC++ = '\n';
-    *pC++ = '\0';
-
-    WriteFile(hLogFile, sTmp, strlen(sTmp), &dwBytesRead, NULL);
-
-    /*
-    if (GetTickCount() - lastFlush > 10000){
-      FlushFileBuffers(hLogFile);
-      lastFlush = GetTickCount();
-    }
-    */
-
-  }
-  #endif
-
 
   if (!NMEAChecksum(String) || (GPS_INFO == NULL)){
     return FALSE;
@@ -226,31 +186,66 @@ BOOL cai302PutBallast(PDeviceDescriptor_t d, double Ballast){
 
 }
 
+void test(void){
+
+  DWORD KeyType;
+  TCHAR Buffer[MAX_PATH];
+  DWORD BufSize = MAX_PATH;
+  int   retries;
+  HKEY hKey = NULL;
+
+  Buffer[0] = '\0';
+
+  if (RegOpenKeyEx(HKEY_LOCAL_MACHINE ,
+      TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
+      0, 0, &hKey
+    ) == ERROR_SUCCESS){
+
+    if (RegQueryValueEx(hKey ,
+        TEXT("DLL"),
+        NULL,
+        &KeyType,
+        (unsigned char *)&Buffer,
+        &BufSize
+      ) == ERROR_SUCCESS){
+
+
+    }
+    else Buffer[0] = '\0';
+
+    RegCloseKey(hKey);
+
+    if (Buffer[0] != '\0'){
+
+      RegDeleteKey(HKEY_LOCAL_MACHINE, TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"));
+
+      for (retries=0; retries < 10 && DeleteFile(Buffer) == 0; retries++){
+        SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
+        Sleep(250*retries);
+      }
+
+    }
+
+  }
+
+}
+
+
 BOOL cai302Open(PDeviceDescriptor_t d, int Port){
 
-
   d->Port = Port;
+
+test();
 
   if (!fSimMode){
     (d->Com.WriteString)(TEXT("\x03"));
     (d->Com.WriteString)(TEXT("LOG 0\r"));
   }
 
-  #if LOGSTREAM > 0
-  hLogFile = CreateFile(TEXT("\\Speicherkarte\\cai302Nmea.log"), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-  SetFilePointer(hLogFile, 0, NULL, FILE_END);
-  #endif
-
   return(TRUE);
 }
 
 BOOL cai302Close(PDeviceDescriptor_t d){
-
-
-  #if LOGSTREAM > 0
-  if (hLogFile != INVALID_HANDLE_VALUE)
-    CloseHandle(hLogFile);
-  #endif
 
   return(TRUE);
 }

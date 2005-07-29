@@ -1,6 +1,5 @@
 
-#include <windows.h>
-#include <tchar.h>
+#include "stdafx.h"
 
 
 #include "externs.h"

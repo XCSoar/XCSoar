@@ -397,13 +397,21 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_AIRFI=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -461,13 +469,21 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_AIRFI=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -480,12 +496,18 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_AIRFI=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -566,13 +588,21 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_AIRSP=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -630,13 +660,21 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_AIRSP=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -649,12 +687,18 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_AIRSP=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -738,16 +782,18 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_AIRSPA=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -826,16 +872,18 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_AIRSPA=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -848,16 +896,18 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_AIRSPA=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -962,8 +1012,11 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\Logger.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -975,6 +1028,9 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_CALCU=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -1050,8 +1106,11 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\Logger.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -1063,6 +1122,9 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_CALCU=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -1076,6 +1138,7 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -1087,6 +1150,9 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_CALCU=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -1191,7 +1257,10 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\devCai302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -1199,6 +1268,9 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVCA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -1259,7 +1331,10 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\devCai302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -1267,6 +1342,9 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVCA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -1279,6 +1357,7 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -1286,6 +1365,9 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVCA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -1370,7 +1452,10 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -1378,6 +1463,9 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVEW=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -1438,7 +1526,10 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -1446,6 +1537,9 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVEW=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -1458,6 +1552,7 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -1465,6 +1560,9 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVEW=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -1548,7 +1646,10 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -1556,6 +1657,9 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVIC=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -1612,7 +1716,10 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -1620,6 +1727,9 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVIC=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -1631,6 +1741,7 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -1638,6 +1749,9 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVIC=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -1722,21 +1836,26 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DIALO=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -1818,25 +1937,32 @@ NODEP_CPP_DIALO=\
 DEP_CPP_DIALO=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DIALO=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -1854,19 +1980,22 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DIALO=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -1984,7 +2113,10 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\Logger.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -1992,6 +2124,9 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_LOGGE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -2048,7 +2183,10 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\Logger.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -2056,6 +2194,9 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_LOGGE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -2067,6 +2208,7 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -2074,6 +2216,9 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_LOGGE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -2219,6 +2364,8 @@ SOURCE=..\..\Common\Source\maperror.c
 DEP_CPP_MAPER=\
 	"..\..\Common\Header\maperror.h"\
 	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -2247,6 +2394,8 @@ DEP_CPP_MAPER=\
 DEP_CPP_MAPER=\
 	"..\..\Common\Header\maperror.h"\
 	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -2254,6 +2403,8 @@ DEP_CPP_MAPER=\
 DEP_CPP_MAPER=\
 	"..\..\Common\Header\maperror.h"\
 	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -2296,6 +2447,8 @@ SOURCE=..\..\Common\Source\mapprimitive.c
 DEP_CPP_MAPPR=\
 	"..\..\Common\Header\maperror.h"\
 	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -2324,6 +2477,8 @@ DEP_CPP_MAPPR=\
 DEP_CPP_MAPPR=\
 	"..\..\Common\Header\maperror.h"\
 	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -2331,6 +2486,8 @@ DEP_CPP_MAPPR=\
 DEP_CPP_MAPPR=\
 	"..\..\Common\Header\maperror.h"\
 	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -2372,6 +2529,8 @@ SOURCE=..\..\Common\Source\mapsearch.c
 
 DEP_CPP_MAPSE=\
 	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -2396,12 +2555,16 @@ DEP_CPP_MAPSE=\
 
 DEP_CPP_MAPSE=\
 	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_MAPSE=\
 	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -2442,6 +2605,8 @@ DEP_CPP_MAPSH=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\maptree.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -2478,6 +2643,8 @@ DEP_CPP_MAPSH=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\maptree.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -2487,6 +2654,8 @@ DEP_CPP_MAPSH=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\maptree.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -2634,18 +2803,26 @@ SOURCE=..\..\Common\Source\MapWindow.cpp
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
+	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MAPWI=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -2710,18 +2887,26 @@ DEP_CPP_MAPWI=\
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
+	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MAPWI=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -2735,6 +2920,7 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -2745,6 +2931,9 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MAPWI=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -2837,6 +3026,8 @@ DEP_CPP_MAPXB=\
 	"..\..\Common\Header\maperror.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -2869,6 +3060,8 @@ DEP_CPP_MAPXB=\
 	"..\..\Common\Header\maperror.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -2877,6 +3070,8 @@ DEP_CPP_MAPXB=\
 	"..\..\Common\Header\maperror.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -2923,14 +3118,20 @@ SOURCE=..\..\Common\Source\McReady.cpp
 DEP_CPP_MCREA=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MCREA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -2983,14 +3184,20 @@ DEP_CPP_MCREA=\
 DEP_CPP_MCREA=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MCREA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -3002,12 +3209,16 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MCREA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -3082,7 +3293,10 @@ SOURCE=..\..\Common\Source\Parser.cpp
 DEP_CPP_PARSE=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -3090,6 +3304,9 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PARSE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -3140,7 +3357,10 @@ DEP_CPP_PARSE=\
 DEP_CPP_PARSE=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -3148,6 +3368,9 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PARSE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -3158,6 +3381,7 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -3165,6 +3389,9 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PARSE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -3237,7 +3464,10 @@ SOURCE=..\..\Common\Source\Port.cpp
 DEP_CPP_PORT_=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -3245,6 +3475,9 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT_=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -3297,7 +3530,10 @@ DEP_CPP_PORT_=\
 DEP_CPP_PORT_=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -3305,6 +3541,9 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT_=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -3315,6 +3554,7 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -3322,6 +3562,9 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT_=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -3396,7 +3639,10 @@ SOURCE=..\..\Common\Source\Port2.cpp
 DEP_CPP_PORT2=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -3404,6 +3650,9 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT2=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -3456,7 +3705,10 @@ DEP_CPP_PORT2=\
 DEP_CPP_PORT2=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -3464,6 +3716,9 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT2=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -3474,6 +3729,7 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -3481,6 +3737,9 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT2=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -3555,14 +3814,21 @@ SOURCE=..\..\Common\Source\Process.cpp
 DEP_CPP_PROCE=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PROCE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -3611,8 +3877,13 @@ DEP_CPP_PROCE=\
 
 DEP_CPP_PROCE=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -3620,22 +3891,30 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_PROCE=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_PROCE=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PROCE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -3705,7 +3984,10 @@ SOURCE=..\..\Common\Source\RasterTerrain.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
 
 DEP_CPP_RASTE=\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -3753,7 +4035,10 @@ DEP_CPP_RASTE=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_RASTE=\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -3768,6 +4053,7 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -3834,32 +4120,28 @@ SOURCE=..\..\Common\Source\rscalc.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -3869,17 +4151,19 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE SH3) Release"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -3889,17 +4173,19 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE SH3) Debug"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -3909,57 +4195,59 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -3969,17 +4257,19 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -3989,17 +4279,19 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86em) Release"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -4010,16 +4302,18 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86em) Debug"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -4029,6 +4323,12 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -4041,6 +4341,7 @@ SOURCE=..\..\Common\Source\StdAfx.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
 
 DEP_CPP_STDAF=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	
 
@@ -4065,12 +4366,14 @@ DEP_CPP_STDAF=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_STDAF=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_STDAF=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	
 
@@ -4108,6 +4411,7 @@ SOURCE=..\..\Common\Source\STScreenBuffer.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
 
 DEP_CPP_STSCR=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	
@@ -4136,6 +4440,7 @@ DEP_CPP_STSCR=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_STSCR=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	
@@ -4143,6 +4448,7 @@ DEP_CPP_STSCR=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_STSCR=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	
@@ -4190,6 +4496,7 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -4200,6 +4507,9 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TERRA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -4268,6 +4578,7 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -4279,6 +4590,9 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_TERRA=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
@@ -4288,6 +4602,7 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -4298,6 +4613,9 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TERRA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -4393,6 +4711,7 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -4400,6 +4719,9 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TOPOL=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -4461,6 +4783,7 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -4468,6 +4791,9 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TOPOL=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -4478,6 +4804,7 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -4485,6 +4812,9 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TOPOL=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -4560,21 +4890,116 @@ DEP_CPP_TOPOL=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Source\units.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\units.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\units.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE SH3) Release"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\units.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE SH3) Debug"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\units.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\units.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\units.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\units.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\units.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86em) Release"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\units.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86em) Debug"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\units.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Source\Utils.cpp
 
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
 
 DEP_CPP_UTILS=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\uniqueid.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UTILS=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -4626,15 +5051,23 @@ DEP_CPP_UTILS=\
 
 DEP_CPP_UTILS=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\uniqueid.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UTILS=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -4646,6 +5079,7 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -4654,6 +5088,9 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\uniqueid.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UTILS=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -4727,6 +5164,7 @@ SOURCE=..\..\Common\Source\VarioSound.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
 
 DEP_CPP_VARIO=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WaveThread.h"\
@@ -4759,6 +5197,7 @@ DEP_CPP_VARIO=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_VARIO=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WaveThread.h"\
@@ -4767,6 +5206,7 @@ DEP_CPP_VARIO=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_VARIO=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WaveThread.h"\
@@ -4816,6 +5256,7 @@ SOURCE=..\..\Common\Source\VOIMAGE.cpp
 DEP_CPP_VOIMA=\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	
@@ -4852,6 +5293,7 @@ DEP_CPP_VOIMA=\
 DEP_CPP_VOIMA=\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	
@@ -4861,6 +5303,7 @@ DEP_CPP_VOIMA=\
 DEP_CPP_VOIMA=\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	
@@ -4911,6 +5354,7 @@ SOURCE=..\..\Common\Source\WaveThread.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
 
 DEP_CPP_WAVET=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
@@ -4939,6 +5383,7 @@ DEP_CPP_WAVET=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_WAVET=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
@@ -4946,6 +5391,7 @@ DEP_CPP_WAVET=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
 
 DEP_CPP_WAVET=\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\WaveThread.h"\
 	
@@ -4991,7 +5437,10 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -4999,6 +5448,11 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_WAYPO=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -5055,7 +5509,10 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5063,6 +5520,11 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_WAYPO=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -5074,6 +5536,7 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5081,6 +5544,11 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_WAYPO=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -5158,7 +5626,10 @@ SOURCE=..\..\Common\Source\windanalyser.cpp
 
 DEP_CPP_WINDA=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5168,6 +5639,7 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\windanalyser.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -5222,7 +5694,10 @@ DEP_CPP_WINDA=\
 
 DEP_CPP_WINDA=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5232,6 +5707,7 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\windanalyser.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -5241,6 +5717,7 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5250,6 +5727,7 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\windanalyser.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -5327,7 +5805,10 @@ SOURCE=..\..\Common\Source\windmeasurementlist.cpp
 
 DEP_CPP_WINDM=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5383,7 +5864,10 @@ DEP_CPP_WINDM=\
 
 DEP_CPP_WINDM=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5400,6 +5884,7 @@ DEP_CPP_WINDM=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5476,7 +5961,10 @@ SOURCE=..\..\Common\Source\windstore.cpp
 
 DEP_CPP_WINDS=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5485,6 +5973,7 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -5536,7 +6025,10 @@ DEP_CPP_WINDS=\
 
 DEP_CPP_WINDS=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5545,6 +6037,7 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -5554,6 +6047,7 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
@@ -5562,6 +6056,7 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -5642,23 +6137,31 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\Logger.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
+	"..\..\Common\Header\Topology.h"\
+	"..\..\Common\Header\units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_XCSOA=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Source\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Debug"
@@ -5754,23 +6257,31 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\Logger.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
+	"..\..\Common\Header\Topology.h"\
+	"..\..\Common\Header\units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_XCSOA=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Source\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -5784,11 +6295,13 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -5796,14 +6309,17 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Topology.h"\
+	"..\..\Common\Header\units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_XCSOA=\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Source\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
