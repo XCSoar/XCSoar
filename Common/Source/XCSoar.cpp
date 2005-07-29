@@ -538,9 +538,17 @@ void FullScreen() {
     SetForegroundWindow(hWndMainWindow);
     SHFullScreen(hWndMainWindow,
                  SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+#if (WINDOWSPC>0)
     SetWindowPos(hWndMainWindow,HWND_TOP,
                  0, 0, 0, 0,
                  SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+#else
+    SetWindowPos(hWndMainWindow,HWND_TOP,
+                 0,0,
+                 GetSystemMetrics(SM_CXSCREEN),
+                 GetSystemMetrics(SM_CYSCREEN),
+                 SWP_SHOWWINDOW);
+#endif
   }
   MapWindow::RequestFastRefresh = true;
   InfoBoxesDirty = true;

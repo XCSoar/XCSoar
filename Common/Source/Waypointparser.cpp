@@ -144,15 +144,10 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
   pToken = strtok_r(NULL, TEXT(","), &pWClast);
   Temp->Lattitude = CalculateAngle(pToken);
 
-  //ExtractParameter(TempString,ctemp,1); //Lattitude
-  pToken = strtok_r(NULL, TEXT(","), &pWClast);
-  Temp->Lattitude = CalculateAngle(pToken);
-
   if((Temp->Lattitude > 90) || (Temp->Lattitude < -90))
     {
       return FALSE;
     }
-
 
   //ExtractParameter(TempString,ctemp,2); //Longditude
   pToken = strtok_r(NULL, TEXT(","), &pWClast);
@@ -173,6 +168,14 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
   //ExtractParameter(TempString,ctemp,5); // Name
   pToken = strtok_r(NULL, TEXT(","), &pWClast);
   _tcscpy(Temp->Name, pToken);
+  int i;
+  for (i=_tcslen(Temp->Name)-1; i>1; i--) {
+    if (Temp->Name[i]==' ') {
+      Temp->Name[i]=0;
+    } else {
+      break;
+    }
+  }
 
   //ExtractParameter(TempString,ctemp,6); // Comment
   pToken = strtok_r(NULL, TEXT(","), &pWClast);

@@ -23,4 +23,6 @@ void DrawTerrain(HDC hdc, RECT rc, double sunazimuth, double sunelevation);
 void DrawMarks(HDC hdc, RECT rc);
 void MarkLocation(double lon, double lat);
 rectObj GetRectBounds(RECT rc);
+void OptimizeTerrainCache();
+
 #endif

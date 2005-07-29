@@ -14,7 +14,7 @@
 
 
 
-#define INTERNAL_WAVEOUT_BUFFER_COUNT 3   // This is one part of the wave output delay
+#define INTERNAL_WAVEOUT_BUFFER_COUNT 2   // This is one part of the wave output delay
                                           //  if you use e.g. 20ms buffers the delay
                                           //  INTERNAL_WAVEOUT_BUFFER_COUNT * 20ms
 
