@@ -57,6 +57,7 @@ static BOOL RMAAvailable = FALSE;
 static double RMAAltitude = 0;
 
 BOOL GpsUpdated = TRUE;
+BOOL VarioUpdated = TRUE;
 
 BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
@@ -594,6 +595,43 @@ BOOL NMEAChecksum(TCHAR *String)
 
 BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
+  double vtas, vias, wnet;
+  TCHAR ctemp[80];
+  // for testing only, this is really static pressure
+
+  ExtractParameter(String,ctemp,0);
+  vtas = StrToDouble(ctemp,NULL)/TOKNOTS;
+
+  ExtractParameter(String,ctemp,1);
+  wnet = StrToDouble(ctemp,NULL)/TOKNOTS;
+
+  ExtractParameter(String,ctemp,2);
+  GPS_INFO->MacReady = StrToDouble(ctemp,NULL)/TOKNOTS;
+  MCCREADY = GPS_INFO->MacReady/LIFTMODIFY;
+
+  ExtractParameter(String,ctemp,3);
+  vias = sqrt(StrToDouble(ctemp,NULL))/TOKNOTS;
+
+  ExtractParameter(String,ctemp,4);
+  GPS_INFO->Ballast = StrToDouble(ctemp,NULL)-1.0;
+  BALLAST = GPS_INFO->Ballast;
+  // JMW TODO: fix this, because for Borgelt it's % of empty weight,
+  // for us, it's % of ballast capacity
+
+  // for Borgelt, it's % degradation,
+  // for us, it is % of max performance
+  ExtractParameter(String,ctemp,5);
+  GPS_INFO->Bugs = 1.0/(1.0+StrToDouble(ctemp,NULL));
+  BUGS = GPS_INFO->Bugs;
+
+  GPS_INFO->AirspeedAvailable = TRUE;
+  GPS_INFO->IndicatedAirspeed = vias;
+  GPS_INFO->TrueAirspeed = vtas;
+  GPS_INFO->VarioAvailable = TRUE;
+  GPS_INFO->Vario = wnet;
+
+  VarioUpdated = TRUE;
+
   return FALSE;
 }
 
@@ -718,6 +756,8 @@ BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->TrueAirspeed = vtas;
   GPS_INFO->VarioAvailable = TRUE;
   GPS_INFO->Vario = wnet/TOKNOTS;
+
+  VarioUpdated = TRUE;
 
   return TRUE;
 }

@@ -57,6 +57,7 @@ extern TCHAR szRegistryFAISector[];
 extern TCHAR szRegistrySectorRadius[];
 extern TCHAR szRegistryPolarID[];
 extern TCHAR szRegistryWayPointFile[];
+extern TCHAR szRegistryAdditionalWayPointFile[];
 extern TCHAR szRegistryAirspaceFile[];
 extern TCHAR szRegistryAdditionalAirspaceFile[];
 extern TCHAR szRegistryAirfieldFile[];
@@ -486,7 +487,7 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           POLARID = SendDlgItemMessage(hDlg,IDC_POLAR,CB_GETCURSEL, 0,0);
           SetToRegistry(szRegistryPolarID,POLARID);
           CalculateNewPolarCoef();
-          SetBallast();
+          GlidePolar::SetBallast();
 	  return TRUE;
         }
       switch (LOWORD(wParam)) {
@@ -533,6 +534,7 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             {
               SAFTEYSPEED = Temp1;
               SetToRegistry(szRegistrySafteySpeed,(DWORD)SAFTEYSPEED);
+	      GlidePolar::SetBallast();
             }
         }
       break;
@@ -602,6 +604,7 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
       VarioSound_SetSoundVolume(SoundVolume);
       VarioSound_SetVdead(SoundDeadband);
       return TRUE;
+
     case WM_COMMAND:
       switch (LOWORD(wParam))
         {
@@ -1411,6 +1414,8 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
       SetDlgItemInt(hDlg,IDC_BALLAST,(int)(BALLAST * 100),FALSE);
 
       memset ((char *)&logfont, 0, sizeof (logfont));
+
+      _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
       logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
       logfont.lfHeight = 35;
       logfont.lfWidth =  15;
@@ -1454,7 +1459,7 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             {
               BALLAST = (double)T1;
               BALLAST /=100;
-	      SetBallast();
+	      GlidePolar::SetBallast();
               if (lastBallast != BALLAST){
                 devPutBallast(devA(), BALLAST);
                 devPutBallast(devB(), BALLAST);
@@ -1569,6 +1574,8 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   static OPENFILENAME           ofnAdditionalAirspace;
   static TCHAR  szWaypointFile[MAX_PATH] = TEXT("\0");
   static OPENFILENAME           ofnWaypoint;
+  static TCHAR  szAdditionalWaypointFile[MAX_PATH] = TEXT("\0");
+  static OPENFILENAME           ofnAdditionalWaypoint;
 
   static ACTIVE = FALSE;
   SHINITDLGINFO shidi;
@@ -1590,6 +1597,9 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_WAYPOINTSFILE,szWaypointFile);
 
+      GetRegistryString(szRegistryAdditionalWayPointFile, szAdditionalWaypointFile, MAX_PATH);
+      SetDlgItemText(hDlg,IDC_ADDITIONALWAYPOINTSFILE,szAdditionalWaypointFile);
+
       ACTIVE = TRUE;
       return TRUE;
 
@@ -1602,8 +1612,8 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
               if(HIWORD(wParam) == EN_UPDATE)
                 {
                   AIRSPACEFILECHANGED = TRUE;
-                  GetDlgItemText(hDlg,IDC_AIRSPACEFILE, szAirspaceFile,MAX_PATH);
-                  SetRegistryString(szRegistryAirspaceFile, szAirspaceFile);
+                  GetDlgItemText(hDlg,IDC_AIRSPACEFILE,szFile,MAX_PATH);
+                  SetRegistryString(szRegistryAirspaceFile,szFile);
                 }
             }
           break;
@@ -1628,6 +1638,19 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                   WAYPOINTFILECHANGED = TRUE;
                   GetDlgItemText(hDlg,IDC_WAYPOINTSFILE,szFile,MAX_PATH);
                   SetRegistryString(szRegistryWayPointFile,szFile);
+                }
+            }
+          break;
+
+        case IDC_ADDITIONALWAYPOINTSFILE:
+          if(ACTIVE == TRUE)
+            {
+              if(HIWORD(wParam) == EN_UPDATE)
+                {
+                  WAYPOINTFILECHANGED = TRUE;
+                  GetDlgItemText(hDlg,IDC_ADDITIONALWAYPOINTSFILE,
+                                 szFile,MAX_PATH);
+                  SetRegistryString(szRegistryAdditionalWayPointFile,szFile);
                 }
             }
           break;
@@ -1680,11 +1703,29 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             }
           break;
 
+        case IDC_BROWSEADDITIONALWAYPOINT:
+          memset( &(ofnAdditionalWaypoint), 0, sizeof(ofnAdditionalWaypoint));
+          ofnAdditionalWaypoint.lStructSize       = sizeof(ofnAdditionalWaypoint);
+          ofnAdditionalWaypoint.hwndOwner = hDlg;
+          ofnAdditionalWaypoint.lpstrFile = szAdditionalWaypointFile;
+          ofnAdditionalWaypoint.nMaxFile = MAX_PATH;
+          ofnAdditionalWaypoint.lpstrFilter = TEXT("Waypoint Files(*.dat)\0*.dat\0All Files(*.*)\0*.*\0\0");
+          ofnAdditionalWaypoint.lpstrTitle = TEXT("Open File");
+          ofnAdditionalWaypoint.Flags = OFN_EXPLORER;
+
+          if(GetOpenFileName(&ofnAdditionalWaypoint))
+            {
+              SetDlgItemText(hDlg,IDC_ADDITIONALWAYPOINTSFILE,
+                             szAdditionalWaypointFile);
+            }
+          break;
+
         }
       break;
     }
   return FALSE;
 }
+
 
 
 LRESULT CALLBACK SetMapFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -1759,30 +1800,7 @@ LRESULT CALLBACK SetMapFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
                 }
             }
           break;
-/*
-        case IDC_BROWSEAIRSPACE:
-          memset( &(ofnAirspace), 0, sizeof(ofnAirspace));
-          ofnAirspace.lStructSize       = sizeof(ofnAirspace);
-          ofnAirspace.hwndOwner = hDlg;
-          ofnAirspace.lpstrFile = szAirspaceFile;
-          ofnAirspace.nMaxFile = MAX_PATH;
-          ofnAirspace.lpstrFilter = TEXT("Airspace Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");
-          ofnAirspace.lpstrTitle = TEXT("Open File");
-          ofnAirspace.Flags = OFN_EXPLORER;
 
-//          lpstrInitialDir      FileExists
-// FileExists(const System::AnsiString FileName);
-          int res;
-
-          if(GetOpenFileName(&ofnAirspace))
-            {
-              SetDlgItemText(hDlg,IDC_AIRSPACEFILE,szAirspaceFile);
-            }
-          else {
-            SetDlgItemText(hDlg,IDC_AIRSPACEFILE,TEXT(""));
-          }
-          break;
-*/
         case IDC_BROWSETERRAIN:
           memset( &(ofnTerrain), 0, sizeof(ofnTerrain));
           ofnTerrain.lStructSize        = sizeof(ofnTerrain);
@@ -1943,6 +1961,8 @@ LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       SHInitDialog(&shidi);
 
       memset ((char *)&logfont, 0, sizeof (logfont));
+      _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+
       logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
       logfont.lfHeight = 25;
       logfont.lfWidth =  10;
@@ -2774,10 +2794,10 @@ extern void DrawJPG(HDC hdc, RECT rc);
 
 extern bool MenuActive;
 
+extern HFONT StatisticsFont;
 
 LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-
   TCHAR Temp[2048];
   static CVOImage jpgimage1;
   static CVOImage jpgimage2;
@@ -2807,6 +2827,9 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     case WM_INITDIALOG:
 
       hdcScreen = GetDC(hDlg);
+
+      SendDlgItemMessage(hDlg, IDC_WAYPOINTDETAILSTEXT, WM_SETFONT,
+                  (WPARAM)StatisticsFont,MAKELPARAM(TRUE,0));
 
       GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
       ExtractDirectory(Directory, szWaypointFile);
@@ -2862,6 +2885,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         {
           ::ReleaseDC(hDlg, hdcScreen);
           EndDialog(hDlg, LOWORD(wParam));
+          ClearAirspaceWarnings(false); // airspace warning gets refreshed
           MapWindow::RequestFastRefresh= true;
           FullScreen();
           return TRUE;
@@ -3001,6 +3025,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       return FALSE;
 
     case WM_CLOSE:
+      ClearAirspaceWarnings(false); // airspace warning gets refreshed
       MapWindow::RequestFastRefresh= true;
       FullScreen();
     }
@@ -3149,6 +3174,10 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
       // Attach window specific data to the window
       SetWindowLong(hwnd, GWL_USERDATA, (LONG) data);
     }
+    MapWindow::RequestFastRefresh = true; // trigger screen refresh
+
+    ClearAirspaceWarnings(false); // JMW do this so airspace warning gets refreshed
+
 
     return 0;
   }
@@ -3208,6 +3237,8 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
   fontHeight = (int)((rc.bottom-rc.top)/iFontHeightRatio);
 
   memset ((char *)&logfont, 0, sizeof (logfont));
+  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = fontHeight;
   logfont.lfWidth =  0;

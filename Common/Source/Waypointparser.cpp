@@ -40,9 +40,18 @@ static double ReadAltitude(TCHAR *temp);
 
 static TCHAR TempString[210];
 
+
+void CloseWayPoints() {
+  NumberOfWayPoints = 0;
+  if(WayPointList != NULL) {
+    LocalFree((HLOCAL)WayPointList);
+    WayPointList = NULL;
+  }
+}
+
+
 void ReadWayPointFile(FILE *fp)
 {
-  int WayPointCount = 0;
   WAYPOINT *List, *p;
   TCHAR szTemp[100];
   int nTrigger=10;
@@ -58,64 +67,59 @@ void ReadWayPointFile(FILE *fp)
     return;
   }
 
-  WayPointList = (WAYPOINT *)LocalAlloc(LPTR, 50 * sizeof(WAYPOINT));
-  WayPointCount = 0;
+  // memory allocation
+  if (!WayPointList) {
+    WayPointList = (WAYPOINT *)LocalAlloc(LPTR, 50 * sizeof(WAYPOINT));
+  }
 
-  if(WayPointList != NULL) {
-
-    List = WayPointList;
-    // SetFilePointer(hFile,0,NULL,FILE_BEGIN);
-    fPos = 0;
-    nTrigger = (fSize/10);
-
-    while(ReadStringX(fp, 200, TempString)){
-
-        fPos += _tcslen(TempString);
-
-        if (nTrigger < (int)fPos){
-          nTrigger += (fSize/10);
-          StepProgressDialog();
-        }
-
-        if(_tcsstr(TempString,TEXT("**")) != TempString) // Look For Comment
-          {
-            List->Details = NULL;
-            if (ParseWayPointString(TempString,List)) {
-
-              List ++;
-              WayPointCount++;
-
-              if ((WayPointCount % 50) == 0){
-                if ((p = (WAYPOINT *)LocalReAlloc(WayPointList, ((WayPointCount/50)+1) * 50 * sizeof(WAYPOINT), LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
-                  MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
-                  return;
-                }
-                if (p != WayPointList){
-                  WayPointList = p;
-                  List = WayPointList + WayPointCount;
-                }
-              }
-
-            }
-          }
-      }
-      NumberOfWayPoints = WayPointCount;
-
-      // compact allocated memory
-      p = (WAYPOINT *)LocalAlloc(LPTR, WayPointCount * sizeof(WAYPOINT));
-      memcpy(p, WayPointList, sizeof(WAYPOINT)*WayPointCount);
-      free(WayPointList);
-      WayPointList = (WAYPOINT *)LocalAlloc(LPTR, WayPointCount * sizeof(WAYPOINT));
-      memcpy(WayPointList, p, sizeof(WAYPOINT)*WayPointCount);
-      free(p);
-
-    }
-
-  else
+  if(WayPointList == NULL)
     {
       MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
+      return;
     }
 
+  List = WayPointList+NumberOfWayPoints;
+
+  // SetFilePointer(hFile,0,NULL,FILE_BEGIN);
+  fPos = 0;
+  nTrigger = (fSize/10);
+
+  while(ReadStringX(fp, 200, TempString)){
+
+    fPos += _tcslen(TempString);
+
+    if (nTrigger < (int)fPos){
+      nTrigger += (fSize/10);
+      StepProgressDialog();
+    }
+
+    if(_tcsstr(TempString,TEXT("**")) != TempString) // Look For Comment
+      {
+        List->Details = NULL;
+        if (ParseWayPointString(TempString,List)) {
+
+          List ++;
+          NumberOfWayPoints++;
+
+          if ((NumberOfWayPoints % 50) == 0){
+
+            if ((p = (WAYPOINT *)LocalReAlloc(WayPointList, ((NumberOfWayPoints/50)+1) * 50 * sizeof(WAYPOINT), LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
+
+              MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
+
+              return;
+            }
+
+            if (p != WayPointList){
+              WayPointList = p;
+              List = WayPointList + NumberOfWayPoints;
+            }
+
+          }
+
+        }
+      }
+  }
 
   wsprintf(szTemp,TEXT("100%%"));
   SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
@@ -136,10 +140,14 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
   pToken = strtok_r(TempString, TEXT(","), &pWClast);
   Temp->Number = _tcstol(pToken, &Zoom, 10);
 
+  //ExtractParameter(TempString,ctemp,1); //Lattitude
+  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  Temp->Lattitude = CalculateAngle(pToken);
 
   //ExtractParameter(TempString,ctemp,1); //Lattitude
   pToken = strtok_r(NULL, TEXT(","), &pWClast);
   Temp->Lattitude = CalculateAngle(pToken);
+
   if((Temp->Lattitude > 90) || (Temp->Lattitude < -90))
     {
       return FALSE;
@@ -314,20 +322,32 @@ static double ReadAltitude(TCHAR *temp)
 }
 
 extern TCHAR szRegistryWayPointFile[];
+extern TCHAR szRegistryAdditionalWayPointFile[];
+
 void ReadWayPoints(void)
 {
-  TCHAR szFile[MAX_PATH] = TEXT("\0");
+  TCHAR szFile1[MAX_PATH] = TEXT("\0");
+  TCHAR szFile2[MAX_PATH] = TEXT("\0");
 
   FILE *fp;
 
   LockFlightData();
+  CloseWayPoints();
+  GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
 
-  GetRegistryString(szRegistryWayPointFile, szFile, MAX_PATH);
+  fp = _tfopen(szFile1, TEXT("rt"));
 
-//  hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  fp = _tfopen(szFile, TEXT("rt"));
+  if(fp != NULL)
+    {
+      ReadWayPointFile(fp);
+      fclose(fp);
+    }
 
+  // read additional waypoint file
 
+  GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
+
+  fp = _tfopen(szFile2, TEXT("rt"));
   if(fp != NULL)
     {
       ReadWayPointFile(fp);

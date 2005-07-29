@@ -11,5 +11,6 @@ void ReadWayPointFile(HANDLE hFile);
 void ReadWayPoints(void);
 void SetHome(void);
 int FindNearestWayPoint(double X, double Y, double MaxRange);
+void CloseWayPoints(void);
 #endif
 

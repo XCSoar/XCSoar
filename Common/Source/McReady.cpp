@@ -31,19 +31,18 @@
   double c = -1.141438761599;
 */
 
-static double SinkRate(double a,double b, double c, double MC, double HW, double V);
+double GlidePolar::BallastFactor;
+double GlidePolar::polar_a;
+double GlidePolar::polar_b;
+double GlidePolar::polar_c;
+int GlidePolar::Vminsink = 2;
+int GlidePolar::Vbestld = 2;
+double GlidePolar::sinkratecache[200];
+double GlidePolar::bestld = 0.0;
+double GlidePolar::minsink = 10000.0;
 
-static double BallastFactor;
-static double polar_a;
-static double polar_b;
-static double polar_c;
-static int Vminsink = 2;
-static int Vbestld = 2;
 
-double sinkratecache[200];
-
-
-void SetBallast() {
+void GlidePolar::SetBallast() {
   double BallastWeight;
   BallastWeight = WEIGHTS[2] * BALLAST;
   BallastWeight += WEIGHTS[0] + WEIGHTS[1];
@@ -58,8 +57,8 @@ void SetBallast() {
   // this also limits speed to fly to logical values (will never try
   // to fly slower than min sink speed)
 
-  double minsink = 10000.0;
-  double bestld = 0.0;
+  minsink = 10000.0;
+  bestld = 0.0;
   int i;
 
   if ((SAFTEYSPEED==0)||(SAFTEYSPEED>200)) {
@@ -88,20 +87,20 @@ void SetBallast() {
 }
 
 
-double SinkRateFast(double MC, int v) {
+double GlidePolar::SinkRateFast(double MC, int v) {
   int i = max(4,min(v,(int)SAFTEYSPEED));
   return sinkratecache[i]-MC;
 }
 
 
-double SinkRate(double V) {
+double GlidePolar::SinkRate(double V) {
 
   return SinkRate(polar_a,polar_b,polar_c,0.0,0.0,V);
 
 }
 
 
-double SinkRate(double V, double n) {
+double GlidePolar::SinkRate(double V, double n) {
   if (n<0.01) {
     n=0.01;
   }
@@ -111,7 +110,9 @@ double SinkRate(double V, double n) {
 }
 
 
-double McCreadyAltitude(double MCREADY, double Distance, double Bearing, double WindSpeed, double WindBearing,
+double GlidePolar::McCreadyAltitude(double MCREADY,
+                                    double Distance, double Bearing,
+                                    double WindSpeed, double WindBearing,
 		       double *BestCruiseTrack,
 		       double *VMcCready,
 		       int isFinalGlide,
@@ -255,7 +256,8 @@ double McCreadyAltitude(double MCREADY, double Distance, double Bearing, double 
 }
 
 
-double SinkRate(double a,double b, double c, double MC, double HW, double V)
+double GlidePolar::SinkRate(double a,double b, double c,
+                            double MC, double HW, double V)
 {
   double temp;
 
@@ -267,3 +269,4 @@ double SinkRate(double a,double b, double c, double MC, double HW, double V)
 
   return temp;
 }
+

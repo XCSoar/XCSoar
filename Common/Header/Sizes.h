@@ -28,6 +28,9 @@
 #define TRAILSHRINK 5
 // short trail is 10 minutes approx
 
+#define GLOBALFONT "Tahoma"
+//#define GLOBALFONT "HelmetCondensed"
+
 // ratio of height of screen to main font height
 #define FONTHEIGHTRATIO 9
 // ratio of width of screen to main font width
@@ -46,6 +49,9 @@
 
 #define CONTROLHEIGHTRATIO 7.4
 #define TITLEHEIGHTRATIO 3.1
+
+#define STATISTICSFONTHEIGHTRATIO 0.7
+#define STATISTICSFONTWIDTHRATIO 0.7
 
 #define MENUBUTTONWIDTHRATIO 0.6
 

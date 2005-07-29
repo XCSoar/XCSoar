@@ -92,6 +92,7 @@ extern void LockNavBox();
 void FocusOnWindow(int i, bool selected);
 void FullScreen();
 extern void PopupWaypointDetails();
+extern void PopupAnalysis();
 
 extern void ShowInfoBoxes();
 extern void HideInfoBoxes();

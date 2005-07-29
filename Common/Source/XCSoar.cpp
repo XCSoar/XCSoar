@@ -102,6 +102,7 @@ HFONT                                   MapWindowBoldFont;
 
 HFONT                                   CDIWindowFont; // New
 HFONT                                   MapLabelFont;
+HFONT                                   StatisticsFont;
 
 int                                             CurrentInfoType;
 int                                             InfoFocus = 0;
@@ -227,7 +228,13 @@ int ActiveWayPoint = -1;
 double AATTaskLength = 120;
 BOOL AATEnabled = FALSE;
 
+
+// Statistics
+Statistics flightstats;
+
+#if UNDER_CE >= 300
 static SHACTIVATEINFO s_sai;
+#endif
 
 static  TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:")};
 static  DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
@@ -238,10 +245,6 @@ static  DWORD SpeedIndex2 = 2;
 
 BOOL InfoBoxesHidden = false;
 
-
-
-#define GLOBALFONT "Tahoma"
-//#define GLOBALFONT "HelmetCondensed"
 
 void PopupBugsBallast(int updown);
 
@@ -421,6 +424,7 @@ void                                            DebugStore(char *Str);
 
 
 extern BOOL GpsUpdated;
+extern BOOL VarioUpdated;
 
 void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
@@ -589,19 +593,23 @@ void FocusOnWindow(int i, bool selected) {
 
 
 DWORD CalculationThread (LPVOID lpvoid) {
-  bool infoarrived = false;
+  bool infoarrived;
+  bool theinfoboxesaredirty;
 
   NMEA_INFO     tmp_GPS_INFO;
   DERIVED_INFO  tmp_CALCULATED_INFO;
 
   while (!MapWindow::CLOSETHREAD) {
+    infoarrived = false;
+    theinfoboxesaredirty = false;
 
     if (GpsUpdated) {
-      GpsUpdated = FALSE;
-
-      //    CheckRegistration();
-
-      // JMW moved logging and snail to Calculations
+      infoarrived = true;
+    }
+    if (GPS_INFO.VarioAvailable && VarioUpdated) {
+      infoarrived = true;
+    }
+    if (infoarrived) {
 
       // make local copy before editing...
       LockFlightData();
@@ -609,15 +617,36 @@ DWORD CalculationThread (LPVOID lpvoid) {
       memcpy(&tmp_CALCULATED_INFO,&CALCULATED_INFO,sizeof(DERIVED_INFO));
       UnlockFlightData();
 
-      if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO))
-        {
-          InfoBoxesDirty = true;
-          MapWindow::RequestMapDirty = true;
+      // Do vario first to reduce audio latency
+      if (GPS_INFO.VarioAvailable && VarioUpdated) {
+        VarioUpdated = false;
+        if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
         }
+        // assume new vario data has arrived, so infoboxes
+        // need to be redrawn
+        theinfoboxesaredirty = true;
+      }
 
+      if (GpsUpdated) {
+        GpsUpdated = false;
+        if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO))
+          {
+            theinfoboxesaredirty = true;
+            MapWindow::RequestMapDirty = true;
+          }
+      }
+
+      // run the function anyway, because this gives audio functions
+      // if no vario connected
       if (!GPS_INFO.VarioAvailable) {
-        // run the function anyway, because this gives audio functions
-        DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO);
+        if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
+            theinfoboxesaredirty = true;
+        }
+      }
+
+
+      if (theinfoboxesaredirty) {
+        InfoBoxesDirty = true;
       }
 
       // values changed, so copy them back now: ONLY CALCULATED INFO
@@ -628,7 +657,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
       UnlockFlightData();
 
     } else {
-      Sleep(100); // sleep 250 ms
+      Sleep(50); // sleep a while
     }
 
   }
@@ -659,8 +688,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   HACCEL hAccelTable;
   INITCOMMONCONTROLSEX icc;
 
-
-
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
@@ -681,15 +708,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SHSetAppKeyWndAssoc(VK_APP2, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP3, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP4, hWndMainWindow);
-
   // Typical Record Button
-
   //	Why you can't always get this to work
-
   //	http://forums.devbuzz.com/m_1185/mpage_1/key_/tm.htm
-
   //	To do with the fact it is a global hotkey, but you can with code above
-
   //	Also APPA is record key on some systems
   SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
@@ -715,7 +737,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
-  SetBallast();
+  GlidePolar::SetBallast();
 
   OpenTerrain();
 
@@ -986,6 +1008,17 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   // Font for map other text
   memset ((char *)&logfont, 0, sizeof (logfont));
 
+  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
+  logfont.lfHeight = (int)(FontHeight*STATISTICSFONTHEIGHTRATIO);
+  logfont.lfWidth =  (int)(FontWidth*STATISTICSFONTWIDTHRATIO);
+  logfont.lfWeight = FW_MEDIUM;
+
+#ifndef NOCLEARTYPE
+  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+#endif
+
+  StatisticsFont = CreateFontIndirect (&logfont);
 
   // new font for map labels
 
@@ -1000,7 +1033,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 #endif
 
   MapWindowFont = CreateFontIndirect (&logfont);
-
 
   SendMessage(hWndMapWindow,WM_SETFONT,
               (WPARAM)MapWindowFont,MAKELPARAM(TRUE,0));
@@ -1572,14 +1604,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       DeleteObject(CDIWindowFont);
       DeleteObject(MapLabelFont);
       DeleteObject(MapWindowFont);
-
       DeleteObject(MapWindowBoldFont);
+      DeleteObject(StatisticsFont);
 
 
       if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
       if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
       if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
-      if(WayPointList != NULL) LocalFree((HLOCAL)WayPointList);
+
+      CloseWayPoints();
 
       DestroyWindow(hWndMainWindow);
 
@@ -1737,6 +1770,15 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      FullScreen();
               return 0;
 
+            case IDC_ANALYSIS:
+
+              ShowWindow(hWndCB,SW_HIDE);
+	      FullScreen();
+              PopupAnalysis();
+              SwitchToMapWindow();
+	      HideMenu();
+	      FullScreen();
+              return 0;
 
             case IDD_SETTINGS:
 
@@ -1789,8 +1831,8 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED))
                 {
                   CloseTerrain();
-                  NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1;
-                  if(WayPointList != NULL) LocalFree((HLOCAL)WayPointList);
+                  Task[0].Index = -1;  ActiveWayPoint = -1;
+
                   OpenTerrain();
                   ReadWayPoints();
 		  ReadAirfieldFile();
@@ -1822,7 +1864,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
               if (POLARFILECHANGED) {
                 CalculateNewPolarCoef();
-                SetBallast();
+                GlidePolar::SetBallast();
               }
 
               if (AIRFIELDFILECHANGED
@@ -1997,18 +2039,11 @@ void ProcessChar2 (char c)
               if(BuildingString[0]=='$')  // Additional "if" to find GPS strings
                 {
                   LockFlightData();
-
                   bool dodisplay = false;
 
                   if(ParseNMEAString(BuildingString,&GPS_INFO))
                     {
                       VARIOCONNECT  = TRUE;
-
-                      if(DoCalculationsVario(&GPS_INFO,&CALCULATED_INFO))
-                        {
-			  //    AssignValues();
-                          // JMW don't display here, as it is too often
-                        }
                     }
                   UnlockFlightData();
                 }
@@ -2166,7 +2201,6 @@ void ProcessTimer(void)
     static BOOL LastVARIOCONNECT = FALSE;
     static BOOL CONNECTWAIT = FALSE;
     static BOOL LOCKWAIT = FALSE;
-    TCHAR szLoadText[MAX_LOADSTRING];
 
     //
     // replace bool with BOOL to correct warnings and match variable declarations RB
@@ -2334,6 +2368,12 @@ void SwitchToMapWindow(void)
   // JMW reactivate menu button
   // ShowWindow(hWndMenuButton, SW_SHOW);
 
+}
+
+void PopupAnalysis()
+{
+  DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndInfoWindow[0],
+            (DLGPROC)AnalysisProc);
 }
 
 
@@ -2530,6 +2570,8 @@ void BlankDisplay(bool doblank) {
                   0, NULL);
         oldblank = true;
         ScreenBlanked = true;
+      } else {
+        DisplayTimeOut = 0;
       }
     } else {
       if (oldblank) { // was blanked

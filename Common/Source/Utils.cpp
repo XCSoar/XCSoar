@@ -122,6 +122,7 @@ TCHAR szRegistryPolarFile[] = TEXT("PolarFile"); // pL
 TCHAR szRegistryTerrainFile[]=	 TEXT("TerrainFile"); // pL
 TCHAR szRegistryTopologyFile[]=  TEXT("TopologyFile"); // pL
 TCHAR szRegistryWayPointFile[]=  TEXT("WPFile"); // pL
+TCHAR szRegistryAdditionalWayPointFile[]=  TEXT("AdditionalWPFile"); // pL
 
 TCHAR szRegistryPilotName[]=  TEXT("PilotName");
 TCHAR szRegistryAircraftType[]=  TEXT("AircraftType");
@@ -1419,6 +1420,7 @@ void WriteProfile(HWND hwnd, TCHAR *szFile)
     WriteFileRegistryString(hFile, szRegistryTerrainFile);
     WriteFileRegistryString(hFile, szRegistryTopologyFile);
     WriteFileRegistryString(hFile, szRegistryWayPointFile);
+    WriteFileRegistryString(hFile, szRegistryAdditionalWayPointFile);
     */
 
     CloseHandle(hFile);
@@ -1487,6 +1489,7 @@ void ReadProfile(HWND hwnd, TCHAR *szFile)
     ReadFileRegistryString(hFile, szRegistryTerrainFile);
     ReadFileRegistryString(hFile, szRegistryTopologyFile);
     ReadFileRegistryString(hFile, szRegistryWayPointFile);
+    ReadFileRegistryString(hFile, szRegistryAdditionalWayPointFile);
 
     WAYPOINTFILECHANGED = TRUE;
     TERRAINFILECHANGED = TRUE;

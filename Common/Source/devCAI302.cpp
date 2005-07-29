@@ -574,6 +574,9 @@ BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
+
+extern BOOL VarioUpdated; // needed to notify of new vario data
+
 /*
 !w,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11>,<12>,<13>*hh<CR><LF>
 <1>  Vector wind direction in degrees
@@ -642,6 +645,9 @@ BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO){
     BUGS = GPS_INFO->Bugs;
   else
     BugsUpdateTimeout--;
+
+  // JMW update audio functions etc.
+  VarioUpdated = TRUE;
 
   return TRUE;
 
