@@ -27,6 +27,7 @@
 #include "uniqueid.h"
 #include "XCSoar.h"
 #include "Topology.h"
+#include "Units.h"
 
 
 TCHAR szRegistryKey[] =                TEXT("Software\\MPSR\\XCSoar");
@@ -186,9 +187,15 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistrySpeedUnitsValue,&Speed);
   switch(Speed)
     {
-    case 0 : SPEEDMODIFY = TOMPH;	break;
-    case 1 : SPEEDMODIFY = TOKNOTS; break;
-    case 2 : SPEEDMODIFY = TOKPH; break;
+    case 0 :
+      SPEEDMODIFY = TOMPH;
+      break;
+    case 1 :
+      SPEEDMODIFY = TOKNOTS;
+      break;
+    case 2 :
+      SPEEDMODIFY = TOKPH;
+      break;
     }
 
   GetFromRegistry(szRegistryDistanceUnitsValue,&Distance);
@@ -212,6 +219,8 @@ void ReadRegistrySettings(void)
     case 0 : LIFTMODIFY = TOKNOTS; break;
     case 1 : LIFTMODIFY = TOMETER; break;
     }
+
+  Units::NotifyUnitChanged();
 
   for (i=0;i<NUMINFOWINDOWS;i++)
     {

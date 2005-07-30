@@ -32,6 +32,7 @@
 //#include <assert.h>
 
 #include "units.h"
+#include "externs.h"
 
 CoordinateFormats_t Units::CoordinateFormat;
 
@@ -40,7 +41,7 @@ UnitDescriptor_t Units::UnitDescriptors[] ={
   {TEXT("nm"),        1,        0},
   {TEXT("sm"),        1,        0},
   {TEXT("km/h"),      1,        0},
-  {TEXT("kn"),        1,        0},
+  {TEXT("kt"),        1,        0},
   {TEXT("mph"),       1,        0},
   {TEXT("m/s"),       1,        0},
   {TEXT("fpm"),       1,        0},
@@ -218,5 +219,56 @@ Units_t Units::SetUserWindSpeedUnit(Units_t NewUnit){
 
 void Units::NotifyUnitChanged(void){
   // todo
+
+  if (SPEEDMODIFY==TOMPH) {
+    SetUserHorizontalSpeedUnit(unStatuteMilesPerHour);
+  }
+  if (SPEEDMODIFY==TOKNOTS) {
+    SetUserHorizontalSpeedUnit(unKnots);
+  }
+  if (SPEEDMODIFY==TOKPH) {
+    SetUserHorizontalSpeedUnit(unKiloMeterPerHour);
+  }
+
+  if (DISTANCEMODIFY == TOMILES) {
+    SetUserDistanceUnit(unStatuteMiles);
+  }
+  if (DISTANCEMODIFY == TONAUTICALMILES) {
+    SetUserDistanceUnit(unNauticalMiles);
+  }
+  if (DISTANCEMODIFY == TOKILOMETER) {
+    SetUserDistanceUnit(unKiloMeter);
+  }
+
+  if (ALTITUDEMODIFY == TOFEET) {
+    SetUserAltitudeUnit(unFeet);
+  }
+  if (ALTITUDEMODIFY == TOMETER) {
+    SetUserAltitudeUnit(unMeter);
+  }
+
+  if (LIFTMODIFY==TOKNOTS) {
+    SetUserVerticalSpeedUnit(unKnots);
+  }
+  if (LIFTMODIFY==TOMETER) {
+    SetUserVerticalSpeedUnit(unMeterPerSecond);
+  }
+
+}
+
+TCHAR *Units::GetHorizontalSpeedName(){
+  return(GetUnitName(GetUserHorizontalSpeedUnit()));
+}
+
+TCHAR *Units::GetVerticalSpeedName(){
+  return(GetUnitName(GetUserVerticalSpeedUnit()));
+}
+
+TCHAR *Units::GetDistanceName(){
+  return(GetUnitName(GetUserDistanceUnit()));
+}
+
+TCHAR *Units::GetAltitudeName(){
+  return(GetUnitName(GetUserAltitudeUnit()));
 }
 
