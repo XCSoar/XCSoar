@@ -13,10 +13,14 @@ Changes from 4.21 to 4.22
 - Minor bugfixes in vario comms thread processing
 - Implemented Borgelt B50 vario parsing (untested)
 - Improvements to performance and latency of audio
-- (terrain cache updates)
-- (file loading improvements)
-- (new wind vector graphics)
-- (new labels for reachable airfields)
+- Terrain cache updates
+- File loading improvements
+- New wind vector graphics
+- New labels with Mc0 arrival height above safety arrival altitude for
+  reachable airfields
+- Updated aircraft graphics
+- Proper units display in dialogs.
+- All configuration options now can be expressed in custom units
 
 Changes from 4.2 to 4.21
 
