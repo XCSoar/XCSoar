@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.43 2005/07/29 15:02:47 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.44 2005/07/30 09:27:13 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -292,51 +292,61 @@ LRESULT CALLBACK SetUnits(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         case IDC_SPEED_STATUTE:
           SetToRegistry(szRegistrySpeedUnitsValue,0);
           SPEEDMODIFY = TOMPH;
+          Units::NotifyUnitChanged();
           return TRUE;
                                 
         case IDC_SPEED_NAUTICAL:
           SetToRegistry(szRegistrySpeedUnitsValue,1);
           SPEEDMODIFY = TOKNOTS;
+          Units::NotifyUnitChanged();
           return TRUE;
                                 
         case IDC_SPEED_METRIC:
           SetToRegistry(szRegistrySpeedUnitsValue,2);
           SPEEDMODIFY = TOKPH;
+          Units::NotifyUnitChanged();
           return TRUE;
 
         case IDC_DISTANCE_STATUTE:
           SetToRegistry(szRegistryDistanceUnitsValue,0);
           DISTANCEMODIFY = TOMILES;
+          Units::NotifyUnitChanged();
           return TRUE;
                                 
         case IDC_DISTANCE_NAUTICAL:
           SetToRegistry(szRegistryDistanceUnitsValue,1);
           DISTANCEMODIFY = TONAUTICALMILES;
+          Units::NotifyUnitChanged();
           return TRUE;
                                 
         case IDC_DISTANCE_METRIC:
           SetToRegistry(szRegistryDistanceUnitsValue,2);
           DISTANCEMODIFY = TOKILOMETER;
+          Units::NotifyUnitChanged();
           return TRUE;
 
         case IDC_ALTITUDE_FEET:
           SetToRegistry(szRegistryAltitudeUnitsValue,0);
           ALTITUDEMODIFY = TOFEET;
+          Units::NotifyUnitChanged();
           return TRUE;
                                 
         case IDC_ALTITUDE_METRES:
           SetToRegistry(szRegistryAltitudeUnitsValue,1);
           ALTITUDEMODIFY = TOMETER;
+          Units::NotifyUnitChanged();
           return TRUE;
 
         case IDC_LIFT_KNOTS:
           SetToRegistry(szRegistryLiftUnitsValue,0);
           LIFTMODIFY = TOKNOTS;
+          Units::NotifyUnitChanged();
           return TRUE;
                                 
         case IDC_LIFT_METRES:
           SetToRegistry(szRegistryLiftUnitsValue,1);
           LIFTMODIFY = TOMETER;
+          Units::NotifyUnitChanged();
           return TRUE;
         }
       break;
@@ -473,7 +483,8 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         SendDlgItemMessage(hDlg,IDC_POLAR,CB_ADDSTRING,0,(LPARAM)(LPCSTR)Polar[i]);
 
       SendDlgItemMessage(hDlg,IDC_POLAR,CB_SETCURSEL,(WPARAM) POLARID,0);
-      SetDlgItemInt(hDlg,IDC_MAXSPEED,(int)SAFTEYSPEED,FALSE);
+      SetDlgItemText(hDlg,IDC_UNIT_SPEED,Units::GetHorizontalSpeedName());     
+      SetDlgItemInt(hDlg,IDC_MAXSPEED,iround(SAFTEYSPEED*SPEEDMODIFY),FALSE);
       GetRegistryString(szRegistryPolarFile, szPolarFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_POLARFILE,szPolarFile);   
       ACTIVE = TRUE;
@@ -529,11 +540,12 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
       if(( lpwp->flags & SWP_HIDEWINDOW) == SWP_HIDEWINDOW)
         {
-          Temp1 = GetDlgItemInt(hDlg,IDC_MAXSPEED,&Temp,FALSE);
+          Temp1 = iround(GetDlgItemInt(hDlg,IDC_MAXSPEED,&Temp,FALSE)
+                         /SPEEDMODIFY);
           if(Temp)
             {
               SAFTEYSPEED = Temp1;
-              SetToRegistry(szRegistrySafteySpeed,(DWORD)SAFTEYSPEED);
+              SetToRegistry(szRegistrySafteySpeed,(DWORD)Temp1);
 	      GlidePolar::SetBallast();
             }
         }
@@ -555,7 +567,8 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
     {
     case WM_INITDIALOG:
 
-      SetDlgItemInt(hDlg,IDC_NETTOSPEED,(int)NettoSpeed,FALSE);
+      SetDlgItemInt(hDlg,IDC_NETTOSPEED,iround(NettoSpeed*SPEEDMODIFY),FALSE);
+      SetDlgItemText(hDlg,IDC_UNIT_SPEED,Units::GetHorizontalSpeedName());     
 
       SendDlgItemMessage(hDlg, IDC_AUDIOSLIDER, 
 			 TBM_SETRANGE, FALSE, MAKELPARAM(0,100));
@@ -629,7 +642,7 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
 
       if(( lpwp->flags & SWP_HIDEWINDOW) == SWP_HIDEWINDOW)
         {
-          Temp1 = GetDlgItemInt(hDlg,IDC_NETTOSPEED,&Temp,FALSE);
+          Temp1 = iround(GetDlgItemInt(hDlg,IDC_NETTOSPEED,&Temp,FALSE)/SPEEDMODIFY);
           if(Temp)
             {
               NettoSpeed = Temp1;
@@ -1343,9 +1356,14 @@ LRESULT CALLBACK FinalGlide(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
   switch (message)
     {
     case WM_INITDIALOG:
-      SetDlgItemInt(hDlg,IDC_SALTARRIVAL,(int)SAFETYALTITUDEARRIVAL,FALSE);
-      SetDlgItemInt(hDlg,IDC_SALTBREAKOFF,(int)SAFETYALTITUDEBREAKOFF,FALSE);
-      SetDlgItemInt(hDlg,IDC_SALTTERRAIN,(int)SAFETYALTITUDETERRAIN,FALSE);
+
+      SetDlgItemText(hDlg,IDC_UNIT_ALT1,Units::GetAltitudeName());     
+      SetDlgItemText(hDlg,IDC_UNIT_ALT2,Units::GetAltitudeName());     
+      SetDlgItemText(hDlg,IDC_UNIT_ALT3,Units::GetAltitudeName());     
+
+      SetDlgItemInt(hDlg,IDC_SALTARRIVAL,iround(SAFETYALTITUDEARRIVAL*ALTITUDEMODIFY),FALSE);
+      SetDlgItemInt(hDlg,IDC_SALTBREAKOFF,iround(SAFETYALTITUDEBREAKOFF*ALTITUDEMODIFY),FALSE);
+      SetDlgItemInt(hDlg,IDC_SALTTERRAIN,iround(SAFETYALTITUDETERRAIN*ALTITUDEMODIFY),FALSE);
 
       if(FinalGlideTerrain == TRUE)
         {
@@ -1362,19 +1380,19 @@ LRESULT CALLBACK FinalGlide(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
       lpwp = (LPWINDOWPOS)(lParam);
       if(( lpwp->flags & SWP_HIDEWINDOW) == SWP_HIDEWINDOW)
         {
-          Temp1 = GetDlgItemInt(hDlg,IDC_SALTARRIVAL,&Temp,FALSE);
+          Temp1 = iround(GetDlgItemInt(hDlg,IDC_SALTARRIVAL,&Temp,FALSE)/ALTITUDEMODIFY);
           if(Temp)
             {
               SAFETYALTITUDEARRIVAL = (double)Temp1;
               SetToRegistry(szRegistrySafetyAltitudeArrival,(DWORD)SAFETYALTITUDEARRIVAL);
             }
-          Temp1 = GetDlgItemInt(hDlg,IDC_SALTBREAKOFF,&Temp,FALSE);
+          Temp1 = iround(GetDlgItemInt(hDlg,IDC_SALTBREAKOFF,&Temp,FALSE)/ALTITUDEMODIFY);
           if(Temp)
             {
               SAFETYALTITUDEBREAKOFF = (double)Temp1;
               SetToRegistry(szRegistrySafetyAltitudeBreakOff,(DWORD)SAFETYALTITUDEBREAKOFF);
             }
-          Temp1 = GetDlgItemInt(hDlg,IDC_SALTTERRAIN,&Temp,FALSE);
+          Temp1 = iround(GetDlgItemInt(hDlg,IDC_SALTTERRAIN,&Temp,FALSE)/ALTITUDEMODIFY);
           if(Temp)
             {
               SAFETYALTITUDETERRAIN = (double)Temp1;
@@ -1865,11 +1883,13 @@ LRESULT CALLBACK AirspaceAlt(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
   switch (message)
     {
     case WM_INITDIALOG:
-      SetDlgItemInt(hDlg,IDC_CLIPALT,(int)ClipAltitude,FALSE);
-        
-      SetDlgItemInt(hDlg,IDC_ALTTOL,(int)AltWarningMargin,FALSE);
-        
-                        
+
+      SetDlgItemText(hDlg,IDC_UNIT_ALT1,Units::GetAltitudeName());     
+      SetDlgItemText(hDlg,IDC_UNIT_ALT2,Units::GetAltitudeName());     
+
+      SetDlgItemInt(hDlg,IDC_CLIPALT,iround(ClipAltitude*ALTITUDEMODIFY),FALSE);       
+      SetDlgItemInt(hDlg,IDC_ALTTOL,iround(AltWarningMargin*ALTITUDEMODIFY),FALSE);
+                                
       switch(AltitudeMode)
         {
         case ALLON : 
@@ -1931,10 +1951,10 @@ LRESULT CALLBACK AirspaceAlt(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
       lpwp = (LPWINDOWPOS)(lParam);
       if(( lpwp->flags & SWP_HIDEWINDOW) == SWP_HIDEWINDOW)
         {
-          ClipAltitude  = GetDlgItemInt(hDlg,IDC_CLIPALT,NULL, FALSE);
+          ClipAltitude  = iround(GetDlgItemInt(hDlg,IDC_CLIPALT,NULL, FALSE)/ALTITUDEMODIFY);
           SetToRegistry(szRegistryClipAlt,ClipAltitude);
 
-          AltWarningMargin = GetDlgItemInt(hDlg,IDC_ALTTOL,NULL, FALSE);
+          AltWarningMargin = iround(GetDlgItemInt(hDlg,IDC_ALTTOL,NULL, FALSE)/ALTITUDEMODIFY);
           SetToRegistry(szRegistryAltMargin,AltWarningMargin);
         }
       break;
@@ -2795,6 +2815,7 @@ extern void DrawJPG(HDC hdc, RECT rc);
 extern bool MenuActive;
 
 extern HFONT StatisticsFont;
+extern HFONT MapWindowBoldFont;
 
 LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -2831,6 +2852,9 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       SendDlgItemMessage(hDlg, IDC_WAYPOINTDETAILSTEXT, WM_SETFONT,
                   (WPARAM)StatisticsFont,MAKELPARAM(TRUE,0));
 
+      SendDlgItemMessage(hDlg, IDC_WDTEXT, WM_SETFONT,
+                  (WPARAM)MapWindowBoldFont,MAKELPARAM(TRUE,0));
+
       GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
       ExtractDirectory(Directory, szWaypointFile);
 
@@ -2858,16 +2882,17 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       Units::LongditudeToString(WayPointList[SelectedWaypoint].Longditude, sLongditude, sizeof(sLongditude)-1);
       Units::LattitudeToString(WayPointList[SelectedWaypoint].Lattitude, sLattitude, sizeof(sLattitude)-1);
 
-      _stprintf(Temp,TEXT("Longitude\t%s\r\nLatitude\t%s\r\nElevation\t%.0f\r\nSunset\t%02d:%02d"),
+      _stprintf(Temp,TEXT("Longitude\t%s\r\nLatitude\t%s\r\nElevation\t%.0f %s\r\nSunset\t%02d:%02d"),
                sLongditude,
                sLattitude,
                WayPointList[SelectedWaypoint].Altitude*ALTITUDEMODIFY,
+                Units::GetAltitudeName(),
                sunsethours,
                sunsetmins
                
                );
       
-      _tcscat(Temp,TEXT("\r\n"));
+      _tcscat(Temp,TEXT("\r\n\r\n"));
       
       if (WayPointList[SelectedWaypoint].Details) {
         _tcscat(Temp,WayPointList[SelectedWaypoint].Details);

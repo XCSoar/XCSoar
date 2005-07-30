@@ -30,10 +30,10 @@ typedef enum {
 typedef enum {
   unKiloMeter,
   unNauticalMiles,
-  unStauteMiles,
+  unStatuteMiles,
   unKiloMeterPerHour,
   unKnots,
-  unStauteMilesMeterPerHour,
+  unStatuteMilesPerHour,
   unMeterPerSecond,
   unFeetPerMinutes,
   unMeter,
@@ -84,5 +84,13 @@ public:
   static bool Units::LattitudeToString(double Lattitude, TCHAR *Buffer, size_t size);
 
   static void NotifyUnitChanged(void);
+
+  static TCHAR *GetHorizontalSpeedName();
+
+  static TCHAR *GetVerticalSpeedName();
+
+  static TCHAR *GetDistanceName();
+
+  static TCHAR *GetAltitudeName();
 
 };

@@ -2,6 +2,7 @@
 #include "XCSoar.h"
 #include "Externs.h"
 #include "McReady.h"
+#include "Units.h"
 
 extern HFONT                                   StatisticsFont;
 
@@ -539,10 +540,12 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       if (page==0) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, TEXT("Barograph"));
 
-        wsprintf(Temp, TEXT("Working band: %5.0f-%5.0f\r\nCeiling trend: %5.0f /hr"),
+        wsprintf(Temp, TEXT("Working band: %5.0f-%5.0f %s\r\nCeiling trend: %5.0f %s/hr"),
                  flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY, 
                  flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY, 
-                 flightstats.Altitude_Ceiling.m*ALTITUDEMODIFY);
+                 Units::GetAltitudeName(),
+                 flightstats.Altitude_Ceiling.m*ALTITUDEMODIFY,
+                 Units::GetAltitudeName());
 
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
@@ -553,24 +556,29 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       if (page==1) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, TEXT("Climb"));
 
-        wsprintf(Temp, TEXT("Average climb rate: %3.1f\r\nClimb trend: %3.2f"),
+        wsprintf(Temp, TEXT("Average climb rate: %3.1f %s\r\nClimb trend: %3.2f %s"),                 
                   flightstats.ThermalAverage.y_ave*LIFTMODIFY,
-                  flightstats.ThermalAverage.m*LIFTMODIFY);
+                 Units::GetVerticalSpeedName(),
+                 flightstats.ThermalAverage.m*LIFTMODIFY,
+                 Units::GetVerticalSpeedName()
+                 );
 
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
         Statistics::RenderClimb(hdcScreen, rcgfx);
 
-
       }
       if (page==2) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, TEXT("Glide Polar"));
 
-        wsprintf(Temp, TEXT("Best LD: %3.1f at %3.0f\r\nMin sink: %3.2f at %3.0f"),
+        wsprintf(Temp, TEXT("Best LD: %3.1f at %3.0f %s\r\nMin sink: %3.2f %s at %3.0f %s"),
                  GlidePolar::bestld,
                  GlidePolar.Vbestld*SPEEDMODIFY,
+                 Units::GetHorizontalSpeedName(),
                  GlidePolar::minsink*LIFTMODIFY,
-                 GlidePolar::Vminsink*SPEEDMODIFY);
+                 Units::GetVerticalSpeedName(),
+                 GlidePolar::Vminsink*SPEEDMODIFY,
+                 Units::GetHorizontalSpeedName());
 
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 

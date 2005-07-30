@@ -33,7 +33,7 @@ CWaveOutThread variosound_waveOut;
 #define BSIZE 5
 #define BCOUNT INTERNAL_WAVEOUT_BUFFER_COUNT
 
-#define LOWFI
+#define MEDFI
 #ifdef LOWFI
 #define FREQZ 80
 #define FREQ 8000

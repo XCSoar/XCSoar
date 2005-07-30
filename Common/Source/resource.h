@@ -276,6 +276,10 @@
 #define IDC_ANALYSISLABEL               1242
 #define IDC_ANALYSISTEXT                1243
 #define IDC_ANALYSISNEXT                1244
+#define IDC_UNIT_ALT1                   1245
+#define IDC_UNIT_ALT2                   1246
+#define IDC_UNIT_ALT3                   1247
+#define IDC_UNIT_SPEED                  1248
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -311,7 +315,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        260
 #define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1245
+#define _APS_NEXT_CONTROL_VALUE         1250
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

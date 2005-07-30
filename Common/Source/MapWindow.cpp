@@ -21,6 +21,7 @@
 
 #include "Mapwindow.h"
 #include "Utils.h"
+#include "Units.h"
 #include "McReady.h"
 #include "Airspace.h"
 #include "Waypointparser.h"
@@ -536,7 +537,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     /* JMW created all re-used pens here */
     
     hpAircraft = (HPEN)CreatePen(PS_SOLID, 3, RGB(0xa0,0xa0,0xa0));
-    hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, 3, RGB(0x00,0x00,0x00));
+    hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, 1, RGB(0x00,0x00,0x00));
     #if (MONOCHROME_SCREEN > 0)
     hpWind = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
     #else
@@ -1277,15 +1278,36 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
 void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
 {
+#define NUMAIRCRAFTPOINTS 16
 
-  POINT Aircraft[7] = { {-15,0}, {15,0}, {0,-6}, {0,12}, {-4,10}, {4,10}, {0,0} };
+  POINT Aircraft[NUMAIRCRAFTPOINTS] = { 
+    { 1,-6},
+    {2,-1},
+    {15,0},
+    {15,2},
+    {1,2},
+    {0,10},
+    {4,11},
+    {4,12},
+    {-4,12},
+    {-4,11},
+    {0,10},
+    {-1,2},
+    {-15,2},
+    {-15,0},
+    {-2,-1}, 
+    {-1,-6}
+  };
+
   double dX,dY;
   int i;
   HPEN hpOld;
-  
+  HBRUSH hbAircraftSolid = (HBRUSH) CreateSolidBrush(RGB(0x00,0x00,0x00));
+  HBRUSH hbAircraftSolidBg = (HBRUSH) CreateSolidBrush(RGB(0xff,0xff,0xff));
+  HBRUSH hbOld = (HBRUSH)SelectObject(hdc, hbAircraftSolidBg);
   hpOld = (HPEN)SelectObject(hdc, hpAircraft);
   
-  for(i=0;i<7;i++)
+  for(i=0; i<NUMAIRCRAFTPOINTS; i++)
   {
 
 // JMW now corrects displayed aircraft heading for wind
@@ -1298,28 +1320,22 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
     Aircraft[i].x =iround(dX+Orig.x)+1;  Aircraft[i].y = iround(dY+Orig.y)+1;
   }
   
-  DrawSolidLine(hdc,Aircraft[2],Aircraft[3]);
-  DrawSolidLine(hdc,Aircraft[4],Aircraft[5]);
-  DrawSolidLine(hdc,Aircraft[0],Aircraft[6]);
-  DrawSolidLine(hdc,Aircraft[1],Aircraft[6]);
-  
-  SelectObject(hdc, hpOld);
-  
+  Polygon(hdc, Aircraft, NUMAIRCRAFTPOINTS);
+
   // draw it again so can get white border
   SelectObject(hdc, hpAircraftBorder);
+  SelectObject(hdc, hbAircraftSolid);
 
-  for(i=0;i<7;i++)
+  for(i=0; i<NUMAIRCRAFTPOINTS; i++)
   {
     
     Aircraft[i].x -= 1;  Aircraft[i].y -= 1;
   }
-  
-  DrawSolidLine(hdc,Aircraft[2],Aircraft[3]);
-  DrawSolidLine(hdc,Aircraft[4],Aircraft[5]);
-  DrawSolidLine(hdc,Aircraft[0],Aircraft[6]);
-  DrawSolidLine(hdc,Aircraft[1],Aircraft[6]);
-  
+
+  Polygon(hdc, Aircraft, NUMAIRCRAFTPOINTS);
+    
   SelectObject(hdc, hpOld);
+  SelectObject(hdc, hbOld);
 }
 
 
@@ -1410,13 +1426,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
   TCHAR sAltUnit[4];
   int DisplayMode;
   
-
-  if (ALTITUDEMODIFY == TOFEET)
-    _tcscpy(sAltUnit, TEXT("ft"));
-  else if (ALTITUDEMODIFY == TOMETER)
-    _tcscpy(sAltUnit, TEXT("m"));
-  else
-    _tcscpy(sAltUnit, TEXT("?"));
+  _tcscpy(sAltUnit, Units::GetAltitudeName());
 
   for(i=0;i<NumberOfWayPoints;i++)
   {
@@ -1747,12 +1757,12 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
   Start.y = Orig.y;
   Start.x = Orig.x;
 
-  POINT Arrow[6] = { {0,-20}, {-6,-26}, {0,-20}, {6,-26}, {0,-20}, {7 + tsize.cx, -22}};
+  POINT Arrow[7] = { {0,-20}, {-6,-26}, {0,-20}, {6,-26}, {0,-20}, {7 + tsize.cx, -22}, {-7 - tsize.cx, -22}};
 
   for (i=1;i<4;i++)
     Arrow[i].y -= wmag;
 
-  for(i=0;i<6;i++)
+  for(i=0;i<7;i++)
   {
     dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
     rotate(&dX, &dY, -1*(DisplayAngle - DerivedDrawInfo.WindBearing));
@@ -1762,8 +1772,11 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
 
   _itot(iround(DerivedDrawInfo.WindSpeed * SPEEDMODIFY), sTmp, 10);
 
-  //  ExtTextOut(hdc, Arrow[5].x - StringSize.cx/2 , Arrow[5].y-StringSize.cy/2 , 0, NULL, sTmp, _tcslen(sTmp), NULL);  
-  TextInBox(hdc, sTmp, Arrow[5].x , Arrow[5].y, 0, 2 | 16);
+  if (Arrow[5].y>=Arrow[6].y) {
+    TextInBox(hdc, sTmp, Arrow[5].x, Arrow[5].y, 0, 2 | 16);
+  } else {
+    TextInBox(hdc, sTmp, Arrow[6].x, Arrow[6].y, 0, 2 | 16);
+  }
 
   Polygon(hdc,Arrow,5);
 
@@ -1928,13 +1941,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc)
     _stprintf(Scale,TEXT("%1.0f"),MapScale);
   }
 
-  if (DISTANCEMODIFY == TOMILES)
-    _tcscat(Scale,TEXT("sm"));
-  else if (DISTANCEMODIFY == TONAUTICALMILES)
-    _tcscat(Scale,TEXT("nm"));
-  else if (DISTANCEMODIFY == TOKILOMETER)
-    _tcscat(Scale,TEXT("km"));
-
+  _tcscat(Scale, Units::GetDistanceName());
 
   if (AutoZoom) {
     _tcscat(Scale,TEXT(" A"));

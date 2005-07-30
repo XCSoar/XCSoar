@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.57 2005/07/29 23:53:22 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.58 2005/07/30 09:27:14 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -463,7 +463,7 @@ void ShowStatus() {
   double distance;
   TCHAR sLongditude[16];
   TCHAR sLattitude[16];
-  int   TabStops[] = {50,80,0};
+  int   TabStops[] = {60,80,0};
 
   statusmessage[0]=0;
 
@@ -475,10 +475,11 @@ void ShowStatus() {
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime-sunsethours)*60);
 
-  _stprintf(Temp,TEXT("Longitude\t%s\r\nLatitude\t%s\r\nAltitude\t%.0f\r\nSunset\t%02d:%02d\r\n\r\n"),
+  _stprintf(Temp,TEXT("Longitude\t%s\r\nLatitude\t%s\r\nAltitude\t%.0f %s\r\nSunset\t%02d:%02d\r\n\r\n"),
            sLongditude,
            sLattitude,
            GPS_INFO.Altitude*ALTITUDEMODIFY,
+            Units::GetAltitudeName(),
            sunsethours,
            sunsetmins
            );
@@ -499,10 +500,11 @@ void ShowStatus() {
                         WayPointList[iwaypoint].Lattitude,
                         WayPointList[iwaypoint].Longditude)*DISTANCEMODIFY;
 
-    _stprintf(Temp,TEXT("Near\t%s\r\nBearing\t%d\r\nDistance\t%.1f\r\n\r\n"),
+    _stprintf(Temp,TEXT("Near\t%s\r\nBearing\t%d\r\nDistance\t%.1f %s\r\n\r\n"),
              WayPointList[iwaypoint].Name,
              (int)bearing,
-             distance);
+              distance,
+              Units::GetDistanceName());
     _tcscat(statusmessage, Temp);
 
   }
@@ -526,7 +528,7 @@ void ShowStatus() {
     wcscat(statusmessage, TEXT("Vario disconnected\r\n"));
   }
 
-  ShowStatusMessage(statusmessage, 60000, 14, false, TabStops);
+  ShowStatusMessage(statusmessage, 60000, 15, false, TabStops);
   // i think one minute is enough...
 
 }
