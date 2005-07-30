@@ -1336,6 +1336,9 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
 
   SelectObject(hdc, hpOld);
   SelectObject(hdc, hbOld);
+
+  DeleteObject(hbAircraftSolid);
+  DeleteObject(hbAircraftSolidBg);
 }
 
 
