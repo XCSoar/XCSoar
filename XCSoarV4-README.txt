@@ -21,6 +21,9 @@ Changes from 4.21 to 4.22
 - Updated aircraft graphics
 - Proper units display in dialogs.
 - All configuration options now can be expressed in custom units
+- New Netto vario infobox
+- New dolphin speed-to-fly infobox
+- Improved audio vario sounds
 
 Changes from 4.2 to 4.21
 
@@ -157,13 +160,13 @@ through various related values.  These groupings are:
 
 - Vario group:
   Average vario, Last Thermal Average, Last Thermal Gain, Last Thermal Time,
-  Thermal Average, Thermal Gain, Vario
+  Thermal Average, Thermal Gain, Vario, Netto Vario
 
 - Wind group:
   Wind speed, Wind bearing
 
 - MacReady group:
-  MacReady Setting, MacReady Speed, Percent time climbing
+  MacReady Setting, MacReady Speed, Percent time climbing, Dolphin speed
 
 - Navigation group:
   Next distance, Next Alt Difference, Next Alt Required, Task Alt Difference,

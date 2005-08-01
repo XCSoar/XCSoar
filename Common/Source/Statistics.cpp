@@ -176,10 +176,10 @@ void Statistics::DrawTrend(HDC hdc, RECT rc, LeastSquares* lsdata, int Style)
   ymin = (int)((y_max-ymin)*yscale)+rc.top;
   ymax = (int)((y_max-ymax)*yscale)+rc.top;
   POINT line[2];
-  line[0].x = xmin;
-  line[0].y = ymin;
-  line[1].x = xmax;
-  line[1].y = ymax;
+  line[0].x = (int)xmin;
+  line[0].y = (int)ymin;
+  line[1].x = (int)xmax;
+  line[1].y = (int)ymax;
 
   StyleLine(hdc, line[0], line[1], Style);
 
@@ -208,10 +208,10 @@ void Statistics::DrawTrendN(HDC hdc, RECT rc, LeastSquares* lsdata,
   ymin = (int)((y_max-ymin)*yscale)+rc.top;
   ymax = (int)((y_max-ymax)*yscale)+rc.top;
   POINT line[2];
-  line[0].x = xmin;
-  line[0].y = ymin;
-  line[1].x = xmax;
-  line[1].y = ymax;
+  line[0].x = (int)xmin;
+  line[0].y = (int)ymin;
+  line[1].x = (int)xmax;
+  line[1].y = (int)ymax;
 
   StyleLine(hdc, line[0], line[1], Style);
 
@@ -231,10 +231,10 @@ void Statistics::DrawLine(HDC hdc, RECT rc, double xmin, double ymin,
   ymin = (int)((y_max-ymin)*yscale)+rc.top;
   ymax = (int)((y_max-ymax)*yscale)+rc.top;
   POINT line[2];
-  line[0].x = xmin;
-  line[0].y = ymin;
-  line[1].x = xmax;
-  line[1].y = ymax;
+  line[0].x = (int)xmin;
+  line[0].y = (int)ymin;
+  line[1].x = (int)xmax;
+  line[1].y = (int)ymax;
 
   // STYLE_REDTHICK
   StyleLine(hdc, line[0], line[1], Style);
@@ -442,7 +442,7 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 
   ResetScale();
   ScaleYFromValue(rc, 0);
-  ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,SAFTEYSPEED-1));
+  ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1)));
   ScaleXFromValue(rc, 0); // GlidePolar::Vminsink);
   ScaleXFromValue(rc, SAFTEYSPEED);
 

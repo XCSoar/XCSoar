@@ -59,16 +59,15 @@ short variosound_volume;
 #include <math.h>
 
 #define fbase 400 // base frequency
-#define noct 4
-#define vmax 10.0
+#define nocthi 3
+#define noctlo 1
 #define tzero 75
-#define delaymult 5.0
-double koct = log(noct)/log(2);
 
 short variosound_vscale_in = 0;
 short variosound_vav_in = 0;
 
 short variosound_vscale=0;
+short variosound_vscale_last=0;
 short variosound_vcur = 0;
 short variosound_vav=0;
 BOOL variosound_sound = TRUE;
@@ -83,17 +82,12 @@ char variosound_pvbufq[201*256];
 
 #ifdef DEBUG
 bool variosound_vscale_timer = false;
-DWORD fpsTimeSound = 0;
 #endif
+DWORD fpsTimeSound = 0;
+short fpsTimeDelta = 0;
 
 short quantisesound(short vv) {
-	short k;
-	k = vv+100;
-	if (k>200)
-		return 100;
-	if (k<0)
-		return 0;
-	return k;
+  return max(0,min(200,vv+100));
 }
 
 CRITICAL_SECTION  CritSec_VarioSound;
@@ -101,10 +95,33 @@ CRITICAL_SECTION  CritSec_VarioSoundV;
 
 
 void VarioSound_sndparam() {
+
+  // this is called by the wave thread when filling the buffer
+  // since the buffer is filled after copying the previous buffer,
+  // it should really calculate the sound at the time of the completion
+  // of the current buffer.  This could be computed by looking at the
+  // sound period
+
   EnterCriticalSection(&CritSec_VarioSoundV);
 
-  variosound_vscale = variosound_vscale_in;
+  // find position of this sound in the slice
+  DWORD	fpsTime0 = ::GetTickCount();
+  short delta = (short)(fpsTime0-fpsTimeSound);
+  delta = min(max(1,delta), fpsTimeDelta);
+
+  // tp_delay/FREQZ
+
+  // find smoothed input (linearly interpolated between last and this sound)
+
   variosound_vav = variosound_vav_in;
+
+  variosound_vscale = (short)((
+    variosound_vscale_in*(delta)
+    +variosound_vscale_last*(fpsTimeDelta-delta)
+    )/fpsTimeDelta);
+
+  variosound_vscale = max(-100,min(100,variosound_vscale));
+
 
 #ifdef DEBUG
   if (variosound_vscale_timer) {
@@ -132,15 +149,17 @@ void VarioSound_sndparam() {
   variosound_vcur = variosound_vscale;
   // (7*variosound_vscale+3*variosound_vcur)/10;
 
-  tp_delay = variosound_delaytable[quantisesound(variosound_vcur)];
-  tp_sound = variosound_freqtable[quantisesound(variosound_vcur)];
+  short qs = quantisesound(variosound_vcur);
+
+  tp_delay = variosound_delaytable[qs];
+  tp_sound = variosound_freqtable[qs];
 
   int i;
   i= (tp_delay/tp_sound);
   tp_delay = i*tp_sound;
 
-  tp_avsound = variosound_freqtable[quantisesound(variosound_vav)];
-  variosound_volume = quantisesound(variosound_vcur);
+  tp_avsound = tp_sound; // variosound_freqtable[quantisesound(variosound_vav)];
+  variosound_volume = qs;
 }
 
 
@@ -170,7 +189,7 @@ unsigned long f_quiet_next(bool isquiet) {
     }
   } else {
     if (isquiet) {
-      return ((long)tp_delay*191);
+      return ((long)tp_delay*254); // JMW was 191
     } else {
       return ((long)tp_delay*255);
     }
@@ -222,12 +241,7 @@ void VarioSound_synthesiseSound() {
 
       while ((buf< endBuf) && (idelay < inext)) {
 
-	// do quiet stuff
-	//	if (variosound_vcur<0) {
-	//	  *buf = f_sound_loud(ii); // sink is solid tone
-	//	} else {
-	  *buf = f_sound_quiet(ii);
-	  //	}
+        *buf = f_sound_quiet(ii);
 	buf++;
 
 	idelay+= 256;
@@ -242,7 +256,6 @@ void VarioSound_synthesiseSound() {
 	// do noisy stuff
 
 	*buf = f_sound_loud(ii);
-	//	f_sound_loud(ii);
 	buf++;
 
 	idelay+= 256;
@@ -323,15 +336,19 @@ extern "C" {
 
   VARIOSOUND_API void VarioSound_SetV(short v) {
     EnterCriticalSection(&CritSec_VarioSoundV);
-    variosound_vscale_in = v;
-    if (variosound_vscale_in>100) {
-      variosound_vscale_in = 100;
-    }
-    if (variosound_vscale_in<-100) {
-      variosound_vscale_in = -100;
-    }
+    // copy last value
+    variosound_vscale_last = variosound_vscale_in;
+
+    // set new value, clipped
+    variosound_vscale_in = max(-100,min(v,100));
+
+    // calculate time elapsed since last sound,
+    // usually this will be 500 or 1000 ms
+    DWORD fpsTimeLast = fpsTimeSound;
+    fpsTimeSound = ::GetTickCount(); // time now
+    fpsTimeDelta = (short)(fpsTimeSound-fpsTimeLast);
+
 #ifdef DEBUG
-    fpsTimeSound = ::GetTickCount();
     variosound_vscale_timer = true;
 #endif
 
@@ -362,7 +379,7 @@ extern "C" {
       for (i=0; i<201; i++) {
         vv = (i-100)/(double)v;
         if (vv<0) {
-          variosound_volumescale[i] = iround(7*(1.0-1.0/(vv*vv+1)));
+          variosound_volumescale[i] = iround(3*(1.0-1.0/(vv*vv+1)));
         } else {
           variosound_volumescale[i]= iround(10*(1.0-1.0/(vv*vv+1)));
         }
@@ -399,18 +416,21 @@ extern "C" {
     int i;
     for (i=0; i<256; i++) {
       double f = sin(i*3.14159*2.0/256);
-     // f = sqrt(fabs(f))*sgn(f);
       variosound_sin[i]= (short)iround(64.0*f);
-      variosound_sinquiet[i]= (short)iround(16.0*f);
+      variosound_sinquiet[i]= (short)iround(8.0*f);
     }
+
+    double kocthi = log(nocthi)/log(2);
+    double koctlo = log(noctlo)/log(2);
 
     for (i=0; i<201; i++) {
       double vv = (i-100)/100.0;
-      variosound_freqtable[i] = (int)((QUANT*FREQ)*pow(2,-vv*koct)/fbase);
       if (vv>=0.0) {
+        variosound_freqtable[i] = (int)((QUANT*FREQ)*pow(2,-vv*kocthi)/fbase);
 	variosound_delaytable[i] = (int)(FREQZ*tzero/(1+fabs(vv)*5));
       } else {
-	variosound_delaytable[i] = (int)(FREQZ*tzero);
+	variosound_delaytable[i] = (int)(FREQZ*tzero); // JMW was 1
+        variosound_freqtable[i] = (int)((QUANT*FREQ)*pow(2,-vv*koctlo)/fbase);
       }
     }
 

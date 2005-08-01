@@ -102,7 +102,7 @@ FONT 10, "System"
 BEGIN
     LTEXT           "XCSoar",IDC_STATIC,32,7,101,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2003,2004,2005",IDC_STATIC,32,25,101,8
-    LTEXT           "Version 4.21",IDC_STATIC,32,16,101,8,SS_NOPREFIX
+    LTEXT           "Version 4.22",IDC_STATIC,32,16,101,8,SS_NOPREFIX
     LTEXT           "Processor",IDC_STATIC,10,46,35,8,SS_NOPREFIX
     LTEXT           "OS Version",IDC_STATIC,10,56,40,8,SS_NOPREFIX
     LTEXT           "",IDC_PROCESSOR,47,45,66,8
@@ -118,7 +118,7 @@ FONT 10, "System"
 BEGIN
     EDITTEXT        IDC_MESSAGE,4,125,124,14,ES_CENTER | ES_MULTILINE |
                     ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "Version 4.21",IDC_STATIC,88,115,42,8
+    LTEXT           "Version 4.22",IDC_STATIC,88,115,42,8
     CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,2,2,
                     129,113
     CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,

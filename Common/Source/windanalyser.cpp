@@ -281,7 +281,10 @@ void WindAnalyser::_calcWind() {
   //the speed of the wind is half the difference between the minimum and the maximumspeeds.
   //let the world know about our measurement!
 
-  slot_newEstimate(a, quality);
+  if (a.x*a.x+a.y*a.y<30*30) {
+    // limit to reasonable values (60 knots), reject otherwise
+    slot_newEstimate(a, quality);
+  }
 }
 
 void WindAnalyser::slot_newEstimate(Vector a, int quality)

@@ -252,9 +252,9 @@ void PopupBugsBallast(int updown);
 //   Altitude 0,1,20,33
 //   Aircraft info 3,6,23,32,37
 //   LD 4,5,19,38
-//   Vario 2,7,8,9,21,22,24
+//   Vario 2,7,8,9,21,22,24,44
 //   Wind 25,26
-//   Mcready 10,34,35
+//   Mcready 10,34,35,43
 //   Nav 11,12,13,15,16,17,18,27,28,29,30,31
 //   Waypoint 14,36,39,40,41,42
 
@@ -266,7 +266,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0},
 
   // 2
-  {TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 24},
+  {TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 44},
 
   // 3
   {TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f°T")), NoProcessing, 6, 37},
@@ -290,7 +290,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 21, 8},
 
   // 10
-  {TEXT("McCready Setting"), TEXT("McCready"), new InfoBoxFormatter(TEXT("%2.1f")), McCreadyProcessing, 34, 35},
+  {TEXT("McCready Setting"), TEXT("McCready"), new InfoBoxFormatter(TEXT("%2.1f")), McCreadyProcessing, 34, 43},
 
   // 11
   {TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},
@@ -332,7 +332,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f°T")), DirectionProcessing, 32, 6},
 
   // 24
-  {TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 22},
+  {TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 44, 22},
 
   // 25
   {TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 26},
@@ -365,7 +365,7 @@ SCREEN_INFO Data_Options[] = {
   {TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
 
   // 35
-  {TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 34},
+  {TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
 
   // 36
   {TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 39, 14},
@@ -388,10 +388,15 @@ SCREEN_INFO Data_Options[] = {
   // 42
   {TEXT("Next Time To Go"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 41},
 
+  // 43
+  {TEXT("Speed Dolphin"), TEXT("V Opt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 35},
+
+  // 44
+  {TEXT("Netto Vario"), TEXT("Netto"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 24},
 
 };
 
-int NUMSELECTSTRINGS = 43;
+int NUMSELECTSTRINGS = 45;
 
 int ControlWidth, ControlHeight;
 

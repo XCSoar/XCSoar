@@ -28,6 +28,7 @@ typedef enum {
 }CoordinateFormats_t;
 
 typedef enum {
+  unUndef,
   unKiloMeter,
   unNauticalMiles,
   unStatuteMiles,
@@ -38,6 +39,7 @@ typedef enum {
   unFeetPerMinutes,
   unMeter,
   unFeet,
+  unFligthLevel,
   unKelvin,
   unGradCelcius,                    // K = C° + 273,15
   unGradFahrenheit                  // K = (°F + 459,67) / 1,8
@@ -45,8 +47,8 @@ typedef enum {
 
 typedef struct{
   TCHAR  *Name;
-  double ToSystemFact;
-  double ToSystemOffset;
+  double ToUserFact;
+  double ToUserOffset;
 }UnitDescriptor_t;
 
 class Units {
@@ -92,5 +94,8 @@ public:
   static TCHAR *GetDistanceName();
 
   static TCHAR *GetAltitudeName();
+
+  static bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
+  static bool FormatUserDistance(double Distance, TCHAR *Buffer, size_t size);
 
 };
