@@ -139,6 +139,10 @@ DWORD Port1ReadThread (LPVOID lpvoid)
 {
   DWORD dwCommModemStatus, dwBytesTransferred;
   BYTE inbuf[1024];
+
+  // JMW added purging of port on open to prevent overflow initially
+  PurgeComm(hPort1, 
+            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
   
   // Specify a set of events to be monitored for the port.
 
@@ -147,10 +151,6 @@ DWORD Port1ReadThread (LPVOID lpvoid)
   SetCommMask(hPort1, dwMask);
 
   fRxThreadTerminated = FALSE;
-
-  // JMW added purging of port on open to prevent overflow initially
-  PurgeComm(hPort1, 
-            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
   
   while ((hPort1 != INVALID_HANDLE_VALUE) && (!MapWindow::CLOSETHREAD) && (!Port1CloseThread)) 
   {
@@ -249,7 +249,12 @@ BOOL Port1StopRxThread(void){
   
   if (hPort1 == INVALID_HANDLE_VALUE) return(FALSE);
 
+  // JMW added purging of port on open to prevent overflow initially
+  PurgeComm(hPort1, 
+            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+
   Port1CloseThread = TRUE;
+
   //GetCommMask(hPort1, &dwMask);       // setting the comm event mask with the same value
   SetCommMask(hPort1, dwMask);          // will cancel any WaitCommEvent!
                                         // this is a documented CE trick to cancel the WaitCommEvent

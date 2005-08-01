@@ -193,6 +193,7 @@ class MapWindow {
   static void DrawThermalBand(HDC hDC,RECT rc);
   static void DrawGlideThroughTerrain(HDC hDC, RECT rc);
   static void DrawCDI();
+  static void DrawSpeedToFly(HDC hDC, RECT rc);
     
   static void DrawSolidLine(HDC , POINT , POINT );
   static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mode);
@@ -252,6 +253,8 @@ class MapWindow {
   static      HPEN hpFinalGlideBelow;
   static      HPEN hpMapScale;
   static      HPEN hpTerrainLine;
+  static      HPEN hpSpeedFast;
+  static      HPEN hpSpeedSlow;
   
   static      HBRUSH hbCompass;
   static      HBRUSH hbThermalBand;
@@ -281,6 +284,8 @@ class MapWindow {
 
  public:
   static bool RenderTimeAvailable();
+
+  static bool BigZoom;
 
 };
 

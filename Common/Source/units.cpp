@@ -26,6 +26,14 @@
 // - unit dialog support
 
 
+//default       EU   UK   US   AUS
+//altitude      m    ft   ft   m
+//verticalspeed m/s  kts  kts  kts
+//wind speed    km/  kts  mp   kts
+//IAS           km/  kts  mp   kts
+//distance      km   nm   ml   nm
+
+
 #include "stdafx.h"
 
 #include <stdio.h>
@@ -37,19 +45,20 @@
 CoordinateFormats_t Units::CoordinateFormat;
 
 UnitDescriptor_t Units::UnitDescriptors[] ={
-  {TEXT("km"),        1,        0},
-  {TEXT("nm"),        1,        0},
-  {TEXT("sm"),        1,        0},
-  {TEXT("km/h"),      1,        0},
-  {TEXT("kt"),        1,        0},
-  {TEXT("mph"),       1,        0},
-  {TEXT("m/s"),       1,        0},
-  {TEXT("fpm"),       1,        0},
-  {TEXT("m"),         1,        0},
-  {TEXT("ft"),        1,        0},
-  {TEXT("K"),         1,        0},
-  {TEXT("°C"),        1,        0},
-  {TEXT("°F"),        1,        0}       // i am very happy that we all have the same time!
+  {NULL,         1,          0},
+  {TEXT("km"),   0.001,      0},
+  {TEXT("nm"),   0.00053996, 0},
+  {TEXT("sm"),   0.0006214,  0},
+  {TEXT("km/h"), 0.0036,     0},
+  {TEXT("kn"),   0.001944,   0},
+  {TEXT("mph"),  0.002237,   0},
+  {TEXT("m/s"),  1.0,        0},
+  {TEXT("fpm"),  3.281/60.0, 0},
+  {TEXT("m"),    1.0,        0},
+  {TEXT("ft"),   3.281,      0},
+  {TEXT("K"),    1,          0},
+  {TEXT("°C"),   1.0,       -273.15},
+  {TEXT("°F"),   1.8,       -459.67}
 };
 
 Units_t Units::UserDistanceUnit = unKiloMeter;
@@ -271,4 +280,76 @@ TCHAR *Units::GetDistanceName(){
 TCHAR *Units::GetAltitudeName(){
   return(GetUnitName(GetUserAltitudeUnit()));
 }
+
+
+bool Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size){
+
+  int prec;
+  TCHAR sTmp[32];
+  UnitDescriptor_t *pU = &UnitDescriptors[UserAltitudeUnit];
+
+  Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
+
+//  prec = 4-log10(Altitude);
+//  prec = max(prec, 0);
+  prec = 0;
+
+  _stprintf(sTmp, TEXT("%.*f%s"), prec, Altitude, pU->Name);
+
+  if (_tcslen(sTmp) < size-1){
+    _tcscpy(Buffer, sTmp);
+    return(true);
+  } else {
+    _tcsncpy(Buffer, sTmp, size);
+    Buffer[size-1] = '\0';
+    return(false);
+  }
+
+}
+
+bool Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size){
+
+  int prec;
+  double value;
+  TCHAR sTmp[32];
+  UnitDescriptor_t *pU = &UnitDescriptors[UserDistanceUnit];
+
+  value = Distance * pU->ToUserFact; // + pU->ToUserOffset;
+
+  if (value >= 100)
+    prec = 0;
+  else if (value > 10)
+    prec = 1;
+  else if (value > 1)
+    prec = 2;
+  else {
+    prec = 3;
+    if (UserDistanceUnit == unKiloMeter){
+      prec = 0;
+      pU = &UnitDescriptors[unMeter];
+      value = Distance * pU->ToUserFact;
+    }
+    /* dont know what to do on miles ....
+    if (UserDistanceUnit == unNauticalMiles || UserDistanceUnit == unStauteMiles){
+      prec = 0;
+      pU = &UnitDescriptors[unFeet];
+      value = Distance * pU->ToUserFact;
+    }
+    */
+  }
+
+  _stprintf(sTmp, TEXT("%.*f%s"), prec, value, pU->Name);
+
+  if (_tcslen(sTmp) < size-1){
+    _tcscpy(Buffer, sTmp);
+    return(true);
+  } else {
+    _tcsncpy(Buffer, sTmp, size);
+    Buffer[size-1] = '\0';
+    return(false);
+  }
+
+}
+
+
 

@@ -121,7 +121,7 @@ class SunEphemeris {
     int localtime = ((int)GPS_INFO.Time-TimeZoneInformation.Bias*60);
     tzone = -TimeZoneInformation.Bias/60.0;
 
-    d = FNday(y, m, day, h);
+    d = FNday(y, m, day, (float)h);
 
     //   Use FNsun to find the ecliptic longitude of the
     //   Sun

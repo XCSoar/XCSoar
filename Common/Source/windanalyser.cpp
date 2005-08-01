@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.8 2005/07/29 09:33:29 samgi Exp $
+**   $Id: windanalyser.cpp,v 1.9 2005/08/01 08:32:02 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -280,8 +280,11 @@ void WindAnalyser::_calcWind() {
   
   //the speed of the wind is half the difference between the minimum and the maximumspeeds.
   //let the world know about our measurement!
-  
-  slot_newEstimate(a, quality);
+
+  if (a.x*a.x+a.y*a.y<30*30) {
+    // limit to reasonable values (60 knots), reject otherwise
+    slot_newEstimate(a, quality);
+  }
 }
 
 void WindAnalyser::slot_newEstimate(Vector a, int quality)

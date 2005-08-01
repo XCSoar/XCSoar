@@ -376,7 +376,12 @@ public:
 
     // grid spacing = 250*rounding; m
 
-    terrain_dem_graphics.SetTerrainRounding(pixelsize);
+    if (MapWindow::BigZoom) {
+      MapWindow::BigZoom = false;
+      terrain_dem_graphics.SetTerrainRounding(pixelsize*2);
+    } else {
+      terrain_dem_graphics.SetTerrainRounding(pixelsize);
+    }
     kpixel = (float)(terrain_dem_graphics.GetTerrainSlopeStep()*3.0); 
     // magnify gradient to make it
     // more obvious

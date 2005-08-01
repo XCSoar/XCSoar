@@ -85,6 +85,9 @@ typedef struct _DERIVED_INFO
 
   double NettoVario;
 
+  // optimum speed to fly instantaneously
+  double VOpt; 
+
   // JMW estimated track bearing at next time step
   double NextTrackBearing;
 

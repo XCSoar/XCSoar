@@ -508,6 +508,14 @@ void InfoBoxFormatter::AssignValue(int i) {
       Value = CALCULATED_INFO.LDNext;
     }
     break;
+  case 43:
+    //    Valid = GPS_INFO.AirspeedAvailable;
+    Value = CALCULATED_INFO.VOpt*SPEEDMODIFY;
+    break;
+  case 44:
+    //    Valid = GPS_INFO.AirspeedAvailable;
+    Value = CALCULATED_INFO.NettoVario*LIFTMODIFY;
+    break;
   default:
     break;
 

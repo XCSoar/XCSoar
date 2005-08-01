@@ -879,6 +879,37 @@ NODEP_CPP_DIALO=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Source\leastsqs.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_LEAST=\
+	"..\..\Common\Header\leastsqs.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_LEAST=\
+	"..\..\Common\Header\leastsqs.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_LEAST=\
+	"..\..\Common\Header\leastsqs.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_LEAST=\
+	"..\..\Common\Header\leastsqs.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Source\Logger.cpp
 
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
@@ -1809,6 +1840,113 @@ DEP_CPP_RSCAL=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Source\Statistics.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_STATI=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_STATI=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_STATI=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_STATI=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Source\StdAfx.cpp
 
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
@@ -2028,6 +2166,109 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Topology.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\units.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_UNITS=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -2715,6 +2956,10 @@ SOURCE=..\..\Common\Header\imgrendr.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Header\leastsqs.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Header\Logger.h
 # End Source File
 # Begin Source File
@@ -2747,6 +2992,10 @@ SOURCE=..\..\Common\Header\newres.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Header\options.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Header\Parser.h
 # End Source File
 # Begin Source File
@@ -2768,6 +3017,10 @@ SOURCE=..\..\Common\Header\resource.h
 # Begin Source File
 
 SOURCE=..\..\Common\Header\Sizes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\Statistics.h
 # End Source File
 # Begin Source File
 
@@ -2796,6 +3049,10 @@ SOURCE=..\..\Common\Header\Topology.h
 # Begin Source File
 
 SOURCE=..\..\Common\Header\uniqueid.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\Units.h
 # End Source File
 # Begin Source File
 

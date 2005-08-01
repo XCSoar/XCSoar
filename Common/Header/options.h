@@ -1,14 +1,14 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#define ALTERNATEWINDVECTOR 1
-#define AIRSPACEUSEBINFILE 0
+#define   MONOCHROME_SCREEN     0             // optimize for monochrom screen
+#define   EXPERIMENTAL          0             // ????
+#define   ALTERNATEWINDVECTOR   1             // winpilot style windverctor (at the airplane)
 
-// this one isn't used?
-#define LOGGDEVICEINSTREAM 0
-
-// not sure what this does...
-#define LOGGDEVCOMMANDLINE 0
+#define   LOGGDEVICEINSTREAM    0             // log device in stream
+#define   LOGGDEVCOMMANDLINE    NULL          // device in-stream logger command line
+                                              // ie TEXT("-logA=\\Speicherkarte\\logA.log ""-logB=\\SD Card\\logB.log""")
+#define   AIRSPACEUSEBINFILE    0             // use and maintain binary airspace file
 
 // define this to be true for windows PC port
 #define WINDOWSPC 0

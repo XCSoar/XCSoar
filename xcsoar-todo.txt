@@ -62,7 +62,6 @@ Waypoint information graphics/text
   -- Runway diagram?
 - Info for all waypoints
   -- Computed arrival height AGL
-  -- Waypoint height
 
 Airfield display as different logo (winpilot look)
 - Display height at arrival on map like winpilot?
@@ -104,11 +103,6 @@ Task manager UI
 - Allow user to add new waypoints from interface 
   (current lat/long and via editor)
 - Bring up airfield display box
-
-New navboxes
-- ETA info
-- Time of Day (in waypoint group)
-
 
 Start/restart task button
 - Stats only collected once starting
@@ -171,8 +165,6 @@ Implement auto-wind switch (three modes)
 - Auto with one climb (as it currently uses)
 - Auto incremental
 
-Wind calculations at multiple heights
-
 Wind calculations making use of IAS data
 
 
@@ -181,29 +173,19 @@ VARIOMETER
 ============================================================================
 
 Audio options in settings
-- Switch on/off
-- Volume
 - Scale sensitivity in up/down
-- Deadband
 
 Netto vario options
+- Super netto or normal netto
 
 Second comm port for vario instrument
 - only first one will process GPS info
 - if vario is present, change calculations so vario readings are used
 
-Do netto calculations
-
-Vario
-
-
 ============================================================================
 PERFORMANCE AND COMPILATION
 ============================================================================
 
-
-Compilation cleanups
-- get rid of int cast warnings
 
 Collect globals into structs to make it easier to manage with respect to locks
 
@@ -251,18 +233,13 @@ TERRAIN ELEVATION
 
 Sunlight rendering
 - Implement sun ephemeris
-- Calculate sunrise/sunset
 
 ============================================================================
 MISCELLANEOUS
 ============================================================================
 
 Display warranty/warning dialog
-- Lookout warning on startup
 - Need GPL no warranty dialog
-
-Fix application icon
-
 
 ============================================================================
 TASK DECLARATION

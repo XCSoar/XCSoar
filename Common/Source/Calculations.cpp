@@ -167,6 +167,35 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  double n;
+
+  // get load factor
+
+  if (Basic->AccelerationAvailable) {
+    n = Basic->Gload;
+  } else {
+    n = 1.0;
+  }
+
+  // TODO: Stall warning
+
+  // calculate sink rate of glider
+
+  double theSinkRate;    
+
+  if (Basic->AirspeedAvailable) {
+    theSinkRate= GlidePolar::SinkRate(Basic->IndicatedAirspeed, n);
+  } else {
+    // assume zero wind (Speed=Airspeed, very bad I know)
+    theSinkRate= GlidePolar::SinkRate(Basic->Speed, n);
+  }
+
+  if (Basic->VarioAvailable) {
+    Calculated->NettoVario = Basic->Vario - theSinkRate;
+  } else {
+    Calculated->NettoVario = Calculated->Vario - theSinkRate;
+  }
+
   if (
       (Basic->AirspeedAvailable && 
       (Basic->IndicatedAirspeed >= NettoSpeed))
@@ -176,36 +205,55 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       ) {
     // TODO: slow/smooth switching between netto and not
 
-    double theSinkRate;
-    double n;
-    if (Basic->AccelerationAvailable) {
-      n = Basic->Gload;
-    } else {
-      n = 1.0;
-    }
-
-    if (Basic->AirspeedAvailable) {
-      theSinkRate= GlidePolar::SinkRate(Basic->IndicatedAirspeed, n);
-    } else {
-      // assume zero wind (Speed=Airspeed, very bad I know)
-      theSinkRate= GlidePolar::SinkRate(Basic->Speed, n);
-    }
-
-    if (Basic->VarioAvailable) {
-      Calculated->NettoVario = Basic->Vario - theSinkRate;
-    } else {
-      Calculated->NettoVario = Calculated->Vario - theSinkRate;
-    }
-
-    VarioSound_SetV((short)(Calculated->NettoVario/6.0*100));
+    VarioSound_SetV((short)((Calculated->NettoVario-GlidePolar::minsink)/6.0*100));
 
   } else {
+
     if (Basic->VarioAvailable) {
       VarioSound_SetV((short)(Basic->Vario/6.0*100));
     } else {
       VarioSound_SetV((short)(Calculated->Vario/6.0*100));
     }
+
   }
+
+  if (Calculated->Circling) {
+    if (n>0) {
+      // calculate speed of min sink adjusted for load factor 
+      Calculated->VOpt = GlidePolar::Vminsink*sqrt(n);
+    }
+  } else {
+    // calculate optimum cruise speed in current track direction
+    // this still makes use of mode, so it should agree with
+    // Vmcready if the track bearing is the best cruise track
+    // this does assume g loading of 1.0
+
+    // this is basically a dolphin soaring calculator
+    double dmc = MCCREADY/LIFTMODIFY-Calculated->NettoVario;
+
+    if (dmc>0) {
+
+      double VOptnew;
+
+    GlidePolar::McCreadyAltitude(dmc,
+                                 100.0, // dummy value
+                                 Basic->TrackBearing, 
+                                 Calculated->WindSpeed, 
+                                 Calculated->WindBearing, 
+                                 0, 
+                                 &VOptnew, 
+                                 1, // (ActiveWayPoint == getFinalWaypoint()),
+                                 0
+                                 );
+    
+    // put low pass filter on VOpt so display doesn't jump around too much
+    Calculated->VOpt = Calculated->VOpt*0.6+VOptnew*0.4;
+
+    } else {
+      Calculated->VOpt = GlidePolar::Vminsink;
+    }
+  }
+
 }
 
 
@@ -545,10 +593,12 @@ void SwitchZoomClimb(bool isclimb, bool left) {
     if (isclimb) {
       CruiseMapScale = MapWindow::RequestMapScale;
       MapWindow::RequestMapScale = ClimbMapScale;
+      MapWindow::BigZoom = true;
     } else {
       // leaving climb
       ClimbMapScale = MapWindow::RequestMapScale;
       MapWindow::RequestMapScale = CruiseMapScale;
+      MapWindow::BigZoom = true;
     }
   }
 

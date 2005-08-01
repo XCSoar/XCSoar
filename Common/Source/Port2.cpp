@@ -165,16 +165,16 @@ DWORD Port2ReadThread (LPVOID lpvoid)
   DWORD dwCommModemStatus, dwBytesTransferred;
   BYTE inbuf[1024];
   
+  // JMW added purging of port on open to prevent overflow
+  PurgeComm(hPort2, 
+            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+
   // Specify a set of events to be monitored for the port.
   SetCommMask (hPort2,  EV_RXFLAG |  EV_CTS 
 	       | EV_DSR | EV_RLSD | EV_RING
 	       | EV_RXCHAR 
 	       );
   
-  // JMW added purging of port on open to prevent overflow
-  PurgeComm(hPort2, 
-            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
-
   while ((hPort2 != INVALID_HANDLE_VALUE)&&(!MapWindow::CLOSETHREAD)) 
   {
     int i=0;
@@ -236,6 +236,11 @@ BOOL Port2Close (HANDLE hCommPort)
 
   if (hCommPort != INVALID_HANDLE_VALUE)
   {
+
+    // JMW added purging of port on open to prevent overflow initially
+    PurgeComm(hPort2, 
+              PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+
     // Close the communication port.
     if (!CloseHandle (hCommPort))
     {

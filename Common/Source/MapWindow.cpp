@@ -63,7 +63,9 @@ bool MapWindow::EnablePan = FALSE;
   
 BOOL MapWindow::CLOSETHREAD = FALSE;
 BOOL MapWindow::THREADRUNNING = TRUE;
-  
+
+bool MapWindow::BigZoom = true;
+
 DWORD  MapWindow::dwDrawThreadID;
 HANDLE MapWindow::hDrawThread;
   
@@ -133,6 +135,8 @@ HPEN MapWindow::hpFinalGlideAbove;
 HPEN MapWindow::hpFinalGlideBelow;
 HPEN MapWindow::hpMapScale;
 HPEN MapWindow::hpTerrainLine;
+HPEN MapWindow::hpSpeedSlow;
+HPEN MapWindow::hpSpeedFast;
   
 COLORREF MapWindow::BackgroundColor = RGB(0xF5,0xF5,0xF5);
 
@@ -360,10 +364,10 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mod
   HFONT oldFont;
 
   // mode are flags
-  // bit 0 == fill background add border
-  // bit 1 == fill background
-  // bit 2 == right alligned
-  // bit 3 == landable TP label
+  // bit 0 == fill background add border / 1
+  // bit 1 == fill background            / 2
+  // bit 2 == right alligned             / 4
+  // bit 3 == landable TP label          / 8
   // bit 4 == center alligned
   
   if (size==0) {
@@ -555,8 +559,13 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     #endif
     hpThermalBand = (HPEN)CreatePen(PS_SOLID, 2, RGB(0x40,0x40,0xFF));
     hpThermalBandGlider = (HPEN)CreatePen(PS_SOLID, 2, RGB(0x00,0x00,0x30));
+
     hpFinalGlideBelow = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xFF,0xA0,0xA0));
     hpFinalGlideAbove = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xA0,0xFF,0xA0));
+
+    hpSpeedSlow=(HPEN)CreatePen(PS_SOLID, 1, RGB(0xFF,0x00,0x00));
+    hpSpeedFast=(HPEN)CreatePen(PS_SOLID, 1, RGB(0x00,0xFF,0x00));
+
     hpMapScale = (HPEN)CreatePen(PS_SOLID, 1, RGB(0,0,0));
     hpTerrainLine = (HPEN)CreatePen(PS_DASH, 1, RGB(0x30,0x30,0x30));
     
@@ -569,6 +578,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hbBestCruiseTrack=(HBRUSH)CreateSolidBrush(RGB(0x0,0x0,0xFF));
     hbFinalGlideBelow=(HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
     hbFinalGlideAbove=(HBRUSH)CreateSolidBrush(RGB(0x00,0xFF,0x00));
+
+
     #if (ALTERNATEWINDVECTOR == 1)
       #if (MONOCHROME_SCREEN > 0)
       hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
@@ -618,6 +629,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject((HPEN)hpFinalGlideBelow);
     DeleteObject((HPEN)hpMapScale);
     DeleteObject((HPEN)hpTerrainLine);
+    DeleteObject((HPEN)hpSpeedFast);
+    DeleteObject((HPEN)hpSpeedSlow);
     
     DeleteObject((HBRUSH)hbCompass);
     DeleteObject((HBRUSH)hbThermalBand);
@@ -722,17 +735,19 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     switch (wParam)
     {
     case VK_DOWN :  // SCROLL UP
-      if (!Debounce(wParam)) break;
+      //      if (!Debounce(wParam)) break;
       RequestMapScale *= 1.414;
+      BigZoom = true;
       if(RequestMapScale>160) RequestMapScale = 160; 
       RefreshMap();
       break;
       
     case VK_UP: // SCROLL DOWN
-      if (!Debounce(wParam)) break;
+      //      if (!Debounce(wParam)) break;
       if(RequestMapScale >= 0.01)
       {
         RequestMapScale /= 1.414;
+        BigZoom = true;
       }
       RefreshMap();
       break;
@@ -1131,7 +1146,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
   DrawMapScale2(hdcDrawWindow,rc, Orig_Aircraft);
   
   DrawCompass(hdcDrawWindow, rc);
-  
+
   #if (ALTERNATEWINDVECTOR == 0)
   if (DerivedDrawInfo.Circling || EnablePan) {
     DrawWind(hdcDrawWindow, Orig, rc); // JMW shouldn't need Orig here
@@ -1141,6 +1156,8 @@ void MapWindow::RenderMapWindow(  RECT rc)
   DrawFlightMode(hdcDrawWindow, rc);
   
   DrawFinalGlide(hdcDrawWindow,rc);
+
+  DrawSpeedToFly(hdcDrawWindow, rc);
   
   DrawThermalBand(hdcDrawWindow, rc);
 
@@ -2418,7 +2435,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 {
   
-  POINT Scale[18] = {						
+  POINT Scale[18] = {				
     {5,-50 }, {14,-60 }, {23, -50}, 
     {5,-40 }, {14,-50 }, {23, -40}, 
     {5,-30 }, {14,-40 }, {23, -30}, 
@@ -2485,7 +2502,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     Offset = (GlideBar[2].y+Offset)-15;
   }
   
-  TextInBox(hDC, Value, GlideBar[0].x, (int)Offset, 0, 2);
+  TextInBox(hDC, Value, 1, (int)Offset, 0, 1|8);
   
   SelectObject(hDC, hbOld);
   SelectObject(hDC, hpOld);
@@ -3079,5 +3096,80 @@ void MapWindow::DrawMapScale2(HDC hDC, RECT rc, POINT Orig_Aircraft)
   SelectObject(hDC, hpOld);
   DeleteObject(hpWhite);
   DeleteObject(hpBlack);
+
+}
+
+
+void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
+  POINT chevron[3];
+
+  HPEN hpOld;
+  HBRUSH hbOld;
+
+  //  TCHAR Value[10];
+  int i;
+
+#ifndef _SIM_
+  if (!(DrawInfo.AirspeedAvailable && DrawInfo.VarioAvailable)) {
+    return;
+  }
+#else
+  // cheat
+  DrawInfo.IndicatedAirspeed = DrawInfo.Speed;
+#endif
+
+  hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+  hpOld = (HPEN)SelectObject(hDC, hpBearing);
+
+  double vdiff;
+  int vsize = (rc.bottom-rc.top)/2;
+
+  vdiff = (DerivedDrawInfo.VOpt - DrawInfo.IndicatedAirspeed)/40.0;
+  // 25.0 m/s is maximum scale
+  vdiff = max(-0.5,min(0.5,vdiff)); // limit it
+  
+  int yoffset=0;
+  int hyoffset=0;
+  vsize = iround(fabs(vdiff*vsize));
+  int xoffset = rc.right-25;
+  int ycenter = (rc.bottom+rc.top)/2;
+
+  int k=0;
+
+  for (k=0; k<2; k++) {
+
+    for (i=0; i< vsize; i+= 5) {
+      if (vdiff>0) {
+        yoffset = i+ycenter+k;
+        hyoffset = 4;
+      } else {
+        yoffset = -i+ycenter-k;
+        hyoffset = -4;
+      }
+      chevron[0].x = xoffset;
+      chevron[0].y = yoffset;
+      chevron[1].x = xoffset+10;
+      chevron[1].y = yoffset+hyoffset;
+      chevron[2].x = xoffset+20;
+      chevron[2].y = yoffset;
+      
+      Polyline(hDC, chevron, 3);
+    }
+    if (vdiff>0) {
+      hpOld = (HPEN)SelectObject(hDC, hpSpeedSlow);
+    } else {
+      hpOld = (HPEN)SelectObject(hDC, hpSpeedFast);
+    }
+  }
+
+  SelectObject(hDC, hpBearing);
+  chevron[0].x = xoffset-3;
+  chevron[0].y = ycenter;
+  chevron[1].x = xoffset+3+20;
+  chevron[1].y = ycenter;
+  Polyline(hDC, chevron, 2);
+    
+  SelectObject(hDC, hbOld);
+  SelectObject(hDC, hpOld);
 
 }

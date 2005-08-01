@@ -147,9 +147,9 @@ double GlidePolar::McCreadyAltitude(double MCREADY,
 
   //Calculate Best Glide Speed
   BestSpeed = 2;
-  BestGlide = 0.0000001;// -BestSpeed / SinkRate(a,b,c,MCREADY,HeadWind,2);
+  BestGlide = -10000;
 
-  bool effectivefinalglide = isFinalGlide || (MCREADY<=0.2);
+  bool effectivefinalglide = isFinalGlide || (MCREADY<=0.1);
 
   double vtot;
   if (Distance<1.0) {
@@ -168,33 +168,44 @@ double GlidePolar::McCreadyAltitude(double MCREADY,
       // SinkRate function returns negative value for sink
 	    
       if (effectivefinalglide) {
-        //	sinkrate = -SinkRate(polar_a,polar_b,polar_c,MCREADY,0.0,vtrack);
+
         sinkrate = -SinkRateFast(MCREADY, i);
+
       } else {
 
-        //	sinkrate = -SinkRate(polar_a,polar_b,polar_c,0.0,0.0,vtrack);
         sinkrate = -SinkRateFast(0, i);
       }
-      tc = MCREADY/(sinkrate+MCREADY);
+
+      tc = max(0.0,min(1.0,MCREADY/(sinkrate+MCREADY)));
 	    
       if (effectivefinalglide) {
 	tc = 1.0; // assume no circling, e.g. final glide at best LD with no climbs
       }
-	    
+      
       vtot = (vtrack*vtrack*tc*tc-CrossWind*CrossWind);
+
       if (vtot>0) {
 	vtot = sqrt(vtot)-HeadWind;
 	      
 	if (vtot>0) {
-		
-	  Glide = vtot/ (sinkrate);
+
+          if (sinkrate!=0) {
+            Glide = vtot/ (sinkrate);
+            Glide = min(10000,max(Glide,-10000));
+          }
 		
 	  double tcruise = (Distance/(vtot))*tc;
 	  double tclimb;
 	  if (effectivefinalglide) {
 	    tclimb = 0.0;
+            tcruise = Distance/vtot;
 	  } else {
-	    tclimb = sinkrate*(tcruise/MCREADY);
+            if (MCREADY<0) {
+              tclimb = 0;
+              tcruise = Distance/vtot;
+            } else {
+              tclimb = sinkrate*(tcruise/MCREADY);
+            }
 	  }
 	  double tdest = tcruise+tclimb;
           if (tdest<1.0) {
