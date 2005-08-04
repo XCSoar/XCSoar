@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.9 2005/08/01 08:32:02 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.10 2005/08/04 00:27:33 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -167,7 +167,7 @@ void WindAnalyser::slot_Altitude() {
 
 void WindAnalyser::calcThermalDrift() {
   double ThermalTime = climbendtime-climbstarttime;
-  if (ThermalTime>60) {
+  if (ThermalTime>120) {
     double ThermalDrift= Distance(climbstartpos.y,
                                   climbstartpos.x,
                                   climbendpos.y,
@@ -198,8 +198,10 @@ void WindAnalyser::slot_newFlightMode(bool left, int marker){
     circleDeg = 0;
     if ((derivedInfo->Circling) && (left)) {
         circleLeft=true;
+        curModeOK=true;
     } else if ((derivedInfo->Circling) && (!left)) {
         circleLeft=false;
+        curModeOK=true;
     } else {
 
         // end circling?
@@ -210,8 +212,9 @@ void WindAnalyser::slot_newFlightMode(bool left, int marker){
 
       return; //ok, so we are not circling. Exit function.
     }
-    //remember that our current mode is ok.
-    curModeOK=true;
+
+    //
+
     //do we have enough satelites in view?
     //    if (satCnt<minSatCnt) return;
 

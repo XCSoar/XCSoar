@@ -30,6 +30,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
 CWaveOutThread variosound_waveOut;
 
+#define CHANNELS 2
 #define BSIZE 5
 #define BCOUNT INTERNAL_WAVEOUT_BUFFER_COUNT
 
@@ -46,22 +47,25 @@ CWaveOutThread variosound_waveOut;
 #define FREQZ 441
 #define FREQ 44100
 #endif
-unsigned char  variosound_buffer[BSIZE*FREQZ];
+
 short variosound_sin[256];
 short variosound_sinquiet[256];
 
-// 20ms 8000Hz, Mono, 16bit
+unsigned char variosound_buffer[BSIZE*FREQZ*CHANNELS];
 unsigned char variosound_volumescale[201];
+unsigned char variosound_pvbuf[201*256];
+unsigned char variosound_pvbufq[201*256];
+
 int variosound_freqtable[201];
 int variosound_delaytable[201];
 short variosound_volume;
 
 #include <math.h>
 
-#define fbase 400 // base frequency
-#define nocthi 3
-#define noctlo 1
-#define tzero 75
+#define fbase 400 // base frequency of sound
+#define nocthi 2  // number of octaves in positive sound range
+#define noctlo 1  // number of octaves in negative sound range
+#define tzero 75  // base period of beeps
 
 short variosound_vscale_in = 0;
 short variosound_vav_in = 0;
@@ -77,22 +81,21 @@ int tp_sound = 20;
 int tp_avsound = 20;
 #define QUANT 16
 
-char variosound_pvbuf[201*256];
-char variosound_pvbufq[201*256];
-
 #ifdef DEBUG
 bool variosound_vscale_timer = false;
 #endif
-DWORD fpsTimeSound = 0;
-short fpsTimeDelta = 0;
 
-short quantisesound(short vv) {
-  return max(0,min(200,vv+100));
-}
+DWORD fpsTimeSound = 0; // time stamp of sound command
+short fpsTimeDelta = 0; // time interval between sound commands
+
+
 
 CRITICAL_SECTION  CritSec_VarioSound;
 CRITICAL_SECTION  CritSec_VarioSoundV;
 
+short quantisesound(short vv) {
+  return max(0,min(200,vv+100));
+}
 
 void VarioSound_sndparam() {
 
@@ -122,8 +125,8 @@ void VarioSound_sndparam() {
 
   variosound_vscale = max(-100,min(100,variosound_vscale));
 
-
 #ifdef DEBUG
+  // for debugging, find time between sending a command and the time the sound gets generated
   if (variosound_vscale_timer) {
     DWORD	fpsTime0 = ::GetTickCount();
 
@@ -145,6 +148,8 @@ void VarioSound_sndparam() {
 #endif
 
   LeaveCriticalSection(&CritSec_VarioSoundV);
+
+  // compute sound parameters
   
   variosound_vcur = variosound_vscale; 
   // (7*variosound_vscale+3*variosound_vcur)/10;
@@ -154,8 +159,8 @@ void VarioSound_sndparam() {
   tp_delay = variosound_delaytable[qs];
   tp_sound = variosound_freqtable[qs];
 
-  int i;
-  i= (tp_delay/tp_sound);
+  short i;
+  i= max(1,(tp_delay/tp_sound)); // make delay an integer number of sounds
   tp_delay = i*tp_sound;
 
   tp_avsound = tp_sound; // variosound_freqtable[quantisesound(variosound_vav)];
@@ -166,14 +171,14 @@ void VarioSound_sndparam() {
 /////////////////////////////////
 
 
-char f_sound_loud(unsigned long i) {
+unsigned char f_sound_loud(unsigned long i) {
   short phase;
   phase = (short)((i/tp_sound) % 256);
   return variosound_pvbuf[variosound_volume*256+phase];
 }
 
  
-char f_sound_quiet(unsigned long i) {
+unsigned char f_sound_quiet(unsigned long i) {
   short phase;
   phase = (short)((i/tp_avsound) % 256);
   return variosound_pvbufq[variosound_volume*256+phase];
@@ -183,13 +188,13 @@ char f_sound_quiet(unsigned long i) {
 unsigned long f_quiet_next(bool isquiet) {
   if (variosound_vcur>0) {
     if (isquiet) {
-      return ((long)tp_delay*63);
+      return ((long)tp_delay*63); // was 63
     } else {
-      return ((long)tp_delay*255);
+      return ((long)tp_delay*255); // was 255
     }
   } else {
     if (isquiet) {
-      return ((long)tp_delay*254); // JMW was 191
+      return ((long)tp_delay*240); // JMW was 191
     } else {
       return ((long)tp_delay*255);
     }
@@ -198,8 +203,8 @@ unsigned long f_quiet_next(bool isquiet) {
 
 
 void VarioSound_synthesiseSound() {
-  char *buf = (char*)variosound_buffer;
-  char *endBuf = (char*)variosound_buffer+BSIZE*FREQZ;
+  unsigned char *buf = (unsigned char*)variosound_buffer;
+  unsigned char *endBuf = (unsigned char*)variosound_buffer+BSIZE*FREQZ*CHANNELS;
   static unsigned long idelay=0;
   static unsigned long ii=0;
   static bool mode_quiet = true;
@@ -208,7 +213,6 @@ void VarioSound_synthesiseSound() {
 #ifdef DEBUG
   DWORD	fpsTime0 = ::GetTickCount();
 #endif
-
 
   while (buf < endBuf) {
 
@@ -224,14 +228,20 @@ void VarioSound_synthesiseSound() {
       // transition mode
 
       mode_quiet = !mode_quiet;
+
     }
 
     if (!variosound_sound) {
 
+      // the sound of silence
       while ((buf< endBuf) && (idelay < inext)) {
 
 	*buf = (unsigned char)0x80;
 	buf++;
+        if (CHANNELS>1) {
+          *buf = (unsigned char)0x80;
+          buf++;
+        }
 
 	idelay+= 256;
 	ii+= QUANT*256;
@@ -242,8 +252,13 @@ void VarioSound_synthesiseSound() {
       while ((buf< endBuf) && (idelay < inext)) {
 
         *buf = f_sound_quiet(ii);
-	buf++;
+        buf++;
 
+        if (CHANNELS>1) {
+          *buf = f_sound_quiet(ii);
+          buf++;
+        }
+          
 	idelay+= 256;
 
 	ii+= QUANT*256;
@@ -258,6 +273,11 @@ void VarioSound_synthesiseSound() {
 	*buf = f_sound_loud(ii);
 	buf++;
 
+        if (CHANNELS>1) {
+          *buf = f_sound_loud(ii);
+          buf++;
+        }
+
 	idelay+= 256;
 
 	ii+= QUANT*256;
@@ -266,28 +286,6 @@ void VarioSound_synthesiseSound() {
 
     }
   }
-
-#ifdef DEBUG
-  int dfpsTime = ::GetTickCount()-fpsTime0;
-  static int kaverage = 0;
-  static int dtave = 0;
-  static int timethis = 0;
-  kaverage++;
-  dtave+= dfpsTime;
-  if (kaverage % 100 == 0) {
-
-    char message[100];
-    int dtbig = (::GetTickCount() - timethis)/kaverage;
-    timethis = fpsTime0;
-    sprintf(message,"dt sound %d ns %d ms\r\n", dtave*1000/kaverage,
-            dtbig);
-    DebugStore(message);
-    dtave=0;
-    kaverage=0;
-
-  }
-
-#endif
 
 }
 
@@ -308,12 +306,12 @@ void CALLBACK variosound_waveOutEventCB(WAVE_OUT_EVENT variosound_waveOutEvent)
     case WAVE_OUT_EVENT_BUFFER_EMPTY:
       variosound_waveOut.ResetBuffer();
       for (i=0; i<BCOUNT; i++) {
-	variosound_waveOut.WriteData(variosound_buffer, BSIZE*FREQZ);
+	variosound_waveOut.WriteData(variosound_buffer, BSIZE*FREQZ*CHANNELS);
 	VarioSound_synthesiseSound();
       }
       break;
     case WAVE_OUT_EVENT_BUFFER_PLAYED:
-      variosound_waveOut.WriteData(variosound_buffer, BSIZE*FREQZ);
+      variosound_waveOut.WriteData(variosound_buffer, BSIZE*FREQZ*CHANNELS);
       VarioSound_synthesiseSound();
 		
       break;
@@ -379,7 +377,7 @@ extern "C" {
       for (i=0; i<201; i++) {
         vv = (i-100)/(double)v;
         if (vv<0) {
-          variosound_volumescale[i] = iround(3*(1.0-1.0/(vv*vv+1)));
+          variosound_volumescale[i]= iround(5*(1.0-1.0/(vv*vv+1)));
         } else {
           variosound_volumescale[i]= iround(10*(1.0-1.0/(vv*vv+1)));
         }
@@ -407,8 +405,8 @@ extern "C" {
     variosound_waveOut.Init(variosound_waveOutEventCB,
 			    THREAD_PRIORITY_TIME_CRITICAL, 
 			    BCOUNT,
-			    BSIZE*FREQZ,
-			    1,
+			    BSIZE*FREQZ*CHANNELS,
+			    CHANNELS,
 			    FREQ,
 			    8);
 
@@ -420,18 +418,23 @@ extern "C" {
       variosound_sinquiet[i]= (short)iround(8.0*f); 
     }
 
-    double kocthi = log(nocthi)/log(2);
-    double koctlo = log(noctlo)/log(2);
+    double kocthi = log(nocthi+1)/log(2);
+    double koctlo = log(noctlo+1)/log(2);
 
     for (i=0; i<201; i++) {
       double vv = (i-100)/100.0;
       if (vv>=0.0) {
-        variosound_freqtable[i] = (int)((QUANT*FREQ)*pow(2,-vv*kocthi)/fbase);
 	variosound_delaytable[i] = (int)(FREQZ*tzero/(1+fabs(vv)*5));
       } else {
-	variosound_delaytable[i] = (int)(FREQZ*tzero); // JMW was 1
-        variosound_freqtable[i] = (int)((QUANT*FREQ)*pow(2,-vv*koctlo)/fbase);
+	variosound_delaytable[i] = (int)(FREQZ*tzero/10); // JMW was 1
       }
+      double ffact;
+      if (vv>=0.0) {
+        ffact = pow(2,-vv*kocthi);
+      } else {
+        ffact = pow(2,-vv*koctlo);
+      }
+      variosound_freqtable[i] = (int)((QUANT*FREQ)*ffact/fbase);
     }
 
     VarioSound_SetVdead(0);
@@ -442,7 +445,7 @@ extern "C" {
     variosound_sound = TRUE;
     for (i=0; i<BCOUNT; i++) {
       VarioSound_synthesiseSound();
-      variosound_waveOut.WriteData(variosound_buffer, BSIZE*FREQZ);
+      variosound_waveOut.WriteData(variosound_buffer, BSIZE*FREQZ*CHANNELS);
     }
     LeaveCriticalSection(&CritSec_VarioSound);
   }

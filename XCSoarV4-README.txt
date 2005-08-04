@@ -24,6 +24,12 @@ Changes from 4.21 to 4.22
 - New Netto vario infobox
 - New dolphin speed-to-fly infobox
 - Improved audio vario sounds
+- Speed-to-fly director chevrons on right of screen when connected to
+  vario with ASI source.
+- Fixed rare bugs in McCready calculation
+- Fixed bug in terrain rendering, where level of detail was previously
+   set at default, and didn't change with zoom.
+- Airspace parser made faster, so binary airspace loader now disabled
 
 Changes from 4.2 to 4.21
 

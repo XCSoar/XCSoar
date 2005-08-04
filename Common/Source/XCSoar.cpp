@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.59 2005/08/01 08:32:00 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.60 2005/08/04 00:27:32 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -672,7 +672,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
       UnlockFlightData();
       
     } else {
-      Sleep(50); // sleep a while
+      Sleep(100); // sleep a while
     }
 
   }

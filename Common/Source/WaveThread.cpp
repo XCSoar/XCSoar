@@ -1010,8 +1010,10 @@ DWORD WINAPI CWaveOutThread::ThreadProc(LPVOID lpParameter)
 
 
 void CWaveOutThread::SetSoundVolume(int volpercent) { 
-  WAVEFORMATEX wf; 
   DWORD dwVolume=(DWORD)(0xFFFF*1.0*volpercent/100.0);
+
+  /*
+  WAVEFORMATEX wf; 
   wf.wFormatTag = WAVE_FORMAT_PCM; 
   wf.nChannels = 1; 
   wf.nSamplesPerSec = 8000 * 1000; 
@@ -1019,7 +1021,7 @@ void CWaveOutThread::SetSoundVolume(int volpercent) {
   wf.nBlockAlign = wf.nChannels * wf.wBitsPerSample / 8; 
   wf.nAvgBytesPerSec = wf.nSamplesPerSec * wf.nBlockAlign; 
   wf.cbSize = 0; 
-
+  */
   EnterCriticalSection(&m_critSecRtp);
 
   // this seems to set master volume pretty well.
