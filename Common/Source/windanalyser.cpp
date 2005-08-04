@@ -167,7 +167,7 @@ void WindAnalyser::slot_Altitude() {
 
 void WindAnalyser::calcThermalDrift() {
   double ThermalTime = climbendtime-climbstarttime;
-  if (ThermalTime>60) {
+  if (ThermalTime>120) {
     double ThermalDrift= Distance(climbstartpos.y,
                                   climbstartpos.x,
                                   climbendpos.y,
@@ -198,8 +198,10 @@ void WindAnalyser::slot_newFlightMode(bool left, int marker){
     circleDeg = 0;
     if ((derivedInfo->Circling) && (left)) {
         circleLeft=true;
+        curModeOK=true;
     } else if ((derivedInfo->Circling) && (!left)) {
         circleLeft=false;
+        curModeOK=true;
     } else {
 
         // end circling?
@@ -210,8 +212,9 @@ void WindAnalyser::slot_newFlightMode(bool left, int marker){
 
       return; //ok, so we are not circling. Exit function.
     }
-    //remember that our current mode is ok.
-    curModeOK=true;
+
+    //
+
     //do we have enough satelites in view?
     //    if (satCnt<minSatCnt) return;
 

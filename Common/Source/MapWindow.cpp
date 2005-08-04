@@ -1216,11 +1216,11 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   while (!CLOSETHREAD)
   {
     if (!THREADRUNNING) {
-      Sleep(50);
+      Sleep(100);
       continue;
     }
     if (!MapDirty && !RequestFastRefresh) {
-      Sleep(50);
+      Sleep(100);
       continue;
     }
 

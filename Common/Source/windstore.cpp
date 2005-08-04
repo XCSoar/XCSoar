@@ -91,11 +91,15 @@ void WindStore::newWind(Vector &wind) {
   //
   double mag = sqrt(wind.x*wind.x+wind.y*wind.y);
   double bearing = atan2(wind.y, wind.x)*(180/3.14159);
-  derivedInfo->WindSpeed = mag;
-  if (bearing<0) {
-    bearing += 360;
+  if (mag<30) { // limit to reasonable values
+    derivedInfo->WindSpeed = mag;
+    if (bearing<0) {
+      bearing += 360;
+    }
+    derivedInfo->WindBearing = bearing;
+  } else {
+    // JMW TODO: give warning
   }
-  derivedInfo->WindBearing = bearing;
 
 #ifdef DEBUG
   char Temp[100];

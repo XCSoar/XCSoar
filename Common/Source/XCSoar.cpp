@@ -672,7 +672,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
       UnlockFlightData();
 
     } else {
-      Sleep(50); // sleep a while
+      Sleep(100); // sleep a while
     }
 
   }

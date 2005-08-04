@@ -209,11 +209,15 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   } else {
 
+#ifndef TESTSOUND
     if (Basic->VarioAvailable) {
       VarioSound_SetV((short)(Basic->Vario/6.0*100));
     } else {
       VarioSound_SetV((short)(Calculated->Vario/6.0*100));
     }
+#else
+    VarioSound_SetV((short)((1.0-MCCREADY/LIFTMODIFY)/6.0*100));
+#endif
 
   }
 
@@ -229,27 +233,31 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     // this does assume g loading of 1.0
 
     // this is basically a dolphin soaring calculator
+
     double dmc = MCCREADY/LIFTMODIFY-Calculated->NettoVario;
 
-    if (dmc>0) {
+    if (Calculated->Vario <= MCCREADY/LIFTMODIFY) {
 
       double VOptnew;
 
-    GlidePolar::McCreadyAltitude(dmc,
-                                 100.0, // dummy value
-                                 Basic->TrackBearing,
-                                 Calculated->WindSpeed,
-                                 Calculated->WindBearing,
-                                 0,
-                                 &VOptnew,
-                                 1, // (ActiveWayPoint == getFinalWaypoint()),
-                                 0
-                                 );
+      GlidePolar::McCreadyAltitude(dmc,
+                                   100.0, // dummy value
+                                   Basic->TrackBearing,
+                                   Calculated->WindSpeed,
+                                   Calculated->WindBearing,
+                                   0,
+                                   &VOptnew,
+                                   1,
+                                   0
+                                   );
 
-    // put low pass filter on VOpt so display doesn't jump around too much
-    Calculated->VOpt = Calculated->VOpt*0.6+VOptnew*0.4;
+      // put low pass filter on VOpt so display doesn't jump around
+      // too much
+      Calculated->VOpt = Calculated->VOpt*0.6+VOptnew*0.4;
 
     } else {
+      // this thermal is better than mccready, so fly at minimum sink
+      // speed
       Calculated->VOpt = GlidePolar::Vminsink;
     }
   }

@@ -43,6 +43,7 @@ double GlidePolar::minsink = 10000.0;
 
 
 void GlidePolar::SetBallast() {
+  LockFlightData();
   double BallastWeight;
   BallastWeight = WEIGHTS[2] * BALLAST;
   BallastWeight += WEIGHTS[0] + WEIGHTS[1];
@@ -83,7 +84,7 @@ void GlidePolar::SetBallast() {
       sinkratecache[i] = -thesinkrate;
 
     }
-
+  UnlockFlightData();
 }
 
 
@@ -110,7 +111,7 @@ double GlidePolar::SinkRate(double V, double n) {
 }
 
 
-double GlidePolar::McCreadyAltitude(double MCREADY,
+double GlidePolar::McCreadyAltitude(double emcready,
                                     double Distance, double Bearing,
                                     double WindSpeed, double WindBearing,
 		       double *BestCruiseTrack,
@@ -118,6 +119,8 @@ double GlidePolar::McCreadyAltitude(double MCREADY,
 		       int isFinalGlide,
                        double *TimeToGo)
 {
+  LockFlightData();
+
   int i;
   double BestSpeed, BestGlide, Glide;
   double BestSinkRate, TimeToDest;
@@ -125,6 +128,7 @@ double GlidePolar::McCreadyAltitude(double MCREADY,
   double HeadWind, CrossWind;
   double CrossBearing;
   double VMG;
+  double BestTime;
 
   CrossBearing = Bearing - WindBearing;
 
@@ -147,9 +151,14 @@ double GlidePolar::McCreadyAltitude(double MCREADY,
 
   //Calculate Best Glide Speed
   BestSpeed = 2;
-  BestGlide = -10000;
+  BestGlide = 10000;
+  BestTime = 0;
 
-  bool effectivefinalglide = isFinalGlide || (MCREADY<=0.1);
+  bool effectivefinalglide = isFinalGlide;
+
+  if (emcready<=0.0) {
+    effectivefinalglide = true;
+  }
 
   double vtot;
   if (Distance<1.0) {
@@ -157,6 +166,7 @@ double GlidePolar::McCreadyAltitude(double MCREADY,
   }
 
   double TimeToDestTotal = -1; // initialise to error value
+  double tcruise, tclimb, tdest;
 
   for(i=Vminsink;i<SAFTEYSPEED;i+=1)
     {
@@ -169,67 +179,64 @@ double GlidePolar::McCreadyAltitude(double MCREADY,
 
       if (effectivefinalglide) {
 
-        sinkrate = -SinkRateFast(MCREADY, i);
+        sinkrate = -SinkRateFast(emcready, i);
+	tc = 1.0; // assume no circling, e.g. final glide at best LD
+                  // with no climbs
 
       } else {
 
         sinkrate = -SinkRateFast(0, i);
+        tc = max(0.0,min(1.0,emcready/(sinkrate+emcready)));
       }
 
-      tc = max(0.0,min(1.0,MCREADY/(sinkrate+MCREADY)));
-
-      if (effectivefinalglide) {
-	tc = 1.0; // assume no circling, e.g. final glide at best LD with no climbs
-      }
-
+      // calculate average speed along track relative to wind
       vtot = (vtrack*vtrack*tc*tc-CrossWind*CrossWind);
 
+      // if able to advance against crosswind
       if (vtot>0) {
+
+        // calculate average speed along track relative to ground
 	vtot = sqrt(vtot)-HeadWind;
 
+        // if able to advance against headwind
 	if (vtot>0) {
 
-          if (sinkrate!=0) {
-            Glide = vtot/ (sinkrate);
-            Glide = min(10000,max(Glide,-10000));
-          }
+          // inverse glide ratio relative to ground
+          Glide = (sinkrate)/vtot;
 
-	  double tcruise = (Distance/(vtot))*tc;
-	  double tclimb;
+          // time spent in cruise
+	  tcruise = (Distance/(vtot))*tc;
+
+          // time spent in climb
+	  tclimb;
+
 	  if (effectivefinalglide) {
 	    tclimb = 0.0;
-            tcruise = Distance/vtot;
 	  } else {
-            if (MCREADY<0) {
-              tclimb = 0;
-              tcruise = Distance/vtot;
-            } else {
-              tclimb = sinkrate*(tcruise/MCREADY);
-            }
+            tclimb = sinkrate*(tcruise/emcready);
 	  }
-	  double tdest = tcruise+tclimb;
-          if (tdest<1.0) {
-            tdest = 1.0;
-          }
 
-	  // JMW TODO: fix this...
+          // total time to destination
+	  tdest = max(tcruise+tclimb,0.00000001);
+
 	  if(
-	     ((Glide >= BestGlide)&&(effectivefinalglide))
+             // best glide angle when in final glide
+	     ((Glide <= BestGlide)&&(effectivefinalglide))
 	     ||
-	     ((1/tdest >= BestGlide)&&(!effectivefinalglide))
+             // best average speed when in maintaining height mode
+	     ((1/tdest >= BestTime)&&(!effectivefinalglide))
 	     )
 	    {
+
 	      if (effectivefinalglide) {
 		BestGlide = Glide;
 	      } else {
-		BestGlide = 1/tdest;
-	      }
-	      BestSpeed = vtrack;
-              if (tdest<=1.0) {
-                TimeToDestTotal = -1.0;
-              } else {
-                TimeToDestTotal = tdest;
+                BestTime = 1/tdest;
               }
+
+	      BestSpeed = vtrack;
+              TimeToDestTotal = tdest;
+
 	      if (BestCruiseTrack) {
 		// best track bearing is the track along cruise that
 		// compensates for the drift during climb
@@ -237,9 +244,11 @@ double GlidePolar::McCreadyAltitude(double MCREADY,
 		  atan2(-CrossWind*(1-tc),vtot
 			+HeadWind*(1-tc))*RAD_TO_DEG+Bearing;
 	      }
+
 	      if (VMcCready) {
 		*VMcCready = vtrack;
 	      }
+
 	      VMG = vtot/tc; // speed along track during cruise component
 	    }
 	  else
@@ -262,6 +271,7 @@ double GlidePolar::McCreadyAltitude(double MCREADY,
 
   AltitudeNeeded = -BestSinkRate * TimeToDest;
   // this is the altitude needed to final glide to destination
+  UnlockFlightData();
 
   return AltitudeNeeded;
 }

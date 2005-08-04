@@ -186,7 +186,8 @@ float RasterTerrain::GetTerrainStepSize() {
   if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
     return 0;
   // this is approximate of course..
-  return (float)(250.0/0.0025*TerrainInfo.StepSize);
+  float fstepsize = (float)(250.0/0.0025*TerrainInfo.StepSize);
+  return fstepsize;
 }
 
 

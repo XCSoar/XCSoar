@@ -367,6 +367,8 @@ public:
     Y1 = Y0+DTQUANT*iys;
     short* myhbuf = hBuf;
 
+    pixelsize = MapWindow::MapScale/30.0*DTQUANT;
+
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
 
