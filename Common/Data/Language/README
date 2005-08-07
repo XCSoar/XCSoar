@@ -1,0 +1,4 @@
+Simple way to find missing entries
+
+perl ~/sourceforge/xcsoar/tools/language/code/missing.pl italian.txt
+
