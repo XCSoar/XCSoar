@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.45 2005/08/01 08:31:57 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.46 2005/08/07 08:07:08 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -64,6 +64,8 @@ extern TCHAR szRegistryAirfieldFile[];
 extern TCHAR szRegistryTopologyFile[];
 extern TCHAR szRegistryPolarFile[];
 extern TCHAR szRegistryTerrainFile[];
+extern TCHAR szRegistryLanguageFile[];
+extern TCHAR szRegistryStatusFile[];
 extern TCHAR szRegistryAltMode[];
 extern TCHAR szRegistryClipAlt[];
 extern TCHAR szRegistryAltMargin[];
@@ -193,21 +195,21 @@ LRESULT CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       if(DisplayLocked) 
         {
           SendDlgItemMessage(hDlg,IDD_LOCK,BM_SETCHECK ,BST_CHECKED, 0);
-          SetWindowText(GetDlgItem(hDlg,IDD_LOCK),TEXT("InfoBoxes locked"));
+          SetWindowText(GetDlgItem(hDlg,IDD_LOCK),gettext(TEXT("InfoBoxes locked")));
         }
       else
         {
           SendDlgItemMessage(hDlg,IDD_LOCK,BM_SETCHECK ,BST_UNCHECKED, 0);
-          SetWindowText(GetDlgItem(hDlg,IDD_LOCK),TEXT("InfoBoxes editable"));
+          SetWindowText(GetDlgItem(hDlg,IDD_LOCK),gettext(TEXT("InfoBoxes editable")));
         }
 
       if(TaskAborted) 
         {
-          SetWindowText(GetDlgItem(hDlg,IDC_ABORTTASK),TEXT("Resume"));
+          SetWindowText(GetDlgItem(hDlg,IDC_ABORTTASK),gettext(TEXT("Resume")));
         }
       else
         {
-          SetWindowText(GetDlgItem(hDlg,IDC_ABORTTASK),TEXT("Abort"));
+          SetWindowText(GetDlgItem(hDlg,IDC_ABORTTASK),gettext(TEXT("Abort")));
         }
 
       return TRUE; 
@@ -1701,6 +1703,7 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
           if(GetOpenFileName(&ofnAdditionalAirspace))
             {
+
               SetDlgItemText(hDlg,IDC_ADDITIONALAIRSPACEFILE,szAdditionalAirspaceFile);     
             }
           break;
@@ -1874,6 +1877,105 @@ LRESULT CALLBACK SetMapFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     }
   return FALSE;
 }
+
+
+
+LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+  static TCHAR  szLanguageFile[MAX_PATH] = TEXT("\0");
+  static OPENFILENAME           ofnLanguage;
+  static TCHAR  szStatusFile[MAX_PATH] = TEXT("\0");
+  static OPENFILENAME           ofnStatus;
+
+  static ACTIVE = FALSE;
+  SHINITDLGINFO shidi;
+  TCHAR szFile[MAX_PATH];
+
+  switch (message)
+    {
+    case WM_INITDIALOG:
+      ACTIVE = FALSE;
+      shidi.dwMask = SHIDIM_FLAGS;
+      shidi.dwFlags = SHIDIF_DONEBUTTON | SHIDIF_SIPDOWN | SHIDIF_SIZEDLGFULLSCREEN;
+      shidi.hDlg = hDlg;
+      SHInitDialog(&shidi);
+
+      GetRegistryString(szRegistryLanguageFile, szLanguageFile, MAX_PATH);
+      SetDlgItemText(hDlg,IDC_LANGUAGEFILE,szLanguageFile);       
+      GetRegistryString(szRegistryStatusFile, szStatusFile, MAX_PATH);
+      SetDlgItemText(hDlg,IDC_STATUSFILE,szStatusFile);     
+
+      ACTIVE = TRUE;
+      return TRUE; 
+
+    case WM_COMMAND:
+      switch (LOWORD(wParam))
+        {
+
+        case IDC_LANGUAGEFILE:
+          if(ACTIVE == TRUE)
+            {
+              if(HIWORD(wParam) == EN_UPDATE)
+                {
+                  LANGUAGEFILECHANGED = TRUE;
+                  GetDlgItemText(hDlg,IDC_LANGUAGEFILE,szFile,MAX_PATH);
+                  SetRegistryString(szRegistryLanguageFile,szFile);
+                }
+            }
+          break;
+
+        case IDC_STATUSFILE:
+          if(ACTIVE == TRUE)
+            {
+              if(HIWORD(wParam) == EN_UPDATE)
+                {
+                  STATUSFILECHANGED = TRUE;
+                  GetDlgItemText(hDlg,IDC_STATUSFILE,szFile,MAX_PATH);
+                  SetRegistryString(szRegistryStatusFile,szFile);
+                }
+            }
+          break;
+
+        case IDC_BROWSELANGUAGE:
+          memset( &(ofnLanguage), 0, sizeof(ofnLanguage));
+          ofnLanguage.lStructSize        = sizeof(ofnLanguage);
+          ofnLanguage.hwndOwner = hDlg;
+          ofnLanguage.lpstrFile = szLanguageFile;
+          ofnLanguage.nMaxFile = MAX_PATH;       
+          ofnLanguage.lpstrFilter = TEXT("Language Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");     
+          ofnLanguage.lpstrTitle = TEXT("Open File");
+          ofnLanguage.Flags = OFN_EXPLORER;
+
+          if(GetOpenFileName(&ofnLanguage))
+            {
+              SetDlgItemText(hDlg,IDC_LANGUAGEFILE,szLanguageFile);       
+            }
+          break;
+                                
+        case IDC_BROWSESTATUS:
+
+          memset( &(ofnStatus), 0, sizeof(ofnStatus));
+          ofnStatus.lStructSize       = sizeof(ofnStatus);
+          ofnStatus.hwndOwner = hDlg;
+          ofnStatus.lpstrFile = szStatusFile;
+          ofnStatus.nMaxFile = MAX_PATH;      
+          ofnStatus.lpstrFilter = TEXT("Status Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");   
+          ofnStatus.lpstrTitle = TEXT("Open File");
+          ofnStatus.Flags = OFN_EXPLORER;
+
+          if(GetOpenFileName(&ofnStatus))
+            {
+              SetDlgItemText(hDlg,IDC_STATUSFILE,szStatusFile);     
+            }
+          break;
+
+        }
+      break;
+    }
+  return FALSE;
+}
+
+
 
 
 LRESULT CALLBACK AirspaceAlt(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -2530,18 +2632,19 @@ LRESULT CALLBACK SaveProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 #define NUMPAGES 18
 
-static const TCHAR *szSettingsTab[] = 
+static TCHAR *szSettingsTab[] = 
 {
   TEXT("About"),
-  TEXT("Register"),
+  // TEXT("Register"),
   TEXT("Airspace display"),
   TEXT("Airspace colours"),
   TEXT("Airspace warnings"),
   TEXT("COMM"),
   TEXT("Display Elements"),
   TEXT("Display Orientation"),
-  TEXT("Files"),
+  TEXT("Core Files"),
   TEXT("Map Files"),
+  TEXT("Interface Files"),
   TEXT("Final glide"),
   TEXT("Polar"),
   TEXT("Profile load"), 
@@ -2572,7 +2675,7 @@ LRESULT CALLBACK Settings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   SHINITDLGINFO shidi;
   int i;
   static int LastShow = 0, NextShow = 0;
-        
+
   switch (message)
     {
     case WM_INITDIALOG:
@@ -2580,28 +2683,30 @@ LRESULT CALLBACK Settings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       shidi.dwFlags = SHIDIF_DONEBUTTON|SHIDIF_SIZEDLG;
       shidi.hDlg = hDlg;
       SHInitDialog(&shidi);
-                        
+          
+
       for(i=0;i<NUMPAGES;i++)
         {
           SendDlgItemMessage(hDlg,IDC_SETTINGS,CB_ADDSTRING,0,
-			     (LPARAM)(LPCSTR)szSettingsTab[i]);
+			     (LPARAM)(LPCSTR)gettext(szSettingsTab[i]));
         }
       SendDlgItemMessage(hDlg,IDC_SETTINGS,CB_SETCURSEL,LastShow,0);
 
       hTabPage[0] = CreateDialog(hInst, (LPCTSTR)IDD_ABOUTBOX, hDlg, (DLGPROC)About);
-      hTabPage[1] = CreateDialog(hInst, (LPCTSTR)IDD_REGISTER, hDlg, (DLGPROC)Register);
-      hTabPage[2] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACEALT, hDlg, (DLGPROC)AirspaceAlt);
+      /* hTabPage[1] = CreateDialog(hInst, (LPCTSTR)IDD_REGISTER, hDlg, (DLGPROC)Register); */
+      hTabPage[1] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACEALT, hDlg, (DLGPROC)AirspaceAlt);
 #if (USE_ARH_COLOUR_SELECTOR == 1)
-      hTabPage[3] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACECOLOUR, hDlg, (DLGPROC)AirspaceColourDlg);
+      hTabPage[2] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACECOLOUR, hDlg, (DLGPROC)AirspaceColourDlg);
 #else
-      hTabPage[3] = CreateDialog(hInst, (LPCTSTR)IDD_COLOUR, hDlg, (DLGPROC)MapColour);
+      hTabPage[2] = CreateDialog(hInst, (LPCTSTR)IDD_COLOUR, hDlg, (DLGPROC)MapColour);
 #endif
-      hTabPage[4] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACEWARN, hDlg, (DLGPROC)SetAirspaceWarnings);
-      hTabPage[5] = CreateDialog(hInst, (LPCTSTR)IDD_COMM, hDlg, (DLGPROC)COMMOptions);
-      hTabPage[6] = CreateDialog(hInst, (LPCTSTR)IDD_DISPLAY, hDlg, (DLGPROC)DisplayOptions);
-      hTabPage[7] = CreateDialog(hInst, (LPCTSTR)IDD_MAPDISPLAY, hDlg, (DLGPROC)MapDisplayOptions);
-      hTabPage[8] = CreateDialog(hInst, (LPCTSTR)IDD_FILES, hDlg, (DLGPROC)SetFiles);
-      hTabPage[9] = CreateDialog(hInst, (LPCTSTR)IDD_MAPFILES, hDlg, (DLGPROC)SetMapFiles);
+      hTabPage[3] = CreateDialog(hInst, (LPCTSTR)IDD_AIRSPACEWARN, hDlg, (DLGPROC)SetAirspaceWarnings);
+      hTabPage[4] = CreateDialog(hInst, (LPCTSTR)IDD_COMM, hDlg, (DLGPROC)COMMOptions);
+      hTabPage[5] = CreateDialog(hInst, (LPCTSTR)IDD_DISPLAY, hDlg, (DLGPROC)DisplayOptions);
+      hTabPage[6] = CreateDialog(hInst, (LPCTSTR)IDD_MAPDISPLAY, hDlg, (DLGPROC)MapDisplayOptions);
+      hTabPage[7] = CreateDialog(hInst, (LPCTSTR)IDD_FILES, hDlg, (DLGPROC)SetFiles);
+      hTabPage[8] = CreateDialog(hInst, (LPCTSTR)IDD_MAPFILES, hDlg, (DLGPROC)SetMapFiles);
+      hTabPage[9] = CreateDialog(hInst, (LPCTSTR)IDD_INTERFACEFILES, hDlg, (DLGPROC)SetInterfaceFiles);
       hTabPage[10] = CreateDialog(hInst, (LPCTSTR)IDD_FGLIDE, hDlg, (DLGPROC)FinalGlide);
       hTabPage[11] = CreateDialog(hInst, (LPCTSTR)IDD_POLAR, hDlg, (DLGPROC)SetPolar);
       hTabPage[12] = CreateDialog(hInst, (LPCTSTR)IDD_PROFILELOAD, hDlg, (DLGPROC)LoadProfile);
@@ -2609,7 +2714,6 @@ LRESULT CALLBACK Settings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       hTabPage[14] = CreateDialog(hInst, (LPCTSTR)IDD_TASKSETTINGS, hDlg, (DLGPROC)TaskSettings);
       hTabPage[15] = CreateDialog(hInst, (LPCTSTR)IDD_UNITS, hDlg, (DLGPROC)SetUnits);
       hTabPage[16] = CreateDialog(hInst, (LPCTSTR)IDD_LOGGERDETAILS, hDlg, (DLGPROC)LoggerDetails);
-
       hTabPage[17] = CreateDialog(hInst, (LPCTSTR)IDD_AUDIO, hDlg, (DLGPROC)AudioSettings);
 
       MoveWindow(hTabPage[LastShow],0,30,240,300,TRUE);
@@ -3217,6 +3321,88 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
 
 
 
+// DoMessage is designed to delegate what to do for a message
+// The "what to do" can be defined in a configuration file
+// Defaults for each message include:
+//	- Text to display (including multiple languages)
+//	- Text to display extra - NOT multiple language
+//		(eg: If Airspace Warning - what details - airfield name is in data file, already 
+//		covers multiple languages).
+//	- ShowStatusMessage - including font size and delay
+//	- Sound to play - What sound to play
+//	- Log - Keep the message on the log/history window (goes to log file and history)
+//
+// Default for no match
+//	- SowStatusMessage for TEXT for 30 second standard font and standard sound, log
+//
+// How to:
+//	- Play sound file
+//	- Match text
+//	- Read configuration
+//	- Edit configuration
+//
+// On the fly information - Each message can keep information on the fly
+//	- Number of times displayed
+//	- Average time displayed
+//	- Release method (button, click, timer)
+//	- Never Show Again - dismiss this
+//
+// TODO:
+//	- New/Better ShowStatusMessage - with buttons etc
+//	- Logging of data
+//	- External WAV files
+//	- Add in TCHAR* data for extra, non language data entry
+
+void DoStatusMessage(TCHAR* text, TCHAR *data) {
+
+	StatusMessageSTRUCT LocalMessage;
+	LocalMessage = StatusMessageCache[0];
+
+	int i;
+	for (i=0; i<StatusMessageCache_Size; i++) {
+		if (wcscmp(text, StatusMessageCache[i].key) == 0)
+			LocalMessage = StatusMessageCache[i];
+	}
+
+	if (EnableSoundModes && LocalMessage.doSound)
+		PlayResource(LocalMessage.sound);
+
+	// XXX What is a sensible size?
+	TCHAR msgcache[1024];
+	if (LocalMessage.doStatus) {
+		wcscpy(msgcache, gettext(text));
+		if (data != NULL) {
+			wcscat(msgcache, TEXT("\r\n"));
+			wcscat(msgcache, data);
+		}
+		ShowStatusMessage(msgcache, LocalMessage.delay_ms);
+	}
+}
+
+/*
+
+  gettext - look up a string of text for the current language
+
+  Currently very simple. Looks up the current string and current language
+  to find the appropriate string response. On failure will return the string itself.
+
+  NOTES CACHING:
+  	- Could load the whole file or part
+	- qsort/bsearch good idea
+	- cache misses in data structure for future use
+ 
+   TODO - Fast search
+
+*/
+TCHAR* gettext(TCHAR* text) {
+	int i;
+	for (i=0; i<GetTextCache_Size; i++) {
+		if (!text || !GetTextCache[i].key) continue;
+		if (wcscmp(text, GetTextCache[i].key) == 0)
+			return GetTextCache[i].text;
+	}
+	return text;
+}
 
 // Pop up a text dialog for a specified time
 // period in milliseconds
@@ -3336,6 +3522,8 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
       return;
     }
   }
+
+  // SCOTT TODO - Add in DestroyWindow on click anywhere in window
   
   // FINALLY, display the window for the user's perusal
   ShowWindow(hWnd, SW_SHOW);

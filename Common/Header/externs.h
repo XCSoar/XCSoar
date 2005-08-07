@@ -12,6 +12,7 @@
 #include "Mapwindow.h"
 #include "Task.h"
 #include "Statistics.h"
+#include "Dialogs.h"
 
 #if (EXPERIMENTAL > 0)
 #include "BlueSMS.h"
@@ -155,9 +156,17 @@ extern BOOL TERRAINFILECHANGED;
 extern BOOL AIRFIELDFILECHANGED;
 extern BOOL TOPOLOGYFILECHANGED;
 extern BOOL POLARFILECHANGED;
-
+extern BOOL LANGUAGEFILECHANGED;
+extern BOOL STATUSFILECHANGED;
 
 bool Debounce(WPARAM wParam);
+
+
+// Interface Globals
+extern GetTextSTRUCT GetTextCache[];
+extern int GetTextCache_Size;
+extern StatusMessageSTRUCT StatusMessageCache[];
+extern int StatusMessageCache_Size;
 
 #if (EXPERIMENTAL > 0)
 extern BlueDialupSMS bsms;
