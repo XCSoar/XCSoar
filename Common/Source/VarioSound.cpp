@@ -488,6 +488,8 @@ BOOL PlayResource (LPTSTR lpName)
   LPTSTR lpRes;
   HANDLE hResInfo, hRes;
 
+  // TODO Modify to allow use of WAV Files and/or Embedded files
+
   // Find the wave resource.
   hResInfo = FindResource (hInst, lpName, TEXT("WAVE"));
 

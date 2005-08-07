@@ -146,6 +146,7 @@ bool LoadAirspaceBinary(FILETIME LastWrite) {
 //  TCHAR szTemp[100]; // unused var RB
 
   HANDLE hFile;// = INVALID_HANDLE_VALUE;
+
   DWORD dwNumBytesRead;
 
   hFile = CreateFile(TEXT("xcsoar-airspace.bin"),
@@ -180,7 +181,7 @@ bool LoadAirspaceBinary(FILETIME LastWrite) {
 
       HWND hProgress;
 
-      hProgress = CreateProgressDialog(TEXT("Loading Airspace File..."));
+      hProgress = CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
 
       //wsprintf(szTemp,TEXT("0%%"));
       //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
@@ -292,7 +293,7 @@ void ReadAirspace(FILE *fp)
 
   HWND hProgress;
 
-  hProgress=CreateProgressDialog(TEXT("Loading Airspace File..."));
+  hProgress=CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
 
   fSize = (double)GetFileSize((void *)_fileno(fp),NULL);
 

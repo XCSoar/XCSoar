@@ -756,19 +756,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       if (!Debounce(wParam)) break;
       EnablePan = !EnablePan;
 
-      if (EnableSoundModes) {
-        if (EnablePan) {
-          PlayResource(TEXT("IDR_INSERT"));
-        } else {
-          PlayResource(TEXT("IDR_REMOVE"));
-        }
-      }
-
       // ARH Let the user know what's happening
       if (EnablePan)
-        ShowStatusMessage(TEXT("Pan mode ON"), 1500);
+        DoStatusMessage(TEXT("Pan mode ON"));
       else
-        ShowStatusMessage(TEXT("Pan mode OFF"), 1500);
+        DoStatusMessage(TEXT("Pan mode OFF"));
 
       if (!EnablePan) {
         PanX = 0.0;
@@ -827,19 +819,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       if (!Debounce(wParam)) break;
       AutoZoom = !AutoZoom;
 
-      if (EnableSoundModes) {
-        if (AutoZoom) {
-          PlayResource(TEXT("IDR_INSERT"));
-        } else {
-          PlayResource(TEXT("IDR_REMOVE"));
-        }
-      }
-
       // ARH Let user know what's happening
       if (AutoZoom)
-        ShowStatusMessage(TEXT("AutoZoom ON"), 1500);
+        DoStatusMessage(TEXT("AutoZoom ON"));
       else
-        ShowStatusMessage(TEXT("AutoZoom OFF"), 1500);
+        DoStatusMessage(TEXT("AutoZoom OFF"));
 
 
       if (AutoZoom) {

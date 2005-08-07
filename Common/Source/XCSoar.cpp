@@ -182,6 +182,12 @@ int AcknowledgementTime = 30;
 TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
 TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
 
+// Interface Files
+GetTextSTRUCT GetTextCache[MAXSTATUSMESSAGECACHE];
+int GetTextCache_Size = 0;
+StatusMessageSTRUCT StatusMessageCache[MAXSTATUSMESSAGECACHE];
+int StatusMessageCache_Size = 0;
+
 //Snail Trial
 SNAIL_POINT SnailTrail[TRAILSIZE];
 int SnailNext = 0;
@@ -218,6 +224,8 @@ BOOL WAYPOINTFILECHANGED = FALSE;
 BOOL TERRAINFILECHANGED = FALSE;
 BOOL TOPOLOGYFILECHANGED = FALSE;
 BOOL POLARFILECHANGED = FALSE;
+BOOL LANGUAGEFILECHANGED = FALSE;
+BOOL STATUSFILECHANGED = FALSE;
 bool MenuActive = false;
 
 //Task Information
@@ -245,7 +253,6 @@ static  DWORD SpeedIndex2 = 2;
 
 BOOL InfoBoxesHidden = false;
 
-
 void PopupBugsBallast(int updown);
 
 // Groups:
@@ -259,142 +266,141 @@ void PopupBugsBallast(int updown);
 //   Waypoint 14,36,39,40,41,42
 
 SCREEN_INFO Data_Options[] = {
-  // 0
-  {TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33},
+	  {TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33},
 
-  // 1
-  {TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0},
+	  // 1
+	  {TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0},
 
-  // 2
-  {TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 44},
+	  // 2
+	  {TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 44},
 
-  // 3
-  {TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f訊")), NoProcessing, 6, 37},
+	  // 3
+	  {TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f訊")), NoProcessing, 6, 37},
 
-  // 4
-  {TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 38},
+	  // 4
+	  {TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 38},
 
-  // 5
-  {TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 19, 4},
+	  // 5
+	  {TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 19, 4},
 
-  // 6
-  {TEXT("Speed ground"), TEXT("V Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), SpeedProcessing, 23, 3},
+	  // 6
+	  {TEXT("Speed ground"), TEXT("V Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), SpeedProcessing, 23, 3},
 
-  // 7
-  {TEXT("Last Thermal Average"), TEXT("TL Avg"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+	  // 7
+	  {TEXT("Last Thermal Average"), TEXT("TL Avg"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
 
-  // 8
-  {TEXT("Last Thermal Gain"), TEXT("TL Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 9, 7},
+	  // 8
+	  {TEXT("Last Thermal Gain"), TEXT("TL Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 9, 7},
 
-  // 9
-  {TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 21, 8},
+	  // 9
+	  {TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 21, 8},
 
-  // 10
-  {TEXT("McCready Setting"), TEXT("McCready"), new InfoBoxFormatter(TEXT("%2.1f")), McCreadyProcessing, 34, 43},
+	  // 10
+	  {TEXT("McCready Setting"), TEXT("McCready"), new InfoBoxFormatter(TEXT("%2.1f")), McCreadyProcessing, 34, 43},
 
-  // 11
-  {TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},
+	  // 11
+	  {TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},
 
-  // 12
-  {TEXT("Next Altitude Difference"), TEXT("WP AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 13, 11},
+	  // 12
+	  {TEXT("Next Altitude Difference"), TEXT("WP AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 13, 11},
 
-  // 13
-  {TEXT("Next Altitude Required"), TEXT("WP AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 15, 12},
+	  // 13
+	  {TEXT("Next Altitude Required"), TEXT("WP AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 15, 12},
 
-  // 14
-  {TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 42},
+	  // 14
+	  {TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 42},
 
-  // 15
-  {TEXT("Final Altitude Difference"), TEXT("Fin AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 16, 13},
+	  // 15
+	  {TEXT("Final Altitude Difference"), TEXT("Fin AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 16, 13},
 
-  // 16
-  {TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15},
+	  // 16
+	  {TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15},
 
-  // 17
-  {TEXT("Speed Task Average"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+	  // 17
+	  {TEXT("Speed Task Average"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
 
-  // 18
-  {TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
+	  // 18
+	  {TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
 
-  // 19
-  {TEXT("Final L/D"), TEXT("Fin L/D"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5},
+	  // 19
+	  {TEXT("Final L/D"), TEXT("Fin L/D"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5},
 
-  // 20
-  {TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1},
+	  // 20
+	  {TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1},
 
-  // 21
-  {TEXT("Thermal Average"), TEXT("TC Avg"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9},
+	  // 21
+	  {TEXT("Thermal Average"), TEXT("TC Avg"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9},
 
-  // 22
-  {TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
+	  // 22
+	  {TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
 
-  // 23
-  {TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f訊")), DirectionProcessing, 32, 6},
+	  // 23
+	  {TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f訊")), DirectionProcessing, 32, 6},
 
-  // 24
-  {TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 44, 22},
+	  // 24
+	  {TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 44, 22},
 
-  // 25
-  {TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 26},
+	  // 25
+	  {TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 26},
 
-  // 26
-  {TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f訊")), WindDirectionProcessing, 25, 25},
+	  // 26
+	  {TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f訊")), WindDirectionProcessing, 25, 25},
 
-  // 27
-  {TEXT("AA Time"), TEXT("AA Time"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
+	  // 27
+	  {TEXT("AA Time"), TEXT("AA Time"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
 
-  // 28
-  {TEXT("AA Distance Max"), TEXT("AA Dmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27},
+	  // 28
+	  {TEXT("AA Distance Max"), TEXT("AA Dmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27},
 
-  // 29
-  {TEXT("AA Distance Min"), TEXT("AA Dmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 30, 28},
+	  // 29
+	  {TEXT("AA Distance Min"), TEXT("AA Dmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 30, 28},
 
-  // 30
-  {TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
+	  // 30
+	  {TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
 
-  // 31
-  {TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 30},
+	  // 31
+	  {TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 30},
 
-  // 32
-  {TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 37, 23},
+	  // 32
+	  {TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 37, 23},
 
-  // 33
-  {TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
+	  // 33
+	  {TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
 
-  // 34
-  {TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
+	  // 34
+	  {TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
 
-  // 35
-  {TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
+	  // 35
+	  {TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
 
-  // 36
-  {TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 39, 14},
+	  // 36
+	  {TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 39, 14},
 
-  // 37
-  {TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 3, 32},
+	  // 37
+	  {TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 3, 32},
 
-  // 38
-  {TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.2f")), NoProcessing, 4, 19},
+	  // 38
+	  {TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.2f")), NoProcessing, 4, 19},
 
-  // 39
-  {TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},
+	  // 39
+	  {TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},
 
-  // 40
-  {TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 41, 39},
+	  // 40
+	  {TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 41, 39},
 
-  // 41
-  {TEXT("Task Time To Go"), TEXT("Fin ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 42, 40},
+	  // 41
+	  {TEXT("Task Time To Go"), TEXT("Fin ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 42, 40},
 
-  // 42
-  {TEXT("Next Time To Go"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 41},
+	  // 42
+	  {TEXT("Next Time To Go"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 41},
 
-  // 43
-  {TEXT("Speed Dolphin"), TEXT("V Opt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 35},
+	  // 43
+	  {TEXT("Speed Dolphin"), TEXT("V Opt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 35},
 
-  // 44
-  {TEXT("Netto Vario"), TEXT("Netto"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 24},
+	  // 44
+	  {TEXT("Netto Vario"), TEXT("Netto"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 24},
 
-};
+	};
 
 int NUMSELECTSTRINGS = 45;
 
@@ -713,7 +719,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
       return FALSE;
     }
 
-  CreateProgressDialog(TEXT("Initialising"));
+  CreateProgressDialog(gettext(TEXT("Initialising")));
 
   hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
@@ -740,7 +746,13 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
 
+  // Registery (early)
   ReadRegistrySettings();
+
+  // Interace (before interface)
+  ReadLanguageFile();
+  ReadStatusFile();
+
 
 #ifdef DEBUG
   DebugStore("# Start\r\n");
@@ -792,27 +804,27 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   MapWindow::CreateDrawingThread();
 
 #if (EXPERIMENTAL > 0)
-  CreateProgressDialog(TEXT("Bluetooth dialup SMS"));
+  CreateProgressDialog(gettext(TEXT("Bluetooth dialup SMS")));
   bsms.Initialise();
 #endif
 
-  CreateProgressDialog(TEXT("Initialising display"));
+  CreateProgressDialog(gettext(TEXT("Initialising display")));
 
   // just about done....
 
   DoSunEphemeris(147.0,-36.0);
 
-
 #ifdef _SIM_
-  ShowStatusMessage(TEXT("Simulation\r\nNothing is real!"), 3000);
+  DoStatusMessage(TEXT("Simulation\r\nNothing is real!"));
 #else
-  ShowStatusMessage(TEXT("Maintain effective\r\nLOOKOUT at all times"), 3000);
+  DoStatusMessage(TEXT("Maintain effective\r\nLOOKOUT at all times"));
 #endif
 
   SwitchToMapWindow();
   MapWindow::MapDirty = true;
 
 //  CloseProgressDialog();
+
 
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0))
@@ -1161,7 +1173,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 #endif
 
 
-  hWndMenuButton = CreateWindow(TEXT("BUTTON"),TEXT("Menu"),WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+  hWndMenuButton = CreateWindow(TEXT("BUTTON"),gettext(TEXT("Menu")),WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                 0, 0,0,0,hWndMainWindow/*hWndMainWindow*/,NULL,hInst,NULL);
 
 
@@ -1305,13 +1317,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
 
     case WM_USER:
-
-      if (EnableSoundModes){
-        PlayResource(TEXT("IDR_REMOVE"));
-      }
-      ShowStatusMessage(TEXT("Closest Airfield\r\nChanged!"), 5000);
-
-    break;
+      DoStatusMessage(TEXT("Closest Airfield\r\nChanged!"));
+	  break;
 
 
     case WM_ERASEBKGND:
@@ -1429,22 +1436,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
 
 
-	    if (EnableSoundModes) {
-	      if (TrailActive) {
-		PlayResource(TEXT("IDR_INSERT"));
-	      } else {
-		PlayResource(TEXT("IDR_REMOVE"));
-	      }
-	    }
-
       // ARH Let the user know what's happened
             if (TrailActive==0)
-              ShowStatusMessage(TEXT("SnailTrail OFF"), 2000);
+              DoStatusMessage(TEXT("SnailTrail OFF"));
             if (TrailActive==1)
-              ShowStatusMessage(TEXT("SnailTrail ON Long"), 2000);
+              DoStatusMessage(TEXT("SnailTrail ON Long"));
             if (TrailActive==2)
-              ShowStatusMessage(TEXT("SnailTrail ON Short"), 2000);
-
+              DoStatusMessage(TEXT("SnailTrail ON Short"));
             break;
           }
 
@@ -1468,19 +1466,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             EnableSoundVario = !EnableSoundVario;
             VarioSound_EnableSound((BOOL)EnableSoundVario);
 
-	    if (EnableSoundModes) {
-	      if (EnableSoundVario) {
-		PlayResource(TEXT("IDR_INSERT"));
-	      } else {
-		PlayResource(TEXT("IDR_REMOVE"));
-	      }
-	    }
-
             // ARH Let the user know what's happened
             if (EnableSoundVario)
-              ShowStatusMessage(TEXT("Vario Sounds ON"), 2000);
+              DoStatusMessage(TEXT("Vario Sounds ON"));
             else
-              ShowStatusMessage(TEXT("Vario Sounds OFF"), 2000);
+              DoStatusMessage(TEXT("Vario Sounds OFF"));
 
             break;
           }
@@ -1511,7 +1501,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           UnlockFlightData();
 
           // ARH Let the user know what's happened
-          ShowStatusMessage(TEXT("Dropped marker"), 1500);
+          DoStatusMessage(TEXT("Dropped marker"));
 
 
           break;
@@ -1696,7 +1686,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 #ifdef _SIM_
                 (true)
                 #else
-                MessageBox(hWnd,TEXT("Do you wish to exit?"),TEXT("Exit?"),MB_YESNO|MB_ICONQUESTION) == IDYES
+                MessageBox(hWnd,gettext(TEXT("Do you wish to exit?")),gettext(TEXT("Exit?")),MB_YESNO|MB_ICONQUESTION) == IDYES
                 #endif
               ) {
                   SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
@@ -1907,7 +1897,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
               if(LoggerActive)
                 {
-                  if(MessageBox(hWndMapWindow,TEXT("Stop Logger"),TEXT("Stop Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+                  if(MessageBox(hWndMapWindow,gettext(TEXT("Stop Logger")),gettext(TEXT("Stop Logger")),MB_YESNO|MB_ICONQUESTION) == IDYES)
                     LoggerActive = FALSE;
                 }
               else
@@ -2125,7 +2115,7 @@ void DisplayText(void)
       Data_Options[DisplayType].Formatter->AssignValue(DisplayType);
       Data_Options[DisplayType].Formatter->Render(hWndInfoWindow[i]);
 
-      _stprintf(Caption[i],Data_Options[DisplayType].Title );
+      _stprintf(Caption[i],gettext(Data_Options[DisplayType].Title) );
 
       SetWindowText(hWndTitleWindow[i],Caption[i]);
 
@@ -2251,7 +2241,7 @@ void ProcessTimer(void)
             MapWindow::MapDirty = true;
             extGPSCONNECT = FALSE;
 
-            ShowStatusMessage(TEXT("Waiting for GPS Connection"), 5000);
+            DoStatusMessage(TEXT("Waiting for GPS Connection"));
 
             //            LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
             //            ShowStatusMessage(szLoadText, 5000);
@@ -2274,7 +2264,7 @@ void ProcessTimer(void)
 
             extGPSCONNECT = FALSE;
 
-            ShowStatusMessage(TEXT("Restarting Comm Ports"), 1000);
+            DoStatusMessage(TEXT("Restarting Comm Ports"));
             MessageBeep(MB_ICONEXCLAMATION);
             RestartCommPorts();
 
@@ -2308,7 +2298,7 @@ void ProcessTimer(void)
       {
         if((navwarning == TRUE) && (LOCKWAIT == FALSE))
           {
-            ShowStatusMessage(TEXT("Waiting for GPS Fix"), 1000);
+            DoStatusMessage(TEXT("Waiting for GPS Fix"));
             MapWindow::MapDirty = true;
 
             LOCKWAIT = TRUE;

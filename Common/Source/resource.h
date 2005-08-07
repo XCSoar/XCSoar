@@ -83,6 +83,9 @@
 #define IDB_GPSSTATUS2                  257
 #define IDD_MAPFILES                    258
 #define IDD_ANALYSIS                    259
+#define IDD_INTERFACEFILES              260
+#define IDR_TEXT1                       261
+#define IDR_TEXT_LANGUAGE               264
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003
@@ -280,6 +283,10 @@
 #define IDC_UNIT_ALT2                   1246
 #define IDC_UNIT_ALT3                   1247
 #define IDC_UNIT_SPEED                  1248
+#define IDC_LANGUAGEFILE                1250
+#define IDC_STATUSFILE                  1251
+#define IDC_BROWSELANGUAGE              1252
+#define IDC_BROWSESTATUS                1253
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -313,9 +320,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        260
+#define _APS_NEXT_RESOURCE_VALUE        265
 #define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1250
+#define _APS_NEXT_CONTROL_VALUE         1254
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

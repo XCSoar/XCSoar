@@ -1012,7 +1012,7 @@ IDR_REMOVE              WAVE    DISCARDABLE     "bitmaps\\Remove.wav"
 // Dialog
 //
 
-IDD_WAYPOINTDETAILS DIALOGEX 0, 0, 136, 154
+IDD_WAYPOINTDETAILS DIALOG DISCARDABLE  0, 0, 136, 154
 STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP
 EXSTYLE WS_EX_STATICEDGE
 FONT 12, "System"
@@ -1116,6 +1116,18 @@ BEGIN
                     NOT WS_BORDER | NOT WS_TABSTOP
 END
 
+IDD_INTERFACEFILES DIALOG DISCARDABLE  0, 0, 140, 133
+STYLE WS_CHILD
+FONT 8, "System"
+BEGIN
+    EDITTEXT        IDC_LANGUAGEFILE,5,12,83,14,ES_RIGHT | ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse..",IDC_BROWSELANGUAGE,92,12,41,14
+    EDITTEXT        IDC_STATUSFILE,5,38,83,14,ES_RIGHT | ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse..",IDC_BROWSESTATUS,92,38,41,14
+    LTEXT           "Language file",-1,5,4,37,8
+    LTEXT           "Status file",-1,5,29,43,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1179,6 +1191,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 145
     END
+
+    IDD_INTERFACEFILES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 133
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 126
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -1191,6 +1211,13 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_XCSOARSWIFT         ICON    DISCARDABLE     "Bitmaps\\xcsoarswift.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXT
+//
+
+IDR_TEXT_LANGUAGE       TEXT    DISCARDABLE     "bitmaps\\french.txt"
 
 /////////////////////////////////////////////////////////////////////////////
 //

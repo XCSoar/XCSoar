@@ -24,6 +24,7 @@ LRESULT CALLBACK TaskSettings		(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 LRESULT CALLBACK Register 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK SetFiles				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK SetMapFiles				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK SetInterfaceFiles				(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AirspaceAlt		(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK MapColour			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
@@ -38,6 +39,30 @@ LRESULT CALLBACK WaypointDetails		(HWND hDlg, UINT message, WPARAM wParam, LPARA
 void AssignedArea(void);
 LRESULT CALLBACK LoggerDetails 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AudioSettings					(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+
+/* DoStatusMessage Declarations */
+void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
+typedef struct {
+	TCHAR *key;		/* English key */
+	TCHAR *sound;		/* What sound entry to play */
+	bool doStatus;
+	bool doSound;
+	int delay_ms;		/* Delay for ShowStatusMessage */
+	int iFontHeightRatio;
+	bool docenter;
+	int *TabStops;
+	int disabled;		/* Disabled - currently during run time */
+} StatusMessageSTRUCT;
+
+typedef struct {
+	TCHAR *key;
+	TCHAR *text;
+} GetTextSTRUCT;
+
+TCHAR* gettext(TCHAR* text);
+
+// Size of Status message cache
+#define MAXSTATUSMESSAGECACHE 100
 
 void ShowStatusMessage(TCHAR* text, int delay_ms=2000, int iFontHeightRatio=12,
                        bool docenter=true, int *TabStops = NULL);

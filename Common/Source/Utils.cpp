@@ -29,7 +29,6 @@
 #include "Topology.h"
 #include "Units.h"
 
-
 TCHAR szRegistryKey[] =                TEXT("Software\\MPSR\\XCSoar");
 TCHAR *szRegistryDisplayType[] =     { TEXT("Info0"),
 				       TEXT("Info1"),
@@ -124,6 +123,9 @@ TCHAR szRegistryTerrainFile[]=	 TEXT("TerrainFile"); // pL
 TCHAR szRegistryTopologyFile[]=  TEXT("TopologyFile"); // pL
 TCHAR szRegistryWayPointFile[]=  TEXT("WPFile"); // pL
 TCHAR szRegistryAdditionalWayPointFile[]=  TEXT("AdditionalWPFile"); // pL
+
+TCHAR szRegistryLanguageFile[]=  TEXT("LanguageFile"); // pL
+TCHAR szRegistryStatusFile[]=  TEXT("StatusFile"); // pL
 
 TCHAR szRegistryPilotName[]=  TEXT("PilotName");
 TCHAR szRegistryAircraftType[]=  TEXT("AircraftType");
@@ -2082,3 +2084,251 @@ cont:
 	}
 	/* NOTREACHED */
 }
+
+
+/*
+
+  INTERFACE FILE SECTION
+
+  TODO - All this code, loading, searching, return etc will
+  be moved into a CPP class very soon. This will allow better
+  handling of the array, and a better place to swap in performance
+  critical search, sort etc.
+
+  See Also:
+	Dialogs.cpp		gettext, DoStatusMessage
+
+*/
+
+
+void ReadLanguageFile() {
+
+	TCHAR szFile1[MAX_PATH] = TEXT("\0");
+	FILE *fp;
+
+	GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
+	if (szFile1)
+		fp  = _tfopen(szFile1, TEXT("rt"));
+
+	if (fp == NULL)
+		return;
+
+	// TODO - Safer sizes, strings etc - use C++
+	TCHAR key[256];
+	TCHAR value[256];
+	int found;
+
+	/* Read from the file */
+	while (
+		(GetTextCache_Size < MAXSTATUSMESSAGECACHE)
+		// TODO - Fix format string here - this does not read non ASCII (ANSI) characters !
+		&& ((found = fwscanf(fp, TEXT("%[^=]=%[^\n]\n"), key, value)) != EOF)
+	) {
+		// Check valid line?
+		if ((found != 2) || !key || !value) continue;
+
+		TCHAR *new_key;
+		new_key = (TCHAR *)malloc((wcslen(key) * 2) + 1);
+		TCHAR *new_text;
+		new_text = (TCHAR *)malloc((wcslen(value) * 2) + 1);
+		wcscpy(new_key, key);
+		wcscpy(new_text, value);
+
+		GetTextCache[GetTextCache_Size].key = new_key;
+		GetTextCache[GetTextCache_Size].text = new_text;
+
+		GetTextCache_Size++;
+	}
+
+	fclose(fp);
+}
+
+
+/*
+
+  Experimental code to read the data from the Resource for fall back
+  - ie: no dependence on external files
+
+  Also plan to have multiple language files built in, but still allow
+  an external request.
+
+  Maybe we can pick up the language automatically.
+
+  // extern HINSTANCE                       hInst; // The current instance
+
+  	LPTSTR lpRes;
+	HANDLE hResInfo, hRes;
+	TCHAR *split;
+
+		hResInfo = FindResource (hInst, TEXT("IDR_TEXT_LANGUAGE"), TEXT("TEXT"));
+
+		if (hResInfo == NULL)
+			return;
+
+		// Load the wave resource.
+		hRes = LoadResource (hInst, (HRSRC)hResInfo);
+
+		if (hRes == NULL)
+			return;
+
+		// Lock the wave resource and play it.
+		lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
+
+		if (lpRes == NULL)
+			return;
+
+		split = lpRes;
+		TCHAR *next;
+		while (split != NULL) {
+			next = wcsstr(split, TEXT("\n"));
+
+			if (next != NULL) {
+				wcsncpy(TempString, split, next - split);
+				_ReadLanguageFile_Set(TempString);
+			}
+
+			// Get next entry
+			split = next;
+		}
+
+
+void _ReadLanguageFile_Set(TCHAR* TempString) {
+
+	TCHAR* split;
+
+	split = wcsstr(TempString, TEXT("|"));
+	if (split) {
+		TCHAR *new_key;
+		new_key = (TCHAR *)malloc(wcslen(TempString) - (TempString - split) * 2);
+		TCHAR *new_text;
+		new_text = (TCHAR *)malloc(wcslen(split) * 2);
+
+		// Out of memory
+		if (!new_key || !new_text) return;
+
+		*split = NULL;
+		wcscpy(new_key, TempString);
+		wcscpy(new_text, split+1);
+
+		split = wcsstr(new_text, TEXT("\n"));
+		if (split)
+			*split = NULL;
+
+		GetTextCache[GetTextCache_Size].key = new_key;
+		GetTextCache[GetTextCache_Size].text = new_text;
+
+		GetTextCache_Size++;
+	}
+}
+
+
+*/
+
+
+/* NOTE HARD CODED Status Data - Temporary */
+
+void ReadStatusFile() {
+
+	// DEFAULT - 0 is loaded as default, and assumed to exist
+	StatusMessageCache[0].key = TEXT("DEFAULT");
+	StatusMessageCache[0].doStatus = true;
+	StatusMessageCache[0].doSound = true;
+	StatusMessageCache[0].sound = TEXT("IDR_WAV_DRIP");
+	StatusMessageCache[0].delay_ms = 1500;
+
+	StatusMessageCache[1].key = TEXT("Pan mode OFF");
+	StatusMessageCache[1].doStatus = true;
+	StatusMessageCache[1].doSound = true;
+	StatusMessageCache[1].sound = TEXT("IDR_REMOVE");
+	StatusMessageCache[1].delay_ms = 500;
+
+	StatusMessageCache[2].key = TEXT("Simulation\r\nNothing is real!");
+	StatusMessageCache[2].doStatus = true;
+	StatusMessageCache[2].doSound = true;
+	StatusMessageCache[2].sound = TEXT("IDR_WAV_DRIP");
+	StatusMessageCache[2].delay_ms = 1500;
+
+	StatusMessageCache[3].key = TEXT("Maintain effective\r\nLOOKOUT at all times");
+	StatusMessageCache[3].doStatus = true;
+	StatusMessageCache[3].doSound = true;
+	StatusMessageCache[3].sound = TEXT("IDR_WAV_DRIP");
+	StatusMessageCache[3].delay_ms = 1500;
+
+	StatusMessageCache[4].key = TEXT("SnailTrail OFF");
+	StatusMessageCache[4].doStatus = true;
+	StatusMessageCache[4].doSound = true;
+	StatusMessageCache[4].sound = TEXT("IDR_REMOVE");
+	StatusMessageCache[4].delay_ms = 1500;
+
+	StatusMessageCache[5].key = TEXT("SnailTrail ON");
+	StatusMessageCache[5].doStatus = true;
+	StatusMessageCache[5].doSound = true;
+	StatusMessageCache[5].sound = TEXT("IDR_INSERT");
+	StatusMessageCache[5].delay_ms = 1500;
+
+	StatusMessageCache[6].key = TEXT("SnailTrail Short");
+	StatusMessageCache[6].doStatus = true;
+	StatusMessageCache[6].doSound = true;
+	StatusMessageCache[6].sound = TEXT("IDR_INSERT");
+	StatusMessageCache[6].delay_ms = 1500;
+
+	StatusMessageCache[7].key = TEXT("Dropped marker");
+	StatusMessageCache[7].doStatus = true;
+	StatusMessageCache[7].doSound = true;
+	StatusMessageCache[7].sound = TEXT("IDR_WAV_BEEPBWEEP");
+	StatusMessageCache[7].delay_ms = 1000;
+
+	StatusMessageCache[8].key = TEXT("Waiting for GPS Connection");
+	StatusMessageCache[8].doStatus = true;
+	StatusMessageCache[8].doSound = false;
+	StatusMessageCache[8].delay_ms = 1500;
+
+	StatusMessageCache[9].key = TEXT("Restarting Comm Ports");
+	StatusMessageCache[9].doStatus = true;
+	StatusMessageCache[9].doSound = false;
+	StatusMessageCache[9].delay_ms = 1500;
+
+	StatusMessageCache[10].key = TEXT("Waiting for GPS Fix");
+	StatusMessageCache[10].doStatus = true;
+	StatusMessageCache[10].doSound = false;
+	StatusMessageCache[10].delay_ms = 1500;
+
+	StatusMessageCache[11].key = TEXT("AutoZoom OFF");
+	StatusMessageCache[11].doStatus = true;
+	StatusMessageCache[11].doSound = true;
+	StatusMessageCache[11].sound = TEXT("IDR_REMOVE");
+	StatusMessageCache[11].delay_ms = 1500;
+
+	StatusMessageCache[12].key = TEXT("AutoZoom ON");
+	StatusMessageCache[12].doStatus = true;
+	StatusMessageCache[12].doSound = true;
+	StatusMessageCache[12].sound = TEXT("IDR_INSERT");
+	StatusMessageCache[12].delay_ms = 1500;
+
+	StatusMessageCache[13].key = TEXT("Calibrate OFF");
+	StatusMessageCache[13].doStatus = true;
+	StatusMessageCache[13].doSound = true;
+	StatusMessageCache[13].sound = TEXT("IDR_REMOVE");
+	StatusMessageCache[13].delay_ms = 1500;
+
+	StatusMessageCache[14].key = TEXT("Calibrate ON");
+	StatusMessageCache[14].doStatus = true;
+	StatusMessageCache[14].doSound = true;
+	StatusMessageCache[14].sound = TEXT("IDR_INSERT");
+	StatusMessageCache[14].delay_ms = 1500;
+
+	StatusMessageCache[15].key = TEXT("Closes Airfield\r\nChanged!");
+	StatusMessageCache[15].doStatus = true;
+	StatusMessageCache[15].doSound = true;
+	StatusMessageCache[15].sound = TEXT("IDR_REMOVE");
+	StatusMessageCache[15].delay_ms = 1500;
+
+	StatusMessageCache[16].key = TEXT("Pan mode ON");
+	StatusMessageCache[16].doStatus = true;
+	StatusMessageCache[16].doSound = true;
+	StatusMessageCache[16].sound = TEXT("IDR_INSERT");
+	StatusMessageCache[16].delay_ms = 2500;
+
+	StatusMessageCache_Size = 17;
+}
+

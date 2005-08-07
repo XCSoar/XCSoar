@@ -35,9 +35,9 @@ void	AirspeedProcessing(int UpDown)
   if (UpDown==0) {
     EnableCalibration = !EnableCalibration;
     if (EnableCalibration)
-      ShowStatusMessage(TEXT("Calibrate ON"), 1000);
+      DoStatusMessage(TEXT("Calibrate ON"));
     else
-      ShowStatusMessage(TEXT("Calibrate OFF"), 1000);
+      DoStatusMessage(TEXT("Calibrate OFF"));
   }
 
 }

@@ -61,6 +61,11 @@ void SaveSoundSettings();
 void ReadDeviceSettings(int devIdx, TCHAR *Name);
 void WriteDeviceSettings(int devIdx, TCHAR *Name);
 
+
+void ReadLanguageFile();
+void ReadStatusFile();
+void _ReadLanguageFile_Set(TCHAR* TempString);
+
 unsigned int isqrt4(unsigned long val);
 int iround(double i);
 long lround(double i);
