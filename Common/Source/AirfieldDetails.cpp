@@ -1,4 +1,4 @@
-//   $Id: AirfieldDetails.cpp,v 1.10 2005/07/29 09:33:26 samgi Exp $
+//   $Id: AirfieldDetails.cpp,v 1.11 2005/08/08 22:48:33 scottp Exp $
 
 
 #include "stdafx.h"
@@ -130,7 +130,7 @@ void ReadAirfieldFile() {
 
   HWND hProgress;
 
-  hProgress=CreateProgressDialog(TEXT("Loading Airfield Details File..."));
+  hProgress=CreateProgressDialog(gettext(TEXT("Loading Airfield Details File...")));
 
   {
     OpenAirfieldDetails();

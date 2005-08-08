@@ -25,8 +25,6 @@ double Reciprocal(double InBound);
 double BiSector(double InBound, double OutBound);
 void SectorEndPoint(double StartLat, double StartLon, double  Radial, double Dist, double *EndLat, double *EndLon);
 void CalculateNewPolarCoef(void);
-int Registered(void);
-void CheckRegistration(void);
 void RefreshTaskWaypoint(int i);
 void CalculateTaskSectors(void);
 void CalculateAATTaskSectors(void);

@@ -61,8 +61,11 @@ typedef struct {
 
 TCHAR* gettext(TCHAR* text);
 
-// Size of Status message cache
-#define MAXSTATUSMESSAGECACHE 100
+// Size of Status message cache - Note 1000 messages may not be enough...
+// TODO If we continue with the reading one at a time - then consider using
+// a pointer structure and build on the fly, thus no limit, but also only
+// RAM used as required - easy to do with struct above - just point to next.
+#define MAXSTATUSMESSAGECACHE 1000
 
 void ShowStatusMessage(TCHAR* text, int delay_ms=2000, int iFontHeightRatio=12,
                        bool docenter=true, int *TabStops = NULL);

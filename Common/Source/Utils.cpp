@@ -885,108 +885,6 @@ void CalculateNewPolarCoef(void)
 }
 
 
-
-int Registered(void)
-{
-  int Raw[8];
-  int i;
-  int Year, Month;
-
-  _stscanf(strRegKey,TEXT("%02X%02X%02X%02X%02X%02X%02X%02X"),&Raw[0],&Raw[1],&Raw[2],&Raw[3],&Raw[4],&Raw[5],&Raw[6],&Raw[7]);
-
-  for(i=0;i<8;i++)
-    {
-      Raw[i] = Raw[i] ^ (strAssetNumber[i] + i);
-    }
-
-  if(Raw[0] != Raw[4]) return FALSE;
-  if(Raw[1] != Raw[5]) return FALSE;
-  if(Raw[2] != Raw[6]) return FALSE;
-  if(Raw[3] != Raw[7]) return FALSE;
-
-  Month = MAKEWORD(Raw[0],Raw[1]);
-  Year = MAKEWORD(Raw[2],Raw[3]);
-	
-  if(GPS_INFO.Year > Year) return FALSE;
-  if((GPS_INFO.Year  == Year)&&(GPS_INFO.Month > Month)) return FALSE;
-
-  return TRUE; 
-}
-
-void CheckRegistration(void)
-{
-  static BOOL Warning = FALSE;
-  static int RegistrationTimeOut = 150;
-  static BOOL LOCK = FALSE;
-  static int LastYear = 0, LastMonth = 0, LastDay = 0;
-
-
-  if(LOCK)
-    {
-      return;
-    }
-
-  LOCK = TRUE;
-
-  if((GPS_INFO.Year == 0) && (GPS_INFO.Month  == 0) && (GPS_INFO.Day  == 0))
-    {
-      LOCK = FALSE;
-      LastYear = GPS_INFO.Year; LastMonth = GPS_INFO.Month; LastDay = GPS_INFO.Day; 
-      return;
-    }
-
-  if(GPS_INFO.Year <= 2004)
-    {
-      LOCK = FALSE;
-      LastYear = GPS_INFO.Year; LastMonth = GPS_INFO.Month; LastDay = GPS_INFO.Day; 
-		
-      return;
-    }
-
-  if((GPS_INFO.Year == 2003) && (GPS_INFO.Month  < 3))
-    {
-      LOCK = FALSE;
-      LastYear = GPS_INFO.Year; LastMonth = GPS_INFO.Month; LastDay = GPS_INFO.Day; 
-      return;
-    }
-
-  if(Registered())
-    {
-      LastYear = GPS_INFO.Year; LastMonth = GPS_INFO.Month; LastDay = GPS_INFO.Day; 
-      LOCK = FALSE;
-      return;
-    }
-
-  if((LastYear != GPS_INFO.Year)||(LastMonth != GPS_INFO.Month)||(LastDay = GPS_INFO.Day))
-    {
-      LastYear = GPS_INFO.Year; LastMonth = GPS_INFO.Month; LastDay = GPS_INFO.Day; 
-      LOCK = FALSE;
-      return;
-    }	
-
-  LastYear = GPS_INFO.Year; LastMonth = GPS_INFO.Month; LastDay = GPS_INFO.Day; 
-	
-  if(Warning == FALSE)
-    {
-      MessageBox(hWndMainWindow,TEXT("Your Registration Key Has Expired Or No Registration Key Was Found.  See File->Register To Set A New Key.  Trial Use Limited To 10 Mins"),TEXT("Trial Use"),MB_OK|MB_ICONINFORMATION|MB_APPLMODAL|MB_TOPMOST);
-      Warning = TRUE;
-    }
-
-  if(RegistrationTimeOut >0)
-    {
-      RegistrationTimeOut --;
-      LOCK = FALSE;
-      return;
-    }
-  else
-    {
-      MessageBox(hWndMainWindow,TEXT("Trial Period Has Expired.  See File->Register To Set A New Key"),TEXT("Trail Period Expired"),MB_OK|MB_ICONSTOP|MB_APPLMODAL|MB_TOPMOST);
-      SendMessage(hWndMainWindow, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWndMainWindow);
-      SendMessage (hWndMainWindow, WM_CLOSE, 0, 0);	
-    }
-  LOCK = FALSE;
-}
-
 void CalculateTaskSectors(void)
 {
   int i;
@@ -1522,6 +1420,9 @@ double ScreenAngle(int x1, int y1, int x2, int y2)
 {
   return atan2(y2-y1, x2-x1)*RAD_TO_DEG;
 }
+
+// TODO SCOTT I18N - This is the warning string - Need to replace with
+// DoStatusMessage modified to act the same etc.
 
 void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top, TCHAR *szMessageBuffer, TCHAR *szTitleBuffer )
 {

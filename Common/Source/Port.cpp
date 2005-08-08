@@ -40,6 +40,8 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   if ( hPort1 == INVALID_HANDLE_VALUE ) 
   {
     // Could not open the port.
+    // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
+    // gettext(), port added on new line
     _stprintf(sTmp, TEXT("Unable to Open\r\nPort %s"), sPortName),
     MessageBox (hWndMainWindow, sTmp,
                 TEXT("Error"), MB_OK|MB_ICONINFORMATION);
@@ -84,6 +86,8 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   {
     // Could not create the read thread.
 		CloseHandle (hPort1);
+    // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
+    // gettext(), port added on new line
     _stprintf(sTmp, TEXT("Unable to Change Settings on Port %s"), sPortName),
     MessageBox (hWndMainWindow, sTmp, TEXT("Error"), MB_OK);
     // dwError = GetLastError ();
@@ -267,7 +271,7 @@ BOOL Port1StopRxThread(void){
 
   #if COMMDEBUG > 0
   if (!fRxThreadTerminated)
-    MessageBox (hWndMainWindow, TEXT("Port1 RX Thread not Terminated!"), TEXT("Error"), MB_OK);
+    MessageBox (hWndMainWindow, gettext(TEXT("Port1 RX Thread not Terminated!")), TEXT("Error"), MB_OK);
   #endif
 
   return(fRxThreadTerminated);
@@ -291,6 +295,8 @@ BOOL Port1StartRxThread(void){
   }
   else                                  // Could not create the read thread.
   {
+    // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
+    // gettext(), port added on new line
     _stprintf(sTmp, TEXT("Unable to Start RX Thread on Port %s"), sPortName),
     MessageBox (hWndMainWindow, sTmp, TEXT("Error"), MB_OK);
     dwError = GetLastError ();
@@ -347,7 +353,7 @@ int Port1SetRxTimeout(int Timeout){
   {
                                         // Could not create the read thread.
 		CloseHandle (hPort1);
-    MessageBox (hWndMainWindow, TEXT("Unable to Set Serial Port Timers"), 
+    MessageBox (hWndMainWindow, gettext(TEXT("Unable to Set Serial Port Timers")),
                 TEXT("Error"), MB_OK);
     dwError = GetLastError ();
     return(-1);
