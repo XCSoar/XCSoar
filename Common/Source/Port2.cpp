@@ -32,7 +32,7 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   if ( hPort2 == INVALID_HANDLE_VALUE )
   {
     // Could not open the port.
-    MessageBox (hWndMainWindow, TEXT("Vario Serial Port Unavailable"),
+    MessageBox (hWndMainWindow, gettext(TEXT("Vario Serial Port Unavailable")),
                 TEXT("Error"), MB_OK|MB_ICONINFORMATION);
     dwError = GetLastError ();
     return FALSE;
@@ -75,7 +75,7 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   {
     // Could not create the read thread.
 		CloseHandle (hPort2);
-    MessageBox (hWndMainWindow, TEXT("Unable to Change the Vario Serial Port Settings"),
+    MessageBox (hWndMainWindow, gettext(TEXT("Unable to Change the Vario Serial Port Settings")),
                 TEXT("Error"), MB_OK);
     dwError = GetLastError ();
     return FALSE;
@@ -98,7 +98,7 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   {
     // Could not create the read thread.
 		CloseHandle (hPort2);
-    MessageBox (hWndMainWindow, TEXT("Unable to Set Serial Port Timers"),
+    MessageBox (hWndMainWindow, gettext(TEXT("Unable to Set Serial Port Timers")),
                 TEXT("Error"), MB_OK);
     dwError = GetLastError ();
     return FALSE;
@@ -123,7 +123,7 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   {
     // Could not create the read thread.
 		CloseHandle (hPort2);
-    MessageBox (hWndMainWindow, TEXT("Unable to Start Vario Serial Port Handler"),
+    MessageBox (hWndMainWindow, gettext(TEXT("Unable to Start Vario Serial Port Handler")),
                 TEXT("Error"), MB_OK);
     dwError = GetLastError ();
     return FALSE;

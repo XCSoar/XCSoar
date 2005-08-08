@@ -130,7 +130,7 @@ void ReadAirfieldFile() {
 
   HWND hProgress;
 
-  hProgress=CreateProgressDialog(TEXT("Loading Airfield Details File..."));
+  hProgress=CreateProgressDialog(gettext(TEXT("Loading Airfield Details File...")));
 
   {
     OpenAirfieldDetails();

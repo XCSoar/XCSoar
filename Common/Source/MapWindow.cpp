@@ -190,8 +190,8 @@ void InsertWaypoint(int index) {
   if (Task[MAXTASKPOINTS-1].Index != -1) {
     // No room for any more task points!
     MessageBox(hWndMapWindow,
-      TEXT("Too many waypoints in task!"),
-      TEXT("Insert Waypoint"),
+      gettext(TEXT("Too many waypoints in task!")),
+      gettext(TEXT("Insert Waypoint")),
       MB_OK|MB_ICONEXCLAMATION);
 
     return;
@@ -305,8 +305,8 @@ void RemoveWaypoint(int index) {
       // WP not found, so ask user if they want to
       // remove the active WP
       int ret = MessageBox(hWndMapWindow,
-        TEXT("Chosen Waypoint not in current task.\nRemove active WayPoint?"),
-        TEXT("Remove Waypoint"),
+        gettext(TEXT("Chosen Waypoint not in current task.\nRemove active WayPoint?")),
+        gettext(TEXT("Remove Waypoint")),
         MB_YESNO|MB_ICONQUESTION);
 
       if (ret == IDYES) {
@@ -795,18 +795,22 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       EnableTopology = (val & 0x01);
       EnableTerrain = (val & 0x02)>>1;
 
+      // TODO SCOTT I18N - This should be a DoStatusMessage
+      // 	(Remove Playsound above, Support multi line text in gettext
+      // 	etc, simplify set of text below)
+
       // ARH Let user know what's happening
       TCHAR buf[128];
 
       if (EnableTopology)
-        _stprintf(buf, TEXT("Topo: %s\r\n"), TEXT("ON"));
+        _stprintf(buf, TEXT("%s\r\n"), gettext(TEXT("Topo: ON")));
       else
-        _stprintf(buf, TEXT("Topo: %s\r\n"), TEXT("OFF"));
+        _stprintf(buf, TEXT("%s\r\n"), gettext(TEXT("Topo: OFF")));
 
       if (EnableTerrain)
-        _stprintf(buf+_tcslen(buf), TEXT("Terrain: %s"), TEXT("ON"));
+        _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("Terrain: ON")));
       else
-        _stprintf(buf+_tcslen(buf), TEXT("Terrain: %s"), TEXT("OFF"));
+        _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("Terrain: OFF")));
 
       ShowStatusMessage(buf, 2500);
       //
@@ -1367,7 +1371,7 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
     BitBlt(hDC,rc.left+2,rc.bottom-20-2,20,20,
            hDCTemp,0,0,SRCAND);
 
-    TextInBox(hDC, gpswarningtext1, rc.left+24, rc.bottom-19, 0, 2);
+    TextInBox(hDC, gettext(gpswarningtext1), rc.left+24, rc.bottom-19, 0, 2);
 
   } else
     if (DrawInfo.NAVWarning) {
@@ -1375,7 +1379,7 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
       BitBlt(hDC,rc.left+2,rc.bottom-20-2,20,20,
              hDCTemp,0,0,SRCAND);
 
-      TextInBox(hDC, gpswarningtext2, rc.left+24, rc.bottom-19, 0, 2);
+      TextInBox(hDC, gettext(gpswarningtext2), rc.left+24, rc.bottom-19, 0, 2);
 
     }
 

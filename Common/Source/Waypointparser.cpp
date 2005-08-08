@@ -59,7 +59,7 @@ void ReadWayPointFile(FILE *fp)
 
   HWND hProgress;
 
-  hProgress = CreateProgressDialog(TEXT("Loading Waypoints File..."));
+  hProgress = CreateProgressDialog(gettext(TEXT("Loading Waypoints File...")));
 
   fSize = GetFileSize((void *)_fileno(fp), NULL);
 
@@ -74,7 +74,7 @@ void ReadWayPointFile(FILE *fp)
 
   if(WayPointList == NULL)
     {
-      MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
+      MessageBox(hWndMainWindow,gettext(TEXT("Not Enough Memory For Waypoints")),TEXT("Error"),MB_OK|MB_ICONSTOP);
       return;
     }
 
@@ -105,7 +105,7 @@ void ReadWayPointFile(FILE *fp)
 
             if ((p = (WAYPOINT *)LocalReAlloc(WayPointList, ((NumberOfWayPoints/50)+1) * 50 * sizeof(WAYPOINT), LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
 
-              MessageBox(hWndMainWindow,TEXT("Not Enough Memory For Waypoints"),TEXT("Error"),MB_OK|MB_ICONSTOP);
+              MessageBox(hWndMainWindow,gettext(TEXT("Not Enough Memory For Waypoints")),TEXT("Error"),MB_OK|MB_ICONSTOP);
 
               return;
             }
