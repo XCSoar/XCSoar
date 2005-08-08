@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.46 2005/08/07 08:07:08 scottp Exp $
+//   $Id: Dialogs.cpp,v 1.47 2005/08/08 23:43:15 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -211,6 +211,18 @@ LRESULT CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         {
           SetWindowText(GetDlgItem(hDlg,IDC_ABORTTASK),gettext(TEXT("Abort")));
         }
+
+	  // I18N of Buttons on menu
+	  SetWindowText_gettext(hDlg, IDD_TASK);
+	  SetWindowText_gettext(hDlg, IDD_BUGS);
+	  SetWindowText_gettext(hDlg, IDC_ABORTTASK);	// (sic) IDC was spelt as is in RC
+	  SetWindowText_gettext(hDlg, IDD_PRESSURE);
+	  SetWindowText_gettext(hDlg, IDD_LOGGER);
+	  SetWindowText_gettext(hDlg, IDD_SETTINGS);
+	  SetWindowText_gettext(hDlg, IDD_STATUS);
+	  SetWindowText_gettext(hDlg, IDC_ANALYSIS);	// (sic) IDC was spelt as is in RC
+	  SetWindowText_gettext(hDlg, IDD_EXIT);
+	  SetWindowText_gettext(hDlg, IDD_BACK);
 
       return TRUE; 
         
@@ -3403,6 +3415,15 @@ TCHAR* gettext(TCHAR* text) {
 	}
 	return text;
 }
+
+// Set the window text value, by passing through gettext
+// TODO - Review if this needs to be done every time?
+void SetWindowText_gettext(HWND hDlg, int entry) {
+	  TCHAR strTemp[1024];
+	  GetWindowText(GetDlgItem(hDlg,entry),strTemp, 1023);
+	  SetWindowText(GetDlgItem(hDlg,entry),gettext(strTemp));
+}
+
 
 // Pop up a text dialog for a specified time
 // period in milliseconds
