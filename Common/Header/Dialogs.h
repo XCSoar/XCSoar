@@ -61,6 +61,8 @@ typedef struct {
 
 TCHAR* gettext(TCHAR* text);
 
+void SetWindowText_gettext(HWND hDlg, int entry);
+
 // Size of Status message cache - Note 1000 messages may not be enough...
 // TODO If we continue with the reading one at a time - then consider using
 // a pointer structure and build on the fly, thus no limit, but also only
