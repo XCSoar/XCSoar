@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.47 2005/08/08 23:43:15 scottp Exp $
+//   $Id: Dialogs.cpp,v 1.48 2005/08/09 01:02:26 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -122,6 +122,9 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       SetDlgItemText(hDlg,IDC_OSVERSION,Temp);
       wsprintf(Temp,TEXT("Build Date %s"),TEXT(__DATE__));
       SetDlgItemText(hDlg,IDC_EXTRA,Temp );
+
+      wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);	
+	  SetDlgItemText(hDlg, IDC_VERSION, Temp);
 
       switch (si.dwProcessorType )
         {
@@ -3581,6 +3584,10 @@ HWND CreateProgressDialog(TCHAR* text) {
                    (LPCTSTR)IDD_PROGRESS,
                    hWndMainWindow,
                    (DLGPROC)Progress);
+
+	SetWindowText_gettext(hProgress, IDC_VERSIONTEXT);
+    SetWindowText(GetDlgItem(hProgress,IDC_VERSION),XCSoar_Version);
+
     ShowWindow(hProgress,SW_SHOW);
     
     SetForegroundWindow(hProgress);

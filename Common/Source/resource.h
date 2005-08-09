@@ -287,6 +287,8 @@
 #define IDC_STATUSFILE                  1251
 #define IDC_BROWSELANGUAGE              1252
 #define IDC_BROWSESTATUS                1253
+#define IDC_VERSION                     1254
+#define IDC_VERSIONTEXT                 1255
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -322,7 +324,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        265
 #define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1254
+#define _APS_NEXT_CONTROL_VALUE         1255
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif

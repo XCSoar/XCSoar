@@ -95,14 +95,14 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 139, 83
+IDD_ABOUTBOX DIALOGEX 0, 0, 139, 83
 STYLE WS_CHILD
 EXSTYLE 0x80000000L
 FONT 10, "System"
 BEGIN
     LTEXT           "XCSoar",IDC_STATIC,32,7,101,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2003,2004,2005",IDC_STATIC,32,25,101,8
-    LTEXT           "Version 4.22",IDC_STATIC,32,16,101,8,SS_NOPREFIX
+    LTEXT           "Version Unknown",IDC_VERSION,32,16,101,8,SS_NOPREFIX
     LTEXT           "Processor",IDC_STATIC,10,46,35,8,SS_NOPREFIX
     LTEXT           "OS Version",IDC_STATIC,10,56,40,8,SS_NOPREFIX
     LTEXT           "",IDC_PROCESSOR,47,45,66,8
@@ -118,11 +118,12 @@ FONT 10, "System"
 BEGIN
     EDITTEXT        IDC_MESSAGE,4,125,124,14,ES_CENTER | ES_MULTILINE | 
                     ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "Version 4.22",IDC_STATIC,88,115,42,8
+    RTEXT           "unknown",IDC_VERSION,97,116,30,8
     CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,2,2,
                     129,113
     CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,
                     4,141,124,8
+    RTEXT           "Version",IDC_VERSIONTEXT,29,116,63,8
 END
 
 IDD_SELECT DIALOG DISCARDABLE  0, 0, 140, 123
@@ -1211,13 +1212,6 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDI_XCSOARSWIFT         ICON    DISCARDABLE     "Bitmaps\\xcsoarswift.ico"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// TEXT
-//
-
-IDR_TEXT_LANGUAGE       TEXT    DISCARDABLE     "bitmaps\\french.txt"
 
 /////////////////////////////////////////////////////////////////////////////
 //
