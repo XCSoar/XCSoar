@@ -22,7 +22,7 @@ readme.xml: ../../source/XCSoarV4-README.txt
 	perl wrap.pl Readme < ../../source/XCSoarV4-README.txt > readme.xml
 
 clean: depends
-	@-rm $(FILES_CLEAN) $(FILES_LOCAL) $(FILES_TMP) >/dev/null 2>/dev/null
+	@-rm $(FILES_CLEAN) $(FILES_LOCAL) $(FILES_TMP) dest.tar.gz >/dev/null 2>/dev/null
 
 dest.tar.gz: $(FILES_DEST) $(FILES_LOCAL)
 	tar cvzf dest.tar.gz $(FILES_DEST) $(FILES_LOCAL)

@@ -68,7 +68,7 @@
 				</a>
 
 				XCSoar is Free Software released under the GNU/GPL License.
-				<br>
+				<br/>
 				Copyright 2005
 			</div>
 
