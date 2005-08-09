@@ -123,6 +123,9 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       wsprintf(Temp,TEXT("Build Date %s"),TEXT(__DATE__));
       SetDlgItemText(hDlg,IDC_EXTRA,Temp );
 
+      wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
+	  SetDlgItemText(hDlg, IDC_VERSION, Temp);
+
       switch (si.dwProcessorType )
         {
         case PROCESSOR_INTEL_386                : SetDlgItemText(hDlg,IDC_PROCESSOR,TEXT("Intel 386")); break;
@@ -3581,6 +3584,10 @@ HWND CreateProgressDialog(TCHAR* text) {
                    (LPCTSTR)IDD_PROGRESS,
                    hWndMainWindow,
                    (DLGPROC)Progress);
+
+	SetWindowText_gettext(hProgress, IDC_VERSIONTEXT);
+    SetWindowText(GetDlgItem(hProgress,IDC_VERSION),XCSoar_Version);
+
     ShowWindow(hProgress,SW_SHOW);
 
     SetForegroundWindow(hProgress);

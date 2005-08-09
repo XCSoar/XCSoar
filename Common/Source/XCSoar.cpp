@@ -48,6 +48,8 @@
 #include "Externs.h"
 #include "units.h"
 
+// Temporary version location (will be automatically generated)
+extern TCHAR* XCSoar_Version = TEXT("5 ALPHA");
 
 HWND hWnd1, hWnd2, hWnd3;
 
