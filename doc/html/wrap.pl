@@ -24,9 +24,9 @@ exit 0;
 sub xml_entify {
         my ($str, $no_escape_tilde) = @_;
 	return undef unless(defined($str));
-        $test =~ s/[\x00-\x08\x10\x0B\x0C\x0E-\x1F]//g;
+        $str =~ s/[\x00-\x08\x10\x0B\x0C\x0E-\x1F]//g;
 #        $test =~ s/([&<>"\x{80}-\x{10ffff}])/"&#".ord($1).";"/eg;
-        $test =~ s/~/~~/g unless $no_escape_tilde;
-        return $test;
+        $str =~ s/~/~~/g unless $no_escape_tilde;
+        return $str;
 }
 

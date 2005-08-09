@@ -63,8 +63,13 @@
 						height="37" 
 						border="0"
 						alt="SourceForge.net Logo" 
+						align="left"
 					/>
 				</a>
+
+				XCSoar is Free Software released under the GNU/GPL License.
+				<br>
+				Copyright 2005
 			</div>
 
 		</div>
