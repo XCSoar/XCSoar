@@ -1,14 +1,20 @@
-
 body {
 	font-family: verdana, arial, helvetica, sans-serif; 
 	color: #333333; 
 	background: #ffffff; 
 	margin: 0px;
-	padding: 0px; 
+	padding: 0px;  
 }
 
 h1 { 
 	font-size: 1.3em;
+	font-family: verdana, arial, helvetica, sans-serif;
+	color: #333366; 
+}
+
+
+h2 { 
+	font-size: 1.2em;
 	font-family: verdana, arial, helvetica, sans-serif;
 	color: #333366; 
 }
@@ -55,6 +61,7 @@ h1 {
 	padding: 10px 20px;  
 	/* Left margin is 10px more than navigation */
 	margin-left: 160px;
+	font-size: 0.8em;  
 }
 
 #navigation {
@@ -115,5 +122,9 @@ h1 {
 	display: block; 
 	margin-left: auto; 
 	margin-right: auto;
+}
+
+.frontshot{
+	margin: 10px;
 }
 
