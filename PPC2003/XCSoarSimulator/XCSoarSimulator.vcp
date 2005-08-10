@@ -4204,6 +4204,10 @@ SOURCE=..\..\Common\Source\Bitmaps\Turnpoint.bmp
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\Common\Source\Bitmaps\xcsoar-splash.bmp"
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Source\Bitmaps\xcsoar.ico
 # End Source File
 # Begin Source File
