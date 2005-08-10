@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.10 2005/08/04 00:27:33 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.11 2005/08/10 13:54:35 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -167,6 +167,9 @@ void WindAnalyser::slot_Altitude() {
 
 void WindAnalyser::calcThermalDrift() {
   double ThermalTime = climbendtime-climbstarttime;
+
+  return; // disabled as this causes problems
+
   if (ThermalTime>120) {
     double ThermalDrift= Distance(climbstartpos.y,
                                   climbstartpos.x,
