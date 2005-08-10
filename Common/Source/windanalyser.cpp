@@ -167,6 +167,9 @@ void WindAnalyser::slot_Altitude() {
 
 void WindAnalyser::calcThermalDrift() {
   double ThermalTime = climbendtime-climbstarttime;
+
+  return; // disabled as this causes problems
+
   if (ThermalTime>120) {
     double ThermalDrift= Distance(climbstartpos.y,
                                   climbstartpos.x,
