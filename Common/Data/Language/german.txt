@@ -5,6 +5,7 @@
  South= Süd
  year : %d \n= Jahr : %d \n
 % Climb=% Steigen
+%% Climb=%% Steigen
 &About=&Über
 &Airspace=&Luftraum
 &Display=&Anzeige
@@ -94,6 +95,7 @@ Brush7=Spüheffekt 07
 Brush8=Spüheffekt 08
 Brush9=Spüheffekt 09
 Bugs %=Mücken %
+Bugs %%=Mücken %%
 Bugs & Ballast=Mücken & Ballast
 Bugs + Ballast=Mücken & Ballast
 Build Date=Erstellungsdatum
