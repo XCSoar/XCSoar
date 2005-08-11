@@ -1,13 +1,16 @@
 # ==============================================================================
 .SUFFIXES : .txt
 
-FILES_MISSING=italian.missing
+FILES_MISSING=italian.missing italian.duplicate german.missing german.duplicate test.xcl
 
 # ------------------------------------------------------------------------------
 build: $(FILES_MISSING)
 
-%.missing : %.txt
-	perl ../../../../tools/language/code/missing.pl $< > $@
+%.missing : %.xcl
+	perl missing.pl $< > $@
+
+%.duplicate : %.xcl
+	perl dup.pl $< > $@
 
 test.xcl: template.xcl test.pl
 	perl test.pl template.xcl > test.xcl
