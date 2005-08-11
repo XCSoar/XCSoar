@@ -161,7 +161,7 @@ bool Units::LattitudeToString(double Lattitude, TCHAR *Buffer, size_t size){
 }
 
 TCHAR *Units::GetUnitName(Units_t Unit){
-  return(UnitDescriptors[Unit].Name);
+  return(gettext(UnitDescriptors[Unit].Name));
 }
 
 Units_t Units::GetUserDistanceUnit(void){

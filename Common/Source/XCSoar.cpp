@@ -488,11 +488,15 @@ void ShowStatus() {
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime-sunsethours)*60);
 
-  _stprintf(Temp,TEXT("Longitude\t%s\r\nLatitude\t%s\r\nAltitude\t%.0f %s\r\nSunset\t%02d:%02d\r\n\r\n"),
+  _stprintf(Temp,TEXT("%s\t%s\r\n%s\t%s\r\n%s\t%.0f %s\r\n%s\t%02d:%02d\r\n\r\n"),
+		   gettext(TEXT("Longitude")),
            sLongditude,
+		   gettext(TEXT("Latitude")),
            sLattitude,
+		   gettext(TEXT("Altitude")),
            GPS_INFO.Altitude*ALTITUDEMODIFY,
             Units::GetAltitudeName(),
+		   gettext(TEXT("Sunset")),
            sunsethours,
            sunsetmins
            );
@@ -513,9 +517,12 @@ void ShowStatus() {
                         WayPointList[iwaypoint].Lattitude,
                         WayPointList[iwaypoint].Longditude)*DISTANCEMODIFY;
 
-    _stprintf(Temp,TEXT("Near\t%s\r\nBearing\t%d\r\nDistance\t%.1f %s\r\n\r\n"),
+    _stprintf(Temp,TEXT("%s\t%s\r\n%s\t%d\r\n%s\t%.1f %s\r\n\r\n"),
+		     gettext(TEXT("Near")),
              WayPointList[iwaypoint].Name,
+			 gettext(TEXT("Bearing")),
              (int)bearing,
+			 gettext(TEXT("Distance")),
               distance,
               Units::GetDistanceName());
     _tcscat(statusmessage, Temp);
@@ -524,22 +531,27 @@ void ShowStatus() {
 
   if (extGPSCONNECT) {
     if (GPS_INFO.NAVWarning) {
-      wcscat(statusmessage, TEXT("GPS 2D fix\r\n"));
+      wcscat(statusmessage, gettext(TEXT("GPS 2D fix")));
     } else {
-      wcscat(statusmessage, TEXT("GPS 3D fix\r\n"));
+      wcscat(statusmessage, gettext(TEXT("GPS 3D fix")));
     }
-    wsprintf(Temp,TEXT("Satellites in view\t%d\r\n"),
+    wcscat(statusmessage, TEXT("\r\n"));
+
+    wsprintf(Temp,TEXT("%s\t%d\r\n"),
+			 gettext(TEXT("Satellites in view")),
              GPS_INFO.SatellitesUsed
              );
     wcscat(statusmessage, Temp);
   } else {
-    wcscat(statusmessage, TEXT("GPS disconnected\r\n"));
+    wcscat(statusmessage, gettext(TEXT("GPS disconnected")));
+	wcscat(statusmessage, TEXT("\r\n"));
   }
   if (GPS_INFO.VarioAvailable) {
-    wcscat(statusmessage, TEXT("Vario connected\r\n"));
+    wcscat(statusmessage, gettext(TEXT("Vario connected")));
   } else {
-    wcscat(statusmessage, TEXT("Vario disconnected\r\n"));
+    wcscat(statusmessage, gettext(TEXT("Vario disconnected")));
   }
+  wcscat(statusmessage, TEXT("\r\n"));
 
   ShowStatusMessage(statusmessage, 60000, 15, false, TabStops);
   // i think one minute is enough...
@@ -711,9 +723,17 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   HACCEL hAccelTable;
   INITCOMMONCONTROLSEX icc;
 
+  // Registery (early)
+  ReadRegistrySettings();
+
+  // Interace (before interface)
+  ReadLanguageFile();
+  ReadStatusFile();
+
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
+
 
   // Perform application initialization:
   if (!InitInstance (hInstance, nCmdShow))
@@ -747,13 +767,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
-
-  // Registery (early)
-  ReadRegistrySettings();
-
-  // Interace (before interface)
-  ReadLanguageFile();
-  ReadStatusFile();
 
 
 #ifdef DEBUG

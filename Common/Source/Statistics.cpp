@@ -538,12 +538,14 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       hfOld = (HFONT)SelectObject(hdcScreen, StatisticsFont);
 
       if (page==0) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, TEXT("Barograph"));
+        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Barograph")));
 
-        wsprintf(Temp, TEXT("Working band: %5.0f-%5.0f %s\r\nCeiling trend: %5.0f %s/hr"),
+        wsprintf(Temp, TEXT("%s: %5.0f-%5.0f %s\r\n%s: %5.0f %s/hr"),
+				 gettext(TEXT("Working band")),
                  flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
                  flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
                  Units::GetAltitudeName(),
+				 gettext(TEXT("Ceiling trend")),
                  flightstats.Altitude_Ceiling.m*ALTITUDEMODIFY,
                  Units::GetAltitudeName());
 
@@ -554,11 +556,13 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
       }
       if (page==1) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, TEXT("Climb"));
+        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Climb")));
 
-        wsprintf(Temp, TEXT("Average climb rate: %3.1f %s\r\nClimb trend: %3.2f %s"),
+        wsprintf(Temp, TEXT("%s: %3.1f %s\r\n%s: %3.2f %s"),
+				 gettext(TEXT("Average climb rate")),
                   flightstats.ThermalAverage.y_ave*LIFTMODIFY,
                  Units::GetVerticalSpeedName(),
+				 gettext(TEXT("Climb trend")),
                  flightstats.ThermalAverage.m*LIFTMODIFY,
                  Units::GetVerticalSpeedName()
                  );
@@ -569,14 +573,18 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
       }
       if (page==2) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, TEXT("Glide Polar"));
+        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Glide Polar")));
 
-        wsprintf(Temp, TEXT("Best LD: %3.1f at %3.0f %s\r\nMin sink: %3.2f %s at %3.0f %s"),
+        wsprintf(Temp, TEXT("%s: %3.1f %s %3.0f %s\r\n%s: %3.2f %s %s %3.0f %s"),
+				 gettext(TEXT("Best LD")),
                  GlidePolar::bestld,
+				 gettext(TEXT("at")),
                  GlidePolar.Vbestld*SPEEDMODIFY,
                  Units::GetHorizontalSpeedName(),
+				 gettext(TEXT("Min sink")),
                  GlidePolar::minsink*LIFTMODIFY,
                  Units::GetVerticalSpeedName(),
+				 gettext(TEXT("at")),
                  GlidePolar::Vminsink*SPEEDMODIFY,
                  Units::GetHorizontalSpeedName());
 
@@ -586,7 +594,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
       }
       if (page==3) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, TEXT("Something"));
+        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Something")));
       }
 
       SelectObject(hdcScreen, hfOld);

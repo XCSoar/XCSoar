@@ -387,15 +387,16 @@ LRESULT CALLBACK Select(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_INITDIALOG:
       for(i=0;i<3;i++)
-        SendDlgItemMessage(hDlg,IDC_NAVBOXMODE,CB_ADDSTRING,0,(LPARAM)(LPCSTR)NavboxModes[i]);
+        SendDlgItemMessage(hDlg,IDC_NAVBOXMODE,CB_ADDSTRING,0,(LPARAM)(LPCSTR)gettext(NavboxModes[i]));
 
       // JMW todo: set mode to current mode by default
+	  // TODO scott - Change to buttons
       SendDlgItemMessage(hDlg,IDC_NAVBOXMODE,CB_SETCURSEL,(WPARAM)navmode,0);
 
       // Create a Done button and size it.
       for(i=0;i<NUMSELECTSTRINGS;i++)
         {
-          SendDlgItemMessage(hDlg,IDC_NAVBOXOPTION,LB_ADDSTRING,0,(LPARAM)(LPCTSTR) Data_Options[i].Description);
+          SendDlgItemMessage(hDlg,IDC_NAVBOXOPTION,LB_ADDSTRING,0,(LPARAM)(LPCTSTR) gettext(Data_Options[i].Description));
         }
 
       info_0 = CurrentInfoType&0xff;
@@ -1019,6 +1020,20 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       shidi.dwFlags = SHIDIF_DONEBUTTON | SHIDIF_SIPDOWN | SHIDIF_FULLSCREENNOMENUBAR;
       shidi.hDlg = hDlg;
       SHInitDialog(&shidi);
+
+	  // Static text labels
+	  SetWindowText_gettext(hDlg, IDC_STATIC1);
+	  SetWindowText_gettext(hDlg, IDC_STATIC2);
+	  SetWindowText_gettext(hDlg, IDC_STATIC3);
+
+	  // Buttons
+	  SetWindowText_gettext(hDlg, IDC_LOAD);
+	  SetWindowText_gettext(hDlg, IDC_SAVE);
+	  SetWindowText_gettext(hDlg, IDC_WAYPOINTDETAILS);
+	  SetWindowText_gettext(hDlg, IDOK);
+	  SetWindowText_gettext(hDlg, IDC_UNDO);
+	  SetWindowText_gettext(hDlg, IDC_AAT);
+	  SetWindowText_gettext(hDlg, IDC_DECLARE);
 
       memcpy(TaskBackup, Task, sizeof(Task_t));
       fTaskModified = FALSE;
@@ -3001,11 +3016,15 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       Units::LongditudeToString(WayPointList[SelectedWaypoint].Longditude, sLongditude, sizeof(sLongditude)-1);
       Units::LattitudeToString(WayPointList[SelectedWaypoint].Lattitude, sLattitude, sizeof(sLattitude)-1);
 
-      _stprintf(Temp,TEXT("Longitude\t%s\r\nLatitude\t%s\r\nElevation\t%.0f %s\r\nSunset\t%02d:%02d"),
+      _stprintf(Temp,TEXT("%s\t%s\r\n%s\t%s\r\n%s\t%.0f %s\r\n%s\t%02d:%02d"),
+		       gettext(TEXT("Longitude")),
                sLongditude,
+			   gettext(TEXT("Latitude")),
                sLattitude,
+			   gettext(TEXT("Elevation")),
                WayPointList[SelectedWaypoint].Altitude*ALTITUDEMODIFY,
                 Units::GetAltitudeName(),
+			   gettext(TEXT("Sunset")),
                sunsethours,
                sunsetmins
 
