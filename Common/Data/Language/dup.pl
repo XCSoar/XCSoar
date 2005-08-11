@@ -6,22 +6,14 @@ use strict;
 # Find entries in template that are missing from other files
 #
 
-open (T, "template.xcl");
 my %data = ();
-while (<T>) {
-	chomp;
-	next if (/^#/);
-	s/=.*$//;
-	$data{$_} = 0;
-}
-
 while (<>) {
 	chomp;
 	next if (/^#/);
 	s/=.*$//;
-	$data{$_} = 1;
+	$data{$_}++;
 }
 
 foreach my $key (sort keys %data) {
-	print "$key=\n" if ($data{$key} == 0);
+	print "$key=\n" if ($data{$key} > 1);
 }
