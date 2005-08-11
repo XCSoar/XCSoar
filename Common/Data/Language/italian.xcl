@@ -1,6 +1,5 @@
 %% Climb=% Climb
 %2.0f=L/D Cru
-%2.0f=L/D Inst
 AA Dmax=AA Dmax
 AA Dmin=AA Dmin
 AA Speed Max=AA Velocità Max
@@ -169,7 +168,6 @@ Only Display Airspace Below=Mostra solo gli Spazi Aerei sotto i
 Other=Altro
 Pan mode OFF=Modo Panoramico OFF
 Pan mode ON=Modo Panoramico ON
-Pattern=Sfondi
 Pattern=Sfondo
 Percentage climb=Percentuale tempo in ascensione
 Pilot name=Nome Pilota

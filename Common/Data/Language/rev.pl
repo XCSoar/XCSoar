@@ -6,16 +6,16 @@ use strict;
 # Find entries in template that are missing from other files
 #
 
-open (T, "template.xcl");
 my %data = ();
-while (<T>) {
+while (<>) {
 	chomp;
 	next if (/^#/);
 	s/=.*$//;
 	$data{$_} = 0;
 }
 
-while (<>) {
+open (T, "template.xcl");
+while (<T>) {
 	chomp;
 	next if (/^#/);
 	s/=.*$//;
