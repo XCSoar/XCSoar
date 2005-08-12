@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.49 2005/08/11 01:14:11 scottp Exp $
+//   $Id: Dialogs.cpp,v 1.50 2005/08/12 00:01:54 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -1972,7 +1972,7 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
           ofnLanguage.hwndOwner = hDlg;
           ofnLanguage.lpstrFile = szLanguageFile;
           ofnLanguage.nMaxFile = MAX_PATH;       
-          ofnLanguage.lpstrFilter = TEXT("Language Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");     
+          ofnLanguage.lpstrFilter = TEXT("Language Files(*.xcl)\0*.xcl\0Text Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");     
           ofnLanguage.lpstrTitle = TEXT("Open File");
           ofnLanguage.Flags = OFN_EXPLORER;
 
