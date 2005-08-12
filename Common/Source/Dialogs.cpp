@@ -1972,7 +1972,7 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
           ofnLanguage.hwndOwner = hDlg;
           ofnLanguage.lpstrFile = szLanguageFile;
           ofnLanguage.nMaxFile = MAX_PATH;
-          ofnLanguage.lpstrFilter = TEXT("Language Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");
+          ofnLanguage.lpstrFilter = TEXT("Language Files(*.xcl)\0*.xcl\0Text Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");
           ofnLanguage.lpstrTitle = TEXT("Open File");
           ofnLanguage.Flags = OFN_EXPLORER;
 
