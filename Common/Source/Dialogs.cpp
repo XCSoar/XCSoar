@@ -1989,7 +1989,7 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
           ofnStatus.hwndOwner = hDlg;
           ofnStatus.lpstrFile = szStatusFile;
           ofnStatus.nMaxFile = MAX_PATH;
-          ofnStatus.lpstrFilter = TEXT("Status Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");
+          ofnStatus.lpstrFilter = TEXT("Status Files(*.xcs)\0*.xcs\0Text Files (*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");
           ofnStatus.lpstrTitle = TEXT("Open File");
           ofnStatus.Flags = OFN_EXPLORER;
 
