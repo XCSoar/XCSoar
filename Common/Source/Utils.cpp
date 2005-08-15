@@ -2007,6 +2007,7 @@ void ReadLanguageFile() {
 	TCHAR szFile1[MAX_PATH] = TEXT("\0");
 	FILE *fp;
 
+	// Open file from registry
 	GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
 	if (szFile1)
 		fp  = _tfopen(szFile1, TEXT("rt"));
@@ -2014,30 +2015,34 @@ void ReadLanguageFile() {
 	if (fp == NULL) 
 		return;
 
-	// TODO - Safer sizes, strings etc - use C++
-	TCHAR key[256];
-	TCHAR value[256];
-	int found;
+	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
+	TCHAR key[1024];	// key from scanf
+	TCHAR value[1024];	// value from scanf
+	TCHAR temp[1024];	// Buffer for formatted output
+	TCHAR *new_entry;	// Pointer for malloc
+	int found;			// Entries found from scanf
 
 	/* Read from the file */
 	while (
 		(GetTextCache_Size < MAXSTATUSMESSAGECACHE)
-		// TODO - Fix format string here - this does not read non ASCII (ANSI) characters !
 		&& ((found = fwscanf(fp, TEXT("%[^=]=%[^\n]\n"), key, value)) != EOF)
 	) {
 		// Check valid line?
 		if ((found != 2) || !key || !value) continue;
 
-		TCHAR *new_key;
-		new_key = (TCHAR *)malloc((wcslen(key) * 2) + 1);
-		TCHAR *new_text;
-		new_text = (TCHAR *)malloc((wcslen(value) * 2) + 1);
-		wcscpy(new_key, key);
-		wcscpy(new_text, value);
+		// Format and copy key
+		swprintf(temp, key);
+		new_entry = (TCHAR *)malloc((wcslen(temp)+1)*sizeof(TCHAR));
+		wcscpy(new_entry, temp);
+		GetTextCache[GetTextCache_Size].key = new_entry;
 
-		GetTextCache[GetTextCache_Size].key = new_key;
-		GetTextCache[GetTextCache_Size].text = new_text;
+		// Format and copy value
+		swprintf(temp, value);
+		new_entry = (TCHAR *)malloc((wcslen(temp)+1)*sizeof(TCHAR));
+		wcscpy(new_entry, temp);
+		GetTextCache[GetTextCache_Size].text = new_entry;
 
+		// Global counter
 		GetTextCache_Size++;
 	}
 
@@ -2136,100 +2141,93 @@ void ReadStatusFile() {
 	StatusMessageCache[0].doSound = true;
 	StatusMessageCache[0].sound = TEXT("IDR_WAV_DRIP");
 	StatusMessageCache[0].delay_ms = 1500;
+	StatusMessageCache_Size++;
 
-	StatusMessageCache[1].key = TEXT("Pan mode OFF");
-	StatusMessageCache[1].doStatus = true;
-	StatusMessageCache[1].doSound = true;
-	StatusMessageCache[1].sound = TEXT("IDR_REMOVE");
-	StatusMessageCache[1].delay_ms = 500;
+	TCHAR szFile1[MAX_PATH] = TEXT("\0");
+	FILE *fp;
 
-	StatusMessageCache[2].key = TEXT("Simulation\r\nNothing is real!");
-	StatusMessageCache[2].doStatus = true;
-	StatusMessageCache[2].doSound = true;
-	StatusMessageCache[2].sound = TEXT("IDR_WAV_DRIP");
-	StatusMessageCache[2].delay_ms = 1500;
+	// Open file from registry
+	GetRegistryString(szRegistryStatusFile, szFile1, MAX_PATH);
+	if (szFile1)
+		fp  = _tfopen(szFile1, TEXT("rt"));
 
-	StatusMessageCache[3].key = TEXT("Maintain effective\r\nLOOKOUT at all times");
-	StatusMessageCache[3].doStatus = true;
-	StatusMessageCache[3].doSound = true;
-	StatusMessageCache[3].sound = TEXT("IDR_WAV_DRIP");
-	StatusMessageCache[3].delay_ms = 1500;
+	if (fp == NULL) 
+		return;
 
-	StatusMessageCache[4].key = TEXT("SnailTrail OFF");
-	StatusMessageCache[4].doStatus = true;
-	StatusMessageCache[4].doSound = true;
-	StatusMessageCache[4].sound = TEXT("IDR_REMOVE");
-	StatusMessageCache[4].delay_ms = 1500;
+	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
+	TCHAR buffer[2049];	// Buffer for all
+	TCHAR key[1024];	// key from scanf
+	TCHAR value[1024];	// value from scanf
+	TCHAR temp[1024];	// Buffer for formatted output
+	TCHAR *new_entry;	// Pointer for malloc
+	int ms;				// Found ms for delay
+	TCHAR **location;	// Where to put the data
+	int found;			// Entries found from scanf
+	bool some_data;		// Did we find some in the last loop...
 
-	StatusMessageCache[5].key = TEXT("SnailTrail ON");
-	StatusMessageCache[5].doStatus = true;
-	StatusMessageCache[5].doSound = true;
-	StatusMessageCache[5].sound = TEXT("IDR_INSERT");
-	StatusMessageCache[5].delay_ms = 1500;
+	// Init first entry
+	_init_Status(StatusMessageCache_Size);
+	some_data = false;
 
-	StatusMessageCache[6].key = TEXT("SnailTrail Short");
-	StatusMessageCache[6].doStatus = true;
-	StatusMessageCache[6].doSound = true;
-	StatusMessageCache[6].sound = TEXT("IDR_INSERT");
-	StatusMessageCache[6].delay_ms = 1500;
+	/* Read from the file */
+	while (
+		(StatusMessageCache_Size < MAXSTATUSMESSAGECACHE)
+		&& fgetws(buffer, 2048, fp)
+		&& ((found = swscanf(buffer, TEXT("%[^=]=%[^\n]\n"), key, value)) != EOF)
+	) {
+		// Check valid line? If not valid, assume next record (primative, but works ok!)
+		if ((found != 2) || !key || !value) {
 
-	StatusMessageCache[7].key = TEXT("Dropped marker");
-	StatusMessageCache[7].doStatus = true;
-	StatusMessageCache[7].doSound = true;
-	StatusMessageCache[7].sound = TEXT("IDR_WAV_BEEPBWEEP");
-	StatusMessageCache[7].delay_ms = 1000;
+			// Global counter (only if the last entry had some data)
+			if (some_data) {
+				StatusMessageCache_Size++;
+				some_data = false;
+				_init_Status(StatusMessageCache_Size);
+			}
+		
+		} else {
 
-	StatusMessageCache[8].key = TEXT("Waiting for GPS Connection");
-	StatusMessageCache[8].doStatus = true;
-	StatusMessageCache[8].doSound = false;
-	StatusMessageCache[8].delay_ms = 1500;
+			location = NULL;
 
-	StatusMessageCache[9].key = TEXT("Restarting Comm Ports");
-	StatusMessageCache[9].doStatus = true;
-	StatusMessageCache[9].doSound = false;
-	StatusMessageCache[9].delay_ms = 1500;
+			if (wcscmp(key, TEXT("key")) == 0) {
+				some_data = true;	// Success, we have a real entry
+				location = &StatusMessageCache[StatusMessageCache_Size].key;
+			} else if (wcscmp(key, TEXT("sound")) == 0) {
+				StatusMessageCache[StatusMessageCache_Size].doSound = true;
+				location = &StatusMessageCache[StatusMessageCache_Size].sound;
+			} else if (wcscmp(key, TEXT("delay")) == 0) {
+				if (swscanf(value, TEXT("%d"), &ms) == 1)
+					StatusMessageCache[StatusMessageCache_Size].delay_ms = ms;
+			} else if (wcscmp(key, TEXT("hide")) == 0) {
+				if (wcscmp(value, TEXT("yes")) == 0)
+					StatusMessageCache[StatusMessageCache_Size].doStatus = false;
+			}
 
-	StatusMessageCache[10].key = TEXT("Waiting for GPS Fix");
-	StatusMessageCache[10].doStatus = true;
-	StatusMessageCache[10].doSound = false;
-	StatusMessageCache[10].delay_ms = 1500;
+			// Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
+			if (location && (wcscmp(*location, TEXT("")) == 0)) {
+				// TODO - this picks up memory lost from no entry, but not duplicates - fix.
+				swprintf(temp, value);
+				new_entry = (TCHAR *)malloc((wcslen(temp)+1)*sizeof(TCHAR));
+				wcscpy(new_entry, temp);
+				*location = new_entry;
+			}
+		}
 
-	StatusMessageCache[11].key = TEXT("AutoZoom OFF");
-	StatusMessageCache[11].doStatus = true;
-	StatusMessageCache[11].doSound = true;
-	StatusMessageCache[11].sound = TEXT("IDR_REMOVE");
-	StatusMessageCache[11].delay_ms = 1500;
+	}
 
-	StatusMessageCache[12].key = TEXT("AutoZoom ON");
-	StatusMessageCache[12].doStatus = true;
-	StatusMessageCache[12].doSound = true;
-	StatusMessageCache[12].sound = TEXT("IDR_INSERT");
-	StatusMessageCache[12].delay_ms = 1500;
+	// How many we really got (blank next just in case)
+	StatusMessageCache_Size++;
+	_init_Status(StatusMessageCache_Size);
 
-	StatusMessageCache[13].key = TEXT("Calibrate OFF");
-	StatusMessageCache[13].doStatus = true;
-	StatusMessageCache[13].doSound = true;
-	StatusMessageCache[13].sound = TEXT("IDR_REMOVE");
-	StatusMessageCache[13].delay_ms = 1500;
+	fclose(fp);
 
-	StatusMessageCache[14].key = TEXT("Calibrate ON");
-	StatusMessageCache[14].doStatus = true;
-	StatusMessageCache[14].doSound = true;
-	StatusMessageCache[14].sound = TEXT("IDR_INSERT");
-	StatusMessageCache[14].delay_ms = 1500;
-
-	StatusMessageCache[15].key = TEXT("Closes Airfield\r\nChanged!");
-	StatusMessageCache[15].doStatus = true;
-	StatusMessageCache[15].doSound = true;
-	StatusMessageCache[15].sound = TEXT("IDR_REMOVE");
-	StatusMessageCache[15].delay_ms = 1500;
-
-	StatusMessageCache[16].key = TEXT("Pan mode ON");
-	StatusMessageCache[16].doStatus = true;
-	StatusMessageCache[16].doSound = true;
-	StatusMessageCache[16].sound = TEXT("IDR_INSERT");
-	StatusMessageCache[16].delay_ms = 2500;
-
-	StatusMessageCache_Size = 17;
 }
 
+// Create a blank entry (not actually used)
+void _init_Status(int num) {
+	StatusMessageCache[num].key = TEXT("");
+	StatusMessageCache[num].doStatus = true;
+	StatusMessageCache[num].doSound = false;
+	StatusMessageCache[num].sound = TEXT("");
+	StatusMessageCache[num].delay_ms = 2500;
+}

@@ -62,7 +62,8 @@ void WriteDeviceSettings(int devIdx, TCHAR *Name);
 
 void ReadLanguageFile();
 void ReadStatusFile();
-void _ReadLanguageFile_Set(TCHAR* TempString);
+// void _ReadLanguageFile_Set(TCHAR* TempString);
+void _init_Status(int num);
 
 unsigned int isqrt4(unsigned long val);
 int iround(double i);
