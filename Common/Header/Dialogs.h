@@ -40,34 +40,10 @@ void AssignedArea(void);
 LRESULT CALLBACK LoggerDetails 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AudioSettings					(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-/* DoStatusMessage Declarations */
 void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
-typedef struct {
-	TCHAR *key;		/* English key */
-	TCHAR *sound;		/* What sound entry to play */
-	bool doStatus;
-	bool doSound;
-	int delay_ms;		/* Delay for ShowStatusMessage */
-	int iFontHeightRatio;
-	bool docenter;
-	int *TabStops;
-	int disabled;		/* Disabled - currently during run time */
-} StatusMessageSTRUCT;
-
-typedef struct {
-	TCHAR *key;
-	TCHAR *text;
-} GetTextSTRUCT;
-
+void SetWindowText_gettext(HWND hDlg, int entry);
 TCHAR* gettext(TCHAR* text);
 
-void SetWindowText_gettext(HWND hDlg, int entry);
-
-// Size of Status message cache - Note 1000 messages may not be enough...
-// TODO If we continue with the reading one at a time - then consider using
-// a pointer structure and build on the fly, thus no limit, but also only
-// RAM used as required - easy to do with struct above - just point to next.
-#define MAXSTATUSMESSAGECACHE 1000
 
 void ShowStatusMessage(TCHAR* text, int delay_ms=2000, int iFontHeightRatio=12,
                        bool docenter=true, int *TabStops = NULL);

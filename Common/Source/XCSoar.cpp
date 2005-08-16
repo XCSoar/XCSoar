@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.65 2005/08/16 22:00:21 scottp Exp $
+  $Id: XCSoar.cpp,v 1.66 2005/08/16 23:15:11 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1414,6 +1414,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
 
     case WM_KEYUP:
+		// XXX INPUT
 
 	// XXX Temporary button code...
 	// Move these "functions" to a separate sub, and effectively just remap.
@@ -1454,7 +1455,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 
 
-	// XXX Temporary version that uses new remote function
+	// XXX INPUT Temporary version that uses new remote function
       switch (wParam)
         {
 
