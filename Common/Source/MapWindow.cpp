@@ -1538,7 +1538,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
             _tcsncpy(Buffer2, WayPointList[i].Name, 3);
             Buffer2[3] = '\0';
             if (DisplayMode)
-              wsprintf(Buffer, TEXT("%s:%d%s"),Buffer2, (int)WayPointList[i].AltArivalAGL, sAltUnit);
+              wsprintf(Buffer, TEXT("%s:%d%s"),Buffer2, (int)WayPointList[i].AltArivalAGL*ALTITUDEMODIFY, sAltUnit);
             else
               wsprintf(Buffer, TEXT("%s"),Buffer2);
 
