@@ -161,7 +161,7 @@ extern BOOL POLARFILECHANGED;
 extern BOOL LANGUAGEFILECHANGED;
 extern BOOL STATUSFILECHANGED;
 
-bool Debounce(WPARAM wParam);
+bool Debounce();
 
 
 // Interface Globals
@@ -169,6 +169,8 @@ extern GetTextSTRUCT GetTextCache[];
 extern int GetTextCache_Size;
 extern StatusMessageSTRUCT StatusMessageCache[];
 extern int StatusMessageCache_Size;
+extern InputSTRUCT InputCache[];
+extern int InputCache_Size;
 
 #if (EXPERIMENTAL > 0)
 extern BlueDialupSMS bsms;

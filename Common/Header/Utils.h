@@ -59,12 +59,6 @@ void SaveSoundSettings();
 void ReadDeviceSettings(int devIdx, TCHAR *Name);
 void WriteDeviceSettings(int devIdx, TCHAR *Name);
 
-
-void ReadLanguageFile();
-void ReadStatusFile();
-// void _ReadLanguageFile_Set(TCHAR* TempString);
-void _init_Status(int num);
-
 unsigned int isqrt4(unsigned long val);
 int iround(double i);
 long lround(double i);
@@ -75,5 +69,28 @@ double DoSunEphemeris(double lon, double lat);
 
 void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2));
 
+// Interface Files !
+
+void ReadLanguageFile();
+void ReadStatusFile();
+void _init_Status(int num);
+void ReadInputFile();
+
+/* DoStatusMessage Declarations */
+typedef struct {
+        int type;               /*
+                                        0=Ignore
+                                        1=Hardware Button
+                                        2=Keyboard input
+                                        3=Overlay (see through portion on left of screen)
+                                        4=Gesture (eg: dragging across map)
+                                */
+        TCHAR *data;            /* Data for this key - eg: Key name, number, etc */
+
+        TCHAR *function;        /* Function - see below */
+
+        TCHAR *misc;            /* Extra Function data */
+
+} InputSTRUCT;
 
 #endif

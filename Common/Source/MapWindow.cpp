@@ -735,7 +735,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     switch (wParam)
     {
     case VK_DOWN :  // SCROLL UP
-      //      if (!Debounce(wParam)) break;
       RequestMapScale *= 1.414;
       BigZoom = true;
       if(RequestMapScale>160) RequestMapScale = 160;
@@ -743,7 +742,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case VK_UP: // SCROLL DOWN
-      //      if (!Debounce(wParam)) break;
       if(RequestMapScale >= 0.01)
       {
         RequestMapScale /= 1.414;
@@ -753,7 +751,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case VK_RIGHT: // Pan mode
-      if (!Debounce(wParam)) break;
+      if (!Debounce()) break;
       EnablePan = !EnablePan;
 
       // ARH Let the user know what's happening
@@ -770,7 +768,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
 
     case VK_RETURN: // Pan mode, cycles through modes
-      if (!Debounce(wParam)) break;
+      if (!Debounce()) break;
 
       if (ClearAirspaceWarnings(true)) {
         // airspace was active, enter was used to acknowledge
@@ -820,7 +818,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     case VK_LEFT:
 
-      if (!Debounce(wParam)) break;
+      if (!Debounce()) break;
       AutoZoom = !AutoZoom;
 
       // ARH Let user know what's happening
