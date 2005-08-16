@@ -69,14 +69,45 @@ double DoSunEphemeris(double lon, double lat);
 
 void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2));
 
-// Interface Files !
+/* =====================================================
+   Interface Files !
+   ===================================================== */
 
 void ReadLanguageFile();
 void ReadStatusFile();
 void _init_Status(int num);
 void ReadInputFile();
 
-/* DoStatusMessage Declarations */
+typedef struct {
+	TCHAR *key;		/* English key */
+	TCHAR *sound;		/* What sound entry to play */
+	TCHAR *nmea_gps;		/* NMEA Sentence - to GPS serial */
+	TCHAR *nmea_vario;		/* NMEA Sentence - to Vario serial */
+	bool doStatus;
+	bool doSound;
+	int delay_ms;		/* Delay for ShowStatusMessage */
+	int iFontHeightRatio;	// TODO - not yet used
+	bool docenter;		// TODO - not yet used
+	int *TabStops;		// TODO - not yet used
+	int disabled;		/* Disabled - currently during run time */
+} StatusMessageSTRUCT;
+
+typedef struct {
+	TCHAR *key;
+	TCHAR *text;
+} GetTextSTRUCT;
+
+
+// Size of Status message cache - Note 1000 messages may not be enough...
+// TODO If we continue with the reading one at a time - then consider using
+// a pointer structure and build on the fly, thus no limit, but also only
+// RAM used as required - easy to do with struct above - just point to next.
+// (NOTE: This is used for all the caches for now - temporary)
+#define MAXSTATUSMESSAGECACHE 1000
+
+// TODO - Performance improvement. Move 'type' so that we have an array of types of InputSTRUCT
+//		- Thus only searching through the array of types we just hit an event for
+//		- EG: If a hardware button, only search through type 1
 typedef struct {
         int type;               /*
                                         0=Ignore
@@ -84,6 +115,7 @@ typedef struct {
                                         2=Keyboard input
                                         3=Overlay (see through portion on left of screen)
                                         4=Gesture (eg: dragging across map)
+										5=NMEA Sentence (either serial ports)
                                 */
         TCHAR *data;            /* Data for this key - eg: Key name, number, etc */
 

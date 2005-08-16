@@ -732,6 +732,13 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     break;
 
   case WM_KEYUP:
+	  // XXX INPUT
+	  //	How to use "MODE" in input data
+	  //	Maybe each input data should have a MODE along the lines of:
+	  //		all		- Everywhere - eg: Set zoom to X
+	  //		map		- Map window only - eg: current method of change zoom
+	  //		info	- Standard info box controls ???
+	  //		status	- Status message being displayed
     switch (wParam)
     {
     case VK_DOWN :  // SCROLL UP

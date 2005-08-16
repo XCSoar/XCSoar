@@ -1414,6 +1414,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
 
     case WM_KEYUP:
+		// XXX INPUT
 
 	// XXX Temporary button code...
 	// Move these "functions" to a separate sub, and effectively just remap.
@@ -1454,7 +1455,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 
 
-	// XXX Temporary version that uses new remote function
+	// XXX INPUT Temporary version that uses new remote function
       switch (wParam)
         {
 
