@@ -2231,3 +2231,24 @@ void _init_Status(int num) {
 	StatusMessageCache[num].sound = TEXT("");
 	StatusMessageCache[num].delay_ms = 2500;
 }
+
+// XXX Read input control file.
+void ReadInputFile() {
+
+	// Example/Test data
+
+	// XXX Why use integer here - we use text everywhere else...
+	InputCache[0].type = 1;
+	InputCache[0].data = TEXT("APP1");
+	InputCache[0].function = TEXT("fullscreen");
+	InputCache[0].misc = TEXT("swap");
+	InputCache_Size++;
+
+	InputCache[1].type = 2;
+	InputCache[1].data = TEXT("f");
+	InputCache[1].function = TEXT("fullscreen");
+	InputCache[1].misc = TEXT("swap");
+	InputCache_Size++;
+
+}
+
