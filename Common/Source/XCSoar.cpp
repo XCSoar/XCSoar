@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.64 2005/08/16 21:42:08 scottp Exp $
+  $Id: XCSoar.cpp,v 1.65 2005/08/16 22:00:21 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1417,33 +1417,46 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	// XXX Temporary button code...
 	// Move these "functions" to a separate sub, and effectively just remap.
-	// int i;
-	// for (i = 0; i < InputCache_Size; i++) {
-	// }
+	for (i = 0; i < InputCache_Size; i++) {
+		if (InputCache[i].type == 1) {
+
+			if (
+				(wParam == VK_APP1)
+				&& (wcscmp(InputCache[i].data, TEXT("APP1")) == 0)
+			) 
+				InputExecute(InputCache[i].function, InputCache[i].misc);
+			else if (
+				(wParam == VK_APP2)
+				&& (wcscmp(InputCache[i].data, TEXT("APP2")) == 0)
+			) 
+				InputExecute(InputCache[i].function, InputCache[i].misc);
+			else if (
+				(wParam == VK_APP3)
+				&& (wcscmp(InputCache[i].data, TEXT("APP3")) == 0)
+			) 
+				InputExecute(InputCache[i].function, InputCache[i].misc);
+			else if (
+				(wParam == VK_APP4)
+				&& (wcscmp(InputCache[i].data, TEXT("APP4")) == 0)
+			) 
+				InputExecute(InputCache[i].function, InputCache[i].misc);
+			else if (
+				(wParam == VK_APP5)
+				&& (wcscmp(InputCache[i].data, TEXT("APP5")) == 0)
+			) 
+				InputExecute(InputCache[i].function, InputCache[i].misc);
+			else if (
+				(wParam == VK_APP6)
+				&& (wcscmp(InputCache[i].data, TEXT("APP6")) == 0)
+			) 
+				InputExecute(InputCache[i].function, InputCache[i].misc);
+		}				
+	}
 
 
 	// XXX Temporary version that uses new remote function
       switch (wParam)
         {
-        case VK_APP1:	// Toggle full screen view
-		InputExecute(TEXT("fullscreen"), TEXT("toggle"));
-		break;
-
-        case VK_APP2:	// Toggle snail trail
-		InputExecute(TEXT("snailtrail"), TEXT("toggle"));
-		break;
-
-        case VK_APP3:	// Vario sound on/off
-		InputExecute(TEXT("variosound"), TEXT("toggle"));
-		break;
-
-        case VK_APP4:	// Add a marker to current location
-		InputExecute(TEXT("marker"), TEXT(""));
-		break;
-
-        case VK_APP6:	// Show Menu
-		InputExecute(TEXT("menubutton"), TEXT(""));
-		break;
 
         case VK_UP :  // SCROLL UP (infobox mode)
           DoInfoKey(1);
@@ -1579,12 +1592,12 @@ void InputExecute(TCHAR* function, TCHAR* misc) {
 	// Debounce all buttons !
 	if (!Debounce()) return;
 
-	if (wcscmp(function, TEXT("fullscreen"))) {
+	if (wcscmp(function, TEXT("fullscreen")) == 0) {
 		// XXX Check on/off/toggle
 		MapWindow::RequestToggleFullScreen();
 		return;
 
-	} else if (wcscmp(function, TEXT("snailtrail"))) {
+	} else if (wcscmp(function, TEXT("snailtrail")) == 0) {
 
 		// XXX on/off/long/toggle !!! (if on/off/long - only if change)
 
@@ -1615,7 +1628,7 @@ void InputExecute(TCHAR* function, TCHAR* misc) {
 
           return;
 
-	} else if (wcscmp(function, TEXT("variosound"))) {
+	} else if (wcscmp(function, TEXT("variosound")) == 0) {
 
 		// XXX on/off/toggle
           if (!InfoWindowActive) {
@@ -1643,7 +1656,7 @@ void InputExecute(TCHAR* function, TCHAR* misc) {
 
           return;
 
-	} else if (wcscmp(function, TEXT("marker"))) {
+	} else if (wcscmp(function, TEXT("marker")) == 0) {
           if (InfoWindowActive)
             return;
 
@@ -1658,7 +1671,7 @@ void InputExecute(TCHAR* function, TCHAR* misc) {
 
           return;
 	
-	} else if (wcscmp(function, TEXT("menubutton"))) {
+	} else if (wcscmp(function, TEXT("menubutton")) == 0) {
 		ShowMenu();
 		return;
 
