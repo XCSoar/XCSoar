@@ -2238,16 +2238,47 @@ void ReadInputFile() {
 	// Example/Test data
 
 	// XXX Why use integer here - we use text everywhere else...
-	InputCache[0].type = 1;
-	InputCache[0].data = TEXT("APP1");
-	InputCache[0].function = TEXT("fullscreen");
-	InputCache[0].misc = TEXT("swap");
+
+	InputCache[InputCache_Size].type = 1;
+	InputCache[InputCache_Size].data = TEXT("APP1");
+	InputCache[InputCache_Size].function = TEXT("fullscreen");
+	InputCache[InputCache_Size].misc = TEXT("swap");
 	InputCache_Size++;
 
-	InputCache[1].type = 2;
-	InputCache[1].data = TEXT("f");
-	InputCache[1].function = TEXT("fullscreen");
-	InputCache[1].misc = TEXT("swap");
+	InputCache[InputCache_Size].type = 1;
+	InputCache[InputCache_Size].data = TEXT("APP2");
+	InputCache[InputCache_Size].function = TEXT("snailtrail");
+	InputCache[InputCache_Size].misc = TEXT("swap");
+	InputCache_Size++;
+
+	InputCache[InputCache_Size].type = 1;
+	InputCache[InputCache_Size].data = TEXT("APP3");
+	InputCache[InputCache_Size].function = TEXT("variosound");
+	InputCache[InputCache_Size].misc = TEXT("swap");
+	InputCache_Size++;
+
+	InputCache[InputCache_Size].type = 1;
+	InputCache[InputCache_Size].data = TEXT("APP4");
+	InputCache[InputCache_Size].function = TEXT("marker");
+	InputCache[InputCache_Size].misc = TEXT("swap");
+	InputCache_Size++;
+
+	InputCache[InputCache_Size].type = 1;
+	InputCache[InputCache_Size].data = TEXT("APP5");
+	InputCache[InputCache_Size].function = TEXT("");
+	InputCache[InputCache_Size].misc = TEXT("");
+	InputCache_Size++;
+
+	InputCache[InputCache_Size].type = 1;
+	InputCache[InputCache_Size].data = TEXT("APP6");
+	InputCache[InputCache_Size].function = TEXT("fullscreen");
+	InputCache[InputCache_Size].misc = TEXT("swap");
+	InputCache_Size++;
+
+	InputCache[InputCache_Size].type = 2;
+	InputCache[InputCache_Size].data = TEXT("f");
+	InputCache[InputCache_Size].function = TEXT("fullscreen");
+	InputCache[InputCache_Size].misc = TEXT("swap");
 	InputCache_Size++;
 
 }
