@@ -76,7 +76,6 @@ void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(c
 void ReadLanguageFile();
 void ReadStatusFile();
 void _init_Status(int num);
-void ReadInputFile();
 
 typedef struct {
 	TCHAR *key;		/* English key */

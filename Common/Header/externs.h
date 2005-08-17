@@ -169,8 +169,6 @@ extern GetTextSTRUCT GetTextCache[];
 extern int GetTextCache_Size;
 extern StatusMessageSTRUCT StatusMessageCache[];
 extern int StatusMessageCache_Size;
-extern InputSTRUCT InputCache[];
-extern int InputCache_Size;
 
 #if (EXPERIMENTAL > 0)
 extern BlueDialupSMS bsms;

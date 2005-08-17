@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.66 2005/08/16 23:15:11 scottp Exp $
+  $Id: XCSoar.cpp,v 1.67 2005/08/17 05:46:58 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -189,8 +189,6 @@ GetTextSTRUCT GetTextCache[MAXSTATUSMESSAGECACHE];
 int GetTextCache_Size = 0;
 StatusMessageSTRUCT StatusMessageCache[MAXSTATUSMESSAGECACHE];
 int StatusMessageCache_Size = 0;
-InputSTRUCT InputCache[MAXSTATUSMESSAGECACHE];
-int InputCache_Size = 0;
 
 //Snail Trial
 SNAIL_POINT SnailTrail[TRAILSIZE];
@@ -731,8 +729,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // Interace (before interface)
   ReadLanguageFile();
   ReadStatusFile();
-  ReadInputFile();
-
+  
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
@@ -1294,7 +1291,7 @@ void DoInfoKey(int keycode) {
 }
 
 
-// XXX Debounce modified to ignore input
+// Debounce input buttons (does not matter which button is pressed)
 bool Debounce() {
   static DWORD fpsTimeLast= -1;
   DWORD fpsTimeThis = ::GetTickCount();
@@ -1318,7 +1315,7 @@ bool Debounce() {
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  int i;
+  int i, j;
   static bool lastpress = false;
   long wdata;
 
@@ -1414,50 +1411,90 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
 
     case WM_KEYUP:
-		// XXX INPUT
-
-	// XXX Temporary button code...
-	// Move these "functions" to a separate sub, and effectively just remap.
-	for (i = 0; i < InputCache_Size; i++) {
-		if (InputCache[i].type == 1) {
-
-			if (
-				(wParam == VK_APP1)
-				&& (wcscmp(InputCache[i].data, TEXT("APP1")) == 0)
-			) 
-				InputExecute(InputCache[i].function, InputCache[i].misc);
-			else if (
-				(wParam == VK_APP2)
-				&& (wcscmp(InputCache[i].data, TEXT("APP2")) == 0)
-			) 
-				InputExecute(InputCache[i].function, InputCache[i].misc);
-			else if (
-				(wParam == VK_APP3)
-				&& (wcscmp(InputCache[i].data, TEXT("APP3")) == 0)
-			) 
-				InputExecute(InputCache[i].function, InputCache[i].misc);
-			else if (
-				(wParam == VK_APP4)
-				&& (wcscmp(InputCache[i].data, TEXT("APP4")) == 0)
-			) 
-				InputExecute(InputCache[i].function, InputCache[i].misc);
-			else if (
-				(wParam == VK_APP5)
-				&& (wcscmp(InputCache[i].data, TEXT("APP5")) == 0)
-			) 
-				InputExecute(InputCache[i].function, InputCache[i].misc);
-			else if (
-				(wParam == VK_APP6)
-				&& (wcscmp(InputCache[i].data, TEXT("APP6")) == 0)
-			) 
-				InputExecute(InputCache[i].function, InputCache[i].misc);
-		}				
-	}
-
-
-	// XXX INPUT Temporary version that uses new remote function
       switch (wParam)
         {
+
+	  case VK_APP1:
+		if (Debounce()) break;
+		MapWindow::RequestToggleFullScreen();
+		break;
+
+	  case VK_APP2:
+
+		if (!InfoWindowActive) {
+            TrailActive ++;
+            if (TrailActive>2) {
+              TrailActive=0;
+            }
+
+            if (TrailActive==0)
+              DoStatusMessage(TEXT("SnailTrail OFF"));
+            if (TrailActive==1) 
+              DoStatusMessage(TEXT("SnailTrail ON Long"));
+            if (TrailActive==2) 
+              DoStatusMessage(TEXT("SnailTrail ON Short"));
+            break;
+          }
+
+          i = getInfoType(InfoFocus);
+
+          j = Data_Options[i].next_screen;
+          setInfoType(InfoFocus,j);
+
+          AssignValues();
+          DisplayText();
+
+          FocusTimeOut = 0;
+
+          break;
+
+    case VK_APP3:
+          if (!InfoWindowActive) {
+            EnableSoundVario = !EnableSoundVario;
+            VarioSound_EnableSound((BOOL)EnableSoundVario);
+
+            // ARH Let the user know what's happened
+            if (EnableSoundVario)
+              DoStatusMessage(TEXT("Vario Sounds ON"));
+            else
+              DoStatusMessage(TEXT("Vario Sounds OFF"));
+
+            break;
+          }
+
+          i = getInfoType(InfoFocus);
+
+          j = Data_Options[i].prev_screen;
+          setInfoType(InfoFocus,j);
+
+          AssignValues();
+          DisplayText();
+
+          FocusTimeOut = 0;
+
+          break;
+
+ 	  case VK_APP4:
+
+          if (InfoWindowActive)
+            break;
+
+          LockFlightData();
+
+          MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
+
+          UnlockFlightData();
+
+          // ARH Let the user know what's happened
+          DoStatusMessage(TEXT("Dropped marker"));
+
+          break;
+	
+	  case VK_APP6:
+
+		ShowMenu();
+		break;
+
 
         case VK_UP :  // SCROLL UP (infobox mode)
           DoInfoKey(1);
@@ -1584,106 +1621,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       return DefWindowProc(hWnd, message, wParam, lParam);
     }
   return 0;
-}
-
-// Execute an Input - this will execute an input based on the TEXT input
-void InputExecute(TCHAR* function, TCHAR* misc) {
-	int i, j;
-
-	// Debounce all buttons !
-	if (!Debounce()) return;
-
-	if (wcscmp(function, TEXT("fullscreen")) == 0) {
-		// XXX Check on/off/toggle
-		MapWindow::RequestToggleFullScreen();
-		return;
-
-	} else if (wcscmp(function, TEXT("snailtrail")) == 0) {
-
-		// XXX on/off/long/toggle !!! (if on/off/long - only if change)
-
-          if (!InfoWindowActive) {
-            TrailActive ++;
-            if (TrailActive>2) {
-              TrailActive=0;
-            }
-
-            if (TrailActive==0)
-              DoStatusMessage(TEXT("SnailTrail OFF"));
-            if (TrailActive==1) 
-              DoStatusMessage(TEXT("SnailTrail ON Long"));
-            if (TrailActive==2) 
-              DoStatusMessage(TEXT("SnailTrail ON Short"));
-            return;
-          }
-
-          i = getInfoType(InfoFocus);
-
-          j = Data_Options[i].next_screen;
-          setInfoType(InfoFocus,j);
-
-          AssignValues();
-          DisplayText();
-
-          FocusTimeOut = 0;
-
-          return;
-
-	} else if (wcscmp(function, TEXT("variosound")) == 0) {
-
-		// XXX on/off/toggle
-          if (!InfoWindowActive) {
-            EnableSoundVario = !EnableSoundVario;
-            VarioSound_EnableSound((BOOL)EnableSoundVario);
-
-            // ARH Let the user know what's happened
-            if (EnableSoundVario)
-              DoStatusMessage(TEXT("Vario Sounds ON"));
-            else
-              DoStatusMessage(TEXT("Vario Sounds OFF"));
-
-            return;
-          }
-
-          i = getInfoType(InfoFocus);
-
-          j = Data_Options[i].prev_screen;
-          setInfoType(InfoFocus,j);
-
-          AssignValues();
-          DisplayText();
-
-          FocusTimeOut = 0;
-
-          return;
-
-	} else if (wcscmp(function, TEXT("marker")) == 0) {
-          if (InfoWindowActive)
-            return;
-
-          LockFlightData();
-
-          MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
-
-          UnlockFlightData();
-
-          // ARH Let the user know what's happened
-          DoStatusMessage(TEXT("Dropped marker"));
-
-          return;
-	
-	} else if (wcscmp(function, TEXT("menubutton")) == 0) {
-		ShowMenu();
-		return;
-
-	} else {
-		// XXX Debugging
-		DoStatusMessage(TEXT("Invalid Input"), function);
-		return;
-
-	}
-
-	return;
 }
 
 
