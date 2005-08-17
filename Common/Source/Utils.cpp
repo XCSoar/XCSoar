@@ -2030,14 +2030,14 @@ void ReadLanguageFile() {
 		// Check valid line?
 		if ((found != 2) || !key || !value) continue;
 
-		// Format and copy key
-		swprintf(temp, key);
+		// TODO Format and copy key
+		swprintf(temp, TEXT("%s"), key);
 		new_entry = (TCHAR *)malloc((wcslen(temp)+1)*sizeof(TCHAR));
 		wcscpy(new_entry, temp);
 		GetTextCache[GetTextCache_Size].key = new_entry;
 
-		// Format and copy value
-		swprintf(temp, value);
+		// TODO Format and copy value
+		swprintf(temp, TEXT("%s"), value);
 		new_entry = (TCHAR *)malloc((wcslen(temp)+1)*sizeof(TCHAR));
 		wcscpy(new_entry, temp);
 		GetTextCache[GetTextCache_Size].text = new_entry;
@@ -2230,56 +2230,5 @@ void _init_Status(int num) {
 	StatusMessageCache[num].doSound = false;
 	StatusMessageCache[num].sound = TEXT("");
 	StatusMessageCache[num].delay_ms = 2500;
-}
-
-// XXX Read input control file.
-void ReadInputFile() {
-
-	// Example/Test data
-
-	// XXX Why use integer here - we use text everywhere else...
-
-	InputCache[InputCache_Size].type = 1;
-	InputCache[InputCache_Size].data = TEXT("APP1");
-	InputCache[InputCache_Size].function = TEXT("fullscreen");
-	InputCache[InputCache_Size].misc = TEXT("swap");
-	InputCache_Size++;
-
-	InputCache[InputCache_Size].type = 1;
-	InputCache[InputCache_Size].data = TEXT("APP2");
-	InputCache[InputCache_Size].function = TEXT("snailtrail");
-	InputCache[InputCache_Size].misc = TEXT("swap");
-	InputCache_Size++;
-
-	InputCache[InputCache_Size].type = 1;
-	InputCache[InputCache_Size].data = TEXT("APP3");
-	InputCache[InputCache_Size].function = TEXT("variosound");
-	InputCache[InputCache_Size].misc = TEXT("swap");
-	InputCache_Size++;
-
-	InputCache[InputCache_Size].type = 1;
-	InputCache[InputCache_Size].data = TEXT("APP4");
-	InputCache[InputCache_Size].function = TEXT("marker");
-	InputCache[InputCache_Size].misc = TEXT("swap");
-	InputCache_Size++;
-
-	InputCache[InputCache_Size].type = 1;
-	InputCache[InputCache_Size].data = TEXT("APP5");
-	InputCache[InputCache_Size].function = TEXT("");
-	InputCache[InputCache_Size].misc = TEXT("");
-	InputCache_Size++;
-
-	InputCache[InputCache_Size].type = 1;
-	InputCache[InputCache_Size].data = TEXT("APP6");
-	InputCache[InputCache_Size].function = TEXT("fullscreen");
-	InputCache[InputCache_Size].misc = TEXT("swap");
-	InputCache_Size++;
-
-	InputCache[InputCache_Size].type = 2;
-	InputCache[InputCache_Size].data = TEXT("f");
-	InputCache[InputCache_Size].function = TEXT("fullscreen");
-	InputCache[InputCache_Size].misc = TEXT("swap");
-	InputCache_Size++;
-
 }
 

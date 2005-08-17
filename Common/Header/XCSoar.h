@@ -128,8 +128,6 @@ DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo);
 void BlankDisplay(bool doblank);
 
 
-void InputExecute(TCHAR* function, TCHAR* misc);
-
 // ******************************************************************
 
 #endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
