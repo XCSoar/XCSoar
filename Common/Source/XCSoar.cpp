@@ -1415,11 +1415,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
 
 	  case VK_APP1:
-		if (Debounce()) break;
+		if (!Debounce()) break;
 		MapWindow::RequestToggleFullScreen();
 		break;
 
 	  case VK_APP2:
+		if (!Debounce()) break;
 
 		if (!InfoWindowActive) {
             TrailActive ++;
@@ -1449,6 +1450,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           break;
 
     case VK_APP3:
+		if (!Debounce()) break;
           if (!InfoWindowActive) {
             EnableSoundVario = !EnableSoundVario;
             VarioSound_EnableSound((BOOL)EnableSoundVario);
@@ -1475,6 +1477,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           break;
 
  	  case VK_APP4:
+		if (!Debounce()) break;
 
           if (InfoWindowActive)
             break;
@@ -1491,6 +1494,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           break;
 
 	  case VK_APP6:
+		if (!Debounce()) break;
 
 		ShowMenu();
 		break;
