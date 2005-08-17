@@ -1481,6 +1481,10 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
       SendDlgItemMessage(hDlg,IDC_BUGSUP,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
       SendDlgItemMessage(hDlg,IDC_BUGSDOWN,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
 
+	  SetWindowText_gettext(hDlg, IDOK);
+	  SetWindowText_gettext(hDlg, IDC_STATIC1);
+	  SetWindowText_gettext(hDlg, IDC_STATIC2);
+
       return TRUE;
 
     case WM_COMMAND:
@@ -3040,6 +3044,15 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       SendMessage(GetDlgItem(hDlg,IDC_WDTEXT), EM_SETTABSTOPS, (WPARAM)(sizeof(TabStops)/sizeof(int)-1), (LPARAM)TabStops);
 
       SetDlgItemText(hDlg,IDC_WDTEXT, Temp);
+
+	  // Other buttons
+	  SetWindowText_gettext(hDlg, IDOK);
+	  SetWindowText_gettext(hDlg, IDC_WDGOTO);
+	  SetWindowText_gettext(hDlg, IDC_WDREPLACE);
+	  SetWindowText_gettext(hDlg, IDC_WDSETHOME);
+	  SetWindowText_gettext(hDlg, IDC_WDINSERT);
+	  SetWindowText_gettext(hDlg, IDC_WDREMOVE);
+	  SetWindowText_gettext(hDlg, IDC_WDTEXT);
 
       return TRUE;
 
