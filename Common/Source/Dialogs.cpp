@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.51 2005/08/15 04:51:36 scottp Exp $
+//   $Id: Dialogs.cpp,v 1.52 2005/08/17 00:04:17 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -1480,6 +1480,10 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
       SendDlgItemMessage(hDlg,IDC_BALLASTDOWN,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
       SendDlgItemMessage(hDlg,IDC_BUGSUP,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
       SendDlgItemMessage(hDlg,IDC_BUGSDOWN,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
+
+	  SetWindowText_gettext(hDlg, IDOK);
+	  SetWindowText_gettext(hDlg, IDC_STATIC1);
+	  SetWindowText_gettext(hDlg, IDC_STATIC2);
 
       return TRUE; 
 
@@ -3040,6 +3044,15 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       SendMessage(GetDlgItem(hDlg,IDC_WDTEXT), EM_SETTABSTOPS, (WPARAM)(sizeof(TabStops)/sizeof(int)-1), (LPARAM)TabStops);
 
       SetDlgItemText(hDlg,IDC_WDTEXT, Temp);
+
+	  // Other buttons
+	  SetWindowText_gettext(hDlg, IDOK);
+	  SetWindowText_gettext(hDlg, IDC_WDGOTO);
+	  SetWindowText_gettext(hDlg, IDC_WDREPLACE);
+	  SetWindowText_gettext(hDlg, IDC_WDSETHOME);
+	  SetWindowText_gettext(hDlg, IDC_WDINSERT);
+	  SetWindowText_gettext(hDlg, IDC_WDREMOVE);
+	  SetWindowText_gettext(hDlg, IDC_WDTEXT);
 
       return TRUE;
 
