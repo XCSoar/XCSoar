@@ -120,11 +120,14 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       GetVersionEx(&osv);
       wsprintf(Temp,TEXT("%d.%d"),osv.dwMajorVersion ,osv.dwMinorVersion );
       SetDlgItemText(hDlg,IDC_OSVERSION,Temp);
-      wsprintf(Temp,TEXT("Build Date %s"),TEXT(__DATE__));
+      wsprintf(Temp,TEXT("%s\ %s"),gettext(TEXT("Build Date")), TEXT(__DATE__));
       SetDlgItemText(hDlg,IDC_EXTRA,Temp );
 
       wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
 	  SetDlgItemText(hDlg, IDC_VERSION, Temp);
+
+	  SetWindowText_gettext(hDlg, IDC_STATIC_OS);
+	  SetWindowText_gettext(hDlg, IDC_STATIC_PROCESSOR);
 
       switch (si.dwProcessorType )
         {
