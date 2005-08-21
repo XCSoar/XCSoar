@@ -1594,8 +1594,14 @@ LRESULT CALLBACK TaskSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
       else
         SendDlgItemMessage(hDlg,IDC_CYLINDER,BM_SETCHECK,BST_CHECKED,0);
 
+      if (StartLine == TRUE) {
+	SetDlgItemInt(hDlg,IDC_STARTRADIUS,StartRadius*2,TRUE);
+	SetDlgItemText(hDlg,IDC_STATICRADIUS,gettext(TEXT("Width")));
+      } else {
+	SetDlgItemInt(hDlg,IDC_STARTRADIUS,StartRadius,TRUE);
+	SetDlgItemText(hDlg,IDC_STATICRADIUS,gettext(TEXT("Radius")));
+      }
       SetDlgItemInt(hDlg,IDC_CYLINDERRADIUS,SectorRadius,TRUE);
-      SetDlgItemInt(hDlg,IDC_STARTRADIUS,StartRadius,TRUE);
 
       return TRUE;
 
@@ -1604,7 +1610,11 @@ LRESULT CALLBACK TaskSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
       if(( lpwp->flags & SWP_HIDEWINDOW) == SWP_HIDEWINDOW)
         {
           Radius  = GetDlgItemInt(hDlg,IDC_STARTRADIUS,0,TRUE);
-          StartRadius = Radius;
+	  if (StartLine) {
+	    StartRadius = Radius/2;
+	  } else {
+	    StartRadius = Radius;
+	  }
           SetToRegistry(szRegistryStartRadius,Radius);
           SetToRegistry(szRegistryStartLine,StartLine);
           CalculateTaskSectors();
@@ -1620,11 +1630,20 @@ LRESULT CALLBACK TaskSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
       switch (LOWORD(wParam))
         {
         case IDC_STARTLINE:
+	  if (StartLine != TRUE) {
+	    SetDlgItemInt(hDlg,IDC_STARTRADIUS,StartRadius*2,TRUE);
+	  }
           StartLine = TRUE;
+	  SetDlgItemText(hDlg,IDC_STATICRADIUS,gettext(TEXT("Width")));
+
           break;
 
         case IDC_STARTCYLINDER:
+	  if (StartLine != FALSE) {
+	    SetDlgItemInt(hDlg,IDC_STARTRADIUS,StartRadius,TRUE);
+	  }
           StartLine = FALSE;
+	  SetDlgItemText(hDlg,IDC_STATICRADIUS,gettext(TEXT("Radius")));
           break;
 
         case IDC_FAI:

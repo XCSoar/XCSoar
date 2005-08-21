@@ -28,6 +28,8 @@ Changes from 4.22 to 4.3
 - Added Auxiliary infobox display, accessible from APP_KEY1, which now
   toggles through normal (mode-specific) infoboxes, auxiliary infoboxes,
   and fullscreen.
+- Settings->Task start line/cylinder labels change dynamically to avoid
+  confusion
 
 Changes from 4.21 to 4.22
 
