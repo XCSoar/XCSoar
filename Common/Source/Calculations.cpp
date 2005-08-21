@@ -1432,13 +1432,10 @@ void DoAutoMcCready(DERIVED_INFO *Calculated)
   static double tad=0.0;
   static double dmc=0.0;
 
-  tad = Calculated->TaskAltitudeDifference;
+  tad = Calculated->TaskAltitudeDifference/(Calculated->TaskDistanceToGo+1);
   
-  if (tad > 20) {
-    dmc = dmc*0.2+0.8*0.2;
-  } else if (tad < -20) {
-    dmc = dmc*0.2-0.8*0.2;
-  }
+  dmc = dmc*0.2+0.8*0.5*min(1.0,max(-1.0,tad/0.001));
+
   MCCREADY += dmc;
   if (MCCREADY>20.0) {
     MCCREADY = 20.0;
