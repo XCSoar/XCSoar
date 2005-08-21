@@ -9,8 +9,8 @@
 #include "mapshape.h"
 #include "Sizes.h"
 
-#define NAME_SIZE 20
-#define COMMENT_SIZE 20
+#define NAME_SIZE 50
+#define COMMENT_SIZE 50
 
 #define TRACKCIRCLE 3
 #define NORTHCIRCLE 2

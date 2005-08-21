@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.h,v 1.2 2005/06/23 12:19:54 jwharington Exp $
+**   $Id: windstore.h,v 1.3 2005/08/21 06:52:35 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -53,6 +53,8 @@ public: // Public slots
     * new measurements flow in, but also if the altitude changes.
     */
   void newWind(Vector& wind);
+
+  Vector getWind(double h, bool *found);
 
 private:
   DERIVED_INFO *derivedInfo;

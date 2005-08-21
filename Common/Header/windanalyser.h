@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.h,v 1.3 2005/07/10 11:30:42 jwharington Exp $
+**   $Id: windanalyser.h,v 1.4 2005/08/21 06:52:35 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -25,6 +25,18 @@
 /**The windanalyser analyses the list of flightsamples looking for windspeed and direction.
   *@author André Somers
   */
+
+
+class WindSample {
+ public:
+  Vector v;
+  double t;
+  double mag;
+};
+
+
+#define MAXWINDSAMPLES 100
+
 
 class WindAnalyser  {
 
@@ -84,8 +96,12 @@ private: // Private attributes
     double climbstarttime;
     double climbendtime;
 
+    WindSample windsamples[MAXWINDSAMPLES];
+    int numwindsamples;
+
 private: // Private memberfunctions
     void _calcWind();
+    void _calcWindNew();
 
   DERIVED_INFO *derivedInfo;
   NMEA_INFO *nmeaInfo;

@@ -53,4 +53,5 @@ void StartupScreen();
 HWND CreateProgressDialog(TCHAR *text);
 void CloseProgressDialog();
 BOOL StepProgressDialog();
+BOOL SetProgressStepSize(int nSize);
 #endif

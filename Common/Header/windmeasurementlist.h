@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windmeasurementlist.h,v 1.3 2005/07/29 09:33:25 samgi Exp $
+**   $Id: windmeasurementlist.h,v 1.4 2005/08/21 06:52:35 jwharington Exp $
 **
 ***********************************************************************/
 
