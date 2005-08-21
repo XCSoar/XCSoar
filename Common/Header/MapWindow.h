@@ -162,6 +162,8 @@ class MapWindow {
 
   static LRESULT CALLBACK MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,LPARAM lParam);
 
+  static bool IsMapFullScreen();
+
  private:
 
   static void CalculateScreenPositions(POINT Orig, RECT rc,

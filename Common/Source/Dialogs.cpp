@@ -377,19 +377,23 @@ LRESULT CALLBACK SetUnits(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 LRESULT CALLBACK Select(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  TCHAR *NavboxModes[] = {TEXT("Climb"),TEXT("Cruise"),TEXT("Final Glide")};
+  TCHAR *NavboxModes[] = {TEXT("Climb"),
+			  TEXT("Cruise"),
+			  TEXT("Final Glide"),
+			  TEXT("Auxiliary")};
   int i;
   static int ItemSelected = 0;
   static int navmode = 0;
   static int info_0;
   static int info_1;
   static int info_2;
+  static int info_3;
 
   switch (message)
     {
 
     case WM_INITDIALOG:
-      for(i=0;i<3;i++)
+      for(i=0;i<4;i++)
         SendDlgItemMessage(hDlg,IDC_NAVBOXMODE,CB_ADDSTRING,0,(LPARAM)(LPCSTR)gettext(NavboxModes[i]));
 
       // JMW todo: set mode to current mode by default
@@ -405,6 +409,7 @@ LRESULT CALLBACK Select(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       info_0 = CurrentInfoType&0xff;
       info_1 = (CurrentInfoType>>8)&0xff;
       info_2 = (CurrentInfoType>>16)&0xff;
+      info_3 = (CurrentInfoType>>24)&0xff;
 
       if (navmode==0) {
         SendDlgItemMessage(hDlg,IDC_NAVBOXOPTION,LB_SETCURSEL,(WPARAM)(info_0),0);
@@ -414,6 +419,9 @@ LRESULT CALLBACK Select(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       }
       if (navmode==2) {
         SendDlgItemMessage(hDlg,IDC_NAVBOXOPTION,LB_SETCURSEL,(WPARAM)(info_2),0);
+      }
+      if (navmode==3) {
+        SendDlgItemMessage(hDlg,IDC_NAVBOXOPTION,LB_SETCURSEL,(WPARAM)(info_3),0);
       }
 
       return TRUE;
@@ -438,6 +446,11 @@ LRESULT CALLBACK Select(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           }
           ItemSelected += (info_2 << 16);
 
+          if (navmode==3) {
+            info_3 = SendDlgItemMessage(hDlg,IDC_NAVBOXOPTION,LB_GETCURSEL,0,0);
+          }
+          ItemSelected += (info_3 << 24);
+
           EndDialog(hDlg, ItemSelected);
           return TRUE;
         }
@@ -457,6 +470,11 @@ LRESULT CALLBACK Select(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             if (navmode==2) {
               SendDlgItemMessage(hDlg,IDC_NAVBOXOPTION,LB_SETCURSEL,(WPARAM)(info_2),0);
             }
+
+            if (navmode==3) {
+              SendDlgItemMessage(hDlg,IDC_NAVBOXOPTION,LB_SETCURSEL,(WPARAM)(info_3),0);
+            }
+
           }
 
         }

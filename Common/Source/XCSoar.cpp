@@ -75,6 +75,7 @@ int                                     InfoType[NUMINFOWINDOWS] = {921102,
 
 BOOL                                    DisplayLocked = TRUE;
 BOOL                                    InfoWindowActive = TRUE;
+BOOL                                    EnableAuxiliaryInfo = FALSE;
 int                                     FocusTimeOut = 0;
 int                                     MenuTimeOut = 0;
 int                                     DisplayTimeOut = 0;
@@ -1238,26 +1239,35 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 
 int getInfoType(int i) {
-  if (CALCULATED_INFO.Circling == TRUE)
-    return InfoType[i] & 0xff;
-  else if (CALCULATED_INFO.FinalGlide == TRUE) {
-    return (InfoType[i] >> 16) & 0xff;
+  if (EnableAuxiliaryInfo) {
+    return (InfoType[i] >> 24) & 0xff; // auxiliary
   } else {
-    return (InfoType[i] >> 8) & 0xff;
+    if (CALCULATED_INFO.Circling == TRUE)
+      return InfoType[i] & 0xff; // climb
+    else if (CALCULATED_INFO.FinalGlide == TRUE) {
+      return (InfoType[i] >> 16) & 0xff; //final glide
+    } else {
+      return (InfoType[i] >> 8) & 0xff; // cruise
+    }
   }
 }
 
 
 void setInfoType(int i, char j) {
-  if (CALCULATED_INFO.Circling == TRUE) {
-    InfoType[i] &= 0xffff00;
-    InfoType[i] += (j);
-  } else if (CALCULATED_INFO.FinalGlide == TRUE) {
-    InfoType[i] &= 0x00ffff;
-    InfoType[i] += (j<<16);
+  if (EnableAuxiliaryInfo) {
+    InfoType[i] &= 0x00ffffff;
+    InfoType[i] += (j<<24);
   } else {
-    InfoType[i] &= 0xff00ff;
-    InfoType[i] += (j<<8);
+    if (CALCULATED_INFO.Circling == TRUE) {
+      InfoType[i] &= 0xffffff00;
+      InfoType[i] += (j);
+    } else if (CALCULATED_INFO.FinalGlide == TRUE) {
+      InfoType[i] &= 0xff00ffff;
+      InfoType[i] += (j<<16);
+    } else {
+      InfoType[i] &= 0xffff00ff;
+      InfoType[i] += (j<<8);
+    }
   }
 }
 
@@ -1418,7 +1428,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	  case VK_APP1:
 		if (!Debounce()) break;
-		MapWindow::RequestToggleFullScreen();
+
+		// toggle switches like this:
+		//  -- normal infobox
+		//  -- auxiliary infobox
+		//  -- full screen
+		//  -- normal infobox
+		if (EnableAuxiliaryInfo) {
+		  MapWindow::RequestToggleFullScreen();
+		  EnableAuxiliaryInfo = false;
+		} else {
+		  if (MapWindow::IsMapFullScreen()) {
+		    MapWindow::RequestToggleFullScreen();
+		  } else {
+		    EnableAuxiliaryInfo = true;
+		  }
+		}
+
 		break;
 
 	  case VK_APP2:
@@ -2105,12 +2131,16 @@ void DisplayText(void)
     {
       Caption[i][0]= 0;
 
-      if (CALCULATED_INFO.Circling == TRUE)
-        DisplayType = InfoType[i] & 0xff;
-      else if (CALCULATED_INFO.FinalGlide == TRUE) {
-        DisplayType = (InfoType[i] >> 16) & 0xff;
+      if (EnableAuxiliaryInfo) {
+	  DisplayType = (InfoType[i] >> 24) & 0xff;
       } else {
-        DisplayType = (InfoType[i] >> 8) & 0xff;
+	if (CALCULATED_INFO.Circling == TRUE)
+	  DisplayType = InfoType[i] & 0xff;
+	else if (CALCULATED_INFO.FinalGlide == TRUE) {
+	  DisplayType = (InfoType[i] >> 16) & 0xff;
+	} else {
+	  DisplayType = (InfoType[i] >> 8) & 0xff;
+	}
       }
 
       Data_Options[DisplayType].Formatter->AssignValue(DisplayType);
