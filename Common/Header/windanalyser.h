@@ -35,7 +35,7 @@ class WindSample {
 };
 
 
-#define MAXWINDSAMPLES 100
+#define MAXWINDSAMPLES 50
 
 
 class WindAnalyser  {

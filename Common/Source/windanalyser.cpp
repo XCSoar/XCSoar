@@ -122,6 +122,8 @@ void WindAnalyser::slot_newSample(){
   if (numwindsamples<MAXWINDSAMPLES-1) {
     numwindsamples++;
   } else {
+    return; // too long to complete circle, so can't be a good circle
+
     // TODO give error...
   }
 
