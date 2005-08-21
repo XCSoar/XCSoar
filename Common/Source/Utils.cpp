@@ -790,14 +790,16 @@ void ReadWinPilotPolar() {
   POLARW[2]= -3.4;
 
   GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
+  SetRegistryString(szRegistryPolarFile, TEXT("\0"));
 
   hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 
   if(hFile != INVALID_HANDLE_VALUE )
     {
 
+      bool foundline = false;
 
-      while(ReadString(hFile,200,TempString))
+      while(ReadString(hFile,200,TempString) && (!foundline))
 	{
 
 	  if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
@@ -823,11 +825,16 @@ void ReadWinPilotPolar() {
 	      PExtractParameter(TempString, ctemp, 7);
 	      POLARW[2] = StrToDouble(ctemp,NULL);
 
-
 	      PolarWinPilot2XCSoar(POLARV, POLARW, ww);
 
+	      foundline = true;
 	    }
 	}
+
+      // file was OK, so save it
+      if (foundline) {
+	SetRegistryString(szRegistryPolarFile, szFile);
+      }
 
       CloseHandle (hFile);
     }
@@ -2009,6 +2016,7 @@ void ReadLanguageFile() {
 
 	// Open file from registry
 	GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
+	SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
 	if (szFile1)
 		fp  = _tfopen(szFile1, TEXT("rt"));
 
@@ -2045,6 +2053,9 @@ void ReadLanguageFile() {
 		// Global counter
 		GetTextCache_Size++;
 	}
+
+	// file was OK, so save registry
+	SetRegistryString(szRegistryLanguageFile, szFile1);
 
 	fclose(fp);
 }
@@ -2148,6 +2159,8 @@ void ReadStatusFile() {
 
 	// Open file from registry
 	GetRegistryString(szRegistryStatusFile, szFile1, MAX_PATH);
+	SetRegistryString(szRegistryStatusFile, TEXT("\0"));
+
 	if (szFile1)
 		fp  = _tfopen(szFile1, TEXT("rt"));
 
@@ -2218,6 +2231,9 @@ void ReadStatusFile() {
 	// How many we really got (blank next just in case)
 	StatusMessageCache_Size++;
 	_init_Status(StatusMessageCache_Size);
+
+	// file was ok, so save it to registry
+	SetRegistryString(szRegistryStatusFile, szFile1);
 
 	fclose(fp);
 

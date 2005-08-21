@@ -2,6 +2,31 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+TODO
+- AutoMcready fix for wandering
+- Enable secondary files check boxes
+- "Reset infobox defaults" button
+
+Changes from 4.22 to 4.3
+
+- Speed-to-fly climb mode bug fix
+- Thermal band mode fix
+- Audio vario sound updates
+- Fixed waypoint arrival altitude bug
+- New airspace parser, faster and more robust
+- New language customisation
+- New status message customisation
+- Wind algorithm improvements especially at low wind speeds
+- Analysis dialog now has page for wind at altitude
+- Fixed defaulting to cruise mode when no waypoint active
+- Miscellaneous dialog cleanups
+- Snail trail colour scales to visible range to make colors more vibrant
+- Safe recovery from critical errors when loading files
+- Bug fix of polar loading on multiple lines
+- Fixed ordering of Menu buttons when using cursor to navigate
+- Blanking improvements (prevent timeout advancing when any dialog is active)
+
+
 Changes from 4.21 to 4.22
 
 - Fixed bug when airspace warning display is not refreshed when another

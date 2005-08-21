@@ -82,81 +82,92 @@ double Magnitude(Vector v) {
 /** Called if a new sample is available in the samplelist. */
 void WindAnalyser::slot_newSample(){
 
-    if (!active) return; //only work if we are in active mode
+  if (!active) return; //only work if we are in active mode
 
 
-    Vector curVector;
+  Vector curVector;
 
-    bool fullCircle=false;
-    //circledetection
-    if( lastHeading )
+  bool fullCircle=false;
+  //circledetection
+  if( lastHeading )
     {
-        int diff= (int)nmeaInfo->TrackBearing - lastHeading;
+      int diff= (int)nmeaInfo->TrackBearing - lastHeading;
 
-        if( diff > 180 )
-            diff -= 360;
-        if( diff < -180 )
-            diff += 360;
+      if( diff > 180 )
+        diff -= 360;
+      if( diff < -180 )
+        diff += 360;
 
-	diff = abs(diff);
-        circleDeg += diff;
+      diff = abs(diff);
+      circleDeg += diff;
     }
-    lastHeading = (int)nmeaInfo->TrackBearing;
+  lastHeading = (int)nmeaInfo->TrackBearing;
 
-    if(circleDeg >= 360 )
+  if(circleDeg >= 360 )
     {
-        //full circle made!
+      //full circle made!
 
-        fullCircle=true;
-        circleDeg = 0;
-        circleCount++;  //increase the number of circles flown (used
-			//to determine the quality)
+      fullCircle=true;
+      circleDeg = 0;
+      circleCount++;  //increase the number of circles flown (used
+      //to determine the quality)
     }
 
-    curVector.x= nmeaInfo->Speed*cos(nmeaInfo->TrackBearing*3.14159/180.0);
-    curVector.y= nmeaInfo->Speed*sin(nmeaInfo->TrackBearing*3.14159/180.0);
+  curVector.x= nmeaInfo->Speed*cos(nmeaInfo->TrackBearing*3.14159/180.0);
+  curVector.y= nmeaInfo->Speed*sin(nmeaInfo->TrackBearing*3.14159/180.0);
 
-    if ((nmeaInfo->Speed< Magnitude(minVector))||first)
-      {
-	minVector.x = curVector.x; minVector.y = curVector.y;
-      }
-    if ((nmeaInfo->Speed> Magnitude(maxVector))||first)
-      {
-	maxVector.x = curVector.x; maxVector.y = curVector.y;
-      }
+  windsamples[numwindsamples].v = curVector;
+  windsamples[numwindsamples].t = nmeaInfo->Time;
+  windsamples[numwindsamples].mag = Magnitude(curVector);
+  if (numwindsamples<MAXWINDSAMPLES-1) {
+    numwindsamples++;
+  } else {
+    // TODO give error...
+  }
 
-    if (fullCircle) { //we have completed a full circle!
-        _calcWind();    //calculate the wind for this circle
-        fullCircle=false;
-
-	// should set each vector to average
-	Vector v;
-	v.x = (maxVector.x-minVector.x)/2;
-	v.y = (maxVector.y-minVector.y)/2;
-
-	minVector.x = v.x; minVector.y = v.y;
-	maxVector.x = v.x; maxVector.y = v.y;
-
-	first = true;
-        if (startcircle>1) {
-          startcircle--;
-        }
-
-        if (startcircle==1) {
-          climbstartpos.x = nmeaInfo->Longditude;
-          climbstartpos.y = nmeaInfo->Lattitude;
-          climbstarttime = nmeaInfo->Time;
-          startcircle = 0;
-        }
-        climbendpos.x = nmeaInfo->Longditude;
-        climbendpos.y = nmeaInfo->Lattitude;
-        climbendtime = nmeaInfo->Time;
-
-        //no need to reset fullCircle, it will automaticly be reset in the next itteration.
+  if ((nmeaInfo->Speed< Magnitude(minVector))||first)
+    {
+      minVector.x = curVector.x; minVector.y = curVector.y;
+    }
+  if ((nmeaInfo->Speed> Magnitude(maxVector))||first)
+    {
+      maxVector.x = curVector.x; maxVector.y = curVector.y;
     }
 
-    first = false;
-    windstore.slot_Altitude();
+  if (fullCircle) { //we have completed a full circle!
+    _calcWind();    //calculate the wind for this circle
+    fullCircle=false;
+
+    // should set each vector to average
+    Vector v;
+    v.x = (maxVector.x-minVector.x)/2;
+    v.y = (maxVector.y-minVector.y)/2;
+
+    minVector.x = v.x; minVector.y = v.y;
+    maxVector.x = v.x; maxVector.y = v.y;
+
+    first = true;
+    numwindsamples = 0;
+
+    if (startcircle>1) {
+      startcircle--;
+    }
+
+    if (startcircle==1) {
+      climbstartpos.x = nmeaInfo->Longditude;
+      climbstartpos.y = nmeaInfo->Lattitude;
+      climbstarttime = nmeaInfo->Time;
+      startcircle = 0;
+    }
+    climbendpos.x = nmeaInfo->Longditude;
+    climbendpos.y = nmeaInfo->Lattitude;
+    climbendtime = nmeaInfo->Time;
+
+    //no need to reset fullCircle, it will automaticly be reset in the next itteration.
+  }
+
+  first = false;
+  windstore.slot_Altitude();
 }
 
 
@@ -226,6 +237,7 @@ void WindAnalyser::slot_newFlightMode(bool left, int marker){
     startheading= (int)nmeaInfo->TrackBearing;
     active=true;
     first = true;
+    numwindsamples = 0;
 }
 
 
@@ -236,18 +248,123 @@ double angleDiff(Vector a, Vector b) {
   a1 = atan2(a.y,a.x)*180.0/3.141592;
   a2 = atan2(b.y,b.x)*180.0/3.141592;
   c = a1-a2;
-  if (c<-180) {
+  while (c<-180) {
     c+= 360;
   }
-  if (c>180) {
+  while (c>180) {
     c-= 360;
   }
   return c;
 }
 
 
+void WindAnalyser::_calcWindNew() {
+  int i;
+  double av=0;
+  if (!numwindsamples) return;
+
+  // find average
+  for (i=0; i<numwindsamples; i++) {
+    av += windsamples[i].mag;
+  }
+  av/= numwindsamples;
+
+  // find zero time for times above average
+  double rthisp;
+  int j;
+  int ithis = 0;
+  double rthismax = 0;
+  double rthismin = 0;
+  int jmax= -1;
+  int jmin= -1;
+  double rpoint;
+  int idiff;
+
+  for (j=0; j<numwindsamples; j++) {
+
+    rthisp= 0;
+    rpoint = windsamples[j].mag;
+
+    for (i=0; i<numwindsamples; i++) {
+      if (i== j) continue;
+      ithis = (i+j)%numwindsamples;
+      idiff = i;
+      if (idiff>numwindsamples/2) {
+        idiff = numwindsamples-idiff;
+      }
+      rthisp += (windsamples[ithis].mag)*idiff;
+    }
+    if ((rthisp<rthismax)||(jmax==-1)) {
+      rthismax = rthisp;
+      jmax = j;
+    }
+    if ((rthisp>rthismin)||(jmin==-1)) {
+      rthismin = rthisp;
+      jmin = j;
+    }
+  }
+
+  // jmax is the point where most wind samples are below
+  // jmin is the point where most wind samples are above
+
+  maxVector = windsamples[jmax].v;
+  minVector = windsamples[jmin].v;
+
+  // attempt to fit cycloid
+
+  double phase;
+  double mag = 0.5*(windsamples[jmax].mag - windsamples[jmin].mag);
+  double wx, wy;
+  double cmag;
+  double rthis=0;
+  for (i=0; i<numwindsamples; i++) {
+    phase = ((i+jmax)%numwindsamples)*3.141592*2.0/numwindsamples;
+    wx = cos(phase)*av+mag;
+    wy = sin(phase)*av;
+    cmag = sqrt(wx*wx+wy*wy)-windsamples[i].mag;
+    rthis += cmag*cmag;
+  }
+  rthis/= numwindsamples;
+  rthis = sqrt(rthis);
+
+  int quality;
+
+  if (mag>1) {
+    quality = 5- rthis/mag*3;
+  } else {
+    quality = 5- rthis;
+  }
+
+  if (circleCount<3) quality--;
+  if (circleCount<2) quality--;
+  if (circleCount<1) return;
+
+  quality= min(quality,5);  //5 is maximum quality, make sure we honour that.
+
+  Vector a;
+
+  a.x = -mag*maxVector.x/windsamples[jmax].mag;
+  a.y = -mag*maxVector.y/windsamples[jmax].mag;
+
+  if (quality<1) {
+    return;   //measurment quality too low
+  }
+
+  if (a.x*a.x+a.y*a.y<30*30) {
+    // limit to reasonable values (60 knots), reject otherwise
+    slot_newEstimate(a, quality);
+  }
+
+}
+
+
 void WindAnalyser::_calcWind() {
-  int aDiff= (int)angleDiff(minVector, maxVector);
+
+  _calcWindNew();
+
+  return;
+
+  double aDiff= angleDiff(minVector, maxVector);
   int quality;
 
   double sp, mmax, mmin;
@@ -262,23 +379,33 @@ void WindAnalyser::_calcWind() {
     Furthermore, the first two circles are considdered to be of lesser quality.
   */
 
-  quality=5-((180-abs(aDiff))/8);
+  quality=5-((180-fabs(aDiff))/6);
   if (sp<2.0) {
-    quality=5-((180-abs(aDiff))/16);
+    quality=5-((180-fabs(aDiff))/10);
   }
-  if (circleCount<2) quality--;
-  if (circleCount<1) quality--;
-
-  if (quality<1) return;   //measurment quality too low
-
   quality= min(quality,5);  //5 is maximum quality, make sure we honour that.
 
+  if (circleCount<3) quality--;
+  if (circleCount<2) quality--;
+  if (circleCount<1) return;
+
   Vector a;
-  a.x = 0.0;
-  a.y = 0.0;
 
   a.x = -sp*maxVector.x/mmax;
   a.y = -sp*maxVector.y/mmax;
+
+  /*
+  if ((sp<2.0)&&(quality<1)) {
+    // even poor quality zero wind inputs are valid
+    slot_newEstimate(a, 1);
+    return;
+  }
+  */
+
+  if (quality<1) {
+    return;   //measurment quality too low
+  }
+
 
   //take both directions for min and max vector into account
   //create a vector object for the resulting wind
@@ -293,6 +420,7 @@ void WindAnalyser::_calcWind() {
   }
 }
 
+
 void WindAnalyser::slot_newEstimate(Vector a, int quality)
 {
 
@@ -306,9 +434,6 @@ void WindAnalyser::slot_newEstimate(Vector a, int quality)
     sprintf(Temp,"%f %f %d # thermal drift\n",a.x,a.y, quality);
 #endif
   } else {
-    quality= min(quality,5);  //5 is maximum quality, make sure we honour that.
-    if (circleCount<2) quality--;
-    if (circleCount<1) quality--;
 #ifdef DEBUG
     sprintf(Temp,"%f %f %d # circling\n",a.x,a.y, quality);
 #endif
@@ -316,8 +441,6 @@ void WindAnalyser::slot_newEstimate(Vector a, int quality)
 #ifdef DEBUG
   DebugStore(Temp);
 #endif
-
-  if (quality<1) return;   //measurment quality too low
 
   windstore.slot_measurement(a, quality);
 }

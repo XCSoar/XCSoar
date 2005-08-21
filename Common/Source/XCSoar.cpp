@@ -138,6 +138,7 @@ BOOL VARIOCONNECT = FALSE;
 bool          TaskAborted = false;
 
 bool InfoBoxesDirty= TRUE;
+bool DialogActive = false;
 
 //Local Static data
 static int iTimerID;
@@ -1411,6 +1412,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
 
     case WM_KEYUP:
+      if (!DialogActive)
       switch (wParam)
         {
 
@@ -1476,13 +1478,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
           break;
 
- 	  case VK_APP4:
+        case VK_APP4:
 		if (!Debounce()) break;
 
-          if (InfoWindowActive)
-            break;
+                if (InfoWindowActive)
+                  break;
 
-          LockFlightData();
+                LockFlightData();
 
           MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
 
@@ -1665,6 +1667,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       if(wmControl == hWndMenuButton)
         {
           wID = DialogBox(hInst, (LPCTSTR)IDD_MENU, hWnd, (DLGPROC)Menu);
+          DialogActive = true;
 
           switch (wID)
             {
@@ -1683,11 +1686,13 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               MapWindow::MapDirty = true;
 	             HideMenu();
               FullScreen();
+              DialogActive = false;
               return 0;
 
 	    case IDD_BACK:
 	      HideMenu();
 	      FullScreen();
+              DialogActive = false;
 	      return 0;
 
             case IDD_STATUS:
@@ -1696,6 +1701,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
+              DialogActive = false;
               return 0;
 
             case IDD_BUGS:
@@ -1711,6 +1717,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
+              DialogActive = false;
               return 0;
 
             case IDD_PRESSURE:
@@ -1724,6 +1731,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
+              DialogActive = false;
               return 0;
 
             case IDD_TASK:
@@ -1735,6 +1743,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
+              DialogActive = false;
               return 0;
 
             case IDD_LOCK:
@@ -1747,7 +1756,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		HideMenu();
 	      }
 	      FullScreen();
-
+              DialogActive = false;
               return 0;
 
             case IDC_ABORTTASK:
@@ -1760,6 +1769,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
+              DialogActive = false;
               return 0;
 
             case IDC_ANALYSIS:
@@ -1770,6 +1780,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
+              DialogActive = false;
               return 0;
 
             case IDD_SETTINGS:
@@ -1876,6 +1887,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      FullScreen();
               ShowWindow(hWndCB,SW_HIDE);
 	      HideMenu();
+              DialogActive = false;
               return 0;
 
             case IDD_LOGGER:
@@ -1921,9 +1933,11 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 
+              DialogActive = false;
               return 0;
             }
         }
+      DialogActive = false;
 
       FullScreen();
 
@@ -2139,7 +2153,11 @@ void CommonProcessTimer()
   } else {
     BlankDisplay(false);
   }
-  DisplayTimeOut++;
+  if (!DialogActive) {
+    DisplayTimeOut++;
+  } else {
+    DisplayTimeOut=0;
+  }
 
   if (!ScreenBlanked) {
     // No need to redraw map or infoboxes if screen is blanked.
@@ -2364,14 +2382,19 @@ void SwitchToMapWindow(void)
 
 void PopupAnalysis()
 {
+  DialogActive = true;
   DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndInfoWindow[0],
             (DLGPROC)AnalysisProc);
+  DialogActive = false;
 }
 
 
 void PopupWaypointDetails()
 {
+  DialogActive = true;
   DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS, hWndInfoWindow[0], (DLGPROC)WaypointDetails);
+  DialogActive = false;
+
   /*
   ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
@@ -2382,21 +2405,25 @@ void PopupWaypointDetails()
 
 void PopupBugsBallast(int UpDown)
 {
+  DialogActive = true;
   DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWndInfoWindow[0], (DLGPROC)SetBugsBallast);
   ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
   SwitchToMapWindow();
+  DialogActive = false;
 }
 
 
 void PopUpSelect(int Index)
 {
+  DialogActive = true;
   CurrentInfoType = InfoType[Index];
   InfoType[Index] = DialogBox(hInst, (LPCTSTR)IDD_SELECT, hWndInfoWindow[Index], (DLGPROC)Select);
   StoreType(Index, InfoType[Index]);
   ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
   SwitchToMapWindow();
+  DialogActive = false;
 }
 
 #include <stdio.h>

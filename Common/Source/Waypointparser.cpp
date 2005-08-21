@@ -337,6 +337,7 @@ void ReadWayPoints(void)
   LockFlightData();
   CloseWayPoints();
   GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
+  SetRegistryString(szRegistryWayPointFile, TEXT("\0"));
 
   fp = _tfopen(szFile1, TEXT("rt"));
 
@@ -345,10 +346,13 @@ void ReadWayPoints(void)
       ReadWayPointFile(fp);
       fclose(fp);
     }
+  // read OK, so set the registry to the actual file name
+  SetRegistryString(szRegistryWayPointFile, szFile1);
 
   // read additional waypoint file
 
   GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
+  SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));
 
   fp = _tfopen(szFile2, TEXT("rt"));
   if(fp != NULL)
@@ -356,6 +360,8 @@ void ReadWayPoints(void)
       ReadWayPointFile(fp);
       fclose(fp);
     }
+  // read OK, so set the registry to the actual file name
+  SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);
 
   UnlockFlightData();
 

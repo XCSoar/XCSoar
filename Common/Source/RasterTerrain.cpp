@@ -259,9 +259,8 @@ void RasterTerrain::OpenTerrain(void)
   static TCHAR  szFile[MAX_PATH] = TEXT("\0");
 
   GetRegistryString(szRegistryTerrainFile, szFile, MAX_PATH);
+  SetRegistryString(szRegistryTerrainFile, TEXT("\0"));
 
-  //hTerrain = NULL;
-  //hTerrain = CreateFile(szFile,GENERIC_READ,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
   fpTerrain = _tfopen(szFile, TEXT("rb"));
   //if( hTerrain == NULL)
   if( fpTerrain == NULL)
@@ -271,6 +270,11 @@ void RasterTerrain::OpenTerrain(void)
   //ReadFile(hTerrain,&TerrainInfo,sizeof(TERRAIN_INFO),&dwBytesRead,NULL);
 //  setvbuf(fpTerrain, NULL, 0x00 /*_IOFBF*/, 4096*8);
   dwBytesRead = fread(&TerrainInfo, 1, sizeof(TERRAIN_INFO), fpTerrain);
+
+  // TODO: sanity check of terrain info, to check validity of file
+  // this can be done by checking the bounds compute correctly and
+  // that we can seek to the end of the file
+  SetRegistryString(szRegistryTerrainFile, szFile);
 
   InitializeCriticalSection(&CritSec_TerrainFile);
 

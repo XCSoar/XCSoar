@@ -65,6 +65,10 @@ void WindStore::slot_Altitude(){
 }
 
 
+Vector WindStore::getWind(double h, bool *found) {
+  return windlist->getWind(h, found);
+}
+
 /** Recalculates the wind from the stored measurements.
   * May result in a newWind signal. */
 

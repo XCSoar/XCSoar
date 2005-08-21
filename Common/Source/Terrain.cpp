@@ -616,6 +616,7 @@ void OpenTopology() {
   }
 
   GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
+  SetRegistryString(szRegistryTopologyFile, TEXT("\0"));
 
   if (!szFile[0]) {
     UnlockTerrainDataGraphics();
@@ -710,6 +711,9 @@ void OpenTopology() {
               numtopo++;
             }
         }
+      // file was OK, so save it
+      SetRegistryString(szRegistryTopologyFile, szFile);
+
       CloseHandle (hFile);
     }
   UnlockTerrainDataGraphics();

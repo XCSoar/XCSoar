@@ -470,6 +470,7 @@ void MapWindow::RequestToggleFullScreen() {
 
 
 extern BOOL extGPSCONNECT;
+extern bool DialogActive;
 
 
 LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
@@ -740,6 +741,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	  //		map		- Map window only - eg: current method of change zoom
 	  //		info	- Standard info box controls ???
 	  //		status	- Status message being displayed
+
+    if (!DialogActive) // JMW prevent keys being trapped if dialog is active
     switch (wParam)
     {
     case VK_DOWN :  // SCROLL UP
@@ -2314,7 +2317,8 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   POINT ThermalProfile[NUMTHERMALBUCKETS+2];
   POINT GliderBand[4] = { {2,0},{23,0},{22,0},{24,0} };
 
-  if ((DerivedDrawInfo.TaskAltitudeDifference>50)||(DerivedDrawInfo.FinalGlide)) {
+  if ((DerivedDrawInfo.TaskAltitudeDifference>50)
+      &&(DerivedDrawInfo.FinalGlide)) {
     return;
   }
 
@@ -2507,9 +2511,9 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 #define NUMSNAILRAMP 3
 
 COLORRAMP snail_colors[] = {
-  {-5,          0xff, 0x50, 0x50},
+  {-10,          0xff, 0x50, 0x50},
   {0,           0x8f, 0x8f, 0x8f},
-  {5,           0x50, 0xff, 0x50}
+  {10,           0x50, 0xff, 0x50}
 };
 
 
@@ -2526,6 +2530,10 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   bool p1Visible = false;
   bool p2Visible = false;
   bool havep2 = true;
+  static double vmax= 5.0;
+  static double vmin= -5.0;
+  double this_vmax=0.0;
+  double this_vmin=0.0;
 
   if(!TrailActive)
     return;
@@ -2608,7 +2616,22 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
     // ok, we got this far, so draw the line
 
-    ColorRampLookup((short)(SnailTrail[P2].Vario/1.5),
+    double cv = SnailTrail[P2].Vario;
+
+    if (cv<this_vmin) {
+      this_vmin = cv;
+    }
+    if (cv>this_vmax) {
+      this_vmax = cv;
+    }
+
+    if (cv<0) {
+      cv /= vmin;
+    } else {
+      cv /= vmax;
+    }
+
+    ColorRampLookup((short)(cv*10),
                     &Red, &Green, &Blue,
                     snail_colors, NUMSNAILRAMP);
 
@@ -2621,6 +2644,13 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     hpDelete = hpNew;
 
     DrawSolidLine(hdc,SnailTrail[P1].Screen,SnailTrail[P2].Screen);
+  }
+
+  if (this_vmin<0) {
+    vmin = this_vmin;
+  }
+  if (this_vmax>0) {
+    vmax = this_vmax;
   }
 
   SelectObject(hdc, hpOld);

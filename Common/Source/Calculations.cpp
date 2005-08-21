@@ -183,6 +183,8 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   double theSinkRate;
 
+#define AUDIOSCALE 100/5.0
+
   if (Basic->AirspeedAvailable) {
     theSinkRate= GlidePolar::SinkRate(Basic->IndicatedAirspeed, n);
   } else {
@@ -205,62 +207,60 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       ) {
     // TODO: slow/smooth switching between netto and not
 
-    VarioSound_SetV((short)((Calculated->NettoVario-GlidePolar::minsink)/6.0*100));
+    VarioSound_SetV((short)((Calculated->NettoVario-GlidePolar::minsink)*AUDIOSCALE));
 
   } else {
 
 #ifndef TESTSOUND
     if (Basic->VarioAvailable) {
-      VarioSound_SetV((short)(Basic->Vario/6.0*100));
+      VarioSound_SetV((short)(Basic->Vario*AUDIOSCALE));
     } else {
-      VarioSound_SetV((short)(Calculated->Vario/6.0*100));
+      VarioSound_SetV((short)(Calculated->Vario*AUDIOSCALE));
     }
 #else
-    VarioSound_SetV((short)((1.0-MCCREADY/LIFTMODIFY)/6.0*100));
+    VarioSound_SetV((short)((1.0-MCCREADY/LIFTMODIFY)*AUDIOSCALE));
 #endif
 
   }
 
-  if (Calculated->Circling) {
-    if (n>0) {
-      // calculate speed of min sink adjusted for load factor
-      Calculated->VOpt = GlidePolar::Vminsink*sqrt(n);
-    }
+  // calculate optimum cruise speed in current track direction
+  // this still makes use of mode, so it should agree with
+  // Vmcready if the track bearing is the best cruise track
+  // this does assume g loading of 1.0
+
+  // this is basically a dolphin soaring calculator
+
+  double dmc = MCCREADY/LIFTMODIFY-Calculated->NettoVario;
+
+  if (Calculated->Vario <= MCCREADY/LIFTMODIFY) {
+
+    double VOptnew;
+
+    GlidePolar::McCreadyAltitude(dmc,
+                                 100.0, // dummy value
+                                 Basic->TrackBearing,
+                                 Calculated->WindSpeed,
+                                 Calculated->WindBearing,
+                                 0,
+                                 &VOptnew,
+                                 1,
+                                 0
+                                 );
+
+    // put low pass filter on VOpt so display doesn't jump around
+    // too much
+    Calculated->VOpt = Calculated->VOpt*0.6+VOptnew*0.4;
+
   } else {
-    // calculate optimum cruise speed in current track direction
-    // this still makes use of mode, so it should agree with
-    // Vmcready if the track bearing is the best cruise track
-    // this does assume g loading of 1.0
-
-    // this is basically a dolphin soaring calculator
-
-    double dmc = MCCREADY/LIFTMODIFY-Calculated->NettoVario;
-
-    if (Calculated->Vario <= MCCREADY/LIFTMODIFY) {
-
-      double VOptnew;
-
-      GlidePolar::McCreadyAltitude(dmc,
-                                   100.0, // dummy value
-                                   Basic->TrackBearing,
-                                   Calculated->WindSpeed,
-                                   Calculated->WindBearing,
-                                   0,
-                                   &VOptnew,
-                                   1,
-                                   0
-                                   );
-
-      // put low pass filter on VOpt so display doesn't jump around
-      // too much
-      Calculated->VOpt = Calculated->VOpt*0.6+VOptnew*0.4;
-
-    } else {
-      // this thermal is better than mccready, so fly at minimum sink
-      // speed
-      Calculated->VOpt = GlidePolar::Vminsink;
-    }
+    // this thermal is better than mccready, so fly at minimum sink
+    // speed
+    // calculate speed of min sink adjusted for load factor
+    Calculated->VOpt = GlidePolar::Vminsink*sqrt(n);
   }
+
+  double vdiff;
+  vdiff = 100*(Basic->Speed/Calculated->VOpt-1.0);
+  VarioSound_SetVAlt((short)(vdiff));
 
 }
 
@@ -1293,6 +1293,17 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
 
       int FinalWayPoint = getFinalWaypoint();
 
+      // update final glide mode status
+      if (
+          ((ActiveWayPoint == FinalWayPoint)
+           &&(ActiveWayPoint>=0))
+          ||(TaskAborted)) {
+        // JMW on final glide
+        Calculated->FinalGlide = 1;
+      } else {
+        Calculated->FinalGlide = 0;
+      }
+
       LegBearing = Bearing(Basic->Lattitude , Basic->Longditude ,
                            WayPointList[Task[i].Index].Lattitude,
                            WayPointList[Task[i].Index].Longditude);
@@ -1385,14 +1396,6 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
           i++;
         }
 
-      if ((ActiveWayPoint == FinalWayPoint)||(TaskAborted)) {
-        // JMW on final glide
-        Calculated->FinalGlide = 1;
-      } else {
-        Calculated->FinalGlide = 0;
-      }
-
-
       Calculated->TaskAltitudeRequired = TaskAltitudeRequired + SAFETYALTITUDEARRIVAL;
       Calculated->TaskAltitudeDifference = Basic->Altitude - (Calculated->TaskAltitudeRequired + WayPointList[Task[i-1].Index].Altitude);
 
@@ -1408,6 +1411,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
     } else {
     // no task selected, so work things out at current heading
 
+    Calculated->FinalGlide = 0;
+
     GlidePolar::McCreadyAltitude(mccready, 100.0, Basic->TrackBearing,
                                  Calculated->WindSpeed,
                                  Calculated->WindBearing,
@@ -1419,6 +1424,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
                                  0);
 
   }
+
 }
 
 void DoAutoMcCready(DERIVED_INFO *Calculated)

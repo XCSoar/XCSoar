@@ -120,7 +120,7 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       GetVersionEx(&osv);
       wsprintf(Temp,TEXT("%d.%d"),osv.dwMajorVersion ,osv.dwMinorVersion );
       SetDlgItemText(hDlg,IDC_OSVERSION,Temp);
-      wsprintf(Temp,TEXT("%s\ %s"),gettext(TEXT("Build Date")), TEXT(__DATE__));
+      wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Build Date")), TEXT(__DATE__));
       SetDlgItemText(hDlg,IDC_EXTRA,Temp );
 
       wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
@@ -1649,7 +1649,8 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
       GetRegistryString(szRegistryAirspaceFile, szAirspaceFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_AIRSPACEFILE,szAirspaceFile);
-      GetRegistryString(szRegistryAdditionalAirspaceFile, szAirspaceFile, MAX_PATH);
+//      GetRegistryString(szRegistryAdditionalAirspaceFile, szAirspaceFile, MAX_PATH);
+      GetRegistryString(szRegistryAdditionalAirspaceFile, szAdditionalAirspaceFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_ADDITIONALAIRSPACEFILE,szAdditionalAirspaceFile);
       GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_WAYPOINTSFILE,szWaypointFile);
@@ -3608,6 +3609,12 @@ void CloseProgressDialog() {
 BOOL StepProgressDialog(void) {
   SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT, 0, 0);
   UpdateWindow(hProgress);
+  return(TRUE);
+}
+
+BOOL SetProgressStepSize(int nSize) {
+  if (nSize < 100)
+	SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_SETSTEP, (WPARAM)nSize, 0);
   return(TRUE);
 }
 
