@@ -19,7 +19,7 @@
 // Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 // Boston, MA  02111-1307, USA.
 //
-// $Id: leastsqs.cpp,v 1.1 2005/07/29 15:03:05 jwharington Exp $
+// $Id: leastsqs.cpp,v 1.2 2005/08/21 07:15:00 jwharington Exp $
 //
 
 

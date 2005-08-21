@@ -1,4 +1,4 @@
-//   $Id: AirfieldDetails.cpp,v 1.11 2005/08/08 22:48:33 scottp Exp $
+//   $Id: AirfieldDetails.cpp,v 1.12 2005/08/21 07:15:00 jwharington Exp $
 
 
 #include "stdafx.h"
@@ -18,14 +18,15 @@ HANDLE hAirfieldDetails;
 
 extern TCHAR szRegistryAirfieldFile[];
 
+static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
+
 void OpenAirfieldDetails() {
 
-  static TCHAR  szFile[MAX_PATH] = TEXT("\0");
-
-  GetRegistryString(szRegistryAirfieldFile, szFile, MAX_PATH);
+  GetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
+  SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
 
   hAirfieldDetails = INVALID_HANDLE_VALUE;
-  hAirfieldDetails = CreateFile(szFile,GENERIC_READ,0,NULL,
+  hAirfieldDetails = CreateFile(szAirfieldDetailsFile,GENERIC_READ,0,NULL,
 				OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
   if( hAirfieldDetails == INVALID_HANDLE_VALUE)
     {
@@ -37,6 +38,9 @@ void OpenAirfieldDetails() {
 
 void CloseAirfieldDetails() {
   if (hAirfieldDetails != INVALID_HANDLE_VALUE) {
+    // file was OK, so save the registry
+    SetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile);
+
     CloseHandle(hAirfieldDetails);
     hAirfieldDetails = NULL;
   }

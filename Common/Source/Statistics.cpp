@@ -155,6 +155,25 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
 }
 
 
+void Statistics::DrawXLabel(HDC hdc, RECT rc, TCHAR *text) {
+  SIZE tsize;
+  GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
+  int x = rc.right-tsize.cx+5;
+  int y = rc.bottom-tsize.cy;
+
+  ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
+}
+
+
+void Statistics::DrawYLabel(HDC hdc, RECT rc, TCHAR *text) {
+  SIZE tsize;
+  GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
+  int x = max(0,rc.left-tsize.cx);
+  int y = rc.top;
+  ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
+}
+
+
 void Statistics::DrawTrend(HDC hdc, RECT rc, LeastSquares* lsdata, int Style) 
 {
   if (lsdata->sum_n<2) {
@@ -407,6 +426,9 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
 
   DrawTrend(hdc, rc, &flightstats.Altitude_Ceiling, STYLE_BLUETHIN);
 
+  DrawXLabel(hdc, rc, TEXT("t"));
+  DrawYLabel(hdc, rc, TEXT("h"));
+
 }
 
 
@@ -434,6 +456,10 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
   DrawTrendN(hdc, rc,
              &flightstats.ThermalAverage,
              STYLE_BLUETHIN);
+
+  DrawXLabel(hdc, rc, TEXT("n"));
+  DrawYLabel(hdc, rc, TEXT("w"));
+
 }
 
 
@@ -465,8 +491,55 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
              i+1, sinkrate1, 
              STYLE_MEDIUMBLACK);
   }
+  DrawXLabel(hdc, rc, TEXT("V"));
+  DrawYLabel(hdc, rc, TEXT("w"));
 }
 
+
+// from Calculations.cpp
+#include "windanalyser.h"
+extern WindAnalyser *windanalyser;
+
+void Statistics::RenderWind(HDC hdc, RECT rc) 
+{
+  int numsteps=10;
+  int i;
+  double h;
+  Vector wind;
+  bool found=true;
+  double mag;
+
+  LeastSquares windstats_mag;
+  
+  for (i=0; i<numsteps ; i++) {
+
+    h = (flightstats.Altitude_Ceiling.y_max-flightstats.Altitude_Base.y_min)*
+      i/(double)numsteps+flightstats.Altitude_Base.y_min;
+
+    wind = windanalyser->windstore.getWind(h, &found);
+    mag = sqrt(wind.x*wind.x+wind.y*wind.y);
+
+    windstats_mag.least_squares_update(mag, h);
+  }
+
+  //
+
+  ResetScale();
+
+  ScaleXFromValue(rc, 0);
+  ScaleXFromData(rc, &windstats_mag);
+  ScaleYFromData(rc, &windstats_mag);
+
+  DrawYGrid(hdc, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER);
+  DrawXGrid(hdc, rc, 5/LIFTMODIFY, 0, STYLE_THINDASHPAPER);
+
+  DrawLineGraph(hdc, rc, &windstats_mag,
+                STYLE_MEDIUMBLACK);
+
+  DrawXLabel(hdc, rc, TEXT("w"));
+  DrawYLabel(hdc, rc, TEXT("h"));
+
+}
 
 
 ////////////////
@@ -517,7 +590,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         page++;
         
         // cycle around to start page
-        if (page==3) {
+        if (page==4) {
           page=0;
         }
       }
@@ -573,18 +646,28 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
       }
       if (page==2) {
+        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Wind at Altitude")));
+
+        wsprintf(Temp, TEXT("    "));
+
+        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
+
+        Statistics::RenderWind(hdcScreen, rcgfx);
+
+      }
+      if (page==3) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Glide Polar")));
 
         wsprintf(Temp, TEXT("%s: %3.1f %s %3.0f %s\r\n%s: %3.2f %s %s %3.0f %s"),
-				 gettext(TEXT("Best LD")),
+                 gettext(TEXT("Best LD")),
                  GlidePolar::bestld,
-				 gettext(TEXT("at")),
+                 gettext(TEXT("at")),
                  GlidePolar.Vbestld*SPEEDMODIFY,
                  Units::GetHorizontalSpeedName(),
-				 gettext(TEXT("Min sink")),
+                 gettext(TEXT("Min sink")),
                  GlidePolar::minsink*LIFTMODIFY,
                  Units::GetVerticalSpeedName(),
-				 gettext(TEXT("at")),
+                 gettext(TEXT("at")),
                  GlidePolar::Vminsink*SPEEDMODIFY,
                  Units::GetHorizontalSpeedName());
 
@@ -592,9 +675,6 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
         Statistics::RenderGlidePolar(hdcScreen, rcgfx);
 
-      }
-      if (page==3) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Something")));
       }
 
       SelectObject(hdcScreen, hfOld);

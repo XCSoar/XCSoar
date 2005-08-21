@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.8 2005/08/04 00:27:33 jwharington Exp $
+**   $Id: windstore.cpp,v 1.9 2005/08/21 07:15:00 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -64,6 +64,10 @@ void WindStore::slot_Altitude(){
   }
 }
 
+
+Vector WindStore::getWind(double h, bool *found) {
+  return windlist->getWind(h, found);
+}
 
 /** Recalculates the wind from the stored measurements.
   * May result in a newWind signal. */

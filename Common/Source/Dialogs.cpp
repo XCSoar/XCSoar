@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.53 2005/08/19 05:49:53 scottp Exp $
+//   $Id: Dialogs.cpp,v 1.54 2005/08/21 07:15:00 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -120,10 +120,10 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       GetVersionEx(&osv);
       wsprintf(Temp,TEXT("%d.%d"),osv.dwMajorVersion ,osv.dwMinorVersion );
       SetDlgItemText(hDlg,IDC_OSVERSION,Temp);
-      wsprintf(Temp,TEXT("%s\ %s"),gettext(TEXT("Build Date")), TEXT(__DATE__));
+      wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Build Date")), TEXT(__DATE__));
       SetDlgItemText(hDlg,IDC_EXTRA,Temp );
 
-      wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);	
+      wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
 	  SetDlgItemText(hDlg, IDC_VERSION, Temp);
 
 	  SetWindowText_gettext(hDlg, IDC_STATIC_OS);
@@ -141,7 +141,7 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         case PROCESSOR_ARM720                           : SetDlgItemText(hDlg,IDC_PROCESSOR,TEXT("ARM 720")); break;
         default :SetDlgItemText(hDlg,IDC_PROCESSOR,TEXT("Unknown")); break;
         }
-      return TRUE; 
+      return TRUE;
     }
   return FALSE;
 }
@@ -155,9 +155,9 @@ LRESULT CALLBACK Register(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   switch (message)
     {
     case WM_INITDIALOG:
-      SetDlgItemText(hDlg,IDC_ASSETNUMBER,strAssetNumber);      
-      SetDlgItemText(hDlg,IDC_REGKEY,strRegKey);        
-      return TRUE; 
+      SetDlgItemText(hDlg,IDC_ASSETNUMBER,strAssetNumber);
+      SetDlgItemText(hDlg,IDC_REGKEY,strRegKey);
+      return TRUE;
 
     case WM_WINDOWPOSCHANGED:
       lpwp = (LPWINDOWPOS)(lParam);
@@ -177,10 +177,10 @@ LRESULT CALLBACK Progress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   switch (message)
     {
     case WM_INITDIALOG:
-      return TRUE; 
-        
+      return TRUE;
+
     case WM_COMMAND:
-      if (LOWORD(wParam) == IDOK) 
+      if (LOWORD(wParam) == IDOK)
         {
           EndDialog(hDlg, LOWORD(wParam));
           return TRUE;
@@ -198,7 +198,7 @@ LRESULT CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   switch (message)
     {
     case WM_INITDIALOG:
-      if(DisplayLocked) 
+      if(DisplayLocked)
         {
           SendDlgItemMessage(hDlg,IDD_LOCK,BM_SETCHECK ,BST_CHECKED, 0);
           SetWindowText(GetDlgItem(hDlg,IDD_LOCK),gettext(TEXT("InfoBoxes locked")));
@@ -209,7 +209,7 @@ LRESULT CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           SetWindowText(GetDlgItem(hDlg,IDD_LOCK),gettext(TEXT("InfoBoxes editable")));
         }
 
-      if(TaskAborted) 
+      if(TaskAborted)
         {
           SetWindowText(GetDlgItem(hDlg,IDC_ABORTTASK),gettext(TEXT("Resume")));
         }
@@ -230,14 +230,14 @@ LRESULT CALLBACK Menu(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	  SetWindowText_gettext(hDlg, IDD_EXIT);
 	  SetWindowText_gettext(hDlg, IDD_BACK);
 
-      return TRUE; 
-        
+      return TRUE;
+
     case WM_COMMAND:
       EndDialog(hDlg, LOWORD(wParam));
       MenuTimeOut=10;
       return TRUE;
     }
-                        
+
   return FALSE;
 }
 
@@ -255,56 +255,56 @@ LRESULT CALLBACK SetUnits(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       GetFromRegistry(szRegistrySpeedUnitsValue,&Speed);
       switch(Speed)
         {
-        case 0 : 
+        case 0 :
           SendDlgItemMessage(hDlg,IDC_SPEED_STATUTE,BM_SETCHECK,BST_CHECKED,0);
           break;
-                        
-        case 1 : 
+
+        case 1 :
           SendDlgItemMessage(hDlg,IDC_SPEED_NAUTICAL,BM_SETCHECK,BST_CHECKED,0);
           break;
-                        
-        case 2 : 
+
+        case 2 :
           SendDlgItemMessage(hDlg,IDC_SPEED_METRIC,BM_SETCHECK,BST_CHECKED,0);
           break;
         }
       GetFromRegistry(szRegistryDistanceUnitsValue,&Distance);
       switch(Distance)
         {
-        case 0 : 
+        case 0 :
           SendDlgItemMessage(hDlg,IDC_DISTANCE_STATUTE,BM_SETCHECK,BST_CHECKED,0);
           break;
-                        
-        case 1 : 
+
+        case 1 :
           SendDlgItemMessage(hDlg,IDC_DISTANCE_NAUTICAL,BM_SETCHECK,BST_CHECKED,0);
           break;
-                        
-        case 2 : 
+
+        case 2 :
           SendDlgItemMessage(hDlg,IDC_DISTANCE_METRIC,BM_SETCHECK,BST_CHECKED,0);
           break;
         }
       GetFromRegistry(szRegistryAltitudeUnitsValue,&Altitude);
       switch(Altitude)
         {
-        case 0 : 
+        case 0 :
           SendDlgItemMessage(hDlg,IDC_ALTITUDE_FEET,BM_SETCHECK,BST_CHECKED,0);
           break;
-                        
-        case 1 : 
+
+        case 1 :
           SendDlgItemMessage(hDlg,IDC_ALTITUDE_METRES,BM_SETCHECK,BST_CHECKED,0);
           break;
         }
       GetFromRegistry(szRegistryLiftUnitsValue,&Lift);
       switch(Lift)
         {
-        case 0 : 
+        case 0 :
           SendDlgItemMessage(hDlg,IDC_LIFT_KNOTS,BM_SETCHECK,BST_CHECKED,0);
           break;
-                        
-        case 1 : 
+
+        case 1 :
           SendDlgItemMessage(hDlg,IDC_LIFT_METRES,BM_SETCHECK,BST_CHECKED,0);
           break;
         }
-      return TRUE; 
+      return TRUE;
 
     case WM_COMMAND:
       switch (LOWORD(wParam))
@@ -314,7 +314,7 @@ LRESULT CALLBACK SetUnits(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           SPEEDMODIFY = TOMPH;
           Units::NotifyUnitChanged();
           return TRUE;
-                                
+
         case IDC_SPEED_NAUTICAL:
           SetToRegistry(szRegistrySpeedUnitsValue,1);
           SPEEDMODIFY = TOKNOTS;
@@ -1649,7 +1649,8 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
       GetRegistryString(szRegistryAirspaceFile, szAirspaceFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_AIRSPACEFILE,szAirspaceFile);     
-      GetRegistryString(szRegistryAdditionalAirspaceFile, szAirspaceFile, MAX_PATH);
+//      GetRegistryString(szRegistryAdditionalAirspaceFile, szAirspaceFile, MAX_PATH);
+      GetRegistryString(szRegistryAdditionalAirspaceFile, szAdditionalAirspaceFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_ADDITIONALAIRSPACEFILE,szAdditionalAirspaceFile);     
       GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_WAYPOINTSFILE,szWaypointFile);    
@@ -3608,6 +3609,12 @@ void CloseProgressDialog() {
 BOOL StepProgressDialog(void) {
   SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT, 0, 0);
   UpdateWindow(hProgress);
+  return(TRUE);
+}
+
+BOOL SetProgressStepSize(int nSize) {
+  if (nSize < 100)
+	SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_SETSTEP, (WPARAM)nSize, 0);
   return(TRUE);
 }
 
