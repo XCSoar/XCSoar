@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.14 2005/08/21 09:10:55 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.15 2005/08/21 09:14:08 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -122,7 +122,6 @@ void WindAnalyser::slot_newSample(){
   if (numwindsamples<MAXWINDSAMPLES-1) {
     numwindsamples++;
   } else {
-    return; // too long to complete circle, so can't be a good circle
 
     // TODO give error...
   }
@@ -137,7 +136,9 @@ void WindAnalyser::slot_newSample(){
     }
   
   if (fullCircle) { //we have completed a full circle!
-    _calcWind();    //calculate the wind for this circle
+    if (numwindsamples<MAXWINDSAMPLES-1) {
+      _calcWind();    //calculate the wind for this circle, only if it is valid
+    } 
     fullCircle=false;
     
     // should set each vector to average
