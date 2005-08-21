@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.13 2005/08/21 08:40:25 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.14 2005/08/21 09:10:55 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -122,6 +122,8 @@ void WindAnalyser::slot_newSample(){
   if (numwindsamples<MAXWINDSAMPLES-1) {
     numwindsamples++;
   } else {
+    return; // too long to complete circle, so can't be a good circle
+
     // TODO give error...
   }
 

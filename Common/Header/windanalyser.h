@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.h,v 1.4 2005/08/21 06:52:35 jwharington Exp $
+**   $Id: windanalyser.h,v 1.5 2005/08/21 09:10:53 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -35,7 +35,7 @@ class WindSample {
 };
 
 
-#define MAXWINDSAMPLES 100
+#define MAXWINDSAMPLES 50
 
 
 class WindAnalyser  {

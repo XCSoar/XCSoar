@@ -26,7 +26,8 @@ Changes from 4.22 to 4.3
 - Fixed ordering of Menu buttons when using cursor to navigate
 - Blanking improvements (prevent timeout advancing when any dialog is active)
 - Added Auxiliary infobox display, accessible from APP_KEY1, which now
-  toggles through normal (mode-specific) infoboxes, auxiliary infoboxes, and fullscreen. 
+  toggles through normal (mode-specific) infoboxes, auxiliary infoboxes,
+  and fullscreen.
 
 Changes from 4.21 to 4.22
 
