@@ -335,7 +335,7 @@ BEGIN
                     WS_GROUP,12,12,29,10
     CONTROL         "Cylinder",IDC_STARTCYLINDER,"Button",BS_AUTORADIOBUTTON,
                     12,24,42,10
-    LTEXT           "Radius",IDC_STATIC,60,25,23,8
+    LTEXT           "Radius",IDC_STATICRADIUS,61,26,23,8
     EDITTEXT        IDC_STARTRADIUS,87,24,27,12,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "m",IDC_STATIC,116,25,10,8
     GROUPBOX        "Start line",IDC_STATIC,7,2,122,41

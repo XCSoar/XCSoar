@@ -291,6 +291,7 @@
 #define IDC_VERSIONTEXT                 1255
 #define IDC_STATIC_PROCESSOR            1255
 #define IDC_STATIC_OS                   1256
+#define IDC_STATICRADIUS                1257
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -326,7 +327,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        265
 #define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1257
+#define _APS_NEXT_CONTROL_VALUE         1258
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif
