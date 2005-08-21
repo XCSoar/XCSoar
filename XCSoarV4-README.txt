@@ -3,7 +3,6 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 TODO
-- AutoMcready fix for wandering
 - Enable secondary files check boxes
 - "Reset infobox defaults" button
 
@@ -30,6 +29,7 @@ Changes from 4.22 to 4.3
   and fullscreen.
 - Settings->Task start line/cylinder labels change dynamically to avoid
   confusion
+- AutoMcready improvements, fix for overshoot hunting
 
 Changes from 4.21 to 4.22
 
