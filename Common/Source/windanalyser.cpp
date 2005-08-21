@@ -122,7 +122,6 @@ void WindAnalyser::slot_newSample(){
   if (numwindsamples<MAXWINDSAMPLES-1) {
     numwindsamples++;
   } else {
-    return; // too long to complete circle, so can't be a good circle
 
     // TODO give error...
   }
@@ -137,7 +136,9 @@ void WindAnalyser::slot_newSample(){
     }
 
   if (fullCircle) { //we have completed a full circle!
-    _calcWind();    //calculate the wind for this circle
+    if (numwindsamples<MAXWINDSAMPLES-1) {
+      _calcWind();    //calculate the wind for this circle, only if it is valid
+    }
     fullCircle=false;
 
     // should set each vector to average
