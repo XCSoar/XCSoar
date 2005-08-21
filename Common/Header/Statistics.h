@@ -58,12 +58,16 @@ class Statistics {
   static void DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
                         int Style);
 
+  static void DrawXLabel(HDC hdc, RECT rc, TCHAR *text);
+  static void DrawYLabel(HDC hdc, RECT rc, TCHAR *text);
 
   ///
 
     static void RenderBarograph(HDC hdc, RECT rc);
     static void RenderClimb(HDC hdc, RECT rc);
     static void RenderGlidePolar(HDC hdc, RECT rc);
+    static void RenderWind(HDC hdc, RECT rc);
+
 };
 
 

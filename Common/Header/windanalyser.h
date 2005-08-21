@@ -26,6 +26,18 @@
   *@author André Somers
   */
 
+
+class WindSample {
+ public:
+  Vector v;
+  double t;
+  double mag;
+};
+
+
+#define MAXWINDSAMPLES 100
+
+
 class WindAnalyser  {
 
 public:
@@ -84,8 +96,12 @@ private: // Private attributes
     double climbstarttime;
     double climbendtime;
 
+    WindSample windsamples[MAXWINDSAMPLES];
+    int numwindsamples;
+
 private: // Private memberfunctions
     void _calcWind();
+    void _calcWindNew();
 
   DERIVED_INFO *derivedInfo;
   NMEA_INFO *nmeaInfo;

@@ -54,6 +54,8 @@ public: // Public slots
     */
   void newWind(Vector& wind);
 
+  Vector getWind(double h, bool *found);
+
 private:
   DERIVED_INFO *derivedInfo;
   NMEA_INFO *nmeaInfo;
