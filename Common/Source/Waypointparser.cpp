@@ -167,6 +167,12 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
 
   //ExtractParameter(TempString,ctemp,5); // Name
   pToken = strtok_r(NULL, TEXT(","), &pWClast);
+
+  // guard against overrun
+  if (_tcslen(pToken)>NAME_SIZE) {
+    pToken[NAME_SIZE-1]= _T('\0');
+  }
+
   _tcscpy(Temp->Name, pToken);
   int i;
   for (i=_tcslen(Temp->Name)-1; i>1; i--) {
