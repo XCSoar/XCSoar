@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.12 2005/08/21 07:15:00 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.13 2005/08/21 08:40:25 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -330,9 +330,9 @@ void WindAnalyser::_calcWindNew() {
   int quality;
 
   if (mag>1) {
-    quality = 5- rthis/mag*3;
+    quality = 5- iround(rthis/mag*3);
   } else {
-    quality = 5- rthis;
+    quality = 5- iround(rthis);
   }
 
   if (circleCount<3) quality--;
@@ -364,7 +364,7 @@ void WindAnalyser::_calcWind() {
 
   return;
 
-  double aDiff= angleDiff(minVector, maxVector);
+  int aDiff= iround(angleDiff(minVector, maxVector));
   int quality;
 
   double sp, mmax, mmin;
@@ -379,9 +379,9 @@ void WindAnalyser::_calcWind() {
     Furthermore, the first two circles are considdered to be of lesser quality.
   */
   
-  quality=5-((180-fabs(aDiff))/6);
+  quality=5-((180-abs(aDiff))/6);
   if (sp<2.0) {
-    quality=5-((180-fabs(aDiff))/10);
+    quality=5-((180-abs(aDiff))/10);
   }
   quality= min(quality,5);  //5 is maximum quality, make sure we honour that.
 

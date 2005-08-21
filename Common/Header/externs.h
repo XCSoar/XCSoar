@@ -122,6 +122,7 @@ extern double QNH;
 extern int NettoSpeed;
 extern BOOL EnableCalibration;
 extern BOOL EnableAutoBlank;
+extern BOOL EnableAuxiliaryInfo;
 
 // user interface options
 extern BOOL bAirspaceBlackOutline;

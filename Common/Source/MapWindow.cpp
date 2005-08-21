@@ -445,6 +445,9 @@ void MapWindow::RefreshMap() {
   RequestMapDirty = true;
 }
 
+bool MapWindow::IsMapFullScreen() {
+  return  MapFullScreen;
+}
 
 void MapWindow::ToggleFullScreenStart() {
 
