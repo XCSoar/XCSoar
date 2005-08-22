@@ -176,6 +176,17 @@ void CheckInfoTypes() {
 }
 
 
+void ResetInfoBoxes(void) {
+  InfoType[0] = 9221102;
+  InfoType[1] = 725525;
+  InfoType[2] = 262144;
+  InfoType[3] = 74518;
+  InfoType[4] = 657930;
+  InfoType[5] = 2236963;
+  InfoType[6] = 394758;
+  InfoType[7] = 1644825;
+}
+
 void ReadRegistrySettings(void)
 {
   DWORD Speed = 0;

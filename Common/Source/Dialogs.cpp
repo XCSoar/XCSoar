@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.56 2005/08/21 11:59:32 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.57 2005/08/22 00:17:54 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -2623,6 +2623,16 @@ LRESULT CALLBACK LoadProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
           GetDlgItemText(hDlg,IDC_FILE,szFile,MAX_PATH);
           ReadProfile(hDlg,szFile);
           EndDialog(hDlg, TRUE);
+          return TRUE;
+
+        case  IDC_INFOBOXRESET:
+	  // TODO
+	  if (MessageBox(hDlg,
+			 gettext(TEXT("Do you wish to reset infoboxes?")),
+			 gettext(TEXT("Reset?")),MB_YESNO|MB_ICONQUESTION) 
+	      == IDYES) {	    
+	    ResetInfoBoxes();
+	  }
           return TRUE;
 
         case IDCANCEL:

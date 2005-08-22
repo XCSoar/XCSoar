@@ -4,7 +4,6 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 TODO
 - Enable secondary files check boxes
-- "Reset infobox defaults" button
 
 Changes from 4.22 to 4.3
 
@@ -30,6 +29,7 @@ Changes from 4.22 to 4.3
 - Settings->Task start line/cylinder labels change dynamically to avoid 
   confusion 
 - AutoMcready improvements, fix for overshoot hunting
+- "Reset infobox defaults" button from Settings->Load Profile
 
 Changes from 4.21 to 4.22
 
