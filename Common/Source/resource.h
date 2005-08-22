@@ -271,6 +271,7 @@
 #define IDC_BUTTON1                     1237
 #define IDD_STATUS                      1237
 #define IDC_BROWSEADDITIONALAIRSPACE    1237
+#define IDC_INFOBOXRESET                1237
 #define IDC_GPSMESSAGE                  1238
 #define IDC_ANALYSIS                    1238
 #define IDC_PROGRESS1                   1239

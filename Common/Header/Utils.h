@@ -69,6 +69,9 @@ double DoSunEphemeris(double lon, double lat);
 
 void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2));
 
+
+void ResetInfoBoxes(void);
+
 /* =====================================================
    Interface Files !
    ===================================================== */

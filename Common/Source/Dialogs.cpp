@@ -2625,6 +2625,16 @@ LRESULT CALLBACK LoadProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
           EndDialog(hDlg, TRUE);
           return TRUE;
 
+        case  IDC_INFOBOXRESET:
+	  // TODO
+	  if (MessageBox(hDlg,
+			 gettext(TEXT("Do you wish to reset infoboxes?")),
+			 gettext(TEXT("Reset?")),MB_YESNO|MB_ICONQUESTION)
+	      == IDYES) {
+	    ResetInfoBoxes();
+	  }
+          return TRUE;
+
         case IDCANCEL:
           EndDialog(hDlg, FALSE);
           return TRUE;
