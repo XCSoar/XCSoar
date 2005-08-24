@@ -4,6 +4,11 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 TODO
 - Enable secondary files check boxes
+- Option to auto-start logger on every flight
+- Reset of flight start time when relaunching
+- Daylight savings time fix
+- Proper time in simulator 
+- Adjustable font for long infoboxes (especially time)
 
 Changes from 4.22 to 4.3
 
