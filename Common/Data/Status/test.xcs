@@ -1,8 +1,0 @@
-key=Pan mode ON
-sound=IDR_REMOVE
-delay=4000
-
-key=Pan mode OFF
-sound=IDR_REMOVE
-delay=200
-
