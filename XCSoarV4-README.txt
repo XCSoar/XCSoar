@@ -35,6 +35,10 @@ Changes from 4.22 to 4.3
   confusion
 - AutoMcready improvements, fix for overshoot hunting
 - "Reset infobox defaults" button from Settings->Load Profile
+- Moved handling of bug degradation to sink model to make it consistent
+  everywhere.
+- Optimised display of titles in infoboxes to prevent over-use of gettext
+- Added units display to AAT settings to avoid confusion
 
 Changes from 4.21 to 4.22
 

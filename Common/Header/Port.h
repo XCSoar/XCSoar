@@ -20,6 +20,7 @@ BOOL Port2Close (HANDLE);
 void Port2Write (BYTE);
 DWORD Port2ReadThread (LPVOID);
 void Port2WriteString(TCHAR *Text);
+void Port2WriteNMEA(TCHAR *Text);
 
 BOOL Port1StopRxThread(void);
 BOOL Port1StartRxThread(void);

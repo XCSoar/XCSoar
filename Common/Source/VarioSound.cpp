@@ -27,6 +27,9 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
 #include <stdlib.h>
 
+#define SIMULATENOISE 1
+#ifdef DEBUGAUDIO
+#endif
 
 double randomgaussian() {
 #ifdef SIMULATENOISE
@@ -55,14 +58,13 @@ CWaveOutThread variosound_waveOut;
 #define CHANNELS 2
 #define BSIZE 1
 #define BCOUNT INTERNAL_WAVEOUT_BUFFER_COUNT
-#define FREQZ 80*40
+#define FREQZ 80*5
 #define FREQ 8000
 
 unsigned char variosound_buffer[BSIZE*FREQZ*CHANNELS];
 
 
-
-
+unsigned char audio_volume = 8;
 
 void VarioSound_synthesiseSound();
 
@@ -128,6 +130,10 @@ void audio_soundparameters(void) {
 
 /////////////////////////////////
 
+unsigned char audio_adjust_volume(unsigned char sval) {
+  short oval = ((((short)sval-0x80)*(short)audio_volume)>>3)+0x80;
+  return oval;
+}
 
 
 // look up sin wave
@@ -150,16 +156,17 @@ unsigned char audio_sound_loud(unsigned short i, bool beep, bool doaltsoundfreq)
   audio_phase_new = phase;
   audio_phase_i_new = i;
 
-  return audio_sintable(phase);
+  return audio_adjust_volume(audio_sintable(phase));
 }
 
 
 // look up beep phase location
 //
 // this routine only has two sounds implemented:
-//   0: positive lift, short beep (60/256) followed by (196/256) quiet
-//   1: negative lift, long beep (200/256) followed by (56/256) quiet
-//
+//   0: silence
+//   1: positive lift, short beep (60/256) followed by (196/256) quiet
+//   2: negative lift, long beep (200/256) followed by (56/256) quiet
+//   3: solid sound
 // other types may be added later to implement hurry-up sounds etc.
 
 unsigned char audio_sound_beep(unsigned short i) {
@@ -960,7 +967,7 @@ extern "C" {
     variosound_vscale_last = variosound_vscale_in;
 
     // set new value, clipped
-    variosound_vscale_in = max(-100,min(v,100));
+    variosound_vscale_in = max(-100,min(v+2.2*randomgaussian(),100));
 
     // calculate time elapsed since last sound,
     // usually this will be 500 or 1000 ms
@@ -968,7 +975,7 @@ extern "C" {
     fpsTimeSound = ::GetTickCount(); // time now
     fpsTimeDelta = (short)(fpsTimeSound-fpsTimeLast);
 
-#ifdef DEBUG
+#ifdef DEBUGAUDIO
     variosound_vscale_timer = true;
 #endif
 
@@ -980,7 +987,6 @@ extern "C" {
   VARIOSOUND_API void VarioSound_SetVdead(short v) {
 
     EnterCriticalSection(&CritSec_VarioSound);
-    int i;
 
     audio_deadband_hi = 100+v-12;
     audio_deadband_low = 100-v-24;
@@ -1090,14 +1096,34 @@ BOOL PlayResource (LPTSTR lpName)
 
 
 void audio_soundmode(short vinst, short valt) {
-  short vcur;
+  static short vcur = 0;
   static short vsmooth= 0;
   static short valtsmooth=0;
   bool suppressdeadband = false;
 
+  short vsmoothlast = 0;
+  short valtsmoothlast = 0;
+  short vcurlast = 0;
+
+  valtsmoothlast = valtsmooth;
   valtsmooth = (6*valtsmooth+2*valt)/8;
+
+  vsmoothlast = vsmooth;
   vsmooth = max(0, min((6*vsmooth+2*vinst)/8, 200));
+
+  vcurlast = vcur;
   vcur = max(0, min(vinst,200));
+
+  short grad;
+
+  grad = max(abs(valtsmooth)/2, abs(vcur-vsmoothlast));
+
+  audio_volume = (audio_volume*6+2*max(3, 3+min(grad/8, 5)))/8;
+  if (audio_volume>3) {
+    suppressdeadband = true;
+  } else {
+    suppressdeadband = false;
+  }
 
   // main vario sound frequency based on instantaneous reading
   audio_soundfrequency = audio_frequencytable(vcur);
@@ -1108,15 +1134,15 @@ void audio_soundmode(short vinst, short valt) {
   // apply deadbands and sound types
   audio_soundtype = 0;
 
-  if (vcur>= audio_deadband_hi) {
+  if (vsmooth>= audio_deadband_hi) {
     audio_soundtype = 1;
-  } else if (suppressdeadband && (vcur>=100)) {
+  } else if (suppressdeadband && (vsmooth>=100)) {
     audio_soundtype = 1;
   }
-  if (vcur<= audio_deadband_low) {
+  if (vsmooth<= audio_deadband_low) {
     audio_soundtype = 2;
-  } else if (suppressdeadband && (vcur<100)) {
-    audio_soundtype = 1;
+  } else if (suppressdeadband && (vsmooth<100)) {
+    audio_soundtype = 2;
   }
 
   // speed-to-fly frequency
@@ -1127,10 +1153,10 @@ void audio_soundmode(short vinst, short valt) {
     // (this is speed-to-fly deadband)
 
     short vthis;
-    vthis = max(0, min(valtsmooth/2+vinst,200));
+    vthis = max(0, min(valtsmooth+vsmooth,200));
     audio_altsoundfrequency = audio_frequencytable(vthis);
 
-    // in climb, need to speed up, switch to sink beep type
+    // in climb and need to speed up, switch to sink beep type
     if ((vsmooth>100) && (valtsmooth<0)) {
       audio_soundtype = 2;
     }
@@ -1139,7 +1165,7 @@ void audio_soundmode(short vinst, short valt) {
     // because low frequencies are hard to distinguish
 
     if ((vsmooth<100)&&(valtsmooth<0)) {
-      vthis = max(0, min(100-valtsmooth,200));
+      vthis = max(0, min(100-valtsmooth*2,200));
       audio_beepfrequency = audio_delaytable(vthis);
       audio_altsoundfrequency = audio_soundfrequency;
     }
@@ -1190,14 +1216,17 @@ void VarioSound_sndparam() {
 
   variosound_vav = variosound_vav_in;
 
+#ifdef AUDIOSMOOTHING
   variosound_vscale = (short)((
     variosound_vscale_in*(delta)
     +variosound_vscale_last*(fpsTimeDelta-delta)
     )/fpsTimeDelta);
-
+#else
+  variosound_vscale = variosound_vscale_in;
+#endif
   variosound_vscale = max(-100,min(100,variosound_vscale));
 
-#ifdef DEBUG
+#ifdef DEBUGAUDIO
   // for debugging, find time between sending a command and the time the sound gets generated
   if (variosound_vscale_timer) {
     DWORD	fpsTime0 = ::GetTickCount();
@@ -1224,7 +1253,7 @@ void VarioSound_sndparam() {
   // compute sound parameters
 
   audio_soundparameters();
-  audio_soundmode(variosound_vscale+100+2.4*randomgaussian(), variosound_valt);
+  audio_soundmode(variosound_vscale+100, variosound_valt);
 
   LeaveCriticalSection(&CritSec_VarioSoundV);
 
@@ -1238,7 +1267,7 @@ void VarioSound_synthesiseSound() {
   unsigned char bsound;
 
 
-#ifdef DEBUG
+#ifdef DEBUGAUDIO
   DWORD	fpsTime0 = ::GetTickCount();
 #endif
 
