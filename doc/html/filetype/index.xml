@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title>File Types</title>
+        </metadata>
+
+        <content>
+
+		<h2>File Types</h2>
+
+<p>
+XCS makes use of many files. Each of these files has been based where possible
+on an already existing format, or at least a common format. Where they can't
+be, they have been kept simple. The following documents describe each file's
+purpose and format.
+</p>
+
+
+<table>
+	<tr>
+		<th>File Type</th>
+		<th>Description</th>
+		<th>XCS Purpose</th>
+		<th>Action</th>
+	</tr>
+
+	<tr>
+		<td>
+
+	<tr>
+		<td>*.xcl</td>
+		<td>Language file - new</td>
+		<td></td>
+		<td><a href="xcl.html">more...</td>
+	</tr>
+
+
+	<tr>
+		<td>*.xcs</td>
+		<td>Status file - new</td>
+		<td></td>
+		<td><a href="xcs.html">more...</td>
+	</tr>
+
+
+	<tr>
+		<td>*.xca</td>
+		<td>Airspace file - was .dat</td>
+		<td></td>
+		<td><a href="xca.html">more...</td>
+	</tr>
+
+
+	<tr>
+		<td>*.xcw</td>
+		<td>Waypoint file - was .dat</td>
+		<td></td>
+		<td><a href="xcw.html">more...</td>
+	</tr>
+
+
+	<tr>
+		<td>*.xct</td>
+		<td>Terrain file - was .dat</td>
+		<td></td>
+		<td><a href="xct.html">more...</td>
+	</tr>
+
+
+	<tr>
+		<td>*.xcf</td>
+		<td>Airfield file - was .txt</td>
+		<td></td>
+		<td><a href="xcf.html">more...</td>
+	</tr>
+
+
+	<tr>
+		<td>*.tpl</td>
+		<td>Topology - as it was</td>
+		<td></td>
+		<td><a href="tpl.html">more...</td>
+	</tr>
+
+
+	<tr>
+		<td>*.prf</td>
+		<td>Profiles - as it was</td>
+		<td></td>
+		<td><a href="prf.html">more...</td>
+	</tr>
+
+
+	<tr>
+		<td>*.plr</td>
+		<td>Polar - as it was</td>
+		<td></td>
+		<td><a href="plr.html">more...</td>
+	</tr>
+
+
+	<tr>
+		<td>*.tsk</td>
+		<td>Task Files - as it was</td>
+		<td></td>
+		<td><a href="tsk.html">more...</td>
+	</tr>
+
+</table>
+		
+	</content>
+</document>
+
