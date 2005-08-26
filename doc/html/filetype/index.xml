@@ -25,21 +25,17 @@ purpose and format.
 	</tr>
 
 	<tr>
-		<td>
-
-	<tr>
 		<td>*.xcl</td>
 		<td>Language file - new</td>
 		<td></td>
-		<td><a href="xcl.html">more...</td>
+		<td><a href="xcl.html">more...</a></td>
 	</tr>
-
 
 	<tr>
 		<td>*.xcs</td>
 		<td>Status file - new</td>
 		<td></td>
-		<td><a href="xcs.html">more...</td>
+		<td><a href="xcs.html">more...</a></td>
 	</tr>
 
 
@@ -47,7 +43,7 @@ purpose and format.
 		<td>*.xca</td>
 		<td>Airspace file - was .dat</td>
 		<td></td>
-		<td><a href="xca.html">more...</td>
+		<td><a href="xca.html">more...</a></td>
 	</tr>
 
 
@@ -55,7 +51,7 @@ purpose and format.
 		<td>*.xcw</td>
 		<td>Waypoint file - was .dat</td>
 		<td></td>
-		<td><a href="xcw.html">more...</td>
+		<td><a href="xcw.html">more...</a></td>
 	</tr>
 
 
@@ -63,7 +59,7 @@ purpose and format.
 		<td>*.xct</td>
 		<td>Terrain file - was .dat</td>
 		<td></td>
-		<td><a href="xct.html">more...</td>
+		<td><a href="xct.html">more...</a></td>
 	</tr>
 
 
@@ -71,7 +67,7 @@ purpose and format.
 		<td>*.xcf</td>
 		<td>Airfield file - was .txt</td>
 		<td></td>
-		<td><a href="xcf.html">more...</td>
+		<td><a href="xcf.html">more...</a></td>
 	</tr>
 
 
@@ -79,7 +75,7 @@ purpose and format.
 		<td>*.tpl</td>
 		<td>Topology - as it was</td>
 		<td></td>
-		<td><a href="tpl.html">more...</td>
+		<td><a href="tpl.html">more...</a></td>
 	</tr>
 
 
@@ -87,7 +83,7 @@ purpose and format.
 		<td>*.prf</td>
 		<td>Profiles - as it was</td>
 		<td></td>
-		<td><a href="prf.html">more...</td>
+		<td><a href="prf.html">more...</a></td>
 	</tr>
 
 
@@ -95,7 +91,7 @@ purpose and format.
 		<td>*.plr</td>
 		<td>Polar - as it was</td>
 		<td></td>
-		<td><a href="plr.html">more...</td>
+		<td><a href="plr.html">more...</a></td>
 	</tr>
 
 
@@ -103,7 +99,7 @@ purpose and format.
 		<td>*.tsk</td>
 		<td>Task Files - as it was</td>
 		<td></td>
-		<td><a href="tsk.html">more...</td>
+		<td><a href="tsk.html">more...</a></td>
 	</tr>
 
 </table>
