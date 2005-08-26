@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.70 2005/08/21 08:40:25 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.71 2005/08/26 12:48:58 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -611,6 +611,9 @@ void RestartCommPorts() {
 
 void FocusOnWindow(int i, bool selected) {
     //hWndTitleWindow
+
+  if (i<0) return; // error
+
   HWND wind = hWndInfoWindow[i];
 
   if (selected) {
@@ -815,6 +818,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   devInit(lpCmdLine);
 
+  // re-set polar in case devices need the data
+  GlidePolar::SetBallast();
 
   CreateCalculationThread();
 
@@ -1239,6 +1244,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 
 int getInfoType(int i) {
+  if (i<0) return 0; // error
+
   if (EnableAuxiliaryInfo) {
     return (InfoType[i] >> 24) & 0xff; // auxiliary
   } else {
@@ -1254,6 +1261,8 @@ int getInfoType(int i) {
 
 
 void setInfoType(int i, char j) {
+  if (i<0) return; // error
+
   if (EnableAuxiliaryInfo) {
     InfoType[i] &= 0x00ffffff;
     InfoType[i] += (j<<24);
@@ -1416,6 +1425,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	  //	  ShowMenu();
         }
       } else {
+	FocusOnWindow(InfoFocus,false);
+	InfoFocus = -1;
 	HideMenu();
         SetFocus(hWndMapWindow);
       }
@@ -1907,7 +1918,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
               UnlockFlightData();
               UnlockNavBox();
-			  MapWindow::ResumeDrawingThread();
+	      MapWindow::ResumeDrawingThread();
 
               SwitchToMapWindow();
 	      FullScreen();
@@ -1999,7 +2010,6 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      return 0;
 	    }
 	}
-
     }
   return DefWindowProc(hWnd, message, wParam, lParam);          
 }
@@ -2111,14 +2121,15 @@ void    AssignValues(void)
 void DisplayText(void)
 {
   
-  if (InfoBoxesHidden) 
+  if (InfoBoxesHidden)
     return;
 
   int i;
   static TCHAR Caption[NUMINFOWINDOWS][100];
-
-  int DisplayType;
-  
+  static int DisplayType[NUMINFOWINDOWS];
+  static bool first=true;
+  static int InfoFocusLast = -1;
+  int DisplayTypeLast;
 #ifdef _MAP_
   return;
 #endif
@@ -2126,31 +2137,45 @@ void DisplayText(void)
   LockNavBox();
   
   // JMW note: this is updated every GPS time step
+
+  if (InfoFocus != InfoFocusLast) {
+    first = true; // force re-setting title
+  }
+  if ((InfoFocusLast>=0)&&(!InfoWindowActive)) {
+    first = true;
+  }
+  InfoFocusLast = InfoFocus;
   
   for(i=0;i<NUMINFOWINDOWS;i++)
     {
       Caption[i][0]= 0;
 
+      DisplayTypeLast = DisplayType[i];
+
       if (EnableAuxiliaryInfo) {
-	  DisplayType = (InfoType[i] >> 24) & 0xff;
+	  DisplayType[i] = (InfoType[i] >> 24) & 0xff;
       } else {
 	if (CALCULATED_INFO.Circling == TRUE)
-	  DisplayType = InfoType[i] & 0xff;
+	  DisplayType[i] = InfoType[i] & 0xff;
 	else if (CALCULATED_INFO.FinalGlide == TRUE) {
-	  DisplayType = (InfoType[i] >> 16) & 0xff;
+	  DisplayType[i] = (InfoType[i] >> 16) & 0xff;
 	} else {
-	  DisplayType = (InfoType[i] >> 8) & 0xff;
+	  DisplayType[i] = (InfoType[i] >> 8) & 0xff;
 	}
       }
 
-      Data_Options[DisplayType].Formatter->AssignValue(DisplayType);
-      Data_Options[DisplayType].Formatter->Render(hWndInfoWindow[i]);
+      Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
+      Data_Options[DisplayType[i]].Formatter->Render(hWndInfoWindow[i]);
 
-      _stprintf(Caption[i],gettext(Data_Options[DisplayType].Title) );
-
-      SetWindowText(hWndTitleWindow[i],Caption[i]);
+      if ((DisplayType[i] != DisplayTypeLast)||(first)) {
+	// JMW only update captions if text has really changed.
+	// this avoids unnecesary gettext lookups
+	_stprintf(Caption[i],gettext(Data_Options[DisplayType[i]].Title) );
+	SetWindowText(hWndTitleWindow[i],Caption[i]);
+      }
 
     }
+  first = false;
 
   UnlockNavBox();
 
@@ -2393,10 +2418,9 @@ void SIMProcessTimer(void)
 
 void SwitchToMapWindow(void)
 {
-  if (InfoWindowActive) {
-    FocusOnWindow(InfoFocus,false);
-  }
+  FocusOnWindow(InfoFocus,false);
   InfoWindowActive = FALSE;
+  InfoFocus = -1;
   SetFocus(hWndMapWindow);
   if (  MenuTimeOut< MENUTIMEOUTMAX) {
     MenuTimeOut = MENUTIMEOUTMAX;

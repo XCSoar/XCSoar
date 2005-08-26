@@ -260,10 +260,28 @@ BOOL Port2Close (HANDLE hCommPort)
 void Port2WriteString(TCHAR *Text)
 {
 	int i,len;
-
 	len = _tcslen(Text);
 
 	for(i=0;i<len;i++)
 		Port2Write ((BYTE)Text[i]);
 }
 
+void Port2WriteNMEA(TCHAR *Text) 
+{
+  int i,len;
+  len = _tcslen(Text);
+  Port2Write((BYTE)_T('$'));
+  unsigned char chk=0;
+  for (i=0;i<len; i++) {
+    chk ^= (BYTE)Text[i];
+    Port2Write((BYTE)Text[i]);
+  }
+  Port2Write((BYTE)_T('*'));
+
+  TCHAR tbuf[3];
+  wsprintf(tbuf,TEXT("%02X"),chk);
+  Port2Write((BYTE)tbuf[0]);
+  Port2Write((BYTE)tbuf[1]);
+  Port2Write((BYTE)_T('\r'));
+  Port2Write((BYTE)_T('\n'));
+}

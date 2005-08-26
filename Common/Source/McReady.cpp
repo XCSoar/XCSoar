@@ -22,6 +22,7 @@
 #include "externs.h"
 
 #include "XCSoar.h"
+#include "Port.h"
 
 #include <math.h>
 #include <windows.h>
@@ -48,9 +49,10 @@ void GlidePolar::SetBallast() {
   BallastWeight = WEIGHTS[2] * BALLAST;
   BallastWeight += WEIGHTS[0] + WEIGHTS[1];
   BallastWeight = (double)sqrt(BallastWeight);
-  polar_a = POLAR[0] / BallastWeight;
-  polar_b = POLAR[1];
-  polar_c = POLAR[2] * BallastWeight;
+  double bugfactor = 1.0/BUGS;
+  polar_a = POLAR[0] / BallastWeight*bugfactor;
+  polar_b = POLAR[1] * bugfactor;
+  polar_c = POLAR[2] * BallastWeight*bugfactor;
 
   // do preliminary scan to find min sink and best LD
   // this speeds up mcready calculations because we have a reduced range
@@ -85,6 +87,23 @@ void GlidePolar::SetBallast() {
 
     }
   UnlockFlightData();
+
+  if (Port2Available && GPS_INFO.VarioAvailable) {
+
+    int polar_ai = iround((polar_a*10)*4096);
+    int polar_bi = iround((polar_b)*4096);
+    int polar_ci = iround((polar_c/10)*4096);
+    int minsinki = iround(minsink*10);
+    TCHAR nmeabuf[100];
+    wsprintf(nmeabuf,TEXT("PDVGP,%d,%d,%d,%d,0"),
+	     polar_ai,
+	     polar_bi,
+	     polar_ci,
+	     minsinki);
+
+    Port2WriteNMEA(nmeabuf);
+  }
+
 }
 
 

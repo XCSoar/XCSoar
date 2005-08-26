@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: Parser.cpp,v 1.14 2005/07/29 15:03:04 jwharington Exp $
+  $Id: Parser.cpp,v 1.15 2005/08/26 12:48:58 jwharington Exp $
 */
 
 #include "stdafx.h"
@@ -42,6 +42,9 @@ static BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO);
+
+static BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL PDAPL(TCHAR *String, NMEA_INFO *GPS_INFO);
 
 static double EastOrWest(double in, TCHAR EoW);
 static double NorthOrSouth(double in, TCHAR NoS);
@@ -111,6 +114,17 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
       if(_tcscmp(SentanceString,TEXT("PBJVH"))==0)
         {
           return PBJVH(&String[7], GPS_INFO);
+        }
+      if(_tcscmp(SentanceString,TEXT("PDVDV"))==0)
+        {
+          return PDVDV(&String[7], GPS_INFO);
+        }
+
+      // JMW testing only
+      if(_tcscmp(SentanceString,TEXT("PDAPL"))==0)
+        {
+	  PlayResource(TEXT("IDR_WAV_GREEN"));
+          return FALSE;
         }
 
       return FALSE;
@@ -760,4 +774,34 @@ BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
   VarioUpdated = TRUE;
 
   return TRUE;
+}
+
+
+// $PDVDV,vario,ias,densityratio,altitude,staticpressure
+
+BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+  TCHAR ctemp[80];
+
+  ExtractParameter(String,ctemp,0);
+  GPS_INFO->Vario = StrToDouble(ctemp,NULL)/10.0;
+  GPS_INFO->VarioAvailable = TRUE;
+
+  /*
+  ExtractParameter(String,ctemp,1);
+  GPS_INFO->IndicatedAirspeed = StrToDouble(ctemp,NULL)/10.0;
+  GPS_INFO->AirspeedAvailable = TRUE;
+
+  ExtractParameter(String,ctemp,2);
+  double densityratio = StrToDouble(ctemp,NULL)/1024.0;
+  GPS_INFO->TrueAirspeed = GPS_INFO->IndicatedAirspeed*densityratio;
+  */
+
+  ExtractParameter(String,ctemp,3);
+  GPS_INFO->BaroAltitude = StrToDouble(ctemp,NULL);
+  GPS_INFO->BaroAltitudeAvailable = TRUE;
+
+  VarioUpdated = TRUE;
+
+  return FALSE;
 }

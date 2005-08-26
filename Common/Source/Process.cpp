@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Utils.h"
 #include "device.h"
 #include "Dialogs.h"
+#include "Port.h"
 
 // JMW added key codes,
 // so -1 down
@@ -167,27 +168,48 @@ void	DirectionProcessing(int UpDown)
 void	McCreadyProcessing(int UpDown)
 {
 
-	if(UpDown==1) {
-		MCCREADY += (double)0.2;
-
-		if (MCCREADY>10.0) { // JMW added sensible limit
-			MCCREADY=10.0;
-		}
-	}
-	else if(UpDown==-1)
+  if(UpDown==1) {
+    
+    MCCREADY += (double)0.2;
+    
+    if (MCCREADY>10.0) { // JMW added sensible limit
+      MCCREADY=10.0;
+    }
+  }
+  else if(UpDown==-1)
+    {
+      MCCREADY -= (double)0.2;
+      if(MCCREADY < 0)
 	{
-		MCCREADY -= (double)0.2;
-		if(MCCREADY < 0)
-		{
-			MCCREADY = 0;
-		}
-	} else if (UpDown==0)
-	{
-		CALCULATED_INFO.AutoMcCready = !CALCULATED_INFO.AutoMcCready; // JMW toggle automacready
+	  MCCREADY = 0;
 	}
-
-  devPutMcCready(devA(), MCCREADY);
+    } else if (UpDown==0)
+    {
+      CALCULATED_INFO.AutoMcCready = !CALCULATED_INFO.AutoMcCready; // JMW toggle automacready
+      
+    }
+  
+  devPutMcCready(devA(), MCCREADY); // NOTE THIS IS IN USER UNITS
   devPutMcCready(devB(), MCCREADY);
+  
+  // JMW testing only
+  if (Port2Available && GPS_INFO.VarioAvailable) {
+    if (UpDown==1) {
+      Port2WriteNMEA(TEXT("PDVTM,2"));
+    }
+    if (UpDown==-1) {
+	Port2WriteNMEA(TEXT("PDVTM,0"));
+    }
+    if (UpDown== 0) {
+	Port2WriteNMEA(TEXT("PDAPL,52"));
+    }
+    //    Port2WriteString(TEXT("$PDVTM,1*46\r\n"));
+    //    Port2WriteString(TEXT("$PDAPL,52*62\r\n"));
+    //    Port2WriteString(TEXT("$PDVAD,10,-10,0*76\r\n"));
+    //    Port2WriteString(TEXT("$PDVGP,-123,777,-1543,-9,0*59\r\n"));
+    //    Port2WriteString(TEXT("$PDVMC,20,300,0,220,1013*52\r\n"));
+    //    Port2WriteString(TEXT("$PDVAL,90,750,300,100,0*6A\r\n"));
+  }
 
 	return;
 }

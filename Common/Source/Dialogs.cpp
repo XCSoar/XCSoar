@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.57 2005/08/22 00:17:54 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.58 2005/08/26 12:48:58 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -1433,23 +1433,30 @@ LRESULT CALLBACK FinalGlide(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
       lpwp = (LPWINDOWPOS)(lParam);
       if(( lpwp->flags & SWP_HIDEWINDOW) == SWP_HIDEWINDOW)
         {
-          Temp1 = iround(GetDlgItemInt(hDlg,IDC_SALTARRIVAL,&Temp,FALSE)/ALTITUDEMODIFY);
+          Temp1 = iround(GetDlgItemInt(hDlg,
+				       IDC_SALTARRIVAL,&Temp,FALSE)
+			 /ALTITUDEMODIFY);
           if(Temp)
             {
               SAFETYALTITUDEARRIVAL = (double)Temp1;
-              SetToRegistry(szRegistrySafetyAltitudeArrival,(DWORD)SAFETYALTITUDEARRIVAL);
+              SetToRegistry(szRegistrySafetyAltitudeArrival,
+			    (DWORD)SAFETYALTITUDEARRIVAL);
             }
-          Temp1 = iround(GetDlgItemInt(hDlg,IDC_SALTBREAKOFF,&Temp,FALSE)/ALTITUDEMODIFY);
+          Temp1 = iround(GetDlgItemInt(hDlg,IDC_SALTBREAKOFF,&Temp,FALSE)
+			 /ALTITUDEMODIFY);
           if(Temp)
             {
               SAFETYALTITUDEBREAKOFF = (double)Temp1;
-              SetToRegistry(szRegistrySafetyAltitudeBreakOff,(DWORD)SAFETYALTITUDEBREAKOFF);
+              SetToRegistry(szRegistrySafetyAltitudeBreakOff,
+			    (DWORD)SAFETYALTITUDEBREAKOFF);
             }
-          Temp1 = iround(GetDlgItemInt(hDlg,IDC_SALTTERRAIN,&Temp,FALSE)/ALTITUDEMODIFY);
+          Temp1 = iround(GetDlgItemInt(hDlg,IDC_SALTTERRAIN,&Temp,FALSE)
+			 /ALTITUDEMODIFY);
           if(Temp)
             {
               SAFETYALTITUDETERRAIN = (double)Temp1;
-              SetToRegistry(szRegistrySafetyAltitudeTerrain,(DWORD)SAFETYALTITUDETERRAIN);
+              SetToRegistry(szRegistrySafetyAltitudeTerrain,
+			    (DWORD)SAFETYALTITUDETERRAIN);
             }
         }
       break;
@@ -1515,6 +1522,7 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 
 	  double lastBugs = BUGS;
 	  double lastBallast = BALLAST;
+	  bool changed = false;
 
           T1 = GetDlgItemInt(hDlg,IDC_BUGS,&T2,FALSE);
           if(T2)
@@ -1525,6 +1533,7 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
               if(BUGS<0.5) BUGS = 0.5;
 
               if (lastBugs != BUGS){
+		changed = true;
                 devPutBugs(devA(), BUGS);
                 devPutBugs(devB(), BUGS);
               }
@@ -1534,12 +1543,15 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
             {
               BALLAST = (double)T1;
               BALLAST /=100;
-	      GlidePolar::SetBallast();
               if (lastBallast != BALLAST){
+		changed = true;
                 devPutBallast(devA(), BALLAST);
                 devPutBallast(devB(), BALLAST);
               }
             }
+	  if (changed) {
+	    GlidePolar::SetBallast();
+	  }
 
           EndDialog(hDlg, LOWORD(wParam));
           DeleteObject(hFont);
@@ -2231,6 +2243,13 @@ LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
           wsprintf(Temp,TEXT("%2.2f"),INHg );
           SetDlgItemText(hDlg,IDC_INHG,Temp);
           SetDlgItemInt(hDlg,IDC_QNH,(int)QNH,FALSE);
+
+          LockFlightData();
+          alt =   GPS_INFO.BaroAltitude*ALTITUDEMODIFY;
+          UnlockFlightData();
+          wsprintf(Temp,TEXT("%2.0f"),alt);
+          SetDlgItemText(hDlg,IDC_PALTITUDE,Temp);
+
           return TRUE;
 
                                 
@@ -3431,7 +3450,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
 //	- Log - Keep the message on the log/history window (goes to log file and history)
 //
 // Default for no match
-//	- SowStatusMessage for TEXT for 30 second standard font and standard sound, log
+//	- ShowStatusMessage for TEXT for 30 second standard font and standard sound, log
 //
 // How to:
 //	- Play sound file

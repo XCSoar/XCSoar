@@ -2162,7 +2162,7 @@ void ReadStatusFile() {
 	StatusMessageCache[0].doStatus = true;
 	StatusMessageCache[0].doSound = true;
 	StatusMessageCache[0].sound = TEXT("IDR_WAV_DRIP");
-	StatusMessageCache[0].delay_ms = 1500;
+	StatusMessageCache[0].delay_ms = 1500; // 1.5 s
 	StatusMessageCache_Size++;
 
 	TCHAR szFile1[MAX_PATH] = TEXT("\0");
@@ -2256,6 +2256,6 @@ void _init_Status(int num) {
 	StatusMessageCache[num].doStatus = true;
 	StatusMessageCache[num].doSound = false;
 	StatusMessageCache[num].sound = TEXT("");
-	StatusMessageCache[num].delay_ms = 2500;
+	StatusMessageCache[num].delay_ms = 2500;  // 2.5 s
 }
 

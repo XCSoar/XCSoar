@@ -26,7 +26,6 @@
 #include "Airspace.h"
 #include "Logger.h"
 #include "VarioSound.h"
-
 #include <windows.h>
 #include <math.h>
 
@@ -36,6 +35,7 @@
 
 WindAnalyser *windanalyser = NULL;
 
+#include "Port.h"
 
 static void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -200,7 +200,7 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   if (
       (Basic->AirspeedAvailable && 
-      (Basic->IndicatedAirspeed >= NettoSpeed))
+       (Basic->IndicatedAirspeed >= NettoSpeed))
       || 
       (!Basic->AirspeedAvailable &&
        (Basic->Speed >= NettoSpeed))
@@ -211,15 +211,11 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   } else {
 
-#ifndef TESTSOUND
     if (Basic->VarioAvailable) {
       VarioSound_SetV((short)(Basic->Vario*AUDIOSCALE));
     } else {
       VarioSound_SetV((short)(Calculated->Vario*AUDIOSCALE));
     }
-#else
-    VarioSound_SetV((short)((1.0-MCCREADY/LIFTMODIFY)*AUDIOSCALE));
-#endif
 
   }
 
@@ -258,9 +254,11 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     Calculated->VOpt = GlidePolar::Vminsink*sqrt(n);
   }
 
-  double vdiff;
-  vdiff = 100*(Basic->Speed/Calculated->VOpt-1.0);
-  VarioSound_SetVAlt((short)(vdiff));
+  if (Basic->AirspeedAvailable) {
+    double vdiff;
+    vdiff = 100*(Basic->IndicatedAirspeed/Calculated->VOpt-1.0);
+    VarioSound_SetVAlt((short)(vdiff));
+  }
   
 }
 
@@ -433,6 +431,18 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       LastAlt = Basic->Altitude;
       LastTime = Basic->Time;
+
+      if (Port2Available && Basic->VarioAvailable) {
+	// JMW experimental
+	TCHAR mcbuf[100];
+	wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
+		 iround(MCCREADY/LIFTMODIFY*10),
+		 iround(Calculated->VOpt*10),
+		 Calculated->Circling,
+		 iround(Calculated->TerrainAlt),
+		 iround(QNH));
+	Port2WriteNMEA(mcbuf);
+      }
 
     }
   else
@@ -902,8 +912,6 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccread
                         // (Calculated->TaskAltitudeDifference>30)
                         // JMW TODO!!!!!!!!!
                         );
-      Calculated->NextAltitudeRequired = 
-        Calculated->NextAltitudeRequired * (1/BUGS);
 
       Calculated->NextAltitudeRequired = 
         Calculated->NextAltitudeRequired + SAFETYALTITUDEARRIVAL ;
@@ -1350,8 +1358,6 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
       }
 
 
-      LegAltitude = LegAltitude * (1/BUGS);
-
       TaskAltitudeRequired = LegAltitude;
       Calculated->TaskDistanceToGo = LegToGo;
       Calculated->TaskTimeToGo = Calculated->LegTimeToGo;
@@ -1386,7 +1392,6 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
                                         Calculated->WindSpeed, Calculated->WindBearing, 0, 0,
                                         (i==FinalWayPoint), // ||() JMW TODO!!!!!!!!!
                                         &LegTimeToGo);
-          LegAltitude = LegAltitude * (1/BUGS);
                         
           TaskAltitudeRequired += LegAltitude;
 
@@ -1991,7 +1996,7 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
                                          0, 
                                          0,
                                          1,
-                                         0)*(1/BUGS);
+                                         0);
   
   return ((Basic->Altitude) - AltReqd - WayPointList[i].Altitude - SAFETYALTITUDEARRIVAL);
 }
