@@ -72,6 +72,9 @@ void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(c
 
 void ResetInfoBoxes(void);
 
+void SaveRegistryToFile(TCHAR* szFile);
+void LoadRegistryFromFile(TCHAR* szFile);
+
 /* =====================================================
    Interface Files !
    ===================================================== */

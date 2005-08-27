@@ -411,6 +411,7 @@ void ReadRegistrySettings(void)
     SetToRegistry(szRegistryAccelerometerZero,Temp);
   }
 
+
 }
 
 
@@ -1320,37 +1321,7 @@ void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
 
 void WriteProfile(HWND hwnd, TCHAR *szFile)
 {
-  HANDLE hFile;
-  DWORD dwBytesWritten;
-
-  hFile = CreateFile(szFile,GENERIC_WRITE,0,(LPSECURITY_ATTRIBUTES)NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
-
-  if(hFile == INVALID_HANDLE_VALUE )
-    {
-      return;
-    }
-
-  WriteFile(hFile,InfoType,sizeof(InfoType),&dwBytesWritten, (OVERLAPPED *)NULL);
-
-  WriteFile(hFile,&POLARID,sizeof(POLARID),&dwBytesWritten, (OVERLAPPED *)NULL);
-
-  WriteFile(hFile,MapWindow::iAirspaceColour,AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceBrush[0]),&dwBytesWritten, (OVERLAPPED *)NULL);
-  WriteFile(hFile,MapWindow::iAirspaceBrush,AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceColour[0]),&dwBytesWritten, (OVERLAPPED *)NULL);
-
-  ///////
-
-    /* Disabled  due to bugs
-    WriteFileRegistryString(hFile, szRegistryAirfieldFile);
-    WriteFileRegistryString(hFile, szRegistryAirspaceFile);
-    WriteFileRegistryString(hFile, szRegistryAdditionalAirspaceFile);
-    WriteFileRegistryString(hFile, szRegistryPolarFile);
-    WriteFileRegistryString(hFile, szRegistryTerrainFile);
-    WriteFileRegistryString(hFile, szRegistryTopologyFile);
-    WriteFileRegistryString(hFile, szRegistryWayPointFile);
-    WriteFileRegistryString(hFile, szRegistryAdditionalWayPointFile);
-    */
-
-    CloseHandle(hFile);
+  SaveRegistryToFile(szFile);
 }
 
 
@@ -1369,54 +1340,8 @@ void ReadFileRegistryString(HANDLE hFile, TCHAR *instring) {
 
 void ReadProfile(HWND hwnd, TCHAR *szFile)
 {
-  HANDLE hFile;
-  DWORD dwBytesRead;
-  int i;
 
-  hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-
-  if(hFile == INVALID_HANDLE_VALUE )
-    {
-      return;
-    }
-
-
-  ReadFile(hFile,InfoType,sizeof(InfoType),&dwBytesRead, (OVERLAPPED *)NULL);
-  for(i=0;i<NUMINFOWINDOWS;i++)
-    {
-      StoreType(i,InfoType[i]);
-    }
-
-  ReadFile(hFile,&POLARID,sizeof(POLARID),&dwBytesRead, (OVERLAPPED *)NULL);
-  SetToRegistry(szRegistryPolarID,(DWORD)POLARID);
-
-  ReadFile(hFile,MapWindow::iAirspaceColour,
-           AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceColour[0]),
-           &dwBytesRead, (OVERLAPPED *)NULL);
-  ReadFile(hFile,MapWindow::iAirspaceBrush,
-           AIRSPACECLASSCOUNT*sizeof(MapWindow::iAirspaceBrush[0]),
-           &dwBytesRead, (OVERLAPPED *)NULL);
-
-  for(i=0;i<AIRSPACECLASSCOUNT;i++)
-    {
-
-      SetRegistryColour(i,MapWindow::iAirspaceColour[i]);
-
-      SetRegistryBrush(i,MapWindow::iAirspaceBrush[i]);
-    }
-
-
-  ///////
-
-    /* Disabled  due to bugs
-    ReadFileRegistryString(hFile, szRegistryAirfieldFile);
-    ReadFileRegistryString(hFile, szRegistryAirspaceFile);
-    ReadFileRegistryString(hFile, szRegistryAdditionalAirspaceFile);
-    ReadFileRegistryString(hFile, szRegistryPolarFile);
-    ReadFileRegistryString(hFile, szRegistryTerrainFile);
-    ReadFileRegistryString(hFile, szRegistryTopologyFile);
-    ReadFileRegistryString(hFile, szRegistryWayPointFile);
-    ReadFileRegistryString(hFile, szRegistryAdditionalWayPointFile);
+  LoadRegistryFromFile(szFile);
 
     WAYPOINTFILECHANGED = TRUE;
     TERRAINFILECHANGED = TRUE;
@@ -1424,9 +1349,6 @@ void ReadProfile(HWND hwnd, TCHAR *szFile)
     AIRSPACEFILECHANGED = TRUE;
     AIRFIELDFILECHANGED = TRUE;
     POLARFILECHANGED = TRUE;
-    */
-
-    CloseHandle(hFile);
 
     // assuming all is ok, we can...
     ReadRegistrySettings();
@@ -2257,5 +2179,118 @@ void _init_Status(int num) {
 	StatusMessageCache[num].doSound = false;
 	StatusMessageCache[num].sound = TEXT("");
 	StatusMessageCache[num].delay_ms = 2500;  // 2.5 s
+}
+
+
+//////////////////////////
+// Registry file handling
+/////////////////
+
+const static int nMaxValueNameSize = MAX_PATH;
+const static int nMaxValueValueSize = 4096;
+const static int nMaxClassSize = MAX_PATH;
+const static int nMaxKeyNameSize = MAX_PATH;
+
+void LoadRegistryFromFile(TCHAR *szFile)
+{
+  FILE *fp;
+  fp = _tfopen(szFile, TEXT("rt"));
+  if(fp == NULL) {
+    // error
+    return;
+  }
+  TCHAR inval[nMaxValueValueSize];
+  TCHAR name[nMaxValueValueSize];
+  TCHAR value[nMaxValueValueSize];
+  int len, i, j;
+  while (ReadStringX(fp, nMaxValueValueSize, inval)) {
+    len = _tcslen(inval);
+    // scan for delimiter
+    i=0;
+    while ((i< len)&&(inval[i]!=_T('='))) {
+      i++;
+    }
+    wcsncpy(name, inval, i); name[i]=0;
+    i++; // skip to next char
+    if (inval[i]==_T('\"')) {
+      // must be text..
+      i++;
+      j= i;
+      while ((j< len)&&(inval[j]!=_T('\"'))) {
+	j++;
+      }
+      if (j-1<i) { j++; } // technically this means termination not found
+      wcsncpy(value, inval+i, j-i);  value[j-i]= 0;
+
+      //      SetRegistryString(name, value);
+
+    } else {
+      // must be a number
+      j= _wtoi(inval+i);
+
+      //      SetToRegistry(name, j);
+
+    }
+  }
+  fclose(fp);
+}
+
+
+void SaveRegistryToFile(TCHAR *szFile)
+{
+  TCHAR lpstrName[nMaxKeyNameSize];
+  TCHAR lpstrClass[nMaxClassSize];
+  BYTE pValue[nMaxValueValueSize];
+
+  HKEY hkFrom;
+  LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey,
+			    0, KEY_ALL_ACCESS, &hkFrom);
+
+  if (ERROR_SUCCESS != res) {
+    return;
+  }
+
+  FILE *fp;
+
+  fp = _tfopen(szFile, TEXT("wt"));
+  if(fp == NULL) {
+    // error
+    return;
+  }
+
+  for (int i = 0;;i++) {
+    DWORD nType;
+    DWORD nValueSize = nMaxValueValueSize;
+    DWORD nNameSize = nMaxKeyNameSize;
+    DWORD nClassSize = nMaxClassSize;
+
+    LONG res = ::RegEnumValue(hkFrom, i, lpstrName,
+			      &nNameSize, 0,
+			      &nType, pValue,
+			      &nValueSize);
+
+    // type 1 text
+    // type 4 integer (valuesize 4)
+    TCHAR outval[nMaxValueValueSize];
+    lpstrName[nNameSize]= 0; // null terminate, just in case
+    if (nType==4) { // data
+      wsprintf(outval,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
+    }
+    if (nType==1) { // text
+      pValue[nValueSize]= 0; // null terminate, just in case
+      wsprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
+    }
+
+    _fputts(outval, fp);
+
+    if (ERROR_NO_MORE_ITEMS == res) {
+      break;
+    }
+  }
+
+  fclose(fp);
+
+  ::RegCloseKey(hkFrom);
+
 }
 

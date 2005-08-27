@@ -39,6 +39,8 @@ Changes from 4.22 to 4.3
   everywhere.
 - Optimised display of titles in infoboxes to prevent over-use of gettext
 - Added units display to AAT settings to avoid confusion
+- New functions to save/restore registry from text file
+- Save/Load profile uses registry save/restore code
 
 Changes from 4.21 to 4.22
 
