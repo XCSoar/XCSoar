@@ -475,6 +475,106 @@ void MapWindow::RequestToggleFullScreen() {
 extern BOOL extGPSCONNECT;
 extern bool DialogActive;
 
+///////////////////////////////////////////////////////////////////////////
+
+void MapWindow::DoToggleAutoZoom() {
+  AutoZoom = !AutoZoom;
+  
+  // ARH Let user know what's happening
+  if (AutoZoom)
+    DoStatusMessage(TEXT("AutoZoom ON"));
+  else
+    DoStatusMessage(TEXT("AutoZoom OFF"));
+  
+  if (AutoZoom) {
+    EnablePan = false;
+    PanX = 0.0;
+    PanY = 0.0;
+  }
+}
+
+
+void MapWindow::DoToggleTerrain() {
+  char val;
+
+  val = 0;
+  val += (EnableTopology)*0x01;
+  val += (EnableTerrain)*0x02;
+  
+  val++;
+  if (val>3) val=0;
+  
+  if (EnableSoundModes) {
+    if (val>0) {
+      PlayResource(TEXT("IDR_INSERT")); 
+    } else {
+      PlayResource(TEXT("IDR_REMOVE")); 
+    }
+  }
+  
+  EnableTopology = (val & 0x01);
+  EnableTerrain = (val & 0x02)>>1;
+  
+  // TODO SCOTT I18N - This should be a DoStatusMessage
+  // 	(Remove Playsound above, Support multi line text in gettext
+  // 	etc, simplify set of text below)
+  
+  // ARH Let user know what's happening
+  TCHAR buf[128];
+  
+  if (EnableTopology)
+    _stprintf(buf, TEXT("%s\r\n"), gettext(TEXT("Topo: ON")));
+  else
+    _stprintf(buf, TEXT("%s\r\n"), gettext(TEXT("Topo: OFF")));
+  
+  if (EnableTerrain)
+    _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("Terrain: ON")));
+  else
+    _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("Terrain: OFF")));
+  
+  ShowStatusMessage(buf, 2500);
+  //
+  
+  RefreshMap();
+}
+
+
+void MapWindow::DoTogglePan() {
+  // ARH Let the user know what's happening
+  EnablePan = !EnablePan;
+  if (EnablePan)
+    DoStatusMessage(TEXT("Pan mode ON"));
+  else
+    DoStatusMessage(TEXT("Pan mode OFF"));
+  
+  if (!EnablePan) {
+    PanX = 0.0;
+    PanY = 0.0;
+    RefreshMap();
+  }
+}
+
+
+void MapWindow::DoZoomIn() {
+  if(RequestMapScale >= 0.01)
+    {
+      RequestMapScale /= 1.414;
+      BigZoom = true;
+    }
+  RefreshMap();
+}
+
+
+void MapWindow::DoZoomOut() {
+  RequestMapScale *= 1.414;
+  BigZoom = true;
+  if(RequestMapScale>160) RequestMapScale = 160; 
+  RefreshMap();
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+
 
 LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
                                         LPARAM lParam)
@@ -485,7 +585,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   static double Xstart, Ystart;
   static double XstartScreen, YstartScreen;
   double distance;
-  char val;
   static bool first = true;
   
   static DWORD dwDownTime=0, dwUpTime=0;
@@ -737,48 +836,29 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     
   case WM_KEYUP:
 
-	  // TODO NOTES INPUT 
-	  //	How to use "MODE" in input data
-	  //	Maybe each input data should have a MODE along the lines of:
-	  //		all		- Everywhere - eg: Set zoom to X
-	  //		map		- Map window only - eg: current method of change zoom
-	  //		info	- Standard info box controls ???
-	  //		status	- Status message being displayed 
-
+    // TODO NOTES INPUT 
+    //	How to use "MODE" in input data
+    //	Maybe each input data should have a MODE along the lines of:
+    //		all		- Everywhere - eg: Set zoom to X
+    //		map		- Map window only - eg: current method of 
+    //                            change zoom
+    //		info	- Standard info box controls ???
+    //		status	- Status message being displayed 
+    
     if (!DialogActive) // JMW prevent keys being trapped if dialog is active
     switch (wParam)
     {
     case VK_DOWN :  // SCROLL UP
-      RequestMapScale *= 1.414;
-      BigZoom = true;
-      if(RequestMapScale>160) RequestMapScale = 160; 
-      RefreshMap();
+      DoZoomOut();
       break;
       
     case VK_UP: // SCROLL DOWN
-      if(RequestMapScale >= 0.01)
-      {
-        RequestMapScale /= 1.414;
-        BigZoom = true;
-      }
-      RefreshMap();
+      DoZoomIn();
       break;
       
     case VK_RIGHT: // Pan mode
       if (!Debounce()) break;
-      EnablePan = !EnablePan;
-      
-      // ARH Let the user know what's happening
-      if (EnablePan)
-        DoStatusMessage(TEXT("Pan mode ON"));
-      else
-        DoStatusMessage(TEXT("Pan mode OFF"));
-      
-      if (!EnablePan) {
-        PanX = 0.0;
-        PanY = 0.0;
-        RefreshMap();
-      }
+      DoTogglePan();
       break;
       
     case VK_RETURN: // Pan mode, cycles through modes
@@ -788,66 +868,13 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
         // airspace was active, enter was used to acknowledge
         break;
       }
-      
-      val = 0;
-      val += (EnableTopology)*0x01;
-      val += (EnableTerrain)*0x02;
-      
-      val++;
-      if (val>3) val=0;
-      
-      if (EnableSoundModes) {
-        if (val>0) {
-          PlayResource(TEXT("IDR_INSERT")); 
-        } else {
-          PlayResource(TEXT("IDR_REMOVE")); 
-        }
-      }
-      
-      EnableTopology = (val & 0x01);
-      EnableTerrain = (val & 0x02)>>1;
-
-      // TODO SCOTT I18N - This should be a DoStatusMessage
-      // 	(Remove Playsound above, Support multi line text in gettext
-      // 	etc, simplify set of text below)
-      
-      // ARH Let user know what's happening
-      TCHAR buf[128];
-      
-      if (EnableTopology)
-        _stprintf(buf, TEXT("%s\r\n"), gettext(TEXT("Topo: ON")));
-      else
-        _stprintf(buf, TEXT("%s\r\n"), gettext(TEXT("Topo: OFF")));
-      
-      if (EnableTerrain)
-        _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("Terrain: ON")));
-      else
-        _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("Terrain: OFF")));
-      
-      ShowStatusMessage(buf, 2500);
-      //
-      
-      RefreshMap();
+      DoToggleTerrain();
       break;
       
     case VK_LEFT:
       
       if (!Debounce()) break;
-      AutoZoom = !AutoZoom;
-      
-      // ARH Let user know what's happening
-      if (AutoZoom)
-        DoStatusMessage(TEXT("AutoZoom ON"));
-      else
-        DoStatusMessage(TEXT("AutoZoom OFF"));
-      
-      
-      if (AutoZoom) {
-        EnablePan = false;
-        PanX = 0.0;
-        PanY = 0.0;
-      }
-      
+      DoToggleAutoZoom();
       break;
       }
       break;

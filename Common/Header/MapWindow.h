@@ -164,6 +164,13 @@ class MapWindow {
 
   static bool IsMapFullScreen();
 
+  // input events
+  static void DoZoomOut();
+  static void DoZoomIn();
+  static void DoTogglePan();
+  static void DoToggleTerrain();
+  static void DoToggleAutoZoom();
+
  private:
 
   static void CalculateScreenPositions(POINT Orig, RECT rc, 

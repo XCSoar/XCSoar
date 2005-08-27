@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.71 2005/08/26 12:48:58 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.72 2005/08/27 22:55:29 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -47,6 +47,7 @@
 #include "devEW.h"
 #include "Externs.h"
 #include "units.h"
+#include "InputEvents.h"
 
 // Temporary version location (will be automatically generated)
 extern TCHAR* XCSoar_Version = TEXT("5 ALPHA");
@@ -195,7 +196,6 @@ int StatusMessageCache_Size = 0;
 //Snail Trial
 SNAIL_POINT SnailTrail[TRAILSIZE];
 int SnailNext = 0;
-int TrailActive = TRUE;
 
 // user interface settings
 int CircleZoom = FALSE;
@@ -1440,41 +1440,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	  case VK_APP1:
 		if (!Debounce()) break;
 
-		// toggle switches like this:
-		//  -- normal infobox
-		//  -- auxiliary infobox
-		//  -- full screen
-		//  -- normal infobox
-		if (EnableAuxiliaryInfo) {
-		  MapWindow::RequestToggleFullScreen();
-		  EnableAuxiliaryInfo = false;
-		} else {
-		  if (MapWindow::IsMapFullScreen()) {
-		    MapWindow::RequestToggleFullScreen();		    
-		  } else {
-		    EnableAuxiliaryInfo = true;
-		  }
-		}
-
+		InputEvents::ToggleScreenModes();
 		break;
 
 	  case VK_APP2:
 		if (!Debounce()) break;
 
 		if (!InfoWindowActive) {
-            TrailActive ++;
-            if (TrailActive>2) {
-              TrailActive=0;
-            }
-
-            if (TrailActive==0)
-              DoStatusMessage(TEXT("SnailTrail OFF"));
-            if (TrailActive==1) 
-              DoStatusMessage(TEXT("SnailTrail ON Long"));
-            if (TrailActive==2) 
-              DoStatusMessage(TEXT("SnailTrail ON Short"));
-            break;
-          }
+		  InputEvents::ToggleSnailTrail();
+		  break;
+		}
 
           i = getInfoType(InfoFocus);
 
@@ -1491,15 +1466,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case VK_APP3:
 		if (!Debounce()) break;
           if (!InfoWindowActive) {
-            EnableSoundVario = !EnableSoundVario;
-            VarioSound_EnableSound((BOOL)EnableSoundVario);
-
-            // ARH Let the user know what's happened
-            if (EnableSoundVario)
-              DoStatusMessage(TEXT("Vario Sounds ON"));
-            else
-              DoStatusMessage(TEXT("Vario Sounds OFF"));
-
+	    InputEvents::ToggleSounds();
             break;
           }
 
@@ -1516,28 +1483,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           break;
 
         case VK_APP4:
-		if (!Debounce()) break;
+	  if (!Debounce()) break;
 
-                if (InfoWindowActive)
-                  break;
-
-                LockFlightData();
-
-          MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
-
-          UnlockFlightData();
-
-          // ARH Let the user know what's happened
-          DoStatusMessage(TEXT("Dropped marker"));
-
+	  if (!InfoWindowActive) {
+	    InputEvents::DoMarkLocation();
+	  }
           break;
 	
-	  case VK_APP6:
-		if (!Debounce()) break;
-
-		ShowMenu();
-		break;
-
+	case VK_APP6:
+	    if (!Debounce()) break;
+	    
+	    ShowMenu();
+	    break;
 
         case VK_UP :  // SCROLL UP (infobox mode)
           DoInfoKey(1);
@@ -1716,19 +1673,25 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 MessageBox(hWnd,gettext(TEXT("Do you wish to exit?")),gettext(TEXT("Exit?")),MB_YESNO|MB_ICONQUESTION) == IDYES
                 #endif
               ) {
-                  SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
-                  SendMessage (hWnd, WM_CLOSE, 0, 0);
+
+		// save registry backup first
+		SaveRegistryToFile(TEXT("xcsoar-registry.bak"));
+
+		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
+		SendMessage (hWnd, WM_CLOSE, 0, 0);
                 } else {
               }
               MapWindow::MapDirty = true;
-	             HideMenu();
+	      HideMenu();
               FullScreen();
+	      Debounce(); 
               DialogActive = false;
               return 0;
 
 	    case IDD_BACK:
 	      HideMenu();
 	      FullScreen();
+	      Debounce(); 
               DialogActive = false;
 	      return 0;
 
@@ -1738,6 +1701,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
+	      Debounce(); 
               DialogActive = false;
               return 0;
 
@@ -1754,6 +1718,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
+	      Debounce(); 
               DialogActive = false;
               return 0;
                 
@@ -1768,6 +1733,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
+	      Debounce(); 
               DialogActive = false;
               return 0; 
         
@@ -1780,6 +1746,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SwitchToMapWindow();
 	      HideMenu();
 	      FullScreen();
+	      Debounce(); 
               DialogActive = false;
               return 0;
 
@@ -1794,6 +1761,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      }
 	      FullScreen();
               DialogActive = false;
+	      Debounce(); 
               return 0;
 
             case IDC_ABORTTASK:
@@ -1807,6 +1775,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      HideMenu();
 	      FullScreen();
               DialogActive = false;
+	      Debounce(); 
               return 0;
 
             case IDC_ANALYSIS:
@@ -1818,6 +1787,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      HideMenu();
 	      FullScreen();
               DialogActive = false;
+	      Debounce(); 
               return 0;
 
             case IDD_SETTINGS:
@@ -1853,15 +1823,8 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #ifndef _SIM_
                   // JMW disabled com opening in sim mode
                   devClose(devA());
-
                   devClose(devA());
-
-
-
                   RestartCommPorts();
-
-                  
-
                   devInit(TEXT(""));
 
 #endif
@@ -1925,11 +1888,13 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               ShowWindow(hWndCB,SW_HIDE);                               
 	      HideMenu();
               DialogActive = false;
+	      Debounce(); 
               return 0;
 
             case IDD_LOGGER:
               TCHAR TaskMessage[1024];
               MenuActive = true;
+	      DialogActive = true;
 
               if(LoggerActive)
                 {
@@ -1945,6 +1910,8 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                         {
                           if(i==0)
                             _tcscat(TaskMessage,TEXT("None"));
+
+			  Debounce(); 
                           break;
                         }
                       _tcscat(TaskMessage,WayPointList[ Task[i].Index ].Name);
@@ -1959,7 +1926,10 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                       StartDeclaration();
                       for(i=0;i<MAXTASKPOINTS;i++)
                         {
-                          if(Task[i].Index == -1) break;
+                          if(Task[i].Index == -1) {
+			    Debounce(); 
+			    break;
+			  }
                           AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
                         }
                       EndDeclaration();
@@ -1969,7 +1939,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      FullScreen();
               SwitchToMapWindow();
 	      HideMenu();
-
+	      Debounce(); 
               DialogActive = false;
               return 0;
             }

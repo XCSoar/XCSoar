@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.58 2005/08/26 12:48:58 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.59 2005/08/27 22:55:28 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -3348,7 +3348,8 @@ public:
 
 
 // Intercept messages destined for the Status Message window
-LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, 
+				       WPARAM wParam, LPARAM lParam)
 {
 
   CStatMsgUserData *data;
@@ -3406,11 +3407,8 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
   case WM_TIMER :
 
     MapWindow::RequestFastRefresh = true; // trigger screen refresh
-
     DestroyWindow(hwnd);
-
     return 0;
-
   case WM_DESTROY :
     // Clean up after ourselves
     if (data != NULL){
@@ -3422,8 +3420,8 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message, WPARAM wParam, L
     }
     MapWindow::RequestFastRefresh = true; // trigger screen refresh
 
-    ClearAirspaceWarnings(false); // JMW do this so airspace warning gets refreshed
-
+    ClearAirspaceWarnings(false); 
+    // JMW do this so airspace warning gets refreshed
 
     return 0;
   }
@@ -3590,11 +3588,14 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
   // Create a child window to contain status message
   if (docenter) {
     hWnd = CreateWindow(TEXT("EDIT"), text,
-                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|ES_CENTER
+			|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN 
+			| WS_CLIPSIBLINGS,
                         0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
   } else {
     hWnd = CreateWindow(TEXT("EDIT"), text,
-                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 
+                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|WS_BORDER
+			|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 
                         0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
 
   }
@@ -3633,12 +3634,12 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
       0);
   }
 
-
   // Attach window specific data to the window
   SetWindowLong(hWnd, GWL_USERDATA, (LONG) data);
 
   // Subclass window function so that we can trap timer messages
-  data->fnOldWndProc = (WNDPROC) SetWindowLong(hWnd, GWL_WNDPROC, (LONG) StatusMsgWndTimerProc) ;  
+  data->fnOldWndProc = (WNDPROC) SetWindowLong(hWnd, GWL_WNDPROC, 
+					       (LONG) StatusMsgWndTimerProc);
 
   if (delay_ms) {
     // Set timer to specified timeout.
