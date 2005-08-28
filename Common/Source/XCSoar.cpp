@@ -35,6 +35,7 @@
 #include "Logger.h"
 #include "McReady.h"
 #include "AirfieldDetails.h"
+#include "InfoBoxLayout.h"
 
 #include <commctrl.h>
 #include <aygshell.h>
@@ -408,7 +409,7 @@ SCREEN_INFO Data_Options[] = {
 
 int NUMSELECTSTRINGS = 45;
 
-int ControlWidth, ControlHeight;
+int ControlWidth, ControlHeight, TitleHeight;
 
 CRITICAL_SECTION  CritSec_FlightData;
 CRITICAL_SECTION  CritSec_TerrainDataGraphics;
@@ -928,7 +929,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   LOGFONT logfont;
   int i;
   int FontHeight, FontWidth;
-  int TitleHeight;
 
   hInst = hInstance;            // Store instance handle in our global variable
   LoadString(hInstance, IDC_XCSOAR, szWindowClass, MAX_LOADSTRING);
@@ -961,9 +961,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   #endif
 
 
-  hWndMainWindow = CreateWindow(szWindowClass, szTitle, WS_VISIBLE | WS_SYSMENU | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                WindowSize.left, WindowSize.top, WindowSize.right, WindowSize.bottom,
-                                NULL, NULL, hInstance, NULL);
+  hWndMainWindow = CreateWindow(szWindowClass, szTitle,
+				WS_VISIBLE|WS_SYSMENU|WS_CLIPCHILDREN
+				| WS_CLIPSIBLINGS,
+                                WindowSize.left, WindowSize.top,
+				WindowSize.right, WindowSize.bottom,
+                                NULL, NULL,
+				hInstance, NULL);
 
   SendMessage(hWndMainWindow, WM_SETICON,
 	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOARSWIFT);
@@ -979,6 +983,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   hBrushUnselected = (HBRUSH)CreateSolidBrush(ColorUnselected);
 
   GetClientRect(hWndMainWindow, &rc);
+
+  ////////////////// do fonts
 
   FontHeight = (rc.bottom - rc.top ) / FONTHEIGHTRATIO;
 
@@ -1094,106 +1100,25 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   MapWindowBoldFont = CreateFontIndirect (&logfont);
 
 
+  ///////////////////////////////////////// create infoboxes
 
+  CreateInfoBoxes(rc);
 
-
-  ////////
-
-  GetClientRect(hWndMainWindow, &rc);
-
-  ControlWidth = 2*(rc.right - rc.left) / NUMINFOWINDOWS;
-  ControlHeight = (int)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
-  TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
-
-#ifdef _MAP_
-  ControlHeight = 0;
-#endif
-
-
-#ifndef _MAP_
-
-  for(i=0;i<NUMINFOWINDOWS/2;i++)
-    {
-      if((i==0)&&0) // JMW why is this a special case?
-        {
-          hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT(""),WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                           i*ControlWidth, rc.top+TitleHeight,ControlWidth,ControlHeight,
-                                           hWndMainWindow,NULL,hInstance,NULL);
-        }
-      else
-        {
-          hWndInfoWindow[i] = CreateWindow(TEXT("STATIC"),TEXT("\0"),
-                                           WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                           i*ControlWidth, rc.top+TitleHeight,
-                                           ControlWidth,ControlHeight-TitleHeight,
-                                           hWndMainWindow,NULL,hInstance,NULL);
-        }
-
-
-
-      hWndTitleWindow[i] = CreateWindow(TEXT("STATIC"),
-                                        // Data_Options[InfoType[i]& 0xff].Title
-                                        TEXT("\0")
-                                        ,
-                                        WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                        i*ControlWidth, rc.top, ControlWidth, TitleHeight,
-                                        hWndMainWindow,NULL,hInstance,NULL);
-
-
-      hWndInfoWindow[i+(NUMINFOWINDOWS/2)] = CreateWindow(TEXT("STATIC"),TEXT("\0"),
-                                                          WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                                          i*ControlWidth, (rc.bottom - ControlHeight+TitleHeight),
-                                                          ControlWidth,ControlHeight-TitleHeight,
-                                                          hWndMainWindow,NULL,hInstance,NULL);
-
-      hWndTitleWindow[i+(NUMINFOWINDOWS/2)] =
-        CreateWindow(TEXT("STATIC"),
-                     // Data_Options[InfoType[i+(NUMINFOWINDOWS/2)]& 0xff].Title,
-                     TEXT("\0"),
-                     WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                     i*ControlWidth, (rc.bottom - ControlHeight),
-                     ControlWidth, TitleHeight,
-                     hWndMainWindow,NULL,hInstance,NULL);
-    }
+  /////////////
 
   for(i=0;i<NUMINFOWINDOWS;i++)
     {
       SendMessage(hWndInfoWindow[i],WM_SETFONT,(WPARAM)InfoWindowFont,MAKELPARAM(TRUE,0));
       SendMessage(hWndTitleWindow[i],WM_SETFONT,(WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
     }
-#endif
 
-
+  ///////////////////////////////////////////////////////
   //// create map window
-
-  MapWindow::MapRect.top = rc.top+ControlHeight;
-  MapWindow::MapRect.left = rc.left;
-  MapWindow::MapRect.bottom = rc.bottom-ControlHeight;
-  MapWindow::MapRect.right = rc.right;
-
-#ifdef _MAP_
-
-  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                               0, 0, (rc.right - rc.left),
-			       (rc.bottom-rc.top) ,
-                               hWndMainWindow,NULL,hInstance,NULL);
-#else
-
-#ifdef OLDWINDOW
-  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                               0, rc.top + ControlHeight, (rc.right - rc.left), ((rc.bottom-rc.top) - (2*ControlHeight)),
-                               hWndMainWindow,NULL,hInstance,NULL);
-#else
 
   hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                0, 0, (rc.right - rc.left),
 			       (rc.bottom-rc.top) ,
                                hWndMainWindow, NULL ,hInstance,NULL);
-
-#endif
-
-#endif
-
 
   hWndMenuButton = CreateWindow(TEXT("BUTTON"),gettext(TEXT("Menu")),WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                 0, 0,0,0,hWndMainWindow/*hWndMainWindow*/,NULL,hInst,NULL);
@@ -1202,10 +1127,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   SendMessage(hWndMenuButton,WM_SETFONT,(WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
 
   // JMW moved menu button to center, to make room for thermal indicator
-  SetWindowPos(hWndMenuButton,HWND_TOP,(int)(rc.right-rc.left-ControlWidth*MENUBUTTONWIDTHRATIO)/2,
-               (int)(ControlHeight+10),
-               (int)(ControlWidth*MENUBUTTONWIDTHRATIO),
-               (int)((rc.bottom - rc.top)/10),SWP_SHOWWINDOW);
+
+  int menubuttonsize = max(ControlWidth, ControlHeight);
+
+  SetWindowPos(hWndMenuButton,HWND_TOP,
+	       menubuttonsize, menubuttonsize,
+               (int)(rc.right-rc.left-menubuttonsize)/2+rc.left,
+               (int)((rc.bottom - rc.top)/10),
+	       SWP_SHOWWINDOW);
 
   // start of new code for displaying CDI window
 
@@ -2100,9 +2029,6 @@ void DisplayText(void)
   static bool first=true;
   static int InfoFocusLast = -1;
   int DisplayTypeLast;
-#ifdef _MAP_
-  return;
-#endif
 
   LockNavBox();
 
