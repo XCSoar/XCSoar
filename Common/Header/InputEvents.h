@@ -17,6 +17,16 @@ class InputEvents {
   static void eventSounds(TCHAR *misc);
   static void eventMarkLocation(TCHAR *misc);
   static void eventFullScreen(TCHAR *misc);
+  static void eventAutoZoom(TCHAR *misc);
+  static void eventScaleZoom(TCHAR *misc);
+  static void eventPan(TCHAR *misc);
+  static void eventClearWarningsAndTerrain(TCHAR *misc);
+  static void eventSelectInfoBox(TCHAR *misc);
+  static void eventChangeInfoBoxType(TCHAR *misc);
+  static void eventDoInfoKey(TCHAR *misc);
+  static void eventPanCursor(TCHAR *misc);
+  static void eventMainMenu(TCHAR *misc);
+
 };
 
 

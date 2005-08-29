@@ -28,7 +28,7 @@
 #include "Dialogs.h"
 #include "externs.h"
 #include "VarioSound.h"
-
+#include "InputEvents.h"
 #include <windows.h>
 #include <math.h>
 
@@ -266,6 +266,7 @@ bool MapWindow::IsMapFullScreen() {
   return  MapFullScreen;
 }
 
+
 void MapWindow::ToggleFullScreenStart() {
 
   // ok, save the state.
@@ -292,10 +293,16 @@ void MapWindow::RequestToggleFullScreen() {
 extern BOOL extGPSCONNECT;
 extern bool DialogActive;
 
+
 ///////////////////////////////////////////////////////////////////////////
 
-void MapWindow::DoToggleAutoZoom() {
-  AutoZoom = !AutoZoom;
+
+void MapWindow::Event_AutoZoom(int vswitch) {
+  if (vswitch== -1) {
+    AutoZoom = !AutoZoom;
+  } else {
+    AutoZoom = vswitch; // 0 off, 1 on
+  }
 
   // ARH Let user know what's happening
   if (AutoZoom)
@@ -311,15 +318,40 @@ void MapWindow::DoToggleAutoZoom() {
 }
 
 
-void MapWindow::DoToggleTerrain() {
+void MapWindow::Event_PanCursor(int dx, int dy) {
+  double X= (MapRect.right+MapRect.left)/2;
+  double Y= (MapRect.bottom+MapRect.top)/2;
+  double Xstart=X;
+  double Ystart=Y;
+
+  GetLocationFromScreen(&Xstart, &Ystart);
+
+  X+= (MapRect.right-MapRect.left)/4.0*dx;
+  Y+= (MapRect.bottom-MapRect.top)/4.0*dy;
+  GetLocationFromScreen(&X, &Y);
+
+  if (EnablePan) {
+    PanX += Xstart-X;
+    PanY += Ystart-Y;
+  }
+}
+
+
+void MapWindow::Event_Terrain(int vswitch) {
   char val;
 
-  val = 0;
-  val += (EnableTopology)*0x01;
-  val += (EnableTerrain)*0x02;
+  if (vswitch== -1) { // toggle
 
-  val++;
-  if (val>3) val=0;
+    val = 0;
+    val += (EnableTopology)*0x01;
+    val += (EnableTerrain)*0x02;
+
+    val++;
+    if (val>3) val=0;
+
+  } else {
+    val = vswitch;
+  }
 
   if (EnableSoundModes) {
     if (val>0) {
@@ -356,9 +388,14 @@ void MapWindow::DoToggleTerrain() {
 }
 
 
-void MapWindow::DoTogglePan() {
+void MapWindow::Event_Pan(int vswitch) {
+  if (vswitch == -1) {
+    EnablePan = !EnablePan;
+  } else {
+    EnablePan = vswitch; // 0 off, 1 on
+  }
+
   // ARH Let the user know what's happening
-  EnablePan = !EnablePan;
   if (EnablePan)
     DoStatusMessage(TEXT("Pan mode ON"));
   else
@@ -372,20 +409,31 @@ void MapWindow::DoTogglePan() {
 }
 
 
-void MapWindow::DoZoomIn() {
-  if(RequestMapScale >= 0.01)
-    {
-      RequestMapScale /= 1.414;
-      BigZoom = true;
-    }
+void MapWindow::Event_SetZoom(double value) {
+  RequestMapScale = value;
+  RequestMapScale = max(0.01,min(160.0, RequestMapScale));
+  BigZoom = true;
   RefreshMap();
 }
 
 
-void MapWindow::DoZoomOut() {
-  RequestMapScale *= 1.414;
+void MapWindow::Event_ScaleZoom(int vswitch) {
+
+  if (vswitch==1) { // zoom in a little
+    RequestMapScale /= 1.414;
+  }
+  if (vswitch== -1) { // zoom out a little
+    RequestMapScale *= 1.414;
+  }
+  if (vswitch==2) { // zoom in a lot
+    RequestMapScale /= 2.0;
+  }
+  if (vswitch== -2) { // zoom out a lot
+    RequestMapScale *= 2.0;
+  }
+
+  RequestMapScale = max(0.01,min(160.0, RequestMapScale));
   BigZoom = true;
-  if(RequestMapScale>160) RequestMapScale = 160;
   RefreshMap();
 }
 
@@ -591,9 +639,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     X = LOWORD(lParam); Y = HIWORD(lParam);
     if(InfoWindowActive)
     {
-      InfoWindowActive = FALSE;
+      DefocusInfoBox();
       SetFocus(hWnd);
-      FocusOnWindow(InfoFocus,false);
       break;
     }
     dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
@@ -663,41 +710,14 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     //		status	- Status message being displayed
 
     if (!DialogActive) // JMW prevent keys being trapped if dialog is active
-    switch (wParam)
-    {
-    case VK_DOWN :  // SCROLL UP
-      DoZoomOut();
-      break;
+	if (InputEvents::processKey(wParam)) {
+	  //	  DoStatusMessage(TEXT("Event in default"));
+	  return TRUE; // don't go to default handler
+	}
+    break;
+  }
 
-    case VK_UP: // SCROLL DOWN
-      DoZoomIn();
-      break;
-
-    case VK_RIGHT: // Pan mode
-      if (!Debounce()) break;
-      DoTogglePan();
-      break;
-
-    case VK_RETURN: // Pan mode, cycles through modes
-      if (!Debounce()) break;
-
-      if (ClearAirspaceWarnings(true)) {
-        // airspace was active, enter was used to acknowledge
-        break;
-      }
-      DoToggleTerrain();
-      break;
-
-    case VK_LEFT:
-
-      if (!Debounce()) break;
-      DoToggleAutoZoom();
-      break;
-      }
-      break;
-    }
-
-    return (DefWindowProc (hWnd, uMsg, wParam, lParam));
+  return (DefWindowProc (hWnd, uMsg, wParam, lParam));
 }
 
 extern int FrameCount;

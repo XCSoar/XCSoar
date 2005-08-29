@@ -16,7 +16,7 @@ extern HINSTANCE hInst; // The current instance
 // 5: infoboxes along right side
 
 
-int InfoBoxLayout::InfoBoxGeometry = 1;
+int InfoBoxLayout::InfoBoxGeometry = 0;
 int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
@@ -243,30 +243,36 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
       CreateWindow(TEXT("STATIC"), TEXT("\0"),
 		   WS_VISIBLE|WS_CHILD|WS_TABSTOP
 		   |SS_CENTER|SS_NOTIFY
-		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-		   0, 0,
-		   0, 0,
+		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
+		   rc.left, rc.top,
+		   50, 15,
 		   hWndMainWindow, NULL, hInst, NULL);
   }
+
+  int hwidth = (rc.right-rc.left)/4;
 
   switch (ButtonLabelGeometry) {
   case 0:
 
     SetWindowPos(hWndButtonWindow[0],HWND_TOP,
-		 rc.left, (rc.bottom - 15),
-		 50, 15, SWP_SHOWWINDOW);
+		 rc.left+3, (rc.bottom-20-InfoBoxLayout::ControlHeight-20),
+		 52, 20, SWP_SHOWWINDOW);
 
     SetWindowPos(hWndButtonWindow[1],HWND_TOP,
-		 rc.left+60, (rc.bottom - 15),
-		 50, 15, SWP_SHOWWINDOW);
+		 rc.left+3, (rc.bottom - 20-InfoBoxLayout::ControlHeight),
+		 52, 20, SWP_SHOWWINDOW);
 
     SetWindowPos(hWndButtonWindow[2],HWND_TOP,
-		 rc.left+120, (rc.bottom - 15),
-		 50, 15, SWP_SHOWWINDOW);
+		 rc.left+hwidth+3, (rc.bottom - 20-InfoBoxLayout::ControlHeight),
+		 52, 20, SWP_SHOWWINDOW);
 
     SetWindowPos(hWndButtonWindow[3],HWND_TOP,
-		 rc.left+180, (rc.bottom - 15),
-		 50, 15, SWP_SHOWWINDOW);
+		 rc.left+hwidth*2+3, (rc.bottom - 20-InfoBoxLayout::ControlHeight),
+		 52, 20, SWP_SHOWWINDOW);
+
+    SetWindowPos(hWndButtonWindow[4],HWND_TOP,
+		 rc.left+hwidth*3+3, (rc.bottom - 20-InfoBoxLayout::ControlHeight),
+		 52, 20, SWP_SHOWWINDOW);
 
     break;
   };
@@ -293,8 +299,8 @@ void ButtonLabel::SetLabelText(int index, TCHAR *text) {
   if ((text==NULL)||(*text==_T('\0'))) {
     ShowWindow(hWndButtonWindow[index], SW_HIDE);
   } else {
-    ShowWindow(hWndButtonWindow[index], SW_SHOW);
     SetWindowText(hWndButtonWindow[index], text);
+    ShowWindow(hWndButtonWindow[index], SW_SHOW);
   }
 
 }

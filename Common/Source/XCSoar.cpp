@@ -77,7 +77,7 @@ int                                     InfoType[NUMINFOWINDOWS] = {921102,
 BOOL                                    DisplayLocked = TRUE;
 BOOL                                    InfoWindowActive = TRUE;
 BOOL                                    EnableAuxiliaryInfo = FALSE;
-int                                     FocusTimeOut = 0;
+int                                     InfoBoxFocusTimeOut = 0;
 int                                     MenuTimeOut = 0;
 int                                     DisplayTimeOut = 0;
 
@@ -608,6 +608,14 @@ void RestartCommPorts() {
 }
 
 
+void DefocusInfoBox() {
+  FocusOnWindow(InfoFocus,false);
+  InfoFocus = -1;
+  InputEvents::setMode(TEXT("default"));
+  InfoWindowActive = FALSE;
+}
+
+
 void FocusOnWindow(int i, bool selected) {
     //hWndTitleWindow
 
@@ -616,9 +624,11 @@ void FocusOnWindow(int i, bool selected) {
   HWND wind = hWndInfoWindow[i];
 
   if (selected) {
-    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER);
+    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD
+		  |WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER);
   } else {
-    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD|WS_TABSTOP|SS_CENTER|SS_NOTIFY);
+    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD
+		  |WS_TABSTOP|SS_CENTER|SS_NOTIFY);
   }
 
   wind = hWndTitleWindow[i];
@@ -1048,9 +1058,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   CDIWindowFont = CreateFontIndirect (&logfont);
 
-
-
-
   // new font for map labels
   memset ((char *)&logfont, 0, sizeof (logfont));
 
@@ -1113,11 +1120,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     InfoBoxLayout::CreateInfoBoxes(rc);
 
     ButtonLabel::CreateButtonLabels(rc);
-
-    ButtonLabel::SetLabelText(0,TEXT("NAV"));
-    ButtonLabel::SetLabelText(1,TEXT("DISPLAY"));
-    ButtonLabel::SetLabelText(2,TEXT("CONFIG"));
-    ButtonLabel::SetLabelText(3,TEXT("INFO"));
+    ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
   /////////////
 
@@ -1143,8 +1146,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   // JMW moved menu button to center, to make room for thermal indicator
 
-  int menubuttonsize = max(InfoBoxLayout::ControlWidth,
-			   InfoBoxLayout::ControlHeight);
+  int menubuttonsize = (int)(max(InfoBoxLayout::ControlWidth,
+				 InfoBoxLayout::ControlHeight)*0.8);
 
   SetWindowPos(hWndMenuButton,HWND_TOP,
                (int)(rc.right-rc.left-menubuttonsize)/2+rc.left,
@@ -1241,7 +1244,7 @@ void DoInfoKey(int keycode) {
 
   GpsUpdated = TRUE; // emulate update to trigger calculations
 
-  FocusTimeOut = 0;
+  InfoBoxFocusTimeOut = 0;
   DisplayTimeOut = 0;
 
 }
@@ -1315,7 +1318,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       if (wdata==4) {
 	SetBkColor((HDC)wParam, ColorSelected);
         SetTextColor((HDC)wParam, ColorOK);
-	return (LRESULT)hBrushUnselected;
+	return (LRESULT)hBrushSelected;
       }
       break;
 
@@ -1324,11 +1327,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       memset (&s_sai, 0, sizeof (s_sai));
       s_sai.cbSize = sizeof (s_sai);
 
-#ifdef _SIM_
       iTimerID = SetTimer(hWnd,1000,250,NULL);
-#else
-      iTimerID = SetTimer(hWnd,1000,250,NULL);
-#endif
 
       hWndCB = CreateRpCommandBar(hWnd);
 
@@ -1353,68 +1352,33 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
 
     case WM_SETFOCUS:
+      // JMW not sure this ever does anything useful..
       if(InfoWindowActive) {
 
         if(DisplayLocked) {
-
 	  FocusOnWindow(InfoFocus,true);
-	  //	  ShowMenu();
-        }
-        else {
-
+        } else {
 	  FocusOnWindow(InfoFocus,true);
-	  //	  ShowMenu();
-        }
+	}
       } else {
-	FocusOnWindow(InfoFocus,false);
-	InfoFocus = -1;
-	InputEvents::setMode(TEXT("default"));
+	DefocusInfoBox();
 	HideMenu();
         SetFocus(hWndMapWindow);
       }
       break;
 
     case WM_KEYUP:
-      if (!DialogActive)
+      if (!DialogActive) {
 
-			// XXX Temp location - should do own check on location - eg: DialogActive
-			// XXX
-			//	working VK_APP1-7
+	// XXX Temp location - should do own check on location - eg:
+	// DialogActive
+	// XXX
+	// working VK_APP1-7
 
-		  if (!InputEvents::processKey(wParam)) {
-			  DoStatusMessage(TEXT("XXX We got a new event"));
-			// else - switch below
-		  } else {
-
-	switch (wParam)
-        {
-
-        case VK_UP :  // SCROLL UP (infobox mode)
-          DoInfoKey(1);
-          break;
-
-        case VK_DOWN: // SCROLL DOWN (infobox mode)
-         DoInfoKey(-1);
-          break;
-
-        case VK_RETURN:
-        if (!Debounce()) break;
-
-          DoInfoKey(0);
-          break;
-
-		  // Simulator - turn glider, wind direction etc
-        case VK_LEFT: // SCROLL DOWN
-          DoInfoKey(-2);
-          break;
-
-        case VK_RIGHT: // SCROLL DOWN
-          DoInfoKey(2);
-          break;
-        }
-			  }
-
-
+	if (InputEvents::processKey(wParam)) {
+	  //	  DoStatusMessage(TEXT("Event in infobox"));
+	}
+      }
       break;
 
     case WM_TIMER:
@@ -1850,7 +1814,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       FullScreen();
 
-      FocusTimeOut = 0;
+      InfoBoxFocusTimeOut = 0;
       if (!InfoWindowActive) {
 	ShowMenu();
       }
@@ -1869,10 +1833,10 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		      FocusOnWindow(InfoFocus,false);
 
 		      InfoFocus = i;
-			  InputEvents::setMode(TEXT("infobox"));
 		      InfoWindowActive = TRUE;
 		    }
 		  DisplayText();
+		  InputEvents::setMode(TEXT("infobox"));
 
 		}
 	      else
@@ -2058,11 +2022,11 @@ void CommonProcessTimer()
 
   if(InfoWindowActive)
     {
-      if(FocusTimeOut == FOCUSTIMEOUTMAX)
+      if(InfoBoxFocusTimeOut == FOCUSTIMEOUTMAX)
         {
           SwitchToMapWindow();
         }
-      FocusTimeOut ++;
+      InfoBoxFocusTimeOut ++;
 
     }
 
@@ -2291,18 +2255,18 @@ void SIMProcessTimer(void)
 }
 
 
+
+
 void SwitchToMapWindow(void)
 {
-  FocusOnWindow(InfoFocus,false);
-  InfoWindowActive = FALSE;
-  InfoFocus = -1;
-  InputEvents::setMode(TEXT("default"));
+  DefocusInfoBox();
+
   SetFocus(hWndMapWindow);
   if (  MenuTimeOut< MENUTIMEOUTMAX) {
     MenuTimeOut = MENUTIMEOUTMAX;
   }
-  if (  FocusTimeOut< FOCUSTIMEOUTMAX) {
-    FocusTimeOut = FOCUSTIMEOUTMAX;
+  if (  InfoBoxFocusTimeOut< FOCUSTIMEOUTMAX) {
+    InfoBoxFocusTimeOut = FOCUSTIMEOUTMAX;
   }
 
   // JMW reactivate menu button
@@ -2537,3 +2501,59 @@ void BlankDisplay(bool doblank) {
   ::ReleaseDC(NULL, gdc);
 }
 
+
+
+void Event_SelectInfoBox(int i) {
+  int oldinfofocus = InfoFocus;
+
+  // must do this
+  InfoBoxFocusTimeOut = 0;
+
+  if (InfoFocus== -1) {
+    InfoFocus = 0;
+  } else {
+    FocusOnWindow(InfoFocus,false);
+  }
+  InfoFocus+= i;
+  if (InfoFocus>=NUMINFOWINDOWS) {
+    InfoFocus = -1; // deactivate if wrap around
+  }
+  if (InfoFocus<0) {
+    InfoFocus = -1; // deactivate if wrap around
+  }
+  if (InfoFocus<0) {
+    DefocusInfoBox();
+    SwitchToMapWindow();
+    return;
+  }
+
+  //  SetFocus(hWndInfoWindow[InfoFocus]);
+  FocusOnWindow(InfoFocus,true);
+  InfoWindowActive = TRUE;
+  DisplayText();
+
+  InputEvents::setMode(TEXT("infobox"));
+}
+
+
+void Event_ChangeInfoBoxType(int i) {
+  int j, k;
+
+  if (InfoFocus<=0) {
+    return;
+  }
+
+  k = getInfoType(InfoFocus);
+  if (i>0) {
+    j = Data_Options[k].next_screen;
+  }
+  if (i<0) {
+    j = Data_Options[k].prev_screen;
+  }
+
+  // TODO: if i==0, go to default or reset
+
+  setInfoType(InfoFocus, j);
+  DisplayText();
+
+}

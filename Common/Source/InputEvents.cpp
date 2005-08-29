@@ -1,4 +1,5 @@
 
+
 /*
 
 InputEvent
@@ -240,14 +241,16 @@ Functions/Events - what it does
 #include "compatibility.h"
 #include <commctrl.h>
 #include <aygshell.h>
+#include "InfoBoxLayout.h"
+#include "Airspace.h"
 
 int TrailActive = TRUE;
 
 // XXX header file ?
 // What to do when a key is pressed...
 typedef struct {
-	void (*pt2Func)(TCHAR *);	// Which function to call (can be any, but should be here)
-	TCHAR *misc;			// What data to pass (eg: on, off, toggle)
+  void (*pt2Func)(TCHAR *);	// Which function to call (can be any, but should be here)
+  TCHAR *misc;			// What data to pass (eg: on, off, toggle)
 } InputKeySTRUCT;
 
 
@@ -264,81 +267,222 @@ int mode_map_count = 0;
 
 // Read the data files
 void InputEvents::readFile() {
-	// XXX Example only
+  // XXX Example only
 
-	/*
-		MODE !
+  /*
+    MODE !
 
-			At read/init time, generate all buttons ?
-			What about unusual modes - such as special menus
-			Do we take a default set and inherit/copy them across on execute
-			Do we do that dynamically, falling back ?
-			Can each mode have a sub-set of keys, copying the previous
-				advantage - only define what you change
-				disadvantage - undefined keys, what ever they last were set to - weird
-			Alternative - one default set, mode on top of default only
-				If we do that, then check current mode then default entry version only
-			Because special modes are TEXT, how do we define that... Do we use a HASH, or lookup?
-				or combination - array lookup of entry for mode...
+    At read/init time, generate all buttons ?
+    What about unusual modes - such as special menus
+    Do we take a default set and inherit/copy them across on execute
+    Do we do that dynamically, falling back ?
+    Can each mode have a sub-set of keys, copying the previous
+    advantage - only define what you change
+    disadvantage - undefined keys, what ever they last were set to - weird
+    Alternative - one default set, mode on top of default only
+    If we do that, then check current mode then default entry version only
+    Because special modes are TEXT, how do we define that... Do we use a HASH, or lookup?
+    or combination - array lookup of entry for mode...
 
-			XXX Example of looking up mode, finding key, fall back to default etc.
+    XXX Example of looking up mode, finding key, fall back to default etc.
 
-	*/
+  */
 
-	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP1].pt2Func = &InputEvents::eventScreenModes;	// Which function
-	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP1].misc = TEXT("toggle");	// Data to send
+  // JMW all of these define the default behaviour, which is how XCSoar currently works.
+  //
+  // default/map mode
 
-	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP2].pt2Func = &InputEvents::eventSnailTrail;
-	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP2].misc = TEXT("toggle");
+  InputKeyData[mode2int(TEXT("default"), true)][VK_APP1].pt2Func = &eventMainMenu;
+  InputKeyData[mode2int(TEXT("default"), true)][VK_APP1].misc = TEXT("");
 
-	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP3].pt2Func = &InputEvents::eventSounds;
-	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP3].misc = TEXT("toggle");
+  InputKeyData[mode2int(TEXT("default"), true)][VK_APP2].pt2Func = &eventMarkLocation;
+  InputKeyData[mode2int(TEXT("default"), true)][VK_APP2].misc = TEXT("");
 
-	InputKeyData[InputEvents::mode2int(TEXT("infobox"), true)][VK_APP3].pt2Func = &InputEvents::eventSnailTrail;
-	InputKeyData[InputEvents::mode2int(TEXT("infobox"), true)][VK_APP3].misc = TEXT("toggle");
+  InputKeyData[mode2int(TEXT("default"), true)][VK_APP3].pt2Func = &eventSelectInfoBox;
+  InputKeyData[mode2int(TEXT("default"), true)][VK_APP3].misc = TEXT("next");
 
-	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP4].pt2Func = &InputEvents::eventMarkLocation;
-	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP4].misc = TEXT("");
+  InputKeyData[mode2int(TEXT("default"), true)][VK_APP4].pt2Func = &setMode;
+  InputKeyData[mode2int(TEXT("default"), true)][VK_APP4].misc = TEXT("display1");
 
-	/*
-	if (VK_APP6 < 256) {
-		InputKeyData[VK_APP4].pt2Func = &InputEvents::eventShowMenu;
-		InputKeyData[VK_APP4].misc = TEXT("");
-	}
-	*/
+  InputKeyData[mode2int(TEXT("default"), true)][VK_DOWN].pt2Func = &eventScaleZoom;
+  InputKeyData[mode2int(TEXT("default"), true)][VK_DOWN].misc = TEXT("-");
+
+  InputKeyData[mode2int(TEXT("default"), true)][VK_UP].pt2Func = &eventScaleZoom;
+  InputKeyData[mode2int(TEXT("default"), true)][VK_UP].misc = TEXT("+");
+
+  /*
+  InputKeyData[mode2int(TEXT("default"), true)][VK_LEFT].pt2Func = &eventAutoZoom;
+  InputKeyData[mode2int(TEXT("default"), true)][VK_LEFT].misc = TEXT("toggle");
+
+  InputKeyData[mode2int(TEXT("default"), true)][VK_RIGHT].pt2Func = &eventPan;
+  InputKeyData[mode2int(TEXT("default"), true)][VK_RIGHT].misc = TEXT("toggle");
+  */
+
+  // infobox mode
+
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP1].pt2Func = &eventSelectInfoBox;
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP1].misc = TEXT("previous");
+
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP4].pt2Func = &eventSelectInfoBox;
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP4].misc = TEXT("next");
+
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP2].pt2Func = &eventChangeInfoBoxType;
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP2].misc = TEXT("previous");
+
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP3].pt2Func = &eventChangeInfoBoxType;
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP3].misc = TEXT("next");
+
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_UP].pt2Func = &eventDoInfoKey;
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_UP].misc = TEXT("up");
+
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_DOWN].pt2Func = &eventDoInfoKey;
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_DOWN].misc = TEXT("down");
+
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_LEFT].pt2Func = &eventDoInfoKey;
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_LEFT].misc = TEXT("left");
+
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_RIGHT].pt2Func = &eventDoInfoKey;
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_RIGHT].misc = TEXT("right");
+
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_RETURN].pt2Func = &eventDoInfoKey;
+  InputKeyData[mode2int(TEXT("infobox"), true)][VK_RETURN].misc = TEXT("return");
+
+  ////////
+
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP1].pt2Func = &eventClearWarningsAndTerrain;
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP1].misc = TEXT("");
+
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP2].pt2Func = &eventScreenModes;
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP2].misc = TEXT("toggle");
+
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP3].pt2Func = &eventPan;
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP3].misc = TEXT("toggle");
+
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP4].pt2Func = &setMode;
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP4].misc = TEXT("display2");
+
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_UP].pt2Func = &eventPanCursor;
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_UP].misc = TEXT("up");
+
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_DOWN].pt2Func = &eventPanCursor;
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_DOWN].misc = TEXT("down");
+
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_LEFT].pt2Func = &eventPanCursor;
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_LEFT].misc = TEXT("left");
+
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_RIGHT].pt2Func = &eventPanCursor;
+  InputKeyData[mode2int(TEXT("display1"), true)][VK_RIGHT].misc = TEXT("right");
+
+  /////////
+
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP1].pt2Func = &eventAutoZoom;
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP1].misc = TEXT("toggle");
+
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP2].pt2Func = &eventSnailTrail;
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP2].misc = TEXT("toggle");
+
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP3].pt2Func = &eventSounds;
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP3].misc = TEXT("toggle");
+
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP4].pt2Func = &setMode;
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP4].misc = TEXT("default");
+
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_UP].pt2Func = &eventPanCursor;
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_UP].misc = TEXT("up");
+
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_DOWN].pt2Func = &eventPanCursor;
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_DOWN].misc = TEXT("down");
+
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_LEFT].pt2Func = &eventPanCursor;
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_LEFT].misc = TEXT("left");
+
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_RIGHT].pt2Func = &eventPanCursor;
+  InputKeyData[mode2int(TEXT("display2"), true)][VK_RIGHT].misc = TEXT("right");
+
+
+
+  /*
+     if (VK_APP6 < 256) {
+     InputKeyData[VK_APP4].pt2Func = &InputEvents::eventShowMenu;
+     InputKeyData[VK_APP4].misc = TEXT("");
+     }
+  */
 
 }
+
 
 // Return 0 for anything else - should probably return -1 !
 int InputEvents::mode2int(TCHAR *mode, bool create) {
-	int i = 0;
+  int i = 0;
 
-	// Better checks !
-	if ((mode == NULL))
-		return 0;
+  // Better checks !
+  if ((mode == NULL))
+    return 0;
 
-	for (i = 0; i < mode_map_count; i++) {
-		if (wcscmp(mode, mode_map[i]) == 0)
-			return i;
-	}
+  for (i = 0; i < mode_map_count; i++) {
+    if (wcscmp(mode, mode_map[i]) == 0)
+      return i;
+  }
 
-	if (create) {
-		// Keep a copy
-		wcsncpy(mode_map[mode_map_count], mode, 25);
-		mode_map_count++;
-		return mode_map_count - 1;
-	}
+  if (create) {
+    // Keep a copy
+    wcsncpy(mode_map[mode_map_count], mode, 25);
+    mode_map_count++;
+    return mode_map_count - 1;
+  }
 
-	return 0;
+  return 0;
 }
+
 
 void InputEvents::setMode(TCHAR *mode) {
-	wcsncpy(mode_current, mode, 25);
+  static int lastmode = -1;
+  int thismode;
+
+  wcsncpy(mode_current, mode, 25);
+
+  thismode = mode2int(mode,true);
+  if (thismode == lastmode) return;
+  lastmode = thismode;
+
+  // XXX TODO: set button labels for each mode (we don't have a way of specifying
+  // these mappings yet, so I'm hardcoding them...
+
+  // for debugging at least, set mode indicator on screen
+  if (thismode==0) {
+    ButtonLabel::SetLabelText(0,NULL);
+    ButtonLabel::SetLabelText(1,NULL);
+    ButtonLabel::SetLabelText(2,NULL);
+    ButtonLabel::SetLabelText(3,NULL);
+    ButtonLabel::SetLabelText(4,NULL);
+  } else {
+    ButtonLabel::SetLabelText(0,mode);
+  }
+  if (thismode==1) { // XXX infobox mode, naughty I am hardcoding it..
+    ButtonLabel::SetLabelText(1,TEXT("<<"));
+    ButtonLabel::SetLabelText(4,TEXT(">>"));
+    ButtonLabel::SetLabelText(2,TEXT("<type"));
+    ButtonLabel::SetLabelText(3,TEXT("type>"));
+  }
+  if (thismode==2) {
+    ButtonLabel::SetLabelText(1,TEXT("Terrain"));
+    ButtonLabel::SetLabelText(2,TEXT("Layout"));
+    ButtonLabel::SetLabelText(3,TEXT("Pan"));
+    ButtonLabel::SetLabelText(4,TEXT(".."));
+  }
+  if (thismode==3) {
+    ButtonLabel::SetLabelText(1,TEXT("AZoom"));
+    ButtonLabel::SetLabelText(2,TEXT("Snail"));
+    ButtonLabel::SetLabelText(3,TEXT("Audio"));
+    ButtonLabel::SetLabelText(4,TEXT(".."));
+  }
 }
 
+
 TCHAR* InputEvents::getMode() {
-	return mode_current;
+  return mode_current;
 }
+
 
 // -----------------------------------------------------------------------
 // Processing functions - which one to do
@@ -347,36 +491,44 @@ TCHAR* InputEvents::getMode() {
 /*
   InputEvent::processKey(KeyID);
 	Process keys normally brought in by hardware or keyboard presses
-	Futureâ will also allow for long and double click presses...
- Return = We had a valid key (even if nothing happens because of Bounce)
+	Future will also allow for long and double click presses...
+	Return = We had a valid key (even if nothing happens because of Bounce)
 */
 bool InputEvents::processKey(int dWord) {
-	InputKeySTRUCT current;
-	int mode = InputEvents::mode2int(InputEvents::getMode(), false);
 
-	if ((dWord < 0) || (dWord > 255))
-		return false;
+  // JMW changed this to pointer for efficiency and because C++ doesn't do deep
+  // copy e.g. of text strings!
+  InputKeySTRUCT *current;
 
-	current = InputKeyData[mode][dWord];
-	if (current.pt2Func == NULL)
-		current = InputKeyData[0][dWord];
+  // get current mode
+  int mode = mode2int(InputEvents::getMode(), false);
 
-	if (current.pt2Func != NULL) {
-		if (!Debounce()) return true;
-		current.pt2Func(current.misc);
-		return true;
-	}
+  if ((dWord < 0) || (dWord > 255))
+    return false;
 
-	return false;
+  current = &(InputKeyData[mode][dWord]);
+  if (current->pt2Func == NULL) {
+    // go with default key..
+    current = &(InputKeyData[0][dWord]);
+    return false; // JMW if no mapping defined, should be blank and return false
+  }
+
+  if (current->pt2Func != NULL) {
+    if (!Debounce()) return true;
+    current->pt2Func(current->misc);
+    return true;
+  }
+
+  return false;
 }
 
 /*
   InputEvent::processNmea(TCHAR* data)
-	Process a string match for NMEA data and call function
+  Process a string match for NMEA data and call function
  Return = TRUE if we have a valid key match
 */
 bool InputEvents::processNmea(TCHAR* data) {
-	return true;
+  return true;
 }
 
 
@@ -394,6 +546,7 @@ void InputEvents::eventMarkLocation(TCHAR *misc) {
   MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
   UnlockFlightData();
 }
+
 
 // Vario sounds only XXX change eventVarioSounds
 void InputEvents::eventSounds(TCHAR *misc) {
@@ -419,30 +572,30 @@ void InputEvents::eventSounds(TCHAR *misc) {
 
 // XXX This should be just SnailTrail - Turn on/off with string
 void InputEvents::eventSnailTrail(TCHAR *misc) {
-	int OldTrailActive;
-	OldTrailActive = TrailActive;
+  int OldTrailActive;
+  OldTrailActive = TrailActive;
 
-	if (wcscmp(misc, TEXT("toggle")) == 0) {
-		TrailActive ++;
-		if (TrailActive>2) {
-			TrailActive=0;
-		}
-	}
-	else if (wcscmp(misc, TEXT("off")) == 0)
-		TrailActive = 0;
-	else if (wcscmp(misc, TEXT("long")) == 0)
-		TrailActive = 1;
-	else if (wcscmp(misc, TEXT("short")) == 0)
-		TrailActive = 2;
+  if (wcscmp(misc, TEXT("toggle")) == 0) {
+    TrailActive ++;
+    if (TrailActive>2) {
+      TrailActive=0;
+    }
+  }
+  else if (wcscmp(misc, TEXT("off")) == 0)
+    TrailActive = 0;
+  else if (wcscmp(misc, TEXT("long")) == 0)
+    TrailActive = 1;
+  else if (wcscmp(misc, TEXT("short")) == 0)
+    TrailActive = 2;
 
-	if (OldTrailActive != TrailActive) {
-		if (TrailActive==0)
-			DoStatusMessage(TEXT("SnailTrail OFF"));
-		if (TrailActive==1)
-			DoStatusMessage(TEXT("SnailTrail ON Long"));
-		if (TrailActive==2)
-			DoStatusMessage(TEXT("SnailTrail ON Short"));
-	}
+  if (OldTrailActive != TrailActive) {
+    if (TrailActive==0)
+      DoStatusMessage(TEXT("SnailTrail OFF"));
+    if (TrailActive==1)
+      DoStatusMessage(TEXT("SnailTrail ON Long"));
+    if (TrailActive==2)
+      DoStatusMessage(TEXT("SnailTrail ON Short"));
+  }
 }
 
 // XXX This should be just ScreenModes - toggle etc with string
@@ -452,6 +605,7 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
   //  -- auxiliary infobox
   //  -- full screen
   //  -- normal infobox
+
   if (EnableAuxiliaryInfo) {
     MapWindow::RequestToggleFullScreen();
     EnableAuxiliaryInfo = false;
@@ -472,20 +626,27 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
 //	on - Turn on if not already
 //	off - Turn off if not already
 //	toggle - Toggle current full screen status
-void eventAutoZoom(TCHAR* misc) {
-	MapWindow::RequestToggleFullScreen();
-	if (wcscmp(misc, TEXT("toggle")) == 0)
-		// XXX Could pass in -1, 0, 1 to AutoZoom -
-		// or separate functions or something else ...
-		// MapWindow::Event_AutoZoom();
-		return;
-	else if (wcscmp(misc, TEXT("on")) == 0)
-		// MapWindow::Event_AutoZoom();
-		return;
-	else if (wcscmp(misc, TEXT("off")) == 0)
-		// MapWindow::Event_AutoZoom();
-		return;
+void InputEvents::eventAutoZoom(TCHAR* misc) {
+  // JMW pass through to handler in MapWindow
+  // here:
+  // -1 means toggle
+  // 0 means off
+  // 1 means on
+
+  if (wcscmp(misc, TEXT("toggle")) == 0) {
+    MapWindow::Event_AutoZoom(-1);
+    return;
+  }
+  else if (wcscmp(misc, TEXT("on")) == 0) {
+    MapWindow::Event_AutoZoom(1);
+    return;
+  }
+  else if (wcscmp(misc, TEXT("off")) == 0) {
+    MapWindow::Event_AutoZoom(0);
+    return;
+  }
 }
+
 
 /*
 	XXX  Entries todo (see above documentation)
@@ -498,5 +659,115 @@ void eventAutoZoom(TCHAR* misc) {
 
 */
 
+/*
+MapWindow::Event_SetZoom(double value);
+MapWindow::Event_ScaleZoom(int vswitch);
+MapWindow::Event_Pan(int vswitch);
+MapWindow::Event_Terrain(int vswitch);
+MapWindow::Event_AutoZoom(int vswitch);
+*/
+
+void InputEvents::eventScaleZoom(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("-")) == 0) {
+    MapWindow::Event_ScaleZoom(-1);
+    return;
+  }
+  if (wcscmp(misc, TEXT("+")) == 0) {
+    MapWindow::Event_ScaleZoom(1);
+    return;
+  }
+  if (wcscmp(misc, TEXT("--")) == 0) {
+    MapWindow::Event_ScaleZoom(-2);
+    return;
+  }
+  if (wcscmp(misc, TEXT("++")) == 0) {
+    MapWindow::Event_ScaleZoom(2);
+    return;
+  }
+}
+
+void InputEvents::eventPan(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("toggle")) == 0) {
+    MapWindow::Event_Pan(-1);
+    return;
+  }
+  else if (wcscmp(misc, TEXT("on")) == 0) {
+    MapWindow::Event_Pan(1);
+    return;
+  }
+  else if (wcscmp(misc, TEXT("off")) == 0) {
+    MapWindow::Event_Pan(0);
+    return;
+  }
+}
 
 
+void InputEvents::eventClearWarningsAndTerrain(TCHAR *misc) {
+  // dumb at the moment, just to get legacy functionality
+  if (ClearAirspaceWarnings(true)) {
+    // airspace was active, enter was used to acknowledge
+    return;
+  }
+  MapWindow::Event_Terrain(-1);
+}
+
+
+void InputEvents::eventSelectInfoBox(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("next")) == 0) {
+    Event_SelectInfoBox(1);
+  }
+  if (wcscmp(misc, TEXT("previous")) == 0) {
+    Event_SelectInfoBox(-1);
+  }
+}
+
+
+void InputEvents::eventChangeInfoBoxType(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("next")) == 0) {
+    Event_ChangeInfoBoxType(1);
+  }
+  if (wcscmp(misc, TEXT("previous")) == 0) {
+    Event_ChangeInfoBoxType(-1);
+  }
+}
+
+
+void InputEvents::eventDoInfoKey(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("up")) == 0) {
+    DoInfoKey(1);
+  }
+  if (wcscmp(misc, TEXT("down")) == 0) {
+    DoInfoKey(-1);
+  }
+  if (wcscmp(misc, TEXT("left")) == 0) {
+    DoInfoKey(-2);
+  }
+  if (wcscmp(misc, TEXT("right")) == 0) {
+    DoInfoKey(2);
+  }
+  if (wcscmp(misc, TEXT("return")) == 0) {
+    DoInfoKey(0);
+  }
+
+}
+
+
+void InputEvents::eventPanCursor(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("up")) == 0) {
+    MapWindow::Event_PanCursor(0,1);
+  }
+  if (wcscmp(misc, TEXT("down")) == 0) {
+    MapWindow::Event_PanCursor(0,-1);
+  }
+  if (wcscmp(misc, TEXT("left")) == 0) {
+    MapWindow::Event_PanCursor(1,0);
+  }
+  if (wcscmp(misc, TEXT("right")) == 0) {
+    MapWindow::Event_PanCursor(-1,0);
+  }
+}
+
+
+void InputEvents::eventMainMenu(TCHAR *misc) {
+  // todo: popup main menu
+}

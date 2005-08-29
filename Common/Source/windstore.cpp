@@ -94,7 +94,7 @@ void WindStore::recalculateWind() {
 void WindStore::newWind(Vector &wind) {
   //
   double mag = sqrt(wind.x*wind.x+wind.y*wind.y);
-  double bearing = atan2(wind.y, wind.x)*(180/3.14159);
+  double bearing = atan2(wind.y, wind.x)*RAD_TO_DEG;
   if (mag<30) { // limit to reasonable values
     derivedInfo->WindSpeed = mag;
     if (bearing<0) {
