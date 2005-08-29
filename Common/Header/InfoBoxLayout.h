@@ -2,6 +2,7 @@
 #define INFOBOXLAYOUT_H
 
 #include "stdafx.h"
+#include "Sizes.h"
 
 class InfoBoxLayout {
  public:
@@ -11,6 +12,16 @@ class InfoBoxLayout {
  private:
   static void GetInfoBoxPosition(int i, RECT rc, int *x, int *y);
   static void GetInfoBoxSizes(RECT rc);
+};
+
+
+class ButtonLabel {
+ public:
+  static int ButtonLabelGeometry;
+  static HWND hWndButtonWindow[NUMBUTTONLABELS];
+  static void CreateButtonLabels(RECT rc);
+  static void Destroy();
+  static void SetLabelText(int index, TCHAR *text);
 };
 
 #endif

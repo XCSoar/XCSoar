@@ -147,7 +147,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 3:
     // calculate control dimensions
 
-    ControlWidth = (rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3;
+    ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
     ControlHeight = (int)(2*(rc.bottom - rc.top) / NUMINFOWINDOWS);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
 
@@ -162,7 +162,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 4:
     // calculate control dimensions
 
-    ControlWidth = (rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3;
+    ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
     ControlHeight = (int)(2*(rc.bottom - rc.top) / NUMINFOWINDOWS);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
 
@@ -177,7 +177,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 5:
     // calculate control dimensions
 
-    ControlWidth = (rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3;
+    ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
     ControlHeight = (int)(2*(rc.bottom - rc.top) / NUMINFOWINDOWS);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
 
@@ -225,5 +225,76 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 		     hWndMainWindow,NULL,hInst,NULL);
 
     }
+
+}
+
+
+///////////////////////
+
+HWND ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
+
+int ButtonLabel::ButtonLabelGeometry = 0;
+
+
+void ButtonLabel::CreateButtonLabels(RECT rc) {
+  int i;
+  for (i=0; i<NUMBUTTONLABELS; i++) {
+    hWndButtonWindow[i] =
+      CreateWindow(TEXT("STATIC"), TEXT("\0"),
+		   WS_VISIBLE|WS_CHILD|WS_TABSTOP
+		   |SS_CENTER|SS_NOTIFY
+		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+		   0, 0,
+		   0, 0,
+		   hWndMainWindow, NULL, hInst, NULL);
+  }
+
+  switch (ButtonLabelGeometry) {
+  case 0:
+
+    SetWindowPos(hWndButtonWindow[0],HWND_TOP,
+		 rc.left, (rc.bottom - 15),
+		 50, 15, SWP_SHOWWINDOW);
+
+    SetWindowPos(hWndButtonWindow[1],HWND_TOP,
+		 rc.left+60, (rc.bottom - 15),
+		 50, 15, SWP_SHOWWINDOW);
+
+    SetWindowPos(hWndButtonWindow[2],HWND_TOP,
+		 rc.left+120, (rc.bottom - 15),
+		 50, 15, SWP_SHOWWINDOW);
+
+    SetWindowPos(hWndButtonWindow[3],HWND_TOP,
+		 rc.left+180, (rc.bottom - 15),
+		 50, 15, SWP_SHOWWINDOW);
+
+    break;
+  };
+  for (i=0; i<NUMBUTTONLABELS; i++) {
+    SetLabelText(i,NULL);
+    SetWindowLong(hWndButtonWindow[i], GWL_USERDATA, 4);
+  }
+
+}
+
+void ButtonLabel::Destroy() {
+  int i;
+  for (i=0; i<NUMBUTTONLABELS; i++) {
+    DestroyWindow(hWndButtonWindow[i]);
+  }
+}
+
+
+void ButtonLabel::SetLabelText(int index, TCHAR *text) {
+  if (index>= NUMBUTTONLABELS) {
+    // error!
+    return;
+  }
+  if ((text==NULL)||(*text==_T('\0'))) {
+    ShowWindow(hWndButtonWindow[index], SW_HIDE);
+  } else {
+    ShowWindow(hWndButtonWindow[index], SW_SHOW);
+    SetWindowText(hWndButtonWindow[index], text);
+  }
 
 }
