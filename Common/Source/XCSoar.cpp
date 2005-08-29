@@ -61,7 +61,6 @@ HWND                                    hWndMainWindow; // Main Windows
 HWND                                    hWndMapWindow;  // MapWindow
 HWND          hWndMenuButton = NULL;
 
-HWND                                    hWndCDIWindow = NULL; //CDI Window
 
 HWND                                    hWndInfoWindow[NUMINFOWINDOWS];
 HWND                                    hWndTitleWindow[NUMINFOWINDOWS];
@@ -132,7 +131,7 @@ bool          AutoMcCready = false;
 
 int          NettoSpeed = 1000;
 
-NMEA_INFO                       GPS_INFO;
+NMEA_INFO     GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
 BOOL GPSCONNECT = FALSE;
 BOOL extGPSCONNECT = FALSE; // this one used by external functions
@@ -259,6 +258,10 @@ static  DWORD SpeedIndex2 = 2;
 BOOL InfoBoxesHidden = false;
 
 void PopupBugsBallast(int updown);
+
+#include "GaugeCDI.h"
+#include "GaugeVario.h"
+
 
 // Groups:
 //   Altitude 0,1,20,33
@@ -409,7 +412,6 @@ SCREEN_INFO Data_Options[] = {
 
 int NUMSELECTSTRINGS = 45;
 
-int ControlWidth, ControlHeight, TitleHeight;
 
 CRITICAL_SECTION  CritSec_FlightData;
 CRITICAL_SECTION  CritSec_TerrainDataGraphics;
@@ -456,10 +458,6 @@ void ShowMenu() {
   ShowWindow(hWndMenuButton, SW_SHOW);
   DisplayTimeOut = 0;
 }
-
-
-//extern bool MapWindow::RequestMapDirty; // GUI asks for map window refresh
-//extern bool MapWindow::MapDirty; // the actual map refresh trigger
 
 
 #if (EXPERIMENTAL > 0)
@@ -665,7 +663,13 @@ DWORD CalculationThread (LPVOID lpvoid) {
         }
         // assume new vario data has arrived, so infoboxes
         // need to be redrawn
-        theinfoboxesaredirty = true;
+	if (!GPSCONNECT) {
+	  // only redraw them if the gps is not connected,
+	  // otherwise fast vario data will slow down the whole system
+	  // as infobox display is a bit expensive
+	  theinfoboxesaredirty = true;
+	}
+	MapWindow::RequestAirDataDirty = true;
       }
 
       if (GpsUpdated) {
@@ -674,6 +678,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
           {
             theinfoboxesaredirty = true;
             MapWindow::RequestMapDirty = true;
+	    MapWindow::RequestAirDataDirty = true;
           }
       }
 
@@ -1105,7 +1110,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   ///////////////////////////////////////// create infoboxes
 
-  CreateInfoBoxes(rc);
+    InfoBoxLayout::CreateInfoBoxes(rc);
 
   /////////////
 
@@ -1131,33 +1136,21 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   // JMW moved menu button to center, to make room for thermal indicator
 
-  int menubuttonsize = max(ControlWidth, ControlHeight);
+  int menubuttonsize = max(InfoBoxLayout::ControlWidth,
+			   InfoBoxLayout::ControlHeight);
 
   SetWindowPos(hWndMenuButton,HWND_TOP,
-	       menubuttonsize, menubuttonsize,
                (int)(rc.right-rc.left-menubuttonsize)/2+rc.left,
                (int)((rc.bottom - rc.top)/10),
+	       menubuttonsize, menubuttonsize,
 	       SWP_SHOWWINDOW);
 
-  // start of new code for displaying CDI window
+  GaugeCDI::Create();
 
-  // JMW changed layout a bit, deleted Waiting for GPS info text as it is misleading here
-
-  hWndCDIWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),WS_VISIBLE|WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                               0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
-  SendMessage(hWndCDIWindow,WM_SETFONT,
-              (WPARAM)CDIWindowFont,MAKELPARAM(TRUE,0));
-
-  SetWindowPos(hWndCDIWindow,hWndMenuButton,
-               (int)(ControlWidth*0.6),(int)(ControlHeight+1),
-               (int)(ControlWidth*2.8),(int)(TitleHeight*1.4),SWP_SHOWWINDOW);
-  // JMW also made it so it doesn't obscure airspace warnings
-
-  // end of new code for drawing CDI window (see below for destruction of objects)
+  GaugeVario::Create();
 
   /////////////
 
-    ShowWindow(hWndCDIWindow, SW_HIDE);
     ShowWindow(hWndMenuButton, SW_HIDE);
 
     ShowWindow(hWndMainWindow, nCmdShow);
@@ -1462,7 +1455,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       DestroyWindow(hWndMapWindow);
       DestroyWindow(hWndMenuButton);
-      DestroyWindow(hWndCDIWindow);
+
+      GaugeCDI::Destroy();
 
       for(i=0;i<NUMINFOWINDOWS;i++)
         {
@@ -2074,11 +2068,6 @@ void CommonProcessTimer()
     // This should save lots of battery power due to CPU usage
     // of drawing the screen
 
-    if (MapWindow::RequestMapDirty) {
-      MapWindow::MapDirty = true;
-      MapWindow::RequestMapDirty = false;
-    }
-
     if (InfoBoxesDirty) {
       InfoBoxesDirty = false;
       //JMWTEST    LockFlightData();
@@ -2086,6 +2075,16 @@ void CommonProcessTimer()
       DisplayText();
       //JMWTEST    UnlockFlightData();
     }
+    if (MapWindow::RequestMapDirty) {
+      MapWindow::MapDirty = true;
+      MapWindow::RequestMapDirty = false;
+    }
+    if (MapWindow::RequestAirDataDirty) {
+      //      MapWindow::AirDataDirty = true;
+      MapWindow::RequestAirDataDirty = false;
+      GaugeVario::Render();
+    }
+
   }
 
 #if (EXPERIMENTAL > 0)

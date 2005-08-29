@@ -39,4 +39,12 @@ typedef struct _TASK_POINT
 
 typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
 
+
+void ReplaceWaypoint(int index);
+void InsertWaypoint(int index);
+void RemoveWaypoint(int index);
+void RemoveTaskPoint(int index);
+void FlyDirectTo(int index);
+
+
 #endif

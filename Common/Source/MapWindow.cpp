@@ -26,7 +26,6 @@
 #include "Airspace.h"
 #include "Waypointparser.h"
 #include "Dialogs.h"
-
 #include "externs.h"
 #include "VarioSound.h"
 
@@ -36,6 +35,10 @@
 #include <tchar.h>
 
 #include "Terrain.h"
+#include "Task.h"
+
+#include "GaugeVario.h"
+#include "GaugeCDI.h"
 
 
 ///////////////////////////////// Initialisation
@@ -143,6 +146,8 @@ COLORREF MapWindow::BackgroundColor = RGB(0xF5,0xF5,0xF5);
 bool MapWindow::RequestFastRefresh = false;
 bool MapWindow::MapDirty = true;
 bool MapWindow::RequestMapDirty = false;
+bool MapWindow::AirDataDirty = true;
+bool MapWindow::RequestAirDataDirty = false;
 DWORD MapWindow::fpsTime0 = 0;
 bool MapWindow::MapFullScreen = false;
 bool MapWindow::RequestFullScreen = false;
@@ -164,194 +169,6 @@ extern void ShowMenu();
 
 extern HFONT  MapWindowFont;
 extern HFONT  MapWindowBoldFont;
-
-void FlyDirectTo(int index) {
-  ActiveWayPoint = -1; AATEnabled = FALSE;
-  for(int j=0;j<MAXTASKPOINTS;j++)
-  {
-    Task[j].Index = -1;
-  }
-  Task[0].Index = index;
-  ActiveWayPoint = 0;
-}
-
-
-// Inserts a waypoint into the task, in the
-// position of the ActiveWaypoint
-void InsertWaypoint(int index) {
-  int i;
-
-  if (ActiveWayPoint<0) {
-    ActiveWayPoint = 0;
-    Task[ActiveWayPoint].Index = index;
-    return;
-  }
-
-  if (Task[MAXTASKPOINTS-1].Index != -1) {
-    // No room for any more task points!
-    MessageBox(hWndMapWindow,
-      gettext(TEXT("Too many waypoints in task!")),
-      gettext(TEXT("Insert Waypoint")),
-      MB_OK|MB_ICONEXCLAMATION);
-
-    return;
-  }
-
-  // Shuffle ActiveWaypoint and all later task points
-  // to the right by one position
-  for (i=MAXTASKPOINTS-1; i>ActiveWayPoint; i--) {
-    Task[i].Index = Task[i-1].Index;
-
-  }
-
-  // Insert new point and update task details
-  Task[ActiveWayPoint].Index = index;
-  RefreshTaskWaypoint(ActiveWayPoint+1);
-  RefreshTaskWaypoint(ActiveWayPoint);
-
-  CalculateTaskSectors();
-  CalculateAATTaskSectors();
-}
-
-
-// RemoveTaskpoint removes a single waypoint
-// from the current task.  index specifies an entry
-// in the Task[] array - NOT a waypoint index.
-//
-// If you call this function, you MUST deal with
-// correctly setting ActiveWayPoint yourself!
-void RemoveTaskPoint(int index) {
-
-  int i;
-
-  if (index < 0 || index >= MAXTASKPOINTS) {
-    return; // index out of bounds
-
-  }
-
-  if (Task[index].Index == -1) {
-    return; // There's no WP at this location
-  }
-
-  // Shuffle all later taskpoints to the left to
-  // fill the gap
-  for (i=index; i<MAXTASKPOINTS-1; ++i) {
-    Task[i].Index = Task[i+1].Index;
-  }
-  Task[MAXTASKPOINTS-1].Index = -1;
-
-  // Only need to refresh info where the removal happened
-  // as the order of other taskpoints hasn't changed
-  if (Task[index].Index != -1) {
-    RefreshTaskWaypoint(index);
-  }
-
-  CalculateTaskSectors();
-  CalculateAATTaskSectors();
-
-}
-
-
-// Index specifies a waypoint in the WP list
-// It won't necessarily be a waypoint that's
-// in the task
-void RemoveWaypoint(int index) {
-  int i;
-
-  if (ActiveWayPoint<0) {
-    return; // No waypoint to remove
-  }
-
-  // Check to see whether selected WP is actually
-  // in the task list.
-  // If not, we'll ask the user if they want to remove
-  // the currently active task point.
-  // If the WP is in the task multiple times then we'll
-  // remove the first instance after (or including) the
-  // active WP.
-  // If they're all before the active WP then just remove
-  // the nearest to the active WP
-
-  // Search forward first
-  i = ActiveWayPoint;
-  while (i < MAXTASKPOINTS && Task[i].Index != index) {
-    ++i;
-  }
-
-  if (i < MAXTASKPOINTS) {
-    // Found WP, so remove it
-    RemoveTaskPoint(i);
-
-    if (Task[ActiveWayPoint].Index == -1) {
-      // We've just removed the last task point and it was
-      // active at the time
-      ActiveWayPoint--;
-    }
-
-  } else {
-    // Didn't find WP, so search backwards
-
-    i = ActiveWayPoint;
-    do {
-      --i;
-    } while (i >= 0 && Task[i].Index != index);
-
-    if (i >= 0) {
-      // Found WP, so remove it
-      RemoveTaskPoint(i);
-      ActiveWayPoint--;
-
-    } else {
-      // WP not found, so ask user if they want to
-      // remove the active WP
-      int ret = MessageBox(hWndMapWindow,
-        gettext(TEXT("Chosen Waypoint not in current task.\nRemove active WayPoint?")),
-        gettext(TEXT("Remove Waypoint")),
-        MB_YESNO|MB_ICONQUESTION);
-
-      if (ret == IDYES) {
-        RemoveTaskPoint(ActiveWayPoint);
-        if (Task[ActiveWayPoint].Index == -1) {
-          // Active WayPoint was last in the list so is currently
-          // invalid.
-          ActiveWayPoint--;
-        }
-      }
-    }
-  }
-}
-
-
-void ReplaceWaypoint(int index) {
-
-  // ARH 26/06/05 Fixed array out-of-bounds bug
-  if (ActiveWayPoint>=0) {
-
-    Task[ActiveWayPoint].Index = index;
-    RefreshTaskWaypoint(ActiveWayPoint);
-
-    if (ActiveWayPoint>0) {
-      RefreshTaskWaypoint(ActiveWayPoint-1);
-    }
-
-    if (ActiveWayPoint+1<MAXTASKPOINTS) {
-      if (Task[ActiveWayPoint+1].Index != -1) {
-        RefreshTaskWaypoint(ActiveWayPoint+1);
-      }
-    }
-
-    CalculateTaskSectors();
-    CalculateAATTaskSectors();
-
-  } else {
-
-    // Insert a new waypoint since there's
-    // nothing to replace
-    ActiveWayPoint=0;
-    Task[ActiveWayPoint].Index = index;
-
-  }
-}
 
 
 ///////////////////
@@ -1069,9 +886,12 @@ void MapWindow::RenderMapWindow(  RECT rc)
   HFONT hfOld;
 
   DWORD	fpsTime = ::GetTickCount();
-  fpsTime0 = fpsTime;
 
-  drawmap = true;
+  // only redraw map part every 800 s unless triggered
+  if (((fpsTime-fpsTime0)>800)||(fpsTime0== -1)) {
+    fpsTime0 = fpsTime;
+    drawmap = true;
+  }
 
   POINT Orig, Orig_Aircraft;
 
@@ -1246,22 +1066,26 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
       Sleep(100);
       continue;
     }
-    if (!MapDirty && !RequestFastRefresh) {
+    if (!MapDirty && !RequestFastRefresh && !AirDataDirty) {
       Sleep(100);
       continue;
     }
 
     // draw previous frame so screen is immediately refreshed
-    BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
-           MapRectBig.bottom-MapRectBig.top,
-       hdcDrawWindow, 0, 0, SRCCOPY);
+    if (MapDirty || RequestFastRefresh) {
+
+      BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
+	     MapRectBig.bottom-MapRectBig.top,
+	     hdcDrawWindow, 0, 0, SRCCOPY);
+    }
 
     if (RequestFullScreen != MapFullScreen) {
       ToggleFullScreenStart();
     }
 
-    if (MapDirty) {
+    if (MapDirty && (!AirDataDirty)) {
       MapDirty = false;
+      fpsTime0 = -1;
       // if map is dirty, there's no need for a fast refresh anyway
       RequestFastRefresh = false;
     } else {
@@ -1277,6 +1101,19 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
     memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
     UnlockFlightData();
+
+    if (AirDataDirty) {
+      //      GaugeVario::Render();
+      AirDataDirty = false;
+      if (MapDirty) {
+	MapDirty = false;
+	fpsTime0 = -1;
+	// if map is dirty, there's no need for a fast refresh anyway
+	RequestFastRefresh = false;
+      } else {
+	continue;
+      }
+    }
 
     LockTerrainDataCalculations();
     terrain_dem_calculations.SetCacheTime();
@@ -2421,12 +2258,12 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 
   // position of thermal band
   for (i=0; i<NUMTHERMALBUCKETS; i++) {
-    ThermalProfile[1+i].x = 7+iround((Wt[i]/Wtot)*TBSCALEX);
+    ThermalProfile[1+i].x = 7+iround((Wt[i]/Wtot)*TBSCALEX)+rc.left;
     ThermalProfile[1+i].y = 5+iround(TBSCALEY*(1.0-(mth/maxh)*(i)/NUMTHERMALBUCKETS))+rc.top;
   }
-  ThermalProfile[0].x = 7;
+  ThermalProfile[0].x = 7+rc.left;
   ThermalProfile[0].y = ThermalProfile[1].y;
-  ThermalProfile[NUMTHERMALBUCKETS+1].x = 7;
+  ThermalProfile[NUMTHERMALBUCKETS+1].x = 7+rc.left;
   ThermalProfile[NUMTHERMALBUCKETS+1].y = ThermalProfile[NUMTHERMALBUCKETS].y;
 
 
@@ -2435,7 +2272,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   GliderBand[1].y = GliderBand[0].y;
   GliderBand[2].y = GliderBand[0].y-4;
   GliderBand[3].y = GliderBand[0].y+4;
-  GliderBand[1].x = 7+iround((mc/Wtot)*TBSCALEX);
+  GliderBand[1].x = 7+iround((mc/Wtot)*TBSCALEX)+rc.left;
   GliderBand[2].x = GliderBand[1].x-4;
   GliderBand[3].x = GliderBand[1].x-4;
 
@@ -2515,6 +2352,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
   for(i=0;i<5;i++)
   {
     GlideBar[i].y += ( (rc.bottom - rc.top )/2)+rc.top;
+    GlideBar[i].x += rc.left;
   }
   GlideBar[0].y -= (int)Offset;
   GlideBar[1].y -= (int)Offset;

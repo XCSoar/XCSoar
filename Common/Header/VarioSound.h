@@ -21,7 +21,8 @@ BOOL PlayResource (LPTSTR lpName);
 extern "C" {
 VARIOSOUND_API void VarioSound_Init(void);
 VARIOSOUND_API void VarioSound_SetV(short v);
-  VARIOSOUND_API void VarioSound_SetVAlt(short v);
+VARIOSOUND_API void VarioSound_SetSTFMode(BOOL);
+VARIOSOUND_API void VarioSound_SetVAlt(short v);
 VARIOSOUND_API void VarioSound_EnableSound(BOOL);
 VARIOSOUND_API void VarioSound_SetVdead(short v);
 VARIOSOUND_API void VarioSound_Close(void);  // added sgi

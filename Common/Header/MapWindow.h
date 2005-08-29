@@ -146,6 +146,9 @@ class MapWindow {
 
   static bool MapDirty;
   static bool RequestMapDirty;
+  static bool AirDataDirty;
+  static bool RequestAirDataDirty;
+
   static bool RequestFastRefresh;
   static bool RequestFullScreen;
 
@@ -305,12 +308,5 @@ extern void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
 
 
 ///////
-
-void ReplaceWaypoint(int index);
-void InsertWaypoint(int index);
-void RemoveWaypoint(int index);
-void RemoveTaskPoint(int index);
-void FlyDirectTo(int index);
-
 
 #endif
