@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.9 2005/08/21 07:15:00 jwharington Exp $
+**   $Id: windstore.cpp,v 1.10 2005/08/29 19:39:36 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -94,7 +94,7 @@ void WindStore::recalculateWind() {
 void WindStore::newWind(Vector &wind) {
   //
   double mag = sqrt(wind.x*wind.x+wind.y*wind.y);
-  double bearing = atan2(wind.y, wind.x)*(180/3.14159);
+  double bearing = atan2(wind.y, wind.x)*RAD_TO_DEG;
   if (mag<30) { // limit to reasonable values
     derivedInfo->WindSpeed = mag;
     if (bearing<0) {
