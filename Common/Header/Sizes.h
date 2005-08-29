@@ -93,4 +93,8 @@
 #define NUMAIRSPACECOLORS 16
 #define NUMAIRSPACEBRUSHES 3
 
+////////////////////////
+
+#define NUMBUTTONLABELS 12
+
 #endif

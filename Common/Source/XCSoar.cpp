@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.76 2005/08/29 04:59:21 scottp Exp $
+  $Id: XCSoar.cpp,v 1.77 2005/08/29 07:26:37 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1112,6 +1112,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     InfoBoxLayout::CreateInfoBoxes(rc);
 
+    ButtonLabel::CreateButtonLabels(rc);
+
+    ButtonLabel::SetLabelText(0,TEXT("NAV"));
+    ButtonLabel::SetLabelText(1,TEXT("DISPLAY"));
+    ButtonLabel::SetLabelText(2,TEXT("CONFIG"));
+    ButtonLabel::SetLabelText(3,TEXT("INFO"));
+
   /////////////
 
   for(i=0;i<NUMINFOWINDOWS;i++)
@@ -1264,7 +1271,7 @@ bool Debounce() {
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  int i, j;
+  int i;
   static bool lastpress = false;
   long wdata;
 
@@ -1302,6 +1309,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       }
       if (wdata==3) {
 	SetBkColor((HDC)wParam, ColorUnselected);
+        SetTextColor((HDC)wParam, ColorOK);
+	return (LRESULT)hBrushUnselected;
+      }
+      if (wdata==4) {
+	SetBkColor((HDC)wParam, ColorSelected);
         SetTextColor((HDC)wParam, ColorOK);
 	return (LRESULT)hBrushUnselected;
       }
@@ -1461,12 +1473,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       DestroyWindow(hWndMenuButton);
 
       GaugeCDI::Destroy();
+      GaugeVario::Destroy();
                         
       for(i=0;i<NUMINFOWINDOWS;i++)
         {
           DestroyWindow(hWndInfoWindow[i]);
           DestroyWindow(hWndTitleWindow[i]);
         }
+
+      ButtonLabel::Destroy();
+
       CommandBar_Destroy(hWndCB);
       for (i=0; i<NUMSELECTSTRINGS; i++) {
         delete Data_Options[i].Formatter;
