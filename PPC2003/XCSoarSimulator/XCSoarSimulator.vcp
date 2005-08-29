@@ -220,13 +220,9 @@ SOURCE=..\..\Common\Source\AirfieldDetails.cpp
 
 DEP_CPP_AIRFI=\
 	"..\..\Common\Header\AirfieldDetails.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -239,25 +235,25 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRFI=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_AIRFI=\
 	"..\..\Common\Header\AirfieldDetails.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -270,25 +266,25 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRFI=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_AIRFI=\
 	"..\..\Common\Header\AirfieldDetails.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -306,20 +302,17 @@ DEP_CPP_AIRFI=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRFI=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_AIRFI=\
 	"..\..\Common\Header\AirfieldDetails.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -337,20 +330,17 @@ DEP_CPP_AIRFI=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRFI=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_AIRFI=\
 	"..\..\Common\Header\AirfieldDetails.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -363,12 +353,16 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRFI=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -382,13 +376,9 @@ SOURCE=..\..\Common\Source\Airspace.cpp
 
 DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -401,25 +391,25 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSP=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -432,25 +422,25 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSP=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -468,20 +458,17 @@ DEP_CPP_AIRSP=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSP=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -499,20 +486,17 @@ DEP_CPP_AIRSP=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSP=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -525,12 +509,16 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSP=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -543,14 +531,10 @@ SOURCE=..\..\Common\Source\AirspaceColourDlg.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_AIRSPA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -563,25 +547,25 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSPA=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_AIRSPA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -594,25 +578,25 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSPA=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_AIRSPA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -630,20 +614,17 @@ DEP_CPP_AIRSPA=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSPA=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_AIRSPA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -661,20 +642,17 @@ DEP_CPP_AIRSPA=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSPA=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_AIRSPA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -687,12 +665,16 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSPA=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -706,13 +688,9 @@ SOURCE=..\..\Common\Source\Calculations.cpp
 
 DEP_CPP_CALCU=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -733,19 +711,21 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_CALCU=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_CALCU=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -766,19 +746,21 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_CALCU=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_CALCU=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -799,19 +781,18 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_CALCU=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_CALCU=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -833,18 +814,17 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_CALCU=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_CALCU=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -865,6 +845,12 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_CALCU=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -877,15 +863,11 @@ SOURCE=..\..\Common\Source\devCAI302.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_DEVCA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -899,20 +881,22 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVCA=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_DEVCA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -926,20 +910,22 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVCA=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DEVCA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -953,20 +939,19 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVCA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DEVCA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -981,19 +966,18 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_DEVCA=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_DEVCA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1007,6 +991,12 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVCA=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -1019,15 +1009,11 @@ SOURCE=..\..\Common\Source\devEW.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_DEVEW=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1041,20 +1027,22 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVEW=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_DEVEW=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1068,20 +1056,22 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVEW=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DEVEW=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1095,20 +1085,19 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVEW=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DEVEW=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1123,19 +1112,18 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_DEVEW=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_DEVEW=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1149,6 +1137,12 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVEW=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -1161,14 +1155,10 @@ SOURCE=..\..\Common\Source\device.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_DEVIC=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1182,19 +1172,21 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVIC=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_DEVIC=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1208,19 +1200,21 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVIC=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DEVIC=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1234,19 +1228,18 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVIC=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DEVIC=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1261,18 +1254,17 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_DEVIC=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_DEVIC=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -1286,6 +1278,12 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_DEVIC=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -1299,15 +1297,11 @@ SOURCE=..\..\Common\Source\Dialogs.cpp
 
 DEP_CPP_DIALO=\
 	"..\..\Common\Header\AirfieldDetails.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -1327,27 +1321,27 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DIALO=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_DIALO=\
 	"..\..\Common\Header\AirfieldDetails.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -1367,27 +1361,27 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DIALO=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DIALO=\
 	"..\..\Common\Header\AirfieldDetails.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -1412,22 +1406,19 @@ DEP_CPP_DIALO=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DIALO=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DIALO=\
 	"..\..\Common\Header\AirfieldDetails.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -1452,22 +1443,19 @@ DEP_CPP_DIALO=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DIALO=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_DIALO=\
 	"..\..\Common\Header\AirfieldDetails.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\imgdecmp.h"\
 	"..\..\Common\Header\imgrendr.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -1487,12 +1475,83 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DIALO=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\InfoBoxLayout.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_INFOB=\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_INFOB=\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_INFOB=\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_INFOB=\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_INFOB=\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
 	
 
 !ENDIF 
@@ -1505,13 +1564,9 @@ SOURCE=..\..\Common\Source\InputEvents.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_INPUT=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1528,18 +1583,20 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_INPUT=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_INPUT=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1556,18 +1613,20 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_INPUT=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_INPUT=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1584,18 +1643,17 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_INPUT=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_INPUT=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1613,17 +1671,16 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_INPUT=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_INPUT=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1640,6 +1697,12 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_INPUT=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -1689,13 +1752,9 @@ SOURCE=..\..\Common\Source\Logger.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_LOGGE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1710,18 +1769,20 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_LOGGE=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_LOGGE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1736,18 +1797,20 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_LOGGE=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_LOGGE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1762,18 +1825,17 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_LOGGE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_LOGGE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1789,17 +1851,16 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_LOGGE=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_LOGGE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1814,6 +1875,12 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_LOGGE=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -2129,13 +2196,9 @@ SOURCE=..\..\Common\Source\MapWindow.cpp
 
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2154,19 +2217,21 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MAPWI=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2185,19 +2250,21 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MAPWI=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2216,19 +2283,18 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MAPWI=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2248,18 +2314,17 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_MAPWI=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2278,6 +2343,12 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MAPWI=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -2347,13 +2418,9 @@ SOURCE=..\..\Common\Source\McReady.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_MCREA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2368,18 +2435,20 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MCREA=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_MCREA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2394,18 +2463,20 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MCREA=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_MCREA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2420,18 +2491,17 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MCREA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_MCREA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2447,17 +2517,16 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_MCREA=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_MCREA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2472,6 +2541,12 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MCREA=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -2484,13 +2559,9 @@ SOURCE=..\..\Common\Source\Parser.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_PARSE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2504,18 +2575,20 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PARSE=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_PARSE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2529,18 +2602,20 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PARSE=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_PARSE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2554,18 +2629,17 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PARSE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_PARSE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2580,17 +2654,16 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_PARSE=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_PARSE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2604,6 +2677,12 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PARSE=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -2616,13 +2695,9 @@ SOURCE=..\..\Common\Source\Port.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_PORT_=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2636,18 +2711,20 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT_=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_PORT_=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2661,18 +2738,20 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT_=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_PORT_=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2686,18 +2765,17 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT_=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_PORT_=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2712,17 +2790,16 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_PORT_=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_PORT_=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2736,6 +2813,12 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT_=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -2748,13 +2831,9 @@ SOURCE=..\..\Common\Source\Port2.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_PORT2=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2768,18 +2847,20 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT2=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_PORT2=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2793,18 +2874,20 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT2=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_PORT2=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2818,18 +2901,17 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT2=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_PORT2=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2844,17 +2926,16 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_PORT2=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_PORT2=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2868,6 +2949,12 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PORT2=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -2880,14 +2967,10 @@ SOURCE=..\..\Common\Source\Process.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_PROCE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2901,19 +2984,21 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PROCE=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_PROCE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2927,19 +3012,21 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PROCE=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_PROCE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2953,19 +3040,18 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PROCE=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_PROCE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -2980,18 +3066,17 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_PROCE=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_PROCE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3005,6 +3090,12 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_PROCE=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -3099,13 +3190,9 @@ SOURCE=..\..\Common\Source\rscalc.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3118,18 +3205,20 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3142,18 +3231,20 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3166,18 +3257,17 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3191,17 +3281,16 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3214,6 +3303,12 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_RSCAL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -3226,13 +3321,9 @@ SOURCE=..\..\Common\Source\Statistics.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_STATI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3251,18 +3342,20 @@ DEP_CPP_STATI=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_STATI=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_STATI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3281,18 +3374,20 @@ DEP_CPP_STATI=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_STATI=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_STATI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3311,18 +3406,17 @@ DEP_CPP_STATI=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_STATI=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_STATI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3342,17 +3436,16 @@ DEP_CPP_STATI=\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_STATI=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_STATI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3371,6 +3464,12 @@ DEP_CPP_STATI=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_STATI=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -3473,13 +3572,9 @@ SOURCE=..\..\Common\Source\Terrain.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_TERRA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3496,18 +3591,20 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TERRA=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_TERRA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3524,18 +3621,20 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TERRA=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_TERRA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3552,18 +3651,17 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TERRA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_TERRA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3581,17 +3679,16 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_TERRA=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_TERRA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3608,6 +3705,12 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TERRA=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -3620,13 +3723,9 @@ SOURCE=..\..\Common\Source\Topology.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_TOPOL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3640,18 +3739,20 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TOPOL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_TOPOL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3665,18 +3766,20 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TOPOL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_TOPOL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3690,18 +3793,17 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TOPOL=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_TOPOL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3716,17 +3818,16 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_TOPOL=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_TOPOL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3740,6 +3841,12 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_TOPOL=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -3752,13 +3859,9 @@ SOURCE=..\..\Common\Source\units.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_UNITS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3772,18 +3875,20 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UNITS=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_UNITS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3797,18 +3902,20 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UNITS=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_UNITS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3822,18 +3929,17 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UNITS=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_UNITS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3848,17 +3954,16 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_UNITS=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_UNITS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3872,6 +3977,12 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UNITS=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -3884,14 +3995,10 @@ SOURCE=..\..\Common\Source\Utils.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_UTILS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3907,19 +4014,21 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UTILS=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_UTILS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3935,19 +4044,21 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UTILS=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_UTILS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3963,19 +4074,18 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UTILS=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_UTILS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3992,18 +4102,17 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
+NODEP_CPP_UTILS=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_UTILS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -4019,6 +4128,12 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_UTILS=\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ENDIF 
@@ -4197,13 +4312,9 @@ SOURCE=..\..\Common\Source\Waypointparser.cpp
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
 
 DEP_CPP_WAYPO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -4217,24 +4328,24 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_WAYPO=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
 
 DEP_CPP_WAYPO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -4248,24 +4359,24 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_WAYPO=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_WAYPO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -4284,19 +4395,16 @@ DEP_CPP_WAYPO=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_WAYPO=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_WAYPO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -4315,19 +4423,16 @@ DEP_CPP_WAYPO=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_WAYPO=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
 
 DEP_CPP_WAYPO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -4341,12 +4446,16 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_WAYPO=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -4662,8 +4771,6 @@ SOURCE=..\..\Common\Source\XCSoar.cpp
 DEP_CPP_XCSOA=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devCAI302.h"\
@@ -4671,8 +4778,6 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
@@ -4694,12 +4799,16 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_XCSOA=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
@@ -4707,8 +4816,6 @@ NODEP_CPP_XCSOA=\
 DEP_CPP_XCSOA=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devCAI302.h"\
@@ -4716,8 +4823,6 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
@@ -4739,12 +4844,16 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_XCSOA=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
@@ -4752,8 +4861,6 @@ NODEP_CPP_XCSOA=\
 DEP_CPP_XCSOA=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devCAI302.h"\
@@ -4761,8 +4868,7 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
@@ -4789,7 +4895,9 @@ DEP_CPP_XCSOA=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_XCSOA=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Source\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4797,8 +4905,6 @@ NODEP_CPP_XCSOA=\
 DEP_CPP_XCSOA=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devCAI302.h"\
@@ -4806,8 +4912,7 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
@@ -4834,7 +4939,9 @@ DEP_CPP_XCSOA=\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_XCSOA=\
-	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Source\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -4842,8 +4949,6 @@ NODEP_CPP_XCSOA=\
 DEP_CPP_XCSOA=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devCAI302.h"\
@@ -4851,8 +4956,6 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
@@ -4874,12 +4977,16 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_XCSOA=\
 	"..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 

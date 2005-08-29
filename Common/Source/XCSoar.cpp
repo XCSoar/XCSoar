@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.73 2005/08/28 12:04:34 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.74 2005/08/29 02:43:31 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -736,6 +736,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ReadLanguageFile();
   ReadStatusFile();
   
+  // XXX Consider location
+  InputEvents::readFile();
+
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
@@ -1213,10 +1216,14 @@ void setInfoType(int i, char j) {
 void DoInfoKey(int keycode) {
   int i;
 
+  if (InfoFocus<0) return; // paranoid
+
   HideMenu();
 
   LockNavBox();
   i = getInfoType(InfoFocus);
+
+  // XXX This could crash if MapWindow does not capture
 
   LockFlightData();
   Data_Options[i].Process(keycode);
@@ -1363,67 +1370,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_KEYUP:
       if (!DialogActive)
-      switch (wParam)
+
+			// XXX Temp location - should do own check on location - eg: DialogActive
+			// XXX
+			//	working VK_APP1-7
+
+		  if (InputEvents::processKey(wParam)) {
+			  DoStatusMessage(TEXT("XXX We got a new event"));
+			// else - switch below
+		  }
+
+	switch (wParam)
         {
-
-	  case VK_APP1:
-		if (!Debounce()) break;
-
-		InputEvents::ToggleScreenModes();
-		break;
-
-	  case VK_APP2:
-		if (!Debounce()) break;
-
-		if (!InfoWindowActive) {
-		  InputEvents::ToggleSnailTrail();
-		  break;
-		}
-
-          i = getInfoType(InfoFocus);
-
-          j = Data_Options[i].next_screen;
-          setInfoType(InfoFocus,j);
-
-          AssignValues();
-          DisplayText();
-
-          FocusTimeOut = 0;
-
-          break;
-
-    case VK_APP3:
-		if (!Debounce()) break;
-          if (!InfoWindowActive) {
-	    InputEvents::ToggleSounds();
-            break;
-          }
-
-          i = getInfoType(InfoFocus);
-
-          j = Data_Options[i].prev_screen;
-          setInfoType(InfoFocus,j);
-
-          AssignValues();
-          DisplayText();
-
-          FocusTimeOut = 0;
-
-          break;
-
-        case VK_APP4:
-	  if (!Debounce()) break;
-
-	  if (!InfoWindowActive) {
-	    InputEvents::DoMarkLocation();
-	  }
-          break;
-	
-	case VK_APP6:
-	    if (!Debounce()) break;
-	    
-	    ShowMenu();
-	    break;
 
         case VK_UP :  // SCROLL UP (infobox mode)
           DoInfoKey(1);
@@ -1439,6 +1397,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           DoInfoKey(0);
           break;
 
+		  // Simulator - turn glider, wind direction etc
         case VK_LEFT: // SCROLL DOWN
           DoInfoKey(-2);
           break;
@@ -1604,7 +1563,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               ) {
 
 		// save registry backup first
-		SaveRegistryToFile(TEXT("xcsoar-registry.bak"));
+		SaveRegistryToFile(TEXT("xcsoar-registry.txt"));
 
 		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
 		SendMessage (hWnd, WM_CLOSE, 0, 0);

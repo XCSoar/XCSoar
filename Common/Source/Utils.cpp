@@ -2222,13 +2222,13 @@ void LoadRegistryFromFile(TCHAR *szFile)
       if (j-1<i) { j++; } // technically this means termination not found
       wcsncpy(value, inval+i, j-i);  value[j-i]= 0;
 
-      //      SetRegistryString(name, value);
+      SetRegistryString(name, value);
 
     } else {
       // must be a number
       j= _wtoi(inval+i);
 
-      //      SetToRegistry(name, j);
+      SetToRegistry(name, j);
 
     }
   }
