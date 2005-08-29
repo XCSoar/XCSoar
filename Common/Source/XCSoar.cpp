@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.75 2005/08/29 03:13:49 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.76 2005/08/29 04:59:21 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1356,6 +1356,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       } else {
 	FocusOnWindow(InfoFocus,false);
 	InfoFocus = -1;
+	InputEvents::setMode(TEXT("default"));
 	HideMenu();
         SetFocus(hWndMapWindow);
       }
@@ -1368,10 +1369,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			// XXX
 			//	working VK_APP1-7
 
-		  if (InputEvents::processKey(wParam)) {
+		  if (!InputEvents::processKey(wParam)) {
 			  DoStatusMessage(TEXT("XXX We got a new event"));
 			// else - switch below
-		  }
+		  } else {
 
 	switch (wParam)
         {
@@ -1399,6 +1400,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           DoInfoKey(2);
           break;
         }
+			  }
+
+
       break;
 
     case WM_TIMER:
@@ -1849,6 +1853,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		      FocusOnWindow(InfoFocus,false);
 
 		      InfoFocus = i;
+			  InputEvents::setMode(TEXT("infobox"));
 		      InfoWindowActive = TRUE;
 		    }
 		  DisplayText();
@@ -2275,6 +2280,7 @@ void SwitchToMapWindow(void)
   FocusOnWindow(InfoFocus,false);
   InfoWindowActive = FALSE;
   InfoFocus = -1;
+  InputEvents::setMode(TEXT("default"));
   SetFocus(hWndMapWindow);
   if (  MenuTimeOut< MENUTIMEOUTMAX) {
     MenuTimeOut = MENUTIMEOUTMAX;

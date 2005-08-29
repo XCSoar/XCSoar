@@ -250,7 +250,13 @@ typedef struct {
 	TCHAR *misc;			// What data to pass (eg: on, off, toggle)
 } InputKeySTRUCT;
 
-InputKeySTRUCT InputKeyData[255];
+
+InputKeySTRUCT InputKeyData[99][255];	// 100 modes, 256 keys
+			
+// XXX Size constant etc
+TCHAR mode_current[26] = TEXT("default");		// Current mode
+TCHAR mode_map[99][26];					// Map mode to location
+int mode_map_count = 0;
 
 // -----------------------------------------------------------------------
 // Initialisation and Defaults
@@ -277,50 +283,22 @@ void InputEvents::readFile() {
 
 			XXX Example of looking up mode, finding key, fall back to default etc.
 
-			int mode;
-			InputKeySTRUCT current;
-
-			mode = InputEvents::getMode();
-
-			current = InputKeyData[mode, dWord];
-			if (current.pt2Func == NULL) 
-				current = InputKeyData[0, dWord];
-			if (current.pt2Func != NULL)
-				current.pt2Func(current.misc);
-
-
-			int mode2int (TCHAR *mode, bool create) {
-				find entry and return int
-				if create, create entry and return int
-			}
-				
-			TCHAR *getMode() {
-			}
-
-			
-
 	*/
 
-	// VK_APP1 - hardware key
-	if (VK_APP1 < 256) {
-		InputKeyData[VK_APP1].pt2Func = &InputEvents::eventScreenModes;	// Which function
-		InputKeyData[VK_APP1].misc = TEXT("toggle");	// Data to send
-	}
+	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP1].pt2Func = &InputEvents::eventScreenModes;	// Which function
+	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP1].misc = TEXT("toggle");	// Data to send
 
-	if (VK_APP2 < 256) {
-		InputKeyData[VK_APP2].pt2Func = &InputEvents::eventSnailTrail;
-		InputKeyData[VK_APP2].misc = TEXT("toggle");
-	}
+	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP2].pt2Func = &InputEvents::eventSnailTrail;
+	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP2].misc = TEXT("toggle");
 
-	if (VK_APP3 < 256) {
-		InputKeyData[VK_APP3].pt2Func = &InputEvents::eventSounds;
-		InputKeyData[VK_APP3].misc = TEXT("toggle");
-	}
+	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP3].pt2Func = &InputEvents::eventSounds;
+	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP3].misc = TEXT("toggle");
+	
+	InputKeyData[InputEvents::mode2int(TEXT("infobox"), true)][VK_APP3].pt2Func = &InputEvents::eventSnailTrail;
+	InputKeyData[InputEvents::mode2int(TEXT("infobox"), true)][VK_APP3].misc = TEXT("toggle");
 
-	if (VK_APP4 < 256) {
-		InputKeyData[VK_APP4].pt2Func = &InputEvents::eventMarkLocation;
-		InputKeyData[VK_APP4].misc = TEXT("");
-	}
+	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP4].pt2Func = &InputEvents::eventMarkLocation;
+	InputKeyData[InputEvents::mode2int(TEXT("default"), true)][VK_APP4].misc = TEXT("");
 
 	/* 
 	if (VK_APP6 < 256) {
@@ -329,6 +307,37 @@ void InputEvents::readFile() {
 	}
 	*/
 
+}
+
+// Return 0 for anything else - should probably return -1 !
+int InputEvents::mode2int(TCHAR *mode, bool create) {
+	int i = 0;
+
+	// Better checks !
+	if ((mode == NULL))
+		return 0;
+
+	for (i = 0; i < mode_map_count; i++) {
+		if (wcscmp(mode, mode_map[i]) == 0)
+			return i;
+	}
+
+	if (create) {
+		// Keep a copy
+		wcsncpy(mode_map[mode_map_count], mode, 25);
+		mode_map_count++;
+		return mode_map_count - 1;
+	}
+
+	return 0;
+}
+
+void InputEvents::setMode(TCHAR *mode) {
+	wcsncpy(mode_current, mode, 25);
+}
+
+TCHAR* InputEvents::getMode() {
+	return mode_current;
 }
 
 // -----------------------------------------------------------------------
@@ -342,13 +351,19 @@ void InputEvents::readFile() {
  Return = We had a valid key (even if nothing happens because of Bounce)
 */
 bool InputEvents::processKey(int dWord) {
-	if (
-		(dWord >= 0)
-		&& (dWord < 256)
-		&& (InputKeyData[dWord].pt2Func != NULL)
-	) {
+	InputKeySTRUCT current;
+	int mode = InputEvents::mode2int(InputEvents::getMode(), false);
+
+	if ((dWord < 0) || (dWord > 255))
+		return false;
+
+	current = InputKeyData[mode][dWord];
+	if (current.pt2Func == NULL) 
+		current = InputKeyData[0][dWord];
+
+	if (current.pt2Func != NULL) {
 		if (!Debounce()) return true;
-		InputKeyData[dWord].pt2Func(InputKeyData[dWord].misc);
+		current.pt2Func(current.misc);
 		return true;
 	}
 

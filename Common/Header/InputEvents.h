@@ -7,6 +7,9 @@
 class InputEvents {
  public:
   static void readFile();
+  static int mode2int(TCHAR *mode, bool create);
+  static void setMode(TCHAR *mode);
+  static TCHAR* getMode();
   static bool processKey(int key);
   static bool processNmea(TCHAR *data);
   static void eventScreenModes(TCHAR *misc);
