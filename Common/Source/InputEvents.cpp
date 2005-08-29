@@ -1,67 +1,3 @@
-#include "stdafx.h"
-#include "XCSoar.h"
-#include "InputEvents.h"
-#include "Utils.h"
-#include "VarioSound.h"
-#include "Terrain.h"
-
-int TrailActive = TRUE;
-
-
-void InputEvents::DoMarkLocation() {
-  // ARH Let the user know what's happened
-  DoStatusMessage(TEXT("Dropped marker"));
-
-  LockFlightData();
-  MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
-  UnlockFlightData();
-
-}
-
-void InputEvents::ToggleSounds() {
-  EnableSoundVario = !EnableSoundVario;
-  VarioSound_EnableSound((BOOL)EnableSoundVario);
-
-  // ARH Let the user know what's happened
-  if (EnableSoundVario)
-    DoStatusMessage(TEXT("Vario Sounds ON"));
-  else
-    DoStatusMessage(TEXT("Vario Sounds OFF"));
-}
-
-void InputEvents::ToggleSnailTrail() {
-  TrailActive ++;
-  if (TrailActive>2) {
-    TrailActive=0;
-  }
-
-  if (TrailActive==0)
-    DoStatusMessage(TEXT("SnailTrail OFF"));
-  if (TrailActive==1)
-    DoStatusMessage(TEXT("SnailTrail ON Long"));
-  if (TrailActive==2)
-    DoStatusMessage(TEXT("SnailTrail ON Short"));
-
-}
-
-void InputEvents::ToggleScreenModes() {
-  // toggle switches like this:
-  //  -- normal infobox
-  //  -- auxiliary infobox
-  //  -- full screen
-  //  -- normal infobox
-  if (EnableAuxiliaryInfo) {
-    MapWindow::RequestToggleFullScreen();
-    EnableAuxiliaryInfo = false;
-  } else {
-    if (MapWindow::IsMapFullScreen()) {
-      MapWindow::RequestToggleFullScreen();
-    } else {
-      EnableAuxiliaryInfo = true;
-    }
-  }
-}
-
 
 /*
 
@@ -85,9 +21,31 @@ Configuration File Format and Data
 
 		type=hardware
 		data=APP1
+		function=activatemode
+		misc=menu1
+		mode=all
+
+		type=hardware
+		data=APP7
 		function=fullscreen
 		misc=toggle
-		mode=all
+		mode=menu1
+		label=FullSc
+		location=1,4,3
+
+		type=hardware
+		data=APP8
+		function=fullscreen
+		misc=toggle
+		mode=menu1
+		label=FullSc
+		location=1,4,3
+
+		type=hardware
+		data=APP9
+		function=fullscreen
+		misc=toggle
+		mode=menu1
 		label=FullSc
 		location=1,4,3
 
@@ -109,16 +67,23 @@ Modes
 	XCSoar now has the concept of Modes. These are an arbitrary
 	string that associates with where and what XCS is doing.
 
+	XXX guiMode !
+
+	? Do they need to consider flight mode?
+
 	Modes:
 
 		all		A pseudo mode matching all (or any) mode
 
-		thermal		Thermallingâ circling, in lift
+		mainwindow / map ???
+		(
+			thermal		Thermallingâ circling, in lift
 
-		cruise		Standard cruise mode - lookout for gliders
-				and lift
+			cruise		Standard cruise mode - lookout for gliders
+					and lift
 
-		finalglide	Final glide - here comes the field
+			finalglide	Final glide - here comes the field
+		)
 
 		menubutton	Strange name maybe, but this allows you
 				to define what buttons do when the menu button
@@ -127,6 +92,11 @@ Modes
 
 		menu		Like menubutton, only now we have the menu
 				window being displayed.
+
+				mode = map
+				key=b1
+				function= activate_mode
+				misc= mm1
 
 		warning		Airspace warning currently being displayed
 
@@ -137,6 +107,26 @@ Modes
 				set of input buttons, jump buttons, up, down etc
 				that are set in this mode.
 
+		infobox gui mode
+
+				- up value
+				- down values
+				- enter (eg: on/off auto mccready)
+				- cycle up what is displayed at that location
+				- cycle down what is displayed at that location
+				- navigate left between info boxes
+				- navigate right between info boxes
+
+					mode=infobox
+					key=left
+					function=infobox_navigate
+					misc=next | previous | first | last | number
+
+
+		"Dialogs"
+
+			dialog_bugs
+			dialog_standard
 
 
 	Mode precedence has been tricky, so instead of solving the problem
@@ -240,115 +230,258 @@ Functions/Events - what it does
 
 */
 
+
 #include "stdafx.h"
-
-#include "InputEvent.h"
-#include "externs.h"
+#include "XCSoar.h"
+#include "InputEvents.h"
 #include "Utils.h"
+#include "VarioSound.h"
+#include "Terrain.h"
+#include "compatibility.h"
+#include <commctrl.h>
+#include <aygshell.h>
 
+int TrailActive = TRUE;
+
+// XXX header file ?
 // What to do when a key is pressed...
 typedef struct {
 	void (*pt2Func)(TCHAR *);	// Which function to call (can be any, but should be here)
 	TCHAR *misc;			// What data to pass (eg: on, off, toggle)
 } InputKeySTRUCT;
 
-typedef char TCHAR;
+InputKeySTRUCT InputKeyData[255];
 
-class InputEvent {
-public:
-	InputKeySTRUCT InputKeyData[255];
+// -----------------------------------------------------------------------
+// Initialisation and Defaults
+// -----------------------------------------------------------------------
 
-	// -----------------------------------------------------------------------
-	// Initialisation and Defaults
-	// -----------------------------------------------------------------------
-
-	// Read the data files
-	void readFile() {
-		// XXX Example only
-		// VK_APP1 - hardware key
-		InputEvent[VK_APP1].event = &eventFullScreen;	// Which function
-		InputEvent[VK_APP1].misc = TEXT("toggle");	// Data to send
-	}
-
-	// -----------------------------------------------------------------------
-	// Processing functions - which one to do
-	// -----------------------------------------------------------------------
-
-	// InputEvent::processKey(KeyID);
-	//	Process keys normally brought in by hardware or keyboard presses
-	//	Futureâ will also allow for long and double click presses...
-	// Return = We had a valid key (even if nothing happens because of Bounce)
-	bool processKey(int dWord) {
-		if (InputKeyData[dWord] && InputKeyData[dWord].event) {
-			if (!Debounce()) return true;
-			InputKeyData[dWord].pt2Func(InputKeyData[dWord].misc);
-			return true;
-		}
-
-		return false;
-	}
-
-	// InputEvent::processNmea(TCHAR* data)
-	//	Process a string match for NMEA data and call function
-	// Return = TRUE if we have a valid key match
-	bool processNmea(TCHAR* data) {
-	}
-
-	// -----------------------------------------------------------------------
-	// Execution - list of things you can do
-	// -----------------------------------------------------------------------
-	void eventAutoZoom(TCHAR* misc) {
-	}
-
-
-	// eventFullScreen - Turn on|off|toggle full screen
-	// misc:
-	//	on - Turn on if not already
-	//	off - Turn off if not already
-	//	toggle - Toggle current full screen status
-	void eventFullScreen(TCHAR* misc) {
-		if (wcscmp(misc, TEXT("toggle")) == 0)
-			MapWindow::RequestToggleFullScreen();
-		else if (wcscmp(misc, TEXT("on")) == 0)
-			MapWindow::RequestOnFullScreen();
-		else if (wcscmp(misc, TEXT("off")) == 0)
-			MapWindow::RequestOffFullScreen();
-	}
-
-	// eventAutoZoom - Turn on|off|toggle AutoZoom
-	// misc:
-	//	on - Turn on if not already
-	//	off - Turn off if not already
-	//	toggle - Toggle current full screen status
-	void eventAutoZoom(TCHAR* misc) {
-		MapWindow::RequestToggleFullScreen();
-		if (wcscmp(misc, TEXT("toggle")) == 0)
-			// XXX Could pass in -1, 0, 1 to AutoZoom -
-			// or separate functions or something else ...
-			MapWindow::Event_AutoZoom();
-		else if (wcscmp(misc, TEXT("on")) == 0)
-			MapWindow::Event_AutoZoom();
-		else if (wcscmp(misc, TEXT("off")) == 0)
-			MapWindow::Event_AutoZoom();
-	}
+// Read the data files
+void InputEvents::readFile() {
+	// XXX Example only
 
 	/*
-		XXX  Entries todo (see above documentation)
+		MODE !
 
-			SnailTrail (on, off, long, toggle)
-			VarioSound (on, off)
-			Marker (optional text to add)
-			MenuButton (on, off, toggle)
-			Menu(open, close, toggle)
+			At read/init time, generate all buttons ?
+			What about unusual modes - such as special menus
+			Do we take a default set and inherit/copy them across on execute
+			Do we do that dynamically, falling back ?
+			Can each mode have a sub-set of keys, copying the previous
+				advantage - only define what you change
+				disadvantage - undefined keys, what ever they last were set to - weird
+			Alternative - one default set, mode on top of default only
+				If we do that, then check current mode then default entry version only
+			Because special modes are TEXT, how do we define that... Do we use a HASH, or lookup?
+				or combination - array lookup of entry for mode...
+
+			XXX Example of looking up mode, finding key, fall back to default etc.
+
+			int mode;
+			InputKeySTRUCT current;
+
+			mode = InputEvents::getMode();
+
+			current = InputKeyData[mode, dWord];
+			if (current.pt2Func == NULL)
+				current = InputKeyData[0, dWord];
+			if (current.pt2Func != NULL)
+				current.pt2Func(current.misc);
+
+
+			int mode2int (TCHAR *mode, bool create) {
+				find entry and return int
+				if create, create entry and return int
+			}
+
+			TCHAR *getMode() {
+			}
+
+
 
 	*/
 
-};
+	// VK_APP1 - hardware key
+	if (VK_APP1 < 256) {
+		InputKeyData[VK_APP1].pt2Func = &InputEvents::eventScreenModes;	// Which function
+		InputKeyData[VK_APP1].misc = TEXT("toggle");	// Data to send
+	}
+
+	if (VK_APP2 < 256) {
+		InputKeyData[VK_APP2].pt2Func = &InputEvents::eventSnailTrail;
+		InputKeyData[VK_APP2].misc = TEXT("toggle");
+	}
+
+	if (VK_APP3 < 256) {
+		InputKeyData[VK_APP3].pt2Func = &InputEvents::eventSounds;
+		InputKeyData[VK_APP3].misc = TEXT("toggle");
+	}
+
+	if (VK_APP4 < 256) {
+		InputKeyData[VK_APP4].pt2Func = &InputEvents::eventMarkLocation;
+		InputKeyData[VK_APP4].misc = TEXT("");
+	}
+
+	/*
+	if (VK_APP6 < 256) {
+		InputKeyData[VK_APP4].pt2Func = &InputEvents::eventShowMenu;
+		InputKeyData[VK_APP4].misc = TEXT("");
+	}
+	*/
+
+}
+
+// -----------------------------------------------------------------------
+// Processing functions - which one to do
+// -----------------------------------------------------------------------
 
 /*
+  InputEvent::processKey(KeyID);
+	Process keys normally brought in by hardware or keyboard presses
+	Futureâ will also allow for long and double click presses...
+ Return = We had a valid key (even if nothing happens because of Bounce)
+*/
+bool InputEvents::processKey(int dWord) {
+	if (
+		(dWord >= 0)
+		&& (dWord < 256)
+		&& (InputKeyData[dWord].pt2Func != NULL)
+	) {
+		if (!Debounce()) return true;
+		InputKeyData[dWord].pt2Func(InputKeyData[dWord].misc);
+		return true;
+	}
 
-Extra code...
+	return false;
+}
+
+/*
+  InputEvent::processNmea(TCHAR* data)
+	Process a string match for NMEA data and call function
+ Return = TRUE if we have a valid key match
+*/
+bool InputEvents::processNmea(TCHAR* data) {
+	return true;
+}
 
 
+
+// -----------------------------------------------------------------------
+// Execution - list of things you can do
+// -----------------------------------------------------------------------
+
+// XXX Keep marker text for log file etc.
+void InputEvents::eventMarkLocation(TCHAR *misc) {
+  // ARH Let the user know what's happened
+  DoStatusMessage(TEXT("Dropped marker"));
+
+  LockFlightData();
+  MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
+  UnlockFlightData();
+}
+
+// Vario sounds only XXX change eventVarioSounds
+void InputEvents::eventSounds(TCHAR *misc) {
+	int OldEnableSoundVario = EnableSoundVario;
+
+	// XXX Consider single byte chars not wide
+	if (wcscmp(misc, TEXT("toggle")) == 0)
+		EnableSoundVario = !EnableSoundVario;
+	else if (wcscmp(misc, TEXT("on")) == 0)
+		EnableSoundVario = 1;
+	if (wcscmp(misc, TEXT("off")) == 0)
+		EnableSoundVario = 0;
+
+  	// ARH Let the user know what's happened
+	if (EnableSoundVario != OldEnableSoundVario) {
+		VarioSound_EnableSound((BOOL)EnableSoundVario);
+		if (EnableSoundVario)
+			DoStatusMessage(TEXT("Vario Sounds ON"));
+		else
+			DoStatusMessage(TEXT("Vario Sounds OFF"));
+	}
+}
+
+// XXX This should be just SnailTrail - Turn on/off with string
+void InputEvents::eventSnailTrail(TCHAR *misc) {
+	int OldTrailActive;
+	OldTrailActive = TrailActive;
+
+	if (wcscmp(misc, TEXT("toggle")) == 0) {
+		TrailActive ++;
+		if (TrailActive>2) {
+			TrailActive=0;
+		}
+	}
+	else if (wcscmp(misc, TEXT("off")) == 0)
+		TrailActive = 0;
+	else if (wcscmp(misc, TEXT("long")) == 0)
+		TrailActive = 1;
+	else if (wcscmp(misc, TEXT("short")) == 0)
+		TrailActive = 2;
+
+	if (OldTrailActive != TrailActive) {
+		if (TrailActive==0)
+			DoStatusMessage(TEXT("SnailTrail OFF"));
+		if (TrailActive==1)
+			DoStatusMessage(TEXT("SnailTrail ON Long"));
+		if (TrailActive==2)
+			DoStatusMessage(TEXT("SnailTrail ON Short"));
+	}
+}
+
+// XXX This should be just ScreenModes - toggle etc with string
+void InputEvents::eventScreenModes(TCHAR *misc) {
+  // toggle switches like this:
+  //  -- normal infobox
+  //  -- auxiliary infobox
+  //  -- full screen
+  //  -- normal infobox
+  if (EnableAuxiliaryInfo) {
+    MapWindow::RequestToggleFullScreen();
+    EnableAuxiliaryInfo = false;
+  } else {
+    if (MapWindow::IsMapFullScreen()) {
+      MapWindow::RequestToggleFullScreen();
+    } else {
+      EnableAuxiliaryInfo = true;
+    }
+  }
+}
+
+
+
+
+// eventAutoZoom - Turn on|off|toggle AutoZoom
+// misc:
+//	on - Turn on if not already
+//	off - Turn off if not already
+//	toggle - Toggle current full screen status
+void eventAutoZoom(TCHAR* misc) {
+	MapWindow::RequestToggleFullScreen();
+	if (wcscmp(misc, TEXT("toggle")) == 0)
+		// XXX Could pass in -1, 0, 1 to AutoZoom -
+		// or separate functions or something else ...
+		// MapWindow::Event_AutoZoom();
+		return;
+	else if (wcscmp(misc, TEXT("on")) == 0)
+		// MapWindow::Event_AutoZoom();
+		return;
+	else if (wcscmp(misc, TEXT("off")) == 0)
+		// MapWindow::Event_AutoZoom();
+		return;
+}
+
+/*
+	XXX  Entries todo (see above documentation)
+
+		SnailTrail (on, off, long, toggle)
+		VarioSound (on, off)
+		Marker (optional text to add)
+		MenuButton (on, off, toggle)
+		Menu(open, close, toggle)
 
 */
+
+
+

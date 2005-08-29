@@ -6,12 +6,14 @@
 
 class InputEvents {
  public:
-  static void ToggleScreenModes();
-  static void ToggleSnailTrail();
-  static void ToggleSounds();
-  static void DoMarkLocation();
-
-
+  static void readFile();
+  static bool processKey(int key);
+  static bool processNmea(TCHAR *data);
+  static void eventScreenModes(TCHAR *misc);
+  static void eventSnailTrail(TCHAR *misc);
+  static void eventSounds(TCHAR *misc);
+  static void eventMarkLocation(TCHAR *misc);
+  static void eventFullScreen(TCHAR *misc);
 };
 
 
