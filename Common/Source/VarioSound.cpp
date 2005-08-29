@@ -78,7 +78,7 @@ short variosound_vcur = 0;
 short variosound_vav=0;
 short variosound_vscale_timer=0;
 BOOL variosound_sound = TRUE;
-
+BOOL variosound_stfmode = FALSE;
 
 DWORD fpsTimeSound = 0; // time stamp of sound command
 short fpsTimeDelta = 0; // time interval between sound commands
@@ -169,16 +169,23 @@ unsigned char audio_sound_loud(unsigned short i, bool beep, bool doaltsoundfreq)
 //   3: solid sound
 // other types may be added later to implement hurry-up sounds etc.
 
+bool beepadvance = false;
+
 unsigned char audio_sound_beep(unsigned short i) {
   unsigned char phase;
   phase = (i*audio_beepfrequency) >> 8;
 
+  beepadvance = false;
+
   switch (audio_soundtype) {
   case 0: // silence
+    beepadvance = true;
     return 0;
   case 1: // positive sound
-    if (phase<64) 
+    if (phase<64) {
+      beepadvance=true;
       return 1;
+    }
     else
       return 0;
   case 2: // negative sound
@@ -187,8 +194,19 @@ unsigned char audio_sound_beep(unsigned short i) {
     else
       return 0;
   case 3: // solid sound
+    beepadvance = true;
     return 1;
+  case 4: // two short beeps
+    if (phase<24) {
+      beepadvance = true;
+      return 1;
+    }
+    if ((phase>48)&&(phase<76)) {
+      return 1;
+    }
+    return 0;
   }
+  beepadvance = true;
   // unknown
   return 0;
 }
@@ -205,7 +223,7 @@ unsigned char audio_get_sound_byte(void) {
 
   i++;
   beepthis = audio_sound_beep(i);
-  if (beepthis && (beeplast==0)) { 
+  if (beepthis && (beeplast==0) && beepadvance) { 
     // rolled over new beep, restart phase counter
     i=0;
     audio_phase = 0;
@@ -961,6 +979,13 @@ extern "C" {
 
   }
 
+  VARIOSOUND_API void VarioSound_SetSTFMode(BOOL v) {
+    EnterCriticalSection(&CritSec_VarioSoundV);
+    variosound_stfmode = v;
+    LeaveCriticalSection(&CritSec_VarioSoundV);
+
+  }
+
   VARIOSOUND_API void VarioSound_SetV(short v) {
     EnterCriticalSection(&CritSec_VarioSoundV);
     // copy last value
@@ -1106,7 +1131,7 @@ void audio_soundmode(short vinst, short valt) {
   short vcurlast = 0;
 
   valtsmoothlast = valtsmooth;
-  valtsmooth = (6*valtsmooth+2*valt)/8;
+  valtsmooth = (7*valtsmooth+1*valt)/8;
 
   vsmoothlast = vsmooth;
   vsmooth = max(0, min((6*vsmooth+2*vinst)/8, 200));
@@ -1116,9 +1141,14 @@ void audio_soundmode(short vinst, short valt) {
 
   short grad;
 
-  grad = max(abs(valtsmooth)/2, abs(vcur-vsmoothlast));
 
-  audio_volume = (audio_volume*6+2*max(3, 3+min(grad/8, 5)))/8;
+  if (variosound_stfmode) {
+    grad = abs(valtsmooth);
+    audio_volume = (audio_volume*6+2*max(1, 1+min(7*grad/80, 7)))/8;
+  } else {
+    grad = abs(vcur-vsmoothlast);
+    audio_volume = (audio_volume*6+2*max(3, 3+min(grad/8, 5)))/8;
+  }
   if (audio_volume>3) {
     suppressdeadband = true;
   } else {
@@ -1127,7 +1157,8 @@ void audio_soundmode(short vinst, short valt) {
 
   // main vario sound frequency based on instantaneous reading
   audio_soundfrequency = audio_frequencytable(vcur);
-  
+  audio_altsoundfrequency = audio_soundfrequency;
+
   // beep frequency based on smoothed input to prevent jumps
   audio_beepfrequency = audio_delaytable(vsmooth);
 
@@ -1140,56 +1171,83 @@ void audio_soundmode(short vinst, short valt) {
     audio_soundtype = 1;
   }
   if (vsmooth<= audio_deadband_low) {
-    audio_soundtype = 2;
+    audio_soundtype = 3;
   } else if (suppressdeadband && (vsmooth<100)) {
-    audio_soundtype = 2;
+    audio_soundtype = 3;
   }
 
   // speed-to-fly frequency
-
-  if ((valtsmooth>10)||(valtsmooth< -5)) {
-    // only make sounds required if speed is more than 10% too fast
-    // or 5% too slow
-    // (this is speed-to-fly deadband)
-
-    short vthis;
-    vthis = max(0, min(valtsmooth+vsmooth,200));
-    audio_altsoundfrequency = audio_frequencytable(vthis);
-
-    // in climb and need to speed up, switch to sink beep type
-    if ((vsmooth>100) && (valtsmooth<0)) {
-      audio_soundtype = 2;
-    }
-
-    // speed-to-fly negative requires special sound
-    // because low frequencies are hard to distinguish
-
-    if ((vsmooth<100)&&(valtsmooth<0)) {
-      vthis = max(0, min(100-valtsmooth*2,200));
-      audio_beepfrequency = audio_delaytable(vthis);
-      audio_altsoundfrequency = audio_soundfrequency;
-    }
-
-    // in sink, need to slow down, switch to climb beep type
-    if ((vsmooth<100)&&(valtsmooth>0)) {
-      audio_soundtype = 1;
-    }
-
-    if (vsmooth>100) {
-      audio_stf_interval = 20;
-    } else {
-      audio_stf_interval = 4;
-    }
-
-    suppressdeadband = true;
-
-  } else {
+  if (!variosound_stfmode) {
 
     // reset speed-to-fly noise counter
     audio_stf_counter = 0;
 
     // this disables speed-to-fly sound
     audio_altsoundfrequency = audio_soundfrequency;
+
+  } else {
+
+    short vthis;
+
+    audio_soundtype = 0; // quiet
+	
+    if ((valtsmooth>5)||(valtsmooth< -5)) {
+      // only make sounds required if speed is more than 10% too fast
+      // or 5% too slow
+      // (this is speed-to-fly deadband)
+
+      if (0) {
+	vthis = max(0, min(valtsmooth+vsmooth,200));
+	audio_altsoundfrequency = audio_frequencytable(vthis);
+	
+	// in climb and need to speed up, switch to sink beep type
+	if ((vsmooth>100) && (valtsmooth<0)) {
+	  audio_soundtype = 2;
+	}
+	
+	// speed-to-fly negative requires special sound
+	// because low frequencies are hard to distinguish
+	
+	if ((vsmooth<100)&&(valtsmooth<0)) {
+	  vthis = max(0, min(100-valtsmooth*2,200));
+	  audio_beepfrequency = audio_delaytable(vthis);
+	  audio_altsoundfrequency = audio_soundfrequency;
+	}
+	
+	// in sink, need to slow down, switch to climb beep type
+	if ((vsmooth<100)&&(valtsmooth>0)) {
+	  audio_soundtype = 1;
+	}
+	
+	if (vsmooth>100) {
+	  audio_stf_interval = 20;
+	} else {
+	  audio_stf_interval = 4;
+	}
+      }
+      
+      vthis = max(0, min(100+valtsmooth,200));
+      if (valtsmooth>0) { // slow down
+	
+	audio_soundtype = 2; // long beeps
+	audio_beepfrequency = audio_delaytable(10); // long period
+	audio_soundfrequency = audio_frequencytable(vthis);
+	
+      }
+      if (valtsmooth<0) { // speed up
+	
+	audio_soundtype = 4; // double beep
+	audio_beepfrequency = audio_delaytable(10); // long period
+	audio_soundfrequency = audio_frequencytable(vthis);
+	
+      }
+      
+      suppressdeadband = true;
+    }
+
+    audio_altsoundfrequency = audio_soundfrequency;
+
+    //   audio_soundtype = 0; // quiet
 
   }
 

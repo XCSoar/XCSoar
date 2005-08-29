@@ -227,7 +227,7 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   // this is basically a dolphin soaring calculator
   
   double dmc = MCCREADY/LIFTMODIFY-Calculated->NettoVario;
-  
+
   if (Calculated->Vario <= MCCREADY/LIFTMODIFY) {
     
     double VOptnew;
@@ -254,10 +254,30 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     Calculated->VOpt = GlidePolar::Vminsink*sqrt(n);
   }
 
-  if (Basic->AirspeedAvailable) {
+  if (Basic->AirspeedAvailable || 1) {
     double vdiff;
-    vdiff = 100*(Basic->IndicatedAirspeed/Calculated->VOpt-1.0);
+    if (Basic->AirspeedAvailable) {
+      vdiff = 100*(1.0-Calculated->VOpt/(Basic->IndicatedAirspeed+0.01));
+    } else {
+      vdiff = 100*(1.0-Calculated->VOpt/(Basic->Speed+0.01));
+    }
     VarioSound_SetVAlt((short)(vdiff));
+    VarioSound_SetSTFMode(0);
+    if ((Basic->Speed>NettoSpeed)||
+	((Calculated->VOpt>NettoSpeed)&&(Basic->Speed<Calculated->VOpt*1.1))
+	){
+      VarioSound_SetSTFMode(1);
+    }
+    // lock on when supernetto climb rate is half mc
+    if (dmc< MCCREADY/LIFTMODIFY/2.0) {
+      VarioSound_SetSTFMode(0);
+    }
+    // lock on in circling
+    if (Calculated->Circling) {
+      VarioSound_SetSTFMode(0);
+    }
+    // TODO: Work out effect on mccready speed to be in speed error
+    // and the volume should be scaled by this.
   }
   
 }
@@ -1810,9 +1830,11 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if (dheight > Calculated->MaxThermalHeight) {
 
+    /* JMW oh, it is a bit annoying really
   if (EnableSoundTask) {
     PlayResource(TEXT("IDR_WAV_BEEPBWEEP"));
-  }
+    }
+    */
 
     // moved beyond ceiling, so redistribute buckets
     double mthnew;

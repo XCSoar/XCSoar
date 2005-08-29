@@ -1,8 +1,7 @@
-#include "InfoBoxLayout.h"
 #include "Sizes.h"
 #include "MapWindow.h"
+#include "InfoBoxLayout.h"
 
-extern int ControlWidth, ControlHeight, TitleHeight;
 extern HWND hWndInfoWindow[NUMINFOWINDOWS];
 extern HWND hWndTitleWindow[NUMINFOWINDOWS];
 extern HWND hWndMainWindow; // Main Windows
@@ -11,14 +10,20 @@ extern HINSTANCE hInst; // The current instance
 // Layouts:
 // 0: default, infoboxes along top and bottom, map in middle
 // 1: both infoboxes along bottom
-// 2: infoboxes along both sides
-// 3: infoboxes along left side
+// 2: both infoboxes along top
+// 3: infoboxes along both sides
+// 4: infoboxes along left side
+// 5: infoboxes along right side
 
-int InfoBoxLayout = 0;
+
+int InfoBoxLayout::InfoBoxGeometry = 1;
+int InfoBoxLayout::ControlWidth;
+int InfoBoxLayout::ControlHeight;
+int InfoBoxLayout::TitleHeight;
 
 
-void GetInfoBoxPosition(int i, RECT rc, int *x, int *y) {
-  switch (InfoBoxLayout) {
+void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc, int *x, int *y) {
+  switch (InfoBoxGeometry) {
   case 0:
     if (i<NUMINFOWINDOWS/2) {
       *x = i*ControlWidth;
@@ -39,6 +44,16 @@ void GetInfoBoxPosition(int i, RECT rc, int *x, int *y) {
     break;
   case 2:
     if (i<NUMINFOWINDOWS/2) {
+      *x = i*ControlWidth;
+      *y = rc.top;;
+    } else {
+      *x = (i-NUMINFOWINDOWS/2)*ControlWidth;
+      *y = rc.top+ControlHeight;
+    }
+    break;
+
+  case 3:
+    if (i<NUMINFOWINDOWS/2) {
       *x = rc.left;
       *y = rc.top+ControlHeight*i;
     } else {
@@ -46,7 +61,7 @@ void GetInfoBoxPosition(int i, RECT rc, int *x, int *y) {
       *y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
     }
     break;
-  case 3:
+  case 4:
     if (i<NUMINFOWINDOWS/2) {
       *x = rc.left;
       *y = rc.top+ControlHeight*i;
@@ -55,13 +70,35 @@ void GetInfoBoxPosition(int i, RECT rc, int *x, int *y) {
       *y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
     }
     break;
+  case 5:
+    if (i<NUMINFOWINDOWS/2) {
+      *x = rc.right-ControlWidth*2;
+      *y = rc.top+ControlHeight*i;
+    } else {
+      *x = rc.right-ControlWidth;
+      *y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
+    }
+    break;
   };
 }
 
 
-void GetInfoBoxSizes(RECT rc) {
+void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
-  switch (InfoBoxLayout) {
+  if (rc.bottom<rc.right) {
+    // landscape mode
+    if (InfoBoxGeometry<3) {
+      InfoBoxGeometry+= 3;
+    }
+
+  } else {
+    // portrait mode
+    if (InfoBoxGeometry>=3) {
+      InfoBoxGeometry-= 3;
+    }
+  }
+
+  switch (InfoBoxGeometry) {
   case 0:
     // calculate control dimensions
     
@@ -95,7 +132,22 @@ void GetInfoBoxSizes(RECT rc) {
   case 2:
     // calculate control dimensions
     
-    ControlWidth = (rc.right - rc.left) / CONTROLHEIGHTRATIO;
+    ControlWidth = 2*(rc.right - rc.left) / NUMINFOWINDOWS;
+    ControlHeight = (int)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
+    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO); 
+    
+    // calculate small map screen size
+    
+    MapWindow::MapRect.top = rc.top+ControlHeight*2;
+    MapWindow::MapRect.left = rc.left;
+    MapWindow::MapRect.bottom = rc.bottom;
+    MapWindow::MapRect.right = rc.right;
+    break;
+
+  case 3:
+    // calculate control dimensions
+    
+    ControlWidth = (rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3;
     ControlHeight = (int)(2*(rc.bottom - rc.top) / NUMINFOWINDOWS);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO); 
     
@@ -107,10 +159,10 @@ void GetInfoBoxSizes(RECT rc) {
     MapWindow::MapRect.right = rc.right-ControlWidth;
     break;
 
-  case 3:
+  case 4:
     // calculate control dimensions
     
-    ControlWidth = (rc.right - rc.left) / CONTROLHEIGHTRATIO;
+    ControlWidth = (rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3;
     ControlHeight = (int)(2*(rc.bottom - rc.top) / NUMINFOWINDOWS);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO); 
     
@@ -122,14 +174,27 @@ void GetInfoBoxSizes(RECT rc) {
     MapWindow::MapRect.right = rc.right;
     break;
 
-  };
+  case 5:
+    // calculate control dimensions
+    
+    ControlWidth = (rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3;
+    ControlHeight = (int)(2*(rc.bottom - rc.top) / NUMINFOWINDOWS);
+    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO); 
+    
+    // calculate small map screen size
+    
+    MapWindow::MapRect.top = rc.top;
+    MapWindow::MapRect.left = rc.left;
+    MapWindow::MapRect.bottom = rc.bottom;
+    MapWindow::MapRect.right = rc.right-ControlWidth*2;
+    break;
 
+  };
 
 }
 
 
-
-void CreateInfoBoxes(RECT rc) {
+void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
   int i;
   int xoff, yoff;
 
