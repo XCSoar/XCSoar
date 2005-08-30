@@ -1,8 +1,11 @@
-FILES = ../../Header/InputEvents_keys.h
+FILES = ../../Header/InputEvents_defaults.cpp ../../Header/InputEvents_Text2Event.cpp
 
 # ==============================================================================
 build: $(FILES)
 
-%.h : template.xci xci2cpp.pl
+../../Header/InputEvents_defaults.cpp : template.xci xci2cpp.pl
 	perl xci2cpp.pl template.xci > $@
+
+../../Header/InputEvents_Text2Event.cpp : ../../Header/InputEvents.h h2cpp.pl
+	perl h2cpp.pl > $@
 
