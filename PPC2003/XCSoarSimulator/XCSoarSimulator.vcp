@@ -1855,7 +1855,8 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
-	"..\..\Common\Header\InputEvents_keys.h"\
+	"..\..\Common\Header\InputEvents_defaults.cpp"\
+	"..\..\Common\Header\InputEvents_Text2Event.cpp"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -5368,10 +5369,6 @@ SOURCE=..\..\Common\Header\externs.h
 # Begin Source File
 
 SOURCE=..\..\Common\Header\InputEvents.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Header\InputEvents_keys.h
 # End Source File
 # Begin Source File
 

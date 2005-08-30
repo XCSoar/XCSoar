@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.80 2005/08/30 05:26:50 scottp Exp $
+  $Id: XCSoar.cpp,v 1.81 2005/08/30 05:54:46 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1537,7 +1537,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 #ifdef _SIM_
                 (true)
                 #else
-                MessageBox(hWnd,gettext(TEXT("Do you wish to exit?")),gettext(TEXT("Exit?")),MB_YESNO|MB_ICONQUESTION) == IDYES
+	                MessageBox(hWnd,gettext(TEXT("Do you wish to exit?")),gettext(TEXT("Exit?")),MB_YESNO|MB_ICONQUESTION) == IDYES
                 #endif
               ) {
 

@@ -18,9 +18,9 @@ class InputEvents {
   static bool processKey(int key);
   static bool processNmea(TCHAR *data);
   static bool processButton(int bindex);
+  static void processGo(int event_id);
   static int makeEvent(void (*event)(TCHAR *), TCHAR *misc);
   static void makeLabel(int mode_id, TCHAR *label, int location, int event_id);
-  static void eventGo(int event_id);
   static void eventScreenModes(TCHAR *misc);
   static void eventSnailTrail(TCHAR *misc);
   static void eventSounds(TCHAR *misc);
