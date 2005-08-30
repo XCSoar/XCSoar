@@ -32,7 +32,10 @@ while (<>) {
 			die "Invalid event $event near $line" unless ($event =~ /^&event[A-Z].+$/);
 			my $misc = $rec{misc} || "";
 			print qq{event_id = InputEvents::makeEvent($event, TEXT("$misc"));\n};
-			print qq{mode_id = InputEvents::mode2int(TEXT("$mode"));\n};
+
+			# TODO Could be faster by grouping these together ! (read file to grouped hash, 
+			# then build, one mode2int, less static text in exe file etc.
+			print qq{mode_id = InputEvents::mode2int(TEXT("$mode"), true);\n};
 		
 			# Mode string
 			my $label = $rec{label};
