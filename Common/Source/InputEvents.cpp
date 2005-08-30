@@ -380,8 +380,17 @@ int InputEvents::getModeID() {
 // -----------------------------------------------------------------------
 
 bool InputEvents::processButton(int bindex) {
-      DoStatusMessage(TEXT("Pressed a button"));
-      return true;
+    // XXX  DoStatusMessage(TEXT("Pressed a button"));
+	int thismode = getModeID();
+	int i;
+	for (i = 0; i < ModeLabel_count[thismode]; i++) {
+		if ((ModeLabel[thismode][i].location == bindex) && (ModeLabel[thismode][i].label != NULL)) {
+			eventGo(ModeLabel[thismode][i].event);
+			return true;
+		}
+  }
+
+	return false;
 }
 
 /*
