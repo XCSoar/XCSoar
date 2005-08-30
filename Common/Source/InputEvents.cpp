@@ -249,7 +249,7 @@ int TrailActive = TRUE;
 #define MAX_MODE_STRING 25
 #define MAX_KEY 255
 #define MAX_EVENTS 1024
-#define MAX_LABEL 25
+#define MAX_LABEL NUMBUTTONLABELS
 
 // Current modes - map mode to integer (primitive hash)
 TCHAR mode_current[MAX_MODE_STRING] = TEXT("default");		// Current mode
