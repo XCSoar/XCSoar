@@ -68,7 +68,7 @@ ModeLabel[mode_id][0].location=1;
 ModeLabel[mode_id][0].event=event_id;
 Key2Event[mode_id][VK_APP1] = event_id;
 
-event_id = InputEvents::makeEvent(&eventScreenMode, TEXT("toggle"));
+event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"));
 mode_id = InputEvents::mode2int(TEXT("display1"), true);
 ModeLabel[mode_id][1].label=TEXT("Layout");
 ModeLabel[mode_id][1].location=2;
