@@ -1818,6 +1818,9 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       if (!InfoWindowActive) {
 	ShowMenu();
       }
+
+      ButtonLabel::CheckButtonPress(wmControl);
+
       for(i=0;i<NUMINFOWINDOWS;i++)
         {
           if(wmControl == hWndInfoWindow[i])
@@ -2509,9 +2512,7 @@ void Event_SelectInfoBox(int i) {
   // must do this
   InfoBoxFocusTimeOut = 0;
 
-  if (InfoFocus== -1) {
-    InfoFocus = 0;
-  } else {
+  if (InfoFocus>= 0) {
     FocusOnWindow(InfoFocus,false);
   }
   InfoFocus+= i;

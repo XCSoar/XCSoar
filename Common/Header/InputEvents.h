@@ -13,6 +13,7 @@ class InputEvents {
   static int getModeID();
   static bool processKey(int key);
   static bool processNmea(TCHAR *data);
+  static bool processButton(int bindex);
   static int makeEvent(void (*event)(TCHAR *), TCHAR *misc);
   static void makeLabel(int mode_id, TCHAR *label, int location, int event_id);
   static void eventGo(int event_id);

@@ -354,15 +354,15 @@ void InputEvents::setMode(TCHAR *mode) {
     ButtonLabel::SetLabelText(0,mode);
   }
 
-	// Set button labels
-	int i;
-	for (i = 0; i < ModeLabel_count[thismode]; i++) {
-		if ((ModeLabel[thismode][i].label != NULL) && (ModeLabel[thismode][i].location > 0))
-			ButtonLabel::SetLabelText(
+  // Set button labels
+  int i;
+  for (i = 0; i < ModeLabel_count[thismode]; i++) {
+    if ((ModeLabel[thismode][i].label != NULL) && (ModeLabel[thismode][i].location > 0))
+      ButtonLabel::SetLabelText(
 				ModeLabel[thismode][i].location,
 				ModeLabel[thismode][i].label
-			);
-	}
+				);
+  }
 
 }
 
@@ -378,6 +378,11 @@ int InputEvents::getModeID() {
 // -----------------------------------------------------------------------
 // Processing functions - which one to do
 // -----------------------------------------------------------------------
+
+bool InputEvents::processButton(int bindex) {
+      DoStatusMessage(TEXT("Pressed a button"));
+      return true;
+}
 
 /*
   InputEvent::processKey(KeyID);
@@ -423,7 +428,8 @@ bool InputEvents::processNmea(TCHAR* data) {
 
 // EXECUTE an Event - lookup event handler and call back - no return
 void InputEvents::eventGo(int eventid) {
-	// evnentid 0 is special for "noop" - otherwise check event exists (pointer to function)
+	// evnentid 0 is special for "noop" - otherwise check event
+	// exists (pointer to function)
 	if (eventid && Events[eventid].event)
 		Events[eventid].event(Events[eventid].misc);
 }
