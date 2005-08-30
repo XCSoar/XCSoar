@@ -229,7 +229,7 @@ data=APP4
 event=SelectInfoBox
 misc=next
 label=>>
-location=1
+location=4
 
 mode=infobox
 type=key
