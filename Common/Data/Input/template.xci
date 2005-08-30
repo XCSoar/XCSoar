@@ -212,6 +212,13 @@ data=UP
 event=ScaleZoom
 misc=+
 
+# Always active buttons...
+mode=default
+type=key
+data=a
+event=Pan
+misc=toggle
+
 # ------------
 # mode=infobox
 # ------------
@@ -395,4 +402,5 @@ type=key
 data=RIGHT
 event=PanCursor
 misc=right
+
 
