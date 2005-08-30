@@ -39,7 +39,7 @@ while (<>) {
 			# Mode string
 			my $label = $rec{label};
 			my $location = $rec{location};
-			if ($label && $location) {
+			if ($location) {
 				print qq{makeLabel(mode_id,TEXT("$label"),$location,event_id);\n};
 			}
 
@@ -47,7 +47,8 @@ while (<>) {
 			if ($rec{type} eq "key") {
 				my $data = $rec{data} || die "Invalid entry near $line - no key\n";
 				if (length($data) == 1) {
-					$data = qq{TEXT("$data")};
+					$data = uc($data);
+					$data = qq{'$data'};
 				} else {
 					$data = "VK_$data";
 				}
