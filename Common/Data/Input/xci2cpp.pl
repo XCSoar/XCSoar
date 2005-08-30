@@ -30,7 +30,7 @@ while (<>) {
 			# Make event
 			my $event = "&event" . $rec{event};
 			die "Invalid event $event near $line" unless ($event =~ /^&event[A-Z].+$/);
-			my $misc = $rec{misc};
+			my $misc = $rec{misc} || "";
 			print qq{event_id = InputEvents::makeEvent($event, TEXT("$misc"));\n};
 			print qq{mode_id = InputEvents::mode2int(TEXT("$mode"));\n};
 		
@@ -60,7 +60,7 @@ while (<>) {
 		%rec = ();
 
 	# We don't need the quotes - ignore for now
-	} elsif (/^([a-z0-9]+)\s*=\s*"*([^"]+)"*$/) {
+	} elsif (/^([a-z0-9]+)\s*=\s*"*([^"]*)"*$/) {
 		$rec{$1} = $2;
 
 	} else {
