@@ -36,7 +36,7 @@ Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT("next"));
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
-makeLabel(mode_id,TEXT(">>"),4,event_id);
+makeLabel(mode_id,TEXT(">>"),1,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = InputEvents::makeEvent(&eventChangeInfoBoxType, TEXT("previous"));
