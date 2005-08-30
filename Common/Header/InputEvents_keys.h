@@ -31,7 +31,7 @@ Key2Event[mode_id][VK_UP] = event_id;
 
 event_id = InputEvents::makeEvent(&eventPan, TEXT("toggle"));
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-Key2Event[mode_id][TEXT("a")] = event_id;
+Key2Event[mode_id]['A'] = event_id;
 
 event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT("previous"));
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
