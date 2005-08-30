@@ -3,18 +3,22 @@ int mode_id;
 
 event_id = InputEvents::makeEvent(&eventMainMenu, TEXT(""));
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""));
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT(""));
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = InputEvents::makeEvent(&eventMode, TEXT("display1"));
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = InputEvents::makeEvent(&eventScaleZoom, TEXT("-"));

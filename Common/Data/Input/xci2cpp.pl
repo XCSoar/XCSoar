@@ -39,7 +39,7 @@ while (<>) {
 			# Mode string
 			my $label = $rec{label};
 			my $location = $rec{location};
-			if ($location) {
+			if ($label && $location) {
 				print qq{makeLabel(mode_id,TEXT("$label"),$location,event_id);\n};
 			}
 
