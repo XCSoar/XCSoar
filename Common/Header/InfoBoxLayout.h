@@ -10,7 +10,9 @@ class InfoBoxLayout {
   static int InfoBoxGeometry;
   static int ControlWidth, ControlHeight, TitleHeight;
  private:
-  static void GetInfoBoxPosition(int i, RECT rc, int *x, int *y);
+  static void GetInfoBoxPosition(int i, RECT rc, 
+				 int *x, int *y,
+				 int *sizex, int *sizey);
   static void GetInfoBoxSizes(RECT rc);
 };
 
@@ -23,6 +25,9 @@ class ButtonLabel {
   static void Destroy();
   static void SetLabelText(int index, TCHAR *text);
   static void CheckButtonPress(HWND pressedwindow);
+  static void GetButtonPosition(int i, RECT rc, 
+				int *x, int *y,
+				int *sizex, int *sizey);
 
 };
 

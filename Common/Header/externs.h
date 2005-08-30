@@ -148,6 +148,7 @@ extern int AltWarningMargin;
 extern int FinalGlideTerrain;
 extern BOOL EnableCDICruise;
 extern BOOL EnableCDICircling;
+extern BOOL EnableVarioGauge;
 //
 
 // statistics

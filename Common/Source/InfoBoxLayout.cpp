@@ -2,6 +2,7 @@
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
+#include "Utils.h"
 
 extern HWND hWndInfoWindow[NUMINFOWINDOWS];
 extern HWND hWndTitleWindow[NUMINFOWINDOWS];
@@ -23,72 +24,109 @@ int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
 
 
-void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc, int *x, int *y) {
-  switch (InfoBoxGeometry) {
-  case 0:
-    if (i<NUMINFOWINDOWS/2) {
-      *x = i*ControlWidth;
-      *y = rc.top;
-    } else {
-      *x = (i-NUMINFOWINDOWS/2)*ControlWidth;
-      *y = rc.bottom-ControlHeight;
-    }
-    break;
-  case 1:
-    if (i<NUMINFOWINDOWS/2) {
-      *x = i*ControlWidth;
-      *y = rc.bottom-ControlHeight*2;
-    } else {
-      *x = (i-NUMINFOWINDOWS/2)*ControlWidth;
-      *y = rc.bottom-ControlHeight;
-    }
-    break;
-  case 2:
-    if (i<NUMINFOWINDOWS/2) {
-      *x = i*ControlWidth;
-      *y = rc.top;;
-    } else {
-      *x = (i-NUMINFOWINDOWS/2)*ControlWidth;
-      *y = rc.top+ControlHeight;
-    }
-    break;
+void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc, 
+				       int *x, int *y,
+				       int *sizex, int *sizey) {
+  TCHAR reggeompx[50];
+  TCHAR reggeompy[50];
+  TCHAR reggeomsx[50];
+  TCHAR reggeomsy[50];
+  DWORD Temp=0;
 
-  case 3:
-    if (i<NUMINFOWINDOWS/2) {
-      *x = rc.left;
-      *y = rc.top+ControlHeight*i;
-    } else {
-      *x = rc.right-ControlWidth;
-      *y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
-    }
-    break;
-  case 4:
-    if (i<NUMINFOWINDOWS/2) {
-      *x = rc.left;
-      *y = rc.top+ControlHeight*i;
-    } else {
-      *x = rc.left+ControlWidth;
-      *y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
-    }
-    break;
-  case 5:
-    if (i<NUMINFOWINDOWS/2) {
-      *x = rc.right-ControlWidth*2;
-      *y = rc.top+ControlHeight*i;
-    } else {
-      *x = rc.right-ControlWidth;
-      *y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
-    }
-    break;
+  wsprintf(reggeompx, TEXT("InfoBoxPositionPosX%d"), i);
+  wsprintf(reggeompy, TEXT("InfoBoxPositionPosY%d"), i);
+  wsprintf(reggeomsx, TEXT("InfoBoxPositionSizeX%d"), i);
+  wsprintf(reggeomsy, TEXT("InfoBoxPositionSizeY%d"), i);
+
+  GetFromRegistry(reggeompx,&Temp); *x = Temp;
+  GetFromRegistry(reggeompy,&Temp); *y = Temp;
+  GetFromRegistry(reggeomsx,&Temp); *sizex = Temp;
+  GetFromRegistry(reggeomsy,&Temp); *sizey = Temp;
+
+  if ((*sizex==0)||(*sizey==0)) {
+    // not defined in registry so go with defaults
+    // these will be saved back to registry
+
+    switch (InfoBoxGeometry) {
+    case 0:
+      if (i<NUMINFOWINDOWS/2) {
+	*x = i*ControlWidth;
+	*y = rc.top;
+      } else {
+	*x = (i-NUMINFOWINDOWS/2)*ControlWidth;
+	*y = rc.bottom-ControlHeight;
+      }
+      break;
+    case 1:
+      if (i<NUMINFOWINDOWS/2) {
+	*x = i*ControlWidth;
+	*y = rc.bottom-ControlHeight*2;
+      } else {
+	*x = (i-NUMINFOWINDOWS/2)*ControlWidth;
+	*y = rc.bottom-ControlHeight;
+      }
+      break;
+    case 2:
+      if (i<NUMINFOWINDOWS/2) {
+	*x = i*ControlWidth;
+	*y = rc.top;;
+      } else {
+	*x = (i-NUMINFOWINDOWS/2)*ControlWidth;
+	*y = rc.top+ControlHeight;
+      }
+      break;
+      
+    case 3:
+      if (i<NUMINFOWINDOWS/2) {
+	*x = rc.left;
+	*y = rc.top+ControlHeight*i;
+      } else {
+	*x = rc.right-ControlWidth;
+	*y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
+      }
+      break;
+    case 4:
+      if (i<NUMINFOWINDOWS/2) {
+	*x = rc.left;
+	*y = rc.top+ControlHeight*i;
+      } else {
+	*x = rc.left+ControlWidth;
+	*y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
+      }
+      break;
+    case 5:
+      if (i<NUMINFOWINDOWS/2) {
+	*x = rc.right-ControlWidth*2;
+	*y = rc.top+ControlHeight*i;
+      } else {
+	*x = rc.right-ControlWidth;
+	*y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
+      }
+      break;
+    };
+
+    *sizex = ControlWidth;
+    *sizey = ControlHeight;
+
+    SetToRegistry(reggeompx,*x);
+    SetToRegistry(reggeompy,*y);
+    SetToRegistry(reggeomsx,*sizex);
+    SetToRegistry(reggeomsy,*sizey);
+
   };
 }
 
 
 void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
+  TCHAR szRegistryInfoBoxGeometry[]=  TEXT("InfoBoxGeometry");
+  DWORD Temp;
+  GetFromRegistry(szRegistryInfoBoxGeometry,&Temp);
+  InfoBoxGeometry = Temp;
+
   if (rc.bottom<rc.right) {
     // landscape mode
-    if (InfoBoxGeometry<3) {
+    if (InfoBoxGeometry<4) {
       InfoBoxGeometry+= 3;
     }
 
@@ -197,7 +235,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
 void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
   int i;
-  int xoff, yoff;
+  int xoff, yoff, sizex, sizey;
 
   GetInfoBoxSizes(rc);
 
@@ -205,7 +243,7 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 
   for(i=0;i<NUMINFOWINDOWS;i++)
     {
-      GetInfoBoxPosition(i, rc, &xoff, &yoff);
+      GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
       hWndInfoWindow[i] = 
 	CreateWindow(TEXT("STATIC"),TEXT("\0"),
@@ -213,7 +251,7 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 		     |SS_CENTER|SS_NOTIFY
 		     |WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
 		     xoff, yoff+TitleHeight,
-		     ControlWidth,ControlHeight-TitleHeight,
+		     sizex, sizey-TitleHeight,
 		     hWndMainWindow,NULL,hInst,NULL);
 
       hWndTitleWindow[i] = 
@@ -222,7 +260,7 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 		     |SS_CENTER|SS_NOTIFY 
 		     |WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
 		     xoff, yoff, 
-		     ControlWidth, TitleHeight,
+		     sizex, TitleHeight,
 		     hWndMainWindow,NULL,hInst,NULL);
       
     }
@@ -234,11 +272,60 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 
 HWND ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
 
-int ButtonLabel::ButtonLabelGeometry = 0;
+int ButtonLabel::ButtonLabelGeometry = 0; // unused currently
+
+
+void ButtonLabel::GetButtonPosition(int i, RECT rc, 
+				    int *x, int *y,
+				    int *sizex, int *sizey) {
+
+  TCHAR reggeompx[50];
+  TCHAR reggeompy[50];
+  TCHAR reggeomsx[50];
+  TCHAR reggeomsy[50];
+  DWORD Temp=0;
+
+  wsprintf(reggeompx, TEXT("ScreenButtonPosX%d"), i);
+  wsprintf(reggeompy, TEXT("ScreenButtonPosY%d"), i);
+  wsprintf(reggeomsx, TEXT("ScreenButtonSizeX%d"), i);
+  wsprintf(reggeomsy, TEXT("ScreenButtonSizeY%d"), i);
+
+  GetFromRegistry(reggeompx,&Temp); *x = Temp;
+  GetFromRegistry(reggeompy,&Temp); *y = Temp;
+  GetFromRegistry(reggeomsx,&Temp); *sizex = Temp;
+  GetFromRegistry(reggeomsy,&Temp); *sizey = Temp;
+
+  if ((*sizex==0)||(*sizey==0)) {
+    // not defined in registry so go with defaults
+    // these will be saved back to registry
+    int hwidth = (rc.right-rc.left)/4;
+
+    if (i==0) {
+      *x = rc.left+3;
+      *y = (rc.bottom-20-InfoBoxLayout::ControlHeight-20);
+      *sizex = 52;
+      *sizey = 20;
+    } else {
+      *x = rc.left+3+hwidth*(i-1);
+      *y = (rc.bottom-20-InfoBoxLayout::ControlHeight);
+      *sizex = 52;
+      *sizey = 20;
+    }
+
+    SetToRegistry(reggeompx,*x);
+    SetToRegistry(reggeompy,*y);
+    SetToRegistry(reggeomsx,*sizex);
+    SetToRegistry(reggeomsy,*sizey);
+
+  };
+
+}
 
 
 void ButtonLabel::CreateButtonLabels(RECT rc) {
   int i;
+  int x, y, xsize, ysize;
+
   for (i=0; i<NUMBUTTONLABELS; i++) {
     hWndButtonWindow[i] =
       CreateWindow(TEXT("STATIC"), TEXT("\0"),
@@ -248,41 +335,17 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 		   rc.left, rc.top, 
 		   50, 15,
 		   hWndMainWindow, NULL, hInst, NULL);
-  }
+    GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
 
-  int hwidth = (rc.right-rc.left)/4;
-  
-  switch (ButtonLabelGeometry) {
-  case 0:
+    SetWindowPos(hWndButtonWindow[i],HWND_TOP,
+		 x, y,
+		 xsize, ysize, SWP_SHOWWINDOW);
 
-    SetWindowPos(hWndButtonWindow[0],HWND_TOP,
-		 rc.left+3, (rc.bottom-20-InfoBoxLayout::ControlHeight-20),
-		 52, 20, SWP_SHOWWINDOW);
-
-    SetWindowPos(hWndButtonWindow[1],HWND_TOP,
-		 rc.left+3, (rc.bottom - 20-InfoBoxLayout::ControlHeight),
-		 52, 20, SWP_SHOWWINDOW);
-
-    SetWindowPos(hWndButtonWindow[2],HWND_TOP,
-		 rc.left+hwidth+3, (rc.bottom - 20-InfoBoxLayout::ControlHeight),
-		 52, 20, SWP_SHOWWINDOW);
-
-    SetWindowPos(hWndButtonWindow[3],HWND_TOP,
-		 rc.left+hwidth*2+3, (rc.bottom - 20-InfoBoxLayout::ControlHeight),
-		 52, 20, SWP_SHOWWINDOW);
-
-    SetWindowPos(hWndButtonWindow[4],HWND_TOP,
-		 rc.left+hwidth*3+3, (rc.bottom - 20-InfoBoxLayout::ControlHeight),
-		 52, 20, SWP_SHOWWINDOW);
-
-    break;
-  };
-  for (i=0; i<NUMBUTTONLABELS; i++) {
     SetLabelText(i,NULL);
     SetWindowLong(hWndButtonWindow[i], GWL_USERDATA, 4);	  
   }
-
 }
+
 
 void ButtonLabel::Destroy() {
   int i;

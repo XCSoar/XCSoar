@@ -27,4 +27,6 @@ Text2Event[12].text = TEXT("MainMenu");
 Text2Event[12].event = &eventMainMenu;
 Text2Event[13].text = TEXT("Mode");
 Text2Event[13].event = &eventMode;
-Text2Event_count = 14;
+Text2Event[14].text = TEXT("Analysis");
+Text2Event[14].event = &eventAnalysis;
+Text2Event_count = 15;

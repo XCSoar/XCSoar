@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.81 2005/08/30 05:54:46 scottp Exp $
+  $Id: XCSoar.cpp,v 1.82 2005/08/30 18:00:17 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -208,7 +208,7 @@ int EnableSoundModes = TRUE;
 int EnableSoundTask = TRUE;
 int SoundVolume = 80;
 int SoundDeadband = 5;
-
+BOOL EnableVarioGauge = false;
 BOOL EnableAutoBlank = false;
 bool ScreenBlanked = false;
 
@@ -1160,6 +1160,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   GaugeVario::Create();
 
+  if (EnableVarioGauge) {
+    ShowWindow(hWndVarioWindow,SW_SHOW);
+  } else {
+    ShowWindow(hWndVarioWindow,SW_HIDE);
+  }
+
   /////////////
 
     ShowWindow(hWndMenuButton, SW_HIDE);
@@ -1542,7 +1548,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               ) {
 
 		// save registry backup first
-		SaveRegistryToFile(TEXT("xcsoar-registry.txt"));
+		SaveRegistryToFile(TEXT("xcsoar-registry.prf"));
 
 		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
 		SendMessage (hWnd, WM_CLOSE, 0, 0);
@@ -2071,7 +2077,9 @@ void CommonProcessTimer()
     if (MapWindow::RequestAirDataDirty) {
       //      MapWindow::AirDataDirty = true;
       MapWindow::RequestAirDataDirty = false;
-      GaugeVario::Render();
+      if (EnableVarioGauge) {
+	GaugeVario::Render();
+      }
     }
 
   }

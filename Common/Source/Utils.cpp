@@ -147,6 +147,7 @@ TCHAR szRegistryDeviceA[]= TEXT("DeviceA");
 TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
 
 TCHAR szRegistryAutoBlank[]= TEXT("AutoBlank");
+TCHAR szRegistryVarioGauge[]= TEXT("VarioGauge");
 
 static double SINETABLE[910];
 static float FSINETABLE[910];
@@ -402,6 +403,10 @@ void ReadRegistrySettings(void)
   Temp = 0;
   GetFromRegistry(szRegistryAutoBlank,&Temp);
   EnableAutoBlank = Temp;
+
+  Temp = 0;
+  GetFromRegistry(szRegistryVarioGauge,&Temp);
+  EnableVarioGauge = Temp;
 
   Temp = 100;
   GetFromRegistry(szRegistryAccelerometerZero,&Temp);
@@ -2222,6 +2227,9 @@ void LoadRegistryFromFile(TCHAR *szFile)
       }
       if (j-1<i) { j++; } // technically this means termination not found
       wcsncpy(value, inval+i, j-i);  value[j-i]= 0;
+      if ((value[0]==_T('\"')) && (value[1]=0)) {
+	value[0]=0;
+      }
 
       SetRegistryString(name, value);
 
@@ -2240,7 +2248,7 @@ void LoadRegistryFromFile(TCHAR *szFile)
 void SaveRegistryToFile(TCHAR *szFile) 
 {
   TCHAR lpstrName[nMaxKeyNameSize];
-  TCHAR lpstrClass[nMaxClassSize];
+//  TCHAR lpstrClass[nMaxClassSize];
   BYTE pValue[nMaxValueValueSize];
 
   HKEY hkFrom;

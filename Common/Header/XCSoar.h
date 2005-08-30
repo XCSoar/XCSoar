@@ -91,11 +91,13 @@ extern void UnlockNavBox();
 extern void LockNavBox();
 void FocusOnWindow(int i, bool selected);
 void FullScreen();
-extern void PopupWaypointDetails();
-extern void PopupAnalysis();
 
 extern void ShowInfoBoxes();
 extern void HideInfoBoxes();
+
+extern void PopupWaypointDetails();
+extern void PopupAnalysis();
+extern void ShowStatus();
 
 #define DEG_TO_RAD .0174532925199432958
 #define RAD_TO_DEG 57.2957795131		

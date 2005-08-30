@@ -36,6 +36,10 @@ class InputEvents {
   static void eventMainMenu(TCHAR *misc);
   static void eventMode(TCHAR *misc);
 
+  static void eventStatus(TCHAR *misc);
+  static void eventAnalysis(TCHAR *misc);
+  static void eventWaypointDetails(TCHAR *misc);
+
 };
 
 

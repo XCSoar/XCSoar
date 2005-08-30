@@ -537,19 +537,20 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
   DrawLineGraph(hdc, rc, &windstats_mag,
                 STYLE_MEDIUMBLACK);
 
-#define NUMWINDVECTORS 4
-#define WINDVECTORMAG 20
+#define WINDVECTORMAG 25
 
-  numsteps = NUMWINDVECTORS;
+  numsteps = (int)((rc.bottom-rc.top)/WINDVECTORMAG)-1;
 
   // draw direction vectors
 
   POINT wv[4];
   double dX, dY;
   double angle;
+  double hfact;
   for (i=0; i<numsteps ; i++) {
+    hfact = (i+1)/(double)(numsteps+1);
     h = (flightstats.Altitude_Ceiling.y_max-flightstats.Altitude_Base.y_min)*
-      i/(double)(numsteps-1)+flightstats.Altitude_Base.y_min;
+      hfact+flightstats.Altitude_Base.y_min;
 
     wind = windanalyser->windstore.getWind(h, &found);
     wind.x /= windstats_mag.x_max;
@@ -557,30 +558,30 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
     if (mag<= 0.0) continue;
 
-    angle = -atan2(-wind.x,wind.y)*RAD_TO_DEG;
+    angle = atan2(wind.x,-wind.y)*RAD_TO_DEG;
 
-    wv[0].y = (int)((1-(i+1)/(double)(numsteps+1))*(rc.bottom-rc.top))+rc.top;
-    wv[0].x = rc.left+(int)(WINDVECTORMAG*1.5);
+    wv[0].y = (int)((1-hfact)*(rc.bottom-rc.top))+rc.top;
+    wv[0].x = (rc.right+rc.left)/2;
 
     dX = (mag*WINDVECTORMAG);
     dY = 0;
     rotate(&dX,&dY,angle);
-    wv[1].x = wv[0].x + dX;
-    wv[1].y = wv[0].y + dY;
+    wv[1].x = (int)(wv[0].x + dX);
+    wv[1].y = (int)(wv[0].y + dY);
     StyleLine(hdc, wv[0], wv[1], STYLE_MEDIUMBLACK);
 
     dX = (mag*WINDVECTORMAG-5);
     dY = -3;
     rotate(&dX,&dY,angle);
-    wv[2].x = wv[0].x + dX;
-    wv[2].y = wv[0].y + dY;
+    wv[2].x = (int)(wv[0].x + dX);
+    wv[2].y = (int)(wv[0].y + dY);
     StyleLine(hdc, wv[1], wv[2], STYLE_MEDIUMBLACK);
 
     dX = (mag*WINDVECTORMAG-5);
     dY = 3;
     rotate(&dX,&dY,angle);
-    wv[3].x = wv[0].x + dX;
-    wv[3].y = wv[0].y + dY;
+    wv[3].x = (int)(wv[0].x + dX);
+    wv[3].y = (int)(wv[0].y + dY);
 
     StyleLine(hdc, wv[1], wv[3], STYLE_MEDIUMBLACK);
 
