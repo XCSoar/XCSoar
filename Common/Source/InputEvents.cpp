@@ -244,22 +244,35 @@ Functions/Events - what it does
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
 
+// XXX What is this for?
 int TrailActive = TRUE;
 
-// XXX header file ?
-// What to do when a key is pressed... 
-typedef struct {
-  void (*pt2Func)(TCHAR *);	// Which function to call (can be any, but should be here)
-  TCHAR *misc;			// What data to pass (eg: on, off, toggle)
-} InputKeySTRUCT;
-
-
-InputKeySTRUCT InputKeyData[99][255];	// 100 modes, 256 keys
-			
 // XXX Size constant etc
+
+// Current modes - map mode to integer (primitive hash)
 TCHAR mode_current[26] = TEXT("default");		// Current mode
 TCHAR mode_map[99][26];					// Map mode to location
 int mode_map_count = 0;
+
+// Key map to Event - Keys (per mode) mapped to events
+int Key2Event[100][256];		// Points to Events location
+
+// Events - What do you want to DO
+typedef struct {
+	void (*event)(TCHAR *);		// Which function to call (can be any, but should be here)
+	TCHAR *misc;				// Parameters
+} EventSTRUCT;
+EventSTRUCT Events[1024];	
+int Events_count;				// How many have we defined
+
+// Labels - defined per mode (XXX very high numbers need fixing)
+typedef struct {
+	TCHAR *label;
+	int location;
+	int event;
+} ModeLabelSTRUCT;
+ModeLabelSTRUCT ModeLabel[25][100];
+int ModeLabel_count[25];				// Where are we up to in this mode...
 
 // -----------------------------------------------------------------------
 // Initialisation and Defaults
@@ -292,23 +305,37 @@ void InputEvents::readFile() {
   // 
   // default/map mode
 
-  InputKeyData[mode2int(TEXT("default"), true)][VK_APP1].pt2Func = &eventMainMenu;	
-  InputKeyData[mode2int(TEXT("default"), true)][VK_APP1].misc = TEXT("");	
 
-  InputKeyData[mode2int(TEXT("default"), true)][VK_APP2].pt2Func = &eventMarkLocation;
-  InputKeyData[mode2int(TEXT("default"), true)][VK_APP2].misc = TEXT("");
-  
-  InputKeyData[mode2int(TEXT("default"), true)][VK_APP3].pt2Func = &eventSelectInfoBox;
-  InputKeyData[mode2int(TEXT("default"), true)][VK_APP3].misc = TEXT("next");
-  
-  InputKeyData[mode2int(TEXT("default"), true)][VK_APP4].pt2Func = &setMode;
-  InputKeyData[mode2int(TEXT("default"), true)][VK_APP4].misc = TEXT("display1");
+	int event_id;
+	int mode_id;
 
-  InputKeyData[mode2int(TEXT("default"), true)][VK_DOWN].pt2Func = &eventScaleZoom;
-  InputKeyData[mode2int(TEXT("default"), true)][VK_DOWN].misc = TEXT("-");
+	mode_id = mode2int(TEXT("default"), true);
+	
+	// Default - BLANK buttons
+	makeLabel(mode_id, TEXT(""), 0, 0);
+	makeLabel(mode_id, TEXT(""), 1, 0);
+	makeLabel(mode_id, TEXT(""), 2, 0);
+	makeLabel(mode_id, TEXT(""), 3, 0);
+	makeLabel(mode_id, TEXT(""), 4, 0);
+	makeLabel(mode_id, TEXT(""), 5, 0);
 
-  InputKeyData[mode2int(TEXT("default"), true)][VK_UP].pt2Func = &eventScaleZoom;
-  InputKeyData[mode2int(TEXT("default"), true)][VK_UP].misc = TEXT("+");
+	event_id = makeEvent(&eventMainMenu, TEXT(""));
+	Key2Event[mode_id][VK_APP1] = event_id;
+
+	event_id = makeEvent(&eventMarkLocation, TEXT(""));
+	Key2Event[mode_id][VK_APP2] = event_id;
+
+	event_id = makeEvent(&eventSelectInfoBox, TEXT(""));
+	Key2Event[mode_id][VK_APP3] = event_id;
+
+	event_id = makeEvent(&setMode, TEXT("display1"));
+	Key2Event[mode_id][VK_APP4] = event_id;
+
+	event_id = makeEvent(&eventScaleZoom, TEXT("-"));
+	Key2Event[mode_id][VK_DOWN] = event_id;
+
+	event_id = makeEvent(&eventScaleZoom, TEXT("+"));
+	Key2Event[mode_id][VK_UP] = event_id;
 
   /*
   InputKeyData[mode2int(TEXT("default"), true)][VK_LEFT].pt2Func = &eventAutoZoom;
@@ -320,96 +347,116 @@ void InputEvents::readFile() {
 
   // infobox mode
 
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP1].pt2Func = &eventSelectInfoBox;
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP1].misc = TEXT("previous");
+	mode_id = mode2int(TEXT("infobox"), true);
 
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP4].pt2Func = &eventSelectInfoBox;
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP4].misc = TEXT("next");
+	event_id = makeEvent(&eventSelectInfoBox, TEXT("previous"));
+	Key2Event[mode_id][VK_APP1] = event_id;
 
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP2].pt2Func = &eventChangeInfoBoxType;
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP2].misc = TEXT("previous");
+	event_id = makeEvent(&eventSelectInfoBox, TEXT("next"));
+	Key2Event[mode_id][VK_APP4] = event_id;
 
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP3].pt2Func = &eventChangeInfoBoxType;
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_APP3].misc = TEXT("next");
+	event_id = makeEvent(&eventChangeInfoBoxType, TEXT("previous"));
+	Key2Event[mode_id][VK_APP2] = event_id;
 
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_UP].pt2Func = &eventDoInfoKey;
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_UP].misc = TEXT("up");
-  
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_DOWN].pt2Func = &eventDoInfoKey;
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_DOWN].misc = TEXT("down");
+	event_id = makeEvent(&eventChangeInfoBoxType, TEXT("next"));
+	Key2Event[mode_id][VK_APP3] = event_id;
 
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_LEFT].pt2Func = &eventDoInfoKey;
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_LEFT].misc = TEXT("left");
+	event_id = makeEvent(&eventDoInfoKey, TEXT("up"));
+	Key2Event[mode_id][VK_UP] = event_id;
 
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_RIGHT].pt2Func = &eventDoInfoKey;
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_RIGHT].misc = TEXT("right");
+  	event_id = makeEvent(&eventDoInfoKey, TEXT("down"));
+	Key2Event[mode_id][VK_DOWN] = event_id;
 
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_RETURN].pt2Func = &eventDoInfoKey;
-  InputKeyData[mode2int(TEXT("infobox"), true)][VK_RETURN].misc = TEXT("return");
+  	event_id = makeEvent(&eventDoInfoKey, TEXT("left"));
+	Key2Event[mode_id][VK_LEFT] = event_id;
 
-  ////////
+	event_id = makeEvent(&eventDoInfoKey, TEXT("right"));
+	Key2Event[mode_id][VK_RIGHT] = event_id;
 
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP1].pt2Func = &eventClearWarningsAndTerrain;	
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP1].misc = TEXT("");	
+  	event_id = makeEvent(&eventDoInfoKey, TEXT("return"));
+	Key2Event[mode_id][VK_RETURN] = event_id;
 
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP2].pt2Func = &eventScreenModes;
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP2].misc = TEXT("toggle");
-  
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP3].pt2Func = &eventPan;
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP3].misc = TEXT("toggle");
+	mode_id = mode2int(TEXT("display1"), true);
 
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP4].pt2Func = &setMode;
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_APP4].misc = TEXT("display2");
+  	event_id = makeEvent(&eventClearWarningsAndTerrain, TEXT(""));
+	Key2Event[mode_id][VK_APP1] = event_id;
+	makeLabel(mode_id, TEXT("Terrain"), 1, event_id);
 
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_UP].pt2Func = &eventPanCursor;
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_UP].misc = TEXT("up");
-  
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_DOWN].pt2Func = &eventPanCursor;
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_DOWN].misc = TEXT("down");
+  	event_id = makeEvent(&eventScreenModes, TEXT("toggle"));
+	Key2Event[mode_id][VK_APP2] = event_id;
+	makeLabel(mode_id, TEXT("LAyout"), 2, event_id);
 
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_LEFT].pt2Func = &eventPanCursor;
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_LEFT].misc = TEXT("left");
+   	event_id = makeEvent(&eventPan, TEXT("toggle"));
+	Key2Event[mode_id][VK_APP3] = event_id;
+	makeLabel(mode_id, TEXT("Pan"), 3, event_id);
 
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_RIGHT].pt2Func = &eventPanCursor;
-  InputKeyData[mode2int(TEXT("display1"), true)][VK_RIGHT].misc = TEXT("right");
+  	event_id = makeEvent(&eventMode, TEXT("display2"));
+	Key2Event[mode_id][VK_APP4] = event_id;
+	makeLabel(mode_id, TEXT(".."), 4, event_id);
+
+  	event_id = makeEvent(&eventPanCursor, TEXT("up"));
+	Key2Event[mode_id][VK_UP] = event_id;
+
+  	event_id = makeEvent(&eventPanCursor, TEXT("down"));
+	Key2Event[mode_id][VK_DOWN] = event_id;
+
+  	event_id = makeEvent(&eventPanCursor, TEXT("left"));
+	Key2Event[mode_id][VK_LEFT] = event_id;
+
+  	event_id = makeEvent(&eventPanCursor, TEXT("right"));
+	Key2Event[mode_id][VK_RIGHT] = event_id;
 
   /////////
 
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP1].pt2Func = &eventAutoZoom;
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP1].misc = TEXT("toggle");	
+	mode_id = mode2int(TEXT("display2"), true);
 
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP2].pt2Func = &eventSnailTrail;
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP2].misc = TEXT("toggle");
+  	event_id = makeEvent(&eventAutoZoom, TEXT("toggle"));
+	Key2Event[mode_id][VK_APP1] = event_id;
 
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP3].pt2Func = &eventSounds;
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP3].misc = TEXT("toggle");
-    
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP4].pt2Func = &setMode;
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_APP4].misc = TEXT("default");
+  	event_id = makeEvent(&eventSnailTrail, TEXT("toggle"));
+	Key2Event[mode_id][VK_APP2] = event_id;
 
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_UP].pt2Func = &eventPanCursor;
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_UP].misc = TEXT("up");
-  
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_DOWN].pt2Func = &eventPanCursor;
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_DOWN].misc = TEXT("down");
+  	event_id = makeEvent(&eventSounds, TEXT("toggle"));
+	Key2Event[mode_id][VK_APP3] = event_id;
 
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_LEFT].pt2Func = &eventPanCursor;
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_LEFT].misc = TEXT("left");
+  	event_id = makeEvent(&eventMode, TEXT("default"));
+	Key2Event[mode_id][VK_APP4] = event_id;
 
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_RIGHT].pt2Func = &eventPanCursor;
-  InputKeyData[mode2int(TEXT("display2"), true)][VK_RIGHT].misc = TEXT("right");
+  	event_id = makeEvent(&eventPanCursor, TEXT("up"));
+	Key2Event[mode_id][VK_UP] = event_id;
 
+  	event_id = makeEvent(&eventPanCursor, TEXT("down"));
+	Key2Event[mode_id][VK_DOWN] = event_id;
 
+  	event_id = makeEvent(&eventPanCursor, TEXT("left"));
+	Key2Event[mode_id][VK_LEFT] = event_id;
 
-  /* 
-     if (VK_APP6 < 256) {
-     InputKeyData[VK_APP4].pt2Func = &InputEvents::eventShowMenu;
-     InputKeyData[VK_APP4].misc = TEXT("");
-     }
-  */
+  	event_id = makeEvent(&eventPanCursor, TEXT("right"));
+	Key2Event[mode_id][VK_RIGHT] = event_id;
 
 }
 
+// Create EVENT Entry
+// NOTE: String must already be copied (allows us to use literals
+// without taking up more data - but when loading from file must copy string
+int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc) {
+	// XXX check not too many events - CONST bounding
+	Events_count++;	// NOTE - Starts at 1 - 0 is a noop
+	Events[Events_count].event = event;
+	Events[Events_count].misc = misc;
+	return Events_count;
+}
+
+
+// Make a new label (add to the end each time)
+// NOTE: String must already be copied (allows us to use literals
+// without taking up more data - but when loading from file must copy string
+void InputEvents::makeLabel(int mode_id, TCHAR* label, int location, int event_id) {
+	ModeLabel[mode_id][ModeLabel_count[mode_id]].label = label;
+	ModeLabel[mode_id][ModeLabel_count[mode_id]].location = location;
+	ModeLabel[mode_id][ModeLabel_count[mode_id]].event = event_id;
+	ModeLabel_count[mode_id]++;
+}
 
 // Return 0 for anything else - should probably return -1 !
 int InputEvents::mode2int(TCHAR *mode, bool create) {
@@ -451,31 +498,27 @@ void InputEvents::setMode(TCHAR *mode) {
   // for debugging at least, set mode indicator on screen
   if (thismode==0) {
     ButtonLabel::SetLabelText(0,NULL);
-    ButtonLabel::SetLabelText(1,NULL);
-    ButtonLabel::SetLabelText(2,NULL);
-    ButtonLabel::SetLabelText(3,NULL);
-    ButtonLabel::SetLabelText(4,NULL);
   } else {
     ButtonLabel::SetLabelText(0,mode);
   }
+
+  /* 
   if (thismode==1) { // XXX infobox mode, naughty I am hardcoding it..
     ButtonLabel::SetLabelText(1,TEXT("<<"));
     ButtonLabel::SetLabelText(4,TEXT(">>"));
     ButtonLabel::SetLabelText(2,TEXT("<type"));
     ButtonLabel::SetLabelText(3,TEXT("type>"));   
   }
-  if (thismode==2) {
-    ButtonLabel::SetLabelText(1,TEXT("Terrain"));
-    ButtonLabel::SetLabelText(2,TEXT("Layout"));
-    ButtonLabel::SetLabelText(3,TEXT("Pan"));   
-    ButtonLabel::SetLabelText(4,TEXT(".."));
-  }
-  if (thismode==3) {
-    ButtonLabel::SetLabelText(1,TEXT("AZoom"));
-    ButtonLabel::SetLabelText(2,TEXT("Snail"));
-    ButtonLabel::SetLabelText(3,TEXT("Audio"));   
-    ButtonLabel::SetLabelText(4,TEXT(".."));
-  }
+  */
+	int i;
+	for (i = 0; i < ModeLabel_count[thismode]; i++) {
+		if ((ModeLabel[thismode][i].label != NULL) && (ModeLabel[thismode][i].location > 0)) 
+			ButtonLabel::SetLabelText(
+				ModeLabel[thismode][i].location,
+				ModeLabel[thismode][i].label
+			);
+	}
+
 }
 
 
@@ -483,6 +526,9 @@ TCHAR* InputEvents::getMode() {
   return mode_current;
 }
 
+int InputEvents::getModeID() {
+	return InputEvents::mode2int(InputEvents::getMode(), false);
+}
 
 // -----------------------------------------------------------------------
 // Processing functions - which one to do
@@ -495,31 +541,29 @@ TCHAR* InputEvents::getMode() {
 	Return = We had a valid key (even if nothing happens because of Bounce)
 */
 bool InputEvents::processKey(int dWord) {
+	int event_id;
 
-  // JMW changed this to pointer for efficiency and because C++ doesn't do deep
-  // copy e.g. of text strings!
-  InputKeySTRUCT *current;
+	// Valid input ?
+	if ((dWord < 0) || (dWord > 255))
+		return false;
 
-  // get current mode
-  int mode = mode2int(InputEvents::getMode(), false);
+	// get current mode
+	int mode = InputEvents::getModeID();
   
-  if ((dWord < 0) || (dWord > 255))
-    return false;
+	// Which key - can be defined locally or at default (fall back to default)
+	event_id = Key2Event[mode][dWord];
+	if (event_id == 0) {
+		// go with default key..
+		event_id = Key2Event[0][dWord];
+	}
+
+	if (event_id > 0) {
+		if (!Debounce()) return true;
+		InputEvents::eventGo(event_id);
+		return true;
+	}
   
-  current = &(InputKeyData[mode][dWord]);
-  if (current->pt2Func == NULL) {
-    // go with default key..
-    current = &(InputKeyData[0][dWord]);
-    return false; // JMW if no mapping defined, should be blank and return false
-  }
-  
-  if (current->pt2Func != NULL) {
-    if (!Debounce()) return true;
-    current->pt2Func(current->misc);
-    return true;
-  }
-  
-  return false;
+	return false;
 }
 
 /*
@@ -532,6 +576,12 @@ bool InputEvents::processNmea(TCHAR* data) {
 }
 
 
+// EXECUTE an Event - lookup event handler and call back - no return
+void InputEvents::eventGo(int eventid) {
+	// evnentid 0 is special for "noop" - otherwise check event exists (pointer to function)
+	if (eventid && Events[eventid].event)
+		Events[eventid].event(Events[eventid].misc);
+}
 
 // -----------------------------------------------------------------------
 // Execution - list of things you can do
@@ -770,4 +820,8 @@ void InputEvents::eventPanCursor(TCHAR *misc) {
 
 void InputEvents::eventMainMenu(TCHAR *misc) {
   // todo: popup main menu
+}
+
+void InputEvents::eventMode(TCHAR *misc) {
+	InputEvents::setMode(misc);
 }
