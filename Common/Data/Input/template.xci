@@ -175,7 +175,6 @@ mode=default
 type=key
 data=APP1
 event=MainMenu
-misc=
 label=""
 location=1
 
@@ -183,7 +182,6 @@ mode=default
 type=key
 data=APP2
 event=MarkLocation
-misc=
 label=""
 location=2
 
@@ -191,7 +189,6 @@ mode=default
 type=key
 data=APP3
 event=SelectInfoBox
-misc=
 label=""
 location=3
 
@@ -280,7 +277,6 @@ mode=display1
 type=key
 data=APP1
 event=ClearWarningsAndTerrain
-misc=
 label="Terrain"
 location=1
 
