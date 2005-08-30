@@ -1,0 +1,17 @@
+mode=default
+type=key
+data=APP1
+event=Mode
+misc=display1
+label=Go
+location=1
+
+mode=display1
+type=key
+data=APP1
+event=Mode
+misc=default
+label=Back
+location=1
+
+# Always need an end...

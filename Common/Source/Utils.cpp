@@ -126,6 +126,7 @@ TCHAR szRegistryAdditionalWayPointFile[]=  TEXT("AdditionalWPFile"); // pL
 
 TCHAR szRegistryLanguageFile[]=  TEXT("LanguageFile"); // pL
 TCHAR szRegistryStatusFile[]=  TEXT("StatusFile"); // pL
+TCHAR szRegistryInputFile[]=  TEXT("InputFile"); // pL
 
 TCHAR szRegistryPilotName[]=  TEXT("PilotName");
 TCHAR szRegistryAircraftType[]=  TEXT("AircraftType");

@@ -4,6 +4,8 @@
 #include "XCSoar.h"
 #include "externs.h"
 
+typedef void (*pt2Event)(TCHAR *);
+
 class InputEvents {
  public:
   static void readFile();
@@ -11,6 +13,8 @@ class InputEvents {
   static void setMode(TCHAR *mode);
   static TCHAR* getMode();
   static int getModeID();
+  static int InputEvents::findKey(TCHAR *data);
+  static pt2Event InputEvents::findEvent(TCHAR *);
   static bool processKey(int key);
   static bool processNmea(TCHAR *data);
   static bool processButton(int bindex);

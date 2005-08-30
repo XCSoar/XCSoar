@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.59 2005/08/27 22:55:28 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.60 2005/08/30 05:26:50 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -66,6 +66,7 @@ extern TCHAR szRegistryPolarFile[];
 extern TCHAR szRegistryTerrainFile[];
 extern TCHAR szRegistryLanguageFile[];
 extern TCHAR szRegistryStatusFile[];
+extern TCHAR szRegistryInputFile[];
 extern TCHAR szRegistryAltMode[];
 extern TCHAR szRegistryClipAlt[];
 extern TCHAR szRegistryAltMargin[];
@@ -1973,6 +1974,8 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
   static OPENFILENAME           ofnLanguage;
   static TCHAR  szStatusFile[MAX_PATH] = TEXT("\0");
   static OPENFILENAME           ofnStatus;
+  static TCHAR  szInputFile[MAX_PATH] = TEXT("\0");
+  static OPENFILENAME           ofnInput;
 
   static ACTIVE = FALSE;
   SHINITDLGINFO shidi;
@@ -1989,8 +1992,12 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
 
       GetRegistryString(szRegistryLanguageFile, szLanguageFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_LANGUAGEFILE,szLanguageFile);       
-      GetRegistryString(szRegistryStatusFile, szStatusFile, MAX_PATH);
+      
+	  GetRegistryString(szRegistryStatusFile, szStatusFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_STATUSFILE,szStatusFile);     
+
+      GetRegistryString(szRegistryInputFile, szInputFile, MAX_PATH);
+      SetDlgItemText(hDlg,IDC_INPUTFILE,szInputFile);     
 
       ACTIVE = TRUE;
       return TRUE; 
@@ -2019,6 +2026,18 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
                   STATUSFILECHANGED = TRUE;
                   GetDlgItemText(hDlg,IDC_STATUSFILE,szFile,MAX_PATH);
                   SetRegistryString(szRegistryStatusFile,szFile);
+                }
+            }
+          break;
+
+        case IDC_INPUTFILE:
+          if(ACTIVE == TRUE)
+            {
+              if(HIWORD(wParam) == EN_UPDATE)
+                {
+                  INPUTFILECHANGED = TRUE;
+                  GetDlgItemText(hDlg,IDC_INPUTFILE,szFile,MAX_PATH);
+                  SetRegistryString(szRegistryInputFile,szFile);
                 }
             }
           break;
@@ -2055,6 +2074,25 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
               SetDlgItemText(hDlg,IDC_STATUSFILE,szStatusFile);     
             }
           break;
+
+
+        case IDC_BROWSEINPUT:
+
+          memset( &(ofnInput), 0, sizeof(ofnInput));
+          ofnInput.lStructSize       = sizeof(ofnInput);
+          ofnInput.hwndOwner = hDlg;
+          ofnInput.lpstrFile = szInputFile;
+          ofnInput.nMaxFile = MAX_PATH;      
+          ofnInput.lpstrFilter = TEXT("Input Files(*.xci)\0*.xci\0Text Files (*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0");   
+          ofnInput.lpstrTitle = TEXT("Open File");
+          ofnInput.Flags = OFN_EXPLORER;
+
+          if(GetOpenFileName(&ofnInput))
+            {
+              SetDlgItemText(hDlg,IDC_INPUTFILE,szInputFile);     
+            }
+          break;
+
 
         }
       break;

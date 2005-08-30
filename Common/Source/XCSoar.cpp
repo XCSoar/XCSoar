@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.79 2005/08/30 01:48:41 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.80 2005/08/30 05:26:50 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -230,6 +230,7 @@ BOOL TOPOLOGYFILECHANGED = FALSE;
 BOOL POLARFILECHANGED = FALSE;
 BOOL LANGUAGEFILECHANGED = FALSE;
 BOOL STATUSFILECHANGED = FALSE;
+BOOL INPUTFILECHANGED = FALSE;
 bool MenuActive = false;
 
 //Task Information

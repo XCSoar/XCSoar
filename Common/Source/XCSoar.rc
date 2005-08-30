@@ -1134,6 +1134,9 @@ BEGIN
     PUSHBUTTON      "Browse..",IDC_BROWSESTATUS,92,38,41,14
     LTEXT           "Language file",-1,5,4,37,8
     LTEXT           "Status file",-1,5,29,43,8
+    EDITTEXT        IDC_INPUTFILE,5,65,83,14,ES_RIGHT | ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse..",IDC_BROWSEINPUT,92,65,41,14
+    LTEXT           "Input file",-1,5,55,43,8
 END
 
 

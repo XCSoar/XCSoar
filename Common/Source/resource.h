@@ -289,8 +289,10 @@
 #define IDC_BROWSELANGUAGE              1252
 #define IDC_BROWSESTATUS                1253
 #define IDC_VERSION                     1254
+#define IDC_INPUTFILE                   1254
 #define IDC_VERSIONTEXT                 1255
 #define IDC_STATIC_PROCESSOR            1255
+#define IDC_BROWSEINPUT                 1255
 #define IDC_STATIC_OS                   1256
 #define IDC_STATICRADIUS                1257
 #define IDC_SPIN1                       1258
