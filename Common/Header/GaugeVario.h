@@ -2,6 +2,8 @@
 #define GAUGE_VARIO_H
 #include "stdafx.h"
 
+extern HWND hWndVarioWindow;
+
 class GaugeVario {
  public:
   static void Create();

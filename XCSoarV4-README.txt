@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-TODO
+To do for next version:
 - Enable secondary files check boxes
 - Option to auto-start logger on every flight
 - Reset of flight start time when relaunching

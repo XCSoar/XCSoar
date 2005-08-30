@@ -75,8 +75,8 @@ void GaugeVario::Render() {
   int i;
   int xoffset = 80;
   int yoffset = (rc.bottom-rc.top)/2;
-  int degrees_per_unit = (GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY);
-  int gmax = degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY);
+  int degrees_per_unit = (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
+  int gmax = (int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY));
   double dx, dy;
   double vval;
 
@@ -85,20 +85,20 @@ void GaugeVario::Render() {
   } else {
     vval = CALCULATED_INFO.Vario;
   }
-  i = vval*degrees_per_unit*LIFTMODIFY;
+  i = (int)(vval*degrees_per_unit*LIFTMODIFY);
   i = min(gmax,max(-gmax,i));
 
   dx = -xoffset+15; dy = 6;
   rotate(&dx, &dy, i);
-  bit[0].x = dx+xoffset; bit[0].y = dy+yoffset;
+  bit[0].x = (int)(dx+xoffset); bit[0].y = (int)(dy+yoffset);
 
   dx = -xoffset+15; dy = -6;
   rotate(&dx, &dy, i);
-  bit[1].x = dx+xoffset; bit[1].y = dy+yoffset;
+  bit[1].x = (int)(dx+xoffset); bit[1].y = (int)(dy+yoffset);
 
   dx = -xoffset+2; dy = 0;
   rotate(&dx, &dy, i);
-  bit[2].x = dx+xoffset; bit[2].y = dy+yoffset;
+  bit[2].x = (int)(dx+xoffset); bit[2].y = (int)(dy+yoffset);
 
   Polygon(hdcDrawWindow, bit, 3);
 
@@ -130,8 +130,8 @@ void GaugeVario::RenderBg() {
   int i;
   int xoffset = 80;
   int yoffset = (rc.bottom-rc.top)/2;
-  int degrees_per_unit = (GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY);
-  int gmax = degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY);
+  int degrees_per_unit = (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
+  int gmax = (int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY));
   double dx, dy;
   for (i= 0; i<= gmax; i+= degrees_per_unit) {
     if (i==0) {
@@ -140,10 +140,10 @@ void GaugeVario::RenderBg() {
       dx = -xoffset+5; dy = 0;
     }
     rotate(&dx, &dy, i);
-    bit[0].x = dx+xoffset; bit[0].y = dy+yoffset;
+    bit[0].x = (int)(dx+xoffset); bit[0].y = (int)(dy+yoffset);
 
     dx = -xoffset; dy = 0; rotate(&dx, &dy, i);
-    bit[1].x = dx+xoffset; bit[1].y = dy+yoffset;
+    bit[1].x = (int)(dx+xoffset); bit[1].y = (int)(dy+yoffset);
 
     Polyline(hdcDrawWindow, bit, 2);
   }
@@ -154,10 +154,10 @@ void GaugeVario::RenderBg() {
       dx = -xoffset+5; dy = 0;
     }
     rotate(&dx, &dy, i);
-    bit[0].x = dx+xoffset; bit[0].y = dy+yoffset;
+    bit[0].x = (int)(dx+xoffset); bit[0].y = (int)(dy+yoffset);
 
     dx = -xoffset; dy = 0; rotate(&dx, &dy, i);
-    bit[1].x = dx+xoffset; bit[1].y = dy+yoffset;
+    bit[1].x = (int)(dx+xoffset); bit[1].y = (int)(dy+yoffset);
 
     Polyline(hdcDrawWindow, bit, 2);
   }

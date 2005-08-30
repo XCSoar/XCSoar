@@ -293,7 +293,9 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_TABSTOP,11,95,73,10
     CONTROL         "Circling",IDC_CDICIRCLING,"Button",BS_AUTOCHECKBOX |
                     WS_TABSTOP,11,107,40,10
-    GROUPBOX        "Compass Indicator",IDC_STATIC,7,85,126,35
+    GROUPBOX        "Compass Indicator",IDC_STATIC,7,85,79,35
+    CONTROL         "Vario",IDC_VARIOGAUGE,"Button",BS_AUTOCHECKBOX |
+                    WS_TABSTOP,91,96,33,10
 END
 
 IDD_UNITS DIALOG DISCARDABLE  10, 10, 163, 103
@@ -452,8 +454,8 @@ BEGIN
     DEFPUSHBUTTON   "L O A D",IDC_LOAD,15,26,108,14
     PUSHBUTTON      "Browse",IDC_BROWSE,73,7,50,14
     EDITTEXT        IDC_FILE,15,7,51,14,ES_RIGHT | ES_AUTOHSCROLL
-    PUSHBUTTON      "Reset infoboxes to default settings",IDC_INFOBOXRESET,
-                    12,53,118,14
+    PUSHBUTTON      "Reset infoboxes to default",IDC_INFOBOXRESET,12,53,118,
+                    14
 END
 
 IDD_AIRSPACEWARN DIALOG DISCARDABLE  0, 0, 113, 103
@@ -1136,7 +1138,7 @@ BEGIN
     LTEXT           "Status file",-1,5,29,43,8
     EDITTEXT        IDC_INPUTFILE,5,65,83,14,ES_RIGHT | ES_AUTOHSCROLL
     PUSHBUTTON      "Browse..",IDC_BROWSEINPUT,92,65,41,14
-    LTEXT           "Input file",-1,5,55,43,8
+    LTEXT           "Input events file",-1,5,55,59,8
 END
 
 

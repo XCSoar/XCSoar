@@ -37,6 +37,7 @@
 #include "VarioSound.h"
 #include "device.h"
 #include "units.h"
+#include "GaugeVario.h"
 
 
 
@@ -91,13 +92,12 @@ extern TCHAR szRegistryNettoSpeed[];
 extern TCHAR szRegistryCDICruise[];
 extern TCHAR szRegistryCDICircling[];
 extern TCHAR szRegistryAutoBlank[];
+extern TCHAR szRegistryVarioGauge[];
 
 
 void ReadWayPoints(void);
 void ReadAirspace(void);
 int FindIndex(HWND hWnd);
-BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
-HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
 void ReadNewTask(HWND hDlg);
 static void LoadTask(TCHAR *FileName,HWND hDlg);
 static void SaveTask(TCHAR *FileName);
@@ -750,6 +750,15 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           SendDlgItemMessage(hDlg,IDC_DRAWTERRAIN,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
+      if(EnableVarioGauge == TRUE)
+        {
+          SendDlgItemMessage(hDlg,IDC_VARIOGAUGE,BM_SETCHECK,BST_CHECKED,0);
+        }
+      else
+        {
+          SendDlgItemMessage(hDlg,IDC_VARIOGAUGE,BM_SETCHECK,BST_UNCHECKED,0);
+        }
+
       GetFromRegistry(szRegistryDisplayText,&Up);
       switch(Up)
         {
@@ -788,6 +797,16 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
         case IDC_SNAIL:
           TrailActive = !TrailActive;
           SetToRegistry(szRegistrySnailTrail,TrailActive);
+          return TRUE;
+
+        case IDC_VARIOGAUGE:
+          EnableVarioGauge = !EnableVarioGauge;
+          SetToRegistry(szRegistryVarioGauge,EnableVarioGauge);
+	  if (EnableVarioGauge) {
+	    ShowWindow(hWndVarioWindow,SW_SHOW);
+	  } else {
+	    ShowWindow(hWndVarioWindow,SW_HIDE);
+	  }
           return TRUE;
 
         case IDC_CDICRUISE:
@@ -1628,7 +1647,7 @@ LRESULT CALLBACK TaskSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 	  } else {
 	    StartRadius = Radius;
 	  }
-          SetToRegistry(szRegistryStartRadius,Radius);
+          SetToRegistry(szRegistryStartRadius,StartRadius);
           SetToRegistry(szRegistryStartLine,StartLine);
           CalculateTaskSectors();
 
@@ -1643,17 +1662,18 @@ LRESULT CALLBACK TaskSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
       switch (LOWORD(wParam))
         {
         case IDC_STARTLINE:
-	  if (StartLine != TRUE) {
-	    SetDlgItemInt(hDlg,IDC_STARTRADIUS,StartRadius*2,TRUE);
+	  if (StartLine == FALSE) {
+	    Radius  = GetDlgItemInt(hDlg,IDC_STARTRADIUS,0,TRUE);
+	    SetDlgItemInt(hDlg,IDC_STARTRADIUS,Radius*2,TRUE);
 	  }
           StartLine = TRUE;
 	  SetDlgItemText(hDlg,IDC_STATICRADIUS,gettext(TEXT("Width")));
 
           break;
-
-        case IDC_STARTCYLINDER:
-	  if (StartLine != FALSE) {
-	    SetDlgItemInt(hDlg,IDC_STARTRADIUS,StartRadius,TRUE);
+	case IDC_STARTCYLINDER:
+	  if (StartLine == TRUE) {
+	    Radius  = GetDlgItemInt(hDlg,IDC_STARTRADIUS,0,TRUE);
+	    SetDlgItemInt(hDlg,IDC_STARTRADIUS,Radius/2,TRUE);
 	  }
           StartLine = FALSE;
 	  SetDlgItemText(hDlg,IDC_STATICRADIUS,gettext(TEXT("Radius")));
