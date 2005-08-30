@@ -283,11 +283,21 @@ int ModeLabel_count[MAX_MODE];				// Where are we up to in this mode...
 bool InitONCE = false;
 extern TCHAR szRegistryInputFile[];
 
+// Mapping text names of events to the real thing
+typedef struct {
+	TCHAR *text;
+	pt2Event event;
+} Text2EventSTRUCT;
+Text2EventSTRUCT Text2Event[256];
+int Text2Event_count;
+
+
 // Read the data files
 void InputEvents::readFile() {
 	// Get defaults
 	if (!InitONCE) {
-		#include "InputEvents_keys.h"
+		#include "InputEvents_defaults.cpp"
+		#include "InputEvents_Text2Event.cpp"
 		InitONCE = true;
 	}
 
@@ -409,10 +419,36 @@ void InputEvents::readFile() {
 }
 
 int InputEvents::findKey(TCHAR *data) {
-	return VK_APP1;
+	if (wcscmp(data, TEXT("APP1")) == 0)
+		return VK_APP1;
+	else if (wcscmp(data, TEXT("APP2")) == 0)
+		return VK_APP2;
+	else if (wcscmp(data, TEXT("APP3")) == 0)
+		return VK_APP3;
+	else if (wcscmp(data, TEXT("APP4")) == 0)
+		return VK_APP4;
+	else if (wcscmp(data, TEXT("APP5")) == 0)
+		return VK_APP5;
+	else if (wcscmp(data, TEXT("APP6")) == 0)
+		return VK_APP6;
+	else if (wcscmp(data, TEXT("LEFT")) == 0)
+		return VK_LEFT;
+	else if (wcscmp(data, TEXT("RIGHT")) == 0)
+		return VK_RIGHT;
+	else if (wcscmp(data, TEXT("UP")) == 0)
+		return VK_UP;
+	else if (wcscmp(data, TEXT("DOWN")) == 0)
+		return VK_DOWN;
+	else if (wcscmp(data, TEXT("RETURN")) == 0)
+		return VK_RETURN;
+	else if (wcslen(data) == 1)
+		return towupper(data[0]);
+	else
+		return 0;
 }
 
 pt2Event InputEvents::findEvent(TCHAR *data) {
+
 	return &eventMode;
 }
 
@@ -513,7 +549,7 @@ bool InputEvents::processButton(int bindex) {
 	int i;
 	for (i = 0; i < ModeLabel_count[thismode]; i++) {
 		if ((ModeLabel[thismode][i].location == bindex) && (ModeLabel[thismode][i].label != NULL)) {
-			eventGo(ModeLabel[thismode][i].event);
+			processGo(ModeLabel[thismode][i].event);
 			return true;
 		}
   }
@@ -546,7 +582,7 @@ bool InputEvents::processKey(int dWord) {
 
 	if (event_id > 0) {
 		if (!Debounce()) return true;
-		InputEvents::eventGo(event_id);
+		InputEvents::processGo(event_id);
 		return true;
 	}
 
@@ -564,7 +600,7 @@ bool InputEvents::processNmea(TCHAR* data) {
 
 
 // EXECUTE an Event - lookup event handler and call back - no return
-void InputEvents::eventGo(int eventid) {
+void InputEvents::processGo(int eventid) {
 	// evnentid 0 is special for "noop" - otherwise check event
 	// exists (pointer to function)
 	if (eventid && Events[eventid].event)
