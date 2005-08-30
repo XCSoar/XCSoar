@@ -280,160 +280,10 @@ int ModeLabel_count[25];				// Where are we up to in this mode...
 
 // Read the data files
 void InputEvents::readFile() {
-  // XXX Example only
+	// Get defaults 
+	#include "InputEvents_keys.h"
 
-  /*
-    MODE !
-    
-    At read/init time, generate all buttons ?
-    What about unusual modes - such as special menus
-    Do we take a default set and inherit/copy them across on execute
-    Do we do that dynamically, falling back ?
-    Can each mode have a sub-set of keys, copying the previous
-    advantage - only define what you change
-    disadvantage - undefined keys, what ever they last were set to - weird
-    Alternative - one default set, mode on top of default only
-    If we do that, then check current mode then default entry version only
-    Because special modes are TEXT, how do we define that... Do we use a HASH, or lookup?
-    or combination - array lookup of entry for mode...
-    
-    XXX Example of looking up mode, finding key, fall back to default etc.
-    
-  */
-
-  // JMW all of these define the default behaviour, which is how XCSoar currently works.
-  // 
-  // default/map mode
-
-
-	int event_id;
-	int mode_id;
-
-	mode_id = mode2int(TEXT("default"), true);
-	
-	// Default - BLANK buttons
-	makeLabel(mode_id, TEXT(""), 0, 0);
-	makeLabel(mode_id, TEXT(""), 1, 0);
-	makeLabel(mode_id, TEXT(""), 2, 0);
-	makeLabel(mode_id, TEXT(""), 3, 0);
-	makeLabel(mode_id, TEXT(""), 4, 0);
-	makeLabel(mode_id, TEXT(""), 5, 0);
-
-	event_id = makeEvent(&eventMainMenu, TEXT(""));
-	Key2Event[mode_id][VK_APP1] = event_id;
-
-	event_id = makeEvent(&eventMarkLocation, TEXT(""));
-	Key2Event[mode_id][VK_APP2] = event_id;
-
-	event_id = makeEvent(&eventSelectInfoBox, TEXT(""));
-	Key2Event[mode_id][VK_APP3] = event_id;
-
-	event_id = makeEvent(&setMode, TEXT("display1"));
-	Key2Event[mode_id][VK_APP4] = event_id;
-
-	event_id = makeEvent(&eventScaleZoom, TEXT("-"));
-	Key2Event[mode_id][VK_DOWN] = event_id;
-
-	event_id = makeEvent(&eventScaleZoom, TEXT("+"));
-	Key2Event[mode_id][VK_UP] = event_id;
-
-  /*
-  InputKeyData[mode2int(TEXT("default"), true)][VK_LEFT].pt2Func = &eventAutoZoom;
-  InputKeyData[mode2int(TEXT("default"), true)][VK_LEFT].misc = TEXT("toggle");
-
-  InputKeyData[mode2int(TEXT("default"), true)][VK_RIGHT].pt2Func = &eventPan;
-  InputKeyData[mode2int(TEXT("default"), true)][VK_RIGHT].misc = TEXT("toggle");
-  */
-
-  // infobox mode
-
-	mode_id = mode2int(TEXT("infobox"), true);
-
-	event_id = makeEvent(&eventSelectInfoBox, TEXT("previous"));
-	Key2Event[mode_id][VK_APP1] = event_id;
-
-	event_id = makeEvent(&eventSelectInfoBox, TEXT("next"));
-	Key2Event[mode_id][VK_APP4] = event_id;
-
-	event_id = makeEvent(&eventChangeInfoBoxType, TEXT("previous"));
-	Key2Event[mode_id][VK_APP2] = event_id;
-
-	event_id = makeEvent(&eventChangeInfoBoxType, TEXT("next"));
-	Key2Event[mode_id][VK_APP3] = event_id;
-
-	event_id = makeEvent(&eventDoInfoKey, TEXT("up"));
-	Key2Event[mode_id][VK_UP] = event_id;
-
-  	event_id = makeEvent(&eventDoInfoKey, TEXT("down"));
-	Key2Event[mode_id][VK_DOWN] = event_id;
-
-  	event_id = makeEvent(&eventDoInfoKey, TEXT("left"));
-	Key2Event[mode_id][VK_LEFT] = event_id;
-
-	event_id = makeEvent(&eventDoInfoKey, TEXT("right"));
-	Key2Event[mode_id][VK_RIGHT] = event_id;
-
-  	event_id = makeEvent(&eventDoInfoKey, TEXT("return"));
-	Key2Event[mode_id][VK_RETURN] = event_id;
-
-	mode_id = mode2int(TEXT("display1"), true);
-
-  	event_id = makeEvent(&eventClearWarningsAndTerrain, TEXT(""));
-	Key2Event[mode_id][VK_APP1] = event_id;
-	makeLabel(mode_id, TEXT("Terrain"), 1, event_id);
-
-  	event_id = makeEvent(&eventScreenModes, TEXT("toggle"));
-	Key2Event[mode_id][VK_APP2] = event_id;
-	makeLabel(mode_id, TEXT("LAyout"), 2, event_id);
-
-   	event_id = makeEvent(&eventPan, TEXT("toggle"));
-	Key2Event[mode_id][VK_APP3] = event_id;
-	makeLabel(mode_id, TEXT("Pan"), 3, event_id);
-
-  	event_id = makeEvent(&eventMode, TEXT("display2"));
-	Key2Event[mode_id][VK_APP4] = event_id;
-	makeLabel(mode_id, TEXT(".."), 4, event_id);
-
-  	event_id = makeEvent(&eventPanCursor, TEXT("up"));
-	Key2Event[mode_id][VK_UP] = event_id;
-
-  	event_id = makeEvent(&eventPanCursor, TEXT("down"));
-	Key2Event[mode_id][VK_DOWN] = event_id;
-
-  	event_id = makeEvent(&eventPanCursor, TEXT("left"));
-	Key2Event[mode_id][VK_LEFT] = event_id;
-
-  	event_id = makeEvent(&eventPanCursor, TEXT("right"));
-	Key2Event[mode_id][VK_RIGHT] = event_id;
-
-  /////////
-
-	mode_id = mode2int(TEXT("display2"), true);
-
-  	event_id = makeEvent(&eventAutoZoom, TEXT("toggle"));
-	Key2Event[mode_id][VK_APP1] = event_id;
-
-  	event_id = makeEvent(&eventSnailTrail, TEXT("toggle"));
-	Key2Event[mode_id][VK_APP2] = event_id;
-
-  	event_id = makeEvent(&eventSounds, TEXT("toggle"));
-	Key2Event[mode_id][VK_APP3] = event_id;
-
-  	event_id = makeEvent(&eventMode, TEXT("default"));
-	Key2Event[mode_id][VK_APP4] = event_id;
-
-  	event_id = makeEvent(&eventPanCursor, TEXT("up"));
-	Key2Event[mode_id][VK_UP] = event_id;
-
-  	event_id = makeEvent(&eventPanCursor, TEXT("down"));
-	Key2Event[mode_id][VK_DOWN] = event_id;
-
-  	event_id = makeEvent(&eventPanCursor, TEXT("left"));
-	Key2Event[mode_id][VK_LEFT] = event_id;
-
-  	event_id = makeEvent(&eventPanCursor, TEXT("right"));
-	Key2Event[mode_id][VK_RIGHT] = event_id;
-
+	// TODO - Read in user defined configuration file
 }
 
 // Create EVENT Entry
@@ -492,9 +342,6 @@ void InputEvents::setMode(TCHAR *mode) {
   if (thismode == lastmode) return;
   lastmode = thismode;
 
-  // XXX TODO: set button labels for each mode (we don't have a way of specifying
-  // these mappings yet, so I'm hardcoding them...
-
   // for debugging at least, set mode indicator on screen
   if (thismode==0) {
     ButtonLabel::SetLabelText(0,NULL);
@@ -510,6 +357,8 @@ void InputEvents::setMode(TCHAR *mode) {
     ButtonLabel::SetLabelText(3,TEXT("type>"));   
   }
   */
+
+	// Set button labels
 	int i;
 	for (i = 0; i < ModeLabel_count[thismode]; i++) {
 		if ((ModeLabel[thismode][i].label != NULL) && (ModeLabel[thismode][i].location > 0)) 
