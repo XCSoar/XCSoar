@@ -261,7 +261,7 @@ int Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
 
 // Events - What do you want to DO
 typedef struct {
-	void (*event)(TCHAR *);		// Which function to call (can be any, but should be here)
+	pt2Event event;		// Which function to call (can be any, but should be here)
 	TCHAR *misc;				// Parameters
 } EventSTRUCT;
 EventSTRUCT Events[MAX_EVENTS];
@@ -280,12 +280,140 @@ int ModeLabel_count[MAX_MODE];				// Where are we up to in this mode...
 // Initialisation and Defaults
 // -----------------------------------------------------------------------
 
+bool InitONCE = false;
+extern TCHAR szRegistryInputFile[];
+
 // Read the data files
 void InputEvents::readFile() {
 	// Get defaults
-	#include "InputEvents_keys.h"
+	if (!InitONCE) {
+		#include "InputEvents_keys.h"
+		InitONCE = true;
+	}
 
 	// TODO - Read in user defined configuration file
+
+	TCHAR szFile1[MAX_PATH] = TEXT("\0");
+	FILE *fp;
+
+	// Open file from registry
+	GetRegistryString(szRegistryInputFile, szFile1, MAX_PATH);
+	SetRegistryString(szRegistryInputFile, TEXT("\0"));
+
+	if (szFile1)
+		fp  = _tfopen(szFile1, TEXT("rt"));
+
+	if (fp == NULL)
+		return;
+
+	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
+	TCHAR buffer[2049];	// Buffer for all
+	TCHAR key[1024];	// key from scanf
+	TCHAR value[1024];	// value from scanf
+	TCHAR *new_entry;
+	int found;
+
+	// Init first entry
+	bool some_data = false;		// Did we find some in the last loop...
+	TCHAR d_mode[256];
+	TCHAR d_type[256];
+	TCHAR d_data[256];
+	TCHAR d_event[256];
+	TCHAR d_misc[256];
+	TCHAR d_label[256];
+	int d_location;
+
+	/* Read from the file */
+	while (
+		fgetws(buffer, 2048, fp)
+		&& ((found = swscanf(buffer, TEXT("%[^=]=%[^\n]\n"), key, value)) != EOF)
+	) {
+		// Check valid line? If not valid, assume next record (primative, but works ok!)
+		if ((found != 2) || !key || !value) {
+
+			// only if the last entry had some data
+			if (some_data) {
+				// General checks before continue...
+				if (
+					(wcscmp(d_type, TEXT("key")) == 0)		// Currently only support a key
+					&& (d_mode != NULL)						// We have a mode
+					&& (wcscmp(d_mode, TEXT("")) != 0)		//
+
+				) {
+
+					// All modes are valid
+					int mode_id = mode2int(d_mode, true);
+					int event_id = 0;
+
+					// Check event exists
+					// XXX Resuse existing !
+					pt2Event event = findEvent(d_event);
+					if (event) {
+						new_entry = (TCHAR *)malloc((wcslen(d_misc)+1)*sizeof(TCHAR));
+						wcscpy(new_entry, d_misc);
+						event_id = makeEvent(event, new_entry);
+					}
+
+					// Make label event
+					// XXX Reuse existing !
+					if (d_location > 0) {
+						new_entry = (TCHAR *)malloc((wcslen(d_label)+1)*sizeof(TCHAR));
+						wcscpy(new_entry, d_label);
+						InputEvents::makeLabel(mode_id, new_entry, d_location, event_id);
+					}
+
+					// Make key (automatically reused)
+					int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
+					if (key > 0)
+						Key2Event[mode_id][key] = event_id;
+				}
+
+			}
+
+			// Clear all data.
+			some_data = false;
+			wcscpy(d_mode, TEXT(""));
+			wcscpy(d_type, TEXT(""));
+			wcscpy(d_data, TEXT(""));
+			wcscpy(d_event, TEXT(""));
+			wcscpy(d_misc, TEXT(""));
+			wcscpy(d_label, TEXT(""));
+			d_location = 0;
+
+		} else {
+			if (wcscmp(key, TEXT("mode")) == 0) {
+				some_data = true;	// Success, we have a real entry
+				wcscpy(d_mode, value);
+			} else if (wcscmp(key, TEXT("type")) == 0) {
+				wcscpy(d_type, value);
+			} else if (wcscmp(key, TEXT("data")) == 0) {
+				wcscpy(d_data, value);
+			} else if (wcscmp(key, TEXT("event")) == 0) {
+				wcscpy(d_event, value);
+			} else if (wcscmp(key, TEXT("misc")) == 0) {
+				wcscpy(d_misc, value);
+			} else if (wcscmp(key, TEXT("label")) == 0) {
+				wcscpy(d_label, value);
+			} else if (wcscmp(key, TEXT("location")) == 0) {
+				swscanf(value, TEXT("%d"), &d_location);
+			}
+		}
+
+	}
+
+	// file was ok, so save it to registry
+	SetRegistryString(szRegistryInputFile, szFile1);
+
+	fclose(fp);
+
+}
+
+int InputEvents::findKey(TCHAR *data) {
+	return VK_APP1;
+}
+
+pt2Event InputEvents::findEvent(TCHAR *data) {
+	return &eventMode;
 }
 
 // Create EVENT Entry
