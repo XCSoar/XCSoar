@@ -750,7 +750,14 @@ void InputEvents::eventScaleZoom(TCHAR *misc) {
   if (wcscmp(misc, TEXT("++")) == 0) {
     MapWindow::Event_ScaleZoom(2);
     return;
-  }
+  }  
+}
+
+void InputEvents::eventSetZoom(TCHAR *misc) {
+	float zoom;
+	int found = swscanf(misc, TEXT("%f"), &zoom);
+	if (found == 1)
+		MapWindow::Event_SetZoom((double)zoom);
 }
 
 void InputEvents::eventPan(TCHAR *misc) {
