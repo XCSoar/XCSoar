@@ -242,8 +242,8 @@ release 		markse the point of release from tow
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
 
-					  // XXX What is this for?
-					  int TrailActive = TRUE;
+// XXX What is this for?
+int TrailActive = TRUE;
 
 #define MAX_MODE 100
 #define MAX_MODE_STRING 25
@@ -262,7 +262,8 @@ int Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
 // Events - What do you want to DO
 typedef struct {
   pt2Event event;		// Which function to call (can be any, but should be here)
-  TCHAR *misc;				// Parameters
+  TCHAR *misc;			// Parameters
+  int next;				// Next in event list - eg: Macros
 } EventSTRUCT;
 EventSTRUCT Events[MAX_EVENTS];
 int Events_count;				// How many have we defined
@@ -459,12 +460,13 @@ pt2Event InputEvents::findEvent(TCHAR *data) {
 // Create EVENT Entry
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
-int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc) {
+int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next) {
   if (Events_count >= MAX_EVENTS)
     return 0;
   Events_count++;	// NOTE - Starts at 1 - 0 is a noop
   Events[Events_count].event = event;
   Events[Events_count].misc = misc;
+  Events[Events_count].next = next;
   return Events_count;
 }
 
@@ -608,8 +610,13 @@ bool InputEvents::processNmea(TCHAR* data) {
 void InputEvents::processGo(int eventid) {
   // evnentid 0 is special for "noop" - otherwise check event
   // exists (pointer to function)
-  if (eventid && Events[eventid].event)
-    Events[eventid].event(Events[eventid].misc);
+	if (eventid) {
+		if (Events[eventid].event)
+			Events[eventid].event(Events[eventid].misc);
+		if (Events[eventid].next > 0)
+			InputEvents::processGo(Events[eventid].next);
+	}
+	return;
 }
 
 // -----------------------------------------------------------------------
