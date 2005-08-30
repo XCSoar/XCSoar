@@ -220,24 +220,32 @@ type=key
 data=APP1
 event=SelectInfoBox
 misc=previous
+label=<<
+location=1
 
 mode=infobox
 type=key
 data=APP4
 event=SelectInfoBox
 misc=next
+label=>>
+location=1
 
 mode=infobox
 type=key
 data=APP2
 event=ChangeInfoBoxType
 misc=previous
+label=<type
+location=2
 
 mode=infobox
 type=key
 data=APP3
 event=ChangeInfoBoxType
 misc=next
+label=type>
+location=3
 
 mode=infobox
 type=key

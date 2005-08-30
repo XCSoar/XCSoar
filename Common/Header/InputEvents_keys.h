@@ -31,18 +31,22 @@ Key2Event[mode_id][VK_UP] = event_id;
 
 event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT("previous"));
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
+makeLabel(mode_id,TEXT("<<"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT("next"));
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
+makeLabel(mode_id,TEXT(">>"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = InputEvents::makeEvent(&eventChangeInfoBoxType, TEXT("previous"));
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
+makeLabel(mode_id,TEXT("<type"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = InputEvents::makeEvent(&eventChangeInfoBoxType, TEXT("next"));
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
+makeLabel(mode_id,TEXT("type>"),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = InputEvents::makeEvent(&eventDoInfoKey, TEXT("up"));
