@@ -26,6 +26,7 @@ class InputEvents {
   static void eventSounds(TCHAR *misc);
   static void eventMarkLocation(TCHAR *misc);
   static void eventAutoZoom(TCHAR *misc);
+  static void eventSetZoom(TCHAR *misc);
   static void eventScaleZoom(TCHAR *misc);
   static void eventPan(TCHAR *misc);
   static void eventClearWarningsAndTerrain(TCHAR *misc);

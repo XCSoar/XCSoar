@@ -753,6 +753,13 @@ void InputEvents::eventScaleZoom(TCHAR *misc) {
   }
 }
 
+void InputEvents::eventSetZoom(TCHAR *misc) {
+	float zoom;
+	int found = swscanf(misc, TEXT("%f"), &zoom);
+	if (found == 1)
+		MapWindow::Event_SetZoom((double)zoom);
+}
+
 void InputEvents::eventPan(TCHAR *misc) {
   if (wcscmp(misc, TEXT("toggle")) == 0) {
     MapWindow::Event_Pan(-1);
