@@ -4,7 +4,6 @@ use warnings;
 
 my %rec = ();
 my $line = 0;
-my %labelcount = ();
 
 print "int event_id;\n";
 print "int mode_id;\n";
@@ -40,12 +39,8 @@ while (<>) {
 			# Mode string
 			my $label = $rec{label};
 			my $location = $rec{location};
-			if ($label && $location) {
-				my $count = $labelcount{$mode} || 0;
-				print qq{ModeLabel[mode_id][$count].label=TEXT("$label");\n};
-				print qq{ModeLabel[mode_id][$count].location=$location;\n};
-				print qq{ModeLabel[mode_id][$count].event=event_id;\n};
-				$labelcount{$mode}++;
+			if ($location) {
+				print qq{makeLabel(mode_id,TEXT("$label"),$location,event_id);\n};
 			}
 
 			# Key output
