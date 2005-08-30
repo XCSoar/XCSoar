@@ -215,8 +215,13 @@ misc=+
 # Always active buttons...
 mode=default
 type=key
-data=a
-event=Pan
+data=l
+event=MarkLocation
+
+mode=default
+type=key
+data=r
+event=ScreenModes
 misc=toggle
 
 # ------------

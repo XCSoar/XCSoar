@@ -29,9 +29,13 @@ event_id = InputEvents::makeEvent(&eventScaleZoom, TEXT("+"));
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_UP] = event_id;
 
-event_id = InputEvents::makeEvent(&eventPan, TEXT("toggle"));
+event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""));
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-Key2Event[mode_id]['A'] = event_id;
+Key2Event[mode_id]['L'] = event_id;
+
+event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"));
+mode_id = InputEvents::mode2int(TEXT("default"), true);
+Key2Event[mode_id]['R'] = event_id;
 
 event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT("previous"));
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
