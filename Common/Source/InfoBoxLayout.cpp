@@ -1,6 +1,7 @@
 #include "Sizes.h"
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
+#include "Dialogs.h"
 
 extern HWND hWndInfoWindow[NUMINFOWINDOWS];
 extern HWND hWndTitleWindow[NUMINFOWINDOWS];
@@ -303,4 +304,15 @@ void ButtonLabel::SetLabelText(int index, TCHAR *text) {
     ShowWindow(hWndButtonWindow[index], SW_SHOW);
   }
 
+}
+
+#include "InputEvents.h"
+
+void ButtonLabel::CheckButtonPress(HWND pressedwindow) {
+  int i;
+  for (i=0; i<NUMBUTTONLABELS; i++) {
+    if (hWndButtonWindow[i]== pressedwindow) {
+      InputEvents::processButton(i);
+    }
+  }
 }

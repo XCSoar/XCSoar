@@ -557,7 +557,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
     mag = sqrt(wind.x*wind.x+wind.y*wind.y);
     if (mag<= 0.0) continue;
 
-    angle = atan2(wind.y,wind.x)*RAD_TO_DEG;
+    angle = -atan2(-wind.x,wind.y)*RAD_TO_DEG;
 
     wv[0].y = (int)((1-(i+1)/(double)(numsteps+1))*(rc.bottom-rc.top))+rc.top;
     wv[0].x = rc.left+(int)(WINDVECTORMAG*1.5);

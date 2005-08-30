@@ -22,6 +22,8 @@ class ButtonLabel {
   static void CreateButtonLabels(RECT rc);
   static void Destroy();
   static void SetLabelText(int index, TCHAR *text);
+  static void CheckButtonPress(HWND pressedwindow);
+
 };
 
 #endif

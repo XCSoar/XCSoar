@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.78 2005/08/29 19:39:36 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.79 2005/08/30 01:48:41 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1818,6 +1818,9 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       if (!InfoWindowActive) {
 	ShowMenu();
       }
+
+      ButtonLabel::CheckButtonPress(wmControl);
+
       for(i=0;i<NUMINFOWINDOWS;i++)
         {       
           if(wmControl == hWndInfoWindow[i])
@@ -2509,9 +2512,7 @@ void Event_SelectInfoBox(int i) {
   // must do this
   InfoBoxFocusTimeOut = 0;
 
-  if (InfoFocus== -1) {
-    InfoFocus = 0;
-  } else {
+  if (InfoFocus>= 0) {
     FocusOnWindow(InfoFocus,false);
   }
   InfoFocus+= i;
