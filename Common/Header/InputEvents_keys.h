@@ -63,30 +63,22 @@ Key2Event[mode_id][VK_RETURN] = event_id;
 
 event_id = InputEvents::makeEvent(&eventClearWarningsAndTerrain, TEXT(""));
 mode_id = InputEvents::mode2int(TEXT("display1"), true);
-ModeLabel[mode_id][0].label=TEXT("Terrain");
-ModeLabel[mode_id][0].location=1;
-ModeLabel[mode_id][0].event=event_id;
+makeLabel(mode_id,TEXT("Terrain"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"));
 mode_id = InputEvents::mode2int(TEXT("display1"), true);
-ModeLabel[mode_id][1].label=TEXT("Layout");
-ModeLabel[mode_id][1].location=2;
-ModeLabel[mode_id][1].event=event_id;
+makeLabel(mode_id,TEXT("Layout"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = InputEvents::makeEvent(&eventPan, TEXT("toggle"));
 mode_id = InputEvents::mode2int(TEXT("display1"), true);
-ModeLabel[mode_id][2].label=TEXT("Pan");
-ModeLabel[mode_id][2].location=3;
-ModeLabel[mode_id][2].event=event_id;
+makeLabel(mode_id,TEXT("Pan"),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = InputEvents::makeEvent(&eventMode, TEXT("display2"));
 mode_id = InputEvents::mode2int(TEXT("display1"), true);
-ModeLabel[mode_id][3].label=TEXT("..");
-ModeLabel[mode_id][3].location=4;
-ModeLabel[mode_id][3].event=event_id;
+makeLabel(mode_id,TEXT(".."),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = InputEvents::makeEvent(&eventPanCursor, TEXT("up"));
@@ -107,30 +99,22 @@ Key2Event[mode_id][VK_RIGHT] = event_id;
 
 event_id = InputEvents::makeEvent(&eventAutoZoom, TEXT("toggle"));
 mode_id = InputEvents::mode2int(TEXT("display2"), true);
-ModeLabel[mode_id][0].label=TEXT("AutoZoom");
-ModeLabel[mode_id][0].location=1;
-ModeLabel[mode_id][0].event=event_id;
+makeLabel(mode_id,TEXT("AutoZoom"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("toggle"));
 mode_id = InputEvents::mode2int(TEXT("display2"), true);
-ModeLabel[mode_id][1].label=TEXT("Snail Trail");
-ModeLabel[mode_id][1].location=2;
-ModeLabel[mode_id][1].event=event_id;
+makeLabel(mode_id,TEXT("Snail Trail"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = InputEvents::makeEvent(&eventSounds, TEXT("toggle"));
 mode_id = InputEvents::mode2int(TEXT("display2"), true);
-ModeLabel[mode_id][2].label=TEXT("Vario Sounds");
-ModeLabel[mode_id][2].location=3;
-ModeLabel[mode_id][2].event=event_id;
+makeLabel(mode_id,TEXT("Vario Sounds"),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"));
 mode_id = InputEvents::mode2int(TEXT("display2"), true);
-ModeLabel[mode_id][3].label=TEXT("..");
-ModeLabel[mode_id][3].location=4;
-ModeLabel[mode_id][3].event=event_id;
+makeLabel(mode_id,TEXT(".."),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = InputEvents::makeEvent(&eventPanCursor, TEXT("up"));
