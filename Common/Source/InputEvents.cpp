@@ -1,5 +1,3 @@
-
-
 /*
 
 InputEvent
@@ -247,32 +245,36 @@ Functions/Events - what it does
 // XXX What is this for?
 int TrailActive = TRUE;
 
-// XXX Size constant etc
+#define MAX_MODE 100
+#define MAX_MODE_STRING 25
+#define MAX_KEY 255
+#define MAX_EVENTS 1024
+#define MAX_LABEL 25
 
 // Current modes - map mode to integer (primitive hash)
-TCHAR mode_current[26] = TEXT("default");		// Current mode
-TCHAR mode_map[99][26];					// Map mode to location
+TCHAR mode_current[MAX_MODE_STRING] = TEXT("default");		// Current mode
+TCHAR mode_map[MAX_MODE][MAX_MODE_STRING];					// Map mode to location
 int mode_map_count = 0;
 
 // Key map to Event - Keys (per mode) mapped to events
-int Key2Event[100][256];		// Points to Events location
+int Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
 
 // Events - What do you want to DO
 typedef struct {
 	void (*event)(TCHAR *);		// Which function to call (can be any, but should be here)
 	TCHAR *misc;				// Parameters
 } EventSTRUCT;
-EventSTRUCT Events[1024];
+EventSTRUCT Events[MAX_EVENTS];
 int Events_count;				// How many have we defined
 
-// Labels - defined per mode (XXX very high numbers need fixing)
+// Labels - defined per mode
 typedef struct {
 	TCHAR *label;
 	int location;
 	int event;
 } ModeLabelSTRUCT;
-ModeLabelSTRUCT ModeLabel[25][100];
-int ModeLabel_count[25];				// Where are we up to in this mode...
+ModeLabelSTRUCT ModeLabel[MAX_MODE][MAX_LABEL];
+int ModeLabel_count[MAX_MODE];				// Where are we up to in this mode...
 
 // -----------------------------------------------------------------------
 // Initialisation and Defaults
@@ -290,7 +292,8 @@ void InputEvents::readFile() {
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
 int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc) {
-	// XXX check not too many events - CONST bounding
+	if (Events_count >= MAX_EVENTS)
+		return 0;
 	Events_count++;	// NOTE - Starts at 1 - 0 is a noop
 	Events[Events_count].event = event;
 	Events[Events_count].misc = misc;
@@ -302,10 +305,12 @@ int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc) {
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
 void InputEvents::makeLabel(int mode_id, TCHAR* label, int location, int event_id) {
-	ModeLabel[mode_id][ModeLabel_count[mode_id]].label = label;
-	ModeLabel[mode_id][ModeLabel_count[mode_id]].location = location;
-	ModeLabel[mode_id][ModeLabel_count[mode_id]].event = event_id;
-	ModeLabel_count[mode_id]++;
+	if ((mode_id >= 0) && (mode_id < MAX_MODE) && (ModeLabel_count[mode_id] < MAX_LABEL)) {
+		ModeLabel[mode_id][ModeLabel_count[mode_id]].label = label;
+		ModeLabel[mode_id][ModeLabel_count[mode_id]].location = location;
+		ModeLabel[mode_id][ModeLabel_count[mode_id]].event = event_id;
+		ModeLabel_count[mode_id]++;
+	}
 }
 
 // Return 0 for anything else - should probably return -1 !
@@ -336,7 +341,7 @@ void InputEvents::setMode(TCHAR *mode) {
   static int lastmode = -1;
   int thismode;
 
-  wcsncpy(mode_current, mode, 25);
+  wcsncpy(mode_current, mode, MAX_MODE_STRING);
 
   thismode = mode2int(mode,true);
   if (thismode == lastmode) return;
@@ -348,15 +353,6 @@ void InputEvents::setMode(TCHAR *mode) {
   } else {
     ButtonLabel::SetLabelText(0,mode);
   }
-
-  /*
-  if (thismode==1) { // XXX infobox mode, naughty I am hardcoding it..
-    ButtonLabel::SetLabelText(1,TEXT("<<"));
-    ButtonLabel::SetLabelText(4,TEXT(">>"));
-    ButtonLabel::SetLabelText(2,TEXT("<type"));
-    ButtonLabel::SetLabelText(3,TEXT("type>"));
-  }
-  */
 
 	// Set button labels
 	int i;
@@ -393,7 +389,7 @@ bool InputEvents::processKey(int dWord) {
 	int event_id;
 
 	// Valid input ?
-	if ((dWord < 0) || (dWord > 255))
+	if ((dWord < 0) || (dWord > MAX_KEY))
 		return false;
 
 	// get current mode
@@ -436,7 +432,7 @@ void InputEvents::eventGo(int eventid) {
 // Execution - list of things you can do
 // -----------------------------------------------------------------------
 
-// XXX Keep marker text for log file etc.
+// TODO Keep marker text for log file etc.
 void InputEvents::eventMarkLocation(TCHAR *misc) {
   // ARH Let the user know what's happened
   DoStatusMessage(TEXT("Dropped marker"));
@@ -469,7 +465,6 @@ void InputEvents::eventSounds(TCHAR *misc) {
 	}
 }
 
-// XXX This should be just SnailTrail - Turn on/off with string
 void InputEvents::eventSnailTrail(TCHAR *misc) {
   int OldTrailActive;
   OldTrailActive = TrailActive;
