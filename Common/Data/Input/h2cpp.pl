@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+print "/* AUTOMATICALLY GENERATED FILE - DO NOT EDIT BY HAND - see Common/Data/Input/h2cpp.pl */\n";
 open (IN, "../../Header/InputEvents.h");
 my $count = 0;
 while (<IN>) {

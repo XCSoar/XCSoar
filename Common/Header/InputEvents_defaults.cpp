@@ -1,3 +1,4 @@
+/* AUTOMATICALLY GENERATED FILE - DO NOT EDIT BY HAND - see Common/Data/Input/xci2cpp.pl */
 int event_id;
 int mode_id;
 

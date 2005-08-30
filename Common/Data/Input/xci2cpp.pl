@@ -5,6 +5,7 @@ use warnings;
 my %rec = ();
 my $line = 0;
 
+print "/* AUTOMATICALLY GENERATED FILE - DO NOT EDIT BY HAND - see Common/Data/Input/xci2cpp.pl */\n";
 print "int event_id;\n";
 print "int mode_id;\n";
 print "\n";
