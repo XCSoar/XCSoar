@@ -19,7 +19,7 @@ class InputEvents {
   static bool processNmea(TCHAR *data);
   static bool processButton(int bindex);
   static void processGo(int event_id);
-  static int makeEvent(void (*event)(TCHAR *), TCHAR *misc);
+  static int makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next = 0);
   static void makeLabel(int mode_id, TCHAR *label, int location, int event_id);
   static void eventScreenModes(TCHAR *misc);
   static void eventSnailTrail(TCHAR *misc);
