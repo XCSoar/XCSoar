@@ -300,7 +300,7 @@ void ButtonLabel::SetLabelText(int index, TCHAR *text) {
   if ((text==NULL)||(*text==_T('\0'))) {
     ShowWindow(hWndButtonWindow[index], SW_HIDE);
   } else {
-    SetWindowText(hWndButtonWindow[index], text);
+    SetWindowText(hWndButtonWindow[index], gettext(text));
     ShowWindow(hWndButtonWindow[index], SW_SHOW);
   }
 

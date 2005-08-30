@@ -448,8 +448,12 @@ int InputEvents::findKey(TCHAR *data) {
 }
 
 pt2Event InputEvents::findEvent(TCHAR *data) {
-
-	return &eventMode;
+	int i;
+	for (i = 0; i < Text2Event_count; i++) {
+		if (wcscmp(data, Text2Event[i].text) == 0)
+			return Text2Event[i].event;
+	}
+	return NULL;
 }
 
 // Create EVENT Entry
@@ -547,7 +551,8 @@ int InputEvents::getModeID() {
 bool InputEvents::processButton(int bindex) {
 	int thismode = getModeID();
 	int i;
-	for (i = 0; i < ModeLabel_count[thismode]; i++) {
+	// Note - reverse order - last one wins
+	for (i = ModeLabel_count[thismode]; i >= 0; i--) {
 		if ((ModeLabel[thismode][i].location == bindex) && (ModeLabel[thismode][i].label != NULL)) {
 			processGo(ModeLabel[thismode][i].event);
 			return true;
@@ -721,25 +726,7 @@ void InputEvents::eventAutoZoom(TCHAR* misc) {
 }
 
 
-/*
-	XXX  Entries todo (see above documentation)
-
-		SnailTrail (on, off, long, toggle)
-		VarioSound (on, off)
-		Marker (optional text to add)
-		MenuButton (on, off, toggle)
-		Menu(open, close, toggle)
-
-*/
-
-/*
-MapWindow::Event_SetZoom(double value);
-MapWindow::Event_ScaleZoom(int vswitch);
-MapWindow::Event_Pan(int vswitch);
-MapWindow::Event_Terrain(int vswitch);
-MapWindow::Event_AutoZoom(int vswitch);
-*/
-
+// TODO Implement specific zom - eg: not scale but actual (for user going to a preset default zoom level)
 void InputEvents::eventScaleZoom(TCHAR *misc) {
   if (wcscmp(misc, TEXT("-")) == 0) {
     MapWindow::Event_ScaleZoom(-1);
@@ -841,10 +828,17 @@ void InputEvents::eventPanCursor(TCHAR *misc) {
 }
 
 
+void InputEvents::eventMode(TCHAR *misc) {
+	InputEvents::setMode(misc);
+}
+
 void InputEvents::eventMainMenu(TCHAR *misc) {
   // todo: popup main menu
 }
 
-void InputEvents::eventMode(TCHAR *misc) {
-	InputEvents::setMode(misc);
-}
+/* TODO
+	eventMainMenu
+	eventMenu
+v
+
+*/
