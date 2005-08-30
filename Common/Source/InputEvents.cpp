@@ -379,8 +379,8 @@ int InputEvents::getModeID() {
 // Processing functions - which one to do
 // -----------------------------------------------------------------------
 
+// Input is a via the user touching the label on a touch screen / mouse
 bool InputEvents::processButton(int bindex) {
-    // XXX  DoStatusMessage(TEXT("Pressed a button"));
 	int thismode = getModeID();
 	int i;
 	for (i = 0; i < ModeLabel_count[thismode]; i++) {
