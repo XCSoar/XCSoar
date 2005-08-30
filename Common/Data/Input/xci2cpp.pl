@@ -56,7 +56,7 @@ while (<>) {
 				} else {
 					$data = "VK_$data";
 				}
-				print qq{KeyEvent[mode_id][$data] = event_id;\n};
+				print qq{Key2Event[mode_id][$data] = event_id;\n};
 			}
 			print "\n";
 		}
