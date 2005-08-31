@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.82 2005/08/30 18:00:17 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.83 2005/08/31 07:09:17 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -857,9 +857,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   DoSunEphemeris(147.0,-36.0);
 
 #ifdef _SIM_
-  DoStatusMessage(TEXT("Simulation\r\nNothing is real!"));
+  InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
 #else
-  DoStatusMessage(TEXT("Maintain effective\r\nLOOKOUT at all times"));
+  InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
 
   SwitchToMapWindow();
@@ -2152,8 +2152,7 @@ void ProcessTimer(void)
             MapWindow::MapDirty = true;
             extGPSCONNECT = FALSE;
 
-            DoStatusMessage(TEXT("Waiting for GPS Connection"));
-
+			InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
             //            LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
             //            ShowStatusMessage(szLoadText, 5000);
 
@@ -2175,8 +2174,8 @@ void ProcessTimer(void)
 
             extGPSCONNECT = FALSE;
 
-            DoStatusMessage(TEXT("Restarting Comm Ports"));
-            MessageBeep(MB_ICONEXCLAMATION);
+			InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
+
             RestartCommPorts();
 
 #if (EXPERIMENTAL > 0)
@@ -2209,7 +2208,8 @@ void ProcessTimer(void)
       {
         if((navwarning == TRUE) && (LOCKWAIT == FALSE))
           {
-            DoStatusMessage(TEXT("Waiting for GPS Fix"));
+			InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
+
             MapWindow::MapDirty = true;
 
             LOCKWAIT = TRUE;

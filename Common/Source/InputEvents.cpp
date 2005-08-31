@@ -610,8 +610,29 @@ bool InputEvents::processNmea(TCHAR* data) {
   InputEvents::processGlideComputer
   Take virtual inputs from a Glide Computer to do special events
 */
-bool InputEvents::processGlideComputer(int event_id) {
-	return true;
+bool InputEvents::processGlideComputer(int gce_id) {
+int event_id = 0;
+
+  // Valid input ?
+  if ((gce_id < 0) || (gce_id > GCE_COUNT))
+    return false;
+
+  // get current mode
+  int mode = InputEvents::getModeID();
+  
+  // Which key - can be defined locally or at default (fall back to default)
+  event_id = GC2Event[mode][gce_id];
+  if (event_id == 0) {
+    // go with default key..
+    event_id = GC2Event[0][gce_id];
+  }
+
+  if (event_id > 0) {
+    InputEvents::processGo(event_id);
+    return true;
+  }
+  
+  return false;
 }
 
 // EXECUTE an Event - lookup event handler and call back - no return
