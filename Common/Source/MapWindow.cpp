@@ -289,6 +289,17 @@ void MapWindow::RequestToggleFullScreen() {
   RefreshMap();
 }
 
+void MapWindow::RequestOnFullScreen() {
+  RequestFullScreen = true;
+  RefreshMap();
+}
+
+void MapWindow::RequestOffFullScreen() {
+  RequestFullScreen = false;
+  RefreshMap();
+}
+
+
 
 extern BOOL extGPSCONNECT;
 extern bool DialogActive;
