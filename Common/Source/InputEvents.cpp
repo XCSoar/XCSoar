@@ -247,7 +247,7 @@ release 		markse the point of release from tow
 #define MAX_MODE 100
 #define MAX_MODE_STRING 25
 #define MAX_KEY 255
-#define MAX_EVENTS 1024
+#define MAX_EVENTS 2048
 #define MAX_LABEL NUMBUTTONLABELS
 
 // Current modes - map mode to integer (primitive hash)
