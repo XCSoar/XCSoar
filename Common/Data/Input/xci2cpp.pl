@@ -26,6 +26,8 @@ while (<>) {
 
 			} elsif ($rec{type} eq "none") {
 
+			} elsif ($rec{type} eq "gce") {
+
 			# TODO - Support "nmea"
 			} else {
 				die "Invaliid record near $line - No valid type: none or key";
@@ -61,6 +63,9 @@ while (<>) {
 					$data = "VK_$data";
 				}
 				print qq{Key2Event[mode_id][$data] = event_id;\n};
+			} elsif ($rec{type} eq "gce") {
+				my $data = $rec{data} || die "Invalid entry near $line - no key\n";
+				print qq{GC2Event[mode_id][$data] = event_id;\n};
 			}
 			print "\n";
 		}
