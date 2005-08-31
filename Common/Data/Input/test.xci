@@ -7,7 +7,7 @@ event=StatusMessage Hey we marked something
 label=Go
 location=1
 
-mode=display1
+mode=display1 display2
 type=key
 data=APP1
 event=Mode default
