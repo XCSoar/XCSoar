@@ -2,6 +2,7 @@
 #include "MapWindow.h"
 #include "Utils.h"
 #include "externs.h"
+#include "InfoBoxLayout.h"
 
 HWND hWndVarioWindow = NULL; // Vario Window
 extern HINSTANCE hInst;      // The current instance
@@ -16,8 +17,8 @@ HDC GaugeVario::hdcDrawWindow = NULL;
 HBITMAP GaugeVario::hDrawBitMap = NULL;
 RECT GaugeVario::rc;
 
-#define GAUGEXSIZE 65
-#define GAUGEYSIZE 100
+#define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
+#define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
 
 void GaugeVario::Create() {
   RECT bigrc;
@@ -32,7 +33,8 @@ void GaugeVario::Create() {
   SendMessage(hWndVarioWindow,WM_SETFONT,
               (WPARAM)CDIWindowFont,MAKELPARAM(TRUE,0));
   SetWindowPos(hWndVarioWindow,hWndMenuButton,
-               bigrc.right-GAUGEXSIZE,bigrc.top+50,
+               bigrc.right+InfoBoxLayout::ControlWidth,
+	       bigrc.top,
                GAUGEXSIZE,GAUGEYSIZE,
 	       SWP_SHOWWINDOW);
 

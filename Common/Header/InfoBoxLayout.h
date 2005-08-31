@@ -9,12 +9,12 @@ class InfoBoxLayout {
   static void CreateInfoBoxes(RECT rc);
   static int InfoBoxGeometry;
   static int ControlWidth, ControlHeight, TitleHeight;
+  static void ScreenGeometry(RECT rc);
  private:
   static void GetInfoBoxPosition(int i, RECT rc,
 				 int *x, int *y,
 				 int *sizex, int *sizey);
   static void GetInfoBoxSizes(RECT rc);
-
 };
 
 

@@ -9,7 +9,7 @@
 
 #define MENU_HEIGHT 26
 
-#define NUMINFOWINDOWS 8
+#define MAXINFOWINDOWS 14
 
 #define REGKEYSIZE 64
 
@@ -95,6 +95,6 @@
 
 ////////////////////////
 
-#define NUMBUTTONLABELS 12
+#define NUMBUTTONLABELS 16
 
 #endif

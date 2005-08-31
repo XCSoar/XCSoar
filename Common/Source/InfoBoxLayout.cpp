@@ -3,9 +3,10 @@
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
 #include "Utils.h"
+#include "externs.h"
 
-extern HWND hWndInfoWindow[NUMINFOWINDOWS];
-extern HWND hWndTitleWindow[NUMINFOWINDOWS];
+extern HWND hWndInfoWindow[MAXINFOWINDOWS];
+extern HWND hWndTitleWindow[MAXINFOWINDOWS];
 extern HWND hWndMainWindow; // Main Windows
 extern HINSTANCE hInst; // The current instance
 
@@ -16,7 +17,18 @@ extern HINSTANCE hInst; // The current instance
 // 3: infoboxes along both sides
 // 4: infoboxes along left side
 // 5: infoboxes along right side
+// 6: infoboxes GNAV
+/*
 
+Screen
+640x480 landscape
+
+480/6 = 80 control height
+
+2/3 of width is map = 420
+leaving 220 = 110 control width
+
+*/
 
 
 /*
@@ -34,6 +46,11 @@ int InfoBoxLayout::InfoBoxGeometry = 0;
 int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
+
+bool gnav = false;
+
+bool geometrychanged = false;
+
 
 
 void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
@@ -55,64 +72,78 @@ void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
   GetFromRegistry(reggeomsx,&Temp); *sizex = Temp;
   GetFromRegistry(reggeomsy,&Temp); *sizey = Temp;
 
-  if ((*sizex==0)||(*sizey==0)) {
+  if ((*sizex==0)||(*sizey==0)||geometrychanged) {
     // not defined in registry so go with defaults
     // these will be saved back to registry
 
     switch (InfoBoxGeometry) {
     case 0:
-      if (i<NUMINFOWINDOWS/2) {
+      if (i<numInfoWindows/2) {
 	*x = i*ControlWidth;
 	*y = rc.top;
       } else {
-	*x = (i-NUMINFOWINDOWS/2)*ControlWidth;
+	*x = (i-numInfoWindows/2)*ControlWidth;
 	*y = rc.bottom-ControlHeight;
       }
       break;
     case 1:
-      if (i<NUMINFOWINDOWS/2) {
+      if (i<numInfoWindows/2) {
 	*x = i*ControlWidth;
 	*y = rc.bottom-ControlHeight*2;
       } else {
-	*x = (i-NUMINFOWINDOWS/2)*ControlWidth;
+	*x = (i-numInfoWindows/2)*ControlWidth;
 	*y = rc.bottom-ControlHeight;
       }
       break;
     case 2:
-      if (i<NUMINFOWINDOWS/2) {
+      if (i<numInfoWindows/2) {
 	*x = i*ControlWidth;
 	*y = rc.top;;
       } else {
-	*x = (i-NUMINFOWINDOWS/2)*ControlWidth;
+	*x = (i-numInfoWindows/2)*ControlWidth;
 	*y = rc.top+ControlHeight;
       }
       break;
 
     case 3:
-      if (i<NUMINFOWINDOWS/2) {
+      if (i<numInfoWindows/2) {
 	*x = rc.left;
 	*y = rc.top+ControlHeight*i;
       } else {
 	*x = rc.right-ControlWidth;
-	*y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
+	*y = rc.top+ControlHeight*(i-numInfoWindows/2);
       }
       break;
     case 4:
-      if (i<NUMINFOWINDOWS/2) {
+      if (i<numInfoWindows/2) {
 	*x = rc.left;
 	*y = rc.top+ControlHeight*i;
       } else {
 	*x = rc.left+ControlWidth;
-	*y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
+	*y = rc.top+ControlHeight*(i-numInfoWindows/2);
       }
       break;
     case 5:
-      if (i<NUMINFOWINDOWS/2) {
+      if (i<numInfoWindows/2) {
 	*x = rc.right-ControlWidth*2;
 	*y = rc.top+ControlHeight*i;
       } else {
 	*x = rc.right-ControlWidth;
-	*y = rc.top+ControlHeight*(i-NUMINFOWINDOWS/2);
+	*y = rc.top+ControlHeight*(i-numInfoWindows/2);
+      }
+      break;
+    case 6:
+      if (i<3) {
+	*x = rc.right-ControlWidth*2;
+	*y = rc.top+ControlHeight*i;
+      } else {
+	if (i<6) {
+	  *x = rc.right-ControlWidth*2;
+	  *y = rc.top+ControlHeight*(i-3)+ControlHeight*3;
+	} else {
+	  *x = rc.right-ControlWidth;
+	  *y = rc.top+ControlHeight*(i-6)+ControlHeight*3;
+	}
       }
       break;
     };
@@ -129,7 +160,7 @@ void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
 }
 
 
-void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
+void InfoBoxLayout::ScreenGeometry(RECT rc) {
 
   TCHAR szRegistryInfoBoxGeometry[]=  TEXT("InfoBoxGeometry");
   DWORD Temp;
@@ -139,21 +170,48 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   if (rc.bottom<rc.right) {
     // landscape mode
     if (InfoBoxGeometry<4) {
-      InfoBoxGeometry+= 3;
+      geometrychanged = true;
+
+      // JMW testing
+      if (1) {
+	InfoBoxGeometry = 6;
+      } else {
+	InfoBoxGeometry+= 3;
+      }
     }
 
   } else {
     // portrait mode
     if (InfoBoxGeometry>=3) {
-      InfoBoxGeometry-= 3;
+      InfoBoxGeometry= 0;
+
+      geometrychanged = true;
+      gnav = false;
     }
   }
+
+  SetToRegistry(szRegistryInfoBoxGeometry,InfoBoxGeometry);
+
+  // JMW testing
+  if (InfoBoxGeometry==6) {
+    gnav = true;
+  }
+  if (gnav) {
+    numInfoWindows = 9;
+  } else {
+    numInfoWindows = 8;
+  }
+
+}
+
+
+void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
   switch (InfoBoxGeometry) {
   case 0:
     // calculate control dimensions
 
-    ControlWidth = 2*(rc.right - rc.left) / NUMINFOWINDOWS;
+    ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
     ControlHeight = (int)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
 
@@ -168,7 +226,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 1:
     // calculate control dimensions
 
-    ControlWidth = 2*(rc.right - rc.left) / NUMINFOWINDOWS;
+    ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
     ControlHeight = (int)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
 
@@ -183,7 +241,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
   case 2:
     // calculate control dimensions
 
-    ControlWidth = 2*(rc.right - rc.left) / NUMINFOWINDOWS;
+    ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
     ControlHeight = (int)((rc.bottom - rc.top) / CONTROLHEIGHTRATIO);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
 
@@ -199,7 +257,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     // calculate control dimensions
 
     ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
-    ControlHeight = (int)(2*(rc.bottom - rc.top) / NUMINFOWINDOWS);
+    ControlHeight = (int)(2*(rc.bottom - rc.top) / numInfoWindows);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
@@ -214,7 +272,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     // calculate control dimensions
 
     ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
-    ControlHeight = (int)(2*(rc.bottom - rc.top) / NUMINFOWINDOWS);
+    ControlHeight = (int)(2*(rc.bottom - rc.top) / numInfoWindows);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
@@ -229,7 +287,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     // calculate control dimensions
 
     ControlWidth = (int)((rc.right - rc.left) / CONTROLHEIGHTRATIO*1.3);
-    ControlHeight = (int)(2*(rc.bottom - rc.top) / NUMINFOWINDOWS);
+    ControlHeight = (int)(2*(rc.bottom - rc.top) / numInfoWindows);
     TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
 
     // calculate small map screen size
@@ -240,6 +298,21 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     MapWindow::MapRect.right = rc.right-ControlWidth*2;
     break;
 
+  case 6:
+    // calculate control dimensions
+
+    ControlWidth = (int)((rc.right - rc.left)*0.18);
+    ControlHeight = (int)((rc.bottom - rc.top)/6);
+    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO);
+
+    // calculate small map screen size
+
+    MapWindow::MapRect.top = rc.top;
+    MapWindow::MapRect.left = rc.left;
+    MapWindow::MapRect.bottom = rc.bottom;
+    MapWindow::MapRect.right = rc.right-ControlWidth*2;
+
+    break;
   };
 
 }
@@ -253,7 +326,7 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 
   // create infobox windows
 
-  for(i=0;i<NUMINFOWINDOWS;i++)
+  for(i=0;i<numInfoWindows;i++)
     {
       GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
@@ -307,21 +380,51 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
   GetFromRegistry(reggeomsx,&Temp); *sizex = Temp;
   GetFromRegistry(reggeomsy,&Temp); *sizey = Temp;
 
-  if ((*sizex==0)||(*sizey==0)) {
+  if ((*sizex==0)||(*sizey==0)||geometrychanged) {
     // not defined in registry so go with defaults
     // these will be saved back to registry
     int hwidth = (rc.right-rc.left)/4;
+    int hheight = (rc.bottom-rc.top)/4;
 
-    if (i==0) {
-      *x = rc.left+3;
-      *y = (rc.bottom-20-InfoBoxLayout::ControlHeight-20);
-      *sizex = 52;
-      *sizey = 20;
-    } else {
-      *x = rc.left+3+hwidth*(i-1);
-      *y = (rc.bottom-20-InfoBoxLayout::ControlHeight);
-      *sizex = 52;
-      *sizey = 20;
+    switch (ButtonLabelGeometry) {
+    case 0:
+      if (i==0) {
+	*sizex = 52;
+	*sizey = 20;
+	*x = rc.left+3;
+	*y = (rc.bottom-(*sizey)*2-InfoBoxLayout::ControlHeight);
+      } else {
+	*sizex = 52;
+	*sizey = 20;
+	*x = rc.left+3+hwidth*(i-1);
+	*y = (rc.bottom-(*sizey)-InfoBoxLayout::ControlHeight);
+      }
+      break;
+
+    case 1:
+      hwidth = (rc.right-rc.left)/5;
+      hheight = (rc.bottom-rc.top)/(4+1);
+
+      if (i==0) {
+	*sizex = 52;
+	*sizey = 20;
+	*x = rc.left+3+(*sizex);
+	*y = (rc.top);
+      } else {
+	if (i<5) {
+	  *sizex = 52;
+	  *sizey = 20;
+	  *x = rc.left+3;
+	  *y = (rc.top+hheight*(i-1+1)-(*sizey)/2);
+	} else {
+	  *sizex = 52;
+	  *sizey = 20;
+	  *x = rc.left+3+hwidth*(i-5);
+	  *y = (rc.bottom-(*sizey));
+	}
+      }
+      break;
+
     }
 
     SetToRegistry(reggeompx,*x);
@@ -338,6 +441,15 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   int i;
   int x, y, xsize, ysize;
 
+  int buttonWidth = 50;
+  int buttonHeight = 15;
+
+  if (gnav) {
+    ButtonLabelGeometry = 1;
+  } else {
+    ButtonLabelGeometry = 0;
+  }
+
   for (i=0; i<NUMBUTTONLABELS; i++) {
     hWndButtonWindow[i] =
       CreateWindow(TEXT("STATIC"), TEXT("\0"),
@@ -345,7 +457,7 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 		   |SS_CENTER|SS_NOTIFY
 		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
 		   rc.left, rc.top,
-		   50, 15,
+		   buttonWidth, buttonHeight,
 		   hWndMainWindow, NULL, hInst, NULL);
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
 
@@ -356,6 +468,18 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
     SetLabelText(i,NULL);
     SetWindowLong(hWndButtonWindow[i], GWL_USERDATA, 4);
   }
+
+  //
+
+  if (gnav) {
+    ButtonLabel::SetLabelText(5,TEXT("skey1"));
+    ButtonLabel::SetLabelText(6,TEXT("skey2"));
+    ButtonLabel::SetLabelText(7,TEXT("skey3"));
+    ButtonLabel::SetLabelText(8,TEXT("skey4"));
+    ButtonLabel::SetLabelText(9,TEXT("skey5"));
+    EnableVarioGauge = true;
+  }
+
 }
 
 
