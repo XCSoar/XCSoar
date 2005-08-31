@@ -44,30 +44,32 @@ while (<>) {
 
 			# TODO Could be faster by grouping these together ! (read file to grouped hash, 
 			# then build, one mode2int, less static text in exe file etc.
-			print qq{mode_id = InputEvents::mode2int(TEXT("$mode"), true);\n};
-		
-			# Mode string
-			my $label = $rec{label};
-			my $location = $rec{location};
-			if ($location) {
-				print qq{makeLabel(mode_id,TEXT("$label"),$location,event_id);\n};
-			}
-
-			# Key output
-			if ($rec{type} eq "key") {
-				my $data = $rec{data} || die "Invalid entry near $line - no key\n";
-				if (length($data) == 1) {
-					$data = uc($data);
-					$data = qq{'$data'};
-				} else {
-					$data = "VK_$data";
+			foreach my $m (split(/ /, $mode)) {
+				print qq{mode_id = InputEvents::mode2int(TEXT("$m"), true);\n};
+			
+				# Mode string
+				my $label = $rec{label};
+				my $location = $rec{location};
+				if ($location) {
+					print qq{makeLabel(mode_id,TEXT("$label"),$location,event_id);\n};
 				}
-				print qq{Key2Event[mode_id][$data] = event_id;\n};
-			} elsif ($rec{type} eq "gce") {
-				my $data = $rec{data} || die "Invalid entry near $line - no key\n";
-				print qq{GC2Event[mode_id][GCE_$data] = event_id;\n};
+
+				# Key output
+				if ($rec{type} eq "key") {
+					my $data = $rec{data} || die "Invalid entry near $line - no key\n";
+					if (length($data) == 1) {
+						$data = uc($data);
+						$data = qq{'$data'};
+					} else {
+						$data = "VK_$data";
+					}
+					print qq{Key2Event[mode_id][$data] = event_id;\n};
+				} elsif ($rec{type} eq "gce") {
+					my $data = $rec{data} || die "Invalid entry near $line - no key\n";
+					print qq{GC2Event[mode_id][GCE_$data] = event_id;\n};
+				}
+				print "\n";
 			}
-			print "\n";
 		}
 		%rec = ();
 		$rec{event} = [];
