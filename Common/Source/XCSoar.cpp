@@ -745,6 +745,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   HACCEL hAccelTable;
   INITCOMMONCONTROLSEX icc;
 
+  // load registry backup if it exists
+  LoadRegistryFromFile(TEXT("IPSM\\xcsoar-registry.prf"));
+
   // Registery (early)
   ReadRegistrySettings();
 
@@ -1547,8 +1550,10 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 #endif
               ) {
 
-		// save registry backup first
-		SaveRegistryToFile(TEXT("xcsoar-registry.prf"));
+		// save registry backup first (try a few places)
+		SaveRegistryToFile(TEXT("IPSM\\xcsoar-registry.prf"));
+		// SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
+		SaveRegistryToFile(TEXT("My Documents\\xcsoar-registry.prf"));
 
 		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
 		SendMessage (hWnd, WM_CLOSE, 0, 0);

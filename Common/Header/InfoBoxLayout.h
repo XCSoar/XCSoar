@@ -14,6 +14,7 @@ class InfoBoxLayout {
 				 int *x, int *y,
 				 int *sizex, int *sizey);
   static void GetInfoBoxSizes(RECT rc);
+
 };
 
 

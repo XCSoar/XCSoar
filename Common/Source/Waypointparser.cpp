@@ -351,9 +351,9 @@ void ReadWayPoints(void)
     {
       ReadWayPointFile(fp);
       fclose(fp);
+      // read OK, so set the registry to the actual file name
+      SetRegistryString(szRegistryWayPointFile, szFile1);
     }
-  // read OK, so set the registry to the actual file name
-  SetRegistryString(szRegistryWayPointFile, szFile1);
 
   // read additional waypoint file
 
@@ -365,9 +365,9 @@ void ReadWayPoints(void)
     {
       ReadWayPointFile(fp);
       fclose(fp);
+      // read OK, so set the registry to the actual file name
+      SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);
     }
-  // read OK, so set the registry to the actual file name
-  SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);
 
   UnlockFlightData();
 

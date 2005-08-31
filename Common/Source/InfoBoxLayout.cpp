@@ -18,6 +18,18 @@ extern HINSTANCE hInst; // The current instance
 // 5: infoboxes along right side
 
 
+
+/*
+
+Button 0 (x,y,sx,sy)
+Button 1 (x,y,sx,sy)
+...
+
+InfoBox 0 (x,y,sx,sy)
+
+*/
+
+
 int InfoBoxLayout::InfoBoxGeometry = 0;
 int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
