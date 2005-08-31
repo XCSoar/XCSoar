@@ -14,6 +14,7 @@ class InputEvents {
   static TCHAR* getMode();
   static int getModeID();
   static int InputEvents::findKey(TCHAR *data);
+  static int InputEvents::findGCE(TCHAR *data);
   static pt2Event InputEvents::findEvent(TCHAR *);
   static bool processKey(int key);
   static bool processNmea(TCHAR *data);

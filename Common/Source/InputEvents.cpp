@@ -295,6 +295,8 @@ typedef struct {
 Text2EventSTRUCT Text2Event[256];
 int Text2Event_count;
 
+// Mapping text names of events to the real thing
+TCHAR *Text2GCE[GCE_COUNT];
 
 // Read the data files
 void InputEvents::readFile() {
@@ -342,47 +344,49 @@ void InputEvents::readFile() {
   while (
 	 fgetws(buffer, 2048, fp)
 	 && ((found = swscanf(buffer, TEXT("%[^=]=%[^\n]\n"), key, value)) != EOF)
-	 ) {
+  ) {
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if ((found != 2) || !key || !value) {
 
-      // only if the last entry had some data
-      if (some_data) {
-	// General checks before continue...
-	if (
-	    (wcscmp(d_type, TEXT("key")) == 0)		// Currently only support a key
-	    && (d_mode != NULL)						// We have a mode
-	    && (wcscmp(d_mode, TEXT("")) != 0)		// 
-					
-	    ) {
+		// General checks before continue...
+		if (
+			some_data
+			&& (d_mode != NULL)						// We have a mode
+			&& (wcscmp(d_mode, TEXT("")) != 0)		// 
+		) {
 
-	  // All modes are valid
-	  int mode_id = mode2int(d_mode, true);
+			// All modes are valid
+			int mode_id = mode2int(d_mode, true);
 
-	  // Make label event
-	  // XXX Reuse existing !
-	  if (d_location > 0) {
-	    new_entry = (TCHAR *)malloc((wcslen(d_label)+1)*sizeof(TCHAR));
-	    wcscpy(new_entry, d_label);
-	    InputEvents::makeLabel(mode_id, new_entry, d_location, event_id);
-	  }
+			// Make label event
+			// TODO Consider Reuse existing !
+			if (d_location > 0) {
+				new_entry = (TCHAR *)malloc((wcslen(d_label)+1)*sizeof(TCHAR));
+				wcscpy(new_entry, d_label);
+				InputEvents::makeLabel(mode_id, new_entry, d_location, event_id);
+			}
 
-	  // Make key (automatically reused)
-	  int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
-	  if (key > 0)
-	    Key2Event[mode_id][key] = event_id;
-	}
+			// Make key (automatically reused)
 
-      }
+			if (wcscmp(d_type, TEXT("key")) == 0)	{	// key - Hardware key or keyboard
+				int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
+				if (key > 0)
+					Key2Event[mode_id][key] = event_id;
+			} else if (wcscmp(d_type, TEXT("gce")) == 0) {		// GCE - Glide Computer Event
+				int key = findGCE(d_data);				// Get the int key (eg: APP1 vs 'a')
+				if (key >= 0)
+					GC2Event[mode_id][key] = event_id;
+			}
+		}
 		
-      // Clear all data.
-      some_data = false;
-      wcscpy(d_mode, TEXT(""));
-      wcscpy(d_type, TEXT(""));
-      wcscpy(d_data, TEXT(""));
-	  event_id = 0;
-      wcscpy(d_label, TEXT(""));
-      d_location = 0;
+		// Clear all data.
+		some_data = false;
+		wcscpy(d_mode, TEXT(""));
+		wcscpy(d_type, TEXT(""));
+		wcscpy(d_data, TEXT(""));
+		event_id = 0;
+		wcscpy(d_label, TEXT(""));
+		d_location = 0;
 
     } else {
       if (wcscmp(key, TEXT("mode")) == 0) {
@@ -411,7 +415,7 @@ void InputEvents::readFile() {
       }
     }
 
-  }
+  } // end while
 
   // file was ok, so save it to registry
   SetRegistryString(szRegistryInputFile, szFile1);
@@ -456,6 +460,15 @@ pt2Event InputEvents::findEvent(TCHAR *data) {
       return Text2Event[i].event;
   }
   return NULL;
+}
+
+int InputEvents::findGCE(TCHAR *data) {
+  int i;
+  for (i = 0; i < GCE_COUNT; i++) {
+    if (wcscmp(data, Text2GCE[i]) == 0)
+      return i;
+  }
+  return -1;
 }
 
 // Create EVENT Entry
