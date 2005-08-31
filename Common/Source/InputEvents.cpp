@@ -326,6 +326,7 @@ void InputEvents::readFile() {
   TCHAR key[1024];	// key from scanf
   TCHAR value[1024];	// value from scanf
   TCHAR *new_entry;
+  TCHAR *new_label;		
   int found;
 
   // Init first entry
@@ -354,28 +355,42 @@ void InputEvents::readFile() {
 			&& (wcscmp(d_mode, TEXT("")) != 0)		// 
 		) {
 
-			// All modes are valid
-			int mode_id = mode2int(d_mode, true);
+			TCHAR *token;
 
-			// Make label event
-			// TODO Consider Reuse existing !
-			if (d_location > 0) {
-				new_entry = (TCHAR *)malloc((wcslen(d_label)+1)*sizeof(TCHAR));
-				wcscpy(new_entry, d_label);
-				InputEvents::makeLabel(mode_id, new_entry, d_location, event_id);
-			} 
+			// For each mode
+			token = wcstok(d_mode, TEXT(" "));
+			while( token != NULL ) {
 
-			// Make key (automatically reused)
+				// All modes are valid
+				int mode_id = mode2int(token, true);
 
-			if (wcscmp(d_type, TEXT("key")) == 0)	{	// key - Hardware key or keyboard
-				int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
-				if (key > 0)
-					Key2Event[mode_id][key] = event_id;
-			} else if (wcscmp(d_type, TEXT("gce")) == 0) {		// GCE - Glide Computer Event
-				int key = findGCE(d_data);				// Get the int key (eg: APP1 vs 'a')
-				if (key >= 0)
-					GC2Event[mode_id][key] = event_id;
+				// Make label event
+				// TODO Consider Reuse existing !
+				if (d_location > 0) {
+					// Only copy this once per object - save string space
+					if (!new_label) {
+						new_label = (TCHAR *)malloc((wcslen(d_label)+1)*sizeof(TCHAR));
+						wcscpy(new_label, d_label);
+					}
+					InputEvents::makeLabel(mode_id, new_label, d_location, event_id);
+				} 
+
+				// Make key (Keyboard input)
+				if (wcscmp(d_type, TEXT("key")) == 0)	{	// key - Hardware key or keyboard
+					int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
+					if (key > 0)
+						Key2Event[mode_id][key] = event_id;
+
+				// Make gce (Glide Computer Event)
+				} else if (wcscmp(d_type, TEXT("gce")) == 0) {		// GCE - Glide Computer Event
+					int key = findGCE(d_data);				// Get the int key (eg: APP1 vs 'a')
+					if (key >= 0)
+						GC2Event[mode_id][key] = event_id;
+				}
+
+				token = wcstok( NULL, TEXT(" "));
 			}
+
 		}
 		
 		// Clear all data.
@@ -386,6 +401,7 @@ void InputEvents::readFile() {
 		event_id = 0;
 		wcscpy(d_label, TEXT(""));
 		d_location = 0;
+		new_label = NULL;
 
     } else {
       if (wcscmp(key, TEXT("mode")) == 0) {
@@ -730,7 +746,6 @@ void InputEvents::eventSnailTrail(TCHAR *misc) {
   }  
 }
 
-// XXX This should be just ScreenModes - toggle etc with string
 void InputEvents::eventScreenModes(TCHAR *misc) {
   // toggle switches like this:
   //  -- normal infobox
@@ -801,7 +816,6 @@ void InputEvents::eventAutoZoom(TCHAR* misc) {
 }
 
 
-// TODO Implement specific zom - eg: not scale but actual (for user going to a preset default zoom level)
 void InputEvents::eventScaleZoom(TCHAR *misc) {
   if (wcscmp(misc, TEXT("out")) == 0) {
     MapWindow::Event_ScaleZoom(-1);
@@ -944,6 +958,9 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
    eventSetMcCready
    eventSetBugs
    eventSetBallast
+
+  eventPanWaypoint		- Set pan to a waypoint
+						- Waypoint could be "next", "first", "last", "previous", or named
 */
 
 void InputEvents::eventStatusMessage(TCHAR *misc) {
