@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.85 2005/08/31 13:05:30 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.86 2005/08/31 18:02:02 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -2149,6 +2149,8 @@ void ProcessTimer(void)
     
     if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
       {
+
+	MapWindow::RequestFastRefresh = true;
         
         devLinkTimeout(devA());
         devLinkTimeout(devB());

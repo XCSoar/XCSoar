@@ -408,7 +408,7 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
       if (i==0) {
 	*sizex = 52;
 	*sizey = 20;
-	*x = rc.left+3+(*sizex);
+	*x = rc.left+3-(*sizex); // JMW make it offscreen for now
 	*y = (rc.top);
       } else {
 	if (i<5) {
@@ -417,9 +417,9 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
 	  *x = rc.left+3;
 	  *y = (rc.top+hheight*(i-1+1)-(*sizey)/2);
 	} else {
-	  *sizex = 52;
-	  *sizey = 20;
-	  *x = rc.left+3+hwidth*(i-5);
+	  *sizex = 60;
+	  *sizey = 40;
+	  *x = rc.left+hwidth*(i-5);
 	  *y = (rc.bottom-(*sizey));
 	}
       }
@@ -472,11 +472,6 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   // 
 
   if (gnav) {
-    ButtonLabel::SetLabelText(5,TEXT("skey1"));
-    ButtonLabel::SetLabelText(6,TEXT("skey2"));
-    ButtonLabel::SetLabelText(7,TEXT("skey3"));
-    ButtonLabel::SetLabelText(8,TEXT("skey4"));
-    ButtonLabel::SetLabelText(9,TEXT("skey5"));
     EnableVarioGauge = true;
   }
 
@@ -496,7 +491,7 @@ void ButtonLabel::SetLabelText(int index, TCHAR *text) {
     // error!
     return;
   }
-  if ((text==NULL)||(*text==_T('\0'))) {
+  if ((text==NULL)||(*text==_T('\0'))||(*text==_T(' '))) {
     ShowWindow(hWndButtonWindow[index], SW_HIDE);
   } else {
     SetWindowText(hWndButtonWindow[index], gettext(text));

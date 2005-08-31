@@ -43,7 +43,9 @@ class InputEvents {
   static void eventWaypointDetails(TCHAR *misc);
   static void eventStatusMessage(TCHAR *misc);
   static void eventPlaySound(TCHAR *misc);
-
+  static void eventAdjustMcCready(TCHAR *misc);
+  static void eventAdjustWind(TCHAR *misc);
+  static void eventAdjustVarioFilter(TCHAR *misc);
 };
 
 // GCE = Glide Computer Event
