@@ -2216,7 +2216,7 @@ void LoadRegistryFromFile(TCHAR *szFile)
     while ((i< len)&&(inval[i]!=_T('='))) {
       i++;
     }
-    wcsncpy(name, inval, i); name[i]=0;
+    _tcsncpy(name, inval, i); name[i]=0;
     i++; // skip to next char
     if (inval[i]==_T('\"')) {
       // must be text..
@@ -2226,7 +2226,7 @@ void LoadRegistryFromFile(TCHAR *szFile)
 	j++;
       }
       if (j-1<i) { j++; } // technically this means termination not found
-      wcsncpy(value, inval+i, j-i);  value[j-i]= 0;
+      _tcsncpy(value, inval+i, j-i);  value[j-i]= 0;
       if ((value[0]==_T('\"')) && (value[1]=0)) {
 	value[0]=0;
       }
@@ -2247,9 +2247,9 @@ void LoadRegistryFromFile(TCHAR *szFile)
 
 void SaveRegistryToFile(TCHAR *szFile) 
 {
-  TCHAR lpstrName[nMaxKeyNameSize];
-//  TCHAR lpstrClass[nMaxClassSize];
-  BYTE pValue[nMaxValueValueSize];
+  TCHAR lpstrName[nMaxKeyNameSize+1];
+  //  TCHAR lpstrClass[nMaxClassSize+1];
+  BYTE pValue[nMaxValueValueSize+1];
 
   HKEY hkFrom;
   LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 
@@ -2278,23 +2278,24 @@ void SaveRegistryToFile(TCHAR *szFile)
 			      &nType, pValue, 
 			      &nValueSize);
 
+    if (ERROR_NO_MORE_ITEMS == res) {
+      break;
+    }
+
     // type 1 text
     // type 4 integer (valuesize 4)
     TCHAR outval[nMaxValueValueSize];
     lpstrName[nNameSize]= 0; // null terminate, just in case
     if (nType==4) { // data
-      wsprintf(outval,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
+      _stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
     }
     if (nType==1) { // text
       pValue[nValueSize]= 0; // null terminate, just in case
-      wsprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
+      _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
     }
 
     _fputts(outval, fp); 
 
-    if (ERROR_NO_MORE_ITEMS == res) {
-      break;
-    }
   }
 
   fclose(fp);

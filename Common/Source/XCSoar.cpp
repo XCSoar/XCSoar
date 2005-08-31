@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.83 2005/08/31 07:09:17 scottp Exp $
+  $Id: XCSoar.cpp,v 1.84 2005/08/31 09:52:44 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -744,6 +744,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   MSG msg;
   HACCEL hAccelTable;
   INITCOMMONCONTROLSEX icc;
+
+  // load registry backup if it exists
+  LoadRegistryFromFile(TEXT("IPSM\\xcsoar-registry.prf"));
 
   // Registery (early)
   ReadRegistrySettings();
@@ -1547,8 +1550,10 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 #endif
               ) {
 
-		// save registry backup first
-		SaveRegistryToFile(TEXT("xcsoar-registry.prf"));
+		// save registry backup first (try a few places)
+		SaveRegistryToFile(TEXT("IPSM\\xcsoar-registry.prf"));
+		// SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
+		SaveRegistryToFile(TEXT("My Documents\\xcsoar-registry.prf"));
 
 		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
 		SendMessage (hWnd, WM_CLOSE, 0, 0);

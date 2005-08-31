@@ -105,7 +105,7 @@ void GaugeVario::Render() {
   TCHAR Temp[10];
   SIZE tsize;
 
-  wsprintf(Temp,TEXT("%2.1f"), vval*LIFTMODIFY);
+  _stprintf(Temp,TEXT("%2.1f"), vval*LIFTMODIFY);
   SelectObject(hdcDrawWindow, InfoWindowFont);
   GetTextExtentPoint(hdcDrawWindow, Temp, _tcslen(Temp), &tsize);
 
