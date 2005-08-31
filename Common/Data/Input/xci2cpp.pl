@@ -65,7 +65,7 @@ while (<>) {
 				print qq{Key2Event[mode_id][$data] = event_id;\n};
 			} elsif ($rec{type} eq "gce") {
 				my $data = $rec{data} || die "Invalid entry near $line - no key\n";
-				print qq{GC2Event[mode_id][$data] = event_id;\n};
+				print qq{GC2Event[mode_id][GCE_$data] = event_id;\n};
 			}
 			print "\n";
 		}
