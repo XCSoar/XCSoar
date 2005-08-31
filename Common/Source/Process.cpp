@@ -334,7 +334,9 @@ void FormatterTime::AssignValue(int i) {
 
 }
 
-
+// TODO crop long text or provide alternate
+// e.g. 10300 ft ==> 10,3
+// e.g. "Ardlethan" => "Ardl."
 
 void InfoBoxFormatter::AssignValue(int i) {
   switch (i) {

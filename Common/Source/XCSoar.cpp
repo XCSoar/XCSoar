@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.84 2005/08/31 09:52:44 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.85 2005/08/31 13:05:30 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -62,10 +62,12 @@ HWND                                    hWndMapWindow;  // MapWindow
 HWND          hWndMenuButton = NULL;
 
 
-HWND                                    hWndInfoWindow[NUMINFOWINDOWS];
-HWND                                    hWndTitleWindow[NUMINFOWINDOWS];
+int numInfoWindows = 8;
 
-int                                     InfoType[NUMINFOWINDOWS] = {921102,
+HWND                                    hWndInfoWindow[MAXINFOWINDOWS];
+HWND                                    hWndTitleWindow[MAXINFOWINDOWS];
+
+int                                     InfoType[MAXINFOWINDOWS] = {921102,
                                                                     725525,
                                                                     262144,
                                                                     74518,
@@ -746,7 +748,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   INITCOMMONCONTROLSEX icc;
 
   // load registry backup if it exists
-  LoadRegistryFromFile(TEXT("IPSM\\xcsoar-registry.prf"));
+  LoadRegistryFromFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));
 
   // Registery (early)
   ReadRegistrySettings();
@@ -1008,15 +1010,18 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   ////////////////// do fonts
 
-  FontHeight = (rc.bottom - rc.top ) / FONTHEIGHTRATIO;
+  int fontsz1 = (rc.bottom - rc.top ); 
+  int fontsz2 = (rc.right - rc.left );
 
-  if ((rc.right - rc.left ) < (rc.bottom - rc.top ))
-    FontWidth = (rc.right - rc.left ) / FONTWIDTHRATIO;
+  if (fontsz1>fontsz2) {
+    FontHeight = fontsz1/FONTHEIGHTRATIO/1.2;
+    FontWidth = FontHeight*0.4;
+  } else {
+    FontHeight = fontsz2/FONTHEIGHTRATIO/1.2;
+    FontWidth = FontHeight*0.4;
+  }
 
-  else 
-
-    FontWidth = 0;  // todo sgi
-
+  // sgi todo
         
   memset ((char *)&logfont, 0, sizeof (logfont));
 
@@ -1120,33 +1125,39 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 
   ///////////////////////////////////////// create infoboxes
-
+    
+    InfoBoxLayout::ScreenGeometry(rc);
     InfoBoxLayout::CreateInfoBoxes(rc);
 
     ButtonLabel::CreateButtonLabels(rc);
     ButtonLabel::SetLabelText(0,TEXT("MODE"));
-
   /////////////
 
-  for(i=0;i<NUMINFOWINDOWS;i++)
+  for(i=0;i<numInfoWindows;i++)
     {
-      SendMessage(hWndInfoWindow[i],WM_SETFONT,(WPARAM)InfoWindowFont,MAKELPARAM(TRUE,0));
-      SendMessage(hWndTitleWindow[i],WM_SETFONT,(WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
+      SendMessage(hWndInfoWindow[i],WM_SETFONT,
+		  (WPARAM)InfoWindowFont,MAKELPARAM(TRUE,0));
+      SendMessage(hWndTitleWindow[i],WM_SETFONT,
+		  (WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
     }
 
   ///////////////////////////////////////////////////////
   //// create map window
 
-  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+  hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,
+			       WS_VISIBLE | WS_CHILD 
+			       | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                0, 0, (rc.right - rc.left), 
 			       (rc.bottom-rc.top) ,
                                hWndMainWindow, NULL ,hInstance,NULL);
 
-  hWndMenuButton = CreateWindow(TEXT("BUTTON"),gettext(TEXT("Menu")),WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                0, 0,0,0,hWndMainWindow/*hWndMainWindow*/,NULL,hInst,NULL);
+  hWndMenuButton = CreateWindow(TEXT("BUTTON"),gettext(TEXT("Menu")),
+				WS_VISIBLE | WS_CHILD 
+				| WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+                                0, 0,0,0,hWndMainWindow,NULL,hInst,NULL);
 
-
-  SendMessage(hWndMenuButton,WM_SETFONT,(WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
+  SendMessage(hWndMenuButton,WM_SETFONT,(WPARAM)TitleWindowFont,
+	      MAKELPARAM(TRUE,0));
 
   // JMW moved menu button to center, to make room for thermal indicator
 
@@ -1178,7 +1189,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     ShowInfoBoxes();
 
-    for(i=0;i<NUMINFOWINDOWS;i++)
+    for(i=0;i<numInfoWindows;i++)
       {
         UpdateWindow(hWndInfoWindow[i]);
         UpdateWindow(hWndTitleWindow[i]);
@@ -1449,7 +1460,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       GaugeCDI::Destroy();
       GaugeVario::Destroy();
                         
-      for(i=0;i<NUMINFOWINDOWS;i++)
+      for(i=0;i<numInfoWindows;i++)
         {
           DestroyWindow(hWndInfoWindow[i]);
           DestroyWindow(hWndTitleWindow[i]);
@@ -1551,10 +1562,10 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               ) {
 
 		// save registry backup first (try a few places)
-		SaveRegistryToFile(TEXT("IPSM\\xcsoar-registry.prf"));
+		SaveRegistryToFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));
 		// SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
-		SaveRegistryToFile(TEXT("My Documents\\xcsoar-registry.prf"));
-
+		SaveRegistryToFile(TEXT("\\\\My Documents\\xcsoar-registry.prf"));
+		
 		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
 		SendMessage (hWnd, WM_CLOSE, 0, 0);
                 } else {
@@ -1833,7 +1844,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       ButtonLabel::CheckButtonPress(wmControl);
 
-      for(i=0;i<NUMINFOWINDOWS;i++)
+      for(i=0;i<numInfoWindows;i++)
         {       
           if(wmControl == hWndInfoWindow[i])
             {
@@ -1977,8 +1988,8 @@ void DisplayText(void)
     return;
 
   int i;
-  static TCHAR Caption[NUMINFOWINDOWS][100];
-  static int DisplayType[NUMINFOWINDOWS];
+  static TCHAR Caption[MAXINFOWINDOWS][100];
+  static int DisplayType[MAXINFOWINDOWS];
   static bool first=true;
   static int InfoFocusLast = -1;
   int DisplayTypeLast;
@@ -1995,7 +2006,7 @@ void DisplayText(void)
   }
   InfoFocusLast = InfoFocus;
   
-  for(i=0;i<NUMINFOWINDOWS;i++)
+  for(i=0;i<numInfoWindows;i++)
     {
       Caption[i][0]= 0;
 
@@ -2389,7 +2400,7 @@ void UnlockTerrainDataGraphics() {
 void HideInfoBoxes() {
   int i;
   InfoBoxesHidden = true;
-  for (i=0; i<NUMINFOWINDOWS; i++) {
+  for (i=0; i<numInfoWindows; i++) {
     ShowWindow(hWndInfoWindow[i], SW_HIDE);
     ShowWindow(hWndTitleWindow[i], SW_HIDE);
   }
@@ -2399,7 +2410,7 @@ void HideInfoBoxes() {
 void ShowInfoBoxes() {
   int i;
   InfoBoxesHidden = false;
-  for (i=0; i<NUMINFOWINDOWS; i++) {
+  for (i=0; i<numInfoWindows; i++) {
     ShowWindow(hWndInfoWindow[i], SW_SHOW);
     ShowWindow(hWndTitleWindow[i], SW_SHOW);
   }
@@ -2530,7 +2541,7 @@ void Event_SelectInfoBox(int i) {
     FocusOnWindow(InfoFocus,false);
   }
   InfoFocus+= i;
-  if (InfoFocus>=NUMINFOWINDOWS) {
+  if (InfoFocus>=numInfoWindows) {
     InfoFocus = -1; // deactivate if wrap around
   }
   if (InfoFocus<0) {
