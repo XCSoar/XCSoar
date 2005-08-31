@@ -14,4 +14,9 @@ event=Mode default
 label=Back
 location=1
 
+mode=default
+type=gce
+data=GCE_STARTUP_SIMULATOR
+event=StatusMessage Well this is new
+
 # Always need an end...
