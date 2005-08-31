@@ -9,6 +9,9 @@ print "/* AUTOMATICALLY GENERATED FILE - DO NOT EDIT BY HAND - see Common/Data/I
 print "int event_id;\n";
 print "int mode_id;\n";
 print "\n";
+
+%rec = ();
+$rec{event} = [];
 while (<>) {
 	chomp;
 	$line++;
@@ -17,6 +20,7 @@ while (<>) {
 	if (/^\s*$/) {
 		if ($rec{type}) {
 			my $mode = $rec{mode} || die "Invalid entry near $line - no mode\n";
+			print "event_id = 0;\n";
 
 			if ($rec{type} eq "key") {
 
@@ -28,10 +32,13 @@ while (<>) {
 			}
 
 			# Make event
-			my $event = "&event" . $rec{event};
-			die "Invalid event $event near $line" unless ($event =~ /^&event[A-Z].+$/);
-			my $misc = $rec{misc} || "";
-			print qq{event_id = InputEvents::makeEvent($event, TEXT("$misc"));\n};
+			foreach my $e (@{$rec{event}}) {
+				my ($event, $misc) = split(/ /, $e, 2);
+				$event = "&event$event";
+				die "Invalid event $event near $line" unless ($event =~ /^&event[A-Z].+$/);
+				$misc ||= "";
+				print qq{event_id = InputEvents::makeEvent($event, TEXT("$misc"), event_id);\n};
+			}
 
 			# TODO Could be faster by grouping these together ! (read file to grouped hash, 
 			# then build, one mode2int, less static text in exe file etc.
@@ -58,8 +65,11 @@ while (<>) {
 			print "\n";
 		}
 		%rec = ();
+		$rec{event} = [];
 
 	# We don't need the quotes - ignore for now
+	} elsif (/^event\s*=\s*"*([^"]*)"*$/) {
+		push @{$rec{event}}, $1;
 	} elsif (/^([a-z0-9]+)\s*=\s*"*([^"]*)"*$/) {
 		$rec{$1} = $2;
 
