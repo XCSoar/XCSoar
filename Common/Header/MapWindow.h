@@ -151,10 +151,13 @@ class MapWindow {
 
   static bool RequestFastRefresh;
   static bool RequestFullScreen;
+  
 
   static void GetLocationFromScreen(double *X, double *Y);
   static void DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h);
   static void RequestToggleFullScreen();
+  static void RequestOnFullScreen();
+  static void RequestOffFullScreen();
   static void LatLon2Screen(float lon, float lat, int *scX, int *scY);
   static void LatLon2Screen(double lon, double lat, int *scX, int *scY);
 

@@ -691,15 +691,31 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
   //  -- full screen
   //  -- normal infobox
 
-  if (EnableAuxiliaryInfo) {
-    MapWindow::RequestToggleFullScreen();
+  if (wcscmp(misc, TEXT("normal")) == 0) {
+    MapWindow::RequestOffFullScreen();
     EnableAuxiliaryInfo = false;
+	
+  } else if (wcscmp(misc, TEXT("auxilary")) == 0) {
+    MapWindow::RequestOffFullScreen();
+    EnableAuxiliaryInfo = true;
+
+  } else if (wcscmp(misc, TEXT("full")) == 0) {
+    MapWindow::RequestOnFullScreen();
+    EnableAuxiliaryInfo = false;
+
   } else {
-    if (MapWindow::IsMapFullScreen()) {
-      MapWindow::RequestToggleFullScreen();		    
-    } else {
-      EnableAuxiliaryInfo = true;
-    }
+
+	  if (EnableAuxiliaryInfo) {
+		MapWindow::RequestToggleFullScreen();
+		EnableAuxiliaryInfo = false;
+	  } else {
+		if (MapWindow::IsMapFullScreen()) {
+		  MapWindow::RequestToggleFullScreen();		    
+		} else {
+		  EnableAuxiliaryInfo = true;
+		}
+	  }
+
   }
 }
 
