@@ -259,6 +259,9 @@ int mode_map_count = 0;
 // Key map to Event - Keys (per mode) mapped to events
 int Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
 
+// Glide Computer Events
+int GC2Event[MAX_MODE][GCE_COUNT];
+
 // Events - What do you want to DO
 typedef struct {
   pt2Event event;		// Which function to call (can be any, but should be here)
@@ -329,10 +332,11 @@ void InputEvents::readFile() {
   TCHAR d_mode[256];
   TCHAR d_type[256];
   TCHAR d_data[256];
-  TCHAR d_event[256];
-  TCHAR d_misc[256];
+  int event_id;
   TCHAR d_label[256];
   int d_location;
+	TCHAR d_event[256];
+	TCHAR d_misc[256];
 
   /* Read from the file */
   while (
@@ -354,16 +358,6 @@ void InputEvents::readFile() {
 
 	  // All modes are valid
 	  int mode_id = mode2int(d_mode, true);
-	  int event_id = 0;
-
-	  // Check event exists
-	  // XXX Resuse existing !
-	  pt2Event event = findEvent(d_event);
-	  if (event) {
-	    new_entry = (TCHAR *)malloc((wcslen(d_misc)+1)*sizeof(TCHAR));
-	    wcscpy(new_entry, d_misc);
-	    event_id = makeEvent(event, new_entry);
-	  }
 
 	  // Make label event
 	  // XXX Reuse existing !
@@ -386,27 +380,34 @@ void InputEvents::readFile() {
       wcscpy(d_mode, TEXT(""));
       wcscpy(d_type, TEXT(""));
       wcscpy(d_data, TEXT(""));
-      wcscpy(d_event, TEXT(""));
-      wcscpy(d_misc, TEXT(""));
+	  event_id = 0;
       wcscpy(d_label, TEXT(""));
       d_location = 0;
 
     } else {
       if (wcscmp(key, TEXT("mode")) == 0) {
-	some_data = true;	// Success, we have a real entry
-	wcscpy(d_mode, value);
+		some_data = true;	// Success, we have a real entry
+		wcscpy(d_mode, value);
       } else if (wcscmp(key, TEXT("type")) == 0) {
-	wcscpy(d_type, value);
+		wcscpy(d_type, value);
       } else if (wcscmp(key, TEXT("data")) == 0) {
-	wcscpy(d_data, value);
+		wcscpy(d_data, value);
       } else if (wcscmp(key, TEXT("event")) == 0) {
-	wcscpy(d_event, value);
-      } else if (wcscmp(key, TEXT("misc")) == 0) {
-	wcscpy(d_misc, value);
+		wcscpy(d_event, TEXT(""));
+		wcscpy(d_misc, TEXT(""));
+		swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 ]"), d_event, d_misc);
+
+		// TODO - Consider reusing existing identical events (not worth it right now)
+		pt2Event event = findEvent(d_event);
+		if (event) {
+			new_entry = (TCHAR *)malloc((wcslen(d_misc)+1)*sizeof(TCHAR));
+			wcscpy(new_entry, d_misc);
+			event_id = makeEvent(event, new_entry, event_id);
+		}
       } else if (wcscmp(key, TEXT("label")) == 0) {
-	wcscpy(d_label, value);
+		wcscpy(d_label, value);
       } else if (wcscmp(key, TEXT("location")) == 0) {
-	swscanf(value, TEXT("%d"), &d_location);
+		swscanf(value, TEXT("%d"), &d_location);
       }
     }
 
@@ -605,6 +606,13 @@ bool InputEvents::processNmea(TCHAR* data) {
   return true;
 }
 
+/*
+  InputEvents::processGlideComputer
+  Take virtual inputs from a Glide Computer to do special events
+*/
+bool InputEvents::processGlideComputer(int event_id) {
+	return true;
+}
 
 // EXECUTE an Event - lookup event handler and call back - no return
 void InputEvents::processGo(int eventid) {
@@ -625,9 +633,6 @@ void InputEvents::processGo(int eventid) {
 
 // TODO Keep marker text for log file etc.
 void InputEvents::eventMarkLocation(TCHAR *misc) {
-  // ARH Let the user know what's happened
-  DoStatusMessage(TEXT("Dropped marker"));
-
   LockFlightData();
   MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
   UnlockFlightData();
@@ -885,3 +890,12 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
    eventSetBugs
    eventSetBallast
 */
+
+void InputEvents::eventStatusMessage(TCHAR *misc) {
+	DoStatusMessage(misc);
+}
+
+void InputEvents::eventPlaySound(TCHAR *misc) {
+	PlayResource(misc);
+}
+

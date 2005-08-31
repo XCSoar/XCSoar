@@ -18,6 +18,7 @@ class InputEvents {
   static bool processKey(int key);
   static bool processNmea(TCHAR *data);
   static bool processButton(int bindex);
+  static bool processGlideComputer(int);
   static void processGo(int event_id);
   static int makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next = 0);
   static void makeLabel(int mode_id, TCHAR *label, int location, int event_id);
@@ -36,12 +37,21 @@ class InputEvents {
   static void eventPanCursor(TCHAR *misc);
   static void eventMainMenu(TCHAR *misc);
   static void eventMode(TCHAR *misc);
-
   static void eventStatus(TCHAR *misc);
   static void eventAnalysis(TCHAR *misc);
   static void eventWaypointDetails(TCHAR *misc);
+  static void eventStatusMessage(TCHAR *misc);
+  static void eventPlaySound(TCHAR *misc);
 
 };
 
+// GCE = Glide Computer Event
+enum {
+		GCE_FLIGHTMODE_FINAL,
+		GCE_FLIGHTMODE_CRUISE,
+		GCE_FLIGHTMODE_CIRCLE,
+		GCE_HEIGHT_MAX,
+		GCE_COUNT			// How many we have for arrays etc
+};
 
 #endif

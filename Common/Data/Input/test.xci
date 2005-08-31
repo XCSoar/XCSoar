@@ -1,16 +1,16 @@
 mode=default
 type=key
 data=APP1
-event=Mode
-misc=display1
+event=Mode display1
+event=MarkLocation
+event=StatusMessage Hey we marked something
 label=Go
 location=1
 
 mode=display1
 type=key
 data=APP1
-event=Mode
-misc=default
+event=Mode default
 label=Back
 location=1
 
