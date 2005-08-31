@@ -203,7 +203,7 @@ location=4
 mode=default
 type=key
 data=DOWN
-event=ScaleZoom
+event=ScaleZoom -
 
 mode=default
 type=key

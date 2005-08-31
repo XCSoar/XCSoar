@@ -2150,6 +2150,8 @@ void ProcessTimer(void)
     if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
       {
 
+	MapWindow::RequestFastRefresh = true;
+
         devLinkTimeout(devA());
         devLinkTimeout(devB());
 

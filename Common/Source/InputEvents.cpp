@@ -241,9 +241,8 @@ release 		markse the point of release from tow
 #include <aygshell.h>
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
-
-// XXX What is this for?
-int TrailActive = TRUE;
+#include "Process.h"
+#include "Port.h"
 
 #define MAX_MODE 100
 #define MAX_MODE_STRING 25
@@ -541,7 +540,9 @@ void InputEvents::setMode(TCHAR *mode) {
   // Set button labels
   int i;
   for (i = 0; i < ModeLabel_count[thismode]; i++) {
-    if ((ModeLabel[thismode][i].label != NULL) && (ModeLabel[thismode][i].location > 0))
+    // JMW removed requirement that label has to be non-null
+    if (// (ModeLabel[thismode][i].label != NULL) &&
+	(ModeLabel[thismode][i].location > 0))
       ButtonLabel::SetLabelText(
 				ModeLabel[thismode][i].location,
 				ModeLabel[thismode][i].label
@@ -569,7 +570,14 @@ bool InputEvents::processButton(int bindex) {
   int i;
   // Note - reverse order - last one wins
   for (i = ModeLabel_count[thismode]; i >= 0; i--) {
-    if ((ModeLabel[thismode][i].location == bindex) && (ModeLabel[thismode][i].label != NULL)) {
+    if ((ModeLabel[thismode][i].location == bindex)
+	// && (ModeLabel[thismode][i].label != NULL)
+	// JMW removed requirement of having a label!
+	) {
+
+      // JMW need a debounce method here..
+      if (!Debounce()) return true;
+
       processGo(ModeLabel[thismode][i].event);
       return true;
     }
@@ -733,15 +741,20 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
   if (wcscmp(misc, TEXT("normal")) == 0) {
     MapWindow::RequestOffFullScreen();
     EnableAuxiliaryInfo = false;
-
   } else if (wcscmp(misc, TEXT("auxilary")) == 0) {
     MapWindow::RequestOffFullScreen();
     EnableAuxiliaryInfo = true;
-
+  } else if (wcscmp(misc, TEXT("toggleauxiliary")) == 0) {
+    MapWindow::RequestOffFullScreen();
+    EnableAuxiliaryInfo = !EnableAuxiliaryInfo;
   } else if (wcscmp(misc, TEXT("full")) == 0) {
     MapWindow::RequestOnFullScreen();
-    EnableAuxiliaryInfo = false;
-
+  } else if (wcscmp(misc, TEXT("togglefull")) == 0) {
+    if (MapWindow::IsMapFullScreen()) {
+      MapWindow::RequestOffFullScreen();
+    } else {
+      MapWindow::RequestOnFullScreen();
+    }
   } else {
 
 	  if (EnableAuxiliaryInfo) {
@@ -790,6 +803,14 @@ void InputEvents::eventAutoZoom(TCHAR* misc) {
 
 // TODO Implement specific zom - eg: not scale but actual (for user going to a preset default zoom level)
 void InputEvents::eventScaleZoom(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("out")) == 0) {
+    MapWindow::Event_ScaleZoom(-1);
+    return;
+  }
+  if (wcscmp(misc, TEXT("in")) == 0) {
+    MapWindow::Event_ScaleZoom(1);
+    return;
+  }
   if (wcscmp(misc, TEXT("-")) == 0) {
     MapWindow::Event_ScaleZoom(-1);
     return;
@@ -933,3 +954,52 @@ void InputEvents::eventPlaySound(TCHAR *misc) {
 	PlayResource(misc);
 }
 
+
+void InputEvents::eventAdjustMcCready(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("up")) == 0) {
+    McCreadyProcessing(1);
+  }
+  if (wcscmp(misc, TEXT("down")) == 0) {
+    McCreadyProcessing(-1);
+  }
+  if (wcscmp(misc, TEXT("auto")) == 0) {
+    McCreadyProcessing(0);
+  }
+}
+
+
+void InputEvents::eventAdjustWind(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("up")) == 0) {
+    WindSpeedProcessing(1);
+  }
+  if (wcscmp(misc, TEXT("down")) == 0) {
+    WindSpeedProcessing(-1);
+  }
+  if (wcscmp(misc, TEXT("left")) == 0) {
+    WindSpeedProcessing(-2);
+  }
+  if (wcscmp(misc, TEXT("right")) == 0) {
+    WindSpeedProcessing(2);
+  }
+  if (wcscmp(misc, TEXT("save")) == 0) {
+    WindSpeedProcessing(0);
+  }
+}
+
+
+void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
+  if (!(Port2Available && GPS_INFO.VarioAvailable))
+    return;
+
+  //  Port2WriteNMEA(TEXT("PDAPL,52"));
+
+  if (wcscmp(misc, TEXT("slow")) == 0) {
+    Port2WriteNMEA(TEXT("PDVTM,2"));
+  }
+  if (wcscmp(misc, TEXT("medium")) == 0) {
+    Port2WriteNMEA(TEXT("PDVTM,1"));
+  }
+  if (wcscmp(misc, TEXT("fast")) == 0) {
+    Port2WriteNMEA(TEXT("PDVTM,0"));
+  }
+}

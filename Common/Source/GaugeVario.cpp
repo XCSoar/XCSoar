@@ -72,6 +72,9 @@ void GaugeVario::Render() {
   SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
   SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
 
+  TCHAR Temp[10];
+  SIZE tsize;
+
   // draw dashes
   POINT bit[3];
   int i;
@@ -90,22 +93,17 @@ void GaugeVario::Render() {
   i = (int)(vval*degrees_per_unit*LIFTMODIFY);
   i = min(gmax,max(-gmax,i));
 
-  dx = -xoffset+15; dy = 6;
+  dx = -xoffset+10; dy = 4;
   rotate(&dx, &dy, i);
   bit[0].x = (int)(dx+xoffset); bit[0].y = (int)(dy+yoffset);
 
-  dx = -xoffset+15; dy = -6;
+  dx = -xoffset+10; dy = -4;
   rotate(&dx, &dy, i);
   bit[1].x = (int)(dx+xoffset); bit[1].y = (int)(dy+yoffset);
 
-  dx = -xoffset+2; dy = 0;
+  dx = -xoffset+3; dy = 0;
   rotate(&dx, &dy, i);
   bit[2].x = (int)(dx+xoffset); bit[2].y = (int)(dy+yoffset);
-
-  Polygon(hdcDrawWindow, bit, 3);
-
-  TCHAR Temp[10];
-  SIZE tsize;
 
   _stprintf(Temp,TEXT("%2.1f"), vval*LIFTMODIFY);
   SelectObject(hdcDrawWindow, InfoWindowFont);
@@ -113,6 +111,8 @@ void GaugeVario::Render() {
 
   ExtTextOut(hdcDrawWindow, rc.right-tsize.cx-2, yoffset-tsize.cy/2,
 	     0, NULL, Temp, _tcslen(Temp), NULL);
+
+  Polygon(hdcDrawWindow, bit, 3);
 
   BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
 

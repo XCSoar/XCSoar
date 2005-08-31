@@ -40,6 +40,7 @@
 #include "GaugeVario.h"
 #include "GaugeCDI.h"
 
+int TrailActive = TRUE;
 
 ///////////////////////////////// Initialisation
 
