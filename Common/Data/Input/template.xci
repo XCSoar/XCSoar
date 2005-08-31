@@ -181,6 +181,7 @@ location=1
 mode=default
 type=key
 data=APP2
+event=StatusMessage Dropped marker
 event=MarkLocation
 label=""
 location=2
@@ -195,8 +196,7 @@ location=3
 mode=default
 type=key
 data=APP4
-event=Mode
-misc=display1
+event=Mode display1
 label=""
 location=4
 
@@ -204,13 +204,11 @@ mode=default
 type=key
 data=DOWN
 event=ScaleZoom
-misc=-
 
 mode=default
 type=key
 data=UP
-event=ScaleZoom
-misc=+
+event=ScaleZoom +
 
 # Always active buttons...
 mode=default
@@ -221,8 +219,7 @@ event=MarkLocation
 mode=default
 type=key
 data=r
-event=ScreenModes
-misc=toggle
+event=ScreenModes toggle
 
 # ------------
 # mode=infobox
@@ -230,64 +227,55 @@ misc=toggle
 mode=infobox
 type=key
 data=APP1
-event=SelectInfoBox
-misc=previous
+event=SelectInfoBox <<
 label=<<
 location=1
 
 mode=infobox
 type=key
 data=APP4
-event=SelectInfoBox
-misc=next
+event=SelectInfoBox next
 label=>>
 location=4
 
 mode=infobox
 type=key
 data=APP2
-event=ChangeInfoBoxType
-misc=previous
+event=ChangeInfoBoxType previous
 label=<type
 location=2
 
 mode=infobox
 type=key
 data=APP3
-event=ChangeInfoBoxType
-misc=next
+event=ChangeInfoBoxType next
 label=type>
 location=3
 
 mode=infobox
 type=key
 data=UP
-event=DoInfoKey
-misc=up
+event=DoInfoKey up
 
 mode=infobox
 type=key
 data=DOWN
-event=DoInfoKey
-misc=down
+event=DoInfoKey down
 
 mode=infobox
 type=key
 data=LEFT
-event=DoInfoKey
-misc=left
+event=DoInfoKey left
 
 mode=infobox
 type=key
 data=RIGHT
-event=DoInfoKey
-misc=right
+event=DoInfoKey right
 
 mode=infobox
 type=key
 data=RETURN
-event=DoInfoKey
-misc=return
+event=DoInfoKey return
 
 
 # -------------
@@ -303,50 +291,43 @@ location=1
 mode=display1
 type=key
 data=APP2
-event=ScreenModes
-misc=toggle
+event=ScreenModes toggle
 label="Layout"
 location=2
 
 mode=display1
 type=key
 data=APP3
-event=Pan
-misc=toggle
+event=Pan toggle
 label="Pan"
 location=3
 
 mode=display1
 type=key
 data=APP4
-event=Mode
-misc=display2
+event=Mode display2
 label=".."
 location=4
 
 mode=display1
 type=key
 data=UP
-event=PanCursor
-misc=up
+event=PanCursor up
 
 mode=display1
 type=key
 data=DOWN
-event=PanCursor
-misc=down
+event=PanCursor down
 
 mode=display1
 type=key
 data=LEFT
-event=PanCursor
-misc=left
+event=PanCursor left
 
 mode=display1
 type=key
 data=RIGHT
-event=PanCursor
-misc=right
+event=PanCursor right
 
 # -------------
 # mode=display2
@@ -355,57 +336,49 @@ misc=right
 mode=display2
 type=key
 data=APP1
-event=AutoZoom
-misc=toggle
+event=AutoZoom toggle
 label="AutoZoom"
 location=1
 
 mode=display2
 type=key
 data=APP2
-event=SnailTrail
-misc=toggle
+event=SnailTrail toggle
 label="Snail Trail"
 location=2
 
 mode=display2
 type=key
 data=APP3
-event=Sounds
-misc=toggle
+event=Sounds toggle
 label="Vario Sounds"
 location=3
 
 mode=display2
 type=key
 data=APP4
-event=Mode
-misc=default
+event=Mode default
 label=".."
 location=4
 
 mode=display2
 type=key
 data=UP
-event=PanCursor
-misc=up
+event=PanCursor up
 
 mode=display2
 type=key
 data=DOWN
-event=PanCursor
-misc=down
+event=PanCursor down
 
 mode=display2
 type=key
 data=LEFT
-event=PanCursor
-misc=left
+event=PanCursor left
 
 mode=display2
 type=key
 data=RIGHT
-event=PanCursor
-misc=right
+event=PanCursor right
 
 
