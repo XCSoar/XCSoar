@@ -316,12 +316,6 @@ void MapWindow::Event_AutoZoom(int vswitch) {
     AutoZoom = (bool)vswitch; // 0 off, 1 on
   }
   
-  // ARH Let user know what's happening
-  if (AutoZoom)
-    DoStatusMessage(TEXT("AutoZoom ON"));
-  else
-    DoStatusMessage(TEXT("AutoZoom OFF"));
-  
   if (AutoZoom) {
     EnablePan = false;
     PanX = 0.0;
@@ -407,12 +401,6 @@ void MapWindow::Event_Pan(int vswitch) {
     EnablePan = (bool)vswitch; // 0 off, 1 on
   }
 
-  // ARH Let the user know what's happening
-  if (EnablePan)
-    DoStatusMessage(TEXT("Pan mode ON"));
-  else
-    DoStatusMessage(TEXT("Pan mode OFF"));
-  
   if (!EnablePan) {
     PanX = 0.0;
     PanY = 0.0;
