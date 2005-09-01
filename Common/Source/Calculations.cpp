@@ -770,10 +770,11 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 least_squares_update(Calculated->ClimbStartTime/3600.0,
                                      Calculated->ClimbStartAlt);
 
-			  // TODO InputEvents GCE - Move this to InputEvents
-			  //	Consider a way to take the CircleZoom and other logic into InputEvents instead
+	      // TODO InputEvents GCE - Move this to InputEvents
+	      // Consider a way to take the CircleZoom and other logic
+	      // into InputEvents instead
               SwitchZoomClimb(true, LEFT);
-			  InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
+	      InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
             }
         }
       else
@@ -816,8 +817,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                                      Calculated->CruiseStartAlt);
 
               SwitchZoomClimb(false, LEFT);
-
-			  InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
+ 	      InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
 
             }
         }
@@ -1333,12 +1333,12 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
            &&(ActiveWayPoint>=0))
           ||(TaskAborted)) {
         // JMW on final glide
-		if (Calculated->FinalGlide == 0)
-			InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE);
+	if (Calculated->FinalGlide == 0)
+	  InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE);
         Calculated->FinalGlide = 1;
       } else {
-		if (Calculated->FinalGlide == 1)
-			InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
+	if (Calculated->FinalGlide == 1)
+	  InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
         Calculated->FinalGlide = 0;
       }
 
@@ -1543,9 +1543,11 @@ void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         {
           BelowGlide = FALSE;
 
-		// TODO InputEvents GCE - This should now be moved to a GCE
-		  // TODO Playing hard coded WAV is bad - move to configuration (maybe InputEvents)
-          sndPlaySound(TEXT("My Documents\\FinalGlide.wav"),SND_ASYNC|SND_NODEFAULT);
+	  // TODO InputEvents GCE - This should now be moved to a GCE
+	  // TODO Playing hard coded WAV is bad - move to
+	  // configuration (maybe InputEvents)
+          sndPlaySound(TEXT("My Documents\\FinalGlide.wav"),
+		       SND_ASYNC|SND_NODEFAULT);
         }
     }
   else
@@ -1553,8 +1555,10 @@ void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       if(Calculated->TaskAltitudeDifference < 10)
         {
           BelowGlide = TRUE;
-		  // TODO InputEvents GCE - Move to InputEvents probably triggered by a GCE
-          sndPlaySound(TEXT("My Documents\\Tiptoe.wav"),SND_ASYNC|SND_NODEFAULT);
+	  // TODO InputEvents GCE - Move to InputEvents probably
+	  // triggered by a GCE
+          sndPlaySound(TEXT("My Documents\\Tiptoe.wav"),
+		       SND_ASYNC|SND_NODEFAULT);
         }
     }
 }

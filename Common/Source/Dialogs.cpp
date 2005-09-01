@@ -39,7 +39,7 @@
 #include "units.h"
 #include "GaugeVario.h"
 #include "InfoBoxLayout.h"
-
+#include "InputEvents.h"
 
 #define USE_ARH_COLOUR_SELECTOR 1
 
@@ -3184,6 +3184,12 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
       return TRUE;
 
+    case WM_KEYUP:
+      DoStatusMessage(TEXT("Event in dialog"));
+      if (InputEvents::processKey(wParam)) {
+	return TRUE;
+      }
+      break;
     case WM_COMMAND:
       if (LOWORD(wParam) == IDOK)
         {

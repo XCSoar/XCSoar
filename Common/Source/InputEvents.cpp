@@ -452,6 +452,26 @@ int InputEvents::findKey(TCHAR *data) {
     return VK_APP5;
   else if (wcscmp(data, TEXT("APP6")) == 0)
     return VK_APP6;
+  else if (wcscmp(data, TEXT("F1")) == 0)
+    return VK_F1;
+  else if (wcscmp(data, TEXT("F2")) == 0)
+    return VK_F2;
+  else if (wcscmp(data, TEXT("F3")) == 0)
+    return VK_F3;
+  else if (wcscmp(data, TEXT("F4")) == 0)
+    return VK_F4;
+  else if (wcscmp(data, TEXT("F5")) == 0)
+    return VK_F5;
+  else if (wcscmp(data, TEXT("F6")) == 0)
+    return VK_F6;
+  else if (wcscmp(data, TEXT("F7")) == 0)
+    return VK_F7;
+  else if (wcscmp(data, TEXT("F8")) == 0)
+    return VK_F8;
+  else if (wcscmp(data, TEXT("F9")) == 0)
+    return VK_F9;
+  else if (wcscmp(data, TEXT("F10")) == 0)
+    return VK_F10;
   else if (wcscmp(data, TEXT("LEFT")) == 0)
     return VK_LEFT;
   else if (wcscmp(data, TEXT("RIGHT")) == 0)
@@ -1020,3 +1040,26 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
     Port2WriteNMEA(TEXT("PDVTM,0"));
   }
 }
+
+
+void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("next")) == 0) {
+    NextUpDown(1); // next
+  }
+  if (wcscmp(misc, TEXT("previous")) == 0) {
+    NextUpDown(-1); // previous
+  }
+}
+
+void InputEvents::eventAbortTask(TCHAR *misc) {
+  //  if (wcscmp(misc, TEXT("toggle")) == 0) {
+    LockFlightData();
+    ResumeAbortTask();
+    UnlockFlightData();
+    //  }
+}
+
+
+// JMW TODO: have all inputevents return bool, indicating whether
+// the button should after processing be hilit or not.
+// this allows the buttons to indicate whether things are enabled/disabled

@@ -313,7 +313,7 @@ void MapWindow::Event_AutoZoom(int vswitch) {
   if (vswitch== -1) {
     AutoZoom = !AutoZoom;
   } else {
-    AutoZoom = vswitch; // 0 off, 1 on
+    AutoZoom = (bool)vswitch; // 0 off, 1 on
   }
 
   // ARH Let user know what's happening
@@ -404,7 +404,7 @@ void MapWindow::Event_Pan(int vswitch) {
   if (vswitch == -1) {
     EnablePan = !EnablePan;
   } else {
-    EnablePan = vswitch; // 0 off, 1 on
+    EnablePan = (bool)vswitch; // 0 off, 1 on
   }
 
   // ARH Let the user know what's happening
@@ -721,11 +721,17 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     //		info	- Standard info box controls ???
     //		status	- Status message being displayed
 
-    if (!DialogActive) // JMW prevent keys being trapped if dialog is active
+    if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
 	if (InputEvents::processKey(wParam)) {
 	  //	  DoStatusMessage(TEXT("Event in default"));
 	  return TRUE; // don't go to default handler
 	}
+    } else {
+      // DoStatusMessage(TEXT("Event in dialog"));
+      if (InputEvents::processKey(wParam)) {
+	return TRUE; // don't go to default handler
+      }
+    }
     break;
   }
 

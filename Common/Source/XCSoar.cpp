@@ -1014,11 +1014,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   int fontsz2 = (rc.right - rc.left );
 
   if (fontsz1>fontsz2) {
-    FontHeight = fontsz1/FONTHEIGHTRATIO/1.2;
-    FontWidth = FontHeight*0.4;
+    FontHeight = (int)(fontsz1/FONTHEIGHTRATIO/1.2);
+    FontWidth = (int)(FontHeight*0.4);
   } else {
-    FontHeight = fontsz2/FONTHEIGHTRATIO/1.2;
-    FontWidth = FontHeight*0.4;
+    FontHeight = (int)(fontsz2/FONTHEIGHTRATIO/1.2);
+    FontWidth = (int)(FontHeight*0.4);
   }
 
   // sgi todo
@@ -1293,6 +1293,8 @@ bool Debounce() {
   }
 }
 
+
+
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   int i;
@@ -1305,7 +1307,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_USER:
       DoStatusMessage(TEXT("Closest Airfield\r\nChanged!"));
 	  break;
-
 
     case WM_ERASEBKGND:
       return TRUE; // JMW trying to reduce screen flicker
@@ -1398,6 +1399,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	if (InputEvents::processKey(wParam)) {
 	  //	  DoStatusMessage(TEXT("Event in infobox"));
+	}
+      } else {
+	//	DoStatusMessage(TEXT("Event in dlg"));
+	if (InputEvents::processKey(wParam)) {
 	}
       }
       break;
