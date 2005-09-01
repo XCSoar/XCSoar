@@ -28,12 +28,12 @@ makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventScaleZoom, TEXT("-"), event_id);
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("-"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_DOWN] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventScaleZoom, TEXT("+"), event_id);
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("+"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_UP] = event_id;
 
@@ -48,7 +48,7 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id]['R'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT("<<"), event_id);
+event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT("previous"), event_id);
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
 makeLabel(mode_id,TEXT("<<"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
@@ -121,38 +121,52 @@ makeLabel(mode_id,TEXT(".."),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPanCursor, TEXT("up"), event_id);
+event_id = InputEvents::makeEvent(&eventPan, TEXT("up"), event_id);
 mode_id = InputEvents::mode2int(TEXT("display1"), true);
 Key2Event[mode_id][VK_UP] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("display2"), true);
+Key2Event[mode_id][VK_UP] = event_id;
+
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPanCursor, TEXT("down"), event_id);
+event_id = InputEvents::makeEvent(&eventPan, TEXT("down"), event_id);
 mode_id = InputEvents::mode2int(TEXT("display1"), true);
 Key2Event[mode_id][VK_DOWN] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("display2"), true);
+Key2Event[mode_id][VK_DOWN] = event_id;
+
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPanCursor, TEXT("left"), event_id);
+event_id = InputEvents::makeEvent(&eventPan, TEXT("left"), event_id);
 mode_id = InputEvents::mode2int(TEXT("display1"), true);
 Key2Event[mode_id][VK_LEFT] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("display2"), true);
+Key2Event[mode_id][VK_LEFT] = event_id;
+
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPanCursor, TEXT("right"), event_id);
+event_id = InputEvents::makeEvent(&eventPan, TEXT("right"), event_id);
 mode_id = InputEvents::mode2int(TEXT("display1"), true);
 Key2Event[mode_id][VK_RIGHT] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("display2"), true);
+Key2Event[mode_id][VK_RIGHT] = event_id;
+
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventAutoZoom, TEXT("toggle"), event_id);
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("auto toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("display2"), true);
 makeLabel(mode_id,TEXT("AutoZoom"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("display2"), true);
 makeLabel(mode_id,TEXT("Snail Trail"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventSounds, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventSounds, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("display2"), true);
 makeLabel(mode_id,TEXT("Vario Sounds"),3,event_id);
@@ -163,26 +177,6 @@ event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("display2"), true);
 makeLabel(mode_id,TEXT(".."),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventPanCursor, TEXT("up"), event_id);
-mode_id = InputEvents::mode2int(TEXT("display2"), true);
-Key2Event[mode_id][VK_UP] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventPanCursor, TEXT("down"), event_id);
-mode_id = InputEvents::mode2int(TEXT("display2"), true);
-Key2Event[mode_id][VK_DOWN] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventPanCursor, TEXT("left"), event_id);
-mode_id = InputEvents::mode2int(TEXT("display2"), true);
-Key2Event[mode_id][VK_LEFT] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventPanCursor, TEXT("right"), event_id);
-mode_id = InputEvents::mode2int(TEXT("display2"), true);
-Key2Event[mode_id][VK_RIGHT] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Waiting for GPS Connection"), event_id);

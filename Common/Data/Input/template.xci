@@ -108,7 +108,7 @@
 #event=Mode
 #misc=test1
 #mode=default
-#label=""
+#label=
 #location=1
 #
 #type=key
@@ -116,7 +116,7 @@
 #event=Mode
 #misc=test2
 #mode=default
-#label=""
+#label=
 #location=2
 #
 #type=key
@@ -124,7 +124,7 @@
 #event=Mode
 #misc=test3
 #mode=default
-#label=""
+#label=
 #location=3
 #
 #type=key
@@ -132,7 +132,7 @@
 #event=Mode
 #misc=default
 #mode=default
-#label=""
+#label=
 #location=4
 #
 
@@ -177,7 +177,7 @@ mode=default
 type=key
 data=APP1
 event=MainMenu
-label=""
+label=
 location=1
 
 mode=default
@@ -185,32 +185,32 @@ type=key
 data=APP2
 event=StatusMessage Dropped marker
 event=MarkLocation
-label=""
+label=
 location=2
 
 mode=default
 type=key
 data=APP3
 event=SelectInfoBox
-label=""
+label=
 location=3
 
 mode=default
 type=key
 data=APP4
 event=Mode display1
-label=""
+label=
 location=4
 
 mode=default
 type=key
 data=DOWN
-event=ScaleZoom -
+event=Zoom -
 
 mode=default
 type=key
 data=UP
-event=ScaleZoom +
+event=Zoom +
 
 # Always active buttons...
 mode=default
@@ -229,7 +229,7 @@ event=ScreenModes toggle
 mode=infobox
 type=key
 data=APP1
-event=SelectInfoBox <<
+event=SelectInfoBox previous
 label=<<
 location=1
 
@@ -283,6 +283,7 @@ event=DoInfoKey return
 # -------------
 # mode=display1
 # -------------
+# XXX This looks wrong - why is it "clear" ? and should also be "toggle"
 mode=display1
 type=key
 data=APP1
@@ -311,25 +312,25 @@ event=Mode display2
 label=".."
 location=4
 
-mode=display1
+mode=display1 display2
 type=key
 data=UP
-event=PanCursor up
+event=Pan up
 
-mode=display1
+mode=display1 display2
 type=key
 data=DOWN
-event=PanCursor down
+event=Pan down
 
-mode=display1
+mode=display1 display2
 type=key
 data=LEFT
-event=PanCursor left
+event=Pan left
 
-mode=display1
+mode=display1 display2
 type=key
 data=RIGHT
-event=PanCursor right
+event=Pan right
 
 # -------------
 # mode=display2
@@ -338,13 +339,14 @@ event=PanCursor right
 mode=display2
 type=key
 data=APP1
-event=AutoZoom toggle
+event=Zoom auto toggle
 label="AutoZoom"
 location=1
 
 mode=display2
 type=key
 data=APP2
+event=SnailTrail show
 event=SnailTrail toggle
 label="Snail Trail"
 location=2
@@ -352,6 +354,7 @@ location=2
 mode=display2
 type=key
 data=APP3
+event=Sounds show
 event=Sounds toggle
 label="Vario Sounds"
 location=3
@@ -362,28 +365,6 @@ data=APP4
 event=Mode default
 label=".."
 location=4
-
-mode=display2
-type=key
-data=UP
-event=PanCursor up
-
-mode=display2
-type=key
-data=DOWN
-event=PanCursor down
-
-mode=display2
-type=key
-data=LEFT
-event=PanCursor left
-
-mode=display2
-type=key
-data=RIGHT
-event=PanCursor right
-
-
 
 # -------------------
 # GlideComputerEvents
