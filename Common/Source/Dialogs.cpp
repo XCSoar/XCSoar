@@ -3185,6 +3185,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       return TRUE;
 
     case WM_KEYUP:
+		// XXX SDP - This looks like a debug line ? JW?
       DoStatusMessage(TEXT("Event in dialog"));
       if (InputEvents::processKey(wParam)) {
 	return TRUE;

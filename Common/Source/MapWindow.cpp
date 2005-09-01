@@ -378,6 +378,17 @@ void MapWindow::Event_Terrain(int vswitch) {
   EnableTopology = (val & 0x01);
   EnableTerrain = (val & 0x02)>>1;
 
+  // XXX InputEvents - need to move all of this function to InputEvents
+  //		toggle
+  //		toggle terrain
+  //		toggle topology
+  //		terrain topology
+  //		topology terrain
+  //		topology
+  //		terrain
+  //		show terrain
+  //		show topology
+  //		show
   // TODO SCOTT I18N - This should be a DoStatusMessage
   // 	(Remove Playsound above, Support multi line text in gettext
   // 	etc, simplify set of text below)
