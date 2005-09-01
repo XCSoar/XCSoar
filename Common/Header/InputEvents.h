@@ -45,6 +45,9 @@ class InputEvents {
   static void eventAdjustVarioFilter(TCHAR *misc);
   static void eventAdjustWaypoint(TCHAR *misc);
   static void eventAbortTask(TCHAR *misc);
+  static void eventBugs(TCHAR *misc);
+  static void eventBallast(TCHAR *misc);
+  static void eventLogger(TCHAR *misc);
 };
 
 // GCE = Glide Computer Event
@@ -58,6 +61,8 @@ enum {
 		GCE_GPS_FIX_WAIT,
 		GCE_STARTUP_SIMULATOR,
 		GCE_STARTUP_REAL,
+		GCE_TAKEOFF,
+		GCE_LANDING,
 
 		GCE_COUNT			// How many we have for arrays etc
 };

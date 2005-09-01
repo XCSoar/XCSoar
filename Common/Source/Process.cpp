@@ -293,15 +293,38 @@ int DetectCurrentTime() {
 
 
 int DetectStartTime() {
+  // JMW added restart ability
+  //
+  // we want this to display landing time until next takeoff 
+
   static int starttime = -1;
-  if (starttime == -1) {
-    if (GPS_INFO.Speed > 5) {
+  static int lastflighttime = -1;
+
+  if ((starttime == -1)&&(CALCULATED_INFO.Flying)) {
+    // hasn't been started yet
+
       starttime = (int)GPS_INFO.Time;
-    } else {
-      return 0;
+
+      lastflighttime = -1;
+  }
+
+  if (CALCULATED_INFO.Flying) {
+    return (int)GPS_INFO.Time-starttime;
+  } else {
+    if (lastflighttime == -1) {
+      // hasn't been stopped yet
+      if (starttime) {
+	lastflighttime = (int)(GPS_INFO.Time-starttime);
+      } else {
+	return 0; // no last flight time
+      }
+      // reset for next takeoff
+      starttime = -1;
     }
   }
-  return (int)GPS_INFO.Time-starttime;
+
+  // return last flighttime if it exists
+  return max(0,lastflighttime);
 }
 
 

@@ -569,7 +569,7 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
   } else if (wcscmp(misc, TEXT("auxilary")) == 0) {
     MapWindow::RequestOffFullScreen();
     EnableAuxiliaryInfo = true;
-  } else if (wcscmp(misc, TEXT("toggleauxilary")) == 0) {
+  } else if (wcscmp(misc, TEXT("toggleauxiliary")) == 0) {
     MapWindow::RequestOffFullScreen();
     EnableAuxiliaryInfo = !EnableAuxiliaryInfo;
   } else if (wcscmp(misc, TEXT("full")) == 0) {
@@ -672,10 +672,10 @@ void InputEvents::eventPan(TCHAR *misc) {
   else if (wcscmp(misc, TEXT("right")) == 0)
     MapWindow::Event_PanCursor(-1,0);
   else if (wcscmp(misc, TEXT("show")) == 0) {
-	  if (MapWindow::isPan)
-			DoStatusMessage(TEXT("Pan mode ON"));
-		else
-			DoStatusMessage(TEXT("Pan mode OFF"));
+    if (MapWindow::isPan())
+      DoStatusMessage(TEXT("Pan mode ON"));
+    else
+      DoStatusMessage(TEXT("Pan mode OFF"));
   }
 
 }
@@ -732,6 +732,9 @@ void InputEvents::eventDoInfoKey(TCHAR *misc) {
 
 void InputEvents::eventMode(TCHAR *misc) {
   InputEvents::setMode(misc);
+
+  // trigger redraw of screen to reduce blank area under windows
+  MapWindow::RequestFastRefresh = true;
 }
 
 void InputEvents::eventMainMenu(TCHAR *misc) {
@@ -770,7 +773,15 @@ void InputEvents::eventAdjustMcCready(TCHAR *misc) {
   }
   if (wcscmp(misc, TEXT("auto")) == 0) {
     McCreadyProcessing(0);
+
+    if (CALCULATED_INFO.AutoMcCready) {
+      DoStatusMessage(TEXT("Auto McCready ON"));
+    } else {
+      DoStatusMessage(TEXT("Auto McCready OFF"));
+    }
+
   }
+  // XXX TODO show, auto show
 }
 
 
@@ -831,6 +842,93 @@ void InputEvents::eventAbortTask(TCHAR *misc) {
     //  }
 }
 
+#include "device.h"
+#include "McReady.h"
+
+void InputEvents::eventBugs(TCHAR *misc) {
+  double oldBugs = BUGS;
+  LockFlightData();
+
+  if (wcscmp(misc, TEXT("up")) == 0) {
+    BUGS+= 0.1;
+  } 
+  if (wcscmp(misc, TEXT("down")) == 0) {
+    BUGS-= 0.1;
+  } 
+  if (wcscmp(misc, TEXT("max")) == 0) {
+    BUGS= 1.0;
+  } 
+  if (wcscmp(misc, TEXT("min")) == 0) {
+    BUGS= 0.0;
+  } 
+  if (wcscmp(misc, TEXT("show")) == 0) {
+    TCHAR Temp[100];
+    wsprintf(Temp,TEXT("Bugs Performance %d"),(int)(BUGS*100));
+    DoStatusMessage(Temp);    
+  } 
+  if (BUGS != oldBugs) {
+    BUGS= min(1.0,max(0.5,BUGS));
+    
+    devPutBugs(devA(), BUGS);
+    devPutBugs(devB(), BUGS);
+    GlidePolar::SetBallast();
+  }
+  UnlockFlightData();
+}
+
+
+void InputEvents::eventBallast(TCHAR *misc) {
+  double oldBallast= BALLAST;
+  LockFlightData();
+  if (wcscmp(misc, TEXT("up")) == 0) {
+    BALLAST+= 0.1;
+  } 
+  if (wcscmp(misc, TEXT("down")) == 0) {
+    BALLAST-= 0.1;
+  } 
+  if (wcscmp(misc, TEXT("max")) == 0) {
+    BALLAST= 1.0;
+  } 
+  if (wcscmp(misc, TEXT("min")) == 0) {
+    BALLAST= 0.0;
+  } 
+  if (wcscmp(misc, TEXT("show")) == 0) {
+    TCHAR Temp[100];
+    wsprintf(Temp,TEXT("Ballast %d %%"),(int)(BALLAST*100));
+    DoStatusMessage(Temp);
+  } 
+  if (BALLAST != oldBallast) {
+    BALLAST=min(1.0,max(0.0,BALLAST));
+    devPutBallast(devA(), BALLAST);
+    devPutBallast(devB(), BALLAST);
+    GlidePolar::SetBallast();
+  }
+  UnlockFlightData();
+}
+
+#include "Task.h"
+
+void InputEvents::eventLogger(TCHAR *misc) {
+  // TODO
+  // start stop toggle addnote
+  if (wcscmp(misc, TEXT("start")) == 0) {
+    guiStartLogger();
+  } 
+  if (wcscmp(misc, TEXT("stop")) == 0) {
+    guiStopLogger();
+  } 
+  if (wcscmp(misc, TEXT("toggle")) == 0) {
+    guiToggleLogger();
+  } 
+  if (wcscmp(misc, TEXT("show")) == 0) {
+    if (LoggerActive) {
+      DoStatusMessage(TEXT("Logger ON"));
+    } else {
+      DoStatusMessage(TEXT("Logger OFF"));
+    }
+  } 
+}
+
 
 // JMW TODO: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.
@@ -839,18 +937,20 @@ void InputEvents::eventAbortTask(TCHAR *misc) {
 
 /* TODO
 
-  eventMainMenu
+   eventMainMenu
    eventMenu
-   eventSetBugs
-   eventSetBallast
-   eventPanWaypoint		- Set pan to a waypoint
+   eventBugs - up down max min show // JMW new
+   eventBallast up down max min show // JMW new
+   eventLogger - start/stop/toggle/addnote // JMW new
+
+
+   eventPanWaypoint		                - Set pan to a waypoint
 						- Waypoint could be "next", "first", "last", "previous", or named
 						- Note: wrong name - probably just part of eventPan
-   eventLogNote			- Write a note to the log file
    eventTaskLoad		- Load tasks from a file (misc = filename)
    eventTaskSave		- Save tasks to a file (misc = filename)
    eventPressure		- Increase, Decrease, show, Set pressure value
-   eventLogger			- start, stop, declare ???
+   eventDeclare			- (JMW separate from internal logger)
    eventAirspaceDisplay	- all, below nnn, below me, auto nnn
    eventAirspaceWarnings- on, off, time nn, ack nn
    eventTerrain			- see MapWindow::Event_Terrain

@@ -132,6 +132,7 @@ void DefocusInfoBox(void);
 void Event_SelectInfoBox(int i);
 void Event_ChangeInfoBoxType(int i);
 void DoInfoKey(int keycode);
+void SwitchToMapWindow(void);
 
 // ******************************************************************
 
