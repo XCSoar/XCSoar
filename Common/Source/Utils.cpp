@@ -179,7 +179,7 @@ void CheckInfoTypes() {
 
 
 void ResetInfoBoxes(void) {
-  InfoType[0] = 9221102;
+  InfoType[0] = 921102;
   InfoType[1] = 725525;
   InfoType[2] = 262144;
   InfoType[3] = 74518;
