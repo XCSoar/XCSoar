@@ -57,7 +57,7 @@ TCHAR *szRegistryColour[] =     { TEXT("Colour0"),
 				  TEXT("Colour12"),
 				  TEXT("Colour13"),
 				  TEXT("Colour14")
-}; // pL		
+}; // pL
 
 
 TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
@@ -75,7 +75,7 @@ TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
 				  TEXT("Brush12"),
 				  TEXT("Brush13"),
 				  TEXT("Brush14")
-}; // pL	
+}; // pL
 
 
 TCHAR szRegistryAirspaceWarning[]= TEXT("AirspaceWarn");
@@ -85,8 +85,8 @@ TCHAR szRegistryAltMode[]=  TEXT("AltitudeMode");
 TCHAR szRegistryAltitudeUnitsValue[] = TEXT("Altitude");
 TCHAR szRegistryCircleZoom[]= TEXT("CircleZoom");
 TCHAR szRegistryClipAlt[]= TEXT("ClipAlt");
-TCHAR szRegistryDisplayText[] = TEXT("DisplayText");	
-TCHAR szRegistryDisplayUpValue[] = TEXT("DisplayUp"); 
+TCHAR szRegistryDisplayText[] = TEXT("DisplayText");
+TCHAR szRegistryDisplayUpValue[] = TEXT("DisplayUp");
 TCHAR szRegistryDistanceUnitsValue[] = TEXT("Distance");
 TCHAR szRegistryDrawTerrain[]= TEXT("DrawTerrain");
 TCHAR szRegistryDrawTopology[]= TEXT("DrawTopology");
@@ -98,9 +98,9 @@ TCHAR szRegistryPolarID[] = TEXT("Polar"); // pL
 TCHAR szRegistryPort1Index[]= TEXT("PortIndex");
 TCHAR szRegistryPort2Index[]=		 TEXT("Port2Index");
 TCHAR szRegistryRegKey[]=				 TEXT("RegKey");
-TCHAR szRegistrySafetyAltitudeArrival[] =     TEXT("SafetyAltitudeArrival");	
-TCHAR szRegistrySafetyAltitudeBreakOff[] =     TEXT("SafetyAltitudeBreakOff");	
-TCHAR szRegistrySafetyAltitudeTerrain[] =     TEXT("SafetyAltitudeTerrain");	
+TCHAR szRegistrySafetyAltitudeArrival[] =     TEXT("SafetyAltitudeArrival");
+TCHAR szRegistrySafetyAltitudeBreakOff[] =     TEXT("SafetyAltitudeBreakOff");
+TCHAR szRegistrySafetyAltitudeTerrain[] =     TEXT("SafetyAltitudeTerrain");
 TCHAR szRegistrySafteySpeed[] =          TEXT("SafteySpeed");
 TCHAR szRegistrySectorRadius[]=          TEXT("Radius");
 TCHAR szRegistrySnailTrail[]=		 TEXT("SnailTrail");
@@ -111,9 +111,9 @@ TCHAR szRegistryStartLine[]=		 TEXT("StartLine");
 TCHAR szRegistryStartRadius[]=		 TEXT("StartRadius");
 TCHAR szRegistryWarningTime[]=		 TEXT("WarnTime");
 TCHAR szRegistryAcknowledgementTime[]=	 TEXT("AcknowledgementTime");
-TCHAR szRegistryWindUpdateMode[] =       TEXT("WindUpdateMode");	
-TCHAR szRegistryWindSpeed[] =            TEXT("WindSpeed");	
-TCHAR szRegistryWindBearing[] =          TEXT("WindBearing");	
+TCHAR szRegistryWindUpdateMode[] =       TEXT("WindUpdateMode");
+TCHAR szRegistryWindSpeed[] =            TEXT("WindSpeed");
+TCHAR szRegistryWindBearing[] =          TEXT("WindBearing");
 
 TCHAR szRegistryAirfieldFile[]=  TEXT("AirfieldFile"); // pL
 TCHAR szRegistryAirspaceFile[]=  TEXT("AirspaceFile"); // pL
@@ -174,7 +174,7 @@ void CheckInfoTypes() {
       InfoType[i] += (InfoType[i] & 0xff)<<16;
       StoreType(i,InfoType[i]);
     }
-  }  
+  }
 }
 
 
@@ -202,17 +202,17 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistrySpeedUnitsValue,&Speed);
   switch(Speed)
     {
-    case 0 : 
+    case 0 :
       SPEEDMODIFY = TOMPH;
       break;
-    case 1 : 
-      SPEEDMODIFY = TOKNOTS; 
+    case 1 :
+      SPEEDMODIFY = TOKNOTS;
       break;
-    case 2 : 
-      SPEEDMODIFY = TOKPH; 
+    case 2 :
+      SPEEDMODIFY = TOKPH;
       break;
     }
-	
+
   GetFromRegistry(szRegistryDistanceUnitsValue,&Distance);
   switch(Distance)
     {
@@ -220,14 +220,14 @@ void ReadRegistrySettings(void)
     case 1 : DISTANCEMODIFY = TONAUTICALMILES; break;
     case 2 : DISTANCEMODIFY = TOKILOMETER; break;
     }
-	
+
   GetFromRegistry(szRegistryAltitudeUnitsValue,&Altitude);
   switch(Altitude)
     {
     case 0 : ALTITUDEMODIFY = TOFEET; break;
     case 1 : ALTITUDEMODIFY = TOMETER; break;
     }
-	
+
   GetFromRegistry(szRegistryLiftUnitsValue,&Lift);
   switch(Lift)
     {
@@ -236,7 +236,7 @@ void ReadRegistrySettings(void)
     }
 
   Units::NotifyUnitChanged();
-	
+
   for (i=0;i<MAXINFOWINDOWS;i++)
     {
       if(GetFromRegistry(szRegistryDisplayType[i],&Altitude) == ERROR_SUCCESS )
@@ -245,7 +245,7 @@ void ReadRegistrySettings(void)
 
   // check against V3 infotypes
   CheckInfoTypes();
-	
+
   GetFromRegistry(szRegistryDisplayUpValue,&Temp);
   switch(Temp)
     {
@@ -254,7 +254,7 @@ void ReadRegistrySettings(void)
     case NORTHCIRCLE : DisplayOrientation = NORTHCIRCLE;break;
     case TRACKCIRCLE : DisplayOrientation = TRACKCIRCLE;break;
     }
-	
+
   GetFromRegistry(szRegistryDisplayText,&Temp);
   switch(Temp)
     {
@@ -265,7 +265,7 @@ void ReadRegistrySettings(void)
     case 4 : DisplayTextType = DISPLAYFIRSTTHREE; break;
     case 5 : DisplayTextType = DISPLAYNAMEIFINTASK; break;
     }
-	
+
   if(GetFromRegistry(szRegistryAltMode,&Temp)==ERROR_SUCCESS)
     AltitudeMode = Temp;
 
@@ -275,7 +275,7 @@ void ReadRegistrySettings(void)
   if(GetFromRegistry(szRegistryAltMargin,&Temp)==ERROR_SUCCESS)
     AltWarningMargin = Temp;
 
-	
+
   GetFromRegistry(szRegistrySafetyAltitudeArrival,&Temp);
   if(Temp != 0)
     SAFETYALTITUDEARRIVAL = (double)Temp;
@@ -299,7 +299,7 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistrySectorRadius,&SectorRadius);
 
   GetFromRegistry(szRegistryPolarID,&Temp); POLARID = (int)Temp;
-	
+
   GetRegistryString(szRegistryRegKey, strRegKey, 65);
 
   for(i=0;i<AIRSPACECLASSCOUNT;i++)
@@ -323,7 +323,7 @@ void ReadRegistrySettings(void)
       }
 
     }
-	
+
   GetFromRegistry(szRegistryAirspaceBlackOutline,&Temp);
   MapWindow::bAirspaceBlackOutline = Temp;
 
@@ -417,20 +417,20 @@ void ReadRegistrySettings(void)
     SetToRegistry(szRegistryAccelerometerZero,Temp);
   }
 
-  
+
 }
 
 
 
-BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)    
+BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
 {
   HKEY    hKey;
   DWORD    dwSize, dwType;
   long    hRes;
 
-  *pPos= 0;        
+  *pPos= 0;
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_ALL_ACCESS, &hKey);
-  if (hRes != ERROR_SUCCESS) 
+  if (hRes != ERROR_SUCCESS)
     {
       RegCloseKey(hKey);
       return hRes;
@@ -445,25 +445,25 @@ BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
 
 // Implement your code to save value to the regsitry
 
-HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)    
+HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 {
   HKEY    hKey;
   DWORD    Disp;
   HRESULT hRes;
 
   hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
-  if (hRes != ERROR_SUCCESS) 
+  if (hRes != ERROR_SUCCESS)
     {
       return FALSE;
     }
 
   hRes = RegSetValueEx(hKey, szRegValue,0,REG_DWORD, (LPBYTE)&Pos, sizeof(DWORD));
-  RegCloseKey(hKey);                    
+  RegCloseKey(hKey);
 
   return hRes;
 }
 
-BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)    
+BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
 {
   HKEY    hKey;
   DWORD   dwType = REG_SZ;
@@ -473,9 +473,9 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
     pPos[i]=0;
   }
 
-  pPos[0]= '\0';        
+  pPos[0]= '\0';
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_ALL_ACCESS, &hKey);
-  if (hRes != ERROR_SUCCESS) 
+  if (hRes != ERROR_SUCCESS)
     {
       RegCloseKey(hKey);
       return FALSE;
@@ -486,20 +486,20 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   return hRes;
 }
 
-HRESULT SetRegistryString(const TCHAR *szRegValue, TCHAR *Pos)    
+HRESULT SetRegistryString(const TCHAR *szRegValue, TCHAR *Pos)
 {
   HKEY    hKey;
   DWORD    Disp;
   HRESULT hRes;
 
   hRes = RegCreateKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, &Disp);
-  if (hRes != ERROR_SUCCESS) 
+  if (hRes != ERROR_SUCCESS)
     {
       return FALSE;
     }
 
   hRes = RegSetValueEx(hKey, szRegValue,0,REG_SZ, (LPBYTE)Pos, _tcslen(Pos)*sizeof(TCHAR));
-  RegCloseKey(hKey);                    
+  RegCloseKey(hKey);
 
   return hRes;
 }
@@ -539,21 +539,21 @@ void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex)
   SetToRegistry(szRegistryPort2Index, PortIndex);
   SetToRegistry(szRegistrySpeed2Index, SpeedIndex);
 }
-		
+
 void rotate(double *xin, double *yin, double angle)
 {
   static double x,y;
   static double xout, yout;
   static double lastangle = 0;
   static double cost=1,sint=0;
-	
+
   if(angle != lastangle)
     {
       lastangle = angle;
       cost = (double)fastcosine(angle);
       sint = (double)fastsine(angle);
     }
-	
+
   x = *xin; y = *yin;
   xout = x*cost - y*sint;
   yout = y*cost + x*sint;
@@ -568,14 +568,14 @@ void frotate(float *xin, float *yin, float angle)
   static float xout, yout;
   static float lastangle = 0;
   static float cost=1,sint=0;
-	
+
   if(angle != lastangle)
     {
       lastangle = angle;
       cost = (float)fastcosine(angle);
       sint = (float)fastsine(angle);
     }
-	
+
   x = *xin; y = *yin;
   xout = x*cost - y*sint;
   yout = y*cost + x*sint;
@@ -593,10 +593,10 @@ double Distance(double lat1, double lon1, double lat2, double lon2)
   lon1 *= DEG_TO_RAD;
   lon2 *= DEG_TO_RAD;
 
-  dTmp =  sin(lat1)*sin(lat2) +  
+  dTmp =  sin(lat1)*sin(lat2) +
 			cos(lat1)*cos(lat2) * cos(lon1-lon2);
 
-  if (dTmp > 1.0)                                   // be shure we dont call acos with 
+  if (dTmp > 1.0)                                   // be shure we dont call acos with
     distance = 0;                                   // values greater than 1 (like 1.0000000000001)
   else
     distance = (double)acos(dTmp) * (double)(RAD_TO_DEG * 111194.9267);
@@ -614,23 +614,23 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
   lat2 *= DEG_TO_RAD;
   lon1 *= DEG_TO_RAD;
   lon2 *= DEG_TO_RAD;
-    
+
   double clat1 = cos(lat1);
   double clat2 = cos(lat2);
   double slat1 = sin(lat1);
   double slat2 = sin(lat2);
-  
+
 
   d = (slat1*slat2 +  clat1*clat2 * cos(lon1-lon2) );
   if(d>1) d = 0.99999999999999;
   if(d<-1) d = -0.99999999999999;
   d = acos(d);
 
-  if(sin(lon1-lon2)<0 )      
+  if(sin(lon1-lon2)<0 )
     {
-      angle = (((slat2-slat1) 
+      angle = (((slat2-slat1)
 		* cos(d) ) / (sin(d)*clat1));
-		
+
       if(angle >1) angle = 1;
       if(angle<-1) angle = -1;
       angle = acos(angle);
@@ -643,7 +643,7 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
       */
       angle *= RAD_TO_DEG;
     }
-  else       
+  else
     {
       if (d != 0 && clat1 != 0){
         angle=(( (slat2-slat1)
@@ -680,7 +680,7 @@ double BiSector(double InBound, double OutBound)
     {
       result = Reciprocal(InBound);
     }
-	
+
   else if (InBound > OutBound)
     {
       if( (InBound - OutBound) < 180)
@@ -715,31 +715,31 @@ void PolarWinPilot2XCSoar(double POLARV[3], double POLARW[3], double ww[2]) {
   double w1,w2,w3;
 
   v1 = POLARV[0]/3.6; v2 = POLARV[1]/3.6; v3 = POLARV[2]/3.6;
-  //	w1 = -POLARV[0]/POLARLD[0]; 
-  //    w2 = -POLARV[1]/POLARLD[1]; 
+  //	w1 = -POLARV[0]/POLARLD[0];
+  //    w2 = -POLARV[1]/POLARLD[1];
   //    w3 = -POLARV[2]/POLARLD[2];
   w1 = POLARW[0]; w2 = POLARW[1]; w3 = POLARW[2];
 
   d = v1*v1*(v2-v3)+v2*v2*(v3-v1)+v3*v3*(v1-v2);
-  if (d == 0.0) 
+  if (d == 0.0)
     {
       POLAR[0]=0;
-    } 
+    }
   else
     {
       POLAR[0]=((v2-v3)*(w1-w3)+(v3-v1)*(w2-w3))/d;
     }
   d = v2-v3;
-  if (d == 0.0) 
+  if (d == 0.0)
     {
       POLAR[1]=0;
     }
   else
     {
       POLAR[1] = (w2-w3-POLAR[0]*(v2*v2-v3*v3))/d;
-    }	 
+    }
 
-	
+
   WEIGHTS[0] = 70;                      // Pilot weight
   WEIGHTS[1] = ww[0]-WEIGHTS[0];        // Glider empty weight
   WEIGHTS[2] = ww[1];                   // Ballast weight
@@ -754,7 +754,7 @@ void PolarWinPilot2XCSoar(double POLARV[3], double POLARW[3], double ww[2]) {
 
 
 
- 
+
 void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber)
 {
   int index = 0;
@@ -810,8 +810,8 @@ void ReadWinPilotPolar() {
   GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
   SetRegistryString(szRegistryPolarFile, TEXT("\0"));
 
-  hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);		
-	
+  hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+
   if(hFile != INVALID_HANDLE_VALUE )
     {
 
@@ -819,7 +819,7 @@ void ReadWinPilotPolar() {
 
       while(ReadString(hFile,200,TempString) && (!foundline))
 	{
-	
+
 	  if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
 	    {
 	      PExtractParameter(TempString, ctemp, 0);
@@ -848,18 +848,18 @@ void ReadWinPilotPolar() {
 	      foundline = true;
 	    }
 	}
-      
+
       // file was OK, so save it
       if (foundline) {
 	SetRegistryString(szRegistryPolarFile, szFile);
       }
-			
+
       CloseHandle (hFile);
     }
 
 }
 
-// *LS-3	WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3  	
+// *LS-3	WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
 //								403,				101,					115.03,		  -0.86,	174.04,	 -1.76,	212.72,	-3.4
 
 
@@ -869,32 +869,32 @@ void ReadWinPilotPolar() {
 
 void CalculateNewPolarCoef(void)
 {
-  static double Polars[7][3] = 
+  static double Polars[7][3] =
     {
-      {-0.0538770500225782443497, 0.1323114348, -0.1273364037098239098543}, 
-      {-0.0532456270195884696748, 0.1509454717, -0.1474304674787072275183}, 
-      {-0.0598306909918491529791, 0.1896480967, -0.1883344146619101871894}, 
-      {-0.0303118230885946660507, 0.0771466019, -0.0799469636558217515699}, 
-      {-0.0222929913566948641563, 0.0318771616, -0.0307925896846546928318}, 
+      {-0.0538770500225782443497, 0.1323114348, -0.1273364037098239098543},
+      {-0.0532456270195884696748, 0.1509454717, -0.1474304674787072275183},
+      {-0.0598306909918491529791, 0.1896480967, -0.1883344146619101871894},
+      {-0.0303118230885946660507, 0.0771466019, -0.0799469636558217515699},
+      {-0.0222929913566948641563, 0.0318771616, -0.0307925896846546928318},
       {-0.0430828898445299480353, 0.0746938776, -0.0487285153053357557183},
       {0.0, 0.0, 0.0}
 
     };
 
-	
+
   /* Weights:
      0 Pilot Weight?
      1 Glider Weight
      2 BallastWeight
   */
 
-  static double Weights[7][3] = { {70,190,1}, 
-				  {70,250,100}, 
-				  {70,240,285}, 
+  static double Weights[7][3] = { {70,190,1},
+				  {70,250,100},
+				  {70,240,285},
 				  {70,287,165},  // w ok!
 				  {70,400,120},  //
-				  {70,527,303}, 
-				  {0,0,0} 
+				  {70,527,303},
+				  {0,0,0}
   };
   int i;
 
@@ -914,7 +914,7 @@ void CalculateTaskSectors(void)
 {
   int i;
   double SectorAngle, SectorSize, SectorBearing;
-	
+
   for(i=0;i<MAXTASKPOINTS-1;i++)
     {
       if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
@@ -943,7 +943,7 @@ void CalculateTaskSectors(void)
 void CalculateAATTaskSectors(void)
 {
   int i;
-	
+
   if(AATEnabled == FALSE)
     return;
 
@@ -972,7 +972,7 @@ double FindLattitude(double Lat, double Lon, double Bearing, double Distance)
   Bearing *= DEG_TO_RAD;
 
   Distance = Distance/6371000;
- 
+
   result = (double)asin(sin(Lat)*cos(Distance)+cos(Lat)*sin(Distance)*cos(Bearing));
   result *= RAD_TO_DEG;
   return result;
@@ -1045,7 +1045,7 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc)
 
   // JMW added faster checking...
 
-	
+
   for(i=0;i<64;i++)
     {
       pt[i].x = x + (long) (radius * xcoords[i]);
@@ -1053,12 +1053,12 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc)
     }
   pt[64].x = x + (long) (radius * xcoords[0]);
   pt[64].y = y + (long) (radius * ycoords[0]);
-  
+
   Polygon(hdc,pt,65);
   return TRUE;
 }
 
-	
+
 void ConvertFlightLevels(void)
 {
   unsigned i;
@@ -1076,8 +1076,8 @@ void ConvertFlightLevels(void)
 	  AirspaceCircle[i].Top.Altitude = AirspaceCircle[i].Top.Altitude / TOFEET;
 	}
     }
-		
-		
+
+
   for(i=0;i<NumberOfAirspaceAreas;i++)
     {
       if(AirspaceArea[i].Base.FL  != 0)
@@ -1151,7 +1151,7 @@ BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
 	      Sector[8] = TRUE;
 	    }
 	}
-    }	
+    }
 
   for(i=0;i<9;i++)
     {
@@ -1203,24 +1203,24 @@ void ReadAssetNumber(void)
 void ReadCompaqID(void)
 {
   PROCESS_INFORMATION pi;
-  HANDLE hInFile;// = INVALID_HANDLE_VALUE; 
-  DWORD dwBytesRead;   
+  HANDLE hInFile;// = INVALID_HANDLE_VALUE;
+  DWORD dwBytesRead;
 
   if(strAssetNumber[0] != '\0')
     {
       return;
     }
 
-  CreateProcess(TEXT("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi); 
-	
-  hInFile = CreateFile(TEXT("\\windows\\cpqAssetData.dat"), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
-  if (hInFile == INVALID_HANDLE_VALUE) 
-    { 
-      //	    MessageBox(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK); 
-      return; 
-    } 
-  SetFilePointer(hInFile, 976, NULL, FILE_BEGIN); 
-  memset(strAssetNumber, 0, 64 * sizeof(TCHAR)); 
+  CreateProcess(TEXT("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi);
+
+  hInFile = CreateFile(TEXT("\\windows\\cpqAssetData.dat"), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+  if (hInFile == INVALID_HANDLE_VALUE)
+    {
+      //	    MessageBox(hWnd, TEXT("Unable to open asset data file."), TEXT("Error!"), MB_OK);
+      return;
+    }
+  SetFilePointer(hInFile, 976, NULL, FILE_BEGIN);
+  memset(strAssetNumber, 0, 64 * sizeof(TCHAR));
   ReadFile(hInFile, &strAssetNumber, 64, &dwBytesRead, (OVERLAPPED *)NULL);
   CloseHandle(hInFile);
 }
@@ -1248,7 +1248,7 @@ void ReadUUID(void)
 
   wSize = pDevID->dwSize;
   free(pDevID); pDevID = NULL;
-	
+
   if( (FALSE != fRes) || (ERROR_INSUFFICIENT_BUFFER != GetLastError()))
     return;
 
@@ -1268,7 +1268,7 @@ void ReadUUID(void)
   pDat +=  pDevID->dwPresetIDBytes;
   pSrc =  (BYTE*)(pDevID) + pDevID->dwPlatformIDOffset;
   memcpy(pDat, pSrc, pDevID->dwPlatformIDBytes);
-	
+
 
   temp = Guid.Data2; temp = temp << 16;
   temp += Guid.Data3 ;
@@ -1311,8 +1311,8 @@ void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
     }
     GetRegistryString(instring, tempFile, MAX_PATH);
     WideCharToMultiByte( CP_ACP, 0, tempFile,
-			 _tcslen(tempFile)+1, 
-			 ctempFile,   
+			 _tcslen(tempFile)+1,
+			 ctempFile,
 			 MAX_PATH, NULL, NULL);
     for (i=0; i<MAX_PATH; i++) {
       if (ctempFile[i]=='\?') {
@@ -1339,7 +1339,7 @@ void ReadFileRegistryString(HANDLE hFile, TCHAR *instring) {
       tempFile[i]= 0;
     }
     ReadString(hFile, MAX_PATH, tempFile);
-    tempFile[_tcslen(tempFile)]= 0;    
+    tempFile[_tcslen(tempFile)]= 0;
     SetRegistryString(instring, tempFile);
 }
 
@@ -1416,7 +1416,7 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 // read string from file
 // support national codepage
 // hFile:  file handle
-// Max:    max chars to fit in Buffer 
+// Max:    max chars to fit in Buffer
 // String: pointer to string buffer
 // return: True if at least one byte was read from file
 //         False Max > MAX_PATH or EOF or read error
@@ -1448,7 +1448,7 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   i = 0;
   j = 0;
   while(i<Max && j<(int)dwNumBytesRead){
-    
+
     c = FileBuffer[j];
     j++;
     dwTotalNumBytesRead++;
@@ -1469,26 +1469,26 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   sTmp[Max-1] = '\0';
 
   mbstowcs(String, sTmp, strlen(sTmp)+1);
-  
+
   return (dwTotalNumBytesRead>0);
 
 }
 
 BOOL ReadStringX(FILE *fp, int Max, TCHAR *String){
 
-  if (fp == NULL || Max < 1 || String == NULL) 
+  if (fp == NULL || Max < 1 || String == NULL)
     return (0);
 
   if (_fgetts(String, 200, fp) != NULL){
 
-    TCHAR *pWC = &String[_tcslen(String)];   
+    TCHAR *pWC = &String[_tcslen(String)];
 
     while (pWC > String && (*pWC == '\r' || *pWC == '\n'))
       pWC--;
 
     *pWC = '\0';
 
-    return (1); 
+    return (1);
   }
 
   return (0);
@@ -1509,7 +1509,7 @@ void InitSineTable(void)
       SINETABLE[i] = (double)sin(angle);
       FSINETABLE[i] = (float)sin(angle);
     }
-} 
+}
 
 
 float ffastcosine(float x)
@@ -1606,7 +1606,7 @@ double StrToDouble(TCHAR *Source, TCHAR **Stop)
 
   StringLength = _tcslen(Source);
 
-  while((Source[index] == ' ')||(Source[index]==9)) 
+  while((Source[index] == ' ')||(Source[index]==9))
     // JMW added skip for tab stop
     {
       index ++;
@@ -1616,11 +1616,11 @@ double StrToDouble(TCHAR *Source, TCHAR **Stop)
     index++;
   }
 
-  while( (index < StringLength)    
+  while( (index < StringLength)
 	 &&
 	 (
 	  (Source[index]>= '0') && (Source [index] <= '9')
-          ) 
+          )
 	 )
     {
       Sum = (Sum*10) + (Source[ index ] - '0');
@@ -1629,11 +1629,11 @@ double StrToDouble(TCHAR *Source, TCHAR **Stop)
   if(Source[index] == '.')
     {
       index ++;
-      while( (index < StringLength)    
+      while( (index < StringLength)
 	     &&
 	     (
 	      (Source[index]>= '0') && (Source [index] <= '9')
-	      ) 
+	      )
 	     )
 	{
 	  Sum = (Sum) + (double)(Source[ index ] - '0')/Divisor;
@@ -1680,7 +1680,7 @@ void LoadWindFromRegistry() {
 void ReadDeviceSettings(int devIdx, TCHAR *Name){
 
   Name[0] = '\0';
-  
+
   if (devIdx == 0){
     GetRegistryString(szRegistryDeviceA , Name, DEVNAMESIZE);
     return;
@@ -1795,7 +1795,7 @@ WORD crcCalc(void *Buffer, size_t size){
     int value = *pB++;
     crc = ByteCRC16(value, crc);
   } while (--size);
-  
+
   return(crc);
 }
 
@@ -1933,11 +1933,11 @@ cont:
 }
 
 
-/* 
-	
+/*
+
   INTERFACE FILE SECTION
 
-  TODO - All this code, loading, searching, return etc will 
+  TODO - All this code, loading, searching, return etc will
   be moved into a CPP class very soon. This will allow better
   handling of the array, and a better place to swap in performance
   critical search, sort etc.
@@ -1949,7 +1949,7 @@ cont:
 
 
 void ReadLanguageFile() {
-	
+
 	TCHAR szFile1[MAX_PATH] = TEXT("\0");
 	FILE *fp;
 
@@ -1959,7 +1959,7 @@ void ReadLanguageFile() {
 	if (szFile1)
 		fp  = _tfopen(szFile1, TEXT("rt"));
 
-	if (fp == NULL) 
+	if (fp == NULL)
 		return;
 
 	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
@@ -2012,25 +2012,25 @@ void ReadLanguageFile() {
 
   // extern HINSTANCE                       hInst; // The current instance
 
-  	LPTSTR lpRes; 
-	HANDLE hResInfo, hRes; 
+  	LPTSTR lpRes;
+	HANDLE hResInfo, hRes;
 	TCHAR *split;
 
-		hResInfo = FindResource (hInst, TEXT("IDR_TEXT_LANGUAGE"), TEXT("TEXT")); 
+		hResInfo = FindResource (hInst, TEXT("IDR_TEXT_LANGUAGE"), TEXT("TEXT"));
 
-		if (hResInfo == NULL) 
-			return; 
-
-		// Load the wave resource. 
-		hRes = LoadResource (hInst, (HRSRC)hResInfo); 
-
-		if (hRes == NULL) 
+		if (hResInfo == NULL)
 			return;
 
-		// Lock the wave resource and play it. 
+		// Load the wave resource.
+		hRes = LoadResource (hInst, (HRSRC)hResInfo);
+
+		if (hRes == NULL)
+			return;
+
+		// Lock the wave resource and play it.
 		lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
 
-		if (lpRes == NULL) 
+		if (lpRes == NULL)
 			return;
 
 		split = lpRes;
@@ -2103,7 +2103,7 @@ void ReadStatusFile() {
 	if (szFile1)
 		fp  = _tfopen(szFile1, TEXT("rt"));
 
-	if (fp == NULL) 
+	if (fp == NULL)
 		return;
 
 	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
@@ -2136,7 +2136,7 @@ void ReadStatusFile() {
 				some_data = false;
 				_init_Status(StatusMessageCache_Size);
 			}
-		
+
 		} else {
 
 			location = NULL;
@@ -2245,18 +2245,18 @@ void LoadRegistryFromFile(TCHAR *szFile)
 }
 
 
-void SaveRegistryToFile(TCHAR *szFile) 
+void SaveRegistryToFile(TCHAR *szFile)
 {
   TCHAR lpstrName[nMaxKeyNameSize+1];
   //  TCHAR lpstrClass[nMaxClassSize+1];
   BYTE pValue[nMaxValueValueSize+1];
 
   HKEY hkFrom;
-  LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 
+  LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey,
 			    0, KEY_ALL_ACCESS, &hkFrom);
 
   if (ERROR_SUCCESS != res) {
-    return;	
+    return;
   }
 
   FILE *fp;
@@ -2273,9 +2273,9 @@ void SaveRegistryToFile(TCHAR *szFile)
     DWORD nNameSize = nMaxKeyNameSize;
     DWORD nClassSize = nMaxClassSize;
 
-    LONG res = ::RegEnumValue(hkFrom, i, lpstrName, 
-			      &nNameSize, 0, 
-			      &nType, pValue, 
+    LONG res = ::RegEnumValue(hkFrom, i, lpstrName,
+			      &nNameSize, 0,
+			      &nType, pValue,
 			      &nValueSize);
 
     if (ERROR_NO_MORE_ITEMS == res) {
@@ -2294,7 +2294,7 @@ void SaveRegistryToFile(TCHAR *szFile)
       _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
     }
 
-    _fputts(outval, fp); 
+    _fputts(outval, fp);
 
   }
 
