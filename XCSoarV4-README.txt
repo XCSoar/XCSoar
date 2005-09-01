@@ -4,13 +4,14 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 To do for next version:
 - Enable secondary files check boxes
-- Option to auto-start logger on every flight
-- Reset of flight start time when relaunching
 - Daylight savings time fix
-- Proper time in simulator
+- Use windows device time instead of GPS time in simulator
 - Adjustable font for long infoboxes (especially time)
+- make status message a singleton
+- enable cancelling a status message via an event
 
-Changes from 4.22 to 4.3
+
+Changes from 4.22 to 4.5
 
 - Speed-to-fly climb mode bug fix
 - Thermal band mode fix
@@ -41,6 +42,11 @@ Changes from 4.22 to 4.3
 - Added units display to AAT settings to avoid confusion
 - New functions to save/restore registry from text file
 - Save/Load profile uses registry save/restore code
+- New button input event system
+- Fix infobox reset to defaults
+- Allow reset of flight start time when relaunching
+- Takeoff/landing events, can be hooked up to autostart logger
+
 
 Changes from 4.21 to 4.22
 

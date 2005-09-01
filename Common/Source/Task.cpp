@@ -191,3 +191,66 @@ void ReplaceWaypoint(int index) {
   }
 }
 
+
+
+////////////
+
+#include "Logger.h"
+
+
+void guiStartLogger(void) {
+  int i;
+  if (!LoggerActive) {
+    TCHAR TaskMessage[1024];
+    _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
+    for(i=0;i<MAXTASKPOINTS;i++)
+      {
+	if(Task[i].Index == -1)
+	  {
+	    if(i==0)
+	      _tcscat(TaskMessage,TEXT("None"));
+
+	    Debounce();
+	    break;
+	  }
+	_tcscat(TaskMessage,WayPointList[ Task[i].Index ].Name);
+	_tcscat(TaskMessage,TEXT("\r\n"));
+      }
+
+    if(MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+      {
+	LoggerActive = TRUE;
+	StartLogger(strAssetNumber);
+	LoggerHeader();
+	StartDeclaration();
+	for(i=0;i<MAXTASKPOINTS;i++)
+	  {
+	    if(Task[i].Index == -1) {
+	      Debounce();
+	      break;
+	    }
+	    AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
+	  }
+	EndDeclaration();
+      }
+    FullScreen();
+  }
+}
+
+
+void guiStopLogger(void) {
+  if (LoggerActive) {
+    if(MessageBox(hWndMapWindow,gettext(TEXT("Stop Logger")),gettext(TEXT("Stop Logger")),MB_YESNO|MB_ICONQUESTION) == IDYES)
+      LoggerActive = FALSE;
+    FullScreen();
+  }
+}
+
+
+void guiToggleLogger(void) {
+  if (LoggerActive) {
+    guiStopLogger();
+  } else {
+    guiStartLogger();
+  }
+}

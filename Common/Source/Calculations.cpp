@@ -63,6 +63,7 @@ static int      InAATurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DoAutoMcCready(DERIVED_INFO *Calculated);
 static void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 
 static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -390,6 +391,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   }
 
+  TakeoffLanding(Basic, Calculated);
   Turning(Basic, Calculated);
   Vario(Basic,Calculated);
   LD(Basic,Calculated);
@@ -429,6 +431,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   return TRUE;
 }
+
 
 void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
@@ -2243,3 +2246,42 @@ void ResumeAbortTask() {
 
 }
 
+
+#define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
+
+void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  static int ntimeinflight = 0;
+
+  if (Basic->Speed> TAKEOFFSPEEDTHRESHOLD) {
+    ntimeinflight++;
+  } else {
+    ntimeinflight--;
+  }
+  ntimeinflight = min(30, max(0,ntimeinflight));
+
+  // JMW logic to detect takeoff and landing is as follows:
+  //   detect takeoff when above threshold speed for 10 seconds
+
+  //   detect landing when below threshold speed for 30 seconds
+
+  // TODO: make this more robust my making use of terrain height data if available
+
+  if (!Calculated->Flying) {
+    // detect takeoff
+
+    if (ntimeinflight>10) {
+      Calculated->Flying = TRUE;
+      InputEvents::processGlideComputer(GCE_TAKEOFF);
+    }
+
+  } else {
+    // detect landing
+    if (ntimeinflight==0) {
+      // have been stationary for a minute
+      Calculated->Flying = FALSE;
+      InputEvents::processGlideComputer(GCE_LANDING);
+    }
+
+  }
+
+}

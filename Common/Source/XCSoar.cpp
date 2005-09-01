@@ -436,7 +436,6 @@ void ProcessTimer    (void);
 void SIMProcessTimer(void);
 
 void                                                    PopUpSelect(int i);
-void                                                    SwitchToMapWindow(void);
 HWND                                                    CreateRpCommandBar(HWND hwnd);
 
 #ifdef DEBUG
@@ -556,11 +555,19 @@ void ShowStatus() {
     wcscat(statusmessage, gettext(TEXT("Vario disconnected")));
   }
   wcscat(statusmessage, TEXT("\r\n"));
+  if (LoggerActive) {
+    wcscat(statusmessage, gettext(TEXT("Logger ON")));
+  } else {
+    wcscat(statusmessage, gettext(TEXT("Logger OFF")));
+  }
+  wcscat(statusmessage, TEXT("\r\n"));
 
   ShowStatusMessage(statusmessage, 60000, 15, false, TabStops);
   // i think one minute is enough...
 
 }
+
+
 
 
 void FullScreen() {
@@ -1008,6 +1015,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   GetClientRect(hWndMainWindow, &rc);
 
+  InfoBoxLayout::ScreenGeometry(rc);
+
   ////////////////// do fonts
 
   int fontsz1 = (rc.bottom - rc.top );
@@ -1033,7 +1042,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWeight = FW_BOLD;
   logfont.lfCharSet = ANSI_CHARSET;
 #ifndef NOCLEARTYPE
-  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  if (!InfoBoxLayout::landscape) {
+    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  }
 #endif
 
   InfoWindowFont = CreateFontIndirect (&logfont);
@@ -1047,7 +1058,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWeight = FW_BOLD;
 
 #ifndef NOCLEARTYPE
-  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  if (!InfoBoxLayout::landscape) {
+    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  }
 #endif
 
   TitleWindowFont = CreateFontIndirect (&logfont);
@@ -1062,7 +1075,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWeight = FW_MEDIUM;
 
 #ifndef NOCLEARTYPE
-  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  if (!InfoBoxLayout::landscape) {
+    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  }
 #endif
 
   CDIWindowFont = CreateFontIndirect (&logfont);
@@ -1078,7 +1093,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWeight = FW_MEDIUM;
 
 #ifndef NOCLEARTYPE
-  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  if (!InfoBoxLayout::landscape) {
+    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  }
 #endif
 
   MapLabelFont = CreateFontIndirect (&logfont);
@@ -1094,7 +1111,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWeight = FW_MEDIUM;
 
 #ifndef NOCLEARTYPE
-  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  if (!InfoBoxLayout::landscape) {
+    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  }
 #endif
 
   StatisticsFont = CreateFontIndirect (&logfont);
@@ -1108,7 +1127,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWeight = FW_MEDIUM;
 
 #ifndef NOCLEARTYPE
-  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  if (!InfoBoxLayout::landscape) {
+    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
+  }
 #endif
 
   MapWindowFont = CreateFontIndirect (&logfont);
@@ -1126,7 +1147,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   ///////////////////////////////////////// create infoboxes
 
-    InfoBoxLayout::ScreenGeometry(rc);
     InfoBoxLayout::CreateInfoBoxes(rc);
 
     ButtonLabel::CreateButtonLabels(rc);
@@ -1791,49 +1811,11 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               return 0;
 
             case IDD_LOGGER:
-              TCHAR TaskMessage[1024];
               MenuActive = true;
 	      DialogActive = true;
 
-              if(LoggerActive)
-                {
-                  if(MessageBox(hWndMapWindow,gettext(TEXT("Stop Logger")),gettext(TEXT("Stop Logger")),MB_YESNO|MB_ICONQUESTION) == IDYES)
-                    LoggerActive = FALSE;
-                }
-              else
-                {
-                  _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
-                  for(i=0;i<MAXTASKPOINTS;i++)
-                    {
-                      if(Task[i].Index == -1)
-                        {
-                          if(i==0)
-                            _tcscat(TaskMessage,TEXT("None"));
+	      guiToggleLogger();
 
-			  Debounce();
-                          break;
-                        }
-                      _tcscat(TaskMessage,WayPointList[ Task[i].Index ].Name);
-                      _tcscat(TaskMessage,TEXT("\r\n"));
-                    }
-
-                  if(MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
-                    {
-                      LoggerActive = TRUE;
-                      StartLogger(strAssetNumber);
-		      LoggerHeader();
-                      StartDeclaration();
-                      for(i=0;i<MAXTASKPOINTS;i++)
-                        {
-                          if(Task[i].Index == -1) {
-			    Debounce();
-			    break;
-			  }
-                          AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
-                        }
-                      EndDeclaration();
-                    }
-                }
               MenuActive = false;
 	      FullScreen();
               SwitchToMapWindow();
@@ -2318,10 +2300,10 @@ void PopupAnalysis()
 {
   DialogActive = true;
   if (InfoBoxLayout::landscape) {
-    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndInfoWindow[0],
+    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndMainWindow,
 	      (DLGPROC)AnalysisProc);
   } else {
-    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndInfoWindow[0],
+    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndMainWindow,
 	      (DLGPROC)AnalysisProc);
   }
   DialogActive = false;
@@ -2334,10 +2316,10 @@ void PopupWaypointDetails()
 
   if (InfoBoxLayout::landscape) {
     DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS_LANDSCAPE,
-	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
+	      hWndMainWindow, (DLGPROC)WaypointDetails);
   } else {
     DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS,
-	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
+	      hWndMainWindow, (DLGPROC)WaypointDetails);
   }
     DialogActive = false;
 
@@ -2589,7 +2571,7 @@ void Event_SelectInfoBox(int i) {
 void Event_ChangeInfoBoxType(int i) {
   int j, k;
 
-  if (InfoFocus<=0) {
+  if (InfoFocus<0) {
     return;
   }
 

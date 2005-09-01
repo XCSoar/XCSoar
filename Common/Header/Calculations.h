@@ -41,6 +41,7 @@ typedef struct _DERIVED_INFO
   int    Circling;
   int    FinalGlide;
   int    AutoMcCready;
+  int    Flying;
   double NextAltitudeRequired;
   double NextAltitudeDifference;
   double FinalAltitudeRequired;
