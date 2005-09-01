@@ -51,7 +51,7 @@ bool gnav = false;
 
 bool geometrychanged = false;
 
-
+bool InfoBoxLayout::landscape = false;
 
 void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc, 
 				       int *x, int *y,
@@ -169,6 +169,7 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
 
   if (rc.bottom<rc.right) {
     // landscape mode
+    landscape = true;
     if (InfoBoxGeometry<4) {
       geometrychanged = true;
 
@@ -181,6 +182,7 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
     }
 
   } else {
+    landscape = false;
     // portrait mode
     if (InfoBoxGeometry>=3) {
       InfoBoxGeometry= 0;

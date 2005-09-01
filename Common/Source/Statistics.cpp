@@ -3,6 +3,7 @@
 #include "Externs.h"
 #include "McReady.h"
 #include "Units.h"
+#include "InfoBoxLayout.h"
 
 extern HFONT                                   StatisticsFont;
 
@@ -619,11 +620,19 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       SendDlgItemMessage(hDlg, IDC_ANALYSISTEXT, WM_SETFONT,
                   (WPARAM)StatisticsFont,MAKELPARAM(TRUE,0));
 
-      rcgfx = rc;
-      rcgfx.left  += 10;
-      rcgfx.right -= 10;
-      rcgfx.top = (rc.bottom-rc.top)*2/10+rc.top;
-      rcgfx.bottom = (rc.bottom-rc.top)*2/3+rc.top;
+      if (!InfoBoxLayout::landscape) {
+	rcgfx = rc;
+	rcgfx.left  += 10;
+	rcgfx.right -= 10;
+	rcgfx.top = (rc.bottom-rc.top)*2/10+rc.top;
+	rcgfx.bottom = (rc.bottom-rc.top)*2/3+rc.top;
+      } else {
+	rcgfx = rc;
+	rcgfx.left  = (rc.right-rc.left)*0.36+rc.left;
+	rcgfx.right = rc.right-10;
+	rcgfx.top = (rc.bottom-rc.top)*2/10+rc.top;
+	rcgfx.bottom = rc.bottom;
+      }
       
       return TRUE;
 

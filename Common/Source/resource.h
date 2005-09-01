@@ -86,6 +86,10 @@
 #define IDD_INTERFACEFILES              260
 #define IDR_TEXT1                       261
 #define IDR_TEXT_LANGUAGE               264
+#define IDD_PROGRESS_LANDSCAPE          265
+#define IDD_MENU_LANDSCAPE              266
+#define IDD_ANALYSIS_LANDSCAPE          267
+#define IDD_WAYPOINTDETAILS_LANDSCAPE   268
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003
@@ -330,7 +334,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        265
+#define _APS_NEXT_RESOURCE_VALUE        269
 #define _APS_NEXT_COMMAND_VALUE         40025
 #define _APS_NEXT_CONTROL_VALUE         1260
 #define _APS_NEXT_SYMED_VALUE           102

@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.86 2005/08/31 18:02:02 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.87 2005/09/01 01:48:16 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1547,7 +1547,12 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
       if(wmControl == hWndMenuButton)
         {
-          wID = DialogBox(hInst, (LPCTSTR)IDD_MENU, hWnd, (DLGPROC)Menu);
+	  if (InfoBoxLayout::landscape) {
+	    wID = DialogBox(hInst, (LPCTSTR)IDD_MENU_LANDSCAPE, 
+			    hWnd, (DLGPROC)Menu);
+	  } else {
+	    wID = DialogBox(hInst, (LPCTSTR)IDD_MENU, hWnd, (DLGPROC)Menu);
+	  }
           DialogActive = true;
                 
           switch (wID)
@@ -2307,8 +2312,13 @@ void SwitchToMapWindow(void)
 void PopupAnalysis()
 {
   DialogActive = true;
-  DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndInfoWindow[0], 
-            (DLGPROC)AnalysisProc);
+  if (InfoBoxLayout::landscape) {
+    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndInfoWindow[0], 
+	      (DLGPROC)AnalysisProc);
+  } else {
+    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndInfoWindow[0], 
+	      (DLGPROC)AnalysisProc);
+  }
   DialogActive = false;
 }
 
@@ -2316,8 +2326,15 @@ void PopupAnalysis()
 void PopupWaypointDetails()
 {
   DialogActive = true;
-  DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS, hWndInfoWindow[0], (DLGPROC)WaypointDetails);
-  DialogActive = false;
+  
+  if (InfoBoxLayout::landscape) {
+    DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS_LANDSCAPE, 
+	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
+  } else {
+    DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS, 
+	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
+  }
+    DialogActive = false;
 
   /*
   ShowWindow(hWndCB,SW_HIDE);                           
