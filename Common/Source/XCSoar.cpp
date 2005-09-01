@@ -1547,7 +1547,12 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
       if(wmControl == hWndMenuButton)
         {
-          wID = DialogBox(hInst, (LPCTSTR)IDD_MENU, hWnd, (DLGPROC)Menu);
+	  if (InfoBoxLayout::landscape) {
+	    wID = DialogBox(hInst, (LPCTSTR)IDD_MENU_LANDSCAPE,
+			    hWnd, (DLGPROC)Menu);
+	  } else {
+	    wID = DialogBox(hInst, (LPCTSTR)IDD_MENU, hWnd, (DLGPROC)Menu);
+	  }
           DialogActive = true;
 
           switch (wID)
@@ -2307,8 +2312,13 @@ void SwitchToMapWindow(void)
 void PopupAnalysis()
 {
   DialogActive = true;
-  DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndInfoWindow[0],
-            (DLGPROC)AnalysisProc);
+  if (InfoBoxLayout::landscape) {
+    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndInfoWindow[0],
+	      (DLGPROC)AnalysisProc);
+  } else {
+    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndInfoWindow[0],
+	      (DLGPROC)AnalysisProc);
+  }
   DialogActive = false;
 }
 
@@ -2316,8 +2326,15 @@ void PopupAnalysis()
 void PopupWaypointDetails()
 {
   DialogActive = true;
-  DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS, hWndInfoWindow[0], (DLGPROC)WaypointDetails);
-  DialogActive = false;
+
+  if (InfoBoxLayout::landscape) {
+    DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS_LANDSCAPE,
+	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
+  } else {
+    DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS,
+	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
+  }
+    DialogActive = false;
 
   /*
   ShowWindow(hWndCB,SW_HIDE);

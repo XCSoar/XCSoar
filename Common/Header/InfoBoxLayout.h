@@ -6,6 +6,7 @@
 
 class InfoBoxLayout {
  public:
+  static bool landscape;
   static void CreateInfoBoxes(RECT rc);
   static int InfoBoxGeometry;
   static int ControlWidth, ControlHeight, TitleHeight;

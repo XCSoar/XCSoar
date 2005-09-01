@@ -38,7 +38,7 @@
 #include "device.h"
 #include "units.h"
 #include "GaugeVario.h"
-
+#include "InfoBoxLayout.h"
 
 
 #define USE_ARH_COLOUR_SELECTOR 1
@@ -3308,8 +3308,10 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         GetClientRect(hDlg, &rc);
         hdc = BeginPaint(hDlg, &ps);
-        jpgimage1.Draw (hdcScreen, 0, 45,
-			rc.right - rc.left, rc.bottom -  rc.top-45);
+        jpgimage1.Draw (hdcScreen, 0, 45, -1, -1);
+			// rc.right - rc.left, rc.bottom -  rc.top-45);
+	// TODO: rotate or rescale satelite images
+	// or make them square and crop depending on landscape orientation
         EndPaint(hDlg, &ps);
       }
       if (page==3) {
@@ -3746,13 +3748,23 @@ BOOL SetProgressStepSize(int nSize) {
 HWND CreateProgressDialog(TCHAR* text) {
   if (hProgress) {
   } else {
-    hProgress=
-      CreateDialog(hInst,
-                   (LPCTSTR)IDD_PROGRESS,
-                   hWndMainWindow,
-                   (DLGPROC)Progress);
 
-	SetWindowText_gettext(hProgress, IDC_VERSIONTEXT);
+    if (InfoBoxLayout::landscape) {
+      hProgress=
+	CreateDialog(hInst,
+		     (LPCTSTR)IDD_PROGRESS_LANDSCAPE,
+		     hWndMainWindow,
+		     (DLGPROC)Progress);
+
+    } else {
+      hProgress=
+	CreateDialog(hInst,
+		     (LPCTSTR)IDD_PROGRESS,
+		     hWndMainWindow,
+		     (DLGPROC)Progress);
+    }
+
+    SetWindowText_gettext(hProgress, IDC_VERSIONTEXT);
     SetWindowText(GetDlgItem(hProgress,IDC_VERSION),XCSoar_Version);
 
     ShowWindow(hProgress,SW_SHOW);
