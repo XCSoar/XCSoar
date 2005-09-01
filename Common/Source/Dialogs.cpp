@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.62 2005/09/01 01:48:15 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.63 2005/09/01 06:31:47 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -39,7 +39,7 @@
 #include "units.h"
 #include "GaugeVario.h"
 #include "InfoBoxLayout.h"
-
+#include "InputEvents.h"
 
 #define USE_ARH_COLOUR_SELECTOR 1
 
@@ -3184,6 +3184,12 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
       return TRUE;
 
+    case WM_KEYUP:
+      DoStatusMessage(TEXT("Event in dialog"));
+      if (InputEvents::processKey(wParam)) {
+	return TRUE;
+      }
+      break;
     case WM_COMMAND:
       if (LOWORD(wParam) == IDOK) 
         {
