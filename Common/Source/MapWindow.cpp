@@ -174,6 +174,10 @@ extern HFONT  MapWindowBoldFont;
 
 ///////////////////
 
+bool MapWindow::isAutoZoom() {
+	return AutoZoom;
+}
+
 
 void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mode) {
 
@@ -340,6 +344,10 @@ void MapWindow::Event_PanCursor(int dx, int dy) {
     PanX += Xstart-X;
     PanY += Ystart-Y;
   }
+}
+
+bool MapWindow::isPan() {
+	return EnablePan;
 }
 
 
