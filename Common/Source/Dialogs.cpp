@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.63 2005/09/01 06:31:47 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.64 2005/09/01 08:12:55 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -3185,6 +3185,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       return TRUE;
 
     case WM_KEYUP:
+		// XXX SDP - This looks like a debug line ? JW?
       DoStatusMessage(TEXT("Event in dialog"));
       if (InputEvents::processKey(wParam)) {
 	return TRUE;
