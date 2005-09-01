@@ -35,6 +35,7 @@ void	AirspeedProcessing(int UpDown)
 {
   if (UpDown==0) {
     EnableCalibration = !EnableCalibration;
+	// XXX InputEvents - Is this an automatic or user thing - either way, needs moving
     if (EnableCalibration)
       DoStatusMessage(TEXT("Calibrate ON"));
     else

@@ -1,6 +1,8 @@
 /*
 
-InputEvent
+  XXX This is all bad - needs a total rewrite
+
+InputEvent s
 
 This class handles all input events. Basic features include:
 
@@ -244,6 +246,7 @@ release 		markse the point of release from tow
 #include "Process.h"
 #include "Port.h"
 
+// Sensible maximums
 #define MAX_MODE 100
 #define MAX_MODE_STRING 25
 #define MAX_KEY 255
@@ -726,16 +729,17 @@ void InputEvents::eventSounds(TCHAR *misc) {
     EnableSoundVario = !EnableSoundVario;
   else if (wcscmp(misc, TEXT("on")) == 0)
     EnableSoundVario = 1;
-  if (wcscmp(misc, TEXT("off")) == 0)
+  else if (wcscmp(misc, TEXT("off")) == 0)
     EnableSoundVario = 0;
-
-  // ARH Let the user know what's happened
-  if (EnableSoundVario != OldEnableSoundVario) {
-    VarioSound_EnableSound((BOOL)EnableSoundVario);
+  else if (wcscmp(misc, TEXT("show")) == 0) {
     if (EnableSoundVario)
       DoStatusMessage(TEXT("Vario Sounds ON"));
     else
       DoStatusMessage(TEXT("Vario Sounds OFF"));
+  }
+
+  if (EnableSoundVario != OldEnableSoundVario) {
+    VarioSound_EnableSound((BOOL)EnableSoundVario);
   }
 }
 
@@ -756,7 +760,7 @@ void InputEvents::eventSnailTrail(TCHAR *misc) {
   else if (wcscmp(misc, TEXT("short")) == 0)
     TrailActive = 2;
 
-  if (OldTrailActive != TrailActive) {
+  else if (wcscmp(misc, TEXT("show")) == 0) {
     if (TrailActive==0)
       DoStatusMessage(TEXT("SnailTrail OFF"));
     if (TrailActive==1)
@@ -802,7 +806,6 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
 		  EnableAuxiliaryInfo = true;
 		}
 	  }
-
   }
 }
 
@@ -811,80 +814,85 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
 
 // eventAutoZoom - Turn on|off|toggle AutoZoom
 // misc:
-//	on - Turn on if not already
-//	off - Turn off if not already
-//	toggle - Toggle current full screen status
-void InputEvents::eventAutoZoom(TCHAR* misc) {
+//	auto on - Turn on if not already
+//	auto off - Turn off if not already
+//	auto toggle - Toggle current full screen status
+//	auto show
+//	+	- Zoom in a bit
+//	++	- Zoom in more
+//	-	- Zoom out a bit
+//	--	- Zoom out more
+//	n.n	- Zoom to particular number
+//	show - Show current zoom number
+void InputEvents::eventZoom(TCHAR* misc) {
   // JMW pass through to handler in MapWindow
   // here:
   // -1 means toggle
   // 0 means off
   // 1 means on
+  float zoom;
 
-  if (wcscmp(misc, TEXT("toggle")) == 0) {
+  if (wcscmp(misc, TEXT("auto toggle")) == 0)
     MapWindow::Event_AutoZoom(-1);
-    return;
-  }
-  else if (wcscmp(misc, TEXT("on")) == 0) {
+  else if (wcscmp(misc, TEXT("auto on")) == 0)
     MapWindow::Event_AutoZoom(1);
-    return;
-  }
-  else if (wcscmp(misc, TEXT("off")) == 0) {
+  else if (wcscmp(misc, TEXT("auto off")) == 0)
     MapWindow::Event_AutoZoom(0);
-    return;
+  else if (wcscmp(misc, TEXT("auto show")) == 0) {
+	  if (AutoZoom)
+		DoStatusMessage(TEXT("AutoZoom ON"));
+	  else
+		DoStatusMessage(TEXT("AutoZoom OFF"));
   }
-}
-
-
-void InputEvents::eventScaleZoom(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("out")) == 0) {
+  else if (wcscmp(misc, TEXT("out")) == 0)
     MapWindow::Event_ScaleZoom(-1);
-    return;
-  }
-  if (wcscmp(misc, TEXT("in")) == 0) {
+  else if (wcscmp(misc, TEXT("in")) == 0)
     MapWindow::Event_ScaleZoom(1);
-    return;
-  }
-  if (wcscmp(misc, TEXT("-")) == 0) {
+  else if (wcscmp(misc, TEXT("-")) == 0)
     MapWindow::Event_ScaleZoom(-1);
-    return;
-  }
-  if (wcscmp(misc, TEXT("+")) == 0) {
+  else if (wcscmp(misc, TEXT("+")) == 0)
     MapWindow::Event_ScaleZoom(1);
-    return;
-  }
-  if (wcscmp(misc, TEXT("--")) == 0) {
+  else if (wcscmp(misc, TEXT("--")) == 0)
     MapWindow::Event_ScaleZoom(-2);
-    return;
-  }
-  if (wcscmp(misc, TEXT("++")) == 0) {
+  else if (wcscmp(misc, TEXT("++")) == 0)
     MapWindow::Event_ScaleZoom(2);
-    return;
-  }
-}
-
-void InputEvents::eventSetZoom(TCHAR *misc) {
-	float zoom;
-	int found = swscanf(misc, TEXT("%f"), &zoom);
-	if (found == 1)
+  else if (swscanf(misc, TEXT("%f"), &zoom) == 1)
 		MapWindow::Event_SetZoom((double)zoom);
 }
 
+// Pan
+//	on	Turn pan on
+//	off	Turn pan off
+//	up	Pan up
+//	down	Pan down
+//	left	Pan left
+//	right	Pan right
+//	TODO n,n	Go that direction - +/-
+//	TODO ???	Go to particular point
+//	TODO ???	Go to waypoint (eg: next, named)
 void InputEvents::eventPan(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("toggle")) == 0) {
+  if (wcscmp(misc, TEXT("toggle")) == 0)
     MapWindow::Event_Pan(-1);
-    return;
-  }
-  else if (wcscmp(misc, TEXT("on")) == 0) {
+  else if (wcscmp(misc, TEXT("on")) == 0)
     MapWindow::Event_Pan(1);
-    return;
-  }
-  else if (wcscmp(misc, TEXT("off")) == 0) {
+  else if (wcscmp(misc, TEXT("off")) == 0)
     MapWindow::Event_Pan(0);
-    return;
+  else if (wcscmp(misc, TEXT("up")) == 0)
+    MapWindow::Event_PanCursor(0,1);
+  else if (wcscmp(misc, TEXT("down")) == 0)
+    MapWindow::Event_PanCursor(0,-1);
+  else if (wcscmp(misc, TEXT("left")) == 0)
+    MapWindow::Event_PanCursor(1,0);
+  else if (wcscmp(misc, TEXT("right")) == 0)
+    MapWindow::Event_PanCursor(-1,0);
+  else if (wcscmp(misc, TEXT("show")) == 0) {
+		if (EnablePan)
+		DoStatusMessage(TEXT("Pan mode ON"));
+		else
+		DoStatusMessage(TEXT("Pan mode OFF"));
   }
-}
 
+}
 
 void InputEvents::eventClearWarningsAndTerrain(TCHAR *misc) {
   // dumb at the moment, just to get legacy functionality
@@ -936,22 +944,6 @@ void InputEvents::eventDoInfoKey(TCHAR *misc) {
 }
 
 
-void InputEvents::eventPanCursor(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("up")) == 0) {
-    MapWindow::Event_PanCursor(0,1);
-  }
-  if (wcscmp(misc, TEXT("down")) == 0) {
-    MapWindow::Event_PanCursor(0,-1);
-  }
-  if (wcscmp(misc, TEXT("left")) == 0) {
-    MapWindow::Event_PanCursor(1,0);
-  }
-  if (wcscmp(misc, TEXT("right")) == 0) {
-    MapWindow::Event_PanCursor(-1,0);
-  }
-}
-
-
 void InputEvents::eventMode(TCHAR *misc) {
   InputEvents::setMode(misc);
 }
@@ -992,6 +984,7 @@ void InputEvents::eventPlaySound(TCHAR *misc) {
 }
 
 
+// XXX auto ? Should be auto toggle, auto on, auto off ?
 void InputEvents::eventAdjustMcCready(TCHAR *misc) {
   if (wcscmp(misc, TEXT("up")) == 0) {
     McCreadyProcessing(1);
@@ -1005,6 +998,8 @@ void InputEvents::eventAdjustMcCready(TCHAR *misc) {
 }
 
 
+// XXX Increase wind by larger amounts ? Set wind to specific amount ?
+//	(may sound silly - but future may get SMS event that then sets wind)
 void InputEvents::eventAdjustWind(TCHAR *misc) {
   if (wcscmp(misc, TEXT("up")) == 0) {
     WindSpeedProcessing(1);
@@ -1051,6 +1046,7 @@ void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
   }
 }
 
+// XXX toggle, abort, resume
 void InputEvents::eventAbortTask(TCHAR *misc) {
   //  if (wcscmp(misc, TEXT("toggle")) == 0) {
     LockFlightData();
@@ -1063,3 +1059,4 @@ void InputEvents::eventAbortTask(TCHAR *misc) {
 // JMW TODO: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.
 // this allows the buttons to indicate whether things are enabled/disabled
+// SDP TODO: maybe instead do conditional processing ?
