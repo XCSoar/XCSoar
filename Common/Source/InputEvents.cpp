@@ -839,7 +839,7 @@ void InputEvents::eventZoom(TCHAR* misc) {
   else if (wcscmp(misc, TEXT("auto off")) == 0)
     MapWindow::Event_AutoZoom(0);
   else if (wcscmp(misc, TEXT("auto show")) == 0) {
-	  if (AutoZoom)
+	  if (MapWindow::isAutoZoom())
 		DoStatusMessage(TEXT("AutoZoom ON"));
 	  else
 		DoStatusMessage(TEXT("AutoZoom OFF"));
@@ -886,10 +886,10 @@ void InputEvents::eventPan(TCHAR *misc) {
   else if (wcscmp(misc, TEXT("right")) == 0)
     MapWindow::Event_PanCursor(-1,0);
   else if (wcscmp(misc, TEXT("show")) == 0) {
-		if (EnablePan)
-		DoStatusMessage(TEXT("Pan mode ON"));
+	  if (MapWindow::isPan)
+			DoStatusMessage(TEXT("Pan mode ON"));
 		else
-		DoStatusMessage(TEXT("Pan mode OFF"));
+			DoStatusMessage(TEXT("Pan mode OFF"));
   }
 
 }

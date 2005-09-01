@@ -152,6 +152,8 @@ class MapWindow {
   static bool RequestFastRefresh;
   static bool RequestFullScreen;
 
+  static bool isAutoZoom();
+  static bool isPan();
 
   static void GetLocationFromScreen(double *X, double *Y);
   static void DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h);
