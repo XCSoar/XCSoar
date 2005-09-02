@@ -12,7 +12,7 @@ class GlidePolar {
   static double McCreadyAltitude(double MCREADY, double Distance,
                                  double Bearing, double WindSpeed,
                                  double WindBearing, double *BestCruiseTrack,
-                                 double *VMcCready, int isFinalGlide,
+                                 double *VMcCready, bool isFinalGlide,
                                  double *timetogo);
 
 

@@ -241,7 +241,7 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
                                  Calculated->WindBearing,
                                  0,
                                  &VOptnew,
-                                 1,
+                                 true,
                                  0
                                  );
 
@@ -1456,7 +1456,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
                                  Calculated->WindBearing,
                                  &(Calculated->BestCruiseTrack),
                                  &(Calculated->VMcCready),
-                                 0,
+                                 false,
                                  // ||()
                                  // JMW TODO!!!!!!!!!!!
                                  0);
@@ -1929,7 +1929,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
                                                   1.0, bearing,
                                                   Calculated->WindSpeed,
                                                   Calculated->WindBearing,
-                                                  0, 0, 1, 0);
+                                                  0, 0, true, 0);
   double maxrange = Basic->Altitude/ialtitude;
   double lat, lon;
   double latlast, lonlast;
@@ -2037,7 +2037,7 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
                                          Calculated->WindBearing,
                                          0,
                                          0,
-                                         1,
+                                         true,
                                          0);
 
   return ((Basic->Altitude) - AltReqd - WayPointList[i].Altitude - SAFETYALTITUDEARRIVAL);
