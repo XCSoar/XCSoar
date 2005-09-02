@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.89 2005/09/01 16:13:38 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.90 2005/09/02 01:18:23 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -391,7 +391,7 @@ SCREEN_INFO Data_Options[] = {
 	  {TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 3, 32},
 
 	  // 38
-	  {TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.2f")), NoProcessing, 4, 19},
+	  {TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 4, 19},
 
 	  // 39
 	  {TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},

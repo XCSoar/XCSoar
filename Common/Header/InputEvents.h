@@ -48,7 +48,10 @@ class InputEvents {
   static void eventBugs(TCHAR *misc);
   static void eventBallast(TCHAR *misc);
   static void eventLogger(TCHAR *misc);
+  static void eventClearAirspaceWarnings(TCHAR *misc);
+  static void eventClearStatusMessages(TCHAR *misc);
 };
+
 
 // GCE = Glide Computer Event
 enum {
