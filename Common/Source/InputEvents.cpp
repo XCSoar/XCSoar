@@ -649,6 +649,7 @@ void InputEvents::eventZoom(TCHAR* misc) {
 // Pan
 //	on	Turn pan on
 //	off	Turn pan off
+//      supertoggle Toggles pan and fullscreen
 //	up	Pan up
 //	down	Pan down
 //	left	Pan left
@@ -659,6 +660,8 @@ void InputEvents::eventZoom(TCHAR* misc) {
 void InputEvents::eventPan(TCHAR *misc) {
   if (wcscmp(misc, TEXT("toggle")) == 0)
     MapWindow::Event_Pan(-1);
+  else if (wcscmp(misc, TEXT("supertoggle")) == 0)
+    MapWindow::Event_Pan(-2);
   else if (wcscmp(misc, TEXT("on")) == 0)
     MapWindow::Event_Pan(1);
   else if (wcscmp(misc, TEXT("off")) == 0)
@@ -679,6 +682,7 @@ void InputEvents::eventPan(TCHAR *misc) {
   }
 
 }
+
 
 void InputEvents::eventClearWarningsAndTerrain(TCHAR *misc) {
   // dumb at the moment, just to get legacy functionality
@@ -930,18 +934,35 @@ void InputEvents::eventLogger(TCHAR *misc) {
 }
 
 
+
+void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
+  ClearAirspaceWarnings(true);
+}
+
+void InputEvents::eventClearStatusMessages(TCHAR *misc) {
+  ClearStatusMessages();
+}
+
+
+
 // JMW TODO: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.
 // this allows the buttons to indicate whether things are enabled/disabled
 // SDP TODO: maybe instead do conditional processing ?
 
+// XXX JMW TODO: make sure when we change things here we also set registry values...
+// or maybe have special tag "save" which indicates it should be saved (notice that
+// the wind adjustment uses this already, see in Process.cpp)
+
 /* TODO
 
    eventMainMenu
    eventMenu
-   eventBugs - up down max min show // JMW new
-   eventBallast up down max min show // JMW new
-   eventLogger - start/stop/toggle/addnote // JMW new
+   eventBugs - up down max min show // JMW new done
+   eventBallast up down max min show // JMW new done
+   eventLogger - start/stop/toggle/addnote // JMW new done
+   eventClearAirspaceWarnings - // JMW new done
+   eventClearStatusMessages - // JMW new done
 
 
    eventPanWaypoint		                - Set pan to a waypoint
@@ -955,10 +976,10 @@ void InputEvents::eventLogger(TCHAR *misc) {
    eventAirspaceWarnings- on, off, time nn, ack nn
    eventTerrain			- see MapWindow::Event_Terrain
    eventCompass			- on, off, cruise on, crusie off, climb on, climb off
-   eventVario			- on, off
+   eventVario			- on, off // JMW what does this do?
    eventOrientation		- north, track,  ???
-   eventTerrainRange	- on, off (might be part of eventTerrain)
+   eventTerrainRange	        - on, off (might be part of eventTerrain)
    eventSounds			- Include Task and Modes sounds along with Vario
-						- Include master nn, deadband nn, netto trigger mph/kts/...
+                                    - Include master nn, deadband nn, netto trigger mph/kts/...
 
 */

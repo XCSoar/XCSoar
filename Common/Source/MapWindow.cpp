@@ -414,7 +414,27 @@ void MapWindow::Event_Terrain(int vswitch) {
 
 
 void MapWindow::Event_Pan(int vswitch) {
-  if (vswitch == -1) {
+  static bool oldfullscreen = 0;
+  if (vswitch == -2) { // superpan, toggles fullscreen also
+
+    if (!EnablePan) {
+      // pan not active on entry, save fullscreen status
+      oldfullscreen = MapWindow::IsMapFullScreen();
+    } else {
+      // pan is active, need to restore
+      if (!oldfullscreen) {
+	// change it if necessary
+	RequestFullScreen = false;
+      }
+    }
+
+    // new mode
+    EnablePan = !EnablePan;
+    if (EnablePan) { // pan now on, so go fullscreen
+      RequestFullScreen = true;
+    }
+
+  } else if (vswitch == -1) {
     EnablePan = !EnablePan;
   } else {
     EnablePan = (bool)vswitch; // 0 off, 1 on
@@ -729,15 +749,15 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     //		status	- Status message being displayed
 
     if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
-	if (InputEvents::processKey(wParam)) {
-	  //	  DoStatusMessage(TEXT("Event in default"));
-	  return TRUE; // don't go to default handler
-	}
+      if (InputEvents::processKey(wParam)) {
+	//	  DoStatusMessage(TEXT("Event in default"));
+      }
+      return TRUE; // don't go to default handler
     } else {
       // DoStatusMessage(TEXT("Event in dialog"));
       if (InputEvents::processKey(wParam)) {
-	return TRUE; // don't go to default handler
       }
+      return TRUE; // don't go to default handler
     }
     break;
   }

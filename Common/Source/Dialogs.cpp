@@ -3398,10 +3398,11 @@ public:
   HFONT   hFont;
   WNDPROC fnOldWndProc;
   BOOL    bCapturedMouse;
+  DWORD   texpiry; //
 
   // Initialize to sensible values
   CStatMsgUserData()
-    : hFont(NULL), fnOldWndProc(NULL), bCapturedMouse(FALSE) {};
+    : hFont(NULL), fnOldWndProc(NULL), bCapturedMouse(FALSE), texpiry(0) {};
 
   // Clean up mess
   ~CStatMsgUserData() {
@@ -3412,6 +3413,14 @@ public:
     fnOldWndProc = NULL;
   }
 };
+
+
+bool forceDestroyStatusMessage = false;
+
+void ClearStatusMessages(void) {
+  forceDestroyStatusMessage = true;
+}
+
 
 
 // Intercept messages destined for the Status Message window
@@ -3470,13 +3479,23 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 
     if (!PtInRect(&rc, pt)) return 0;
 
-    // Fall through to Timer case
-  case WM_TIMER :
-
-    MapWindow::RequestFastRefresh = true; // trigger screen refresh
     DestroyWindow(hwnd);
     return 0;
+
+  case WM_TIMER :
+
+    // force destruction of window...
+    if (forceDestroyStatusMessage) {
+      DestroyWindow(hwnd);
+      return 0;
+    }
+
+    if ((data->texpiry>0) && (::GetTickCount()>data->texpiry)) {
+      DestroyWindow(hwnd);
+    }
+    return 0;
   case WM_DESTROY :
+
     // Clean up after ourselves
     if (data != NULL){
       delete data;
@@ -3595,6 +3614,7 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 }
 
 
+
 // Pop up a text dialog for a specified time
 // period in milliseconds
 //
@@ -3619,6 +3639,8 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
   int widthMain, heightMain;
   int widthStatus, heightStatus;
   int linecount;
+
+  forceDestroyStatusMessage = false;
 
   // Check inputs are valid
   if (delay_ms < 0) return;
@@ -3709,12 +3731,15 @@ void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
 					       (LONG) StatusMsgWndTimerProc);
 
   if (delay_ms) {
-    // Set timer to specified timeout.
-    // Window will close when timer fires
-    if (!SetTimer(hWnd, 1, delay_ms, NULL)) {
-      DestroyWindow(hWnd);  // Couldn't init timer
-      return;
-    }
+    data->texpiry = delay_ms + ::GetTickCount();
+  } else {
+    data->texpiry = 0;
+  }
+  // Set timer to specified timeout.
+  // Window will close when timer fires
+  if (!SetTimer(hWnd, 1, 500, NULL)) {
+    DestroyWindow(hWnd);  // Couldn't init timer
+    return;
   }
 
   // SCOTT TODO - Add in DestroyWindow on click anywhere in window
