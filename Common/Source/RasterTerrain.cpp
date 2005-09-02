@@ -34,7 +34,7 @@ void RasterTerrain::ClearTerrainCache() {
   SortThresold = MAXTERRAINCACHE-1;
 }
 
-int TerrainCacheCompare(const void *elem1, const void *elem2 ){
+static int _cdecl TerrainCacheCompare(const void *elem1, const void *elem2 ){
 #ifdef PARANOID
   if (!elem1 && !elem2) {
     return(0);
