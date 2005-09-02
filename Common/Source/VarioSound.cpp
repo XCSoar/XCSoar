@@ -132,7 +132,7 @@ void audio_soundparameters(void) {
 
 unsigned char audio_adjust_volume(unsigned char sval) {
   short oval = ((((short)sval-0x80)*(short)audio_volume)>>3)+0x80;
-  return oval;
+  return (unsigned char)oval;
 }
 
 
@@ -236,7 +236,7 @@ unsigned char audio_get_sound_byte(void) {
 
   }
   beeplast = beepthis;
-  return audio_sound_loud(i, beepthis, audio_stf_counter==0);
+  return audio_sound_loud(i, (beepthis > 0), audio_stf_counter==0);
 }
 
 // sin function indexed by unsigned char.  This is a fast implementation.
@@ -992,7 +992,7 @@ extern "C" {
     variosound_vscale_last = variosound_vscale_in;
 
     // set new value, clipped
-    variosound_vscale_in = max(-100,min(v+2.2*randomgaussian(),100));
+    variosound_vscale_in = (short)max(-100,min(v+2.2*randomgaussian(),100));
 
     // calculate time elapsed since last sound,
     // usually this will be 500 or 1000 ms
@@ -1156,11 +1156,11 @@ void audio_soundmode(short vinst, short valt) {
   }
 
   // main vario sound frequency based on instantaneous reading
-  audio_soundfrequency = audio_frequencytable(vcur);
+  audio_soundfrequency = audio_frequencytable((unsigned char)vcur);
   audio_altsoundfrequency = audio_soundfrequency;
 
   // beep frequency based on smoothed input to prevent jumps
-  audio_beepfrequency = audio_delaytable(vsmooth);
+  audio_beepfrequency = audio_delaytable((unsigned char)vsmooth);
 
   // apply deadbands and sound types
   audio_soundtype = 0;
@@ -1198,7 +1198,7 @@ void audio_soundmode(short vinst, short valt) {
 
       if (0) {
 	vthis = max(0, min(valtsmooth+vsmooth,200));
-	audio_altsoundfrequency = audio_frequencytable(vthis);
+	audio_altsoundfrequency = audio_frequencytable((unsigned char)vthis);
 	
 	// in climb and need to speed up, switch to sink beep type
 	if ((vsmooth>100) && (valtsmooth<0)) {
@@ -1210,7 +1210,7 @@ void audio_soundmode(short vinst, short valt) {
 	
 	if ((vsmooth<100)&&(valtsmooth<0)) {
 	  vthis = max(0, min(100-valtsmooth*2,200));
-	  audio_beepfrequency = audio_delaytable(vthis);
+	  audio_beepfrequency = audio_delaytable((unsigned char)vthis);
 	  audio_altsoundfrequency = audio_soundfrequency;
 	}
 	
@@ -1231,14 +1231,14 @@ void audio_soundmode(short vinst, short valt) {
 	
 	audio_soundtype = 2; // long beeps
 	audio_beepfrequency = audio_delaytable(10); // long period
-	audio_soundfrequency = audio_frequencytable(vthis);
+	audio_soundfrequency = audio_frequencytable((unsigned char)vthis);
 	
       }
       if (valtsmooth<0) { // speed up
 	
 	audio_soundtype = 4; // double beep
 	audio_beepfrequency = audio_delaytable(10); // long period
-	audio_soundfrequency = audio_frequencytable(vthis);
+	audio_soundfrequency = audio_frequencytable((unsigned char)vthis);
 	
       }
       

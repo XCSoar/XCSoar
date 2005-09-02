@@ -628,7 +628,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 	rcgfx.bottom = (rc.bottom-rc.top)*2/3+rc.top;
       } else {
 	rcgfx = rc;
-	rcgfx.left  = (rc.right-rc.left)*0.36+rc.left;
+	rcgfx.left  = long(double(rc.right-rc.left)*0.36)+rc.left;
 	rcgfx.right = rc.right-10;
 	rcgfx.top = (rc.bottom-rc.top)*2/10+rc.top;
 	rcgfx.bottom = rc.bottom;

@@ -317,7 +317,7 @@ void MapWindow::Event_AutoZoom(int vswitch) {
   if (vswitch== -1) {
     AutoZoom = !AutoZoom;
   } else {
-    AutoZoom = (bool)vswitch; // 0 off, 1 on
+    AutoZoom = (vswitch != 0); // 0 off, 1 on
   }
   
   if (AutoZoom) {
@@ -437,7 +437,7 @@ void MapWindow::Event_Pan(int vswitch) {
   } else if (vswitch == -1) {
     EnablePan = !EnablePan;
   } else {
-    EnablePan = (bool)vswitch; // 0 off, 1 on
+    EnablePan = (vswitch != 0); // 0 off, 1 on
   }
 
   if (!EnablePan) {
@@ -2838,7 +2838,7 @@ void MapWindow::CalculateWaypointReachable(void)
                                      // JMW was MCCREADY/LIFTMODIFY
           WaypointDistance,WaypointBearing, 
           DerivedDrawInfo.WindSpeed, 
-          DerivedDrawInfo.WindBearing,0,0,1,0);
+          DerivedDrawInfo.WindBearing,0,0,true,0);
         AltitudeRequired = AltitudeRequired * (1/BUGS);	
         AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL + WayPointList[i].Altitude ;
         AltitudeRequired = DrawInfo.Altitude - AltitudeRequired;				

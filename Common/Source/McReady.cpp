@@ -135,7 +135,7 @@ double GlidePolar::McCreadyAltitude(double emcready,
                                     double WindSpeed, double WindBearing, 
 		       double *BestCruiseTrack,
 		       double *VMcCready, 
-		       int isFinalGlide,
+		       bool isFinalGlide,
                        double *TimeToGo)
 {
   LockFlightData();
