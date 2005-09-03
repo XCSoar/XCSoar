@@ -5355,6 +5355,18 @@ SOURCE=..\..\Common\Header\compatibility.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Header\devCAI302.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\devEW.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\device.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Header\Dialogs.h
 # End Source File
 # Begin Source File
