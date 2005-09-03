@@ -659,7 +659,7 @@ SOURCE=..\..\Common\Source\devCAI302.cpp
 
 DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\devCai302.h"\
+	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
@@ -685,7 +685,7 @@ NODEP_CPP_DEVCA=\
 
 DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\devCai302.h"\
+	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -702,7 +702,7 @@ DEP_CPP_DEVCA=\
 
 DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\devCai302.h"\
+	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -730,7 +730,7 @@ NODEP_CPP_DEVCA=\
 
 DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\devCai302.h"\
+	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\externs.h"\
@@ -3890,7 +3890,7 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\devCai302.h"\
+	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -3936,7 +3936,7 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\devCai302.h"\
+	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -3968,7 +3968,7 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\devCai302.h"\
+	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -4012,7 +4012,7 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\devCai302.h"\
+	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -4090,6 +4090,18 @@ SOURCE=..\..\Common\Header\Calculations.h
 # Begin Source File
 
 SOURCE=..\..\Common\Header\compatibility.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\devCAI302.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\devEW.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Header\device.h
 # End Source File
 # Begin Source File
 
