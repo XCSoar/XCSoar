@@ -170,6 +170,9 @@ To run, click on either of the XCSoar icons on the Today screen...
 HARDWARE BUTTONS
 ============================================================================
 
+NOTE: Hardware buttons are now configurable in configuration and by default
+from Version 4.5 - see INPUT AND EVENT SYSTEM further down.
+
 Hardware buttons and the cursor operate differently in Map mode or InfoBox mode.
 
 Map mode:
@@ -583,3 +586,150 @@ waypoint.
 
 By default now, aborting a task always sets the active waypoint to the
 closest landable field.
+
+
+============================================================================
+LANGUAGE CONFIG
+============================================================================
+
+A language file (.xcl) is used to map the English phrases in the source 
+code to a customised language. Each entry in the language file represents
+a single box that appears on screen, and is an exact match lookup. No
+parsing of an entry is done. Things that require two parts, a name / label
+and a datum are not effected as the datum is already in the natural
+language (eg: waypoints). 
+
+Creating your own language is a simple matter of downloading the template.xcl
+file from the source package or the web site, editing it with a text editor
+and writing the new strings appropriate for the new language on the right
+side of the "=".
+
+Limitations currently include: ANSI only (unfortunately excludes some 
+European and many Asian languages).
+
+============================================================================
+STATUS MESSAGES
+============================================================================
+
+Each status message has a number of configurables...
+
+* sound - what sound to play when this message is displayed 
+* delay - How long should the message be displayed
+* hide - Don't show this one, but sound could still be played
+* color - What colours should be used
+* size - the size of the font
+
+Each of these entries can be configured per status message. This is the 
+start of a far more advanced system which will also allow you to block
+a message for a flight (instance or type), repeat alerts until acknowledged
+and cascade multiple simultaneous events into one (Post version 4.5).
+
+
+============================================================================
+INPUT AND EVENT SYSTEM
+============================================================================
+
+The Input System is actually a large number of things all bunched into one.
+
+Primarily it is about giving the user control of what button does what
+and when. There is a new concept called Input Mode - this is a the mode
+the GUI is in for input. For example, you can click on the info boxes
+and you are now in "infobox" mode. Clicking on the map is called
+"default". But it doesn't stop there, you can create a new mode called
+anything you like. This may not mean much - but wait till you combine it
+with the rest of the features...
+
+Input is not restricted to hardware buttons any more. You can map all
+your hardware buttons (currently support for APP1 to APP6, Left, Right,
+Up, Down and Enter, although I believe we can do some more) but also any
+key code at all. This feature allows those with a built in keyboard to
+use any key to map to any function in XCS. Where it comes into real
+advantage is in external keyboards. There are a number of bluetooth
+devices out there (eg: http://shop.brando.com.hk/btgamepad.php) which
+can map each of their buttons to any key code - that key code can then
+be mapped to any feature in XCS. You can then add to the hardware
+buttons the buttons available to you on external devices. Other inputs
+(eg: Serial) are also being looked at - and support is in the code for
+that extension.
+
+We are striving towards a platform which is not only easier to use and
+more intuitive, but also faster and easier to use in flight as well. As
+such, another new feature as part of input is the concept of Button
+Labels. Combined with the modes mentioned above, you can create any
+arbitrary set of functions to map to any number of buttons. Think about
+it like creating a tree, or a multiple level menu.
+
+This produces two benefits that I know will be appreciated by people
+with limited inputs. The first is that you can create menus, where by
+you press one button to get to the next level (eg: pressing on APP1
+brings up AutoZoom, Pan Mode, Full screen on the other buttons. Press
+APP1 again and it goes to Terrain, Marker and Auto McCready. Press APP1
+again and the menu is gone) - but more importantly for those with touch
+screens and limited buttons, each of these labels can optionally be
+assigned a key and you can touch the button area as if it was a button.
+This means that we can actually control on a touch screen model the
+entire system without buttons - press an area of the screen and the
+buttons pop up, click through - change options and more.
+
+The combined features of labels, configurable buttons (including from
+external hardware), hierarchical menus (for lack of a better name),
+touch screen buttons has allowed us to configure XCS - without
+recompile - for an enormous range of hardware, and personal preference.
+And all configurable as plane text, simple files. There is no need for
+a file, the defaults internally will probably be a combination of a 4
+button bottom system with one button always shown on screen for no/few
+button display.
+
+The screen layout - location of the labels - is also totally
+configurable - allowing us to vary the layout of buttons depending on
+the type of organiser or desired look and feel.
+
+There is a great unexpected benefit in the development of the
+input system.
+
+We can execute any number of events attached to an input with only 2
+extra lines of code. This worked perfectly. So now we have a basic
+macro system, allowing many more events to be attached to a single
+input event.
+
+But it doesn't stop there, this has lead to some more excellent
+developments. The idea of Glide Computer Events things like
+"Maximum Height Reached". Currently we play a sound effect for
+that. But you may choose to play a sound, bring up a message box
+and write to the log file.
+
+One nice feature of XCS is the ability to change things such as Zoom and
+North when Circling. Now you can do so much more. You could choose to
+point North, Zoom to 1.0 (rather than a relative change), Turn on Vario
+Sounds, Start a timer. When switching back to Cruise mode, you can bring
+up the stats box for 30 seconds. The options are limited by your
+imagination.
+
+This is also contributing to a major reduction in complex code. We can
+move out these complex tests into one centrally, easier to manage
+system, reducing bugs and improving maintainability.
+
+Another side benefits of these Macros is User Defined Flight Modes. One
+idea was a button which switched to Zoom 1.0, Pan ON, Pan Move to Next
+Waypoint. Basically the ability to jump and see the next waypoint. And
+in the previous we can change the Input Mode to "ViewWaypoint" - at
+which point you can redefine the same button to switch back to your
+original settings.
+
+The flexibility of this system comes with only one small price. We can't
+provide an interface within XCS to fully customise all of these near
+infinitely variable possibilities. However I believe that is unnecessary
+anyway, you are not likely to change these sort of features very often,
+and definitely not on the field. That does not mean you can't, you can
+of course edit the plane(sic) text file to change functions.
+
+What this really means is that we can have people in the project helping
+and contributing to the customising of XCS, without having to change the
+code. This, especially on an open source project is fantastic as it
+nicely separates the user interface changes from the highly reliable
+part of the code. It also involves people who can develop new interfaces
+and functions that are expert gliders but not necessarily programmers.
+
+For information on file formats see Common/Data/Input/template.xci and
+the web site documentation.
+
