@@ -51,7 +51,7 @@
 #include "InputEvents.h"
 
 // Temporary version location (will be automatically generated)
-extern TCHAR* XCSoar_Version = TEXT("4.5 BETA");
+extern TCHAR* XCSoar_Version = TEXT("4.5 BETA 2");
 
 HWND hWnd1, hWnd2, hWnd3;
 

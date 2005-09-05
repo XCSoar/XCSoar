@@ -459,6 +459,8 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 		   |SS_CENTER|SS_NOTIFY
 		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
 		   rc.left, rc.top,
+		   // TODO need to have these passed in to as some buttons
+		   // may actually be a different shape.
 		   buttonWidth, buttonHeight,
 		   hWndMainWindow, NULL, hInst, NULL);
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
@@ -469,6 +471,8 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 
     SetLabelText(i,NULL);
     SetWindowLong(hWndButtonWindow[i], GWL_USERDATA, 4);
+	// TODO Set colour of window and text (probably RED on YELLOW for these)
+	// TODO Color, font and size to be put into registry - simple Utils method for lookup
   }
 
   //
