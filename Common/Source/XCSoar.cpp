@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.91 2005/09/02 05:24:45 scottp Exp $
+  $Id: XCSoar.cpp,v 1.92 2005/09/05 03:40:21 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -51,7 +51,7 @@
 #include "InputEvents.h"
 
 // Temporary version location (will be automatically generated)
-extern TCHAR* XCSoar_Version = TEXT("4.5 BETA");
+extern TCHAR* XCSoar_Version = TEXT("4.5 BETA 2");
 
 HWND hWnd1, hWnd2, hWnd3;
 
