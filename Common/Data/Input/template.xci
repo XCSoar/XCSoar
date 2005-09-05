@@ -179,6 +179,10 @@ data=APP1
 event=MainMenu
 label=
 location=1
+title=MainMenu
+note=Here is a main menu
+note=It can have any number of entries
+note=Really any we want !
 
 mode=default
 type=key
@@ -187,6 +191,8 @@ event=StatusMessage Dropped marker
 event=MarkLocation
 label=
 location=2
+title=Drop a marker
+note=Drop a marker and tell us about it
 
 mode=default
 type=key
