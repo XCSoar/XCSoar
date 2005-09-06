@@ -1,0 +1,555 @@
+# -------------------
+# GlideComputerEvents
+# -------------------
+mode=default
+type=gce
+data=GCE_GPS_CONNECTION_WAIT
+event=StatusMessage Waiting for GPS Connection
+
+mode=default
+type=gce
+data=GCE_COMMPORT_RESTART
+event=StatusMessage Restarting Comm Ports
+
+mode=default
+type=gce
+data=GCE_GPS_FIX_WAIT
+event=StatusMessage Waiting for GPS Fix
+
+mode=default
+type=gce
+data=GCE_STARTUP_SIMULATOR
+event=StatusMessage Simulation\r\nNothing is real!
+
+mode=default
+type=gce
+data=GCE_STARTUP_REAL
+event=StatusMessage Maintain effective\r\nLOOKOUT at all times
+
+mode=default
+type=gce
+data=GCE_TAKEOFF
+event=StatusMessage Takeoff 
+
+mode=default
+type=gce
+data=GCE_LANDING
+event=StatusMessage Landing
+
+# ------------
+# mode=default
+# ------------
+
+# legacy keys
+
+mode=default
+type=key
+data=APP1
+event=ScreenModes toggle
+label= 
+location=1
+
+mode=default
+type=key
+data=APP2
+event=SnailTrail show
+event=SnailTrail toggle
+label= 
+location=2
+
+mode=default
+type=key
+data=APP3
+event=StatusMessage Dropped marker
+event=MarkLocation
+label= 
+location=3
+
+mode=default
+type=key
+data=APP4
+event=Mode Menu1
+label= 
+location=4
+
+mode=default
+type=key
+data=LEFT
+event=Zoom auto show
+event=Zoom auto toggle
+
+mode=default
+type=key
+data=RIGHT
+event=Pan show
+event=Pan supertoggle
+
+mode=default
+type=key
+data=DOWN
+event=Zoom out
+
+mode=default
+type=key
+data=UP
+event=Zoom in
+
+mode=default
+type=key
+data=RETURN
+event=ClearAirspaceWarnings
+event=ClearStatusMessages
+
+
+# ------------
+# mode=infobox
+# ------------
+
+mode=infobox
+type=key
+data=APP1
+event=SelectInfoBox previous
+label=<<
+location=1
+
+mode=infobox
+type=key
+data=APP4
+event=SelectInfoBox next
+label=>>
+location=4
+
+mode=infobox
+type=key
+data=APP2
+event=ChangeInfoBoxType previous
+label=<type
+location=2
+
+mode=infobox
+type=key
+data=APP3
+event=ChangeInfoBoxType next
+label=type>
+location=3
+
+mode=infobox
+type=key
+data=UP
+event=DoInfoKey up
+
+mode=infobox
+type=key
+data=DOWN
+event=DoInfoKey down
+
+mode=infobox
+type=key
+data=LEFT
+event=DoInfoKey left
+
+mode=infobox
+type=key
+data=RIGHT
+event=DoInfoKey right
+
+mode=infobox
+type=key
+data=RETURN
+event=DoInfoKey return
+
+#==============
+# Mode Menu1
+#==============
+
+mode=Menu1
+type=key
+data=APP1
+event=Mode Nav1
+label=Nav/
+location=1
+
+mode=Menu1
+type=key
+data=APP2
+event=Mode Display1
+label=Display/
+location=2
+
+mode=Menu1
+type=key
+data=APP3
+event=Mode Config1
+label=Config/
+location=3
+
+mode=Menu1
+type=key
+data=APP4
+event=Mode Menu2
+label=Menu/
+location=4
+
+
+#==============
+# Mode Menu2
+#==============
+
+mode=Menu2
+type=key
+data=APP1
+event=Mode Info1
+label=Info/
+location=1
+
+mode=Menu2
+type=key
+data=APP2
+label= 
+location=2
+
+mode=Menu2
+type=key
+data=APP3
+label= 
+location=3
+
+mode=Menu2
+type=key
+data=APP4
+event=Mode default
+label=/Menu
+location=4
+
+
+#==============
+# Mode Nav1
+#==============
+
+mode=Nav1
+type=key
+data=APP1
+event=StatusMessage Dropped marker
+event=MarkLocation
+label=Mark
+location=1
+
+mode=Nav1
+type=key
+data=APP2
+event=Mode default
+event=WaypointDetails
+label=Waypt details
+location=2
+
+mode=Nav1
+type=key
+data=APP3
+event=Mode default
+event=AbortTask toggle
+label=Abort task
+location=3
+
+mode=Nav1
+type=key
+data=APP4
+event=Mode Nav2
+label=Nav/
+location=4
+
+
+#==============
+# Mode Nav2
+#==============
+
+mode=Nav2
+type=key
+data=APP1
+event=Logger show
+event=Logger toggle
+label=Log
+location=1
+
+mode=Nav2
+type=key
+data=APP2
+event=AdjustWaypoint previous
+label=Waypt previous
+location=2
+
+mode=Nav2
+type=key
+data=APP3
+event=AdjustWaypoint next
+label=Waypt next
+location=3
+
+mode=Nav2
+type=key
+data=APP4
+event=Mode default
+label=/Nav
+location=4
+
+
+#==============
+# Mode Display1
+#==============
+
+mode=Display1
+type=key
+data=APP1
+event=ClearWarningsAndTerrain
+label=Terrain
+location=1
+
+mode=Display1
+type=key
+data=APP2
+event=Mode default
+event=ScreenModes togglefull
+label=Full screen
+location=2
+
+mode=Display1
+type=key
+data=APP3
+event=Pan show
+event=Pan supertoggle
+label=Pan
+location=3
+
+mode=Display1
+type=key
+data=APP4
+event=Mode Display2
+label=Display/
+location=4
+
+mode=Display1
+type=key
+data=UP
+event=Pan up
+
+mode=Display1
+type=key
+data=DOWN
+event=Pan down
+
+mode=Display1
+type=key
+data=LEFT
+event=Pan left
+
+mode=Display1
+type=key
+data=RIGHT
+event=Pan right
+
+
+#==============
+# Mode Display2
+#==============
+
+mode=Display2
+type=key
+data=APP1
+event=Zoom auto show
+event=Zoom auto toggle
+label=Auto Zoom
+location=1
+
+mode=Display2
+type=key
+data=APP2
+event=SnailTrail show
+event=SnailTrail toggle
+label=Snail
+location=2
+
+mode=Display2
+type=key
+data=APP3
+label= 
+location=3
+
+mode=Display2
+type=key
+data=APP4
+event=Mode default
+label=/Display
+location=4
+
+
+#==============
+# Mode Config1
+#==============
+
+mode=Config1
+type=key
+data=APP1
+event=AdjustMcCready up
+label=McCready +
+location=1
+
+mode=Config1
+type=key
+data=APP2
+event=AdjustMcCready down
+label=McCready -
+location=2
+
+mode=Config1
+type=key
+data=APP3
+event=AdjustMcCready auto
+label=McCready Auto
+location=3
+
+mode=Config1
+type=key
+data=APP4
+event=Mode Config2
+label=Config/
+location=4
+
+
+#==============
+# Mode Config2
+#==============
+
+mode=Config2
+type=key
+data=APP1
+event=Mode Bugs
+label=Bugs/
+location=1
+
+mode=Config2
+type=key
+data=APP2
+event=Mode Ballast
+label=Ballast/
+location=2
+
+mode=Config2
+type=key
+data=APP3
+event=Sounds show
+event=Sounds toggle
+label=Audio
+location=3
+
+mode=Config2
+type=key
+data=APP4
+event=Mode default
+label=/Config
+location=4
+
+# -------------
+# mode=Info1
+# -------------
+
+mode=Info1
+type=key
+data=APP1
+event=ScreenModes toggleauxiliary
+label=Aux Info
+location=1
+
+mode=Info1
+type=key
+data=APP2
+event=Mode default
+event=Status
+label=Status
+location=2
+
+mode=Info1
+type=key
+data=APP3
+event=Mode default
+event=Analysis
+label=Analysis
+location=3
+
+mode=Info1
+type=key
+data=APP4
+event=Mode default
+label=/Info
+location=4
+
+
+# -------------
+# mode=Bugs
+# -------------
+
+mode=Bugs
+type=key
+data=APP1
+event=Bugs show
+event=Bugs max
+label=Clean
+location=1
+
+mode=Bugs
+type=key
+data=APP2
+event=Bugs show
+event=Bugs up
+label=Bugs -
+location=2
+
+mode=Bugs
+type=key
+data=APP3
+event=Bugs show
+event=Bugs down
+label=Bugs +
+location=3
+
+mode=Bugs
+type=key
+data=APP4
+event=Mode default
+label=/Bugs
+location=4
+
+
+# -------------
+# mode=Ballast
+# -------------
+
+mode=Ballast
+type=key
+data=APP1
+event=Ballast show
+event=Ballast min
+label=Empty
+location=1
+
+mode=Ballast
+type=key
+data=APP2
+event=Ballast show
+event=Ballast down
+label=Ballast -
+location=2
+
+mode=Ballast
+type=key
+data=APP3
+event=Ballast show
+event=Ballast up
+label=Ballast +
+location=3
+
+mode=Ballast
+type=key
+data=APP4
+event=Mode default
+label=/Ballast
+location=4
+
