@@ -1603,23 +1603,9 @@ bool ClearAirspaceWarnings(bool ack) {
     Message::Acknowledge(MSG_AIRSPACE);
     ClearAirspaceWarningTimeout = AcknowledgementTime;
   }
-  /*
-  if(hCMessage)
-    {
-      AirspaceLastCircle = -1;AirspaceLastArea = -1;
-      DestroyWindow(hCMessage);
-      hCMessage = NULL;
-      return true;
-    }
-  if(hAMessage)
-    {
-      DestroyWindow(hAMessage);
-      hAMessage = NULL;
-      return true;
-    }
-  */
   return false;
 }
+
 
 void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
@@ -1636,19 +1622,6 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     {
       // clear previous warning if any
       Message::Acknowledge(MSG_AIRSPACE);
-      /*
-      if(hCMessage)
-        {
-          AirspaceLastCircle = -1;AirspaceLastArea = -1;
-          DestroyWindow(hCMessage);
-          hCMessage = NULL;
-        }
-      if(hAMessage)
-        {
-          DestroyWindow(hAMessage);
-          hAMessage = NULL;
-        }
-      */
       return;
     }
 
@@ -1659,61 +1632,34 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         {   // already being displayed
           return;
         }
-      /*        
-      if(hCMessage)
-        {
-          DestroyWindow(hCMessage);
-          hCMessage = NULL;
-        }
-      */
+
       if (ClearAirspaceWarningTimeout>0) {
 	return;
       }
 
       MessageBeep(MB_ICONEXCLAMATION);
-      FormatWarningString(AirspaceCircle[i].Type , AirspaceCircle[i].Name , AirspaceCircle[i].Base, AirspaceCircle[i].Top, szMessageBuffer, szTitleBuffer );
-
-      /*
-      if(
-         (DisplayOrientation == TRACKUP)
-         ||
-         ((DisplayOrientation == NORTHCIRCLE) && (Calculated->Circling == FALSE))
-	  ||
-         ((DisplayOrientation == TRACKCIRCLE) && (Calculated->Circling == FALSE) )      
-         )
-        hCMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                 0, MapWindow::MapRect.top+15, 240, 50, hWndMapWindow,NULL,hInst,NULL);
-      else
-        hCMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                 0, 180,240,50,hWndMapWindow,NULL,hInst,NULL);
-      */
+      FormatWarningString(AirspaceCircle[i].Type , AirspaceCircle[i].Name , 
+			  AirspaceCircle[i].Base, AirspaceCircle[i].Top, 
+			  szMessageBuffer, szTitleBuffer );
 
       wsprintf(text,TEXT("Airspace: %s\r\n%s"),szTitleBuffer,szMessageBuffer);
+
       // clear previous warning if any
       Message::Acknowledge(MSG_AIRSPACE);
       Message::AddMessage(5000, MSG_AIRSPACE, text);
 
-      /*
-      ShowWindow(hCMessage,SW_SHOW);
-      UpdateWindow(hCMessage);
-      */
+      if (AirspaceLastCircle != i) {
+	InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+      }
 
       AirspaceLastCircle = i;
       return;
     }
-  else /* if(hCMessage)
+  else
     {
       if (AirspaceLastCircle != -1) {
 	Message::Acknowledge(MSG_AIRSPACE);
-      }
-      DestroyWindow(hCMessage);
-      hCMessage = NULL;
-      AirspaceLastCircle = -1;
-    }
-    else */
-    {
-      if (AirspaceLastCircle != -1) {
-	Message::Acknowledge(MSG_AIRSPACE);
+	InputEvents::processGlideComputer(GCE_AIRSPACE_LEAVE);
       }
       AirspaceLastCircle = -1;
     }
@@ -1726,64 +1672,37 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         {
           return;
         }
-      /*
-      if(hAMessage)
-        {
-          DestroyWindow(hAMessage);
-          hAMessage = NULL;
-        }
-      */
 
       if (ClearAirspaceWarningTimeout>0) {
 	return;
       }
 
       MessageBeep(MB_ICONEXCLAMATION);
-      FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name , AirspaceArea[i].Base, AirspaceArea[i].Top, szMessageBuffer, szTitleBuffer );
-      /*
-      if(
-         (DisplayOrientation == TRACKUP)
-         ||
-         ((DisplayOrientation == NORTHCIRCLE) && (Calculated->Circling == FALSE) )  	  ||
-         ((DisplayOrientation == TRACKCIRCLE) && (Calculated->Circling == FALSE) )    
-         )
-
-        hAMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                 0, 15+MapWindow::MapRect.top, 240,50,hWndMapWindow,NULL,hInst,NULL);
-      else
-        hAMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                 0, 180,240,50,hWndMapWindow,NULL,hInst,NULL);
-      */
+      FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name , 
+			  AirspaceArea[i].Base, AirspaceArea[i].Top, 
+			  szMessageBuffer, szTitleBuffer );
 
       wsprintf(text,TEXT("Airspace: %s\r\n%s"),szTitleBuffer,szMessageBuffer);
       Message::Acknowledge(MSG_AIRSPACE);
       Message::AddMessage(5000, MSG_AIRSPACE, text);
 
-      /*
-      ShowWindow(hAMessage,SW_SHOW);
-      UpdateWindow(hAMessage);
-      */
+      if (AirspaceLastArea != i) {
+	InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+      }
                 
       AirspaceLastArea = i;
       return;
     }
-  else /* if(hAMessage)
+  else
     {
       if (AirspaceLastArea != -1) {
 	Message::Acknowledge(MSG_AIRSPACE);
-      }
-      DestroyWindow(hAMessage);
-      hAMessage = NULL;
-      AirspaceLastArea = -1;
-    }
-    else */
-    {
-      if (AirspaceLastArea != -1) {
-	Message::Acknowledge(MSG_AIRSPACE);
+	InputEvents::processGlideComputer(GCE_AIRSPACE_LEAVE);
       }
       AirspaceLastArea = -1;
     }
 }
+
 
 void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
