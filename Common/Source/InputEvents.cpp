@@ -33,6 +33,7 @@ InputEvents
 #include "Airspace.h"
 #include "Process.h"
 #include "Port.h"
+#include "Message.h"
 
 // Sensible maximums
 #define MAX_MODE 100
@@ -205,7 +206,8 @@ void InputEvents::readFile() {
       } else if (wcscmp(key, TEXT("event")) == 0) {
 		wcscpy(d_event, TEXT(""));
 		wcscpy(d_misc, TEXT(""));
-		swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 ]"), d_event, d_misc);
+		swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\]"), d_event, d_misc);
+		// XXX TODO: scan for \r\n, currently not done!!!!!!!
 
 		// TODO - Consider reusing existing identical events (not worth it right now)
 		pt2Event event = findEvent(d_event);
@@ -483,15 +485,19 @@ int event_id = 0;
   return false;
 }
 
+extern int MenuTimeOut;
+
 // EXECUTE an Event - lookup event handler and call back - no return
 void InputEvents::processGo(int eventid) {
   // evnentid 0 is special for "noop" - otherwise check event
   // exists (pointer to function)
 	if (eventid) {
-		if (Events[eventid].event)
-			Events[eventid].event(Events[eventid].misc);
-		if (Events[eventid].next > 0)
-			InputEvents::processGo(Events[eventid].next);
+	  if (Events[eventid].event) {
+	    Events[eventid].event(Events[eventid].misc);
+	    MenuTimeOut = 0;
+	  }
+	  if (Events[eventid].next > 0)
+	    InputEvents::processGo(Events[eventid].next);
 	}
 	return;
 }
@@ -754,7 +760,9 @@ void InputEvents::eventAnalysis(TCHAR *misc) {
 }
 
 void InputEvents::eventWaypointDetails(TCHAR *misc) {
+  LockFlightData();
   PopupWaypointDetails();
+  UnlockFlightData();
 }
 
 
@@ -941,8 +949,33 @@ void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
 
 void InputEvents::eventClearStatusMessages(TCHAR *misc) {
   ClearStatusMessages();
+
+  // new interface..
+  // TODO: allow selection of specific messages (here we are acknowledging all)
+  Message::Acknowledge(0);
 }
 
+void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
+  // new interface
+  // XXX TODO: display only by type specified in misc field
+  Message::Repeat(0);
+}
+
+
+void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
+  // TODO..
+}
+
+
+void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("aircraft")) == 0) {
+    MapWindow::Event_NearestWaypointDetails(GPS_INFO.Longditude,
+					    GPS_INFO.Lattitude,
+					    1.0e5); // big range..
+  }
+  // TODO, also allow getting waypoint details at center of screen, or at cursor..
+
+}
 
 
 // JMW TODO: have all inputevents return bool, indicating whether

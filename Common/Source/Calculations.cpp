@@ -29,6 +29,7 @@
 #include <windows.h>
 #include <math.h>
 #include "InputEvents.h"
+#include "Message.h"
 
 #include <tchar.h>
 
@@ -1587,32 +1588,36 @@ void CalculateNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
 }
 
-int LastCi =-1;
-int LastAi =-1;
+int AirspaceLastCircle =-1;
+int AirspaceLastArea =-1;
+/*
 HWND hCMessage = NULL;
 HWND hAMessage = NULL;
+*/
 int ClearAirspaceWarningTimeout = 0;
 
 bool ClearAirspaceWarnings(bool ack) {
+  if (ack) {
+    AirspaceLastCircle = -1;
+    AirspaceLastArea = -1;
+    Message::Acknowledge(MSG_AIRSPACE);
+    ClearAirspaceWarningTimeout = AcknowledgementTime;
+  }
+  /*
   if(hCMessage)
     {
-      LastCi = -1;LastAi = -1;
+      AirspaceLastCircle = -1;AirspaceLastArea = -1;
       DestroyWindow(hCMessage);
-      if (ack) {
-        ClearAirspaceWarningTimeout = AcknowledgementTime;
-      }
       hCMessage = NULL;
       return true;
     }
   if(hAMessage)
     {
       DestroyWindow(hAMessage);
-      if (ack) {
-        ClearAirspaceWarningTimeout = AcknowledgementTime;
-      }
       hAMessage = NULL;
       return true;
     }
+  */
   return false;
 }
 
@@ -1621,6 +1626,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   int i;
   TCHAR szMessageBuffer[1024];
   TCHAR szTitleBuffer[1024];
+  TCHAR text[1024];
 
   if (ClearAirspaceWarningTimeout) {
     ClearAirspaceWarningTimeout--;
@@ -1628,9 +1634,12 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if(!AIRSPACEWARNINGS)
     {
+      // clear previous warning if any
+      Message::Acknowledge(MSG_AIRSPACE);
+      /*
       if(hCMessage)
         {
-          LastCi = -1;LastAi = -1;
+          AirspaceLastCircle = -1;AirspaceLastArea = -1;
           DestroyWindow(hCMessage);
           hCMessage = NULL;
         }
@@ -1639,29 +1648,32 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           DestroyWindow(hAMessage);
           hAMessage = NULL;
         }
+      */
       return;
     }
 
   i= FindAirspaceCircle(Calculated->NextLongditde, Calculated->NextLattitude );
   if(i != -1)
     {
-      if(i == LastCi)
+      if(i == AirspaceLastCircle)
         {   // already being displayed
           return;
         }
-
+      /*
       if(hCMessage)
         {
           DestroyWindow(hCMessage);
           hCMessage = NULL;
         }
-
+      */
       if (ClearAirspaceWarningTimeout>0) {
 	return;
       }
 
       MessageBeep(MB_ICONEXCLAMATION);
       FormatWarningString(AirspaceCircle[i].Type , AirspaceCircle[i].Name , AirspaceCircle[i].Base, AirspaceCircle[i].Top, szMessageBuffer, szTitleBuffer );
+
+      /*
       if(
          (DisplayOrientation == TRACKUP)
          ||
@@ -1674,37 +1686,53 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       else
         hCMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                  0, 180,240,50,hWndMapWindow,NULL,hInst,NULL);
+      */
 
+      wsprintf(text,TEXT("Airspace: %s\r\n%s"),szTitleBuffer,szMessageBuffer);
+      // clear previous warning if any
+      Message::Acknowledge(MSG_AIRSPACE);
+      Message::AddMessage(5000, MSG_AIRSPACE, text);
+
+      /*
       ShowWindow(hCMessage,SW_SHOW);
       UpdateWindow(hCMessage);
-      LastCi = i;
+      */
+
+      AirspaceLastCircle = i;
       return;
     }
-  else if(hCMessage)
+  else /* if(hCMessage)
     {
+      if (AirspaceLastCircle != -1) {
+	Message::Acknowledge(MSG_AIRSPACE);
+      }
       DestroyWindow(hCMessage);
       hCMessage = NULL;
-      LastCi = -1;
+      AirspaceLastCircle = -1;
     }
-  else
+    else */
     {
-      LastCi = -1;
+      if (AirspaceLastCircle != -1) {
+	Message::Acknowledge(MSG_AIRSPACE);
+      }
+      AirspaceLastCircle = -1;
     }
 
 
   i= FindAirspaceArea(Calculated->NextLongditde,Calculated->NextLattitude);
   if(i != -1)
     {
-      if(i == LastAi)
+      if(i == AirspaceLastArea)
         {
           return;
         }
-
+      /*
       if(hAMessage)
         {
           DestroyWindow(hAMessage);
           hAMessage = NULL;
         }
+      */
 
       if (ClearAirspaceWarningTimeout>0) {
 	return;
@@ -1712,6 +1740,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       MessageBeep(MB_ICONEXCLAMATION);
       FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name , AirspaceArea[i].Base, AirspaceArea[i].Top, szMessageBuffer, szTitleBuffer );
+      /*
       if(
          (DisplayOrientation == TRACKUP)
          ||
@@ -1724,22 +1753,35 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       else
         hAMessage = CreateWindow(TEXT("EDIT"),szMessageBuffer,WS_VISIBLE|WS_CHILD|ES_MULTILINE |ES_CENTER|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                                  0, 180,240,50,hWndMapWindow,NULL,hInst,NULL);
+      */
 
+      wsprintf(text,TEXT("Airspace: %s\r\n%s"),szTitleBuffer,szMessageBuffer);
+      Message::Acknowledge(MSG_AIRSPACE);
+      Message::AddMessage(5000, MSG_AIRSPACE, text);
+
+      /*
       ShowWindow(hAMessage,SW_SHOW);
       UpdateWindow(hAMessage);
+      */
 
-      LastAi = i;
+      AirspaceLastArea = i;
       return;
     }
-  else if(hAMessage)
+  else /* if(hAMessage)
     {
+      if (AirspaceLastArea != -1) {
+	Message::Acknowledge(MSG_AIRSPACE);
+      }
       DestroyWindow(hAMessage);
       hAMessage = NULL;
-      LastAi = -1;
+      AirspaceLastArea = -1;
     }
-  else
+    else */
     {
-      LastAi = -1;
+      if (AirspaceLastArea != -1) {
+	Message::Acknowledge(MSG_AIRSPACE);
+      }
+      AirspaceLastArea = -1;
     }
 }
 

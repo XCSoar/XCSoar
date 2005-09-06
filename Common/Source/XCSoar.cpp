@@ -49,6 +49,7 @@
 #include "Externs.h"
 #include "units.h"
 #include "InputEvents.h"
+#include "Message.h"
 
 // Temporary version location (will be automatically generated)
 extern TCHAR* XCSoar_Version = TEXT("4.5 BETA 2");
@@ -87,10 +88,12 @@ int                                     DisplayTimeOut = 0;
 
 HBRUSH hBrushSelected;
 HBRUSH hBrushUnselected;
+HBRUSH hBrushButton;
 COLORREF ColorSelected = RGB(0xC0,0xC0,0xC0);
 COLORREF ColorUnselected = RGB(0xFF,0xFF,0xFF);
 COLORREF ColorWarning = RGB(0xFF,0x00,0x00);
 COLORREF ColorOK = RGB(0x00,0x00,0xFF);
+COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
 
 // Serial Port Globals
 
@@ -213,6 +216,7 @@ int SoundDeadband = 5;
 BOOL EnableVarioGauge = false;
 BOOL EnableAutoBlank = false;
 bool ScreenBlanked = false;
+
 
 
 //IGC Logger
@@ -877,7 +881,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SwitchToMapWindow();
   MapWindow::MapDirty = true;
 
-//  CloseProgressDialog();
+  CloseProgressDialog();
 
 
   // Main message loop:
@@ -1012,6 +1016,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   hBrushSelected = (HBRUSH)CreateSolidBrush(ColorSelected);
   hBrushUnselected = (HBRUSH)CreateSolidBrush(ColorUnselected);
+  hBrushButton = (HBRUSH)CreateSolidBrush(ColorButton);
 
   GetClientRect(hWndMainWindow, &rc);
 
@@ -1194,6 +1199,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   GaugeVario::Create();
 
+  Message::Initialize(rc);
+
   if (EnableVarioGauge) {
     ShowWindow(hWndVarioWindow,SW_SHOW);
   } else {
@@ -1292,6 +1299,9 @@ void DoInfoKey(int keycode) {
 
 
 // Debounce input buttons (does not matter which button is pressed)
+
+int debounceTimeout=200;
+
 bool Debounce() {
   static DWORD fpsTimeLast= -1;
   DWORD fpsTimeThis = ::GetTickCount();
@@ -1305,7 +1315,7 @@ bool Debounce() {
     return false;
   }
 
-  if (dT>500) {
+  if (dT>debounceTimeout) {
     fpsTimeLast = fpsTimeThis;
     return true;
   } else {
@@ -1357,10 +1367,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         SetTextColor((HDC)wParam, ColorOK);
 	return (LRESULT)hBrushUnselected;
       }
-      if (wdata==4) {
-	SetBkColor((HDC)wParam, ColorSelected);
-        SetTextColor((HDC)wParam, ColorOK);
-	return (LRESULT)hBrushSelected;
+      if (wdata==4) { // this one used for buttons
+	// black on light green
+	SetBkColor((HDC)wParam, ColorButton);
+        SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
+	return (LRESULT)hBrushButton;
       }
       break;
 
@@ -1485,6 +1496,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       GaugeCDI::Destroy();
       GaugeVario::Destroy();
 
+      Message::Destroy();
+
       for(i=0;i<numInfoWindows;i++)
         {
           DestroyWindow(hWndInfoWindow[i]);
@@ -1497,6 +1510,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       for (i=0; i<NUMSELECTSTRINGS; i++) {
         delete Data_Options[i].Formatter;
       }
+
+      DeleteObject(hBrushSelected);
+      DeleteObject(hBrushUnselected);
+      DeleteObject(hBrushButton);
 
       DeleteObject(InfoWindowFont);
       DeleteObject(TitleWindowFont);
@@ -2038,6 +2055,8 @@ void CommonProcessTimer()
 {
   SystemIdleTimerReset();
 
+  Message::Render();
+
   if(InfoWindowActive)
     {
       if(InfoBoxFocusTimeOut == FOCUSTIMEOUTMAX)
@@ -2051,6 +2070,7 @@ void CommonProcessTimer()
   if (DisplayLocked) {
     if(MenuTimeOut==MENUTIMEOUTMAX) {
       ShowWindow(hWndMenuButton, SW_HIDE);
+      InputEvents::setMode(TEXT("default"));
     }
     MenuTimeOut++;
   }
@@ -2300,10 +2320,10 @@ void PopupAnalysis()
 {
   DialogActive = true;
   if (InfoBoxLayout::landscape) {
-    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndMainWindow,
+    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndInfoWindow[0],
 	      (DLGPROC)AnalysisProc);
   } else {
-    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndMainWindow,
+    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndInfoWindow[0],
 	      (DLGPROC)AnalysisProc);
   }
   DialogActive = false;
@@ -2316,18 +2336,13 @@ void PopupWaypointDetails()
 
   if (InfoBoxLayout::landscape) {
     DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS_LANDSCAPE,
-	      hWndMainWindow, (DLGPROC)WaypointDetails);
+	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
   } else {
     DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS,
-	      hWndMainWindow, (DLGPROC)WaypointDetails);
+	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
   }
-    DialogActive = false;
+  DialogActive = false;
 
-  /*
-  ShowWindow(hWndCB,SW_HIDE);
-  FullScreen();
-  SwitchToMapWindow();
-  */
 }
 
 

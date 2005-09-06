@@ -149,6 +149,8 @@ TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
 TCHAR szRegistryAutoBlank[]= TEXT("AutoBlank");
 TCHAR szRegistryVarioGauge[]= TEXT("VarioGauge");
 
+TCHAR szRegistryDebounceTimeout[]= TEXT("DebounceTimeout");
+
 static double SINETABLE[910];
 static float FSINETABLE[910];
 
@@ -407,6 +409,14 @@ void ReadRegistrySettings(void)
   Temp = 0;
   GetFromRegistry(szRegistryVarioGauge,&Temp);
   EnableVarioGauge = Temp;
+
+  Temp = 0;
+  GetFromRegistry(szRegistryDebounceTimeout, &Temp);
+  if (Temp==0) {
+    // reasonable default for debounce
+    debounceTimeout = 250;
+    SetToRegistry(szRegistryDebounceTimeout, debounceTimeout);
+  }
 
   Temp = 100;
   GetFromRegistry(szRegistryAccelerometerZero,&Temp);
@@ -1093,8 +1103,6 @@ void ConvertFlightLevels(void)
     }
 }
 
-// TODO: BUG
-// NOTE THIS HAS HARD CODED SCREEN COORDINATES
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
 {
   BOOL Sector[9] = {FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE};
@@ -1105,48 +1113,52 @@ BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
 
   for(i=0;i<nCount;i++)
     {
-      if(lpPoints[i].y < 0)
+      if(lpPoints[i].y < MapWindow::MapRect.top)
 	{
-	  if(lpPoints[i].x <0)
+	  if(lpPoints[i].x < MapWindow::MapRect.left)
 	    {
 	      Sector[0] = TRUE;
 	    }
-	  else if((lpPoints[i].x >=0) && (lpPoints[i].x <240))
+	  else if((lpPoints[i].x >=MapWindow::MapRect.left)
+		  && (lpPoints[i].x <MapWindow::MapRect.right))
 	    {
 	      Sector[1] = TRUE;
 	    }
-	  else if(lpPoints[i].x >=240)
+	  else if(lpPoints[i].x >=MapWindow::MapRect.right)
 	    {
 	      Sector[2] = TRUE;
 	    }
 	}
-      else if((lpPoints[i].y >=0) && (lpPoints[i].y <320))
+      else if((lpPoints[i].y >=MapWindow::MapRect.top)
+	      && (lpPoints[i].y <MapWindow::MapRect.bottom))
 	{
-	  if(lpPoints[i].x <0)
+	  if(lpPoints[i].x <MapWindow::MapRect.left)
 	    {
 	      Sector[3] = TRUE;
 	    }
-	  else if((lpPoints[i].x >=0) && (lpPoints[i].x <240))
+	  else if((lpPoints[i].x >=MapWindow::MapRect.left)
+		  && (lpPoints[i].x <MapWindow::MapRect.right))
 	    {
 	      Sector[4] = TRUE;
 	      return TRUE;
 	    }
-	  else if(lpPoints[i].x >=240)
+	  else if(lpPoints[i].x >=MapWindow::MapRect.right)
 	    {
 	      Sector[5] = TRUE;
 	    }
 	}
-      else if(lpPoints[i].y >=320)
+      else if(lpPoints[i].y >=MapWindow::MapRect.bottom)
 	{
-	  if(lpPoints[i].x <0)
+	  if(lpPoints[i].x <MapWindow::MapRect.left)
 	    {
 	      Sector[6] = TRUE;
 	    }
-	  else if((lpPoints[i].x >=0) && (lpPoints[i].x <240))
+	  else if((lpPoints[i].x >=MapWindow::MapRect.left)
+		  && (lpPoints[i].x <MapWindow::MapRect.right))
 	    {
 	      Sector[7] = TRUE;
 	    }
-	  else if(lpPoints[i].x >=240)
+	  else if(lpPoints[i].x >=MapWindow::MapRect.right)
 	    {
 	      Sector[8] = TRUE;
 	    }

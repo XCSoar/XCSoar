@@ -174,6 +174,44 @@ extern HFONT  MapWindowBoldFont;
 
 ///////////////////
 
+bool MapWindow::Event_NearestWaypointDetails(double lon, double lat, double range) {
+  int i;
+  i=FindNearestWayPoint(lon, lat, range);
+  if(i != -1)
+    {
+      SelectedWaypoint = i;
+      PopupWaypointDetails();
+      return true;
+    }
+  return false;
+}
+
+
+bool MapWindow::Event_InteriorAirspaceDetails(double lon, double lat) {
+  int i;
+
+  i= FindAirspaceCircle(lon,lat);
+  if(i != -1)
+    {
+      DisplayAirspaceWarning(AirspaceCircle[i].Type ,
+			     AirspaceCircle[i].Name ,
+			     AirspaceCircle[i].Base,
+			     AirspaceCircle[i].Top );
+      return true;
+    }
+  i= FindAirspaceArea(lon,lat);
+  if(i != -1)
+    {
+      DisplayAirspaceWarning(AirspaceArea[i].Type ,
+			     AirspaceArea[i].Name ,
+			     AirspaceArea[i].Base,
+			     AirspaceArea[i].Top );
+      return true;
+    }
+
+  return false; // nothing found..
+}
+
 bool MapWindow::isAutoZoom() {
 	return AutoZoom;
 }
@@ -707,32 +745,14 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     if(dwDownTime < 1000)
     {
-      i=FindNearestWayPoint(Xstart, Ystart, MapScale * 500);
-      if(i != -1)
-      {
-
-        SelectedWaypoint = i;
-        PopupWaypointDetails();
-
-        SetFocus(hWnd);
-        SetWindowPos(hWndMainWindow,HWND_TOP,0,0,0,0,SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
-
-        break;
+      if (Event_NearestWaypointDetails(Xstart, Ystart, 500*MapScale)) {
+	break;
       }
     }
     else
     {
-      i= FindAirspaceCircle(Xstart,Ystart);
-      if(i != -1)
-      {
-        DisplayAirspaceWarning(AirspaceCircle[i].Type , AirspaceCircle[i].Name , AirspaceCircle[i].Base, AirspaceCircle[i].Top );
-        break;
-      }
-      i= FindAirspaceArea(Xstart,Ystart);
-      if(i != -1)
-      {
-        DisplayAirspaceWarning(AirspaceArea[i].Type , AirspaceArea[i].Name , AirspaceArea[i].Base, AirspaceArea[i].Top );
-        break;
+      if (Event_InteriorAirspaceDetails(Xstart, Ystart)) {
+	break;
       }
     }
     break;
@@ -1120,8 +1140,6 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   UpdateMapScale();
   RenderMapWindow(MapRect);
   SetTopologyBounds(MapRect);
-
-  CloseProgressDialog();
 
   //////
 

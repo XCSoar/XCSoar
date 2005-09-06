@@ -172,13 +172,15 @@ class MapWindow {
 
   static bool IsMapFullScreen();
 
-  // input events
+  // input events or reused code
   static void Event_SetZoom(double value);
   static void Event_ScaleZoom(int vswitch);
   static void Event_Pan(int vswitch);
   static void Event_Terrain(int vswitch);
   static void Event_AutoZoom(int vswitch);
   static void Event_PanCursor(int dx, int dy);
+  static bool Event_InteriorAirspaceDetails(double lon, double lat);
+  static bool Event_NearestWaypointDetails(double lon, double lat, double range);
 
  private:
 
@@ -302,10 +304,11 @@ class MapWindow {
 
  public:
   static bool RenderTimeAvailable();
-
   static bool BigZoom;
 
 };
+
+
 
 
 extern void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );

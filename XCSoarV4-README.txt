@@ -7,11 +7,18 @@ To do for next version:
 - Daylight savings time fix
 - Use windows device time instead of GPS time in simulator
 - Adjustable font for long infoboxes (especially time)
-- make status message a singleton
-- enable cancelling a status message via an event
+- Write code to find airspace nearest to aircraft or some cursor --- currently
+  the code we have only finds airspace enclosing a place.
 
+Changes from 4.5beta2 to 4.5
+- Added debounce timeout registry setting in settings->interface files
+- Added input menu timeout
+- Added new status message interface (thread-safe, single window, ability
+  to repeat messages and acknowledge)
+- Fixed hard-coded screen coordinates in PolygonVisible function
+- Airspace warnings now use new message class
 
-Changes from 4.22 to 4.5
+Changes from 4.22 to 4.5beta2
 
 - Speed-to-fly climb mode bug fix
 - Thermal band mode fix
