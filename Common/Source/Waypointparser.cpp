@@ -420,7 +420,7 @@ int FindNearestWayPoint(double X, double Y, double MaxRange)
 {
   unsigned int i;
   int NearestIndex = 0;
-  double        NearestDistance, Dist;
+  double NearestDistance, Dist;
 
   if(NumberOfWayPoints ==0)
     {

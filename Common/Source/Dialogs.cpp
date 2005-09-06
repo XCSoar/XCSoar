@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.65 2005/09/02 01:18:22 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.66 2005/09/06 06:01:17 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -40,6 +40,7 @@
 #include "GaugeVario.h"
 #include "InfoBoxLayout.h"
 #include "InputEvents.h"
+#include "Message.h"
 
 #define USE_ARH_COLOUR_SELECTOR 1
 
@@ -93,6 +94,7 @@ extern TCHAR szRegistryCDICruise[];
 extern TCHAR szRegistryCDICircling[];
 extern TCHAR szRegistryAutoBlank[];
 extern TCHAR szRegistryVarioGauge[];
+extern TCHAR szRegistryDebounceTimeout[];
 
 
 void ReadWayPoints(void);
@@ -2019,12 +2021,26 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
       GetRegistryString(szRegistryInputFile, szInputFile, MAX_PATH);
       SetDlgItemText(hDlg,IDC_INPUTFILE,szInputFile);     
 
+      SetDlgItemInt(hDlg,IDC_DEBOUNCETIME,debounceTimeout, FALSE);     
+
       ACTIVE = TRUE;
       return TRUE; 
 
     case WM_COMMAND:
       switch (LOWORD(wParam))
         {
+	case IDC_DEBOUNCETIME:
+          if(ACTIVE == TRUE)
+            {
+              if(HIWORD(wParam) == EN_UPDATE)
+                {
+		  debounceTimeout = GetDlgItemInt(hDlg,
+						  IDC_DEBOUNCETIME,NULL, 
+						  FALSE);
+                  SetToRegistry(szRegistryDebounceTimeout,debounceTimeout);
+                }
+            }
+          break;
 
         case IDC_LANGUAGEFILE:
           if(ACTIVE == TRUE)
@@ -3555,6 +3571,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 //	- Add in TCHAR* data for extra, non language data entry
 
 void DoStatusMessage(TCHAR* text, TCHAR *data) {
+  Message::Lock();
 
 	StatusMessageSTRUCT LocalMessage;
 	LocalMessage = StatusMessageCache[0];
@@ -3571,13 +3588,19 @@ void DoStatusMessage(TCHAR* text, TCHAR *data) {
 	// XXX What is a sensible size?
 	TCHAR msgcache[1024];
 	if (LocalMessage.doStatus) {
-		wcscpy(msgcache, gettext(text));
-		if (data != NULL) {
-			wcscat(msgcache, TEXT("\r\n"));
-			wcscat(msgcache, data);
-		}
-		ShowStatusMessage(msgcache, LocalMessage.delay_ms);
+	  
+	  wcscpy(msgcache, gettext(text));
+	  if (data != NULL) {
+	    wcscat(msgcache, TEXT("\r\n"));
+	    wcscat(msgcache, data);
+	  }
+	  
+	  ShowStatusMessage(msgcache, LocalMessage.delay_ms);
+	  
 	}
+
+  Message::Unlock();
+
 }
 
 /*
@@ -3629,6 +3652,11 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 // otherwise you'll get funny characters appearing
 void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio, 
                        bool docenter, int *TabStops) {
+
+  // JMW new interface...///// XXXX todo work out how to set the type properly
+  Message::AddMessage(delay_ms, 1, text);
+  return;
+  //////////////
 
   CStatMsgUserData *data;
   HWND hWnd;

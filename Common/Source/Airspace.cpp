@@ -983,7 +983,6 @@ void ReadAirspace(void)
 }
 
 
-
 int FindAirspaceCircle(double Longditude,double Lattitude)
 {
   unsigned i;

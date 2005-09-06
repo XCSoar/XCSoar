@@ -50,6 +50,10 @@ class InputEvents {
   static void eventLogger(TCHAR *misc);
   static void eventClearAirspaceWarnings(TCHAR *misc);
   static void eventClearStatusMessages(TCHAR *misc);
+  static void eventNearestWaypointDetails(TCHAR *misc);
+  static void eventNearestAirspaceDetails(TCHAR *misc);
+  static void eventRepeatStatusMessage(TCHAR *misc);
+
 };
 
 

@@ -126,6 +126,7 @@ extern int NettoSpeed;
 extern BOOL EnableCalibration;
 extern BOOL EnableAutoBlank;
 extern BOOL EnableAuxiliaryInfo;
+extern int debounceTimeout;
 
 // user interface options
 extern BOOL bAirspaceBlackOutline;
