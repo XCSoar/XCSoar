@@ -392,12 +392,12 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
     case 0:
       if (i==0) {
 	*sizex = 52;
-	*sizey = 20;
-	*x = rc.left+3;
-	*y = (rc.bottom-(*sizey)*2-InfoBoxLayout::ControlHeight);
+	*sizey = 37;
+	*x = rc.left+3+hwidth*3-3;
+	*y = (rc.bottom-(*sizey)-3-InfoBoxLayout::ControlHeight);
       } else {
 	*sizex = 52;
-	*sizey = 20;
+	*sizey = 37;
 	*x = rc.left+3+hwidth*(i-1);
 	*y = (rc.bottom-(*sizey)-InfoBoxLayout::ControlHeight);
       }
@@ -471,8 +471,11 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 
     SetLabelText(i,NULL);
     SetWindowLong(hWndButtonWindow[i], GWL_USERDATA, 4);
-	// TODO Set colour of window and text (probably RED on YELLOW for these)
-	// TODO Color, font and size to be put into registry - simple Utils method for lookup
+    // TODO Set colour of window and text (probably RED on YELLOW for
+    // these)
+
+    // TODO Color, font and size to be put into registry - simple
+    // Utils method for lookup
   }
 
   //
