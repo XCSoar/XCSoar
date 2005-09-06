@@ -110,24 +110,7 @@ typedef struct {
 // (NOTE: This is used for all the caches for now - temporary)
 #define MAXSTATUSMESSAGECACHE 1000
 
-// TODO - Performance improvement. Move 'type' so that we have an array of types of InputSTRUCT
-//		- Thus only searching through the array of types we just hit an event for
-//		- EG: If a hardware button, only search through type 1
-typedef struct {
-        int type;               /* 
-                                        0=Ignore
-                                        1=Hardware Button
-                                        2=Keyboard input
-                                        3=Overlay (see through portion on left of screen)
-                                        4=Gesture (eg: dragging across map)
-										5=NMEA Sentence (either serial ports)
-                                */
-        TCHAR *data;            /* Data for this key - eg: Key name, number, etc */
-
-        TCHAR *function;        /* Function - see below */
-
-        TCHAR *misc;            /* Extra Function data */
-
-} InputSTRUCT;
+// Parse string (new lines etc) and malloc the string
+TCHAR* StringMallocParse(TCHAR* old_string);
 
 #endif
