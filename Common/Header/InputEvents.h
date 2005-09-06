@@ -70,6 +70,8 @@ enum {
 		GCE_STARTUP_REAL,
 		GCE_TAKEOFF,
 		GCE_LANDING,
+		GCE_AIRSPACE_ENTER,
+		GCE_AIRSPACE_LEAVE,
 
 		GCE_COUNT			// How many we have for arrays etc
 };
