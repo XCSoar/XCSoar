@@ -17,6 +17,7 @@ Changes from 4.5beta2 to 4.5
   to repeat messages and acknowledge)
 - Fixed hard-coded screen coordinates in PolygonVisible function
 - Airspace warnings now use new message class
+- Added glide computer events for entering and leaving airspace
 
 Changes from 4.22 to 4.5beta2
 
