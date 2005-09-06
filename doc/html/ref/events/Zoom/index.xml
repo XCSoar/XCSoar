@@ -1,0 +1,17 @@
+<h2>Zoom</h2>
+
+	<p>Everything about zoom of map</p>
+	<ul>
+		<li>auto toggle</li>
+		<li>auto on</li>
+		<li>auto off</li>
+		<li>auto show</li>
+		<li>in</li>
+		<li>out</li>
+		<li>+</li>
+		<li>++</li>
+		<li>-</li>
+		<li>--</li>
+		<li>"n.n" - a number</li>
+	</ul>
+

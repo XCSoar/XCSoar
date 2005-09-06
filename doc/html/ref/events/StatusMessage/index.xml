@@ -1,0 +1,7 @@
+<h2>StatusMessage</h2>
+
+	<p></p>
+	<ul>
+		<li>"*" - Specific string to send to DoStatusMessage</li>
+	</ul>
+

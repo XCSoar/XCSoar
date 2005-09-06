@@ -1,0 +1,12 @@
+<h2>ScreenModes</h2>
+
+	<p>Set the screen mode</p>
+	<ul>
+		<li>normal</li>
+		<li>auxilary</li>
+		<li>toggleauxiliary</li>
+		<li>full</li>
+		<li>togglefull</li>
+		<li>toggle</li>
+	<ul>
+

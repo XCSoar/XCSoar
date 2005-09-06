@@ -1,0 +1,10 @@
+<h2>SnailTrail</h2>
+
+	<p>Change snail trail setting</p>
+	<ul>
+		<li>off</li>
+		<li>short</li>
+		<li>long</li>
+		<li>show</li>
+	</ul>
+
