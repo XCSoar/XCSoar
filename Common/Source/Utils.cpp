@@ -2307,27 +2307,24 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
 	unsigned int used = 0;
 	unsigned int i;
 	for (i = 0; i < wcslen(old_string); i++) {
-		if (used < 2045) {
-			if (old_string[i] == '\\' ) {
-				if (old_string[i + 1] == 'r') {
-					// Do nothing
-					i++;
-				} else if (old_string[i + 1] == 'n') { 
-					buffer[used++] = '\r';
-					buffer[used++] = '\n';
-					i++;
-				} else if (old_string[i + 1] == '\\') {
-					buffer[used++] = '\\';
-					i++;
-				} else {
-					buffer[used++] = old_string[i];
-				}
+		if (old_string[i] == '\\' ) {
+			if (old_string[i + 1] == 'r') {
+				// Do nothing
+				i++;
+			} else if (old_string[i + 1] == 'n') { 
+				buffer[used++] = '\r';
+				buffer[used++] = '\n';
+				i++;
+			} else if (old_string[i + 1] == '\\') {
+				buffer[used++] = '\\';
+				i++;
 			} else {
 				buffer[used++] = old_string[i];
 			}
+		} else {
+			buffer[used++] = old_string[i];
 		}
 	};
-	buffer[used++] = NULL;
 
 	new_string = (TCHAR *)malloc((wcslen(buffer)+1)*sizeof(TCHAR));
 	wcscpy(new_string, buffer);
