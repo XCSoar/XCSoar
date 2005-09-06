@@ -1978,7 +1978,6 @@ void ReadLanguageFile() {
 	TCHAR key[1024];	// key from scanf
 	TCHAR value[1024];	// value from scanf
 	TCHAR temp[1024];	// Buffer for formatted output
-	TCHAR *new_entry;	// Pointer for malloc
 	int found;			// Entries found from scanf
 
 	/* Read from the file */
@@ -1989,17 +1988,8 @@ void ReadLanguageFile() {
 		// Check valid line?
 		if ((found != 2) || !key || !value) continue;
 
-		// TODO Format and copy key
-		swprintf(temp, TEXT("%s"), key);
-		new_entry = (TCHAR *)malloc((wcslen(temp)+1)*sizeof(TCHAR));
-		wcscpy(new_entry, temp);
-		GetTextCache[GetTextCache_Size].key = new_entry;
-
-		// TODO Format and copy value
-		swprintf(temp, TEXT("%s"), value);
-		new_entry = (TCHAR *)malloc((wcslen(temp)+1)*sizeof(TCHAR));
-		wcscpy(new_entry, temp);
-		GetTextCache[GetTextCache_Size].text = new_entry;
+		GetTextCache[GetTextCache_Size].key = StringMallocParse(key);
+		GetTextCache[GetTextCache_Size].text = StringMallocParse(value);
 
 		// Global counter
 		GetTextCache_Size++;
@@ -2122,8 +2112,6 @@ void ReadStatusFile() {
 	TCHAR buffer[2049];	// Buffer for all
 	TCHAR key[1024];	// key from scanf
 	TCHAR value[1024];	// value from scanf
-	TCHAR temp[1024];	// Buffer for formatted output
-	TCHAR *new_entry;	// Pointer for malloc
 	int ms;				// Found ms for delay
 	TCHAR **location;	// Where to put the data
 	int found;			// Entries found from scanf
@@ -2170,10 +2158,7 @@ void ReadStatusFile() {
 			// Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
 			if (location && (wcscmp(*location, TEXT("")) == 0)) {
 				// TODO - this picks up memory lost from no entry, but not duplicates - fix.
-				swprintf(temp, value);
-				new_entry = (TCHAR *)malloc((wcslen(temp)+1)*sizeof(TCHAR));
-				wcscpy(new_entry, temp);
-				*location = new_entry;
+				*location = StringMallocParse(value);
 			}
 		}
 
@@ -2316,3 +2301,36 @@ void SaveRegistryToFile(TCHAR *szFile)
 
 }
 
+TCHAR* StringMallocParse(TCHAR* old_string) {
+	TCHAR buffer[2048];	// Note - max size of any string we cope with here !
+	TCHAR* new_string;
+	unsigned int used = 0;
+	unsigned int i;
+	for (i = 0; i < wcslen(old_string); i++) {
+		if (used < 2045) {
+			if (old_string[i] == '\\' ) {
+				if (old_string[i + 1] == 'r') {
+					// Do nothing
+					i++;
+				} else if (old_string[i + 1] == 'n') {
+					buffer[used++] = '\r';
+					buffer[used++] = '\n';
+					i++;
+				} else if (old_string[i + 1] == '\\') {
+					buffer[used++] = '\\';
+					i++;
+				} else {
+					buffer[used++] = old_string[i];
+				}
+			} else {
+				buffer[used++] = old_string[i];
+			}
+		}
+	};
+	buffer[used++] = NULL;
+
+	new_string = (TCHAR *)malloc((wcslen(buffer)+1)*sizeof(TCHAR));
+	wcscpy(new_string, buffer);
+
+	return new_string;
+}

@@ -98,7 +98,7 @@ void InputEvents::readFile() {
     InitONCE = true;
   }
 
-  // TODO - Read in user defined configuration file
+  // Read in user defined configuration file
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   FILE *fp;
@@ -117,12 +117,11 @@ void InputEvents::readFile() {
   TCHAR buffer[2049];	// Buffer for all
   TCHAR key[1024];	// key from scanf
   TCHAR value[1024];	// value from scanf
-  TCHAR *new_entry;
   TCHAR *new_label;
   int found;
 
   // Init first entry
-  bool some_data = false;		// Did we find some in the last loop...
+  bool some_data = false;		// Did we fin some in the last loop...
   TCHAR d_mode[256];
   TCHAR d_type[256];
   TCHAR d_data[256];
@@ -161,8 +160,7 @@ void InputEvents::readFile() {
 				if (d_location > 0) {
 					// Only copy this once per object - save string space
 					if (!new_label) {
-						new_label = (TCHAR *)malloc((wcslen(d_label)+1)*sizeof(TCHAR));
-						wcscpy(new_label, d_label);
+						new_label = StringMallocParse(d_label);
 					}
 					InputEvents::makeLabel(mode_id, new_label, d_location, event_id);
 				}
@@ -212,9 +210,7 @@ void InputEvents::readFile() {
 		// TODO - Consider reusing existing identical events (not worth it right now)
 		pt2Event event = findEvent(d_event);
 		if (event) {
-			new_entry = (TCHAR *)malloc((wcslen(d_misc)+1)*sizeof(TCHAR));
-			wcscpy(new_entry, d_misc);
-			event_id = makeEvent(event, new_entry, event_id);
+			event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
 		}
       } else if (wcscmp(key, TEXT("label")) == 0) {
 		wcscpy(d_label, value);
