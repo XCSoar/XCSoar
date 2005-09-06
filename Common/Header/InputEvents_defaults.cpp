@@ -5,37 +5,37 @@ int mode_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Waiting for GPS Connection"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-GC2Event[mode_id][GCE_GCE_GPS_CONNECTION_WAIT] = event_id;
+GC2Event[mode_id][GCE_GPS_CONNECTION_WAIT] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Restarting Comm Ports"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-GC2Event[mode_id][GCE_GCE_COMMPORT_RESTART] = event_id;
+GC2Event[mode_id][GCE_COMMPORT_RESTART] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Waiting for GPS Fix"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-GC2Event[mode_id][GCE_GCE_GPS_FIX_WAIT] = event_id;
+GC2Event[mode_id][GCE_GPS_FIX_WAIT] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Simulation\r\nNothing is real!"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-GC2Event[mode_id][GCE_GCE_STARTUP_SIMULATOR] = event_id;
+GC2Event[mode_id][GCE_STARTUP_SIMULATOR] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Maintain effective\r\nLOOKOUT at all times"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-GC2Event[mode_id][GCE_GCE_STARTUP_REAL] = event_id;
+GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Takeoff "), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-GC2Event[mode_id][GCE_GCE_TAKEOFF] = event_id;
+GC2Event[mode_id][GCE_TAKEOFF] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Landing"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-GC2Event[mode_id][GCE_GCE_LANDING] = event_id;
+GC2Event[mode_id][GCE_LANDING] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"), event_id);
