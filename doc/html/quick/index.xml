@@ -272,3 +272,51 @@ The following screenshots show settings available for AAT tasks.
 	</content>
 </document>
 
+
+
+
+
+Introduction
+This guide will help you get up and running with XCSoar, the Open Source soaring and navigation software for PDAs.
+There are several steps involved. First you need to collect the required files. Then you'll need to  copy them to your PDA using ActiveSync. Finally, you'll want to customise XCSoar to your own requirements.
+For detailed up-to-the-minute information about XCSoar, visit the web site at http://www.xcsoar.com.
+
+Downloading the files you need
+Main download page
+Most of the files you need are available on the XCSoar Files page on SourceForge.net at this URL: http://sourceforge.net/project/showfiles.php?group_id=141663
+XCSoar program
+Download the file appropriate to your PDA from the Binaries section of the XCSoar Files page.
+Language files
+You can localise the text that XCSoar by downloading the appropriate language file from the XCSoar Files page. If your language is not yet listed, then please contact one of the XCSoar administrators who will gladly accept your offer to contribute a new set of translations!
+
+Terrain and Topology
+Download the Terrain and Topology package for your country from the Data section of the XCSoar Files page. If your country is not listed, please contact a member of the development team.
+The terrain file is a mesh of the ground surface height above sea level. Even if you don't want to turn on the option to display this, XCSoar needs it to calculate and display your spot height above ground (QFE). This is a single file and is quite large (several MB).
+The topology files contain data defining towns, roads, rail etc. XCSoar has an option switchable in flight to display this information on the moving map display. This is a collection of about 25 files in a subfolder of the Zip file.
+
+Turning points
+You will need to obtain a file for your country containing turning point information. This needs to be in Cambridge or Winpilot format (both are identical). You can get this from the Worldwide Soaring Turning Point Exchange at http://soaring.gahsys.com/TP/
+Some countries have a file for the whole country plus regional sub-sets. If this is the case, go for the whole country file as XCSoar is not limited in the number of waypoints it can hold.
+
+Airspace
+You will also need the current airspace file for your country. This is available at the same location as the turning points and is listed under Special Use Airspace. You need to choose OpenAir format. Files for some areas may be available on the XCSoar site.
+Synchronising with your PDA
+You are probably familiar with the process of copying files from your PC to your PDA using Microsoft ActiveSync. Make a connection by placing the PDA in its cradle, then double-click on the XCSoar program image you downloaded. This will then be installed on your PDA.
+Now copy the data files you downloaded to your PDA's My Documents folder on your PC. This will most likely be called Pocket_PC My Documents, unless you renamed your PDA. It's preferable to copy the topology files to a sub folder of MyDocuments (calling it Topo, for example) to avoid clutter in the PDA's main MyDocuments folder.
+Setting up and Customising XCSoar
+To set up XCSoar on your PDA, run the Simulator by tapping SIM on the Today screen. Settings are common between the Simulator and normal Flight mode. If you follow the instructions below in order, you will quickly have XCSoar up and running and ready to fly.
+
+Initial Settings
+Entering settings
+Double-tap anywhere on the screen to bring up the Menu box. Tap this box to display the menu, then tap Settings.
+Files
+Select Core Files from the drop-down box. Tap the browse button next to Airspace file, and select the Airspace file that you downloaded. Repeat for the Waypoint file. Ignore the Additional file settings for now.
+Now select Map Files from the drop-down box and browse for your Terrain and Topology files.
+If you downloaded a Language file, select Interface Files from the drop-down box and browse for this file.
+Now click ok to load all the files you selected so that you can use this information to make further settings.
+Home Airfield
+You may have noticed that when the files were loaded, the map is displayed centred on the first waypoint in the Waypoint file. To set your home airfield, bring up the Menu and tap the Task button. Choose your home airfield from the list on the left hand side and tap the Details... button. Now tap the Ò>>Ó button on the right, then the Set Home button, then Close.
+For the new home airfield to take effect, you need to restart XCSoar. Bring up the Menu and tap Exit. Tap SIM on the Today screen and you should see the map displayed centred on your home airfield.
+Other Settings
+
+
