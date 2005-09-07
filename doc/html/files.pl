@@ -2,7 +2,7 @@
 use strict;
 
 my $CLEAN = ""; my $DEST = "";
-foreach my $ext (qw/xml gif png jpg css js/) {
+foreach my $ext (qw/xml gif png jpg css js xci/) {
 	#print STDERR "Finiding $ext\n";
 	open (IN, "find . -name '*.$ext' | ") || die "Can't open files ($ext) - $!";
 	while (<IN>) {

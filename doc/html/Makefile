@@ -24,6 +24,7 @@ readme.xml: ../../source/XCSoarV4-README.txt
 	perl wrap.pl Readme < ../../source/XCSoarV4-README.txt > readme.xml
 
 input/default.xcixml: ../../source/Common/Data/Input/default.xci
+	cp ../../source/Common/Data/Input/default.xci input/default.xci
 	perl xci2xml.pl ../../source/Common/Data/Input/default.xci > $@
 
 clean: depends
