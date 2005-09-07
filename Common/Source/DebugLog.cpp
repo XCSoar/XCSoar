@@ -12,7 +12,7 @@ enum {
 	DL_HIGH
 };
 
-// XXX Think more about the set of event
+// TODO Think more about the set of event
 // Log Type
 enum {
 	DL_GENERAL,

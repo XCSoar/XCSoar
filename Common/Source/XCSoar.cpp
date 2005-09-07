@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.93 2005/09/06 06:01:17 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.94 2005/09/07 01:36:46 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -768,7 +768,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ReadLanguageFile();
   ReadStatusFile();
   
-  // XXX Consider location
+  // Read input events.
   InputEvents::readFile();
 
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
@@ -1420,14 +1420,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       }
       break;
 
+      // TODO Capture KEYDOWN time
+      // 	- Pass that (otpionally) to processKey, allowing
+      // 	  processKey to handle long events - at any length
+      // 	- Not sure how to do double click... (need timer call back
+      // 	process unless reset etc... tricky)
     case WM_KEYUP:
       if (!DialogActive) {
 
-	// XXX Temp location - should do own check on location - eg:
-	// DialogActive 
-	// XXX 
-	// working VK_APP1-7
-	
 	if (InputEvents::processKey(wParam)) {
 	  //	  DoStatusMessage(TEXT("Event in infobox"));
 	}

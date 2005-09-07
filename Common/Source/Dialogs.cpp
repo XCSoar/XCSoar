@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.66 2005/09/06 06:01:17 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.67 2005/09/07 01:36:46 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -3585,7 +3585,7 @@ void DoStatusMessage(TCHAR* text, TCHAR *data) {
 	if (EnableSoundModes && LocalMessage.doSound)
 		PlayResource(LocalMessage.sound);
 
-	// XXX What is a sensible size?
+	// TODO consider what is a sensible size?
 	TCHAR msgcache[1024];
 	if (LocalMessage.doStatus) {
 	  

@@ -1,100 +1,3 @@
-# XXX THIS DOCUMENTATION IS OUT OF DATA - FIX BEFORE RELEASE
-#
-# INPUT MODES
-#
-#	default		- The default, also map window mode
-#	infobox		- Info box selected
-#	*		- Any other user defined Input modes
-#
-# INPUT TYPE
-#
-# 	key		- Key press event - including APP1-6 + Keyboard	characters
-#	nmea		- NMEA string
-#	none		- No key assigned, use labels
-#
-# FUNCTIONS
-#
-#        AutoZoom                on, off, toggle
-#        FullScreen              on, off, toggle
-#        SnailTrail              on, off, long, toggle
-#        VarioSound              on, off
-#        Marker                  optional text to add
-#        MenuButton              on, off, toggle
-#        Menu                    open, close, toggle
-#        MenuEntry               task, b+b, abortresume, abore, resume, pressure
-#                                logger, settings, status, analysis, exit, cancel
-#                                NOTE: Some of the above may be separate functions
-#        Settings                (each setting, bring up to that point)
-#        Bugs                    add, subtract, 0-100% (set value)
-#        Ballast                 add, subtract, 0-100% (set value)
-#        Zoom                    add, subtract, 0-nn (set value)
-#        Wind                    up, down, 0-nn (set value, left, right, "n","ne","e","se","s","sw","w","nw"...
-#        McCready                add, subtract, 0-nn (set value)
-#        WaypointNext            "String" to specific waypoint
-#                                eg: WayPointNext "home"
-#        WayPoint???             "reverse" - reverse, from last passed back to start (ie: from here to home)
-#                                "drop next" - drop the next
-#                                "restore" - restore all - from start of flight but 
-#                                XXX This needs more thought
-#        flight                  "startstop", "start", "stop", "release"
-#                                Start/Stop of flight - Can be automatic, but pressing will override
-#                                automatic part.
-#        release                 markse the point of release from tow
-#
-#	 mode			 Set the mode - any arbitrary mode (eg: menu1)
-#
-#
-# XXX NOTES
-#
-#	int KeyEvent[100][256];		// Points to Events location
-#
-#	struct {
-#		XXX pointer to function	// What to execute
-#		TCHAR *misc;		// Parameters
-#	} EventSTRUCT;
-#	EventSTRUCT Events[1024];	
-#	int Events_count;
-#
-# 	struct {
-# 		TCHAR *label;
-# 		int location;
-#		int event;
-# 	} ModeLabelSTRUCT;
-# 	ModeLabelSTRUCT ModeLabel[25][100];
-#
-#	getModeID
-#		return InputEvents::mode2int(InputEvents::getMode);
-#
-#	setMode...
-#		Set new mode !
-#		int mode = InputEvents::getModeID;
-#		int i;
-#		for (i = 0; i < 100; i++) {
-#			if ((ModeLabel[mode][i].label != NULL) && (ModeLabel[mode][i].location > 0)) 
-#				Label::SetLabel(
-#					ModeLabel[mode][i].label,
-#					ModeLabel[mode][i].location
-#				);
-#		}
-#
-#	InputEvents::eventGo(int event) {
-#		XXX Execute event if valid (as per key handler now)
-#
-#	Change key handler to call eventGo
-#
-#	// NOTE: String must already be copied (allows us to use literals
-#	// without taking up more data - but when loading from file must copy string
-#	InputEvents::makeEvent(pointers, TCHAR *misc) {
-#		Events[Events_count].event = event;
-#		Events[Events_count].misc = misc;
-#		Events_count++;
-#		return Events_count - 1;
-#	}
-#
-#	InputEvents::eventMode(TCHAR *misc) {
-#		InputEvents::setMode(misc);
-#	}
-
 # ==============================================================================
 # 4 Hardware Buttons at the bottom configuration + Bluetooth GamePad
 # ==============================================================================
@@ -289,7 +192,7 @@ event=DoInfoKey return
 # -------------
 # mode=display1
 # -------------
-# XXX This looks wrong - why is it "clear" ? and should also be "toggle"
+# This looks wrong - why is it "clear" ? and should also be "toggle"
 mode=display1
 type=key
 data=APP1

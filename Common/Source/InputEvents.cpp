@@ -205,8 +205,6 @@ void InputEvents::readFile() {
 		wcscpy(d_event, TEXT(""));
 		wcscpy(d_misc, TEXT(""));
 		swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\]"), d_event, d_misc);
-		// XXX TODO: scan for \r\n, currently not done!!!!!!!
-
 		// TODO - Consider reusing existing identical events (not worth it right now)
 		pt2Event event = findEvent(d_event);
 		if (event) {
@@ -797,7 +795,7 @@ void InputEvents::eventAdjustMcCready(TCHAR *misc) {
 }
 
 
-// XXX Increase wind by larger amounts ? Set wind to specific amount ?
+// TODO Increase wind by larger amounts ? Set wind to specific amount ?
 //	(may sound silly - but future may get SMS event that then sets wind)
 void InputEvents::eventAdjustWind(TCHAR *misc) {
   if (wcscmp(misc, TEXT("up")) == 0) {
