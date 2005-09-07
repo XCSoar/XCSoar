@@ -92,7 +92,7 @@ h2 {
 	padding: 0px;
 }
 
-#navigation a, .nav a:link, .nav a:visited { 
+#navigation a, #navigation a:link, #navigation a:visited { 
 	color: #455F8D;
 	font-weight: bold;
 	text-decoration: none;
@@ -128,3 +128,24 @@ h2 {
 	margin: 10px;
 }
 
+.input h1 {
+	border-top: solid 1px #003366;
+}
+
+.input td {
+	background-color: #eeeeee;
+}
+
+.input th {
+	background-color: #B8CBE8;
+	color: #003366;
+	text-align: left;
+}
+	
+a, a:link, a:visited {
+	color #003366;
+}
+
+a:hover, a:active, a:focus {
+	color: #455F8D;
+}

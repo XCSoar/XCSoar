@@ -40,6 +40,9 @@ install: build nightlycvs
 	scp dest.tar.gz $(SSHUSER)@shell.sourceforge.net:/home/groups/x/xc/xcsoar/htdocs/
 	ssh $(SSHUSER)@shell.sourceforge.net "cd /home/groups/x/xc/xcsoar/htdocs/; tar xvzf dest.tar.gz; chmod -R g+rwX /home/groups/x/xc/xcsoar/htdocs"
 
+installstyle: 
+	scp style.css $(SSHUSER)@shell.sourceforge.net:/home/groups/x/xc/xcsoar/htdocs/
+
 %.xml : %.xcixml ss/xci.xsl
 	xsltproc ss/xci.xsl $< > $@
 

@@ -20,7 +20,18 @@
 
 		<content>
 
-			<table border="1">
+<div class="input">
+
+<p>
+This document describes the input and events in the
+selected input file. Start at <a href="#mode_default">default</a> to view the
+purpose and mapping of each button on the organiser, and what happens during
+automatic glide computer events. Click on Event Names to take you to a
+description of the purpose and options for an event. Click on Mode names (eg:
+Menu1) to jump to the next mode.
+</p>
+
+			<table>
 				<tr>
 					<th>Mode</th>
 					<th>Input Type</th>
@@ -54,6 +65,9 @@
 				</xsl:for-each>
 			</table>
 			<xsl:apply-templates/>
+
+</div>
+
 		</content>
 
 	</document>
@@ -95,7 +109,7 @@
 			- Keyboard (or hardware) button input
 		</xsl:if>
 	</h2>
-	<table border="1">
+	<table>
 		<tr>
 			<th>Button/Trigger</th>
 			<th>Title</th>
