@@ -184,9 +184,19 @@ void	McCreadyProcessing(int UpDown)
 	{
 	  MCCREADY = 0;
 	}
-    } else if (UpDown==0)
+
+  } else if (UpDown==0)
     {
       CALCULATED_INFO.AutoMcCready = !CALCULATED_INFO.AutoMcCready; // JMW toggle automacready
+	}
+  else if (UpDown==-2)
+    {
+      CALCULATED_INFO.AutoMcCready = false;						// SDP on auto mccready
+
+    }
+  else if (UpDown==+2)
+    {
+      CALCULATED_INFO.AutoMcCready = true;						// SDP off auto mccready
 
     }
 

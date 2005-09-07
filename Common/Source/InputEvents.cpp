@@ -117,7 +117,7 @@ void InputEvents::readFile() {
   TCHAR buffer[2049];	// Buffer for all
   TCHAR key[1024];	// key from scanf
   TCHAR value[1024];	// value from scanf
-  TCHAR *new_label;
+  TCHAR *new_label = NULL;
   int found;
 
   // Init first entry
@@ -773,25 +773,29 @@ void InputEvents::eventPlaySound(TCHAR *misc) {
 }
 
 
-// XXX auto ? Should be auto toggle, auto on, auto off ?
-void InputEvents::eventAdjustMcCready(TCHAR *misc) {
+// up, down, auto on, auto off, auto toggle, auto show
+void InputEvents::eventMcCready(TCHAR *misc) {
   if (wcscmp(misc, TEXT("up")) == 0) {
     McCreadyProcessing(1);
-  }
-  if (wcscmp(misc, TEXT("down")) == 0) {
+  } else if (wcscmp(misc, TEXT("down")) == 0) {
     McCreadyProcessing(-1);
-  }
-  if (wcscmp(misc, TEXT("auto")) == 0) {
+  } else if (wcscmp(misc, TEXT("auto toggle")) == 0) {
     McCreadyProcessing(0);
-
+  } else if (wcscmp(misc, TEXT("auto on")) == 0) {
+    McCreadyProcessing(+2);
+  } else if (wcscmp(misc, TEXT("auto off")) == 0) {
+    McCreadyProcessing(-2);
+  } else if (wcscmp(misc, TEXT("auto show")) == 0) {
     if (CALCULATED_INFO.AutoMcCready) {
       DoStatusMessage(TEXT("Auto McCready ON"));
     } else {
       DoStatusMessage(TEXT("Auto McCready OFF"));
     }
-
+  } else if (wcscmp(misc, TEXT("show")) == 0) {
+	TCHAR Temp[100];
+	wsprintf(Temp,TEXT("%f"),MCCREADY);
+	DoStatusMessage(TEXT("McCready Value"), Temp);
   }
-  // XXX TODO show, auto show
 }
 
 
@@ -873,8 +877,8 @@ void InputEvents::eventBugs(TCHAR *misc) {
   }
   if (wcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    wsprintf(Temp,TEXT("Bugs Performance %d"),(int)(BUGS*100));
-    DoStatusMessage(Temp);
+    wsprintf(Temp,TEXT("%d"),(int)(BUGS*100));
+    DoStatusMessage(TEXT("Bugs Performance"), Temp);
   }
   if (BUGS != oldBugs) {
     BUGS= min(1.0,max(0.5,BUGS));
@@ -904,8 +908,8 @@ void InputEvents::eventBallast(TCHAR *misc) {
   }
   if (wcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    wsprintf(Temp,TEXT("Ballast %d %%"),(int)(BALLAST*100));
-    DoStatusMessage(Temp);
+    wsprintf(Temp,TEXT("%d"),(int)(BALLAST*100));
+    DoStatusMessage(TEXT("Ballast %"), Temp);
   }
   if (BALLAST != oldBallast) {
     BALLAST=min(1.0,max(0.0,BALLAST));
