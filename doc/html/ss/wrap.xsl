@@ -45,9 +45,10 @@
 				      <li><a href="/infoboxes/">Infoboxes</a></li>
 				      <li><a href="/settings/">Configuration settings</a></li>
 				      <li><a href="/readme.html">Version 4 Readme</a></li>
-				      <li><a href="/filetype/">File Types</a></li>
 				      <li><a href="/faq/">FAQ</a></li>
 				      <li><a href="/links.html">Links</a></li>
+				      <li><a href="/advanced/">Advanced</a></li>
+				      <li><a href="/ref/">Reference Manual</a></li>
 				</ul>
 			</div>
 			    
