@@ -388,22 +388,22 @@ location=4
 mode=Config1
 type=key
 data=APP1
-event=AdjustMcCready up
+event=McCready up
 label=McCready +
 location=1
 
 mode=Config1
 type=key
 data=APP2
-event=AdjustMcCready down
+event=McCready down
 label=McCready -
 location=2
 
 mode=Config1
 type=key
 data=APP3
-event=AdjustMcCready auto show
-event=AdjustMcCready auto toggle
+event=McCready auto show
+event=McCready auto toggle
 label=McCready Auto
 location=3
 
