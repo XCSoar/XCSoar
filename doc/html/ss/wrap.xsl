@@ -44,11 +44,14 @@
 				      <li><a href="/quick/">Quick start</a></li>
 				      <li><a href="/infoboxes/">Infoboxes</a></li>
 				      <li><a href="/settings/">Configuration settings</a></li>
-				      <li><a href="/readme.html">Version 4 Readme</a></li>
+				      <li><a href="/input/">Input Controls and Events</a></li>
+				      <!--
 				      <li><a href="/faq/">FAQ</a></li>
+				      -->
 				      <li><a href="/links.html">Links</a></li>
 				      <li><a href="/advanced/">Advanced</a></li>
 				      <li><a href="/ref/">Reference Manual</a></li>
+				      <li><a href="/readme.html">Version 4 Readme</a></li>
 				</ul>
 			</div>
 			    
@@ -100,6 +103,7 @@
 
 	<p><xsl:apply-templates/></p>
 </xsl:template>
+
 
 <xsl:template match="@*|node()">
         <xsl:copy>

@@ -1,3 +1,4 @@
+<faq>
 
 - Terrain safety height is the height above terrain at which XCSoar
 considers you're too low to cross.  This is only used in calculating the
@@ -13,3 +14,4 @@ outlanding options.  XCSoar doesn't do very much with this just yet.
 
 All are done through GPS I believe.
 
+</faq>

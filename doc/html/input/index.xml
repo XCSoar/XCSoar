@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title>Input and Events</title>
+        </metadata>
+
+        <content>
+
+		<h2>Input and Events</h2>
+
+<p>
+	XCSoar allows input and events to be controlled by files. This allows
+not only amazing levels of customisation but also good documentation as well.
+</p>
+
+<h2>Configurations</h2>
+
+<p>The following is a list of configurations that you can use in XCSoar and
+their documentation.</p>
+
+
+<table border="1">
+	<tr>
+		<th>Name</th>
+		<th>Description</th>
+		<th>Action</th>
+	</tr>
+
+	<tr>
+		<td>Default</td>
+		<td>Standard built into XCS</td>
+		<td><a href="default.html">more...</a></td>
+	</tr>
+
+</table>
+		
+<p>See <a href="/ref/filetype/xci/">XCI File type</a> and <a
+href="/advanced/input/">Advanced Input</a> for further information on file
+types and creating your own input files.</p>
+	
+	</content>
+</document>
+
