@@ -3585,7 +3585,7 @@ void DoStatusMessage(TCHAR* text, TCHAR *data) {
 	if (EnableSoundModes && LocalMessage.doSound)
 		PlayResource(LocalMessage.sound);
 
-	// XXX What is a sensible size?
+	// TODO consider what is a sensible size?
 	TCHAR msgcache[1024];
 	if (LocalMessage.doStatus) {
 

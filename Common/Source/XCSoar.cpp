@@ -768,7 +768,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ReadLanguageFile();
   ReadStatusFile();
 
-  // XXX Consider location
+  // Read input events.
   InputEvents::readFile();
 
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
@@ -1420,13 +1420,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       }
       break;
 
+      // TODO Capture KEYDOWN time
+      // 	- Pass that (otpionally) to processKey, allowing
+      // 	  processKey to handle long events - at any length
+      // 	- Not sure how to do double click... (need timer call back
+      // 	process unless reset etc... tricky)
     case WM_KEYUP:
       if (!DialogActive) {
-
-	// XXX Temp location - should do own check on location - eg:
-	// DialogActive
-	// XXX
-	// working VK_APP1-7
 
 	if (InputEvents::processKey(wParam)) {
 	  //	  DoStatusMessage(TEXT("Event in infobox"));
