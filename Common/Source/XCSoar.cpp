@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.94 2005/09/07 01:36:46 scottp Exp $
+  $Id: XCSoar.cpp,v 1.95 2005/09/07 06:46:24 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -874,6 +874,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
 #ifdef _SIM_
   InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
+  InputEvents::showErrors();
 #else
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif

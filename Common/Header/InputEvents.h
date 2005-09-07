@@ -53,6 +53,9 @@ class InputEvents {
   static void eventNearestWaypointDetails(TCHAR *misc);
   static void eventNearestAirspaceDetails(TCHAR *misc);
   static void eventRepeatStatusMessage(TCHAR *misc);
+#ifdef _SIM_
+  static void InputEvents::showErrors();
+#endif 
 
 };
 
@@ -75,5 +78,7 @@ enum {
 
 		GCE_COUNT			// How many we have for arrays etc
 };
+
+
 
 #endif

@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.67 2005/09/07 01:36:46 scottp Exp $
+//   $Id: Dialogs.cpp,v 1.68 2005/09/07 06:46:24 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -3591,7 +3591,7 @@ void DoStatusMessage(TCHAR* text, TCHAR *data) {
 	  
 	  wcscpy(msgcache, gettext(text));
 	  if (data != NULL) {
-	    wcscat(msgcache, TEXT("\r\n"));
+	    wcscat(msgcache, TEXT(" "));
 	    wcscat(msgcache, data);
 	  }
 	  

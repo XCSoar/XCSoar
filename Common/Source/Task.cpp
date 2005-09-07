@@ -198,7 +198,7 @@ void ReplaceWaypoint(int index) {
 #include "Logger.h"
 
 
-void guiStartLogger(void) {
+void guiStartLogger(bool noAsk) {
   int i;
   if (!LoggerActive) {
     TCHAR TaskMessage[1024];
@@ -217,7 +217,7 @@ void guiStartLogger(void) {
 	_tcscat(TaskMessage,TEXT("\r\n"));
       }
     
-    if(MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+    if(noAsk || MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
       {
 	LoggerActive = TRUE;
 	StartLogger(strAssetNumber);
@@ -238,19 +238,19 @@ void guiStartLogger(void) {
 }
 
 
-void guiStopLogger(void) {
+void guiStopLogger(bool noAsk) {
   if (LoggerActive) {
-    if(MessageBox(hWndMapWindow,gettext(TEXT("Stop Logger")),gettext(TEXT("Stop Logger")),MB_YESNO|MB_ICONQUESTION) == IDYES)
+    if(noAsk || MessageBox(hWndMapWindow,gettext(TEXT("Stop Logger")),gettext(TEXT("Stop Logger")),MB_YESNO|MB_ICONQUESTION) == IDYES)
       LoggerActive = FALSE;
     FullScreen();
   }
 }
 
 
-void guiToggleLogger(void) {
+void guiToggleLogger(bool noAsk) {
   if (LoggerActive) {
-    guiStopLogger();
+    guiStopLogger(noAsk);
   } else {
-    guiStartLogger();
+    guiStartLogger(noAsk);
   }
 }

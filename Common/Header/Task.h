@@ -47,9 +47,9 @@ void RemoveTaskPoint(int index);
 void FlyDirectTo(int index);
 
 
-void guiStartLogger(void);
-void guiStopLogger(void);
-void guiToggleLogger(void);
+void guiStartLogger(bool noAsk = false);
+void guiStopLogger(bool noAsk = false);
+void guiToggleLogger(bool noAsk = false);
 
 
 #endif
