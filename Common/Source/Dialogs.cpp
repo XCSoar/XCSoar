@@ -3591,7 +3591,7 @@ void DoStatusMessage(TCHAR* text, TCHAR *data) {
 
 	  wcscpy(msgcache, gettext(text));
 	  if (data != NULL) {
-	    wcscat(msgcache, TEXT("\r\n"));
+	    wcscat(msgcache, TEXT(" "));
 	    wcscat(msgcache, data);
 	  }
 

@@ -1,4 +1,5 @@
 /*
+
 InputEvents
 
   This class is used to control all user and external InputEvents.
@@ -41,6 +42,18 @@ InputEvents
 #define MAX_KEY 255
 #define MAX_EVENTS 2048
 #define MAX_LABEL NUMBUTTONLABELS
+
+/*
+	TODO - All of this input_Errors code needs to be removed and replaced with standard logger.
+	The logger can then display messages through Message:: if ncessary and log to files etc
+	This code, and baddly written #ifdef should be moved to Macros in the Log class.
+*/
+#ifdef _SIM_
+	// Log first 10 input event errors for display in simulator mode
+	#define MAX_INPUT_ERRORS 10
+	TCHAR input_errors[MAX_INPUT_ERRORS][1024];
+	int input_errors_count = 0;
+#endif
 
 // Current modes - map mode to integer (primitive hash)
 TCHAR mode_current[MAX_MODE_STRING] = TEXT("default");		// Current mode
@@ -131,11 +144,15 @@ void InputEvents::readFile() {
 	TCHAR d_event[256];
 	TCHAR d_misc[256];
 
+	int line = 0;
+
   /* Read from the file */
   while (
 	 fgetws(buffer, 2048, fp)
 	 && ((found = swscanf(buffer, TEXT("%[^=]=%[^\n]\n"), key, value)) != EOF)
   ) {
+	  line++;
+
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if ((found != 2) || !key || !value) {
 
@@ -156,7 +173,7 @@ void InputEvents::readFile() {
 				int mode_id = mode2int(token, true);
 
 				// Make label event
-				// TODO Consider Reuse existing !
+				// TODO Consider Reuse existing entries...
 				if (d_location > 0) {
 					// Only copy this once per object - save string space
 					if (!new_label) {
@@ -170,12 +187,21 @@ void InputEvents::readFile() {
 					int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
 					if (key > 0)
 						Key2Event[mode_id][key] = event_id;
+   					#ifdef _SIM_
+					else if (input_errors_count < MAX_INPUT_ERRORS)
+					  wsprintf(input_errors[input_errors_count++], TEXT("Invalid key data: %s at %i"), d_data, line);
+					#endif
+
 
 				// Make gce (Glide Computer Event)
 				} else if (wcscmp(d_type, TEXT("gce")) == 0) {		// GCE - Glide Computer Event
 					int key = findGCE(d_data);				// Get the int key (eg: APP1 vs 'a')
 					if (key >= 0)
 						GC2Event[mode_id][key] = event_id;
+   					#ifdef _SIM_
+					else if (input_errors_count < MAX_INPUT_ERRORS)
+					  wsprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
+					#endif
 				}
 
 				token = wcstok( NULL, TEXT(" "));
@@ -209,11 +235,20 @@ void InputEvents::readFile() {
 		pt2Event event = findEvent(d_event);
 		if (event) {
 			event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
+   	    #ifdef _SIM_
+		} else  if (input_errors_count < MAX_INPUT_ERRORS) {
+		  wsprintf(input_errors[input_errors_count++], TEXT("Invalid event type: %s at %i"), d_event, line);
+	    #endif
 		}
       } else if (wcscmp(key, TEXT("label")) == 0) {
 		wcscpy(d_label, value);
       } else if (wcscmp(key, TEXT("location")) == 0) {
 		swscanf(value, TEXT("%d"), &d_location);
+
+	  #ifdef _SIM_
+	  } else if (input_errors_count < MAX_INPUT_ERRORS) {
+		  wsprintf(input_errors[input_errors_count++], TEXT("Invalid key/value pair %s=%s at %i"), key, value, line);
+	  #endif
       }
     }
 
@@ -225,6 +260,17 @@ void InputEvents::readFile() {
   fclose(fp);
 
 }
+
+#ifdef _SIM_
+void InputEvents::showErrors() {
+	TCHAR buffer[2048];
+	int i;
+	for (i = 0; i < input_errors_count; i++) {
+		wsprintf(buffer, TEXT("XCI Error %i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
+  		Message::AddMessage(5000, 1, buffer);
+	}
+}
+#endif
 
 int InputEvents::findKey(TCHAR *data) {
   if (wcscmp(data, TEXT("APP1")) == 0)
@@ -926,18 +972,21 @@ void InputEvents::eventBallast(TCHAR *misc) {
 #include "Task.h"
 
 void InputEvents::eventLogger(TCHAR *misc) {
-  // TODO
+  // TODO - start logger without asking
   // start stop toggle addnote
-  if (wcscmp(misc, TEXT("start")) == 0) {
+  if (wcscmp(misc, TEXT("start ask")) == 0) {
     guiStartLogger();
-  }
-  if (wcscmp(misc, TEXT("stop")) == 0) {
+  } else if (wcscmp(misc, TEXT("start")) == 0) {
+    guiStartLogger(true);
+  } else if (wcscmp(misc, TEXT("stop ask")) == 0) {
     guiStopLogger();
-  }
-  if (wcscmp(misc, TEXT("toggle")) == 0) {
+  } else if (wcscmp(misc, TEXT("stop")) == 0) {
+    guiStopLogger(true);
+  } else if (wcscmp(misc, TEXT("toggle ask")) == 0) {
     guiToggleLogger();
-  }
-  if (wcscmp(misc, TEXT("show")) == 0) {
+  } else if (wcscmp(misc, TEXT("toggle")) == 0) {
+    guiToggleLogger(true);
+  } else if (wcscmp(misc, TEXT("show")) == 0) {
     if (LoggerActive) {
       DoStatusMessage(TEXT("Logger ON"));
     } else {

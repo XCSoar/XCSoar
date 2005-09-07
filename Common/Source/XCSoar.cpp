@@ -874,6 +874,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
 #ifdef _SIM_
   InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
+  InputEvents::showErrors();
 #else
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
