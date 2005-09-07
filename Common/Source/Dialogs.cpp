@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.68 2005/09/07 06:46:24 scottp Exp $
+//   $Id: Dialogs.cpp,v 1.69 2005/09/07 17:16:03 jwharington Exp $
 
 */
 #include "stdafx.h"
@@ -3650,7 +3650,9 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 // Insert linebreaks by using carriage return AND
 // linefeed characters.  ie TEXT("Line 1\r\nLine 2")
 // otherwise you'll get funny characters appearing
-void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio, 
+//
+void ShowStatusMessage(TCHAR* text, int delay_ms, 
+		       int iFontHeightRatio, 
                        bool docenter, int *TabStops) {
 
   // JMW new interface...///// XXXX todo work out how to set the type properly

@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.95 2005/09/07 06:46:24 scottp Exp $
+  $Id: XCSoar.cpp,v 1.96 2005/09/07 17:16:03 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1036,6 +1036,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     FontWidth = (int)(FontHeight*0.4);
   }
 
+  FontWidth = 0; // JMW this should be done so closest font is found
+
   // sgi todo
         
   memset ((char *)&logfont, 0, sizeof (logfont));
@@ -1146,7 +1148,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   // Font for map bold text
 
   logfont.lfWeight = FW_BOLD;
-  logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
+  logfont.lfWidth =  0; // JMW (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
 
   MapWindowBoldFont = CreateFontIndirect (&logfont);
 
@@ -1316,7 +1318,7 @@ bool Debounce() {
     return false; 
   }
 
-  if (dT>debounceTimeout) {
+  if (dT>(unsigned int)debounceTimeout) {
     fpsTimeLast = fpsTimeThis;
     return true;
   } else {
@@ -1832,7 +1834,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               MenuActive = true;
 	      DialogActive = true;
 
-	      guiToggleLogger();
+	      guiToggleLogger(true);
 
               MenuActive = false;
 	      FullScreen();

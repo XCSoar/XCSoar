@@ -11,5 +11,11 @@ int FindAirspaceCircle(double Longditude,double Lattitude);
 int FindAirspaceArea(double Longditude,double Lattitude);
 BOOL CheckAirspaceAltitude(double Base, double Top);
 void CloseAirspace(void);
+void FindNearestAirspace(double longitude, 
+			 double latitude,
+			 double *nearestdistance, 
+			 double *nearestbearing,
+			 int *foundcircle, 
+			 int *foundarea);
 
 #endif

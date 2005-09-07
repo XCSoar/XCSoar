@@ -18,6 +18,7 @@ Changes from 4.5beta2 to 4.5
 - Fixed hard-coded screen coordinates in PolygonVisible function
 - Airspace warnings now use new message class
 - Added glide computer events for entering and leaving airspace
+- Added method to find nearest airspace boundary (interior or exterior)
 
 Changes from 4.22 to 4.5beta2
 

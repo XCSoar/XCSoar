@@ -167,8 +167,8 @@ void Message::Resize() {
 
     int linecount = max(1,SendMessage(hWndMessageWindow, EM_GETLINECOUNT, 0, 0));
     int width =// min((rcmsg.right-rcmsg.left)*0.8,tsize.cx);
-      (rcmsg.right-rcmsg.left)*0.8;
-    int height = min((rcmsg.bottom-rcmsg.top)*0.8,tsize.cy*linecount);
+      (int)((rcmsg.right-rcmsg.left)*0.8);
+    int height = (int)min((rcmsg.bottom-rcmsg.top)*0.8,tsize.cy*linecount);
 
     int midx = (rcmsg.right+rcmsg.left)/2;
     int midy = (rcmsg.bottom+rcmsg.top)/2;

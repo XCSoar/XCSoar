@@ -1476,12 +1476,7 @@ void DoAutoMcCready(DERIVED_INFO *Calculated)
   dmc = dmc*0.2+0.8*0.5*min(1.0,max(-1.0,tad/0.001));
 
   MCCREADY += dmc;
-  if (MCCREADY>20.0) {
-    MCCREADY = 20.0;
-  }
-  if (MCCREADY<0.0) {
-    MCCREADY = 0.0;
-  }
+  MCCREADY = min(2.5*LIFTMODIFY,max(0,MCCREADY));
 
   /* NOT WORKING
   static double tad=0.0;

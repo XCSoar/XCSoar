@@ -1115,7 +1115,8 @@ int FindAirspaceArea(double Longditude,double Lattitude)
         // surely we should check it whether it is visible or not
         // in almost all cases it will be, so ok.
 	{
-	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
+	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, 
+				   AirspaceArea[i].Top.Altitude))
 	    {
 
               // first check if point is within bounding box
@@ -1141,3 +1142,312 @@ int FindAirspaceArea(double Longditude,double Lattitude)
   return -1;
 }
 
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////
+
+
+
+int FindNearestAirspaceCircle(double longitude, double latitude, 
+			      double *nearestdistance, double *nearestbearing)
+{
+  unsigned i;
+  int NearestIndex = 0;
+  double Dist;
+
+  if(NumberOfAirspaceCircles == 0)
+    {
+      return -1;
+    }
+		
+  for(i=0;i<NumberOfAirspaceCircles;i++)
+    {
+      if(AirspaceCircle[i].Visible)
+	{
+	  Dist = Distance(latitude,longitude,
+			  AirspaceCircle[i].Lattitude, 
+			  AirspaceCircle[i].Longditude)
+	    -AirspaceCircle[i].Radius;
+
+	  if(Dist < *nearestdistance )
+	    {
+	      if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, 
+				       AirspaceCircle[i].Top.Altitude))
+		{
+
+		  *nearestdistance = Dist;
+		  *nearestbearing = Bearing(latitude,
+					    longitude,
+					    AirspaceCircle[i].Lattitude, 
+					    AirspaceCircle[i].Longditude);
+
+		  return i;
+
+
+		}
+	    }
+	}
+    }
+  return -1;
+
+}
+
+
+
+// this is a slow function
+// adapted from The Aviation Formulary 1.42
+
+// finds the point along a distance dthis between p1 and p2, which are
+// separated by dtotal
+void IntermediatePoint(double lon1, double lat1,
+		       double lon2, double lat2,
+		       double dthis,
+		       double dtotal,
+		       double *lon3, double *lat3) {
+  double A, B, x, y, z, d, f;
+  /*
+  lat1 *= DEG_TO_RAD;
+  lat2 *= DEG_TO_RAD;
+  lon1 *= DEG_TO_RAD;
+  lon2 *= DEG_TO_RAD;
+  */
+
+  if (dtotal>0) {
+    f = dthis/dtotal;
+    d = dtotal;
+  } else {
+    dtotal=1.0e-7;
+    f = 0.0;
+  }
+  f = min(1.0,max(0.0,f));
+
+  double coslat1 = cos(lat1);
+  double coslat2 = cos(lat2);
+
+  A=sin((1-f)*d)/sin(d);
+  B=sin(f*d)/sin(d);
+  x = A*coslat1*cos(lon1) +  B*coslat2*cos(lon2);
+  y = A*coslat1*sin(lon1) +  B*coslat2*sin(lon2);
+  z = A*sin(lat1)           +  B*sin(lat2);
+  *lat3=atan2(z,sqrt(x*x+y*y))*RAD_TO_DEG;
+  *lon3=atan2(y,x)*RAD_TO_DEG;
+}
+
+
+// finds cross track error in meters and closest point p4 between p3 and
+// desired track p1-p2.
+// very slow function!
+double CrossTrackError(double lon1, double lat1,
+		     double lon2, double lat2,
+		     double lon3, double lat3,
+		     double *lon4, double *lat4) {
+
+  double dist_AD = 
+    Distance(lat1, lon1, lat3, lon3)/(RAD_TO_DEG * 111194.9267);
+  double dist_AB = 
+    Distance(lat1, lon1, lat2, lon2)/(RAD_TO_DEG * 111194.9267);
+  double crs_AD = Bearing(lat1, lon1, lat3, lon3)*DEG_TO_RAD;
+  double crs_AB = Bearing(lat1, lon1, lat2, lon2)*DEG_TO_RAD;
+
+  lat1 *= DEG_TO_RAD;
+  lat2 *= DEG_TO_RAD;
+  lat3 *= DEG_TO_RAD;
+  lon1 *= DEG_TO_RAD;
+  lon2 *= DEG_TO_RAD;
+  lon3 *= DEG_TO_RAD;
+
+  double XTD; // cross track distance
+  double ATD; // along track distance
+  //  The "along track distance", ATD, the distance from A along the
+  //  course towards B to the point abeam D
+
+  double sindist_AD = sin(dist_AD);
+
+  XTD = asin(sindist_AD*sin(crs_AD-crs_AB));
+
+  double sinXTD = sin(XTD);
+  ATD = asin(sqrt( sindist_AD*sindist_AD - sinXTD*sinXTD )/cos(XTD));
+  
+  if (lon4 && lat4) {
+    IntermediatePoint(lon1, lat1, lon2, lat2, ATD, dist_AB,
+		      lon4, lat4);
+  }
+
+  // units
+  XTD *= (RAD_TO_DEG * 111194.9267);
+
+  return XTD;
+}
+
+// this one uses screen coordinates to avoid as many trig functions
+// as possible.. it means it is approximate but for our use it is ok.
+double ScreenCrossTrackError(double lon1, double lat1,
+		     double lon2, double lat2,
+		     double lon3, double lat3,
+		     double *lon4, double *lat4) {
+  int x1, y1, x2, y2, x3, y3;
+  
+  MapWindow::LatLon2Screen(lon1, lat1, &x1, &y1);
+  MapWindow::LatLon2Screen(lon2, lat2, &x2, &y2);
+  MapWindow::LatLon2Screen(lon3, lat3, &x3, &y3);
+
+  int v12x, v12y, v13x, v13y;
+
+  v12x = x2-x1; v12y = y2-y1;
+  v13x = x3-x1; v13y = y3-y1;
+
+  int mag12 = isqrt4(v12x*v12x+v12y*v12y);
+  if (mag12>1) {
+
+    // projection of v13 along v12 = v12.v13/|v12|
+    int proj = (v12x*v13x+v12y*v13y)/mag12;
+    
+    // distance between 3 and tangent to v12
+    int dist = abs(isqrt4(v13x*v13x+v13y*v13y-proj*proj));
+    
+    // fractional distance
+    double f = min(1.0,max(0,proj*1.0/mag12));
+    
+    // location of 'closest' point 
+    *lon4 = (v12x)*f+x1;
+    *lat4 = (v12y)*f+y1;
+    MapWindow::GetLocationFromScreen(lon4, lat4);
+  } else {
+    *lon4 = lon1;
+    *lat4 = lat1;
+  }
+  
+  // compute accurate distance
+  return Distance(lat3, lon3, *lat4, *lon4); 
+}
+
+
+int FindNearestAirspaceArea(double longitude, double latitude, 
+			      double *nearestdistance, double *nearestbearing)
+{
+  unsigned i;
+  int ifound = -1;
+  double lon4, lat4;
+  bool inside=false;
+  // location of point the target is abeam along line in airspace area 
+
+  if(NumberOfAirspaceAreas == 0)
+    {
+      return -1;
+    }
+
+  AIRSPACE_POINT thispoint;
+
+  thispoint.Longditude = longitude;
+  thispoint.Lattitude = latitude;
+
+  for(i=0;i<NumberOfAirspaceAreas;i++)
+    {
+      // JMW is this a bug?
+      // surely we should check it whether it is visible or not
+      // in almost all cases it will be, so ok.
+      if(AirspaceArea[i].Visible ) 
+	{
+	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, 
+				   AirspaceArea[i].Top.Altitude))
+	    {
+
+	      inside = false;
+
+              // first check if point is within bounding box
+              if (
+                  (latitude> AirspaceArea[i].bounds.miny)&&
+                  (latitude< AirspaceArea[i].bounds.maxy)&&
+                  (longitude> AirspaceArea[i].bounds.minx)&&
+                  (longitude< AirspaceArea[i].bounds.maxx)
+                  )
+                {
+                  // it is within, so now do detailed polygon test
+                  if (wn_PnPoly(thispoint,
+                                &AirspacePoint[AirspaceArea[i].FirstPoint],
+                                AirspaceArea[i].NumPoints-1) != 0) {
+                    // we are inside the i'th airspace area
+
+		    inside = true;
+
+                  }
+                }
+
+	      // find nearest distance to line segment
+	      unsigned int j;
+	      double dist;
+	      for (j=0; j<AirspaceArea[i].NumPoints-1; j++) {
+
+		dist = 
+		  ScreenCrossTrackError(
+		AirspacePoint[AirspaceArea[i].FirstPoint+j].Longditude,
+		AirspacePoint[AirspaceArea[i].FirstPoint+j].Lattitude,
+		AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Longditude,
+		AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Lattitude,
+		longitude, latitude,
+		&lon4, &lat4);
+
+		if ((dist< *nearestdistance)
+		    || ((j==0)&&(inside))) {
+		      // found new closest, or if we are inside,
+		      // ignore previous nearest airspace since it
+		      // is irrelevant now
+		  *nearestdistance = dist;
+		  *nearestbearing = Bearing(latitude, longitude,
+					    lat4, lon4);
+		  ifound = i;
+		}
+	      }
+
+	      if (inside) {
+		// no need to continue the search
+		*nearestdistance = -(*nearestdistance);
+		return i;
+	      }
+
+	    }
+	}
+    }
+  // not inside any airspace, so return closest one
+  return ifound;
+}
+
+
+
+
+////////////////////////
+//
+// Finds nearest airspace (whether circle or area) to the specified point.
+// Returns -1 in foundcircle or foundarea if circle or area is not found
+// Otherwise, returns index of the circle or area that is closest to the specified 
+// point.
+//
+// Also returns the distance and bearing to the boundary of the airspace,
+// (and the vertical separation TODO).  
+//
+// Distance <0 means interior.
+//
+// This only searches within a range of 100km of the target
+
+void FindNearestAirspace(double longitude, double latitude,
+			 double *nearestdistance, double *nearestbearing,
+			 int *foundcircle, int *foundarea)
+{
+
+  *nearestdistance = 100000; // 100 km
+  *nearestbearing = 0;
+
+  *foundcircle = FindNearestAirspaceCircle(longitude, latitude,
+					   nearestdistance, nearestbearing);
+
+  if (*nearestdistance<0) {
+    // we are inside already
+    return;
+  }
+
+  *foundarea = FindNearestAirspaceArea(longitude, latitude,
+					   nearestdistance, nearestbearing);
+
+}
