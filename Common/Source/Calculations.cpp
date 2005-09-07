@@ -2166,44 +2166,52 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
 }
 
 
-void ResumeAbortTask() {
+void ResumeAbortTask(int set) {
   static int OldTask[MAXTASKPOINTS];
   static int OldActiveWayPoint= -1;
   int i;
 
-  TaskAborted = !TaskAborted;
+  bool oldTaskAborted = TaskAborted;
 
-  if (TaskAborted) {
+  if (set == 0)
+	TaskAborted = !TaskAborted;
+  else if (set > 0)
+	TaskAborted = true;
+  else if (set < 0)
+	TaskAborted = false;
 
-    // save current task in backup
+  if (oldTaskAborted != TaskAborted) {
+	  if (TaskAborted) {
 
-    for (i=0; i<MAXTASKPOINTS; i++) {
-      OldTask[i]= Task[i].Index;
-    }
-    OldActiveWayPoint = ActiveWayPoint;
+		// save current task in backup
 
-    // force new waypoint to be the closest
-    ActiveWayPoint = -1;
+		for (i=0; i<MAXTASKPOINTS; i++) {
+		  OldTask[i]= Task[i].Index;
+		}
+		OldActiveWayPoint = ActiveWayPoint;
 
-  } else {
+		// force new waypoint to be the closest
+		ActiveWayPoint = -1;
 
-    // reload backup task
+	  } else {
 
-    for (i=0; i<MAXTASKPOINTS; i++) {
-      Task[i].Index = OldTask[i];
-    }
-    ActiveWayPoint = OldActiveWayPoint;
+		// reload backup task
 
-    for (i=0; i<MAXTASKPOINTS; i++) {
-      if (Task[i].Index != -1) {
-        RefreshTaskWaypoint(i);
-      }
-    }
-    CalculateTaskSectors();
-    CalculateAATTaskSectors();
+		for (i=0; i<MAXTASKPOINTS; i++) {
+		  Task[i].Index = OldTask[i];
+		}
+		ActiveWayPoint = OldActiveWayPoint;
 
+		for (i=0; i<MAXTASKPOINTS; i++) {
+		  if (Task[i].Index != -1) {
+			RefreshTaskWaypoint(i);
+		  }
+		}
+		CalculateTaskSectors();
+		CalculateAATTaskSectors();
+
+	  }
   }
-
 
 }
 
