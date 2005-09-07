@@ -15,7 +15,7 @@ while (<IN>) {
 		print qq{Text2Event[$count].text = TEXT("$1");\n};
 		print qq{Text2Event[$count].event = &event$1;\n};
 		$count++;
-	} elsif (/(GCE_[A-Z0-9_]+)/) {
+	} elsif (/GCE_([A-Z0-9_]+)/) {
 		print qq{Text2GCE[$gce_count] = TEXT("$1");\n};
 		$gce_count++;
 	}
