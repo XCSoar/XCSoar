@@ -5,36 +5,44 @@ mode=default
 type=gce
 data=GPS_CONNECTION_WAIT
 event=StatusMessage Waiting for GPS Connection
+title=Waiting for GPS Connection
 
 mode=default
 type=gce
 data=COMMPORT_RESTART
 event=StatusMessage Restarting Comm Ports
+title=Waiting for COMM Port
 
 mode=default
 type=gce
 data=GPS_FIX_WAIT
 event=StatusMessage Waiting for GPS Fix
+title=Waiting for GPS Fix
 
 mode=default
 type=gce
 data=STARTUP_SIMULATOR
 event=StatusMessage Simulation\r\nNothing is real!
+title=The simulator has started
 
 mode=default
 type=gce
 data=STARTUP_REAL
 event=StatusMessage Maintain effective\r\nLOOKOUT at all times
+title=The real XCS has started
 
 mode=default
 type=gce
 data=TAKEOFF
 event=StatusMessage Takeoff 
+title=Takeoff
+note=This event could be useful for automatically starting the logger.
 
 mode=default
 type=gce
 data=LANDING
 event=StatusMessage Landing
+title=Landing
 
 # ------------
 # mode=default
@@ -48,6 +56,7 @@ data=APP1
 event=ScreenModes toggle
 label= 
 location=1
+title=Toggle the screen modes (full, navboxes)
 
 mode=default
 type=key
@@ -56,6 +65,7 @@ event=SnailTrail show
 event=SnailTrail toggle
 label= 
 location=2
+title=Toggle snail trail (where was I)
 
 mode=default
 type=key
@@ -64,6 +74,7 @@ event=StatusMessage Dropped marker
 event=MarkLocation
 label= 
 location=3
+title=Mark the current location into a file
 
 mode=default
 type=key
@@ -71,18 +82,21 @@ data=APP4
 event=Mode Menu1
 label=Main
 location=4
+title=Display more configuration options
 
 mode=default
 type=key
 data=LEFT
 event=Zoom auto show
 event=Zoom auto toggle
+title=Toggle the automatic zoom
 
 mode=default
 type=key
 data=RIGHT
 event=Pan show
 event=Pan supertoggle
+title=Toggle between Pan mode and normal
 
 mode=default
 type=key
@@ -99,6 +113,7 @@ type=key
 data=RETURN
 event=ClearAirspaceWarnings
 event=ClearStatusMessages
+title=Acknowledge messages
 
 
 # ------------
