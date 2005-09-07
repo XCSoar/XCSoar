@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+<title>PlaySound</title>
+        </metadata>
+
+        <content>
 <h2>PlaySound</h2>
 
 	<p></p>
@@ -6,3 +13,5 @@
 		<li>TODO "*" - String matching file</li>
 	</ul>
 
+</content>
+</document>

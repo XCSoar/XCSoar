@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+<title>AdjustWaypoint</title>
+        </metadata>
+
+        <content>
 <h2>AdjustWaypoint</h2>
 
 	<p></p>
@@ -8,3 +15,5 @@
 		<li>right</li>
 	</ul>
 
+</content>
+</document>

@@ -269,12 +269,9 @@ The following screenshots show settings available for AAT tasks.
 
 		</screenshots>
 
-	</content>
-</document>
 
 
-
-
+<!--
 
 Introduction
 This guide will help you get up and running with XCSoar, the Open Source soaring and navigation software for PDAs.
@@ -315,8 +312,12 @@ Now select Map Files from the drop-down box and browse for your Terrain and Topo
 If you downloaded a Language file, select Interface Files from the drop-down box and browse for this file.
 Now click ok to load all the files you selected so that you can use this information to make further settings.
 Home Airfield
-You may have noticed that when the files were loaded, the map is displayed centred on the first waypoint in the Waypoint file. To set your home airfield, bring up the Menu and tap the Task button. Choose your home airfield from the list on the left hand side and tap the Details... button. Now tap the Ò>>Ó button on the right, then the Set Home button, then Close.
+You may have noticed that when the files were loaded, the map is displayed centred on the first waypoint in the Waypoint file. To set your home airfield, bring up the Menu and tap the Task button. Choose your home airfield from the list on the left hand side and tap the Details... button. Now tap the >> button on the right, then the Set Home button, then Close.
 For the new home airfield to take effect, you need to restart XCSoar. Bring up the Menu and tap Exit. Tap SIM on the Today screen and you should see the map displayed centred on your home airfield.
 Other Settings
 
+-->
+
+	</content>
+</document>
 

@@ -5,7 +5,7 @@ include Files
 # Files to build locally (not found from xml) (also temp files)
 FILES_LOCAL=readme.html
 # Other temp files to remove
-FILES_TMP=dest.tar.gz readme.xml
+FILES_TMP=dest.tar.gz readme.xml input/default.xml
 
 # ------------------------------------------------------------------------------
 
@@ -16,10 +16,14 @@ build: depends $(FILES_DEST) $(FILES_LOCAL) dest.tar.gz
 $(FILES_DEST): ss/wrap.xsl
 
 depends:
+	@-mkdir input 2>/dev/null
 	@perl files.pl > Files
 
 readme.xml: ../../source/XCSoarV4-README.txt
 	perl wrap.pl Readme < ../../source/XCSoarV4-README.txt > readme.xml
+
+input/default.xml: ../../source/Common/Data/Input/default.xci
+	perl xci2xml.pl ../../source/Common/Data/Input/default.xci > input/default.xml
 
 clean: depends
 	@-rm $(FILES_CLEAN) $(FILES_LOCAL) $(FILES_TMP) dest.tar.gz >/dev/null 2>/dev/null

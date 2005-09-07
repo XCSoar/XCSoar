@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+<title>ClearWarningsAndTerrain</title>
+        </metadata>
+
+        <content>
 <h2>ClearWarningsAndTerrain</h2>
 
 	<p></p>
@@ -10,3 +17,5 @@
 		<li>right - Pan right</li>
 	</ul>
 
+</content>
+</document>

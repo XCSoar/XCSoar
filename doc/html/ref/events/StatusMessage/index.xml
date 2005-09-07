@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+<title>StatusMessage</title>
+        </metadata>
+
+        <content>
 <h2>StatusMessage</h2>
 
 	<p></p>
@@ -5,3 +12,5 @@
 		<li>"*" - Specific string to send to DoStatusMessage</li>
 	</ul>
 
+</content>
+</document>

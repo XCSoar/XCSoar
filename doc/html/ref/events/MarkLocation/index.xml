@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+<title>MarkLocation</title>
+        </metadata>
+
+        <content>
 <h2>MarkLocation</h2>
 
 	<p>Mark a location</p>
@@ -5,3 +12,5 @@
 		<li>(TODO) "*" - Text string to add to file</li>
 	</ul>
 
+</content>
+</document>

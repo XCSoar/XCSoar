@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+<title>ScreenModes</title>
+        </metadata>
+
+        <content>
 <h2>ScreenModes</h2>
 
 	<p>Set the screen mode</p>
@@ -10,3 +17,5 @@
 		<li>toggle</li>
 	<ul>
 
+</content>
+</document>

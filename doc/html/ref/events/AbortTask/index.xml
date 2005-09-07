@@ -1,3 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+		<title>AbortTask</title>
+        </metadata>
+
+        <content>
+
 <h2>AbortTask</h2>
 
 	<p></p>
@@ -6,4 +14,7 @@
 		<li>TODO abort</li>
 		<li>TODO resume</li>
 	</ul>
+
+</content>
+</document>
 

@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+<title>SnailTrail</title>
+        </metadata>
+
+        <content>
 <h2>SnailTrail</h2>
 
 	<p>Change snail trail setting</p>
@@ -8,3 +15,5 @@
 		<li>show</li>
 	</ul>
 
+</content>
+</document>

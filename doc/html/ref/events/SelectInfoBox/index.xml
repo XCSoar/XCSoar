@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+<title>SelectInfoBox</title>
+        </metadata>
+
+        <content>
 <h2>SelectInfoBox</h2>
 
 	<p></p>
@@ -6,3 +13,5 @@
 		<li>previous</li>
 	</ul>
 
+</content>
+</document>

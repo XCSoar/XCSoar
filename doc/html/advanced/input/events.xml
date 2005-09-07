@@ -1,3 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title>Welcome</title>
+        </metadata>
+
+        <content>
+
 <h2>ScreenModes</h2>
 
 	<p>Set the screen mode</p>
@@ -8,7 +16,7 @@
 		<li>full</li>
 		<li>togglefull</li>
 		<li>toggle</li>
-	<ul>
+	</ul>
 
 <h2>SnailTrail</h2>
 
@@ -190,3 +198,6 @@
 		<li>TODO resume</li>
 	</ul>
 
+
+</content>
+</document>

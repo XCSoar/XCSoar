@@ -1,3 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+<title>Zoom</title>
+        </metadata>
+
+        <content>
 <h2>Zoom</h2>
 
 	<p>Everything about zoom of map</p>
@@ -15,3 +22,5 @@
 		<li>"n.n" - a number</li>
 	</ul>
 
+</content>
+</document>
