@@ -801,7 +801,7 @@ void InputEvents::eventMcCready(TCHAR *misc) {
 
 // TODO Increase wind by larger amounts ? Set wind to specific amount ?
 //	(may sound silly - but future may get SMS event that then sets wind)
-void InputEvents::eventAdjustWind(TCHAR *misc) {
+void InputEvents::eventWind(TCHAR *misc) {
   if (wcscmp(misc, TEXT("up")) == 0) {
     WindSpeedProcessing(1);
   }
@@ -847,13 +847,16 @@ void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
   }
 }
 
-// XXX toggle, abort, resume
+// toggle, abort, resume
 void InputEvents::eventAbortTask(TCHAR *misc) {
-  //  if (wcscmp(misc, TEXT("toggle")) == 0) {
     LockFlightData();
-    ResumeAbortTask();
+	if (wcscmp(misc, TEXT("abort")) == 0)
+	    ResumeAbortTask(1);
+	else if (wcscmp(misc, TEXT("resume")) == 0)
+	    ResumeAbortTask(-1);
+	else
+	    ResumeAbortTask();
     UnlockFlightData();
-    //  }
 }
 
 #include "device.h"
