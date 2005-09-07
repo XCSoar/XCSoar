@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title>Advanced</title>
+        </metadata>
+
+        <content>
+
+<h1>Advanced and Programming Information</h1>
+
+<p>This section is designed as a central location for important advanced and
+programmer information. Examples may include how to compile, code/api, details
+of how to create special files and much more.</p>
+
+<h2>The List</h2>
+
+<ul>
+
+	<li>
+		<a href="input/">
+			Input and Events Files
+		</a> - how to write your own
+	</li>
+</ul>
+	</content>
+</document>
+
