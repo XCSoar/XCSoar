@@ -18,6 +18,14 @@ h2 {
 	font-family: verdana, arial, helvetica, sans-serif;
 	color: #333366; 
 }
+	
+a:link, a:visited {
+	color: #003366;
+}
+
+a:hover, a:active, a:focus {
+	color: #455F8D;
+}
 
 #page {
 	background: transparent url(side-bg.gif) top left;
@@ -98,7 +106,7 @@ h2 {
 	text-decoration: none;
 }
 	
-#navigation a:hover { 
+#navigation a:hover, #navigation a:active, #navigation a:focus { 
 	font-weight: bold;
 	color: #152748;  
 	text-decoration: underline;
@@ -109,6 +117,7 @@ h2 {
 	clear: both;	
 	padding: 5px;
 	height: 35px;
+	font-size: 0.8em;
 }
 
 
@@ -128,24 +137,25 @@ h2 {
 	margin: 10px;
 }
 
+.input table {
+	margin-bottom: 20px;
+}
+
 .input h1 {
 	border-top: solid 1px #003366;
+	margin-top: 30px;
+	margin-bottom: 10px;
 }
 
 .input td {
 	background-color: #eeeeee;
+	font-size: 0.8em;
+	padding: 2px;
 }
 
 .input th {
 	background-color: #B8CBE8;
+	font-size: 0.9em;
 	color: #003366;
 	text-align: left;
-}
-	
-a, a:link, a:visited {
-	color #003366;
-}
-
-a:hover, a:active, a:focus {
-	color: #455F8D;
 }

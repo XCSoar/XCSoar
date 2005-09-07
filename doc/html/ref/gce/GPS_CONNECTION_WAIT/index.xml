@@ -8,6 +8,9 @@
                 <h2>GPS_CONNECTION_WAIT</h2>
 
 <p>
+Waiting for the GPS tor return connection. Check your GPS is properly
+connected. You can bring up a <a href="/ref/events/Sound">Sound</a> or <a
+href="/ref/events/StatusMessage">StatusMessage</a> to warn the user.
 </p>
 
         </content>

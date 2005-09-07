@@ -8,7 +8,21 @@
                 <h2>FLIGHTMODE_FINALGLIDE</h2>
 
 <p>
+XCS has three main flight modes: <a
+href="/ref/gce/FLIGHTMODE_CRUISE/">Cruise</a>, <a
+href="/ref/gce/FLIGHTMODE_FINAL">Final Glide</a>, and <a
+href="/ref/gce/FLIGHTMODE_CLIMB">Climb</a> mode.
 </p>
+
+<p>
+These events are triggered when switching from one mode to another.
+</p>
+
+<p>
+Standard events done during a change to climb may include changing <a
+href="/ref/events/Zoom">Zoom</a>, North/Track up, Drop Marker and more.
+</p>
+
 
         </content>
 </document>

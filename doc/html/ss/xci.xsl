@@ -31,14 +31,10 @@ description of the purpose and options for an event. Click on Mode names (eg:
 Menu1) to jump to the next mode.
 </p>
 
-			<table>
-				<tr>
-					<th>Mode</th>
-					<th>Input Type</th>
-				</tr>
+		<h2>Index of Modes and Event Types</h2>
+			<ul>
 				<xsl:for-each select="mode">
-					<tr>
-						<td>
+					<li>
 							<a>
 								<xsl:attribute name="href">
 									<xsl:text>#mode_</xsl:text>
@@ -46,8 +42,7 @@ Menu1) to jump to the next mode.
 								</xsl:attribute>
 								<xsl:value-of select="@name"/>
 							</a>
-						</td>
-						<td>
+						<xsl:text> - </xsl:text>
 							<xsl:for-each select="type">
 								<a>
 									<xsl:attribute name="href">
@@ -60,10 +55,9 @@ Menu1) to jump to the next mode.
 								</a>
 								<xsl:text> </xsl:text>
 							</xsl:for-each>
-						</td>
-					</tr>
+					</li>
 				</xsl:for-each>
-			</table>
+			</ul>
 			<xsl:apply-templates/>
 
 </div>
