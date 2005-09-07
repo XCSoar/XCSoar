@@ -176,7 +176,7 @@ location=1
 </pre>
 
 <p>The record above demonstrates remapping the first hardware key on your
-organiser to change Pan to off, Zoom to 1.0â Sounds on, ScreenModes full, and
+organiser to change Pan to off, Zoom to 1.0 Sounds on, ScreenModes full, and
 then a status message to tell you it is done.
 </p>
 
@@ -250,37 +250,50 @@ to specify what mode it thinks it is in. This can then be used by the
 input code to decide what to do. This mode could get out of sink
 with the real world, and careful checking will be required, but at
 this stage it seems like the only sensible option.
+</p>
 
+<p>
 The code will review first if an entry exists in the current mode, and 
 then in the default mode. This allows you to do one of the following
 example: Define a default action for button "A" to be "Zoom In" but
 make that button increase Bugs value in infobox mode only. You can do
 this by making an "default" and a "infobox" entry. You can also put an entry
 in for Button "A" for every mode and have complete control.
+</p>
 
+<p>
 Special Modes - eg: the level of a menu (Think File vs Edit, vs Tools vs Help)
+</p>
 
+<p>
 have special modes, such as
 the level of the menu you are at. You press one button, then another
 set become available (like pressing menu and seeing Settings etc). This
 will be very useful in non-touch screen models. The menu configuration
 can then be read from this same file and configured, allowing any
 number of levels and any number of combinations.
+</p>
 
+<p>
 The only hard part is what mode to go back to. We need a 
 "Calculate Live Mode" function - which can be called to calculate the
 real live mode (eg: finalglide vs curse) rather than the temporary
-mode such as Menuâ Special Menu Level, Warning etc.
+mode such as Menu, Special Menu Level, Warning etc.
+</p>
 
+<p>
 The label and location values are examples of what can be done here
 to allow input button labels to be displayed. What needs to be 
 considered is a simple way of mapping the locations and the size.
 In some models it may be that buttons are 4 across the top of the
 screen, where as others it is 3 or 2 or even 6. So both size and
 location needs to be considered.
+</p>
 
+<p>
 The label itself will go through gettext to allow language
 translations.
+</p>
 
 
 <h2>Keys</h2>
@@ -293,6 +306,7 @@ translations.
 	<li>LEFT, RIGHT, UP, DOWN, RETURN - Mapped to arrow keys - joystick on
 organisers</li>
 	<li>A-Z, 0-9 - and other possible keyboard buttons (case is ignored)</li>
+</ul>
 
 Input Types
 
@@ -306,7 +320,7 @@ keyboard	Normal characters on the keyboard (a-z etc)
 
 nmea		A sentence received via NMEA stream (either)
 
-virtual		Virtual buttons are a new ideaâ allowing
+virtual		Virtual buttons are a new idea, allowing
 multiple buttons to be created on screen.
 These buttons can then be optionally mapped
 to physical buttons or to a spot on the 
