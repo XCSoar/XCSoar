@@ -69,7 +69,7 @@ mode=default
 type=key
 data=APP4
 event=Mode Menu1
-label=Menu
+label=Main
 location=4
 
 mode=default
