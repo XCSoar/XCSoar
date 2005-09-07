@@ -266,7 +266,7 @@ mode=Nav2
 type=key
 data=APP1
 event=Logger show
-event=Logger toggle
+event=Logger toggle ask
 label=Log
 location=1
 

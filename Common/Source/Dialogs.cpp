@@ -3650,7 +3650,9 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 // Insert linebreaks by using carriage return AND
 // linefeed characters.  ie TEXT("Line 1\r\nLine 2")
 // otherwise you'll get funny characters appearing
-void ShowStatusMessage(TCHAR* text, int delay_ms, int iFontHeightRatio,
+//
+void ShowStatusMessage(TCHAR* text, int delay_ms,
+		       int iFontHeightRatio,
                        bool docenter, int *TabStops) {
 
   // JMW new interface...///// XXXX todo work out how to set the type properly

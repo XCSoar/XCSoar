@@ -1977,7 +1977,7 @@ void ReadLanguageFile() {
 	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
 	TCHAR key[1024];	// key from scanf
 	TCHAR value[1024];	// value from scanf
-	TCHAR temp[1024];	// Buffer for formatted output
+//	TCHAR temp[1024];	// Buffer for formatted output
 	int found;			// Entries found from scanf
 
 	/* Read from the file */
@@ -2307,24 +2307,27 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
 	unsigned int used = 0;
 	unsigned int i;
 	for (i = 0; i < wcslen(old_string); i++) {
-		if (old_string[i] == '\\' ) {
-			if (old_string[i + 1] == 'r') {
-				// Do nothing
-				i++;
-			} else if (old_string[i + 1] == 'n') {
-				buffer[used++] = '\r';
-				buffer[used++] = '\n';
-				i++;
-			} else if (old_string[i + 1] == '\\') {
-				buffer[used++] = '\\';
-				i++;
+		if (used < 2045) {
+			if (old_string[i] == '\\' ) {
+				if (old_string[i + 1] == 'r') {
+					// Do nothing
+					i++;
+				} else if (old_string[i + 1] == 'n') {
+					buffer[used++] = '\r';
+					buffer[used++] = '\n';
+					i++;
+				} else if (old_string[i + 1] == '\\') {
+					buffer[used++] = '\\';
+					i++;
+				} else {
+					buffer[used++] = old_string[i];
+				}
 			} else {
 				buffer[used++] = old_string[i];
 			}
-		} else {
-			buffer[used++] = old_string[i];
 		}
 	};
+	buffer[used++] = NULL;
 
 	new_string = (TCHAR *)malloc((wcslen(buffer)+1)*sizeof(TCHAR));
 	wcscpy(new_string, buffer);

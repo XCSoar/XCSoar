@@ -35,6 +35,7 @@ InputEvents
 #include "Process.h"
 #include "Port.h"
 #include "Message.h"
+#include "Units.h"
 
 // Sensible maximums
 #define MAX_MODE 100
@@ -1017,7 +1018,64 @@ void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
 
 
 void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
-  // TODO..
+  double nearestdistance, nearestbearing;
+  int foundcircle, foundarea, i;
+  bool inside = false;
+
+  TCHAR szMessageBuffer[1024];
+  TCHAR szTitleBuffer[1024];
+  TCHAR text[1024];
+
+  FindNearestAirspace(GPS_INFO.Longditude, GPS_INFO.Lattitude,
+		      &nearestdistance, &nearestbearing,
+		      &foundcircle, &foundarea);
+
+  if ((foundcircle == -1)&&(foundarea == -1)) {
+    // nothing to display!
+    return;
+  }
+
+  if (foundcircle != -1) {
+    i = foundcircle;
+
+    FormatWarningString(AirspaceCircle[i].Type , AirspaceCircle[i].Name ,
+			AirspaceCircle[i].Base, AirspaceCircle[i].Top,
+			szMessageBuffer, szTitleBuffer );
+
+  } else if (foundarea != -1) {
+
+    i = foundarea;
+
+    FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name ,
+			AirspaceArea[i].Base, AirspaceArea[i].Top,
+			szMessageBuffer, szTitleBuffer );
+ }
+
+  if (nearestdistance<0) {
+    inside = true;
+    nearestdistance = -nearestdistance;
+  }
+
+  if (inside) {
+    wsprintf(text,TEXT("Inside airspace: %s\r\n%s\r\nExit: %.1f %s\r\nBearing %d"),
+	     szTitleBuffer,
+	     szMessageBuffer,
+	     nearestdistance*DISTANCEMODIFY,
+	     Units::GetDistanceName(),
+	     (int)nearestbearing);
+  } else {
+    wsprintf(text,TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %.1f %s\r\nBearing %d"),
+	     szTitleBuffer,
+	     szMessageBuffer,
+	     nearestdistance*DISTANCEMODIFY,
+	     Units::GetDistanceName(),
+	     (int)nearestbearing);
+  }
+
+  // clear previous warning if any
+  Message::Acknowledge(MSG_AIRSPACE);
+  Message::AddMessage(5000, MSG_AIRSPACE, text);
+
 }
 
 

@@ -1036,6 +1036,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     FontWidth = (int)(FontHeight*0.4);
   }
 
+  FontWidth = 0; // JMW this should be done so closest font is found
+
   // sgi todo
 
   memset ((char *)&logfont, 0, sizeof (logfont));
@@ -1146,7 +1148,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   // Font for map bold text
 
   logfont.lfWeight = FW_BOLD;
-  logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
+  logfont.lfWidth =  0; // JMW (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
 
   MapWindowBoldFont = CreateFontIndirect (&logfont);
 
@@ -1316,7 +1318,7 @@ bool Debounce() {
     return false;
   }
 
-  if (dT>debounceTimeout) {
+  if (dT>(unsigned int)debounceTimeout) {
     fpsTimeLast = fpsTimeThis;
     return true;
   } else {
@@ -1832,7 +1834,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               MenuActive = true;
 	      DialogActive = true;
 
-	      guiToggleLogger();
+	      guiToggleLogger(true);
 
               MenuActive = false;
 	      FullScreen();
