@@ -157,13 +157,13 @@ void WindAnalyser::slot_newSample(){
     }
 
     if (startcircle==1) {
-      climbstartpos.x = nmeaInfo->Longditude;
-      climbstartpos.y = nmeaInfo->Lattitude;
+      climbstartpos.x = nmeaInfo->Longitude;
+      climbstartpos.y = nmeaInfo->Latitude;
       climbstarttime = nmeaInfo->Time;
       startcircle = 0;
     }
-    climbendpos.x = nmeaInfo->Longditude;
-    climbendpos.y = nmeaInfo->Lattitude;
+    climbendpos.x = nmeaInfo->Longitude;
+    climbendpos.y = nmeaInfo->Latitude;
     climbendtime = nmeaInfo->Time;
 
     //no need to reset fullCircle, it will automaticly be reset in the next itteration.

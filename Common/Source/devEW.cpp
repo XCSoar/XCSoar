@@ -219,8 +219,8 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
     _tcscpy(&IDString[3], TEXT("   "));           // truncate to short name
   #endif
 
-  DegLat = (int)wp->Lattitude;                    // preparte lat
-  MinLat = wp->Lattitude - DegLat;
+  DegLat = (int)wp->Latitude;                    // preparte lat
+  MinLat = wp->Latitude - DegLat;
   NoS = 'N';
   if(MinLat<0)
     {
@@ -231,8 +231,8 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
   MinLat *= 1000;
 
 
-  DegLon = (int)wp->Longditude ;                  // prepare long
-  MinLon = wp->Longditude  - DegLon;
+  DegLon = (int)wp->Longitude ;                  // prepare long
+  MinLon = wp->Longitude  - DegLon;
   EoW = 'E';
   if(MinLon<0)
     {

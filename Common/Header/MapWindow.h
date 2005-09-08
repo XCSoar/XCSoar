@@ -41,8 +41,8 @@
 typedef struct _WAYPOINT_INFO
 {
   int Number;
-	double Lattitude;
-	double Longditude;
+	double Latitude;
+	double Longitude;
 	double Altitude;
 	int Flags;
 	TCHAR Name[NAME_SIZE + 1];
@@ -71,6 +71,12 @@ typedef struct _WAYPOINT_INFO
 #define CLASSF				13
 #define AIRSPACECLASSCOUNT  14
 
+typedef struct _AIRSPACE_ACK
+{
+  bool AcknowledgedToday;
+  double AcknowledgementTime;
+} AIRSPACE_ACK;
+
 typedef struct _AIRSPACE_ALT
 {
 	double Altitude;
@@ -86,17 +92,18 @@ typedef struct _AIRSPACE_AREA
 	unsigned FirstPoint;
 	unsigned NumPoints;
 	int Visible;
-	double MinLattitude;
-	double MaxLattitude;
-	double MinLongditude;
-	double MaxLongditude;
+	double MinLatitude;
+	double MaxLatitude;
+	double MinLongitude;
+	double MaxLongitude;
         rectObj bounds;
+        AIRSPACE_ACK Ack;
 } AIRSPACE_AREA;
 
 typedef struct _AIRSPACE_POINT
 {
-	double Lattitude;
-	double Longditude;
+	double Latitude;
+	double Longitude;
 	POINT Screen;
 } AIRSPACE_POINT;
 
@@ -106,19 +113,20 @@ typedef struct _AIRSPACE_CIRCLE
   int Type;
 	AIRSPACE_ALT Base;
 	AIRSPACE_ALT Top;
-	double Lattitude;
-	double Longditude;
+	double Latitude;
+	double Longitude;
 	double Radius;
 	int ScreenX;
 	int ScreenY;
 	int ScreenR;
 	int Visible;
+        AIRSPACE_ACK Ack;
 } AIRSPACE_CIRCLE;
 
 typedef struct _SNAIL_POINT
 {
-	double Lattitude;
-	double Longditude;
+	double Latitude;
+	double Longitude;
 	double Vario;
 	POINT Screen;
 } SNAIL_POINT;

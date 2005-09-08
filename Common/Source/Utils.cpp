@@ -942,10 +942,10 @@ void CalculateTaskSectors(void)
 	      SectorBearing = Task[i].Bisector;
 	    }
 
-	  Task[i].SectorStartLat = FindLattitude(WayPointList[Task[i].Index].Lattitude,WayPointList[Task[i].Index].Longditude, SectorBearing + SectorAngle, SectorSize);
-	  Task[i].SectorStartLon = FindLongditude(Task[i].SectorStartLat,WayPointList[Task[i].Index].Longditude, SectorBearing + SectorAngle, SectorSize);
-	  Task[i].SectorEndLat   = FindLattitude(WayPointList[Task[i].Index].Lattitude,WayPointList[Task[i].Index].Longditude,	SectorBearing - SectorAngle, SectorSize);
-	  Task[i].SectorEndLon   = FindLongditude(Task[i].SectorEndLat,WayPointList[Task[i].Index].Longditude,	SectorBearing - SectorAngle, SectorSize);
+	  Task[i].SectorStartLat = FindLatitude(WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude, SectorBearing + SectorAngle, SectorSize);
+	  Task[i].SectorStartLon = FindLongitude(Task[i].SectorStartLat,WayPointList[Task[i].Index].Longitude, SectorBearing + SectorAngle, SectorSize);
+	  Task[i].SectorEndLat   = FindLatitude(WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude,	SectorBearing - SectorAngle, SectorSize);
+	  Task[i].SectorEndLon   = FindLongitude(Task[i].SectorEndLat,WayPointList[Task[i].Index].Longitude,	SectorBearing - SectorAngle, SectorSize);
 	}
     }
 }
@@ -963,17 +963,17 @@ void CalculateAATTaskSectors(void)
 	{
 	  if(Task[i].AATType == SECTOR)
 	    {
-	      Task[i].AATStartLat = FindLattitude (WayPointList[Task[i].Index].Lattitude,WayPointList[Task[i].Index].Longditude, Task[i].AATStartRadial , Task[i].AATSectorRadius );
-	      Task[i].AATStartLon = FindLongditude(WayPointList[Task[i].Index].Lattitude,WayPointList[Task[i].Index].Longditude, Task[i].AATStartRadial , Task[i].AATSectorRadius );
-	      Task[i].AATFinishLat= FindLattitude (WayPointList[Task[i].Index].Lattitude,WayPointList[Task[i].Index].Longditude,	Task[i].AATFinishRadial , Task[i].AATSectorRadius );
-	      Task[i].AATFinishLon= FindLongditude(WayPointList[Task[i].Index].Lattitude,WayPointList[Task[i].Index].Longditude,	Task[i].AATFinishRadial , Task[i].AATSectorRadius );
+	      Task[i].AATStartLat = FindLatitude (WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude, Task[i].AATStartRadial , Task[i].AATSectorRadius );
+	      Task[i].AATStartLon = FindLongitude(WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude, Task[i].AATStartRadial , Task[i].AATSectorRadius );
+	      Task[i].AATFinishLat= FindLatitude (WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude,	Task[i].AATFinishRadial , Task[i].AATSectorRadius );
+	      Task[i].AATFinishLon= FindLongitude(WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude,	Task[i].AATFinishRadial , Task[i].AATSectorRadius );
 	    }
 	}
     }
 }
 
 
-double FindLattitude(double Lat, double Lon, double Bearing, double Distance)
+double FindLatitude(double Lat, double Lon, double Bearing, double Distance)
 {
   double result;
 
@@ -988,7 +988,7 @@ double FindLattitude(double Lat, double Lon, double Bearing, double Distance)
   return result;
 }
 
-double FindLongditude(double Lat, double Lon, double Bearing, double Distance)
+double FindLongitude(double Lat, double Lon, double Bearing, double Distance)
 {
   double result;
 

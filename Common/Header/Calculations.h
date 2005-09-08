@@ -60,8 +60,8 @@ typedef struct _DERIVED_INFO
   double LegTimeToGo;
   double LegStartTime;
   double LegSpeed;
-  double NextLattitude;
-  double NextLongditde;
+  double NextLatitude;
+  double NextLongitude;
   double NextAltitude;
   double AATMaxDistance;
   double AATMinDistance;
@@ -70,8 +70,8 @@ typedef struct _DERIVED_INFO
   double AATMinSpeed;
   double PercentCircling;
 
-  double TerrainWarningLongditude;
-  double TerrainWarningLattitude;
+  double TerrainWarningLongitude;
+  double TerrainWarningLatitude;
 
   // JMW moved calculated waypoint info here
 
@@ -106,7 +106,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 				DERIVED_INFO *Calculated, double *retlat,
 				double *retlon);
 
-bool ClearAirspaceWarnings(bool ack);
+bool ClearAirspaceWarnings(bool ack, bool allday=false);
 void ResumeAbortTask(int set = 0);
 
 #endif

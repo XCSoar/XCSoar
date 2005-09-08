@@ -19,6 +19,8 @@ Changes from 4.5beta2 to 4.5
 - Airspace warnings now use new message class
 - Added glide computer events for entering and leaving airspace
 - Added method to find nearest airspace boundary (interior or exterior)
+- Renamed fixed "longditude" and "lattitude" spelling mistakes
+- Display speed-to-fly bar only if flying
 
 Changes from 4.22 to 4.5beta2
 

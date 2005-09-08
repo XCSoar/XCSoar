@@ -30,7 +30,7 @@ static TCHAR szLoggerFileName[MAX_PATH];
 int EW_count = 0;
 
 
-void LogPoint(double Lattitude, double Longditude, double Altitude)
+void LogPoint(double Latitude, double Longitude, double Altitude)
 {
   HANDLE hFile;// = INVALID_HANDLE_VALUE;
   DWORD dwBytesRead;
@@ -43,8 +43,8 @@ void LogPoint(double Lattitude, double Longditude, double Altitude)
   char NoS, EoW;
 
 
-  DegLat = (int)Lattitude;
-  MinLat = Lattitude - DegLat;
+  DegLat = (int)Latitude;
+  MinLat = Latitude - DegLat;
   NoS = 'N';
   if(MinLat<0)
     {
@@ -55,8 +55,8 @@ void LogPoint(double Lattitude, double Longditude, double Altitude)
   MinLat *= 1000;
 
 
-  DegLon = (int)Longditude ;
-  MinLon = Longditude  - DegLon;
+  DegLon = (int)Longitude ;
+  MinLon = Longitude  - DegLon;
   EoW = 'E';
   if(MinLon<0)
     {
@@ -172,7 +172,7 @@ void EndDeclaration(void)
   CloseHandle(hFile);
 }
 
-void AddDeclaration(double Lattitude, double Longditude, TCHAR *ID)
+void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
 {
   DWORD dwBytesRead;
   HANDLE hFile;
@@ -193,8 +193,8 @@ void AddDeclaration(double Lattitude, double Longditude, TCHAR *ID)
     }
   IDString[i] = '\0';
 
-  DegLat = (int)Lattitude;
-  MinLat = Lattitude - DegLat;
+  DegLat = (int)Latitude;
+  MinLat = Latitude - DegLat;
   NoS = 'N';
   if(MinLat<0)
     {
@@ -205,8 +205,8 @@ void AddDeclaration(double Lattitude, double Longditude, TCHAR *ID)
   MinLat *= 1000;
 
 
-  DegLon = (int)Longditude ;
-  MinLon = Longditude  - DegLon;
+  DegLon = (int)Longitude ;
+  MinLon = Longitude  - DegLon;
   EoW = 'E';
   if(MinLon<0)
     {
@@ -267,7 +267,7 @@ void DoLogger(TCHAR *strAssetNumber)
 	  for(i=0;i<MAXTASKPOINTS;i++)
 	    {
 	      if(Task[i].Index == -1) break;
-	      AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
+	      AddDeclaration(WayPointList[Task[i].Index].Latitude , WayPointList[Task[i].Index].Longitude  , WayPointList[Task[i].Index].Name );
 	    }
 	  EndDeclaration();
 	}

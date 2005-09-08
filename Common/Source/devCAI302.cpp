@@ -453,8 +453,8 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
   _tcsncpy(Name, wp->Name, 12);
   Name[12] = '\0';
 
-  DegLat = (int)wp->Lattitude;
-  MinLat = wp->Lattitude - DegLat;
+  DegLat = (int)wp->Latitude;
+  MinLat = wp->Latitude - DegLat;
   NoS = 'N';
   if(MinLat<0)
     {
@@ -465,8 +465,8 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
   MinLat *= 60;
 
 
-  DegLon = (int)wp->Longditude ;
-  MinLon = wp->Longditude  - DegLon;
+  DegLon = (int)wp->Longitude ;
+  MinLon = wp->Longitude  - DegLon;
   EoW = 'E';
   if(MinLon<0)
     {

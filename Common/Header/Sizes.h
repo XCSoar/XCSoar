@@ -28,9 +28,9 @@
 #define TRAILSHRINK 5
 // short trail is 10 minutes approx
 
-#define GLOBALFONT "Tahoma"
+//#define GLOBALFONT "Tahoma"
 //#define GLOBALFONT "Bitstream Vera Sans"
-//#define GLOBALFONT "DejaVu Sans Condensed"
+#define GLOBALFONT "DejaVu Sans Condensed"
 //#define GLOBALFONT "HelmetCondensed"
 
 // ratio of height of screen to main font height

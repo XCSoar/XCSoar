@@ -561,7 +561,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
     angle = atan2(wind.x,-wind.y)*RAD_TO_DEG;
 
-    wv[0].y = (int)((1-hfact)*(rc.bottom-rc.top))+rc.top;
+    wv[0].y = (int)((hfact)*(rc.bottom-rc.top))+rc.top;
     wv[0].x = (rc.right+rc.left)/2;
 
     dX = (mag*WINDVECTORMAG);

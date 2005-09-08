@@ -51,9 +51,12 @@ InputEvents
 */
 #ifdef _SIM_
 	// Log first 10 input event errors for display in simulator mode
-	#define MAX_INPUT_ERRORS 10
+	#define MAX_INPUT_ERRORS 1
 	TCHAR input_errors[MAX_INPUT_ERRORS][1024];
-	int input_errors_count = 0;
+int input_errors_count = 0;
+// JMW this is just far too annoying right now,
+// since "title" "note" and commencts are not parsed, they
+// come up as errors.
 #endif
 
 // Current modes - map mode to integer (primitive hash)
@@ -554,7 +557,7 @@ void InputEvents::processGo(int eventid) {
 // TODO Keep marker text for log file etc.
 void InputEvents::eventMarkLocation(TCHAR *misc) {
   LockFlightData();
-  MarkLocation(GPS_INFO.Longditude, GPS_INFO.Lattitude);
+  MarkLocation(GPS_INFO.Longitude, GPS_INFO.Latitude);
   UnlockFlightData();
 }
 
@@ -1026,7 +1029,7 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   TCHAR szTitleBuffer[1024];
   TCHAR text[1024];
 
-  FindNearestAirspace(GPS_INFO.Longditude, GPS_INFO.Lattitude,
+  FindNearestAirspace(GPS_INFO.Longitude, GPS_INFO.Latitude,
 		      &nearestdistance, &nearestbearing,
 		      &foundcircle, &foundarea);
 
@@ -1081,8 +1084,8 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
 
 void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
   if (wcscmp(misc, TEXT("aircraft")) == 0) {
-    MapWindow::Event_NearestWaypointDetails(GPS_INFO.Longditude,
-					    GPS_INFO.Lattitude,
+    MapWindow::Event_NearestWaypointDetails(GPS_INFO.Longitude,
+					    GPS_INFO.Latitude,
 					    1.0e5); // big range..
   }
   // TODO, also allow getting waypoint details at center of screen, or at cursor..

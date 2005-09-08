@@ -1304,12 +1304,12 @@ void RefreshTaskWaypoint(int i) {
     }
   else
     {
-      Task[i].Leg = Distance(WayPointList[Task[i].Index].Lattitude,
-                             WayPointList[Task[i].Index].Longditude,
-                             WayPointList[Task[i-1].Index].Lattitude,
-                             WayPointList[Task[i-1].Index].Longditude);
-      Task[i].InBound = Bearing(WayPointList[Task[i-1].Index].Lattitude,   WayPointList[Task[i-1].Index].Longditude,
-                                WayPointList[Task[i].Index].Lattitude, WayPointList[Task[i].Index].Longditude);
+      Task[i].Leg = Distance(WayPointList[Task[i].Index].Latitude,
+                             WayPointList[Task[i].Index].Longitude,
+                             WayPointList[Task[i-1].Index].Latitude,
+                             WayPointList[Task[i-1].Index].Longitude);
+      Task[i].InBound = Bearing(WayPointList[Task[i-1].Index].Latitude,   WayPointList[Task[i-1].Index].Longitude,
+                                WayPointList[Task[i].Index].Latitude, WayPointList[Task[i].Index].Longitude);
       Task[i-1].OutBound = Task[i].InBound;
       Task[i-1].Bisector = BiSector(Task[i-1].InBound,Task[i-1].OutBound);
     }
@@ -3123,8 +3123,8 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
   double sunsettime;
   int sunsethours;
   int sunsetmins;
-  TCHAR sLongditude[16];
-  TCHAR sLattitude[16];
+  TCHAR sLongitude[16];
+  TCHAR sLatitude[16];
   int TabStops[] = {45,0};
 
   // Modis images are now assumed to be colocated with waypoint file
@@ -3160,19 +3160,19 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
       Temp[0]= 0;
 
-      sunsettime = DoSunEphemeris(WayPointList[SelectedWaypoint].Longditude,
-                                  WayPointList[SelectedWaypoint].Lattitude);
+      sunsettime = DoSunEphemeris(WayPointList[SelectedWaypoint].Longitude,
+                                  WayPointList[SelectedWaypoint].Latitude);
       sunsethours = (int)sunsettime;
       sunsetmins = (int)((sunsettime-sunsethours)*60);
 
-      Units::LongditudeToString(WayPointList[SelectedWaypoint].Longditude, sLongditude, sizeof(sLongditude)-1);
-      Units::LattitudeToString(WayPointList[SelectedWaypoint].Lattitude, sLattitude, sizeof(sLattitude)-1);
+      Units::LongitudeToString(WayPointList[SelectedWaypoint].Longitude, sLongitude, sizeof(sLongitude)-1);
+      Units::LatitudeToString(WayPointList[SelectedWaypoint].Latitude, sLatitude, sizeof(sLatitude)-1);
 
       _stprintf(Temp,TEXT("%s\t%s\r\n%s\t%s\r\n%s\t%.0f %s\r\n%s\t%02d:%02d"),
 		       gettext(TEXT("Longitude")),
-               sLongditude,
+               sLongitude,
 			   gettext(TEXT("Latitude")),
-               sLattitude,
+               sLatitude,
 			   gettext(TEXT("Elevation")),
                WayPointList[SelectedWaypoint].Altitude*ALTITUDEMODIFY,
                 Units::GetAltitudeName(),

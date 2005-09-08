@@ -478,8 +478,8 @@ static void ParseLine(int nLineType)
 	case k_nLtDP:
 		if (bFillMode)
 		{
-			ReadCoords(&TempString[3],&TempPoint.Longditude ,
-                                   &TempPoint.Lattitude );
+			ReadCoords(&TempString[3],&TempPoint.Longitude ,
+                                   &TempPoint.Latitude );
 			AddPoint(&TempPoint);
 		}
 		else
@@ -691,14 +691,16 @@ static void AddAirspaceCircle(AIRSPACE_AREA *Temp, double CenterX, double Center
       NumberOfAirspaceCircles++;
 
       _tcscpy(NewCircle->Name , Temp->Name);
-      NewCircle->Lattitude = CenterY;
-      NewCircle->Longditude = CenterX;
+      NewCircle->Latitude = CenterY;
+      NewCircle->Longitude = CenterX;
       NewCircle->Radius = Radius;
       NewCircle->Type = Temp->Type;
       NewCircle->Top.Altitude  = Temp->Top.Altitude ;
       NewCircle->Top.FL   = Temp->Top.FL;
       NewCircle->Base.Altitude  = Temp->Base.Altitude;
       NewCircle->Base.FL   = Temp->Base.FL;
+      NewCircle->Ack.AcknowledgedToday = false;
+      NewCircle->Ack.AcknowledgementTime = 0;
     }
 }
 
@@ -715,8 +717,8 @@ static void AddPoint(AIRSPACE_POINT *Temp)
       NewPoint = &AirspacePoint[NumberOfAirspacePoints];
       NumberOfAirspacePoints++;
 
-      NewPoint->Lattitude  = Temp->Lattitude;
-      NewPoint->Longditude = Temp->Longditude;
+      NewPoint->Latitude  = Temp->Latitude;
+      NewPoint->Longitude = Temp->Longitude;
     }
 }
 
@@ -744,26 +746,29 @@ static void AddArea(AIRSPACE_AREA *Temp)
       NewArea->Top.Altitude  = Temp->Top.Altitude ;
       NewArea->Top.FL = Temp->Top.FL;
       NewArea->FirstPoint = Temp->FirstPoint;
+      NewArea->Ack.AcknowledgedToday = false;
+      NewArea->Ack.AcknowledgementTime = 0;
+
 
       Temp->FirstPoint = Temp->FirstPoint + Temp->NumPoints ;
 
       PointList = &AirspacePoint[NewArea->FirstPoint];
-      NewArea->MaxLattitude = -90;
-      NewArea->MinLattitude = 90;
-      NewArea->MaxLongditude  = -180;
-      NewArea->MinLongditude  = 180;
+      NewArea->MaxLatitude = -90;
+      NewArea->MinLatitude = 90;
+      NewArea->MaxLongitude  = -180;
+      NewArea->MinLongitude  = 180;
 
       for(i=0;i<Temp->NumPoints; i++)
 	{
-	  if(PointList[i].Lattitude > NewArea->MaxLattitude)
-	    NewArea->MaxLattitude = PointList[i].Lattitude ;
-	  if(PointList[i].Lattitude < NewArea->MinLattitude)
-	    NewArea->MinLattitude = PointList[i].Lattitude ;
+	  if(PointList[i].Latitude > NewArea->MaxLatitude)
+	    NewArea->MaxLatitude = PointList[i].Latitude ;
+	  if(PointList[i].Latitude < NewArea->MinLatitude)
+	    NewArea->MinLatitude = PointList[i].Latitude ;
 
-	  if(PointList[i].Longditude  > NewArea->MaxLongditude)
-	    NewArea->MaxLongditude  = PointList[i].Longditude ;
-	  if(PointList[i].Longditude  < NewArea->MinLongditude)
-	    NewArea->MinLongditude  = PointList[i].Longditude ;
+	  if(PointList[i].Longitude  > NewArea->MaxLongitude)
+	    NewArea->MaxLongitude  = PointList[i].Longitude ;
+	  if(PointList[i].Longitude  < NewArea->MinLongitude)
+	    NewArea->MinLongitude  = PointList[i].Longitude ;
 	}
     }
 }
@@ -812,8 +817,8 @@ static void CalculateSector(TCHAR *Text)
 
 	  if (bFillMode)	// Trig calcs not needed on first pass
 	  {
-		  TempPoint.Lattitude =  FindLattitude(CenterY, CenterX, StartBearing, Radius);
-		  TempPoint.Longditude = FindLongditude(CenterY, CenterX, StartBearing, Radius);
+		  TempPoint.Latitude =  FindLatitude(CenterY, CenterX, StartBearing, Radius);
+		  TempPoint.Longitude = FindLongitude(CenterY, CenterX, StartBearing, Radius);
 	  }
       AddPoint(&TempPoint);
       TempArea.NumPoints++;
@@ -823,8 +828,8 @@ static void CalculateSector(TCHAR *Text)
 
   if (bFillMode)	// Trig calcs not needed on first pass
   {
-	  TempPoint.Lattitude =  FindLattitude(CenterY, CenterX, EndBearing, Radius);
-	  TempPoint.Longditude = FindLongditude(CenterY, CenterX, EndBearing, Radius);
+	  TempPoint.Latitude =  FindLatitude(CenterY, CenterX, EndBearing, Radius);
+	  TempPoint.Longitude = FindLongitude(CenterY, CenterX, EndBearing, Radius);
   }
   AddPoint(&TempPoint);
   TempArea.NumPoints++;
@@ -850,8 +855,8 @@ static void CalculateArc(TCHAR *Text)
   Radius = Distance(CenterY, CenterX, StartLat, StartLon);
   StartBearing = Bearing(CenterY, CenterX, StartLat, StartLon);
   EndBearing = Bearing(CenterY, CenterX, EndLat, EndLon);
-  TempPoint.Lattitude  = StartLat;
-  TempPoint.Longditude = StartLon;
+  TempPoint.Latitude  = StartLat;
+  TempPoint.Longitude = StartLon;
   AddPoint(&TempPoint);
   TempArea.NumPoints++;
 
@@ -866,14 +871,14 @@ static void CalculateArc(TCHAR *Text)
 
 	  if (bFillMode)	// Trig calcs not needed on first pass
 	  {
-		  TempPoint.Lattitude =  FindLattitude(CenterY, CenterX, StartBearing, Radius);
-		  TempPoint.Longditude = FindLongditude(CenterY, CenterX, StartBearing, Radius);
+		  TempPoint.Latitude =  FindLatitude(CenterY, CenterX, StartBearing, Radius);
+		  TempPoint.Longitude = FindLongitude(CenterY, CenterX, StartBearing, Radius);
 	  }
       AddPoint(&TempPoint);
       TempArea.NumPoints++;
     }
-  TempPoint.Lattitude  = EndLat;
-  TempPoint.Longditude = EndLon;
+  TempPoint.Latitude  = EndLat;
+  TempPoint.Longitude = EndLon;
   AddPoint(&TempPoint);
   TempArea.NumPoints++;
 }
@@ -887,19 +892,19 @@ static void FindAirspaceAreaBounds() {
         j< AirspaceArea[i].FirstPoint+AirspaceArea[i].NumPoints; j++) {
 
       if (first) {
-        AirspaceArea[i].bounds.minx = AirspacePoint[j].Longditude;
-        AirspaceArea[i].bounds.maxx = AirspacePoint[j].Longditude;
-        AirspaceArea[i].bounds.miny = AirspacePoint[j].Lattitude;
-        AirspaceArea[i].bounds.maxy = AirspacePoint[j].Lattitude;
+        AirspaceArea[i].bounds.minx = AirspacePoint[j].Longitude;
+        AirspaceArea[i].bounds.maxx = AirspacePoint[j].Longitude;
+        AirspaceArea[i].bounds.miny = AirspacePoint[j].Latitude;
+        AirspaceArea[i].bounds.maxy = AirspacePoint[j].Latitude;
         first = false;
       } else {
-        AirspaceArea[i].bounds.minx = min(AirspacePoint[j].Longditude,
+        AirspaceArea[i].bounds.minx = min(AirspacePoint[j].Longitude,
                                           AirspaceArea[i].bounds.minx);
-        AirspaceArea[i].bounds.maxx = max(AirspacePoint[j].Longditude,
+        AirspaceArea[i].bounds.maxx = max(AirspacePoint[j].Longitude,
                                           AirspaceArea[i].bounds.maxx);
-        AirspaceArea[i].bounds.miny = min(AirspacePoint[j].Lattitude,
+        AirspaceArea[i].bounds.miny = min(AirspacePoint[j].Latitude,
                                           AirspaceArea[i].bounds.miny);
-        AirspaceArea[i].bounds.maxy = max(AirspacePoint[j].Lattitude,
+        AirspaceArea[i].bounds.maxy = max(AirspacePoint[j].Latitude,
                                           AirspaceArea[i].bounds.maxy);
       }
 
@@ -983,7 +988,7 @@ void ReadAirspace(void)
 }
 
 
-int FindAirspaceCircle(double Longditude,double Lattitude)
+int FindAirspaceCircle(double Longitude,double Latitude)
 {
   unsigned i;
   int NearestIndex = 0;
@@ -998,7 +1003,7 @@ int FindAirspaceCircle(double Longditude,double Lattitude)
     {
       if(AirspaceCircle[i].Visible)
 	{
-	  Dist = Distance(Lattitude,Longditude,AirspaceCircle[i].Lattitude, AirspaceCircle[i].Longditude);
+	  Dist = Distance(Latitude,Longitude,AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude);
 	  if(Dist < AirspaceCircle[i].Radius )
 	    {
 	      if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
@@ -1061,8 +1066,8 @@ BOOL CheckAirspaceAltitude(double Base, double Top)
 inline static double
 isLeft( AIRSPACE_POINT P0, AIRSPACE_POINT P1, AIRSPACE_POINT P2 )
 {
-    return ( (P1.Longditude - P0.Longditude) * (P2.Lattitude - P0.Lattitude)
-            - (P2.Longditude - P0.Longditude) * (P1.Lattitude - P0.Lattitude) );
+    return ( (P1.Longitude - P0.Longitude) * (P2.Latitude - P0.Latitude)
+            - (P2.Longitude - P0.Longitude) * (P1.Latitude - P0.Latitude) );
 }
 //===================================================================
 
@@ -1077,13 +1082,13 @@ wn_PnPoly( AIRSPACE_POINT P, AIRSPACE_POINT* V, int n )
 
     // loop through all edges of the polygon
     for (int i=0; i<n; i++) {   // edge from V[i] to V[i+1]
-        if (V[i].Lattitude <= P.Lattitude) {         // start y <= P.Lattitude
-            if (V[i+1].Lattitude > P.Lattitude)      // an upward crossing
+        if (V[i].Latitude <= P.Latitude) {         // start y <= P.Latitude
+            if (V[i+1].Latitude > P.Latitude)      // an upward crossing
                 if (isLeft( V[i], V[i+1], P) > 0)  // P left of edge
                     ++wn;            // have a valid up intersect
         }
-        else {                       // start y > P.Lattitude (no test needed)
-            if (V[i+1].Lattitude <= P.Lattitude)     // a downward crossing
+        else {                       // start y > P.Latitude (no test needed)
+            if (V[i+1].Latitude <= P.Latitude)     // a downward crossing
                 if (isLeft( V[i], V[i+1], P) < 0)  // P right of edge
                     --wn;            // have a valid down intersect
         }
@@ -1094,7 +1099,7 @@ wn_PnPoly( AIRSPACE_POINT P, AIRSPACE_POINT* V, int n )
 
 
 
-int FindAirspaceArea(double Longditude,double Lattitude)
+int FindAirspaceArea(double Longitude,double Latitude)
 {
   unsigned i;
 
@@ -1105,8 +1110,8 @@ int FindAirspaceArea(double Longditude,double Lattitude)
 
   AIRSPACE_POINT thispoint;
 
-  thispoint.Longditude = Longditude;
-  thispoint.Lattitude = Lattitude;
+  thispoint.Longitude = Longitude;
+  thispoint.Latitude = Latitude;
 
   for(i=0;i<NumberOfAirspaceAreas;i++)
     {
@@ -1121,10 +1126,10 @@ int FindAirspaceArea(double Longditude,double Lattitude)
 
               // first check if point is within bounding box
               if (
-                  (Lattitude> AirspaceArea[i].bounds.miny)&&
-                  (Lattitude< AirspaceArea[i].bounds.maxy)&&
-                  (Longditude> AirspaceArea[i].bounds.minx)&&
-                  (Longditude< AirspaceArea[i].bounds.maxx)
+                  (Latitude> AirspaceArea[i].bounds.miny)&&
+                  (Latitude< AirspaceArea[i].bounds.maxy)&&
+                  (Longitude> AirspaceArea[i].bounds.minx)&&
+                  (Longitude< AirspaceArea[i].bounds.maxx)
                   )
                 {
                   // it is within, so now do detailed polygon test
@@ -1167,8 +1172,8 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
       if(AirspaceCircle[i].Visible)
 	{
 	  Dist = Distance(latitude,longitude,
-			  AirspaceCircle[i].Lattitude,
-			  AirspaceCircle[i].Longditude)
+			  AirspaceCircle[i].Latitude,
+			  AirspaceCircle[i].Longitude)
 	    -AirspaceCircle[i].Radius;
 
 	  if(Dist < *nearestdistance )
@@ -1180,8 +1185,8 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 		  *nearestdistance = Dist;
 		  *nearestbearing = Bearing(latitude,
 					    longitude,
-					    AirspaceCircle[i].Lattitude,
-					    AirspaceCircle[i].Longditude);
+					    AirspaceCircle[i].Latitude,
+					    AirspaceCircle[i].Longitude);
 
 		  return i;
 
@@ -1340,8 +1345,8 @@ int FindNearestAirspaceArea(double longitude, double latitude,
 
   AIRSPACE_POINT thispoint;
 
-  thispoint.Longditude = longitude;
-  thispoint.Lattitude = latitude;
+  thispoint.Longitude = longitude;
+  thispoint.Latitude = latitude;
 
   for(i=0;i<NumberOfAirspaceAreas;i++)
     {
@@ -1382,10 +1387,10 @@ int FindNearestAirspaceArea(double longitude, double latitude,
 
 		dist =
 		  ScreenCrossTrackError(
-		AirspacePoint[AirspaceArea[i].FirstPoint+j].Longditude,
-		AirspacePoint[AirspaceArea[i].FirstPoint+j].Lattitude,
-		AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Longditude,
-		AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Lattitude,
+		AirspacePoint[AirspaceArea[i].FirstPoint+j].Longitude,
+		AirspacePoint[AirspaceArea[i].FirstPoint+j].Latitude,
+		AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Longitude,
+		AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Latitude,
 		longitude, latitude,
 		&lon4, &lat4);
 
