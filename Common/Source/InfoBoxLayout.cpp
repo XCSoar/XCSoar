@@ -471,11 +471,6 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 
     SetLabelText(i,NULL);
     SetWindowLong(hWndButtonWindow[i], GWL_USERDATA, 4);	  
-    // TODO Set colour of window and text (probably RED on YELLOW for
-    // these) 
-
-    // TODO Color, font and size to be put into registry - simple
-    // Utils method for lookup
   }
 
   // 

@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.69 2005/09/07 17:16:03 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.70 2005/09/08 07:29:31 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -2074,6 +2074,10 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
                   INPUTFILECHANGED = TRUE;
                   GetDlgItemText(hDlg,IDC_INPUTFILE,szFile,MAX_PATH);
                   SetRegistryString(szRegistryInputFile,szFile);
+
+				  // TODO - Consider better methods - for now - force resize on Input File Selection
+   				  //SetToRegistry(TEXT("ScreenButtonSizeX"),0);
+				  //SetToRegistry(TEXT("ScreenButtonSizeY"),0);
                 }
             }
           break;
