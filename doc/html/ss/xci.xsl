@@ -139,8 +139,9 @@ Menu1) to jump to the next mode.
 		<td>
 			<xsl:if test="@label != ''">
 				<xsl:value-of select="@location"/>
-				<xsl:text>: </xsl:text>
+				<xsl:text>: "</xsl:text>
 				<xsl:value-of select="@label"/>
+				<xsl:text>"</xsl:text>
 			</xsl:if>
 		</td>
 		<td>
