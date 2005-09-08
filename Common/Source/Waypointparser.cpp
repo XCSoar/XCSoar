@@ -140,19 +140,19 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
   pToken = strtok_r(TempString, TEXT(","), &pWClast);
   Temp->Number = _tcstol(pToken, &Zoom, 10);
         
-  //ExtractParameter(TempString,ctemp,1); //Lattitude
+  //ExtractParameter(TempString,ctemp,1); //Latitude
   pToken = strtok_r(NULL, TEXT(","), &pWClast);
-  Temp->Lattitude = CalculateAngle(pToken);
+  Temp->Latitude = CalculateAngle(pToken);
 
-  if((Temp->Lattitude > 90) || (Temp->Lattitude < -90))
+  if((Temp->Latitude > 90) || (Temp->Latitude < -90))
     {
       return FALSE;
     }
 
-  //ExtractParameter(TempString,ctemp,2); //Longditude
+  //ExtractParameter(TempString,ctemp,2); //Longitude
   pToken = strtok_r(NULL, TEXT(","), &pWClast);
-  Temp->Longditude  = CalculateAngle(pToken);
-  if((Temp->Longditude  > 180) || (Temp->Longditude  < -180))
+  Temp->Longitude  = CalculateAngle(pToken);
+  if((Temp->Longitude  > 180) || (Temp->Longitude  < -180))
     {
       return FALSE;
     }
@@ -207,7 +207,7 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
     LockTerrainDataGraphics();
     terrain_dem_graphics.SetTerrainRounding(0.0);
     double myalt = 
-      terrain_dem_graphics.GetTerrainHeight(Temp->Lattitude , Temp->Longditude);
+      terrain_dem_graphics.GetTerrainHeight(Temp->Latitude , Temp->Longitude);
     UnlockTerrainDataGraphics();
 
     Temp->Altitude = myalt;
@@ -405,8 +405,8 @@ void SetHome(void)
   }
 
   // Assume here we have a home now...
-  GPS_INFO.Lattitude = WayPointList[HomeWaypoint].Lattitude;
-  GPS_INFO.Longditude = WayPointList[HomeWaypoint].Longditude;
+  GPS_INFO.Latitude = WayPointList[HomeWaypoint].Latitude;
+  GPS_INFO.Longitude = WayPointList[HomeWaypoint].Longitude;
 
 
   // 
@@ -427,7 +427,7 @@ int FindNearestWayPoint(double X, double Y, double MaxRange)
       return -1;
     }
                 
-  NearestDistance = Distance(Y,X,WayPointList[0].Lattitude, WayPointList[0].Longditude);
+  NearestDistance = Distance(Y,X,WayPointList[0].Latitude, WayPointList[0].Longitude);
   for(i=1;i<NumberOfWayPoints;i++)
     {
       if (((WayPointList[i].Zoom >= MapWindow::MapScale*10)||
@@ -436,7 +436,7 @@ int FindNearestWayPoint(double X, double Y, double MaxRange)
 
             // only look for visible waypoints
             // feature added by Samuel Gisiger
-            Dist = Distance(Y,X,WayPointList[i].Lattitude, WayPointList[i].Longditude);
+            Dist = Distance(Y,X,WayPointList[i].Latitude, WayPointList[i].Longitude);
             if(Dist < NearestDistance)
               {
                 NearestIndex = i;

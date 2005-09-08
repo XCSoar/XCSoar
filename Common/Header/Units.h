@@ -82,8 +82,8 @@ public:
   static Units_t GetUserWindSpeedUnit(void);
   static Units_t SetUserWindSpeedUnit(Units_t NewUnit);
 
-  static bool LongditudeToString(double Longitude, TCHAR *Buffer, size_t size);
-  static bool Units::LattitudeToString(double Lattitude, TCHAR *Buffer, size_t size);
+  static bool LongitudeToString(double Longitude, TCHAR *Buffer, size_t size);
+  static bool LatitudeToString(double Latitude, TCHAR *Buffer, size_t size);
 
   static void NotifyUnitChanged(void);
 

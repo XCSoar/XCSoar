@@ -23,8 +23,8 @@
 
 typedef struct _NMEA_INFO
 {
-  double Lattitude;
-  double Longditude;
+  double Latitude;
+  double Longitude;
   double TrackBearing;
   double Speed;
   double Altitude;

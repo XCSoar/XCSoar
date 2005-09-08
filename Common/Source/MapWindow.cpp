@@ -268,7 +268,7 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mod
       x -= 3;
 
     HPEN oldPen = (HPEN)SelectObject(hDC, hpMapScale);
-    RoundRect(hDC, brect.left-1, brect.top-1, brect.right+1, brect.bottom+1, 8, 8);
+    RoundRect(hDC, brect.left-1, brect.top-2, brect.right+1, brect.bottom+1, 8, 8);
     SelectObject(hDC, oldPen);
 
     ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
@@ -817,7 +817,9 @@ void MapWindow::UpdateMapScale()
       if(
         (DisplayOrientation == NORTHUP) 
         || 
-        ((DisplayOrientation == NORTHCIRCLE) && (DerivedDrawInfo.Circling == TRUE) )
+        (((DisplayOrientation == NORTHCIRCLE) 
+	  || (DisplayOrientation == TRACKCIRCLE)) 
+	 && (DerivedDrawInfo.Circling == TRUE) )
         )
       {
         AutoZoomFactor = 2.5;
@@ -921,7 +923,7 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
     || 
     (
     ((DisplayOrientation == NORTHCIRCLE)
-    ||(DisplayOrientation==TRACKCIRCLE)) 
+     ||(DisplayOrientation==TRACKCIRCLE))
     && (DerivedDrawInfo.Circling == TRUE) )
     )
   {
@@ -2000,11 +2002,11 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
   }
   Polyline(hDC, Groundline, NUMTERRAINSWEEPS+1);
   
-  if ((DerivedDrawInfo.TerrainWarningLattitude != 0.0)
-    &&(DerivedDrawInfo.TerrainWarningLongditude != 0.0)) {
+  if ((DerivedDrawInfo.TerrainWarningLatitude != 0.0)
+    &&(DerivedDrawInfo.TerrainWarningLongitude != 0.0)) {
     
-    LatLon2Screen(DerivedDrawInfo.TerrainWarningLongditude, 
-      DerivedDrawInfo.TerrainWarningLattitude, &scx, &scy);
+    LatLon2Screen(DerivedDrawInfo.TerrainWarningLongitude, 
+      DerivedDrawInfo.TerrainWarningLatitude, &scx, &scy);
     DrawBitmapIn(hDC, scx, scy, hTerrainWarning);
     
   }
@@ -2525,12 +2527,12 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     if (i == 0) {
       // set first point up
 
-      p2Visible = PointVisible(SnailTrail[P2].Longditude , 
-                               SnailTrail[P2].Lattitude);
+      p2Visible = PointVisible(SnailTrail[P2].Longitude , 
+                               SnailTrail[P2].Latitude);
     } 
       
-    p1Visible = PointVisible(SnailTrail[P1].Longditude , 
-                             SnailTrail[P1].Lattitude);
+    p1Visible = PointVisible(SnailTrail[P1].Longitude , 
+                             SnailTrail[P1].Latitude);
 
     // the line is invalid
     if ((P1 == iSnailNext) || (P2 == iSnailNext) || 
@@ -2548,16 +2550,16 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     // if we don't already.
 
     if (!havep2) {
-      LatLon2Screen(SnailTrail[P2].Longditude, 
-                    SnailTrail[P2].Lattitude, &scx, &scy);
+      LatLon2Screen(SnailTrail[P2].Longitude, 
+                    SnailTrail[P2].Latitude, &scx, &scy);
       SnailTrail[P2].Screen.x = scx;
       SnailTrail[P2].Screen.y = scy;
     } else {
       havep2 = false;
     }
 
-    LatLon2Screen(SnailTrail[P1].Longditude, 
-                  SnailTrail[P1].Lattitude, &scx, &scy);
+    LatLon2Screen(SnailTrail[P1].Longitude, 
+                  SnailTrail[P1].Latitude, &scx, &scy);
     SnailTrail[P1].Screen.x = scx;
     SnailTrail[P1].Screen.y = scy;
     havep2 = true; // next time our p2 will be in screen coords
@@ -2686,7 +2688,7 @@ void MapWindow::CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
     if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
     {
       
-      LatLon2Screen(AirspaceCircle[i].Longditude, AirspaceCircle[i].Lattitude, &scx, &scy);
+      LatLon2Screen(AirspaceCircle[i].Longitude, AirspaceCircle[i].Latitude, &scx, &scy);
       
       AirspaceCircle[i].ScreenX = scx;
       AirspaceCircle[i].ScreenY = scy;
@@ -2707,7 +2709,7 @@ void MapWindow::CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
       {
         
         // bug fix by Samuel Gisiger
-        LatLon2Screen(AirspacePoint[j].Longditude, AirspacePoint[j].Lattitude, &scx, &scy);
+        LatLon2Screen(AirspacePoint[j].Longitude, AirspacePoint[j].Latitude, &scx, &scy);
         
         AirspacePoint[j].Screen.x = scx;
         AirspacePoint[j].Screen.y = scy;
@@ -2729,10 +2731,10 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
   
   Orig_Screen = Orig;
   
-  PanXr = DrawInfo.Longditude + PanX;
-  PanYr = DrawInfo.Lattitude + PanY;
+  PanXr = DrawInfo.Longitude + PanX;
+  PanYr = DrawInfo.Latitude + PanY;
   
-  LatLon2Screen(DrawInfo.Longditude, DrawInfo.Lattitude, &scx,
+  LatLon2Screen(DrawInfo.Longitude, DrawInfo.Latitude, &scx,
     &scy);
   Orig_Aircraft->x = scx;
   Orig_Aircraft->y = scy;
@@ -2742,8 +2744,8 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (Task[i].Index>=0) {
 
-      LatLon2Screen(WayPointList[Task[i].Index].Longditude, 
-                    WayPointList[Task[i].Index].Lattitude, 
+      LatLon2Screen(WayPointList[Task[i].Index].Longitude, 
+                    WayPointList[Task[i].Index].Latitude, 
                     &scx, &scy);
     
       WayPointList[Task[i].Index].Screen.x = scx;
@@ -2757,11 +2759,11 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
   for(i=0;i<NumberOfWayPoints;i++)
   {
     
-    if(PointVisible(WayPointList[i].Longditude, WayPointList[i].Lattitude) )
+    if(PointVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
     {
       WayPointList[i].Visible = TRUE;
 
-      LatLon2Screen(WayPointList[i].Longditude, WayPointList[i].Lattitude, &scx, &scy);
+      LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude, &scx, &scy);
     
       WayPointList[i].Screen.x = scx;
       WayPointList[i].Screen.y = scy;
@@ -2785,8 +2787,8 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
        the lat/long.... faster
     for(i=0;i<TRAILSIZE;i++)
     {
-      LatLon2Screen(SnailTrail[i].Longditude, 
-        SnailTrail[i].Lattitude, &scx, &scy);
+      LatLon2Screen(SnailTrail[i].Longitude, 
+        SnailTrail[i].Latitude, &scx, &scy);
       
       SnailTrail[i].Screen.x = scx;
       SnailTrail[i].Screen.y = scy;
@@ -2849,9 +2851,9 @@ void MapWindow::CalculateWaypointReachable(void)
     {
       if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
       {
-        WaypointDistance = Distance(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
+        WaypointDistance = Distance(DrawInfo.Latitude, DrawInfo.Longitude, WayPointList[i].Latitude, WayPointList[i].Longitude);
 
-        WaypointBearing =  Bearing(DrawInfo.Lattitude, DrawInfo.Longditude, WayPointList[i].Lattitude, WayPointList[i].Longditude);
+        WaypointBearing =  Bearing(DrawInfo.Latitude, DrawInfo.Longitude, WayPointList[i].Latitude, WayPointList[i].Longitude);
         AltitudeRequired = GlidePolar::McCreadyAltitude(0.0, 
                                      // JMW was MCCREADY/LIFTMODIFY
           WaypointDistance,WaypointBearing, 
@@ -3083,6 +3085,9 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
 
   //  TCHAR Value[10];
   int i;
+
+  if (!DerivedDrawInfo.Flying)
+    return;
 
 #ifndef _SIM_
   if (!(DrawInfo.AirspeedAvailable && DrawInfo.VarioAvailable)) {

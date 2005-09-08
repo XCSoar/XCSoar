@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.15 2005/08/21 09:14:08 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.16 2005/09/08 23:36:14 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -157,13 +157,13 @@ void WindAnalyser::slot_newSample(){
     }
     
     if (startcircle==1) {
-      climbstartpos.x = nmeaInfo->Longditude;
-      climbstartpos.y = nmeaInfo->Lattitude;
+      climbstartpos.x = nmeaInfo->Longitude;
+      climbstartpos.y = nmeaInfo->Latitude;
       climbstarttime = nmeaInfo->Time;
       startcircle = 0;
     }
-    climbendpos.x = nmeaInfo->Longditude;
-    climbendpos.y = nmeaInfo->Lattitude;
+    climbendpos.x = nmeaInfo->Longitude;
+    climbendpos.y = nmeaInfo->Latitude;
     climbendtime = nmeaInfo->Time;
     
     //no need to reset fullCircle, it will automaticly be reset in the next itteration.

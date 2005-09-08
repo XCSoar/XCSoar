@@ -19,7 +19,7 @@
 */
 
 // TODO
-// - check buffer size in LongditudeToString and LattiditudeToString
+// - check buffer size in LongitudeToString and LattiditudeToString
 // - convertion function
 // - fill up UnitDescriptors with convertion factors
 // - registry re-store
@@ -67,7 +67,7 @@ Units_t Units::UserHorizontalSpeedUnit = unKiloMeterPerHour;
 Units_t Units::UserVerticalSpeedUnit = unMeterPerSecond;
 Units_t Units::UserWindSpeedUnit = unKiloMeterPerHour;
 
-bool Units::LongditudeToString(double Longitude, TCHAR *Buffer, size_t size){
+bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
 
   TCHAR EW[] = TEXT("WE");
   int dd, mm, ss;
@@ -114,22 +114,22 @@ bool Units::LongditudeToString(double Longitude, TCHAR *Buffer, size_t size){
 }
 
 
-bool Units::LattitudeToString(double Lattitude, TCHAR *Buffer, size_t size){
+bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
 
   TCHAR EW[] = TEXT("SN");
   int dd, mm, ss;
 
-  int sign = Lattitude<0 ? 0 : 1;
-  Lattitude = fabs(Lattitude);
+  int sign = Latitude<0 ? 0 : 1;
+  Latitude = fabs(Latitude);
 
 
   switch(CoordinateFormat){
     case cfDDMMSS:
-      dd = (int)Lattitude;
-      Lattitude = (Lattitude - dd) * 60.0;
-      mm = (int)(Lattitude);
-      Lattitude = (Lattitude - mm) * 60.0;
-      ss = (int)(Lattitude + 0.5);
+      dd = (int)Latitude;
+      Latitude = (Latitude - dd) * 60.0;
+      mm = (int)(Latitude);
+      Latitude = (Latitude - mm) * 60.0;
+      ss = (int)(Latitude + 0.5);
       if (ss >= 60)
         mm++;
       if (mm >= 60)
@@ -137,19 +137,19 @@ bool Units::LattitudeToString(double Lattitude, TCHAR *Buffer, size_t size){
       _stprintf(Buffer, TEXT("%c%02d°%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:
-      dd = (int)Lattitude;
-      Lattitude = (Lattitude - dd) * 60.0;
-      mm = (int)(Lattitude);
-      Lattitude = (Lattitude - mm) * 60.0;
-      _stprintf(Buffer, TEXT("%c%02d°%02d'%05.2f\""), EW[sign], dd, mm, Lattitude);
+      dd = (int)Latitude;
+      Latitude = (Latitude - dd) * 60.0;
+      mm = (int)(Latitude);
+      Latitude = (Latitude - mm) * 60.0;
+      _stprintf(Buffer, TEXT("%c%02d°%02d'%05.2f\""), EW[sign], dd, mm, Latitude);
     break;
     case cfDDMMmmm:
-      dd = (int)Lattitude;
-      Lattitude = (Lattitude - dd) * 60.0;
-      _stprintf(Buffer, TEXT("%c%02d°%06.3f'"), EW[sign], dd, Lattitude);
+      dd = (int)Latitude;
+      Latitude = (Latitude - dd) * 60.0;
+      _stprintf(Buffer, TEXT("%c%02d°%06.3f'"), EW[sign], dd, Latitude);
     break;
     case cfDDdddd:
-      _stprintf(Buffer, TEXT("%c%07.4f°"), EW[sign], Lattitude);
+      _stprintf(Buffer, TEXT("%c%07.4f°"), EW[sign], Latitude);
     break;
     default:
 //      assert(false /* undefined coordinateformat */);

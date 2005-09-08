@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.96 2005/09/07 17:16:03 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.97 2005/09/08 23:36:14 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -481,25 +481,25 @@ void ShowStatus() {
   int sunsetmins;
   double bearing;
   double distance;
-  TCHAR sLongditude[16];
-  TCHAR sLattitude[16];
+  TCHAR sLongitude[16];
+  TCHAR sLatitude[16];
   int   TabStops[] = {60,80,0};
 
   statusmessage[0]=0;
 
-  Units::LongditudeToString(GPS_INFO.Longditude, sLongditude, sizeof(sLongditude)-1);
-  Units::LattitudeToString(GPS_INFO.Lattitude, sLattitude, sizeof(sLattitude)-1);
+  Units::LongitudeToString(GPS_INFO.Longitude, sLongitude, sizeof(sLongitude)-1);
+  Units::LatitudeToString(GPS_INFO.Latitude, sLatitude, sizeof(sLatitude)-1);
 
-  sunsettime = DoSunEphemeris(GPS_INFO.Longditude,
-                              GPS_INFO.Lattitude);
+  sunsettime = DoSunEphemeris(GPS_INFO.Longitude,
+                              GPS_INFO.Latitude);
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime-sunsethours)*60);
 
   _stprintf(Temp,TEXT("%s\t%s\r\n%s\t%s\r\n%s\t%.0f %s\r\n%s\t%02d:%02d\r\n\r\n"),
 		   gettext(TEXT("Longitude")),
-           sLongditude,
+           sLongitude,
 		   gettext(TEXT("Latitude")),
-           sLattitude,
+           sLatitude,
 		   gettext(TEXT("Altitude")),
            GPS_INFO.Altitude*ALTITUDEMODIFY,
             Units::GetAltitudeName(),
@@ -509,20 +509,20 @@ void ShowStatus() {
            );
   _tcscat(statusmessage, Temp);
 
-  iwaypoint = FindNearestWayPoint(GPS_INFO.Longditude,
-                                  GPS_INFO.Lattitude,
+  iwaypoint = FindNearestWayPoint(GPS_INFO.Longitude,
+                                  GPS_INFO.Latitude,
                                   100000.0); // big range limit
   if (iwaypoint>=0) {
 
-    bearing = Bearing(GPS_INFO.Lattitude,
-                      GPS_INFO.Longditude,
-                      WayPointList[iwaypoint].Lattitude,
-                      WayPointList[iwaypoint].Longditude);
+    bearing = Bearing(GPS_INFO.Latitude,
+                      GPS_INFO.Longitude,
+                      WayPointList[iwaypoint].Latitude,
+                      WayPointList[iwaypoint].Longitude);
 
-    distance = Distance(GPS_INFO.Lattitude,
-                        GPS_INFO.Longditude,
-                        WayPointList[iwaypoint].Lattitude,
-                        WayPointList[iwaypoint].Longditude)*DISTANCEMODIFY;
+    distance = Distance(GPS_INFO.Latitude,
+                        GPS_INFO.Longitude,
+                        WayPointList[iwaypoint].Latitude,
+                        WayPointList[iwaypoint].Longitude)*DISTANCEMODIFY;
 
     _stprintf(Temp,TEXT("%s\t%s\r\n%s\t%d\r\n%s\t%.1f %s\r\n\r\n"),
 		     gettext(TEXT("Near")),
@@ -947,6 +947,18 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
 
 }
 
+void ApplyClearType(LOGFONT *logfont) {
+  logfont->lfQuality = ANTIALIASED_QUALITY; 
+  if (0) {
+#ifndef NOCLEARTYPE
+  if (!InfoBoxLayout::landscape) {
+    logfont->lfQuality = CLEARTYPE_COMPAT_QUALITY; 
+  }
+#endif
+  }
+}
+
+
 //
 //  FUNCTION: InitInstance(HANDLE, int)
 //
@@ -1029,10 +1041,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   int fontsz2 = (rc.right - rc.left );
 
   if (fontsz1>fontsz2) {
-    FontHeight = (int)(fontsz1/FONTHEIGHTRATIO/1.2);
+    FontHeight = (int)(fontsz1/FONTHEIGHTRATIO/1.16);
     FontWidth = (int)(FontHeight*0.4);
   } else {
-    FontHeight = (int)(fontsz2/FONTHEIGHTRATIO/1.2);
+    FontHeight = (int)(fontsz2/FONTHEIGHTRATIO/1.16);
     FontWidth = (int)(FontHeight*0.4);
   }
 
@@ -1045,31 +1057,23 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
 
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
-  logfont.lfHeight = FontHeight;
+  logfont.lfHeight = FontHeight*1.08;
   logfont.lfWidth =  FontWidth;
   logfont.lfWeight = FW_BOLD;
+  logfont.lfItalic = TRUE;
   logfont.lfCharSet = ANSI_CHARSET;
-#ifndef NOCLEARTYPE
-  if (!InfoBoxLayout::landscape) {
-    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
-  }
-#endif
+  ApplyClearType(&logfont);
 
   InfoWindowFont = CreateFontIndirect (&logfont);
 
   memset ((char *)&logfont, 0, sizeof (logfont));
 
-  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight/TITLEFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth/TITLEFONTWIDTHRATIO);
   logfont.lfWeight = FW_BOLD;
-
-#ifndef NOCLEARTYPE
-  if (!InfoBoxLayout::landscape) {
-    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
-  }
-#endif
+  //  ApplyClearType(&logfont);
 
   TitleWindowFont = CreateFontIndirect (&logfont);
 
@@ -1081,30 +1085,20 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfHeight = (int)(FontHeight*CDIFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*CDIFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
-
-#ifndef NOCLEARTYPE
-  if (!InfoBoxLayout::landscape) {
-    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
-  }
-#endif
+  ApplyClearType(&logfont);
 
   CDIWindowFont = CreateFontIndirect (&logfont);
 
   // new font for map labels
   memset ((char *)&logfont, 0, sizeof (logfont));
-
         
   _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
-
-#ifndef NOCLEARTYPE
-  if (!InfoBoxLayout::landscape) {
-    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
-  }
-#endif
+  logfont.lfItalic = TRUE; // JMW
+  ApplyClearType(&logfont);
 
   MapLabelFont = CreateFontIndirect (&logfont);
 
@@ -1117,12 +1111,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfHeight = (int)(FontHeight*STATISTICSFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*STATISTICSFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
-
-#ifndef NOCLEARTYPE
-  if (!InfoBoxLayout::landscape) {
-    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
-  }
-#endif
+  ApplyClearType(&logfont);
 
   StatisticsFont = CreateFontIndirect (&logfont);
 
@@ -1133,12 +1122,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO*1.3);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO*1.3);
   logfont.lfWeight = FW_MEDIUM;
-
-#ifndef NOCLEARTYPE
-  if (!InfoBoxLayout::landscape) {
-    logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY; // JMW
-  }
-#endif
+  ApplyClearType(&logfont);
 
   MapWindowFont = CreateFontIndirect (&logfont);
 
@@ -2289,8 +2273,8 @@ void SIMProcessTimer(void)
   GPS_INFO.NAVWarning = FALSE;
   GPS_INFO.SatellitesUsed = 6;
 
-  GPS_INFO.Lattitude = FindLattitude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
-  GPS_INFO.Longditude = FindLongditude(GPS_INFO.Lattitude, GPS_INFO.Longditude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
+  GPS_INFO.Latitude = FindLatitude(GPS_INFO.Latitude, GPS_INFO.Longitude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
+  GPS_INFO.Longitude = FindLongitude(GPS_INFO.Latitude, GPS_INFO.Longitude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
   GPS_INFO.Time+= 1.0;
 
   GpsUpdated = TRUE;

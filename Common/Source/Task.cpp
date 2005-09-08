@@ -229,7 +229,7 @@ void guiStartLogger(bool noAsk) {
 	      Debounce(); 
 	      break;
 	    }
-	    AddDeclaration(WayPointList[Task[i].Index].Lattitude , WayPointList[Task[i].Index].Longditude  , WayPointList[Task[i].Index].Name );
+	    AddDeclaration(WayPointList[Task[i].Index].Latitude , WayPointList[Task[i].Index].Longitude  , WayPointList[Task[i].Index].Name );
 	  }
 	EndDeclaration();
       }

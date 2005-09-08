@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: Parser.cpp,v 1.15 2005/08/26 12:48:58 jwharington Exp $
+  $Id: Parser.cpp,v 1.16 2005/09/08 23:36:14 jwharington Exp $
 */
 
 #include "stdafx.h"
@@ -310,8 +310,8 @@ BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO)
   tmplon = EastOrWest(tmplon,ctemp[0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Lattitude = tmplat;
-    GPS_INFO->Longditude = tmplon;
+    GPS_INFO->Latitude = tmplat;
+    GPS_INFO->Longitude = tmplon;
   }
 
   ExtractParameter(String,ctemp,5);
@@ -388,8 +388,8 @@ BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
   tmplon = EastOrWest(tmplon,ctemp[0]);
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Lattitude = tmplat;
-    GPS_INFO->Longditude = tmplon;
+    GPS_INFO->Latitude = tmplat;
+    GPS_INFO->Longitude = tmplon;
   }
 
   ExtractParameter(String,ctemp,6);
@@ -468,8 +468,8 @@ BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->SatellitesUsed = (int)(min(12,StrToDouble(ctemp, NULL)));
 
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Lattitude = tmplat;
-    GPS_INFO->Longditude = tmplon;
+    GPS_INFO->Latitude = tmplat;
+    GPS_INFO->Longitude = tmplon;
   }
 
   if(RMZAvailable)
