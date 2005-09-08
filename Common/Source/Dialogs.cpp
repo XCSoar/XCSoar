@@ -2074,6 +2074,10 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
                   INPUTFILECHANGED = TRUE;
                   GetDlgItemText(hDlg,IDC_INPUTFILE,szFile,MAX_PATH);
                   SetRegistryString(szRegistryInputFile,szFile);
+
+				  // TODO - Consider better methods - for now - force resize on Input File Selection
+   				  //SetToRegistry(TEXT("ScreenButtonSizeX"),0);
+				  //SetToRegistry(TEXT("ScreenButtonSizeY"),0);
                 }
             }
           break;
