@@ -538,7 +538,7 @@ void ShowStatus() {
 
   if (extGPSCONNECT) {
     if (GPS_INFO.NAVWarning) {
-      wcscat(statusmessage, gettext(TEXT("GPS 2D fix")));
+      wcscat(statusmessage, gettext(TEXT("GPS fix invalid")));       // JMW fixed message
     } else {
       wcscat(statusmessage, gettext(TEXT("GPS 3D fix")));
     }
@@ -1057,7 +1057,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
 
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
-  logfont.lfHeight = FontHeight*1.08;
+  logfont.lfHeight = FontHeight; // *1.08;
   logfont.lfWidth =  FontWidth;
   logfont.lfWeight = FW_BOLD;
   logfont.lfItalic = TRUE;

@@ -21,8 +21,11 @@ class InputEvents {
   static bool processButton(int bindex);
   static bool processGlideComputer(int);
   static void processGo(int event_id);
-  static int makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next = 0);
+  static int  makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next = 0);
   static void makeLabel(int mode_id, TCHAR *label, int location, int event_id);
+
+  // -------
+
   static void eventScreenModes(TCHAR *misc);
   static void eventSnailTrail(TCHAR *misc);
   static void eventSounds(TCHAR *misc);
@@ -53,6 +56,9 @@ class InputEvents {
   static void eventNearestWaypointDetails(TCHAR *misc);
   static void eventNearestAirspaceDetails(TCHAR *misc);
   static void eventRepeatStatusMessage(TCHAR *misc);
+
+  // -------
+
 #ifdef _SIM_
   static void InputEvents::showErrors();
 #endif
@@ -75,6 +81,8 @@ enum {
 		GCE_LANDING,
 		GCE_AIRSPACE_ENTER,
 		GCE_AIRSPACE_LEAVE,
+		GCE_TASK_START,
+		GCE_TASK_NEXTWAYPOINT,
 		GCE_FLIGHTMODE_FINALGLIDE_ABOVE,
 		GCE_FLIGHTMODE_FINALGLIDE_BELOW,
 

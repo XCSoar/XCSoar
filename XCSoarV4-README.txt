@@ -10,17 +10,25 @@ To do for next version:
 - Write code to find airspace nearest to aircraft or some cursor --- currently
   the code we have only finds airspace enclosing a place.
 
-Changes from 4.5beta2 to 4.5
+Changes from 4.5beta2 to 4.5beta3
 - Added debounce timeout registry setting in settings->interface files
 - Added input menu timeout
 - Added new status message interface (thread-safe, single window, ability
   to repeat messages and acknowledge)
 - Fixed hard-coded screen coordinates in PolygonVisible function
 - Airspace warnings now use new message class
-- Added glide computer events for entering and leaving airspace
 - Added method to find nearest airspace boundary (interior or exterior)
+- Input event to display info on nearest airspace boundary (interior or exterior)
 - Renamed fixed "longditude" and "lattitude" spelling mistakes
 - Display speed-to-fly bar only if flying
+- Debugging of input events file when in simulator mode
+- Added glide computer events for entering and leaving airspace
+- Added glide computer events for task start and next waypoint
+- Audio vario sound updates
+- Allow acknowledgement of individual airspaces, and per-day
+- Fix acknowledgement bug when re-entering airspace
+- Minor font adjustments
+- "GPS 2D fix" changed to "GPS fix invalid"
 
 Changes from 4.22 to 4.5beta2
 

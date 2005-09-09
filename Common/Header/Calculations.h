@@ -92,6 +92,9 @@ typedef struct _DERIVED_INFO
   // JMW estimated track bearing at next time step
   double NextTrackBearing;
 
+  // whether Speed-To-Fly audio are valid or not
+  bool STFMode;
+
 } DERIVED_INFO;
 
 #include "RasterTerrain.h"

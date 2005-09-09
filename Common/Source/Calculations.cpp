@@ -257,6 +257,8 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     Calculated->VOpt = GlidePolar::Vminsink*sqrt(n);
   }
 
+  Calculated->STFMode = false;
+
   if (Basic->AirspeedAvailable || 1) { // JMW testing...
     double vdiff;
     if (Basic->AirspeedAvailable) {
@@ -265,18 +267,22 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       vdiff = 100*(1.0-Calculated->VOpt/(Basic->Speed+0.01));
     }
     VarioSound_SetVAlt((short)(vdiff));
+    Calculated->STFMode = false;
     VarioSound_SetSTFMode(0);
     if ((Basic->Speed>NettoSpeed)||
 	((Calculated->VOpt>NettoSpeed)&&(Basic->Speed<Calculated->VOpt*1.1))
 	){
+      Calculated->STFMode = true;
       VarioSound_SetSTFMode(1);
     }
     // lock on when supernetto climb rate is half mc
     if (dmc< MCCREADY/LIFTMODIFY/2.0) {
+      Calculated->STFMode = false;
       VarioSound_SetSTFMode(0);
     }
     // lock on in circling
     if (Calculated->Circling) {
+      Calculated->STFMode = false;
       VarioSound_SetSTFMode(0);
     }
     // TODO: Work out effect on mccready speed to be in speed error
@@ -460,10 +466,11 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       if (Port2Available && Basic->VarioAvailable) {
 	// JMW experimental
 	TCHAR mcbuf[100];
-	wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
+	wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d,%d"),
 		 iround(MCCREADY/LIFTMODIFY*10),
 		 iround(Calculated->VOpt*10),
 		 Calculated->Circling,
+		 Calculated->STFMode,
 		 iround(Calculated->TerrainAlt),
 		 iround(QNH));
 	Port2WriteNMEA(mcbuf);
@@ -628,9 +635,11 @@ void SwitchZoomClimb(bool isclimb, bool left) {
   // if AutoZoom
 
   // JMW
+  /* Not needed now since can put it in input events if users want it.
   if (EnableSoundTask) {
     PlayResource(TEXT("IDR_WAV_DRIP"));
   }
+  */
 
   if (CircleZoom) {
     if (isclimb) {
@@ -1082,9 +1091,11 @@ void AnnounceWayPointSwitch() {
   FastLogNum = 5;
 
   // play sound
+  /* Not needed now since can put it in input events if users want it.
   if (EnableSoundTask) {
     PlayResource(TEXT("IDR_WAV_TASKTURNPOINT"));
   }
+  */
 
 }
 
@@ -1115,6 +1126,8 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                       Calculated->LegStartTime = Basic->Time;
                       StartSectorEntered = FALSE;
 
+		      InputEvents::processGlideComputer(GCE_TASK_START);
+
                       AnnounceWayPointSwitch();
                     }
                 }
@@ -1143,6 +1156,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
                   ActiveWayPoint ++;
                   AnnounceWayPointSwitch();
+		  InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 
                   return;
                 }
@@ -1178,6 +1192,8 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                       Calculated->LegStartTime = Basic->Time;
                       StartSectorEntered = FALSE;
 
+		      InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
+
                       AnnounceWayPointSwitch();
 
                     }
@@ -1202,6 +1218,8 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
               if(Task[ActiveWayPoint+1].Index >= 0)
                 {
                   Calculated->LegStartTime = Basic->Time;
+
+		  InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 
                   AnnounceWayPointSwitch();
                   ActiveWayPoint ++;

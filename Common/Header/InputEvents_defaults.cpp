@@ -38,6 +38,18 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_LANDING] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\My Documents\FinalGlide.wav"), event_id);
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Above Final Glide"), event_id);
+mode_id = InputEvents::mode2int(TEXT("default"), true);
+GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_ABOVE] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\My Documents\Tiptoe.wav"), event_id);
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Marginal Final Glide"), event_id);
+mode_id = InputEvents::mode2int(TEXT("default"), true);
+GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_BELOW] = event_id;
+
+event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
@@ -215,7 +227,7 @@ Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventLogger, TEXT("show"), event_id);
-event_id = InputEvents::makeEvent(&eventLogger, TEXT("toggle"), event_id);
+event_id = InputEvents::makeEvent(&eventLogger, TEXT("toggle ask"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
 makeLabel(mode_id,TEXT("Log"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;

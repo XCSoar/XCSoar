@@ -216,6 +216,12 @@ unsigned char audio_sound_beep(unsigned short i) {
       return 1;
     }
     return 0;
+  case 5: // equal beep
+    if (phase<128) {
+      beepadvance=true;
+      return 1;
+    } else
+      return 0;
   }
   beepadvance = true;
   // unknown
@@ -1216,6 +1222,23 @@ void audio_soundmode_climb(void) {
 }
 
 
+void audio_soundmode_stall(short delta) {
+  // stall warning sound is hi-lo fast beep, range of sound based on
+  // magnitude of stall speed difference
+
+  short mag = max(20,min(100,delta*5));
+
+  audio_volume = 8; // make it loud, maybe this should be based on mag
+
+  audio_beepfrequency = audio_delaytable(130); // shortish period
+
+  audio_soundfrequency = audio_frequencytable((unsigned char)(100-mag));
+  audio_altsoundfrequency = audio_frequencytable((unsigned char)(100+mag));
+  audio_soundtype = 5; // even beep
+}
+
+#include "externs.h"
+
 void audio_soundmode(short vinst, short vstf) {
 
   audio_soundmode_smooth(vinst, vstf);
@@ -1232,10 +1255,15 @@ void audio_soundmode(short vinst, short vstf) {
   audio_altsoundfrequency = audio_soundfrequency;
 
   // apply sounds
-  if (audiofilter.stfmode) {
-    audio_soundmode_cruise();
+  short stalldelta = 0; // MCCREADY*10;
+  if (stalldelta>0) {
+    audio_soundmode_stall(stalldelta);
   } else {
-    audio_soundmode_climb();
+    if (audiofilter.stfmode) {
+      audio_soundmode_cruise();
+    } else {
+      audio_soundmode_climb();
+    }
   }
 
 }
