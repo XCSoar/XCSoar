@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.97 2005/09/08 23:36:14 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.98 2005/09/09 10:52:35 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1598,6 +1598,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		// save registry backup first (try a few places)
 		SaveRegistryToFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));
 		// SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
+		// XXX Hard coded file needs fixing - lookup where my documents i automatically
 		SaveRegistryToFile(TEXT("\\\\My Documents\\xcsoar-registry.prf"));
 		
 		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);

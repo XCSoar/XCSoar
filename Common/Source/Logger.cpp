@@ -89,6 +89,7 @@ void StartLogger(TCHAR *strAssetNumber)
 
   for(i=1;i<99;i++)
     {
+	  // XXX My Documents hard coded - fix - lookup normal location 
       wsprintf(szLoggerFileName,TEXT("\\My Documents\\%04d-%02d-%02d-XXX-%02d"),
 	       st.wYear, 
 	       st.wMonth, 

@@ -18,6 +18,8 @@ InputEvents
 	source/Common/Data/Input/*
 	doc/html/advanced/input/*		http://xcsoar.sourceforge.net/advanced/input/
 
+  Copyright (c) 2005 Scott Penrose and others - yet to be filled in (GNU License)
+
 */
 
 
@@ -50,13 +52,13 @@ InputEvents
 	This code, and baddly written #ifdef should be moved to Macros in the Log class.
 */
 #ifdef _SIM_
-	// Log first 10 input event errors for display in simulator mode
-	#define MAX_INPUT_ERRORS 1
+	// Log first NN input event errors for display in simulator mode
+	#define MAX_INPUT_ERRORS 5
 	TCHAR input_errors[MAX_INPUT_ERRORS][1024];
-int input_errors_count = 0; 
-// JMW this is just far too annoying right now,
-// since "title" "note" and commencts are not parsed, they
-// come up as errors.
+	int input_errors_count = 0; 
+	// JMW this is just far too annoying right now,
+	// since "title" "note" and commencts are not parsed, they
+	// come up as errors.
 #endif
 
 // Current modes - map mode to integer (primitive hash)
@@ -153,13 +155,15 @@ void InputEvents::readFile() {
   /* Read from the file */
   while (
 	 fgetws(buffer, 2048, fp)
-	 && ((found = swscanf(buffer, TEXT("%[^=]=%[^\n]\n"), key, value)) != EOF)
+	 // XXX What about \r - as in \r\n ?
+	 // XXX Note that ^# does not allow # in key - might be required
+	 //		Better way is to separate the check for # and the scanf 
+	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
   ) {
 	  line++;
 
     // Check valid line? If not valid, assume next record (primative, but works ok!)
-    if ((found != 2) || !key || !value) {
-
+	if ((buffer[0] == '\n') || (buffer[0] == NULL)) {
 		// General checks before continue...
 		if (
 			some_data
@@ -206,6 +210,15 @@ void InputEvents::readFile() {
 					else if (input_errors_count < MAX_INPUT_ERRORS)
 					  wsprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
 					#endif
+
+				} else if (wcscmp(d_type, TEXT("label")) == 0)	{	// label only - no key associated (label can still be touch screen)
+					// Nothing to do here...
+
+   				#ifdef _SIM_
+				} else if (input_errors_count < MAX_INPUT_ERRORS) {
+				  wsprintf(input_errors[input_errors_count++], TEXT("Invalid type: %s at %i"), d_type, line);
+				#endif
+
 				}
 
 				token = wcstok( NULL, TEXT(" "));
@@ -223,6 +236,10 @@ void InputEvents::readFile() {
 		d_location = 0;
 		new_label = NULL;
 
+	} else if ((found != 2) || !key || !value) {
+		// Do nothing - we probably just have a comment line
+		void;
+
     } else {
       if (wcscmp(key, TEXT("mode")) == 0) {
 		some_data = true;	// Success, we have a real entry
@@ -233,8 +250,15 @@ void InputEvents::readFile() {
 		wcscpy(d_data, value);				
       } else if (wcscmp(key, TEXT("event")) == 0) {
 		wcscpy(d_event, TEXT(""));
-		wcscpy(d_misc, TEXT(""));
-		swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\]"), d_event, d_misc);
+        wcscpy(d_misc, TEXT(""));
+		swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().]"), d_event, d_misc);
+
+		// XXX Can't use token here - breaks other token - damn C - how about C++ String class ?
+		// TCHAR *eventtoken;
+		// eventtoken = wcstok(value, TEXT(" "));
+		// d_event = token;
+		// eventtoken = wcstok(value, TEXT(" "));
+
 		// TODO - Consider reusing existing identical events (not worth it right now)
 		pt2Event event = findEvent(d_event);
 		if (event) {
@@ -271,7 +295,7 @@ void InputEvents::showErrors() {
 	int i;
 	for (i = 0; i < input_errors_count; i++) {
 		wsprintf(buffer, TEXT("XCI Error %i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
-  		Message::AddMessage(5000, 1, buffer);
+  		Message::AddMessage(30000, 1, buffer);
 	}
 }
 #endif
@@ -904,7 +928,12 @@ void InputEvents::eventAbortTask(TCHAR *misc) {
 	    ResumeAbortTask(1);
 	else if (wcscmp(misc, TEXT("resume")) == 0)
 	    ResumeAbortTask(-1);
-	else 
+	else if (wcscmp(misc, TEXT("show")) == 0) {
+		if (TaskAborted)
+		    DoStatusMessage(TEXT("Task Aborted"));
+		else 
+		    DoStatusMessage(TEXT("Task Resume"));			
+	} else 
 	    ResumeAbortTask();
     UnlockFlightData();
 }
