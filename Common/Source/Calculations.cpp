@@ -268,22 +268,22 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
     VarioSound_SetVAlt((short)(vdiff));
     Calculated->STFMode = false;
-    VarioSound_SetSTFMode(0);
+    VarioSound_SetSTFMode(false);
     if ((Basic->Speed>NettoSpeed)||
 	((Calculated->VOpt>NettoSpeed)&&(Basic->Speed<Calculated->VOpt*1.1))
 	){
       Calculated->STFMode = true;
-      VarioSound_SetSTFMode(1);
+      VarioSound_SetSTFMode(true);
     }
     // lock on when supernetto climb rate is half mc
     if (dmc< MCCREADY/LIFTMODIFY/2.0) {
       Calculated->STFMode = false;
-      VarioSound_SetSTFMode(0);
+      VarioSound_SetSTFMode(false);
     }
     // lock on in circling
     if (Calculated->Circling) {
       Calculated->STFMode = false;
-      VarioSound_SetSTFMode(0);
+      VarioSound_SetSTFMode(false);
     }
     // TODO: Work out effect on mccready speed to be in speed error
     // and the volume should be scaled by this.
@@ -311,7 +311,7 @@ BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
-BOOL EnableCalibration = FALSE;
+bool EnableCalibration = false;
 
 
 void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)

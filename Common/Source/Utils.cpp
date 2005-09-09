@@ -327,22 +327,22 @@ void ReadRegistrySettings(void)
     }
 
   GetFromRegistry(szRegistryAirspaceBlackOutline,&Temp);
-  MapWindow::bAirspaceBlackOutline = Temp;
+  MapWindow::bAirspaceBlackOutline = (Temp == 1);
 
   GetFromRegistry(szRegistrySnailTrail,&Temp);
   TrailActive = Temp;
 
   GetFromRegistry(szRegistryDrawTopology,&Temp);
-  EnableTopology = Temp;
+  EnableTopology = (Temp == 1);
 
   GetFromRegistry(szRegistryDrawTerrain,&Temp);
-  EnableTerrain = Temp;
+  EnableTerrain = (Temp == 1);
 
   GetFromRegistry(szRegistryFinalGlideTerrain,&Temp);
-  FinalGlideTerrain = Temp;
+  FinalGlideTerrain = (Temp == 1);
 
   GetFromRegistry(szRegistryCircleZoom,&Temp);
-  CircleZoom = Temp;
+  CircleZoom = (Temp == 1);
 
   GetFromRegistry(szRegistryWindUpdateMode,&Temp);
   WindUpdateMode = Temp;
@@ -380,15 +380,15 @@ void ReadRegistrySettings(void)
 
   Temp = 1;
   GetFromRegistry(szRegistrySoundAudioVario,&Temp);
-  EnableSoundVario = Temp;
+  EnableSoundVario = (Temp == 1);
 
   Temp = 1;
   GetFromRegistry(szRegistrySoundTask,&Temp);
-  EnableSoundTask = Temp;
+  EnableSoundTask = (Temp == 1);
 
   Temp = 1;
   GetFromRegistry(szRegistrySoundModes,&Temp);
-  EnableSoundModes = Temp;
+  EnableSoundModes = (Temp == 1);
 
   Temp = 500;
   GetFromRegistry(szRegistryNettoSpeed,&Temp);
@@ -396,19 +396,19 @@ void ReadRegistrySettings(void)
 
   Temp = 0;
   GetFromRegistry(szRegistryCDICruise,&Temp);
-  EnableCDICruise = Temp;
+  EnableCDICruise = (Temp == 1);
 
   Temp = 0;
   GetFromRegistry(szRegistryCDICircling,&Temp);
-  EnableCDICircling = Temp;
+  EnableCDICircling = (Temp == 1);
 
   Temp = 0;
   GetFromRegistry(szRegistryAutoBlank,&Temp);
-  EnableAutoBlank = Temp;
+  EnableAutoBlank = (Temp == 1);
 
   Temp = 0;
   GetFromRegistry(szRegistryVarioGauge,&Temp);
-  EnableVarioGauge = Temp;
+  EnableVarioGauge = (Temp == 1);
 
   Temp = 0;
   GetFromRegistry(szRegistryDebounceTimeout, &Temp);
@@ -454,7 +454,7 @@ BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
 }
 
 
-// Implement your code to save value to the regsitry
+// Implement your code to save value to the registry
 
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
 {
@@ -472,6 +472,18 @@ HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos)
   RegCloseKey(hKey);
 
   return hRes;
+}
+
+// Set bool value to registry as 1 or 0 - JG
+HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal)
+{
+	return SetToRegistry(szRegValue, bVal ? DWORD(1) : DWORD(0));
+}
+
+// Set int value to registry - JG
+HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal)
+{
+	return SetToRegistry(szRegValue, DWORD(nVal));
 }
 
 BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
@@ -1669,9 +1681,9 @@ void SaveSoundSettings()
 {
   SetToRegistry(szRegistrySoundVolume, (DWORD)SoundVolume);
   SetToRegistry(szRegistrySoundDeadband, (DWORD)SoundDeadband);
-  SetToRegistry(szRegistrySoundAudioVario, (DWORD)EnableSoundVario);
-  SetToRegistry(szRegistrySoundTask, (DWORD)EnableSoundTask);
-  SetToRegistry(szRegistrySoundModes, (DWORD)EnableSoundModes);
+  SetToRegistry(szRegistrySoundAudioVario, EnableSoundVario ? 1 : 0);
+  SetToRegistry(szRegistrySoundTask, EnableSoundTask ? 1 : 0);
+  SetToRegistry(szRegistrySoundModes, EnableSoundModes ? 1 : 0);
 }
 
 

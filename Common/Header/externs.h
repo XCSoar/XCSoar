@@ -45,7 +45,7 @@ extern int  CurrentInfoType;          // Used for Popup Menu Select
 extern int  InfoType[MAXINFOWINDOWS]; //
 extern HWND hWndInfoWindow[MAXINFOWINDOWS];
 extern int  InfoFocus;
-extern BOOL DisplayLocked; // if infoboxes are locked
+extern bool DisplayLocked; // if infoboxes are locked
 extern SCREEN_INFO Data_Options[];
 extern int NUMSELECTSTRINGS;
 extern BOOL InfoBoxesHidden;
@@ -97,7 +97,7 @@ extern int POLARID;
 extern double POLAR[POLARSIZE];
 extern double WEIGHTS[POLARSIZE];
 
-extern BOOL InfoWindowActive;
+extern bool InfoWindowActive;
 extern int iAirspaceBrush[];
 extern int iAirspaceColour[];
 
@@ -119,24 +119,25 @@ extern double SAFETYALTITUDEARRIVAL;
 extern double SAFETYALTITUDEBREAKOFF;
 extern double SAFETYALTITUDETERRAIN;
 extern double SAFTEYSPEED;
-extern BOOL LoggerActive;
+extern bool LoggerActive;
 extern int WindUpdateMode; // unused
 extern double QNH;
 extern int NettoSpeed;
-extern BOOL EnableCalibration;
-extern BOOL EnableAutoBlank;
-extern BOOL EnableAuxiliaryInfo;
+extern bool EnableCalibration;
+extern bool EnableAutoBlank;
+extern bool EnableAuxiliaryInfo;
 extern int debounceTimeout;
 
 // user interface options
-extern BOOL bAirspaceBlackOutline;
+extern bool bAirspaceBlackOutline;
 extern int TrailActive;
-extern int CircleZoom;
-extern int EnableTopology;
-extern int EnableTerrain;
-extern int EnableSoundVario;
-extern int EnableSoundTask;
-extern int EnableSoundModes;
+extern bool CircleZoom;
+extern bool EnableTopology;
+extern bool EnableTerrain;
+extern bool FinalGlideTerrain;
+extern bool EnableSoundVario;
+extern bool EnableSoundTask;
+extern bool EnableSoundModes;
 extern int SoundVolume;
 extern int SoundDeadband;
 extern int DisplayOrientation;
@@ -147,10 +148,9 @@ extern int AcknowledgementTime;
 extern int AltitudeMode;
 extern int ClipAltitude;
 extern int AltWarningMargin;
-extern int FinalGlideTerrain;
-extern BOOL EnableCDICruise;
-extern BOOL EnableCDICircling;
-extern BOOL EnableVarioGauge;
+extern bool EnableCDICruise;
+extern bool EnableCDICircling;
+extern bool EnableVarioGauge;
 //
 
 // statistics

@@ -238,7 +238,7 @@ void InputEvents::readFile() {
 
 	} else if ((found != 2) || !key || !value) {
 		// Do nothing - we probably just have a comment line
-		void;
+		// JG removed "void;" - causes warning (void is declaration and needs variable)
 
     } else {
       if (wcscmp(key, TEXT("mode")) == 0) {
@@ -587,14 +587,14 @@ void InputEvents::eventMarkLocation(TCHAR *misc) {
 
 
 void InputEvents::eventSounds(TCHAR *misc) {
-  int OldEnableSoundVario = EnableSoundVario;
+  bool OldEnableSoundVario = EnableSoundVario;
   
   if (wcscmp(misc, TEXT("toggle")) == 0)
     EnableSoundVario = !EnableSoundVario;
   else if (wcscmp(misc, TEXT("on")) == 0)
-    EnableSoundVario = 1;
+    EnableSoundVario = true;
   else if (wcscmp(misc, TEXT("off")) == 0)
-    EnableSoundVario = 0;
+    EnableSoundVario = false;
   else if (wcscmp(misc, TEXT("show")) == 0) {
     if (EnableSoundVario)
       DoStatusMessage(TEXT("Vario Sounds ON"));
@@ -603,7 +603,7 @@ void InputEvents::eventSounds(TCHAR *misc) {
   }
   
   if (EnableSoundVario != OldEnableSoundVario) {
-    VarioSound_EnableSound((BOOL)EnableSoundVario);
+    VarioSound_EnableSound(EnableSoundVario);
   }
 }
 

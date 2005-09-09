@@ -239,7 +239,7 @@ void DoLogger(TCHAR *strAssetNumber)
     {
       if(MessageBox(hWndMapWindow,TEXT("Stop Logger"),TEXT("Stop Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
 	{
-	  LoggerActive = FALSE;
+	  LoggerActive = false;
 	}
     }
   else
@@ -261,7 +261,7 @@ void DoLogger(TCHAR *strAssetNumber)
 		
       if(MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
 	{
-	  LoggerActive = TRUE;
+	  LoggerActive = true;
 	  StartLogger(strAssetNumber);
 	  LoggerHeader();
 	  StartDeclaration();

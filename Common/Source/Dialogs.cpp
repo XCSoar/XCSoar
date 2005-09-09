@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.71 2005/09/08 23:36:13 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.72 2005/09/09 16:35:30 jeffg1 Exp $
 
 */
 #include "stdafx.h"
@@ -622,7 +622,7 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
       SendDlgItemMessage(hDlg, IDC_AUDIODEADBAND, 
 			 TBM_SETPOS, TRUE, 40-SoundDeadband);
                
-      if(EnableSoundVario == TRUE)
+      if(EnableSoundVario)
         {
           SendDlgItemMessage(hDlg,IDC_AUDIOVARIO,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -631,7 +631,7 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
           SendDlgItemMessage(hDlg,IDC_AUDIOVARIO,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
-      if(EnableSoundTask == TRUE)
+      if(EnableSoundTask)
         {
           SendDlgItemMessage(hDlg,IDC_AUDIOEVENTS,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -640,7 +640,7 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
           SendDlgItemMessage(hDlg,IDC_AUDIOEVENTS,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
-      if(EnableSoundModes == TRUE)
+      if(EnableSoundModes)
         {
           SendDlgItemMessage(hDlg,IDC_AUDIOUI,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -716,7 +716,7 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           SendDlgItemMessage(hDlg,IDC_SNAIL,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
-      if(EnableCDICruise == TRUE)
+      if(EnableCDICruise)
         {
           SendDlgItemMessage(hDlg,IDC_CDICRUISE,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -725,7 +725,7 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           SendDlgItemMessage(hDlg,IDC_CDICRUISE,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
-      if(EnableCDICircling == TRUE)
+      if(EnableCDICircling)
         {
           SendDlgItemMessage(hDlg,IDC_CDICIRCLING,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -734,7 +734,7 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           SendDlgItemMessage(hDlg,IDC_CDICIRCLING,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
-      if(EnableTopology == TRUE)
+      if(EnableTopology)
         {
           SendDlgItemMessage(hDlg,IDC_DRAWTOPOLOGY,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -743,7 +743,7 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           SendDlgItemMessage(hDlg,IDC_DRAWTOPOLOGY,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
-      if(EnableTerrain == TRUE)
+      if(EnableTerrain)
         {
           SendDlgItemMessage(hDlg,IDC_DRAWTERRAIN,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -752,7 +752,7 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
           SendDlgItemMessage(hDlg,IDC_DRAWTERRAIN,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
-      if(EnableVarioGauge == TRUE)
+      if(EnableVarioGauge)
         {
           SendDlgItemMessage(hDlg,IDC_VARIOGAUGE,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -813,22 +813,22 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 
         case IDC_CDICRUISE:
           EnableCDICruise = !EnableCDICruise;
-          SetToRegistry(szRegistryCDICruise,EnableCDICruise);
+          SetToRegistry(szRegistryCDICruise, EnableCDICruise);
           return TRUE;
 
         case IDC_CDICIRCLING:
           EnableCDICircling = !EnableCDICircling;
-          SetToRegistry(szRegistryCDICircling,EnableCDICircling);
+          SetToRegistry(szRegistryCDICircling, EnableCDICircling);
           return TRUE;
 
         case IDC_DRAWTOPOLOGY:
           EnableTopology = !EnableTopology;
-          SetToRegistry(szRegistryDrawTopology,EnableTopology);
+          SetToRegistry(szRegistryDrawTopology, EnableTopology);
           return TRUE;
 
         case IDC_DRAWTERRAIN:
           EnableTerrain = !EnableTerrain;
-          SetToRegistry(szRegistryDrawTerrain,EnableTerrain);
+          SetToRegistry(szRegistryDrawTerrain, EnableTerrain);
           return TRUE;
 
         case IDC_WAYPOINTNAME:
@@ -877,7 +877,7 @@ LRESULT CALLBACK MapDisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARA
     {
     case WM_INITDIALOG:
                         
-      if(CircleZoom == TRUE)
+      if(CircleZoom)
         {
           SendDlgItemMessage(hDlg,IDC_CIRCLEZOOM,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -886,7 +886,7 @@ LRESULT CALLBACK MapDisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARA
           SendDlgItemMessage(hDlg,IDC_CIRCLEZOOM,BM_SETCHECK,BST_UNCHECKED,0);
         }
 
-      if(EnableAutoBlank == TRUE)
+      if(EnableAutoBlank)
         {
           SendDlgItemMessage(hDlg,IDC_AUTOBLANK,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -928,7 +928,7 @@ LRESULT CALLBACK MapDisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARA
 
         case IDC_CIRCLEZOOM:
           CircleZoom = !CircleZoom;
-          SetToRegistry(szRegistryCircleZoom,CircleZoom);
+          SetToRegistry(szRegistryCircleZoom, CircleZoom);
           return TRUE;
 
         case IDC_NORTHUP:
@@ -1440,7 +1440,7 @@ LRESULT CALLBACK FinalGlide(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
       SetDlgItemInt(hDlg,IDC_SALTBREAKOFF,iround(SAFETYALTITUDEBREAKOFF*ALTITUDEMODIFY),FALSE);
       SetDlgItemInt(hDlg,IDC_SALTTERRAIN,iround(SAFETYALTITUDETERRAIN*ALTITUDEMODIFY),FALSE);
 
-      if(FinalGlideTerrain == TRUE)
+      if(FinalGlideTerrain)
         {
           SendDlgItemMessage(hDlg,IDC_FINALGLIDETERRAIN,BM_SETCHECK,BST_CHECKED,0);
         }
@@ -1487,7 +1487,7 @@ LRESULT CALLBACK FinalGlide(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 	{
 	case IDC_FINALGLIDETERRAIN:
 	  FinalGlideTerrain = !FinalGlideTerrain;
-	  SetToRegistry(szRegistryFinalGlideTerrain,FinalGlideTerrain);
+	  SetToRegistry(szRegistryFinalGlideTerrain, FinalGlideTerrain);
 	  return TRUE;
 	}
     }

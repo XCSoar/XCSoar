@@ -96,9 +96,9 @@ HBITMAP MapWindow::hGPSStatus1;
 HBITMAP MapWindow::hGPSStatus2;
 
   // 12 is number of airspace types
-int	MapWindow::iAirspaceBrush[AIRSPACECLASSCOUNT]; 
-int	MapWindow::iAirspaceColour[AIRSPACECLASSCOUNT];
-BOOL    MapWindow::bAirspaceBlackOutline = FALSE;
+int	 MapWindow::iAirspaceBrush[AIRSPACECLASSCOUNT]; 
+int	 MapWindow::iAirspaceColour[AIRSPACECLASSCOUNT];
+bool MapWindow::bAirspaceBlackOutline = false;
 
 HBRUSH  MapWindow::hBackgroundBrush;
 
@@ -161,8 +161,8 @@ NMEA_INFO DrawInfo;
 DERIVED_INFO DerivedDrawInfo;
 
 int SelectedWaypoint;
-BOOL EnableCDICruise = FALSE;
-BOOL EnableCDICircling = FALSE;
+bool EnableCDICruise = false;
+bool EnableCDICircling = false;
 
 extern HWND hWndCDIWindow;
 extern int iround(double i);
@@ -395,9 +395,8 @@ void MapWindow::Event_Terrain(int vswitch) {
   if (vswitch== -1) { // toggle
 
     val = 0;
-    val += (EnableTopology)*0x01;
-    val += (EnableTerrain)*0x02;
-    
+    if (EnableTopology) val++;
+    if (EnableTerrain) val += 2;
     val++;
     if (val>3) val=0;
    
@@ -413,8 +412,8 @@ void MapWindow::Event_Terrain(int vswitch) {
     }
   }
   
-  EnableTopology = (val & 0x01);
-  EnableTerrain = (val & 0x02)>>1;
+  EnableTopology = ((val & 0x01) == 0x01);
+  EnableTerrain  = ((val & 0x02) == 0x02);
 
   // XXX InputEvents - need to move all of this function to InputEvents
   //		toggle

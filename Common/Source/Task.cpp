@@ -219,7 +219,7 @@ void guiStartLogger(bool noAsk) {
     
     if(noAsk || MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
       {
-	LoggerActive = TRUE;
+	LoggerActive = true;
 	StartLogger(strAssetNumber);
 	LoggerHeader();
 	StartDeclaration();
@@ -241,7 +241,7 @@ void guiStartLogger(bool noAsk) {
 void guiStopLogger(bool noAsk) {
   if (LoggerActive) {
     if(noAsk || MessageBox(hWndMapWindow,gettext(TEXT("Stop Logger")),gettext(TEXT("Stop Logger")),MB_YESNO|MB_ICONQUESTION) == IDYES)
-      LoggerActive = FALSE;
+      LoggerActive = false;
     FullScreen();
   }
 }

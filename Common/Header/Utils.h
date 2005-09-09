@@ -11,6 +11,8 @@
 
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
+HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal);	// JG
+HRESULT SetToRegistry(const TCHAR *szRegValue, int nVal);	// JG
 BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize);
 HRESULT SetRegistryString(const TCHAR *szRegValue, TCHAR *Pos);
 void ReadRegistrySettings(void);
