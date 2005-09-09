@@ -77,9 +77,9 @@ int                                     InfoType[MAXINFOWINDOWS] = {921102,
                                                                     394758,
                                                                     1644825};
 
-BOOL                                    DisplayLocked = TRUE;
-BOOL                                    InfoWindowActive = TRUE;
-BOOL                                    EnableAuxiliaryInfo = FALSE;
+bool                                    DisplayLocked = true;
+bool                                    InfoWindowActive = true;
+bool                                    EnableAuxiliaryInfo = false;
 int                                     InfoBoxFocusTimeOut = 0;
 int                                     MenuTimeOut = 0;
 int                                     DisplayTimeOut = 0;
@@ -203,24 +203,24 @@ SNAIL_POINT SnailTrail[TRAILSIZE];
 int SnailNext = 0;
 
 // user interface settings
-int CircleZoom = FALSE;
+bool CircleZoom = false;
 int WindUpdateMode = 0;
-int EnableTopology = FALSE;
-int EnableTerrain = FALSE;
-int FinalGlideTerrain = FALSE;
-int EnableSoundVario = TRUE;
-int EnableSoundModes = TRUE;
-int EnableSoundTask = TRUE;
+bool EnableTopology = false;
+bool EnableTerrain = false;
+bool FinalGlideTerrain = false;
+bool EnableSoundVario = true;
+bool EnableSoundModes = true;
+bool EnableSoundTask = true;
 int SoundVolume = 80;
 int SoundDeadband = 5;
-BOOL EnableVarioGauge = false;
-BOOL EnableAutoBlank = false;
+bool EnableVarioGauge = false;
+bool EnableAutoBlank = false;
 bool ScreenBlanked = false;
 
 
 
 //IGC Logger
-BOOL LoggerActive = FALSE;
+bool LoggerActive = false;
 
 // Others
 double FrameRate = 0;

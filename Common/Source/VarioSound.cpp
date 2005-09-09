@@ -989,7 +989,7 @@ extern "C" {
 
   }
 
-  VARIOSOUND_API void VarioSound_SetSTFMode(BOOL v) {
+  VARIOSOUND_API void VarioSound_SetSTFMode(bool v) {
     EnterCriticalSection(&CritSec_VarioSoundV);
     audiofilter.stfmode = v;
     LeaveCriticalSection(&CritSec_VarioSoundV);
@@ -1061,8 +1061,9 @@ extern "C" {
   }
 //
 // Modified to use BOOL instead of bool as the parameter.  RB
+// Changed back! JG
 //
-  VARIOSOUND_API void VarioSound_EnableSound(BOOL sound) {
+  VARIOSOUND_API void VarioSound_EnableSound(bool sound) {
     EnterCriticalSection(&CritSec_VarioSound);
     variosound_sound = sound;
     if (sound) {
