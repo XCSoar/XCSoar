@@ -412,7 +412,8 @@ void ReadRegistrySettings(void)
 
   Temp = 0;
   GetFromRegistry(szRegistryDebounceTimeout, &Temp);
-  if (Temp==0) {
+  debounceTimeout = Temp;
+  if (debounceTimeout==0) {
     // reasonable default for debounce
     debounceTimeout = 250;
     SetToRegistry(szRegistryDebounceTimeout, debounceTimeout);

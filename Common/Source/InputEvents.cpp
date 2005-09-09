@@ -1031,8 +1031,15 @@ void InputEvents::eventLogger(TCHAR *misc) {
 
 
 void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
-  ClearAirspaceWarnings(true);
+  // JMW clear airspace warnings for entire day (for selected airspace)
+  if (wcscmp(misc, TEXT("day")) == 0) {
+    ClearAirspaceWarnings(true,true);
+    return;
+  }
+  // default, clear airspace for short acknowledgmenet time
+  ClearAirspaceWarnings(true,false);
 }
+
 
 void InputEvents::eventClearStatusMessages(TCHAR *misc) {
   ClearStatusMessages();

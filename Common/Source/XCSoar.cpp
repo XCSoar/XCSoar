@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.98 2005/09/09 10:52:35 scottp Exp $
+  $Id: XCSoar.cpp,v 1.99 2005/09/09 13:17:43 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -538,7 +538,7 @@ void ShowStatus() {
 
   if (extGPSCONNECT) {
     if (GPS_INFO.NAVWarning) {
-      wcscat(statusmessage, gettext(TEXT("GPS 2D fix")));      
+      wcscat(statusmessage, gettext(TEXT("GPS fix invalid")));       // JMW fixed message
     } else {
       wcscat(statusmessage, gettext(TEXT("GPS 3D fix")));      
     }
@@ -1057,7 +1057,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
 
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
-  logfont.lfHeight = FontHeight*1.08;
+  logfont.lfHeight = FontHeight; // *1.08;
   logfont.lfWidth =  FontWidth;
   logfont.lfWeight = FW_BOLD;
   logfont.lfItalic = TRUE;
