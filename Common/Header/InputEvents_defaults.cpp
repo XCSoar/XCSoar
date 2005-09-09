@@ -38,13 +38,13 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_LANDING] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\My Documents\FinalGlide.wav"), event_id);
+event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\FinalGlide.wav"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Above Final Glide"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_ABOVE] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\My Documents\Tiptoe.wav"), event_id);
+event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\Tiptoe.wav"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Marginal Final Glide"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_BELOW] = event_id;
