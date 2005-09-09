@@ -1542,11 +1542,7 @@ void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         {
           BelowGlide = FALSE;
 
-	  // TODO InputEvents GCE - This should now be moved to a GCE
-	  // TODO Playing hard coded WAV is bad - move to
-	  // configuration (maybe InputEvents)
-          sndPlaySound(TEXT("My Documents\\FinalGlide.wav"),
-		       SND_ASYNC|SND_NODEFAULT);
+	  	InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
         }
     }
   else
@@ -1554,10 +1550,7 @@ void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       if(Calculated->TaskAltitudeDifference < 10)
         {
           BelowGlide = TRUE;
-	  // TODO InputEvents GCE - Move to InputEvents probably
-	  // triggered by a GCE
-          sndPlaySound(TEXT("My Documents\\Tiptoe.wav"),
-		       SND_ASYNC|SND_NODEFAULT);
+	  	InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
         }
     }
 }

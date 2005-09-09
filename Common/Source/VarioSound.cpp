@@ -1094,29 +1094,34 @@ BOOL PlayResource (LPTSTR lpName)
 
   // TODO Modify to allow use of WAV Files and/or Embedded files
 
-  // Find the wave resource.
-  hResInfo = FindResource (hInst, lpName, TEXT("WAVE"));
+  if (wcsstr(lpName, TEXT(".wav"))) {
+		bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
 
-  if (hResInfo == NULL)
-    return FALSE;
+  } else {
 
-  // Load the wave resource.
-  hRes = LoadResource (hInst, (HRSRC)hResInfo);
+	  // Find the wave resource.
+	  hResInfo = FindResource (hInst, lpName, TEXT("WAVE"));
 
-  if (hRes == NULL)
-    return FALSE;
+	  if (hResInfo == NULL)
+		return FALSE;
 
-  // Lock the wave resource and play it.
-  lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
+	  // Load the wave resource.
+	  hRes = LoadResource (hInst, (HRSRC)hResInfo);
 
-  if (lpRes != NULL)
-    {
-    bRtn = sndPlaySound (lpRes, SND_MEMORY | SND_ASYNC | SND_NODEFAULT );
-    }
-  else
-    bRtn = 0;
+	  if (hRes == NULL)
+		return FALSE;
 
-  return bRtn;
+	  // Lock the wave resource and play it.
+	  lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
+
+	  if (lpRes != NULL)
+		{
+		bRtn = sndPlaySound (lpRes, SND_MEMORY | SND_ASYNC | SND_NODEFAULT );
+		}
+	  else
+		bRtn = 0;
+}
+      return bRtn;
 }
 
 

@@ -150,8 +150,9 @@ void SetTopologyBounds(RECT rcin) {
 void ReadTopology() {
 
   LockTerrainDataGraphics();
+	  // XXX My Documents hard coded - fix - lookup normal location
   topo_marks =
-    new TopologyWriter("My Documents/xcsoar-marks", RGB(0xD0,0xD0,0xD0));
+	  new TopologyWriter("My Documents/xcsoar-marks", RGB(0xD0,0xD0,0xD0));
 
   topo_marks->scaleThreshold = 30.0;
 

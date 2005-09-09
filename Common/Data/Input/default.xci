@@ -44,6 +44,18 @@ data=LANDING
 event=StatusMessage Landing
 title=Landing
 
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_ABOVE
+event=PlaySound \My Documents\FinalGlide.wav
+event=StatusMessage Above Final Glide
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_BELOW
+event=PlaySound \My Documents\Tiptoe.wav
+event=StatusMessage Marginal Final Glide
+
 # ------------
 # mode=default
 # ------------
