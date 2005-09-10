@@ -186,7 +186,7 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   double theSinkRate;    
 
-#define AUDIOSCALE 100/5.0
+#define AUDIOSCALE 100/10.0  // +/- 10 m/s range
 
   if (Basic->AirspeedAvailable) {
     theSinkRate= GlidePolar::SinkRate(Basic->IndicatedAirspeed, n);
@@ -1560,7 +1560,7 @@ void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         {
           BelowGlide = FALSE;
 
-	  	InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
+	  InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
         }
     }
   else
@@ -1568,7 +1568,8 @@ void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       if(Calculated->TaskAltitudeDifference < 10)
         {
           BelowGlide = TRUE;
-	  	InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
+
+	  InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
         }
     }
 }
@@ -2175,11 +2176,13 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
     ActiveWayPoint = foundActiveWayPoint;
   } else {
     // if not found, keep on field or set active waypoint to closest
-    aa = CalculateWaypointArrivalAltitude(Basic, Calculated, Task[ActiveWayPoint].Index);
+    if (ActiveWayPoint>=0) {
+      aa = CalculateWaypointArrivalAltitude(Basic, 
+					    Calculated, 
+					    Task[ActiveWayPoint].Index);
+    }
     if (aa <= 0){
-
-      PostMessage(hWndMainWindow, WM_USER, 0, 0);
-
+      DoStatusMessage(TEXT("Closest Airfield\r\nChanged!"));
       ActiveWayPoint = 0;
     } else {
       SortedLandableIndex[MAXTASKPOINTS-1] = Task[ActiveWayPoint].Index;

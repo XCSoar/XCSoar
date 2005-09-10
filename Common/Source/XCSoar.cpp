@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.100 2005/09/09 16:35:30 jeffg1 Exp $
+  $Id: XCSoar.cpp,v 1.101 2005/09/10 12:42:17 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1035,18 +1035,30 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   InfoBoxLayout::ScreenGeometry(rc);
 
+  ////////////////////////
+
+  ///////////////////////////////////////// create infoboxes
+    
+    InfoBoxLayout::CreateInfoBoxes(rc);
+
+    ButtonLabel::CreateButtonLabels(rc);
+    ButtonLabel::SetLabelText(0,TEXT("MODE"));
+
   ////////////////// do fonts
 
   int fontsz1 = (rc.bottom - rc.top ); 
   int fontsz2 = (rc.right - rc.left );
 
   if (fontsz1>fontsz2) {
-    FontHeight = (int)(fontsz1/FONTHEIGHTRATIO/1.16);
+    FontHeight = (int)(fontsz1/FONTHEIGHTRATIO);
     FontWidth = (int)(FontHeight*0.4);
   } else {
-    FontHeight = (int)(fontsz2/FONTHEIGHTRATIO/1.16);
+    FontHeight = (int)(fontsz2/FONTHEIGHTRATIO);
     FontWidth = (int)(FontHeight*0.4);
   }
+
+  int iFontHeight = FontHeight*1.4;
+  // oversize first so can then scale down
 
   FontWidth = 0; // JMW this should be done so closest font is found
 
@@ -1054,17 +1066,34 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
         
   memset ((char *)&logfont, 0, sizeof (logfont));
 
-  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+  _tcscpy(logfont.lfFaceName, _T("DejaVu Sans Condensed"));
 
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
-  logfont.lfHeight = FontHeight; // *1.08;
+  logfont.lfHeight = iFontHeight;
   logfont.lfWidth =  FontWidth;
   logfont.lfWeight = FW_BOLD;
-  logfont.lfItalic = TRUE;
+    logfont.lfItalic = TRUE;
   logfont.lfCharSet = ANSI_CHARSET;
   ApplyClearType(&logfont);
 
+  // JMW algorithm to auto-size info window font.
+  SIZE tsize;
+  HDC iwhdc = GetDC(hWndInfoWindow[0]);
+  do {
+    iFontHeight--;
+    logfont.lfHeight = iFontHeight;
+    InfoWindowFont = CreateFontIndirect (&logfont);
+    SelectObject(iwhdc, InfoWindowFont);
+    GetTextExtentPoint(iwhdc, TEXT("00:00"), 5, &tsize);
+    DeleteObject(InfoWindowFont);
+  } while (tsize.cx>InfoBoxLayout::ControlWidth);
+  ReleaseDC(hWndInfoWindow[0], iwhdc);
+
+  iFontHeight++;
+  logfont.lfHeight = iFontHeight;
   InfoWindowFont = CreateFontIndirect (&logfont);
+
+  // next font..
 
   memset ((char *)&logfont, 0, sizeof (logfont));
 
@@ -1135,15 +1164,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWidth =  0; // JMW (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
 
   MapWindowBoldFont = CreateFontIndirect (&logfont);
-
-
-  ///////////////////////////////////////// create infoboxes
-    
-    InfoBoxLayout::CreateInfoBoxes(rc);
-
-    ButtonLabel::CreateButtonLabels(rc);
-    ButtonLabel::SetLabelText(0,TEXT("MODE"));
-  /////////////
 
   for(i=0;i<numInfoWindows;i++)
     {
@@ -1321,9 +1341,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   switch (message) 
     {
 
-    case WM_USER:
-      DoStatusMessage(TEXT("Closest Airfield\r\nChanged!"));
-	  break;
 
     case WM_ERASEBKGND:
       return TRUE; // JMW trying to reduce screen flicker
