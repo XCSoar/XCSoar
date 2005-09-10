@@ -1681,9 +1681,9 @@ void SaveSoundSettings()
 {
   SetToRegistry(szRegistrySoundVolume, (DWORD)SoundVolume);
   SetToRegistry(szRegistrySoundDeadband, (DWORD)SoundDeadband);
-  SetToRegistry(szRegistrySoundAudioVario, EnableSoundVario ? 1 : 0);
-  SetToRegistry(szRegistrySoundTask, EnableSoundTask ? 1 : 0);
-  SetToRegistry(szRegistrySoundModes, EnableSoundModes ? 1 : 0);
+  SetToRegistry(szRegistrySoundAudioVario, EnableSoundVario);
+  SetToRegistry(szRegistrySoundTask, EnableSoundTask);
+  SetToRegistry(szRegistrySoundModes, EnableSoundModes);
 }
 
 
