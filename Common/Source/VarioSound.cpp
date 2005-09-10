@@ -1002,7 +1002,7 @@ extern "C" {
     variosound_vscale_last = variosound_vscale_in;
 
     // set new value, clipped
-    variosound_vscale_in = (short)max(-100,min(v+2.2*randomgaussian(),100));
+    variosound_vscale_in = (short)max(-100,min(v+1.3*randomgaussian(),100));
 
     // calculate time elapsed since last sound,
     // usually this will be 500 or 1000 ms
