@@ -2185,7 +2185,12 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
       DoStatusMessage(TEXT("Closest Airfield\r\nChanged!"));
       ActiveWayPoint = 0;
     } else {
-      SortedLandableIndex[MAXTASKPOINTS-1] = Task[ActiveWayPoint].Index;
+      if (ActiveWayPoint>=0) {
+	SortedLandableIndex[MAXTASKPOINTS-1] = Task[ActiveWayPoint].Index;
+      } else {
+	// JMW not sure this is right..
+	SortedLandableIndex[MAXTASKPOINTS-1] = 0;
+      }
       ActiveWayPoint = MAXTASKPOINTS-1;
     }
   }
