@@ -1569,7 +1569,7 @@ void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         {
           BelowGlide = TRUE;
 
-	  InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
+	  InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_BELOW);
         }
     }
 }
