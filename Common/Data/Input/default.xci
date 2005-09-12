@@ -64,10 +64,10 @@ event=StatusMessage Marginal Final Glide
 
 mode=default
 type=key
-data=APP1
+data=APP4
 event=ScreenModes toggle
 label=
-location=1
+location=4
 title=Toggle the screen modes (full, navboxes)
 
 mode=default
@@ -90,10 +90,10 @@ title=Mark the current location into a file
 
 mode=default
 type=key
-data=APP4
+data=APP1
 event=Mode Menu1
-label=Main
-location=4
+label=Main/
+location=1
 title=Display more configuration options
 
 mode=default
