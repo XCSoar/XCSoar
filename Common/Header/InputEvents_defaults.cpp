@@ -52,8 +52,8 @@ GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_BELOW] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT(""),1,event_id);
-Key2Event[mode_id][VK_APP1] = event_id;
+makeLabel(mode_id,TEXT(""),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("show"), event_id);
@@ -72,8 +72,8 @@ Key2Event[mode_id][VK_APP3] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Menu1"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT("Main"),4,event_id);
-Key2Event[mode_id][VK_APP4] = event_id;
+makeLabel(mode_id,TEXT("Main/"),1,event_id);
+Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("auto show"), event_id);
