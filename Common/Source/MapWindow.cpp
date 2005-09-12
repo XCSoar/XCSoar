@@ -1356,15 +1356,31 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
   } else {
     SelectObject(hDCTemp,hCruise);
   }
+  // Code already commented as of 12aug05 - redundant? -st
   //		BitBlt(hdc,rc.right-35,5,24,20,
   //				 hDCTemp,20,0,SRCAND);
-  BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
-    hDCTemp,0,0,SRCAND);
   
+  // code for pre 12aug icons - st
+  //BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
+  //  hDCTemp,0,0,SRCAND);
+  
+  BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
+    hDCTemp,0,0,SRCPAINT);
+  BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
+    hDCTemp,24,0,SRCAND);
+
   if (DerivedDrawInfo.AutoMcCready) {
     SelectObject(hDCTemp,hAutoMcCready);
+    
+	//changed draw mode & icon for higher opacity 12aug -st
+	BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
+      hDCTemp,0,0,SRCPAINT);
     BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
-      hDCTemp,0,0,SRCAND);
+      hDCTemp,24,0,SRCAND);
+
+  //  commented @ 12aug st
+  //  BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
+  //    hDCTemp,0,0,SRCAND);
   };
   
 }
