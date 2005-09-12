@@ -39,7 +39,7 @@ while (<>) {
 				$event = "&event$event";
 				die "Invalid event $event near $line" unless ($event =~ /^&event[A-Z].+$/);
 				$misc ||= "";
-				$misc =~ s|\\[^rn]|\\\\|g;
+				$misc =~ s|\\([^rn])|\\\\$1|g if ($misc);
 				print qq{event_id = InputEvents::makeEvent($event, TEXT("$misc"), event_id);\n};
 			}
 
@@ -50,7 +50,7 @@ while (<>) {
 
 				# Mode string
 				my $label = $rec{label};
-				$label =~ s|\\[^rn]|\\\\|g;
+				$label =~ s|\\([^rn])|\\\\$1|g if ($label);
 				my $location = $rec{location};
 				if ($location) {
 					print qq{makeLabel(mode_id,TEXT("$label"),$location,event_id);\n};
