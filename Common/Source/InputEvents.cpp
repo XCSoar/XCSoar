@@ -156,7 +156,7 @@ void InputEvents::readFile() {
   while (
 	 fgetws(buffer, 2048, fp)
 	 // XXX What about \r - as in \r\n ?
-	 // XXX Note that ^# does not allow # in key - might be required
+	 // XXX Note that ^# does not allow # in key - might be required (probably not)
 	 //		Better way is to separate the check for # and the scanf 
 	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
   ) {
