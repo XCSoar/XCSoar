@@ -2360,12 +2360,12 @@ TCHAR* LocalPath(TCHAR* file, int loc) {
 
 void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc)
 {
-	for(int i = 0; i < _tcslen(pszSrc); i++)
+	for(unsigned int i = 0; i < _tcslen(pszSrc); i++)
 		pszDest[i] = (CHAR) pszSrc[i];
 }
 
 void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc)
 {
-	for(int i = 0; i < strlen(pszSrc); i++)
+	for(unsigned int i = 0; i < strlen(pszSrc); i++)
 		pszDest[i] = (TCHAR) pszSrc[i];
 }
