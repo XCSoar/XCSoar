@@ -3205,8 +3205,6 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       return TRUE;
 
     case WM_KEYUP:
-		// XXX SDP - This looks like a debug line ? JW?
-      //      DoStatusMessage(TEXT("Event in dialog"));
       if (InputEvents::processKey(wParam)) {
 	return TRUE;
       }
@@ -3659,7 +3657,7 @@ void ShowStatusMessage(TCHAR* text, int delay_ms,
 		       int iFontHeightRatio,
                        bool docenter, int *TabStops) {
 
-  // JMW new interface...///// XXXX todo work out how to set the type properly
+  // JMW new interface...///// XXX todo work out how to set the type properly
   Message::AddMessage(delay_ms, 1, text);
   return;
   //////////////
