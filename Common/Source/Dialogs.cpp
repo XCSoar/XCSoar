@@ -690,7 +690,11 @@ LRESULT CALLBACK AudioSettings(HWND hDlg, UINT message,
               NettoSpeed = Temp1;
               SetToRegistry(szRegistryNettoSpeed,(DWORD)NettoSpeed);
             }
+
+	  SaveSoundSettings();
+
         }
+
       break;
 
 

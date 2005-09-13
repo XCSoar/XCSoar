@@ -1319,8 +1319,8 @@ void MapWindow::DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h) {
 
 void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
 {
-  TCHAR gpswarningtext1[] = TEXT("GPS Not Connected");
-  TCHAR gpswarningtext2[] = TEXT("GPS 2D fix");
+  TCHAR gpswarningtext1[] = TEXT("GPS not connected");
+  TCHAR gpswarningtext2[] = TEXT("GPS waiting for fix");
 
   if (extGPSCONNECT && !(DrawInfo.NAVWarning))
     // nothing to do

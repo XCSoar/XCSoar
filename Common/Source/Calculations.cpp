@@ -169,6 +169,8 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 }
 
 
+extern int jmw_demo;
+
 void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double n;
 
@@ -186,7 +188,7 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   double theSinkRate;
 
-#define AUDIOSCALE 100/10.0  // +/- 10 m/s range
+#define AUDIOSCALE 100/7.5  // +/- 7.5 m/s range
 
   if (Basic->AirspeedAvailable) {
     theSinkRate= GlidePolar::SinkRate(Basic->IndicatedAirspeed, n);
@@ -258,9 +260,9 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 
   Calculated->STFMode = false;
+  double vdiff;
 
-  if (Basic->AirspeedAvailable || 1) { // JMW testing...
-    double vdiff;
+  if (Basic->AirspeedAvailable) {
     if (Basic->AirspeedAvailable) {
       vdiff = 100*(1.0-Calculated->VOpt/(Basic->IndicatedAirspeed+0.01));
     } else {
@@ -268,25 +270,37 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
     VarioSound_SetVAlt((short)(vdiff));
     Calculated->STFMode = false;
-    VarioSound_SetSTFMode(false);
     if ((Basic->Speed>NettoSpeed)||
 	((Calculated->VOpt>NettoSpeed)&&(Basic->Speed<Calculated->VOpt*1.1))
 	){
       Calculated->STFMode = true;
-      VarioSound_SetSTFMode(true);
     }
     // lock on when supernetto climb rate is half mc
     if (dmc< MCCREADY/LIFTMODIFY/2.0) {
       Calculated->STFMode = false;
-      VarioSound_SetSTFMode(false);
     }
     // lock on in circling
     if (Calculated->Circling) {
       Calculated->STFMode = false;
-      VarioSound_SetSTFMode(false);
     }
     // TODO: Work out effect on mccready speed to be in speed error
     // and the volume should be scaled by this.
+  }
+
+  // STF test
+  if (jmw_demo==1) {
+    Calculated->STFMode = true;
+    Calculated->VOpt = 35.0;
+    vdiff = 100*(1.0-Calculated->VOpt/(Basic->IndicatedAirspeed+0.01));
+    VarioSound_SetVAlt((short)(vdiff));
+    VarioSound_SetSTFMode(Calculated->STFMode);
+  }
+  // Climb test
+  if (jmw_demo==2) {
+    Calculated->STFMode = false;
+    VarioSound_SetV((short)(Basic->Vario*AUDIOSCALE));
+    VarioSound_SetVAlt(0);
+    VarioSound_SetSTFMode(Calculated->STFMode);
   }
 
 }

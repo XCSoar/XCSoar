@@ -56,6 +56,7 @@ class InputEvents {
   static void eventNearestWaypointDetails(TCHAR *misc);
   static void eventNearestAirspaceDetails(TCHAR *misc);
   static void eventRepeatStatusMessage(TCHAR *misc);
+  static void eventAudioDeadband(TCHAR *misc);
 
   // -------
 

@@ -187,42 +187,24 @@ void	McCreadyProcessing(int UpDown)
 
   } else if (UpDown==0)
     {
-      CALCULATED_INFO.AutoMcCready = !CALCULATED_INFO.AutoMcCready; // JMW toggle automacready
+      CALCULATED_INFO.AutoMcCready = !CALCULATED_INFO.AutoMcCready;
+      // JMW toggle automacready
 	}
   else if (UpDown==-2)
     {
-      CALCULATED_INFO.AutoMcCready = false;						// SDP on auto mccready
+      CALCULATED_INFO.AutoMcCready = false;  // SDP on auto mccready
 
     }
   else if (UpDown==+2)
     {
-      CALCULATED_INFO.AutoMcCready = true;						// SDP off auto mccready
+      CALCULATED_INFO.AutoMcCready = true;	// SDP off auto mccready
 
     }
 
   devPutMcCready(devA(), MCCREADY); // NOTE THIS IS IN USER UNITS
   devPutMcCready(devB(), MCCREADY);
 
-  // JMW testing only
-  if (Port2Available && GPS_INFO.VarioAvailable) {
-    if (UpDown==1) {
-      Port2WriteNMEA(TEXT("PDVTM,2"));
-    }
-    if (UpDown==-1) {
-	Port2WriteNMEA(TEXT("PDVTM,0"));
-    }
-    if (UpDown== 0) {
-	Port2WriteNMEA(TEXT("PDAPL,52"));
-    }
-    //    Port2WriteString(TEXT("$PDVTM,1*46\r\n"));
-    //    Port2WriteString(TEXT("$PDAPL,52*62\r\n"));
-    //    Port2WriteString(TEXT("$PDVAD,10,-10,0*76\r\n"));
-    //    Port2WriteString(TEXT("$PDVGP,-123,777,-1543,-9,0*59\r\n"));
-    //    Port2WriteString(TEXT("$PDVMC,20,300,0,220,1013*52\r\n"));
-    //    Port2WriteString(TEXT("$PDVAL,90,750,300,100,0*6A\r\n"));
-  }
-
-	return;
+  return;
 }
 
 extern void PopupWaypointDetails();
@@ -653,12 +635,14 @@ void FormatterWaypoint::Render(HWND hWnd) {
         }
       else if( DisplayTextType == DISPLAYNUMBER)
         {
-          _stprintf(Text,TEXT("%d"),WayPointList[ Task[ActiveWayPoint].Index ].Number );
+          _stprintf(Text,TEXT("%d"),
+		    WayPointList[ Task[ActiveWayPoint].Index ].Number );
         }
       else
         {
           _tcsncpy(Text,WayPointList[ Task[ActiveWayPoint].Index ].Name,5);
           Text[5] = '\0';
+	  // JMW this needs some work, can still be too wide for infobox
         }
     }
   else

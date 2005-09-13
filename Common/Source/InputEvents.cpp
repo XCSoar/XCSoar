@@ -894,21 +894,70 @@ void InputEvents::eventWind(TCHAR *misc) {
 }
 
 
+int jmw_demo=0;
+
 void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
   if (!(Port2Available && GPS_INFO.VarioAvailable))
     return;
 
-  //  Port2WriteNMEA(TEXT("PDAPL,52"));
-
   if (wcscmp(misc, TEXT("slow")) == 0) {
-    Port2WriteNMEA(TEXT("PDVTM,2"));
+    Port2WriteNMEA(TEXT("PDVTM,3"));
+    return;
   }
   if (wcscmp(misc, TEXT("medium")) == 0) {
-    Port2WriteNMEA(TEXT("PDVTM,1"));
+    Port2WriteNMEA(TEXT("PDVTM,2"));
+    return;
   }
   if (wcscmp(misc, TEXT("fast")) == 0) {
-    Port2WriteNMEA(TEXT("PDVTM,0"));
+    Port2WriteNMEA(TEXT("PDVTM,1"));
+    return;
   }
+  if (wcscmp(misc, TEXT("statistics"))==0) {
+    Port2WriteNMEA(TEXT("PDVDM,0,1"));
+    jmw_demo=0;
+    return;
+  }
+  if (wcscmp(misc, TEXT("diagnostics"))==0) {
+    Port2WriteNMEA(TEXT("PDVDM,0,2"));
+    jmw_demo=0;
+    return;
+  }
+  if (wcscmp(misc, TEXT("psraw"))==0) {
+    Port2WriteNMEA(TEXT("PDVDM,0,3"));
+    return;
+  }
+  if (wcscmp(misc, TEXT("democlimb"))==0) {
+    Port2WriteNMEA(TEXT("PDVDM,2,0"));
+    jmw_demo=2;
+    return;
+  }
+  if (wcscmp(misc, TEXT("demostf"))==0) {
+    Port2WriteNMEA(TEXT("PDVDM,1,0"));
+    jmw_demo=1;
+    return;
+  }
+  //    Port2WriteNMEA(TEXT("PDVTC,5,1,0"));
+  //    Port2WriteNMEA(TEXT("PDVAC,18204,421,18204,410"));
+
+}
+
+
+void InputEvents::eventAudioDeadband(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("+"))) {
+    SoundDeadband++;
+  }
+  if (wcscmp(misc, TEXT("-"))) {
+    SoundDeadband--;
+  }
+  SoundDeadband = min(40,max(SoundDeadband,0));
+  VarioSound_SetVdead(SoundDeadband);
+  SaveSoundSettings(); // save to registry
+
+  if (!(Port2Available && GPS_INFO.VarioAvailable))
+    return;
+
+  // JMW TODO send to vario if available
+
 }
 
 
