@@ -1615,8 +1615,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		// save registry backup first (try a few places)
 		SaveRegistryToFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));
 		// SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
-		// XXX Hard coded file needs fixing - lookup where my documents i automatically
-		SaveRegistryToFile(TEXT("\\\\My Documents\\xcsoar-registry.prf"));
+		SaveRegistryToFile(LocalPath(TEXT("xcsoar-registry.prf")));
 
 		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
 		SendMessage (hWnd, WM_CLOSE, 0, 0);
