@@ -11,6 +11,12 @@ To do for next version:
   the code we have only finds airspace enclosing a place.
 
 Changes from 4.5beta2 to 4.5beta3
+- Confilg files (input, language and status) now support "\r\n" strings correctly
+- PlaySound now supports external WAV files automatically. Also allows WAV files
+  to be referenced as Input Events - assumes local resource unless ends in ".wav"
+- Automatically lookup localised "My Documents" directory to support multiple
+  language releases of Pocket PC
+- Version number (build date) is automatically generated for non-released versions
 - Added debounce timeout registry setting in settings->interface files
 - Added input menu timeout
 - Added new status message interface (thread-safe, single window, ability
