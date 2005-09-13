@@ -34,7 +34,7 @@ Changes from 4.5beta2 to 4.5beta3
 - Allow acknowledgement of individual airspaces, and per-day
 - Fix acknowledgement bug when re-entering airspace
 - Minor font adjustments
-- "GPS 2D fix" changed to "GPS fix invalid"
+- "GPS 2D fix" changed to "GPS waiting for fix"
 
 Changes from 4.22 to 4.5beta2
 

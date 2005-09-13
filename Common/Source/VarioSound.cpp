@@ -27,7 +27,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
 #include <stdlib.h>
 
-#define SIMULATENOISE 1
+#define SIMULATENOISE 0
 #ifdef DEBUGAUDIO
 #endif
 
@@ -157,7 +157,7 @@ unsigned char audio_sound_loud(unsigned short i, bool beep) {
     if (audio_soundfrequency != audio_altsoundfrequency) {
       phase = (((i-audio_phase_i)*audio_altsoundfrequency) >> 8)+ audio_phase;
     } else {
-      return 0x80;
+      return 0x80; // return silence
     }
   }
 
@@ -179,37 +179,46 @@ unsigned char audio_sound_loud(unsigned short i, bool beep) {
 //   3: solid sound
 // other types may be added later to implement hurry-up sounds etc.
 
-bool beepadvance = false;
+
+typedef struct{
+  unsigned Index:16;
+  unsigned Last:1;
+  unsigned WaitZerroCross:1;
+  unsigned Advance:1;
+}AudioSoundStatic_t;
+
+static AudioSoundStatic_t Beep = {0,0,0,0};
+
 
 unsigned char audio_sound_beep(unsigned short i) {
   unsigned char phase;
   phase = (i*audio_beepfrequency) >> 8;
 
-  beepadvance = false;
+  Beep.Advance = false;
 
   switch (audio_soundtype) {
   case 0: // silence
-    beepadvance = true;
+    Beep.Advance=true;
     return 0;
   case 1: // positive sound, short beep
     if (phase<64) {
-      beepadvance=true;
+      Beep.Advance=true;
       return 1;
     }
     else
       return 0;
   case 2: // negative sound, long beep
     if (phase<200) {
-      beepadvance=true;
+      Beep.Advance=true;
       return 1;
     } else
       return 0;
   case 3: // solid sound
-    beepadvance = true;
+    Beep.Advance=true;
     return 1;
   case 4: // two short beeps
     if (phase<24) {
-      beepadvance = true;
+      Beep.Advance = true;
       return 1;
     }
     if ((phase>48)&&(phase<76)) {
@@ -218,13 +227,13 @@ unsigned char audio_sound_beep(unsigned short i) {
     return 0;
   case 5: // equal beep
     if (phase<128) {
-      beepadvance=true;
+      Beep.Advance=true;
       return 1;
     } else
       return 0;
   }
-  beepadvance = true;
   // unknown
+  Beep.Advance = true;
   return 0;
 }
 
@@ -232,21 +241,39 @@ unsigned char audio_sound_beep(unsigned short i) {
 // Retrieve the next sound byte
 //
 unsigned char audio_get_sound_byte(void) {
-  static unsigned short i=0; 
-  static unsigned char beeplast=0;
   unsigned char beepthis;
+  unsigned char makebeepsound;
 
-  i++;
-  beepthis = audio_sound_beep(i);
-  if (beepthis && (beeplast==0) && beepadvance) { 
-    // rolled over new beep, restart phase counter
-    i=0;
+  // increment beep phase
+  Beep.Index++;
+
+  // check if this sound type makes a beep
+  beepthis = audio_sound_beep(Beep.Index);
+
+  // check to see if we can reset the beep phase data
+  if (beepthis && (Beep.Last==0) && (Beep.Advance)) { 
+    // rolled over new beep and the sound mode allows advance,
+    // so restart phase counter
+    Beep.Index=0;
     audio_phase = 0;
     audio_phase_i = 0;
-
   }
-  beeplast = beepthis;
-  return audio_sound_loud(i, (beepthis > 0));
+  Beep.Last = beepthis;
+
+  // continue to make a beep if waiting for zero crossing or it's a
+  // real beep anyway
+  makebeepsound = beepthis || Beep.WaitZerroCross;
+
+  // find the sound sample
+  signed char sample = audio_sound_loud(Beep.Index, makebeepsound);
+
+  if (makebeepsound) {
+    // wait for zero crossing before finishing beep
+    Beep.WaitZerroCross = beepthis  // still need a real beep
+      || (abs(sample+0x80) > 10);   // or zero crossing hasn't occurred
+  }
+
+  return(sample);
 }
 
 // sin function indexed by unsigned char.  This is a fast implementation.
@@ -1023,8 +1050,8 @@ extern "C" {
 
     EnterCriticalSection(&CritSec_VarioSound);
  
-    audio_deadband_hi = 100+v-12;
-    audio_deadband_low = 100-v-24;
+    audio_deadband_hi = 100+v/2;
+    audio_deadband_low = 100-v/2;
     // TODO
 
     LeaveCriticalSection(&CritSec_VarioSound);
@@ -1149,10 +1176,11 @@ void audio_soundmode_volume(void) {
     audio_volume = (audio_volume*6+2*max(3, 3+min(grad/8, 5)))/8;
   }
   // if gradient/urgency is high, suppress deadband
-  if (audio_volume>3) {
+  if (audio_volume>5) {
     suppressdeadband = true;
+  } else {
+    suppressdeadband = false;
   }
-
 }
 
 
@@ -1160,7 +1188,7 @@ void audio_soundmode_smooth(short vinst, short vstf) {
   audiofilter.vstfsmoothlast = audiofilter.vstfsmooth;
   audiofilter.vstfsmooth = (7*audiofilter.vstfsmooth+1*vstf)/8;
   audiofilter.vsmoothlast = audiofilter.vsmooth;
-  audiofilter.vsmooth = max(0, min((6*audiofilter.vsmooth+2*vinst)/8, 200));
+  audiofilter.vsmooth = max(0, min((4*audiofilter.vsmooth+4*vinst)/8, 200));
   audiofilter.vcur = max(0, min(vinst,200));
 }
 
@@ -1171,11 +1199,15 @@ void audio_soundmode_cruise(void) {
   // if too fast, type=continuous
   // if in deadband zone, silence
 
+  // sound tone equal to speed command:
+  // if too slow, pitch is low (like sink tone)
+  // if too fast, pitch is high (like climb tone)
+
   short vthis;
 
   audio_soundtype = 0; // quiet
 	
-  if ((audiofilter.vstfsmooth>5)||(audiofilter.vstfsmooth< -5)) {
+  if ((audiofilter.vstfsmooth>1)||(audiofilter.vstfsmooth< -1)) {
     // only make sounds required if speed is more than 10% too fast
     // or 5% too slow
     // (this is speed-to-fly deadband)
@@ -1188,7 +1220,7 @@ void audio_soundmode_cruise(void) {
       audio_beepfrequency = audio_delaytable(10); // long period
       audio_soundfrequency = audio_frequencytable((unsigned char)vthis);
       
-    }
+    } else
     if (audiofilter.vstfsmooth<0) { // speed up
       
       audio_soundtype = 4; // double beep
@@ -1197,6 +1229,10 @@ void audio_soundmode_cruise(void) {
       
     }
   }
+
+  // this disables alternate sound
+  audio_altsoundfrequency = audio_soundfrequency;
+
 }
 
 
@@ -1206,18 +1242,25 @@ void audio_soundmode_climb(void) {
   // if in sink, and below deadband or deadband suppressed, type=continuous
   // if in deadband zone, silence
 
-  audio_soundtype = 0;
+  // main vario sound frequency based on instantaneous reading
+  audio_soundfrequency = audio_frequencytable((unsigned char)audiofilter.vcur);
 
-  if (audiofilter.vsmooth>= audio_deadband_hi) {
+  // beep frequency based on smoothed input to prevent jumps
+  audio_beepfrequency = audio_delaytable((unsigned char)audiofilter.vsmooth);
+
+  // this disables alternate sound
+  audio_altsoundfrequency = audio_soundfrequency;
+
+  if (audiofilter.vcur>= audio_deadband_hi) {
     audio_soundtype = 1;
   } else if (suppressdeadband && (audiofilter.vsmooth>=100)) {
     audio_soundtype = 1;
-  }
-
-  if (audiofilter.vsmooth<= audio_deadband_low) {
+  } else if (audiofilter.vcur<= audio_deadband_low) {
     audio_soundtype = 3;
   } else if (suppressdeadband && (audiofilter.vsmooth<100)) {
     audio_soundtype = 3;
+  } else {
+    audio_soundtype = 0;
   }
 
 }
@@ -1245,15 +1288,6 @@ void audio_soundmode(short vinst, short vstf) {
   audio_soundmode_smooth(vinst, vstf);
 
   audio_soundmode_volume();
-
-  // main vario sound frequency based on instantaneous reading
-  audio_soundfrequency = audio_frequencytable((unsigned char)audiofilter.vcur);
-
-  // beep frequency based on smoothed input to prevent jumps
-  audio_beepfrequency = audio_delaytable((unsigned char)audiofilter.vsmooth);
-
-  // this disables alternate sound
-  audio_altsoundfrequency = audio_soundfrequency;
 
   // apply sounds
   short stalldelta = 0; // MCCREADY*10;

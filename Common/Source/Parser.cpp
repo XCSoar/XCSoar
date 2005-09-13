@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: Parser.cpp,v 1.16 2005/09/08 23:36:14 jwharington Exp $
+  $Id: Parser.cpp,v 1.17 2005/09/13 18:53:10 jwharington Exp $
 */
 
 #include "stdafx.h"
@@ -43,6 +43,7 @@ static BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO);
 
+static BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDAPL(TCHAR *String, NMEA_INFO *GPS_INFO);
 
@@ -82,7 +83,7 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
     {
       return FALSE;
     }
-
+  
   if(!NMEAChecksum(String))
     {
       return FALSE;
@@ -119,13 +120,26 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
         {
           return PDVDV(&String[7], GPS_INFO);
         }
+      if(_tcscmp(SentanceString,TEXT("PDVDS"))==0)
+        {
+          return PDVDS(&String[7], GPS_INFO);
+        }
+      if(_tcscmp(SentanceString,TEXT("PDVSD"))==0)
+	{
+	  TCHAR cptext[80];
+	  wsprintf(cptext,TEXT("%s"), &String[7]);
+	  DoStatusMessage(cptext);
+	  return FALSE;
+	}
 
       // JMW testing only
+      /*
       if(_tcscmp(SentanceString,TEXT("PDAPL"))==0)
         {
-	  PlayResource(TEXT("IDR_WAV_GREEN"));
+	  DoStatusMessage(TEXT("Recv APL"));
           return FALSE;
         }
+      */
 
       return FALSE;
     }
@@ -611,7 +625,6 @@ BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   double vtas, vias, wnet;
   TCHAR ctemp[80];
-  // for testing only, this is really static pressure
 
   ExtractParameter(String,ctemp,0);
   vtas = StrToDouble(ctemp,NULL)/TOKNOTS;
@@ -777,6 +790,24 @@ BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
+// $PDVDS,nx,nz,flap,stallratio
+BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+  TCHAR ctemp[80];
+
+  ExtractParameter(String,ctemp,0);
+  GPS_INFO->AccelX = StrToDouble(ctemp,NULL)/AccelerometerZero;
+  ExtractParameter(String,ctemp,1);
+  GPS_INFO->AccelZ = StrToDouble(ctemp,NULL)/AccelerometerZero;
+  int mag = isqrt4((int)((GPS_INFO->AccelX*GPS_INFO->AccelX
+			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
+  GPS_INFO->Gload = mag/100.0;
+  GPS_INFO->AccelerationAvailable = TRUE;
+
+  return FALSE;
+}
+
+
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
 
 BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
@@ -787,7 +818,6 @@ BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->Vario = StrToDouble(ctemp,NULL)/10.0;
   GPS_INFO->VarioAvailable = TRUE;
 
-  /*
   ExtractParameter(String,ctemp,1);
   GPS_INFO->IndicatedAirspeed = StrToDouble(ctemp,NULL)/10.0;
   GPS_INFO->AirspeedAvailable = TRUE;
@@ -795,7 +825,6 @@ BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
   ExtractParameter(String,ctemp,2);
   double densityratio = StrToDouble(ctemp,NULL)/1024.0;
   GPS_INFO->TrueAirspeed = GPS_INFO->IndicatedAirspeed*densityratio;
-  */
 
   ExtractParameter(String,ctemp,3);
   GPS_INFO->BaroAltitude = StrToDouble(ctemp,NULL);
