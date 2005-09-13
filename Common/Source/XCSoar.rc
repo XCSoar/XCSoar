@@ -118,12 +118,11 @@ FONT 10, "System"
 BEGIN
     EDITTEXT        IDC_MESSAGE,4,125,124,14,ES_CENTER | ES_MULTILINE |
                     ES_AUTOHSCROLL | ES_READONLY
-    RTEXT           "unknown",IDC_VERSION,97,116,30,8
+    RTEXT           "unknown",IDC_VERSION,10,116,117,8
     CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,2,2,
                     129,113
     CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,
                     4,141,124,8
-    RTEXT           "Version",IDC_VERSIONTEXT,29,116,63,8
 END
 
 IDD_PROGRESS_LANDSCAPE DIALOG DISCARDABLE  0, 0, 153, 118
@@ -132,12 +131,11 @@ FONT 10, "System"
 BEGIN
     EDITTEXT        IDC_MESSAGE,3,91,147,14,ES_CENTER | ES_MULTILINE |
                     ES_AUTOHSCROLL | ES_READONLY
-    RTEXT           "unknown",IDC_VERSION,119,82,30,8
+    RTEXT           "unknown",IDC_VERSION,27,82,122,8
     CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,2,2,
                     148,78
     CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,
                     3,108,148,8
-    RTEXT           "Version",IDC_VERSIONTEXT,53,82,63,8
 END
 
 IDD_SELECT DIALOG DISCARDABLE  0, 0, 140, 123
@@ -1069,7 +1067,7 @@ IDR_REMOVE              WAVE    DISCARDABLE     "bitmaps\\Remove.wav"
 // Dialog
 //
 
-IDD_WAYPOINTDETAILS DIALOGEX 0, 0, 136, 154
+IDD_WAYPOINTDETAILS DIALOG DISCARDABLE  0, 0, 136, 154
 STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP
 EXSTYLE WS_EX_STATICEDGE
 FONT 12, "System"

@@ -51,8 +51,7 @@
 #include "InputEvents.h"
 #include "Message.h"
 
-// Temporary version location (will be automatically generated)
-extern TCHAR* XCSoar_Version = TEXT("4.5 BETA 2");
+extern TCHAR XCSoar_Version[256] = TEXT("");
 
 HWND hWnd1, hWnd2, hWnd3;
 
@@ -757,6 +756,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   MSG msg;
   HACCEL hAccelTable;
   INITCOMMONCONTROLSEX icc;
+
+  // Version String
+  wcscat(XCSoar_Version, TEXT("Alpha "));
+  wcscat(XCSoar_Version, TEXT(__DATE__));
+  // (normal) wcscat(XCSoar_Version, TEXT("4.5 BETA 3"));
 
   // load registry backup if it exists
   LoadRegistryFromFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));

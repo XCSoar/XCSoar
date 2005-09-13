@@ -3830,8 +3830,9 @@ HWND CreateProgressDialog(TCHAR* text) {
 		     (DLGPROC)Progress);
     }
 
-    SetWindowText_gettext(hProgress, IDC_VERSIONTEXT);
-    SetWindowText(GetDlgItem(hProgress,IDC_VERSION),XCSoar_Version);
+	TCHAR Temp[1024];
+	wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
+    SetWindowText(GetDlgItem(hProgress,IDC_VERSION),Temp);
 
     ShowWindow(hProgress,SW_SHOW);
 
