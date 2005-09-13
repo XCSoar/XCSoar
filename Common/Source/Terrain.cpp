@@ -150,9 +150,13 @@ void SetTopologyBounds(RECT rcin) {
 void ReadTopology() {
 
   LockTerrainDataGraphics();
-	  // XXX My Documents hard coded - fix - lookup normal location 
+	  
+  // TODO - This convert to non-unicode will not support all languages
+  //		(some may use more complicated PATH names, containing Unicode)
+  char buffer[MAX_PATH];
+  ConvertTToC(buffer, LocalPath(TEXT("xcsoar-marks")));
   topo_marks = 
-	  new TopologyWriter("My Documents/xcsoar-marks", RGB(0xD0,0xD0,0xD0));
+	  new TopologyWriter(buffer, RGB(0xD0,0xD0,0xD0));
 
   topo_marks->scaleThreshold = 30.0;
 
@@ -193,10 +197,8 @@ void MarkLocation(double lon, double lat)
   sprintf(message,"Lon:%f Lat:%f\r\n", lon, lat);
 
   FILE *stream;
-  static TCHAR szFileName[] = TEXT("\\xcsoar-marks.txt");
-
-  stream = _wfopen(szFileName,TEXT("a+t"));
-
+  stream = _wfopen(LocalPath(TEXT("xcsoar-marks.txt")),TEXT("a+t"));
+ 
   fwrite(message,strlen(message),1,stream);
 
   fclose(stream);

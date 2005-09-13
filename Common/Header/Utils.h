@@ -115,4 +115,9 @@ typedef struct {
 // Parse string (new lines etc) and malloc the string
 TCHAR* StringMallocParse(TCHAR* old_string);
 
+TCHAR* LocalPath(TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
+
+void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
+void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
+
 #endif

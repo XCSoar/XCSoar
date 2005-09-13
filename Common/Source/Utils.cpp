@@ -2347,3 +2347,25 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
 
 	return new_string;
 }
+
+// Get local My Documents path - optionally include file to add and location
+//	(Warning - static buffer returned, use immediately - not thread safe !!!)
+TCHAR* LocalPath(TCHAR* file, int loc) {
+	static TCHAR buffer[MAX_PATH];
+	SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
+	wcsncat(buffer, TEXT("\\"), MAX_PATH);
+	wcsncat(buffer, file, MAX_PATH);
+	return buffer;
+}
+
+void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc)
+{
+	for(int i = 0; i < _tcslen(pszSrc); i++)
+		pszDest[i] = (CHAR) pszSrc[i];
+}
+
+void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc)
+{
+	for(int i = 0; i < strlen(pszSrc); i++)
+		pszDest[i] = (TCHAR) pszSrc[i];
+}
