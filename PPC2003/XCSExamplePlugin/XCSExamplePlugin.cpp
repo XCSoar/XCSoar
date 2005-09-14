@@ -23,6 +23,6 @@ BOOL APIENTRY DllMain( HANDLE hModule,
     return TRUE;
 }
 
-extern void DemoSound(TCHAR *misc) {
-	sndPlaySound(misc, SND_ASYNC | SND_FILENAME);
+XCSEXAMPLEPLUGIN_API void DemoSound(TCHAR *misc) {
+  sndPlaySound(misc, SND_ASYNC | SND_FILENAME);
 }
