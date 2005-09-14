@@ -1,9 +1,8 @@
 mode=default
 type=key
 data=APP1
-event=Mode display1
-event=MarkLocation
-event=StatusMessage Hey we marked something
+event=DLLExecute XCSExamplePlugin.DLL PlaySound blah
+event=StatusMessage Call DLL
 label=Go
 location=1
 

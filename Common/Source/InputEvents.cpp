@@ -1177,6 +1177,33 @@ void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
 
 }
 
+typedef void (CALLBACK *DLLFUNC)(TCHAR*);
+void InputEvents::eventDLLExecute(TCHAR *misc) {
+	// LoadLibrary(TEXT("test.dll"));
+
+	TCHAR *dll_name = TEXT("XCSExamplePlugin.DLL");	// The filename for the DLL
+	TCHAR *func_name = TEXT("DemoSound");	// The function to find
+	TCHAR *other = TEXT("\\My Documents\\Sample2.wav");		// The other "misc" data to send (none means no send)
+
+	HINSTANCE hinstLib;		// Library pointer
+	DLLFUNC lpfnDLLProc;	// Function pointer
+
+	// Load library, find function, execute, unload library
+	hinstLib = LoadLibrary(dll_name);
+	if (hinstLib != NULL) {
+		lpfnDLLProc = (DLLFUNC)GetProcAddress(hinstLib,func_name);
+		if (lpfnDLLProc != NULL)
+			(*lpfnDLLProc)(other);
+		else {
+			DWORD le;
+			le = GetLastError();
+			TCHAR buffer[1024];
+			swprintf(buffer, TEXT("Problem = %d"), le);
+			Message::AddMessage(5000, 1, buffer);
+		}
+		FreeLibrary(hinstLib);
+	}
+}
 
 // JMW TODO: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.
