@@ -94,6 +94,9 @@ HBITMAP MapWindow::hAutoMcCready;
 HBITMAP MapWindow::hTerrainWarning;
 HBITMAP MapWindow::hGPSStatus1;
 HBITMAP MapWindow::hGPSStatus2;
+HBITMAP MapWindow::hAbort;
+HBITMAP MapWindow::hLogger;
+HBITMAP MapWindow::hLoggerOff;
 
   // 12 is number of airspace types
 int	 MapWindow::iAirspaceBrush[AIRSPACECLASSCOUNT]; 
@@ -570,6 +573,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hAutoMcCready=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
     hGPSStatus1=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS1));
     hGPSStatus2=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS2));
+    hAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_ABORT));
+    hLogger=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LOGGER));
+    hLoggerOff=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LOGGEROFF));
     
     // airspace brushes and colours
 
@@ -584,7 +590,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
         
     /* JMW created all re-used pens here */
     
-    hpAircraft = (HPEN)CreatePen(PS_SOLID, 3, RGB(0xa0,0xa0,0xa0));
+    hpAircraft = (HPEN)CreatePen(PS_SOLID, 3, RGB(0xf0,0xf0,0xf0));
     hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, 1, RGB(0x00,0x00,0x00));
     #if (MONOCHROME_SCREEN > 0)
     hpWind = (HPEN)CreatePen(PS_SOLID, 2, RGB(0,0,0));
@@ -659,6 +665,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject(hTerrainWarning);
     DeleteObject(hGPSStatus1);
     DeleteObject(hGPSStatus2);
+    DeleteObject(hAbort);
+    DeleteObject(hLogger);
+    DeleteObject(hLoggerOff);
     
     DeleteObject((HPEN)hpAircraft);
     DeleteObject((HPEN)hpAircraftBorder);
@@ -1348,13 +1357,52 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
 
 void MapWindow::DrawFlightMode(HDC hdc, RECT rc) 
 {
+  static bool flip= true;
+  static double LastTime = 0;
+  bool drawlogger = true;
+  static bool lastLoggerActive=false;
+
+  // has GPS time advanced?
+  if(DrawInfo.Time <= LastTime)
+    {
+      LastTime = DrawInfo.Time;       
+    } else {
+    flip = !flip;
+
+    // don't bother drawing logger if not active for more than one second
+    if ((!LoggerActive)&&(!lastLoggerActive)) {
+      drawlogger = false;
+    }
+    lastLoggerActive = LoggerActive;
+  }
+
+  int offset = -3;
   
-  if (DerivedDrawInfo.Circling) {
-    SelectObject(hDCTemp,hClimb);
-  } else if (DerivedDrawInfo.FinalGlide) {
-    SelectObject(hDCTemp,hFinalGlide);
+  if (drawlogger) {
+    offset -= 7;
+    
+    if (LoggerActive && flip) {
+      SelectObject(hDCTemp,hLogger);
+    } else {
+      SelectObject(hDCTemp,hLoggerOff);
+    }
+    //changed draw mode & icon for higher opacity 12aug -st
+    BitBlt(hdc,rc.right+offset-3,rc.bottom-7-3,7,7,
+	   hDCTemp,0,0,SRCPAINT);
+    BitBlt(hdc,rc.right+offset-3,rc.bottom-7-3,7,7,
+	   hDCTemp,7,0,SRCAND);
+  }
+
+  if (TaskAborted) {
+    SelectObject(hDCTemp,hAbort);
   } else {
-    SelectObject(hDCTemp,hCruise);
+    if (DerivedDrawInfo.Circling) {
+      SelectObject(hDCTemp,hClimb);
+    } else if (DerivedDrawInfo.FinalGlide) {
+      SelectObject(hDCTemp,hFinalGlide);
+    } else {
+      SelectObject(hDCTemp,hCruise);
+    }
   }
   // Code already commented as of 12aug05 - redundant? -st
   //		BitBlt(hdc,rc.right-35,5,24,20,
@@ -1363,24 +1411,28 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
   // code for pre 12aug icons - st
   //BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
   //  hDCTemp,0,0,SRCAND);
+
+  offset -= 24;
   
-  BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
+  BitBlt(hdc,rc.right+offset-3,rc.bottom-20-3,24,20,
     hDCTemp,0,0,SRCPAINT);
-  BitBlt(hdc,rc.right-24-3,rc.bottom-20-3,24,20,
+  BitBlt(hdc,rc.right+offset-3,rc.bottom-20-3,24,20,
     hDCTemp,24,0,SRCAND);
 
   if (DerivedDrawInfo.AutoMcCready) {
     SelectObject(hDCTemp,hAutoMcCready);
-    
-	//changed draw mode & icon for higher opacity 12aug -st
-	BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
-      hDCTemp,0,0,SRCPAINT);
-    BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
-      hDCTemp,24,0,SRCAND);
 
-  //  commented @ 12aug st
-  //  BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
-  //    hDCTemp,0,0,SRCAND);
+    offset -= 24;
+
+	//changed draw mode & icon for higher opacity 12aug -st
+    BitBlt(hdc,rc.right+offset-3,rc.bottom-20-3,24,20,
+	   hDCTemp,0,0,SRCPAINT);
+    BitBlt(hdc,rc.right+offset-3,rc.bottom-20-3,24,20,
+	   hDCTemp,24,0,SRCAND);
+
+    //  commented @ 12aug st
+    //  BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
+    //    hDCTemp,0,0,SRCAND);
   };
   
 }

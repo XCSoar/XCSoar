@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.103 2005/09/13 01:05:04 scottp Exp $
+  $Id: XCSoar.cpp,v 1.104 2005/09/14 05:25:28 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -1061,7 +1061,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     FontWidth = (int)(FontHeight*0.4);
   }
 
-  int iFontHeight = FontHeight*1.4;
+  int iFontHeight = (int)(FontHeight*1.4);
   // oversize first so can then scale down
 
   FontWidth = 0; // JMW this should be done so closest font is found

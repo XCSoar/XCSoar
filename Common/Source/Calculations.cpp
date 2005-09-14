@@ -302,7 +302,8 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     VarioSound_SetVAlt(0);
     VarioSound_SetSTFMode(Calculated->STFMode);
   }
-  
+  VarioSound_SoundParam();
+
 }
 
 

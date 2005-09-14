@@ -936,8 +936,12 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
     jmw_demo=1;
     return;
   }
-  //    Port2WriteNMEA(TEXT("PDVTC,5,1,0"));
-  //    Port2WriteNMEA(TEXT("PDVAC,18204,421,18204,410"));
+  if (wcscmp(misc, TEXT("zero"))==0) {
+    Port2WriteNMEA(TEXT("PDVTC,8,1,0"));
+    // zero, no mixing
+    // Port2WriteNMEA(TEXT("PDVAC,18204,421,18204,410"));
+    return;
+  }
 
 }
 
@@ -1058,16 +1062,22 @@ void InputEvents::eventLogger(TCHAR *misc) {
   // start stop toggle addnote
   if (wcscmp(misc, TEXT("start ask")) == 0) {
     guiStartLogger();
+    return;
   } else if (wcscmp(misc, TEXT("start")) == 0) {
     guiStartLogger(true);
+    return;
   } else if (wcscmp(misc, TEXT("stop ask")) == 0) {
     guiStopLogger();
+    return;
   } else if (wcscmp(misc, TEXT("stop")) == 0) {
     guiStopLogger(true);
+    return;
   } else if (wcscmp(misc, TEXT("toggle ask")) == 0) {
     guiToggleLogger();
+    return;
   } else if (wcscmp(misc, TEXT("toggle")) == 0) {
     guiToggleLogger(true);
+    return;
   } else if (wcscmp(misc, TEXT("show")) == 0) {
     if (LoggerActive) {
       DoStatusMessage(TEXT("Logger ON"));
