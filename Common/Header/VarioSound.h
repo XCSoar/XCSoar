@@ -20,6 +20,7 @@ BOOL PlayResource (LPTSTR lpName);
 
 extern "C" {
 VARIOSOUND_API void VarioSound_Init(void);
+VARIOSOUND_API void VarioSound_SoundParam(void);
 VARIOSOUND_API void VarioSound_SetV(short v);
 VARIOSOUND_API void VarioSound_SetSTFMode(bool);
 VARIOSOUND_API void VarioSound_SetVAlt(short v);

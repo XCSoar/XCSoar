@@ -217,7 +217,9 @@ void guiStartLogger(bool noAsk) {
 	_tcscat(TaskMessage,TEXT("\r\n"));
       }
 
-    if(noAsk || MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+    if(noAsk ||
+       (MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),
+		   MB_YESNO|MB_ICONQUESTION) == IDYES))
       {
 	LoggerActive = true;
 	StartLogger(strAssetNumber);
@@ -229,7 +231,9 @@ void guiStartLogger(bool noAsk) {
 	      Debounce();
 	      break;
 	    }
-	    AddDeclaration(WayPointList[Task[i].Index].Latitude , WayPointList[Task[i].Index].Longitude  , WayPointList[Task[i].Index].Name );
+	    AddDeclaration(WayPointList[Task[i].Index].Latitude,
+			   WayPointList[Task[i].Index].Longitude,
+			   WayPointList[Task[i].Index].Name );
 	  }
 	EndDeclaration();
       }
@@ -240,7 +244,9 @@ void guiStartLogger(bool noAsk) {
 
 void guiStopLogger(bool noAsk) {
   if (LoggerActive) {
-    if(noAsk || MessageBox(hWndMapWindow,gettext(TEXT("Stop Logger")),gettext(TEXT("Stop Logger")),MB_YESNO|MB_ICONQUESTION) == IDYES)
+    if(noAsk || (MessageBox(hWndMapWindow,gettext(TEXT("Stop Logger")),
+			    gettext(TEXT("Stop Logger")),
+			    MB_YESNO|MB_ICONQUESTION) == IDYES))
       LoggerActive = false;
     FullScreen();
   }

@@ -732,6 +732,15 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Bitmap
+//
+
+IDB_ABORT               BITMAP  DISCARDABLE     "Bitmaps\\abort.bmp"
+IDB_LOGGER              BITMAP  DISCARDABLE     "Bitmaps\\logging.bmp"
+IDB_LOGGEROFF           BITMAP  DISCARDABLE     "Bitmaps\\loggingoff.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // String Table
 //
 

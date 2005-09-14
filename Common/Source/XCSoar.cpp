@@ -1061,7 +1061,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     FontWidth = (int)(FontHeight*0.4);
   }
 
-  int iFontHeight = FontHeight*1.4;
+  int iFontHeight = (int)(FontHeight*1.4);
   // oversize first so can then scale down
 
   FontWidth = 0; // JMW this should be done so closest font is found

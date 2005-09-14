@@ -7,11 +7,11 @@ To do for next version:
 - Daylight savings time fix
 - Use windows device time instead of GPS time in simulator
 - Adjustable font for long infoboxes (especially time)
-- Write code to find airspace nearest to aircraft or some cursor --- currently
-  the code we have only finds airspace enclosing a place.
+- Implement cursor moveable by arrow keys for waypoint/airspace selection and
+  to move/edit waypoints.
 
 Changes from 4.5beta2 to 4.5beta3
-- Confilg files (input, language and status) now support "\r\n" strings correctly
+- Config files (input, language and status) now support "\r\n" strings correctly
 - PlaySound now supports external WAV files automatically. Also allows WAV files
   to be referenced as Input Events - assumes local resource unless ends in ".wav"
 - Automatically lookup localised "My Documents" directory to support multiple
@@ -35,6 +35,9 @@ Changes from 4.5beta2 to 4.5beta3
 - Fix acknowledgement bug when re-entering airspace
 - Minor font adjustments
 - "GPS 2D fix" changed to "GPS waiting for fix"
+- New high-visibility icons for flight modes by Simon Taylor.
+- Blinking logger icon when logger is active.
+- Code cleanups, eliminated BOOL occurances
 
 Changes from 4.22 to 4.5beta2
 

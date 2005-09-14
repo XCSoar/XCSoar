@@ -27,7 +27,6 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
 #include <stdlib.h>
 
-#define SIMULATENOISE 0
 #ifdef DEBUGAUDIO
 #endif
 
@@ -103,7 +102,7 @@ CRITICAL_SECTION  CritSec_VarioSoundV;
 unsigned short audio_beepfrequency = 17;
 unsigned short audio_soundfrequency = 3276;
 unsigned short audio_altsoundfrequency = 3276;
-unsigned char audio_soundtype = 1;
+unsigned char audio_soundtype = 0; // start in silence
 unsigned char audio_deadband_hi = 100;
 unsigned char audio_deadband_low = 100;
 
@@ -265,13 +264,20 @@ unsigned char audio_get_sound_byte(void) {
   makebeepsound = beepthis || Beep.WaitZerroCross;
 
   // find the sound sample
-  signed char sample = audio_sound_loud(Beep.Index, makebeepsound);
+  static unsigned char lastsample = 0;
+  unsigned char sample = audio_sound_loud(Beep.Index, makebeepsound);
 
   if (makebeepsound) {
     // wait for zero crossing before finishing beep
     Beep.WaitZerroCross = beepthis  // still need a real beep
-      || (abs(sample+0x80) > 10);   // or zero crossing hasn't occurred
+      || ((sample>0x80)&&(lastsample>0x80))
+      || ((sample<0x80)&&(lastsample<0x80)); // better zero crossing detection
+    if (!beepthis && !Beep.WaitZerroCross) {
+      // found zero crossing and need no beep now, so silence it.
+      sample = 0x80;
+    }
   }
+  lastsample = sample;
 
   return(sample);
 }
@@ -1007,7 +1013,13 @@ void CALLBACK variosound_waveOutEventCB(WAVE_OUT_EVENT variosound_waveOutEvent)
 
 extern int iround(double i);
 
+extern void VarioSound_sndparam_int();
+
 extern "C" {
+
+  VARIOSOUND_API void VarioSound_SoundParam() {
+    VarioSound_sndparam_int();
+  }
 
   VARIOSOUND_API void VarioSound_SetVAlt(short v) {
     EnterCriticalSection(&CritSec_VarioSoundV);
@@ -1307,7 +1319,7 @@ void audio_soundmode(short vinst, short vstf) {
 ////////////////////////////////////////////////////////////////////////////////
 
 
-void VarioSound_sndparam() {
+void VarioSound_sndparam_int() {
 
   // this is called by the wave thread when filling the buffer
   // since the buffer is filled after copying the previous buffer,
@@ -1383,7 +1395,7 @@ void VarioSound_synthesiseSound() {
   DWORD	fpsTime0 = ::GetTickCount();
 #endif
 
-  VarioSound_sndparam();
+  //
 
   while (buf < endBuf) {
 
