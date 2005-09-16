@@ -11,6 +11,7 @@ To do for next version:
   to move/edit waypoints.
 
 Changes from 4.5beta2 to 4.5beta3
+- Arbitrary DLL Load and Function calls from InputEvents
 - Config files (input, language and status) now support "\r\n" strings correctly
 - PlaySound now supports external WAV files automatically. Also allows WAV files
   to be referenced as Input Events - assumes local resource unless ends in ".wav"
