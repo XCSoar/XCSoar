@@ -1,7 +1,7 @@
 mode=default
 type=key
 data=APP1
-event=DLLExecute XCSExamplePlugin.DLL PlaySound blah
+event=DLLExecute XCSExamplePlugin.DLL DemoSound \My Documents\Sample2.wav
 event=StatusMessage Call DLL
 label=Go
 location=1
