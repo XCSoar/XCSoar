@@ -15,8 +15,8 @@ InputEvents
 
   For further information on config file formats see
 
-	source/Common/Data/Input/*
-	doc/html/advanced/input/*		http://xcsoar.sourceforge.net/advanced/input/
+	source/Common/Data/Input/ALL
+	doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
   Copyright (c) 2005 Scott Penrose and others - yet to be filled in (GNU License)
 
@@ -297,6 +297,7 @@ void InputEvents::showErrors() {
 		wsprintf(buffer, TEXT("XCI Error %i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
   		Message::AddMessage(30000, 1, buffer);
 	}
+	input_errors_count = 0;
 }
 #endif
 
@@ -1191,11 +1192,38 @@ typedef void (CALLBACK *DLLFUNC)(TCHAR*);
 
 void InputEvents::eventDLLExecute(TCHAR *misc) {
 	// LoadLibrary(TEXT("test.dll"));
+	
+	TCHAR data[MAX_PATH];
+	TCHAR* dll_name;
+	TCHAR* func_name;
+	TCHAR* other;
+	TCHAR* pdest;
+	
+	wcscpy(data, misc);
 
-	TCHAR dll_name[] = TEXT("XCSExamplePlugin.DLL");	// The filename for the DLL
-	TCHAR func_name[] = TEXT("DemoSound");	// The function to find
-	TCHAR other[] = TEXT("\\My Documents\\Sample2.wav");   
-	// The other "misc" data to send (none means no send)
+	// dll_name (up to first space)
+	pdest = wcsstr(data, TEXT(" "));
+	if (pdest == NULL) {
+		#ifdef _SIM_
+		wsprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute string - no DLL"));
+		InputEvents::showErrors();
+		#endif
+		return;
+	}
+	*pdest = NULL;
+	dll_name = data;
+
+	// func_name (after first space)
+	func_name = pdest + 1;
+
+	// other (after next space to end of string)
+	pdest = wcsstr(func_name, TEXT(" "));
+	if (pdest != NULL) {
+		*pdest = NULL;
+		other = pdest + 1;
+	} else {
+		other = NULL;
+	}
 
 	HINSTANCE hinstLib;	// Library pointer
 	DLLFUNC lpfnDLLProc;	// Function pointer
@@ -1204,17 +1232,25 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 	hinstLib = LoadLibrary(dll_name);
 	if (hinstLib != NULL) {
 		lpfnDLLProc = (DLLFUNC)GetProcAddress(hinstLib, func_name);
-		if (lpfnDLLProc != NULL)
+		if (lpfnDLLProc != NULL) {
 			(*lpfnDLLProc)(other);
-		else {
+	    #ifdef _SIM_
+		} else {
 			DWORD le;
 			le = GetLastError();
-			TCHAR buffer[1024];
-			swprintf(buffer, TEXT("Problem = %d"), le);
-			Message::AddMessage(5000, 1, buffer);
+			wsprintf(input_errors[input_errors_count++], TEXT("Problem loading function (%s) in DLL (%s) = %d"), func_name, dll_name, le);
+			InputEvents::showErrors();
+		#endif
 		}
 		FreeLibrary(hinstLib);
+	
+    #ifdef _SIM_
+	} else {
+		wsprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute - not loaded - %s"), dll_name);
+		InputEvents::showErrors();
+	#endif
 	}
+
 }
 
 // JMW TODO: have all inputevents return bool, indicating whether
