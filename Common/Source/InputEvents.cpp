@@ -108,6 +108,17 @@ int Text2Event_count;
 // Mapping text names of events to the real thing
 TCHAR *Text2GCE[GCE_COUNT];
 
+
+// DLL Cache
+typedef void (CALLBACK *DLLFUNC)(TCHAR*);
+#define MAX_DLL_CACHE 256
+typedef struct {
+  TCHAR *text;
+  HINSTANCE hinstance;
+} DLLCACHESTRUCT;
+DLLCACHESTRUCT DLLCache[MAX_DLL_CACHE];
+int DLLCache_Count = 0;
+
 // Read the data files
 void InputEvents::readFile() {
   // Get defaults 
@@ -1188,7 +1199,6 @@ void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
 
 }
 
-typedef void (CALLBACK *DLLFUNC)(TCHAR*);
 
 void InputEvents::eventDLLExecute(TCHAR *misc) {
 	// LoadLibrary(TEXT("test.dll"));
@@ -1229,7 +1239,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 	DLLFUNC lpfnDLLProc;	// Function pointer
 
 	// Load library, find function, execute, unload library
-	hinstLib = LoadLibrary(dll_name);
+	hinstLib = _loadDLL(dll_name);
 	if (hinstLib != NULL) {
 		lpfnDLLProc = (DLLFUNC)GetProcAddress(hinstLib, func_name);
 		if (lpfnDLLProc != NULL) {
@@ -1242,15 +1252,32 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 			InputEvents::showErrors();
 		#endif
 		}
-		FreeLibrary(hinstLib);
-	
-    #ifdef _SIM_
-	} else {
-		wsprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute - not loaded - %s"), dll_name);
-		InputEvents::showErrors();
-	#endif
+	}
+}
+
+// Load a DLL (only once, keep a cache of the handle)
+//	TODO FreeLibrary - it would be nice to call FreeLibrary before exit on each of these
+HINSTANCE _loadDLL(TCHAR *name) {
+	int i;
+	for (i = 0; i < DLLCache_Count; i++) {
+		if (wcscmp(name, DLLCache[i].text) != 0)
+			return DLLCache[i].hinstance;
+	}
+	if (DLLCache_Count < MAX_DLL_CACHE) {
+		DLLCache[DLLCache_Count].hinstance = LoadLibrary(name);
+		if (DLLCache[DLLCache_Count].hinstance) {
+			DLLCache[DLLCache_Count].text = StringMallocParse(name);
+			DLLCache_Count++;
+			return DLLCache[DLLCache_Count - 1].hinstance;
+		#ifdef _SIM_
+		} else {
+			wsprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute - not loaded - %s"), name);
+			InputEvents::showErrors();
+		#endif
+		}
 	}
 
+	return NULL;
 }
 
 // JMW TODO: have all inputevents return bool, indicating whether

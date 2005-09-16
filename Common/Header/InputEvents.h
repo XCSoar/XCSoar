@@ -6,6 +6,8 @@
 
 typedef void (*pt2Event)(TCHAR *);
 
+HINSTANCE _loadDLL(TCHAR *name);
+
 class InputEvents {
  public:
   static void readFile();
