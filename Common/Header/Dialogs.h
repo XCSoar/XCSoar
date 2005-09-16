@@ -40,7 +40,7 @@ void AssignedArea(void);
 LRESULT CALLBACK LoggerDetails 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AudioSettings					(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
+extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
 void SetWindowText_gettext(HWND hDlg, int entry);
 TCHAR* gettext(TCHAR* text);
 void ClearStatusMessages(void);

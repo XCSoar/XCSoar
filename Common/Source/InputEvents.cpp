@@ -110,7 +110,9 @@ TCHAR *Text2GCE[GCE_COUNT];
 
 
 // DLL Cache
-typedef void (CALLBACK *DLLFUNC)(TCHAR*);
+typedef void (CALLBACK *DLLFUNC_INPUTEVENT)(TCHAR*);
+typedef void (CALLBACK *DLLFUNC_SETHINST)(HMODULE);
+
 #define MAX_DLL_CACHE 256
 typedef struct {
   TCHAR *text;
@@ -1236,12 +1238,12 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 	}
 
 	HINSTANCE hinstLib;	// Library pointer
-	DLLFUNC lpfnDLLProc;	// Function pointer
+	DLLFUNC_INPUTEVENT lpfnDLLProc;	// Function pointer
 
 	// Load library, find function, execute, unload library
 	hinstLib = _loadDLL(dll_name);
 	if (hinstLib != NULL) {
-		lpfnDLLProc = (DLLFUNC)GetProcAddress(hinstLib, func_name);
+		lpfnDLLProc = (DLLFUNC_INPUTEVENT)GetProcAddress(hinstLib, func_name);
 		if (lpfnDLLProc != NULL) {
 			(*lpfnDLLProc)(other);
 	    #ifdef _SIM_
@@ -1260,7 +1262,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 HINSTANCE _loadDLL(TCHAR *name) {
 	int i;
 	for (i = 0; i < DLLCache_Count; i++) {
-		if (wcscmp(name, DLLCache[i].text) != 0)
+		if (wcscmp(name, DLLCache[i].text) == 0)
 			return DLLCache[i].hinstance;
 	}
 	if (DLLCache_Count < MAX_DLL_CACHE) {
@@ -1268,6 +1270,13 @@ HINSTANCE _loadDLL(TCHAR *name) {
 		if (DLLCache[DLLCache_Count].hinstance) {
 			DLLCache[DLLCache_Count].text = StringMallocParse(name);
 			DLLCache_Count++;
+
+			// First time setup... (should check version numbers etc...)
+			DLLFUNC_SETHINST lpfnDLLProc;
+			lpfnDLLProc = (DLLFUNC_SETHINST)GetProcAddress(DLLCache[DLLCache_Count - 1].hinstance, TEXT("XCSAPI_SetHInst"));
+			if (lpfnDLLProc)
+				lpfnDLLProc(GetModuleHandle(NULL));
+
 			return DLLCache[DLLCache_Count - 1].hinstance;
 		#ifdef _SIM_
 		} else {

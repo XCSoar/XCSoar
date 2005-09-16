@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.76 2005/09/13 18:53:10 jwharington Exp $
+//   $Id: Dialogs.cpp,v 1.77 2005/09/16 06:09:13 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -3576,7 +3576,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 //	- External WAV files
 //	- Add in TCHAR* data for extra, non language data entry
 
-void DoStatusMessage(TCHAR* text, TCHAR *data) {
+extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR *data) {
   Message::Lock();
 
 	StatusMessageSTRUCT LocalMessage;
