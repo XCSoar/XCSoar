@@ -1210,19 +1210,23 @@ void SetRegistryBrush(int i, DWORD c)
 
 void ReadAssetNumber(void)
 {
+  strAssetNumber[0]= _T('A');
+  strAssetNumber[1]= _T('A');
+  strAssetNumber[2]= _T('A');
+  /*
   if(strAssetNumber[0] != '\0')
     {
       return;
     }
 
   ReadUUID();
-
   if(strAssetNumber[0] != '\0')
     {
       return;
     }
 
   ReadCompaqID();
+  */
 }
 
 void ReadCompaqID(void)

@@ -13,6 +13,7 @@ void AddDeclaration(double Lattitude, double Longditude, TCHAR *ID);
 void StartDeclaration(void);
 void EndDeclaration(void);
 void LoggerHeader(void);
+void LoggerNote(TCHAR *text);
 
 void EW_Strings(double Lattitude, double Longditude, TCHAR *ID);
 void EW_Download(TCHAR *strAssetNumber);
