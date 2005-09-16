@@ -1822,6 +1822,10 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             }
           break;
 
+        case IDC_CLEARADDITIONALAIRSPACE:
+          SetDlgItemText(hDlg,IDC_ADDITIONALAIRSPACEFILE,TEXT(""));
+          break;
+
         case IDC_BROWSEWAYPOINT:
           memset( &(ofnWaypoint), 0, sizeof(ofnWaypoint));
           ofnWaypoint.lStructSize       = sizeof(ofnWaypoint);
@@ -1853,6 +1857,10 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
               SetDlgItemText(hDlg,IDC_ADDITIONALWAYPOINTSFILE,
                              szAdditionalWaypointFile);
             }
+          break;
+
+        case IDC_CLEARADDITIONALWAYPOINT:
+          SetDlgItemText(hDlg,IDC_ADDITIONALWAYPOINTSFILE, TEXT(""));
           break;
 
         }
