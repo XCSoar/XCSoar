@@ -37,3 +37,5 @@ enum {
 */
 
 
+#define DEBUGLOG(type, level, string) 
+
