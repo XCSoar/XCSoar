@@ -758,9 +758,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   INITCOMMONCONTROLSEX icc;
 
   // Version String
-  wcscat(XCSoar_Version, TEXT("Alpha "));
-  wcscat(XCSoar_Version, TEXT(__DATE__));
-  // (normal) wcscat(XCSoar_Version, TEXT("4.5 BETA 3"));
+  // wcscat(XCSoar_Version, TEXT("Alpha "));
+  // wcscat(XCSoar_Version, TEXT(__DATE__));
+  wcscat(XCSoar_Version, TEXT("4.5 BETA 3"));
 
   // load registry backup if it exists
   LoadRegistryFromFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));
