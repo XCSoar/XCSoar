@@ -3,7 +3,6 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 To do for next version:
-- Enable secondary files check boxes
 - Daylight savings time fix
 - Use windows device time instead of GPS time in simulator 
 - Adjustable font for long infoboxes (especially time)
@@ -11,6 +10,7 @@ To do for next version:
   to move/edit waypoints.
 
 Changes from 4.5beta2 to 4.5beta3
+- Enable secondary files clear button
 - Arbitrary DLL Load and Function calls from InputEvents
 - Config files (input, language and status) now support "\r\n" strings correctly
 - PlaySound now supports external WAV files automatically. Also allows WAV files

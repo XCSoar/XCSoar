@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-//   $Id: Dialogs.cpp,v 1.77 2005/09/16 06:09:13 scottp Exp $
+//   $Id: Dialogs.cpp,v 1.78 2005/09/16 07:11:27 scottp Exp $
 
 */
 #include "stdafx.h"
@@ -1822,6 +1822,10 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             }
           break;
 
+        case IDC_CLEARADDITIONALAIRSPACE:
+          SetDlgItemText(hDlg,IDC_ADDITIONALAIRSPACEFILE,TEXT(""));     
+          break;
+
         case IDC_BROWSEWAYPOINT:
           memset( &(ofnWaypoint), 0, sizeof(ofnWaypoint));
           ofnWaypoint.lStructSize       = sizeof(ofnWaypoint);
@@ -1853,6 +1857,10 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
               SetDlgItemText(hDlg,IDC_ADDITIONALWAYPOINTSFILE,
                              szAdditionalWaypointFile);    
             }
+          break;
+
+        case IDC_CLEARADDITIONALWAYPOINT:
+          SetDlgItemText(hDlg,IDC_ADDITIONALWAYPOINTSFILE, TEXT(""));
           break;
 
         }

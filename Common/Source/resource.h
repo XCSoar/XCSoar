@@ -134,6 +134,7 @@
 #define IDC_WAYPOINTDETAILSNEXT         1035
 #define IDC_BALLASTUP                   1036
 #define IDC_BROWSEADDITIONALWAYPOINT    1036
+#define IDC_CLEARADDITIONALWAYPOINT     1037
 #define IDC_SETTINGS                    1038
 #define IDC_BUGSDOWN                    1041
 #define IDC_UP                          1041
@@ -281,6 +282,7 @@
 #define IDC_INFOBOXRESET                1237
 #define IDC_GPSMESSAGE                  1238
 #define IDC_ANALYSIS                    1238
+#define IDC_CLEARADDITIONALAIRSPACE     1238
 #define IDC_PROGRESS1                   1239
 #define IDC_CDICIRCLING                 1240
 #define IDC_ADDITIONALAIRSPACEFILE      1241
