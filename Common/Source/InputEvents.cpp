@@ -1070,6 +1070,7 @@ void InputEvents::eventBallast(TCHAR *misc) {
 }
 
 #include "Task.h"
+#include "Logger.h"
 
 void InputEvents::eventLogger(TCHAR *misc) {
   // TODO - start logger without asking
@@ -1098,6 +1099,9 @@ void InputEvents::eventLogger(TCHAR *misc) {
     } else {
       DoStatusMessage(TEXT("Logger OFF"));
     }
+  } else if (wcsncmp(misc, TEXT("note"), 4)==0) {
+    // add note to logger file if available..
+    LoggerNote(misc+4);
   }
 }
 

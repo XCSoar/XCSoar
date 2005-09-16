@@ -432,7 +432,6 @@ LRESULT CALLBACK        WndProc                 (HWND, UINT, WPARAM, LPARAM);
 LRESULT                                         MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void                                                    AssignValues(void);
 void                                                    DisplayText(void);
-void                                                    ReadAssetNumber(void);
 
 void CommonProcessTimer    (void);
 void ProcessTimer    (void);
@@ -757,10 +756,15 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   HACCEL hAccelTable;
   INITCOMMONCONTROLSEX icc;
 
+  // JMW we need a global version string!
+
   // Version String
   // wcscat(XCSoar_Version, TEXT("Alpha "));
   // wcscat(XCSoar_Version, TEXT(__DATE__));
   wcscat(XCSoar_Version, TEXT("4.5 BETA 3"));
+
+  // find unique ID of this PDA
+  ReadAssetNumber();
 
   // load registry backup if it exists
   LoadRegistryFromFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));
@@ -1125,7 +1129,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   // new font for map labels
   memset ((char *)&logfont, 0, sizeof (logfont));
 
-  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+  _tcscpy(logfont.lfFaceName, _T("DejaVu Sans Condensed"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO);
@@ -1139,7 +1143,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   // Font for map other text
   memset ((char *)&logfont, 0, sizeof (logfont));
 
-  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*STATISTICSFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*STATISTICSFONTWIDTHRATIO);
@@ -1150,7 +1154,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   // new font for map labels
 
-  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+  _tcscpy(logfont.lfFaceName, _T("DejaVu Sans Condensed"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO*1.3);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO*1.3);
@@ -1164,6 +1168,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   // Font for map bold text
 
+  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfWeight = FW_BOLD;
   logfont.lfWidth =  0; // JMW (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
 

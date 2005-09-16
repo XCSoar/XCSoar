@@ -241,7 +241,7 @@ unsigned char audio_sound_beep(unsigned short i) {
 //
 unsigned char audio_get_sound_byte(void) {
   unsigned char beepthis;
-  unsigned char makebeepsound;
+  bool makebeepsound;
 
   // increment beep phase
   Beep.Index++;

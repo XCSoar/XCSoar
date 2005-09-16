@@ -24,6 +24,45 @@
 #include <tchar.h>
 #include "Utils.h"
 
+/*
+problems with current IGC:
+
+must have unique serial number, make and type, version number
+
+must mark where declaration is changed in-flight
+
+header: HF TAKEOFF
+
+Pilot Event Marker: PEV
+
+should be on for a while prior to takeoff and off for a while after
+landing, to mark the ground level.
+
+add C lines at waypoint events: START, TURN, TURN AREA, FINISH
+
+C lines are causing problems when blank, as reported by Deniz
+
+*/
+
+/*
+
+HFDTE141203  <- should be UTC, same as time in filename
+HFFXA100
+HFPLTPILOT:JOHN WHARINGTON
+HFGTYGLIDERTYPE:LS 3
+HFGIDGLIDERID:VH-WUE
+HFDTM100GPSDATUM:WGS84
+HFRFWFIRMWAREVERSION:3.6
+HFRHWHARDWAREVERSION:3.4
+HFFTYFR TYPE:GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0
+HFCIDCOMPETITIONID:WUE
+HFCCLCOMPETITIONCLASS:FAI
+HFCIDCOMPETITIONID:WUE
+HFCCLCOMPETITIONCLASS:15M
+*/
+
+
+
 
 static TCHAR szLoggerFileName[MAX_PATH];
 
@@ -68,12 +107,17 @@ void LogPoint(double Latitude, double Longitude, double Altitude)
 
   GetLocalTime(&st);
 
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
+		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
-  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d0AA\r\n", st.wHour, st.wMinute, st.wSecond, DegLat, MinLat, NoS, DegLon, MinLon, EoW, (int)Altitude,(int)Altitude);
+  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d0AA\r\n",
+	  st.wHour, st.wMinute, st.wSecond,
+	  DegLat, MinLat, NoS, DegLon, MinLon, EoW,
+	  (int)Altitude,(int)Altitude);
 
   SetFilePointer(hFile, 0, NULL, FILE_END);
-  WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead, (OVERLAPPED *)NULL);
+  WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead,
+	    (OVERLAPPED *)NULL);
 
   CloseHandle(hFile);
 }
@@ -89,16 +133,22 @@ void StartLogger(TCHAR *strAssetNumber)
 
   for(i=1;i<99;i++)
     {
-       wsprintf(szLoggerFileName,TEXT("%s%04d-%02d-%02d-XXX-%02d"),
+      // 2003-12-31-XXX-987-01.IGC
+      // long filename form of IGC file.
+      // XXX represents manufacturer code
+       wsprintf(szLoggerFileName,TEXT("%s%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
 		   LocalPath(),
-	       st.wYear,
-	       st.wMonth,
-	       st.wDay,
-	       //		   strAssetNumber[0],strAssetNumber[1],strAssetNumber[2],
-	       i);
-      _tcscat(szLoggerFileName,TEXT(".IGC"));
+		st.wYear,
+		st.wMonth,
+		st.wDay,
+		strAssetNumber[0],
+		strAssetNumber[1],
+		strAssetNumber[2],
+		i);
 
-      hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, 0);
+      hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
+			 FILE_SHARE_WRITE, NULL, CREATE_NEW,
+			 FILE_ATTRIBUTE_NORMAL, 0);
       if(hFile!=INVALID_HANDLE_VALUE )
 	{
 	  CloseHandle(hFile);
@@ -129,6 +179,23 @@ void LoggerHeader(void)
 
   SetFilePointer(hFile, 0, NULL, FILE_END);
 
+  // Flight recorder ID number MUST go first..
+  sprintf(temp,
+	  "AXXX%C%C%C\r\n",
+	  strAssetNumber[0],
+	  strAssetNumber[1],
+	  strAssetNumber[2]);
+  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
+
+  SYSTEMTIME st;
+  GetLocalTime(&st);
+
+  sprintf(temp,"HFDTE%02d%02d%02d\r\n",
+	  st.wDay,
+	  st.wMonth,
+	  st.wYear % 100);
+  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
+
   GetRegistryString(szRegistryPilotName, PilotName, 100);
   sprintf(temp,"HFPLTPILOT:%S\r\n", PilotName);
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
@@ -141,12 +208,16 @@ void LoggerHeader(void)
   sprintf(temp,"HFGIDGLIDERID:%S\r\n", AircraftRego);
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
+  sprintf(temp,"HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_Version);
   CloseHandle(hFile);
 
 }
 
+
 void StartDeclaration(void)
 {
+  // JMW TODO: this is causing problems with some analysis software
+  // maybe it's because the date and location fields are bogus
   char start[] = "C0000000N00000000ETAKEOFF (not defined)\r\n";
   HANDLE hFile;
   DWORD dwBytesRead;
@@ -161,6 +232,8 @@ void StartDeclaration(void)
 
 void EndDeclaration(void)
 {
+  // JMW TODO: this is causing problems with some analysis software
+  // maybe it's because the date and location fields are bogus
   char start[] = "C0000000N00000000ELANDING (not defined)\r\n";
   HANDLE hFile;
   DWORD dwBytesRead;
@@ -223,11 +296,36 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
 
   sprintf(szCRecord,"C%02d%05.0f%c%03d%05.0f%c%s\r\n", DegLat, MinLat, NoS, DegLon, MinLon, EoW, IDString);
 
+
+
   SetFilePointer(hFile, 0, NULL, FILE_END);
   WriteFile(hFile, szCRecord, strlen(szCRecord), &dwBytesRead, (OVERLAPPED *)NULL);
 
   CloseHandle(hFile);
 }
+
+
+// JMW TODO: make this thread-safe, since it could happen in the middle
+// of the calculations doing LogPoint or something else!
+
+void LoggerNote(TCHAR *text) {
+  if (LoggerActive) {
+    HANDLE hFile;// = INVALID_HANDLE_VALUE;
+    DWORD dwBytesRead;
+
+    char fulltext[500];
+    hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
+		       NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+    sprintf(fulltext, "LPLT%S\r\n", text);
+    SetFilePointer(hFile, 0, NULL, FILE_END);
+    WriteFile(hFile, fulltext, strlen(fulltext), &dwBytesRead,
+	      (OVERLAPPED *)NULL);
+
+    CloseHandle(hFile);
+
+  }
+}
+
 
 
 void DoLogger(TCHAR *strAssetNumber)
@@ -277,19 +375,3 @@ void DoLogger(TCHAR *strAssetNumber)
 
 
 
-/*
-
-HFDTE141203
-HFFXA100
-HFPLTPILOT:JOHN WHARINGTON
-HFGTYGLIDERTYPE:LS 3
-HFGIDGLIDERID:VH-WUE
-HFDTM100GPSDATUM:WGS84
-HFRFWFIRMWAREVERSION:3.6
-HFRHWHARDWAREVERSION:3.4
-HFFTYFR TYPE:GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0
-HFCIDCOMPETITIONID:WUE
-HFCCLCOMPETITIONCLASS:FAI
-HFCIDCOMPETITIONID:WUE
-HFCCLCOMPETITIONCLASS:15M
-*/

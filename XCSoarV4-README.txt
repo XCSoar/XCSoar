@@ -39,6 +39,8 @@ Changes from 4.5beta2 to 4.5beta3
 - New high-visibility icons for flight modes by Simon Taylor.
 - Blinking logger icon when logger is active.
 - Code cleanups, eliminated BOOL occurances
+- Fixed missing sentances in IGC file, so now loadable by TaskNav
+- Added "Logger note blahblah" event to put a pilot note in IGC log file.
 
 Changes from 4.22 to 4.5beta2
 
