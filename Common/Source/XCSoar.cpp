@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.104 2005/09/14 05:25:28 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.105 2005/09/16 07:50:51 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -758,9 +758,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   INITCOMMONCONTROLSEX icc;
 
   // Version String
-  wcscat(XCSoar_Version, TEXT("Alpha "));
-  wcscat(XCSoar_Version, TEXT(__DATE__));
-  // (normal) wcscat(XCSoar_Version, TEXT("4.5 BETA 3"));
+  // wcscat(XCSoar_Version, TEXT("Alpha "));
+  // wcscat(XCSoar_Version, TEXT(__DATE__));
+  wcscat(XCSoar_Version, TEXT("4.5 BETA 3"));
 
   // load registry backup if it exists
   LoadRegistryFromFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));
