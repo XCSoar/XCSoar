@@ -18,6 +18,8 @@ extern "C" {
 // This class is exported from the XCSExamplePlugin.dll
 XCSEXAMPLEPLUGIN_API void DemoSound(TCHAR* misc);
 
+XCSEXAMPLEPLUGIN_API void XCSAPI_SetHInst(HMODULE);
+
 }
 
 #endif

@@ -3576,7 +3576,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 //	- External WAV files
 //	- Add in TCHAR* data for extra, non language data entry
 
-void DoStatusMessage(TCHAR* text, TCHAR *data) {
+extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR *data) {
   Message::Lock();
 
 	StatusMessageSTRUCT LocalMessage;
