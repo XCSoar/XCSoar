@@ -233,6 +233,10 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mod
   // bit 3 == landable TP label          / 8
   // bit 4 == center alligned
   
+  if (x<0) or (x>240) {
+	return 0;
+  }
+  
   if (size==0) {
     size = _tcslen(Value);
   }
