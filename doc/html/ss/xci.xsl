@@ -5,12 +5,18 @@
 	<!ENTITY copy "&#169;">
 	<!ENTITY reg  "&#174;">
 	<!ENTITY raquo  "&#187;">
+	<!ENTITY tree SYSTEM "../input/tree.xml">
 ]>
 
 <xsl:stylesheet 
 	version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
+
+<!--
+<xsl:output method="html" indent="yes" encoding="UTF-8"/>
+<xsl:strip-space elements="*"/>   
+-->
 
 <xsl:template match="/input">
 	<document>
@@ -31,6 +37,10 @@ description of the purpose and options for an event. Click on Mode names (eg:
 Menu1) to jump to the next mode.
 </p>
 
+<h2>Tree view</h2>
+&tree;
+
+<!--
 		<h2>Index of Modes and Event Types</h2>
 			<ul>
 				<xsl:for-each select="mode">
@@ -58,6 +68,8 @@ Menu1) to jump to the next mode.
 					</li>
 				</xsl:for-each>
 			</ul>
+-->
+
 			<xsl:apply-templates/>
 
 </div>

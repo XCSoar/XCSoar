@@ -10,19 +10,6 @@ print q{
 
 <!-- ... example ..
 
-	<mode name="Blah...">
-
-		<type name="key">
-
-			<record data="APP1" title="Show menu">
-				<event name="" misc=""/>
-				<label location="1" text="Here it is"/>
-			</record>
-
-		</type>
-
-	</mode>
-
 
 -->
 };
@@ -47,7 +34,7 @@ while (<>) {
 					label => $rec{label} || "",
 					location => $rec{location} || "",
 					data => uc($rec{data}),
-					title => $rec{title} || join(" ", reverse @{$rec{event}}),
+					title => $rec{title}, # || join(" ", reverse @{$rec{event}}),
 					notes => $rec{notes},
 				};
 			}

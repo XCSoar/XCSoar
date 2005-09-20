@@ -23,7 +23,7 @@ depends:
 readme.xml: ../../source/XCSoarV4-README.txt
 	perl wrap.pl Readme < ../../source/XCSoarV4-README.txt > readme.xml
 
-input/default.xcixml: ../../source/Common/Data/Input/default.xci
+input/default.xcixml: ../../source/Common/Data/Input/default.xci xci2xml.pl
 	cp ../../source/Common/Data/Input/default.xci input/default.xci
 	perl xci2xml.pl ../../source/Common/Data/Input/default.xci > $@
 
@@ -43,7 +43,8 @@ install: build nightlycvs
 installstyle: 
 	scp style.css $(SSHUSER)@shell.sourceforge.net:/home/groups/x/xc/xcsoar/htdocs/
 
-%.xml : %.xcixml ss/xci.xsl
+%.xml : %.xcixml ss/xci.xsl ss/xci_tree.xsl
+	xsltproc ss/xci_tree.xsl $< > input/tree.xml
 	xsltproc ss/xci.xsl $< > $@
 
 %.html : %.xml ss/wrap.xsl
