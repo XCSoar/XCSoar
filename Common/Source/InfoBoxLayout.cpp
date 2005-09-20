@@ -506,11 +506,13 @@ void ButtonLabel::SetLabelText(int index, TCHAR *text) {
 
 #include "InputEvents.h"
 
-void ButtonLabel::CheckButtonPress(HWND pressedwindow) {
+bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
   int i;
   for (i=0; i<NUMBUTTONLABELS; i++) {
     if (hWndButtonWindow[i]== pressedwindow) {
       InputEvents::processButton(i);
+      return TRUE;
     }
   }
+  return FALSE;
 }

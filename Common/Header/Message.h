@@ -42,6 +42,8 @@ class Message {
   static void Lock();
   static void Unlock();
 
+  static void CheckTouch(HWND wmControl);
+
  private:
   static struct singleMessage messages[MAXMESSAGES];
   static RECT rcmsg; // maximum message size

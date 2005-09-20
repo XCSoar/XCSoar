@@ -312,6 +312,13 @@ void Message::Repeat(int type) {
 }
 
 
+void Message::CheckTouch(HWND wmControl) {
+  if (wmControl == hWndMessageWindow) {
+    // acknowledge with click/touch
+    Acknowledge(0);
+  }
+}
+
 void Message::Acknowledge(int type) {
   int i;
 
