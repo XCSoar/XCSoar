@@ -94,7 +94,7 @@ data=APP1
 event=Mode Menu1
 label=Main/
 location=1
-title=Display more configuration options
+title=Display main menu buttons
 
 mode=default
 type=key
@@ -213,7 +213,7 @@ location=3
 mode=Menu1
 type=key
 data=APP4
-event=Mode Menu2
+event=Mode Info1
 label=Menu/
 location=4
 
@@ -222,31 +222,31 @@ location=4
 # Mode Menu2
 #==============
 
-mode=Menu2
-type=key
-data=APP1
-event=Mode Info1
-label=Info/
-location=1
-
-mode=Menu2
-type=key
-data=APP2
-label=
-location=2
-
-mode=Menu2
-type=key
-data=APP3
-label=
-location=3
-
-mode=Menu2
-type=key
-data=APP4
-event=Mode default
-label=/Menu
-location=4
+#mode=Menu2
+#type=key
+#data=APP1
+#event=Mode Info1
+#label=Info/
+#location=1
+#
+#mode=Menu2
+#type=key
+#data=APP2
+#label=
+#location=2
+#
+#mode=Menu2
+#type=key
+#data=APP3
+#label=
+#location=3
+#
+#mode=Menu2
+#type=key
+#data=APP4
+#event=Mode default
+#label=/Menu
+#location=4
 
 
 #==============
@@ -260,6 +260,7 @@ event=StatusMessage Dropped marker
 event=MarkLocation
 label=Mark
 location=1
+title=Mark the current location
 
 mode=Nav1
 type=key
@@ -268,6 +269,7 @@ event=Mode default
 event=WaypointDetails
 label=Waypt details
 location=2
+title=Details on the next waypoint
 
 mode=Nav1
 type=key
@@ -276,6 +278,7 @@ event=Mode default
 event=AbortTask toggle
 label=Abort task
 location=3
+title=Toggle between abort and resume task
 
 mode=Nav1
 type=key
@@ -296,13 +299,15 @@ event=Logger show
 event=Logger toggle ask
 label=Log
 location=1
+title=Turn on logger ?
 
 mode=Nav2
 type=key
 data=APP2
 event=AdjustWaypoint previous
-label=Waypt previous
+label=Waypt prev.
 location=2
+title=Switch to previous waypoint
 
 mode=Nav2
 type=key
@@ -310,6 +315,7 @@ data=APP3
 event=AdjustWaypoint next
 label=Waypt next
 location=3
+title=Switch to next waypoint
 
 mode=Nav2
 type=key
@@ -322,6 +328,8 @@ location=4
 #==============
 # Mode Display1
 #==============
+
+# XXX This one looks wrong - terrain = clear ?
 
 mode=Display1
 type=key
