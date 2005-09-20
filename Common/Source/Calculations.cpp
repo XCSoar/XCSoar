@@ -2207,7 +2207,7 @@ void SortLandableWaypoints (NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
     if (aa <= 0)
 		{
-      DoStatusMessage(TEXT("Closest Airfield\r\nChanged!"));
+      DoStatusMessage(TEXT("Closest Airfield Changed!"));
       ActiveWayPoint = 0;
     }
 		else

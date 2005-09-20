@@ -2170,8 +2170,11 @@ void ReadStatusFile() {
 	if (szFile1)
 		fp  = _tfopen(szFile1, TEXT("rt"));
 
-	if (fp == NULL)
+	// Unable to open file - load defaults
+	if (fp == NULL) {
+		#include "Status_defaults.cpp"
 		return;
+	}
 
 	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
 	TCHAR buffer[2049];	// Buffer for all

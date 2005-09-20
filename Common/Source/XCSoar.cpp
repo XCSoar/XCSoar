@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.107 2005/09/20 00:14:08 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.108 2005/09/20 07:04:23 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -880,18 +880,18 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   DoSunEphemeris(147.0,-36.0);
 
+  SwitchToMapWindow();
+  MapWindow::MapDirty = true;
+
+  CloseProgressDialog();
+
+  // NOTE: Must show errors AFTER all windows ready
 #ifdef _SIM_
   InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
   InputEvents::showErrors();
 #else
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
-
-  SwitchToMapWindow();
-  MapWindow::MapDirty = true;
-
-  CloseProgressDialog();
-
  
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0)) 

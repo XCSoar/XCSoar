@@ -252,6 +252,9 @@ void InputEvents::readFile() {
 	} else if ((found != 2) || !key || !value) {
 		// Do nothing - we probably just have a comment line
 		// JG removed "void;" - causes warning (void is declaration and needs variable)
+   		#ifdef _SIM_
+		  wsprintf(input_errors[input_errors_count++], TEXT("Not a valid line: %s at %i"), buffer, line);
+		#endif
 
     } else {
       if (wcscmp(key, TEXT("mode")) == 0) {
@@ -307,8 +310,8 @@ void InputEvents::showErrors() {
 	TCHAR buffer[2048];
 	int i;
 	for (i = 0; i < input_errors_count; i++) {
-		wsprintf(buffer, TEXT("XCI Error %i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
-  		Message::AddMessage(30000, 1, buffer);
+		wsprintf(buffer, TEXT("%i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
+		DoStatusMessage(TEXT("XCI Error"), buffer);
 	}
 	input_errors_count = 0;
 }
@@ -1190,6 +1193,8 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
     
   // clear previous warning if any
   Message::Acknowledge(MSG_AIRSPACE);
+
+  // TODO No control via status data (ala DoStatusMEssage) - can we change this?
   Message::AddMessage(5000, MSG_AIRSPACE, text);
   
 }
