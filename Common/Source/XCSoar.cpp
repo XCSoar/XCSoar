@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.108 2005/09/20 07:04:23 scottp Exp $
+  $Id: XCSoar.cpp,v 1.109 2005/09/20 07:15:34 scottp Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -564,6 +564,7 @@ void ShowStatus() {
   }
   wcscat(statusmessage, TEXT("\r\n"));
 
+  // XXX Need to fix this one.
   ShowStatusMessage(statusmessage, 60000, 15, false, TabStops);
   // i think one minute is enough...
 
