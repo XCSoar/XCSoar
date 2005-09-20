@@ -5,7 +5,7 @@
 	<!ENTITY copy "&#169;">
 	<!ENTITY reg  "&#174;">
 	<!ENTITY raquo  "&#187;">
-	<!ENTITY tree SYSTEM "../input/tree.xml">
+	<!ENTITY tree SYSTEM "../input/tree.tmp">
 ]>
 
 <xsl:stylesheet 

@@ -29,7 +29,9 @@
 
 <xsl:template name="one">
 	<li>
+	<xsl:text>"</xsl:text>
 	<xsl:value-of select="@label"/>
+	<xsl:text>"</xsl:text>
 	<xsl:if test="@title and @title != ''">
 		<xsl:text> - </xsl:text>
 		<xsl:value-of select="@title"/>
@@ -43,7 +45,7 @@
 	<a>
 		<xsl:attribute name="href">
 			<xsl:text>#mode_</xsl:text>
-			<xsl:value-of select="@misc"/>
+			<xsl:value-of select="$mode"/>
 		</xsl:attribute>
 		<xsl:value-of select="@label"/>
 	</a>
