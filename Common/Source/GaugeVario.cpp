@@ -56,7 +56,7 @@ void GaugeVario::Destroy() {
 }
 
 #define GAUGEVARIORANGE 2.50 // 5 m/s
-#define GAUGEVARIOSWEEP 80 // degrees total sweep
+#define GAUGEVARIOSWEEP 90 // degrees total sweep
 
 extern NMEA_INFO     GPS_INFO;
 extern DERIVED_INFO  CALCULATED_INFO;
@@ -81,7 +81,7 @@ void GaugeVario::Render() {
   int xoffset = 80;
   int yoffset = (rc.bottom-rc.top)/2;
   int degrees_per_unit = (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
-  int gmax = (int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY));
+  int gmax = (int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY))+2;
   double dx, dy;
   double vval;
 
@@ -128,12 +128,14 @@ void GaugeVario::RenderBg() {
   SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
 
   // draw dashes
-  POINT bit[2];
+  POINT bit[4];
   int i;
   int xoffset = 80;
   int yoffset = (rc.bottom-rc.top)/2;
-  int degrees_per_unit = (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
-  int gmax = (int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY));
+  int degrees_per_unit = 
+    (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
+  int gmax = 
+    (int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY+1));
   double dx, dy;
   for (i= 0; i<= gmax; i+= degrees_per_unit) {
     if (i==0) {
@@ -148,6 +150,12 @@ void GaugeVario::RenderBg() {
     bit[1].x = (int)(dx+xoffset); bit[1].y = (int)(dy+yoffset);
 
     Polyline(hdcDrawWindow, bit, 2);
+
+    bit[2] = bit[1];
+    if (i>0) {
+      Polyline(hdcDrawWindow, &bit[2], 2);
+    }
+    bit[3] = bit[1];
   }
   for (i= 0; i>= -gmax; i-= degrees_per_unit) {
     if (i==0) {
@@ -162,6 +170,12 @@ void GaugeVario::RenderBg() {
     bit[1].x = (int)(dx+xoffset); bit[1].y = (int)(dy+yoffset);
 
     Polyline(hdcDrawWindow, bit, 2);
+
+    bit[2] = bit[1];
+    if (i<0) {
+      Polyline(hdcDrawWindow, &bit[2], 2);
+    }
+    bit[3] = bit[1];
   }
 
 }

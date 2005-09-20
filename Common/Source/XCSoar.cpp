@@ -16,7 +16,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: XCSoar.cpp,v 1.106 2005/09/16 08:28:01 jwharington Exp $
+  $Id: XCSoar.cpp,v 1.107 2005/09/20 00:14:08 jwharington Exp $
 */
 #include "stdafx.h"
 #include "compatibility.h"
@@ -763,9 +763,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // wcscat(XCSoar_Version, TEXT(__DATE__));
   wcscat(XCSoar_Version, TEXT("4.5 BETA 3"));
 
-  // find unique ID of this PDA
-  ReadAssetNumber();
-
   // load registry backup if it exists
   LoadRegistryFromFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));
 
@@ -789,6 +786,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
     {
       return FALSE;
     }
+
+  // find unique ID of this PDA
+  ReadAssetNumber();
 
   CreateProgressDialog(gettext(TEXT("Initialising")));
 
@@ -1419,6 +1419,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 
     case WM_SETFOCUS:
       // JMW not sure this ever does anything useful..
+
       if(InfoWindowActive) {
 	
         if(DisplayLocked) {
@@ -1449,6 +1450,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (InputEvents::processKey(wParam)) {
 	}
       }
+      return TRUE; // JMW trying to fix multiple processkey bug
       break;
 
     case WM_TIMER:
@@ -1864,8 +1866,6 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	ShowMenu();
       }
 
-      ButtonLabel::CheckButtonPress(wmControl);
-
       for(i=0;i<numInfoWindows;i++)
         {       
           if(wmControl == hWndInfoWindow[i])
@@ -1895,6 +1895,12 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      return 0;
 	    }
 	}
+      Message::CheckTouch(wmControl);
+
+      if (ButtonLabel::CheckButtonPress(wmControl)) {
+	return TRUE; // don't continue processing..
+      }
+
     }
   return DefWindowProc(hWnd, message, wParam, lParam);          
 }

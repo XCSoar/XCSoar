@@ -1046,6 +1046,59 @@ static double ycoords[64] = {
 };
 
 
+void StartArc(HDC hdc, 
+	      double longitude0, double latitude0,
+	      double longitude1, double latitude1, 
+	      double arclength) {
+  int scx, scy;
+
+  double radius = Distance(latitude0, longitude0, 
+			   latitude1, longitude1);
+  double bearing = Bearing(latitude0, longitude0,
+			   latitude1, longitude1);
+  double angle = 360*min(1, arclength/(2.0*3.1415926*radius));
+  int i0 = (bearing+angle/2);
+  int i1 = (bearing-angle/2);
+  int i;
+  if (i0<0) { i1+= 360; }
+  if (i1<0) { i1+= 360; }
+  if (i0>360) {i0-= 360; }
+  if (i1>360) {i1-= 360; }
+  i0 = i0*64/360;
+  i1 = i1*64/360;
+  POINT pt[2];
+  double lat, lon;
+  int x,y;
+
+  if (i1<i0) {
+    for (i=i0; i<64-1; i++) {
+      //      MapWindow::LatLon2Screen(lon, lat, &scx, &scy);
+      pt[0].x = x + (long) (radius * xcoords[i]);
+      pt[0].y = y + (long) (radius * ycoords[i]);
+      pt[1].x = x + (long) (radius * xcoords[i+1]);
+      pt[1].y = y + (long) (radius * ycoords[i+1]);
+      Polygon(hdc,pt,2);
+    }
+    for (i=0; i<i1-1; i++) {
+      pt[0].x = x + (long) (radius * xcoords[i]);
+      pt[0].y = y + (long) (radius * ycoords[i]);
+      pt[1].x = x + (long) (radius * xcoords[i+1]);
+      pt[1].y = y + (long) (radius * ycoords[i+1]);
+      Polygon(hdc,pt,2);
+    }
+  } else {
+    for (i=i0; i<i1-1; i++) {
+      pt[0].x = x + (long) (radius * xcoords[i]);
+      pt[0].y = y + (long) (radius * ycoords[i]);
+      pt[1].x = x + (long) (radius * xcoords[i+1]);
+      pt[1].y = y + (long) (radius * ycoords[i+1]);
+      Polygon(hdc,pt,2);
+    }
+  }
+
+}
+
+
 int Circle(HDC hdc, long x, long y, int radius, RECT rc)
 {
   POINT pt[65];
@@ -1218,7 +1271,6 @@ void ReadAssetNumber(void)
     {
       return;
     }
-
   ReadUUID();
   if(strAssetNumber[0] != '\0')
     {
@@ -1258,7 +1310,7 @@ void ReadUUID(void)
 {
   BOOL fRes;
   DWORD dwBytesReturned =0;
-  DEVICE_ID* pDevID;
+  DEVICE_ID DevID;
   int wSize;
   int i;
 
@@ -1268,36 +1320,32 @@ void ReadUUID(void)
 
   memset(&Guid, 0, sizeof(GUID));
 
-  pDevID = (DEVICE_ID*)malloc(sizeof(DEVICE_ID));
-  memset(pDevID, 0, sizeof(DEVICE_ID));
-  pDevID->dwSize = sizeof(DEVICE_ID);
+  memset(&DevID, 0, sizeof(DEVICE_ID));
+  DevID.dwSize = sizeof(DEVICE_ID);
 
   fRes = KernelIoControl( IOCTL_HAL_GET_DEVICEID, NULL, 0,
-			  pDevID, sizeof( DEVICE_ID ), &dwBytesReturned );
+			  &DevID, sizeof( DEVICE_ID ), &dwBytesReturned );
 
-  wSize = pDevID->dwSize;
-  free(pDevID); pDevID = NULL;
+  wSize = DevID.dwSize;
 
   if( (FALSE != fRes) || (ERROR_INSUFFICIENT_BUFFER != GetLastError()))
     return;
 
-  pDevID = (DEVICE_ID*)malloc(sizeof(wSize));
-  memset(pDevID, 0, sizeof(wSize));
-  pDevID->dwSize = wSize;
+  memset(&DevID, 0, sizeof(wSize));
+  DevID.dwSize = wSize;
 
   fRes = KernelIoControl( IOCTL_HAL_GET_DEVICEID, NULL, 0,
-			  pDevID, wSize, &dwBytesReturned );
+			  &DevID, wSize, &dwBytesReturned );
 
   if((FALSE == fRes) || (ERROR_INSUFFICIENT_BUFFER == GetLastError()) )
     return;
 
   BYTE* pDat = (BYTE*)&Guid.Data1;
-  BYTE* pSrc = (BYTE*)(pDevID) + pDevID->dwPresetIDOffset;
-  memcpy(pDat, pSrc, pDevID->dwPresetIDBytes);
-  pDat +=  pDevID->dwPresetIDBytes;
-  pSrc =  (BYTE*)(pDevID) + pDevID->dwPlatformIDOffset;
-  memcpy(pDat, pSrc, pDevID->dwPlatformIDBytes);
-
+  BYTE* pSrc = (BYTE*)(&DevID) + DevID.dwPresetIDOffset;
+  memcpy(pDat, pSrc, DevID.dwPresetIDBytes);
+  pDat +=  DevID.dwPresetIDBytes;
+  pSrc =  (BYTE*)(&DevID) + DevID.dwPlatformIDOffset;
+  memcpy(pDat, pSrc, DevID.dwPlatformIDBytes);
 
   temp = Guid.Data2; temp = temp << 16;
   temp += Guid.Data3 ;
