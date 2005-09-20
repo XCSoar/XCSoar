@@ -3583,6 +3583,9 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 //	- Logging of data
 //	- External WAV files
 //	- Add in TCHAR* data for extra, non language data entry
+//
+// XXX Consider moving almost all this functionality into AddMessage ?
+//	???
 
 extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR *data) {
   Message::Lock();
@@ -3609,12 +3612,10 @@ extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR *data) 
 	    wcscat(msgcache, data);
 	  }
 
-	  ShowStatusMessage(msgcache, LocalMessage.delay_ms);
-
+	  Message::AddMessage(LocalMessage.delay_ms, 1, msgcache);
 	}
 
   Message::Unlock();
-
 }
 
 /*
@@ -3668,130 +3669,9 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 void ShowStatusMessage(TCHAR* text, int delay_ms,
 		       int iFontHeightRatio,
                        bool docenter, int *TabStops) {
-
   // JMW new interface...///// XXX todo work out how to set the type properly
   Message::AddMessage(delay_ms, 1, text);
   return;
-  //////////////
-
-  CStatMsgUserData *data;
-  HWND hWnd;
-  LOGFONT logfont;
-  RECT rc;
-
-  int fontHeight;
-  int widthMain, heightMain;
-  int widthStatus, heightStatus;
-  int linecount;
-
-  forceDestroyStatusMessage = false;
-
-  // Check inputs are valid
-  if (delay_ms < 0) return;
-
-  if (iFontHeightRatio < 2)  iFontHeightRatio = 2;
-  if (iFontHeightRatio > 20) iFontHeightRatio = 20;
-
-  // Initialize window specific data class
-  data = new CStatMsgUserData();
-
-  // Get size of main window
-  GetClientRect(hWndMainWindow, &rc);
-  widthMain  = rc.right - rc.left;
-  heightMain = rc.bottom - rc.top;
-
-
-  // Build a font of the correct height
-  fontHeight = (int)((rc.bottom-rc.top)/iFontHeightRatio);
-
-  memset ((char *)&logfont, 0, sizeof (logfont));
-  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
-
-  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
-  logfont.lfHeight = fontHeight;
-  logfont.lfWidth =  0;
-  logfont.lfWeight = FW_BOLD;
-
-#ifndef NOCLEARTYPE
-  logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY;
-#endif
-
-  data->hFont = CreateFontIndirect (&logfont);
-
-  // Create a child window to contain status message
-  if (docenter) {
-    hWnd = CreateWindow(TEXT("EDIT"), text,
-                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|ES_CENTER
-			|WS_BORDER|ES_READONLY | WS_CLIPCHILDREN
-			| WS_CLIPSIBLINGS,
-                        0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
-  } else {
-    hWnd = CreateWindow(TEXT("EDIT"), text,
-                        WS_VISIBLE|WS_CHILD|ES_MULTILINE|WS_BORDER
-			|ES_READONLY | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                        0,0,0,0,hWndMainWindow,NULL,hInst,NULL);
-
-  }
-
-  if (TabStops != NULL){
-    int x;
-    for (x=0; TabStops[x] != 0 && x < 10; x++);
-    SendMessage(hWnd, EM_SETTABSTOPS, (WPARAM)x, (LPARAM)TabStops);
-  }
-
-  // Apply font to window
-  SendMessage(hWnd,WM_SETFONT,(WPARAM) data->hFont,MAKELPARAM(TRUE,0));
-
-  // Now find out what size the window needs to be
-  widthStatus  = (int)((double)widthMain * 0.95);
-  heightStatus = (int)((double)fontHeight * 1.2);
-
-  // Center it in the middle of the Main Window
-  SetWindowPos(hWnd,HWND_TOP,
-	  (widthMain-widthStatus)/2, (heightMain-heightStatus)/2,
-    widthStatus, heightStatus,
-    0);
-
-  // If there are multiple lines of text when using the current
-  // width, then we need to increase the height and reposition
-  linecount = SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
-
-  if (linecount > 1) {
-    heightStatus = heightStatus * linecount;
-
-    if (heightStatus > heightMain) heightStatus = heightMain;
-
-    SetWindowPos(hWnd,HWND_TOP,
-  	  (widthMain-widthStatus)/2, (heightMain-heightStatus)/2,
-      widthStatus, heightStatus,
-      0);
-  }
-
-  // Attach window specific data to the window
-  SetWindowLong(hWnd, GWL_USERDATA, (LONG) data);
-
-  // Subclass window function so that we can trap timer messages
-  data->fnOldWndProc = (WNDPROC) SetWindowLong(hWnd, GWL_WNDPROC,
-					       (LONG) StatusMsgWndTimerProc);
-
-  if (delay_ms) {
-    data->texpiry = delay_ms + ::GetTickCount();
-  } else {
-    data->texpiry = 0;
-  }
-  // Set timer to specified timeout.
-  // Window will close when timer fires
-  if (!SetTimer(hWnd, 1, 500, NULL)) {
-    DestroyWindow(hWnd);  // Couldn't init timer
-    return;
-  }
-
-  // SCOTT TODO - Add in DestroyWindow on click anywhere in window
-
-  // FINALLY, display the window for the user's perusal
-  ShowWindow(hWnd, SW_SHOW);
-  UpdateWindow(hWnd);
-
 }
 
 

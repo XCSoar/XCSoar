@@ -880,18 +880,18 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   DoSunEphemeris(147.0,-36.0);
 
+  SwitchToMapWindow();
+  MapWindow::MapDirty = true;
+
+  CloseProgressDialog();
+
+  // NOTE: Must show errors AFTER all windows ready
 #ifdef _SIM_
   InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
   InputEvents::showErrors();
 #else
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
-
-  SwitchToMapWindow();
-  MapWindow::MapDirty = true;
-
-  CloseProgressDialog();
-
 
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0))
