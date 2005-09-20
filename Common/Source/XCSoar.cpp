@@ -564,6 +564,7 @@ void ShowStatus() {
   }
   wcscat(statusmessage, TEXT("\r\n"));
 
+  // XXX Need to fix this one.
   ShowStatusMessage(statusmessage, 60000, 15, false, TabStops);
   // i think one minute is enough...
 
