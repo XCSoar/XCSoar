@@ -7,7 +7,7 @@ FILES_LOCAL=readme.html input/default.html
 # Other temp files to remove
 # (XXX Crap name xcixml - XSL should use different entries depending
 # automatically)
-FILES_TMP=dest.tar.gz readme.xml input/default.xcixml input/default.xml
+FILES_TMP=dest.tar.gz readme.xml input/default.xcixml input/default.xml input/tree.tmp
 
 # ------------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ installstyle:
 	scp style.css $(SSHUSER)@shell.sourceforge.net:/home/groups/x/xc/xcsoar/htdocs/
 
 %.xml : %.xcixml ss/xci.xsl ss/xci_tree.xsl
-	xsltproc ss/xci_tree.xsl $< > input/tree.xml
+	xsltproc ss/xci_tree.xsl $< > input/tree.tmp
 	xsltproc ss/xci.xsl $< > $@
 
 %.html : %.xml ss/wrap.xsl
