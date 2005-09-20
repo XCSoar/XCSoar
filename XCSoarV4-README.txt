@@ -3,6 +3,15 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 To do for next version:
+- Exit simulator if battery lower than 20%
+
+To do for next beta:
+- RETURN key in default.xci needs to be mapped
+- Check default.xci has same key mappings as 4.3
+- Text box size of messages in default.xci
+- Package and release fonts (part of standard cab/exe)
+- Default set of status messages (compiled, defaults, change code)
+- Hide main button when not in MENU (not sure how to yet...)
 - Daylight savings time fix
 - Use windows device time instead of GPS time in simulator
 - Adjustable font for long infoboxes (especially time)
