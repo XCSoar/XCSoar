@@ -41,6 +41,7 @@ while (<>) {
 			if ($rec{hide} && ($rec{hide} eq "yes")) {
 				print qq{StatusMessageCache[StatusMessageCache_Size].doStatus = false;\n};
 			}
+			print qq{StatusMessageCache[StatusMessageCache_Size].ms_delay = } . $rec{delay} . qq{;\n};
 			print qq{StatusMessageCache_Size++;\n};
 		}
 		%rec = ();
