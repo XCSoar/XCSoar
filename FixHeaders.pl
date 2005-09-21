@@ -37,8 +37,13 @@ foreach my $file (@ARGV) {
 		local $/;
 		$buffer = <IN>;
 	}
-	$buffer =~ s/Copyright_License\s*{[^}]*}/Copyright_License {$header}/;
 	close IN;
+
+	if ($buffer =~ s/Copyright_License\s*{[^}]*}/Copyright_License {$header}/) {
+		print "\tDone\n";
+	} else {
+		print "\tmissing Copyright_License { } entry\n";
+	}
 
 	open (OUT, "> $file")
 		or die("Unable to open original input file $file for output - $!");

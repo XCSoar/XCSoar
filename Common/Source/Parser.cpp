@@ -1,6 +1,14 @@
 /*
-  XCSoar Glide Computer
-  Copyright (C) 2000 - 2004  M Roberts
+  $Id: Parser.cpp,v 1.18 2005/09/21 00:32:50 scottp Exp $
+
+Copyright_License {
+
+  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+  Copyright (C) 2000 - 2005  
+
+  	M Roberts
+	Scott Penrose <scottp@dd.com.au>
+	John Wharington <jwharington@bigfoot.com>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -16,7 +24,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-  $Id: Parser.cpp,v 1.17 2005/09/13 18:53:10 jwharington Exp $
+}
+
 */
 
 #include "stdafx.h"
