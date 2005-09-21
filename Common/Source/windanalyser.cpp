@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.17 2005/09/21 00:32:50 scottp Exp $
+**   $Id: windanalyser.cpp,v 1.18 2005/09/21 00:46:17 scottp Exp $
 **
 ***********************************************************************/
 /*
@@ -22,7 +22,11 @@ Copyright_License {
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
   Copyright (C) 2000 - 2005  
 
-  	M Roberts
+  	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
 	Scott Penrose <scottp@dd.com.au>
 	John Wharington <jwharington@bigfoot.com>
 

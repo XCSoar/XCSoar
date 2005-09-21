@@ -19,7 +19,7 @@
 // Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 // Boston, MA  02111-1307, USA.
 //
-// $Id: leastsqs.cpp,v 1.3 2005/09/21 00:32:50 scottp Exp $
+// $Id: leastsqs.cpp,v 1.4 2005/09/21 00:46:17 scottp Exp $
 //
 /*
 NOTE: Sompe portions copyright as above
@@ -29,7 +29,11 @@ Copyright_License {
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
   Copyright (C) 2000 - 2005  
 
-  	M Roberts
+  	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
 	Scott Penrose <scottp@dd.com.au>
 	John Wharington <jwharington@bigfoot.com>
 

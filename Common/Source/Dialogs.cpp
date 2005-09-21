@@ -1,13 +1,17 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.80 2005/09/21 00:32:49 scottp Exp $
+  $Id: Dialogs.cpp,v 1.81 2005/09/21 00:46:17 scottp Exp $
 
 Copyright_License {
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
   Copyright (C) 2000 - 2005  
 
-  	M Roberts
+  	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
 	Scott Penrose <scottp@dd.com.au>
 	John Wharington <jwharington@bigfoot.com>
 
