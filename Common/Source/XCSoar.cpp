@@ -481,7 +481,7 @@ BlueDialupSMS bsms;
 
 
 void ShowStatus() {
-  TCHAR statusmessage[1000];
+  TCHAR statusmessage[2000];
   TCHAR Temp[1000];
   int iwaypoint= -1;
   double sunsettime;
@@ -494,6 +494,7 @@ void ShowStatus() {
   int   TabStops[] = {60,80,0};
 
   statusmessage[0]=0;
+  _tcscat(statusmessage, TEXT("\r\n"));
 
   Units::LongitudeToString(GPS_INFO.Longitude, sLongitude, sizeof(sLongitude)-1);
   Units::LatitudeToString(GPS_INFO.Latitude, sLatitude, sizeof(sLatitude)-1);
@@ -574,9 +575,7 @@ void ShowStatus() {
   }
   wcscat(statusmessage, TEXT("\r\n"));
 
-  // XXX Need to fix this one.
-  ShowStatusMessage(statusmessage, 60000, 15, false, TabStops);
-  // i think one minute is enough...
+  DoStatusMessage(TEXT("Status"), statusmessage);
 
 }
 
@@ -2213,8 +2212,6 @@ void ProcessTimer(void)
             extGPSCONNECT = FALSE;
 
 			InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
-            //            LoadString(hInst, IDS_CONNECTWAIT, szLoadText, MAX_LOADSTRING);
-            //            ShowStatusMessage(szLoadText, 5000);
 
  //            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
 

@@ -92,7 +92,7 @@ typedef struct {
 	TCHAR *nmea_vario;		/* NMEA Sentence - to Vario serial */
 	bool doStatus;
 	bool doSound;
-	int delay_ms;		/* Delay for ShowStatusMessage */
+	int delay_ms;		/* Delay for DoStatusMessage */
 	int iFontHeightRatio;	// TODO - not yet used
 	bool docenter;		// TODO - not yet used
 	int *TabStops;		// TODO - not yet used

@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.81 2005/09/21 00:46:17 scottp Exp $
+  $Id: Dialogs.cpp,v 1.82 2005/09/21 03:11:09 scottp Exp $
 
 Copyright_License {
 
@@ -3576,29 +3576,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 //	- Sound to play - What sound to play
 //	- Log - Keep the message on the log/history window (goes to log file and history)
 //
-// Default for no match
-//	- ShowStatusMessage for TEXT for 30 second standard font and standard sound, log
-//
-// How to:
-//	- Play sound file
-//	- Match text
-//	- Read configuration
-//	- Edit configuration
-//
-// On the fly information - Each message can keep information on the fly
-//	- Number of times displayed
-//	- Average time displayed
-//	- Release method (button, click, timer)
-//	- Never Show Again - dismiss this
-//
-// TODO:
-//	- New/Better ShowStatusMessage - with buttons etc
-//	- Logging of data
-//	- External WAV files
-//	- Add in TCHAR* data for extra, non language data entry
-//
-// XXX Consider moving almost all this functionality into AddMessage ?
-//	???
+// TODO (need to discuss) Consider moving almost all this functionality into AddMessage ?
 
 extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR *data) {
   Message::Lock();
@@ -3663,31 +3641,6 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 	  GetWindowText(GetDlgItem(hDlg,entry),strTemp, 1023);
 	  SetWindowText(GetDlgItem(hDlg,entry),gettext(strTemp));
 }
-
-
-
-// Pop up a text dialog for a specified time
-// period in milliseconds
-//
-// If delay_ms==0 the window will stay up until clicked
-//
-// Font size is (optionally) set using iFontHeightRatio
-// - specifies the number of rows of text that would fit
-// on the entire screen
-//
-// Insert linebreaks by using carriage return AND
-// linefeed characters.  ie TEXT("Line 1\r\nLine 2")
-// otherwise you'll get funny characters appearing
-//
-void ShowStatusMessage(TCHAR* text, int delay_ms, 
-		       int iFontHeightRatio, 
-                       bool docenter, int *TabStops) {
-  // JMW new interface...///// XXX todo work out how to set the type properly
-  Message::AddMessage(delay_ms, 1, text);
-  return;
-}
-
-
 
 
 /////////////////////////////////////////////////

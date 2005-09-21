@@ -45,9 +45,6 @@ void SetWindowText_gettext(HWND hDlg, int entry);
 TCHAR* gettext(TCHAR* text);
 void ClearStatusMessages(void);
 
-void ShowStatusMessage(TCHAR* text, int delay_ms=2000, int iFontHeightRatio=12,
-                       bool docenter=true, int *TabStops = NULL);
-
 void StartupScreen();
 
 HWND CreateProgressDialog(TCHAR *text);
