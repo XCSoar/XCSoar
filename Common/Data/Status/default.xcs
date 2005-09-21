@@ -119,3 +119,7 @@ sound=IDR_INSERT
 key=Status
 delay=60000
 
+# Always leave dummy entry for now (work around issue in parser)
+key=Dummy
+delay=1500
+
