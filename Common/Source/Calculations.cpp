@@ -1659,11 +1659,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   TCHAR text[1024];
 
   if(!AIRSPACEWARNINGS)
-    {
-      // clear previous warning if any
-      Message::Acknowledge(MSG_AIRSPACE);
       return;
-    }
 
   i= FindAirspaceCircle(Calculated->NextLongitude, Calculated->NextLatitude );
   if(i != -1)
