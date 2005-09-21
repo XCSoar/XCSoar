@@ -114,3 +114,5 @@ StatusMessageCache[StatusMessageCache_Size].doSound = true;
 StatusMessageCache_Size++;
 StatusMessageCache[StatusMessageCache_Size].key = TEXT("Status");
 StatusMessageCache_Size++;
+StatusMessageCache[StatusMessageCache_Size].key = TEXT("Dummy");
+StatusMessageCache_Size++;
