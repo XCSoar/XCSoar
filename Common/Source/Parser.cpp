@@ -141,6 +141,11 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
 	{
 	  TCHAR cptext[80];
 	  wsprintf(cptext,TEXT("%s"), &String[7]);
+	  // TODO - JMW (from Scott)
+	  // 	Either use something like
+	  // 		DoStatusMessage(TEXT("Vario Message"), cptext);
+	  // 		(then you can assign time and sound to Vario Message)
+	  // 	or	Message::AddMessage
 	  DoStatusMessage(cptext);
 	  return FALSE;
 	}

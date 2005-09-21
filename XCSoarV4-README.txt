@@ -6,17 +6,20 @@ To do for next version:
 - Exit simulator if battery lower than 20%
 
 To do for next beta:
-- RETURN key in default.xci needs to be mapped
 - Check default.xci has same key mappings as 4.3
 - Text box size of messages in default.xci
 - Package and release fonts (part of standard cab/exe)
-- Default set of status messages (compiled, defaults, change code)
 - Hide main button when not in MENU (not sure how to yet...)
 - Daylight savings time fix
 - Use windows device time instead of GPS time in simulator
 - Adjustable font for long infoboxes (especially time)
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
   to move/edit waypoints.
+
+Changes from 4.5beta3 to 4.5beta4
+- Fixed message disappearing problem after 1 second (when airspace warnings were off)
+- RETURN key in default.xci needs to be mapped
+- Default set of status messages - now automatically generated from default.xcs
 
 Changes from 4.5beta2 to 4.5beta3
 - Enable secondary files clear button
