@@ -790,7 +790,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
 
-
   // Perform application initialization:
   if (!InitInstance (hInstance, nCmdShow))
     {
@@ -827,6 +826,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
 
+#ifdef _SIM_
+  SYSTEMTIME pda_time;
+  GetSystemTime(&pda_time);
+  GPS_INFO.Time = pda_time.wHour*3600+pda_time.wMinute*60+pda_time.wSecond;
+#endif
 
 #ifdef DEBUG
   DebugStore("# Start\r\n");

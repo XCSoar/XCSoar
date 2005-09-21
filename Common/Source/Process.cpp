@@ -290,8 +290,11 @@ void FormatterTime::SecsToDisplayTime(int d) {
 
 int DetectCurrentTime() {
   TIME_ZONE_INFORMATION TimeZoneInformation;
-  GetTimeZoneInformation(&TimeZoneInformation);
-  int localtime = ((int)GPS_INFO.Time-TimeZoneInformation.Bias*60);
+  int localtime = (int)GPS_INFO.Time;
+  if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
+    // TODO: check UTC adjustment for UK?
+  }
+  localtime -= TimeZoneInformation.Bias*60;
   return localtime;
 }
 

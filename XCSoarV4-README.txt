@@ -10,13 +10,15 @@ To do for next beta:
 - Text box size of messages in default.xci
 - Package and release fonts (part of standard cab/exe)
 - Hide main button when not in MENU (not sure how to yet...)
-- Daylight savings time fix
-- Use windows device time instead of GPS time in simulator
+- Daylight savings time fix for UK
 - Adjustable font for long infoboxes (especially time)
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
   to move/edit waypoints.
 
 Changes from 4.5beta3 to 4.5beta4
+- Use windows device time instead of GPS time in simulator
+- Fixed spurious button press bug
+- Status messages can be acknowledged by touching them
 - Fixed message disappearing problem after 1 second (when airspace warnings were off)
 - RETURN key in default.xci needs to be mapped
 - Default set of status messages - now automatically generated from default.xcs
