@@ -66,6 +66,8 @@ bool Message::hidden;
 TCHAR Message::msgText[2000];
 extern HFONT MapWindowBoldFont;
 
+// Get start time to reduce overrun errors
+DWORD startTime = ::GetTickCount();
 
 // Intercept messages destined for the Status Message window
 LRESULT CALLBACK MessageWindowProc(HWND hwnd, UINT message, 
@@ -216,7 +218,7 @@ void Message::Resize() {
 }
 
 void Message::Render() {
-  DWORD	fpsTime = ::GetTickCount();
+  DWORD	fpsTime = ::GetTickCount() - startTime;
 
   Lock();
 
@@ -232,8 +234,10 @@ void Message::Render() {
   for (i=0; i<MAXMESSAGES; i++) {
     if (messages[i].type==0) continue; // ignore unknown messages
 
-    if ((messages[i].texpiry<= fpsTime)
-	&&(messages[i].texpiry> messages[i].tstart)) {
+    if (
+		(messages[i].texpiry <= fpsTime)
+		&&(messages[i].texpiry> messages[i].tstart)
+	) {
       // this message has expired for first time
       changed = true;
       continue;
@@ -294,7 +298,7 @@ void Message::AddMessage(DWORD tshow, int type, TCHAR* Text) {
   Lock();
 
   int i;
-  DWORD	fpsTime = ::GetTickCount();
+  DWORD	fpsTime = ::GetTickCount() - startTime;
   i = GetEmptySlot();
 
   messages[i].type = type;
@@ -313,7 +317,7 @@ void Message::Repeat(int type) {
 
   Lock();
 
-  DWORD	fpsTime = ::GetTickCount();
+  DWORD	fpsTime = ::GetTickCount() - startTime;
 
   // find most recent non-visible message
 
@@ -348,7 +352,7 @@ void Message::Acknowledge(int type) {
   int i;
 
   Lock();
-  DWORD	fpsTime = ::GetTickCount();
+  DWORD	fpsTime = ::GetTickCount() - startTime;
 
   for (i=0; i<MAXMESSAGES; i++) {
     if ((messages[i].texpiry> messages[i].tstart)
