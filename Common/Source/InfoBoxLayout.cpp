@@ -525,7 +525,9 @@ void ButtonLabel::SetLabelText(int index, TCHAR *text) {
     // error!
     return;
   }
-  if ((text==NULL)||(*text==_T('\0'))||(*text==_T(' '))) {
+  if (text==NULL) {
+    ShowWindow(hWndButtonWindow[index], SW_HIDE);
+  } else if ((*text==_T('\0'))||(*text==_T(' '))) {
     ShowWindow(hWndButtonWindow[index], SW_HIDE);
   } else {
     SetWindowText(hWndButtonWindow[index], gettext(text));
