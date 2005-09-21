@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.19 2005/09/21 00:46:17 scottp Exp $
+  $Id: Parser.cpp,v 1.20 2005/09/21 01:45:45 scottp Exp $
 
 Copyright_License {
 
@@ -141,6 +141,11 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
 	{
 	  TCHAR cptext[80];
 	  wsprintf(cptext,TEXT("%s"), &String[7]);
+	  // TODO - JMW (from Scott)
+	  // 	Either use something like
+	  // 		DoStatusMessage(TEXT("Vario Message"), cptext);
+	  // 		(then you can assign time and sound to Vario Message)
+	  // 	or	Message::AddMessage
 	  DoStatusMessage(cptext);
 	  return FALSE;
 	}

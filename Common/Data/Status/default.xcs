@@ -34,7 +34,7 @@ key=Maintain effective\r\nLOOKOUT at all times
 sound=IDR_REMOVE
 delay=1500
 
-key=Closest Airfield\r\nChanged!
+key=Closest Airfield Changed!
 sound=IDR_REMOVE
 delay=1500
 
@@ -69,5 +69,42 @@ key=Restarting Comm Ports
 delay=1500
 
 key=Waiting for GPS Fix
+delay=1500
+
+key=XCI Error
+delay=30000
+sound=IDR_FAIL
+
+key=McCready Value
+delay=5000
+
+key=Auto McCready ON
+sound=IDR_INSERT
+delay=1500
+
+key=Auto McCready OFF
+sound=IDR_REMOVE
+delay=1500
+
+key=Task Aborted
+sound=IDR_REMOVE
+delay=1500
+
+key=Task Resume
+sound=IDR_REMOVE
+delay=1500
+
+key=Bugs Performance
+delay=5000
+
+key=Ballast %
+delay=5000
+
+key=Logger ON
+sound=IDR_INSERT
+delay=1500
+
+key=Logger OFF
+sound=IDR_REMOVE
 delay=1500
 

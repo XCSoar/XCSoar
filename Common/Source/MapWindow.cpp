@@ -783,22 +783,14 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     
   case WM_KEYUP:
 
-    // TODO NOTES INPUT 
-    //	How to use "MODE" in input data
-    //	Maybe each input data should have a MODE along the lines of:
-    //		all		- Everywhere - eg: Set zoom to X
-    //		map		- Map window only - eg: current method of 
-    //                            change zoom
-    //		info	- Standard info box controls ???
-    //		status	- Status message being displayed 
-    
     if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
       if (InputEvents::processKey(wParam)) {
-	//	  DoStatusMessage(TEXT("Event in default"));
+	// TODO - change to debugging DoStatusMessage(TEXT("Event in default"));
       }
+      // XXX Should we only do this if it IS processed above ?
       return TRUE; // don't go to default handler
     } else {
-      // DoStatusMessage(TEXT("Event in dialog"));
+      // TODO - debugging DoStatusMessage(TEXT("Event in dialog"));
       if (InputEvents::processKey(wParam)) {
       }
       return TRUE; // don't go to default handler

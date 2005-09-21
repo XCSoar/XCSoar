@@ -1454,10 +1454,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       if (!DialogActive) {
 
 	if (InputEvents::processKey(wParam)) {
-	  //	  DoStatusMessage(TEXT("Event in infobox"));
+	  //	  TODO debugging - DoStatusMessage(TEXT("Event in infobox"));
 	}
       } else {
-	//	DoStatusMessage(TEXT("Event in dlg"));
+	//	TODO debugging - DoStatusMessage(TEXT("Event in dlg"));
 	if (InputEvents::processKey(wParam)) {
 	}
       }

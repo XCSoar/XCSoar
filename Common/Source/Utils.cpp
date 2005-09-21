@@ -1456,9 +1456,6 @@ double ScreenAngle(int x1, int y1, int x2, int y2)
   return atan2(y2-y1, x2-x1)*RAD_TO_DEG;
 }
 
-// TODO SCOTT I18N - This is the warning string - Need to replace with
-// DoStatusMessage modified to act the same etc.
-
 void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top, TCHAR *szMessageBuffer, TCHAR *szTitleBuffer )
 {
   TCHAR BaseStr[512];
