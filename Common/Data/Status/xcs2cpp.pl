@@ -31,6 +31,7 @@ while (<>) {
 
 	if (/^\s*$/) {
 		if ($rec{key}) {
+			print qq{_init_Status(StatusMessageCache_Size);\n};
 			print q{StatusMessageCache[StatusMessageCache_Size].key = TEXT("} . $rec{key} . qq{");\n}; 
 			if ($rec{sound}) {
 				print q{StatusMessageCache[StatusMessageCache_Size].sound = TEXT("} 
