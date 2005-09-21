@@ -423,47 +423,23 @@ void MapWindow::Event_Terrain(int vswitch) {
     val = vswitch;
   }
 
-  if (EnableSoundModes) {
-    if (val>0) {
-      PlayResource(TEXT("IDR_INSERT"));
-    } else {
-      PlayResource(TEXT("IDR_REMOVE"));
-    }
-  }
-
   EnableTopology = ((val & 0x01) == 0x01);
   EnableTerrain  = ((val & 0x02) == 0x02);
-
-  // XXX InputEvents - need to move all of this function to InputEvents
-  //		toggle
-  //		toggle terrain
-  //		toggle topology
-  //		terrain topology
-  //		topology terrain
-  //		topology
-  //		terrain
-  //		show terrain
-  //		show topology
-  //		show
-  // TODO SCOTT I18N - This should be a DoStatusMessage
-  // 	(Remove Playsound above, Support multi line text in gettext
-  // 	etc, simplify set of text below)
 
   // ARH Let user know what's happening
   TCHAR buf[128];
 
   if (EnableTopology)
-    _stprintf(buf, TEXT("%s\r\n"), gettext(TEXT("Topo: ON")));
+    _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("ON")));
   else
-    _stprintf(buf, TEXT("%s\r\n"), gettext(TEXT("Topo: OFF")));
+    _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("OFF")));
 
   if (EnableTerrain)
-    _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("Terrain: ON")));
+    _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("ON")));
   else
-    _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("Terrain: OFF")));
+    _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
 
-  ShowStatusMessage(buf, 2500);
-  //
+  DoStatusMessage(TEXT("Topology / Terrain"), buf);
 
   RefreshMap();
 }
@@ -2719,10 +2695,7 @@ void MapWindow::DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base
 
   FormatWarningString(Type, Name , Base, Top, szMessageBuffer, szTitleBuffer );
 
-  ShowStatusMessage(szMessageBuffer, 7000, 25);
-
-//  MessageBox(hWndMapWindow,szMessageBuffer ,szTitleBuffer,MB_OK|MB_ICONWARNING);
-//  SetWindowPos(hWndMainWindow,HWND_TOP,0,0,0,0,SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+  DoStatusMessage(TEXT("Airspace Warning"), szMessageBuffer);
 }
 
 

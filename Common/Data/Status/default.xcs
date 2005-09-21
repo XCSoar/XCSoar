@@ -108,3 +108,14 @@ key=Logger OFF
 sound=IDR_REMOVE
 delay=1500
 
+key=Airspace Warning
+delay=7000
+sound=IDR_FAIL
+
+key=Toppology / Terrain
+delay=2500
+sound=IDR_INSERT
+
+key=Status
+delay=60000
+
