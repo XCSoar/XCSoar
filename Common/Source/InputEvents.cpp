@@ -78,10 +78,11 @@ Copyright_License {
 	The logger can then display messages through Message:: if ncessary and log to files etc
 	This code, and baddly written #ifdef should be moved to Macros in the Log class.
 */
-#ifdef _SIM_
+
+#ifdef _INPUTDEBUG_
 	// Log first NN input event errors for display in simulator mode
 	#define MAX_INPUT_ERRORS 5
-	TCHAR input_errors[MAX_INPUT_ERRORS][1024];
+	TCHAR input_errors[MAX_INPUT_ERRORS][3000];
 	int input_errors_count = 0; 
 	// JMW this is just far too annoying right now,
 	// since "title" "note" and commencts are not parsed, they
@@ -174,8 +175,8 @@ void InputEvents::readFile() {
 
   // TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
   TCHAR buffer[2049];	// Buffer for all
-  TCHAR key[1024];	// key from scanf
-  TCHAR value[1024];	// value from scanf
+  TCHAR key[2049];	// key from scanf
+  TCHAR value[2049];	// value from scanf
   TCHAR *new_label = NULL;		
   int found;
 
@@ -215,10 +216,25 @@ void InputEvents::readFile() {
 
 			// For each mode
 			token = wcstok(d_mode, TEXT(" "));
+
+			// General errors - these should be true
+			ASSERT(d_location >= 0);
+			ASSERT(d_location < 1024);	// Scott arbitrary limit
+			ASSERT(event_id >= 0);
+			ASSERT(d_mode != NULL);
+			ASSERT(d_type != NULL);
+			ASSERT(d_label != NULL);
+
+			// These could indicate bad data - thus not an ASSERT (debug only)
+			// ASSERT(wcslen(d_mode) < 1024);
+			// ASSERT(wcslen(d_type) < 1024);
+			// ASSERT(wcslen(d_label) < 1024);
+
 			while( token != NULL ) {
 
-				// All modes are valid
+				// All modes are valid at this point
 				int mode_id = mode2int(token, true);
+				ASSERT(mode_id >= 0);
 
 				// Make label event
 				// TODO Consider Reuse existing entries...
@@ -235,7 +251,7 @@ void InputEvents::readFile() {
 					int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
 					if (key > 0)
 						Key2Event[mode_id][key] = event_id;
-   					#ifdef _SIM_
+   					#ifdef _INPUTDEBUG_
 					else if (input_errors_count < MAX_INPUT_ERRORS)
 					  wsprintf(input_errors[input_errors_count++], TEXT("Invalid key data: %s at %i"), d_data, line);
 					#endif
@@ -246,7 +262,7 @@ void InputEvents::readFile() {
 					int key = findGCE(d_data);				// Get the int key (eg: APP1 vs 'a')
 					if (key >= 0)
 						GC2Event[mode_id][key] = event_id;
-   					#ifdef _SIM_
+   					#ifdef _INPUTDEBUG_
 					else if (input_errors_count < MAX_INPUT_ERRORS)
 					  wsprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
 					#endif
@@ -254,7 +270,7 @@ void InputEvents::readFile() {
 				} else if (wcscmp(d_type, TEXT("label")) == 0)	{	// label only - no key associated (label can still be touch screen)
 					// Nothing to do here...
 
-   				#ifdef _SIM_
+   				#ifdef _INPUTDEBUG_
 				} else if (input_errors_count < MAX_INPUT_ERRORS) {
 				  wsprintf(input_errors[input_errors_count++], TEXT("Invalid type: %s at %i"), d_type, line);
 				#endif
@@ -279,9 +295,7 @@ void InputEvents::readFile() {
 	} else if ((found != 2) || !key || !value) {
 		// Do nothing - we probably just have a comment line
 		// JG removed "void;" - causes warning (void is declaration and needs variable)
-   		#ifdef _SIM_
-		  wsprintf(input_errors[input_errors_count++], TEXT("Not a valid line: %s at %i"), buffer, line);
-		#endif
+		// NOTE: Do NOT display buffer to user as it may contain an invalid stirng !
 
     } else {
       if (wcscmp(key, TEXT("mode")) == 0) {
@@ -306,7 +320,7 @@ void InputEvents::readFile() {
 		pt2Event event = findEvent(d_event);
 		if (event) {
 			event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
-   	    #ifdef _SIM_
+   	    #ifdef _INPUTDEBUG_
 		} else  if (input_errors_count < MAX_INPUT_ERRORS) {
 		  wsprintf(input_errors[input_errors_count++], TEXT("Invalid event type: %s at %i"), d_event, line);
 	    #endif
@@ -316,7 +330,7 @@ void InputEvents::readFile() {
       } else if (wcscmp(key, TEXT("location")) == 0) {
 		swscanf(value, TEXT("%d"), &d_location);
 
-	  #ifdef _SIM_
+	  #ifdef _INPUTDEBUG_
 	  } else if (input_errors_count < MAX_INPUT_ERRORS) {
 		  wsprintf(input_errors[input_errors_count++], TEXT("Invalid key/value pair %s=%s at %i"), key, value, line);
 	  #endif
@@ -332,7 +346,7 @@ void InputEvents::readFile() {
 
 }
 
-#ifdef _SIM_
+#ifdef _INPUTDEBUG_
 void InputEvents::showErrors() {
 	TCHAR buffer[2048];
 	int i;
@@ -429,6 +443,8 @@ int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next) {
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
 void InputEvents::makeLabel(int mode_id, TCHAR* label, int location, int event_id) {
+	if (mode_id == 0)
+		return;
   if ((mode_id >= 0) && (mode_id < MAX_MODE) && (ModeLabel_count[mode_id] < MAX_LABEL)) {
     ModeLabel[mode_id][ModeLabel_count[mode_id]].label = label;
     ModeLabel[mode_id][ModeLabel_count[mode_id]].location = location;
@@ -443,7 +459,7 @@ int InputEvents::mode2int(TCHAR *mode, bool create) {
   
   // Better checks !
   if ((mode == NULL))
-    return 0;
+    return -1;
   
   for (i = 0; i < mode_map_count; i++) {
     if (wcscmp(mode, mode_map[i]) == 0)
@@ -457,7 +473,7 @@ int InputEvents::mode2int(TCHAR *mode, bool create) {
     return mode_map_count - 1;
   }
   
-  return 0;
+  return -1;
 }
 
 
@@ -467,7 +483,11 @@ void InputEvents::setMode(TCHAR *mode) {
 
   wcsncpy(mode_current, mode, MAX_MODE_STRING);
 
-  thismode = mode2int(mode,true);
+  // Mode must already exist to use it here...
+  thismode = mode2int(mode,false);
+  if (thismode < 0)	// Technically an error in config (eg event=Mode DoesNotExist)
+	  return;		// TODO Add debugging here 
+
   if (thismode == lastmode) return;
   lastmode = thismode;
 
@@ -512,6 +532,7 @@ int InputEvents::getModeID() {
 // Input is a via the user touching the label on a touch screen / mouse
 bool InputEvents::processButton(int bindex) {
   int thismode = getModeID();
+  ASSERT(thismode >= 0);	// Must always be so because mode_current should always be valid
   int i;
   // Note - reverse order - last one wins
   for (i = ModeLabel_count[thismode]; i >= 0; i--) {
@@ -546,6 +567,7 @@ bool InputEvents::processKey(int dWord) {
 
   // get current mode
   int mode = InputEvents::getModeID();
+  ASSERT(mode >= 0);
   
   // Which key - can be defined locally or at default (fall back to default)
   event_id = Key2Event[mode][dWord];
@@ -585,6 +607,7 @@ int event_id = 0;
 
   // get current mode
   int mode = InputEvents::getModeID();
+  ASSERT(mode >= 0);
   
   // Which key - can be defined locally or at default (fall back to default)
   event_id = GC2Event[mode][gce_id];
@@ -1252,7 +1275,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 	// dll_name (up to first space)
 	pdest = wcsstr(data, TEXT(" "));
 	if (pdest == NULL) {
-		#ifdef _SIM_
+		#ifdef _INPUTDEBUG_
 		wsprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute string - no DLL"));
 		InputEvents::showErrors();
 		#endif
@@ -1282,7 +1305,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 		lpfnDLLProc = (DLLFUNC_INPUTEVENT)GetProcAddress(hinstLib, func_name);
 		if (lpfnDLLProc != NULL) {
 			(*lpfnDLLProc)(other);
-	    #ifdef _SIM_
+	    #ifdef _INPUTDEBUG_
 		} else {
 			DWORD le;
 			le = GetLastError();
@@ -1314,7 +1337,7 @@ HINSTANCE _loadDLL(TCHAR *name) {
 				lpfnDLLProc(GetModuleHandle(NULL));
 
 			return DLLCache[DLLCache_Count - 1].hinstance;
-		#ifdef _SIM_
+		#ifdef _INPUTDEBUG_
 		} else {
 			wsprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute - not loaded - %s"), name);
 			InputEvents::showErrors();

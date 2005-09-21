@@ -93,6 +93,8 @@ enum {
 		GCE_COUNT			// How many we have for arrays etc
 };
 
-
+#ifdef _SIM_
+#define _INPUTDEBUG_
+#endif
 
 #endif

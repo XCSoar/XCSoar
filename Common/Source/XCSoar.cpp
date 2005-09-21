@@ -902,9 +902,12 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // NOTE: Must show errors AFTER all windows ready
 #ifdef _SIM_
   InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
-  InputEvents::showErrors();
 #else
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
+#endif
+
+#ifdef _INPUTDEBUG_
+  InputEvents::showErrors();
 #endif
  
   // Main message loop:
