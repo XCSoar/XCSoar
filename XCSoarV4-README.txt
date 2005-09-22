@@ -4,6 +4,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 To do for next version:
 - Exit simulator if battery lower than 20%
+- Implement cursor moveable by arrow keys for waypoint/airspace selection and
+  to move/edit waypoints.
 
 To do for next beta:
 - Check default.xci has same key mappings as 4.3
@@ -12,10 +14,11 @@ To do for next beta:
 - Hide main button when not in MENU (not sure how to yet...)
 - Daylight savings time fix for UK
 - Adjustable font for long infoboxes (especially time)
-- Implement cursor moveable by arrow keys for waypoint/airspace selection and
-  to move/edit waypoints.
 
 Changes from 4.5beta3 to 4.5beta4
+- Fixed a number of memory leaks and buffer overruns in parsing data files
+- Fixed Input Events label corruption
+- Modified variable names for Language and Status (more sensible)
 - Use windows device time instead of GPS time in simulator 
 - Fixed spurious button press bug
 - Status messages can be acknowledged by touching them
