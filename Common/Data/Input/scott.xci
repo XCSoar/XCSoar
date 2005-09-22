@@ -1,0 +1,871 @@
+# ============================================================================================
+# SCOTT PENROSE <scottp@dd.com.au> - XCSoar Input Configuration http://xcsoar.sourceforge.net/
+# ============================================================================================
+# Copyrgith 2005 Scott Penrose
+#
+# This configuration file is designed for Pocket PC O2 XDA II with Bluetooth Gamepad
+# ============================================================================================
+
+#
+# TAKEOFF/LANDING
+#
+#	- Automatically start/stop logger
+#
+
+mode=default
+type=gce
+data=TAKEOFF
+event=PlaySound \Storage\Magic.wav
+event=StatusMessage TAKEOFF\r\nLog Started
+event=Logger start
+
+mode=default
+type=gce
+data=LANDING
+event=Analysis
+event=PlaySound \Storage\Magic.wav
+event=StatusMessage LANDING\r\nLog Stopped
+event=Logger stop
+
+
+#
+# Organiser Hardware Keys
+# 
+#	- APP1 - get me the menu, use on screen after that - fall back in case of GamePad failure
+#	- APP2 - Abort/Resume toggle
+#
+
+# Alwyas show me this settings - may need to add more here
+
+mode=default Nav1 Nav2 Nav3 Config1 Config2 Config3 Info1 Info2 Info3 Display1 Display2 Display3 Menu1
+type=key
+data=APP1
+event=AbortTask show
+event=AbortTask toggle
+
+mode=default Nav1 Nav2 Nav3 Config1 Config2 Config3 Info1 Info2 Info3 Display1 Display2 Display3 Menu1
+type=key
+data=APP2
+event=Mode Menu1
+label=Main/
+location=1
+
+mode=default
+type=label
+event=PlaySound \Windows\Youvegotmail.wav
+label=Test Play
+location=2
+
+# Clear default entry
+
+mode=default
+type=label
+label=
+location=4
+
+mode=default
+type=key
+data=RETURN
+event=ClearAirspaceWarnings
+event=ClearStatusMessages
+
+#
+# GamePad Keys
+# 
+#	- Keys 
+#		l = Left button
+#		r = Right button
+#		a = A (little left)
+#		b = B (little up)
+#		c = C (little right)
+#		d = D (little down)
+#		s = Start button
+#		8 = Up arrow
+#		2 = Down arrow
+#		4 = Left arrow
+#		6 = Right arrow
+#		
+#	- L = Drop marker (Always)
+#	- R = Acknowledge (Always)
+#	- Start = bring up top menu
+#	- A-D = Choose next menu (then next rotate between)
+#	- A-D = Not used in menu above, function to change
+#	- Up, Down, Left, Right = Other special events from top menu
+#		eg: ???
+#	- Up, Down, Left, Right - Act normally in all other modes (zoom, pan, bugs% etc)
+#	- ??? Enter key for Acknowledge is required... Could be hold down start?
+#
+
+# -------------------
+# Left (l) /Right (r)
+# -------------------
+
+mode=default
+type=key
+data=L
+event=StatusMessage Dropped marker
+event=MarkLocation
+
+mode=default
+type=key
+data=R
+event=StatusMessage Acknoledge NOT implemented (XXX)
+event=ClearAirspaceWarnings
+event=ClearStatusMessages
+#event=Acknowledge XXX (Not implemented)
+
+# ------------------------------------
+# Arrows (8, 2, 4, 6) while in DEFAULT
+# ------------------------------------
+
+mode=default
+type=key
+data=2
+event=Zoom out
+
+mode=default
+type=key
+data=8
+event=Zoom in
+
+mode=default
+type=key
+data=4
+event=StatusMessage XXX Unallocated LEFT Arrow
+
+mode=default
+type=key
+data=6
+event=StatusMessage XXX Unallocated RIGHT Arrow
+
+# ----------------------------------------------------
+# Start (S) and A,B,C,D menu top level buttons (Menu1)
+# ----------------------------------------------------
+
+mode=default
+type=key
+data=S
+event=Mode Menu1
+
+mode=Menu1
+type=key
+data=A
+event=Mode Nav1
+label=Nav/
+location=1
+
+mode=Menu1
+type=key
+data=B
+event=Mode Display1
+label=Display/
+location=2
+
+mode=Menu1
+type=key
+data=C
+event=Mode Config1
+label=Config/
+location=3
+
+mode=Menu1
+type=key
+data=D
+event=Mode Info1
+label=Info/
+location=4
+
+mode=Menu1
+type=key
+data=8
+event=StatusMessage XXX Unallocated UP Arrow
+
+mode=Menu1
+type=key
+data=2
+event=StatusMessage XXX Unallocated DOWN Arrow
+
+mode=Menu1
+type=key
+data=4
+event=StatusMessage XXX Unallocated LEFT Arrow
+
+mode=Menu1
+type=key
+data=6
+event=StatusMessage XXX Unallocated RIGHT Arrow
+
+
+XXXXXXXXXXXXXXXXXX
+
+# ------------
+# mode=infobox (XXX currently only by clicking an info box !)
+# ------------
+
+mode=infobox
+type=key
+data=A
+event=SelectInfoBox previous
+label=<<
+location=1
+
+mode=infobox
+type=key
+data=C
+event=SelectInfoBox next
+label=>>
+location=4
+
+mode=infobox
+type=key
+data=D
+event=ChangeInfoBoxType previous
+label=<type
+location=2
+
+mode=infobox
+type=key
+data=B
+event=ChangeInfoBoxType next
+label=type>
+location=3
+
+mode=infobox
+type=key
+data=8
+event=DoInfoKey up
+
+mode=infobox
+type=key
+data=2
+event=DoInfoKey down
+
+mode=infobox
+type=key
+data=4
+event=DoInfoKey left
+
+mode=infobox
+type=key
+data=6
+event=DoInfoKey right
+
+mode=infobox
+type=key
+data=R
+event=DoInfoKey return
+
+
+# -------------
+# mode=Nav1 (original key A)
+# -------------
+
+mode=Nav1
+type=key
+data=A
+event=Mode Nav2
+label=Nav/ (1 of 3)
+location=1
+
+
+mode=Nav1
+type=key
+data=B
+event=StatusMessage Dropped marker
+event=MarkLocation
+label=Mark
+location=2
+
+mode=Nav1
+type=key
+data=C
+#event=Mode default
+event=WaypointDetails
+label=Waypt details
+location=3
+
+mode=Nav1
+type=key
+data=D
+event=AdjustWaypoint previous
+label=Waypt previous
+location=4
+
+# -------------
+# mode=Nav2
+# -------------
+
+mode=Nav2
+type=key
+data=A
+event=Mode Nav3
+label=Nav/ (2 of 3)
+location=1
+
+mode=Nav2
+type=key
+data=B
+label=Lookup
+location=2
+#event=xxwaypointSelector
+#event=StatusMessage Waypoint selector not implemented
+
+mode=Nav2
+type=key
+data=C
+label=Task
+location=3
+event=StatusMessage Task edit not implemented
+#event=xxtaskEdit
+
+mode=Nav2
+type=key
+data=D
+label=Declare
+location=4
+event=StatusMessage Declare task not implemented
+#event=xxdeclare
+
+# ---------
+# mode=Nav3
+# ---------
+
+mode=Nav3
+type=key
+data=A
+event=Mode default
+label=Nav/ (3 of 3)
+location=1
+
+mode=Nav3
+type=key
+data=B
+event=Logger show
+event=Logger toggle
+label=Log
+location=2
+
+mode=Nav3
+type=key
+data=C
+event=AdjustWaypoint next
+label=Waypt next
+location=3
+
+mode=Nav3
+type=key
+data=D
+#event=Mode default
+event=AbortTask toggle
+label=Abort task
+location=4
+
+# -------------
+# mode=Display1 (original key B)
+# -------------
+
+mode=Display1
+type=key
+data=B
+event=Mode Display2
+label=Display/ (1 of 3)
+location=2
+
+mode=Display1
+type=key
+data=A
+event=Zoom in
+label=Zoom In
+location=1
+
+mode=Display1
+type=key
+data=C
+event=Zoom out
+label=Zoom Out
+location=3
+
+mode=Display1
+type=key
+data=D
+event=ClearWarningsAndTerrain
+label=Terrain
+location=4
+
+mode=Display1 Display2 Display3
+type=key
+data=8
+event=Pan up
+
+mode=Display1 Display2 Display3
+type=key
+data=2
+event=Pan down
+
+mode=Display1 Display2 Display3
+type=key
+data=4
+event=Pan left
+
+mode=Display1 Display2 Display3
+type=key
+data=6
+event=Pan right
+
+# -------------
+# mode=Display2
+# -------------
+
+mode=Display2
+type=key
+data=B
+event=Mode Display3
+label=Display/ (2 of 3)
+location=2
+
+mode=Display2
+type=key
+data=A
+event=Zoom auto show
+event=Zoom auto toggle
+label=Auto Zoom
+location=1
+
+mode=Display2
+type=key
+data=C
+event=SnailTrail show
+event=SnailTrail toggle
+label=Snail
+location=3
+
+mode=Display2
+type=key
+data=D
+label=Up Cruise
+location=4
+event=StatusMessage Up cruise not implemented
+#event=xxnorthcruise
+
+# -------------
+# mode=Display3
+# -------------
+
+mode=Display3
+type=key
+data=B
+event=Mode default
+label=Display/ (3 of 3)
+location=2
+
+mode=Display3
+type=key
+data=A
+label=Up Climb
+location=1
+event=StatusMessage Up circling not implemented
+#event=xxnorthcircling
+
+mode=Display3
+type=key
+data=C
+#event=Mode default
+event=ScreenModes togglefull
+label=Full screen
+location=3
+
+mode=Display3
+type=key
+data=D
+event=Pan show
+event=Pan supertoggle
+label=Pan
+location=4
+
+# -------------
+# mode=Config1 (original key C)
+# -------------
+mode=Config1
+type=key
+data=C
+event=Mode Config2
+label=Config/ (1 of 3)
+location=3
+
+mode=Config1
+type=key
+data=A
+event=McCready up
+label=McCready +
+location=1
+
+mode=Config1
+type=key
+data=B
+event=McCready down
+label=McCready -
+location=2
+
+mode=Config1
+type=key
+data=D
+event=McCready auto
+label=McCready Auto
+location=4
+
+
+# -------------
+# mode=Config2
+# -------------
+
+mode=Config2
+type=key
+data=C
+event=Mode Config3
+label=Config/ (2 of 3)
+location=3
+
+mode=Config2
+type=key
+data=A
+event=Mode Vario
+label=Vario/
+location=1
+
+mode=Config2
+type=key
+data=B
+label=Setup
+location=2
+event=StatusMessage Setup not implemented
+#event=xxsetup
+
+mode=Config2
+type=key
+data=D
+label=FMode
+location=4
+event=StatusMessage Switch flightmode not implemented
+#event=xxflightmode
+
+# ------------
+# mode=Config3
+# ------------
+
+mode=Config3
+type=key
+data=C
+event=Mode default
+label=Config/ (3 of 3)
+location=3
+
+mode=Config3
+type=key
+data=A
+event=Mode Ballast
+label=Ballast/
+location=1
+
+mode=Config3
+type=key
+data=B
+event=Mode Wind
+label=Wind/
+location=2
+
+mode=Config3
+type=key
+data=D
+event=Mode Bugs
+label=Bugs/
+location=4
+
+# -------------
+# mode=Vario	XXX Too complex - Start, C, C, A, B, A - to turn on sound and back to default
+# -------------
+mode=Vario
+type=key
+data=A
+event=Mode default
+label=..
+location=1
+
+mode=Vario
+type=key
+data=B
+event=Sounds show
+event=Sounds toggle
+label=Mute
+location=2
+
+#mode=Vario
+#type=key
+#data=B
+#event=xxdeadband
+#event=StatusMessage Deadband not implemented
+#label=Deadband
+#location=2
+
+mode=Vario
+type=key
+data=C
+event=Mode VarioFilter
+label=Filter/
+location=3
+
+mode=Vario
+type=key
+data=D
+label=STF
+location=4
+event=StatusMessage Speed to fly not implemented
+#event=xxspeedtofly
+
+# -------------
+# mode=Info1 (original key D)
+# -------------
+mode=Info1
+type=key
+data=D
+event=Mode Info2
+label=Info/ (1 of 2)
+location=4
+
+mode=Info1
+type=key
+data=A
+event=SelectInfoBox next
+label=Select
+location=1
+
+mode=Info1
+type=key
+data=B
+event=ScreenModes toggleauxiliary
+label=Aux Info
+location=2
+
+mode=Info1
+type=key
+data=C
+label=Messages
+location=3
+event=StatusMessage Review messages not implemented
+#event=xxstatusmessage
+
+# -------------
+# mode=Info2
+# -------------
+mode=Info2
+type=key
+data=D
+event=Mode default
+label=Info/ (2 of 2)
+location=4
+
+mode=Info2
+type=key
+data=A
+#event=Mode default
+event=Analysis
+label=Analysis
+location=1
+
+mode=Info2
+type=key
+data=B
+label=Near port
+location=2
+event=StatusMessage Nearest airfield not implemented
+#event=xxnearestairfield
+
+mode=Info2
+type=key
+data=C
+#event=Mode default
+event=Status
+label=Status
+location=3
+
+# -------------
+# mode=VarioFilter (XXX needs work - arrows and ABCD)
+# -------------
+
+mode=VarioFilter
+type=key
+data=APP3
+event=Mode default
+label=..
+location=3
+
+mode=VarioFilter
+type=key
+data=6
+event=AdjustVarioFilter fast
+event=StatusMessage Vario fast
+label=Fast 1.0s
+location=5
+
+mode=VarioFilter
+type=key
+data=7
+event=AdjustVarioFilter medium
+event=StatusMessage Vario medium
+label=Medium 1.5s
+location=6
+
+mode=VarioFilter
+type=key
+data=8
+event=AdjustVarioFilter slow
+event=StatusMessage Vario slow
+label=Slow 3.0s
+location=7
+
+mode=VarioFilter
+type=key
+data=9
+label= 
+location=8
+
+mode=VarioFilter
+type=key
+data=0
+label= 
+location=9
+
+# -------------
+# mode=Bugs (XXX needs work - arrows and ABCD)
+# -------------
+
+mode=Bugs
+type=key
+data=APP3
+event=Mode default
+label=..
+location=3
+
+mode=Bugs
+type=key
+data=6
+event=Bugs show
+event=Bugs max
+label=Clean
+location=5
+
+mode=Bugs
+type=key
+data=7
+event=Bugs show
+event=Bugs up
+label=Bugs -
+location=6
+
+mode=Bugs
+type=key
+data=8
+event=Bugs show
+event=Bugs down
+label=Bugs +
+location=7
+
+mode=Bugs
+type=key
+data=9
+event=Bugs show
+event=Bugs min
+label=Dirty
+location=8
+
+mode=Bugs
+type=key
+data=0
+label= 
+location=9
+
+# -------------
+# mode=Ballast (XXX needs work - arrows and ABCD)
+# -------------
+
+mode=Ballast
+type=key
+data=APP3
+event=Mode default
+label=..
+location=3
+
+mode=Ballast
+type=key
+data=6
+event=Ballast show
+event=Ballast min
+label=Empty
+location=5
+
+mode=Ballast
+type=key
+data=7
+event=Ballast show
+event=Ballast down
+label=Ballast -
+location=6
+
+mode=Ballast
+type=key
+data=8
+event=Ballast show
+event=Ballast up
+label=Ballast +
+location=7
+
+mode=Ballast
+type=key
+data=9
+event=Ballast show
+event=Ballast max
+label=Full
+location=8
+
+mode=Ballast
+type=key
+data=0
+label= 
+location=9
+
+# -------------
+# mode=Wind (XXX needs work - arrows and ABCD)
+# -------------
+mode=Wind
+type=key
+data=APP3
+event=Mode default
+label=..
+location=3
+
+mode=Wind
+type=key
+data=7
+event=Wind down
+label=Wind Speed-
+location=6
+
+mode=Wind
+type=key
+data=8
+event=Wind up
+label=Wind Speed+
+location=7
+
+mode=Wind
+type=key
+data=9
+event=Wind left
+label=Wind Dir-
+location=8
+
+mode=Wind
+type=key
+data=0
+event=Wind right
+label=Wind Dir+
+location=9
