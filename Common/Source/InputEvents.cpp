@@ -182,7 +182,7 @@ void InputEvents::readFile() {
 
   // Init first entry
   bool some_data = false;		// Did we fin some in the last loop...
-  TCHAR d_mode[256];
+  TCHAR d_mode[1024];			// Multiple modes (so large string)
   TCHAR d_type[256];
   TCHAR d_data[256];
   int event_id;
@@ -299,42 +299,55 @@ void InputEvents::readFile() {
 
     } else {
       if (wcscmp(key, TEXT("mode")) == 0) {
-		some_data = true;	// Success, we have a real entry
-		wcscpy(d_mode, value);
+		  if (wcslen(value) < 1024) {
+				some_data = true;	// Success, we have a real entry
+				wcscpy(d_mode, value);
+		  }
       } else if (wcscmp(key, TEXT("type")) == 0) {
-		wcscpy(d_type, value);
+		  if (wcslen(value) < 256)
+			wcscpy(d_type, value);
       } else if (wcscmp(key, TEXT("data")) == 0) {
-		wcscpy(d_data, value);
+		  if (wcslen(value) < 256)
+			wcscpy(d_data, value);
       } else if (wcscmp(key, TEXT("event")) == 0) {
-		wcscpy(d_event, TEXT(""));
-        wcscpy(d_misc, TEXT(""));
-		swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().]"), d_event, d_misc);
+		  if (wcslen(value) < 256) {
+				wcscpy(d_event, TEXT(""));
+				wcscpy(d_misc, TEXT(""));
+				int ef;
+				ef = swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().]"), d_event, d_misc);
 
-		// XXX Can't use token here - breaks other token - damn C - how about C++ String class ?
-		// TCHAR *eventtoken;
-		// eventtoken = wcstok(value, TEXT(" "));
-		// d_event = token;
-		// eventtoken = wcstok(value, TEXT(" "));
+				// XXX Can't use token here - breaks other token - damn C - how about C++ String class ?
+				// TCHAR *eventtoken;
+				// eventtoken = wcstok(value, TEXT(" "));
+				// d_event = token;
+				// eventtoken = wcstok(value, TEXT(" "));
 
-		// TODO - Consider reusing existing identical events (not worth it right now)
-		pt2Event event = findEvent(d_event);
-		if (event) {
-			event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
-   	    #ifdef _INPUTDEBUG_
-		} else  if (input_errors_count < MAX_INPUT_ERRORS) {
-		  wsprintf(input_errors[input_errors_count++], TEXT("Invalid event type: %s at %i"), d_event, line);
-	    #endif
-		}
-      } else if (wcscmp(key, TEXT("label")) == 0) {
+				if ((ef == 1) || (ef = 2)) {
+					// TODO - Consider reusing existing identical events (not worth it right now)
+					pt2Event event = findEvent(d_event);
+					if (event) {
+						event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
+   					#ifdef _INPUTDEBUG_
+					} else  if (input_errors_count < MAX_INPUT_ERRORS) {
+					  wsprintf(input_errors[input_errors_count++], TEXT("Invalid event type: %s at %i"), d_event, line);
+					#endif
+					}
+   				#ifdef _INPUTDEBUG_
+				} else  if (input_errors_count < MAX_INPUT_ERRORS) {
+				  wsprintf(input_errors[input_errors_count++], TEXT("Invalid event type at %i"), line);
+				#endif
+				}
+		  }
+	  } else if (wcscmp(key, TEXT("label")) == 0) {
 		wcscpy(d_label, value);
-      } else if (wcscmp(key, TEXT("location")) == 0) {
+	  } else if (wcscmp(key, TEXT("location")) == 0) {
 		swscanf(value, TEXT("%d"), &d_location);
 
 	  #ifdef _INPUTDEBUG_
 	  } else if (input_errors_count < MAX_INPUT_ERRORS) {
 		  wsprintf(input_errors[input_errors_count++], TEXT("Invalid key/value pair %s=%s at %i"), key, value, line);
 	  #endif
-      }
+	  }
     }
 
   } // end while

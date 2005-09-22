@@ -7,16 +7,13 @@ my $line = 0;
 
 =head1 DEMO
 
-	XXX Fix name - don't use Cache !
+	StatusMessageData[StatusMessageData_Size].key = TEXT("blah");
+	StatusMessageData[StatusMessageData_Size].sound = TEXT("blah");
+	StatusMessageData[StatusMessageData_Size].do_sound = true;
+	StatusMessageData[StatusMessageData_Size].delay_ms = nn;
+	StatusMessageData[StatusMessageData_Size].doStatus = false;
 
-
-	StatusMessageCache[StatusMessageCache_Size].key = TEXT("blah");
-	StatusMessageCache[StatusMessageCache_Size].sound = TEXT("blah");
-	StatusMessageCache[StatusMessageCache_Size].do_sound = true;
-	StatusMessageCache[StatusMessageCache_Size].delay_ms = nn;
-	StatusMessageCache[StatusMessageCache_Size].doStatus = false;
-
-	StatusMessageCache_Size++;
+	StatusMessageData_Size++;
 
 =cut
 
@@ -31,19 +28,19 @@ while (<>) {
 
 	if (/^\s*$/) {
 		if ($rec{key}) {
-			print qq{_init_Status(StatusMessageCache_Size);\n};
-			print q{StatusMessageCache[StatusMessageCache_Size].key = TEXT("} . $rec{key} . qq{");\n};
+			print qq{_init_Status(StatusMessageData_Size);\n};
+			print q{StatusMessageData[StatusMessageData_Size].key = TEXT("} . $rec{key} . qq{");\n};
 			if ($rec{sound}) {
-				print q{StatusMessageCache[StatusMessageCache_Size].sound = TEXT("}
+				print q{StatusMessageData[StatusMessageData_Size].sound = TEXT("}
 					. $rec{sound}
 					. qq{");\n};
-				print qq{StatusMessageCache[StatusMessageCache_Size].doSound = true;\n};
+				print qq{StatusMessageData[StatusMessageData_Size].doSound = true;\n};
 			}
 			if ($rec{hide} && ($rec{hide} eq "yes")) {
-				print qq{StatusMessageCache[StatusMessageCache_Size].doStatus = false;\n};
+				print qq{StatusMessageData[StatusMessageData_Size].doStatus = false;\n};
 			}
-			print qq{StatusMessageCache[StatusMessageCache_Size].delay_ms = } . $rec{delay} . qq{;\n};
-			print qq{StatusMessageCache_Size++;\n};
+			print qq{StatusMessageData[StatusMessageData_Size].delay_ms = } . $rec{delay} . qq{;\n};
+			print qq{StatusMessageData_Size++;\n};
 		}
 		%rec = ();
 

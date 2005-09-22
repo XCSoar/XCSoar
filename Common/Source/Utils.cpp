@@ -2049,24 +2049,25 @@ void ReadLanguageFile() {
 		return;
 
 	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
-	TCHAR key[1024];	// key from scanf
-	TCHAR value[1024];	// value from scanf
-//	TCHAR temp[1024];	// Buffer for formatted output
+	TCHAR buffer[2049];	// key from scanf
+	TCHAR key[2049];	// key from scanf
+	TCHAR value[2049];	// value from scanf
 	int found;			// Entries found from scanf
 
 	/* Read from the file */
 	while (
-		(GetTextCache_Size < MAXSTATUSMESSAGECACHE)
-		&& ((found = fwscanf(fp, TEXT("%[^=]=%[^\n]\n"), key, value)) != EOF)
+  	 (GetTextData_Size < MAXSTATUSMESSAGECACHE)
+	 && fgetws(buffer, 2048, fp)
+	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
 	) {
 		// Check valid line?
 		if ((found != 2) || !key || !value) continue;
 
-		GetTextCache[GetTextCache_Size].key = StringMallocParse(key);
-		GetTextCache[GetTextCache_Size].text = StringMallocParse(value);
+		GetTextData[GetTextData_Size].key = StringMallocParse(key);
+		GetTextData[GetTextData_Size].text = StringMallocParse(value);
 
 		// Global counter
-		GetTextCache_Size++;
+		GetTextData_Size++;
 	}
 
 	// file was OK, so save registry
@@ -2075,99 +2076,18 @@ void ReadLanguageFile() {
 	fclose(fp);
 }
 
-
-/*
-
-  Experimental code to read the data from the Resource for fall back
-  - ie: no dependence on external files
-
-  Also plan to have multiple language files built in, but still allow
-  an external request.
-
-  Maybe we can pick up the language automatically.
-
-  // extern HINSTANCE                       hInst; // The current instance
-
-  	LPTSTR lpRes;
-	HANDLE hResInfo, hRes;
-	TCHAR *split;
-
-		hResInfo = FindResource (hInst, TEXT("IDR_TEXT_LANGUAGE"), TEXT("TEXT"));
-
-		if (hResInfo == NULL)
-			return;
-
-		// Load the wave resource.
-		hRes = LoadResource (hInst, (HRSRC)hResInfo);
-
-		if (hRes == NULL)
-			return;
-
-		// Lock the wave resource and play it.
-		lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
-
-		if (lpRes == NULL)
-			return;
-
-		split = lpRes;
-		TCHAR *next;
-		while (split != NULL) {
-			next = wcsstr(split, TEXT("\n"));
-
-			if (next != NULL) {
-				wcsncpy(TempString, split, next - split);
-				_ReadLanguageFile_Set(TempString);
-			}
-
-			// Get next entry
-			split = next;
-		}
-
-
-void _ReadLanguageFile_Set(TCHAR* TempString) {
-
-	TCHAR* split;
-
-	split = wcsstr(TempString, TEXT("|"));
-	if (split) {
-		TCHAR *new_key;
-		new_key = (TCHAR *)malloc(wcslen(TempString) - (TempString - split) * 2);
-		TCHAR *new_text;
-		new_text = (TCHAR *)malloc(wcslen(split) * 2);
-
-		// Out of memory
-		if (!new_key || !new_text) return;
-
-		*split = NULL;
-		wcscpy(new_key, TempString);
-		wcscpy(new_text, split+1);
-
-		split = wcsstr(new_text, TEXT("\n"));
-		if (split)
-			*split = NULL;
-
-		GetTextCache[GetTextCache_Size].key = new_key;
-		GetTextCache[GetTextCache_Size].text = new_text;
-
-		GetTextCache_Size++;
-	}
-}
-
-
-*/
-
-
-/* NOTE HARD CODED Status Data - Temporary */
-
 void ReadStatusFile() {
 
 	// DEFAULT - 0 is loaded as default, and assumed to exist
-	StatusMessageCache[0].key = TEXT("DEFAULT");
-	StatusMessageCache[0].doStatus = true;
-	StatusMessageCache[0].doSound = true;
-	StatusMessageCache[0].sound = TEXT("IDR_WAV_DRIP");
-	StatusMessageCache[0].delay_ms = 1500; // 1.5 s
-	StatusMessageCache_Size++;
+	StatusMessageData[0].key = TEXT("DEFAULT");
+	StatusMessageData[0].doStatus = true;
+	StatusMessageData[0].doSound = true;
+	StatusMessageData[0].sound = TEXT("IDR_WAV_DRIP");
+	StatusMessageData[0].delay_ms = 1500; // 1.5 s
+	StatusMessageData_Size++;
+
+	// Load up other defaults - allow overwrite in config file
+	#include "Status_defaults.cpp"
 
 	TCHAR szFile1[MAX_PATH] = TEXT("\0");
 	FILE *fp;
@@ -2179,39 +2099,37 @@ void ReadStatusFile() {
 	if (szFile1)
 		fp  = _tfopen(szFile1, TEXT("rt"));
 
-	// Unable to open file - load defaults
-	if (fp == NULL) {
-		#include "Status_defaults.cpp"
+	// Unable to open file
+	if (fp == NULL)
 		return;
-	}
 
 	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
 	TCHAR buffer[2049];	// Buffer for all
-	TCHAR key[1024];	// key from scanf
-	TCHAR value[1024];	// value from scanf
+	TCHAR key[2049];	// key from scanf
+	TCHAR value[2049];	// value from scanf
 	int ms;				// Found ms for delay
 	TCHAR **location;	// Where to put the data
 	int found;			// Entries found from scanf
 	bool some_data;		// Did we find some in the last loop...
 
 	// Init first entry
-	_init_Status(StatusMessageCache_Size);
+	_init_Status(StatusMessageData_Size);
 	some_data = false;
 
 	/* Read from the file */
 	while (
-		(StatusMessageCache_Size < MAXSTATUSMESSAGECACHE)
+		(StatusMessageData_Size < MAXSTATUSMESSAGECACHE)
 		&& fgetws(buffer, 2048, fp)
-		&& ((found = swscanf(buffer, TEXT("%[^=]=%[^\n]\n"), key, value)) != EOF)
+		&& ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
 	) {
 		// Check valid line? If not valid, assume next record (primative, but works ok!)
 		if ((found != 2) || !key || !value) {
 
 			// Global counter (only if the last entry had some data)
 			if (some_data) {
-				StatusMessageCache_Size++;
+				StatusMessageData_Size++;
 				some_data = false;
-				_init_Status(StatusMessageCache_Size);
+				_init_Status(StatusMessageData_Size);
 			}
 
 		} else {
@@ -2220,16 +2138,16 @@ void ReadStatusFile() {
 
 			if (wcscmp(key, TEXT("key")) == 0) {
 				some_data = true;	// Success, we have a real entry
-				location = &StatusMessageCache[StatusMessageCache_Size].key;
+				location = &StatusMessageData[StatusMessageData_Size].key;
 			} else if (wcscmp(key, TEXT("sound")) == 0) {
-				StatusMessageCache[StatusMessageCache_Size].doSound = true;
-				location = &StatusMessageCache[StatusMessageCache_Size].sound;
+				StatusMessageData[StatusMessageData_Size].doSound = true;
+				location = &StatusMessageData[StatusMessageData_Size].sound;
 			} else if (wcscmp(key, TEXT("delay")) == 0) {
 				if (swscanf(value, TEXT("%d"), &ms) == 1)
-					StatusMessageCache[StatusMessageCache_Size].delay_ms = ms;
+					StatusMessageData[StatusMessageData_Size].delay_ms = ms;
 			} else if (wcscmp(key, TEXT("hide")) == 0) {
 				if (wcscmp(value, TEXT("yes")) == 0)
-					StatusMessageCache[StatusMessageCache_Size].doStatus = false;
+					StatusMessageData[StatusMessageData_Size].doStatus = false;
 			}
 
 			// Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
@@ -2242,23 +2160,22 @@ void ReadStatusFile() {
 	}
 
 	// How many we really got (blank next just in case)
-	StatusMessageCache_Size++;
-	_init_Status(StatusMessageCache_Size);
+	StatusMessageData_Size++;
+	_init_Status(StatusMessageData_Size);
 
 	// file was ok, so save it to registry
 	SetRegistryString(szRegistryStatusFile, szFile1);
 
 	fclose(fp);
-
 }
 
 // Create a blank entry (not actually used)
 void _init_Status(int num) {
-	StatusMessageCache[num].key = TEXT("");
-	StatusMessageCache[num].doStatus = true;
-	StatusMessageCache[num].doSound = false;
-	StatusMessageCache[num].sound = TEXT("");
-	StatusMessageCache[num].delay_ms = 2500;  // 2.5 s
+	StatusMessageData[num].key = TEXT("");
+	StatusMessageData[num].doStatus = true;
+	StatusMessageData[num].doSound = false;
+	StatusMessageData[num].sound = TEXT("");
+	StatusMessageData[num].delay_ms = 2500;  // 2.5 s
 }
 
 
