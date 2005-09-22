@@ -172,10 +172,10 @@ bool Debounce();
 
 
 // Interface Globals
-extern GetTextSTRUCT GetTextCache[];
-extern int GetTextCache_Size;
-extern StatusMessageSTRUCT StatusMessageCache[];
-extern int StatusMessageCache_Size;
+extern GetTextSTRUCT GetTextData[];
+extern int GetTextData_Size;
+extern StatusMessageSTRUCT StatusMessageData[];
+extern int StatusMessageData_Size;
 
 #if (EXPERIMENTAL > 0)
 extern BlueDialupSMS bsms;

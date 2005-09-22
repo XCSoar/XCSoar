@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.82 2005/09/21 03:11:09 scottp Exp $
+  $Id: Dialogs.cpp,v 1.83 2005/09/22 00:00:08 scottp Exp $
 
 Copyright_License {
 
@@ -3582,12 +3582,13 @@ extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR *data) 
   Message::Lock();
 
 	StatusMessageSTRUCT LocalMessage;
-	LocalMessage = StatusMessageCache[0];
+	LocalMessage = StatusMessageData[0];
 
 	int i;
-	for (i=0; i<StatusMessageCache_Size; i++) {
-		if (wcscmp(text, StatusMessageCache[i].key) == 0)
-			LocalMessage = StatusMessageCache[i];
+	// Search from end of list (allow overwrites by user)
+	for (i=StatusMessageData_Size - 1; i>0; i--) {
+		if (wcscmp(text, StatusMessageData[i].key) == 0)
+			LocalMessage = StatusMessageData[i];
 	}
 
 	if (EnableSoundModes && LocalMessage.doSound)
@@ -3626,10 +3627,10 @@ extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR *data) 
 */
 TCHAR* gettext(TCHAR* text) {
 	int i;
-	for (i=0; i<GetTextCache_Size; i++) {
-		if (!text || !GetTextCache[i].key) continue;
-		if (wcscmp(text, GetTextCache[i].key) == 0)
-			return GetTextCache[i].text;
+	for (i=0; i<GetTextData_Size; i++) {
+		if (!text || !GetTextData[i].key) continue;
+		if (wcscmp(text, GetTextData[i].key) == 0)
+			return GetTextData[i].text;
 	}
 	return text;
 }
@@ -3641,7 +3642,6 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 	  GetWindowText(GetDlgItem(hDlg,entry),strTemp, 1023);
 	  SetWindowText(GetDlgItem(hDlg,entry),gettext(strTemp));
 }
-
 
 /////////////////////////////////////////////////
 

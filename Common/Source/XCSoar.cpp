@@ -202,10 +202,10 @@ TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
 TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");     
 
 // Interface Files
-GetTextSTRUCT GetTextCache[MAXSTATUSMESSAGECACHE];
-int GetTextCache_Size = 0;
-StatusMessageSTRUCT StatusMessageCache[MAXSTATUSMESSAGECACHE];
-int StatusMessageCache_Size = 0;
+GetTextSTRUCT GetTextData[MAXSTATUSMESSAGECACHE];
+int GetTextData_Size = 0;
+StatusMessageSTRUCT StatusMessageData[MAXSTATUSMESSAGECACHE];
+int StatusMessageData_Size = 0;
 
 //Snail Trial
 SNAIL_POINT SnailTrail[TRAILSIZE];
