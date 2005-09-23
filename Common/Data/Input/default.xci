@@ -68,7 +68,7 @@ mode=default
 type=key
 data=APP1
 event=Mode Menu1
-label=
+label= 
 location=1
 title=Display main menu buttons
 
@@ -128,7 +128,6 @@ data=RETURN
 event=ClearAirspaceWarnings
 event=ClearStatusMessages
 title=Acknowledge messages
-
 
 # ------------
 # mode=infobox
@@ -216,7 +215,7 @@ mode=Menu1
 type=key
 data=APP4
 event=Mode Info1
-label=Menu/
+label=Info/
 location=4
 
 #==============

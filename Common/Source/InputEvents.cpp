@@ -182,14 +182,14 @@ void InputEvents::readFile() {
 
   // Init first entry
   bool some_data = false;		// Did we fin some in the last loop...
-  TCHAR d_mode[1024];			// Multiple modes (so large string)
-  TCHAR d_type[256];
-  TCHAR d_data[256];
-  int event_id;
-  TCHAR d_label[256];
-  int d_location;
-	TCHAR d_event[256];
-	TCHAR d_misc[256];
+  TCHAR d_mode[1024] = TEXT("");			// Multiple modes (so large string)
+  TCHAR d_type[256] = TEXT("");
+  TCHAR d_data[256] = TEXT("");
+  int event_id = 0;
+  TCHAR d_label[256] = TEXT("");
+  int d_location = 0;
+	TCHAR d_event[256] = TEXT("");
+	TCHAR d_misc[256] = TEXT("");
 
 	int line = 0;
 
@@ -219,7 +219,7 @@ void InputEvents::readFile() {
 
 			// General errors - these should be true
 			ASSERT(d_location >= 0);
-			ASSERT(d_location < 1024);	// Scott arbitrary limit
+  			ASSERT(d_location < 1024);	// Scott arbitrary limit
 			ASSERT(event_id >= 0);
 			ASSERT(d_mode != NULL);
 			ASSERT(d_type != NULL);
@@ -456,8 +456,6 @@ int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next) {
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
 void InputEvents::makeLabel(int mode_id, TCHAR* label, int location, int event_id) {
-	if (mode_id == 0)
-		return;
   if ((mode_id >= 0) && (mode_id < MAX_MODE) && (ModeLabel_count[mode_id] < MAX_LABEL)) {
     ModeLabel[mode_id][ModeLabel_count[mode_id]].label = label;
     ModeLabel[mode_id][ModeLabel_count[mode_id]].location = location;
