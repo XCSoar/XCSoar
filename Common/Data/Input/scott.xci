@@ -56,13 +56,6 @@ event=PlaySound \Windows\Youvegotmail.wav
 label=Test Play
 location=2
 
-# Clear default entry
-
-mode=default
-type=label
-label=
-location=4
-
 mode=default
 type=key
 data=RETURN
