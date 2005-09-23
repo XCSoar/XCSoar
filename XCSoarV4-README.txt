@@ -8,14 +8,18 @@ To do for next version:
   to move/edit waypoints.
 
 To do for next beta:
-- Check default.xci has same key mappings as 4.3
-- Text box size of messages in default.xci
 - Package and release fonts (part of standard cab/exe)
-- Hide main button when not in MENU (not sure how to yet...)
 - Daylight savings time fix for UK
 - Adjustable font for long infoboxes (especially time)
 
 Changes from 4.5beta3 to 4.5beta4
+- Reduce length of labels where possible
+- Change default.xci buttons to stay consistent between modes,
+  removed some defatul modes changes
+- Added sensible default sounds to play during Glide Computer Events
+  (\My Documents\XCSoarData\ - Start_Simulator,Start_Real,Takeoff,Landing,
+  FinalGlide,Tiptoe - .wav)
+- Default.xci updated to hide Main button and map closely to 4.3 (APP1 does Main/)
 - Fixed a number of memory leaks and buffer overruns in parsing data files
 - Fixed Input Events label corruption
 - Modified variable names for Language and Status (more sensible)
