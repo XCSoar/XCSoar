@@ -1062,15 +1062,15 @@ void StartArc(HDC hdc,
 	      double longitude0, double latitude0,
 	      double longitude1, double latitude1, 
 	      double arclength) {
-  int scx, scy;
+//  int scx, scy;
 
   double radius = Distance(latitude0, longitude0, 
 			   latitude1, longitude1);
   double bearing = Bearing(latitude0, longitude0,
 			   latitude1, longitude1);
   double angle = 360*min(1, arclength/(2.0*3.1415926*radius));
-  int i0 = (bearing+angle/2);
-  int i1 = (bearing-angle/2);
+  int i0 = (int)(bearing+angle/2);
+  int i1 = (int)(bearing-angle/2);
   int i;
   if (i0<0) { i1+= 360; }
   if (i1<0) { i1+= 360; }
@@ -1079,8 +1079,9 @@ void StartArc(HDC hdc,
   i0 = i0*64/360;
   i1 = i1*64/360;
   POINT pt[2];
-  double lat, lon;
-  int x,y;
+//  double lat, lon;
+  int x=0;
+  int y=0;
 
   if (i1<i0) {
     for (i=i0; i<64-1; i++) {
