@@ -5,6 +5,9 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 To do for next version:
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
   to move/edit waypoints.
+- Notify the user (via GCE to Input) of switching between AC and Battery mode
+- Improved notification of battery level - not just simulator.
+  (exit should still only be the simulator)
 
 To do for next beta:
 - Package and release fonts (part of standard cab/exe)
