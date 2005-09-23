@@ -175,7 +175,7 @@ extern int DisplayTimeOut;
 NMEA_INFO DrawInfo;
 DERIVED_INFO DerivedDrawInfo;
 
-int SelectedWaypoint;
+int SelectedWaypoint = -1;
 bool EnableCDICruise = false;
 bool EnableCDICircling = false;
 
