@@ -3,7 +3,6 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 To do for next version:
-- Exit simulator if battery lower than 20%
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
   to move/edit waypoints.
 
@@ -13,6 +12,8 @@ To do for next beta:
 - Adjustable font for long infoboxes (especially time)
 
 Changes from 4.5beta3 to 4.5beta4
+- Exit simulator if battery lower than 20% (warning < 30%)
+- Fixed crash during Waypoint details, when none selected
 - Reduce length of labels where possible
 - Change default.xci buttons to stay consistent between modes, 
   removed some defatul modes changes

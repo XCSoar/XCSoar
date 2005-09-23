@@ -1340,7 +1340,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
       if(LegCovered <=0)
         Calculated->TaskDistanceCovered = 0;
       else
-        Calculated->TaskDistanceCovered = LegCovered;
+        Calculated->TaskDistanceCovered = LegCovered;	
       
       Calculated->LegDistanceToGo = LegToGo;
       Calculated->LegDistanceCovered = Calculated->TaskDistanceCovered;

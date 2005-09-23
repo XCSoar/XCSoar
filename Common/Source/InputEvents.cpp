@@ -193,7 +193,7 @@ void InputEvents::readFile() {
 
 	int line = 0;
 
-  /* Read from the file */
+                                                                                                                                              /* Read from the file */
   while (
 	 fgetws(buffer, 2048, fp)
 	 // XXX What about \r - as in \r\n ?

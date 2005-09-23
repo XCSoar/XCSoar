@@ -278,6 +278,15 @@ void PopupBugsBallast(int updown);
 #include "GaugeCDI.h"
 #include "GaugeVario.h"
 
+// Battery status for SIMULATOR mode
+//	30% reminder, 20% exit, 30 second reminders on warnings
+#ifdef _SIM_
+#define BATTERY_WARNING 30
+#define BATTERY_EXIT 20
+#define BATTERY_REMINDER 30000
+DWORD BatteryWarningTime = 0;
+#endif
+
 
 // Groups: 
 //   Altitude 0,1,20,33
@@ -2366,6 +2375,10 @@ void PopupAnalysis()
 
 void PopupWaypointDetails()
 {
+
+	if (SelectedWaypoint<=0)
+		return;
+
   DialogActive = true;
   
   if (InfoBoxLayout::landscape) {
@@ -2557,6 +2570,26 @@ void BlankDisplay(bool doblank) {
     if (doblank) {
       BATTERYINFO BatteryInfo;
       GetBatteryInfo(&BatteryInfo);
+
+	  /* Battery status - simulator only - for safety of battery data
+		note: Simulator only - more important to keep running in your plane
+	  */
+#ifdef _SIM_
+
+	  if (BatteryInfo.acStatus==0) {
+		  if (BatteryInfo.BatteryLifePercent < BATTERY_EXIT) {
+			  // TODO - Debugging and warning message
+			exit(0);
+		  } else if (BatteryInfo.BatteryLifePercent < BATTERY_WARNING) {
+			DWORD LocalWarningTime = ::GetTickCount();
+			if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
+				BatteryWarningTime = LocalWarningTime;
+				DoStatusMessage(TEXT("Battery getting low"));
+			}
+		  }
+	  }
+
+#endif 
 
       if (BatteryInfo.acStatus==0) {
 
