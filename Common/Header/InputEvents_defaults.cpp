@@ -177,7 +177,7 @@ Key2Event[mode_id][VK_APP3] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Info1"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Menu1"), true);
-makeLabel(mode_id,TEXT("Menu/"),4,event_id);
+makeLabel(mode_id,TEXT("Info/"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
