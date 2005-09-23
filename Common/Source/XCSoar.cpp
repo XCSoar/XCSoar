@@ -2567,6 +2567,10 @@ void BlankDisplay(bool doblank) {
     vpm.Length = sizeof(VIDEO_POWER_MANAGEMENT);
     vpm.DPMSVersion = 0x0001;
 
+	// TODO - Trigger a GCE (Glide Computer Event) when switching to battery mode
+	//	This can be used to warn users that power has been lost and you are now
+	//	on battery power - ie: something else is wrong
+
     if (doblank) {
       BATTERYINFO BatteryInfo;
       GetBatteryInfo(&BatteryInfo);
@@ -2584,7 +2588,8 @@ void BlankDisplay(bool doblank) {
 			DWORD LocalWarningTime = ::GetTickCount();
 			if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
 				BatteryWarningTime = LocalWarningTime;
-				DoStatusMessage(TEXT("Battery getting low"));
+				// TODO - Show the user what the status is.
+				DoStatusMessage(TEXT("Organiser Battery Low"));
 			}
 		  }
 	  }
