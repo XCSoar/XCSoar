@@ -21,7 +21,8 @@ Changes from 4.5beta3 to 4.5beta4
   FinalGlide,Tiptoe - .wav)
 - Default.xci updated to hide Main button and map closely to 4.3 (APP1 does Main/)
 - Fixed a number of memory leaks and buffer overruns in parsing data files
-- Fixed Input Events label corruption
+- Fixed Input Events label corruption. Fixed associated debug failure when
+  comparing uninitialized variables.
 - Modified variable names for Language and Status (more sensible)
 - Use windows device time instead of GPS time in simulator
 - Fixed spurious button press bug

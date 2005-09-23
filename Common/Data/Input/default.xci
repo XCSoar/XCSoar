@@ -129,7 +129,6 @@ event=ClearAirspaceWarnings
 event=ClearStatusMessages
 title=Acknowledge messages
 
-
 # ------------
 # mode=infobox
 # ------------
@@ -216,7 +215,7 @@ mode=Menu1
 type=key
 data=APP4
 event=Mode Info1
-label=Menu/
+label=Info/
 location=4
 
 #==============
