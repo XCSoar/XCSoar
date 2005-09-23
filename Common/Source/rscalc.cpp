@@ -139,7 +139,13 @@ class SunEphemeris {
 
    
 #ifdef _SIM_
-    m=7; day=21; y=2005; h=0;
+//    m=7; day=21; y=2005; h=0;
+		SYSTEMTIME st;
+		GetLocalTime(&st);
+		y		= st.wYear;
+		m		= st.wMonth;
+		day	= st.wDay;
+		h		= 0;
 #else
     m = GPS_INFO.Month;
     y = GPS_INFO.Year;
