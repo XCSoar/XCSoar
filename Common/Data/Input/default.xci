@@ -23,18 +23,21 @@ mode=default
 type=gce
 data=STARTUP_SIMULATOR
 event=StatusMessage Simulation\r\nNothing is real!
+event=PlaySound \My Documents\XCSoarData\Start_Simulator.wav
 title=The simulator has started
 
 mode=default
 type=gce
 data=STARTUP_REAL
 event=StatusMessage Maintain effective\r\nLOOKOUT at all times
+event=PlaySound \My Documents\XCSoarData\Start_Real.wav
 title=The real XCS has started
 
 mode=default
 type=gce
 data=TAKEOFF
 event=StatusMessage Takeoff 
+event=PlaySound \My Documents\XCSoarData\Takeoff.wav
 title=Takeoff
 note=This event could be useful for automatically starting the logger.
 
@@ -42,33 +45,32 @@ mode=default
 type=gce
 data=LANDING
 event=StatusMessage Landing
+event=PlaySound \My Documents\XCSoarData\Landing.wav
 title=Landing
 
 mode=default
 type=gce
 data=FLIGHTMODE_FINALGLIDE_ABOVE
-event=PlaySound \My Documents\FinalGlide.wav
+event=PlaySound \My Documents\XCSoarData\FinalGlide.wav
 event=StatusMessage Above Final Glide
 
 mode=default
 type=gce
 data=FLIGHTMODE_FINALGLIDE_BELOW
-event=PlaySound \My Documents\Tiptoe.wav
+event=PlaySound \My Documents\XCSoarData\Tiptoe.wav
 event=StatusMessage Marginal Final Glide
 
 # ------------
 # mode=default
 # ------------
 
-# legacy keys
-
 mode=default
 type=key
-data=APP4
-event=ScreenModes toggle
-label= 
-location=4
-title=Toggle the screen modes (full, navboxes)
+data=APP1
+event=Mode Menu1
+label=
+location=1
+title=Display main menu buttons
 
 mode=default
 type=key
@@ -90,11 +92,11 @@ title=Mark the current location into a file
 
 mode=default
 type=key
-data=APP1
-event=Mode Menu1
-label=Main/
-location=1
-title=Display main menu buttons
+data=APP4
+event=ScreenModes toggle
+label= 
+location=4
+title=Toggle the screen modes (full, navboxes)
 
 mode=default
 type=key
@@ -217,64 +219,32 @@ event=Mode Info1
 label=Menu/
 location=4
 
-
-#==============
-# Mode Menu2
-#==============
-
-#mode=Menu2
-#type=key
-#data=APP1
-#event=Mode Info1
-#label=Info/
-#location=1
-#
-#mode=Menu2
-#type=key
-#data=APP2
-#label= 
-#location=2
-#
-#mode=Menu2
-#type=key
-#data=APP3
-#label= 
-#location=3
-#
-#mode=Menu2
-#type=key
-#data=APP4
-#event=Mode default
-#label=/Menu
-#location=4
-
-
 #==============
 # Mode Nav1
 #==============
 
 mode=Nav1
 type=key
-data=APP1
+data=APP4
 event=StatusMessage Dropped marker
 event=MarkLocation
 label=Mark
-location=1
+location=4
 title=Mark the current location
 
 mode=Nav1
 type=key
 data=APP2
-event=Mode default
+#event=Mode default
 event=WaypointDetails
-label=Waypt details
+label=Waypt detail
 location=2
 title=Details on the next waypoint
 
 mode=Nav1
 type=key
 data=APP3
-event=Mode default
+#event=Mode default
 event=AbortTask toggle
 label=Abort task
 location=3
@@ -282,10 +252,10 @@ title=Toggle between abort and resume task
 
 mode=Nav1
 type=key
-data=APP4
+data=APP1
 event=Mode Nav2
 label=Nav/
-location=4
+location=1
 
 
 #==============
@@ -294,18 +264,18 @@ location=4
 
 mode=Nav2
 type=key
-data=APP1
+data=APP4
 event=Logger show
 event=Logger toggle ask
 label=Log
-location=1
+location=4
 title=Turn on logger ?
 
 mode=Nav2
 type=key
 data=APP2
 event=AdjustWaypoint previous
-label=Waypt prev.
+label=Waypt prev
 location=2
 title=Switch to previous waypoint
 
@@ -319,17 +289,15 @@ title=Switch to next waypoint
 
 mode=Nav2
 type=key
-data=APP4
+data=APP1
 event=Mode default
 label=/Nav
-location=4
+location=1
 
 
 #==============
 # Mode Display1
 #==============
-
-# XXX This one looks wrong - terrain = clear ?
 
 mode=Display1
 type=key
@@ -340,11 +308,10 @@ location=1
 
 mode=Display1
 type=key
-data=APP2
-event=Mode default
+data=APP4
 event=ScreenModes togglefull
 label=Full screen
-location=2
+location=4
 
 mode=Display1
 type=key
@@ -356,10 +323,10 @@ location=3
 
 mode=Display1
 type=key
-data=APP4
+data=APP2
 event=Mode Display2
 label=Display/
-location=4
+location=2
 
 mode=Display1
 type=key
@@ -396,11 +363,11 @@ location=1
 
 mode=Display2
 type=key
-data=APP2
+data=APP4
 event=SnailTrail show
 event=SnailTrail toggle
 label=Snail
-location=2
+location=4
 
 mode=Display2
 type=key
@@ -410,10 +377,10 @@ location=3
 
 mode=Display2
 type=key
-data=APP4
+data=APP2
 event=Mode default
 label=/Display
-location=4
+location=2
 
 
 #==============
@@ -436,18 +403,18 @@ location=2
 
 mode=Config1
 type=key
-data=APP3
+data=APP4
 event=McCready auto show
 event=McCready auto toggle
 label=McCready Auto
-location=3
+location=4
 
 mode=Config1
 type=key
-data=APP4
+data=APP3
 event=Mode Config2
 label=Config/
-location=4
+location=3
 
 
 #==============
@@ -470,18 +437,18 @@ location=2
 
 mode=Config2
 type=key
-data=APP3
+data=APP4
 event=Sounds show
 event=Sounds toggle
 label=Audio
-location=3
+location=4
 
 mode=Config2
 type=key
-data=APP4
+data=APP3
 event=Mode default
 label=/Config
-location=4
+location=3
 
 # -------------
 # mode=Info1
@@ -497,7 +464,7 @@ location=1
 mode=Info1
 type=key
 data=APP2
-event=Mode default
+#event=Mode default
 event=Status
 label=Status
 location=2
@@ -505,7 +472,7 @@ location=2
 mode=Info1
 type=key
 data=APP3
-event=Mode default
+#event=Mode default
 event=Analysis
 label=Analysis
 location=3
