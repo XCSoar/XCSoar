@@ -19,41 +19,45 @@ GC2Event[mode_id][GCE_GPS_FIX_WAIT] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Simulation\r\nNothing is real!"), event_id);
+event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Start_Simulator.wav"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_SIMULATOR] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Maintain effective\r\nLOOKOUT at all times"), event_id);
+event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Start_Real.wav"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Takeoff "), event_id);
+event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Takeoff.wav"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TAKEOFF] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Landing"), event_id);
+event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Landing.wav"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_LANDING] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\FinalGlide.wav"), event_id);
+event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\FinalGlide.wav"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Above Final Glide"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_ABOVE] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\Tiptoe.wav"), event_id);
+event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Tiptoe.wav"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Marginal Final Glide"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_BELOW] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("Menu1"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT(""),4,event_id);
-Key2Event[mode_id][VK_APP4] = event_id;
+makeLabel(mode_id,TEXT(""),1,event_id);
+Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("show"), event_id);
@@ -70,10 +74,10 @@ makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMode, TEXT("Menu1"), event_id);
+event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT("Main/"),1,event_id);
-Key2Event[mode_id][VK_APP1] = event_id;
+makeLabel(mode_id,TEXT(""),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("auto show"), event_id);
@@ -180,18 +184,16 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Dropped marker"), event_id);
 event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Mark"),1,event_id);
-Key2Event[mode_id][VK_APP1] = event_id;
+makeLabel(mode_id,TEXT("Mark"),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventWaypointDetails, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Waypt details"),2,event_id);
+makeLabel(mode_id,TEXT("Waypt detail"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventAbortTask, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
 makeLabel(mode_id,TEXT("Abort task"),3,event_id);
@@ -200,20 +202,20 @@ Key2Event[mode_id][VK_APP3] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Nav2"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Nav/"),4,event_id);
-Key2Event[mode_id][VK_APP4] = event_id;
+makeLabel(mode_id,TEXT("Nav/"),1,event_id);
+Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventLogger, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventLogger, TEXT("toggle ask"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("Log"),1,event_id);
-Key2Event[mode_id][VK_APP1] = event_id;
+makeLabel(mode_id,TEXT("Log"),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventAdjustWaypoint, TEXT("previous"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("Waypt prev."),2,event_id);
+makeLabel(mode_id,TEXT("Waypt prev"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
@@ -225,8 +227,8 @@ Key2Event[mode_id][VK_APP3] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("/Nav"),4,event_id);
-Key2Event[mode_id][VK_APP4] = event_id;
+makeLabel(mode_id,TEXT("/Nav"),1,event_id);
+Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventClearWarningsAndTerrain, TEXT(""), event_id);
@@ -235,11 +237,10 @@ makeLabel(mode_id,TEXT("Terrain"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("togglefull"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Full screen"),2,event_id);
-Key2Event[mode_id][VK_APP2] = event_id;
+makeLabel(mode_id,TEXT("Full screen"),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventPan, TEXT("show"), event_id);
@@ -251,8 +252,8 @@ Key2Event[mode_id][VK_APP3] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Display2"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Display/"),4,event_id);
-Key2Event[mode_id][VK_APP4] = event_id;
+makeLabel(mode_id,TEXT("Display/"),2,event_id);
+Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventPan, TEXT("up"), event_id);
@@ -285,8 +286,8 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
-makeLabel(mode_id,TEXT("Snail"),2,event_id);
-Key2Event[mode_id][VK_APP2] = event_id;
+makeLabel(mode_id,TEXT("Snail"),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
@@ -296,8 +297,8 @@ Key2Event[mode_id][VK_APP3] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
-makeLabel(mode_id,TEXT("/Display"),4,event_id);
-Key2Event[mode_id][VK_APP4] = event_id;
+makeLabel(mode_id,TEXT("/Display"),2,event_id);
+Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMcCready, TEXT("up"), event_id);
@@ -315,14 +316,14 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventMcCready, TEXT("auto show"), event_id);
 event_id = InputEvents::makeEvent(&eventMcCready, TEXT("auto toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config1"), true);
-makeLabel(mode_id,TEXT("McCready Auto"),3,event_id);
-Key2Event[mode_id][VK_APP3] = event_id;
+makeLabel(mode_id,TEXT("McCready Auto"),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Config2"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config1"), true);
-makeLabel(mode_id,TEXT("Config/"),4,event_id);
-Key2Event[mode_id][VK_APP4] = event_id;
+makeLabel(mode_id,TEXT("Config/"),3,event_id);
+Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Bugs"), event_id);
@@ -340,14 +341,14 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventSounds, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventSounds, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config2"), true);
-makeLabel(mode_id,TEXT("Audio"),3,event_id);
-Key2Event[mode_id][VK_APP3] = event_id;
+makeLabel(mode_id,TEXT("Audio"),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config2"), true);
-makeLabel(mode_id,TEXT("/Config"),4,event_id);
-Key2Event[mode_id][VK_APP4] = event_id;
+makeLabel(mode_id,TEXT("/Config"),3,event_id);
+Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggleauxiliary"), event_id);
@@ -356,14 +357,12 @@ makeLabel(mode_id,TEXT("Aux Info"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventStatus, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
 makeLabel(mode_id,TEXT("Status"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventAnalysis, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
 makeLabel(mode_id,TEXT("Analysis"),3,event_id);
