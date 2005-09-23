@@ -119,7 +119,12 @@ sound=IDR_INSERT
 key=Status
 delay=60000
 
+key=Organiser Battery Low
+delay=10000
+sound=IDR_FAIL
+
 # Always leave dummy entry for now (work around issue in parser)
 key=Dummy
 delay=1500
+
 
