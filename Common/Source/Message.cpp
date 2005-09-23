@@ -253,8 +253,21 @@ void Message::Render() {
 
   }
 
-  if (!changed) { Unlock(); return; }
+  static bool doresize= false;
 
+  if (!changed) {
+    if (doresize) {
+      doresize = false;
+      // do one extra resize after display so we are sure we get all
+      // the text (workaround bug in getlinecount)
+      Resize();
+    }
+    Unlock(); return;
+  }
+
+  // ok, we've changed the visible messages, so need to regenerate the text box
+
+  doresize = true;
   msgText[0]= 0;
   for (i=0; i<MAXMESSAGES; i++) {
     if (messages[i].type==0) continue; // ignore unknown messages

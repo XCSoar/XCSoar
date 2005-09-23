@@ -1155,7 +1155,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   // new font for map labels
   memset ((char *)&logfont, 0, sizeof (logfont));
 
-  _tcscpy(logfont.lfFaceName, _T("DejaVu Sans Condensed"));
+  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO);
@@ -1180,7 +1180,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   // new font for map labels
 
-  _tcscpy(logfont.lfFaceName, _T("DejaVu Sans Condensed"));
+  _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO*1.3);
   logfont.lfWidth =  (int)(FontWidth*MAPFONTWIDTHRATIO*1.3);

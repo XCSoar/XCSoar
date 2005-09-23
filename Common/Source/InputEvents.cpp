@@ -1021,6 +1021,28 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
     return;
   }
 
+  // accel calibration
+  if (wcscmp(misc, TEXT("A1"))==0) {
+    Port2WriteNMEA(TEXT("PDVAC,A1"));
+    return;
+  }
+  if (wcscmp(misc, TEXT("A2"))==0) {
+    Port2WriteNMEA(TEXT("PDVAC,A2"));
+    return;
+  }
+  if (wcscmp(misc, TEXT("A3"))==0) {
+    Port2WriteNMEA(TEXT("PDVAC,A3"));
+    return;
+  }
+  if (wcscmp(misc, TEXT("A4"))==0) {
+    Port2WriteNMEA(TEXT("PDVAC,A4"));
+    return;
+  }
+  if (wcscmp(misc, TEXT("A5"))==0) {
+    Port2WriteNMEA(TEXT("PDVAC,A5"));
+    return;
+  }
+
 }
 
 
