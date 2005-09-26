@@ -8,11 +8,18 @@ To do for next version:
 - Notify the user (via GCE to Input) of switching between AC and Battery mode
 - Improved notification of battery level - not just simulator.
   (exit should still only be the simulator)
+- Adjustable font for long infoboxes (especially time)
+- Seeding random NMEA static strings from Input Events
+- Triggering events from NMEA substring matches (may be limited to certain
+  types due to performance limitations).
+- Timed buttons (pass time of button press to processKey and support threshold
+  passing in InputEvents - eg: Set long press as nnn ms - over that is long
+  press, under is short) (assume for simplicity that we still only press
+  single buttons at a time - thus time last button.
+- Consider support of double click (harder...)
 
 To do for next beta:
 - Package and release fonts (part of standard cab/exe)
-- Daylight savings time fix for UK
-- Adjustable font for long infoboxes (especially time)
 
 Changes from 4.5beta3 to 4.5beta4
 - Exit simulator if battery lower than 20% (warning < 30%)
