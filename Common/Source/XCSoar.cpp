@@ -838,7 +838,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #ifdef _SIM_
   SYSTEMTIME pda_time;
   GetSystemTime(&pda_time);
-  GPS_INFO.Time = pda_time.wHour*3600+pda_time.wMinute*60+pda_time.wSecond;
+  GPS_INFO.Time  = pda_time.wHour*3600+pda_time.wMinute*60+pda_time.wSecond;
+	GPS_INFO.Year  = pda_time.wYear;
+	GPS_INFO.Month = pda_time.wMonth;
+	GPS_INFO.Day	 = pda_time.wDay;
 #endif
 
 #ifdef DEBUG
