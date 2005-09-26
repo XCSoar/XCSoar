@@ -137,22 +137,13 @@ class SunEphemeris {
     TIME_ZONE_INFORMATION TimeZoneInformation;
     GetTimeZoneInformation(&TimeZoneInformation);
 
-
-#ifdef _SIM_
-//    m=7; day=21; y=2005; h=0;
-		SYSTEMTIME st;
-		GetLocalTime(&st);
-		y		= st.wYear;
-		m		= st.wMonth;
-		day	= st.wDay;
-		h		= 0;
-#else
+// JG Removed simulator conditional code, since GPS_INFO now set up
+// from system time.
     m = GPS_INFO.Month;
     y = GPS_INFO.Year;
     day = GPS_INFO.Day;
     h = ((int)GPS_INFO.Time)/3600;
     h = (h % 24);
-#endif
 
     int localtime = ((int)GPS_INFO.Time-TimeZoneInformation.Bias*60);
     tzone = -TimeZoneInformation.Bias/60.0;
