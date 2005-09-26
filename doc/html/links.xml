@@ -6,7 +6,21 @@
 
         <content>
 		<h1>Interesting Links</h1>
-		http://home.earthlink.net/~gliderpaul/survey/
+
+
+		<ul>
+
+			<li><a href="http://www.soarmn.com/cumulus/flightsoftware.htm">Cumulus Soaring</a> has
+done an excellent job comparing flight software. It is also a great place to go
+for PDA comparisons, purchaing of mounts and other gliding equipment.
+			</li>
+
+			<li>
+				<a href="http://home.earthlink.net/~gliderpaul/survey/">PDA-Based Soaring Software Survey Results</a>
+			</li>
+		</ul>
+
+
 	</content>
 </document>
 

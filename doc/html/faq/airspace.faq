@@ -1,0 +1,25 @@
+<faq>
+	<title>Airspace</title>
+
+	<entry>
+		<question>
+		</question>
+		<answer>
+		</answer>
+	</entry>
+
+
+
+      * I've downloaded and changed the extensions on uk_air_2005.txt
+        (->.xca) and bga2005.dat (->.xcw) and astircs.plr. BTW, there's
+        a small problem with the d/l for the polar and airspace files:
+        with the way things are set up at SourceForge the  download
+        system insists on displaying them on my browser as text pages (I
+        run Opera) and of course I can't download a URL target because
+        the mirror d/l system is indirect. However, saving the displayed
+        page works OK.
+
+Hmm, ok, we may have to zip them or something to prevent that from
+happening.  I'll make a note of it.
+
+</faq>
