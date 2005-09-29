@@ -36,7 +36,6 @@ title=The real XCS has started
 mode=default
 type=gce
 data=TAKEOFF
-event=StatusMessage Takeoff
 event=PlaySound \My Documents\XCSoarData\Takeoff.wav
 title=Takeoff
 note=This event could be useful for automatically starting the logger.
@@ -44,7 +43,6 @@ note=This event could be useful for automatically starting the logger.
 mode=default
 type=gce
 data=LANDING
-event=StatusMessage Landing
 event=PlaySound \My Documents\XCSoarData\Landing.wav
 title=Landing
 

@@ -1497,7 +1497,7 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
       wsprintf(TopStr,TEXT("FL %1.0f"),Top.FL );
     }
 
-  wsprintf(szMessageBuffer,TEXT("%s - %s\r\nBase - %s\r\nTop - %s"),szTitleBuffer, Name, BaseStr, TopStr);
+  wsprintf(szMessageBuffer,TEXT("%s: %s\r\nBase: %s\r\nTop: %s\r\n"),szTitleBuffer, Name, BaseStr, TopStr);
 }
 
 // read string from file

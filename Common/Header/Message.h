@@ -16,7 +16,7 @@ enum {
 
 
 struct singleMessage {
-  TCHAR text[200];
+  TCHAR text[1000];
   int type;
   DWORD tstart; // time message was created
   DWORD texpiry; // time message will expire

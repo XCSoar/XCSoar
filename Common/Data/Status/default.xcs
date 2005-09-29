@@ -108,7 +108,7 @@ key=Logger OFF
 sound=IDR_REMOVE
 delay=1500
 
-key=Airspace Warning
+key=Airspace Query
 delay=7000
 sound=IDR_FAIL
 

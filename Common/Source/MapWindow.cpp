@@ -2695,7 +2695,7 @@ void MapWindow::DisplayAirspaceWarning(int Type, TCHAR *Name , AIRSPACE_ALT Base
 
   FormatWarningString(Type, Name , Base, Top, szMessageBuffer, szTitleBuffer );
 
-  DoStatusMessage(TEXT("Airspace Warning"), szMessageBuffer);
+  DoStatusMessage(TEXT("Airspace Query"), szMessageBuffer);
 }
 
 

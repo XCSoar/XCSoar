@@ -30,13 +30,11 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Takeoff "), event_id);
 event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Takeoff.wav"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TAKEOFF] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Landing"), event_id);
 event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Landing.wav"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_LANDING] = event_id;
