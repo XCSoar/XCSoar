@@ -1,32 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
         <metadata>
-                <title>Hardware</title>
+                <title>GPS</title>
         </metadata>
 
         <content>
 
-		<h2>Hardware</h2>
+		<h2>GPS</h2>
 
 <p>
-One of the powerful advantages of XCSoar being open source is the ability to
-support a large amount of hardware. This page is a start on details of that
-support.
+The GPS is the most important part of XCSoar hardware (apart from the <a
+href="../organiser/">organiser</a>
+itself). The GPS can come in many forms and most of them can be used by XCSoar.
 </p>
 
+<p>
+Almost all GPS units provide a serial output standard <a
+href="http://en.wikipedia.org/wiki/NMEA">NMEA</a> signal. Almost all
+<a href="../organiser/">Organisers</a> provide a serial port, usually by purchasing another cable.
+In theory any GPS capable of serial or bluetooth that can output NMEA should
+work, once you have the right cable and settings.
+</p>
+
+<p>
+Some <a href="../organiser/">Organisers</a> have built in GPS units and you can
+also get Compact Flash and Secure Digital versions.
+</p>
+
+<p>
+Alternatively there is also <a
+href="http://en.wikipedia.org/wiki/Bluetooth">Bluetooth</a> input to organisers, and many new models
+of GPS provide <a href="http://en.wikipedia.org/wiki/Bluetooth">Bluetooth</a> connections.
+</p>
+
+<p>
+Some of the GPS units we will talk about are often referred to as 'Chip sets'.
+This is because technically they are made by one manufacturer but are often
+rebadged and repackged by many companies. There is often too many of these to
+list.
+</p>
+
+<h2>Some GPS Units Available</h2>
 <ul>
+	<li>Garmin</li>
+	<li>Magellan</li>
+	<li>Volkslogger</li>
+	<li>FLARM</li>
+	<li>Cambridge Varios/Computers</li>
 
-
-	<li><a href="organise/">Organisers</a> - The computer, currently Pocket PC Computers</li>
-
-	<li><a href="gps/">GPS</a> - The second most important part</li>
-
-	<li><a href="keys/">Keys</a> - A collection of input devices such as keyboard and game
-pads</li>
-
-	<li><a href="vario/">Varios</a> - Varios and other avionic connections</li>
 
 </ul>
+
+<h3>Garmin</h3>
+<p>
+<a href="http://www.garmin.com/">Garmin</a> GPS receivers have been around a long time and in the early days made
+were a big part in the promotion of the NMEA in serial ports. 
+</p>
+<p>
+Unfortunately the bad news for the future of Garmin is that they are
+dropping support for NMEA and <a
+href="http://www.oreillynet.com/pub/wlg/5745">going more proprietary</a>.
+PVT is an alternative format, which would in theory be fine for support in XCS,
+except that it does not allow the interlacing of other existing NMEA strings
+(such as those from <a href="../varios/">Varios</a>).
+</p>
+<p>
+To use a Garmin you need a Garmin Serial and Power cable, probably a null-modem adapter and a
+serial cable to suit your organiser. You also need to make sure the settings of
+your Garmin interface is NMEA Out (refer to your Garmin manual - or google).
+</p>
+
+<h3>Magellan</h3>
+<p>
+In the early days, if you din't have a Garmin then you had a <a
+href="http://www.magellangps.com/">Magellan</a>.
+</p>
+
+<h3>Volkslogger</h3>
+<p>
+For those world record attempts, it is a good idea to have an <a
+href="http://www.fai.org/gliding/">IGC</a> approvded logger. It just so happens
+that the <a href="http://www.volkslogger.de/">Volkslogger</a> also outputs the NMEA GPS stream which can be used in
+XCSoar.
+</p>
+
+<h3>FLARM</h3>
+<p>
+Safety is an important aspect of our sport. <a
+href="http://www.flarm.com/">FLARM</a> has made an excellent collision
+avoidance system that can be used also as a stream of NMEA data for XCSoar.
+</p>
+
+
+<h3>Cambridge Varios and Computers</h3>
+
+<p><a href="http://www.cambridge-aero.com/">Cambridge</a> models 10, 20 &amp; 25
+and computer 302 support GPS NMEA output which can be used by XCSoar.
+</p>
+
+<h3>Other GPS Units</h3>
+
+<p>Mouse... (asus ?) </p>
+
+
+<h3>Compact Flash GPS Units</h3>
+
+<h3>Secure Digital GPS Units</h3>
+
+<p>Globalsat ?</p>
+
+<h3>Bluetooth GPS Units</h3>
+<p>BT338, SIRF Star III ...</p>
+
+<h3>Other resources and links</h3>
+<ul>
+
+	<li><a href="http://www.lxnavigation.si/">LX Navigation</a></li>
+	<li><a href="http://www.filser.de/">Filser</a></li>
+	<li><a href="http://www.trautenberg.net/">Hans Trautenberg</a> - garmin
+cables and more</li>
+	<li><a href="http://www.soarmn.com/cumulus/goddard.htm#Cable_Selection_Guide">Cumulus Soaring</a> - data cable selection guide</li>
+</ul>
+
 
         </content>
 </document>
