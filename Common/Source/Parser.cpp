@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.20 2005/09/21 01:45:45 scottp Exp $
+  $Id: Parser.cpp,v 1.21 2005/09/29 08:17:27 jwharington Exp $
 
 Copyright_License {
 
@@ -59,6 +59,9 @@ static BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDAPL(TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO);
+
+
 
 static double EastOrWest(double in, TCHAR EoW);
 static double NorthOrSouth(double in, TCHAR NoS);
@@ -129,6 +132,12 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
         {
           return PBJVH(&String[7], GPS_INFO);
         }
+
+      if(_tcscmp(SentanceString,TEXT("PDAAV"))==0)
+        {
+          return PDAAV(&String[7], GPS_INFO);
+        }
+
       if(_tcscmp(SentanceString,TEXT("PDVDV"))==0)
         {
           return PDVDV(&String[7], GPS_INFO);
@@ -825,6 +834,23 @@ BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
   return FALSE;
 }
 
+
+#include "VarioSound.h"
+
+BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+  TCHAR ctemp[80];
+
+  ExtractParameter(String,ctemp,0);
+  unsigned short beepfrequency = StrToDouble(ctemp, NULL);
+  ExtractParameter(String,ctemp,1);
+  unsigned short soundfrequency = StrToDouble(ctemp, NULL);
+  ExtractParameter(String,ctemp,2);
+  unsigned char soundtype = StrToDouble(ctemp, NULL);
+
+  audio_setconfig(beepfrequency, soundfrequency, soundtype);
+  return FALSE;
+}
 
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
 

@@ -163,7 +163,7 @@ StatusMessageData[StatusMessageData_Size].doSound = true;
 StatusMessageData[StatusMessageData_Size].delay_ms = 1500;
 StatusMessageData_Size++;
 _init_Status(StatusMessageData_Size);
-StatusMessageData[StatusMessageData_Size].key = TEXT("Airspace Warning");
+StatusMessageData[StatusMessageData_Size].key = TEXT("Airspace Query");
 StatusMessageData[StatusMessageData_Size].sound = TEXT("IDR_FAIL");
 StatusMessageData[StatusMessageData_Size].doSound = true;
 StatusMessageData[StatusMessageData_Size].delay_ms = 7000;

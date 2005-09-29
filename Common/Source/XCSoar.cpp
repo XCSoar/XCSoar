@@ -2379,7 +2379,7 @@ void PopupAnalysis()
 void PopupWaypointDetails()
 {
 
-	if (SelectedWaypoint<=0)
+	if (SelectedWaypoint<0)
 		return;
 
   DialogActive = true;

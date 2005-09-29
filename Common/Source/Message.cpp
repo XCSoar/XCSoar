@@ -192,9 +192,12 @@ void Message::Resize() {
     hidden = false;
     GetTextExtentPoint(hdc, msgText, size, &tsize);
 
-    int linecount = max(1,SendMessage(hWndMessageWindow, EM_GETLINECOUNT, 0, 0));
+    int linecount = max(1,
+			SendMessage(hWndMessageWindow, 
+				    EM_GETLINECOUNT, 0, 0));
+
     int width =// min((rcmsg.right-rcmsg.left)*0.8,tsize.cx);
-      (int)((rcmsg.right-rcmsg.left)*0.8);
+      (int)((rcmsg.right-rcmsg.left)*0.9);
     int height = (int)min((rcmsg.bottom-rcmsg.top)*0.8,tsize.cy*linecount);
 
     int midx = (rcmsg.right+rcmsg.left)/2;

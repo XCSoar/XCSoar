@@ -1,7 +1,7 @@
 # ==============================================================================
 .SUFFIXES : .xcs
 
-FILES=default.xcs test.xcs ../../Header/Status_defaults.cpp
+FILES=default.xcs template.xcs ../../Header/Status_defaults.cpp
 
 # ------------------------------------------------------------------------------
 build: $(FILES)
