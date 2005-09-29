@@ -1,31 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
         <metadata>
-                <title>Hardware</title>
+                <title>Organisers</title>
         </metadata>
 
         <content>
 
-		<h2>Hardware</h2>
+		<h2>Organisers</h2>
 
 <p>
-One of the powerful advantages of XCSoar being open source is the ability to
-support a large amount of hardware. This page is a start on details of that
-support.
+XCSoar is Pocket PC Software designed for Organisers. Although technically we
+can now compile for Windows desktop as well, our primary goal is to be on Pocket PC
+Organisers. Therefore you will probably need one - or have one.
 </p>
 
+<p>
+Standard systems include:
 <ul>
+	<li>Pocket PC - also called Windows CE 3.0 (pre 3.0 is not supported)</li>
+	<li>Pocket PC 2002</li>
+	<li>Pocket PC 2003 - also called Windows Mobile 2003 (1st and 2nd ediition)</li>
+</ul>
+
+Some processors supported (depending on your operating system):
+<ul>
+	<li>SH3 = ?</li>
+	<li>MIPS (PPC and 2002 only)</li>
+	<li>ARM (including Strong ARM and Intel X-Scale)</li>
+	<li>x86 (but only experimentally on the desktop)</li>
+</ul>
+
+Othe requirements:
+<ul>
+	<li>Screen resolution: 320x240 or 640x480</li>
+	<li>Colour depth: any - but recommmend 256</li>
+	<li>Orientation: Portrait and Landscape fully supported</li>
+	<li>Serial port or Bluetooth for <a href="../gps/">GPS</a></li>
+	<li>Storage space: 2MB for program up to 100MB for Data (optional,
+depends on location)</li>
+	<li>Memory: Anything fromm 16MB on an Aero to 128MB - recommend a
+minimum of 64MB</li>
+</ul>
+</p>
 
 
-	<li><a href="organise/">Organisers</a> - The computer, currently Pocket PC Computers</li>
+<h2>Known working/supported Organisers</h2>
 
-	<li><a href="gps/">GPS</a> - The second most important part</li>
+<h3>Compaq Aero</h3>
 
-	<li><a href="keys/">Keys</a> - A collection of input devices such as keyboard and game
-pads</li>
+<p>
+Windows CE 3.0 only - you must have the upgrade card. Also suggest you turn off
+terrain, possibly topology and use long or no snail trails.
+</p>
 
-	<li><a href="vario/">Varios</a> - Varios and other avionic connections</li>
+<h3>iPAQ</h3>
 
+<h3>Other Brands</h3>
+<ul>
+	<li>HP iPAQs</li>
+	<li>Fujitsu Siemens</li>
+	<li>Dell</li>
+	<li>Toshiba</li>
+	<li>ViewSonic</li>
+	<li>NEC</li>
+</ul>
+
+<h3>Links</h3>
+
+<ul>
+	<li><a href="http://www.soarmn.com/cumulus/pda.htm">Cumulus Soaring</a>
+PDA Comparison</li>
 </ul>
 
         </content>
