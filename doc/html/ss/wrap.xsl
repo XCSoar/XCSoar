@@ -41,17 +41,18 @@
 				      <li><a href="/">Home</a></li>
 				      <li><a href="/about/">About XCSoar</a></li>
 				      <li><a href="/download/">Download</a></li>
+				      <li><a href="/hardware/">Hardware</a></li>
+				      <li><a href="/install/">Installation</a></li>
 				      <li><a href="/quick/">Quick start</a></li>
 				      <li><a href="/infoboxes/">Infoboxes</a></li>
 				      <li><a href="/settings/">Configuration settings</a></li>
 				      <li><a href="/input/">Input Controls and Events</a></li>
-				      <!--
 				      <li><a href="/faq/">FAQ</a></li>
-				      -->
 				      <li><a href="/links.html">Links</a></li>
 				      <li><a href="/advanced/">Advanced</a></li>
 				      <li><a href="/ref/">Reference Manual</a></li>
 				      <li><a href="/readme.html">Version 4 Readme</a></li>
+				      <li><a href="/people/">People</a></li>
 				</ul>
 			</div>
 			    
