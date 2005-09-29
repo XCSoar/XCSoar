@@ -842,14 +842,16 @@ BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
 
   ExtractParameter(String,ctemp,0);
-  unsigned short beepfrequency = StrToDouble(ctemp, NULL);
+  unsigned short beepfrequency = (unsigned short)StrToDouble(ctemp, NULL);
   ExtractParameter(String,ctemp,1);
-  unsigned short soundfrequency = StrToDouble(ctemp, NULL);
+  unsigned short soundfrequency = (unsigned short)StrToDouble(ctemp, NULL);
   ExtractParameter(String,ctemp,2);
-  unsigned char soundtype = StrToDouble(ctemp, NULL);
+  unsigned char soundtype = (unsigned char)StrToDouble(ctemp, NULL);
 
-  audio_setconfig(beepfrequency, soundfrequency, soundtype);
-  return FALSE;
+	// Temporarily commented out - function as yet undefined
+//  audio_setconfig(beepfrequency, soundfrequency, soundtype);
+
+	return FALSE;
 }
 
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
