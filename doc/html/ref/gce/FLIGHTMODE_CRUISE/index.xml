@@ -11,7 +11,7 @@
 <p>
 XCS has three main flight modes: <a
 href="/ref/gce/FLIGHTMODE_CRUISE/">Cruise</a>, <a
-href="/ref/gce/FLIGHTMODE_FINAL">Final Glide</a>, and <a
+href="/ref/gce/FLIGHTMODE_FINALGLIDE">Final Glide</a>, and <a
 href="/ref/gce/FLIGHTMODE_CLIMB">Climb</a> mode.
 </p>
 
