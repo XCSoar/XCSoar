@@ -17,6 +17,8 @@ To do for next version:
   press, under is short) (assume for simplicity that we still only press
   single buttons at a time - thus time last button.
 - Consider support of double click (harder...)
+- Simple output terminal for COM ports (allow users to check serial
+  connnections are working correctly).
 
 To do for next beta:
 - Package and release fonts (part of standard cab/exe)

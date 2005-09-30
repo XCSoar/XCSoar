@@ -5,7 +5,7 @@ CESignature = "$Windows CE$"    ; required as-is
 
 [CEStrings]
 AppName     = "XCSoar"          ; full app name will be "<Provider> <AppName>"
-InstallDir  = "\Program Files\XCSoar"
+InstallDir  = "%CE1%\%AppName%
 
 [Strings]
 reg_path = Software\OpenSource\XCSoar
@@ -35,6 +35,8 @@ VersionMax = 32767.0
 1 = ,"ARM Files",,PPC2003\XCSoar\ARMV4Rel
 2 = ,"ARM Files",,PPC2003\XCSoarSimulator\ARMV4Rel
 3 = ,"ARM Files",,PPC2003\XCSoarLaunch\ARMV4Rel
+4 = ,"Font Files",,Common\Data\Fonts
+
 
 [SourceDisksNames.x86]
 1 = ,"PPC30 X86 Files",,X86EMDbg
@@ -46,14 +48,19 @@ VersionMax = 32767.0
 XCSoar.exe = 1
 XCSoarSimulator.exe = 2
 XCSoarLaunch.dll = 3
+DejaVuSansCondensed-BoldOblique2.ttf = 4
+DejaVuSansCondensed2.ttf = 4
+DejaVuSansCondensed-Bold2.ttf = 4
+DejaVuSansCondensed-Oblique2.ttf = 4
 
 [DefaultInstall]
-CopyFiles   = TheFiles,Files.Windows
+CopyFiles   = TheFiles,Files.Windows,Files.Fonts
 AddReg = AddRegistry
 ;CEShortcuts = Links
 
 [DestinationDirs]
 Files.Windows       = 0,%CE2%           ; "\Windows" directory
+Files.Fonts         = 0,%CE15%           ; "\Windows\Fonts" directory
 TheFiles    = 0, %InstallDir%
 
 
@@ -64,6 +71,12 @@ XCSoarSimulator.exe
 
 [Files.Windows]
 XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
+
+[Files.Fonts]
+DejaVuSansCondensed-Bold2.ttf
+DejaVuSansCondensed-BoldOblique2.ttf
+DejaVuSansCondensed-Oblique2.ttf
+DejaVuSansCondensed2.ttf
 
 [AddRegistry]
 HKLM,\Software\Microsoft\Today\Items\%AppName%,Type,0x00010001,4
