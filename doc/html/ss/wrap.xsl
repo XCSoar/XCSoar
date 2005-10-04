@@ -16,7 +16,7 @@
 	<html>
 		<head>
 			<title>
-				XCSoar - <xsl:value-of select="/document/metadata/title"/>
+				Open Source XCSoar - <xsl:value-of select="/document/metadata/title"/>
 			</title>
 			<link href="/style.css" rel="stylesheet" type="text/css"/>
 		</head>
@@ -31,7 +31,7 @@
 				/>
 				<h1>
 					<a href="/">
-						XCSoar - <xsl:value-of select="/document/metadata/title"/>
+						Open Source XCSoar - <xsl:value-of select="/document/metadata/title"/>
 					</a>
 				</h1>
 			</div>
@@ -40,6 +40,7 @@
 			      <ul>
 				      <li><a href="/">Home</a></li>
 				      <li><a href="/about/">About XCSoar</a></li>
+				      <li><a href="/about/features.html">Features</a></li>
 				      <li><a href="/download/">Download</a></li>
 				      <li><a href="/hardware/">Hardware</a></li>
 				      <li><a href="/install/">Installation</a></li>
@@ -110,6 +111,17 @@
         <xsl:copy>
                 <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
+</xsl:template>
+
+<xsl:template match="faq">
+	<h2>
+		<a>
+			<xsl:attribute name="href">
+				<xsl:value-of select="@href"/>
+			</xsl:attribute>
+			<xsl:value-of select="document(@faqref)/faq/title"/>
+		</a>
+	</h2>
 </xsl:template>
 
 </xsl:stylesheet>

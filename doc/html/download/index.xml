@@ -8,23 +8,6 @@
 		<h2>Download</h2>
 
 		<!-- ============================ -->
-		<h3>Source Code</h3>
-		<ul>
-			<li>
-				<a href="https://sourceforge.net/cvs/?group_id=141663">
-					CVS
-				</a> - considering the high turn over of code,
-				this is the best place to get the source.
-	
-				<p>
-				The latest CVS tarball is available 
-				<a href="../xcsoar-nightlyCVS.tar.gz">here</a>.
-				</p>
-			</li>
-		</ul>
-
-
-		<!-- ============================ -->
 		<h3>Binaries</h3>
 		<ul>
 			<li>
@@ -81,6 +64,23 @@ from the <a href="http://www.winpilot.com/polar.asp"> WinPilot </a> site. </li>
 
                 </ul>
                 </p>
+
+		<!-- ============================ -->
+		<h3>Source Code</h3>
+		<ul>
+			<li>
+				<a href="https://sourceforge.net/cvs/?group_id=141663">
+					CVS
+				</a> - considering the high turn over of code,
+				this is the best place to get the source.
+	
+				<p>
+				The latest CVS tarball is available 
+				<a href="../xcsoar-nightlyCVS.tar.gz">here</a>.
+				</p>
+			</li>
+		</ul>
+
 
 	</content>
 </document>

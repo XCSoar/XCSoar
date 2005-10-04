@@ -137,14 +137,16 @@ a:hover, a:active, a:focus {
 	margin: 10px;
 }
 
-.input table {
-	margin-bottom: 20px;
-}
-
 .input h1 {
 	border-top: solid 1px #003366;
 	margin-top: 30px;
 	margin-bottom: 10px;
+}
+
+/* These were all .input * - but chanted to be all for now */
+
+.input table {
+	margin-bottom: 20px;
 }
 
 .input td {

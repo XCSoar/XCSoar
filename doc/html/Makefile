@@ -1,13 +1,13 @@
 # ==============================================================================
-.SUFFIXES : .html .xml .gif .jpg .png .css .js
+.SUFFIXES : .html .xml .gif .jpg .png .css .js .faq
 
 include Files
 # Files to build locally (not found from xml) (also temp files)
-FILES_LOCAL=readme.html input/default.html
+FILES_LOCAL=readme.html input/default.html faq/index.html
 # Other temp files to remove
 # (XXX Crap name xcixml - XSL should use different entries depending
 # automatically)
-FILES_TMP=dest.tar.gz readme.xml input/default.xcixml input/default.xml input/tree.tmp
+FILES_TMP=dest.tar.gz readme.xml input/default.xcixml input/default.xml input/tree.tmp faq/index.xml
 
 # ------------------------------------------------------------------------------
 
@@ -22,6 +22,9 @@ depends:
 
 readme.xml: ../../source/XCSoarV4-README.txt
 	perl wrap.pl Readme < ../../source/XCSoarV4-README.txt > readme.xml
+
+faq/index.xml: faq/*.faq faq2index.pl
+	perl faq2index.pl > $@
 
 input/default.xcixml: ../../source/Common/Data/Input/default.xci xci2xml.pl
 	cp ../../source/Common/Data/Input/default.xci input/default.xci
@@ -49,4 +52,7 @@ installstyle:
 
 %.html : %.xml ss/wrap.xsl
 	xsltproc ss/wrap.xsl $< > $@
+
+%.xml : %.faq ss/faq.xsl
+	xsltproc ss/faq.xsl $< > $@
 

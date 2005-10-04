@@ -6,6 +6,22 @@
 
         <content>
 
+		<h2>What is XCSoar</h2>
+		<p>
+XCSoar is a tactical glide computer
+for the Pocket PC operating system.  
+It was originally released as commercial software until early 2005 when it was
+released as open source. The open source community has taken and embraced this
+fantastic bit of code and improved it further.
+		</p>
+	
+		<p>
+XCSoar is now going through a major increase in features that are now very
+comparable and in most cases favourable to the common commercial glide
+computer software. See <a href="features.html">features</a> for further
+information.
+		</p>
+
 		<h2>A brief history of XCSoar</h2>
 
 		<ul>

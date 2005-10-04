@@ -1,15 +1,20 @@
 <faq>
 
+	<title>Installation - Linux</title>
 
-      * how do I install the main EXE from Linux? Your notes say that it
-        should be run under Winders but that's obviously not going to
-        work....
+	<entry>
+		<question>
+			      How do I install the main EXE from Linux? Your notes say that it
+				should be run under Winders but that's obviously not going to
+				work....
+		</question>
+		<answer>
+			Ah, good question.  The installer must be run from windows.  To get
+			around this, you can use a cab file from linux using one of the synce
+			tools (I think there is a cab installer in there somewhere). CAB files 
+			can be downloaded along with some useful installation scripts.
+		</answer>
+	</entry>
 
-Ah, good question.  The installer must be run from windows.  To get
-around this, you can use a cab file from linux using one of the synce
-tools (I think there is a cab installer in there somewhere).  I'll have
-to send you the .cab file --- hopefully in a few hours, OK?
-
-It will be a squeaky clean new version (4.5 beta 4).
 
 </faq>

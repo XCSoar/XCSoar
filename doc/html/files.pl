@@ -2,14 +2,14 @@
 use strict;
 
 my $CLEAN = ""; my $DEST = "";
-foreach my $ext (qw/xml gif png jpg css js xci/) {
+foreach my $ext (qw/xml gif png jpg css js xci faq/) {
 	#print STDERR "Finiding $ext\n";
 	open (IN, "find . -name '*.$ext' | ") || die "Can't open files ($ext) - $!";
 	while (<IN>) {
 		chomp;
 		next if (/old/);
 		#print STDERR "\t$_\n";
-		if ($ext eq "xml") {
+		if ("xml faq " =~ /$ext /) {
 			s/$ext$/html/;
 			$CLEAN .= $_ . " ";
 		}
