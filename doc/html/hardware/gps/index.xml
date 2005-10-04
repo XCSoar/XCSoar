@@ -6,7 +6,8 @@
 
         <content>
 
-		<h2>GPS</h2>
+		<section>
+		<title>GPS</title>
 
 <p>
 The GPS is the most important part of XCSoar hardware (apart from the <a
@@ -40,7 +41,10 @@ rebadged and repackged by many companies. There is often too many of these to
 list.
 </p>
 
-<h2>Some GPS Units Available</h2>
+</section>
+
+<section>
+<title>Some GPS Units Available</title>
 <ul>
 	<li>Garmin</li>
 	<li>Magellan</li>
@@ -51,7 +55,8 @@ list.
 
 </ul>
 
-<h3>Garmin</h3>
+<section>
+<title>Garmin</title>
 <p>
 <a href="http://www.garmin.com/">Garmin</a> GPS receivers have been around a long time and in the early days made
 were a big part in the promotion of the NMEA in serial ports. 
@@ -70,49 +75,71 @@ serial cable to suit your organiser. You also need to make sure the settings of
 your Garmin interface is NMEA Out (refer to your Garmin manual - or google).
 </p>
 
-<h3>Magellan</h3>
+</section>
+
+<section>
+<title>Magellan</title>
 <p>
 In the early days, if you din't have a Garmin then you had a <a
 href="http://www.magellangps.com/">Magellan</a>.
 </p>
 
-<h3>Volkslogger</h3>
+</section>
+
+<section>
+<title>Volkslogger</title>
 <p>
 For those world record attempts, it is a good idea to have an <a
 href="http://www.fai.org/gliding/">IGC</a> approvded logger. It just so happens
 that the <a href="http://www.volkslogger.de/">Volkslogger</a> also outputs the NMEA GPS stream which can be used in
 XCSoar.
 </p>
+</section>
 
-<h3>FLARM</h3>
+<section>
+<title>FLARM</title>
 <p>
 Safety is an important aspect of our sport. <a
 href="http://www.flarm.com/">FLARM</a> has made an excellent collision
 avoidance system that can be used also as a stream of NMEA data for XCSoar.
 </p>
+</section>
 
-
-<h3>Cambridge Varios and Computers</h3>
+<section>
+<title>Cambridge Varios and Computers</title>
 
 <p><a href="http://www.cambridge-aero.com/">Cambridge</a> models 10, 20 &amp; 25
 and computer 302 support GPS NMEA output which can be used by XCSoar.
 </p>
 
-<h3>Other GPS Units</h3>
+</section>
+
+<section>
+<title>Other GPS Units</title>
 
 <p>Mouse... (asus ?) </p>
 
 
-<h3>Compact Flash GPS Units</h3>
+</section>
 
-<h3>Secure Digital GPS Units</h3>
+<section>
+<title>Compact Flash GPS Units</title>
+
+</section>
+
+<section>
+<title>Secure Digital GPS Units</title>
 
 <p>Globalsat ?</p>
+</section>
 
-<h3>Bluetooth GPS Units</h3>
+<section>
+<title>Bluetooth GPS Units</title>
 <p>BT338, SIRF Star III ...</p>
+</section>
 
-<h3>Other resources and links</h3>
+<section>
+<title>Other resources and links</title>
 <ul>
 
 	<li><a href="http://www.lxnavigation.si/">LX Navigation</a></li>
@@ -121,6 +148,10 @@ and computer 302 support GPS NMEA output which can be used by XCSoar.
 cables and more</li>
 	<li><a href="http://www.soarmn.com/cumulus/goddard.htm#Cable_Selection_Guide">Cumulus Soaring</a> - data cable selection guide</li>
 </ul>
+</section>
+
+
+</section>
 
 
         </content>

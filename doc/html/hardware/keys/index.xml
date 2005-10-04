@@ -6,23 +6,35 @@
 
         <content>
 
-		<h2>Keys</h2>
+	<section>
 
-<p>
-Keys - or Human input. These fall into the external type such as a Bluetooth
-Keyboard, gamepad or mouse. Also there are some special key adapters for Varios
-and computers, along with some special serial and other hardware protocols.
-Some are made by hand. Also reviewed here are some possibl grips.
-</p>
+		<title>Keys</title>
 
-<h2>Keyboards</h2>
+		<p>
+			Keys - or Human input. These fall into the external type such as a Bluetooth
+			Keyboard, gamepad or mouse. Also there are some special key adapters for Varios
+			and computers, along with some special serial and other hardware protocols.
+			Some are made by hand. Also reviewed here are some possibl grips.
+		</p>
+		
+		<section>
+			<title>Keyboards</title>
 
-<h2>Game pads</h2>
+		</section>
 
-<h2>Mice</h2>
+		<section>
+			<title>Game pads</title>
+		</section>
 
-<h2>Grips</h2>
+		<section>
+			<title>Mice</title>
+		</section>
 
+		<section>
+			<title>Grips</title>
+		</section>
+
+	</section>
 
         </content>
 </document>

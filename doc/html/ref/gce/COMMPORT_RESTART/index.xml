@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-                <h2>COMMPORT_RESTART</h2>
+<section>
+                <title>COMMPORT_RESTART</title>
 
 <p>
 This event is called each time the comm port is restarted. This can be used to
@@ -13,6 +14,7 @@ bring up a <a href="/ref/events/StatusMessage/">StatusMessage</a> or to trigger
 logs.
 </p>
 
+</section>
         </content>
 </document>
 

@@ -5,7 +5,9 @@
         </metadata>
 
         <content>
-		<h1>Interesting Links</h1>
+
+	<section>
+		<title>Interesting Links</title>
 
 
 		<ul>
@@ -20,6 +22,8 @@ for PDA comparisons, purchasing of mounts and other gliding equipment.
 			</li>
 		</ul>
 
+
+	</section>
 
 	</content>
 </document>

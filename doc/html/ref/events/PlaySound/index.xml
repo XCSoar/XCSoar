@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-<h2>PlaySound</h2>
+<section>
+<title>PlaySound</title>
 
 	<p></p>
 	<ul>
@@ -13,5 +14,6 @@
 		<li>TODO "*" - String matching file</li>
 	</ul>
 
+</section>
 </content>
 </document>

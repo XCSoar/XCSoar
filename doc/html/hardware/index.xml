@@ -6,27 +6,28 @@
 
         <content>
 
-		<h2>Hardware</h2>
+	<section>
+		<title>Hardware</title>
 
-<p>
-One of the powerful advantages of XCSoar being open source is the ability to
-support a large amount of hardware. This page is a start on details of that
-support.
-</p>
+		<p>
+			One of the powerful advantages of XCSoar being open source is the ability to
+			support a large amount of hardware. This page is a start on details of that
+			support.
+		</p>
 
-<ul>
+		<ul>
+			<li><a href="organiser/">Organisers</a> - The computer, currently Pocket PC Computers</li>
 
+			<li><a href="gps/">GPS</a> - The second most important part</li>
 
-	<li><a href="organiser/">Organisers</a> - The computer, currently Pocket PC Computers</li>
+			<li><a href="keys/">Keys</a> - A collection of input devices such as keyboard and game
+		pads</li>
 
-	<li><a href="gps/">GPS</a> - The second most important part</li>
+			<li><a href="vario/">Varios</a> - Varios and other avionic connections</li>
 
-	<li><a href="keys/">Keys</a> - A collection of input devices such as keyboard and game
-pads</li>
+		</ul>
 
-	<li><a href="vario/">Varios</a> - Varios and other avionic connections</li>
-
-</ul>
+	</section>
 
         </content>
 </document>

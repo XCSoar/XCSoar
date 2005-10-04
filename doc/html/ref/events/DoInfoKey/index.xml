@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-<h2>DoInfoKey</h2>
+<section>
+<title>DoInfoKey</title>
 
 	<p></p>
 	<ul>
@@ -16,5 +17,6 @@
 		<li>return</li>
 	</ul>
 
+</section>
 </content>
 </document>

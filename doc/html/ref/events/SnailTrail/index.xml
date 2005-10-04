@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-<h2>SnailTrail</h2>
+<section>
+<title>SnailTrail</title>
 
 	<p>Change snail trail setting</p>
 	<ul>
@@ -15,5 +16,6 @@
 		<li>show</li>
 	</ul>
 
+</section>
 </content>
 </document>

@@ -5,8 +5,9 @@
         </metadata>
 
         <content>
+<section>
 
-		<h2>Reference Manual</h2>
+		<title>Reference Manual</title>
 
 <p>
 These entries mainly appear as a reference from other locations, but they still
@@ -25,6 +26,7 @@ could be useful.
 	</li>
 </ul>
 
+</section>
 	</content>
 </document>
 

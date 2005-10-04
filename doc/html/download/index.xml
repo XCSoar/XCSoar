@@ -5,82 +5,89 @@
         </metadata>
 
         <content>
-		<h2>Download</h2>
-
-		<!-- ============================ -->
-		<h3>Binaries</h3>
-		<ul>
-			<li>
-				<a 
-					href="https://sourceforge.net/project/showfiles.php?group_id=141663&amp;package_id=155526"
-				>
-					including: PocketPC 2002, PocketPC 2003
-				</a>
-			</li>
-		</ul>
-
-
-		<!-- ============================ -->
-		<h3>Data</h3>
-
-		<p>This is by far the big important section of any application
-		like this. We have great plans and great code here for
-		generating data from free sources for any area in the world.
-		However it is by no means a trivial task. As such we are
-		building a set of tools to generate the data. To do so we will
-		need about 3 GB of disk storage for the original files. This is
-		not a problem for us long term, but we are not ready for that.
-		</p>
-		<p>
-		For now, please contact the users list with the data area you
-		need or try and generate it yourself with the tools in CVS.
-		</p>
-		<p>
-		Here are some we have already prepared
-		</p>
-		<ul>
-			<li>
-				<a
-					href="https://sourceforge.net/project/showfiles.php?group_id=141663&amp;package_id=157326"
-				>
-					including:
-					Benalla, Alps, Bayreuth, Germany, Slovakia and UK -
-					more to come
-				</a>
-			</li>
-		</ul>
-
-                <p>
-                Data formats used by XCSoar and sources of data are listed below.
-                <ul>
-<li> Waypoints: Cambridge .dat format.  The
-<a href="http://soaring.aerobatics.ws/TP/"> Worldwide Soaring Turnpoint Exchange</a> is a good source of waypoint files.</li>
-
-<li> Airspace: OpenAir .txt format.  The
-<a href="http://soaring.aerobatics.ws/SUA/HomePage.html"> Worldwide Soaring Turnpoint Exchange </a> has a section on Special Use Airspace. </li>
-
-<li> Glide polars: WinPilot .plr format.  These can be obtained
-from the <a href="http://www.winpilot.com/polar.asp"> WinPilot </a> site. </li>
-
-                </ul>
-                </p>
-
-		<!-- ============================ -->
-		<h3>Source Code</h3>
-		<ul>
-			<li>
-				<a href="https://sourceforge.net/cvs/?group_id=141663">
-					CVS
-				</a> - considering the high turn over of code,
-				this is the best place to get the source.
+		<section>
 	
-				<p>
-				The latest CVS tarball is available 
-				<a href="../xcsoar-nightlyCVS.tar.gz">here</a>.
-				</p>
-			</li>
-		</ul>
+		<title>Download</title>
 
+		<!-- ============================ -->
+
+			<section>
+			<title>Binaries</title>
+			<ul>
+				<li>
+					<a 
+						href="https://sourceforge.net/project/showfiles.php?group_id=141663&amp;package_id=155526"
+					>
+						including: PocketPC 2002, PocketPC 2003
+					</a>
+				</li>
+			</ul>
+			</section>
+
+			<!-- ============================ -->
+			<section>
+			<title>Data</title>
+
+			<p>This is by far the big important section of any application
+			like this. We have great plans and great code here for
+			generating data from free sources for any area in the world.
+			However it is by no means a trivial task. As such we are
+			building a set of tools to generate the data. To do so we will
+			need about 3 GB of disk storage for the original files. This is
+			not a problem for us long term, but we are not ready for that.
+			</p>
+			<p>
+			For now, please contact the users list with the data area you
+			need or try and generate it yourself with the tools in CVS.
+			</p>
+			<p>
+			Here are some we have already prepared
+			</p>
+			<ul>
+				<li>
+					<a
+						href="https://sourceforge.net/project/showfiles.php?group_id=141663&amp;package_id=157326"
+					>
+						including:
+						Benalla, Alps, Bayreuth, Germany, Slovakia and UK -
+						more to come
+					</a>
+				</li>
+			</ul>
+
+			<p>
+			Data formats used by XCSoar and sources of data are listed below.
+			<ul>
+				<li> Waypoints: Cambridge .dat format.  The
+				<a href="http://soaring.aerobatics.ws/TP/"> Worldwide Soaring Turnpoint Exchange</a> is a good source of waypoint files.</li>
+
+				<li> Airspace: OpenAir .txt format.  The
+				<a href="http://soaring.aerobatics.ws/SUA/HomePage.html"> Worldwide Soaring Turnpoint Exchange </a> has a section on Special Use Airspace. </li>
+
+				<li> Glide polars: WinPilot .plr format.  These can be obtained
+				from the <a href="http://www.winpilot.com/polar.asp"> WinPilot </a> site. </li>
+
+			</ul>
+			</p>
+		</section>
+
+		<!-- ============================ -->
+		<section>
+			<title>Source Code</title>
+			<ul>
+				<li>
+					<a href="https://sourceforge.net/cvs/?group_id=141663">
+						CVS
+					</a> - considering the high turn over of code,
+					this is the best place to get the source.
+		
+					<p>
+					The latest CVS tarball is available 
+					<a href="../xcsoar-nightlyCVS.tar.gz">here</a>.
+					</p>
+				</li>
+			</ul>
+		</section>
 
 	</content>
 </document>

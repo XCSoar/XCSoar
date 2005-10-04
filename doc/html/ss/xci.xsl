@@ -37,8 +37,10 @@ description of the purpose and options for an event. Click on Mode names (eg:
 Menu1) to jump to the next mode.
 </p>
 
-<h2>Tree view</h2>
-&tree;
+<section>
+	<title>Tree View</title>
+	&tree;
+</section>
 
 <!--
 		<h2>Index of Modes and Event Types</h2>
@@ -90,14 +92,18 @@ Menu1) to jump to the next mode.
 			<xsl:value-of select="@name"/>
 		</xsl:attribute>
 	</a>
-	<h1>MODE = <xsl:value-of select="@name"/></h1>
-	<xsl:apply-templates>
-		<xsl:with-param name="mode" select="@name"/>
-	</xsl:apply-templates>
+	<section>
+		<title>MODE = <xsl:value-of select="@name"/></title>
+		<xsl:apply-templates>
+			<xsl:with-param name="mode" select="@name"/>
+		</xsl:apply-templates>
+	</section>
 </xsl:template>
 
 <xsl:template match="type">
 	<xsl:param name="mode"/>
+	<section>
+	<!-- XXX This should be automatic with sections ! -->
 	<a>
 		<xsl:attribute name="name">
 			<xsl:text>mode_</xsl:text>
@@ -106,7 +112,7 @@ Menu1) to jump to the next mode.
 			<xsl:value-of select="@name"/>
 		</xsl:attribute>
 	</a>
-	<h2>
+	<title>
 		Input type = <xsl:value-of select="@name"/>
 		<xsl:if test="@name = 'gce'">
 			- Glide Computer Event Trigger
@@ -114,7 +120,7 @@ Menu1) to jump to the next mode.
 		<xsl:if test="@name = 'key'">
 			- Keyboard (or hardware) button input
 		</xsl:if>
-	</h2>
+	</title>
 	<table>
 		<tr>
 			<th>Button/Trigger</th>
@@ -124,6 +130,7 @@ Menu1) to jump to the next mode.
 		</tr>
 		<xsl:apply-templates/>
 	</table>
+	</section>
 </xsl:template>
 
 <xsl:template match="entry">

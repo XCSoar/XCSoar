@@ -5,12 +5,14 @@
         </metadata>
 
         <content>
-                <h2>STARTUP_SIMULATOR</h2>
+<section>
+                <title>STARTUP_SIMULATOR</title>
 
 <p>
 Startup first message. This happens during simulator mode.
 </p>
 
+</section>
         </content>
 </document>
 

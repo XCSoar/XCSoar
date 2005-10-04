@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-<h2>AdjustWaypoint</h2>
+<section>
+<title>AdjustWaypoint</title>
 
 	<p></p>
 	<ul>
@@ -15,5 +16,6 @@
 		<li>right</li>
 	</ul>
 
+</section>
 </content>
 </document>

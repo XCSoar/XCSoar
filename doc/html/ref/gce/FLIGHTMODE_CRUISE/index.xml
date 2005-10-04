@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-                <h2>FLIGHTMODE_CRUISE</h2>
+<section>
+                <title>FLIGHTMODE_CRUISE</title>
 
 
 <p>
@@ -24,6 +25,7 @@ Standard events done during a change to climb may include changing <a
 href="/ref/events/Zoom">Zoom</a>, North/Track up, Drop Marker and more.
 </p>
 
+</section>
         </content>
 </document>
 

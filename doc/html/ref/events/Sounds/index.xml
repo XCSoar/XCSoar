@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-<h2>Sounds</h2>
+<section>
+<title>Sounds</title>
 
 	<p>Change vario sounds</p>
 	<ul>
@@ -15,5 +16,6 @@
 		<li>show</li>
 	</ul>
 
+</section>
 </content>
 </document>

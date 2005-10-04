@@ -6,14 +6,15 @@
 
         <content>
 
-		<h2>Varios</h2>
+		<section>
+			<title>Varios</title>
 
-<p>
-A number of varios on the market allow external connnections to organiser.
-XCSoar suppors a number of these.
-</p>
+			<p>
+				A number of varios on the market allow external connnections to organiser.
+				XCSoar suppors a number of these.
+			</p>
 
-<h3>...</h3>
+		</section>
 
         </content>
 </document>

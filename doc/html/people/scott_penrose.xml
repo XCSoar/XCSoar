@@ -6,7 +6,8 @@
 
         <content>
 
-		<h2>Scott Penrose</h2>
+	<section>
+		<title>Scott Penrose</title>
 
 		<p>Scott Penrose is a private glider owner and club memeber at
 <a href="http://www.gliding-benalla.org/">Gliding Club of Victoria</a> in
@@ -22,6 +23,7 @@ site.</p>
 		<p>You can see me my site here <a
 href="http://linux.dd.com.au/">http://linux.dd.com.au/</a></p>
 
+	</section>
 	</content>
 </document>
 

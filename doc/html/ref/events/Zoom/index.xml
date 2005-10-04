@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-<h2>Zoom</h2>
+<section>
+<title>Zoom</title>
 
 	<p>Everything about zoom of map</p>
 	<ul>
@@ -22,5 +23,6 @@
 		<li>"n.n" - a number</li>
 	</ul>
 
+</section>
 </content>
 </document>

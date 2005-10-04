@@ -6,7 +6,9 @@
 
         <content>
 
-		<h1>Input and Events</h1>
+<section>
+
+		<title>Input and Events</title>
 
 <ul>
 	<li><a href="COMMPORT_RESTART">COMMPORT_RESTART</a></li>
@@ -21,6 +23,8 @@
 	<li><a href="STARTUP_SIMULATOR">STARTUP_SIMULATOR</a></li>
 	<li><a href="TAKEOFF">TAKEOFF</a></li>
 </ul>
+
+</section>
 
 </content>
 </document>

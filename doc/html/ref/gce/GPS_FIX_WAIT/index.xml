@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-                <h2>GPS_FIX_WAIT</h2>
+<section>
+                <title>GPS_FIX_WAIT</title>
 
 <p>
 Waiting for the GPS to Getafix. You can bring up a <a href="/ref/events/Sound">Sound</a> or <a
@@ -14,6 +15,7 @@ href="/ref/events/StatusMessage">StatusMessage</a> to warn the user.
 
 
 
+</section>
         </content>
 </document>
 

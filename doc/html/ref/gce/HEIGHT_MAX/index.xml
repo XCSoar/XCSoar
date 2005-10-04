@@ -5,13 +5,15 @@
         </metadata>
 
         <content>
-                <h2>HEIGHT_MAX</h2>
+<section>
+                <title>HEIGHT_MAX</title>
 
 <p>
 Maximum height reached for this trip. Sound, Message, Stats, Analasys, Mark
 location are all good choices here.
 </p>
 
+</section>
         </content>
 </document>
 

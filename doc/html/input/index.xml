@@ -6,41 +6,47 @@
 
         <content>
 
-		<h2>Input and Events</h2>
+	<section>
+		<title>Input and Events</title>
 
-<p>
-	XCSoar allows input and events to be controlled by files. This allows
-not only amazing levels of customisation but also good documentation as well.
-</p>
+		<p>
+			XCSoar allows input and events to be controlled by files. This allows
+		not only amazing levels of customisation but also good documentation as well.
+		</p>
 
-<h2>Configurations</h2>
+	</section>
 
-<p>The following is a list of configurations that you can use in XCSoar and
-their documentation.</p>
+	<section>
+		<title>Configurations</title>
+
+		<p>The following is a list of configurations that you can use in XCSoar and
+		their documentation.</p>
 
 
-<table border="1">
-	<tr>
-		<th>Name</th>
-		<th>Description</th>
-		<th>Action</th>
-	</tr>
+		<table border="1">
+			<tr>
+				<th>Name</th>
+				<th>Description</th>
+				<th>Action</th>
+			</tr>
 
-	<tr>
-		<td>Default</td>
-		<td>Standard built into XCS</td>
-		<td>
-			<a href="default.html">more about default.xci</a>
-			<br/>
-			<a href="default.xci">download default.xci</a>
-		</td>
-	</tr>
+			<tr>
+				<td>Default</td>
+				<td>Standard built into XCS</td>
+				<td>
+					<a href="default.html">more about default.xci</a>
+					<br/>
+					<a href="default.xci">download default.xci</a>
+				</td>
+			</tr>
 
-</table>
-		
-<p>See <a href="/ref/filetype/xci/">XCI File type</a> and <a
-href="/advanced/input/">Advanced Input</a> for further information on file
-types and creating your own input files.</p>
+		</table>
+				
+		<p>See <a href="/ref/filetype/xci/">XCI File type</a> and <a
+		href="/advanced/input/">Advanced Input</a> for further information on file
+		types and creating your own input files.</p>
+
+	</section>
 	
 	</content>
 </document>

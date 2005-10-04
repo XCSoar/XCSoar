@@ -6,13 +6,15 @@
 
         <content>
 
-		<h2>Install</h2>
+	<section>
+		<title>Install</title>
 
-<ul>
-	<li><a href="windows/">Windows</a> - Installation from Microsoft Windows</li>
-	<li><a href="linux/">Linux</a> - Installation from a linux work station</li>
-	<li><a href="mac/">Mac OS X</a> - Installation from Mac OS X</li>
-</ul>
+		<ul>
+			<li><a href="windows/">Windows</a> - Installation from Microsoft Windows</li>
+			<li><a href="linux/">Linux</a> - Installation from a linux work station</li>
+			<li><a href="mac/">Mac OS X</a> - Installation from Mac OS X</li>
+		</ul>
+	</section>
 
         </content>
 </document>

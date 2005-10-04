@@ -5,12 +5,14 @@
         </metadata>
 
         <content>
-                <h2>STARTUP_REAL</h2>
+<section>
+                <title>STARTUP_REAL</title>
 
 <p>
 First message - this happens at startup of the real XCS.
 </p>
 
+</section>
         </content>
 </document>
 

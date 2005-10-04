@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-<h2>ClearWarningsAndTerrain</h2>
+<section>
+<title>ClearWarningsAndTerrain</title>
 
 	<p></p>
 	<ul>
@@ -17,5 +18,6 @@
 		<li>right - Pan right</li>
 	</ul>
 
+</section>
 </content>
 </document>

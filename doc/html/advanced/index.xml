@@ -6,32 +6,38 @@
 
         <content>
 
-<h1>Advanced and Programming Information</h1>
+	<section>
+		<title>Advanced and Programming Information</title>
 
 <p>This section is designed as a central location for important advanced and
 programmer information. Examples may include how to compile, code/api, details
 of how to create special files and much more.</p>
 
-<h2>The List</h2>
+		<section>
+			<title>The List</title>
 
-<ul>
+			<ul>
 
-	<li>
-		<a href="input/">
-			Input and Events Files
-		</a> - how to write your own
-	</li>
-	<li>
-		<a href="status/">
-			Status Files
-		</a> - how to write your own
-	</li>
-	<li>
-		<a href="language/">
-			Language Files
-		</a> - how to write your own
-	</li>
-</ul>
+				<li>
+					<a href="input/">
+						Input and Events Files
+					</a> - how to write your own
+				</li>
+				<li>
+					<a href="status/">
+						Status Files
+					</a> - how to write your own
+				</li>
+				<li>
+					<a href="language/">
+						Language Files
+					</a> - how to write your own
+				</li>
+			</ul>
+		</section>
+
+	</section>
+
 	</content>
 </document>
 

@@ -86,6 +86,19 @@
 	</html>
 </xsl:template>
 
+<xsl:template match="section">
+	<xsl:if test="title">
+		<xsl:variable name="hl">
+			<xsl:text>h</xsl:text>
+			<xsl:value-of select="count(parent::section) + 1"/>
+		</xsl:variable>
+		<xsl:element name="{$hl}">
+			<xsl:value-of select="title"/>
+		</xsl:element>
+	</xsl:if>
+	<xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="screenshots">
 	<div class="screenshots">
 		<xsl:apply-templates/>
@@ -112,6 +125,12 @@
                 <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
 </xsl:template>
+
+<xsl:template match="h1"></xsl:template>
+<xsl:template match="h2"></xsl:template>
+<xsl:template match="h3"></xsl:template>
+<xsl:template match="h4"></xsl:template>
+<xsl:template match="title"></xsl:template>
 
 <xsl:template match="faq">
 	<h2>

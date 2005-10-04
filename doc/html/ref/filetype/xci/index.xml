@@ -5,8 +5,9 @@
         </metadata>
 
         <content>
+<section>
 
-		<h2>File Type - xci - Input and Event Control</h2>
+		<title>File Type - xci - Input and Event Control</title>
 
 <p>
 The xci file is a plain text file designed to control the input and events in
@@ -31,6 +32,7 @@ XCSoar and of gliding.
 <p>For more information on writing your own XCI see the <a
 href="/advanced/input/">Advanced Input Manual</a></p>
 
+</section>
 	</content>
 </document>
 

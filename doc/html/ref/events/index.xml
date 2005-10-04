@@ -6,7 +6,8 @@
 
         <content>
 
-		<h1>Input and Events</h1>
+<section>
+		<title>Input and Events</title>
 
 <ul>
 	<li><a href="/ref/events/ScreenModes/">ScreenModes</a></li>
@@ -33,6 +34,7 @@
 	<li><a href="/ref/events/AbortTask/">AbortTask</a></li>
 
 </ul>
+</section>
 
 </content>
 </document>

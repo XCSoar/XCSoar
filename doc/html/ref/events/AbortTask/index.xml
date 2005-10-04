@@ -5,8 +5,9 @@
         </metadata>
 
         <content>
+<section>
 
-<h2>AbortTask</h2>
+<title>AbortTask</title>
 
 	<p></p>
 	<ul>
@@ -15,6 +16,7 @@
 		<li>TODO resume</li>
 	</ul>
 
+</section>
 </content>
 </document>
 

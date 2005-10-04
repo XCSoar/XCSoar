@@ -6,7 +6,9 @@
 
         <content>
 
-		<h2>Features</h2>
+	<section>
+	
+		<title>Features</title>
 
 <div class="input">
 
@@ -95,6 +97,8 @@
 </table>
 
 </div>
+
+</section>
 
         </content>
 </document>

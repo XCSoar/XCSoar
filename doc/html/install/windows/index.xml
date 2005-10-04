@@ -6,7 +6,9 @@
 
         <content>
 
-		<h2>The Windows Installation procedure</h2>
+
+	<section>
+		<title>The Windows Installation procedure</title>
 
 <ul>
 	<li><a href="/download/">Download</a> the lattest windows EXE Installer from source forge</li>
@@ -19,6 +21,8 @@ the organiser</li>
 	<li>Restart (see operating instructions) the orgasier to get full
 suport for fonts and Start Page</li>
 </ul>
+
+	</section>
 
         </content>
 </document>

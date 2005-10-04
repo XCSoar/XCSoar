@@ -5,12 +5,14 @@
         </metadata>
 
         <content>
-<h2>MainMenu</h2>
+<section>
+<title>MainMenu</title>
 
 	<p></p>
 	<ul>
 		<li></li>
 	</ul>
 
+</section>
 </content>
 </document>

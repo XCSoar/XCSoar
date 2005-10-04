@@ -5,8 +5,9 @@
         </metadata>
 
         <content>
+<section>
 
-		<h2>File Types</h2>
+		<title>File Types</title>
 
 <p>
 XCS makes use of many files. Each of these files has been based where possible
@@ -116,6 +117,7 @@ and more)</td>
 
 </table>
 		
+</section>
 	</content>
 </document>
 

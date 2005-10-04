@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-<h2>Modes</h2>
+<section>
+<title>Modes</title>
 
 	<p>Set the screen mode</p>
 	<ul>
@@ -17,5 +18,6 @@
 		<li>toggle</li>
 	</ul>
 
+</section>
 </content>
 </document>

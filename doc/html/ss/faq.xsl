@@ -23,12 +23,15 @@
 
 		<content>
 
-			<h1>
-				FAQ - 
-				<xsl:value-of select="title"/>
-			</h1>
+			<section>
+				<title>
+					FAQ - 
+					<xsl:value-of select="title"/>
+				</title>
 
-			<xsl:apply-templates/>
+				<xsl:apply-templates/>
+
+			</section>
 
 		</content>
 
@@ -36,14 +39,16 @@
 </xsl:template>
 
 <xsl:template match="entry">
+	<section>
 	<xsl:apply-templates select="question"/>
 	<xsl:apply-templates select="answer"/>
+	</section>
 </xsl:template>
 
 <xsl:template match="question">
-	<h2>
+	<title>
 		<xsl:value-of select="."/>
-	</h2>
+	</title>
 </xsl:template>
 
 <!-- apply everything inside answers -->

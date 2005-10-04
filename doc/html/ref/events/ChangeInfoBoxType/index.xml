@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-<h2>ChangeInfoBoxType</h2>
+<section>
+<title>ChangeInfoBoxType</title>
 
 	<p></p>
 	<ul>
@@ -13,5 +14,6 @@
 		<li>previous</li>
 	</ul>
 
+</section>
 </content>
 </document>

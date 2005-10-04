@@ -18,6 +18,12 @@ h2 {
 	font-family: verdana, arial, helvetica, sans-serif;
 	color: #333366; 
 }
+
+h3 { 
+	font-size: 1.1em;
+	font-family: verdana, arial, helvetica, sans-serif;
+	color: #333366; 
+}
 	
 a:link, a:visited {
 	color: #003366;

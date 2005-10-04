@@ -5,12 +5,15 @@
         </metadata>
 
         <content>
-<h2>MarkLocation</h2>
+<section>
+<title>MarkLocation</title>
 
 	<p>Mark a location</p>
 	<ul>
 		<li>(TODO) "*" - Text string to add to file</li>
 	</ul>
 
+</section>
 </content>
 </document>
+

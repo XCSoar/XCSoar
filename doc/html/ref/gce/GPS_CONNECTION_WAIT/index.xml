@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-                <h2>GPS_CONNECTION_WAIT</h2>
+<section>
+                <title>GPS_CONNECTION_WAIT</title>
 
 <p>
 Waiting for the GPS tor return connection. Check your GPS is properly
@@ -13,6 +14,7 @@ connected. You can bring up a <a href="/ref/events/Sound">Sound</a> or <a
 href="/ref/events/StatusMessage">StatusMessage</a> to warn the user.
 </p>
 
+</section>
         </content>
 </document>
 

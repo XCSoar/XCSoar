@@ -5,7 +5,8 @@
         </metadata>
 
         <content>
-                <h2>FLIGHTMODE_FINALGLIDE</h2>
+<section>
+                <title>FLIGHTMODE_FINALGLIDE</title>
 
 <p>
 XCS has three main flight modes: <a
@@ -24,6 +25,7 @@ href="/ref/events/Zoom">Zoom</a>, North/Track up, Drop Marker and more.
 </p>
 
 
+</section>
         </content>
 </document>
 
