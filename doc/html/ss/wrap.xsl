@@ -121,6 +121,9 @@
 			</xsl:attribute>
 			<xsl:value-of select="document(@faqref)/faq/title"/>
 		</a>
+		<xsl:text> (</xsl:text>
+		<xsl:value-of select="count(document(@faqref)/faq/entry)"/>
+		<xsl:text> questions)</xsl:text>
 	</h2>
 </xsl:template>
 

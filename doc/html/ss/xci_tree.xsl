@@ -12,7 +12,7 @@
 
 <xsl:template match="/">
 	<ul>
-		<xsl:apply-templates select="//input/mode[@name='default']/type[@name='key']"/>
+		<xsl:apply-templates select="//input/mode[@name='Menu1']/type[@name='key']"/>
 	</ul>
 </xsl:template>
 
