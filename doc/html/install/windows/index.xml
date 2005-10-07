@@ -10,17 +10,53 @@
 	<section>
 		<title>The Windows Installation procedure</title>
 
-<ul>
-	<li><a href="/download/">Download</a> the lattest windows EXE Installer from source forge</li>
-	<li>Connect your organiser to windows via Active Sync</li>
-	<li>Backup your organiser for extra safety (Backup from Windows Active Sync or other prefered method</li>
-	<li>Run the XCSoar EXE</li>
-	<li>Read and accept the License</li>
-	<li>Follow the prompts on windows first for installation and then on
-the organiser</li>
-	<li>Restart (see operating instructions) the orgasier to get full
-suport for fonts and Start Page</li>
-</ul>
+<p>
+	<img src="XCS_Download.png" align="right"/>
+
+	<a href="/download/">Download</a> the lattest windows EXE Installer
+from source forge (note the version you need to download for your organiser)
+
+</p>
+<br clear="all"/>
+
+<p>
+	<img src="XCS_ActiveSync.png" align="right"/>
+	<br/>
+	Connect your organiser to windows via Active Sync
+</p>
+<br clear="all"/>
+
+<p>
+	Backup your organiser for extra safety (Backup from Windows Active
+	Sync or other prefered method
+</p>
+<br clear="all"/>
+
+<p>
+	<img src="XCS_License.png" align="right"/>
+	<br/>
+	Run the XCSoar EXE
+</p>
+<br clear="all"/>
+
+
+<p>
+	Read and accept the License
+</p>
+<br clear="all"/>
+
+<p>
+	<img src="XCS_Windows.png" align="right"/>
+	Follow the prompts on windows first for installation and then on
+	the organiser
+</p>
+<br clear="all"/>
+
+<p>
+	Restart (see operating instructions) the orgasier to get full
+	suport for fonts and Start Page
+</p>
+<br clear="all"/>
 
 	</section>
 
