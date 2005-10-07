@@ -53,11 +53,6 @@
 
 <!-- apply everything inside answers -->
 <xsl:template match="answer">
-	<xsl:if test=".!=''">
-		<p>
-			<xsl:value-of select="."/>
-		</p>
-	</xsl:if>
 	<xsl:apply-templates/>
 </xsl:template>
 
