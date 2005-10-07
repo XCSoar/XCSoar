@@ -21,7 +21,6 @@ from source forge (note the version you need to download for your organiser)
 
 <p>
 	<img src="XCS_ActiveSync.png" align="right"/>
-	<br/>
 	Connect your organiser to windows via Active Sync
 </p>
 <br clear="all"/>
@@ -34,7 +33,6 @@ from source forge (note the version you need to download for your organiser)
 
 <p>
 	<img src="XCS_License.png" align="right"/>
-	<br/>
 	Run the XCSoar EXE
 </p>
 <br clear="all"/>
@@ -57,6 +55,19 @@ from source forge (note the version you need to download for your organiser)
 	suport for fonts and Start Page
 </p>
 <br clear="all"/>
+
+<p>
+	<img src="XCS_Today.png" align="right"/>
+	Choose Simulator from your Today screen
+</p>
+<br clear="all"/>
+
+<p>
+	<img src="XCS_Run.png" align="right"/>
+	Now have a play. Review the <a href="/quick/">Quick Start Guide</a> for
+	more informaiton on what to do next.
+</p>
+	
 
 	</section>
 
