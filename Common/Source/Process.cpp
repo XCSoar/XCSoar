@@ -178,43 +178,43 @@ void	DirectionProcessing(int UpDown)
 	return;
 }
 
-void	McCreadyProcessing(int UpDown)
+void	MacCreadyProcessing(int UpDown)
 {
 
   if(UpDown==1) {
     
-    MCCREADY += (double)0.2;
+    MACCREADY += (double)0.2;
     
-    if (MCCREADY>10.0) { // JMW added sensible limit
-      MCCREADY=10.0;
+    if (MACCREADY>10.0) { // JMW added sensible limit
+      MACCREADY=10.0;
     }
   }
   else if(UpDown==-1)
     {
-      MCCREADY -= (double)0.2;
-      if(MCCREADY < 0)
+      MACCREADY -= (double)0.2;
+      if(MACCREADY < 0)
 	{
-	  MCCREADY = 0;
+	  MACCREADY = 0;
 	}
 
   } else if (UpDown==0)
     {
-      CALCULATED_INFO.AutoMcCready = !CALCULATED_INFO.AutoMcCready; 
+      CALCULATED_INFO.AutoMacCready = !CALCULATED_INFO.AutoMacCready; 
       // JMW toggle automacready
 	} 
   else if (UpDown==-2)
     {
-      CALCULATED_INFO.AutoMcCready = false;  // SDP on auto mccready
+      CALCULATED_INFO.AutoMacCready = false;  // SDP on auto maccready
       
     }
   else if (UpDown==+2)
     {
-      CALCULATED_INFO.AutoMcCready = true;	// SDP off auto mccready
+      CALCULATED_INFO.AutoMacCready = true;	// SDP off auto maccready
       
     }
   
-  devPutMcCready(devA(), MCCREADY); // NOTE THIS IS IN USER UNITS
-  devPutMcCready(devB(), MCCREADY);
+  devPutMacCready(devA(), MACCREADY); // NOTE THIS IS IN USER UNITS
+  devPutMacCready(devB(), MACCREADY);
   
   return;
 }
@@ -410,7 +410,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = ALTITUDEMODIFY*CALCULATED_INFO.LastThermalGain;
     break;
   case 10:
-    Value = MCCREADY;
+    Value = MACCREADY;
     break;
   case 11:
     Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
@@ -546,7 +546,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = ALTITUDEMODIFY*GPS_INFO.BaroAltitude;
     break;
   case 34:
-    Value = SPEEDMODIFY*CALCULATED_INFO.VMcCready; 
+    Value = SPEEDMODIFY*CALCULATED_INFO.VMacCready; 
     break;
   case 35:
     Value = CALCULATED_INFO.PercentCircling;

@@ -262,7 +262,7 @@ class MapWindow {
   
   static HBITMAP hLandable, hReachable, 
     hTurnPoint, hSmall, hCruise, hClimb, 
-    hFinalGlide, hAutoMcCready, hTerrainWarning, hGPSStatus1, hGPSStatus2,
+    hFinalGlide, hAutoMacCready, hTerrainWarning, hGPSStatus1, hGPSStatus2,
     hAbort, hLogger, hLoggerOff;
 
   static HBRUSH   hBackgroundBrush;

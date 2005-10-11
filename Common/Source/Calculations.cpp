@@ -62,8 +62,8 @@ static void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready);
-static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready);
+static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
+static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
 static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int  InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -74,7 +74,7 @@ static void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int  InAATStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int  InAATurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void DoAutoMcCready(DERIVED_INFO *Calculated);
+static void DoAutoMacCready(DERIVED_INFO *Calculated);
 static void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -244,13 +244,13 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   
   // this is basically a dolphin soaring calculator
   
-  double dmc = MCCREADY/LIFTMODIFY-Calculated->NettoVario;
+  double dmc = MACCREADY/LIFTMODIFY-Calculated->NettoVario;
 
-  if (Calculated->Vario <= MCCREADY/LIFTMODIFY) {
+  if (Calculated->Vario <= MACCREADY/LIFTMODIFY) {
     
     double VOptnew;
     
-    GlidePolar::McCreadyAltitude(dmc,
+    GlidePolar::MacCreadyAltitude(dmc,
                                  100.0, // dummy value
                                  Basic->TrackBearing, 
                                  Calculated->WindSpeed, 
@@ -266,7 +266,7 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     Calculated->VOpt = Calculated->VOpt*0.6+VOptnew*0.4;
     
   } else {
-    // this thermal is better than mccready, so fly at minimum sink
+    // this thermal is better than maccready, so fly at minimum sink
     // speed
     // calculate speed of min sink adjusted for load factor 
     Calculated->VOpt = GlidePolar::Vminsink*sqrt(n);
@@ -289,14 +289,14 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       Calculated->STFMode = true;
     }
     // lock on when supernetto climb rate is half mc
-    if (dmc< MCCREADY/LIFTMODIFY/2.0) {
+    if (dmc< MACCREADY/LIFTMODIFY/2.0) {
       Calculated->STFMode = false;
     }
     // lock on in circling
     if (Calculated->Circling) {
       Calculated->STFMode = false;
     }
-    // TODO: Work out effect on mccready speed to be in speed error
+    // TODO: Work out effect on maccready speed to be in speed error
     // and the volume should be scaled by this.
   }
 
@@ -382,7 +382,7 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
-  static double mccready;
+  static double maccready;
 
   if (!windanalyser) {
     windanalyser = new WindAnalyser(Basic, Calculated);
@@ -397,10 +397,10 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     */
   }
 
-  mccready = MCCREADY/LIFTMODIFY;
+  maccready = MACCREADY/LIFTMODIFY;
 
   DistanceToNext(Basic, Calculated);
-  AltitudeRequired(Basic, Calculated, mccready);
+  AltitudeRequired(Basic, Calculated, maccready);
   Heading(Basic, Calculated);
 
   TerrainHeight(Basic, Calculated);
@@ -408,7 +408,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (TaskAborted) {
     SortLandableWaypoints(Basic, Calculated);
   } 
-  TaskStatistics(Basic, Calculated, mccready);
+  TaskStatistics(Basic, Calculated, maccready);
 
   if(Basic->Time <= LastTime)
     {
@@ -421,8 +421,8 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if ((Calculated->FinalGlide)
       ||(fabs(Calculated->TaskAltitudeDifference)>30)) {
     FinalGlideAlert(Basic, Calculated);
-    if (Calculated->AutoMcCready) {
-      DoAutoMcCready(Calculated);
+    if (Calculated->AutoMacCready) {
+      DoAutoMacCready(Calculated);
     }
   }
 
@@ -443,7 +443,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (TaskAborted) {
 
     SortLandableWaypoints(Basic, Calculated);
-    //    TaskStatistics(Basic, Calculated, mccready);
+    //    TaskStatistics(Basic, Calculated, maccready);
 
   } else {
 
@@ -451,11 +451,11 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     InAATSector(Basic, Calculated);
 
     AATStats(Basic, Calculated);  
-    TaskStatistics(Basic, Calculated, mccready);
+    TaskStatistics(Basic, Calculated, maccready);
 
   }
 
-  AltitudeRequired(Basic, Calculated, mccready);
+  AltitudeRequired(Basic, Calculated, maccready);
   TerrainHeight(Basic, Calculated);
                   
   CalculateNextPosition(Basic, Calculated);
@@ -495,7 +495,7 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	// JMW experimental
 	TCHAR mcbuf[100];
 	wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d,%d"),
-		 iround(MCCREADY/LIFTMODIFY*10),
+		 iround(MACCREADY/LIFTMODIFY*10),
 		 iround(Calculated->VOpt*10),
 		 Calculated->Circling,
 		 Calculated->STFMode,
@@ -964,12 +964,12 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
 }
 
-void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
+void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 {
   if(ActiveWayPoint >=0)
     {
       Calculated->NextAltitudeRequired = 
-        GlidePolar::McCreadyAltitude(mccready,
+        GlidePolar::MacCreadyAltitude(maccready,
                         Calculated->WaypointDistance,
                         Calculated->WaypointBearing, 
                         Calculated->WindSpeed, Calculated->WindBearing, 
@@ -1315,7 +1315,7 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 /////////////////////////////////////////
 
-void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
+void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 {
   int i;
   double LegCovered, LegToGo, LegDistance, LegBearing, LegAltitude;
@@ -1400,14 +1400,14 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
                          WayPointList[Task[i].Index].Latitude, 
                          WayPointList[Task[i].Index].Longitude);
 
-      // JMW TODO: use instantaneous mccready here again to calculate
+      // JMW TODO: use instantaneous maccready here again to calculate
       // dolphin speed to fly 
-      LegAltitude = GlidePolar::McCreadyAltitude(mccready, LegToGo, 
+      LegAltitude = GlidePolar::MacCreadyAltitude(maccready, LegToGo, 
                                                  LegBearing, 
                                     Calculated->WindSpeed, 
                                     Calculated->WindBearing, 
                                     &(Calculated->BestCruiseTrack),
-                                    &(Calculated->VMcCready),
+                                    &(Calculated->VMacCready),
                                     (i==FinalWayPoint),
                                     &(Calculated->LegTimeToGo)
                                     // ||()
@@ -1467,7 +1467,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
                                WayPointList[Task[i].Index].Longitude); 
 
 
-          LegAltitude = GlidePolar::McCreadyAltitude(mccready, 
+          LegAltitude = GlidePolar::MacCreadyAltitude(maccready, 
                                                      LegDistance, LegBearing, 
                                         Calculated->WindSpeed, Calculated->WindBearing, 0, 0,
                                         (i==FinalWayPoint), // ||() JMW TODO!!!!!!!!!
@@ -1498,11 +1498,11 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
 
     Calculated->FinalGlide = 0;
     
-    GlidePolar::McCreadyAltitude(mccready, 100.0, Basic->TrackBearing, 
+    GlidePolar::MacCreadyAltitude(maccready, 100.0, Basic->TrackBearing, 
                                  Calculated->WindSpeed, 
                                  Calculated->WindBearing, 
                                  &(Calculated->BestCruiseTrack),
-                                 &(Calculated->VMcCready),
+                                 &(Calculated->VMacCready),
                                  false,
                                  // ||()
                                  // JMW TODO!!!!!!!!!!!
@@ -1512,7 +1512,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double mccready)
 
 }
 
-void DoAutoMcCready(DERIVED_INFO *Calculated)
+void DoAutoMacCready(DERIVED_INFO *Calculated)
 {
   static double tad=0.0;
   static double dmc=0.0;
@@ -1521,8 +1521,8 @@ void DoAutoMcCready(DERIVED_INFO *Calculated)
   
   dmc = dmc*0.2+0.8*0.5*min(1.0,max(-1.0,tad/0.001));
 
-  MCCREADY += dmc;
-  MCCREADY = min(2.5*LIFTMODIFY,max(0,MCCREADY));
+  MACCREADY += dmc;
+  MACCREADY = min(2.5*LIFTMODIFY,max(0,MACCREADY));
 
   /* NOT WORKING
   static double tad=0.0;
@@ -1536,22 +1536,22 @@ void DoAutoMcCready(DERIVED_INFO *Calculated)
 
   if (fabs(tad)<5.0) {
     tadlast = tad;
-    mclast = MCCREADY;
+    mclast = MACCREADY;
     return;
   }
 
   // no change detected, increment until see something
 
   if (fabs(tad-tadlast)>0.0001) {
-    slope = 0.9*slope+0.1*(MCCREADY-mclast)/(tad-tadlast);
+    slope = 0.9*slope+0.1*(MACCREADY-mclast)/(tad-tadlast);
   } else {
   }
  
   if (fabs(slope)<0.01) {
     if (tad>0) {
-      mcnew= MCCREADY+0.1;
+      mcnew= MACCREADY+0.1;
     } else {
-      mcnew= MCCREADY-0.1;
+      mcnew= MACCREADY-0.1;
     }
   } else {
 
@@ -1563,17 +1563,17 @@ void DoAutoMcCready(DERIVED_INFO *Calculated)
     // slope=(5-4)/(100-200)= -0.1
     delta = (-slope*tad);
     delta = min(1.0,max(-1.0,delta));
-    mcnew = MCCREADY+0.3*(delta);
+    mcnew = MACCREADY+0.3*(delta);
   }
   tadlast = tad;
-  mclast = MCCREADY;
+  mclast = MACCREADY;
 
-  MCCREADY = mcnew;
-  if (MCCREADY>10.0) {
-    MCCREADY = 10.0;
+  MACCREADY = mcnew;
+  if (MACCREADY>10.0) {
+    MACCREADY = 10.0;
   }
-  if (MCCREADY<0.0) {
-    MCCREADY = 0.0;
+  if (MACCREADY<0.0) {
+    MACCREADY = 0.0;
   }
   */
 }
@@ -1941,7 +1941,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   // returns distance one would arrive at altitude in straight glide
 
   // first estimate max range at this altitude
-  double ialtitude = GlidePolar::McCreadyAltitude(MCCREADY/LIFTMODIFY, 
+  double ialtitude = GlidePolar::MacCreadyAltitude(MACCREADY/LIFTMODIFY, 
                                                   1.0, bearing, 
                                                   Calculated->WindSpeed, 
                                                   Calculated->WindBearing, 
@@ -2046,7 +2046,7 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
 		     WayPointList[i].Latitude, 
 		     WayPointList[i].Longitude); 
   
-  AltReqd = GlidePolar::McCreadyAltitude(0.0, 
+  AltReqd = GlidePolar::MacCreadyAltitude(0.0, 
                                          wDistance, 
                                          wBearing, 
                                          Calculated->WindSpeed, 

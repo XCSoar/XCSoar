@@ -19,11 +19,15 @@ To do for next version:
 - Consider support of double click (harder...)
 - Simple output terminal for COM ports (allow users to check serial
   connnections are working correctly).
+- Replay IGC and include examples
+- Launcher profile selector (multiple pilots or situations - maybe even tasks)
 
 To do for next beta:
 - Package and release fonts (part of standard cab/exe)
 
 Changes from 4.5beta3 to 4.5beta4
+- Fix spelling of MacCready (it was McCready).
+  (reference: http://www.achievement.org/autodoc/page/mac0bio-1)
 - Exit simulator if battery lower than 20% (warning < 30%)
 - Fixed crash during Waypoint details, when none selected
 - Reduce length of labels where possible

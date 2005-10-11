@@ -9,10 +9,10 @@
 class GlidePolar {
  public:
 
-  static double McCreadyAltitude(double MCREADY, double Distance, 
+  static double MacCreadyAltitude(double MCREADY, double Distance, 
                                  double Bearing, double WindSpeed, 
                                  double WindBearing, double *BestCruiseTrack, 
-                                 double *VMcCready, bool isFinalGlide, 
+                                 double *VMacCready, bool isFinalGlide, 
                                  double *timetogo);
 
 

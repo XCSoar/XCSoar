@@ -15,7 +15,7 @@ typedef struct _DERIVED_INFO
   double Vario;
   double LD;
   double CruiseLD;
-  double VMcCready;
+  double VMacCready;
   double Average30s;
   double BestCruiseTrack;
   double AverageThermal;
@@ -40,7 +40,7 @@ typedef struct _DERIVED_INFO
   double AltitudeAGL;
   int    Circling;
   int    FinalGlide;
-  int    AutoMcCready;
+  int    AutoMacCready;
   int    Flying;
   double NextAltitudeRequired;
   double NextAltitudeDifference;

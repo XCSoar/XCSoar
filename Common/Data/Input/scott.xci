@@ -488,22 +488,22 @@ location=3
 mode=Config1
 type=key
 data=A
-event=McCready up
-label=McCready +
+event=MacCready up
+label=MacCready +
 location=1
 
 mode=Config1
 type=key
 data=B
-event=McCready down
-label=McCready -
+event=MacCready down
+label=MacCready -
 location=2
 
 mode=Config1
 type=key
 data=D
-event=McCready auto
-label=McCready Auto
+event=MacCready auto
+label=MacCready Auto
 location=4
 
 

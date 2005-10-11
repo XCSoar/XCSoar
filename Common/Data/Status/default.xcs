@@ -75,14 +75,14 @@ key=XCI Error
 delay=30000
 sound=IDR_FAIL
 
-key=McCready Value
+key=MacCready Value
 delay=5000
 
-key=Auto McCready ON
+key=Auto MacCready ON
 sound=IDR_INSERT
 delay=1500
 
-key=Auto McCready OFF
+key=Auto MacCready OFF
 sound=IDR_REMOVE
 delay=1500
 

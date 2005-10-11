@@ -46,7 +46,7 @@ class InputEvents {
   static void eventWaypointDetails(TCHAR *misc);
   static void eventStatusMessage(TCHAR *misc);
   static void eventPlaySound(TCHAR *misc);
-  static void eventMcCready(TCHAR *misc);
+  static void eventMacCready(TCHAR *misc);
   static void eventWind(TCHAR *misc);
   static void eventAdjustVarioFilter(TCHAR *misc);
   static void eventAdjustWaypoint(TCHAR *misc);

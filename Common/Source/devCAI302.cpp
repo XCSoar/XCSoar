@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.14 2005/09/21 00:46:17 scottp Exp $
+// $Id: devCAI302.cpp,v 1.15 2005/10/11 10:45:33 scottp Exp $
 
 /*
 Copyright_License {
@@ -141,7 +141,7 @@ static BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL cai_PCAIB(TCHAR *String, NMEA_INFO *GPS_INFO);
 static cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO);
 
-static int  McCreadyUpdateTimeout = 0;
+static int  MacCreadyUpdateTimeout = 0;
 static int  BugsUpdateTimeout = 0;
 static int  BallastUpdateTimeout = 0;
 
@@ -169,16 +169,16 @@ BOOL cai302ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL cai302PutMcCready(PDeviceDescriptor_t d, double McCready){
+BOOL cai302PutMacCready(PDeviceDescriptor_t d, double MacCready){
 
   TCHAR  szTmp[32];
 
-  _stprintf(szTmp, TEXT("!g,m%d\r\n"), int(((McCready * 10) / KNOTSTOMETRESSECONDS) + 0.5));
+  _stprintf(szTmp, TEXT("!g,m%d\r\n"), int(((MacCready * 10) / KNOTSTOMETRESSECONDS) + 0.5));
 
   if (!fSimMode)
     (d->Com.WriteString)(szTmp);
 
-  McCreadyUpdateTimeout = 2;
+  MacCreadyUpdateTimeout = 2;
 
   return(TRUE);
 
@@ -546,7 +546,7 @@ BOOL cai302Install(PDeviceDescriptor_t d){
 
   _tcscpy(d->Name, TEXT("CAI 302"));
   d->ParseNMEA = cai302ParseNMEA;
-  d->PutMcCready = cai302PutMcCready;
+  d->PutMacCready = cai302PutMacCready;
   d->PutBugs = cai302PutBugs;
   d->PutBallast = cai302PutBallast;
   d->Open = cai302Open;
@@ -655,10 +655,10 @@ BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO){
 
   ExtractParameter(String,ctemp,10);
   GPS_INFO->MacReady = (StrToDouble(ctemp,NULL) / 10.0) * KNOTSTOMETRESSECONDS;
-  if (McCreadyUpdateTimeout <= 0)
-    MCCREADY = GPS_INFO->MacReady;
+  if (MacCreadyUpdateTimeout <= 0)
+    MACCREADY = GPS_INFO->MacReady;
   else
-    McCreadyUpdateTimeout--; 
+    MacCreadyUpdateTimeout--; 
 
 
   ExtractParameter(String,ctemp,11);
