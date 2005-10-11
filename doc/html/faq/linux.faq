@@ -2,6 +2,18 @@
 
 	<title>Installation - Linux</title>
 
+
+	<entry>
+		<question>
+			How do I install XCSoar from Linux
+		</question>
+		<answer>
+			See <a href="/install/linux/">Linux Installion</a>
+		</answer>
+	</entry>
+
+
+
 	<entry>
 		<question>
 			      How do I install the main EXE from Linux? Your notes say that it
