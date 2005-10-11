@@ -208,19 +208,19 @@
 	</section>
 
 	<section>
-		<title>McCready group</title>
+		<title>MacCready group</title>
 
 		<dl>
-			<dt>McCready Setting: McCready</dt>
+			<dt>MacCready Setting: MacCready</dt>
 			<dd>
-				The current McCready setting. Also used to adjust the McCready Setting if
+				The current MacCready setting. Also used to adjust the MacCready Setting if
 				the infobox is active, by using the up/down cursor keys.  Pressing the
-				enter cursor key toggles AutoMcCready mode.
+				enter cursor key toggles AutoMacCready mode.
 			</dd>
 
-			<dt>Speed McCready: V Mc</dt>
+			<dt>Speed MacCready: V Mc</dt>
 			<dd>
-				The McCready speed-to-fly.  In cruise flight mode, this speed-to-fly
+				The MacCready speed-to-fly.  In cruise flight mode, this speed-to-fly
 				is calculated for maintaining altitude.  In final glide mode, this
 				speed-to-fly is calculated for descent.
 			</dd>

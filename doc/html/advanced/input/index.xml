@@ -53,7 +53,7 @@
 				with limited inputs. The first is that you can create menus, where by
 				you press one button to get to the next level (eg: pressing on APP1
 				brings up AutoZoom, Pan Mode, Full screen on the other buttons. Press
-				APP1 again and it goes to Terrain, Marker and Auto McCready. Press APP1
+				APP1 again and it goes to Terrain, Marker and Auto MacCready. Press APP1
 				again and the menu is gone) - but more importantly for those with touch
 				screens and limited buttons, each of these labels can optionally be
 				assigned a key and you can touch the button area as if it was a button.
@@ -232,7 +232,7 @@
 					<li><a href="/ref/events/WaypointDetails/">WaypointDetails</a></li>
 					<li><a href="/ref/events/StatusMessage/">StatusMessage</a></li>
 					<li><a href="/ref/events/PlaySound/">PlaySound</a></li>
-					<li><a href="/ref/events/AdjustMcCready/">AdjustMcCready</a></li>
+					<li><a href="/ref/events/AdjustMacCready/">AdjustMacCready</a></li>
 					<li><a href="/ref/events/AdjustWind/">AdjustWind</a></li>
 					<li><a href="/ref/events/AdjustVarioFilter/">AdjustVarioFilter</a></li>
 					<li><a href="/ref/events/AdjustWaypoint/">AdjustWaypoint</a></li>
@@ -379,7 +379,7 @@
 				Ballast			add, subtract, 0-100% (set value)
 				Zoom			add, subtract, 0-nn (set value)
 				Wind			up, down, 0-nn (set value, left, right, "n","ne","e","se","s","sw","w","nw"...
-				McCready		add, subtract, 0-nn (set value)
+				MacCready		add, subtract, 0-nn (set value)
 				WaypointNext		"String" to specific waypoint
 				eg: WayPointNext "home"
 				WayPoint???		"reverse" - reverse, from last passed back to start (ie: from here to home)

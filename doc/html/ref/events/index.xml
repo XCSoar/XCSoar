@@ -27,7 +27,7 @@
 	<li><a href="/ref/events/WaypointDetails/">WaypointDetails</a></li>
 	<li><a href="/ref/events/StatusMessage/">StatusMessage</a></li>
 	<li><a href="/ref/events/PlaySound/">PlaySound</a></li>
-	<li><a href="/ref/events/AdjustMcCready/">AdjustMcCready</a></li>
+	<li><a href="/ref/events/AdjustMacCready/">AdjustMacCready</a></li>
 	<li><a href="/ref/events/AdjustWind/">AdjustWind</a></li>
 	<li><a href="/ref/events/AdjustVarioFilter/">AdjustVarioFilter</a></li>
 	<li><a href="/ref/events/AdjustWaypoint/">AdjustWaypoint</a></li>
