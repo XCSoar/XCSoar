@@ -123,9 +123,8 @@ event=Zoom in
 mode=default
 type=key
 data=RETURN
-event=ClearAirspaceWarnings
-event=ClearStatusMessages
-title=Acknowledge messages
+event=ClearWarningsOrTerrainTopology
+title=Acknowledge messages OR Toggle Terrain/Topology
 
 # ------------
 # mode=infobox
@@ -299,7 +298,7 @@ location=1
 mode=Display1
 type=key
 data=APP1
-event=ClearWarningsAndTerrain
+event=TerrainTopology toggle
 label=Terrain
 location=1
 

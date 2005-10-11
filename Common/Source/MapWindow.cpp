@@ -407,41 +407,68 @@ bool MapWindow::isPan() {
 	return EnablePan;
 }
 
-
-void MapWindow::Event_Terrain(int vswitch) {
+/* Event_TerrainToplogy Changes
+	0	Show
+	1	Toplogy = ON
+	2	Toplogy = OFF
+	3	Terrain = ON
+	4	Terrain = OFF
+	-1	Toggle through 4 stages (off/off, off/on, on/off, on/on)
+	-2	Toggle terrain
+	-3	Toggle toplogy
+ */
+void MapWindow::Event_TerrainTopology(int vswitch) {
   char val;
 
-  if (vswitch== -1) { // toggle
+  if (vswitch== -1) { // toggle through 4 possible options
+	  val = 0;
+	  if (EnableTopology) val++;
+	  if (EnableTerrain) val += 2;
+	  val++;
+	  if (val>3) val=0;
+	  EnableTopology = ((val & 0x01) == 0x01);
+  	  EnableTerrain  = ((val & 0x02) == 0x02);
+	  RefreshMap();
 
-    val = 0;
-    if (EnableTopology) val++;
-    if (EnableTerrain) val += 2;
-    val++;
-    if (val>3) val=0;
+  } else if (vswitch == -2) { // toggle terrain
+	  EnableTerrain = !EnableTerrain;
+	  RefreshMap();
 
-  } else {
-    val = vswitch;
+  } else if (vswitch == -3) { // toggle topology
+	  EnableTopology = !EnableToplogy;
+	  RefreshMap();
+
+  } else if (vswitch == 1) { // Turn on toplogy
+	  EnableToplogy = true;
+	  RefreshMap();
+
+  } else if (vswitch == 2) { // Turn off toplogy
+	  EnableToplogy = false;
+	  RefreshMap();
+
+  } else if (vswitch == 3) { // Turn on terrain
+	  EnableTerrain = true;
+	  RefreshMap();
+
+  } else if (vswitch == 4) { // Turn off terrain
+	  EnableTerrain = false;
+	  RefreshMap();
+
+  } else if (vswitch == 0) { // Show terrain/Topology
+	  // ARH Let user know what's happening
+	  TCHAR buf[128];
+
+	  if (EnableTopology)
+		_stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("ON")));
+	  else
+		_stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("OFF")));
+
+	  if (EnableTerrain)
+		_stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("ON")));
+	  else
+		_stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
+	  DoStatusMessage(TEXT("Topology / Terrain"), buf);
   }
-
-  EnableTopology = ((val & 0x01) == 0x01);
-  EnableTerrain  = ((val & 0x02) == 0x02);
-
-  // ARH Let user know what's happening
-  TCHAR buf[128];
-
-  if (EnableTopology)
-    _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("ON")));
-  else
-    _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("OFF")));
-
-  if (EnableTerrain)
-    _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("ON")));
-  else
-    _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
-
-  DoStatusMessage(TEXT("Topology / Terrain"), buf);
-
-  RefreshMap();
 }
 
 
