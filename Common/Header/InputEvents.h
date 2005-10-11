@@ -34,7 +34,8 @@ class InputEvents {
   static void eventMarkLocation(TCHAR *misc);
   static void eventZoom(TCHAR *misc);
   static void eventPan(TCHAR *misc);
-  static void eventClearWarningsAndTerrain(TCHAR *misc);
+  static void eventTerrainTopology(TCHAR *misc);
+  static void eventClearWarningsOrTerrainTopology(TCHAR *misc);
   static void eventSelectInfoBox(TCHAR *misc);
   static void eventChangeInfoBoxType(TCHAR *misc);
   static void eventDoInfoKey(TCHAR *misc);
