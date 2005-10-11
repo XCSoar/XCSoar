@@ -184,7 +184,7 @@ class MapWindow {
   static void Event_SetZoom(double value);
   static void Event_ScaleZoom(int vswitch);
   static void Event_Pan(int vswitch);
-  static void Event_Terrain(int vswitch);
+  static void Event_TerrainTopology(int vswitch);
   static void Event_AutoZoom(int vswitch);
   static void Event_PanCursor(int dx, int dy);
   static bool Event_InteriorAirspaceDetails(double lon, double lat);

@@ -839,16 +839,62 @@ void InputEvents::eventPan(TCHAR *misc) {
 
 }
 
+// Do JUST Terrain/Toplogy (toggle any, on/off any, show)
+void InputEvents::eventTerrainTopology(TCHAR *misc) {
 
-void InputEvents::eventClearWarningsAndTerrain(TCHAR *misc) {
-  // dumb at the moment, just to get legacy functionality
-  if (ClearAirspaceWarnings(true)) {
+  if (wcscmp(misc, TEXT("toggle terrain")) == 0) 
+	  MapWindow::Event_TerrainTopology(-2);
+
+  else if (wcscmp(misc, TEXT("toggle toplogy")) == 0) 
+	  MapWindow::Event_TerrainTopology(-3);
+
+  else if (wcscmp(misc, TEXT("terrain on")) == 0) 
+	  MapWindow::Event_TerrainTopology(1);
+
+  else if (wcscmp(misc, TEXT("terrain off")) == 0) 
+	  MapWindow::Event_TerrainTopology(1);
+
+  else if (wcscmp(misc, TEXT("topology on")) == 0) 
+	  MapWindow::Event_TerrainTopology(1);
+
+  else if (wcscmp(misc, TEXT("topology off")) == 0) 
+	  MapWindow::Event_TerrainTopology(1);
+
+  else if (wcscmp(misc, TEXT("show")) == 0) 
+	  MapWindow::Event_TerrainTopology(0);
+
+  else if (wcscmp(misc, TEXT("toggle")) == 0) 
+	  MapWindow::Event_TerrainTopology(-1);
+
+}
+
+ // Do clear warnings IF NONE Toggle Terrain/Topology
+void InputEvents::eventClearWarningsOrTerrainTopology(TCHAR *misc) {
+  if (ClearAirspaceWarnings(true,false)) {
     // airspace was active, enter was used to acknowledge
     return;
   }
-  MapWindow::Event_Terrain(-1);
+  // Else toggle TerrainTopology - and show the results
+  MapWindow::Event_TerrainTopology(-1);
+  MapWindow::Event_TerrainTopology(0);
 }
 
+// Do Clear Airspace warnings
+void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
+  if (wcscmp(misc, TEXT("day")) == 0) 
+	// JMW clear airspace warnings for entire day (for selected airspace)
+	ClearAirspaceWarnings(true,true);
+  else 
+	// default, clear airspace for short acknowledgmenet time
+	ClearAirspaceWarnings(true,false);
+}
+
+// Do Clear Event Warnings
+void InputEvents::eventClearStatusMessages(TCHAR *misc) {
+  ClearStatusMessages();
+  // TODO: allow selection of specific messages (here we are acknowledging all)
+  Message::Acknowledge(0);
+}
 
 void InputEvents::eventSelectInfoBox(TCHAR *misc) {
   if (wcscmp(misc, TEXT("next")) == 0) {
@@ -1191,26 +1237,6 @@ void InputEvents::eventLogger(TCHAR *misc) {
   }
 }
 
-
-
-void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
-  // JMW clear airspace warnings for entire day (for selected airspace)
-  if (wcscmp(misc, TEXT("day")) == 0) {
-    ClearAirspaceWarnings(true,true);
-    return;
-  }
-  // default, clear airspace for short acknowledgmenet time
-  ClearAirspaceWarnings(true,false);
-}
-
-
-void InputEvents::eventClearStatusMessages(TCHAR *misc) {
-  ClearStatusMessages();
-
-  // new interface..
-  // TODO: allow selection of specific messages (here we are acknowledging all)
-  Message::Acknowledge(0);
-}
 
 void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
   // new interface
