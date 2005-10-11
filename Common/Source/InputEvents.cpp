@@ -972,27 +972,27 @@ void InputEvents::eventPlaySound(TCHAR *misc) {
 
 
 // up, down, auto on, auto off, auto toggle, auto show
-void InputEvents::eventMcCready(TCHAR *misc) {
+void InputEvents::eventMacCready(TCHAR *misc) {
   if (wcscmp(misc, TEXT("up")) == 0) {
-    McCreadyProcessing(1);
+    MacCreadyProcessing(1);
   } else if (wcscmp(misc, TEXT("down")) == 0) {
-    McCreadyProcessing(-1);
+    MacCreadyProcessing(-1);
   } else if (wcscmp(misc, TEXT("auto toggle")) == 0) {
-    McCreadyProcessing(0);
+    MacCreadyProcessing(0);
   } else if (wcscmp(misc, TEXT("auto on")) == 0) {
-    McCreadyProcessing(+2);
+    MacCreadyProcessing(+2);
   } else if (wcscmp(misc, TEXT("auto off")) == 0) {
-    McCreadyProcessing(-2);
+    MacCreadyProcessing(-2);
   } else if (wcscmp(misc, TEXT("auto show")) == 0) {
-    if (CALCULATED_INFO.AutoMcCready) {
-      DoStatusMessage(TEXT("Auto McCready ON"));
+    if (CALCULATED_INFO.AutoMacCready) {
+      DoStatusMessage(TEXT("Auto MacCready ON"));
     } else {
-      DoStatusMessage(TEXT("Auto McCready OFF"));
+      DoStatusMessage(TEXT("Auto MacCready OFF"));
     }
   } else if (wcscmp(misc, TEXT("show")) == 0) {
 	TCHAR Temp[100];
-	wsprintf(Temp,TEXT("%f"),MCCREADY);
-	DoStatusMessage(TEXT("McCready Value"), Temp);
+	wsprintf(Temp,TEXT("%f"),MACCREADY);
+	DoStatusMessage(TEXT("MacCready Value"), Temp);
   }
 }
 

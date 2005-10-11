@@ -98,7 +98,7 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].fhLogFile = NULL;
     DeviceList[i].Name[0] = '\0';
     DeviceList[i].ParseNMEA = NULL;
-    DeviceList[i].PutMcCready = NULL;
+    DeviceList[i].PutMacCready = NULL;
     DeviceList[i].PutBugs = NULL;
     DeviceList[i].PutBallast = NULL;
     DeviceList[i].Open = NULL;
@@ -313,9 +313,9 @@ so don't get multiple updates
 }
 
 
-BOOL devPutMcCready(PDeviceDescriptor_t d, double McCready){
-  if (d != NULL && d->PutMcCready != NULL)
-    return ((d->PutMcCready)(d, McCready));
+BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready){
+  if (d != NULL && d->PutMacCready != NULL)
+    return ((d->PutMacCready)(d, MacCready));
   else
     return(TRUE);
 }

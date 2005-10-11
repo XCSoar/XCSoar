@@ -142,11 +142,11 @@ double GlidePolar::SinkRate(double V, double n) {
 }
 
 
-double GlidePolar::McCreadyAltitude(double emcready,
+double GlidePolar::MacCreadyAltitude(double emcready,
                                     double Distance, double Bearing,
                                     double WindSpeed, double WindBearing,
 		       double *BestCruiseTrack,
-		       double *VMcCready,
+		       double *VMacCready,
 		       bool isFinalGlide,
                        double *TimeToGo)
 {
@@ -276,8 +276,8 @@ double GlidePolar::McCreadyAltitude(double emcready,
 			+HeadWind*(1-tc))*RAD_TO_DEG+Bearing;
 	      }
 
-	      if (VMcCready) {
-		*VMcCready = vtrack;
+	      if (VMacCready) {
+		*VMacCready = vtrack;
 	      }
 
 	      VMG = vtot/tc; // speed along track during cruise component

@@ -298,22 +298,22 @@ makeLabel(mode_id,TEXT("/Display"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMcCready, TEXT("up"), event_id);
+event_id = InputEvents::makeEvent(&eventMacCready, TEXT("up"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config1"), true);
-makeLabel(mode_id,TEXT("McCready +"),1,event_id);
+makeLabel(mode_id,TEXT("MacCready +"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMcCready, TEXT("down"), event_id);
+event_id = InputEvents::makeEvent(&eventMacCready, TEXT("down"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config1"), true);
-makeLabel(mode_id,TEXT("McCready -"),2,event_id);
+makeLabel(mode_id,TEXT("MacCready -"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMcCready, TEXT("auto show"), event_id);
-event_id = InputEvents::makeEvent(&eventMcCready, TEXT("auto toggle"), event_id);
+event_id = InputEvents::makeEvent(&eventMacCready, TEXT("auto show"), event_id);
+event_id = InputEvents::makeEvent(&eventMacCready, TEXT("auto toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config1"), true);
-makeLabel(mode_id,TEXT("McCready Auto"),4,event_id);
+makeLabel(mode_id,TEXT("MacCready Auto"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;

@@ -112,8 +112,8 @@ extern	int SnailNext;
 extern int TrailLock;
 
 // user controls/parameters
-extern double MCCREADY;
-extern bool   AutoMcCready;
+extern double MACCREADY;
+extern bool   AutoMacCready;
 extern double AccelerometerZero;
 extern double SAFETYALTITUDEARRIVAL;
 extern double SAFETYALTITUDEBREAKOFF;

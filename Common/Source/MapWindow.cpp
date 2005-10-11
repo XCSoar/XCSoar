@@ -102,7 +102,7 @@ HBITMAP MapWindow::hSmall;
 HBITMAP MapWindow::hCruise;
 HBITMAP MapWindow::hClimb;
 HBITMAP MapWindow::hFinalGlide;
-HBITMAP MapWindow::hAutoMcCready;
+HBITMAP MapWindow::hAutoMacCready;
 HBITMAP MapWindow::hTerrainWarning;
 HBITMAP MapWindow::hGPSStatus1;
 HBITMAP MapWindow::hGPSStatus2;
@@ -589,7 +589,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE));
     hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB));
     hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE));
-    hAutoMcCready=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
+    hAutoMacCready=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
     hGPSStatus1=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS1));
     hGPSStatus2=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_GPSSTATUS2));
     hAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_ABORT));
@@ -680,7 +680,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject(hCruise);
     DeleteObject(hClimb);
     DeleteObject(hFinalGlide);
-    DeleteObject(hAutoMcCready);
+    DeleteObject(hAutoMacCready);
     DeleteObject(hTerrainWarning);
     DeleteObject(hGPSStatus1);
     DeleteObject(hGPSStatus2);
@@ -1430,8 +1430,8 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
   BitBlt(hdc,rc.right+offset-3,rc.bottom-20-3,24,20,
     hDCTemp,24,0,SRCAND);
 
-  if (DerivedDrawInfo.AutoMcCready) {
-    SelectObject(hDCTemp,hAutoMcCready);
+  if (DerivedDrawInfo.AutoMacCready) {
+    SelectObject(hDCTemp,hAutoMacCready);
 
     offset -= 24;
 
@@ -2410,7 +2410,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
     Wtot = 1.0;
   }
 
-  double mc = MCCREADY/LIFTMODIFY;
+  double mc = MACCREADY/LIFTMODIFY;
 
   // scale to mcready
   if (mc>0.5) {
@@ -2929,8 +2929,8 @@ void MapWindow::CalculateWaypointReachable(void)
         WaypointDistance = Distance(DrawInfo.Latitude, DrawInfo.Longitude, WayPointList[i].Latitude, WayPointList[i].Longitude);
 
         WaypointBearing =  Bearing(DrawInfo.Latitude, DrawInfo.Longitude, WayPointList[i].Latitude, WayPointList[i].Longitude);
-        AltitudeRequired = GlidePolar::McCreadyAltitude(0.0,
-                                     // JMW was MCCREADY/LIFTMODIFY
+        AltitudeRequired = GlidePolar::MacCreadyAltitude(0.0,
+                                     // JMW was MACCREADY/LIFTMODIFY
           WaypointDistance,WaypointBearing,
           DerivedDrawInfo.WindSpeed,
           DerivedDrawInfo.WindBearing,0,0,true,0);

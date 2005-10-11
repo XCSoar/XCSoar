@@ -140,8 +140,8 @@ double                          DISTANCEMODIFY = TONAUTICALMILES;
 double        ALTITUDEMODIFY = TOFEET;
 
 //Flight Data Globals
-double        MCCREADY = 0;
-bool          AutoMcCready = false;
+double        MACCREADY = 0;
+bool          AutoMacCready = false;
 
 int          NettoSpeed = 1000;
 
@@ -329,7 +329,7 @@ SCREEN_INFO Data_Options[] = {
 	  {TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 21, 8},
 
 	  // 10
-	  {TEXT("McCready Setting"), TEXT("McCready"), new InfoBoxFormatter(TEXT("%2.1f")), McCreadyProcessing, 34, 43},
+	  {TEXT("MacCready Setting"), TEXT("MacCready"), new InfoBoxFormatter(TEXT("%2.1f")), MacCreadyProcessing, 34, 43},
 
 	  // 11
 	  {TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},

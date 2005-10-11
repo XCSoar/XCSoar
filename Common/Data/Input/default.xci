@@ -386,23 +386,23 @@ location=2
 mode=Config1
 type=key
 data=APP1
-event=McCready up
-label=McCready +
+event=MacCready up
+label=MacCready +
 location=1
 
 mode=Config1
 type=key
 data=APP2
-event=McCready down
-label=McCready -
+event=MacCready down
+label=MacCready -
 location=2
 
 mode=Config1
 type=key
 data=APP4
-event=McCready auto show
-event=McCready auto toggle
-label=McCready Auto
+event=MacCready auto show
+event=MacCready auto toggle
+label=MacCready Auto
 location=4
 
 mode=Config1

@@ -1332,7 +1332,7 @@ void audio_soundmode(short vinst, short vstf) {
   audio_soundmode_volume();
 
   // apply sounds
-  short stalldelta = 0; // MCCREADY*10;
+  short stalldelta = 0; // MACCREADY*10;
   if (stalldelta>0) {
     audio_soundmode_stall(stalldelta);
   } else {

@@ -595,7 +595,7 @@ BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
 
   ExtractParameter(String,ctemp,0);
-  MCCREADY = LIFTMODIFY*StrToDouble(ctemp,NULL);
+  MACCREADY = LIFTMODIFY*StrToDouble(ctemp,NULL);
   return FALSE;
 }
 
@@ -661,7 +661,7 @@ BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   ExtractParameter(String,ctemp,2);
   GPS_INFO->MacReady = StrToDouble(ctemp,NULL)/TOKNOTS;
-  MCCREADY = GPS_INFO->MacReady/LIFTMODIFY;
+  MACCREADY = GPS_INFO->MacReady/LIFTMODIFY;
 
   ExtractParameter(String,ctemp,3);
   vias = sqrt(StrToDouble(ctemp,NULL))/TOKNOTS;
