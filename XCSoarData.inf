@@ -5,8 +5,8 @@ CESignature = "$Windows CE$"    ; required as-is
 
 [CEStrings]
 AppName     = "XCSoarData"          ; full app name will be "<Provider> <AppName>"
-InstallDir  = "\My Documents\XCSoarData"
-InstallDir  = "\My Documents\XCSoarTopo"
+InstallDir  = "%CE5%\XCSoarData"    ; %CE5% = \My Documents\
+; (wasn't being used) InstallDir  = "%CE5%\XCSoarTopo"
 
 [Strings]
 reg_path = Software\MPSR\XCSoar

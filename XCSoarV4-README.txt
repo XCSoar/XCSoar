@@ -24,6 +24,8 @@ To do for next version:
 
 To do for next beta:
 - Package and release fonts (part of standard cab/exe)
+- Automatically select "WinPilot File" as type when selecting a file...
+	(future: Consider fixing this - it acts differently to other types)
 
 Changes from 4.5beta3 to 4.5beta4
 - Fix spelling of MacCready (it was McCready).
