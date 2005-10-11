@@ -6,6 +6,7 @@ CESignature = "$Windows CE$"    ; required as-is
 [CEStrings]
 AppName     = "XCSoar"          ; full app name will be "<Provider> <AppName>"
 InstallDir  = %CE1%\%AppName%
+DataDir  = "%CE5%\XCSoarData"    ; %CE5% = \My Documents\
 
 [Strings]
 reg_path = Software\OpenSource\XCSoar
@@ -26,28 +27,52 @@ VersionMax = 32767.0
 2 = ,"MIPS Files",,PPC\XCSoarSimulator\MIPSRel
 3 = ,"MIPS Files",,PPC\XCSoarLaunch\MIPSRel
 4 = ,"MIPS Files",,PPC\XCSoarSetup\MIPSRel
+5 = ,"Font Files",,Common\Data\Fonts
+6 = ,"Input Files",,Common\Data\Input
+7 = ,"Language Files",,Common\Data\Language
+8 = ,"Polar Files",,Common\Data\Polar
+
+
 
 [SourceDisksNames.PPC_ARM]         ; CPU-dependent files
 1 = ,"MIPS Files",,PPC\XCSoar\ARMRel
 2 = ,"MIPS Files",,PPC\XCSoarSimulator\ARMRel
 3 = ,"MIPS Files",,PPC\XCSoarLaunch\ARMRel
 4 = ,"MIPS Files",,PPC\XCSoarSetup\ARMRel
+5 = ,"Font Files",,Common\Data\Fonts
+6 = ,"Input Files",,Common\Data\Input
+7 = ,"Language Files",,Common\Data\Language
+8 = ,"Polar Files",,Common\Data\Polar
 
 [SourceDisksFiles]
 XCSoar.exe = 1
 XCSoarSimulator.exe = 2
 XCSoarLaunch.dll = 3
 XCSoarSetup.dll = 4
-
+DejaVuSansCondensed-BoldOblique2.ttf = 5
+DejaVuSansCondensed2.ttf = 5
+DejaVuSansCondensed-Bold2.ttf = 5
+DejaVuSansCondensed-Oblique2.ttf = 5
+standard.xci = 6
+legacy.xci = 6
+english.xcl = 7
+italian.xcl = 7
+german.xcl = 7
+astircs.plr = 8
+cobra.plr = 8
 
 [DefaultInstall]
-CopyFiles   = TheFiles,Files.Windows
+CopyFiles   = TheFiles,Files.Windows,Files.Fonts,Files.Language,Files.Input,Files.Polar
 AddReg = AddRegistry
 CESetupDLL=XCSoarSetup.dll
 
 [DestinationDirs]
 Files.Windows       = 0,%CE2%       ; "\Windows" directory
+Files.Fonts	    = 0,%CE15%	    ; "\Windows\Fonts" directory
 TheFiles            = 0, %InstallDir%
+Files.Language            = 0, %DataDir%
+Files.Input            = 0, %DataDir%
+Files.Polar            = 0, %DataDir%
 
 
 ;File copy list.
@@ -58,6 +83,25 @@ XCSoarSetup.dll
 
 [Files.Windows]
 XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
+
+[Files.Fonts]
+DejaVuSansCondensed-Bold2.ttf
+DejaVuSansCondensed-BoldOblique2.ttf
+DejaVuSansCondensed-Oblique2.ttf
+DejaVuSansCondensed2.ttf
+
+[Files.Input]
+standard.xci
+legacy.xci
+
+[Files.Language]
+english.xcl
+italian.xcl
+german.xcl
+
+[Files.Polar]
+astircs.plr
+cobra.plr
 
 [AddRegistry]
 HKLM,\Software\Microsoft\Today\Items\%AppName%,Type,0x00010001,4

@@ -5,7 +5,9 @@ CESignature = "$Windows CE$"    ; required as-is
 
 [CEStrings]
 AppName     = "XCSoar"          ; full app name will be "<Provider> <AppName>"
-InstallDir  = "%CE1%\%AppName%
+InstallDir  = "%CE1%\%AppName%"	; %CE1% = \Program Files\
+DataDir  = "%CE5%\XCSoarData"    ; %CE5% = \My Documents\
+
 
 [Strings]
 reg_path = Software\OpenSource\XCSoar
@@ -36,6 +38,9 @@ VersionMax = 32767.0
 2 = ,"ARM Files",,PPC2003\XCSoarSimulator\ARMV4Rel
 3 = ,"ARM Files",,PPC2003\XCSoarLaunch\ARMV4Rel
 4 = ,"Font Files",,Common\Data\Fonts
+5 = ,"Input Files",,Common\Data\Input
+6 = ,"Language Files",,Common\Data\Language
+7 = ,"Polar Files",,Common\Data\Polar
 
 
 [SourceDisksNames.x86]
@@ -52,9 +57,16 @@ DejaVuSansCondensed-BoldOblique2.ttf = 4
 DejaVuSansCondensed2.ttf = 4
 DejaVuSansCondensed-Bold2.ttf = 4
 DejaVuSansCondensed-Oblique2.ttf = 4
+standard.xci = 5
+legacy.xci = 5
+english.xcl = 6
+italian.xcl = 6
+german.xcl = 6
+astircs.plr = 7
+cobra.plr = 7
 
 [DefaultInstall]
-CopyFiles   = TheFiles,Files.Windows,Files.Fonts
+CopyFiles   = TheFiles,Files.Windows,Files.Fonts,Files.Language,Files.Input,Files.Polar
 AddReg = AddRegistry
 ;CEShortcuts = Links
 
@@ -62,6 +74,9 @@ AddReg = AddRegistry
 Files.Windows       = 0,%CE2%           ; "\Windows" directory
 Files.Fonts         = 0,%CE15%           ; "\Windows\Fonts" directory
 TheFiles    = 0, %InstallDir%
+Files.Language    = 0, %DataDir%
+Files.Input    = 0, %DataDir%
+Files.Polar    = 0, %DataDir%
 
 
 ;File copy list.
@@ -78,6 +93,19 @@ DejaVuSansCondensed-BoldOblique2.ttf
 DejaVuSansCondensed-Oblique2.ttf
 DejaVuSansCondensed2.ttf
 
+[Files.Input]
+standard.xci
+legacy.xci
+
+[Files.Language]
+english.xcl
+italian.xcl
+german.xcl
+
+[Files.Polar]
+astircs.plr
+cobra.plr
+
 [AddRegistry]
 HKLM,\Software\Microsoft\Today\Items\%AppName%,Type,0x00010001,4
 HKLM,\Software\Microsoft\Today\Items\%AppName%,Enabled,0x00010001,1
@@ -89,5 +117,4 @@ HKLM,%reg_path%,InstallDir,0x00000000,%InstallDir%
 ;[Links]
 ;%LinkFilename%,0,"XCSoar.exe",%CE14%
 ;; shortcut to a file, created in the standard destination path %CE14%
-
 
