@@ -435,7 +435,7 @@ void MapWindow::Event_TerrainTopology(int vswitch) {
 	  RefreshMap();
 
   } else if (vswitch == -3) { // toggle topology
-	  EnableTopology = !EnableToplogy;
+	  EnableTopology = !EnableTopology;
 	  RefreshMap();
 
   } else if (vswitch == 1) { // Turn on toplogy
