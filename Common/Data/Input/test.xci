@@ -6,12 +6,20 @@ event=StatusMessage Call DLL
 label=Go
 location=1
 
-mode=display1 display2
+mode=default
 type=key
-data=APP1
-event=Mode default
-label=Back
-location=1
+data=APP2
+event=ScreenModes show
+event=ScreenModes toggle
+label=Do+Show
+location=2
+
+mode=default
+type=key
+data=APP3
+event=ScreenModes show
+label=Show
+location=3
 
 mode=default
 type=gce

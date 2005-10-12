@@ -737,12 +737,12 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
       MapWindow::RequestOnFullScreen();
     }
   } else if (wcscmp(misc, TEXT("show")) == 0) {
-	if (!EnableAuxilaryInfo && !MapWindow::IsMapFullScreen())
-		DoStatusMessage(TEXT("Screen Mode Normal"));
-	else if (!EnableAuxilaryInfo && MapWindow::IsMapFullScreen())
-		DoStatusMessage(TEXT("Screen Mode Full"));
-	else if (EnabledAuxilaryInfo && !MapWindow::IsMapFullScreen())
-		DoStatusMessage(TEXT("Screen Mode Auxilary"));
+		if (MapWindow::IsMapFullScreen())
+			DoStatusMessage(TEXT("Screen Mode Full"));
+		else if (EnableAuxiliaryInfo)
+			DoStatusMessage(TEXT("Screen Mode Auxiliary"));
+		else
+			DoStatusMessage(TEXT("Screen Mode Normal"));
   } else {
 
 	  if (EnableAuxiliaryInfo) {
