@@ -30,12 +30,16 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("TAKEOFF\r\nLog Started"), event_id);
 event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Takeoff.wav"), event_id);
+event_id = InputEvents::makeEvent(&eventLogger, TEXT("start"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TAKEOFF] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("LANDING\r\nLog Stopped"), event_id);
 event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Landing.wav"), event_id);
+event_id = InputEvents::makeEvent(&eventLogger, TEXT("stop"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_LANDING] = event_id;
 
@@ -65,14 +69,14 @@ makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Dropped marker"), event_id);
-event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""), event_id);
+event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"), event_id);
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Dropped marker"), event_id);
+event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
