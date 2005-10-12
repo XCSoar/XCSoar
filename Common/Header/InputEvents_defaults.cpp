@@ -232,6 +232,7 @@ makeLabel(mode_id,TEXT("/Nav"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventTerrainTopology, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventTerrainTopology, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
 makeLabel(mode_id,TEXT("Terrain"),1,event_id);
