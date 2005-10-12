@@ -1,1 +1,75 @@
-# Legacy file XXX to be written
+# Legacy file - Compatible with 4.22 Buttons and Labels
+#
+#	APP1 = Full Screen
+#	APP2 = Snail Trail
+#	APP3 = Vario Sounds
+#	APP4 = Marker
+#
+
+# APP 1 = Screen toggle
+
+mode=default
+type=key
+data=APP1
+event=ScreenModes toggle
+label=
+location=1
+title=Toggle the screen modes (full, navboxes)
+
+# APP 3 = Vario Sound toggle
+
+mode=default
+type=key
+data=APP3
+event=Sounds show
+event=Sounds toggle
+label=
+location=3
+title=Vario Sound Toggle
+
+# Takeoff = Do Nothing
+
+mode=default
+type=gce
+data=TAKEOFF
+title=Takeoff
+
+# Landing = Do Nothing
+
+mode=default
+type=gce
+data=LANDING
+title=Landing
+
+# Info Box Modes - no labels
+
+mode=infobox
+type=key
+data=APP1
+event=SelectInfoBox previous
+label=
+location=1
+
+mode=infobox
+type=key
+data=APP4
+event=SelectInfoBox next
+label=
+location=4
+
+mode=infobox
+type=key
+data=APP2
+event=ChangeInfoBoxType previous
+label=
+location=2
+
+mode=infobox
+type=key
+data=APP3
+event=ChangeInfoBoxType next
+label=
+location=3
+
+mode=dummy
+

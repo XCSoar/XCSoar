@@ -364,8 +364,9 @@ void Message::CheckTouch(HWND wmControl) {
   }
 }
 
-void Message::Acknowledge(int type) {
+bool Message::Acknowledge(int type) {
   int i;
+  bool ret = false;	// Did we acknowledge?
 
   Lock();
   DWORD	fpsTime = ::GetTickCount() - startTime;
@@ -375,9 +376,11 @@ void Message::Acknowledge(int type) {
 	&& ((type==0)||(type==messages[i].type))) {
       // message was previously visible, so make it expire now.
       messages[i].texpiry = fpsTime-1;
+	  ret = true;
     }
   }
 
   Unlock();
+  return ret;
 }
 
