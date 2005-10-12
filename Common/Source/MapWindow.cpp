@@ -325,7 +325,9 @@ void MapWindow::RefreshMap() {
 }
 
 bool MapWindow::IsMapFullScreen() {
-  return  MapFullScreen;
+	// SDP - Seems that RequestFullScreen is always more accurate (MapFullSCreen is delayed)
+	return RequestFullScreen;
+  // return  MapFullScreen;
 }
 
 
