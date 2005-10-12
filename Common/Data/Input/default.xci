@@ -118,11 +118,13 @@ mode=default
 type=key
 data=DOWN
 event=Zoom out
+title=Zoom out
 
 mode=default
 type=key
 data=UP
 event=Zoom in
+title=Zoom in
 
 mode=default
 type=key
@@ -244,7 +246,6 @@ title=Details on the next waypoint
 mode=Nav1
 type=key
 data=APP3
-#event=Mode default
 event=AbortTask toggle
 label=Abort task
 location=3
