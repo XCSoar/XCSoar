@@ -6,6 +6,7 @@
 	<!ENTITY reg  "&#174;">
 	<!ENTITY raquo  "&#187;">
 	<!ENTITY tree SYSTEM "../input/tree.tmp">
+	<!ENTITY basic SYSTEM "../input/basic.tmp">
 ]>
 
 <xsl:stylesheet 
@@ -36,6 +37,11 @@ automatic glide computer events. Click on Event Names to take you to a
 description of the purpose and options for an event. Click on Mode names (eg:
 Menu1) to jump to the next mode.
 </p>
+
+<section>
+	<title>Basic Buttons</title>
+	&basic;
+</section>
 
 <section>
 	<title>Tree View</title>
