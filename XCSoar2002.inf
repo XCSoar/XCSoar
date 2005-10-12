@@ -6,7 +6,6 @@ CESignature = "$Windows CE$"    ; required as-is
 [CEStrings]
 AppName     = "XCSoar"          ; full app name will be "<Provider> <AppName>"
 InstallDir  = %CE1%\%AppName%
-DataDir  = "%CE5%\XCSoarData"    ; %CE5% = \My Documents\
 
 
 [Strings]
@@ -76,9 +75,9 @@ CESetupDLL=XCSoarSetup.dll
 Files.Windows       = 0,%CE2%           ; "\Windows" directory
 Files.Fonts	    = 0,%CE15%		; "\Windows\Fonts" directory
 TheFiles    = 0,%InstallDir%
-Files.Language    = 0,%DataDir%
-Files.Input    = 0,%DataDir%
-Files.Polar    = 0,%DataDir%
+Files.Language    = 0,"%CE5%\XCSoarData"
+Files.Input    = 0,"%CE5%\XCSoarData"
+Files.Polar    = 0,"%CE5%\XCSoarData"
 
 ;File copy list.
 

@@ -302,6 +302,7 @@ location=1
 mode=Display1
 type=key
 data=APP1
+event=TerrainTopology show
 event=TerrainTopology toggle
 label=Terrain
 location=1
