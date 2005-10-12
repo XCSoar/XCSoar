@@ -23,9 +23,13 @@ To do for next version:
 - Launcher profile selector (multiple pilots or situations - maybe even tasks)
 
 To do for next beta:
-- Package and release fonts (part of standard cab/exe)
+- WARN the user when changing input, language, status files that they need to
+  restart.
 - Automatically select "WinPilot File" as type when selecting a file...
 	(future: Consider fixing this - it acts differently to other types)
+
+Changes from 4.5beta3 to 4.5beta4
+- Package and release fonts (part of standard cab/exe)
 - Button & Event mapping - default and legacy
   	legacy = same as version 4.22
 	default = changed from 4.22...
@@ -34,8 +38,7 @@ To do for next beta:
 		Take Off = Start logger (was manually)
 		Landing = Stop logger (was manually)
 		Info Box Control = Show labels (were hidden)
-
-Changes from 4.5beta3 to 4.5beta4
+- Allow display of screen mode (Normal, Auxiliary, Full)
 - Fix spelling of MacCready (it was McCready).
   (reference: http://www.achievement.org/autodoc/page/mac0bio-1)
 - Exit simulator if battery lower than 20% (warning < 30%)
