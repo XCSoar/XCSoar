@@ -37,7 +37,7 @@ class Message {
   static void Repeat(int type);
 
   // clears all visible messages (of specified type or if type=0, all)
-  static void Acknowledge(int type);
+  static bool Acknowledge(int type);
 
   static void Lock();
   static void Unlock();

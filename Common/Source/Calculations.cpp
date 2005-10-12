@@ -1630,22 +1630,20 @@ int AirspaceLastArea =-1;
 bool ClearAirspaceWarnings(bool ack, bool allday) {
   if (ack) {
     if (AirspaceLastCircle!= -1) {
-      AirspaceCircle[AirspaceLastCircle].Ack.AcknowledgementTime = 
-	GPS_INFO.Time;
+      AirspaceCircle[AirspaceLastCircle].Ack.AcknowledgementTime = GPS_INFO.Time;
       if (allday) {
-	AirspaceCircle[AirspaceLastCircle].Ack.AcknowledgedToday = true;
+		AirspaceCircle[AirspaceLastCircle].Ack.AcknowledgedToday = true;
       }
       AirspaceLastCircle = -1;
     }
     if (AirspaceLastArea!= -1) {
-      AirspaceArea[AirspaceLastArea].Ack.AcknowledgementTime = 
-	GPS_INFO.Time;
+      AirspaceArea[AirspaceLastArea].Ack.AcknowledgementTime = GPS_INFO.Time;
       if (allday) {
-	AirspaceArea[AirspaceLastArea].Ack.AcknowledgedToday = true;
+		AirspaceArea[AirspaceLastArea].Ack.AcknowledgedToday = true;
       }
       AirspaceLastArea = -1;
     }
-    Message::Acknowledge(MSG_AIRSPACE);
+    return Message::Acknowledge(MSG_AIRSPACE);
   }
   return false;
 }

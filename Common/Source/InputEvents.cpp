@@ -196,8 +196,8 @@ void InputEvents::readFile() {
                                                                                                                                               /* Read from the file */
   while (
 	 fgetws(buffer, 2048, fp)
-	 // XXX What about \r - as in \r\n ?
-	 // XXX Note that ^# does not allow # in key - might be required (probably not)
+	 // TODO What about \r - as in \r\n ?
+	 // TODO Note that ^# does not allow # in key - might be required (probably not)
 	 //		Better way is to separate the check for # and the scanf 
 	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
   ) {
@@ -316,7 +316,7 @@ void InputEvents::readFile() {
 				int ef;
 				ef = swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().]"), d_event, d_misc);
 
-				// XXX Can't use token here - breaks other token - damn C - how about C++ String class ?
+				// TODO Can't use token here - breaks other token - damn C - how about C++ String class ?
 				// TCHAR *eventtoken;
 				// eventtoken = wcstok(value, TEXT(" "));
 				// d_event = token;
@@ -842,10 +842,10 @@ void InputEvents::eventPan(TCHAR *misc) {
 // Do JUST Terrain/Toplogy (toggle any, on/off any, show)
 void InputEvents::eventTerrainTopology(TCHAR *misc) {
 
-  if (wcscmp(misc, TEXT("toggle terrain")) == 0) 
+  if (wcscmp(misc, TEXT("terrain toggle")) == 0) 
 	  MapWindow::Event_TerrainTopology(-2);
 
-  else if (wcscmp(misc, TEXT("toggle toplogy")) == 0) 
+  else if (wcscmp(misc, TEXT("toplogy toggle")) == 0) 
 	  MapWindow::Event_TerrainTopology(-3);
 
   else if (wcscmp(misc, TEXT("terrain on")) == 0) 
@@ -1240,7 +1240,7 @@ void InputEvents::eventLogger(TCHAR *misc) {
 
 void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
   // new interface
-  // XXX TODO: display only by type specified in misc field
+  // TODO: display only by type specified in misc field
   Message::Repeat(0);
 }
 
@@ -1412,7 +1412,7 @@ HINSTANCE _loadDLL(TCHAR *name) {
 // this allows the buttons to indicate whether things are enabled/disabled
 // SDP TODO: maybe instead do conditional processing ?
 
-// XXX JMW TODO: make sure when we change things here we also set registry values...
+// JMW TODO: make sure when we change things here we also set registry values...
 // or maybe have special tag "save" which indicates it should be saved (notice that
 // the wind adjustment uses this already, see in Process.cpp)
 

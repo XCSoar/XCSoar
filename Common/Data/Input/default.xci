@@ -36,14 +36,18 @@ title=The real XCS has started
 mode=default
 type=gce
 data=TAKEOFF
+event=StatusMessage TAKEOFF\r\nLog Started
 event=PlaySound \My Documents\XCSoarData\Takeoff.wav
+event=Logger start
 title=Takeoff
 note=This event could be useful for automatically starting the logger.
 
 mode=default
 type=gce
 data=LANDING
+event=StatusMessage LANDING\r\nLog Stopped
 event=PlaySound \My Documents\XCSoarData\Landing.wav
+event=Logger stop
 title=Landing
 
 mode=default
@@ -82,19 +86,19 @@ title=Toggle snail trail (where was I)
 mode=default
 type=key
 data=APP3
-event=StatusMessage Dropped marker
-event=MarkLocation
+event=ScreenModes toggle
 label= 
 location=3
-title=Mark the current location into a file
+title=Toggle the screen modes (full, navboxes)
 
 mode=default
 type=key
 data=APP4
-event=ScreenModes toggle
+event=StatusMessage Dropped marker
+event=MarkLocation
 label= 
 location=4
-title=Toggle the screen modes (full, navboxes)
+title=Mark the current location into a file
 
 mode=default
 type=key
@@ -438,6 +442,7 @@ event=Sounds show
 event=Sounds toggle
 label=Audio
 location=4
+title=Vario Sound Toggle
 
 mode=Config2
 type=key
