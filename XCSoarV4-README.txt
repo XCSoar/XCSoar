@@ -26,6 +26,14 @@ To do for next beta:
 - Package and release fonts (part of standard cab/exe)
 - Automatically select "WinPilot File" as type when selecting a file...
 	(future: Consider fixing this - it acts differently to other types)
+- Button & Event mapping - default and legacy
+  	legacy = same as version 4.22
+	default = changed from 4.22...
+		APP1 = Show button menu (was Full Screen)
+		APP3 = Full Screen (was Vario Sounds Toggle)
+		Take Off = Start logger (was manually)
+		Landing = Stop logger (was manually)
+		Info Box Control = Show labels (were hidden)
 
 Changes from 4.5beta3 to 4.5beta4
 - Fix spelling of MacCready (it was McCready).
