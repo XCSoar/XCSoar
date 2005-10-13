@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.83 2005/09/22 00:00:08 scottp Exp $
+  $Id: Dialogs.cpp,v 1.84 2005/10/13 12:50:52 scottp Exp $
 
 Copyright_License {
 
@@ -3587,8 +3587,10 @@ extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR *data) 
 	int i;
 	// Search from end of list (allow overwrites by user)
 	for (i=StatusMessageData_Size - 1; i>0; i--) {
-		if (wcscmp(text, StatusMessageData[i].key) == 0)
+		if (wcscmp(text, StatusMessageData[i].key) == 0) {
 			LocalMessage = StatusMessageData[i];
+			break;
+		}
 	}
 
 	if (EnableSoundModes && LocalMessage.doSound)
