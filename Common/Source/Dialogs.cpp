@@ -3587,8 +3587,10 @@ extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR *data) 
 	int i;
 	// Search from end of list (allow overwrites by user)
 	for (i=StatusMessageData_Size - 1; i>0; i--) {
-		if (wcscmp(text, StatusMessageData[i].key) == 0)
+		if (wcscmp(text, StatusMessageData[i].key) == 0) {
 			LocalMessage = StatusMessageData[i];
+			break;
+		}
 	}
 
 	if (EnableSoundModes && LocalMessage.doSound)
