@@ -27,11 +27,11 @@ sound=IDR_REMOVE
 delay=1500
 
 key=Simulation\r\nNothing is real!
-sound=IDR_REMOVE
+sound=\My Documents\XCSoarData\Start_Real.wav
 delay=1500
 
 key=Maintain effective\r\nLOOKOUT at all times
-sound=IDR_REMOVE
+sound=\My Documents\XCSoarData\Start_Simulator.wav
 delay=1500
 
 key=Closest Airfield Changed!
@@ -120,8 +120,37 @@ key=Status
 delay=60000
 
 key=Organiser Battery Low
+delay=5000
+sound=IDR_FAIL
+
+key=Organiser Lost External Power
 delay=10000
 sound=IDR_FAIL
+
+key=Screen Mode Full
+delay=1000
+
+key=Screen Mode Auxiliary
+delay=1000
+
+key=Screen Mode Normal
+delay=1000
+
+key=Above Final Glide
+sound=\My Documents\XCSoarData\FinalGlide.wav
+delay=5000
+
+key=Marginal Final Glide
+sound=\My Documents\XCSoarData\Tiptoe.wav
+delay=5000
+
+key=TAKEOFF\r\nLog Started
+sound=\My Documents\XCSoarData\Takeoff.wav
+delay=1000
+
+key=LANDING\r\nLog Stopped
+sound=\My Documents\XCSoarData\Landing.wav
+delay=1000
 
 # Always leave dummy entry for now (work around issue in parser)
 key=Dummy
