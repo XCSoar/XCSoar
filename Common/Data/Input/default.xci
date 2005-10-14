@@ -23,21 +23,18 @@ mode=default
 type=gce
 data=STARTUP_SIMULATOR
 event=StatusMessage Simulation\r\nNothing is real!
-event=PlaySound \My Documents\XCSoarData\Start_Simulator.wav
 title=The simulator has started
 
 mode=default
 type=gce
 data=STARTUP_REAL
 event=StatusMessage Maintain effective\r\nLOOKOUT at all times
-event=PlaySound \My Documents\XCSoarData\Start_Real.wav
 title=The real XCS has started
 
 mode=default
 type=gce
 data=TAKEOFF
 event=StatusMessage TAKEOFF\r\nLog Started
-event=PlaySound \My Documents\XCSoarData\Takeoff.wav
 event=Logger start
 title=Takeoff
 note=This event could be useful for automatically starting the logger.
@@ -46,20 +43,17 @@ mode=default
 type=gce
 data=LANDING
 event=StatusMessage LANDING\r\nLog Stopped
-event=PlaySound \My Documents\XCSoarData\Landing.wav
 event=Logger stop
 title=Landing
 
 mode=default
 type=gce
 data=FLIGHTMODE_FINALGLIDE_ABOVE
-event=PlaySound \My Documents\XCSoarData\FinalGlide.wav
 event=StatusMessage Above Final Glide
 
 mode=default
 type=gce
 data=FLIGHTMODE_FINALGLIDE_BELOW
-event=PlaySound \My Documents\XCSoarData\Tiptoe.wav
 event=StatusMessage Marginal Final Glide
 
 # ------------
