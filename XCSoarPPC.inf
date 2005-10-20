@@ -21,7 +21,7 @@ ProcessorType=2577
 VersionMin = 3.0
 VersionMax = 32767.0
 
-[SourceDisksNames.PPC_MIPS]         ; CPU-dependent files
+[SourceDisksNames.MIPS]         ; CPU-dependent files
 1 = ,"MIPS Files",,PPC\XCSoar\MIPSRel
 2 = ,"MIPS Files",,PPC\XCSoarSimulator\MIPSRel
 3 = ,"MIPS Files",,PPC\XCSoarLaunch\MIPSRel
@@ -33,7 +33,7 @@ VersionMax = 32767.0
 
 
 
-[SourceDisksNames.PPC_ARM]         ; CPU-dependent files
+[SourceDisksNames.ARM]         ; CPU-dependent files
 1 = ,"MIPS Files",,PPC\XCSoar\ARMRel
 2 = ,"MIPS Files",,PPC\XCSoarSimulator\ARMRel
 3 = ,"MIPS Files",,PPC\XCSoarLaunch\ARMRel

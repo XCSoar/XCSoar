@@ -71,7 +71,7 @@ foreach my $platform (keys %platforms) {
 				. qq{$platform/$project/$project.vcp /MAKE "$project - Win32 (WCE $proc) Release" /REBUILD};
 			print STDERR "Building $project for $platform/$proc\n";
 			print STDERR "\t$cmd\n" if ($debug);
-			#system($cmd) and die("ERROR Executing Command - $?\n\t$cmd\n");
+			system($cmd) and die("ERROR Executing Command - $?\n\t$cmd\n");
 		}
 	}
 }
@@ -79,36 +79,42 @@ foreach my $platform (keys %platforms) {
 # ------------------------------------------------------------------------------
 # CABs - via ???
 # ------------------------------------------------------------------------------
-# XXX Also need to consider command line
-
 foreach my $platform (keys %platforms) {
 	my $cmd = q{"} . $execs{$platforms{$platform}{'exec'}}{cabwiz} . q{" }
 		. qq{XCSoar$platform.inf /cpu } . join(" ", @{$platforms{$platform}{'proc'}});
 	print STDERR "CABing $platform\n";
 	print STDERR "\t$cmd\n" if ($debug);
-	#system($cmd) and die("ERROR Executing Command - $?\n\t$cmd\n");
+	system($cmd) and die("ERROR Executing Command - $?\n\t$cmd\n");
 }
-
-#"%ProgramFiles%\Windows CE Tools\wce420\POCKET PC 2003\Tools\Cabwiz.exe" XCSoar2002.inf /cpu armv4
-#ezsetup -l english -i XCSoar2002.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-ARM2002.exe
-#
-#"C:\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Tools\Cabwiz.exe" XCSoar.inf /cpu armv4
-#ezsetup -l english -i XCSoar.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-ARM2003.exe
-#
-#"%ProgramFiles%\Windows CE Tools\wce300\MS Pocket PC\support\ActiveSync\windows ce application installation\cabwiz\Cabwiz.exe" XCSoarPPC.inf  /cpu PPC_MIPS PPC_ARM
-#ezsetup -l english -i XCSoarPPC.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-PPC.exe
-#
-#ezsetup -l english -i XCSoarALL.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-ALL.exe
-#
-#"C:\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Tools\Cabwiz.exe" XCSoarData.inf
-#ezsetup -l english -i XCSoarData.ini -r installmsgdata.txt -e gpl.txt -o InstallXCSoar-Data.exe
 
 # ------------------------------------------------------------------------------
 # EXEs - via EZSetup
 # ------------------------------------------------------------------------------
-# XXX Also need to consider command line
-# XXX All in one EXE as well
-# XXX VERSION Numbers and Rename files
+foreach my $platform ((keys %platforms, "ALL")) {
+	my $cmd = q{} . $exec_ezsetup . q{ -l english -i }
+		. qq{XCSoar$platform.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$platform.exe};
+	print STDERR "EZSetup for $platform\n";
+	print STDERR "\t$cmd\n" if ($debug);
+	system($cmd) and die("ERROR Executing Command - $?\n\t$cmd\n");
+}
+
+# ------------------------------------------------------------------------------
+# RENAME for Distribution
+# ------------------------------------------------------------------------------
+# Rename CAB files
+mkdir "dist";
+foreach my $platform (keys %platforms) {
+	foreach my $proc (@{$platforms{$platform}{'proc'}}) {
+		rename "XCSoar$platform.$proc.cab", "dist\\XCSoar$platform.$proc.$version_file.cab"
+			or die("ERROR: Unable to move CAB file $!\n\tXCSoar$platform.$proc.cab\n");
+	}
+}
+
+# Rename EXE files
+foreach my $platform ((keys %platforms, "ALL")) {
+	rename "InstallXCSoar-$platform.exe", "dist\\InstallXCSoar-$platform.$version_file.exe"
+		or die("ERROR: Unable to move EXE file $!\n\tInstallXCSoar-$platform.exe\n");
+}
 
 __END__
 
