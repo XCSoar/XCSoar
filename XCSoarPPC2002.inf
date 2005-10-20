@@ -32,7 +32,7 @@ ProcessorType = 10003
 VersionMin = 3.0
 VersionMax = 32767.0
 
-[SourceDisksNames.armv4]           ; CPU-dependent files
+[SourceDisksNames.arm]           ; CPU-dependent files
 1 = ,"ARM Files",,PPC2002\XCSoar\ARMRel
 2 = ,"ARM Files",,PPC2002\XCSoarSimulator\ARMRel
 3 = ,"ARM Files",,PPC2002\XCSoarLaunch\ARMRel
