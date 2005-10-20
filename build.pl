@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use warnings;
 use strict;
-my $debug = 1;
+my $debug = 0;
 
 # ------------------------------------------------------------------------------
 # Standard Variables
