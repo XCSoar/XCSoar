@@ -68,6 +68,7 @@ void ReadWayPointFile(FILE *fp)
   TCHAR szTemp[100];
   int nTrigger=10;
   DWORD fSize, fPos=0;
+  int nLineNumber=0;
 
   HWND hProgress;
 
@@ -98,6 +99,7 @@ void ReadWayPointFile(FILE *fp)
 
   while(ReadStringX(fp, 200, TempString)){
     
+    nLineNumber++;
     fPos += _tcslen(TempString);
     
     if (nTrigger < (int)fPos){
@@ -109,12 +111,12 @@ void ReadWayPointFile(FILE *fp)
       {
         List->Details = NULL; 
         if (ParseWayPointString(TempString,List)) {
-          
+
           List ++;
           NumberOfWayPoints++;
-          
+
           if ((NumberOfWayPoints % 50) == 0){
- 
+
             if ((p = (WAYPOINT *)LocalReAlloc(WayPointList, ((NumberOfWayPoints/50)+1) * 50 * sizeof(WAYPOINT), LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
 
               MessageBox(hWndMainWindow,gettext(TEXT("Not Enough Memory For Waypoints")),TEXT("Error"),MB_OK|MB_ICONSTOP);
@@ -128,7 +130,12 @@ void ReadWayPointFile(FILE *fp)
             }
 
           }
-          
+
+        } else {
+
+          _stprintf(szTemp, gettext(TEXT("Waypointfile Parse Error at Line %d")), nLineNumber);
+          MessageBox(hWndMainWindow,szTemp,TEXT("Error"),MB_OK | MB_ICONWARNING);
+
         }
       }
   }
@@ -149,11 +156,13 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
 
 
   // ExtractParameter(TempString,ctemp,0);
-  pToken = strtok_r(TempString, TEXT(","), &pWClast);
+  if ((pToken = strtok_r(TempString, TEXT(","), &pWClast)) == NULL)
+    return FALSE;
   Temp->Number = _tcstol(pToken, &Zoom, 10);
         
   //ExtractParameter(TempString,ctemp,1); //Latitude
-  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return FALSE;
   Temp->Latitude = CalculateAngle(pToken);
 
   if((Temp->Latitude > 90) || (Temp->Latitude < -90))
@@ -162,7 +171,8 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
     }
 
   //ExtractParameter(TempString,ctemp,2); //Longitude
-  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return FALSE;
   Temp->Longitude  = CalculateAngle(pToken);
   if((Temp->Longitude  > 180) || (Temp->Longitude  < -180))
     {
@@ -170,15 +180,21 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
     }
 
   //ExtractParameter(TempString,ctemp,3); //Altitude
-  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return FALSE;
   Temp->Altitude = ReadAltitude(pToken);
+  if (Temp->Altitude == -9999){
+    return FALSE;
+  }
 
   //ExtractParameter(TempString,ctemp,4); //Flags
-  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return FALSE;
   Temp->Flags = CheckFlags(pToken);
 
   //ExtractParameter(TempString,ctemp,5); // Name
-  pToken = strtok_r(NULL, TEXT(","), &pWClast);
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
+    return FALSE;
 
   // guard against overrun
   if (_tcslen(pToken)>NAME_SIZE) {
@@ -196,29 +212,33 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
   }
 
   //ExtractParameter(TempString,ctemp,6); // Comment
-  pToken = strtok_r(NULL, TEXT(","), &pWClast);
-  _tcscpy(ctemp, pToken);
-  ctemp[COMMENT_SIZE] = '\0';
+  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) != NULL){
+    _tcscpy(ctemp, pToken);
+    ctemp[COMMENT_SIZE] = '\0';
 
-  Temp->Zoom = 0;
-  Zoom = _tcschr(ctemp,'*');
-  if(Zoom) 
-    {
-      *Zoom = '\0';
-      Zoom +=2;
-      Temp->Zoom = _tcstol(Zoom, &Zoom, 10);
-    }
+    Temp->Zoom = 0;
+    Zoom = _tcschr(ctemp,'*');
+    if(Zoom)
+      {
+        *Zoom = '\0';
+        Zoom +=2;
+        Temp->Zoom = _tcstol(Zoom, &Zoom, 10);
+      }
 
-  // sgi, move "panic-stripping" of the comment-field after we extract
-  // the zoom factor
-  ctemp[COMMENT_SIZE] = '\0';
-  _tcscpy(Temp->Comment, ctemp);
+    // sgi, move "panic-stripping" of the comment-field after we extract
+    // the zoom factor
+    ctemp[COMMENT_SIZE] = '\0';
+    _tcscpy(Temp->Comment, ctemp);
+  } else {
+    Temp->Comment[0] = '\0';
+    Temp->Zoom = 0;
+  }
 
   if(Temp->Altitude == 0){
 
     LockTerrainDataGraphics();
     terrain_dem_graphics.SetTerrainRounding(0.0);
-    double myalt = 
+    double myalt =
       terrain_dem_graphics.GetTerrainHeight(Temp->Latitude , Temp->Longitude);
     UnlockTerrainDataGraphics();
 
@@ -330,15 +350,36 @@ static int CheckFlags(TCHAR *temp)
 static double ReadAltitude(TCHAR *temp)
 {
   TCHAR *Stop;
-  double Altitude;
+  double Altitude=-9999;
 
-        
+
   Altitude = (double)_tcstol(temp, &Stop, 10);
-        
-  if(*Stop == 'F')
-    {
-      Altitude = Altitude / TOFEET;
+
+  if (temp == Stop)                                         // error at begin
+    Altitude=-9999;
+  else {
+    if (Stop != NULL){                                      // number converted endpointer is set
+
+      switch(*Stop){
+
+        case 'M':                                           // meter's nothing to do
+        case 'm':
+        case '\0':
+        break;
+
+        case 'F':                                           // feet, convert to meter
+        case 'f':
+          Altitude = Altitude / TOFEET;
+        break;
+
+        default:                                            // anything else is a syntax error   
+          Altitude = -9999;
+        break;
+
+      }
     }
+  }
+
   return Altitude;
 }
 
