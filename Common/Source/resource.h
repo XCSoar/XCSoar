@@ -307,6 +307,7 @@
 #define IDC_SPIN1                       1258
 #define IDC_VARIOGAUGE                  1259
 #define IDC_DEBOUNCETIME                1260
+#define IDC_WAYPOINTCOMMENTTEXT         1262
 #define IDM_FILE_ABOUT                  40001
 #define IDM_FILE_REGISTER               40002
 #define IDM_FILE_LOCK                   40003
@@ -342,7 +343,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        273
 #define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1261
+#define _APS_NEXT_CONTROL_VALUE         1263
 #define _APS_NEXT_SYMED_VALUE           102
 #endif
 #endif
