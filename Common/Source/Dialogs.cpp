@@ -3158,10 +3158,29 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     {
     case WM_INITDIALOG:
 
+			SIZE	tsize;
+			TCHAR	name[64];
+			int		size;
+
       hdcScreen = GetDC(hDlg);
+
+			// We're going to reference this several times, so copy to local variable
+			_tcscpy(name, WayPointList[SelectedWaypoint].Name);
+			size = _tcslen(name);
 
       SendDlgItemMessage(hDlg, IDC_WAYPOINTDETAILSTEXT, WM_SETFONT,
                   (WPARAM)StatisticsFont,MAKELPARAM(TRUE,0));
+
+			// Get size of Name text with large font
+			GetTextExtentPoint(hdcScreen, name, size, &tsize);
+
+			// If it is going to wrap, set smaller font
+			if (tsize.cx > 80)
+				SendDlgItemMessage(hDlg, IDC_WAYPOINTDETAILSTEXT, WM_SETFONT,
+										(WPARAM)MapWindowBoldFont,MAKELPARAM(TRUE,0));
+
+      SendDlgItemMessage(hDlg, IDC_WAYPOINTCOMMENTTEXT, WM_SETFONT,
+                  (WPARAM)MapWindowBoldFont,MAKELPARAM(TRUE,0));
 
       SendDlgItemMessage(hDlg, IDC_WDTEXT, WM_SETFONT,
                   (WPARAM)MapWindowBoldFont,MAKELPARAM(TRUE,0));
@@ -3177,11 +3196,8 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       hasimage2 = jpgimage2.Load (hdcScreen ,path_fname2 );
       page = 0;
 
-      _stprintf(Temp,TEXT("%s\n%s"),
-               WayPointList[SelectedWaypoint].Name,
-               WayPointList[SelectedWaypoint].Comment);
-
-      SetDlgItemText(hDlg,IDC_WAYPOINTDETAILSTEXT, Temp);
+      SetDlgItemText(hDlg,IDC_WAYPOINTDETAILSTEXT, name);
+      SetDlgItemText(hDlg,IDC_WAYPOINTCOMMENTTEXT, WayPointList[SelectedWaypoint].Comment);
 
       Temp[0]= 0;
 
@@ -3323,6 +3339,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
       EndPaint(hDlg, &ps);
 
       if (page==0) {
+        ShowWindow(GetDlgItem(hDlg,IDC_WAYPOINTCOMMENTTEXT),SW_SHOW);
         ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_HIDE);
@@ -3331,6 +3348,8 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         ShowWindow(GetDlgItem(hDlg,IDC_WDTEXT),SW_SHOW);
       }
       if (page==1) {
+
+        ShowWindow(GetDlgItem(hDlg,IDC_WAYPOINTCOMMENTTEXT),SW_HIDE);
 
         // if this page is up due to task dialog, disable buttons
         if (MenuActive) {
@@ -3349,6 +3368,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
       }
       if (page==2) {
+        ShowWindow(GetDlgItem(hDlg,IDC_WAYPOINTCOMMENTTEXT),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_HIDE);
@@ -3365,6 +3385,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         EndPaint(hDlg, &ps);
       }
       if (page==3) {
+        ShowWindow(GetDlgItem(hDlg,IDC_WAYPOINTCOMMENTTEXT),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDGOTO),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREPLACE),SW_HIDE);
         ShowWindow(GetDlgItem(hDlg,IDC_WDREMOVE),SW_HIDE);
