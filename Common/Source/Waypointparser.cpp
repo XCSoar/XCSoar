@@ -193,7 +193,7 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
   Temp->Flags = CheckFlags(pToken);
 
   //ExtractParameter(TempString,ctemp,5); // Name
-  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL)
+  if ((pToken = strtok_r(NULL, TEXT(",\n\r"), &pWClast)) == NULL)
     return FALSE;
 
   // guard against overrun
@@ -212,7 +212,7 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
   }
 
   //ExtractParameter(TempString,ctemp,6); // Comment
-  if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) != NULL){
+  if ((pToken = strtok_r(NULL, TEXT("\n\r"), &pWClast)) != NULL){
     _tcscpy(ctemp, pToken);
     ctemp[COMMENT_SIZE] = '\0';
 
