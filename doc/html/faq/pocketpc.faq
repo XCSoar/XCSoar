@@ -1,0 +1,27 @@
+<faq>
+        <title>Pocket PC</title>
+
+        <entry>
+                <question>
+			What version is my operating system.
+                </question>
+                <answer>
+			<p>
+			<a href="http://www.pdagold.com/articles/detail.asp?a=135">See what version?</a>
+			</p>
+			<p>Short guide: Go to Settings, About and see the
+version number.</p>
+			<ul>
+				<li>PPC (Pocket PC) - Identified by large TODAY
+graphic on today screen.</li>
+				<li>PPC 2002 (Pocket PC 2002) Version 3.0</li>
+				<li>PPC 2003 (Pocket PC 2003) Version 4.2</li>
+				<li<PPC 2003 SE (Pocket PC 2003 Second Edition) Version 4.21</li>
+				<li>WM 5 (Windows Mobile 5) Version 5.0</li>
+			</ul>
+                </answer>
+        </entry>
+
+
+
+</faq>
