@@ -2,6 +2,7 @@
 use warnings;
 use strict;
 my $debug = 0;
+my $errors = 0;
 
 # ------------------------------------------------------------------------------
 # Standard Variables
@@ -20,7 +21,7 @@ my %execs = (
 my $exec_ezsetup = "ezsetup.exe";
 foreach my $e (keys %execs) {
 	foreach my $p (qw/evc cabwiz/) {
-		die "ERROR: Unable to locate $e $p\n\t" . $execs{$e}{$p} . "\n" unless (-e $execs{$e}{$p});
+		error("Unable to locate $e $p\n\t" . $execs{$e}{$p} .  "\n") unless (-e $execs{$e}{$p});
 	}
 }
 # TODO die "ERROR: Unable to locate EZSetup\n\t$exec_ezsetup\n" unless (-e $exec_ezsetup);
@@ -28,7 +29,6 @@ foreach my $e (keys %execs) {
 # List projects here... (note: we build all of these for each platform)
 my @projects = qw/XCSoar XCSoarSimulator XCSoarLaunch/;
 
-# XXX Selection - need to indicate which ones to build from the command line !
 my %platforms = (
 	'PPC2003' => {
 		'exec' => "EVC4",
@@ -44,6 +44,24 @@ my %platforms = (
 		# XXX 'proc' => [qw/ARM MIPS/],
 	},
 );
+my @platforms_all = keys %platforms;
+push @platforms_all, "ALL";
+
+# ------------------------------------------------------------------------------
+# User Input (primative)
+# ------------------------------------------------------------------------------
+my $user = shift;
+if ($user) {
+	if (exists($platforms{$user})) {
+		foreach my $key (keys %platforms) {
+			delete $platforms{$key} unless ($key eq $user);
+		}
+		@platforms_all = ($user);
+	} else {
+		die "ERROR: Invalid platform. Select from:\n\t" . join(",", keys %platforms) .  "\n";
+	}
+}
+print STDERR "Building platforms: " . join(",", keys %platforms) . "\n";
 
 # ------------------------------------------------------------------------------
 # Process the VERSION
@@ -71,7 +89,7 @@ foreach my $platform (keys %platforms) {
 				. qq{$platform/$project/$project.vcp /MAKE "$project - Win32 (WCE $proc) Release" /REBUILD};
 			print STDERR "Building $project for $platform/$proc\n";
 			print STDERR "\t$cmd\n" if ($debug);
-			system($cmd) and die("ERROR Executing Command - $?\n\t$cmd\n");
+			system($cmd) and error("Executing Command - $?\n\t$cmd\n");
 		}
 	}
 }
@@ -84,18 +102,18 @@ foreach my $platform (keys %platforms) {
 		. qq{XCSoar$platform.inf /cpu } . join(" ", @{$platforms{$platform}{'proc'}});
 	print STDERR "CABing $platform\n";
 	print STDERR "\t$cmd\n" if ($debug);
-	system($cmd) and die("ERROR Executing Command - $?\n\t$cmd\n");
+	system($cmd) and error("Executing Command - $?\n\t$cmd\n");
 }
 
 # ------------------------------------------------------------------------------
 # EXEs - via EZSetup
 # ------------------------------------------------------------------------------
-foreach my $platform ((keys %platforms, "ALL")) {
+foreach my $platform (@platforms_all) {
 	my $cmd = q{} . $exec_ezsetup . q{ -l english -i }
 		. qq{XCSoar$platform.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$platform.exe};
 	print STDERR "EZSetup for $platform\n";
 	print STDERR "\t$cmd\n" if ($debug);
-	system($cmd) and die("ERROR Executing Command - $?\n\t$cmd\n");
+	system($cmd) and error("Executing Command - $?\n\t$cmd\n");
 }
 
 # ------------------------------------------------------------------------------
@@ -106,16 +124,31 @@ mkdir "dist";
 foreach my $platform (keys %platforms) {
 	foreach my $proc (@{$platforms{$platform}{'proc'}}) {
 		rename "XCSoar$platform.$proc.cab", "dist\\XCSoar$platform.$proc.$version_file.cab"
-			or die("ERROR: Unable to move CAB file $!\n\tXCSoar$platform.$proc.cab\n");
+			or error("Unable to move CAB file $!\n\tXCSoar$platform.$proc.cab\n");
 	}
 }
 
 # Rename EXE files
-foreach my $platform ((keys %platforms, "ALL")) {
+foreach my $platform (@platforms_all) {
 	rename "InstallXCSoar-$platform.exe", "dist\\InstallXCSoar-$platform.$version_file.exe"
-		or die("ERROR: Unable to move EXE file $!\n\tInstallXCSoar-$platform.exe\n");
+		or error("Unable to move EXE file $!\n\tInstallXCSoar-$platform.exe\n");
 }
 
+print STDERR "PROCESSING COMPLETE: $errors errors\n";
+
+exit 0;
+
+sub error {
+	my ($msg) = @_;
+	print STDERR "ERROR: $msg\n";
+	print STDERR "Continue (Y/N)? ";
+	my $A = <STDIN>;
+	unless (uc(substr($A, 0, 1)) eq "Y") {
+		print STDERR "PROCESSING INCOMPLETE!\n";
+		exit 1;
+	}
+	$errors++;
+}
 __END__
 
 =====
