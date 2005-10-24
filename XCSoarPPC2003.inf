@@ -37,10 +37,11 @@ VersionMax = 32767.0
 1 = ,"ARM Files",,PPC2003\XCSoar\ARMV4Rel
 2 = ,"ARM Files",,PPC2003\XCSoarSimulator\ARMV4Rel
 3 = ,"ARM Files",,PPC2003\XCSoarLaunch\ARMV4Rel
-4 = ,"Font Files",,Common\Data\Fonts
-5 = ,"Input Files",,Common\Data\Input
-6 = ,"Language Files",,Common\Data\Language
-7 = ,"Polar Files",,Common\Data\Polar
+4 = ,"ARM Files",,PPC2003\XCSoarSetup\ARMV4Rel
+5 = ,"Font Files",,Common\Data\Fonts
+6 = ,"Input Files",,Common\Data\Input
+7 = ,"Language Files",,Common\Data\Language
+8 = ,"Polar Files",,Common\Data\Polar
 
 
 [SourceDisksNames.x86]
@@ -53,22 +54,24 @@ VersionMax = 32767.0
 XCSoar.exe = 1
 XCSoarSimulator.exe = 2
 XCSoarLaunch.dll = 3
-DejaVuSansCondensed-BoldOblique2.ttf = 4
-DejaVuSansCondensed2.ttf = 4
-DejaVuSansCondensed-Bold2.ttf = 4
-DejaVuSansCondensed-Oblique2.ttf = 4
-standard.xci = 5
-legacy.xci = 5
-english.xcl = 6
-italian.xcl = 6
-german.xcl = 6
-astircs.plr = 7
-cobra.plr = 7
+XCSoarSetup.dll = 4
+DejaVuSansCondensed-BoldOblique2.ttf = 5
+DejaVuSansCondensed2.ttf = 5
+DejaVuSansCondensed-Bold2.ttf = 5
+DejaVuSansCondensed-Oblique2.ttf = 5
+standard.xci = 6
+legacy.xci = 6
+english.xcl = 7
+italian.xcl = 7
+german.xcl = 7
+astircs.plr = 8
+cobra.plr = 8
 
 [DefaultInstall]
 CopyFiles   = TheFiles,Files.Windows,Files.Fonts,Files.Language,Files.Input,Files.Polar
 AddReg = AddRegistry
 ;CEShortcuts = Links
+CESetupDLL=XCSoarSetup.dll
 
 [DestinationDirs]
 Files.Windows       = 0,%CE2%           ; "\Windows" directory
@@ -83,6 +86,7 @@ Files.Polar    = 0, "%CE5%\XCSoarData"
 [TheFiles]
 XCSoar.exe
 XCSoarSimulator.exe
+XCSoarSetup.dll
 
 [Files.Windows]
 XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
