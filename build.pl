@@ -27,7 +27,7 @@ foreach my $e (keys %execs) {
 # TODO die "ERROR: Unable to locate EZSetup\n\t$exec_ezsetup\n" unless (-e $exec_ezsetup);
 
 # List projects here... (note: we build all of these for each platform)
-my @projects = qw/XCSoar XCSoarSimulator XCSoarLaunch/;
+my @projects = qw/XCSoar XCSoarSimulator XCSoarLaunch XCSoarSetup/;
 
 my %platforms = (
 	'PPC2003' => {
@@ -40,8 +40,7 @@ my %platforms = (
 	},
 	'PPC' => {	# Also known as PPC 2000
 		'exec' => "EVC3",
-		'proc' => [qw/ARM/],
-		# XXX 'proc' => [qw/ARM MIPS/],
+		'proc' => [qw/MIPS ARM/],
 	},
 );
 my @platforms_all = keys %platforms;
