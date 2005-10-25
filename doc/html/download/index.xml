@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
         <metadata>
-                <title>About</title>
+                <title>Download</title>
         </metadata>
 
         <content>
@@ -34,13 +34,31 @@
 				Help ! Which version do I need? See the 
 				<a href="/faq/pocketpc.html">FAQ - Pocket PC</a> 
 				for version numbers.
+				<ul>
+					<li>Install*.EXE Files - Download an EXE Install version for installation from <a href="/install/windows/">Windows</a>.</li>
+					<li>XCSoar*.CAB Files - Download these for direct install from <a href="/install/linux/">Linux</a>, <a href="/install/mac/">Macintosh</a>, <a href="/install/flash/">Flash</a> and <a href="/install/internet/">The Internet</a></li> 
+					<li>InstallXCSoar-ALL.*.EXE - Choose this if you are not sure which version to download.</li>
+				</ul>
+			</p>
+
+			<p>
+				Version information: (download through sourceforge below)
+			</p>
+			<ul>
+				<li>
+					<a href="version_4_5.html">Version 4.5</a>
+				</li>
+			</ul>
+
+			<p>
+				Download here:
 			</p>
 			<ul>
 				<li>
 					<a 
 						href="https://sourceforge.net/project/showfiles.php?group_id=141663&amp;package_id=155526"
 					>
-						including: PocketPC 2002, PocketPC 2003
+						including: PocketPC (PPC), PocketPC 2002 (PPC2002), PocketPC 2003 (PPC2003)
 					</a>
 				</li>
 			</ul>

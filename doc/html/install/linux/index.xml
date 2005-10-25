@@ -9,6 +9,15 @@
 	<section>
 		<title>The Linux Installation procedure</title>
 
+		 <section>
+                        <title>Flash card or Network</title>
+                        <ul>
+                                <li>See <a href="../flash/">Flash Installation</a></li>
+                                <li>See <a href="../internet/">Internet Installation</a></li>
+                        </ul>
+                </section>
+
+
 		<p>
 		To be defined.
 		</p>

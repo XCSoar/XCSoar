@@ -13,6 +13,8 @@
 			<li><a href="windows/">Windows</a> - Installation from Microsoft Windows</li>
 			<li><a href="linux/">Linux</a> - Installation from a linux work station</li>
 			<li><a href="mac/">Mac OS X</a> - Installation from Mac OS X</li>
+			<li><a href="flash/">Flash Card</a> - Installation via Flash card (Compact Flash, Secure Digital etc)</li>
+			<li><a href="internet/">Internet</a> - Installation via the Internet</li>
 		</ul>
 	</section>
 
