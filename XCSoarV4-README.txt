@@ -21,14 +21,14 @@ To do for next version:
   connnections are working correctly).
 - Replay IGC and include examples
 - Launcher profile selector (multiple pilots or situations - maybe even tasks)
-
-To do for next beta:
 - WARN the user when changing input, language, status files that they need to
   restart.
 - Automatically select "WinPilot File" as type when selecting a file...
 	(future: Consider fixing this - it acts differently to other types)
 
-Changes from 4.5beta3 to 4.5beta4
+Changes from 4.22 to 4.5
+
+- Fix waypoint parsing - make it completely bullet proof
 - Package and release fonts (part of standard cab/exe)
 - Button & Event mapping - default and legacy
   	legacy = same as version 4.22
@@ -60,8 +60,6 @@ Changes from 4.5beta3 to 4.5beta4
 - Fixed message disappearing problem after 1 second (when airspace warnings were off)
 - RETURN key in default.xci needs to be mapped
 - Default set of status messages - now automatically generated from default.xcs
-
-Changes from 4.5beta2 to 4.5beta3
 - Enable secondary files clear button
 - Arbitrary DLL Load and Function calls from InputEvents
 - Config files (input, language and status) now support "\r\n" strings correctly
@@ -93,9 +91,6 @@ Changes from 4.5beta2 to 4.5beta3
 - Code cleanups, eliminated BOOL occurances
 - Fixed missing sentances in IGC file, so now loadable by TaskNav
 - Added "Logger note blahblah" event to put a pilot note in IGC log file.
-
-Changes from 4.22 to 4.5beta2
-
 - Speed-to-fly climb mode bug fix
 - Thermal band mode fix
 - Audio vario sound updates
@@ -129,7 +124,6 @@ Changes from 4.22 to 4.5beta2
 - Fix infobox reset to defaults
 - Allow reset of flight start time when relaunching
 - Takeoff/landing events, can be hooked up to autostart logger
-
 
 Changes from 4.21 to 4.22
 
