@@ -140,7 +140,7 @@ double                          DISTANCEMODIFY = TONAUTICALMILES;
 double        ALTITUDEMODIFY = TOFEET; 
 
 //Flight Data Globals
-double        MACCREADY = 0;
+double        MACCREADY = 0; // JMW now in SI units (m/s) for consistency
 bool          AutoMacCready = false;
 
 int          NettoSpeed = 1000;

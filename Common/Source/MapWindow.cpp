@@ -2412,7 +2412,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
     Wtot = 1.0;
   }
   
-  double mc = MACCREADY/LIFTMODIFY;
+  double mc = MACCREADY;
   
   // scale to mcready
   if (mc>0.5) {
@@ -2932,7 +2932,7 @@ void MapWindow::CalculateWaypointReachable(void)
 
         WaypointBearing =  Bearing(DrawInfo.Latitude, DrawInfo.Longitude, WayPointList[i].Latitude, WayPointList[i].Longitude);
         AltitudeRequired = GlidePolar::MacCreadyAltitude(0.0, 
-                                     // JMW was MACCREADY/LIFTMODIFY
+                                     // JMW was MACCREADY
           WaypointDistance,WaypointBearing, 
           DerivedDrawInfo.WindSpeed, 
           DerivedDrawInfo.WindBearing,0,0,true,0);

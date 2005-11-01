@@ -51,4 +51,10 @@ HWND CreateProgressDialog(TCHAR *text);
 void CloseProgressDialog();
 BOOL StepProgressDialog();
 BOOL SetProgressStepSize(int nSize);
+
+
+void LoadNewTask(TCHAR *FileName);
+void LoadTask(TCHAR *FileName,HWND hDlg);
+void SaveTask(TCHAR *FileName);
+
 #endif

@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.85 2005/10/23 11:16:33 jeffg1 Exp $
+  $Id: Dialogs.cpp,v 1.86 2005/11/01 14:16:50 jwharington Exp $
 
 Copyright_License {
 
@@ -114,8 +114,6 @@ void ReadWayPoints(void);
 void ReadAirspace(void);
 int FindIndex(HWND hWnd);
 void ReadNewTask(HWND hDlg);
-static void LoadTask(TCHAR *FileName,HWND hDlg);
-static void SaveTask(TCHAR *FileName);
 
 
 static Task_t TaskBackup;
@@ -1367,6 +1365,7 @@ void ReadNewTask(HWND hDlg)
           TaskLength += Task[i].Leg; 
         }
     }
+
   CalculateTaskSectors();
   CalculateAATTaskSectors();
   wsprintf(szTaskLength,TEXT("%2.1f"), DISTANCEMODIFY * TaskLength );
@@ -1375,14 +1374,58 @@ void ReadNewTask(HWND hDlg)
     ActiveWayPoint = 0;
 }
 
-void LoadTask(TCHAR *szFileName, HWND hDlg)
+
+
+// loads a new task from scratch.
+void LoadNewTask(TCHAR *szFileName)
 {
   HANDLE hFile;
   TASK_POINT Temp;
   DWORD dwBytesRead;
   int i;
 
-  TCHAR temp[] = TEXT("kjh");
+  ActiveWayPoint = -1;
+  for(i=0;i<MAXTASKPOINTS;i++)
+    {
+      Task[i].Index = -1;
+    }
+  
+  hFile = CreateFile(szFileName,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  
+  if(hFile!= INVALID_HANDLE_VALUE )
+    {
+      for(i=0;i<MAXTASKPOINTS;i++)
+        {
+          if(!ReadFile(hFile,&Temp,sizeof(TASK_POINT),&dwBytesRead, (OVERLAPPED *)NULL))
+            {
+              break;
+            }
+	  memcpy(&Task[i],&Temp, sizeof(TASK_POINT));
+	  /*Task[i].InBound = Temp.InBound;
+	    Task[i].Index = Temp.Index;
+	    Task[i].Leg = Temp.Leg;
+	    Task[i].OutBound = Temp.OutBound;
+	    Task[i].AATCircleRadius = Temp */
+        }
+      CloseHandle(hFile);
+    }
+  
+  CalculateTaskSectors();
+  CalculateAATTaskSectors();
+  
+  if(Task[0].Index != -1)
+    ActiveWayPoint = 0;
+}
+
+
+
+// this one inserts the task in the task list!
+void LoadTask(TCHAR *szFileName, HWND hDlg)
+{
+  HANDLE hFile;
+  TASK_POINT Temp;
+  DWORD dwBytesRead;
+  int i;
 
   ActiveWayPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
@@ -1418,12 +1461,14 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
     {
       if(Task[i].Index >=0)
         {
-          SendDlgItemMessage(hDlg,IDC_TASK,LB_ADDSTRING,0,(LPARAM)(LPCTSTR)WayPointList[Task[i].Index].Name);
+	  SendDlgItemMessage(hDlg,IDC_TASK,LB_ADDSTRING,0,(LPARAM)(LPCTSTR)WayPointList[Task[i].Index].Name);
         }
     }
+
   if(Task[0].Index != -1)
     ActiveWayPoint = 0;
 }
+
 
 void SaveTask(TCHAR *szFileName)
 {

@@ -998,7 +998,7 @@ void InputEvents::eventMacCready(TCHAR *misc) {
     }
   } else if (wcscmp(misc, TEXT("show")) == 0) {
 	TCHAR Temp[100];
-	wsprintf(Temp,TEXT("%f"),MACCREADY);
+	wsprintf(Temp,TEXT("%f"),MACCREADY*LIFTMODIFY);
 	DoStatusMessage(TEXT("MacCready Value"), Temp);
   }
 }
@@ -1028,71 +1028,75 @@ void InputEvents::eventWind(TCHAR *misc) {
 int jmw_demo=0;
 
 void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
-  if (!(Port2Available && GPS_INFO.VarioAvailable))
-    return;
+ // if (!(Port2Available && GPS_INFO.VarioAvailable))
+ //   return;
 
   if (wcscmp(misc, TEXT("slow")) == 0) {
-    Port2WriteNMEA(TEXT("PDVTM,3"));
+    Port2WriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,3"));
     return;
   }
   if (wcscmp(misc, TEXT("medium")) == 0) {
-    Port2WriteNMEA(TEXT("PDVTM,2"));
+    Port2WriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,2"));
     return;
   }
   if (wcscmp(misc, TEXT("fast")) == 0) {
-    Port2WriteNMEA(TEXT("PDVTM,1"));
+    Port2WriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,1"));
     return;
   }
   if (wcscmp(misc, TEXT("statistics"))==0) {
-    Port2WriteNMEA(TEXT("PDVDM,0,1"));
+    Port2WriteNMEA(TEXT("PDVSC,S,Diagnostics,1"));
     jmw_demo=0;
     return;
   }
   if (wcscmp(misc, TEXT("diagnostics"))==0) {
-    Port2WriteNMEA(TEXT("PDVDM,0,2"));
+    Port2WriteNMEA(TEXT("PDVSC,S,Diagnostics,2"));
     jmw_demo=0;
     return;
   }
   if (wcscmp(misc, TEXT("psraw"))==0) {
-    Port2WriteNMEA(TEXT("PDVDM,0,3"));
+    Port2WriteNMEA(TEXT("PDVSC,S,Diagnostics,3"));
     return;
   }
   if (wcscmp(misc, TEXT("democlimb"))==0) {
-    Port2WriteNMEA(TEXT("PDVDM,2,0"));
+    Port2WriteNMEA(TEXT("PDVSC,S,DemoMode,2"));
     jmw_demo=2;
     return;
   }
   if (wcscmp(misc, TEXT("demostf"))==0) {
-    Port2WriteNMEA(TEXT("PDVDM,1,0"));
+    Port2WriteNMEA(TEXT("PDVSC,S,DemoMode,1"));
     jmw_demo=1;
     return;
   }
   if (wcscmp(misc, TEXT("zero"))==0) {
-    Port2WriteNMEA(TEXT("PDVTC,8,1,0"));
+    Port2WriteNMEA(TEXT("PDVSC,S,ZeroASI,1"));
     // zero, no mixing
-    // Port2WriteNMEA(TEXT("PDVAC,18204,421,18204,410"));
+    return;
+  }
+  if (wcscmp(misc, TEXT("save"))==0) {
+    Port2WriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
     return;
   }
 
   // accel calibration
-  if (wcscmp(misc, TEXT("A1"))==0) {
-    Port2WriteNMEA(TEXT("PDVAC,X1"));
+  if (wcscmp(misc, TEXT("X1"))==0) {
+    Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,1"));
     return;
   }
-  if (wcscmp(misc, TEXT("A2"))==0) {
-    Port2WriteNMEA(TEXT("PDVAC,X2"));
+  if (wcscmp(misc, TEXT("X2"))==0) {
+    Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,2"));
     return;
   }
-  if (wcscmp(misc, TEXT("A3"))==0) {
-    Port2WriteNMEA(TEXT("PDVAC,X3"));
+  if (wcscmp(misc, TEXT("X3"))==0) {
+    Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,3"));
     return;
   }
-  if (wcscmp(misc, TEXT("A4"))==0) {
-    Port2WriteNMEA(TEXT("PDVAC,X4"));
+  if (wcscmp(misc, TEXT("X4"))==0) {
+    Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,4"));
     return;
   }
-  if (wcscmp(misc, TEXT("A5"))==0) {
-    Port2WriteNMEA(TEXT("PDVAC,X5"));
+  if (wcscmp(misc, TEXT("X5"))==0) {
+    Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,5"));
+    //    Port2WriteNMEA(TEXT("PDVAC,?"));
     return;
   }
 
@@ -1327,6 +1331,15 @@ void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
 }
 
 
+void InputEvents::eventTaskLoad(TCHAR *misc) {
+  LoadNewTask(misc);
+}
+
+void InputEvents::eventTaskSave(TCHAR *misc) {
+  SaveTask(misc);
+}
+
+
 void InputEvents::eventDLLExecute(TCHAR *misc) {
 	// LoadLibrary(TEXT("test.dll"));
 	
@@ -1423,6 +1436,13 @@ HINSTANCE _loadDLL(TCHAR *name) {
 // or maybe have special tag "save" which indicates it should be saved (notice that
 // the wind adjustment uses this already, see in Process.cpp)
 
+/* Recently done
+
+   eventTaskLoad		- Load tasks from a file (misc = filename)
+   eventTaskSave		- Save tasks to a file (misc = filename)
+
+*/
+
 /* TODO
 
    eventMainMenu
@@ -1437,8 +1457,6 @@ HINSTANCE _loadDLL(TCHAR *name) {
    eventPanWaypoint		                - Set pan to a waypoint
 						- Waypoint could be "next", "first", "last", "previous", or named
 						- Note: wrong name - probably just part of eventPan
-   eventTaskLoad		- Load tasks from a file (misc = filename)
-   eventTaskSave		- Save tasks to a file (misc = filename)
    eventPressure		- Increase, Decrease, show, Set pressure value
    eventDeclare			- (JMW separate from internal logger)
    eventAirspaceDisplay	- all, below nnn, below me, auto nnn

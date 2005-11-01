@@ -61,6 +61,8 @@ class InputEvents {
   static void eventRepeatStatusMessage(TCHAR *misc);
   static void eventAudioDeadband(TCHAR *misc);
   static void eventDLLExecute(TCHAR *misc);
+  static void eventTaskLoad(TCHAR *misc);
+  static void eventTaskSave(TCHAR *misc);
 
   // -------
 

@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.23 2005/10/11 10:45:33 scottp Exp $
+  $Id: Parser.cpp,v 1.24 2005/11/01 14:16:50 jwharington Exp $
 
 Copyright_License {
 
@@ -60,7 +60,8 @@ static BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDAPL(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO);
-
+static BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO);
 
 
 static double EastOrWest(double in, TCHAR EoW);
@@ -132,10 +133,18 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
         {
           return PBJVH(&String[7], GPS_INFO);
         }
-
+      if(_tcscmp(SentanceString,TEXT("PDSWC"))==0)
+        {
+          return PDSWC(&String[7], GPS_INFO);
+        }
       if(_tcscmp(SentanceString,TEXT("PDAAV"))==0)
         {
           return PDAAV(&String[7], GPS_INFO);
+        }
+
+      if(_tcscmp(SentanceString,TEXT("PDVSC"))==0)
+        {
+          return PDVSC(&String[7], GPS_INFO);
         }
 
       if(_tcscmp(SentanceString,TEXT("PDVDV"))==0)
@@ -595,7 +604,7 @@ BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
 
   ExtractParameter(String,ctemp,0);
-  MACCREADY = LIFTMODIFY*StrToDouble(ctemp,NULL);
+  MACCREADY = StrToDouble(ctemp,NULL);
   return FALSE;
 }
 
@@ -661,7 +670,7 @@ BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   ExtractParameter(String,ctemp,2);
   GPS_INFO->MacReady = StrToDouble(ctemp,NULL)/TOKNOTS;
-  MACCREADY = GPS_INFO->MacReady/LIFTMODIFY;
+  MACCREADY = GPS_INFO->MacReady;
 
   ExtractParameter(String,ctemp,3);
   vias = sqrt(StrToDouble(ctemp,NULL))/TOKNOTS;
@@ -817,6 +826,27 @@ BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
+BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+  TCHAR ctemp[80];
+
+  ExtractParameter(String,ctemp,0);
+  MACCREADY = StrToDouble(ctemp,NULL)/10;
+
+  unsigned long switchinputs, switchoutputs;
+
+  ExtractParameter(String,ctemp,1);
+  switchinputs = wcstol(ctemp, NULL, 16);
+
+  ExtractParameter(String,ctemp,2);
+  switchoutputs = wcstol(ctemp, NULL, 16);
+
+  //   airdata.circling = (switchoutputs && (1<<OUTPUT_BIT_CIRCLING));
+
+  return TRUE;
+}
+
+
 // $PDVDS,nx,nz,flap,stallratio
 BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
@@ -878,5 +908,14 @@ BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   VarioUpdated = TRUE;
 
+  return FALSE;
+}
+
+
+BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+  TCHAR ctemp[80];
+  wsprintf(ctemp,TEXT("%s"), &String[0]);
+  DoStatusMessage(ctemp);
   return FALSE;
 }

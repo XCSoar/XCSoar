@@ -103,6 +103,9 @@ void	AccelerometerProcessing(int UpDown)
   DWORD Temp;
   if (UpDown==0) {
     AccelerometerZero*= GPS_INFO.Gload;
+    if (AccelerometerZero<1) {
+      AccelerometerZero = 100;
+    }
     Temp = (int)AccelerometerZero;
     SetToRegistry(szRegistryAccelerometerZero,Temp);
   }
@@ -183,15 +186,15 @@ void	MacCreadyProcessing(int UpDown)
 
   if(UpDown==1) {
     
-    MACCREADY += (double)0.2;
+    MACCREADY += (double)0.1;
     
-    if (MACCREADY>10.0) { // JMW added sensible limit
-      MACCREADY=10.0;
+    if (MACCREADY>5.0) { // JMW added sensible limit
+      MACCREADY=5.0;
     }
   }
   else if(UpDown==-1)
     {
-      MACCREADY -= (double)0.2;
+      MACCREADY -= (double)0.1;
       if(MACCREADY < 0)
 	{
 	  MACCREADY = 0;
@@ -213,7 +216,7 @@ void	MacCreadyProcessing(int UpDown)
       
     }
   
-  devPutMacCready(devA(), MACCREADY); // NOTE THIS IS IN USER UNITS
+  devPutMacCready(devA(), MACCREADY); 
   devPutMacCready(devB(), MACCREADY);
   
   return;
@@ -409,8 +412,8 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 8:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.LastThermalGain;
     break;
-  case 10:
-    Value = MACCREADY;
+  case 10:    
+    Value = iround(LIFTMODIFY*MACCREADY*10)/10.0;
     break;
   case 11:
     Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
