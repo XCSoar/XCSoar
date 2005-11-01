@@ -244,9 +244,9 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   // this is basically a dolphin soaring calculator
 
-  double dmc = MACCREADY/LIFTMODIFY-Calculated->NettoVario;
+  double dmc = MACCREADY-Calculated->NettoVario;
 
-  if (Calculated->Vario <= MACCREADY/LIFTMODIFY) {
+  if (Calculated->Vario <= MACCREADY) {
 
     double VOptnew;
 
@@ -289,7 +289,7 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       Calculated->STFMode = true;
     }
     // lock on when supernetto climb rate is half mc
-    if (dmc< MACCREADY/LIFTMODIFY/2.0) {
+    if (dmc< MACCREADY/2.0) {
       Calculated->STFMode = false;
     }
     // lock on in circling
@@ -316,6 +316,9 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     VarioSound_SetSTFMode(Calculated->STFMode);
   }
   VarioSound_SoundParam();
+
+  Calculated->STFMode = !Calculated->Circling;
+  //  audio_send(Basic, Calculated);
 
 }
 
@@ -397,7 +400,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     */
   }
 
-  maccready = MACCREADY/LIFTMODIFY;
+  maccready = MACCREADY;
 
   DistanceToNext(Basic, Calculated);
   AltitudeRequired(Basic, Calculated, maccready);
@@ -494,13 +497,12 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       if (Port2Available && Basic->VarioAvailable) {
 	// JMW experimental
 	TCHAR mcbuf[100];
-	wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d,%d"),
-		 iround(MACCREADY/LIFTMODIFY*10),
+	wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
+		 iround(MACCREADY*10),
 		 iround(Calculated->VOpt*10),
 		 Calculated->Circling,
-		 Calculated->STFMode,
 		 iround(Calculated->TerrainAlt),
-		 iround(QNH));
+		 iround(QNH*10));
 	Port2WriteNMEA(mcbuf);
       }
 
@@ -519,7 +521,6 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   int Elapsed, i;
   long temp;
   double Gain;
-
 
   if(Basic->Time > LastTime)
     {
@@ -1522,7 +1523,7 @@ void DoAutoMacCready(DERIVED_INFO *Calculated)
   dmc = dmc*0.2+0.8*0.5*min(1.0,max(-1.0,tad/0.001));
 
   MACCREADY += dmc;
-  MACCREADY = min(2.5*LIFTMODIFY,max(0,MACCREADY));
+  MACCREADY = min(5.0,max(0,MACCREADY));
 
   /* NOT WORKING
   static double tad=0.0;
@@ -1682,7 +1683,8 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 			  AirspaceCircle[i].Base, AirspaceCircle[i].Top,
 			  szMessageBuffer, szTitleBuffer );
 
-      wsprintf(text,TEXT("Airspace: %s\r\n%s"),szTitleBuffer,szMessageBuffer);
+      wsprintf(text,TEXT("AIRSPACE: %s\r\n%s"),
+	       szTitleBuffer,szMessageBuffer);
 
       // clear previous warning if any
       Message::Acknowledge(MSG_AIRSPACE);
@@ -1732,9 +1734,11 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 			  AirspaceArea[i].Base, AirspaceArea[i].Top,
 			  szMessageBuffer, szTitleBuffer );
 
-      wsprintf(text,TEXT("Airspace: %s\r\n%s"),szTitleBuffer,szMessageBuffer);
+      wsprintf(text,TEXT("AIRSPACE: %s\r\n%s"),
+	       szTitleBuffer,
+	       szMessageBuffer);
       Message::Acknowledge(MSG_AIRSPACE);
-      Message::AddMessage(5000, MSG_AIRSPACE, text);
+      Message::AddMessage(10000, MSG_AIRSPACE, text);
 
       if (AirspaceLastArea != i) {
 	InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
@@ -1939,7 +1943,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   // returns distance one would arrive at altitude in straight glide
 
   // first estimate max range at this altitude
-  double ialtitude = GlidePolar::MacCreadyAltitude(MACCREADY/LIFTMODIFY,
+  double ialtitude = GlidePolar::MacCreadyAltitude(MACCREADY,
                                                   1.0, bearing,
                                                   Calculated->WindSpeed,
                                                   Calculated->WindBearing,

@@ -467,7 +467,7 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
 {
   ResetScale();
   ScaleYFromData(rc, &flightstats.ThermalAverage);
-  ScaleYFromValue(rc, MACCREADY/LIFTMODIFY);
+  ScaleYFromValue(rc, MACCREADY);
   ScaleYFromValue(rc, 0);
   ScaleXFromValue(rc, 0);
   ScaleXFromValue(rc, flightstats.ThermalAverage.sum_n+1);
@@ -479,9 +479,9 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
   DrawBarChart(hdc, rc,
                &flightstats.ThermalAverage);
   DrawLine(hdc, rc,
-           0, MACCREADY/LIFTMODIFY,
+           0, MACCREADY,
            flightstats.ThermalAverage.sum_n+1,
-           MACCREADY/LIFTMODIFY,
+           MACCREADY,
            STYLE_REDTHICK);
 
   DrawTrendN(hdc, rc,

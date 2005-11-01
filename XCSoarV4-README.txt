@@ -1,6 +1,9 @@
+msg no 242822
+
 ============================================================================
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
+
 
 To do for next version:
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
@@ -8,6 +11,9 @@ To do for next version:
 - Notify the user (via GCE to Input) of switching between AC and Battery mode
 - Improved notification of battery level - not just simulator.
   (exit should still only be the simulator)
+- Default task (so when you save a task as default.tsk, it comes up
+  when the program starts), save task to todays date, load on restart.
+- Clear up ETA/ETR confusion in infoboxes
 - Adjustable font for long infoboxes (especially time)
 - Seeding random NMEA static strings from Input Events
 - Triggering events from NMEA substring matches (may be limited to certain
