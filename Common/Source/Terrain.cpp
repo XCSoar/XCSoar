@@ -711,29 +711,34 @@ void OpenTopology() {
               ShapeIcon = _tcstol(ctemp, &Stop, 10);
 
               // Shape field for text display
-              PExtractParameter(TempString, ctemp, 3);
-              ShapeField = _tcstol(ctemp, &Stop, 10);
 
-              // Shape field for text display
+			  // sjt 02NOV05 - field parameter enabled
+
+              PExtractParameter(TempString, ctemp, 3);
+              if (isalnum(ctemp[0]))
+				  ShapeField = _tcstol(ctemp, &Stop, 10);
+			  else
+				  ShapeField = -1;
+
+              // Red component of line / shading colour
               PExtractParameter(TempString, ctemp, 4);
               red = (BYTE)_tcstol(ctemp, &Stop, 10);
 
-              // Shape field for text display
+              // Green component of line / shading colour
               PExtractParameter(TempString, ctemp, 5);
               green = (BYTE)_tcstol(ctemp, &Stop, 10);
 
-              // Shape field for text display
+              // Blue component of line / shading colour
               PExtractParameter(TempString, ctemp, 6);
-    
-			        blue = (BYTE)_tcstol(ctemp, &Stop, 10);
+    		  blue = (BYTE)_tcstol(ctemp, &Stop, 10);
   
-              if (ShapeField==0) {
+              if (ShapeField==-1) {
                 Topology* newtopo;
                 newtopo = new Topology(ShapeFilename, RGB(red,green,blue));
                 TopoStore[numtopo] = newtopo;
               } else {
                 TopologyLabel *newtopol;
-                newtopol = new TopologyLabel(ShapeFilename, RGB(red,green,blue));
+                newtopol = new TopologyLabel(ShapeFilename, RGB(red,green,blue),ShapeField);
                 TopoStore[numtopo] = newtopol;
               }
               if (ShapeIcon!=0) 
