@@ -191,6 +191,98 @@ bool Topology::checkVisible(shapeObj* shape, rectObj *screenRect) {
 }
 
 
+int Topology::getQuad(double x, double y, RECT rc) {
+	int quad;
+
+	double eq1, eq2, xOffs, yOffs;
+
+	//rc.bottom = rc.bottom - 30;
+	//rc.top = rc.top + 30;
+	//rc.left = rc.left + 30;
+	//rc.right = rc.right - 30;
+	// /\ For testing
+
+	eq1 = (rc.right-rc.left);
+    eq1 = (rc.bottom-rc.top)/eq1;
+	eq2 = (rc.right-rc.left);
+	eq2 = (rc.top-rc.bottom)/eq2;
+
+	xOffs = ((rc.right)-(rc.left));
+	xOffs = 0.5*xOffs;
+	xOffs = xOffs + rc.left;
+
+	yOffs = ((rc.bottom)-(rc.top));
+	yOffs = 0.5*yOffs;
+	yOffs = yOffs + rc.top;
+
+	if ((y-yOffs)<((x-xOffs)*eq1))
+		if ((y-yOffs)>((x-xOffs)*eq2))
+			quad=3; //RIGHT of screen
+		else
+			quad=2; //ABOVE screen
+	else
+		if ((y-yOffs)<((x-xOffs)*eq2))
+			quad=1; //LEFT of screen
+		else
+			quad=4; //BELOW screen
+	return quad;
+}
+
+bool Topology::checkInside(int x, int y, int quad, RECT rc) {
+	bool inside=false;
+
+	//rc.bottom = rc.bottom - 30;
+	//rc.top = rc.top + 30;
+	//rc.left = rc.left + 30;
+	//rc.right = rc.right - 30;
+	// /\ for testing
+
+	if (quad==1)
+		if (x > rc.left)
+			inside=true;
+	if (quad==2)
+		if (y > rc.top)
+			inside=true;
+	if (quad==3)
+		if (x < rc.right)
+			inside=true;
+	if (quad==4)
+		if (y < rc.bottom)
+			inside=true;
+	return inside;
+}
+
+int Topology::getCorner(int n, int n2) {
+	//nb - tidy this up
+
+	if (n==1){
+		if (n2==2)
+			return 1;
+		if (n2==4)
+			return 4;
+	}
+	if (n==2){
+		if (n2==1)
+			return 1;
+		if (n2==3)
+			return 2;
+	}
+	if (n==3){
+		if (n2==2)
+			return 2;
+		if (n2==4)
+			return 3;
+	}
+	if (n==4){
+		if (n2==3)
+			return 3;
+		if (n2==1)
+			return 4;
+	}
+	return 0;
+}
+
+
 void CalculateScreenBounds(RECT rc, rectObj *screenRect) {
   double xmin, xmax, ymin, ymax;
   double x, y;
@@ -339,27 +431,93 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
 	  if (checkVisible(shape, &screenRect))
 	  for (int tt = 0; tt < shape->numlines; tt ++) {
+		int skipped=0,keypoints=0,stcnr=0,endcnr=0,quad1=0,quad2=0,xprev=0,yprev=0;
+		bool leftscreen=false;
 
-	    pt = (POINT*)SfRealloc(pt,sizeof(POINT)*shape->line[tt].numpoints/iskip);
+	    pt = (POINT*)SfRealloc(pt,int((sizeof(POINT)*shape->line[tt].numpoints/iskip)*1.3));
+		//Uh-oh.. chance of running out of array space here, since the number of points is dynamic. Can anyone help?
 
 	    for (int jj=0; jj< shape->line[tt].numpoints/iskip; jj++) {
-	      int x, y;
+	      int x, y, quad;
+		  bool inside;
 
 	      tpp_x = shape->line[tt].point[jj*iskip].x;
 	      tpp_y = shape->line[tt].point[jj*iskip].y;
 		  MapWindow::LatLon2Screen(tpp_x, tpp_y, &x, &y);
 
-	      pt[jj].x = x;
-	      pt[jj].y = y;
+		  //Screen is split into four quadrants:  \ 2 /
+		  //									   \ /
+		  //When a point outside screen crosses   1 x 3
+		  //from one quadrant to another,a corner  / \
+		  //is drawn to prevent polygon clipping. / 4 \
 
-	      // find leftmost visible point for display of label
-	      if ((x<=minx)&&(x>=rc.left)&&(y>=rc.top)&&(y<=rc.bottom)) {
-		minx = x;
-		miny = y;
-	      }
+		  quad = getQuad(x,y,rc);
+		  inside = checkInside(x,y,quad,rc);
 
-	    }
-	    Polygon(hdc, pt, shape->line[tt].numpoints/iskip);
+		  if (!inside){
+			  if ((!leftscreen)||(quad != quad1)){
+				  if(!leftscreen){
+					//Polygon has just left the screen
+					//Point is still drawn, which prevents clipped corners
+					pt[(jj-skipped)+keypoints].x = x;
+					pt[(jj-skipped)+keypoints].y = y;
+				  }
+				  else{
+						  //Point has taken polygon to a new quadrant;
+						  //draw a key point at the relevant corner.
+						  switch (getCorner(quad,quad1)){
+						  case 1:{
+						  		pt[(jj-skipped)+keypoints].x = (rc.left - 10);
+								pt[(jj-skipped)+keypoints].y = (rc.top - 10);
+								 }; break;
+						  case 2:{
+						  		pt[(jj-skipped)+keypoints].x = (rc.right + 10);
+								pt[(jj-skipped)+keypoints].y = (rc.top - 10);
+								 }; break;
+						  case 3:{
+						  		pt[(jj-skipped)+keypoints].x = (rc.right + 10);
+								pt[(jj-skipped)+keypoints].y = (rc.bottom + 10);
+								 }; break;
+						  case 4:{
+						  		pt[(jj-skipped)+keypoints].x = (rc.left - 10);
+								pt[(jj-skipped)+keypoints].y = (rc.bottom + 10);
+								 }; break;
+						  }
+				  }
+			  }
+			  else skipped++; //Don't draw this point...
+
+			  xprev=x;
+		      yprev=y;
+
+			  leftscreen=true;
+		      if (quad != quad1) quad1=quad;
+		  }
+		  else{
+			  //If current point is inside the screen...
+
+			  //... and we've just returned from outside the screen,
+			  // we draw one point outside the screen (prevents clipping)
+			  if (leftscreen){
+				  pt[(jj-skipped)+keypoints].x = xprev;
+				  pt[(jj-skipped)+keypoints].y = yprev;
+				  keypoints++;
+			  }
+
+			  leftscreen = false;
+
+			  pt[(jj-skipped)+keypoints].x = x;
+			  pt[(jj-skipped)+keypoints].y = y;
+
+			  // find leftmost visible point for display of label
+		      if ((x<=minx)&&(x>=rc.left)&&(y>=rc.top)&&(y<=rc.bottom)) {
+			  minx = x;
+			  miny = y;
+			  }
+		  }
+		}
+
+		Polygon(hdc, pt, (((shape->line[tt].numpoints/iskip)+keypoints)-skipped));
 	    shpCache[ixshp]->renderSpecial(hdc,minx,miny);
 
 	  }
@@ -383,9 +541,10 @@ void Topology::Paint(HDC hdc, RECT rc) {
 ///////////////////////////////////////////////////////////
 
 
-TopologyLabel::TopologyLabel(char* shpname, COLORREF thecolor):Topology(shpname, thecolor)
+TopologyLabel::TopologyLabel(char* shpname, COLORREF thecolor, int field1):Topology(shpname, thecolor)
 {
-  field = 0;
+  //sjt 02nov05 - enabled label fields
+  setField(field1); //field = 0;
 };
 
 TopologyLabel::~TopologyLabel()
@@ -412,6 +571,19 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
     TCHAR Temp[100];
     wsprintf(Temp,TEXT("%S"),label);
     SetBkMode(hDC,TRANSPARENT);
+	if (ispunct(Temp[0])){
+		DOUBLE dTemp;
+
+		Temp[0]='0';
+		dTemp = StrToDouble(Temp,NULL);
+		dTemp = ALTITUDEMODIFY*dTemp;
+		if (dTemp > 999)
+			wsprintf(Temp,TEXT("%.1f"),(dTemp/1000));
+		else
+			wsprintf(Temp,TEXT("%d"),int(dTemp));
+	}
+
+
     ExtTextOut(hDC, x+2, y+2, 0, NULL, Temp, _tcslen(Temp), NULL);
   }
 }
