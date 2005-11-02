@@ -157,7 +157,7 @@ HPEN MapWindow::hpTerrainLine;
 HPEN MapWindow::hpSpeedSlow;
 HPEN MapWindow::hpSpeedFast;
   
-COLORREF MapWindow::BackgroundColor = RGB(0xF5,0xF5,0xF5);
+COLORREF MapWindow::BackgroundColor = RGB(0xFF,0xFF,0xFF); //sjt 02NOV05 - was F5F5F5. Changed to increase screen clarity at oblique viewing angles.
 
 bool MapWindow::RequestFastRefresh = false;
 bool MapWindow::MapDirty = true;
