@@ -928,6 +928,8 @@ IDB_AUTOMCREADY         BITMAP  DISCARDABLE     "bitmaps\\automcre.bmp"
 IDB_TOWN                BITMAP  DISCARDABLE     "bitmaps\\town.bmp"
 IDB_MARK                BITMAP  DISCARDABLE     "bitmaps\\mark.bmp"
 IDB_TERRAINWARNING      BITMAP  DISCARDABLE     "bitmaps\\terrainw.bmp"
+IDB_PEAKHIGH            BITMAP  DISCARDABLE     "bitmaps\\peakhigh.bmp"
+IDB_PEAKLOW             BITMAP  DISCARDABLE     "bitmaps\\peaklow.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1078,7 +1080,7 @@ IDR_REMOVE              WAVE    DISCARDABLE     "bitmaps\\Remove.wav"
 // Dialog
 //
 
-IDD_WAYPOINTDETAILS DIALOGEX 0, 0, 136, 154
+IDD_WAYPOINTDETAILS DIALOG DISCARDABLE  0, 0, 136, 154
 STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP
 EXSTYLE WS_EX_STATICEDGE
 FONT 12, "System"
