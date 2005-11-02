@@ -65,6 +65,10 @@ class Topology {
   virtual void removeShape(int i);
   virtual XShape* addShape(int i);
 
+   int getQuad(double x, double y, RECT rc);
+  bool checkInside(int x, int y, int quad, RECT rc);
+  int getCorner(int n, int n2);
+
 };
 
 
@@ -79,7 +83,7 @@ class TopologyWriter: public Topology {
 
 class TopologyLabel: public Topology {
  public:
-  TopologyLabel(char* shpname, COLORREF thecolor);
+  TopologyLabel(char* shpname, COLORREF thecolor, INT field1);
     ~TopologyLabel();
   virtual XShape* addShape(int i);
   void setField(int i);
