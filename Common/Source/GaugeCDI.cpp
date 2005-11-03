@@ -31,6 +31,7 @@ Copyright_License {
 
 */
 
+#include "stdafx.h"
 #include "GaugeCDI.h"
 
 HWND hWndCDIWindow = NULL; //CDI Window

@@ -61,6 +61,57 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Message.h"
 
+#if 0
+Appearance_t Appearance = {
+  apMsAltA,
+  apMs2None,
+  true,
+  206,
+  {0,13},
+  apFlightModeIconAltA,
+//  apFlightModeIconDefault,
+  {10,3},
+  apCompassAltA,
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  ctBestCruiseTrackAltA,
+  afAircraftAltA,
+  true,
+  fgFinalGlideAltA,
+  wpLandableAltA,
+  true
+};
+#endif
+
+#if 1
+Appearance_t Appearance = {
+  0,
+  0,
+  false,
+  0,
+  {0,0},
+  0,
+  {0,0},
+  0,
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0x,0},
+  0,
+  0,
+  false,
+  0,
+  0,
+  false
+};
+#endif
+
+
+
 extern TCHAR XCSoar_Version[256] = TEXT("");
 
 HWND hWnd1, hWnd2, hWnd3;
@@ -562,7 +613,7 @@ void ShowStatus() {
     }
     wcscat(statusmessage, TEXT("\r\n"));
 
-    wsprintf(Temp,TEXT("%s\t%d\r\n"),
+    _stprintf(Temp,TEXT("%s\t%d\r\n"),
 			 gettext(TEXT("Satellites in view")), 
              GPS_INFO.SatellitesUsed
              );
@@ -783,7 +834,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // wcscat(XCSoar_Version, TEXT("4.5 BETA 4")); // Yet to be released
 
   // load registry backup if it exists
-  LoadRegistryFromFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));
+  LoadRegistryFromFile(TEXT("\\NOR Flash\\xcsoar-registry.prf"));
 
   // Registery (early)
   ReadRegistrySettings();
@@ -800,7 +851,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   InitCommonControls();
        
   // Perform application initialization:
-  if (!InitInstance (hInstance, nCmdShow)) 
+  if (!InitInstance (hInstance, nCmdShow))
     {
       return FALSE;
     }
@@ -1037,22 +1088,23 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
 
   #ifdef SCREENWIDTH
-    WindowSize.right = SCREENWIDTH;
-    WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - SCREENWIDTH) / 2;
+    WindowSize.right = SCREENWIDTH + 2*GetSystemMetrics( SM_CXFIXEDFRAME);
+    WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;
   #endif
   #ifdef SCREENHEIGHT
-    WindowSize.bottom = SCREENHEIGHT;
-    WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - SCREENHEIGHT) / 2;
+    WindowSize.bottom = SCREENHEIGHT + 2*GetSystemMetrics( SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION);
+    WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
   #endif
 
 
-  hWndMainWindow = CreateWindow(szWindowClass, szTitle, 
+  hWndMainWindow = CreateWindow(szWindowClass, szTitle,
 				WS_VISIBLE|WS_SYSMENU|WS_CLIPCHILDREN 
 				| WS_CLIPSIBLINGS,
                                 WindowSize.left, WindowSize.top, 
 				WindowSize.right, WindowSize.bottom,
                                 NULL, NULL, 
 				hInstance, NULL);
+
 
   SendMessage(hWndMainWindow, WM_SETICON,
 	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOARSWIFT);
@@ -1109,7 +1161,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfHeight = iFontHeight;
   logfont.lfWidth =  FontWidth;
   logfont.lfWeight = FW_BOLD;
-    logfont.lfItalic = TRUE;
+  logfont.lfItalic = TRUE;
   logfont.lfCharSet = ANSI_CHARSET;
   ApplyClearType(&logfont);
 
@@ -1128,6 +1180,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
+
+  propGetFontSettings(TEXT("InfoWindowFont"), &logfont);
   InfoWindowFont = CreateFontIndirect (&logfont);
 
   // next font..
@@ -1141,23 +1195,25 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWeight = FW_BOLD;
   //  ApplyClearType(&logfont);
 
+  propGetFontSettings(TEXT("TitleWindowFont"), &logfont);
   TitleWindowFont = CreateFontIndirect (&logfont);
 
   memset ((char *)&logfont, 0, sizeof (logfont));
 
   // new font for CDI Scale
-        
+
   logfont.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*CDIFONTHEIGHTRATIO);
   logfont.lfWidth =  (int)(FontWidth*CDIFONTWIDTHRATIO);
   logfont.lfWeight = FW_MEDIUM;
   ApplyClearType(&logfont);
 
+  propGetFontSettings(TEXT("CDIWindowFont"), &logfont);
   CDIWindowFont = CreateFontIndirect (&logfont);
 
   // new font for map labels
   memset ((char *)&logfont, 0, sizeof (logfont));
-        
+
   _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO);
@@ -1166,6 +1222,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfItalic = TRUE; // JMW
   ApplyClearType(&logfont);
 
+  propGetFontSettings(TEXT("MapLabelFont"), &logfont);
   MapLabelFont = CreateFontIndirect (&logfont);
 
 
@@ -1179,10 +1236,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWeight = FW_MEDIUM;
   ApplyClearType(&logfont);
 
+  propGetFontSettings(TEXT("StatisticsFont"), &logfont);
   StatisticsFont = CreateFontIndirect (&logfont);
 
   // new font for map labels
-        
+
   _tcscpy(logfont.lfFaceName, _T("Tahoma"));
   logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
   logfont.lfHeight = (int)(FontHeight*MAPFONTHEIGHTRATIO*1.3);
@@ -1190,6 +1248,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWeight = FW_MEDIUM;
   ApplyClearType(&logfont);
 
+  propGetFontSettings(TEXT("MapWindowFont"), &logfont);
   MapWindowFont = CreateFontIndirect (&logfont);
 
   SendMessage(hWndMapWindow,WM_SETFONT,
@@ -1201,6 +1260,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfWeight = FW_BOLD;
   logfont.lfWidth =  0; // JMW (int)(FontWidth*MAPFONTWIDTHRATIO*1.3) +2;
 
+  propGetFontSettings(TEXT("MapWindowBoldFont"), &logfont);
   MapWindowBoldFont = CreateFontIndirect (&logfont);
 
   for(i=0;i<numInfoWindows;i++)
@@ -1471,13 +1531,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_KEYUP:
       if (!DialogActive) {
 
-	if (InputEvents::processKey(wParam)) {
-	  //	  TODO debugging - DoStatusMessage(TEXT("Event in infobox"));
-	}
+        if (InputEvents::processKey(wParam)) {
+      	  //	  TODO debugging - DoStatusMessage(TEXT("Event in infobox"));
+        }
       } else {
-	//	TODO debugging - DoStatusMessage(TEXT("Event in dlg"));
-	if (InputEvents::processKey(wParam)) {
-	}
+        //	TODO debugging - DoStatusMessage(TEXT("Event in dlg"));
+        if (InputEvents::processKey(wParam)) {
+        }
       }
       return TRUE; // JMW trying to fix multiple processkey bug
       break;
@@ -1653,7 +1713,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               ) {
 
 		// save registry backup first (try a few places)
-		SaveRegistryToFile(TEXT("\\\\NOR Flash\\xcsoar-registry.prf"));
+		SaveRegistryToFile(TEXT("\\NOR Flash\\xcsoar-registry.prf"));
 		// SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 		SaveRegistryToFile(LocalPath(TEXT("xcsoar-registry.prf")));
 		
@@ -2154,7 +2214,7 @@ void CommonProcessTimer()
       //      MapWindow::AirDataDirty = true;
       MapWindow::RequestAirDataDirty = false;
       if (EnableVarioGauge) {
-	GaugeVario::Render();
+        GaugeVario::Render();
       }
     }
 

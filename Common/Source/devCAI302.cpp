@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.15 2005/10/11 10:45:33 scottp Exp $
+// $Id: devCAI302.cpp,v 1.16 2005/11/03 20:11:07 samgi Exp $
 
 /*
 Copyright_License {
@@ -265,7 +265,7 @@ BOOL cai302Open(PDeviceDescriptor_t d, int Port){
 
   d->Port = Port;
 
-test();
+//test();
 
   if (!fSimMode){
     (d->Com.WriteString)(TEXT("\x03"));

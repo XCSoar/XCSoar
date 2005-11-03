@@ -28,6 +28,7 @@ Copyright_License {
 
 }
 */
+#include "stdafx.h"
 #include "Statistics.h"
 #include "XCSoar.h"
 #include "Externs.h"
@@ -752,7 +753,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
                  gettext(TEXT("Best LD")),
                  GlidePolar::bestld,
                  gettext(TEXT("at")),
-                 GlidePolar.Vbestld*SPEEDMODIFY,
+                 GlidePolar::Vbestld*SPEEDMODIFY,
                  Units::GetHorizontalSpeedName(),
                  gettext(TEXT("Min sink")),
                  GlidePolar::minsink*LIFTMODIFY,

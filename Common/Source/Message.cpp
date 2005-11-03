@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Message.h"
 #include "MapWindow.h"
 
