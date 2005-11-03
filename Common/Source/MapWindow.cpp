@@ -967,13 +967,13 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
   }
   
   if(GliderCenter || EnablePan) {
-    Orig->x = (rc.left + rc.right ) /2;
-    Orig->y = (rc.bottom - rc.top) /2+rc.top;
+    Orig->x = iround((rc.left + rc.right ) /2.0);
+    Orig->y = iround((rc.bottom - rc.top) /2.0+rc.top);
   }
   else
   {
-    Orig->x = (rc.left + rc.right ) /2;
-    Orig->y = (rc.bottom - rc.top) - ((rc.bottom - rc.top )/5)+rc.top;
+    Orig->x = iround((rc.left + rc.right ) /2.0);
+    Orig->y = iround((rc.bottom - rc.top) - ((rc.bottom - rc.top )/5.0)+rc.top);
   }
 }
 
@@ -2748,8 +2748,8 @@ void MapWindow::LatLon2Screen(double lon, double lat, int *scX, int *scY) {
   
   rotate(&X, &Y, DisplayAngle );
   
-  *scX = Orig_Screen.x - (int)X; // iround(X);
-  *scY = Orig_Screen.y + (int)Y; // iround(Y);
+  *scX = Orig_Screen.x - iround(X);
+  *scY = Orig_Screen.y + iround(Y);
 }
 
 
@@ -2811,8 +2811,10 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
   PanXr = DrawInfo.Longitude + PanX;
   PanYr = DrawInfo.Latitude + PanY;
   
-  LatLon2Screen(DrawInfo.Longitude, DrawInfo.Latitude, &scx,
-    &scy);
+  LatLon2Screen(DrawInfo.Longitude, 
+		DrawInfo.Latitude, 
+		&scx,
+		&scy);
   Orig_Aircraft->x = scx;
   Orig_Aircraft->y = scy;
 

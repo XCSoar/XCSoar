@@ -211,7 +211,6 @@ float RasterTerrain::GetTerrainSlopeStep() {
 }
 
 
-
 float RasterTerrain::GetTerrainStepSize() {
   if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
     return 0;
@@ -230,9 +229,17 @@ void RasterTerrain::SetTerrainRounding(double dist) {
   }
 }
 
+int RasterTerrain::GetEffectivePixelSize(double dist) {
+  int grounding;
+  grounding = iround(2.0*(GetTerrainStepSize()/1000.0)/dist);
+  if (grounding<1) {
+    grounding = 1;
+  }
+  return grounding;
+}
 
-// JMW rounding further reduces data as required to speed up terrain display on
-// low zoom levels
+// JMW rounding further reduces data as required to speed up terrain
+// display on low zoom levels
 
 
 short RasterTerrain::GetTerrainHeight(double Lattitude, 

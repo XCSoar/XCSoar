@@ -203,7 +203,7 @@ int Topology::getQuad(double x, double y, RECT rc) {
 	// /\ For testing
 
 	eq1 = (rc.right-rc.left);
-    eq1 = (rc.bottom-rc.top)/eq1;
+	eq1 = (rc.bottom-rc.top)/eq1;
 	eq2 = (rc.right-rc.left);
 	eq2 = (rc.top-rc.bottom)/eq2;
 
@@ -434,8 +434,10 @@ void Topology::Paint(HDC hdc, RECT rc) {
 		int skipped=0,keypoints=0,stcnr=0,endcnr=0,quad1=0,quad2=0,xprev=0,yprev=0;
 		bool leftscreen=false;
 
-	    pt = (POINT*)SfRealloc(pt,int((sizeof(POINT)*shape->line[tt].numpoints/iskip)*1.3)); 
-		//Uh-oh.. chance of running out of array space here, since the number of points is dynamic. Can anyone help?
+	    pt = (POINT*)SfRealloc(pt,
+				   int((sizeof(POINT)
+					*shape->line[tt].numpoints/iskip)*1.3)); 
+	    //Uh-oh.. chance of running out of array space here, since the number of points is dynamic. Can anyone help?
 
 	    for (int jj=0; jj< shape->line[tt].numpoints/iskip; jj++) {
 	      int x, y, quad;
@@ -455,69 +457,70 @@ void Topology::Paint(HDC hdc, RECT rc) {
 		  inside = checkInside(x,y,quad,rc);
 
 		  if (!inside){
-			  if ((!leftscreen)||(quad != quad1)){
-				  if(!leftscreen){
-					//Polygon has just left the screen
-					//Point is still drawn, which prevents clipped corners
-					pt[(jj-skipped)+keypoints].x = x;
-					pt[(jj-skipped)+keypoints].y = y;
-				  }
-				  else{
-						  //Point has taken polygon to a new quadrant; 
-						  //draw a key point at the relevant corner.
-						  switch (getCorner(quad,quad1)){
-						  case 1:{
-						  		pt[(jj-skipped)+keypoints].x = (rc.left - 10);
-								pt[(jj-skipped)+keypoints].y = (rc.top - 10);
-								 }; break;
-						  case 2:{
-						  		pt[(jj-skipped)+keypoints].x = (rc.right + 10);
-								pt[(jj-skipped)+keypoints].y = (rc.top - 10);
-								 }; break;
-						  case 3:{
-						  		pt[(jj-skipped)+keypoints].x = (rc.right + 10);
-								pt[(jj-skipped)+keypoints].y = (rc.bottom + 10);
-								 }; break;
-						  case 4:{
-						  		pt[(jj-skipped)+keypoints].x = (rc.left - 10);
-								pt[(jj-skipped)+keypoints].y = (rc.bottom + 10);
-								 }; break;
-						  }
-				  }
-			  }
-			  else skipped++; //Don't draw this point...
-
-			  xprev=x;
-		      yprev=y;
-
-			  leftscreen=true;
-		      if (quad != quad1) quad1=quad;
+		    if ((!leftscreen)||(quad != quad1)){
+		      if(!leftscreen){
+			//Polygon has just left the screen
+			//Point is still drawn, which prevents clipped corners
+			pt[(jj-skipped)+keypoints].x = x;
+			pt[(jj-skipped)+keypoints].y = y;
+		      }
+		      else{
+			//Point has taken polygon to a new quadrant; 
+			//draw a key point at the relevant corner.
+			switch (getCorner(quad,quad1)){
+			case 1:{
+			  pt[(jj-skipped)+keypoints].x = (rc.left - 10);
+			  pt[(jj-skipped)+keypoints].y = (rc.top - 10);
+			}; break;
+			case 2:{
+			  pt[(jj-skipped)+keypoints].x = (rc.right + 10);
+			  pt[(jj-skipped)+keypoints].y = (rc.top - 10);
+			}; break;
+			case 3:{
+			  pt[(jj-skipped)+keypoints].x = (rc.right + 10);
+			  pt[(jj-skipped)+keypoints].y = (rc.bottom + 10);
+			}; break;
+			case 4:{
+			  pt[(jj-skipped)+keypoints].x = (rc.left - 10);
+			  pt[(jj-skipped)+keypoints].y = (rc.bottom + 10);
+			}; break;
+			}
+		      }
+		    }
+		    else skipped++; //Don't draw this point...
+		    
+		    xprev=x;
+		    yprev=y;
+		    
+		    leftscreen=true;
+		    if (quad != quad1) quad1=quad;
 		  }
 		  else{
-			  //If current point is inside the screen...
-
-			  //... and we've just returned from outside the screen,
-			  // we draw one point outside the screen (prevents clipping)
-			  if (leftscreen){					  
-				  pt[(jj-skipped)+keypoints].x = xprev;
-				  pt[(jj-skipped)+keypoints].y = yprev;
-				  keypoints++;
-			  }
-			
-			  leftscreen = false;
-
-			  pt[(jj-skipped)+keypoints].x = x;
-			  pt[(jj-skipped)+keypoints].y = y;
-					
-			  // find leftmost visible point for display of label
-		      if ((x<=minx)&&(x>=rc.left)&&(y>=rc.top)&&(y<=rc.bottom)) {
-			  minx = x;
-			  miny = y;
-			  }
+		    //If current point is inside the screen...
+		    
+		    //... and we've just returned from outside the screen,
+		    // we draw one point outside the screen (prevents clipping)
+		    if (leftscreen){					  
+		      pt[(jj-skipped)+keypoints].x = xprev;
+		      pt[(jj-skipped)+keypoints].y = yprev;
+		      keypoints++;
+		    }
+		    
+		    leftscreen = false;
+		    
+		    pt[(jj-skipped)+keypoints].x = x;
+		    pt[(jj-skipped)+keypoints].y = y;
+		    
+		    // find leftmost visible point for display of label
+		    if ((x<=minx)&&(x>=rc.left)&&(y>=rc.top)&&(y<=rc.bottom)) {
+		      minx = x;
+		      miny = y;
+		    }
 		  }
-		}
-	
-		Polygon(hdc, pt, (((shape->line[tt].numpoints/iskip)+keypoints)-skipped));         
+	    }
+	    
+	    Polygon(hdc, pt, 
+		    (((shape->line[tt].numpoints/iskip)+keypoints)-skipped)); 
 	    shpCache[ixshp]->renderSpecial(hdc,minx,miny);
 
 	  }
@@ -544,7 +547,8 @@ void Topology::Paint(HDC hdc, RECT rc) {
 TopologyLabel::TopologyLabel(char* shpname, COLORREF thecolor, int field1):Topology(shpname, thecolor) 
 {
   //sjt 02nov05 - enabled label fields
-  setField(field1); //field = 0;
+  setField(max(0,field1)); 
+  // JMW this is causing XCSoar to crash on my system!
 };
 
 TopologyLabel::~TopologyLabel()

@@ -1057,6 +1057,10 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
     Port2WriteNMEA(TEXT("PDVSC,S,Diagnostics,3"));
     return;
   }
+  if (wcscmp(misc, TEXT("switch"))==0) {
+    Port2WriteNMEA(TEXT("PDVSC,S,Diagnostics,4"));
+    return;
+  }
   if (wcscmp(misc, TEXT("democlimb"))==0) {
     Port2WriteNMEA(TEXT("PDVSC,S,DemoMode,2"));
     jmw_demo=2;

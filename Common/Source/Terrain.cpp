@@ -417,6 +417,7 @@ public:
     } else {
       terrain_dem_graphics.SetTerrainRounding(pixelsize);
     }
+
     kpixel = (float)(terrain_dem_graphics.GetTerrainSlopeStep()*3.0); 
     // magnify gradient to make it
     // more obvious
@@ -456,25 +457,45 @@ public:
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
 
+    int epx = min(100,terrain_dem_graphics.
+		  GetEffectivePixelSize(pixelsize));
+    int ixsepx = ixs*epx;
+    float ekpixel = kpixel;
+
     for (int y = 0; y<iys; y++) {
       for (int x = 0; x<ixs; x++) {
 
-        if (x==0) {
-          nx= (short)((hBuf[pval+1]-hBuf[pval])*kpixel*2);
-        } else if (x==ixs-1) {
-          nx= (short)((hBuf[pval]-hBuf[pval-1])*kpixel*2);
-        } else {
-          nx= (short)((hBuf[pval+1]-hBuf[pval-1])*kpixel);
-        }
-        if (y==0) {
-          ny= (short)((hBuf[pval+ixs]-hBuf[pval])*kpixel*2);
-        } else if (y==iys-1) {
-          ny= (short)((hBuf[pval]-hBuf[pval-ixs])*kpixel*2);
-        } else {
-          ny= (short)((hBuf[pval+ixs]-hBuf[pval-ixs])*kpixel);
-        }
+	// JMW: if zoomed right in (e.g. one unit
+	// is larger than terrain grid), then increase the
+	// step size to be equal to the terrain grid
+	// for purposes of calculating slope, to avoid
+	// shading problems (gridding of display)
+	// This is why epx is used instead of 1 previously.
+	// for large zoom levels, epx=1
+
+	if ((epx<ixs)&&(epx<iys)&&(epx<10)) {
+	  if (x<epx) {
+	    nx= (short)((hBuf[pval+epx]-hBuf[pval])*ekpixel*2);
+	  } else if (x>=ixs-epx) {
+	    nx= (short)((hBuf[pval]-hBuf[pval-epx])*ekpixel*2);
+	  } else {
+	    nx= (short)((hBuf[pval+epx]-hBuf[pval-epx])*ekpixel);
+	  } 
+	  if (y<epx) {
+	    ny= (short)((hBuf[pval+ixsepx]-hBuf[pval])*ekpixel*2);
+	  } else if (y>=iys-epx) {
+	    ny= (short)((hBuf[pval]-hBuf[pval-ixsepx])*ekpixel*2);
+	  } else {
+	    ny= (short)((hBuf[pval+ixsepx]
+			 -hBuf[pval-ixsepx])*ekpixel);
+	  }
+	} else {
+	  nx= 0;
+	  ny= 0;
+	}
+
         nz= 256;
-        mag = isqrt4(nx*nx+ny*ny+nz*nz);
+        mag = isqrt4((nx*nx+ny*ny+nz*nz)*64)/8;
 
         nxBuf[pval] = nx*256/mag;
         nyBuf[pval] = ny*256/mag;
@@ -549,7 +570,7 @@ public:
       return;
 
     sbuf->Smooth2();
-    sbuf->Quantise();
+    //    sbuf->Quantise();
     sbuf->DrawStretch(&hdc, rc);
   }
 
@@ -712,13 +733,13 @@ void OpenTopology() {
 
               // Shape field for text display
 
-			  // sjt 02NOV05 - field parameter enabled
-
+	      // sjt 02NOV05 - field parameter enabled
               PExtractParameter(TempString, ctemp, 3);
-              if (isalnum(ctemp[0]))
-				  ShapeField = _tcstol(ctemp, &Stop, 10);
-			  else
-				  ShapeField = -1;
+              if (iswalnum(ctemp[0])) {
+		ShapeField = _tcstol(ctemp, &Stop, 10);
+	        ShapeField--;
+	      } else
+		ShapeField = -1;
 
               // Red component of line / shading colour
               PExtractParameter(TempString, ctemp, 4);
@@ -732,13 +753,15 @@ void OpenTopology() {
               PExtractParameter(TempString, ctemp, 6);
     		  blue = (BYTE)_tcstol(ctemp, &Stop, 10);
   
-              if (ShapeField==-1) {
+              if (ShapeField<0) {
                 Topology* newtopo;
                 newtopo = new Topology(ShapeFilename, RGB(red,green,blue));
                 TopoStore[numtopo] = newtopo;
               } else {
                 TopologyLabel *newtopol;
-                newtopol = new TopologyLabel(ShapeFilename, RGB(red,green,blue),ShapeField);
+                newtopol = new TopologyLabel(ShapeFilename, 
+					     RGB(red,green,blue),
+					     ShapeField);
                 TopoStore[numtopo] = newtopol;
               }
               if (ShapeIcon!=0) 
