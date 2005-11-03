@@ -746,11 +746,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hLoggerOff=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LOGGEROFF));
 
     if (Appearance.FlightModeIcon == apFlightModeIconAltA){
-      hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE_B));
-      hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB_B));
-      hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE_B));
-      hAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE_ABORT_B));
-      hBmpClimbeAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB_ABORT_B));
+      //hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE_B));
+      //hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB_B));
+      //hFinalGlide=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE_B));
+      //hAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FINALGLIDE_ABORT_B));
+      //hBmpClimbeAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB_ABORT_B));
     } else {
       hCruise=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CRUISE));
       hClimb=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMB));
@@ -758,7 +758,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       hAbort=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_ABORT));
     }
 
-    hBmpCompassBg = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_COMPASSBG));
+    //hBmpCompassBg = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_COMPASSBG));
 
 
     // airspace brushes and colours
