@@ -63,7 +63,7 @@
 #define MAXTERRAINCACHE 4096
 
 // stepsize of pixel grid, should be multiple of 2
-#define DTQUANT 6
+#define DTQUANT 7
 
 // ratio of smoothed bitmap size to pixel grid
 #define OVS 2

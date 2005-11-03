@@ -1,11 +1,11 @@
-msg no 242822
-
 ============================================================================
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 
 To do for next version:
+- Fix shading at high zoom levels
+
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
   to move/edit waypoints.
 - Notify the user (via GCE to Input) of switching between AC and Battery mode

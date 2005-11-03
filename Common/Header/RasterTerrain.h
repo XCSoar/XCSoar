@@ -65,6 +65,8 @@ public:
   float GetTerrainStepSize();
   float GetTerrainSlopeStep();
 
+  int GetEffectivePixelSize(double pixelsize);
+
   void SetTerrainRounding(double dist);
 
   BOOL isTerrainLoaded(){
