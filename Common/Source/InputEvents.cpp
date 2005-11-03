@@ -253,7 +253,7 @@ void InputEvents::readFile() {
 						Key2Event[mode_id][key] = event_id;
    					#ifdef _INPUTDEBUG_
 					else if (input_errors_count < MAX_INPUT_ERRORS)
-					  wsprintf(input_errors[input_errors_count++], TEXT("Invalid key data: %s at %i"), d_data, line);
+					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid key data: %s at %i"), d_data, line);
 					#endif
 
 
@@ -264,7 +264,7 @@ void InputEvents::readFile() {
 						GC2Event[mode_id][key] = event_id;
    					#ifdef _INPUTDEBUG_
 					else if (input_errors_count < MAX_INPUT_ERRORS)
-					  wsprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
+					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
 					#endif
 
 				} else if (wcscmp(d_type, TEXT("label")) == 0)	{	// label only - no key associated (label can still be touch screen)
@@ -272,7 +272,7 @@ void InputEvents::readFile() {
 
    				#ifdef _INPUTDEBUG_
 				} else if (input_errors_count < MAX_INPUT_ERRORS) {
-				  wsprintf(input_errors[input_errors_count++], TEXT("Invalid type: %s at %i"), d_type, line);
+				  _stprintf(input_errors[input_errors_count++], TEXT("Invalid type: %s at %i"), d_type, line);
 				#endif
 
 				}
@@ -322,19 +322,19 @@ void InputEvents::readFile() {
 				// d_event = token;
 				// eventtoken = wcstok(value, TEXT(" "));
 
-				if ((ef == 1) || (ef = 2)) {
+				if ((ef == 1) || (ef == 2)) {
 					// TODO - Consider reusing existing identical events (not worth it right now)
 					pt2Event event = findEvent(d_event);
 					if (event) {
 						event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
    					#ifdef _INPUTDEBUG_
 					} else  if (input_errors_count < MAX_INPUT_ERRORS) {
-					  wsprintf(input_errors[input_errors_count++], TEXT("Invalid event type: %s at %i"), d_event, line);
+					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid event type: %s at %i"), d_event, line);
 					#endif
 					}
    				#ifdef _INPUTDEBUG_
 				} else  if (input_errors_count < MAX_INPUT_ERRORS) {
-				  wsprintf(input_errors[input_errors_count++], TEXT("Invalid event type at %i"), line);
+				  _stprintf(input_errors[input_errors_count++], TEXT("Invalid event type at %i"), line);
 				#endif
 				}
 		  }
@@ -345,7 +345,7 @@ void InputEvents::readFile() {
 
 	  #ifdef _INPUTDEBUG_
 	  } else if (input_errors_count < MAX_INPUT_ERRORS) {
-		  wsprintf(input_errors[input_errors_count++], TEXT("Invalid key/value pair %s=%s at %i"), key, value, line);
+		  _stprintf(input_errors[input_errors_count++], TEXT("Invalid key/value pair %s=%s at %i"), key, value, line);
 	  #endif
 	  }
     }
@@ -364,7 +364,7 @@ void InputEvents::showErrors() {
 	TCHAR buffer[2048];
 	int i;
 	for (i = 0; i < input_errors_count; i++) {
-		wsprintf(buffer, TEXT("%i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
+		_stprintf(buffer, TEXT("%i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
 		DoStatusMessage(TEXT("XCI Error"), buffer);
 	}
 	input_errors_count = 0;
@@ -1160,10 +1160,10 @@ void InputEvents::eventBugs(TCHAR *misc) {
   LockFlightData();
 
   if (wcscmp(misc, TEXT("up")) == 0) {
-    BUGS+= 0.1;
+    BUGS = iround(BUGS*100+10) / 100;
   }
   if (wcscmp(misc, TEXT("down")) == 0) {
-    BUGS-= 0.1;
+    BUGS = iround(BUGS*100-10) / 100;
   }
   if (wcscmp(misc, TEXT("max")) == 0) {
     BUGS= 1.0;
@@ -1173,7 +1173,7 @@ void InputEvents::eventBugs(TCHAR *misc) {
   }
   if (wcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    wsprintf(Temp,TEXT("%d"),(int)(BUGS*100));
+    _stprintf(Temp,TEXT("%d"), iround(BUGS*100));
     DoStatusMessage(TEXT("Bugs Performance"), Temp);
   }
   if (BUGS != oldBugs) {
@@ -1191,10 +1191,10 @@ void InputEvents::eventBallast(TCHAR *misc) {
   double oldBallast= BALLAST;
   LockFlightData();
   if (wcscmp(misc, TEXT("up")) == 0) {
-    BALLAST+= 0.1;
+    BALLAST = iround(BALLAST*100.0+10) / 100.0;
   }
   if (wcscmp(misc, TEXT("down")) == 0) {
-    BALLAST-= 0.1;
+    BALLAST = iround(BALLAST*100.0-10) / 100.0;
   }
   if (wcscmp(misc, TEXT("max")) == 0) {
     BALLAST= 1.0;
@@ -1204,7 +1204,7 @@ void InputEvents::eventBallast(TCHAR *misc) {
   }
   if (wcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
-    wsprintf(Temp,TEXT("%d"),(int)(BALLAST*100));
+    _stprintf(Temp,TEXT("%d"),iround(BALLAST*100));
     DoStatusMessage(TEXT("Ballast %"), Temp);
   }
   if (BALLAST != oldBallast) {
@@ -1300,14 +1300,14 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   }
 
   if (inside) {
-    wsprintf(text,TEXT("Inside airspace: %s\r\n%s\r\nExit: %.1f %s\r\nBearing %d"),
+    _stprintf(text,TEXT("Inside airspace: %s\r\n%s\r\nExit: %.1f %s\r\nBearing %d"),
 	     szTitleBuffer,
 	     szMessageBuffer,
 	     nearestdistance*DISTANCEMODIFY,
 	     Units::GetDistanceName(),
 	     (int)nearestbearing);
   } else {
-    wsprintf(text,TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %.1f %s\r\nBearing %d"),
+    _stprintf(text,TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %.1f %s\r\nBearing %d"),
 	     szTitleBuffer,
 	     szMessageBuffer,
 	     nearestdistance*DISTANCEMODIFY,
@@ -1359,7 +1359,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 	pdest = wcsstr(data, TEXT(" "));
 	if (pdest == NULL) {
 		#ifdef _INPUTDEBUG_
-		wsprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute string - no DLL"));
+		_stprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute string - no DLL"));
 		InputEvents::showErrors();
 		#endif
 		return;
@@ -1392,7 +1392,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 		} else {
 			DWORD le;
 			le = GetLastError();
-			wsprintf(input_errors[input_errors_count++], TEXT("Problem loading function (%s) in DLL (%s) = %d"), func_name, dll_name, le);
+			_stprintf(input_errors[input_errors_count++], TEXT("Problem loading function (%s) in DLL (%s) = %d"), func_name, dll_name, le);
 			InputEvents::showErrors();
 		#endif
 		}
@@ -1422,7 +1422,7 @@ HINSTANCE _loadDLL(TCHAR *name) {
 			return DLLCache[DLLCache_Count - 1].hinstance;
 		#ifdef _INPUTDEBUG_
 		} else {
-			wsprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute - not loaded - %s"), name);
+			_stprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute - not loaded - %s"), name);
 			InputEvents::showErrors();
 		#endif
 		}

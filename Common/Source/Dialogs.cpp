@@ -132,12 +132,12 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
       osv.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
       GetSystemInfo(&si);
       GetVersionEx(&osv);
-      wsprintf(Temp,TEXT("%d.%d"),osv.dwMajorVersion ,osv.dwMinorVersion );
+      _stprintf(Temp,TEXT("%d.%d"),osv.dwMajorVersion ,osv.dwMinorVersion );
       SetDlgItemText(hDlg,IDC_OSVERSION,Temp);
-      wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Build Date")), TEXT(__DATE__));
+      _stprintf(Temp,TEXT("%s %s"),gettext(TEXT("Build Date")), TEXT(__DATE__));
       SetDlgItemText(hDlg,IDC_EXTRA,Temp );
 
-      wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
+      _stprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
 	  SetDlgItemText(hDlg, IDC_VERSION, Temp);
 
 	  SetWindowText_gettext(hDlg, IDC_STATIC_OS);
@@ -1368,7 +1368,7 @@ void ReadNewTask(HWND hDlg)
 
   CalculateTaskSectors();
   CalculateAATTaskSectors();
-  wsprintf(szTaskLength,TEXT("%2.1f"), DISTANCEMODIFY * TaskLength );
+  _stprintf(szTaskLength,TEXT("%2.1f"), DISTANCEMODIFY * TaskLength );
   SetDlgItemText(hDlg,IDC_TASKLENGTH,szTaskLength);
   if(Task[0].Index != -1)
     ActiveWayPoint = 0;
@@ -1583,6 +1583,7 @@ LRESULT CALLBACK SetBugsBallast(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
       logfont.lfWidth =  15;
       logfont.lfWeight = FW_MEDIUM;
 
+      propGetFontSettings(TEXT("BugsBallastFont"), &logfont);
       hFont = CreateFontIndirect (&logfont);
 
       SendDlgItemMessage(hDlg,IDOK,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
@@ -2325,6 +2326,7 @@ LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       logfont.lfWidth =  10;
       logfont.lfWeight = FW_MEDIUM;
 
+      propGetFontSettings(TEXT("AirspacePressFont"), &logfont);
       hFont = CreateFontIndirect (&logfont);
 
       SendDlgItemMessage(hDlg,IDOK,WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
@@ -2343,13 +2345,13 @@ LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       INHg = (int)QNH;
       INHg = INHg /1013.2;
       INHg = INHg*29.91;
-      wsprintf(Temp,TEXT("%2.2f"),INHg );
+      _stprintf(Temp,TEXT("%2.2f"),INHg );
       SetDlgItemText(hDlg,IDC_INHG,Temp);
 
       LockFlightData();
       alt =   GPS_INFO.BaroAltitude*ALTITUDEMODIFY;
       UnlockFlightData();
-      wsprintf(Temp,TEXT("%2.0f"),alt);
+      _stprintf(Temp,TEXT("%2.0f"),alt);
       SetDlgItemText(hDlg,IDC_PALTITUDE,Temp);
 
       return TRUE;
@@ -2370,14 +2372,14 @@ LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
           INHg = QNH;
           INHg = INHg /1013.2;
           INHg = INHg*29.91;
-          wsprintf(Temp,TEXT("%2.2f"),INHg );
+          _stprintf(Temp,TEXT("%2.2f"),INHg );
           SetDlgItemText(hDlg,IDC_INHG,Temp);
           SetDlgItemInt(hDlg,IDC_QNH,(int)QNH,FALSE);
 
           LockFlightData();
           alt =   GPS_INFO.BaroAltitude*ALTITUDEMODIFY;
           UnlockFlightData();
-          wsprintf(Temp,TEXT("%2.0f"),alt);
+          _stprintf(Temp,TEXT("%2.0f"),alt);
           SetDlgItemText(hDlg,IDC_PALTITUDE,Temp);
 
           return TRUE;
@@ -2388,14 +2390,14 @@ LRESULT CALLBACK AirspacePress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
           INHg = QNH;
           INHg = INHg /1013.2;
           INHg = INHg*29.91;
-          wsprintf(Temp,TEXT("%2.2f"),INHg );
+          _stprintf(Temp,TEXT("%2.2f"),INHg );
           SetDlgItemText(hDlg,IDC_INHG,Temp);
           SetDlgItemInt(hDlg,IDC_QNH,(int)QNH,FALSE);
 
           LockFlightData();
           alt =   GPS_INFO.BaroAltitude*ALTITUDEMODIFY;
           UnlockFlightData();
-          wsprintf(Temp,TEXT("%2.0f"),alt);
+          _stprintf(Temp,TEXT("%2.0f"),alt);
           SetDlgItemText(hDlg,IDC_PALTITUDE,Temp);
 
           return TRUE;
@@ -3755,7 +3757,7 @@ HWND CreateProgressDialog(TCHAR* text) {
     }
 
 	TCHAR Temp[1024];
-	wsprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
+	_stprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
     SetWindowText(GetDlgItem(hProgress,IDC_VERSION),Temp);
 
     ShowWindow(hProgress,SW_SHOW);

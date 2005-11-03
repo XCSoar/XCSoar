@@ -55,6 +55,8 @@ Copyright_License {
 */
 
 
+#include "stdafx.h"
+
 #include <stdio.h>
 
 #include "leastsqs.h"

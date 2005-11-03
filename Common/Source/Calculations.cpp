@@ -955,9 +955,14 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Calculated->WaypointDistance = Distance(Basic->Latitude, Basic->Longitude,
                                          WayPointList[Task[ActiveWayPoint].Index].Latitude,
                                          WayPointList[Task[ActiveWayPoint].Index].Longitude);
-      Calculated->WaypointBearing = Bearing(Basic->Latitude, Basic->Longitude,
+      if (Calculated->WaypointDistance > 0.5)
+        Calculated->WaypointBearing = Bearing(Basic->Latitude, Basic->Longitude,
                                        WayPointList[Task[ActiveWayPoint].Index].Latitude,
                                        WayPointList[Task[ActiveWayPoint].Index].Longitude);
+      else {
+        Calculated->WaypointDistance = 0;
+        Calculated->WaypointBearing = 360;
+      }
     }
   else
     {

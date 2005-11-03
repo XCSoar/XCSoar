@@ -2278,6 +2278,9 @@ void SaveRegistryToFile(TCHAR *szFile)
     // type 4 integer (valuesize 4)
     TCHAR outval[nMaxValueValueSize];
     lpstrName[nNameSize]= 0; // null terminate, just in case
+
+    outval[0] = '\0';
+
     if (nType==4) { // data
       _stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
     }
@@ -2286,7 +2289,8 @@ void SaveRegistryToFile(TCHAR *szFile)
       _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
     }
 
-    _fputts(outval, fp);
+    if (outval[0] != '\0')
+      _fputts(outval, fp);
 
   }
 
@@ -2351,3 +2355,106 @@ void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc)
 	for(unsigned int i = 0; i < strlen(pszSrc); i++)
 		pszDest[i] = (TCHAR) pszSrc[i];
 }
+
+
+void propGetFontSettings(TCHAR *Name, LOGFONT* lplf){
+
+  TCHAR Buffer[128];
+  TCHAR *pWClast, *pToken;
+  LOGFONT lfTmp;
+
+  assert(Name != NULL);
+  assert(Name[0] != '\0');
+  assert(lplf != NULL);
+
+	if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){
+
+    // typical font entry
+    // 26,0,0,0,700,1,0,0,0,0,0,4,2,<fontname>
+
+    //FW_THIN   100
+    //FW_NORMAL 400
+    //FW_MEDIUM 500
+    //FW_BOLD   700
+    //FW_HEAVY  900
+
+
+
+    memset ((void *)&lfTmp, 0, sizeof (LOGFONT));
+
+    if ((pToken = strtok_r(Buffer, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfHeight = _tcstol(pToken, NULL, 10);
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfWidth = _tcstol(pToken, NULL, 10);
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfEscapement = _tcstol(pToken, NULL, 10);
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfOrientation = _tcstol(pToken, NULL, 10);
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfWeight = _tcstol(pToken, NULL, 10);
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfItalic = _tcstol(pToken, NULL, 10);
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfUnderline = _tcstol(pToken, NULL, 10);
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfStrikeOut = _tcstol(pToken, NULL, 10);
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfCharSet = _tcstol(pToken, NULL, 10);
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfOutPrecision = _tcstol(pToken, NULL, 10);
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfClipPrecision = _tcstol(pToken, NULL, 10);
+
+                                                            // DEFAULT_QUALITY			   0
+                                                            // RASTER_FONTTYPE			   0x0001
+                                                            // DRAFT_QUALITY			     1
+                                                            // NONANTIALIASED_QUALITY  3
+                                                            // ANTIALIASED_QUALITY     4
+                                                            // CLEARTYPE_QUALITY       5
+                                                            // CLEARTYPE_COMPAT_QUALITY 6
+
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfQuality = _tcstol(pToken, NULL, 10);
+
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+    lfTmp.lfPitchAndFamily = _tcstol(pToken, NULL, 10);
+
+    if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
+
+    _tcscpy(lfTmp.lfFaceName, pToken);
+
+    memcpy((void *)lplf, (void *)&lfTmp, sizeof (LOGFONT));
+
+  }
+  return;
+}
+
+
+int propGetScaleList(double *List, size_t Size){
+
+  TCHAR Buffer[128];
+  TCHAR Name[] = TEXT("ScaleList");
+  TCHAR *pWClast, *pToken;
+  int   Idx = 0;
+
+  assert(List != NULL);
+  assert(Size > 0);
+
+	if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){
+
+    pToken = strtok_r(Buffer, TEXT(","), &pWClast);
+
+    while(Idx < Size && pToken != NULL){
+      List[Idx] = _tcstod(pToken, NULL);
+      Idx++;
+      pToken = strtok_r(NULL, TEXT(","), &pWClast);
+    }
+
+    return(Idx);
+
+  } else {
+    return(0);
+  }
+
+}
+

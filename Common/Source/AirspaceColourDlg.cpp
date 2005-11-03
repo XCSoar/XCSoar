@@ -139,6 +139,7 @@ LRESULT CALLBACK AirspaceColourDlg(HWND hDlg, UINT message, WPARAM wParam, LPARA
     logfont.lfQuality = CLEARTYPE_COMPAT_QUALITY;
 #endif
 
+    propGetFontSettings(TEXT("AirspaceColourDlgFont"), &logfont);
     hFont = CreateFontIndirect (&logfont);
 
     // Apply font to window

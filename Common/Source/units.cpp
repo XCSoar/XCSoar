@@ -362,5 +362,60 @@ bool Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size){
 
 }
 
+bool Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer, size_t size){
 
+  int prec;
+  double value;
+  TCHAR sTmp[32];
+  UnitDescriptor_t *pU = &UnitDescriptors[UserDistanceUnit];
+
+  if (Unit != NULL)
+    *Unit = UserDistanceUnit;
+
+  value = Distance * pU->ToUserFact; // + pU->ToUserOffset;
+
+  if (value >= 9.999)
+    prec = 0;
+  else if ((UserDistanceUnit == unKiloMeter && value >= 0.999) || (UserDistanceUnit != unKiloMeter && value >= 0.160))
+    prec = 1;
+  else {
+    prec = 2;
+    if (UserDistanceUnit == unKiloMeter){
+      prec = 0;
+      if (Unit != NULL)
+        *Unit = unMeter;
+      pU = &UnitDescriptors[unMeter];
+      value = Distance * pU->ToUserFact;
+    }
+    if (UserDistanceUnit == unNauticalMiles || UserDistanceUnit == unStatuteMiles){
+      prec = 0;
+      if (Unit != NULL)
+        *Unit = unFeet;
+      pU = &UnitDescriptors[unFeet];
+      value = Distance * pU->ToUserFact;
+    }
+  }
+
+//  _stprintf(sTmp, TEXT("%.*f%s"), prec, value, pU->Name);
+  _stprintf(sTmp, TEXT("%.*f"), prec, value);
+
+  if (_tcslen(sTmp) < size-1){
+    _tcscpy(Buffer, sTmp);
+    return(true);
+  } else {
+    _tcsncpy(Buffer, sTmp, size);
+    Buffer[size-1] = '\0';
+    return(false);
+  }
+
+}
+
+
+double Units::ToUserAltitude(double Altitude){
+  UnitDescriptor_t *pU = &UnitDescriptors[UserAltitudeUnit];
+
+  Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
+
+  return(Altitude);
+}
 

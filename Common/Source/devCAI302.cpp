@@ -265,7 +265,7 @@ BOOL cai302Open(PDeviceDescriptor_t d, int Port){
 
   d->Port = Port;
 
-test();
+//test();
 
   if (!fSimMode){
     (d->Com.WriteString)(TEXT("\x03"));

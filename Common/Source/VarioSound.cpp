@@ -216,38 +216,38 @@ typedef struct{
   unsigned Advance:1;
 }AudioSoundStatic_t;
 
-static AudioSoundStatic_t Beep = {0,0,0,0};
+static AudioSoundStatic_t BeepData = {0,0,0,0};
 
 
 unsigned char audio_sound_beep(unsigned short i) {
   unsigned char phase;
   phase = (i*audio_beepfrequency) >> 8;
 
-  Beep.Advance = false;
+  BeepData.Advance = false;
 
   switch (audio_soundtype) {
   case 0: // silence
-    Beep.Advance=true;
+    BeepData.Advance=true;
     return 0;
   case 1: // positive sound, short beep
     if (phase<64) {
-      Beep.Advance=true;
+      BeepData.Advance=true;
       return 1;
     }
     else
       return 0;
   case 2: // negative sound, long beep
     if (phase<200) {
-      Beep.Advance=true;
+      BeepData.Advance=true;
       return 1;
     } else
       return 0;
   case 3: // solid sound
-    Beep.Advance=true;
+    BeepData.Advance=true;
     return 1;
   case 4: // two short beeps
     if (phase<24) {
-      Beep.Advance = true;
+      BeepData.Advance = true;
       return 1;
     }
     if ((phase>48)&&(phase<76)) {
@@ -256,13 +256,13 @@ unsigned char audio_sound_beep(unsigned short i) {
     return 0;
   case 5: // equal beep
     if (phase<128) {
-      Beep.Advance=true;
+      BeepData.Advance=true;
       return 1;
     } else
       return 0;
   }
   // unknown
-  Beep.Advance = true;
+  BeepData.Advance = true;
   return 0;
 }
 
@@ -274,35 +274,35 @@ unsigned char audio_get_sound_byte(void) {
   bool makebeepsound;
 
   // increment beep phase
-  Beep.Index++;
+  BeepData.Index++;
 
   // check if this sound type makes a beep
-  beepthis = audio_sound_beep(Beep.Index);
+  beepthis = audio_sound_beep(BeepData.Index);
 
   // check to see if we can reset the beep phase data
-  if (beepthis && (Beep.Last==0) && (Beep.Advance)) {
+  if (beepthis && (BeepData.Last==0) && (BeepData.Advance)) {
     // rolled over new beep and the sound mode allows advance,
     // so restart phase counter
-    Beep.Index=0;
+    BeepData.Index=0;
     audio_phase = 0;
     audio_phase_i = 0;
   }
-  Beep.Last = beepthis;
+  BeepData.Last = beepthis;
 
   // continue to make a beep if waiting for zero crossing or it's a
   // real beep anyway
-  makebeepsound = beepthis || Beep.WaitZerroCross;
+  makebeepsound = beepthis || BeepData.WaitZerroCross;
 
   // find the sound sample
   static unsigned char lastsample = 0;
-  unsigned char sample = audio_sound_loud(Beep.Index, makebeepsound);
+  unsigned char sample = audio_sound_loud(BeepData.Index, makebeepsound);
 
   if (makebeepsound) {
     // wait for zero crossing before finishing beep
-    Beep.WaitZerroCross = beepthis  // still need a real beep
+    BeepData.WaitZerroCross = beepthis  // still need a real beep
       || ((sample>0x80)&&(lastsample>0x80))
       || ((sample<0x80)&&(lastsample<0x80)); // better zero crossing detection
-    if (!beepthis && !Beep.WaitZerroCross) {
+    if (!beepthis && !BeepData.WaitZerroCross) {
       // found zero crossing and need no beep now, so silence it.
       sample = 0x80;
     }

@@ -28,6 +28,7 @@ Copyright_License {
 
 }
 */
+#include "stdafx.h"
 #include "Sizes.h"
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"

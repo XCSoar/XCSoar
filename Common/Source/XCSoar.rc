@@ -930,6 +930,18 @@ IDB_MARK                BITMAP  DISCARDABLE     "bitmaps\\mark.bmp"
 IDB_TERRAINWARNING      BITMAP  DISCARDABLE     "bitmaps\\terrainw.bmp"
 IDB_PEAKHIGH            BITMAP  DISCARDABLE     "bitmaps\\peakhigh.bmp"
 IDB_PEAKLOW             BITMAP  DISCARDABLE     "bitmaps\\peaklow.bmp"
+IDB_MAPSCALE_A          BITMAP  DISCARDABLE     "bitmaps\\MapScale_A.bmp"
+IDB_UNIT_KM             BITMAP  DISCARDABLE     "bitmaps\\UnitKm.bmp"
+IDB_UNIT_SM             BITMAP  DISCARDABLE     "bitmaps\\UnitSm.bmp"
+IDB_UNIT_NM             BITMAP  DISCARDABLE     "bitmaps\\UnitNm.bmp"
+IDB_UNIT_M              BITMAP  DISCARDABLE     "bitmaps\\UnitM.bmp"
+IDB_UNIT_FT             BITMAP  DISCARDABLE     "bitmaps\\UnitFt.bmp"
+IDB_UNIT_MS             BITMAP  DISCARDABLE     "bitmaps\\UnitMpSec.bmp"
+IDB_AIRPORT_REACHABLE   BITMAP  DISCARDABLE     "bitmaps\\LandableAirport.bmp"
+IDB_AIRPORT_UNREACHABLE BITMAP  DISCARDABLE     "bitmaps\\UnreachableAirport.bmp"
+IDB_OUTFILED_REACHABLE   BITMAP DISCARDABLE     "bitmaps\\LandableField.bmp"
+IDB_OUTFILED_UNREACHABLE BITMAP DISCARDABLE     "bitmaps\\UnreachableField.bmp"
+IDB_VARIOSCALEA         BITMAP  DISCARDABLE     "bitmaps\\VarioScaleB.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
