@@ -1,7 +1,7 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#define   MONOCHROME_SCREEN     0             // optimize for monochrom screen
+#define   MONOCHROME_SCREEN     1             // optimize for monochrom screen
 #define   EXPERIMENTAL          0             // ????
 #define   ALTERNATEWINDVECTOR   1             // winpilot style windverctor (at the airplane)
 
@@ -11,6 +11,10 @@
 #define   AIRSPACEUSEBINFILE    0             // use and maintain binary airspace file
 
 // define this to be true for windows PC port
-#define WINDOWSPC 0
+#define   WINDOWSPC             1
+
+#define   GAUGEVARIOENABLED     1
+
+#define   FONTQUALITY           NONANTIALIASED_QUALITY
 
 #endif
