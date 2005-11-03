@@ -6,6 +6,7 @@
 #endif // _MSC_VER > 1000
 
 #include <windows.h>
+#include <shlobj.h>
 #include "task.h"
 #include "mapwindow.h"
 
@@ -70,6 +71,7 @@ void ExtractDirectory(TCHAR *Dest, TCHAR *Source);
 double DoSunEphemeris(double lon, double lat);
 
 void *bsearch(void *key, void *base0, size_t nmemb, size_t size, int (*compar)(const void *elem1, const void *elem2));
+TCHAR *strtok_r(TCHAR *s, TCHAR *delim, TCHAR **lasts);
 
 
 void ResetInfoBoxes(void);
@@ -119,5 +121,10 @@ TCHAR* LocalPath(TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
 
 void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
 void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
+
+void propGetFontSettings(TCHAR *Name, LOGFONT* lplf);
+int propGetScaleList(double *List, size_t Size);
+
+
 
 #endif

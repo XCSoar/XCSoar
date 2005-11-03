@@ -6,6 +6,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "stdafx.h"
 
 #include "resource.h"
 #include "sizes.h"
@@ -133,6 +134,80 @@ void Event_SelectInfoBox(int i);
 void Event_ChangeInfoBoxType(int i);
 void DoInfoKey(int keycode);
 void SwitchToMapWindow(void);
+
+
+
+typedef enum{
+  apMsDefault,
+  apMsNone,
+  apMsAltA
+}MapScaleAppearance_t;
+
+typedef enum{
+  apMs2Default,
+  apMs2None,
+  apMs2AltA
+}MapScale2Appearance_t;
+
+typedef enum{
+  apFlightModeIconDefault,
+  apFlightModeIconAltA
+}FlightModeIconAppearance_t;
+
+typedef enum{
+  apCompassDefault,
+  apCompassAltA
+}CompassAppearance_t;
+
+typedef enum{
+  ctBestCruiseTrackDefault,
+  ctBestCruiseTrackAltA,
+}BestCruiseTrack_t;
+
+typedef enum{
+  afAircraftDefault,
+  afAircraftAltA
+}Aircraft_t;
+
+typedef enum{
+  fgFinalGlideDefault,
+  fgFinalGlideAltA,
+}IndFinalGlide_t;
+
+typedef enum{
+  wpLandableDefault,
+  wpLandableAltA,
+}IndLandable_t;
+
+typedef struct{
+  int Height;
+  int AscentHeight;
+  int CapitalHeight;
+}FontHeightInfo_t;
+
+typedef struct{
+  MapScaleAppearance_t MapScale;
+  MapScale2Appearance_t MapScale2;
+  bool DontShowLoggerIndicator;
+  int DefaultMapWidth;
+  POINT GPSStatusOffset;
+  FlightModeIconAppearance_t FlightModeIcon;
+  POINT FlightModeOffset;
+  CompassAppearance_t CompassAppearance;
+  FontHeightInfo_t TitleWindowFont;
+  FontHeightInfo_t MapWindowFont;
+  FontHeightInfo_t MapWindowBoldFont;
+  FontHeightInfo_t InfoWindowFont;
+  FontHeightInfo_t CDIWindowFont;
+  BestCruiseTrack_t BestCruiseTrack;
+  Aircraft_t Aircraft;
+  bool DontShowSpeedToFly;
+  IndFinalGlide_t IndFinalGlide;
+  IndLandable_t IndLandable;
+  bool DontShowAutoMacCready;
+}Appearance_t;
+
+extern Appearance_t Appearance;
 
 // ******************************************************************
 

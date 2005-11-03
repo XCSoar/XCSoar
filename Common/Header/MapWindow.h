@@ -215,7 +215,8 @@ class MapWindow {
   static void DrawTask(HDC hdc, RECT rc);
   static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
   static void DrawBearing(HDC hdc, POINT Orig);
-  static void DrawMapScale(HDC hDC,RECT rc);
+  // static void DrawMapScale(HDC hDC,RECT rc);
+  static void DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChangeFeedback);
   static void DrawMapScale2(HDC hDC,RECT rc, POINT Orig_Aircraft);
   static void DrawFinalGlide(HDC hDC,RECT rc);
   static void DrawThermalBand(HDC hDC,RECT rc);
@@ -261,7 +262,7 @@ class MapWindow {
   static int dTDisplay;
   
   static HBITMAP hLandable, hReachable, 
-    hTurnPoint, hSmall, hCruise, hClimb, 
+    hTurnPoint, hSmall, hCruise, hClimb,
     hFinalGlide, hAutoMacCready, hTerrainWarning, hGPSStatus1, hGPSStatus2,
     hAbort, hLogger, hLoggerOff;
 
@@ -311,7 +312,33 @@ class MapWindow {
   static void RenderMapWindow(  RECT rc);
   static double findMapScaleBarSize(RECT rc);
 
+  #define SCALELISTSIZE  20
+  static int ScaleListCount;
+  static int ScaleCurrent;
+  static double ScaleList[SCALELISTSIZE];
+  static double StepMapScale(int Step);
+  static double FindMapScale(double Value);
+
+  static HPEN    hpCompassBorder;
+  static HBRUSH  hBrushFlyingModeAbort;
+
+  static HBITMAP hBmpAirportReachable;
+  static HBITMAP hBmpAirportUnReachable;
+  static HBITMAP hBmpFieldReachable;
+  static HBITMAP hBmpFieldUnReachable;
+
  public:
+
+  static HBITMAP hBmpMapScale;
+  static HBITMAP hBmpCompassBg;
+  static HBITMAP hBmpClimbeAbort;
+  static HBITMAP hBmpUnitKm;
+  static HBITMAP hBmpUnitSm;
+  static HBITMAP hBmpUnitNm;
+  static HBITMAP hBmpUnitM;
+  static HBITMAP hBmpUnitFt;
+  static HBITMAP hBmpUnitMpS;
+
   static bool RenderTimeAvailable();
   static bool BigZoom;
 
