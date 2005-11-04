@@ -68,8 +68,8 @@ Appearance_t Appearance = {
   true,
   206,
   {0,13},
-  apFlightModeIconAltA,
-//  apFlightModeIconDefault,
+  //  apFlightModeIconAltA,
+  apFlightModeIconDefault,
   {10,3},
   apCompassAltA,
   {0,0,0},
@@ -88,24 +88,24 @@ Appearance_t Appearance = {
 
 #if 1
 Appearance_t Appearance = {
-  0,
-  0,
+  apMsDefault,
+  apMs2Default,
   false,
   240,
   {0,0},
-  0,
+  apFlightModeIconDefault,
   {0,0},
-  0,
+  apCompassDefault,
   {0,0,0},
   {0,0,0},
   {0,0,0},
   {0,0,0},
   {0,0,0},
-  0,
-  0,
+  ctBestCruiseTrackDefault,
+  afAircraftDefault,
   false,
-  0,
-  0,
+  fgFinalGlideDefault,
+  wpLandableDefault,
   false
 };
 #endif
@@ -337,8 +337,6 @@ void PopupBugsBallast(int updown);
 #define BATTERY_REMINDER 30000
 DWORD BatteryWarningTime = 0;
 #endif
-
-
 // Groups:
 //   Altitude 0,1,20,33
 //   Aircraft info 3,6,23,32,37
@@ -347,146 +345,104 @@ DWORD BatteryWarningTime = 0;
 //   Wind 25,26
 //   Mcready 10,34,35,43
 //   Nav 11,12,13,15,16,17,18,27,28,29,30,31
-//   Waypoint 14,36,39,40,41,42
-
+//   Waypoint 14,36,39,40,41,42,45,46
 SCREEN_INFO Data_Options[] = {
+          // 0
 	  {TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33},
-
 	  // 1
 	  {TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0},
-
 	  // 2
 	  {TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 44},
-
 	  // 3
 	  {TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f°T")), NoProcessing, 6, 37},
-
 	  // 4
 	  {TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 38},
-
 	  // 5
 	  {TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 19, 4},
-
 	  // 6
 	  {TEXT("Speed ground"), TEXT("V Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), SpeedProcessing, 23, 3},
-
 	  // 7
 	  {TEXT("Last Thermal Average"), TEXT("TL Avg"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
-
 	  // 8
 	  {TEXT("Last Thermal Gain"), TEXT("TL Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 9, 7},
-
 	  // 9
 	  {TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 21, 8},
-
 	  // 10
 	  {TEXT("MacCready Setting"), TEXT("MacCready"), new InfoBoxFormatter(TEXT("%2.1f")), MacCreadyProcessing, 34, 43},
-
 	  // 11
 	  {TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},
-
 	  // 12
 	  {TEXT("Next Altitude Difference"), TEXT("WP AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 13, 11},
-
 	  // 13
 	  {TEXT("Next Altitude Required"), TEXT("WP AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 15, 12},
-
 	  // 14
-	  {TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 42},
-
+	  {TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 46},
 	  // 15
 	  {TEXT("Final Altitude Difference"), TEXT("Fin AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 16, 13},
-
 	  // 16
 	  {TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15},
-
 	  // 17
 	  {TEXT("Speed Task Average"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
-
 	  // 18
 	  {TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
-
 	  // 19
 	  {TEXT("Final L/D"), TEXT("Fin L/D"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5},
-
 	  // 20
 	  {TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1},
-
 	  // 21
 	  {TEXT("Thermal Average"), TEXT("TC Avg"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9},
-
 	  // 22
 	  {TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
-
 	  // 23
 	  {TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f°T")), DirectionProcessing, 32, 6},
-
 	  // 24
 	  {TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 44, 22},
-
 	  // 25
 	  {TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 26},
-
 	  // 26
 	  {TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f°T")), WindDirectionProcessing, 25, 25},
-
 	  // 27
 	  {TEXT("AA Time"), TEXT("AA Time"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
-
 	  // 28
 	  {TEXT("AA Distance Max"), TEXT("AA Dmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27},
-
 	  // 29
 	  {TEXT("AA Distance Min"), TEXT("AA Dmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 30, 28},
-
 	  // 30
 	  {TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
-
 	  // 31
 	  {TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 30},
-
 	  // 32
 	  {TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 37, 23},
-
 	  // 33
 	  {TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
-
 	  // 34
 	  {TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
-
 	  // 35
 	  {TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
-
 	  // 36
 	  {TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 39, 14},
-
 	  // 37
 	  {TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 3, 32},
-
 	  // 38
 	  {TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 4, 19},
-
 	  // 39
 	  {TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},
-
 	  // 40
 	  {TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 41, 39},
-
 	  // 41
-	  {TEXT("Task Time To Go"), TEXT("Fin ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 42, 40},
-
+	  {TEXT("Task Time To Go"), TEXT("Fin ETE"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 42, 40},
 	  // 42
-	  {TEXT("Next Time To Go"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 41},
-
+	  {TEXT("Next Time To Go"), TEXT("WP ETE"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 45, 41},
 	  // 43
 	  {TEXT("Speed Dolphin"), TEXT("V Opt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 35},
-
 	  // 44
 	  {TEXT("Netto Vario"), TEXT("Netto"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 24},
-
+	  // 45
+	  {TEXT("Task Arrival Time"), TEXT("Fin ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 46, 42},
+	  // 46
+	  {TEXT("Next Arrival Time"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 45},
 	};
-
-int NUMSELECTSTRINGS = 45;
+int NUMSELECTSTRINGS = 47;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -849,18 +805,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
-
   // Perform application initialization:
   if (!InitInstance (hInstance, nCmdShow))
     {
       return FALSE;
     }
-
   // find unique ID of this PDA
   ReadAssetNumber();
-
   CreateProgressDialog(gettext(TEXT("Initialising")));
-
   hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
   InitSineTable();
@@ -2641,19 +2593,22 @@ void BlankDisplay(bool doblank) {
 	  /* Battery status - simulator only - for safety of battery data
 		note: Simulator only - more important to keep running in your plane
 	  */
+
 #ifdef _SIM_
+      // JMW, maybe this should be active always...
+      // we don't want the PDA to be completely depleted.
 
 	  if (BatteryInfo.acStatus==0) {
 		  if (BatteryInfo.BatteryLifePercent < BATTERY_EXIT) {
-			  // TODO - Debugging and warning message
-			exit(0);
+		    // TODO - Debugging and warning message
+		    exit(0);
 		  } else if (BatteryInfo.BatteryLifePercent < BATTERY_WARNING) {
-			DWORD LocalWarningTime = ::GetTickCount();
-			if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
-				BatteryWarningTime = LocalWarningTime;
-				// TODO - Show the user what the status is.
-				DoStatusMessage(TEXT("Organiser Battery Low"));
-			}
+		    DWORD LocalWarningTime = ::GetTickCount();
+		    if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
+		      BatteryWarningTime = LocalWarningTime;
+		      // TODO - Show the user what the status is.
+		      DoStatusMessage(TEXT("Organiser Battery Low"));
+		    }
 		  }
 	  }
 

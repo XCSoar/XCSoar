@@ -2363,9 +2363,9 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf){
   TCHAR *pWClast, *pToken;
   LOGFONT lfTmp;
 
-  assert(Name != NULL);
-  assert(Name[0] != '\0');
-  assert(lplf != NULL);
+  ASSERT(Name != NULL);
+  ASSERT(Name[0] != '\0');
+  ASSERT(lplf != NULL);
 
 	if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){
 
@@ -2437,8 +2437,8 @@ int propGetScaleList(double *List, size_t Size){
   TCHAR *pWClast, *pToken;
   int   Idx = 0;
 
-  assert(List != NULL);
-  assert(Size > 0);
+  ASSERT(List != NULL);
+  ASSERT(Size > 0);
 
 	if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){
 

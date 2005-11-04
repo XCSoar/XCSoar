@@ -11,7 +11,7 @@
 #define   AIRSPACEUSEBINFILE    0             // use and maintain binary airspace file
 
 // define this to be true for windows PC port
-#define   WINDOWSPC             1
+#define   WINDOWSPC             0
 
 #define   GAUGEVARIOENABLED     1
 

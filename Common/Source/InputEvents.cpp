@@ -3,13 +3,14 @@
 InputEvents
 
   This class is used to control all user and external InputEvents.
-  This includes some Nmea strings, virtual events (Glide Computer Evnets) and Keyboard.
+  This includes some Nmea strings, virtual events (Glide Computer
+  Evnets) and Keyboard.
 
-  What it does not cover is Glide Computer normal processing - this includes GPS and Vario
-  processing.
+  What it does not cover is Glide Computer normal processing - this
+  includes GPS and Vario processing.
 
-  What it does include is what to do when an automatic event (switch to Climb mode) and
-  user events are entered.
+  What it does include is what to do when an automatic event (switch
+  to Climb mode) and user events are entered.
 
   It also covers the configuration side of on screen labels.
 
@@ -760,7 +761,6 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
 
 
 
-
 // eventAutoZoom - Turn on|off|toggle AutoZoom
 // misc:
 //	auto on - Turn on if not already
@@ -1100,7 +1100,6 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
   }
   if (wcscmp(misc, TEXT("X5"))==0) {
     Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,5"));
-    //    Port2WriteNMEA(TEXT("PDVAC,?"));
     return;
   }
 

@@ -2309,7 +2309,9 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (Basic->Speed> TAKEOFFSPEEDTHRESHOLD) {
     ntimeinflight++;
   } else {
-    ntimeinflight--;
+    if ((Calculated->AltitudeAGL<300)&&(Calculated->TerrainValid)) {
+      ntimeinflight--;
+    }
   }
   ntimeinflight = min(30, max(0,ntimeinflight));
 

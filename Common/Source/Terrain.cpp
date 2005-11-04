@@ -390,6 +390,8 @@ public:
   short *nzBuf;
   short *ilBuf;
 
+#define TERRAIN_ANTIALIASING 1.5
+
   void Height(RECT rc) {
     double X, Y;
     short X0, Y0;
@@ -411,14 +413,17 @@ public:
 
     // grid spacing = 250*rounding; m
 
+    double rfact=1.0;
+
     if (MapWindow::BigZoom) {
       MapWindow::BigZoom = false;
-      terrain_dem_graphics.SetTerrainRounding(pixelsize*2);
+      rfact = 2.0;
     } else {
-      terrain_dem_graphics.SetTerrainRounding(pixelsize);
+      rfact = 1.0;
     }
+    terrain_dem_graphics.SetTerrainRounding(pixelsize*0.25);
 
-    kpixel = (float)(terrain_dem_graphics.GetTerrainSlopeStep()*3.0);
+    kpixel = (float)(terrain_dem_graphics.GetTerrainSlopeStep()*1.5);
     // magnify gradient to make it
     // more obvious
 
@@ -431,11 +436,38 @@ public:
 		    // far the bottom goes down
     }
 
+    // JMW attempting to remove wobbling terrain
+    X = (X0+X1)/2;
+    Y = (Y0+Y1)/2;
+    MapWindow::GetLocationFromScreen(&X, &Y);
+    double xmiddle = X;
+    double ymiddle = Y;
+
+    X = (X0+X1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact;
+    Y = (Y0+Y1)/2;
+    MapWindow::GetLocationFromScreen(&X, &Y);
+    double Xrounding = fabs(X-xmiddle);
+
+    X = (X0+X1)/2;
+    Y = (Y0+Y1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact;
+    MapWindow::GetLocationFromScreen(&X, &Y);
+    double Yrounding = fabs(Y-ymiddle);
+
+    // ok, ready to fill the buffer now.
+
     for (int y = Y0; y<Y1; y+= DTQUANT) {
       for (int x = X0; x<X1; x+= DTQUANT) {
         X = x;
         Y = y;
         MapWindow::GetLocationFromScreen(&X, &Y);
+
+	// round lat and long to prevent wobbling
+	long rr;
+	rr = lround(X/Xrounding);
+	X = rr*Xrounding;
+	rr = lround(Y/Yrounding);
+	Y = rr*Yrounding;
+
         *myhbuf = terrain_dem_graphics.GetTerrainHeight(Y, X);
         myhbuf++;
         // latitude, longitude

@@ -95,6 +95,7 @@
 #define IDB_LOGGEROFF                   272
 #define IDB_PEAKHIGH                    273
 #define IDB_PEAKLOW                     274
+#define IDB_VARIOSCALE                  277
 #define IDB_MAPSCALE_A                  283
 #define IDB_UNIT_KM                     284
 #define IDB_UNIT_SM                     285
@@ -355,7 +356,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        275
+#define _APS_NEXT_RESOURCE_VALUE        278
 #define _APS_NEXT_COMMAND_VALUE         40025
 #define _APS_NEXT_CONTROL_VALUE         1263
 #define _APS_NEXT_SYMED_VALUE           102
