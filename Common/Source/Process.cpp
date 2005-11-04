@@ -362,6 +362,12 @@ void FormatterTime::AssignValue(int i) {
   case 42:
     SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo));
     break;
+  case 45:
+    SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo+DetectCurrentTime()));
+    break;
+  case 46:
+    SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo+DetectCurrentTime()));
+    break;
   default:
     break;
   }

@@ -740,6 +740,7 @@ END
 IDB_ABORT               BITMAP  DISCARDABLE     "Bitmaps\\abort.bmp"
 IDB_LOGGER              BITMAP  DISCARDABLE     "Bitmaps\\logging.bmp"
 IDB_LOGGEROFF           BITMAP  DISCARDABLE     "Bitmaps\\loggingoff.bmp"
+IDB_VARIOSCALE          BITMAP  DISCARDABLE     "Bitmaps\\VarioScale.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -939,8 +940,8 @@ IDB_UNIT_FT             BITMAP  DISCARDABLE     "bitmaps\\UnitFt.bmp"
 IDB_UNIT_MS             BITMAP  DISCARDABLE     "bitmaps\\UnitMpSec.bmp"
 IDB_AIRPORT_REACHABLE   BITMAP  DISCARDABLE     "bitmaps\\LandableAirport.bmp"
 IDB_AIRPORT_UNREACHABLE BITMAP  DISCARDABLE     "bitmaps\\UnreachableAirport.bmp"
-IDB_OUTFILED_REACHABLE   BITMAP DISCARDABLE     "bitmaps\\LandableField.bmp"
-IDB_OUTFILED_UNREACHABLE BITMAP DISCARDABLE     "bitmaps\\UnreachableField.bmp"
+IDB_OUTFILED_REACHABLE  BITMAP  DISCARDABLE     "bitmaps\\LandableField.bmp"
+IDB_OUTFILED_UNREACHABLE BITMAP  DISCARDABLE     "bitmaps\\UnreachableField.bmp"
 IDB_VARIOSCALEA         BITMAP  DISCARDABLE     "bitmaps\\VarioScaleB.bmp"
 
 /////////////////////////////////////////////////////////////////////////////

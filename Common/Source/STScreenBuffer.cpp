@@ -477,3 +477,5 @@ void CSTScreenBuffer::Quantise()
   }
 
 }
+
+// 1 + 2 + 4 = 7

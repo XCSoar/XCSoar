@@ -4,16 +4,13 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 
 To do for next version:
-- Fix shading at high zoom levels
-
+- Low battery exit is not working, fix it.
+- 
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
   to move/edit waypoints.
 - Notify the user (via GCE to Input) of switching between AC and Battery mode
 - Improved notification of battery level - not just simulator.
   (exit should still only be the simulator)
-- Default task (so when you save a task as default.tsk, it comes up
-  when the program starts), save task to todays date, load on restart.
-- Clear up ETA/ETR confusion in infoboxes
 - Adjustable font for long infoboxes (especially time)
 - Seeding random NMEA static strings from Input Events
 - Triggering events from NMEA substring matches (may be limited to certain
@@ -31,6 +28,18 @@ To do for next version:
   restart.
 - Automatically select "WinPilot File" as type when selecting a file...
 	(future: Consider fixing this - it acts differently to other types)
+- Add 'Append' waypoint function, so users can create a task by selecting
+  waypoints from the map in sequence
+
+
+Changes from 4.5 to HEAD:
+- Minor terrain rendering fixes at close zoom levels
+- Improvements to topology polygon rendering
+- Added ETA infoboxes (as distinct from ETE)
+- Default task (Default.tsk) file may be loaded automatically at startup
+   if present (through InputEvent TaskLoad on STARTUP_REAL/STARTUP_SIMULATOR)
+- Improved landing detection by checking altitude AGL to avoid false
+  landings when flying in high winds 
 
 Changes from 4.22 to 4.5
 

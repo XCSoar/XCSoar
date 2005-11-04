@@ -138,44 +138,44 @@ void SwitchToMapWindow(void);
 
 
 typedef enum{
-  apMsDefault,
+  apMsDefault=0,
   apMsNone,
   apMsAltA
 }MapScaleAppearance_t;
 
 typedef enum{
-  apMs2Default,
+  apMs2Default=0,
   apMs2None,
   apMs2AltA
 }MapScale2Appearance_t;
 
 typedef enum{
-  apFlightModeIconDefault,
+  apFlightModeIconDefault=0,
   apFlightModeIconAltA
 }FlightModeIconAppearance_t;
 
 typedef enum{
-  apCompassDefault,
+  apCompassDefault=0,
   apCompassAltA
 }CompassAppearance_t;
 
 typedef enum{
-  ctBestCruiseTrackDefault,
+  ctBestCruiseTrackDefault=0,
   ctBestCruiseTrackAltA,
 }BestCruiseTrack_t;
 
 typedef enum{
-  afAircraftDefault,
+  afAircraftDefault=0,
   afAircraftAltA
 }Aircraft_t;
 
 typedef enum{
-  fgFinalGlideDefault,
+  fgFinalGlideDefault=0,
   fgFinalGlideAltA,
 }IndFinalGlide_t;
 
 typedef enum{
-  wpLandableDefault,
+  wpLandableDefault=0,
   wpLandableAltA,
 }IndLandable_t;
 
@@ -205,7 +205,7 @@ typedef struct{
   IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;
   bool DontShowAutoMacCready;
-}Appearance_t;
+} Appearance_t;
 
 extern Appearance_t Appearance;
 
