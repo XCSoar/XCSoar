@@ -275,9 +275,9 @@ void InputEvents::readFile() {
 
 				// Make ne (NMEA Event)
 				} else if (wcscmp(d_type, TEXT("ne")) == 0) { 		// NE - NMEA Event
-					int key = findN(d_data);			// Get the int key (eg: APP1 vs 'a')
+					int key = findNE(d_data);			// Get the int key (eg: APP1 vs 'a')
 					if (key >= 0)
-						NE2Event[mode_id][key] = event_id;
+						N2Event[mode_id][key] = event_id;
    					#ifdef _INPUTDEBUG_
 					else if (input_errors_count < MAX_INPUT_ERRORS)
 					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
