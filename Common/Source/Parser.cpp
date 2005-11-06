@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.26 2005/11/06 23:06:04 jwharington Exp $
+  $Id: Parser.cpp,v 1.27 2005/11/06 23:11:00 jwharington Exp $
 
 Copyright_License {
 
@@ -825,6 +825,7 @@ BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
   return TRUE;
 }
 
+#include "InputEvents.h"
 
 BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
@@ -862,16 +863,16 @@ BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
   for (i=0; i<32; i++) {
     long thebit = 1<<i;
     if (down_switchinputs & thebit) {
-      InputEvents::processNMEA(i);
+      InputEvents::processNmea(i);
     }
     if (down_switchoutputs & thebit) {
-      InputEvents::processNMEA(i+32);
+      InputEvents::processNmea(i+32);
     }
     if (up_switchinputs & thebit) {
-      InputEvents::processNMEA(i+64);
+      InputEvents::processNmea(i+64);
     }
     if (up_switchoutputs & thebit) {
-      InputEvents::processNMEA(i+96);
+      InputEvents::processNmea(i+96);
     }
   }
 
