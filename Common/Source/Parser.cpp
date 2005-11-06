@@ -862,16 +862,16 @@ BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
   for (i=0; i<32; i++) {
     long thebit = 1<<i;
     if (down_switchinputs & thebit) {
-      // TODO send event to inputevents with "input i down" as argument
+      InputEvents::processNMEA(i);
     }
     if (down_switchoutputs & thebit) {
-      // TODO send event to inputevents with "output i down" as argument
+      InputEvents::processNMEA(i+32);
     }
     if (up_switchinputs & thebit) {
-      // TODO send event to inputevents with "input i up" as argument
+      InputEvents::processNMEA(i+64);
     }
     if (up_switchoutputs & thebit) {
-      // TODO send event to inputevents with "output i up" as argument
+      InputEvents::processNMEA(i+96);
     }
   }
 
