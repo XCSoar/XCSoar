@@ -330,16 +330,23 @@ void InputEvents::readFile() {
 				wcscpy(d_event, TEXT(""));
 				wcscpy(d_misc, TEXT(""));
 				int ef;
-				ef = swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().]"), d_event, d_misc);
+				ef = swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event, d_misc);
 
-				// TODO Can't use token here - breaks other token - damn C - how about C++ String class ?
+				// TODO Can't use token here - breaks
+				// other token - damn C - how about
+				// C++ String class ?
+
 				// TCHAR *eventtoken;
 				// eventtoken = wcstok(value, TEXT(" "));
 				// d_event = token;
 				// eventtoken = wcstok(value, TEXT(" "));
 
 				if ((ef == 1) || (ef == 2)) {
-					// TODO - Consider reusing existing identical events (not worth it right now)
+
+					// TODO - Consider reusing
+					// existing identical events
+					// (not worth it right now)
+
 					pt2Event event = findEvent(d_event);
 					if (event) {
 						event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
@@ -1073,81 +1080,89 @@ void InputEvents::eventWind(TCHAR *misc) {
 
 int jmw_demo=0;
 
-void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
- // if (!(Port2Available && GPS_INFO.VarioAvailable))
- //   return;
+void InputEvents::eventSendNMEA(TCHAR *misc) {
+  if (misc) {
+    VarioWriteNMEA(misc);
+  }
+}
 
+void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
   if (wcscmp(misc, TEXT("slow")) == 0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,3"));
+    VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,3"));
     return;
   }
   if (wcscmp(misc, TEXT("medium")) == 0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,2"));
+    VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,2"));
     return;
   }
   if (wcscmp(misc, TEXT("fast")) == 0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,1"));
+    VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,1"));
     return;
   }
   if (wcscmp(misc, TEXT("statistics"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,Diagnostics,1"));
+    VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,1"));
     jmw_demo=0;
     return;
   }
   if (wcscmp(misc, TEXT("diagnostics"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,Diagnostics,2"));
+    VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,2"));
     jmw_demo=0;
     return;
   }
   if (wcscmp(misc, TEXT("psraw"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,Diagnostics,3"));
+    VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,3"));
     return;
   }
   if (wcscmp(misc, TEXT("switch"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,Diagnostics,4"));
+    VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,4"));
     return;
   }
   if (wcscmp(misc, TEXT("democlimb"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,DemoMode,2"));
+    VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,2"));
     jmw_demo=2;
     return;
   }
   if (wcscmp(misc, TEXT("demostf"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,DemoMode,1"));
+    VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,1"));
     jmw_demo=1;
     return;
   }
   if (wcscmp(misc, TEXT("zero"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,ZeroASI,1"));
+    VarioWriteNMEA(TEXT("PDVSC,S,ZeroASI,1"));
     // zero, no mixing
     return;
   }
   if (wcscmp(misc, TEXT("save"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
+    VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
     return;
   }
 
   // accel calibration
   if (wcscmp(misc, TEXT("X1"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,1"));
+    VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,1"));
     return;
   }
   if (wcscmp(misc, TEXT("X2"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,2"));
+    VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,2"));
     return;
   }
   if (wcscmp(misc, TEXT("X3"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,3"));
+    VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,3"));
     return;
   }
   if (wcscmp(misc, TEXT("X4"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,4"));
+    VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,4"));
     return;
   }
   if (wcscmp(misc, TEXT("X5"))==0) {
-    Port2WriteNMEA(TEXT("PDVSC,S,CalibrateAccel,5"));
+    VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,5"));
     return;
   }
+
+ if (wcscmp(misc, TEXT("jjj"))==0) {
+    VarioWriteNMEA(TEXT("PDVSC,S,ToneCruiseLiftDetectionType,2"));
+    return;
+ }
 
 }
 
@@ -1162,9 +1177,6 @@ void InputEvents::eventAudioDeadband(TCHAR *misc) {
   SoundDeadband = min(40,max(SoundDeadband,0));
   VarioSound_SetVdead(SoundDeadband);
   SaveSoundSettings(); // save to registry
-
-  if (!(Port2Available && GPS_INFO.VarioAvailable))
-    return;
 
   // JMW TODO send to vario if available
 

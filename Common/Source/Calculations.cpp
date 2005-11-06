@@ -366,12 +366,27 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         
         double k = (mag / Basic->TrueAirspeed);
         
-        char buffer[100];
+        char buffer[200];
+	/*
         sprintf(buffer,"%g %g %g # airspeed \r\n", 
                 Basic->IndicatedAirspeed, 
                 mag*Basic->IndicatedAirspeed/Basic->TrueAirspeed, 
                 k);
         DebugStore(buffer);
+	*/
+	sprintf(buffer,"%g %g %g %g %g %g %g %g %g %g #airdata\r\n",
+		Basic->Vario, 
+		Calculated->NettoVario,
+		Basic->IndicatedAirspeed,
+		Basic->TrueAirspeed,
+		Basic->Speed, 
+		Calculated->WindSpeed,
+		Calculated->WindBearing,
+		Basic->Gload,
+		Basic->BaroAltitude,
+		Basic->Altitude);
+        DebugStore(buffer);
+		
       }
     }
 
@@ -494,7 +509,7 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       LastAlt = Basic->Altitude;
       LastTime = Basic->Time;
 
-      if (Port2Available && Basic->VarioAvailable) {
+      if (Basic->VarioAvailable) {
 	// JMW experimental
 	TCHAR mcbuf[100];
 	wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
@@ -503,7 +518,7 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 		 Calculated->Circling,
 		 iround(Calculated->TerrainAlt),
 		 iround(QNH*10));
-	Port2WriteNMEA(mcbuf);
+	VarioWriteNMEA(mcbuf);
       }
 
     }

@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.24 2005/11/01 14:16:50 jwharington Exp $
+  $Id: Parser.cpp,v 1.25 2005/11/06 22:52:29 jwharington Exp $
 
 Copyright_License {
 
@@ -829,6 +829,8 @@ BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
 BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
+  static unsigned long last_switchinputs;
+  static unsigned long last_switchoutputs;
 
   ExtractParameter(String,ctemp,0);
   MACCREADY = StrToDouble(ctemp,NULL)/10;
@@ -843,6 +845,39 @@ BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   //   airdata.circling = (switchoutputs && (1<<OUTPUT_BIT_CIRCLING));
 
+  unsigned long up_switchinputs;
+  unsigned long down_switchinputs;
+  unsigned long up_switchoutputs;
+  unsigned long down_switchoutputs;
+
+  // detect changes to ON: on now (x) and not on before (!lastx)
+  // detect changes to OFF: off now (!x) and on before (lastx)
+
+  down_switchinputs = (switchinputs & (!last_switchinputs));
+  up_switchinputs = (!switchinputs & (last_switchinputs));
+  down_switchoutputs = (switchoutputs & (!last_switchoutputs));
+  up_switchoutputs = (!switchoutputs & (last_switchoutputs));
+
+  int i;
+  for (i=0; i<32; i++) {
+    long thebit = 1<<i;
+    if (down_switchinputs & thebit) {
+      // TODO send event to inputevents with "input i down" as argument
+    }
+    if (down_switchoutputs & thebit) {
+      // TODO send event to inputevents with "output i down" as argument
+    }
+    if (up_switchinputs & thebit) {
+      // TODO send event to inputevents with "input i up" as argument
+    }
+    if (up_switchoutputs & thebit) {
+      // TODO send event to inputevents with "output i up" as argument
+    }
+  }
+
+  last_switchinputs = switchinputs;
+  last_switchoutputs = switchoutputs;
+  
   return TRUE;
 }
 

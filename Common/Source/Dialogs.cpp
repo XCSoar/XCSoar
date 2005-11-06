@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.87 2005/11/03 20:10:41 samgi Exp $
+  $Id: Dialogs.cpp,v 1.88 2005/11/06 22:52:28 jwharington Exp $
 
 Copyright_License {
 
@@ -32,6 +32,7 @@ Copyright_License {
 }
 
 */
+
 #include "stdafx.h"
 
 #include <commdlg.h>
@@ -159,7 +160,6 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     }
   return FALSE;
 }
-
 
 
 LRESULT CALLBACK Register(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -883,7 +883,6 @@ LRESULT CALLBACK DisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 }
 
 
-
 LRESULT CALLBACK MapDisplayOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   DWORD Up;
@@ -1375,7 +1374,6 @@ void ReadNewTask(HWND hDlg)
 }
 
 
-
 // loads a new task from scratch.
 void LoadNewTask(TCHAR *szFileName)
 {
@@ -1416,7 +1414,6 @@ void LoadNewTask(TCHAR *szFileName)
   if(Task[0].Index != -1)
     ActiveWayPoint = 0;
 }
-
 
 
 // this one inserts the task in the task list!
@@ -1929,7 +1926,6 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-
 LRESULT CALLBACK SetMapFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   static TCHAR  szTerrainFile[MAX_PATH] = TEXT("\0");
@@ -2058,7 +2054,6 @@ LRESULT CALLBACK SetMapFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     }
   return FALSE;
 }
-
 
 
 LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -2210,7 +2205,6 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
     }
   return FALSE;
 }
-
 
 
 
@@ -2883,7 +2877,6 @@ LRESULT CALLBACK SaveProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 }
 
 
-
 #define NUMPAGES 18
 
 static TCHAR *szSettingsTab[] = 
@@ -3164,7 +3157,6 @@ LRESULT CALLBACK AATTurn(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     }
   return FALSE;
 }
-
 
 
 extern void DrawJPG(HDC hdc, RECT rc);
@@ -3458,7 +3450,6 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
 
 
-
 LRESULT CALLBACK LoggerDetails(HWND hDlg, UINT message, 
 			       WPARAM wParam, LPARAM lParam)
 {
@@ -3531,7 +3522,6 @@ bool forceDestroyStatusMessage = false;
 void ClearStatusMessages(void) {
   forceDestroyStatusMessage = true;
 }
-
 
 
 // Intercept messages destined for the Status Message window
@@ -3630,7 +3620,6 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
     return(0);
 
 }
-
 
 
 // DoMessage is designed to delegate what to do for a message
@@ -3774,3 +3763,4 @@ HWND CreateProgressDialog(TCHAR* text) {
   UpdateWindow(hProgress);
   return hProgress;
 }
+

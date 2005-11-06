@@ -1099,7 +1099,7 @@ void MapWindow::UpdateMapScale()
           // reset starting map scale
 
 
-          ////?          StartingAutoMapScale = MapScale;
+          ////?JMW TODO for frank          StartingAutoMapScale = MapScale;
         }
 
       }

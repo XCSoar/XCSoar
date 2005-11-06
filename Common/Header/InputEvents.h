@@ -64,7 +64,7 @@ class InputEvents {
   static void eventDLLExecute(TCHAR *misc);
   static void eventTaskLoad(TCHAR *misc);
   static void eventTaskSave(TCHAR *misc);
-
+  static void eventSendNMEA(TCHAR *misc);
   // -------
 
 #ifdef _SIM_
