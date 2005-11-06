@@ -8,6 +8,7 @@ my $count = 0;
 
 my $buffer = "";
 my $gce_count = 0;
+my $ne_count = 0;
 while (<IN>) {
 	chomp;
 	
@@ -18,6 +19,9 @@ while (<IN>) {
 	} elsif (/GCE_([A-Z0-9_]+)/) {
 		print qq{Text2GCE[$gce_count] = TEXT("$1");\n};
 		$gce_count++;
+	} elsif (/NE_([A-Z0-9_]+)/) {
+		print qq{Text2NE[$ne_count] = TEXT("$1");\n};
+		$ne_count++;
 	}
 }
 

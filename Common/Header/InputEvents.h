@@ -17,9 +17,10 @@ class InputEvents {
   static int getModeID();
   static int InputEvents::findKey(TCHAR *data);
   static int InputEvents::findGCE(TCHAR *data);
+  static int InputEvents::findNE(TCHAR *data);
   static pt2Event InputEvents::findEvent(TCHAR *);
   static bool processKey(int key);
-  static bool processNmea(TCHAR *data);
+  static bool processNmea(int key);
   static bool processButton(int bindex);
   static bool processGlideComputer(int);
   static void processGo(int event_id);
@@ -94,6 +95,17 @@ enum {
 		GCE_FLIGHTMODE_FINALGLIDE_BELOW,
 
 		GCE_COUNT			// How many we have for arrays etc
+};
+
+// NE = NMEA Events (hard coded triggered events from the NMEA processor)
+enum {
+		NE_FLAP_A,
+		NE_FLAP_B,
+		NE_FLAP_C,
+		NE_ACKNOWLEDGE,
+		NE_REPEAT,
+		
+		NE_COUNT			// How many we have for arrays etc
 };
 
 /*
