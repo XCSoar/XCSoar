@@ -19,38 +19,32 @@ GC2Event[mode_id][GCE_GPS_FIX_WAIT] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Simulation\r\nNothing is real!"), event_id);
-event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Start_Simulator.wav"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_SIMULATOR] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Maintain effective\r\nLOOKOUT at all times"), event_id);
-event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Start_Real.wav"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("TAKEOFF\r\nLog Started"), event_id);
-event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Takeoff.wav"), event_id);
 event_id = InputEvents::makeEvent(&eventLogger, TEXT("start"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TAKEOFF] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("LANDING\r\nLog Stopped"), event_id);
-event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Landing.wav"), event_id);
 event_id = InputEvents::makeEvent(&eventLogger, TEXT("stop"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_LANDING] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\FinalGlide.wav"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Above Final Glide"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_ABOVE] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPlaySound, TEXT("\\My Documents\\XCSoarData\\Tiptoe.wav"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Marginal Final Glide"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_BELOW] = event_id;

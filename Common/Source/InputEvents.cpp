@@ -101,6 +101,9 @@ int Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
 // Glide Computer Events
 int GC2Event[MAX_MODE][GCE_COUNT];
 
+// NMEA Triggered Events
+int N2Event[MAX_MODE][NE_COUNT];
+
 // Events - What do you want to DO
 typedef struct {
   pt2Event event;		// Which function to call (can be any, but should be here)
@@ -137,6 +140,8 @@ int Text2Event_count;
 // Mapping text names of events to the real thing
 TCHAR *Text2GCE[GCE_COUNT];
 
+// Mapping text names of events to the real thing
+TCHAR *Text2NE[NE_COUNT];
 
 // DLL Cache
 typedef void (CALLBACK *DLLFUNC_INPUTEVENT)(TCHAR*);
@@ -263,6 +268,16 @@ void InputEvents::readFile() {
 					int key = findGCE(d_data);				// Get the int key (eg: APP1 vs 'a')
 					if (key >= 0)
 						GC2Event[mode_id][key] = event_id;
+   					#ifdef _INPUTDEBUG_
+					else if (input_errors_count < MAX_INPUT_ERRORS)
+					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
+					#endif
+
+				// Make ne (NMEA Event)
+				} else if (wcscmp(d_type, TEXT("ne")) == 0) { 		// NE - NMEA Event
+					int key = findN(d_data);			// Get the int key (eg: APP1 vs 'a')
+					if (key >= 0)
+						NE2Event[mode_id][key] = event_id;
    					#ifdef _INPUTDEBUG_
 					else if (input_errors_count < MAX_INPUT_ERRORS)
 					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
@@ -439,6 +454,15 @@ int InputEvents::findGCE(TCHAR *data) {
   return -1;
 }
 
+int InputEvents::findNE(TCHAR *data) {
+  int i;
+  for (i = 0; i < NE_COUNT; i++) {
+    if (wcscmp(data, Text2NE[i]) == 0)
+      return i;
+  }
+  return -1;
+}
+
 // Create EVENT Entry
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
@@ -599,11 +623,33 @@ bool InputEvents::processKey(int dWord) {
 
 /*
   InputEvent::processNmea(TCHAR* data)
-  Process a string match for NMEA data and call function
+  Take hard coded inputs from NMEA processor.
   Return = TRUE if we have a valid key match
 */
-bool InputEvents::processNmea(TCHAR* data) {
-  return true;
+bool InputEvents::processNmea(int ne_id) {
+  int event_id = 0;
+
+  // Valid input ?
+  if ((ne_id < 0) || (ne_id >= NE_COUNT))
+    return false;
+
+  // get current mode
+  int mode = InputEvents::getModeID();
+  ASSERT(mode >= 0);
+
+  // Which key - can be defined locally or at default (fall back to default)
+  event_id = N2Event[mode][ne_id];
+  if (event_id == 0) {
+    // go with default key..
+    event_id = N2Event[0][ne_id];
+  }
+
+  if (event_id > 0) {
+    InputEvents::processGo(event_id);
+    return true;
+  }
+
+  return false;
 }
 
 /*
@@ -614,7 +660,7 @@ bool InputEvents::processGlideComputer(int gce_id) {
 int event_id = 0;
 
   // Valid input ?
-  if ((gce_id < 0) || (gce_id > GCE_COUNT))
+  if ((gce_id < 0) || (gce_id >= GCE_COUNT))
     return false;
 
   // get current mode
