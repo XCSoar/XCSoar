@@ -107,7 +107,7 @@ void GlidePolar::SetBallast() {
   int vbestldi = iround(Vbestld*10);
   int bestldi = iround(bestld*10);
 
-  if (Port2Available && GPS_INFO.VarioAvailable) {
+  if (GPS_INFO.VarioAvailable) {
 
     TCHAR nmeabuf[100];
     wsprintf(nmeabuf,TEXT("PDVGP,%d,%d,%d,%d,%d,%d,0"),
@@ -118,7 +118,7 @@ void GlidePolar::SetBallast() {
 	     vbestldi,
 	     bestldi);
 
-    Port2WriteNMEA(nmeabuf);
+    VarioWriteNMEA(nmeabuf);
   }
 
 }

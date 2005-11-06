@@ -296,6 +296,7 @@ void Port2WriteString(TCHAR *Text)
 		Port2Write ((BYTE)Text[i]);
 }
 
+
 void Port2WriteNMEA(TCHAR *Text)
 {
   int i,len;

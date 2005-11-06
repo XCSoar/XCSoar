@@ -184,9 +184,12 @@ void ReadTopology() {
   // TODO - This convert to non-unicode will not support all languages
   //		(some may use more complicated PATH names, containing Unicode)
   char buffer[MAX_PATH];
-  ConvertTToC(buffer, LocalPath(TEXT("xcsoar-marks")));
+  //  ConvertTToC(buffer, LocalPath(TEXT("xcsoar-marks")));
+  // DISABLED LocalPath
+  // JMW localpath does NOT work for the shapefile renderer!
+
   topo_marks =
-	  new TopologyWriter(buffer, RGB(0xD0,0xD0,0xD0));
+	  new TopologyWriter("xcsoar-marks", RGB(0xD0,0xD0,0xD0));
 
   topo_marks->scaleThreshold = 30.0;
 

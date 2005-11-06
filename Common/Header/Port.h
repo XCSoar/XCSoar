@@ -28,5 +28,8 @@ int  Port1GetChar(void);
 int  Port1SetRxTimeout(int Timeout);
 unsigned long Port1SetBaudrate(unsigned long BaudRate);
 int Port1Read(void *Buffer, size_t Size);
+void Port1WriteNMEA(TCHAR *Text);
+
+void VarioWriteNMEA(TCHAR *Text);
 
 #endif

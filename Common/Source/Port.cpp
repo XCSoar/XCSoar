@@ -436,3 +436,39 @@ int Port1Read(void *Buffer, size_t Size){
 
 }
 
+//////
+
+void Port1WriteNMEA(TCHAR *Text)
+{
+  int i,len;
+  len = _tcslen(Text);
+  Port1Write((BYTE)_T('$'));
+  unsigned char chk=0;
+  for (i=0;i<len; i++) {
+    chk ^= (BYTE)Text[i];
+    Port1Write((BYTE)Text[i]);
+  }
+  Port1Write((BYTE)_T('*'));
+
+  TCHAR tbuf[3];
+  wsprintf(tbuf,TEXT("%02X"),chk);
+  Port1Write((BYTE)tbuf[0]);
+  Port1Write((BYTE)tbuf[1]);
+  Port1Write((BYTE)_T('\r'));
+  Port1Write((BYTE)_T('\n'));
+}
+
+
+void VarioWriteNMEA(TCHAR *Text) {
+  if (!(GPS_INFO.VarioAvailable))
+    return;
+
+  if (Port2Available) {
+    // assume vario is on port B
+    Port2WriteNMEA(Text);
+  } else {
+    if (Port1Available) {
+      Port1WriteNMEA(Text);
+    }
+  }
+}
