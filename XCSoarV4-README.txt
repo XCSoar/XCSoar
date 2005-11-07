@@ -4,6 +4,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 
 To do for next version:
+
 - Low battery exit is not working, fix it.
 - 
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
@@ -33,6 +34,8 @@ To do for next version:
 
 
 Changes from 4.5 to HEAD:
+
+- Added NMEA processing and NE (NMEA Events) into InputEvents
 - Minor terrain rendering fixes at close zoom levels
 - Improvements to topology polygon rendering
 - Added ETA infoboxes (as distinct from ETE)
@@ -40,6 +43,7 @@ Changes from 4.5 to HEAD:
    if present (through InputEvent TaskLoad on STARTUP_REAL/STARTUP_SIMULATOR)
 - Improved landing detection by checking altitude AGL to avoid false
   landings when flying in high winds 
+
 
 Changes from 4.22 to 4.5
 
@@ -140,6 +144,7 @@ Changes from 4.22 to 4.5
 - Allow reset of flight start time when relaunching
 - Takeoff/landing events, can be hooked up to autostart logger
 
+
 Changes from 4.21 to 4.22
 
 - Fixed bug when airspace warning display is not refreshed when another
@@ -169,6 +174,7 @@ Changes from 4.21 to 4.22
    set at default, and didn't change with zoom.
 - Airspace parser made faster, so binary airspace loader now disabled
 
+
 Changes from 4.2 to 4.21
 
 - Better recovery of bluetooth GPS after switching device off and on
@@ -191,7 +197,9 @@ Changes from 4.2 to 4.21
 - Settings->File page split into two (map data separated off)
 - Snail trail toggles between no trail, long trail, and short trail
 
+
 Summary of new features since v4.0
+
 - Fullscreen mode (app button 1 in map mode); app button 2 now
   toggles snail trail
 - Terrain shading via phong model, direction set by wind direction
@@ -217,7 +225,9 @@ Summary of new features since v4.0
 - Adjusted infobox descriptions and titles.
 - Added infoboxes: Time to next waypoint, time to task completion
 
+
 Bug fixes and code improvements
+
 - Sound files are now in the code as resources, so no need for Audio directory
 - Filtering of files:
    Waypoints [.txt]
