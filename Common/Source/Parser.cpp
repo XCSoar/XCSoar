@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.27 2005/11/06 23:11:00 jwharington Exp $
+  $Id: Parser.cpp,v 1.28 2005/11/08 06:20:50 jwharington Exp $
 
 Copyright_License {
 
@@ -854,24 +854,25 @@ BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
   // detect changes to ON: on now (x) and not on before (!lastx)
   // detect changes to OFF: off now (!x) and on before (lastx)
 
-  down_switchinputs = (switchinputs & (!last_switchinputs));
-  up_switchinputs = (!switchinputs & (last_switchinputs));
-  down_switchoutputs = (switchoutputs & (!last_switchoutputs));
-  up_switchoutputs = (!switchoutputs & (last_switchoutputs));
+  down_switchinputs = (switchinputs & (~last_switchinputs));
+  up_switchinputs = ((~switchinputs) & (last_switchinputs));
+  down_switchoutputs = (switchoutputs & (~last_switchoutputs));
+  up_switchoutputs = ((~switchoutputs) & (last_switchoutputs));
 
   int i;
+  unsigned long thebit;
   for (i=0; i<32; i++) {
-    long thebit = 1<<i;
-    if (down_switchinputs & thebit) {
+    thebit = 1<<i;
+    if ((down_switchinputs & thebit) == thebit) {
       InputEvents::processNmea(i);
     }
-    if (down_switchoutputs & thebit) {
+    if ((down_switchoutputs & thebit) == thebit) {
       InputEvents::processNmea(i+32);
     }
-    if (up_switchinputs & thebit) {
+    if ((up_switchinputs & thebit) == thebit) {
       InputEvents::processNmea(i+64);
     }
-    if (up_switchoutputs & thebit) {
+    if ((up_switchoutputs & thebit) == thebit) {
       InputEvents::processNmea(i+96);
     }
   }

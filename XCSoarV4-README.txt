@@ -13,9 +13,6 @@ To do for next version:
 - Improved notification of battery level - not just simulator.
   (exit should still only be the simulator)
 - Adjustable font for long infoboxes (especially time)
-- Seeding random NMEA static strings from Input Events
-- Triggering events from NMEA substring matches (may be limited to certain
-  types due to performance limitations).
 - Timed buttons (pass time of button press to processKey and support threshold
   passing in InputEvents - eg: Set long press as nnn ms - over that is long
   press, under is short) (assume for simplicity that we still only press
@@ -43,6 +40,9 @@ Changes from 4.5 to HEAD:
    if present (through InputEvent TaskLoad on STARTUP_REAL/STARTUP_SIMULATOR)
 - Improved landing detection by checking altitude AGL to avoid false
   landings when flying in high winds 
+- Seeding random NMEA static strings from Input Events
+- Triggering events from NMEA substring matches (may be limited to certain
+  types due to performance limitations).
 
 
 Changes from 4.22 to 4.5
