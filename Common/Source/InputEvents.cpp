@@ -1186,9 +1186,12 @@ void InputEvents::eventAudioDeadband(TCHAR *misc) {
 void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
   if (wcscmp(misc, TEXT("next")) == 0) {
     NextUpDown(1); // next
-  }
-  if (wcscmp(misc, TEXT("previous")) == 0) {
+  } else if (wcscmp(misc, TEXT("nextwrap")) == 0) {
+    NextUpDown(2); // next - with wrap
+  } else if (wcscmp(misc, TEXT("previous")) == 0) {
     NextUpDown(-1); // previous
+  } else if (wcscmp(misc, TEXT("previouswrap")) == 0) {
+    NextUpDown(-2); // previous with wrap
   }
 }
 

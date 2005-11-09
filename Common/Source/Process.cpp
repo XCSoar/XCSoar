@@ -224,30 +224,47 @@ void	MacCreadyProcessing(int UpDown)
 
 extern void PopupWaypointDetails();
 
+/*
+	1	Next waypoint
+	0	Show waypoint details
+	-1	Previous waypoint
+	2	Next waypoint with wrap around
+	-2	Previous waypoint with wrap around
+*/
 void NextUpDown(int UpDown)
 {
-	if(UpDown==1)
-	{
-		if(ActiveWayPoint < MAXTASKPOINTS)
-		{
-			if(Task[ActiveWayPoint+1].Index >= 0)
-			{
-				if(ActiveWayPoint == 0)
-				{
+	if(UpDown>0) {
+		if(ActiveWayPoint < MAXTASKPOINTS) {
+			// Increment Waypoint
+			if(Task[ActiveWayPoint+1].Index >= 0) {
+				if(ActiveWayPoint == 0)	{
 					CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
 				}
 				ActiveWayPoint ++;
 				CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
 			}
+			// No more, try first
+			else if((UpDown == 2) && (Task[0].Index >= 0)) {
+				if(ActiveWayPoint == 0)	{
+					CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
+				}
+				ActiveWayPoint = 0;
+				CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
+			}
 		}
 	}
-	else if (UpDown==-1)
-	{
-		if(ActiveWayPoint >0)
-		{
+	else if (UpDown<0){
+		if(ActiveWayPoint >0) {
 			ActiveWayPoint --;
+			/*
+			XXX How do we know what the last one is?
+		} else if (UpDown == -2) {
+			ActiveWayPoint = MAXTASKPOINTS;
+			*/
 		}
-	} else if (UpDown==0) {
+
+	}
+	else if (UpDown==0) {
 		SelectedWaypoint = Task[ActiveWayPoint].Index;
 		UnlockFlightData();
 		PopupWaypointDetails();
