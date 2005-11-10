@@ -409,6 +409,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 3:
     Value = CALCULATED_INFO.WaypointBearing;
+    Valid = CALCULATED_INFO.WaypointDistance > 10.0;
     break;
   case 4:
     if (CALCULATED_INFO.LD== 999) {
@@ -604,7 +605,11 @@ void InfoBoxFormatter::AssignValue(int i) {
 }
 
 
+#if NEWINFOBOX > 0
+TCHAR *InfoBoxFormatter::Render(void) {
+#else
 void InfoBoxFormatter::Render(HWND hWnd) {
+#endif
   if (Valid) {
     _stprintf(Text,
               Format,
@@ -612,13 +617,20 @@ void InfoBoxFormatter::Render(HWND hWnd) {
   } else {
     _stprintf(Text,TEXT("---"));
   }
+  #if NEWINFOBOX > 0
+  return(Text);
+  #else
   SetWindowLong(hWnd, GWL_USERDATA, 0);
   SetWindowText(hWnd,Text);
+  #endif
 
 }
 
-
+#if NEWINFOBOX > 0
+TCHAR *FormatterLowWarning::Render(void) {
+#else
 void FormatterLowWarning::Render(HWND hWnd) {
+#endif
 
   if (Valid) {
     _stprintf(Text,
@@ -627,18 +639,25 @@ void FormatterLowWarning::Render(HWND hWnd) {
   } else {
     _stprintf(Text,TEXT("---"));
   }
+  #if NEWINFOBOX > 0
+  return(Text);
+  #else
   if (Value<minimum) {
     SetWindowLong(hWnd, GWL_USERDATA, 2); // red text
   } else {
     SetWindowLong(hWnd, GWL_USERDATA, 0);
   }
   SetWindowText(hWnd,Text);
+  #endif
 
 }
 
 
-
+#if NEWINFOBOX > 0
+TCHAR *FormatterTime::Render(void) {
+#else
 void FormatterTime::Render(HWND hWnd) {
+#endif
   if (Valid==FALSE) {
     _stprintf(Text,TEXT("--:--"));
   } else {
@@ -653,21 +672,31 @@ void FormatterTime::Render(HWND hWnd) {
 
     }
   }
+  #if NEWINFOBOX > 0
+  return(Text);
+  #else
   SetWindowLong(hWnd, GWL_USERDATA, 0);
   SetWindowText(hWnd,Text);
+  #endif
 }
 
-
+#if NEWINFOBOX > 0
+TCHAR *FormatterWaypoint::Render(void) {
+#else
 void FormatterWaypoint::Render(HWND hWnd) {
+#endif
 
   if(ActiveWayPoint >=0)
     {
 
+      #if NEWINFOBOX > 0
+      #else
       if (WayPointList[Task[ActiveWayPoint].Index].Reachable) {
         SetWindowLong(hWnd, GWL_USERDATA, 3); // blue text
       } else {
         SetWindowLong(hWnd, GWL_USERDATA, 0); // black text
       }
+      #endif
 
       if ( DisplayTextType == DISPLAYFIRSTTHREE)
         {
@@ -681,18 +710,67 @@ void FormatterWaypoint::Render(HWND hWnd) {
         }
       else
         {
+          #if NEWINFOBOX > 0
+          _tcsncpy(Text,WayPointList[ Task[ActiveWayPoint].Index ].Name,(sizeof(Text)/sizeof(TCHAR))-1);
+          Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
+          #else
           _tcsncpy(Text,WayPointList[ Task[ActiveWayPoint].Index ].Name,5);
           Text[5] = '\0';
-	  // JMW this needs some work, can still be too wide for infobox
+	        // JMW this needs some work, can still be too wide for infobox
+          #endif
         }
     }
   else
     {
       // no waypoint selected
+      #if NEWINFOBOX > 0
+      #else
       SetWindowLong(hWnd, GWL_USERDATA, 0);
+      #endif
       Text[0] = '\0';
     }
 
+  #if NEWINFOBOX > 0
+  return(Text);
+  #else
   SetWindowText(hWnd, Text);
+  #endif
+
+}
+
+#if NEWINFOBOX > 0
+TCHAR *FormatterDiffBearing::Render(void) {
+#else
+void FormatterDiffBearing::Render(HWND hWnd) {
+#endif
+
+  if (ActiveWayPoint>=0 && CALCULATED_INFO.WaypointDistance > 10.0) {
+    Valid = true;
+
+    Value = CALCULATED_INFO.WaypointBearing -  GPS_INFO.TrackBearing;
+
+    if (Value < -180.0)
+      Value += 360.0;
+    else
+    if (Value > 180.0)
+      Value -= 360.0;
+
+    if (Value > 1)
+      _stprintf(Text, TEXT("%2.0f°»"), Value);
+    else if (Value < -1)
+      _stprintf(Text, TEXT("«%2.0f°"), -Value);
+    else
+      _tcscpy(Text, TEXT("«»"));
+
+  } else {
+    Valid = false;
+    _tcscpy(Text, TEXT("---"));
+  }
+
+  #if NEWINFOBOX > 0
+  return(Text);
+  #else
+  SetWindowText(hWnd, Text);
+  #endif
 
 }

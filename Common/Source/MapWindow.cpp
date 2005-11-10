@@ -828,13 +828,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     hBmpMapScale = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_MAPSCALE_A));
 
-    hBmpUnitKm = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_UNIT_KM));
-    hBmpUnitSm = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_UNIT_SM));
-    hBmpUnitNm = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_UNIT_NM));
-    hBmpUnitM =  LoadBitmap(hInst, MAKEINTRESOURCE(IDB_UNIT_M));
-    hBmpUnitFt = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_UNIT_FT));
-    hBmpUnitMpS= LoadBitmap(hInst, MAKEINTRESOURCE(IDB_UNIT_MS));
-
     hpCompassBorder = (HPEN)CreatePen(PS_SOLID, 3, RGB(0xff,0xff,0xff));
     hBrushFlyingModeAbort = (HBRUSH)CreateSolidBrush(RGB(0xff,0x00,0x00));
 
@@ -911,12 +904,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject(hBackgroundBrush);
     DeleteObject(hBmpClimbeAbort);
 
-    DeleteObject(hBmpUnitKm);
-    DeleteObject(hBmpUnitSm);
-    DeleteObject(hBmpUnitNm);
-    DeleteObject(hBmpUnitM);
-    DeleteObject(hBmpUnitFt);
-    DeleteObject(hBmpUnitMpS);
     DeleteObject((HPEN)hpCompassBorder);
     DeleteObject((HBRUSH)hBrushFlyingModeAbort);
 
@@ -1708,7 +1695,7 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
 
     if (DerivedDrawInfo.Circling) {
 
-      SetPoint(0, Center.x, Center.y+4);
+      SetPoint(0, Center.x, Center.y-4);
       SetPoint(1, Center.x-8, Center.y+4);
       SetPoint(2, Center.x+8, Center.y+4);
 
@@ -1818,7 +1805,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         SelectObject(hDCTemp,hTurnPoint);
       }
 
-      if((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0))
+      if(((Task[ActiveWayPoint].Index == i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
       {
         BitBlt(hdc,WayPointList[i].Screen.x-10 , WayPointList[i].Screen.y-10,20,20,
           hDCTemp,0,0,SRCPAINT);
@@ -1844,7 +1831,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 
       } else
 
-        if( ((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
+        if(((Task[ActiveWayPoint].Index == i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
         {
           switch(DisplayTextType)
           {
@@ -2423,27 +2410,13 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     BitBlt(hDC, 6+7+TextSize.cx, rc.bottom-Height, 8, 11, hDCTemp, 6, 0, SRCCOPY);
 
     if (!ScaleChangeFeedback){
-      switch(Unit){
-        case unKiloMeter:
-          SelectObject(hDCTemp, hBmpUnitKm);
-          BitBlt(hDC, 6+TextSize.cx, rc.bottom-Height, 5, 11, hDCTemp, 0, 0, SRCCOPY);
-        break;
-        case unMeter:
-          SelectObject(hDCTemp, hBmpUnitM);
-          BitBlt(hDC, 6+TextSize.cx, rc.bottom-Height, 5, 11, hDCTemp, 0, 0, SRCCOPY);
-        break;
-        case unFeet:
-          SelectObject(hDCTemp, hBmpUnitFt);
-          BitBlt(hDC, 6+TextSize.cx, rc.bottom-Height, 5, 11, hDCTemp, 0, 0, SRCCOPY);
-        break;
-        case unNauticalMiles:
-          SelectObject(hDCTemp, hBmpUnitNm);
-          BitBlt(hDC, 6+TextSize.cx, rc.bottom-Height, 5, 11, hDCTemp, 0, 0, SRCCOPY);
-        break;
-        case unStatuteMiles:
-          SelectObject(hDCTemp, hBmpUnitSm);
-          BitBlt(hDC, 6+TextSize.cx, rc.bottom-Height, 5, 11, hDCTemp, 0, 0, SRCCOPY);
-        break;
+      HBITMAP Bmp;
+      POINT   BmpPos, BmpSize;
+
+      if (Units::GetUnitBitmap(Unit, &Bmp, &BmpPos, &BmpSize, 0)){
+        HBITMAP oldBitMap = (HBITMAP)SelectObject(hDCTemp, Bmp);
+        BitBlt(hDC, 6+TextSize.cx, rc.bottom-Height, BmpSize.x, BmpSize.y, hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
+        SelectObject(hDCTemp, oldBitMap);
       }
     }
 
@@ -2472,11 +2445,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     SelectObject(hDC, oldBrush);
     SelectObject(hDCTemp, oldBitMap);
 
-
-
   }
-
-
 
 }
 
@@ -3041,6 +3010,9 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     HFONT oldFont;
     int y = ((rc.bottom - rc.top )/2)-rc.top-Appearance.MapWindowBoldFont.CapitalHeight/2-1;
     int x = GlideBar[2].x+1;
+    HBITMAP Bmp;
+    POINT  BmpPos;
+    POINT  BmpSize;
 
     _stprintf(Value, TEXT("%1.0f"), Units::ToUserAltitude(DerivedDrawInfo.TaskAltitudeDifference));
 
@@ -3053,15 +3025,10 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
     ExtTextOut(hDC, x+1, y+rc.top+Appearance.MapWindowBoldFont.CapitalHeight-Appearance.MapWindowBoldFont.AscentHeight+1, 0, NULL, Value, _tcslen(Value), NULL);
 
-    switch(Units::GetUserAltitudeUnit()){
-      case unMeter:
-        SelectObject(hDCTemp, hBmpUnitM);
-        BitBlt(hDC, x+TextSize.cx, y, 5, 11, hDCTemp, 0, 0, SRCCOPY);
-      break;
-      case unFeet:
-        SelectObject(hDCTemp, hBmpUnitFt);
-        BitBlt(hDC, x+TextSize.cx, y, 5, 11, hDCTemp, 0, 0, SRCCOPY);
-      break;
+    if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), &Bmp, &BmpPos, &BmpSize, 0)){
+      HBITMAP oldBitMap = (HBITMAP)SelectObject(hDCTemp, Bmp);
+      BitBlt(hDC, x+TextSize.cx+1, y, BmpSize.x, BmpSize.y, hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
+      SelectObject(hDCTemp, oldBitMap);
     }
 
     SelectObject(hDC, oldFont);

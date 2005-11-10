@@ -3,54 +3,66 @@
 #pragma hdrstop
 USERES("XCSoarPC.res");
 USEFORM("Unit1.cpp", Form1);
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\XCSoar.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Airspace.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\AirspaceColourDlg.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Calculations.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\devCAI302.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\devEW.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\device.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Dialogs.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Logger.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\mapbits.c");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\maperror.c");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\mapprimitive.c");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\mapsearch.c");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\mapshape.c");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\maptree.c");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\MapWindow.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\mapxbase.c");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\McReady.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Parser.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Port.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Port2.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Process.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\RasterTerrain.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\rscalc.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\StdAfx.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\STScreenBuffer.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Terrain.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Topology.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Utils.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\VarioSound.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\VOIMAGE.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\WaveThread.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\Waypointparser.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\windanalyser.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\windmeasurementlist.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\windstore.cpp");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\AirfieldDetails.cpp");
-USERC("C:\Project\xcsoarMy\source\Common\Source\XCSoar.rc");
-USEUNIT("C:\Project\xcsoarMy\source\Common\Source\units.cpp");
+USEUNIT("..\..\Common\Source\XCSoar.cpp");
+USEUNIT("..\..\Common\Source\Airspace.cpp");
+USEUNIT("..\..\Common\Source\AirspaceColourDlg.cpp");
+USEUNIT("..\..\Common\Source\Calculations.cpp");
+USEUNIT("..\..\Common\Source\devCAI302.cpp");
+USEUNIT("..\..\Common\Source\devEW.cpp");
+USEUNIT("..\..\Common\Source\device.cpp");
+USEUNIT("..\..\Common\Source\Dialogs.cpp");
+USEUNIT("..\..\Common\Source\Logger.cpp");
+USEUNIT("..\..\Common\Source\mapbits.c");
+USEUNIT("..\..\Common\Source\maperror.c");
+USEUNIT("..\..\Common\Source\mapprimitive.c");
+USEUNIT("..\..\Common\Source\mapsearch.c");
+USEUNIT("..\..\Common\Source\mapshape.c");
+USEUNIT("..\..\Common\Source\maptree.c");
+USEUNIT("..\..\Common\Source\MapWindow.cpp");
+USEUNIT("..\..\Common\Source\mapxbase.c");
+USEUNIT("..\..\Common\Source\McReady.cpp");
+USEUNIT("..\..\Common\Source\Parser.cpp");
+USEUNIT("..\..\Common\Source\Port.cpp");
+USEUNIT("..\..\Common\Source\Port2.cpp");
+USEUNIT("..\..\Common\Source\Process.cpp");
+USEUNIT("..\..\Common\Source\RasterTerrain.cpp");
+USEUNIT("..\..\Common\Source\rscalc.cpp");
+USEUNIT("..\..\Common\Source\StdAfx.cpp");
+USEUNIT("..\..\Common\Source\STScreenBuffer.cpp");
+USEUNIT("..\..\Common\Source\Terrain.cpp");
+USEUNIT("..\..\Common\Source\Topology.cpp");
+USEUNIT("..\..\Common\Source\Utils.cpp");
+USEUNIT("..\..\Common\Source\VarioSound.cpp");
+USEUNIT("..\..\Common\Source\VOIMAGE.cpp");
+USEUNIT("..\..\Common\Source\WaveThread.cpp");
+USEUNIT("..\..\Common\Source\Waypointparser.cpp");
+USEUNIT("..\..\Common\Source\windanalyser.cpp");
+USEUNIT("..\..\Common\Source\windmeasurementlist.cpp");
+USEUNIT("..\..\Common\Source\windstore.cpp");
+USEUNIT("..\..\Common\Source\AirfieldDetails.cpp");
+USERC("..\..\Common\Source\XCSoar.rc");
+USEUNIT("..\..\Common\Source\units.cpp");
 USEUNIT("modDummies.cpp");
+USEUNIT("..\..\Common\Source\Statistics.cpp");
+USEUNIT("..\..\Common\Source\GaugeVarioAltA.cpp");
+USEUNIT("..\..\Common\Source\InfoBoxLayout.cpp");
+USEUNIT("..\..\Common\Source\InputEvents.cpp");
+USEUNIT("..\..\Common\Source\leastsqs.cpp");
+USEUNIT("..\..\Common\Source\GaugeCDI.cpp");
+USEUNIT("..\..\Common\Source\Task.cpp");
+USEUNIT("..\..\Common\Source\Message.cpp");
+USEUNIT("..\..\Common\Source\InfoBox.cpp");
 //---------------------------------------------------------------------------
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 int WINAPI xcsoarWinMain(     HINSTANCE hInstance,
                         HINSTANCE hPrevInstance,
                         LPTSTR    lpCmdLine,
                         int       nCmdShow);
+
+
 
 #ifdef __cplusplus
 }
@@ -68,7 +80,7 @@ WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
   {
    Application->Initialize();
    Application->CreateForm(__classid(TForm1), &Form1);
-   Application->Run();
+    Application->Run();
   }
   catch (Exception &exception)
   {
@@ -76,7 +88,6 @@ WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
   }
   return 0;
 }
-
 
 
 //---------------------------------------------------------------------------

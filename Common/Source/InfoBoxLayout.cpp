@@ -36,8 +36,14 @@ Copyright_License {
 #include "Utils.h"
 #include "externs.h"
 
+#include "infobox.h"
+
+#if NEWINFOBOX>0
+extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
+#else
 extern HWND hWndInfoWindow[MAXINFOWINDOWS];
 extern HWND hWndTitleWindow[MAXINFOWINDOWS];
+#endif
 extern HWND hWndMainWindow; // Main Windows
 extern HINSTANCE hInst; // The current instance
 
@@ -363,8 +369,22 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
     {
       GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
+      #if NEWINFOBOX > 0
+      InfoBoxes[i] = new InfoBox(hWndMainWindow, xoff, yoff, sizex, sizey);
+
+      if (gnav){
+        int Border=0;
+        if (i>0)
+          Border |= BORDERTOP;
+        if (i<6)
+          Border |= BORDERRIGHT;
+        InfoBoxes[i]->SetBorderKind(Border);
+      }
+
+      #else
+
       hWndInfoWindow[i] =
-	CreateWindow(TEXT("STATIC"),TEXT("\0"),
+        CreateWindow(TEXT("STATIC"),TEXT("\0"),
 		     WS_VISIBLE|WS_CHILD|WS_TABSTOP
 		     |SS_CENTER|SS_NOTIFY
 		     |WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
@@ -373,18 +393,28 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 		     hWndMainWindow,NULL,hInst,NULL);
 
       hWndTitleWindow[i] =
-	CreateWindow(TEXT("STATIC"), TEXT("\0"),
+        CreateWindow(TEXT("STATIC"), TEXT("\0"),
 		     WS_VISIBLE|WS_CHILD|WS_TABSTOP
 		     |SS_CENTER|SS_NOTIFY
 		     |WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
 		     xoff, yoff,
 		     sizex, TitleHeight,
 		     hWndMainWindow,NULL,hInst,NULL);
+      #endif
 
     }
 
 }
 
+#if NEWINFOBOX > 0
+void InfoBoxLayout::DestroyInfoBoxes(void){
+  int i;
+  for(i=0; i<numInfoWindows; i++){
+    delete (InfoBoxes[i]);
+  }
+
+}
+#endif
 
 ///////////////////////
 

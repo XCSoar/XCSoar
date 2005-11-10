@@ -1,0 +1,578 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+  Copyright (C) 2000 - 2005
+
+  	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
+	Scott Penrose <scottp@dd.com.au>
+	John Wharington <jwharington@bigfoot.com>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+}
+*/
+
+#include "stdafx.h"
+#include "GaugeVarioAltA.h"
+#include "MapWindow.h"
+#include "Utils.h"
+#include "externs.h"
+#include "InfoBoxLayout.h"
+
+extern NMEA_INFO DrawInfo;
+extern DERIVED_INFO DerivedDrawInfo;
+
+
+HWND   hWndVarioWindow = NULL; // Vario Window
+extern HINSTANCE hInst;      // The current instance
+extern HWND hWndMainWindow; // Main Windows
+extern HFONT CDIWindowFont; // New
+extern HWND hWndMenuButton;
+
+extern HFONT InfoWindowFont;
+extern HFONT TitleWindowFont;
+extern HFONT TitleWindowFont;
+extern HFONT MapWindowFont;
+extern HFONT MapWindowBoldFont;
+
+HDC GaugeVario::hdcScreen = NULL;
+HDC GaugeVario::hdcDrawWindow = NULL;
+HDC GaugeVario::hdcTemp = NULL;
+HBITMAP GaugeVario::hDrawBitMap = NULL;
+RECT GaugeVario::rc;
+
+DrawInfo_t GaugeVario::diValueTop = {false};
+DrawInfo_t GaugeVario::diValueMiddle = {false};
+DrawInfo_t GaugeVario::diValueBottom = {false};
+DrawInfo_t GaugeVario::diLabelTop = {false};
+DrawInfo_t GaugeVario::diLabelMiddle = {false};
+DrawInfo_t GaugeVario::diLabelBottom = {false};
+
+#define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
+#define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
+
+#define colTextGray    RGB(0xa0, 0xa0, 0xa0)
+#define colTextWhite   RGB(0xff, 0xff, 0xff)
+#define colTextBackgnd RGB(0x00, 0x00, 0x00)
+
+void GaugeVario::Create() {
+  RECT bigrc;
+
+  bigrc = MapWindow::MapRect;
+
+  hWndVarioWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),
+			       WS_VISIBLE|WS_CHILD | WS_CLIPCHILDREN
+			       | WS_CLIPSIBLINGS,
+                               0,0,0,0,
+			       hWndMainWindow,NULL,hInst,NULL);
+  SetWindowPos(hWndVarioWindow,hWndMenuButton,
+               bigrc.right+InfoBoxLayout::ControlWidth,
+	       bigrc.top,
+               GAUGEXSIZE,GAUGEYSIZE,
+	       SWP_SHOWWINDOW);
+
+  GetClientRect(hWndVarioWindow, &rc);
+
+  //
+  hdcScreen = GetDC(hWndVarioWindow);
+  hdcDrawWindow = CreateCompatibleDC(hdcScreen);
+  hdcTemp = CreateCompatibleDC(hdcScreen);
+
+//  hDrawBitMap = CreateCompatibleBitmap (hdcScreen, GAUGEXSIZE, GAUGEYSIZE);
+  hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEA));
+
+  SetTextColor(hdcDrawWindow, RGB(0xff,0xff,0xff));
+  SetBkColor(hdcDrawWindow, RGB(0x00,0x00,0x00));
+
+}
+
+
+void GaugeVario::Destroy() {
+  ReleaseDC(hWndVarioWindow, hdcScreen);
+  DeleteDC(hdcDrawWindow);
+  DeleteDC(hdcTemp);
+  DeleteObject(hDrawBitMap);
+  DestroyWindow(hWndVarioWindow);
+}
+
+#define GAUGEVARIORANGE 2.50 // 5 m/s
+#define GAUGEVARIOSWEEP 180 // degrees total sweep
+
+extern NMEA_INFO     GPS_INFO;
+extern DERIVED_INFO  CALCULATED_INFO;
+
+//extern DERIVED_INFO DerivedDrawInfo;
+//extern NMEA_INFO DrawInfo;
+
+void GaugeVario::Render() {
+
+  static POINT orgTop     = {-1,-1};
+  static POINT orgMiddle  = {-1,-1};
+  static POINT orgBottom  = {-1,-1};
+  static int xoffset;
+  static int yoffset;
+  static int ValueHight;
+  static InitDone = false;
+
+  double vval;
+
+  HKEY Key;
+
+  SelectObject(hdcDrawWindow, (HBITMAP)hDrawBitMap);   // ???
+  RenderBg();                                          // ???
+
+  if (!InitDone){
+    xoffset = (rc.right-rc.left);
+    yoffset = (rc.bottom-rc.top)/2;
+    ValueHight = (1 + Appearance.CDIWindowFont.CapitalHeight + 2 + Appearance.TitleWindowFont.CapitalHeight + 1);
+    orgTop.y = (ValueHight/2 + ValueHight);
+    orgTop.x = rc.right;
+    orgMiddle.y = orgTop.y + ValueHight;
+    orgMiddle.x = rc.right;
+    orgBottom.y = orgMiddle.y + ValueHight;
+    orgBottom.x = rc.right;
+    InitDone = true;
+  }
+
+  if (GPS_INFO.VarioAvailable) {
+    vval = GPS_INFO.Vario;
+  } else {
+    vval = CALCULATED_INFO.Vario;
+  }
+
+  RenderNeedle(vval, xoffset, yoffset);
+
+  vval = vval*LIFTMODIFY;
+  vval = min(99.9,max(-99.9,vval));
+
+  RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop, CALCULATED_INFO.Average30s*LIFTMODIFY, MapWindow::hBmpUnitMpS, TEXT("Avg"));
+
+  RenderValue(orgMiddle.x, orgMiddle.y, &diValueMiddle, &diLabelMiddle, vval*LIFTMODIFY, MapWindow::hBmpUnitMpS, TEXT("Netto"));
+
+  if (CALCULATED_INFO.AutoMacCready)
+    RenderValue(orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, MapWindow::hBmpUnitMpS, TEXT("Auto Mc"));
+  else
+    RenderValue(orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, MapWindow::hBmpUnitMpS, TEXT("Mc"));
+
+  RenderSpeedToFly(rc.right - 11, (rc.bottom-rc.top)/2);
+
+  RenderBallast();
+
+  RenderBugs();
+
+  BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
+
+}
+
+
+void GaugeVario::RenderBg() {
+}
+
+void GaugeVario::RenderNeedle(double Value, int x, int y){
+
+  static int lastI = -99999;
+  static POINT lastBit[3];
+
+  bool InitDone = false;
+  POINT bit[3];
+  int i;
+  int degrees_per_unit;
+  int gmax;
+  double dx, dy;
+
+  if (!InitDone){
+    degrees_per_unit = (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
+    gmax = (int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY))+2;
+    InitDone = true;
+  }
+
+  i = (int)(Value*degrees_per_unit*LIFTMODIFY);
+  i = min(gmax,max(-gmax,i));
+
+  if (i != lastI){
+
+    if (lastI != -99999){
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+
+      Polygon(hdcDrawWindow, lastBit, 3);
+    }
+
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+
+    dx = -x+13; dy = 4;
+    rotate(&dx, &dy, i);
+    bit[0].x = (int)(dx+x); bit[0].y = (int)(dy+y);
+
+    dx = -x+13; dy = -4;
+    rotate(&dx, &dy, i);
+    bit[1].x = (int)(dx+x); bit[1].y = (int)(dy+y);
+
+    dx = -x+6; dy = 0;
+    rotate(&dx, &dy, i);
+    bit[2].x = (int)(dx+x); bit[2].y = (int)(dy+y);
+
+    Polygon(hdcDrawWindow, bit, 3);
+
+    memcpy(lastBit, bit, sizeof(bit));
+
+    lastI = i;
+  }
+
+}
+
+
+void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, HBITMAP BmpUnit, TCHAR *Label){
+
+  SIZE tsize;
+
+
+  if (!diValue->InitDone){
+
+    diValue->recBkg.right = x-5;
+    diValue->recBkg.top = y + 3 + Appearance.TitleWindowFont.CapitalHeight;
+
+    diValue->recBkg.left = diValue->recBkg.right;           // update back rect with max label size
+    diValue->recBkg.bottom = diValue->recBkg.top + Appearance.CDIWindowFont.CapitalHeight;
+
+    diValue->orgText.x = diValue->recBkg.left;
+    diValue->orgText.y = diValue->recBkg.top + Appearance.CDIWindowFont.CapitalHeight - Appearance.CDIWindowFont.AscentHeight;
+
+    diValue->lastValue = -9999;
+    diValue->lastText[0] = '\0';
+    diValue->lastBitMap = NULL;
+    diValue->InitDone = true;
+  }
+
+  if (!diLabel->InitDone){
+
+    diLabel->recBkg.right = x;
+    diLabel->recBkg.top = y+1;
+
+    diLabel->recBkg.left = diLabel->recBkg.right;           // update back rect with max label size
+    diLabel->recBkg.bottom = diLabel->recBkg.top + Appearance.TitleWindowFont.CapitalHeight;
+
+    diLabel->orgText.x = diLabel->recBkg.left;
+    diLabel->orgText.y = diLabel->recBkg.top + Appearance.TitleWindowFont.CapitalHeight - Appearance.TitleWindowFont.AscentHeight;
+
+    diLabel->lastValue = -9999;
+    diLabel->lastText[0] = '\0';
+    diLabel->lastBitMap = NULL;
+    diLabel->InitDone = true;
+  }
+
+  SetBkMode(hdcDrawWindow, TRANSPARENT);
+
+  if (_tcscmp(diLabel->lastText, Label) != 0){
+
+    SetBkColor(hdcDrawWindow, colTextBackgnd);
+
+    SetTextColor(hdcDrawWindow, colTextGray);
+
+    SelectObject(hdcDrawWindow, TitleWindowFont);
+
+    GetTextExtentPoint(hdcDrawWindow, Label, _tcslen(Label), &tsize);
+    diLabel->orgText.x = diLabel->recBkg.right - tsize.cx;
+
+    ExtTextOut(hdcDrawWindow, diLabel->orgText.x, diLabel->orgText.y,
+      ETO_OPAQUE, &diLabel->recBkg, Label, _tcslen(Label), NULL);
+
+    diLabel->recBkg.left = diLabel->orgText.x;
+
+    _tcscpy(diLabel->lastText, Label);
+
+  }
+
+  if (diValue->lastValue != Value){
+
+    TCHAR Temp[18];
+
+    SetBkColor(hdcDrawWindow, colTextBackgnd);
+
+    SetTextColor(hdcDrawWindow, RGB(0xff, 0xff, 0xff));
+
+    _stprintf(Temp, TEXT("%.1f"), Value);
+
+    SelectObject(hdcDrawWindow, CDIWindowFont);
+
+    GetTextExtentPoint(hdcDrawWindow, Temp, _tcslen(Temp), &tsize);
+    diValue->orgText.x = diValue->recBkg.right - tsize.cx;
+
+    ExtTextOut(hdcDrawWindow, diValue->orgText.x, diValue->orgText.y,
+      ETO_OPAQUE, &diValue->recBkg, Temp, _tcslen(Temp), NULL);
+
+    diValue->recBkg.left = diValue->orgText.x;
+
+    diValue->lastValue = Value;
+  }
+
+  if (diLabel->lastBitMap != BmpUnit){
+    SelectObject(hdcTemp, BmpUnit);
+    BitBlt(hdcDrawWindow, x-5, diValue->recBkg.top, 5, 11, hdcTemp, 0, 0, NOTSRCCOPY);
+    diLabel->lastBitMap = BmpUnit;
+  }
+
+}
+
+void GaugeVario::RenderSpeedToFly(int x, int y){
+
+  #define  YOFFSET     36
+  #define  DeltaVstep  4
+  #define  DeltaVlimit 16
+
+#ifndef _SIM_
+  if (!(DrawInfo.AirspeedAvailable && DrawInfo.VarioAvailable)) {
+    return;
+  }
+#else
+  // cheat
+  DrawInfo.IndicatedAirspeed = DrawInfo.Speed;
+#endif
+
+  static double lastVdiff;
+  double vdiff;
+
+  if (DerivedDrawInfo.Flying && !DerivedDrawInfo.Circling){
+    vdiff = (DerivedDrawInfo.VOpt - DrawInfo.IndicatedAirspeed);
+    vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
+    vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;
+  } else
+    vdiff = 0;
+
+  if (lastVdiff != vdiff){
+
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    SetBkMode(hdcDrawWindow, OPAQUE);
+
+    // ToDo sgi optimize
+    Rectangle(hdcDrawWindow, x, y+YOFFSET, x+11, y+YOFFSET+4*4);
+    Rectangle(hdcDrawWindow, x, y-YOFFSET-(4*4-1), x+11, y-YOFFSET+1);
+
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+
+
+    if (vdiff > 0){ // to slow
+
+      y += YOFFSET;
+
+      while (vdiff > 0){
+        if (vdiff > DeltaVstep){
+          Rectangle(hdcDrawWindow, x, y, x+11, y+3);
+        } else {
+          POINT Arrow[4];
+          Arrow[0].x = x; Arrow[0].y = y;
+          Arrow[1].x = x+5; Arrow[1].y = y+3;
+          Arrow[2].x = x+10; Arrow[2].y = y;
+          Arrow[3].x = x; Arrow[3].y = y;
+          Polygon(hdcDrawWindow, Arrow, 4);
+        }
+        vdiff -=DeltaVstep;
+        y += 4;
+      }
+
+    } else
+    if (vdiff < 0){
+
+      y -= YOFFSET;
+
+      while (vdiff < 0){
+        if (vdiff < -DeltaVstep){
+          Rectangle(hdcDrawWindow, x, y-2, x+11, y+1);
+        } else {
+          POINT Arrow[4];
+          Arrow[0].x = x; Arrow[0].y = y;
+          Arrow[1].x = x+5; Arrow[1].y = y-3;
+          Arrow[2].x = x+10; Arrow[2].y = y;
+          Arrow[3].x = x; Arrow[3].y = y;
+          Polygon(hdcDrawWindow, Arrow, 4);
+        }
+        vdiff +=DeltaVstep;
+        y -= 4;
+      }
+
+    }
+
+    lastVdiff = vdiff;
+
+  }
+
+}
+
+
+void GaugeVario::RenderBallast(void){
+
+  #define TextBal TEXT("Bal")
+
+  static double lastBallast = 1;
+  static RECT  recLabelBk = {-1,-1,-1,-1};
+  static RECT  recValueBk = {-1,-1,-1,-1};
+  static POINT orgLabel  = {-1,-1};
+  static POINT orgValue  = {-1,-1};
+
+  if (recLabelBk.left == -1){                               // ontime init, origin and background rect
+
+    SIZE tSize;
+
+    orgLabel.x = 1;                                         // position of ballast label
+    orgLabel.y = rc.top + 2 + (Appearance.TitleWindowFont.CapitalHeight*2) - Appearance.TitleWindowFont.AscentHeight;
+
+    orgValue.x = 1;                                         // position of ballast value
+    orgValue.y = rc.top + 1 + Appearance.TitleWindowFont.CapitalHeight - Appearance.TitleWindowFont.AscentHeight;
+
+    recLabelBk.left = orgLabel.x;                           // set upper left corner
+    recLabelBk.top = orgLabel.y + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
+    recValueBk.left = orgValue.x;                           // set upper left corner
+    recValueBk.top = orgValue.y + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
+
+    SelectObject(hdcDrawWindow, TitleWindowFont);           // get max label size
+    GetTextExtentPoint(hdcDrawWindow, TextBal, _tcslen(TextBal), &tSize);
+
+    recLabelBk.right = recLabelBk.left + tSize.cx;          // update back rect with max label size
+    recLabelBk.bottom = recLabelBk.top + Appearance.TitleWindowFont.CapitalHeight;
+
+                                                            // get max value size
+    GetTextExtentPoint(hdcDrawWindow, TEXT("100%"), _tcslen(TEXT("100%")), &tSize);
+
+    recValueBk.right = recValueBk.left + tSize.cx;          // update back rect with max label size
+    recValueBk.bottom = recValueBk.top + Appearance.TitleWindowFont.CapitalHeight;
+
+  }
+
+
+  if (BALLAST != lastBallast){                              // ballast hase been changed
+
+    TCHAR Temp[18];
+
+    SelectObject(hdcDrawWindow, TitleWindowFont);
+    SetBkColor(hdcDrawWindow, colTextBackgnd);
+
+    if (lastBallast < 0.001 || BALLAST < 0.001){
+      if (BALLAST < 0.001)                                  // new ballast is 0, hide label
+        ExtTextOut(hdcDrawWindow,
+          orgLabel.x,
+          orgLabel.y,
+          ETO_OPAQUE, &recLabelBk, TEXT(""), 0, NULL);
+      else {
+        SetTextColor(hdcDrawWindow, colTextGray);           // ols ballast was 0, show label
+        ExtTextOut(hdcDrawWindow,
+          orgLabel.x,
+          orgLabel.y,
+          ETO_OPAQUE, &recLabelBk, TextBal, _tcslen(TextBal), NULL);
+      }
+    }
+
+    if (BALLAST < 0.001)                                    // new ballast 0, hide value
+      _stprintf(Temp, TEXT(""));
+    else
+      _stprintf(Temp, TEXT("%.0f%%"), BALLAST*100);
+
+    SetTextColor(hdcDrawWindow, colTextWhite);              // display value
+    ExtTextOut(hdcDrawWindow,
+      orgValue.x,
+      orgValue.y,
+      ETO_OPAQUE, &recValueBk, Temp, _tcslen(Temp), NULL);
+
+    lastBallast = BALLAST;
+
+  }
+
+}
+
+void GaugeVario::RenderBugs(void){
+
+  #define TextBug TEXT("Bug")
+  static double lastBugs = 1;
+  static RECT  recLabelBk = {-1,-1,-1,-1};
+  static RECT  recValueBk = {-1,-1,-1,-1};
+  static POINT orgLabel  = {-1,-1};
+  static POINT orgValue  = {-1,-1};
+
+  if (recLabelBk.left == -1){
+
+    SIZE tSize;
+
+    orgLabel.x = 1;
+    orgLabel.y = rc.bottom - 2 - Appearance.TitleWindowFont.CapitalHeight - Appearance.TitleWindowFont.AscentHeight;
+
+    orgValue.x = 1;
+    orgValue.y = rc.bottom - 1 - Appearance.TitleWindowFont.AscentHeight;
+
+    recLabelBk.left = orgLabel.x;
+    recLabelBk.top = orgLabel.y + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
+    recValueBk.left = orgValue.x;
+    recValueBk.top = orgValue.y + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
+
+    SelectObject(hdcDrawWindow, TitleWindowFont);
+    GetTextExtentPoint(hdcDrawWindow, TextBug, _tcslen(TextBug), &tSize);
+
+    recLabelBk.right = recLabelBk.left + tSize.cx;
+    recLabelBk.bottom = recLabelBk.top + Appearance.TitleWindowFont.CapitalHeight + Appearance.TitleWindowFont.Height - Appearance.TitleWindowFont.AscentHeight;
+
+    GetTextExtentPoint(hdcDrawWindow, TEXT("100%"), _tcslen(TEXT("100%")), &tSize);
+
+    recValueBk.right = recValueBk.left + tSize.cx;
+    recValueBk.bottom = recValueBk.top + Appearance.TitleWindowFont.CapitalHeight;
+
+  }
+
+  if (BUGS != lastBugs){
+
+    TCHAR Temp[18];
+
+    SelectObject(hdcDrawWindow, TitleWindowFont);
+    SetBkColor(hdcDrawWindow, colTextBackgnd);
+
+    if (lastBugs > 0.999 || BUGS > 0.999){
+      if (BUGS > 0.999)
+        ExtTextOut(hdcDrawWindow,
+          orgLabel.x,
+          orgLabel.y,
+          ETO_OPAQUE, &recLabelBk, TEXT(""), 0, NULL);
+      else {
+        SetTextColor(hdcDrawWindow, colTextGray);
+        ExtTextOut(hdcDrawWindow,
+          orgLabel.x,
+          orgLabel.y,
+          ETO_OPAQUE, &recLabelBk, TextBug, _tcslen(TextBug), NULL);
+      }
+    }
+
+    if (BUGS > 0.999)
+      _stprintf(Temp, TEXT(""));
+    else
+      _stprintf(Temp, TEXT("%.0f%%"), (1-BUGS)*100);
+
+    SetTextColor(hdcDrawWindow, colTextWhite);
+
+    ExtTextOut(hdcDrawWindow,
+    orgValue.x,
+    orgValue.y,
+    ETO_OPAQUE, &recValueBk, Temp, _tcslen(Temp), NULL);
+
+    lastBugs = BUGS;
+
+  }
+
+}
+
+

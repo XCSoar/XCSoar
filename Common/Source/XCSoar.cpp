@@ -61,6 +61,11 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Message.h"
 
+#if NEWINFOBOX > 0
+#include "InfoBox.h"
+#endif
+
+
 #if 0
 Appearance_t Appearance = {
   apMsAltA,
@@ -68,8 +73,8 @@ Appearance_t Appearance = {
   true,
   206,
   {0,13},
-  //  apFlightModeIconAltA,
-  apFlightModeIconDefault,
+  apFlightModeIconAltA,
+  //apFlightModeIconDefault,
   {10,3},
   apCompassAltA,
   {0,0,0},
@@ -82,6 +87,8 @@ Appearance_t Appearance = {
   true,
   fgFinalGlideAltA,
   wpLandableAltA,
+  true,
+  true,
   true
 };
 #endif
@@ -106,6 +113,8 @@ Appearance_t Appearance = {
   false,
   fgFinalGlideDefault,
   wpLandableDefault,
+  false,
+  false,
   false
 };
 #endif
@@ -125,8 +134,12 @@ HWND          hWndMenuButton = NULL;
 
 int numInfoWindows = 8;
 
+#if NEWINFOBOX>0
+InfoBox *InfoBoxes[MAXINFOWINDOWS];
+#else
 HWND                                    hWndInfoWindow[MAXINFOWINDOWS];
 HWND                                    hWndTitleWindow[MAXINFOWINDOWS];
+#endif
 
 int                                     InfoType[MAXINFOWINDOWS] = {921102,
                                                                     725525,
@@ -339,7 +352,7 @@ DWORD BatteryWarningTime = 0;
 #endif
 // Groups:
 //   Altitude 0,1,20,33
-//   Aircraft info 3,6,23,32,37
+//   Aircraft info 3,6,23,32,37,47
 //   LD 4,5,19,38
 //   Vario 2,7,8,9,21,22,24,44
 //   Wind 25,26
@@ -348,101 +361,103 @@ DWORD BatteryWarningTime = 0;
 //   Waypoint 14,36,39,40,41,42,45,46
 SCREEN_INFO Data_Options[] = {
           // 0
-	  {TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33},
+	  {ugAltitude,        TEXT("Height GPS"), TEXT("H GPS"), new InfoBoxFormatter(TEXT("%2.0f")), AltitudeProcessing, 1, 33},
 	  // 1
-	  {TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0},
+	  {ugAltitude,        TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0},
 	  // 2
-	  {TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 44},
+	  {ugVerticalSpeed,   TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 44},
 	  // 3
-	  {TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f訊")), NoProcessing, 6, 37},
+	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f訊")), NoProcessing, 6, 37},
 	  // 4
-	  {TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 38},
+	  {ugNone,            TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 38},
 	  // 5
-	  {TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 19, 4},
+	  {ugNone,            TEXT("L/D cruise"), TEXT("L/D Cru"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 19, 4},
 	  // 6
-	  {TEXT("Speed ground"), TEXT("V Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), SpeedProcessing, 23, 3},
+	  {ugHorizontalSpeed, TEXT("Speed ground"), TEXT("V Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), SpeedProcessing, 23, 3},
 	  // 7
-	  {TEXT("Last Thermal Average"), TEXT("TL Avg"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+	  {ugVerticalSpeed,   TEXT("Last Thermal Average"), TEXT("TL Avg"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
 	  // 8
-	  {TEXT("Last Thermal Gain"), TEXT("TL Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 9, 7},
+	  {ugAltitude,        TEXT("Last Thermal Gain"), TEXT("TL Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 9, 7},
 	  // 9
-	  {TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 21, 8},
+	  {ugNone,            TEXT("Last Thermal Time"), TEXT("TL Time"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 21, 8},
 	  // 10
-	  {TEXT("MacCready Setting"), TEXT("MacCready"), new InfoBoxFormatter(TEXT("%2.1f")), MacCreadyProcessing, 34, 43},
+	  {ugVerticalSpeed,   TEXT("MacCready Setting"), TEXT("MacCready"), new InfoBoxFormatter(TEXT("%2.1f")), MacCreadyProcessing, 34, 43},
 	  // 11
-	  {TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},
+	  {ugDistance,        TEXT("Next Distance"), TEXT("WP Dist"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 12, 31},
 	  // 12
-	  {TEXT("Next Altitude Difference"), TEXT("WP AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 13, 11},
+	  {ugAltitude,        TEXT("Next Altitude Difference"), TEXT("WP AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 13, 11},
 	  // 13
-	  {TEXT("Next Altitude Required"), TEXT("WP AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 15, 12},
+	  {ugAltitude,        TEXT("Next Altitude Required"), TEXT("WP AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 15, 12},
 	  // 14
-	  {TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 46},
+	  {ugNone,            TEXT("Next Waypoint"), TEXT("Next"), new FormatterWaypoint(TEXT("\0")), NextUpDown, 36, 46},
 	  // 15
-	  {TEXT("Final Altitude Difference"), TEXT("Fin AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 16, 13},
+	  {ugAltitude,        TEXT("Final Altitude Difference"), TEXT("Fin AltD"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 16, 13},
 	  // 16
-	  {TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15},
+	  {ugAltitude,        TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15},
 	  // 17
-	  {TEXT("Speed Task Average"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+	  {ugHorizontalSpeed, TEXT("Speed Task Average"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
 	  // 18
-	  {TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
+	  {ugDistance,        TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
 	  // 19
-	  {TEXT("Final L/D"), TEXT("Fin L/D"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5},
+	  {ugNone,            TEXT("Final L/D"), TEXT("Fin L/D"), new InfoBoxFormatter(TEXT("%1.0f")), NoProcessing, 38, 5},
 	  // 20
-	  {TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1},
+	  {ugAltitude,        TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1},
 	  // 21
-	  {TEXT("Thermal Average"), TEXT("TC Avg"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9},
+	  {ugVerticalSpeed,   TEXT("Thermal Average"), TEXT("TC Avg"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9},
 	  // 22
-	  {TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
+	  {ugAltitude,        TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
 	  // 23
-	  {TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f訊")), DirectionProcessing, 32, 6},
+	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f訊")), DirectionProcessing, 32, 6},
 	  // 24
-	  {TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 44, 22},
+	  {ugVerticalSpeed,   TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 44, 22},
 	  // 25
-	  {TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 26},
+	  {ugWindSpeed,       TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 26},
 	  // 26
-	  {TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f訊")), WindDirectionProcessing, 25, 25},
+	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f訊")), WindDirectionProcessing, 25, 25},
 	  // 27
-	  {TEXT("AA Time"), TEXT("AA Time"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
+	  {ugNone,            TEXT("AA Time"), TEXT("AA Time"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
 	  // 28
-	  {TEXT("AA Distance Max"), TEXT("AA Dmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27},
+	  {ugDistance,        TEXT("AA Distance Max"), TEXT("AA Dmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27},
 	  // 29
-	  {TEXT("AA Distance Min"), TEXT("AA Dmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 30, 28},
+	  {ugDistance,        TEXT("AA Distance Min"), TEXT("AA Dmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 30, 28},
 	  // 30
-	  {TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
+	  {ugHorizontalSpeed, TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
 	  // 31
-	  {TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 30},
+	  {ugHorizontalSpeed, TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 30},
 	  // 32
-	  {TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 37, 23},
+	  {ugHorizontalSpeed, TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 37, 23},
 	  // 33
-	  {TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
+	  {ugAltitude,        TEXT("Pressure Altitude"), TEXT("H Baro"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 0, 20},
 	  // 34
-	  {TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
+	  {ugHorizontalSpeed, TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
 	  // 35
-	  {TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
+	  {ugNone,            TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
 	  // 36
-	  {TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 39, 14},
+	  {ugNone,            TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 39, 14},
 	  // 37
-	  {TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 3, 32},
+	  {ugNone,            TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 47, 32},
 	  // 38
-	  {TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 4, 19},
+	  {ugNone,            TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 4, 19},
 	  // 39
-	  {TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},
+	  {ugNone,            TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},
 	  // 40
-	  {TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 41, 39},
+	  {ugNone,            TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 41, 39},
 	  // 41
-	  {TEXT("Task Time To Go"), TEXT("Fin ETE"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 42, 40},
+	  {ugNone,            TEXT("Task Time To Go"), TEXT("Fin ETE"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 42, 40},
 	  // 42
-	  {TEXT("Next Time To Go"), TEXT("WP ETE"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 45, 41},
+	  {ugNone,            TEXT("Next Time To Go"), TEXT("WP ETE"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 45, 41},
 	  // 43
-	  {TEXT("Speed Dolphin"), TEXT("V Opt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 35},
+	  {ugHorizontalSpeed, TEXT("Speed Dolphin"), TEXT("V Opt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 35},
 	  // 44
-	  {TEXT("Netto Vario"), TEXT("Netto"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 24},
+	  {ugVerticalSpeed,   TEXT("Netto Vario"), TEXT("Netto"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 24},
 	  // 45
-	  {TEXT("Task Arrival Time"), TEXT("Fin ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 46, 42},
+	  {ugNone,            TEXT("Task Arrival Time"), TEXT("Fin ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 46, 42},
 	  // 46
-	  {TEXT("Next Arrival Time"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 45},
+	  {ugNone,            TEXT("Next Arrival Time"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 45},
+	  // 47
+	  {ugNone,            TEXT("Bearing Difference"), TEXT("Brng D"), new FormatterDiffBearing(TEXT("")), NoProcessing, 3, 37},
 	};
-int NUMSELECTSTRINGS = 47;
+int NUMSELECTSTRINGS = 48;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -465,6 +480,7 @@ void SIMProcessTimer(void);
 
 void                                                    PopUpSelect(int i);
 HWND                                                    CreateRpCommandBar(HWND hwnd);
+bool IsInfoboxHdc(HDC hdc);
 
 #ifdef DEBUG
 void                                            DebugStore(char *Str);
@@ -659,6 +675,11 @@ void FocusOnWindow(int i, bool selected) {
 
   if (i<0) return; // error
 
+  #if NEWINFOBOX>0
+    InfoBoxes[i]->SetFocus(selected);
+    // todo defocus all other?
+  #else
+
   HWND wind = hWndInfoWindow[i];
 
   if (selected) {
@@ -675,6 +696,7 @@ void FocusOnWindow(int i, bool selected) {
   } else {
     SetWindowLong(wind, GWL_USERDATA, 0);
   }
+  #endif
 
 }
 
@@ -1050,7 +1072,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 
   hWndMainWindow = CreateWindow(szWindowClass, szTitle,
-				WS_VISIBLE|WS_SYSMENU|WS_CLIPCHILDREN
+				WS_SYSMENU|WS_CLIPCHILDREN
 				| WS_CLIPSIBLINGS,
                                 WindowSize.left, WindowSize.top,
 				WindowSize.right, WindowSize.bottom,
@@ -1074,6 +1096,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   GetClientRect(hWndMainWindow, &rc);
 
+  Units::LoadUnitBitmap(hInst);
+
   InfoBoxLayout::ScreenGeometry(rc);
 
   ////////////////////////
@@ -1086,6 +1110,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
   ////////////////// do fonts
+
+
+  ShowWindow(hWndMainWindow, SW_SHOW);
 
   int fontsz1 = (rc.bottom - rc.top );
   int fontsz2 = (rc.right - rc.left );
@@ -1117,6 +1144,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfCharSet = ANSI_CHARSET;
   ApplyClearType(&logfont);
 
+  #if NEWINFOBOX > 0
+  // todo
+  #else
   // JMW algorithm to auto-size info window font.
   SIZE tsize;
   HDC iwhdc = GetDC(hWndInfoWindow[0]);
@@ -1129,6 +1159,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     DeleteObject(InfoWindowFont);
   } while (tsize.cx>InfoBoxLayout::ControlWidth);
   ReleaseDC(hWndInfoWindow[0], iwhdc);
+  #endif
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
@@ -1215,6 +1246,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   propGetFontSettings(TEXT("MapWindowBoldFont"), &logfont);
   MapWindowBoldFont = CreateFontIndirect (&logfont);
 
+  #if NEWINFOBOX > 0
+  // NOP not needed
+  #else
   for(i=0;i<numInfoWindows;i++)
     {
       SendMessage(hWndInfoWindow[i],WM_SETFONT,
@@ -1222,6 +1256,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       SendMessage(hWndTitleWindow[i],WM_SETFONT,
 		  (WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
     }
+  #endif
 
   ///////////////////////////////////////////////////////
   //// create map window
@@ -1273,11 +1308,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     ShowInfoBoxes();
 
+    #if NEWINFOBOX>0
+    // NOP not needed
+    #else
     for(i=0;i<numInfoWindows;i++)
       {
         UpdateWindow(hWndInfoWindow[i]);
         UpdateWindow(hWndTitleWindow[i]);
       }
+    #endif
 
     return TRUE;
 }
@@ -1407,6 +1446,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return (LRESULT)hBrushSelected;
       }
       if (wdata==0) {
+        if (IsInfoboxHdc((HDC)lParam) && Appearance.InverseInfoBox){
+          SetBkColor((HDC)wParam, RGB(0x00,0x00,0x00));
+          SetTextColor((HDC)wParam, RGB(0xff,0xff,0xff));
+          return (LRESULT)GetStockObject(BLACK_BRUSH);
+          return (LRESULT)GetStockObject(BLACK_BRUSH);
+        }
 	SetBkColor((HDC)wParam, ColorUnselected);
         SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
 	return (LRESULT)hBrushUnselected;
@@ -1464,13 +1509,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       if(InfoWindowActive) {
 
         if(DisplayLocked) {
-	  FocusOnWindow(InfoFocus,true);
+          FocusOnWindow(InfoFocus,true);
         } else {
-	  FocusOnWindow(InfoFocus,true);
-	}
+          FocusOnWindow(InfoFocus,true);
+        }
       } else {
-	DefocusInfoBox();
-	HideMenu();
+        DefocusInfoBox();
+        HideMenu();
         SetFocus(hWndMapWindow);
       }
       break;
@@ -1554,11 +1599,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       Message::Destroy();
 
+      Units::UnLoadUnitBitmap();
+
+      #if NEWINFOBOX > 0
+      InfoBoxLayout::DestroyInfoBoxes();
+      #else
       for(i=0;i<numInfoWindows;i++)
         {
           DestroyWindow(hWndInfoWindow[i]);
           DestroyWindow(hWndTitleWindow[i]);
         }
+      #endif
 
       ButtonLabel::Destroy();
 
@@ -1904,42 +1955,50 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       InfoBoxFocusTimeOut = 0;
       if (!InfoWindowActive) {
-	ShowMenu();
+        ShowMenu();
       }
 
+      // todo_newinfobox
       for(i=0;i<numInfoWindows;i++)
         {
+          #if NEWINFOBOX > 0
+          if(wmControl == InfoBoxes[i]->GetHandle())
+          #else
           if(wmControl == hWndInfoWindow[i])
+          #endif
             {
-	      InfoWindowActive = TRUE;
-	      SetFocus(hWnd);
+              InfoWindowActive = TRUE;
+              #if NEWINFOBOX > 0
+              #else
+              SetFocus(hWnd);
+              #endif
 
-	      if(DisplayLocked)
-		{
-		  if( i!= InfoFocus)
-		    {
-		      FocusOnWindow(i,true);
-		      FocusOnWindow(InfoFocus,false);
+              if(DisplayLocked)
+                {
+                  if( i!= InfoFocus)
+                    {
+                      FocusOnWindow(i,true);
+                      FocusOnWindow(InfoFocus,false);
 
-		      InfoFocus = i;
-		      InfoWindowActive = TRUE;
-		    }
-		  DisplayText();
-		  InputEvents::setMode(TEXT("infobox"));
+                      InfoFocus = i;
+                      InfoWindowActive = TRUE;
+                    }
+                  DisplayText();
+                  InputEvents::setMode(TEXT("infobox"));
 
-		}
-	      else
-		{
-		  PopUpSelect(i);
-		  DisplayText();
-		}
-	      return 0;
-	    }
-	}
+                }
+	            else
+                {
+                  PopUpSelect(i);
+                  DisplayText();
+                }
+              return 0;
+            }
+        }
       Message::CheckTouch(wmControl);
 
       if (ButtonLabel::CheckButtonPress(wmControl)) {
-	return TRUE; // don't continue processing..
+        return TRUE; // don't continue processing..
       }
 
     }
@@ -2082,32 +2141,76 @@ void DisplayText(void)
       DisplayTypeLast = DisplayType[i];
 
       if (EnableAuxiliaryInfo) {
-	  DisplayType[i] = (InfoType[i] >> 24) & 0xff;
+        DisplayType[i] = (InfoType[i] >> 24) & 0xff;
       } else {
-	if (CALCULATED_INFO.Circling == TRUE)
-	  DisplayType[i] = InfoType[i] & 0xff;
-	else if (CALCULATED_INFO.FinalGlide == TRUE) {
-	  DisplayType[i] = (InfoType[i] >> 16) & 0xff;
-	} else {
-	  DisplayType[i] = (InfoType[i] >> 8) & 0xff;
-	}
+        if (CALCULATED_INFO.Circling == TRUE)
+          DisplayType[i] = InfoType[i] & 0xff;
+        else if (CALCULATED_INFO.FinalGlide == TRUE) {
+          DisplayType[i] = (InfoType[i] >> 16) & 0xff;
+        } else {
+          DisplayType[i] = (InfoType[i] >> 8) & 0xff;
+        }
       }
 
       Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
-      Data_Options[DisplayType[i]].Formatter->Render(hWndInfoWindow[i]);
+      #if NEWINFOBOX>0
+      if (DisplayType[i] == 14){ // Next Waypoint
+        if (ActiveWayPoint != -1){
+          InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Formatter->Render());
+          InfoBoxes[i]->SetValue(Data_Options[47].Formatter->Render());
+          InfoBoxes[i]->SetComment(WayPointList[ Task[ActiveWayPoint].Index ].Comment);
+        }else{
+          InfoBoxes[i]->SetTitle(TEXT("Next"));
+          InfoBoxes[i]->SetValue(TEXT("---"));
+          InfoBoxes[i]->SetComment(TEXT(""));
+        }
+      } else {
+        InfoBoxes[i]->SetValue(Data_Options[DisplayType[i]].Formatter->Render());
+        // to be optimized!
+        InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(Data_Options[DisplayType[i]].UnitGroup));
+      }
 
-      if ((DisplayType[i] != DisplayTypeLast)||(first)) {
-	// JMW only update captions if text has really changed.
-	// this avoids unnecesary gettext lookups
-	_stprintf(Caption[i],gettext(Data_Options[DisplayType[i]].Title) );
-	SetWindowText(hWndTitleWindow[i],Caption[i]);
+      if (DisplayType[i] == 10){ // MC Setting
+        if (CALCULATED_INFO.AutoMacCready)
+          InfoBoxes[i]->SetComment(TEXT("AUTO"));
+        else
+          InfoBoxes[i]->SetComment(TEXT("MANUAL"));
+      }
+
+      #else
+      Data_Options[DisplayType[i]].Formatter->Render(hWndInfoWindow[i]);
+      #endif
+
+      if ((DisplayType[i] != DisplayTypeLast)/* this is always false!*/ || (first)) {
+        // JMW only update captions if text has really changed.
+        // this avoids unnecesary gettext lookups
+        _stprintf(Caption[i],gettext(Data_Options[DisplayType[i]].Title) );
+        #if NEWINFOBOX>0
+        InfoBoxes[i]->SetTitle(Caption[i]);
+        #else
+        SetWindowText(hWndTitleWindow[i],Caption[i]);
+        #endif
       }
 
     }
+
   first = false;
 
   UnlockNavBox();
 
+}
+
+
+bool IsInfoboxHdc(HDC hdc){
+  #if NEWINFOBOX > 0
+  // NOP, not needed
+  #else
+  int i;
+  for(i=0;i<numInfoWindows;i++)
+    if (hWndTitleWindow[i] == hdc || hWndInfoWindow[i] == hdc)
+      return(true);
+  #endif
+  return(false);
 }
 
 
@@ -2377,6 +2480,13 @@ void SwitchToMapWindow(void)
 void PopupAnalysis()
 {
   DialogActive = true;
+  #if NEWINFOBOX>0
+  if (InfoBoxLayout::landscape) {
+    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndMapWindow, (DLGPROC)AnalysisProc);
+  } else {
+    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndMapWindow, (DLGPROC)AnalysisProc);
+  }
+  #else
   if (InfoBoxLayout::landscape) {
     DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndInfoWindow[0],
 	      (DLGPROC)AnalysisProc);
@@ -2384,6 +2494,7 @@ void PopupAnalysis()
     DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndInfoWindow[0],
 	      (DLGPROC)AnalysisProc);
   }
+  #endif
   DialogActive = false;
 }
 
@@ -2395,7 +2506,15 @@ void PopupWaypointDetails()
 		return;
 
   DialogActive = true;
-
+  #if NEWINFOBOX>0
+  if (InfoBoxLayout::landscape) {
+    DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS_LANDSCAPE,
+	      hWndMapWindow, (DLGPROC)WaypointDetails);
+  } else {
+    DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS,
+	      hWndMapWindow, (DLGPROC)WaypointDetails);
+  }
+  #else
   if (InfoBoxLayout::landscape) {
     DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS_LANDSCAPE,
 	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
@@ -2403,6 +2522,7 @@ void PopupWaypointDetails()
     DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS,
 	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
   }
+  #endif
   DialogActive = false;
 
 }
@@ -2411,7 +2531,11 @@ void PopupWaypointDetails()
 void PopupBugsBallast(int UpDown)
 {
   DialogActive = true;
+  #if NEWINFOBOX>0
+  DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWndMapWindow, (DLGPROC)SetBugsBallast);
+  #else
   DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWndInfoWindow[0], (DLGPROC)SetBugsBallast);
+  #endif
   ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
   SwitchToMapWindow();
@@ -2423,7 +2547,11 @@ void PopUpSelect(int Index)
 {
   DialogActive = true;
   CurrentInfoType = InfoType[Index];
+  #if NEWINFOBOX>0
+  InfoType[Index] = DialogBox(hInst, (LPCTSTR)IDD_SELECT, hWndMapWindow, (DLGPROC)Select);
+  #else
   InfoType[Index] = DialogBox(hInst, (LPCTSTR)IDD_SELECT, hWndInfoWindow[Index], (DLGPROC)Select);
+  #endif
   StoreType(Index, InfoType[Index]);
   ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
@@ -2483,20 +2611,32 @@ void UnlockTerrainDataGraphics() {
 void HideInfoBoxes() {
   int i;
   InfoBoxesHidden = true;
+  #if NEWINFOBOX > 0
+  for (i=0; i<numInfoWindows; i++) {
+    InfoBoxes[i]->SetVisible(false);
+  }
+  #else
   for (i=0; i<numInfoWindows; i++) {
     ShowWindow(hWndInfoWindow[i], SW_HIDE);
     ShowWindow(hWndTitleWindow[i], SW_HIDE);
   }
+  #endif
 }
 
 
 void ShowInfoBoxes() {
   int i;
   InfoBoxesHidden = false;
+  #if NEWINFOBOX > 0
+  for (i=0; i<numInfoWindows; i++) {
+    InfoBoxes[i]->SetVisible(true);
+  }
+  #else
   for (i=0; i<numInfoWindows; i++) {
     ShowWindow(hWndInfoWindow[i], SW_SHOW);
     ShowWindow(hWndTitleWindow[i], SW_SHOW);
   }
+  #endif
 }
 
 

@@ -10,6 +10,7 @@
 
 #include "resource.h"
 #include "sizes.h"
+#include "units.h"
 
 
 class InfoBoxFormatter {
@@ -20,7 +21,11 @@ class InfoBoxFormatter {
     Value = 0.0;
   }
 
+  #if NEWINFOBOX
+  virtual TCHAR *Render(void);
+  #else
   virtual void Render(HWND hWnd);
+  #endif
   BOOL Valid;
   double Value;
   TCHAR Format[FORMAT_SIZE+1];
@@ -35,7 +40,11 @@ class FormatterWaypoint: public InfoBoxFormatter {
  public:
   FormatterWaypoint(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
+  #if NEWINFOBOX
+  virtual TCHAR *Render(void);
+  #else
   virtual void Render(HWND hWnd);
+  #endif
 };
 
 class FormatterLowWarning: public InfoBoxFormatter {
@@ -47,7 +56,11 @@ class FormatterLowWarning: public InfoBoxFormatter {
 
   };
 
+  #if NEWINFOBOX
+  virtual TCHAR *Render(void);
+  #else
   virtual void Render(HWND hWnd);
+  #endif
   double minimum;
   virtual void AssignValue(int i);
 };
@@ -57,7 +70,11 @@ class FormatterTime: public InfoBoxFormatter {
  public:
   FormatterTime(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
+  #if NEWINFOBOX
+  virtual TCHAR *Render(void);
+  #else
   virtual void Render(HWND hWnd);
+  #endif
   virtual void AssignValue(int i);
   int hours;
   int mins;
@@ -65,10 +82,20 @@ class FormatterTime: public InfoBoxFormatter {
   void SecsToDisplayTime(int i);
 };
 
+class FormatterDiffBearing: public InfoBoxFormatter {
+ public:
+  FormatterDiffBearing(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
+  #if NEWINFOBOX
+  virtual TCHAR *Render(void);
+  #else
+  virtual void Render(HWND hWnd);
+  #endif
+};
 
 typedef struct _SCREEN_INFO
 {
+  UnitGroup_t UnitGroup;
   TCHAR Description[DESCRIPTION_SIZE +1];
   TCHAR Title[TITLE_SIZE + 1];
   InfoBoxFormatter *Formatter;
@@ -205,6 +232,8 @@ typedef struct{
   IndFinalGlide_t IndFinalGlide;
   IndLandable_t IndLandable;
   bool DontShowAutoMacCready;
+  bool InverseInfoBox;
+  bool InfoTitelCapital;
 } Appearance_t;
 
 extern Appearance_t Appearance;
