@@ -38,6 +38,7 @@ Copyright_License {
 #include "externs.h"
 
 #define DEFAULTBORDERPENWIDTH 1
+#define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+4)
 
 extern HFONT  TitleWindowFont;
 extern HFONT  MapWindowFont;
@@ -49,11 +50,12 @@ extern HFONT  CDIWindowFont;
 static fgColor = RGB(0x0,0x0,0x0);
 static bkColor = RGB(0xff,0xff,0xff);
 static bkColorSel = RGB(150,0x0,0x0);
-static bdColor = RGB(80,80,80);
+static bdColor = RGB(80,80,80);  
 static DWORD lastErr;
 static HBRUSH hBrushDefaultBackGround;
 static HBRUSH hBrushDefaultBackGroundSel;
 static HPEN hPenDefaultBorder;
+static HPEN hPenSelector;
 static int Count=0;
 
 void InitInfoBoxModule(void);
@@ -66,15 +68,17 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   mWidth = Width;
   mHeight = Height;
   mParent = Parent;
-  mColorBack = bkColor;
-  mColorFore = fgColor;
 
   InitInfoBoxModule();
+
+  mColorBack = bkColor;
+  mColorFore = fgColor;
 
   if (Count == 0){
     hBrushDefaultBackGround = (HBRUSH)CreateSolidBrush(bkColor);
     hBrushDefaultBackGroundSel = (HBRUSH)CreateSolidBrush(bkColorSel);
     hPenDefaultBorder = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH, bdColor);
+    hPenSelector = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH+2, mColorFore);
   }
 
   mHWnd = CreateWindow(TEXT("STATIC"), TEXT("\0"),
@@ -95,6 +99,7 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   mhBrushBk = hBrushDefaultBackGround;
   mhBrushBkSel = hBrushDefaultBackGroundSel;
   mhPenBorder = hPenDefaultBorder;
+  mhPenSelector = hPenSelector;
   mBorderSize = 1;
 
   mBorderKind = BORDERRIGHT | BORDERBOTTOM;
@@ -147,9 +152,11 @@ InfoBox::~InfoBox(void){
     DeleteObject(hBrushDefaultBackGround);
     DeleteObject(hBrushDefaultBackGroundSel);
     DeleteObject(hPenDefaultBorder);
+    DeleteObject(hPenSelector);
 
   }
 
+  ReleaseDC(mHWnd, mHdc);
   DeleteDC(mHdcTemp);
   DestroyWindow(mHWnd);
 
@@ -160,12 +167,16 @@ void InfoBox::SetFocus(bool Value){
   if (mHasFocus != Value){
     mHasFocus = Value;
 
+/*
     if (mHasFocus)
       mColorTitleBk = bkColorSel;
     else
       mColorTitleBk = bkColor;
 
     PaintTitle();
+*/
+
+    Paint();
     
   }
 }
@@ -220,6 +231,7 @@ void InfoBox::SetTitle(TCHAR *Value){
   if (_tcscmp(mTitle, sTmp) != 0){
     _tcscpy(mTitle, sTmp);
     PaintTitle();
+    PaintSelector();
   }
 }
 
@@ -236,6 +248,7 @@ void InfoBox::SetComment(TCHAR *Value){
     _tcsncpy(mComment, Value, COMMENTSIZE);
     mComment[COMMENTSIZE] = '\0';
     PaintComment();
+    PaintSelector();
   }
 }
 
@@ -345,6 +358,32 @@ void InfoBox::PaintComment(void){
 
 }
 
+void InfoBox::PaintSelector(void){
+
+  if (mHasFocus){
+    HPEN oldPen = (HPEN)SelectObject(mHdc, hPenSelector);
+
+    MoveToEx(mHdc, mWidth-SELECTORWIDTH-1, 0, NULL);
+    LineTo(mHdc, mWidth-1, 0);
+    LineTo(mHdc, mWidth-1, SELECTORWIDTH+1);
+
+    MoveToEx(mHdc, mWidth-1, mHeight-SELECTORWIDTH-2, NULL);
+    LineTo(mHdc, mWidth-1, mHeight-1);
+    LineTo(mHdc, mWidth-SELECTORWIDTH-1, mHeight-1);
+
+    MoveToEx(mHdc, SELECTORWIDTH+1, mHeight-1, NULL);
+    LineTo(mHdc, 0, mHeight-1);
+    LineTo(mHdc, 0, mHeight-SELECTORWIDTH-2);
+
+    MoveToEx(mHdc, 0, SELECTORWIDTH+1, NULL);
+    LineTo(mHdc, 0, 0);
+    LineTo(mHdc, SELECTORWIDTH+1, 0);
+
+    SelectObject(mHdc,oldPen);
+  }
+  
+}
+
 void InfoBox::Paint(void){
 
   static InitDone = false;
@@ -364,7 +403,7 @@ void InfoBox::Paint(void){
 
   if (mBorderKind != 0){
 
-    SelectObject(mHdc, mhPenBorder);
+    HPEN oldPen = (HPEN)SelectObject(mHdc, mhPenBorder);
 
     if (mBorderKind & BORDERTOP){
       MoveToEx(mHdc, 0, 0, NULL);
@@ -382,12 +421,13 @@ void InfoBox::Paint(void){
       MoveToEx(mHdc, 0, mHeight-1, NULL);
       LineTo(mHdc, 0, -1);
     }
-
+    SelectObject(mHdc,oldPen);
   }
 
   PaintTitle();
   PaintValue();
   PaintComment();
+  PaintSelector();
 
 }
 

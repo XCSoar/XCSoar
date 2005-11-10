@@ -74,6 +74,7 @@ class InfoBox{
     HBRUSH mhBrushBk;
     HBRUSH mhBrushBkSel;
     HPEN mhPenBorder;
+    HPEN mhPenSelector;
     TCHAR mTitle[TITLESIZE+1];
     TCHAR mValue[VALUESIZE+1];
     TCHAR mComment[COMMENTSIZE+1];
@@ -100,6 +101,7 @@ class InfoBox{
     void PaintTitle(void);
     void PaintValue(void);
     void PaintComment(void);
+    void PaintSelector(void);
 
     // LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

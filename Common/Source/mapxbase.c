@@ -351,6 +351,9 @@ DBFHandle msDBFCreate( const char * pszFilename )
     psDBF->bCurrentRecordModified = MS_FALSE;
     psDBF->pszCurrentRecord = NULL;
 
+    psDBF->pszStringField = NULL;
+    psDBF->nStringFieldLen = 0;    
+
     psDBF->bNoHeader = MS_TRUE;
 
     return( psDBF );

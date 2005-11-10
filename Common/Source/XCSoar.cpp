@@ -480,7 +480,6 @@ void SIMProcessTimer(void);
 
 void                                                    PopUpSelect(int i);
 HWND                                                    CreateRpCommandBar(HWND hwnd);
-bool IsInfoboxHdc(HDC hdc);
 
 #ifdef DEBUG
 void                                            DebugStore(char *Str);
@@ -1441,20 +1440,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_CTLCOLORSTATIC:
       wdata = GetWindowLong((HWND)lParam, GWL_USERDATA);
       if (wdata==1) {
-	SetBkColor((HDC)wParam, ColorSelected);
+        SetBkColor((HDC)wParam, ColorSelected);
         SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
-	return (LRESULT)hBrushSelected;
+        return (LRESULT)hBrushSelected;
       }
       if (wdata==0) {
-        if (IsInfoboxHdc((HDC)lParam) && Appearance.InverseInfoBox){
-          SetBkColor((HDC)wParam, RGB(0x00,0x00,0x00));
-          SetTextColor((HDC)wParam, RGB(0xff,0xff,0xff));
-          return (LRESULT)GetStockObject(BLACK_BRUSH);
-          return (LRESULT)GetStockObject(BLACK_BRUSH);
-        }
-	SetBkColor((HDC)wParam, ColorUnselected);
+        SetBkColor((HDC)wParam, ColorUnselected);
         SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
-	return (LRESULT)hBrushUnselected;
+        return (LRESULT)hBrushUnselected;
       }
       if (wdata==2) {
 	SetBkColor((HDC)wParam, ColorUnselected);
@@ -2198,19 +2191,6 @@ void DisplayText(void)
 
   UnlockNavBox();
 
-}
-
-
-bool IsInfoboxHdc(HDC hdc){
-  #if NEWINFOBOX > 0
-  // NOP, not needed
-  #else
-  int i;
-  for(i=0;i<numInfoWindows;i++)
-    if (hWndTitleWindow[i] == hdc || hWndInfoWindow[i] == hdc)
-      return(true);
-  #endif
-  return(false);
 }
 
 
