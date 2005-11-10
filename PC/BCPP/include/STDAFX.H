@@ -94,17 +94,25 @@ long WINAPI     MulDiv32(long, long, long);
 
 //#define WNDPROC     FARPROC
 
+
+
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+// BCpp does not know a wide char version, this is the proto of the wrapper (see xcsoarps.cpp)
+#define GetProcAddress GetProcAddressW
+FARPROC GetProcAddressW(HMODULE hModule, LPCWSTR lpProcName);
+
+//BOOL SHGetSpecialFolderPathW(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);
+
 // redefine WinMain
 int WINAPI xcsoarWinMain(     HINSTANCE hInstance,
-                        HINSTANCE hPrevInstance,
-                        LPTSTR    lpCmdLine,
-                        int       nCmdShow);
+  HINSTANCE hPrevInstance,  LPTSTR    lpCmdLine,  int       nCmdShow);
 #define WinMain xcsoarWinMain
-
+  
 #ifdef __cplusplus
 }
 #endif

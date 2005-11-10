@@ -108,6 +108,16 @@
 #define IDB_OUTFILED_UNREACHABLE        292
 #define IDB_VARIOSCALEA                 293
 #define IDB_UNIT_MS                     294
+#define IDB_UNIT_KT                     295
+#define IDB_UNIT_FL                     296
+#define IDB_UNIT_DegK                   297
+#define IDB_UNIT_DegC                   298
+#define IDB_UNIT_DegF                   299
+#define IDB_UNIT_FPM                    300
+#define IDB_UNIT_KMH                    301
+#define IDB_UNIT_MPH                    302
+
+
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003

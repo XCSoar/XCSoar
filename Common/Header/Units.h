@@ -18,6 +18,12 @@
 
 */
 
+#if !defined(__UNITS_H)
+#define __UNITS_H
+
+#define UNITBITMAPNORMAL      0
+#define UNITBITMAPINVERS      1
+#define UNITBITMAPGRAY        2
 
 
 typedef enum {
@@ -45,10 +51,22 @@ typedef enum {
   unGradFahrenheit                  // K = (°F + 459,67) / 1,8
 }Units_t;
 
+
+typedef enum {
+  ugNone,
+  ugDistance,
+  ugAltitude,
+  ugHorizontalSpeed,
+  ugVerticalSpeed,
+  ugWindSpeed
+}UnitGroup_t;
+
 typedef struct{
-  TCHAR  *Name;
-  double ToUserFact;
-  double ToUserOffset;
+  TCHAR   *Name;
+  double  ToUserFact;
+  double  ToUserOffset;
+  HBITMAP hBitmap;
+  POINT   BitMapSize;
 }UnitDescriptor_t;
 
 class Units {
@@ -60,6 +78,8 @@ private:
   static Units_t UserHorizontalSpeedUnit;
   static Units_t UserVerticalSpeedUnit;
   static Units_t UserWindSpeedUnit;
+
+  static void setupUnitBitmap(Units_t Unit, HINSTANCE hInst, WORD IDB, int Width, int Height);
 
 public:
 
@@ -82,6 +102,8 @@ public:
   static Units_t GetUserWindSpeedUnit(void);
   static Units_t SetUserWindSpeedUnit(Units_t NewUnit);
 
+  static Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
+
   static bool LongitudeToString(double Longitude, TCHAR *Buffer, size_t size);
   static bool LatitudeToString(double Latitude, TCHAR *Buffer, size_t size);
 
@@ -101,4 +123,12 @@ public:
 
   static double ToUserAltitude(double Altitude);
 
+  static bool GetUnitBitmap(Units_t Unit, HBITMAP *HBmp, POINT *Org, POINT *Size, int Kind);
+  static bool LoadUnitBitmap(HINSTANCE hInst);
+  static bool UnLoadUnitBitmap(void);
+
+
 };
+
+#endif
+

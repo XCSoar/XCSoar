@@ -8,6 +8,9 @@ class InfoBoxLayout {
  public:
   static bool landscape;
   static void CreateInfoBoxes(RECT rc);
+  #if NEWINFOBOX > 0
+  static void DestroyInfoBoxes(void);
+  #endif
   static int InfoBoxGeometry;
   static int ControlWidth, ControlHeight, TitleHeight;
   static void ScreenGeometry(RECT rc);
