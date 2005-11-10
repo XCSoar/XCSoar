@@ -58,6 +58,11 @@ HDC GaugeVario::hdcTemp = NULL;
 HBITMAP GaugeVario::hDrawBitMap = NULL;
 RECT GaugeVario::rc;
 
+HBITMAP GaugeVario::hBitmapUnit;
+POINT GaugeVario::BitmapUnitPos;
+POINT GaugeVario::BitmapUnitSize;
+
+
 DrawInfo_t GaugeVario::diValueTop = {false};
 DrawInfo_t GaugeVario::diValueMiddle = {false};
 DrawInfo_t GaugeVario::diValueBottom = {false};
@@ -71,6 +76,9 @@ DrawInfo_t GaugeVario::diLabelBottom = {false};
 #define colTextGray    RGB(0xa0, 0xa0, 0xa0)
 #define colTextWhite   RGB(0xff, 0xff, 0xff)
 #define colTextBackgnd RGB(0x00, 0x00, 0x00)
+
+LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
 
 void GaugeVario::Create() {
   RECT bigrc;
@@ -90,16 +98,23 @@ void GaugeVario::Create() {
 
   GetClientRect(hWndVarioWindow, &rc);
 
-  //
-  hdcScreen = GetDC(hWndVarioWindow);
-  hdcDrawWindow = CreateCompatibleDC(hdcScreen);
-  hdcTemp = CreateCompatibleDC(hdcScreen);
+  hdcScreen = GetDC(hWndVarioWindow);                       // the screen DC
+  hdcDrawWindow = CreateCompatibleDC(hdcScreen);            // the memory DC
+  hdcTemp = CreateCompatibleDC(hdcScreen);                  // temp DC to select Uniz Bmp's
 
-//  hDrawBitMap = CreateCompatibleBitmap (hdcScreen, GAUGEXSIZE, GAUGEYSIZE);
+                                                            // prepare drawing DC, setup size and coler deep
+  HBITMAP memBM = CreateCompatibleBitmap (hdcScreen, rc.right-rc.left, rc.bottom-rc.top);
+  SelectObject(hdcDrawWindow, memBM);
+                                                            // load vario scale
   hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEA));
 
   SetTextColor(hdcDrawWindow, RGB(0xff,0xff,0xff));
   SetBkColor(hdcDrawWindow, RGB(0x00,0x00,0x00));
+
+  Units::GetUnitBitmap(Units::GetUserUnitByGroup(ugVerticalSpeed),
+    &hBitmapUnit, &BitmapUnitPos, &BitmapUnitSize, UNITBITMAPINVERS | UNITBITMAPGRAY);
+
+  SetWindowLong(hWndVarioWindow, GWL_WNDPROC, (LONG) GaugeVarioWndProc);
 
 }
 
@@ -133,12 +148,13 @@ void GaugeVario::Render() {
 
   double vval;
 
-  HKEY Key;
+//  HKEY Key;
 
-  SelectObject(hdcDrawWindow, (HBITMAP)hDrawBitMap);   // ???
-  RenderBg();                                          // ???
+//  RenderBg();                                          // ???
 
   if (!InitDone){
+    HBITMAP oldBmp;
+
     xoffset = (rc.right-rc.left);
     yoffset = (rc.bottom-rc.top)/2;
     ValueHight = (1 + Appearance.CDIWindowFont.CapitalHeight + 2 + Appearance.TitleWindowFont.CapitalHeight + 1);
@@ -148,6 +164,11 @@ void GaugeVario::Render() {
     orgMiddle.x = rc.right;
     orgBottom.y = orgMiddle.y + ValueHight;
     orgBottom.x = rc.right;
+
+    oldBmp = (HBITMAP)SelectObject(hdcTemp, (HBITMAP)hDrawBitMap);            // copy scale bitmap to memory DC
+    BitBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom, hdcTemp, 0, 0, SRCCOPY);
+    SelectObject(hdcTemp, oldBmp);
+
     InitDone = true;
   }
 
@@ -162,14 +183,16 @@ void GaugeVario::Render() {
   vval = vval*LIFTMODIFY;
   vval = min(99.9,max(-99.9,vval));
 
-  RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop, CALCULATED_INFO.Average30s*LIFTMODIFY, MapWindow::hBmpUnitMpS, TEXT("Avg"));
 
-  RenderValue(orgMiddle.x, orgMiddle.y, &diValueMiddle, &diLabelMiddle, vval*LIFTMODIFY, MapWindow::hBmpUnitMpS, TEXT("Netto"));
+
+  RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop, CALCULATED_INFO.Average30s*LIFTMODIFY, TEXT("Avg"));
+
+  RenderValue(orgMiddle.x, orgMiddle.y, &diValueMiddle, &diLabelMiddle, vval*LIFTMODIFY, TEXT("Gross"));
 
   if (CALCULATED_INFO.AutoMacCready)
-    RenderValue(orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, MapWindow::hBmpUnitMpS, TEXT("Auto Mc"));
+    RenderValue(orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, TEXT("Auto Mc"));
   else
-    RenderValue(orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, MapWindow::hBmpUnitMpS, TEXT("Mc"));
+    RenderValue(orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, TEXT("Mc"));
 
   RenderSpeedToFly(rc.right - 11, (rc.bottom-rc.top)/2);
 
@@ -181,6 +204,9 @@ void GaugeVario::Render() {
 
 }
 
+void GaugeVario::Repaint(void){
+  BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
+}
 
 void GaugeVario::RenderBg() {
 }
@@ -189,12 +215,12 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
 
   static int lastI = -99999;
   static POINT lastBit[3];
+  static bool InitDone = false;
+  static int degrees_per_unit;
+  static int gmax;
 
-  bool InitDone = false;
   POINT bit[3];
   int i;
-  int degrees_per_unit;
-  int gmax;
   double dx, dy;
 
   if (!InitDone){
@@ -240,7 +266,7 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
 }
 
 
-void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, HBITMAP BmpUnit, TCHAR *Label){
+void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, TCHAR *Label){
 
   SIZE tsize;
 
@@ -324,10 +350,19 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
     diValue->lastValue = Value;
   }
 
-  if (diLabel->lastBitMap != BmpUnit){
-    SelectObject(hdcTemp, BmpUnit);
-    BitBlt(hdcDrawWindow, x-5, diValue->recBkg.top, 5, 11, hdcTemp, 0, 0, NOTSRCCOPY);
-    diLabel->lastBitMap = BmpUnit;
+  if (diLabel->lastBitMap != hBitmapUnit){
+    HBITMAP oldBmp;
+
+    oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapUnit);
+    BitBlt(hdcDrawWindow,
+      x-5, diValue->recBkg.top,
+      BitmapUnitSize.x, BitmapUnitSize.y,
+      hdcTemp,
+      BitmapUnitPos.x, BitmapUnitPos.y,
+      SRCCOPY
+    );
+    SelectObject(hdcTemp, oldBmp);
+    diLabel->lastBitMap = hBitmapUnit;
   }
 
 }
@@ -574,5 +609,19 @@ void GaugeVario::RenderBugs(void){
   }
 
 }
+
+LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
+
+  switch (uMsg){
+
+    case WM_PAINT:
+      GaugeVario::Repaint();
+    break;
+
+  }
+
+  return(DefWindowProc (hwnd, uMsg, wParam, lParam));
+}
+
 
 

@@ -20,11 +20,12 @@ class GaugeVario {
   static void Destroy();
   static void Render();
   static void RenderBg();
-  static void RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, HBITMAP BmpUnit, TCHAR *Label);
+  static void RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, TCHAR *Label);
   static void RenderSpeedToFly(int x, int y);
   static void RenderBallast(void);
   static void RenderBugs(void);
   static void RenderNeedle(double Value, int x, int y);
+  static void Repaint(void);
 
  private:
   static HDC hdcScreen;
@@ -38,6 +39,9 @@ class GaugeVario {
   static DrawInfo_t diLabelTop;
   static DrawInfo_t diLabelMiddle;
   static DrawInfo_t diLabelBottom;
+  static HBITMAP hBitmapUnit;
+  static POINT BitmapUnitPos;
+  static POINT BitmapUnitSize;
 
 };
 

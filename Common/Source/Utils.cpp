@@ -2393,17 +2393,17 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf){
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
     lfTmp.lfWeight = _tcstol(pToken, NULL, 10);
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfItalic = _tcstol(pToken, NULL, 10);
+    lfTmp.lfItalic = (unsigned char)_tcstol(pToken, NULL, 10);
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfUnderline = _tcstol(pToken, NULL, 10);
+    lfTmp.lfUnderline = (unsigned char)_tcstol(pToken, NULL, 10);
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfStrikeOut = _tcstol(pToken, NULL, 10);
+    lfTmp.lfStrikeOut = (unsigned char)_tcstol(pToken, NULL, 10);
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfCharSet = _tcstol(pToken, NULL, 10);
+    lfTmp.lfCharSet = (unsigned char)_tcstol(pToken, NULL, 10);
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfOutPrecision = _tcstol(pToken, NULL, 10);
+    lfTmp.lfOutPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfClipPrecision = _tcstol(pToken, NULL, 10);
+    lfTmp.lfClipPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
 
                                                             // DEFAULT_QUALITY			   0
                                                             // RASTER_FONTTYPE			   0x0001
@@ -2414,10 +2414,10 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf){
                                                             // CLEARTYPE_COMPAT_QUALITY 6
 
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfQuality = _tcstol(pToken, NULL, 10);
+    lfTmp.lfQuality = (unsigned char)_tcstol(pToken, NULL, 10);
 
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
-    lfTmp.lfPitchAndFamily = _tcstol(pToken, NULL, 10);
+    lfTmp.lfPitchAndFamily = (unsigned char)_tcstol(pToken, NULL, 10);
 
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
 
@@ -2444,7 +2444,7 @@ int propGetScaleList(double *List, size_t Size){
 
     pToken = strtok_r(Buffer, TEXT(","), &pWClast);
 
-    while(Idx < Size && pToken != NULL){
+    while(Idx < (int)Size && pToken != NULL){
       List[Idx] = _tcstod(pToken, NULL);
       Idx++;
       pToken = strtok_r(NULL, TEXT(","), &pWClast);

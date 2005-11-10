@@ -63,6 +63,14 @@ void Topology::loadBitmap(int xx) {
 
 
 Topology::Topology(char* shpname, COLORREF thecolor):append(FALSE) {
+
+  memset((void*)&shpfile, 0 ,sizeof(shpfile));
+  shapefileopen = false;
+  triggerUpdateCache = false;
+  scaleThreshold = 0;
+  shpCache=NULL;
+  hBitmap = NULL;
+
   filename = (char *) malloc(strlen(shpname)+1);
   strcpy( filename, shpname );
   hPen = (HPEN)CreatePen(PS_SOLID, 1, thecolor);

@@ -257,6 +257,8 @@ Units_t Units::GetUserUnitByGroup(UnitGroup_t UnitGroup){
     case ugWindSpeed:
       return(GetUserWindSpeedUnit());
     break;
+    default:
+      return(unUndef);
   }
 }
 
