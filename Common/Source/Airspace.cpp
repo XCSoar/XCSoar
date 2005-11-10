@@ -311,7 +311,7 @@ void ReadAirspace(FILE *fp)
   SetProgressStepSize(5);
   dwStep = GetFileSize((void *)_fileno(fp), NULL) / 10L;
 
-  TempArea.FirstPoint = 0;
+  TempArea.FirstPoint = NumberOfAirspacePoints;	// JG 10-Nov-2005
 
   bFillMode = false;
   bWaiting = true;
@@ -332,6 +332,10 @@ void ReadAirspace(FILE *fp)
 
 	  ParseLine(nLineType);
   }
+
+	// Process final area (if any). bFillMode is false.  JG 10-Nov-2005
+	if (!bWaiting)
+		NumberOfAirspaceAreas++;
 
   // initialise the areas
 
@@ -398,7 +402,7 @@ void ReadAirspace(FILE *fp)
   NumberOfAirspaceAreas	  = OldNumberOfAirspaceAreas; 
   NumberOfAirspaceCircles = OldNumberOfAirspaceCircles;
 
-  TempArea.FirstPoint = 0;
+  TempArea.FirstPoint = NumberOfAirspacePoints;	// JG 10-Nov-2005
   fseek(fp, 0, SEEK_SET );
   LineCount = -1;
 
@@ -422,6 +426,10 @@ void ReadAirspace(FILE *fp)
 
 	  ParseLine(nLineType);
   }
+
+	// Process final area (if any). bFillMode is true.  JG 10-Nov-2005
+	if (!bWaiting)
+		AddArea(&TempArea);
 }
 
 static void ParseLine(int nLineType)
@@ -448,7 +456,7 @@ static void ParseLine(int nLineType)
 			
 			Rotation = +1;
 		}
-		else
+		else if (!bWaiting)							// Don't count circles JG 10-Nov-2005
 			NumberOfAirspaceAreas++;
 
 		bWaiting = false;
