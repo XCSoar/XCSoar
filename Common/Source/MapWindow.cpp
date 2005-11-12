@@ -1805,7 +1805,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         SelectObject(hDCTemp,hTurnPoint);
       }
 
-      if(((Task[ActiveWayPoint].Index == i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
+      if(((Task[ActiveWayPoint].Index == (int)i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
       {
         BitBlt(hdc,WayPointList[i].Screen.x-10 , WayPointList[i].Screen.y-10,20,20,
           hDCTemp,0,0,SRCPAINT);
@@ -1831,7 +1831,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 
       } else
 
-        if(((Task[ActiveWayPoint].Index == i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
+        if(((Task[ActiveWayPoint].Index == (int)i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
         {
           switch(DisplayTextType)
           {
@@ -2368,7 +2368,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
   }
   if (Appearance.MapScale == apMsAltA){
 
-    static LastMapWidth = 0;
+    static double LastMapWidth = 0;
     double MapWidth;
     TCHAR ScaleInfo[32];
 
@@ -2584,7 +2584,7 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
   } else
   if (Appearance.CompassAppearance == apCompassAltA){
 
-    static lastDisplayAngle = 9999.9;
+    static double lastDisplayAngle = 9999.9;
     static POINT Arrow[5] = { {0,-11}, {-5,9}, {0,3}, {5,9}, {0,-11}};
 
     if (lastDisplayAngle != DisplayAngle){
