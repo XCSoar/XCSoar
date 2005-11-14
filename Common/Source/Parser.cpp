@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.28 2005/11/08 06:20:50 jwharington Exp $
+  $Id: Parser.cpp,v 1.29 2005/11/14 12:49:18 jwharington Exp $
 
 Copyright_License {
 
@@ -40,6 +40,8 @@ Copyright_License {
 #include "VarioSound.h"
 
 #include "parser.h"
+
+extern bool EnableCalibration;
 
 static BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO);
@@ -898,6 +900,22 @@ BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->Gload = mag/100.0;
   GPS_INFO->AccelerationAvailable = TRUE;
 
+  ExtractParameter(String,ctemp,4);
+  GPS_INFO->NettoVarioAvailable = TRUE;
+  GPS_INFO->NettoVario = StrToDouble(ctemp,NULL)/10.0;
+
+  if (EnableCalibration) {
+    char buffer[200];
+    sprintf(buffer,"%g %g %g %g %g %g #te net\r\n",
+	    GPS_INFO->IndicatedAirspeed,
+	    GPS_INFO->BaroAltitude,
+	    GPS_INFO->Vario, 
+	    GPS_INFO->NettoVario, 
+	    GPS_INFO->AccelX, 
+	    GPS_INFO->AccelZ); 
+    DebugStore(buffer);
+  }
+
   return FALSE;
 }
 
@@ -918,7 +936,7 @@ BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO)
 	// Temporarily commented out - function as yet undefined
 //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
   
-	return FALSE;
+  return FALSE;
 }
 
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure

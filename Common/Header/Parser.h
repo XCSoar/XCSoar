@@ -47,8 +47,10 @@ typedef struct _NMEA_INFO
   double ExternalWindSpeed;
   double ExternalWindDirection;
   BOOL VarioAvailable;
+  BOOL NettoVarioAvailable;
   BOOL AirspeedAvailable;
   double Vario;
+  double NettoVario;
   double IAS;
   double Ballast;
   double Bugs;

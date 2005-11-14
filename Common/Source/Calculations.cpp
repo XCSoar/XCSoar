@@ -210,10 +210,14 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     theSinkRate= GlidePolar::SinkRate(Basic->Speed, n);
   }
 
-  if (Basic->VarioAvailable) {
-    Calculated->NettoVario = Basic->Vario - theSinkRate;
+  if (Basic->NettoVarioAvailable) {
+    Calculated->NettoVario = Basic->NettoVario;
   } else {
-    Calculated->NettoVario = Calculated->Vario - theSinkRate;
+    if (Basic->VarioAvailable) {
+      Calculated->NettoVario = Basic->Vario - theSinkRate;
+    } else {
+      Calculated->NettoVario = Calculated->Vario - theSinkRate;
+    }
   }
 
   if (
@@ -367,18 +371,10 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         double k = (mag / Basic->TrueAirspeed);
         
         char buffer[200];
-	/*
-        sprintf(buffer,"%g %g %g # airspeed \r\n", 
+	sprintf(buffer,"%g %g %g %g %g %g %g %g %g # airspeed\r\n",
                 Basic->IndicatedAirspeed, 
                 mag*Basic->IndicatedAirspeed/Basic->TrueAirspeed, 
-                k);
-        DebugStore(buffer);
-	*/
-	sprintf(buffer,"%g %g %g %g %g %g %g %g %g %g #airdata\r\n",
-		Basic->Vario, 
-		Calculated->NettoVario,
-		Basic->IndicatedAirspeed,
-		Basic->TrueAirspeed,
+		k,
 		Basic->Speed, 
 		Calculated->WindSpeed,
 		Calculated->WindBearing,

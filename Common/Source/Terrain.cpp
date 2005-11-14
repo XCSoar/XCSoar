@@ -515,7 +515,7 @@ public:
 	    nx= (short)((hBuf[pval]-hBuf[pval-epx])*ekpixel*2);
 	  } else {
 	    nx= (short)((hBuf[pval+epx]-hBuf[pval-epx])*ekpixel);
-	  } 
+	  }
 	  if (y<epx) {
 	    ny= (short)((hBuf[pval+ixsepx]-hBuf[pval])*ekpixel*2);
 	  } else if (y>=iys-epx) {

@@ -65,6 +65,7 @@ class InputEvents {
   static void eventTaskLoad(TCHAR *misc);
   static void eventTaskSave(TCHAR *misc);
   static void eventSendNMEA(TCHAR *misc);
+  static void eventNull(TCHAR *misc);
   // -------
 
 #ifdef _SIM_

@@ -1395,6 +1395,11 @@ void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
 }
 
 
+void InputEvents::eventNull(TCHAR *misc) {
+  // do nothing
+}
+
+
 void InputEvents::eventTaskLoad(TCHAR *misc) {
   LoadNewTask(misc);
 }
