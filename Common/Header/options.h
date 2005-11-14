@@ -19,4 +19,6 @@
 
 #define   FONTQUALITY           NONANTIALIASED_QUALITY
 
+#define NEWINFOBOX 0
+
 #endif
