@@ -335,9 +335,9 @@ void TerrainColorMap(short h, BYTE *r, BYTE *g, BYTE *b) {
 
 void TerrainIllumination(short illum, BYTE *r, BYTE *g, BYTE *b)
 {
-  static float contrast = (float)0.6;
-  static short contrastpos = (short)(contrast * 255);
-  static short contrastneg = (short)((1.0-contrast) * 255);
+  static short contrast = 140;
+  static short contrastpos = (short)(contrast);
+  static short contrastneg = (short)(255-contrast);
 
   short il = illum*contrastpos/256+contrastneg;
   *r = (BYTE)((int)*r*il/256);
@@ -392,6 +392,9 @@ public:
   short *nyBuf;
   short *nzBuf;
   short *ilBuf;
+
+  double Xrounding;
+  double Yrounding;
 
 #define TERRAIN_ANTIALIASING 1.5
 
@@ -449,12 +452,12 @@ public:
     X = (X0+X1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact;
     Y = (Y0+Y1)/2;
     MapWindow::GetLocationFromScreen(&X, &Y);
-    double Xrounding = fabs(X-xmiddle);
+    Xrounding = fabs(X-xmiddle);
 
     X = (X0+X1)/2;
     Y = (Y0+Y1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact;
     MapWindow::GetLocationFromScreen(&X, &Y);
-    double Yrounding = fabs(Y-ymiddle);
+    Yrounding = fabs(Y-ymiddle);
 
     // ok, ready to fill the buffer now.
 
@@ -484,9 +487,7 @@ public:
   float kpixel;
 
   void Slope() {
-    short mag;
-
-    short nx, ny, nz;
+    int mag;
     short pval=0;
 
     if(!terrain_dem_graphics.isTerrainLoaded())
@@ -495,7 +496,8 @@ public:
     int epx = min(100,terrain_dem_graphics.
 		  GetEffectivePixelSize(pixelsize));
     int ixsepx = ixs*epx;
-    float ekpixel = kpixel;
+
+    int tss = epx*pixelsize*1000;
 
     for (int y = 0; y<iys; y++) {
       for (int x = 0; x<ixs; x++) {
@@ -508,33 +510,81 @@ public:
 	// This is why epx is used instead of 1 previously.
 	// for large zoom levels, epx=1
 
+	int p1[3], p2[3], p3[3];
+	p1[0]= 0;
+	p1[1]= 0;
+	p1[2]= hBuf[pval];
+	p2[0]= 0;
+	p2[1]= 0;
+	p2[2]= 0;
+	p3[0]= 0;
+	p3[1]= 0;
+	p3[2]= 0;
+	bool rev=false;
 	if ((epx<ixs)&&(epx<iys)&&(epx<10)) {
 	  if (x<epx) {
-	    nx= (short)((hBuf[pval+epx]-hBuf[pval])*ekpixel*2);
+	    p2[0]= tss;
+	    p2[2]= hBuf[pval+epx]-p1[2];
 	  } else if (x>=ixs-epx) {
-	    nx= (short)((hBuf[pval]-hBuf[pval-epx])*ekpixel*2);
+	    p2[0]= -tss;
+	    p2[2]= hBuf[pval-epx]-p1[2];
+	    rev= !rev;
 	  } else {
-	    nx= (short)((hBuf[pval+epx]-hBuf[pval-epx])*ekpixel);
+	    p2[0] = tss;
+	    p2[2]= hBuf[pval+epx]-p1[2];
 	  }
 	  if (y<epx) {
-	    ny= (short)((hBuf[pval+ixsepx]-hBuf[pval])*ekpixel*2);
+	    p3[1]= tss;
+	    p3[2]= hBuf[pval+ixsepx]-p1[2];
 	  } else if (y>=iys-epx) {
-	    ny= (short)((hBuf[pval]-hBuf[pval-ixsepx])*ekpixel*2);
+	    p3[1]= -tss;
+	    p3[2]= hBuf[pval-ixsepx]-p1[2];
+	    rev= !rev;
 	  } else {
-	    ny= (short)((hBuf[pval+ixsepx]
-			 -hBuf[pval-ixsepx])*ekpixel);
+	    p3[1]= tss;
+	    p3[2]= hBuf[pval+ixsepx]-p1[2];
 	  }
+
+	  p1[2]= 0;
+
+	  long dp21[3];
+	  long dp31[3];
+
+	  dp21[0]= p2[0]-p1[0];
+	  dp21[1]= p2[1]-p1[1];
+	  dp21[2]= (p2[2]-p1[2])*2; // magnify slope
+
+	  dp31[0]= p3[0]-p1[0];
+	  dp31[1]= p3[1]-p1[1];
+	  dp31[2]= (p3[2]-p1[2])*2; // magnify slope
+
+	  long dd[3];
+	  dd[0] = (dp21[1]*dp31[2]-dp21[2]*dp31[1])/tss;
+	  dd[1] = (dp21[2]*dp31[0]-dp21[0]*dp31[2])/tss;
+	  dd[2] = (dp21[0]*dp31[1]-dp21[1]*dp31[0])/tss;
+	  mag = isqrt4(dd[0]*dd[0]+dd[1]*dd[1]+dd[2]*dd[2]);
+	  if (mag>0) {
+	    dd[0]= 255*dd[0]/mag;
+	    dd[1]= 255*dd[1]/mag;
+	    dd[2]= 255*dd[2]/mag;
+	    if (dd[2]<0) {
+	      dd[0]= -dd[0];
+	      dd[1]= -dd[1];
+	      dd[2]= -dd[2];
+	    }
+	  } else {
+	    dd[0]= 0;
+	    dd[1]= 0;
+	    dd[2]= 255;
+	  }
+	  nxBuf[pval] = dd[0];
+	  nyBuf[pval] = dd[1];
+	  nzBuf[pval] = dd[2];
 	} else {
-	  nx= 0;
-	  ny= 0;
+	  nxBuf[pval] = 0;
+	  nyBuf[pval] = 0;
+	  nzBuf[pval] = 255;
 	}
-
-        nz= 256;
-        mag = isqrt4((nx*nx+ny*ny+nz*nz)*64)/8;
-
-        nxBuf[pval] = nx*256/mag;
-        nyBuf[pval] = ny*256/mag;
-        nzBuf[pval] = nz*256/mag;
 
 	pval++;
       }
@@ -552,7 +602,9 @@ public:
       return;
 
     for (int i=0; i<ixs*iys; i++) {
+
       mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256;
+      //      mag = 255;
       *tilBuf = max(0,(short)mag);
 
       tnxBuf++;

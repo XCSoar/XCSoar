@@ -686,11 +686,12 @@ TCHAR *FormatterWaypoint::Render(void) {
 void FormatterWaypoint::Render(HWND hWnd) {
 #endif
 
-  if(ActiveWayPoint >=0)
+  if((ActiveWayPoint >=0)&&(WayPointList))
     {
 
       #if NEWINFOBOX > 0
       #else
+
       if (WayPointList[Task[ActiveWayPoint].Index].Reachable) {
         SetWindowLong(hWnd, GWL_USERDATA, 3); // blue text
       } else {

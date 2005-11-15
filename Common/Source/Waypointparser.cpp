@@ -353,7 +353,8 @@ static double ReadAltitude(TCHAR *temp)
   double Altitude=-9999;
 
 
-  Altitude = (double)_tcstol(temp, &Stop, 10);
+  //  Altitude = (double)_tcstol(temp, &Stop, 10);
+  Altitude = StrToDouble(temp, &Stop);
 
   if (temp == Stop)                                         // error at begin
     Altitude=-9999;

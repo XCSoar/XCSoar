@@ -2482,8 +2482,14 @@ void PopupAnalysis()
 void PopupWaypointDetails()
 {
 
-	if (SelectedWaypoint<0)
-		return;
+  if (SelectedWaypoint<0) {
+    if (ActiveWayPoint>=0) {
+      SelectedWaypoint = Task[ActiveWayPoint].Index;
+    }
+    if (SelectedWaypoint==0) {
+      return;
+    }
+  }
 
   DialogActive = true;
   #if NEWINFOBOX>0
