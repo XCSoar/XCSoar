@@ -206,7 +206,7 @@ float RasterTerrain::GetTerrainSlopeStep() {
   float kpixel = (float)256.0/(
 			  GetTerrainStepSize()
                           * (float)rounding
-                          * (float)2.0);
+                          );
     return kpixel;
 }
 

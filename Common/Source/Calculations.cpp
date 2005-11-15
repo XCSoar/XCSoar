@@ -107,7 +107,11 @@ void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   SnailTrail[SnailNext].Longitude = Basic->Longitude;
         
   // JMW TODO: if circling, color according to 30s average?
-  SnailTrail[SnailNext].Vario = Calculated->Vario ;
+  if (Basic->NettoVarioAvailable) {
+    SnailTrail[SnailNext].Vario = Basic->NettoVario ;
+  } else {
+    SnailTrail[SnailNext].Vario = Calculated->Vario ;
+  }
 
   SnailNext ++;
   SnailNext %= TRAILSIZE;
@@ -961,6 +965,8 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   // JMW these things should be in Calculated, not Basic
 
+  if (!WayPointList) return;
+
   if(ActiveWayPoint >=0)
     {
       Calculated->WaypointDistance = Distance(Basic->Latitude, Basic->Longitude,
@@ -983,7 +989,7 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 {
-  if(ActiveWayPoint >=0)
+  if((ActiveWayPoint >=0)&&(WayPointList))
     {
       Calculated->NextAltitudeRequired = 
         GlidePolar::MacCreadyAltitude(maccready,
@@ -1015,6 +1021,8 @@ int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   double AircraftBearing;
 
+  if (!WayPointList) return FALSE;
+
   if(FAISector !=  TRUE)
     {
       if(Calculated->WaypointDistance < SectorRadius)
@@ -1045,6 +1053,8 @@ int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 int InAATTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   double AircraftBearing;
+
+  if (!WayPointList) return FALSE;
 
   if(Task[ActiveWayPoint].AATType ==  CIRCLE)
     {
@@ -1090,6 +1100,8 @@ int InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static int InSector = FALSE;
   double AircraftBearing;
   double FirstPointDistance;
+
+  if (!WayPointList) return FALSE;
 
   // No Task Loaded
   if(Task[0].Index == -1)
@@ -1338,6 +1350,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
   double LegCovered, LegToGo, LegDistance, LegBearing, LegAltitude;
   double TaskAltitudeRequired = 0;
         
+  if (!WayPointList) return;
+
   // Calculate Task Distances
   if(ActiveWayPoint >=1)
     {
@@ -1785,6 +1799,8 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   double LegToGo, LegDistance;
   double TaskAltitudeRequired = 0;
 
+  if (!WayPointList) return ;
+
   if(!AATEnabled)
     {
       return;
@@ -2035,6 +2051,7 @@ void LatLon2Flat(double lon, double lat, int *scx, int *scy) {
 
 int CalculateWaypointApproxDistance(int scx_aircraft, int scy_aircraft,
                                     int i) {
+
   // Do preliminary fast search
   int scx, scy;
   LatLon2Flat(WayPointList[i].Longitude, 
@@ -2088,6 +2105,8 @@ void SortLandableWaypoints (NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   int i, k, l;
   double aa;
   int ai;
+
+  if (!WayPointList) return;
 
   // Do preliminary fast search
   int scx_aircraft, scy_aircraft;

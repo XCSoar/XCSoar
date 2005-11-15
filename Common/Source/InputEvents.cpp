@@ -69,7 +69,7 @@ Copyright_License {
 
 // Sensible maximums 
 #define MAX_MODE 100
-#define MAX_MODE_STRING 25
+#define MAX_MODE_STRING 50
 #define MAX_KEY 255
 #define MAX_EVENTS 2048
 #define MAX_LABEL NUMBUTTONLABELS
@@ -79,6 +79,7 @@ Copyright_License {
 	The logger can then display messages through Message:: if ncessary and log to files etc
 	This code, and baddly written #ifdef should be moved to Macros in the Log class.
 */
+
 
 #ifdef _INPUTDEBUG_
 	// Log first NN input event errors for display in simulator mode
@@ -1220,10 +1221,10 @@ void InputEvents::eventBugs(TCHAR *misc) {
   LockFlightData();
 
   if (wcscmp(misc, TEXT("up")) == 0) {
-    BUGS = iround(BUGS*100+10) / 100;
+    BUGS = iround(BUGS*100+10) / 100.0;
   } 
   if (wcscmp(misc, TEXT("down")) == 0) {
-    BUGS = iround(BUGS*100-10) / 100;
+    BUGS = iround(BUGS*100-10) / 100.0;
   } 
   if (wcscmp(misc, TEXT("max")) == 0) {
     BUGS= 1.0;

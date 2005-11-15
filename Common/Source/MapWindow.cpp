@@ -1751,6 +1751,8 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
 
 bool WaypointInTask(int ind) {
   int i;
+  if (!WayPointList) return false;
+
   if( (WayPointList[ind].Flags & HOME) == HOME) {
     return true;
   }
@@ -1774,6 +1776,8 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
   int DisplayMode;
   
   _tcscpy(sAltUnit, Units::GetAltitudeName());
+
+  if (!WayPointList) return;
 
   for(i=0;i<NumberOfWayPoints;i++)
   {
@@ -1895,6 +1899,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
 {
   int i;
+  if (!WayPointList) return;
   
   for(i=0;i<MAXTASKPOINTS-1;i++)
   {
@@ -1916,7 +1921,9 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
 
   COLORREF whitecolor = RGB(0xff,0xff, 0xff);
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
-  
+
+  if (!WayPointList) return;
+
   for(i=0;i<MAXTASKPOINTS-1;i++)
   {
     if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
@@ -2219,7 +2226,9 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 {
   POINT Start, End;
   HPEN hpOld;
-  
+
+  if (!WayPointList) return;
+
   hpOld = (HPEN)SelectObject(hdc, hpBearing);
   
   if(ActiveWayPoint >= 0)
@@ -3320,40 +3329,41 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 
   // get screen coordinates for all task waypoints
 
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    if (Task[i].Index>=0) {
-
-      LatLon2Screen(WayPointList[Task[i].Index].Longitude, 
-                    WayPointList[Task[i].Index].Latitude, 
-                    &scx, &scy);
-    
-      WayPointList[Task[i].Index].Screen.x = scx;
-      WayPointList[Task[i].Index].Screen.y = scy;
+  if (WayPointList) {
+    for (i=0; i<MAXTASKPOINTS; i++) {
+      if (Task[i].Index>=0) {
+	
+	LatLon2Screen(WayPointList[Task[i].Index].Longitude, 
+		      WayPointList[Task[i].Index].Latitude, 
+		      &scx, &scy);
+	
+	WayPointList[Task[i].Index].Screen.x = scx;
+	WayPointList[Task[i].Index].Screen.y = scy;
+      }
+      
     }
     
+    // only calculate screen coordinates for waypoints that are visible
+    
+    for(i=0;i<NumberOfWayPoints;i++)
+      {
+	
+	if(PointVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
+	  {
+	    WayPointList[i].Visible = TRUE;
+	    
+	    LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude, &scx, &scy);
+	    
+	    WayPointList[i].Screen.x = scx;
+	    WayPointList[i].Screen.y = scy;
+	    
+	  }
+	else
+	  {
+	    WayPointList[i].Visible = FALSE;
+	  }
+      }
   }
-
-  // only calculate screen coordinates for waypoints that are visible
-
-  for(i=0;i<NumberOfWayPoints;i++)
-  {
-    
-    if(PointVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
-    {
-      WayPointList[i].Visible = TRUE;
-
-      LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude, &scx, &scy);
-    
-      WayPointList[i].Screen.x = scx;
-      WayPointList[i].Screen.y = scy;
-
-    }
-    else
-    {
-      WayPointList[i].Visible = FALSE;
-    }
-  }
-  
     
   if(TrailActive)
   {
@@ -3413,7 +3423,9 @@ void MapWindow::CalculateWaypointReachable(void)
   unsigned int i,j;
   bool intask;
   double WaypointDistance, WaypointBearing,AltitudeRequired;
-  
+
+  if (!WayPointList) return;
+
   for(i=0;i<NumberOfWayPoints;i++)
   {
     // calculate reachable for waypoints in task also
