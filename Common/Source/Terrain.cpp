@@ -402,8 +402,8 @@ public:
     double X, Y;
     short X0, Y0;
     short X1, Y1;
-    X0 = DTQUANT/2; // +rc.left
-    Y0 = DTQUANT/2; // +rc.top
+    X0 = DTQUANT/2; 
+    Y0 = DTQUANT/2;
     X1 = X0+DTQUANT*ixs;
     Y1 = Y0+DTQUANT*iys;
     short* myhbuf = hBuf;
@@ -417,7 +417,7 @@ public:
 
     terrain_dem_graphics.SetCacheTime();
 
-    // grid spacing = 250*rounding; m
+    // grid spacing = 250*rounding; in meters (dependent on resolution)
 
     double rfact=1.0;
 
@@ -429,7 +429,7 @@ public:
     }
     terrain_dem_graphics.SetTerrainRounding(pixelsize*0.25);
 
-    kpixel = (float)(terrain_dem_graphics.GetTerrainSlopeStep()*1.5); 
+    kpixel = (float)(terrain_dem_graphics.GetTerrainSlopeStep()); 
     // magnify gradient to make it
     // more obvious
 
@@ -604,14 +604,50 @@ public:
     for (int i=0; i<ixs*iys; i++) {
       
       mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256;
-      //      mag = 255;
       *tilBuf = max(0,(short)mag);
+
+      tnxBuf[0] = tilBuf[0];
       
       tnxBuf++;
       tnyBuf++;
       tnzBuf++;
       tilBuf++;
+
     }
+    
+    // smooth illumination buffer
+    short ff;
+    short vv;
+    short index = 0;
+
+    for (int y = 0; y<iys; y++) {
+      for (int x = 0; x<ixs; x++) {
+	vv = 3;
+	ff = 3*nxBuf[index];
+
+	if (x>0) {
+	  vv++;
+	  ff += nxBuf[index-1];
+	}
+	if (x<ixs-1) {
+	  vv++;
+	  ff += nxBuf[index+1];
+	}
+	if (y>0) {
+	  vv++;
+	  ff += nxBuf[index-ixs];
+	}
+	if (y<iys-1) {
+	  vv++;
+	  ff += nxBuf[index+ixs];
+	}
+	ff/= vv;
+
+	ilBuf[index]= ff;
+	index++;
+      }
+    }    
+
   }
 
   void FillColorBuffer() {
