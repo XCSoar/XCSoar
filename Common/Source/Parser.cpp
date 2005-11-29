@@ -64,6 +64,7 @@ static BOOL PDAPL(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO);
 
 
 static double EastOrWest(double in, TCHAR EoW);
@@ -156,6 +157,10 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
       if(_tcscmp(SentanceString,TEXT("PDVDS"))==0)
         {
           return PDVDS(&String[7], GPS_INFO);
+        }
+      if(_tcscmp(SentanceString,TEXT("PDVVT"))==0)
+        {
+          return PDVVT(&String[7], GPS_INFO);
         }
       if(_tcscmp(SentanceString,TEXT("PDVSD"))==0)
 	{
@@ -742,7 +747,7 @@ BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO)
   ExtractParameter(String,ctemp,1);
   oat = StrToDouble(ctemp,NULL)/100.0;
 
-  oat = oat/10.0-273.0;
+  oat = oat/10.0-273.15;
   rh = rh/10.0;
 
   return FALSE;
@@ -972,5 +977,21 @@ BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
   wsprintf(ctemp,TEXT("%s"), &String[0]);
   DoStatusMessage(ctemp);
+  return FALSE;
+}
+
+
+BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+  TCHAR ctemp[80];
+
+  ExtractParameter(String,ctemp,0);
+  GPS_INFO->OutsideAirTemperature = StrToDouble(ctemp,NULL)/10.0-273.0;
+  GPS_INFO->TemperatureAvailable = TRUE;
+
+  ExtractParameter(String,ctemp,1);
+  GPS_INFO->RelativeHumidity = StrToDouble(ctemp,NULL); // %
+  GPS_INFO->HumidityAvailable = TRUE;
+
   return FALSE;
 }

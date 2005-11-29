@@ -47,6 +47,7 @@ Copyright_License {
 #include <tchar.h>
 
 #include "windanalyser.h"
+#include "Atmosphere.h"
 
 WindAnalyser *windanalyser = NULL;
 
@@ -888,6 +889,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   // generate new wind vector if altitude changes or a new
   // estimate is available
   windanalyser->slot_Altitude();
+
+  // update atmospheric model
+  CuSonde::updateMeasurements(Basic, Calculated);
 
 }
 
@@ -2393,3 +2397,4 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 
 }
+

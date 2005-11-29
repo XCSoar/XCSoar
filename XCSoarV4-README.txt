@@ -6,7 +6,9 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 To do for next version:
 
 - Low battery exit is not working, fix it.
--
+- Fix strange circling bug
+- Speed to fly chevrons are hidden by vario in fullscreen mode
+- Mark to waypoint, mark to waypointfile
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
   to move/edit waypoints.
 - Notify the user (via GCE to Input) of switching between AC and Battery mode
@@ -28,10 +30,16 @@ To do for next version:
 	(future: Consider fixing this - it acts differently to other types)
 - Add 'Append' waypoint function, so users can create a task by selecting
   waypoints from the map in sequence
-
+- Fix display orientation for square displays e.g. hp 6515
+- Restore sound after exit
 
 Changes from 4.5 to HEAD:
 
+- Fixed bug in local time display
+- Fixed daylight savings bug
+- Added infoboxes to support temperature acquisition and traces
+- Added atmospheric analysis (temperature trace, convection estimation)
+- Snail trail uses netto vario if available
 - Added NMEA processing and NE (NMEA Events) into InputEvents
 - Minor terrain rendering fixes at close zoom levels
 - Improvements to topology polygon rendering

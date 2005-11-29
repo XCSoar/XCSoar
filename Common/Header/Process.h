@@ -15,6 +15,7 @@ void				SpeedProcessing(int UpDown);
 void				DirectionProcessing(int UpDown);
 void				AltitudeProcessing(int UpDown);
 void				AirspeedProcessing(int UpDown);
+void				ForecastTemperatureProcessing(int UpDown);
 
 
 #endif

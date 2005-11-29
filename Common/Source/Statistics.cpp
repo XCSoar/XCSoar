@@ -35,6 +35,7 @@ Copyright_License {
 #include "McReady.h"
 #include "Units.h"
 #include "InfoBoxLayout.h"
+#include "Atmosphere.h"
 
 extern HFONT                                   StatisticsFont;
 
@@ -47,7 +48,6 @@ double Statistics::x_max;
 double Statistics::y_max;
 bool Statistics::unscaled_x;
 bool Statistics::unscaled_y;
-
 
 
 void Statistics::ResetScale() {
@@ -430,7 +430,6 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
 
 
-
 /////////////////
 
 
@@ -528,6 +527,64 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 }
 
 
+void Statistics::RenderTemperature(HDC hdc, RECT rc)
+{
+  ResetScale();
+
+  int i;
+  float hmin= 10000;
+  float hmax= -10000;
+  float tmin= CuSonde::maxGroundTemperature;
+  float tmax= CuSonde::maxGroundTemperature;
+
+  // find range for scaling of graph
+  for (i=0; i<CUSONDE_NUMLEVELS-1; i++) {
+    if (CuSonde::cslevels[i].nmeasurements) {
+
+      hmin = min(hmin, i);
+      hmax = max(hmax, i);
+      tmin = min(tmin, min(CuSonde::cslevels[i].tempDry,
+			   min(CuSonde::cslevels[i].airTemp,
+			       CuSonde::cslevels[i].dewpoint)));
+      tmax = max(tmax, max(CuSonde::cslevels[i].tempDry,
+			   max(CuSonde::cslevels[i].airTemp,
+			       CuSonde::cslevels[i].dewpoint)));
+    }
+  }
+
+  ScaleYFromValue(rc, hmin);
+  ScaleYFromValue(rc, hmax);
+  ScaleXFromValue(rc, tmin);
+  ScaleXFromValue(rc, tmax);
+
+  for (i=0; i<CUSONDE_NUMLEVELS; i++) {
+
+    if (CuSonde::cslevels[i].nmeasurements &&
+	CuSonde::cslevels[i+1].nmeasurements) {
+
+      DrawLine(hdc, rc,
+	       CuSonde::cslevels[i].tempDry, i,
+	       CuSonde::cslevels[i+1].tempDry, (i+1),
+	       STYLE_REDTHICK);
+
+      DrawLine(hdc, rc,
+	       CuSonde::cslevels[i].airTemp, i,
+	       CuSonde::cslevels[i+1].airTemp, (i+1),
+	       STYLE_MEDIUMBLACK);
+
+      DrawLine(hdc, rc,
+	       CuSonde::cslevels[i].dewpoint, i,
+	       CuSonde::cslevels[i+1].dewpoint, i+1,
+	       STYLE_BLUETHIN);
+
+    }
+  }
+
+  DrawXLabel(hdc, rc, TEXT("T°"));
+  DrawYLabel(hdc, rc, TEXT("h"));
+}
+
+
 // from Calculations.cpp
 #include "windanalyser.h"
 extern WindAnalyser *windanalyser;
@@ -542,6 +599,9 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
   double mag;
 
   LeastSquares windstats_mag;
+
+  if (fabs(flightstats.Altitude_Ceiling.y_max
+	   -flightstats.Altitude_Base.y_min)<1) return;
 
   for (i=0; i<numsteps ; i++) {
 
@@ -681,7 +741,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         page++;
 
         // cycle around to start page
-        if (page==4) {
+        if (page==5) {
           page=0;
         }
       }
@@ -767,6 +827,19 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         Statistics::RenderGlidePolar(hdcScreen, rcgfx);
 
       }
+      if (page==4) {
+        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Temp trace")));
+
+        wsprintf(Temp, TEXT("%s: %5.0f\r\n%s: %5.0f\r\n"),
+		 gettext(TEXT("Thermal height")),
+		 CuSonde::thermalHeight*ALTITUDEMODIFY,
+		 gettext(TEXT("Cloud base")),
+		 CuSonde::cloudBase*ALTITUDEMODIFY);
+        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
+
+        Statistics::RenderTemperature(hdcScreen, rcgfx);
+
+      }
 
       SelectObject(hdcScreen, hfOld);
       EndPaint(hDlg, &ps);
@@ -780,3 +853,4 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
     }
   return FALSE;
 }
+

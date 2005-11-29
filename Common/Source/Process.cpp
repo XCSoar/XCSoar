@@ -37,6 +37,7 @@ Copyright_License {
 #include "device.h"
 #include "Dialogs.h"
 #include "Port.h"
+#include "Atmosphere.h"
 
 // JMW added key codes,
 // so -1 down
@@ -222,6 +223,18 @@ void	MacCreadyProcessing(int UpDown)
   return;
 }
 
+
+void	ForecastTemperatureProcessing(int UpDown)
+{
+  if (UpDown==1) {
+    CuSonde::adjustForecastTemperature(0.5);
+  }
+  if (UpDown== -1) {
+    CuSonde::adjustForecastTemperature(-0.5);
+  }
+}
+
+
 extern void PopupWaypointDetails();
 
 /*
@@ -296,11 +309,13 @@ void FormatterLowWarning::AssignValue(int i) {
 
 
 void FormatterTime::SecsToDisplayTime(int d) {
-  hours = (d/3600);
-  mins = (d/60-hours*60);
-  seconds = (d-mins*60+hours*3600);
+  int dd = d % (3600*24);
+
+  hours = (dd/3600);
+  mins = (dd/60-hours*60);
+  seconds = (dd-mins*60+hours*3600);
   hours = hours % 24;
-  if (d<0) {
+  if (dd<0) {
     Valid = FALSE;
   } else {
     Valid = TRUE;
@@ -312,6 +327,7 @@ int DetectCurrentTime() {
   TIME_ZONE_INFORMATION TimeZoneInformation;
   int localtime = (int)GPS_INFO.Time;
   if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
+    localtime += 3600;
     // TODO: check UTC adjustment for UK?
   }
   localtime -= TimeZoneInformation.Bias*60;
@@ -597,6 +613,15 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 44:
     //    Valid = GPS_INFO.AirspeedAvailable;
     Value = CALCULATED_INFO.NettoVario*LIFTMODIFY;
+    break;
+  case 48:
+    Value = GPS_INFO.OutsideAirTemperature;
+    break;
+  case 49:
+    Value = GPS_INFO.RelativeHumidity;
+    break;
+  case 50:
+    Value = CuSonde::maxGroundTemperature;
     break;
   default:
     break;
