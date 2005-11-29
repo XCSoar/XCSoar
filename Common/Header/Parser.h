@@ -59,6 +59,10 @@ typedef struct _NMEA_INFO
   double AccelX;
   double AccelZ;
   int SatellitesUsed;
+  BOOL TemperatureAvailable;
+  double OutsideAirTemperature;
+  BOOL HumidityAvailable;
+  double RelativeHumidity;
 } NMEA_INFO;
 
 int ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO);

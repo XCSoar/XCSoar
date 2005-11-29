@@ -60,6 +60,7 @@ Copyright_License {
 #include "units.h"
 #include "InputEvents.h"
 #include "Message.h"
+#include "Atmosphere.h"
 
 #if NEWINFOBOX > 0
 #include "InfoBox.h"
@@ -355,7 +356,7 @@ DWORD BatteryWarningTime = 0;
 //   Aircraft info 3,6,23,32,37,47
 //   LD 4,5,19,38
 //   Vario 2,7,8,9,21,22,24,44
-//   Wind 25,26
+//   Wind 25,26,48,49,50
 //   Mcready 10,34,35,43
 //   Nav 11,12,13,15,16,17,18,27,28,29,30,31
 //   Waypoint 14,36,39,40,41,42,45,46
@@ -411,9 +412,9 @@ SCREEN_INFO Data_Options[] = {
 	  // 24
 	  {ugVerticalSpeed,   TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 44, 22},
 	  // 25
-	  {ugWindSpeed,       TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 26},
+	  {ugWindSpeed,       TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 50},
 	  // 26
-	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f°T")), WindDirectionProcessing, 25, 25},
+	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f°T")), WindDirectionProcessing, 48, 25},
 	  // 27
 	  {ugNone,            TEXT("AA Time"), TEXT("AA Time"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
 	  // 28
@@ -456,8 +457,14 @@ SCREEN_INFO Data_Options[] = {
 	  {ugNone,            TEXT("Next Arrival Time"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 45},
 	  // 47
 	  {ugNone,            TEXT("Bearing Difference"), TEXT("Brng D"), new FormatterDiffBearing(TEXT("")), NoProcessing, 3, 37},
+	  // 48
+	  {ugNone,            TEXT("Outside Air Temperature"), TEXT("OAT"), new InfoBoxFormatter(TEXT("%2.1f°")), NoProcessing, 49, 26},
+	  // 49
+	  {ugNone,            TEXT("Relative Humidity"), TEXT("RelHum"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 50, 48},
+	  // 50
+	  {ugNone,            TEXT("Forecast Temperature"), TEXT("MaxTemp"), new InfoBoxFormatter(TEXT("%2.1f°")), ForecastTemperatureProcessing, 49, 25},
 	};
-int NUMSELECTSTRINGS = 48;
+int NUMSELECTSTRINGS = 51;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -534,6 +541,11 @@ void ShowStatus() {
                               GPS_INFO.Latitude);
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime-sunsethours)*60);
+
+  TIME_ZONE_INFORMATION TimeZoneInformation;
+  if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
+    sunsethours += 1;
+  }
 
   _stprintf(Temp,TEXT("%s\t%s\r\n%s\t%s\r\n%s\t%.0f %s\r\n%s\t%02d:%02d\r\n\r\n"),
 		   gettext(TEXT("Longitude")),
@@ -944,6 +956,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
 #ifdef _INPUTDEBUG_
   InputEvents::showErrors();
+#endif
+
+#ifdef _SIM_
+  CuSonde::test();
 #endif
 
   // Main message loop:
