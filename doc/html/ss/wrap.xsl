@@ -43,6 +43,7 @@
 				      <li><a href="/about/features.html">Features</a></li>
 				      <li><a href="/download/">Download</a></li>
 				      <li><a href="/hardware/">Hardware</a></li>
+				      <li><a href="/doc/">Documentation</a></li>
 				      <li><a href="/install/">Installation</a></li>
 				      <li><a href="/quick/">Quick start</a></li>
 				      <li><a href="/infoboxes/">Infoboxes</a></li>
