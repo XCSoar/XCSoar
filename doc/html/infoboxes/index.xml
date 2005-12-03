@@ -6,22 +6,30 @@
 
         <content>
 
+<section>
+  <title>Info Boxes</title>
+<p>
 Infobox data types are grouped into logical categories.  The type of a
 particular infobox may be cycled through each type within its category
 by pressing the application buttons 2 and 3 when the infobox is
 highlighted.
+</p>
 
+<p>
 All infoboxes display their data in user-specified units.  Where data
 is invalid, the displayed value will be '---'.  This happens, for
 example, when no terrain data is found or in range for the Terrain
 Elevation infobox type.
+</p>
 
+<p>
 In the following description of the infobox data types, the first
 title is as it appears in the infobox configuration dialog box, the
 second title is the label used in the infobox title.  Note that these
 labels have changed since older versions (pre V4.2) of XCSoar.
+</p>
 
-		<h3>Altitude group</h3>
+<section>		<title>Altitude group</title>
 
 <dl>
 <dt>Height GPS: H GPS</dt>
@@ -52,8 +60,10 @@ pressure sensor, or a supported external intelligent vario.
 </dd>
 
 </dl>
+</section>
 
-<h3>Aircraft state group</h3>
+<section>
+<title>Aircraft state group</title>
 <dl>
 <dt>Bearing: Bearing</dt>
 <dd>
@@ -89,9 +99,10 @@ Chevrons point to the direction the glider needs to alter course to
 correct the bearing.
 </dd>
 </dl>
+</section>
 
-
-<h3>Glide ratio group</h3>
+<section>
+<title>Glide ratio group</title>
 <dl>
 <dt>L/D instantaneous: L/D Inst</dt>
 <dd>Instantaneous glide ratio, given by the ground speed divided by the
@@ -129,7 +140,10 @@ zero, the displayed value is '---'.
 
 </dl>
 
-<h3>Variometer group</h3>
+</section>
+
+<section>
+<title>Variometer group</title>
 
 <dl>
 <dt>Thermal last 30 sec: TC 30s</dt>
@@ -175,7 +189,10 @@ glider's estimated sink rate.  Best used if airspeed, accelerometers and vario a
 
 </dl>
 
-<h3>Atmosphere group</h3>
+</section>
+
+<section>
+<title>Atmosphere group</title>
 <dl>
 <dt>Wind Speed: Wind V</dt>
 <dd>
@@ -214,17 +231,20 @@ up/down cursor keys adjusts this forecast temperature.
 
 </dl>
 
-<h3>McCready group</h3>
+</section>
+
+<section>
+<title>MacCready group</title>
 
 <dl>
-<dt>McCready Setting: McCready</dt>
-<dd>The current McCready setting. Also used to adjust the McCready Setting if
+<dt>MacCready Setting: MacCready</dt>
+<dd>The current MacCready setting. Also used to adjust the MacCready Setting if
 the infobox is active, by using the up/down cursor keys.  Pressing the
-enter cursor key toggles AutoMcCready mode.
+enter cursor key toggles AutoMacCready mode.
 </dd>
 
-<dt>Speed McCready: V Mc</dt>
-<dd>The McCready speed-to-fly for optimal flight to the next waypoint.
+<dt>Speed MacCready: V Mc</dt>
+<dd>The MacCready speed-to-fly for optimal flight to the next waypoint.
 In cruise flight mode, this speed-to-fly is calculated for maintaining
 altitude.  In final glide mode, this speed-to-fly is calculated for
 descent.
@@ -232,19 +252,21 @@ descent.
 
 <dt>Percentage climb: % Climb</dt>
 <dd>Percentage of time spent in climb mode</dd>
-</dl>
 
 <dt>Dolphin Speed: V Opt</dt>
-
-<dd>The instantaneous McCready speed-to-fly, making use of Netto vario
+<dd>The instantaneous MacCready speed-to-fly, making use of Netto vario
 calculations to determine dolphin cruise speed in the glider's current
 bearing.  In cruise flight mode, this speed-to-fly is calculated for
 maintaining altitude.  In final glide mode, this speed-to-fly is
 calculated for descent.  In climb mode, this switches to the speed for
 minimum sink at the current load factor (if an accelerometer is connected).
 </dd>
+</dl>
 
-<h3>Navigation group</h3>
+</section>
+
+<section>
+<title>Navigation group</title>
 
 <dl>
 <dt>Next Distance: WP Dist</dt>
@@ -286,8 +308,10 @@ the safety arrival altitude.</dd>
 <dd>(TBD)</dd>
 
 </dl>
+</section>
 
-<h3>Waypoint group</h3>
+<section>
+<title>Waypoint group</title>
 <dl>
 <dt>Next Waypoint: Next</dt>
 <dd>The name of the currently selected turn point.  When this infobox is active, using the up/down cursor keys selects the next/previous waypoint in the task.
@@ -318,8 +342,9 @@ Pressing the enter cursor key brings up the waypoint details.
 <dt>Next Arrival Time: WP ETA</dt>
 <dd>Estimated arrival local time at next waypoint, assuming
  performance of ideal MacCready cruise/climb cycle.</dd>
-
 </dl>
+</section>
+</section>
                                                                                	</content>
 </document>
      
