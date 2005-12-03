@@ -81,7 +81,15 @@ vario.</dd>
 <dt>G load: G</dt>
 <dd>Magnitude of G loading reported by a supported external intelligent
 vario.  This value is negative for pitch-down manoeuvers.</dd>
+
+<dt>Bearing Difference: Brng D</dt>
+<dd>
+The error in the glider's track to the bearing of the next waypoint.
+Chevrons point to the direction the glider needs to alter course to
+correct the bearing.
+</dd>
 </dl>
+
 
 <h3>Glide ratio group</h3>
 <dl>
@@ -167,7 +175,7 @@ glider's estimated sink rate.  Best used if airspeed, accelerometers and vario a
 
 </dl>
 
-<h3>Wind group</h3>
+<h3>Atmosphere group</h3>
 <dl>
 <dt>Wind Speed: Wind V</dt>
 <dd>
@@ -183,6 +191,25 @@ starts.
 Wind bearing estimated by XCSoar.  Manual adjustment is possible by
 pressing the up/down cursor keys to adjust bearing when the infobox is
 active.
+</dd>
+
+<dt> Outside Air Temperature: OAT</dt>
+<dd>
+Outside air temperature measured by a probe if supported by a connected intelligent variometer.
+</dd>
+
+<dt> Relative Humidity: RelHum</dt>
+<dd>
+Relative humidity of the air in percent as measured by a probe if supported
+by a connected intelligent variometer.
+</dd>
+
+<dt> Forecast Temperature: MaxTemp</dt>
+<dd>
+Forecast temperature of the ground at the home airfield, used in
+estimating convection height and cloud base in conjunction with
+outside air temperature and relative humidity probe.  Pressing the
+up/down cursor keys adjusts this forecast temperature.
 </dd>
 
 </dl>
@@ -275,6 +302,22 @@ Pressing the enter cursor key brings up the waypoint details.
 
 <dt>Time UTC: Time UTC</dt>
 <dd>GPS time expressed in UTC.</dd>
+
+<dt>Task Time To Go: Fin ETE</dt>
+<dd>Estimated time required to complete task, assuming performance
+ of ideal MacCready cruise/climb cycle.</dd>
+
+<dt>Next Time To Go: WP ETE</dt>
+<dd>Estimated time required to reach next waypoint, assuming
+ performance of ideal MacCready cruise/climb cycle.</dd>
+
+<dt>Task Arrival Time: Fin ETA</dt>
+<dd>Estimated arrival local time at task completion, assuming performance
+ of ideal MacCready cruise/climb cycle.</dd>
+
+<dt>Next Arrival Time: WP ETA</dt>
+<dd>Estimated arrival local time at next waypoint, assuming
+ performance of ideal MacCready cruise/climb cycle.</dd>
 
 </dl>
                                                                                	</content>
