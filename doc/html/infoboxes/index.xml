@@ -293,19 +293,23 @@ the safety arrival altitude.</dd>
 <dd>Distance to finish around remaining turn points.</dd>
  
 <dt>AA Time: AA Time</dt>
-<dd>(TBD)</dd>
+<dd>Assigned Area Task time remaining.</dd>
 
 <dt>AA Distance Max: AA Dmax</dt>
-<dd>(TBD)</dd>
+<dd>Assigned Area Task maximum distance possible for remainder of
+  task.</dd>
 
 <dt>AA Distance Min: AA Dmin</dt>
-<dd>(TBD)</dd>
+<dd>Assigned Area Task minimum distance possible for remainder of task.
+  </dd>
 
 <dt>AA Speed Max: AA Vmax</dt>
-<dd>(TBD)</dd>
+<dd>Assigned Area Task average speed achievable if flying maximum
+  possible distance remaining in minimum AAT time. </dd>
 
 <dt>AA Speed Min: AA Vmin</dt>
-<dd>(TBD)</dd>
+<dd>Assigned Area Task average speed achievable if flying minimum
+  possible distance remaining in minimum AAT time.</dd>
 
 </dl>
 </section>
