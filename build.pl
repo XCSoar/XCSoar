@@ -133,6 +133,13 @@ foreach my $platform (@platforms_all) {
 		or error("Unable to move EXE file $!\n\tInstallXCSoar-$platform.exe\n");
 }
 
+# ------------------------------------------------------------------------------
+# Upload and Announce
+# ------------------------------------------------------------------------------
+# TODO - Upload to Sourceforge (optional)
+# TODO - Announce to lists & Freshmeat etc
+
+
 print STDERR "PROCESSING COMPLETE: $errors errors\n";
 
 exit 0;
