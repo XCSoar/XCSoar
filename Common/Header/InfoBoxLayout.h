@@ -7,6 +7,7 @@
 class InfoBoxLayout {
  public:
   static bool landscape;
+  static bool square;
   static void CreateInfoBoxes(RECT rc);
   #if NEWINFOBOX > 0
   static void DestroyInfoBoxes(void);
@@ -27,6 +28,9 @@ class ButtonLabel {
   static int ButtonLabelGeometry;
   static HWND hWndButtonWindow[NUMBUTTONLABELS];
   static void CreateButtonLabels(RECT rc);
+  #if NEWINFOBOX > 0
+  static void SetFont(HFONT Font);
+  #endif
   static void Destroy();
   static void SetLabelText(int index, TCHAR *text);
   static bool CheckButtonPress(HWND pressedwindow);

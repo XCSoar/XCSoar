@@ -5,6 +5,20 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 To do for next version:
 
+- Speed command driven by dolphin speed or block maccready
+- Temp trace max temperature relative to ground offset
+- Fix airspace visibility bug (query, warnings should apply even if
+  not drawn on screen!)
+- 'Marginal final glide' is that the right text?
+- FLARM status, FLARM aircraft display on map
+- Font customisation in settings (font type, size)
+- Autozoom optionally on at startup (settings)
+- Disable PGRMZ if vario is already outputting altitude (or vica versa)
+- Collect different settings based on pilot identification at startup
+- In climb stats page, show direction of circling
+- Drop marker conditional on significant climb
+- Generate waypoints from towns (builtupa, miscpopp)
+- Kinetic energy adjustment to final glide
 - Low battery exit is not working, fix it.
 - Fix strange circling bug
 - Speed to fly chevrons are hidden by vario in fullscreen mode
@@ -30,11 +44,14 @@ To do for next version:
 	(future: Consider fixing this - it acts differently to other types)
 - Add 'Append' waypoint function, so users can create a task by selecting
   waypoints from the map in sequence
-- Fix display orientation for square displays e.g. hp 6515
-- Restore sound after exit
 
 Changes from 4.5 to HEAD:
 
+- Fix display orientation for square displays e.g. hp 6515 (untested)
+- Added FLARM TRAFFIC and FLARM NOTRAFFIC glide computer events
+- Sound restored at exit
+- Added basic FLARM status support in parser and Status dialog
+- Fixed bug in arrival altitude calculation with respect to bugs
 - Fixed bug in local time display
 - Fixed daylight savings bug
 - Added infoboxes to support temperature acquisition and traces
@@ -330,8 +347,8 @@ through various related values.  These groupings are:
 - Wind group:
   Wind speed, Wind bearing
 
-- MacReady group:
-  MacReady Setting, MacReady Speed, Percent time climbing, Dolphin speed
+- MacCready group:
+  MacCready Setting, MacCready Speed, Percent time climbing, Dolphin speed
 
 - Navigation group:
   Next distance, Next Alt Difference, Next Alt Required, Task Alt Difference,
@@ -522,10 +539,10 @@ The thermal band meter shows a graph, where the vertical axis is
 height above the break-off height and is scaled according to the
 maximum height achieved.  The horizontal axis is the average climb
 rate achieved at a particular height band.  The horizontal axis is
-scaled according to the MacReady setting, and an arrow indicating this
+scaled according to the MacCready setting, and an arrow indicating this
 setting and the glider's current height is overlaid on the shaded
 area.  This scaling and arrow makes it easy to see how the pilot's
-MacReady setting compares with achieved thermals and to plan the
+MacCready setting compares with achieved thermals and to plan the
 desired working height band.
 
 
@@ -581,8 +598,8 @@ IGC logging is now improved so that the logger outputs at higher rates
 GLIDE COMPUTER
 ============================================================================
 
-Auto MacRready is selected by pressing 'Enter' on the MacReady InfoBox
-when in Final Glide flight mode.  It adjusts the MacReady setting so
+Auto MacRready is selected by pressing 'Enter' on the MacCready InfoBox
+when in Final Glide flight mode.  It adjusts the MacCready setting so
 excess height is converted to higher speed and vica versa.  A mode
 icon, showing a green and red triangle, appears in the bottom right
 corner of the map window when active.
@@ -619,7 +636,7 @@ in the Settings->Polar page, where it is the particular
 file name is also defined.
 
 The user can specify a maximum manoeuvering speed, which limits the
-speed-to-fly in MacReady calculations to realistic values.  This is
+speed-to-fly in MacCready calculations to realistic values.  This is
 specified in m/s.
 
 

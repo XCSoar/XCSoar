@@ -549,6 +549,8 @@ CWaveOutThread::~CWaveOutThread()
   // Stop the thread processing
   StopThread();
 
+  waveOutSetVolume(0, dwVolume_restore);
+
   // Delete the critical section
   DeleteCriticalSection(&m_critSecRtp);
 
@@ -616,6 +618,9 @@ BOOL CWaveOutThread::Init(cbWaveOut pcbWaveOut,          // Callback function fo
   m_dwBufferSize = wBufferCount * dwSingleBufferSize;
 
   m_bInitialized = TRUE;
+
+  // save volume setting so it can be restored on exit.
+  waveOutGetVolume(0,&dwVolume_restore);
 
   return TRUE;
 }
@@ -1037,6 +1042,7 @@ DWORD WINAPI CWaveOutThread::ThreadProc(LPVOID lpParameter)
 
   return 0;
 }
+
 
 
 void CWaveOutThread::SetSoundVolume(int volpercent) {

@@ -73,7 +73,7 @@ Appearance_t Appearance = {
   apMs2None,
   true,
   206,
-  {0,13},
+  {0,-13},
   apFlightModeIconAltA,
   //apFlightModeIconDefault,
   {10,3},
@@ -90,11 +90,12 @@ Appearance_t Appearance = {
   wpLandableAltA,
   true,
   true,
-  true
+  true,
+  smAlligneTopLeft
 };
-#endif
 
-#if 1
+#else
+
 Appearance_t Appearance = {
   apMsDefault,
   apMs2Default,
@@ -116,7 +117,8 @@ Appearance_t Appearance = {
   wpLandableDefault,
   false,
   false,
-  false
+  false,
+  smAlligneCenter
 };
 #endif
 
@@ -518,6 +520,12 @@ BlueDialupSMS bsms;
 #endif
 
 
+#if NEWINFOBOX > 0
+void dlgStatusShowModal(void);
+void ShowStatus(void){
+  dlgStatusShowModal();
+}
+#else
 void ShowStatus() {
   TCHAR statusmessage[2000];
   TCHAR Temp[1000];
@@ -618,9 +626,24 @@ void ShowStatus() {
   }
   wcscat(statusmessage, TEXT("\r\n"));
 
+  if (GPS_INFO.FLARM_Available) {
+    if (GPS_INFO.FLARM_TX && GPS_INFO.FLARM_GPS) {
+      _stprintf(Temp,TEXT("FLARM: OK, level\t%d"),
+		GPS_INFO.FLARM_AlarmLevel
+		);
+      wcscat(statusmessage, Temp);
+    } else if (GPS_INFO.FLARM_TX) {
+      wcscat(statusmessage, gettext(TEXT("FLARM: No GPS fix")));
+    } else {
+      wcscat(statusmessage, gettext(TEXT("FLARM: TX error")));
+    }
+  }
+  wcscat(statusmessage, TEXT("\r\n"));
+
   DoStatusMessage(TEXT("Status"), statusmessage);
 
 }
+#endif
 
 
 
@@ -878,6 +901,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 	GPS_INFO.Year  = pda_time.wYear;
 	GPS_INFO.Month = pda_time.wMonth;
 	GPS_INFO.Day	 = pda_time.wDay;
+  #if _SIM_STARTUPSPEED
+  GPS_INFO.Speed = _SIM_STARTUPSPEED;
+  #endif
+  #if _SIM_STARTUPALTITUDE
+  GPS_INFO.Altitude = _SIM_STARTUPALTITUDE;
+  #endif
+
+
 #endif
 
 #ifdef DEBUG
@@ -1271,6 +1302,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       SendMessage(hWndTitleWindow[i],WM_SETFONT,
 		  (WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
     }
+  #endif
+
+  #if NEWINFOBOX > 0
+  ButtonLabel::SetFont(MapWindowBoldFont);
   #endif
 
   ///////////////////////////////////////////////////////
@@ -1967,7 +2002,6 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         ShowMenu();
       }
 
-      // todo_newinfobox
       for(i=0;i<numInfoWindows;i++)
         {
           #if NEWINFOBOX > 0
@@ -2184,6 +2218,16 @@ void DisplayText(void)
           InfoBoxes[i]->SetComment(TEXT("AUTO"));
         else
           InfoBoxes[i]->SetComment(TEXT("MANUAL"));
+      }else
+      if (DisplayType[i] == 0){ // GPS Alt
+        TCHAR sTmp[32];
+        Units::FormatAlternateUserAltitude(GPS_INFO.Altitude, sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+        InfoBoxes[i]->SetComment(sTmp);
+      }else
+      if (DisplayType[i] == 33){ // Baro Alt
+        TCHAR sTmp[32];
+        Units::FormatAlternateUserAltitude(GPS_INFO.BaroAltitudeAvailable, sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+        InfoBoxes[i]->SetComment(sTmp);
       }
 
       #else
@@ -2447,6 +2491,11 @@ void SIMProcessTimer(void)
   GPS_INFO.Longitude = FindLongitude(GPS_INFO.Latitude, GPS_INFO.Longitude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
   GPS_INFO.Time+= 1.0;
 
+#ifdef _SIM_
+  void testflarm(NMEA_INFO *theinfo);
+  testflarm(&GPS_INFO);
+#endif
+
   GpsUpdated = TRUE;
 
   UnlockFlightData();
@@ -2477,11 +2526,15 @@ void PopupAnalysis()
 {
   DialogActive = true;
   #if NEWINFOBOX>0
+  extern void dlgAnalysisShowModal(void);
+  dlgAnalysisShowModal();
+  /*
   if (InfoBoxLayout::landscape) {
     DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndMapWindow, (DLGPROC)AnalysisProc);
   } else {
     DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndMapWindow, (DLGPROC)AnalysisProc);
   }
+  */
   #else
   if (InfoBoxLayout::landscape) {
     DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndInfoWindow[0],
@@ -2497,15 +2550,14 @@ void PopupAnalysis()
 
 void PopupWaypointDetails()
 {
+#if NEWINFOBOX>0
+  extern void dlgWayPointDetailsShowModal(void);
 
-  if (SelectedWaypoint<0) {
-    if (ActiveWayPoint>=0) {
-      SelectedWaypoint = Task[ActiveWayPoint].Index;
-    }
-    if (SelectedWaypoint==0) {
-      return;
-    }
-  }
+  dlgWayPointDetailsShowModal();
+#else
+
+	if (SelectedWaypoint<0)
+		return;
 
   DialogActive = true;
   #if NEWINFOBOX>0
@@ -2526,7 +2578,7 @@ void PopupWaypointDetails()
   }
   #endif
   DialogActive = false;
-
+#endif
 }
 
 

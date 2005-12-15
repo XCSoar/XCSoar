@@ -1,40 +1,12 @@
-/*
-Copyright_License {
 
-  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
-  Copyright (C) 2000 - 2005
-
-  	M Roberts (original release)
-	Robin Birch <robinb@ruffnready.co.uk>
-	Samuel Gisiger <samuel.gisiger@triadis.ch>
-	Jeff Goodenough <jeff@enborne.f2s.com>
-	Alastair Harrison <aharrison@magic.force9.co.uk>
-	Scott Penrose <scottp@dd.com.au>
-	John Wharington <jwharington@bigfoot.com>
-
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-
-}
-*/
 #include "stdafx.h"
-#include "Statistics.h"
 #include "XCSoar.h"
+
+#include "WindowControls.h"
+#include "Statistics.h"
 #include "Externs.h"
 #include "McReady.h"
-#include "Units.h"
-#include "InfoBoxLayout.h"
+#include "dlgTools.h"
 #include "Atmosphere.h"
 
 extern HFONT                                   StatisticsFont;
@@ -46,9 +18,10 @@ double Statistics::y_min;
 double Statistics::x_min;
 double Statistics::x_max;
 double Statistics::y_max;
-bool Statistics::unscaled_x;
-bool Statistics::unscaled_y;
+bool   Statistics::unscaled_x;
+bool   Statistics::unscaled_y;
 
+static HPEN penThinSignal = NULL;
 
 void Statistics::ResetScale() {
   unscaled_y = true;
@@ -80,9 +53,13 @@ void Statistics::ScaleYFromData(RECT rc, LeastSquares* lsdata)
   }
 
 
-  yscale = (y_max - y_min);
-  if (yscale>0) {
-    yscale = (rc.bottom-rc.top)/yscale;
+  if (fabs(y_max - y_min) > 50){
+    yscale = (y_max - y_min);
+    if (yscale>0) {
+      yscale = (rc.bottom-rc.top)/yscale;
+    }
+  } else {
+    yscale = 2000;
   }
 }
 
@@ -170,14 +147,14 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
                  RGB(0,255,0));
     break;
   case STYLE_MEDIUMBLACK:
-    SelectObject(hdc, GetStockObject(BLACK_PEN));
+    SelectObject(hdc, penThinSignal /*GetStockObject(BLACK_PEN)*/);
     Polyline(hdc, line, 2);
     break;
   case STYLE_THINDASHPAPER:
     DrawDashLine(hdc, 1,
                  l1,
                  l2,
-                 RGB(0xf0,0xf0,0xb0));
+                 RGB(0x60,0x60,0x60));
     break;
 
   default:
@@ -190,7 +167,7 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
 void Statistics::DrawXLabel(HDC hdc, RECT rc, TCHAR *text) {
   SIZE tsize;
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
-  int x = rc.right-tsize.cx+5;
+  int x = rc.right-tsize.cx;
   int y = rc.bottom-tsize.cy;
 
   ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
@@ -200,7 +177,7 @@ void Statistics::DrawXLabel(HDC hdc, RECT rc, TCHAR *text) {
 void Statistics::DrawYLabel(HDC hdc, RECT rc, TCHAR *text) {
   SIZE tsize;
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
-  int x = max(0,rc.left-tsize.cx);
+  int x = max(2,rc.left-tsize.cx);
   int y = rc.top;
   ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
 }
@@ -430,6 +407,7 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
 
 
+
 /////////////////
 
 
@@ -500,8 +478,8 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
   ResetScale();
   ScaleYFromValue(rc, 0);
   ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1)));
-  ScaleXFromValue(rc, 0); // GlidePolar::Vminsink);
-  ScaleXFromValue(rc, SAFTEYSPEED);
+  ScaleXFromValue(rc, GlidePolar::Vminsink-2); // GlidePolar::Vminsink);
+  ScaleXFromValue(rc, SAFTEYSPEED+2);
 
   DrawXGrid(hdc, rc,
             10.0/SPEEDMODIFY, 0,
@@ -600,9 +578,6 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
   LeastSquares windstats_mag;
 
-  if (fabs(flightstats.Altitude_Ceiling.y_max
-	   -flightstats.Altitude_Base.y_min)<1) return;
-
   for (i=0; i<numsteps ; i++) {
 
     h = (flightstats.Altitude_Ceiling.y_max-flightstats.Altitude_Base.y_min)*
@@ -686,8 +661,201 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
 }
 
+static int page;
+static WndForm *wf=NULL;
+static WndOwnerDrawFrame *wGrid=NULL;
+static WndOwnerDrawFrame *wInfo=NULL;
 
-////////////////
+static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
+
+  RECT  rcgfx;
+  HFONT hfOld;
+
+  CopyRect(&rcgfx, Sender->GetBoundRect());
+
+  // packgrund is painted in the base-class
+
+  hfOld = (HFONT)SelectObject(hDC, Sender->GetFont());
+
+  SetBkMode(hDC, TRANSPARENT);
+  SetTextColor(hDC, Sender->GetForeColor());
+
+  if (page==0) {
+    Statistics::RenderBarograph(hDC, rcgfx);
+  }
+  if (page==1) {
+    Statistics::RenderClimb(hDC, rcgfx);
+  }
+  if (page==2) {
+    Statistics::RenderWind(hDC, rcgfx);
+  }
+  if (page==3) {
+    Statistics::RenderGlidePolar(hDC, rcgfx);
+  }
+  if (page==4) {
+    Statistics::RenderTemperature(hDC, rcgfx);
+  }
+
+  SelectObject(hDC, hfOld);
+
+
+}
+
+static void Update(void){
+  TCHAR sTmp[128];
+
+  switch(page){
+    case 0:
+      _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Barograph"));
+      wf->SetCaption(sTmp);
+
+      _stprintf(sTmp, TEXT("%s:\r\n%.0f-%.0f %s\r\n\r\n%s:\r\n%.0f %s/hr"),
+             gettext(TEXT("Working band")),
+             flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
+             flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
+             Units::GetAltitudeName(),
+             gettext(TEXT("Ceiling trend")),
+             flightstats.Altitude_Ceiling.m*ALTITUDEMODIFY,
+             Units::GetAltitudeName());
+
+      wInfo->SetCaption(sTmp);
+
+    break;
+    case 1:
+      _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Climb"));
+      wf->SetCaption(sTmp);
+
+      _stprintf(sTmp, TEXT("%s:\r\n%3.1f %s\r\n\r\n%s:\r\n%3.2f %s"),
+             gettext(TEXT("Average climb rate")),
+             flightstats.ThermalAverage.y_ave*LIFTMODIFY,
+             Units::GetVerticalSpeedName(),
+             gettext(TEXT("Climb trend")),
+             flightstats.ThermalAverage.m*LIFTMODIFY,
+             Units::GetVerticalSpeedName()
+             );
+
+      wInfo->SetCaption(sTmp);
+
+    break;
+    case 2:
+      _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Wind at Altitude"));
+      wf->SetCaption(sTmp);
+      _stprintf(sTmp, TEXT(""));
+      wInfo->SetCaption(sTmp);
+    break;
+    case 3:
+      _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Glide Polar"));
+      wf->SetCaption(sTmp);
+      _stprintf(sTmp, TEXT("%s:\r\n%3.1f\r\n%s %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n%s %3.0f %s"),
+             gettext(TEXT("Best LD")),
+             GlidePolar::bestld,
+             gettext(TEXT("at")),
+             GlidePolar::Vbestld*SPEEDMODIFY,
+             Units::GetHorizontalSpeedName(),
+             gettext(TEXT("Min sink")),
+             GlidePolar::minsink*LIFTMODIFY,
+             Units::GetVerticalSpeedName(),
+             gettext(TEXT("at")),
+             GlidePolar::Vminsink*SPEEDMODIFY,
+             Units::GetHorizontalSpeedName());
+
+      wInfo->SetCaption(sTmp);
+    break;
+  case 4:
+    _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Temp trace"));
+    wf->SetCaption(sTmp);
+
+    _stprintf(sTmp, TEXT("%s: %5.0f\r\n%s: %5.0f\r\n"),
+	      gettext(TEXT("Thermal height")),
+	      CuSonde::thermalHeight*ALTITUDEMODIFY,
+	      gettext(TEXT("Cloud base")),
+	      CuSonde::cloudBase*ALTITUDEMODIFY);
+    wInfo->SetCaption(sTmp);
+
+  }
+
+  if (wGrid != NULL)
+    wGrid->Redraw();
+
+}
+
+static void NextPage(int Step){
+  page += Step;
+  if (page > 4)
+    page = 0;
+  if (page < 0)
+    page = 4;
+  Update();
+}
+
+static void OnNextClicked(WindowControl * Sender){
+  NextPage(+1);
+}
+
+static void OnPrevClicked(WindowControl * Sender){
+  NextPage(-1);
+}
+
+static void OnCloseClicked(WindowControl * Sender){
+  wf->SetModalResult(mrOK);
+}
+
+static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+
+  if (wGrid->GetFocused())
+    return(0);
+
+  switch(wParam & 0xffff){
+    case VK_LEFT:
+      NextPage(-1);
+    return(0);
+    case VK_RIGHT:
+      NextPage(+1);
+    return(0);
+  }
+  return(1);
+}
+
+static CallBackTableEntry_t CallBackTable[]={
+  DeclearCallBackEntry(OnAnalysisPaint),
+  DeclearCallBackEntry(OnNextClicked),
+  DeclearCallBackEntry(OnPrevClicked),
+  DeclearCallBackEntry(NULL)
+};
+
+void dlgAnalysisShowModal(void){
+
+  penThinSignal = CreatePen(PS_SOLID, 1 , RGB(50,243,45));
+
+  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgAnalysis.xml", hWndMainWindow);
+
+  wf->SetKeyDownNotify(FormKeyDown);
+
+  wGrid = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmGrid"));
+  wInfo = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmInfo"));
+  ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+
+  Update();
+
+  wf->ShowModal();
+
+  delete wf;
+
+  wf = NULL;
+
+  DeleteObject(penThinSignal);
+
+  MapWindow::RequestFastRefresh= true;
+  ClearAirspaceWarnings(false); // airspace warning gets refreshed
+  FullScreen();
+
+}
+
+
+/////////////
+// For backward compatability
+
+#include "InfoBoxLayout.h"
 
 LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -855,4 +1023,3 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
     }
   return FALSE;
 }
-

@@ -42,6 +42,9 @@ Copyright_License {
 
 #include <tchar.h>
 
+#include "xmlParser.h"
+
+
 TCHAR *strtok_r(TCHAR *s, TCHAR *delim, TCHAR **lasts);
 
 static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);

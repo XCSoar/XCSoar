@@ -226,21 +226,52 @@ void LoggerHeader(void)
 }
 
 
-void StartDeclaration(void)
+void StartDeclaration(int ntp)
 {
   // JMW TODO: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
   char start[] = "C0000000N00000000ETAKEOFF (not defined)\r\n";
   HANDLE hFile;
   DWORD dwBytesRead;
+  char temp[100];
 
   hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
   SetFilePointer(hFile, 0, NULL, FILE_END);
+
+  // JMW added task start declaration line
+
+  SYSTEMTIME st;
+
+  GetLocalTime(&st);
+
+  // IGC GNSS specification 3.6.1
+  sprintf(temp,
+    "C%02d%02d%02d%02d%02d%02d%02d%02d%02d0000%02d (not defined)\r\n",
+	  // DD  MM  YY  HH  MM  SS  DD  MM  YYIIII  TT
+	  // JMW TODO these should be UTC time and date!
+	   st.wDay,
+	   st.wMonth,
+	   st.wYear % 100,
+	   st.wHour,
+	   st.wMinute,
+	   st.wSecond,
+
+	  // these should be local date
+	   st.wDay,
+	   st.wMonth,
+	   st.wYear % 100,
+	   ntp);
+
+  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
+
+  // takeoff line
+  // IGC GNSS specification 3.6.3
   WriteFile(hFile, start, strlen(start), &dwBytesRead, (OVERLAPPED *)NULL);
 
   CloseHandle(hFile);
 }
+
 
 void EndDeclaration(void)
 {
@@ -374,7 +405,16 @@ void DoLogger(TCHAR *strAssetNumber)
 	  LoggerActive = true;
 	  StartLogger(strAssetNumber);
 	  LoggerHeader();
-	  StartDeclaration();
+	  int ntp = 0;
+
+	  // first count the number of turnpoints
+	  for(i=0;i<MAXTASKPOINTS;i++)
+	    {
+	      if(Task[i].Index == -1) break;
+	      ntp++;
+	    }
+	  StartDeclaration(ntp);
+
 	  for(i=0;i<MAXTASKPOINTS;i++)
 	    {
 	      if(Task[i].Index == -1) break;

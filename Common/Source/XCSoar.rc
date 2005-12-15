@@ -741,6 +741,12 @@ IDB_ABORT               BITMAP  DISCARDABLE     "Bitmaps\\abort.bmp"
 IDB_LOGGER              BITMAP  DISCARDABLE     "Bitmaps\\logging.bmp"
 IDB_LOGGEROFF           BITMAP  DISCARDABLE     "Bitmaps\\loggingoff.bmp"
 IDB_VARIOSCALE          BITMAP  DISCARDABLE     "Bitmaps\\VarioScale.bmp"
+IDB_FLARMTRAFFIC        BITMAP  DISCARDABLE     "bitmaps\\flarmtra.bmp"
+IDB_AIRSPACE3           BITMAP  DISCARDABLE     "Bitmaps\\airspace3.bmp"
+IDB_DLGBUTTONLEFT16     BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonLeft16x16.bmp"
+IDB_DLGBUTTONLEFT32     BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonLeft32x32.bmp"
+IDB_DLGBUTTONRIGHT16    BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonRight16x16.bmp"
+IDB_DLGBUTTONRIGHT32    BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonRight32x32.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

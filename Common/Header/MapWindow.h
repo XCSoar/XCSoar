@@ -134,12 +134,30 @@ typedef struct _SNAIL_POINT
 
 void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
 
+typedef union{
+  unsigned int AsInt;
+  struct{
+    unsigned Border:1;
+    unsigned FillBackground:1;
+    unsigned AlligneRight:1;
+    unsigned Reachable:1;
+    unsigned AlligneCenter:1;
+  }AsFlag;
+}TextInBoxMode_t;
+  // mode are flags
+  // bit 0 == fill background add border / 1
+  // bit 1 == fill background            / 2
+  // bit 2 == right alligned             / 4
+  // bit 3 == landable TP label          / 8
+  // bit 4 == center alligned
+
 class MapWindow {
  public:
 
   // 12 is number of airspace types
   static int	iAirspaceBrush[AIRSPACECLASSCOUNT];
   static int	iAirspaceColour[AIRSPACECLASSCOUNT];
+  static HPEN hAirspacePens[AIRSPACECLASSCOUNT];
   static bool bAirspaceBlackOutline;
   static HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
   static HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
@@ -223,9 +241,10 @@ class MapWindow {
   static void DrawGlideThroughTerrain(HDC hDC, RECT rc);
   static void DrawCDI();
   static void DrawSpeedToFly(HDC hDC, RECT rc);
+  static void DrawFLARMTraffic(HDC hDC, RECT rc);
 
   static void DrawSolidLine(HDC , POINT , POINT );
-  static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, int Mode);
+  static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode);
   static void ToggleFullScreenStart();
   static void RefreshMap();
 
@@ -264,7 +283,7 @@ class MapWindow {
   static HBITMAP hLandable, hReachable,
     hTurnPoint, hSmall, hCruise, hClimb,
     hFinalGlide, hAutoMacCready, hTerrainWarning, hGPSStatus1, hGPSStatus2,
-    hAbort, hLogger, hLoggerOff;
+    hAbort, hLogger, hLoggerOff, hFLARMTraffic;
 
   static HBRUSH   hBackgroundBrush;
 

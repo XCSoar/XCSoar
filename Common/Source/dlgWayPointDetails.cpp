@@ -1,0 +1,271 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+  Copyright (C) 2000 - 2005
+
+  	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
+	Scott Penrose <scottp@dd.com.au>
+	John Wharington <jwharington@bigfoot.com>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+}
+*/
+
+
+#include "stdafx.h"
+#include <Aygshell.h>
+
+#include "XCSoar.h"
+
+#include "WindowControls.h"
+#include "Statistics.h"
+#include "Externs.h"
+#include "McReady.h"
+#include "dlgTools.h"
+
+extern void DrawJPG(HDC hdc, RECT rc);
+#include "VOIMAGE.h"
+
+extern TCHAR szRegistryHomeWaypoint[];
+extern TCHAR szRegistryWayPointFile[];
+
+static int page=0;
+static WndForm *wf=NULL;
+static WndFrame *wInfo=NULL;
+static WndFrame *wCommand=NULL;
+static WndOwnerDrawFrame *wImage=NULL;
+static BOOL hasimage1 = false;
+static BOOL hasimage2 = false;
+static CVOImage jpgimage1;
+static CVOImage jpgimage2;
+static TCHAR path_modis[100];
+static TCHAR path_fname2[] = TEXT("\\Program Files\\omap\\ersa-benalla.jpg");
+static TCHAR szWaypointFile[MAX_PATH] = TEXT("\0");
+static TCHAR Directory[MAX_PATH];
+
+static void NextPage(int Step){
+  page += Step;
+  if (!jpgimage1 && !jpgimage2 && page > 1)
+    page = 0;
+  if (jpgimage1 && !jpgimage2 && page > 2)
+    page = 0;
+  if (jpgimage1 && jpgimage2 && page > 3)
+    page = 0;
+  if (!jpgimage1 && !jpgimage2 && page < 0)
+    page = 1;
+  if (jpgimage1 && !jpgimage2 && page < 0)
+    page = 2;
+  if (jpgimage1 && jpgimage2 && page < 0)
+    page = 3;
+
+  wInfo->SetVisible(page == 0);
+  wCommand->SetVisible(page == 1);
+  wImage->SetVisible(page > 1);
+
+}
+
+static void OnNextClicked(WindowControl * Sender){
+  NextPage(+1);
+}
+
+static void OnPrevClicked(WindowControl * Sender){
+  NextPage(-1);
+}
+
+static void OnCloseClicked(WindowControl * Sender){
+  wf->SetModalResult(mrOK);
+}
+
+static void OnGotoClicked(WindowControl * Sender){
+  FlyDirectTo(SelectedWaypoint);
+  wf->SetModalResult(mrOK);
+}
+
+static void OnReplaceClicked(WindowControl * Sender){
+  ReplaceWaypoint(SelectedWaypoint);
+  wf->SetModalResult(mrOK);
+}
+
+static void OnNewHomeClicked(WindowControl * Sender){
+	HomeWaypoint = SelectedWaypoint;
+	SetToRegistry(szRegistryHomeWaypoint, HomeWaypoint);
+  wf->SetModalResult(mrOK);
+}
+
+static void OnInserInTaskClicked(WindowControl * Sender){
+  InsertWaypoint(SelectedWaypoint);
+  wf->SetModalResult(mrOK);
+}
+
+static void OnRemoveFromTaskClicked(WindowControl * Sender){
+  RemoveWaypoint(SelectedWaypoint);
+  wf->SetModalResult(mrOK);
+}
+
+static void OnImagePaint(WindowControl * Sender, HDC hDC){
+
+  if (page == 2)
+    jpgimage1.Draw(hDC, 0, 0, -1, -1);
+
+  if (page == 3)
+    jpgimage2.Draw(hDC, 0, 0, -1, -1);
+
+}
+
+
+static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+  switch(wParam & 0xffff){
+    case VK_LEFT:
+      NextPage(-1);
+    return(0);
+    case VK_RIGHT:
+      NextPage(+1);
+    return(0);
+  }
+  return(1);
+}
+
+static CallBackTableEntry_t CallBackTable[]={
+  DeclearCallBackEntry(OnNextClicked),
+  DeclearCallBackEntry(OnPrevClicked),
+  DeclearCallBackEntry(NULL)
+};
+
+void dlgWayPointDetailsShowModal(void){
+
+  TCHAR sTmp[128];
+  double sunsettime;
+  int sunsethours;
+  int sunsetmins;
+  WndProperty *wp;
+
+  GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
+  ExtractDirectory(Directory, szWaypointFile);
+
+  _stprintf(path_modis,TEXT("%s\\modis-%03d.jpg"),
+           Directory,
+           SelectedWaypoint+1);
+
+  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgWayPointDetails.xml", hWndMainWindow);
+
+  _stprintf(sTmp, TEXT("%s: "), wf->GetCaption());
+  _tcscat(sTmp, WayPointList[SelectedWaypoint].Name);
+  wf->SetCaption(sTmp);
+
+  wp = ((WndProperty *)wf->FindByName(TEXT("prpWpComment")));
+  wp->SetText(WayPointList[SelectedWaypoint].Comment);
+  wp->SetButtonSize(16);
+
+  Units::LongitudeToString(WayPointList[SelectedWaypoint].Longitude, sTmp, sizeof(sTmp)-1);
+  ((WndProperty *)wf->FindByName(TEXT("prpLongitude")))
+    ->SetText(sTmp);
+
+  Units::LatitudeToString(WayPointList[SelectedWaypoint].Latitude, sTmp, sizeof(sTmp)-1);
+  ((WndProperty *)wf->FindByName(TEXT("prpLatitude")))
+    ->SetText(sTmp);
+
+  Units::FormatUserAltitude(WayPointList[SelectedWaypoint].Altitude, sTmp, sizeof(sTmp)-1);
+  ((WndProperty *)wf->FindByName(TEXT("prpAltitude")))
+    ->SetText(sTmp);
+
+  sunsettime = DoSunEphemeris(WayPointList[SelectedWaypoint].Longitude,
+                              WayPointList[SelectedWaypoint].Latitude);
+  sunsethours = (int)sunsettime;
+  sunsetmins = (int)((sunsettime-sunsethours)*60);
+
+  _stprintf(sTmp, TEXT("%02d:%02d"), sunsethours, sunsetmins);
+  ((WndProperty *)wf->FindByName(TEXT("prpSunset")))
+    ->SetText(sTmp);
+
+  _stprintf(sTmp, TEXT("%.0fkm"), Distance(GPS_INFO.Latitude,
+                        GPS_INFO.Longitude,
+                        WayPointList[SelectedWaypoint].Latitude,
+                        WayPointList[SelectedWaypoint].Longitude)*DISTANCEMODIFY
+
+  );
+  ((WndProperty *)wf->FindByName(TEXT("prpDistance")))
+    ->SetText(sTmp);
+
+  _stprintf(sTmp, TEXT("%d°"), iround(Bearing(GPS_INFO.Latitude,
+                        GPS_INFO.Longitude,
+                        WayPointList[SelectedWaypoint].Latitude,
+                        WayPointList[SelectedWaypoint].Longitude)));
+
+  ((WndProperty *)wf->FindByName(TEXT("prpBearing")))
+    ->SetText(sTmp);
+
+  ((WndProperty *)wf->FindByName(TEXT("prpMc0")))
+    ->SetText(TEXT("-"));
+
+  ((WndProperty *)wf->FindByName(TEXT("prpMc1")))
+    ->SetText(TEXT("-"));
+
+  ((WndProperty *)wf->FindByName(TEXT("prpMc2")))
+    ->SetText(TEXT("-"));
+
+  wf->SetKeyDownNotify(FormKeyDown);
+
+  ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+
+  wInfo    = ((WndFrame *)wf->FindByName(TEXT("frmInfos")));
+  wCommand = ((WndFrame *)wf->FindByName(TEXT("frmCommands")));
+  wImage   = ((WndOwnerDrawFrame *)wf->FindByName(TEXT("frmImage")));
+
+  ASSERT(wInfo!=NULL);
+  ASSERT(wCommand!=NULL);
+  ASSERT(wImage!=NULL);
+
+  wInfo->SetBorderKind(BORDERLEFT);
+  wCommand->SetBorderKind(BORDERLEFT);
+  wImage->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERBOTTOM | BORDERRIGHT);
+
+  wCommand->SetVisible(false);
+  wImage->SetCaption(TEXT("Blank!"));
+  wImage->SetOnPaintNotify(OnImagePaint);
+
+  ((WndButton *)wf->FindByName(TEXT("cmdGoto")))
+    ->SetOnClickNotify(OnGotoClicked);
+
+  ((WndButton *)wf->FindByName(TEXT("cmdReplace")))
+    ->SetOnClickNotify(OnReplaceClicked);
+
+  ((WndButton *)wf->FindByName(TEXT("cmdNewHome")))
+    ->SetOnClickNotify(OnNewHomeClicked);
+
+  ((WndButton *)wf->FindByName(TEXT("cmdInserInTask")))
+    ->SetOnClickNotify(OnInserInTaskClicked);
+
+  ((WndButton *)wf->FindByName(TEXT("cmdRemoveFromTask")))
+    ->SetOnClickNotify(OnRemoveFromTaskClicked);
+
+  hasimage1 = jpgimage1.Load(wImage->GetDeviceContext() ,path_modis );
+  hasimage2 = jpgimage2.Load(wImage->GetDeviceContext() ,path_fname2 );
+
+  page = 0;
+
+  wf->ShowModal();
+
+  delete wf;
+
+  wf = NULL;
+
+}
+

@@ -116,6 +116,9 @@ public:
    void SuspendThread();
    void ResumeThread();
    void SetSoundVolume(int volpercent);
+   void RestoreSoundVolume();
+   DWORD dwVolume_restore;
+
 
 protected:
 

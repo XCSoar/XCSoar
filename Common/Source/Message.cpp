@@ -204,10 +204,17 @@ void Message::Resize() {
     int midx = (rcmsg.right+rcmsg.left)/2;
     int midy = (rcmsg.bottom+rcmsg.top)/2;
 
-    rthis.left = midx-width/2;
-    rthis.right = midx+width/2;
-    rthis.top = midy-height/2;
-    rthis.bottom = midy+height/2;
+    if (Appearance.StateMessageAlligne == smAlligneTopLeft){
+      rthis.top = 0;
+      rthis.left = 0;
+      rthis.bottom = height;
+      rthis.right = 206;
+    } else {
+      rthis.left = midx-width/2;
+      rthis.right = midx+width/2;
+      rthis.top = midy-height/2;
+      rthis.bottom = midy+height/2;
+    }
 
     SetWindowPos(hWndMessageWindow, HWND_TOP,
 		 rthis.left, rthis.top,

@@ -116,6 +116,8 @@ void GaugeVario::Create() {
 
   SetWindowLong(hWndVarioWindow, GWL_WNDPROC, (LONG) GaugeVarioWndProc);
 
+  Render();
+
 }
 
 
@@ -127,7 +129,7 @@ void GaugeVario::Destroy() {
   DestroyWindow(hWndVarioWindow);
 }
 
-#define GAUGEVARIORANGE 2.50 // 5 m/s
+#define GAUGEVARIORANGE 5.0 //2.50 // 5 m/s
 #define GAUGEVARIOSWEEP 180 // degrees total sweep
 
 extern NMEA_INFO     GPS_INFO;
@@ -204,8 +206,8 @@ void GaugeVario::Render() {
 
 }
 
-void GaugeVario::Repaint(void){
-  BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
+void GaugeVario::Repaint(HDC hDC){
+  BitBlt(hDC, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
 }
 
 void GaugeVario::RenderBg() {
@@ -612,10 +614,16 @@ void GaugeVario::RenderBugs(void){
 
 LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
+  PAINTSTRUCT ps;            // structure for paint info
+  HDC hDC;                   // handle to graphics device context,
+
   switch (uMsg){
 
     case WM_PAINT:
-      GaugeVario::Repaint();
+      hDC = BeginPaint(hwnd, &ps);
+      GaugeVario::Repaint(hDC);
+      DeleteDC(hDC);
+      EndPaint(hwnd, &ps);
     break;
 
   }

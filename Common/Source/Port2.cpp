@@ -39,6 +39,8 @@ Copyright_License {
 
 
 HANDLE				hRead2Thread = NULL;              // Handle to the read thread
+static TCHAR sPortName[8];
+
 
 BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 {
@@ -46,6 +48,8 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
         dwThreadID;
   DCB PortDCB;
   COMMTIMEOUTS CommTimeouts;
+
+  _tcscpy(sPortName, lpszPortName);
 
   // Open the serial port.
   hPort2 = CreateFile (lpszPortName, // Pointer to the name of the port
@@ -61,10 +65,14 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   // If it fails to open the port, return FALSE.
   if ( hPort2 == INVALID_HANDLE_VALUE )
   {
-    // Could not open the port.
-    MessageBox (hWndMainWindow, gettext(TEXT("Vario Serial Port Unavailable")),
-                TEXT("Error"), MB_OK|MB_ICONINFORMATION);
+    TCHAR sTmp[127];
+
     dwError = GetLastError ();
+
+    // Could not open the port.
+    _stprintf(sTmp, TEXT("Unable to Open\r\nPort %s"), sPortName),
+    MessageBox (hWndMainWindow, sTmp,
+                TEXT("Error"), MB_OK|MB_ICONINFORMATION);
     return FALSE;
   }
 

@@ -69,7 +69,7 @@ Copyright_License {
 
 // Sensible maximums
 #define MAX_MODE 100
-#define MAX_MODE_STRING 50
+#define MAX_MODE_STRING 25
 #define MAX_KEY 255
 #define MAX_EVENTS 2048
 #define MAX_LABEL NUMBUTTONLABELS
@@ -202,11 +202,11 @@ void InputEvents::readFile() {
 
                                                                                                                                               /* Read from the file */
   while (
-	 fgetws(buffer, 2048, fp)
+	 _fgetts(buffer, 2048, fp)
 	 // TODO What about \r - as in \r\n ?
 	 // TODO Note that ^# does not allow # in key - might be required (probably not)
 	 //		Better way is to separate the check for # and the scanf
-	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
+	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
   ) {
 	  line++;
 
@@ -216,13 +216,13 @@ void InputEvents::readFile() {
 		if (
 			some_data
 			&& (d_mode != NULL)						// We have a mode
-			&& (wcscmp(d_mode, TEXT("")) != 0)		//
+			&& (_tcscmp(d_mode, TEXT("")) != 0)		//
 		) {
 
 			TCHAR *token;
 
 			// For each mode
-			token = wcstok(d_mode, TEXT(" "));
+			token = _tcstok(d_mode, TEXT(" "));
 
 			// General errors - these should be true
 			ASSERT(d_location >= 0);
@@ -233,9 +233,9 @@ void InputEvents::readFile() {
 			ASSERT(d_label != NULL);
 
 			// These could indicate bad data - thus not an ASSERT (debug only)
-			// ASSERT(wcslen(d_mode) < 1024);
-			// ASSERT(wcslen(d_type) < 1024);
-			// ASSERT(wcslen(d_label) < 1024);
+			// ASSERT(_tcslen(d_mode) < 1024);
+			// ASSERT(_tcslen(d_type) < 1024);
+			// ASSERT(_tcslen(d_label) < 1024);
 
 			while( token != NULL ) {
 
@@ -254,7 +254,7 @@ void InputEvents::readFile() {
 				}
 
 				// Make key (Keyboard input)
-				if (wcscmp(d_type, TEXT("key")) == 0)	{	// key - Hardware key or keyboard
+				if (_tcscmp(d_type, TEXT("key")) == 0)	{	// key - Hardware key or keyboard
 					int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
 					if (key > 0)
 						Key2Event[mode_id][key] = event_id;
@@ -265,7 +265,7 @@ void InputEvents::readFile() {
 
 
 				// Make gce (Glide Computer Event)
-				} else if (wcscmp(d_type, TEXT("gce")) == 0) {		// GCE - Glide Computer Event
+				} else if (_tcscmp(d_type, TEXT("gce")) == 0) {		// GCE - Glide Computer Event
 					int key = findGCE(d_data);				// Get the int key (eg: APP1 vs 'a')
 					if (key >= 0)
 						GC2Event[mode_id][key] = event_id;
@@ -275,7 +275,7 @@ void InputEvents::readFile() {
 					#endif
 
 				// Make ne (NMEA Event)
-				} else if (wcscmp(d_type, TEXT("ne")) == 0) { 		// NE - NMEA Event
+				} else if (_tcscmp(d_type, TEXT("ne")) == 0) { 		// NE - NMEA Event
 					int key = findNE(d_data);			// Get the int key (eg: APP1 vs 'a')
 					if (key >= 0)
 						N2Event[mode_id][key] = event_id;
@@ -284,7 +284,7 @@ void InputEvents::readFile() {
 					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
 					#endif
 
-				} else if (wcscmp(d_type, TEXT("label")) == 0)	{	// label only - no key associated (label can still be touch screen)
+				} else if (_tcscmp(d_type, TEXT("label")) == 0)	{	// label only - no key associated (label can still be touch screen)
 					// Nothing to do here...
 
    				#ifdef _INPUTDEBUG_
@@ -294,18 +294,18 @@ void InputEvents::readFile() {
 
 				}
 
-				token = wcstok( NULL, TEXT(" "));
+				token = _tcstok( NULL, TEXT(" "));
 			}
 
 		}
 
 		// Clear all data.
 		some_data = false;
-		wcscpy(d_mode, TEXT(""));
-		wcscpy(d_type, TEXT(""));
-		wcscpy(d_data, TEXT(""));
+		_tcscpy(d_mode, TEXT(""));
+		_tcscpy(d_type, TEXT(""));
+		_tcscpy(d_data, TEXT(""));
 		event_id = 0;
-		wcscpy(d_label, TEXT(""));
+		_tcscpy(d_label, TEXT(""));
 		d_location = 0;
 		new_label = NULL;
 
@@ -315,32 +315,42 @@ void InputEvents::readFile() {
 		// NOTE: Do NOT display buffer to user as it may contain an invalid stirng !
 
     } else {
-      if (wcscmp(key, TEXT("mode")) == 0) {
-		  if (wcslen(value) < 1024) {
+      if (_tcscmp(key, TEXT("mode")) == 0) {
+		  if (_tcslen(value) < 1024) {
 				some_data = true;	// Success, we have a real entry
-				wcscpy(d_mode, value);
+				_tcscpy(d_mode, value);
 		  }
-      } else if (wcscmp(key, TEXT("type")) == 0) {
-		  if (wcslen(value) < 256)
-			wcscpy(d_type, value);
-      } else if (wcscmp(key, TEXT("data")) == 0) {
-		  if (wcslen(value) < 256)
-			wcscpy(d_data, value);
-      } else if (wcscmp(key, TEXT("event")) == 0) {
-		  if (wcslen(value) < 256) {
-				wcscpy(d_event, TEXT(""));
-				wcscpy(d_misc, TEXT(""));
+      } else if (_tcscmp(key, TEXT("type")) == 0) {
+		  if (_tcslen(value) < 256)
+			_tcscpy(d_type, value);
+      } else if (_tcscmp(key, TEXT("data")) == 0) {
+		  if (_tcslen(value) < 256)
+			_tcscpy(d_data, value);
+      } else if (_tcscmp(key, TEXT("event")) == 0) {
+		  if (_tcslen(value) < 256) {
+				_tcscpy(d_event, TEXT(""));
+				_tcscpy(d_misc, TEXT(""));
 				int ef;
-				ef = swscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event, d_misc);
+        #if defined(__BORLANDC__	)
+        memset(d_event, 0, sizeof(d_event));
+        memset(d_misc, 0, sizeof(d_event));
+        if (_tcschr(value, ' ') == NULL){
+          _tcscpy(d_event, value);
+        } else {
+        #endif
+				ef = _stscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event, d_misc);
+        #if defined(__BORLANDC__	)
+        }
+        #endif
 
 				// TODO Can't use token here - breaks
 				// other token - damn C - how about
 				// C++ String class ?
 
 				// TCHAR *eventtoken;
-				// eventtoken = wcstok(value, TEXT(" "));
+				// eventtoken = _tcstok(value, TEXT(" "));
 				// d_event = token;
-				// eventtoken = wcstok(value, TEXT(" "));
+				// eventtoken = _tcstok(value, TEXT(" "));
 
 				if ((ef == 1) || (ef == 2)) {
 
@@ -362,10 +372,10 @@ void InputEvents::readFile() {
 				#endif
 				}
 		  }
-	  } else if (wcscmp(key, TEXT("label")) == 0) {
-		wcscpy(d_label, value);
-	  } else if (wcscmp(key, TEXT("location")) == 0) {
-		swscanf(value, TEXT("%d"), &d_location);
+	  } else if (_tcscmp(key, TEXT("label")) == 0) {
+		_tcscpy(d_label, value);
+	  } else if (_tcscmp(key, TEXT("location")) == 0) {
+		_stscanf(value, TEXT("%d"), &d_location);
 
 	  #ifdef _INPUTDEBUG_
 	  } else if (input_errors_count < MAX_INPUT_ERRORS) {
@@ -396,49 +406,49 @@ void InputEvents::showErrors() {
 #endif
 
 int InputEvents::findKey(TCHAR *data) {
-  if (wcscmp(data, TEXT("APP1")) == 0)
+  if (_tcscmp(data, TEXT("APP1")) == 0)
     return VK_APP1;
-  else if (wcscmp(data, TEXT("APP2")) == 0)
+  else if (_tcscmp(data, TEXT("APP2")) == 0)
     return VK_APP2;
-  else if (wcscmp(data, TEXT("APP3")) == 0)
+  else if (_tcscmp(data, TEXT("APP3")) == 0)
     return VK_APP3;
-  else if (wcscmp(data, TEXT("APP4")) == 0)
+  else if (_tcscmp(data, TEXT("APP4")) == 0)
     return VK_APP4;
-  else if (wcscmp(data, TEXT("APP5")) == 0)
+  else if (_tcscmp(data, TEXT("APP5")) == 0)
     return VK_APP5;
-  else if (wcscmp(data, TEXT("APP6")) == 0)
+  else if (_tcscmp(data, TEXT("APP6")) == 0)
     return VK_APP6;
-  else if (wcscmp(data, TEXT("F1")) == 0)
+  else if (_tcscmp(data, TEXT("F1")) == 0)
     return VK_F1;
-  else if (wcscmp(data, TEXT("F2")) == 0)
+  else if (_tcscmp(data, TEXT("F2")) == 0)
     return VK_F2;
-  else if (wcscmp(data, TEXT("F3")) == 0)
+  else if (_tcscmp(data, TEXT("F3")) == 0)
     return VK_F3;
-  else if (wcscmp(data, TEXT("F4")) == 0)
+  else if (_tcscmp(data, TEXT("F4")) == 0)
     return VK_F4;
-  else if (wcscmp(data, TEXT("F5")) == 0)
+  else if (_tcscmp(data, TEXT("F5")) == 0)
     return VK_F5;
-  else if (wcscmp(data, TEXT("F6")) == 0)
+  else if (_tcscmp(data, TEXT("F6")) == 0)
     return VK_F6;
-  else if (wcscmp(data, TEXT("F7")) == 0)
+  else if (_tcscmp(data, TEXT("F7")) == 0)
     return VK_F7;
-  else if (wcscmp(data, TEXT("F8")) == 0)
+  else if (_tcscmp(data, TEXT("F8")) == 0)
     return VK_F8;
-  else if (wcscmp(data, TEXT("F9")) == 0)
+  else if (_tcscmp(data, TEXT("F9")) == 0)
     return VK_F9;
-  else if (wcscmp(data, TEXT("F10")) == 0)
+  else if (_tcscmp(data, TEXT("F10")) == 0)
     return VK_F10;
-  else if (wcscmp(data, TEXT("LEFT")) == 0)
+  else if (_tcscmp(data, TEXT("LEFT")) == 0)
     return VK_LEFT;
-  else if (wcscmp(data, TEXT("RIGHT")) == 0)
+  else if (_tcscmp(data, TEXT("RIGHT")) == 0)
     return VK_RIGHT;
-  else if (wcscmp(data, TEXT("UP")) == 0)
+  else if (_tcscmp(data, TEXT("UP")) == 0)
     return VK_UP;
-  else if (wcscmp(data, TEXT("DOWN")) == 0)
+  else if (_tcscmp(data, TEXT("DOWN")) == 0)
     return VK_DOWN;
-  else if (wcscmp(data, TEXT("RETURN")) == 0)
+  else if (_tcscmp(data, TEXT("RETURN")) == 0)
     return VK_RETURN;
-  else if (wcslen(data) == 1)
+  else if (_tcslen(data) == 1)
     return towupper(data[0]);
   else
     return 0;
@@ -447,7 +457,7 @@ int InputEvents::findKey(TCHAR *data) {
 pt2Event InputEvents::findEvent(TCHAR *data) {
   int i;
   for (i = 0; i < Text2Event_count; i++) {
-    if (wcscmp(data, Text2Event[i].text) == 0)
+    if (_tcscmp(data, Text2Event[i].text) == 0)
       return Text2Event[i].event;
   }
   return NULL;
@@ -456,7 +466,7 @@ pt2Event InputEvents::findEvent(TCHAR *data) {
 int InputEvents::findGCE(TCHAR *data) {
   int i;
   for (i = 0; i < GCE_COUNT; i++) {
-    if (wcscmp(data, Text2GCE[i]) == 0)
+    if (_tcscmp(data, Text2GCE[i]) == 0)
       return i;
   }
   return -1;
@@ -465,7 +475,7 @@ int InputEvents::findGCE(TCHAR *data) {
 int InputEvents::findNE(TCHAR *data) {
   int i;
   for (i = 0; i < NE_COUNT; i++) {
-    if (wcscmp(data, Text2NE[i]) == 0)
+    if (_tcscmp(data, Text2NE[i]) == 0)
       return i;
   }
   return -1;
@@ -506,13 +516,13 @@ int InputEvents::mode2int(TCHAR *mode, bool create) {
     return -1;
 
   for (i = 0; i < mode_map_count; i++) {
-    if (wcscmp(mode, mode_map[i]) == 0)
+    if (_tcscmp(mode, mode_map[i]) == 0)
       return i;
   }
 
   if (create) {
     // Keep a copy
-    wcsncpy(mode_map[mode_map_count], mode, 25);
+    _tcsncpy(mode_map[mode_map_count], mode, 25);
     mode_map_count++;
     return mode_map_count - 1;
   }
@@ -525,7 +535,7 @@ void InputEvents::setMode(TCHAR *mode) {
   static int lastmode = -1;
   int thismode;
 
-  wcsncpy(mode_current, mode, MAX_MODE_STRING);
+  _tcsncpy(mode_current, mode, MAX_MODE_STRING);
 
   // Mode must already exist to use it here...
   thismode = mode2int(mode,false);
@@ -722,13 +732,13 @@ void InputEvents::eventMarkLocation(TCHAR *misc) {
 void InputEvents::eventSounds(TCHAR *misc) {
   bool OldEnableSoundVario = EnableSoundVario;
 
-  if (wcscmp(misc, TEXT("toggle")) == 0)
+  if (_tcscmp(misc, TEXT("toggle")) == 0)
     EnableSoundVario = !EnableSoundVario;
-  else if (wcscmp(misc, TEXT("on")) == 0)
+  else if (_tcscmp(misc, TEXT("on")) == 0)
     EnableSoundVario = true;
-  else if (wcscmp(misc, TEXT("off")) == 0)
+  else if (_tcscmp(misc, TEXT("off")) == 0)
     EnableSoundVario = false;
-  else if (wcscmp(misc, TEXT("show")) == 0) {
+  else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (EnableSoundVario)
       DoStatusMessage(TEXT("Vario Sounds ON"));
     else
@@ -744,20 +754,20 @@ void InputEvents::eventSnailTrail(TCHAR *misc) {
   int OldTrailActive;
   OldTrailActive = TrailActive;
 
-  if (wcscmp(misc, TEXT("toggle")) == 0) {
+  if (_tcscmp(misc, TEXT("toggle")) == 0) {
     TrailActive ++;
     if (TrailActive>2) {
       TrailActive=0;
     }
   }
-  else if (wcscmp(misc, TEXT("off")) == 0)
+  else if (_tcscmp(misc, TEXT("off")) == 0)
     TrailActive = 0;
-  else if (wcscmp(misc, TEXT("long")) == 0)
+  else if (_tcscmp(misc, TEXT("long")) == 0)
     TrailActive = 1;
-  else if (wcscmp(misc, TEXT("short")) == 0)
+  else if (_tcscmp(misc, TEXT("short")) == 0)
     TrailActive = 2;
 
-  else if (wcscmp(misc, TEXT("show")) == 0) {
+  else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (TrailActive==0)
       DoStatusMessage(TEXT("SnailTrail OFF"));
     if (TrailActive==1)
@@ -774,24 +784,24 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
   //  -- full screen
   //  -- normal infobox
 
-  if (wcscmp(misc, TEXT("normal")) == 0) {
+  if (_tcscmp(misc, TEXT("normal")) == 0) {
     MapWindow::RequestOffFullScreen();
     EnableAuxiliaryInfo = false;
-  } else if (wcscmp(misc, TEXT("auxilary")) == 0) {
+  } else if (_tcscmp(misc, TEXT("auxilary")) == 0) {
     MapWindow::RequestOffFullScreen();
     EnableAuxiliaryInfo = true;
-  } else if (wcscmp(misc, TEXT("toggleauxiliary")) == 0) {
+  } else if (_tcscmp(misc, TEXT("toggleauxiliary")) == 0) {
     MapWindow::RequestOffFullScreen();
     EnableAuxiliaryInfo = !EnableAuxiliaryInfo;
-  } else if (wcscmp(misc, TEXT("full")) == 0) {
+  } else if (_tcscmp(misc, TEXT("full")) == 0) {
     MapWindow::RequestOnFullScreen();
-  } else if (wcscmp(misc, TEXT("togglefull")) == 0) {
+  } else if (_tcscmp(misc, TEXT("togglefull")) == 0) {
     if (MapWindow::IsMapFullScreen()) {
       MapWindow::RequestOffFullScreen();
     } else {
       MapWindow::RequestOnFullScreen();
     }
-  } else if (wcscmp(misc, TEXT("show")) == 0) {
+  } else if (_tcscmp(misc, TEXT("show")) == 0) {
 		if (MapWindow::IsMapFullScreen())
 			DoStatusMessage(TEXT("Screen Mode Full"));
 		else if (EnableAuxiliaryInfo)
@@ -835,31 +845,31 @@ void InputEvents::eventZoom(TCHAR* misc) {
   // 1 means on
   float zoom;
 
-  if (wcscmp(misc, TEXT("auto toggle")) == 0)
+  if (_tcscmp(misc, TEXT("auto toggle")) == 0)
     MapWindow::Event_AutoZoom(-1);
-  else if (wcscmp(misc, TEXT("auto on")) == 0)
+  else if (_tcscmp(misc, TEXT("auto on")) == 0)
     MapWindow::Event_AutoZoom(1);
-  else if (wcscmp(misc, TEXT("auto off")) == 0)
+  else if (_tcscmp(misc, TEXT("auto off")) == 0)
     MapWindow::Event_AutoZoom(0);
-  else if (wcscmp(misc, TEXT("auto show")) == 0) {
+  else if (_tcscmp(misc, TEXT("auto show")) == 0) {
 	  if (MapWindow::isAutoZoom())
 		DoStatusMessage(TEXT("AutoZoom ON"));
 	  else
 		DoStatusMessage(TEXT("AutoZoom OFF"));
   }
-  else if (wcscmp(misc, TEXT("out")) == 0)
+  else if (_tcscmp(misc, TEXT("out")) == 0)
     MapWindow::Event_ScaleZoom(-1);
-  else if (wcscmp(misc, TEXT("in")) == 0)
+  else if (_tcscmp(misc, TEXT("in")) == 0)
     MapWindow::Event_ScaleZoom(1);
-  else if (wcscmp(misc, TEXT("-")) == 0)
+  else if (_tcscmp(misc, TEXT("-")) == 0)
     MapWindow::Event_ScaleZoom(-1);
-  else if (wcscmp(misc, TEXT("+")) == 0)
+  else if (_tcscmp(misc, TEXT("+")) == 0)
     MapWindow::Event_ScaleZoom(1);
-  else if (wcscmp(misc, TEXT("--")) == 0)
+  else if (_tcscmp(misc, TEXT("--")) == 0)
     MapWindow::Event_ScaleZoom(-2);
-  else if (wcscmp(misc, TEXT("++")) == 0)
+  else if (_tcscmp(misc, TEXT("++")) == 0)
     MapWindow::Event_ScaleZoom(2);
-  else if (swscanf(misc, TEXT("%f"), &zoom) == 1)
+  else if (_stscanf(misc, TEXT("%f"), &zoom) == 1)
 		MapWindow::Event_SetZoom((double)zoom);
 }
 
@@ -875,23 +885,23 @@ void InputEvents::eventZoom(TCHAR* misc) {
 //	TODO ???	Go to particular point
 //	TODO ???	Go to waypoint (eg: next, named)
 void InputEvents::eventPan(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("toggle")) == 0)
+  if (_tcscmp(misc, TEXT("toggle")) == 0)
     MapWindow::Event_Pan(-1);
-  else if (wcscmp(misc, TEXT("supertoggle")) == 0)
+  else if (_tcscmp(misc, TEXT("supertoggle")) == 0)
     MapWindow::Event_Pan(-2);
-  else if (wcscmp(misc, TEXT("on")) == 0)
+  else if (_tcscmp(misc, TEXT("on")) == 0)
     MapWindow::Event_Pan(1);
-  else if (wcscmp(misc, TEXT("off")) == 0)
+  else if (_tcscmp(misc, TEXT("off")) == 0)
     MapWindow::Event_Pan(0);
-  else if (wcscmp(misc, TEXT("up")) == 0)
+  else if (_tcscmp(misc, TEXT("up")) == 0)
     MapWindow::Event_PanCursor(0,1);
-  else if (wcscmp(misc, TEXT("down")) == 0)
+  else if (_tcscmp(misc, TEXT("down")) == 0)
     MapWindow::Event_PanCursor(0,-1);
-  else if (wcscmp(misc, TEXT("left")) == 0)
+  else if (_tcscmp(misc, TEXT("left")) == 0)
     MapWindow::Event_PanCursor(1,0);
-  else if (wcscmp(misc, TEXT("right")) == 0)
+  else if (_tcscmp(misc, TEXT("right")) == 0)
     MapWindow::Event_PanCursor(-1,0);
-  else if (wcscmp(misc, TEXT("show")) == 0) {
+  else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (MapWindow::isPan())
       DoStatusMessage(TEXT("Pan mode ON"));
     else
@@ -903,28 +913,28 @@ void InputEvents::eventPan(TCHAR *misc) {
 // Do JUST Terrain/Toplogy (toggle any, on/off any, show)
 void InputEvents::eventTerrainTopology(TCHAR *misc) {
 
-  if (wcscmp(misc, TEXT("terrain toggle")) == 0)
+  if (_tcscmp(misc, TEXT("terrain toggle")) == 0)
 	  MapWindow::Event_TerrainTopology(-2);
 
-  else if (wcscmp(misc, TEXT("toplogy toggle")) == 0)
+  else if (_tcscmp(misc, TEXT("toplogy toggle")) == 0)
 	  MapWindow::Event_TerrainTopology(-3);
 
-  else if (wcscmp(misc, TEXT("terrain on")) == 0)
+  else if (_tcscmp(misc, TEXT("terrain on")) == 0)
 	  MapWindow::Event_TerrainTopology(1);
 
-  else if (wcscmp(misc, TEXT("terrain off")) == 0)
+  else if (_tcscmp(misc, TEXT("terrain off")) == 0)
 	  MapWindow::Event_TerrainTopology(1);
 
-  else if (wcscmp(misc, TEXT("topology on")) == 0)
+  else if (_tcscmp(misc, TEXT("topology on")) == 0)
 	  MapWindow::Event_TerrainTopology(1);
 
-  else if (wcscmp(misc, TEXT("topology off")) == 0)
+  else if (_tcscmp(misc, TEXT("topology off")) == 0)
 	  MapWindow::Event_TerrainTopology(1);
 
-  else if (wcscmp(misc, TEXT("show")) == 0)
+  else if (_tcscmp(misc, TEXT("show")) == 0)
 	  MapWindow::Event_TerrainTopology(0);
 
-  else if (wcscmp(misc, TEXT("toggle")) == 0)
+  else if (_tcscmp(misc, TEXT("toggle")) == 0)
 	  MapWindow::Event_TerrainTopology(-1);
 
 }
@@ -942,7 +952,7 @@ void InputEvents::eventClearWarningsOrTerrainTopology(TCHAR *misc) {
 
 // Do Clear Airspace warnings
 void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("day")) == 0)
+  if (_tcscmp(misc, TEXT("day")) == 0)
 	// JMW clear airspace warnings for entire day (for selected airspace)
 	ClearAirspaceWarnings(true,true);
   else
@@ -958,39 +968,39 @@ void InputEvents::eventClearStatusMessages(TCHAR *misc) {
 }
 
 void InputEvents::eventSelectInfoBox(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("next")) == 0) {
+  if (_tcscmp(misc, TEXT("next")) == 0) {
     Event_SelectInfoBox(1);
   }
-  if (wcscmp(misc, TEXT("previous")) == 0) {
+  if (_tcscmp(misc, TEXT("previous")) == 0) {
     Event_SelectInfoBox(-1);
   }
 }
 
 
 void InputEvents::eventChangeInfoBoxType(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("next")) == 0) {
+  if (_tcscmp(misc, TEXT("next")) == 0) {
     Event_ChangeInfoBoxType(1);
   }
-  if (wcscmp(misc, TEXT("previous")) == 0) {
+  if (_tcscmp(misc, TEXT("previous")) == 0) {
     Event_ChangeInfoBoxType(-1);
   }
 }
 
 
 void InputEvents::eventDoInfoKey(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("up")) == 0) {
+  if (_tcscmp(misc, TEXT("up")) == 0) {
     DoInfoKey(1);
   }
-  if (wcscmp(misc, TEXT("down")) == 0) {
+  if (_tcscmp(misc, TEXT("down")) == 0) {
     DoInfoKey(-1);
   }
-  if (wcscmp(misc, TEXT("left")) == 0) {
+  if (_tcscmp(misc, TEXT("left")) == 0) {
     DoInfoKey(-2);
   }
-  if (wcscmp(misc, TEXT("right")) == 0) {
+  if (_tcscmp(misc, TEXT("right")) == 0) {
     DoInfoKey(2);
   }
-  if (wcscmp(misc, TEXT("return")) == 0) {
+  if (_tcscmp(misc, TEXT("return")) == 0) {
     DoInfoKey(0);
   }
 
@@ -1017,9 +1027,26 @@ void InputEvents::eventAnalysis(TCHAR *misc) {
 }
 
 void InputEvents::eventWaypointDetails(TCHAR *misc) {
-  LockFlightData();
-  PopupWaypointDetails();
-  UnlockFlightData();
+
+  if (_tcscmp(misc, TEXT("current")) == 0) {
+    if (SelectedWaypoint<0){
+      DoStatusMessage(TEXT("No Active Waypoint!"));
+      return;
+    }
+    LockFlightData();
+    PopupWaypointDetails();
+    UnlockFlightData();
+  } else
+  if (_tcscmp(misc, TEXT("select")) == 0) {
+    extern int dlgWayPointSelect(void);
+    int res;
+
+    if ((res = dlgWayPointSelect()) != -1){
+      SelectedWaypoint = res;
+      PopupWaypointDetails();
+    };
+
+  }
 }
 
 
@@ -1034,25 +1061,25 @@ void InputEvents::eventPlaySound(TCHAR *misc) {
 
 // up, down, auto on, auto off, auto toggle, auto show
 void InputEvents::eventMacCready(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("up")) == 0) {
+  if (_tcscmp(misc, TEXT("up")) == 0) {
     MacCreadyProcessing(1);
-  } else if (wcscmp(misc, TEXT("down")) == 0) {
+  } else if (_tcscmp(misc, TEXT("down")) == 0) {
     MacCreadyProcessing(-1);
-  } else if (wcscmp(misc, TEXT("auto toggle")) == 0) {
+  } else if (_tcscmp(misc, TEXT("auto toggle")) == 0) {
     MacCreadyProcessing(0);
-  } else if (wcscmp(misc, TEXT("auto on")) == 0) {
+  } else if (_tcscmp(misc, TEXT("auto on")) == 0) {
     MacCreadyProcessing(+2);
-  } else if (wcscmp(misc, TEXT("auto off")) == 0) {
+  } else if (_tcscmp(misc, TEXT("auto off")) == 0) {
     MacCreadyProcessing(-2);
-  } else if (wcscmp(misc, TEXT("auto show")) == 0) {
+  } else if (_tcscmp(misc, TEXT("auto show")) == 0) {
     if (CALCULATED_INFO.AutoMacCready) {
       DoStatusMessage(TEXT("Auto MacCready ON"));
     } else {
       DoStatusMessage(TEXT("Auto MacCready OFF"));
     }
-  } else if (wcscmp(misc, TEXT("show")) == 0) {
+  } else if (_tcscmp(misc, TEXT("show")) == 0) {
 	TCHAR Temp[100];
-	wsprintf(Temp,TEXT("%f"),MACCREADY*LIFTMODIFY);
+	_stprintf(Temp,TEXT("%f"),MACCREADY*LIFTMODIFY);
 	DoStatusMessage(TEXT("MacCready Value"), Temp);
   }
 }
@@ -1061,19 +1088,19 @@ void InputEvents::eventMacCready(TCHAR *misc) {
 // TODO Increase wind by larger amounts ? Set wind to specific amount ?
 //	(may sound silly - but future may get SMS event that then sets wind)
 void InputEvents::eventWind(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("up")) == 0) {
+  if (_tcscmp(misc, TEXT("up")) == 0) {
     WindSpeedProcessing(1);
   }
-  if (wcscmp(misc, TEXT("down")) == 0) {
+  if (_tcscmp(misc, TEXT("down")) == 0) {
     WindSpeedProcessing(-1);
   }
-  if (wcscmp(misc, TEXT("left")) == 0) {
+  if (_tcscmp(misc, TEXT("left")) == 0) {
     WindSpeedProcessing(-2);
   }
-  if (wcscmp(misc, TEXT("right")) == 0) {
+  if (_tcscmp(misc, TEXT("right")) == 0) {
     WindSpeedProcessing(2);
   }
-  if (wcscmp(misc, TEXT("save")) == 0) {
+  if (_tcscmp(misc, TEXT("save")) == 0) {
     WindSpeedProcessing(0);
   }
 }
@@ -1088,79 +1115,79 @@ void InputEvents::eventSendNMEA(TCHAR *misc) {
 }
 
 void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("slow")) == 0) {
+  if (_tcscmp(misc, TEXT("slow")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,3"));
     return;
   }
-  if (wcscmp(misc, TEXT("medium")) == 0) {
+  if (_tcscmp(misc, TEXT("medium")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,2"));
     return;
   }
-  if (wcscmp(misc, TEXT("fast")) == 0) {
+  if (_tcscmp(misc, TEXT("fast")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,1"));
     return;
   }
-  if (wcscmp(misc, TEXT("statistics"))==0) {
+  if (_tcscmp(misc, TEXT("statistics"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,1"));
     jmw_demo=0;
     return;
   }
-  if (wcscmp(misc, TEXT("diagnostics"))==0) {
+  if (_tcscmp(misc, TEXT("diagnostics"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,2"));
     jmw_demo=0;
     return;
   }
-  if (wcscmp(misc, TEXT("psraw"))==0) {
+  if (_tcscmp(misc, TEXT("psraw"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,3"));
     return;
   }
-  if (wcscmp(misc, TEXT("switch"))==0) {
+  if (_tcscmp(misc, TEXT("switch"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,Diagnostics,4"));
     return;
   }
-  if (wcscmp(misc, TEXT("democlimb"))==0) {
+  if (_tcscmp(misc, TEXT("democlimb"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,2"));
     jmw_demo=2;
     return;
   }
-  if (wcscmp(misc, TEXT("demostf"))==0) {
+  if (_tcscmp(misc, TEXT("demostf"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,1"));
     jmw_demo=1;
     return;
   }
-  if (wcscmp(misc, TEXT("zero"))==0) {
+  if (_tcscmp(misc, TEXT("zero"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,ZeroASI,1"));
     // zero, no mixing
     return;
   }
-  if (wcscmp(misc, TEXT("save"))==0) {
+  if (_tcscmp(misc, TEXT("save"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
     return;
   }
 
   // accel calibration
-  if (wcscmp(misc, TEXT("X1"))==0) {
+  if (_tcscmp(misc, TEXT("X1"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,1"));
     return;
   }
-  if (wcscmp(misc, TEXT("X2"))==0) {
+  if (_tcscmp(misc, TEXT("X2"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,2"));
     return;
   }
-  if (wcscmp(misc, TEXT("X3"))==0) {
+  if (_tcscmp(misc, TEXT("X3"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,3"));
     return;
   }
-  if (wcscmp(misc, TEXT("X4"))==0) {
+  if (_tcscmp(misc, TEXT("X4"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,4"));
     return;
   }
-  if (wcscmp(misc, TEXT("X5"))==0) {
+  if (_tcscmp(misc, TEXT("X5"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,5"));
     return;
   }
 
- if (wcscmp(misc, TEXT("jjj"))==0) {
+ if (_tcscmp(misc, TEXT("jjj"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,ToneCruiseLiftDetectionType,2"));
     return;
  }
@@ -1169,10 +1196,10 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
 
 
 void InputEvents::eventAudioDeadband(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("+"))) {
+  if (_tcscmp(misc, TEXT("+"))) {
     SoundDeadband++;
   }
-  if (wcscmp(misc, TEXT("-"))) {
+  if (_tcscmp(misc, TEXT("-"))) {
     SoundDeadband--;
   }
   SoundDeadband = min(40,max(SoundDeadband,0));
@@ -1185,13 +1212,13 @@ void InputEvents::eventAudioDeadband(TCHAR *misc) {
 
 
 void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("next")) == 0) {
+  if (_tcscmp(misc, TEXT("next")) == 0) {
     NextUpDown(1); // next
-  } else if (wcscmp(misc, TEXT("nextwrap")) == 0) {
+  } else if (_tcscmp(misc, TEXT("nextwrap")) == 0) {
     NextUpDown(2); // next - with wrap
-  } else if (wcscmp(misc, TEXT("previous")) == 0) {
+  } else if (_tcscmp(misc, TEXT("previous")) == 0) {
     NextUpDown(-1); // previous
-  } else if (wcscmp(misc, TEXT("previouswrap")) == 0) {
+  } else if (_tcscmp(misc, TEXT("previouswrap")) == 0) {
     NextUpDown(-2); // previous with wrap
   }
 }
@@ -1199,17 +1226,17 @@ void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
 // toggle, abort, resume
 void InputEvents::eventAbortTask(TCHAR *misc) {
     LockFlightData();
-	if (wcscmp(misc, TEXT("abort")) == 0)
+	if (_tcscmp(misc, TEXT("abort")) == 0)
 	    ResumeAbortTask(1);
-	else if (wcscmp(misc, TEXT("resume")) == 0)
+	else if (_tcscmp(misc, TEXT("resume")) == 0)
 	    ResumeAbortTask(-1);
-	else if (wcscmp(misc, TEXT("show")) == 0) {
+	else if (_tcscmp(misc, TEXT("show")) == 0) {
 		if (TaskAborted)
 		    DoStatusMessage(TEXT("Task Aborted"));
 		else
 		    DoStatusMessage(TEXT("Task Resume"));
 	} else
-	    ResumeAbortTask();
+	    ResumeAbortTask();  // ToDo arg?
     UnlockFlightData();
 }
 
@@ -1220,19 +1247,19 @@ void InputEvents::eventBugs(TCHAR *misc) {
   double oldBugs = BUGS;
   LockFlightData();
 
-  if (wcscmp(misc, TEXT("up")) == 0) {
+  if (_tcscmp(misc, TEXT("up")) == 0) {
     BUGS = iround(BUGS*100+10) / 100.0;
   }
-  if (wcscmp(misc, TEXT("down")) == 0) {
+  if (_tcscmp(misc, TEXT("down")) == 0) {
     BUGS = iround(BUGS*100-10) / 100.0;
   }
-  if (wcscmp(misc, TEXT("max")) == 0) {
+  if (_tcscmp(misc, TEXT("max")) == 0) {
     BUGS= 1.0;
   }
-  if (wcscmp(misc, TEXT("min")) == 0) {
+  if (_tcscmp(misc, TEXT("min")) == 0) {
     BUGS= 0.0;
   }
-  if (wcscmp(misc, TEXT("show")) == 0) {
+  if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp,TEXT("%d"), iround(BUGS*100));
     DoStatusMessage(TEXT("Bugs Performance"), Temp);
@@ -1251,19 +1278,19 @@ void InputEvents::eventBugs(TCHAR *misc) {
 void InputEvents::eventBallast(TCHAR *misc) {
   double oldBallast= BALLAST;
   LockFlightData();
-  if (wcscmp(misc, TEXT("up")) == 0) {
+  if (_tcscmp(misc, TEXT("up")) == 0) {
     BALLAST = iround(BALLAST*100.0+10) / 100.0;
   }
-  if (wcscmp(misc, TEXT("down")) == 0) {
+  if (_tcscmp(misc, TEXT("down")) == 0) {
     BALLAST = iround(BALLAST*100.0-10) / 100.0;
   }
-  if (wcscmp(misc, TEXT("max")) == 0) {
+  if (_tcscmp(misc, TEXT("max")) == 0) {
     BALLAST= 1.0;
   }
-  if (wcscmp(misc, TEXT("min")) == 0) {
+  if (_tcscmp(misc, TEXT("min")) == 0) {
     BALLAST= 0.0;
   }
-  if (wcscmp(misc, TEXT("show")) == 0) {
+  if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp,TEXT("%d"),iround(BALLAST*100));
     DoStatusMessage(TEXT("Ballast %"), Temp);
@@ -1283,31 +1310,31 @@ void InputEvents::eventBallast(TCHAR *misc) {
 void InputEvents::eventLogger(TCHAR *misc) {
   // TODO - start logger without asking
   // start stop toggle addnote
-  if (wcscmp(misc, TEXT("start ask")) == 0) {
+  if (_tcscmp(misc, TEXT("start ask")) == 0) {
     guiStartLogger();
     return;
-  } else if (wcscmp(misc, TEXT("start")) == 0) {
+  } else if (_tcscmp(misc, TEXT("start")) == 0) {
     guiStartLogger(true);
     return;
-  } else if (wcscmp(misc, TEXT("stop ask")) == 0) {
+  } else if (_tcscmp(misc, TEXT("stop ask")) == 0) {
     guiStopLogger();
     return;
-  } else if (wcscmp(misc, TEXT("stop")) == 0) {
+  } else if (_tcscmp(misc, TEXT("stop")) == 0) {
     guiStopLogger(true);
     return;
-  } else if (wcscmp(misc, TEXT("toggle ask")) == 0) {
+  } else if (_tcscmp(misc, TEXT("toggle ask")) == 0) {
     guiToggleLogger();
     return;
-  } else if (wcscmp(misc, TEXT("toggle")) == 0) {
+  } else if (_tcscmp(misc, TEXT("toggle")) == 0) {
     guiToggleLogger(true);
     return;
-  } else if (wcscmp(misc, TEXT("show")) == 0) {
+  } else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (LoggerActive) {
       DoStatusMessage(TEXT("Logger ON"));
     } else {
       DoStatusMessage(TEXT("Logger OFF"));
     }
-  } else if (wcsncmp(misc, TEXT("note"), 4)==0) {
+  } else if (_tcsncmp(misc, TEXT("note"), 4)==0) {
     // add note to logger file if available..
     LoggerNote(misc+4);
   }
@@ -1386,7 +1413,7 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
 
 
 void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
-  if (wcscmp(misc, TEXT("aircraft")) == 0) {
+  if (_tcscmp(misc, TEXT("aircraft")) == 0) {
     MapWindow::Event_NearestWaypointDetails(GPS_INFO.Longitude,
 					    GPS_INFO.Latitude,
 					    1.0e5); // big range..
@@ -1409,6 +1436,23 @@ void InputEvents::eventTaskSave(TCHAR *misc) {
   SaveTask(misc);
 }
 
+void dlgBasicSettingsShowModal(void);
+void dlgWindSettingsShowModal(void);
+
+void InputEvents::eventSetup(TCHAR *misc) {
+
+  if (_tcscmp(misc,TEXT("Basic"))==0){
+    dlgBasicSettingsShowModal();
+  } else
+  if (_tcscmp(misc,TEXT("Wind"))==0){
+    dlgWindSettingsShowModal();
+  } else
+  if (_tcscmp(misc,TEXT("System"))==0){
+    // dlgSystemSettingsShowModal();
+  }
+}
+
+
 
 void InputEvents::eventDLLExecute(TCHAR *misc) {
 	// LoadLibrary(TEXT("test.dll"));
@@ -1419,10 +1463,10 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 	TCHAR* other;
 	TCHAR* pdest;
 
-	wcscpy(data, misc);
+	_tcscpy(data, misc);
 
 	// dll_name (up to first space)
-	pdest = wcsstr(data, TEXT(" "));
+	pdest = _tcsstr(data, TEXT(" "));
 	if (pdest == NULL) {
 		#ifdef _INPUTDEBUG_
 		_stprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute string - no DLL"));
@@ -1437,7 +1481,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 	func_name = pdest + 1;
 
 	// other (after next space to end of string)
-	pdest = wcsstr(func_name, TEXT(" "));
+	pdest = _tcsstr(func_name, TEXT(" "));
 	if (pdest != NULL) {
 		*pdest = NULL;
 		other = pdest + 1;
@@ -1470,7 +1514,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 HINSTANCE _loadDLL(TCHAR *name) {
 	int i;
 	for (i = 0; i < DLLCache_Count; i++) {
-		if (wcscmp(name, DLLCache[i].text) == 0)
+		if (_tcscmp(name, DLLCache[i].text) == 0)
 			return DLLCache[i].hinstance;
 	}
 	if (DLLCache_Count < MAX_DLL_CACHE) {

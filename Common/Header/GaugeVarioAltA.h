@@ -25,7 +25,7 @@ class GaugeVario {
   static void RenderBallast(void);
   static void RenderBugs(void);
   static void RenderNeedle(double Value, int x, int y);
-  static void Repaint(void);
+  static void Repaint(HDC hDC);
 
  private:
   static HDC hdcScreen;

@@ -838,7 +838,6 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       else
         {
           MODE = CRUISE;
-
         }
     }
   else if(MODE == CLIMB)

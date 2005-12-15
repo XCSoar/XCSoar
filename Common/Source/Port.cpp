@@ -69,13 +69,15 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   // If it fails to open the port, return FALSE.
   if ( hPort1 == INVALID_HANDLE_VALUE )
   {
+
+    dwError = GetLastError ();
+
     // Could not open the port.
     // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
     _stprintf(sTmp, TEXT("Unable to Open\r\nPort %s"), sPortName),
     MessageBox (hWndMainWindow, sTmp,
                 TEXT("Error"), MB_OK|MB_ICONINFORMATION);
-    dwError = GetLastError ();
     return FALSE;
   }
 

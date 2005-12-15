@@ -96,6 +96,10 @@
 #define IDB_PEAKHIGH                    273
 #define IDB_PEAKLOW                     274
 #define IDB_VARIOSCALE                  277
+#define IDB_FLARMTRAFFIC                278
+#define IDB_AIRSPACE3                   280
+#define IDB_DLGBUTTONLEFT16             281
+#define IDB_DLGBUTTONLEFT32             282
 #define IDB_MAPSCALE_A                  283
 #define IDB_UNIT_KM                     284
 #define IDB_UNIT_SM                     285
@@ -116,8 +120,8 @@
 #define IDB_UNIT_FPM                    300
 #define IDB_UNIT_KMH                    301
 #define IDB_UNIT_MPH                    302
-
-
+#define IDB_DLGBUTTONRIGHT16            303
+#define IDB_DLGBUTTONRIGHT32            304
 #define IDC_AAT                         1001
 #define IDC_AATTIME                     1002
 #define IDC_AATTIMESPIN                 1003
@@ -366,7 +370,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        278
+#define _APS_NEXT_RESOURCE_VALUE        305
 #define _APS_NEXT_COMMAND_VALUE         40025
 #define _APS_NEXT_CONTROL_VALUE         1263
 #define _APS_NEXT_SYMED_VALUE           102
