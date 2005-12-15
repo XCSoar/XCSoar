@@ -21,8 +21,27 @@
 #define TOFEET          (double)3.281
 #define TOMETER         (double)1.0
 
+typedef struct _FLARM_TRAFFIC
+{
+  double Latitude;
+  double Longitude;
+  double TrackBearing;
+  double Speed;
+  double Altitude;
+  double TurnRate;
+  double ClimbRate;
+  TCHAR ID[7];
+  unsigned short IDType;
+  unsigned short AlarmLevel;
+  double Time_Fix;
+  unsigned short Type;
+
+} FLARM_TRAFFIC;
+
+
 typedef struct _NMEA_INFO
 {
+
   double Latitude;
   double Longitude;
   double TrackBearing;
@@ -63,6 +82,14 @@ typedef struct _NMEA_INFO
   double OutsideAirTemperature;
   BOOL HumidityAvailable;
   double RelativeHumidity;
+
+  unsigned short FLARM_RX;
+  unsigned short FLARM_TX;
+  unsigned short FLARM_GPS;
+  unsigned short FLARM_AlarmLevel;
+  BOOL FLARM_Available;
+  FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
+
 } NMEA_INFO;
 
 int ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO);

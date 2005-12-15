@@ -89,6 +89,7 @@ bool gnav = false;
 bool geometrychanged = false;
 
 bool InfoBoxLayout::landscape = false;
+bool InfoBoxLayout::square = false;
 
 void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc, 
 				       int *x, int *y,
@@ -183,6 +184,10 @@ void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
 	}
       }
       break;
+    case 7:
+      *x = rc.right-ControlWidth;
+      *y = rc.top+ControlHeight*i;
+      break;
     };
 
     *sizex = ControlWidth;
@@ -218,6 +223,14 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
       }
     }
 
+  } else if (rc.bottom==rc.right) {
+    landscape = false;
+    square = true;
+    if (InfoBoxGeometry<7) {
+      geometrychanged = true;
+    }
+    InfoBoxGeometry = 7;
+
   } else {
     landscape = false;
     // portrait mode
@@ -237,6 +250,8 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   }
   if (gnav) {
     numInfoWindows = 9;
+  } else if (square) {
+    numInfoWindows = 5;
   } else {
     numInfoWindows = 8;
   }
@@ -350,6 +365,22 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     MapWindow::MapRect.left = rc.left;
     MapWindow::MapRect.bottom = rc.bottom;
     MapWindow::MapRect.right = rc.right-ControlWidth*2;
+
+    break;
+
+  case 7:
+    // calculate control dimensions
+    
+    ControlWidth = (int)((rc.right - rc.left)*0.2);
+    ControlHeight = (int)((rc.bottom - rc.top)/5);
+    TitleHeight = (int)(ControlHeight/TITLEHEIGHTRATIO); 
+    
+    // calculate small map screen size
+    
+    MapWindow::MapRect.top = rc.top;
+    MapWindow::MapRect.left = rc.left;
+    MapWindow::MapRect.bottom = rc.bottom;
+    MapWindow::MapRect.right = rc.right-ControlWidth;
 
     break;
   };
@@ -516,11 +547,11 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   for (i=0; i<NUMBUTTONLABELS; i++) {
     hWndButtonWindow[i] =
       CreateWindow(TEXT("STATIC"), TEXT("\0"),
-		   WS_VISIBLE|WS_CHILD|WS_TABSTOP
-		   |SS_CENTER|SS_NOTIFY 
+		   /*WS_VISIBLE|*/WS_CHILD|WS_TABSTOP
+		   |SS_CENTER|SS_NOTIFY
 		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
 		   rc.left, rc.top, 
-		   // TODO need to have these passed in to as some buttons
+		   // TODO need to have these passed in too as some buttons
 		   // may actually be a different shape.
 		   buttonWidth, buttonHeight,
 		   hWndMainWindow, NULL, hInst, NULL);
@@ -541,6 +572,16 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   }
 
 }
+
+#if NEWINFOBOX > 0
+void ButtonLabel::SetFont(HFONT Font) {
+  int i;
+  for (i=0; i<NUMBUTTONLABELS; i++) {
+    SendMessage(hWndButtonWindow[i], WM_SETFONT,
+              (WPARAM)Font, MAKELPARAM(TRUE,0));
+  }
+}
+#endif
 
 
 void ButtonLabel::Destroy() {

@@ -118,6 +118,7 @@ public:
   static TCHAR *GetAltitudeName();
 
   static bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
+  static bool FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
   static bool FormatUserDistance(double Distance, TCHAR *Buffer, size_t size);
   static bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer, size_t size);
 

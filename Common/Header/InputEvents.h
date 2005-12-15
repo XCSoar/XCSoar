@@ -65,7 +65,8 @@ class InputEvents {
   static void eventTaskLoad(TCHAR *misc);
   static void eventTaskSave(TCHAR *misc);
   static void eventSendNMEA(TCHAR *misc);
-  static void eventNull(TCHAR *misc);
+  static void eventNull(TCHAR *misc); 
+  static void eventSetup(TCHAR *misc);
   // -------
 
 #ifdef _SIM_
@@ -94,6 +95,8 @@ enum {
 		GCE_TASK_NEXTWAYPOINT,
 		GCE_FLIGHTMODE_FINALGLIDE_ABOVE,	
 		GCE_FLIGHTMODE_FINALGLIDE_BELOW,
+		GCE_FLARM_TRAFFIC,
+		GCE_FLARM_NOTRAFFIC,
 
 		GCE_COUNT			// How many we have for arrays etc
 };

@@ -10,7 +10,7 @@ void DoLogger(TCHAR *strAssetNumber);
 void StartLogger(TCHAR *strAssetNumber);
 void LogPoint(double Lattitude, double Longditude, double Altitude);
 void AddDeclaration(double Lattitude, double Longditude, TCHAR *ID);
-void StartDeclaration(void);
+void StartDeclaration(int numturnpoints);
 void EndDeclaration(void);
 void LoggerHeader(void);
 void LoggerNote(TCHAR *text);

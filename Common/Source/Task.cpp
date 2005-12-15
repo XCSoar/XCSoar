@@ -223,7 +223,6 @@ void ReplaceWaypoint(int index) {
 }
 
 
-
 ////////////
 
 #include "Logger.h"
@@ -255,7 +254,16 @@ void guiStartLogger(bool noAsk) {
 	LoggerActive = true;
 	StartLogger(strAssetNumber);
 	LoggerHeader();
-	StartDeclaration();
+
+	int ntp=0;
+	for(i=0;i<MAXTASKPOINTS;i++)
+	  {
+	    if(Task[i].Index == -1) {
+	      break;
+	    }
+	    ntp++;
+	  }
+	StartDeclaration(ntp);
 	for(i=0;i<MAXTASKPOINTS;i++)
 	  {
 	    if(Task[i].Index == -1) {

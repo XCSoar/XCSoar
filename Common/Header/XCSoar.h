@@ -128,7 +128,10 @@ extern void PopupAnalysis();
 extern void ShowStatus();
 
 #define DEG_TO_RAD .0174532925199432958
-#define RAD_TO_DEG 57.2957795131		
+#define RAD_TO_DEG 57.2957795131
+#if defined(M_PI)
+  #undef M_PI
+#endif
 #define M_PI 3.14159265359
 #define M_2PI 6.28318530718
 
@@ -206,6 +209,11 @@ typedef enum{
   wpLandableAltA,
 }IndLandable_t;
 
+typedef enum{
+  smAlligneCenter=0,
+  smAlligneTopLeft,
+}StateMessageAlligne_t;
+
 typedef struct{
   int Height;
   int AscentHeight;
@@ -234,6 +242,7 @@ typedef struct{
   bool DontShowAutoMacCready;
   bool InverseInfoBox;
   bool InfoTitelCapital;
+  StateMessageAlligne_t StateMessageAlligne;
 } Appearance_t;
 
 extern Appearance_t Appearance;

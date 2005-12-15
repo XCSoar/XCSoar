@@ -15,6 +15,8 @@
 
 #define POLARSIZE 3
 
+#define FLARM_MAX_TRAFFIC 15
+
 #define DESCRIPTION_SIZE 30
 #define TITLE_SIZE 30
 #define FORMAT_SIZE 20
@@ -92,7 +94,7 @@
 ///////////////////////
 
 #define NUMAIRSPACECOLORS 16
-#define NUMAIRSPACEBRUSHES 3
+#define NUMAIRSPACEBRUSHES 4
 
 ////////////////////////
 

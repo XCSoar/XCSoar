@@ -240,23 +240,17 @@ Units_t Units::SetUserWindSpeedUnit(Units_t NewUnit){
 Units_t Units::GetUserUnitByGroup(UnitGroup_t UnitGroup){
   switch(UnitGroup){
     case ugNone:
-      return(unUndef);
-    break;
+    return(unUndef);
     case ugDistance:
-      return(GetUserDistanceUnit());
-    break;
+    return(GetUserDistanceUnit());
     case ugAltitude:
-      return(GetUserAltitudeUnit());
-    break;
+    return(GetUserAltitudeUnit());
     case ugHorizontalSpeed:
-      return(GetUserHorizontalSpeedUnit());
-    break;
+    return(GetUserHorizontalSpeedUnit());
     case ugVerticalSpeed:
-      return(GetUserVerticalSpeedUnit());
-    break;
+    return(GetUserVerticalSpeedUnit());
     case ugWindSpeed:
-      return(GetUserWindSpeedUnit());
-    break;
+    return(GetUserWindSpeedUnit());
     default:
       return(unUndef);
   }
@@ -343,6 +337,24 @@ bool Units::FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size){
   }
 
 }
+
+bool Units::FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size){
+  Units_t saveUnit = UserAltitudeUnit;
+  bool res;
+
+  if (saveUnit == unMeter)
+    UserAltitudeUnit = unFeet;
+  if (saveUnit == unFeet)
+    UserAltitudeUnit = unMeter;
+
+  res = FormatUserAltitude(Altitude, Buffer, size);
+
+  UserAltitudeUnit = saveUnit;
+
+  return(res);
+
+}
+
 
 bool Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size){
 

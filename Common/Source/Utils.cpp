@@ -1383,7 +1383,7 @@ void ReadUUID(void)
 
   Asset = Asset ^ temp;
 
-  wsprintf(strAssetNumber,TEXT("%08X%08X"),Asset,Guid.Data1 );
+  _stprintf(strAssetNumber,TEXT("%08X%08X"),Asset,Guid.Data1 );
   return;
 }
 
@@ -1481,23 +1481,26 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 
   if(Base.FL == 0)
     {
-      wsprintf(BaseStr,TEXT("%1.0f Alt"),ALTITUDEMODIFY * Base.Altitude );
+      if (Base.Altitude > 0)
+        _stprintf(BaseStr,TEXT("%1.0f%s Alt"), ALTITUDEMODIFY * Base.Altitude, Units::GetUnitName(Units::GetUserAltitudeUnit()));
+      else
+        _stprintf(BaseStr,TEXT("GND"));
     }
   else
     {
-      wsprintf(BaseStr,TEXT("FL %1.0f"),Base.FL );
+      _stprintf(BaseStr,TEXT("FL %1.0f"),Base.FL );
     }
 
   if(Top.FL == 0)
     {
-      wsprintf(TopStr,TEXT("%1.0f Alt"),ALTITUDEMODIFY * Top.Altitude );
+      _stprintf(TopStr,TEXT("%1.0f%s Alt"), ALTITUDEMODIFY * Top.Altitude, Units::GetUnitName(Units::GetUserAltitudeUnit()));
     }
   else
     {
-      wsprintf(TopStr,TEXT("FL %1.0f"),Top.FL );
+      _stprintf(TopStr,TEXT("FL %1.0f"),Top.FL );
     }
 
-  wsprintf(szMessageBuffer,TEXT("%s: %s\r\nBase: %s\r\nTop: %s\r\n"),szTitleBuffer, Name, BaseStr, TopStr);
+  _stprintf(szMessageBuffer,TEXT("%s: %s\r\nBase: %s\r\nTop: %s\r\n"),szTitleBuffer, Name, BaseStr, TopStr);
 }
 
 // read string from file

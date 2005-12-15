@@ -1024,6 +1024,7 @@ int FindAirspaceCircle(double Longitude,double Latitude)
   for(i=0;i<NumberOfAirspaceCircles;i++)
     {
       if(AirspaceCircle[i].Visible)
+	// JMW airspace visibility BUG!
 	{
 	  Dist = Distance(Latitude,Longitude,AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude);
 	  if(Dist < AirspaceCircle[i].Radius )
@@ -1191,7 +1192,7 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 		
   for(i=0;i<NumberOfAirspaceCircles;i++)
     {
-      if(AirspaceCircle[i].Visible)
+      if(AirspaceCircle[i].Visible) // JMW this is a problem BUG?
 	{
 	  Dist = Distance(latitude,longitude,
 			  AirspaceCircle[i].Latitude, 

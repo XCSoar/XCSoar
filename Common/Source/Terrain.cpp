@@ -231,10 +231,10 @@ void MarkLocation(double lon, double lat)
 
   FILE *stream;
   stream = _wfopen(LocalPath(TEXT("xcsoar-marks.txt")),TEXT("a+t"));
- 
-  fwrite(message,strlen(message),1,stream);
-
-  fclose(stream);
+  if (stream != NULL){
+    fwrite(message,strlen(message),1,stream);
+    fclose(stream);
+  }
 
 #if (EXPERIMENTAL > 0)
   bsms.SendSMS(message);
@@ -497,7 +497,7 @@ public:
 		  GetEffectivePixelSize(pixelsize));
     int ixsepx = ixs*epx;
 
-    int tss = epx*pixelsize*1000;
+    int tss = (int)(epx*pixelsize*1000);
 
     for (int y = 0; y<iys; y++) {
       for (int x = 0; x<ixs; x++) {
@@ -577,9 +577,9 @@ public:
 	    dd[1]= 0;
 	    dd[2]= 255;
 	  }
-	  nxBuf[pval] = dd[0];
-	  nyBuf[pval] = dd[1];
-	  nzBuf[pval] = dd[2];
+	  nxBuf[pval] = (short)dd[0];
+	  nyBuf[pval] = (short)dd[1];
+	  nzBuf[pval] = (short)dd[2];
 	} else {
 	  nxBuf[pval] = 0;
 	  nyBuf[pval] = 0;

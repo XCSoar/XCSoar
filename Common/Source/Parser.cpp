@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.30 2005/11/29 06:12:17 jwharington Exp $
+  $Id: Parser.cpp,v 1.31 2005/12/15 06:11:03 jwharington Exp $
 
 Copyright_License {
 
@@ -66,6 +66,9 @@ static BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO);
 
+// FLARM sentances
+static BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO);
 
 static double EastOrWest(double in, TCHAR EoW);
 static double NorthOrSouth(double in, TCHAR NoS);
@@ -174,6 +177,16 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
 	  DoStatusMessage(cptext);
 	  return FALSE;
 	}
+
+      if(_tcscmp(SentanceString,TEXT("PFLAA"))==0)
+        {
+          return PFLAA(&String[7], GPS_INFO);
+        }
+
+      if(_tcscmp(SentanceString,TEXT("PFLAU"))==0)
+        {
+          return PFLAU(&String[7], GPS_INFO);
+        }
 
       // JMW testing only
       /*
@@ -995,3 +1008,185 @@ BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   return FALSE;
 }
+
+
+////////////// FLARM
+
+void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO) {
+  int i;
+  for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
+    // clear this slot if it is too old
+    if (GPS_INFO->Time> GPS_INFO->FLARM_Traffic[i].Time_Fix+3) {
+      GPS_INFO->FLARM_Traffic[i].ID[0]= 0;
+    }
+  }
+}
+
+double FLARM_NorthingToLatitude = 0.0;
+double FLARM_EastingToLongitude = 0.0;
+
+
+BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+  TCHAR ctemp[80];
+  static int old_flarm_rx = 0;
+
+  GPS_INFO->FLARM_Available = true;
+
+  // calculate relative east and north projection to lat/lon
+
+  double delta_lat = 0.01;
+  double delta_lon = 0.01;
+
+  double dlat = Distance(GPS_INFO->Latitude, GPS_INFO->Longitude,
+			 GPS_INFO->Latitude+delta_lat, GPS_INFO->Longitude);
+
+  FLARM_NorthingToLatitude = delta_lat / dlat;
+
+  double dlon = Distance(GPS_INFO->Latitude, GPS_INFO->Longitude,
+			 GPS_INFO->Latitude, GPS_INFO->Longitude+delta_lon);
+
+  FLARM_EastingToLongitude = delta_lon / dlon;
+
+  FLARM_RefreshSlots(GPS_INFO);
+
+  // number of received FLARM devices
+  ExtractParameter(String,ctemp,0);
+  GPS_INFO->FLARM_RX = StrToDouble(ctemp,NULL);
+
+  // Transmit status
+  ExtractParameter(String,ctemp,1);
+  GPS_INFO->FLARM_TX = StrToDouble(ctemp,NULL);
+
+  // GPS status
+  ExtractParameter(String,ctemp,2);
+  GPS_INFO->FLARM_GPS = StrToDouble(ctemp,NULL);
+
+  // Alarm level of FLARM (0-3)
+  ExtractParameter(String,ctemp,4);
+  GPS_INFO->FLARM_AlarmLevel = StrToDouble(ctemp,NULL);
+
+  // process flarm updates
+
+  if ((GPS_INFO->FLARM_RX) && (old_flarm_rx==0)) {
+    // traffic has appeared..
+    InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
+  }
+  if ((GPS_INFO->FLARM_RX==0) && (old_flarm_rx)) {
+    // traffic has appeared..
+    InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
+  }
+
+  old_flarm_rx = GPS_INFO->FLARM_RX;
+
+  return FALSE;
+}
+
+
+int FLARM_FindSlot(NMEA_INFO *GPS_INFO, TCHAR *Id)
+{
+  int i;
+  for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
+
+    // find position in existing slot
+    if (_tcscmp(Id, GPS_INFO->FLARM_Traffic[i].ID)==0) {
+      return i;
+    }
+
+    // find old empty slot
+
+  }
+  // not found, so try to find an empty slot
+  for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
+    if (GPS_INFO->FLARM_Traffic[i].ID[0]==0) {
+      return i;
+    }
+  }
+
+  // still not found and no empty slots left, buffer is full
+  return -1;
+}
+
+
+
+BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+  TCHAR ctemp[80];
+  int flarm_slot = 0;
+
+  // 5 id, 6 digit hex
+  ExtractParameter(String,ctemp,5);
+
+  flarm_slot = FLARM_FindSlot(GPS_INFO, ctemp);
+  if (flarm_slot<0) {
+    // no more slots available,
+    return FALSE;
+  }
+
+  _tcscpy(GPS_INFO->FLARM_Traffic[flarm_slot].ID, ctemp);
+
+  // set time of fix to current time
+  GPS_INFO->FLARM_Traffic[flarm_slot].Time_Fix = GPS_INFO->Time;
+
+  // 0 alarmlevel
+  ExtractParameter(String,ctemp,0);
+  GPS_INFO->FLARM_Traffic[flarm_slot].AlarmLevel = 
+    StrToDouble(ctemp,NULL);
+
+  // 1 relativenorth, meters  
+  ExtractParameter(String,ctemp,1);
+  GPS_INFO->FLARM_Traffic[flarm_slot].Latitude = 
+    StrToDouble(ctemp,NULL)*FLARM_NorthingToLatitude + GPS_INFO->Latitude;
+
+  // 2 relativeeast, meters
+  ExtractParameter(String,ctemp,2);
+  GPS_INFO->FLARM_Traffic[flarm_slot].Longitude = 
+    StrToDouble(ctemp,NULL)*FLARM_EastingToLongitude + GPS_INFO->Longitude;
+
+  // 3 relativevertical, meters
+  ExtractParameter(String,ctemp,3);
+  GPS_INFO->FLARM_Traffic[flarm_slot].Altitude = 
+    StrToDouble(ctemp,NULL) + GPS_INFO->Altitude;
+
+  // 4 id-type
+  ExtractParameter(String,ctemp,4);
+  GPS_INFO->FLARM_Traffic[flarm_slot].IDType = 
+    StrToDouble(ctemp,NULL);
+
+  // 6 track, integer degrees 0-360
+  ExtractParameter(String,ctemp,6);
+  GPS_INFO->FLARM_Traffic[flarm_slot].TrackBearing = 
+    StrToDouble(ctemp,NULL);
+
+  // 7 turnrate, degrees per second
+  ExtractParameter(String,ctemp,7);
+  GPS_INFO->FLARM_Traffic[flarm_slot].TurnRate = 
+    StrToDouble(ctemp,NULL);
+
+  // 8 groundspeed, meters/second
+  ExtractParameter(String,ctemp,8);
+  GPS_INFO->FLARM_Traffic[flarm_slot].Speed = 
+    StrToDouble(ctemp,NULL);
+
+  // 9 climbrate, meters/second
+  ExtractParameter(String,ctemp,9);
+  GPS_INFO->FLARM_Traffic[flarm_slot].ClimbRate = 
+    StrToDouble(ctemp,NULL);
+
+  // 10 type
+  ExtractParameter(String,ctemp,10);
+  GPS_INFO->FLARM_Traffic[flarm_slot].Type = 
+    StrToDouble(ctemp,NULL);
+
+  return FALSE;
+}
+
+
+//////
+
+void testflarm(NMEA_INFO *GPS_INFO) {
+  GPS_INFO->FLARM_Available = true;
+  PFLAU(TEXT("1,1,1,1"),GPS_INFO);
+  PFLAA(TEXT("0,1000,2000,220,2,DD8F12,180,-4.5,30,-1.4,1"),GPS_INFO);
+}
+
