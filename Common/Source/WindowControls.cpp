@@ -33,6 +33,7 @@ Copyright_License {
 #include "tchar.h"
 #include <stdio.h>
 #include "WindowControls.h"
+#include "MapWindow.h"
 
 #define DEFAULTBORDERPENWIDTH 1
 #define SELECTORWIDTH         4
@@ -431,8 +432,8 @@ WindowControl::WindowControl(WindowControl *Owner, HWND Parent, TCHAR *Name, int
   InstCount++;
 
   Style = WS_CHILD | ES_MULTILINE | ES_CENTER
-				   | ES_READONLY | WS_CLIPCHILDREN
-				   | WS_CLIPSIBLINGS;
+    | ES_READONLY | WS_CLIPCHILDREN
+    | WS_CLIPSIBLINGS;
 
   if (mParent == NULL)
     Style |= WS_POPUP;
@@ -950,6 +951,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     break;
 
     case WM_DESTROY:
+      MapWindow::RequestFastRefresh=true;
     break;
 
     case WM_COMMAND:
@@ -1464,7 +1466,7 @@ int     WndProperty::InstCount=0;
 LRESULT CALLBACK WndPropertyEditWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
-WndProperty::WndProperty(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height, int CaptionWidth, int (*DataChangeNotify)(WindowControl * Sender, int Mode, int Value)):
+WndProperty::WndProperty(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height, int CaptionWidth, int (*DataChangeNotify)(WindowControl * Sender, int Mode, int Value), int MultiLine):
       WindowControl(Parent, NULL /*Parent->GetHandle()*/, Name, X, Y, Width, Height){
 
   mOnClickUpNotify = NULL;
@@ -1490,13 +1492,26 @@ WndProperty::WndProperty(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int
   }
   UpdateButtonData(mBitmapSize);
 
-  mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
-		     WS_BORDER | WS_VISIBLE | WS_CHILD | ES_LEFT | ES_AUTOHSCROLL
-				   | WS_CLIPCHILDREN
-				   | WS_CLIPSIBLINGS,
-		     mEditPos.x, mEditPos.y,
-		     mEditSize.x, mEditSize.y,
-		     GetHandle(), NULL, hInst, NULL);
+  if (MultiLine) {
+    mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
+			  WS_BORDER | WS_VISIBLE | WS_CHILD 
+			  | ES_LEFT | ES_AUTOHSCROLL
+			  | WS_CLIPCHILDREN
+			  | WS_CLIPSIBLINGS
+			  | ES_MULTILINE, // JMW added MULTILINE
+			  mEditPos.x, mEditPos.y,
+			  mEditSize.x, mEditSize.y,
+			  GetHandle(), NULL, hInst, NULL);
+  } else {
+    mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
+			  WS_BORDER | WS_VISIBLE | WS_CHILD 
+			  | ES_LEFT | ES_AUTOHSCROLL
+			  | WS_CLIPCHILDREN
+			  | WS_CLIPSIBLINGS,
+			  mEditPos.x, mEditPos.y,
+			  mEditSize.x, mEditSize.y,
+			  GetHandle(), NULL, hInst, NULL);
+  }
 
   SetWindowLong(mhEdit, GWL_USERDATA, (long)this);
   mEditWindowProcedure = (WNDPROC)SetWindowLong(mhEdit, GWL_WNDPROC, (LONG) WndPropertyEditWndProc);

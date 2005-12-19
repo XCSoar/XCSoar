@@ -472,7 +472,9 @@ int dlgWayPointSelect(void){
   PrepareData();
   UpdateList();
 
-  if (wf->ShowModal() == mrOK && (UpLimit - LowLimit > 0) && ItemIndex > 0 && ItemIndex < (UpLimit - LowLimit)){
+  if (wf->ShowModal() == mrOK && (UpLimit - LowLimit > 0) && 
+      (ItemIndex >= 0)  // JMW fixed bug, was >0
+      && (ItemIndex < (UpLimit - LowLimit))) {
     ItemIndex = WayPointSelectInfo[LowLimit + ItemIndex].Index;
   }else
     ItemIndex = -1;

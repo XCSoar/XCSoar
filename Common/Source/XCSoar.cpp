@@ -67,7 +67,7 @@ Copyright_License {
 #endif
 
 
-#if 0
+#if NEWINFOBOX
 Appearance_t Appearance = {
   apMsAltA,
   apMs2None,
@@ -2492,8 +2492,8 @@ void SIMProcessTimer(void)
   GPS_INFO.Time+= 1.0;
 
 #ifdef _SIM_
-  void testflarm(NMEA_INFO *theinfo);
-  testflarm(&GPS_INFO);
+  //  void testflarm(NMEA_INFO *theinfo);
+  //  testflarm(&GPS_INFO);
 #endif
 
   GpsUpdated = TRUE;

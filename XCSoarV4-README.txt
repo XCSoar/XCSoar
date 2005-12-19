@@ -5,6 +5,10 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 To do for next version:
 
+- Add LoadProfile to inputevents, so we can have menu buttons 
+   trigger pilot/region specific settings
+- AAT Areas are drawn on top of everything, including task lines.
+- Add track line particularly if not in north up mode
 - Speed command driven by dolphin speed or block maccready
 - Temp trace max temperature relative to ground offset
 - Fix airspace visibility bug (query, warnings should apply even if
@@ -21,7 +25,7 @@ To do for next version:
 - Kinetic energy adjustment to final glide
 - Low battery exit is not working, fix it.
 - Fix strange circling bug
-- Speed to fly chevrons are hidden by vario in fullscreen mode
+- Speed to fly chevrons and north arrow are hidden by vario in fullscreen mode
 - Mark to waypoint, mark to waypointfile
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
   to move/edit waypoints.
@@ -47,6 +51,8 @@ To do for next version:
 
 Changes from 4.5 to HEAD:
 
+- Force redraw of map if not redrawn for 5 seconds (due to gps not connected)
+- Fixed display of airfield details in new dialog
 - Fix display orientation for square displays e.g. hp 6515 (untested)
 - Added FLARM TRAFFIC and FLARM NOTRAFFIC glide computer events
 - Sound restored at exit
