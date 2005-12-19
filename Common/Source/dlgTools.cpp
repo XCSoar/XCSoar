@@ -347,14 +347,16 @@ void LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
       int CaptionWidth;
       TCHAR DataNotifyCallback[128];
       int ReadOnly;
+      int MultiLine;
 
       CaptionWidth = StringToIntDflt(childNode.getAttribute(TEXT("CaptionWidth")), 0);
+      MultiLine = StringToIntDflt(childNode.getAttribute(TEXT("MultiLine")), 0);
       ReadOnly = StringToIntDflt(childNode.getAttribute(TEXT("ReadOnly")), 0);
       _tcscpy(DataNotifyCallback, StringToStringDflt(childNode.getAttribute(TEXT("OnDataNotify")), TEXT("")));
       _tcscpy(Caption, StringToStringDflt(childNode.getAttribute(TEXT("Caption")), TEXT("")));
 
       WC = W = new WndProperty(Parent, Name, Caption, X, Y, Width, Height, CaptionWidth,
-              (WndProperty::DataChangeCallback_t) CallBackLookup(LookUpTable, DataNotifyCallback));
+			       (WndProperty::DataChangeCallback_t) CallBackLookup(LookUpTable, DataNotifyCallback), MultiLine);
 
       Caption[0] = '\0';
       W->SetReadOnly(ReadOnly != 0);

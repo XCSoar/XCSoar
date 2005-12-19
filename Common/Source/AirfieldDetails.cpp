@@ -83,6 +83,10 @@ void CloseAirfieldDetails() {
 void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
   int i;
   TCHAR UName[100];
+  TCHAR NameA[100];
+  TCHAR NameB[100];
+  TCHAR NameC[100];
+  TCHAR NameD[100];
 
   for(i=0;i<(int)NumberOfWayPoints;i++)
     {
@@ -90,12 +94,23 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
 	_tcscpy(UName, WayPointList[i].Name);
 	CharUpper(UName);
 
-	if (_tcscmp(UName, Name)==0) {
+	_stprintf(NameA,TEXT("%s A/F"),Name);
+	_stprintf(NameB,TEXT("%s AF"),Name);
+	_stprintf(NameC,TEXT("%s A/D"),Name);
+	_stprintf(NameD,TEXT("%s AD"),Name);
+
+	if ((_tcscmp(UName, Name)==0)
+	  ||(_tcscmp(UName, NameA)==0)
+	  ||(_tcscmp(UName, NameB)==0)
+	  ||(_tcscmp(UName, NameC)==0)
+	  ||(_tcscmp(UName, NameD)==0)
+	    ){
 
 	  if (WayPointList[i].Details) {
 	    free(WayPointList[i].Details);
 	  }
-	  WayPointList[i].Details = (TCHAR*)malloc((_tcslen(Details)+1)*sizeof(TCHAR));
+	  WayPointList[i].Details =
+	    (TCHAR*)malloc((_tcslen(Details)+1)*sizeof(TCHAR));
 	  _tcscpy(WayPointList[i].Details, Details);
 
 	  return;

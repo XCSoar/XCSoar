@@ -51,6 +51,7 @@ static int page=0;
 static WndForm *wf=NULL;
 static WndFrame *wInfo=NULL;
 static WndFrame *wCommand=NULL;
+static WndFrame *wDetails=NULL;
 static WndOwnerDrawFrame *wImage=NULL;
 static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
@@ -63,22 +64,28 @@ static TCHAR Directory[MAX_PATH];
 
 static void NextPage(int Step){
   page += Step;
-  if (!jpgimage1 && !jpgimage2 && page > 1)
+
+  if ((!WayPointList[SelectedWaypoint].Details)&&(page==1)) {
+    page++;
+  }
+
+  if (!jpgimage1 && !jpgimage2 && page > 2)
     page = 0;
-  if (jpgimage1 && !jpgimage2 && page > 2)
+  if (jpgimage1 && !jpgimage2 && page > 3)
     page = 0;
-  if (jpgimage1 && jpgimage2 && page > 3)
+  if (jpgimage1 && jpgimage2 && page > 4)
     page = 0;
   if (!jpgimage1 && !jpgimage2 && page < 0)
-    page = 1;
-  if (jpgimage1 && !jpgimage2 && page < 0)
     page = 2;
-  if (jpgimage1 && jpgimage2 && page < 0)
+  if (jpgimage1 && !jpgimage2 && page < 0)
     page = 3;
+  if (jpgimage1 && jpgimage2 && page < 0)
+    page = 4;
 
   wInfo->SetVisible(page == 0);
-  wCommand->SetVisible(page == 1);
-  wImage->SetVisible(page > 1);
+  wDetails->SetVisible(page == 1);
+  wCommand->SetVisible(page == 2);
+  wImage->SetVisible(page > 2);
 
 }
 
@@ -105,8 +112,8 @@ static void OnReplaceClicked(WindowControl * Sender){
 }
 
 static void OnNewHomeClicked(WindowControl * Sender){
-	HomeWaypoint = SelectedWaypoint;
-	SetToRegistry(szRegistryHomeWaypoint, HomeWaypoint);
+  HomeWaypoint = SelectedWaypoint;
+  SetToRegistry(szRegistryHomeWaypoint, HomeWaypoint);
   wf->SetModalResult(mrOK);
 }
 
@@ -122,10 +129,10 @@ static void OnRemoveFromTaskClicked(WindowControl * Sender){
 
 static void OnImagePaint(WindowControl * Sender, HDC hDC){
 
-  if (page == 2)
+  if (page == 3)
     jpgimage1.Draw(hDC, 0, 0, -1, -1);
 
-  if (page == 3)
+  if (page == 4)
     jpgimage2.Draw(hDC, 0, 0, -1, -1);
 
 }
@@ -149,6 +156,8 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(NULL)
 };
 
+
+
 void dlgWayPointDetailsShowModal(void){
 
   TCHAR sTmp[128];
@@ -164,7 +173,9 @@ void dlgWayPointDetailsShowModal(void){
            Directory,
            SelectedWaypoint+1);
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgWayPointDetails.xml", hWndMainWindow);
+  wf = dlgLoadFromXML(CallBackTable,
+		      "\\NOR Flash\\dlgWayPointDetails.xml",
+		      hWndMainWindow);
 
   _stprintf(sTmp, TEXT("%s: "), wf->GetCaption());
   _tcscat(sTmp, WayPointList[SelectedWaypoint].Name);
@@ -228,14 +239,20 @@ void dlgWayPointDetailsShowModal(void){
   wInfo    = ((WndFrame *)wf->FindByName(TEXT("frmInfos")));
   wCommand = ((WndFrame *)wf->FindByName(TEXT("frmCommands")));
   wImage   = ((WndOwnerDrawFrame *)wf->FindByName(TEXT("frmImage")));
+  wDetails    = ((WndFrame *)wf->FindByName(TEXT("frmDetails")));
 
   ASSERT(wInfo!=NULL);
   ASSERT(wCommand!=NULL);
   ASSERT(wImage!=NULL);
+  ASSERT(wDetails!=NULL);
+
+  wp = ((WndProperty *)wf->FindByName(TEXT("prpWpDetails")));
+  wp->SetText(WayPointList[SelectedWaypoint].Details);
 
   wInfo->SetBorderKind(BORDERLEFT);
   wCommand->SetBorderKind(BORDERLEFT);
   wImage->SetBorderKind(BORDERLEFT | BORDERTOP | BORDERBOTTOM | BORDERRIGHT);
+  wDetails->SetBorderKind(BORDERLEFT);
 
   wCommand->SetVisible(false);
   wImage->SetCaption(TEXT("Blank!"));
@@ -260,6 +277,8 @@ void dlgWayPointDetailsShowModal(void){
   hasimage2 = jpgimage2.Load(wImage->GetDeviceContext() ,path_fname2 );
 
   page = 0;
+
+  NextPage(0); // just to turn proper pages on/off
 
   wf->ShowModal();
 

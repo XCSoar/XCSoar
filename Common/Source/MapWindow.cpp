@@ -533,6 +533,7 @@ void MapWindow::Event_AutoZoom(int vswitch) {
     PanX = 0.0;
     PanY = 0.0;
   }
+  RefreshMap();
 }
 
 
@@ -551,6 +552,7 @@ void MapWindow::Event_PanCursor(int dx, int dy) {
   if (EnablePan) {
     PanX += Xstart-X;
     PanY += Ystart-Y;
+    RefreshMap();
   }
 }
 
@@ -1362,7 +1364,8 @@ void MapWindow::RenderMapWindow(  RECT rc)
     if (EnableTerrain) {
       double sunelevation = 40.0;
       double sunazimuth = -DerivedDrawInfo.WindBearing;
-      sunazimuth+= DisplayAngle;
+
+      // BUG?   sunazimuth+= DisplayAngle;
       DrawTerrain(hdcDrawWindowBg, rc, sunazimuth, sunelevation);
     }
     if (EnableTopology) {
@@ -1494,16 +1497,25 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
   //////
 
+  static int nodrawtimeout = 50; // force redraw if haven't redrawn
+				 // for 5 seconds
+
   while (!CLOSETHREAD)
   {
     if (!THREADRUNNING) {
       Sleep(100);
       continue;
     }
+    if (nodrawtimeout<=0) {
+      AirDataDirty=true;
+      nodrawtimeout = 50;
+    }
     if (!MapDirty && !RequestFastRefresh && !AirDataDirty) {
       Sleep(100);
       continue;
     }
+
+    nodrawtimeout= 50;
 
     // draw previous frame so screen is immediately refreshed
     if (MapDirty || RequestFastRefresh) {
@@ -2716,11 +2728,11 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, POINT Orig)
     return; // nothing to draw..
   }
 
-  hpOld = (HPEN)SelectObject(hdc, hpBestCruiseTrack);
-  hbOld = (HBRUSH)SelectObject(hdc, hbBestCruiseTrack);
-
   if (DerivedDrawInfo.WaypointDistance < 0.010)
     return;
+
+  hpOld = (HPEN)SelectObject(hdc, hpBestCruiseTrack);
+  hbOld = (HBRUSH)SelectObject(hdc, hbBestCruiseTrack);
 
   if (Appearance.BestCruiseTrack == ctBestCruiseTrackDefault){
 
@@ -4019,8 +4031,14 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
 void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
   if (!DrawInfo.FLARM_Available) return;
 
+  HPEN hpOld;
+  POINT Arrow[2];
+
+  hpOld = (HPEN)SelectObject(hDC, hpBestCruiseTrack);
+
   int i;
   int scx, scy;
+  double dX, dY;
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (DrawInfo.FLARM_Traffic[i].ID[0]!= 0) {
 
@@ -4028,9 +4046,29 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
       LatLon2Screen(DrawInfo.FLARM_Traffic[i].Longitude,
 		    DrawInfo.FLARM_Traffic[i].Latitude,
 		    &scx, &scy);
+
+      /*  Direction line disabled, not working very well
+
+      Arrow[0].x = scx;
+      Arrow[0].y = scy;
+
+      double vmag = max(1.0,min(15.0,DrawInfo.FLARM_Traffic[i].Speed/5.0))*2;
+
+      dX = 0; dY = vmag;
+
+      rotate(&dX, &dY, -1*(DisplayAngle
+			   - DrawInfo.FLARM_Traffic[i].TrackBearing));
+
+      Arrow[1].x = iround(dX+scx);  Arrow[1].y = iround(dY+scy);
+
+      Polygon(hDC,Arrow,2);
+      */
+
       DrawBitmapIn(hDC, scx, scy, hFLARMTraffic);
 
     }
   }
+
+  SelectObject(hDC, hpOld);
 
 }

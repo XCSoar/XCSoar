@@ -547,7 +547,7 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   for (i=0; i<NUMBUTTONLABELS; i++) {
     hWndButtonWindow[i] =
       CreateWindow(TEXT("STATIC"), TEXT("\0"),
-		   /*WS_VISIBLE|*/WS_CHILD|WS_TABSTOP
+		   /*WS_VISIBLE|*/ WS_CHILD|WS_TABSTOP
 		   |SS_CENTER|SS_NOTIFY
 		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
 		   rc.left, rc.top,

@@ -40,7 +40,7 @@ Copyright_License {
 
 #define COMMDEBUG 0
 
-HANDLE			 hRead1Thread = NULL;              // Handle to the read thread
+HANDLE hRead1Thread = NULL;              // Handle to the read thread
 static BOOL  Port1CloseThread;
 static BOOL  fRxThreadTerminated;
 static TCHAR sPortName[8];

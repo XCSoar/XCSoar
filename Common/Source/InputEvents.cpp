@@ -66,6 +66,7 @@ Copyright_License {
 #include "Port.h"
 #include "Message.h"
 #include "Units.h"
+#include "MapWindow.h"
 
 // Sensible maximums
 #define MAX_MODE 100
@@ -539,8 +540,9 @@ void InputEvents::setMode(TCHAR *mode) {
 
   // Mode must already exist to use it here...
   thismode = mode2int(mode,false);
-  if (thismode < 0)	// Technically an error in config (eg event=Mode DoesNotExist)
-	  return;		// TODO Add debugging here
+  if (thismode < 0)	// Technically an error in config (eg
+			// event=Mode DoesNotExist)
+	  return;	// TODO Add debugging here
 
   if (thismode == lastmode) return;
   lastmode = thismode;
@@ -567,6 +569,7 @@ void InputEvents::setMode(TCHAR *mode) {
 				ModeLabel[thismode][i].label
 				);
   }
+  MapWindow::RequestFastRefresh = true;
 
 }
 

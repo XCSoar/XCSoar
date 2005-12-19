@@ -1015,8 +1015,8 @@ BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO)
 void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO) {
   int i;
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    // clear this slot if it is too old
-    if (GPS_INFO->Time> GPS_INFO->FLARM_Traffic[i].Time_Fix+3) {
+    // clear this slot if it is too old (2 seconds)
+    if (GPS_INFO->Time> GPS_INFO->FLARM_Traffic[i].Time_Fix+2) {
       GPS_INFO->FLARM_Traffic[i].ID[0]= 0;
     }
   }
@@ -1187,6 +1187,6 @@ BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
 void testflarm(NMEA_INFO *GPS_INFO) {
   GPS_INFO->FLARM_Available = true;
   PFLAU(TEXT("1,1,1,1"),GPS_INFO);
-  PFLAA(TEXT("0,1000,2000,220,2,DD8F12,180,-4.5,30,-1.4,1"),GPS_INFO);
+  PFLAA(TEXT("0,1000,2000,220,2,DD8F12,120,-4.5,30,-1.4,1"),GPS_INFO);
 }
 
