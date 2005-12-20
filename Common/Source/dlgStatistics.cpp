@@ -512,8 +512,8 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
   int i;
   float hmin= 10000;
   float hmax= -10000;
-  float tmin= CuSonde::maxGroundTemperature;
-  float tmax= CuSonde::maxGroundTemperature;
+  float tmin= (float)CuSonde::maxGroundTemperature;
+  float tmax= (float)CuSonde::maxGroundTemperature;
 
   // find range for scaling of graph
   for (i=0; i<CUSONDE_NUMLEVELS-1; i++) {
@@ -521,11 +521,11 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 
       hmin = min(hmin, i);
       hmax = max(hmax, i);
-      tmin = min(tmin, min(CuSonde::cslevels[i].tempDry,
-			   min(CuSonde::cslevels[i].airTemp,
+      tmin = min(tmin, (float)min(CuSonde::cslevels[i].tempDry,
+			   (float)min(CuSonde::cslevels[i].airTemp,
 			       CuSonde::cslevels[i].dewpoint)));
-      tmax = max(tmax, max(CuSonde::cslevels[i].tempDry,
-			   max(CuSonde::cslevels[i].airTemp,
+      tmax = max(tmax, (float)max(CuSonde::cslevels[i].tempDry,
+			   (float)max(CuSonde::cslevels[i].airTemp,
 			       CuSonde::cslevels[i].dewpoint)));
     }
   }
@@ -825,9 +825,11 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgAnalysisShowModal(void){
 
-  penThinSignal = CreatePen(PS_SOLID, 1 , RGB(50,243,45));
 
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgAnalysis.xml", hWndMainWindow);
+  if (!wf) return;
+
+  penThinSignal = CreatePen(PS_SOLID, 1 , RGB(50,243,45));
 
   wf->SetKeyDownNotify(FormKeyDown);
 

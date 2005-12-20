@@ -8,9 +8,9 @@
 
 
 unsigned short CuSonde::last_level=0;
-float CuSonde::thermalHeight = 0;
-float CuSonde::cloudBase = 0;
-float CuSonde::maxGroundTemperature = 25.0;
+double CuSonde::thermalHeight = 0;
+double CuSonde::cloudBase = 0;
+double CuSonde::maxGroundTemperature = 25.0;
 CuSondeLevel CuSonde::cslevels[CUSONDE_NUMLEVELS];
 
 
@@ -37,7 +37,7 @@ void CuSonde::test() {
 }
 
 
-void CuSonde::adjustForecastTemperature(float delta) {
+void CuSonde::adjustForecastTemperature(double delta) {
   maxGroundTemperature+= delta;
   int level;
   int zlevel=0;
@@ -193,13 +193,13 @@ void CuSonde::findCloudBase(unsigned short level) {
 
 
 
-void CuSondeLevel::updateTemps(float rh, float t)
+void CuSondeLevel::updateTemps(double rh, double t)
 // calculate dew point
 // input:  humi [%RH]
 //         temp [degreesC]
 // output: dew point [degreesC]
 {
-   float logEx, adewpoint;
+   double logEx, adewpoint;
 
    logEx=0.66077+7.5*t/(237.3+t)+(log10(rh)-2);
    adewpoint = (logEx - 0.66077)*237.3/(0.66077+7.5-logEx);
@@ -225,7 +225,7 @@ void CuSondeLevel::updateTemps(float rh, float t)
 
 void CuSondeLevel::updateThermalIndex(unsigned short level,
 				      bool newdata) {
-  float hlevel = level*CUSONDE_HEIGHTSTEP;
+  double hlevel = level*CUSONDE_HEIGHTSTEP;
 
   tempDry = DALR*hlevel+CuSonde::maxGroundTemperature;
 
@@ -244,7 +244,7 @@ void CuSondeLevel::updateThermalIndex(unsigned short level,
 
 /*
 //-----------------------------------------------------------------------------
-float calc_dewpoint(float h, float t)
+double calc_dewpoint(double h, double t)
 */
 
 

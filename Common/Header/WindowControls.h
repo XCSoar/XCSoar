@@ -142,7 +142,7 @@ class DataFieldBoolean:public DataField{
   public:
     DataFieldBoolean(TCHAR *EditFormat, TCHAR *DisplayFormat, int Default, TCHAR *TextTrue, TCHAR *TextFalse, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
-      mValue = Default;
+      mValue = (bool)Default;
       _tcscpy(mTextTrue, TextTrue);
       _tcscpy(mTextFalse, TextFalse);
 
@@ -314,7 +314,7 @@ typedef enum{
   bkLeft
 }BorderKind_t;
 
-class WindowControl{
+class WindowControl {
 
   private:
 
@@ -460,7 +460,7 @@ class WindowControl{
     WindowControl(WindowControl *Owner, HWND Parent, TCHAR *Name, int X, int Y, int Width, int Height, bool Visible=true);
     virtual ~WindowControl(void);
 
-    virtual void Distroy(void);
+    virtual void Destroy(void);
 
     void Redraw(void);
 
@@ -489,7 +489,7 @@ class WndFrame:public WindowControl{
       | DT_WORDBREAK;
     };
 
-    virtual void Distroy(void);
+    virtual void Destroy(void);
 
     void SetCaption(TCHAR *Value);
     TCHAR *GetCaption(void){return(mCaption);};
@@ -534,7 +534,7 @@ class WndListFrame:public WndFrame{
 
     WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y, int Width, int Height, void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo));
 
-    virtual void Distroy(void);
+    virtual void Destroy(void);
 
     int OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
     int WndListFrame::PrepareItemDraw(void);
@@ -565,7 +565,7 @@ class WndOwnerDrawFrame:public WndFrame{
 
     };
 
-    virtual void Distroy(void);
+    virtual void Destroy(void);
 
     void SetOnPaintNotify(void (*OnPaintCallback)(WindowControl * Sender, HDC hDC)){
       mOnPaintCallback = OnPaintCallback;
@@ -610,7 +610,7 @@ class WndForm:public WindowControl{
 
     WndForm(HWND Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height);
     ~WndForm(void);
-    virtual void Distroy(void);
+    virtual void Destroy(void);
 
     HWND GetClientAeraHandle(void);
     void AddClient(WindowControl *Client);
@@ -659,7 +659,7 @@ class WndButton:public WindowControl{
     typedef void (*ClickNotifyCallback_t)(WindowControl * Sender);
 
     WndButton(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height, void(*Function)(WindowControl * Sender) = NULL);
-    virtual void Distroy(void);
+    virtual void Destroy(void);
 
     int OnLButtonUp(WPARAM wParam, LPARAM lParam);
     int OnLButtonDown(WPARAM wParam, LPARAM lParam);
@@ -720,7 +720,7 @@ class WndProperty:public WindowControl{
 
     WndProperty(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height, int CaptionWidth, int (*DataChangeNotify)(WindowControl * Sender, int Mode, int Value), int MultiLine=false);
     ~WndProperty(void);
-    virtual void Distroy(void);
+    virtual void Destroy(void);
 
     int WndProcEditControl(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

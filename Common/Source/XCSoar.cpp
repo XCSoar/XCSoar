@@ -68,6 +68,8 @@ Copyright_License {
 
 
 #if NEWINFOBOX
+
+#if SAMGI
 Appearance_t Appearance = {
   apMsAltA,
   apMs2None,
@@ -93,6 +95,34 @@ Appearance_t Appearance = {
   true,
   smAlligneTopLeft
 };
+#else
+
+Appearance_t Appearance = {
+  apMsAltA, // mapscale
+  apMs2Default,
+  false, // don't show logger indicator
+  206,
+  {0,-13},
+  apFlightModeIconDefault,
+  {0,0},
+  apCompassAltA,
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  {0,0,0},
+  ctBestCruiseTrackAltA,
+  afAircraftAltA,
+  true, // don't show speed to fly
+  fgFinalGlideDefault,
+  wpLandableDefault,
+  true,
+  true,
+  true,
+  smAlligneCenter
+};
+
+#endif
 
 #else
 

@@ -107,10 +107,11 @@ void dlgWindSettingsShowModal(void){
 
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgWindSettings.xml", hWndMainWindow);
 
-  wf->ShowModal();
+  if (wf) {
+    wf->ShowModal();
 
-  delete wf;
-
+    delete wf;
+  }
   wf = NULL;
 
 }

@@ -160,6 +160,7 @@ typedef struct XMLNode
     //     can be used to trace the error.
     // you can have a detailed explanation of the parsing error with this function:
 
+  static bool GlobalError;
     static LPCTSTR getError(XMLError error);
 
     LPCTSTR getName();                                // name of the node

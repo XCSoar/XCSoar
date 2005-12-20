@@ -254,7 +254,7 @@ static HFONT FontMap[5] = {
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND Parent){
 
   WndForm *theForm = NULL;
-  TCHAR sFileName[128];
+  //  TCHAR sFileName[128];
 
   ASSERT(hWndMainWindow == Parent);
 
@@ -262,6 +262,11 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 
   // this open and parse the XML file:
   XMLNode xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
+
+  // JMW TODO: put in error checking here and get rid of exits in xmlParser
+  if (xMainNode.isEmpty()) {
+    return NULL;
+  }
 
   XMLNode xNode=xMainNode.getChildNode(TEXT("WndForm"));
 
@@ -279,10 +284,12 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
     COLORREF BackColor;
     COLORREF ForeColor;
 
-
-    GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height, &Font, sTmp);
-    BackColor = StringToIntDflt(xNode.getAttribute(TEXT("BackColor")), 0xffffffff);
-    ForeColor = StringToIntDflt(xNode.getAttribute(TEXT("ForeColor")), 0xffffffff);
+    GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height,
+				 &Font, sTmp);
+    BackColor = StringToIntDflt(xNode.getAttribute(TEXT("BackColor")),
+				0xffffffff);
+    ForeColor = StringToIntDflt(xNode.getAttribute(TEXT("ForeColor")),
+				0xffffffff);
 
     theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height);
 
@@ -292,16 +299,27 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
     if (Font != -1)
       theForm->SetFont(FontMap[Font]);
     if (BackColor != 0xffffffff){
-      BackColor = RGB((BackColor>>16)&0xff,(BackColor>>8)&0xff,(BackColor>>0)&0xff);
+      BackColor = RGB((BackColor>>16)&0xff,
+		      (BackColor>>8)&0xff,
+		      (BackColor>>0)&0xff);
       theForm->SetBackColor(BackColor);
     }
     if (ForeColor != 0xffffffff){
-      ForeColor = RGB((ForeColor>>16)&0xff,(ForeColor>>8)&0xff,(ForeColor>>0)&0xff);
+      ForeColor = RGB((ForeColor>>16)&0xff,
+		      (ForeColor>>8)&0xff,
+		      (ForeColor>>0)&0xff);
       theForm->SetForeColor(ForeColor);
     }
 
     LoadChildsFromXML(theForm, LookUpTable, &xNode, Font);
 
+    if (XMLNode::GlobalError) {
+      delete theForm;
+      return NULL;
+    }
+
+  } else {
+    return NULL;
   }
 
   return(theForm);
@@ -340,7 +358,6 @@ void LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
     }
     Font = StringToIntDflt(childNode.getAttribute(TEXT("Font")), ParentFont);
 
-
     if (_tcscmp(childNode.getName(), TEXT("WndProperty")) == 0){
 
       WndProperty *W;
@@ -355,7 +372,8 @@ void LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
       _tcscpy(DataNotifyCallback, StringToStringDflt(childNode.getAttribute(TEXT("OnDataNotify")), TEXT("")));
       _tcscpy(Caption, StringToStringDflt(childNode.getAttribute(TEXT("Caption")), TEXT("")));
 
-      WC = W = new WndProperty(Parent, Name, Caption, X, Y, Width, Height, CaptionWidth,
+      WC = W = new WndProperty(Parent, Name, Caption, X, Y,
+			       Width, Height, CaptionWidth,
 			       (WndProperty::DataChangeCallback_t) CallBackLookup(LookUpTable, DataNotifyCallback), MultiLine);
 
       Caption[0] = '\0';
@@ -394,7 +412,7 @@ void LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
         }
         if (_tcsicmp(DataType, TEXT("integer"))==0){
           W->SetDataField(
-            new DataFieldInteger(EditFormat, DisplayFmt, Min, Max, 0, Step,
+			  new DataFieldInteger(EditFormat, DisplayFmt, (int)Min, (int)Max, (int)0, (int)Step,
               (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
           );
         }

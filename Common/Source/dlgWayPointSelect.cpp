@@ -458,6 +458,9 @@ int dlgWayPointSelect(void){
   ItemIndex = -1;
 
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgWayPointSelect.xml", hWndMainWindow);
+
+  if (!wf) return -1;
+
   ASSERT(wf!=NULL);
   wf->SetKeyDownNotify(FormKeyDown);
 

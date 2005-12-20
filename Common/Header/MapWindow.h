@@ -206,7 +206,7 @@ class MapWindow {
   static void Event_AutoZoom(int vswitch);
   static void Event_PanCursor(int dx, int dy);
   static bool Event_InteriorAirspaceDetails(double lon, double lat);
-  static bool Event_NearestWaypointDetails(double lon, double lat, double range);
+  static bool Event_NearestWaypointDetails(double lon, double lat, double range, bool pan);
 
  private:
 
@@ -310,9 +310,7 @@ class MapWindow {
   static      HBRUSH hbBestCruiseTrack;
   static      HBRUSH hbFinalGlideBelow;
   static      HBRUSH hbFinalGlideAbove;
-  #if (ALTERNATEWINDVECTOR == 1)
   static      HBRUSH hbWind;
-  #endif
 
   static RECT MapRectSmall;
   static bool MapFullScreen;
