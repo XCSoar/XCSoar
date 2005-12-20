@@ -56,6 +56,8 @@
 #include <stdlib.h>
 #include "xmlParser.h"
 
+bool XMLNode::GlobalError = false;
+
 XMLNode XMLNode::emptyXMLNode;
 XMLClear XMLNode::emptyXMLClear={ NULL, NULL, NULL};
 XMLAttribute XMLNode::emptyXMLAttribute={ NULL, NULL};
@@ -220,7 +222,8 @@ LPTSTR fromXMLString(LPCTSTR s, int lo)
                     printf("unknown escape character: '&%s'",d);
 #endif
                 free(d);
-                exit(255);
+		XMLNode::GlobalError = true;
+                return (LPTSTR)NULL;
             }
         };
         ll++; s++;
@@ -1173,7 +1176,8 @@ static void CountLinesAndColumns(LPCTSTR lpXML, int nUpto, XMLResults *pResults)
 }
 
 // Parse XML and return the root element.
-XMLNode XMLNode::parseString(LPCTSTR lpszXML, LPCTSTR tag, XMLResults *pResults)
+XMLNode XMLNode::parseString(LPCTSTR lpszXML, LPCTSTR tag, 
+			     XMLResults *pResults)
 {
     if (!lpszXML) 
     {
@@ -1309,6 +1313,7 @@ XMLNode XMLNode::parseFile(const char *filename, LPCTSTR tag, XMLResults *pResul
     }
 #endif
 #endif
+
     XMLNode x=parseString((LPTSTR)buf,tag,pResults);
     free(buf);
     return x;
@@ -1317,6 +1322,7 @@ XMLNode XMLNode::parseFile(const char *filename, LPCTSTR tag, XMLResults *pResul
 XMLNode XMLNode::openFileHelper(const char *lpszXML, LPCTSTR tag)
 {
     XMLResults pResults;
+    XMLNode::GlobalError = false;
     XMLNode xnode=XMLNode::parseFile(lpszXML, tag, &pResults);
     if (pResults.error != eXMLErrorNone)
     {
@@ -1337,7 +1343,8 @@ XMLNode XMLNode::openFileHelper(const char *lpszXML, LPCTSTR tag)
             printf("Tag is '%s'.\n",tag);
 #endif
         }
-        exit(255);
+	XMLNode::GlobalError = true;
+	// was exit(255);
     }
     return xnode;
 }

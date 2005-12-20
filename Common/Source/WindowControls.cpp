@@ -252,7 +252,7 @@ bool DataFieldFloat::GetAsBoolean(void){
 }
 
 int DataFieldFloat::GetAsInteger(void){
-  return(mValue+0.5);
+  return(int)(mValue+0.5);
 }
 
 double DataFieldFloat::GetAsFloat(void){
@@ -395,6 +395,13 @@ HPEN WindowControl::hPenDefaultSelector=NULL;
 
 WindowControl::WindowControl(WindowControl *Owner, HWND Parent, TCHAR *Name, int X, int Y, int Width, int Height, bool Visible){
 
+  mHasFocus = false;
+  mCanFocus = false;
+
+  mReadOnly = false;
+
+  mClientCount = 0;
+
   // todo
 
   DWORD Style = 0;
@@ -411,7 +418,7 @@ WindowControl::WindowControl(WindowControl *Owner, HWND Parent, TCHAR *Name, int
   mCaption[0] = '\0';
   mDontPaintSelector = false;
 
-  if (mParent == NULL && mOwner != NULL)
+  if ((mParent == NULL) && (mOwner != NULL))
     mParent = mOwner->GetClientAeraHandle();
 
   if (Name != NULL)
@@ -457,14 +464,17 @@ WindowControl::WindowControl(WindowControl *Owner, HWND Parent, TCHAR *Name, int
   mBoundRect.right = GetWidth();
   mBoundRect.bottom = GetHeight();
 
-  mHdc = GetDC(mHWnd);
-  mHdcTemp = CreateCompatibleDC(mHdc);
-  mBmpMem = CreateCompatibleBitmap(mHdc, mWidth, mHeight);
-  SelectObject(mHdcTemp, mBmpMem);
-
   mSavWndProcedure = GetWindowLong(mHWnd, GWL_WNDPROC);
   SetWindowLong(mHWnd, GWL_USERDATA, (long)this);
   SetWindowLong(mHWnd, GWL_WNDPROC, (LONG) WindowControlWndProc);
+
+  mHdc = GetDC(mHWnd);
+  mHdcTemp = CreateCompatibleDC(mHdc);
+
+  /* JMW debugging
+  mBmpMem = CreateCompatibleBitmap(mHdc, mWidth, mHeight);
+  SelectObject(mHdcTemp, mBmpMem);
+  */
 
   mhBrushBk = hBrushDefaultBk;
   mhPenBorder = hPenDefaultBorder;
@@ -475,13 +485,6 @@ WindowControl::WindowControl(WindowControl *Owner, HWND Parent, TCHAR *Name, int
 
   SetBkMode(mHdc, TRANSPARENT);
 
-  mHasFocus = false;
-  mCanFocus = false;
-
-  mReadOnly = false;
-
-  mClientCount = 0;
-
   if (mVisible)
     ShowWindow(GetHandle(), SW_SHOW);
 
@@ -491,10 +494,10 @@ WindowControl::~WindowControl(void){
 
 }
 
-void WindowControl::Distroy(void){
+void WindowControl::Destroy(void){
   int i;
   for (i=mClientCount-1; i>=0; i--){
-    mClients[i]->Distroy();
+    mClients[i]->Destroy();
     delete mClients[i];
   }
 
@@ -514,10 +517,11 @@ void WindowControl::Distroy(void){
     DeleteObject(mhPenSelector);
   }
 
-  DeleteObject(mBmpMem);
   ReleaseDC(mHWnd, mHdc);
   DeleteDC(mHdcTemp);
-
+  /* JMW debugging
+  DeleteObject(mBmpMem);
+  */
   SetWindowLong(mHWnd, GWL_WNDPROC, (LONG) mSavWndProcedure);
   SetWindowLong(mHWnd, GWL_USERDATA, (long)0);
 
@@ -1060,17 +1064,19 @@ WndForm::WndForm(HWND Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Wid
 };
 
 WndForm::~WndForm(void){
-  Distroy();
+  Destroy();
 }
 
 
-void WndForm::Distroy(void){
+void WndForm::Destroy(void){
 
-  mClientWindow->SetVisible(false);
+  if (mClientWindow) 
+    mClientWindow->SetVisible(false);
+
   DestroyAcceleratorTable(mhAccelTable);
   DeleteObject(mhBrushTitle);
 
-  WindowControl::Distroy();  // delets all childs
+  WindowControl::Destroy();  // delets all childs
 
 }
 
@@ -1251,7 +1257,7 @@ void WndForm::Paint(HDC hDC){
 
   rcClient.top += tsize.cy;
 
-  if (!EqualRect(&mClientRect, &rcClient)){
+  if (mClientWindow && !EqualRect(&mClientRect, &rcClient)){
 
     SetWindowPos(mClientWindow->GetHandle(), HWND_TOP,
       rcClient.left, rcClient.top, rcClient.right-rcClient.left, rcClient.bottom-rcClient.top,
@@ -1293,17 +1299,20 @@ void WndForm::SetCaption(TCHAR *Value){
 }
 
 COLORREF WndForm::SetForeColor(COLORREF Value){
-  mClientWindow->SetForeColor(Value);
+  if (mClientWindow)
+    mClientWindow->SetForeColor(Value);
   return(WindowControl::SetForeColor(Value));
 }
 
 COLORREF WndForm::SetBackColor(COLORREF Value){
+  if (mClientWindow)
   mClientWindow->SetBackColor(Value);
   return(WindowControl::SetBackColor(Value));
 }
 
 HFONT WndForm::SetFont(HFONT Value){
-  mClientWindow->SetFont(Value);
+  if (mClientWindow)
+    mClientWindow->SetFont(Value);
   return(WindowControl::SetFont(Value));
 }
 
@@ -1340,9 +1349,9 @@ WndButton::WndButton(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, 
 
 };
 
-void WndButton::Distroy(void){
+void WndButton::Destroy(void){
 
-  WindowControl::Distroy();
+  WindowControl::Destroy();
 
 }
 
@@ -1542,7 +1551,7 @@ WndProperty::WndProperty(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int
 WndProperty::~WndProperty(void){
 }
 
-void WndProperty::Distroy(void){
+void WndProperty::Destroy(void){
 
   InstCount--;
   if (InstCount == 0){
@@ -1563,7 +1572,7 @@ void WndProperty::Distroy(void){
 
   DestroyWindow(mhEdit);
 
-  WindowControl::Distroy();
+  WindowControl::Destroy();
 
 }
 
@@ -1953,16 +1962,16 @@ void WndOwnerDrawFrame::Paint(HDC hDC){
 
 }
 
-void WndOwnerDrawFrame::Distroy(void){
+void WndOwnerDrawFrame::Destroy(void){
 
-  WndFrame::Distroy();
+  WndFrame::Destroy();
 
 }
 
 
-void WndFrame::Distroy(void){
+void WndFrame::Destroy(void){
 
-  WindowControl::Distroy();
+  WindowControl::Destroy();
 
 }
 
@@ -2060,9 +2069,9 @@ WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y, int 
 
 };
 
-void WndListFrame::Distroy(void){
+void WndListFrame::Destroy(void){
 
-  WndFrame::Distroy();
+  WndFrame::Destroy();
 
 }
 

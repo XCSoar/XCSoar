@@ -166,9 +166,7 @@ HBRUSH MapWindow::hbThermalBand;
 HBRUSH MapWindow::hbBestCruiseTrack;
 HBRUSH MapWindow::hbFinalGlideBelow;
 HBRUSH MapWindow::hbFinalGlideAbove;
-#if (ALTERNATEWINDVECTOR == 1)
 HBRUSH MapWindow::hbWind;
-#endif
 
 
 HPEN MapWindow::hpAircraft;
@@ -222,9 +220,16 @@ extern HFONT  CDIWindowFont;
 
 ///////////////////
 
-bool MapWindow::Event_NearestWaypointDetails(double lon, double lat, double range) {
+bool MapWindow::Event_NearestWaypointDetails(double lon, double lat, 
+					     double range,
+					     bool pan) {
   int i;
-  i=FindNearestWayPoint(lon, lat, range);
+  if (!pan || !EnablePan) {
+    i=FindNearestWayPoint(lon, lat, range);
+  } else {
+    // nearest to center of screen if in pan mode
+    i=FindNearestWayPoint(PanXr, PanYr, range);
+  }
   if(i != -1)
     {
       SelectedWaypoint = i;
@@ -552,8 +557,8 @@ void MapWindow::Event_PanCursor(int dx, int dy) {
   if (EnablePan) {
     PanX += Xstart-X;
     PanY += Ystart-Y;
-    RefreshMap();
   }
+  RefreshMap();
 }
 
 bool MapWindow::isPan() {
@@ -655,8 +660,8 @@ void MapWindow::Event_Pan(int vswitch) {
   if (!EnablePan) {
     PanX = 0.0;
     PanY = 0.0;
-    RefreshMap();
   }
+  RefreshMap();
 }
 
 
@@ -938,13 +943,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hbFinalGlideAbove=(HBRUSH)CreateSolidBrush(RGB(0x00,0xFF,0x00));
 
 
-    #if (ALTERNATEWINDVECTOR == 1)
-      #if (MONOCHROME_SCREEN > 0)
-      hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
-      #else
-      hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
-      #endif
-    #endif
+#if (MONOCHROME_SCREEN > 0)
+    hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
+#else
+    hbWind=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0x80));
+#endif
 
     ScaleListCount = propGetScaleList(ScaleList, sizeof(ScaleList)/sizeof(ScaleList[0]));
     RequestMapScale = FindMapScale(RequestMapScale);
@@ -1019,9 +1022,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject((HBRUSH)hbBestCruiseTrack);
     DeleteObject((HBRUSH)hbFinalGlideBelow);
     DeleteObject((HBRUSH)hbFinalGlideAbove);
-    #if (ALTERNATEWINDVECTOR == 1)
     DeleteObject((HBRUSH)hbWind);
-    #endif
 
     DeleteObject(hBmpMapScale);
     DeleteObject(hBmpCompassBg);
@@ -1098,7 +1099,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     
     if(dwDownTime < 1000)
     {
-      if (Event_NearestWaypointDetails(Xstart, Ystart, 500*MapScale)) {
+      if (Event_NearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
 	break;
       }
     }
@@ -1497,8 +1498,9 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   
   //////
 
-  static int nodrawtimeout = 50; // force redraw if haven't redrawn
+  static int nodrawtimeout = 10; // force redraw if haven't redrawn
 				 // for 5 seconds
+  bool forceshaperefresh = false;
 
   while (!CLOSETHREAD) 
   {
@@ -1506,12 +1508,22 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
       Sleep(100);
       continue;
     }
+
+    // force refresh of terrain, topo and screen update if it hasn't
+    // been redrawn for 5 seconds
     if (nodrawtimeout<=0) {
       AirDataDirty=true;
+      MapDirty=true;
       nodrawtimeout = 50;
+      forceshaperefresh=true;
+    } else {
+      forceshaperefresh=false;
     }
+
+
     if (!MapDirty && !RequestFastRefresh && !AirDataDirty) { 
       Sleep(100);
+      nodrawtimeout--;
       continue;
     } 
 
@@ -1582,13 +1594,13 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
     // have some time, do graphics terrain cache update if necessary
     if (EnableTerrain) {
-      if (RenderTimeAvailable()) {
+      if (RenderTimeAvailable() || forceshaperefresh) {
         OptimizeTerrainCache();
       }
     }
 
     // have some time, do calculations terrain cache update if necessary
-    if (RenderTimeAvailable()) {
+    if (RenderTimeAvailable() || forceshaperefresh) {
       LockTerrainDataCalculations();
       if (terrain_dem_calculations.terraincachemisses > 0){
         DWORD tm =GetTickCount();
@@ -1934,6 +1946,12 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
   TCHAR sAltUnit[4];
   TextInBoxMode_t DisplayMode;
 
+  // if pan mode, show full names
+  int pDisplayTextType = DisplayTextType;
+  if (EnablePan) {
+    pDisplayTextType = DISPLAYNAME;
+  }
+
   if (!WayPointList) return;
 
   _tcscpy(sAltUnit, Units::GetAltitudeName());
@@ -1972,7 +1990,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         SelectObject(hDCTemp,hTurnPoint);
       }
 
-      if(((Task[ActiveWayPoint].Index == i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
+      if(((Task[ActiveWayPoint].Index == (int)i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
       {
         BitBlt(hdc,WayPointList[i].Screen.x-10 , WayPointList[i].Screen.y-10,20,20,
           hDCTemp,0,0,SRCPAINT);
@@ -1982,7 +2000,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
       }
 
       // JMW
-      if (DisplayTextType == DISPLAYNAMEIFINTASK) {
+      if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
 
         if (WaypointInTask(i)) {
 
@@ -2000,9 +2018,9 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         
       } else
 
-        if(((Task[ActiveWayPoint].Index == i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
+        if(((Task[ActiveWayPoint].Index == (int)i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
         {
-          switch(DisplayTextType)
+          switch(pDisplayTextType)
           {
 
 
@@ -2623,7 +2641,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
     Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo, sizeof(ScaleInfo)/sizeof(TCHAR));
     GetTextExtentPoint(hDC, ScaleInfo, _tcslen(ScaleInfo), &TextSize);
-    LastMapWidth = MapWidth;
+    LastMapWidth = (int)MapWidth;
 
     Height = Appearance.MapWindowBoldFont.CapitalHeight+2;  // 2: add 1pix border
 
@@ -4032,13 +4050,13 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
   if (!DrawInfo.FLARM_Available) return;
 
   HPEN hpOld;
-  POINT Arrow[2];
+//  POINT Arrow[2];
 
   hpOld = (HPEN)SelectObject(hDC, hpBestCruiseTrack);
 
   int i;
   int scx, scy;
-  double dX, dY;
+//  double dX, dY;
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (DrawInfo.FLARM_Traffic[i].ID[0]!= 0) {
       

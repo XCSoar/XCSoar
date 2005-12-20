@@ -1419,7 +1419,14 @@ void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("aircraft")) == 0) {
     MapWindow::Event_NearestWaypointDetails(GPS_INFO.Longitude,
 					    GPS_INFO.Latitude,
-					    1.0e5); // big range..
+					    1.0e5, // big range..
+					    false); 
+  }
+  if (_tcscmp(misc, TEXT("pan")) == 0) {
+    MapWindow::Event_NearestWaypointDetails(GPS_INFO.Longitude,
+					    GPS_INFO.Latitude,
+					    1.0e5, // big range..
+					    true); 
   }
   // TODO, also allow getting waypoint details at center of screen, or at cursor..
 

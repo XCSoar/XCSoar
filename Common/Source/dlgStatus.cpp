@@ -69,6 +69,8 @@ void dlgStatusShowModal(void){
 
 
   wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatus.xml", hWndMainWindow);
+  if (!wf) return;
+
   wf->SetLButtonUpNotify(OnFormLButtonUp);
 
   Units::LongitudeToString(GPS_INFO.Longitude, sLongitude, sizeof(sLongitude)-1);

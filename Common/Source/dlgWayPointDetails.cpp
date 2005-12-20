@@ -166,16 +166,18 @@ void dlgWayPointDetailsShowModal(void){
   int sunsetmins;
   WndProperty *wp;
 
+  wf = dlgLoadFromXML(CallBackTable, 
+		      "\\NOR Flash\\dlgWayPointDetails.xml", 
+		      hWndMainWindow);
+
+  if (!wf) return;
+
   GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
   ExtractDirectory(Directory, szWaypointFile);
 
   _stprintf(path_modis,TEXT("%s\\modis-%03d.jpg"),
            Directory,
            SelectedWaypoint+1);
-
-  wf = dlgLoadFromXML(CallBackTable, 
-		      "\\NOR Flash\\dlgWayPointDetails.xml", 
-		      hWndMainWindow);
 
   _stprintf(sTmp, TEXT("%s: "), wf->GetCaption());
   _tcscat(sTmp, WayPointList[SelectedWaypoint].Name);
@@ -278,7 +280,7 @@ void dlgWayPointDetailsShowModal(void){
 
   page = 0;
 
-  NextPage(0); // just to turn proper pages on/off
+  NextPage(0); // JMW just to turn proper pages on/off
 
   wf->ShowModal();
 

@@ -12,13 +12,13 @@ public:
   double airTemp; // degrees C
   double dewpoint; // degrees C
   double tempDry; // degrees C
-  float thermalIndex; 
-  void updateTemps(float rh, float t);
+  double thermalIndex; 
+  void updateTemps(double rh, double t);
   void updateThermalIndex(unsigned short level, bool newdata=true);
   int nmeasurements;
 
-  float thermalHeight; // as estimated by this level
-  float cloudBase; // as estimated by this level
+  double thermalHeight; // as estimated by this level
+  double cloudBase; // as estimated by this level
 };
 
 
@@ -29,16 +29,16 @@ public:
 
 class CuSonde {
 public:
-  static float maxGroundTemperature;
+  static double maxGroundTemperature;
   static unsigned short last_level; 
   static void updateMeasurements(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
   static CuSondeLevel cslevels[CUSONDE_NUMLEVELS];
   static void findCloudBase(unsigned short level);
   static void findThermalHeight(unsigned short level);
-  static void adjustForecastTemperature(float delta);
+  static void adjustForecastTemperature(double delta);
 
-  static float thermalHeight; // as estimated by this level
-  static float cloudBase; // as estimated by this level
+  static double thermalHeight; // as estimated by this level
+  static double cloudBase; // as estimated by this level
 
   static void test();
 };

@@ -51,6 +51,10 @@ To do for next version:
 
 Changes from 4.5 to HEAD:
 
+- Fixed memory leak in new dialog system (bitmap unnecessary)
+- All waypoint labels shown when in pan mode 
+- Added 'pan' to nearestWaypoint inputevent, to return item nearest to
+    center of screen if in pan mode.
 - Force redraw of map if not redrawn for 5 seconds (due to gps not connected)
 - Fixed display of airfield details in new dialog
 - Fix display orientation for square displays e.g. hp 6515 (untested)
