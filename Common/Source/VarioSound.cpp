@@ -1634,6 +1634,10 @@ extern "C" {
     InitializeCriticalSection(&CritSec_VarioSound);
 	InitializeCriticalSection(&CritSec_VarioSoundV);  // added sgi
 
+#ifdef DISABLEAUDIO
+	return;
+#endif
+
     variosound_waveOut.Init(variosound_waveOutEventCB,
 			    THREAD_PRIORITY_TIME_CRITICAL, 
 			    BCOUNT,
@@ -1676,7 +1680,9 @@ extern "C" {
 
   
   VARIOSOUND_API void VarioSound_Close(void) {  // added sgi
+#ifndef DISABLEAUDIO
     variosound_waveOut.StopThread();   // added manually stop the thread
+#endif
     DeleteCriticalSection(&CritSec_VarioSound);
     DeleteCriticalSection(&CritSec_VarioSoundV);
   }
@@ -1697,6 +1703,10 @@ BOOL PlayResource (LPTSTR lpName)
   BOOL bRtn; 
   LPTSTR lpRes; 
   HANDLE hResInfo, hRes; 
+
+#ifdef DISABLEAUDIO
+  return false;
+#endif
 
   // TODO Modify to allow use of WAV Files and/or Embedded files
 

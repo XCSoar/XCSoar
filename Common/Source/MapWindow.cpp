@@ -1410,6 +1410,10 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     // finally, draw you!
 
+    if (EnablePan) {
+      DrawCrossHairs(hdcDrawWindowBg, Orig);
+    }
+
     if (extGPSCONNECT) {
       DrawAircraft(hdcDrawWindowBg, Orig_Aircraft);
     }
@@ -1612,6 +1616,29 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     }
   }
   return 0;
+}
+
+
+void MapWindow::DrawCrossHairs(HDC hdc, POINT Orig)
+{
+  POINT o1, o2;
+  
+  o1.x = Orig.x+20;
+  o2.x = Orig.x-20;
+  o1.y = Orig.y;
+  o2.y = Orig.y;
+
+  DrawDashLine(hdc, 1, o1, o2,
+	       RGB(50,50,50));
+
+  o1.x = Orig.x;
+  o2.x = Orig.x;
+  o1.y = Orig.y+20;
+  o2.y = Orig.y-20;
+
+  DrawDashLine(hdc, 1, o1, o2,
+	       RGB(50,50,50));
+
 }
 
 

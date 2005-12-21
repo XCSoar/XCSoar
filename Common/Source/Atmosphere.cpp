@@ -10,6 +10,7 @@
 unsigned short CuSonde::last_level=0;
 double CuSonde::thermalHeight = 0;
 double CuSonde::cloudBase = 0;
+double CuSonde::hGround = 0;
 double CuSonde::maxGroundTemperature = 25.0;
 CuSondeLevel CuSonde::cslevels[CUSONDE_NUMLEVELS];
 
@@ -83,6 +84,11 @@ void CuSonde::updateMeasurements(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     last_level = level;
     return; // nothing to do, wait until level transition
   }
+
+  LockTerrainDataCalculations();
+  hGround = terrain_dem_calculations.
+    GetTerrainHeight(Basic->Latitude, Basic->Longitude); 
+  UnlockTerrainDataCalculations();
 
   if (level>last_level) {
     // going up
@@ -227,7 +233,7 @@ void CuSondeLevel::updateThermalIndex(unsigned short level,
 				      bool newdata) {
   double hlevel = level*CUSONDE_HEIGHTSTEP;
 
-  tempDry = DALR*hlevel+CuSonde::maxGroundTemperature;
+  tempDry = DALR*(hlevel-CuSonde::hGround)+CuSonde::maxGroundTemperature;
 
   // thermal index is difference in dry temp and environmental temp
   thermalIndex = airTemp-tempDry;

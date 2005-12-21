@@ -8,12 +8,12 @@
 typedef struct _TERRAIN_INFO
 {
   double Left;
-	double Right;
-	double Top;
-	double Bottom;
-	double StepSize;
-	long Rows;
-	long Columns;
+  double Right;
+  double Top;
+  double Bottom;
+  double StepSize;
+  long Rows;
+  long Columns;
 } TERRAIN_INFO;
 
 

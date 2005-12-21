@@ -30,6 +30,7 @@ public:
 class CuSonde {
 public:
   static double maxGroundTemperature;
+  static double hGround;
   static unsigned short last_level; 
   static void updateMeasurements(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
   static CuSondeLevel cslevels[CUSONDE_NUMLEVELS];

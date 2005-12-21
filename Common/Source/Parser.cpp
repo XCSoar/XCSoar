@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.32 2005/12/19 17:44:09 jwharington Exp $
+  $Id: Parser.cpp,v 1.33 2005/12/21 13:19:06 jwharington Exp $
 
 Copyright_License {
 
@@ -1052,19 +1052,19 @@ BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   // number of received FLARM devices
   ExtractParameter(String,ctemp,0);
-  GPS_INFO->FLARM_RX = StrToDouble(ctemp,NULL);
+  GPS_INFO->FLARM_RX = (unsigned short)StrToDouble(ctemp,NULL);
 
   // Transmit status
   ExtractParameter(String,ctemp,1);
-  GPS_INFO->FLARM_TX = StrToDouble(ctemp,NULL);
+  GPS_INFO->FLARM_TX = (unsigned short)StrToDouble(ctemp,NULL);
 
   // GPS status
   ExtractParameter(String,ctemp,2);
-  GPS_INFO->FLARM_GPS = StrToDouble(ctemp,NULL);
+  GPS_INFO->FLARM_GPS = (unsigned short)StrToDouble(ctemp,NULL);
 
   // Alarm level of FLARM (0-3)
   ExtractParameter(String,ctemp,4);
-  GPS_INFO->FLARM_AlarmLevel = StrToDouble(ctemp,NULL);
+  GPS_INFO->FLARM_AlarmLevel = (unsigned short)StrToDouble(ctemp,NULL);
 
   // process flarm updates
 
@@ -1131,7 +1131,7 @@ BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
   // 0 alarmlevel
   ExtractParameter(String,ctemp,0);
   GPS_INFO->FLARM_Traffic[flarm_slot].AlarmLevel = 
-    StrToDouble(ctemp,NULL);
+    (unsigned short)StrToDouble(ctemp,NULL);
 
   // 1 relativenorth, meters  
   ExtractParameter(String,ctemp,1);
@@ -1151,7 +1151,7 @@ BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
   // 4 id-type
   ExtractParameter(String,ctemp,4);
   GPS_INFO->FLARM_Traffic[flarm_slot].IDType = 
-    StrToDouble(ctemp,NULL);
+    (unsigned short)StrToDouble(ctemp,NULL);
 
   // 6 track, integer degrees 0-360
   ExtractParameter(String,ctemp,6);
@@ -1176,7 +1176,7 @@ BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
   // 10 type
   ExtractParameter(String,ctemp,10);
   GPS_INFO->FLARM_Traffic[flarm_slot].Type = 
-    StrToDouble(ctemp,NULL);
+    (unsigned short)StrToDouble(ctemp,NULL);
 
   return FALSE;
 }

@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.88 2005/11/06 22:52:28 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.89 2005/12/21 13:18:57 jwharington Exp $
 
 Copyright_License {
 
@@ -2784,7 +2784,7 @@ LRESULT CALLBACK LoadProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         {
         case  IDC_LOAD:
           GetDlgItemText(hDlg,IDC_FILE,szFile,MAX_PATH);
-          ReadProfile(hDlg,szFile);
+          ReadProfile(szFile);
           EndDialog(hDlg, TRUE);
           return TRUE;
 
@@ -2842,15 +2842,13 @@ LRESULT CALLBACK SaveProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         {
         case  IDC_SAVE:
           GetDlgItemText(hDlg,IDC_FILE,szFile,MAX_PATH);
-          WriteProfile(hDlg,szFile);
-
-
+          WriteProfile(szFile);
           EndDialog(hDlg, TRUE);
           return TRUE;
 
         case IDCANCEL:
           GetDlgItemText(hDlg,IDC_FILE,szFile,MAX_PATH);
-          WriteProfile(hDlg,szFile);
+          WriteProfile(szFile);
 
           EndDialog(hDlg, FALSE);
           return TRUE;

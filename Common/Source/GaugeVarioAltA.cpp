@@ -185,11 +185,10 @@ void GaugeVario::Render() {
   vval = vval*LIFTMODIFY;
   vval = min(99.9,max(-99.9,vval));
 
-
-
   RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop, CALCULATED_INFO.Average30s*LIFTMODIFY, TEXT("Avg"));
 
-  RenderValue(orgMiddle.x, orgMiddle.y, &diValueMiddle, &diLabelMiddle, vval*LIFTMODIFY, TEXT("Gross"));
+  RenderValue(orgMiddle.x, orgMiddle.y, &diValueMiddle, &diLabelMiddle, vval, 
+	      TEXT("Gross"));
 
   if (CALCULATED_INFO.AutoMacCready)
     RenderValue(orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, TEXT("Auto Mc"));

@@ -1415,7 +1415,7 @@ void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
 }
 
 
-void WriteProfile(HWND hwnd, TCHAR *szFile)
+void WriteProfile(TCHAR *szFile)
 {
   SaveRegistryToFile(szFile);
 }
@@ -1434,7 +1434,7 @@ void ReadFileRegistryString(HANDLE hFile, TCHAR *instring) {
 }
 
 
-void ReadProfile(HWND hwnd, TCHAR *szFile)
+void ReadProfile(TCHAR *szFile)
 {
 
   LoadRegistryFromFile(szFile);

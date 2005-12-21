@@ -629,6 +629,7 @@ BOOL CWaveOutThread::Init(cbWaveOut pcbWaveOut,          // Callback function fo
 // Start sound output
 BOOL CWaveOutThread::StartThread()
 {
+
   UINT           id;
   WORD           i;
 

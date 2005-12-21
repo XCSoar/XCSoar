@@ -215,10 +215,12 @@ void MarkLocation(double lon, double lat)
 {
   LockTerrainDataGraphics();
 
+#ifndef DISABLEAUDIO
   if (EnableSoundModes) {
     PlayResource(TEXT("IDR_WAV_CLEAR"));
   }
- 
+#endif 
+
   topo_marks->addPoint(lon, lat);
   topo_marks->triggerUpdateCache = true;
   UnlockTerrainDataGraphics();
