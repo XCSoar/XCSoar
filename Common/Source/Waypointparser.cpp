@@ -35,6 +35,7 @@ Copyright_License {
 #include "resource.h"
 #include "Utils.h"
 
+#include "RasterTerrain.h"
 
 #include <windows.h>
 #include <Commctrl.h>
@@ -62,6 +63,25 @@ void CloseWayPoints() {
     LocalFree((HLOCAL)WayPointList);
     WayPointList = NULL;
   }
+}
+
+
+
+bool WaypointInTerrainRange(WAYPOINT *List) {
+
+  if (terrain_dem_calculations.isTerrainLoaded()) {
+    if (
+	(List->Latitude<=RasterTerrain::TerrainInfo.Top) &&
+	(List->Latitude>=RasterTerrain::TerrainInfo.Bottom) &&
+	(List->Longitude<=RasterTerrain::TerrainInfo.Right) &&
+	(List->Longitude>=RasterTerrain::TerrainInfo.Left)) {
+      return true;
+    } else
+      return false;
+  }
+  // no terrain database, so all waypoints are ok
+  return true;
+
 }
 
 
@@ -115,24 +135,27 @@ void ReadWayPointFile(FILE *fp)
         List->Details = NULL;
         if (ParseWayPointString(TempString,List)) {
 
-          List ++;
-          NumberOfWayPoints++;
+	  if (WaypointInTerrainRange(List)) {
 
-          if ((NumberOfWayPoints % 50) == 0){
+	    List ++;
+	    NumberOfWayPoints++;
 
-            if ((p = (WAYPOINT *)LocalReAlloc(WayPointList, ((NumberOfWayPoints/50)+1) * 50 * sizeof(WAYPOINT), LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
+	    if ((NumberOfWayPoints % 50) == 0){
 
-              MessageBox(hWndMainWindow,gettext(TEXT("Not Enough Memory For Waypoints")),TEXT("Error"),MB_OK|MB_ICONSTOP);
+	      if ((p = (WAYPOINT *)LocalReAlloc(WayPointList, ((NumberOfWayPoints/50)+1) * 50 * sizeof(WAYPOINT), LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
 
-              return;
-            }
+		MessageBox(hWndMainWindow,gettext(TEXT("Not Enough Memory For Waypoints")),TEXT("Error"),MB_OK|MB_ICONSTOP);
 
-            if (p != WayPointList){
-              WayPointList = p;
-              List = WayPointList + NumberOfWayPoints;
-            }
+		return;
+	      }
 
-          }
+	      if (p != WayPointList){
+		WayPointList = p;
+		List = WayPointList + NumberOfWayPoints;
+	      }
+
+	    }
+	  }
 
         } else {
 
@@ -511,3 +534,4 @@ int FindNearestWayPoint(double X, double Y, double MaxRange)
 
 
 
+///////

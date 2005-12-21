@@ -101,8 +101,8 @@ static int _cdecl WaypointDirectionCompare(const void *elem1, const void *elem2 
 
   int a1, a2;
 
-  a1 = ((WayPointSelectInfo_t *)elem1)->Direction - DirectionFilter[DirectionFilterIdx];
-  a2 = ((WayPointSelectInfo_t *)elem2)->Direction - DirectionFilter[DirectionFilterIdx];
+  a1 = (int)(((WayPointSelectInfo_t *)elem1)->Direction - DirectionFilter[DirectionFilterIdx]);
+  a2 = (int)(((WayPointSelectInfo_t *)elem2)->Direction - DirectionFilter[DirectionFilterIdx]);
 
   if (a1 > 180)
     a1 -=360;
@@ -170,7 +170,7 @@ static void PrepareData(void){
 
 static void UpdateList(void){
 
-  TCHAR sTmp[128];
+//  TCHAR sTmp[128];
   int i;
 
   ItemIndex = 0;

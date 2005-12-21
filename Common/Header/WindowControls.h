@@ -142,7 +142,7 @@ class DataFieldBoolean:public DataField{
   public:
     DataFieldBoolean(TCHAR *EditFormat, TCHAR *DisplayFormat, int Default, TCHAR *TextTrue, TCHAR *TextFalse, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
-      mValue = (bool)Default;
+		  if (Default) {mValue=true;} else {mValue=false;}
       _tcscpy(mTextTrue, TextTrue);
       _tcscpy(mTextFalse, TextFalse);
 

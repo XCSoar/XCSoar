@@ -5,34 +5,33 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 To do for next version:
 
-- Add LoadProfile to inputevents, so we can have menu buttons
-   trigger pilot/region specific settings
+- Fix bug in profile save routine (bad \r\n encoding)
 - AAT Areas are drawn on top of everything, including task lines.
 - Add track line particularly if not in north up mode
-- Speed command driven by dolphin speed or block maccready
-- Temp trace max temperature relative to ground offset
+- Option for speed command driven by dolphin speed or block maccready
 - Fix airspace visibility bug (query, warnings should apply even if
   not drawn on screen!)
 - 'Marginal final glide' is that the right text?
-- FLARM status, FLARM aircraft display on map
-- Font customisation in settings (font type, size)
 - Autozoom optionally on at startup (settings)
 - Disable PGRMZ if vario is already outputting altitude (or vica versa)
 - Collect different settings based on pilot identification at startup
+   (or this can be done with profiles and menu buttons)
 - In climb stats page, show direction of circling
-- Drop marker conditional on significant climb
+- Drop marker automatically conditional on significant climb
 - Generate waypoints from towns (builtupa, miscpopp)
 - Kinetic energy adjustment to final glide
 - Low battery exit is not working, fix it.
+- Improved notification of battery level - not just simulator.
+  (exit should still only be the simulator)
+- Notify the user (via GCE to Input) of switching between AC and Battery mode
 - Fix strange circling bug
 - Speed to fly chevrons and north arrow are hidden by vario in fullscreen mode
+- Chevrons only on if airspeed available
 - Mark to waypoint, mark to waypointfile
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
   to move/edit waypoints.
-- Notify the user (via GCE to Input) of switching between AC and Battery mode
-- Improved notification of battery level - not just simulator.
-  (exit should still only be the simulator)
 - Adjustable font for long infoboxes (especially time)
+- Font customisation in settings (font type, size)
 - Timed buttons (pass time of button press to processKey and support threshold
   passing in InputEvents - eg: Set long press as nnn ms - over that is long
   press, under is short) (assume for simplicity that we still only press
@@ -41,16 +40,22 @@ To do for next version:
 - Simple output terminal for COM ports (allow users to check serial
   connnections are working correctly).
 - Replay IGC and include examples
-- Launcher profile selector (multiple pilots or situations - maybe even tasks)
 - WARN the user when changing input, language, status files that they need to
   restart.
 - Automatically select "WinPilot File" as type when selecting a file...
 	(future: Consider fixing this - it acts differently to other types)
 - Add 'Append' waypoint function, so users can create a task by selecting
   waypoints from the map in sequence
+- Add 'PanTo' waypoint function, to pan towards the selected waypoint
 
 Changes from 4.5 to HEAD:
 
+- Fixed bug in bringing up WaypointDetails from SelectedWaypoint when not
+  using infoboxes
+- Added LoadProfile to inputevents, so we can have menu buttons
+   trigger pilot/region specific settings
+- Temp trace max temperature now relative to ground offset
+- When terrain file is valid, only waypoints within terrain area are loaded
 - Fixed memory leak in new dialog system (bitmap unnecessary)
 - All waypoint labels shown when in pan mode
 - Added 'pan' to nearestWaypoint inputevent, to return item nearest to
@@ -58,6 +63,7 @@ Changes from 4.5 to HEAD:
 - Force redraw of map if not redrawn for 5 seconds (due to gps not connected)
 - Fixed display of airfield details in new dialog
 - Fix display orientation for square displays e.g. hp 6515 (untested)
+- FLARM status, FLARM aircraft display on map
 - Added FLARM TRAFFIC and FLARM NOTRAFFIC glide computer events
 - Sound restored at exit
 - Added basic FLARM status support in parser and Status dialog

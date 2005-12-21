@@ -67,6 +67,7 @@ Copyright_License {
 #include "Message.h"
 #include "Units.h"
 #include "MapWindow.h"
+#include "Atmosphere.h"
 
 // Sensible maximums
 #define MAX_MODE 100
@@ -1033,8 +1034,15 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
     if (SelectedWaypoint<0){
-      DoStatusMessage(TEXT("No Active Waypoint!"));
-      return;
+      if (ActiveWayPoint<0) {
+	DoStatusMessage(TEXT("No Active Waypoint!"));
+	return;
+      }
+      SelectedWaypoint = Task[ActiveWayPoint].Index;
+      if (SelectedWaypoint<0){
+	DoStatusMessage(TEXT("No Active Waypoint!"));
+	return;
+      }
     }
     LockFlightData();
     PopupWaypointDetails();
@@ -1058,7 +1066,7 @@ void InputEvents::eventStatusMessage(TCHAR *misc) {
 }
 
 void InputEvents::eventPlaySound(TCHAR *misc) {
-	PlayResource(misc);
+  PlayResource(misc);
 }
 
 
@@ -1446,6 +1454,15 @@ void InputEvents::eventTaskSave(TCHAR *misc) {
   SaveTask(misc);
 }
 
+void InputEvents::eventProfileLoad(TCHAR *misc) {
+  ReadProfile(misc);
+}
+
+void InputEvents::eventProfileSave(TCHAR *misc) {
+  WriteProfile(misc);
+}
+
+
 void dlgBasicSettingsShowModal(void);
 void dlgWindSettingsShowModal(void);
 
@@ -1551,6 +1568,22 @@ HINSTANCE _loadDLL(TCHAR *name) {
 	return NULL;
 }
 
+
+void InputEvents::eventAdjustForecastTemperature(TCHAR *misc) {
+  if (_tcscmp(misc, TEXT("+")) == 0) {
+    CuSonde::adjustForecastTemperature(1.0);
+  }
+  if (_tcscmp(misc, TEXT("-")) == 0) {
+    CuSonde::adjustForecastTemperature(-1.0);
+  }
+  if (_tcscmp(misc, TEXT("show")) == 0) {
+    TCHAR Temp[100];
+    _stprintf(Temp,TEXT("%f"),CuSonde::maxGroundTemperature);
+    DoStatusMessage(TEXT("Forecast temp"), Temp);
+  }
+}
+
+
 // JMW TODO: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.
 // this allows the buttons to indicate whether things are enabled/disabled
@@ -1564,6 +1597,8 @@ HINSTANCE _loadDLL(TCHAR *name) {
 
    eventTaskLoad		- Load tasks from a file (misc = filename)
    eventTaskSave		- Save tasks to a file (misc = filename)
+   eventProfileLoad		- Load profile from a file (misc = filename)
+   eventProfileSave		- Save profile to a file (misc = filename)
 
 */
 

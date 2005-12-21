@@ -220,6 +220,7 @@ class MapWindow {
   static bool PointVisible(double lon, double lat);
 
   static void DrawAircraft(HDC hdc, POINT Orig);
+  static void DrawCrossHairs(HDC hdc, POINT Orig);
   static void DrawBestCruiseTrack(HDC hdc, POINT Orig);
   static void DrawCompass(HDC hdc, RECT rc);
   static void DrawWind(HDC hdc, POINT Orig, RECT rc);

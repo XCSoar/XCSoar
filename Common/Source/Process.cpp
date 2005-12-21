@@ -283,6 +283,9 @@ void NextUpDown(int UpDown)
 		PopupWaypointDetails();
 		LockFlightData();
 	}
+	if (ActiveWayPoint>=0) {
+	  SelectedWaypoint = Task[ActiveWayPoint].Index;
+	}
 }
 
 

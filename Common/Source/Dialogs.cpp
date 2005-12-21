@@ -2784,7 +2784,7 @@ LRESULT CALLBACK LoadProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         {
         case  IDC_LOAD:
           GetDlgItemText(hDlg,IDC_FILE,szFile,MAX_PATH);
-          ReadProfile(hDlg,szFile);
+          ReadProfile(szFile);
           EndDialog(hDlg, TRUE);
           return TRUE;
 
@@ -2842,15 +2842,13 @@ LRESULT CALLBACK SaveProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
         {
         case  IDC_SAVE:
           GetDlgItemText(hDlg,IDC_FILE,szFile,MAX_PATH);
-          WriteProfile(hDlg,szFile);
-
-
+          WriteProfile(szFile);
           EndDialog(hDlg, TRUE);
           return TRUE;
 
         case IDCANCEL:
           GetDlgItemText(hDlg,IDC_FILE,szFile,MAX_PATH);
-          WriteProfile(hDlg,szFile);
+          WriteProfile(szFile);
 
           EndDialog(hDlg, FALSE);
           return TRUE;

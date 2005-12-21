@@ -1113,7 +1113,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   TCHAR szWindowClass[MAX_LOADSTRING];                  // The window class name
   RECT rc;
   LOGFONT logfont;
-  int i;
+//  int i;
   int FontHeight, FontWidth;
 
   hInst = hInstance;            // Store instance handle in our global variable
@@ -2420,7 +2420,9 @@ void ProcessTimer(void)
  //            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
 
             CONNECTWAIT = TRUE;
+#ifndef DISABLEAUDIO
             MessageBeep(MB_ICONEXCLAMATION);
+#endif
             FullScreen();
 
           } else {
@@ -2474,7 +2476,9 @@ void ProcessTimer(void)
             MapWindow::MapDirty = true;
 
             LOCKWAIT = TRUE;
+#ifndef DISABLEAUDIO
             MessageBeep(MB_ICONEXCLAMATION);
+#endif
             FullScreen();
 
           }
