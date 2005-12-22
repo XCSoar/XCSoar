@@ -55,6 +55,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "InputEvents.h"
 #include "Utils.h"
+#include "Dialogs.h"
 #include "VarioSound.h"
 #include "Terrain.h"
 #include "compatibility.h"

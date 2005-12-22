@@ -31,6 +31,7 @@ Copyright_License {
 #include "stdafx.h"
 #include "Task.h"
 #include "XCSoar.h"
+#include "Utils.h"
 #include "externs.h"
 
 
