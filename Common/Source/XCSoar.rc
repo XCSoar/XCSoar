@@ -135,7 +135,8 @@ BEGIN
     CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,1,1,
                     127,94
     CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",
-                    PBS_VERTICAL | PBS_SMOOTH | WS_BORDER,129,0,14,119
+                    PBS_VERTICAL | PBS_SMOOTH |
+                    WS_BORDER,129,0,14,119
 END
 
 IDD_SELECT DIALOG DISCARDABLE  0, 0, 140, 123

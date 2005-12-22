@@ -1113,7 +1113,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   TCHAR szWindowClass[MAX_LOADSTRING];                  // The window class name
   RECT rc;
   LOGFONT logfont;
-//  int i;
   int FontHeight, FontWidth;
 
   hInst = hInstance;            // Store instance handle in our global variable
@@ -1325,6 +1324,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   #if NEWINFOBOX > 0
   // NOP not needed
   #else
+  int i;
   for(i=0;i<numInfoWindows;i++)
     {
       SendMessage(hWndInfoWindow[i],WM_SETFONT,
