@@ -2919,7 +2919,10 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
 void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 {
   unsigned i,j;
-  POINT pt[501];
+//  POINT pt[501];
+	POINT *pt = NULL;
+
+
   COLORREF whitecolor = RGB(0xff,0xff, 0xff);
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
 
@@ -2971,7 +2974,8 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
   {
     if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
     {
-      for(j= AirspaceArea[i].FirstPoint; 
+			pt = (POINT*)SfRealloc(pt, sizeof(POINT) * AirspaceArea[i].NumPoints);
+     for(j= AirspaceArea[i].FirstPoint; 
 	  j < (AirspaceArea[i].NumPoints + AirspaceArea[i].FirstPoint); 
 	  j++)
       {
@@ -3104,6 +3108,8 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
   }
   #endif
 
+	if (pt != NULL)
+		free (pt);
 }
 
 
