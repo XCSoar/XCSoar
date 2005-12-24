@@ -231,9 +231,7 @@
 
 
 #if !defined(BEGIN_INTERFACE)
-#if defined(_MPPC_)  && \
-    ( (defined(_MSC_VER) || defined(__SC__) || defined(__MWERKS__)) && \
-    !defined(NO_NULL_VTABLE_ENTRY) )
+#if defined(_MPPC_)  && \    ( (defined(_MSC_VER) || defined(__SC__) || defined(__MWERKS__)) && \    !defined(NO_NULL_VTABLE_ENTRY) )
    #define BEGIN_INTERFACE virtual void a() {}
    #define END_INTERFACE
 #else
@@ -274,11 +272,8 @@
 #else
 #undef CONST_VTBL
 #define CONST_VTBL
-#define DECLARE_INTERFACE(iface)    typedef interface iface { \
-                                    struct iface##Vtbl FAR* lpVtbl; \
-                                } iface; \
-                                typedef struct iface##Vtbl iface##Vtbl; \
-                                struct iface##Vtbl
+#define DECLARE_INTERFACE(iface)    typedef interface iface { \                                    struct iface##Vtbl FAR* lpVtbl; \                                } iface; \                                typedef struct iface##Vtbl iface##Vtbl; \                                struct iface##Vtbl
+
 #endif
 #define DECLARE_INTERFACE_(iface, baseiface)    DECLARE_INTERFACE(iface)
 
@@ -330,16 +325,11 @@
 
 // With DCOM, CLSCTX_REMOTE_SERVER should be included
 #if (_WIN32_WINNT >= 0x0400 ) || defined(_WIN32_DCOM) // DCOM
-#define CLSCTX_ALL              (CLSCTX_INPROC_SERVER| \
-                                 CLSCTX_INPROC_HANDLER| \
-                                 CLSCTX_LOCAL_SERVER| \
-                                 CLSCTX_REMOTE_SERVER)
+#define CLSCTX_ALL              (CLSCTX_INPROC_SERVER| \                                 CLSCTX_INPROC_HANDLER| \                                 CLSCTX_LOCAL_SERVER| \                                 CLSCTX_REMOTE_SERVER)
 
 #define CLSCTX_SERVER           (CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER|CLSCTX_REMOTE_SERVER)
 #else
-#define CLSCTX_ALL              (CLSCTX_INPROC_SERVER| \
-                                 CLSCTX_INPROC_HANDLER| \
-                                 CLSCTX_LOCAL_SERVER )
+#define CLSCTX_ALL              (CLSCTX_INPROC_SERVER| \                                 CLSCTX_INPROC_HANDLER| \                                 CLSCTX_LOCAL_SERVER )
 
 #define CLSCTX_SERVER           (CLSCTX_INPROC_SERVER|CLSCTX_LOCAL_SERVER)
 #endif
@@ -437,17 +427,17 @@ typedef interface    IRpcChannelBuffer  IRpcChannelBuffer;
 // after objbase.h followed by one or more of the guid defintion files.
 
 #ifndef INITGUID
-#define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-    EXTERN_C const GUID FAR name
+#define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \    EXTERN_C const GUID FAR name
+
 #else
 
-#define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-        EXTERN_C const GUID name \
+#define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \        EXTERN_C const GUID name \
                 = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
+
 #endif // INITGUID
 
-#define DEFINE_OLEGUID(name, l, w1, w2) \
-    DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
+#define DEFINE_OLEGUID(name, l, w1, w2) \    DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
+
 
 #ifdef _OLE32_
 
@@ -464,10 +454,10 @@ __inline BOOL  InlineIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 }
 #else   // ! __cplusplus
 #define InlineIsEqualGUID(rguid1, rguid2)  \
-        (((PLONG) rguid1)[0] == ((PLONG) rguid2)[0] &&   \
-        ((PLONG) rguid1)[1] == ((PLONG) rguid2)[1] &&    \
+        (((PLONG) rguid1)[0] == ((PLONG) rguid2)[0] &&   \        ((PLONG) rguid1)[1] == ((PLONG) rguid2)[1] &&    \
         ((PLONG) rguid1)[2] == ((PLONG) rguid2)[2] &&    \
         ((PLONG) rguid1)[3] == ((PLONG) rguid2)[3])
+
 #endif  // __cplusplus
 
 #ifdef _OLE32PRIV_
@@ -479,10 +469,11 @@ BOOL _fastcall wIsEqualGUID(REFGUID rguid1, REFGUID rguid2);
 
 #else   // ! _OLE32_
 #ifdef __cplusplus
-__inline BOOL IsEqualGUID(REFGUID rguid1, REFGUID rguid2)
+/*
+inline BOOL IsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 {
     return !memcmp(&rguid1, &rguid2, sizeof(GUID));
-}
+}*/
 #else   //  ! __cplusplus
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID)))
 #endif  //  __cplusplus

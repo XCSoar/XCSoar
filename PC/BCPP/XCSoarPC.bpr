@@ -1,108 +1,158 @@
-# ---------------------------------------------------------------------------
-#  Delphi VCL Extensions (RX)
-#  Copyright (c) 1998 Master-Bank
-# ---------------------------------------------------------------------------
-# ---------------------------------------------------------------------------
-!if !$d(BCB)
-BCB = $(MAKEDIR)\..
-!endif
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="XCSoarPC.exe"/>
+    <OBJFILES value="XCSoarPC.obj Unit1.obj modDummies.obj ..\..\Common\Source\VarioSound.obj 
+      ..\..\Common\Source\VOIMAGE.obj ..\..\Common\Source\WaveThread.obj 
+      ..\..\Common\Source\Waypointparser.obj 
+      ..\..\Common\Source\windanalyser.obj ..\..\Common\Source\windmeasurementlist.obj 
+      ..\..\Common\Source\WindowControls.obj ..\..\Common\Source\windstore.obj 
+      ..\..\Common\Source\XCSoar.obj ..\..\Common\Source\xmlParser.obj 
+      ..\..\Common\Source\AirfieldDetails.obj ..\..\Common\Source\Airspace.obj 
+      ..\..\Common\Source\AirspaceColourDlg.obj 
+      ..\..\Common\Source\Atmosphere.obj ..\..\Common\Source\Calculations.obj 
+      ..\..\Common\Source\DebugLog.obj ..\..\Common\Source\devCAI302.obj 
+      ..\..\Common\Source\devEW.obj ..\..\Common\Source\device.obj 
+      ..\..\Common\Source\Dialogs.obj ..\..\Common\Source\dlgBasicSettings.obj 
+      ..\..\Common\Source\dlgStatistics.obj ..\..\Common\Source\dlgStatus.obj 
+      ..\..\Common\Source\dlgTools.obj 
+      ..\..\Common\Source\dlgWayPointDetails.obj ..\..\Common\Source\dlgWayPointSelect.obj 
+      ..\..\Common\Source\dlgWindSettings.obj ..\..\Common\Source\GaugeCDI.obj 
+      ..\..\Common\Source\GaugeVarioAltA.obj ..\..\Common\Source\InfoBox.obj 
+      ..\..\Common\Source\InfoBoxLayout.obj ..\..\Common\Source\InputEvents.obj 
+      ..\..\Common\Source\leastsqs.obj ..\..\Common\Source\Logger.obj 
+      ..\..\Common\Source\MapWindow.obj ..\..\Common\Source\McReady.obj 
+      ..\..\Common\Source\Message.obj ..\..\Common\Source\Parser.obj 
+      ..\..\Common\Source\Port2.obj ..\..\Common\Source\Port.obj 
+      ..\..\Common\Source\Process.obj ..\..\Common\Source\RasterTerrain.obj 
+      ..\..\Common\Source\rscalc.obj ..\..\Common\Source\Statistics.obj 
+      ..\..\Common\Source\StdAfx.obj ..\..\Common\Source\STScreenBuffer.obj 
+      ..\..\Common\Source\Task.obj ..\..\Common\Source\Terrain.obj 
+      ..\..\Common\Source\Topology.obj ..\..\Common\Source\units.obj 
+      ..\..\Common\Source\Utils.obj ..\..\Common\Source\maperror.obj 
+      ..\..\Common\Source\mapprimitive.obj 
+      ..\..\Common\Source\mapprimitive-pt2.obj ..\..\Common\Source\mapsearch.obj 
+      ..\..\Common\Source\mapshape.obj ..\..\Common\Source\maptree.obj 
+      ..\..\Common\Source\mapxbase.obj ..\..\Common\Source\mapbits.obj"/>
+    <RESFILES value="XCSoarPC.res ..\..\Common\Source\XCSoar.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) Unit1.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value=""/>
+    <SPARELIBS value="rtl.lib vcl.lib"/>
+    <PACKAGES value="rtl.bpi vcl.bpi dbrtl.bpi vcldb.bpi bdertl.bpi"/>
+    <PATHCPP value=".;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source;..\..\Common\Source"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;..\..\Common\Source;..\..\Common\Source"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="UNICODE;_UNICODE;_SIM_;SCREENHEIGHT=240;SCREENWIDTH=320;UNDER_CE=300;WINDOWSPC=1;NEWINFOBOX=1"/>
+    <SYSDEFINES value="NO_STRICT;USEPACKAGES"/>
+    <MAINSOURCE value="XCSoarPC.cpp"/>
+    <INCLUDEPATH value=".\include;..\..\common\header;..\..\common\source;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="..\..\common\source;\\herkules2000\triadis\project\common\vcl_1.00\units\rxlib\260\rx\units;$(BCB)\lib\release;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026"/>
+    <WARNOPTSTR value=""/>
+    <OTHERFILES value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-src_suffix cpp -DUNICODE -D_UNICODE -D_SIM_ -DSCREENHEIGHT=240 
+      -DSCREENWIDTH=320 -DUNDER_CE=300 -DWINDOWSPC=1 -DNEWINFOBOX=1 -I.\include 
+      -I..\..\common\header -I..\..\common\source -I$(BCB)\include 
+      -I$(BCB)\include\vcl -boa"/>
+    <CFLAG1 value="-Od -H=c:\PROGRA~1\borland\CBUILD~1\lib\vcl35.csm -Hc -Vx -Ve -X- -r- -a8 
+      -b- -k -y -v -vi- -c -Tkh30000 -tWM"/>
+    <CFLAG2 value=""/>
+    <CFLAG3 value=""/>
+    <PFLAGS value="-$YD -$W -$V- -$O- -$A8 -v -M -JPHNE"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zi"/>
+    <LFLAGS value="-D&quot;RX Library Database Components&quot; -aa -Tpe -GD -s -Gn -Gl -Gi -v"/>
+    <IFLAGS value=""/>
+    <OTHERFILES value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="$(PACKAGES) $(OBJFILES) sysinit.obj c0w32.obj "/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+    <OTHERFILES value=""/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="XCSoarPC.cpp" FORMNAME="" UNITNAME="XCSoarPC" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="XCSoarPC.res" FORMNAME="" UNITNAME="XCSoarPC" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit1.cpp" FORMNAME="Form1" UNITNAME="Unit1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\XCSoar.rc" FORMNAME="" UNITNAME="XCSoar" CONTAINERID="RCCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="modDummies.cpp" FORMNAME="" UNITNAME="modDummies" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\VarioSound.cpp" FORMNAME="" UNITNAME="VarioSound.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\VOIMAGE.cpp" FORMNAME="" UNITNAME="VOIMAGE.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\WaveThread.cpp" FORMNAME="" UNITNAME="WaveThread.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Waypointparser.cpp" FORMNAME="" UNITNAME="Waypointparser.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\windanalyser.cpp" FORMNAME="" UNITNAME="windanalyser.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\windmeasurementlist.cpp" FORMNAME="" UNITNAME="windmeasurementlist.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\WindowControls.cpp" FORMNAME="" UNITNAME="WindowControls.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\windstore.cpp" FORMNAME="" UNITNAME="windstore.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\XCSoar.cpp" FORMNAME="" UNITNAME="XCSoar.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\xmlParser.cpp" FORMNAME="" UNITNAME="xmlParser.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\AirfieldDetails.cpp" FORMNAME="" UNITNAME="AirfieldDetails.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Airspace.cpp" FORMNAME="" UNITNAME="Airspace.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\AirspaceColourDlg.cpp" FORMNAME="" UNITNAME="AirspaceColourDlg.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Atmosphere.cpp" FORMNAME="" UNITNAME="Atmosphere.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Calculations.cpp" FORMNAME="" UNITNAME="Calculations.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\DebugLog.cpp" FORMNAME="" UNITNAME="DebugLog.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\devCAI302.cpp" FORMNAME="" UNITNAME="devCAI302.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\devEW.cpp" FORMNAME="" UNITNAME="devEW.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\device.cpp" FORMNAME="" UNITNAME="device.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Dialogs.cpp" FORMNAME="" UNITNAME="Dialogs.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\dlgBasicSettings.cpp" FORMNAME="" UNITNAME="dlgBasicSettings.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\dlgStatistics.cpp" FORMNAME="" UNITNAME="dlgStatistics.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\dlgStatus.cpp" FORMNAME="" UNITNAME="dlgStatus.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\dlgTools.cpp" FORMNAME="" UNITNAME="dlgTools.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\dlgWayPointDetails.cpp" FORMNAME="" UNITNAME="dlgWayPointDetails.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\dlgWayPointSelect.cpp" FORMNAME="" UNITNAME="dlgWayPointSelect.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\dlgWindSettings.cpp" FORMNAME="" UNITNAME="dlgWindSettings.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\GaugeCDI.cpp" FORMNAME="" UNITNAME="GaugeCDI.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\GaugeVarioAltA.cpp" FORMNAME="" UNITNAME="GaugeVarioAltA.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\InfoBox.cpp" FORMNAME="" UNITNAME="InfoBox.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\InfoBoxLayout.cpp" FORMNAME="" UNITNAME="InfoBoxLayout.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\InputEvents.cpp" FORMNAME="" UNITNAME="InputEvents.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\leastsqs.cpp" FORMNAME="" UNITNAME="leastsqs.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Logger.cpp" FORMNAME="" UNITNAME="Logger.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\MapWindow.cpp" FORMNAME="" UNITNAME="MapWindow.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\McReady.cpp" FORMNAME="" UNITNAME="McReady.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Message.cpp" FORMNAME="" UNITNAME="Message.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Parser.cpp" FORMNAME="" UNITNAME="Parser.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Port2.cpp" FORMNAME="" UNITNAME="Port2.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Port.cpp" FORMNAME="" UNITNAME="Port.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Process.cpp" FORMNAME="" UNITNAME="Process.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\RasterTerrain.cpp" FORMNAME="" UNITNAME="RasterTerrain.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\rscalc.cpp" FORMNAME="" UNITNAME="rscalc.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Statistics.cpp" FORMNAME="" UNITNAME="Statistics.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\StdAfx.cpp" FORMNAME="" UNITNAME="StdAfx.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\STScreenBuffer.cpp" FORMNAME="" UNITNAME="STScreenBuffer.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Task.cpp" FORMNAME="" UNITNAME="Task.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Terrain.cpp" FORMNAME="" UNITNAME="Terrain.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Topology.cpp" FORMNAME="" UNITNAME="Topology.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\units.cpp" FORMNAME="" UNITNAME="units.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\Utils.cpp" FORMNAME="" UNITNAME="Utils.cpp" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\maperror.c" FORMNAME="" UNITNAME="maperror.c" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\mapprimitive.c" FORMNAME="" UNITNAME="mapprimitive.c" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\mapprimitive-pt2.c" FORMNAME="" UNITNAME="mapprimitive-pt2.c" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\mapsearch.c" FORMNAME="" UNITNAME="mapsearch.c" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\mapshape.c" FORMNAME="" UNITNAME="mapshape.c" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\maptree.c" FORMNAME="" UNITNAME="maptree.c" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\mapxbase.c" FORMNAME="" UNITNAME="mapxbase.c" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="..\..\Common\Source\mapbits.c" FORMNAME="" UNITNAME="mapbits.c" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
 
-# ---------------------------------------------------------------------------
-# IDE SECTION
-# ---------------------------------------------------------------------------
-# The following section of the project makefile is managed by the BCB IDE.
-# It is recommended to use the IDE to change any of the values in this
-# section.
-# ---------------------------------------------------------------------------
-
-VERSION = BCB.03
-# ---------------------------------------------------------------------------
-PROJECT = XCSoarPC.exe
-OBJFILES = XCSoarPC.obj Unit1.obj ..\..\Common\Source\XCSoar.obj \
-  ..\..\Common\Source\Airspace.obj \
-  ..\..\Common\Source\AirspaceColourDlg.obj \
-  ..\..\Common\Source\Calculations.obj \
-  ..\..\Common\Source\devCAI302.obj \
-  ..\..\Common\Source\devEW.obj \
-  ..\..\Common\Source\device.obj ..\..\Common\Source\Dialogs.obj \
-  ..\..\Common\Source\Logger.obj \
-  ..\..\Common\Source\mapbits.obj \
-  ..\..\Common\Source\maperror.obj \
-  ..\..\Common\Source\mapprimitive.obj \
-  ..\..\Common\Source\mapsearch.obj \
-  ..\..\Common\Source\mapshape.obj \
-  ..\..\Common\Source\maptree.obj \
-  ..\..\Common\Source\MapWindow.obj \
-  ..\..\Common\Source\mapxbase.obj \
-  ..\..\Common\Source\McReady.obj \
-  ..\..\Common\Source\Parser.obj ..\..\Common\Source\Port.obj \
-  ..\..\Common\Source\Port2.obj \
-  ..\..\Common\Source\Process.obj \
-  ..\..\Common\Source\RasterTerrain.obj \
-  ..\..\Common\Source\rscalc.obj \
-  ..\..\Common\Source\StdAfx.obj \
-  ..\..\Common\Source\STScreenBuffer.obj \
-  ..\..\Common\Source\Terrain.obj \
-  ..\..\Common\Source\Topology.obj \
-  ..\..\Common\Source\Utils.obj \
-  ..\..\Common\Source\VarioSound.obj \
-  ..\..\Common\Source\VOIMAGE.obj \
-  ..\..\Common\Source\WaveThread.obj \
-  ..\..\Common\Source\Waypointparser.obj \
-  ..\..\Common\Source\windanalyser.obj \
-  ..\..\Common\Source\windmeasurementlist.obj \
-  ..\..\Common\Source\windstore.obj \
-  ..\..\Common\Source\AirfieldDetails.obj \
-  ..\..\Common\Source\units.obj modDummies.obj \
-  ..\..\Common\Source\Statistics.obj \
-  ..\..\Common\Source\GaugeVarioAltA.obj \
-  ..\..\Common\Source\InfoBoxLayout.obj \
-  ..\..\Common\Source\InputEvents.obj \
-  ..\..\Common\Source\leastsqs.obj \
-  ..\..\Common\Source\GaugeCDI.obj \
-  ..\..\Common\Source\Task.obj \
-  ..\..\Common\Source\Message.obj ..\..\Common\Source\InfoBox.obj
-RESFILES = XCSoarPC.res ..\..\Common\Source\XCSoar.res
-DEFFILE =
-RESDEPEN = $(RESFILES) Unit1.dfm
-LIBFILES =
-LIBRARIES =
-SPARELIBS = vcl35.lib rxctl.lib dclrxctl.lib rxdb.lib vcldb35.lib
-PACKAGES = vcl35.bpi vcldb35.bpi rxctl.bpi rxdb.bpi dclrxctl.bpi
-# ---------------------------------------------------------------------------
-PATHCPP = .;..\..\Common\Source
-PATHASM = .;
-PATHPAS = .;..\..\Common\Source
-PATHRC = .;
-DEBUGLIBPATH = $(BCB)\lib\debug
-RELEASELIBPATH = $(BCB)\lib\release
-# ---------------------------------------------------------------------------
-CFLAG1 = -Od -Hc -w -Ve -r- -k -y -v -vi- -c -b- -w-par -w-inl -Vx
-CFLAG2 = -DUNICODE;_UNICODE;_SIM_;SCREENHEIGHT=240;SCREENWIDTH=320;UNDER_CE=300;WINDOWSPC=1;NEWINFOBOX=1;USEPACKAGES \
-  -I.\include;..\..\common\header;..\..\common\source;$(BCB)\include;$(BCB)\include\vcl \
-  -H=$(BCB)\lib\vcl35.csm
-CFLAG3 = -Tkh30000
-PFLAGS = -DUNICODE;_UNICODE;_SIM_;SCREENHEIGHT=240;SCREENWIDTH=320;UNDER_CE=300;WINDOWSPC=1;NEWINFOBOX=1;USEPACKAGES \
-  -U..\..\common\source;\\herkules2000\triadis\project\common\vcl_1.00\units\rxlib\260\rx\units;$(BCB)\lib\release;$(BCB)\lib\obj;$(BCB)\lib;$(RELEASELIBPATH) \
-  -I.\include;..\..\common\header;..\..\common\source;$(BCB)\include;$(BCB)\include\vcl \
-  -$Y -$W -$V- -$O- -v -JPHN -M
-RFLAGS = -DUNICODE;_UNICODE;_SIM_;SCREENHEIGHT=240;SCREENWIDTH=320;UNDER_CE=300;WINDOWSPC=1;NEWINFOBOX=1;USEPACKAGES \
-  -i.\include;..\..\common\header;..\..\common\source;$(BCB)\include;$(BCB)\include\vcl
-AFLAGS = /i.\include /i..\..\common\header /i..\..\common\source \
-  /i$(BCB)\include /i$(BCB)\include\vcl /dUNICODE /d_UNICODE \
-  /d_SIM_ /dSCREENHEIGHT=240 /dSCREENWIDTH=320 /dUNDER_CE=300 \
-  /dWINDOWSPC=1 /dNEWINFOBOX=1 /dUSEPACKAGES /mx /w2 /zi
-LFLAGS = -L..\..\common\source;\\herkules2000\triadis\project\common\vcl_1.00\units\rxlib\260\rx\units;$(BCB)\lib\release;$(BCB)\lib\obj;$(BCB)\lib;$(RELEASELIBPATH) \
-  -D"RX Library Database Components" -aa -Tpe -s -Gn -Gl -Gi -v
-IFLAGS =
-# ---------------------------------------------------------------------------
-ALLOBJ = c0w32.obj $(PACKAGES) sysinit.obj $(OBJFILES)
-ALLRES = $(RESFILES)
-ALLLIB = $(LIBFILES) $(LIBRARIES) import32.lib \
-  cp32mt.lib
-# ---------------------------------------------------------------------------
-!ifdef IDEOPTIONS
-
+  <IDEOPTIONS>
 [Version Info]
 IncludeVerInfo=0
 AutoIncBuild=0
@@ -163,81 +213,24 @@ DebugSourceDirs=$(BCB)\source\vcl
 
 [Parameters]
 RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
 HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
 
-!endif
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
 
-# ---------------------------------------------------------------------------
-# MAKE SECTION
-# ---------------------------------------------------------------------------
-# This section of the project file is not used by the BCB IDE.  It is for
-# the benefit of building from the command-line using the MAKE utility.
-# ---------------------------------------------------------------------------
-
-.autodepend
-# ---------------------------------------------------------------------------
-!if !$d(BCC32)
-BCC32 = bcc32
-!endif
-
-!if !$d(DCC32)
-DCC32 = dcc32
-!endif
-
-!if !$d(TASM32)
-TASM32 = tasm32
-!endif
-
-!if !$d(LINKER)
-LINKER = ilink32
-!endif
-
-!if !$d(BRCC32)
-BRCC32 = brcc32
-!endif
-# ---------------------------------------------------------------------------
-!if $d(PATHCPP)
-.PATH.CPP = $(PATHCPP)
-.PATH.C   = $(PATHCPP)
-!endif
-
-!if $d(PATHPAS)
-.PATH.PAS = $(PATHPAS)
-!endif
-
-!if $d(PATHASM)
-.PATH.ASM = $(PATHASM)
-!endif
-
-!if $d(PATHRC)
-.PATH.RC  = $(PATHRC)
-!endif
-# ---------------------------------------------------------------------------
-$(PROJECT): $(OBJFILES) $(RESDEPEN) $(DEFFILE)
-    $(BCB)\BIN\$(LINKER) @&&!
-    $(LFLAGS) +
-    $(ALLOBJ), +
-    $(PROJECT),, +
-    $(ALLLIB), +
-    $(DEFFILE), +
-    $(ALLRES)
-!
-# ---------------------------------------------------------------------------
-.pas.hpp:
-    $(BCB)\BIN\$(DCC32) $(PFLAGS) {$< }
-
-.pas.obj:
-    $(BCB)\BIN\$(DCC32) $(PFLAGS) {$< }
-
-.cpp.obj:
-    $(BCB)\BIN\$(BCC32) $(CFLAG1) $(CFLAG2) $(CFLAG3) -n$(@D) {$< }
-
-.c.obj:
-    $(BCB)\BIN\$(BCC32) $(CFLAG1) $(CFLAG2) $(CFLAG3) -n$(@D) {$< }
-
-.asm.obj:
-    $(BCB)\BIN\$(TASM32) $(AFLAGS) $<, $@
-
-.rc.res:
-    $(BCB)\BIN\$(BRCC32) $(RFLAGS) -fo$@ $<
-# ---------------------------------------------------------------------------
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+  </IDEOPTIONS>
+</PROJECT>

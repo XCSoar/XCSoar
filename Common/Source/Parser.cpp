@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.33 2005/12/21 13:19:06 jwharington Exp $
+  $Id: Parser.cpp,v 1.34 2005/12/24 04:37:51 jwharington Exp $
 
 Copyright_License {
 
@@ -441,6 +441,8 @@ BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
       return FALSE;
     }
 
+  GPSCONNECT = TRUE;
+
   ExtractParameter(String,ctemp,1);
   GPS_INFO->NAVWarning = NAVWarn(ctemp[0]);
 
@@ -460,6 +462,8 @@ BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
   if (!((tmplat == 0.0) && (tmplon == 0.0))) {
     GPS_INFO->Latitude = tmplat;
     GPS_INFO->Longitude = tmplon;
+  } else {
+    //    GPSCONNECT = FALSE;
   }
 
   ExtractParameter(String,ctemp,6);
@@ -499,7 +503,6 @@ BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
         
   LastTime = ThisTime;
   
-  GPSCONNECT = TRUE;
   return TRUE;
 }
 

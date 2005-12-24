@@ -40,7 +40,6 @@ void AssignedArea(void);
 LRESULT CALLBACK LoggerDetails 			(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK AudioSettings					(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
-extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
 void SetWindowText_gettext(HWND hDlg, int entry);
 TCHAR* gettext(TCHAR* text);
 void ClearStatusMessages(void);
@@ -56,5 +55,7 @@ BOOL SetProgressStepSize(int nSize);
 void LoadNewTask(TCHAR *FileName);
 void LoadTask(TCHAR *FileName,HWND hDlg);
 void SaveTask(TCHAR *FileName);
+
+extern void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
 
 #endif

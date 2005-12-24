@@ -947,16 +947,18 @@ void ReadAirspace(void)
   TCHAR	szFile1[MAX_PATH] = TEXT("\0");
   TCHAR	szFile2[MAX_PATH] = TEXT("\0");
 	
-  FILE *fp;
-  FILE *fp2;
+  FILE *fp=NULL;
+  FILE *fp2=NULL;
   FILETIME LastWriteTime;
   FILETIME LastWriteTime2;
 
   GetRegistryString(szRegistryAirspaceFile, szFile1, MAX_PATH);
   GetRegistryString(szRegistryAdditionalAirspaceFile, szFile2, MAX_PATH);
 
-  fp  = _tfopen(szFile1, TEXT("rt"));
-  fp2 = _tfopen(szFile2, TEXT("rt"));
+  if (_tcslen(szFile1)>0)      
+    fp  = _tfopen(szFile1, TEXT("rt"));
+  if (_tcslen(szFile2)>0)      
+    fp2 = _tfopen(szFile2, TEXT("rt"));
 
   SetRegistryString(szRegistryAirspaceFile, TEXT("\0"));
   SetRegistryString(szRegistryAdditionalAirspaceFile, TEXT("\0"));

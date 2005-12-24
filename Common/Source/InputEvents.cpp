@@ -151,6 +151,7 @@ TCHAR *Text2NE[NE_COUNT];
 typedef void (CALLBACK *DLLFUNC_INPUTEVENT)(TCHAR*);
 typedef void (CALLBACK *DLLFUNC_SETHINST)(HMODULE);
 
+
 #define MAX_DLL_CACHE 256
 typedef struct {
   TCHAR *text;
@@ -171,13 +172,13 @@ void InputEvents::readFile() {
   // Read in user defined configuration file
 	
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
-  FILE *fp;
+  FILE *fp=NULL;
 
   // Open file from registry
   GetRegistryString(szRegistryInputFile, szFile1, MAX_PATH);
   SetRegistryString(szRegistryInputFile, TEXT("\0"));
 	
-  if (szFile1)
+  if (_tcslen(szFile1)>0)      
     fp  = _tfopen(szFile1, TEXT("rt"));
 
   if (fp == NULL) 
@@ -592,6 +593,8 @@ int InputEvents::getModeID() {
 bool InputEvents::processButton(int bindex) {
   int thismode = getModeID();
   ASSERT(thismode >= 0);	// Must always be so because mode_current should always be valid
+  if (thismode<0) thismode= 0 ; // JMW testing
+
   int i;
   // Note - reverse order - last one wins
   for (i = ModeLabel_count[thismode]; i >= 0; i--) {
@@ -627,6 +630,7 @@ bool InputEvents::processKey(int dWord) {
   // get current mode
   int mode = InputEvents::getModeID();
   ASSERT(mode >= 0);
+  if (mode<0) mode=0; // JMW testing
   
   // Which key - can be defined locally or at default (fall back to default)
   event_id = Key2Event[mode][dWord];
@@ -659,6 +663,7 @@ bool InputEvents::processNmea(int ne_id) {
   // get current mode
   int mode = InputEvents::getModeID();
   ASSERT(mode >= 0);
+  if (mode<0) mode=0; // JMW testing
   
   // Which key - can be defined locally or at default (fall back to default)
   event_id = N2Event[mode][ne_id];
@@ -689,6 +694,7 @@ int event_id = 0;
   // get current mode
   int mode = InputEvents::getModeID();
   ASSERT(mode >= 0);
+  if (mode<0) mode=0; // JMW testing
   
   // Which key - can be defined locally or at default (fall back to default)
   event_id = GC2Event[mode][gce_id];

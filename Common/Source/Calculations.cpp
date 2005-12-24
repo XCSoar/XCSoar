@@ -32,6 +32,7 @@ Copyright_License {
 
 #include "stdafx.h"
 #include "Calculations.h"
+#include "Dialogs.h"
 #include "parser.h"
 #include "Utils.h"
 #include "Externs.h"

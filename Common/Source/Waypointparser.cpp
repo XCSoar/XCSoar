@@ -418,14 +418,15 @@ void ReadWayPoints(void)
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
         
-  FILE *fp;
+  FILE *fp=NULL;
 
   LockFlightData();
   CloseWayPoints();
   GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
   SetRegistryString(szRegistryWayPointFile, TEXT("\0"));  
       
-  fp = _tfopen(szFile1, TEXT("rt"));
+  if (_tcslen(szFile1)>0)      
+    fp = _tfopen(szFile1, TEXT("rt"));
                         
   if(fp != NULL)
     {
@@ -440,7 +441,8 @@ void ReadWayPoints(void)
   GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
   SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));  
 
-  fp = _tfopen(szFile2, TEXT("rt"));
+  if (_tcslen(szFile2)>0)      
+    fp = _tfopen(szFile2, TEXT("rt"));
   if(fp != NULL)
     {
       ReadWayPointFile(fp);

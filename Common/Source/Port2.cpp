@@ -41,6 +41,7 @@ Copyright_License {
 HANDLE				hRead2Thread = NULL;              // Handle to the read thread
 static TCHAR sPortName[8];
 
+static BOOL  Port2CloseThread;
 
 BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 {
@@ -148,6 +149,8 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   EscapeCommFunction (hPort2, SETDTR);
   EscapeCommFunction (hPort2, SETRTS);
 
+  Port2CloseThread = FALSE;
+
   // Create a read thread for reading data from the communication port.
   if (hRead2Thread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )Port2ReadThread, 0, 0, 
                                   &dwThreadID))
@@ -213,7 +216,9 @@ DWORD Port2ReadThread (LPVOID lpvoid)
 	       | EV_RXCHAR 
 	       );
   
-  while ((hPort2 != INVALID_HANDLE_VALUE)&&(!MapWindow::CLOSETHREAD)) 
+  while ((hPort2 != INVALID_HANDLE_VALUE)
+	 &&(!MapWindow::CLOSETHREAD)
+	 && (!Port2CloseThread)) 
   {
     int i=0;
 
@@ -274,6 +279,8 @@ BOOL Port2Close (HANDLE hCommPort)
 
   if (hCommPort != INVALID_HANDLE_VALUE)
   {
+
+    Port2CloseThread = TRUE;
 
     // JMW added purging of port on open to prevent overflow initially
     PurgeComm(hPort2, 

@@ -50,6 +50,8 @@ To do for next version:
 
 Changes from 4.5 to HEAD:
 
+- Windows PC port using Visual studio 6.
+- JG fixed bug in display of more than 500 airspace areas
 - Fixed bug in bringing up WaypointDetails from SelectedWaypoint when not
   using infoboxes
 - Added LoadProfile to inputevents, so we can have menu buttons 

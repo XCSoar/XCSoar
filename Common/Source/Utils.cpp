@@ -2041,12 +2041,12 @@ cont:
 void ReadLanguageFile() {
 
 	TCHAR szFile1[MAX_PATH] = TEXT("\0");
-	FILE *fp;
+	FILE *fp=NULL;
 
 	// Open file from registry
 	GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
 	SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
-	if (szFile1)
+	if (_tcslen(szFile1)>0)
 		fp  = _tfopen(szFile1, TEXT("rt"));
 
 	if (fp == NULL)
@@ -2094,13 +2094,13 @@ void ReadStatusFile() {
 	#include "Status_defaults.cpp"
 
 	TCHAR szFile1[MAX_PATH] = TEXT("\0");
-	FILE *fp;
+	FILE *fp=NULL;
 
 	// Open file from registry
 	GetRegistryString(szRegistryStatusFile, szFile1, MAX_PATH);
 	SetRegistryString(szRegistryStatusFile, TEXT("\0"));
 
-	if (szFile1)
+	if (_tcslen(szFile1)>0)
 		fp  = _tfopen(szFile1, TEXT("rt"));
 
 	// Unable to open file
@@ -2194,8 +2194,9 @@ const static int nMaxKeyNameSize = MAX_PATH;
 
 void LoadRegistryFromFile(TCHAR *szFile)
 {
-  FILE *fp;
-  fp = _tfopen(szFile, TEXT("rt"));
+  FILE *fp=NULL;
+  if (_tcslen(szFile)>0)
+    fp = _tfopen(szFile, TEXT("rt"));
   if(fp == NULL) {
     // error
     return;
@@ -2254,9 +2255,9 @@ void SaveRegistryToFile(TCHAR *szFile)
     return;
   }
 
-  FILE *fp;
-
-  fp = _tfopen(szFile, TEXT("wt"));
+  FILE *fp=NULL;
+  if (_tcslen(szFile)>0)
+    fp = _tfopen(szFile, TEXT("wt"));
   if(fp == NULL) {
     // error
     return;
