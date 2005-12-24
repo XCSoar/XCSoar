@@ -42,7 +42,7 @@ extern TCHAR szRegistryTerrainFile[];
 // have file opened by one reader
 
 TERRAIN_INFO RasterTerrain::TerrainInfo;
-FILE *RasterTerrain::fpTerrain;
+FILE *RasterTerrain::fpTerrain=NULL;
 
 CRITICAL_SECTION  CritSec_TerrainFile;
 
@@ -298,7 +298,9 @@ void RasterTerrain::OpenTerrain(void)
   GetRegistryString(szRegistryTerrainFile, szFile, MAX_PATH);
   SetRegistryString(szRegistryTerrainFile, TEXT("\0"));
 
-  fpTerrain = _tfopen(szFile, TEXT("rb"));
+  if (_tcslen(szFile)>0) {
+    fpTerrain = _tfopen(szFile, TEXT("rb"));
+  }
   //if( hTerrain == NULL)
   if( fpTerrain == NULL)
     {
