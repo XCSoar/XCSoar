@@ -1,10 +1,8 @@
-//---------------------------------------------------------------------------
-#include <vcl.h>
-#pragma hdrstop
-USEFORM("Unit1.cpp", Form1);
+// XCSoarPC.cpp : Defines the entry point for the application.
+//
 
-//#pragma resource "XCSoar.res"
-//---------------------------------------------------------------------------
+#include "stdafx.h"
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,16 +17,17 @@ int WINAPI xcsoarWinMain(     HINSTANCE hInstance,
 }
 #endif
 
-#include <stdio.h>
 
-WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
+int APIENTRY WinMain(HINSTANCE hInstance,
+                     HINSTANCE hPrevInstance,
+                     LPSTR     lpCmdLine,
+                     int       nShowCmd)
 {
-  printf("hello\n");
+ 	// TODO: Place code here.
 
   xcsoarWinMain(hInstance, hPrevInstance, NULL, nShowCmd);
 
-  return (0);
-
+  /*
   try
   {
    Application->Initialize();
@@ -39,8 +38,11 @@ WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, in
   {
    Application->ShowException(&exception);
   }
+  */
   return 0;
+
+	return 0;
 }
 
 
-//---------------------------------------------------------------------------
+

@@ -643,6 +643,7 @@ void ShowStatus() {
     wcscat(statusmessage, gettext(TEXT("GPS disconnected")));
 	wcscat(statusmessage, TEXT("\r\n"));
   }
+#if (WINDOWSPC<1)
   if (GPS_INFO.VarioAvailable) {
     wcscat(statusmessage, gettext(TEXT("Vario connected")));
   } else {
@@ -655,6 +656,7 @@ void ShowStatus() {
     wcscat(statusmessage, gettext(TEXT("Logger OFF")));
   }
   wcscat(statusmessage, TEXT("\r\n"));
+#endif
 
   if (GPS_INFO.FLARM_Available) {
     if (GPS_INFO.FLARM_TX && GPS_INFO.FLARM_GPS) {
@@ -663,9 +665,9 @@ void ShowStatus() {
 		);
       wcscat(statusmessage, Temp);
     } else if (GPS_INFO.FLARM_TX) {
-      wcscat(statusmessage, gettext(TEXT("FLARM: No GPS fix")));
+      wcscat(statusmessage, (TEXT("FLARM: No GPS fix")));
     } else {
-      wcscat(statusmessage, gettext(TEXT("FLARM: TX error")));
+      wcscat(statusmessage, (TEXT("FLARM: TX error")));
     }
   }
   wcscat(statusmessage, TEXT("\r\n"));
@@ -1057,7 +1059,11 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.style                      = CS_HREDRAW | CS_VREDRAW;
   wc.lpfnWndProc                = (WNDPROC) WndProc;
   wc.cbClsExtra                 = 0;
+#if (WINDOWSPC>0)
+  wc.cbWndExtra = 0;
+#else
   wc.cbWndExtra                 = dc.cbWndExtra ;
+#endif
   wc.hInstance                  = hInstance;
   wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
   wc.hCursor                    = 0;
@@ -1071,7 +1077,13 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.style = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
   wc.lpfnWndProc = (WNDPROC)MapWindow::MapWndProc;
   wc.cbClsExtra = 0;
+
+#if (WINDOWSPC>0)
+  wc.cbWndExtra = 0 ;
+#else
   wc.cbWndExtra = dc.cbWndExtra ;
+#endif
+
   wc.hInstance = hInstance;
   wc.hIcon = (HICON)NULL;
   wc.hCursor = NULL;
@@ -1154,22 +1166,28 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
                                 NULL, NULL,
 				hInstance, NULL);
 
+  if (!hWndMainWindow)
+    {
+      return FALSE;
+    }
 
   SendMessage(hWndMainWindow, WM_SETICON,
 	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOARSWIFT);
   SendMessage(hWndMainWindow, WM_SETICON,
 	      (WPARAM)ICON_SMALL, (LPARAM)IDI_XCSOARSWIFT);
 
-  if (!hWndMainWindow)
-    {
-      return FALSE;
-    }
-
   hBrushSelected = (HBRUSH)CreateSolidBrush(ColorSelected);
   hBrushUnselected = (HBRUSH)CreateSolidBrush(ColorUnselected);
   hBrushButton = (HBRUSH)CreateSolidBrush(ColorButton);
 
   GetClientRect(hWndMainWindow, &rc);
+
+#if (WINDOWSPC>0)
+  rc.left = 0;
+  rc.right = SCREENWIDTH;
+  rc.top = 0;
+  rc.bottom = SCREENHEIGHT;
+#endif
 
   Units::LoadUnitBitmap(hInst);
 
@@ -1243,6 +1261,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   InfoWindowFont = CreateFontIndirect (&logfont);
 
   // next font..
+
+#if (WINDOWSPC>0)
+  FontHeight/= 1.5;
+  FontWidth/= 1.5;
+#endif
 
   memset ((char *)&logfont, 0, sizeof (logfont));
 
@@ -2439,7 +2462,9 @@ void ProcessTimer(void)
 
 			InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
 
+#if (WINDOWSPC<1)
             RestartCommPorts();
+#endif
 
 #if (EXPERIMENTAL > 0)
             // if comm port shut down, probably so did bluetooth dialup

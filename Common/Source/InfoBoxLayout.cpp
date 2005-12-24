@@ -209,6 +209,11 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   GetFromRegistry(szRegistryInfoBoxGeometry,&Temp);
   InfoBoxGeometry = Temp;
 
+#if (WINDOWSPC>0)
+  // JMW testing only
+      geometrychanged = true;
+#endif
+
   if (rc.bottom<rc.right) {
     // landscape mode
     landscape = true;

@@ -2100,7 +2100,9 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 
             break;
           default:
-            assert(0);
+#if (WINDOWSPC<1)
+            ASSERT(0);
+#endif
           break;
           }
 
@@ -2148,7 +2150,9 @@ static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
   }
 
   if (MapWaypointLabelListCount >= (sizeof(MapWaypointLabelList)/sizeof(MapWaypointLabel_t))){
-    assert(0);
+#if (WINDOWSPC<1)
+    ASSERT(0);
+#endif
     return;
   }
 
@@ -3068,7 +3072,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
   */
 
-  #if !defined(WINDOWSPC)
+  #if (WINDOWSPC<-1)
     // old version
     //  BitBlt(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
     //	   hDCTemp,rc.left,rc.top,SRCAND /*SRCAND*/);

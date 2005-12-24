@@ -234,6 +234,12 @@ DWORD Port1ReadThread (LPVOID lpvoid)
   }
   fRxThreadTerminated = TRUE;
 
+#if (WINDOWSPC>0)
+  PurgeComm(hPort1,
+            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+  CloseHandle (hPort1);
+#endif
+
   return 0;
 }
 
@@ -253,6 +259,10 @@ BOOL Port1Close (HANDLE hCommPort)
     Port1StopRxThread();
     Sleep(20);  // todo ...
 
+#if (WINDOWSPC>0)
+    hCommPort = INVALID_HANDLE_VALUE;
+    return TRUE;
+#else
     // Close the communication port.
     if (!CloseHandle (hCommPort))
     {
@@ -264,6 +274,7 @@ BOOL Port1Close (HANDLE hCommPort)
       hCommPort = INVALID_HANDLE_VALUE;
       return TRUE;
     }
+#endif
   }
 
   return FALSE;
@@ -285,17 +296,30 @@ BOOL Port1StopRxThread(void){
 
   if (hPort1 == INVALID_HANDLE_VALUE) return(FALSE);
 
+  Port1CloseThread = TRUE;
+
   // JMW added purging of port on open to prevent overflow initially
+  DWORD tm = GetTickCount()+2000l;
+
+#if (WINDOWSPC>0)
+  dwMask = 0;
+  while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0){
+    Sleep(10);
+  }
+  TerminateThread(hRead1Thread, 0);
+  CloseHandle(hRead1Thread);
+#else
   PurgeComm(hPort1,
             PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
 
-  Port1CloseThread = TRUE;
-
   //GetCommMask(hPort1, &dwMask);       // setting the comm event mask with the same value
-  SetCommMask(hPort1, dwMask);          // will cancel any WaitCommEvent!
-                                        // this is a documented CE trick to cancel the WaitCommEvent
+  SetCommMask(hPort1, dwMask);          // will cancel any
+                                        // WaitCommEvent!  this is a
+                                        // documented CE trick to
+                                        // cancel the WaitCommEvent
+#endif
 
-  DWORD tm = GetTickCount()+2000l;
+  tm = GetTickCount()+2000l;
 
   while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0){
     Sleep(10);

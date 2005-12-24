@@ -37,11 +37,11 @@ Copyright_License {
 
 #include <commdlg.h>
 #include <commctrl.h>
-#include <Aygshell.h>
+#include "aygshell.h"
 
 #include "compatibility.h"
 
-#include "dialogs.h"
+#include "Dialogs.h"
 #include "resource.h"
 #include "utils.h"
 #include "externs.h"
@@ -3633,7 +3633,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 //
 // TODO (need to discuss) Consider moving almost all this functionality into AddMessage ?
 
-extern "C" __declspec(dllexport) void DoStatusMessage(TCHAR* text, TCHAR *data) {
+void DoStatusMessage(TCHAR* text, TCHAR *data) {
   Message::Lock();
 
 	StatusMessageSTRUCT LocalMessage;

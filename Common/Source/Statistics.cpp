@@ -29,6 +29,7 @@ Copyright_License {
 }
 */
 #include "stdafx.h"
+#include <math.h>
 #include "Statistics.h"
 #include "XCSoar.h"
 #include "Externs.h"

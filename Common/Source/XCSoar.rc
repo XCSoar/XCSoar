@@ -17,7 +17,9 @@
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
 #ifdef _WIN32
+#ifndef WINDOWSPC
 LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
+#endif
 #pragma code_page(1252)
 #endif //_WIN32
 
@@ -86,7 +88,9 @@ IDI_XCSOARS             ICON    DISCARDABLE     "bitmaps\\xcsoars.ico"
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
+#ifndef WINDOWSPC
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#endif
 #pragma code_page(1252)
 #endif //_WIN32
 
@@ -135,7 +139,9 @@ BEGIN
     CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,1,1,
                     127,94
     CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",
+#ifndef WINDOWSPC
                     PBS_VERTICAL | PBS_SMOOTH |
+#endif
                     WS_BORDER,129,0,14,119
 END
 
@@ -776,7 +782,9 @@ END
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
 #ifdef _WIN32
+#ifndef WINDOWSPC
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#endif
 #pragma code_page(1252)
 #endif //_WIN32
 
@@ -843,9 +851,13 @@ FONT 8, "System"
 BEGIN
     CONTROL         "Use black airspace outline",IDC_BLACKOUTLINE,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,11,111,96,13
-    CONTROL         "List2",IDC_LISTAIRSPACE,"SysListView32",LVS_SMALLICON |
+    CONTROL         "List2",IDC_LISTAIRSPACE,"SysListView32",
+#ifndef WINDOWSPC
+		    LVS_SMALLICON |
                     LVS_SINGLESEL | LVS_NOLABELWRAP | LVS_NOCOLUMNHEADER |
-                    LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,11,20,114,87,
+                    LVS_NOSORTHEADER |
+#endif
+			WS_BORDER | WS_TABSTOP,11,20,114,87,
                     WS_EX_CLIENTEDGE
     CTEXT           "Click on item to change style",IDC_STATIC,11,10,114,8
 END
@@ -1091,7 +1103,9 @@ END
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENA)
 #ifdef _WIN32
+#ifndef WINDOWSPC
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_AUS
+#endif
 #pragma code_page(1252)
 #endif //_WIN32
 
@@ -1155,11 +1169,19 @@ BEGIN
                     WS_TABSTOP,14,23,31,10
     CONTROL         "Modes",IDC_AUDIOUI,"Button",BS_AUTOCHECKBOX |
                     WS_TABSTOP,14,36,37,10
-    CONTROL         "Slider1",IDC_AUDIOSLIDER,"msctls_trackbar32",TBS_VERT |
-                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,74,20,24,100
+    CONTROL         "Slider1",IDC_AUDIOSLIDER,"msctls_trackbar32",
+#ifndef WINDOWSPC
+	            TBS_VERT |
+                    TBS_BOTH | TBS_NOTICKS |
+#endif
+			WS_TABSTOP,74,20,24,100
     LTEXT           "Master",IDC_STATIC,71,11,23,8
-    CONTROL         "Slider2",IDC_AUDIODEADBAND,"msctls_trackbar32",TBS_VERT |
-                    TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,106,20,20,100
+    CONTROL         "Slider2",IDC_AUDIODEADBAND,"msctls_trackbar32",
+#ifndef WINDOWSPC
+			TBS_VERT |
+                    TBS_BOTH | TBS_NOTICKS |
+#endif
+			WS_TABSTOP,106,20,20,100
     LTEXT           "Deadband",IDC_STATIC,98,11,34,8
     CONTROL         "Enable",IDC_AUDIOVARIO,"Button",BS_AUTOCHECKBOX |
                     WS_TABSTOP,13,68,38,10
