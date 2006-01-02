@@ -11,7 +11,7 @@ To do for next version:
 - Option for speed command driven by dolphin speed or block maccready
 - Fix airspace visibility bug (query, warnings should apply even if
   not drawn on screen!)
-- 'Marginal final glide' is that the right text?
+- 'Marginal final glide' is that the right text? (I think so - SP)
 - Autozoom optionally on at startup (settings)
 - Disable PGRMZ if vario is already outputting altitude (or vica versa)
 - Collect different settings based on pilot identification at startup 
@@ -50,6 +50,7 @@ To do for next version:
 
 Changes from 4.5 to HEAD:
 
+- BUG 1366197: Second Airspace File now works
 - Windows PC port using Visual studio 6.
 - JG fixed bug in display of more than 500 airspace areas
 - Fixed bug in bringing up WaypointDetails from SelectedWaypoint when not
@@ -64,10 +65,10 @@ Changes from 4.5 to HEAD:
     center of screen if in pan mode.
 - Force redraw of map if not redrawn for 5 seconds (due to gps not connected)
 - Fixed display of airfield details in new dialog
-- Fix display orientation for square displays e.g. hp 6515 (untested)
+- BUG 1368752: Fix display orientation for square displays e.g. hp 6515 (untested)
 - FLARM status, FLARM aircraft display on map
 - Added FLARM TRAFFIC and FLARM NOTRAFFIC glide computer events
-- Sound restored at exit
+- BUG 1305089: Sound restored at exit
 - Added basic FLARM status support in parser and Status dialog 
 - Fixed bug in arrival altitude calculation with respect to bugs
 - Fixed bug in local time display
@@ -81,7 +82,7 @@ Changes from 4.5 to HEAD:
 - Added ETA infoboxes (as distinct from ETE)
 - Default task (Default.tsk) file may be loaded automatically at startup
    if present (through InputEvent TaskLoad on STARTUP_REAL/STARTUP_SIMULATOR)
-- Improved landing detection by checking altitude AGL to avoid false
+- BUG 1366492: Improved landing detection by checking altitude AGL to avoid false
   landings when flying in high winds 
 - Seeding random NMEA static strings from Input Events
 - Triggering events from NMEA substring matches (may be limited to certain
