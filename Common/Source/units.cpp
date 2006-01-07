@@ -95,9 +95,15 @@ bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
       Longitude = (Longitude - mm) * 60.0;
       ss = (int)(Longitude + 0.5);
       if (ss >= 60)
+			{
         mm++;
+				ss -= 60;
+			}
       if (mm >= 60)
+			{
         dd++;
+				mm -= 60;
+			}
       _stprintf(Buffer, TEXT("%c%03d°%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:
@@ -142,9 +148,15 @@ bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
       Latitude = (Latitude - mm) * 60.0;
       ss = (int)(Latitude + 0.5);
       if (ss >= 60)
+			{
         mm++;
+				ss -= 60;
+			}
       if (mm >= 60)
+			{
         dd++;
+				mm -= 60;
+			}
       _stprintf(Buffer, TEXT("%c%02d°%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:
