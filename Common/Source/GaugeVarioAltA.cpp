@@ -73,9 +73,9 @@ DrawInfo_t GaugeVario::diLabelBottom = {false};
 #define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
 #define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
 
-#define colTextGray    RGB(0xa0, 0xa0, 0xa0)
-#define colTextWhite   RGB(0xff, 0xff, 0xff)
-#define colTextBackgnd RGB(0x00, 0x00, 0x00)
+COLORREF colTextGray;
+COLORREF colText;
+COLORREF colTextBackgnd;
 
 LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -108,11 +108,26 @@ void GaugeVario::Create() {
                                                             // load vario scale
   hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEA));
 
-  SetTextColor(hdcDrawWindow, RGB(0xff,0xff,0xff));
-  SetBkColor(hdcDrawWindow, RGB(0x00,0x00,0x00));
+  if (Appearance.InverseInfoBox){
+    colText = RGB(0xff, 0xff, 0xff);
+    colTextBackgnd = RGB(0x00, 0x00, 0x00);
+    colTextGray = RGB(0xa0, 0xa0, 0xa0);
+  } else {
+    colText = RGB(0x00, 0x00, 0x00);
+    colTextBackgnd = RGB(0xff, 0xff, 0xff);
+    colTextGray = RGB(~0xa0, ~0xa0, ~0xa0);
+  }
 
-  Units::GetUnitBitmap(Units::GetUserUnitByGroup(ugVerticalSpeed),
-    &hBitmapUnit, &BitmapUnitPos, &BitmapUnitSize, UNITBITMAPINVERS | UNITBITMAPGRAY);
+  SetTextColor(hdcDrawWindow, colText);
+  SetBkColor(hdcDrawWindow, colTextBackgnd);
+
+  if (Appearance.InverseInfoBox){
+    Units::GetUnitBitmap(Units::GetUserUnitByGroup(ugVerticalSpeed),
+      &hBitmapUnit, &BitmapUnitPos, &BitmapUnitSize, UNITBITMAPINVERS | UNITBITMAPGRAY);
+  } else {
+    Units::GetUnitBitmap(Units::GetUserUnitByGroup(ugVerticalSpeed),
+      &hBitmapUnit, &BitmapUnitPos, &BitmapUnitSize, UNITBITMAPGRAY);
+  }
 
   SetWindowLong(hWndVarioWindow, GWL_WNDPROC, (LONG) GaugeVarioWndProc);
 
@@ -168,7 +183,11 @@ void GaugeVario::Render() {
     orgBottom.x = rc.right;
 
     oldBmp = (HBITMAP)SelectObject(hdcTemp, (HBITMAP)hDrawBitMap);            // copy scale bitmap to memory DC
-    BitBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom, hdcTemp, 0, 0, SRCCOPY);
+    if (Appearance.InverseInfoBox)
+      BitBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom, hdcTemp, 58, 0, SRCCOPY);
+    else
+      BitBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom, hdcTemp, 0, 0, SRCCOPY);
+      
     SelectObject(hdcTemp, oldBmp);
 
     InitDone = true;
@@ -236,14 +255,24 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
   if (i != lastI){
 
     if (lastI != -99999){
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+      if (Appearance.InverseInfoBox){
+        SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+        SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+      } else {
+        SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+        SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+      }
 
       Polygon(hdcDrawWindow, lastBit, 3);
     }
 
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+    if (Appearance.InverseInfoBox){
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+    } else {
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    }
 
     dx = -x+13; dy = 4;
     rotate(&dx, &dy, i);
@@ -334,7 +363,7 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
 
     SetBkColor(hdcDrawWindow, colTextBackgnd);
 
-    SetTextColor(hdcDrawWindow, RGB(0xff, 0xff, 0xff));
+    SetTextColor(hdcDrawWindow, colText);
 
     _stprintf(Temp, TEXT("%.1f"), Value);
 
@@ -395,17 +424,26 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
 
   if (lastVdiff != vdiff){
 
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    if (Appearance.InverseInfoBox){
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    } else {
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+    }
     SetBkMode(hdcDrawWindow, OPAQUE);
 
     // ToDo sgi optimize
     Rectangle(hdcDrawWindow, x, y+YOFFSET, x+11, y+YOFFSET+4*4);
     Rectangle(hdcDrawWindow, x, y-YOFFSET-(4*4-1), x+11, y-YOFFSET+1);
 
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
-
+    if (Appearance.InverseInfoBox){
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+    } else {
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    }
 
     if (vdiff > 0){ // to slow
 
@@ -522,7 +560,7 @@ void GaugeVario::RenderBallast(void){
     else
       _stprintf(Temp, TEXT("%.0f%%"), BALLAST*100);
 
-    SetTextColor(hdcDrawWindow, colTextWhite);              // display value
+    SetTextColor(hdcDrawWindow, colText);              // display value
     ExtTextOut(hdcDrawWindow,
       orgValue.x,
       orgValue.y,
@@ -598,7 +636,7 @@ void GaugeVario::RenderBugs(void){
     else
       _stprintf(Temp, TEXT("%.0f%%"), (1-BUGS)*100);
 
-    SetTextColor(hdcDrawWindow, colTextWhite);
+    SetTextColor(hdcDrawWindow, colText);
 
     ExtTextOut(hdcDrawWindow,
     orgValue.x,
