@@ -33,6 +33,7 @@ Copyright_License {
 #include "externs.h"
 #include "Dialogs.h"
 #include "resource.h"
+#include "options.h"
 #include "Utils.h"
 
 #include "RasterTerrain.h"
@@ -179,7 +180,6 @@ int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
   TCHAR *Zoom;
   TCHAR *pWClast = NULL;
   TCHAR *pToken;
-
 
   // ExtractParameter(TempString,ctemp,0);
   if ((pToken = strtok_r(TempString, TEXT(","), &pWClast)) == NULL)

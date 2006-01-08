@@ -14,7 +14,7 @@ typedef struct _COLORRAMP
 void ColorRampLookup(short h, BYTE *r, BYTE *g, BYTE *b,
 		     COLORRAMP* ramp_colors, int numramp);
 
-void SetTopologyBounds(RECT rcin);
+void SetTopologyBounds(RECT rcin, bool force=false);
 void ReadTopology();
 void OpenTopology();
 void CloseTopology();
@@ -24,5 +24,5 @@ void DrawMarks(HDC hdc, RECT rc);
 void MarkLocation(double lon, double lat);
 rectObj GetRectBounds(RECT rc);
 void OptimizeTerrainCache();
-
+void CloseTerrainRenderer();
 #endif

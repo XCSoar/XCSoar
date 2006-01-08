@@ -22,6 +22,9 @@ class XShape {
 
 class XShapeLabel: public XShape {
  public:
+  XShapeLabel() {
+    label= NULL;
+  }
   virtual void clear();
   char *label;
   void setlabel(const char* src);
@@ -65,7 +68,7 @@ class Topology {
   virtual void removeShape(int i);
   virtual XShape* addShape(int i);
 
-   int getQuad(double x, double y, RECT rc);
+  int getQuad(double x, double y, RECT rc);
   bool checkInside(int x, int y, int quad, RECT rc);
   int getCorner(int n, int n2);
 

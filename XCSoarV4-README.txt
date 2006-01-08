@@ -48,8 +48,12 @@ To do for next version:
   waypoints from the map in sequence
 - Add 'PanTo' waypoint function, to pan towards the selected waypoint
 
+
 Changes from 4.5 to HEAD:
 
+- Total energy height compensation for final glide
+- Fixed bug in topology bounds refresh
+- Name in task display also shows names of landpoints/airports
 - BUG 1366197: Second Airspace File now works
 - Windows PC port using Visual studio 6.
 - JG fixed bug in display of more than 500 airspace areas

@@ -64,6 +64,7 @@ static void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void EnergyHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
 static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
 static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -420,6 +421,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   maccready = MACCREADY;
 
   DistanceToNext(Basic, Calculated);
+  EnergyHeight(Basic, Calculated);
   AltitudeRequired(Basic, Calculated, maccready);
   Heading(Basic, Calculated);
 
@@ -485,6 +487,19 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   DoLogging(Basic, Calculated);
 
   return TRUE;
+}
+
+
+void EnergyHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
+  if (Basic->AirspeedAvailable) {
+    Calculated->EnergyHeight =
+      (Basic->IndicatedAirspeed*Basic->IndicatedAirspeed
+       -GlidePolar::Vbestld*GlidePolar::Vbestld)/(9.81*2.0);
+  } else {
+    Calculated->EnergyHeight = 0.0;
+  }
+
 }
 
 
@@ -1012,7 +1027,7 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccrea
 
       Calculated->NextAltitudeDifference =
         Basic->Altitude - (Calculated->NextAltitudeRequired
-                           + WayPointList[Task[ActiveWayPoint].Index].Altitude);
+                           + WayPointList[Task[ActiveWayPoint].Index].Altitude)         + Calculated->EnergyHeight;
     }
   else
     {
@@ -1517,11 +1532,11 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
         }
 
       Calculated->TaskAltitudeRequired = TaskAltitudeRequired + SAFETYALTITUDEARRIVAL;
-      Calculated->TaskAltitudeDifference = Basic->Altitude - (Calculated->TaskAltitudeRequired + WayPointList[Task[i-1].Index].Altitude);
+      Calculated->TaskAltitudeDifference = Basic->Altitude - (Calculated->TaskAltitudeRequired + WayPointList[Task[i-1].Index].Altitude) + Calculated->EnergyHeight;
 
-      if(  (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude) > 0)
+      if(  (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude  + Calculated->EnergyHeight) > 0)
         {
-          Calculated->LDFinish = Calculated->TaskDistanceToGo / (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude)  ;
+          Calculated->LDFinish = Calculated->TaskDistanceToGo / (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude + Calculated->EnergyHeight)  ;
         }
       else
         {

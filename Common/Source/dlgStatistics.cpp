@@ -277,8 +277,8 @@ void Statistics::DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata) {
     return;
   }
 
-  SelectObject(hdc, GetStockObject(BLACK_PEN));
-  SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+  SelectObject(hdc, GetStockObject(WHITE_PEN));
+  SelectObject(hdc, GetStockObject(WHITE_BRUSH));
 
   int xmin, ymin, xmax, ymax;
 

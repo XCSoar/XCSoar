@@ -41,6 +41,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "resource.h"
 #include "Utils.h"
+#include "options.h"
 
 #include <aygshell.h>
 

@@ -61,22 +61,22 @@ rectObj GetRectBounds(RECT rc) {
   xmin = x; xmax = x;
   ymin = y; ymax = y;
 
-  x = rc.left-100; y = rc.top-100;
+  x = rc.left; y = rc.top;
   MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
-  x = rc.right+100; y = rc.top-100;
+  x = rc.right; y = rc.top;
   MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
-  x = rc.left-100; y = rc.bottom+100;
+  x = rc.left; y = rc.bottom;
   MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
-  x = rc.right+100; y = rc.bottom+100;
+  x = rc.right; y = rc.bottom;
   MapWindow::GetLocationFromScreen(&x, &y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
@@ -90,15 +90,15 @@ rectObj GetRectBounds(RECT rc) {
 };
 
 
-void SetTopologyBounds(RECT rcin) {
+void SetTopologyBounds(RECT rcin, bool force) {
   static rectObj bounds;
   rectObj bounds_new;
 
   bounds_new = GetRectBounds(rcin);
 
-  double threshold = BORDERFACTOR*max(bounds_new.maxx-bounds_new.minx,
-                                      bounds_new.maxy-bounds_new.miny);
-  bool recompute = false;
+  double threshold = BORDERFACTOR*max((bounds_new.maxx-bounds_new.minx),
+                                      (bounds_new.maxy-bounds_new.miny));
+  bool recompute = force;
 
   // make bounds bigger than screen
   bounds_new.maxx += threshold;
@@ -123,53 +123,57 @@ void SetTopologyBounds(RECT rcin) {
     recompute = true;
   }
 
+  bool rta = MapWindow::RenderTimeAvailable();
+
+#ifdef GNAV
+  rta = true;
+#endif
+
   if (recompute) {
+
+    for (int z=0; z<MAXTOPOLOGY; z++) {
+      if (TopoStore[z]) {
+	if (rta && EnableTopology) {
+	  TopoStore[z]->updateCache(bounds_new);
+	} else {
+	  // didn't have time this time
+	  TopoStore[z]->triggerUpdateCache=true;
+	}
+      }
+    }
+    topo_marks->updateCache(bounds_new);
+
     bounds.maxx = bounds_new.maxx;
     bounds.maxy = bounds_new.maxy;
     bounds.minx = bounds_new.minx;
     bounds.miny = bounds_new.miny;
 
-    if (EnableTopology) {
-
-      LockTerrainDataGraphics();
-      for (int z=0; z<MAXTOPOLOGY; z++) {
-        if (TopoStore[z]) {
-          if (MapWindow::RenderTimeAvailable()) {
-            TopoStore[z]->updateCache(bounds);
-          } else {
-            // didn't have time this time
-            TopoStore[z]->triggerUpdateCache=true;
-          }
-        }
-      }
-      UnlockTerrainDataGraphics();
-
-    } else {
-      // just trigger that they need to be updated next time they are enabled or within zoom
-      for (int z=0; z<MAXTOPOLOGY; z++) {
-        if (TopoStore[z]) {
-          TopoStore[z]->triggerUpdateCache=true;
-        }
-      }
-    }
-    topo_marks->updateCache(bounds);
   } else {
-    if (topo_marks->triggerUpdateCache)
-      topo_marks->updateCache(bounds);
+    if (topo_marks->triggerUpdateCache) {
+      topo_marks->updateCache(bounds_new);
+    }
   }
 
   if (EnableTopology) {
+
     // check if any needs to have cache updates because wasnt
     // visible previously when bounds moved
-      for (int z=0; z<MAXTOPOLOGY; z++) {
-        if (TopoStore[z]) {
-          if (TopoStore[z]->triggerUpdateCache) {
-            if (MapWindow::RenderTimeAvailable()) {
-              TopoStore[z]->updateCache(bounds);
-            }
-          }
-        }
+    rta = MapWindow::RenderTimeAvailable();
+
+#ifdef GNAV
+  rta = true;
+#endif
+  rta = true;
+
+    for (int z=0; z<MAXTOPOLOGY; z++) {
+      if (TopoStore[z]) {
+	if (rta) {
+	  if (TopoStore[z]->triggerUpdateCache) {
+	    TopoStore[z]->updateCache(bounds);
+	  }
+	}
       }
+    }
   }
 }
 
@@ -381,6 +385,14 @@ public:
 
     pixelsize = MapWindow::MapScale/30.0*DTQUANT;
 
+  }
+  ~TerrainRenderer() {
+	if (hBuf) free(hBuf);
+	if (nxBuf) free(nxBuf);
+	if (nyBuf) free(nyBuf);
+	if (nzBuf) free(nzBuf);
+	if (ilBuf) free(ilBuf);
+	if (sbuf) delete sbuf;
   }
 
   int ixs, iys; // screen dimensions in coarse pixels
@@ -710,6 +722,12 @@ TerrainRenderer *trenderer = NULL;
 int CacheEfficiency = 0;
 int Performance = 0;
 
+void CloseTerrainRenderer() {
+  if (trenderer) {
+    delete trenderer;
+  }
+}
+
 void OptimizeTerrainCache()
 {
 
@@ -797,7 +815,7 @@ void OpenTopology() {
   GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
   SetRegistryString(szRegistryTopologyFile, TEXT("\0"));
 
-  if (!szFile[0]) {
+  if (_tcslen(szFile)==0) {
     UnlockTerrainDataGraphics();
     return;
   }

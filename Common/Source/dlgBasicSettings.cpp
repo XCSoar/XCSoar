@@ -138,7 +138,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnBallastData),
   DeclearCallBackEntry(OnAltitudeData),
   DeclearCallBackEntry(OnQnhData),
-  DeclearCallBackEntry(OnQnhData),
+  DeclearCallBackEntry(OnQnhData), // JMW bug? this is repeated
   DeclearCallBackEntry(OnCloseClicked),
   DeclearCallBackEntry(NULL)
 };

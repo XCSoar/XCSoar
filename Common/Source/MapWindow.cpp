@@ -48,6 +48,7 @@ Copyright_License {
 #include <tchar.h>
 
 #include "Terrain.h"
+#include "options.h"
 #include "Task.h"
 
 #include "GaugeVario.h"
@@ -1118,7 +1119,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     }
   break;
   case WM_KEYUP:
-
     if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
       if (InputEvents::processKey(wParam)) {
 	// TODO - change to debugging DoStatusMessage(TEXT("Event in default"));
@@ -1498,7 +1498,9 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
   UpdateMapScale();
   RenderMapWindow(MapRect);
+  LockTerrainDataGraphics();
   SetTopologyBounds(MapRect);
+  UnlockTerrainDataGraphics();
 
   //////
 
@@ -1516,14 +1518,14 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     // force refresh of terrain, topo and screen update if it hasn't
     // been redrawn for 5 seconds
     if (nodrawtimeout<=0) {
-      AirDataDirty=true;
-      MapDirty=true;
+      RequestAirDataDirty = true;
+      RequestMapDirty = true;
       nodrawtimeout = 50;
       forceshaperefresh=true;
+      fpsTime0 = -1;
     } else {
       forceshaperefresh=false;
     }
-
 
     if (!MapDirty && !RequestFastRefresh && !AirDataDirty) {
       Sleep(100);
@@ -1594,17 +1596,19 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     // we do caching after screen update, to minimise perceived delay
 
     // have some time, do shape file cache update if necessary
-    SetTopologyBounds(MapRect);
+    LockTerrainDataGraphics();
+    SetTopologyBounds(MapRect, forceshaperefresh);
+    UnlockTerrainDataGraphics();
 
     // have some time, do graphics terrain cache update if necessary
     if (EnableTerrain) {
-      if (RenderTimeAvailable() || forceshaperefresh) {
+      if (RenderTimeAvailable()) {
         OptimizeTerrainCache();
       }
     }
 
     // have some time, do calculations terrain cache update if necessary
-    if (RenderTimeAvailable() || forceshaperefresh) {
+    if (RenderTimeAvailable()) {
       LockTerrainDataCalculations();
       if (terrain_dem_calculations.terraincachemisses > 0){
         DWORD tm =GetTickCount();
@@ -2029,7 +2033,9 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
       // JMW
       if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
 
-        if (WaypointInTask(i)) {
+        if (WaypointInTask(i)
+	    || ((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
+	  {
 
           if (DisplayMode.AsInt)
             wsprintf(Buffer, TEXT("%s:%d%s"),WayPointList[i].Name, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);

@@ -32,6 +32,7 @@ Copyright_License {
 #include "stdafx.h"
 
 #include "Topology.h"
+#include "options.h"
 #include "externs.h"
 
 extern HFONT MapLabelFont;
@@ -603,11 +604,14 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
 
 void XShapeLabel::setlabel(const char* src) {
   if (strcmp(src,"UNK") != 0) {
-    label = _strdup(src);
+    label = (char*)malloc(strlen(src)+1);
+    strcpy(label,src);
   } else {
+    if (label) free(label);
     label= NULL;
   }
 }
+
 
 void XShapeLabel::clear() {
   XShape::clear();
@@ -626,9 +630,8 @@ void XShapeLabel::clear() {
 
 TopologyWriter::TopologyWriter(char* shpname, COLORREF thecolor):
   Topology(shpname, thecolor) {
-  char *dbfname;
+  char dbfname[100];
 
-  dbfname = (char*)malloc(strlen(shpname)+4);
   strcpy(dbfname, shpname );
   strcat(dbfname, ".dbf");
   strcpy(filename, shpname );
