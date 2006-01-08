@@ -878,7 +878,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // wcscat(XCSoar_Version, TEXT("4.5 BETA 4")); // Yet to be released
 
   // load registry backup if it exists
+#ifdef GNAV
   LoadRegistryFromFile(TEXT("\\NOR Flash\\xcsoar-registry.prf"));
+#endif
 
   // Registery (early)
   ReadRegistrySettings();
@@ -1622,7 +1624,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       // 	  processKey to handle long events - at any length
       // 	- Not sure how to do double click... (need timer call back
       // 	process unless reset etc... tricky)
-    case WM_KEYUP:
+    case WM_KEYUP: // JMW was keyup
       if (!DialogActive) {
 
         if (InputEvents::processKey(wParam)) {
@@ -1682,6 +1684,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
       CloseTerrain();
       CloseTopology();
+      CloseTerrainRenderer();
 
       if(Port1Available)
         Port1Close(hPort1);
@@ -1743,6 +1746,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       CloseProgressDialog();
 
+#if (WINDOWSPC>0) 
+#if _DEBUG
+      _CrtDumpMemoryLeaks();
+#endif
+#endif
       break;
 
     case WM_DESTROY:
@@ -2460,10 +2468,12 @@ void ProcessTimer(void)
 
             extGPSCONNECT = FALSE;
 
-			InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
+	    InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
 
 #if (WINDOWSPC<1)
+#ifndef GNAV
             RestartCommPorts();
+#endif
 #endif
 
 #if (EXPERIMENTAL > 0)

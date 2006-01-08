@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.15 2005/12/19 17:44:09 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.16 2006/01/08 09:51:16 jwharington Exp $
 
 
 Copyright_License {
@@ -41,6 +41,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "resource.h"
 #include "Utils.h"
+#include "options.h"
 
 #include <aygshell.h>
 

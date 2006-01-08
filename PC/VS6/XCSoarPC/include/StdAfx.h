@@ -195,7 +195,7 @@ typedef struct _SYSTEM_POWER_STATUS_EX2 {
 
 
 
-DWORD WINAPI    GetCurrentProcessId(void);
+//DWORD   GetCurrentProcessId(void);
 
 
 long WINAPI     MulDiv32(long, long, long);

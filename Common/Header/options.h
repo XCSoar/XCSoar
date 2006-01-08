@@ -19,5 +19,12 @@
 
 #define   FONTQUALITY           NONANTIALIASED_QUALITY
 
+#if (WINDOWSPC>0)
+// leak checking
+#define CRTDBG_MAP_ALLOC
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
         
 #endif

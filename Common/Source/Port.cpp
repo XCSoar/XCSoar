@@ -260,6 +260,7 @@ BOOL Port1Close (HANDLE hCommPort)
     Sleep(20);  // todo ...
 
 #if (WINDOWSPC>0)
+	dwError = 0;
     hCommPort = INVALID_HANDLE_VALUE;
     return TRUE;
 #else

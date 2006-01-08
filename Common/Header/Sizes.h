@@ -62,10 +62,18 @@
 //////////////
 
 // size of terrain cache
+#if (WINDOWSPC>0) 
+#define MAXTERRAINCACHE 8192
+#else
 #define MAXTERRAINCACHE 4096
+#endif
 
 // stepsize of pixel grid, should be multiple of 2
+#if (WINDOWSPC>0)
+#define DTQUANT 4
+#else
 #define DTQUANT 6
+#endif
 
 // ratio of smoothed bitmap size to pixel grid
 #define OVS 2
