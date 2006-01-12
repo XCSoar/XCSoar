@@ -90,6 +90,8 @@ typedef struct _NMEA_INFO
   BOOL FLARM_Available;
   FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
 
+  double SupplyBatteryVoltage;
+
 } NMEA_INFO;
 
 int ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO);

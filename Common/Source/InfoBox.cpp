@@ -47,6 +47,8 @@ extern HFONT  InfoWindowFont;
 extern HFONT  CDIWindowFont;
 
 //static ATOM atmWndClass;
+static redColor = RGB(0xff,0x0,0x0);
+static blueColor = RGB(0x0,0x0,0xff);
 static fgColor = RGB(0x0,0x0,0x0);
 static bkColor = RGB(0xff,0xff,0xff);
 static bkColorSel = RGB(150,0x0,0x0);
@@ -73,6 +75,7 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
 
   mColorBack = bkColor;
   mColorFore = fgColor;
+  color = 0;
 
   if (Count == 0){
     hBrushDefaultBackGround = (HBRUSH)CreateSolidBrush(bkColor);
@@ -243,6 +246,15 @@ void InfoBox::SetValue(TCHAR *Value){
   }
 }
 
+
+void InfoBox::SetColor(int value) {
+  if (Appearance.InfoBoxColors) {
+    color = value;
+  } else {
+    color = 0;
+  }
+}
+
 void InfoBox::SetComment(TCHAR *Value){
   if (_tcscmp(mComment, Value) != 0){
     _tcsncpy(mComment, Value, COMMENTSIZE);
@@ -294,7 +306,17 @@ void InfoBox::PaintValue(void){
 
   SetBkColor(mHdc, mColorValueBk);
 
-  SetTextColor(mHdc, mColorValue);
+  switch (color) {
+  case 0:
+    SetTextColor(mHdc, mColorValue);
+    break;
+  case 1:
+    SetTextColor(mHdc, redColor);
+    break;
+  case 2:
+    SetTextColor(mHdc, blueColor);
+    break;
+  }
 
   SelectObject(mHdc, *mphFontValue);
 

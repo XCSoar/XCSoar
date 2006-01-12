@@ -37,9 +37,9 @@ void CuSonde::test() {
   }
 }
 
+void CuSonde::setForecastTemperature(double val) {
+  maxGroundTemperature= val;
 
-void CuSonde::adjustForecastTemperature(double delta) {
-  maxGroundTemperature+= delta;
   int level;
   int zlevel=0;
 
@@ -58,6 +58,11 @@ void CuSonde::adjustForecastTemperature(double delta) {
     findThermalHeight(level);
     findCloudBase(level);
   }
+
+}
+
+void CuSonde::adjustForecastTemperature(double delta) {
+  setForecastTemperature(maxGroundTemperature+delta);
 }
 
 

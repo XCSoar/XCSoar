@@ -37,6 +37,7 @@ public:
   static void findCloudBase(unsigned short level);
   static void findThermalHeight(unsigned short level);
   static void adjustForecastTemperature(double delta);
+  static void setForecastTemperature(double val);
 
   static double thermalHeight; // as estimated by this level
   static double cloudBase; // as estimated by this level

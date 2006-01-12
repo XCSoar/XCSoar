@@ -22,7 +22,7 @@ class InfoBoxFormatter {
   }
 
   #if NEWINFOBOX
-  virtual TCHAR *Render(void);
+  virtual TCHAR *Render(int *color);
   #else
   virtual void Render(HWND hWnd);
   #endif
@@ -41,7 +41,7 @@ class FormatterWaypoint: public InfoBoxFormatter {
   FormatterWaypoint(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
   #if NEWINFOBOX
-  virtual TCHAR *Render(void);
+  virtual TCHAR *Render(int *color);
   #else
   virtual void Render(HWND hWnd);
   #endif
@@ -57,7 +57,7 @@ class FormatterLowWarning: public InfoBoxFormatter {
   };
 
   #if NEWINFOBOX
-  virtual TCHAR *Render(void);
+  virtual TCHAR *Render(int *color);
   #else
   virtual void Render(HWND hWnd);
   #endif
@@ -71,7 +71,7 @@ class FormatterTime: public InfoBoxFormatter {
   FormatterTime(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
   #if NEWINFOBOX
-  virtual TCHAR *Render(void);
+  virtual TCHAR *Render(int *color);
   #else
   virtual void Render(HWND hWnd);
   #endif
@@ -87,7 +87,7 @@ class FormatterDiffBearing: public InfoBoxFormatter {
   FormatterDiffBearing(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
   #if NEWINFOBOX
-  virtual TCHAR *Render(void);
+  virtual TCHAR *Render(int *color);
   #else
   virtual void Render(HWND hWnd);
   #endif
@@ -126,6 +126,7 @@ extern void HideInfoBoxes();
 extern void PopupWaypointDetails();
 extern void PopupAnalysis();
 extern void ShowStatus();
+extern void ShowStatusSystem();
 
 #define DEG_TO_RAD .0174532925199432958
 #define RAD_TO_DEG 57.2957795131
@@ -220,6 +221,12 @@ typedef struct{
   int CapitalHeight;
 }FontHeightInfo_t;
 
+typedef enum{
+  gvnsDefault=0,
+  gvnsLongNeedle,
+}GaugeVarioNeedleStyle_t;
+
+
 typedef struct{
   MapScaleAppearance_t MapScale;
   MapScale2Appearance_t MapScale2;
@@ -243,6 +250,13 @@ typedef struct{
   bool InverseInfoBox;
   bool InfoTitelCapital;
   StateMessageAlligne_t StateMessageAlligne;
+  bool GaugeVarioAvgText;
+  bool GaugeVarioMc;
+  bool GaugeVarioSpeedToFly;
+  bool GaugeVarioBallast;
+  bool GaugeVarioBugs;
+  GaugeVarioNeedleStyle_t GaugeVarioNeedleStyle;
+  bool InfoBoxColors;
 } Appearance_t;
 
 extern Appearance_t Appearance;

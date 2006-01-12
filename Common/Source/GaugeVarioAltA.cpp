@@ -150,8 +150,6 @@ void GaugeVario::Destroy() {
 extern NMEA_INFO     GPS_INFO;
 extern DERIVED_INFO  CALCULATED_INFO;
 
-//extern DERIVED_INFO DerivedDrawInfo;
-//extern NMEA_INFO DrawInfo;
 
 void GaugeVario::Render() {
 
@@ -160,7 +158,7 @@ void GaugeVario::Render() {
   static POINT orgBottom  = {-1,-1};
   static int xoffset;
   static int yoffset;
-  static int ValueHight;
+  static int ValueHeight;
   static InitDone = false;
 
   double vval;
@@ -174,12 +172,12 @@ void GaugeVario::Render() {
 
     xoffset = (rc.right-rc.left);
     yoffset = (rc.bottom-rc.top)/2;
-    ValueHight = (1 + Appearance.CDIWindowFont.CapitalHeight + 2 + Appearance.TitleWindowFont.CapitalHeight + 1);
-    orgTop.y = (ValueHight/2 + ValueHight);
+    ValueHeight = (1 + Appearance.CDIWindowFont.CapitalHeight + 2 + Appearance.TitleWindowFont.CapitalHeight + 1);
+    orgTop.y = (ValueHeight/2 + ValueHeight);
     orgTop.x = rc.right;
-    orgMiddle.y = orgTop.y + ValueHight;
+    orgMiddle.y = orgTop.y + ValueHeight;
     orgMiddle.x = rc.right;
-    orgBottom.y = orgMiddle.y + ValueHight;
+    orgBottom.y = orgMiddle.y + ValueHeight;
     orgBottom.x = rc.right;
 
     oldBmp = (HBITMAP)SelectObject(hdcTemp, (HBITMAP)hDrawBitMap);            // copy scale bitmap to memory DC
@@ -204,21 +202,34 @@ void GaugeVario::Render() {
   vval = vval*LIFTMODIFY;
   vval = min(99.9,max(-99.9,vval));
 
-  RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop, CALCULATED_INFO.Average30s*LIFTMODIFY, TEXT("Avg"));
+  if (Appearance.GaugeVarioAvgText) {
+    RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
+		CALCULATED_INFO.Average30s*LIFTMODIFY, TEXT("Avg"));
+  }
 
   RenderValue(orgMiddle.x, orgMiddle.y, &diValueMiddle, &diLabelMiddle, vval,
 	      TEXT("Gross"));
 
-  if (CALCULATED_INFO.AutoMacCready)
-    RenderValue(orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, TEXT("Auto Mc"));
-  else
-    RenderValue(orgBottom.x, orgBottom.y, &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, TEXT("Mc"));
+  if (Appearance.GaugeVarioMc) {
+    if (CALCULATED_INFO.AutoMacCready)
+      RenderValue(orgBottom.x, orgBottom.y,
+		  &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, TEXT("Auto Mc"));
+    else
+      RenderValue(orgBottom.x, orgBottom.y,
+		  &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, TEXT("Mc"));
+  }
 
-  RenderSpeedToFly(rc.right - 11, (rc.bottom-rc.top)/2);
+  if (Appearance.GaugeVarioSpeedToFly) {
+    RenderSpeedToFly(rc.right - 11, (rc.bottom-rc.top)/2);
+  }
 
-  RenderBallast();
+  if (Appearance.GaugeVarioBallast) {
+    RenderBallast();
+  }
 
-  RenderBugs();
+  if (Appearance.GaugeVarioBugs) {
+    RenderBugs();
+  }
 
   BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
 
@@ -238,6 +249,17 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
   static bool InitDone = false;
   static int degrees_per_unit;
   static int gmax;
+  int nlength0, nlength1, nwidth;
+
+  if (Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle) {
+    nlength0 = 25;
+    nlength1 = 0;
+    nwidth = 3;
+  } else {
+    nlength0 = 13;
+    nlength1 = 6;
+    nwidth = 4;
+  }
 
   POINT bit[3];
   int i;
@@ -274,15 +296,15 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
       SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
     }
 
-    dx = -x+13; dy = 4;
+    dx = -x+nlength0; dy = nwidth;
     rotate(&dx, &dy, i);
     bit[0].x = (int)(dx+x); bit[0].y = (int)(dy+y);
 
-    dx = -x+13; dy = -4;
+    dx = -x+nlength0; dy = -nwidth;
     rotate(&dx, &dy, i);
     bit[1].x = (int)(dx+x); bit[1].y = (int)(dy+y);
 
-    dx = -x+6; dy = 0;
+    dx = -x+nlength1; dy = 0;
     rotate(&dx, &dy, i);
     bit[2].x = (int)(dx+x); bit[2].y = (int)(dy+y);
 

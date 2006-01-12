@@ -175,6 +175,123 @@ class DataFieldBoolean:public DataField{
 
 };
 
+#define DFE_MAX_ENUMS 100
+
+class DataFieldEnum: public DataField {
+
+  private:
+    unsigned int nEnums;
+    unsigned int mValue;
+    TCHAR *mTextEnum[DFE_MAX_ENUMS];
+
+  public:
+    DataFieldEnum(TCHAR *EditFormat,
+		  TCHAR *DisplayFormat,
+		  int Default,
+		  void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
+      DataField(EditFormat, DisplayFormat, OnDataAccess){
+      if (Default>=0) { mValue = Default; } else {mValue = 0;}
+      nEnums = 0;
+      (mOnDataAccess)(this, daGet);
+
+    };
+      ~DataFieldEnum() {
+	for (unsigned int i=0; i<nEnums; i++) {
+	  if (mTextEnum[i]) {
+	    free(mTextEnum[i]);
+	    mTextEnum[i]=0;
+	  }
+	}
+	nEnums = 0;
+
+      }
+
+  void Inc(void);
+  void Dec(void);
+
+  void addEnumText(TCHAR *Text);
+
+  int GetAsInteger(void);
+  TCHAR *GetAsString(void);
+  TCHAR *GetAsDisplayString(void){
+    return(GetAsString());
+  };
+
+  #if defined(__BORLANDC__)
+  #pragma warn -hid
+  #endif
+  void Set(int Value);
+  #if defined(__BORLANDC__)
+  #pragma warn +hid
+  #endif
+  int SetAsInteger(int Value);
+
+};
+
+#define DFE_MAX_FILES 100
+
+
+class DataFieldFileReader: public DataField {
+
+ private:
+  unsigned int nFiles;
+  unsigned int mValue;
+  TCHAR *mTextFile[DFE_MAX_FILES];
+  TCHAR *mTextPathFile[DFE_MAX_FILES];
+
+  public:
+  DataFieldFileReader(TCHAR *EditFormat,
+		      TCHAR *DisplayFormat,
+		      void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
+      DataField(EditFormat, DisplayFormat, OnDataAccess){
+      mValue = 0;
+      mTextFile[0]= NULL;
+      mTextPathFile[0]= NULL; // first entry always exists and is blank
+      nFiles = 1;
+
+      (mOnDataAccess)(this, daGet);
+
+    };
+    ~DataFieldFileReader() {
+	for (unsigned int i=0; i<nFiles; i++) {
+	  if (mTextFile[i]) {
+	    free(mTextFile[i]);
+	    mTextFile[i]=0;
+	  }
+	  if (mTextPathFile[i]) {
+	    free(mTextPathFile[i]);
+	    mTextPathFile[i]=0;
+	  }
+	}
+	nFiles = 0;
+
+      }
+
+  void Inc(void);
+  void Dec(void);
+
+  BOOL ScanFiles(const TCHAR *pattern, const TCHAR *filter);
+  BOOL ScanDirectories(const TCHAR *pattern, const TCHAR *filter);
+  void addFile(TCHAR *fname, TCHAR *fpname);
+
+  int GetAsInteger(void);
+  TCHAR *GetAsString(void);
+  TCHAR *GetAsDisplayString(void);
+  void Lookup(TCHAR* text);
+
+  #if defined(__BORLANDC__)
+  #pragma warn -hid
+  #endif
+  void Set(int Value);
+  #if defined(__BORLANDC__)
+  #pragma warn +hid
+  #endif
+  int SetAsInteger(int Value);
+
+};
+
+
+
 #define OUTBUFFERSIZE 128
 
 class DataFieldInteger:public DataField{
@@ -727,6 +844,8 @@ class WndProperty:public WindowControl{
     bool SetFocused(bool Value, HWND FromTo);
 
     bool SetReadOnly(bool Value);
+
+    void RefreshDisplay(void);
 
     HFONT SetFont(HFONT Value);
 

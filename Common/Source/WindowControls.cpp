@@ -38,6 +38,229 @@ Copyright_License {
 #define DEFAULTBORDERPENWIDTH 1
 #define SELECTORWIDTH         4
 
+// utility functions
+
+BOOL IsDots(const TCHAR* str) {
+  if(_tcscmp(str,TEXT(".")) && _tcscmp(str,TEXT(".."))) return FALSE;
+    return TRUE;
+}
+
+int DataFieldFileReader::GetAsInteger(void){
+  return mValue;
+}
+
+int DataFieldFileReader::SetAsInteger(int Value){
+  Set(Value);
+  return mValue;
+}
+
+
+BOOL DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter) {
+    HANDLE hFind;  // file handle
+    WIN32_FIND_DATA FindFileData;
+
+    TCHAR DirPath[MAX_PATH];
+    TCHAR FileName[MAX_PATH];
+
+    if (sPath) {
+      _tcscpy(DirPath,sPath);
+    } else {
+      DirPath[0]= 0;
+    }
+    _tcscat(DirPath,TEXT("\\"));
+    _tcscat(DirPath,TEXT("*"));
+    if (sPath) {
+      _tcscpy(FileName,sPath);
+    } else {
+      FileName[0]= 0;
+    }
+    _tcscat(FileName,TEXT("\\"));
+
+    hFind = FindFirstFile(DirPath,&FindFileData); // find the first file
+    if(hFind == INVALID_HANDLE_VALUE) return FALSE;
+    _tcscpy(DirPath,FileName);
+
+    ScanFiles(FileName, filter);
+
+    bool bSearch = true;
+    while(bSearch) { // until we finds an entry
+        if(FindNextFile(hFind,&FindFileData)) {
+            if(IsDots(FindFileData.cFileName)) continue;
+            _tcscat(FileName,FindFileData.cFileName);
+            if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+
+                // we have found a directory, recurse
+	      if(!ScanDirectories(FileName,filter)) {
+		// none deeper
+	      }
+	      _tcscpy(FileName,DirPath);
+            } else {
+	      _tcscpy(FileName,DirPath);
+	    }
+        }
+        else {
+            if(GetLastError() == ERROR_NO_MORE_FILES) // no more files there
+            bSearch = false;
+            else {
+                // some error occured, close the handle and return FALSE
+                FindClose(hFind);
+                return FALSE;
+            }
+
+        }
+
+    }
+    FindClose(hFind);  // closing file handle
+
+    return TRUE;
+}
+
+
+BOOL DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter) {
+    HANDLE hFind;  // file handle
+    WIN32_FIND_DATA FindFileData;
+
+    TCHAR DirPath[MAX_PATH];
+    TCHAR FileName[MAX_PATH];
+
+    if (sPath) {
+      _tcscpy(DirPath,sPath);
+    } else {
+      DirPath[0]= 0;
+    }
+    //    _tcscat(DirPath,TEXT("\\"));
+    _tcscat(DirPath,filter);
+    if (sPath) {
+      _tcscpy(FileName,sPath);
+    } else {
+      FileName[0]= 0;
+    }
+    //    _tcscat(FileName,TEXT("\\"));
+
+    hFind = FindFirstFile(DirPath,&FindFileData); // find the first file
+    if(hFind == INVALID_HANDLE_VALUE) return FALSE;
+    _tcscpy(DirPath,FileName);
+
+
+    // found first one
+    if(!IsDots(FindFileData.cFileName)) {
+      _tcscat(FileName,FindFileData.cFileName);
+
+      if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+	// do nothing
+	_tcscpy(FileName,DirPath);
+      }
+      else {
+	// DO SOMETHING WITH FileName
+	addFile(FindFileData.cFileName, FileName);
+
+	//
+	_tcscpy(FileName,DirPath);
+      }
+    }
+
+    bool bSearch = true;
+    while(bSearch) { // until we finds an entry
+        if(FindNextFile(hFind,&FindFileData)) {
+            if(IsDots(FindFileData.cFileName)) continue;
+            _tcscat(FileName,FindFileData.cFileName);
+
+            if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+	      // do nothing
+	      _tcscpy(FileName,DirPath);
+            }
+            else {
+	      // DO SOMETHING WITH FileName
+	      addFile(FindFileData.cFileName, FileName);
+
+	      //
+	      _tcscpy(FileName,DirPath);
+            }
+        }
+        else {
+            if(GetLastError() == ERROR_NO_MORE_FILES) // no more files there
+            bSearch = false;
+            else {
+                // some error occured, close the handle and return FALSE
+                FindClose(hFind);
+                return FALSE;
+            }
+
+        }
+
+    }
+    FindClose(hFind);  // closing file handle
+
+    return TRUE;
+}
+
+void DataFieldFileReader::Lookup(TCHAR *Text) {
+  int i=0;
+  mValue = 0;
+  for (i=1; i<nFiles; i++) {
+    if (_tcscmp(Text,mTextPathFile[i])==0) {
+      mValue = i;
+    }
+  }
+}
+
+
+void DataFieldFileReader::addFile(TCHAR *Text, TCHAR *PText) {
+  if (nFiles<DFE_MAX_FILES) {
+    mTextFile[nFiles] = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
+    _tcscpy(mTextFile[nFiles], Text);
+
+    mTextPathFile[nFiles] = (TCHAR*)malloc((_tcslen(PText)+1)*sizeof(TCHAR));
+    _tcscpy(mTextPathFile[nFiles], PText);
+
+    nFiles++;
+  }
+}
+
+
+TCHAR *DataFieldFileReader::GetAsString(void){
+  if (mValue<nFiles) {
+    return(mTextFile[mValue]);
+  } else {
+    return NULL;
+  }
+}
+
+
+TCHAR *DataFieldFileReader::GetAsDisplayString(void){
+  if (mValue<nFiles) {
+    return(mTextFile[mValue]);
+  } else {
+    return NULL;
+  }
+}
+
+
+void DataFieldFileReader::Set(int Value){
+  if (Value<=nFiles) {
+    mValue = Value;
+  }
+  if (Value<0) {
+    mValue = 0;
+  }
+}
+
+void DataFieldFileReader::Inc(void){
+  if (mValue<nFiles-1) {
+    mValue++;
+  }
+}
+
+void DataFieldFileReader::Dec(void){
+  if (mValue>0) {
+    mValue--;
+  }
+}
+
+/////////
+
+
+
 void DataField::Inc(void){
   (mOnDataAccess)(this, daInc);
 }
@@ -75,6 +298,10 @@ void DataField::SetDisplayFormat(TCHAR *Value){
   _tcscpy(mDisplayFormat, Value);
 }
 
+
+//----------------------------------------------------------
+// DataField boolean
+//----------------------------------------------------------
 
 bool DataFieldBoolean::GetAsBoolean(void){
   return(mValue);
@@ -146,6 +373,59 @@ void DataFieldBoolean::Inc(void){
 void DataFieldBoolean::Dec(void){
   SetAsBoolean(!GetAsBoolean());
 }
+
+//----------------------------------------------------------
+// DataField enum
+//----------------------------------------------------------
+
+int DataFieldEnum::GetAsInteger(void){
+  return mValue;
+}
+
+void DataFieldEnum::addEnumText(TCHAR *Text) {
+  if (nEnums<DFE_MAX_ENUMS) {
+    mTextEnum[nEnums] = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
+    _tcscpy(mTextEnum[nEnums], Text);
+    nEnums++;
+  }
+}
+
+
+TCHAR *DataFieldEnum::GetAsString(void){
+  if (mValue<nEnums) {
+    return(mTextEnum[mValue]);
+  } else {
+    return NULL;
+  }
+}
+
+
+void DataFieldEnum::Set(int Value){
+  if (Value<=nEnums) {
+    mValue = Value;
+  }
+  if (Value<0) {
+    mValue = 0;
+  }
+}
+
+int DataFieldEnum::SetAsInteger(int Value){
+  Set(Value);
+  return mValue;
+}
+
+void DataFieldEnum::Inc(void){
+  if (mValue<nEnums-1) {
+    mValue++;
+  }
+}
+
+void DataFieldEnum::Dec(void){
+  if (mValue>0) {
+    mValue--;
+  }
+}
+
 
 //----------------------------------------------------------
 // DataField Integer
@@ -1913,6 +2193,15 @@ void WndProperty::Paint(HDC hDC){
 
 }
 
+
+void WndProperty::RefreshDisplay() {
+  if (GetFocused())
+    SetWindowText(mhEdit, mDataField->GetAsString());
+  else
+    SetWindowText(mhEdit, mDataField->GetAsDisplayString());
+}
+
+
 DataField *WndProperty::SetDataField(DataField *Value){
   DataField *res = mDataField;
 
@@ -1936,13 +2225,7 @@ DataField *WndProperty::SetDataField(DataField *Value){
 
     mDataField->GetData();
 
-    if (GetFocused())
-
-      SetWindowText(mhEdit, mDataField->GetAsString());
-
-    else
-
-      SetWindowText(mhEdit, mDataField->GetAsDisplayString());
+    RefreshDisplay();
 
   }
 
