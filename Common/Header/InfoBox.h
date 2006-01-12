@@ -71,6 +71,10 @@ class InfoBox{
     COLORREF mColorValueBk;
     COLORREF mColorComment;
     COLORREF mColorCommentBk;
+
+    COLORREF mColorRed;
+    COLORREF mColorBlue;
+
     HBRUSH mhBrushBk;
     HBRUSH mhBrushBkSel;
     HPEN mhPenBorder;
@@ -93,6 +97,7 @@ class InfoBox{
     POINT  mBitmapUnitPos;
     POINT  mBitmapUnitSize;
 
+    int color;
     int mBorderSize;
     int mUnitBitmapKind;
     bool mVisible;
@@ -122,6 +127,8 @@ class InfoBox{
 
     HWND GetHandle(void);
     HWND GetParent(void);
+
+    void SetColor(int Value);
 
     InfoBox(HWND Parent, int X, int Y, int Width, int Height);
     ~InfoBox(void);

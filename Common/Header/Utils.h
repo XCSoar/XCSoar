@@ -10,6 +10,58 @@
 #include "task.h"
 #include "mapwindow.h"
 
+extern TCHAR szRegistryKey[];
+extern TCHAR szRegistrySpeedUnitsValue[];
+extern TCHAR szRegistryDistanceUnitsValue[];
+extern TCHAR szRegistryAltitudeUnitsValue[];
+extern TCHAR szRegistryLiftUnitsValue[];
+extern TCHAR szRegistryDisplayUpValue[];
+extern TCHAR szRegistryDisplayText[];   
+extern TCHAR szRegistrySafetyAltitudeArrival[];
+extern TCHAR szRegistrySafetyAltitudeBreakOff[];
+extern TCHAR szRegistrySafetyAltitudeTerrain[];
+extern TCHAR szRegistrySafteySpeed[];
+extern TCHAR szRegistryFAISector[];
+extern TCHAR szRegistrySectorRadius[];
+extern TCHAR szRegistryPolarID[];
+extern TCHAR szRegistryWayPointFile[];
+extern TCHAR szRegistryAdditionalWayPointFile[];
+extern TCHAR szRegistryAirspaceFile[];
+extern TCHAR szRegistryAdditionalAirspaceFile[];
+extern TCHAR szRegistryAirfieldFile[];
+extern TCHAR szRegistryTopologyFile[];
+extern TCHAR szRegistryPolarFile[];
+extern TCHAR szRegistryTerrainFile[];
+extern TCHAR szRegistryLanguageFile[];
+extern TCHAR szRegistryStatusFile[];
+extern TCHAR szRegistryInputFile[];
+extern TCHAR szRegistryAltMode[];
+extern TCHAR szRegistryClipAlt[];
+extern TCHAR szRegistryAltMargin[];
+extern TCHAR szRegistryRegKey[];
+extern TCHAR szRegistrySnailTrail[];
+extern TCHAR szRegistryDrawTopology[];
+extern TCHAR szRegistryDrawTerrain[];
+extern TCHAR szRegistryFinalGlideTerrain[];
+extern TCHAR szRegistryStartLine[];
+extern TCHAR szRegistryStartRadius[];
+extern TCHAR szRegistryAirspaceWarning[];
+extern TCHAR szRegistryAirspaceBlackOutline[];
+extern TCHAR szRegistryWarningTime[];
+extern TCHAR szRegistryAcknowledgementTime[];
+extern TCHAR szRegistryCircleZoom[];
+extern TCHAR szRegistryWindUpdateMode[];        
+extern TCHAR szRegistryHomeWaypoint[];        
+extern TCHAR szRegistryPilotName[];        
+extern TCHAR szRegistryAircraftType[];        
+extern TCHAR szRegistryAircraftRego[];        
+extern TCHAR szRegistryNettoSpeed[];        
+extern TCHAR szRegistryCDICruise[];
+extern TCHAR szRegistryCDICircling[];
+extern TCHAR szRegistryAutoBlank[];
+extern TCHAR szRegistryVarioGauge[];
+extern TCHAR szRegistryDebounceTimeout[];
+
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, bool bVal);	// JG

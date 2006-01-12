@@ -1030,7 +1030,11 @@ void InputEvents::eventMainMenu(TCHAR *misc) {
 }
 
 void InputEvents::eventStatus(TCHAR *misc) {
-  ShowStatus();
+  if (_tcscmp(misc, TEXT("system")) == 0) {
+    ShowStatusSystem();
+  } else {
+    ShowStatus();
+  }
 }
 
 void InputEvents::eventAnalysis(TCHAR *misc) {
@@ -1472,6 +1476,7 @@ void InputEvents::eventProfileSave(TCHAR *misc) {
 
 void dlgBasicSettingsShowModal(void);
 void dlgWindSettingsShowModal(void);
+void SystemConfiguration(void);
 
 void InputEvents::eventSetup(TCHAR *misc) {
 
@@ -1482,7 +1487,7 @@ void InputEvents::eventSetup(TCHAR *misc) {
     dlgWindSettingsShowModal();
   } else
   if (_tcscmp(misc,TEXT("System"))==0){
-    // dlgSystemSettingsShowModal();
+    SystemConfiguration();
   }
 }
 

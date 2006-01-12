@@ -93,7 +93,14 @@ Appearance_t Appearance = {
   true,
   true,
   true,
-  smAlligneTopLeft
+  smAlligneTopLeft,
+  true,
+  true,
+  true,
+  true,
+  true,
+  gvnsDefault, 
+  false
 };
 #else
 
@@ -117,9 +124,16 @@ Appearance_t Appearance = {
   fgFinalGlideDefault,
   wpLandableDefault,
   true,
+  false,
   true,
-  true,
-  smAlligneCenter
+  smAlligneCenter,
+  false,
+  false,
+  false,
+  false,
+  false,
+  gvnsLongNeedle,
+  true
 };
 
 #endif
@@ -148,7 +162,14 @@ Appearance_t Appearance = {
   false,
   false,
   false,
-  smAlligneCenter
+  smAlligneCenter,
+  false,
+  false,
+  false,
+  false,
+  false,
+  gvnsLongNeedle,
+  true
 };
 #endif
 
@@ -549,13 +570,115 @@ void ShowMenu() {
 BlueDialupSMS bsms;
 #endif
 
+void SettingsEnter() {
+  MenuActive = true;
+  MapWindow::SuspendDrawingThread();
+  COMPORTCHANGED = FALSE;
+  AIRSPACEFILECHANGED = FALSE;
+  WAYPOINTFILECHANGED = FALSE;
+  TERRAINFILECHANGED = FALSE;
+  TOPOLOGYFILECHANGED = FALSE;
+  POLARFILECHANGED = FALSE;
+}
+
+void SettingsLeave() {
+  SwitchToMapWindow();
+  LockFlightData();
+  LockNavBox();
+  MenuActive = false;
+  
+  if(COMPORTCHANGED)
+    {
+      
+#ifndef _SIM_
+      // JMW disabled com opening in sim mode
+      devClose(devA());
+      devClose(devA());
+      RestartCommPorts();
+      devInit(TEXT(""));
+      
+#endif
+    }
+  
+  if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED))
+    {
+      CloseTerrain();
+      Task[0].Index = -1;  ActiveWayPoint = -1;
+      
+      OpenTerrain();
+      ReadWayPoints();
+      ReadAirfieldFile();
+      
+      if (WAYPOINTFILECHANGED) {
+	HomeWaypoint = -1;
+	if(NumberOfWayPoints) SetHome();
+      }
+    }
+  
+  if (TOPOLOGYFILECHANGED)
+    {
+      CloseTopology();
+      OpenTopology();
+      ReadTopology();
+    }
+  
+  if(AIRSPACEFILECHANGED)
+    {
+      CloseAirspace();
+      ReadAirspace();
+      
+    }
+  
+  if (AIRFIELDFILECHANGED)
+    {
+      ReadAirfieldFile();
+    }
+  
+  if (POLARFILECHANGED) {
+    CalculateNewPolarCoef();
+    GlidePolar::SetBallast();
+  }
+  
+  if (AIRFIELDFILECHANGED
+      || AIRSPACEFILECHANGED
+      || WAYPOINTFILECHANGED
+      || TERRAINFILECHANGED
+      )
+    CloseProgressDialog();
+  
+  UnlockFlightData();
+  UnlockNavBox();
+  MapWindow::ResumeDrawingThread();
+}
+
 
 #if NEWINFOBOX > 0
 void dlgStatusShowModal(void);
+void dlgStatusSystemShowModal(void);
+void dlgConfigurationShowModal(void);
+
+void SystemConfiguration(void) {
+  SettingsEnter();
+  dlgConfigurationShowModal(); 
+  SettingsLeave();
+}
+
 void ShowStatus(void){
   dlgStatusShowModal();
 }
+
+void ShowStatusSystem(void){
+  dlgStatusSystemShowModal();
+}
+
 #else
+
+void SystemConfiguration(void) {
+}
+
+void ShowStatusSystem(void){
+}
+
 void ShowStatus() {
   TCHAR statusmessage[2000];
   TCHAR Temp[1000];
@@ -1940,15 +2063,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             case IDD_SETTINGS:
 
-              COMPORTCHANGED = FALSE;
-              AIRSPACEFILECHANGED = FALSE;
-              WAYPOINTFILECHANGED = FALSE;
-              TERRAINFILECHANGED = FALSE;
-              TOPOLOGYFILECHANGED = FALSE;
-              POLARFILECHANGED = FALSE;
-
-              MenuActive = true;
-			  MapWindow::SuspendDrawingThread();
+	      SettingsEnter();
 
               ShowWindow(hWndCB,SW_SHOW);
               SetWindowPos(hWndMainWindow,HWND_TOP,
@@ -1958,78 +2073,8 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
               DialogBox(hInst, (LPCTSTR)IDD_SETTINGS, hWndMainWindow, (DLGPROC)Settings);
               ShowWindow(hWndCB,SW_HIDE);
-              SwitchToMapWindow();
 
-              LockFlightData();
-              LockNavBox();
-
-              MenuActive = false;
-
-              if(COMPORTCHANGED)
-                {
-
-#ifndef _SIM_
-                  // JMW disabled com opening in sim mode
-                  devClose(devA());
-                  devClose(devA());
-                  RestartCommPorts();
-                  devInit(TEXT(""));
-
-#endif
-
-                }
-
-              if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED))
-                {
-                  CloseTerrain();
-                  Task[0].Index = -1;  ActiveWayPoint = -1;
-
-                  OpenTerrain();
-                  ReadWayPoints();
-		  ReadAirfieldFile();
-
-		  if (WAYPOINTFILECHANGED) {
-		    HomeWaypoint = -1;
-		    if(NumberOfWayPoints) SetHome();
-		  }
-                }
-
-              if (TOPOLOGYFILECHANGED)
-                {
-                  CloseTopology();
-		  OpenTopology();
-                  ReadTopology();
-                }
-
-              if(AIRSPACEFILECHANGED)
-                {
-                  CloseAirspace();
-                  ReadAirspace();
-
-                }
-
-              if (AIRFIELDFILECHANGED)
-                {
-		  ReadAirfieldFile();
-                }
-
-              if (POLARFILECHANGED) {
-                CalculateNewPolarCoef();
-                GlidePolar::SetBallast();
-              }
-
-              if (AIRFIELDFILECHANGED
-                  || AIRSPACEFILECHANGED
-                  || WAYPOINTFILECHANGED
-                  || TERRAINFILECHANGED
-                  )
-                CloseProgressDialog();
-
-
-
-              UnlockFlightData();
-              UnlockNavBox();
-	      MapWindow::ResumeDrawingThread();
+	      SettingsLeave();
 
               SwitchToMapWindow();
 	      FullScreen();
@@ -2257,21 +2302,25 @@ void DisplayText(void)
       }
 
       Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
+      int color = 0;
       #if NEWINFOBOX>0
       if (DisplayType[i] == 14){ // Next Waypoint
         if (ActiveWayPoint != -1){
-          InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Formatter->Render());
-          InfoBoxes[i]->SetValue(Data_Options[47].Formatter->Render());
+          InfoBoxes[i]->SetValue(Data_Options[47].Formatter->Render(&color));
+          InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Formatter->Render(&color));
           InfoBoxes[i]->SetComment(WayPointList[ Task[ActiveWayPoint].Index ].Comment);
+	  InfoBoxes[i]->SetColor(color);
         }else{
           InfoBoxes[i]->SetTitle(TEXT("Next"));
           InfoBoxes[i]->SetValue(TEXT("---"));
           InfoBoxes[i]->SetComment(TEXT(""));
+	  InfoBoxes[i]->SetColor(0);
         }
       } else {
-        InfoBoxes[i]->SetValue(Data_Options[DisplayType[i]].Formatter->Render());
+        InfoBoxes[i]->SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
         // to be optimized!
         InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(Data_Options[DisplayType[i]].UnitGroup));
+	InfoBoxes[i]->SetColor(color);
       }
 
       if (DisplayType[i] == 10){ // MC Setting
@@ -2279,15 +2328,15 @@ void DisplayText(void)
           InfoBoxes[i]->SetComment(TEXT("AUTO"));
         else
           InfoBoxes[i]->SetComment(TEXT("MANUAL"));
-      }else
+      } else
       if (DisplayType[i] == 0){ // GPS Alt
         TCHAR sTmp[32];
         Units::FormatAlternateUserAltitude(GPS_INFO.Altitude, sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
         InfoBoxes[i]->SetComment(sTmp);
-      }else
+      } else
       if (DisplayType[i] == 33){ // Baro Alt
         TCHAR sTmp[32];
-        Units::FormatAlternateUserAltitude(GPS_INFO.BaroAltitudeAvailable, sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+        Units::FormatAlternateUserAltitude(GPS_INFO.BaroAltitude, sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
         InfoBoxes[i]->SetComment(sTmp);
       }
 

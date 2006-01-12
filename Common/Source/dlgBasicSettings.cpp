@@ -38,6 +38,7 @@ Copyright_License {
 #include "McReady.h"
 #include "device.h"
 
+#include "Atmosphere.h"
 
 #include "WindowControls.h"
 #include "dlgTools.h"
@@ -133,12 +134,31 @@ static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 }
 
+
+static void OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode){
+  static double lastRead = -1;
+
+  switch(Mode){
+    case DataField::daGet:
+      lastRead = CuSonde::maxGroundTemperature;
+      Sender->Set(CuSonde::maxGroundTemperature);
+    break;
+    case DataField::daPut:
+      if (fabs(lastRead-Sender->GetAsFloat()) >= 1.0){
+	CuSonde::setForecastTemperature(Sender->GetAsFloat());
+      }
+    break;
+    case DataField::daChange:
+    break;
+  }
+}
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnBugsData),
+  DeclearCallBackEntry(OnTempData),
   DeclearCallBackEntry(OnBallastData),
   DeclearCallBackEntry(OnAltitudeData),
-  DeclearCallBackEntry(OnQnhData),
-  DeclearCallBackEntry(OnQnhData), // JMW bug? this is repeated
+  DeclearCallBackEntry(OnQnhData), 
   DeclearCallBackEntry(OnCloseClicked),
   DeclearCallBackEntry(NULL)
 };
@@ -149,6 +169,7 @@ void dlgBasicSettingsShowModal(void){
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgBasicSettings.xml", hWndMainWindow);
 
   if (wf) {
+    
     wf->ShowModal();
     delete wf;
   }

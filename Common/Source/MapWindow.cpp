@@ -3512,7 +3512,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     }
 
     if (cv<0) {
-      cv /= vmin;
+      cv /= (-vmin); // JMW fixed bug here
     } else {
       cv /= vmax;
     }

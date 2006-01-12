@@ -398,6 +398,18 @@ void LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable,
         Max = StringToIntDflt(dataFieldNode.getAttribute(TEXT("Max")), INT_MAX);
         Step = StringToFloatDflt(dataFieldNode.getAttribute(TEXT("Step")), 1);
 
+        if (_tcsicmp(DataType, TEXT("enum"))==0){
+          W->SetDataField(
+			  new DataFieldEnum(EditFormat, DisplayFmt, false,
+              (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
+          );
+        }
+        if (_tcsicmp(DataType, TEXT("filereader"))==0){
+          W->SetDataField(
+			  new DataFieldFileReader(EditFormat, DisplayFmt,
+              (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
+          );
+        }
         if (_tcsicmp(DataType, TEXT("boolean"))==0){
           W->SetDataField(
             new DataFieldBoolean(EditFormat, DisplayFmt, false, TEXT("ON"), TEXT("OFF"),

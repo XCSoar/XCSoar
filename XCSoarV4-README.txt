@@ -51,6 +51,9 @@ To do for next version:
 
 Changes from 4.5 to HEAD:
 
+- Fixed bug, "1m" in baro altitude infobox for alternate user units
+- Fixed bug, snail trail was never red in sink, now working properly
+- Filter out "Railway station" as miscpop label
 - Total energy height compensation for final glide
 - Fixed bug in topology bounds refresh
 - Name in task display also shows names of landpoints/airports

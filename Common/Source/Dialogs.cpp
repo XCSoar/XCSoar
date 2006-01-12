@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.90 2005/12/24 04:37:51 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.91 2006/01/12 13:20:43 jwharington Exp $
 
 Copyright_License {
 
@@ -58,57 +58,6 @@ Copyright_License {
 
 #define USE_ARH_COLOUR_SELECTOR 1
 
-extern TCHAR szRegistryKey[];
-extern TCHAR szRegistrySpeedUnitsValue[];
-extern TCHAR szRegistryDistanceUnitsValue[];
-extern TCHAR szRegistryAltitudeUnitsValue[];
-extern TCHAR szRegistryLiftUnitsValue[];
-extern TCHAR szRegistryDisplayUpValue[];
-extern TCHAR szRegistryDisplayText[];   
-extern TCHAR szRegistrySafetyAltitudeArrival[];
-extern TCHAR szRegistrySafetyAltitudeBreakOff[];
-extern TCHAR szRegistrySafetyAltitudeTerrain[];
-extern TCHAR szRegistrySafteySpeed[];
-extern TCHAR szRegistryFAISector[];
-extern TCHAR szRegistrySectorRadius[];
-extern TCHAR szRegistryPolarID[];
-extern TCHAR szRegistryWayPointFile[];
-extern TCHAR szRegistryAdditionalWayPointFile[];
-extern TCHAR szRegistryAirspaceFile[];
-extern TCHAR szRegistryAdditionalAirspaceFile[];
-extern TCHAR szRegistryAirfieldFile[];
-extern TCHAR szRegistryTopologyFile[];
-extern TCHAR szRegistryPolarFile[];
-extern TCHAR szRegistryTerrainFile[];
-extern TCHAR szRegistryLanguageFile[];
-extern TCHAR szRegistryStatusFile[];
-extern TCHAR szRegistryInputFile[];
-extern TCHAR szRegistryAltMode[];
-extern TCHAR szRegistryClipAlt[];
-extern TCHAR szRegistryAltMargin[];
-extern TCHAR szRegistryRegKey[];
-extern TCHAR szRegistrySnailTrail[];
-extern TCHAR szRegistryDrawTopology[];
-extern TCHAR szRegistryDrawTerrain[];
-extern TCHAR szRegistryFinalGlideTerrain[];
-extern TCHAR szRegistryStartLine[];
-extern TCHAR szRegistryStartRadius[];
-extern TCHAR szRegistryAirspaceWarning[];
-extern TCHAR szRegistryAirspaceBlackOutline[];
-extern TCHAR szRegistryWarningTime[];
-extern TCHAR szRegistryAcknowledgementTime[];
-extern TCHAR szRegistryCircleZoom[];
-extern TCHAR szRegistryWindUpdateMode[];        
-extern TCHAR szRegistryHomeWaypoint[];        
-extern TCHAR szRegistryPilotName[];        
-extern TCHAR szRegistryAircraftType[];        
-extern TCHAR szRegistryAircraftRego[];        
-extern TCHAR szRegistryNettoSpeed[];        
-extern TCHAR szRegistryCDICruise[];
-extern TCHAR szRegistryCDICircling[];
-extern TCHAR szRegistryAutoBlank[];
-extern TCHAR szRegistryVarioGauge[];
-extern TCHAR szRegistryDebounceTimeout[];
 
 
 void ReadWayPoints(void);
@@ -508,17 +457,18 @@ int intround(double d) {
 }
 
 
+TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
+			TEXT("Club - ASW19"),
+			TEXT("Standard - LS8"),
+			TEXT("15M - ASW27"),
+			TEXT("18M - LS6C"),
+			TEXT("Open - ASW22"),
+			TEXT("WinPilot File")};
+
 LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   LPWINDOWPOS lpwp;
 
-  TCHAR *Polar[] = {TEXT("Vintage - Ka6"),
-                    TEXT("Club Class - ASW19"),
-                    TEXT("Standard Class - LS8"),
-                    TEXT("15M Class - ASW27"),
-                    TEXT("18M Class - LS6C"),
-                    TEXT("Open Class ASW22"),
-                    TEXT("WinPilot File")};
   int i;
   int Temp;
   int Temp1;
@@ -532,8 +482,8 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_INITDIALOG:
       ACTIVE = FALSE;
 
-      for(i=0;i<7;i++)
-        SendDlgItemMessage(hDlg,IDC_POLAR,CB_ADDSTRING,0,(LPARAM)(LPCSTR)Polar[i]);
+      for(i=0;i<NUMPOLARS;i++)
+        SendDlgItemMessage(hDlg,IDC_POLAR,CB_ADDSTRING,0,(LPARAM)(LPCSTR)PolarLabels[i]);
 
       SendDlgItemMessage(hDlg,IDC_POLAR,CB_SETCURSEL,(WPARAM) POLARID,0);
       SetDlgItemText(hDlg,IDC_UNIT_SPEED,Units::GetHorizontalSpeedName());     

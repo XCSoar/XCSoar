@@ -634,7 +634,7 @@ void InfoBoxFormatter::AssignValue(int i) {
 
 
 #if NEWINFOBOX > 0
-TCHAR *InfoBoxFormatter::Render(void) {
+TCHAR *InfoBoxFormatter::Render(int *color) {
 #else
 void InfoBoxFormatter::Render(HWND hWnd) {
 #endif
@@ -646,6 +646,7 @@ void InfoBoxFormatter::Render(HWND hWnd) {
     _stprintf(Text,TEXT("---"));
   }
   #if NEWINFOBOX > 0
+  *color = 0;
   return(Text);
   #else
   SetWindowLong(hWnd, GWL_USERDATA, 0);
@@ -655,7 +656,7 @@ void InfoBoxFormatter::Render(HWND hWnd) {
 }
 
 #if NEWINFOBOX > 0
-TCHAR *FormatterLowWarning::Render(void) {
+TCHAR *FormatterLowWarning::Render(int *color) {
 #else
 void FormatterLowWarning::Render(HWND hWnd) {
 #endif
@@ -668,6 +669,11 @@ void FormatterLowWarning::Render(HWND hWnd) {
     _stprintf(Text,TEXT("---"));
   }
   #if NEWINFOBOX > 0
+  if (Value<minimum) {
+    *color = 1; // red
+  } else {
+    *color = 0;
+  }
   return(Text);
   #else
   if (Value<minimum) {
@@ -682,7 +688,7 @@ void FormatterLowWarning::Render(HWND hWnd) {
 
 
 #if NEWINFOBOX > 0
-TCHAR *FormatterTime::Render(void) {
+TCHAR *FormatterTime::Render(int *color) {
 #else
 void FormatterTime::Render(HWND hWnd) {
 #endif
@@ -701,6 +707,7 @@ void FormatterTime::Render(HWND hWnd) {
     }
   }
   #if NEWINFOBOX > 0
+  *color = 0;
   return(Text);
   #else
   SetWindowLong(hWnd, GWL_USERDATA, 0);
@@ -709,7 +716,7 @@ void FormatterTime::Render(HWND hWnd) {
 }
 
 #if NEWINFOBOX > 0
-TCHAR *FormatterWaypoint::Render(void) {
+TCHAR *FormatterWaypoint::Render(int *color) {
 #else
 void FormatterWaypoint::Render(HWND hWnd) {
 #endif
@@ -718,6 +725,12 @@ void FormatterWaypoint::Render(HWND hWnd) {
     {
 
       #if NEWINFOBOX > 0
+      if (WayPointList[Task[ActiveWayPoint].Index].Reachable) {
+	*color = 2; // blue text
+      } else {
+	*color = 0; // black text
+      }
+
       #else
 	  
       if (WayPointList[Task[ActiveWayPoint].Index].Reachable) {
@@ -753,6 +766,7 @@ void FormatterWaypoint::Render(HWND hWnd) {
     {
       // no waypoint selected
       #if NEWINFOBOX > 0
+      *color = 0;
       #else
       SetWindowLong(hWnd, GWL_USERDATA, 0);
       #endif
@@ -768,7 +782,7 @@ void FormatterWaypoint::Render(HWND hWnd) {
 }
 
 #if NEWINFOBOX > 0
-TCHAR *FormatterDiffBearing::Render(void) {
+TCHAR *FormatterDiffBearing::Render(int *color) {
 #else
 void FormatterDiffBearing::Render(HWND hWnd) {
 #endif
@@ -797,6 +811,7 @@ void FormatterDiffBearing::Render(HWND hWnd) {
   }
 
   #if NEWINFOBOX > 0
+  *color = 0;
   return(Text);
   #else
   SetWindowText(hWnd, Text);

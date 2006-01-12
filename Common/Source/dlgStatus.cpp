@@ -41,7 +41,6 @@ Copyright_License {
 #include "dlgTools.h"
 
 extern HWND   hWndMainWindow;
-extern BOOL extGPSCONNECT;
 static WndForm *wf=NULL;
 
 static void OnCloseClicked(WindowControl * Sender){
@@ -49,7 +48,17 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 static int OnFormLButtonUp(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+  static int nignore = 0;
+#ifndef GNAV
+  if (nignore) {
+    nignore = 0;
+    wf->SetModalResult(mrOK);
+    return(0);
+  }
+  nignore++;
+#else
   wf->SetModalResult(mrOK);
+#endif
   return(0);
 }
 
@@ -67,8 +76,7 @@ void dlgStatusShowModal(void){
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-
-  wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatus.xml", hWndMainWindow);
+  wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusAircraft.xml", hWndMainWindow);
   if (!wf) return;
 
   wf->SetLButtonUpNotify(OnFormLButtonUp);
@@ -130,34 +138,7 @@ void dlgStatusShowModal(void){
     wp->SetText(TEXT("-"));
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpGPS"));
-  if (extGPSCONNECT) {
-    if (GPS_INFO.NAVWarning) {
-      wp->SetText(gettext(TEXT("fix invalid")));
-    } else {
-      wp->SetText(gettext(TEXT("3D fix")));
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpNumSat"));
-    _stprintf(Temp,TEXT("%d"),GPS_INFO.SatellitesUsed);
-    wp->SetText(Temp);
-
-  } else {
-    wp->SetText(gettext(TEXT("disconnected")));
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVario"));
-  if (GPS_INFO.VarioAvailable) {
-    wp->SetText(gettext(TEXT("connected")));
-  } else {
-    wp->SetText(gettext(TEXT("disconnected")));
-  }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLogger"));
-  if (LoggerActive) {
-    wp->SetText(gettext(TEXT("ON")));
-  } else {
-    wp->SetText(gettext(TEXT("OFF")));
-  }
+  // TODO time of flight
 
   wf->ShowModal();
 
