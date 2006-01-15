@@ -27,4 +27,18 @@
 
 
 
+	<entry>
+		<question>
+			Where is my keyboard?
+		</question>
+		<answer>
+                        It appears that in some versions of the program
+                        the keyboard button to make data entries does
+                        not appear. This can be fixed by installing the
+                        version particular to your operating system (see
+                        quesiton above).
+		</answer>
+
+	</entry>
+
 </faq>
