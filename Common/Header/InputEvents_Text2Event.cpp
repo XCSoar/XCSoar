@@ -233,3 +233,7 @@ Text2NE[128] = TEXT("UNUSED_56");
 Text2NE[129] = TEXT("UNUSED_57");
 Text2NE[130] = TEXT("COUNT");
 Text2Event_count = 41;
+// Check no array overrun
+ASSERT(130 <= NE_COUNT);
+// Check no array overrun
+ASSERT(19 <= GCE_COUNT);

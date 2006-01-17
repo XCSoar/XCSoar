@@ -27,3 +27,8 @@ while (<IN>) {
 
 print qq{Text2Event_count = $count;\n};
 
+$ne_count--;
+$gce_count--;
+print qq{// Check no array overrun\nASSERT($ne_count <= NE_COUNT);\n};
+print qq{// Check no array overrun\nASSERT($gce_count <= GCE_COUNT);\n};
+

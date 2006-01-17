@@ -222,7 +222,7 @@ enum {
   NE_UNUSED_34 =                      106,
   NE_UNUSED_35 =                      107,
   NE_UNUSED_36 =                      108,
-  NE_UNUSED_37 =                      108,
+  NE_UNUSED_37 =                      108,	// XXX Duplicate of above
   NE_UNUSED_38 =                      109,
   NE_UNUSED_39 =                      110,
   NE_UNUSED_40 =                      111,
@@ -237,13 +237,13 @@ enum {
   NE_UNUSED_49 =                      120,
   NE_UNUSED_50 =                      121,
   NE_UNUSED_51 =                      122,
-  NE_UNUSED_52 =                      122,
+  NE_UNUSED_52 =                      122,	// XXX Duplicate of above
   NE_UNUSED_53 =                      123,
   NE_UNUSED_54 =                      124,
   NE_UNUSED_55 =                      125,
   NE_UNUSED_56 =                      126,
   NE_UNUSED_57 =                      127,
-  NE_COUNT = 128, // How many we have for arrays etc
+  NE_COUNT = 132, // How many we have for arrays etc // XXX Increased arbitrarily for duplicates above
 };
 
 /*
