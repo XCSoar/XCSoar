@@ -1,0 +1,29 @@
+mode=default
+type=key
+data=APP1
+event=Null
+label=Test One
+location=1
+
+mode=default
+type=key
+data=APP2
+event=Null
+label=Test Two
+location=2
+
+mode=default
+type=key
+data=APP3
+event=Null
+label=Test Three
+location=3
+
+mode=default
+type=key
+data=APP4
+event=Null
+label=Test Four
+location=4
+
+# Always need an end...
