@@ -162,6 +162,7 @@ int DLLCache_Count = 0;
 
 // Read the data files
 void InputEvents::readFile() {
+
   // Get defaults
   if (!InitONCE) {
 #include "InputEvents_defaults.cpp"
@@ -495,6 +496,7 @@ int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next) {
   Events[Events_count].event = event;
   Events[Events_count].misc = misc;
   Events[Events_count].next = next;
+
   return Events_count;
 }
 
@@ -531,6 +533,8 @@ int InputEvents::mode2int(TCHAR *mode, bool create) {
     return mode_map_count - 1;
   }
 
+  // Should never reach this point
+  ASSERT(false);
   return -1;
 }
 
@@ -538,6 +542,8 @@ int InputEvents::mode2int(TCHAR *mode, bool create) {
 void InputEvents::setMode(TCHAR *mode) {
   static int lastmode = -1;
   int thismode;
+
+	ASSERT(mode != NULL);
 
   _tcsncpy(mode_current, mode, MAX_MODE_STRING);
 
@@ -592,8 +598,6 @@ int InputEvents::getModeID() {
 // Input is a via the user touching the label on a touch screen / mouse
 bool InputEvents::processButton(int bindex) {
   int thismode = getModeID();
-  ASSERT(thismode >= 0);	// Must always be so because mode_current should always be valid
-  if (thismode<0) thismode= 0 ; // JMW testing
 
   int i;
   // Note - reverse order - last one wins
@@ -629,8 +633,6 @@ bool InputEvents::processKey(int dWord) {
 
   // get current mode
   int mode = InputEvents::getModeID();
-  ASSERT(mode >= 0);
-  if (mode<0) mode=0; // JMW testing
 
   // Which key - can be defined locally or at default (fall back to default)
   event_id = Key2Event[mode][dWord];
@@ -662,8 +664,6 @@ bool InputEvents::processNmea(int ne_id) {
 
   // get current mode
   int mode = InputEvents::getModeID();
-  ASSERT(mode >= 0);
-  if (mode<0) mode=0; // JMW testing
 
   // Which key - can be defined locally or at default (fall back to default)
   event_id = N2Event[mode][ne_id];
@@ -693,8 +693,6 @@ int event_id = 0;
 
   // get current mode
   int mode = InputEvents::getModeID();
-  ASSERT(mode >= 0);
-  if (mode<0) mode=0; // JMW testing
 
   // Which key - can be defined locally or at default (fall back to default)
   event_id = GC2Event[mode][gce_id];
@@ -1019,10 +1017,11 @@ void InputEvents::eventDoInfoKey(TCHAR *misc) {
 
 
 void InputEvents::eventMode(TCHAR *misc) {
-  InputEvents::setMode(misc);
+	ASSERT(misc != NULL);
+	InputEvents::setMode(misc);
 
-  // trigger redraw of screen to reduce blank area under windows
-  MapWindow::RequestFastRefresh = true;
+	// trigger redraw of screen to reduce blank area under windows
+	MapWindow::RequestFastRefresh = true;
 }
 
 void InputEvents::eventMainMenu(TCHAR *misc) {
