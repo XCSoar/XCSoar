@@ -2062,7 +2062,7 @@ void ReadLanguageFile() {
 	while (
   	 (GetTextData_Size < MAXSTATUSMESSAGECACHE)
 	 && fgetws(buffer, 2048, fp)
-	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
+	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
 	) {
 		// Check valid line?
 		if ((found != 2) || !key || !value) continue;

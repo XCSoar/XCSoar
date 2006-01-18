@@ -211,12 +211,12 @@ void InputEvents::readFile() {
 	 // TODO What about \r - as in \r\n ?
 	 // TODO Note that ^# does not allow # in key - might be required (probably not)
 	 //		Better way is to separate the check for # and the scanf 
-	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
+	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
   ) {
 	  line++;
 
     // Check valid line? If not valid, assume next record (primative, but works ok!)
-	if ((buffer[0] == '\n') || (buffer[0] == NULL)) {
+	if ((buffer[0] == '\r') || (buffer[0] == '\n') || (buffer[0] == NULL)) {
 		// General checks before continue...
 		if (
 			some_data
