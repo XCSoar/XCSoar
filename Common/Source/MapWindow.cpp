@@ -41,7 +41,7 @@ Copyright_License {
 #include "externs.h"
 #include "VarioSound.h"
 #include "InputEvents.h"
-#include <assert.h>
+// #include <assert.h>
 #include <windows.h>
 #include <math.h>
 

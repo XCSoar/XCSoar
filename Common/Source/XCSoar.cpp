@@ -1146,10 +1146,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   InputEvents::showErrors();
 #endif
 
-#ifdef _SIM_
-  CuSonde::test();
-#endif
-
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0))
     {
