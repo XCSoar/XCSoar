@@ -945,6 +945,30 @@ void CalculateNewPolarCoef(void)
 }
 
 
+void RefreshTask() {
+  double lengthtotal = 0.0;
+  int i;
+  // Only need to refresh info where the removal happened
+  // as the order of other taskpoints hasn't changed
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    if (Task[i].Index != -1) {
+      RefreshTaskWaypoint(i);
+      lengthtotal += Task[i].Leg;
+    }
+  }
+  if (lengthtotal>0) {
+    for (i=0; i<MAXTASKPOINTS; i++) {
+      if (Task[i].Index != -1) {
+	RefreshTaskWaypoint(i);
+	TaskStats[i].LengthPercent = Task[i].Leg/lengthtotal;
+      }
+    }
+  }
+  CalculateTaskSectors();
+  CalculateAATTaskSectors();
+
+}
+
 void CalculateTaskSectors(void)
 {
   int i;

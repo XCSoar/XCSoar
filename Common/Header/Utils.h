@@ -81,6 +81,7 @@ double BiSector(double InBound, double OutBound);
 void SectorEndPoint(double StartLat, double StartLon, double  Radial, double Dist, double *EndLat, double *EndLon);
 void CalculateNewPolarCoef(void);
 void RefreshTaskWaypoint(int i);
+void RefreshTask(void);
 void CalculateTaskSectors(void);
 void CalculateAATTaskSectors(void);
 double FindLatitude(double Lat, double Lon, double Bearing, double Distance);

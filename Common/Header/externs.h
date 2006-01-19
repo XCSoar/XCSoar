@@ -66,6 +66,7 @@ extern unsigned int NumberOfAirspaceCircles;
 
 // task data
 extern TASK_POINT Task[];
+extern TASKSTATS_POINT TaskStats[];
 extern int ActiveWayPoint;
 extern bool TaskAborted;
 extern int SelectedWaypoint;

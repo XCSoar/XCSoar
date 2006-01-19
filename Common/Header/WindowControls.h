@@ -648,7 +648,6 @@ class WndListFrame:public WndFrame{
 
     typedef void (*OnListCallback_t)(WindowControl * Sender, ListInfo_t *ListInfo);
 
-
     WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y, int Width, int Height, void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo));
 
     virtual void Destroy(void);
@@ -656,10 +655,12 @@ class WndListFrame:public WndFrame{
     int OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
     int WndListFrame::PrepareItemDraw(void);
     void ResetList(void);
+    void SetEnterCallback(void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo));
 
   protected:
 
     OnListCallback_t mOnListCallback;
+    OnListCallback_t mOnListEnterCallback;
     ListInfo_t mListInfo;
     void Paint(HDC hDC);
 

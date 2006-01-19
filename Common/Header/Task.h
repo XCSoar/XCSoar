@@ -24,7 +24,7 @@ typedef struct _TASK_POINT
   double SectorEndLon;
   POINT	 Start;
   POINT	 End;
-  int		 AATType;
+  int	 AATType;
   double AATCircleRadius;
   double AATSectorRadius;
   double AATStartRadial;
@@ -38,6 +38,13 @@ typedef struct _TASK_POINT
 }TASK_POINT;
 
 typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
+
+typedef struct _TASKSTATS_POINT
+{
+  double LengthPercent;
+}TASKSTATS_POINT;
+
+typedef TASKSTATS_POINT TaskStats_t[MAXTASKPOINTS +1];
 
 
 void ReplaceWaypoint(int index);

@@ -2347,6 +2347,7 @@ WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y, int 
 
   mCaption[0] = '\0';
   mOnListCallback = OnListCallback;
+  mOnListEnterCallback = NULL;
   SetForeColor(GetOwner()->GetForeColor());
   SetBackColor(GetOwner()->GetBackColor());
 
@@ -2414,32 +2415,42 @@ void WndListFrame::Paint(HDC hDC){
   }
 }
 
+
+void WndListFrame::SetEnterCallback(void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo)) {
+  mOnListEnterCallback = OnListCallback;
+}
+
+
 int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lParam){
   switch (wParam){
-    case VK_DOWN:
-      mListInfo.ItemIndex++;
-      if (mListInfo.ItemIndex >= mListInfo.BottomIndex){
-        mListInfo.ItemIndex = mListInfo.BottomIndex;
-        return(1);
-      }
-
-      mListInfo.DrawIndex = mListInfo.ItemIndex;
-      mOnListCallback(this, &mListInfo);
-      mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex-mListInfo.TopIndex));
-      mClients[0]->Redraw();
-
+  case VK_RETURN:
+    if (mOnListEnterCallback) {
+      mOnListEnterCallback(this, &mListInfo);
+      return(0);
+    } else
+      return(1);
+  case VK_DOWN:
+    mListInfo.ItemIndex++;
+    if (mListInfo.ItemIndex >= mListInfo.BottomIndex){
+      mListInfo.ItemIndex = mListInfo.BottomIndex;
+      return(1);
+    }
+    mListInfo.DrawIndex = mListInfo.ItemIndex;
+    mOnListCallback(this, &mListInfo);
+    mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex-mListInfo.TopIndex));
+    mClients[0]->Redraw();
     return(0);
-    case VK_UP:
-      mListInfo.ItemIndex--;
-      if (mListInfo.ItemIndex < 0){
-        mListInfo.ItemIndex = 0;
-        return(1);
-      }
+  case VK_UP:
+    mListInfo.ItemIndex--;
+    if (mListInfo.ItemIndex < 0){
+      mListInfo.ItemIndex = 0;
+      return(1);
+    }
 
-      mListInfo.DrawIndex = mListInfo.ItemIndex;
-      mOnListCallback(this, &mListInfo);
-      mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex-mListInfo.TopIndex));
-      mClients[0]->Redraw();
+    mListInfo.DrawIndex = mListInfo.ItemIndex;
+    mOnListCallback(this, &mListInfo);
+    mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex-mListInfo.TopIndex));
+    mClients[0]->Redraw();
 
     return(0);
   }
