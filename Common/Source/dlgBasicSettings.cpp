@@ -67,11 +67,12 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
   }
 
   INHg = (int)QNH;
-  INHg = INHg/1013.2;
-  INHg = INHg*29.91;
+  INHg = INHg*29.91/1013.2;
 
 }
 
+
+// TODO: This isn't updating properly...
 static void OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
   switch(Mode){

@@ -2358,14 +2358,7 @@ void ResumeAbortTask(int set) {
 		}
 		ActiveWayPoint = OldActiveWayPoint;
 
-		for (i=0; i<MAXTASKPOINTS; i++) {
-		  if (Task[i].Index != -1) {
-			RefreshTaskWaypoint(i);
-		  }
-		}
-		CalculateTaskSectors();
-		CalculateAATTaskSectors();
-
+		RefreshTask();
 	  }
   }
 

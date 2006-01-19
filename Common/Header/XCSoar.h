@@ -127,6 +127,7 @@ extern void PopupWaypointDetails();
 extern void PopupAnalysis();
 extern void ShowStatus();
 extern void ShowStatusSystem();
+extern void RestartCommPorts();
 
 #define DEG_TO_RAD .0174532925199432958
 #define RAD_TO_DEG 57.2957795131

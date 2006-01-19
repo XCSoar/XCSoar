@@ -253,7 +253,7 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
 
   if (Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle) {
     nlength0 = 25;
-    nlength1 = 0;
+    nlength1 = 6;
     nwidth = 3;
   } else {
     nlength0 = 13;

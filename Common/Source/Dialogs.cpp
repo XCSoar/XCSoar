@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.91 2006/01/12 13:20:43 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.92 2006/01/19 16:28:07 jwharington Exp $
 
 Copyright_License {
 
@@ -1315,8 +1315,8 @@ void ReadNewTask(HWND hDlg)
         }
     }
 
-  CalculateTaskSectors();
-  CalculateAATTaskSectors();
+  RefreshTask();
+
   _stprintf(szTaskLength,TEXT("%2.1f"), DISTANCEMODIFY * TaskLength );
   SetDlgItemText(hDlg,IDC_TASKLENGTH,szTaskLength);
   if(Task[0].Index != -1)
@@ -1358,8 +1358,7 @@ void LoadNewTask(TCHAR *szFileName)
       CloseHandle(hFile);
     }
   
-  CalculateTaskSectors();
-  CalculateAATTaskSectors();
+  RefreshTask();
   
   if(Task[0].Index != -1)
     ActiveWayPoint = 0;
@@ -1661,7 +1660,7 @@ LRESULT CALLBACK TaskSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
 	  }
           SetToRegistry(szRegistryStartRadius,StartRadius);
           SetToRegistry(szRegistryStartLine,StartLine);
-          CalculateTaskSectors();
+	  RefreshTask();
 
           Radius  = GetDlgItemInt(hDlg,IDC_CYLINDERRADIUS,0,TRUE);
           SectorRadius = Radius;

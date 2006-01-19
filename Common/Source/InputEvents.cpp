@@ -1476,6 +1476,7 @@ void InputEvents::eventProfileSave(TCHAR *misc) {
 void dlgBasicSettingsShowModal(void);
 void dlgWindSettingsShowModal(void);
 void SystemConfiguration(void);
+void dlgTaskOverviewShowModal(void);
 
 void InputEvents::eventSetup(TCHAR *misc) {
 
@@ -1487,7 +1488,11 @@ void InputEvents::eventSetup(TCHAR *misc) {
   } else
   if (_tcscmp(misc,TEXT("System"))==0){
     SystemConfiguration();
+  } else
+  if (_tcscmp(misc,TEXT("Task"))==0){
+    dlgTaskOverviewShowModal();
   }
+
 }
 
 

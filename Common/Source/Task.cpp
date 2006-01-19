@@ -71,16 +71,13 @@ void InsertWaypoint(int index) {
   // to the right by one position
   for (i=MAXTASKPOINTS-1; i>ActiveWayPoint; i--) {
     Task[i].Index = Task[i-1].Index;
-    
   }
   
   // Insert new point and update task details
   Task[ActiveWayPoint].Index = index;
-  RefreshTaskWaypoint(ActiveWayPoint+1);
-  RefreshTaskWaypoint(ActiveWayPoint);
+
+  RefreshTask();
   
-  CalculateTaskSectors();
-  CalculateAATTaskSectors();
 }
 
 
@@ -109,15 +106,8 @@ void RemoveTaskPoint(int index) {
     Task[i].Index = Task[i+1].Index;
   }
   Task[MAXTASKPOINTS-1].Index = -1;
-  
-  // Only need to refresh info where the removal happened
-  // as the order of other taskpoints hasn't changed
-  if (Task[index].Index != -1) {
-    RefreshTaskWaypoint(index);
-  }
-  
-  CalculateTaskSectors();
-  CalculateAATTaskSectors();
+
+  RefreshTask();
   
 }
 
@@ -198,20 +188,7 @@ void ReplaceWaypoint(int index) {
   if (ActiveWayPoint>=0) {	
     
     Task[ActiveWayPoint].Index = index;
-    RefreshTaskWaypoint(ActiveWayPoint);
-    
-    if (ActiveWayPoint>0) {
-      RefreshTaskWaypoint(ActiveWayPoint-1);
-    }
-    
-    if (ActiveWayPoint+1<MAXTASKPOINTS) {
-      if (Task[ActiveWayPoint+1].Index != -1) {
-        RefreshTaskWaypoint(ActiveWayPoint+1);
-      }
-    }
-    
-    CalculateTaskSectors();
-    CalculateAATTaskSectors();
+    RefreshTask();    
     
   } else {
     
@@ -219,7 +196,7 @@ void ReplaceWaypoint(int index) {
     // nothing to replace
     ActiveWayPoint=0;
     Task[ActiveWayPoint].Index = index;
-    
+    RefreshTask();
   }
 }
 
