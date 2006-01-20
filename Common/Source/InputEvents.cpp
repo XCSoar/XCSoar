@@ -1059,6 +1059,7 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
     UnlockFlightData();
   } else
   if (_tcscmp(misc, TEXT("select")) == 0) {
+#if NEWINFOBOX > 0
     extern int dlgWayPointSelect(void);
     int res;
 
@@ -1066,6 +1067,9 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
       SelectedWaypoint = res;
       PopupWaypointDetails();
     };
+#else
+	0;
+#endif
 
   }
 }
@@ -1473,24 +1477,38 @@ void InputEvents::eventProfileSave(TCHAR *misc) {
 }
 
 
+void SystemConfiguration(void);
+#if NEWINFOBOX > 0
 void dlgBasicSettingsShowModal(void);
 void dlgWindSettingsShowModal(void);
-void SystemConfiguration(void);
 void dlgTaskOverviewShowModal(void);
+#endif
 
 void InputEvents::eventSetup(TCHAR *misc) {
 
   if (_tcscmp(misc,TEXT("Basic"))==0){
+#if NEWINFOBOX > 0
     dlgBasicSettingsShowModal();
+#else
+	0;
+#endif
   } else
   if (_tcscmp(misc,TEXT("Wind"))==0){
+#if NEWINFOBOX > 0
     dlgWindSettingsShowModal();
+#else
+	0;
+#endif
   } else
   if (_tcscmp(misc,TEXT("System"))==0){
     SystemConfiguration();
   } else
   if (_tcscmp(misc,TEXT("Task"))==0){
+#if NEWINFOBOX > 0
     dlgTaskOverviewShowModal();
+#else
+	0;
+#endif;
   }
 
 }

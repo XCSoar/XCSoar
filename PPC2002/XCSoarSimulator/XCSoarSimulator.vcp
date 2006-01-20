@@ -151,7 +151,7 @@ RSC=rc.exe
 # ADD RSC /l 0x409 /i "..\..\Common\Header" /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "_X86_" /d "x86" /d "_i386_" /r
 CPP=cl.exe
 # ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "_i386_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "i_386_" /D "UNICODE" /D "_UNICODE" /D "_X86_" /D "x86" /Yu"stdafx.h" /Gs8192 /GF /c
-# ADD CPP /nologo /W3 /Zi /Od /I "..\..\Common\Header" /D "DEBUG" /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "_SIM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "NOCLEARTYPE" /FR /YX /Gs8192 /GF /c
+# ADD CPP /nologo /W3 /Zi /Od /I "..\..\Common\Header" /D "DEBUG" /D "_i386_" /D "i_386_" /D "_X86_" /D "x86" /D "_SIM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "NOCLEARTYPE" /D NEWINFOBOX=0 /FR /YX /Gs8192 /GF /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
@@ -1164,1057 +1164,6 @@ DEP_CPP_DIALO=\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DIALO=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\dlgBasicSettings.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-DEP_CPP_DLGBA=\
-	"..\..\Common\Header\Atmosphere.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\device.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGBA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-DEP_CPP_DLGBA=\
-	"..\..\Common\Header\Atmosphere.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\device.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGBA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
-
-DEP_CPP_DLGBA=\
-	"..\..\Common\Header\Atmosphere.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\device.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGBA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
-
-DEP_CPP_DLGBA=\
-	"..\..\Common\Header\Atmosphere.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\device.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGBA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\dlgConfiguration.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-DEP_CPP_DLGCO=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGCO=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-DEP_CPP_DLGCO=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGCO=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
-
-DEP_CPP_DLGCO=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGCO=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
-
-DEP_CPP_DLGCO=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGCO=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\dlgStatistics.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-DEP_CPP_DLGST=\
-	"..\..\Common\Header\Atmosphere.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\InfoBoxLayout.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\vector.h"\
-	"..\..\Common\Header\windanalyser.h"\
-	"..\..\Common\Header\windmeasurementlist.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\windstore.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGST=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-DEP_CPP_DLGST=\
-	"..\..\Common\Header\Atmosphere.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\InfoBoxLayout.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\vector.h"\
-	"..\..\Common\Header\windanalyser.h"\
-	"..\..\Common\Header\windmeasurementlist.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\windstore.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGST=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
-
-DEP_CPP_DLGST=\
-	"..\..\Common\Header\Atmosphere.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\InfoBoxLayout.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\vector.h"\
-	"..\..\Common\Header\windanalyser.h"\
-	"..\..\Common\Header\windmeasurementlist.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\windstore.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGST=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
-
-DEP_CPP_DLGST=\
-	"..\..\Common\Header\Atmosphere.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\InfoBoxLayout.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\vector.h"\
-	"..\..\Common\Header\windanalyser.h"\
-	"..\..\Common\Header\windmeasurementlist.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\windstore.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGST=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\dlgStatus.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-DEP_CPP_DLGSTA=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\Waypointparser.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGSTA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-DEP_CPP_DLGSTA=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\Waypointparser.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGSTA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
-
-DEP_CPP_DLGSTA=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\Waypointparser.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGSTA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
-
-DEP_CPP_DLGSTA=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\Waypointparser.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGSTA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\dlgStatusSystem.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-DEP_CPP_DLGSTAT=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\Waypointparser.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGSTAT=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-DEP_CPP_DLGSTAT=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\Waypointparser.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGSTAT=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
-
-DEP_CPP_DLGSTAT=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\Waypointparser.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGSTAT=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
-
-DEP_CPP_DLGSTAT=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\Waypointparser.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGSTAT=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\dlgTools.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-DEP_CPP_DLGTO=\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	"..\..\Common\Header\xmlParser.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-DEP_CPP_DLGTO=\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	"..\..\Common\Header\xmlParser.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
-
-DEP_CPP_DLGTO=\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	"..\..\Common\Header\xmlParser.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
-
-DEP_CPP_DLGTO=\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	"..\..\Common\Header\xmlParser.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\dlgWayPointDetails.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-DEP_CPP_DLGWA=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\imgdecmp.h"\
-	"..\..\Common\Header\imgrendr.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VOIMAGE.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGWA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-DEP_CPP_DLGWA=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\imgdecmp.h"\
-	"..\..\Common\Header\imgrendr.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VOIMAGE.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGWA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
-
-DEP_CPP_DLGWA=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\imgdecmp.h"\
-	"..\..\Common\Header\imgrendr.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VOIMAGE.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGWA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
-
-DEP_CPP_DLGWA=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\imgdecmp.h"\
-	"..\..\Common\Header\imgrendr.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VOIMAGE.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGWA=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\dlgWayPointSelect.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-DEP_CPP_DLGWAY=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGWAY=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-DEP_CPP_DLGWAY=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGWAY=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
-
-DEP_CPP_DLGWAY=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGWAY=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
-
-DEP_CPP_DLGWAY=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	
-NODEP_CPP_DLGWAY=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\dlgWindSettings.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-DEP_CPP_DLGWI=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\device.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWI=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-DEP_CPP_DLGWI=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\device.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWI=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
-
-DEP_CPP_DLGWI=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\device.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWI=\
-	"..\..\Common\Header\BlueSMS.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
-
-DEP_CPP_DLGWI=\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\device.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\RasterTerrain.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWI=\
 	"..\..\Common\Header\BlueSMS.h"\
 	
 
@@ -3887,6 +2836,137 @@ NODEP_CPP_RSCAL=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Source\Statistics.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+DEP_CPP_STATI=\
+	"..\..\Common\Header\Atmosphere.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\vector.h"\
+	"..\..\Common\Header\windanalyser.h"\
+	"..\..\Common\Header\windmeasurementlist.h"\
+	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_STATI=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+DEP_CPP_STATI=\
+	"..\..\Common\Header\Atmosphere.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\vector.h"\
+	"..\..\Common\Header\windanalyser.h"\
+	"..\..\Common\Header\windmeasurementlist.h"\
+	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_STATI=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
+
+DEP_CPP_STATI=\
+	"..\..\Common\Header\Atmosphere.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\vector.h"\
+	"..\..\Common\Header\windanalyser.h"\
+	"..\..\Common\Header\windmeasurementlist.h"\
+	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_STATI=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
+
+DEP_CPP_STATI=\
+	"..\..\Common\Header\Atmosphere.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\vector.h"\
+	"..\..\Common\Header\windanalyser.h"\
+	"..\..\Common\Header\windmeasurementlist.h"\
+	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_STATI=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
@@ -4871,69 +3951,6 @@ DEP_CPP_WINDM=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\WindowControls.cpp
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-DEP_CPP_WINDO=\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-DEP_CPP_WINDO=\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
-
-DEP_CPP_WINDO=\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
-
-DEP_CPP_WINDO=\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
 	
 
 !ENDIF 

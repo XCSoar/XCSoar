@@ -1112,12 +1112,14 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     }
     break;
     
+#if NEWINFOBOX > 0
   case WM_KEYDOWN:
     void WindowControlTest(void);
     if (wParam == 191){
       WindowControlTest();
     }
   break;
+#endif
   case WM_KEYUP:
     if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
       if (InputEvents::processKey(wParam)) {
