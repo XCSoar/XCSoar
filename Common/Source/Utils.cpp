@@ -2220,7 +2220,7 @@ void LoadRegistryFromFile(TCHAR *szFile)
 {
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
-    fp = _tfopen(szFile, TEXT("rt"));
+    fp = _tfopen(szFile, TEXT("r"));
   if(fp == NULL) {
     // error
     return;
@@ -2228,39 +2228,20 @@ void LoadRegistryFromFile(TCHAR *szFile)
   TCHAR inval[nMaxValueValueSize];
   TCHAR name[nMaxValueValueSize];
   TCHAR value[nMaxValueValueSize];
-  int len, i, j;
-  while (ReadStringX(fp, nMaxValueValueSize, inval)) {
-    len = _tcslen(inval);
-    // scan for delimiter
-    i=0;
-    while ((i< len)&&(inval[i]!=_T('='))) {
-      i++;
-    }
-    _tcsncpy(name, inval, i); name[i]=0;
-    i++; // skip to next char
-    if (inval[i]==_T('\"')) {
-      // must be text..
-      i++;
-      j= i;
-      while ((j< len)&&(inval[j]!=_T('\"'))) {
-	j++;
-      }
-      if (j-1<i) { j++; } // technically this means termination not found
-      _tcsncpy(value, inval+i, j-i);  value[j-i]= 0;
-      if ((value[0]==_T('\"')) && (value[1]=0)) {
-	value[0]=0;
-      }
+  int j;
 
-      SetRegistryString(name, value);
-
-    } else {
-      // must be a number
-      j= _wtoi(inval+i);
-
-      SetToRegistry(name, j);
-
-    }
+  while (_fgetts(inval, nMaxValueValueSize, fp)) {
+	  if (_stscanf(inval, TEXT("%[^#=]=\"%[^\r\n\"]\"[\r\n]"), name, value) == 2) {
+		SetRegistryString(name, value);
+	  } else if (_stscanf(inval, TEXT("%[^#=]=%d[\r\n]"), name, &j) == 2) {
+		SetToRegistry(name, j);
+	  } else if (_stscanf(inval, TEXT("%[^#=]=\"\"[\r\n]"), name) == 1) {
+		SetRegistryString(name, TEXT(""));
+	  } else {
+		ASSERT(false);	// Invalid line reached
+	  }
   }
+
   fclose(fp);
 }
 
@@ -2281,7 +2262,7 @@ void SaveRegistryToFile(TCHAR *szFile)
 
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
-    fp = _tfopen(szFile, TEXT("wt"));
+    fp = _tfopen(szFile, TEXT("w"));
   if(fp == NULL) {
     // error
     return;
@@ -2312,6 +2293,7 @@ void SaveRegistryToFile(TCHAR *szFile)
     if (nType==4) { // data
       _stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
     }
+	// XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
     if (nType==1) { // text
       pValue[nValueSize]= 0; // null terminate, just in case
       _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
@@ -2325,7 +2307,6 @@ void SaveRegistryToFile(TCHAR *szFile)
   fclose(fp);
 
   ::RegCloseKey(hkFrom);
-
 }
 
 TCHAR* StringMallocParse(TCHAR* old_string) {
