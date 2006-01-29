@@ -102,7 +102,7 @@
 ///////////////////////
 
 #define NUMAIRSPACECOLORS 16
-#define NUMAIRSPACEBRUSHES 4
+#define NUMAIRSPACEBRUSHES 5
 
 ////////////////////////
 

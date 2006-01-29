@@ -505,6 +505,42 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 }
 
 
+void Statistics::RenderTask(HDC hdc, RECT rc)
+{
+  int i;
+
+  ResetScale();
+
+  double lat1 = 0;
+  double lon1 = 0;
+  double lat2 = 0;
+  double lon2 = 0;
+
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    if (Task[i].Index != -1) {
+      lat1 = WayPointList[Task[i].Index].Latitude;
+      lon1 = WayPointList[Task[i].Index].Longitude;
+      ScaleYFromValue(rc, lat1);
+      ScaleXFromValue(rc, lon1);
+    }
+  }
+
+  for (i=1; i<MAXTASKPOINTS; i++) {
+    if (Task[i].Index != -1) {
+      lat1 = WayPointList[Task[i-1].Index].Latitude;
+      lon1 = WayPointList[Task[i-1].Index].Longitude;
+      lat2 = WayPointList[Task[i].Index].Latitude;
+      lon2 = WayPointList[Task[i].Index].Longitude;
+
+      DrawLine(hdc, rc,
+	       lon1, lat1, lon2, lat2,
+	       STYLE_BLUETHIN);
+    }
+  }
+
+}
+
+
 void Statistics::RenderTemperature(HDC hdc, RECT rc)
 {
   ResetScale();
@@ -661,7 +697,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
 }
 
-static int page;
+static int page=0;
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wGrid=NULL;
 static WndOwnerDrawFrame *wInfo=NULL;
@@ -694,6 +730,9 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
   }
   if (page==4) {
     Statistics::RenderTemperature(hDC, rcgfx);
+  }
+  if (page==5) {
+    Statistics::RenderTask(hDC, rcgfx);
   }
 
   SelectObject(hDC, hfOld);
@@ -771,7 +810,15 @@ static void Update(void){
 	      gettext(TEXT("Cloud base")),
 	      CuSonde::cloudBase*ALTITUDEMODIFY);
     wInfo->SetCaption(sTmp);
-
+    break;
+  case 5:
+    _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Task"));
+    wf->SetCaption(sTmp);
+    
+    _stprintf(sTmp, TEXT("%s\r\n"),
+	      gettext(TEXT("temp")));
+    wInfo->SetCaption(sTmp);
+    break;
   }
 
   if (wGrid != NULL)
@@ -781,12 +828,13 @@ static void Update(void){
 
 static void NextPage(int Step){
   page += Step;
-  if (page > 4)
+  if (page > 5)
     page = 0;
   if (page < 0)
-    page = 4;
+    page = 5;
   Update();
 }
+
 
 static void OnNextClicked(WindowControl * Sender){
   NextPage(+1);
@@ -913,7 +961,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         page++;
         
         // cycle around to start page
-        if (page==5) {
+        if (page==6) {
           page=0;
         }
       }
@@ -1010,6 +1058,16 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
         Statistics::RenderTemperature(hdcScreen, rcgfx);
+
+      }
+      if (page==5) {
+        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Task")));
+	
+        _stprintf(Temp, TEXT("%s\r\n"),
+		  gettext(TEXT("task")));
+        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
+
+        Statistics::RenderTask(hdcScreen, rcgfx);
 
       }
 

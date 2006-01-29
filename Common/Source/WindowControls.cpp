@@ -204,6 +204,12 @@ void DataFieldFileReader::Lookup(TCHAR *Text) {
   }
 }
 
+TCHAR* DataFieldFileReader::GetPathFile(void) {
+  if ((mValue<=nFiles)&&(mValue)) {
+    return mTextPathFile[mValue];
+  }
+  return TEXT("\0");
+}
 
 void DataFieldFileReader::addFile(TCHAR *Text, TCHAR *PText) {
   if (nFiles<DFE_MAX_FILES) {

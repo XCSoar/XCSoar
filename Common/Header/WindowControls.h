@@ -278,6 +278,7 @@ class DataFieldFileReader: public DataField {
   TCHAR *GetAsString(void);
   TCHAR *GetAsDisplayString(void);
   void Lookup(TCHAR* text);
+  TCHAR* GetPathFile(void);
 
   #if defined(__BORLANDC__)
   #pragma warn -hid

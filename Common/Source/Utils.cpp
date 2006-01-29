@@ -163,6 +163,16 @@ TCHAR szRegistryVarioGauge[]= TEXT("VarioGauge");
 
 TCHAR szRegistryDebounceTimeout[]= TEXT("DebounceTimeout");
 
+TCHAR szRegistryAppIndFinalGlide[] = TEXT("AppIndFinalGlide");
+TCHAR szRegistryAppIndLandable[] = TEXT("AppIndLandable");
+TCHAR szRegistryAppInverseInfoBox[] = TEXT("AppInverseInfoBox");
+TCHAR szRegistryAppGaugeVarioSpeedToFly[] = TEXT("AppGaugeVarioSpeedToFly");
+TCHAR szRegistryAppGaugeVarioAvgText[] = TEXT("AppGaugeVarioAvgText");
+TCHAR szRegistryAppGaugeVarioMc[] = TEXT("AppGaugeVarioMc");
+TCHAR szRegistryAppGaugeVarioBugs[] = TEXT("AppGaugeVarioBugs");
+TCHAR szRegistryAppGaugeVarioBallast[] = TEXT("AppGaugeVarioBallast");
+
+
 static double SINETABLE[910];
 static float FSINETABLE[910];
 
@@ -440,6 +450,39 @@ void ReadRegistrySettings(void)
     SetToRegistry(szRegistryAccelerometerZero,Temp);
   }
 
+  // new appearance variables
+
+  Temp = Appearance.IndFinalGlide;
+  GetFromRegistry(szRegistryAppIndFinalGlide, &Temp);
+  Appearance.IndFinalGlide = (IndFinalGlide_t)Temp;
+
+  Temp = Appearance.IndLandable;
+  GetFromRegistry(szRegistryAppIndLandable, &Temp);
+  Appearance.IndLandable = (IndLandable_t)Temp;
+
+  Temp = Appearance.InverseInfoBox;
+  GetFromRegistry(szRegistryAppInverseInfoBox, &Temp);
+  Appearance.InverseInfoBox = Temp;
+
+  Temp = Appearance.GaugeVarioSpeedToFly;
+  GetFromRegistry(szRegistryAppGaugeVarioSpeedToFly, &Temp);
+  Appearance.GaugeVarioSpeedToFly = Temp;
+
+  Temp = Appearance.GaugeVarioAvgText;
+  GetFromRegistry(szRegistryAppGaugeVarioAvgText, &Temp);
+  Appearance.GaugeVarioAvgText = Temp;
+
+  Temp = Appearance.GaugeVarioMc;
+  GetFromRegistry(szRegistryAppGaugeVarioMc, &Temp);
+  Appearance.GaugeVarioMc = Temp;
+
+  Temp = Appearance.GaugeVarioBugs;
+  GetFromRegistry(szRegistryAppGaugeVarioBugs, &Temp);
+  Appearance.GaugeVarioBugs = Temp;
+
+  Temp = Appearance.GaugeVarioBallast;
+  GetFromRegistry(szRegistryAppGaugeVarioBallast, &Temp);
+  Appearance.GaugeVarioBallast = Temp;
 
 }
 
@@ -2296,6 +2339,7 @@ void SaveRegistryToFile(TCHAR *szFile)
 	// XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
     if (nType==1) { // text
       pValue[nValueSize]= 0; // null terminate, just in case
+      pValue[nValueSize+1]= 0; // null terminate, just in case
       _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
     }
 
