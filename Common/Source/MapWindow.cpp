@@ -890,6 +890,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hAirspaceBitmap[1]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE1));
     hAirspaceBitmap[2]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE2));
     hAirspaceBitmap[3]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE3));
+    hAirspaceBitmap[4]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE4));
 
     for (i=0; i<NUMAIRSPACEBRUSHES; i++) {
       hAirspaceBrushes[i] =
@@ -2205,17 +2206,6 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
 
   if (!WayPointList) return;
 
-  for(i=0;i<MAXTASKPOINTS-1;i++)
-  {
-    if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
-    {
-      DrawDashLine(hdc, 3,
-        WayPointList[Task[i].Index].Screen,
-        WayPointList[Task[i+1].Index].Screen,
-        RGB(0,255,0));
-    }
-  }
-
   if((Task[0].Index >=0) &&  (Task[1].Index >=0))
   {
     if(StartLine)
@@ -2283,6 +2273,17 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
           Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc);
         }
       }
+    }
+  }
+
+  for(i=0;i<MAXTASKPOINTS-1;i++)
+  {
+    if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
+    {
+      DrawDashLine(hdc, 3,
+        WayPointList[Task[i].Index].Screen,
+        WayPointList[Task[i+1].Index].Screen,
+        RGB(0,255,0));
     }
   }
 

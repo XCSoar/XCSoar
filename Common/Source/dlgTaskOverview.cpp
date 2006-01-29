@@ -194,8 +194,25 @@ static void OverviewRefreshTask(void) {
 }
 
 
+static void ReadValues(void) {
+  WndProperty* wp;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
+  if (wp) {
+    AATTaskLength = wp->GetDataField()->GetAsInteger();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
+  if (wp) {
+    AATEnabled = wp->GetDataField()->GetAsInteger();
+  }
+
+}
 
 static void OnTaskListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo) {
+
+  ReadValues();
+
   ItemIndex = ListInfo->ItemIndex;
   if ((ItemIndex>= UpLimit) || (UpLimit==1)) {
     ItemIndex= UpLimit;
@@ -230,11 +247,12 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  ItemIndex = -1; // to stop FormDown bringing up task details
+
 }
 
 static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  ItemIndex = -1; // to stop FormDown bringing up task details
+  ReadValues();
+  RefreshTask();
 }
 
 static CallBackTableEntry_t CallBackTable[]={
@@ -282,7 +300,8 @@ void dlgTaskOverviewShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
   if (wp) {
-    wp->GetDataField()->Set(AATEnabled);
+    bool aw = AATEnabled;
+    wp->GetDataField()->Set(aw);
     wp->RefreshDisplay();
   }
 
@@ -291,16 +310,8 @@ void dlgTaskOverviewShowModal(void){
   wf->ShowModal();
 
   // now retrieve back the properties...
-  wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
-  if (wp) {
-    AATTaskLength = wp->GetDataField()->GetAsInteger();
-  }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
-  if (wp) {
-    AATEnabled = wp->GetDataField()->GetAsInteger();
-  }
-
+  ReadValues();
   RefreshTask();
 
   delete wf;

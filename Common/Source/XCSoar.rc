@@ -142,7 +142,7 @@ BEGIN
 #ifndef WINDOWSPC
                     PBS_VERTICAL | PBS_SMOOTH |
 #endif
-                    WS_BORDER,129,0,14,119
+			 WS_BORDER,129,0,14,119
 END
 
 IDD_SELECT DIALOG DISCARDABLE  0, 0, 140, 123
@@ -755,6 +755,7 @@ IDB_DLGBUTTONLEFT16     BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonLeft16x16.
 IDB_DLGBUTTONLEFT32     BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonLeft32x32.bmp"
 IDB_DLGBUTTONRIGHT16    BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonRight16x16.bmp"
 IDB_DLGBUTTONRIGHT32    BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonRight32x32.bmp"
+IDB_AIRSPACE4           BITMAP  DISCARDABLE     "Bitmaps\\airspace4.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -857,7 +858,7 @@ BEGIN
                     LVS_SINGLESEL | LVS_NOLABELWRAP | LVS_NOCOLUMNHEADER |
                     LVS_NOSORTHEADER |
 #endif
-			WS_BORDER | WS_TABSTOP,11,20,114,87,
+		    WS_BORDER | WS_TABSTOP,11,20,114,87,
                     WS_EX_CLIENTEDGE
     CTEXT           "Click on item to change style",IDC_STATIC,11,10,114,8
 END
@@ -1171,17 +1172,17 @@ BEGIN
                     WS_TABSTOP,14,36,37,10
     CONTROL         "Slider1",IDC_AUDIOSLIDER,"msctls_trackbar32",
 #ifndef WINDOWSPC
-	            TBS_VERT |
+		    TBS_VERT |
                     TBS_BOTH | TBS_NOTICKS |
 #endif
-			WS_TABSTOP,74,20,24,100
+		    WS_TABSTOP,74,20,24,100
     LTEXT           "Master",IDC_STATIC,71,11,23,8
     CONTROL         "Slider2",IDC_AUDIODEADBAND,"msctls_trackbar32",
 #ifndef WINDOWSPC
-			TBS_VERT |
+		    TBS_VERT |
                     TBS_BOTH | TBS_NOTICKS |
 #endif
-			WS_TABSTOP,106,20,20,100
+		    WS_TABSTOP,106,20,20,100
     LTEXT           "Deadband",IDC_STATIC,98,11,34,8
     CONTROL         "Enable",IDC_AUDIOVARIO,"Button",BS_AUTOCHECKBOX |
                     WS_TABSTOP,13,68,38,10

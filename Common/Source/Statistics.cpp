@@ -857,3 +857,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
   return FALSE;
 }
 
+
+void Statistics::RenderTemperature(HDC hdc, RECT rc) {
+
+}

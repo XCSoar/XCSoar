@@ -68,6 +68,7 @@ class Statistics {
     static void RenderGlidePolar(HDC hdc, RECT rc);
     static void RenderWind(HDC hdc, RECT rc);
     static void RenderTemperature(HDC hdc, RECT rc);
+    static void RenderTask(HDC hdc, RECT rc);
 
 };
 
