@@ -70,6 +70,7 @@ class InputEvents {
   static void eventNull(TCHAR *misc); 
   static void eventSetup(TCHAR *misc);
   static void eventAdjustForecastTemperature(TCHAR *misc);
+  static void eventRun(TCHAR *misc);
   // -------
 
 #ifdef _SIM_

@@ -1617,6 +1617,16 @@ void InputEvents::eventAdjustForecastTemperature(TCHAR *misc) {
   }
 }
 
+void InputEvents::eventRun(TCHAR *misc) {
+  PROCESS_INFORMATION pi;
+  if (!::CreateProcess(misc,
+		       NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi))
+    return;
+
+  // wait for program to finish
+  ::WaitForSingleObject(pi.hProcess, INFINITE);
+}
+
 
 // JMW TODO: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.
