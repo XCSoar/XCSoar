@@ -2304,6 +2304,10 @@ void DisplayText(void)
       }
 
       Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
+
+      // JMW fixed bug with spurious comments
+      InfoBoxes[i]->SetComment(TEXT(""));
+
       int color = 0;
       #if NEWINFOBOX>0
       if (DisplayType[i] == 14){ // Next Waypoint

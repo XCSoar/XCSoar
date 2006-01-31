@@ -81,6 +81,8 @@ Text2Event[39].text = TEXT("Setup");
 Text2Event[39].event = &eventSetup;
 Text2Event[40].text = TEXT("AdjustForecastTemperature");
 Text2Event[40].event = &eventAdjustForecastTemperature;
+Text2Event[41].text = TEXT("Run");
+Text2Event[41].event = &eventRun;
 Text2GCE[0] = TEXT("FLIGHTMODE_FINALGLIDE");
 Text2GCE[1] = TEXT("FLIGHTMODE_CRUISE");
 Text2GCE[2] = TEXT("FLIGHTMODE_CLIMB");
@@ -232,7 +234,7 @@ Text2NE[127] = TEXT("UNUSED_55");
 Text2NE[128] = TEXT("UNUSED_56");
 Text2NE[129] = TEXT("UNUSED_57");
 Text2NE[130] = TEXT("COUNT");
-Text2Event_count = 41;
+Text2Event_count = 42;
 // Check no array overrun
 ASSERT(130 <= NE_COUNT);
 // Check no array overrun
