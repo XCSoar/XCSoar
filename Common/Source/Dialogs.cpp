@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.93 2006/02/01 15:32:48 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.94 2006/02/01 15:39:48 jwharington Exp $
 
 Copyright_License {
 
@@ -1405,6 +1405,8 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
 
       if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
 	AATEnabled = FALSE;
+      if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
+	AATTaskLength = 0;
 
       CloseHandle(hFile);
     }
@@ -1432,9 +1434,11 @@ void SaveTask(TCHAR *szFileName)
     {
       WriteFile(hFile,&Task[0],sizeof(TASK_POINT)*MAXTASKPOINTS,&dwBytesWritten,(OVERLAPPED *)NULL);
       WriteFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesWritten,(OVERLAPPED*)NULL);
+      WriteFile(hFile,&AATTaskLength,sizeof(double),&dwBytesWritten,(OVERLAPPED*)NULL);
     }
   CloseHandle(hFile);
 }
+
 
 LRESULT CALLBACK FinalGlide(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
