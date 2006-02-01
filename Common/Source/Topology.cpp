@@ -474,26 +474,19 @@ void Topology::Paint(HDC hdc, RECT rc) {
 			pt[(jj-skipped)+keypoints].y = y;
 		      }
 		      else{
-			//Point has taken polygon to a new quadrant;
-			//draw a key point at the relevant corner.
-			switch (getCorner(quad,quad1)){
-			case 1:{
-			  pt[(jj-skipped)+keypoints].x = (rc.left - 10);
-			  pt[(jj-skipped)+keypoints].y = (rc.top - 10);
-			}; break;
-			case 2:{
-			  pt[(jj-skipped)+keypoints].x = (rc.right + 10);
-			  pt[(jj-skipped)+keypoints].y = (rc.top - 10);
-			}; break;
-			case 3:{
-			  pt[(jj-skipped)+keypoints].x = (rc.right + 10);
-			  pt[(jj-skipped)+keypoints].y = (rc.bottom + 10);
-			}; break;
-			case 4:{
-			  pt[(jj-skipped)+keypoints].x = (rc.left - 10);
-			  pt[(jj-skipped)+keypoints].y = (rc.bottom + 10);
-			}; break;
-			}
+				//Point has taken polygon to a new quadrant;
+				//draw a line between the two points (Just in case the line
+				//intersects the screen)
+				//(01FEB06 code simplification - sjt)
+
+				pt[(jj-skipped)+keypoints].x = xprev;
+				pt[(jj-skipped)+keypoints].y = yprev;
+
+				keypoints++;
+
+				pt[(jj-skipped)+keypoints].x = x;
+				pt[(jj-skipped)+keypoints].y = y;
+
 		      }
 		    }
 		    else skipped++; //Don't draw this point...
