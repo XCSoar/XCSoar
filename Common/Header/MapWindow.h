@@ -232,6 +232,7 @@ class MapWindow {
   static void DrawGPSStatus(HDC hdc, RECT rc);
   static void DrawTrail(HDC hdc, POINT Orig, RECT rc);
   static void DrawTask(HDC hdc, RECT rc);
+  static void DrawTaskAAT(HDC hdc, RECT rc);
   static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
   static void DrawBearing(HDC hdc, POINT Orig);
   // static void DrawMapScale(HDC hDC,RECT rc);

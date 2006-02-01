@@ -215,9 +215,15 @@ static void OnTaskListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *Li
 
   ItemIndex = ListInfo->ItemIndex;
   if ((ItemIndex>= UpLimit) || (UpLimit==1)) {
-    ItemIndex= UpLimit;
+    if (ItemIndex>=UpLimit) {
+      ItemIndex= UpLimit;
+    }
     Task[ItemIndex].Index = Task[0].Index;
-    dlgTaskWaypointShowModal(ItemIndex, 2); // finish waypoint
+    if (ItemIndex>0) {
+      dlgTaskWaypointShowModal(ItemIndex, 2); // finish waypoint
+    } else {
+      dlgTaskWaypointShowModal(ItemIndex, 0); // start waypoint
+    }
     OverviewRefreshTask();
     return;
   }

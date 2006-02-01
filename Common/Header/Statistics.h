@@ -42,6 +42,7 @@ class Statistics {
   static void ScaleXFromData(RECT rc, LeastSquares* lsdata);
   static void ScaleYFromValue(RECT rc, double val);
   static void ScaleXFromValue(RECT rc, double val);
+  static void ScaleMakeSquare(RECT rc);
 
   static void StyleLine(HDC hdc, POINT l1, POINT l2, int Style);
 
@@ -60,6 +61,7 @@ class Statistics {
 
   static void DrawXLabel(HDC hdc, RECT rc, TCHAR *text);
   static void DrawYLabel(HDC hdc, RECT rc, TCHAR *text);
+  static void DrawLabel(HDC hdc, RECT rc, TCHAR *text, double xv, double yv);
 
   ///
 

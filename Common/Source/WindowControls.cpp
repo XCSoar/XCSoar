@@ -90,6 +90,7 @@ BOOL DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filte
             if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
                 // we have found a directory, recurse
+
 	      if(!ScanDirectories(FileName,filter)) {
 		// none deeper
 	      }
@@ -1440,6 +1441,11 @@ int WndForm::ShowModal(void){
   while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)){
 
 //hack!
+
+    // JMW update display timeout so we don't get blanking
+    if (msg.message == WM_KEYDOWN) {
+      Debounce();
+    }
 
     if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_ESCAPE))
       mModalResult = mrCancle;

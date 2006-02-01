@@ -164,6 +164,17 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
 }
 
 
+void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text,
+			   double xv, double yv) {
+  SIZE tsize;
+  GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
+  int x = (int)((xv-x_min)*xscale)+rc.left-tsize.cx/2;
+  int y = (int)((y_max-yv)*yscale)+rc.top-tsize.cy/2;
+  ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
+
+}
+
+
 void Statistics::DrawXLabel(HDC hdc, RECT rc, TCHAR *text) {
   SIZE tsize;
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
@@ -505,17 +516,51 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 }
 
 
+void Statistics::ScaleMakeSquare(RECT rc) {
+  if (y_max-y_min<=0) return;
+  if (rc.bottom-rc.top<=0) return;
+  float ar = ((float)(rc.right-rc.left))/(rc.bottom-rc.top);
+  float ard = (x_max-x_min)/(y_max-y_min);
+  float armod = ard/ar;
+  float delta;
+
+  if (armod<1.0) {
+    // need to expand width
+    delta = (x_max-x_min)*(1.0/armod-1.0);
+    x_max += delta/2.0;
+    x_min -= delta/2.0;
+  } else {
+    // need to expand height
+    delta = (y_max-y_min)*(armod-1.0);
+    y_max += delta/2.0;
+    y_min -= delta/2.0;
+  }
+  // shrink both by 10%
+  delta = (x_max-x_min)*(1.1-1.0);
+  x_max += delta/2.0;
+  x_min -= delta/2.0;
+  delta = (y_max-y_min)*(1.1-1.0);
+  y_max += delta/2.0;
+  y_min -= delta/2.0;
+
+  yscale = (rc.bottom-rc.top)/(y_max-y_min);
+  xscale = (rc.right-rc.left)/(x_max-x_min);
+}
+
+
 void Statistics::RenderTask(HDC hdc, RECT rc)
 {
   int i;
-
-  ResetScale();
 
   double lat1 = 0;
   double lon1 = 0;
   double lat2 = 0;
   double lon2 = 0;
+  double x1, y1, x2, y2;
+  double lat_c, lon_c;
 
+  // find center
+  ResetScale();
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (Task[i].Index != -1) {
       lat1 = WayPointList[Task[i].Index].Latitude;
@@ -524,17 +569,40 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
       ScaleXFromValue(rc, lon1);
     }
   }
+  lat_c = (y_max+y_min)/2;
+  lon_c = (x_max+x_min)/2;
 
-  for (i=1; i<MAXTASKPOINTS; i++) {
+  ResetScale();
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    if (Task[i].Index != -1) {
+      lat1 = WayPointList[Task[i].Index].Latitude;
+      lon1 = WayPointList[Task[i].Index].Longitude;
+      x1 = (lon1-lon_c)*ffastcosine(lat1);
+      y1 = (lat1-lat_c);
+      ScaleYFromValue(rc, y1);
+      ScaleXFromValue(rc, x1);
+    }
+  }
+  ScaleMakeSquare(rc);
+
+  for (i=MAXTASKPOINTS-1; i>0; i--) {
     if (Task[i].Index != -1) {
       lat1 = WayPointList[Task[i-1].Index].Latitude;
       lon1 = WayPointList[Task[i-1].Index].Longitude;
       lat2 = WayPointList[Task[i].Index].Latitude;
       lon2 = WayPointList[Task[i].Index].Longitude;
+      x1 = (lon1-lon_c)*ffastcosine(lat1);
+      y1 = (lat1-lat_c);
+      x2 = (lon2-lon_c)*ffastcosine(lat2);
+      y2 = (lat2-lat_c);
 
       DrawLine(hdc, rc,
-	       lon1, lat1, lon2, lat2,
+	       x1, y1, x2, y2,
 	       STYLE_BLUETHIN);
+
+      TCHAR text[10];
+      _stprintf(text,TEXT("%0d"),i+1);
+      DrawLabel(hdc, rc, text, x2, y2);
     }
   }
 

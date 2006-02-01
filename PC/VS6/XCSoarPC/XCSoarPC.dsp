@@ -146,6 +146,18 @@ SOURCE=..\..\..\Common\Source\dlgStatus.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Common\Source\dlgStatusSystem.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\dlgTaskOverview.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\dlgTaskWaypoint.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Common\Source\dlgTools.cpp
 # End Source File
 # Begin Source File

@@ -1628,7 +1628,7 @@ void DoInfoKey(int keycode) {
 
 int debounceTimeout=200;
 
-bool Debounce() {
+bool Debounce(void) {
   static DWORD fpsTimeLast= -1;
   DWORD fpsTimeThis = ::GetTickCount();
   DWORD dT = fpsTimeThis-fpsTimeLast;
@@ -2305,8 +2305,10 @@ void DisplayText(void)
 
       Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
 
+#if NEWINFOBOX>0
       // JMW fixed bug with spurious comments
       InfoBoxes[i]->SetComment(TEXT(""));
+#endif
 
       int color = 0;
       #if NEWINFOBOX>0
