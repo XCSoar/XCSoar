@@ -861,3 +861,46 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 void Statistics::RenderTemperature(HDC hdc, RECT rc) {
 
 }
+
+
+void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text, 
+			   double xv, double yv) {
+  SIZE tsize;
+  GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
+  int x = (int)((xv-x_min)*xscale)+rc.left;//+tsize.cx;
+  int y = (int)((y_max-yv)*yscale)+rc.top;//+tsize.cy;
+  ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
+
+}
+
+
+void Statistics::ScaleMakeSquare(RECT rc) {
+  if (y_max-y_min<=0) return;
+  if (rc.bottom-rc.top<=0) return;
+  float ar = ((float)(rc.right-rc.left))/(rc.bottom-rc.top);
+  float ard = (x_max-x_min)/(y_max-y_min);
+  float armod = ard/ar;
+  float delta;
+
+  if (armod<1.0) {
+    // need to expand width
+    delta = (x_max-x_min)*(1.0/armod-1.0);
+    x_max += delta/2.0;
+    x_min -= delta/2.0;
+  } else {
+    // need to expand height
+    delta = (y_max-y_min)*(armod-1.0);
+    y_max += delta/2.0;
+    y_min -= delta/2.0;
+  }
+  // shrink both by 10%
+  delta = (x_max-x_min)*(1.1-1.0);
+  x_max += delta/2.0;
+  x_min -= delta/2.0;
+  delta = (y_max-y_min)*(1.1-1.0);
+  y_max += delta/2.0;
+  y_min -= delta/2.0;
+
+  yscale = (rc.bottom-rc.top)/(y_max-y_min);
+  xscale = (rc.right-rc.left)/(x_max-x_min);
+}

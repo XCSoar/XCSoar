@@ -110,6 +110,13 @@ void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
   GetFromRegistry(reggeomsx,&Temp); *sizex = Temp;
   GetFromRegistry(reggeomsy,&Temp); *sizey = Temp;
 
+  if (*sizey != ControlHeight) {
+    geometrychanged = true;
+  }
+  if (*sizex != ControlWidth) {
+    geometrychanged = true;
+  }
+
   if ((*sizex==0)||(*sizey==0)||geometrychanged) {
     // not defined in registry so go with defaults
     // these will be saved back to registry

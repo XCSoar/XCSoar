@@ -1372,6 +1372,11 @@ void MapWindow::RenderMapWindow(  RECT rc)
       // BUG?   sunazimuth+= DisplayAngle;
       DrawTerrain(hdcDrawWindowBg, rc, sunazimuth, sunelevation);
     }
+
+    if (!TaskAborted) {
+      DrawTaskAAT(hdcDrawWindowBg, rc);
+    }
+
     if (EnableTopology) {
       DrawTopology(hdcDrawWindowBg, rc);
     }
@@ -2222,6 +2227,54 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
   {
     if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
     {
+      if(AATEnabled != TRUE)
+      {
+        DrawDashLine(hdc, 2, WayPointList[Task[i].Index].Screen, Task[i].Start, RGB(127,127,127));
+        DrawDashLine(hdc, 2, WayPointList[Task[i].Index].Screen, Task[i].End, RGB(127,127,127));
+        
+        if(FAISector != TRUE)
+        {
+          tmp = SectorRadius*DISTANCEMODIFY/MapScale;
+          tmp = tmp * 30;
+          SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
+          Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc); 
+        }
+      }
+    }
+  }
+
+  for(i=0;i<MAXTASKPOINTS-1;i++)
+  {
+    if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
+    {
+      DrawDashLine(hdc, 3, 
+        WayPointList[Task[i].Index].Screen, 
+        WayPointList[Task[i+1].Index].Screen, 
+        RGB(0,255,0));
+    }
+  }
+
+  // restore original color
+  SetTextColor(hDCTemp, origcolor);
+
+
+}
+
+
+void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
+{
+  int i;
+  double tmp;
+
+  COLORREF whitecolor = RGB(0xff,0xff, 0xff);
+  COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
+
+  if (!WayPointList) return;
+    
+  for(i=1;i<MAXTASKPOINTS-1;i++)
+  {
+    if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
+    {
       if(AATEnabled == TRUE)
       {
         if(Task[i].AATType == CIRCLE)
@@ -2260,36 +2313,11 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
           DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATFinish);
         }
       }
-      else
-      {
-        DrawDashLine(hdc, 2, WayPointList[Task[i].Index].Screen, Task[i].Start, RGB(127,127,127));
-        DrawDashLine(hdc, 2, WayPointList[Task[i].Index].Screen, Task[i].End, RGB(127,127,127));
-        
-        if(FAISector != TRUE)
-        {
-          tmp = SectorRadius*DISTANCEMODIFY/MapScale;
-          tmp = tmp * 30;
-          SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
-          Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc); 
-        }
-      }
-    }
-  }
-
-  for(i=0;i<MAXTASKPOINTS-1;i++)
-  {
-    if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
-    {
-      DrawDashLine(hdc, 3, 
-        WayPointList[Task[i].Index].Screen, 
-        WayPointList[Task[i+1].Index].Screen, 
-        RGB(0,255,0));
     }
   }
 
   // restore original color
   SetTextColor(hDCTemp, origcolor);
-
 
 }
 
