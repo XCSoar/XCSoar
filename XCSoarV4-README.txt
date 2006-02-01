@@ -51,6 +51,7 @@ To do for next version:
 
 Changes from 4.5 to HEAD:
 
+- Fixed bug, topology polygon errors no longer occur at high zoom factors
 - Fixed bug, "1m" in baro altitude infobox for alternate user units
 - Fixed bug, snail trail was never red in sink, now working properly
 - Filter out "Railway station" as miscpop label
