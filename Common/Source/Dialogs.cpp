@@ -1391,6 +1391,7 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
             {
               break;
             }
+
           if(Temp.Index < (int)NumberOfWayPoints)
             {
               memcpy(&Task[i],&Temp, sizeof(TASK_POINT));
@@ -1401,6 +1402,10 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
                 Task[i].AATCircleRadius = Temp*/
             }
         }
+
+      if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
+	AATEnabled = FALSE;
+
       CloseHandle(hFile);
     }
   for(i=0;i<MAXTASKPOINTS;i++)
@@ -1426,6 +1431,7 @@ void SaveTask(TCHAR *szFileName)
   if(hFile!=INVALID_HANDLE_VALUE )
     {
       WriteFile(hFile,&Task[0],sizeof(TASK_POINT)*MAXTASKPOINTS,&dwBytesWritten,(OVERLAPPED *)NULL);
+      WriteFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesWritten,(OVERLAPPED*)NULL);
     }
   CloseHandle(hFile);
 }
