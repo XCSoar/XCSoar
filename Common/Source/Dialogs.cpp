@@ -1355,6 +1355,12 @@ void LoadNewTask(TCHAR *szFileName)
 	    Task[i].OutBound = Temp.OutBound;
 	    Task[i].AATCircleRadius = Temp */
         }
+
+      if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
+	AATEnabled = FALSE;
+      if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
+	AATTaskLength = 0;
+
       CloseHandle(hFile);
     }
 

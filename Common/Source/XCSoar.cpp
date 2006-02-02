@@ -1805,8 +1805,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       MapWindow::CloseDrawingThread();
 
-      NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1; AATEnabled = FALSE;
-      NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
+      NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1;
+      AATEnabled = FALSE;
+      NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0;
+      NumberOfAirspaceCircles = 0;
       CloseTerrain();
       CloseTopology();
       CloseTerrainRenderer();
