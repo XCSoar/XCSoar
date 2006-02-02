@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.94 2006/02/01 15:39:48 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.95 2006/02/02 00:29:43 jwharington Exp $
 
 Copyright_License {
 
@@ -1355,6 +1355,12 @@ void LoadNewTask(TCHAR *szFileName)
 	    Task[i].OutBound = Temp.OutBound;
 	    Task[i].AATCircleRadius = Temp */
         }
+
+      if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
+	AATEnabled = FALSE;
+      if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
+	AATTaskLength = 0;
+
       CloseHandle(hFile);
     }
   
