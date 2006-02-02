@@ -304,6 +304,7 @@ class MapWindow {
   static      HPEN hpFinalGlideBelow;
   static      HPEN hpMapScale;
   static      HPEN hpTerrainLine;
+  static      HPEN hpTerrainLineBg;
   static      HPEN hpSpeedFast;
   static      HPEN hpSpeedSlow;
   

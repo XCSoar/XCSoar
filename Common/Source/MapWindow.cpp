@@ -183,6 +183,7 @@ HPEN MapWindow::hpFinalGlideAbove;
 HPEN MapWindow::hpFinalGlideBelow;
 HPEN MapWindow::hpMapScale;
 HPEN MapWindow::hpTerrainLine;
+HPEN MapWindow::hpTerrainLineBg;
 HPEN MapWindow::hpSpeedSlow;
 HPEN MapWindow::hpSpeedFast;
   
@@ -933,6 +934,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     hpMapScale = (HPEN)CreatePen(PS_SOLID, 1, RGB(0,0,0));
     hpTerrainLine = (HPEN)CreatePen(PS_DASH, 1, RGB(0x30,0x30,0x30));
+	hpTerrainLineBg = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xFF,0xFF,0xFF));
 
     #if (MONOCHROME_SCREEN > 0)
     hbCompass=(HBRUSH)CreateSolidBrush(RGB(0xff,0xff,0xff));
@@ -1016,6 +1018,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject((HPEN)hpFinalGlideBelow);
     DeleteObject((HPEN)hpMapScale);
     DeleteObject((HPEN)hpTerrainLine);
+	DeleteObject((HPEN)hpTerrainLineBg);
     DeleteObject((HPEN)hpSpeedFast);
     DeleteObject((HPEN)hpSpeedSlow);
     
@@ -2778,7 +2781,7 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
   int scx, scy;
   HPEN hpOld;
 
-  hpOld = (HPEN)SelectObject(hDC, hpTerrainLine);
+  hpOld = (HPEN)SelectObject(hDC, hpTerrainLineBg);	//sjt 02feb06 added bg line
 
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
     bearing = -90+i*180.0/NUMTERRAINSWEEPS+DrawInfo.TrackBearing;
@@ -2788,7 +2791,12 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
     Groundline[i].x = scx;
     Groundline[i].y = scy;
   }
+  Polyline(hDC, Groundline, NUMTERRAINSWEEPS+1);	//sjt 02feb06
+
+  (HPEN)SelectObject(hDC, hpTerrainLine);
+  
   Polyline(hDC, Groundline, NUMTERRAINSWEEPS+1);
+
 
   if ((DerivedDrawInfo.TerrainWarningLatitude != 0.0)
     &&(DerivedDrawInfo.TerrainWarningLongitude != 0.0)) {
