@@ -535,8 +535,8 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
   int i;
   float hmin= 10000;
   float hmax= -10000;
-  float tmin= CuSonde::maxGroundTemperature;
-  float tmax= CuSonde::maxGroundTemperature;
+  float tmin= (float)CuSonde::maxGroundTemperature; //RB Type cast fixed
+  float tmax= (float)CuSonde::maxGroundTemperature; //RB Type cast fixed
 
   // find range for scaling of graph
   for (i=0; i<CUSONDE_NUMLEVELS-1; i++) {
@@ -544,12 +544,12 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 
       hmin = min(hmin, i);
       hmax = max(hmax, i);
-      tmin = min(tmin, min(CuSonde::cslevels[i].tempDry,
+      tmin = (float)min(tmin, min(CuSonde::cslevels[i].tempDry,
 			   min(CuSonde::cslevels[i].airTemp,
-			       CuSonde::cslevels[i].dewpoint)));
-      tmax = max(tmax, max(CuSonde::cslevels[i].tempDry,
+			       CuSonde::cslevels[i].dewpoint)));  // RB fix casts
+      tmax = (float)max(tmax, max(CuSonde::cslevels[i].tempDry,
 			   max(CuSonde::cslevels[i].airTemp,
-			       CuSonde::cslevels[i].dewpoint)));
+			       CuSonde::cslevels[i].dewpoint)));  // RB fix casts
     }
   }
 
@@ -857,11 +857,11 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
   return FALSE;
 }
 
-
-void Statistics::RenderTemperature(HDC hdc, RECT rc) {
-
-}
-
+//
+//void Statistics::RenderTemperature(HDC hdc, RECT rc) {
+//
+//}
+//
 
 void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text,
 			   double xv, double yv) {
@@ -878,26 +878,26 @@ void Statistics::ScaleMakeSquare(RECT rc) {
   if (y_max-y_min<=0) return;
   if (rc.bottom-rc.top<=0) return;
   float ar = ((float)(rc.right-rc.left))/(rc.bottom-rc.top);
-  float ard = (x_max-x_min)/(y_max-y_min);
+  float ard = (float)((x_max-x_min)/(y_max-y_min));
   float armod = ard/ar;
   float delta;
 
   if (armod<1.0) {
     // need to expand width
-    delta = (x_max-x_min)*(1.0/armod-1.0);
+    delta = (float)((x_max-x_min)*(1.0/armod-1.0)); //RB - fix casts
     x_max += delta/2.0;
     x_min -= delta/2.0;
   } else {
     // need to expand height
-    delta = (y_max-y_min)*(armod-1.0);
+    delta = (float)((y_max-y_min)*(armod-1.0));  //RB - fix casts
     y_max += delta/2.0;
     y_min -= delta/2.0;
   }
   // shrink both by 10%
-  delta = (x_max-x_min)*(1.1-1.0);
+  delta = (float)((x_max-x_min)*(0.1)); //RB - fix cast and remove un-necessary calc
   x_max += delta/2.0;
   x_min -= delta/2.0;
-  delta = (y_max-y_min)*(1.1-1.0);
+  delta = (float)((y_max-y_min)*(0.1)); //RB - fix cast and remove un-necessary calc
   y_max += delta/2.0;
   y_min -= delta/2.0;
 
