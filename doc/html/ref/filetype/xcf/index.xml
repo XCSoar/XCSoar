@@ -1,18 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
         <metadata>
-                <title>File Type - xcf</title>
+                <title>File Type - Airfield</title>
         </metadata>
 
         <content>
 <section>
 
-		<title>File Type - xcf</title>
+		<title>File Type - Airfield</title>
 
 <p>
-Details yet to come...
+The airfield details file is a simple text format file containing
+entries for each airfield, marked in square brackets in uppercase,
+followed by the text to be displayed on the Waypoint Details Dialog
+for that particular waypoint.
+<p>
+
+<p>
+The names of airfields used in the file must correspond exactly to the
+names in the waypoints file, with the exception of being converted to
+uppercase.
 </p>
 
+<p>
+The XCSoar website provides airfield details files for several
+countries and includes tools to convert from various Enroute
+Supplement sources to this file format.
+</p>
+
+<p>
+Users are free to edit these files to add their own notes for
+airfields that may not otherwise be included in the Enroute Supplement
+sources.
+</p>
+
+
+	<section>
+		<title>Advanced - Programming</title>
+		<p>
+		</p>
+	</section>
 </section>
 	</content>
 </document>

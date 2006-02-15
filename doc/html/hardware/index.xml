@@ -11,9 +11,12 @@
 
 		<p>
 			One of the powerful advantages of XCSoar being open source is the ability to
-			support a large amount of hardware. This page is a start on details of that
-			support.
-		</p>
+			support a large amount of hardware.
+			This section describes the use of XCSoar on particular Pocket PC
+			devices and its integration with external devices and instruments.
+			Due to the large number of devices available, it is not practical to
+			include a discussion relating to every available device.
+		</p>	
 
 		<ul>
 			<li><a href="organiser/">Organisers</a> - The computer, currently Pocket PC Computers</li>
@@ -24,6 +27,8 @@
 		pads</li>
 
 			<li><a href="vario/">Varios</a> - Varios and other avionic connections</li>
+
+			<li><a href="logger/">Loggers</a> - External loggers</li>
 
 		</ul>
 

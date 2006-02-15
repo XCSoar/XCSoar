@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document>
         <metadata>
-                <title>File Type - plr</title>
+                <title>File Type - Polar</title>
         </metadata>
 
         <content>
 <section>
 
-		<title>File Type - plr</title>
+		<title>File Type - Polar</title>
 
 <p>
-Details yet to come...
+Glide polar. The WinPilot format is used for glide polar files.
+</p>
+
+<p>
+XXX TODO: EXPLAIN THE FORMAT
+</p>
+
+<p>
+The WinPilot and XCSoar websites provide several glide polar files.
+Files for other gliders may be created upon request to the XCSoar
+team.
 </p>
 
 

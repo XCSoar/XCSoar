@@ -10,9 +10,24 @@
 		<title>File Type - xct</title>
 
 <p>
-Details yet to come...
+The terrain file (extension .dat) is a raster digital elevation
+model represented as an array of elevations in meters on a
+latitude/longitude grid.  The format used is unique to XCSoar as it
+contains a header containing the grid geometry followed by the raster
+array.
 </p>
 
+<p>
+Terrain files for various regions can be obtained from the XCSoar website.
+Additional terrain files can be produced upon request.
+</p>
+
+
+	<section>
+		<title>Advanced - Programming</title>
+		<p>
+		</p>
+	</section>
 </section>
 	</content>
 </document>
