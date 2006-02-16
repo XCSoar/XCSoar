@@ -87,6 +87,11 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 
+void RefreshTaskStatistics(void) {
+  TaskStatistics(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
+  AATStats(&GPS_INFO, &CALCULATED_INFO);
+}
+
 
 int getFinalWaypoint() {
   int i;
@@ -1197,14 +1202,14 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 {
                   if(Task[ActiveWayPoint+1].Index >= 0)
                     {
-                      ActiveWayPoint ++;
-                      Calculated->TaskStartTime = Basic->Time ;
+		      if (AutoAdvance) {
+			ActiveWayPoint++;
+			InputEvents::processGlideComputer(GCE_TASK_START);
+			AnnounceWayPointSwitch();
+		      }
+		      StartSectorEntered = FALSE;
+		      Calculated->TaskStartTime = Basic->Time ;
                       Calculated->LegStartTime = Basic->Time;
-                      StartSectorEntered = FALSE;
-
-		      InputEvents::processGlideComputer(GCE_TASK_START);
-
-                      AnnounceWayPointSwitch();
                     }
                 }
             }
@@ -1230,9 +1235,11 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 {
                   Calculated->LegStartTime = Basic->Time;
 
-                  ActiveWayPoint ++;
-                  AnnounceWayPointSwitch();
-		  InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
+		  if (AutoAdvance) {
+		    ActiveWayPoint++;
+		    AnnounceWayPointSwitch();
+		    InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
+		  }
 
                   return;
                 }
@@ -1263,15 +1270,15 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                   if(Task[ActiveWayPoint+1].Index >= 0)
                     {
 
-                      ActiveWayPoint ++;
+		      if (AutoAdvance) {
+			ActiveWayPoint++;
+			InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
+			AnnounceWayPointSwitch();
+		      }
+		      StartSectorEntered = FALSE;
                       Calculated->TaskStartTime = Basic->Time ;
                       Calculated->LegStartTime = Basic->Time;
-                      StartSectorEntered = FALSE;
-
-		      InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
-
-                      AnnounceWayPointSwitch();
-
+		      // JMW TODO: make sure this is valid for manual start
                     }
                 }
             }
@@ -1295,10 +1302,12 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 {
                   Calculated->LegStartTime = Basic->Time;
 
-		  InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
+		  if (AutoAdvance) {
+		    ActiveWayPoint++;
+		    InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 
-                  AnnounceWayPointSwitch();
-                  ActiveWayPoint ++;
+		    AnnounceWayPointSwitch();
+		  }
 
                   return;
                 }
@@ -1371,19 +1380,39 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 
   if (!WayPointList) return;
 
+  double w1lat;
+  double w1lon;
+  double w0lat;
+  double w0lon;
+
   // Calculate Task Distances
   if(ActiveWayPoint >=1)
     {
+
+      // JMW added support for target in AAT
+
+      w1lat = WayPointList[Task[ActiveWayPoint].Index].Latitude;
+      w1lon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
+      w0lat = WayPointList[Task[ActiveWayPoint-1].Index].Latitude;
+      w0lon = WayPointList[Task[ActiveWayPoint-1].Index].Longitude;
+
+      if (AATEnabled) {
+	w1lat = Task[ActiveWayPoint].AATTargetLat;
+	w1lon = Task[ActiveWayPoint].AATTargetLon;
+	w0lat = Task[ActiveWayPoint-1].AATTargetLat;
+	w0lon = Task[ActiveWayPoint-1].AATTargetLon;
+      }
+
       LegDistance =
-        Distance(WayPointList[Task[ActiveWayPoint].Index].Latitude,
-                 WayPointList[Task[ActiveWayPoint].Index].Longitude,
-                 WayPointList[Task[ActiveWayPoint-1].Index].Latitude,
-                 WayPointList[Task[ActiveWayPoint-1].Index].Longitude);
+	Distance(w1lat,
+		 w1lon,
+		 w0lat,
+		 w0lon);
 
       LegToGo =
         Distance(Basic->Latitude , Basic->Longitude ,
-                 WayPointList[Task[ActiveWayPoint].Index].Latitude,
-                 WayPointList[Task[ActiveWayPoint].Index].Longitude);
+                 w1lat,
+                 w1lon);
 
       LegCovered = LegDistance - LegToGo;
 
@@ -1402,15 +1431,27 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 
       for(i=0;i<ActiveWayPoint-1;i++)
         {
-          LegDistance =
-            Distance(WayPointList[Task[i].Index].Latitude,
-                     WayPointList[Task[i].Index].Longitude,
-                     WayPointList[Task[i+1].Index].Latitude,
-                     WayPointList[Task[i+1].Index].Longitude);
+
+	  w1lat = WayPointList[Task[i].Index].Latitude;
+	  w1lon = WayPointList[Task[i].Index].Longitude;
+	  w0lat = WayPointList[Task[i+1].Index].Latitude;
+	  w0lon = WayPointList[Task[i+1].Index].Longitude;
+
+	  if (AATEnabled) {
+	    w1lat = Task[i].AATTargetLat;
+	    w1lon = Task[i].AATTargetLon;
+	    w0lat = Task[i+1].AATTargetLat;
+	    w0lon = Task[i+1].AATTargetLon;
+	  }
+
+	  LegDistance =
+	    Distance(w1lat,
+		     w1lon,
+		     w0lat,
+		     w0lon);
 
           Calculated->TaskDistanceCovered += LegDistance;
-
-        }
+	}
 
       if(Basic->Time != Calculated->TaskStartTime)
         Calculated->TaskSpeed =
@@ -1442,13 +1483,25 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
         Calculated->FinalGlide = 0;
       }
 
-      LegBearing = Bearing(Basic->Latitude , Basic->Longitude ,
-                           WayPointList[Task[i].Index].Latitude,
-                           WayPointList[Task[i].Index].Longitude);
+      if (AATEnabled) {
 
-      LegToGo = Distance(Basic->Latitude , Basic->Longitude ,
-                         WayPointList[Task[i].Index].Latitude,
-                         WayPointList[Task[i].Index].Longitude);
+	LegBearing = Bearing(Basic->Latitude , Basic->Longitude ,
+			     Task[i].AATTargetLat,
+			     Task[i].AATTargetLon);
+
+	LegToGo = Distance(Basic->Latitude , Basic->Longitude ,
+			     Task[i].AATTargetLat,
+			     Task[i].AATTargetLon);
+      } else {
+
+	LegBearing = Bearing(Basic->Latitude , Basic->Longitude ,
+			     WayPointList[Task[i].Index].Latitude,
+			     WayPointList[Task[i].Index].Longitude);
+
+	LegToGo = Distance(Basic->Latitude , Basic->Longitude ,
+			   WayPointList[Task[i].Index].Latitude,
+			   WayPointList[Task[i].Index].Longitude);
+      }
 
       // JMW TODO: use instantaneous maccready here again to calculate
       // dolphin speed to fly
@@ -1487,7 +1540,6 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
         Calculated->TerrainWarningLongitude = 0.0;
       }
 
-
       TaskAltitudeRequired = LegAltitude;
       Calculated->TaskDistanceToGo = LegToGo;
       Calculated->TaskTimeToGo = Calculated->LegTimeToGo;
@@ -1496,7 +1548,9 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 
       if(  (Basic->Altitude - LegAltitude - SAFETYALTITUDEARRIVAL) > 0)
         {
-          Calculated->LDNext = Calculated->TaskDistanceToGo / (Basic->Altitude - LegAltitude - SAFETYALTITUDEARRIVAL)  ;
+          Calculated->LDNext =
+	    Calculated->TaskDistanceToGo
+	    / (Basic->Altitude - LegAltitude - SAFETYALTITUDEARRIVAL)  ;
         }
       else
         {
@@ -1506,22 +1560,36 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
       i++;
       while((Task[i].Index != -1) && (i<MAXTASKPOINTS) && (!TaskAborted))
         {
-          LegDistance = Distance(WayPointList[Task[i].Index].Latitude,
-                                 WayPointList[Task[i].Index].Longitude,
-                                 WayPointList[Task[i-1].Index].Latitude,
-                                 WayPointList[Task[i-1].Index].Longitude);
 
-          LegBearing = Bearing(WayPointList[Task[i-1].Index].Latitude,
-                               WayPointList[Task[i-1].Index].Longitude,
-                               WayPointList[Task[i].Index].Latitude,
-                               WayPointList[Task[i].Index].Longitude);
+	  w1lat = WayPointList[Task[i].Index].Latitude;
+	  w1lon = WayPointList[Task[i].Index].Longitude;
+	  w0lat = WayPointList[Task[i-1].Index].Latitude;
+	  w0lon = WayPointList[Task[i-1].Index].Longitude;
 
+	  if (AATEnabled) {
+	    w1lat = Task[i].AATTargetLat;
+	    w1lon = Task[i].AATTargetLon;
+	    w0lat = Task[i-1].AATTargetLat;
+	    w0lon = Task[i-1].AATTargetLon;
+	  }
 
-          LegAltitude = GlidePolar::MacCreadyAltitude(maccready,
-                                                     LegDistance, LegBearing,
-                                        Calculated->WindSpeed, Calculated->WindBearing, 0, 0,
-                                        (i==FinalWayPoint), // ||() JMW TODO!!!!!!!!!
-                                        &LegTimeToGo);
+          LegDistance = Distance(w1lat,
+                                 w1lon,
+                                 w0lat,
+                                 w0lon);
+
+          LegBearing = Bearing(w1lat,
+			       w1lon,
+			       w0lat,
+			       w0lon);
+
+          LegAltitude = GlidePolar::
+	    MacCreadyAltitude(maccready,
+			      LegDistance, LegBearing,
+			      Calculated->WindSpeed,
+			      Calculated->WindBearing, 0, 0,
+			      (i==FinalWayPoint), // ||() JMW TODO!!!!!!!!!
+			      &LegTimeToGo);
 
           TaskAltitudeRequired += LegAltitude;
 
@@ -1531,12 +1599,20 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
           i++;
         }
 
-      Calculated->TaskAltitudeRequired = TaskAltitudeRequired + SAFETYALTITUDEARRIVAL;
-      Calculated->TaskAltitudeDifference = Basic->Altitude - (Calculated->TaskAltitudeRequired + WayPointList[Task[i-1].Index].Altitude) + Calculated->EnergyHeight;
+      Calculated->TaskAltitudeRequired = TaskAltitudeRequired
+	+ SAFETYALTITUDEARRIVAL;
 
-      if(  (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude  + Calculated->EnergyHeight) > 0)
+      Calculated->TaskAltitudeDifference = Basic->Altitude
+	- (Calculated->TaskAltitudeRequired
+	   + WayPointList[Task[i-1].Index].Altitude)
+	+ Calculated->EnergyHeight;
+
+      if(  (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude
+	    + Calculated->EnergyHeight) > 0)
         {
-          Calculated->LDFinish = Calculated->TaskDistanceToGo / (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude + Calculated->EnergyHeight)  ;
+          Calculated->LDFinish = Calculated->TaskDistanceToGo
+	    / (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude
+	       + Calculated->EnergyHeight)  ;
         }
       else
         {
@@ -1561,6 +1637,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
   }
 
 }
+
 
 void DoAutoMacCready(DERIVED_INFO *Calculated)
 {
@@ -1814,8 +1891,8 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   double Temp;
   int i;
-  double MaxDistance, MinDistance;
-  double LegToGo, LegDistance;
+  double MaxDistance, MinDistance, TargetDistance;
+  double LegToGo, LegDistance, TargetLegToGo, TargetLegDistance;
   double TaskAltitudeRequired = 0;
 
   if (!WayPointList) return ;
@@ -1826,6 +1903,11 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
 
   Temp = Basic->Time - Calculated->TaskStartTime;
+
+  if ((ActiveWayPoint==0)&&(Calculated->AATTimeToGo==0)) {
+    Calculated->AATTimeToGo = AATTaskLength*60;
+  }
+
   if((Temp >=0)&&(ActiveWayPoint >0))
     {
       Calculated->AATTimeToGo = (AATTaskLength*60) - Temp;
@@ -1835,7 +1917,7 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         Calculated->AATTimeToGo = (AATTaskLength * 60);
     }
 
-  MaxDistance = 0; MinDistance = 0;
+  MaxDistance = 0; MinDistance = 0; TargetDistance = 0;
   // Calculate Task Distances
 
   Calculated->TaskDistanceToGo = 0;
@@ -1849,6 +1931,10 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                          WayPointList[Task[i].Index].Latitude,
                          WayPointList[Task[i].Index].Longitude);
 
+      TargetLegToGo = Distance(Basic->Latitude , Basic->Longitude ,
+			       Task[i].AATTargetLat,
+			       Task[i].AATTargetLon);
+
       if(Task[ActiveWayPoint].AATType == CIRCLE)
         {
           MaxDistance = LegToGo + (Task[i].AATCircleRadius * 2);
@@ -1860,6 +1946,8 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           MinDistance = LegToGo;
         }
 
+      TargetDistance = TargetLegToGo;
+
       i++;
       while((Task[i].Index != -1) && (i<MAXTASKPOINTS))
         {
@@ -1867,6 +1955,11 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                                  WayPointList[Task[i].Index].Longitude,
                                  WayPointList[Task[i-1].Index].Latitude,
                                  WayPointList[Task[i-1].Index].Longitude);
+
+          TargetLegDistance = Distance(Task[i].AATTargetLat,
+				       Task[i].AATTargetLon,
+				       Task[i-1].AATTargetLat,
+				       Task[i-1].AATTargetLon);
 
           if(Task[ActiveWayPoint].AATType == CIRCLE)
             {
@@ -1878,14 +1971,22 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
               MaxDistance += LegDistance + (Task[ActiveWayPoint].AATSectorRadius * 2);
               MinDistance += LegDistance;
             }
+	  TargetDistance += TargetLegDistance;
           i++;
         }
+
+      // JMW TODO: make this more accurate, because currently it is
+      // very approximate.
+
       Calculated->AATMaxDistance = MaxDistance;
       Calculated->AATMinDistance = MinDistance;
+      Calculated->AATTargetDistance = TargetDistance;
+
       if(Calculated->AATTimeToGo >0)
         {
           Calculated->AATMaxSpeed = Calculated->AATMaxDistance / Calculated->AATTimeToGo;
           Calculated->AATMinSpeed = Calculated->AATMinDistance / Calculated->AATTimeToGo;
+          Calculated->AATTargetSpeed = Calculated->AATTargetDistance / Calculated->AATTimeToGo;
         }
     }
 }

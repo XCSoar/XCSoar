@@ -172,6 +172,8 @@ TCHAR szRegistryAppGaugeVarioMc[] = TEXT("AppGaugeVarioMc");
 TCHAR szRegistryAppGaugeVarioBugs[] = TEXT("AppGaugeVarioBugs");
 TCHAR szRegistryAppGaugeVarioBallast[] = TEXT("AppGaugeVarioBallast");
 
+TCHAR szRegistryAutoAdvance[] = TEXT("AutoAdvance");
+
 
 static double SINETABLE[910];
 static float FSINETABLE[910];
@@ -484,6 +486,10 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAppGaugeVarioBallast, &Temp);
   Appearance.GaugeVarioBallast = Temp;
 
+  Temp = 1;
+  GetFromRegistry(szRegistryAutoAdvance,&Temp);
+  AutoAdvance = (Temp == 1);
+
 }
 
 
@@ -493,6 +499,7 @@ BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
   HKEY    hKey;
   DWORD    dwSize, dwType;
   long    hRes;
+  DWORD defaultVal;
 
   *pPos= 0;
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_ALL_ACCESS, &hKey);
@@ -502,8 +509,13 @@ BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
       return hRes;
     }
 
+  defaultVal = *pPos;
   dwSize = sizeof(DWORD);
   hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
+  if (hRes != ERROR_SUCCESS) {
+    *pPos = defaultVal;
+  }
+
   RegCloseKey(hKey);
   return hRes;
 }
@@ -1004,13 +1016,19 @@ void RefreshTask() {
       if (Task[i].Index != -1) {
 	RefreshTaskWaypoint(i);
 	TaskStats[i].LengthPercent = Task[i].Leg/lengthtotal;
+	if ((i<MAXTASKPOINTS-1) && (Task[i+1].Index == -1)) {
+	  Task[i].AATTargetOffsetRadius = 0.0;
+	  Task[i].AATTargetOffsetRadial = 0.0;
+	  Task[i].AATTargetLat = WayPointList[Task[i].Index].Latitude;
+	  Task[i].AATTargetLon = WayPointList[Task[i].Index].Longitude;
+	}
       }
     }
   }
   CalculateTaskSectors();
   CalculateAATTaskSectors();
-
 }
+
 
 void CalculateTaskSectors(void)
 {
@@ -1034,10 +1052,22 @@ void CalculateTaskSectors(void)
 	      SectorBearing = Task[i].Bisector;
 	    }
 
-	  Task[i].SectorStartLat = FindLatitude(WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude, SectorBearing + SectorAngle, SectorSize);
-	  Task[i].SectorStartLon = FindLongitude(Task[i].SectorStartLat,WayPointList[Task[i].Index].Longitude, SectorBearing + SectorAngle, SectorSize);
-	  Task[i].SectorEndLat   = FindLatitude(WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude,	SectorBearing - SectorAngle, SectorSize);
-	  Task[i].SectorEndLon   = FindLongitude(Task[i].SectorEndLat,WayPointList[Task[i].Index].Longitude,	SectorBearing - SectorAngle, SectorSize);
+	  Task[i].SectorStartLat =
+	    FindLatitude(WayPointList[Task[i].Index].Latitude,
+			 WayPointList[Task[i].Index].Longitude,
+			 SectorBearing + SectorAngle, SectorSize);
+	  Task[i].SectorStartLon =
+	    FindLongitude(WayPointList[Task[i].Index].Latitude,
+			  WayPointList[Task[i].Index].Longitude,
+			  SectorBearing + SectorAngle, SectorSize);
+	  Task[i].SectorEndLat   =
+	    FindLatitude(WayPointList[Task[i].Index].Latitude,
+			 WayPointList[Task[i].Index].Longitude,
+			 SectorBearing - SectorAngle, SectorSize);
+	  Task[i].SectorEndLon   =
+	    FindLongitude(WayPointList[Task[i].Index].Latitude,
+			  WayPointList[Task[i].Index].Longitude,
+			  SectorBearing - SectorAngle, SectorSize);
 	}
     }
 }
@@ -1049,10 +1079,56 @@ void CalculateAATTaskSectors(void)
   if(AATEnabled == FALSE)
     return;
 
+  Task[0].AATTargetOffsetRadius = 0.0;
+  Task[0].AATTargetOffsetRadial = 0.0;
+  if (Task[0].Index>=0) {
+    Task[0].AATTargetLat = WayPointList[Task[0].Index].Latitude;
+    Task[0].AATTargetLon = WayPointList[Task[0].Index].Longitude;
+  }
+
   for(i=1;i<MAXTASKPOINTS-1;i++)
     {
       if((Task[i].Index >=0))
 	{
+	  Task[i].AATTargetOffsetRadius = min(1.0,
+                             max(Task[i].AATTargetOffsetRadius,-1.0));
+
+	  Task[i].AATTargetOffsetRadial = min(1.0,
+                             max(Task[i].AATTargetOffsetRadial,0.0));
+
+	  double targetbearing;
+	  double targetrange;
+
+	  if(Task[i].AATType == SECTOR) {
+	    targetrange = ((Task[i].AATTargetOffsetRadius+1.0)/2.0)
+	      *Task[i].AATSectorRadius;
+	  } else {
+	    targetrange = Task[i].AATTargetOffsetRadius
+	      *Task[i].AATCircleRadius;
+	  }
+
+	  targetbearing = Task[i].Bisector;
+	  /*
+	  if(Task[i].AATType == SECTOR) {
+	    double r1 = Task[i].AATStartRadial;
+	    double r2 = Task[i].AATFinishRadial;
+	    targetbearing = (r2-r1)*Task[i].AATTargetOffsetRadial+r1;
+	  } else {
+	    targetbearing = 360.0*Task[i].AATTargetOffsetRadial;
+	  }
+	  */
+
+	  Task[i].AATTargetLat =
+	    FindLatitude (WayPointList[Task[i].Index].Latitude,
+			  WayPointList[Task[i].Index].Longitude,
+			  targetbearing,
+			  targetrange);
+	  Task[i].AATTargetLon =
+	    FindLongitude (WayPointList[Task[i].Index].Latitude,
+			   WayPointList[Task[i].Index].Longitude,
+			   targetbearing,
+			   targetrange);
+
 	  if(Task[i].AATType == SECTOR)
 	    {
 	      Task[i].AATStartLat = FindLatitude (WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude, Task[i].AATStartRadial , Task[i].AATSectorRadius );
@@ -1201,7 +1277,6 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc)
 
   // JMW added faster checking...
 
-
   for(i=0;i<64;i++)
     {
       pt[i].x = x + (long) (radius * xcoords[i]);
@@ -1211,6 +1286,70 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc)
   pt[64].y = y + (long) (radius * ycoords[0]);
 
   Polygon(hdc,pt,65);
+  return TRUE;
+}
+
+
+int Segment(HDC hdc, long x, long y, int radius, RECT rc,
+	    double start,
+	    double end)
+{
+  POINT pt[66];
+  int i;
+  int istart;
+  int iend;
+
+  rectObj rect;
+  rect.minx = x-radius;
+  rect.maxx = x+radius;
+  rect.miny = y-radius;
+  rect.maxy = y+radius;
+  rectObj rcrect;
+  rcrect.minx = rc.left;
+  rcrect.maxx = rc.right;
+  rcrect.miny = rc.top;
+  rcrect.maxy = rc.bottom;
+
+  if (msRectOverlap(&rect, &rcrect)!=MS_TRUE) {
+    return FALSE;
+  }
+
+  // JMW added faster checking...
+
+  while (start>=360.0) {
+    start -= 360.0;
+  }
+  while (end<=0.0) {
+    end += 360.0;
+  }
+  while (start<0.0) {
+    start += 360.0;
+  }
+  while (end>360.0) {
+    end -= 360.0;
+  }
+
+  istart = iround(start/360.0*64);
+  iend = iround(end/360.0*64);
+
+  int npoly = 0;
+
+  if (istart>iend) {
+    iend+= 64;
+  }
+
+  pt[0].x = x; pt[0].y = y; npoly=1;
+  for(i=0;i<64;i++)
+    {
+      if (i<=iend-istart) {
+	pt[npoly].x = x + (long) (radius * xcoords[(i+istart)%64]);
+	pt[npoly].y = y + (long) (radius * ycoords[(i+istart)%64]);
+	npoly++;
+      }
+    }
+  pt[npoly].x = x; pt[npoly].y = y; npoly++;
+  Polygon(hdc,pt,npoly);
+
   return TRUE;
 }
 

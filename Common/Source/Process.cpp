@@ -374,7 +374,6 @@ int DetectStartTime() {
 }
 
 
-
 void FormatterTime::AssignValue(int i) {
   switch (i) {
   case 9:
@@ -625,6 +624,22 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 50:
     Value = CuSonde::maxGroundTemperature;
+    break;
+  case 51:
+    Value = DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance ;
+    if (ActiveWayPoint>=0) {
+      Valid = AATEnabled;
+    } else {
+      Valid = false;
+    }
+    break;
+  case 52:
+    Value = SPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed;
+    if (ActiveWayPoint>=0) {
+      Valid = AATEnabled;
+    } else {
+      Valid = false;
+    }
     break;
   default:
     break;

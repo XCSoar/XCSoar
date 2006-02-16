@@ -1353,6 +1353,14 @@ void InputEvents::eventLogger(TCHAR *misc) {
   } else if (_tcscmp(misc, TEXT("toggle")) == 0) {
     guiToggleLogger(true);
     return;
+  } else if (_tcscmp(misc, TEXT("nmea")) == 0) {
+    EnableLogNMEA = !EnableLogNMEA;
+    if (EnableLogNMEA) {
+      DoStatusMessage(TEXT("NMEA Log ON"));
+    } else {
+      DoStatusMessage(TEXT("NMEA Log OFF"));
+    }
+    return;
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (LoggerActive) {
       DoStatusMessage(TEXT("Logger ON"));

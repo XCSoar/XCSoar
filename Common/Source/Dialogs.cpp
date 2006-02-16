@@ -1331,6 +1331,7 @@ void LoadNewTask(TCHAR *szFileName)
   TASK_POINT Temp;
   DWORD dwBytesRead;
   int i;
+  bool TaskInvalid = false;
 
   ActiveWayPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
@@ -1354,6 +1355,11 @@ void LoadNewTask(TCHAR *szFileName)
 	    Task[i].Leg = Temp.Leg;
 	    Task[i].OutBound = Temp.OutBound;
 	    Task[i].AATCircleRadius = Temp */
+
+          if((Temp.Index >= (int)NumberOfWayPoints)||(Temp.Index<-1)) {
+	    TaskInvalid = true;
+	  }
+
         }
 
       if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
@@ -1363,6 +1369,13 @@ void LoadNewTask(TCHAR *szFileName)
 
       CloseHandle(hFile);
     }
+
+  if (TaskInvalid) {
+    for(i=0;i<MAXTASKPOINTS;i++)
+      {
+	Task[i].Index = -1;
+      }
+  }
 
   RefreshTask();
 
@@ -1378,6 +1391,7 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
   TASK_POINT Temp;
   DWORD dwBytesRead;
   int i;
+  bool TaskInvalid = false;
 
   ActiveWayPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
@@ -1406,7 +1420,9 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
                 Task[i].Leg = Temp.Leg;
                 Task[i].OutBound = Temp.OutBound;
                 Task[i].AATCircleRadius = Temp*/
-            }
+            } else {
+	    TaskInvalid = true;
+	  }
         }
 
       if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
@@ -1416,6 +1432,14 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
 
       CloseHandle(hFile);
     }
+
+  if (TaskInvalid) {
+    for(i=0;i<MAXTASKPOINTS;i++)
+      {
+	Task[i].Index = -1;
+      }
+  }
+
   for(i=0;i<MAXTASKPOINTS;i++)
     {
       if(Task[i].Index >=0)

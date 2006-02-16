@@ -64,6 +64,7 @@ Copyright_License {
 #define clDefault 0x20000000
 
 #define FORMATSIZE 32
+#define UNITSIZE 10
 
 class DataField{
 
@@ -109,6 +110,7 @@ class DataField{
 
   virtual int SetMax(int Value){return(0);};
   virtual double SetMax(double Value){return(0);};
+  void SetUnits(TCHAR *text) { _tcscpy(mUnits, text); }
 
   void Use(void){
     mUsageCounter++;
@@ -125,6 +127,7 @@ class DataField{
     void (*mOnDataAccess)(DataField *Sender, DataAccessKind_t Mode);
     TCHAR mEditFormat[FORMATSIZE+1];
     TCHAR mDisplayFormat[FORMATSIZE+1];
+    TCHAR mUnits[UNITSIZE+1];
 
   private:
 

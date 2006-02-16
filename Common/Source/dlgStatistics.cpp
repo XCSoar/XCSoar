@@ -170,7 +170,9 @@ void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text,
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
   int x = (int)((xv-x_min)*xscale)+rc.left-tsize.cx/2;
   int y = (int)((y_max-yv)*yscale)+rc.top-tsize.cy/2;
-  ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
+  SetBkMode(hdc, OPAQUE);
+  ExtTextOut(hdc, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
+  SetBkMode(hdc, TRANSPARENT);
 
 }
 
@@ -558,9 +560,14 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
   double lon2 = 0;
   double x1, y1, x2, y2;
   double lat_c, lon_c;
+  double aatradius[MAXTASKPOINTS];
 
   // find center
   ResetScale();
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    aatradius[i]=0;
+  }
+
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (Task[i].Index != -1) {
       lat1 = WayPointList[Task[i].Index].Latitude;
@@ -572,18 +579,90 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
   lat_c = (y_max+y_min)/2;
   lon_c = (x_max+x_min)/2;
 
+  int nwps = 0;
+
+  // find scale
   ResetScale();
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (Task[i].Index != -1) {
+      nwps++;
       lat1 = WayPointList[Task[i].Index].Latitude;
       lon1 = WayPointList[Task[i].Index].Longitude;
       x1 = (lon1-lon_c)*ffastcosine(lat1);
       y1 = (lat1-lat_c);
       ScaleYFromValue(rc, y1);
       ScaleXFromValue(rc, x1);
+
+      if (AATEnabled) {
+	double aatlat;
+	double aatlon;
+	double bearing;
+	double radius;
+
+	if (Task[i].AATType == SECTOR) {
+	  radius = Task[i].AATSectorRadius;
+	} else {
+	  radius = Task[i].AATCircleRadius;
+	}
+	for (int j=0; j<4; j++) {
+	  bearing = j*360.0/4;
+
+	  aatlat = FindLatitude(WayPointList[Task[i].Index].Latitude,
+				WayPointList[Task[i].Index].Longitude,
+				bearing, radius);
+	  aatlon = FindLongitude(WayPointList[Task[i].Index].Latitude,
+				 WayPointList[Task[i].Index].Longitude,
+				 bearing, radius);
+	  x1 = (aatlon-lon_c)*ffastcosine(lat1);
+	  y1 = (aatlat-lat_c);
+	  ScaleYFromValue(rc, y1);
+	  ScaleXFromValue(rc, x1);
+	}
+	aatlat-= lat1;
+	aatlon-= lon1;
+	aatradius[i]= sqrt(aatlat*aatlat+aatlon*aatlon);
+      }
+
     }
   }
   ScaleMakeSquare(rc);
+
+  // draw aat areas
+
+  if (AATEnabled) {
+    for (i=MAXTASKPOINTS-1; i>0; i--) {
+      if (Task[i].Index != -1) {
+	lat1 = WayPointList[Task[i-1].Index].Latitude;
+	lon1 = WayPointList[Task[i-1].Index].Longitude;
+	lat2 = WayPointList[Task[i].Index].Latitude;
+	lon2 = WayPointList[Task[i].Index].Longitude;
+	x1 = (lon1-lon_c)*ffastcosine(lat1);
+	y1 = (lat1-lat_c);
+	x2 = (lon2-lon_c)*ffastcosine(lat2);
+	y2 = (lat2-lat_c);
+
+	SelectObject(hdc,
+		     MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[AATASK]]);
+	SelectObject(hdc, GetStockObject(WHITE_PEN));
+	if (Task[i].AATType == SECTOR) {
+          Segment(hdc,
+		  (x2-x_min)*xscale+rc.left,
+		  (y_max-y2)*yscale+rc.top,
+		  aatradius[i]*xscale,
+		  rc,
+		  Task[i].AATStartRadial,
+		  Task[i].AATFinishRadial);
+	} else {
+          Circle(hdc,
+		 (x2-x_min)*xscale+rc.left,
+		 (y_max-y2)*yscale+rc.top,
+		 aatradius[i]*xscale, rc);
+	}
+      }
+    }
+  }
+
+  // draw task lines and labels
 
   for (i=MAXTASKPOINTS-1; i>0; i--) {
     if (Task[i].Index != -1) {
@@ -598,11 +677,49 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 
       DrawLine(hdc, rc,
 	       x1, y1, x2, y2,
-	       STYLE_BLUETHIN);
+	       STYLE_DASHGREEN);
 
       TCHAR text[10];
-      _stprintf(text,TEXT("%0d"),i+1);
-      DrawLabel(hdc, rc, text, x2, y2);
+      if ((i==nwps-1) && (Task[i].Index == Task[0].Index)) {
+	_stprintf(text,TEXT("%0d"),1);
+	DrawLabel(hdc, rc, text, x2, y2);
+      } else {
+	_stprintf(text,TEXT("%0d"),i+1);
+	DrawLabel(hdc, rc, text, x2, y2);
+      }
+    }
+  }
+
+  // draw aat task line
+
+  if (AATEnabled) {
+    for (i=MAXTASKPOINTS-1; i>0; i--) {
+      if (Task[i].Index != -1) {
+	if (i<ActiveWayPoint) continue;
+	if (i>=ActiveWayPoint) {
+	  if (i==1) {
+	    lat1 = WayPointList[Task[i-1].Index].Latitude;
+	    lon1 = WayPointList[Task[i-1].Index].Longitude;
+	  } else {
+	    lat1 = Task[i-1].AATTargetLat;
+	    lon1 = Task[i-1].AATTargetLon;
+	  }
+	  lat2 = Task[i].AATTargetLat;
+	  lon2 = Task[i].AATTargetLon;
+	}
+	if (i==ActiveWayPoint) {
+	  lat1 = GPS_INFO.Latitude;
+	  lon1 = GPS_INFO.Longitude;
+	}
+	x1 = (lon1-lon_c)*ffastcosine(lat1);
+	y1 = (lat1-lat_c);
+	x2 = (lon2-lon_c)*ffastcosine(lat2);
+	y2 = (lat2-lat_c);
+
+	DrawLine(hdc, rc,
+		 x1, y1, x2, y2,
+		 STYLE_REDTHICK);
+      }
     }
   }
 
@@ -768,6 +885,7 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 static int page=0;
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wGrid=NULL;
+static WndOwnerDrawFrame *wDetails=NULL;
 static WndOwnerDrawFrame *wInfo=NULL;
 
 static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
@@ -808,8 +926,19 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
 
 }
 
+
+void TimeToText(TCHAR* text, int d) {
+  int hours, mins;
+  int dd = d % (3600*24);
+  hours = (dd/3600);
+  mins = (dd/60-hours*60);
+  _stprintf(text, TEXT("%02d:%02d"),
+	    hours, mins);
+}
+
 static void Update(void){
-  TCHAR sTmp[128];
+  TCHAR sTmp[1000];
+  WndProperty *wp;
 
   switch(page){
     case 0:
@@ -883,11 +1012,40 @@ static void Update(void){
     _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Task"));
     wf->SetCaption(sTmp);
 
-    _stprintf(sTmp, TEXT("%s\r\n"),
-	      gettext(TEXT("temp")));
+    RefreshTaskStatistics();
+
+    TCHAR timetext1[10];
+    TCHAR timetext2[10];
+    if (AATEnabled) {
+      TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+      TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
+      _stprintf(sTmp, TEXT("Task: %s\r\nAAT: %s\r\nD max: %5.0f\r\nD min: %5.0f\r\nD tgt: %5.0f\r\nV max: %5.0f\r\nV min: %5.0f\r\nV tgt: %5.0f\r\n"),
+		timetext1,
+		timetext2,
+		DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance,
+		DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance,
+		DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
+		SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed,
+		SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed,
+		SPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed
+		);
+    } else {
+      TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+      _stprintf(sTmp, TEXT("Time to go: %s\r\nDistance to go: %5.0f\r\n"),
+		timetext1,
+		DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo);
+    }
+
     wInfo->SetCaption(sTmp);
     break;
+  case 6:
+    wp = ((WndProperty *)wf->FindByName(TEXT("prpDetails")));
+    wp->SetText(TEXT("blah blah blah"));
+    break;
   }
+
+  wGrid->SetVisible(page<6);
+  wDetails->SetVisible(page==6);
 
   if (wGrid != NULL)
     wGrid->Redraw();
@@ -950,6 +1108,7 @@ void dlgAnalysisShowModal(void){
   wf->SetKeyDownNotify(FormKeyDown);
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmGrid"));
+  wDetails = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmDetails"));
   wInfo = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmInfo"));
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
@@ -974,6 +1133,7 @@ void dlgAnalysisShowModal(void){
 // For backward compatability
 
 #include "InfoBoxLayout.h"
+
 
 LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1130,9 +1290,25 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       }
       if (page==5) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Task")));
-
-        _stprintf(Temp, TEXT("%s\r\n"),
-		  gettext(TEXT("task")));
+	TCHAR timetext1[10];
+	TCHAR timetext2[10];
+	if (AATEnabled) {
+	  TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+	  TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
+	  _stprintf(Temp, TEXT("Task time to go: %s\r\nAAT time to go: %s\r\nMax dist: %5.0f\r\nMin dist: %5.0f\r\nMax speed: %5.0f\r\nMin speed: %5.0f\r\n"),
+		    timetext1,
+		    timetext2,
+		    DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance,
+		    DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance,
+		    SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed,
+		    SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed
+		   );
+	} else {
+	  TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+	  _stprintf(Temp, TEXT("Time to go: %s\r\nDistance to go: %5.0f\r\n"),
+		    timetext1,
+		    DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo);
+	}
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
         Statistics::RenderTask(hdcScreen, rcgfx);

@@ -71,6 +71,7 @@ extern TCHAR szRegistryAppGaugeVarioAvgText[];
 extern TCHAR szRegistryAppGaugeVarioMc[];
 extern TCHAR szRegistryAppGaugeVarioBugs[];
 extern TCHAR szRegistryAppGaugeVarioBallast[];
+extern TCHAR szRegistryAutoAdvance[];
 
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
@@ -103,6 +104,9 @@ void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex);
 void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
 int  Circle(HDC hdc, long x, long y, int radius, RECT rc);
+int Segment(HDC hdc, long x, long y, int radius, RECT rc,
+	    double start,
+	    double end);
 void ReadAssetNumber(void);
 void WriteProfile(TCHAR *szFile);
 void ReadProfile(TCHAR *szFile);

@@ -369,8 +369,11 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInB
   HFONT oldFont;
   POINT org;
 
-  if (x<MapRect.left-WPCIRCLESIZE || x>MapRect.right+(WPCIRCLESIZE*3) || y<MapRect.top-WPCIRCLESIZE || y>MapRect.bottom+WPCIRCLESIZE) {
-	  return;
+  if ((x<MapRect.left-WPCIRCLESIZE) ||
+      (x>MapRect.right+(WPCIRCLESIZE*3)) ||
+      (y<MapRect.top-WPCIRCLESIZE) ||
+      (y>MapRect.bottom+WPCIRCLESIZE)) {
+    return;
   }
 
   org.x = x;
@@ -2312,6 +2315,13 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
           SelectObject(hdc, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
           SelectObject(hdc, GetStockObject(BLACK_PEN));
 
+          tmp = Task[i].AATSectorRadius * DISTANCEMODIFY/MapScale;
+          tmp = tmp * 30;
+
+          Segment(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
+		  Task[i].AATStartRadial+DisplayAngle,
+		  Task[i].AATFinishRadial+DisplayAngle);
+
           DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATStart);
           DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATFinish);
         }
@@ -2547,8 +2557,13 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 
   if(ActiveWayPoint >= 0)
   {
-    Start.x = WayPointList[Task[ActiveWayPoint].Index].Screen.x;
-    Start.y = WayPointList[Task[ActiveWayPoint].Index].Screen.y;
+    if (AATEnabled) {
+      Start.x = Task[ActiveWayPoint].Target.x;
+      Start.y = Task[ActiveWayPoint].Target.y;
+    } else {
+      Start.x = WayPointList[Task[ActiveWayPoint].Index].Screen.x;
+      Start.y = WayPointList[Task[ActiveWayPoint].Index].Screen.y;
+    }
     End.x = Orig.x;
     End.y = Orig.y;
     DrawSolidLine(hdc, Start, End);
@@ -3021,9 +3036,11 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
   for(i=0;i<NumberOfAirspaceAreas;i++)
   {
-    if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
+    if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
+			     AirspaceArea[i].Top.Altitude))
     {
-			pt = (POINT*)SfRealloc(pt, sizeof(POINT) * AirspaceArea[i].NumPoints);
+      pt = (POINT*)SfRealloc(pt,
+			     sizeof(POINT) * AirspaceArea[i].NumPoints);
      for(j= AirspaceArea[i].FirstPoint;
 	  j < (AirspaceArea[i].NumPoints + AirspaceArea[i].FirstPoint);
 	  j++)
@@ -3117,33 +3134,62 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
   */
 
-  #if (WINDOWSPC<-1)
+  //  #if (WINDOWSPC<-1)
+  #if (1)
     // old version
     //  BitBlt(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
     //	   hDCTemp,rc.left,rc.top,SRCAND /*SRCAND*/);
+
+  TransparentImage(hdcDrawWindowBg,
+		   rc.left,rc.top,
+		   rc.right-rc.left,rc.bottom-rc.top,
+		   hDCTemp,
+		   rc.left,rc.top,
+		   rc.right-rc.left,rc.bottom-rc.top,
+		   whitecolor
+		   );
+
+  /*
   TransparentImage(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
     hDCTemp,rc.left,rc.top,
     whitecolor
   );
+  */
+
   #else
   {
+
+  // JMW disabled this, it is buggy.
+
     DWORD tm = GetTickCount();
     HDC dc = CreateCompatibleDC(hdcDrawWindowBg);
     HBITMAP memBM = CreateCompatibleBitmap (dc, rc.right-rc.left, rc.bottom-rc.top);
     HBITMAP oldBmp = (HBITMAP)SelectObject(dc, memBM);
 
     SetBkColor(hDCTemp, RGB(0xff,0xff,0xff));
-    BitBlt(dc, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top,
-  	   hDCTemp, rc.left, rc.top,SRCCOPY /*SRCAND*/);
+    // JMW bug fix..
+
+    //    BitBlt(dc, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top,
+    //  	   hDCTemp, rc.left, rc.top,SRCCOPY /*SRCAND*/);
+    BitBlt(dc, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
+      	   hDCTemp, 0, 0, SRCCOPY /*SRCAND*/);
 
     // test draw the mask
     //    BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top,
     //  	   dc, rc.left, rc.top,SRCCOPY /*SRCAND*/);
 
+    /*
     MaskBlt(hdcDrawWindowBg,
       rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
       hDCTemp, rc.left,rc.top,
       memBM, rc.left,rc.top,
+      MAKEROP4(SRCAND, SRCCOPY)
+    );
+    */
+    MaskBlt(hdcDrawWindowBg,
+      0,0,rc.right-rc.left,rc.bottom-rc.top,
+      hDCTemp, 0, 0,
+      memBM, 0, 0,
       MAKEROP4(SRCAND, SRCCOPY)
     );
 
@@ -3673,13 +3719,18 @@ void MapWindow::CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
 
   for(i=0;i<NumberOfAirspaceAreas;i++)
   {
-    if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, AirspaceArea[i].Top.Altitude))
+    if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
+			     AirspaceArea[i].Top.Altitude))
     {
-      for(j=AirspaceArea[i].FirstPoint ; j<(AirspaceArea[i].FirstPoint + AirspaceArea[i].NumPoints) ; j++)
+      for(j=AirspaceArea[i].FirstPoint;
+	  j<(AirspaceArea[i].FirstPoint + AirspaceArea[i].NumPoints);
+	  j++)
       {
 
         // bug fix by Samuel Gisiger
-        LatLon2Screen(AirspacePoint[j].Longitude, AirspacePoint[j].Latitude, &scx, &scy);
+        LatLon2Screen(AirspacePoint[j].Longitude,
+		      AirspacePoint[j].Latitude,
+		      &scx, &scy);
 
         AirspacePoint[j].Screen.x = scx;
         AirspacePoint[j].Screen.y = scy;
@@ -3773,6 +3824,13 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 
   for(i=0;i<MAXTASKPOINTS-1;i++)
   {
+
+    if ((Task[i].Index >=0) && AATEnabled) {
+      LatLon2Screen(Task[i].AATTargetLon, Task[i].AATTargetLat, &scx, &scy);
+      Task[i].Target.x  = scx;
+      Task[i].Target.y = scy;
+    }
+
     if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
     {
       LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, &scx, &scy);

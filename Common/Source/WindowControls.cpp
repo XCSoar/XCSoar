@@ -299,6 +299,8 @@ DataField::DataField(TCHAR *EditFormat, TCHAR *DisplayFormat, void(*OnDataAccess
     mOnDataAccess = __Dummy;
   }
 
+  // blank units
+  mUnits[0]= 0;
 }
 
 void DataField::SetDisplayFormat(TCHAR *Value){
@@ -457,7 +459,7 @@ TCHAR *DataFieldInteger::GetAsString(void){
 }
 
 TCHAR *DataFieldInteger::GetAsDisplayString(void){
-  _stprintf(mOutBuf, mDisplayFormat, mValue);
+  _stprintf(mOutBuf, mDisplayFormat, mValue, mUnits);
   return(mOutBuf);
 }
 
@@ -552,7 +554,7 @@ TCHAR *DataFieldFloat::GetAsString(void){
 }
 
 TCHAR *DataFieldFloat::GetAsDisplayString(void){
-  _stprintf(mOutBuf, mDisplayFormat, mValue);
+  _stprintf(mOutBuf, mDisplayFormat, mValue, mUnits);
   return(mOutBuf);
 }
 
@@ -680,7 +682,12 @@ HBRUSH WindowControl::hBrushDefaultBk=NULL;
 HPEN WindowControl::hPenDefaultBorder=NULL;
 HPEN WindowControl::hPenDefaultSelector=NULL;
 
-WindowControl::WindowControl(WindowControl *Owner, HWND Parent, TCHAR *Name, int X, int Y, int Width, int Height, bool Visible){
+WindowControl::WindowControl(WindowControl *Owner,
+			     HWND Parent,
+			     TCHAR *Name,
+			     int X, int Y,
+			     int Width, int Height,
+			     bool Visible){
 
   mHasFocus = false;
   mCanFocus = false;
@@ -892,11 +899,14 @@ void WindowControl::AddClient(WindowControl *Client){
 
   if (Client->mY == -1){
     if (mClientCount > 1){
-      Client->mY = mClients[mClientCount-2]->mY + mClients[mClientCount-2]->mHeight;
+      Client->mY =
+	mClients[mClientCount-2]->mY
+	+ mClients[mClientCount-2]->mHeight;
       SetWindowPos(Client->GetHandle(), 0,
-		     Client->mX, Client->mY,
-		     0, 0,
-	       SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+		   Client->mX, Client->mY,
+		   0, 0,
+		   SWP_NOSIZE | SWP_NOZORDER
+		   | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     }
   }
 
@@ -1217,6 +1227,7 @@ LRESULT CALLBACK WindowControlWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 	else
 		return (DefWindowProc(hwnd, uMsg, wParam, lParam));
 }
+
 
 int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
@@ -1767,8 +1778,18 @@ int     WndProperty::InstCount=0;
 LRESULT CALLBACK WndPropertyEditWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
-WndProperty::WndProperty(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height, int CaptionWidth, int (*DataChangeNotify)(WindowControl * Sender, int Mode, int Value), int MultiLine):
-      WindowControl(Parent, NULL /*Parent->GetHandle()*/, Name, X, Y, Width, Height){
+WndProperty::WndProperty(WindowControl *Parent,
+			 TCHAR *Name,
+			 TCHAR *Caption,
+			 int X, int Y,
+			 int Width, int Height,
+			 int CaptionWidth,
+			 int (*DataChangeNotify)(WindowControl * Sender,
+						 int Mode, int Value),
+			 int MultiLine):
+  WindowControl(Parent,
+		NULL /*Parent->GetHandle()*/,
+		Name, X, Y, Width, Height){
 
   mOnClickUpNotify = NULL;
   mOnClickDownNotify = NULL;
@@ -1854,9 +1875,12 @@ void WndProperty::Destroy(void){
   }
 
   if (mDataField != NULL){
-    if (!mDataField->Unuse())
+    if (!mDataField->Unuse()) {
       delete(mDataField);
       mDataField = NULL;
+    } else {
+      ASSERT(0);
+    }
   }
 
   SetWindowLong(mhEdit, GWL_WNDPROC, (LONG) mEditWindowProcedure);
