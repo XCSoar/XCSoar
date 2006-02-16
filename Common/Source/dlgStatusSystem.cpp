@@ -77,7 +77,7 @@ void dlgStatusSystemShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpGPS"));
   if (extGPSCONNECT) {
     if (GPS_INFO.NAVWarning) {
-      wp->SetText(gettext(TEXT("fix invalid")));
+      wp->SetText(gettext(TEXT("Fix invalid")));
     } else {
       wp->SetText(gettext(TEXT("3D fix")));
     }
@@ -87,21 +87,21 @@ void dlgStatusSystemShowModal(void){
     wp->SetText(Temp);
 
   } else {
-    wp->SetText(gettext(TEXT("disconnected")));
+    wp->SetText(gettext(TEXT("Disconnected")));
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpVario"));
   if (GPS_INFO.VarioAvailable) {
-    wp->SetText(gettext(TEXT("connected")));
+    wp->SetText(gettext(TEXT("Connected")));
   } else {
-    wp->SetText(gettext(TEXT("disconnected")));
+    wp->SetText(gettext(TEXT("Disconnected")));
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFLARM"));
   if (GPS_INFO.FLARM_Available) {
-    wp->SetText(gettext(TEXT("connected")));
+    wp->SetText(gettext(TEXT("Connected")));
   } else {
-    wp->SetText(gettext(TEXT("disconnected")));
+    wp->SetText(gettext(TEXT("Disconnected")));
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLogger"));

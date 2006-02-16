@@ -108,6 +108,12 @@ void dlgWindSettingsShowModal(void){
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgWindSettings.xml", hWndMainWindow);
 
   if (wf) {
+    WndProperty* wp;
+    wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
+    if (wp) {
+      wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
+      wp->RefreshDisplay();
+    }
     wf->ShowModal();
     
     delete wf;

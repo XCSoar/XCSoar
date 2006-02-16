@@ -328,7 +328,10 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 
 
 
-void LoadChildsFromXML(WindowControl *Parent, CallBackTableEntry_t *LookUpTable, XMLNode *Node, int ParentFont){
+void LoadChildsFromXML(WindowControl *Parent, 
+		       CallBackTableEntry_t *LookUpTable, 
+		       XMLNode *Node, 
+		       int ParentFont) {
 
   int X,Y,Width,Height,Font;
   TCHAR Caption[128];

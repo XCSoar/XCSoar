@@ -61,7 +61,7 @@ UnitDescriptor_t Units::UnitDescriptors[] ={
   {TEXT("nm"),   0.00053996, 0},
   {TEXT("sm"),   0.0006214,  0},
   {TEXT("km/h"), 0.0036,     0},
-  {TEXT("kn"),   0.001944,   0},
+  {TEXT("kt"),   0.001944,   0},
   {TEXT("mph"),  0.002237,   0},
   {TEXT("m/s"),  1.0,        0},
   {TEXT("fpm"),  3.281/60.0, 0},
@@ -240,6 +240,7 @@ Units_t Units::SetUserVerticalSpeedUnit(Units_t NewUnit){
 Units_t Units::GetUserWindSpeedUnit(void){
   return(UserWindSpeedUnit);
 }
+
 Units_t Units::SetUserWindSpeedUnit(Units_t NewUnit){
   Units_t last = UserWindSpeedUnit;
   if (UserWindSpeedUnit != NewUnit){
@@ -274,12 +275,15 @@ void Units::NotifyUnitChanged(void){
 
   if (SPEEDMODIFY==TOMPH) {
     SetUserHorizontalSpeedUnit(unStatuteMilesPerHour);
+    SetUserWindSpeedUnit(unStatuteMilesPerHour);
   }
   if (SPEEDMODIFY==TOKNOTS) {
     SetUserHorizontalSpeedUnit(unKnots);
+    SetUserWindSpeedUnit(unKnots);
   }
   if (SPEEDMODIFY==TOKPH) {
     SetUserHorizontalSpeedUnit(unKiloMeterPerHour);
+    SetUserWindSpeedUnit(unKiloMeterPerHour);
   }
 
   if (DISTANCEMODIFY == TOMILES) {

@@ -248,6 +248,7 @@ int                                             DisplayTextType = DISPLAYNONE;
 int                                             AltitudeMode = ALLON;
 int                                             ClipAltitude = 1000;
 int                                             AltWarningMargin = 100;
+bool                                    AutoAdvance = true;
 double                          QNH = (double)1013.2;
 
 
@@ -478,7 +479,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 30
 	  {ugHorizontalSpeed, TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
 	  // 31
-	  {ugHorizontalSpeed, TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 30},
+	  {ugHorizontalSpeed, TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 51, 30},
 	  // 32
 	  {ugHorizontalSpeed, TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 37, 23},
 	  // 33
@@ -517,8 +518,13 @@ SCREEN_INFO Data_Options[] = {
 	  {ugNone,            TEXT("Relative Humidity"), TEXT("RelHum"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 50, 48},
 	  // 50
 	  {ugNone,            TEXT("Forecast Temperature"), TEXT("MaxTemp"), new InfoBoxFormatter(TEXT("%2.1f°")), ForecastTemperatureProcessing, 49, 25},
+	  // 51
+	  {ugDistance,        TEXT("AA Distance Tgt"), TEXT("AA Dtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 52, 31},
+	  // 52
+	  {ugHorizontalSpeed, TEXT("AA Speed Tgt"), TEXT("AA Vtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 51},
+
 	};
-int NUMSELECTSTRINGS = 51;
+int NUMSELECTSTRINGS = 53;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -2505,7 +2511,7 @@ void ProcessTimer(void)
             MapWindow::MapDirty = true;
             extGPSCONNECT = FALSE;
 
-			InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
+	    InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
 
  //            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
 
@@ -2748,7 +2754,7 @@ void DebugStore(char *Str)
   FILE *stream;
   static TCHAR szFileName[] = TEXT("\\TEMP.TXT");
 
-  stream = _wfopen(szFileName,TEXT("a+t"));
+  stream = _wfopen(szFileName,TEXT("a+"));
 
   fwrite(Str,strlen(Str),1,stream);
 

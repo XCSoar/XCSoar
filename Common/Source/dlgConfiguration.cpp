@@ -41,6 +41,7 @@ Copyright_License {
 #include "Externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
+#include "device.h"
 
 static bool changed = false;
 static bool taskchanged = false;
@@ -296,11 +297,105 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig13!=NULL);
   ASSERT(wConfig14!=NULL);
 
-  // TODO: units conversions, display units
-  // TODO: COM parameters
   // TODO: airspace colors
   // TODO: all appearance variables
   // TODO: warning of need to restart for language/input/appearance
+
+  TCHAR *COMMPort[] = {TEXT("COM1"),TEXT("COM2"),TEXT("COM3"),TEXT("COM4"),TEXT("COM5"),TEXT("COM6"),TEXT("COM7"),TEXT("COM8"),TEXT("COM9"),TEXT("COM10")};
+  TCHAR *tSpeed[] = {TEXT("1200"),TEXT("2400"),TEXT("4800"),TEXT("9600"),TEXT("19200"),TEXT("38400"),TEXT("57600"),TEXT("115200")};
+  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
+
+  DWORD dwPortIndex1 = 0;
+  DWORD dwSpeedIndex1 = 2;
+  DWORD dwPortIndex2 = 0;
+  DWORD dwSpeedIndex2 = 2;
+
+  int i;
+  int dwDeviceIndex1=0;
+  int dwDeviceIndex2=0;
+  TCHAR DeviceName[DEVNAMESIZE+1];
+
+  ReadPort1Settings(&dwPortIndex1,&dwSpeedIndex1);
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComPort1"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    for (i=0; i<10; i++) {
+      dfe->addEnumText(COMMPort[i]);
+    }
+    dfe->Set(dwPortIndex1);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComSpeed1"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    for (i=0; i<8; i++) {
+      dfe->addEnumText(tSpeed[i]);
+    }
+    dfe->Set(dwSpeedIndex1);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComDevice1"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Generic"));
+    for (i=0; i<DeviceRegisterCount; i++) {
+      decRegisterGetName(i, DeviceName);
+      dfe->addEnumText(DeviceName);
+      if (devA() != NULL){
+	if (_tcscmp(DeviceName, devA()->Name) == 0)
+	  dwDeviceIndex1 = i+1;
+      }
+    }
+    dfe->Set(dwDeviceIndex1);
+    wp->RefreshDisplay();
+  }
+
+  ReadPort2Settings(&dwPortIndex2,&dwSpeedIndex2);
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComPort2"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    for (i=0; i<10; i++) {
+      dfe->addEnumText(COMMPort[i]);
+    }
+    dfe->Set(dwPortIndex2);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComSpeed2"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    for (i=0; i<8; i++) {
+      dfe->addEnumText(tSpeed[i]);
+    }
+    dfe->Set(dwSpeedIndex2);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComDevice2"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Generic"));
+    for (i=0; i<DeviceRegisterCount; i++) {
+      decRegisterGetName(i, DeviceName);
+      dfe->addEnumText(DeviceName);
+      if (devB() != NULL){
+	if (_tcscmp(DeviceName, devB()->Name) == 0)
+	  dwDeviceIndex2 = i+1;
+      }
+    }
+    dfe->Set(dwDeviceIndex2);
+    wp->RefreshDisplay();
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceDisplay"));
   if (wp) {
@@ -317,13 +412,14 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpClipAltitude"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(ClipAltitude);
+    wp->GetDataField()->SetAsFloat(iround(ClipAltitude*ALTITUDEMODIFY));
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
-
+    
   wp = (WndProperty*)wf->FindByName(TEXT("prpAltWarningMargin"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(AltWarningMargin);
+    wp->GetDataField()->SetAsFloat(iround(AltWarningMargin*ALTITUDEMODIFY));
     wp->RefreshDisplay();
   }
 
@@ -398,19 +494,22 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeArrival"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(SAFETYALTITUDEARRIVAL);
+    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*SAFETYALTITUDEARRIVAL));
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeBreakoff"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(SAFETYALTITUDEBREAKOFF);
+    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*SAFETYALTITUDEBREAKOFF));
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeTerrain"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(SAFETYALTITUDETERRAIN);
+    wp->GetDataField()->SetAsFloat(iround(ALTITUDEMODIFY*SAFETYALTITUDETERRAIN));
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 
@@ -490,11 +589,11 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxManoeuveringSpeed"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(SAFTEYSPEED);
+    wp->GetDataField()->SetAsFloat(iround(SPEEDMODIFY*SAFTEYSPEED));
+    wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
     wp->RefreshDisplay();
   }
 
-  int i;
   // TODO handle change
   wp = (WndProperty*)wf->FindByName(TEXT("prpPolarType"));
   if (wp) {
@@ -718,6 +817,12 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
+  if (wp) {
+    wp->GetDataField()->Set(AutoAdvance);
+    wp->RefreshDisplay();
+  }
+
   ////
 
   SetInfoBoxSelector(TEXT("prpInfoBoxCruise0"),0,0);
@@ -794,10 +899,13 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  int ival;
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpClipAltitude"));
   if (wp) {
-    if (ClipAltitude != wp->GetDataField()->GetAsInteger()) {
-      ClipAltitude = wp->GetDataField()->GetAsInteger();
+    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    if (ClipAltitude != ival) {
+      ClipAltitude = ival;
       SetToRegistry(szRegistryAltMode,ClipAltitude);
       changed = true;
     }
@@ -805,8 +913,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAltWarningMargin"));
   if (wp) {
-    if (AltWarningMargin != wp->GetDataField()->GetAsInteger()) {
-      AltWarningMargin = wp->GetDataField()->GetAsInteger();
+    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    if (AltWarningMargin != ival) {
+      AltWarningMargin = ival;
       SetToRegistry(szRegistryAltMargin,AltWarningMargin);
       changed = true;
     }
@@ -887,8 +996,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeArrival"));
   if (wp) {
-    if (SAFETYALTITUDEARRIVAL != wp->GetDataField()->GetAsInteger()) {
-      SAFETYALTITUDEARRIVAL = wp->GetDataField()->GetAsInteger();
+    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    if (SAFETYALTITUDEARRIVAL != ival) {
+      SAFETYALTITUDEARRIVAL = ival;
       SetToRegistry(szRegistrySafetyAltitudeArrival,
 		    (DWORD)SAFETYALTITUDEARRIVAL);
       changed = true;
@@ -897,8 +1007,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeBreakoff"));
   if (wp) {
-    if (SAFETYALTITUDEBREAKOFF != wp->GetDataField()->GetAsInteger()) {
-      SAFETYALTITUDEBREAKOFF = wp->GetDataField()->GetAsInteger();
+    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    if (SAFETYALTITUDEBREAKOFF != ival) {
+      SAFETYALTITUDEBREAKOFF = ival;
       SetToRegistry(szRegistrySafetyAltitudeBreakOff,
 		    (DWORD)SAFETYALTITUDEBREAKOFF);
       changed = true;
@@ -907,8 +1018,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyAltitudeTerrain"));
   if (wp) {
-    if (SAFETYALTITUDETERRAIN != wp->GetDataField()->GetAsInteger()) {
-      SAFETYALTITUDETERRAIN = wp->GetDataField()->GetAsInteger();
+    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    if (SAFETYALTITUDETERRAIN != ival) {
+      SAFETYALTITUDETERRAIN = ival;
       SetToRegistry(szRegistrySafetyAltitudeTerrain,
 		    (DWORD)SAFETYALTITUDETERRAIN);
       changed = true;
@@ -929,6 +1041,7 @@ void dlgConfigurationShowModal(void){
     if (Speed != wp->GetDataField()->GetAsInteger()) {
       Speed = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistrySpeedUnitsValue, Speed);
+      Units::NotifyUnitChanged();
       changed = true;
     }
   }
@@ -938,6 +1051,7 @@ void dlgConfigurationShowModal(void){
     if (Distance != wp->GetDataField()->GetAsInteger()) {
       Distance = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryDistanceUnitsValue, Distance);
+      Units::NotifyUnitChanged();
       changed = true;
     }
   }
@@ -947,6 +1061,7 @@ void dlgConfigurationShowModal(void){
     if (Lift != wp->GetDataField()->GetAsInteger()) {
       Lift = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryLiftUnitsValue, Lift);
+      Units::NotifyUnitChanged();
       changed = true;
     }
   }
@@ -956,6 +1071,7 @@ void dlgConfigurationShowModal(void){
     if (Altitude != wp->GetDataField()->GetAsInteger()) {
       Altitude = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryAltitudeUnitsValue, Altitude);
+      Units::NotifyUnitChanged();
       changed = true;
     }
   }
@@ -1094,8 +1210,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxManoeuveringSpeed"));
   if (wp) {
-    if (SAFTEYSPEED != wp->GetDataField()->GetAsInteger()) {
-      SAFTEYSPEED = wp->GetDataField()->GetAsInteger();
+    ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
+    if (SAFTEYSPEED != ival) {
+      SAFTEYSPEED = ival;
       SetToRegistry(szRegistrySafteySpeed,(DWORD)SAFTEYSPEED);
       GlidePolar::SetBallast();
       changed = true;
@@ -1214,6 +1331,80 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
+  if (wp) {
+    if (AutoAdvance != wp->GetDataField()->GetAsBoolean()) {
+      AutoAdvance = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryAutoAdvance,
+		    AutoAdvance);
+      changed = true;
+    }
+  }
+
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComPort1"));
+  if (wp) {
+    if (dwPortIndex1 != wp->GetDataField()->GetAsInteger()) {
+      dwPortIndex1 = wp->GetDataField()->GetAsInteger();
+      changed = true;
+      COMPORTCHANGED = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComSpeed1"));
+  if (wp) {
+    if (dwSpeedIndex1 != wp->GetDataField()->GetAsInteger()) {
+      dwSpeedIndex1 = wp->GetDataField()->GetAsInteger();
+      changed = true;
+      COMPORTCHANGED = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComDevice1"));
+  if (wp) {
+    if (dwDeviceIndex1 != wp->GetDataField()->GetAsInteger()) {
+      dwDeviceIndex1 = wp->GetDataField()->GetAsInteger();
+      changed = true;
+      COMPORTCHANGED = true;
+      decRegisterGetName(dwDeviceIndex1-1, DeviceName);
+      WriteDeviceSettings(0, DeviceName);  
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComPort2"));
+  if (wp) {
+    if (dwPortIndex2 != wp->GetDataField()->GetAsInteger()) {
+      dwPortIndex2 = wp->GetDataField()->GetAsInteger();
+      changed = true;
+      COMPORTCHANGED = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComSpeed2"));
+  if (wp) {
+    if (dwSpeedIndex2 != wp->GetDataField()->GetAsInteger()) {
+      dwSpeedIndex2 = wp->GetDataField()->GetAsInteger();
+      changed = true;
+      COMPORTCHANGED = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpComDevice2"));
+  if (wp) {
+    if (dwDeviceIndex2 != wp->GetDataField()->GetAsInteger()) {
+      dwDeviceIndex2 = wp->GetDataField()->GetAsInteger();
+      changed = true;
+      COMPORTCHANGED = true;
+      decRegisterGetName(dwDeviceIndex2-1, DeviceName);
+      WriteDeviceSettings(1, DeviceName);  
+    }
+  }
+
+  if (COMPORTCHANGED) {
+    WritePort1Settings(dwPortIndex1,dwSpeedIndex1);
+    WritePort2Settings(dwPortIndex2,dwSpeedIndex2);
+  }
+
   GetInfoBoxSelector(TEXT("prpInfoBoxCruise0"),0,0);
   GetInfoBoxSelector(TEXT("prpInfoBoxCruise1"),1,0);
   GetInfoBoxSelector(TEXT("prpInfoBoxCruise2"),2,0);
@@ -1266,9 +1457,32 @@ void dlgConfigurationShowModal(void){
 #endif
   };
 
+
   delete wf;
 
   wf = NULL;
 
 }
 
+// extern TCHAR szRegistryAirspaceBlackOutline[];
+// NUMAIRSPACECOLORS
+// AIRSPACECLASSCOUNT
+// SetRegistryColour(CTR, NewColor);
+/*
+ AIRSPACECLASSCOUNT
+
+  { CLASSA,     _T("Class A")},
+  { CLASSB,     _T("Class B")},
+  { CLASSC,     _T("Class C")},
+  { CLASSD,     _T("Class D")},
+  { CLASSE,     _T("Class E")},
+  { CLASSF,     _T("Class F")},
+  { PROHIBITED, _T("Prohibited areas")},
+  { DANGER,     _T("Danger areas")},
+  { RESTRICT,   _T("Restricted areas")},
+  { CTR,        _T("CTR")},
+  { NOGLIDER,   _T("No Gliders")},
+  { WAVE,       _T("Wave")},
+  { OTHER,      _T("Other")},
+  { AATASK,     _T("AAT")}
+*/

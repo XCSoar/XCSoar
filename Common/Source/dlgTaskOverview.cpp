@@ -88,23 +88,8 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 		 ETO_OPAQUE, NULL,
 		 WayPointList[Task[i].Index].Name,
 		 _tcslen(WayPointList[Task[i].Index].Name), NULL);
-      /*
-	if (WayPointList[WayPointSelectInfo[i].Index].Flags & HOME){
-      sTmp[0] = 'H';
-    }else
-    if (WayPointList[WayPointSelectInfo[i].Index].Flags & AIRPORT){
-      sTmp[0] = 'A';
-    }else
-    if (WayPointList[WayPointSelectInfo[i].Index].Flags & LANDPOINT){
-      sTmp[0] = 'L';
-    }else
-      sTmp[0] = 'T';
 
-    ExtTextOut(hDC, 135, 2,
-      ETO_OPAQUE, NULL,
-      sTmp, 1, NULL);
-      */
-                           //todo user unit
+    //todo user unit
     _stprintf(sTmp, TEXT("%.0fkm"), Task[i].Leg/1000.0);
 
     ExtTextOut(hDC, 125, 2,
@@ -176,6 +161,8 @@ static void OverviewRefreshTask(void) {
 
   UpdateList();
 
+  RefreshTaskStatistics();
+
   /*
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(TEXT("prpDistance"));
@@ -190,6 +177,17 @@ static void OverviewRefreshTask(void) {
     wp->RefreshDisplay();
   }
   */
+  WndProperty* wp;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
+  if (wp) {
+    double dd = CALCULATED_INFO.TaskTimeToGo;
+    if (CALCULATED_INFO.TaskStartTime>0.0) {
+      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    }
+    wp->GetDataField()->SetAsFloat(dd/60.0);
+    wp->RefreshDisplay();
+  }
 
 }
 
@@ -218,7 +216,10 @@ static void OnTaskListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *Li
     if (ItemIndex>=UpLimit) {
       ItemIndex= UpLimit;
     }
+    // create new waypoint
     Task[ItemIndex].Index = Task[0].Index;
+    Task[ItemIndex].AATTargetOffsetRadius = 0.0;
+    Task[ItemIndex].AATTargetOffsetRadial = 0.0;
     if (ItemIndex>0) {
       dlgTaskWaypointShowModal(ItemIndex, 2); // finish waypoint
     } else {
@@ -261,12 +262,63 @@ static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *L
   RefreshTask();
 }
 
+static int TaskFileNumber = 0;
+
+static void GetTaskFileName(TCHAR *filename) {
+  WndProperty* wp;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
+  if (wp) {
+    TaskFileNumber = wp->GetDataField()->GetAsInteger();
+  }
+#ifdef GNAV
+  _stprintf(filename,TEXT("\\NOR Flash\\%02d.tsk"), TaskFileNumber);
+#else 
+  _stprintf(filename,TEXT("\\%02d.tsk"), TaskFileNumber);
+#endif
+}
+
+static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+  TCHAR filename[100];
+  GetTaskFileName(filename);
+  ReadValues();
+  SaveTask(filename);
+}
+
+
+static void SetValues(void) {
+  WndProperty* wp;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(AATTaskLength);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
+  if (wp) {
+    bool aw = AATEnabled;
+    wp->GetDataField()->Set(aw);
+    wp->RefreshDisplay();
+  }
+}
+
+static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+  TCHAR filename[100];
+  GetTaskFileName(filename);
+  LoadNewTask(filename);
+  SetValues();
+  OverviewRefreshTask();
+}
+
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnTaskPaintListItem),
   DeclearCallBackEntry(OnTaskListInfo),
   DeclearCallBackEntry(OnDeclareClicked),
   DeclearCallBackEntry(OnClearClicked),
   DeclearCallBackEntry(OnCloseClicked),
+  DeclearCallBackEntry(OnSaveClicked),
+  DeclearCallBackEntry(OnLoadClicked),
   DeclearCallBackEntry(NULL)
 };
 
@@ -298,21 +350,31 @@ void dlgTaskOverviewShowModal(void){
 
   // set properties...
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
+  SetValues();
+
+  // 
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(AATTaskLength);
+    wp->GetDataField()->SetAsFloat(TaskFileNumber);
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
-  if (wp) {
-    bool aw = AATEnabled;
-    wp->GetDataField()->Set(aw);
-    wp->RefreshDisplay();
-  }
+  // CALCULATED_INFO.AATTimeToGo
+  // 
 
   // initialise and turn on the display
   OverviewRefreshTask();
+
+  /*
+  WndButton *wb;
+
+  wb = (WndButton*)wf->FindByName(TEXT("cmdClose"));
+  if (wb) {
+    SetFocus(wb->GetHandle());
+  }
+  */
+
   wf->ShowModal();
 
   // now retrieve back the properties...

@@ -152,6 +152,7 @@ extern int AltWarningMargin;
 extern bool EnableCDICruise;
 extern bool EnableCDICircling;
 extern bool EnableVarioGauge;
+extern bool AutoAdvance;
 //
 
 // statistics

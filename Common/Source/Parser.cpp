@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.34 2005/12/24 04:37:51 jwharington Exp $
+  $Id: Parser.cpp,v 1.35 2006/02/16 00:03:06 jwharington Exp $
 
 Copyright_License {
 
@@ -111,6 +111,9 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
     {
       return FALSE;
     }
+
+  if (EnableLogNMEA)
+    LogNMEA(String);
 
   if(String[1] == 'P')
     {
@@ -1193,3 +1196,30 @@ void testflarm(NMEA_INFO *GPS_INFO) {
   PFLAA(TEXT("0,1000,2000,220,2,DD8F12,120,-4.5,30,-1.4,1"),GPS_INFO);
 }
 
+
+///
+
+bool EnableLogNMEA = false;
+HANDLE nmeaLogFile = INVALID_HANDLE_VALUE; 
+
+void LogNMEA(TCHAR* text) {
+
+  if (!EnableLogNMEA) {
+    if (nmeaLogFile != INVALID_HANDLE_VALUE) {
+       CloseHandle(nmeaLogFile);
+       nmeaLogFile = INVALID_HANDLE_VALUE; 
+    }
+    return;
+  }
+
+  DWORD dwBytesRead;   
+
+  if (nmeaLogFile == INVALID_HANDLE_VALUE) {
+    nmeaLogFile = CreateFile(TEXT("\\SD Card\\xcsoar-nmea.log"), 
+			     GENERIC_WRITE, FILE_SHARE_WRITE, 
+			     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
+  }
+
+  WriteFile(nmeaLogFile, text, _tcslen(text)*sizeof(TCHAR), &dwBytesRead, 
+	    (OVERLAPPED *)NULL);
+}

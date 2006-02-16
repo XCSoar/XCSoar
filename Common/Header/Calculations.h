@@ -65,8 +65,10 @@ typedef struct _DERIVED_INFO
   double NextAltitude;
   double AATMaxDistance;
   double AATMinDistance;
+  double AATTargetDistance;
   double AATTimeToGo;
   double AATMaxSpeed;
+  double AATTargetSpeed;
   double AATMinSpeed;
   double PercentCircling;
 
@@ -114,5 +116,6 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 
 bool ClearAirspaceWarnings(bool ack, bool allday=false);
 void ResumeAbortTask(int set = 0);
+void RefreshTaskStatistics(void);
 
 #endif

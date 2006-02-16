@@ -148,30 +148,32 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATCircleRadius"));
-  // TODO handle change
   if (wp) {
     wp->GetDataField()->SetAsFloat(Task[twItemIndex].AATCircleRadius);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATSectorRadius"));
-  // TODO handle change
   if (wp) {
     wp->GetDataField()->SetAsFloat(Task[twItemIndex].AATSectorRadius);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATStartRadial"));
-  // TODO handle change
   if (wp) {
     wp->GetDataField()->SetAsFloat(Task[twItemIndex].AATStartRadial);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATFinishRadial"));
-  // TODO handle change
   if (wp) {
     wp->GetDataField()->SetAsFloat(Task[twItemIndex].AATFinishRadial);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATOffsetRadius"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(iround(Task[twItemIndex].AATTargetOffsetRadius*100.0));
     wp->RefreshDisplay();
   }
 
@@ -231,6 +233,12 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATFinishRadial"));
   if (wp) {
     Task[twItemIndex].AATFinishRadial = wp->GetDataField()->GetAsInteger();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATOffsetRadius"));
+  if (wp) {
+    Task[twItemIndex].AATTargetOffsetRadius = 
+      wp->GetDataField()->GetAsInteger()/100.0;
   }
 
   delete wf;

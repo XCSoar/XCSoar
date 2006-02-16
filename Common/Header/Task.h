@@ -34,7 +34,12 @@ typedef struct _TASK_POINT
   double AATFinishLat;
   double AATFinishLon;
   POINT	 AATStart;
-  POINT	 AATFinish;  
+  POINT	 AATFinish;
+  double AATTargetOffsetRadius;
+  double AATTargetOffsetRadial;
+  double AATTargetLat;
+  double AATTargetLon;
+  POINT	 Target;		
 }TASK_POINT;
 
 typedef TASK_POINT Task_t[MAXTASKPOINTS +1];

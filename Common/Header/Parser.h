@@ -98,4 +98,7 @@ int ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO);
 BOOL NMEAChecksum(TCHAR *String);
 void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 
+extern bool EnableLogNMEA;
+void LogNMEA(TCHAR* text);
+
 #endif

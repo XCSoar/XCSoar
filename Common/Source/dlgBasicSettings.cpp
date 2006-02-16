@@ -169,8 +169,15 @@ void dlgBasicSettingsShowModal(void){
 
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgBasicSettings.xml", hWndMainWindow);
 
+  WndProperty* wp;
+
   if (wf) {
-    
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+    if (wp) {
+      wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+    }
+
     wf->ShowModal();
     delete wf;
   }

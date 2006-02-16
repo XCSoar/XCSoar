@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.95 2006/02/02 00:29:43 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.96 2006/02/16 00:03:05 jwharington Exp $
 
 Copyright_License {
 
@@ -1331,6 +1331,7 @@ void LoadNewTask(TCHAR *szFileName)
   TASK_POINT Temp;
   DWORD dwBytesRead;
   int i;
+  bool TaskInvalid = false;
 
   ActiveWayPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
@@ -1354,6 +1355,11 @@ void LoadNewTask(TCHAR *szFileName)
 	    Task[i].Leg = Temp.Leg;
 	    Task[i].OutBound = Temp.OutBound;
 	    Task[i].AATCircleRadius = Temp */
+
+          if((Temp.Index >= (int)NumberOfWayPoints)||(Temp.Index<-1)) {
+	    TaskInvalid = true;
+	  }
+
         }
 
       if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
@@ -1363,6 +1369,13 @@ void LoadNewTask(TCHAR *szFileName)
 
       CloseHandle(hFile);
     }
+
+  if (TaskInvalid) {
+    for(i=0;i<MAXTASKPOINTS;i++)
+      {
+	Task[i].Index = -1;
+      }
+  }
   
   RefreshTask();
   
@@ -1378,6 +1391,7 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
   TASK_POINT Temp;
   DWORD dwBytesRead;
   int i;
+  bool TaskInvalid = false;
 
   ActiveWayPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
@@ -1388,7 +1402,7 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
   SendDlgItemMessage(hDlg,IDC_TASK,LB_RESETCONTENT,0,0);
 
   hFile = CreateFile(szFileName,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-        
+  
   if(hFile!=INVALID_HANDLE_VALUE )
     {
       for(i=0;i<MAXTASKPOINTS;i++)
@@ -1397,7 +1411,7 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
             {
               break;
             }
-
+	  
           if(Temp.Index < (int)NumberOfWayPoints)
             {
               memcpy(&Task[i],&Temp, sizeof(TASK_POINT));
@@ -1406,16 +1420,26 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
                 Task[i].Leg = Temp.Leg;
                 Task[i].OutBound = Temp.OutBound;
                 Task[i].AATCircleRadius = Temp*/
-            }
+            } else {
+	    TaskInvalid = true;
+	  }
         }
 
       if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
 	AATEnabled = FALSE;
       if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
 	AATTaskLength = 0;
-
+      
       CloseHandle(hFile);
     }
+
+  if (TaskInvalid) {
+    for(i=0;i<MAXTASKPOINTS;i++)
+      {
+	Task[i].Index = -1;
+      }
+  }
+
   for(i=0;i<MAXTASKPOINTS;i++)
     {
       if(Task[i].Index >=0)
