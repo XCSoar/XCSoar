@@ -1222,8 +1222,10 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         {
           if(Basic->Time - Calculated->TaskStartTime < 600)
             {
-              ActiveWayPoint = 0;
-              StartSectorEntered = TRUE;
+	      if (AutoAdvance) {
+		ActiveWayPoint = 0;
+		StartSectorEntered = TRUE;
+	      }
             }
         }
 
@@ -1290,8 +1292,10 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         {
           if(Basic->Time - Calculated->TaskStartTime < 600)
             {
-              ActiveWayPoint = 0;
-              StartSectorEntered = TRUE;
+	      if (AutoAdvance) {
+		ActiveWayPoint = 0;
+		StartSectorEntered = TRUE;
+	      }
             }
         }
       if(InAATTurnSector(Basic,Calculated))
@@ -1410,7 +1414,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 		 w0lon);
       
       LegToGo = 
-        Distance(Basic->Latitude , Basic->Longitude , 
+        Distance(Basic->Latitude, 
+		 Basic->Longitude, 
                  w1lat, 
                  w1lon);
       
@@ -1428,7 +1433,6 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
         Calculated->LegSpeed = Calculated->LegDistanceCovered
           / (Basic->Time - Calculated->LegStartTime); 
       
-
       for(i=0;i<ActiveWayPoint-1;i++)
         {
 
@@ -1485,37 +1489,43 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 
       if (AATEnabled) {
 
-	LegBearing = Bearing(Basic->Latitude , Basic->Longitude , 
+	LegBearing = Bearing(Basic->Latitude , 
+			     Basic->Longitude , 
 			     Task[i].AATTargetLat, 
 			     Task[i].AATTargetLon);
 	
-	LegToGo = Distance(Basic->Latitude , Basic->Longitude , 
+	LegToGo = Distance(Basic->Latitude , 
+			   Basic->Longitude , 
 			     Task[i].AATTargetLat, 
 			     Task[i].AATTargetLon);
       } else {
 
-	LegBearing = Bearing(Basic->Latitude , Basic->Longitude , 
+	LegBearing = Bearing(Basic->Latitude , 
+			     Basic->Longitude , 
 			     WayPointList[Task[i].Index].Latitude, 
 			     WayPointList[Task[i].Index].Longitude);
 	
-	LegToGo = Distance(Basic->Latitude , Basic->Longitude , 
+	LegToGo = Distance(Basic->Latitude , 
+			   Basic->Longitude , 
 			   WayPointList[Task[i].Index].Latitude, 
 			   WayPointList[Task[i].Index].Longitude);
       }
 
       // JMW TODO: use instantaneous maccready here again to calculate
       // dolphin speed to fly 
-      LegAltitude = GlidePolar::MacCreadyAltitude(maccready, LegToGo, 
-                                                 LegBearing, 
-                                    Calculated->WindSpeed, 
-                                    Calculated->WindBearing, 
-                                    &(Calculated->BestCruiseTrack),
-                                    &(Calculated->VMacCready),
-                                    (i==FinalWayPoint),
-                                    &(Calculated->LegTimeToGo)
-                                    // ||()
-                                    // JMW TODO!!!!!!!!!!!
-                                    );
+      LegAltitude = 
+	GlidePolar::MacCreadyAltitude(maccready, 
+				      LegToGo, 
+				      LegBearing, 
+				      Calculated->WindSpeed, 
+				      Calculated->WindBearing,
+				      &(Calculated->BestCruiseTrack),
+				      &(Calculated->VMacCready),
+				      (i==FinalWayPoint),
+				      &(Calculated->LegTimeToGo)
+				      // ||()
+				      // JMW TODO!!!!!!!!!!!
+				      );
 
       if ((i==FinalWayPoint)||(TaskAborted)) {
         double lat, lon;
@@ -1920,7 +1930,7 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   MaxDistance = 0; MinDistance = 0; TargetDistance = 0;
   // Calculate Task Distances
 
-  Calculated->TaskDistanceToGo = 0;
+  //  Calculated->TaskDistanceToGo = 0;
   // JMW: not sure why this is here?
 
   if(ActiveWayPoint >=0)

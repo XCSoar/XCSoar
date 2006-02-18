@@ -40,8 +40,10 @@ void FlyDirectTo(int index) {
   for(int j=0;j<MAXTASKPOINTS;j++)
   {
     Task[j].Index = -1;
+    Task[j].AATTargetOffsetRadius = 0.0;
   }
   Task[0].Index = index;
+  Task[0].AATTargetOffsetRadius = 0.0;
   ActiveWayPoint = 0;
 }
 
@@ -54,6 +56,7 @@ void InsertWaypoint(int index) {
   if (ActiveWayPoint<0) {
     ActiveWayPoint = 0;
     Task[ActiveWayPoint].Index = index;
+    Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
     return;
   }
   
@@ -71,10 +74,12 @@ void InsertWaypoint(int index) {
   // to the right by one position
   for (i=MAXTASKPOINTS-1; i>ActiveWayPoint; i--) {
     Task[i].Index = Task[i-1].Index;
+    Task[i].AATTargetOffsetRadius= Task[i-1].AATTargetOffsetRadius;
   }
   
   // Insert new point and update task details
   Task[ActiveWayPoint].Index = index;
+  Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
 
   RefreshTask();
   
@@ -104,8 +109,10 @@ void RemoveTaskPoint(int index) {
   // fill the gap
   for (i=index; i<MAXTASKPOINTS-1; ++i) {
     Task[i].Index = Task[i+1].Index;
+    Task[i].AATTargetOffsetRadius= Task[i+1].AATTargetOffsetRadius;
   }
   Task[MAXTASKPOINTS-1].Index = -1;
+  Task[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
 
   RefreshTask();
   
@@ -188,6 +195,7 @@ void ReplaceWaypoint(int index) {
   if (ActiveWayPoint>=0) {	
     
     Task[ActiveWayPoint].Index = index;
+    Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
     RefreshTask();    
     
   } else {
@@ -196,6 +204,7 @@ void ReplaceWaypoint(int index) {
     // nothing to replace
     ActiveWayPoint=0;
     Task[ActiveWayPoint].Index = index;
+    Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
     RefreshTask();
   }
 }

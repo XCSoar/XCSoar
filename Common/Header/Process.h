@@ -16,6 +16,7 @@ void				DirectionProcessing(int UpDown);
 void				AltitudeProcessing(int UpDown);
 void				AirspeedProcessing(int UpDown);
 void				ForecastTemperatureProcessing(int UpDown);
-
+int DetectStartTime(void);
+int TimeLocal(int d);
 
 #endif

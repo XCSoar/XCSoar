@@ -128,6 +128,7 @@ public:
   static bool LoadUnitBitmap(HINSTANCE hInst);
   static bool UnLoadUnitBitmap(void);
 
+  static void TimeToText(TCHAR* text, int d);
 
 };
 

@@ -1031,9 +1031,13 @@ void InputEvents::eventMainMenu(TCHAR *misc) {
 void InputEvents::eventStatus(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("system")) == 0) {
     ShowStatusSystem();
-  } else {
-    ShowStatus();
-  }
+  } else
+    if (_tcscmp(misc, TEXT("task")) == 0) {
+      ShowStatusTask();
+    } else 
+      {
+	ShowStatus();
+      }
 }
 
 void InputEvents::eventAnalysis(TCHAR *misc) {

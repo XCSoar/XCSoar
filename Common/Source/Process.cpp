@@ -246,46 +246,56 @@ extern void PopupWaypointDetails();
 */
 void NextUpDown(int UpDown)
 {
-	if(UpDown>0) {
-		if(ActiveWayPoint < MAXTASKPOINTS) {
-			// Increment Waypoint
-			if(Task[ActiveWayPoint+1].Index >= 0) {
-				if(ActiveWayPoint == 0)	{
-					CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
-				}
-				ActiveWayPoint ++;
-				CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
-			}
-			// No more, try first
-			else if((UpDown == 2) && (Task[0].Index >= 0)) {
-				if(ActiveWayPoint == 0)	{
-					CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
-				}
-				ActiveWayPoint = 0;
-				CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
-			}
-		}
+  if(UpDown>0) {
+    if(ActiveWayPoint < MAXTASKPOINTS) {
+      // Increment Waypoint
+      if(Task[ActiveWayPoint+1].Index >= 0) {
+	if(ActiveWayPoint == 0)	{
+	  // manual start
+	  CALCULATED_INFO.TaskDistanceCovered = 0.0;
+	  CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
 	}
-	else if (UpDown<0){
-		if(ActiveWayPoint >0) {
-			ActiveWayPoint --;
-			/*
-			XXX How do we know what the last one is?
-		} else if (UpDown == -2) {
-			ActiveWayPoint = MAXTASKPOINTS;
-			*/
-		}
-			
-	} 
-	else if (UpDown==0) {
-		SelectedWaypoint = Task[ActiveWayPoint].Index;
-		UnlockFlightData();
-		PopupWaypointDetails();
-		LockFlightData();
+	ActiveWayPoint ++;
+	CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
+      }
+      // No more, try first
+      else if((UpDown == 2) && (Task[0].Index >= 0)) {
+	if(ActiveWayPoint == 0)	{
+	  CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
 	}
-	if (ActiveWayPoint>=0) {
-	  SelectedWaypoint = Task[ActiveWayPoint].Index;
-	}
+	ActiveWayPoint = 0;
+	CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
+      }
+    }
+  }
+  else if (UpDown<0){
+    if(ActiveWayPoint >0) {
+
+      ActiveWayPoint --;
+      /*
+	XXX How do we know what the last one is?
+	} else if (UpDown == -2) {
+	ActiveWayPoint = MAXTASKPOINTS;
+      */
+    } else {
+      if (ActiveWayPoint==0) {
+	// restarted task..
+	// JMW TODO: ask if user wants to restart task?
+	CALCULATED_INFO.TaskDistanceCovered = 0.0;
+	CALCULATED_INFO.TaskStartTime = 0;
+      }
+    }
+    
+  } 
+  else if (UpDown==0) {
+    SelectedWaypoint = Task[ActiveWayPoint].Index;
+    UnlockFlightData();
+    PopupWaypointDetails();
+    LockFlightData();
+  }
+  if (ActiveWayPoint>=0) {
+    SelectedWaypoint = Task[ActiveWayPoint].Index;
+  }
 }
 
 
@@ -326,15 +336,19 @@ void FormatterTime::SecsToDisplayTime(int d) {
 }
 
 
-int DetectCurrentTime() {
+int TimeLocal(int localtime) {
   TIME_ZONE_INFORMATION TimeZoneInformation;
-  int localtime = (int)GPS_INFO.Time;
   if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
     localtime += 3600;
     // TODO: check UTC adjustment for UK?
   }
   localtime -= TimeZoneInformation.Bias*60;
   return localtime;
+}
+
+int DetectCurrentTime() {
+  int localtime = (int)GPS_INFO.Time;
+  return TimeLocal(localtime);
 }
 
 

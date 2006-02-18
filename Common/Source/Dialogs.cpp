@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.96 2006/02/16 00:03:05 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.97 2006/02/18 15:40:05 jwharington Exp $
 
 Copyright_License {
 
@@ -1272,8 +1272,10 @@ void RefreshTaskWaypoint(int i) {
                              WayPointList[Task[i].Index].Longitude,
                              WayPointList[Task[i-1].Index].Latitude, 
                              WayPointList[Task[i-1].Index].Longitude);
-      Task[i].InBound = Bearing(WayPointList[Task[i-1].Index].Latitude,   WayPointList[Task[i-1].Index].Longitude,
-                                WayPointList[Task[i].Index].Latitude, WayPointList[Task[i].Index].Longitude);
+      Task[i].InBound = Bearing(WayPointList[Task[i-1].Index].Latitude,   
+				WayPointList[Task[i-1].Index].Longitude,
+                                WayPointList[Task[i].Index].Latitude, 
+				WayPointList[Task[i].Index].Longitude);
       Task[i-1].OutBound = Task[i].InBound;
       Task[i-1].Bisector = BiSector(Task[i-1].InBound,Task[i-1].OutBound);
     }

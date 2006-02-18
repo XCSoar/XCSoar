@@ -431,7 +431,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceWarnings"));
   if (wp) {
-    bool aw = AIRSPACEWARNINGS;
+    bool aw = AIRSPACEWARNINGS != 0;
     wp->GetDataField()->Set(aw);
     wp->RefreshDisplay();
   }
@@ -1038,7 +1038,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsSpeed"));
   if (wp) {
-    if (Speed != wp->GetDataField()->GetAsInteger()) {
+    if ((int)Speed != wp->GetDataField()->GetAsInteger()) {
       Speed = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistrySpeedUnitsValue, Speed);
       Units::NotifyUnitChanged();
@@ -1048,7 +1048,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsDistance"));
   if (wp) {
-    if (Distance != wp->GetDataField()->GetAsInteger()) {
+    if ((int)Distance != wp->GetDataField()->GetAsInteger()) {
       Distance = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryDistanceUnitsValue, Distance);
       Units::NotifyUnitChanged();
@@ -1058,7 +1058,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsLift"));
   if (wp) {
-    if (Lift != wp->GetDataField()->GetAsInteger()) {
+    if ((int)Lift != wp->GetDataField()->GetAsInteger()) {
       Lift = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryLiftUnitsValue, Lift);
       Units::NotifyUnitChanged();
@@ -1068,7 +1068,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsAltitude"));
   if (wp) {
-    if (Altitude != wp->GetDataField()->GetAsInteger()) {
+    if ((int)Altitude != wp->GetDataField()->GetAsInteger()) {
       Altitude = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryAltitudeUnitsValue, Altitude);
       Units::NotifyUnitChanged();
@@ -1231,7 +1231,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
-    if (StartRadius*2 != wp->GetDataField()->GetAsInteger()) {
+    if ((int)StartRadius*2 != wp->GetDataField()->GetAsInteger()) {
       StartRadius = wp->GetDataField()->GetAsInteger()/2;
       SetToRegistry(szRegistryStartRadius,StartRadius);
       changed = true;
@@ -1241,7 +1241,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
   if (wp) {
-    if (FAISector != wp->GetDataField()->GetAsInteger()) {
+    if ((int)FAISector != wp->GetDataField()->GetAsInteger()) {
       FAISector = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryFAISector,FAISector);
       changed = true;
@@ -1251,7 +1251,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskSectorRadius"));
   if (wp) {
-    if (SectorRadius != wp->GetDataField()->GetAsInteger()) {
+    if ((int)SectorRadius != wp->GetDataField()->GetAsInteger()) {
       SectorRadius = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistrySectorRadius,SectorRadius);
       changed = true;
@@ -1279,8 +1279,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInverseInfoBox"));
   if (wp) {
-    if (Appearance.InverseInfoBox != wp->GetDataField()->GetAsInteger()) {
-      Appearance.InverseInfoBox = wp->GetDataField()->GetAsInteger();
+    if ((int)(Appearance.InverseInfoBox) != wp->GetDataField()->GetAsInteger()) {
+      Appearance.InverseInfoBox = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppInverseInfoBox,Appearance.InverseInfoBox);
       changed = true;
     }
@@ -1288,8 +1288,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioSpeedToFly"));
   if (wp) {
-    if (Appearance.GaugeVarioSpeedToFly != wp->GetDataField()->GetAsInteger()) {
-      Appearance.GaugeVarioSpeedToFly = wp->GetDataField()->GetAsInteger();
+    if ((int)(Appearance.GaugeVarioSpeedToFly) != wp->GetDataField()->GetAsInteger()) {
+      Appearance.GaugeVarioSpeedToFly = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppGaugeVarioSpeedToFly,Appearance.GaugeVarioSpeedToFly);
       changed = true;
     }
@@ -1297,8 +1297,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioAvgText"));
   if (wp) {
-    if (Appearance.GaugeVarioAvgText != wp->GetDataField()->GetAsInteger()) {
-      Appearance.GaugeVarioAvgText = wp->GetDataField()->GetAsInteger();
+    if ((int)Appearance.GaugeVarioAvgText != wp->GetDataField()->GetAsInteger()) {
+      Appearance.GaugeVarioAvgText = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppGaugeVarioAvgText,Appearance.GaugeVarioAvgText);
       changed = true;
     }
@@ -1306,8 +1306,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioMc"));
   if (wp) {
-    if (Appearance.GaugeVarioMc != wp->GetDataField()->GetAsInteger()) {
-      Appearance.GaugeVarioMc = wp->GetDataField()->GetAsInteger();
+    if ((int)Appearance.GaugeVarioMc != wp->GetDataField()->GetAsInteger()) {
+      Appearance.GaugeVarioMc = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppGaugeVarioMc,Appearance.GaugeVarioMc);
       changed = true;
     }
@@ -1315,8 +1315,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioBugs"));
   if (wp) {
-    if (Appearance.GaugeVarioBugs != wp->GetDataField()->GetAsInteger()) {
-      Appearance.GaugeVarioBugs = wp->GetDataField()->GetAsInteger();
+    if ((int)Appearance.GaugeVarioBugs != wp->GetDataField()->GetAsInteger()) {
+      Appearance.GaugeVarioBugs = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppGaugeVarioBugs,Appearance.GaugeVarioBugs);
       changed = true;
     }
@@ -1324,8 +1324,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioBallast"));
   if (wp) {
-    if (Appearance.GaugeVarioBallast != wp->GetDataField()->GetAsInteger()) {
-      Appearance.GaugeVarioBallast = wp->GetDataField()->GetAsInteger();
+    if ((int)Appearance.GaugeVarioBallast != wp->GetDataField()->GetAsInteger()) {
+      Appearance.GaugeVarioBallast = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppGaugeVarioBallast,Appearance.GaugeVarioBallast);
       changed = true;
     }
@@ -1344,7 +1344,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpComPort1"));
   if (wp) {
-    if (dwPortIndex1 != wp->GetDataField()->GetAsInteger()) {
+    if ((int)dwPortIndex1 != wp->GetDataField()->GetAsInteger()) {
       dwPortIndex1 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
@@ -1353,7 +1353,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpComSpeed1"));
   if (wp) {
-    if (dwSpeedIndex1 != wp->GetDataField()->GetAsInteger()) {
+    if ((int)dwSpeedIndex1 != wp->GetDataField()->GetAsInteger()) {
       dwSpeedIndex1 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
@@ -1373,7 +1373,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpComPort2"));
   if (wp) {
-    if (dwPortIndex2 != wp->GetDataField()->GetAsInteger()) {
+    if ((int)dwPortIndex2 != wp->GetDataField()->GetAsInteger()) {
       dwPortIndex2 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
@@ -1382,7 +1382,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpComSpeed2"));
   if (wp) {
-    if (dwSpeedIndex2 != wp->GetDataField()->GetAsInteger()) {
+    if ((int)dwSpeedIndex2 != wp->GetDataField()->GetAsInteger()) {
       dwSpeedIndex2 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;

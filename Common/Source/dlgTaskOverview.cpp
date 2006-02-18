@@ -57,8 +57,6 @@ void dlgTaskWaypointShowModal(int itemindex, int type);
 
 static void UpdateList(void){
 
-  int i;
-
   //
 
   LowLimit =0;
@@ -89,8 +87,9 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 		 WayPointList[Task[i].Index].Name,
 		 _tcslen(WayPointList[Task[i].Index].Name), NULL);
 
-    //todo user unit
-    _stprintf(sTmp, TEXT("%.0fkm"), Task[i].Leg/1000.0);
+      _stprintf(sTmp, TEXT("%.0f %s"), 
+		Task[i].Leg*DISTANCEMODIFY,
+		Units::GetDistanceName());
 
     ExtTextOut(hDC, 125, 2,
       ETO_OPAQUE, NULL,
@@ -115,10 +114,24 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 		 ETO_OPAQUE, NULL,
 		 sTmp, _tcslen(sTmp), NULL);
 
-      if (fai_ok) {
-	_stprintf(sTmp, TEXT("%.0fkm FAI"), lengthtotal/1000.0);
+      if (fai_ok && !AATEnabled) {
+	_stprintf(sTmp, TEXT("%.0f %s FAI"), lengthtotal*DISTANCEMODIFY,
+		  Units::GetDistanceName());
       } else {
-	_stprintf(sTmp, TEXT("%.0fkm"), lengthtotal/1000.0);
+	if (AATEnabled) {
+	  double d1 = (CALCULATED_INFO.TaskDistanceToGo
+		       +CALCULATED_INFO.TaskDistanceCovered);
+	  if (d1==0.0) {
+	    d1 = CALCULATED_INFO.AATTargetDistance;
+	  }
+	  _stprintf(sTmp, TEXT("%.0f (%.0f) %s"), 
+		    DISTANCEMODIFY*lengthtotal,
+		    DISTANCEMODIFY*d1,
+		    Units::GetDistanceName());
+	} else {
+	  _stprintf(sTmp, TEXT("%.0f %s"), lengthtotal*DISTANCEMODIFY,
+		    Units::GetDistanceName());
+	}
       }
       ExtTextOut(hDC, 125, 2,
 		 ETO_OPAQUE, NULL,
@@ -159,24 +172,10 @@ static void OverviewRefreshTask(void) {
     fai_ok = false;
   }
 
-  UpdateList();
-
   RefreshTaskStatistics();
 
-  /*
-  WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(TEXT("prpDistance"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(lengthtotal/1000.0);
-    wp->RefreshDisplay();
-  }
+  UpdateList();
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFAIOK"));
-  if (wp) {
-    wp->GetDataField()->Set(fai_ok);
-    wp->RefreshDisplay();
-  }
-  */
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
@@ -296,7 +295,7 @@ static void SetValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
   if (wp) {
-    bool aw = AATEnabled;
+    bool aw = (AATEnabled != 0);
     wp->GetDataField()->Set(aw);
     wp->RefreshDisplay();
   }
