@@ -127,6 +127,7 @@ extern void PopupWaypointDetails();
 extern void PopupAnalysis();
 extern void ShowStatus();
 extern void ShowStatusSystem();
+extern void ShowStatusTask();
 extern void RestartCommPorts();
 extern bool Debounce();
 

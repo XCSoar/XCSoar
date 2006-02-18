@@ -464,27 +464,27 @@ void ReadRegistrySettings(void)
 
   Temp = Appearance.InverseInfoBox;
   GetFromRegistry(szRegistryAppInverseInfoBox, &Temp);
-  Appearance.InverseInfoBox = Temp;
+  Appearance.InverseInfoBox = (Temp != 0);
 
   Temp = Appearance.GaugeVarioSpeedToFly;
   GetFromRegistry(szRegistryAppGaugeVarioSpeedToFly, &Temp);
-  Appearance.GaugeVarioSpeedToFly = Temp;
+  Appearance.GaugeVarioSpeedToFly = (Temp != 0);
 
   Temp = Appearance.GaugeVarioAvgText;
   GetFromRegistry(szRegistryAppGaugeVarioAvgText, &Temp);
-  Appearance.GaugeVarioAvgText = Temp;
+  Appearance.GaugeVarioAvgText = (Temp != 0);
 
   Temp = Appearance.GaugeVarioMc;
   GetFromRegistry(szRegistryAppGaugeVarioMc, &Temp);
-  Appearance.GaugeVarioMc = Temp;
+  Appearance.GaugeVarioMc = (Temp != 0);
 
   Temp = Appearance.GaugeVarioBugs;
   GetFromRegistry(szRegistryAppGaugeVarioBugs, &Temp);
-  Appearance.GaugeVarioBugs = Temp;
+  Appearance.GaugeVarioBugs = (Temp != 0);
 
   Temp = Appearance.GaugeVarioBallast;
   GetFromRegistry(szRegistryAppGaugeVarioBallast, &Temp);
-  Appearance.GaugeVarioBallast = Temp;
+  Appearance.GaugeVarioBallast = (Temp != 0);
 
   Temp = 1;
   GetFromRegistry(szRegistryAutoAdvance,&Temp);

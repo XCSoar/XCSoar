@@ -35,6 +35,7 @@ Copyright_License {
 #include "units.h"
 #include "externs.h"
 #include "Waypointparser.h"
+#include "Process.h"
 
 
 #include "WindowControls.h"
@@ -139,6 +140,11 @@ void dlgStatusShowModal(void){
   }
 
   // TODO time of flight
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFlightTime"));
+  if (wp) {
+    Units::TimeToText(Temp, (int)DetectStartTime());
+    wp->SetText(Temp);
+  }
 
   wf->ShowModal();
 

@@ -198,7 +198,7 @@ BOOL DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter) {
 void DataFieldFileReader::Lookup(TCHAR *Text) {
   int i=0;
   mValue = 0;
-  for (i=1; i<nFiles; i++) {
+  for (i=1; i<(int)nFiles; i++) {
     if (_tcscmp(Text,mTextPathFile[i])==0) {
       mValue = i;
     }
@@ -244,7 +244,7 @@ TCHAR *DataFieldFileReader::GetAsDisplayString(void){
 
 
 void DataFieldFileReader::Set(int Value){
-  if (Value<=nFiles) {
+  if (Value<=(int)nFiles) {
     mValue = Value;
   }
   if (Value<0) {
@@ -410,7 +410,7 @@ TCHAR *DataFieldEnum::GetAsString(void){
 
 
 void DataFieldEnum::Set(int Value){
-  if (Value<=nEnums) {
+  if (Value<=(int)nEnums) {
     mValue = Value;
   }
   if (Value<0) {
@@ -2102,13 +2102,17 @@ int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
   Pos.y = (lParam >> 16)& 0x0000ffff;
   //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
 
-  if ((mDownDown = PtInRect(&mHitRectDown, Pos)) != 0){
+  mDownDown = (PtInRect(&mHitRectDown, Pos) != 0);
+
+  if (mDownDown) {
     DecValue();
     InvalidateRect(GetHandle(), &mHitRectDown, false);
     UpdateWindow(GetHandle());
   }
 
-  if ((mUpDown = PtInRect(&mHitRectUp, Pos)) != 0){
+  mUpDown = (PtInRect(&mHitRectUp, Pos) != 0);
+
+  if (mUpDown) {
     IncValue();
     InvalidateRect(GetHandle(), &mHitRectUp, false);
     UpdateWindow(GetHandle());

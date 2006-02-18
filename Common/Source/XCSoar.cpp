@@ -665,7 +665,9 @@ void SettingsLeave() {
 
 
 #if NEWINFOBOX > 0
+
 void dlgStatusShowModal(void);
+void dlgStatusTaskShowModal(void);
 void dlgStatusSystemShowModal(void);
 void dlgConfigurationShowModal(void);
 
@@ -683,12 +685,19 @@ void ShowStatusSystem(void){
   dlgStatusSystemShowModal();
 }
 
+void ShowStatusTask(void){
+  dlgStatusTaskShowModal();
+}
+
 #else
 
 void SystemConfiguration(void) {
 }
 
 void ShowStatusSystem(void){
+}
+
+void ShowStatusTask(void){
 }
 
 void ShowStatus() {

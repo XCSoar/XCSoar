@@ -145,6 +145,7 @@ class SunEphemeris {
     h = ((int)GPS_INFO.Time)/3600;
     h = (h % 24);
 
+    // TODO: use TimeLocal function from Process here
     int localtime = ((int)GPS_INFO.Time-TimeZoneInformation.Bias*60);
     tzone = -TimeZoneInformation.Bias/60.0;
 

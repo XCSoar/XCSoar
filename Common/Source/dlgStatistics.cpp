@@ -521,10 +521,10 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 void Statistics::ScaleMakeSquare(RECT rc) {
   if (y_max-y_min<=0) return;
   if (rc.bottom-rc.top<=0) return;
-  float ar = ((float)(rc.right-rc.left))/(rc.bottom-rc.top);
-  float ard = (x_max-x_min)/(y_max-y_min);
-  float armod = ard/ar;
-  float delta;
+  double ar = ((double)(rc.right-rc.left))/(rc.bottom-rc.top);
+  double ard = (x_max-x_min)/(y_max-y_min);
+  double armod = ard/ar;
+  double delta;
 
   if (armod<1.0) {
     // need to expand width
@@ -588,7 +588,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
       nwps++;
       lat1 = WayPointList[Task[i].Index].Latitude;
       lon1 = WayPointList[Task[i].Index].Longitude;
-      x1 = (lon1-lon_c)*ffastcosine(lat1);
+      x1 = (lon1-lon_c)*fastcosine(lat1);
       y1 = (lat1-lat_c);
       ScaleYFromValue(rc, y1);
       ScaleXFromValue(rc, x1);
@@ -613,7 +613,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 	  aatlon = FindLongitude(WayPointList[Task[i].Index].Latitude,
 				 WayPointList[Task[i].Index].Longitude,
 				 bearing, radius);
-	  x1 = (aatlon-lon_c)*ffastcosine(lat1);
+	  x1 = (aatlon-lon_c)*fastcosine(lat1);
 	  y1 = (aatlat-lat_c);
 	  ScaleYFromValue(rc, y1);
 	  ScaleXFromValue(rc, x1);
@@ -636,9 +636,9 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 	lon1 = WayPointList[Task[i-1].Index].Longitude;
 	lat2 = WayPointList[Task[i].Index].Latitude;
 	lon2 = WayPointList[Task[i].Index].Longitude;
-	x1 = (lon1-lon_c)*ffastcosine(lat1);
+	x1 = (lon1-lon_c)*fastcosine(lat1);
 	y1 = (lat1-lat_c);
-	x2 = (lon2-lon_c)*ffastcosine(lat2);
+	x2 = (lon2-lon_c)*fastcosine(lat2);
 	y2 = (lat2-lat_c);
 
 	SelectObject(hdc,
@@ -646,17 +646,18 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 	SelectObject(hdc, GetStockObject(WHITE_PEN));
 	if (Task[i].AATType == SECTOR) {
           Segment(hdc,
-		  (x2-x_min)*xscale+rc.left,
-		  (y_max-y2)*yscale+rc.top,
-		  aatradius[i]*xscale,
+		  (long)((x2-x_min)*xscale+rc.left),
+		  (long)((y_max-y2)*yscale+rc.top),
+		  (long)(aatradius[i]*xscale),
 		  rc,
 		  Task[i].AATStartRadial,
 		  Task[i].AATFinishRadial);
 	} else {
           Circle(hdc,
-		 (x2-x_min)*xscale+rc.left,
-		 (y_max-y2)*yscale+rc.top,
-		 aatradius[i]*xscale, rc);
+		 (long)((x2-x_min)*xscale+rc.left),
+		 (long)((y_max-y2)*yscale+rc.top),
+		 (long)(aatradius[i]*xscale),
+		  rc);
 	}
       }
     }
@@ -670,9 +671,9 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
       lon1 = WayPointList[Task[i-1].Index].Longitude;
       lat2 = WayPointList[Task[i].Index].Latitude;
       lon2 = WayPointList[Task[i].Index].Longitude;
-      x1 = (lon1-lon_c)*ffastcosine(lat1);
+      x1 = (lon1-lon_c)*fastcosine(lat1);
       y1 = (lat1-lat_c);
-      x2 = (lon2-lon_c)*ffastcosine(lat2);
+      x2 = (lon2-lon_c)*fastcosine(lat2);
       y2 = (lat2-lat_c);
 
       DrawLine(hdc, rc,
@@ -711,9 +712,9 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 	  lat1 = GPS_INFO.Latitude;
 	  lon1 = GPS_INFO.Longitude;
 	}
-	x1 = (lon1-lon_c)*ffastcosine(lat1);
+	x1 = (lon1-lon_c)*fastcosine(lat1);
 	y1 = (lat1-lat_c);
-	x2 = (lon2-lon_c)*ffastcosine(lat2);
+	x2 = (lon2-lon_c)*fastcosine(lat2);
 	y2 = (lat2-lat_c);
 
 	DrawLine(hdc, rc,
@@ -927,14 +928,6 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
 }
 
 
-void TimeToText(TCHAR* text, int d) {
-  int hours, mins;
-  int dd = d % (3600*24);
-  hours = (dd/3600);
-  mins = (dd/60-hours*60);
-  _stprintf(text, TEXT("%02d:%02d"),
-	    hours, mins);
-}
 
 static void Update(void){
   TCHAR sTmp[1000];
@@ -1017,20 +1010,16 @@ static void Update(void){
     TCHAR timetext1[10];
     TCHAR timetext2[10];
     if (AATEnabled) {
-      TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
-      TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
-      _stprintf(sTmp, TEXT("Task: %s\r\nAAT: %s\r\nD max: %5.0f\r\nD min: %5.0f\r\nD tgt: %5.0f\r\nV max: %5.0f\r\nV min: %5.0f\r\nV tgt: %5.0f\r\n"),
+      Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+      Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
+      _stprintf(sTmp, TEXT("Task to go: %s\r\nAAT to go: %s\r\nDistance to go: %5.0f\r\nTarget speed: %5.0f\r\n"),
 		timetext1,
 		timetext2,
-		DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance,
-		DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance,
 		DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
-		SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed,
-		SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed,
 		SPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed
 		);
     } else {
-      TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+      Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
       _stprintf(sTmp, TEXT("Time to go: %s\r\nDistance to go: %5.0f\r\n"),
 		timetext1,
 		DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo);
@@ -1139,7 +1128,6 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 {
   TCHAR Temp[2048];
   static HDC hdcScreen;
-  static int page = 0;
   PAINTSTRUCT ps;
   HDC hdc;
   RECT rc;
@@ -1293,8 +1281,8 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 	TCHAR timetext1[10];
 	TCHAR timetext2[10];
 	if (AATEnabled) {
-	  TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
-	  TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
+	  Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+	  Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
 	  _stprintf(Temp, TEXT("Task time to go: %s\r\nAAT time to go: %s\r\nMax dist: %5.0f\r\nMin dist: %5.0f\r\nMax speed: %5.0f\r\nMin speed: %5.0f\r\n"),
 		    timetext1,
 		    timetext2,
@@ -1304,7 +1292,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 		    SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed
 		   );
 	} else {
-	  TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+	  Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
 	  _stprintf(Temp, TEXT("Time to go: %s\r\nDistance to go: %5.0f\r\n"),
 		    timetext1,
 		    DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo);

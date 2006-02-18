@@ -522,6 +522,17 @@ bool Units::UnLoadUnitBitmap(void){
 
 }
 
+void Units::TimeToText(TCHAR* text, int d) {
+  int hours, mins;
+  int dd = d % (3600*24);
+  hours = (dd/3600);
+  mins = (dd/60-hours*60);
+  hours = hours % 24;
+  _stprintf(text, TEXT("%02d:%02d"),
+	    hours, mins);
+}
+
+
 bool Units::GetUnitBitmap(Units_t Unit, HBITMAP *HBmp, POINT *Org, POINT *Size, int Kind){
 
   UnitDescriptor_t *pU = &UnitDescriptors[Unit];

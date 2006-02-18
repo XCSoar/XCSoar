@@ -1272,8 +1272,10 @@ void RefreshTaskWaypoint(int i) {
                              WayPointList[Task[i].Index].Longitude,
                              WayPointList[Task[i-1].Index].Latitude,
                              WayPointList[Task[i-1].Index].Longitude);
-      Task[i].InBound = Bearing(WayPointList[Task[i-1].Index].Latitude,   WayPointList[Task[i-1].Index].Longitude,
-                                WayPointList[Task[i].Index].Latitude, WayPointList[Task[i].Index].Longitude);
+      Task[i].InBound = Bearing(WayPointList[Task[i-1].Index].Latitude,
+				WayPointList[Task[i-1].Index].Longitude,
+                                WayPointList[Task[i].Index].Latitude,
+				WayPointList[Task[i].Index].Longitude);
       Task[i-1].OutBound = Task[i].InBound;
       Task[i-1].Bisector = BiSector(Task[i-1].InBound,Task[i-1].OutBound);
     }
