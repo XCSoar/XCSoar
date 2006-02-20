@@ -7,6 +7,42 @@
         <content>
 
 	<section>
+		<title>System Requirements</title>
+
+		<section>
+			<title>PC or Laptop</title>
+			Running Microsoft ActiveSync.  The PC is used for XCSoar installation
+			only.
+			It is also possible to install XCSoar with Linux, Mac OS X, from Flash 
+			card or directly from the internet. See <a href="/install/">Installation</a> 
+			for further information.
+		</section>
+
+		<section>
+			<title>Pocket PC</title>
+			<p>
+			Microsoft Windows CE Version 3.0 or later (PocketPC), MIPS and ARM
+			processors.  Devices with Symbian, Palm OS or Linux operating
+			systems are not currently supported.
+			</p>
+			<p>
+			A variety of terms may be used to describe Pocket PC devices,
+			including 'organiser' and Pocket Digital Assitant (PDA).  Throughout
+			this document, these terms are used interchangeably.
+			</p>
+		</section>
+
+		<section>
+			<title>GPS data source</title>
+			NMEA data source with $GPRMC and $GPGGA strings.  Suitable devices
+			include handheld serial GPS devices, glider flight loggers, bluetooth
+			GPS devices, GPS-integrated variometers.
+
+		</section>
+					
+	</section>
+
+	<section>
 		<title>Hardware</title>
 
 		<p>

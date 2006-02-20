@@ -21,19 +21,25 @@ from source forge (note the version you need to download for your organiser)
 
 <p>
 	<img src="XCS_ActiveSync.png" align="right"/>
-	Connect your organiser to windows via Active Sync
+	Connect your organiser to windows via Active Sync. Usually you place
+	the organiser in the cradle and a connection will be made automatically.
 </p>
 <br clear="all"/>
 
 <p>
 	Backup your organiser for extra safety (Backup from Windows Active
-	Sync or other prefered method
+	Sync or other prefered method.
+	Prior to performing any installation, it is a good idea to backup your
+	organiser for extra safety.
 </p>
 <br clear="all"/>
 
 <p>
 	<img src="XCS_License.png" align="right"/>
-	Run the XCSoar EXE
+	Run the XCSoar EXE. This will be called something like
+"Install-XCSoar-nnn.exe" - where nnn is the version number you have downloaded
+and the organiser type. You can usually just double click on the downloaded EXE
+on the desktop.
 </p>
 <br clear="all"/>
 
@@ -52,7 +58,11 @@ from source forge (note the version you need to download for your organiser)
 
 <p>
 	Restart (see operating instructions) the orgasier to get full
-	suport for fonts and Start Page
+	suport for fonts and Start Page. This is an optional step. Resetting
+	your organiser before use of XCSoar is a good practice. 
+	After restart the "FLY" (for full GPS versio) and "SIM" (for XCSoar
+	Simulator mode) launcher icons will be available on the Today screen of your
+	organiser.
 </p>
 <br clear="all"/>
 

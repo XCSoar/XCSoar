@@ -14,10 +14,17 @@
 			<title>Flash card</title>
 			<p>
 				You can <a href="/download/">download</a> the
-CAB file approriate for your organiser and install it onto a Compact Flash or
-Secure Digital card. Place it in your organiser. Use File Manager on your
-organiser to find the CAB and click on it to execute it. Follow the onscreen
-instructions, the CAB file will be deleted after installation.
+				CAB file approriate for your organiser and install it onto a Compact Flash or
+				Secure Digital card. Place it in your organiser. Use File Manager on your
+				organiser to find the CAB and click on it to execute it. Follow the onscreen
+				instructions, the CAB file may be deleted after installation (Windows Mobile 5
+				does not delete installed CAB files).
+			</p>
+
+			<p>
+				TIP: It is generally a good idea to keep the CAB file on the storage card
+				so that if the organiser's power fails and the memory is lost, XCSoar
+				can be reinstalled.
 			</p>
 
 		</section>
