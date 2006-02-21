@@ -1,0 +1,33 @@
+Main Menu
+
+The main menu provides the following selection of items:
+\begin{description}
+\item[Task]  Activates the task dialog, allowing tasks to be
+  edited, saved and loaded, and for browsing waypoints by name.
+\item[Bugs/Ballast]  Activates the bugs/ballast dialog,
+ allowing entry of bugs and ballast percentages.
+\item[Pressure] Activates the pressure dialog,
+ allowing entry of QNH pressure.
+\item[Logger]  Turns on or off the IGC flight logger.
+ When the logger is started, the current task is written as a
+ declaration at the start of the logger file. A new logger file is
+ created each time the logger is started. The logger files are written
+ using a subset of the IGC format although the logger is not approved
+ for verification of any IGC badge or records.
+\item[Settings] Provides several pages of configuration settings.
+  Typically these settings are seldom changed after initial
+  installation, and it is recommended they not be modified in flight.
+\item[Abort] Aborts or resumes the current task.
+\item[Status] Activates the Status dialog, giving a quick overview of
+  system status.
+\item[Analysis] Activates the Analysis dialog, giving detailed analysis
+  and statistics on relating to task performance.
+\item[Cancel] Returns to the map screen.
+\item[Exit]  
+Quit the application.  Always use this method of closing the
+application as it ensures that the software is terminated cleanly.
+\item[Edit infoboxes] This checkbox allows infoboxes to be edited. 
+\end{description}
+
+{\it DIAGRAM SHOWING MAIN MENU}
+

@@ -1,0 +1,31 @@
+Gauges
+
+All gauges are optional and may only be available if the XCSoar is
+connected to a supported instrument.
+
+\subsection{Variometer}
+
+A needle-dial style display shows the variometer measurements.  The
+gross variometer reading drives the main arrow on the dial, and in the
+center of the dial the instantaneous measurement is written.
+Additionally, speed command arrows appear above or below the gross
+variometer measurement.
+
+XXX TODO: explain this more, including range, averager, bugs/ballast.
+
+\begin{center}
+%\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{../quick/fig-climb.eps}
+
+{\it DIAGRAM CUTOUT SHOWING VARIOMETER GAUGE}
+
+\end{center}
+
+\subsection{Compass display indicator}
+
+\begin{center}
+%\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{../quick/fig-climb.eps}
+
+{\it DIAGRAM CUTOUT SHOWING COMPASS GAUGE}
+
+\end{center}
+
