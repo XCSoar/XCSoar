@@ -1379,12 +1379,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   logfont.lfCharSet = ANSI_CHARSET;
   ApplyClearType(&logfont);
 
-  #if NEWINFOBOX > 0
+  //  #if NEWINFOBOX > 0
   // todo
-  #else
+  //  #else
   // JMW algorithm to auto-size info window font.
+  // this is still required in case title font property doesn't exist.
   SIZE tsize;
-  HDC iwhdc = GetDC(hWndInfoWindow[0]);
+  HDC iwhdc = GetDC(hWndMainWindow);
   do {
     iFontHeight--;
     logfont.lfHeight = iFontHeight;
@@ -1393,8 +1394,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     GetTextExtentPoint(iwhdc, TEXT("00:00"), 5, &tsize);
     DeleteObject(InfoWindowFont);
   } while (tsize.cx>InfoBoxLayout::ControlWidth);
-  ReleaseDC(hWndInfoWindow[0], iwhdc);
-  #endif
+  ReleaseDC(hWndMainWindow, iwhdc);
+  //  #endif
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;

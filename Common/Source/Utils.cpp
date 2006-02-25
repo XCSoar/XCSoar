@@ -2549,7 +2549,7 @@ void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc)
 }
 
 
-void propGetFontSettings(TCHAR *Name, LOGFONT* lplf){
+void propGetFontSettings(TCHAR *Name, LOGFONT* lplf) {
 
   TCHAR Buffer[128];
   TCHAR *pWClast, *pToken;
@@ -2559,7 +2559,7 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf){
   ASSERT(Name[0] != '\0');
   ASSERT(lplf != NULL);
 
-	if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){
+  if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0) {
 
     // typical font entry
     // 26,0,0,0,700,1,0,0,0,0,0,4,2,<fontname>
@@ -2569,8 +2569,6 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf){
     //FW_MEDIUM 500
     //FW_BOLD   700
     //FW_HEAVY  900
-
-
 
     memset ((void *)&lfTmp, 0, sizeof (LOGFONT));
 
@@ -2597,13 +2595,13 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf){
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
     lfTmp.lfClipPrecision = (unsigned char)_tcstol(pToken, NULL, 10);
 
-                                                            // DEFAULT_QUALITY			   0
-                                                            // RASTER_FONTTYPE			   0x0001
-                                                            // DRAFT_QUALITY			     1
-                                                            // NONANTIALIASED_QUALITY  3
-                                                            // ANTIALIASED_QUALITY     4
-                                                            // CLEARTYPE_QUALITY       5
-                                                            // CLEARTYPE_COMPAT_QUALITY 6
+    // DEFAULT_QUALITY			   0
+    // RASTER_FONTTYPE			   0x0001
+    // DRAFT_QUALITY			     1
+    // NONANTIALIASED_QUALITY  3
+    // ANTIALIASED_QUALITY     4
+    // CLEARTYPE_QUALITY       5
+    // CLEARTYPE_COMPAT_QUALITY 6
 
     if ((pToken = strtok_r(NULL, TEXT(","), &pWClast)) == NULL) return;
     lfTmp.lfQuality = (unsigned char)_tcstol(pToken, NULL, 10);
