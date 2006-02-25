@@ -1121,7 +1121,7 @@ int InAATTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 int InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
-  static int InSector = FALSE;
+  static int LastInSector = FALSE;
   double AircraftBearing;
   double FirstPointDistance;
 
@@ -1133,36 +1133,54 @@ int InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       return FALSE;
     }
 
+  // distance from aircraft to start point
+  FirstPointDistance = Distance(Basic->Latitude,
+				Basic->Longitude,
+				WayPointList[Task[0].Index].Latitude, 
+				WayPointList[Task[0].Index].Longitude);
+  bool inrange = false;
+  inrange = (FirstPointDistance<StartRadius);
+  if (!inrange) {
+    LastInSector = false;
+  }
 
-  FirstPointDistance = Distance(Basic->Latitude ,Basic->Longitude ,WayPointList[Task[0].Index].Latitude , WayPointList[Task[0].Index].Longitude);
-        
   if(!StartLine) // Start Circle
     {
-      if(FirstPointDistance< StartRadius)
-        {
-          return TRUE;
-        }
-      else
-        {
-          return FALSE;
-        }
+      return inrange;
     }
         
   // Start Line
-  AircraftBearing = Bearing(WayPointList[Task[0].Index].Latitude,   
-                            WayPointList[Task[0].Index].Longitude,
-                            Basic->Latitude , 
-                            Basic->Longitude);
+  AircraftBearing = Bearing(Basic->Latitude , 
+                            Basic->Longitude,
+			    WayPointList[Task[0].Index].Latitude,   
+                            WayPointList[Task[0].Index].Longitude);
 
-  AircraftBearing = AircraftBearing - Task[0].Bisector ;
+  AircraftBearing = AircraftBearing - Task[0].OutBound ;
+  // JMW bugfix, was Bisector, which is invalid
 
-  if( (AircraftBearing >= -90) && (AircraftBearing <= 90))
-    {
-      if(FirstPointDistance < StartRadius)
-        {
-          return TRUE;
-        }
+  bool approaching;
+  approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
+
+  if (inrange) {
+
+    if (LastInSector) {
+      // previously approaching the start line
+      if (!approaching) {
+	// now moving away from start line
+	LastInSector = false;
+	return TRUE;
+      }
+    } else {
+      if (approaching) {
+	// now approaching the start line
+	LastInSector = true;
+      }
     }
+    
+  } else {
+    LastInSector = false;
+  }
+
   return FALSE;
 }
 

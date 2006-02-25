@@ -39,10 +39,17 @@
 // ratio of width of screen to main font width
 #define FONTWIDTHRATIO 22
 
+#if NEWINFOBOX>0
+// ratio of title font height to main font height
+#define TITLEFONTHEIGHTRATIO 3.0
+// ratio of title font width to main font width
+#define TITLEFONTWIDTHRATIO 2.9 //1.8
+#else
 // ratio of title font height to main font height
 #define TITLEFONTHEIGHTRATIO 2.3
 // ratio of title font width to main font width
 #define TITLEFONTWIDTHRATIO 2.4 //1.8
+#endif
 
 #define CDIFONTHEIGHTRATIO 0.6
 #define CDIFONTWIDTHRATIO 0.75
