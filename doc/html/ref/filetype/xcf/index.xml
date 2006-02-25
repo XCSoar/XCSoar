@@ -38,7 +38,39 @@ sources.
 	<section>
 		<title>Advanced - Programming</title>
 		<p>
+		The airfield file is straightforward.  It's a text file, with entries
+		for each landable waypoint in capital letters, followed by plain text
+		with a narrow margin (say, 40 characters).  For example, if your
+		airfield was called Innisfail, some of the text might look like this:
 		</p>
+
+		<pre>
+			[INNISFAIL]
+			RUNWAYS:
+			  21 14 32 03
+
+			COMMUNICATIONS:
+			  CTAF - 126.7 FSS-BRISBANE
+			  CENTER - 124.6 REMARKS:
+			  (circuitarea)
+
+			REMARKS:
+			  CAUTION - AG ops wi 10 NM to
+			  5000'. MISC - Ldg fees. Arpt
+			  unlicensed. Ctcarpt for
+			  current info, fone C074-030-
+			  2222.
+
+			ICAO: YIFL
+
+			[PORT HEDLAND INTL]
+			RUNWAYS:
+			  14 32 18 36
+
+			etc etc etc.
+		</pre>
+
+
 	</section>
 </section>
 	</content>
