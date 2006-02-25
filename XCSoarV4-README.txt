@@ -2,11 +2,31 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+To do higher priority:
+- UTC offset
+- New dialogs:
+  - Config: Airspace colors, enable/disable individual airspaces?
+  - Config: Vario gauge, other optional display items
+  - Close button on every dialog for consistency
+  - Fix memory leak in new dialog system
+  - New Waypointselect dialog to have scrolling in list box,
+     text in airspace details also to have scrolling
+  - Minimise configuration dialog start time
+  - Vario settings dialog
+- AAT support:
+   -- More accurate calculation of ETA etc
+       -- with respect to final glide fraction
+       -- different ways of calculating average speed
+- Proper filename extensions
 
 To do for next version:
-
-- Fix bug in profile save routine (bad \r\n encoding)
-- AAT Areas are drawn on top of everything, including task lines.
+- Allow finish line versus finish area?
+- Zig zag wind calculations
+- Revert to default aircraft type if polar file doesn't exist or invalid
+- Password protect on settings
+- Chevrons only on if airspeed available
+- NearestWaypoint pan in .xci not working?
+- Dialog and inputevent for custom user checklists
 - Add track line particularly if not in north up mode
 - Option for speed command driven by dolphin speed or block maccready
 - Fix airspace visibility bug (query, warnings should apply even if
@@ -14,19 +34,18 @@ To do for next version:
 - 'Marginal final glide' is that the right text? (I think so - SP)
 - Autozoom optionally on at startup (settings)
 - Disable PGRMZ if vario is already outputting altitude (or vica versa)
+- Switch GPS between multiple sources if one fails to lock and the other doesn't, and prevent aliasing.
 - Collect different settings based on pilot identification at startup 
    (or this can be done with profiles and menu buttons)
 - In climb stats page, show direction of circling
 - Drop marker automatically conditional on significant climb
 - Generate waypoints from towns (builtupa, miscpopp)
-- Kinetic energy adjustment to final glide
 - Low battery exit is not working, fix it.
 - Improved notification of battery level - not just simulator.
   (exit should still only be the simulator)
 - Notify the user (via GCE to Input) of switching between AC and Battery mode
 - Fix strange circling bug
 - Speed to fly chevrons and north arrow are hidden by vario in fullscreen mode
-- Chevrons only on if airspeed available
 - Mark to waypoint, mark to waypointfile
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
   to move/edit waypoints.
@@ -48,39 +67,30 @@ To do for next version:
   waypoints from the map in sequence
 - Add 'PanTo' waypoint function, to pan towards the selected waypoint
 
-
 Changes from 4.5 to HEAD:
 
-- Fixed bug, topology polygon errors no longer occur at high zoom factors
-- Fixed bug, "1m" in baro altitude infobox for alternate user units
-- Fixed bug, snail trail was never red in sink, now working properly
-- Filter out "Railway station" as miscpop label
-- Total energy height compensation for final glide
-- Fixed bug in topology bounds refresh
+- Added task status dialog
+- Added drawing of task in analysis dialog
+- 'Target' offset for each AAT waypoint
+- 'Run' inputevent so people can execute another program from XCSoar.  Program
+  must exit before XCSoar continues
+- Added 'autoadvance' option (default true) to allow disabling of 
+  automatic waypoint advances
+- AAT sectors now drawn as shaded segments
+- Total energy height compensation for kinetic energy in final glide
 - Name in task display also shows names of landpoints/airports
-- BUG 1366197: Second Airspace File now works
-- Windows PC port using Visual studio 6.
-- JG fixed bug in display of more than 500 airspace areas
-- Fixed bug in bringing up WaypointDetails from SelectedWaypoint when not
-  using infoboxes
 - Added LoadProfile to inputevents, so we can have menu buttons 
    trigger pilot/region specific settings
-- Temp trace max temperature now relative to ground offset
+- Windows PC port using Visual studio 6.
 - When terrain file is valid, only waypoints within terrain area are loaded 
-- Fixed memory leak in new dialog system (bitmap unnecessary)
 - All waypoint labels shown when in pan mode 
 - Added 'pan' to nearestWaypoint inputevent, to return item nearest to
     center of screen if in pan mode.
 - Force redraw of map if not redrawn for 5 seconds (due to gps not connected)
-- Fixed display of airfield details in new dialog
-- BUG 1368752: Fix display orientation for square displays e.g. hp 6515 (untested)
 - FLARM status, FLARM aircraft display on map
 - Added FLARM TRAFFIC and FLARM NOTRAFFIC glide computer events
-- BUG 1305089: Sound restored at exit
 - Added basic FLARM status support in parser and Status dialog 
-- Fixed bug in arrival altitude calculation with respect to bugs
-- Fixed bug in local time display
-- Fixed daylight savings bug
+- Filter out "Railway station" as miscpop label
 - Added infoboxes to support temperature acquisition and traces
 - Added atmospheric analysis (temperature trace, convection estimation)
 - Snail trail uses netto vario if available
@@ -90,7 +100,29 @@ Changes from 4.5 to HEAD:
 - Added ETA infoboxes (as distinct from ETE)
 - Default task (Default.tsk) file may be loaded automatically at startup
    if present (through InputEvent TaskLoad on STARTUP_REAL/STARTUP_SIMULATOR)
-- BUG 1366492: Improved landing detection by checking altitude AGL to avoid false
+
+- Fixed bug, start line works now 
+- Fixed bug in task save/load, also clears task on error when loading
+- Fixed bug in wind speed infobox units display (now uses aircraft speed units)
+- Fixed bug, AAT Areas were drawn on top of everything, including task lines.
+- Fixed bug in profile save routine (bad \r\n encoding)
+- Fixed spurious captions in subtitle infoboxes
+- Fixed bug, "1m" in baro altitude infobox for alternate user units
+- Fixed bug, snail trail was never red in sink, now working properly
+- Fixed bug in topology bounds refresh
+- Fixed bug BUG 1366197: Second Airspace File now works
+- Fixed bug in display of more than 500 airspace areas
+- Fixed bug in bringing up WaypointDetails from SelectedWaypoint when not
+  using infoboxes
+- Fixed bug, temp trace max temperature now relative to ground offset
+- Fixed memory leak in new dialog system (bitmap unnecessary)
+- Fixed display of airfield details in new dialog
+- Fixed bug BUG 1368752: Fix display orientation for square displays e.g. hp 6515 (untested)
+- Fixed bug BUG 1305089: Sound restored at exit
+- Fixed bug in arrival altitude calculation with respect to bugs
+- Fixed bug in local time display
+- Fixed daylight savings bug
+- Fixed BUG 1366492: Improved landing detection by checking altitude AGL to avoid false
   landings when flying in high winds 
 - Seeding random NMEA static strings from Input Events
 - Triggering events from NMEA substring matches (may be limited to certain
