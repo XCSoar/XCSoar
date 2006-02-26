@@ -3,36 +3,28 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 To do higher priority:
-- UTC offset
 - New dialogs:
   - Config: Airspace colors, enable/disable individual airspaces?
   - Config: Vario gauge, other optional display items
-  - Close button on every dialog for consistency
-  - Fix memory leak in new dialog system
-  - New Waypointselect dialog to have scrolling in list box,
-     text in airspace details also to have scrolling
-  - Minimise configuration dialog start time
-  - Vario settings dialog
+  - Text in airspace details to have scrolling
+  - User defined text dialog (and corresponding inputevent)
 - AAT support:
    -- More accurate calculation of ETA etc
        -- with respect to final glide fraction
        -- different ways of calculating average speed
 - Proper filename extensions
+- Task overview analysis page draws wrong task if in abort mode
 
 To do for next version:
 - Allow finish line versus finish area?
 - Zig zag wind calculations
 - Revert to default aircraft type if polar file doesn't exist or invalid
-- Password protect on settings
-- Chevrons only on if airspeed available
+- Password protect on settings, or lock out settings in flight
 - NearestWaypoint pan in .xci not working?
-- Dialog and inputevent for custom user checklists
 - Add track line particularly if not in north up mode
-- Option for speed command driven by dolphin speed or block maccready
 - Fix airspace visibility bug (query, warnings should apply even if
   not drawn on screen!)
 - 'Marginal final glide' is that the right text? (I think so - SP)
-- Autozoom optionally on at startup (settings)
 - Disable PGRMZ if vario is already outputting altitude (or vica versa)
 - Switch GPS between multiple sources if one fails to lock and the other doesn't, and prevent aliasing.
 - Collect different settings based on pilot identification at startup 
@@ -44,7 +36,7 @@ To do for next version:
 - Improved notification of battery level - not just simulator.
   (exit should still only be the simulator)
 - Notify the user (via GCE to Input) of switching between AC and Battery mode
-- Fix strange circling bug
+- Fix strange circling bug (not sure this is a bug still)
 - Speed to fly chevrons and north arrow are hidden by vario in fullscreen mode
 - Mark to waypoint, mark to waypointfile
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
@@ -69,6 +61,13 @@ To do for next version:
 
 Changes from 4.5 to HEAD:
 
+- New Waypointselect dialog allows scrolling in list box
+- Added option for autozoom optionally on at startup
+  (in new config dialog)
+- Added option for speed command driven by dolphin speed or block maccready
+  (in new config dialog), this is shown in VOpt infobox
+- Added in new dialog system a vario configuration page for Vega
+- Added UTC offset configuration parameter for Altair
 - Added task status dialog
 - Added drawing of task in analysis dialog
 - 'Target' offset for each AAT waypoint
@@ -100,7 +99,10 @@ Changes from 4.5 to HEAD:
 - Added ETA infoboxes (as distinct from ETE)
 - Default task (Default.tsk) file may be loaded automatically at startup
    if present (through InputEvent TaskLoad on STARTUP_REAL/STARTUP_SIMULATOR)
+- Chevrons only on if airspeed available
 
+- Fixed minor memory leak in shape labels
+- Fixed minor memory leak in new dialog system
 - Fixed bug, start line works now 
 - Fixed bug in task save/load, also clears task on error when loading
 - Fixed bug in wind speed infobox units display (now uses aircraft speed units)
