@@ -57,9 +57,13 @@ int DataFieldFileReader::SetAsInteger(int Value){
 
 
 void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
+#if (WINDOWSPC<1)
   ScanDirectories(TEXT("\\NOR Flash"),filter);
   ScanDirectories(TEXT("\\My Documents"),filter);
   ScanDirectories(TEXT("\\XCSoarData"),filter);
+#else
+  ScanDirectories(TEXT("c:\\XCSoar"),filter);
+#endif
 }
 
 
@@ -401,6 +405,17 @@ void DataFieldBoolean::Dec(void){
 //----------------------------------------------------------
 // DataField enum
 //----------------------------------------------------------
+
+DataFieldEnum::~DataFieldEnum()
+{
+  for (unsigned int i=0; i<nEnums; i++) {
+    if (mTextEnum[i]) {
+      free(mTextEnum[i]);
+      mTextEnum[i]= NULL;
+    }
+  }
+  nEnums = 0;      
+}
 
 int DataFieldEnum::GetAsInteger(void){
   return mValue;
@@ -1448,6 +1463,11 @@ HFONT WndForm::SetTitleFont(HFONT Value){
 
 }
 
+void WndForm::SetToForeground(void) 
+{
+  BringWindowToTop(GetHandle());
+  SetActiveWindow(GetHandle());
+}
 
 int WndForm::ShowModal(void){
 
@@ -1455,8 +1475,7 @@ int WndForm::ShowModal(void){
   HWND oldFocusHwnd;
 
   SetVisible(true);
-  BringWindowToTop(GetHandle());
-  SetActiveWindow(GetHandle());
+  SetToForeground();
 
   mModalResult = 0;
 
@@ -1891,7 +1910,7 @@ void WndProperty::Destroy(void){
 
   if (mDataField != NULL){
     if (!mDataField->Unuse()) {
-      delete(mDataField);
+      delete mDataField;
       mDataField = NULL;
     } else {
       ASSERT(0);
@@ -2476,6 +2495,25 @@ void WndListFrame::SetEnterCallback(void (*OnListCallback)(WindowControl * Sende
 }
 
 
+void WndListFrame::RedrawScrolled(bool all) {
+  int i;
+  if (all) {
+    for (i=0; i<= mListInfo.ItemInViewCount; i++) {
+      mListInfo.DrawIndex = mListInfo.TopIndex+i;
+      mOnListCallback(this, &mListInfo);
+      mClients[0]->SetTop(mClients[0]->GetHeight() * (i));
+      mClients[0]->Redraw();
+
+    }
+  } 
+  mListInfo.DrawIndex = mListInfo.ItemIndex;
+  mOnListCallback(this, &mListInfo);
+  mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex
+						  -mListInfo.TopIndex));
+  mClients[0]->Redraw();
+}
+
+
 int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lParam){
   switch (wParam){
   case VK_RETURN:
@@ -2487,25 +2525,41 @@ int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lPa
   case VK_DOWN:
     mListInfo.ItemIndex++;
     if (mListInfo.ItemIndex >= mListInfo.BottomIndex){
-      mListInfo.ItemIndex = mListInfo.BottomIndex;
-      return(1);
+
+      if ((mListInfo.ItemIndex+mListInfo.ScrollIndex<
+	   mListInfo.ItemCount)
+	  &&(mListInfo.ItemCount>mListInfo.ItemInViewCount)) {
+
+	mListInfo.ScrollIndex++;
+	mListInfo.ItemIndex = mListInfo.BottomIndex-1;
+	// JMW scroll
+	RedrawScrolled(true);
+	return(0);
+      } else {
+	mListInfo.ItemIndex = mListInfo.BottomIndex;
+	return(1);
+      }
     }
-    mListInfo.DrawIndex = mListInfo.ItemIndex;
-    mOnListCallback(this, &mListInfo);
-    mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex-mListInfo.TopIndex));
-    mClients[0]->Redraw();
+    RedrawScrolled(false);
     return(0);
   case VK_UP:
     mListInfo.ItemIndex--;
+
     if (mListInfo.ItemIndex < 0){
+
       mListInfo.ItemIndex = 0;
-      return(1);
+      // JMW scroll
+      if (mListInfo.ScrollIndex>0) {
+	mListInfo.ScrollIndex--;
+	RedrawScrolled(true);
+	return(0);
+      } else {
+	// only return if no more scrolling left to do
+	return(1);
+      }
     }
-    
-    mListInfo.DrawIndex = mListInfo.ItemIndex;
-    mOnListCallback(this, &mListInfo);
-    mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex-mListInfo.TopIndex));
-    mClients[0]->Redraw();
+
+    RedrawScrolled(false);
     
     return(0);
   }
@@ -2515,6 +2569,7 @@ int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lPa
 
 void WndListFrame::ResetList(void){
 
+  mListInfo.ScrollIndex = 0;
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
   mListInfo.ItemInPageCount = ((GetWidth()+mClients[0]->GetHeight()-1)/mClients[0]->GetHeight())-1;

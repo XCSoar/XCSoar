@@ -210,7 +210,8 @@ void CloseTopology() {
       delete TopoStore[z];
     }
   }
-  delete topo_marks;
+  if (topo_marks) 
+    delete topo_marks;
   UnlockTerrainDataGraphics();
 }
 

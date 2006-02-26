@@ -76,6 +76,113 @@ static void UpdateCaption(void) {
 }
 
 
+static void SetValues(void) {
+  WndProperty* wp;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Cylinder"));
+    dfe->addEnumText(TEXT("Line"));
+    dfe->Set(StartLine);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(StartRadius*2);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Cylinder"));
+    dfe->addEnumText(TEXT("Sector"));
+    dfe->Set(FAISector);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskSectorRadius"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(SectorRadius);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
+  if (wp) {
+    wp->GetDataField()->Set(AutoAdvance);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(AATTaskLength);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
+  if (wp) {
+    bool aw = (AATEnabled != 0);
+    wp->GetDataField()->Set(aw);
+    wp->RefreshDisplay();
+  }
+}
+
+
+static void ReadValues(void) {
+  WndProperty* wp;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
+  if (wp) {
+    if ((int)StartRadius*2 != wp->GetDataField()->GetAsInteger()) {
+      StartRadius = wp->GetDataField()->GetAsInteger()/2;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
+  if (wp) {
+    if ((int)FAISector != wp->GetDataField()->GetAsInteger()) {
+      FAISector = wp->GetDataField()->GetAsInteger();
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskSectorRadius"));
+  if (wp) {
+    if ((int)SectorRadius != wp->GetDataField()->GetAsInteger()) {
+      SectorRadius = wp->GetDataField()->GetAsInteger();
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
+  if (wp) {
+    if (StartLine != wp->GetDataField()->GetAsInteger()) {
+      StartLine = wp->GetDataField()->GetAsInteger();
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
+  if (wp) {
+    if (AutoAdvance != wp->GetDataField()->GetAsBoolean()) {
+      AutoAdvance = wp->GetDataField()->GetAsBoolean();
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
+  if (wp) {
+    AATTaskLength = wp->GetDataField()->GetAsInteger();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
+  if (wp) {
+    AATEnabled = wp->GetDataField()->GetAsInteger();
+  }
+
+}
+
+
 static void OnSelectClicked(WindowControl * Sender){
   int res;
 
@@ -97,8 +204,7 @@ static void OnDetailsClicked(WindowControl * Sender){
 }
 
 static void OnRemoveClicked(WindowControl * Sender) {
-  SelectedWaypoint = Task[twItemIndex].Index;
-  RemoveWaypoint(SelectedWaypoint);
+  RemoveTaskPoint(twItemIndex);
   wf->SetModalResult(mrOK);
 }
 
@@ -203,6 +309,10 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
     break;
   }
 
+  // set properties...
+
+  SetValues();
+
   UpdateCaption();
 
   wf->ShowModal();
@@ -240,6 +350,9 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
     Task[twItemIndex].AATTargetOffsetRadius = 
       wp->GetDataField()->GetAsInteger()/100.0;
   }
+
+  ReadValues();
+  RefreshTask();
 
   delete wf;
 

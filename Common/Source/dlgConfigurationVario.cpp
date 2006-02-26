@@ -40,6 +40,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "Externs.h"
 #include "McReady.h"
+#include "Dialogs.h"
 #include "dlgTools.h"
 #include "device.h"
 
@@ -77,6 +78,12 @@ static bool VegaConfigurationUpdated(TCHAR *name, bool first) {
   DWORD dwvalue;
   
   WndProperty* wp;
+
+#if (WINDOWSPC<1)
+  if (first) {
+    StepProgressDialog();
+  }
+#endif
 
   _stprintf(updatename, TEXT("Vega%sUpdated"), name);
   _stprintf(fullname, TEXT("Vega%s"), name);
@@ -625,7 +632,19 @@ bool dlgConfigurationVarioShowModal(void){
   FillAudioEnums(TEXT("CirclingClimbingLow"));
   FillAudioEnums(TEXT("CirclingDescending"));
 
+  /////////
+
+#if (WINDOWSPC<1)
+  CreateProgressDialog(gettext(TEXT("Reading vario settings...")));
+  // Need step size finer than default 10
+  SetProgressStepSize(2);
+#endif
+
   UpdateParameters(true);
+
+#if (WINDOWSPC<1)
+  CloseProgressDialog();
+#endif
 
   /////////
 

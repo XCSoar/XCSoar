@@ -1790,7 +1790,7 @@ void MapWindow::DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h) {
 void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
 {
 
-  if (extGPSCONNECT && !(DrawInfo.NAVWarning)) 
+  if (extGPSCONNECT && !(DrawInfo.NAVWarning) && (DrawInfo.SatellitesUsed>0)) 
     // nothing to do
     return;
 
@@ -1806,7 +1806,7 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
     TextInBox(hDC, gettext(gpswarningtext1), rc.left+24, rc.bottom-19+Appearance.GPSStatusOffset.y, 0, TextInBoxMode);
 
   } else
-    if (DrawInfo.NAVWarning) {
+    if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed==0)) {
       SelectObject(hDCTemp,hGPSStatus1);
       BitBlt(hDC,rc.left+2,rc.bottom-20-2+Appearance.GPSStatusOffset.y,20,20,
              hDCTemp,0,0,SRCAND);
@@ -3134,8 +3134,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
   */
 
-  //  #if (WINDOWSPC<-1)
-  #if (1)
+  #if (WINDOWSPC<1)
     // old version
     //  BitBlt(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
     //	   hDCTemp,rc.left,rc.top,SRCAND /*SRCAND*/);

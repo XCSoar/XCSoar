@@ -250,6 +250,7 @@ static HFONT FontMap[5] = {
   };
 
 
+#include <stdio.h>
 
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND Parent){
 
@@ -261,7 +262,14 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 // T:\\Project\\WINCE\\TNAV\\XCSoar\\
 
   // this open and parse the XML file:
+
+#if (WINDOWSPC<1)
   XMLNode xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
+#else
+  char winname[200];
+  sprintf(winname,"C:\\XCSoar%s",FileName);
+  XMLNode xMainNode=XMLNode::openFileHelper(winname ,TEXT("PMML"));
+#endif
 
   // JMW TODO: put in error checking here and get rid of exits in xmlParser
   if (xMainNode.isEmpty()) {

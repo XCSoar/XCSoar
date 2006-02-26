@@ -81,7 +81,11 @@ void dlgStatusSystemShowModal(void){
     if (GPS_INFO.NAVWarning) {
       wp->SetText(gettext(TEXT("Fix invalid")));
     } else {
-      wp->SetText(gettext(TEXT("3D fix")));
+      if (GPS_INFO.SatellitesUsed==0) {
+	wp->SetText(gettext(TEXT("No fix")));
+      } else {
+	wp->SetText(gettext(TEXT("3D fix")));
+      }
     }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpNumSat"));

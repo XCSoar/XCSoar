@@ -153,6 +153,7 @@ extern bool EnableCDICruise;
 extern bool EnableCDICircling;
 extern bool EnableVarioGauge;
 extern bool AutoAdvance;
+extern bool EnableBlockSTF; // block speed to fly instead of dolphin
 //
 
 // statistics

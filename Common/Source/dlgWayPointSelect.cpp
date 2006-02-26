@@ -164,7 +164,6 @@ static void PrepareData(void){
   qsort(WayPointSelectInfo, UpLimit,
       sizeof(WayPointSelectInfo_t), WaypointNameCompare);
 
-
 }
 
 
@@ -432,14 +431,24 @@ void OnPaintListItem(WindowControl * Sender, HDC hDC){
 
 }
 
+// DrawListIndex = number of things to draw
+// ItemIndex = current selected item
+
+
 void OnWpListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = UpLimit-LowLimit;
   } else {
-    DrawListIndex = ListInfo->DrawIndex;
-    ItemIndex = ListInfo->ItemIndex;
+    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
+    ItemIndex = ListInfo->ItemIndex+ListInfo->ScrollIndex;
   }
 }
+
+static void OnCloseClicked(WindowControl * Sender){
+  ItemIndex = -1;
+  wf->SetModalResult(mrCancle);
+}
+
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(FormKeyDown),
@@ -464,6 +473,10 @@ int dlgWayPointSelect(void){
   ASSERT(wf!=NULL);
   wf->SetKeyDownNotify(FormKeyDown);
 
+  ((WndButton *)wf->
+   FindByName(TEXT("cmdClose")))->
+    SetOnClickNotify(OnCloseClicked);
+
   wWayPointList = (WndListFrame*)wf->FindByName(TEXT("frmWayPointList"));
   ASSERT(wWayPointList!=NULL);
   wWayPointList->SetBorderKind(BORDERLEFT);
@@ -475,7 +488,7 @@ int dlgWayPointSelect(void){
   PrepareData();
   UpdateList();
 
-  if (wf->ShowModal() == mrOK && (UpLimit - LowLimit > 0) && 
+  if ((wf->ShowModal() == mrOK) && (UpLimit - LowLimit > 0) && 
       (ItemIndex >= 0)  // JMW fixed bug, was >0
       && (ItemIndex < (UpLimit - LowLimit))) {
     ItemIndex = WayPointSelectInfo[LowLimit + ItemIndex].Index;

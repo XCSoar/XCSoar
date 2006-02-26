@@ -435,10 +435,12 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   pszFullname = (char *) malloc(strlen(pszBasename) + 5);
   sprintf( pszFullname, "%s.shp", pszBasename );
   fpSHP = ppc_fopen(pszFullname, "wb" );
-  if( fpSHP == NULL )
-    return( NULL );
-  
   sprintf( pszFullname, "%s.shx", pszBasename );
+
+  free( pszBasename );
+
+  if( fpSHP == NULL ) 
+    return( NULL );
   fpSHX = ppc_fopen(pszFullname, "wb" );
   if( fpSHX == NULL )
     return( NULL );

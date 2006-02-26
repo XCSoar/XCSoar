@@ -277,9 +277,7 @@ class MapWindow {
   static double DisplayAngle;
   static double DisplayAircraftAngle;
   static double DrawScale;
-  
-  static bool AutoZoom;
-    
+      
   static int dTDisplay;
   
   static HBITMAP hLandable, hReachable, 
@@ -361,6 +359,7 @@ class MapWindow {
 
   static bool RenderTimeAvailable();
   static bool BigZoom;
+  static bool AutoZoom;
 
 };
 

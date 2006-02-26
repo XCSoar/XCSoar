@@ -134,6 +134,12 @@ extern bool dlgConfigurationVarioShowModal(void);
 
 static void OnVarioClicked(WindowControl * Sender){
   changed = dlgConfigurationVarioShowModal();
+
+  // this is a hack to get the dialog to retain focus because
+  // the progress dialog in the vario configuration somehow causes
+  // focus problems
+  wf->FocusNext(NULL);
+
 }
 
 
@@ -456,6 +462,12 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoZoom"));
+  if (wp) {
+    wp->GetDataField()->Set(MapWindow::AutoZoom);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceOutline"));
   if (wp) {
     wp->GetDataField()->Set(MapWindow::bAirspaceBlackOutline);
@@ -549,6 +561,12 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinalGlideTerrain"));
   if (wp) {
     wp->GetDataField()->Set(FinalGlideTerrain);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpBlockSTF"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableBlockSTF);
     wp->RefreshDisplay();
   }
 
@@ -931,6 +949,17 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoZoom"));
+  if (wp) {
+    if (MapWindow::AutoZoom != 
+	wp->GetDataField()->GetAsBoolean()) {
+      MapWindow::AutoZoom = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryAutoZoom,
+		    MapWindow::AutoZoom);
+      changed = true;
+    }
+  }
+
   int ival;
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpUTCOffset"));
@@ -1078,6 +1107,15 @@ void dlgConfigurationShowModal(void){
     if (FinalGlideTerrain != wp->GetDataField()->GetAsBoolean()) {
       FinalGlideTerrain = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryFinalGlideTerrain, FinalGlideTerrain);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpBlockSTF"));
+  if (wp) {
+    if (EnableBlockSTF != wp->GetDataField()->GetAsBoolean()) {
+      EnableBlockSTF = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryBlockSTF, EnableBlockSTF);
       changed = true;
     }
   }
@@ -1386,7 +1424,6 @@ void dlgConfigurationShowModal(void){
       changed = true;
     }
   }
-
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpComPort1"));
   if (wp) {

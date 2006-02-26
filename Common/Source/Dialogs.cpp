@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.97 2006/02/18 15:40:05 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.98 2006/02/26 23:32:16 jwharington Exp $
 
 Copyright_License {
 
@@ -3698,7 +3698,6 @@ static HWND hProgress = NULL;
 void CloseProgressDialog() {
   if (hProgress) {
     DestroyWindow(hProgress);
-    FullScreen();
     hProgress = NULL;
   }
 }
@@ -3711,7 +3710,8 @@ BOOL StepProgressDialog(void) {
 
 BOOL SetProgressStepSize(int nSize) {
   if (nSize < 100)
-	SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_SETSTEP, (WPARAM)nSize, 0);
+    SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), 
+		PBM_SETSTEP, (WPARAM)nSize, 0);
   return(TRUE);
 }
 
@@ -3734,14 +3734,17 @@ HWND CreateProgressDialog(TCHAR* text) {
 		     (DLGPROC)Progress);
     }
 
-	TCHAR Temp[1024];
-	_stprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
+    TCHAR Temp[1024];
+    _stprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
     SetWindowText(GetDlgItem(hProgress,IDC_VERSION),Temp);
 
     ShowWindow(hProgress,SW_SHOW);
     
     SetForegroundWindow(hProgress);
-    SHFullScreen(hProgress,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
+    SHFullScreen(hProgress,
+		 SHFS_HIDETASKBAR
+		 |SHFS_HIDESIPBUTTON
+		 |SHFS_HIDESTARTICON);
     SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);    
     

@@ -42,6 +42,8 @@ Copyright_License {
 #include "dlgTools.h"
 
 
+void dlgTaskCalculatorShowModal(void);
+
 static WndForm *wf=NULL;
 static WndListFrame *wTaskList=NULL;
 static WndOwnerDrawFrame *wTaskListEntry = NULL;
@@ -109,33 +111,43 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 		 ETO_OPAQUE, NULL,
 		 sTmp, _tcslen(sTmp), NULL);
     } else if (DrawListIndex==n+1) {
-      _stprintf(sTmp, TEXT("Total:"));
-      ExtTextOut(hDC, 2, 2,
-		 ETO_OPAQUE, NULL,
-		 sTmp, _tcslen(sTmp), NULL);
 
-      if (fai_ok && !AATEnabled) {
-	_stprintf(sTmp, TEXT("%.0f %s FAI"), lengthtotal*DISTANCEMODIFY,
-		  Units::GetDistanceName());
-      } else {
-	if (AATEnabled) {
-	  double d1 = (CALCULATED_INFO.TaskDistanceToGo
-		       +CALCULATED_INFO.TaskDistanceCovered);
-	  if (d1==0.0) {
-	    d1 = CALCULATED_INFO.AATTargetDistance;
-	  }
-	  _stprintf(sTmp, TEXT("%.0f (%.0f) %s"), 
-		    DISTANCEMODIFY*lengthtotal,
-		    DISTANCEMODIFY*d1,
+      if (!AATEnabled) {
+	_stprintf(sTmp, TEXT("Total:"));
+	ExtTextOut(hDC, 2, 2,
+		   ETO_OPAQUE, NULL,
+		   sTmp, _tcslen(sTmp), NULL);
+      
+	if (fai_ok) {
+	  _stprintf(sTmp, TEXT("%.0f %s FAI"), lengthtotal*DISTANCEMODIFY,
 		    Units::GetDistanceName());
 	} else {
 	  _stprintf(sTmp, TEXT("%.0f %s"), lengthtotal*DISTANCEMODIFY,
 		    Units::GetDistanceName());
 	}
-      }
-      ExtTextOut(hDC, 125, 2,
-		 ETO_OPAQUE, NULL,
-		 sTmp, _tcslen(sTmp), NULL);
+	ExtTextOut(hDC, 125, 2,
+		   ETO_OPAQUE, NULL,
+		   sTmp, _tcslen(sTmp), NULL);
+
+      } else {
+	_stprintf(sTmp, TEXT("Total: %.0f min"), AATTaskLength*1.0);
+	ExtTextOut(hDC, 2, 2,
+		   ETO_OPAQUE, NULL,
+		   sTmp, _tcslen(sTmp), NULL);
+
+	double d1 = (CALCULATED_INFO.TaskDistanceToGo
+		     +CALCULATED_INFO.TaskDistanceCovered);
+	if (d1==0.0) {
+	  d1 = CALCULATED_INFO.AATTargetDistance;
+	}
+	_stprintf(sTmp, TEXT("%.0f (%.0f) %s"), 
+		  DISTANCEMODIFY*lengthtotal,
+		  DISTANCEMODIFY*d1,
+		  Units::GetDistanceName());
+	ExtTextOut(hDC, 125, 2,
+		   ETO_OPAQUE, NULL,
+		   sTmp, _tcslen(sTmp), NULL);
+      } 
     }
   }
 }
@@ -191,24 +203,7 @@ static void OverviewRefreshTask(void) {
 }
 
 
-static void ReadValues(void) {
-  WndProperty* wp;
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
-  if (wp) {
-    AATTaskLength = wp->GetDataField()->GetAsInteger();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
-  if (wp) {
-    AATEnabled = wp->GetDataField()->GetAsInteger();
-  }
-
-}
-
 static void OnTaskListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo) {
-
-  ReadValues();
 
   ItemIndex = ListInfo->ItemIndex;
   if ((ItemIndex>= UpLimit) || (UpLimit==1)) {
@@ -256,9 +251,16 @@ static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *Lis
 
 }
 
+static void OnCalcClicked(WindowControl * Sender, 
+			  WndListFrame::ListInfo_t *ListInfo){
+  dlgTaskCalculatorShowModal();
+  OverviewRefreshTask();
+}
+
+
 static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  ReadValues();
   RefreshTask();
+  // do something here.
 }
 
 static int TaskFileNumber = 0;
@@ -279,33 +281,14 @@ static void GetTaskFileName(TCHAR *filename) {
 static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   TCHAR filename[100];
   GetTaskFileName(filename);
-  ReadValues();
   SaveTask(filename);
 }
 
-
-static void SetValues(void) {
-  WndProperty* wp;
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(AATTaskLength);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
-  if (wp) {
-    bool aw = (AATEnabled != 0);
-    wp->GetDataField()->Set(aw);
-    wp->RefreshDisplay();
-  }
-}
 
 static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   TCHAR filename[100];
   GetTaskFileName(filename);
   LoadNewTask(filename);
-  SetValues();
   OverviewRefreshTask();
 }
 
@@ -314,6 +297,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnTaskPaintListItem),
   DeclearCallBackEntry(OnTaskListInfo),
   DeclearCallBackEntry(OnDeclareClicked),
+  DeclearCallBackEntry(OnCalcClicked),
   DeclearCallBackEntry(OnClearClicked),
   DeclearCallBackEntry(OnCloseClicked),
   DeclearCallBackEntry(OnSaveClicked),
@@ -347,10 +331,6 @@ void dlgTaskOverviewShowModal(void){
 
   WndProperty* wp;
 
-  // set properties...
-
-  SetValues();
-
   // 
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
@@ -378,7 +358,6 @@ void dlgTaskOverviewShowModal(void){
 
   // now retrieve back the properties...
 
-  ReadValues();
   RefreshTask();
 
   delete wf;
