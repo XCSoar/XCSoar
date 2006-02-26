@@ -81,7 +81,7 @@ class DataField{
     typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
 
     DataField(TCHAR *EditFormat, TCHAR *DisplayFormat, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)=NULL);
-    ~DataField(void){};
+    virtual ~DataField(void){};
 
   virtual void Inc(void);
   virtual void Dec(void);
@@ -201,20 +201,16 @@ class DataFieldEnum: public DataField {
 		  void(*OnDataAccess)(DataField *Sender,
 				      DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
-      if (Default>=0) { mValue = Default; } else {mValue = 0;}
+      if (Default>=0)
+	{ mValue = Default; }
+      else
+	{mValue = 0;}
       nEnums = 0;
-      (mOnDataAccess)(this, daGet);
-
-    };
-    ~DataFieldEnum() {
-      for (unsigned int i=0; i<nEnums; i++) {
-	if (mTextEnum[i]) {
-	  free(mTextEnum[i]);
-	  mTextEnum[i]= NULL;
-	}
+      if (mOnDataAccess) {
+	(mOnDataAccess)(this, daGet);
       }
-      nEnums = 0;
     };
+      ~DataFieldEnum();
 
   void Inc(void);
   void Dec(void);
@@ -658,6 +654,7 @@ class WndListFrame:public WndFrame{
       int ItemIndex;
       int DrawIndex;
       int SelectedIndex;
+      int ScrollIndex;
       int ItemCount;
       int ItemInViewCount;
       int ItemInPageCount;
@@ -673,6 +670,7 @@ class WndListFrame:public WndFrame{
     int WndListFrame::PrepareItemDraw(void);
     void ResetList(void);
     void SetEnterCallback(void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo));
+    void RedrawScrolled(bool all);
 
   protected:
 
@@ -758,6 +756,8 @@ class WndForm:public WindowControl{
       WindowControl::Close();
       mModalResult = mrCancle;
     }
+
+    void SetToForeground(void);
 
     int GetModalResult(void){return(mModalResult);};
     int SetModalResult(int Value){mModalResult = Value;return(Value);};

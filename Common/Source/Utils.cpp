@@ -174,6 +174,8 @@ TCHAR szRegistryAppGaugeVarioBallast[] = TEXT("AppGaugeVarioBallast");
 
 TCHAR szRegistryAutoAdvance[] = TEXT("AutoAdvance");
 TCHAR szRegistryUTCOffset[] = TEXT("UTCOffset");
+TCHAR szRegistryBlockSTF[] = TEXT("BlockSpeedToFly");
+TCHAR szRegistryAutoZoom[] = TEXT("AutoZoom");
 
 int UTCOffset = 0; // used for Altair
 
@@ -498,6 +500,14 @@ void ReadRegistrySettings(void)
   if (UTCOffset>12) {
     UTCOffset-= 24;
   }
+
+  Temp = 0;
+  GetFromRegistry(szRegistryBlockSTF,&Temp);
+  EnableBlockSTF = (Temp == 1);
+
+  Temp = 0;
+  GetFromRegistry(szRegistryAutoZoom,&Temp);
+  MapWindow::AutoZoom = (Temp == 1);
 
 }
 
@@ -1010,145 +1020,6 @@ void CalculateNewPolarCoef(void)
 }
 
 
-void RefreshTask() {
-  double lengthtotal = 0.0;
-  int i;
-  // Only need to refresh info where the removal happened
-  // as the order of other taskpoints hasn't changed
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    if (Task[i].Index != -1) {
-      RefreshTaskWaypoint(i);
-      lengthtotal += Task[i].Leg;
-    }
-  }
-  if (lengthtotal>0) {
-    for (i=0; i<MAXTASKPOINTS; i++) {
-      if (Task[i].Index != -1) {
-	RefreshTaskWaypoint(i);
-	TaskStats[i].LengthPercent = Task[i].Leg/lengthtotal;
-	if ((i<MAXTASKPOINTS-1) && (Task[i+1].Index == -1)) {
-	  Task[i].AATTargetOffsetRadius = 0.0;
-	  Task[i].AATTargetOffsetRadial = 0.0;
-	  Task[i].AATTargetLat = WayPointList[Task[i].Index].Latitude;
-	  Task[i].AATTargetLon = WayPointList[Task[i].Index].Longitude;
-	}
-      }
-    }
-  }
-  CalculateTaskSectors();
-  CalculateAATTaskSectors();
-}
-
-
-void CalculateTaskSectors(void)
-{
-  int i;
-  double SectorAngle, SectorSize, SectorBearing;
-
-  for(i=0;i<MAXTASKPOINTS-1;i++)
-    {
-      if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
-	{
-	  if(i == 0)
-	    {
-	      SectorAngle = 90;
-	      SectorSize = StartRadius;
-	      SectorBearing = Task[i].OutBound;
-	    }
-	  else
-	    {
-	      SectorAngle = 45;
-	      SectorSize = 5000;
-	      SectorBearing = Task[i].Bisector;
-	    }
-
-	  Task[i].SectorStartLat =
-	    FindLatitude(WayPointList[Task[i].Index].Latitude,
-			 WayPointList[Task[i].Index].Longitude,
-			 SectorBearing + SectorAngle, SectorSize);
-	  Task[i].SectorStartLon =
-	    FindLongitude(WayPointList[Task[i].Index].Latitude,
-			  WayPointList[Task[i].Index].Longitude,
-			  SectorBearing + SectorAngle, SectorSize);
-	  Task[i].SectorEndLat   =
-	    FindLatitude(WayPointList[Task[i].Index].Latitude,
-			 WayPointList[Task[i].Index].Longitude,
-			 SectorBearing - SectorAngle, SectorSize);
-	  Task[i].SectorEndLon   =
-	    FindLongitude(WayPointList[Task[i].Index].Latitude,
-			  WayPointList[Task[i].Index].Longitude,
-			  SectorBearing - SectorAngle, SectorSize);
-	}
-    }
-}
-
-void CalculateAATTaskSectors(void)
-{
-  int i;
-
-  if(AATEnabled == FALSE)
-    return;
-
-  Task[0].AATTargetOffsetRadius = 0.0;
-  Task[0].AATTargetOffsetRadial = 0.0;
-  if (Task[0].Index>=0) {
-    Task[0].AATTargetLat = WayPointList[Task[0].Index].Latitude;
-    Task[0].AATTargetLon = WayPointList[Task[0].Index].Longitude;
-  }
-
-  for(i=1;i<MAXTASKPOINTS-1;i++)
-    {
-      if((Task[i].Index >=0))
-	{
-	  Task[i].AATTargetOffsetRadius = min(1.0,
-                             max(Task[i].AATTargetOffsetRadius,-1.0));
-
-	  Task[i].AATTargetOffsetRadial = min(1.0,
-                             max(Task[i].AATTargetOffsetRadial,0.0));
-
-	  double targetbearing;
-	  double targetrange;
-
-	  if(Task[i].AATType == SECTOR) {
-	    targetrange = ((Task[i].AATTargetOffsetRadius+1.0)/2.0)
-	      *Task[i].AATSectorRadius;
-	  } else {
-	    targetrange = Task[i].AATTargetOffsetRadius
-	      *Task[i].AATCircleRadius;
-	  }
-
-	  targetbearing = Task[i].Bisector;
-	  /*
-	  if(Task[i].AATType == SECTOR) {
-	    double r1 = Task[i].AATStartRadial;
-	    double r2 = Task[i].AATFinishRadial;
-	    targetbearing = (r2-r1)*Task[i].AATTargetOffsetRadial+r1;
-	  } else {
-	    targetbearing = 360.0*Task[i].AATTargetOffsetRadial;
-	  }
-	  */
-
-	  Task[i].AATTargetLat =
-	    FindLatitude (WayPointList[Task[i].Index].Latitude,
-			  WayPointList[Task[i].Index].Longitude,
-			  targetbearing,
-			  targetrange);
-	  Task[i].AATTargetLon =
-	    FindLongitude (WayPointList[Task[i].Index].Latitude,
-			   WayPointList[Task[i].Index].Longitude,
-			   targetbearing,
-			   targetrange);
-
-	  if(Task[i].AATType == SECTOR)
-	    {
-	      Task[i].AATStartLat = FindLatitude (WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude, Task[i].AATStartRadial , Task[i].AATSectorRadius );
-	      Task[i].AATStartLon = FindLongitude(WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude, Task[i].AATStartRadial , Task[i].AATSectorRadius );
-	      Task[i].AATFinishLat= FindLatitude (WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude,	Task[i].AATFinishRadial , Task[i].AATSectorRadius );
-	      Task[i].AATFinishLon= FindLongitude(WayPointList[Task[i].Index].Latitude,WayPointList[Task[i].Index].Longitude,	Task[i].AATFinishRadial , Task[i].AATSectorRadius );
-	    }
-	}
-    }
-}
 
 
 double FindLatitude(double Lat, double Lon, double Bearing, double Distance)
@@ -2373,7 +2244,11 @@ void ReadStatusFile() {
 			// Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
 			if (location && (wcscmp(*location, TEXT("")) == 0)) {
 				// TODO - this picks up memory lost from no entry, but not duplicates - fix.
-				*location = StringMallocParse(value);
+			  if (*location) {
+			    // JMW fix memory leak
+			    free(*location);
+			  }
+			  *location = StringMallocParse(value);
 			}
 		}
 

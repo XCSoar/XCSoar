@@ -83,6 +83,7 @@ int InfoBoxLayout::InfoBoxGeometry = 0;
 int InfoBoxLayout::ControlWidth;
 int InfoBoxLayout::ControlHeight;
 int InfoBoxLayout::TitleHeight;
+int InfoBoxLayout::scale = 1;
 
 bool gnav = false;
 
@@ -218,8 +219,11 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
 
 #if (WINDOWSPC>0)
   // JMW testing only
-      geometrychanged = true;
+  geometrychanged = true;
 #endif
+  int maxsize=0;
+  maxsize = max(rc.right-rc.left,rc.bottom-rc.top);
+  scale = max(1,maxsize/320);
 
   if (rc.bottom<rc.right) {
     // landscape mode
@@ -495,13 +499,13 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
     switch (ButtonLabelGeometry) {
     case 0:
       if (i==0) {
-	*sizex = 52;
-	*sizey = 37;
+	*sizex = 52*InfoBoxLayout::scale;
+	*sizey = 37*InfoBoxLayout::scale;
 	*x = rc.left+3+hwidth*3-3;
 	*y = (rc.bottom-(*sizey)-3-InfoBoxLayout::ControlHeight);
       } else {
-	*sizex = 52;
-	*sizey = 37;
+	*sizex = 52*InfoBoxLayout::scale;
+	*sizey = 37*InfoBoxLayout::scale;
 	*x = rc.left+3+hwidth*(i-1);
 	*y = (rc.bottom-(*sizey)-InfoBoxLayout::ControlHeight);
       }
@@ -512,19 +516,19 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
       hheight = (rc.bottom-rc.top)/(4+1);
 
       if (i==0) {
-	*sizex = 52;
-	*sizey = 20;
+	*sizex = 52*InfoBoxLayout::scale;
+	*sizey = 20*InfoBoxLayout::scale;
 	*x = rc.left+3-(*sizex); // JMW make it offscreen for now
 	*y = (rc.top);
       } else {
 	if (i<5) {
-	  *sizex = 52;
-	  *sizey = 20;
+	  *sizex = 52*InfoBoxLayout::scale;
+	  *sizey = 20*InfoBoxLayout::scale;
 	  *x = rc.left+3;
 	  *y = (rc.top+hheight*(i-1+1)-(*sizey)/2);
 	} else {
-	  *sizex = 60;
-	  *sizey = 40;
+	  *sizex = 60*InfoBoxLayout::scale;
+	  *sizey = 40*InfoBoxLayout::scale;
 	  *x = rc.left+hwidth*(i-5);
 	  *y = (rc.bottom-(*sizey));
 	}
@@ -547,8 +551,8 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   int i;
   int x, y, xsize, ysize;
 
-  int buttonWidth = 50;
-  int buttonHeight = 15;
+  int buttonWidth = 50*InfoBoxLayout::scale;
+  int buttonHeight = 15*InfoBoxLayout::scale;
 
   if (gnav) {
     ButtonLabelGeometry = 1;

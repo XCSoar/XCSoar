@@ -21,6 +21,8 @@ double Statistics::y_max;
 bool   Statistics::unscaled_x;
 bool   Statistics::unscaled_y;
 
+void dlgTaskCalculatorShowModal(void);
+
 static HPEN penThinSignal = NULL;
 
 void Statistics::ResetScale() {
@@ -924,7 +926,6 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
 
   SelectObject(hDC, hfOld);
 
-
 }
 
 
@@ -1079,12 +1080,22 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   return(1);
 }
 
+
+static void OnCalcClicked(WindowControl * Sender,
+			  WndListFrame::ListInfo_t *ListInfo){
+  dlgTaskCalculatorShowModal();
+  Update();
+}
+
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnAnalysisPaint),
   DeclearCallBackEntry(OnNextClicked),
   DeclearCallBackEntry(OnPrevClicked),
+  DeclearCallBackEntry(OnCalcClicked),
   DeclearCallBackEntry(NULL)
 };
+
 
 void dlgAnalysisShowModal(void){
 

@@ -42,6 +42,7 @@ Copyright_License {
 
 #include "WindowControls.h"
 #include "dlgTools.h"
+#include "Port.h"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
@@ -60,7 +61,12 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
       Sender->Set(QNH);
     break;
     case DataField::daPut:
+    case DataField::daChange:
       QNH = Sender->GetAsFloat();
+      INHg = (int)QNH;
+      INHg = INHg*29.91/1013.2;
+
+      VarioWriteSettings();
       wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
       if (wp) {
 	wp->GetDataField()->
@@ -68,13 +74,7 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
 	wp->RefreshDisplay();
       }
     break;
-    case DataField::daChange:
-      // calc alt...
-    break;
   }
-
-  INHg = (int)QNH;
-  INHg = INHg*29.91/1013.2;
 
 }
 

@@ -260,7 +260,13 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   // this is basically a dolphin soaring calculator
 
-  double dmc = MACCREADY-Calculated->NettoVario;
+  double dmc;
+
+  if (EnableBlockSTF) {
+    dmc = MACCREADY;
+  } else {
+    dmc = MACCREADY-Calculated->NettoVario;
+  }
 
   if (Calculated->Vario <= MACCREADY) {
 
@@ -531,17 +537,7 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       LastAlt = Basic->Altitude;
       LastTime = Basic->Time;
 
-      if (Basic->VarioAvailable) {
-	// JMW experimental
-	TCHAR mcbuf[100];
-	wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
-		 iround(MACCREADY*10),
-		 iround(Calculated->VOpt*10),
-		 Calculated->Circling,
-		 iround(Calculated->TerrainAlt),
-		 iround(QNH*10));
-	VarioWriteNMEA(mcbuf);
-      }
+      VarioWriteSettings();
 
     }
   else
@@ -2460,6 +2456,7 @@ void SortLandableWaypoints (NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 void ResumeAbortTask(int set) {
   static int OldTask[MAXTASKPOINTS];
   static int OldActiveWayPoint= -1;
+  static bool OldAATEnabled= false;
   int i;
 
   bool oldTaskAborted = TaskAborted;
@@ -2472,29 +2469,38 @@ void ResumeAbortTask(int set) {
 	TaskAborted = false;
 
   if (oldTaskAborted != TaskAborted) {
-	  if (TaskAborted) {
+    if (TaskAborted) {
 
-		// save current task in backup
+      // save current task in backup
 
-		for (i=0; i<MAXTASKPOINTS; i++) {
-		  OldTask[i]= Task[i].Index;
-		}
-		OldActiveWayPoint = ActiveWayPoint;
+      for (i=0; i<MAXTASKPOINTS; i++) {
+	OldTask[i]= Task[i].Index;
+      }
+      OldActiveWayPoint = ActiveWayPoint;
+      if (AATEnabled) {
+	OldAATEnabled = true;
+      } else {
+	OldAATEnabled = false;
+      }
 
-		// force new waypoint to be the closest
-		ActiveWayPoint = -1;
+      // force new waypoint to be the closest
+      ActiveWayPoint = -1;
 
-	  } else {
+      // force AAT off
+      AATEnabled = false;
 
-		// reload backup task
+    } else {
 
-		for (i=0; i<MAXTASKPOINTS; i++) {
-		  Task[i].Index = OldTask[i];
-		}
-		ActiveWayPoint = OldActiveWayPoint;
+      // reload backup task
 
-		RefreshTask();
-	  }
+      for (i=0; i<MAXTASKPOINTS; i++) {
+	Task[i].Index = OldTask[i];
+      }
+      ActiveWayPoint = OldActiveWayPoint;
+      AATEnabled = OldAATEnabled;
+
+      RefreshTask();
+    }
   }
 
 }

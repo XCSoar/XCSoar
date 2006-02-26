@@ -250,7 +250,7 @@ int                                             ClipAltitude = 1000;
 int                                             AltWarningMargin = 100;
 bool                                    AutoAdvance = true;
 double                          QNH = (double)1013.2;
-
+bool EnableBlockSTF = false;
 
 //SI to Local Units
 double        SPEEDMODIFY = TOKNOTS;
@@ -769,7 +769,11 @@ void ShowStatus() {
     if (GPS_INFO.NAVWarning) {
       wcscat(statusmessage, gettext(TEXT("GPS fix invalid")));       // JMW fixed message
     } else {
-      wcscat(statusmessage, gettext(TEXT("GPS 3D fix")));
+      if (GPS_INFO.SatellitesUsed==0) {
+	wcscat(statusmessage, gettext(TEXT("No fix")));
+      } else {
+	wcscat(statusmessage, gettext(TEXT("GPS 3D fix")));
+      }
     }
     wcscat(statusmessage, TEXT("\r\n"));
 
@@ -2359,6 +2363,13 @@ void DisplayText(void)
         TCHAR sTmp[32];
         Units::FormatAlternateUserAltitude(GPS_INFO.BaroAltitude, sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
         InfoBoxes[i]->SetComment(sTmp);
+      }
+      if (DisplayType[i] == 43) { // optimum speed
+	if (EnableBlockSTF) {
+	  InfoBoxes[i]->SetComment(TEXT("Block"));
+	} else {
+	  InfoBoxes[i]->SetComment(TEXT("Dolphin"));
+	}
       }
 
       #else

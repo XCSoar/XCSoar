@@ -8,6 +8,7 @@ class InfoBoxLayout {
  public:
   static bool landscape;
   static bool square;
+  static int scale;
   static void CreateInfoBoxes(RECT rc);
   #if NEWINFOBOX > 0
   static void DestroyInfoBoxes(void);

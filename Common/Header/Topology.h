@@ -9,7 +9,7 @@
 class XShape {
  public:
   XShape();
-  ~XShape();
+  virtual ~XShape();
 
   virtual void load(shapefileObj* shpfile, int i);
   virtual void clear();
@@ -25,6 +25,7 @@ class XShapeLabel: public XShape {
   XShapeLabel() {
     label= NULL;
   }
+  virtual ~XShapeLabel();
   virtual void clear();
   char *label;
   void setlabel(const char* src);
@@ -38,7 +39,7 @@ class Topology {
   Topology(char* shpname, COLORREF thecolor);
   Topology() {};
 
-  ~Topology();
+  virtual ~Topology();
 
   void Open();
   void Close();
@@ -87,7 +88,7 @@ class TopologyWriter: public Topology {
 class TopologyLabel: public Topology {
  public:
   TopologyLabel(char* shpname, COLORREF thecolor, INT field1);
-    ~TopologyLabel();
+  ~TopologyLabel();
   virtual XShape* addShape(int i);
   void setField(int i);
   int field;

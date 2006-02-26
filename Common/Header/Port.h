@@ -31,5 +31,6 @@ int Port1Read(void *Buffer, size_t Size);
 void Port1WriteNMEA(TCHAR *Text);
 
 void VarioWriteNMEA(TCHAR *Text);
+void VarioWriteSettings(void);
 
 #endif
