@@ -53,6 +53,7 @@ static void OnCloseClicked(WindowControl * Sender){
 static double INHg=0;
 
 static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
+  WndProperty* wp;
 
   switch(Mode){
     case DataField::daGet:
@@ -60,6 +61,12 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
     break;
     case DataField::daPut:
       QNH = Sender->GetAsFloat();
+      wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+      if (wp) {
+	wp->GetDataField()->
+	  SetAsFloat(Units::ToUserAltitude(GPS_INFO.BaroAltitude));
+	wp->RefreshDisplay();
+      }
     break;
     case DataField::daChange:
       // calc alt...
@@ -175,7 +182,10 @@ void dlgBasicSettingsShowModal(void){
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
     if (wp) {
+      wp->GetDataField()->SetAsFloat(
+				     Units::ToUserAltitude(GPS_INFO.BaroAltitude));
       wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+      wp->RefreshDisplay();
     }
 
     wf->ShowModal();

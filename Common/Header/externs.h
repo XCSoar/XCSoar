@@ -172,7 +172,6 @@ extern BOOL INPUTFILECHANGED;
 
 bool Debounce();
 
-
 // Interface Globals
 extern GetTextSTRUCT GetTextData[];
 extern int GetTextData_Size;

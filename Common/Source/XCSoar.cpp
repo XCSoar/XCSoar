@@ -724,11 +724,6 @@ void ShowStatus() {
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime-sunsethours)*60);
 
-  TIME_ZONE_INFORMATION TimeZoneInformation;
-  if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
-    sunsethours += 1;
-  }
-
   _stprintf(Temp,TEXT("%s\t%s\r\n%s\t%s\r\n%s\t%.0f %s\r\n%s\t%02d:%02d\r\n\r\n"),
 		   gettext(TEXT("Longitude")),
            sLongitude,

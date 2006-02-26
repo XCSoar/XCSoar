@@ -173,7 +173,9 @@ TCHAR szRegistryAppGaugeVarioBugs[] = TEXT("AppGaugeVarioBugs");
 TCHAR szRegistryAppGaugeVarioBallast[] = TEXT("AppGaugeVarioBallast");
 
 TCHAR szRegistryAutoAdvance[] = TEXT("AutoAdvance");
+TCHAR szRegistryUTCOffset[] = TEXT("UTCOffset");
 
+int UTCOffset = 0; // used for Altair
 
 static double SINETABLE[910];
 static float FSINETABLE[910];
@@ -490,10 +492,18 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAutoAdvance,&Temp);
   AutoAdvance = (Temp == 1);
 
+  Temp = 0;
+  GetFromRegistry(szRegistryUTCOffset,&Temp);
+  UTCOffset = Temp;
+  if (UTCOffset>12) {
+    UTCOffset-= 24;
+  }
+
 }
 
 
-
+// NOTE: all registry variables are unsigned!
+//
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
 {
   HKEY    hKey;
@@ -2646,5 +2656,24 @@ int propGetScaleList(double *List, size_t Size){
     return(0);
   }
 
+}
+
+
+long GetUTCOffset(void) {
+#ifndef GNAV
+  long utcoffset=0;
+  // returns offset in seconds
+  TIME_ZONE_INFORMATION TimeZoneInformation;
+  GetTimeZoneInformation(&TimeZoneInformation);
+
+  utcoffset = TimeZoneInformation.Bias*60;
+
+  if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
+    utcoffset += TimeZoneInformation.DaylightBias*60;
+  }
+  return utcoffset;
+#else
+  return UTCOffset;
+#endif
 }
 

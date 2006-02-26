@@ -348,16 +348,26 @@ void LoadChildsFromXML(WindowControl *Parent,
 
     XMLNode childNode = Node->getChildNode(i);
 
-    GetDefaultWindowControlProps(&childNode, Name, &X, &Y, &Width, &Height, &Font, Caption);
+    GetDefaultWindowControlProps(&childNode,
+				 Name,
+				 &X, &Y,
+				 &Width, &Height,
+				 &Font, Caption);
 
-    BackColor = StringToIntDflt(childNode.getAttribute(TEXT("BackColor")), 0xffffffff);
-    ForeColor = StringToIntDflt(childNode.getAttribute(TEXT("ForeColor")), 0xffffffff);
+    BackColor = StringToIntDflt(childNode.getAttribute(TEXT("BackColor")),
+				0xffffffff);
+    ForeColor = StringToIntDflt(childNode.getAttribute(TEXT("ForeColor")),
+				0xffffffff);
     Visible = StringToIntDflt(childNode.getAttribute(TEXT("Visible")), 1) == 1;
     if (BackColor != 0xffffffff){
-      BackColor = RGB((BackColor>>16)&0xff,(BackColor>>8)&0xff,(BackColor>>0)&0xff);
+      BackColor = RGB((BackColor>>16)&0xff,
+		      (BackColor>>8)&0xff,
+		      (BackColor>>0)&0xff);
     }
     if (ForeColor != 0xffffffff){
-      ForeColor = RGB((ForeColor>>16)&0xff,(ForeColor>>8)&0xff,(ForeColor>>0)&0xff);
+      ForeColor = RGB((ForeColor>>16)&0xff,
+		      (ForeColor>>8)&0xff,
+		      (ForeColor>>0)&0xff);
     }
     Font = StringToIntDflt(childNode.getAttribute(TEXT("Font")), ParentFont);
 
@@ -369,15 +379,29 @@ void LoadChildsFromXML(WindowControl *Parent,
       int ReadOnly;
       int MultiLine;
 
-      CaptionWidth = StringToIntDflt(childNode.getAttribute(TEXT("CaptionWidth")), 0);
-      MultiLine = StringToIntDflt(childNode.getAttribute(TEXT("MultiLine")), 0);
-      ReadOnly = StringToIntDflt(childNode.getAttribute(TEXT("ReadOnly")), 0);
-      _tcscpy(DataNotifyCallback, StringToStringDflt(childNode.getAttribute(TEXT("OnDataNotify")), TEXT("")));
-      _tcscpy(Caption, StringToStringDflt(childNode.getAttribute(TEXT("Caption")), TEXT("")));
+      CaptionWidth =
+	StringToIntDflt(childNode.getAttribute(TEXT("CaptionWidth")),
+			0);
+      MultiLine =
+	StringToIntDflt(childNode.getAttribute(TEXT("MultiLine")),
+			0);
+      ReadOnly =
+	StringToIntDflt(childNode.getAttribute(TEXT("ReadOnly")),
+			0);
 
-      WC = W = new WndProperty(Parent, Name, Caption, X, Y,
-			       Width, Height, CaptionWidth,
-			       (WndProperty::DataChangeCallback_t) CallBackLookup(LookUpTable, DataNotifyCallback), MultiLine);
+      _tcscpy(DataNotifyCallback,
+	      StringToStringDflt(childNode.getAttribute(TEXT("OnDataNotify")),
+				 TEXT("")));
+      _tcscpy(Caption,
+	      StringToStringDflt(childNode.getAttribute(TEXT("Caption")),
+				 TEXT("")));
+
+      WC = W =
+	new WndProperty(Parent, Name, Caption, X, Y,
+			Width, Height, CaptionWidth,
+			(WndProperty::DataChangeCallback_t)
+			CallBackLookup(LookUpTable, DataNotifyCallback),
+			MultiLine);
 
       Caption[0] = '\0';
       W->SetReadOnly(ReadOnly != 0);
@@ -390,27 +414,48 @@ void LoadChildsFromXML(WindowControl *Parent,
         TCHAR OnDataAccess[64];
         double Min, Max, Step;
 
-        XMLNode dataFieldNode = childNode.getChildNode(TEXT("DataField"), 0);
+        XMLNode dataFieldNode =
+	  childNode.getChildNode(TEXT("DataField"), 0);
 
-        _tcscpy(DataType, StringToStringDflt(dataFieldNode.getAttribute(TEXT("DataType")), TEXT("")));
-        _tcscpy(DisplayFmt, StringToStringDflt(dataFieldNode.getAttribute(TEXT("DisplayFormat")), TEXT("")));
-        _tcscpy(EditFormat, StringToStringDflt(dataFieldNode.getAttribute(TEXT("EditFormat")), TEXT("")));
-        _tcscpy(OnDataAccess, StringToStringDflt(dataFieldNode.getAttribute(TEXT("OnDataAccess")), TEXT("")));
-        ReadOnly = StringToIntDflt(dataFieldNode.getAttribute(TEXT("ReadOnly")), 0);
-        Min = StringToIntDflt(dataFieldNode.getAttribute(TEXT("Min")), INT_MIN);
-        Max = StringToIntDflt(dataFieldNode.getAttribute(TEXT("Max")), INT_MAX);
-        Step = StringToFloatDflt(dataFieldNode.getAttribute(TEXT("Step")), 1);
+        _tcscpy(DataType,
+		StringToStringDflt(dataFieldNode.
+				   getAttribute(TEXT("DataType")),
+				   TEXT("")));
+        _tcscpy(DisplayFmt,
+		StringToStringDflt(dataFieldNode.
+				   getAttribute(TEXT("DisplayFormat")),
+				   TEXT("")));
+        _tcscpy(EditFormat,
+		StringToStringDflt(dataFieldNode.
+				   getAttribute(TEXT("EditFormat")),
+				   TEXT("")));
+        _tcscpy(OnDataAccess,
+		StringToStringDflt(dataFieldNode.
+				   getAttribute(TEXT("OnDataAccess")),
+				   TEXT("")));
+        ReadOnly = StringToIntDflt(dataFieldNode.
+				   getAttribute(TEXT("ReadOnly")), 0);
+        Min = StringToIntDflt(dataFieldNode.
+			      getAttribute(TEXT("Min")), INT_MIN);
+        Max = StringToIntDflt(dataFieldNode.
+			      getAttribute(TEXT("Max")), INT_MAX);
+        Step = StringToFloatDflt(dataFieldNode.
+				 getAttribute(TEXT("Step")), 1);
 
         if (_tcsicmp(DataType, TEXT("enum"))==0){
           W->SetDataField(
 			  new DataFieldEnum(EditFormat, DisplayFmt, false,
-              (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
+					    (DataField::DataAccessCallback_t)
+					    CallBackLookup(LookUpTable,
+							   OnDataAccess))
           );
         }
         if (_tcsicmp(DataType, TEXT("filereader"))==0){
           W->SetDataField(
-			  new DataFieldFileReader(EditFormat, DisplayFmt,
-              (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
+			  new DataFieldFileReader(EditFormat,
+						  DisplayFmt,
+						  (DataField::DataAccessCallback_t)
+						  CallBackLookup(LookUpTable, OnDataAccess))
           );
         }
         if (_tcsicmp(DataType, TEXT("boolean"))==0){

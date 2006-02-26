@@ -164,6 +164,13 @@ class DataFieldBoolean:public DataField{
     return(GetAsString());
   };
 
+  virtual void Set(int Value){
+    if (Value>0)
+      Set(true);
+    else
+      Set(false);
+  };
+
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
@@ -191,23 +198,23 @@ class DataFieldEnum: public DataField {
     DataFieldEnum(TCHAR *EditFormat,
 		  TCHAR *DisplayFormat,
 		  int Default,
-		  void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
+		  void(*OnDataAccess)(DataField *Sender,
+				      DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
       if (Default>=0) { mValue = Default; } else {mValue = 0;}
       nEnums = 0;
       (mOnDataAccess)(this, daGet);
 
     };
-      ~DataFieldEnum() {
-	for (unsigned int i=0; i<nEnums; i++) {
-	  if (mTextEnum[i]) {
-	    free(mTextEnum[i]);
-	    mTextEnum[i]=0;
-	  }
+    ~DataFieldEnum() {
+      for (unsigned int i=0; i<nEnums; i++) {
+	if (mTextEnum[i]) {
+	  free(mTextEnum[i]);
+	  mTextEnum[i]= NULL;
 	}
-	nEnums = 0;
-
       }
+      nEnums = 0;
+    };
 
   void Inc(void);
   void Dec(void);
@@ -256,25 +263,23 @@ class DataFieldFileReader: public DataField {
 
     };
     ~DataFieldFileReader() {
-	for (unsigned int i=0; i<nFiles; i++) {
+	for (unsigned int i=1; i<nFiles; i++) {
 	  if (mTextFile[i]) {
 	    free(mTextFile[i]);
-	    mTextFile[i]=0;
+	    mTextFile[i]= NULL;
 	  }
 	  if (mTextPathFile[i]) {
 	    free(mTextPathFile[i]);
-	    mTextPathFile[i]=0;
+	    mTextPathFile[i]= NULL;
 	  }
 	}
-	nFiles = 0;
+	nFiles = 1;
 
       }
 
   void Inc(void);
   void Dec(void);
 
-  BOOL ScanFiles(const TCHAR *pattern, const TCHAR *filter);
-  BOOL ScanDirectories(const TCHAR *pattern, const TCHAR *filter);
   void addFile(TCHAR *fname, TCHAR *fpname);
 
   int GetAsInteger(void);
@@ -291,6 +296,12 @@ class DataFieldFileReader: public DataField {
   #pragma warn +hid
   #endif
   int SetAsInteger(int Value);
+
+  void ScanDirectoryTop(const TCHAR *filter);
+
+ protected:
+  BOOL ScanFiles(const TCHAR *pattern, const TCHAR *filter);
+  BOOL ScanDirectories(const TCHAR *pattern, const TCHAR *filter);
 
 };
 
@@ -384,6 +395,8 @@ class DataFieldFloat:public DataField{
   double GetAsFloat(void);
   TCHAR *GetAsString(void);
   TCHAR *GetAsDisplayString(void);
+
+  virtual void Set(int Value){ Set((double)Value); };
 
   #if defined(__BORLANDC__)
   #pragma warn -hid

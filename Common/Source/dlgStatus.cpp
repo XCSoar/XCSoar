@@ -80,6 +80,8 @@ void dlgStatusShowModal(void){
   wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusAircraft.xml", hWndMainWindow);
   if (!wf) return;
 
+  ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+
   wf->SetLButtonUpNotify(OnFormLButtonUp);
 
   Units::LongitudeToString(GPS_INFO.Longitude, sLongitude, sizeof(sLongitude)-1);
