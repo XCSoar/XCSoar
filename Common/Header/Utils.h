@@ -72,6 +72,7 @@ extern TCHAR szRegistryAppGaugeVarioMc[];
 extern TCHAR szRegistryAppGaugeVarioBugs[];
 extern TCHAR szRegistryAppGaugeVarioBallast[];
 extern TCHAR szRegistryAutoAdvance[];
+extern TCHAR szRegistryUTCOffset[];
 
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
@@ -192,6 +193,6 @@ void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
 void propGetFontSettings(TCHAR *Name, LOGFONT* lplf);
 int propGetScaleList(double *List, size_t Size);
 
-
+long GetUTCOffset(void);
 
 #endif

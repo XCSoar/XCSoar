@@ -1156,6 +1156,12 @@ int InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                             WayPointList[Task[0].Index].Longitude);
 
   AircraftBearing = AircraftBearing - Task[0].OutBound ;
+  while (AircraftBearing<-180) {
+    AircraftBearing+= 360;
+  }
+  while (AircraftBearing>180) {
+    AircraftBearing-= 360;
+  }
   // JMW bugfix, was Bisector, which is invalid
 
   bool approaching;

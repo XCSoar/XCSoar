@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.35 2006/02/16 00:03:06 jwharington Exp $
+  $Id: Parser.cpp,v 1.36 2006/02/26 05:58:43 jwharington Exp $
 
 Copyright_License {
 
@@ -994,8 +994,26 @@ BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
 BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
+  TCHAR name[80];
+  TCHAR responsetype[10];
+  ExtractParameter(String,responsetype,0);
+  ExtractParameter(String,name,1);
+  ExtractParameter(String,ctemp,2);
+  long value =  (long)StrToDouble(ctemp,NULL);
+  DWORD dwvalue;
+
+  TCHAR updatename[100];
+  TCHAR fullname[100];
+  _stprintf(updatename, TEXT("Vega%sUpdated"), name);
+  _stprintf(fullname, TEXT("Vega%s"), name);
+  SetToRegistry(updatename, 1);
+  dwvalue = *((DWORD*)&value);
+  SetToRegistry(fullname, dwvalue);
+
+  /*
   wsprintf(ctemp,TEXT("%s"), &String[0]);
   DoStatusMessage(ctemp);
+  */
   return FALSE;
 }
 

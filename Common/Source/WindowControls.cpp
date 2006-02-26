@@ -34,6 +34,7 @@ Copyright_License {
 #include <stdio.h>
 #include "WindowControls.h"
 #include "MapWindow.h"
+#include "Utils.h"
 
 #define DEFAULTBORDERPENWIDTH 1
 #define SELECTORWIDTH         4
@@ -42,7 +43,7 @@ Copyright_License {
 
 BOOL IsDots(const TCHAR* str) {
   if(_tcscmp(str,TEXT(".")) && _tcscmp(str,TEXT(".."))) return FALSE;
-    return TRUE;
+  return TRUE;
 }
 
 int DataFieldFileReader::GetAsInteger(void){
@@ -55,7 +56,15 @@ int DataFieldFileReader::SetAsInteger(int Value){
 }
 
 
-BOOL DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filter) {
+void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
+  ScanDirectories(TEXT("\\NOR Flash"),filter);
+  ScanDirectories(TEXT("\\My Documents"),filter);
+  ScanDirectories(TEXT("\\XCSoarData"),filter);
+}
+
+
+BOOL DataFieldFileReader::ScanDirectories(const TCHAR* sPath, 
+					  const TCHAR* filter) {
     HANDLE hFind;  // file handle
     WIN32_FIND_DATA FindFileData;
 
@@ -77,7 +86,9 @@ BOOL DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filte
     _tcscat(FileName,TEXT("\\"));
 
     hFind = FindFirstFile(DirPath,&FindFileData); // find the first file
-    if(hFind == INVALID_HANDLE_VALUE) return FALSE;
+    if(hFind == INVALID_HANDLE_VALUE) {
+      return FALSE;
+    }
     _tcscpy(DirPath,FileName);
 
     ScanFiles(FileName, filter);
@@ -117,7 +128,8 @@ BOOL DataFieldFileReader::ScanDirectories(const TCHAR* sPath, const TCHAR* filte
 }
 
 
-BOOL DataFieldFileReader::ScanFiles(const TCHAR* sPath, const TCHAR* filter) {
+BOOL DataFieldFileReader::ScanFiles(const TCHAR* sPath, 
+				    const TCHAR* filter) {
     HANDLE hFind;  // file handle
     WIN32_FIND_DATA FindFileData;
 
@@ -205,6 +217,7 @@ void DataFieldFileReader::Lookup(TCHAR *Text) {
   }
 }
 
+
 TCHAR* DataFieldFileReader::GetPathFile(void) {
   if ((mValue<=nFiles)&&(mValue)) {
     return mTextPathFile[mValue];
@@ -212,7 +225,9 @@ TCHAR* DataFieldFileReader::GetPathFile(void) {
   return TEXT("\0");
 }
 
-void DataFieldFileReader::addFile(TCHAR *Text, TCHAR *PText) {
+
+void DataFieldFileReader::addFile(TCHAR *Text, 
+				  TCHAR *PText) {
   if (nFiles<DFE_MAX_FILES) {
     mTextFile[nFiles] = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
     _tcscpy(mTextFile[nFiles], Text);
@@ -492,7 +507,7 @@ int DataFieldInteger::SetAsInteger(int Value){
 
 double DataFieldInteger::SetAsFloat(double Value){
   double res = GetAsFloat();
-  SetAsInteger((int)(Value+0.5));
+  SetAsInteger(iround(Value));
   return(res);
 }
 
@@ -541,7 +556,7 @@ bool DataFieldFloat::GetAsBoolean(void){
 }
 
 int DataFieldFloat::GetAsInteger(void){
-  return(int)(mValue+0.5);
+  return iround(mValue);
 }
 
 double DataFieldFloat::GetAsFloat(void){

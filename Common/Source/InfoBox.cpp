@@ -447,8 +447,8 @@ void InfoBox::Paint(void){
   }
 
   PaintTitle();
-  PaintValue();
   PaintComment();
+  PaintValue();
   PaintSelector();
 
 }

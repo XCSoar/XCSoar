@@ -43,6 +43,7 @@ Copyright_License {
 #include <windows.h>
 #include "XCSoar.h"
 #include "externs.h"
+#include "Utils.h"
 
 class SunEphemeris {
 
@@ -134,9 +135,6 @@ class SunEphemeris {
 
     // testing
 
-    TIME_ZONE_INFORMATION TimeZoneInformation;
-    GetTimeZoneInformation(&TimeZoneInformation);
-
 // JG Removed simulator conditional code, since GPS_INFO now set up
 // from system time.
     m = GPS_INFO.Month;
@@ -146,8 +144,22 @@ class SunEphemeris {
     h = (h % 24);
 
     // TODO: use TimeLocal function from Process here
+    /*
+    TIME_ZONE_INFORMATION TimeZoneInformation;
+    GetTimeZoneInformation(&TimeZoneInformation);
+
+    if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
+      sunsethours += 1;
+    }
+    
+    // bias is in minutes
+
     int localtime = ((int)GPS_INFO.Time-TimeZoneInformation.Bias*60);
     tzone = -TimeZoneInformation.Bias/60.0;
+    */
+
+    int localtime = (int)(GPS_INFO.Time-GetUTCOffset());
+    tzone = -GetUTCOffset()/3600.0;
 
     d = FNday(y, m, day, (float)h);
 

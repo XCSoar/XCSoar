@@ -487,8 +487,10 @@ void Port1WriteNMEA(TCHAR *Text)
 
 
 void VarioWriteNMEA(TCHAR *Text) {
+  /*
   if (!(GPS_INFO.VarioAvailable))
     return;
+  */
 
   if (Port2Available) {
     // assume vario is on port B

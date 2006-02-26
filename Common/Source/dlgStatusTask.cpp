@@ -72,6 +72,8 @@ void dlgStatusTaskShowModal(void){
   wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusTask.xml", hWndMainWindow);
   if (!wf) return;
 
+  ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+
   wf->SetLButtonUpNotify(OnFormLButtonUp);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskTime"));

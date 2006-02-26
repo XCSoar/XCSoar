@@ -72,6 +72,8 @@ void dlgStatusSystemShowModal(void){
   wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusSystem.xml", hWndMainWindow);
   if (!wf) return;
 
+  ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+
   wf->SetLButtonUpNotify(OnFormLButtonUp);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpGPS"));

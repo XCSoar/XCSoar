@@ -43,6 +43,8 @@ Copyright_License {
 #include "dlgTools.h"
 #include "device.h"
 
+extern int UTCOffset;
+
 static bool changed = false;
 static bool taskchanged = false;
 static int page=0;
@@ -80,7 +82,7 @@ static void NextPage(int Step){
     wf->SetCaption(TEXT("4 Polar"));
     break;
   case 4:
-    wf->SetCaption(TEXT("5 Comms"));
+    wf->SetCaption(TEXT("5 Comm Ports and Devices"));
     break;
   case 5:
     wf->SetCaption(TEXT("6 Units"));
@@ -89,7 +91,7 @@ static void NextPage(int Step){
     wf->SetCaption(TEXT("7 Appearance"));
     break;
   case 7:
-    wf->SetCaption(TEXT("8 Vario gauge"));
+    wf->SetCaption(TEXT("8 Vario Gauge"));
     break;
   case 8:
     wf->SetCaption(TEXT("9 Task"));
@@ -124,6 +126,14 @@ static void NextPage(int Step){
   wConfig12->SetVisible(page == 11); 
   wConfig13->SetVisible(page == 12); 
   wConfig14->SetVisible(page == 13); 
+}
+
+
+extern bool dlgConfigurationVarioShowModal(void);
+
+
+static void OnVarioClicked(WindowControl * Sender){
+  changed = dlgConfigurationVarioShowModal();
 }
 
 
@@ -162,6 +172,7 @@ static void OnTestEnumData(DataField *Sender, DataField::DataAccessKind_t Mode){
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnNextClicked),
   DeclearCallBackEntry(OnPrevClicked),
+  DeclearCallBackEntry(OnVarioClicked),
   DeclearCallBackEntry(NULL)
 };
 
@@ -263,7 +274,7 @@ void dlgConfigurationShowModal(void){
 		      hWndMainWindow);
 
   if (!wf) return;
-
+  
   //  wf->SetKeyDownNotify(FormKeyDown);
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
@@ -297,6 +308,22 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig13!=NULL);
   ASSERT(wConfig14!=NULL);
 
+  //////////
+  /*
+  page = 0;
+
+  NextPage(0); // JMW just to turn proper pages on/off
+
+  wf->ShowModal();
+
+  delete wf;
+
+  wf = NULL;
+
+  return; 
+  */
+  ///////////////////
+  
   // TODO: airspace colors
   // TODO: all appearance variables
   // TODO: warning of need to restart for language/input/appearance
@@ -409,6 +436,12 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
   // 
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpUTCOffset"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(UTCOffset/3600.0);
+    wp->RefreshDisplay();
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpClipAltitude"));
   if (wp) {
@@ -612,8 +645,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    //    dfe->ScanFiles(TEXT("\\My Documents\\"),TEXT("*.plr"));
-    dfe->ScanDirectories(NULL,TEXT("*.plr"));
+    dfe->ScanDirectoryTop(TEXT("*.plr"));
     dfe->Lookup(szPolarFile);
     wp->RefreshDisplay();
   }
@@ -624,7 +656,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectories(NULL,TEXT("*.txt"));
+    dfe->ScanDirectoryTop(TEXT("*.txt"));
     dfe->Lookup(szAirspaceFile);
     wp->RefreshDisplay();
   }
@@ -636,8 +668,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    //    dfe->ScanFiles(TEXT("\\My Documents\\"),TEXT("*.plr"));
-    dfe->ScanDirectories(NULL,TEXT("*.txt"));
+    dfe->ScanDirectoryTop(TEXT("*.txt"));
     dfe->Lookup(szAdditionalAirspaceFile);
     wp->RefreshDisplay();
   }
@@ -648,7 +679,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectories(NULL,TEXT("*.dat"));
+    dfe->ScanDirectoryTop(TEXT("*.dat"));
     dfe->Lookup(szWaypointFile);
     wp->RefreshDisplay();
   }
@@ -660,7 +691,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectories(NULL,TEXT("*.dat"));
+    dfe->ScanDirectoryTop(TEXT("*.dat"));
     dfe->Lookup(szAdditionalWaypointFile);
     wp->RefreshDisplay();
   }
@@ -671,7 +702,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectories(NULL,TEXT("*.dat"));
+    dfe->ScanDirectoryTop(TEXT("*.dat"));
     dfe->Lookup(szTerrainFile);
     wp->RefreshDisplay();
   }
@@ -682,7 +713,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectories(NULL,TEXT("*.tpl"));
+    dfe->ScanDirectoryTop(TEXT("*.tpl"));
     dfe->Lookup(szTopologyFile);
     wp->RefreshDisplay();
   }
@@ -693,7 +724,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectories(NULL,TEXT("*.txt"));
+    dfe->ScanDirectoryTop(TEXT("*.txt"));
     dfe->Lookup(szAirfieldFile);
     wp->RefreshDisplay();
   }
@@ -704,7 +735,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectories(NULL,TEXT("*.xcl"));
+    dfe->ScanDirectoryTop(TEXT("*.xcl"));
     dfe->Lookup(szLanguageFile);
     wp->RefreshDisplay();
   }
@@ -715,7 +746,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectories(NULL,TEXT("*.xcs"));
+    dfe->ScanDirectoryTop(TEXT("*.xcs"));
     dfe->Lookup(szStatusFile);
     wp->RefreshDisplay();
   }
@@ -726,7 +757,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    dfe->ScanDirectories(NULL,TEXT("*.xci"));
+    dfe->ScanDirectoryTop(TEXT("*.xci"));
     dfe->Lookup(szInputFile);
     wp->RefreshDisplay();
   }
@@ -891,7 +922,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceOutline"));
   if (wp) {
-    if (MapWindow::bAirspaceBlackOutline != wp->GetDataField()->GetAsBoolean()) {
+    if (MapWindow::bAirspaceBlackOutline != 
+	wp->GetDataField()->GetAsBoolean()) {
       MapWindow::bAirspaceBlackOutline = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryAirspaceBlackOutline,
 		    MapWindow::bAirspaceBlackOutline);
@@ -900,6 +932,20 @@ void dlgConfigurationShowModal(void){
   }
 
   int ival;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpUTCOffset"));
+  if (wp) {
+    ival = iround(wp->GetDataField()->GetAsInteger()*3600.0);
+    if (UTCOffset != ival) {
+      UTCOffset = ival;
+
+      // have to do this because registry variables can't be negative!
+      int lival = UTCOffset;
+      if (lival<0) { lival+= 24; }
+      SetToRegistry(szRegistryUTCOffset, lival);
+      changed = true;
+    }
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpClipAltitude"));
   if (wp) {
@@ -1455,8 +1501,8 @@ void dlgConfigurationShowModal(void){
 #else
     SaveRegistryToFile(TEXT("xcsoar-registry.prf"));
 #endif
+    DoStatusMessage(TEXT("Configuration saved"));
   };
-
 
   delete wf;
 
