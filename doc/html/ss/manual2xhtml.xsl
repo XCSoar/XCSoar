@@ -51,7 +51,7 @@ Parameters used
 	</head>
 	<body>
 		<div>
-			<xsl:apply-templates select="//document/content/*">
+			<xsl:apply-templates select="//document">
 				<xsl:with-param name="fudge" select="0"/>
 			</xsl:apply-templates>
 		</div>
@@ -65,12 +65,12 @@ Parameters used
 
 	<!-- Extract PATH for use in src etc -->
 
-	<xsl:apply-templates select="exsl:node-set(document(@href)/document/content)">
+	<xsl:apply-templates select="exsl:node-set(document(@href)/document)">
 		<xsl:with-param name="fudge" select="count(parent::section)"/>
 	</xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="content">
+<xsl:template match="document">
 	<xsl:param name="fudge"/>
 	<xsl:apply-templates select="section">
 		<xsl:with-param name="fudge" select="$fudge"/>
@@ -82,7 +82,7 @@ Parameters used
 	<xsl:if test="title">
 		<xsl:variable name="hl">
 			<xsl:text>h</xsl:text>
-			<xsl:value-of select="count(parent::section) + 1 + $fudge"/>
+			<xsl:value-of select="count(parent::section) + $fudge"/>
 		</xsl:variable>
 		<xsl:element name="{$hl}">
 			<xsl:value-of select="title"/>

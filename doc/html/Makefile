@@ -66,6 +66,6 @@ manual.pdf : manual.fo
 manual.fo : manual.xhtml
 	xsltproc ss/xhtml2fo.xsl manual.xhtml > manual.fo
 
-manual.xhtml : depends $(FILES_GEN) manual.xml
+manual.xhtml : depends $(FILES_GEN) manual.xml readme.html input/default.html faq/index.html
 	xsltproc ss/manual2xhtml.xsl manual.xml > manual.xhtml
 
