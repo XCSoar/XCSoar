@@ -1021,6 +1021,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // wcscat(XCSoar_Version, TEXT("4.5 BETA 4")); // Yet to be released
 
   // load registry backup if it exists
+#if (WINDOWSPC>0)
+  LoadRegistryFromFile(TEXT("C:\\XCSoar\\NOR Flash\\xcsoar-registry.prf"));
+#endif
 #ifdef GNAV
   LoadRegistryFromFile(TEXT("\\NOR Flash\\xcsoar-registry.prf"));
 #endif
@@ -1156,11 +1159,16 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   CloseProgressDialog();
 
   // NOTE: Must show errors AFTER all windows ready
+
+  int olddelay = StatusMessageData[0].delay_ms;
+  StatusMessageData[0].delay_ms = 20000; // 20 seconds
+
 #ifdef _SIM_
   InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
 #else
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
+  StatusMessageData[0].delay_ms = olddelay;
 
 #ifdef _INPUTDEBUG_
   InputEvents::showErrors();
@@ -1963,7 +1971,11 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               ) {
 
 		// save registry backup first (try a few places)
+#if (WINDOWSPC>0)
+		SaveRegistryToFile(TEXT("C:\\XCSoar\\NOR Flash\\xcsoar-registry.prf"));
+#else
 		SaveRegistryToFile(TEXT("\\NOR Flash\\xcsoar-registry.prf"));
+#endif
 		// SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 		SaveRegistryToFile(LocalPath(TEXT("xcsoar-registry.prf")));
 

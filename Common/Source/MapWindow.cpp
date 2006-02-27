@@ -1703,6 +1703,12 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
       rotate(&dX, &dY, DisplayAircraftAngle+
              (DerivedDrawInfo.Heading-DrawInfo.TrackBearing)
              );
+      /*
+      if (InfoBoxLayout::scale>1) {
+	dX*= InfoBoxLayout::scale;
+	dY*= InfoBoxLayout::scale;
+      }
+      */
 
       Aircraft[i].x =iround(dX+Orig.x)+1;  Aircraft[i].y = iround(dY+Orig.y)+1;
     }
@@ -1800,18 +1806,30 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
 
   if (!extGPSCONNECT) {
     SelectObject(hDCTemp,hGPSStatus2);
-    BitBlt(hDC,rc.left+2,rc.bottom-20-2+Appearance.GPSStatusOffset.y,20,20,
+    BitBlt(hDC,
+	   rc.left+2,
+	   rc.bottom-20-2+Appearance.GPSStatusOffset.y*InfoBoxLayout::scale,
+	   20,20,
            hDCTemp,0,0,SRCAND);
 
-    TextInBox(hDC, gettext(gpswarningtext1), rc.left+24, rc.bottom-19+Appearance.GPSStatusOffset.y, 0, TextInBoxMode);
+    TextInBox(hDC, gettext(gpswarningtext1),
+	      rc.left+24,
+	      rc.bottom-19+Appearance.GPSStatusOffset.y*InfoBoxLayout::scale,
+	      0, TextInBoxMode);
 
   } else
     if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed==0)) {
       SelectObject(hDCTemp,hGPSStatus1);
-      BitBlt(hDC,rc.left+2,rc.bottom-20-2+Appearance.GPSStatusOffset.y,20,20,
+      BitBlt(hDC,
+	     rc.left+2,
+	     rc.bottom-20-2+Appearance.GPSStatusOffset.y*InfoBoxLayout::scale,
+	     20,20,
              hDCTemp,0,0,SRCAND);
 
-      TextInBox(hDC, gettext(gpswarningtext2), rc.left+24, rc.bottom-19+Appearance.GPSStatusOffset.y, 0, TextInBoxMode);
+      TextInBox(hDC, gettext(gpswarningtext2),
+		rc.left+24,
+		rc.bottom-19+Appearance.GPSStatusOffset.y*InfoBoxLayout::scale,
+		0, TextInBoxMode);
 
     }
 

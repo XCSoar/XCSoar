@@ -40,6 +40,7 @@ Copyright_License {
 #include "Externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
+#include "InfoBoxLayout.h"
 
 typedef struct{
   int Index;
@@ -390,7 +391,7 @@ void OnPaintListItem(WindowControl * Sender, HDC hDC){
 
     int i = LowLimit + DrawListIndex;
 
-    ExtTextOut(hDC, 2, 2,
+    ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       WayPointList[WayPointSelectInfo[i].Index].Name,
       _tcslen(WayPointList[WayPointSelectInfo[i].Index].Name), NULL);
@@ -406,24 +407,24 @@ void OnPaintListItem(WindowControl * Sender, HDC hDC){
     }else
       sTmp[0] = 'T';
 
-    ExtTextOut(hDC, 135, 2,
+    ExtTextOut(hDC, 135*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       sTmp, 1, NULL);
                            //todo user unit
     _stprintf(sTmp, TEXT("%.0fkm"), WayPointSelectInfo[i].Distance);
-    ExtTextOut(hDC, 146, 2,
+    ExtTextOut(hDC, 146*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       sTmp, _tcslen(sTmp), NULL);
 
     _stprintf(sTmp, TEXT("%d°"),  iround(WayPointSelectInfo[i].Direction));
-    ExtTextOut(hDC, 185, 2,
+    ExtTextOut(hDC, 185*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       sTmp, _tcslen(sTmp), NULL);
 
   } else {
     if (DrawListIndex == 0){
       _stprintf(sTmp, TEXT("%s"), TEXT("No Match!"));
-      ExtTextOut(hDC, 2, 2,
+      ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
         ETO_OPAQUE, NULL,
         sTmp, _tcslen(sTmp), NULL);
     }

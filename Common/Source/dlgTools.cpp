@@ -35,7 +35,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "dlgTools.h"
 #include "XMLParser.h"
-
+#include "InfoBoxLayout.h"
 
 
 extern HWND   hWndMainWindow;
@@ -214,10 +214,16 @@ const TCHAR *StringToStringDflt(const TCHAR *String, TCHAR *Default){
 
 void GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y, int *Width, int *Height, int *Font, TCHAR *Caption){
 
-  *X = StringToIntDflt(Node->getAttribute(TEXT("X")), 0);
+  *X = StringToIntDflt(Node->getAttribute(TEXT("X")), 0)
+    *InfoBoxLayout::scale;
   *Y = StringToIntDflt(Node->getAttribute(TEXT("Y")), 0);
-  *Width = StringToIntDflt(Node->getAttribute(TEXT("Width")), 50);
-  *Height = StringToIntDflt(Node->getAttribute(TEXT("Height")), 50);
+  if (*Y>=0) {
+    (*Y) *= InfoBoxLayout::scale;
+  }
+  *Width = StringToIntDflt(Node->getAttribute(TEXT("Width")), 50)
+    *InfoBoxLayout::scale;
+  *Height = StringToIntDflt(Node->getAttribute(TEXT("Height")), 50)
+    *InfoBoxLayout::scale;
   *Font = StringToIntDflt(Node->getAttribute(TEXT("Font")), -1);
   _tcscpy(Name, StringToStringDflt(Node->getAttribute(TEXT("Name")), TEXT("")));
   _tcscpy(Caption, StringToStringDflt(Node->getAttribute(TEXT("Caption")), TEXT("")));
@@ -389,7 +395,7 @@ void LoadChildsFromXML(WindowControl *Parent,
 
       CaptionWidth =
 	StringToIntDflt(childNode.getAttribute(TEXT("CaptionWidth")),
-			0);
+			0)*InfoBoxLayout::scale;
       MultiLine =
 	StringToIntDflt(childNode.getAttribute(TEXT("MultiLine")),
 			0);

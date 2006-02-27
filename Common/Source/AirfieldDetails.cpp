@@ -71,6 +71,9 @@ void OpenAirfieldDetails() {
 
 
 void CloseAirfieldDetails() {
+  if (hAirfieldDetails == NULL) {
+    return;
+  }
   if (hAirfieldDetails != INVALID_HANDLE_VALUE) {
     // file was OK, so save the registry
     SetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile);
@@ -127,7 +130,7 @@ void ParseAirfieldDetails() {
     return;
 
   TCHAR TempString[200];
-  TCHAR Details[1000];
+  TCHAR Details[5000];
   TCHAR Name[100];
 
   BOOL inDetails = FALSE;

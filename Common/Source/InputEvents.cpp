@@ -554,7 +554,6 @@ void InputEvents::setMode(TCHAR *mode) {
 	  return;	// TODO Add debugging here
 
   if (thismode == lastmode) return;
-  lastmode = thismode;
 
   // TODO Enable this in debug modes
   // for debugging at least, set mode indicator on screen
@@ -572,13 +571,17 @@ void InputEvents::setMode(TCHAR *mode) {
   for (i = 0; i < ModeLabel_count[thismode]; i++) {
     // JMW removed requirement that label has to be non-null
     if (// (ModeLabel[thismode][i].label != NULL) &&
-	(ModeLabel[thismode][i].location > 0))
-      ButtonLabel::SetLabelText(
-				ModeLabel[thismode][i].location,
-				ModeLabel[thismode][i].label
-				);
+	(ModeLabel[thismode][i].location > 0)) {
+
+	ButtonLabel::SetLabelText(
+				  ModeLabel[thismode][i].location,
+				  ModeLabel[thismode][i].label
+				  );
+    }
   }
   MapWindow::RequestFastRefresh = true;
+
+  lastmode = thismode;
 
 }
 

@@ -64,10 +64,12 @@ static WndFrame *wConfig12=NULL;
 static WndFrame *wConfig13=NULL;
 static WndFrame *wConfig14=NULL;
 
+#define NUMPAGES 13
+
 static void NextPage(int Step){
   page += Step;
-  if (page>13) { page=0; }
-  if (page<0) { page=13; }
+  if (page>=NUMPAGES) { page=0; }
+  if (page<0) { page=NUMPAGES-1; }
   switch(page) {
   case 0:
     wf->SetCaption(TEXT("1 Airspace"));

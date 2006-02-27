@@ -180,11 +180,31 @@ void GaugeVario::Render() {
     orgBottom.y = orgMiddle.y + ValueHeight;
     orgBottom.x = rc.right;
 
-    oldBmp = (HBITMAP)SelectObject(hdcTemp, (HBITMAP)hDrawBitMap);            // copy scale bitmap to memory DC
-    if (Appearance.InverseInfoBox)
-      BitBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom, hdcTemp, 58, 0, SRCCOPY);
-    else
-      BitBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom, hdcTemp, 0, 0, SRCCOPY);
+    oldBmp = (HBITMAP)SelectObject(hdcTemp, (HBITMAP)hDrawBitMap);
+    // copy scale bitmap to memory DC
+    if (InfoBoxLayout::scale>1) {
+      if (Appearance.InverseInfoBox)
+	StretchBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom,
+		   hdcTemp,
+		   58, 0,
+		   58, 120,
+		   SRCCOPY);
+      else
+	StretchBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom,
+		   hdcTemp,
+		   0, 0,
+		   58, 120,
+		   SRCCOPY);
+    } else {
+
+      if (Appearance.InverseInfoBox)
+	BitBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom,
+	       hdcTemp, 58, 0, SRCCOPY);
+      else
+	BitBlt(hdcDrawWindow, 0, 0, rc.right, rc.bottom,
+	       hdcTemp, 0, 0, SRCCOPY);
+
+    }
 
     SelectObject(hdcTemp, oldBmp);
 
@@ -249,16 +269,20 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
   static bool InitDone = false;
   static int degrees_per_unit;
   static int gmax;
-  int nlength0, nlength1, nwidth;
+  static first = true;
+  static int nlength0, nlength1, nwidth;
 
-  if (Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle) {
-    nlength0 = 25;
-    nlength1 = 6;
-    nwidth = 3;
-  } else {
-    nlength0 = 13;
-    nlength1 = 6;
-    nwidth = 4;
+  if (first) {
+    first = false;
+    if (Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle) {
+      nlength0 = 25*InfoBoxLayout::scale;
+      nlength1 = 6*InfoBoxLayout::scale;
+      nwidth = 3*InfoBoxLayout::scale;
+    } else {
+      nlength0 = 13*InfoBoxLayout::scale;
+      nlength1 = 6*InfoBoxLayout::scale;
+      nwidth = 4*InfoBoxLayout::scale;
+    }
   }
 
   POINT bit[3];
@@ -325,14 +349,18 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
 
   if (!diValue->InitDone){
 
-    diValue->recBkg.right = x-5;
-    diValue->recBkg.top = y + 3 + Appearance.TitleWindowFont.CapitalHeight;
+    diValue->recBkg.right = x-5*InfoBoxLayout::scale;
+    diValue->recBkg.top = y +3*InfoBoxLayout::scale
+      + Appearance.TitleWindowFont.CapitalHeight;
 
     diValue->recBkg.left = diValue->recBkg.right;           // update back rect with max label size
-    diValue->recBkg.bottom = diValue->recBkg.top + Appearance.CDIWindowFont.CapitalHeight;
+    diValue->recBkg.bottom = diValue->recBkg.top
+      + Appearance.CDIWindowFont.CapitalHeight;
 
     diValue->orgText.x = diValue->recBkg.left;
-    diValue->orgText.y = diValue->recBkg.top + Appearance.CDIWindowFont.CapitalHeight - Appearance.CDIWindowFont.AscentHeight;
+    diValue->orgText.y = diValue->recBkg.top
+      + Appearance.CDIWindowFont.CapitalHeight
+      - Appearance.CDIWindowFont.AscentHeight;
 
     diValue->lastValue = -9999;
     diValue->lastText[0] = '\0';
@@ -343,13 +371,16 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
   if (!diLabel->InitDone){
 
     diLabel->recBkg.right = x;
-    diLabel->recBkg.top = y+1;
+    diLabel->recBkg.top = y+1*InfoBoxLayout::scale;
 
     diLabel->recBkg.left = diLabel->recBkg.right;           // update back rect with max label size
-    diLabel->recBkg.bottom = diLabel->recBkg.top + Appearance.TitleWindowFont.CapitalHeight;
+    diLabel->recBkg.bottom = diLabel->recBkg.top
+      + Appearance.TitleWindowFont.CapitalHeight;
 
     diLabel->orgText.x = diLabel->recBkg.left;
-    diLabel->orgText.y = diLabel->recBkg.top + Appearance.TitleWindowFont.CapitalHeight - Appearance.TitleWindowFont.AscentHeight;
+    diLabel->orgText.y = diLabel->recBkg.top
+      + Appearance.TitleWindowFont.CapitalHeight
+      - Appearance.TitleWindowFont.AscentHeight;
 
     diLabel->lastValue = -9999;
     diLabel->lastText[0] = '\0';
@@ -407,7 +438,8 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
 
     oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapUnit);
     BitBlt(hdcDrawWindow,
-      x-5, diValue->recBkg.top,
+	   x-5*InfoBoxLayout::scale,
+	   diValue->recBkg.top,
       BitmapUnitSize.x, BitmapUnitSize.y,
       hdcTemp,
       BitmapUnitPos.x, BitmapUnitPos.y,
