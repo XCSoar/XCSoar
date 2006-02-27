@@ -4,7 +4,6 @@
                 <title>STARTUP_SIMULATOR</title>
         </metadata>
 
-        <content>
 <section>
                 <title>STARTUP_SIMULATOR</title>
 
@@ -13,6 +12,5 @@ Startup first message. This happens during simulator mode.
 </p>
 
 </section>
-        </content>
 </document>
 

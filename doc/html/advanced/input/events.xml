@@ -4,7 +4,7 @@
                 <title>Welcome</title>
         </metadata>
 
-        <content>
+        <section>
 
 <h2>ScreenModes</h2>
 
@@ -199,5 +199,5 @@
 	</ul>
 
 
-</content>
+</section>
 </document>

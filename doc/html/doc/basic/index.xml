@@ -1,16 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title>Basic Operation</title>
+        </metadata>
+
+<section>
+        <title>Basic Operation</title>
+
+
 Basic operation
 
 This chapter describes the fundamental user interface concepts used by
 XCSoar, and is intended as an overview.  Specific button assignments,
 menus and configuration settings are described in later chapters.
 
-\begin{center}
-\includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{../quick/fig-buttonsinfo.eps}
-
-{\it DIAGRAM SHOWING XCSOAR RUNNING ON PDA WITH BUTTONS. 
+DIAGRAM SHOWING XCSOAR RUNNING ON PDA WITH BUTTONS. 
  }
 
-\end{center}
 
 The XCSoar display is composed of several parts:
 \begin{description}
@@ -58,3 +64,6 @@ numbers or assignments of buttons.  Refer to
 Chapter~\ref{cha:hardware} for details of major hardware
 configurations.
 
+
+</section>
+</document>

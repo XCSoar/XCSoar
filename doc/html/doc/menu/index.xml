@@ -1,3 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title></title>
+        </metadata>
+
+<section>
+        <title></title>
+
+
 Main Menu
 
 The main menu provides the following selection of items:
@@ -31,3 +41,5 @@ application as it ensures that the software is terminated cleanly.
 
 {\it DIAGRAM SHOWING MAIN MENU}
 
+</section>
+</document>

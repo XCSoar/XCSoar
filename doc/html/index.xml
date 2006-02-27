@@ -4,14 +4,12 @@
                 <title>Open source glide computer</title>
         </metadata>
 
-        <content>
-
-<img src="screenshot2.png" align="right" class="frontshot"/>
-<img src="screenshot.png" align="right" class="frontshot"/>
 
 <section>
 	<title>XCSoar - Welcome</title>
 
+	<img src="screenshot2.png" align="right" class="frontshot"/>
+	<img src="screenshot.png" align="right" class="frontshot"/>
 
 	<a href="/download/version_4_5.html">
 		<img src="version_4_5.gif" align="left" border="0"/>
@@ -48,5 +46,4 @@
 
 </section>
 
-</content>
 </document>

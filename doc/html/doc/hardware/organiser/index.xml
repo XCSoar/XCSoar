@@ -4,7 +4,7 @@
                 <title>Organisers</title>
         </metadata>
 
-        <content>
+        <section>
 
 		<section>
 			<title>Organisers</title>
@@ -89,5 +89,5 @@
 				<li><a href="http://www.soarmn.com/cumulus/pda.htm">Cumulus Soaring</a> PDA Comparison</li>
 			</ul>
 		</section>
-        </content>
+        </section>
 </document>

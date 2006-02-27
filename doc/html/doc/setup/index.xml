@@ -4,7 +4,7 @@
                 <title>Setup</title>
         </metadata>
 
-        <content>
+        <section>
 
 		<section>
 			<title>Hardware Button</title>
@@ -91,6 +91,6 @@
 			</p>
 		</section>
 
-	</content>
+	</section>
 </document>
 

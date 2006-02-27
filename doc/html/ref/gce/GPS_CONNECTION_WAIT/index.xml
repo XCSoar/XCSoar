@@ -4,7 +4,6 @@
                 <title>GPS_CONNECTION_WAIT</title>
         </metadata>
 
-        <content>
 <section>
                 <title>GPS_CONNECTION_WAIT</title>
 
@@ -15,6 +14,5 @@ href="/ref/events/StatusMessage">StatusMessage</a> to warn the user.
 </p>
 
 </section>
-        </content>
 </document>
 

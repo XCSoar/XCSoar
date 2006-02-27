@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document>
+<document base="doc/settings/">
         <metadata>
                 <title>Configuration Settings</title>
         </metadata>
 
-        <content>
+        <section>
 
 		<!-- XXX future update to use XML list of images -->
 
@@ -84,5 +84,5 @@
 
 		</screenshots>
 
-	</content>
+	</section>
 </document>

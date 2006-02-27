@@ -4,7 +4,6 @@
                 <title>File Type - Waypoints</title>
         </metadata>
 
-        <content>
 <section>
 
 		<title>File Type - Waypoints</title>
@@ -13,7 +12,7 @@
 XCSoar uses waypoint files written in the format designed by Cambridge
 Aero Instruments for their C302 instrument. Files are available from
 the Soaring Turnpoints section of the Soaring Server:
-<p>
+</p>
 
 <p>
 TODO: There are better mirrors than this one - see which is best.
@@ -33,7 +32,6 @@ converting between different waypoint formats.
 		</p>
 	</section>
 </section>
-	</content>
 </document>
 
 	

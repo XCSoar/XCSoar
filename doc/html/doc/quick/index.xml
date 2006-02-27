@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document>
+<document base="doc/quick/">
         <metadata>
                 <title>Quick start guide</title>
         </metadata>
 
-        <content>
+        <section>
 
 		<!-- XXX future update to use XML list of images -->
 
@@ -318,6 +318,6 @@ Other Settings
 
 -->
 
-	</content>
+	</section>
 </document>
 

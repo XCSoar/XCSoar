@@ -1,3 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title></title>
+        </metadata>
+
+<section>
+        <title></title>
+
+
 Status messages
 
 Status messages appear over the map area to present text for a short
@@ -20,3 +30,6 @@ Typical status messages include:
 
 {\it DIAGRAM SHOWING TYPICAL STATUS MESSAGE}
 
+
+</section>
+</document>

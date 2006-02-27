@@ -4,7 +4,7 @@
                 <title>Install</title>
         </metadata>
 
-        <content>
+        <section>
 
 	<section>
 		<title>Downloading XCSoar</title>
@@ -17,6 +17,8 @@
 
 		<p>
 		Several files are available, broadly these include:
+		</p>
+
 		<ul>
 			<li>Program</li>
 			<li>Data Files Individual airspace</li>
@@ -73,5 +75,5 @@ download.
 		</ul>
 	</section>
 
-        </content>
+        </section>
 </document>

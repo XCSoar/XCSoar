@@ -4,7 +4,6 @@
                 <title>File Type - Airfield</title>
         </metadata>
 
-        <content>
 <section>
 
 		<title>File Type - Airfield</title>
@@ -14,7 +13,7 @@ The airfield details file is a simple text format file containing
 entries for each airfield, marked in square brackets in uppercase,
 followed by the text to be displayed on the Waypoint Details Dialog
 for that particular waypoint.
-<p>
+</p>
 
 <p>
 The names of airfields used in the file must correspond exactly to the
@@ -73,7 +72,6 @@ sources.
 
 	</section>
 </section>
-	</content>
 </document>
 
 	

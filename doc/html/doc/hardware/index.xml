@@ -4,7 +4,7 @@
                 <title>Hardware</title>
         </metadata>
 
-        <content>
+        <section>
 
 	<section>
 		<title>System Requirements</title>
@@ -78,5 +78,5 @@
 
 	</section>
 
-        </content>
+        </section>
 </document>

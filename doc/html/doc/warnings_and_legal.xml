@@ -4,7 +4,7 @@
                 <title>Warnings and Legal Notices</title>
         </metadata>
 
-        <content>
+        <section>
 
                 <section>
                         <title>Warnings and Precautions</title>
@@ -52,5 +52,5 @@
 
 			</section>
 		</section>
-	</content>
+	</section>
 </document>

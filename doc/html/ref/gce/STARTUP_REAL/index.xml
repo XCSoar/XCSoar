@@ -4,7 +4,6 @@
                 <title>STARTUP_REAL</title>
         </metadata>
 
-        <content>
 <section>
                 <title>STARTUP_REAL</title>
 
@@ -13,6 +12,5 @@ First message - this happens at startup of the real XCS.
 </p>
 
 </section>
-        </content>
 </document>
 

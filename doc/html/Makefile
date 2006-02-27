@@ -57,3 +57,15 @@ installstyle:
 %.xml : %.faq ss/faq.xsl
 	xsltproc ss/faq.xsl $< > $@
 
+manual.ps : manual.fo
+	/Users/scottp/src/fop-0.20.5/fop.sh manual.fo manual.ps
+
+manual.pdf : manual.fo
+	/Users/scottp/src/fop-0.20.5/fop.sh manual.fo manual.pdf
+
+manual.fo : manual.xhtml
+	xsltproc ss/xhtml2fo.xsl manual.xhtml > manual.fo
+
+manual.xhtml : depends $(FILES_GEN) manual.xml
+	xsltproc ss/manual2xhtml.xsl manual.xml > manual.xhtml
+

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document>
+<document base="about/">
         <metadata>
                 <title>About</title>
         </metadata>
 
-        <content>
+        <section>
 
 		<section>
 			<title>What is XCSoar?</title>
@@ -86,6 +86,6 @@
 			</p>
 		</section>
 
-        </content>
+        </section>
 </document>
 
