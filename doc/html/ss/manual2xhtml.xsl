@@ -11,12 +11,6 @@
 	Longer term the converting to XHTML will be skipped as it is
 	looses a lot of the information - it is only temporary.
 
-
-Parameters used
-
-	relative_path		Location of the imported document (for images etc)
-	fudge			Heading depth fudge factor (XXX better name)
-
 -->
 
 <!DOCTYPE midoc [
@@ -51,46 +45,39 @@ Parameters used
 	</head>
 	<body>
 		<div>
-			<xsl:apply-templates select="//document">
-				<xsl:with-param name="fudge" select="0"/>
-			</xsl:apply-templates>
+			<xsl:apply-templates select="document"/>
 		</div>
 	</body>
 	</html>
 </xsl:template>
 
+<!--
+XXX Not working - see manual2temp.xsl !
+	It does mean that the "fudge" factor is no longer required !
 <xsl:template match="object">
-	<!-- XXX Deal with comments ??? -->
 	<comment>Original document = <xsl:value-of select="@href"/></comment>
-
-	<!-- Extract PATH for use in src etc -->
-
 	<xsl:apply-templates select="exsl:node-set(document(@href)/document)">
-		<xsl:with-param name="fudge" select="count(parent::section)"/>
+		<xsl:with-param name="fudge" select="count(ancestor::section)"/>
 	</xsl:apply-templates>
 </xsl:template>
+-->
 
 <xsl:template match="document">
-	<xsl:param name="fudge"/>
-	<xsl:apply-templates select="section">
-		<xsl:with-param name="fudge" select="$fudge"/>
-	</xsl:apply-templates>
+	<xsl:apply-templates select="section"/>
 </xsl:template>
 
 <xsl:template match="section">
-	<xsl:param name="fudge"/>
 	<xsl:if test="title">
 		<xsl:variable name="hl">
 			<xsl:text>h</xsl:text>
-			<xsl:value-of select="count(parent::section) + $fudge"/>
+			<xsl:value-of select="count(ancestor::section) + 1"/>
 		</xsl:variable>
 		<xsl:element name="{$hl}">
 			<xsl:value-of select="title"/>
 		</xsl:element>
 	</xsl:if>
-	<xsl:apply-templates>
-		<xsl:with-param name="fudge" select="$fudge"/>
-	</xsl:apply-templates>
+
+	<xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="screenshots">
@@ -102,7 +89,7 @@ Parameters used
 <xsl:template match="img">
 	<img>
 		<xsl:attribute name="src">
-			<xsl:value-of select="parent::document/@base"/>
+			<xsl:value-of select="ancestor::document/@base"/>
 			<xsl:value-of select="@src"/>
 		</xsl:attribute>
 	</img>
@@ -110,12 +97,13 @@ Parameters used
 
 <xsl:template match="screenshot">
 	<xsl:if test="@title">
-		<h2><xsl:value-of select="@title"/></h2>
+		<!-- XXX Need to fix this hard coded h4 !!! -->
+		<h4><xsl:value-of select="@title"/></h4>
 	</xsl:if>
 
 	<img>
 		<xsl:attribute name="src">
-			<xsl:value-of select="parent::document/@base"/>
+			<xsl:value-of select="ancestor::document/@base"/>
 			<xsl:value-of select="@src"/>
 		</xsl:attribute>
 	</img>
@@ -130,7 +118,7 @@ Parameters used
         </xsl:copy>
 </xsl:template>
 
-<!-- Ignore these - they should not be honored -->
+<!-- Ignore these - they should not be honored (XXX current done in document2xhtml) -->
 <xsl:template match="h1"></xsl:template>
 <xsl:template match="h2"></xsl:template>
 <xsl:template match="h3"></xsl:template>
@@ -138,18 +126,27 @@ Parameters used
 <xsl:template match="title"></xsl:template>
 
 <xsl:template match="faq">
-	<!-- XXX Need to fix this hard coded h2 !!! -->
-	<h2>
+	<!-- XXX Need to fix this hard coded h4 !!! -->
+
+	<!-- XXX This section not really required here - as we have the
+		information locally we do not need to load the documents -->
+
+	<test1><xsl:value-of select="ancestor::document/@base"/></test1>
+	<xsl:variable name="faqref">
+		<xsl:value-of select="ancestor::document/@base"/>
+		<xsl:value-of select="@faqref"/>
+	</xsl:variable>
+	<h4>
 		<a>
 			<xsl:attribute name="href">
 				<xsl:value-of select="@href"/>
 			</xsl:attribute>
-			<xsl:value-of select="document(@faqref)/faq/title"/>
+			<xsl:value-of select="document($faqref)/faq/title"/>
 		</a>
 		<xsl:text> (</xsl:text>
-		<xsl:value-of select="count(document(@faqref)/faq/entry)"/>
+		<xsl:value-of select="count(document($faqref)/faq/entry)"/>
 		<xsl:text> questions)</xsl:text>
-	</h2>
+	</h4>
 </xsl:template>
 
 </xsl:stylesheet>

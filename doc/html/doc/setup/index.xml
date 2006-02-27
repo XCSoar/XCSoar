@@ -4,7 +4,6 @@
                 <title>Setup</title>
         </metadata>
 
-        <section>
 
 		<section>
 			<title>Hardware Button</title>
@@ -90,7 +89,5 @@
 			simulator.
 			</p>
 		</section>
-
-	</section>
 </document>
 

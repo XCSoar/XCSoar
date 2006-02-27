@@ -464,6 +464,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <fo:root xsl:use-attribute-sets="root">
       <xsl:call-template name="process-common-attributes"/>
       <xsl:call-template name="make-layout-master-set"/>
+      <xsl:call-template name="frontpage"/>	<!-- SCOTT -->
       <xsl:call-template name="toc"/>	<!-- SCOTT -->
       <xsl:apply-templates/>
     </fo:root>
@@ -471,6 +472,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
   <xsl:template name="make-layout-master-set">
     <fo:layout-master-set>
+	<!-- SCOTT -->
+	<fo:simple-page-master margin="25mm 25mm 25mm 25mm" master-name="PageMaster-FRONTPAGE">
+		<fo:region-body margin="0mm 0mm 0mm 0mm"/>
+	</fo:simple-page-master>
 	<!-- SCOTT -->
 	<fo:simple-page-master margin="25mm 25mm 25mm 25mm" master-name="PageMaster-TOC">
 		<fo:region-body margin="0mm 0mm 0mm 0mm"/>
@@ -707,13 +712,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </xsl:template>
 
   <xsl:template match="html:h2">
-    <fo:block xsl:use-attribute-sets="h2">
+    <fo:block xsl:use-attribute-sets="h2" id="{generate-id()}">
       <xsl:call-template name="process-common-attributes-and-children"/>
     </fo:block>
   </xsl:template>
 
   <xsl:template match="html:h3">
-    <fo:block xsl:use-attribute-sets="h3">
+    <fo:block xsl:use-attribute-sets="h3" id="{generate-id()}">
       <xsl:call-template name="process-common-attributes-and-children"/>
     </fo:block>
   </xsl:template>
@@ -1607,6 +1612,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <xsl:apply-templates/>
   </xsl:template>
 
+  <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+       Stuff to ignore
+  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
+
   <xsl:template match="html:param"/>
   <xsl:template match="html:map"/>
   <xsl:template match="html:area"/>
@@ -1622,6 +1631,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        Link
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
+
+<!--
+	XXX Only link external links starting with http: - internal
+	links should not be linked - or linked internally
+-->
 
   <xsl:template match="html:a">
     <fo:inline>
@@ -1662,6 +1676,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
        Ruby
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
+
+<!--
+	SCOTT to remove
 
   <xsl:template match="html:ruby">
     <fo:inline-container alignment-baseline="central"
@@ -1707,6 +1724,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
       </xsl:if>
     </fo:inline-container>
   </xsl:template>
+-->
 
 
 
@@ -1727,6 +1745,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 					<fo:block xsl:use-attribute-sets="h3" axf:outline-level="1" space-after="10pt">
 						Table of Contents
 					</fo:block>
+					<!-- Can only do H1 now - use section/section later 
+					<xsl:for-each select="//html:h1 | //html:h2">
+					-->
 					<xsl:for-each select="//html:h1">
 						<xsl:call-template name="toc.line"/>
 					</xsl:for-each>
@@ -1734,8 +1755,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 			</fo:flow>
 		</fo:page-sequence>
 	</xsl:template>
+
 	<xsl:template name="toc.line">
 		<xsl:variable name="toc-level-max" select="3"/>
+		<!-- XXX This is a clasic example of where section/title would be better than first converting to h1/h2/h3 -->
 		<xsl:variable name="level" select="count(ancestor-or-self::part |ancestor-or-self::chapter |ancestor-or-self::section |ancestor-or-self::subsection | ancestor-or-self::subsubsection |ancestor-or-self::appendix)"/>
 		<xsl:if test="$level &lt;= $toc-level-max">
 			<fo:block text-align-last="justify">
@@ -1770,7 +1793,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 					<xsl:value-of select="800 - $level * 100"/>
 				</xsl:attribute>
 				<fo:basic-link internal-destination="{generate-id()}">
-					<xsl:value-of select="title"/>
 					<xsl:value-of select="."/>	<!-- SCOTT -->
 				</fo:basic-link>
 				<fo:inline font-weight="normal" font-size="10pt">
@@ -1782,5 +1804,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	</xsl:template>
 	
 
+	<!-- XXX Blank second page required -->
+	<xsl:template name="frontpage">
+		<fo:page-sequence master-reference="PageMaster-FRONTPAGE" force-page-count="no-force">
+			<fo:flow flow-name="xsl-region-body">
+				<fo:block xsl:use-attribute-sets="div.toc">
+					<fo:block xsl:use-attribute-sets="h3" axf:outline-level="1" space-after="10pt">
+						Front Page - XXX
+					</fo:block>
+				</fo:block>
+			</fo:flow>
+		</fo:page-sequence>
+	</xsl:template>
 
 </xsl:stylesheet>

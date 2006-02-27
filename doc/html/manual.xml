@@ -22,8 +22,6 @@
 
 	-->
 
-        <section>
-
 		<section>
 			<title>Introduction</title>
 			<object href="about/index.xml"/>
@@ -173,5 +171,4 @@
 			<object href="people/index.xml"/>
 			<object href="people/scott_penrose.xml"/>
 		</section>
-	</section>
 </document>

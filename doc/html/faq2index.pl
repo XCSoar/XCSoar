@@ -8,9 +8,9 @@ print q{<?xml version="1.0" encoding="UTF-8"?>
                 <title>FAQ</title>
         </metadata>
 
-        <content>
+        <section>
 
-	<h1>FAQ</h1>
+	<title>FAQ</title>
 };
 
 
@@ -28,7 +28,7 @@ while (<IN>) {
 }
 
 print q{
-	</content>
+	</section>
 </document>
 };
 

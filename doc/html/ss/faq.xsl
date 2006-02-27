@@ -21,19 +21,15 @@
 			</title>
 		</metadata>
 
-		<content>
+		<section>
+			<title>
+				FAQ - 
+				<xsl:value-of select="title"/>
+			</title>
 
-			<section>
-				<title>
-					FAQ - 
-					<xsl:value-of select="title"/>
-				</title>
+			<xsl:apply-templates/>
 
-				<xsl:apply-templates/>
-
-			</section>
-
-		</content>
+		</section>
 
 	</document>
 </xsl:template>
