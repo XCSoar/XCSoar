@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.16 2006/01/08 09:51:16 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.17 2006/02/27 14:43:49 jwharington Exp $
 
 
 Copyright_License {
@@ -71,6 +71,9 @@ void OpenAirfieldDetails() {
 
 
 void CloseAirfieldDetails() {
+  if (hAirfieldDetails == NULL) {
+    return;
+  }
   if (hAirfieldDetails != INVALID_HANDLE_VALUE) {
     // file was OK, so save the registry
     SetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile);
@@ -127,7 +130,7 @@ void ParseAirfieldDetails() {
     return;
 
   TCHAR TempString[200];
-  TCHAR Details[1000];
+  TCHAR Details[5000];
   TCHAR Name[100];
 
   BOOL inDetails = FALSE;

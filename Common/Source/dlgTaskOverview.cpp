@@ -40,6 +40,7 @@ Copyright_License {
 #include "Externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
+#include "InfoBoxLayout.h"
 
 
 void dlgTaskCalculatorShowModal(void);
@@ -84,7 +85,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
     int i = LowLimit + DrawListIndex;
 
     if (Task[i].Index>=0) {
-      ExtTextOut(hDC, 2, 2,
+      ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		 ETO_OPAQUE, NULL,
 		 WayPointList[Task[i].Index].Name,
 		 _tcslen(WayPointList[Task[i].Index].Name), NULL);
@@ -93,12 +94,12 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 		Task[i].Leg*DISTANCEMODIFY,
 		Units::GetDistanceName());
 
-    ExtTextOut(hDC, 125, 2,
+      ExtTextOut(hDC, 125*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       sTmp, _tcslen(sTmp), NULL);
     
     _stprintf(sTmp, TEXT("%d°"),  iround(Task[i].InBound));
-    ExtTextOut(hDC, 175, 2,
+    ExtTextOut(hDC, 175*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       sTmp, _tcslen(sTmp), NULL);
     
@@ -107,14 +108,14 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
   } else {
     if (DrawListIndex==n) {
       _stprintf(sTmp, TEXT("%s"), TEXT("..."));
-      ExtTextOut(hDC, 2, 2,
+      ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		 ETO_OPAQUE, NULL,
 		 sTmp, _tcslen(sTmp), NULL);
     } else if (DrawListIndex==n+1) {
 
       if (!AATEnabled) {
 	_stprintf(sTmp, TEXT("Total:"));
-	ExtTextOut(hDC, 2, 2,
+	ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		   ETO_OPAQUE, NULL,
 		   sTmp, _tcslen(sTmp), NULL);
       
@@ -125,13 +126,13 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 	  _stprintf(sTmp, TEXT("%.0f %s"), lengthtotal*DISTANCEMODIFY,
 		    Units::GetDistanceName());
 	}
-	ExtTextOut(hDC, 125, 2,
+	ExtTextOut(hDC, 125*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		   ETO_OPAQUE, NULL,
 		   sTmp, _tcslen(sTmp), NULL);
 
       } else {
 	_stprintf(sTmp, TEXT("Total: %.0f min"), AATTaskLength*1.0);
-	ExtTextOut(hDC, 2, 2,
+	ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		   ETO_OPAQUE, NULL,
 		   sTmp, _tcslen(sTmp), NULL);
 
@@ -144,7 +145,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 		  DISTANCEMODIFY*lengthtotal,
 		  DISTANCEMODIFY*d1,
 		  Units::GetDistanceName());
-	ExtTextOut(hDC, 125, 2,
+	ExtTextOut(hDC, 125*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		   ETO_OPAQUE, NULL,
 		   sTmp, _tcslen(sTmp), NULL);
       } 
@@ -271,10 +272,16 @@ static void GetTaskFileName(TCHAR *filename) {
   if (wp) {
     TaskFileNumber = wp->GetDataField()->GetAsInteger();
   }
+#if (WINDOWSPC>0)
+  _stprintf(filename,TEXT("C:\\XCSoar\\NOR Flash\\%02d.tsk"), 
+	    TaskFileNumber);
 #ifdef GNAV
-  _stprintf(filename,TEXT("\\NOR Flash\\%02d.tsk"), TaskFileNumber);
+  _stprintf(filename,TEXT("\\NOR Flash\\%02d.tsk"), 
+	    TaskFileNumber);
 #else 
-  _stprintf(filename,TEXT("\\%02d.tsk"), TaskFileNumber);
+  _stprintf(filename,TEXT("\\%02d.tsk"), 
+	    TaskFileNumber);
+#endif
 #endif
 }
 

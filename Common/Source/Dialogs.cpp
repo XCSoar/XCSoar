@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.98 2006/02/26 23:32:16 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.99 2006/02/27 14:43:49 jwharington Exp $
 
 Copyright_License {
 
@@ -3703,19 +3703,25 @@ void CloseProgressDialog() {
 }
 
 BOOL StepProgressDialog(void) {
-  SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT, 0, 0);
-  UpdateWindow(hProgress);
+  if (hProgress) {
+    SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT, 0, 0);
+    UpdateWindow(hProgress);
+  }
   return(TRUE);
 }
 
 BOOL SetProgressStepSize(int nSize) {
-  if (nSize < 100)
-    SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), 
-		PBM_SETSTEP, (WPARAM)nSize, 0);
+  if (hProgress)
+    if (nSize < 100)
+      SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), 
+		  PBM_SETSTEP, (WPARAM)nSize, 0);
   return(TRUE);
 }
 
 HWND CreateProgressDialog(TCHAR* text) {
+#if (WINDOWSPC>0)
+  return NULL;
+#endif
   if (hProgress) {
   } else {
 
