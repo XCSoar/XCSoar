@@ -44,6 +44,10 @@
 		</title>
 	</head>
 	<body>
+		<frontpage>
+			<xsl:apply-templates select="document/frontpage"/>
+		</frontpage>
+
 		<div>
 			<xsl:apply-templates select="document"/>
 		</div>

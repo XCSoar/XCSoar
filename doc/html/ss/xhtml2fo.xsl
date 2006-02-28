@@ -101,6 +101,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <xsl:attribute name="space-after">0.67em</xsl:attribute>
     <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
     <xsl:attribute name="keep-together.within-column">always</xsl:attribute>
+    <xsl:attribute name="break-before">page</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="h2">
@@ -1742,7 +1743,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		<fo:page-sequence master-reference="PageMaster-TOC" force-page-count="no-force">
 			<fo:flow flow-name="xsl-region-body">
 				<fo:block xsl:use-attribute-sets="div.toc">
-					<fo:block xsl:use-attribute-sets="h3" axf:outline-level="1" space-after="10pt">
+					<fo:block xsl:use-attribute-sets="h3" outline-level="1" space-after="10pt">
 						Table of Contents
 					</fo:block>
 					<!-- Can only do H1 now - use section/section later 
@@ -1804,14 +1805,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	</xsl:template>
 	
 
-	<!-- XXX Blank second page required -->
+	  <!-- SCOTT - Don't display this one -->
+	  <xsl:template match="html:frontpage"/>
+
+	<!-- XXX Blank second page required (also, div.toc wrong attributes etc) -->
 	<xsl:template name="frontpage">
 		<fo:page-sequence master-reference="PageMaster-FRONTPAGE" force-page-count="no-force">
 			<fo:flow flow-name="xsl-region-body">
 				<fo:block xsl:use-attribute-sets="div.toc">
-					<fo:block xsl:use-attribute-sets="h3" axf:outline-level="1" space-after="10pt">
-						Front Page - XXX
-					</fo:block>
+					<xsl:apply-templates select="//html:frontpage/*"/>
 				</fo:block>
 			</fo:flow>
 		</fo:page-sequence>

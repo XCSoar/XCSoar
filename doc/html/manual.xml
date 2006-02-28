@@ -4,6 +4,11 @@
                 <title>XCSoar - Open source glide computer</title>
         </metadata>
 
+	<frontpage>
+		<img src="logo/xcsoar-big.gif"/>
+		<p>More hello from front page...</p>
+	</frontpage>
+
 	<!-- NOTES
 
 		This document should contain no real text
