@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmTaskOverview" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Task Overview" Font=2  BackColor=0xDADBAB>
+
+  <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 />
+
+  <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=2 Width=98  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
+
+  <WndProperty Name="prpFile" Caption="File"   X=2 Y=-1  Width=98 Height=22 CaptionWidth=30 Font=2>
+  <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=20 Step=1/>
+  </WndProperty>
+
+  <WndButton   Caption="Save"    X=2 Y=46 Width=45  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
+  <WndButton   Caption="Load"    X=47 Y=46 Width=45  Height=22 Font=2 OnClickNotify="OnLoadClicked"/>
+
+  <aaaaWndProperty Name="prpDistance" Caption="Distance" X=2 Y=-1  Width=98 Height=40 CaptionWidth=0 Font=2 ReadOnly=1 min=0 max=5000>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" ReadOnly=1/>
+  </aaaaWndProperty>
+  <aaaaWndProperty Name="prpFAIOK" Caption="FAI Rules" X=2 Y=-1  Width=98 Height=40 CaptionWidth=0 Font=2 ReadOnly=1>
+    <DataField name="" DataType="boolean" ReadOnly=1/>
+  </aaaaWndProperty>
+
+  <WndProperty Name="prpAATEst" Caption="ETE" X=2 Y=-1  Width=98 Height=22 CaptionWidth=40 Font=2 ReadOnly=1 min=0 max=600 step=10>
+    <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly=1/>
+  </WndProperty>
+
+  <WndButton   Caption="Declare"    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnDeclareClicked"/>
+  <WndButton Name="cmdCalc"  Caption="Calc" X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnCalcClicked" Tag=4 />
+
+  <WndListFrame Name="frmTaskList" X=102 Y=0 Width=215 Height=222 Font=2 OnListInfo="OnTaskListInfo">
+    <WndOwnerDrawFrame Name="frmTaskListEntry" X=2 Y=2 Width=211 Height=18 Font=2  OnPaint="OnTaskPaintListItem"/>
+  </WndListFrame>
+
+</WndForm>
+
+</PMML>

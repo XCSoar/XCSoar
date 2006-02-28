@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmConfiguration" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Configuration" Font=2  BackColor=0xDADBAB>
+
+  <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
+  <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
+  <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />
+
+  <WndFrame Name="frmAirspace" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpAirspaceDisplay" Caption="Airspace display"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpClipAltitude" Caption="Clip altitude"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
+  </WndProperty>
+
+  <WndProperty Name="prpAltWarningMargin" Caption="Margin"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
+  </WndProperty>
+
+  <WndProperty Name="prpAirspaceOutline" Caption="Use black outline"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAirspaceWarnings" Caption="Warnings"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpWarningTime" Caption="Warning time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=0 Max=1000 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpAcknowledgementTime" Caption="Acknowledge time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=0 Max=1000 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpAirspaceFile" Caption="Airspace 1"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAdditionalAirspaceFile" Caption="Airspace 2"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmDisplay" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpWaypointLabels" Caption="Labels"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpTrail" Caption="Trail"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpEnableTerrain" Caption="Terrain"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpEnableTopology" Caption="Topology"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+    <WndProperty Name="prpOrientation" Caption="Orientation"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpAutoZoom" Caption="Auto zoom"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpCirclingZoom" Caption="Circling zoom"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpTopologyFile" Caption="Topology file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=120 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+
+  <WndFrame Name="frmInfoBoxCruise" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpInfoBoxCruise0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCruise8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmInfoBoxCircling" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpInfoBoxCircling0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxCircling1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+    <WndProperty Name="prpInfoBoxCircling8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmInfoBoxFinalGlide" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpInfoBoxFinalGlide0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxFinalGlide8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmInfoBoxAuxiliary" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpInfoBoxAux0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpInfoBoxAux8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmFinalGlide" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpSafetyAltitudeArrival" Caption="Arrival height"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
+  </WndProperty>
+
+  <WndProperty Name="prpSafetyAltitudeBreakoff" Caption="Breakoff height"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
+  </WndProperty>
+
+  <WndProperty Name="prpSafetyAltitudeTerrain" Caption="Terrain height"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
+  </WndProperty>
+
+  <WndProperty Name="prpFinalGlideTerrain" Caption="Glide terrain"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainFile" Caption="Terrain file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=120 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpBlockSTF" Caption="Block speed to fly"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmPolar" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpPolarType" Caption="Type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpPolarFile" Caption="Polar file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpMaxManoeuveringSpeed" Caption="V rough air"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmComm" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpComPort1" Caption="Com port 1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpComSpeed1" Caption="Com speed 1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpComDevice1" Caption="Com device 1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpComPort2" Caption="Com port 2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpComSpeed2" Caption="Com speed 2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpComDevice2" Caption="Com device 2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+  <WndButton Name="cmdVario" Caption="Vario config" X=5 Y=-1 Width=80  Height=28 Font=2 Tag=4 OnClickNotify="OnVarioClicked" />
+
+  </WndFrame>
+
+  <WndFrame Name="frmFiles" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  </WndFrame>
+
+  <WndFrame Name="frmUnits" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndProperty Name="prpUnitsSpeed" Caption="Speed"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpUnitsDistance" Caption="Distance"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpUnitsLift" Caption="Lift"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpUnitsAltitude" Caption="Altitude"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpUTCOffset" Caption="UTC Offset"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.1f" EditFormat="%.1f" Min=-13 Max=13 Step=0.5/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmAppearance" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpAppDefaultMapWidth" Caption="Default map zoom"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=100 Max=400 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppIndFinalGlide" Caption="Final glide bar"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=2 Step=1/>
+
+  </WndProperty>
+
+  <WndProperty Name="prpAppIndLandable" Caption="Landable fields"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=2 Step=1/>
+
+  </WndProperty>
+
+  <WndProperty Name="prpAppInverseInfoBox" Caption="Inverse infoboxes"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppInfoBoxColors" Caption="Color infoboxes"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpLanguageFile" Caption="Language"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpStatusFile" Caption="Status"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpInputFile" Caption="Events"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmVarioAppearance" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppGaugeVarioAvgText" Caption="Show average"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppGaugeVarioMc" Caption="Show MacReady"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppGaugeVarioBugs" Caption="Show bugs"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppGaugeVarioBallast" Caption="Show ballast"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmTask" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpAutoAdvance" Caption="Auto advance"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpTaskStartLine" Caption="Start type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpTaskStartRadius" Caption="Start diameter"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+
+  </WndProperty>
+
+  <WndProperty Name="prpTaskFAISector" Caption="Sector type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpTaskSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+
+  </WndProperty>
+
+  <WndProperty Name="prpWaypointFile" Caption="Waypoints 1"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAdditionalWaypointFile" Caption="Waypoints 2"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAirfieldFile" Caption="Airfields file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
+
+</WndForm>
+
+</PMML>

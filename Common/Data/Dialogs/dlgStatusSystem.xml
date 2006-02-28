@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Type="Dialog" X=5 Y=5 Width=251 Height=231 Caption="Status" Font=2 BackColor=0xDADBAB>
+
+  <WndProperty Name="prpGPS"       Caption="GPS"       X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpNumSat"    Caption="Satellites in view"   X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpVario"     Caption="Vario"     X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpFLARM"       Caption="FLARM"       X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpLogger"    Caption="Logger"    X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpBattery"       Caption="Battery"       X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
+
+  <WndButton Name="cmdClose" Caption="Close" X=5 Y=-1 Width=60  Height=28 Font=2 Tag=3 />
+
+</WndForm>
+
+</PMML>

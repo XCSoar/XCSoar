@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Type="Dialog" X=5 Y=5 Width=251 Height=231 Caption="System Status" Font=2 BackColor=0xDADBAB>
+
+  <WndProperty Name="prpLongitude" Caption="Longitude" X=2 Y=2  Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpLatitude"  Caption="Latitude"  X=2 Y=-1 Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpAltitude"  Caption="Altitude"  X=2 Y=-1 Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpSunset"    Caption="Sunset"    X=2 Y=-1 Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpNear"      Caption="Near"      X=2 Y=-1 Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpBearing"   Caption="Bearing"   X=2 Y=-1 Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpDistance"  Caption="Distance"   X=2 Y=-1 Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpGPS"       Caption="GPS"       X=2 Y=-1 Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpNumSat"    Caption="Satellites in view"   X=2 Y=-1 Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpVario"     Caption="Vario"     X=2 Y=-1 Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpLogger"    Caption="Logger"    X=2 Y=-1 Width=242 Height=19 CaptionWidth=120 Font=2 ReadOnly=1 />
+
+</WndForm>
+
+</PMML>
