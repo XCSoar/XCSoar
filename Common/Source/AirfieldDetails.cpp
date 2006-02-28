@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.17 2006/02/27 14:43:49 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.18 2006/02/28 13:38:25 jwharington Exp $
 
 
 Copyright_License {
@@ -132,6 +132,10 @@ void ParseAirfieldDetails() {
   TCHAR TempString[200];
   TCHAR Details[5000];
   TCHAR Name[100];
+
+  Details[0]= 0;
+  Name[0]= 0;
+  TempString[0]=0;
 
   BOOL inDetails = FALSE;
   int i;

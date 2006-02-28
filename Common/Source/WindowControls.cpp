@@ -2528,7 +2528,7 @@ int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lPa
 
       if ((mListInfo.ItemIndex+mListInfo.ScrollIndex<
 	   mListInfo.ItemCount)
-	  &&(mListInfo.ItemCount>mListInfo.ItemInViewCount)) {
+	  &&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
 
 	mListInfo.ScrollIndex++;
 	mListInfo.ItemIndex = mListInfo.BottomIndex-1;
@@ -2536,7 +2536,7 @@ int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lPa
 	RedrawScrolled(true);
 	return(0);
       } else {
-	mListInfo.ItemIndex = mListInfo.BottomIndex;
+	mListInfo.ItemIndex = mListInfo.BottomIndex-1;
 	return(1);
       }
     }
@@ -2572,12 +2572,14 @@ void WndListFrame::ResetList(void){
   mListInfo.ScrollIndex = 0;
   mListInfo.ItemIndex = 0;
   mListInfo.DrawIndex = 0;
-  mListInfo.ItemInPageCount = ((GetWidth()+mClients[0]->GetHeight()-1)/mClients[0]->GetHeight())-1;
+  mListInfo.ItemInPageCount = ((GetHeight()+mClients[0]->GetHeight()-1)
+			       /mClients[0]->GetHeight())-1;
   mListInfo.TopIndex = 0;
   mListInfo.BottomIndex = 0;
   mListInfo.SelectedIndex = 0;
   mListInfo.ItemCount = 0;
-  mListInfo.ItemInViewCount = (GetWidth()+mClients[0]->GetHeight()-1)/mClients[0]->GetHeight();
+  mListInfo.ItemInViewCount = (GetHeight()+mClients[0]->GetHeight()-1)
+    /mClients[0]->GetHeight()-1;
 
   if (mOnListCallback != NULL){
     mListInfo.DrawIndex = -1;                               // -1 -> initialize data

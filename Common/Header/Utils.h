@@ -192,5 +192,6 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf);
 int propGetScaleList(double *List, size_t Size);
 
 long GetUTCOffset(void);
+int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines);
 
 #endif
