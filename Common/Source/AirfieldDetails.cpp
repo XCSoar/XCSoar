@@ -133,6 +133,10 @@ void ParseAirfieldDetails() {
   TCHAR Details[5000];
   TCHAR Name[100];
 
+  Details[0]= 0;
+  Name[0]= 0;
+  TempString[0]=0;
+
   BOOL inDetails = FALSE;
   int i;
   int k=0;

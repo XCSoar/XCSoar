@@ -68,17 +68,16 @@ static int LowLimit=0;
 
 static int ItemIndex = -1;
 
-static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-  switch(wParam & 0xffff){
-    case VK_RETURN:
-      if (ItemIndex != -1)
-        wf->SetModalResult(mrOK);
-      else
-        wf->SetModalResult(mrCancle);
-    return(0);
+
+static void OnWaypointListEnter(WindowControl * Sender,
+				WndListFrame::ListInfo_t *ListInfo){
+  if (ItemIndex != -1) {
+    wf->SetModalResult(mrOK);
   }
-  return(1);
+  else
+    wf->SetModalResult(mrCancle);
 }
+
 
 static WayPointSelectInfo_t *WayPointSelectInfo=NULL;
 
@@ -382,7 +381,7 @@ static void OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mod
 
 static int DrawListIndex=0;
 
-void OnPaintListItem(WindowControl * Sender, HDC hDC){
+static void OnPaintListItem(WindowControl * Sender, HDC hDC){
 
   int n = UpLimit - LowLimit;
   TCHAR sTmp[12];
@@ -436,7 +435,7 @@ void OnPaintListItem(WindowControl * Sender, HDC hDC){
 // ItemIndex = current selected item
 
 
-void OnWpListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+static void OnWpListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = UpLimit-LowLimit;
   } else {
@@ -445,14 +444,14 @@ void OnWpListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   }
 }
 
-static void OnCloseClicked(WindowControl * Sender){
+
+static void OnWPSCloseClicked(WindowControl * Sender){
   ItemIndex = -1;
   wf->SetModalResult(mrCancle);
 }
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(FormKeyDown),
   DeclearCallBackEntry(OnFilterName),
   DeclearCallBackEntry(OnFilterDistance),
   DeclearCallBackEntry(OnFilterDirection),
@@ -472,15 +471,15 @@ int dlgWayPointSelect(void){
   if (!wf) return -1;
 
   ASSERT(wf!=NULL);
-  wf->SetKeyDownNotify(FormKeyDown);
 
   ((WndButton *)wf->
    FindByName(TEXT("cmdClose")))->
-    SetOnClickNotify(OnCloseClicked);
+    SetOnClickNotify(OnWPSCloseClicked);
 
   wWayPointList = (WndListFrame*)wf->FindByName(TEXT("frmWayPointList"));
   ASSERT(wWayPointList!=NULL);
   wWayPointList->SetBorderKind(BORDERLEFT);
+  wWayPointList->SetEnterCallback(OnWaypointListEnter);
 
   wWayPointListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmWayPointListEntry"));
   ASSERT(wWayPointListEntry!=NULL);

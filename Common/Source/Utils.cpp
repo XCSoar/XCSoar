@@ -2552,3 +2552,35 @@ long GetUTCOffset(void) {
 #endif
 }
 
+
+int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines) {
+  int nTextLines=0;
+  LineOffsets[0]= 0;
+  if (text) {
+    if (_tcslen(text)>0) {
+
+      int delta = 0;
+      int cumul = 0;
+      TCHAR* vind = text;
+
+      while (nTextLines<maxLines) {
+	delta = _tcscspn(vind+cumul, TEXT("\n"));
+	if (!delta) {
+	  break;
+	}
+	if (_tcslen(vind+cumul+delta)>0) {
+	  delta++;
+	} else {
+	  break;
+	}
+	cumul += delta;
+	nTextLines++;
+	LineOffsets[nTextLines]= cumul;
+      }
+      nTextLines++;
+
+    }
+  }
+  return nTextLines;
+}
+

@@ -185,8 +185,8 @@ static void ReadValues(void) {
 
 static void OnSelectClicked(WindowControl * Sender){
   int res;
-
-  if ((res = dlgWayPointSelect()) != -1){
+  res = dlgWayPointSelect();
+  if (res != -1){
     SelectedWaypoint = res;
     Task[twItemIndex].Index = res;
     UpdateCaption();

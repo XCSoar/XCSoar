@@ -669,10 +669,16 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 
   for (i=MAXTASKPOINTS-1; i>0; i--) {
     if (Task[i].Index != -1) {
+
       lat1 = WayPointList[Task[i-1].Index].Latitude;
       lon1 = WayPointList[Task[i-1].Index].Longitude;
-      lat2 = WayPointList[Task[i].Index].Latitude;
-      lon2 = WayPointList[Task[i].Index].Longitude;
+      if (TaskAborted) {
+	lat2 = GPS_INFO.Latitude;
+	lon2 = GPS_INFO.Longitude;
+      } else {
+	lat2 = WayPointList[Task[i].Index].Latitude;
+	lon2 = WayPointList[Task[i].Index].Longitude;
+      }
       x1 = (lon1-lon_c)*fastcosine(lat1);
       y1 = (lat1-lat_c);
       x2 = (lon2-lon_c)*fastcosine(lat2);
@@ -690,6 +696,17 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 	_stprintf(text,TEXT("%0d"),i+1);
 	DrawLabel(hdc, rc, text, x2, y2);
       }
+
+      if ((i==ActiveWayPoint)&&(!AATEnabled)) {
+	lat2 = GPS_INFO.Latitude;
+	lon2 = GPS_INFO.Longitude;
+	x2 = (lon2-lon_c)*fastcosine(lat2);
+	y2 = (lat2-lat_c);
+	DrawLine(hdc, rc,
+		 x1, y1, x2, y2,
+		 STYLE_REDTHICK);
+      }
+
     }
   }
 
@@ -710,6 +727,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 	  lat2 = Task[i].AATTargetLat;
 	  lon2 = Task[i].AATTargetLon;
 	}
+
 	if (i==ActiveWayPoint) {
 	  lat1 = GPS_INFO.Latitude;
 	  lon1 = GPS_INFO.Longitude;

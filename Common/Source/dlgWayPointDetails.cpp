@@ -40,6 +40,7 @@ Copyright_License {
 #include "Externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
+#include "InfoBoxLayout.h"
 
 extern void DrawJPG(HDC hdc, RECT rc);
 #include "VOIMAGE.h"
@@ -49,9 +50,10 @@ extern TCHAR szRegistryWayPointFile[];
 
 static int page=0;
 static WndForm *wf=NULL;
+static WndListFrame *wDetails=NULL;
+static WndOwnerDrawFrame *wDetailsEntry = NULL;
 static WndFrame *wInfo=NULL;
 static WndFrame *wCommand=NULL;
-static WndFrame *wDetails=NULL;
 static WndOwnerDrawFrame *wImage=NULL;
 static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
@@ -61,6 +63,11 @@ static TCHAR path_modis[100];
 static TCHAR path_fname2[] = TEXT("\\Program Files\\omap\\ersa-benalla.jpg");
 static TCHAR szWaypointFile[MAX_PATH] = TEXT("\0");
 static TCHAR Directory[MAX_PATH];
+
+#define MAXLINES 100
+static int LineOffsets[MAXLINES];
+static int DrawListIndex=0;
+static int nTextLines=0;
 
 static void NextPage(int Step){
   page += Step;
@@ -87,7 +94,52 @@ static void NextPage(int Step){
   wCommand->SetVisible(page == 2);
   wImage->SetVisible(page > 2);
 
+  if (page==1) {
+    wDetails->ResetList();
+    wDetails->Redraw();
+  }
+
 }
+
+
+static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
+
+  if (DrawListIndex < nTextLines){
+    TCHAR* text = WayPointList[SelectedWaypoint].Details;
+    int nstart = LineOffsets[DrawListIndex];
+    int nlen;
+    if (DrawListIndex<nTextLines-1) {
+      nlen = LineOffsets[DrawListIndex+1]-LineOffsets[DrawListIndex]-1;
+      nlen--;
+    } else {
+      nlen = _tcslen(text+nstart);
+    }
+    if (_tcscmp(text+nstart+nlen-1,TEXT("\r"))==0) {
+      nlen--;
+    }
+    if (_tcscmp(text+nstart+nlen-1,TEXT("\n"))==0) {
+      nlen--;
+    }
+    if (nlen>0) {
+      ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+		 ETO_OPAQUE, NULL,
+		 text+nstart,
+		 nlen,
+		 NULL);
+    }
+  }
+}
+
+
+static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+  if (ListInfo->DrawIndex == -1){
+    ListInfo->ItemCount = nTextLines-1;
+  } else {
+    DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
+  }
+}
+
+
 
 static void OnNextClicked(WindowControl * Sender){
   NextPage(+1);
@@ -153,6 +205,8 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnNextClicked),
   DeclearCallBackEntry(OnPrevClicked),
+  DeclearCallBackEntry(OnPaintDetailsListItem),
+  DeclearCallBackEntry(OnDetailsListInfo),
   DeclearCallBackEntry(NULL)
 };
 
@@ -169,6 +223,8 @@ void dlgWayPointDetailsShowModal(void){
   wf = dlgLoadFromXML(CallBackTable,
 		      "\\NOR Flash\\dlgWayPointDetails.xml",
 		      hWndMainWindow);
+
+  nTextLines = 0;
 
   if (!wf) return;
 
@@ -241,15 +297,26 @@ void dlgWayPointDetailsShowModal(void){
   wInfo    = ((WndFrame *)wf->FindByName(TEXT("frmInfos")));
   wCommand = ((WndFrame *)wf->FindByName(TEXT("frmCommands")));
   wImage   = ((WndOwnerDrawFrame *)wf->FindByName(TEXT("frmImage")));
-  wDetails    = ((WndFrame *)wf->FindByName(TEXT("frmDetails")));
+  wDetails = (WndListFrame*)wf->FindByName(TEXT("frmDetails"));
 
   ASSERT(wInfo!=NULL);
   ASSERT(wCommand!=NULL);
   ASSERT(wImage!=NULL);
   ASSERT(wDetails!=NULL);
 
+  wDetailsEntry =
+    (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmDetailsEntry"));
+  ASSERT(wDetailsEntry!=NULL);
+  wDetailsEntry->SetCanFocus(true);
+
+  nTextLines = TextToLineOffsets(WayPointList[SelectedWaypoint].Details,
+				 LineOffsets,
+				 MAXLINES);
+
+  /* TODO
   wp = ((WndProperty *)wf->FindByName(TEXT("prpWpDetails")));
   wp->SetText(WayPointList[SelectedWaypoint].Details);
+  */
 
   wInfo->SetBorderKind(BORDERLEFT);
   wCommand->SetBorderKind(BORDERLEFT);

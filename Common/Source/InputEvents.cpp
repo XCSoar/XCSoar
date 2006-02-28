@@ -1031,6 +1031,16 @@ void InputEvents::eventMainMenu(TCHAR *misc) {
   // todo: popup main menu
 }
 
+#if (NEWINFOBOX>0)
+void dlgChecklistShowModal(void);
+#endif
+
+void InputEvents::eventChecklist(TCHAR *misc) {
+#if (NEWINFOBOX>0)
+  dlgChecklistShowModal();
+#endif
+}
+
 void InputEvents::eventStatus(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("system")) == 0) {
     ShowStatusSystem();
@@ -1068,9 +1078,9 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("select")) == 0) {
 #if NEWINFOBOX > 0
     extern int dlgWayPointSelect(void);
-    int res;
+    int res = dlgWayPointSelect();
 
-    if ((res = dlgWayPointSelect()) != -1){
+    if (res != -1){
       SelectedWaypoint = res;
       PopupWaypointDetails();
     };
