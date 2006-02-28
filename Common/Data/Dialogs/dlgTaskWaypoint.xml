@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmTaskWaypoint" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="Waypoint" Font=2  BackColor=0xDADBAB>
+
+  <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 />
+  <WndButton   Caption="Close"    X=2 Y=-1 Width=60  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
+  <WndButton   Caption="Select"    X=2 Y=-1 Width=60  Height=22 Font=2 OnClickNotify="OnSelectClicked"/>
+  <WndButton   Caption="Remove"    X=2 Y=-1 Width=60  Height=22 Font=2 OnClickNotify="OnRemoveClicked"/>
+  <WndButton   Caption="Details"    X=2 Y=-1 Width=60  Height=22 Font=2 OnClickNotify="OnDetailsClicked"/>
+
+  <WndFrame Name="frmStart" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpTaskStartLine" Caption="Start type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpTaskStartRadius" Caption="Start diameter"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+
+  </WndProperty>
+
+  <WndProperty Name="prpTaskFAISector" Caption="Sector type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpTaskSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+
+  </WndProperty>
+
+  <WndProperty Name="prpAATEnabled" Caption="AAT" X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 ReadOnly=0>
+    <DataField name="" DataType="boolean" ReadOnly=0/>
+  </WndProperty>
+
+  <WndProperty Name="prpMinTime" Caption="Min time" X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 min=0 max=600 step=10>
+    <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAutoAdvance" Caption="Auto advance"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmTurnpoint" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  </WndFrame>
+
+  <WndFrame Name="frmAATTurnpoint" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpAATOffsetRadius" Caption="Target distance"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=-100 Max=100 Step=10/>
+    </WndProperty>
+
+    <WndProperty Name="prpAATType" Caption="Type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpAATCircleRadius" Caption="Circle radius"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+    </WndProperty>
+
+  <WndProperty Name="prpAATSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+    </WndProperty>
+
+  <WndProperty Name="prpAATStartRadial" Caption="Start radial"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=360 Step=10/>
+    </WndProperty>
+
+  <WndProperty Name="prpAATFinishRadial" Caption="Finish radial"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=360 Step=10/>
+    </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmFinish" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  </WndFrame>
+
+</WndForm>    
+
+</PMML>
