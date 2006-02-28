@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+        <metadata>
+                <title></title>
+        </metadata>
+
+<section>
+        <title></title>
+
+
+Indicators
+
+Indicators are icons drawn on the map area to indicate system status.
+
+\subsection{Flight modes}
+
+XCSoar automatically detects the difference between thermal (circling)
+flight and cruising flight. After about 30 seconds of circling flight
+the software will switch from cruise to climb mode. After about 30
+seconds of straight line flight the software will switch from climb to
+cruise mode.
+
+The cruise modes are further divided into final glide and normal
+cruise.  Final glide is active when the last waypoint in the task is
+active, or when the task is in abort mode.
+
+The symbols used to indicate these modes are shown below:
+\begin{itemize}
+\item Climb
+\item Cruise
+\item Final glide
+\end{itemize}
+If there is no task active, then no flight mode symbol is shown.
+
+{\it DIAGRAM CUTOUTS SHOWING FLIGHT MODE ICONS, NO TERRAIN/TOPOLOGY}
+
+
+\subsection{GPS status}
+
+Normally, XCSoar requires a 3D GPS fix for its navigation functions.
+GPS status icons and text may appear on the bottom edge of the
+map display to indicate:
+\begin{description}
+\item[Waiting for GPS fix]  The GPS may have a 2D fix, better reception
+  or additional time to search for satelites is required.
+\item[GPS not connected]  No communication with the GPS is received.
+  This indicates an error in the Comm port settings or the GPS device may
+  be disconnected or switched off.
+\end{description}
+
+When the GPS is not connected for more than one minute, XCSoar
+automatically attempts to restart communication with the device and
+will then resume waiting.  This method has shown to provide the most
+reliable way of recovering from communication errors.
+
+{\it DIAGRAM CUTOUT SHOWING GPS STATUS (SEVERAL DIAGRAMS EACH FOR DIFFERENT
+ STATUS), NO TERRAIN/TOPOLOGY}
+
+\subsection{Flight logger}
+
+A flight logger conforming to the IGC file specification can be used
+to record flights.  The logger can be turned on and off automatically
+or manually.  When the logger is active, a small diamond in the lower
+right corner of the map area flashes once per second.
+
+{\it DIAGRAM CUTOUT SHOWING FLIGHT LOGGER ICON, NO TERRAIN/TOPOLOGY}
+
+</section>
+</document>
