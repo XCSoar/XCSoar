@@ -44,7 +44,7 @@
   </WndProperty>
 
   <WndProperty Name="prpAutoAdvance" Caption="Auto advance"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="boolean"/>
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
   </WndFrame>
@@ -56,7 +56,7 @@
   <WndFrame Name="frmAATTurnpoint" X=70 Y=0 Width=246 Height=222 Font=2>
 
   <WndProperty Name="prpAATOffsetRadius" Caption="Target distance"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=-100 Max=100 Step=10/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=10/>
     </WndProperty>
 
     <WndProperty Name="prpAATType" Caption="Type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>

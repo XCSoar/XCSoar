@@ -1,3 +1,4 @@
+#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 #include "XCSoar.h"
@@ -916,7 +917,7 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
 
   CopyRect(&rcgfx, Sender->GetBoundRect());
 
-  // packgrund is painted in the base-class
+  // background is painted in the base-class
 
   hfOld = (HFONT)SelectObject(hDC, Sender->GetFont());
 
@@ -1344,3 +1345,5 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
     }
   return FALSE;
 }
+
+#endif

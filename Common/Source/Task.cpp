@@ -212,6 +212,11 @@ void ReplaceWaypoint(int index) {
 void RefreshTask() {
   double lengthtotal = 0.0;
   int i;
+
+  if ((ActiveWayPoint<0)&&(Task[0].Index>=0)) {
+    ActiveWayPoint=0;
+  }
+
   // Only need to refresh info where the removal happened
   // as the order of other taskpoints hasn't changed
   for (i=0; i<MAXTASKPOINTS; i++) {

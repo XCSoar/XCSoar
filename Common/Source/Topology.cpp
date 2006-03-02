@@ -598,7 +598,8 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
 void XShapeLabel::setlabel(const char* src) {
   if (
       (strcmp(src,"UNK") != 0) &&
-      (strcmp(src,"RAILWAY STATION") != 0)
+      (strcmp(src,"RAILWAY STATION") != 0) &&
+      (strcmp(src,"RAILROAD STATION") != 0)
       ) {
     label = (char*)malloc(strlen(src)+1);
     strcpy(label,src);

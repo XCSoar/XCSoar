@@ -193,5 +193,8 @@ int propGetScaleList(double *List, size_t Size);
 
 long GetUTCOffset(void);
 int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines);
+void RestoreRegistry(void);
+void StoreRegistry(void);
+void XCSoarGetOpts(LPTSTR CommandLine);
 
 #endif

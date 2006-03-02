@@ -999,6 +999,27 @@ void InputEvents::eventChangeInfoBoxType(TCHAR *misc) {
 }
 
 
+void InputEvents::eventArmAdvance(TCHAR *misc) {
+  if (_tcscmp(misc, TEXT("on")) == 0) {
+    AdvanceArmed = true;
+  }
+  if (_tcscmp(misc, TEXT("off")) == 0) {
+    AdvanceArmed = false;
+  }
+  if (_tcscmp(misc, TEXT("toggle")) == 0) {
+    AdvanceArmed = !AdvanceArmed;
+  }
+  if (_tcscmp(misc, TEXT("show")) == 0) {
+    if (AdvanceArmed) {
+      DoStatusMessage(TEXT("Auto Advance ARMED"));
+    } else {
+      DoStatusMessage(TEXT("Auto Advance DISARMED"));
+    }
+  }
+}
+
+
+
 void InputEvents::eventDoInfoKey(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0) {
     DoInfoKey(1);
@@ -1041,6 +1062,17 @@ void InputEvents::eventChecklist(TCHAR *misc) {
 #endif
 }
 
+#if (NEWINFOBOX>0)
+void dlgTaskCalculatorShowModal(void);
+#endif
+
+void InputEvents::eventCalculator(TCHAR *misc) {
+#if (NEWINFOBOX>0)
+  dlgTaskCalculatorShowModal();
+#endif
+}
+
+
 void InputEvents::eventStatus(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("system")) == 0) {
     ShowStatusSystem();
@@ -1052,6 +1084,7 @@ void InputEvents::eventStatus(TCHAR *misc) {
 	ShowStatus();
       }
 }
+
 
 void InputEvents::eventAnalysis(TCHAR *misc) {
   PopupAnalysis();
@@ -1507,6 +1540,7 @@ void SystemConfiguration(void);
 void dlgBasicSettingsShowModal(void);
 void dlgWindSettingsShowModal(void);
 void dlgTaskOverviewShowModal(void);
+void dlgAirspaceShowModal(void);
 #endif
 
 void InputEvents::eventSetup(TCHAR *misc) {
@@ -1531,6 +1565,13 @@ void InputEvents::eventSetup(TCHAR *misc) {
   if (_tcscmp(misc,TEXT("Task"))==0){
 #if NEWINFOBOX > 0
     dlgTaskOverviewShowModal();
+#else
+	0;
+#endif;
+  } else
+  if (_tcscmp(misc,TEXT("Airspace"))==0){
+#if NEWINFOBOX > 0
+    dlgAirspaceShowModal();
 #else
 	0;
 #endif;

@@ -225,7 +225,7 @@ DWORD Port2ReadThread (LPVOID lpvoid)
     // Wait for an event to occur for the port.
     if (!WaitCommEvent (hPort2, &dwCommModemStatus, 0)) {
       // error reading from port
-      Sleep(10);
+      Sleep(100);
     }
 
     // Re-specify the set of events to be monitored for the port.

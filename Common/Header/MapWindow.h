@@ -55,21 +55,21 @@ typedef struct _WAYPOINT_INFO
   TCHAR *Details;
 } WAYPOINT;
 
-#define OTHER					0
-#define RESTRICT      1
-#define PROHIBITED    2
-#define DANGER        3
+#define OTHER                           0
+#define RESTRICT                        1
+#define PROHIBITED                      2
+#define DANGER                          3
 #define CLASSA				4
 #define CLASSB				5
 #define CLASSC				6
 #define CLASSD				7
 #define	NOGLIDER			8
-#define CTR					  9
-#define WAVE				  10
+#define CTR                             9
+#define WAVE				10
 #define AATASK				11
 #define CLASSE				12
 #define CLASSF				13
-#define AIRSPACECLASSCOUNT  14
+#define AIRSPACECLASSCOUNT              14
 
 typedef struct _AIRSPACE_ACK
 {
@@ -270,6 +270,7 @@ class MapWindow {
   static bool EnablePan;
 
   static BOOL THREADRUNNING;
+  static BOOL THREADEXIT;
 
   static DWORD  dwDrawThreadID;
   static HANDLE hDrawThread;
@@ -346,6 +347,8 @@ class MapWindow {
   static HBITMAP hBmpFieldUnReachable;
 
  public:
+
+  static int GetMapResolutionFactor();
 
   static HBITMAP hBmpMapScale;
   static HBITMAP hBmpCompassBg;

@@ -51,6 +51,8 @@
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 
+  <WndButton Name="cmdAirspaceColours"  Caption="Colours" X=100 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnAirspaceColoursClicked" />
+
   </WndFrame>
 
   <WndFrame Name="frmDisplay" X=70 Y=0 Width=246 Height=222 Font=2>
@@ -410,7 +412,7 @@
   <WndFrame Name="frmTask" X=70 Y=0 Width=246 Height=222 Font=2>
 
   <WndProperty Name="prpAutoAdvance" Caption="Auto advance"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
-    <DataField name="" DataType="boolean"/>
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpTaskStartLine" Caption="Start type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>

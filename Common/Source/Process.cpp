@@ -256,6 +256,7 @@ void NextUpDown(int UpDown)
 	  CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
 	}
 	ActiveWayPoint ++;
+	AdvanceArmed = false;
 	CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
       }
       // No more, try first
@@ -263,6 +264,7 @@ void NextUpDown(int UpDown)
 	if(ActiveWayPoint == 0)	{
 	  CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
 	}
+	AdvanceArmed = false;
 	ActiveWayPoint = 0;
 	CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
       }

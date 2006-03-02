@@ -245,15 +245,17 @@ void WindAnalyser::slot_newFlightMode(bool left, int marker){
     startcircle = 3; // ignore first two circles in thermal drift calcs
 
     circleDeg = 0;
-    if ((derivedInfo->Circling) && (left)) {
+    if (derivedInfo->Circling) {
+      if (left) {
         circleLeft=true;
         curModeOK=true;
-    } else if ((derivedInfo->Circling) && (!left)) {
+      } else {
         circleLeft=false;
         curModeOK=true;
+      }
     } else {
 
-        // end circling?
+      // end circling?
       if (curModeOK) {
         calcThermalDrift();
       }

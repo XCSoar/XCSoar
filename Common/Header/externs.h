@@ -152,7 +152,8 @@ extern int AltWarningMargin;
 extern bool EnableCDICruise;
 extern bool EnableCDICircling;
 extern bool EnableVarioGauge;
-extern bool AutoAdvance;
+extern int AutoAdvance;
+extern bool AdvanceArmed;
 extern bool EnableBlockSTF; // block speed to fly instead of dolphin
 //
 

@@ -276,6 +276,7 @@ void ReadRegistrySettings(void)
   // check against V3 infotypes
   CheckInfoTypes();
 
+  Temp=0;
   GetFromRegistry(szRegistryDisplayUpValue,&Temp);
   switch(Temp)
     {
@@ -285,6 +286,7 @@ void ReadRegistrySettings(void)
     case TRACKCIRCLE : DisplayOrientation = TRACKCIRCLE;break;
     }
 
+  Temp=0;
   GetFromRegistry(szRegistryDisplayText,&Temp);
   switch(Temp)
     {
@@ -296,44 +298,55 @@ void ReadRegistrySettings(void)
     case 5 : DisplayTextType = DISPLAYNAMEIFINTASK; break;
     }
 
+  Temp=AltitudeMode;
   if(GetFromRegistry(szRegistryAltMode,&Temp)==ERROR_SUCCESS)
     AltitudeMode = Temp;
 
+  Temp=ClipAltitude;
   if(GetFromRegistry(szRegistryClipAlt,&Temp)==ERROR_SUCCESS)
     ClipAltitude = Temp;
 
+  Temp=AltWarningMargin;
   if(GetFromRegistry(szRegistryAltMargin,&Temp)==ERROR_SUCCESS)
     AltWarningMargin = Temp;
 
-
+  Temp=SAFETYALTITUDEARRIVAL;
   GetFromRegistry(szRegistrySafetyAltitudeArrival,&Temp);
   if(Temp != 0)
     SAFETYALTITUDEARRIVAL = (double)Temp;
 
+  Temp=SAFETYALTITUDEBREAKOFF;
   GetFromRegistry(szRegistrySafetyAltitudeBreakOff,&Temp);
   if(Temp != 0)
     SAFETYALTITUDEBREAKOFF = (double)Temp;
 
+  Temp=SAFETYALTITUDETERRAIN;
   GetFromRegistry(szRegistrySafetyAltitudeTerrain,&Temp);
   if(Temp != 0)
     SAFETYALTITUDETERRAIN = (double)Temp;
 
+  Temp=SAFTEYSPEED;
   GetFromRegistry(szRegistrySafteySpeed,&Temp);
   if(Temp != 0)
     SAFTEYSPEED = (double)Temp;
 
-  Temp = 0;
+  Temp = FAISector;
   GetFromRegistry(szRegistryFAISector,&Temp);
   FAISector = Temp;
 
-  GetFromRegistry(szRegistrySectorRadius,&SectorRadius);
+  GetFromRegistry(szRegistrySectorRadius,
+		  &SectorRadius);
 
-  GetFromRegistry(szRegistryPolarID,&Temp); POLARID = (int)Temp;
+  Temp = POLARID;
+  GetFromRegistry(szRegistryPolarID,
+		  &Temp);
+  POLARID = (int)Temp;
 
   GetRegistryString(szRegistryRegKey, strRegKey, 65);
 
   for(i=0;i<AIRSPACECLASSCOUNT;i++)
     {
+      Temp=0;
       if(GetFromRegistry(szRegistryBrush[i],&Temp)==ERROR_SUCCESS)
         MapWindow::iAirspaceBrush[i] =			(int)Temp;
       else
@@ -354,27 +367,35 @@ void ReadRegistrySettings(void)
 
     }
 
+  Temp = MapWindow::bAirspaceBlackOutline;
   GetFromRegistry(szRegistryAirspaceBlackOutline,&Temp);
   MapWindow::bAirspaceBlackOutline = (Temp == 1);
 
+  Temp = TrailActive;
   GetFromRegistry(szRegistrySnailTrail,&Temp);
   TrailActive = Temp;
 
+  Temp  = EnableTopology;
   GetFromRegistry(szRegistryDrawTopology,&Temp);
   EnableTopology = (Temp == 1);
 
+  Temp  = EnableTerrain;
   GetFromRegistry(szRegistryDrawTerrain,&Temp);
   EnableTerrain = (Temp == 1);
 
+  Temp  = FinalGlideTerrain;
   GetFromRegistry(szRegistryFinalGlideTerrain,&Temp);
   FinalGlideTerrain = (Temp == 1);
 
+  Temp  = CircleZoom;
   GetFromRegistry(szRegistryCircleZoom,&Temp);
   CircleZoom = (Temp == 1);
 
+  Temp  = WindUpdateMode;
   GetFromRegistry(szRegistryWindUpdateMode,&Temp);
   WindUpdateMode = Temp;
 
+  Temp = HomeWaypoint;
   GetFromRegistry(szRegistryHomeWaypoint,&Temp);
   HomeWaypoint = Temp;
 
@@ -521,7 +542,6 @@ BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)
   long    hRes;
   DWORD defaultVal;
 
-  *pPos= 0;
   hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_ALL_ACCESS, &hKey);
   if (hRes != ERROR_SUCCESS)
     {
@@ -1551,19 +1571,32 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 
   switch (Type)
     {
-    case RESTRICT:		_tcscpy(szTitleBuffer,TEXT("Restricted")); break;
-    case PROHIBITED:	_tcscpy(szTitleBuffer,TEXT("Prohibited")); break;
-    case DANGER:			_tcscpy(szTitleBuffer,TEXT("Danger Area")); break;
-    case CLASSA:			_tcscpy(szTitleBuffer,TEXT("Class A")); break;
-    case CLASSB:			_tcscpy(szTitleBuffer,TEXT("Class B")); break;
-    case CLASSC:			_tcscpy(szTitleBuffer,TEXT("Class C")); break;
-    case CLASSD:			_tcscpy(szTitleBuffer,TEXT("Class D")); break;
-    case CLASSE:			_tcscpy(szTitleBuffer,TEXT("Class E")); break;
-    case CLASSF:			_tcscpy(szTitleBuffer,TEXT("Class F")); break;
-    case NOGLIDER:		_tcscpy(szTitleBuffer,TEXT("No Glider")); break;
-    case CTR:					_tcscpy(szTitleBuffer,TEXT("CTR")); break;
-    case WAVE:				_tcscpy(szTitleBuffer,TEXT("Wave")); break;
-    default:					_tcscpy(szTitleBuffer,TEXT("Unknown"));
+    case RESTRICT:
+      _tcscpy(szTitleBuffer,TEXT("Restricted")); break;
+    case PROHIBITED:
+      _tcscpy(szTitleBuffer,TEXT("Prohibited")); break;
+    case DANGER:
+      _tcscpy(szTitleBuffer,TEXT("Danger Area")); break;
+    case CLASSA:
+      _tcscpy(szTitleBuffer,TEXT("Class A")); break;
+    case CLASSB:
+      _tcscpy(szTitleBuffer,TEXT("Class B")); break;
+    case CLASSC:
+      _tcscpy(szTitleBuffer,TEXT("Class C")); break;
+    case CLASSD:
+      _tcscpy(szTitleBuffer,TEXT("Class D")); break;
+    case CLASSE:
+      _tcscpy(szTitleBuffer,TEXT("Class E")); break;
+    case CLASSF:
+      _tcscpy(szTitleBuffer,TEXT("Class F")); break;
+    case NOGLIDER:
+      _tcscpy(szTitleBuffer,TEXT("No Glider")); break;
+    case CTR:
+      _tcscpy(szTitleBuffer,TEXT("CTR")); break;
+    case WAVE:
+      _tcscpy(szTitleBuffer,TEXT("Wave")); break;
+    default:
+      _tcscpy(szTitleBuffer,TEXT("Unknown"));
     }
 
   if(Base.FL == 0)
@@ -1840,18 +1873,22 @@ void SaveSoundSettings()
 
 
 void SaveWindToRegistry() {
-  SetToRegistry(szRegistryWindSpeed,(DWORD)CALCULATED_INFO.WindSpeed);
-  SetToRegistry(szRegistryWindBearing,(DWORD)CALCULATED_INFO.WindBearing);
+  DWORD Temp;
+  Temp = iround(CALCULATED_INFO.WindSpeed);
+  SetToRegistry(szRegistryWindSpeed,Temp);
+  Temp = CALCULATED_INFO.WindBearing;
+  SetToRegistry(szRegistryWindBearing,Temp);
 }
 
 
 void LoadWindFromRegistry() {
   DWORD Temp;
+  Temp=0;
   GetFromRegistry(szRegistryWindSpeed,&Temp);
-  CALCULATED_INFO.WindSpeed = (double)Temp;
+  CALCULATED_INFO.WindSpeed = Temp;
+  Temp=0;
   GetFromRegistry(szRegistryWindBearing,&Temp);
-  CALCULATED_INFO.WindBearing = (double)Temp;
-
+  CALCULATED_INFO.WindBearing = Temp;
 }
 
 void ReadDeviceSettings(int devIdx, TCHAR *Name){
@@ -2584,3 +2621,58 @@ int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines) {
   return nTextLines;
 }
 
+
+/////////
+
+
+TCHAR startProfileFile[MAX_PATH];
+
+void RestoreRegistry(void) {
+  // load registry backup if it exists
+  LoadRegistryFromFile(startProfileFile);
+}
+
+void StoreRegistry(void) {
+  // save registry backup first (try a few places)
+  SaveRegistryToFile(startProfileFile);
+}
+
+void XCSoarGetOpts(LPTSTR CommandLine) {
+
+// SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
+
+#if (WINDOWSPC>0)
+  _tcscpy(startProfileFile,
+	  TEXT("C:\\XCSoar\\NOR Flash\\xcsoar-registry.prf"));
+#else
+#ifdef GNAV
+  _tcscpy(startProfileFile,
+	  TEXT("\\NOR Flash\\xcsoar-registry.prf"));
+#else
+  _tcscpy(startProfileFile,
+	  LocalPath(TEXT("xcsoar-registry.prf")));
+#endif
+#endif
+
+  if (CommandLine != NULL){
+    TCHAR *pC, *pCe;
+
+    pC = _tcsstr(CommandLine, TEXT("-profile="));
+    if (pC != NULL){
+      pC += strlen("-profile=");
+      if (*pC == '"'){
+        pC++;
+        pCe = pC;
+        while (*pCe != '"' && *pCe != '\0') pCe++;
+      } else{
+        pCe = pC;
+        while (*pCe != ' ' && *pCe != '\0') pCe++;
+      }
+      if (pCe != NULL && pCe-1 > pC){
+
+        _tcsncpy(startProfileFile, pC, pCe-pC);
+        startProfileFile[pCe-pC] = '\0';
+      }
+    }
+  }
+}

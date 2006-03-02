@@ -28,6 +28,7 @@ Copyright_License {
 
 }
 */
+#if (NEWINFOBOX>0)
 
 
 #include "stdafx.h"
@@ -505,3 +506,4 @@ int dlgWayPointSelect(void){
 
 }
 
+#endif
