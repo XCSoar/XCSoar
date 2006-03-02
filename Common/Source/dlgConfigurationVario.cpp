@@ -28,6 +28,7 @@ Copyright_License {
 
 }
 */
+#if (NEWINFOBOX>0)
 
 
 #include "stdafx.h"
@@ -773,4 +774,6 @@ Advanced alerts
 "BatEmptyDelay" 0 100
 "BatRepeatTime" 0 100
 */
+
+#endif
 

@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.18 2005/09/21 00:46:17 scottp Exp $
+**   $Id: windanalyser.cpp,v 1.19 2006/03/02 12:24:01 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -245,15 +245,17 @@ void WindAnalyser::slot_newFlightMode(bool left, int marker){
     startcircle = 3; // ignore first two circles in thermal drift calcs
 
     circleDeg = 0;
-    if ((derivedInfo->Circling) && (left)) {
+    if (derivedInfo->Circling) {
+      if (left) {
         circleLeft=true;
         curModeOK=true;
-    } else if ((derivedInfo->Circling) && (!left)) {
+      } else {
         circleLeft=false;
         curModeOK=true;
+      }
     } else {
 
-        // end circling?
+      // end circling?
       if (curModeOK) {
         calcThermalDrift();
       }

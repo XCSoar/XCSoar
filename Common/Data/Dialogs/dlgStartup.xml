@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmStartup" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="XCSoar" Font=2  BackColor=0xDADBAB>
+
+  <aWndOwnerDrawFrame Name="frmSplash" X=220 Y=2 Width=100 Height=100 Font=0 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnSplashPaint" />
+
+  <WndProperty Name="prpDisclaimer"   Caption=""       X=2 Y=2  Width=318 Height=148 CaptionWidth=2 Font=3 ReadOnly=1 MultiLine=1/>
+
+  <WndButton Name="cmdClose" Caption="Accept" X=2 Y=160 Width=314  Height=28 Font=2 Tag=3 />
+
+  <WndProperty Name="prpProfile" Caption="Profile"      X=2 Y=190   Width=314 Height=25 CaptionWidth=60 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+</WndForm>    
+
+</PMML>

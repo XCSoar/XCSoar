@@ -28,6 +28,7 @@ Copyright_License {
 
 }
 */
+#if (NEWINFOBOX>0)
 
 
 #include "stdafx.h"
@@ -144,6 +145,11 @@ static void OnVarioClicked(WindowControl * Sender){
 
 }
 
+void dlgAirspaceShowModal(void);
+
+static void OnAirspaceColoursClicked(WindowControl * Sender){
+  dlgAirspaceShowModal();
+}
 
 static void OnNextClicked(WindowControl * Sender){
   NextPage(+1);
@@ -178,6 +184,7 @@ static void OnTestEnumData(DataField *Sender, DataField::DataAccessKind_t Mode){
 */
 
 static CallBackTableEntry_t CallBackTable[]={
+  DeclearCallBackEntry(OnAirspaceColoursClicked),
   DeclearCallBackEntry(OnNextClicked),
   DeclearCallBackEntry(OnPrevClicked),
   DeclearCallBackEntry(OnVarioClicked),
@@ -870,7 +877,13 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
   if (wp) {
-    wp->GetDataField()->Set(AutoAdvance);
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Manual"));
+    dfe->addEnumText(TEXT("Auto"));
+    dfe->addEnumText(TEXT("Arm"));
+    dfe->addEnumText(TEXT("Arm start"));
+    dfe->Set(AutoAdvance);
     wp->RefreshDisplay();
   }
 
@@ -1419,8 +1432,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
   if (wp) {
-    if (AutoAdvance != wp->GetDataField()->GetAsBoolean()) {
-      AutoAdvance = wp->GetDataField()->GetAsBoolean();
+    if (AutoAdvance != wp->GetDataField()->GetAsInteger()) {
+      AutoAdvance = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryAutoAdvance,
 		    AutoAdvance);
       changed = true;
@@ -1535,11 +1548,7 @@ void dlgConfigurationShowModal(void){
   }
 
   if (changed) {
-#ifdef GNAV
-    SaveRegistryToFile(TEXT("\\NOR Flash\\xcsoar-registry.prf"));
-#else
-    SaveRegistryToFile(TEXT("xcsoar-registry.prf"));
-#endif
+    StoreRegistry();
     DoStatusMessage(TEXT("Configuration saved"));
   };
 
@@ -1571,3 +1580,5 @@ void dlgConfigurationShowModal(void){
   { OTHER,      _T("Other")},
   { AATASK,     _T("AAT")}
 */
+
+#endif

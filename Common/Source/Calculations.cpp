@@ -736,9 +736,13 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   double Rate;
   static double LastRate=0;
   double dRate;
+  double dT;
         
-  if(Basic->Time <= LastTime)
+  if(Basic->Time <= LastTime) {
+    LastTime = Basic->Time;
     return;
+  }
+  dT = Basic->Time - LastTime;
 
   if((LastTrack>270) && (Basic->TrackBearing <90))
     {
@@ -752,13 +756,13 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     {
       Rate = (Basic->TrackBearing - LastTrack);
     }
-  Rate = Rate / (Basic->Time - LastTime);
+  Rate = Rate / dT;
 
-  if (Basic->Time-LastTime<2.0) {
+  if (dT<2.0) {
     // time step ok
 
     // calculate acceleration
-    dRate = (Rate-LastRate)/(Basic->Time-LastTime);
+    dRate = (Rate-LastRate)/dT;
 
     double dtlead=0.3;
     // integrate assuming constant acceleration, for one second
@@ -791,7 +795,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
 
   if (timeCruising+timeCircling>0) {
-    Calculated->PercentCircling = 100.0*(timeCircling)/(timeCruising+timeCircling);
+    Calculated->PercentCircling = 
+      100.0*(timeCircling)/(timeCruising+timeCircling);
   } else {
     Calculated->PercentCircling = 0.0;
   }
@@ -816,92 +821,82 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   LastTime = Basic->Time;
   LastTrack = Basic->TrackBearing;
 
-  if(MODE == CRUISE)
-    {
-      if(Rate > MinTurnRate)
-        {
-          StartTime = Basic->Time;
-          StartLong = Basic->Longitude;
-          StartLat  = Basic->Latitude;
-          StartAlt  = Basic->Altitude;
-          MODE = WAITCLIMB;
-        }
+  switch(MODE) {
+  case CRUISE:
+    if(Rate >= MinTurnRate) {
+      StartTime = Basic->Time;
+      StartLong = Basic->Longitude;
+      StartLat  = Basic->Latitude;
+      StartAlt  = Basic->Altitude;
+      MODE = WAITCLIMB;
     }
-  else if(MODE == WAITCLIMB)
-    {
-      if(Rate > MinTurnRate)
-        {
-          if( (Basic->Time  - StartTime) > CruiseClimbSwitch)
-            {
-              Calculated->Circling = TRUE;
-              // JMW Transition to climb
-              MODE = CLIMB;
-              Calculated->ClimbStartLat = StartLat;
-              Calculated->ClimbStartLong = StartLong;
-              Calculated->ClimbStartAlt = StartAlt;
-              Calculated->ClimbStartTime = StartTime;
-
-              flightstats.Altitude_Base.
-                least_squares_update(Calculated->ClimbStartTime/3600.0,
-                                     Calculated->ClimbStartAlt);
-
-	      // TODO InputEvents GCE - Move this to InputEvents 
-	      // Consider a way to take the CircleZoom and other logic
-	      // into InputEvents instead
-              SwitchZoomClimb(true, LEFT);
-	      InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
-            }
-        }
-      else
-        {
-          MODE = CRUISE;
-        }
+    break;
+  case WAITCLIMB:
+    if(Rate >= MinTurnRate) {
+      if( (Basic->Time  - StartTime) > CruiseClimbSwitch) {
+	Calculated->Circling = TRUE;
+	// JMW Transition to climb
+	MODE = CLIMB;
+	Calculated->ClimbStartLat = StartLat;
+	Calculated->ClimbStartLong = StartLong;
+	Calculated->ClimbStartAlt = StartAlt;
+	Calculated->ClimbStartTime = StartTime;
+	
+	flightstats.Altitude_Base.
+	  least_squares_update(Calculated->ClimbStartTime/3600.0,
+			       Calculated->ClimbStartAlt);
+	
+	// TODO InputEvents GCE - Move this to InputEvents 
+	// Consider a way to take the CircleZoom and other logic
+	// into InputEvents instead
+	SwitchZoomClimb(true, LEFT);
+	InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
+      }
+    } else {
+      // nope, not turning, so go back to cruise
+      MODE = CRUISE;
     }
-  else if(MODE == CLIMB)
-    {
-      windanalyser->slot_newSample();
-
-      if(Rate < MinTurnRate)
-        {
-          StartTime = Basic->Time;
-          StartLong = Basic->Longitude;
-          StartLat  = Basic->Latitude;
-          StartAlt  = Basic->Altitude;
-          // JMW Transition to cruise, due to not properly turning
-          MODE = WAITCRUISE;
-        }
+    break;
+  case CLIMB:
+    windanalyser->slot_newSample();
+    
+    if(Rate < MinTurnRate) {
+      StartTime = Basic->Time;
+      StartLong = Basic->Longitude;
+      StartLat  = Basic->Latitude;
+      StartAlt  = Basic->Altitude;
+      // JMW Transition to cruise, due to not properly turning
+      MODE = WAITCRUISE;
     }
-  else if(MODE == WAITCRUISE)
-    {
-      if(Rate < MinTurnRate)
-        {
-          if( (Basic->Time  - StartTime) > ClimbCruiseSwitch)
-            {
-              Calculated->Circling = FALSE;
-
-              // Transition to cruise
-              MODE = CRUISE;
-              Calculated->CruiseStartLat = StartLat;
-              Calculated->CruiseStartLong = StartLong;
-              Calculated->CruiseStartAlt = StartAlt;
-              Calculated->CruiseStartTime = StartTime;
-
-              flightstats.Altitude_Ceiling.
-                least_squares_update(Calculated->CruiseStartTime/3600.0,
-                                     Calculated->CruiseStartAlt);
-
-              SwitchZoomClimb(false, LEFT);
- 	      InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
-
-            }
-        }
-      else
-        {
-          // JMW Transition to climb
-          MODE = CLIMB;
-        }
+    break;
+  case WAITCRUISE:
+    if(Rate < MinTurnRate) {
+      if( (Basic->Time  - StartTime) > ClimbCruiseSwitch) {
+	Calculated->Circling = FALSE;
+	
+	// Transition to cruise
+	MODE = CRUISE;
+	Calculated->CruiseStartLat = StartLat;
+	Calculated->CruiseStartLong = StartLong;
+	Calculated->CruiseStartAlt = StartAlt;
+	Calculated->CruiseStartTime = StartTime;
+	
+	flightstats.Altitude_Ceiling.
+	  least_squares_update(Calculated->CruiseStartTime/3600.0,
+			       Calculated->CruiseStartAlt);
+	
+	SwitchZoomClimb(false, LEFT);
+	InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
+      }
+    } else {
+      // JMW Transition back to climb, because we are turning again
+      MODE = CLIMB;
     }
-
+    break;
+  default:
+    // error, go to cruise
+    MODE = CRUISE;
+  }
   // generate new wind vector if altitude changes or a new
   // estimate is available
   windanalyser->slot_Altitude();
@@ -1200,6 +1195,28 @@ void AnnounceWayPointSwitch() {
 
 }
 
+bool ReadyToAdvance(void) {
+  if (AutoAdvance==1) {
+    AdvanceArmed = false;
+    return true;
+  }
+  if ((AutoAdvance==2)&&(AdvanceArmed)) {
+    AdvanceArmed = false;
+    return true;
+  }
+  if (AutoAdvance==3) {
+    if (ActiveWayPoint>0) {
+      AdvanceArmed = false;
+      return true;
+    }
+    if (AdvanceArmed) {
+      AdvanceArmed = false;
+      return true;
+    }
+  }
+  return false;
+}
+
 
 void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
@@ -1222,7 +1239,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 {
                   if(Task[ActiveWayPoint+1].Index >= 0)
                     {
-		      if (AutoAdvance) {
+		      if (ReadyToAdvance()) {
 			ActiveWayPoint++;
 			InputEvents::processGlideComputer(GCE_TASK_START);
 			AnnounceWayPointSwitch();
@@ -1242,7 +1259,8 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         {
           if(Basic->Time - Calculated->TaskStartTime < 600)
             {
-	      if (AutoAdvance) {
+	      if (ReadyToAdvance()) {
+		AdvanceArmed = false;	
 		ActiveWayPoint = 0;
 		StartSectorEntered = TRUE;
 	      }
@@ -1257,7 +1275,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 {
                   Calculated->LegStartTime = Basic->Time;
 
-		  if (AutoAdvance) {
+		  if (ReadyToAdvance()) {
 		    ActiveWayPoint++;
 		    AnnounceWayPointSwitch();
 		    InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
@@ -1291,8 +1309,7 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 {
                   if(Task[ActiveWayPoint+1].Index >= 0)
                     {
-
-		      if (AutoAdvance) {
+		      if (ReadyToAdvance()) {
 			ActiveWayPoint++;
 			InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 			AnnounceWayPointSwitch();
@@ -1311,8 +1328,10 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       if(InStartSector(Basic, Calculated))
         {
           if(Basic->Time - Calculated->TaskStartTime < 600)
+	    // this allows restart if returned to start sector before
+	    // 10 minutes after task start
             {
-	      if (AutoAdvance) {
+	      if (ReadyToAdvance()) {
 		ActiveWayPoint = 0;
 		StartSectorEntered = TRUE;
 	      }
@@ -1326,7 +1345,8 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                 {
                   Calculated->LegStartTime = Basic->Time;
 
-		  if (AutoAdvance) {
+		  if (ReadyToAdvance()) {
+		    AdvanceArmed = false;		
 		    ActiveWayPoint++;
 		    InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 
@@ -1816,7 +1836,11 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if(!AIRSPACEWARNINGS)
       return;
 
-  i= FindAirspaceCircle(Calculated->NextLongitude, Calculated->NextLatitude );
+  // JMW TODO: FindAirspaceCircle etc should sort results, return 
+  // the most critical or closest
+
+  i= FindAirspaceCircle(Calculated->NextLongitude, 
+			Calculated->NextLatitude, false);
   if(i != -1)
     {
       if(i == AirspaceLastCircle)
@@ -1867,7 +1891,8 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
         
 
-  i= FindAirspaceArea(Calculated->NextLongitude,Calculated->NextLatitude);
+  i= FindAirspaceArea(Calculated->NextLongitude,
+		      Calculated->NextLatitude, false);
   if(i != -1)
     {
       if(i == AirspaceLastArea)

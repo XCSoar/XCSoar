@@ -28,6 +28,7 @@ Copyright_License {
 
 }
 */
+#if (NEWINFOBOX>0)
 
 
 #include "stdafx.h"
@@ -113,7 +114,13 @@ static void SetValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
   if (wp) {
-    wp->GetDataField()->Set(AutoAdvance);
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Manual"));
+    dfe->addEnumText(TEXT("Auto"));
+    dfe->addEnumText(TEXT("Arm"));
+    dfe->addEnumText(TEXT("Arm start"));
+    dfe->Set(AutoAdvance);
     wp->RefreshDisplay();
   }
 
@@ -134,6 +141,11 @@ static void SetValues(void) {
 
 static void ReadValues(void) {
   WndProperty* wp;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
+  if (wp) {
+    AATEnabled = wp->GetDataField()->GetAsInteger();
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
@@ -165,19 +177,14 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
   if (wp) {
-    if (AutoAdvance != wp->GetDataField()->GetAsBoolean()) {
-      AutoAdvance = wp->GetDataField()->GetAsBoolean();
+    if (AutoAdvance != wp->GetDataField()->GetAsInteger()) {
+      AutoAdvance = wp->GetDataField()->GetAsInteger();
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
   if (wp) {
     AATTaskLength = wp->GetDataField()->GetAsInteger();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
-  if (wp) {
-    AATEnabled = wp->GetDataField()->GetAsInteger();
   }
 
 }
@@ -352,7 +359,6 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
   }
 
   ReadValues();
-  RefreshTask();
 
   delete wf;
 
@@ -360,3 +366,4 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
 
 }
 
+#endif

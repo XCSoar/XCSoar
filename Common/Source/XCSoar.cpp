@@ -248,7 +248,9 @@ int                                             DisplayTextType = DISPLAYNONE;
 int                                             AltitudeMode = ALLON;
 int                                             ClipAltitude = 1000;
 int                                             AltWarningMargin = 100;
-bool                                    AutoAdvance = true;
+int                                             AutoAdvance = 1;
+bool                                            AdvanceArmed = false;
+
 double                          QNH = (double)1013.2;
 bool EnableBlockSTF = false;
 
@@ -786,7 +788,6 @@ void ShowStatus() {
     wcscat(statusmessage, gettext(TEXT("GPS disconnected")));
 	wcscat(statusmessage, TEXT("\r\n"));
   }
-#if (WINDOWSPC<1)
   if (GPS_INFO.VarioAvailable) {
     wcscat(statusmessage, gettext(TEXT("Vario connected")));
   } else {
@@ -799,7 +800,6 @@ void ShowStatus() {
     wcscat(statusmessage, gettext(TEXT("Logger OFF")));
   }
   wcscat(statusmessage, TEXT("\r\n"));
-#endif
 
   if (GPS_INFO.FLARM_Available) {
     if (GPS_INFO.FLARM_TX && GPS_INFO.FLARM_GPS) {
@@ -911,23 +911,17 @@ void FocusOnWindow(int i, bool selected) {
 
 
 DWORD CalculationThread (LPVOID lpvoid) {
-  bool infoarrived;
   bool theinfoboxesaredirty;
 
   NMEA_INFO     tmp_GPS_INFO;
   DERIVED_INFO  tmp_CALCULATED_INFO;
 
   while (!MapWindow::CLOSETHREAD) {
-    infoarrived = false;
+
     theinfoboxesaredirty = false;
 
-    if (GpsUpdated) {
-      infoarrived = true;
-    }
-    if (GPS_INFO.VarioAvailable && VarioUpdated) {
-      infoarrived = true;
-    }
-    if (infoarrived) {
+    if ((GpsUpdated) || 
+	(GPS_INFO.VarioAvailable && VarioUpdated)) {
 
       // make local copy before editing...
       LockFlightData();
@@ -969,7 +963,6 @@ DWORD CalculationThread (LPVOID lpvoid) {
         }
       }
 
-
       if (theinfoboxesaredirty) {
         InfoBoxesDirty = true;
       }
@@ -984,7 +977,6 @@ DWORD CalculationThread (LPVOID lpvoid) {
     } else {
       Sleep(100); // sleep a while
     }
-
   }
   return 0;
 }
@@ -1003,6 +995,25 @@ void CreateCalculationThread() {
   }
 }
 
+void dlgStartupShowModal(void);
+
+void PreloadInitialisation(void) {
+#if (NEWINFOBOX>0)
+  dlgStartupShowModal();
+#endif
+
+  // Registery (early)
+  RestoreRegistry();
+  ReadRegistrySettings();
+
+  // Interace (before interface)
+  ReadLanguageFile();
+  ReadStatusFile();
+
+  // Read input events.
+  InputEvents::readFile();
+
+}
 
 int WINAPI WinMain(     HINSTANCE hInstance,
                         HINSTANCE hPrevInstance,
@@ -1020,27 +1031,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   wcscat(XCSoar_Version, TEXT(__DATE__));
   // wcscat(XCSoar_Version, TEXT("4.5 BETA 4")); // Yet to be released
 
-  // load registry backup if it exists
-#if (WINDOWSPC>0)
-  LoadRegistryFromFile(TEXT("C:\\XCSoar\\NOR Flash\\xcsoar-registry.prf"));
-#endif
-#ifdef GNAV
-  LoadRegistryFromFile(TEXT("\\NOR Flash\\xcsoar-registry.prf"));
-#endif
-
-  // Registery (early)
-  ReadRegistrySettings();
-
-  // Interace (before interface)
-  ReadLanguageFile();
-  ReadStatusFile();
-
-  // Read input events.
-  InputEvents::readFile();
+  XCSoarGetOpts(lpCmdLine);
 
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
+
+  PreloadInitialisation();
+
   // Perform application initialization:
   if (!InitInstance (hInstance, nCmdShow))
     {
@@ -1306,7 +1304,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
   #endif
 
-
   hWndMainWindow = CreateWindow(szWindowClass, szTitle,
 				WS_SYSMENU|WS_CLIPCHILDREN
 				| WS_CLIPSIBLINGS,
@@ -1330,6 +1327,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   hBrushButton = (HBRUSH)CreateSolidBrush(ColorButton);
 
   GetClientRect(hWndMainWindow, &rc);
+  FullScreen();
 
 #if (WINDOWSPC>0)
   rc.left = 0;
@@ -1338,7 +1336,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   rc.bottom = SCREENHEIGHT;
 #endif
 
-  Units::LoadUnitBitmap(hInst);
+  Units::LoadUnitBitmap(hInstance);
 
   InfoBoxLayout::ScreenGeometry(rc);
 
@@ -1352,7 +1350,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
   ////////////////// do fonts
-
 
   ShowWindow(hWndMainWindow, SW_SHOW);
 
@@ -1413,8 +1410,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   // next font..
 
 #if (WINDOWSPC>0)
-  FontHeight/= 1.5;
-  FontWidth/= 1.5;
+  FontHeight= (int)(FontHeight/1.35);
+  FontWidth= (int)(FontWidth/1.35);
 #endif
 
   memset ((char *)&logfont, 0, sizeof (logfont));
@@ -1524,7 +1521,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   hWndMenuButton = CreateWindow(TEXT("BUTTON"),gettext(TEXT("Menu")),
 				WS_VISIBLE | WS_CHILD
 				| WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                0, 0,0,0,hWndMainWindow,NULL,hInst,NULL);
+                                0, 0,0,0,hWndMainWindow,NULL,hInstance,NULL);
 
   SendMessage(hWndMenuButton,WM_SETFONT,(WPARAM)TitleWindowFont,
 	      MAKELPARAM(TRUE,0));
@@ -1552,26 +1549,25 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     ShowWindow(hWndVarioWindow,SW_HIDE);
   }
 
-  /////////////
 
-    ShowWindow(hWndMenuButton, SW_HIDE);
-
-    ShowWindow(hWndMainWindow, nCmdShow);
-    UpdateWindow(hWndMainWindow);
-
-    ShowInfoBoxes();
-
-    #if NEWINFOBOX>0
-    // NOP not needed
-    #else
-    for(i=0;i<numInfoWindows;i++)
-      {
-        UpdateWindow(hWndInfoWindow[i]);
-        UpdateWindow(hWndTitleWindow[i]);
-      }
-    #endif
-
-    return TRUE;
+  ShowWindow(hWndMenuButton, SW_HIDE);
+  
+  ShowWindow(hWndMainWindow, nCmdShow);
+  UpdateWindow(hWndMainWindow);
+  
+  ShowInfoBoxes();
+  
+#if NEWINFOBOX>0
+  // NOP not needed
+#else
+  for(i=0;i<numInfoWindows;i++)
+    {
+      UpdateWindow(hWndInfoWindow[i]);
+      UpdateWindow(hWndTitleWindow[i]);
+    }
+#endif
+  
+  return TRUE;
 }
 
 
@@ -1970,14 +1966,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 #endif
               ) {
 
-		// save registry backup first (try a few places)
-#if (WINDOWSPC>0)
-		SaveRegistryToFile(TEXT("C:\\XCSoar\\NOR Flash\\xcsoar-registry.prf"));
-#else
-		SaveRegistryToFile(TEXT("\\NOR Flash\\xcsoar-registry.prf"));
-#endif
-		// SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
-		SaveRegistryToFile(LocalPath(TEXT("xcsoar-registry.prf")));
+		StoreRegistry();
 
 		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
 		SendMessage (hWnd, WM_CLOSE, 0, 0);
@@ -2871,6 +2860,7 @@ DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo)
         return 0;
     }
 
+#if (WINDOWSPC<1)
     SYSTEM_POWER_STATUS_EX2 sps;
 
     // request the power status
@@ -2883,6 +2873,7 @@ DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo)
         pBatteryInfo->chargeStatus = sps.BatteryFlag;
         pBatteryInfo->BatteryLifePercent = sps.BatteryLifePercent;
     }
+#endif
 
     return result;
 }

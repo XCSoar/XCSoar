@@ -173,10 +173,18 @@ void GaugeVario::Render() {
     xoffset = (rc.right-rc.left);
     yoffset = (rc.bottom-rc.top)/2;
     ValueHeight = (1 + Appearance.CDIWindowFont.CapitalHeight + 2 + Appearance.TitleWindowFont.CapitalHeight + 1);
+    /*
     orgTop.y = (ValueHeight/2 + ValueHeight);
     orgTop.x = rc.right;
     orgMiddle.y = orgTop.y + ValueHeight;
     orgMiddle.x = rc.right;
+    orgBottom.y = orgMiddle.y + ValueHeight;
+    orgBottom.x = rc.right;
+    */
+    orgMiddle.y = yoffset - ValueHeight/2;
+    orgMiddle.x = rc.right;
+    orgTop.y = orgMiddle.y-ValueHeight;
+    orgTop.x = rc.right;
     orgBottom.y = orgMiddle.y + ValueHeight;
     orgBottom.x = rc.right;
 

@@ -7,8 +7,10 @@
 
 
 void ReadAirspace(void);
-int FindAirspaceCircle(double Longditude,double Lattitude);
-int FindAirspaceArea(double Longditude,double Lattitude);
+int FindAirspaceCircle(double Longditude,double Lattitude,
+		       bool visibleonly=true);
+int FindAirspaceArea(double Longditude,double Lattitude,
+		     bool visibleonly=true);
 BOOL CheckAirspaceAltitude(double Base, double Top);
 void CloseAirspace(void);
 void FindNearestAirspace(double longitude, 

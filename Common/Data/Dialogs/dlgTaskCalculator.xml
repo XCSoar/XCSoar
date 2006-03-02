@@ -7,7 +7,7 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmTaskCalculator" Type="Dialog" X=0 Y=0 Width=246 Height=160 Caption="Task Calculator" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmTaskCalculator" Type="Dialog" X=5 Y=5 Width=246 Height=160 Caption="Task Calculator" Font=2  BackColor=0xDADBAB>
 
   <WndButton   Caption="OK"    X=2 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
   <WndButton   Caption="Cancel"    X=65 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCancelClicked" Tag=2/>

@@ -108,6 +108,7 @@ bool MapWindow::EnablePan = FALSE;
 
 BOOL MapWindow::CLOSETHREAD = FALSE;
 BOOL MapWindow::THREADRUNNING = TRUE;
+BOOL MapWindow::THREADEXIT = FALSE;
 
 bool MapWindow::BigZoom = true;
 
@@ -672,15 +673,15 @@ void MapWindow::Event_Pan(int vswitch) {
 
 void MapWindow::Event_SetZoom(double value) {
 
-  double lastRequestMapScale = RequestMapScale;
+  static double lastRequestMapScale = RequestMapScale;
 
   if (ScaleListCount > 0){
     RequestMapScale = FindMapScale(value);
   } else {
-    RequestMapScale = value;
-    RequestMapScale = max(0.01,min(160.0, RequestMapScale));
+    RequestMapScale = max(0.01,min(160.0, value));
   }
   if (lastRequestMapScale != RequestMapScale){
+    lastRequestMapScale = RequestMapScale;
     BigZoom = true;
     RefreshMap();
   }
@@ -689,42 +690,48 @@ void MapWindow::Event_SetZoom(double value) {
 
 void MapWindow::Event_ScaleZoom(int vswitch) {
 
-  double lastRequestMapScale = RequestMapScale;
+  static double lastRequestMapScale = RequestMapScale;
+  double value = RequestMapScale;
 
   if (ScaleListCount > 0){
-    RequestMapScale = StepMapScale(-vswitch);
+    value = StepMapScale(-vswitch);
   } else {
 
     if (vswitch==1) { // zoom in a little
-      RequestMapScale /= 1.414;
+      value /= 1.414;
     }
     if (vswitch== -1) { // zoom out a little
-      RequestMapScale *= 1.414;
+      value *= 1.414;
     }
     if (vswitch==2) { // zoom in a lot
-      RequestMapScale /= 2.0;
+      value /= 2.0;
     }
     if (vswitch== -2) { // zoom out a lot
-      RequestMapScale *= 2.0;
+      value *= 2.0;
     }
 
-    RequestMapScale = max(0.01,min(160.0, RequestMapScale));
+    RequestMapScale = max(0.01,min(160.0, value));
   }
 
   if (lastRequestMapScale != RequestMapScale){
+    lastRequestMapScale = RequestMapScale;
     BigZoom = true;
     RefreshMap();
 
     DrawMapScale(hdcScreen, MapRect, true);
-
   }
 }
 
 
+int MapWindow::GetMapResolutionFactor(void) {
+  return 30; // *InfoBoxLayout::scale;
+}
+
 double MapWindow::StepMapScale(int Step){
   ScaleCurrent += Step;
   ScaleCurrent = max(0,min(ScaleListCount-1, ScaleCurrent));
-  return((ScaleList[ScaleCurrent]*30)/Appearance.DefaultMapWidth);
+  return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
+	 /Appearance.DefaultMapWidth);
 }
 
 double MapWindow::FindMapScale(double Value){
@@ -732,7 +739,8 @@ double MapWindow::FindMapScale(double Value){
   int    i;
   double BestFit = 99999;
   int    BestFitIdx=-1;
-  double DesiredScale = (Value * Appearance.DefaultMapWidth) / 30;
+  double DesiredScale = (Value * Appearance.DefaultMapWidth) / 
+    GetMapResolutionFactor();
 
   for (i=0; i<ScaleListCount; i++){
     double err = fabs(DesiredScale - ScaleList[i])/DesiredScale;
@@ -744,7 +752,8 @@ double MapWindow::FindMapScale(double Value){
 
   if (BestFitIdx != -1){
     ScaleCurrent = BestFitIdx;
-    return((ScaleList[ScaleCurrent]*30)/Appearance.DefaultMapWidth);
+    return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
+	   /Appearance.DefaultMapWidth);
   }
   return(Value);
 }
@@ -1165,7 +1174,7 @@ void MapWindow::UpdateMapScale()
     
     DrawScale = MapScale/DISTANCEMODIFY;
     DrawScale = DrawScale/111000;
-    DrawScale = 30/DrawScale;
+    DrawScale = GetMapResolutionFactor()/DrawScale;
 
     useraskedforchange = true;
 
@@ -1192,7 +1201,7 @@ void MapWindow::UpdateMapScale()
       
       if(
          (DerivedDrawInfo.WaypointDistance 
-          < ( AutoZoomFactor * RequestMapScale / DISTANCEMODIFY))
+          < ( AutoZoomFactor * MapScale / DISTANCEMODIFY))
          || 
          (StartingAutoMapScale==0.0))
       {
@@ -1203,7 +1212,7 @@ void MapWindow::UpdateMapScale()
         // so save original map scale
 
         if (StartingAutoMapScale==0.0) {
-          StartingAutoMapScale = RequestMapScale;
+          StartingAutoMapScale = MapScale;
         }
 
         // set scale exactly so that waypoint distance is the zoom factor
@@ -1220,7 +1229,7 @@ void MapWindow::UpdateMapScale()
         // calculate scale factors for display etc.
         DrawScale = DerivedDrawInfo.WaypointDistance / AutoZoomFactor;
         DrawScale = DrawScale/111000;
-        DrawScale = 30/DrawScale;
+        DrawScale = GetMapResolutionFactor()/DrawScale;
 
 
       }	else {
@@ -1387,6 +1396,9 @@ void MapWindow::RenderMapWindow(  RECT rc)
       DrawTopology(hdcDrawWindowBg, rc);
     }
 
+    // then airspace..
+    DrawAirSpace(hdcDrawWindowBg, rc);
+
     if(TrailActive)
       DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
 
@@ -1395,9 +1407,6 @@ void MapWindow::RenderMapWindow(  RECT rc)
     } else {
       DrawTask(hdcDrawWindowBg, rc);
     }
-
-    // then airspace..
-    DrawAirSpace(hdcDrawWindowBg, rc);
 
     if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
       DrawGlideThroughTerrain(hdcDrawWindowBg, rc);
@@ -1477,10 +1486,11 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   MapScale = RequestMapScale;
   DrawScale = MapScale/DISTANCEMODIFY;
   DrawScale = DrawScale/111000;
-  DrawScale = 30/DrawScale;
+  DrawScale = GetMapResolutionFactor()/DrawScale;
   
   //  THREADRUNNING = FALSE;
-  
+  THREADEXIT = FALSE;
+
   GetClientRect(hWndMapWindow, &MapRectBig);
   
   MapRectSmall = MapRect;
@@ -1633,6 +1643,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
       UnlockTerrainDataCalculations();
     }
   }
+  THREADEXIT = TRUE;
   return 0;
 }
 
@@ -1699,7 +1710,8 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
 
   // JMW now corrects displayed aircraft heading for wind
 
-      dX = (double)Aircraft[i].x ;dY = (double)Aircraft[i].y;
+      dX = (double)Aircraft[i].x;
+      dY = (double)Aircraft[i].y;
       rotate(&dX, &dY, DisplayAircraftAngle+
              (DerivedDrawInfo.Heading-DrawInfo.TrackBearing) 
              );
@@ -1721,7 +1733,6 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
 
     for(i=0; i<NUMAIRCRAFTPOINTS; i++)
     {
-
       Aircraft[i].x -= 1;  Aircraft[i].y -= 1;
     }
 
@@ -1734,6 +1745,7 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
     DeleteObject(hbAircraftSolidBg);
     
   } else
+
   if (Appearance.Aircraft == afAircraftAltA){
 
     int i;
@@ -2242,7 +2254,8 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
       DrawDashLine(hdc, 2, WayPointList[Task[0].Index].Screen, Task[0].End, RGB(127,127,127));
       DrawDashLine(hdc, 2, WayPointList[Task[0].Index].Screen, Task[0].Start , RGB(127,127,127));
     }
-    tmp = StartRadius*DISTANCEMODIFY/MapScale; tmp = tmp * 30;
+    tmp = StartRadius*DISTANCEMODIFY/MapScale; 
+    tmp = tmp * GetMapResolutionFactor();
     SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
     Circle(hdc,WayPointList[Task[0].Index].Screen.x,WayPointList[Task[0].Index].Screen.y,(int)tmp, rc); 
   }
@@ -2259,7 +2272,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
         if(FAISector != TRUE)
         {
           tmp = SectorRadius*DISTANCEMODIFY/MapScale;
-          tmp = tmp * 30;
+          tmp = tmp * GetMapResolutionFactor();
           SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
           Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc); 
         }
@@ -2304,7 +2317,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
         if(Task[i].AATType == CIRCLE)
         {
           tmp = Task[i].AATCircleRadius * DISTANCEMODIFY/MapScale;
-          tmp = tmp * 30;
+          tmp = tmp * GetMapResolutionFactor();
 
           // this color is used as the black bit
           SetTextColor(hDCTemp, 
@@ -2317,7 +2330,10 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
           SelectObject(hdc, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
           SelectObject(hdc, GetStockObject(BLACK_PEN));
 
-          Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc); 
+          Circle(hdc,
+		 WayPointList[Task[i].Index].Screen.x,
+		 WayPointList[Task[i].Index].Screen.y,
+		 (int)tmp, rc); 
         }
         else
         {
@@ -2334,7 +2350,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
           SelectObject(hdc, GetStockObject(BLACK_PEN));
 
           tmp = Task[i].AATSectorRadius * DISTANCEMODIFY/MapScale;
-          tmp = tmp * 30;
+          tmp = tmp * GetMapResolutionFactor();
 
           Segment(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc, 
 		  Task[i].AATStartRadial+DisplayAngle, 
@@ -2738,12 +2754,13 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     Units_t        Unit;
 
     if (ScaleChangeFeedback)
-      MapWidth = (RequestMapScale * rc.right) / (30.0/1000.0);
+      MapWidth = (RequestMapScale * rc.right)*1000.0/GetMapResolutionFactor();
     else
-      MapWidth = (MapScale * rc.right) / (30.0/1000.0);
+      MapWidth = (MapScale * rc.right)*1000.0/GetMapResolutionFactor();
 
     oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
-    Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo, sizeof(ScaleInfo)/sizeof(TCHAR));
+    Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo, 
+			      sizeof(ScaleInfo)/sizeof(TCHAR));
     GetTextExtentPoint(hDC, ScaleInfo, _tcslen(ScaleInfo), &TextSize);
     LastMapWidth = (int)MapWidth;
 
@@ -3045,7 +3062,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
     } else {
       // JMW think this was missing before
       // NOPE, NOT A BUG
-      AirspaceCircle[i].Visible = false;
+      // JMW trying it without AirspaceCircle[i].Visible = false;
 
     }
   }
@@ -3091,7 +3108,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
     } else {
       // JMW think this was missing before
       // NOPE, NOT A BUG
-      AirspaceArea[i].Visible = false;
+      // JMW trying without      AirspaceArea[i].Visible = false;
     }
   }
 
@@ -3227,7 +3244,8 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
 void MapWindow::CreateDrawingThread(void)
 {
-  CLOSETHREAD = FALSE; 
+  CLOSETHREAD = FALSE;
+  THREADEXIT = FALSE;
   hDrawThread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )MapWindow::DrawThread, 0, 0, &dwDrawThreadID);
   SetThreadPriority(hDrawThread,THREAD_PRIORITY_NORMAL);
 }
@@ -3255,6 +3273,7 @@ void MapWindow::CloseDrawingThread(void)
   SuspendDrawingThread();
   SetThreadPriority(hDrawThread,THREAD_PRIORITY_ABOVE_NORMAL);
   UnlockTerrainDataGraphics();
+  while(!THREADEXIT) { Sleep(100); };
 }
 
 
@@ -3727,7 +3746,7 @@ void MapWindow::CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
       AirspaceCircle[i].ScreenY = scy;
       
       tmp = AirspaceCircle[i].Radius * DISTANCEMODIFY/MapScale;
-      tmp = tmp * 30;
+      tmp = tmp * GetMapResolutionFactor();
       
       AirspaceCircle[i].ScreenR = (int)tmp;
     }
@@ -4040,7 +4059,7 @@ double MapWindow::findMapScaleBarSize(RECT rc) {
   int range = rc.bottom-rc.top;
   int nbars = 0;
   int nscale = 1;
-  double pixelsize = MapScale/30; // km/pixel
+  double pixelsize = MapScale/GetMapResolutionFactor(); // km/pixel
   
   // find largest bar size that will fit in display
 

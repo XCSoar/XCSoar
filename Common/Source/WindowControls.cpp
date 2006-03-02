@@ -2519,6 +2519,7 @@ int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lPa
   case VK_RETURN:
     if (mOnListEnterCallback) {
       mOnListEnterCallback(this, &mListInfo);
+      //      RedrawScrolled(true);
       return(0);
     } else 
       return(1);

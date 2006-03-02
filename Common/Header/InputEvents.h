@@ -44,6 +44,8 @@ class InputEvents {
   static void eventMode(TCHAR *misc);
   static void eventStatus(TCHAR *misc);
   static void eventChecklist(TCHAR *misc);
+  static void eventCalculator(TCHAR *misc);
+  static void eventArmAdvance(TCHAR *misc);
   static void eventAnalysis(TCHAR *misc);
   static void eventWaypointDetails(TCHAR *misc);
   static void eventStatusMessage(TCHAR *misc);

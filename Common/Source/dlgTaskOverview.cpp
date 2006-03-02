@@ -28,6 +28,7 @@ Copyright_License {
 
 }
 */
+#if (NEWINFOBOX>0)
 
 
 #include "stdafx.h"
@@ -46,9 +47,10 @@ Copyright_License {
 void dlgTaskCalculatorShowModal(void);
 
 static WndForm *wf=NULL;
+static WndFrame *wfAdvanced=NULL;
 static WndListFrame *wTaskList=NULL;
 static WndOwnerDrawFrame *wTaskListEntry = NULL;
-
+static bool showAdvanced= false;
 
 static int UpLimit=0;
 static int LowLimit=0;
@@ -56,19 +58,6 @@ static int LowLimit=0;
 static int ItemIndex = -1;
 
 void dlgTaskWaypointShowModal(int itemindex, int type);
-
-
-static void UpdateList(void){
-
-  //
-
-  LowLimit =0;
-
-  wTaskList->ResetList();
-  wTaskList->Redraw();
-
-}
-
 
 
 static int DrawListIndex=0;
@@ -79,7 +68,8 @@ static bool fai_ok = false;
 static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 
   int n = UpLimit - LowLimit;
-  TCHAR sTmp[12];
+  TCHAR sTmp[120];
+  LockFlightData();
 
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
@@ -151,10 +141,13 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
       } 
     }
   }
+  UnlockFlightData();
+
 }
 
 
 static void OverviewRefreshTask(void) {
+  LockFlightData();
   RefreshTask();
 
   int i;
@@ -165,10 +158,9 @@ static void OverviewRefreshTask(void) {
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (Task[i].Index != -1) {
       lengthtotal += Task[i].Leg;
-      UpLimit = i;
+      UpLimit = i+1;
     }
   }
-  UpLimit++;
 
   // Simple FAI 2004 triangle rules 
   fai_ok = true;
@@ -186,9 +178,7 @@ static void OverviewRefreshTask(void) {
   }
 
   RefreshTaskStatistics();
-
-  UpdateList();
-
+  
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
@@ -200,11 +190,25 @@ static void OverviewRefreshTask(void) {
     wp->GetDataField()->SetAsFloat(dd/60.0);
     wp->RefreshDisplay();
   }
+  
+  LowLimit =0;
+  wTaskList->ResetList();
+  wTaskList->Redraw();
+  UnlockFlightData();
 
 }
 
 
-static void OnTaskListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo) {
+
+static void UpdateAdvanced(void) {
+  if (wfAdvanced) {
+    wfAdvanced->SetVisible(showAdvanced);
+  }
+}
+
+
+static void OnTaskListEnter(WindowControl * Sender, 
+		     WndListFrame::ListInfo_t *ListInfo) {
 
   ItemIndex = ListInfo->ItemIndex;
   if ((ItemIndex>= UpLimit) || (UpLimit==1)) {
@@ -212,7 +216,15 @@ static void OnTaskListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *Li
       ItemIndex= UpLimit;
     }
     // create new waypoint
-    Task[ItemIndex].Index = Task[0].Index;
+    if (ItemIndex>0) {
+      Task[ItemIndex].Index = Task[0].Index;
+    } else {
+      if (HomeWaypoint>=0) {
+	Task[ItemIndex].Index = HomeWaypoint;
+      } else {
+	Task[ItemIndex].Index = -1;
+      }
+    }    
     Task[ItemIndex].AATTargetOffsetRadius = 0.0;
     Task[ItemIndex].AATTargetOffsetRadial = 0.0;
     if (ItemIndex>0) {
@@ -231,6 +243,7 @@ static void OnTaskListEnter(WindowControl * Sender, WndListFrame::ListInfo_t *Li
     dlgTaskWaypointShowModal(ItemIndex, 1); // turnpoint
   }
   OverviewRefreshTask();
+
 }
 
 
@@ -299,6 +312,10 @@ static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   OverviewRefreshTask();
 }
 
+static void OnAdvancedClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+  showAdvanced = !showAdvanced;
+  UpdateAdvanced();
+}
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnTaskPaintListItem),
@@ -307,6 +324,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnCalcClicked),
   DeclearCallBackEntry(OnClearClicked),
   DeclearCallBackEntry(OnCloseClicked),
+  DeclearCallBackEntry(OnAdvancedClicked),
   DeclearCallBackEntry(OnSaveClicked),
   DeclearCallBackEntry(OnLoadClicked),
   DeclearCallBackEntry(NULL)
@@ -326,6 +344,9 @@ void dlgTaskOverviewShowModal(void){
   if (!wf) return;
 
   ASSERT(wf!=NULL);
+
+  wfAdvanced = ((WndFrame *)wf->FindByName(TEXT("frmAdvanced")));
+  ASSERT(wfAdvanced!=NULL);
 
   wTaskList = (WndListFrame*)wf->FindByName(TEXT("frmTaskList"));
   ASSERT(wTaskList!=NULL);
@@ -361,6 +382,8 @@ void dlgTaskOverviewShowModal(void){
   }
   */
 
+  UpdateAdvanced();
+
   wf->ShowModal();
 
   // now retrieve back the properties...
@@ -373,3 +396,4 @@ void dlgTaskOverviewShowModal(void){
 
 }
 
+#endif

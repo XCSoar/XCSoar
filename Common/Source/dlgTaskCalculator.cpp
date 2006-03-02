@@ -28,6 +28,7 @@ Copyright_License {
 
 }
 */
+#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 
@@ -165,3 +166,4 @@ void dlgTaskCalculatorShowModal(void){
 
 }
 
+#endif

@@ -103,11 +103,30 @@ static const int k_nLtDC	= 8;
 
 static const int k_nAreaCount = 11;
 static const TCHAR* k_strAreaStart[k_nAreaCount] = {
-					_T("R"),  _T("Q"), _T("P"), _T("A"), _T("B"), _T("CTR"),
-					_T("D"), _T("GP"), _T("W"), _T("E"), _T("F")};
+					_T("R"),  
+					_T("Q"), 
+					_T("P"), 
+					_T("A"), 
+					_T("B"), 
+					_T("CTR"),
+					_T("D"), 
+					_T("GP"), 
+					_T("W"), 
+					_T("E"), 
+					_T("F")
+};
 static const int k_nAreaType[k_nAreaCount] = {
-					RESTRICT, DANGER, PROHIBITED, CLASSA, CLASSB, CTR,
-					CLASSD, NOGLIDER, WAVE, CLASSE, CLASSF};
+					RESTRICT, 
+					DANGER, 
+					PROHIBITED, 
+					CLASSA, 
+					CLASSB, 
+					CTR,
+					CLASSD, 
+					NOGLIDER, 
+					WAVE, 
+					CLASSE, 
+					CLASSF};
 
 /////////////////////////////
 
@@ -1012,7 +1031,7 @@ void ReadAirspace(void)
 }
 
 
-int FindAirspaceCircle(double Longitude,double Latitude)
+int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
 {
   unsigned i;
   int NearestIndex = 0;
@@ -1025,8 +1044,7 @@ int FindAirspaceCircle(double Longitude,double Latitude)
 		
   for(i=0;i<NumberOfAirspaceCircles;i++)
     {
-      if(AirspaceCircle[i].Visible)
-	// JMW airspace visibility BUG!
+      if(AirspaceCircle[i].Visible || (!visibleonly))
 	{
 	  Dist = Distance(Latitude,Longitude,AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude);
 	  if(Dist < AirspaceCircle[i].Radius )
@@ -1124,7 +1142,7 @@ wn_PnPoly( AIRSPACE_POINT P, AIRSPACE_POINT* V, int n )
 
 
 
-int FindAirspaceArea(double Longitude,double Latitude)
+int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 {
   unsigned i;
 
@@ -1140,10 +1158,7 @@ int FindAirspaceArea(double Longitude,double Latitude)
 
   for(i=0;i<NumberOfAirspaceAreas;i++)
     {
-      if(AirspaceArea[i].Visible ) 
-        // JMW is this a bug?
-        // surely we should check it whether it is visible or not
-        // in almost all cases it will be, so ok.
+      if(AirspaceArea[i].Visible || (!visibleonly)) 
 	{
 	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, 
 				   AirspaceArea[i].Top.Altitude))
@@ -1194,7 +1209,7 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 		
   for(i=0;i<NumberOfAirspaceCircles;i++)
     {
-      if(AirspaceCircle[i].Visible) // JMW this is a problem BUG?
+      if(AirspaceCircle[i].Visible || 1) // JMW this is a problem BUG?
 	{
 	  Dist = Distance(latitude,longitude,
 			  AirspaceCircle[i].Latitude, 
@@ -1378,7 +1393,7 @@ int FindNearestAirspaceArea(double longitude, double latitude,
       // JMW is this a bug?
       // surely we should check it whether it is visible or not
       // in almost all cases it will be, so ok.
-      if(AirspaceArea[i].Visible ) 
+      if(AirspaceArea[i].Visible || 1) 
 	{
 	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, 
 				   AirspaceArea[i].Top.Altitude))
