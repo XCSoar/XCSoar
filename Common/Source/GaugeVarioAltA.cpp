@@ -507,10 +507,11 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
       SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
     }
 
-    if (vdiff > 0){ // to slow
+    if (vdiff > 0){ // too slow
 
       y += YOFFSET;
 
+      // JMW todo: use InfoBoxLayout::scale to scale sizes
       while (vdiff > 0){
         if (vdiff > DeltaVstep){
           Rectangle(hdcDrawWindow, x, y, x+11, y+3);

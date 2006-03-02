@@ -48,6 +48,7 @@ extern int UTCOffset;
 
 static bool changed = false;
 static bool taskchanged = false;
+static bool requirerestart = false;
 static int page=0;
 static WndForm *wf=NULL;
 static WndFrame *wConfig1=NULL;
@@ -145,10 +146,14 @@ static void OnVarioClicked(WindowControl * Sender){
 
 }
 
-void dlgAirspaceShowModal(void);
+void dlgAirspaceShowModal(bool);
 
 static void OnAirspaceColoursClicked(WindowControl * Sender){
-  dlgAirspaceShowModal();
+  dlgAirspaceShowModal(true);
+}
+
+static void OnAirspaceModeClicked(WindowControl * Sender){
+  dlgAirspaceShowModal(false);
 }
 
 static void OnNextClicked(WindowControl * Sender){
@@ -185,6 +190,7 @@ static void OnTestEnumData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnAirspaceColoursClicked),
+  DeclearCallBackEntry(OnAirspaceModeClicked),
   DeclearCallBackEntry(OnNextClicked),
   DeclearCallBackEntry(OnPrevClicked),
   DeclearCallBackEntry(OnVarioClicked),
@@ -943,6 +949,7 @@ void dlgConfigurationShowModal(void){
 
   changed = false;
   taskchanged = false;
+  requirerestart = false;
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceDisplay"));
   if (wp) {
@@ -1281,6 +1288,7 @@ void dlgConfigurationShowModal(void){
     temptext = dfe->GetPathFile();
     if (_tcscmp(temptext,szLanguageFile)) {
       SetRegistryString(szRegistryLanguageFile, temptext);
+      requirerestart = true;
       changed = true;
     }
   }
@@ -1292,6 +1300,7 @@ void dlgConfigurationShowModal(void){
     temptext = dfe->GetPathFile();
     if (_tcscmp(temptext,szStatusFile)) {
       SetRegistryString(szRegistryStatusFile, temptext);
+      requirerestart = true;
       changed = true;
     }
   }
@@ -1303,6 +1312,7 @@ void dlgConfigurationShowModal(void){
     temptext = dfe->GetPathFile();
     if (_tcscmp(temptext,szInputFile)) {
       SetRegistryString(szRegistryInputFile, temptext);
+      requirerestart = true;
       changed = true;
     }
   }
@@ -1364,6 +1374,7 @@ void dlgConfigurationShowModal(void){
       Appearance.IndFinalGlide = (IndFinalGlide_t)(wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryAppIndFinalGlide,(DWORD)(Appearance.IndFinalGlide));
       changed = true;
+      requirerestart = true;
     }
   }
 
@@ -1373,6 +1384,7 @@ void dlgConfigurationShowModal(void){
       Appearance.IndLandable = (IndLandable_t)(wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryAppIndLandable,(DWORD)(Appearance.IndLandable));
       changed = true;
+      requirerestart = true;
     }
   }
 
@@ -1381,6 +1393,7 @@ void dlgConfigurationShowModal(void){
     if ((int)(Appearance.InverseInfoBox) != wp->GetDataField()->GetAsInteger()) {
       Appearance.InverseInfoBox = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppInverseInfoBox,Appearance.InverseInfoBox);
+      requirerestart = true;
       changed = true;
     }
   }
@@ -1391,6 +1404,7 @@ void dlgConfigurationShowModal(void){
       Appearance.GaugeVarioSpeedToFly = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppGaugeVarioSpeedToFly,Appearance.GaugeVarioSpeedToFly);
       changed = true;
+      requirerestart = true;
     }
   }
 
@@ -1400,6 +1414,7 @@ void dlgConfigurationShowModal(void){
       Appearance.GaugeVarioAvgText = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppGaugeVarioAvgText,Appearance.GaugeVarioAvgText);
       changed = true;
+      requirerestart = true;
     }
   }
 
@@ -1551,6 +1566,10 @@ void dlgConfigurationShowModal(void){
     StoreRegistry();
     DoStatusMessage(TEXT("Configuration saved"));
   };
+
+  if (requirerestart) {
+    DoStatusMessage(TEXT("Changes require XCSoar to be reset"));
+  }
 
   delete wf;
 

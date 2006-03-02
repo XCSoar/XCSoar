@@ -56,7 +56,7 @@ void dlgStartupShowModal(void){
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);
 
-  TCHAR temp[200];
+  TCHAR temp[MAX_PATH];
 
   _stprintf(temp,TEXT("XCSoar: Version %s"), XCSoar_Version);
   wf->SetCaption(temp);
@@ -75,6 +75,15 @@ void dlgStartupShowModal(void){
   }
 
   wf->ShowModal();
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpProfile"));
+  if (wp) {
+    DataFieldFileReader* dfe;
+    dfe = (DataFieldFileReader*)wp->GetDataField();
+    if (_tcslen(dfe->GetPathFile())>0) {
+      _tcscpy(startProfileFile,dfe->GetPathFile());
+    }
+  }
 
   delete wf;
 

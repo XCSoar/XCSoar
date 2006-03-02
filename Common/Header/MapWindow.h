@@ -157,6 +157,7 @@ class MapWindow {
   // 12 is number of airspace types
   static int	iAirspaceBrush[AIRSPACECLASSCOUNT]; 
   static int	iAirspaceColour[AIRSPACECLASSCOUNT];
+  static int    iAirspaceMode[AIRSPACECLASSCOUNT];
   static HPEN hAirspacePens[AIRSPACECLASSCOUNT];
   static bool bAirspaceBlackOutline;
   static HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];

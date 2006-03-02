@@ -1843,6 +1843,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 			Calculated->NextLatitude, false);
   if(i != -1)
     {
+
       if(i == AirspaceLastCircle)
         {   // already being displayed
           return;

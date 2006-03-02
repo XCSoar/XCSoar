@@ -1540,7 +1540,7 @@ void SystemConfiguration(void);
 void dlgBasicSettingsShowModal(void);
 void dlgWindSettingsShowModal(void);
 void dlgTaskOverviewShowModal(void);
-void dlgAirspaceShowModal(void);
+void dlgAirspaceShowModal(bool);
 #endif
 
 void InputEvents::eventSetup(TCHAR *misc) {
@@ -1571,9 +1571,9 @@ void InputEvents::eventSetup(TCHAR *misc) {
   } else 
   if (_tcscmp(misc,TEXT("Airspace"))==0){
 #if NEWINFOBOX > 0
-    dlgAirspaceShowModal();
+    dlgAirspaceShowModal(false);
 #else
-	0;
+    0;
 #endif;
   }
 

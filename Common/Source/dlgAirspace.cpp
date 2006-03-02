@@ -48,6 +48,7 @@ static WndListFrame *wAirspaceList=NULL;
 static WndOwnerDrawFrame *wAirspaceListEntry = NULL;
 
 static int ItemIndex = -1;
+static bool colormode = false;
 
 int dlgAirspaceColoursShowModal(void);
 int dlgAirspacePatternsShowModal(void);
@@ -116,24 +117,55 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
 	       label,
 	       _tcslen(label), 
 	       NULL);
-    SelectObject(hDC, GetStockObject(WHITE_PEN));
-    SelectObject(hDC, GetStockObject(WHITE_BRUSH));
-    Rectangle(hDC, 
-              100*InfoBoxLayout::scale, 
-              2*InfoBoxLayout::scale,
-              180*InfoBoxLayout::scale,
-              22*InfoBoxLayout::scale);
-    SetTextColor(hDC, 
-		 MapWindow::Colours[MapWindow::iAirspaceColour[i]]);
-    SetBkColor(hDC, 
-	       RGB(0xFF, 0xFF, 0xFF));
-    SelectObject(hDC, 
-		 MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[i]]);
-    Rectangle(hDC, 
-              100*InfoBoxLayout::scale, 
-              2*InfoBoxLayout::scale,
-              180*InfoBoxLayout::scale,
-              22*InfoBoxLayout::scale);
+
+    if (colormode) {
+
+      SelectObject(hDC, GetStockObject(WHITE_PEN));
+      SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+      Rectangle(hDC, 
+		100*InfoBoxLayout::scale, 
+		2*InfoBoxLayout::scale,
+		180*InfoBoxLayout::scale,
+		22*InfoBoxLayout::scale);
+      SetTextColor(hDC, 
+		   MapWindow::Colours[MapWindow::iAirspaceColour[i]]);
+      SetBkColor(hDC, 
+		 RGB(0xFF, 0xFF, 0xFF));
+      SelectObject(hDC, 
+		   MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[i]]);
+      Rectangle(hDC, 
+		100*InfoBoxLayout::scale, 
+		2*InfoBoxLayout::scale,
+		180*InfoBoxLayout::scale,
+		22*InfoBoxLayout::scale);
+    } else {
+      bool iswarn;
+      bool isdisplay;
+
+      iswarn = (MapWindow::iAirspaceMode[i]>=2);
+      isdisplay = (MapWindow::iAirspaceMode[i]%2);
+      if (iswarn) {
+	_tcscpy(label, TEXT("Warn"));
+	ExtTextOut(hDC, 
+		   90*InfoBoxLayout::scale, 
+		   2*InfoBoxLayout::scale,
+		   ETO_OPAQUE, NULL,
+		   label,
+		   _tcslen(label), 
+		   NULL);
+      }
+      if (isdisplay) {
+	_tcscpy(label, TEXT("Display"));
+	ExtTextOut(hDC, 
+		   150*InfoBoxLayout::scale, 
+		   2*InfoBoxLayout::scale,
+		   ETO_OPAQUE, NULL,
+		   label,
+		   _tcslen(label), 
+		   NULL);
+      }
+
+    }
 
   }
 }
@@ -149,16 +181,25 @@ static void OnAirspaceListEnter(WindowControl * Sender,
     ItemIndex = AIRSPACECLASSCOUNT-1;
   }
   if (ItemIndex>=0) {
-    int c = dlgAirspaceColoursShowModal();
-    if (c>=0) {
-      MapWindow::iAirspaceColour[ItemIndex] = c; 
-      SetRegistryColour(ItemIndex,MapWindow::iAirspaceColour[ItemIndex]);
-      changed = true;
-    }
-    int p = dlgAirspacePatternsShowModal();
-    if (p>=0) {
-      MapWindow::iAirspaceBrush[ItemIndex] = p; 
-      SetRegistryBrush(ItemIndex,MapWindow::iAirspaceBrush[ItemIndex]);
+
+    if (colormode) {
+      int c = dlgAirspaceColoursShowModal();
+      if (c>=0) {
+	MapWindow::iAirspaceColour[ItemIndex] = c; 
+	SetRegistryColour(ItemIndex,MapWindow::iAirspaceColour[ItemIndex]);
+	changed = true;
+      }
+      int p = dlgAirspacePatternsShowModal();
+      if (p>=0) {
+	MapWindow::iAirspaceBrush[ItemIndex] = p; 
+	SetRegistryBrush(ItemIndex,MapWindow::iAirspaceBrush[ItemIndex]);
+	changed = true;
+      }
+    } else {
+      int v = (MapWindow::iAirspaceMode[ItemIndex]+1)%4;
+      MapWindow::iAirspaceMode[ItemIndex] = v;
+      //  wAirspaceList->Redraw();
+      SetRegistryAirspaceMode(ItemIndex);
       changed = true;
     }
   }
@@ -188,7 +229,9 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
-void dlgAirspaceShowModal(void){
+void dlgAirspaceShowModal(bool coloredit){
+
+  colormode = coloredit;
 
   ItemIndex = -1;
 

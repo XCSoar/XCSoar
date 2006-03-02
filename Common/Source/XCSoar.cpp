@@ -1327,7 +1327,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   hBrushButton = (HBRUSH)CreateSolidBrush(ColorButton);
 
   GetClientRect(hWndMainWindow, &rc);
-  FullScreen();
 
 #if (WINDOWSPC>0)
   rc.left = 0;
@@ -1567,6 +1566,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     }
 #endif
   
+  FullScreen();
+
   return TRUE;
 }
 
