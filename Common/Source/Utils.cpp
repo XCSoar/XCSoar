@@ -89,6 +89,23 @@ TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
 				  TEXT("Brush14")
 }; // pL
 
+TCHAR *szRegistryAirspaceMode[] =     {  TEXT("AirspaceMode0"),
+					 TEXT("AirspaceMode1"),
+					 TEXT("AirspaceMode2"),
+					 TEXT("AirspaceMode3"),
+					 TEXT("AirspaceMode4"),
+					 TEXT("AirspaceMode5"),
+					 TEXT("AirspaceMode6"),
+					 TEXT("AirspaceMode7"),
+					 TEXT("AirspaceMode8"),
+					 TEXT("AirspaceMode9"),
+					 TEXT("AirspaceMode10"),
+					 TEXT("AirspaceMode11"),
+					 TEXT("AirspaceMode12"),
+					 TEXT("AirspaceMode13"),
+					 TEXT("AirspaceMode14")
+}; // pL
+
 
 TCHAR szRegistryAirspaceWarning[]= TEXT("AirspaceWarn");
 TCHAR szRegistryAirspaceBlackOutline[]= TEXT("AirspaceBlackOutline");
@@ -310,22 +327,22 @@ void ReadRegistrySettings(void)
   if(GetFromRegistry(szRegistryAltMargin,&Temp)==ERROR_SUCCESS)
     AltWarningMargin = Temp;
 
-  Temp=SAFETYALTITUDEARRIVAL;
+  Temp=(DWORD)SAFETYALTITUDEARRIVAL;
   GetFromRegistry(szRegistrySafetyAltitudeArrival,&Temp);
   if(Temp != 0)
     SAFETYALTITUDEARRIVAL = (double)Temp;
 
-  Temp=SAFETYALTITUDEBREAKOFF;
+  Temp=(DWORD)SAFETYALTITUDEBREAKOFF;
   GetFromRegistry(szRegistrySafetyAltitudeBreakOff,&Temp);
   if(Temp != 0)
     SAFETYALTITUDEBREAKOFF = (double)Temp;
 
-  Temp=SAFETYALTITUDETERRAIN;
+  Temp=(DWORD)SAFETYALTITUDETERRAIN;
   GetFromRegistry(szRegistrySafetyAltitudeTerrain,&Temp);
   if(Temp != 0)
     SAFETYALTITUDETERRAIN = (double)Temp;
 
-  Temp=SAFTEYSPEED;
+  Temp=(DWORD)SAFTEYSPEED;
   GetFromRegistry(szRegistrySafteySpeed,&Temp);
   if(Temp != 0)
     SAFTEYSPEED = (double)Temp;
@@ -346,6 +363,8 @@ void ReadRegistrySettings(void)
 
   for(i=0;i<AIRSPACECLASSCOUNT;i++)
     {
+      MapWindow::iAirspaceMode[i] = GetRegistryAirspaceMode(i);
+
       Temp=0;
       if(GetFromRegistry(szRegistryBrush[i],&Temp)==ERROR_SUCCESS)
         MapWindow::iAirspaceBrush[i] =			(int)Temp;
@@ -1381,6 +1400,19 @@ void SetRegistryBrush(int i, DWORD c)
 }
 
 
+void SetRegistryAirspaceMode(int i)
+{
+  DWORD val = MapWindow::iAirspaceMode[i];
+  SetToRegistry(szRegistryAirspaceMode[i], val);
+}
+
+int GetRegistryAirspaceMode(int i) {
+  DWORD Temp= 3; // display + warnings
+  GetFromRegistry(szRegistryAirspaceMode[i],&Temp);
+  return Temp;
+}
+
+
 void ReadAssetNumber(void)
 {
   strAssetNumber[0]= _T('A');
@@ -1876,7 +1908,7 @@ void SaveWindToRegistry() {
   DWORD Temp;
   Temp = iround(CALCULATED_INFO.WindSpeed);
   SetToRegistry(szRegistryWindSpeed,Temp);
-  Temp = CALCULATED_INFO.WindBearing;
+  Temp = iround(CALCULATED_INFO.WindBearing);
   SetToRegistry(szRegistryWindBearing,Temp);
 }
 

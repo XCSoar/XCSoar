@@ -37,6 +37,7 @@ Copyright_License {
 #include "dialogs.h"
 #include "Utils.h"
 #include "XCSoar.h"
+#include "MapWindow.h"
 
 #include <windows.h>
 #include <Commctrl.h>
@@ -1044,6 +1045,10 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
 
   for(i=0;i<NumberOfAirspaceCircles;i++)
     {
+      if (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]< 2) {
+	// don't want warnings for this one
+	continue;
+      }
       if(AirspaceCircle[i].Visible || (!visibleonly))
 	{
 	  Dist = Distance(Latitude,Longitude,AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude);
@@ -1158,6 +1163,11 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 
   for(i=0;i<NumberOfAirspaceAreas;i++)
     {
+      if (MapWindow::iAirspaceMode[AirspaceArea[i].Type]< 2) {
+	// don't want warnings for this one
+	continue;
+      }
+
       if(AirspaceArea[i].Visible || (!visibleonly))
 	{
 	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
@@ -1209,6 +1219,11 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 
   for(i=0;i<NumberOfAirspaceCircles;i++)
     {
+      if (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]< 2) {
+	// don't want warnings for this one
+	continue;
+      }
+
       if(AirspaceCircle[i].Visible || 1) // JMW this is a problem BUG?
 	{
 	  Dist = Distance(latitude,longitude,
@@ -1390,6 +1405,11 @@ int FindNearestAirspaceArea(double longitude, double latitude,
 
   for(i=0;i<NumberOfAirspaceAreas;i++)
     {
+      if (MapWindow::iAirspaceMode[AirspaceArea[i].Type]< 2) {
+	// don't want warnings for this one
+	continue;
+      }
+
       // JMW is this a bug?
       // surely we should check it whether it is visible or not
       // in almost all cases it will be, so ok.
@@ -1480,19 +1500,25 @@ void FindNearestAirspace(double longitude, double latitude,
 			 double *nearestdistance, double *nearestbearing,
 			 int *foundcircle, int *foundarea)
 {
-
-  *nearestdistance = 100000; // 100 km
-  *nearestbearing = 0;
+  double nearestd1 = 100000; // 100km
+  double nearestd2 = 100000; // 100km
+  double nearestb1 = 0;
+  double nearestb2 = 0;
 
   *foundcircle = FindNearestAirspaceCircle(longitude, latitude,
-					   nearestdistance, nearestbearing);
-
-  if (*nearestdistance<0) {
-    // we are inside already
-    return;
-  }
+					   &nearestd1, &nearestb1);
 
   *foundarea = FindNearestAirspaceArea(longitude, latitude,
-					   nearestdistance, nearestbearing);
+				       &nearestd2, &nearestb2);
+
+  if (nearestd1<nearestd2) {
+    *nearestdistance = nearestd1;
+    *nearestbearing = nearestb1;
+    *foundarea = -1;
+  } else {
+    *nearestdistance = nearestd2;
+    *nearestbearing = nearestb2;
+    *foundcircle = -1;
+  }
 
 }

@@ -85,6 +85,8 @@ HRESULT SetRegistryString(const TCHAR *szRegValue, TCHAR *Pos);
 void ReadRegistrySettings(void);
 void SetRegistryColour(int i, DWORD c);
 void SetRegistryBrush(int i, DWORD c);
+void SetRegistryAirspaceMode(int i);
+int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
 void rotate(double *xin, double *yin, double angle);
 void frotate(float *xin, float *yin, float angle);

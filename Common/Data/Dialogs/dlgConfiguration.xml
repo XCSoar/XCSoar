@@ -15,6 +15,9 @@
 
   <WndFrame Name="frmAirspace" X=70 Y=0 Width=246 Height=222 Font=2>
 
+  <WndButton Name="cmdAirspaceColours"  Caption="Colours" X=100 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnAirspaceColoursClicked" />
+  <WndButton Name="cmdAirspaceMode"  Caption="Filter" X=170 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnAirspaceModeClicked" />
+
     <WndProperty Name="prpAirspaceDisplay" Caption="Airspace display"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
@@ -50,8 +53,6 @@
   <WndProperty Name="prpAdditionalAirspaceFile" Caption="Airspace 2"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
-
-  <WndButton Name="cmdAirspaceColours"  Caption="Colours" X=100 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnAirspaceColoursClicked" />
 
   </WndFrame>
 

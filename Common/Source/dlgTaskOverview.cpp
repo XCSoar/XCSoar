@@ -39,6 +39,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "Statistics.h"
 #include "Externs.h"
+#include "Dialogs.h"
 #include "McReady.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
@@ -302,6 +303,7 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   TCHAR filename[100];
   GetTaskFileName(filename);
   SaveTask(filename);
+  DoStatusMessage(TEXT("Task saved"));
 }
 
 
