@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document base="about/">
+<document>
+	<!-- NO base="about/" to prevent adding it to http:// -->
         <metadata>
                 <title>About</title>
         </metadata>

@@ -9,6 +9,23 @@
 		<p>More hello from front page...</p>
 	</frontpage>
 
+	<!--
+	<section>
+		<title>Test</title>
+		Text outside of paragraph, before first.
+		<p>
+			First level of paragraph.
+			<p>
+				A deeper one...
+				<p>
+					Yet more.
+				</p>
+			</p>
+		</p>
+		Text outside of paragraph, after last.
+	</section>
+	-->
+
 	<!-- NOTES
 
 		This document should contain no real text

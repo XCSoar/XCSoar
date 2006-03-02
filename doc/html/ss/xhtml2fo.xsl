@@ -52,6 +52,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <!-- hyphenate: true | false -->
   <xsl:param name="hyphenate">false</xsl:param>
 
+  <!-- start-indent: How much start indent for blocks like p etc -->
+  <xsl:param name="start-indent">30pt</xsl:param>
+
+
+  <!-- heading-numbers: 0.. 6 0=none 2 = 1 and 2 -->
+  <xsl:param name="heading-numbers">2</xsl:param>
 
   <!--======================================================================
       Attribute Sets
@@ -95,6 +101,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
 
   <xsl:attribute-set name="h1">
+    <xsl:attribute name="border-bottom">2px solid</xsl:attribute>
     <xsl:attribute name="font-size">2em</xsl:attribute>
     <xsl:attribute name="font-weight">bold</xsl:attribute>
     <xsl:attribute name="space-before">0.67em</xsl:attribute>
@@ -152,12 +159,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <xsl:attribute-set name="p">
     <xsl:attribute name="space-before">1em</xsl:attribute>
     <xsl:attribute name="space-after">1em</xsl:attribute>
+    <xsl:attribute name="start-indent"><xsl:value-of select="$start-indent"/></xsl:attribute>
     <!-- e.g.,
     <xsl:attribute name="text-indent">1em</xsl:attribute>
     -->
   </xsl:attribute-set>
 
   <xsl:attribute-set name="p-initial" use-attribute-sets="p">
+    <xsl:attribute name="start-indent"><xsl:value-of select="$start-indent"/></xsl:attribute>
     <!-- initial paragraph, preceded by h1..6 or div -->
     <!-- e.g.,
     <xsl:attribute name="text-indent">0em</xsl:attribute>
@@ -165,6 +174,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </xsl:attribute-set>
 
   <xsl:attribute-set name="p-initial-first" use-attribute-sets="p-initial">
+    <xsl:attribute name="start-indent"><xsl:value-of select="$start-indent"/></xsl:attribute>
     <!-- initial paragraph, first child of div, body or td -->
   </xsl:attribute-set>
 
@@ -200,6 +210,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <xsl:attribute-set name="ul">
     <xsl:attribute name="space-before">1em</xsl:attribute>
     <xsl:attribute name="space-after">1em</xsl:attribute>
+    <xsl:attribute name="start-indent">inherited-property-value(start-indent) + <xsl:value-of select="$start-indent"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="ul-nested">
@@ -210,6 +221,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <xsl:attribute-set name="ol">
     <xsl:attribute name="space-before">1em</xsl:attribute>
     <xsl:attribute name="space-after">1em</xsl:attribute>
+    <xsl:attribute name="start-indent">inherited-property-value(start-indent) + <xsl:value-of select="$start-indent"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="ol-nested">
@@ -437,6 +449,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
 
   <xsl:attribute-set name="img">
+    <xsl:attribute name="start-indent">inherited-property-value(start-indent)</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="img-link">
@@ -570,8 +583,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
 
   <xsl:template name="process-common-attributes-and-children">
+    <xsl:param name="before"/>
+    <xsl:param name="after"/>
     <xsl:call-template name="process-common-attributes"/>
+    <xsl:copy-of select="$before"/>
     <xsl:apply-templates/>
+    <xsl:copy-of select="$after"/>
   </xsl:template>
 
   <xsl:template name="process-common-attributes">
@@ -708,13 +725,29 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
   <xsl:template match="html:h1">
     <fo:block xsl:use-attribute-sets="h1" id="{generate-id()}">
-      <xsl:call-template name="process-common-attributes-and-children"/>
+      <xsl:call-template name="process-common-attributes-and-children">
+	<!-- Moving this code to manual2xhtml due to easier section handling
+        <xsl:with-param name="before">
+          <xsl:value-of select="count(preceding-sibling::html:h1) + 1"/>
+          <xsl:text>: </xsl:text>
+        </xsl:with-param>
+	-->
+      </xsl:call-template>
     </fo:block>
   </xsl:template>
 
   <xsl:template match="html:h2">
     <fo:block xsl:use-attribute-sets="h2" id="{generate-id()}">
-      <xsl:call-template name="process-common-attributes-and-children"/>
+      <xsl:call-template name="process-common-attributes-and-children">
+	<!-- Moving this code to manual2xhtml due to easier section handling
+        <xsl:with-param name="before">
+          <xsl:value-of select="count(preceding-sibling::html:h1) + 1"/>
+          <xsl:text>.</xsl:text>
+          <xsl:value-of select="count(preceding-sibling::html:h2) + 1"/>
+          <xsl:text>: </xsl:text>
+        </xsl:with-param>
+	-->
+      </xsl:call-template>
     </fo:block>
   </xsl:template>
 
@@ -725,19 +758,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </xsl:template>
 
   <xsl:template match="html:h4">
-    <fo:block xsl:use-attribute-sets="h4">
+    <fo:block xsl:use-attribute-sets="h4" id="{generate-id()}">
       <xsl:call-template name="process-common-attributes-and-children"/>
     </fo:block>
   </xsl:template>
 
   <xsl:template match="html:h5">
-    <fo:block xsl:use-attribute-sets="h5">
+    <fo:block xsl:use-attribute-sets="h5" id="{generate-id()}">
       <xsl:call-template name="process-common-attributes-and-children"/>
     </fo:block>
   </xsl:template>
 
   <xsl:template match="html:h6">
-    <fo:block xsl:use-attribute-sets="h6">
+    <fo:block xsl:use-attribute-sets="h6" id="{generate-id()}">
       <xsl:call-template name="process-common-attributes-and-children"/>
     </fo:block>
   </xsl:template>
@@ -1817,6 +1850,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 				</fo:block>
 			</fo:flow>
 		</fo:page-sequence>
+	</xsl:template>
+
+	<!-- XXX (debugging) Ignore these - only here for my debugging -->
+	<xsl:template match="html:comment">
+		<fo:block xsl:use-attribute-sets="p">
+			<xsl:call-template name="process-common-attributes-and-children">
+				<xsl:with-param name="before">DEBUG: </xsl:with-param>
+			</xsl:call-template>
+		</fo:block>
 	</xsl:template>
 
 </xsl:stylesheet>

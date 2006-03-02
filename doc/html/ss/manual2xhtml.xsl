@@ -77,11 +77,51 @@ XXX Not working - see manual2temp.xsl !
 			<xsl:value-of select="count(ancestor::section) + 1"/>
 		</xsl:variable>
 		<xsl:element name="{$hl}">
+			<!-- The BROKEN heading counter - h1 works, but h2 does not 
+				* h1 & h2 fail some times due to the fact that
+				  the section levels may be inside a document - 
+				  which should be ingored
+				* h2 is not picking up the correct first part heading 
+
+			<xsl:choose>
+				<xsl:when test="$hl = 'h1'">
+					<xsl:call-template name="section-count" select="."/>
+					<xsl:text>: </xsl:text>
+				</xsl:when>
+				<xsl:when test="$hl = 'h2'">
+					<xsl:call-template name="section-count" select=".."/>
+					<xsl:text>.</xsl:text>
+					<xsl:call-template name="section-count" select="."/>
+					<xsl:text>: </xsl:text>
+				</xsl:when>
+			</xsl:choose>
+			 -->
 			<xsl:value-of select="title"/>
 		</xsl:element>
 	</xsl:if>
 
+	<!-- Experiment to captue the funny section with no paragraph 
+	-->
+	<p>
+		<xsl:choose>
+			<xsl:when test="title">
+				<xsl:value-of select="normalize-space(text()[2])"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="normalize-space(text()[1])"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</p>
 	<xsl:apply-templates/>
+</xsl:template>
+
+<!-- Remove ALL text from a section - note that the necessary text is copied in
+	section template above
+-->
+<xsl:template match="section/text()"/>
+
+<xsl:template name="section-count">
+	<xsl:value-of select="count(preceding-sibling::section) + 1"/>
 </xsl:template>
 
 <xsl:template match="screenshots">
@@ -93,7 +133,10 @@ XXX Not working - see manual2temp.xsl !
 <xsl:template match="img">
 	<img>
 		<xsl:attribute name="src">
-			<xsl:value-of select="ancestor::document/@base"/>
+			<!-- XXX This is not working !!! -->
+			<xsl:if test="not(substring-before(ancestor::document/@base, ':') = 'http')">
+				<xsl:value-of select="ancestor::document/@base"/>
+			</xsl:if>
 			<xsl:value-of select="@src"/>
 		</xsl:attribute>
 	</img>
@@ -129,7 +172,7 @@ XXX Not working - see manual2temp.xsl !
 <xsl:template match="h4"></xsl:template>
 <xsl:template match="title"></xsl:template>
 
-<xsl:template match="faq">
+<xsl:template match="faqXXX">
 	<!-- XXX Need to fix this hard coded h4 !!! -->
 
 	<!-- XXX This section not really required here - as we have the

@@ -5,6 +5,7 @@
         </metadata>
 
         <section>
+		<title>Quick start guide</title>
 
 		<!-- XXX future update to use XML list of images -->
 
@@ -272,6 +273,7 @@ The following screenshots show settings available for AAT tasks.
 
 
 <!--
+XXX - should use this !!!
 
 Introduction
 This guide will help you get up and running with XCSoar, the Open Source soaring and navigation software for PDAs.

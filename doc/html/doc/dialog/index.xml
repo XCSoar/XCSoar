@@ -6,27 +6,35 @@
 
 <section>
         <title>Dialog Windows</title>
-
-
-Dialog Windows
-
+<p>
 Many of the dialog windows have multiple pages of information and are
 controlled in a consistent fashion.  Press the '$>>$' button to select
 the next page of the dialog, and the 'OK' button do make the dialog
 disappear.
+</p>
 
-\subsection{Waypoint details}
+<section>
+	<title>Waypoint Details</title>
+<p>
 Several ways of selecting a waypoint are available:
-\begin{itemize}
-\item Touch its name or the waypoint symbol on the map screen if it is visible.
-\item If the waypoint is in the active task, highlight the waypoint InfoBox, then use the up/down arrow keys to select the desired waypoint, and press the
-enter key.
-\item From the Task dialog, find and highlight the waypoint in
- the waypoint list, then press the 'Details' button.
-\end{itemize}
-The display will now show the waypoint details dialog.
+</p>
 
+<ul>
+<li> Touch its name or the waypoint symbol on the map screen if it is
+visible.</li>
+<li> If the waypoint is in the active task, highlight the waypoint InfoBox, then use the up/down arrow keys to select the desired waypoint, and press the
+enter key.</li>
+<li> From the Task dialog, find and highlight the waypoint in
+ the waypoint list, then press the 'Details' button.</li>
+</ul>
+<p>
+The display will now show the waypoint details dialog.
+</p>
+
+<p>
 The waypoint details dialog contains several pages:
+</p>
+
 \begin{description}
 \item[Waypoint details]  
 This page contains text describing the waypoint's location, elevation
@@ -67,7 +75,10 @@ waypoint.
 Depending on the configuration files specified in the settings, not
 all of these pages may be available.
 
-\subsection{Analysis}
+</section>
+
+<section>
+	<title>Analysis</title>
 
 To activate the analysis dialog, select the 'Analysis' option from the
 main menu.
@@ -117,7 +128,10 @@ The analysis dialog contains several pages:
 
 \end{description}
 
-\subsection{Status}\label{sec:status}
+<section>
+
+<section>
+	<title>Status</title>
 
 The status dialog is a single page of text summarising the status of
 the aircraft, task, and connected devices, including:
@@ -133,7 +147,10 @@ XXX ?? anything else, FLARM, PDA battery, glider battery?
 
 {\it DIAGRAM SHOWING STATUS DIALOG}
 
-\subsection{Bugs and ballast}
+</section>
+
+<section>
+	<title>Bugs and ballast</title>
 
 Use the Bugs/Ballast dialog to modify the polar of the glider both
 before and during flight.  The bugs settings determines the amount the
@@ -148,7 +165,10 @@ modifies the polar to account for a full load of water ballast.
 
 {\it DIAGRAM SHOWING BUGS AND BALLAST DIALOG}
 
-\subsection{Pressure}
+</section>
+
+<section>
+	<title>Pressure</title>
 
 Use this dialog both before and during the flight to record the mean
 sea level atmospheric pressure, also known as QNH pressure.  The
@@ -156,6 +176,7 @@ software uses the values entered to convert airspace flight levels
 into altitudes.
 
 {\it DIAGRAM SHOWING PRESSURE DIALOG}
+</section>
 
 </section>
 </document>
