@@ -277,6 +277,7 @@ class DataFieldFileReader: public DataField {
   void Dec(void);
 
   void addFile(TCHAR *fname, TCHAR *fpname);
+  int GetNumFiles(void);
 
   int GetAsInteger(void);
   TCHAR *GetAsString(void);
