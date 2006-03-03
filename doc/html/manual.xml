@@ -5,8 +5,10 @@
         </metadata>
 
 	<frontpage>
-		<img src="logo/xcsoar-big.gif"/>
-		<p>More hello from front page...</p>
+		<img src="logo/xcsoar.png"/>
+		<p>XCSoar Gliding Software</p>
+		<p>User Manual</p>
+		<p> - DRAFT -</p>
 	</frontpage>
 
 	<!--
@@ -56,7 +58,7 @@
 
 
 		<section>
-			<title>Hardware and Installation</title>
+			<title>Hardware</title>
 			<object href="doc/hardware/example/index.xml"/>
 			<object href="doc/hardware/gps/index.xml"/>
 			<object href="doc/hardware/index.xml"/>
@@ -64,6 +66,10 @@
 			<object href="doc/hardware/logger/index.xml"/>
 			<object href="doc/hardware/organiser/index.xml"/>
 			<object href="doc/hardware/vario/index.xml"/>
+		</section>
+
+		<section>
+			<title>Installation</title>
 			<object href="download/index.xml"/>
 			<object href="doc/install/index.xml"/>
 			<object href="doc/install/windows/index.xml"/>
@@ -96,6 +102,7 @@
 			<object href="doc/symbology/index.xml"/>
 			<!-- XXX Could be advanced ! -->
 			<object href="input/index.xml"/>
+			<object href="input/default.xml"/>
 			<object href="input/legacy_422.xml"/>
 		</section>
 

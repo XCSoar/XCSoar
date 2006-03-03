@@ -100,6 +100,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
        Block-level
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
 
+  <!-- SCOTT SPECIAL DEBUGGING TYPE -->
+  <xsl:attribute-set name="comment">
+    <xsl:attribute name="border">1px solid</xsl:attribute>
+    <xsl:attribute name="text-align">center</xsl:attribute>
+    <xsl:attribute name="font-size">1em</xsl:attribute>
+    <xsl:attribute name="space-before">2em</xsl:attribute>
+    <xsl:attribute name="space-after">2em</xsl:attribute>
+  </xsl:attribute-set>
+
   <xsl:attribute-set name="h1">
     <xsl:attribute name="border-bottom">2px solid</xsl:attribute>
     <xsl:attribute name="font-size">2em</xsl:attribute>
@@ -242,6 +251,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   <xsl:attribute-set name="dl">
     <xsl:attribute name="space-before">1em</xsl:attribute>
     <xsl:attribute name="space-after">1em</xsl:attribute>
+    <xsl:attribute name="start-indent"><xsl:value-of select="$start-indent"/></xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="dt">
@@ -449,7 +459,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
 
   <xsl:attribute-set name="img">
-    <xsl:attribute name="start-indent">inherited-property-value(start-indent)</xsl:attribute>
+    <xsl:attribute name="start-indent">inherited-property-value(start-indent) + <xsl:value-of select="$start-indent"/></xsl:attribute>
+    <xsl:attribute name="display-align">center</xsl:attribute>
+    <xsl:attribute name="text-align">center</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set name="img-link">
@@ -1584,10 +1596,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
        Image
   =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-->
 
+  <!-- SCOTT - Make all images as block and center - ??? -->
   <xsl:template match="html:img">
-    <fo:external-graphic xsl:use-attribute-sets="img">
-      <xsl:call-template name="process-img"/>
-    </fo:external-graphic>
+    <fo:block xsl:use-attribute-sets="img">
+      <fo:external-graphic xsl:use-attribute-sets="img">
+        <xsl:call-template name="process-img"/>
+      </fo:external-graphic>
+    </fo:block>
   </xsl:template>
 
   <xsl:template match="html:img[ancestor::html:a/@href]">
@@ -1854,7 +1869,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 	<!-- XXX (debugging) Ignore these - only here for my debugging -->
 	<xsl:template match="html:comment">
-		<fo:block xsl:use-attribute-sets="p">
+		<fo:block xsl:use-attribute-sets="comment">
 			<xsl:call-template name="process-common-attributes-and-children">
 				<xsl:with-param name="before">DEBUG: </xsl:with-param>
 			</xsl:call-template>

@@ -45,12 +45,14 @@
 			<p>
 			The program can be run in either of two modes by pressing the 'FLY' or
 			'SIM' launcher on the Today screen:
-			<ul>
-				<li>[FLY] This mode is used when actually flying.  The simulator is 
-				  disabled and serial communications are active. </li>
-				<li>[SIM] This starts XCSoar in simulator mode, no serial communications
-				  are attempted.</li>
-			</ul>
+			<dl>
+				<dt>FLY</dt>
+				<dd>This mode is used when actually flying.  The simulator is 
+				  disabled and serial communications are active. </dd>
+				<dt>SIM</dt>
+				<dd> This starts XCSoar in simulator mode, no serial communications
+				  are attempted.</dd>
+			</dl>
 			</p>
 
 			<p>

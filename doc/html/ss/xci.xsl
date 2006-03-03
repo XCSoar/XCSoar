@@ -25,7 +25,9 @@
 			<title>Input and Events File</title>
 		</metadata>
 
-		<content>
+		<section>
+			<title>Introduction</title>
+
 
 <div class="input">
 
@@ -37,6 +39,7 @@ automatic glide computer events. Click on Event Names to take you to a
 description of the purpose and options for an event. Click on Mode names (eg:
 Menu1) to jump to the next mode.
 </p>
+
 
 <section>
 	<title>Basic Buttons</title>
@@ -82,7 +85,7 @@ Menu1) to jump to the next mode.
 
 </div>
 
-		</content>
+		</section>
 
 	</document>
 </xsl:template>

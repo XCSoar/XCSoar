@@ -6,8 +6,8 @@ print qq{<?xml version="1.0" encoding="UTF-8"?>
 <metadata>
 	<title>$title</title>
 </metadata>
-<content>
-<h2>$title</h2>
+<section>
+<title>$title</title>
 <pre>
 };
 
@@ -16,7 +16,7 @@ while (<>) {
 }
 print q{
 </pre>
-</content>
+</section>
 </document>
 };
 exit 0;

@@ -35,42 +35,53 @@ The display will now show the waypoint details dialog.
 The waypoint details dialog contains several pages:
 </p>
 
-\begin{description}
-\item[Waypoint details]  
-This page contains text describing the waypoint's location, elevation
-and local sunset.  For airfields, the page may also include relevant
-text from the Enroute Supplement about the airfield, including
-runways, radio frequencies, traffic patterns, contacts.
+<dl>
+	<dt>
+		Waypoint details
+	</dt>
+	<dd>
+		This page contains text describing the waypoint's location, elevation
+		and local sunset.  For airfields, the page may also include relevant
+		text from the Enroute Supplement about the airfield, including
+		runways, radio frequencies, traffic patterns, contacts.
+	</dd>
 
+<!-- XXX get eps (other format...
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{../quick/fig-wpersa.eps}
 
 {\it DIAGRAM SHOWING WAYPOINT DETAILS ERSA PAGE}
+-->
 
-\end{center}
+	<dt>
+		Task menu
+	</dt>
+	<dd>
+		This page contains a menu of buttons allowing various actions to be performed:
+		<ul>
+			<li> Goto direct: cancels the current task and sets the waypoint as the
+			  single active waypoint in the task.</li>
+			<li> Replace active: replaces the active waypoint in the task.</li>
+			<li> Insert here: inserts the waypoint before the active waypoint in
+			  the task.</li>
+			<li> Remove: removes the waypoint from the task.</li>
+			<li> Set home: sets the waypoint as the home airfield</li>
+		</ul>
+	</dd>
 
-\item[Task menu]  This page contains a menu of buttons allowing various actions to be performed:
-\begin{itemize}
-\item Goto direct: cancels the current task and sets the waypoint as the
-  single active waypoint in the task.
-\item Replace active: replaces the active waypoint in the task.
-\item Insert here: inserts the waypoint before the active waypoint in
-  the task.
-\item Remove: removes the waypoint from the task.
-\item Set home: sets the waypoint as the home airfield
-\end{itemize}
+	<dt>
+		Satellite image 
+	</dt>
+	<dd>
+		This page shows a satellite image of the waypoint.
+	</dd>
 
-\item[Satellite image] This page shows a satellite image of the
-waypoint.
+		<!-- XXX image !
+		\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{../quick/fig-wpmodis.eps}
+		{\it DIAGRAM SHOWING WAYPOINT DETAILS SATELLITE PAGE}
+		-->
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{../quick/fig-wpmodis.eps}
-
-{\it DIAGRAM SHOWING WAYPOINT DETAILS SATELLITE PAGE}
-
-\end{center}
-
-\end{description}
+</dl>
 
 Depending on the configuration files specified in the settings, not
 all of these pages may be available.
@@ -80,102 +91,154 @@ all of these pages may be available.
 <section>
 	<title>Analysis</title>
 
+<p>
 To activate the analysis dialog, select the 'Analysis' option from the
 main menu.
+</p>
 
+<p>
 The analysis dialog contains several pages:
-\begin{description}
-\item[Barograph]  Shows a graph of the history of the altitude of the glider.
-  Statistics are used to estimate the thermal working band (average
-  base and ceiling of climbs) and to estimate how the ceiling is
-  changing over time.  The base and ceiling lines are drawn on the
-  barograph.
+</p>
 
-{\it DIAGRAM SHOWING ANALYSIS BAROGRAPH PAGE}
+<dl>
 
-\item[Climb history]
-  Shows a bar chart of the average climb rate acheived during each
-  climb.  Statistics are used to estimate the overall average climb
-  rate, and to estimate how this average is changing over time.  The
-  current MacCready setting is drawn on the bar chart as a thick red
-  dashed line, and the climb rate trend is drawn on the chart as a
-  black line.
+	<dt>
+		Barograph
+	</dt>
+	<dd>
+		Shows a graph of the history of the altitude of the glider.
+		Statistics are used to estimate the thermal working band (average
+		base and ceiling of climbs) and to estimate how the ceiling is
+		changing over time.  The base and ceiling lines are drawn on the
+		barograph.
+	</dd>
 
-{\it DIAGRAM SHOWING ANALYSIS BAROGRAPH PAGE}
+	<!-- XXX Diagram
+		{\it DIAGRAM SHOWING ANALYSIS BAROGRAPH PAGE}
+	-->
 
-\item[Wind at altitude]
-  This shows a graph of the wind magnitude versus height, and shows the
-  wind vector at several heights.
 
+	<dt>
+		Climb history
+	</dt>
+	<dd>
+		Shows a bar chart of the average climb rate acheived during each
+		climb.  Statistics are used to estimate the overall average climb
+		rate, and to estimate how this average is changing over time.  The
+		current MacCready setting is drawn on the bar chart as a thick red
+		dashed line, and the climb rate trend is drawn on the chart as a
+		black line.
+		<!-- XXX Diagram
+		{\it DIAGRAM SHOWING ANALYSIS BAROGRAPH PAGE}
+		-->
+	</dd>
+
+
+	<dt>
+		Wind at altitude
+	</dt>
+	<dd>
+		This shows a graph of the wind magnitude versus height, and shows the
+		wind vector at several heights.
+	</dd>
+
+<!-- XXX
 {\it DIAGRAM SHOWING ANALYSIS WIND AT ALTITUDE PAGE}
+-->
 
-\item[Glide polar]
-  This shows a graph of the glide polar at the current bugs and ballast
-  setting.  It also shows the calculated best LD and the speed at which 
-  it occurs, and the minumum sink and the speed at which it occurs.
+	<dt>
+		Glide polar
+	</dt>
+	<dd>
+		This shows a graph of the glide polar at the current bugs and ballast
+		setting.  It also shows the calculated best LD and the speed at which 
+		it occurs, and the minumum sink and the speed at which it occurs.
+	</dd>
 
+<!-- XXX
 {\it DIAGRAM SHOWING ANALYSIS GLIDE POLAR PAGE}
+-->
 
-\item[Temperature trace]
-  This page is only available if a supported instrument is connected
-  to XCSoar that produces outside air temperature and humidity.  The
-  chart shows the variation of dry air temperature, dew point
-  temperature and outside air temperature with height.  The convection
-  forecast is summarised as the estimated thermal convection height
-  and estimated cloud base.
+	<dt>
+		Temperature trace
+	</dt>
+	<dd>
+		This page is only available if a supported instrument is connected
+		to XCSoar that produces outside air temperature and humidity.  The
+		chart shows the variation of dry air temperature, dew point
+		temperature and outside air temperature with height.  The convection
+		forecast is summarised as the estimated thermal convection height
+		and estimated cloud base.
+	</dd>
 
+<!-- XXX
 {\it DIAGRAM SHOWING ANALYSIS TEMP TRACE PAGE}
+-->
 
-\end{description}
-
-<section>
-
-<section>
-	<title>Status</title>
-
-The status dialog is a single page of text summarising the status of
-the aircraft, task, and connected devices, including:
-\begin{itemize}
-\item The glider's latitude and longitude and altitude
-\item Sunset expressed in local time zone
-\item Range and bearing to the nearest landmark
-\item GPS status and number of satellites in view
-\item Logger status
-\end{itemize}
-
-XXX ?? anything else, FLARM, PDA battery, glider battery?
-
-{\it DIAGRAM SHOWING STATUS DIALOG}
+</dl>
 
 </section>
 
 <section>
-	<title>Bugs and ballast</title>
+<title>Status</title>
 
-Use the Bugs/Ballast dialog to modify the polar of the glider both
-before and during flight.  The bugs settings determines the amount the
-polar is degraded due to contamination during a long flight.  A bugs
-setting of 100\% will cause the software to use the clean polar. A
-bugs setting of 50\% will degrade the polar by 50\%, effectively
-doubling the sink rate.
+The status dialog is a single page of text summarising the status of
+the aircraft, task, and connected devices, including:
+<ul>
+<li> The glider's latitude and longitude and altitude</li>
+<li> Sunset expressed in local time zone</li>
+<li> Range and bearing to the nearest landmark</li>
+<li> GPS status and number of satellites in view</li>
+<li> Logger status</li>
+</ul>
 
-The ballast setting is used to modify the polar to account for any
-water ballast carried during the flight. A ballast setting of 100\%
-modifies the polar to account for a full load of water ballast.  
+<!-- 
+XXX ?? anything else, FLARM, PDA battery, glider battery?
+-->
 
+<!-- XXX Diagram
+{\it DIAGRAM SHOWING STATUS DIALOG}
+-->
+
+</section>
+
+<section>
+<title>Bugs and ballast</title>
+
+<p>
+	Use the Bugs/Ballast dialog to modify the polar of the glider both
+	before and during flight.  The bugs settings determines the amount the
+	polar is degraded due to contamination during a long flight.  A bugs
+	setting of 100\% will cause the software to use the clean polar. A
+	bugs setting of 50\% will degrade the polar by 50\%, effectively
+	doubling the sink rate.
+</p>
+
+<p>
+	The ballast setting is used to modify the polar to account for any
+	water ballast carried during the flight. A ballast setting of 100\%
+	modifies the polar to account for a full load of water ballast.  
+</p>
+
+<!-- XXX Find diagram 
 {\it DIAGRAM SHOWING BUGS AND BALLAST DIALOG}
+-->
 
 </section>
 
 <section>
 	<title>Pressure</title>
 
-Use this dialog both before and during the flight to record the mean
-sea level atmospheric pressure, also known as QNH pressure.  The
-software uses the values entered to convert airspace flight levels
-into altitudes.
+<p>
+	Use this dialog both before and during the flight to record the mean
+	sea level atmospheric pressure, also known as QNH pressure.  The
+	software uses the values entered to convert airspace flight levels
+	into altitudes.
+</p>
 
+<!-- XXX Find diagram 
 {\it DIAGRAM SHOWING PRESSURE DIALOG}
+-->
 </section>
 
 </section>
