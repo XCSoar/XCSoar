@@ -196,4 +196,37 @@ XXX Not working - see manual2temp.xsl !
 	</h4>
 </xsl:template>
 
+<!-- FOP doesn't like PRE - fix by substituting new lines -->
+<xsl:template match="pre">
+	<p>
+		<xsl:call-template name="substitute">
+			<xsl:with-param name="string" select="."/>
+		</xsl:call-template>
+	</p>
+</xsl:template>
+
+
+<xsl:template name="substitute">
+   <xsl:param name="string" />
+   <xsl:param name="from" select="'&#xA;'" />
+   <xsl:param name="to">
+      <br />
+   </xsl:param>
+   <xsl:choose>
+      <xsl:when test="contains($string, $from)">
+         <xsl:value-of select="substring-before($string, $from)" />
+         <xsl:copy-of select="$to" />
+         <xsl:call-template name="substitute">
+            <xsl:with-param name="string"
+                            select="substring-after($string, $from)" />
+            <xsl:with-param name="from" select="$from" />
+            <xsl:with-param name="to" select="$to" />
+         </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+         <xsl:value-of select="$string" />
+      </xsl:otherwise>
+   </xsl:choose>
+</xsl:template>                
+
 </xsl:stylesheet>
