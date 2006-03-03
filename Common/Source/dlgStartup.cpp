@@ -72,6 +72,10 @@ void dlgStartupShowModal(void){
     dfe->ScanDirectoryTop(TEXT("*.prf"));
     dfe->Lookup(startProfileFile);
     wp->RefreshDisplay();
+    if (dfe->GetNumFiles()<=2) {
+      delete wf;
+      wf = NULL;
+    }
   }
 
   wf->ShowModal();

@@ -221,6 +221,9 @@ void DataFieldFileReader::Lookup(TCHAR *Text) {
   }
 }
 
+int DataFieldFileReader::GetNumFiles(void) {
+  return nFiles;
+}
 
 TCHAR* DataFieldFileReader::GetPathFile(void) {
   if ((mValue<=nFiles)&&(mValue)) {
