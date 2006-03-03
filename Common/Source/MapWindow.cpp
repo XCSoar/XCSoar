@@ -2339,10 +2339,16 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
   int i;
   double tmp;
 
+  if (!WayPointList) return;
+
   COLORREF whitecolor = RGB(0xff,0xff, 0xff);
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
 
-  if (!WayPointList) return;
+  SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
+
+  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
+  Rectangle(hDCTemp,rc.left,rc.top,rc.right,rc.bottom);
     
   for(i=1;i<MAXTASKPOINTS-1;i++)
   {
@@ -2363,10 +2369,10 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
           SetBkColor(hDCTemp, 
                      whitecolor);
 
-          SelectObject(hdc, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
-          SelectObject(hdc, GetStockObject(BLACK_PEN));
+          SelectObject(hDCTemp, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+          SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
 
-          Circle(hdc,
+          Circle(hDCTemp,
 		 WayPointList[Task[i].Index].Screen.x,
 		 WayPointList[Task[i].Index].Screen.y,
 		 (int)tmp, rc); 
@@ -2382,18 +2388,22 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
           SetBkColor(hDCTemp, 
                      whitecolor);
 
-          SelectObject(hdc, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
-          SelectObject(hdc, GetStockObject(BLACK_PEN));
+          SelectObject(hDCTemp, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+          SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
 
           tmp = Task[i].AATSectorRadius * DISTANCEMODIFY/MapScale;
           tmp = tmp * GetMapResolutionFactor();
 
-          Segment(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc, 
-		  Task[i].AATStartRadial+DisplayAngle, 
-		  Task[i].AATFinishRadial+DisplayAngle); 
+          Segment(hDCTemp,
+		  WayPointList[Task[i].Index].Screen.x,
+		  WayPointList[Task[i].Index].Screen.y,(int)tmp, rc, 
+		  Task[i].AATStartRadial-DisplayAngle, 
+		  Task[i].AATFinishRadial-DisplayAngle); 
 	 
-          DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATStart);
-          DrawSolidLine(hdc,WayPointList[Task[i].Index].Screen, Task[i].AATFinish);
+          DrawSolidLine(hDCTemp,
+			WayPointList[Task[i].Index].Screen, Task[i].AATStart);
+          DrawSolidLine(hDCTemp,
+			WayPointList[Task[i].Index].Screen, Task[i].AATFinish);
         }
       }
     }
@@ -2401,6 +2411,77 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
 
   // restore original color
   SetTextColor(hDCTemp, origcolor);
+
+
+  //////
+
+  #if (WINDOWSPC<1)
+    // old version
+    //  BitBlt(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
+    //	   hDCTemp,rc.left,rc.top,SRCAND /*SRCAND*/);
+
+  TransparentImage(hdcDrawWindowBg,
+		   rc.left,rc.top,
+		   rc.right-rc.left,rc.bottom-rc.top,
+		   hDCTemp,
+		   rc.left,rc.top,
+		   rc.right-rc.left,rc.bottom-rc.top,
+		   whitecolor
+		   );
+
+  /*
+  TransparentImage(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
+    hDCTemp,rc.left,rc.top,
+    whitecolor
+  );
+  */
+
+  #else
+  {
+
+  // JMW disabled this, it is buggy.
+
+    DWORD tm = GetTickCount();
+    HDC dc = CreateCompatibleDC(hdcDrawWindowBg);
+    HBITMAP memBM = CreateCompatibleBitmap (dc, rc.right-rc.left, rc.bottom-rc.top);
+    HBITMAP oldBmp = (HBITMAP)SelectObject(dc, memBM);
+
+    SetBkColor(hDCTemp, RGB(0xff,0xff,0xff));
+    // JMW bug fix..
+
+    //    BitBlt(dc, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top,
+    //  	   hDCTemp, rc.left, rc.top,SRCCOPY /*SRCAND*/);
+    BitBlt(dc, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
+      	   hDCTemp, 0, 0, SRCCOPY /*SRCAND*/);
+
+    // test draw the mask
+    //    BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top,
+    //  	   dc, rc.left, rc.top,SRCCOPY /*SRCAND*/);
+
+    /*
+    MaskBlt(hdcDrawWindowBg,
+      rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
+      hDCTemp, rc.left,rc.top,
+      memBM, rc.left,rc.top,
+      MAKEROP4(SRCAND, SRCCOPY)
+    );
+    */
+    MaskBlt(hdcDrawWindowBg,
+      0,0,rc.right-rc.left,rc.bottom-rc.top,
+      hDCTemp, 0, 0,
+      memBM, 0, 0,
+      MAKEROP4(SRCAND, SRCCOPY)
+    );
+
+    SelectObject(dc, oldBmp);
+    DeleteObject(memBM);
+    DeleteDC(dc);
+
+    tm = GetTickCount()-tm;
+    tm = GetTickCount()-tm;
+
+  }
+  #endif
 
 }
 

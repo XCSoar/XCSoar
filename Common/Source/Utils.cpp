@@ -1263,7 +1263,7 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
     {
       if (i<=iend-istart) {
 	pt[npoly].x = x + (long) (radius * xcoords[(i+istart)%64]);
-	pt[npoly].y = y + (long) (radius * ycoords[(i+istart)%64]);
+	pt[npoly].y = y - (long) (radius * ycoords[(i+istart)%64]);
 	npoly++;
       }
     }

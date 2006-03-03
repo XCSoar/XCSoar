@@ -232,7 +232,7 @@ TCHAR* DataFieldFileReader::GetPathFile(void) {
   return TEXT("\0");
 }
 
-
+   
 void DataFieldFileReader::addFile(TCHAR *Text, 
 				  TCHAR *PText) {
   if (nFiles<DFE_MAX_FILES) {

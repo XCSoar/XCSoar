@@ -340,6 +340,8 @@ void dlgTaskOverviewShowModal(void){
   LowLimit = 0;
   ItemIndex = -1;
 
+  showAdvanced = false;
+
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgTaskOverview.xml", 
 		      hWndMainWindow);
 

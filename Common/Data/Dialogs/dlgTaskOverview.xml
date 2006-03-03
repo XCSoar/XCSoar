@@ -27,8 +27,8 @@
   <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=20 Step=1/>
   </WndProperty>
 
-  <WndButton  Name="cmdSave" Caption="Save"    X=2 Y=60 Width=45  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
-  <WndButton  Name="cmdLoad" Caption="Load"    X=47 Y=60 Width=45  Height=22 Font=2 OnClickNotify="OnLoadClicked"/>
+  <WndButton  Name="cmdLoad" Caption="Load"    X=2 Y=60 Width=45  Height=22 Font=2 OnClickNotify="OnLoadClicked"/>
+  <WndButton  Name="cmdSave" Caption="Save"    X=47 Y=60 Width=45  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
 
   <WndButton  Name="cmdDeclare" Caption="Declare"    X=2 Y=-1 Width=-1  Height=22 Font=2 OnClickNotify="OnDeclareClicked"/>
   </WndFrame>
