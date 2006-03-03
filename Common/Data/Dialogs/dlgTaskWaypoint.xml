@@ -64,19 +64,19 @@
     </WndProperty>
 
   <WndProperty Name="prpAATCircleRadius" Caption="Circle radius"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
     </WndProperty>
 
   <WndProperty Name="prpAATSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
     </WndProperty>
 
   <WndProperty Name="prpAATStartRadial" Caption="Start radial"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=360 Step=10/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=360 Step=10/>
     </WndProperty>
 
   <WndProperty Name="prpAATFinishRadial" Caption="Finish radial"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=360 Step=10/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=360 Step=10/>
     </WndProperty>
 
   </WndFrame>

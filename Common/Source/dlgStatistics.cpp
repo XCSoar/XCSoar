@@ -280,7 +280,6 @@ void Statistics::DrawLine(HDC hdc, RECT rc, double xmin, double ymin,
   line[1].x = (int)xmax;
   line[1].y = (int)ymax;
 
-  // STYLE_REDTHICK
   StyleLine(hdc, line[0], line[1], Style);
 
 }
@@ -744,6 +743,13 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
       }
     }
   }
+
+  // Draw aircraft on top
+  lat1 = GPS_INFO.Latitude;
+  lon1 = GPS_INFO.Longitude;
+  x1 = (lon1-lon_c)*fastcosine(lat1);
+  y1 = (lat1-lat_c);
+  DrawLabel(hdc, rc, TEXT("+"), x1, y1);
 
 }
 
