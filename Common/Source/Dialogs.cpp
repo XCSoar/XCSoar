@@ -1432,6 +1432,9 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
       if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
 	AATTaskLength = 0;
 
+      // TODO: include StartLine/StartRadius and FinishLine/FinishRadius
+      // etc in this file?
+
       CloseHandle(hFile);
     }
 

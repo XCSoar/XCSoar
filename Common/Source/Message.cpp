@@ -1,7 +1,3 @@
-#include "stdafx.h"
-#include "Message.h"
-#include "MapWindow.h"
-
 /*
 
 Copyright_License {
@@ -35,6 +31,12 @@ Copyright_License {
 
 */
 
+#include "stdafx.h"
+#include "Message.h"
+#include "MapWindow.h"
+#include "InfoBoxLayout.h"
+
+
 /*
 
   - Single window, created in GUI thread.
@@ -62,7 +64,8 @@ RECT Message::rcmsg;
 HWND Message::hWndMessageWindow;
 HDC Message::hdc;
 struct singleMessage Message::messages[MAXMESSAGES];
-bool Message::hidden;
+bool Message::hidden=false;
+int Message::nvisible=0;
 
 TCHAR Message::msgText[2000];
 extern HFONT MapWindowBoldFont;
@@ -139,6 +142,7 @@ void Message::Initialize(RECT rc) {
   hdc = GetDC(hWndMessageWindow);
 
   hidden = false;
+  nvisible = 0;
 
   //  for (x=0; TabStops[x] != 0 && x < 10; x++);
   //  SendMessage(hWnd, EM_SETTABSTOPS, (WPARAM)x, (LPARAM)TabStops);
@@ -193,13 +197,15 @@ void Message::Resize() {
     hidden = false;
     GetTextExtentPoint(hdc, msgText, size, &tsize);
 
-    int linecount = max(1,
+    int linecount = max(nvisible,max(1,
 			SendMessage(hWndMessageWindow,
-				    EM_GETLINECOUNT, 0, 0));
+				    EM_GETLINECOUNT, 0, 0)));
 
     int width =// min((rcmsg.right-rcmsg.left)*0.8,tsize.cx);
       (int)((rcmsg.right-rcmsg.left)*0.9);
-    int height = (int)min((rcmsg.bottom-rcmsg.top)*0.8,tsize.cy*linecount);
+    int height = (int)min((rcmsg.bottom-rcmsg.top)*0.8,tsize.cy*(linecount+2));
+    int h1 = height/2;
+    int h2 = height-h1;
 
     int midx = (rcmsg.right+rcmsg.left)/2;
     int midy = (rcmsg.bottom+rcmsg.top)/2;
@@ -208,17 +214,19 @@ void Message::Resize() {
       rthis.top = 0;
       rthis.left = 0;
       rthis.bottom = height;
-      rthis.right = 206;
+      rthis.right = 206*InfoBoxLayout::scale;
+      // TODO: this shouldn't be hard-coded
     } else {
       rthis.left = midx-width/2;
       rthis.right = midx+width/2;
-      rthis.top = midy-height/2;
-      rthis.bottom = midy+height/2;
+      rthis.top = midy-h1;
+      rthis.bottom = midy+h2;
     }
 
     SetWindowPos(hWndMessageWindow, HWND_TOP,
 		 rthis.left, rthis.top,
-		 rthis.right-rthis.left, rthis.bottom-rthis.top,
+		 rthis.right-rthis.left,
+		 rthis.bottom-rthis.top,
 		 SWP_SHOWWINDOW);
 
     // window has resized potentially, so redraw map to reduce artifacts
@@ -246,8 +254,8 @@ void Message::Render() {
     if (messages[i].type==0) continue; // ignore unknown messages
 
     if (
-		(messages[i].texpiry <= fpsTime)
-		&&(messages[i].texpiry> messages[i].tstart)
+	(messages[i].texpiry <= fpsTime)
+	&&(messages[i].texpiry> messages[i].tstart)
 	) {
       // this message has expired for first time
       changed = true;
@@ -276,20 +284,24 @@ void Message::Render() {
     Unlock(); return;
   }
 
-  // ok, we've changed the visible messages, so need to regenerate the text box
+  // ok, we've changed the visible messages, so need to regenerate the
+  // text box
 
   doresize = true;
   msgText[0]= 0;
+  nvisible=0;
   for (i=0; i<MAXMESSAGES; i++) {
     if (messages[i].type==0) continue; // ignore unknown messages
 
     if (messages[i].texpiry< fpsTime) {
-      messages[i].texpiry = messages[i].tstart-1; // reset expiry so we don't refresh
+      messages[i].texpiry = messages[i].tstart-1;
+      // reset expiry so we don't refresh
       continue;
     }
 
     _tcscat(msgText, messages[i].text);
     _tcscat(msgText, TEXT("\r\n"));
+    nvisible++;
 
   }
   Resize();

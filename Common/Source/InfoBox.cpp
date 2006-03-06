@@ -36,6 +36,7 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Utils.h"
 #include "externs.h"
+#include "InfoBoxLayout.h"
 
 #define DEFAULTBORDERPENWIDTH 1
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+4)
@@ -201,7 +202,9 @@ Units_t InfoBox::SetValueUnit(Units_t Value){
   if (mValueUnit != Value){
     mValueUnit = Value;
 
-    Units::GetUnitBitmap(mValueUnit, &mhBitmapUnit, &mBitmapUnitPos, &mBitmapUnitSize, mUnitBitmapKind);
+    Units::GetUnitBitmap(mValueUnit, &mhBitmapUnit,
+			 &mBitmapUnitPos,
+			 &mBitmapUnitSize, mUnitBitmapKind);
     PaintValue();
 
   }
@@ -322,15 +325,18 @@ void InfoBox::PaintValue(void){
 
   GetTextExtentPoint(mHdc, mValue, _tcslen(mValue), &tsize);
 
-  x = recValue.left + (mWidth - tsize.cx - mBitmapUnitSize.x) / 2;
+  x = recValue.left +
+    (mWidth - tsize.cx - mBitmapUnitSize.x*InfoBoxLayout::scale) / 2;
   if (x < 1)
     x = 1;
 
   if (mBorderKind & BORDERLEFT)
     x++;
 
-  y = recValue.top + (recValue.bottom - recValue.top+1)/2;
-  y = y + ((mpFontHeightValue->CapitalHeight+1)/2) - mpFontHeightValue->AscentHeight;
+  y = recValue.top +
+    (recValue.bottom - recValue.top+1)/2;
+  y += ((mpFontHeightValue->CapitalHeight+1)/2)
+    - mpFontHeightValue->AscentHeight;
 
   ExtTextOut(mHdc, x, y,
     ETO_OPAQUE, &recValue, mValue, _tcslen(mValue), NULL);
@@ -339,14 +345,30 @@ void InfoBox::PaintValue(void){
     if (mhBitmapUnit != NULL){
       HBITMAP oldBmp;
       oldBmp = (HBITMAP)SelectObject(mHdcTemp, mhBitmapUnit);
-      BitBlt(mHdc,
-        x+tsize.cx,
-        y+mpFontHeightValue->AscentHeight-mBitmapUnitSize.y,
-        mBitmapUnitSize.x, mBitmapUnitSize.y,
-        mHdcTemp,
-        mBitmapUnitPos.x, mBitmapUnitPos.y,
-        SRCCOPY
-      );
+      if (InfoBoxLayout::scale>1) {
+	StretchBlt(mHdc,
+		   x+tsize.cx,
+		   y+mpFontHeightValue->AscentHeight
+		   -mBitmapUnitSize.y*InfoBoxLayout::scale,
+		   mBitmapUnitSize.x*InfoBoxLayout::scale,
+		   mBitmapUnitSize.y*InfoBoxLayout::scale,
+		   mHdcTemp,
+		   mBitmapUnitPos.x, mBitmapUnitPos.y,
+		   mBitmapUnitSize.x,
+		   mBitmapUnitSize.y,
+	       SRCCOPY
+	       );
+      } else {
+	BitBlt(mHdc,
+	       x+tsize.cx,
+	       y+mpFontHeightValue->AscentHeight
+	       -mBitmapUnitSize.y,
+	       mBitmapUnitSize.x, mBitmapUnitSize.y,
+	       mHdcTemp,
+	       mBitmapUnitPos.x, mBitmapUnitPos.y,
+	       SRCCOPY
+	       );
+      }
       SelectObject(mHdcTemp ,oldBmp);
     }
   }

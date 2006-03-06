@@ -138,6 +138,8 @@ TCHAR szRegistrySpeed2Index[]=		 TEXT("Speed2Index");
 TCHAR szRegistrySpeedUnitsValue[] =      TEXT("Speed");
 TCHAR szRegistryStartLine[]=		 TEXT("StartLine");
 TCHAR szRegistryStartRadius[]=		 TEXT("StartRadius");
+TCHAR szRegistryFinishLine[]=		 TEXT("FinishLine");
+TCHAR szRegistryFinishRadius[]=		 TEXT("FinishRadius");
 TCHAR szRegistryWarningTime[]=		 TEXT("WarnTime");
 TCHAR szRegistryAcknowledgementTime[]=	 TEXT("AcknowledgementTime");
 TCHAR szRegistryWindUpdateMode[] =       TEXT("WindUpdateMode");
@@ -188,13 +190,20 @@ TCHAR szRegistryAppGaugeVarioAvgText[] = TEXT("AppGaugeVarioAvgText");
 TCHAR szRegistryAppGaugeVarioMc[] = TEXT("AppGaugeVarioMc");
 TCHAR szRegistryAppGaugeVarioBugs[] = TEXT("AppGaugeVarioBugs");
 TCHAR szRegistryAppGaugeVarioBallast[] = TEXT("AppGaugeVarioBallast");
+TCHAR szRegistryAppCompassAppearance[] = TEXT("AppCompassAppearance");
+TCHAR szRegistryAppStatusMessageAlignment[] = TEXT("AppStatusMessageAlignment");
+TCHAR szRegistryAppInfoBoxColors[] = TEXT("AppInfoBoxColors");
+TCHAR szRegistryAppDefaultMapWidth[] = TEXT("AppDefaultMapWidth");
 
 TCHAR szRegistryAutoAdvance[] = TEXT("AutoAdvance");
 TCHAR szRegistryUTCOffset[] = TEXT("UTCOffset");
 TCHAR szRegistryBlockSTF[] = TEXT("BlockSpeedToFly");
 TCHAR szRegistryAutoZoom[] = TEXT("AutoZoom");
+TCHAR szRegistryMenuTimeout[] = TEXT("MenuTimeout");
+TCHAR szRegistryLockSettingsInFlight[] = TEXT("LockSettingsInFlight");
 
 int UTCOffset = 0; // used for Altair
+bool LockSettingsInFlight = true;
 
 static double SINETABLE[910];
 static float FSINETABLE[910];
@@ -426,6 +435,14 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryStartRadius,&Temp);
   StartRadius = Temp;
 
+  Temp = 1;
+  GetFromRegistry(szRegistryFinishLine,&Temp);
+  FinishLine = Temp;
+
+  Temp = 1000;
+  GetFromRegistry(szRegistryFinishRadius,&Temp);
+  FinishRadius = Temp;
+
   Temp = 0;
   GetFromRegistry(szRegistryAirspaceWarning,&Temp);
   AIRSPACEWARNINGS = Temp;
@@ -530,6 +547,36 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAppGaugeVarioBallast, &Temp);
   Appearance.GaugeVarioBallast = (Temp != 0);
 
+  Temp = Appearance.CompassAppearance;
+  GetFromRegistry(szRegistryAppCompassAppearance, &Temp);
+  Appearance.CompassAppearance = (CompassAppearance_t)Temp;
+
+  Temp = Appearance.StateMessageAlligne;
+  GetFromRegistry(szRegistryAppStatusMessageAlignment, &Temp);
+  Appearance.StateMessageAlligne = (StateMessageAlligne_t)Temp;
+
+  Temp = Appearance.DefaultMapWidth;
+  GetFromRegistry(szRegistryAppDefaultMapWidth, &Temp);
+  Appearance.DefaultMapWidth = Temp;
+
+  Temp = Appearance.InfoBoxColors;
+  GetFromRegistry(szRegistryAppInfoBoxColors, &Temp);
+  Appearance.InfoBoxColors = (Temp != 0);
+
+  // StateMessageAlligne : center, topleft
+  // DefaultMapWidth: 206?
+  // CompassAppearance (north arrow)
+  //
+  // DontShowLoggerIndicator
+  // FlightModeIcon
+  // DontShowAutoMacCready
+  // MapScale
+  // MapScale2
+  // BestCruiseTrack
+  // Aircraft
+  // IndFinalGlide
+  // IndLandable
+
   Temp = 1;
   GetFromRegistry(szRegistryAutoAdvance,&Temp);
   AutoAdvance = (Temp == 1);
@@ -548,6 +595,14 @@ void ReadRegistrySettings(void)
   Temp = 0;
   GetFromRegistry(szRegistryAutoZoom,&Temp);
   MapWindow::AutoZoom = (Temp == 1);
+
+  Temp = MenuTimeoutMax;
+  GetFromRegistry(szRegistryMenuTimeout,&Temp);
+  MenuTimeoutMax = Temp;
+
+  Temp = 1;
+  GetFromRegistry(szRegistryLockSettingsInFlight,&Temp);
+  LockSettingsInFlight = (Temp == 1);
 
 }
 
@@ -2610,12 +2665,16 @@ long GetUTCOffset(void) {
   TIME_ZONE_INFORMATION TimeZoneInformation;
   GetTimeZoneInformation(&TimeZoneInformation);
 
-  utcoffset = TimeZoneInformation.Bias*60;
+  utcoffset = -TimeZoneInformation.Bias*60;
 
   if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
-    utcoffset += TimeZoneInformation.DaylightBias*60;
+    utcoffset -= TimeZoneInformation.DaylightBias*60;
   }
+#if (WINDOWSPC>0)
+  return UTCOffset;
+#else
   return utcoffset;
+#endif
 #else
   return UTCOffset;
 #endif

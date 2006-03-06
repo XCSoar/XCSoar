@@ -9,13 +9,13 @@
 
 <WndForm Name="frmStartup" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="XCSoar" Font=2  BackColor=0xDADBAB>
 
-  <aWndOwnerDrawFrame Name="frmSplash" X=220 Y=2 Width=100 Height=100 Font=0 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnSplashPaint" />
+  <WndOwnerDrawFrame Name="frmSplash" X=0 Y=2 Width=318 Height=163 Font=0 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnSplashPaint" />
 
-  <WndProperty Name="prpDisclaimer"   Caption=""       X=2 Y=2  Width=318 Height=148 CaptionWidth=2 Font=3 ReadOnly=1 MultiLine=1/>
+  <aWndProperty Name="prpDisclaimer"   Caption=""       X=2 Y=2  Width=318 Height=148 CaptionWidth=2 Font=3 ReadOnly=1 MultiLine=1/>
 
-  <WndButton Name="cmdClose" Caption="Accept" X=2 Y=160 Width=314  Height=28 Font=2 Tag=3 />
+  <WndButton Name="cmdClose" Caption="Accept" X=2 Y=-1 Width=314  Height=30 Font=2 Tag=3 />
 
-  <WndProperty Name="prpProfile" Caption="Profile"      X=2 Y=190   Width=314 Height=25 CaptionWidth=60 Font=2>
+  <WndProperty Name="prpProfile" Caption="Profile"      X=2 Y=-1   Width=314 Height=25 CaptionWidth=60 Font=2>
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 

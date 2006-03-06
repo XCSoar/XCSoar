@@ -169,7 +169,10 @@ class MapWindow {
   static RECT MapRect;
   static RECT MapRectBig;
   static double MapScale;
+  static double MapScaleOverDistanceModify; // speedup
+  static double ResMapScaleOverDistanceModify; // speedup
   static double RequestMapScale;
+  static void ModifyMapScale();
 
   static bool MapDirty;
   static bool RequestMapDirty;
@@ -184,6 +187,11 @@ class MapWindow {
 
   static void GetLocationFromScreen(double *X, double *Y);
   static void DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h);
+  static void DrawBitmapX(HDC hdc, int top, int right,
+		     int sizex, int sizey,
+		     HDC source,
+		     int offsetx, int offsety,
+		     DWORD mode);
   static void RequestToggleFullScreen();
   static void RequestOnFullScreen();
   static void RequestOffFullScreen();

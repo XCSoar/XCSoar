@@ -50,6 +50,11 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_BELOW] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task finished"), event_id);
+mode_id = InputEvents::mode2int(TEXT("default"), true);
+GC2Event[mode_id][GCE_TASK_FINISH] = event_id;
+
+event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Menu1"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);

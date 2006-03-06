@@ -688,7 +688,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 	       x1, y1, x2, y2,
 	       STYLE_DASHGREEN);
 
-      TCHAR text[10];
+      TCHAR text[100];
       if ((i==nwps-1) && (Task[i].Index == Task[0].Index)) {
 	_stprintf(text,TEXT("%0d"),1);
 	DrawLabel(hdc, rc, text, x2, y2);
@@ -1033,8 +1033,8 @@ static void Update(void){
 
     RefreshTaskStatistics();
 
-    TCHAR timetext1[10];
-    TCHAR timetext2[10];
+    TCHAR timetext1[100];
+    TCHAR timetext2[100];
     if (AATEnabled) {
       Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
       Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
@@ -1314,8 +1314,8 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       }
       if (page==5) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Task")));
-	TCHAR timetext1[10];
-	TCHAR timetext2[10];
+	TCHAR timetext1[100];
+	TCHAR timetext2[100];
 	if (AATEnabled) {
 	  Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
 	  Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);

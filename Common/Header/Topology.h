@@ -15,6 +15,7 @@ class XShape {
   virtual void clear();
   virtual void renderSpecial(HDC hdc, int x, int y) {};
 
+  bool hide;
   shapeObj shape;
 
 };

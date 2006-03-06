@@ -53,6 +53,7 @@ class Message {
   static void Resize();
   static int GetEmptySlot();
   static bool hidden;
+  static int nvisible;
 
 };
 

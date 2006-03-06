@@ -158,8 +158,8 @@ class SunEphemeris {
     tzone = -TimeZoneInformation.Bias/60.0;
     */
 
-    int localtime = (int)(GPS_INFO.Time-GetUTCOffset());
-    tzone = -GetUTCOffset()/3600.0;
+    int localtime = (int)(GPS_INFO.Time+GetUTCOffset());
+    tzone = GetUTCOffset()/3600.0;
 
     d = FNday(y, m, day, (float)h);
 

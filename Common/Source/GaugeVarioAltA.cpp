@@ -445,14 +445,27 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
     HBITMAP oldBmp;
 
     oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapUnit);
-    BitBlt(hdcDrawWindow,
-	   x-5*InfoBoxLayout::scale,
-	   diValue->recBkg.top,
-      BitmapUnitSize.x, BitmapUnitSize.y,
-      hdcTemp,
-      BitmapUnitPos.x, BitmapUnitPos.y,
-      SRCCOPY
-    );
+    if (InfoBoxLayout::scale>1) {
+      StretchBlt(hdcDrawWindow,
+		 x-5*InfoBoxLayout::scale,
+		 diValue->recBkg.top,
+		 BitmapUnitSize.x*InfoBoxLayout::scale,
+		 BitmapUnitSize.y*InfoBoxLayout::scale,
+		 hdcTemp,
+		 BitmapUnitPos.x, BitmapUnitPos.y,
+		 BitmapUnitSize.x, BitmapUnitSize.y,
+		 SRCCOPY
+		 );
+    } else {
+      BitBlt(hdcDrawWindow,
+	     x-5,
+	     diValue->recBkg.top,
+	     BitmapUnitSize.x, BitmapUnitSize.y,
+	     hdcTemp,
+	     BitmapUnitPos.x, BitmapUnitPos.y,
+	     SRCCOPY
+	     );
+    }
     SelectObject(hdcTemp, oldBmp);
     diLabel->lastBitMap = hBitmapUnit;
   }
@@ -511,7 +524,7 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
 
       y += YOFFSET;
 
-      // JMW todo: use InfoBoxLayout::scale to scale sizes
+      // JMW TODO: use InfoBoxLayout::scale to scale sizes
       while (vdiff > 0){
         if (vdiff > DeltaVstep){
           Rectangle(hdcDrawWindow, x, y, x+11, y+3);

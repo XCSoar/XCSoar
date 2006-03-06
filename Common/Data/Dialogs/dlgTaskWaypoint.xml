@@ -83,6 +83,15 @@
 
   <WndFrame Name="frmFinish" X=70 Y=0 Width=246 Height=222 Font=2>
 
+  <WndProperty Name="prpTaskFinishLine" Caption="Finish type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpTaskFinishRadius" Caption="Finish diameter"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+
+  </WndProperty>
+
   </WndFrame>
 
 </WndForm>

@@ -339,15 +339,10 @@ void FormatterTime::SecsToDisplayTime(int d) {
 
 
 int TimeLocal(int localtime) {
-  /*
-  TIME_ZONE_INFORMATION TimeZoneInformation;
-  if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
-    localtime += 3600;
-    // TODO: check UTC adjustment for UK?
+  localtime += GetUTCOffset();
+  if (localtime<0) {
+    localtime+= 3600*24;
   }
-  localtime -= TimeZoneInformation.Bias*60;
-  */
-  localtime -= GetUTCOffset();
   return localtime;
 }
 

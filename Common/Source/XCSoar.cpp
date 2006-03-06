@@ -210,7 +210,7 @@ bool                                    EnableAuxiliaryInfo = false;
 int                                     InfoBoxFocusTimeOut = 0;
 int                                     MenuTimeOut = 0;
 int                                     DisplayTimeOut = 0;
-
+int                                     MenuTimeoutMax = MENUTIMEOUTMAX;
 
 
 HBRUSH hBrushSelected;
@@ -562,7 +562,7 @@ void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
   if (DisplayLocked) {
     ShowWindow(hWndMenuButton, SW_HIDE);
-    MenuTimeOut = MENUTIMEOUTMAX;
+    MenuTimeOut = MenuTimeoutMax;
     DisplayTimeOut = 0;
   }
 }
@@ -674,6 +674,11 @@ void dlgStatusSystemShowModal(void);
 void dlgConfigurationShowModal(void);
 
 void SystemConfiguration(void) {
+  if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
+    DoStatusMessage(TEXT("Settings locked in flight"));
+    return;
+  }
+
   SettingsEnter();
   dlgConfigurationShowModal();
   SettingsLeave();
@@ -1027,6 +1032,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // JMW we need a global version string!
 
   // Version String
+#ifdef GNAV
+  wcscat(XCSoar_Version, TEXT("Altair "));
+#endif
   wcscat(XCSoar_Version, TEXT("Alpha "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
   // wcscat(XCSoar_Version, TEXT("4.5 BETA 4")); // Yet to be released
@@ -1037,13 +1045,12 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
 
-  PreloadInitialisation();
-
   // Perform application initialization:
   if (!InitInstance (hInstance, nCmdShow))
     {
       return FALSE;
     }
+
   // find unique ID of this PDA
   ReadAssetNumber();
   CreateProgressDialog(gettext(TEXT("Initialising")));
@@ -1086,6 +1093,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   GPS_INFO.Altitude = _SIM_STARTUPALTITUDE;
   #endif
 
+#if (WINDOWSPC>0)
+  CuSonde::test();
+#endif
 
 #endif
 
@@ -1238,8 +1248,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.lpszMenuName = 0;
   wc.lpszClassName = TEXT("MapWindowClass");
 
-  MapWindow::RequestMapDirty = true;
-
   return RegisterClass(&wc);
 
 }
@@ -1256,102 +1264,9 @@ void ApplyClearType(LOGFONT *logfont) {
 }
 
 
-//
-//  FUNCTION: InitInstance(HANDLE, int)
-//
-//  PURPOSE: Saves instance handle and creates main window
-//
-//  COMMENTS:
-//
-//    In this function, we save the instance handle in a global variable and
-//    create and display the main program window.
-//
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
-{
-  TCHAR szTitle[MAX_LOADSTRING];                        // The title bar text
-  TCHAR szWindowClass[MAX_LOADSTRING];                  // The window class name
-  RECT rc;
+static void InitialiseFonts(RECT rc) {
   LOGFONT logfont;
   int FontHeight, FontWidth;
-
-  hInst = hInstance;            // Store instance handle in our global variable
-  LoadString(hInstance, IDC_XCSOAR, szWindowClass, MAX_LOADSTRING);
-  LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-
-  //If it is already running, then focus on the window
-  hWndMainWindow = FindWindow(szWindowClass, szTitle);
-  if (hWndMainWindow)
-    {
-      SetForegroundWindow((HWND)((ULONG) hWndMainWindow | 0x00000001));
-      return 0;
-    }
-
-  MyRegisterClass(hInst, szWindowClass);
-
-  RECT WindowSize;
-
-  WindowSize.left = 0;
-  WindowSize.top = 0;
-  WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
-  WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
-
-  #ifdef SCREENWIDTH
-    WindowSize.right = SCREENWIDTH + 2*GetSystemMetrics( SM_CXFIXEDFRAME);
-    WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;
-  #endif
-  #ifdef SCREENHEIGHT
-    WindowSize.bottom = SCREENHEIGHT + 2*GetSystemMetrics( SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION);
-    WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
-  #endif
-
-  hWndMainWindow = CreateWindow(szWindowClass, szTitle,
-				WS_SYSMENU|WS_CLIPCHILDREN
-				| WS_CLIPSIBLINGS,
-                                WindowSize.left, WindowSize.top,
-				WindowSize.right, WindowSize.bottom,
-                                NULL, NULL,
-				hInstance, NULL);
-
-  if (!hWndMainWindow)
-    {
-      return FALSE;
-    }
-
-  SendMessage(hWndMainWindow, WM_SETICON,
-	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOARSWIFT);
-  SendMessage(hWndMainWindow, WM_SETICON,
-	      (WPARAM)ICON_SMALL, (LPARAM)IDI_XCSOARSWIFT);
-
-  hBrushSelected = (HBRUSH)CreateSolidBrush(ColorSelected);
-  hBrushUnselected = (HBRUSH)CreateSolidBrush(ColorUnselected);
-  hBrushButton = (HBRUSH)CreateSolidBrush(ColorButton);
-
-  GetClientRect(hWndMainWindow, &rc);
-
-#if (WINDOWSPC>0)
-  rc.left = 0;
-  rc.right = SCREENWIDTH;
-  rc.top = 0;
-  rc.bottom = SCREENHEIGHT;
-#endif
-
-  Units::LoadUnitBitmap(hInstance);
-
-  InfoBoxLayout::ScreenGeometry(rc);
-
-  ////////////////////////
-
-  ///////////////////////////////////////// create infoboxes
-
-    InfoBoxLayout::CreateInfoBoxes(rc);
-
-    ButtonLabel::CreateButtonLabels(rc);
-    ButtonLabel::SetLabelText(0,TEXT("MODE"));
-
-  ////////////////// do fonts
-
-  ShowWindow(hWndMainWindow, SW_SHOW);
-
   int fontsz1 = (rc.bottom - rc.top );
   int fontsz2 = (rc.right - rc.left );
 
@@ -1502,10 +1417,105 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 		  (WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
     }
   #endif
+}
+
+//
+//  FUNCTION: InitInstance(HANDLE, int)
+//
+//  PURPOSE: Saves instance handle and creates main window
+//
+//  COMMENTS:
+//
+//    In this function, we save the instance handle in a global variable and
+//    create and display the main program window.
+//
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+  TCHAR szTitle[MAX_LOADSTRING];                        // The title bar text
+  TCHAR szWindowClass[MAX_LOADSTRING];                  // The window class name
+  RECT rc;
+
+  hInst = hInstance;            // Store instance handle in our global variable
+  LoadString(hInstance, IDC_XCSOAR, szWindowClass, MAX_LOADSTRING);
+  LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+
+  //If it is already running, then focus on the window
+  hWndMainWindow = FindWindow(szWindowClass, szTitle);
+  if (hWndMainWindow)
+    {
+      SetForegroundWindow((HWND)((ULONG) hWndMainWindow | 0x00000001));
+      return 0;
+    }
+
+  PreloadInitialisation();
+
+  MyRegisterClass(hInst, szWindowClass);
+
+  RECT WindowSize;
+
+  WindowSize.left = 0;
+  WindowSize.top = 0;
+  WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
+  WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
+
+  #ifdef SCREENWIDTH
+    WindowSize.right = SCREENWIDTH + 2*GetSystemMetrics( SM_CXFIXEDFRAME);
+    WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;
+  #endif
+  #ifdef SCREENHEIGHT
+    WindowSize.bottom = SCREENHEIGHT + 2*GetSystemMetrics( SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION);
+    WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
+  #endif
+
+  hWndMainWindow = CreateWindow(szWindowClass, szTitle,
+				WS_SYSMENU|WS_CLIPCHILDREN
+				| WS_CLIPSIBLINGS,
+                                WindowSize.left, WindowSize.top,
+				WindowSize.right, WindowSize.bottom,
+                                NULL, NULL,
+				hInstance, NULL);
+
+  if (!hWndMainWindow)
+    {
+      return FALSE;
+    }
+
+  SendMessage(hWndMainWindow, WM_SETICON,
+	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOARSWIFT);
+  SendMessage(hWndMainWindow, WM_SETICON,
+	      (WPARAM)ICON_SMALL, (LPARAM)IDI_XCSOARSWIFT);
+
+  hBrushSelected = (HBRUSH)CreateSolidBrush(ColorSelected);
+  hBrushUnselected = (HBRUSH)CreateSolidBrush(ColorUnselected);
+  hBrushButton = (HBRUSH)CreateSolidBrush(ColorButton);
+
+  GetClientRect(hWndMainWindow, &rc);
+
+#if (WINDOWSPC>0)
+  rc.left = 0;
+  rc.right = SCREENWIDTH;
+  rc.top = 0;
+  rc.bottom = SCREENHEIGHT;
+#endif
+  InfoBoxLayout::ScreenGeometry(rc);
+
+  ///////////////////////////////////////// create infoboxes
+
+  Units::LoadUnitBitmap(hInstance);
+  InfoBoxLayout::CreateInfoBoxes(rc);
+  ButtonLabel::CreateButtonLabels(rc);
+  ButtonLabel::SetLabelText(0,TEXT("MODE"));
+
+  ////////////////// do fonts
+  InitialiseFonts(rc);
 
   #if NEWINFOBOX > 0
   ButtonLabel::SetFont(MapWindowBoldFont);
   #endif
+
+  Message::Initialize(rc); // creates window, sets fonts
+
+  ShowWindow(hWndMainWindow, SW_SHOW);
 
   ///////////////////////////////////////////////////////
   //// create map window
@@ -1539,8 +1549,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   GaugeCDI::Create();
 
   GaugeVario::Create();
-
-  Message::Initialize(rc);
 
   if (EnableVarioGauge) {
     ShowWindow(hWndVarioWindow,SW_SHOW);
@@ -1670,24 +1678,113 @@ bool Debounce(void) {
 }
 
 
+void Shutdown(void) {
+  int i;
+
+  SaveSoundSettings();
+
+  VarioSound_EnableSound(false);
+
+  VarioSound_Close();
+
+  devCloseAll();
+
+#if (EXPERIMENTAL > 0)
+  bsms.Shutdown();
+#endif
+
+  MapWindow::CloseDrawingThread();
+
+  NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1;
+  AATEnabled = FALSE;
+  NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0;
+  NumberOfAirspaceCircles = 0;
+  CloseTerrain();
+  CloseTopology();
+  CloseTerrainRenderer();
+
+  if(Port1Available)
+    Port1Close(hPort1);
+  if (Port2Available)
+    Port2Close(hPort2);
+
+  DestroyWindow(hWndMapWindow);
+  DestroyWindow(hWndMenuButton);
+
+  GaugeCDI::Destroy();
+  GaugeVario::Destroy();
+
+  Message::Destroy();
+
+  Units::UnLoadUnitBitmap();
+
+#if NEWINFOBOX > 0
+  InfoBoxLayout::DestroyInfoBoxes();
+#else
+  for(i=0;i<numInfoWindows;i++)
+    {
+      DestroyWindow(hWndInfoWindow[i]);
+      DestroyWindow(hWndTitleWindow[i]);
+    }
+#endif
+
+  ButtonLabel::Destroy();
+
+  CommandBar_Destroy(hWndCB);
+  for (i=0; i<NUMSELECTSTRINGS; i++) {
+    delete Data_Options[i].Formatter;
+  }
+
+  DeleteObject(hBrushSelected);
+  DeleteObject(hBrushUnselected);
+  DeleteObject(hBrushButton);
+
+  DeleteObject(InfoWindowFont);
+  DeleteObject(TitleWindowFont);
+  DeleteObject(CDIWindowFont);
+  DeleteObject(MapLabelFont);
+  DeleteObject(MapWindowFont);
+  DeleteObject(MapWindowBoldFont);
+  DeleteObject(StatisticsFont);
+
+
+  if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
+  if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
+  if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
+
+  CloseWayPoints();
+
+  DestroyWindow(hWndMainWindow);
+
+  DeleteCriticalSection(&CritSec_FlightData);
+  DeleteCriticalSection(&CritSec_NavBox);
+  DeleteCriticalSection(&CritSec_TerrainDataCalculations);
+  DeleteCriticalSection(&CritSec_TerrainDataGraphics);
+
+  CloseProgressDialog();
+
+#if (WINDOWSPC>0)
+#if _DEBUG
+  _CrtDumpMemoryLeaks();
+#endif
+#endif
+}
+
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  int i;
   static bool lastpress = false;
   long wdata;
 
   switch (message)
     {
 
-
     case WM_ERASEBKGND:
       return TRUE; // JMW trying to reduce screen flicker
-
+      break;
     case WM_COMMAND:
       return MainMenu(hWnd, message, wParam, lParam);
       break;
-
     case WM_CTLCOLORSTATIC:
       wdata = GetWindowLong((HWND)lParam, GWL_USERDATA);
       if (wdata==1) {
@@ -1716,8 +1813,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
 	return (LRESULT)hBrushButton;
       }
-      break;
-
       break;
     case WM_CREATE:
       memset (&s_sai, 0, sizeof (s_sai));
@@ -1810,94 +1905,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       if(iTimerID)
         KillTimer(hWnd,iTimerID);
 
-      SaveSoundSettings();
-
-      VarioSound_EnableSound(false);
-
-      VarioSound_Close();
-
-
-      devCloseAll();
-
-#if (EXPERIMENTAL > 0)
-      bsms.Shutdown();
-#endif
-
-      MapWindow::CloseDrawingThread();
-
-      NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1;
-      AATEnabled = FALSE;
-      NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0;
-      NumberOfAirspaceCircles = 0;
-      CloseTerrain();
-      CloseTopology();
-      CloseTerrainRenderer();
-
-      if(Port1Available)
-        Port1Close(hPort1);
-      if (Port2Available)
-        Port2Close(hPort2);
-
-      DestroyWindow(hWndMapWindow);
-      DestroyWindow(hWndMenuButton);
-
-      GaugeCDI::Destroy();
-      GaugeVario::Destroy();
-
-      Message::Destroy();
-
-      Units::UnLoadUnitBitmap();
-
-      #if NEWINFOBOX > 0
-      InfoBoxLayout::DestroyInfoBoxes();
-      #else
-      for(i=0;i<numInfoWindows;i++)
-        {
-          DestroyWindow(hWndInfoWindow[i]);
-          DestroyWindow(hWndTitleWindow[i]);
-        }
-      #endif
-
-      ButtonLabel::Destroy();
-
-      CommandBar_Destroy(hWndCB);
-      for (i=0; i<NUMSELECTSTRINGS; i++) {
-        delete Data_Options[i].Formatter;
-      }
-
-      DeleteObject(hBrushSelected);
-      DeleteObject(hBrushUnselected);
-      DeleteObject(hBrushButton);
-
-      DeleteObject(InfoWindowFont);
-      DeleteObject(TitleWindowFont);
-      DeleteObject(CDIWindowFont);
-      DeleteObject(MapLabelFont);
-      DeleteObject(MapWindowFont);
-      DeleteObject(MapWindowBoldFont);
-      DeleteObject(StatisticsFont);
-
-
-      if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
-      if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
-      if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
-
-      CloseWayPoints();
-
-      DestroyWindow(hWndMainWindow);
-
-      DeleteCriticalSection(&CritSec_FlightData);
-      DeleteCriticalSection(&CritSec_NavBox);
-      DeleteCriticalSection(&CritSec_TerrainDataCalculations);
-      DeleteCriticalSection(&CritSec_TerrainDataGraphics);
-
-      CloseProgressDialog();
-
-#if (WINDOWSPC>0)
-#if _DEBUG
-      _CrtDumpMemoryLeaks();
-#endif
-#endif
+      Shutdown();
       break;
 
     case WM_DESTROY:
@@ -2084,26 +2092,31 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             case IDD_SETTINGS:
 
-	      SettingsEnter();
+	      if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
+		DoStatusMessage(TEXT("Settings locked in flight"));
+	      } else {
 
-              ShowWindow(hWndCB,SW_SHOW);
-              SetWindowPos(hWndMainWindow,HWND_TOP,
-                           0, 0, 0, 0,
-                           SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+		SettingsEnter();
 
-              SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
-              DialogBox(hInst, (LPCTSTR)IDD_SETTINGS, hWndMainWindow, (DLGPROC)Settings);
-              ShowWindow(hWndCB,SW_HIDE);
+		ShowWindow(hWndCB,SW_SHOW);
+		SetWindowPos(hWndMainWindow,HWND_TOP,
+			     0, 0, 0, 0,
+			     SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
 
-	      SettingsLeave();
+		SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
+		DialogBox(hInst, (LPCTSTR)IDD_SETTINGS, hWndMainWindow, (DLGPROC)Settings);
+		ShowWindow(hWndCB,SW_HIDE);
 
-              SwitchToMapWindow();
-	      FullScreen();
-              ShowWindow(hWndCB,SW_HIDE);
-	      HideMenu();
-              DialogActive = false;
-	      Debounce();
-              return 0;
+		SettingsLeave();
+	      }
+
+		SwitchToMapWindow();
+		FullScreen();
+		ShowWindow(hWndCB,SW_HIDE);
+		HideMenu();
+		DialogActive = false;
+		Debounce();
+		return 0;
 
             case IDD_LOGGER:
               MenuActive = true;
@@ -2400,7 +2413,9 @@ void DisplayText(void)
 
 void CommonProcessTimer()
 {
+#if (WINDOWSPC<1)
   SystemIdleTimerReset();
+#endif
 
   Message::Render();
 
@@ -2415,7 +2430,7 @@ void CommonProcessTimer()
     }
 
   if (DisplayLocked) {
-    if(MenuTimeOut==MENUTIMEOUTMAX) {
+    if(MenuTimeOut==MenuTimeoutMax) {
       ShowWindow(hWndMenuButton, SW_HIDE);
       InputEvents::setMode(TEXT("default"));
     }
@@ -2439,10 +2454,10 @@ void CommonProcessTimer()
     // of drawing the screen
 
     if (InfoBoxesDirty) {
-      InfoBoxesDirty = false;
       //JMWTEST    LockFlightData();
       AssignValues();
       DisplayText();
+      InfoBoxesDirty = false;
       //JMWTEST    UnlockFlightData();
     }
     if (MapWindow::RequestMapDirty) {
@@ -2451,10 +2466,10 @@ void CommonProcessTimer()
     }
     if (MapWindow::RequestAirDataDirty) {
       //      MapWindow::AirDataDirty = true;
-      MapWindow::RequestAirDataDirty = false;
       if (EnableVarioGauge) {
         GaugeVario::Render();
       }
+      MapWindow::RequestAirDataDirty = false;
     }
 
   }
@@ -2589,7 +2604,7 @@ void ProcessTimer(void)
       {
         if((navwarning == TRUE) && (LOCKWAIT == FALSE))
           {
-			InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
+	    InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
 
             MapWindow::MapDirty = true;
 
@@ -2639,8 +2654,12 @@ void SIMProcessTimer(void)
   GPS_INFO.NAVWarning = FALSE;
   GPS_INFO.SatellitesUsed = 6;
 
-  GPS_INFO.Latitude = FindLatitude(GPS_INFO.Latitude, GPS_INFO.Longitude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
-  GPS_INFO.Longitude = FindLongitude(GPS_INFO.Latitude, GPS_INFO.Longitude, GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
+  GPS_INFO.Latitude =
+    FindLatitude(GPS_INFO.Latitude, GPS_INFO.Longitude,
+		 GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
+  GPS_INFO.Longitude =
+    FindLongitude(GPS_INFO.Latitude, GPS_INFO.Longitude,
+		  GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
   GPS_INFO.Time+= 1.0;
 
 #ifdef _SIM_
@@ -2662,8 +2681,8 @@ void SwitchToMapWindow(void)
   DefocusInfoBox();
 
   SetFocus(hWndMapWindow);
-  if (  MenuTimeOut< MENUTIMEOUTMAX) {
-    MenuTimeOut = MENUTIMEOUTMAX;
+  if (  MenuTimeOut< MenuTimeoutMax) {
+    MenuTimeOut = MenuTimeoutMax;
   }
   if (  InfoBoxFocusTimeOut< FOCUSTIMEOUTMAX) {
     InfoBoxFocusTimeOut = FOCUSTIMEOUTMAX;
@@ -2909,6 +2928,10 @@ typedef struct _VIDEO_POWER_MANAGEMENT {
 
 void BlankDisplay(bool doblank) {
   static bool oldblank = false;
+
+#if (WINDOWSPC>0)
+  return;
+#endif
 
   if (!EnableAutoBlank) {
     return;
