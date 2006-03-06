@@ -821,17 +821,17 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
 		else 
 			DoStatusMessage(TEXT("Screen Mode Normal"));
   } else {
-
-	  if (EnableAuxiliaryInfo) {
-		MapWindow::RequestToggleFullScreen();
-		EnableAuxiliaryInfo = false;
-	  } else {
-		if (MapWindow::IsMapFullScreen()) {
-		  MapWindow::RequestToggleFullScreen();		    
-		} else {
-		  EnableAuxiliaryInfo = true;
-		}
-	  }
+    // toggle?
+    if (EnableAuxiliaryInfo) {
+      MapWindow::RequestToggleFullScreen();
+      EnableAuxiliaryInfo = false;
+    } else {
+      if (MapWindow::IsMapFullScreen()) {
+	MapWindow::RequestToggleFullScreen();		    
+      } else {
+	EnableAuxiliaryInfo = true;
+      }
+    }
   }
 }
 
@@ -842,13 +842,13 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
 //	auto on - Turn on if not already
 //	auto off - Turn off if not already
 //	auto toggle - Toggle current full screen status
-//	auto show
-//	+	- Zoom in a bit
-//	++	- Zoom in more
-//	-	- Zoom out a bit
-//	--	- Zoom out more
-//	n.n	- Zoom to particular number
-//	show - Show current zoom number
+//	auto show - Shows autozoom status
+//	+	- Zoom in
+//	++	- Zoom in near
+//	-	- Zoom out
+//	--	- Zoom out far
+//	n.n	- Zoom to a set scale
+//	show - Show current zoom scale
 void InputEvents::eventZoom(TCHAR* misc) {
   // JMW pass through to handler in MapWindow
   // here:
@@ -962,16 +962,20 @@ void InputEvents::eventClearWarningsOrTerrainTopology(TCHAR *misc) {
   MapWindow::Event_TerrainTopology(0);
 }
 
-// Do Clear Airspace warnings
+// ClearAirspaceWarnings
+// Clears airspace warnings for the selected airspace
+//     day: clears the warnings for the entire day
+//     ack: clears the warnings for the acknowledgement time
 void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("day")) == 0) 
 	// JMW clear airspace warnings for entire day (for selected airspace)
 	ClearAirspaceWarnings(true,true);
   else 
-	// default, clear airspace for short acknowledgmenet time
+	// default, clear airspace for short acknowledgement time
 	ClearAirspaceWarnings(true,false);
 }
 
+// ClearStatusMessages
 // Do Clear Event Warnings
 void InputEvents::eventClearStatusMessages(TCHAR *misc) {
   ClearStatusMessages();
@@ -979,6 +983,8 @@ void InputEvents::eventClearStatusMessages(TCHAR *misc) {
   Message::Acknowledge(0);
 }
 
+// SelectInfoBox
+// Selects the next or previous infobox
 void InputEvents::eventSelectInfoBox(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("next")) == 0) {
     Event_SelectInfoBox(1);
@@ -988,7 +994,8 @@ void InputEvents::eventSelectInfoBox(TCHAR *misc) {
   }
 }
 
-
+// ChangeInfoBoxType
+// Changes the type of the current infobox to the next/previous type
 void InputEvents::eventChangeInfoBoxType(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("next")) == 0) {
     Event_ChangeInfoBoxType(1);
@@ -998,7 +1005,12 @@ void InputEvents::eventChangeInfoBoxType(TCHAR *misc) {
   }
 }
 
-
+// ArmAdvance
+// Controls waypoint advance trigger:
+//     on: Arms the advance trigger
+//    off: Disarms the advance trigger
+//   toggle: Toggles between armed and disarmed.
+//   show: Shows current armed state
 void InputEvents::eventArmAdvance(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("on")) == 0) {
     AdvanceArmed = true;
@@ -1018,8 +1030,12 @@ void InputEvents::eventArmAdvance(TCHAR *misc) {
   }
 }
 
-
-
+// DoInfoKey
+// Performs functions associated with the selected infobox
+//    up: triggers the up event
+//    etc.
+//    Functions associated with the infoboxes are described in the
+//    infobox section in the reference guide
 void InputEvents::eventDoInfoKey(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0) {
     DoInfoKey(1);
@@ -1039,7 +1055,10 @@ void InputEvents::eventDoInfoKey(TCHAR *misc) {
   
 }
 
-
+// Mode
+// Sets the current event mode.
+//  The argument is the label of the mode to activate. 
+//  This is used to activate menus/submenus of buttons
 void InputEvents::eventMode(TCHAR *misc) {
 	ASSERT(misc != NULL);
 	InputEvents::setMode(misc);
@@ -1048,6 +1067,8 @@ void InputEvents::eventMode(TCHAR *misc) {
 	MapWindow::RequestFastRefresh = true;
 }
 
+// MainMenu
+// Don't think we need this.
 void InputEvents::eventMainMenu(TCHAR *misc) {
   // todo: popup main menu
 }
@@ -1056,6 +1077,9 @@ void InputEvents::eventMainMenu(TCHAR *misc) {
 void dlgChecklistShowModal(void);
 #endif  
 
+// Checklist
+// Displays the checklist dialog
+//  See the checklist dialog section of the reference manual for more info.
 void InputEvents::eventChecklist(TCHAR *misc) {
 #if (NEWINFOBOX>0)
   dlgChecklistShowModal();
@@ -1066,13 +1090,22 @@ void InputEvents::eventChecklist(TCHAR *misc) {
 void dlgTaskCalculatorShowModal(void);
 #endif  
 
+// Displays the task calculator dialog
+//  See the task calculator dialog section of the reference manual
+// for more info.
 void InputEvents::eventCalculator(TCHAR *misc) {
 #if (NEWINFOBOX>0)
   dlgTaskCalculatorShowModal();
 #endif  
 }
 
-
+// Status
+// Displays one of the three status dialogs:
+//    system: display the system status
+//    aircraft: displays the aircraft status
+//    task: displays the task status
+//  See the status dialog section of the reference manual for more info
+//  on these.
 void InputEvents::eventStatus(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("system")) == 0) {
     ShowStatusSystem();
@@ -1085,11 +1118,21 @@ void InputEvents::eventStatus(TCHAR *misc) {
       }
 }
 
-
+// Analysis
+// Displays the analysis/statistics dialog
+//  See the analysis dialog section of the reference manual
+// for more info.
 void InputEvents::eventAnalysis(TCHAR *misc) {
   PopupAnalysis();
 }
 
+// WaypointDetails
+// Displays waypoint details
+//         current: the current active waypoint
+//          select: brings up the waypoint selector, if the user then
+//                  selects a waypoint, then the details dialog is shown.
+//  See the waypoint dialog section of the reference manual
+// for more info.
 void InputEvents::eventWaypointDetails(TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
@@ -1125,15 +1168,21 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
 }
 
 
+// StatusMessage
+// Displays a user defined status message. 
+//    The argument is the text to be displayed.
+//    No punctuation characters are allowed.
 void InputEvents::eventStatusMessage(TCHAR *misc) {
 	DoStatusMessage(misc);
 }
 
+// Plays a sound from the filename
 void InputEvents::eventPlaySound(TCHAR *misc) {
   PlayResource(misc);
 }
 
-
+// MacCready
+// Adjusts MacCready settings
 // up, down, auto on, auto off, auto toggle, auto show
 void InputEvents::eventMacCready(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0) {
@@ -1154,12 +1203,20 @@ void InputEvents::eventMacCready(TCHAR *misc) {
     }
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
 	TCHAR Temp[100];
-	_stprintf(Temp,TEXT("%f"),MACCREADY*LIFTMODIFY);
-	DoStatusMessage(TEXT("MacCready Value"), Temp);
+	_stprintf(Temp,TEXT("%0.1f"),MACCREADY*LIFTMODIFY);
+	DoStatusMessage(TEXT("MacCready "), Temp);
   }
 }
 
 
+// Wind
+// Adjusts the wind magnitude and direction
+//     up: increases wind magnitude
+//   down: decreases wind magnitude
+//   left: rotates wind direction counterclockwise
+//  right: rotates wind direction clockwise
+//   save: saves wind value, so it is used at next startup
+//
 // TODO Increase wind by larger amounts ? Set wind to specific amount ?
 //	(may sound silly - but future may get SMS event that then sets wind)
 void InputEvents::eventWind(TCHAR *misc) {
@@ -1183,12 +1240,32 @@ void InputEvents::eventWind(TCHAR *misc) {
 
 int jmw_demo=0;
 
+// SendNMEA
+//  Sends a user-defined NMEA string to an external instrument.
+//   The string sent is prefixed with the start character '$'
+//   and appended with the checksum e.g. '*40'.  The user needs only
+//   to provide the text in between the '$' and '*'.
 void InputEvents::eventSendNMEA(TCHAR *misc) {
   if (misc) {
     VarioWriteNMEA(misc);
   }
 }
 
+// AdjustVarioFilter
+// When connected to the Vega variometer, this adjusts
+// the filter time constant
+//     slow/medium/fast
+// The following arguments can be used for diagnostics purposes
+//     statistics:
+//     diagnostics:
+//     psraw:
+//     switch:
+// The following arguments can be used to trigger demo modes:
+//     climbdemo:
+//     stfdemo:
+// Other arguments control vario setup:
+//     save: saves the vario configuration to nonvolatile memory on the instrument
+//     zero: Zero's the airspeed indicator's offset
 void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("slow")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,3"));
@@ -1261,15 +1338,12 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
     VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,5"));
     return;
   }
-
- if (_tcscmp(misc, TEXT("jjj"))==0) {
-    VarioWriteNMEA(TEXT("PDVSC,S,ToneCruiseLiftDetectionType,2"));
-    return;
- }
-
 }
 
 
+// Adjust audio deadband of internal vario sounds
+// +: increases deadband
+// -: decreases deadband
 void InputEvents::eventAudioDeadband(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("+"))) {
     SoundDeadband++;
@@ -1285,7 +1359,12 @@ void InputEvents::eventAudioDeadband(TCHAR *misc) {
 
 }
 
-
+// AdjustWaypoint
+// Adjusts the active waypoint of the task  
+//  next: selects the next waypoint, stops at final waypoint
+//  previous: selects the previous waypoint, stops at start waypoint
+//  nextwrap: selects the next waypoint, wrapping back to start after final
+//  previouswrap: selects the previous waypoint, wrapping to final after start
 void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("next")) == 0) {
     NextUpDown(1); // next
@@ -1298,26 +1377,38 @@ void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
   }
 }
 
-// toggle, abort, resume
+// AbortTask
+// Allows aborting and resuming of tasks
+// abort: aborts the task if active
+// resume: resumes the task if aborted
+// toggle: toggles between abort and resume
+// show: displays a status message showing the task abort status
 void InputEvents::eventAbortTask(TCHAR *misc) {
     LockFlightData();
-	if (_tcscmp(misc, TEXT("abort")) == 0)
-	    ResumeAbortTask(1);
-	else if (_tcscmp(misc, TEXT("resume")) == 0)
-	    ResumeAbortTask(-1);
-	else if (_tcscmp(misc, TEXT("show")) == 0) {
-		if (TaskAborted)
-		    DoStatusMessage(TEXT("Task Aborted"));
-		else 
-		    DoStatusMessage(TEXT("Task Resume"));			
-	} else 
-	    ResumeAbortTask();  // ToDo arg?
+    if (_tcscmp(misc, TEXT("abort")) == 0)
+      ResumeAbortTask(1);
+    else if (_tcscmp(misc, TEXT("resume")) == 0)
+	  ResumeAbortTask(-1);
+    else if (_tcscmp(misc, TEXT("show")) == 0) {
+      if (TaskAborted)
+	DoStatusMessage(TEXT("Task Aborted"));
+      else 
+	DoStatusMessage(TEXT("Task Resume"));			
+    } else 
+      ResumeAbortTask();  // ToDo arg?
     UnlockFlightData();
 }
 
 #include "device.h"
 #include "McReady.h"
 
+// Bugs
+// Adjusts the degradation of glider performance due to bugs
+// up: increases the performance by 10%
+// down: decreases the performance by 10%
+// max: cleans the aircraft of bugs
+// min: selects the worst performance (50%)
+// show: shows the current bug degradation
 void InputEvents::eventBugs(TCHAR *misc) {
   double oldBugs = BUGS;
   LockFlightData();
@@ -1349,7 +1440,13 @@ void InputEvents::eventBugs(TCHAR *misc) {
   UnlockFlightData();
 }
 
-
+// Ballast
+// Adjusts the ballast setting of the glider
+// up: increases ballast by 10% 
+// down: decreases ballast by 10%
+// max: selects 100% ballast
+// min: selects 0% ballast
+// show: displays a status message indicating the ballast percentage
 void InputEvents::eventBallast(TCHAR *misc) {
   double oldBallast= BALLAST;
   LockFlightData();
@@ -1382,6 +1479,17 @@ void InputEvents::eventBallast(TCHAR *misc) {
 #include "Task.h"
 #include "Logger.h"
 
+// Logger
+// Activates the internal IGC logger
+//  start: starts the logger 
+// start ask: starts the logger after asking the user to confirm
+// stop: stops the logger
+// stop ask: stops the logger after asking the user to confirm
+// toggle: toggles between on and off
+// toggle ask: toggles between on and off, asking the user to confirm
+// show: displays a status message indicating whether the logger is active
+// nmea: turns on and off NMEA logging
+// note: the text following the 'note' characters is added to the log file
 void InputEvents::eventLogger(TCHAR *misc) {
   // TODO - start logger without asking
   // start stop toggle addnote
@@ -1423,7 +1531,9 @@ void InputEvents::eventLogger(TCHAR *misc) {
   }
 }
 
-
+// RepeatStatusMessage
+// Repeats the last status message.  If pressed repeatedly, will
+// repeat previous status messages
 void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
   // new interface
   // TODO: display only by type specified in misc field
@@ -1431,6 +1541,12 @@ void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
 }
 
 
+// NearestAirspaceDetails
+// Displays details of the nearest airspace to the aircraft in a 
+// status message.  This does nothing if there is no airspace within
+// 100km of the aircraft.
+// If the aircraft is within airspace, this displays the distance and bearing
+// to the nearest exit to the airspace.
 void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   double nearestdistance, nearestbearing;
   int foundcircle, foundarea, i;
@@ -1471,14 +1587,14 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   }
 
   if (inside) {
-    _stprintf(text,TEXT("Inside airspace: %s\r\n%s\r\nExit: %.1f %s\r\nBearing %d"), 
+    _stprintf(text,TEXT("Inside airspace: %s\r\n%s\r\nExit: %.1f %s\r\nBearing %d\r\n"), 
 	     szTitleBuffer, 
 	     szMessageBuffer,
 	     nearestdistance*DISTANCEMODIFY,
 	     Units::GetDistanceName(),
 	     (int)nearestbearing);
   } else {
-    _stprintf(text,TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %.1f %s\r\nBearing %d"), 
+    _stprintf(text,TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %.1f %s\r\nBearing %d\r\n"), 
 	     szTitleBuffer, 
 	     szMessageBuffer,
 	     nearestdistance*DISTANCEMODIFY,
@@ -1489,12 +1605,16 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   // clear previous warning if any
   Message::Acknowledge(MSG_AIRSPACE);
 
-  // TODO No control via status data (ala DoStatusMEssage) - can we change this?
+  // TODO No control via status data (ala DoStatusMEssage) 
+  // - can we change this?
   Message::AddMessage(5000, MSG_AIRSPACE, text);
   
 }
 
-
+// NearestWaypointDetails
+// Displays the waypoint details dialog
+//  aircraft: the waypoint nearest the aircraft
+//  pan: the waypoint nearest to the pan cursor
 void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("aircraft")) == 0) {
     MapWindow::Event_NearestWaypointDetails(GPS_INFO.Longitude,
@@ -1508,28 +1628,35 @@ void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
 					    1.0e5, // big range..
 					    true); 
   }
-  // TODO, also allow getting waypoint details at center of screen, or at cursor..
-
 }
 
-
+// Null
+// The null event does nothing.  This can be used to override
+// default functionality
 void InputEvents::eventNull(TCHAR *misc) {
   // do nothing
 }
 
-
+// TaskLoad
+// Loads the task of the specified filename
 void InputEvents::eventTaskLoad(TCHAR *misc) {
   LoadNewTask(misc);
 }
 
+// TaskSave
+// Saves the task to the specified filename
 void InputEvents::eventTaskSave(TCHAR *misc) {
   SaveTask(misc);
 }
 
+// ProfileLoad
+// Loads the profile of the specified filename
 void InputEvents::eventProfileLoad(TCHAR *misc) {
   ReadProfile(misc);
 }
 
+// ProfileSave
+// Saves the profile to the specified filename
 void InputEvents::eventProfileSave(TCHAR *misc) {
   WriteProfile(misc);
 }
@@ -1543,6 +1670,13 @@ void dlgTaskOverviewShowModal(void);
 void dlgAirspaceShowModal(bool);
 #endif
 
+// Setup
+// Activates configuration and setting dialogs
+//  Basic: Basic settings (QNH/Bugs/Ballast/MaxTemperature)
+//  Wind: Wind settings
+//  Task: Task editor
+//  Airspace: Airspace filter settings
+// 
 void InputEvents::eventSetup(TCHAR *misc) {
 
   if (_tcscmp(misc,TEXT("Basic"))==0){
@@ -1580,7 +1714,8 @@ void InputEvents::eventSetup(TCHAR *misc) {
 }
 
 
-
+// DLLExecute
+// Runs the plugin of the specified filename
 void InputEvents::eventDLLExecute(TCHAR *misc) {
 	// LoadLibrary(TEXT("test.dll"));
 	
@@ -1668,7 +1803,11 @@ HINSTANCE _loadDLL(TCHAR *name) {
 	return NULL;
 }
 
-
+// AdjustForecastTemperature
+// Adjusts the maximum ground temperature used by the convection forecast
+// +: increases temperature by one degree celsius
+// -: decreases temperature by one degree celsius
+// show: Shows a status message with the current forecast temperature
 void InputEvents::eventAdjustForecastTemperature(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("+")) == 0) {
     CuSonde::adjustForecastTemperature(1.0);
@@ -1679,10 +1818,13 @@ void InputEvents::eventAdjustForecastTemperature(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("show")) == 0) {
     TCHAR Temp[100];
     _stprintf(Temp,TEXT("%f"),CuSonde::maxGroundTemperature);
-    DoStatusMessage(TEXT("Forecast temp"), Temp);
+    DoStatusMessage(TEXT("Forecast temperature"), Temp);
   }
 }
 
+// Run
+// Runs an external program of the specified filename.
+// Note that XCSoar will wait until this program exits.
 void InputEvents::eventRun(TCHAR *misc) {
   PROCESS_INFORMATION pi;
   if (!::CreateProcess(misc,

@@ -34,10 +34,11 @@ Copyright_License {
 #include <stdio.h>
 #include "WindowControls.h"
 #include "MapWindow.h"
+#include "InfoBoxLayout.h"
 #include "Utils.h"
 
-#define DEFAULTBORDERPENWIDTH 1
-#define SELECTORWIDTH         4
+#define DEFAULTBORDERPENWIDTH 1*InfoBoxLayout::scale
+#define SELECTORWIDTH         4*InfoBoxLayout::scale
 
 // utility functions
 
@@ -2272,6 +2273,7 @@ void WndProperty::Paint(HDC hDC){
 
 
 void WndProperty::RefreshDisplay() {
+  if (!mDataField) return;
   if (GetFocused())
     SetWindowText(mhEdit, mDataField->GetAsString());
   else

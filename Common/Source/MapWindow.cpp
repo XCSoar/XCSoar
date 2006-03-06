@@ -55,7 +55,9 @@ Copyright_License {
 #include "GaugeCDI.h"
 #include "InfoBoxLayout.h"
 
-
+#if (WINDOWSPC>0)
+#include <Wingdi.h>
+#endif
 
 int TrailActive = TRUE;
 
@@ -117,6 +119,8 @@ HANDLE MapWindow::hDrawThread;
 
 double MapWindow::RequestMapScale = 5;
 double MapWindow::MapScale = 5;
+double MapWindow::MapScaleOverDistanceModify = 5/DISTANCEMODIFY;
+double MapWindow::ResMapScaleOverDistanceModify = 0.0;
 double MapWindow::DisplayAngle = 0.0;
 double MapWindow::DisplayAircraftAngle = 0.0;
 double MapWindow::DrawScale;
@@ -726,14 +730,14 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
 
 
 int MapWindow::GetMapResolutionFactor(void) {
-  return 30; // *InfoBoxLayout::scale;
+  return 30*InfoBoxLayout::scale;
 }
 
 double MapWindow::StepMapScale(int Step){
   ScaleCurrent += Step;
   ScaleCurrent = max(0,min(ScaleListCount-1, ScaleCurrent));
   return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
-	 /Appearance.DefaultMapWidth);
+	 /(Appearance.DefaultMapWidth*InfoBoxLayout::scale));
 }
 
 double MapWindow::FindMapScale(double Value){
@@ -741,7 +745,9 @@ double MapWindow::FindMapScale(double Value){
   int    i;
   double BestFit = 99999;
   int    BestFitIdx=-1;
-  double DesiredScale = (Value * Appearance.DefaultMapWidth) / 
+  double DesiredScale = 
+    (Value 
+     *Appearance.DefaultMapWidth*InfoBoxLayout::scale) / 
     GetMapResolutionFactor();
 
   for (i=0; i<ScaleListCount; i++){
@@ -755,7 +761,7 @@ double MapWindow::FindMapScale(double Value){
   if (BestFitIdx != -1){
     ScaleCurrent = BestFitIdx;
     return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
-	   /Appearance.DefaultMapWidth);
+	   /Appearance.DefaultMapWidth*InfoBoxLayout::scale);
   }
   return(Value);
 }
@@ -1107,7 +1113,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
     
     distance = isqrt4((long)((XstartScreen-X)*(XstartScreen-X)+
-                      (YstartScreen-Y)*(YstartScreen-Y)));
+			     (YstartScreen-Y)*(YstartScreen-Y)))
+      /InfoBoxLayout::scale;
     
     GetLocationFromScreen(&X, &Y);
     
@@ -1171,6 +1178,21 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 extern int FrameCount;
 
 
+void MapWindow::ModifyMapScale(void) {
+  // limit zoomed in so doesn't reach silly levels
+  if (MapScale<0.2) {
+    MapScale = 0.2; 
+  }
+  MapScaleOverDistanceModify = MapScale/DISTANCEMODIFY;
+  ResMapScaleOverDistanceModify = 
+    GetMapResolutionFactor()/MapScaleOverDistanceModify;
+  RequestMapScale = MapScale;
+  DrawScale = MapScaleOverDistanceModify;
+  DrawScale = DrawScale/111000;
+  DrawScale = GetMapResolutionFactor()/DrawScale;
+}
+
+
 void MapWindow::UpdateMapScale()
 {
   static double AutoMapScale= RequestMapScale;
@@ -1184,13 +1206,8 @@ void MapWindow::UpdateMapScale()
   if(MapScale != RequestMapScale)
   {
     MapScale = RequestMapScale;
-    
-    DrawScale = MapScale/DISTANCEMODIFY;
-    DrawScale = DrawScale/111000;
-    DrawScale = GetMapResolutionFactor()/DrawScale;
-
+    ModifyMapScale();
     useraskedforchange = true;
-
   }
   
   if (AutoZoom) {
@@ -1214,7 +1231,7 @@ void MapWindow::UpdateMapScale()
       
       if(
          (DerivedDrawInfo.WaypointDistance 
-          < ( AutoZoomFactor * MapScale / DISTANCEMODIFY))
+          < ( AutoZoomFactor * MapScaleOverDistanceModify))
          || 
          (StartingAutoMapScale==0.0))
       {
@@ -1230,20 +1247,13 @@ void MapWindow::UpdateMapScale()
 
         // set scale exactly so that waypoint distance is the zoom factor
         // across the screen
-        MapScale = DerivedDrawInfo.WaypointDistance * DISTANCEMODIFY 
-          / AutoZoomFactor;
-
-        // limit zoomed in so doesn't reach silly levels
-        if (MapScale<0.2) {
-          MapScale = 0.2; 
-        }
-        RequestMapScale = MapScale; 
-        
+        MapScale = DerivedDrawInfo.WaypointDistance*DISTANCEMODIFY 
+	  / AutoZoomFactor;
+	ModifyMapScale();
         // calculate scale factors for display etc.
-        DrawScale = DerivedDrawInfo.WaypointDistance / AutoZoomFactor;
-        DrawScale = DrawScale/111000;
-        DrawScale = GetMapResolutionFactor()/DrawScale;
-
+	//        DrawScale = DerivedDrawInfo.WaypointDistance / AutoZoomFactor;
+	//        DrawScale = DrawScale/111000;
+	//        DrawScale = GetMapResolutionFactor()/DrawScale;
 
       }	else {
 
@@ -1368,8 +1378,9 @@ void MapWindow::RenderMapWindow(  RECT rc)
   
   CalculateScreenPositions(Orig, rc, &Orig_Aircraft);
   CalculateScreenPositionsAirspace(Orig, rc, &Orig_Aircraft);
-  
+
   if (drawmap) {
+  
     CalculateWaypointReachable();
     
     // display border and fill background..
@@ -1426,6 +1437,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     DrawWaypoints(hdcDrawWindowBg,rc);
 
+
     // draw wind vector at aircraft
     #if (ALTERNATEWINDVECTOR == 0)
     if (!DerivedDrawInfo.Circling && (!EnablePan)) {
@@ -1455,6 +1467,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     // marks on top...
     DrawMarks(hdcDrawWindowBg, rc);
+
 
   }
 
@@ -1494,11 +1507,8 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
-  
   MapScale = RequestMapScale;
-  DrawScale = MapScale/DISTANCEMODIFY;
-  DrawScale = DrawScale/111000;
-  DrawScale = GetMapResolutionFactor()/DrawScale;
+  ModifyMapScale();
   
   //  THREADRUNNING = FALSE;
   THREADEXIT = FALSE;
@@ -1614,6 +1624,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
         continue;
       }
     }
+
 
     LockTerrainDataCalculations();
     terrain_dem_calculations.SetCacheTime();
@@ -1812,12 +1823,37 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
 
 }
 
+void MapWindow::DrawBitmapX(HDC hdc, int x, int y,
+			    int sizex, int sizey,
+			    HDC source,
+			    int offsetx, int offsety,
+			    DWORD mode) {
+#if (WINDOWSPC>0) 
+  StretchBlt(hdc, x, y, 
+	     sizex*InfoBoxLayout::scale, 
+	     sizey*InfoBoxLayout::scale, 
+	     source,
+	     offsetx, offsety, sizex, sizey,
+	     mode);
+#else
+  BitBlt(hdc, x, y, sizex, sizey, 
+	 source, offsetx, offsety, mode); 
+#endif
+
+}
 
 void MapWindow::DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h) {
   SelectObject(hDCTemp, h);
-  BitBlt(hdc,x-5,y-5,10,10,
+
+  DrawBitmapX(hdc,
+	      x-5*InfoBoxLayout::scale,
+	      y-5*InfoBoxLayout::scale,
+	      10,10,
     hDCTemp,0,0,SRCPAINT);
-  BitBlt(hdc,x-5,y-5,10,10,
+  DrawBitmapX(hdc,
+	      x-5*InfoBoxLayout::scale,
+	      y-5*InfoBoxLayout::scale,
+	      10,10,
     hDCTemp,10,0,SRCAND);
 }
 
@@ -1836,29 +1872,36 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
 
   if (!extGPSCONNECT) {
     SelectObject(hDCTemp,hGPSStatus2);
-    BitBlt(hDC,
-	   rc.left+2,
-	   rc.bottom-20-2+Appearance.GPSStatusOffset.y*InfoBoxLayout::scale,
-	   20,20,
-           hDCTemp,0,0,SRCAND);
+    DrawBitmapX(hDC, 
+		rc.left+2*InfoBoxLayout::scale,
+		rc.bottom+(Appearance.GPSStatusOffset.y-22)
+		*InfoBoxLayout::scale,
+		20, 20,
+		hDCTemp, 
+		0, 0, SRCAND);
 
     TextInBox(hDC, gettext(gpswarningtext1), 
-	      rc.left+24, 
-	      rc.bottom-19+Appearance.GPSStatusOffset.y*InfoBoxLayout::scale, 
+	      rc.left+24*InfoBoxLayout::scale, 
+	      rc.bottom+(Appearance.GPSStatusOffset.y-19)
+	      *InfoBoxLayout::scale, 
 	      0, TextInBoxMode);
 
   } else
     if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed==0)) {
       SelectObject(hDCTemp,hGPSStatus1);
-      BitBlt(hDC,
-	     rc.left+2,
-	     rc.bottom-20-2+Appearance.GPSStatusOffset.y*InfoBoxLayout::scale,
-	     20,20,
-             hDCTemp,0,0,SRCAND);
+
+      DrawBitmapX(hDC, 
+		  rc.left+2*InfoBoxLayout::scale,
+		  rc.bottom+(Appearance.GPSStatusOffset.y-22)
+		  *InfoBoxLayout::scale,
+		  20, 20,
+		  hDCTemp, 
+		  0, 0, SRCAND);
 
       TextInBox(hDC, gettext(gpswarningtext2), 
-		rc.left+24, 
-		rc.bottom-19+Appearance.GPSStatusOffset.y*InfoBoxLayout::scale,
+		rc.left+24*InfoBoxLayout::scale, 
+		rc.bottom+
+		(Appearance.GPSStatusOffset.y-19)*InfoBoxLayout::scale,
 		0, TextInBoxMode);
 
     }
@@ -1899,10 +1942,23 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
         SelectObject(hDCTemp,hLoggerOff);
       }
       //changed draw mode & icon for higher opacity 12aug -st
-      BitBlt(hdc,rc.right+offset-3+Appearance.FlightModeOffset.x,rc.bottom-7-3+Appearance.FlightModeOffset.y,7,7,
-       hDCTemp,0,0,SRCPAINT);
-      BitBlt(hdc,rc.right+offset-3+Appearance.FlightModeOffset.x,rc.bottom-7-3+Appearance.FlightModeOffset.y,7,7,
-       hDCTemp,7,0,SRCAND);
+      DrawBitmapX(hdc,
+		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
+		  *InfoBoxLayout::scale,
+		  rc.bottom+(-7-3+Appearance.FlightModeOffset.y)
+		  *InfoBoxLayout::scale,
+		  7,7,
+		  hDCTemp,
+		  0,0,SRCPAINT);
+
+      DrawBitmapX(hdc,
+		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
+		  *InfoBoxLayout::scale,
+		  rc.bottom+(-7-3+Appearance.FlightModeOffset.y)
+		  *InfoBoxLayout::scale,
+		  7,7,
+		  hDCTemp,
+		  7,0,SRCAND);
     }
   }
 
@@ -1929,10 +1985,23 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
 
     offset -= 24;
 
-    BitBlt(hdc,rc.right+offset-3+Appearance.FlightModeOffset.x,rc.bottom-20-3+Appearance.FlightModeOffset.y,24,20,
-      hDCTemp,0,0,SRCPAINT);
-    BitBlt(hdc,rc.right+offset-3+Appearance.FlightModeOffset.x,rc.bottom-20-3+Appearance.FlightModeOffset.y,24,20,
-      hDCTemp,24,0,SRCAND);
+      DrawBitmapX(hdc,
+		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
+		  *InfoBoxLayout::scale,
+		  rc.bottom+(-20-3+Appearance.FlightModeOffset.y)
+		  *InfoBoxLayout::scale,
+		  24,20,
+		  hDCTemp,
+		  0,0,SRCPAINT);
+
+      DrawBitmapX(hdc,
+		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
+		  *InfoBoxLayout::scale,
+		  rc.bottom+(-20-3+Appearance.FlightModeOffset.y)
+		  *InfoBoxLayout::scale,
+		  24,20,
+		  hDCTemp,
+		  24,0,SRCAND);
 
   } else if (Appearance.FlightModeIcon == apFlightModeIconAltA){
 
@@ -2006,10 +2075,24 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
     offset -= 24;
 
     //changed draw mode & icon for higher opacity 12aug -st
-    BitBlt(hdc,rc.right+offset-3+Appearance.FlightModeOffset.x,rc.bottom-20-3+Appearance.FlightModeOffset.y,24,20,
-	   hDCTemp,0,0,SRCPAINT);
-    BitBlt(hdc,rc.right+offset-3+Appearance.FlightModeOffset.x,rc.bottom-20-3+Appearance.FlightModeOffset.y,24,20,
-	   hDCTemp,24,0,SRCAND);
+
+      DrawBitmapX(hdc,
+		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
+		  *InfoBoxLayout::scale,
+		  rc.bottom+(-20-3+Appearance.FlightModeOffset.y)
+		  *InfoBoxLayout::scale,
+		  24,20,
+		  hDCTemp,
+		  0,0,SRCPAINT);
+
+      DrawBitmapX(hdc,
+		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
+		  *InfoBoxLayout::scale,
+		  rc.bottom+(-20-3+Appearance.FlightModeOffset.y)
+		  *InfoBoxLayout::scale,
+		  24,20,
+		  hDCTemp,
+		  24,0,SRCAND);
 
     //  commented @ 12aug st
     //  BitBlt(hdc,rc.right-48-3,rc.bottom-20-3,24,20,
@@ -2073,6 +2156,8 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
     if(WayPointList[i].Visible )
     {
 
+      bool irange = false;
+
       DisplayMode.AsInt = 0;
       if(MapScale > 20)
       {
@@ -2101,20 +2186,29 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         SelectObject(hDCTemp,hTurnPoint);
       }
 
-      if(((Task[ActiveWayPoint].Index == (int)i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
-      {
-        BitBlt(hdc,WayPointList[i].Screen.x-10 , WayPointList[i].Screen.y-10,20,20,
-          hDCTemp,0,0,SRCPAINT);
-        BitBlt(hdc,WayPointList[i].Screen.x-10 , WayPointList[i].Screen.y-10,20,20,
-          hDCTemp,20,0,SRCAND);
+      irange = ((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10);
 
+    if((Task[ActiveWayPoint].Index == (int)i) || irange)
+      {
+
+        DrawBitmapX(hdc,
+		    WayPointList[i].Screen.x-10*InfoBoxLayout::scale, 
+		    WayPointList[i].Screen.y-10*InfoBoxLayout::scale,
+		    20,20,
+		    hDCTemp,0,0,SRCPAINT);
+	
+        DrawBitmapX(hdc,
+		    WayPointList[i].Screen.x-10*InfoBoxLayout::scale, 
+		    WayPointList[i].Screen.y-10*InfoBoxLayout::scale,
+		    20,20,
+		    hDCTemp,20,0,SRCAND);
       }
 
       // JMW
       if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
 
         if (WaypointInTask(i)
-	    || ((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) ) 
+	    || ((((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT))&&(irange))) 
 	  {
 
           if (DisplayMode.AsInt)
@@ -2131,12 +2225,10 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         
       } else
 
-        if(((Task[ActiveWayPoint].Index == (int)i) || (WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) && (MapScale <= 10))
+        if((Task[ActiveWayPoint].Index == (int)i) || irange)
         {
           switch(pDisplayTextType)
           {
-
-
 
           case DISPLAYNAME:
 
@@ -2191,7 +2283,6 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 #endif
           break;
           }
-
 
           MapWaypointLabelAdd(
             Buffer,
@@ -2283,21 +2374,49 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
 
   if (!WayPointList) return;
   
-  if((Task[0].Index >=0) &&  (Task[1].Index >=0))
+  if((Task[0].Index >=0) &&  (Task[1].Index >=0) && (ActiveWayPoint<2))
   {
     if(StartLine)
     { 
       DrawDashLine(hdc, 2, WayPointList[Task[0].Index].Screen, Task[0].End, RGB(127,127,127));
       DrawDashLine(hdc, 2, WayPointList[Task[0].Index].Screen, Task[0].Start , RGB(127,127,127));
     }
-    tmp = StartRadius*DISTANCEMODIFY/MapScale; 
-    tmp = tmp * GetMapResolutionFactor();
-    SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
+    tmp = StartRadius*ResMapScaleOverDistanceModify; 
+    SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
+    SelectObject(hdc, GetStockObject(BLACK_PEN));
     Circle(hdc,WayPointList[Task[0].Index].Screen.x,WayPointList[Task[0].Index].Screen.y,(int)tmp, rc); 
   }
   
   for(i=1;i<MAXTASKPOINTS-1;i++)
   {
+    if((Task[i].Index >=0) &&  (Task[i+1].Index <0))
+      { // final waypoint
+	if (ActiveWayPoint>1) { 
+	  // only draw finish line when past the first
+	  // waypoint.
+
+	if(FinishLine)
+	  { 
+	    DrawDashLine(hdc, 2, 
+			 WayPointList[Task[i].Index].Screen, 
+			 Task[i].End, 
+			 RGB(127,127,127));
+	    DrawDashLine(hdc, 2, 
+			 WayPointList[Task[i].Index].Screen, 
+			 Task[i].Start, 
+			 RGB(127,127,127));
+	  }
+	tmp = FinishRadius*ResMapScaleOverDistanceModify; 
+	SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
+	SelectObject(hdc, GetStockObject(BLACK_PEN));
+	Circle(hdc,
+	       WayPointList[Task[i].Index].Screen.x,
+	       WayPointList[Task[i].Index].Screen.y,
+	       (int)tmp, rc); 
+	}
+	
+      }
+
     if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
     {
       if(AATEnabled != TRUE)
@@ -2307,8 +2426,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
         
         if(FAISector != TRUE)
         {
-          tmp = SectorRadius*DISTANCEMODIFY/MapScale;
-          tmp = tmp * GetMapResolutionFactor();
+          tmp = SectorRadius*ResMapScaleOverDistanceModify;
           SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
           Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc); 
         }
@@ -2340,6 +2458,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
   double tmp;
 
   if (!WayPointList) return;
+  if (!AATEnabled) return;
 
   COLORREF whitecolor = RGB(0xff,0xff, 0xff);
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
@@ -2354,64 +2473,58 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
   {
     if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
     {
-      if(AATEnabled == TRUE)
-      {
-        if(Task[i].AATType == CIRCLE)
+      if(Task[i].AATType == CIRCLE)
         {
-          tmp = Task[i].AATCircleRadius * DISTANCEMODIFY/MapScale;
-          tmp = tmp * GetMapResolutionFactor();
-
+          tmp = Task[i].AATCircleRadius*ResMapScaleOverDistanceModify;
+	  
           // this color is used as the black bit
           SetTextColor(hDCTemp, 
-                   Colours[iAirspaceColour[AATASK]]);
-
+		       Colours[iAirspaceColour[AATASK]]);
+	  
           // this color is the transparent bit
           SetBkColor(hDCTemp, 
                      whitecolor);
-
+	  
           SelectObject(hDCTemp, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
           SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
-
+	  
           Circle(hDCTemp,
 		 WayPointList[Task[i].Index].Screen.x,
 		 WayPointList[Task[i].Index].Screen.y,
 		 (int)tmp, rc); 
         }
-        else
+      else
         {
-
+	  
           // this color is used as the black bit
           SetTextColor(hDCTemp, 
-                   Colours[iAirspaceColour[AATASK]]);
-
+		       Colours[iAirspaceColour[AATASK]]);
+	  
           // this color is the transparent bit
           SetBkColor(hDCTemp, 
                      whitecolor);
-
+	  
           SelectObject(hDCTemp, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
           SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
-
-          tmp = Task[i].AATSectorRadius * DISTANCEMODIFY/MapScale;
-          tmp = tmp * GetMapResolutionFactor();
-
+	  
+          tmp = Task[i].AATSectorRadius*ResMapScaleOverDistanceModify;
+	  
           Segment(hDCTemp,
 		  WayPointList[Task[i].Index].Screen.x,
 		  WayPointList[Task[i].Index].Screen.y,(int)tmp, rc, 
 		  Task[i].AATStartRadial-DisplayAngle, 
 		  Task[i].AATFinishRadial-DisplayAngle); 
-	 
+	  
           DrawSolidLine(hDCTemp,
 			WayPointList[Task[i].Index].Screen, Task[i].AATStart);
           DrawSolidLine(hDCTemp,
 			WayPointList[Task[i].Index].Screen, Task[i].AATFinish);
         }
-      }
     }
   }
 
   // restore original color
   SetTextColor(hDCTemp, origcolor);
-
 
   //////
 
@@ -2429,58 +2542,15 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
 		   whitecolor
 		   );
 
-  /*
-  TransparentImage(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
-    hDCTemp,rc.left,rc.top,
-    whitecolor
-  );
-  */
-
   #else
-  {
-
-  // JMW disabled this, it is buggy.
-
-    DWORD tm = GetTickCount();
-    HDC dc = CreateCompatibleDC(hdcDrawWindowBg);
-    HBITMAP memBM = CreateCompatibleBitmap (dc, rc.right-rc.left, rc.bottom-rc.top);
-    HBITMAP oldBmp = (HBITMAP)SelectObject(dc, memBM);
-
-    SetBkColor(hDCTemp, RGB(0xff,0xff,0xff));
-    // JMW bug fix..
-
-    //    BitBlt(dc, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top,
-    //  	   hDCTemp, rc.left, rc.top,SRCCOPY /*SRCAND*/);
-    BitBlt(dc, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
-      	   hDCTemp, 0, 0, SRCCOPY /*SRCAND*/);
-
-    // test draw the mask
-    //    BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top,
-    //  	   dc, rc.left, rc.top,SRCCOPY /*SRCAND*/);
-
-    /*
-    MaskBlt(hdcDrawWindowBg,
-      rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
-      hDCTemp, rc.left,rc.top,
-      memBM, rc.left,rc.top,
-      MAKEROP4(SRCAND, SRCCOPY)
-    );
-    */
-    MaskBlt(hdcDrawWindowBg,
-      0,0,rc.right-rc.left,rc.bottom-rc.top,
-      hDCTemp, 0, 0,
-      memBM, 0, 0,
-      MAKEROP4(SRCAND, SRCCOPY)
-    );
-
-    SelectObject(dc, oldBmp);
-    DeleteObject(memBM);
-    DeleteDC(dc);
-
-    tm = GetTickCount()-tm;
-    tm = GetTickCount()-tm;
-
-  }
+  TransparentBlt(hdcDrawWindowBg,
+		   rc.left,rc.top,
+		   rc.right-rc.left,rc.bottom-rc.top,
+		   hDCTemp,
+		   rc.left,rc.top,
+		   rc.right-rc.left,rc.bottom-rc.top,
+		   whitecolor
+		   );
   #endif
 
 }
@@ -3040,7 +3110,6 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, POINT Orig)
       Arrow[i].x = iround(dX+Orig.x);  Arrow[i].y = iround(dY+Orig.y);
     }
 
-
     Polygon(hdc,Arrow,7);
 
   } else
@@ -3291,58 +3360,16 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 		   whitecolor
 		   );
 
-  /*
-  TransparentImage(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
-    hDCTemp,rc.left,rc.top,
-    whitecolor
-  );
-  */
-
   #else
-  {
 
-  // JMW disabled this, it is buggy.
-
-    DWORD tm = GetTickCount();
-    HDC dc = CreateCompatibleDC(hdcDrawWindowBg);
-    HBITMAP memBM = CreateCompatibleBitmap (dc, rc.right-rc.left, rc.bottom-rc.top);
-    HBITMAP oldBmp = (HBITMAP)SelectObject(dc, memBM);
-
-    SetBkColor(hDCTemp, RGB(0xff,0xff,0xff));
-    // JMW bug fix..
-
-    //    BitBlt(dc, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top,
-    //  	   hDCTemp, rc.left, rc.top,SRCCOPY /*SRCAND*/);
-    BitBlt(dc, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
-      	   hDCTemp, 0, 0, SRCCOPY /*SRCAND*/);
-
-    // test draw the mask
-    //    BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top,
-    //  	   dc, rc.left, rc.top,SRCCOPY /*SRCAND*/);
-
-    /*
-    MaskBlt(hdcDrawWindowBg,
-      rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
-      hDCTemp, rc.left,rc.top,
-      memBM, rc.left,rc.top,
-      MAKEROP4(SRCAND, SRCCOPY)
-    );
-    */
-    MaskBlt(hdcDrawWindowBg,
-      0,0,rc.right-rc.left,rc.bottom-rc.top,
-      hDCTemp, 0, 0,
-      memBM, 0, 0,
-      MAKEROP4(SRCAND, SRCCOPY)
-    );
-
-    SelectObject(dc, oldBmp);
-    DeleteObject(memBM);
-    DeleteDC(dc);
-
-    tm = GetTickCount()-tm;
-    tm = GetTickCount()-tm;
-
-  }
+  TransparentBlt(hdcDrawWindowBg,
+		   rc.left,rc.top,
+		   rc.right-rc.left,rc.bottom-rc.top,
+		   hDCTemp,
+		   rc.left,rc.top,
+		   rc.right-rc.left,rc.bottom-rc.top,
+		   whitecolor
+		   );
   #endif
 
 	if (pt != NULL)
@@ -3853,8 +3880,7 @@ void MapWindow::CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
       AirspaceCircle[i].ScreenX = scx;
       AirspaceCircle[i].ScreenY = scy;
       
-      tmp = AirspaceCircle[i].Radius * DISTANCEMODIFY/MapScale;
-      tmp = tmp * GetMapResolutionFactor();
+      tmp = AirspaceCircle[i].Radius*ResMapScaleOverDistanceModify;
       
       AirspaceCircle[i].ScreenR = (int)tmp;
     }
@@ -3975,6 +4001,19 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
       Task[i].Target.y = scy;
     }
 
+    if((Task[i].Index >=0) &&  (Task[i+1].Index <0))
+    {
+      // finish
+      LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, &scx, &scy);
+      
+      Task[i].End.x  = scx;
+      Task[i].End.y = scy;
+      
+      LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, &scx, &scy);      
+      Task[i].Start.x  = scx;
+      Task[i].Start.y = scy;
+    }
+
     if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
     {
       LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, &scx, &scy);
@@ -3982,8 +4021,7 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
       Task[i].End.x  = scx;
       Task[i].End.y = scy;
       
-      LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, &scx, &scy);
-      
+      LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, &scx, &scy);      
       Task[i].Start.x  = scx;
       Task[i].Start.y = scy;
 
@@ -4374,3 +4412,6 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
   SelectObject(hDC, hpOld);
 
 }
+
+
+//////////////////////

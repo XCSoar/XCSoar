@@ -18,15 +18,16 @@ static void OnSplashPaint(WindowControl * Sender, HDC hDC){
 
   RECT  rc;
 
-  hSplash=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SWIFT));
+  hSplash=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_DISCLAIMER));
 
   CopyRect(&rc, Sender->GetBoundRect());
   HDC hDCTemp = CreateCompatibleDC(hDC);
 
-  //    Statistics::RenderTask(hDC, rcgfx);
   SelectObject(hDCTemp, hSplash);
-  StretchBlt(hDC, rc.left, rc.top, rc.right, rc.bottom,
-	     hDCTemp, 0, 0, 50, 50, SRCCOPY);
+  StretchBlt(hDC, 
+	     rc.left, rc.top, 
+	     rc.right, rc.bottom,
+	     hDCTemp, 0, 0, 318, 163, SRCCOPY);
 	     
   DeleteObject(hSplash);
   DeleteDC(hDCTemp);

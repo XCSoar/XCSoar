@@ -43,12 +43,14 @@ Copyright_License {
 #include "McReady.h"
 #include "dlgTools.h"
 #include "device.h"
+#include "Process.h"
 
 extern int UTCOffset;
 
 static bool changed = false;
 static bool taskchanged = false;
 static bool requirerestart = false;
+static bool utcchanged = false;
 static int page=0;
 static WndForm *wf=NULL;
 static WndFrame *wConfig1=NULL;
@@ -65,8 +67,9 @@ static WndFrame *wConfig11=NULL;
 static WndFrame *wConfig12=NULL;
 static WndFrame *wConfig13=NULL;
 static WndFrame *wConfig14=NULL;
+static WndFrame *wConfig15=NULL;
 
-#define NUMPAGES 13
+#define NUMPAGES 14
 
 static void NextPage(int Step){
   page += Step;
@@ -77,7 +80,7 @@ static void NextPage(int Step){
     wf->SetCaption(TEXT("1 Airspace"));
     break;
   case 1:
-    wf->SetCaption(TEXT("2 Display"));
+    wf->SetCaption(TEXT("2 Map Display"));
     break;
   case 2:
     wf->SetCaption(TEXT("3 Final Glide"));
@@ -92,28 +95,31 @@ static void NextPage(int Step){
     wf->SetCaption(TEXT("6 Units"));
     break;
   case 6:
-    wf->SetCaption(TEXT("7 Appearance"));
+    wf->SetCaption(TEXT("7 Interface"));
     break;
   case 7:
-    wf->SetCaption(TEXT("8 Vario Gauge"));
+    wf->SetCaption(TEXT("8 Appearance"));
     break;
   case 8:
-    wf->SetCaption(TEXT("9 Task"));
+    wf->SetCaption(TEXT("9 Vario Gauge"));
     break;
   case 9:
-    wf->SetCaption(TEXT("10 InfoBox Circling"));
+    wf->SetCaption(TEXT("10 Task"));
     break;
   case 10:
-    wf->SetCaption(TEXT("11 InfoBox Cruise"));
+    wf->SetCaption(TEXT("11 InfoBox Circling"));
     break;
   case 11:
-    wf->SetCaption(TEXT("12 InfoBox Final Glide"));
+    wf->SetCaption(TEXT("12 InfoBox Cruise"));
     break;
   case 12:
-    wf->SetCaption(TEXT("13 InfoBox Auxiliary"));
+    wf->SetCaption(TEXT("13 InfoBox Final Glide"));
     break;
   case 13:
-    wf->SetCaption(TEXT("14 Core files"));
+    wf->SetCaption(TEXT("14 InfoBox Auxiliary"));
+    break;
+  case 14:
+    wf->SetCaption(TEXT("15 Core files"));
     break;
   }
   wConfig1->SetVisible(page == 0);
@@ -130,6 +136,7 @@ static void NextPage(int Step){
   wConfig12->SetVisible(page == 11); 
   wConfig13->SetVisible(page == 12); 
   wConfig14->SetVisible(page == 13); 
+  wConfig15->SetVisible(page == 14); 
 }
 
 
@@ -168,29 +175,45 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-/*
-int enumval = 0;
 
-static void OnTestEnumData(DataField *Sender, DataField::DataAccessKind_t Mode){
-  static int lastRead = -1;
+static void SetLocalTime(void) {
+  WndProperty* wp;
+  TCHAR temp[20];
+  Units::TimeToText(temp, 
+		    (int)TimeLocal((int)(GPS_INFO.Time)));
+  
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLocalTime"));
+  if (wp) {
+    wp->SetText(temp);
+    wp->RefreshDisplay();
+  }
+}
+
+static void OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode){
+//  WndProperty* wp;
+  int ival;
 
   switch(Mode){
     case DataField::daGet:
-      lastRead = enumval;
-      Sender->Set(enumval);
     break;
-    case DataField::daPut:
-      enumval = Sender->GetAsInteger();
-    break;
+    case DataField::daPut: 
     case DataField::daChange:
+      ival = iround(Sender->GetAsFloat()*3600.0);
+      if (UTCOffset != ival) {
+	UTCOffset = ival;
+	utcchanged = true;
+      }
+      SetLocalTime();
     break;
   }
+
 }
-*/
+
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnAirspaceColoursClicked),
   DeclearCallBackEntry(OnAirspaceModeClicked),
+  DeclearCallBackEntry(OnUTCData),
   DeclearCallBackEntry(OnNextClicked),
   DeclearCallBackEntry(OnPrevClicked),
   DeclearCallBackEntry(OnVarioClicked),
@@ -284,6 +307,9 @@ void GetInfoBoxSelector(TCHAR *name, int item, int mode)
   }
 }
 
+
+
+
 extern TCHAR *PolarLabels[];
 
 void dlgConfigurationShowModal(void){
@@ -305,14 +331,15 @@ void dlgConfigurationShowModal(void){
   wConfig4    = ((WndFrame *)wf->FindByName(TEXT("frmPolar")));
   wConfig5    = ((WndFrame *)wf->FindByName(TEXT("frmComm")));
   wConfig6    = ((WndFrame *)wf->FindByName(TEXT("frmUnits")));
-  wConfig7    = ((WndFrame *)wf->FindByName(TEXT("frmAppearance")));
-  wConfig8    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
-  wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
-  wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
-  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
-  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
-  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
-  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmFiles")));
+  wConfig7    = ((WndFrame *)wf->FindByName(TEXT("frmInterface")));
+  wConfig8    = ((WndFrame *)wf->FindByName(TEXT("frmAppearance")));
+  wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
+  wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
+  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
+  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
+  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
+  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
+  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmFiles")));
 
   ASSERT(wConfig1!=NULL);
   ASSERT(wConfig2!=NULL);
@@ -328,6 +355,7 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig12!=NULL);
   ASSERT(wConfig13!=NULL);
   ASSERT(wConfig14!=NULL);
+  ASSERT(wConfig15!=NULL);
 
   //////////
   /*
@@ -463,6 +491,7 @@ void dlgConfigurationShowModal(void){
     wp->GetDataField()->SetAsFloat(UTCOffset/3600.0);
     wp->RefreshDisplay();
   }
+  SetLocalTime();
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpClipAltitude"));
   if (wp) {
@@ -486,6 +515,12 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceOutline"));
   if (wp) {
     wp->GetDataField()->Set(MapWindow::bAirspaceBlackOutline);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLockSettingsInFlight"));
+  if (wp) {
+    wp->GetDataField()->Set(LockSettingsInFlight);
     wp->RefreshDisplay();
   }
 
@@ -549,6 +584,12 @@ void dlgConfigurationShowModal(void){
     dfe->addEnumText(TEXT("North circling"));
     dfe->addEnumText(TEXT("Track circling"));
     dfe->Set(DisplayOrientation);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMenuTimeout"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(MenuTimeoutMax/4);
     wp->RefreshDisplay();
   }
 
@@ -795,21 +836,55 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppStatusMessageAlignment"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Center"));
+    dfe->addEnumText(TEXT("Topleft"));
+    dfe->Set(Appearance.StateMessageAlligne);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppCompassAppearance"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Normal"));
+    dfe->addEnumText(TEXT("White outline"));
+    dfe->Set(Appearance.CompassAppearance);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppIndFinalGlide"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Appearance.IndFinalGlide);
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Default"));
+    dfe->addEnumText(TEXT("Alternate"));
+    dfe->Set(Appearance.IndFinalGlide);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppIndLandable"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(Appearance.IndLandable);
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Winpilot"));
+    dfe->addEnumText(TEXT("Alternate"));
+    dfe->Set(Appearance.IndLandable);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInverseInfoBox"));
   if (wp) {
     wp->GetDataField()->Set(Appearance.InverseInfoBox);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppDefaultMapWidth"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(Appearance.DefaultMapWidth);
     wp->RefreshDisplay();
   }
 
@@ -846,6 +921,22 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioBallast"));
   if (wp) {
     wp->GetDataField()->Set(Appearance.GaugeVarioBallast);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Cylinder"));
+    dfe->addEnumText(TEXT("Line"));
+    dfe->Set(FinishLine);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(FinishRadius*2);
     wp->RefreshDisplay();
   }
 
@@ -939,23 +1030,33 @@ void dlgConfigurationShowModal(void){
 
   ////
 
-  page = 0;
-
   NextPage(0); // JMW just to turn proper pages on/off
-
-  wf->ShowModal();
-
-  // TODO: implement a cancel button that skips all this below after exit.
 
   changed = false;
   taskchanged = false;
   requirerestart = false;
+  utcchanged = false;
+
+  wf->ShowModal();
+
+  // TODO: implement a cancel button that skips all this below after exit.
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceDisplay"));
   if (wp) {
     if (AltitudeMode != wp->GetDataField()->GetAsInteger()) {
       AltitudeMode = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryAltMode,AltitudeMode);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLockSettingsInFlight"));
+  if (wp) {
+    if (LockSettingsInFlight != 
+	wp->GetDataField()->GetAsBoolean()) {
+      LockSettingsInFlight = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryLockSettingsInFlight,
+		    LockSettingsInFlight);
       changed = true;
     }
   }
@@ -987,7 +1088,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpUTCOffset"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()*3600.0);
-    if (UTCOffset != ival) {
+    if ((UTCOffset != ival)||(utcchanged)) {
       UTCOffset = ival;
 
       // have to do this because registry variables can't be negative!
@@ -1087,6 +1188,15 @@ void dlgConfigurationShowModal(void){
     if (DisplayOrientation != wp->GetDataField()->GetAsInteger()) {
       DisplayOrientation = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryDisplayUpValue,DisplayOrientation);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMenuTimeout"));
+  if (wp) {
+    if (MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*4) {
+      MenuTimeoutMax = wp->GetDataField()->GetAsInteger()*4;
+      SetToRegistry(szRegistryMenuTimeout,MenuTimeoutMax);
       changed = true;
     }
   }
@@ -1328,6 +1438,24 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
+  if (wp) {
+    if (FinishLine != wp->GetDataField()->GetAsInteger()) {
+      FinishLine = wp->GetDataField()->GetAsInteger();
+      changed = true;
+      taskchanged = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
+  if (wp) {
+    if ((int)FinishRadius*2 != wp->GetDataField()->GetAsInteger()) {
+      FinishRadius = wp->GetDataField()->GetAsInteger()/2;
+      changed = true;
+      taskchanged = true;
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
   if (wp) {
     if (StartLine != wp->GetDataField()->GetAsInteger()) {
@@ -1374,6 +1502,31 @@ void dlgConfigurationShowModal(void){
       Appearance.IndFinalGlide = (IndFinalGlide_t)(wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryAppIndFinalGlide,(DWORD)(Appearance.IndFinalGlide));
       changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppCompassAppearance"));
+  if (wp) {
+    if (Appearance.CompassAppearance != (CompassAppearance_t)
+	(wp->GetDataField()->GetAsInteger())) {
+      Appearance.CompassAppearance = (CompassAppearance_t)
+	(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryAppCompassAppearance,
+		    (DWORD)(Appearance.CompassAppearance));
+      changed = true;
+      requirerestart = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppStatusMessageAlignment"));
+  if (wp) {
+    if (Appearance.StateMessageAlligne != (StateMessageAlligne_t)
+	(wp->GetDataField()->GetAsInteger())) {
+      Appearance.StateMessageAlligne = (StateMessageAlligne_t)
+	(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryAppStatusMessageAlignment,
+		    (DWORD)(Appearance.StateMessageAlligne));
+      changed = true;
       requirerestart = true;
     }
   }
@@ -1393,6 +1546,28 @@ void dlgConfigurationShowModal(void){
     if ((int)(Appearance.InverseInfoBox) != wp->GetDataField()->GetAsInteger()) {
       Appearance.InverseInfoBox = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppInverseInfoBox,Appearance.InverseInfoBox);
+      requirerestart = true;
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppDefaultMapWidth"));
+  if (wp) {
+    if ((int)(Appearance.DefaultMapWidth) != 
+	wp->GetDataField()->GetAsInteger()) {
+      Appearance.DefaultMapWidth = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryAppDefaultMapWidth,Appearance.DefaultMapWidth);
+      requirerestart = true;
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxColors"));
+  if (wp) {
+    if ((int)(Appearance.InfoBoxColors) != 
+	wp->GetDataField()->GetAsInteger()) {
+      Appearance.InfoBoxColors = (wp->GetDataField()->GetAsInteger() != 0);
+      SetToRegistry(szRegistryAppInfoBoxColors,Appearance.InfoBoxColors);
       requirerestart = true;
       changed = true;
     }

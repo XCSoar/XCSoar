@@ -80,6 +80,22 @@ static void UpdateCaption(void) {
 static void SetValues(void) {
   WndProperty* wp;
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Cylinder"));
+    dfe->addEnumText(TEXT("Line"));
+    dfe->Set(FinishLine);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(FinishRadius*2);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -147,6 +163,27 @@ static void ReadValues(void) {
     AATEnabled = wp->GetDataField()->GetAsInteger();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
+  if (wp) {
+    if (FinishLine != wp->GetDataField()->GetAsInteger()) {
+      FinishLine = wp->GetDataField()->GetAsInteger();
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
+  if (wp) {
+    if ((int)FinishRadius*2 != wp->GetDataField()->GetAsInteger()) {
+      FinishRadius = wp->GetDataField()->GetAsInteger()/2;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
+  if (wp) {
+    if (StartLine != wp->GetDataField()->GetAsInteger()) {
+      StartLine = wp->GetDataField()->GetAsInteger();
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
     if ((int)StartRadius*2 != wp->GetDataField()->GetAsInteger()) {
@@ -165,13 +202,6 @@ static void ReadValues(void) {
   if (wp) {
     if ((int)SectorRadius != wp->GetDataField()->GetAsInteger()) {
       SectorRadius = wp->GetDataField()->GetAsInteger();
-    }
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
-  if (wp) {
-    if (StartLine != wp->GetDataField()->GetAsInteger()) {
-      StartLine = wp->GetDataField()->GetAsInteger();
     }
   }
 
@@ -211,7 +241,15 @@ static void OnDetailsClicked(WindowControl * Sender){
 }
 
 static void OnRemoveClicked(WindowControl * Sender) {
+  LockFlightData();
   RemoveTaskPoint(twItemIndex);
+  if (ActiveWayPoint>=twItemIndex) {
+    ActiveWayPoint--;
+  }
+  if (ActiveWayPoint<0) {
+    ActiveWayPoint= -1;
+  }
+  UnlockFlightData();
   wf->SetModalResult(mrOK);
 }
 

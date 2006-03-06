@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.99 2006/02/27 14:43:49 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.100 2006/03/06 17:30:21 jwharington Exp $
 
 Copyright_License {
 
@@ -1431,6 +1431,9 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
 	AATEnabled = FALSE;
       if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
 	AATTaskLength = 0;
+
+      // TODO: include StartLine/StartRadius and FinishLine/FinishRadius
+      // etc in this file?
       
       CloseHandle(hFile);
     }

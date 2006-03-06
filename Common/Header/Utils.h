@@ -63,18 +63,26 @@ extern TCHAR szRegistryCDICircling[];
 extern TCHAR szRegistryAutoBlank[];
 extern TCHAR szRegistryVarioGauge[];
 extern TCHAR szRegistryDebounceTimeout[];
+extern TCHAR szRegistryAppDefaultMapWidth[];
 extern TCHAR szRegistryAppIndFinalGlide[];
 extern TCHAR szRegistryAppIndLandable[];
 extern TCHAR szRegistryAppInverseInfoBox[];
+extern TCHAR szRegistryAppInfoBoxColors[];
 extern TCHAR szRegistryAppGaugeVarioSpeedToFly[];
 extern TCHAR szRegistryAppGaugeVarioAvgText[];
 extern TCHAR szRegistryAppGaugeVarioMc[];
 extern TCHAR szRegistryAppGaugeVarioBugs[];
 extern TCHAR szRegistryAppGaugeVarioBallast[];
+extern TCHAR szRegistryAppCompassAppearance[];
+extern TCHAR szRegistryAppStatusMessageAlignment[];
 extern TCHAR szRegistryAutoAdvance[];
 extern TCHAR szRegistryUTCOffset[];
 extern TCHAR szRegistryBlockSTF[];
 extern TCHAR szRegistryAutoZoom[];
+extern TCHAR szRegistryMenuTimeout[];
+extern TCHAR szRegistryLockSettingsInFlight[];
+
+extern bool LockSettingsInFlight;
 
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);

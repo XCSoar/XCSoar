@@ -127,7 +127,7 @@ static void OnMacCreadyData(DataField *Sender,
 static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(Range*100.0);
+      //      Sender->Set(Range*100.0);
     break;
     case DataField::daPut: 
     case DataField::daChange:
@@ -155,6 +155,9 @@ void dlgTaskCalculatorShowModal(void){
 		      hWndMainWindow);
 
   if (!wf) return;
+
+  // find start value for range
+  Range = AdjustAATTargets(2.0);
 
   RefreshCalculator();
 

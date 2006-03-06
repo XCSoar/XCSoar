@@ -74,6 +74,8 @@ extern int FAISector;
 extern DWORD SectorRadius;
 extern int StartLine;
 extern DWORD StartRadius;
+extern int FinishLine;
+extern DWORD FinishRadius;
 extern double AATTaskLength;
 extern BOOL AATEnabled;
 
@@ -155,6 +157,7 @@ extern bool EnableVarioGauge;
 extern int AutoAdvance;
 extern bool AdvanceArmed;
 extern bool EnableBlockSTF; // block speed to fly instead of dolphin
+extern int MenuTimeoutMax;
 //
 
 // statistics

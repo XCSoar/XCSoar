@@ -69,6 +69,7 @@ static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double 
 static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
 static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int  InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static int  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int i);
 static int  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void CalculateNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -87,9 +88,15 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 
+int FinishLine=1;
+DWORD FinishRadius=1000;
+
+
 void RefreshTaskStatistics(void) {
+  LockFlightData();
   TaskStatistics(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
   AATStats(&GPS_INFO, &CALCULATED_INFO);
+  UnlockFlightData();
 }
 
 
@@ -1047,12 +1054,19 @@ int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   // else
   {
-    AircraftBearing = Bearing(WayPointList[Task[ActiveWayPoint].Index].Latitude,   
-                              WayPointList[Task[ActiveWayPoint].Index].Longitude,
-                              Basic->Latitude , 
-                              Basic->Longitude);
+    AircraftBearing = 
+      Bearing(WayPointList[Task[ActiveWayPoint].Index].Latitude,   
+	      WayPointList[Task[ActiveWayPoint].Index].Longitude,
+	      Basic->Latitude , 
+	      Basic->Longitude);
 
     AircraftBearing = AircraftBearing - Task[ActiveWayPoint].Bisector ;
+    while (AircraftBearing<-180) {
+      AircraftBearing+= 360;
+    }
+    while (AircraftBearing>180) {
+      AircraftBearing-= 360;
+    }
 
     if( (AircraftBearing >= -45) && (AircraftBearing <= 45))
       {
@@ -1106,6 +1120,79 @@ int InAATTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
             return TRUE;
         }
     }
+  return FALSE;
+}
+
+
+int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+		   int i)
+{
+  static int LastInSector = FALSE;
+  double AircraftBearing;
+  double FirstPointDistance;
+
+  if (!WayPointList) return FALSE;
+
+  // Finish invalid
+  if(Task[i].Index == -1)
+    {
+      return FALSE;
+    }
+
+  // distance from aircraft to start point
+  FirstPointDistance = Distance(Basic->Latitude,
+				Basic->Longitude,
+				WayPointList[Task[i].Index].Latitude, 
+				WayPointList[Task[i].Index].Longitude);
+  bool inrange = false;
+  inrange = (FirstPointDistance<FinishRadius);
+  if (!inrange) {
+    LastInSector = false;
+  }
+
+  if(!FinishLine) // Start Circle
+    {
+      return inrange;
+    }
+        
+  // Start Line
+  AircraftBearing = Bearing(Basic->Latitude , 
+                            Basic->Longitude,
+			    WayPointList[Task[i].Index].Latitude,   
+                            WayPointList[Task[i].Index].Longitude);
+
+  AircraftBearing = AircraftBearing - Task[i].InBound ;
+  while (AircraftBearing<-180) {
+    AircraftBearing+= 360;
+  }
+  while (AircraftBearing>180) {
+    AircraftBearing-= 360;
+  }
+  // JMW bugfix, was Bisector, which is invalid
+
+  bool approaching;
+  approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
+
+  if (inrange) {
+
+    if (LastInSector) {
+      // previously approaching the finish line
+      if (!approaching) {
+	// now moving away from finish line
+	LastInSector = false;
+	return TRUE;
+      }
+    } else {
+      if (approaching) {
+	// now approaching the finish line
+	LastInSector = true;
+      }
+    }
+    
+  } else {
+    LastInSector = false;
+  }
+
   return FALSE;
 }
 
@@ -1218,15 +1305,19 @@ bool ReadyToAdvance(void) {
 }
 
 
+
+
 void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static BOOL StartSectorEntered = FALSE;
+  static bool TaskFinished = false;
 
   if(AATEnabled)
     return;
 
   if(ActiveWayPoint == 0)
     {
+      TaskFinished = false;
       if(InStartSector(Basic,Calculated))
         {
           StartSectorEntered = TRUE;
@@ -1244,6 +1335,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 			InputEvents::processGlideComputer(GCE_TASK_START);
 			AnnounceWayPointSwitch();
 		      }
+		      TaskFinished = false;
 		      StartSectorEntered = FALSE;
 		      Calculated->TaskStartTime = Basic->Time ;
                       Calculated->LegStartTime = Basic->Time;
@@ -1264,39 +1356,50 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 		ActiveWayPoint = 0;
 		StartSectorEntered = TRUE;
 	      }
+	      TaskFinished = false;
             }
         }
 
-      if(InTurnSector(Basic,Calculated))
-        {
-          if(ActiveWayPoint < MAXTASKPOINTS)
-            {
-              if(Task[ActiveWayPoint+1].Index >= 0)
-                {
-                  Calculated->LegStartTime = Basic->Time;
-
-		  if (ReadyToAdvance()) {
-		    ActiveWayPoint++;
-		    AnnounceWayPointSwitch();
-		    InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
-		  }
-
-                  return;
-                }
-            }
-        }
+      if(ActiveWayPoint < MAXTASKPOINTS) {
+	if(Task[ActiveWayPoint+1].Index >= 0) {
+	  if(InTurnSector(Basic,Calculated)) {
+	    Calculated->LegStartTime = Basic->Time;
+	    
+	    if (ReadyToAdvance()) {
+	      ActiveWayPoint++;
+	      AnnounceWayPointSwitch();
+	      InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
+	    }
+	    TaskFinished = false;
+	    
+	    return;
+	  }
+	} else {
+	  if (InFinishSector(Basic,Calculated, ActiveWayPoint)) {
+	    if (!TaskFinished) {
+	      AnnounceWayPointSwitch();
+	      InputEvents::processGlideComputer(GCE_TASK_FINISH);
+	      TaskFinished = true;
+	    }
+	  } else {
+	    //	    TaskFinished = false;
+	  }
+	}
+      }
     }                   
 }
 
 void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static BOOL StartSectorEntered = FALSE;
+  static bool TaskFinished = false;
 
   if(!AATEnabled)
     return;
 
   if(ActiveWayPoint == 0)
     {
+      TaskFinished = false;
       if(InStartSector(Basic,Calculated))
         {
           StartSectorEntered = TRUE;
@@ -1314,6 +1417,7 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 			InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 			AnnounceWayPointSwitch();
 		      }
+		      TaskFinished = false;
 		      StartSectorEntered = FALSE;
                       Calculated->TaskStartTime = Basic->Time ;
                       Calculated->LegStartTime = Basic->Time;
@@ -1335,30 +1439,40 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 		ActiveWayPoint = 0;
 		StartSectorEntered = TRUE;
 	      }
+	      TaskFinished = false;
             }
         }
-      if(InAATTurnSector(Basic,Calculated))
-        {
-          if(ActiveWayPoint < MAXTASKPOINTS)
-            {
-              if(Task[ActiveWayPoint+1].Index >= 0)
-                {
-                  Calculated->LegStartTime = Basic->Time;
+      if(ActiveWayPoint < MAXTASKPOINTS) {
+	if(Task[ActiveWayPoint+1].Index >= 0) {
+	  if(InAATTurnSector(Basic,Calculated)) {
+	    Calculated->LegStartTime = Basic->Time;
 
-		  if (ReadyToAdvance()) {
-		    AdvanceArmed = false;		
-		    ActiveWayPoint++;
-		    InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
+	    if (ReadyToAdvance()) {
+	      AdvanceArmed = false;		
+	      ActiveWayPoint++;
+	      InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
+	      
+	      AnnounceWayPointSwitch();
+	    }
+	    TaskFinished = false;
 
-		    AnnounceWayPointSwitch();
-		  }
-
-                  return;
-                }
-            }
-        }
-    }                   
+	    return;
+	  }
+	} else {
+	  if (InFinishSector(Basic,Calculated, ActiveWayPoint)) {
+	    if (!TaskFinished) {
+	      AnnounceWayPointSwitch();
+	      InputEvents::processGlideComputer(GCE_TASK_FINISH);
+	      TaskFinished = true;
+	    }
+	  } else {
+	    //	    TaskFinished = false;
+	  }
+	}	
+      }
+    }
 }
+
 
 //////////////////////////////////////////////////////
 
@@ -1475,6 +1589,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
       
       for(i=0;i<ActiveWayPoint-1;i++)
         {
+	  if (Task[i].Index<0) continue;
+	  if (Task[i+1].Index<0) continue;
 
 	  w1lat = WayPointList[Task[i].Index].Latitude;
 	  w1lon = WayPointList[Task[i].Index].Longitude;
@@ -1540,15 +1656,18 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 			     Task[i].AATTargetLon);
       } else {
 
-	LegBearing = Bearing(Basic->Latitude , 
+	if (Task[i].Index>=0) {
+
+	  LegBearing = Bearing(Basic->Latitude , 
+			       Basic->Longitude , 
+			       WayPointList[Task[i].Index].Latitude, 
+			       WayPointList[Task[i].Index].Longitude);
+	  
+	  LegToGo = Distance(Basic->Latitude , 
 			     Basic->Longitude , 
 			     WayPointList[Task[i].Index].Latitude, 
 			     WayPointList[Task[i].Index].Longitude);
-	
-	LegToGo = Distance(Basic->Latitude , 
-			   Basic->Longitude , 
-			   WayPointList[Task[i].Index].Latitude, 
-			   WayPointList[Task[i].Index].Longitude);
+	}
       }
 
       // JMW TODO: use instantaneous maccready here again to calculate

@@ -143,7 +143,7 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
       bool isdisplay;
 
       iswarn = (MapWindow::iAirspaceMode[i]>=2);
-      isdisplay = (MapWindow::iAirspaceMode[i]%2);
+      isdisplay = ((MapWindow::iAirspaceMode[i]%2)>0);
       if (iswarn) {
 	_tcscpy(label, TEXT("Warn"));
 	ExtTextOut(hDC, 

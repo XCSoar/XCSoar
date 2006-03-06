@@ -38,7 +38,7 @@ Copyright_License {
 extern HFONT MapLabelFont;
 
 XShape::XShape() {
-
+  hide=false;
 }
 
 
@@ -372,6 +372,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     
     if (!shpCache[ixshp]) continue;    
+    if (shpCache[ixshp]->hide) continue;
 
     shapeObj *shape = &(shpCache[ixshp]->shape);
 
@@ -577,19 +578,18 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
     TCHAR Temp[100];
     wsprintf(Temp,TEXT("%S"),label);
     SetBkMode(hDC,TRANSPARENT);
-	if (ispunct(Temp[0])){
-		DOUBLE dTemp;
-		
-		Temp[0]='0';
-		dTemp = StrToDouble(Temp,NULL);
-		dTemp = ALTITUDEMODIFY*dTemp;
-		if (dTemp > 999)
-			wsprintf(Temp,TEXT("%.1f"),(dTemp/1000));
-		else
-			wsprintf(Temp,TEXT("%d"),int(dTemp));
-	}
-
-
+    if (ispunct(Temp[0])){
+      DOUBLE dTemp;
+      
+      Temp[0]='0';
+      dTemp = StrToDouble(Temp,NULL);
+      dTemp = ALTITUDEMODIFY*dTemp;
+      if (dTemp > 999)
+	wsprintf(Temp,TEXT("%.1f"),(dTemp/1000));
+      else
+	wsprintf(Temp,TEXT("%d"),int(dTemp));
+    }
+    
     ExtTextOut(hDC, x+2, y+2, 0, NULL, Temp, _tcslen(Temp), NULL);
   }
 }
@@ -603,9 +603,11 @@ void XShapeLabel::setlabel(const char* src) {
       ) {
     label = (char*)malloc(strlen(src)+1);
     strcpy(label,src);
+    hide=false;
   } else {
     if (label) free(label);
     label= NULL;
+    hide=true;
   }
 }
 
