@@ -110,12 +110,14 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].DeclAddWayPoint = NULL;
     DeviceList[i].IsLogger = NULL;
     DeviceList[i].IsGPSSource = NULL;
+    DeviceList[i].PortNumber = i;
   }
 
   ReadDeviceSettings(0, DeviceName);
 
   for (i=0; i<DeviceRegisterCount; i++){
     if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
+
       DeviceRegister[i].Installer(devA());
 
       devA()->Com.WriteString = Port1WriteString;
@@ -253,19 +255,21 @@ PDeviceDescriptor_t devGetDeviceOnPort(int Port){
 
 
 
-BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
+  PDeviceDescriptor_t d;
+  d = devGetDeviceOnPort(portNum);
 
-
-  if (d != NULL && d->fhLogFile != NULL && String != NULL && _tcslen(String) > 0){
+  if ((d != NULL) && 
+      (d->fhLogFile != NULL) && 
+      (String != NULL) && (_tcslen(String) > 0)) {
     char  sTmp[500];  // temp multibyte buffer
     TCHAR *pWC = String;
     char  *pC  = sTmp;
-    static DWORD lastFlush = 0;
-
+    static DWORD lastFlush = 0;    
     
     sprintf(pC, "%9d <", GetTickCount());
     pC = sTmp + strlen(sTmp);
-
+    
     while (*pWC){
       if (*pWC != '\r'){
         *pC = (char)*pWC;
@@ -292,21 +296,10 @@ BOOL devParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
       bool dodisplay = false;
 
-      if(ParseNMEAString(String, GPS_INFO))
+      if(NMEAParser::ParseNMEAString(portNum, String, GPS_INFO))
         {
           GPSCONNECT  = TRUE;
-          if(GPS_INFO->NAVWarning == FALSE)
-            {
-/* JMW: wait for main thread to do this,
-so don't get multiple updates
-              if(DoCalculations(&GPS_INFO,&CALCULATED_INFO))
-                {
-                  AssignValues();
-                  dodisplay = true;
-                }
-*/
-            }
-        return(TRUE);
+	  return(TRUE);
         } 
     }
   return(FALSE);

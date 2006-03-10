@@ -54,7 +54,12 @@ event=StatusMessage Above Final Glide
 mode=default
 type=gce
 data=FLIGHTMODE_FINALGLIDE_BELOW
-event=StatusMessage Marginal Final Glide
+event=StatusMessage Below Final Glide
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_TERRAIN
+event=StatusMessage Final Glide Through Terrain
 
 mode=default
 type=gce

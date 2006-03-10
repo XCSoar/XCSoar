@@ -339,17 +339,27 @@ void TerrainColorMap(short h, BYTE *r, BYTE *g, BYTE *b) {
   ColorRampLookup(h*8/4, r, g, b, terrain_colors, NUMTERRAINRAMP);
 }
 
+static short ContrastPos;
+static short ContrastNeg;
+short TerrainContrast = 40*256/100;
+short TerrainBrightness = 10*256/100;
+short TerrainWhiteness = 0;
+
+static void UpdateContrast(void) {
+  TerrainWhiteness = TerrainBrightness;
+  int tb = (255-TerrainWhiteness);
+  int tc = (tb*(int)TerrainContrast)/256;
+  ContrastPos = (short)(tc);
+  ContrastNeg = (short)(tb-tc);
+}
+
 
 void TerrainIllumination(short illum, BYTE *r, BYTE *g, BYTE *b)
 {
-  static short contrast = 140;
-  static short contrastpos = (short)(contrast);
-  static short contrastneg = (short)(255-contrast);
-
-  short il = illum*contrastpos/256+contrastneg;
-  *r = (BYTE)((int)*r*il/256);
-  *g = (BYTE)((int)*g*il/256);
-  *b = (BYTE)((int)*b*il/256);
+  short il = (illum*ContrastPos)/256+ContrastNeg;
+  *r = (BYTE)((int)*r*il/256+TerrainWhiteness);
+  *g = (BYTE)((int)*g*il/256+TerrainWhiteness);
+  *b = (BYTE)((int)*b*il/256+TerrainWhiteness);
 }
 
 
@@ -674,6 +684,8 @@ public:
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
 
+    UpdateContrast();
+
     for (int y = 0; y<iys; y++) {
       for (int x = 0; x<ixs; x++) {
         if (hBuf[pval]<=0) {
@@ -754,7 +766,7 @@ void OptimizeTerrainCache()
 void DrawTerrain( HDC hdc, RECT rc, double sunazimuth, double sunelevation)
 {
 
-DWORD tm;
+  DWORD tm;
 
   if(!terrain_dem_graphics.isTerrainLoaded())
     return;
@@ -765,9 +777,11 @@ DWORD tm;
 
   // step 1: calculate sunlight vector
   short sx, sy, sz;
-  sx = (short)(256*(fastcosine(sunelevation)*fastsine(sunazimuth)));
-  sy = (short)(256*(fastcosine(sunelevation)*fastcosine(sunazimuth)));
-  sz = (short)(256*fastsine(sunelevation));
+  double fudgeelevation = (90.0-80.0*TerrainContrast/255.0);
+
+  sx = (short)(256*(fastcosine(fudgeelevation)*fastsine(sunazimuth)));
+  sy = (short)(256*(fastcosine(fudgeelevation)*fastcosine(sunazimuth)));
+  sz = (short)(256*fastsine(fudgeelevation));
 
   // step 2: fill height buffer
 

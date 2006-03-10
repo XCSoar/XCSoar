@@ -453,6 +453,8 @@ int InputEvents::findKey(TCHAR *data) {
     return VK_DOWN;
   else if (_tcscmp(data, TEXT("RETURN")) == 0)
     return VK_RETURN;
+  else if (_tcscmp(data, TEXT("ESC")) == 0)
+    return VK_ESCAPE;
   else if (_tcslen(data) == 1)
     return towupper(data[0]);
   else
@@ -1245,11 +1247,28 @@ int jmw_demo=0;
 //   The string sent is prefixed with the start character '$'
 //   and appended with the checksum e.g. '*40'.  The user needs only
 //   to provide the text in between the '$' and '*'.
+//
 void InputEvents::eventSendNMEA(TCHAR *misc) {
   if (misc) {
     VarioWriteNMEA(misc);
   }
 }
+
+void InputEvents::eventSendNMEAPort1(TCHAR *misc) {
+  if (misc) {
+    Port1WriteNMEA(misc);
+  }
+}
+
+void InputEvents::eventSendNMEAPort2(TCHAR *misc) {
+  if (misc) {
+    Port2WriteNMEA(misc);
+  }
+}
+
+#if (NEWINFOBOX>0)
+extern void dlgVegaDemoShowModal(void);
+#endif
 
 // AdjustVarioFilter
 // When connected to the Vega variometer, this adjusts
@@ -1305,6 +1324,12 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("demostf"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,1"));
     jmw_demo=1;
+    return;
+  }
+  if (_tcscmp(misc, TEXT("xdemo")) == 0) {
+#if (NEWINFOBOX>0)
+    dlgVegaDemoShowModal();
+#endif
     return;
   }
   if (_tcscmp(misc, TEXT("zero"))==0) {

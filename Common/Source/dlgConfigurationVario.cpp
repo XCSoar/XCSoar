@@ -45,6 +45,8 @@ Copyright_License {
 #include "dlgTools.h"
 #include "device.h"
 
+extern void dlgVegaDemoShowModal(void);
+
 static bool changed = false;
 static int page=0;
 static WndForm *wf=NULL;
@@ -351,6 +353,12 @@ static void OnSaveClicked(WindowControl * Sender){
   VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
 }
 
+static void OnDemoClicked(WindowControl * Sender){
+  // retrieve changes from form
+  UpdateParameters(false);
+  dlgVegaDemoShowModal();
+}
+
 /*
 int enumval = 0;
 
@@ -374,6 +382,8 @@ static void OnTestEnumData(DataField *Sender, DataField::DataAccessKind_t Mode){
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnNextClicked),
   DeclearCallBackEntry(OnPrevClicked),
+  DeclearCallBackEntry(OnDemoClicked),
+  DeclearCallBackEntry(OnSaveClicked),
   DeclearCallBackEntry(NULL)
 };
 
@@ -403,6 +413,7 @@ static void FillAudioEnums(TCHAR* name) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Constant high"));
     dfe->addEnumText(TEXT("Constant medium"));
+    dfe->addEnumText(TEXT("Constant low"));
     dfe->addEnumText(TEXT("Speed percent"));
     dfe->addEnumText(TEXT("Speed error"));
     dfe->addEnumText(TEXT("Vario gross"));
@@ -419,6 +430,7 @@ static void FillAudioEnums(TCHAR* name) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Constant high"));
     dfe->addEnumText(TEXT("Constant medium"));
+    dfe->addEnumText(TEXT("Constant low"));
     dfe->addEnumText(TEXT("Speed percent"));
     dfe->addEnumText(TEXT("Speed error"));
     dfe->addEnumText(TEXT("Vario gross"));
@@ -459,8 +471,6 @@ static void FillAudioEnums(TCHAR* name) {
 
 }
 
-/*
-*/
 
 
 bool dlgConfigurationVarioShowModal(void){
@@ -477,9 +487,6 @@ bool dlgConfigurationVarioShowModal(void){
   
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);
-
-  ((WndButton *)wf->FindByName(TEXT("cmdSave")))
-    ->SetOnClickNotify(OnSaveClicked);
 
   wConfig1    = ((WndFrame *)wf->FindByName(TEXT("frmHardware")));
   wConfig2    = ((WndFrame *)wf->FindByName(TEXT("frmCalibration")));
@@ -534,9 +541,11 @@ bool dlgConfigurationVarioShowModal(void){
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Disabled"));
     dfe->addEnumText(TEXT("Relative>0"));
-    dfe->addEnumText(TEXT("Gross>0"));
     dfe->addEnumText(TEXT("Relative>MacCready/2"));
+    dfe->addEnumText(TEXT("Gross>0"));
     dfe->addEnumText(TEXT("Net>MacCready/2"));
+    dfe->addEnumText(TEXT("Relative>MacCready"));
+    dfe->addEnumText(TEXT("Net>MacCready"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }

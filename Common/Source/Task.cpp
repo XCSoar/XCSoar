@@ -30,12 +30,16 @@ Copyright_License {
 */
 #include "stdafx.h"
 #include "Task.h"
+#include "Logger.h"
 #include "XCSoar.h"
 #include "Utils.h"
 #include "externs.h"
 
 
 void FlyDirectTo(int index) {
+  if (!CheckDeclaration())
+    return;
+
   ActiveWayPoint = -1; AATEnabled = FALSE;
   for(int j=0;j<MAXTASKPOINTS;j++)
   {
@@ -51,6 +55,9 @@ void FlyDirectTo(int index) {
 // Inserts a waypoint into the task, in the
 // position of the ActiveWaypoint
 void InsertWaypoint(int index) {
+  if (!CheckDeclaration())
+    return;
+
   int i;
   
   if (ActiveWayPoint<0) {
@@ -62,7 +69,7 @@ void InsertWaypoint(int index) {
   
   if (Task[MAXTASKPOINTS-1].Index != -1) {
     // No room for any more task points!
-    MessageBox(hWndMapWindow,
+    MessageBoxX(hWndMapWindow,
       gettext(TEXT("Too many waypoints in task!")),
       gettext(TEXT("Insert Waypoint")),
       MB_OK|MB_ICONEXCLAMATION);
@@ -93,6 +100,8 @@ void InsertWaypoint(int index) {
 // If you call this function, you MUST deal with
 // correctly setting ActiveWayPoint yourself!
 void RemoveTaskPoint(int index) {
+  if (!CheckDeclaration())
+    return;
   
   int i;
   
@@ -123,6 +132,9 @@ void RemoveTaskPoint(int index) {
 // in the task
 void RemoveWaypoint(int index) {
   int i;
+
+  if (!CheckDeclaration())
+    return;
   
   if (ActiveWayPoint<0) {
     return; // No waypoint to remove
@@ -170,7 +182,7 @@ void RemoveWaypoint(int index) {
     } else {
       // WP not found, so ask user if they want to
       // remove the active WP
-      int ret = MessageBox(hWndMapWindow,
+      int ret = MessageBoxX(hWndMapWindow,
         gettext(TEXT("Chosen Waypoint not in current task.\nRemove active WayPoint?")),
         gettext(TEXT("Remove Waypoint")),
         MB_YESNO|MB_ICONQUESTION);
@@ -189,6 +201,8 @@ void RemoveWaypoint(int index) {
 
 
 void ReplaceWaypoint(int index) {
+  if (!CheckDeclaration())
+    return;
   
   // ARH 26/06/05 Fixed array out-of-bounds bug
   if (ActiveWayPoint>=0) {	
@@ -264,9 +278,13 @@ void CalculateTaskSectors(void)
 	      }
 	    else
 	      {
-		// normal fai sector
+		// normal turnpoint sector
 		SectorAngle = 45;
-		SectorSize = 5000;
+		if (SectorType == 2) {
+		  SectorSize = 10000; // German DAe 0.5/10
+		} else {
+		  SectorSize = 5000;  // FAI sector
+		}
 		SectorBearing = Task[i].Bisector;
 	      }
 	  } else {
@@ -461,7 +479,7 @@ void guiStartLogger(bool noAsk) {
       }
     
     if(noAsk || 
-       (MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),
+       (MessageBoxX(hWndMapWindow,TaskMessage,TEXT("Start Logger"),
 		   MB_YESNO|MB_ICONQUESTION) == IDYES))
       {
 	LoggerActive = true;
@@ -496,9 +514,10 @@ void guiStartLogger(bool noAsk) {
 
 void guiStopLogger(bool noAsk) {
   if (LoggerActive) {
-    if(noAsk || (MessageBox(hWndMapWindow,gettext(TEXT("Stop Logger")),
-			    gettext(TEXT("Stop Logger")),
-			    MB_YESNO|MB_ICONQUESTION) == IDYES))
+    if(noAsk || 
+       (MessageBoxX(hWndMapWindow,gettext(TEXT("Stop Logger")),
+		    gettext(TEXT("Stop Logger")),
+		    MB_YESNO|MB_ICONQUESTION) == IDYES))
       LoggerActive = false;
     FullScreen();
   }

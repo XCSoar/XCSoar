@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.36 2006/02/26 05:58:43 jwharington Exp $
+  $Id: Parser.cpp,v 1.37 2006/03/10 13:19:40 jwharington Exp $
 
 Copyright_License {
 
@@ -43,33 +43,6 @@ Copyright_License {
 
 extern bool EnableCalibration;
 
-static BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL RMZ(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL WP0(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL WP1(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO);
-
-// Additional sentances added by JMW
-static BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO);
-
-static BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PDAPL(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO);
-
-// FLARM sentances
-static BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO);
-
 static double EastOrWest(double in, TCHAR EoW);
 static double NorthOrSouth(double in, TCHAR NoS);
 static double LeftOrRight(double in, TCHAR LoR);
@@ -83,13 +56,78 @@ static double RMZAltitude = 0;
 static BOOL RMAAvailable = FALSE;
 static double RMAAltitude = 0;
 
-BOOL GpsUpdated = TRUE;
-BOOL VarioUpdated = TRUE;
+BOOL NMEAParser::GpsUpdated = false;
+BOOL NMEAParser::VarioUpdated = false;
 
-BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
+NMEAParser nmeaParser1;
+NMEAParser nmeaParser2;
+
+
+NMEAParser::NMEAParser() {
+  gpsValid = false;
+  hasVega = false;
+  nSatellites = 0;
+
+  activeGPS = false;
+}
+
+void NMEAParser::Reset(void) {
+  GpsUpdated = TRUE;
+  VarioUpdated = TRUE;
+  nmeaParser1.gpsValid = false;
+  nmeaParser2.gpsValid = false;
+  nmeaParser1.activeGPS = true;
+  nmeaParser2.activeGPS = true;
+  nmeaParser1.hasVega = false;
+  nmeaParser2.hasVega = false;
+}
+
+
+int NMEAParser::FindVegaPort(void) {
+  if (nmeaParser1.hasVega)
+    return 0;
+  if (nmeaParser2.hasVega)
+    return 1;
+  return -1;
+}
+
+void NMEAParser::UpdateMonitor(void) 
 {
-  static TCHAR SentanceString[6] = TEXT("");
-  static int i;
+  // does anyone have GPS?
+  if (nmeaParser1.gpsValid || nmeaParser2.gpsValid) {
+    if (nmeaParser1.gpsValid && nmeaParser2.gpsValid) {
+      // both valid, just use first
+      nmeaParser2.activeGPS = false;
+      nmeaParser1.activeGPS = true;
+    } else {
+      nmeaParser1.activeGPS = nmeaParser1.gpsValid;
+      nmeaParser2.activeGPS = nmeaParser2.gpsValid;
+    }
+  } else {
+    // assume device 1 is active
+    nmeaParser2.activeGPS = false;
+    nmeaParser1.activeGPS = true;
+  }
+}
+
+
+BOOL NMEAParser::ParseNMEAString(int device,
+				 TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+  switch (device) {
+  case 0: 
+    return nmeaParser1.ParseNMEAString_Internal(String, GPS_INFO);
+  case 1:
+    return nmeaParser2.ParseNMEAString_Internal(String, GPS_INFO);
+  };
+  return FALSE;
+}
+
+
+BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+  TCHAR SentanceString[6] = TEXT("");
+  int i;
 
   if(_tcslen(String)<=6)
     {
@@ -101,24 +139,21 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
       // string is too long
       return FALSE;
     }
-  
   if(String[0] != '$')
     {
       return FALSE;
     }
-  
   if(!NMEAChecksum(String))
     {
       return FALSE;
     }
-
   if (EnableLogNMEA)
     LogNMEA(String);
 
   if(String[1] == 'P')
     {
       //Proprietary String
-      // JMW added his own variometer here...
+      // JMW added Vega variometer
 
       for(i=0;i<5;i++)
         {
@@ -191,17 +226,10 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
           return PFLAU(&String[7], GPS_INFO);
         }
 
-      // JMW testing only
-      /*
-      if(_tcscmp(SentanceString,TEXT("PDAPL"))==0)
-        {
-	  DoStatusMessage(TEXT("Recv APL"));
-          return FALSE;
-        }
-      */
-
       return FALSE;
     }
+
+  // basic GPS sentences
   for(i=0;i<3;i++)
     {
       SentanceString[i] = String[i+3];
@@ -239,14 +267,16 @@ BOOL ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO)
     {
       return WP1(&String[7], GPS_INFO);
     }
-  if(_tcscmp(SentanceString,TEXT("WP2"))==0)
+ if(_tcscmp(SentanceString,TEXT("WP2"))==0)
     {
       return WP2(&String[7], GPS_INFO);
     }
   return FALSE;
 }
 
-void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber)
+void NMEAParser::ExtractParameter(TCHAR *Source, 
+				  TCHAR *Destination, 
+				  int DesiredFieldNumber)
 {
   int index = 0;
   int dest_index = 0;
@@ -349,51 +379,60 @@ double TimeModify(double FixTime)
   return FixTime;
 }
 
-BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO)
+
+BOOL NMEAParser::GLL(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80]; 
   double ThisTime;
   static double LastTime = 0;
 
-  ExtractParameter(String,ctemp,4);
-  ThisTime = StrToDouble(ctemp,NULL);
-  ThisTime = TimeModify(ThisTime);
-
-  if(ThisTime<=LastTime)
-    {
-      LastTime = ThisTime;
-      return FALSE;
-    }
-
-  LastTime = ThisTime;
-  GPS_INFO->Time = ThisTime;
-
-  double tmplat;
-  double tmplon;
-
-  ExtractParameter(String,ctemp,0);
-  tmplat = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
-  ExtractParameter(String,ctemp,1);
-  tmplat = NorthOrSouth(tmplat, ctemp[0]);
-
-  ExtractParameter(String,ctemp,2);
-  tmplon = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
-
-  ExtractParameter(String,ctemp,3);
-  tmplon = EastOrWest(tmplon,ctemp[0]);
-
-  if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Latitude = tmplat;
-    GPS_INFO->Longitude = tmplon;
-  }
-
   ExtractParameter(String,ctemp,5);
-  GPS_INFO->NAVWarning = NAVWarn(ctemp[0]);
+  gpsValid = !NAVWarn(ctemp[0]);
 
+  if (activeGPS) {
+    GPS_INFO->NAVWarning = !gpsValid;
+
+    ////
+    
+    ExtractParameter(String,ctemp,4);
+    ThisTime = StrToDouble(ctemp,NULL);
+    ThisTime = TimeModify(ThisTime);
+    
+    if(ThisTime<=LastTime)
+      {
+	LastTime = ThisTime;
+	return FALSE;
+      }
+    
+    LastTime = ThisTime;
+    GPS_INFO->Time = ThisTime;
+    
+    double tmplat;
+    double tmplon;
+    
+    ExtractParameter(String,ctemp,0);
+    tmplat = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
+    ExtractParameter(String,ctemp,1);
+    tmplat = NorthOrSouth(tmplat, ctemp[0]);
+    
+    ExtractParameter(String,ctemp,2);
+    tmplon = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
+    
+    ExtractParameter(String,ctemp,3);
+    tmplon = EastOrWest(tmplon,ctemp[0]);
+    
+    if (!((tmplat == 0.0) && (tmplon == 0.0))) {
+      GPS_INFO->Latitude = tmplat;
+      GPS_INFO->Longitude = tmplon;
+    } else {
+
+    }
+  }
   return TRUE;
 }
 
-BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO)
+
+BOOL NMEAParser::RMB(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
 
   /* we calculate all this stuff now 
@@ -423,162 +462,177 @@ BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO)
   return TRUE;
 }
 
-BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   TCHAR *Stop;
   double ThisTime;
   static double LastTime = 0;
 
-  ExtractParameter(String,ctemp,0);
-  ThisTime = StrToDouble(ctemp, NULL);
-  ThisTime = TimeModify(ThisTime);
-
-  if (ThisTime>LastTime) {
-    GpsUpdated = TRUE;
-  }
-
-  if(ThisTime<=LastTime)
-    {
-      LastTime = ThisTime;
-      return FALSE;
-    }
-
-  GPSCONNECT = TRUE;
-
   ExtractParameter(String,ctemp,1);
-  GPS_INFO->NAVWarning = NAVWarn(ctemp[0]);
+  gpsValid = !NAVWarn(ctemp[0]);
 
-  double tmplat;
-  double tmplon;
+  GPSCONNECT = TRUE;    
 
-  ExtractParameter(String,ctemp,2);
-  tmplat = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
-  ExtractParameter(String,ctemp,3);
-  tmplat = NorthOrSouth(tmplat, ctemp[0]);
+  if (activeGPS) {
+    GPS_INFO->NAVWarning = !gpsValid;
 
-  ExtractParameter(String,ctemp,4);
-  tmplon = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
-  ExtractParameter(String,ctemp,5);
-  tmplon = EastOrWest(tmplon,ctemp[0]);
+    ExtractParameter(String,ctemp,0);
+    ThisTime = StrToDouble(ctemp, NULL);
+    ThisTime = TimeModify(ThisTime);
 
-  if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Latitude = tmplat;
-    GPS_INFO->Longitude = tmplon;
-  } else {
-    //    GPSCONNECT = FALSE;
+    // say we are updated every time we get this,
+    // so infoboxes get refreshed if GPS connected
+    GpsUpdated = TRUE; 
+
+    if(ThisTime<=LastTime)
+      {
+	LastTime = ThisTime;
+	return FALSE;
+      }
+    
+    ////////
+    
+    double tmplat;
+    double tmplon;
+    
+    ExtractParameter(String,ctemp,2);
+    tmplat = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
+    ExtractParameter(String,ctemp,3);
+    tmplat = NorthOrSouth(tmplat, ctemp[0]);
+    
+    ExtractParameter(String,ctemp,4);
+    tmplon = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
+    ExtractParameter(String,ctemp,5);
+    tmplon = EastOrWest(tmplon,ctemp[0]);
+    
+    if (!((tmplat == 0.0) && (tmplon == 0.0))) {
+      GPS_INFO->Latitude = tmplat;
+      GPS_INFO->Longitude = tmplon;
+    } else {
+    }
+    
+    ExtractParameter(String,ctemp,6);
+    GPS_INFO->Speed = KNOTSTOMETRESSECONDS * StrToDouble(ctemp, NULL);
+    
+    ExtractParameter(String,ctemp,7);
+    
+    if (GPS_INFO->Speed>1.0) {
+      // JMW don't update bearing unless we're moving
+      GPS_INFO->TrackBearing = StrToDouble(ctemp, NULL);
+    }
+    
+    ExtractParameter(String,ctemp,8);
+    GPS_INFO->Year = _tcstol(&ctemp[4], &Stop, 10) + 2000;   
+    ctemp[4] = '\0';
+    GPS_INFO->Month = _tcstol(&ctemp[2], &Stop, 10);   
+    ctemp[2] = '\0';
+    GPS_INFO->Day = _tcstol(&ctemp[0], &Stop, 10);   
+    
+    if(GPS_INFO->Day > 1)
+      {
+	GPS_INFO->Time = (( GPS_INFO->Day -1) * 86400) + ThisTime; 
+      }
+    else
+      {
+	GPS_INFO->Time = ThisTime; 
+      }
+    
+    if(RMZAvailable)
+      {
+	GPS_INFO->Altitude = RMZAltitude;
+      }
+    else if(RMAAvailable)
+	{
+	  GPS_INFO->Altitude = RMAAltitude;
+	}
+    
+    LastTime = ThisTime;
   }
-
-  ExtractParameter(String,ctemp,6);
-  GPS_INFO->Speed = KNOTSTOMETRESSECONDS * StrToDouble(ctemp, NULL);
-
-  ExtractParameter(String,ctemp,7);
-
-  if (GPS_INFO->Speed>1.0) {
-    // JMW don't update bearing unless we're moving
-    GPS_INFO->TrackBearing = StrToDouble(ctemp, NULL);
-  }
-
-  ExtractParameter(String,ctemp,8);
-  GPS_INFO->Year = _tcstol(&ctemp[4], &Stop, 10) + 2000;   
-  ctemp[4] = '\0';
-  GPS_INFO->Month = _tcstol(&ctemp[2], &Stop, 10);   
-  ctemp[2] = '\0';
-  GPS_INFO->Day = _tcstol(&ctemp[0], &Stop, 10);   
-
-  if(GPS_INFO->Day > 1)
-    {
-      GPS_INFO->Time = (( GPS_INFO->Day -1) * 86400) + ThisTime; 
-    }
-  else
-    {
-      GPS_INFO->Time = ThisTime; 
-    }
-        
-  if(RMZAvailable)
-    {
-      GPS_INFO->Altitude = RMZAltitude;
-    }
-  else if(RMAAvailable)
-    {
-      GPS_INFO->Altitude = RMAAltitude;
-    }
-        
-  LastTime = ThisTime;
   
   return TRUE;
 }
 
-BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO)
+
+BOOL NMEAParser::GGA(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   double ThisTime;
   static double LastTime = 0;
 
-  ExtractParameter(String,ctemp,0);
-  ThisTime = StrToDouble(ctemp, NULL);
-  ThisTime = TimeModify(ThisTime);
+  /////
 
-  if(ThisTime<=LastTime)
-    {
-      LastTime = ThisTime;
-      return FALSE;
-    }
-
-  double tmplat;
-  double tmplon;
-
-  ExtractParameter(String,ctemp,1);
-  tmplat = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
-
-  ExtractParameter(String,ctemp,2);
-  tmplat = NorthOrSouth(tmplat, ctemp[0]);
-
-  ExtractParameter(String,ctemp,3);
-  tmplon = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
-
-  ExtractParameter(String,ctemp,4);
-  tmplon = EastOrWest(tmplon,ctemp[0]);
-
-  ExtractParameter(String,ctemp,6);
-  GPS_INFO->SatellitesUsed = (int)(min(12,StrToDouble(ctemp, NULL)));
-
-  if (!((tmplat == 0.0) && (tmplon == 0.0))) {
-    GPS_INFO->Latitude = tmplat;
-    GPS_INFO->Longitude = tmplon;
+  ExtractParameter(String,ctemp,6);  
+  nSatellites = (int)(min(12,StrToDouble(ctemp, NULL)));
+  if (nSatellites==0) {
+    gpsValid = false;
   }
 
-  if(RMZAvailable)
-    {
-      GPS_INFO->Altitude = RMZAltitude;
+  if (activeGPS) {
+    GPS_INFO->SatellitesUsed = (int)(min(12,StrToDouble(ctemp, NULL)));
+      
+    ExtractParameter(String,ctemp,0);
+    ThisTime = StrToDouble(ctemp, NULL);
+    ThisTime = TimeModify(ThisTime);
+    
+    if(ThisTime<=LastTime)
+      {
+	LastTime = ThisTime;
+	return FALSE;
+      }
+    
+    double tmplat;
+    double tmplon;
+    
+    ExtractParameter(String,ctemp,1);
+    tmplat = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
+    
+    ExtractParameter(String,ctemp,2);
+    tmplat = NorthOrSouth(tmplat, ctemp[0]);
+    
+    ExtractParameter(String,ctemp,3);
+    tmplon = MixedFormatToDegrees(StrToDouble(ctemp, NULL));
+    
+    ExtractParameter(String,ctemp,4);
+    tmplon = EastOrWest(tmplon,ctemp[0]);
+    
+    if (!((tmplat == 0.0) && (tmplon == 0.0))) {
+	GPS_INFO->Latitude = tmplat;
+	GPS_INFO->Longitude = tmplon;
     }
-  else if(RMAAvailable)
-    {
-      GPS_INFO->Altitude = RMAAltitude;
-    }
-  else
-    {
-      ExtractParameter(String,ctemp,8);
-      GPS_INFO->Altitude = StrToDouble(ctemp, NULL);
-      ExtractParameter(String,ctemp,9);
-      GPS_INFO->Altitude = AltitudeModify(GPS_INFO->Altitude,ctemp[0]);
-    }
-        
-  if(GPS_INFO->Day > 1)
-    {
-      GPS_INFO->Time = (( GPS_INFO->Day -1) * 86400) + ThisTime; 
-    }
-  else
-    {
-      GPS_INFO->Time = ThisTime; 
-    }
-        
-  LastTime = ThisTime;
-
+    
+    if(RMZAvailable)
+      {
+	GPS_INFO->Altitude = RMZAltitude;
+      }
+    else if(RMAAvailable)
+      {
+	GPS_INFO->Altitude = RMAAltitude;
+      }
+    else
+      {
+	ExtractParameter(String,ctemp,8);
+	GPS_INFO->Altitude = StrToDouble(ctemp, NULL);
+	ExtractParameter(String,ctemp,9);
+	GPS_INFO->Altitude = AltitudeModify(GPS_INFO->Altitude,ctemp[0]);
+      }
+    
+    if(GPS_INFO->Day > 1)
+      {
+	GPS_INFO->Time = (( GPS_INFO->Day -1) * 86400) + ThisTime; 
+      }
+    else
+      {
+	GPS_INFO->Time = ThisTime; 
+      }        
+    LastTime = ThisTime;
+  }
+  
   return TRUE;
 }
 
-BOOL RMZ(TCHAR *String, NMEA_INFO *GPS_INFO)
+
+BOOL NMEAParser::RMZ(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
 
@@ -590,7 +644,8 @@ BOOL RMZ(TCHAR *String, NMEA_INFO *GPS_INFO)
   return FALSE;
 }
 
-BOOL RMA(TCHAR *String, NMEA_INFO *GPS_INFO)
+
+BOOL NMEAParser::RMA(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
 
@@ -602,7 +657,8 @@ BOOL RMA(TCHAR *String, NMEA_INFO *GPS_INFO)
   return FALSE;
 }
 
-BOOL WP0(TCHAR *String, NMEA_INFO *GPS_INFO)
+
+BOOL NMEAParser::WP0(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
  
@@ -616,7 +672,7 @@ BOOL WP0(TCHAR *String, NMEA_INFO *GPS_INFO)
   return FALSE;
 }
 
-BOOL WP1(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::WP1(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
 
@@ -625,7 +681,7 @@ BOOL WP1(TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
-BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::WP2(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
 
@@ -636,7 +692,7 @@ BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 
-BOOL NMEAChecksum(TCHAR *String)
+BOOL NMEAParser::NMEAChecksum(TCHAR *String)
 {
   unsigned char CalcCheckSum = 0;
   unsigned char ReadCheckSum;
@@ -683,7 +739,7 @@ BOOL NMEAChecksum(TCHAR *String)
 
 //////
 
-BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   double vtas, vias, wnet;
   TCHAR ctemp[80];
@@ -726,7 +782,7 @@ BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 double AccelerometerZero=100.0;
 
-BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   int xval, zval;
   TCHAR ctemp[80];
@@ -756,7 +812,7 @@ BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 
-BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   double rh, oat;
   TCHAR ctemp[80];
@@ -805,7 +861,7 @@ double AirDensityRatio(double altitude) {
 }
 
 
-BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   double vias, wnet, vtas;
   TCHAR ctemp[80];
@@ -853,7 +909,7 @@ BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 #include "InputEvents.h"
 
-BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   static unsigned long last_switchinputs;
@@ -911,7 +967,7 @@ BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 // $PDVDS,nx,nz,flap,stallratio
-BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
 
@@ -939,6 +995,7 @@ BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
 	    GPS_INFO->AccelZ); 
     DebugStore(buffer);
   }
+  hasVega = true;
 
   return FALSE;
 }
@@ -946,7 +1003,7 @@ BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 #include "VarioSound.h"
 
-BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
 
@@ -965,13 +1022,16 @@ BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
 
-BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
 
   ExtractParameter(String,ctemp,0);
   GPS_INFO->Vario = StrToDouble(ctemp,NULL)/10.0;
   GPS_INFO->VarioAvailable = TRUE;
+  hasVega = true;
+
+  VarioUpdated = TRUE;
 
   ExtractParameter(String,ctemp,1);
   GPS_INFO->IndicatedAirspeed = StrToDouble(ctemp,NULL)/10.0;
@@ -985,13 +1045,11 @@ BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->BaroAltitude = StrToDouble(ctemp,NULL);
   GPS_INFO->BaroAltitudeAvailable = TRUE;
 
-  VarioUpdated = TRUE;
-
   return FALSE;
 }
 
 
-BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   TCHAR name[80];
@@ -1018,7 +1076,7 @@ BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
-BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
 
@@ -1050,7 +1108,7 @@ double FLARM_NorthingToLatitude = 0.0;
 double FLARM_EastingToLongitude = 0.0;
 
 
-BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   static int old_flarm_rx = 0;
@@ -1133,7 +1191,7 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, TCHAR *Id)
 
 
 
-BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   int flarm_slot = 0;
@@ -1207,13 +1265,13 @@ BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 //////
-
+/*
 void testflarm(NMEA_INFO *GPS_INFO) {
   GPS_INFO->FLARM_Available = true;
   PFLAU(TEXT("1,1,1,1"),GPS_INFO);
   PFLAA(TEXT("0,1000,2000,220,2,DD8F12,120,-4.5,30,-1.4,1"),GPS_INFO);
 }
-
+*/
 
 ///
 
@@ -1241,3 +1299,4 @@ void LogNMEA(TCHAR* text) {
   WriteFile(nmeaLogFile, text, _tcslen(text)*sizeof(TCHAR), &dwBytesRead, 
 	    (OVERLAPPED *)NULL);
 }
+

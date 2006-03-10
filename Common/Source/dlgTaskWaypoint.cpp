@@ -41,6 +41,7 @@ Copyright_License {
 #include "Externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
+#include "Logger.h"
 
 static int twItemIndex= 0;
 static WndForm *wf=NULL;
@@ -117,8 +118,9 @@ static void SetValues(void) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Cylinder"));
-    dfe->addEnumText(TEXT("Sector"));
-    dfe->Set(FAISector);
+    dfe->addEnumText(TEXT("FAI Sector"));
+    dfe->addEnumText(TEXT("DAe 0.5/10"));
+    dfe->Set(SectorType);
     wp->RefreshDisplay();
   }
 
@@ -193,8 +195,8 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
   if (wp) {
-    if ((int)FAISector != wp->GetDataField()->GetAsInteger()) {
-      FAISector = wp->GetDataField()->GetAsInteger();
+    if ((int)SectorType != wp->GetDataField()->GetAsInteger()) {
+      SectorType = wp->GetDataField()->GetAsInteger();
     }
   }
 
@@ -225,7 +227,11 @@ static void OnSelectClicked(WindowControl * Sender){
   res = dlgWayPointSelect();
   if (res != -1){
     SelectedWaypoint = res;    
-    Task[twItemIndex].Index = res;
+    if (Task[twItemIndex].Index != res) {
+      if (CheckDeclaration()) {
+	Task[twItemIndex].Index = res;
+      }
+    }
     UpdateCaption();
   };
 }

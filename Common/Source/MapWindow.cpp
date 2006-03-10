@@ -51,7 +51,7 @@ Copyright_License {
 #include "options.h"
 #include "Task.h"
 
-#include "GaugeVario.h"
+#include "GaugeVarioAltA.h"
 #include "GaugeCDI.h"
 #include "InfoBoxLayout.h"
 
@@ -367,7 +367,7 @@ bool TextInBoxMoveInView(POINT *offset, RECT *brect){
 
 }
 
-void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode) {
+void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode, bool noOverlap) {
 
   #define WPCIRCLESIZE        2
 
@@ -419,6 +419,8 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInB
     y -= tsize.cy/2;
   }
 
+  bool notoverlapping = true;
+
   if (Mode.AsFlag.Border){
 
     POINT offset;
@@ -436,11 +438,15 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInB
       y += offset.y;
     }
 
-    HPEN oldPen = (HPEN)SelectObject(hDC, hpMapScale);
-    RoundRect(hDC, brect.left, brect.top, brect.right, brect.bottom, 8, 8);
-    SelectObject(hDC, oldPen);
+    notoverlapping = checkLabelBlock(brect);
+  
+    if (!noOverlap || notoverlapping) {
+      HPEN oldPen = (HPEN)SelectObject(hDC, hpMapScale);
+      RoundRect(hDC, brect.left, brect.top, brect.right, brect.bottom, 8, 8);
+      SelectObject(hDC, oldPen);
 
-    ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+    }
 
 
   } else if (Mode.AsFlag.FillBackground){
@@ -460,9 +466,13 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInB
       y += offset.y;
     }
 
-    COLORREF oldColor = SetBkColor(hDC, RGB(0xff, 0xff, 0xff));
-    ExtTextOut(hDC, x, y, ETO_OPAQUE, &brect, Value, size, NULL);
-    SetBkColor(hDC, oldColor);
+    notoverlapping = checkLabelBlock(brect);
+  
+    if (!noOverlap || notoverlapping) {
+      COLORREF oldColor = SetBkColor(hDC, RGB(0xff, 0xff, 0xff));
+      ExtTextOut(hDC, x, y, ETO_OPAQUE, &brect, Value, size, NULL);
+      SetBkColor(hDC, oldColor);
+    }
 
   } else {
 
@@ -475,7 +485,16 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInB
     }
     */
 
-    ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+    brect.left = x-2;
+    brect.right = brect.left+tsize.cx+4;
+    brect.top = y+((tsize.cy+4) / 8)-2;
+    brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4) / 8);
+
+    notoverlapping = checkLabelBlock(brect);
+  
+    if (!noOverlap || notoverlapping) {
+      ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+    }
 
   }
   
@@ -511,6 +530,8 @@ void MapWindow::ToggleFullScreenStart() {
     MapRect = MapRectSmall;
     ShowInfoBoxes();
   }
+  GaugeVario::Show(!MapFullScreen);
+
 }
 
 
@@ -546,9 +567,12 @@ void MapWindow::Event_AutoZoom(int vswitch) {
   }
   
   if (AutoZoom) {
-    EnablePan = false;
-    PanX = 0.0;
-    PanY = 0.0;
+    if (EnablePan) {
+      EnablePan = false;
+      StoreRestoreFullscreen(false);
+      PanX = 0.0;
+      PanY = 0.0;
+    }
   }
   RefreshMap();
 }
@@ -642,21 +666,35 @@ void MapWindow::Event_TerrainTopology(int vswitch) {
 }
 
 
-void MapWindow::Event_Pan(int vswitch) {
+void MapWindow::StoreRestoreFullscreen(bool store) {
   static bool oldfullscreen = 0;
-  if (vswitch == -2) { // superpan, toggles fullscreen also
-
-    if (!EnablePan) {
-      // pan not active on entry, save fullscreen status
-      oldfullscreen = MapWindow::IsMapFullScreen();
-    } else {
+  static bool SuperPan = false;
+  if (store) {
+    // pan not active on entry, save fullscreen status
+    SuperPan = true;
+    oldfullscreen = MapWindow::IsMapFullScreen();
+  } else {
+    if (SuperPan) {
       // pan is active, need to restore
       if (!oldfullscreen) {
 	// change it if necessary
 	RequestFullScreen = false;
       }
+      SuperPan = false;
     }
+  }
+}
 
+
+void MapWindow::Event_Pan(int vswitch) {
+  static bool oldfullscreen = 0;
+  if (vswitch == -2) { // superpan, toggles fullscreen also
+
+    if (!EnablePan) {
+      StoreRestoreFullscreen(true);
+    } else {
+      StoreRestoreFullscreen(false);
+    }
     // new mode
     EnablePan = !EnablePan;
     if (EnablePan) { // pan now on, so go fullscreen
@@ -684,7 +722,7 @@ void MapWindow::Event_SetZoom(double value) {
   if (ScaleListCount > 0){
     RequestMapScale = FindMapScale(value);
   } else {
-    RequestMapScale = max(0.01,min(160.0, value));
+    RequestMapScale = max(0.1,min(160.0, value));
   }
   if (lastRequestMapScale != RequestMapScale){
     lastRequestMapScale = RequestMapScale;
@@ -716,7 +754,7 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
       value *= 2.0;
     }
 
-    RequestMapScale = max(0.01,min(160.0, value));
+    RequestMapScale = max(0.1,min(160.0, value));
   }
 
   if (lastRequestMapScale != RequestMapScale){
@@ -811,6 +849,8 @@ static void SetFontInfo(HDC hDC, FontHeightInfo_t *FontHeightInfo){
     FontHeightInfo->CapitalHeight = tm.tmAscent - 1 -(tm.tmHeight/10);
 
 }
+
+extern bool ProgramStarted;
 
 LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
                                         LPARAM lParam)
@@ -1011,7 +1051,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     break;
 
   case WM_DESTROY:
-    CloseDrawingThread();
 
     ReleaseDC(hWnd, hdcScreen);
     DeleteDC(hdcDrawWindow);
@@ -1082,8 +1121,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     for (i=0; i<AIRSPACECLASSCOUNT; i++) {
       DeleteObject(hAirspacePens[i]);
     }
-
     PostQuitMessage (0);
+
     break;
 
   case WM_LBUTTONDBLCLK:
@@ -1180,8 +1219,8 @@ extern int FrameCount;
 
 void MapWindow::ModifyMapScale(void) {
   // limit zoomed in so doesn't reach silly levels
-  if (MapScale<0.2) {
-    MapScale = 0.2; 
+  if (MapScale<0.1) {
+    MapScale = 0.1; 
   }
   MapScaleOverDistanceModify = MapScale/DISTANCEMODIFY;
   ResMapScaleOverDistanceModify = 
@@ -1250,10 +1289,6 @@ void MapWindow::UpdateMapScale()
         MapScale = DerivedDrawInfo.WaypointDistance*DISTANCEMODIFY 
 	  / AutoZoomFactor;
 	ModifyMapScale();
-        // calculate scale factors for display etc.
-	//        DrawScale = DerivedDrawInfo.WaypointDistance / AutoZoomFactor;
-	//        DrawScale = DrawScale/111000;
-	//        DrawScale = GetMapResolutionFactor()/DrawScale;
 
       }	else {
 
@@ -1411,12 +1446,15 @@ void MapWindow::RenderMapWindow(  RECT rc)
       DrawTerrain(hdcDrawWindowBg, rc, sunazimuth, sunelevation);
     }
 
-    if (!TaskAborted) {
-      DrawTaskAAT(hdcDrawWindowBg, rc);
-    }
-
     if (EnableTopology) {
       DrawTopology(hdcDrawWindowBg, rc);
+    }
+    
+    // reset label over-write preventer
+    nLabelBlocks = 0;
+
+    if (!TaskAborted) {
+      DrawTaskAAT(hdcDrawWindowBg, rc);
     }
 
     // then airspace..
@@ -1512,6 +1550,8 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   
   //  THREADRUNNING = FALSE;
   THREADEXIT = FALSE;
+
+  nLabelBlocks = 0;
 
   GetClientRect(hWndMapWindow, &MapRectBig);
   
@@ -1625,10 +1665,11 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
       }
     }
 
-
+    /* JMW moved to calculations.cpp
     LockTerrainDataCalculations();
     terrain_dem_calculations.SetCacheTime();
     UnlockTerrainDataCalculations();
+    */
 
     UpdateMapScale();
     
@@ -1656,14 +1697,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
     // have some time, do calculations terrain cache update if necessary
     if (RenderTimeAvailable()) {
-      LockTerrainDataCalculations();
-      if (terrain_dem_calculations.terraincachemisses > 0){
-        DWORD tm =GetTickCount();
-        terrain_dem_calculations.OptimizeCash();
-        tm = GetTickCount()-tm;
-        tm = GetTickCount();
-      }
-      UnlockTerrainDataCalculations();
+
     }
   }
   THREADEXIT = TRUE;
@@ -2107,6 +2141,7 @@ typedef struct{
   POINT Pos;
   TextInBoxMode_t Mode;
   int AltArivalAGL;
+  bool inTask;
 }MapWaypointLabel_t;
 
 bool WaypointInTask(int ind) {
@@ -2126,10 +2161,11 @@ bool WaypointInTask(int ind) {
   return false;
 }
 
-static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode, int AltArivalAGL);
+static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode, int AltArivalAGL, bool inTask=false);
 static int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 );
 static MapWaypointLabel_t MapWaypointLabelList[50];
 static int MapWaypointLabelListCount=0;
+
 
 void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 {
@@ -2157,6 +2193,9 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
     {
 
       bool irange = false;
+      bool intask = false;
+
+      intask = WaypointInTask(i);
 
       DisplayMode.AsInt = 0;
       if(MapScale > 20)
@@ -2175,6 +2214,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
             SelectObject(hDCTemp,hBmpAirportReachable);
           else
             SelectObject(hDCTemp,hBmpFieldReachable);
+	  intask = true; // so we can always draw them
         } else
           if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
             SelectObject(hDCTemp,hBmpAirportUnReachable);
@@ -2207,7 +2247,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
       // JMW
       if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
 
-        if (WaypointInTask(i)
+        if (intask
 	    || ((((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT))&&(irange))) 
 	  {
 
@@ -2216,7 +2256,13 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           else
             wsprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
 
-          MapWaypointLabelAdd(Buffer, WayPointList[i].Screen.x+5, WayPointList[i].Screen.y, DisplayMode, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY));
+          MapWaypointLabelAdd(Buffer, 
+			      WayPointList[i].Screen.x+5, 
+			      WayPointList[i].Screen.y, 
+			      DisplayMode, 
+			      (int)
+			      (WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+			      intask);
 
           //TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
           //    WayPointList[i].Screen.y, 0, DisplayMode);
@@ -2233,23 +2279,23 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           case DISPLAYNAME:
 
             if (DisplayMode.AsInt)
-              wsprintf(Buffer, TEXT("%s:%d%s"),WayPointList[i].Name, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
+              wsprintf(Buffer, TEXT("%s:%d%s"),
+		       WayPointList[i].Name, 
+		       (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
+		       sAltUnit);
             else
               wsprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
-
-            //TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
-            //  WayPointList[i].Screen.y, 0, DisplayMode);
 
             break;
           case DISPLAYNUMBER:
 
             if (DisplayMode.AsInt)
-              wsprintf(Buffer, TEXT("%d:%d%s"),WayPointList[i].Number, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
+              wsprintf(Buffer, TEXT("%d:%d%s"),
+		       WayPointList[i].Number, 
+		       (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
+		       sAltUnit);
             else
               wsprintf(Buffer, TEXT("%d"),WayPointList[i].Number);
-
-            //TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
-            //  WayPointList[i].Screen.y, 0, DisplayMode);
 
             break;
           case DISPLAYFIRSTFIVE:
@@ -2257,26 +2303,34 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
             _tcsncpy(Buffer2, WayPointList[i].Name, 5);
             Buffer2[5] = '\0';
             if (DisplayMode.AsInt)
-              wsprintf(Buffer, TEXT("%s:%d%s"),Buffer2, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
+              wsprintf(Buffer, TEXT("%s:%d%s"),
+		       Buffer2, 
+		       (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
+		       sAltUnit);
             else
               wsprintf(Buffer, TEXT("%s"),Buffer2);
-
-            //TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
-            //  WayPointList[i].Screen.y, 0, DisplayMode);
 
             break;
           case DISPLAYFIRSTTHREE:
             _tcsncpy(Buffer2, WayPointList[i].Name, 3);
             Buffer2[3] = '\0';
             if (DisplayMode.AsInt)
-              wsprintf(Buffer, TEXT("%s:%d%s"),Buffer2, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
+              wsprintf(Buffer, TEXT("%s:%d%s"),
+		       Buffer2, 
+		       (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
+		       sAltUnit);
             else
               wsprintf(Buffer, TEXT("%s"),Buffer2);
 
-            //TextInBox(hdc, Buffer, WayPointList[i].Screen.x+5,
-            //  WayPointList[i].Screen.y, 0, DisplayMode);
-
             break;
+	  case DISPLAYNONE:
+            if (DisplayMode.AsInt)
+              wsprintf(Buffer, TEXT("%d%s"), 
+		       (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
+		       sAltUnit);
+            else
+              Buffer[0]= '\0';
+
           default:
 #if (WINDOWSPC<1)
             ASSERT(0);
@@ -2289,25 +2343,53 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
             WayPointList[i].Screen.x+5,
             WayPointList[i].Screen.y,
             DisplayMode,
-            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY));
-
+            (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
+	    intask);
 
         }
     }
   }
 
-  qsort(&MapWaypointLabelList, MapWaypointLabelListCount,
-        sizeof(MapWaypointLabel_t), MapWaypointLabelListCompare);
+  qsort(&MapWaypointLabelList, 
+	MapWaypointLabelListCount,
+        sizeof(MapWaypointLabel_t), 
+	MapWaypointLabelListCompare);
 
-  for (int j=MapWaypointLabelListCount-1; j>=0; j--){
+  int j;
+
+  // now draw task/landable waypoints in order of range (closest last)
+  // writing unconditionally
+  for (j=MapWaypointLabelListCount-1; j>=0; j--){
     MapWaypointLabel_t *E = &MapWaypointLabelList[j];
-    TextInBox(hdc, E->Name, E->Pos.x,
-      E->Pos.y, 0, E->Mode);
+    // draws if they are in task unconditionally,
+    // otherwise, does comparison
+    if (E->inTask) {
+      TextInBox(hdc, E->Name, E->Pos.x,
+		E->Pos.y, 0, E->Mode, 
+		false);
+    }
+  }
+
+  // now draw normal waypoints in order of range (furthest away last)
+  // without writing over each other (or the task ones)
+  for (j=0; j<MapWaypointLabelListCount; j++) {
+    MapWaypointLabel_t *E = &MapWaypointLabelList[j];
+    if (!E->inTask) {
+      TextInBox(hdc, E->Name, E->Pos.x,
+		E->Pos.y, 0, E->Mode, 
+		true);
+    }
   }
 
 }
 
 static int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *elem2 ){
+
+  // Now sorts elements in task preferentially.
+  /*
+  if (((MapWaypointLabel_t *)elem1)->inTask && ! ((MapWaypointLabel_t *)elem2)->inTask)
+    return (-1);
+  */
   if (((MapWaypointLabel_t *)elem1)->AltArivalAGL > ((MapWaypointLabel_t *)elem2)->AltArivalAGL)
     return (-1);
   if (((MapWaypointLabel_t *)elem1)->AltArivalAGL < ((MapWaypointLabel_t *)elem2)->AltArivalAGL)
@@ -2316,17 +2398,19 @@ static int _cdecl MapWaypointLabelListCompare(const void *elem1, const void *ele
 }
 
 
-static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode, int AltArivalAGL){
+static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, 
+				TextInBoxMode_t Mode, 
+				int AltArivalAGL, bool inTask){
   MapWaypointLabel_t *E;
 
-  if (X<MapWindow::MapRect.left-WPCIRCLESIZE
-      || X>MapWindow::MapRect.right+(WPCIRCLESIZE*3)
-      || Y<MapWindow::MapRect.top-WPCIRCLESIZE
-      || Y>MapWindow::MapRect.bottom+WPCIRCLESIZE){
+  if ((X<MapWindow::MapRect.left-WPCIRCLESIZE)
+      || (X>MapWindow::MapRect.right+(WPCIRCLESIZE*3))
+    || (Y<MapWindow::MapRect.top-WPCIRCLESIZE)
+	 || (Y>MapWindow::MapRect.bottom+WPCIRCLESIZE)){
 	  return;
   }
 
-  if (MapWaypointLabelListCount >= (sizeof(MapWaypointLabelList)/sizeof(MapWaypointLabel_t))){
+  if (MapWaypointLabelListCount >= (sizeof(MapWaypointLabelList)/sizeof(MapWaypointLabel_t))-1){
 #if (WINDOWSPC<1)
     ASSERT(0);
 #endif
@@ -2340,6 +2424,7 @@ static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
   E->Pos.y = Y;
   E->Mode = Mode;
   E->AltArivalAGL = AltArivalAGL;
+  E->inTask = inTask;
 
   MapWaypointLabelListCount++;
 
@@ -2421,15 +2506,35 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
     {
       if(AATEnabled != TRUE)
       {
-        DrawDashLine(hdc, 2, WayPointList[Task[i].Index].Screen, Task[i].Start, RGB(127,127,127));
-        DrawDashLine(hdc, 2, WayPointList[Task[i].Index].Screen, Task[i].End, RGB(127,127,127));
+        DrawDashLine(hdc, 2, 
+		     WayPointList[Task[i].Index].Screen, 
+		     Task[i].Start, RGB(127,127,127));
+        DrawDashLine(hdc, 2, 
+		     WayPointList[Task[i].Index].Screen, 
+		     Task[i].End, RGB(127,127,127));
         
-        if(FAISector != TRUE)
+        if(SectorType== 0)
         {
           tmp = SectorRadius*ResMapScaleOverDistanceModify;
-          SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));SelectObject(hdc, GetStockObject(BLACK_PEN));
-          Circle(hdc,WayPointList[Task[i].Index].Screen.x,WayPointList[Task[i].Index].Screen.y,(int)tmp, rc); 
+          SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
+	  SelectObject(hdc, GetStockObject(BLACK_PEN));
+          Circle(hdc,
+		 WayPointList[Task[i].Index].Screen.x,
+		 WayPointList[Task[i].Index].Screen.y,
+		 (int)tmp, rc); 
         }
+        if(SectorType== 2)
+        {
+	  // JMW added german rules
+          tmp = 500*ResMapScaleOverDistanceModify;
+          SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
+	  SelectObject(hdc, GetStockObject(BLACK_PEN));
+          Circle(hdc,
+		 WayPointList[Task[i].Index].Screen.x,
+		 WayPointList[Task[i].Index].Screen.y,
+		 (int)tmp, rc); 
+        }
+
       }
     }
   }
@@ -3030,11 +3135,10 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
 }
 
 
+pointObj MapWindow::GlideFootPrint[NUMTERRAINSWEEPS+1];
+
 void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
   POINT Groundline[NUMTERRAINSWEEPS+1];
-  double lat, lon;
-  double distance;
-  double bearing;
   int scx, scy;
   HPEN hpOld;
 
@@ -3042,10 +3146,9 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
 			     hpTerrainLineBg);	//sjt 02feb06 added bg line
 
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-    bearing = -90+i*180.0/NUMTERRAINSWEEPS+DrawInfo.TrackBearing;
-    distance = FinalGlideThroughTerrain(bearing, &DrawInfo,
-      &DerivedDrawInfo, &lat, &lon);
-    LatLon2Screen(lon, lat, &scx, &scy);
+    LatLon2Screen(GlideFootPrint[i].x, 
+		  GlideFootPrint[i].y, 
+		  &scx, &scy);
     Groundline[i].x = scx;
     Groundline[i].y = scy;
   }
@@ -3304,6 +3407,10 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
       if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, 
 			       AirspaceArea[i].Top.Altitude))
 	{
+	  // JMW now looks for overlap in lat/lon coordinates
+	  
+	  if(AirspaceArea[i].Visible) {
+
 	  pt = (POINT*)SfRealloc(pt, 
 				 sizeof(POINT) * AirspaceArea[i].NumPoints);
 	  for(j= AirspaceArea[i].FirstPoint; 
@@ -3313,13 +3420,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 	      pt[j-AirspaceArea[i].FirstPoint].x = AirspacePoint[j].Screen.x ;
 	      pt[j-AirspaceArea[i].FirstPoint].y = AirspacePoint[j].Screen.y ;
 	    }
-	  
-	  AirspaceArea[i].Visible = 
-	    msRectOverlap(&AirspaceArea[i].bounds, &screenbounds_latlon);
-	  // JMW now looks for overlap in lat/lon coordinates
-	  
-	  if(AirspaceArea[i].Visible) {
-	    
+	  	    
         // this color is used as the black bit
 	    SetTextColor(hDCTemp, 
 			 Colours[iAirspaceColour[AirspaceArea[i].Type]]);
@@ -3406,7 +3507,6 @@ void MapWindow::CloseDrawingThread(void)
   LockTerrainDataGraphics();
   CLOSETHREAD = TRUE;
   SuspendDrawingThread();
-  SetThreadPriority(hDrawThread,THREAD_PRIORITY_ABOVE_NORMAL);
   UnlockTerrainDataGraphics();
   while(!THREADEXIT) { Sleep(100); };
 }
@@ -3872,10 +3972,12 @@ void MapWindow::CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
 
   for(i=0;i<NumberOfAirspaceCircles;i++)
   {
-    if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
+    if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, 
+			     AirspaceCircle[i].Top.Altitude))
     {
       
-      LatLon2Screen(AirspaceCircle[i].Longitude, AirspaceCircle[i].Latitude, &scx, &scy);
+      LatLon2Screen(AirspaceCircle[i].Longitude, 
+		    AirspaceCircle[i].Latitude, &scx, &scy);
       
       AirspaceCircle[i].ScreenX = scx;
       AirspaceCircle[i].ScreenY = scy;
@@ -3884,30 +3986,32 @@ void MapWindow::CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
       
       AirspaceCircle[i].ScreenR = (int)tmp;
     }
+
   }
-  
-  
+    
   for(i=0;i<NumberOfAirspaceAreas;i++)
   {
     if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, 
-			     AirspaceArea[i].Top.Altitude))
-    {
-      for(j=AirspaceArea[i].FirstPoint; 
-	  j<(AirspaceArea[i].FirstPoint + AirspaceArea[i].NumPoints); 
-	  j++)
-      {
-        
-        // bug fix by Samuel Gisiger
-        LatLon2Screen(AirspacePoint[j].Longitude, 
-		      AirspacePoint[j].Latitude, 
-		      &scx, &scy);
-        
-        AirspacePoint[j].Screen.x = scx;
-        AirspacePoint[j].Screen.y = scy;
+			     AirspaceArea[i].Top.Altitude)) {
+      if (msRectOverlap(&AirspaceArea[i].bounds, &screenbounds_latlon)) {
+	for(j=AirspaceArea[i].FirstPoint; 
+	    j<(AirspaceArea[i].FirstPoint + AirspaceArea[i].NumPoints); 
+	    j++)
+	  {
+	    // bug fix by Samuel Gisiger
+	    LatLon2Screen(AirspacePoint[j].Longitude, 
+			  AirspacePoint[j].Latitude, 
+			  &scx, &scy);
+	    
+	    AirspacePoint[j].Screen.x = scx;
+	    AirspacePoint[j].Screen.y = scy;
+	  }
+	AirspaceArea[i].Visible = true;
+      } else {
+	AirspaceArea[i].Visible = false;
       }
     }
   }
-  
 }
 
 
@@ -4415,3 +4519,22 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
 
 
 //////////////////////
+// JMW added simple code to prevent text writing over map city names
+int MapWindow::nLabelBlocks;
+RECT MapWindow::LabelBlockCoords[MAXLABELBLOCKS];
+
+bool MapWindow::checkLabelBlock(RECT rc) {
+  bool ok = true;
+
+  for (int i=0; i<nLabelBlocks; i++) {
+    if (CheckRectOverlap(LabelBlockCoords[i],rc)) {
+      ok = false;
+      continue;
+    }
+  }
+  if (nLabelBlocks<MAXLABELBLOCKS-1) {
+    LabelBlockCoords[nLabelBlocks]= rc;
+    nLabelBlocks++;
+  }
+  return ok;
+}

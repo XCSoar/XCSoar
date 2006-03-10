@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.100 2006/03/06 17:30:21 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.101 2006/03/10 13:19:39 jwharington Exp $
 
 Copyright_License {
 
@@ -42,6 +42,7 @@ Copyright_License {
 #include "compatibility.h"
 
 #include "Dialogs.h"
+#include "Logger.h"
 #include "resource.h"
 #include "utils.h"
 #include "externs.h"
@@ -1213,42 +1214,8 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
           GetRegistryString(szRegistryAircraftType, AircraftType, 32);
           GetRegistryString(szRegistryAircraftRego, AircraftRego, 32);
 
-
-          if (devIsLogger(devA())){
+	  LoggerDeviceDeclare();
           
-            if(MessageBox(hWndMapWindow, TEXT("Declare Task?"), devA()->Name, MB_YESNO| MB_ICONQUESTION) == IDYES){
-
-              devDeclBegin(devA(), PilotName, AircraftType, AircraftRego);
-              for(i=0;i<MAXTASKPOINTS;i++)
-                {
-                  if(Task[i].Index == -1) break;
-                  devDeclAddWayPoint(devA(), &WayPointList[Task[i].Index]);
-                }
-              if (devDeclEnd(devA()))
-                MessageBox(hWndMapWindow, TEXT("Task Declared!"), devA()->Name, MB_OK| MB_ICONINFORMATION);
-              else
-                MessageBox(hWndMapWindow, TEXT("Error occure,\r\nTask NOT Declared!"), devA()->Name, MB_OK| MB_ICONERROR);
-
-            }
-          }
-
-          if (devIsLogger(devB())){
-          
-            if(MessageBox(hWndMapWindow, TEXT("Declare Task?"), devB()->Name, MB_YESNO| MB_ICONQUESTION) == IDYES){
-
-              devDeclBegin(devB(), PilotName, AircraftType, AircraftRego);
-              for(i=0;i<MAXTASKPOINTS;i++)
-                {
-                  if(Task[i].Index == -1) break;
-                  devDeclAddWayPoint(devB(), &WayPointList[Task[i].Index]);
-                }
-              if (devDeclEnd(devB()))
-                MessageBox(hWndMapWindow, TEXT("Task Declared!"), devB()->Name, MB_OK| MB_ICONINFORMATION);
-              else
-                MessageBox(hWndMapWindow, TEXT("Error occure,\r\nTask NOT Declared!"), devB()->Name, MB_OK| MB_ICONERROR);
-
-            }
-          }
         }
         break;
 
@@ -1677,7 +1644,7 @@ LRESULT CALLBACK TaskSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
       else
         SendDlgItemMessage(hDlg,IDC_STARTCYLINDER,BM_SETCHECK,BST_CHECKED,0);
         
-      if(FAISector == TRUE)
+      if(SectorType>0)
         SendDlgItemMessage(hDlg,IDC_FAI,BM_SETCHECK,BST_CHECKED,0);
       else
         SendDlgItemMessage(hDlg,IDC_CYLINDER,BM_SETCHECK,BST_CHECKED,0);
@@ -1710,7 +1677,7 @@ LRESULT CALLBACK TaskSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
           Radius  = GetDlgItemInt(hDlg,IDC_CYLINDERRADIUS,0,TRUE);
           SectorRadius = Radius;
           SetToRegistry(szRegistrySectorRadius,Radius);
-          SetToRegistry(szRegistryFAISector,FAISector);
+          SetToRegistry(szRegistryFAISector,SectorType);
         }
       break;
 
@@ -1736,11 +1703,11 @@ LRESULT CALLBACK TaskSettings(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPa
           break;
 
         case IDC_FAI:
-          FAISector = TRUE;
+          SectorType = 1;
           break;
                                 
         case IDC_CYLINDER:
-          FAISector = FALSE;
+          SectorType = 0;
           break;
         }
       break;
@@ -2784,7 +2751,7 @@ LRESULT CALLBACK LoadProfile(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
         case  IDC_INFOBOXRESET:
 	  // TODO
-	  if (MessageBox(hDlg,
+	  if (MessageBoxX(hDlg,
 			 gettext(TEXT("Do you wish to reset infoboxes?")),
 			 gettext(TEXT("Reset?")),MB_YESNO|MB_ICONQUESTION) 
 	      == IDYES) {	    
@@ -3722,7 +3689,8 @@ BOOL SetProgressStepSize(int nSize) {
 }
 
 HWND CreateProgressDialog(TCHAR* text) {
-#if (WINDOWSPC>0)
+#if (WINDOWSPC>2)
+  hProgress = NULL;
   return NULL;
 #endif
   if (hProgress) {
@@ -3750,12 +3718,18 @@ HWND CreateProgressDialog(TCHAR* text) {
     ShowWindow(hProgress,SW_SHOW);
     
     SetForegroundWindow(hProgress);
+#if (WINDOWSPC>0)
+    SetWindowPos(hProgress,HWND_TOPMOST,
+                 0, 0, 0, 0,
+                 SWP_SHOWWINDOW);
+#else
     SHFullScreen(hProgress,
 		 SHFS_HIDETASKBAR
 		 |SHFS_HIDESIPBUTTON
 		 |SHFS_HIDESTARTICON);
     SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,
-                 SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);    
+                 SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+#endif
     
   }
   
@@ -3764,4 +3738,5 @@ HWND CreateProgressDialog(TCHAR* text) {
   UpdateWindow(hProgress);
   return hProgress;
 }
+
 

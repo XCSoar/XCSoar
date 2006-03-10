@@ -35,6 +35,7 @@ Copyright_License {
 #include <windows.h>
 #include <tchar.h>
 #include "Utils.h"
+#include "device.h"
 
 /* 
 problems with current IGC:
@@ -378,21 +379,25 @@ void DoLogger(TCHAR *strAssetNumber)
 
   if(LoggerActive)
     {
-      if(MessageBox(hWndMapWindow,TEXT("Stop Logger"),TEXT("Stop Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+      if(MessageBoxX(hWndMapWindow,
+		     gettext(TEXT("Stop Logger?")),
+		     gettext(TEXT("Stop Logger?")),
+		     MB_YESNO|MB_ICONQUESTION) == IDYES)
 	{
 	  LoggerActive = false;
 	}
     }
   else
     {
-      _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
+      _tcscpy(TaskMessage,gettext(TEXT("Start Logger With Declaration?")));
+      _tcscat(TaskMessage,TEXT("\r\n"));
       for(i=0;i<MAXTASKPOINTS;i++)
 	{
 	  if(Task[i].Index == -1)
 	    {
 	      if(i==0)
 		{
-		  _tcscat(TaskMessage,TEXT("None"));
+		  _tcscat(TaskMessage,gettext(TEXT("None")));
 		}
 	      break;
 	    }
@@ -400,7 +405,10 @@ void DoLogger(TCHAR *strAssetNumber)
 	  _tcscat(TaskMessage,TEXT("\r\n"));
 	}
 		
-      if(MessageBox(hWndMapWindow,TaskMessage,TEXT("Start Logger"),MB_YESNO|MB_ICONQUESTION) == IDYES)
+      if(MessageBoxX(hWndMapWindow,
+		     TaskMessage,
+		     gettext(TEXT("Start Logger?")),
+		     MB_YESNO|MB_ICONQUESTION) == IDYES)
 	{
 	  LoggerActive = true;
 	  StartLogger(strAssetNumber);
@@ -426,4 +434,91 @@ void DoLogger(TCHAR *strAssetNumber)
 }
 
 
+bool DeclaredToDevice = false;
 
+void LoggerDeviceDeclare() {
+  int i;
+  WCHAR PilotName[64];
+  WCHAR AircraftType[32];
+  WCHAR AircraftRego[32];
+  bool foundone = false;
+
+  GetRegistryString(szRegistryPilotName, PilotName, 64);
+  GetRegistryString(szRegistryAircraftType, AircraftType, 32);
+  GetRegistryString(szRegistryAircraftRego, AircraftRego, 32);
+
+  if (devIsLogger(devA())){
+    foundone = true;
+    if(MessageBoxX(hWndMapWindow, 
+		   gettext(TEXT("Declare Task?")), 
+		   devA()->Name, 
+		   MB_YESNO| MB_ICONQUESTION) == IDYES)
+      {
+	
+	devDeclBegin(devA(), PilotName, AircraftType, AircraftRego);
+	
+	for(i=0;i<MAXTASKPOINTS;i++)
+	  {
+	    if(Task[i].Index == -1) break;
+	    devDeclAddWayPoint(devA(), &WayPointList[Task[i].Index]);
+	  }
+	if (devDeclEnd(devA())) {
+	  MessageBoxX(hWndMapWindow, 
+		      gettext(TEXT("Task Declared!")), 
+		      devA()->Name, MB_OK| MB_ICONINFORMATION);
+	  DeclaredToDevice = true;
+	} else
+	  MessageBoxX(hWndMapWindow, 
+		      gettext(TEXT("Error occured,\r\nTask NOT Declared!")), 
+		      devA()->Name, MB_OK| MB_ICONERROR);
+	
+      }
+  }
+  
+  if (devIsLogger(devB())){
+    foundone = true;
+    
+    if(MessageBoxX(hWndMapWindow, 
+		   gettext(TEXT("Declare Task?")), 
+		   devB()->Name, MB_YESNO| MB_ICONQUESTION) == IDYES){
+      
+      devDeclBegin(devB(), PilotName, AircraftType, AircraftRego);
+      for(i=0;i<MAXTASKPOINTS;i++)
+	{
+	  if(Task[i].Index == -1) break;
+	  devDeclAddWayPoint(devB(), &WayPointList[Task[i].Index]);
+	}
+      if (devDeclEnd(devB())) {
+	MessageBoxX(hWndMapWindow, gettext(TEXT("Task Declared!")), 
+			    devB()->Name, MB_OK| MB_ICONINFORMATION);
+	  DeclaredToDevice = true;
+      } else
+	MessageBoxX(hWndMapWindow, 
+		    gettext(TEXT("Error occured,\r\nTask NOT Declared!")), 
+		    devB()->Name, MB_OK| MB_ICONERROR);
+      
+    }
+  }
+  if (!foundone) {
+    MessageBoxX(hWndMapWindow, gettext(TEXT("No logger connected")), 
+		devB()->Name, MB_OK| MB_ICONINFORMATION);
+    DeclaredToDevice = true; // testing only
+  }
+}
+
+
+bool CheckDeclaration(void) {
+  if (!DeclaredToDevice) {
+    return true;
+  } else {
+    if(MessageBoxX(hWndMapWindow, 
+		   gettext(TEXT("OK to invalidate declaration?")), 
+		   gettext(TEXT("Task declared")), 
+		   MB_YESNO| MB_ICONQUESTION) == IDYES){
+      DeclaredToDevice = false;
+      return true;
+    } else {
+      return false;
+    }
+  }
+}

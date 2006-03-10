@@ -13,8 +13,10 @@
   <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />
 
-  <WndButton Name="cmdSave"  Caption="Save" X=5 Y=90 Width=60  Height=28 Font=2 OnClickNotify="OnSaveClicked" Tag=1 />
+  <WndButton Name="cmdDemo"  Caption="Demo" X=5 Y=60 Width=60  Height=28 Font=2 OnClickNotify="OnDemoClicked" Tag=2 />
   
+  <WndButton Name="cmdSave"  Caption="Save" X=5 Y=90 Width=60  Height=28 Font=2 OnClickNotify="OnSaveClicked" Tag=1 />
+
   <WndFrame Name="frmHardware" X=70 Y=0 Width=246 Height=222 Font=2>
 
   <WndProperty Name="prpHasPressureTE" Caption="TE port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>

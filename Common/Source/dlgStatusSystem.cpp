@@ -36,6 +36,7 @@ Copyright_License {
 #include "units.h"
 #include "externs.h"
 #include "Waypointparser.h"
+#include "Logger.h"
 
 #include "WindowControls.h"
 #include "dlgTools.h"
@@ -116,6 +117,13 @@ void dlgStatusSystemShowModal(void){
     wp->SetText(gettext(TEXT("ON")));
   } else {
     wp->SetText(gettext(TEXT("OFF")));
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpDeclared"));
+  if (DeclaredToDevice) {
+    wp->SetText(gettext(TEXT("YES")));
+  } else {
+    wp->SetText(gettext(TEXT("NO")));
   }
 
   // JMW TODO: current time and battery

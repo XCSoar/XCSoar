@@ -226,8 +226,8 @@ COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
 
 HANDLE                          hPort1 = INVALID_HANDLE_VALUE;    // Handle to the serial port
 HANDLE                          hPort2 = INVALID_HANDLE_VALUE;    // Handle to the serial port
-BOOL                                    Port1Available = NULL;
-BOOL                                    Port2Available = NULL;
+BOOL                                    Port1Available = FALSE;
+BOOL                                    Port2Available = FALSE;
 
 // Display Gobals
 HFONT                                   InfoWindowFont;
@@ -271,7 +271,6 @@ DERIVED_INFO  CALCULATED_INFO;
 BOOL GPSCONNECT = FALSE;
 BOOL extGPSCONNECT = FALSE; // this one used by external functions
 
-BOOL VARIOCONNECT = FALSE;
 bool          TaskAborted = false;
 
 bool InfoBoxesDirty= TRUE;
@@ -298,7 +297,7 @@ double WEIGHTS[POLARSIZE] = {250,70,100};
 // Waypoint Database
 WAYPOINT *WayPointList = NULL;
 unsigned int NumberOfWayPoints = 0;
-int FAISector = TRUE;
+int SectorType = 1; // FAI sector
 DWORD SectorRadius = 500;
 int StartLine = TRUE;
 DWORD StartRadius = 3000;
@@ -489,7 +488,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 34
 	  {ugHorizontalSpeed, TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
 	  // 35
-	  {ugNone,            TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
+	  {ugNone,            TEXT("Percentage climb"), TEXT("% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
 	  // 36
 	  {ugNone,            TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 39, 14},
 	  // 37
@@ -533,6 +532,7 @@ CRITICAL_SECTION  CritSec_FlightData;
 CRITICAL_SECTION  CritSec_TerrainDataGraphics;
 CRITICAL_SECTION  CritSec_TerrainDataCalculations;
 CRITICAL_SECTION  CritSec_NavBox;
+CRITICAL_SECTION  CritSec_Comm;
 
 
 // Forward declarations of functions included in this code module:
@@ -554,9 +554,6 @@ HWND                                                    CreateRpCommandBar(HWND 
 void                                            DebugStore(char *Str);
 #endif
 
-
-extern BOOL GpsUpdated;
-extern BOOL VarioUpdated;
 
 void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
@@ -583,7 +580,6 @@ void SettingsEnter() {
   MenuActive = true;
   MapWindow::SuspendDrawingThread();
 
-  COMPORTCHANGED = FALSE;
   AIRSPACEFILECHANGED = FALSE;
   AIRFIELDFILECHANGED = FALSE;
   WAYPOINTFILECHANGED = FALSE;
@@ -593,27 +589,17 @@ void SettingsEnter() {
   LANGUAGEFILECHANGED = FALSE;
   STATUSFILECHANGED = FALSE;
   INPUTFILECHANGED = FALSE;
+  COMPORTCHANGED = FALSE;
 }
+
+
 
 void SettingsLeave() {
   SwitchToMapWindow();
   LockFlightData();
   LockNavBox();
   MenuActive = false;
-  
-  if(COMPORTCHANGED)
-    {
-      
-#ifndef _SIM_
-      // JMW disabled com opening in sim mode
-      devClose(devA());
-      devClose(devA());
-      RestartCommPorts();
-      devInit(TEXT(""));
-      
-#endif
-    }
-  
+    
   if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED))
     {
       CloseTerrain();
@@ -662,7 +648,18 @@ void SettingsLeave() {
   
   UnlockFlightData();
   UnlockNavBox();
+
+#ifndef _SIM_
+  if(COMPORTCHANGED)
+    {
+      // JMW disabled com opening in sim mode
+      RestartCommPorts();
+    }
+
+#endif
+
   MapWindow::ResumeDrawingThread();
+
 }
 
 
@@ -723,8 +720,10 @@ void ShowStatus() {
   statusmessage[0]=0;
   _tcscat(statusmessage, TEXT("\r\n"));
 
-  Units::LongitudeToString(GPS_INFO.Longitude, sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(GPS_INFO.Latitude, sLatitude, sizeof(sLatitude)-1);
+  Units::LongitudeToString(GPS_INFO.Longitude, 
+			   sLongitude, sizeof(sLongitude)-1);
+  Units::LatitudeToString(GPS_INFO.Latitude, 
+			  sLatitude, sizeof(sLatitude)-1);
 
   sunsettime = DoSunEphemeris(GPS_INFO.Longitude,
                               GPS_INFO.Latitude);
@@ -851,28 +850,71 @@ void FullScreen() {
 }
 
 
+void LockComm() {
+  EnterCriticalSection(&CritSec_Comm);
+}
+
+void UnlockComm() {
+  LeaveCriticalSection(&CritSec_Comm);
+}
 
 
 void RestartCommPorts() {
+  static bool first = true;
+
+  LockComm();
+#if (WINDOWSPC<1)
+  devClose(devA());
+  devClose(devB());
+#endif
+
+  // Close both first!
   if(Port1Available)
     {
-      Port1Available = FALSE; Port1Close (hPort1);
+#if (WINDOWSPC<1)
+      Port1Available = FALSE; 
+      Port1Close ();
+#endif
     }
-  PortIndex1 = 0; SpeedIndex1 = 2; ReadPort1Settings(&PortIndex1,&SpeedIndex1);
-  Port1Available = Port1Initialize (COMMPort[PortIndex1],dwSpeed[SpeedIndex1]);
-
   if(Port2Available)
     {
-      Port2Available = FALSE; Port2Close (hPort2);
+#if (WINDOWSPC<1)
+      Port2Available = FALSE; 
+      Port2Close ();
+#endif
     }
-  PortIndex2 = 0; SpeedIndex2 = 2; ReadPort2Settings(&PortIndex2,&SpeedIndex2);
-  if (PortIndex1 != PortIndex2) {
-    Port2Available = Port2Initialize (COMMPort[PortIndex2],dwSpeed[SpeedIndex2]);
-  } else {
-    Port2Available = FALSE;
+
+#if (WINDOWSPC>0)
+  first = true;
+#endif
+  if (first) {
+    if (!Port1Available) {
+      PortIndex1 = 0; SpeedIndex1 = 2; 
+      ReadPort1Settings(&PortIndex1,&SpeedIndex1);
+      Port1Available = 
+	Port1Initialize (COMMPort[PortIndex1],dwSpeed[SpeedIndex1]);
+    }
+    
+    if (!Port2Available) {
+      PortIndex2 = 0; SpeedIndex2 = 2; 
+      ReadPort2Settings(&PortIndex2,&SpeedIndex2);
+      if (PortIndex1 != PortIndex2) {
+	Port2Available = 
+	  Port2Initialize (COMMPort[PortIndex2],dwSpeed[SpeedIndex2]);
+      } else {
+	Port2Available = FALSE;
+      }
+    }
+    first = false;
   }
 
-  GpsUpdated = TRUE;
+#if (WINDOWSPC<1)
+  devInit(TEXT(""));      
+  NMEAParser::Reset();
+#endif
+
+  UnlockComm();
+
 }
 
 
@@ -925,8 +967,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
     theinfoboxesaredirty = false;
 
-    if ((GpsUpdated) || 
-	(GPS_INFO.VarioAvailable && VarioUpdated)) {
+    if ((NMEAParser::GpsUpdated) || 
+	(GPS_INFO.VarioAvailable && NMEAParser::VarioUpdated)) {
 
       // make local copy before editing...
       LockFlightData();
@@ -935,8 +977,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
       UnlockFlightData();
 
       // Do vario first to reduce audio latency
-      if (GPS_INFO.VarioAvailable && VarioUpdated) {
-        VarioUpdated = false;
+      if (GPS_INFO.VarioAvailable && NMEAParser::VarioUpdated) {
+	NMEAParser::VarioUpdated = false;
         if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
         }
         // assume new vario data has arrived, so infoboxes
@@ -950,8 +992,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
 	MapWindow::RequestAirDataDirty = true;
       }
 
-      if (GpsUpdated) {
-        GpsUpdated = false;
+      if (NMEAParser::GpsUpdated) {
+	NMEAParser::GpsUpdated = false;
         if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO))
           {
             theinfoboxesaredirty = true;
@@ -993,32 +1035,47 @@ void CreateCalculationThread() {
 
   // Create a read thread for performing calculations
   if (hCalculationThread =
-      CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )CalculationThread, 0, 0, &dwThreadID))
+      CreateThread (NULL, 0, 
+		    (LPTHREAD_START_ROUTINE )CalculationThread, 
+		    0, 0, &dwThreadID))
   {
-    SetThreadPriority(hCalculationThread, THREAD_PRIORITY_NORMAL); //THREAD_PRIORITY_ABOVE_NORMAL
+    SetThreadPriority(hCalculationThread, THREAD_PRIORITY_NORMAL); 
+    // was THREAD_PRIORITY_ABOVE_NORMAL
     CloseHandle (hCalculationThread);
   }
 }
 
 void dlgStartupShowModal(void);
 
-void PreloadInitialisation(void) {
-#if (NEWINFOBOX>0)
-  dlgStartupShowModal();
-#endif
+void PreloadInitialisation(bool ask) {
+  SetToRegistry(TEXT("XCV"), 1);
 
   // Registery (early)
-  RestoreRegistry();
-  ReadRegistrySettings();
 
-  // Interace (before interface)
-  ReadLanguageFile();
-  ReadStatusFile();
+  if (ask) {
+    RestoreRegistry();
+    ReadRegistrySettings();
+#if (WINDOWSPC<2) 
+#if (NEWINFOBOX>0)
+    dlgStartupShowModal();
+    RestoreRegistry();
+    ReadRegistrySettings();
+#endif
+#endif
+    StatusFileInit();
+  }
 
-  // Read input events.
-  InputEvents::readFile();
+  // Interface (before interface)
+  if (!ask) {
+    ReadLanguageFile();
+    ReadStatusFile();
+    InputEvents::readFile();
+  }
 
 }
+
+
+bool ProgramStarted = false;
 
 int WINAPI WinMain(     HINSTANCE hInstance,
                         HINSTANCE hPrevInstance,
@@ -1044,6 +1101,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
+  InitSineTable();
 
   // Perform application initialization:
   if (!InitInstance (hInstance, nCmdShow))
@@ -1053,10 +1111,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // find unique ID of this PDA
   ReadAssetNumber();
-  CreateProgressDialog(gettext(TEXT("Initialising")));
-  hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
-  InitSineTable();
+  hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
   SHSetAppKeyWndAssoc(VK_APP1, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP2, hWndMainWindow);
@@ -1072,6 +1128,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   InitializeCriticalSection(&CritSec_FlightData);
   InitializeCriticalSection(&CritSec_NavBox);
+  InitializeCriticalSection(&CritSec_Comm);
   InitializeCriticalSection(&CritSec_TerrainDataGraphics);
   InitializeCriticalSection(&CritSec_TerrainDataCalculations);
 
@@ -1079,33 +1136,35 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
 
+  CreateProgressDialog(gettext(TEXT("Initialising")));
+
+  // display start up screen
+  //  StartupScreen();
+  // not working very well at all
+
+  PreloadInitialisation(false);
+
 #ifdef _SIM_
   SYSTEMTIME pda_time;
   GetSystemTime(&pda_time);
   GPS_INFO.Time  = pda_time.wHour*3600+pda_time.wMinute*60+pda_time.wSecond;
-	GPS_INFO.Year  = pda_time.wYear;
-	GPS_INFO.Month = pda_time.wMonth;
-	GPS_INFO.Day	 = pda_time.wDay;
+  GPS_INFO.Year  = pda_time.wYear;
+  GPS_INFO.Month = pda_time.wMonth;
+  GPS_INFO.Day	 = pda_time.wDay;
   #if _SIM_STARTUPSPEED
   GPS_INFO.Speed = _SIM_STARTUPSPEED;
   #endif
   #if _SIM_STARTUPALTITUDE
   GPS_INFO.Altitude = _SIM_STARTUPALTITUDE;
   #endif
-
 #if (WINDOWSPC>0)
   CuSonde::test();
 #endif
-
 #endif
 
 #ifdef DEBUG
   DebugStore("# Start\r\n");
 #endif
-
-  // display start up screen
-  //  StartupScreen();
-  // not working very well at all
 
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
@@ -1132,16 +1191,18 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   VarioSound_SetSoundVolume(SoundVolume);
 
+  // ... register all supported devices
+  cai302Register();
+  ewRegister();
+
+  //JMW disabled  devInit(lpCmdLine);
+
 #ifndef _SIM_
   RestartCommPorts();
 #endif
-
-  cai302Register();
-  ewRegister();
-  // ... register all supported devices
-
-
-  devInit(lpCmdLine);
+#if (WINDOWSPC>0)
+  devInit(TEXT(""));      
+#endif
 
   // re-set polar in case devices need the data
   GlidePolar::SetBallast();
@@ -1161,10 +1222,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   DoSunEphemeris(147.0,-36.0);
 
-  SwitchToMapWindow();
-  MapWindow::MapDirty = true;
-
+  // Finally ready to go
+  Sleep(1000);
   CloseProgressDialog();
+
+  MapWindow::MapDirty = true;
+  SwitchToMapWindow();
+  ProgramStarted = true;
+
 
   // NOTE: Must show errors AFTER all windows ready
 
@@ -1251,6 +1316,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   return RegisterClass(&wc);
 
 }
+
 
 void ApplyClearType(LOGFONT *logfont) {
   logfont->lfQuality = ANTIALIASED_QUALITY;
@@ -1447,7 +1513,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return 0;
     }
 
-  PreloadInitialisation();
+  PreloadInitialisation(true);
 
   MyRegisterClass(hInst, szWindowClass);
 
@@ -1556,7 +1622,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     ShowWindow(hWndVarioWindow,SW_HIDE);
   }
 
-
   ShowWindow(hWndMenuButton, SW_HIDE);
   
   ShowWindow(hWndMainWindow, nCmdShow);
@@ -1644,7 +1709,7 @@ void DoInfoKey(int keycode) {
   */
   InfoBoxesDirty = true;
 
-  GpsUpdated = TRUE; // emulate update to trigger calculations
+  NMEAParser::GpsUpdated = TRUE; // emulate update to trigger calculations
 
   InfoBoxFocusTimeOut = 0;
   DisplayTimeOut = 0;
@@ -1681,20 +1746,27 @@ bool Debounce(void) {
 void Shutdown(void) {
   int i;
 
+  // Save settings
+
+  StoreRegistry();
+
+  // Stop sound
+
   SaveSoundSettings();
   
   VarioSound_EnableSound(false);
   
   VarioSound_Close();
-  
-  devCloseAll();
-  
+
+  // Stop SMS device
 #if (EXPERIMENTAL > 0)
   bsms.Shutdown();
 #endif
   
+  // Stop drawing
   MapWindow::CloseDrawingThread();
   
+  // Clear data
   NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1; 
   AATEnabled = FALSE;
   NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; 
@@ -1702,15 +1774,19 @@ void Shutdown(void) {
   CloseTerrain();
   CloseTopology();
   CloseTerrainRenderer();
-  
+
+  // Stop COM devices
+  devCloseAll();
+    
+#if (WINDOWSPC<1)
   if(Port1Available)
-    Port1Close(hPort1);
+    Port1Close();
   if (Port2Available)
-    Port2Close(hPort2);
-  
-  DestroyWindow(hWndMapWindow);
-  DestroyWindow(hWndMenuButton);
-  
+    Port2Close();
+#endif
+
+  // Kill windows
+
   GaugeCDI::Destroy();
   GaugeVario::Destroy();
   
@@ -1734,7 +1810,9 @@ void Shutdown(void) {
   for (i=0; i<NUMSELECTSTRINGS; i++) {
     delete Data_Options[i].Formatter;
   }
-  
+
+  // Kill graphics objects
+
   DeleteObject(hBrushSelected);
   DeleteObject(hBrushUnselected);
   DeleteObject(hBrushButton);
@@ -1745,8 +1823,7 @@ void Shutdown(void) {
   DeleteObject(MapLabelFont);
   DeleteObject(MapWindowFont);
   DeleteObject(MapWindowBoldFont);
-  DeleteObject(StatisticsFont);
-  
+  DeleteObject(StatisticsFont);  
   
   if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
   if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
@@ -1754,15 +1831,18 @@ void Shutdown(void) {
   
   CloseWayPoints();
   
-  DestroyWindow(hWndMainWindow);
-  
   DeleteCriticalSection(&CritSec_FlightData);
   DeleteCriticalSection(&CritSec_NavBox);
+  DeleteCriticalSection(&CritSec_Comm);
   DeleteCriticalSection(&CritSec_TerrainDataCalculations);
   DeleteCriticalSection(&CritSec_TerrainDataGraphics);
   
   CloseProgressDialog();
-  
+
+  DestroyWindow(hWndMapWindow);
+  DestroyWindow(hWndMainWindow);
+  DestroyWindow(hWndMenuButton);
+      
 #if (WINDOWSPC>0) 
 #if _DEBUG
   _CrtDumpMemoryLeaks();
@@ -1844,18 +1924,20 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_SETFOCUS:
       // JMW not sure this ever does anything useful..
+      if (ProgramStarted) {
 
-      if(InfoWindowActive) {
-
-        if(DisplayLocked) {
-          FocusOnWindow(InfoFocus,true);
-        } else {
-          FocusOnWindow(InfoFocus,true);
-        }
-      } else {
-        DefocusInfoBox();
-        HideMenu();
-        SetFocus(hWndMapWindow);
+	if(InfoWindowActive) {
+	  
+	  if(DisplayLocked) {
+	    FocusOnWindow(InfoFocus,true);
+	  } else {
+	    FocusOnWindow(InfoFocus,true);
+	  }
+	} else {
+	  DefocusInfoBox();
+	  HideMenu();
+	  SetFocus(hWndMapWindow);
+	}
       }
       break;
 
@@ -1865,40 +1947,44 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       // 	- Not sure how to do double click... (need timer call back
       // 	process unless reset etc... tricky)
     case WM_KEYUP: // JMW was keyup
-      if (!DialogActive) {
-
-        if (InputEvents::processKey(wParam)) {
-      	  //	  TODO debugging - DoStatusMessage(TEXT("Event in infobox"));
-        }
-      } else {
-        //	TODO debugging - DoStatusMessage(TEXT("Event in dlg"));
-        if (InputEvents::processKey(wParam)) {
-        }
+      if (ProgramStarted) {
+	if (!DialogActive) {
+	  
+	  if (InputEvents::processKey(wParam)) {
+	    //	  TODO debugging - DoStatusMessage(TEXT("Event in infobox"));
+	  }
+	} else {
+	  //	TODO debugging - DoStatusMessage(TEXT("Event in dlg"));
+	  if (InputEvents::processKey(wParam)) {
+	  }
+	}
+	return TRUE; // JMW trying to fix multiple processkey bug
       }
-      return TRUE; // JMW trying to fix multiple processkey bug
       break;
-
     case WM_TIMER:
-      FrameRate = (double)FrameCount/4;
+      if (ProgramStarted) {
+	FrameRate = (double)FrameCount/4;
 #ifdef _SIM_
-      SIMProcessTimer();
+	SIMProcessTimer();
 #else
-      ProcessTimer();
+	ProcessTimer();
 #endif
-      FrameCount = 0;
-
+	FrameCount = 0;
+      }
       break;
 
     case WM_INITMENUPOPUP:
-      if(DisplayLocked)
-        CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_CHECKED|MF_BYCOMMAND);
-      else
-        CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_UNCHECKED|MF_BYCOMMAND);
-
-      if(LoggerActive)
-        CheckMenuItem((HMENU) wParam,IDM_FILE_LOGGER,MF_CHECKED|MF_BYCOMMAND);
-      else
-        CheckMenuItem((HMENU) wParam,IDM_FILE_LOGGER,MF_UNCHECKED|MF_BYCOMMAND);
+      if (ProgramStarted) {
+	if(DisplayLocked)
+	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_CHECKED|MF_BYCOMMAND);
+	else
+	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_UNCHECKED|MF_BYCOMMAND);
+	
+	if(LoggerActive)
+	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOGGER,MF_CHECKED|MF_BYCOMMAND);
+	else
+	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOGGER,MF_UNCHECKED|MF_BYCOMMAND);
+      }
       break;
 
     case WM_CLOSE:
@@ -1954,6 +2040,8 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
   if(wmControl != NULL)
     {
+      if (ProgramStarted) {
+
       if(wmControl == hWndMenuButton)
         {
 	  if (InfoBoxLayout::landscape) {
@@ -1971,11 +2059,12 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 #ifdef _SIM_
                 (true)
                 #else
-	                MessageBox(hWnd,gettext(TEXT("Do you wish to exit?")),gettext(TEXT("Exit?")),MB_YESNO|MB_ICONQUESTION) == IDYES
+	                MessageBoxX(hWnd,
+				    gettext(TEXT("Do you wish to exit?")),
+				    gettext(TEXT("Exit?")),
+				    MB_YESNO|MB_ICONQUESTION) == IDYES
                 #endif
               ) {
-
-		StoreRegistry();
 
 		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
 		SendMessage (hWnd, WM_CLOSE, 0, 0);
@@ -2179,11 +2268,12 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
       Message::CheckTouch(wmControl);
-
+      
       if (ButtonLabel::CheckButtonPress(wmControl)) {
         return TRUE; // don't continue processing..
       }
 
+      }
     }
   return DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -2194,27 +2284,43 @@ void ProcessChar1 (char c)
   static TCHAR BuildingString[100];
   static int i = 0;
 
-  if (i<90)
-    {
-      if(c=='\n')
-        {
-          BuildingString[i] = '\0';
-
-          LockFlightData();
-          devParseNMEA(devGetDeviceOnPort(0), BuildingString, &GPS_INFO);
-          UnlockFlightData();
-
-        }
-      else
-        {
-          BuildingString[i++] = c;
-          return;
-        }
+  if (i<90) {
+    if(c=='\n') {
+      BuildingString[i] = '\0';
+      LockFlightData();
+      devParseNMEA(0, BuildingString, &GPS_INFO);
+      UnlockFlightData();
+    } else {
+      BuildingString[i++] = c;
+      return;
     }
-
+  }
+  
   i = 0;
 }
 
+
+void ProcessChar2 (char c)
+{
+  static TCHAR BuildingString[100];
+  static int i = 0;
+
+  if (i<90) {
+    if(c=='\n') {
+      BuildingString[i] = '\0';
+      LockFlightData();
+      devParseNMEA(1, BuildingString, &GPS_INFO);
+      UnlockFlightData();
+    } else {
+      BuildingString[i++] = c;
+      return;
+    }
+  }
+  
+  i = 0;
+}
+
+/* I think this is redundant now, since EW is handled in the devEW code
 void ProcessChar2 (char c)
 {
 #define WAIT 0
@@ -2255,12 +2361,9 @@ void ProcessChar2 (char c)
               if(BuildingString[0]=='$')  // Additional "if" to find GPS strings
                 {
                   LockFlightData();
-                  bool dodisplay = false;
-
-                  if(ParseNMEAString(BuildingString,&GPS_INFO))
-                    {
-                      VARIOCONNECT  = TRUE;
-                    }
+		  NMEAParser::ParseNMEAString(1,
+					      BuildingString,
+					      &GPS_INFO);
                   UnlockFlightData();
                 }
               else //   else parse EW logger string
@@ -2274,7 +2377,7 @@ void ProcessChar2 (char c)
         }
     }
 }
-
+*/
 
 extern int DetectStartTime();
 
@@ -2294,7 +2397,6 @@ void    AssignValues(void)
 
 void DisplayText(void)
 {
-
   if (InfoBoxesHidden)
     return;
 
@@ -2303,7 +2405,7 @@ void DisplayText(void)
   static int DisplayType[MAXINFOWINDOWS];
   static bool first=true;
   static int InfoFocusLast = -1;
-  int DisplayTypeLast;
+  static int DisplayTypeLast[MAXINFOWINDOWS];
 
   LockNavBox();
 
@@ -2317,92 +2419,126 @@ void DisplayText(void)
   }
   InfoFocusLast = InfoFocus;
 
-  for(i=0;i<numInfoWindows;i++)
-    {
-      Caption[i][0]= 0;
-
-      DisplayTypeLast = DisplayType[i];
-
-      if (EnableAuxiliaryInfo) {
-        DisplayType[i] = (InfoType[i] >> 24) & 0xff;
+  for(i=0;i<numInfoWindows;i++) {
+    Caption[i][0]= 0;
+    
+    if (EnableAuxiliaryInfo) {
+      DisplayType[i] = (InfoType[i] >> 24) & 0xff;
+    } else {
+      if (CALCULATED_INFO.Circling == TRUE)
+	DisplayType[i] = InfoType[i] & 0xff;
+      else if (CALCULATED_INFO.FinalGlide == TRUE) {
+	DisplayType[i] = (InfoType[i] >> 16) & 0xff;
       } else {
-        if (CALCULATED_INFO.Circling == TRUE)
-          DisplayType[i] = InfoType[i] & 0xff;
-        else if (CALCULATED_INFO.FinalGlide == TRUE) {
-          DisplayType[i] = (InfoType[i] >> 16) & 0xff;
-        } else {
-          DisplayType[i] = (InfoType[i] >> 8) & 0xff;
-        }
+	DisplayType[i] = (InfoType[i] >> 8) & 0xff;
       }
+    }
+    
+    Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
+    
+#if NEWINFOBOX>0
+    TCHAR sTmp[32];
+#endif
+    
+    int color = 0;
 
-      Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
+    bool needupdate = ((DisplayType[i] != DisplayTypeLast[i])||first);
 
 #if NEWINFOBOX>0
-      // JMW fixed bug with spurious comments
+    
+    // set values, title
+    switch (DisplayType[i]) {
+    case 14: // Next waypoint
+      if (ActiveWayPoint != -1){
+	InfoBoxes[i]->
+	  SetTitle(Data_Options[DisplayType[i]].Formatter->
+		   Render(&color));	  
+	InfoBoxes[i]->
+	  SetValue(Data_Options[47].Formatter->Render(&color));
+	InfoBoxes[i]->SetColor(color);
+      }else{
+	InfoBoxes[i]->SetTitle(TEXT("Next"));
+	InfoBoxes[i]->SetValue(TEXT("---"));
+	InfoBoxes[i]->SetColor(0);
+      }
+	break;
+    default:
+      if (needupdate)
+	InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
+
+      InfoBoxes[i]->
+	SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
+      
+      // to be optimized!
+      if (needupdate)
+	InfoBoxes[i]->
+	  SetValueUnit(Units::GetUserUnitByGroup(
+		       Data_Options[DisplayType[i]].UnitGroup));
+      
+      InfoBoxes[i]->SetColor(0);
+    };
+    
+    switch (DisplayType[i]) {
+    case 14: // Next waypoint
+      if (ActiveWayPoint != -1){
+	InfoBoxes[i]->
+	  SetComment(WayPointList[ Task[ActiveWayPoint].Index ].Comment);
+      }else{
+	InfoBoxes[i]->SetComment(TEXT(""));
+      }
+      break;
+    case 10:
+      if (CALCULATED_INFO.AutoMacCready)
+	InfoBoxes[i]->SetComment(TEXT("AUTO"));
+      else
+	InfoBoxes[i]->SetComment(TEXT("MANUAL"));
+      break;
+    case 0: // GPS Alt
+      if (needupdate) {
+	Units::FormatAlternateUserAltitude(GPS_INFO.Altitude, 
+					   sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+	InfoBoxes[i]->SetComment(sTmp);
+      }
+      break;
+    case 33:
+      if (needupdate) {
+	Units::FormatAlternateUserAltitude(GPS_INFO.BaroAltitude, 
+					   sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+	InfoBoxes[i]->SetComment(sTmp);
+      }
+      break;
+    case 43:
+      if (EnableBlockSTF) {
+	InfoBoxes[i]->SetComment(TEXT("Block"));
+      } else {
+	InfoBoxes[i]->SetComment(TEXT("Dolphin"));
+      }
+      break;
+    default:
       InfoBoxes[i]->SetComment(TEXT(""));
+    };
+    
+#else
+    Data_Options[DisplayType[i]].Formatter->Render(hWndInfoWindow[i]);
 #endif
 
-      int color = 0;
-      #if NEWINFOBOX>0
-      if (DisplayType[i] == 14){ // Next Waypoint
-        if (ActiveWayPoint != -1){
-          InfoBoxes[i]->SetValue(Data_Options[47].Formatter->Render(&color));
-          InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Formatter->Render(&color));
-          InfoBoxes[i]->SetComment(WayPointList[ Task[ActiveWayPoint].Index ].Comment);
-	  InfoBoxes[i]->SetColor(color);
-        }else{
-          InfoBoxes[i]->SetTitle(TEXT("Next"));
-          InfoBoxes[i]->SetValue(TEXT("---"));
-          InfoBoxes[i]->SetComment(TEXT(""));
-	  InfoBoxes[i]->SetColor(0);
-        }
-      } else {
-        InfoBoxes[i]->SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
-        // to be optimized!
-        InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(Data_Options[DisplayType[i]].UnitGroup));
-	InfoBoxes[i]->SetColor(color);
-      }
-
-      if (DisplayType[i] == 10){ // MC Setting
-        if (CALCULATED_INFO.AutoMacCready)
-          InfoBoxes[i]->SetComment(TEXT("AUTO"));
-        else
-          InfoBoxes[i]->SetComment(TEXT("MANUAL"));
-      } else
-      if (DisplayType[i] == 0){ // GPS Alt
-        TCHAR sTmp[32];
-        Units::FormatAlternateUserAltitude(GPS_INFO.Altitude, sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-        InfoBoxes[i]->SetComment(sTmp);
-      } else
-      if (DisplayType[i] == 33){ // Baro Alt
-        TCHAR sTmp[32];
-        Units::FormatAlternateUserAltitude(GPS_INFO.BaroAltitude, sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-        InfoBoxes[i]->SetComment(sTmp);
-      }
-      if (DisplayType[i] == 43) { // optimum speed
-	if (EnableBlockSTF) {
-	  InfoBoxes[i]->SetComment(TEXT("Block"));
-	} else {
-	  InfoBoxes[i]->SetComment(TEXT("Dolphin"));
-	}
-      }
-
-      #else
-      Data_Options[DisplayType[i]].Formatter->Render(hWndInfoWindow[i]);
-      #endif
-
-      if ((DisplayType[i] != DisplayTypeLast)/* this is always false!*/ || (first)) {
-        // JMW only update captions if text has really changed.
-        // this avoids unnecesary gettext lookups
-        _stprintf(Caption[i],gettext(Data_Options[DisplayType[i]].Title) );
-        #if NEWINFOBOX>0
-        InfoBoxes[i]->SetTitle(Caption[i]);
-        #else
-        SetWindowText(hWndTitleWindow[i],Caption[i]);
-        #endif
-      }
-
+    /*
+    if ((DisplayType[i] != DisplayTypeLast[i])// this is always false!
+	|| (first)) {
+      // JMW only update captions if text has really changed.
+      // this avoids unnecesary gettext lookups
+      _stprintf(Caption[i],gettext(Data_Options[DisplayType[i]].Title) );
+#if NEWINFOBOX>0
+      InfoBoxes[i]->SetTitle(Caption[i]);
+#else
+      SetWindowText(hWndTitleWindow[i],Caption[i]);
+#endif
     }
+    */
+
+    DisplayTypeLast[i] = DisplayType[i];
+    
+  }
 
   first = false;
 
@@ -2413,10 +2549,15 @@ void DisplayText(void)
 
 void CommonProcessTimer()
 {
+
+
 #if (WINDOWSPC<1)
   SystemIdleTimerReset();
 #endif
 
+  //
+  // maybe block/delay this if a dialog is active?
+  //
   Message::Render();
 
   if(InfoWindowActive)
@@ -2498,13 +2639,21 @@ void ProcessTimer(void)
     static int itimeout = 0;
     itimeout++;
 
+    if (itimeout % 4 == 0) {
+      // write settings to vario every second
+      VarioWriteSettings();
+    }
+
     if (itimeout % 20 != 0) {
       // timeout if no new data in 5 seconds
       return;
     }
 
+    LockComm();
+    NMEAParser::UpdateMonitor();
+    UnlockComm();
+
     static BOOL LastGPSCONNECT = FALSE;
-    static BOOL LastVARIOCONNECT = FALSE;
     static BOOL CONNECTWAIT = FALSE;
     static BOOL LOCKWAIT = FALSE;
 
@@ -2518,7 +2667,6 @@ void ProcessTimer(void)
     }
 
     GPSCONNECT = FALSE;
-    BOOL varioconnect = VARIOCONNECT;
     BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
 
     if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
@@ -2532,16 +2680,16 @@ void ProcessTimer(void)
         if(LOCKWAIT == TRUE)
           {
             // gps was waiting for fix, now waiting for connection
-            MapWindow::MapDirty = true;
-            SwitchToMapWindow();
-            FullScreen();
+            MapWindow::RequestMapDirty = true;
+	    //            SwitchToMapWindow();
+	    //            FullScreen();
             LOCKWAIT = FALSE;
           }
         if(!CONNECTWAIT)
           {
             // gps is waiting for connection first time
 
-            MapWindow::MapDirty = true;
+            MapWindow::RequestMapDirty = true;
             extGPSCONNECT = FALSE;
 
 	    InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
@@ -2562,16 +2710,14 @@ void ProcessTimer(void)
             // no activity for 30 seconds, so assume PDA has been
             // switched off and on again
             //
-            MapWindow::MapDirty = true;
+            MapWindow::RequestMapDirty = true;
 
             extGPSCONNECT = FALSE;
 
 	    InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
 
-#if (WINDOWSPC<1)
 #ifndef GNAV
             RestartCommPorts();
-#endif
 #endif
 
 #if (EXPERIMENTAL > 0)
@@ -2592,10 +2738,10 @@ void ProcessTimer(void)
 
         if(CONNECTWAIT)
           {
-            MapWindow::MapDirty = true;
+            MapWindow::RequestMapDirty = true;
 
-            SwitchToMapWindow();
-            FullScreen();
+	    //            SwitchToMapWindow();
+	    //            FullScreen();
             CONNECTWAIT = FALSE;
           }
       }
@@ -2606,7 +2752,7 @@ void ProcessTimer(void)
           {
 	    InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
 
-            MapWindow::MapDirty = true;
+            MapWindow::RequestMapDirty = true;
 
             LOCKWAIT = TRUE;
 #ifndef DISABLEAUDIO
@@ -2617,21 +2763,16 @@ void ProcessTimer(void)
           }
         else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
           {
-            MapWindow::MapDirty = true;
-            SwitchToMapWindow();
-            FullScreen();
+            MapWindow::RequestMapDirty = true;
+	    //            SwitchToMapWindow();
+	    //            FullScreen();
             LOCKWAIT = FALSE;
           }
       }
 
-    if((varioconnect == TRUE) && (LastVARIOCONNECT == FALSE)) {
-      // vario is connected now
-    }
-
     LastGPSCONNECT = gpsconnect;
 
 #endif // end processing of non-simulation mode
-
 
 }
 
@@ -2667,9 +2808,11 @@ void SIMProcessTimer(void)
   //  testflarm(&GPS_INFO);
 #endif
 
-  GpsUpdated = TRUE;
+  NMEAParser::GpsUpdated = TRUE;
 
   UnlockFlightData();
+
+  VarioWriteSettings();
 
 }
 
@@ -2806,6 +2949,7 @@ void LockNavBox() {
 
 void UnlockNavBox() {
 }
+
 
 void LockFlightData() {
   EnterCriticalSection(&CritSec_FlightData);
@@ -3065,3 +3209,63 @@ void Event_ChangeInfoBoxType(int i) {
   DisplayText();
 
 }
+
+
+
+///////////////////
+
+/* Memory checking 
+
+void GlobalMemoryStatus( 
+  LPMEMORYSTATUS lpBuffer 
+);
+
+
+typedef struct _MEMORYSTATUS { 
+  DWORD dwLength; 
+  DWORD dwMemoryLoad; 
+  DWORD dwTotalPhys; 
+  DWORD dwAvailPhys; 
+  DWORD dwTotalPageFile; 
+  DWORD dwAvailPageFile; 
+  DWORD dwTotalVirtual; 
+  DWORD dwAvailVirtual; 
+} MEMORYSTATUS, *LPMEMORYSTATUS; 
+Members
+dwLength 
+Specifies the size, in bytes, of the MEMORYSTATUS structure. 
+Set this member to sizeof(MEMORYSTATUS) when passing it to the GlobalMemoryStatus function. 
+
+dwMemoryLoad 
+Specifies a number between zero and 100 that gives a general idea of current memory use, in which zero indicates no memory use and 100 indicates full memory use. 
+dwTotalPhys 
+Indicates the total number of bytes of physical memory. 
+dwAvailPhys 
+Indicates the number of bytes of physical memory available. 
+dwTotalPageFile 
+Indicates the total number of bytes that can be stored in the paging file. 
+This number does not represent the physical size of the paging file on disk. 
+
+dwAvailPageFile 
+Indicates the number of bytes available in the paging file. 
+dwTotalVirtual 
+Indicates the total number of bytes that can be described in the user mode portion of the virtual address space of the calling process. 
+dwAvailVirtual 
+Indicates the number of bytes of unreserved and uncommitted memory in the user mode portion of the virtual address space of the calling process. 
+Requirements
+OS Versions: Windows CE 1.0 and later.
+Header: Winbase.h.
+
+See Also
+GlobalMemoryStatus 
+
+
+/////
+
+Files: 
+  CopyFile
+  GetFileSize
+GetDiskFreeSpaceEx
+
+
+*/

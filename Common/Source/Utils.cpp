@@ -39,6 +39,7 @@ Copyright_License {
 #include "uniqueid.h"
 #include "XCSoar.h"
 #include "Topology.h"
+#include "Terrain.h"
 #include "Units.h"
 
 TCHAR szRegistryKey[] =                TEXT("Software\\MPSR\\XCSoar");
@@ -201,6 +202,8 @@ TCHAR szRegistryBlockSTF[] = TEXT("BlockSpeedToFly");
 TCHAR szRegistryAutoZoom[] = TEXT("AutoZoom");
 TCHAR szRegistryMenuTimeout[] = TEXT("MenuTimeout");
 TCHAR szRegistryLockSettingsInFlight[] = TEXT("LockSettingsInFlight");
+TCHAR szRegistryTerrainContrast[] = TEXT("TerrainContrast");
+TCHAR szRegistryTerrainBrightness[] = TEXT("TerrainBrightness");
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -356,9 +359,9 @@ void ReadRegistrySettings(void)
   if(Temp != 0)
     SAFTEYSPEED = (double)Temp;
 
-  Temp = FAISector;
+  Temp = SectorType;
   GetFromRegistry(szRegistryFAISector,&Temp);
-  FAISector = Temp;
+  SectorType = Temp;
 
   GetFromRegistry(szRegistrySectorRadius,
 		  &SectorRadius);
@@ -491,9 +494,11 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAutoBlank,&Temp);
   EnableAutoBlank = (Temp == 1);
 
+  /*
   Temp = 0;
   GetFromRegistry(szRegistryVarioGauge,&Temp);
   EnableVarioGauge = (Temp == 1);
+  */
 
   Temp = 0;
   GetFromRegistry(szRegistryDebounceTimeout, &Temp);
@@ -603,6 +608,14 @@ void ReadRegistrySettings(void)
   Temp = 1;
   GetFromRegistry(szRegistryLockSettingsInFlight,&Temp);
   LockSettingsInFlight = (Temp == 1);
+
+  Temp = TerrainContrast;
+  GetFromRegistry(szRegistryTerrainContrast,&Temp);
+  TerrainContrast = (short)Temp;
+
+  Temp = TerrainBrightness;
+  GetFromRegistry(szRegistryTerrainBrightness,&Temp);
+  TerrainBrightness = (short)Temp;
 
 }
 
@@ -2291,101 +2304,104 @@ void ReadLanguageFile() {
 	fclose(fp);
 }
 
+void StatusFileInit() {
+  // DEFAULT - 0 is loaded as default, and assumed to exist
+  StatusMessageData[0].key = TEXT("DEFAULT");
+  StatusMessageData[0].doStatus = true;
+  StatusMessageData[0].doSound = true;
+  StatusMessageData[0].sound = TEXT("IDR_WAV_DRIP");
+  StatusMessageData[0].delay_ms = 1500; // 1.5 s
+  StatusMessageData_Size=1;
+
+  // Load up other defaults - allow overwrite in config file
+#include "Status_defaults.cpp"
+
+}
+
 void ReadStatusFile() {
-
-	// DEFAULT - 0 is loaded as default, and assumed to exist
-	StatusMessageData[0].key = TEXT("DEFAULT");
-	StatusMessageData[0].doStatus = true;
-	StatusMessageData[0].doSound = true;
-	StatusMessageData[0].sound = TEXT("IDR_WAV_DRIP");
-	StatusMessageData[0].delay_ms = 1500; // 1.5 s
+  
+  TCHAR szFile1[MAX_PATH] = TEXT("\0");
+  FILE *fp=NULL;
+  
+  // Open file from registry
+  GetRegistryString(szRegistryStatusFile, szFile1, MAX_PATH);
+  SetRegistryString(szRegistryStatusFile, TEXT("\0"));
+  
+  if (_tcslen(szFile1)>0)
+    fp  = _tfopen(szFile1, TEXT("rt"));
+  
+  // Unable to open file
+  if (fp == NULL)
+    return;
+  
+  // TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
+  TCHAR buffer[2049];	// Buffer for all
+  TCHAR key[2049];	// key from scanf
+  TCHAR value[2049];	// value from scanf
+  int ms;				// Found ms for delay
+  TCHAR **location;	// Where to put the data
+  int found;			// Entries found from scanf
+  bool some_data;		// Did we find some in the last loop...
+  
+  // Init first entry
+  _init_Status(StatusMessageData_Size);
+  some_data = false;
+  
+  /* Read from the file */
+  while (
+	 (StatusMessageData_Size < MAXSTATUSMESSAGECACHE)
+	 && fgetws(buffer, 2048, fp)
+	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
+	 ) {
+    // Check valid line? If not valid, assume next record (primative, but works ok!)
+    if ((found != 2) || !key || !value) {
+      
+      // Global counter (only if the last entry had some data)
+      if (some_data) {
 	StatusMessageData_Size++;
-
-	// Load up other defaults - allow overwrite in config file
-	#include "Status_defaults.cpp"
-
-	TCHAR szFile1[MAX_PATH] = TEXT("\0");
-	FILE *fp=NULL;
-
-	// Open file from registry
-	GetRegistryString(szRegistryStatusFile, szFile1, MAX_PATH);
-	SetRegistryString(szRegistryStatusFile, TEXT("\0"));
-
-	if (_tcslen(szFile1)>0)
-		fp  = _tfopen(szFile1, TEXT("rt"));
-
-	// Unable to open file
-	if (fp == NULL)
-		return;
-
-	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
-	TCHAR buffer[2049];	// Buffer for all
-	TCHAR key[2049];	// key from scanf
-	TCHAR value[2049];	// value from scanf
-	int ms;				// Found ms for delay
-	TCHAR **location;	// Where to put the data
-	int found;			// Entries found from scanf
-	bool some_data;		// Did we find some in the last loop...
-
-	// Init first entry
-	_init_Status(StatusMessageData_Size);
 	some_data = false;
-
-	/* Read from the file */
-	while (
-		(StatusMessageData_Size < MAXSTATUSMESSAGECACHE)
-		&& fgetws(buffer, 2048, fp)
-		&& ((found = swscanf(buffer, TEXT("%[^#=]=%[^\n]\n"), key, value)) != EOF)
-	) {
-		// Check valid line? If not valid, assume next record (primative, but works ok!)
-		if ((found != 2) || !key || !value) {
-
-			// Global counter (only if the last entry had some data)
-			if (some_data) {
-				StatusMessageData_Size++;
-				some_data = false;
-				_init_Status(StatusMessageData_Size);
-			}
-
-		} else {
-
-			location = NULL;
-
-			if (wcscmp(key, TEXT("key")) == 0) {
-				some_data = true;	// Success, we have a real entry
-				location = &StatusMessageData[StatusMessageData_Size].key;
-			} else if (wcscmp(key, TEXT("sound")) == 0) {
-				StatusMessageData[StatusMessageData_Size].doSound = true;
-				location = &StatusMessageData[StatusMessageData_Size].sound;
-			} else if (wcscmp(key, TEXT("delay")) == 0) {
-				if (swscanf(value, TEXT("%d"), &ms) == 1)
-					StatusMessageData[StatusMessageData_Size].delay_ms = ms;
-			} else if (wcscmp(key, TEXT("hide")) == 0) {
-				if (wcscmp(value, TEXT("yes")) == 0)
-					StatusMessageData[StatusMessageData_Size].doStatus = false;
-			}
-
-			// Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
-			if (location && (wcscmp(*location, TEXT("")) == 0)) {
-				// TODO - this picks up memory lost from no entry, but not duplicates - fix.
-			  if (*location) {
-			    // JMW fix memory leak
-			    free(*location);
-			  }
-			  *location = StringMallocParse(value);
-			}
-		}
-
-	}
-
-	// How many we really got (blank next just in case)
-	StatusMessageData_Size++;
 	_init_Status(StatusMessageData_Size);
-
-	// file was ok, so save it to registry
-	SetRegistryString(szRegistryStatusFile, szFile1);
-
-	fclose(fp);
+      }
+      
+    } else {
+      
+      location = NULL;
+      
+      if (wcscmp(key, TEXT("key")) == 0) {
+	some_data = true;	// Success, we have a real entry
+	location = &StatusMessageData[StatusMessageData_Size].key;
+      } else if (wcscmp(key, TEXT("sound")) == 0) {
+	StatusMessageData[StatusMessageData_Size].doSound = true;
+	location = &StatusMessageData[StatusMessageData_Size].sound;
+      } else if (wcscmp(key, TEXT("delay")) == 0) {
+	if (swscanf(value, TEXT("%d"), &ms) == 1)
+	  StatusMessageData[StatusMessageData_Size].delay_ms = ms;
+      } else if (wcscmp(key, TEXT("hide")) == 0) {
+	if (wcscmp(value, TEXT("yes")) == 0)
+	  StatusMessageData[StatusMessageData_Size].doStatus = false;
+      }
+      
+      // Do we have somewhere to put this && is it currently empty ? (prevent lost at startup)
+      if (location && (wcscmp(*location, TEXT("")) == 0)) {
+	// TODO - this picks up memory lost from no entry, but not duplicates - fix.
+	if (*location) {
+	  // JMW fix memory leak
+	  free(*location);
+	}
+	*location = StringMallocParse(value);
+      }
+    }
+    
+  }
+  
+  // How many we really got (blank next just in case)
+  StatusMessageData_Size++;
+  _init_Status(StatusMessageData_Size);
+  
+  // file was ok, so save it to registry
+  SetRegistryString(szRegistryStatusFile, szFile1);
+  
+  fclose(fp);
 }
 
 // Create a blank entry (not actually used)
@@ -2767,3 +2783,14 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
     }
   }
 }
+
+
+
+bool CheckRectOverlap(RECT rc1, RECT rc2) {
+  if(rc1.left >= rc2.right) return(false);
+  if(rc1.right <= rc2.left) return(false);
+  if(rc1.top >= rc2.bottom) return(false);
+  if(rc1.bottom <= rc2.top) return(false);
+  return(true);
+}
+

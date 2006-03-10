@@ -240,29 +240,29 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, RECT rcDest)
 
 BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest, int cx, int cy)
 {
-	ASSERT(m_hBitmap);
-	ReleaseDC();
-
-	POINT Origin = {0,0};
-
-	BOOL bResult = FALSE;
-
-	HDC memDc = CreateCompatibleDC(*pDC);
-	if (!memDc) {
-		return FALSE;
-	}
-
-	HBITMAP m_hOldBitmap = (HBITMAP)::SelectObject(memDc, m_hBitmap);
-
-	bResult = StretchBlt(*pDC, ptDest.x, ptDest.y, 
-			     cx, cy, memDc, 
-			     Origin.x, Origin.y, 
-			     m_nWidth, m_nHeight, SRCCOPY);
-
-	::SelectObject(memDc, m_hOldBitmap);
-	DeleteDC(memDc);
-
-	return bResult;
+  ASSERT(m_hBitmap);
+  ReleaseDC();
+  
+  POINT Origin = {0,0};
+  
+  BOOL bResult = FALSE;
+  
+  HDC memDc = CreateCompatibleDC(*pDC);
+  if (!memDc) {
+    return FALSE;
+  }
+  
+  HBITMAP m_hOldBitmap = (HBITMAP)::SelectObject(memDc, m_hBitmap);
+  
+  bResult = StretchBlt(*pDC, ptDest.x, ptDest.y, 
+		       cx, cy, memDc, 
+		       Origin.x, Origin.y, 
+		       m_nWidth, m_nHeight, SRCCOPY);
+  
+  ::SelectObject(memDc, m_hOldBitmap);
+  DeleteDC(memDc);
+  
+  return bResult;
 }
 
 

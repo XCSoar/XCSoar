@@ -43,6 +43,7 @@ typedef	struct DeviceDescriptor_t{
 	BOOL (*DeclAddWayPoint)(DeviceDescriptor_t *d, WAYPOINT	*wp);
 	BOOL (*IsLogger)(DeviceDescriptor_t	*d);
 	BOOL (*IsGPSSource)(DeviceDescriptor_t *d);
+  int PortNumber;
 }DeviceDescriptor_t;
 
 typedef	DeviceDescriptor_t *PDeviceDescriptor_t;
@@ -67,7 +68,7 @@ BOOL devCloseAll(void);
 PDeviceDescriptor_t devGetDeviceOnPort(int Port);
 BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token);
 
-BOOL devParseNMEA(PDeviceDescriptor_t	d, TCHAR *String,	NMEA_INFO	*GPS_INFO);
+BOOL devParseNMEA(int portNum, TCHAR *String,	NMEA_INFO	*GPS_INFO);
 BOOL devPutMacCready(PDeviceDescriptor_t d,	double MacCready);
 BOOL devPutBugs(PDeviceDescriptor_t	d, double	Bugs);
 BOOL devPutBallast(PDeviceDescriptor_t d,	double Ballast);

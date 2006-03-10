@@ -70,14 +70,14 @@
 
 // size of terrain cache
 #if (WINDOWSPC>0) 
-#define MAXTERRAINCACHE 8192
+#define MAXTERRAINCACHE 8192*2
 #else
 #define MAXTERRAINCACHE 4096
 #endif
 
 // stepsize of pixel grid, should be multiple of 2
 #if (WINDOWSPC>0)
-#define DTQUANT 4
+#define DTQUANT 6
 #else
 #define DTQUANT 6
 #endif

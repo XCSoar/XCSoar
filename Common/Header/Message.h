@@ -44,6 +44,8 @@ class Message {
 
   static void CheckTouch(HWND wmControl);
 
+  static void BlockRender(bool doblock);
+
  private:
   static struct singleMessage messages[MAXMESSAGES];
   static RECT rcmsg; // maximum message size
@@ -54,6 +56,7 @@ class Message {
   static int GetEmptySlot();
   static bool hidden;
   static int nvisible;
+  static bool blocked;
 
 };
 

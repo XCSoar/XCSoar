@@ -11,6 +11,9 @@ typedef struct _COLORRAMP
   unsigned char b;
 } COLORRAMP;
 
+extern short TerrainContrast;
+extern short TerrainBrightness;
+
 void ColorRampLookup(short h, BYTE *r, BYTE *g, BYTE *b,
 		     COLORRAMP* ramp_colors, int numramp);
 

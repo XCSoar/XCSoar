@@ -573,8 +573,8 @@ XShape* TopologyLabel::addShape(int i) {
 
 
 void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
-  // TODO: draw label at x,y
   if (label) {
+
     TCHAR Temp[100];
     wsprintf(Temp,TEXT("%S"),label);
     SetBkMode(hDC,TRANSPARENT);
@@ -589,8 +589,23 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
       else
 	wsprintf(Temp,TEXT("%d"),int(dTemp));
     }
-    
-    ExtTextOut(hDC, x+2, y+2, 0, NULL, Temp, _tcslen(Temp), NULL);
+    int size = _tcslen(Temp);
+
+    SIZE tsize;
+    RECT brect;
+    GetTextExtentPoint(hDC, Temp, size, &tsize);
+    x+= 2;
+    y+= 2;
+    brect.left = x;
+    brect.right = brect.left+tsize.cx;
+    brect.top = y;
+    brect.bottom = brect.top+tsize.cy;
+
+    if (!MapWindow::checkLabelBlock(brect))
+      return;
+
+    ExtTextOut(hDC, x, y, 0, NULL, Temp, size, NULL);
+
   }
 }
 

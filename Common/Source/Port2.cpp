@@ -40,6 +40,7 @@ Copyright_License {
 
 HANDLE				hRead2Thread = NULL;              // Handle to the read thread
 static TCHAR sPortName[8];
+static BOOL  fRxThreadTerminated;
 
 static BOOL  Port2CloseThread;
 
@@ -72,8 +73,8 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 
     // Could not open the port.
     _stprintf(sTmp, TEXT("Unable to Open\r\nPort %s"), sPortName),
-    MessageBox (hWndMainWindow, sTmp,
-                TEXT("Error"), MB_OK|MB_ICONINFORMATION);
+    MessageBoxX (hWndMainWindow, sTmp,
+		 gettext(TEXT("Error")), MB_OK|MB_ICONINFORMATION);
     return FALSE;
   }
 
@@ -114,8 +115,8 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   {
     // Could not create the read thread.
 		CloseHandle (hPort2);
-    MessageBox (hWndMainWindow, gettext(TEXT("Unable to Change the Vario Serial Port Settings")), 
-                TEXT("Error"), MB_OK);
+    MessageBoxX (hWndMainWindow, gettext(TEXT("Unable to Change the Vario Serial Port Settings")), 
+		 gettext(TEXT("Error")), MB_OK);
     dwError = GetLastError ();
     return FALSE;
   }
@@ -137,8 +138,8 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   {
     // Could not create the read thread.
 		CloseHandle (hPort2);
-    MessageBox (hWndMainWindow, gettext(TEXT("Unable to Set Serial Port Timers")),
-                TEXT("Error"), MB_OK);
+    MessageBoxX (hWndMainWindow, gettext(TEXT("Unable to Set Serial Port Timers")),
+                gettext(TEXT("Error")), MB_OK);
     dwError = GetLastError ();
     return FALSE;
   }
@@ -152,8 +153,9 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   Port2CloseThread = FALSE;
 
   // Create a read thread for reading data from the communication port.
-  if (hRead2Thread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )Port2ReadThread, 0, 0, 
-                                  &dwThreadID))
+  if (hRead2Thread = CreateThread (NULL, 0, 
+				   (LPTHREAD_START_ROUTINE )Port2ReadThread, 0, 0, 
+				   &dwThreadID))
   {
     SetThreadPriority(hRead2Thread,
 		      THREAD_PRIORITY_NORMAL);
@@ -163,9 +165,10 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   else
   {
     // Could not create the read thread.
-		CloseHandle (hPort2);
-    MessageBox (hWndMainWindow, gettext(TEXT("Unable to Start Vario Serial Port Handler")),
-                TEXT("Error"), MB_OK);
+    CloseHandle (hPort2);
+    MessageBoxX (hWndMainWindow, 
+		 gettext(TEXT("Unable to Start Vario Serial Port Handler")),
+		 gettext(TEXT("Error")), MB_OK);
     dwError = GetLastError ();
     return FALSE;
   }
@@ -181,6 +184,9 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 ***********************************************************************/
 void Port2Write (BYTE Byte)
 {
+
+  if (hPort2 == INVALID_HANDLE_VALUE) return;
+
   DWORD dwError,
         dwNumBytesWritten;
 
@@ -201,6 +207,8 @@ void Port2Write (BYTE Byte)
   PortReadThread (LPVOID lpvoid)
 
 ***********************************************************************/
+static DWORD dwMask2;
+
 DWORD Port2ReadThread (LPVOID lpvoid)
 {
   DWORD dwCommModemStatus, dwBytesTransferred;
@@ -211,11 +219,12 @@ DWORD Port2ReadThread (LPVOID lpvoid)
             PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
 
   // Specify a set of events to be monitored for the port.
-  SetCommMask (hPort2,  EV_RXFLAG |  EV_CTS 
-	       | EV_DSR | EV_RLSD | EV_RING
-	       | EV_RXCHAR 
-	       );
-  
+
+  dwMask2 = EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR;
+  SetCommMask(hPort2, dwMask2);
+
+  fRxThreadTerminated = FALSE;
+
   while ((hPort2 != INVALID_HANDLE_VALUE)
 	 &&(!MapWindow::CLOSETHREAD)
 	 && (!Port2CloseThread)) 
@@ -229,13 +238,11 @@ DWORD Port2ReadThread (LPVOID lpvoid)
     }
 
     // Re-specify the set of events to be monitored for the port.
-    SetCommMask (hPort2, EV_RXFLAG | EV_CTS | EV_DSR | EV_RING
-     | EV_RXCHAR 
-		 );
+    //    SetCommMask (hPort2, dwMask2);
 
     if (
 	(dwCommModemStatus & EV_RXFLAG)
-		||(dwCommModemStatus & EV_RXCHAR)
+	||(dwCommModemStatus & EV_RXCHAR)
 	)
     {
 
@@ -244,7 +251,8 @@ DWORD Port2ReadThread (LPVOID lpvoid)
       {
 	dwBytesTransferred = 0;
         // Read the data from the serial port.
-	if (ReadFile (hPort2, inbuf, 1024, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
+	if (ReadFile (hPort2, inbuf, 1024, &dwBytesTransferred, 
+		      (OVERLAPPED *)NULL)) {
 
 	  for (unsigned int j=0; j<dwBytesTransferred; j++) {
 	    ProcessChar2 (inbuf[j]);
@@ -252,55 +260,111 @@ DWORD Port2ReadThread (LPVOID lpvoid)
 	} else {
 	  dwBytesTransferred = 0;
 	}
-		  
+	if (Port2CloseThread)
+	  dwBytesTransferred = 0;
       } while (dwBytesTransferred != 0);
 
     }
 
-    //    Sleep(5); // give port some time to fill
-
+    Sleep(5); // give port some time to fill
     // Retrieve modem control-register values.
     GetCommModemStatus (hPort2, &dwCommModemStatus);
 
   }
+  fRxThreadTerminated = TRUE;
+  PurgeComm(hPort1, 
+            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+  CloseHandle (hPort1);
 
   return 0;
 }
 
 
+// Stop Rx Thread
+// return: TRUE on success, FALSE on error
+BOOL Port2StopRxThread(void){
+  
+  if (hPort2 == INVALID_HANDLE_VALUE) return(FALSE);
+
+  Port2CloseThread = TRUE;
+
+  DWORD tm = GetTickCount()+20000l;
+#if (WINDOWSPC>0)
+  /*
+  dwMask2 = 0;
+  while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0){
+    Sleep(10);
+  }
+  */
+  LockFlightData();
+  TerminateThread(hRead2Thread, 0);
+  CloseHandle(hRead2Thread);
+  UnlockFlightData();
+  
+  if (hPort2 != INVALID_HANDLE_VALUE)
+    CloseHandle (hPort2);
+  
+#else
+  PurgeComm(hPort2, 
+            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+  // setting the comm event mask with the same value
+  //  GetCommMask(hPort2, &dwMask2);
+  SetCommMask(hPort2, dwMask2);          // will cancel any
+                                         // WaitCommEvent!  this is a
+                                        // documented CE trick to
+                                        // cancel the WaitCommEvent
+  while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0){
+    Sleep(10);
+  }
+  //  #if COMMDEBUG > 0
+  if (!fRxThreadTerminated)
+    MessageBoxX (hWndMainWindow, 
+		 gettext(TEXT("Port2 RX Thread not Terminated!")), 
+		 TEXT("Error"), MB_OK);
+  //  #endif
+#endif
+
+  return(fRxThreadTerminated);
+
+}
+
+
 /***********************************************************************
 
-  PortClose (HANDLE hCommPort)
+  PortClose ()
 
 ***********************************************************************/
-BOOL Port2Close (HANDLE hCommPort)
+BOOL Port2Close ()
 {
   DWORD dwError;
 
-  if (hCommPort != INVALID_HANDLE_VALUE)
+  if (hPort2 != INVALID_HANDLE_VALUE)
   {
 
-    Port2CloseThread = TRUE;
+    Port2StopRxThread();
+    Sleep(100);  // todo ...
 
-    // JMW added purging of port on open to prevent overflow initially
-    PurgeComm(hPort2, 
-              PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
-
+#if (WINDOWSPC>0)
+    dwError = 0;
+    hPort2 = INVALID_HANDLE_VALUE;
+    return TRUE;
+#else
     // Close the communication port.
-    if (!CloseHandle (hCommPort))
+    if (!CloseHandle (hPort2))
     {
       dwError = GetLastError ();
       return FALSE;
     }
     else
     {
-      hCommPort = INVALID_HANDLE_VALUE;
+      hPort2 = INVALID_HANDLE_VALUE;
       return TRUE;
     }
+#endif
   }
-
   return FALSE;
 }
+
 
 void Port2WriteString(TCHAR *Text)
 {
@@ -314,6 +378,7 @@ void Port2WriteString(TCHAR *Text)
 
 void Port2WriteNMEA(TCHAR *Text) 
 {
+
   int i,len;
   len = _tcslen(Text);
   Port2Write((BYTE)_T('$'));

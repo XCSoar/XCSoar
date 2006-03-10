@@ -111,7 +111,9 @@ void ReadWayPointFile(FILE *fp)
   
   if(WayPointList == NULL) 
     {
-      MessageBox(hWndMainWindow,gettext(TEXT("Not Enough Memory For Waypoints")),TEXT("Error"),MB_OK|MB_ICONSTOP);
+      MessageBoxX(hWndMainWindow,
+		  gettext(TEXT("Not Enough Memory For Waypoints")),
+		  gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
       return;
     }
 
@@ -145,7 +147,9 @@ void ReadWayPointFile(FILE *fp)
 	      
 	      if ((p = (WAYPOINT *)LocalReAlloc(WayPointList, ((NumberOfWayPoints/50)+1) * 50 * sizeof(WAYPOINT), LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
 		
-		MessageBox(hWndMainWindow,gettext(TEXT("Not Enough Memory For Waypoints")),TEXT("Error"),MB_OK|MB_ICONSTOP);
+		MessageBoxX(hWndMainWindow,
+			    gettext(TEXT("Not Enough Memory For Waypoints")),
+			    gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
 		
 		return;
 	      }
@@ -161,7 +165,8 @@ void ReadWayPointFile(FILE *fp)
         } else {
 
           _stprintf(szTemp, gettext(TEXT("Waypointfile Parse Error at Line %d")), nLineNumber);
-          MessageBox(hWndMainWindow,szTemp,TEXT("Error"),MB_OK | MB_ICONWARNING);
+          MessageBoxX(hWndMainWindow,szTemp,gettext(TEXT("Error")),
+		      MB_OK | MB_ICONWARNING);
 
         }
       }

@@ -63,6 +63,8 @@ class InputEvents {
   static void eventScreenModes(TCHAR *misc);
   static void eventSelectInfoBox(TCHAR *misc);
   static void eventSendNMEA(TCHAR *misc);
+  static void eventSendNMEAPort1(TCHAR *misc);
+  static void eventSendNMEAPort2(TCHAR *misc);
   static void eventSetup(TCHAR *misc);
   static void eventSnailTrail(TCHAR *misc);
   static void eventSounds(TCHAR *misc);
@@ -93,6 +95,7 @@ enum {
 		GCE_FLIGHTMODE_CLIMB,
 		GCE_FLIGHTMODE_CRUISE,
 		GCE_FLIGHTMODE_FINALGLIDE,
+		GCE_FLIGHTMODE_FINALGLIDE_TERRAIN,
 		GCE_FLIGHTMODE_FINALGLIDE_ABOVE,	
 		GCE_FLIGHTMODE_FINALGLIDE_BELOW,
 		GCE_GPS_CONNECTION_WAIT,

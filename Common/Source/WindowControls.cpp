@@ -33,6 +33,7 @@ Copyright_License {
 #include "tchar.h"
 #include <stdio.h>
 #include "WindowControls.h"
+#include "Message.h"
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
 #include "Utils.h"
@@ -1478,6 +1479,8 @@ int WndForm::ShowModal(void){
   MSG msg;
   HWND oldFocusHwnd;
 
+  Message::BlockRender(true);
+
   SetVisible(true);
   SetToForeground();
 
@@ -1565,6 +1568,11 @@ int WndForm::ShowModal(void){
   }
 
   SetFocus(oldFocusHwnd);
+
+  // JMW added to make sure screen is redrawn
+  MapWindow::RequestFastRefresh= true;
+
+  Message::BlockRender(false);
 
   return(mModalResult);
 

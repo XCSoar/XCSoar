@@ -437,6 +437,8 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
   ScaleXFromData(rc, &flightstats.Altitude_Ceiling);
   ScaleYFromData(rc, &flightstats.Altitude_Ceiling);
 
+  if (flightstats.Altitude.sum_n==0) return;
+
   DrawXGrid(hdc, rc, 
             0.25, flightstats.Altitude.x_min,
             STYLE_THINDASHPAPER);
@@ -464,10 +466,12 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
   ScaleYFromValue(rc, 0);
   ScaleXFromValue(rc, 0);
   ScaleXFromValue(rc, flightstats.ThermalAverage.sum_n+1);
-  
+
   DrawYGrid(hdc, rc, 
             1.0/LIFTMODIFY, 0,
             STYLE_THINDASHPAPER);
+
+  if (flightstats.ThermalAverage.sum_n==0) return;
   
   DrawBarChart(hdc, rc,
                &flightstats.ThermalAverage);
@@ -563,6 +567,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
   double x1, y1, x2, y2;
   double lat_c, lon_c;
   double aatradius[MAXTASKPOINTS];
+  bool nowaypoints = true;
 
   // find center
   ResetScale();
@@ -576,10 +581,13 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
       lon1 = WayPointList[Task[i].Index].Longitude;
       ScaleYFromValue(rc, lat1);
       ScaleXFromValue(rc, lon1);
+      nowaypoints = false;
     }
   }
   lat_c = (y_max+y_min)/2;
   lon_c = (x_max+x_min)/2;
+
+  if (nowaypoints) return;
 
   int nwps = 0;
 
@@ -961,7 +969,7 @@ static void Update(void){
 
   switch(page){
     case 0:
-      _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Barograph"));
+      _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Barograph")));
       wf->SetCaption(sTmp);
 
       _stprintf(sTmp, TEXT("%s:\r\n%.0f-%.0f %s\r\n\r\n%s:\r\n%.0f %s/hr"),
@@ -977,7 +985,7 @@ static void Update(void){
 
     break;
     case 1:
-      _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Climb"));
+      _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Climb")));
       wf->SetCaption(sTmp);
 
       _stprintf(sTmp, TEXT("%s:\r\n%3.1f %s\r\n\r\n%s:\r\n%3.2f %s"),
@@ -993,13 +1001,13 @@ static void Update(void){
 
     break;
     case 2:
-      _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Wind at Altitude"));
+      _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Wind at Altitude")));
       wf->SetCaption(sTmp);
       _stprintf(sTmp, TEXT(""));
       wInfo->SetCaption(sTmp);
     break;
     case 3:
-      _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Glide Polar"));
+      _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Glide Polar")));
       wf->SetCaption(sTmp);
       _stprintf(sTmp, TEXT("%s:\r\n%3.1f\r\n%s %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n%s %3.0f %s"),
              gettext(TEXT("Best LD")),
@@ -1017,7 +1025,7 @@ static void Update(void){
       wInfo->SetCaption(sTmp);
     break;
   case 4:
-    _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Temp trace"));
+    _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Temp trace")));
     wf->SetCaption(sTmp);
 
     _stprintf(sTmp, TEXT("%s: %5.0f\r\n%s: %5.0f\r\n"),
