@@ -155,7 +155,6 @@ double GlidePolar::MacCreadyAltitude(double emcready,
 		       bool isFinalGlide,
                        double *TimeToGo)
 {
-  LockFlightData();
 
   int i;
   double BestSpeed, BestGlide, Glide;
@@ -307,7 +306,6 @@ double GlidePolar::MacCreadyAltitude(double emcready,
 
   AltitudeNeeded = -BestSinkRate * TimeToDest;
   // this is the altitude needed to final glide to destination
-  UnlockFlightData();
 
   return AltitudeNeeded;
 }

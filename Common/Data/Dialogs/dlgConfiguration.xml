@@ -404,6 +404,14 @@
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
+  <WndProperty Name="prpTerrainContrast" Caption="Terrain contrast"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainBrightness" Caption="Terrain brightness"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
+  </WndProperty>
+
   </WndFrame>
 
   <WndFrame Name="frmVarioAppearance" X=70 Y=0 Width=246 Height=222 Font=2>

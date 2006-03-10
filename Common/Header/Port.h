@@ -10,13 +10,13 @@
 
 
 BOOL Port1Initialize (LPTSTR,DWORD);
-BOOL Port1Close (HANDLE);
+BOOL Port1Close (void);
 void Port1Write (BYTE);
 DWORD Port1ReadThread (LPVOID);
 void Port1WriteString(TCHAR *Text);
 
 BOOL Port2Initialize (LPTSTR,DWORD);
-BOOL Port2Close (HANDLE);
+BOOL Port2Close (void);
 void Port2Write (BYTE);
 DWORD Port2ReadThread (LPVOID);
 void Port2WriteString(TCHAR *Text);

@@ -19,7 +19,7 @@
 
   <WndButton   Name="cmdFile" Caption="Advanced.."    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnAdvancedClicked"/>
 
-  <WndFrame Name="frmAdvanced" X=0 Y=-1 Width=100 Height=100 Font=2 >
+  <WndFrame Name="frmAdvanced" X=0 Y=-1 Width=100 Height=150 Font=2 >
 
   <WndButton  Name="cmdCalc"  Caption="Calc" X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnCalcClicked" Tag=4 />
 
@@ -29,8 +29,7 @@
 
   <WndButton  Name="cmdLoad" Caption="Load"    X=2 Y=60 Width=45  Height=22 Font=2 OnClickNotify="OnLoadClicked"/>
   <WndButton  Name="cmdSave" Caption="Save"    X=47 Y=60 Width=45  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
-
-  <WndButton  Name="cmdDeclare" Caption="Declare"    X=2 Y=-1 Width=-1  Height=22 Font=2 OnClickNotify="OnDeclareClicked"/>
+  <WndButton  Name="cmdDeclare" Caption="Declare"    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnDeclareClicked"/>
   </WndFrame>
 
   <WndListFrame Name="frmTaskList" X=102 Y=0 Width=215 Height=222 Font=2 OnListInfo="OnTaskListInfo">

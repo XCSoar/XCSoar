@@ -135,6 +135,17 @@ void GaugeVario::Create() {
 
 }
 
+void GaugeVario::Show(bool doshow) {
+  EnableVarioGauge = doshow;
+  static bool lastvisible = true;
+  if (EnableVarioGauge && !lastvisible) {
+    ShowWindow(hWndVarioWindow, SW_SHOW);
+  }
+  if (!EnableVarioGauge && lastvisible) {
+    ShowWindow(hWndVarioWindow, SW_HIDE);
+  }
+  lastvisible = EnableVarioGauge;
+}
 
 void GaugeVario::Destroy() {
   ReleaseDC(hWndVarioWindow, hdcScreen);
@@ -725,6 +736,7 @@ void GaugeVario::RenderBugs(void){
 
 }
 
+
 LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
   PAINTSTRUCT ps;            // structure for paint info
@@ -733,10 +745,12 @@ LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
   switch (uMsg){
 
     case WM_PAINT:
-      hDC = BeginPaint(hwnd, &ps);
-      GaugeVario::Repaint(hDC);
-      DeleteDC(hDC);
-      EndPaint(hwnd, &ps);
+      if (EnableVarioGauge) {
+	hDC = BeginPaint(hwnd, &ps);
+	GaugeVario::Repaint(hDC);
+	DeleteDC(hDC);
+	EndPaint(hwnd, &ps);
+      }
     break;
 
   }

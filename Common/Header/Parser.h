@@ -94,9 +94,64 @@ typedef struct _NMEA_INFO
 
 } NMEA_INFO;
 
-int ParseNMEAString(TCHAR *String, NMEA_INFO *GPS_INFO);
-BOOL NMEAChecksum(TCHAR *String);
-void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
+
+class NMEAParser {
+ public:
+  NMEAParser();
+  static void UpdateMonitor(void);
+  static BOOL ParseNMEAString(int portnum,
+			      TCHAR *String, NMEA_INFO *GPS_INFO);
+  static int FindVegaPort(void);
+  static void Reset(void);
+
+  BOOL ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO);
+  bool gpsValid;
+  bool hasVega;
+  int nSatellites;
+
+  bool activeGPS;
+
+  static BOOL GpsUpdated;
+  static BOOL VarioUpdated;
+
+ public:
+  // these routines can be used by other parsers.
+  static BOOL NMEAChecksum(TCHAR *String);
+  static void ExtractParameter(TCHAR *Source,
+			       TCHAR *Destination,
+			       int DesiredFieldNumber);
+
+ private:
+
+  BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL RMA(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL RMZ(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL WP0(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL WP1(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO);
+
+  // Additional sentances added by JMW
+  BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO);
+
+  BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PDAPL(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO);
+
+  // FLARM sentances
+  BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO);
+};
+
 
 extern bool EnableLogNMEA;
 void LogNMEA(TCHAR* text);

@@ -45,9 +45,14 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_ABOVE] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Marginal Final Glide"), event_id);
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Below Final Glide"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_BELOW] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Final Glide Through Terrain"), event_id);
+mode_id = InputEvents::mode2int(TEXT("default"), true);
+GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_TERRAIN] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task finished"), event_id);

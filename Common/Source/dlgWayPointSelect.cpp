@@ -172,6 +172,7 @@ static void UpdateList(void){
 
 //  TCHAR sTmp[128];
   int i;
+  bool distancemode = false;
 
   ItemIndex = 0;
 
@@ -179,104 +180,91 @@ static void UpdateList(void){
   LowLimit =0;
 
   if (DistanceFilterIdx != 0){
-
+    distancemode = true;
     qsort(WayPointSelectInfo, NumberOfWayPoints,
         sizeof(WayPointSelectInfo_t), WaypointDistanceCompare);
-
-
     for (i=0; i<(int)NumberOfWayPoints; i++){
       if (WayPointSelectInfo[i].Distance > DistanceFilter[DistanceFilterIdx]){
-
         UpLimit = i;
-
         break;
-
       }
-
     }
-
   }
-
 
   if (DirectionFilterIdx != 0){
-
-
+    distancemode = true;
     qsort(WayPointSelectInfo, UpLimit,
         sizeof(WayPointSelectInfo_t), WaypointDirectionCompare);
-
-
     for (i=0; i<UpLimit; i++){
-
       if (WayPointSelectInfo[i].DirectionErr > 18){
-
         UpLimit = i;
-
         break;
-
       }
-
     }
-
-
   }
 
-
   if (NameFilterIdx != 0){
-
     TCHAR sTmp[8];
-
-
+    LowLimit = UpLimit;
     qsort(WayPointSelectInfo, UpLimit,
-
         sizeof(WayPointSelectInfo_t), WaypointNameCompare);
-
-
     sTmp[0] = NameFilter[NameFilterIdx];
-
+    sTmp[1] = '\0';
     sTmp[2] = '\0';
-
     _tcsupr(sTmp);
-
-
     for (i=0; i<UpLimit; i++){
-
       if ((BYTE)(WayPointSelectInfo[i].FourChars >> 24) >= (sTmp[0]&0xff)){
-
         LowLimit = i;
-
         break;
-
       }
-
     }
 
     for (; i<UpLimit; i++){
-
       if ((BYTE)(WayPointSelectInfo[i].FourChars >> 24) != (sTmp[0]&0xff)){
-
         UpLimit = i;
-
         break;
-
       }
-
     }
-
   }
 
-
-  qsort(&WayPointSelectInfo[LowLimit], UpLimit-LowLimit,
-
-      sizeof(WayPointSelectInfo_t), WaypointNameCompare);
-
+  if (!distancemode) {
+    qsort(&WayPointSelectInfo[LowLimit], UpLimit-LowLimit,
+	  sizeof(WayPointSelectInfo_t), WaypointNameCompare);
+  } else {
+    qsort(&WayPointSelectInfo[LowLimit], UpLimit-LowLimit,
+	  sizeof(WayPointSelectInfo_t), WaypointDistanceCompare);
+  }
 
   wWayPointList->ResetList();
-
   wWayPointList->Redraw();
-
 
 }
 
+
+WndProperty *wpName;
+WndProperty *wpDistance;
+WndProperty *wpDirection;
+
+static void FilterMode(bool direction) {
+  if (direction) {
+    DistanceFilterIdx=0;
+    DirectionFilterIdx=0;
+    if (wpDistance) {
+      wpDistance->GetDataField()->Set(TEXT("*"));
+      wpDistance->RefreshDisplay();
+    }
+    if (wpDirection) {
+      wpDirection->GetDataField()->Set(TEXT("*"));
+      wpDirection->RefreshDisplay();
+    }
+  } else {
+    NameFilterIdx=0;
+    if (wpName) {
+      wpName->GetDataField()->Set(TEXT("**"));
+      wpName->RefreshDisplay();
+    }
+  }
+}
 
 
 
@@ -295,12 +283,14 @@ static void OnFilterName(DataField *Sender, DataField::DataAccessKind_t Mode){
       NameFilterIdx++;
       if (NameFilterIdx > sizeof(NameFilter)/sizeof(NameFilter[0])-2)
         NameFilterIdx = 1;
+      FilterMode(true);
       UpdateList();
     break;
     case DataField::daDec:
       NameFilterIdx--;
       if (NameFilterIdx < 0)
         NameFilterIdx = sizeof(NameFilter)/sizeof(NameFilter[0])-1;
+      FilterMode(true);
       UpdateList();
     break;
   }
@@ -328,19 +318,21 @@ static void OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode
       DistanceFilterIdx++;
       if (DistanceFilterIdx > sizeof(DistanceFilter)/sizeof(DistanceFilter[0])-1)
         DistanceFilterIdx = 0;
+      FilterMode(false);
       UpdateList();
     break;
     case DataField::daDec:
       DistanceFilterIdx--;
       if (DistanceFilterIdx < 0)
         DistanceFilterIdx = sizeof(DistanceFilter)/sizeof(DistanceFilter[0])-1;
+      FilterMode(false);
       UpdateList();
     break;
   }
 
   if (DistanceFilterIdx == 0)
     _stprintf(sTmp, TEXT("%c"), '*');
-  else                      // todo user unit
+  else                      // TODO todo user unit
     _stprintf(sTmp, TEXT("%.0fkm"), DistanceFilter[DistanceFilterIdx]);
   Sender->Set(sTmp);
 
@@ -362,12 +354,14 @@ static void OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mod
       DirectionFilterIdx++;
       if (DirectionFilterIdx > sizeof(DirectionFilter)/sizeof(DirectionFilter[0])-1)
         DirectionFilterIdx = 0;
+      FilterMode(false);
       UpdateList();
     break;
     case DataField::daDec:
       DirectionFilterIdx--;
       if (DirectionFilterIdx < 0)
         DirectionFilterIdx = sizeof(DirectionFilter)/sizeof(DirectionFilter[0])-1;
+      FilterMode(false);
       UpdateList();
     break;
   }
@@ -423,7 +417,7 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
 
   } else {
     if (DrawListIndex == 0){
-      _stprintf(sTmp, TEXT("%s"), TEXT("No Match!"));
+      _stprintf(sTmp, TEXT("%s"), gettext(TEXT("No Match!")));
       ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
         ETO_OPAQUE, NULL,
         sTmp, _tcslen(sTmp), NULL);
@@ -485,6 +479,10 @@ int dlgWayPointSelect(void){
   wWayPointListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmWayPointListEntry"));
   ASSERT(wWayPointListEntry!=NULL);
   wWayPointListEntry->SetCanFocus(true);
+
+  wpName = (WndProperty*)wf->FindByName(TEXT("prpFltName"));
+  wpDistance = (WndProperty*)wf->FindByName(TEXT("prpFltDistance"));
+  wpDirection = (WndProperty*)wf->FindByName(TEXT("prpFltDirection"));
 
   PrepareData();
   UpdateList();

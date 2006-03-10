@@ -60,4 +60,16 @@ extern void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
 
 #define NUMPOLARS 7 // number of in-built polars
 
+#if (NEWINFOBOX<1)
+#define MessageBoxX MessageBox
+#else
+int
+WINAPI
+MessageBoxX(
+    HWND hWnd ,
+    LPCWSTR lpText,
+    LPCWSTR lpCaption,
+    UINT uType);
+#endif
+
 #endif

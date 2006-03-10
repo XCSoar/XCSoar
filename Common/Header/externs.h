@@ -70,7 +70,7 @@ extern TASKSTATS_POINT TaskStats[];
 extern int ActiveWayPoint;
 extern bool TaskAborted;
 extern int SelectedWaypoint;
-extern int FAISector;
+extern int SectorType;
 extern DWORD SectorRadius;
 extern int StartLine;
 extern DWORD StartRadius;

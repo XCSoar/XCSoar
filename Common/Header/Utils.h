@@ -81,6 +81,8 @@ extern TCHAR szRegistryBlockSTF[];
 extern TCHAR szRegistryAutoZoom[];
 extern TCHAR szRegistryMenuTimeout[];
 extern TCHAR szRegistryLockSettingsInFlight[];
+extern TCHAR szRegistryTerrainContrast[];
+extern TCHAR szRegistryTerrainBrightness[];
 
 extern bool LockSettingsInFlight;
 
@@ -159,8 +161,9 @@ void LoadRegistryFromFile(TCHAR* szFile);
    Interface Files !
    ===================================================== */
 
-void ReadLanguageFile();
-void ReadStatusFile();
+void ReadLanguageFile(void);
+void ReadStatusFile(void);
+void StatusFileInit(void);
 void _init_Status(int num);
 
 typedef struct {
@@ -206,5 +209,7 @@ int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines);
 void RestoreRegistry(void);
 void StoreRegistry(void);
 void XCSoarGetOpts(LPTSTR CommandLine);
+
+bool CheckRectOverlap(RECT rc1, RECT rc2);
 
 #endif

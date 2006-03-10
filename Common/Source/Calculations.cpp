@@ -87,6 +87,21 @@ static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
+static void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  double bearing, distance;
+  double lat, lon;
+  for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
+    bearing = -90+i*180.0/NUMTERRAINSWEEPS+Basic->TrackBearing;
+    distance = FinalGlideThroughTerrain(bearing,
+					Basic,
+					Calculated, &lat, &lon);
+    MapWindow::GlideFootPrint[i].x = lon;
+    MapWindow::GlideFootPrint[i].y = lat;
+  }
+}
+
 
 int FinishLine=1;
 DWORD FinishRadius=1000;
@@ -422,6 +437,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
   static double maccready;
+  static double LastOptimiseTime = 0;
 
   if (!windanalyser) {
     windanalyser = new WindAnalyser(Basic, Calculated);
@@ -496,13 +512,31 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
 
   AltitudeRequired(Basic, Calculated, maccready);
+
   TerrainHeight(Basic, Calculated);
+
+  TerrainFootprint(Basic, Calculated);
 
   CalculateNextPosition(Basic, Calculated);
 
   AirspaceWarning(Basic, Calculated);
 
   DoLogging(Basic, Calculated);
+
+  // moved from MapWindow.cpp
+  if(Basic->Time> LastOptimiseTime+15.0)
+    {
+      LastOptimiseTime = Basic->Time;
+      LockTerrainDataCalculations();
+      if (terrain_dem_calculations.terraincachemisses > 0){
+        DWORD tm =GetTickCount();
+        terrain_dem_calculations.OptimizeCash();
+        tm = GetTickCount()-tm;
+        tm = GetTickCount();
+      }
+      terrain_dem_calculations.SetCacheTime();
+      UnlockTerrainDataCalculations();
+    }
 
   return TRUE;
 }
@@ -543,8 +577,6 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       LastAlt = Basic->Altitude;
       LastTime = Basic->Time;
-
-      VarioWriteSettings();
 
     }
   else
@@ -1045,37 +1077,51 @@ int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if (!WayPointList) return FALSE;
 
-  if(FAISector !=  TRUE)
+  if(SectorType==0)
     {
       if(Calculated->WaypointDistance < SectorRadius)
         {
           return TRUE;
         }
     }
-  // else
-  {
-    AircraftBearing =
-      Bearing(WayPointList[Task[ActiveWayPoint].Index].Latitude,
-	      WayPointList[Task[ActiveWayPoint].Index].Longitude,
-	      Basic->Latitude ,
-	      Basic->Longitude);
+  if (SectorType>0)
+    {
+      AircraftBearing =
+	Bearing(WayPointList[Task[ActiveWayPoint].Index].Latitude,
+		WayPointList[Task[ActiveWayPoint].Index].Longitude,
+		Basic->Latitude ,
+		Basic->Longitude);
 
-    AircraftBearing = AircraftBearing - Task[ActiveWayPoint].Bisector ;
-    while (AircraftBearing<-180) {
-      AircraftBearing+= 360;
-    }
-    while (AircraftBearing>180) {
-      AircraftBearing-= 360;
-    }
-
-    if( (AircraftBearing >= -45) && (AircraftBearing <= 45))
-      {
-        if(Calculated->WaypointDistance < 20000)
-          {
-            return TRUE;
-          }
+      AircraftBearing = AircraftBearing - Task[ActiveWayPoint].Bisector ;
+      while (AircraftBearing<-180) {
+	AircraftBearing+= 360;
       }
-  }
+      while (AircraftBearing>180) {
+	AircraftBearing-= 360;
+      }
+
+      if (SectorType==2) {
+	// JMW added german rules
+	if (Calculated->WaypointDistance<500) {
+	  return TRUE;
+	}
+      }
+      if( (AircraftBearing >= -45) && (AircraftBearing <= 45))
+	{
+	  if (SectorType==1) {
+	    if(Calculated->WaypointDistance < 20000)
+	      {
+		return TRUE;
+	      }
+	  } else {
+	    // JMW added german rules
+	    if(Calculated->WaypointDistance < 10000)
+	      {
+		return TRUE;
+	      }
+	  }
+	}
+    }
   return FALSE;
 }
 
@@ -1511,6 +1557,7 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   double Alt = 0;
 
   LockTerrainDataCalculations();
+  // TODO: check this rounding is OK.
   terrain_dem_calculations.SetTerrainRounding(0);
   Alt = terrain_dem_calculations.
     GetTerrainHeight(Basic->Latitude , Basic->Longitude);
@@ -1535,6 +1582,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
   int i;
   double LegCovered, LegToGo, LegDistance, LegBearing, LegAltitude;
   double TaskAltitudeRequired = 0;
+  static bool fgtt = false;
+  bool fgttnew = false;
 
   if (!WayPointList) return;
 
@@ -1698,15 +1747,17 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
           Calculated->TerrainWarningLatitude = lat;
           Calculated->TerrainWarningLongitude = lon;
 
+	  fgttnew = true;
         } else {
           Calculated->TerrainWarningLatitude = 0.0;
           Calculated->TerrainWarningLongitude = 0.0;
-
+	  fgtt = false;
         }
 
       } else {
         Calculated->TerrainWarningLatitude = 0.0;
         Calculated->TerrainWarningLongitude = 0.0;
+	fgtt = false;
       }
 
       TaskAltitudeRequired = LegAltitude;
@@ -1775,6 +1826,15 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 	- (Calculated->TaskAltitudeRequired
 	   + WayPointList[Task[i-1].Index].Altitude)
 	+ Calculated->EnergyHeight;
+
+      if (Calculated->TaskAltitudeDifference>0) {
+	if (!fgtt && fgttnew) {
+	  InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_TERRAIN);
+	  fgtt = true;
+	}
+      } else {
+	fgtt = false;
+      }
 
       if(  (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude
 	    + Calculated->EnergyHeight) > 0)
@@ -1877,19 +1937,21 @@ void DoAutoMacCready(DERIVED_INFO *Calculated)
 void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static BOOL BelowGlide = TRUE;
+  static double delayedTAD = 0.0;
+
+  delayedTAD = 0.95*delayedTAD+0.05*Calculated->TaskAltitudeDifference;
 
   if(BelowGlide == TRUE)
     {
-      if(Calculated->TaskAltitudeDifference > 10)
+      if(delayedTAD > 50)
         {
           BelowGlide = FALSE;
-
 	  InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
         }
     }
   else
     {
-      if(Calculated->TaskAltitudeDifference < 10)
+      if(delayedTAD < 50)
         {
           BelowGlide = TRUE;
 

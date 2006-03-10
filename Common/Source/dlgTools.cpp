@@ -37,9 +37,10 @@ Copyright_License {
 #include "dlgTools.h"
 #include "XMLParser.h"
 #include "InfoBoxLayout.h"
-
+#include "Dialogs.h"
 
 extern HWND   hWndMainWindow;
+extern HWND   hWndMapWindow;
 
 extern HFONT  TitleWindowFont;
 extern HFONT  MapWindowFont;
@@ -83,30 +84,37 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   RECT rc;
 
   // todo
-  hWnd = hWndMainWindow;
 
+  hWnd = hWndMainWindow;
   ASSERT(hWnd == hWndMainWindow);
+
   ASSERT(lpText != NULL);
   ASSERT(lpCaption != NULL);
 
   GetClientRect(hWnd, &rc);
 
-  Width = 200;
-  Height = 150;
+  Width = 200*InfoBoxLayout::scale;
+  Height = 150*InfoBoxLayout::scale;
 
   X = ((rc.right-rc.left) - Width)/2;
   Y = ((rc.bottom-rc.top) - Height)/2;
 
-  y = 100;
-  w = 60;
-  h = 32;
+  y = 100*InfoBoxLayout::scale;
+  w = 60*InfoBoxLayout::scale;
+  h = 32*InfoBoxLayout::scale;
 
-  wf = new WndForm(hWnd, TEXT("frmXcSoarMessageDlg"), (TCHAR*)lpCaption, X, Y, Width, Height);
+  wf = new WndForm(hWnd, TEXT("frmXcSoarMessageDlg"),
+		   (TCHAR*)lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
   wf->SetBackColor(RGB(0xDA, 0xDB, 0xAB));
 
-  wText = new WndFrame(wf, TEXT("frmMessageDlgText"), 0, 5, Width, Height);
+  wText = new WndFrame(wf,
+		       TEXT("frmMessageDlgText"),
+		       0,
+		       5*InfoBoxLayout::scale,
+		       Width,
+		       Height);
   wText->SetCaption((TCHAR*)lpText);
   wText->SetFont(MapWindowBoldFont);
   wText->SetCaptionStyle(
@@ -114,13 +122,13 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
       | DT_CENTER
       | DT_NOCLIP
       | DT_WORDBREAK
-      | DT_VCENTER
+	//      | DT_VCENTER
   );
 
   /* TODO, dont work
   dY = wText->GetLastDrawTextHeight() - Height;
   */
-  dY = -40;
+  dY = -40*InfoBoxLayout::scale;
   // wText->SetHeight(wText->GetLastDrawTextHeight()+5);
   wf->SetHeight(wf->GetHeight() + dY);
 
@@ -132,7 +140,8 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
       || uType == MB_OKCANCEL
 
   ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), TEXT("OK"), 0, y, w, h, OnButtonClick);
+    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("OK")),
+					  0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDOK);
     ButtonCount++;
   }
@@ -140,10 +149,12 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   if (uType == MB_YESNO
       || uType == MB_YESNOCANCEL
   ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), TEXT("Yes"), 0, y, w, h, OnButtonClick);
+    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("Yes")),
+					  0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDYES);
     ButtonCount++;
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), TEXT("No"), 0, y, w, h, OnButtonClick);
+    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("No")),
+					  0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDNO);
     ButtonCount++;
   }
@@ -151,7 +162,9 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   if (uType == MB_ABORTRETRYIGNORE
       || uType == MB_RETRYCANCEL
   ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), TEXT("Retry"), 0, y, w, h, OnButtonClick);
+    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
+					  gettext(TEXT("Retry")),
+					  0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDRETRY);
     ButtonCount++;
   }
@@ -160,17 +173,23 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
       || uType == MB_RETRYCANCEL
       || uType == MB_YESNOCANCEL
   ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), TEXT("Cancel"), 0, y, w, h, OnButtonClick);
+    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
+					  gettext(TEXT("Cancel")),
+					  0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDCANCEL);
     ButtonCount++;
   }
 
   if (uType == MB_ABORTRETRYIGNORE
   ){
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), TEXT("Abort"), 0, y, w, h, OnButtonClick);
+    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
+					  gettext(TEXT("Abort")),
+					  0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDABORT);
     ButtonCount++;
-    wButtons[ButtonCount] = new WndButton(wf, TEXT(""), TEXT("Ignore"), 0, y, w, h, OnButtonClick);
+    wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
+					  gettext(TEXT("Ignore")),
+					  0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDIGNORE);
     ButtonCount++;
   }
@@ -280,6 +299,12 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 
   // JMW TODO: put in error checking here and get rid of exits in xmlParser
   if (xMainNode.isEmpty()) {
+
+    MessageBoxX(hWndMainWindow,
+      gettext(TEXT("Error in loading XML dialog")),
+      gettext(TEXT("Dialog error")),
+      MB_OK|MB_ICONEXCLAMATION);
+
     return NULL;
   }
 
@@ -329,11 +354,21 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
     LoadChildsFromXML(theForm, LookUpTable, &xNode, Font);
 
     if (XMLNode::GlobalError) {
+      MessageBoxX(hWndMainWindow,
+		 gettext(TEXT("Error in loading XML dialog")),
+		 gettext(TEXT("Dialog error")),
+		 MB_OK|MB_ICONEXCLAMATION);
+
       delete theForm;
       return NULL;
     }
 
   } else {
+    MessageBoxX(hWndMainWindow,
+      gettext(TEXT("Error in loading XML dialog")),
+      gettext(TEXT("Dialog error")),
+      MB_OK|MB_ICONEXCLAMATION);
+
     return NULL;
   }
 

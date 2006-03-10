@@ -60,19 +60,19 @@ void	AirspeedProcessing(int UpDown)
 void	AltitudeProcessing(int UpDown)
 {
 	#ifdef _SIM_
-		if(UpDown==1)
-			GPS_INFO.Altitude += (100/ALTITUDEMODIFY);
-		else if (UpDown==-1)
-		{
-			GPS_INFO.Altitude -= (100/ALTITUDEMODIFY);
-			if(GPS_INFO.Altitude < 0)
-				GPS_INFO.Altitude = 0;
-		} else if (UpDown==-2) {
-			DirectionProcessing(-1);
-		} else if (UpDown==2) {
-			DirectionProcessing(1);
-		}
-	#endif
+	if(UpDown==1) {
+	  GPS_INFO.Altitude += (100/ALTITUDEMODIFY);
+	}	else if (UpDown==-1)
+	  {
+	    GPS_INFO.Altitude -= (100/ALTITUDEMODIFY);
+	    if(GPS_INFO.Altitude < 0)
+	      GPS_INFO.Altitude = 0;
+	  } else if (UpDown==-2) {
+	  DirectionProcessing(-1);
+	} else if (UpDown==2) {
+	  DirectionProcessing(1);
+	}
+#endif
 	return;
 }
 

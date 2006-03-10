@@ -36,6 +36,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 #include "MapWindow.h"
+#include "Terrain.h"
 
 #include "WindowControls.h"
 #include "Statistics.h"
@@ -549,9 +550,9 @@ void dlgConfigurationShowModal(void){
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Names"));
     dfe->addEnumText(TEXT("Numbers"));
+    dfe->addEnumText(TEXT("First 5"));
     dfe->addEnumText(TEXT("None"));
     dfe->addEnumText(TEXT("First 3"));
-    dfe->addEnumText(TEXT("First 5"));
     dfe->addEnumText(TEXT("Names in task"));
     dfe->Set(DisplayTextType);
     wp->RefreshDisplay();
@@ -888,6 +889,18 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainContrast"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(iround(TerrainContrast*100/255));
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainBrightness"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(iround(TerrainBrightness*100/255));
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxColors"));
   if (wp) {
     wp->GetDataField()->Set(Appearance.InfoBoxColors);
@@ -961,8 +974,9 @@ void dlgConfigurationShowModal(void){
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Cylinder"));
-    dfe->addEnumText(TEXT("Sector"));
-    dfe->Set(FAISector);
+    dfe->addEnumText(TEXT("FAI Sector"));
+    dfe->addEnumText(TEXT("DAe 0.5/10"));
+    dfe->Set(SectorType);
     wp->RefreshDisplay();
   }
 
@@ -1258,6 +1272,7 @@ void dlgConfigurationShowModal(void){
       Speed = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistrySpeedUnitsValue, Speed);
       Units::NotifyUnitChanged();
+      requirerestart = true;
       changed = true;
     }
   }
@@ -1268,6 +1283,7 @@ void dlgConfigurationShowModal(void){
       Distance = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryDistanceUnitsValue, Distance);
       Units::NotifyUnitChanged();
+      requirerestart = true;
       changed = true;
     }
   }
@@ -1278,6 +1294,7 @@ void dlgConfigurationShowModal(void){
       Lift = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryLiftUnitsValue, Lift);
       Units::NotifyUnitChanged();
+      requirerestart = true;
       changed = true;
     }
   }
@@ -1289,6 +1306,7 @@ void dlgConfigurationShowModal(void){
       SetToRegistry(szRegistryAltitudeUnitsValue, Altitude);
       Units::NotifyUnitChanged();
       changed = true;
+      requirerestart = true;
     }
   }
 
@@ -1478,9 +1496,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
   if (wp) {
-    if ((int)FAISector != wp->GetDataField()->GetAsInteger()) {
-      FAISector = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryFAISector,FAISector);
+    if ((int)SectorType != wp->GetDataField()->GetAsInteger()) {
+      SectorType = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryFAISector,SectorType);
       changed = true;
       taskchanged = true;
     }
@@ -1620,6 +1638,26 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainContrast"));
+  if (wp) {
+    if (iround(TerrainContrast*100/255) !=
+	wp->GetDataField()->GetAsInteger()) {
+      TerrainContrast = iround(wp->GetDataField()->GetAsInteger()*255.0/100);
+      SetToRegistry(szRegistryTerrainContrast,TerrainContrast);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainBrightness"));
+  if (wp) {
+    if (iround(TerrainBrightness*100/255) !=
+	wp->GetDataField()->GetAsInteger()) {
+      TerrainBrightness = iround(wp->GetDataField()->GetAsInteger()*255.0/100);
+      SetToRegistry(szRegistryTerrainBrightness,TerrainBrightness);
+      changed = true;
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
   if (wp) {
     if (AutoAdvance != wp->GetDataField()->GetAsInteger()) {
@@ -1737,13 +1775,25 @@ void dlgConfigurationShowModal(void){
     RefreshTask();
   }
 
+#if (WINDOWSPC>0)
+  if (COMPORTCHANGED) {
+    requirerestart = true;
+  }
+#endif
+
   if (changed) {
     StoreRegistry();
-    DoStatusMessage(TEXT("Configuration saved"));
-  };
 
-  if (requirerestart) {
-    DoStatusMessage(TEXT("Changes require XCSoar to be reset"));
+    if (!requirerestart) {
+      MessageBoxX (hWndMainWindow,
+		   gettext(TEXT("Changes to configuration saved.")),
+		   TEXT(""), MB_OK);
+    } else {
+
+      MessageBoxX (hWndMainWindow,
+		   gettext(TEXT("Changes to configuration saved.  Restart XCSoar.")),
+		   TEXT(""), MB_OK);
+    }
   }
 
   delete wf;

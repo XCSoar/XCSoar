@@ -45,7 +45,7 @@ static BOOL  Port1CloseThread;
 static BOOL  fRxThreadTerminated;
 static TCHAR sPortName[8];
 
-static DWORD dwMask;
+static DWORD dwMask1;
 
 BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 {
@@ -76,8 +76,8 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
     // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
     _stprintf(sTmp, TEXT("Unable to Open\r\nPort %s"), sPortName),
-    MessageBox (hWndMainWindow, sTmp,
-                TEXT("Error"), MB_OK|MB_ICONINFORMATION);
+    MessageBoxX (hWndMainWindow, sTmp,
+		 gettext(TEXT("Error")), MB_OK|MB_ICONINFORMATION);
     return FALSE;
   }
 
@@ -117,11 +117,11 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   if (!SetCommState (hPort1, &PortDCB))
   {
     // Could not create the read thread.
-		CloseHandle (hPort1);
+    CloseHandle (hPort1);
     // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
     _stprintf(sTmp, TEXT("Unable to Change Settings on Port %s"), sPortName),
-    MessageBox (hWndMainWindow, sTmp, TEXT("Error"), MB_OK);
+      MessageBoxX (hWndMainWindow, sTmp, gettext(TEXT("Error")), MB_OK);
     // dwError = GetLastError ();
     return FALSE;
   }
@@ -139,7 +139,6 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
     return(FALSE);
   }
 
-
   return TRUE;
 }
 
@@ -151,15 +150,18 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 ***********************************************************************/
 void Port1Write (BYTE Byte)
 {
+
+  if (hPort1 == INVALID_HANDLE_VALUE) return;
+
   DWORD dwError,
         dwNumBytesWritten;
 
   if (!WriteFile (hPort1,              // Port handle
-                  &Byte,              // Pointer to the data to write
-                  1,                  // Number of bytes to write
-                  &dwNumBytesWritten, // Pointer to the number of bytes
-                                      // written
-                  (OVERLAPPED *)NULL))              // Must be NULL for Windows CE
+                  &Byte,               // Pointer to the data to write
+                  1,                   // Number of bytes to write
+                  &dwNumBytesWritten,  // Pointer to the number of bytes
+                                       // written
+                  (OVERLAPPED *)NULL)) // Must be NULL for Windows CE
   {
     // WriteFile failed. Report error.
     dwError = GetLastError ();
@@ -182,13 +184,14 @@ DWORD Port1ReadThread (LPVOID lpvoid)
 
   // Specify a set of events to be monitored for the port.
 
-  dwMask = EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR;
+  dwMask1 = EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR;
 
-  SetCommMask(hPort1, dwMask);
+  SetCommMask(hPort1, dwMask1);
 
   fRxThreadTerminated = FALSE;
 
-  while ((hPort1 != INVALID_HANDLE_VALUE) && (!MapWindow::CLOSETHREAD) && (!Port1CloseThread))
+  while ((hPort1 != INVALID_HANDLE_VALUE) &&
+	 (!MapWindow::CLOSETHREAD) && (!Port1CloseThread))
   {
     int i=0;
 
@@ -199,12 +202,12 @@ DWORD Port1ReadThread (LPVOID lpvoid)
     }
 
     // Re-specify the set of events to be monitored for the port.
-    SetCommMask (hPort1, dwMask);
+    //    SetCommMask (hPort1, dwMask1);
 
     if (
-	    (dwCommModemStatus & EV_RXFLAG)
-		    ||(dwCommModemStatus & EV_RXCHAR)
-	    )
+	(dwCommModemStatus & EV_RXFLAG)
+	||(dwCommModemStatus & EV_RXCHAR)
+	)
     {
 
       // Loop for waiting for the data.
@@ -212,7 +215,8 @@ DWORD Port1ReadThread (LPVOID lpvoid)
       {
         dwBytesTransferred = 0;
               // Read the data from the serial port.
-        if (ReadFile (hPort1, inbuf, 1024, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
+        if (ReadFile (hPort1, inbuf, 1024, &dwBytesTransferred,
+		      (OVERLAPPED *)NULL)) {
 
 	        for (unsigned int j=0; j<dwBytesTransferred; j++) {
 	          ProcessChar1 (inbuf[j]);
@@ -222,23 +226,22 @@ DWORD Port1ReadThread (LPVOID lpvoid)
 	        dwBytesTransferred = 0;
         }
 
+	if (Port1CloseThread)
+	  dwBytesTransferred = 0;
       } while (dwBytesTransferred != 0);
 
     }
 
-    //    Sleep(5); // give port some time to fill
-
+    Sleep(5); // give port some time to fill
     // Retrieve modem control-register values.
     GetCommModemStatus (hPort1, &dwCommModemStatus);
 
   }
   fRxThreadTerminated = TRUE;
 
-#if (WINDOWSPC>0)
   PurgeComm(hPort1,
             PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
   CloseHandle (hPort1);
-#endif
 
   return 0;
 }
@@ -246,33 +249,33 @@ DWORD Port1ReadThread (LPVOID lpvoid)
 
 /***********************************************************************
 
-  PortClose (HANDLE hCommPort)
+  PortClose ()
 
 ***********************************************************************/
-BOOL Port1Close (HANDLE hCommPort)
+BOOL Port1Close ()
 {
   DWORD dwError;
 
-  if (hCommPort != INVALID_HANDLE_VALUE)
+  if (hPort1 != INVALID_HANDLE_VALUE)
   {
 
     Port1StopRxThread();
-    Sleep(20);  // todo ...
+    Sleep(100);  // todo ...
 
 #if (WINDOWSPC>0)
-	dwError = 0;
-    hCommPort = INVALID_HANDLE_VALUE;
+    dwError = 0;
+    hPort1 = INVALID_HANDLE_VALUE;
     return TRUE;
 #else
     // Close the communication port.
-    if (!CloseHandle (hCommPort))
+    if (!CloseHandle (hPort1))
     {
       dwError = GetLastError ();
       return FALSE;
     }
     else
     {
-      hCommPort = INVALID_HANDLE_VALUE;
+      hPort1 = INVALID_HANDLE_VALUE;
       return TRUE;
     }
 #endif
@@ -291,45 +294,47 @@ void Port1WriteString(TCHAR *Text)
 		Port1Write ((BYTE)Text[i]);
 }
 
-                                        // Stop Rx Thread
-                                        // return: TRUE on success, FALSE on error
+// Stop Rx Thread
+// return: TRUE on success, FALSE on error
 BOOL Port1StopRxThread(void){
 
   if (hPort1 == INVALID_HANDLE_VALUE) return(FALSE);
 
   Port1CloseThread = TRUE;
 
-  // JMW added purging of port on open to prevent overflow initially
-  DWORD tm = GetTickCount()+2000l;
-
+  DWORD tm = GetTickCount()+20000l;
 #if (WINDOWSPC>0)
-  dwMask = 0;
+  /*
   while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0){
     Sleep(10);
   }
+  */
+  LockFlightData();
   TerminateThread(hRead1Thread, 0);
   CloseHandle(hRead1Thread);
+  UnlockFlightData();
+  if (hPort1 != INVALID_HANDLE_VALUE)
+    CloseHandle (hPort1);
+
 #else
   PurgeComm(hPort1,
             PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
-
-  //GetCommMask(hPort1, &dwMask);       // setting the comm event mask with the same value
-  SetCommMask(hPort1, dwMask);          // will cancel any
-                                        // WaitCommEvent!  this is a
+  // setting the comm event mask with the same value
+  //  GetCommMask(hPort1, &dwMask1);
+  SetCommMask(hPort1, dwMask1);          // will cancel any
+                                         // WaitCommEvent!  this is a
                                         // documented CE trick to
                                         // cancel the WaitCommEvent
-#endif
-
-  tm = GetTickCount()+2000l;
-
   while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0){
     Sleep(10);
   }
-
-  #if COMMDEBUG > 0
+  //  #if COMMDEBUG > 0
   if (!fRxThreadTerminated)
-    MessageBox (hWndMainWindow, gettext(TEXT("Port1 RX Thread not Terminated!")), TEXT("Error"), MB_OK);
-  #endif
+    MessageBoxX (hWndMainWindow,
+		 gettext(TEXT("Port1 RX Thread not Terminated!")),
+		 TEXT("Error"), MB_OK);
+  //  #endif
+#endif
 
   return(fRxThreadTerminated);
 
@@ -355,7 +360,7 @@ BOOL Port1StartRxThread(void){
     // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
     _stprintf(sTmp, TEXT("Unable to Start RX Thread on Port %s"), sPortName),
-    MessageBox (hWndMainWindow, sTmp, TEXT("Error"), MB_OK);
+      MessageBoxX (hWndMainWindow, sTmp, gettext(TEXT("Error")), MB_OK);
     dwError = GetLastError ();
     return FALSE;
   }
@@ -409,9 +414,9 @@ int Port1SetRxTimeout(int Timeout){
   if (!SetCommTimeouts (hPort1, &CommTimeouts))
   {
                                         // Could not create the read thread.
-		CloseHandle (hPort1);
-    MessageBox (hWndMainWindow, gettext(TEXT("Unable to Set Serial Port Timers")),
-                TEXT("Error"), MB_OK);
+    CloseHandle (hPort1);
+    MessageBoxX (hWndMainWindow, gettext(TEXT("Unable to Set Serial Port Timers")),
+		 TEXT("Error"), MB_OK);
     dwError = GetLastError ();
     return(-1);
   }
@@ -467,6 +472,7 @@ int Port1Read(void *Buffer, size_t Size){
 
 void Port1WriteNMEA(TCHAR *Text)
 {
+
   int i,len;
   len = _tcslen(Text);
   Port1Write((BYTE)_T('$'));
@@ -487,20 +493,15 @@ void Port1WriteNMEA(TCHAR *Text)
 
 
 void VarioWriteNMEA(TCHAR *Text) {
-  /*
-  if (!(GPS_INFO.VarioAvailable))
-    return;
-  */
-
-  if (Port2Available) {
-    // assume vario is on port B
+  int i =  NMEAParser::FindVegaPort();
+  if (i==0) {
+    Port1WriteNMEA(Text);
+  }
+  if (i==1) {
     Port2WriteNMEA(Text);
-  } else {
-    if (Port1Available) {
-      Port1WriteNMEA(Text);
-    }
   }
 }
+
 
 void VarioWriteSettings(void) {
   if (GPS_INFO.VarioAvailable) {

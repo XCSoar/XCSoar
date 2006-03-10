@@ -255,7 +255,7 @@ class MapWindow {
   static void DrawFLARMTraffic(HDC hDC, RECT rc);
 
   static void DrawSolidLine(HDC , POINT , POINT );
-  static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode);
+  static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode, bool noOverlap=false);
   static void ToggleFullScreenStart();
   static void RefreshMap();
 
@@ -355,9 +355,15 @@ class MapWindow {
   static HBITMAP hBmpFieldReachable;
   static HBITMAP hBmpFieldUnReachable;
 
+#define MAXLABELBLOCKS 100
+  static int nLabelBlocks;
+  static RECT LabelBlockCoords[MAXLABELBLOCKS];
+
+  static void StoreRestoreFullscreen(bool);
  public:
 
   static int GetMapResolutionFactor();
+  static bool checkLabelBlock(RECT rc);
 
   static HBITMAP hBmpMapScale;
   static HBITMAP hBmpCompassBg;
@@ -373,6 +379,8 @@ class MapWindow {
   static bool BigZoom;
   static bool AutoZoom;
 
+ public:
+  static pointObj GlideFootPrint[NUMTERRAINSWEEPS+1];
 };
 
 

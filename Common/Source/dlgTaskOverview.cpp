@@ -40,6 +40,7 @@ Copyright_License {
 #include "Statistics.h"
 #include "Externs.h"
 #include "Dialogs.h"
+#include "Logger.h"
 #include "McReady.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
@@ -217,23 +218,26 @@ static void OnTaskListEnter(WindowControl * Sender,
       ItemIndex= UpLimit;
     }
     // create new waypoint
-    if (ItemIndex>0) {
-      Task[ItemIndex].Index = Task[0].Index;
-    } else {
-      if (HomeWaypoint>=0) {
-	Task[ItemIndex].Index = HomeWaypoint;
+    if (CheckDeclaration()) {
+
+      if (ItemIndex>0) {
+	Task[ItemIndex].Index = Task[0].Index;
       } else {
-	Task[ItemIndex].Index = -1;
+	if (HomeWaypoint>=0) {
+	  Task[ItemIndex].Index = HomeWaypoint;
+	} else {
+	  Task[ItemIndex].Index = -1;
+	}
       }
+      Task[ItemIndex].AATTargetOffsetRadius = 0.0;
+      Task[ItemIndex].AATTargetOffsetRadial = 0.0;
+      if (ItemIndex>0) {
+	dlgTaskWaypointShowModal(ItemIndex, 2); // finish waypoint
+      } else {
+	dlgTaskWaypointShowModal(ItemIndex, 0); // start waypoint
+      }
+      OverviewRefreshTask();
     }
-    Task[ItemIndex].AATTargetOffsetRadius = 0.0;
-    Task[ItemIndex].AATTargetOffsetRadial = 0.0;
-    if (ItemIndex>0) {
-      dlgTaskWaypointShowModal(ItemIndex, 2); // finish waypoint
-    } else {
-      dlgTaskWaypointShowModal(ItemIndex, 0); // start waypoint
-    }
-    OverviewRefreshTask();
     return;
   }
   if (ItemIndex==0) {
@@ -275,6 +279,9 @@ static void OnCalcClicked(WindowControl * Sender,
 
 static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   RefreshTask();
+
+  LoggerDeviceDeclare();
+
   // do something here.
 }
 
@@ -289,6 +296,7 @@ static void GetTaskFileName(TCHAR *filename) {
 #if (WINDOWSPC>0)
   _stprintf(filename,TEXT("C:\\XCSoar\\NOR Flash\\%02d.tsk"),
 	    TaskFileNumber);
+#else
 #ifdef GNAV
   _stprintf(filename,TEXT("\\NOR Flash\\%02d.tsk"),
 	    TaskFileNumber);
@@ -298,6 +306,7 @@ static void GetTaskFileName(TCHAR *filename) {
 #endif
 #endif
 }
+
 
 static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   TCHAR filename[100];

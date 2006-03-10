@@ -107,13 +107,17 @@ LRESULT CALLBACK MessageWindowProc(HWND hwnd, UINT message,
     DestroyWindow(hwnd);
     return 0;
   }
-
   return DefWindowProc(hwnd, message, wParam, lParam);
 }
+
+
+bool Message::blocked = false;
 
 void Message::Initialize(RECT rc) {
 
   InitializeCriticalSection(&CritSec_Messages);
+
+  blocked = false;
 
   rcmsg = rc; // default; message window can be full size of screen
 
@@ -236,8 +240,20 @@ void Message::Resize() {
 
 }
 
+
+void Message::BlockRender(bool doblock) {
+  //  Lock();
+  blocked = doblock;
+  // TODO: add blocked time to messages' timers so they come
+  // up once unblocked.
+  //  Unlock();
+}
+
+
 void Message::Render() {
   DWORD	fpsTime = ::GetTickCount() - startTime;
+
+  if (blocked) return;
 
   Lock();
 

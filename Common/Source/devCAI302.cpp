@@ -148,7 +148,7 @@ static int  BallastUpdateTimeout = 0;
 
 BOOL cai302ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
-  if (!NMEAChecksum(String) || (GPS_INFO == NULL)){
+  if (!NMEAParser::NMEAChecksum(String) || (GPS_INFO == NULL)){
     return FALSE;
   }
 
@@ -603,10 +603,6 @@ BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO){
   return TRUE;
 }
 
-
-
-extern BOOL VarioUpdated; // needed to notify of new vario data
-
 /*
 !w,<1>,<2>,<3>,<4>,<5>,<6>,<7>,<8>,<9>,<10>,<11>,<12>,<13>*hh<CR><LF>
 <1>  Vector wind direction in degrees
@@ -630,38 +626,36 @@ BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO){
   TCHAR ctemp[80];
 
 
-  ExtractParameter(String,ctemp,1);
+  NMEAParser::ExtractParameter(String,ctemp,1);
   GPS_INFO->ExternalWindAvailalbe = TRUE;
   GPS_INFO->ExternalWindSpeed = (StrToDouble(ctemp,NULL) / 10.0);
-  ExtractParameter(String,ctemp,0);
+  NMEAParser::ExtractParameter(String,ctemp,0);
   GPS_INFO->ExternalWindDirection = StrToDouble(ctemp,NULL);
 
 
-  ExtractParameter(String,ctemp,4);
+  NMEAParser::ExtractParameter(String,ctemp,4);
   GPS_INFO->BaroAltitudeAvailable = TRUE;
   GPS_INFO->BaroAltitude = StrToDouble(ctemp, NULL) - 1000;
 
 //  ExtractParameter(String,ctemp,5);
 //  GPS_INFO->QNH = StrToDouble(ctemp, NULL) - 1000;
 
-  ExtractParameter(String,ctemp,6);
+  NMEAParser::ExtractParameter(String,ctemp,6);
   GPS_INFO->AirspeedAvailable = TRUE;
   GPS_INFO->TrueAirspeed = (StrToDouble(ctemp,NULL) / 100.0);
 
-  ExtractParameter(String,ctemp,7);
+  NMEAParser::ExtractParameter(String,ctemp,7);
   GPS_INFO->VarioAvailable = TRUE;
   GPS_INFO->Vario = ((StrToDouble(ctemp,NULL) - 200.0) / 10.0) * KNOTSTOMETRESSECONDS;
 
-
-  ExtractParameter(String,ctemp,10);
+  NMEAParser::ExtractParameter(String,ctemp,10);
   GPS_INFO->MacReady = (StrToDouble(ctemp,NULL) / 10.0) * KNOTSTOMETRESSECONDS;
   if (MacCreadyUpdateTimeout <= 0)
     MACCREADY = GPS_INFO->MacReady;
   else
     MacCreadyUpdateTimeout--;
 
-
-  ExtractParameter(String,ctemp,11);
+  NMEAParser::ExtractParameter(String,ctemp,11);
   GPS_INFO->Ballast = StrToDouble(ctemp,NULL) / 100.0;
   if (BugsUpdateTimeout <= 0)
     BALLAST = GPS_INFO->Ballast;
@@ -669,7 +663,7 @@ BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO){
     BallastUpdateTimeout--;
 
 
-  ExtractParameter(String,ctemp,12);
+  NMEAParser::ExtractParameter(String,ctemp,12);
   GPS_INFO->Bugs = StrToDouble(ctemp,NULL) / 100.0;
   if (BugsUpdateTimeout <= 0)
     BUGS = GPS_INFO->Bugs;
@@ -677,7 +671,7 @@ BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO){
     BugsUpdateTimeout--;
 
   // JMW update audio functions etc.
-  VarioUpdated = TRUE;
+  NMEAParser::VarioUpdated = TRUE;
 
   return TRUE;
 
