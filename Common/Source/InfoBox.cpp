@@ -61,6 +61,8 @@ static HPEN hPenDefaultBorder;
 static HPEN hPenSelector;
 static int Count=0;
 
+#if (NEWINFOBOX>0)
+
 void InitInfoBoxModule(void);
 LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -584,3 +586,5 @@ void InitInfoBoxModule(void){
   InitDone = true;
 
 }
+
+#endif

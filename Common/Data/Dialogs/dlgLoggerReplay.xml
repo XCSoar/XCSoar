@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmLoggerReplay" Type="Dialog" X=5 Y=5 Width=250 Height=72 Caption="Logger Replay" Font=2 BackColor=0xDADBAB>
+
+  <WndButton   Caption="Close"    X=2 Y=2 Width=66  Height=22 Font=2 OnClickNotify="OnCloseClicked">
+  </WndButton> 
+
+  <WndProperty Name="prpIGCFile" Caption="File"      X=70 Y=2   Width=180 Height=22 CaptionWidth=60 Font=2>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndButton   Caption="Start"    X=2 Y=26 Width=68  Height=22 Font=2 OnClickNotify="OnStartClicked">
+  </WndButton> 
+
+  <WndButton   Caption="Stop"    X=70 Y=26 Width=68  Height=22 Font=2 OnClickNotify="OnStopClicked">
+  </WndButton> 
+
+  <WndProperty Name="prpRate" Caption="Rate"  X=140 Y=26  Width=110 Height=22 CaptionWidth=60 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f x" EditFormat="%.0f" Min=0 Max=10 Step=1  OnDataAccess="OnRateData"/>
+  </WndProperty>
+
+</WndForm>    
+
+</PMML>

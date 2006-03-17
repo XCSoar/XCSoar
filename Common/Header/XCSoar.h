@@ -141,7 +141,6 @@ extern bool Debounce();
 
 void DebugStore(char *Str);
 
-
 typedef struct
 {
   BYTE acStatus;

@@ -120,7 +120,8 @@ int dlgAirspacePatternsShowModal(void){
   ItemIndex = -1;
 
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgAirspacePatterns.xml", 
-		      hWndMainWindow);
+		      hWndMainWindow,
+		      TEXT("IDR_XML_AIRSPACEPATTERNS"));
 
   if (!wf) return -1;
 

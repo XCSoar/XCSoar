@@ -39,89 +39,90 @@ Copyright_License {
 #include "McReady.h"
 #include "device.h"
 
+#include "Logger.h"
 
 #include "WindowControls.h"
 #include "dlgTools.h"
+#include "Port.h"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
+
+
+static void OnStopClicked(WindowControl * Sender){
+  ReplayLogger::Stop();
+}
+
+static void OnStartClicked(WindowControl * Sender){
+  WndProperty* wp;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpIGCFile"));
+  if (wp) {
+    DataFieldFileReader* dfe;
+    dfe = (DataFieldFileReader*)wp->GetDataField();
+    ReplayLogger::SetFilename(dfe->GetPathFile());
+  }
+  ReplayLogger::Start();
+}
+
 
 static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-static void OnSaveClicked(WindowControl * Sender){
-  SaveWindToRegistry();
-  wf->SetModalResult(mrOK);
-}
 
-static void OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
   switch(Mode){
     case DataField::daGet:
-      Sender->SetMax(SPEEDMODIFY*(200.0/TOKPH));
-      Sender->Set(SPEEDMODIFY*CALCULATED_INFO.WindSpeed);
+      Sender->Set(ReplayLogger::TimeScale);
     break;
-    case DataField::daPut:
-      CALCULATED_INFO.WindSpeed = Sender->GetAsFloat()/SPEEDMODIFY;
-    break;
+    case DataField::daPut: 
     case DataField::daChange:
-      // calc alt...
-    break;
-  }
-}
-
-static void OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode){
-
-  double lastWind;
-
-  switch(Mode){
-    case DataField::daGet:
-      lastWind = CALCULATED_INFO.WindBearing;
-      if (lastWind < 0.5)
-        lastWind = 360.0;
-      Sender->Set(lastWind);
-    break;
-    case DataField::daPut:
-      CALCULATED_INFO.WindBearing = Sender->GetAsFloat();
-    break;
-    case DataField::daChange:
-      lastWind = Sender->GetAsFloat();
-      if (lastWind < 0.5)
-        Sender->Set(360.0);
-      if (lastWind > 360.5)
-        Sender->Set(1.0);
+      ReplayLogger::TimeScale = Sender->GetAsFloat();
     break;
   }
 
 }
+
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnWindSpeedData),
-  DeclearCallBackEntry(OnWindDirectionData),
-  DeclearCallBackEntry(OnSaveClicked),
+  DeclearCallBackEntry(OnStopClicked),
+  DeclearCallBackEntry(OnStartClicked),
+  DeclearCallBackEntry(OnRateData), 
   DeclearCallBackEntry(OnCloseClicked),
   DeclearCallBackEntry(NULL)
 };
 
-void dlgWindSettingsShowModal(void){
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgWindSettings.xml", hWndMainWindow,
-		      TEXT("IDR_XML_WINDSETTINGS"));
+void dlgLoggerReplayShowModal(void){
+
+  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgLoggerReplay.xml", 
+		      hWndMainWindow,
+		      TEXT("IDR_XML_LOGGERREPLAY"));
+
+  WndProperty* wp;
 
   if (wf) {
-    WndProperty* wp;
-    wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpRate"));
     if (wp) {
-      wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
+      wp->GetDataField()->SetAsFloat(ReplayLogger::TimeScale);
       wp->RefreshDisplay();
     }
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpIGCFile"));
+    if (wp) {
+      DataFieldFileReader* dfe;
+      dfe = (DataFieldFileReader*)wp->GetDataField();
+      dfe->ScanDirectoryTop(TEXT("*.igc"));
+      dfe->Lookup(ReplayLogger::GetFilename());
+      wp->RefreshDisplay();
+    }
+
     wf->ShowModal();
-    
     delete wf;
   }
   wf = NULL;
-
 }
 
 

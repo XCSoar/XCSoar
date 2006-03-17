@@ -56,7 +56,7 @@ rectObj GetRectBounds(RECT rc) {
   double x;
   double y;
 
-  x=0; y=0;
+  x= (rc.left+rc.right)/2; y=(rc.bottom+rc.top)/2;
   MapWindow::GetLocationFromScreen(&x, &y);
   xmin = x; xmax = x;
   ymin = y; ymax = y;
@@ -90,67 +90,76 @@ rectObj GetRectBounds(RECT rc) {
 };
 
 
+bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
+  if (r_interior.minx < r_exterior.minx) return false;
+  if (r_interior.maxx > r_exterior.maxx) return false;
+  if (r_interior.miny < r_exterior.miny) return false;
+  if (r_interior.maxy > r_exterior.maxy) return false;
+  return true;
+}
+
 void SetTopologyBounds(RECT rcin, bool force) {
-  static rectObj bounds;
-  rectObj bounds_new;
+  static rectObj bounds_active;
+  static double range_active = 1.0;
+  rectObj bounds_screen;
+  pointObj center;
 
-  bounds_new = GetRectBounds(rcin);
+  bounds_screen = GetRectBounds(rcin);
+  center.x = (bounds_screen.maxx + bounds_screen.minx)/2;
+  center.y = (bounds_screen.maxy + bounds_screen.miny)/2;
 
-  double threshold = BORDERFACTOR*max((bounds_new.maxx-bounds_new.minx), 
-                                      (bounds_new.maxy-bounds_new.miny));
-  bool recompute = force;
+  double range = BORDERFACTOR*max((bounds_screen.maxx-bounds_screen.minx), 
+				  (bounds_screen.maxy-bounds_screen.miny));
 
-  // make bounds bigger than screen
-  bounds_new.maxx += threshold;
-  bounds_new.minx -= threshold;
-  bounds_new.maxy += threshold;
-  bounds_new.miny -= threshold;
+  range = max(range,0.05);
+
+  bool recompute = false;
 
   // only recalculate which shapes when bounds change significantly
   // need to have some trigger for this..
 
-  // trigger if any border moves more than X% of screen width
-  if (fabs(bounds_new.maxx-bounds.maxx)>threshold) {
+  // trigger if the border goes outside the stored area
+  if (!RectangleIsInside(bounds_active, bounds_screen)) {
     recompute = true;
   }
-  if (fabs(bounds_new.minx-bounds.minx)>threshold) {
-    recompute = true;
-  }
-  if (fabs(bounds_new.maxy-bounds.maxy)>threshold) {
-    recompute = true;
-  }
-  if (fabs(bounds_new.miny-bounds.miny)>threshold) {
+  
+  if (max(range/range_active, range_active/range)>4) {
     recompute = true;
   }
 
-  bool rta = MapWindow::RenderTimeAvailable();
+  // also trigger if the scale has changed heaps
+
+  bool rta = MapWindow::RenderTimeAvailable() || force;
 
 #ifdef GNAV
   rta = true;
 #endif
 
-  if (recompute) {
+  if (recompute && rta) {
 
+    // make bounds bigger than screen
+    bounds_active = bounds_screen;
+    bounds_active.maxx = center.x+range;
+    bounds_active.minx = center.x-range;
+    bounds_active.maxy = center.y+range;
+    bounds_active.miny = center.y-range;
+    range_active = range;
+    
     for (int z=0; z<MAXTOPOLOGY; z++) {
       if (TopoStore[z]) {
 	if (rta && EnableTopology) {
-	  TopoStore[z]->updateCache(bounds_new);
+	  TopoStore[z]->updateCache(bounds_active);
 	} else {
 	  // didn't have time this time
 	  TopoStore[z]->triggerUpdateCache=true;          
 	}
       }
     }
-    topo_marks->updateCache(bounds_new);
-
-    bounds.maxx = bounds_new.maxx;
-    bounds.maxy = bounds_new.maxy;
-    bounds.minx = bounds_new.minx;
-    bounds.miny = bounds_new.miny;
+    topo_marks->updateCache(bounds_active);
 
   } else {
     if (topo_marks->triggerUpdateCache) {
-      topo_marks->updateCache(bounds_new);    
+      topo_marks->updateCache(bounds_active);    
     } 
   }
   
@@ -169,7 +178,7 @@ void SetTopologyBounds(RECT rcin, bool force) {
       if (TopoStore[z]) {
 	if (rta) {
 	  if (TopoStore[z]->triggerUpdateCache) {
-	    TopoStore[z]->updateCache(bounds);
+	    TopoStore[z]->updateCache(bounds_active);
 	  }
 	}
       }

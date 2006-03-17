@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.101 2006/03/10 13:19:39 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.102 2006/03/17 17:01:56 jwharington Exp $
 
 Copyright_License {
 
@@ -57,8 +57,9 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Message.h"
 
+#if (NEWINFOBOX<1)
 #define USE_ARH_COLOUR_SELECTOR 1
-
+#endif
 
 
 void ReadWayPoints(void);

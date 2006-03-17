@@ -47,6 +47,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+#if (NEWINFOBOX<1)
+
 void BuildLabelList();
 void buildSwatchControlArray(HWND, HWND, int, int);
 void InitAirspaceList(HWND hListView);
@@ -632,3 +634,5 @@ void buildSwatchControlArray(HWND hDlg, HWND hWndContainer,
     
   }
 }
+
+#endif

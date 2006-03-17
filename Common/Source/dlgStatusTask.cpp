@@ -70,7 +70,8 @@ void dlgStatusTaskShowModal(void){
 
   TCHAR Temp[1000];
 
-  wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusTask.xml", hWndMainWindow);
+  wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusTask.xml", hWndMainWindow,
+		      TEXT("IDR_XML_STATUSTASK"));
   if (!wf) return;
 
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);

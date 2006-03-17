@@ -33,15 +33,47 @@ Copyright_License {
 #include "tchar.h"
 #include <stdio.h>
 #include "WindowControls.h"
+#ifndef ALTAIRSYNC
 #include "Message.h"
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
+#endif
 #include "Utils.h"
 
-#define DEFAULTBORDERPENWIDTH 1*InfoBoxLayout::scale
-#define SELECTORWIDTH         4*InfoBoxLayout::scale
+#ifdef ALTAIRSYNC
+#define ISCALE 1
+#else
+#define ISCALE InfoBoxLayout::scale
+#endif
+
+#define DEFAULTBORDERPENWIDTH 1*ISCALE
+#define SELECTORWIDTH         4*ISCALE
 
 // utility functions
+
+
+int numkeyup=0;
+
+// returns true if it is a long press,
+// otherwise returns false
+bool KeyTimer(bool isdown, DWORD thekey) {
+  static DWORD fpsTimeDown= -1;
+  static DWORD savedKey=0;
+  if (!isdown) {
+    int dT = ::GetTickCount()-fpsTimeDown;
+    if ((dT>3000)&&(thekey==savedKey)) {
+      numkeyup++;
+      return true;
+    }
+  } else {
+    if (thekey != savedKey) {
+      fpsTimeDown = ::GetTickCount();
+      savedKey = thekey;
+    }
+  }
+  return false;
+}
+
 
 BOOL IsDots(const TCHAR* str) {
   if(_tcscmp(str,TEXT(".")) && _tcscmp(str,TEXT(".."))) return FALSE;
@@ -71,146 +103,152 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 
 BOOL DataFieldFileReader::ScanDirectories(const TCHAR* sPath, 
 					  const TCHAR* filter) {
-    HANDLE hFind;  // file handle
-    WIN32_FIND_DATA FindFileData;
 
-    TCHAR DirPath[MAX_PATH];
-    TCHAR FileName[MAX_PATH];
+  HANDLE hFind;  // file handle
+  WIN32_FIND_DATA FindFileData;
 
-    if (sPath) {
-      _tcscpy(DirPath,sPath);
-    } else {
-      DirPath[0]= 0;
+  TCHAR DirPath[MAX_PATH];
+  TCHAR FileName[MAX_PATH];
+
+  if (sPath) {
+    _tcscpy(DirPath,sPath);
+    _tcscpy(FileName,sPath);
+  } else {
+    DirPath[0]= 0;
+    FileName[0]= 0;
+  }
+
+  ScanFiles(FileName, filter);
+
+  _tcscat(DirPath,TEXT("\\"));
+  _tcscat(FileName,TEXT("\\*"));
+
+  hFind = FindFirstFile(FileName,&FindFileData); // find the first file
+  if(hFind == INVALID_HANDLE_VALUE) {
+    return FALSE;
+  }
+  _tcscpy(FileName,DirPath);
+
+  if(!IsDots(FindFileData.cFileName)) {
+    _tcscat(FileName,FindFileData.cFileName);
+
+    if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+      // we have found a directory, recurse
+      //      if (!IsSystemDirectory(FileName)) {
+	if(!ScanDirectories(FileName,filter)) { 
+	  // none deeper
+	}
+	//      }
     }
-    _tcscat(DirPath,TEXT("\\"));
-    _tcscat(DirPath,TEXT("*"));    
-    if (sPath) {
-      _tcscpy(FileName,sPath);
-    } else {
-      FileName[0]= 0;
+  }
+  _tcscpy(FileName,DirPath);
+
+  bool bSearch = true;
+  while(bSearch) { // until we finds an entry
+    if(FindNextFile(hFind,&FindFileData)) {
+      if(IsDots(FindFileData.cFileName)) continue;
+      if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+	// we have found a directory, recurse
+	_tcscat(FileName,FindFileData.cFileName);
+	//	if (!IsSystemDirectory(FileName)) {
+	  if(!ScanDirectories(FileName,filter)) { 
+	    // none deeper
+	  }
+	  //	}
+      }
+      _tcscpy(FileName,DirPath);
     }
-    _tcscat(FileName,TEXT("\\"));
-
-    hFind = FindFirstFile(DirPath,&FindFileData); // find the first file
-    if(hFind == INVALID_HANDLE_VALUE) {
-      return FALSE;
+    else {
+      if(GetLastError() == ERROR_NO_MORE_FILES) // no more files there
+	bSearch = false;
+      else {
+	// some error occured, close the handle and return FALSE
+	FindClose(hFind); 
+	return FALSE;
+      }
     }
-    _tcscpy(DirPath,FileName);
-
-    ScanFiles(FileName, filter);
-        
-    bool bSearch = true;
-    while(bSearch) { // until we finds an entry
-        if(FindNextFile(hFind,&FindFileData)) {
-            if(IsDots(FindFileData.cFileName)) continue;
-            _tcscat(FileName,FindFileData.cFileName);
-            if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-
-                // we have found a directory, recurse
-
-	      if(!ScanDirectories(FileName,filter)) { 
-		// none deeper
-	      }
-	      _tcscpy(FileName,DirPath);
-            } else {
-	      _tcscpy(FileName,DirPath);
-	    }
-        }
-        else {
-            if(GetLastError() == ERROR_NO_MORE_FILES) // no more files there
-            bSearch = false;
-            else {
-                // some error occured, close the handle and return FALSE
-                FindClose(hFind); 
-                return FALSE;
-            }
-
-        }
-
-    }
-    FindClose(hFind);  // closing file handle
+  }
+  FindClose(hFind);  // closing file handle
  
-    return TRUE;
+  return TRUE;
 }
 
 
 BOOL DataFieldFileReader::ScanFiles(const TCHAR* sPath, 
 				    const TCHAR* filter) {
-    HANDLE hFind;  // file handle
-    WIN32_FIND_DATA FindFileData;
+  HANDLE hFind;  // file handle
+  WIN32_FIND_DATA FindFileData;
 
-    TCHAR DirPath[MAX_PATH];
-    TCHAR FileName[MAX_PATH];
+  TCHAR DirPath[MAX_PATH];
+  TCHAR FileName[MAX_PATH];
 
-    if (sPath) {
-      _tcscpy(DirPath,sPath);
-    } else {
-      DirPath[0]= 0;
-    }
-    //    _tcscat(DirPath,TEXT("\\"));
-    _tcscat(DirPath,filter);    
-    if (sPath) {
-      _tcscpy(FileName,sPath);
-    } else {
-      FileName[0]= 0;
-    }
-    //    _tcscat(FileName,TEXT("\\"));
+  if (sPath) {
+    _tcscpy(DirPath,sPath);
+  } else {
+    DirPath[0]= 0;
+  }
+  _tcscat(DirPath,TEXT("\\"));
+  _tcscat(DirPath,filter);    
+  if (sPath) {
+    _tcscpy(FileName,sPath);
+  } else {
+    FileName[0]= 0;
+  }
+  _tcscat(FileName,TEXT("\\"));
 
-    hFind = FindFirstFile(DirPath,&FindFileData); // find the first file
-    if(hFind == INVALID_HANDLE_VALUE) return FALSE;
-    _tcscpy(DirPath,FileName);
+  hFind = FindFirstFile(DirPath,&FindFileData); // find the first file
+  if(hFind == INVALID_HANDLE_VALUE) return FALSE;
+  _tcscpy(DirPath,FileName);
 
 
-    // found first one
-    if(!IsDots(FindFileData.cFileName)) {
-      _tcscat(FileName,FindFileData.cFileName);
+  // found first one
+  if(!IsDots(FindFileData.cFileName)) {
+    _tcscat(FileName,FindFileData.cFileName);
       
+    if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+      // do nothing
+    }
+    else {
+      // DO SOMETHING WITH FileName
+      if (checkFilter(FindFileData.cFileName, filter)) {
+	addFile(FindFileData.cFileName, FileName);
+      }
+    }
+    _tcscpy(FileName,DirPath);
+  }
+
+  bool bSearch = true;
+  while(bSearch) { // until we finds an entry
+    if(FindNextFile(hFind,&FindFileData)) {
+      if(IsDots(FindFileData.cFileName)) continue;
+      _tcscat(FileName,FindFileData.cFileName);
+
       if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 	// do nothing
-	_tcscpy(FileName,DirPath);
       }
       else {
 	// DO SOMETHING WITH FileName
-	addFile(FindFileData.cFileName, FileName);
-	
-	//
-	_tcscpy(FileName,DirPath);
+	if (checkFilter(FindFileData.cFileName, filter)) {
+	  addFile(FindFileData.cFileName, FileName);
+	}
       }
+      _tcscpy(FileName,DirPath);
+    }
+    else {
+      if(GetLastError() == ERROR_NO_MORE_FILES) // no more files there
+	bSearch = false;
+      else {
+	// some error occured, close the handle and return FALSE
+	FindClose(hFind); 
+	return FALSE;
+      }
+
     }
 
-    bool bSearch = true;
-    while(bSearch) { // until we finds an entry
-        if(FindNextFile(hFind,&FindFileData)) {
-            if(IsDots(FindFileData.cFileName)) continue;
-            _tcscat(FileName,FindFileData.cFileName);
-
-            if((FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-	      // do nothing
-	      _tcscpy(FileName,DirPath);
-            }
-            else {
-	      // DO SOMETHING WITH FileName
-	      addFile(FindFileData.cFileName, FileName);
-
-	      //
-	      _tcscpy(FileName,DirPath);
-            }
-        }
-        else {
-            if(GetLastError() == ERROR_NO_MORE_FILES) // no more files there
-            bSearch = false;
-            else {
-                // some error occured, close the handle and return FALSE
-                FindClose(hFind); 
-                return FALSE;
-            }
-
-        }
-
-    }
-    FindClose(hFind);  // closing file handle
+  }
+  FindClose(hFind);  // closing file handle
  
-    return TRUE;
+  return TRUE;
 }
 
 void DataFieldFileReader::Lookup(TCHAR *Text) {
@@ -232,6 +270,39 @@ TCHAR* DataFieldFileReader::GetPathFile(void) {
     return mTextPathFile[mValue];
   }
   return TEXT("\0");
+}
+
+
+bool DataFieldFileReader::checkFilter(const TCHAR *filename,
+				      const TCHAR *filter) {
+  TCHAR *ptr;
+  TCHAR upfilter[MAX_PATH];
+  // checks if the filename matches the filter exactly
+
+  if (!filter || (_tcslen(filter+1)==0)) {
+    // invalid or short filter, pass
+    return true;
+  }
+
+  _tcscpy(upfilter,filter+1);
+
+  // check if trailing part of filter (*.exe => .exe) matches end
+  ptr = _tcsstr(filename, upfilter);
+  if (ptr) {
+    if (_tcslen(ptr)==_tcslen(upfilter)) {
+      return true;
+    }
+  }
+
+  _tcsupr(upfilter);
+  ptr = _tcsstr(filename, upfilter);
+  if (ptr) {
+    if (_tcslen(ptr)==_tcslen(upfilter)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
    
@@ -1288,7 +1359,9 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     break;
 
     case WM_DESTROY:
+#ifndef ALTAIRSYNC
       MapWindow::RequestFastRefresh=true;
+#endif
     break;
 
     case WM_COMMAND:
@@ -1474,12 +1547,19 @@ void WndForm::SetToForeground(void)
   SetActiveWindow(GetHandle());
 }
 
+
+
+
 int WndForm::ShowModal(void){
 
   MSG msg;
   HWND oldFocusHwnd;
 
+  enterTime = ::GetTickCount();
+
+#ifndef ALTAIRSYNC
   Message::BlockRender(true);
+#endif
 
   SetVisible(true);
   SetToForeground();
@@ -1490,14 +1570,20 @@ int WndForm::ShowModal(void){
 
   FocusNext(NULL);
 
-  while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)){
+  bool hastimed = false;
+
+  while ((mModalResult == 0) && GetMessage(&msg, NULL, 0, 0)) {
 
 //hack!
     
     // JMW update display timeout so we don't get blanking
+    /*
     if (msg.message == WM_KEYDOWN) {
-      Debounce();
+      if (!Debounce()) {
+	continue;
+      }
     }
+    */
 
     if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_ESCAPE))
       mModalResult = mrCancle;
@@ -1512,7 +1598,23 @@ int WndForm::ShowModal(void){
     
     if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
 
+      if (msg.message == WM_KEYUP){
+	/*
+	if (KeyTimer(false,msg.wParam & 0xffff)) {
+	  // activate tool tips
+	  1;
+	} else {
+	  // behave as if it was a key down event
+	  if (mOnKeyDownNotify != NULL)
+	    if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
+	      continue;
+	}
+	*/
+      }
+
       if (msg.message == WM_KEYDOWN){
+	//	KeyTimer(true,msg.wParam & 0xffff);
+
 /*
         if (ActiveControl != NULL){
           switch(msg.wParam & 0xffff){
@@ -1527,6 +1629,7 @@ int WndForm::ShowModal(void){
           }
         }
 */
+
         if (mOnKeyDownNotify != NULL)
           if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
             continue;
@@ -1543,7 +1646,6 @@ int WndForm::ShowModal(void){
             continue;
 
       }
-
 
       TranslateMessage(&msg);
       if (DispatchMessage(&msg)){
@@ -1565,14 +1667,28 @@ int WndForm::ShowModal(void){
       }
 
     }
+
+
+    // hack to stop exiting immediately
+    // TODO: maybe this should block all key handlers
+    // to avoid accidental key presses
+    if (!hastimed) {
+      if (::GetTickCount()-enterTime<1000) {
+	mModalResult = 0;
+      } else {
+	hastimed = true;
+      }
+    }
   }
 
   SetFocus(oldFocusHwnd);
 
+#ifndef ALTAIRSYNC
   // JMW added to make sure screen is redrawn
   MapWindow::RequestFastRefresh= true;
 
   Message::BlockRender(false);
+#endif
 
   return(mModalResult);
 
@@ -2357,8 +2473,9 @@ void WndFrame::Paint(HDC hDC){
 
   if (!GetVisible()) return;
 
-  if (mIsListItem && GetOwner()!=NULL)
+  if (mIsListItem && GetOwner()!=NULL) {
     ((WndListFrame*)GetOwner())->PrepareItemDraw();
+  }
 
   WindowControl::Paint(hDC);
 
@@ -2615,7 +2732,51 @@ void WndListFrame::ResetList(void){
 }
 
 int WndListFrame::PrepareItemDraw(void){
-  mOnListCallback(this, &mListInfo);
+  if (mOnListCallback)
+    mOnListCallback(this, &mListInfo);
   return(1);
 }
 
+#ifndef ALTAIRSYNC
+#include "InputEvents.h"
+
+void WndEventButton_OnClickNotify(WindowControl *Sender) {
+  WndEventButton *wb = (WndEventButton*)Sender;
+  wb->CallEvent();
+}
+
+void WndEventButton::CallEvent() {
+  if (inputEvent) {
+    inputEvent(parameters);
+  }
+}
+
+WndEventButton::~WndEventButton() {
+  if (parameters) {
+    free(parameters);
+    parameters=NULL;
+  }
+}
+
+
+WndEventButton::WndEventButton(WindowControl *Parent, TCHAR *Name, 
+			       TCHAR *Caption, 
+			       int X, int Y, int Width, int Height, 
+			       TCHAR* ename,
+			       TCHAR* theparameters):
+  WndButton(Parent,Name,Caption,X,Y,Width,Height,
+	    WndEventButton_OnClickNotify)
+{
+  inputEvent = InputEvents::findEvent(ename);
+  if (theparameters) {
+    parameters = _tcsdup(theparameters);
+  } else {
+    parameters = NULL;
+  }
+
+}
+
+
+// 
+// 
+#endif

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmFileSelect" Type="Dialog" X=0 Y=0 Width=320 Height=240 Caption="File browser" Font=2  BackColor=0xDADBAB>
+
+  <WndButton Name="cmdClose" Caption="Close" X=2 Y=0 Width=56  Height=28 Font=2 Tag=3 OnClickNotify="OnFileCloseClicked"/>
+
+  <WndProperty Name="prpFltType"      Caption="File type"      X=60 Y=0  Width=190 Height=28 CaptionWidth=70 Font=2 >
+  <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndButton Name="cmdRefresh" Caption="Refresh" X=252 Y=0 Width=66  Height=28 Font=2 Tag=1 OnClickNotify="OnRefreshClicked"/>
+
+  <WndProperty Name="prpStorageFree" Caption="Free" X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 ReadOnly=1>
+    <DataField name="" DataType="double" DisplayFormat="%.0f kb" EditFormat="%.0f" ReadOnly=1/>
+  </WndProperty>
+
+  <WndListFrame Name=frmFileList X=102 Y=38 Width=215 Height=192 Font=2 OnListInfo="OnFileListInfo">
+    <WndOwnerDrawFrame Name=frmFileListEntry X=2 Y=2 Width=211 Height=18 Font=2  OnPaint="OnPaintListItem"/>
+  </WndListFrame>
+
+
+</WndForm>    
+
+</PMML>

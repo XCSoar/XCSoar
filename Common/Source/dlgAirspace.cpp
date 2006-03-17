@@ -236,7 +236,8 @@ void dlgAirspaceShowModal(bool coloredit){
   ItemIndex = -1;
 
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgAirspace.xml", 
-		      hWndMainWindow);
+		      hWndMainWindow,
+		      TEXT("IDR_XML_AIRSPACE"));
 
   if (!wf) return;
 

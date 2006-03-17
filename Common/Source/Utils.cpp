@@ -41,6 +41,7 @@ Copyright_License {
 #include "Topology.h"
 #include "Terrain.h"
 #include "Units.h"
+#include "Calculations.h"
 
 TCHAR szRegistryKey[] =                TEXT("Software\\MPSR\\XCSoar");
 TCHAR *szRegistryDisplayType[] =     { TEXT("Info0"),
@@ -1978,6 +1979,8 @@ void SaveWindToRegistry() {
   SetToRegistry(szRegistryWindSpeed,Temp);
   Temp = iround(CALCULATED_INFO.WindBearing);
   SetToRegistry(szRegistryWindBearing,Temp);
+  SetWindEstimate(CALCULATED_INFO.WindSpeed, CALCULATED_INFO.WindBearing);
+
 }
 
 
@@ -2518,42 +2521,56 @@ void SaveRegistryToFile(TCHAR *szFile)
 }
 
 TCHAR* StringMallocParse(TCHAR* old_string) {
-	TCHAR buffer[2048];	// Note - max size of any string we cope with here !
-	TCHAR* new_string;
-	unsigned int used = 0;
-	unsigned int i;
-	for (i = 0; i < wcslen(old_string); i++) {
-		if (used < 2045) {
-			if (old_string[i] == '\\' ) {
-				if (old_string[i + 1] == 'r') {
-					// Do nothing
-					i++;
-				} else if (old_string[i + 1] == 'n') { 
-					buffer[used++] = '\r';
-					buffer[used++] = '\n';
-					i++;
-				} else if (old_string[i + 1] == '\\') {
-					buffer[used++] = '\\';
-					i++;
-				} else {
-					buffer[used++] = old_string[i];
-				}
-			} else {
-				buffer[used++] = old_string[i];
-			}
-		}
-	};
-	buffer[used++] = NULL;
-
-	new_string = (TCHAR *)malloc((wcslen(buffer)+1)*sizeof(TCHAR));
-	wcscpy(new_string, buffer);
-
-	return new_string;
+  TCHAR buffer[2048];	// Note - max size of any string we cope with here !
+  TCHAR* new_string;
+  unsigned int used = 0;
+  unsigned int i;
+  for (i = 0; i < wcslen(old_string); i++) {
+    if (used < 2045) {
+      if (old_string[i] == '\\' ) {
+	if (old_string[i + 1] == 'r') {
+	  // Do nothing
+	  i++;
+	} else if (old_string[i + 1] == 'n') { 
+	  buffer[used++] = '\r';
+	  buffer[used++] = '\n';
+	  i++;
+	} else if (old_string[i + 1] == '\\') {
+	  buffer[used++] = '\\';
+	  i++;
+	} else {
+	  buffer[used++] = old_string[i];
+	}
+      } else {
+	buffer[used++] = old_string[i];
+      }
+    }
+  };
+  buffer[used++] = NULL;
+  
+  new_string = (TCHAR *)malloc((wcslen(buffer)+1)*sizeof(TCHAR));
+  wcscpy(new_string, buffer);
+  
+  return new_string;
 }
 
 // Get local My Documents path - optionally include file to add and location
-//	(Warning - static buffer returned, use immediately - not thread safe !!!)
+//	(Warning - static buffer returned, use immediately 
+//       - not thread safe !!!)
 TCHAR* LocalPath(TCHAR* file, int loc) {
+/*
+
+loc = CSIDL_PROGRAMS
+
+File system directory that contains the user's program groups (which
+are also file system directories).
+
+CSIDL_PERSONAL File system directory that serves as a common
+repository for documents.
+
+CSIDL_PROGRAM_FILES 0x0026 The program files folder.
+
+*/
 	static TCHAR buffer[MAX_PATH];
 	SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
 	wcsncat(buffer, TEXT("\\"), MAX_PATH);    
@@ -2794,3 +2811,27 @@ bool CheckRectOverlap(RECT rc1, RECT rc2) {
   return(true);
 }
 
+
+/*
+
+ MEMORYSTATUS    memInfo;
+ STORE_INFORMATION  si;
+ TCHAR        szBuf[MAX_PATH];
+
+ // Program memory
+ memInfo.dwLength = sizeof(memInfo);
+ GlobalMemoryStatus(&memInfo);
+
+ wsprintf(szBuf, __TEXT("Total RAM: %d bytes\n Free: %d \nUsed: %d"), memInfo.dwTotalPhys, memInfo.dwAvailPhys, memInfo.dwTotalPhys — memInfo.dwAvailPhys);
+ MessageBox(hwnd, szBuf, __TEXT("Program Memory"), MB_OK);
+
+ // Storage memory
+ GetStoreInformation(&si);
+  
+ // dwStoreSize isn't exact due to compression. 
+ wsprintf(szBuf, __TEXT("Free: %d"), si.dwFreeSize);
+ MessageBox(hwnd, szBuf, __TEXT("Storage Memory"), MB_OK);
+
+
+
+*/

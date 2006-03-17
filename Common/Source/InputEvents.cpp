@@ -110,9 +110,9 @@ int N2Event[MAX_MODE][NE_COUNT];
 
 // Events - What do you want to DO
 typedef struct {
-  pt2Event event;		// Which function to call (can be any, but should be here)
-  TCHAR *misc;			// Parameters
-  int next;				// Next in event list - eg: Macros
+  pt2Event event; // Which function to call (can be any, but should be here)
+  TCHAR *misc;    // Parameters
+  int next;       // Next in event list - eg: Macros
 } EventSTRUCT;
 EventSTRUCT Events[MAX_EVENTS];	
 int Events_count;				// How many have we defined
@@ -343,7 +343,7 @@ void InputEvents::readFile() {
           _tcscpy(d_event, value);
         } else {
         #endif
-				ef = _stscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event, d_misc);
+	  ef = _stscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event, d_misc);
         #if defined(__BORLANDC__	)
         }
         #endif
@@ -690,7 +690,9 @@ bool InputEvents::processNmea(int ne_id) {
   Take virtual inputs from a Glide Computer to do special events
 */
 bool InputEvents::processGlideComputer(int gce_id) {
-int event_id = 0;
+  int event_id = 0;
+
+  // TODO: Log to IGC file
 
   // Valid input ?
   if ((gce_id < 0) || (gce_id >= GCE_COUNT))
@@ -718,17 +720,26 @@ extern int MenuTimeOut;
 
 // EXECUTE an Event - lookup event handler and call back - no return
 void InputEvents::processGo(int eventid) {
+
+  // 
+  // JMW TODO: event/macro recorder
+  /*
+  if (LoggerActive) {
+    LoggerNoteEvent(Events[eventid].);
+  }
+  */
+
   // evnentid 0 is special for "noop" - otherwise check event
   // exists (pointer to function)
-	if (eventid) {
-	  if (Events[eventid].event) {
-	    Events[eventid].event(Events[eventid].misc);
-	    MenuTimeOut = 0;
-	  }
-	  if (Events[eventid].next > 0)
-	    InputEvents::processGo(Events[eventid].next);
-	}
-	return;
+  if (eventid) {
+    if (Events[eventid].event) {
+      Events[eventid].event(Events[eventid].misc);
+      MenuTimeOut = 0;
+    }
+    if (Events[eventid].next > 0)
+      InputEvents::processGo(Events[eventid].next);
+  }
+  return;
 }
 
 // -----------------------------------------------------------------------
@@ -934,16 +945,16 @@ void InputEvents::eventTerrainTopology(TCHAR *misc) {
 	  MapWindow::Event_TerrainTopology(-3);
 
   else if (_tcscmp(misc, TEXT("terrain on")) == 0) 
-	  MapWindow::Event_TerrainTopology(1);
+	  MapWindow::Event_TerrainTopology(3);
 
   else if (_tcscmp(misc, TEXT("terrain off")) == 0) 
-	  MapWindow::Event_TerrainTopology(1);
+	  MapWindow::Event_TerrainTopology(4);
 
   else if (_tcscmp(misc, TEXT("topology on")) == 0) 
 	  MapWindow::Event_TerrainTopology(1);
 
   else if (_tcscmp(misc, TEXT("topology off")) == 0) 
-	  MapWindow::Event_TerrainTopology(1);
+	  MapWindow::Event_TerrainTopology(2);
 
   else if (_tcscmp(misc, TEXT("show")) == 0) 
 	  MapWindow::Event_TerrainTopology(0);
@@ -1175,7 +1186,7 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
 //    The argument is the text to be displayed.
 //    No punctuation characters are allowed.
 void InputEvents::eventStatusMessage(TCHAR *misc) {
-	DoStatusMessage(misc);
+  DoStatusMessage(misc);
 }
 
 // Plays a sound from the filename
@@ -1693,6 +1704,7 @@ void dlgBasicSettingsShowModal(void);
 void dlgWindSettingsShowModal(void);
 void dlgTaskOverviewShowModal(void);
 void dlgAirspaceShowModal(bool);
+void dlgLoggerReplayShowModal(void);
 #endif
 
 // Setup
@@ -1701,7 +1713,7 @@ void dlgAirspaceShowModal(bool);
 //  Wind: Wind settings
 //  Task: Task editor
 //  Airspace: Airspace filter settings
-// 
+//  Replay: IGC replay dialog
 void InputEvents::eventSetup(TCHAR *misc) {
 
   if (_tcscmp(misc,TEXT("Basic"))==0){
@@ -1735,7 +1747,13 @@ void InputEvents::eventSetup(TCHAR *misc) {
     0;
 #endif;
   }
-
+  if (_tcscmp(misc,TEXT("Replay"))==0){
+#if NEWINFOBOX > 0
+    dlgLoggerReplayShowModal();
+#else
+    0;
+#endif;
+  }
 }
 
 
@@ -1860,11 +1878,23 @@ void InputEvents::eventRun(TCHAR *misc) {
   ::WaitForSingleObject(pi.hProcess, INFINITE);
 }
 
+#if (NEWINFOBOX>0)
+void dlgBrightnessShowModal(void);
+#endif  
+
+
+void InputEvents::eventBrightness(TCHAR *misc) {
+#if (NEWINFOBOX>0)
+  dlgBrightnessShowModal();
+#endif  
+}
 
 // JMW TODO: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.
 // this allows the buttons to indicate whether things are enabled/disabled
 // SDP TODO: maybe instead do conditional processing ?
+//     I like this idea; if one returns false, then don't execute the
+//     remaining events.
 
 // JMW TODO: make sure when we change things here we also set registry values...
 // or maybe have special tag "save" which indicates it should be saved (notice that
@@ -1883,12 +1913,6 @@ void InputEvents::eventRun(TCHAR *misc) {
 
    eventMainMenu
    eventMenu
-   eventBugs - up down max min show // JMW new done
-   eventBallast up down max min show // JMW new done
-   eventLogger - start/stop/toggle/addnote // JMW new done
-   eventClearAirspaceWarnings - // JMW new done
-   eventClearStatusMessages - // JMW new done
-
 
    eventPanWaypoint		                - Set pan to a waypoint
 						- Waypoint could be "next", "first", "last", "previous", or named

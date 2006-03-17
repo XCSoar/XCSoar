@@ -78,7 +78,10 @@ void dlgStatusShowModal(void){
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-  wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusAircraft.xml", hWndMainWindow);
+  wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusAircraft.xml", 
+		      hWndMainWindow,
+		      TEXT("IDR_XML_STATUSAIRCRAFT"));
+
   if (!wf) return;
 
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
@@ -106,6 +109,12 @@ void dlgStatusShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpSunset"));
   _stprintf(Temp, TEXT("%02d:%02d"), sunsethours,sunsetmins);
   wp->SetText(Temp);
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLocalTime"));
+  if (wp) {
+    Units::TimeToText(Temp, (int)DetectCurrentTime());
+    wp->SetText(Temp);
+  }
 
   iwaypoint = FindNearestWayPoint(GPS_INFO.Longitude,
                                   GPS_INFO.Latitude,
@@ -142,7 +151,6 @@ void dlgStatusShowModal(void){
     wp->SetText(TEXT("-"));
   }
 
-  // TODO time of flight
   wp = (WndProperty*)wf->FindByName(TEXT("prpFlightTime"));
   if (wp) {
     Units::TimeToText(Temp, (int)DetectStartTime());

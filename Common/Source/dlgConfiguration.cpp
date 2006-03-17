@@ -319,7 +319,8 @@ void dlgConfigurationShowModal(void){
 
   wf = dlgLoadFromXML(CallBackTable, 
 		      "\\NOR Flash\\dlgConfiguration.xml", 
-		      hWndMainWindow);
+		      hWndMainWindow,
+		      TEXT("IDR_XML_CONFIGURATION"));
 
   if (!wf) return;
   

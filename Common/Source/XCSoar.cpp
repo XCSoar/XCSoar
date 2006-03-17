@@ -307,6 +307,7 @@ int HomeWaypoint = -1;
 // Airspace Database
 AIRSPACE_AREA *AirspaceArea = NULL;
 AIRSPACE_POINT *AirspacePoint = NULL;
+POINT *AirspaceScreenPoint = NULL;
 AIRSPACE_CIRCLE *AirspaceCircle = NULL;
 unsigned int NumberOfAirspacePoints = 0;
 unsigned int NumberOfAirspaceAreas = 0;
@@ -397,6 +398,7 @@ BOOL InfoBoxesHidden = false;
 void PopupBugsBallast(int updown);
 
 #include "GaugeCDI.h"
+#include "GaugeFLARM.h"
 #include "GaugeVario.h"
 
 // Battery status for SIMULATOR mode
@@ -956,6 +958,29 @@ void FocusOnWindow(int i, bool selected) {
 
 }
 
+extern void debugUpdateStats(bool);
+
+void TriggerRedraws(NMEA_INFO *nmea_info,
+		    DERIVED_INFO *derived_info,
+		    bool newdata) {
+  if (!ScreenBlanked) {
+    if (newdata) {
+      MapWindow::UpdateInfo(nmea_info, derived_info);
+    }
+    if (MapWindow::RequestMapDirty) {
+      MapWindow::MapDirty = true;
+      MapWindow::RequestMapDirty = false;
+    }
+    if (MapWindow::RequestAirDataDirty) {
+      //      MapWindow::AirDataDirty = true;
+      if (EnableVarioGauge) {
+	GaugeVario::Render();
+      }
+      MapWindow::RequestAirDataDirty = false;
+    }
+  }
+}
+
 
 DWORD CalculationThread (LPVOID lpvoid) {
   bool theinfoboxesaredirty;
@@ -972,9 +997,14 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
       // make local copy before editing...
       LockFlightData();
+      if (NMEAParser::GpsUpdated) { // timeout on FLARM objects
+	FLARM_RefreshSlots(&GPS_INFO);
+      }
       memcpy(&tmp_GPS_INFO,&GPS_INFO,sizeof(NMEA_INFO));
       memcpy(&tmp_CALCULATED_INFO,&CALCULATED_INFO,sizeof(DERIVED_INFO));
       UnlockFlightData();
+
+      debugUpdateStats(true);
 
       // Do vario first to reduce audio latency
       if (GPS_INFO.VarioAvailable && NMEAParser::VarioUpdated) {
@@ -997,7 +1027,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
         if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO))
           {
             theinfoboxesaredirty = true;
-            MapWindow::RequestMapDirty = true;
+	    MapWindow::RequestMapDirty = true;
 	    MapWindow::RequestAirDataDirty = true;
           }
       }
@@ -1010,9 +1040,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
         }
       }
 
-      if (theinfoboxesaredirty) {
-        InfoBoxesDirty = true;
-      }
+      TriggerRedraws(&tmp_GPS_INFO, &tmp_CALCULATED_INFO, true);
 
       // values changed, so copy them back now: ONLY CALCULATED INFO
       // should be changed in DoCalculations, so we only need to write
@@ -1022,7 +1050,11 @@ DWORD CalculationThread (LPVOID lpvoid) {
       UnlockFlightData();
 
     } else {
-      Sleep(100); // sleep a while
+      TriggerRedraws(&tmp_GPS_INFO, &tmp_CALCULATED_INFO, false);
+      Sleep(50); // sleep a while
+    }
+    if (theinfoboxesaredirty) {
+      InfoBoxesDirty = true;
     }
   }
   return 0;
@@ -1055,14 +1087,15 @@ void PreloadInitialisation(bool ask) {
   if (ask) {
     RestoreRegistry();
     ReadRegistrySettings();
-#if (WINDOWSPC<2) 
+    StatusFileInit();
+  } else {
+    //#if (WINDOWSPC<1) 
 #if (NEWINFOBOX>0)
     dlgStartupShowModal();
     RestoreRegistry();
     ReadRegistrySettings();
 #endif
-#endif
-    StatusFileInit();
+    //#endif
   }
 
   // Interface (before interface)
@@ -1147,6 +1180,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #ifdef _SIM_
   SYSTEMTIME pda_time;
   GetSystemTime(&pda_time);
+
   GPS_INFO.Time  = pda_time.wHour*3600+pda_time.wMinute*60+pda_time.wSecond;
   GPS_INFO.Year  = pda_time.wYear;
   GPS_INFO.Month = pda_time.wMonth;
@@ -1157,9 +1191,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   #if _SIM_STARTUPALTITUDE
   GPS_INFO.Altitude = _SIM_STARTUPALTITUDE;
   #endif
-#if (WINDOWSPC>0)
-  CuSonde::test();
-#endif
 #endif
 
 #ifdef DEBUG
@@ -1569,8 +1600,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   Units::LoadUnitBitmap(hInstance);
   InfoBoxLayout::CreateInfoBoxes(rc);
+
+  GaugeFLARM::Create();
+
   ButtonLabel::CreateButtonLabels(rc);
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
+
 
   ////////////////// do fonts
   InitialiseFonts(rc);
@@ -1613,7 +1648,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	       SWP_SHOWWINDOW);
 
   GaugeCDI::Create();
-
   GaugeVario::Create();
 
   if (EnableVarioGauge) {
@@ -1632,7 +1666,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 #if NEWINFOBOX>0
   // NOP not needed
 #else
-  for(i=0;i<numInfoWindows;i++)
+  for(int i=0;i<numInfoWindows;i++)
     {
       UpdateWindow(hWndInfoWindow[i]);
       UpdateWindow(hWndTitleWindow[i]);
@@ -1789,6 +1823,7 @@ void Shutdown(void) {
 
   GaugeCDI::Destroy();
   GaugeVario::Destroy();
+  GaugeFLARM::Destroy();
   
   Message::Destroy();
   
@@ -1827,6 +1862,7 @@ void Shutdown(void) {
   
   if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
   if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
+  if(AirspaceScreenPoint != NULL)  LocalFree((HLOCAL)AirspaceScreenPoint);
   if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
   
   CloseWayPoints();
@@ -1898,7 +1934,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       memset (&s_sai, 0, sizeof (s_sai));
       s_sai.cbSize = sizeof (s_sai);
 
-      iTimerID = SetTimer(hWnd,1000,250,NULL);
+      iTimerID = SetTimer(hWnd,1000,200,NULL);
 
       hWndCB = CreateRpCommandBar(hWnd);
 
@@ -1963,7 +1999,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
     case WM_TIMER:
       if (ProgramStarted) {
-	FrameRate = (double)FrameCount/4;
+	FrameRate = (double)FrameCount/5;
 #ifdef _SIM_
 	SIMProcessTimer();
 #else
@@ -2520,21 +2556,12 @@ void DisplayText(void)
     
 #else
     Data_Options[DisplayType[i]].Formatter->Render(hWndInfoWindow[i]);
-#endif
 
-    /*
-    if ((DisplayType[i] != DisplayTypeLast[i])// this is always false!
-	|| (first)) {
       // JMW only update captions if text has really changed.
       // this avoids unnecesary gettext lookups
       _stprintf(Caption[i],gettext(Data_Options[DisplayType[i]].Title) );
-#if NEWINFOBOX>0
-      InfoBoxes[i]->SetTitle(Caption[i]);
-#else
       SetWindowText(hWndTitleWindow[i],Caption[i]);
 #endif
-    }
-    */
 
     DisplayTypeLast[i] = DisplayType[i];
     
@@ -2593,7 +2620,6 @@ void CommonProcessTimer()
     // No need to redraw map or infoboxes if screen is blanked.
     // This should save lots of battery power due to CPU usage
     // of drawing the screen
-
     if (InfoBoxesDirty) {
       //JMWTEST    LockFlightData();
       AssignValues();
@@ -2601,18 +2627,6 @@ void CommonProcessTimer()
       InfoBoxesDirty = false;
       //JMWTEST    UnlockFlightData();
     }
-    if (MapWindow::RequestMapDirty) {
-      MapWindow::MapDirty = true;
-      MapWindow::RequestMapDirty = false;
-    }
-    if (MapWindow::RequestAirDataDirty) {
-      //      MapWindow::AirDataDirty = true;
-      if (EnableVarioGauge) {
-        GaugeVario::Render();
-      }
-      MapWindow::RequestAirDataDirty = false;
-    }
-
   }
 
 #if (EXPERIMENTAL > 0)
@@ -2628,192 +2642,210 @@ void CommonProcessTimer()
 
 void ProcessTimer(void)
 {
+#ifndef _SIM_
+
   CommonProcessTimer();
 
   // processing moved to its own thread
 
-#ifndef _SIM_
+  // now check GPS status
 
-    // now check GPS status
+  static int itimeout = -1;
+  itimeout++;
+  
+  if (itimeout % 5 == 0) {
+    // write settings to vario every second
+    VarioWriteSettings();
+    
+    // also service replay logger
+    ReplayLogger::Update();
+  }
 
-    static int itimeout = 0;
-    itimeout++;
+  if (ReplayLogger::IsEnabled()) {
+    GPSCONNECT = TRUE;
+    extGPSCONNECT = TRUE;
+    GPS_INFO.NAVWarning = FALSE;
+    GPS_INFO.SatellitesUsed = 6;
+    NMEAParser::GpsUpdated = TRUE;
+    return;
+  }
+  
+  if (itimeout % 25 != 0) {
+    // timeout if no new data in 5 seconds
+    return;
+  }
+  
+  LockComm();
+  NMEAParser::UpdateMonitor();
+  UnlockComm();
+  
+  static BOOL LastGPSCONNECT = FALSE;
+  static BOOL CONNECTWAIT = FALSE;
+  static BOOL LOCKWAIT = FALSE;
+  
+  //
+  // replace bool with BOOL to correct warnings and match variable
+  // declarations RB
+  //
+  BOOL gpsconnect = GPSCONNECT;
+  
+  if (GPSCONNECT) {
+    extGPSCONNECT = TRUE;
+  }
 
-    if (itimeout % 4 == 0) {
-      // write settings to vario every second
-      VarioWriteSettings();
-    }
+  GPSCONNECT = FALSE;
+  BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
+  
+  if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
+    {
+      
+      MapWindow::RequestFastRefresh = true;
+      
+      devLinkTimeout(devA());
+      devLinkTimeout(devB());
 
-    if (itimeout % 20 != 0) {
-      // timeout if no new data in 5 seconds
-      return;
-    }
+      if(LOCKWAIT == TRUE)
+	{
+	  // gps was waiting for fix, now waiting for connection
+	  MapWindow::RequestMapDirty = true;
+	  //            SwitchToMapWindow();
+	  //            FullScreen();
+	  LOCKWAIT = FALSE;
+	}
+      if(!CONNECTWAIT)
+	{
+	  // gps is waiting for connection first time
+	  
+	  MapWindow::RequestMapDirty = true;
+	  extGPSCONNECT = FALSE;
+	  
+	  InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
 
-    LockComm();
-    NMEAParser::UpdateMonitor();
-    UnlockComm();
-
-    static BOOL LastGPSCONNECT = FALSE;
-    static BOOL CONNECTWAIT = FALSE;
-    static BOOL LOCKWAIT = FALSE;
-
-    //
-    // replace bool with BOOL to correct warnings and match variable declarations RB
-    //
-    BOOL gpsconnect = GPSCONNECT;
-
-    if (GPSCONNECT) {
-      extGPSCONNECT = TRUE;
-    }
-
-    GPSCONNECT = FALSE;
-    BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
-
-    if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
-      {
-
-	MapWindow::RequestFastRefresh = true;
-
-        devLinkTimeout(devA());
-        devLinkTimeout(devB());
-
-        if(LOCKWAIT == TRUE)
-          {
-            // gps was waiting for fix, now waiting for connection
-            MapWindow::RequestMapDirty = true;
-	    //            SwitchToMapWindow();
-	    //            FullScreen();
-            LOCKWAIT = FALSE;
-          }
-        if(!CONNECTWAIT)
-          {
-            // gps is waiting for connection first time
-
-            MapWindow::RequestMapDirty = true;
-            extGPSCONNECT = FALSE;
-
-	    InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
-
- //            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
-
+	  //            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
+	  
             CONNECTWAIT = TRUE;
 #ifndef DISABLEAUDIO
             MessageBeep(MB_ICONEXCLAMATION);
 #endif
             FullScreen();
+	    
+	} else {
+	
+	if (itimeout % 120 == 0) {
+	  // we've been waiting for connection a long time
+	  
+	  // no activity for 30 seconds, so assume PDA has been
+	  // switched off and on again
+	  //
+	  MapWindow::RequestMapDirty = true;
 
-          } else {
-
-          if (itimeout % 120 == 0) {
-            // we've been waiting for connection a long time
-
-            // no activity for 30 seconds, so assume PDA has been
-            // switched off and on again
-            //
-            MapWindow::RequestMapDirty = true;
-
-            extGPSCONNECT = FALSE;
-
-	    InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
-
+	  extGPSCONNECT = FALSE;
+	  
+	  InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
+	  
 #ifndef GNAV
-            RestartCommPorts();
+	  RestartCommPorts();
 #endif
-
+	  
 #if (EXPERIMENTAL > 0)
-            // if comm port shut down, probably so did bluetooth dialup
-            // so restart it here also.
-            bsms.Shutdown();
-            bsms.Initialise();
+	  // if comm port shut down, probably so did bluetooth dialup
+	  // so restart it here also.
+	  bsms.Shutdown();
+	  bsms.Initialise();
 #endif
-
-            itimeout = 0;
-          }
-        }
+	  
+	  itimeout = 0;
+	}
       }
-
-    if((gpsconnect == TRUE) && (LastGPSCONNECT == FALSE))
-      {
-        itimeout = 0; // reset timeout
-
-        if(CONNECTWAIT)
-          {
-            MapWindow::RequestMapDirty = true;
+    }
+  
+  if((gpsconnect == TRUE) && (LastGPSCONNECT == FALSE))
+    {
+      itimeout = 0; // reset timeout
+      
+      if(CONNECTWAIT)
+	{
+	  MapWindow::RequestMapDirty = true;
 
 	    //            SwitchToMapWindow();
 	    //            FullScreen();
-            CONNECTWAIT = FALSE;
-          }
-      }
-
-    if((gpsconnect == TRUE) && (LastGPSCONNECT == TRUE))
-      {
-        if((navwarning == TRUE) && (LOCKWAIT == FALSE))
-          {
-	    InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
-
-            MapWindow::RequestMapDirty = true;
-
-            LOCKWAIT = TRUE;
+	  CONNECTWAIT = FALSE;
+	}
+    }
+  
+  if((gpsconnect == TRUE) && (LastGPSCONNECT == TRUE))
+    {
+      if((navwarning == TRUE) && (LOCKWAIT == FALSE))
+	{
+	  InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
+	  
+	  MapWindow::RequestMapDirty = true;
+	  
+	  LOCKWAIT = TRUE;
 #ifndef DISABLEAUDIO
-            MessageBeep(MB_ICONEXCLAMATION);
+	  MessageBeep(MB_ICONEXCLAMATION);
 #endif
-            FullScreen();
-
-          }
-        else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
-          {
-            MapWindow::RequestMapDirty = true;
-	    //            SwitchToMapWindow();
-	    //            FullScreen();
-            LOCKWAIT = FALSE;
-          }
-      }
-
-    LastGPSCONNECT = gpsconnect;
-
+	  FullScreen();
+	  
+	}
+      else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
+	{
+	  MapWindow::RequestMapDirty = true;
+	  //            SwitchToMapWindow();
+	  //            FullScreen();
+	  LOCKWAIT = FALSE;
+	}
+    }
+  
+  LastGPSCONNECT = gpsconnect;
+  
 #endif // end processing of non-simulation mode
-
+  
 }
 
 
 void SIMProcessTimer(void)
 {
+#ifdef _SIM_
+
   CommonProcessTimer();
 
   static int ktimer=0;
   ktimer++;
-  if (ktimer % 4 != 0) {
-    return; // only update every 4 clicks
+  if (ktimer % 5 != 0) {
+    return; // only update every 5 clicks
   }
-
-  LockFlightData();
 
   GPSCONNECT = TRUE;
   extGPSCONNECT = TRUE;
 
-  GPS_INFO.NAVWarning = FALSE;
-  GPS_INFO.SatellitesUsed = 6;
+  if (!ReplayLogger::Update()) {
 
-  GPS_INFO.Latitude = 
-    FindLatitude(GPS_INFO.Latitude, GPS_INFO.Longitude, 
-		 GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
-  GPS_INFO.Longitude = 
-    FindLongitude(GPS_INFO.Latitude, GPS_INFO.Longitude, 
-		  GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
-  GPS_INFO.Time+= 1.0;
+    LockFlightData();
 
-#ifdef _SIM_
-  //  void testflarm(NMEA_INFO *theinfo);
-  //  testflarm(&GPS_INFO);
+    GPS_INFO.NAVWarning = FALSE;
+    GPS_INFO.SatellitesUsed = 6;
+    GPS_INFO.Latitude = 
+      FindLatitude(GPS_INFO.Latitude, GPS_INFO.Longitude, 
+		   GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
+    GPS_INFO.Longitude = 
+      FindLongitude(GPS_INFO.Latitude, GPS_INFO.Longitude, 
+		    GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
+    GPS_INFO.Time+= 1.0;
+
+    UnlockFlightData();
+  }
+
+#ifdef DEBUG
+#if 0
+  NMEAParser::TestRoutine(&GPS_INFO);
+#endif
 #endif
 
   NMEAParser::GpsUpdated = TRUE;
 
-  UnlockFlightData();
-
   VarioWriteSettings();
-
+#endif
 }
 
 
@@ -2931,6 +2963,7 @@ void PopUpSelect(int Index)
 
 void DebugStore(char *Str)
 {
+#ifdef DEBUG
   FILE *stream;
   static TCHAR szFileName[] = TEXT("\\TEMP.TXT");
 
@@ -2939,9 +2972,8 @@ void DebugStore(char *Str)
   fwrite(Str,strlen(Str),1,stream);
 
   fclose(stream);
+#endif
 }
-
-
 
 
 void LockNavBox() {

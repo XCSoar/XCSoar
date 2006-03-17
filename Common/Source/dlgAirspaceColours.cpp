@@ -121,7 +121,8 @@ int dlgAirspaceColoursShowModal(void){
   ItemIndex = -1;
 
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgAirspaceColours.xml", 
-		      hWndMainWindow);
+		      hWndMainWindow,
+		      TEXT("IDR_XML_AIRSPACECOLOURS"));
 
   if (!wf) return -1;
 

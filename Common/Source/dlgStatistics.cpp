@@ -1,4 +1,3 @@
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 #include "XCSoar.h"
@@ -29,6 +28,17 @@ static HPEN penThinSignal = NULL;
 void Statistics::ResetScale() {
   unscaled_y = true;  
   unscaled_x = true;  
+}
+
+
+
+void Statistics::Reset() {
+  ThermalAverage.Reset();
+  Wind_x.Reset();
+  Wind_y.Reset();
+  Altitude.Reset();
+  Altitude_Base.Reset();
+  Altitude_Ceiling.Reset();
 }
 
 
@@ -1116,7 +1126,9 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
 static void OnCalcClicked(WindowControl * Sender, 
 			  WndListFrame::ListInfo_t *ListInfo){
+#if (NEWINFOBOX>0)
   dlgTaskCalculatorShowModal();
+#endif
   Update();
 }
 
@@ -1129,11 +1141,13 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(NULL)
 };
 
+#if (NEWINFOBOX>0)
 
 void dlgAnalysisShowModal(void){
 
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgAnalysis.xml", hWndMainWindow);
+  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgAnalysis.xml", hWndMainWindow,
+		      TEXT("IDR_XML_ANALYSIS"));
   if (!wf) return;
 
   penThinSignal = CreatePen(PS_SOLID, 1 , RGB(50,243,45));
@@ -1160,6 +1174,8 @@ void dlgAnalysisShowModal(void){
   FullScreen();
 
 }
+
+#endif
 
 
 /////////////
@@ -1360,4 +1376,3 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
   return FALSE;
 }
 
-#endif

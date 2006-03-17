@@ -5,6 +5,13 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+
+// max length airspace and waypoint names
+#define NAME_SIZE 50
+
+// max length of waypoint comment names
+#define COMMENT_SIZE 50
+
 #define WAY_POINT_ID_SIZE 20
 
 #define MENU_HEIGHT 26
@@ -92,7 +99,7 @@
 #define NUMFINALGLIDETERRAIN 30
 
 // ratio of border size to trigger shape cache reload
-#define BORDERFACTOR 0.9
+#define BORDERFACTOR 1.4
 
 // maximum number of topologies
 #define MAXTOPOLOGY 20

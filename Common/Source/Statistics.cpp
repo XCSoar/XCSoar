@@ -433,6 +433,24 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
 /////////////////
 
+void Statistics::Reset() {
+  ThermalAverage.Reset();
+  Wind_x.Reset();
+  Wind_y.Reset();
+  Altitude.Reset();
+  Altitude_Base.Reset();
+  Altitude_Ceiling.Reset();
+}
+
+
+void Statistics::Reset() {
+  ThermalAverage.Reset();
+  Wind_x.Reset();
+  Wind_y.Reset();
+  Altitude.Reset();
+  Altitude_Base.Reset();
+  Altitude_Ceiling.Reset();
+}
 
 void Statistics::RenderBarograph(HDC hdc, RECT rc)
 {

@@ -113,9 +113,6 @@ static void OnMacCreadyData(DataField *Sender,
       Sender->Set(MACCREADY*LIFTMODIFY);
     break;
     case DataField::daPut: 
-      MACCREADY = Sender->GetAsFloat()/LIFTMODIFY;
-      RefreshCalculator();
-    break;
     case DataField::daChange:
       MACCREADY = Sender->GetAsFloat()/LIFTMODIFY;
       RefreshCalculator();
@@ -152,7 +149,8 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgTaskCalculatorShowModal(void){
 
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgTaskCalculator.xml", 
-		      hWndMainWindow);
+		      hWndMainWindow,
+		      TEXT("IDR_XML_TASKCALCULATOR"));
 
   if (!wf) return;
 

@@ -31,6 +31,7 @@ Copyright_License {
 
 #include "units.h"
 #include "xcsoar.h"
+#include "dialogs.h"
 
 #define BORDERTOP    (1<<bkTop)
 #define BORDERRIGHT  (1<<bkRight)
@@ -41,14 +42,6 @@ Copyright_License {
 #define VALUESIZE    32
 #define COMMENTSIZE  32
 
-
-typedef enum{
-  bkNone,
-  bkTop,
-  bkRight,
-  bkBottom,
-  bkLeft
-}BorderKind_t;
 
 class InfoBox{
 

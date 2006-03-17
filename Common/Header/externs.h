@@ -59,6 +59,7 @@ extern unsigned int NumberOfWayPoints;
 // airspace data
 extern AIRSPACE_AREA *AirspaceArea;
 extern AIRSPACE_POINT *AirspacePoint;
+extern POINT *AirspaceScreenPoint;
 extern AIRSPACE_CIRCLE *AirspaceCircle;
 extern unsigned int NumberOfAirspacePoints;
 extern unsigned int NumberOfAirspaceAreas;

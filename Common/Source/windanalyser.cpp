@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.19 2006/03/02 12:24:01 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.20 2006/03/17 17:01:56 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -120,6 +120,7 @@ void WindAnalyser::slot_newSample(){
   Vector curVector;
   
   bool fullCircle=false;
+
   //circledetection
   if( lastHeading )
     {
@@ -216,7 +217,7 @@ void WindAnalyser::calcThermalDrift() {
 
   return; // disabled as this causes problems
 
-  if (ThermalTime>120) {
+  if (ThermalTime>300) {
     double ThermalDrift= Distance(climbstartpos.y,
                                   climbstartpos.x,
                                   climbendpos.y,
@@ -230,7 +231,7 @@ void WindAnalyser::calcThermalDrift() {
     v.x = -ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
     v.y = -ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);
     
-    slot_newEstimate(v, 6);
+    slot_newEstimate(v, 3);
 
   }
 }
@@ -400,7 +401,7 @@ void WindAnalyser::_calcWind() {
   _calcWindNew();
 
   return;
-
+  
   int aDiff= iround(angleDiff(minVector, maxVector));
   int quality;
 

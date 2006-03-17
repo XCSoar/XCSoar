@@ -433,6 +433,16 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
+void  SetWindEstimate(double speed, double bearing) {
+  Vector v;
+  v.x = speed*cos(bearing*3.1415926/180.0);
+  v.y = speed*sin(bearing*3.1415926/180.0);
+  if (windanalyser) {
+    windanalyser->slot_newEstimate(v, 6);
+  }
+}
+
+
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
@@ -443,13 +453,8 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     windanalyser = new WindAnalyser(Basic, Calculated);
 
     // seed initial wind store with current conditions
-    /*
-    Vector v;
-    v.x = Calculated->WindSpeed*cos(Calculated->WindBearing*3.1415926/180.0);
-    v.y = Calculated->WindSpeed*sin(Calculated->WindBearing*3.1415926/180.0);
-    
-    windanalyser->slot_newEstimate(v, 6);
-    */
+    SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing);
+
   }
 
   maccready = MACCREADY;
@@ -468,6 +473,12 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if(Basic->Time <= LastTime)
     {
+
+      if (Basic->Time<LastTime) {
+	// Reset statistics.. (probably due to being in IGC replay mode)
+	flightstats.Reset();
+      }
+
       LastTime = Basic->Time; 
       return FALSE;      
     }
@@ -733,6 +744,7 @@ void SwitchZoomClimb(bool isclimb, bool left) {
   
   static double CruiseMapScale = 10;
   static double ClimbMapScale = 0.25;
+  static bool last_isclimb = false;
   // if AutoZoom
 
   // JMW
@@ -743,15 +755,24 @@ void SwitchZoomClimb(bool isclimb, bool left) {
   */
 
   if (CircleZoom) {
-    if (isclimb) {
-      CruiseMapScale = MapWindow::RequestMapScale;
-      MapWindow::RequestMapScale = ClimbMapScale;
-      MapWindow::BigZoom = true;
+    if (isclimb != last_isclimb) {
+      if (isclimb) {
+	// save cruise scale
+	CruiseMapScale = MapWindow::MapScale;
+	// switch to climb scale
+	MapWindow::RequestMapScale = ClimbMapScale;
+	MapWindow::BigZoom = true;
+      } else {
+	// leaving climb
+	// save cruise scale
+	ClimbMapScale = MapWindow::MapScale;
+	MapWindow::RequestMapScale = CruiseMapScale;
+	// switch to climb scale
+	MapWindow::BigZoom = true;
+      }
+      last_isclimb = isclimb;
     } else {
-      // leaving climb
-      ClimbMapScale = MapWindow::RequestMapScale;
-      MapWindow::RequestMapScale = CruiseMapScale;
-      MapWindow::BigZoom = true;
+      // nothing to do.
     }
   }
 
@@ -782,19 +803,13 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     return;
   }
   dT = Basic->Time - LastTime;
-
-  if((LastTrack>270) && (Basic->TrackBearing <90))
-    {
-      Rate = Basic->TrackBearing + (360-LastTrack);
-    }
-  else if ((LastTrack<90) && (Basic->TrackBearing >270))
-    {
-      Rate = LastTrack + (360-Basic->TrackBearing );
-    }
-  else
-    {
-      Rate = (Basic->TrackBearing - LastTrack);
-    }
+  Rate = Basic->TrackBearing-LastTrack;
+  while (Rate>180) {
+    Rate-= 360;
+  }
+  while (Rate<-180) {
+    Rate+= 360;
+  }
   Rate = Rate / dT;
 
   if (dT<2.0) {
@@ -859,6 +874,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LastTime = Basic->Time;
   LastTrack = Basic->TrackBearing;
+
+  double temp = StartTime;
 
   switch(MODE) {
   case CRUISE:

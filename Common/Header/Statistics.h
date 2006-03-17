@@ -25,6 +25,7 @@ class Statistics {
   LeastSquares Altitude;
   LeastSquares Altitude_Base;
   LeastSquares Altitude_Ceiling;
+  void Reset();
 
   static void DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata);
 

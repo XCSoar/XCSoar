@@ -98,7 +98,9 @@ static bool VegaConfigurationUpdated(TCHAR *name, bool first) {
     // (do request here)
     _stprintf(requesttext,TEXT("PDVSC,R,%s"),name);
     VarioWriteNMEA(requesttext);
+#ifndef _SIM_
     Sleep(250);
+#endif
   }
 
   if (!(GetFromRegistry(fullname, (DWORD*)&lvalue)==ERROR_SUCCESS)) {
@@ -151,7 +153,9 @@ static bool VegaConfigurationUpdated(TCHAR *name, bool first) {
 
 	  _stprintf(requesttext,TEXT("PDVSC,S,%s,%d"),name, newval);
 	  VarioWriteNMEA(requesttext);
+#ifndef _SIM_
 	  Sleep(250);
+#endif
 
 	  return true;
 	}
@@ -257,6 +261,8 @@ static void UpdateParameters(bool first) {
   VegaConfigurationUpdated(TEXT("BatLowDelay"), first);
   VegaConfigurationUpdated(TEXT("BatEmptyDelay"), first);
   VegaConfigurationUpdated(TEXT("BatRepeatTime"), first);
+
+  VegaConfigurationUpdated(TEXT("NeedleGaugeType"), first);
 
 }
 
@@ -481,7 +487,8 @@ bool dlgConfigurationVarioShowModal(void){
 
   wf = dlgLoadFromXML(CallBackTable, 
 		      "\\NOR Flash\\dlgVario.xml", 
-		      hWndMainWindow);
+		      hWndMainWindow,
+		      TEXT("IDR_XML_VARIO"));
 
   if (!wf) return false;
   
@@ -641,6 +648,17 @@ bool dlgConfigurationVarioShowModal(void){
   FillAudioEnums(TEXT("CirclingClimbingHi"));
   FillAudioEnums(TEXT("CirclingClimbingLow"));
   FillAudioEnums(TEXT("CirclingDescending"));
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpNeedleGaugeType"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("None"));
+    dfe->addEnumText(TEXT("LX"));
+    dfe->addEnumText(TEXT("Analog"));
+    dfe->Set(0);
+    wp->RefreshDisplay();
+  }
 
   /////////
 

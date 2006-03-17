@@ -63,13 +63,7 @@ extern void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
 #if (NEWINFOBOX<1) 
 #define MessageBoxX MessageBox
 #else
-int
-WINAPI
-MessageBoxX(
-    HWND hWnd ,
-    LPCWSTR lpText,
-    LPCWSTR lpCaption,
-    UINT uType);
+#include "dlgTools.h"
 #endif
 
 #endif
