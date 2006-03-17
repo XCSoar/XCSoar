@@ -33,11 +33,19 @@ Copyright_License {
 #include "stdafx.h"
 #include <limits.h>
 
+//#include "winbase.h" // needed for resource stuff
+
 #include "WindowControls.h"
 #include "dlgTools.h"
 #include "XMLParser.h"
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
+
+#ifdef ALTAIRSYNC
+#define ISCALE 1
+#else
+#define ISCALE InfoBoxLayout::scale
+#endif
 
 extern HWND   hWndMainWindow;
 extern HWND   hWndMapWindow;
@@ -93,15 +101,20 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   GetClientRect(hWnd, &rc);
 
-  Width = 200*InfoBoxLayout::scale;
-  Height = 150*InfoBoxLayout::scale;
+#ifdef ALTAIRSYNC
+  Width = 220*ISCALE;
+  Height = 160*ISCALE;
+#else
+  Width = 200*ISCALE;
+  Height = 150*ISCALE;
+#endif
 
   X = ((rc.right-rc.left) - Width)/2;
   Y = ((rc.bottom-rc.top) - Height)/2;
 
-  y = 100*InfoBoxLayout::scale;
-  w = 60*InfoBoxLayout::scale;
-  h = 32*InfoBoxLayout::scale;
+  y = 100*ISCALE;
+  w = 60*ISCALE;
+  h = 32*ISCALE;
 
   wf = new WndForm(hWnd, TEXT("frmXcSoarMessageDlg"),
 		   (TCHAR*)lpCaption, X, Y, Width, Height);
@@ -112,7 +125,7 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   wText = new WndFrame(wf,
 		       TEXT("frmMessageDlgText"),
 		       0,
-		       5*InfoBoxLayout::scale,
+		       5*ISCALE,
 		       Width,
 		       Height);
   wText->SetCaption((TCHAR*)lpText);
@@ -128,7 +141,7 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   /* TODO, dont work
   dY = wText->GetLastDrawTextHeight() - Height;
   */
-  dY = -40*InfoBoxLayout::scale;
+  dY = -40*ISCALE;
   // wText->SetHeight(wText->GetLastDrawTextHeight()+5);
   wf->SetHeight(wf->GetHeight() + dY);
 
@@ -235,15 +248,15 @@ const TCHAR *StringToStringDflt(const TCHAR *String, TCHAR *Default){
 void GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y, int *Width, int *Height, int *Font, TCHAR *Caption){
 
   *X = StringToIntDflt(Node->getAttribute(TEXT("X")), 0)
-    *InfoBoxLayout::scale;
+    *ISCALE;
   *Y = StringToIntDflt(Node->getAttribute(TEXT("Y")), 0);
   if (*Y>=0) {
-    (*Y) *= InfoBoxLayout::scale;
+    (*Y) *= ISCALE;
   }
   *Width = StringToIntDflt(Node->getAttribute(TEXT("Width")), 50)
-    *InfoBoxLayout::scale;
+    *ISCALE;
   *Height = StringToIntDflt(Node->getAttribute(TEXT("Height")), 50)
-    *InfoBoxLayout::scale;
+    *ISCALE;
   *Font = StringToIntDflt(Node->getAttribute(TEXT("Font")), -1);
   _tcscpy(Name, StringToStringDflt(Node->getAttribute(TEXT("Name")), TEXT("")));
   _tcscpy(Caption, StringToStringDflt(Node->getAttribute(TEXT("Caption")), TEXT("")));
@@ -278,7 +291,115 @@ static HFONT FontMap[5] = {
 
 #include <stdio.h>
 
-WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND Parent){
+
+extern HINSTANCE hInst;
+
+XMLNode xmlLoadFromResource(LPTSTR lpName,
+			    LPCTSTR tag,
+			    XMLResults *pResults) {
+  LPTSTR lpRes;
+  HRSRC hResInfo;
+  HGLOBAL hRes;
+  int l;
+
+  // Find the xml resource.
+  hResInfo = FindResource (hInst, lpName, TEXT("XMLDialog"));
+
+  if (hResInfo == NULL) {
+    // unable to find the resource
+    return XMLNode::emptyXMLNode;
+  }
+
+  // Load the wave resource.
+  hRes = LoadResource (hInst, hResInfo);
+
+  if (hRes == NULL) {
+    // unable to load the resource
+    return XMLNode::emptyXMLNode;
+  }
+
+  // Lock the wave resource and do something with it.
+  lpRes = (LPTSTR)LockResource (hRes);
+
+  if (lpRes) {
+    l = SizeofResource(hInst,hResInfo);
+    if (l>0) {
+      char *buf= (char*)malloc(l+1);
+      if (!buf) {
+	// unable to allocate memory
+	return XMLNode::emptyXMLNode;
+      }
+      strncpy(buf,(char*)lpRes,l);
+      buf[l]=0; // need to explicitly null-terminate.
+
+#if defined(WIN32) || defined(UNDER_CE)
+#ifdef _UNICODE
+#if !defined(UNDER_CE)
+      if (!IsTextUnicode(buf,mmin(l,10000),NULL))
+	{
+#endif
+	  LPTSTR b2=(LPTSTR)malloc(l*2+2);
+	  MultiByteToWideChar(CP_ACP,          // code page
+			      MB_PRECOMPOSED,  // character-type options
+			      buf,             // string to map
+			      l,               // number of bytes in string
+			      b2,              // wide-character buffer
+			      l*2+2);          // size of buffer
+	  free(buf);
+	  buf=(char*)b2;
+#if !defined(UNDER_CE)
+	}
+#endif
+#else
+      if (IsTextUnicode(buf,mmin(l,10000),NULL))
+	{
+	  l>>=1;
+	  LPTSTR b2=(LPTSTR)malloc(l+2);
+	  WideCharToMultiByte(CP_ACP,                      // code page
+			      0,                           // performance and mapping flags
+			      (const WCHAR*)buf,           // wide-character string
+			      l,                           // number of chars in string
+			      b2,                          // buffer for new string
+			      l+2,                         // size of buffer
+			      NULL,                        // default for unmappable chars
+			      NULL                         // set when default char used
+			      );
+	  free(buf);
+	  buf=(char*)b2;
+	}
+#endif
+#endif
+
+      XMLNode x=XMLNode::parseString((LPTSTR)buf,tag,pResults);
+
+      free(buf);
+      return x;
+    }
+  }
+  return XMLNode::emptyXMLNode;
+}
+
+
+
+XMLNode xmlOpenResourceHelper(TCHAR *lpszXML, LPCTSTR tag)
+{
+    XMLResults pResults;
+    XMLNode::GlobalError = false;
+    XMLNode xnode=xmlLoadFromResource(lpszXML, tag, &pResults);
+    if (pResults.error != eXMLErrorNone)
+    {
+	XMLNode::GlobalError = true;
+	// was exit(255);
+    }
+    return xnode;
+}
+
+
+///////////////////////////////////////
+
+
+WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND Parent,
+			TCHAR* resource) {
 
   WndForm *theForm = NULL;
   //  TCHAR sFileName[128];
@@ -289,13 +410,21 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 
   // this open and parse the XML file:
 
+  XMLNode xMainNode;
+  if (resource) {
+    xMainNode =xmlOpenResourceHelper(resource,
+				     TEXT("PMML"));
+  }
+  if (xMainNode.isEmpty()) {
+
 #if (WINDOWSPC<1)
-  XMLNode xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
+    xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
 #else
-  char winname[200];
-  sprintf(winname,"C:\\XCSoar%s",FileName);
-  XMLNode xMainNode=XMLNode::openFileHelper(winname ,TEXT("PMML"));
+    char winname[200];
+    sprintf(winname,"C:\\XCSoar%s",FileName);
+    xMainNode=XMLNode::openFileHelper(winname ,TEXT("PMML"));
 #endif
+  }
 
   // JMW TODO: put in error checking here and get rid of exits in xmlParser
   if (xMainNode.isEmpty()) {
@@ -431,7 +560,7 @@ void LoadChildsFromXML(WindowControl *Parent,
 
       CaptionWidth =
 	StringToIntDflt(childNode.getAttribute(TEXT("CaptionWidth")),
-			0)*InfoBoxLayout::scale;
+			0)*ISCALE;
       MultiLine =
 	StringToIntDflt(childNode.getAttribute(TEXT("MultiLine")),
 			0);
@@ -544,11 +673,39 @@ void LoadChildsFromXML(WindowControl *Parent,
        _tcscpy(ClickCallback, StringToStringDflt(childNode.getAttribute(TEXT("OnClickNotify")), TEXT("")));
 
       WC = new WndButton(Parent, Name, Caption, X, Y, Width, Height,
-               (WndButton::ClickNotifyCallback_t) CallBackLookup(LookUpTable, ClickCallback));
+               (WndButton::ClickNotifyCallback_t)
+			 CallBackLookup(LookUpTable, ClickCallback));
 
       Caption[0] = '\0';
 
     }else
+
+
+      /////
+#ifndef ALTAIRSYNC
+
+    if (_tcscmp(childNode.getName(), TEXT("WndEventButton")) == 0){
+
+      TCHAR iename[100];
+      TCHAR ieparameters[100];
+      _tcscpy(iename,
+	      StringToStringDflt(childNode.
+				 getAttribute(TEXT("InputEvent")),
+				 TEXT("")));
+      _tcscpy(ieparameters,
+	      StringToStringDflt(childNode.
+				 getAttribute(TEXT("Parameters")),
+				 TEXT("")));
+
+      WC = new WndEventButton(Parent, Name, Caption, X, Y, Width, Height,
+			      iename, ieparameters);
+
+      Caption[0] = '\0';
+
+    }else
+
+      /////
+#endif
 
 
     if (_tcscmp(childNode.getName(), TEXT("WndOwnerDrawFrame")) == 0){

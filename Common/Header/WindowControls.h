@@ -51,7 +51,7 @@ Copyright_License {
 #define clTeal    RGB(0x80,0x80,0x00)
 #define clGray    RGB(0x80,0x80,0x80)
 #define clSilver  RGB(0xC0,0xC0,0xC0)
-#define clRed     RGB(0x00,0x00,0xFF)
+#define clRed     RGB(0xFF,0x00,0xFF)
 #define clLime    RGB(0x00,0xFF,0x00)
 #define clYellow  RGB(0x00,0xFF,0xFF)
 #define clBlue    RGB(0xFF,0x00,0x00)
@@ -277,6 +277,7 @@ class DataFieldFileReader: public DataField {
   void Dec(void);
 
   void addFile(TCHAR *fname, TCHAR *fpname);
+  bool checkFilter(const TCHAR *fname, const TCHAR* filter);
   int GetNumFiles(void);
 
   int GetAsInteger(void);
@@ -758,6 +759,8 @@ class WndForm:public WindowControl{
       mModalResult = mrCancle;
     }
 
+    DWORD enterTime;
+
     void SetToForeground(void);
 
     int GetModalResult(void){return(mModalResult);};
@@ -810,6 +813,7 @@ class WndButton:public WindowControl{
 
 
 };
+
 
 
 #define STRINGVALUESIZE         128
@@ -883,6 +887,26 @@ class WndProperty:public WindowControl{
     int SetButtonSize(int Value);
 
 };
+
+#ifndef ALTAIRSYNC
+
+typedef void (*webpt2Event)(TCHAR *);
+
+class WndEventButton:public WndButton {
+ public:
+  WndEventButton(WindowControl *Parent, TCHAR *Name, TCHAR *Caption,
+		 int X, int Y, int Width, int Height, TCHAR *ename,
+		 TCHAR *eparameters);
+  ~WndEventButton();
+ public:
+  void CallEvent(void);
+ private:
+  webpt2Event inputEvent;
+  TCHAR *parameters;
+};
+
+
+#endif
 
 #endif
 

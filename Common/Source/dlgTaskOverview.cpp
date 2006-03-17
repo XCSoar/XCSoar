@@ -352,7 +352,8 @@ void dlgTaskOverviewShowModal(void){
   showAdvanced = false;
 
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgTaskOverview.xml",
-		      hWndMainWindow);
+		      hWndMainWindow,
+		      TEXT("IDR_XML_TASKOVERVIEW"));
 
   if (!wf) return;
 

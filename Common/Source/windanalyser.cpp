@@ -120,6 +120,7 @@ void WindAnalyser::slot_newSample(){
   Vector curVector;
 
   bool fullCircle=false;
+
   //circledetection
   if( lastHeading )
     {
@@ -216,7 +217,7 @@ void WindAnalyser::calcThermalDrift() {
 
   return; // disabled as this causes problems
 
-  if (ThermalTime>120) {
+  if (ThermalTime>300) {
     double ThermalDrift= Distance(climbstartpos.y,
                                   climbstartpos.x,
                                   climbendpos.y,
@@ -230,7 +231,7 @@ void WindAnalyser::calcThermalDrift() {
     v.x = -ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
     v.y = -ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);
 
-    slot_newEstimate(v, 6);
+    slot_newEstimate(v, 3);
 
   }
 }

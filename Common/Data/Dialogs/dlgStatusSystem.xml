@@ -15,7 +15,7 @@
   <WndProperty Name="prpFLARM"       Caption="FLARM"       X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpLogger"    Caption="Logger"    X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpDeclared"    Caption="Declared"    X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpBattery"       Caption="Battery"       X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpBattery"       Caption="Supply voltage"       X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
 
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=-1 Width=60  Height=28 Font=2 Tag=3 />
 

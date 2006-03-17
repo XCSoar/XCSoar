@@ -30,6 +30,8 @@ typedef struct _FLARM_TRAFFIC
   double Altitude;
   double TurnRate;
   double ClimbRate;
+  double RelativeNorth;
+  double RelativeEast;
   TCHAR ID[7];
   unsigned short IDType;
   unsigned short AlarmLevel;
@@ -115,6 +117,8 @@ class NMEAParser {
   static BOOL VarioUpdated;
 
  public:
+  static void TestRoutine(NMEA_INFO *GPS_INFO);
+
   // these routines can be used by other parsers.
   static BOOL NMEAChecksum(TCHAR *String);
   static void ExtractParameter(TCHAR *Source,
@@ -152,6 +156,7 @@ class NMEAParser {
   BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO);
 };
 
+void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO);
 
 extern bool EnableLogNMEA;
 void LogNMEA(TCHAR* text);

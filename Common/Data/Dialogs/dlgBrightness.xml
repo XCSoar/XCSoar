@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmBrightness" Type="Dialog" X=5 Y=5 Width=153 Height=111 Caption="Screen Brightness" Font=2 BackColor=0xDADBAB>
+  <WndButton   Caption="Close"    X=68 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
+
+  <WndProperty Name="prpAuto" Caption="Auto"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2>
+  <DataField name="" DataType="boolean" OnDataAccess="OnAutoData"/>
+  </WndProperty>
+
+  <WndProperty Name="prpBrightness" Caption="Brightness"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=1 OnDataAccess="OnBrightnessData"/>
+  </WndProperty>
+
+</WndForm>
+
+</PMML>

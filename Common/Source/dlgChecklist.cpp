@@ -254,7 +254,8 @@ void dlgChecklistShowModal(void){
 
   wf = dlgLoadFromXML(CallBackTable,
 		      "\\NOR Flash\\dlgChecklist.xml",
-		      hWndMainWindow);
+		      hWndMainWindow,
+		      TEXT("IDR_XML_CHECKLIST"));
 
   nTextLines = 0;
 

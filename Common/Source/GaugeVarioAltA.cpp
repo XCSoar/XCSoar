@@ -57,6 +57,7 @@ HDC GaugeVario::hdcDrawWindow = NULL;
 HDC GaugeVario::hdcTemp = NULL;
 HBITMAP GaugeVario::hDrawBitMap = NULL;
 RECT GaugeVario::rc;
+bool GaugeVario::dirty;
 
 HBITMAP GaugeVario::hBitmapUnit;
 POINT GaugeVario::BitmapUnitPos;
@@ -82,7 +83,6 @@ LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 void GaugeVario::Create() {
   RECT bigrc;
-
   bigrc = MapWindow::MapRect;
 
   hWndVarioWindow = CreateWindow(TEXT("STATIC"),TEXT(" "),
@@ -236,26 +236,22 @@ void GaugeVario::Render() {
     vval = CALCULATED_INFO.Vario;
   }
 
-  RenderNeedle(vval, xoffset, yoffset);
-
-  vval = vval*LIFTMODIFY;
-  vval = min(99.9,max(-99.9,vval));
+  double vvaldisplay = min(99.9,max(-99.9,vval*LIFTMODIFY));
 
   if (Appearance.GaugeVarioAvgText) {
     RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
 		CALCULATED_INFO.Average30s*LIFTMODIFY, TEXT("Avg"));
   }
 
-  RenderValue(orgMiddle.x, orgMiddle.y, &diValueMiddle, &diLabelMiddle, vval,
-	      TEXT("Gross"));
-
   if (Appearance.GaugeVarioMc) {
     if (CALCULATED_INFO.AutoMacCready)
       RenderValue(orgBottom.x, orgBottom.y,
-		  &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, TEXT("Auto Mc"));
+		  &diValueBottom, &diLabelBottom,
+		  MACCREADY*LIFTMODIFY, TEXT("Auto Mc"));
     else
       RenderValue(orgBottom.x, orgBottom.y,
-		  &diValueBottom, &diLabelBottom, MACCREADY*LIFTMODIFY, TEXT("Mc"));
+		  &diValueBottom, &diLabelBottom,
+		  MACCREADY*LIFTMODIFY, TEXT("Mc"));
   }
 
   if (Appearance.GaugeVarioSpeedToFly) {
@@ -269,6 +265,13 @@ void GaugeVario::Render() {
   if (Appearance.GaugeVarioBugs) {
     RenderBugs();
   }
+
+  dirty = false;
+  RenderNeedle(vval, xoffset, yoffset);
+
+  RenderValue(orgMiddle.x, orgMiddle.y, &diValueMiddle, &diLabelMiddle,
+	      vvaldisplay,
+	      TEXT("Gross"));
 
   BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
 
@@ -315,9 +318,11 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
   }
 
   i = (int)(Value*degrees_per_unit*LIFTMODIFY);
-  i = min(gmax,max(-gmax,i));
 
   if (i != lastI){
+    i = min(gmax,max(-gmax,i));
+
+    dirty = true;
 
     if (lastI != -99999){
       if (Appearance.InverseInfoBox){
@@ -361,10 +366,9 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
 }
 
 
-void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, TCHAR *Label){
+void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, TCHAR *Label) {
 
   SIZE tsize;
-
 
   if (!diValue->InitDone){
 
@@ -372,7 +376,8 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
     diValue->recBkg.top = y +3*InfoBoxLayout::scale
       + Appearance.TitleWindowFont.CapitalHeight;
 
-    diValue->recBkg.left = diValue->recBkg.right;           // update back rect with max label size
+    diValue->recBkg.left = diValue->recBkg.right;
+    // update back rect with max label size
     diValue->recBkg.bottom = diValue->recBkg.top
       + Appearance.CDIWindowFont.CapitalHeight;
 
@@ -392,7 +397,8 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
     diLabel->recBkg.right = x;
     diLabel->recBkg.top = y+1*InfoBoxLayout::scale;
 
-    diLabel->recBkg.left = diLabel->recBkg.right;           // update back rect with max label size
+    diLabel->recBkg.left = diLabel->recBkg.right;
+    // update back rect with max label size
     diLabel->recBkg.bottom = diLabel->recBkg.top
       + Appearance.TitleWindowFont.CapitalHeight;
 
@@ -409,7 +415,7 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
 
   SetBkMode(hdcDrawWindow, TRANSPARENT);
 
-  if (_tcscmp(diLabel->lastText, Label) != 0){
+  if (dirty || (_tcscmp(diLabel->lastText, Label) != 0)) {
 
     SetBkColor(hdcDrawWindow, colTextBackgnd);
 
@@ -429,7 +435,7 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
 
   }
 
-  if (diValue->lastValue != Value){
+  if (dirty || (diValue->lastValue != Value)) {
 
     TCHAR Temp[18];
 
@@ -452,7 +458,7 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
     diValue->lastValue = Value;
   }
 
-  if (diLabel->lastBitMap != hBitmapUnit){
+  if (dirty || (diLabel->lastBitMap != hBitmapUnit)) {
     HBITMAP oldBmp;
 
     oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapUnit);
@@ -501,6 +507,19 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
   static double lastVdiff;
   double vdiff;
 
+#define NARROWS 4
+#define ARROWYSIZE 4*InfoBoxLayout::scale
+#define ARROWXSIZE 5*InfoBoxLayout::scale
+
+  int nary = NARROWS*ARROWYSIZE;
+  int ytop = rc.top
+    +YOFFSET+nary; // JMW
+  int ybottom = rc.bottom
+    -YOFFSET-nary-InfoBoxLayout::scale; // JMW
+
+  // JMW
+  x = rc.left+1*InfoBoxLayout::scale;
+
   if (DerivedDrawInfo.Flying && !DerivedDrawInfo.Circling){
     vdiff = (DerivedDrawInfo.VOpt - DrawInfo.IndicatedAirspeed);
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
@@ -509,6 +528,8 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
     vdiff = 0;
 
   if (lastVdiff != vdiff){
+
+    lastVdiff = vdiff;
 
     if (Appearance.InverseInfoBox){
       SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
@@ -520,8 +541,16 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
     SetBkMode(hdcDrawWindow, OPAQUE);
 
     // ToDo sgi optimize
-    Rectangle(hdcDrawWindow, x, y+YOFFSET, x+11, y+YOFFSET+4*4);
-    Rectangle(hdcDrawWindow, x, y-YOFFSET-(4*4-1), x+11, y-YOFFSET+1);
+
+    // bottom (too slow)
+    Rectangle(hdcDrawWindow,
+	      x, (ybottom+YOFFSET),
+	      x+ARROWXSIZE*2+1, (ybottom+YOFFSET)+nary);
+
+    // top (too fast)
+    Rectangle(hdcDrawWindow,
+	      x, (ytop-YOFFSET)+1,
+	      x+ARROWXSIZE*2+1, (ytop-YOFFSET)-nary+1);
 
     if (Appearance.InverseInfoBox){
       SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
@@ -533,47 +562,49 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
 
     if (vdiff > 0){ // too slow
 
+      y = ybottom;
       y += YOFFSET;
 
       // JMW TODO: use InfoBoxLayout::scale to scale sizes
       while (vdiff > 0){
         if (vdiff > DeltaVstep){
-          Rectangle(hdcDrawWindow, x, y, x+11, y+3);
+          Rectangle(hdcDrawWindow,
+		    x, y,
+		    x+ARROWXSIZE*2+1, y+ARROWYSIZE-1);
         } else {
           POINT Arrow[4];
           Arrow[0].x = x; Arrow[0].y = y;
-          Arrow[1].x = x+5; Arrow[1].y = y+3;
-          Arrow[2].x = x+10; Arrow[2].y = y;
+          Arrow[1].x = x+ARROWXSIZE; Arrow[1].y = y+ARROWYSIZE-1;
+          Arrow[2].x = x+2*ARROWXSIZE; Arrow[2].y = y;
           Arrow[3].x = x; Arrow[3].y = y;
           Polygon(hdcDrawWindow, Arrow, 4);
         }
         vdiff -=DeltaVstep;
-        y += 4;
+        y += ARROWYSIZE;
       }
 
-    } else
-    if (vdiff < 0){
+    } else if (vdiff < 0){ // too fast
 
+      y = ytop;
       y -= YOFFSET;
 
       while (vdiff < 0){
         if (vdiff < -DeltaVstep){
-          Rectangle(hdcDrawWindow, x, y-2, x+11, y+1);
+          Rectangle(hdcDrawWindow, x, y+1,
+		    x+ARROWXSIZE*2+1, y-ARROWYSIZE+2);
         } else {
           POINT Arrow[4];
           Arrow[0].x = x; Arrow[0].y = y;
-          Arrow[1].x = x+5; Arrow[1].y = y-3;
-          Arrow[2].x = x+10; Arrow[2].y = y;
+          Arrow[1].x = x+ARROWXSIZE; Arrow[1].y = y-ARROWYSIZE+1;
+          Arrow[2].x = x+2*ARROWXSIZE; Arrow[2].y = y;
           Arrow[3].x = x; Arrow[3].y = y;
           Polygon(hdcDrawWindow, Arrow, 4);
         }
         vdiff +=DeltaVstep;
-        y -= 4;
+        y -= ARROWYSIZE;
       }
 
     }
-
-    lastVdiff = vdiff;
 
   }
 

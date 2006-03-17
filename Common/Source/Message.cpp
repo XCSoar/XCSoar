@@ -111,13 +111,13 @@ LRESULT CALLBACK MessageWindowProc(HWND hwnd, UINT message,
 }
 
 
-bool Message::blocked = false;
+int Message::block_ref = 0;
 
 void Message::Initialize(RECT rc) {
 
   InitializeCriticalSection(&CritSec_Messages);
 
-  blocked = false;
+  block_ref = 0;
 
   rcmsg = rc; // default; message window can be full size of screen
 
@@ -243,7 +243,11 @@ void Message::Resize() {
 
 void Message::BlockRender(bool doblock) {
   //  Lock();
-  blocked = doblock;
+  if (doblock) {
+    block_ref++;
+  } else {
+    block_ref--;
+  }
   // TODO: add blocked time to messages' timers so they come
   // up once unblocked.
   //  Unlock();
@@ -253,7 +257,7 @@ void Message::BlockRender(bool doblock) {
 void Message::Render() {
   DWORD	fpsTime = ::GetTickCount() - startTime;
 
-  if (blocked) return;
+  if (block_ref) return;
 
   Lock();
 

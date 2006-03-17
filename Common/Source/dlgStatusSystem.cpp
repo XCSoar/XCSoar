@@ -71,7 +71,8 @@ void dlgStatusSystemShowModal(void){
 
   TCHAR Temp[1000];
 
-  wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusSystem.xml", hWndMainWindow);
+  wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusSystem.xml", hWndMainWindow,
+		      TEXT("IDR_XML_STATUSSYSTEM"));
   if (!wf) return;
 
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
@@ -126,10 +127,8 @@ void dlgStatusSystemShowModal(void){
     wp->SetText(gettext(TEXT("NO")));
   }
 
-  // JMW TODO: current time and battery
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpBattery"));
-  _stprintf(Temp,TEXT("%0.f%%"),GPS_INFO.SupplyBatteryVoltage); // TODO
+  _stprintf(Temp,TEXT("%.1f V"),GPS_INFO.SupplyBatteryVoltage);
   wp->SetText(Temp);
 
   wf->ShowModal();

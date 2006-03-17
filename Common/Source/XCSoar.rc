@@ -756,6 +756,34 @@ IDB_DLGBUTTONLEFT32     BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonLeft32x32.
 IDB_DLGBUTTONRIGHT16    BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonRight16x16.bmp"
 IDB_DLGBUTTONRIGHT32    BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonRight32x32.bmp"
 IDB_AIRSPACE4           BITMAP  DISCARDABLE     "Bitmaps\\airspace4.bmp"
+IDB_FLARMROSE           BITMAP  DISCARDABLE     "Bitmaps\\flarmcluster.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// XMLDIALOG
+//
+
+IDR_XML_AIRSPACE        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspace.xml"
+IDR_XML_AIRSPACECOLOURS XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceColours.xml"
+IDR_XML_AIRSPACEPATTERNS XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspacePatterns.xml"
+IDR_XML_ANALYSIS        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAnalysis.xml"
+IDR_XML_BASICSETTINGS   XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgBasicSettings.xml"
+IDR_XML_BRIGHTNESS      XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgBrightness.xml"
+IDR_XML_CHECKLIST       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgChecklist.xml"
+IDR_XML_CONFIGURATION   XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgConfiguration.xml"
+IDR_XML_LOGGERREPLAY    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgLoggerReplay.xml"
+IDR_XML_STARTUP         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartup.xml"
+IDR_XML_STATUSAIRCRAFT  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStatusAircraft.xml"
+IDR_XML_STATUSSYSTEM    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStatusSystem.xml"
+IDR_XML_STATUSTASK      XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStatusTask.xml"
+IDR_XML_TASKCALCULATOR  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskCalculator.xml"
+IDR_XML_TASKOVERVIEW    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskOverview.xml"
+IDR_XML_TASKWAYPOINT    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskWaypoint.xml"
+IDR_XML_VARIO           XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgVario.xml"
+IDR_XML_VEGADEMO        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgVegaDemo.xml"
+IDR_XML_WAYPOINTDETAILS XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWayPointDetails.xml"
+IDR_XML_WAYPOINTSELECT  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWayPointSelect.xml"
+IDR_XML_WINDSETTINGS    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWindSettings.xml"
 
 /////////////////////////////////////////////////////////////////////////////
 //

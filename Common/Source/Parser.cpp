@@ -38,7 +38,8 @@ Copyright_License {
 #include "utils.h"
 #include "externs.h"
 #include "VarioSound.h"
-
+#include "Logger.h"
+#include "GaugeFLARM.h"
 #include "parser.h"
 
 extern bool EnableCalibration;
@@ -390,6 +391,12 @@ BOOL NMEAParser::GLL(TCHAR *String, NMEA_INFO *GPS_INFO)
   gpsValid = !NAVWarn(ctemp[0]);
 
   if (activeGPS) {
+
+    if (ReplayLogger::IsEnabled()) {
+      // block actual GPS signal
+      return TRUE;
+    }
+
     GPS_INFO->NAVWarning = !gpsValid;
 
     ////
@@ -475,6 +482,20 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPSCONNECT = TRUE;
 
   if (activeGPS) {
+
+    ExtractParameter(String,ctemp,6);
+    double speed = StrToDouble(ctemp, NULL);
+
+    if (ReplayLogger::IsEnabled()) {
+      if (speed>2.0) {
+	// stop logger replay if aircraft is actually moving.
+	ReplayLogger::Stop();
+      } else {
+	// block actual GPS signal
+      }
+      return TRUE;
+    }
+
     GPS_INFO->NAVWarning = !gpsValid;
 
     ExtractParameter(String,ctemp,0);
@@ -513,7 +534,7 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
     }
 
     ExtractParameter(String,ctemp,6);
-    GPS_INFO->Speed = KNOTSTOMETRESSECONDS * StrToDouble(ctemp, NULL);
+    GPS_INFO->Speed = KNOTSTOMETRESSECONDS * speed;
 
     ExtractParameter(String,ctemp,7);
 
@@ -962,6 +983,9 @@ BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
   last_switchinputs = switchinputs;
   last_switchoutputs = switchoutputs;
 
+  ExtractParameter(String,ctemp,3);
+  GPS_INFO->SupplyBatteryVoltage = StrToDouble(ctemp,NULL)/10;
+
   return TRUE;
 }
 
@@ -1096,13 +1120,18 @@ BOOL NMEAParser::PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO) {
   int i;
+  bool present = false;
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     // clear this slot if it is too old (2 seconds)
     if (GPS_INFO->Time> GPS_INFO->FLARM_Traffic[i].Time_Fix+2) {
       GPS_INFO->FLARM_Traffic[i].ID[0]= 0;
+    } else {
+      present = true;
     }
   }
+  GaugeFLARM::Show(present);
 }
+
 
 double FLARM_NorthingToLatitude = 0.0;
 double FLARM_EastingToLongitude = 0.0;
@@ -1130,8 +1159,6 @@ BOOL NMEAParser::PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   FLARM_EastingToLongitude = delta_lon / dlon;
 
-  FLARM_RefreshSlots(GPS_INFO);
-
   // number of received FLARM devices
   ExtractParameter(String,ctemp,0);
   GPS_INFO->FLARM_RX = (unsigned short)StrToDouble(ctemp,NULL);
@@ -1158,6 +1185,7 @@ BOOL NMEAParser::PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
     // traffic has appeared..
     InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
   }
+  // XX: TODO also another event for new traffic.
 
   old_flarm_rx = GPS_INFO->FLARM_RX;
 
@@ -1217,13 +1245,19 @@ BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   // 1 relativenorth, meters
   ExtractParameter(String,ctemp,1);
+  GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth =
+    StrToDouble(ctemp,NULL);
   GPS_INFO->FLARM_Traffic[flarm_slot].Latitude =
-    StrToDouble(ctemp,NULL)*FLARM_NorthingToLatitude + GPS_INFO->Latitude;
+    GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth
+    *FLARM_NorthingToLatitude + GPS_INFO->Latitude;
 
   // 2 relativeeast, meters
   ExtractParameter(String,ctemp,2);
+  GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast =
+    StrToDouble(ctemp,NULL);
   GPS_INFO->FLARM_Traffic[flarm_slot].Longitude =
-    StrToDouble(ctemp,NULL)*FLARM_EastingToLongitude + GPS_INFO->Longitude;
+    GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast
+    *FLARM_EastingToLongitude + GPS_INFO->Longitude;
 
   // 3 relativevertical, meters
   ExtractParameter(String,ctemp,3);
@@ -1265,13 +1299,22 @@ BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 //////
-/*
-void testflarm(NMEA_INFO *GPS_INFO) {
-  GPS_INFO->FLARM_Available = true;
-  PFLAU(TEXT("1,1,1,1"),GPS_INFO);
-  PFLAA(TEXT("0,1000,2000,220,2,DD8F12,120,-4.5,30,-1.4,1"),GPS_INFO);
+
+void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
+  static int i=0;
+  i++;
+
+  if (i>100) {
+    i=0;
+  }
+  if (i>50) {
+    GPS_INFO->FLARM_Available = true;
+    nmeaParser1.PFLAU(TEXT("1,1,1,1"),GPS_INFO);
+    nmeaParser1.PFLAA(TEXT("0,300,500,220,2,DD8F12,120,-4.5,30,-1.4,1"),GPS_INFO);
+    nmeaParser1.PFLAA(TEXT("0,0,1200,50,2,DA8F12,120,-4.5,30,-1.4,1"),GPS_INFO);
+  }
 }
-*/
+
 
 ///
 

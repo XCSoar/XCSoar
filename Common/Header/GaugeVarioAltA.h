@@ -29,6 +29,7 @@ class GaugeVario {
   static void Show(bool doshow);
 
  private:
+  static bool dirty;
   static HDC hdcScreen;
   static HDC hdcDrawWindow;
   static HDC hdcTemp;

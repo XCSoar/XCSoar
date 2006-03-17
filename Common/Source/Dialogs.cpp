@@ -57,8 +57,9 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Message.h"
 
+#if (NEWINFOBOX<1)
 #define USE_ARH_COLOUR_SELECTOR 1
-
+#endif
 
 
 void ReadWayPoints(void);

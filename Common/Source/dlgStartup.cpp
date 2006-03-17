@@ -49,7 +49,8 @@ void dlgStartupShowModal(void){
   WndProperty* wp;
 
   wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgStartup.xml",
-		      hWndMainWindow);
+		      hWndMainWindow,
+		      TEXT("IDR_XML_STARTUP"));
   if (!wf) return;
 
   wSplash = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmSplash"));
@@ -76,6 +77,7 @@ void dlgStartupShowModal(void){
     if (dfe->GetNumFiles()<=2) {
       delete wf;
       wf = NULL;
+      return;
     }
   }
 

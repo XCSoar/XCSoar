@@ -76,6 +76,7 @@ class InputEvents {
   static void eventWaypointDetails(TCHAR *misc);
   static void eventWind(TCHAR *misc);
   static void eventZoom(TCHAR *misc);
+  static void eventBrightness(TCHAR *misc);
   // -------
 
 #ifdef _SIM_

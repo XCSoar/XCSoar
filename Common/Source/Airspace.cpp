@@ -132,159 +132,6 @@ static const int k_nAreaType[k_nAreaCount] = {
 /////////////////////////////
 
 
-#if AIRSPACEUSEBINFILE > 0
-// if file changed, don't load from binary, load from normal and then save it.
-
-static void SaveAirspaceBinary(FILETIME LastWrite) {
-
-  HANDLE hFile;// = INVALID_HANDLE_VALUE;
-  DWORD dwBytesRead;
-  BinFileHeader_t Header;
-
-  hFile = CreateFile(TEXT("xcsoar-airspace.bin"),
-		     GENERIC_WRITE, FILE_SHARE_WRITE, NULL,
-		     CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-
-  strncpy(Header.Header, BINFILEHEADER, sizeof(Header.Header));
-  Header.MagicNumber = BINFILEMAGICNUMBER;
-  Header.Version = BINFILEVERION;
-  Header.LastWriteSourceFile = LastWrite;
-  Header.CrcSourceFile = 0;
-
-  WriteFile(hFile, &Header,
-	    sizeof(Header), &dwBytesRead, NULL);
-
-  WriteFile(hFile, &NumberOfAirspaceAreas,
-	    sizeof(unsigned int), &dwBytesRead, NULL);
-  WriteFile(hFile, &NumberOfAirspacePoints,
-	    sizeof(unsigned int), &dwBytesRead, NULL);
-  WriteFile(hFile, &NumberOfAirspaceCircles,
-	    sizeof(unsigned int), &dwBytesRead, NULL);
-
-  WriteFile(hFile, AirspaceArea,
-	    sizeof(AIRSPACE_AREA)*NumberOfAirspaceAreas,
-	    &dwBytesRead, NULL);
-  WriteFile(hFile, AirspacePoint,
-	    sizeof(AIRSPACE_POINT)*NumberOfAirspacePoints,
-	    &dwBytesRead, NULL);
-  WriteFile(hFile, AirspaceCircle,
-	    sizeof(AIRSPACE_CIRCLE)*NumberOfAirspaceCircles,
-	    &dwBytesRead, NULL);
-
-  CloseHandle(hFile);
-
-}
-
-
-static bool LoadAirspaceBinary(FILETIME LastWrite) {
-//  TCHAR szTemp[100]; // unused var RB
-
-  HANDLE hFile;// = INVALID_HANDLE_VALUE;
-
-  DWORD dwNumBytesRead;
-
-  hFile = CreateFile(TEXT("xcsoar-airspace.bin"),
-		     GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,
-		     OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-
-  if(hFile != INVALID_HANDLE_VALUE )
-
-    {
-
-
-      BinFileHeader_t Header;
-
-      if ((ReadFile(hFile, &Header, sizeof(Header), &dwNumBytesRead, NULL) == 0)
-          ||
-          (dwNumBytesRead != sizeof(Header))
-          ||
-          (Header.MagicNumber != BINFILEMAGICNUMBER)
-          ||
-          (Header.Version != BINFILEVERION)
-          ||
-          (Header.LastWriteSourceFile.dwLowDateTime != LastWrite.dwLowDateTime)
-          ||
-          (Header.LastWriteSourceFile.dwHighDateTime != LastWrite.dwHighDateTime)
-          ){
-
-        CloseHandle(hFile);
-        return(false);
-
-      }
-
-
-      HWND hProgress;
-
-      hProgress = CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
-
-      //wsprintf(szTemp,TEXT("0%%"));
-      //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
-
-      ReadFile(hFile,&NumberOfAirspaceAreas,
-	       sizeof(unsigned int),&dwNumBytesRead,NULL);
-
-      ReadFile(hFile,&NumberOfAirspacePoints,
-	       sizeof(unsigned int),&dwNumBytesRead,NULL);
-
-      ReadFile(hFile,&NumberOfAirspaceCircles,
-	       sizeof(unsigned int),&dwNumBytesRead,NULL);
-
-      if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
-      if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
-      if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
-
-      AirspaceArea  = (AIRSPACE_AREA *)
-	LocalAlloc(LMEM_FIXED, NumberOfAirspaceAreas   * sizeof(AIRSPACE_AREA));
-      AirspacePoint = (AIRSPACE_POINT *)
-	LocalAlloc(LMEM_FIXED, NumberOfAirspacePoints  * sizeof(AIRSPACE_POINT));
-      AirspaceCircle = (AIRSPACE_CIRCLE *)
-	LocalAlloc(LMEM_FIXED, NumberOfAirspaceCircles * sizeof(AIRSPACE_CIRCLE));
-
-      unsigned int i;
-
-      StepProgressDialog();
-
-      for (i=0; i<NumberOfAirspaceAreas; i++) {
-
-	ReadFile(hFile,&AirspaceArea[i],
-		 sizeof(AIRSPACE_AREA),
-		 &dwNumBytesRead,NULL);
-      }
-      StepProgressDialog();
-      StepProgressDialog();
-      StepProgressDialog();
-
-      for (i=0; i<NumberOfAirspacePoints; i++) {
-	ReadFile(hFile,&AirspacePoint[i],
-		 sizeof(AIRSPACE_POINT),
-		 &dwNumBytesRead,NULL);
-      }
-      StepProgressDialog();
-      StepProgressDialog();
-      StepProgressDialog();
-
-      for (i=0; i<NumberOfAirspaceCircles; i++) {
-	ReadFile(hFile,&AirspaceCircle[i],
-		 sizeof(AIRSPACE_CIRCLE),
-		 &dwNumBytesRead,NULL);
-      }
-      StepProgressDialog();
-      StepProgressDialog();
-      StepProgressDialog();
-
-      CloseHandle(hFile);
-
-      //wsprintf(szTemp,TEXT("100%%"));
-      //SetDlgItemText(hProgress,IDC_PROGRESS,szTemp);
-
-      return true;
-    }
-  return false; // couldn't find it...
-
-return false;
-
-}
-#endif
 
 ///////////////////////////////
 
@@ -299,6 +146,10 @@ void CloseAirspace() {
   if(AirspacePoint != NULL)  {
     LocalFree((HLOCAL)AirspacePoint);
     AirspacePoint = NULL;
+  }
+  if(AirspaceScreenPoint != NULL)  {
+    LocalFree((HLOCAL)AirspaceScreenPoint);
+    AirspaceScreenPoint = NULL;
   }
   if(AirspaceCircle != NULL) {
     AirspaceCircle = NULL;
@@ -362,6 +213,7 @@ void ReadAirspace(FILE *fp)
   // old pointers, in case we have multiple airspace files
   AIRSPACE_CIRCLE* OldAirspaceCircle = AirspaceCircle;
   AIRSPACE_POINT*  OldAirspacePoint = AirspacePoint;
+  POINT*  OldAirspaceScreenPoint = AirspaceScreenPoint;
   AIRSPACE_AREA*   OldAirspaceArea = AirspaceArea;
 
   // allocate new memory
@@ -372,20 +224,27 @@ void ReadAirspace(FILE *fp)
   AirspacePoint  = (AIRSPACE_POINT *)LocalAlloc(LMEM_FIXED,
 						NumberOfAirspacePoints  * sizeof(AIRSPACE_POINT));
 
+  AirspaceScreenPoint  = (POINT *)LocalAlloc(LMEM_FIXED,
+					     NumberOfAirspacePoints
+					     * sizeof(POINT));
+
+
   AirspaceArea   = (AIRSPACE_AREA *)  LocalAlloc(LMEM_FIXED,
 						NumberOfAirspaceAreas   * sizeof(AIRSPACE_AREA));
 
   // can't allocate memory, so delete everything
-  if(( AirspaceCircle == NULL) || (AirspacePoint == NULL) || (AirspaceArea == NULL))
+  if(( AirspaceCircle == NULL) || (AirspacePoint == NULL) || (AirspaceArea == NULL) || (AirspaceScreenPoint == NULL))
     {
       NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
       if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
       if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
+      if(AirspaceScreenPoint != NULL)  LocalFree((HLOCAL)AirspaceScreenPoint);
       if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
 
       if(OldAirspaceArea != NULL)   LocalFree((HLOCAL)OldAirspaceArea);
       if(OldAirspacePoint != NULL)  LocalFree((HLOCAL)OldAirspacePoint);
       if(OldAirspaceCircle != NULL) LocalFree((HLOCAL)OldAirspaceCircle);
+      if(OldAirspaceScreenPoint != NULL) LocalFree((HLOCAL)OldAirspaceScreenPoint);
 
       return;
     }
@@ -415,6 +274,10 @@ void ReadAirspace(FILE *fp)
     }
     // free the old values
     LocalFree((HLOCAL)OldAirspacePoint);
+  }
+
+  if (OldAirspaceScreenPoint != NULL) {
+    LocalFree((HLOCAL)OldAirspaceScreenPoint);
   }
 
   // ok, start the read
@@ -925,6 +788,37 @@ static void CalculateArc(TCHAR *Text)
   TempArea.NumPoints++;
 }
 
+
+static void ScanAirspaceCircleBounds(int i, double bearing) {
+  double lat, lon;
+  lat =
+    FindLatitude(AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude,
+		 bearing, AirspaceCircle[i].Radius );
+  lon =
+    FindLongitude(AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude,
+		  bearing, AirspaceCircle[i].Radius);
+
+  AirspaceCircle[i].bounds.minx = min(lon, AirspaceCircle[i].bounds.minx);
+  AirspaceCircle[i].bounds.maxx = max(lon, AirspaceCircle[i].bounds.maxx);
+  AirspaceCircle[i].bounds.miny = min(lat, AirspaceCircle[i].bounds.miny);
+  AirspaceCircle[i].bounds.maxy = max(lat, AirspaceCircle[i].bounds.maxy);
+}
+
+
+static void FindAirspaceCircleBounds() {
+  unsigned int i;
+  for(i=0; i<NumberOfAirspaceCircles; i++) {
+    AirspaceCircle[i].bounds.minx = AirspaceCircle[i].Longitude;
+    AirspaceCircle[i].bounds.maxx = AirspaceCircle[i].Longitude;
+    AirspaceCircle[i].bounds.miny = AirspaceCircle[i].Latitude;
+    AirspaceCircle[i].bounds.maxy = AirspaceCircle[i].Latitude;
+    ScanAirspaceCircleBounds(i,0);
+    ScanAirspaceCircleBounds(i,90);
+    ScanAirspaceCircleBounds(i,180);
+    ScanAirspaceCircleBounds(i,270);
+  }
+}
+
 static void FindAirspaceAreaBounds() {
   unsigned i, j;
   for(i=0; i<NumberOfAirspaceAreas; i++) {
@@ -1028,6 +922,7 @@ void ReadAirspace(void)
   }
 
   FindAirspaceAreaBounds();
+  FindAirspaceCircleBounds();
 
 }
 
@@ -1051,18 +946,29 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
       }
       if(AirspaceCircle[i].Visible || (!visibleonly))
 	{
-	  Dist = Distance(Latitude,Longitude,AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude);
-	  if(Dist < AirspaceCircle[i].Radius )
+
+	  if (
+	      (Latitude> AirspaceCircle[i].bounds.miny)&&
+	      (Latitude< AirspaceCircle[i].bounds.maxy)&&
+	      (Longitude> AirspaceCircle[i].bounds.minx)&&
+	      (Longitude< AirspaceCircle[i].bounds.maxx)
+	      )
 	    {
-	      if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
+
+	      Dist = Distance(Latitude,Longitude,AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude);
+	      if(Dist < AirspaceCircle[i].Radius )
 		{
-		  return i;
+		  if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
+		    {
+		      return i;
+		    }
 		}
 	    }
 	}
     }
   return -1;
 }
+
 
 BOOL CheckAirspaceAltitude(double Base, double Top)
 {
@@ -1226,26 +1132,35 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 
       if(AirspaceCircle[i].Visible || 1) // JMW this is a problem BUG?
 	{
-	  Dist = Distance(latitude,longitude,
-			  AirspaceCircle[i].Latitude,
-			  AirspaceCircle[i].Longitude)
-	    -AirspaceCircle[i].Radius;
 
-	  if(Dist < *nearestdistance )
+	  if (
+	      (latitude> AirspaceCircle[i].bounds.miny)&&
+	      (latitude< AirspaceCircle[i].bounds.maxy)&&
+	      (longitude> AirspaceCircle[i].bounds.minx)&&
+	      (longitude< AirspaceCircle[i].bounds.maxx)
+	      )
 	    {
-	      if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
-				       AirspaceCircle[i].Top.Altitude))
+
+	      Dist = Distance(latitude,longitude,
+			      AirspaceCircle[i].Latitude,
+			      AirspaceCircle[i].Longitude)
+		-AirspaceCircle[i].Radius;
+
+	      if(Dist < *nearestdistance )
 		{
+		  if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
+					   AirspaceCircle[i].Top.Altitude))
+		    {
 
-		  *nearestdistance = Dist;
-		  *nearestbearing = Bearing(latitude,
-					    longitude,
-					    AirspaceCircle[i].Latitude,
-					    AirspaceCircle[i].Longitude);
+		      *nearestdistance = Dist;
+		      *nearestbearing = Bearing(latitude,
+						longitude,
+						AirspaceCircle[i].Latitude,
+						AirspaceCircle[i].Longitude);
 
-		  return i;
+		      return i;
 
-
+		    }
 		}
 	    }
 	}

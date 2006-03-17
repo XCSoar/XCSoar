@@ -36,6 +36,7 @@ Copyright_License {
 #include <tchar.h>
 #include "Utils.h"
 #include "device.h"
+#include "InputEvents.h"
 
 /*
 problems with current IGC:
@@ -150,7 +151,11 @@ void StartLogger(TCHAR *strAssetNumber)
       // long filename form of IGC file.
       // XXX represents manufacturer code
        wsprintf(szLoggerFileName,TEXT("%s%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
-		   LocalPath(),
+#ifdef GNAV
+		TEXT("\\NOR Flash\\"),
+#else
+		LocalPath(),
+#endif
 		st.wYear,
 		st.wMonth,
 		st.wDay,
@@ -248,21 +253,21 @@ void StartDeclaration(int ntp)
 
   // IGC GNSS specification 3.6.1
   sprintf(temp,
-    "C%02d%02d%02d%02d%02d%02d%02d%02d%02d0000%02d (not defined)\r\n",
+	  "C%02d%02d%02d%02d%02d%02d%02d%02d%02d0000%02d (not defined)\r\n",
 	  // DD  MM  YY  HH  MM  SS  DD  MM  YYIIII  TT
 	  // JMW TODO these should be UTC time and date!
-	   st.wDay,
-	   st.wMonth,
-	   st.wYear % 100,
-	   st.wHour,
-	   st.wMinute,
-	   st.wSecond,
+	  st.wDay,
+	  st.wMonth,
+	  st.wYear % 100,
+	  st.wHour,
+	  st.wMinute,
+	  st.wSecond,
 
 	  // these should be local date
-	   st.wDay,
-	   st.wMonth,
-	   st.wYear % 100,
-	   ntp);
+	  st.wDay,
+	  st.wMonth,
+	  st.wYear % 100,
+	  ntp);
 
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
@@ -282,7 +287,8 @@ void EndDeclaration(void)
   HANDLE hFile;
   DWORD dwBytesRead;
 
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
+		     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
   SetFilePointer(hFile, 0, NULL, FILE_END);
   WriteFile(hFile, start, strlen(start), &dwBytesRead,(OVERLAPPED *)NULL);
@@ -490,8 +496,8 @@ void LoggerDeviceDeclare() {
 	}
       if (devDeclEnd(devB())) {
 	MessageBoxX(hWndMapWindow, gettext(TEXT("Task Declared!")),
-			    devB()->Name, MB_OK| MB_ICONINFORMATION);
-	  DeclaredToDevice = true;
+		    devB()->Name, MB_OK| MB_ICONINFORMATION);
+	DeclaredToDevice = true;
       } else
 	MessageBoxX(hWndMapWindow,
 		    gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
@@ -522,3 +528,340 @@ bool CheckDeclaration(void) {
     }
   }
 }
+
+
+/////////////////////////
+
+
+bool ReplayLogger::ReadLine(TCHAR *buffer) {
+  static FILE *fp  = NULL;
+  if (!buffer) {
+    if (fp) {
+      fclose(fp);
+      fp= NULL;
+    }
+    return false;
+  }
+  if (!fp) {
+    if (_tcslen(FileName)>0) {
+      fp = _tfopen(FileName, TEXT("r"));
+    }
+  }
+  if (fp==NULL)
+    return false;
+
+  if (!fgetws(buffer, 200, fp)) {
+	_tcscat(buffer,TEXT("\0"));
+    return false;
+  }
+  return true;
+}
+
+
+bool ReplayLogger::ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
+			      double *Longitude, double *Altitude)
+{
+  int DegLat, DegLon;
+  int MinLat, MinLon;
+  char NoS, EoW;
+  int iAltitude;
+  int Hour=0;
+  int Minute=0;
+  int Second=0;
+
+  int lfound=0;
+  int found=0;
+
+  if ((lfound =
+       swscanf(buffer,
+	       TEXT("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05dd"),
+	       &Hour, &Minute, &Second,
+	       &DegLat, &MinLat, &NoS, &DegLon, &MinLon,
+	       &EoW, &iAltitude, &iAltitude
+	       )) != EOF) {
+
+    if (lfound==11) {
+      *Latitude = DegLat+MinLat/60000.0;
+      if (NoS=='S') {
+	*Latitude *= -1;
+      }
+
+      *Longitude = DegLon+MinLon/60000.0;
+      if (EoW=='W') {
+	*Longitude *= -1;
+      }
+      *Altitude = iAltitude;
+      *Time = Hour*3600+Minute*60+Second;
+    }
+  }
+
+  TCHAR event[200];
+  TCHAR misc[200];
+
+  found = _stscanf(buffer,
+		   TEXT("LPLT event=%[^ ] %[A-Za-z0-9 \\/().,]"),
+		   event,misc);
+  if (found>0) {
+    pt2Event fevent = InputEvents::findEvent(event);
+    if (fevent) {
+      if (found==2) {
+	TCHAR *mmisc = StringMallocParse(misc);
+	fevent(mmisc);
+	free(mmisc);
+      } else {
+	fevent(TEXT("\0"));
+      }
+    }
+
+  }
+  return (lfound>0);
+}
+
+
+bool ReplayLogger::ReadPoint(double *Time,
+			     double *Latitude,
+			     double *Longitude,
+			     double *Altitude)
+{
+  TCHAR buffer[200];
+  bool found=false;
+
+  while (ReadLine(buffer) && !found) {
+    if (ScanBuffer(buffer,Time,Latitude,Longitude,Altitude)) {
+      found = true;
+    }
+  }
+  return found;
+}
+
+
+#include "Parser.h"
+
+extern NMEA_INFO GPS_INFO;
+
+TCHAR ReplayLogger::FileName[MAX_PATH]=
+  TEXT("C:\\XCSoar\\NOR Flash\\test.igc");
+bool ReplayLogger::Enabled = false; // test only
+double ReplayLogger::TimeScale = 1.0;
+
+bool ReplayLogger::IsEnabled(void) {
+  return Enabled;
+}
+
+
+class ReplayLoggerInterpolator {
+public:
+  void Reset() {
+    x0=0; x1=0; x2=0;
+    t0=0; t1=0; t2=0;
+    a=0; b=0; c=0;
+    num = 0;
+    tzero = 0;
+  }
+  void Update(double t, double x) {
+    if (num==0) {
+      tzero = t;
+    }
+    t0=t1; x0=x1;
+    t1=t2; x1=x2;
+    t2=t-tzero; x2=x;
+    if (num<3) {
+      num++;
+    } else {
+      UpdateInterpolator();
+    }
+  }
+  bool Ready() {
+    return (num==3);
+  }
+  double Interpolate(double t) {
+    if (!Ready()) {
+      return x0;
+    }
+    double tz= t-tzero;
+    return a*tz*tz+b*tz+c;
+  }
+  double GetMinTime(void) {
+    return t0+tzero;
+  }
+  double GetMaxTime(void) {
+    return t2+tzero;
+  }
+  double GetAverageTime(void) {
+    return (t0+t1+t2)/3+tzero;
+  }
+private:
+  double t0, t1, t2;
+  double x0, x1, x2;
+  double a, b, c;
+  int num;
+  bool first;
+  double tzero;
+
+  void UpdateInterpolator() {
+    double d = t0*t0*(t1-t2)+t1*t1*(t2-t0)+t2*t2*(t0-t1);
+    if (d == 0.0)
+      {
+	a=0;
+      }
+    else
+      {
+	a=((t1-t2)*(x0-x2)+(t2-t0)*(x1-x2))/d;
+      }
+    d = t1-t2;
+    if (d == 0.0)
+      {
+	b=0;
+      }
+    else
+      {
+	b = (x1-x2-a*(t1*t1-t2*t2))/d;
+      }
+    c = (x2 - a*t2*t2 - b*t2);
+  }
+};
+
+
+bool ReplayLogger::UpdateInternal(void) {
+  static bool init=true;
+
+  if (!Enabled) {
+    init = true;
+    ReadLine(NULL); // close file
+    Enabled = true;
+  }
+
+  static ReplayLoggerInterpolator li_lat;
+  static ReplayLoggerInterpolator li_lon;
+  static ReplayLoggerInterpolator li_alt;
+
+  SYSTEMTIME st;
+  GetLocalTime(&st);
+  static double time_lstart = 0;
+
+  if (init) {
+    time_lstart = 0;
+  }
+  static double time=0;
+  double deltatimereal;
+  static double tthis=0;
+
+  bool finished = false;
+
+  double timelast = time;
+  time = (st.wHour*3600+st.wMinute*60+st.wSecond-time_lstart);
+  deltatimereal = time-timelast;
+
+  if (init) {
+    time_lstart = time;
+    time = 0;
+    deltatimereal = 0;
+    tthis = 0;
+
+    li_lat.Reset();
+    li_lon.Reset();
+    li_alt.Reset();
+  }
+
+  tthis += TimeScale*deltatimereal;
+
+  double mintime = li_lat.GetMinTime();
+  if (tthis<mintime) { tthis = mintime; }
+
+  // if need a new point
+  while (
+	 (!li_lat.Ready()||(li_lat.GetAverageTime()< tthis))
+	 &&(!finished)) {
+
+    double t1, Lat1, Lon1, Alt1;
+    finished = !ReadPoint(&t1,&Lat1,&Lon1,&Alt1);
+
+    if (!finished) {
+      li_lat.Update(t1,Lat1);
+      li_lon.Update(t1,Lon1);
+      li_alt.Update(t1,Alt1);
+    }
+  }
+
+  if (!finished) {
+
+    double LatX, LonX, AltX, SpeedX, BearingX;
+    double LatX1, LonX1;
+
+    AltX = li_alt.Interpolate(tthis);
+
+    LatX = li_lat.Interpolate(tthis);
+    LonX = li_lon.Interpolate(tthis);
+
+    LatX1 = li_lat.Interpolate(tthis+1);
+    LonX1 = li_lon.Interpolate(tthis+1);
+
+    SpeedX = Distance(LatX, LonX, LatX1, LonX1);
+    BearingX = Bearing(LatX, LonX, LatX1, LonX1);
+
+    if (SpeedX>0) {
+      LockFlightData();
+      GPS_INFO.Latitude = LatX;
+      GPS_INFO.Longitude = LonX;
+      GPS_INFO.Speed = SpeedX;
+      GPS_INFO.TrackBearing = BearingX;
+      GPS_INFO.Altitude = AltX;
+      GPS_INFO.Time = tthis;
+      UnlockFlightData();
+    } else {
+      tthis=li_lat.GetMaxTime();
+    }
+  }
+
+  // quit if finished.
+  if (finished) {
+    Stop();
+  }
+  init = false;
+
+  return !finished;
+}
+
+
+void ReplayLogger::Stop(void) {
+  ReadLine(NULL); // close the file
+  Enabled = false;
+}
+
+
+void ReplayLogger::Start(void) {
+  if (Enabled) {
+    Stop();
+  }
+  if (!UpdateInternal()) {
+    // TODO couldn't start, give error dialog
+    MessageBoxX(hWndMapWindow,
+		gettext(TEXT("Could not open IGC file!")),
+		gettext(TEXT("Flight replay")),
+		MB_OK| MB_ICONINFORMATION);
+  }
+}
+
+
+TCHAR* ReplayLogger::GetFilename(void) {
+  return FileName;
+}
+
+
+void ReplayLogger::SetFilename(TCHAR *name) {
+  if (!name) {
+    return;
+  }
+  if (_tcscmp(FileName,name)!=0) {
+    _tcscpy(FileName,name);
+  }
+}
+
+bool ReplayLogger::Update(void) {
+  if (!Enabled)
+    return false;
+
+  Enabled = UpdateInternal();
+  return Enabled;
+}
+

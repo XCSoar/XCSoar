@@ -223,7 +223,8 @@ void dlgWayPointDetailsShowModal(void){
 
   wf = dlgLoadFromXML(CallBackTable,
 		      "\\NOR Flash\\dlgWayPointDetails.xml",
-		      hWndMainWindow);
+		      hWndMainWindow,
+		      TEXT("IDR_XML_WAYPOINTDETAILS"));
 
   nTextLines = 0;
 

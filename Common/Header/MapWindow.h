@@ -6,11 +6,10 @@
 #endif // _MSC_VER > 1000
 
 #include <windows.h>
-#include "mapshape.h"
 #include "Sizes.h"
-
-#define NAME_SIZE 50
-#define COMMENT_SIZE 50
+#include "Airspace.h"
+#include "Parser.h"
+#include "Calculations.h"
 
 #define TRACKCIRCLE 3
 #define NORTHCIRCLE 2
@@ -23,11 +22,6 @@
 #define DISPLAYNONE 3
 #define DISPLAYFIRSTTHREE 4
 #define DISPLAYNAMEIFINTASK 5
-
-#define ALLON 0
-#define CLIP 1
-#define AUTO 2
-#define ALLBELOW 3
 
 #define AIRPORT				0x01
 #define TURNPOINT			0x02
@@ -55,73 +49,6 @@ typedef struct _WAYPOINT_INFO
   TCHAR *Details;
 } WAYPOINT;
 
-#define OTHER                           0
-#define RESTRICT                        1
-#define PROHIBITED                      2
-#define DANGER                          3
-#define CLASSA				4
-#define CLASSB				5
-#define CLASSC				6
-#define CLASSD				7
-#define	NOGLIDER			8
-#define CTR                             9
-#define WAVE				10
-#define AATASK				11
-#define CLASSE				12
-#define CLASSF				13
-#define AIRSPACECLASSCOUNT              14
-
-typedef struct _AIRSPACE_ACK
-{
-  bool AcknowledgedToday;
-  double AcknowledgementTime;
-} AIRSPACE_ACK;
-
-typedef struct _AIRSPACE_ALT
-{
-	double Altitude;
-	double FL;
-} AIRSPACE_ALT;
-
-typedef struct _AIRSPACE_AREA
-{
-	TCHAR Name[NAME_SIZE + 1];
-        int Type;
-	AIRSPACE_ALT Base;
-	AIRSPACE_ALT Top;
-	unsigned FirstPoint;
-	unsigned NumPoints;
-	int Visible;
-	double MinLatitude;
-	double MaxLatitude;
-	double MinLongitude;
-	double MaxLongitude;
-        rectObj bounds;
-        AIRSPACE_ACK Ack;
-} AIRSPACE_AREA;
-
-typedef struct _AIRSPACE_POINT
-{
-	double Latitude;
-	double Longitude;
-	POINT Screen;
-} AIRSPACE_POINT;
-
-typedef struct _AIRSPACE_CIRCLE
-{
-	TCHAR Name[NAME_SIZE + 1];
-  int Type;
-	AIRSPACE_ALT Base;
-	AIRSPACE_ALT Top;
-	double Latitude;
-	double Longitude;
-	double Radius;
-	int ScreenX;
-	int ScreenY;
-	int ScreenR;
-	int Visible;
-        AIRSPACE_ACK Ack;
-} AIRSPACE_CIRCLE;
 
 typedef struct _SNAIL_POINT
 {
@@ -217,6 +144,8 @@ class MapWindow {
   static bool Event_InteriorAirspaceDetails(double lon, double lat);
   static bool Event_NearestWaypointDetails(double lon, double lat, double range, bool pan);
 
+  static void UpdateInfo(NMEA_INFO *nmea_info,
+			 DERIVED_INFO *derived_info);
  private:
 
   static void CalculateScreenPositions(POINT Orig, RECT rc,

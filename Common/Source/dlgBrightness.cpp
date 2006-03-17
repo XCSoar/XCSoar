@@ -31,97 +31,85 @@ Copyright_License {
 #if (NEWINFOBOX>0)
 
 #include "stdafx.h"
-
-#include "statistics.h"
-
 #include "externs.h"
 #include "units.h"
-#include "McReady.h"
 #include "device.h"
-
-
 #include "WindowControls.h"
 #include "dlgTools.h"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
+
+
 static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-static void OnSaveClicked(WindowControl * Sender){
-  SaveWindToRegistry();
-  wf->SetModalResult(mrOK);
-}
 
-static void OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode){
+bool EnableAutoBrightness=true;
+int BrightnessValue=50;
+// TODO implement this!
 
+static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
   switch(Mode){
     case DataField::daGet:
-      Sender->SetMax(SPEEDMODIFY*(200.0/TOKPH));
-      Sender->Set(SPEEDMODIFY*CALCULATED_INFO.WindSpeed);
+      Sender->Set(EnableAutoBrightness);
     break;
     case DataField::daPut:
-      CALCULATED_INFO.WindSpeed = Sender->GetAsFloat()/SPEEDMODIFY;
-    break;
     case DataField::daChange:
-      // calc alt...
+      EnableAutoBrightness = (Sender->GetAsInteger()!=0);
     break;
   }
 }
 
-static void OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
-  double lastWind;
-
+static void OnBrightnessData(DataField *Sender,
+			     DataField::DataAccessKind_t Mode){
   switch(Mode){
     case DataField::daGet:
-      lastWind = CALCULATED_INFO.WindBearing;
-      if (lastWind < 0.5)
-        lastWind = 360.0;
-      Sender->Set(lastWind);
+      Sender->SetAsFloat(BrightnessValue);
     break;
     case DataField::daPut:
-      CALCULATED_INFO.WindBearing = Sender->GetAsFloat();
-    break;
     case DataField::daChange:
-      lastWind = Sender->GetAsFloat();
-      if (lastWind < 0.5)
-        Sender->Set(360.0);
-      if (lastWind > 360.5)
-        Sender->Set(1.0);
+      BrightnessValue = iround(Sender->GetAsFloat());
     break;
   }
-
 }
+
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnWindSpeedData),
-  DeclearCallBackEntry(OnWindDirectionData),
-  DeclearCallBackEntry(OnSaveClicked),
+  DeclearCallBackEntry(OnAutoData),
+  DeclearCallBackEntry(OnBrightnessData),
   DeclearCallBackEntry(OnCloseClicked),
   DeclearCallBackEntry(NULL)
 };
 
-void dlgWindSettingsShowModal(void){
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgWindSettings.xml", hWndMainWindow,
-		      TEXT("IDR_XML_WINDSETTINGS"));
+void dlgBrightnessShowModal(void){
+
+  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgBrightness.xml",
+		      hWndMainWindow,
+		      TEXT("IDR_XML_BRIGHTNESS"));
+
+  WndProperty* wp;
 
   if (wf) {
-    WndProperty* wp;
-    wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpBrightness"));
     if (wp) {
-      wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
+      wp->GetDataField()->SetAsFloat(BrightnessValue);
+      wp->RefreshDisplay();
+    }
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAuto"));
+    if (wp) {
+      wp->GetDataField()->Set(EnableAutoBrightness);
       wp->RefreshDisplay();
     }
     wf->ShowModal();
-
     delete wf;
   }
   wf = NULL;
-
 }
 
 

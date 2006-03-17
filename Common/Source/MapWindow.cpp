@@ -34,6 +34,7 @@ Copyright_License {
 #include "Mapwindow.h"
 #include "Utils.h"
 #include "Units.h"
+#include "Logger.h"
 #include "McReady.h"
 #include "Airspace.h"
 #include "Waypointparser.h"
@@ -53,6 +54,7 @@ Copyright_License {
 
 #include "GaugeVarioAltA.h"
 #include "GaugeCDI.h"
+#include "GaugeFLARM.h"
 #include "InfoBoxLayout.h"
 
 #if (WINDOWSPC>0)
@@ -228,6 +230,24 @@ extern HFONT  CDIWindowFont;
 
 
 ///////////////////
+
+int timestats_av = 0;
+
+void debugUpdateStats(bool start) {
+  static long tottime=0;
+  static DWORD timelast = 0;
+  if (start) {
+    timelast = ::GetTickCount();
+  } else {
+    DWORD time = ::GetTickCount();
+    tottime = (4*tottime+(time-timelast))/5;
+    timestats_av = tottime;
+  }
+}
+
+
+///////////////////
+
 
 bool MapWindow::Event_NearestWaypointDetails(double lon, double lat,
 					     double range,
@@ -503,10 +523,11 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInB
 
 }
 
-
+bool userasked = false;
 
 void MapWindow::RefreshMap() {
   RequestMapDirty = true;
+  userasked = true;
 }
 
 bool MapWindow::IsMapFullScreen() {
@@ -1401,10 +1422,13 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
   DWORD	fpsTime = ::GetTickCount();
 
+  UpdateMapScale();
+
   // only redraw map part every 800 s unless triggered
-  if (((fpsTime-fpsTime0)>800)||(fpsTime0== -1)) {
+  if (((fpsTime-fpsTime0)>800)||(fpsTime0== -1)||(userasked)) {
     fpsTime0 = fpsTime;
     drawmap = true;
+    userasked = false;
   }
 
   POINT Orig, Orig_Aircraft;
@@ -1412,11 +1436,13 @@ void MapWindow::RenderMapWindow(  RECT rc)
   CalculateOrigin(rc, &Orig);
 
   CalculateScreenPositions(Orig, rc, &Orig_Aircraft);
-  CalculateScreenPositionsAirspace(Orig, rc, &Orig_Aircraft);
 
   if (drawmap) {
 
+    // do slow calculations before clearing the screen
+    // to reduce flicker
     CalculateWaypointReachable();
+    CalculateScreenPositionsAirspace(Orig, rc, &Orig_Aircraft);
 
     // display border and fill background..
 
@@ -1475,13 +1501,13 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     DrawWaypoints(hdcDrawWindowBg,rc);
 
-
     // draw wind vector at aircraft
     #if (ALTERNATEWINDVECTOR == 0)
     if (!DerivedDrawInfo.Circling && (!EnablePan)) {
       DrawWindAtAircraft(hdcDrawWindowBg, Orig, rc);
     }
     #endif
+
 
     #if (ALTERNATEWINDVECTOR == 1)
     DrawWindAtAircraft2(hdcDrawWindowBg, Orig, rc);
@@ -1505,8 +1531,6 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     // marks on top...
     DrawMarks(hdcDrawWindowBg, rc);
-
-
   }
 
   BitBlt(hdcDrawWindow, 0, 0, MapRectBig.right, MapRectBig.bottom,
@@ -1542,6 +1566,12 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
 }
 
+void MapWindow::UpdateInfo(NMEA_INFO *nmea_info,
+			   DERIVED_INFO *derived_info) {
+  memcpy(&DrawInfo,nmea_info,sizeof(NMEA_INFO));
+  memcpy(&DerivedDrawInfo,derived_info,sizeof(DERIVED_INFO));
+}
+
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
@@ -1554,6 +1584,8 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   nLabelBlocks = 0;
 
   GetClientRect(hWndMapWindow, &MapRectBig);
+
+  debugUpdateStats(true);
 
   MapRectSmall = MapRect;
 
@@ -1577,12 +1609,8 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   //////
 
   ////// This is just here to give fully rendered start screen
-  LockFlightData();
-  memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
-  memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
-  UnlockFlightData();
+  UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
 
-  UpdateMapScale();
   RenderMapWindow(MapRect);
   LockTerrainDataGraphics();
   SetTopologyBounds(MapRect);
@@ -1592,8 +1620,6 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
   static int nodrawtimeout = 10; // force redraw if haven't redrawn
 				 // for 5 seconds
-  bool forceshaperefresh = false;
-
   while (!CLOSETHREAD)
   {
     if (!THREADRUNNING) {
@@ -1604,26 +1630,23 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     // force refresh of terrain, topo and screen update if it hasn't
     // been redrawn for 5 seconds
     if (nodrawtimeout<=0) {
-      RequestAirDataDirty = true;
-      RequestMapDirty = true;
+      MapDirty = true;
+      // should this be RequestFastRefresh?
       nodrawtimeout = 50;
-      forceshaperefresh=true;
       fpsTime0 = -1;
-    } else {
-      forceshaperefresh=false;
     }
 
-    if (!MapDirty && !RequestFastRefresh && !AirDataDirty) {
+    if (!MapDirty && !RequestFastRefresh) {
       Sleep(100);
       nodrawtimeout--;
       continue;
     }
+    //    debugUpdateStats(true);
 
     nodrawtimeout= 50;
 
     // draw previous frame so screen is immediately refreshed
-    if (MapDirty || RequestFastRefresh) {
-
+    if (RequestFastRefresh  && (!MapDirty)) {
       BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
 	     MapRectBig.bottom-MapRectBig.top,
 	     hdcDrawWindow, 0, 0, SRCCOPY);
@@ -1633,35 +1656,15 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
       ToggleFullScreenStart();
     }
 
-    if (MapDirty && (!AirDataDirty)) {
+    if (MapDirty) {
       MapDirty = false;
-      fpsTime0 = -1;
       // if map is dirty, there's no need for a fast refresh anyway
       RequestFastRefresh = false;
+      //      fpsTime0 = -1;
     } else {
       if (RequestFastRefresh) {
         RequestFastRefresh = false;
-        continue;
-      }
-    }
-
-    // we got this far, so must really need to redraw properly
-
-    LockFlightData();
-    memcpy(&DrawInfo,&GPS_INFO,sizeof(NMEA_INFO));
-    memcpy(&DerivedDrawInfo,&CALCULATED_INFO,sizeof(DERIVED_INFO));
-    UnlockFlightData();
-
-    if (AirDataDirty) {
-      //      GaugeVario::Render();
-      AirDataDirty = false;
-      if (MapDirty) {
-        MapDirty = false;
-        fpsTime0 = -1;
-        // if map is dirty, there's no need for a fast refresh anyway
-        RequestFastRefresh = false;
-      } else {
-        continue;
+	continue;
       }
     }
 
@@ -1671,7 +1674,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     UnlockTerrainDataCalculations();
     */
 
-    UpdateMapScale();
+    GaugeFLARM::Render(&DrawInfo);
 
     RenderMapWindow(MapRect);
 
@@ -1684,9 +1687,11 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     // we do caching after screen update, to minimise perceived delay
 
     // have some time, do shape file cache update if necessary
-    LockTerrainDataGraphics();
-    SetTopologyBounds(MapRect, forceshaperefresh);
-    UnlockTerrainDataGraphics();
+    if (EnableTopology) {
+      LockTerrainDataGraphics();
+      SetTopologyBounds(MapRect);
+      UnlockTerrainDataGraphics();
+    }
 
     // have some time, do graphics terrain cache update if necessary
     if (EnableTerrain) {
@@ -1699,6 +1704,9 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     if (RenderTimeAvailable()) {
 
     }
+
+    debugUpdateStats(false);
+
   }
   THREADEXIT = TRUE;
   return 0;
@@ -2938,7 +2946,7 @@ void MapWindow::GetLocationFromScreen(double *X, double *Y)
 
   *Y = (PanYr)  - *Y;
 
-  *X = *X / (double)ffastcosine((float)*Y);
+  *X = *X /fastcosine(*Y);
 
   *X = (PanXr) + *X;
 }
@@ -2989,13 +2997,16 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     if (EnablePan) {
       _tcscat(Scale,TEXT(" PAN"));
     }
+    if (EnableAuxiliaryInfo) {
+      _tcscat(Scale,TEXT(" AUX"));
+    }
+    if (ReplayLogger::IsEnabled()) {
+      _tcscat(Scale,TEXT(" REPLAY"));
+    }
 
   /*
   extern int CacheEfficiency;
   extern int Performance;
-
-    wsprintf(Scale,TEXT("%d%% %dms"), CacheEfficiency, Performance);
-    TextInBox(hDC, Scale, rc.right-5, rc.bottom-60-4, 0, 2+4);
 
     hpOld = (HPEN)SelectObject(hDC, hpMapScale);
     Start.x = rc.right-6; End.x = rc.right-6;
@@ -3025,27 +3036,13 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     SetTextColor(hDC, blackcolor);
     ExtTextOut(hDC, rc.right-10-tsize.cx, End.y+7, 0, NULL, Scale, _tcslen(Scale), NULL);
 
+#ifdef DEBUG
+    wsprintf(Scale,TEXT("%dms"), timestats_av);
+    ExtTextOut(hDC, rc.left, rc.bottom-40, 0, NULL, Scale, _tcslen(Scale), NULL);
+#endif
+
     // restore original color
     SetTextColor(hDC, origcolor);
-
-
-    // JMW for debugging
-    /*
-    wsprintf(Scale,TEXT("%d"), terraincacheefficiency);
-    ExtTextOut(hDC, 20, End.y+20, 0, NULL, Scale, _tcslen(Scale), NULL);
-
-    //////////////
-
-    hpOld = (HPEN)SelectObject(hDC, hpBearing);
-
-    Start.x = rc.right-1;
-    Start.y = rc.bottom;
-    End.x = rc.right-1;
-    End.y = (rc.bottom-rc.top)*terrain_dem_graphics.
-      terraincacheefficiency/100+rc.top;
-    DrawSolidLine(hDC, Start, End);
-
-    */
 
     SelectObject(hDC, hpOld);
 
@@ -3054,7 +3051,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
 
     static LastMapWidth = 0;
     double MapWidth;
-    TCHAR ScaleInfo[32];
+    TCHAR ScaleInfo[50];
 
     HFONT          oldFont;
     int            Height;
@@ -3108,21 +3105,31 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     if (!ScaleChangeFeedback){
       int y = rc.bottom-Height-(Appearance.TitleWindowFont.AscentHeight+1);
       bool FontSelected = false;
-      ScaleInfo[0] = '\0';
+      ScaleInfo[0] = 0;
       if (AutoZoom) {
-        _tcscpy(ScaleInfo, TEXT("AUTO"));
+        _tcscat(ScaleInfo, TEXT("AUTO "));
+      }
+      if (EnablePan) {
+        _tcscat(ScaleInfo, TEXT("PAN "));
+      }
+      if (EnableAuxiliaryInfo) {
+        _tcscat(ScaleInfo, TEXT("AUX "));
+      }
+      if (ReplayLogger::IsEnabled()) {
+        _tcscat(ScaleInfo, TEXT("REPLAY "));
+      }
+      if (ScaleInfo[0]) {
         SelectObject(hDC, TitleWindowFont);
         FontSelected = true;
         ExtTextOut(hDC, 1, y, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
         y -= (Appearance.TitleWindowFont.CapitalHeight+1);
       }
-      if (EnablePan) {
-        _tcscpy(ScaleInfo, TEXT("PAN"));
-        if (!FontSelected)
-          SelectObject(hDC, TitleWindowFont);
-        ExtTextOut(hDC, 1, y, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
-      }
     }
+
+#ifdef DEBUG
+    wsprintf(ScaleInfo,TEXT("%dms"), timestats_av);
+    ExtTextOut(hDC, rc.left, rc.bottom-40, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
+#endif
 
     SetTextColor(hDC, oldTextColor);
     SelectObject(hDC, oldPen);
@@ -3349,7 +3356,7 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
 
 void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 {
-  unsigned i,j;
+  unsigned i;
   POINT *pt = NULL;
 
   COLORREF whitecolor = RGB(0xff,0xff, 0xff);
@@ -3369,59 +3376,57 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
   for(i=0;i<NumberOfAirspaceCircles;i++)
   {
-    if (iAirspaceMode[AirspaceCircle[i].Type]%2 == 1) {
+    if (AirspaceCircle[i].Visible) {
       if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
 			       AirspaceCircle[i].Top.Altitude))
 	{
 
-	  // this color is used as the black bit
-	  SetTextColor(hDCTemp,
-		       Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
-	  // this color is the transparent bit
-	  SetBkColor(hDCTemp,
-		     whitecolor);
+	  if (iAirspaceMode[AirspaceCircle[i].Type]%2 == 1) {
 
-	  // get brush, can be solid or a 1bpp bitmap
-	  SelectObject(hDCTemp,
-		       hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
+	    // this color is used as the black bit
+	    SetTextColor(hDCTemp,
+			 Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
+	    // this color is the transparent bit
+	    SetBkColor(hDCTemp,
+		       whitecolor);
 
-	  AirspaceCircle[i].Visible =
+	    // get brush, can be solid or a 1bpp bitmap
+	    SelectObject(hDCTemp,
+			 hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
+
+	    //	    AirspaceCircle[i].Visible =
 	    Circle(hDCTemp,AirspaceCircle[i].ScreenX ,
 		   AirspaceCircle[i].ScreenY ,
 		   AirspaceCircle[i].ScreenR ,rc);
-
-	} else {
-	// JMW think this was missing before
-	// NOPE, NOT A BUG
-	// JMW trying it without AirspaceCircle[i].Visible = false;
-
-      }
+	  }
+	}
     }
   }
 
   /////////
-
   for(i=0;i<NumberOfAirspaceAreas;i++)
   {
-    if (iAirspaceMode[AirspaceArea[i].Type]%2 == 1) {
+    if(AirspaceArea[i].Visible) {
       if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
 			       AirspaceArea[i].Top.Altitude))
 	{
 	  // JMW now looks for overlap in lat/lon coordinates
 
-	  if(AirspaceArea[i].Visible) {
+	  if (iAirspaceMode[AirspaceArea[i].Type]%2 == 1) {
 
-	  pt = (POINT*)SfRealloc(pt,
-				 sizeof(POINT) * AirspaceArea[i].NumPoints);
-	  for(j= AirspaceArea[i].FirstPoint;
-	      j < (AirspaceArea[i].NumPoints + AirspaceArea[i].FirstPoint);
-	      j++)
-	    {
-	      pt[j-AirspaceArea[i].FirstPoint].x = AirspacePoint[j].Screen.x ;
-	      pt[j-AirspaceArea[i].FirstPoint].y = AirspacePoint[j].Screen.y ;
-	    }
+	    /*
+	    pt = (POINT*)SfRealloc(pt,
+				   sizeof(POINT) * AirspaceArea[i].NumPoints);
+	    for(j= 0; j < AirspaceArea[i].NumPoints; j++)
+	      {
+		pt[j].x =
+		  AirspacePoint[j+AirspaceArea[i].FirstPoint].Screen.x ;
+		pt[j].y =
+		  AirspacePoint[j+AirspaceArea[i].FirstPoint].Screen.y ;
+	      }
+	    */
 
-        // this color is used as the black bit
+	    // this color is used as the black bit
 	    SetTextColor(hDCTemp,
 			 Colours[iAirspaceColour[AirspaceArea[i].Type]]);
 	    // this color is the transparent bit
@@ -3430,17 +3435,15 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
 	    SelectObject(hDCTemp,
 			 hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
-
 	    // test only!
 	    SelectObject(hDCTemp, hAirspacePens[AirspaceArea[i].Type]);
-
 	    Polygon(hDCTemp,pt,AirspaceArea[i].NumPoints);
+
+	    Polygon(hDCTemp,AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
+		    AirspaceArea[i].NumPoints);
+
 	  }
-	} else {
-	// JMW think this was missing before
-	// NOPE, NOT A BUG
-	// JMW trying without      AirspaceArea[i].Visible = false;
-      }
+	}
     }
   }
 
@@ -3473,8 +3476,8 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 		   );
   #endif
 
-	if (pt != NULL)
-		free (pt);
+  if (pt != NULL)
+    free (pt);
 }
 
 
@@ -3591,12 +3594,12 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 
   // position of thermal band
   for (i=0; i<NUMTHERMALBUCKETS; i++) {
-    ThermalProfile[1+i].x = 7+iround((Wt[i]/Wtot)*TBSCALEX)+rc.left;
+    ThermalProfile[1+i].x = (7+iround((Wt[i]/Wtot)*TBSCALEX))*InfoBoxLayout::scale+rc.left;
     ThermalProfile[1+i].y = 5+iround(TBSCALEY*(1.0-(mth/maxh)*(i)/NUMTHERMALBUCKETS))+rc.top;
   }
-  ThermalProfile[0].x = 7+rc.left;
+  ThermalProfile[0].x = 7*InfoBoxLayout::scale+rc.left;
   ThermalProfile[0].y = ThermalProfile[1].y;
-  ThermalProfile[NUMTHERMALBUCKETS+1].x = 7+rc.left;
+  ThermalProfile[NUMTHERMALBUCKETS+1].x = 7*InfoBoxLayout::scale+rc.left;
   ThermalProfile[NUMTHERMALBUCKETS+1].y = ThermalProfile[NUMTHERMALBUCKETS].y;
 
 
@@ -3605,7 +3608,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   GliderBand[1].y = GliderBand[0].y;
   GliderBand[2].y = GliderBand[0].y-4;
   GliderBand[3].y = GliderBand[0].y+4;
-  GliderBand[1].x = 7+iround((mc/Wtot)*TBSCALEX)+rc.left;
+  GliderBand[1].x = (7+iround((mc/Wtot)*TBSCALEX))*InfoBoxLayout::scale+rc.left;
   GliderBand[2].x = GliderBand[1].x-4;
   GliderBand[3].x = GliderBand[1].x-4;
 
@@ -3901,18 +3904,17 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
 
 bool MapWindow::PointVisible(double lon, double lat) {
-  if ((lon> screenbounds_latlon.minx)&&(lon< screenbounds_latlon.maxx)
-      && (lat>screenbounds_latlon.miny)&&(lat< screenbounds_latlon.maxy)) {
-    return 1;
-  } else {
-    return 0;
-  }
+  if (lon< screenbounds_latlon.minx) return false;
+  if (lon> screenbounds_latlon.maxx) return false;
+  if (lat< screenbounds_latlon.miny) return false;
+  if (lat> screenbounds_latlon.maxy) return false;
+  return true;
 }
 
 
 bool MapWindow::PointVisible(POINT *P, RECT *rc)
 {
-  if(	( P->x > rc->left )
+  if(( P->x > rc->left )
     &&
     ( P->x < rc->right )
     &&
@@ -3972,25 +3974,32 @@ void MapWindow::CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
 
   for(i=0;i<NumberOfAirspaceCircles;i++)
   {
+    AirspaceCircle[i].Visible = false;
     if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
 			     AirspaceCircle[i].Top.Altitude))
     {
 
-      LatLon2Screen(AirspaceCircle[i].Longitude,
-		    AirspaceCircle[i].Latitude, &scx, &scy);
+      if (msRectOverlap(&AirspaceCircle[i].bounds, &screenbounds_latlon)) {
+	AirspaceCircle[i].Visible = true;
 
-      AirspaceCircle[i].ScreenX = scx;
-      AirspaceCircle[i].ScreenY = scy;
+	LatLon2Screen(AirspaceCircle[i].Longitude,
+		      AirspaceCircle[i].Latitude, &scx, &scy);
 
-      tmp = AirspaceCircle[i].Radius*ResMapScaleOverDistanceModify;
+	AirspaceCircle[i].ScreenX = scx;
+	AirspaceCircle[i].ScreenY = scy;
 
-      AirspaceCircle[i].ScreenR = (int)tmp;
+	tmp = AirspaceCircle[i].Radius*ResMapScaleOverDistanceModify;
+
+	AirspaceCircle[i].ScreenR = (int)tmp;
+
+      }
     }
 
   }
 
   for(i=0;i<NumberOfAirspaceAreas;i++)
   {
+    AirspaceArea[i].Visible = false;
     if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
 			     AirspaceArea[i].Top.Altitude)) {
       if (msRectOverlap(&AirspaceArea[i].bounds, &screenbounds_latlon)) {
@@ -4003,12 +4012,12 @@ void MapWindow::CalculateScreenPositionsAirspace(POINT Orig, RECT rc,
 			  AirspacePoint[j].Latitude,
 			  &scx, &scy);
 
-	    AirspacePoint[j].Screen.x = scx;
-	    AirspacePoint[j].Screen.y = scy;
+	    AirspaceScreenPoint[j].x = max(rc.left-1,
+					   min(rc.right+1,scx));
+	    AirspaceScreenPoint[j].y = max(rc.top-1,
+					   min(rc.bottom+1,scy));
 	  }
 	AirspaceArea[i].Visible = true;
-      } else {
-	AirspaceArea[i].Visible = false;
       }
     }
   }
@@ -4484,7 +4493,7 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
   int scx, scy;
 //  double dX, dY;
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    if (DrawInfo.FLARM_Traffic[i].ID[0]!= 0) {
+    if (_tcslen(DrawInfo.FLARM_Traffic[i].ID)>0) {
 
       // TODO: draw direction, height?
       LatLon2Screen(DrawInfo.FLARM_Traffic[i].Longitude,

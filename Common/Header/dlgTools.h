@@ -41,6 +41,14 @@ typedef struct{
   void *Ptr;
 }CallBackTableEntry_t;
 
-WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND Parent);
+WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND Parent, TCHAR *resource=NULL);
+
+int
+WINAPI
+MessageBoxX(
+    HWND hWnd ,
+    LPCWSTR lpText,
+    LPCWSTR lpCaption,
+    UINT uType);
 
 #endif

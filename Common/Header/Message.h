@@ -56,7 +56,7 @@ class Message {
   static int GetEmptySlot();
   static bool hidden;
   static int nvisible;
-  static bool blocked;
+  static int block_ref;
 
 };
 
