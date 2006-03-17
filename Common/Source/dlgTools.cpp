@@ -411,19 +411,19 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
   // this open and parse the XML file:
 
   XMLNode xMainNode;
-  if (resource) {
-    xMainNode =xmlOpenResourceHelper(resource,
-				     TEXT("PMML"));
-  }
-  if (xMainNode.isEmpty()) {
 
 #if (WINDOWSPC<1)
-    xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
+  xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
 #else
-    char winname[200];
-    sprintf(winname,"C:\\XCSoar%s",FileName);
-    xMainNode=XMLNode::openFileHelper(winname ,TEXT("PMML"));
+  char winname[200];
+  sprintf(winname,"C:\\XCSoar%s",FileName);
+  xMainNode=XMLNode::openFileHelper(winname ,TEXT("PMML"));
 #endif
+  if (xMainNode.isEmpty()) {
+    if (resource) {
+      xMainNode =xmlOpenResourceHelper(resource,
+				       TEXT("PMML"));
+    }
   }
 
   // JMW TODO: put in error checking here and get rid of exits in xmlParser
