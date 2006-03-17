@@ -64,7 +64,7 @@ POINT GaugeFLARM::center;
 
 int GaugeFLARM::RangeScale(double d) {
   int rad;
-  double drad = 1.0-d/FLARMMAXRANGE;
+  double drad = 1.0-min(1.0,d/FLARMMAXRANGE);
   rad = iround(radius*(1.0-drad*drad));
   return rad;
 }
