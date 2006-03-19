@@ -42,6 +42,7 @@ Copyright_License {
 #include "Terrain.h"
 #include "Units.h"
 #include "Calculations.h"
+#include "GaugeFLARM.h"
 
 TCHAR szRegistryKey[] =                TEXT("Software\\MPSR\\XCSoar");
 TCHAR *szRegistryDisplayType[] =     { TEXT("Info0"),
@@ -205,6 +206,8 @@ TCHAR szRegistryMenuTimeout[] = TEXT("MenuTimeout");
 TCHAR szRegistryLockSettingsInFlight[] = TEXT("LockSettingsInFlight");
 TCHAR szRegistryTerrainContrast[] = TEXT("TerrainContrast");
 TCHAR szRegistryTerrainBrightness[] = TEXT("TerrainBrightness");
+TCHAR szRegistryEnableFLARMDisplay[] = TEXT("EnableFLARMDisplay");
+
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -610,6 +613,10 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryLockSettingsInFlight,&Temp);
   LockSettingsInFlight = (Temp == 1);
 
+  Temp = 1;
+  GetFromRegistry(szRegistryEnableFLARMDisplay,&Temp);
+  EnableFLARMDisplay = (Temp == 1);
+
   Temp = TerrainContrast;
   GetFromRegistry(szRegistryTerrainContrast,&Temp);
   TerrainContrast = (short)Temp;
@@ -758,10 +765,10 @@ void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex)
   SetToRegistry(szRegistrySpeed2Index, SpeedIndex);
 }
 
-void rotate(double *xin, double *yin, double angle)
+void rotate(double &xin, double &yin, const double angle)
 {
-  static double x,y;
-  static double xout, yout;
+  double x= xin;
+  double y= yin;
   static double lastangle = 0;
   static double cost=1,sint=0;
 
@@ -771,34 +778,26 @@ void rotate(double *xin, double *yin, double angle)
       cost = (double)fastcosine(angle);
       sint = (double)fastsine(angle);
     }
-
-  x = *xin; y = *yin;
-  xout = x*cost - y*sint;
-  yout = y*cost + x*sint;
-  *xin = xout;
-  *yin = yout;
+  xin = x*cost - y*sint;
+  yin = y*cost + x*sint;
 }
 
 
-void frotate(float *xin, float *yin, float angle)
+void frotate(float &xin, float &yin, const float angle)
 {
-  static float x,y;
-  static float xout, yout;
+  float x= xin;
+  float y= yin;
   static float lastangle = 0;
   static float cost=1,sint=0;
 
   if(angle != lastangle)
     {
       lastangle = angle;
-      cost = (float)fastcosine(angle);
-      sint = (float)fastsine(angle);
+      cost = ffastcosine(angle);
+      sint = ffastsine(angle);
     }
-
-  x = *xin; y = *yin;
-  xout = x*cost - y*sint;
-  yout = y*cost + x*sint;
-  *xin = xout;
-  *yin = yout;
+  xin = x*cost - y*sint;
+  yin = y*cost + x*sint;
 }
 
 
@@ -1823,29 +1822,30 @@ void InitSineTable(void)
 }
 
 
-float ffastcosine(float x)
+float ffastcosine(const float &x)
 {
   return ffastsine(x+90);
 }
 
-double fastcosine(double x)
+double fastcosine(const double &x)
 {
   return fastsine(x+90);
 }
 
-double fastsine(double x)
+double fastsine(const double &x)
 {
   int index;
+  double xi = x;
 
-  while(x<0)
+  while(xi<0)
     {
-      x = x + 360;
+      xi += 360;
     }
-  while(x>=360)
+  while(xi>=360)
     {
-      x = x - 360;
+      xi -= 360;
     }
-  index = (int)(x*10);
+  index = (int)(xi*10);
   if((index>=0 )&&(index<=900))
     {
       return SINETABLE[index];
@@ -1870,19 +1870,20 @@ double fastsine(double x)
 }
 
 
-float ffastsine(float x)
+float ffastsine(const float &x)
 {
   int index;
+  float xi = x;
 
-  while(x<0)
+  while(xi<0)
     {
-      x = x + 360;
+      xi += 360;
     }
-  while(x>=360)
+  while(xi>=360)
     {
-      x = x - 360;
+      xi -= 360;
     }
-  index = (int)(x*10);
+  index = (int)(xi*10);
   if((index>=0 )&&(index<=900))
     {
       return FSINETABLE[index];

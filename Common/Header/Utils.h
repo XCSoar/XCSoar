@@ -83,6 +83,7 @@ extern TCHAR szRegistryMenuTimeout[];
 extern TCHAR szRegistryLockSettingsInFlight[];
 extern TCHAR szRegistryTerrainContrast[];
 extern TCHAR szRegistryTerrainBrightness[];
+extern TCHAR szRegistryEnableFLARMDisplay[];
 
 extern bool LockSettingsInFlight;
 
@@ -98,8 +99,8 @@ void SetRegistryBrush(int i, DWORD c);
 void SetRegistryAirspaceMode(int i);
 int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
-void rotate(double *xin, double *yin, double angle);
-void frotate(float *xin, float *yin, float angle);
+void rotate(double &xin, double &yin, const double angle);
+void frotate(float &xin, float &yin, const float angle);
 double Distance(double lat1, double lon1, double lat2, double lon2);
 double Bearing(double lat1, double lon1, double lat2, double lon2);
 double Reciprocal(double InBound);
@@ -128,10 +129,10 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 BOOL ReadString(HANDLE hFile, int Max, TCHAR *String);
 BOOL ReadStringX(FILE *fp, int Max, TCHAR *String);
 void InitSineTable(void);
-double fastcosine(double x);
-double fastsine(double x);
-float ffastcosine(float x);
-float ffastsine(float x);
+double fastcosine(const double &x);
+double fastsine(const double &x);
+float ffastcosine(const float &x);
+float ffastsine(const float &x);
 double StrToDouble(TCHAR *Source, TCHAR **Stop);
 void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 void SaveWindToRegistry();

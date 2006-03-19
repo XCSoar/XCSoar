@@ -29,7 +29,7 @@ class GlidePolar {
   
   static double sinkratecache[200];
 
-  static double SinkRateFast(double MC, int v);
+  static double SinkRateFast(const double &MC, const int &v);
   static double SinkRate(double Vias);
   static double SinkRate(double Vias, 
                 double loadfactor);

@@ -29,8 +29,11 @@ Copyright_License {
 */
 
 #include "stdafx.h"
+#include "externs.h"
 #include "GaugeFLARM.h"
 #include "Utils.h"
+
+bool EnableFLARMDisplay = true;
 
 HWND hWndFLARMWindow = NULL; //FLARM Window
 
@@ -135,7 +138,7 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       y = -gps_info->FLARM_Traffic[i].RelativeNorth;
       double d = sqrt(x*x+y*y);
       if (d<FLARMMAXRANGE) {
-	rotate(&x, &y, -gps_info->TrackBearing); 	// or use .Heading
+	rotate(x, y, -gps_info->TrackBearing); 	// or use .Heading
 	double xp = x/d;
 	double yp = y/d;
 	double scale = RangeScale(d);
@@ -176,7 +179,7 @@ void GaugeFLARM::Create() {
 	       (int)(rc.bottom-InfoBoxLayout::ControlHeight*2)+1,
 	       (int)(InfoBoxLayout::ControlWidth*2)-1,
 	       (int)(InfoBoxLayout::ControlHeight*2)-1,
-	       SWP_SHOWWINDOW);
+	       SWP_HIDEWINDOW);
 
   GetClientRect(hWndFLARMWindow, &rc);
 
@@ -210,12 +213,13 @@ void GaugeFLARM::Create() {
   // end of new code for drawing FLARM window (see below for destruction of objects)
 
   SetWindowLong(hWndFLARMWindow, GWL_WNDPROC, (LONG) GaugeFLARMWndProc);
+  ShowWindow(hWndFLARMWindow, SW_HIDE);
   Show(false);
 }
 
 
 void GaugeFLARM::Show(bool doshow) {
-  Enable = doshow;
+  Enable = doshow && EnableFLARMDisplay;
   static bool lastvisible = true;
   if (Enable && !lastvisible) {
     ShowWindow(hWndFLARMWindow, SW_SHOW);
@@ -248,7 +252,7 @@ LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
   switch (uMsg){
 
     case WM_PAINT:
-      if (GaugeFLARM::Enable) {
+      if (GlobalRunning && GaugeFLARM::Enable) {
 	hDC = BeginPaint(hwnd, &ps);
 	GaugeFLARM::Repaint(hDC);
 	DeleteDC(hDC);

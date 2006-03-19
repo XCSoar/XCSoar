@@ -50,34 +50,34 @@ Topology* TopoStore[MAXTOPOLOGY];
 
 TopologyWriter *topo_marks;
 
-rectObj GetRectBounds(RECT rc) {
+rectObj GetRectBounds(const RECT rc) {
   rectObj bounds;
   double xmin, xmax, ymin, ymax;
   double x;
   double y;
 
   x= (rc.left+rc.right)/2; y=(rc.bottom+rc.top)/2;
-  MapWindow::GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(x, y);
   xmin = x; xmax = x;
   ymin = y; ymax = y;
 
   x = rc.left; y = rc.top;
-  MapWindow::GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.right; y = rc.top;
-  MapWindow::GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.left; y = rc.bottom;
-  MapWindow::GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.right; y = rc.bottom;
-  MapWindow::GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
@@ -91,14 +91,16 @@ rectObj GetRectBounds(RECT rc) {
 
 
 bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
-  if (r_interior.minx < r_exterior.minx) return false;
-  if (r_interior.maxx > r_exterior.maxx) return false;
-  if (r_interior.miny < r_exterior.miny) return false;
-  if (r_interior.maxy > r_exterior.maxy) return false;
-  return true;
+  if ((r_interior.minx > r_exterior.minx)&&
+      (r_interior.maxx < r_exterior.maxx)&&
+      (r_interior.miny > r_exterior.miny)&&
+      (r_interior.maxy < r_exterior.maxy))    
+    return true;
+  else 
+    return false;
 }
 
-void SetTopologyBounds(RECT rcin, bool force) {
+void SetTopologyBounds(const RECT rcin, const bool force) {
   static rectObj bounds_active;
   static double range_active = 1.0;
   rectObj bounds_screen;
@@ -123,19 +125,12 @@ void SetTopologyBounds(RECT rcin, bool force) {
     recompute = true;
   }
   
+  // also trigger if the scale has changed heaps
   if (max(range/range_active, range_active/range)>4) {
     recompute = true;
   }
 
-  // also trigger if the scale has changed heaps
-
-  bool rta = MapWindow::RenderTimeAvailable() || force;
-
-#ifdef GNAV
-  rta = true;
-#endif
-
-  if (recompute && rta) {
+  if (recompute || force) {
 
     // make bounds bigger than screen
     bounds_active = bounds_screen;
@@ -147,40 +142,32 @@ void SetTopologyBounds(RECT rcin, bool force) {
     
     for (int z=0; z<MAXTOPOLOGY; z++) {
       if (TopoStore[z]) {
-	if (rta && EnableTopology) {
-	  TopoStore[z]->updateCache(bounds_active);
-	} else {
-	  // didn't have time this time
-	  TopoStore[z]->triggerUpdateCache=true;          
-	}
+	TopoStore[z]->triggerUpdateCache=true;          
       }
     }
-    topo_marks->updateCache(bounds_active);
-
-  } else {
-    if (topo_marks->triggerUpdateCache) {
-      topo_marks->updateCache(bounds_active);    
-    } 
+    topo_marks->triggerUpdateCache = true;
   }
+
+  // ok, now update the caches
+
+  topo_marks->updateCache(bounds_active);    
   
   if (EnableTopology) {
-
     // check if any needs to have cache updates because wasnt 
     // visible previously when bounds moved
-    rta = MapWindow::RenderTimeAvailable();
+    bool sneaked= false;
+    bool rta;
 
-#ifdef GNAV
-  rta = true;
-#endif
-  rta = true;
+    // we will make sure we update at least one cache per call
+    // to make sure eventually everything gets refreshed
 
     for (int z=0; z<MAXTOPOLOGY; z++) {
       if (TopoStore[z]) {
-	if (rta) {
-	  if (TopoStore[z]->triggerUpdateCache) {
-	    TopoStore[z]->updateCache(bounds_active);
-	  }
+	rta = MapWindow::RenderTimeAvailable() || force || !sneaked;
+	if (TopoStore[z]->triggerUpdateCache) {
+	  sneaked = true;
 	}
+	TopoStore[z]->updateCache(bounds_active, !rta);
       }
     }
   }
@@ -225,7 +212,7 @@ void CloseTopology() {
 }
 
 
-void MarkLocation(double lon, double lat)
+void MarkLocation(const double lon, const double lat)
 {
   LockTerrainDataGraphics();
 
@@ -258,7 +245,7 @@ void MarkLocation(double lon, double lat)
 
 }
 
-void DrawMarks (HDC hdc, RECT rc)
+void DrawMarks (const HDC hdc, const RECT rc)
 {
 
   LockTerrainDataGraphics();
@@ -268,7 +255,7 @@ void DrawMarks (HDC hdc, RECT rc)
 }
 
 
-void DrawTopology( HDC hdc, RECT rc)
+void DrawTopology(const HDC hdc, const RECT rc)
 {
 
   LockTerrainDataGraphics();
@@ -304,8 +291,8 @@ COLORRAMP terrain_colors[] = {
 };
 
 
-void ColorRampLookup(short h, BYTE *r, BYTE *g, BYTE *b,
-		     COLORRAMP* ramp_colors, int numramp) {
+void ColorRampLookup(const short h, BYTE &r, BYTE &g, BYTE &b,
+		     COLORRAMP* ramp_colors, const int numramp) {
 
   int i;
   int tr, tg, tb;
@@ -313,16 +300,16 @@ void ColorRampLookup(short h, BYTE *r, BYTE *g, BYTE *b,
 
   // check if h lower than lowest
   if (h<=ramp_colors[0].h) {
-    *r = ramp_colors[0].r;
-    *g = ramp_colors[0].g;
-    *b = ramp_colors[0].b;
+    r = ramp_colors[0].r;
+    g = ramp_colors[0].g;
+    b = ramp_colors[0].b;
     return;
   }
   // gone past end, so use last color
   if (h>=ramp_colors[numramp-1].h) {
-    *r = ramp_colors[numramp-1].r;
-    *g = ramp_colors[numramp-1].g;
-    *b = ramp_colors[numramp-1].b;
+    r = ramp_colors[numramp-1].r;
+    g = ramp_colors[numramp-1].g;
+    b = ramp_colors[numramp-1].b;
     return;
   }
 
@@ -334,9 +321,9 @@ void ColorRampLookup(short h, BYTE *r, BYTE *g, BYTE *b,
       tr = f*ramp_colors[i+1].r+of*ramp_colors[i].r;
       tg = f*ramp_colors[i+1].g+of*ramp_colors[i].g;
       tb = f*ramp_colors[i+1].b+of*ramp_colors[i].b;
-      *r = tr/255;
-      *g = tg/255;
-      *b = tb/255;
+      r = tr >> 8; // was /256
+      g = tg >> 8;
+      b = tb >> 8;
       return;
     }
   }
@@ -344,7 +331,7 @@ void ColorRampLookup(short h, BYTE *r, BYTE *g, BYTE *b,
 }
 
 
-void TerrainColorMap(short h, BYTE *r, BYTE *g, BYTE *b) {
+void TerrainColorMap(const short h, BYTE &r, BYTE &g, BYTE &b) {
   ColorRampLookup(h*8/4, r, g, b, terrain_colors, NUMTERRAINRAMP);
 }
 
@@ -363,12 +350,12 @@ static void UpdateContrast(void) {
 }
 
 
-void TerrainIllumination(short illum, BYTE *r, BYTE *g, BYTE *b)
+void TerrainIllumination(const short illum, BYTE &r, BYTE &g, BYTE &b)
 {
   short il = (illum*ContrastPos)/256+ContrastNeg;
-  *r = (BYTE)((int)*r*il/256+TerrainWhiteness);
-  *g = (BYTE)((int)*g*il/256+TerrainWhiteness);
-  *b = (BYTE)((int)*b*il/256+TerrainWhiteness);
+  r = (BYTE)((r*il>>8)+TerrainWhiteness);
+  g = (BYTE)((g*il>>8)+TerrainWhiteness);
+  b = (BYTE)((b*il>>8)+TerrainWhiteness);
 }
 
 
@@ -403,8 +390,8 @@ public:
     nzBuf = (short*)malloc(sizeof(short)*ixs*iys);
     ilBuf = (short*)malloc(sizeof(short)*ixs*iys);
 
-    pixelsize = MapWindow::MapScale/MapWindow::GetMapResolutionFactor()
-      *DTQUANT;
+    pixelsize = (float)(MapWindow::MapScale/MapWindow::GetMapResolutionFactor()
+			*DTQUANT);
 
   }
   ~TerrainRenderer() {
@@ -420,7 +407,7 @@ public:
 
   CSTScreenBuffer *sbuf;
 
-  double pixelsize;
+  float pixelsize;
 
   short *hBuf;
   short *nxBuf;
@@ -428,13 +415,13 @@ public:
   short *nzBuf;
   short *ilBuf;
 
-  double Xrounding;
-  double Yrounding;
+  float Xrounding;
+  float Yrounding;
 
 #define TERRAIN_ANTIALIASING 1.5
 
   void Height(RECT rc) {
-    double X, Y;
+    float X, Y;
     short X0, Y0;
     short X1, Y1;
     X0 = DTQUANT/2; 
@@ -443,8 +430,8 @@ public:
     Y1 = Y0+DTQUANT*iys;
     short* myhbuf = hBuf;
 
-    pixelsize = MapWindow::MapScale/MapWindow::GetMapResolutionFactor()
-      *DTQUANT;
+    pixelsize = (float)(MapWindow::MapScale/MapWindow::GetMapResolutionFactor()
+			*DTQUANT);
 
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
@@ -463,9 +450,7 @@ public:
     } else {
       rfact = 1.0;
     }
-    terrain_dem_graphics.SetTerrainRounding(pixelsize*0.25);
 
-    kpixel = (float)(terrain_dem_graphics.GetTerrainSlopeStep()); 
     // magnify gradient to make it
     // more obvious
 
@@ -479,48 +464,39 @@ public:
     }
 
     // JMW attempting to remove wobbling terrain
-    X = (X0+X1)/2;
-    Y = (Y0+Y1)/2;
-    MapWindow::GetLocationFromScreen(&X, &Y);
-    double xmiddle = X;
-    double ymiddle = Y;
+    X = (float)((X0+X1)/2);
+    Y = (float)((Y0+Y1)/2);
+    MapWindow::GetLocationFromScreen(X, Y);
+    float xmiddle = X;
+    float ymiddle = Y;
 
-    X = (X0+X1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact;
-    Y = (Y0+Y1)/2;
-    MapWindow::GetLocationFromScreen(&X, &Y);
-    Xrounding = fabs(X-xmiddle);
+    X = (float)((X0+X1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact);
+    Y = (float)((Y0+Y1)/2);
+    MapWindow::GetLocationFromScreen(X, Y);
+    Xrounding = (float)fabs(X-xmiddle);
 
-    X = (X0+X1)/2;
-    Y = (Y0+Y1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact;
-    MapWindow::GetLocationFromScreen(&X, &Y);
-    Yrounding = fabs(Y-ymiddle);
+    X = (float)((X0+X1)/2);
+    Y = (float)((Y0+Y1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact);
+    MapWindow::GetLocationFromScreen(X, Y);
+    Yrounding = (float)fabs(Y-ymiddle);
 
     // ok, ready to fill the buffer now.
+
+    terrain_dem_graphics.SetTerrainRounding(Xrounding,Yrounding);
     
     for (int y = Y0; y<Y1; y+= DTQUANT) {
       for (int x = X0; x<X1; x+= DTQUANT) {
-        X = x;
-        Y = y;
-        MapWindow::GetLocationFromScreen(&X, &Y);
-
-	// round lat and long to prevent wobbling
-	long rr;
-	rr = lround(X/Xrounding);
-	X = rr*Xrounding;
-	rr = lround(Y/Yrounding);
-	Y = rr*Yrounding;
-
+        X = (float)x;
+        Y = (float)y;
+        MapWindow::GetLocationFromScreen(X, Y);
         *myhbuf = terrain_dem_graphics.GetTerrainHeight(Y, X);
-        myhbuf++;
-        // latitude, longitude
+        ++myhbuf;
       }
     }
 
     UnlockTerrainDataGraphics();
 
   }
-
-  float kpixel;
 
   void Slope() {
     int mag;
@@ -622,7 +598,7 @@ public:
 	  nzBuf[pval] = 255;
 	}
       
-	pval++;
+	++pval;
       }
     }
   }
@@ -641,14 +617,12 @@ public:
       
       mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256;
       *tilBuf = max(0,(short)mag);
+      *tnxBuf = *tilBuf;
 
-      tnxBuf[0] = tilBuf[0];
-      
-      tnxBuf++;
-      tnyBuf++;
-      tnzBuf++;
-      tilBuf++;
-
+      ++tnxBuf;
+      ++tnyBuf;
+      ++tnzBuf;
+      ++tilBuf;
     }
     
     // smooth illumination buffer
@@ -662,25 +636,25 @@ public:
 	ff = 3*nxBuf[index];
 
 	if (x>0) {
-	  vv++;
+	  ++vv;
 	  ff += nxBuf[index-1];
 	}
 	if (x<ixs-1) {
-	  vv++;
+	  ++vv;
 	  ff += nxBuf[index+1];
 	}
 	if (y>0) {
-	  vv++;
+	  ++vv;
 	  ff += nxBuf[index-ixs];
 	}
 	if (y<iys-1) {
-	  vv++;
+	  ++vv;
 	  ff += nxBuf[index+ixs];
 	}
 	ff/= vv;
 
 	ilBuf[index]= ff;
-	index++;
+	++index;
       }
     }    
 
@@ -688,7 +662,7 @@ public:
 
   void FillColorBuffer() {
     BYTE r=0xff,g=0xff,b=0xff;
-    short pval = 0; // y*ixs+x;
+    short pval = 0; 
 
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
@@ -703,8 +677,8 @@ public:
           g = 96;
           b = 240;
         } else {
-          TerrainColorMap(hBuf[pval],&r,&g,&b);
-          TerrainIllumination(ilBuf[pval], &r,&g,&b);
+          TerrainColorMap(hBuf[pval],r,g,b);
+          TerrainIllumination(ilBuf[pval], r,g,b);
         }
 
         int ix0, iy0, ix1, iy1;
@@ -718,8 +692,7 @@ public:
             sbuf->SetPoint(ix, iy, r, g, b);
           }
         }
-
-	pval++;
+	++pval;
       }
     }
 
@@ -772,7 +745,7 @@ void OptimizeTerrainCache()
 }
 
 
-void DrawTerrain( HDC hdc, RECT rc, double sunazimuth, double sunelevation)
+void DrawTerrain( const HDC hdc, const RECT rc, const double sunazimuth, const double sunelevation)
 {
 
   DWORD tm;

@@ -254,6 +254,11 @@ bool                                            AdvanceArmed = false;
 double                          QNH = (double)1013.2;
 bool EnableBlockSTF = false;
 
+bool GlobalRunning = false; 
+// this controls all displays, to make sure everything is
+// properly initialised.
+
+
 //SI to Local Units
 double        SPEEDMODIFY = TOKNOTS;
 double                          LIFTMODIFY  = TOKNOTS;
@@ -353,8 +358,6 @@ bool ScreenBlanked = false;
 bool LoggerActive = false;
 
 // Others
-double FrameRate = 0;
-int FrameCount = 0;
 BOOL TopWindow = TRUE;
 
 BOOL COMPORTCHANGED = FALSE;
@@ -561,7 +564,7 @@ void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
   if (DisplayLocked) {
     ShowWindow(hWndMenuButton, SW_HIDE);
-    MenuTimeOut = MenuTimeoutMax;
+    MenuTimeOut = MenuTimeoutMax/5;
     DisplayTimeOut = 0;
   }
 }
@@ -847,7 +850,7 @@ void FullScreen() {
                  SWP_SHOWWINDOW);
 #endif
   }
-  MapWindow::RequestFastRefresh = true;
+  MapWindow::RequestFastRefresh();
   InfoBoxesDirty = true;
 }
 
@@ -958,104 +961,110 @@ void FocusOnWindow(int i, bool selected) {
 
 }
 
-extern void debugUpdateStats(bool);
 
 void TriggerRedraws(NMEA_INFO *nmea_info,
-		    DERIVED_INFO *derived_info,
-		    bool newdata) {
-  if (!ScreenBlanked) {
-    if (newdata) {
+		    DERIVED_INFO *derived_info) {
+  if (MapWindow::IsDisplayRunning()) {
+    if (NMEAParser::GpsUpdated) {
       MapWindow::UpdateInfo(nmea_info, derived_info);
-    }
-    if (MapWindow::RequestMapDirty) {
       MapWindow::MapDirty = true;
-      MapWindow::RequestMapDirty = false;
-    }
-    if (MapWindow::RequestAirDataDirty) {
-      //      MapWindow::AirDataDirty = true;
-      if (EnableVarioGauge) {
-	GaugeVario::Render();
-      }
-      MapWindow::RequestAirDataDirty = false;
+      SetEvent(drawTriggerEvent);
     }
   }
 }
 
 
+DWORD InstrumentThread (LPVOID lpvoid) {
+
+  while (!MapWindow::CLOSETHREAD) {
+
+    WaitForSingleObject(dataTriggerEvent, 5000);
+    if (MapWindow::CLOSETHREAD) continue; // drop out on exit
+
+    if (MapWindow::IsDisplayRunning()) {
+      if (NMEAParser::VarioUpdated) {
+	if (EnableVarioGauge) {
+	  GaugeVario::Render();
+	}
+      }
+    }
+    NMEAParser::VarioUpdated = false;
+  }
+  return 0;
+}
+
+
 DWORD CalculationThread (LPVOID lpvoid) {
-  bool theinfoboxesaredirty;
+  bool needcalculationsslow;
 
   NMEA_INFO     tmp_GPS_INFO;
   DERIVED_INFO  tmp_CALCULATED_INFO;
 
+  needcalculationsslow = false;
+
   while (!MapWindow::CLOSETHREAD) {
 
-    theinfoboxesaredirty = false;
+    WaitForSingleObject(dataTriggerEvent, 5000);
+    if (MapWindow::CLOSETHREAD) continue; // drop out on exit
 
-    if ((NMEAParser::GpsUpdated) || 
-	(GPS_INFO.VarioAvailable && NMEAParser::VarioUpdated)) {
+    // set timer to determine latency (including calculations)
+    if (NMEAParser::GpsUpdated) { // timeout on FLARM objects
+      MapWindow::UpdateTimeStats(true);
+    }
 
-      // make local copy before editing...
-      LockFlightData();
-      if (NMEAParser::GpsUpdated) { // timeout on FLARM objects
-	FLARM_RefreshSlots(&GPS_INFO);
-      }
-      memcpy(&tmp_GPS_INFO,&GPS_INFO,sizeof(NMEA_INFO));
-      memcpy(&tmp_CALCULATED_INFO,&CALCULATED_INFO,sizeof(DERIVED_INFO));
-      UnlockFlightData();
+    // make local copy before editing...
+    LockFlightData();
+    if (NMEAParser::GpsUpdated) { // timeout on FLARM objects
+      FLARM_RefreshSlots(&GPS_INFO);
+    }
+    memcpy(&tmp_GPS_INFO,&GPS_INFO,sizeof(NMEA_INFO));
+    memcpy(&tmp_CALCULATED_INFO,&CALCULATED_INFO,sizeof(DERIVED_INFO));
+    UnlockFlightData();
 
-      debugUpdateStats(true);
-
-      // Do vario first to reduce audio latency
-      if (GPS_INFO.VarioAvailable && NMEAParser::VarioUpdated) {
-	NMEAParser::VarioUpdated = false;
-        if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
-        }
-        // assume new vario data has arrived, so infoboxes
-        // need to be redrawn
-	if (!GPSCONNECT) {
-	  // only redraw them if the gps is not connected,
-	  // otherwise fast vario data will slow down the whole system
-	  // as infobox display is a bit expensive
-	  theinfoboxesaredirty = true;
+    // Do vario first to reduce audio latency
+    if (GPS_INFO.VarioAvailable) {
+      if (NMEAParser::VarioUpdated) {
+	if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
+	  
 	}
-	MapWindow::RequestAirDataDirty = true;
+	// assume new vario data has arrived, so infoboxes
+	// need to be redrawn
       }
-
-      if (NMEAParser::GpsUpdated) {
-	NMEAParser::GpsUpdated = false;
-        if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO))
-          {
-            theinfoboxesaredirty = true;
-	    MapWindow::RequestMapDirty = true;
-	    MapWindow::RequestAirDataDirty = true;
-          }
-      }
-
+    } else {
       // run the function anyway, because this gives audio functions
       // if no vario connected
-      if (!GPS_INFO.VarioAvailable) {
-        if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
-            theinfoboxesaredirty = true;
-        }
+      if (NMEAParser::GpsUpdated) {
+	if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
+	}
+	NMEAParser::VarioUpdated = true; // emulate vario update
       }
-
-      TriggerRedraws(&tmp_GPS_INFO, &tmp_CALCULATED_INFO, true);
-
-      // values changed, so copy them back now: ONLY CALCULATED INFO
-      // should be changed in DoCalculations, so we only need to write
-      // that one back (otherwise we may write over new data)
-      LockFlightData();
-      memcpy(&CALCULATED_INFO,&tmp_CALCULATED_INFO,sizeof(DERIVED_INFO));
-      UnlockFlightData();
-
-    } else {
-      TriggerRedraws(&tmp_GPS_INFO, &tmp_CALCULATED_INFO, false);
-      Sleep(50); // sleep a while
     }
-    if (theinfoboxesaredirty) {
+    
+    if (NMEAParser::GpsUpdated) {
+      if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO))
+	{
+	  MapWindow::MapDirty = true;
+	}
+      needcalculationsslow = true;
       InfoBoxesDirty = true;
     }
+        
+    TriggerRedraws(&tmp_GPS_INFO, &tmp_CALCULATED_INFO);
+
+    if (needcalculationsslow) {
+      DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO);
+      needcalculationsslow = false;
+    }
+
+    // values changed, so copy them back now: ONLY CALCULATED INFO
+    // should be changed in DoCalculations, so we only need to write
+    // that one back (otherwise we may write over new data)
+    LockFlightData();
+    memcpy(&CALCULATED_INFO,&tmp_CALCULATED_INFO,sizeof(DERIVED_INFO));
+    UnlockFlightData();
+
+    NMEAParser::GpsUpdated = false;
+
   }
   return 0;
 }
@@ -1063,18 +1072,30 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
 void CreateCalculationThread() {
   HANDLE hCalculationThread;
-  DWORD dwThreadID;
+  DWORD dwCalcThreadID;
 
   // Create a read thread for performing calculations
   if (hCalculationThread =
       CreateThread (NULL, 0, 
 		    (LPTHREAD_START_ROUTINE )CalculationThread, 
-		    0, 0, &dwThreadID))
+		    0, 0, &dwCalcThreadID))
   {
     SetThreadPriority(hCalculationThread, THREAD_PRIORITY_NORMAL); 
-    // was THREAD_PRIORITY_ABOVE_NORMAL
     CloseHandle (hCalculationThread);
   }
+
+  HANDLE hInstrumentThread;
+  DWORD dwInstThreadID;
+
+  if (hInstrumentThread =
+      CreateThread (NULL, 0, 
+		    (LPTHREAD_START_ROUTINE )InstrumentThread, 
+		    0, 0, &dwInstThreadID))
+  {
+    SetThreadPriority(hInstrumentThread, THREAD_PRIORITY_NORMAL); 
+    CloseHandle (hInstrumentThread);
+  }
+
 }
 
 void dlgStartupShowModal(void);
@@ -1106,6 +1127,9 @@ void PreloadInitialisation(bool ask) {
   }
 
 }
+
+HANDLE drawTriggerEvent;
+HANDLE dataTriggerEvent;
 
 
 bool ProgramStarted = false;
@@ -1164,6 +1188,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   InitializeCriticalSection(&CritSec_Comm);
   InitializeCriticalSection(&CritSec_TerrainDataGraphics);
   InitializeCriticalSection(&CritSec_TerrainDataCalculations);
+  drawTriggerEvent = CreateEvent(NULL, FALSE, FALSE, TEXT("drawTriggerEvent"));
+  dataTriggerEvent = CreateEvent(NULL, FALSE, FALSE, TEXT("dataTriggerEvent"));
 
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
@@ -1259,8 +1285,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   MapWindow::MapDirty = true;
   SwitchToMapWindow();
-  ProgramStarted = true;
-
 
   // NOTE: Must show errors AFTER all windows ready
 
@@ -1277,6 +1301,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #ifdef _INPUTDEBUG_
   InputEvents::showErrors();
 #endif
+
+  GlobalRunning = true;
+  ProgramStarted = true;
 
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0))
@@ -1735,14 +1762,9 @@ void DoInfoKey(int keycode) {
 
   UnlockNavBox();
 
-  /*
-  LockFlightData();
-  AssignValues();
-  DisplayText();
-  UnlockFlightData();
-  */
   InfoBoxesDirty = true;
 
+  SetEvent(dataTriggerEvent);
   NMEAParser::GpsUpdated = TRUE; // emulate update to trigger calculations
 
   InfoBoxFocusTimeOut = 0;
@@ -1780,6 +1802,9 @@ bool Debounce(void) {
 void Shutdown(void) {
   int i;
 
+  // turn off all displays
+  GlobalRunning = false;
+
   // Save settings
 
   StoreRegistry();
@@ -1799,6 +1824,9 @@ void Shutdown(void) {
   
   // Stop drawing
   MapWindow::CloseDrawingThread();
+
+  // Stop calculating too (wake up)
+  SetEvent(dataTriggerEvent);
   
   // Clear data
   NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1; 
@@ -1879,6 +1907,9 @@ void Shutdown(void) {
   DestroyWindow(hWndMainWindow);
   DestroyWindow(hWndMenuButton);
       
+  CloseHandle(drawTriggerEvent);
+  CloseHandle(dataTriggerEvent);
+
 #if (WINDOWSPC>0) 
 #if _DEBUG
   _CrtDumpMemoryLeaks();
@@ -1934,7 +1965,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       memset (&s_sai, 0, sizeof (s_sai));
       s_sai.cbSize = sizeof (s_sai);
 
-      iTimerID = SetTimer(hWnd,1000,200,NULL);
+      iTimerID = SetTimer(hWnd,1000,1000,NULL);
 
       hWndCB = CreateRpCommandBar(hWnd);
 
@@ -1999,13 +2030,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
     case WM_TIMER:
       if (ProgramStarted) {
-	FrameRate = (double)FrameCount/5;
 #ifdef _SIM_
 	SIMProcessTimer();
 #else
 	ProcessTimer();
 #endif
-	FrameCount = 0;
       }
       break;
 
@@ -2577,15 +2606,9 @@ void DisplayText(void)
 void CommonProcessTimer()
 {
 
-
 #if (WINDOWSPC<1)
   SystemIdleTimerReset();
 #endif
-
-  //
-  // maybe block/delay this if a dialog is active?
-  //
-  Message::Render();
 
   if(InfoWindowActive)
     {
@@ -2598,7 +2621,7 @@ void CommonProcessTimer()
     }
 
   if (DisplayLocked) {
-    if(MenuTimeOut==MenuTimeoutMax) {
+    if(MenuTimeOut==MenuTimeoutMax/5) {
       ShowWindow(hWndMenuButton, SW_HIDE);
       InputEvents::setMode(TEXT("default"));
     }
@@ -2616,7 +2639,7 @@ void CommonProcessTimer()
     DisplayTimeOut=0;
   }
 
-  if (!ScreenBlanked) {
+  if (MapWindow::IsDisplayRunning()) {
     // No need to redraw map or infoboxes if screen is blanked.
     // This should save lots of battery power due to CPU usage
     // of drawing the screen
@@ -2627,6 +2650,15 @@ void CommonProcessTimer()
       InfoBoxesDirty = false;
       //JMWTEST    UnlockFlightData();
     }
+  }
+
+  //
+  // maybe block/delay this if a dialog is active?
+  //
+  static int i=0;
+  i++;
+  if (i%5==0) {
+    Message::Render();
   }
 
 #if (EXPERIMENTAL > 0)
@@ -2653,24 +2685,22 @@ void ProcessTimer(void)
   static int itimeout = -1;
   itimeout++;
   
-  if (itimeout % 5 == 0) {
-    // write settings to vario every second
-    VarioWriteSettings();
+  // write settings to vario every second
+  VarioWriteSettings();
     
-    // also service replay logger
-    ReplayLogger::Update();
-  }
-
+  // also service replay logger
+  ReplayLogger::Update();
   if (ReplayLogger::IsEnabled()) {
+    NMEAParser::GpsUpdated = TRUE;
+    SetEvent(dataTriggerEvent);
     GPSCONNECT = TRUE;
     extGPSCONNECT = TRUE;
     GPS_INFO.NAVWarning = FALSE;
     GPS_INFO.SatellitesUsed = 6;
-    NMEAParser::GpsUpdated = TRUE;
     return;
   }
   
-  if (itimeout % 25 != 0) {
+  if (itimeout % 5 != 0) {
     // timeout if no new data in 5 seconds
     return;
   }
@@ -2699,7 +2729,7 @@ void ProcessTimer(void)
   if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
     {
       
-      MapWindow::RequestFastRefresh = true;
+      MapWindow::RequestFastRefresh();
       
       devLinkTimeout(devA());
       devLinkTimeout(devB());
@@ -2707,16 +2737,18 @@ void ProcessTimer(void)
       if(LOCKWAIT == TRUE)
 	{
 	  // gps was waiting for fix, now waiting for connection
-	  MapWindow::RequestMapDirty = true;
-	  //            SwitchToMapWindow();
-	  //            FullScreen();
+	  NMEAParser::GpsUpdated = true;
+	  MapWindow::MapDirty = true;
+	  SetEvent(dataTriggerEvent);
 	  LOCKWAIT = FALSE;
 	}
       if(!CONNECTWAIT)
 	{
 	  // gps is waiting for connection first time
 	  
-	  MapWindow::RequestMapDirty = true;
+	  NMEAParser::GpsUpdated = true;
+	  MapWindow::MapDirty = true;
+	  SetEvent(dataTriggerEvent);
 	  extGPSCONNECT = FALSE;
 	  
 	  InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
@@ -2731,13 +2763,15 @@ void ProcessTimer(void)
 	    
 	} else {
 	
-	if (itimeout % 120 == 0) {
+	if (itimeout % 30 == 0) {
 	  // we've been waiting for connection a long time
 	  
 	  // no activity for 30 seconds, so assume PDA has been
 	  // switched off and on again
 	  //
-	  MapWindow::RequestMapDirty = true;
+	  NMEAParser::GpsUpdated = true;
+	  MapWindow::MapDirty = true;
+	  SetEvent(dataTriggerEvent);
 
 	  extGPSCONNECT = FALSE;
 	  
@@ -2765,10 +2799,9 @@ void ProcessTimer(void)
       
       if(CONNECTWAIT)
 	{
-	  MapWindow::RequestMapDirty = true;
-
-	    //            SwitchToMapWindow();
-	    //            FullScreen();
+	  NMEAParser::GpsUpdated = true;
+	  MapWindow::MapDirty = true;
+	  SetEvent(dataTriggerEvent);
 	  CONNECTWAIT = FALSE;
 	}
     }
@@ -2779,7 +2812,9 @@ void ProcessTimer(void)
 	{
 	  InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
 	  
-	  MapWindow::RequestMapDirty = true;
+	  NMEAParser::GpsUpdated = true;
+	  MapWindow::MapDirty = true;
+	  SetEvent(dataTriggerEvent);
 	  
 	  LOCKWAIT = TRUE;
 #ifndef DISABLEAUDIO
@@ -2790,9 +2825,9 @@ void ProcessTimer(void)
 	}
       else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
 	{
-	  MapWindow::RequestMapDirty = true;
-	  //            SwitchToMapWindow();
-	  //            FullScreen();
+	  NMEAParser::GpsUpdated = true;
+	  MapWindow::MapDirty = true;
+	  SetEvent(dataTriggerEvent);
 	  LOCKWAIT = FALSE;
 	}
     }
@@ -2809,12 +2844,6 @@ void SIMProcessTimer(void)
 #ifdef _SIM_
 
   CommonProcessTimer();
-
-  static int ktimer=0;
-  ktimer++;
-  if (ktimer % 5 != 0) {
-    return; // only update every 5 clicks
-  }
 
   GPSCONNECT = TRUE;
   extGPSCONNECT = TRUE;
@@ -2837,12 +2866,13 @@ void SIMProcessTimer(void)
   }
 
 #ifdef DEBUG
-#if 0
+#if 1
   NMEAParser::TestRoutine(&GPS_INFO);
 #endif
 #endif
 
   NMEAParser::GpsUpdated = TRUE;
+  SetEvent(dataTriggerEvent);
 
   VarioWriteSettings();
 #endif
@@ -2856,17 +2886,14 @@ void SwitchToMapWindow(void)
   DefocusInfoBox();
 
   SetFocus(hWndMapWindow);
-  if (  MenuTimeOut< MenuTimeoutMax) {
-    MenuTimeOut = MenuTimeoutMax;
+  if (  MenuTimeOut< MenuTimeoutMax/5) {
+    MenuTimeOut = MenuTimeoutMax/5;
   }
   if (  InfoBoxFocusTimeOut< FOCUSTIMEOUTMAX) {
     InfoBoxFocusTimeOut = FOCUSTIMEOUTMAX;
   }
-
-  // JMW reactivate menu button
-  // ShowWindow(hWndMenuButton, SW_SHOW);
-
 }
+
 
 void PopupAnalysis()
 {

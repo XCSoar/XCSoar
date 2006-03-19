@@ -372,6 +372,14 @@
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
+  <WndProperty Name="prpDebounceTimeout" Caption="Debounce time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 >
+    <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=0 Max=1000 Step=25/>
+  </WndProperty>
+
+  <WndProperty Name="prpEnableFLARMDisplay" Caption="FLARM display"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
   </WndFrame>
 
   <WndFrame Name="frmAppearance" X=70 Y=0 Width=246 Height=222 Font=2>

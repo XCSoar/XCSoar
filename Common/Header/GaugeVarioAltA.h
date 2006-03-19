@@ -24,11 +24,18 @@ class GaugeVario {
   static void RenderSpeedToFly(int x, int y);
   static void RenderBallast(void);
   static void RenderBugs(void);
-  static void RenderNeedle(double Value, int x, int y);
+  static void RenderNeedle(double Value);
   static void Repaint(HDC hDC);
   static void Show(bool doshow);
 
  private:
+  static int xoffset;
+  static int yoffset;
+  static int gmax;
+  static void MakePolygon(const int i);
+  static void MakeAllPolygons();
+  static POINT* getPolygon(const int i);
+  static POINT *polys;
   static bool dirty;
   static HDC hdcScreen;
   static HDC hdcDrawWindow;

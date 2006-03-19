@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.38 2006/03/17 17:01:56 jwharington Exp $
+  $Id: Parser.cpp,v 1.39 2006/03/19 08:43:10 jwharington Exp $
 
 Copyright_License {
 
@@ -74,6 +74,7 @@ NMEAParser::NMEAParser() {
 
 void NMEAParser::Reset(void) {
   GpsUpdated = TRUE;
+  SetEvent(dataTriggerEvent);
   VarioUpdated = TRUE;
   nmeaParser1.gpsValid = false;
   nmeaParser2.gpsValid = false;
@@ -140,6 +141,9 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
       // string is too long
       return FALSE;
     }
+
+  if(_tcslen(String)>90)
+
   if(String[0] != '$')
     {
       return FALSE;
@@ -279,32 +283,30 @@ void NMEAParser::ExtractParameter(TCHAR *Source,
 				  TCHAR *Destination, 
 				  int DesiredFieldNumber)
 {
-  int index = 0;
   int dest_index = 0;
   int CurrentFieldNumber = 0;
-  int StringLength        = 0;
+  int StringLength = _tcslen(Source);
+  TCHAR *sptr = Source;
+  TCHAR *eptr = Source+StringLength;
 
-  StringLength = _tcslen(Source);
-
-  while( (CurrentFieldNumber < DesiredFieldNumber) && (index < StringLength) )
+  while( (CurrentFieldNumber < DesiredFieldNumber) && (sptr<eptr) )
     {
-      if ( Source[ index ] == ',' || Source[ index ] == '*' )
+      if (*sptr == ',' || *sptr == '*' )
         {
           CurrentFieldNumber++;
         }
-
-      index++;
+      ++sptr;
     }
 
   if ( CurrentFieldNumber == DesiredFieldNumber )
     {
-      while( (index < StringLength)    &&
-             (Source[ index ] != ',') &&
-             (Source[ index ] != '*') &&
-             (Source[ index ] != '\0') )
+      while( (sptr < eptr)    &&
+             (*sptr != ',') &&
+             (*sptr != '*') &&
+             (*sptr != '\0') )
         {
-          Destination[dest_index] = Source[ index ];
-          index++; dest_index++;
+          Destination[dest_index] = *sptr;
+          ++sptr; ++dest_index;
         }
       Destination[dest_index] = '\0';
     }
@@ -505,6 +507,7 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
     // say we are updated every time we get this,
     // so infoboxes get refreshed if GPS connected
     GpsUpdated = TRUE; 
+    SetEvent(dataTriggerEvent);
 
     if(ThisTime<=LastTime)
       {
@@ -581,7 +584,10 @@ BOOL NMEAParser::GGA(TCHAR *String, NMEA_INFO *GPS_INFO)
   double ThisTime;
   static double LastTime = 0;
 
-  /////
+  if (ReplayLogger::IsEnabled()) {
+    return TRUE;
+  }
+
 
   ExtractParameter(String,ctemp,6);  
   nSatellites = (int)(min(12,StrToDouble(ctemp, NULL)));
@@ -797,6 +803,7 @@ BOOL NMEAParser::PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->Vario = wnet;
 
   VarioUpdated = TRUE;
+  SetEvent(dataTriggerEvent);
 
   return FALSE;
 }
@@ -924,6 +931,7 @@ BOOL NMEAParser::PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->Vario = wnet/TOKNOTS;
 
   VarioUpdated = TRUE;
+  SetEvent(dataTriggerEvent);
 
   return TRUE;
 }
@@ -932,27 +940,26 @@ BOOL NMEAParser::PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  TCHAR ctemp[80];
-  static unsigned long last_switchinputs;
-  static unsigned long last_switchoutputs;
-
-  ExtractParameter(String,ctemp,0);
-  MACCREADY = StrToDouble(ctemp,NULL)/10;
+  static long last_switchinputs;
+  static long last_switchoutputs;
 
   unsigned long switchinputs, switchoutputs;
+  swscanf(String,
+	  TEXT("%lf,%lx,%lx"),
+	  &MACCREADY,
+	  &switchinputs,
+	  &switchoutputs,
+	  &GPS_INFO->SupplyBatteryVoltage);
 
-  ExtractParameter(String,ctemp,1);
-  switchinputs = wcstol(ctemp, NULL, 16);
-
-  ExtractParameter(String,ctemp,2);
-  switchoutputs = wcstol(ctemp, NULL, 16);
+  MACCREADY /= 10;
+  GPS_INFO->SupplyBatteryVoltage/= 10;
 
   //   airdata.circling = (switchoutputs && (1<<OUTPUT_BIT_CIRCLING));
 
-  unsigned long up_switchinputs;
-  unsigned long down_switchinputs;
-  unsigned long up_switchoutputs;
-  unsigned long down_switchoutputs;
+  long up_switchinputs;
+  long down_switchinputs;
+  long up_switchoutputs;
+  long down_switchoutputs;
 
   // detect changes to ON: on now (x) and not on before (!lastx)
   // detect changes to OFF: off now (!x) and on before (lastx)
@@ -963,7 +970,7 @@ BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
   up_switchoutputs = ((~switchoutputs) & (last_switchoutputs));
 
   int i;
-  unsigned long thebit;
+  long thebit;
   for (i=0; i<32; i++) {
     thebit = 1<<i;
     if ((down_switchinputs & thebit) == thebit) {
@@ -983,30 +990,30 @@ BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
   last_switchinputs = switchinputs;
   last_switchoutputs = switchoutputs;
 
-  ExtractParameter(String,ctemp,3);
-  GPS_INFO->SupplyBatteryVoltage = StrToDouble(ctemp,NULL)/10;
-  
   return TRUE;
 }
 
 
-// $PDVDS,nx,nz,flap,stallratio
+// $PDVDS,nx,nz,flap,stallratio,netto
 BOOL NMEAParser::PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  TCHAR ctemp[80];
+  double flap, stallratio;
+  swscanf(String,
+	  TEXT("%lf,%lf,%lf,%lf,%lf"),
+	  &GPS_INFO->AccelX,
+	  &GPS_INFO->AccelZ,
+	  &flap,
+	  &stallratio,
+	  &GPS_INFO->NettoVario);
 
-  ExtractParameter(String,ctemp,0);
-  GPS_INFO->AccelX = StrToDouble(ctemp,NULL)/AccelerometerZero;
-  ExtractParameter(String,ctemp,1);
-  GPS_INFO->AccelZ = StrToDouble(ctemp,NULL)/AccelerometerZero;
+  GPS_INFO->AccelX /= AccelerometerZero;
+  GPS_INFO->AccelZ /= AccelerometerZero;
   int mag = isqrt4((int)((GPS_INFO->AccelX*GPS_INFO->AccelX
 			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
   GPS_INFO->Gload = mag/100.0;
   GPS_INFO->AccelerationAvailable = TRUE;
-
-  ExtractParameter(String,ctemp,4);
   GPS_INFO->NettoVarioAvailable = TRUE;
-  GPS_INFO->NettoVario = StrToDouble(ctemp,NULL)/10.0;
+  GPS_INFO->NettoVario /= 10.0;
 
   if (EnableCalibration) {
     char buffer[200];
@@ -1048,26 +1055,24 @@ BOOL NMEAParser::PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 BOOL NMEAParser::PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  TCHAR ctemp[80];
+  swscanf(String,
+	  TEXT("%lf,%lf,%lf,%lf"),
+	  &GPS_INFO->Vario, //
+	  &GPS_INFO->IndicatedAirspeed,
+	  &GPS_INFO->TrueAirspeed,
+	  &GPS_INFO->BaroAltitude);
 
-  ExtractParameter(String,ctemp,0);
-  GPS_INFO->Vario = StrToDouble(ctemp,NULL)/10.0;
+  GPS_INFO->Vario /= 10.0;
   GPS_INFO->VarioAvailable = TRUE;
   hasVega = true;
 
-  VarioUpdated = TRUE;
-
-  ExtractParameter(String,ctemp,1);
-  GPS_INFO->IndicatedAirspeed = StrToDouble(ctemp,NULL)/10.0;
+  GPS_INFO->IndicatedAirspeed /= 10.0;
   GPS_INFO->AirspeedAvailable = TRUE;
-
-  ExtractParameter(String,ctemp,2);
-  double densityratio = StrToDouble(ctemp,NULL)/1024.0;
-  GPS_INFO->TrueAirspeed = GPS_INFO->IndicatedAirspeed*densityratio;
-
-  ExtractParameter(String,ctemp,3);
-  GPS_INFO->BaroAltitude = StrToDouble(ctemp,NULL);
+  GPS_INFO->TrueAirspeed *= GPS_INFO->IndicatedAirspeed/1024.0;
   GPS_INFO->BaroAltitudeAvailable = TRUE;
+
+  VarioUpdated = TRUE;
+  SetEvent(dataTriggerEvent);
 
   return FALSE;
 }
@@ -1139,7 +1144,6 @@ double FLARM_EastingToLongitude = 0.0;
 
 BOOL NMEAParser::PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  TCHAR ctemp[80];
   static int old_flarm_rx = 0;
 
   GPS_INFO->FLARM_Available = true;
@@ -1159,21 +1163,12 @@ BOOL NMEAParser::PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   FLARM_EastingToLongitude = delta_lon / dlon;
 
-  // number of received FLARM devices
-  ExtractParameter(String,ctemp,0);
-  GPS_INFO->FLARM_RX = (unsigned short)StrToDouble(ctemp,NULL);
-
-  // Transmit status
-  ExtractParameter(String,ctemp,1);
-  GPS_INFO->FLARM_TX = (unsigned short)StrToDouble(ctemp,NULL);
-
-  // GPS status
-  ExtractParameter(String,ctemp,2);
-  GPS_INFO->FLARM_GPS = (unsigned short)StrToDouble(ctemp,NULL);
-
-  // Alarm level of FLARM (0-3)
-  ExtractParameter(String,ctemp,4);
-  GPS_INFO->FLARM_AlarmLevel = (unsigned short)StrToDouble(ctemp,NULL);
+  swscanf(String,
+	  TEXT("%hu,%hu,%hu,%hu"),
+	  &GPS_INFO->FLARM_RX, // number of received FLARM devices
+	  &GPS_INFO->FLARM_TX, // Transmit status
+	  &GPS_INFO->FLARM_GPS, // GPS status
+	  &GPS_INFO->FLARM_AlarmLevel); // Alarm level of FLARM (0-3)
 
   // process flarm updates
 
@@ -1238,61 +1233,30 @@ BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
   // set time of fix to current time
   GPS_INFO->FLARM_Traffic[flarm_slot].Time_Fix = GPS_INFO->Time;
 
-  // 0 alarmlevel
-  ExtractParameter(String,ctemp,0);
-  GPS_INFO->FLARM_Traffic[flarm_slot].AlarmLevel = 
-    (unsigned short)StrToDouble(ctemp,NULL);
-
+  swscanf(String,
+	  TEXT("%hu,%lf,%lf,%lf,%hu,%6s,%lf,%lf,%lf,%lf,%hu"),
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].AlarmLevel, // unsigned short 0
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth, // double?     1
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast, // double?      2
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].Altitude, // double           3
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].IDType, // unsigned short     4
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].ID, // 6 char hex
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].TrackBearing, // double       6
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].TurnRate, // double           7
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].Speed, // double              8
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].ClimbRate, // double          9
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].Type); // unsigned short     10
   // 1 relativenorth, meters  
-  ExtractParameter(String,ctemp,1);
-  GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth = 
-    StrToDouble(ctemp,NULL);
   GPS_INFO->FLARM_Traffic[flarm_slot].Latitude = 
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth
     *FLARM_NorthingToLatitude + GPS_INFO->Latitude;
-
   // 2 relativeeast, meters
-  ExtractParameter(String,ctemp,2);
-  GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast = 
-    StrToDouble(ctemp,NULL);
   GPS_INFO->FLARM_Traffic[flarm_slot].Longitude = 
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast
     *FLARM_EastingToLongitude + GPS_INFO->Longitude;
-
-  // 3 relativevertical, meters
-  ExtractParameter(String,ctemp,3);
-  GPS_INFO->FLARM_Traffic[flarm_slot].Altitude = 
-    StrToDouble(ctemp,NULL) + GPS_INFO->Altitude;
-
-  // 4 id-type
-  ExtractParameter(String,ctemp,4);
-  GPS_INFO->FLARM_Traffic[flarm_slot].IDType = 
-    (unsigned short)StrToDouble(ctemp,NULL);
-
-  // 6 track, integer degrees 0-360
-  ExtractParameter(String,ctemp,6);
-  GPS_INFO->FLARM_Traffic[flarm_slot].TrackBearing = 
-    StrToDouble(ctemp,NULL);
-
-  // 7 turnrate, degrees per second
-  ExtractParameter(String,ctemp,7);
-  GPS_INFO->FLARM_Traffic[flarm_slot].TurnRate = 
-    StrToDouble(ctemp,NULL);
-
-  // 8 groundspeed, meters/second
-  ExtractParameter(String,ctemp,8);
-  GPS_INFO->FLARM_Traffic[flarm_slot].Speed = 
-    StrToDouble(ctemp,NULL);
-
-  // 9 climbrate, meters/second
-  ExtractParameter(String,ctemp,9);
-  GPS_INFO->FLARM_Traffic[flarm_slot].ClimbRate = 
-    StrToDouble(ctemp,NULL);
-
-  // 10 type
-  ExtractParameter(String,ctemp,10);
-  GPS_INFO->FLARM_Traffic[flarm_slot].Type = 
-    (unsigned short)StrToDouble(ctemp,NULL);
+  // alt
+  GPS_INFO->FLARM_Traffic[flarm_slot].Altitude += 
+    GPS_INFO->Altitude;
 
   return FALSE;
 }
@@ -1301,18 +1265,24 @@ BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
 //////
 
 void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
-  static int i=0;
+  static int i=90;
+  static TCHAR t1[] = TEXT("1,1,1,1");
+  static TCHAR t2[] = TEXT("0,300,500,220,2,DD8F12,120,-4.5,30,-1.4,1");
+  static TCHAR t3[] = TEXT("0,0,1200,50,2,DA8F12,120,-4.5,30,-1.4,1");
+  //  static TCHAR t4[] = TEXT("-3,500,1024,50");
+
   i++;
 
   if (i>100) {
     i=0;
   }
-  if (i>50) {
+  if (i<50) {
     GPS_INFO->FLARM_Available = true;
-    nmeaParser1.PFLAU(TEXT("1,1,1,1"),GPS_INFO);
-    nmeaParser1.PFLAA(TEXT("0,300,500,220,2,DD8F12,120,-4.5,30,-1.4,1"),GPS_INFO);
-    nmeaParser1.PFLAA(TEXT("0,0,1200,50,2,DA8F12,120,-4.5,30,-1.4,1"),GPS_INFO);
+    nmeaParser1.PFLAU(t1,GPS_INFO);
+    nmeaParser1.PFLAA(t2,GPS_INFO);
+    nmeaParser1.PFLAA(t3,GPS_INFO);
   }
+  //  nmeaParser1.PDVDV(t4,GPS_INFO);
 }
 
 

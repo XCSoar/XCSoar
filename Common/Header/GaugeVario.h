@@ -11,6 +11,8 @@ class GaugeVario {
   static void Render();
   static void RenderBg();
  private:
+  static int xoffset;
+  static int yoffset;
   static HDC hdcScreen;
   static HDC hdcDrawWindow;
   static HBITMAP hDrawBitMap;

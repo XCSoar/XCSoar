@@ -946,7 +946,6 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
       }
       if(AirspaceCircle[i].Visible || (!visibleonly))
 	{
-
 	  if (
 	      (Latitude> AirspaceCircle[i].bounds.miny)&&
 	      (Latitude< AirspaceCircle[i].bounds.maxy)&&
@@ -955,10 +954,14 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
 	      )
 	    {
 
-	      Dist = Distance(Latitude,Longitude,AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude);
-	      if(Dist < AirspaceCircle[i].Radius )
+	      if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, 
+				       AirspaceCircle[i].Top.Altitude))
 		{
-		  if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Top.Altitude))
+		  Dist = Distance(Latitude,
+				  Longitude,
+				  AirspaceCircle[i].Latitude, 
+				  AirspaceCircle[i].Longitude);
+		  if(Dist < AirspaceCircle[i].Radius )
 		    {
 		      return i;
 		    }
@@ -970,7 +973,7 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
 }
 
 
-BOOL CheckAirspaceAltitude(double Base, double Top)
+BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
 {
 
   switch (AltitudeMode)
@@ -1073,7 +1076,6 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 	// don't want warnings for this one
 	continue;
       }
-
       if(AirspaceArea[i].Visible || (!visibleonly)) 
 	{
 	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, 
@@ -1264,9 +1266,9 @@ double ScreenCrossTrackError(double lon1, double lat1,
 		     double *lon4, double *lat4) {
   int x1, y1, x2, y2, x3, y3;
   
-  MapWindow::LatLon2Screen(lon1, lat1, &x1, &y1);
-  MapWindow::LatLon2Screen(lon2, lat2, &x2, &y2);
-  MapWindow::LatLon2Screen(lon3, lat3, &x3, &y3);
+  MapWindow::LatLon2Screen(lon1, lat1, x1, y1);
+  MapWindow::LatLon2Screen(lon2, lat2, x2, y2);
+  MapWindow::LatLon2Screen(lon3, lat3, x3, y3);
 
   int v12x, v12y, v13x, v13y;
 
@@ -1288,7 +1290,7 @@ double ScreenCrossTrackError(double lon1, double lat1,
     // location of 'closest' point 
     *lon4 = (v12x)*f+x1;
     *lat4 = (v12y)*f+y1;
-    MapWindow::GetLocationFromScreen(lon4, lat4);
+    MapWindow::GetLocationFromScreen(*lon4, *lat4);
   } else {
     *lon4 = lon1;
     *lat4 = lat1;

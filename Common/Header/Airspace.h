@@ -73,8 +73,7 @@ typedef struct _AIRSPACE_CIRCLE
 	double Latitude;
 	double Longitude;
 	double Radius;
-	int ScreenX;
-	int ScreenY;
+	POINT Screen;
 	int ScreenR;
 	int Visible;
         AIRSPACE_ACK Ack;
@@ -87,7 +86,7 @@ int FindAirspaceCircle(double Longditude,double Lattitude,
 		       bool visibleonly=true);
 int FindAirspaceArea(double Longditude,double Lattitude,
 		     bool visibleonly=true);
-BOOL CheckAirspaceAltitude(double Base, double Top);
+BOOL CheckAirspaceAltitude(const double &Base, const double &Top);
 void CloseAirspace(void);
 void FindNearestAirspace(double longitude, 
 			 double latitude,

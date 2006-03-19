@@ -1360,7 +1360,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
     case WM_DESTROY:
 #ifndef ALTAIRSYNC
-      MapWindow::RequestFastRefresh=true;
+      MapWindow::RequestFastRefresh();
 #endif
     break;
 
@@ -1685,7 +1685,7 @@ int WndForm::ShowModal(void){
 
 #ifndef ALTAIRSYNC
   // JMW added to make sure screen is redrawn
-  MapWindow::RequestFastRefresh= true;
+  MapWindow::RequestFastRefresh();
 
   Message::BlockRender(false);
 #endif

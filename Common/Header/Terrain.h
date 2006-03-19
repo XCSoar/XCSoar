@@ -14,18 +14,18 @@ typedef struct _COLORRAMP
 extern short TerrainContrast;
 extern short TerrainBrightness;
 
-void ColorRampLookup(short h, BYTE *r, BYTE *g, BYTE *b,
-		     COLORRAMP* ramp_colors, int numramp);
+void ColorRampLookup(short h, BYTE &r, BYTE &g, BYTE &b,
+		     COLORRAMP* ramp_colors, const int numramp);
 
-void SetTopologyBounds(RECT rcin, bool force=false);
+void SetTopologyBounds(const RECT rcin, const bool force=false);
 void ReadTopology();
 void OpenTopology();
 void CloseTopology();
-void DrawTopology( HDC hdc, RECT rc);
-void DrawTerrain(HDC hdc, RECT rc, double sunazimuth, double sunelevation);
-void DrawMarks(HDC hdc, RECT rc);
-void MarkLocation(double lon, double lat);
-rectObj GetRectBounds(RECT rc);
+void DrawTopology(const HDC hdc, const RECT rc);
+void DrawTerrain(const HDC hdc, const RECT rc, const double sunazimuth, const double sunelevation);
+void DrawMarks(const HDC hdc, const RECT rc);
+void MarkLocation(const double lon, const double lat);
+rectObj GetRectBounds(const RECT rc);
 void OptimizeTerrainCache();
 void CloseTerrainRenderer();
 #endif

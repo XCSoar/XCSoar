@@ -81,11 +81,14 @@ typedef union{
 class MapWindow {
  public:
 
+  static bool IsDisplayRunning();
+
   // 12 is number of airspace types
   static int	iAirspaceBrush[AIRSPACECLASSCOUNT]; 
   static int	iAirspaceColour[AIRSPACECLASSCOUNT];
   static int    iAirspaceMode[AIRSPACECLASSCOUNT];
   static HPEN hAirspacePens[AIRSPACECLASSCOUNT];
+  static HPEN hSnailPens[NUMSNAILCOLORS];
   static bool bAirspaceBlackOutline;
   static HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
   static HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
@@ -102,18 +105,19 @@ class MapWindow {
   static void ModifyMapScale();
 
   static bool MapDirty;
-  static bool RequestMapDirty;
-  static bool AirDataDirty;
-  static bool RequestAirDataDirty;
 
-  static bool RequestFastRefresh;
+  static void RequestFastRefresh();
   static bool RequestFullScreen;
+
+  static DWORD timestamp_newdata;
+  static void UpdateTimeStats(bool start);
 
   static bool isAutoZoom();
   static bool isPan();
 
-  static void GetLocationFromScreen(double *X, double *Y);
-  static void DrawBitmapIn(HDC hdc, int x, int y, HBITMAP h);
+  static void GetLocationFromScreen(double &X, double &Y);
+  static void GetLocationFromScreen(float &X, float &Y);
+  static void DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h);
   static void DrawBitmapX(HDC hdc, int top, int right,
 		     int sizex, int sizey,
 		     HDC source,
@@ -122,8 +126,9 @@ class MapWindow {
   static void RequestToggleFullScreen();
   static void RequestOnFullScreen();
   static void RequestOffFullScreen();
-  static void LatLon2Screen(float lon, float lat, int *scX, int *scY);
-  static void LatLon2Screen(double lon, double lat, int *scX, int *scY);
+  static void LatLon2Screen(const float &lon, const float &lat, int &scX, int &scY);
+  static void LatLon2Screen(const double &lon, const double &lat, int &scX, int &scY);
+  static void LatLon2Screen(const double &lon, const double &lat, POINT &sc);
 
   static void CloseDrawingThread(void);
   static void CreateDrawingThread(void);
@@ -150,12 +155,13 @@ class MapWindow {
 
   static void CalculateScreenPositions(POINT Orig, RECT rc, 
                                        POINT *Orig_Aircraft);
-  static void CalculateScreenPositionsAirspace(POINT Orig, RECT rc, 
-                                               POINT *Orig_Aircraft);
+  static void CalculateScreenPositionsAirspace();
+  static void CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE& circ);
+  static void CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA& area);
   static void CalculateWaypointReachable(void);
   
-  static bool PointVisible(POINT *P, RECT *rc);
-  static bool PointVisible(double lon, double lat);
+  static bool PointVisible(const POINT &P, const RECT &rc);
+  static bool PointVisible(const double &lon, const double &lat);
   
   static void DrawAircraft(HDC hdc, POINT Orig);
   static void DrawCrossHairs(HDC hdc, POINT Orig);
@@ -183,7 +189,7 @@ class MapWindow {
   static void DrawSpeedToFly(HDC hDC, RECT rc);
   static void DrawFLARMTraffic(HDC hDC, RECT rc);
     
-  static void DrawSolidLine(HDC , POINT , POINT );
+  static void DrawSolidLine(const HDC&hdc , const POINT&start , const POINT&end );
   static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode, bool noOverlap=false);
   static void ToggleFullScreenStart();
   static void RefreshMap();
@@ -267,6 +273,7 @@ class MapWindow {
   static DWORD DrawThread (LPVOID);
 
   static void RenderMapWindow(  RECT rc);
+  static void UpdateCaches(bool force=false);
   static double findMapScaleBarSize(RECT rc);
 
   #define SCALELISTSIZE  20
@@ -291,6 +298,7 @@ class MapWindow {
   static void StoreRestoreFullscreen(bool);
  public:
 
+  static double GetApproxScreenRange(void);
   static int GetMapResolutionFactor();
   static bool checkLabelBlock(RECT rc);
 

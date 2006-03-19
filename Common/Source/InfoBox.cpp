@@ -432,6 +432,8 @@ void InfoBox::PaintSelector(void){
 
 void InfoBox::Paint(void){
 
+  if (!GlobalRunning) return; // safety
+
   static InitDone = false;
   RECT rc;
 
@@ -528,12 +530,14 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     case WM_ERASEBKGND:
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
-      ib->Paint();
+      if (ib)
+	ib->Paint();
     return TRUE;
 
     case WM_PAINT:
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
-      ib->Paint();
+      if (ib)
+	ib->Paint();
     break;
 
     case WM_SIZE:
@@ -541,7 +545,8 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     case WM_WINDOWPOSCHANGED:
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
-      ib->Paint();
+      if (ib)
+	ib->Paint();
     return 0;
 
     case WM_CREATE:
@@ -555,7 +560,8 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     case WM_LBUTTONDOWN:
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
-      SendMessage(ib->GetParent(), WM_COMMAND, (WPARAM)0, (LPARAM)ib->GetHandle());
+      if (ib) 
+	SendMessage(ib->GetParent(), WM_COMMAND, (WPARAM)0, (LPARAM)ib->GetHandle());
     return(0);
 
     case WM_LBUTTONUP:

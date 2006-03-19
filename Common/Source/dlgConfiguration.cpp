@@ -37,6 +37,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "MapWindow.h"
 #include "Terrain.h"
+#include "GaugeFLARM.h"
 
 #include "WindowControls.h"
 #include "Statistics.h"
@@ -523,6 +524,18 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpLockSettingsInFlight"));
   if (wp) {
     wp->GetDataField()->Set(LockSettingsInFlight);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpDebounceTimeout"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(debounceTimeout);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMDisplay"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableFLARMDisplay);
     wp->RefreshDisplay();
   }
 
@@ -1076,6 +1089,26 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMDisplay"));
+  if (wp) {
+    if (EnableFLARMDisplay != 
+	wp->GetDataField()->GetAsBoolean()) {
+      EnableFLARMDisplay = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryEnableFLARMDisplay,
+		    EnableFLARMDisplay);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpDebounceTimeout"));
+  if (wp) {
+    if (debounceTimeout != wp->GetDataField()->GetAsInteger()) {
+      debounceTimeout = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryDebounceTimeout, debounceTimeout);
+      changed = true;
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceOutline"));
   if (wp) {
     if (MapWindow::bAirspaceBlackOutline != 
@@ -1546,7 +1579,6 @@ void dlgConfigurationShowModal(void){
       SetToRegistry(szRegistryAppStatusMessageAlignment,
 		    (DWORD)(Appearance.StateMessageAlligne));
       changed = true;
-      requirerestart = true;
     }
   }
 
