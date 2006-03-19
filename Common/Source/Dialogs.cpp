@@ -3255,7 +3255,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
           ::ReleaseDC(hDlg, hdcScreen);
           EndDialog(hDlg, LOWORD(wParam));
           ClearAirspaceWarnings(false); // airspace warning gets refreshed
-          MapWindow::RequestFastRefresh= true;
+          MapWindow::RequestFastRefresh();
           FullScreen();
           return TRUE;
         }
@@ -3265,7 +3265,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
-        MapWindow::RequestFastRefresh= true;
+        MapWindow::RequestFastRefresh();
         FullScreen();
         break;
       }
@@ -3275,7 +3275,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
-        MapWindow::RequestFastRefresh= true;
+        MapWindow::RequestFastRefresh();
         FullScreen();
         break;
       }
@@ -3285,7 +3285,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
-        MapWindow::RequestFastRefresh= true;
+        MapWindow::RequestFastRefresh();
         FullScreen();
         break;
       }
@@ -3295,7 +3295,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
-        MapWindow::RequestFastRefresh= true;
+        MapWindow::RequestFastRefresh();;
         FullScreen();
         break;
       }
@@ -3306,7 +3306,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
         ::ReleaseDC(hDlg, hdcScreen);
         EndDialog(hDlg, LOWORD(wParam));
-        MapWindow::RequestFastRefresh= true;
+        MapWindow::RequestFastRefresh();
         FullScreen();
         break;
       }
@@ -3402,7 +3402,7 @@ LRESULT CALLBACK WaypointDetails(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
     case WM_CLOSE:
       ClearAirspaceWarnings(false); // airspace warning gets refreshed
-      MapWindow::RequestFastRefresh= true;
+      MapWindow::RequestFastRefresh();
       FullScreen();
     }
   return FALSE;
@@ -3565,7 +3565,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
       // Attach window specific data to the window
       SetWindowLong(hwnd, GWL_USERDATA, (LONG) data);
     }
-    MapWindow::RequestFastRefresh = true; // trigger screen refresh
+    MapWindow::RequestFastRefresh();
 
     ClearAirspaceWarnings(false);
     // JMW do this so airspace warning gets refreshed

@@ -109,6 +109,8 @@ typedef struct _SCREEN_INFO
 void ProcessChar1 (char c);
 void ProcessChar2 (char c);
 
+extern void UnlockGraphicsData();
+extern void LockGraphicsData();
 extern void UnlockFlightData();
 extern void LockFlightData();
 extern void UnlockTerrainDataCalculations();
@@ -117,6 +119,9 @@ extern void UnlockTerrainDataGraphics();
 extern void LockTerrainDataGraphics();
 extern void UnlockNavBox();
 extern void LockNavBox();
+extern HANDLE drawTriggerEvent;
+extern HANDLE dataTriggerEvent;
+
 void FocusOnWindow(int i, bool selected);
 void FullScreen();
 

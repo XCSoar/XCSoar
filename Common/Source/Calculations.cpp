@@ -92,11 +92,17 @@ static void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double bearing, distance;
   double lat, lon;
+
+  // estimate max range (only interested in at most one screen distance away)
+  double mymaxrange = MapWindow::GetApproxScreenRange();
+
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-    bearing = -90+i*180.0/NUMTERRAINSWEEPS+Basic->TrackBearing;
+    //    bearing = -90+i*180/NUMTERRAINSWEEPS+Basic->TrackBearing;
+    bearing = i*360/NUMTERRAINSWEEPS;
     distance = FinalGlideThroughTerrain(bearing,
 					Basic,
-					Calculated, &lat, &lon);
+					Calculated, &lat, &lon,
+					mymaxrange);
     MapWindow::GlideFootPrint[i].x = lon;
     MapWindow::GlideFootPrint[i].y = lat;
   }
@@ -132,6 +138,7 @@ int FastLogNum = 0; // number of points to log at high rate
 
 void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
+  if (!Calculated->Flying) return;
 
   SnailTrail[SnailNext].Latitude = Basic->Latitude;
   SnailTrail[SnailNext].Longitude = Basic->Longitude;
@@ -442,12 +449,38 @@ void  SetWindEstimate(double speed, double bearing) {
   }
 }
 
+void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  // do slow part of calculations (cleanup of caches etc, nothing
+  // that changes the state)
+
+  if (FinalGlideTerrain)
+     TerrainFootprint(Basic, Calculated);
+
+  static double LastOptimiseTime = 0;
+
+  AirspaceWarning(Basic, Calculated);
+
+  // moved from MapWindow.cpp
+  if(Basic->Time> LastOptimiseTime+0.0)
+    {
+      LastOptimiseTime = Basic->Time;
+      LockTerrainDataCalculations();
+      if (terrain_dem_calculations.terraincachemisses > 0){
+        DWORD tm =GetTickCount();
+        terrain_dem_calculations.OptimizeCash();
+        tm = GetTickCount()-tm;
+        tm = GetTickCount();
+      }
+      terrain_dem_calculations.SetCacheTime();
+      UnlockTerrainDataCalculations();
+    }
+}
+
 
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
   static double maccready;
-  static double LastOptimiseTime = 0;
 
   if (!windanalyser) {
     windanalyser = new WindAnalyser(Basic, Calculated);
@@ -526,28 +559,9 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   TerrainHeight(Basic, Calculated);
 
-  TerrainFootprint(Basic, Calculated);
-
   CalculateNextPosition(Basic, Calculated);
 
-  AirspaceWarning(Basic, Calculated);
-
   DoLogging(Basic, Calculated);
-
-  // moved from MapWindow.cpp
-  if(Basic->Time> LastOptimiseTime+15.0)
-    {
-      LastOptimiseTime = Basic->Time;
-      LockTerrainDataCalculations();
-      if (terrain_dem_calculations.terraincachemisses > 0){
-        DWORD tm =GetTickCount();
-        terrain_dem_calculations.OptimizeCash();
-        tm = GetTickCount()-tm;
-        tm = GetTickCount();
-      }
-      terrain_dem_calculations.SetCacheTime();
-      UnlockTerrainDataCalculations();
-    }
 
   return TRUE;
 }
@@ -1574,8 +1588,8 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   double Alt = 0;
 
   LockTerrainDataCalculations();
-  // TODO: check this rounding is OK.
-  terrain_dem_calculations.SetTerrainRounding(0);
+  // want most accurate rounding here
+  terrain_dem_calculations.SetTerrainRounding(0,0);
   Alt = terrain_dem_calculations.
     GetTerrainHeight(Basic->Latitude , Basic->Longitude);
   UnlockTerrainDataCalculations();
@@ -1757,7 +1771,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
         double distancesoarable =
           FinalGlideThroughTerrain(LegBearing, Basic, Calculated,
                                    &lat,
-                                   &lon);
+                                   &lon,
+				   LegToGo);
 
         if (distancesoarable< LegToGo) {
           // JMW TODO display terrain warning
@@ -2035,7 +2050,8 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       return;
 
   // JMW TODO: FindAirspaceCircle etc should sort results, return
-  // the most critical or closest
+  // the most critical or closest.
+  // TODO: It should also check against current position, not just next position.
 
   i= FindAirspaceCircle(Calculated->NextLongitude,
 			Calculated->NextLatitude, false);
@@ -2343,75 +2359,87 @@ void ExitFinalGlideThroughTerrain() {
 
 double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
                                 DERIVED_INFO *Calculated,
-                                double *retlat, double *retlon)
+                                double *retlat, double *retlon,
+				double maxrange)
 {
+  double ialtitude = GlidePolar::MacCreadyAltitude(MACCREADY,
+						   // should this be zero?
+						   1.0, bearing,
+						   Calculated->WindSpeed,
+						   Calculated->WindBearing,
+						   0, 0, true, 0);
+  double glidemaxrange = Basic->Altitude/ialtitude;
 
   // returns distance one would arrive at altitude in straight glide
-
   // first estimate max range at this altitude
-  double ialtitude = GlidePolar::MacCreadyAltitude(MACCREADY,
-                                                  1.0, bearing,
-                                                  Calculated->WindSpeed,
-                                                  Calculated->WindBearing,
-                                                  0, 0, true, 0);
-  double maxrange = Basic->Altitude/ialtitude;
   double lat, lon;
   double latlast, lonlast;
   double h=0.0, dh=0.0;
   int imax=0;
   double dhlast=0;
-  double distance, altitude;
-  double distancelast=0;
+  double altitude;
 
   if (retlat && retlon) {
-    *retlat = Basic->Latitude;
-    *retlon = Basic->Longitude;
+    *retlat = 0;
+    *retlon = 0;
   }
 
-  // calculate terrain rounding factor
   LockTerrainDataCalculations();
 
-  terrain_dem_calculations.
-    SetTerrainRounding(maxrange/NUMFINALGLIDETERRAIN/1000.0);
+  // calculate terrain rounding factor
+
+  lat = FindLatitude(Basic->Latitude, Basic->Longitude, 0,
+		     glidemaxrange/NUMFINALGLIDETERRAIN);
+  lon = FindLongitude(Basic->Latitude, Basic->Longitude, 90,
+		      glidemaxrange/NUMFINALGLIDETERRAIN);
+  double Xrounding = fabs(lon-Basic->Longitude)/2;
+  double Yrounding = fabs(lat-Basic->Latitude)/2;
+  terrain_dem_calculations.SetTerrainRounding(Xrounding, Yrounding);
+
+  // find grid
+  double dlat = FindLatitude(Basic->Latitude, Basic->Longitude, bearing,
+				glidemaxrange)-Basic->Latitude;
+  double dlon = FindLongitude(Basic->Latitude, Basic->Longitude, bearing,
+				 glidemaxrange)-Basic->Longitude;
 
   for (int i=0; i<=NUMFINALGLIDETERRAIN; i++) {
-    distance = i*maxrange/NUMFINALGLIDETERRAIN;
-    altitude = (NUMFINALGLIDETERRAIN-i)*(Basic->Altitude)/NUMFINALGLIDETERRAIN;
+    double fi = (i*1.0)/NUMFINALGLIDETERRAIN;
+
+    if ((maxrange>0)&&(fi>maxrange/glidemaxrange)) {
+      // early exit
+      ExitFinalGlideThroughTerrain();
+      return maxrange;
+    }
+
+    altitude = (1.0-fi)*Basic->Altitude;
 
     // find lat, lon of point of interest
 
-    lat = FindLatitude(Basic->Latitude, Basic->Longitude, bearing, distance);
-    lon = FindLongitude(Basic->Latitude, Basic->Longitude, bearing, distance);
+    lat = Basic->Latitude+dlat*fi;
+    lon = Basic->Longitude+dlon*fi;
 
     // find height over terrain
-    h =  terrain_dem_calculations.
-      GetTerrainHeight(lat, lon); // latitude, longitude
+    h =  terrain_dem_calculations.GetTerrainHeight(lat, lon);
+                 // latitude, longitude
 
     dh = altitude - h -  SAFETYALTITUDETERRAIN;
-    //SAFETYALTITUDEARRIVAL;
 
     if ((dh<=0)&&(dhlast>0)) {
-      double f = (0.0-dhlast)/(dh-dhlast);
+      double f = (-dhlast)/(dh-dhlast);
       if (retlat && retlon) {
         *retlat = latlast*(1.0-f)+lat*f;
         *retlon = lonlast*(1.0-f)+lon*f;
       }
       ExitFinalGlideThroughTerrain();
-     return distancelast*(1.0-f)+distance*(f);
+      return Distance(Basic->Latitude, Basic->Longitude, lat, lon);
     }
-    if (i&&(distance<= 0.0)) {
-      ExitFinalGlideThroughTerrain();
-      return 0.0;
-    }
-
-    distancelast = distance;
     dhlast = dh;
     latlast = lat;
     lonlast = lon;
   }
 
   ExitFinalGlideThroughTerrain();
-  return 0.0;
+  return glidemaxrange;
 }
 
 
@@ -2593,7 +2621,8 @@ void SortLandableWaypoints (NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 		  double distancesoarable =
 		    FinalGlideThroughTerrain(LegBearing, Basic, Calculated,
 					     NULL,
-					     NULL);
+					     NULL,
+					     LegToGo);
 
 		  if ((distancesoarable>= LegToGo)||(aa<0)) {
 		    // only put this in the index if it is reachable

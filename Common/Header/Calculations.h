@@ -107,12 +107,15 @@ typedef struct _DERIVED_INFO
 
 int DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 int DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
 void OpenTerrain(void);
 void CloseTerrain(void);
 void AddSnailPoint(void);
 double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 				DERIVED_INFO *Calculated, double *retlat,
-				double *retlon);
+				double *retlon,
+				double maxsearchrange);
 
 bool ClearAirspaceWarnings(bool ack, bool allday=false);
 void ResumeAbortTask(int set = 0);

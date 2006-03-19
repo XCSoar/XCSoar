@@ -581,7 +581,7 @@ void InputEvents::setMode(TCHAR *mode) {
 				  );
     }
   }
-  MapWindow::RequestFastRefresh = true;
+  MapWindow::RequestFastRefresh();
 
   lastmode = thismode;
 
@@ -1073,11 +1073,11 @@ void InputEvents::eventDoInfoKey(TCHAR *misc) {
 //  The argument is the label of the mode to activate.
 //  This is used to activate menus/submenus of buttons
 void InputEvents::eventMode(TCHAR *misc) {
-	ASSERT(misc != NULL);
-	InputEvents::setMode(misc);
+  ASSERT(misc != NULL);
+  InputEvents::setMode(misc);
 
-	// trigger redraw of screen to reduce blank area under windows
-	MapWindow::RequestFastRefresh = true;
+  // trigger redraw of screen to reduce blank area under windows
+  MapWindow::RequestFastRefresh();
 }
 
 // MainMenu

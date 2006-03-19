@@ -134,7 +134,8 @@ Topology::~Topology() {
 }
 
 
-void Topology::updateCache(rectObj thebounds) {
+void Topology::updateCache(rectObj thebounds, bool purgeonly) {
+  if (!triggerUpdateCache) return;
 
   if (!shapefileopen) return;
 
@@ -149,8 +150,10 @@ void Topology::updateCache(rectObj thebounds) {
     }
     // note that the trigger will still be active, because as soon as
     // the map scale comes within range, we will need to regenerate the cache
+    triggerUpdateCache = false;
     return;
   }
+  if (purgeonly) return;
 
   triggerUpdateCache = false;
 
@@ -298,25 +301,25 @@ void CalculateScreenBounds(RECT rc, rectObj *screenRect) {
 
   x = rc.left;
   y = rc.top;
-  MapWindow::GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(x, y);
   xmin = x; xmax = x;
   ymin = y; ymax = y;
 
   x = rc.right;
   y = rc.top;
-  MapWindow::GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.right;
   y = rc.bottom;
-  MapWindow::GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.left;
   y = rc.bottom;
-  MapWindow::GetLocationFromScreen(&x, &y);
+  MapWindow::GetLocationFromScreen(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
@@ -389,16 +392,16 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
 	for (int jj=0; jj< shape->line[tt].numpoints; jj++) {
 
-	  int x, y;
+	  POINT sc;
 
 	  tpp_x = shape->line[tt].point[jj].x;
 	  tpp_y = shape->line[tt].point[jj].y;
 
-	  MapWindow::LatLon2Screen(tpp_x, tpp_y, &x, &y);
+	  MapWindow::LatLon2Screen(tpp_x, tpp_y, sc);
 
-	  MapWindow::DrawBitmapIn(hdc, x, y, hBitmap);
+	  MapWindow::DrawBitmapIn(hdc, sc, hBitmap);
 
-	  shpCache[ixshp]->renderSpecial(hdc,x,y);
+	  shpCache[ixshp]->renderSpecial(hdc, sc.x, sc.y);
 
 	}
       }
@@ -413,19 +416,15 @@ void Topology::Paint(HDC hdc, RECT rc) {
 	pt = (POINT*)SfRealloc(pt,sizeof(POINT)*shape->line[tt].numpoints);
 
 	for (int jj=0; jj< shape->line[tt].numpoints; jj++) {
-	  int x, y;
 
 	  tpp_x = shape->line[tt].point[jj].x;
 	  tpp_y = shape->line[tt].point[jj].y;
-	  MapWindow::LatLon2Screen(tpp_x, tpp_y, &x, &y);
+	  MapWindow::LatLon2Screen(tpp_x, tpp_y, pt[jj]);
 
-	  if (x<=minx) {
-	    minx = x;
-	    miny = y;
+	  if (pt[jj].x<=minx) {
+	    minx = pt[jj].x;
+	    miny = pt[jj].y;
 	  }
-
-	  pt[jj].x = x;
-	  pt[jj].y = y;
 
 	}
 	Polyline(hdc, pt, shape->line[tt].numpoints);
@@ -451,75 +450,75 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
 	    for (int jj=0; jj< shape->line[tt].numpoints/iskip; jj++) {
 	      int x, y, quad;
-		  bool inside;
+	      bool inside;
 
 	      tpp_x = shape->line[tt].point[jj*iskip].x;
 	      tpp_y = shape->line[tt].point[jj*iskip].y;
-		  MapWindow::LatLon2Screen(tpp_x, tpp_y, &x, &y);
+	      MapWindow::LatLon2Screen(tpp_x, tpp_y, x, y);
 
-		  //Screen is split into four quadrants:  \ 2 /
-		  //									   \ /
-		  //When a point outside screen crosses   1 x 3
-		  //from one quadrant to another,a corner  / \
+	      //Screen is split into four quadrants:  \ 2 /
+	      //									   \ /
+	      //When a point outside screen crosses   1 x 3
+	      //from one quadrant to another,a corner  /      \
 		  //is drawn to prevent polygon clipping. / 4 \
 
-		  quad = getQuad(x,y,rc);
-		  inside = checkInside(x,y,quad,rc);
+		quad = getQuad(x,y,rc);
+		inside = checkInside(x,y,quad,rc);
 
-		  if (!inside){
-		    if ((!leftscreen)||(quad != quad1)){
-		      if(!leftscreen){
-			//Polygon has just left the screen
-			//Point is still drawn, which prevents clipped corners
-			pt[(jj-skipped)+keypoints].x = x;
-			pt[(jj-skipped)+keypoints].y = y;
-		      }
-		      else{
-				//Point has taken polygon to a new quadrant;
-				//draw a line between the two points (Just in case the line
-				//intersects the screen)
-				//(01FEB06 code simplification - sjt)
-
-				pt[(jj-skipped)+keypoints].x = xprev;
-				pt[(jj-skipped)+keypoints].y = yprev;
-
-				keypoints++;
-
-				pt[(jj-skipped)+keypoints].x = x;
-				pt[(jj-skipped)+keypoints].y = y;
-
-		      }
+		if (!inside){
+		  if ((!leftscreen)||(quad != quad1)){
+		    if(!leftscreen){
+		      //Polygon has just left the screen
+		      //Point is still drawn, which prevents clipped corners
+		      pt[(jj-skipped)+keypoints].x = x;
+		      pt[(jj-skipped)+keypoints].y = y;
 		    }
-		    else skipped++; //Don't draw this point...
+		    else{
+		      //Point has taken polygon to a new quadrant;
+		      //draw a line between the two points (Just in case the line
+		      //intersects the screen)
+		      //(01FEB06 code simplification - sjt)
 
-		    xprev=x;
-		    yprev=y;
-
-		    leftscreen=true;
-		    if (quad != quad1) quad1=quad;
-		  }
-		  else{
-		    //If current point is inside the screen...
-
-		    //... and we've just returned from outside the screen,
-		    // we draw one point outside the screen (prevents clipping)
-		    if (leftscreen){
 		      pt[(jj-skipped)+keypoints].x = xprev;
 		      pt[(jj-skipped)+keypoints].y = yprev;
+
 		      keypoints++;
-		    }
 
-		    leftscreen = false;
+		      pt[(jj-skipped)+keypoints].x = x;
+		      pt[(jj-skipped)+keypoints].y = y;
 
-		    pt[(jj-skipped)+keypoints].x = x;
-		    pt[(jj-skipped)+keypoints].y = y;
-
-		    // find leftmost visible point for display of label
-		    if ((x<=minx)&&(x>=rc.left)&&(y>=rc.top)&&(y<=rc.bottom)) {
-		      minx = x;
-		      miny = y;
 		    }
 		  }
+		  else skipped++; //Don't draw this point...
+
+		  xprev=x;
+		  yprev=y;
+
+		  leftscreen=true;
+		  if (quad != quad1) quad1=quad;
+		}
+		else{
+		  //If current point is inside the screen...
+
+		  //... and we've just returned from outside the screen,
+		  // we draw one point outside the screen (prevents clipping)
+		  if (leftscreen){
+		    pt[(jj-skipped)+keypoints].x = xprev;
+		    pt[(jj-skipped)+keypoints].y = yprev;
+		    keypoints++;
+		  }
+
+		  leftscreen = false;
+
+		  pt[(jj-skipped)+keypoints].x = x;
+		  pt[(jj-skipped)+keypoints].y = y;
+
+		  // find leftmost visible point for display of label
+		  if ((x<=minx)&&(x>=rc.left)&&(y>=rc.top)&&(y<=rc.bottom)) {
+		    minx = x;
+		    miny = y;
+		  }
+		}
 	    }
 
 	    Polygon(hdc, pt,
@@ -530,8 +529,8 @@ void Topology::Paint(HDC hdc, RECT rc) {
 	}
 	  break;
 
-	  ///////////////////////////////////
-	    default:;
+    default:;
+
     }
   }
   //

@@ -48,10 +48,10 @@ public:
 
   void SetCacheTime();
   void ClearTerrainCache();
-  short LookupTerrainCache(long SeekPos);
-  short LookupTerrainCacheFile(long SeekPos);
-  short GetTerrainHeight(double Lattitude,
-			 double Longditude);
+  short LookupTerrainCache(const long &SeekPos);
+  short LookupTerrainCacheFile(const long &SeekPos);
+  short GetTerrainHeight(const double &Lattitude,
+			 const double &Longditude);
 
   void OptimizeCash(void);
 
@@ -60,14 +60,15 @@ public:
   static TERRAIN_INFO TerrainInfo;
   static FILE *fpTerrain;
 
-  int rounding;
+  double fXrounding, fYrounding;
+  int Xrounding, Yrounding;
 
   float GetTerrainStepSize();
-  float GetTerrainSlopeStep();
+  //  float GetTerrainSlopeStep();
 
   int GetEffectivePixelSize(double pixelsize);
 
-  void SetTerrainRounding(double dist);
+  void SetTerrainRounding(double xr, double yr);
 
   BOOL isTerrainLoaded(){
     return(fpTerrain != NULL && TerrainInfo.StepSize != 0);

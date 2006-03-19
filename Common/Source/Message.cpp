@@ -190,15 +190,11 @@ void Message::Resize() {
   if (size==0) {
     if (!hidden) {
       ShowWindow(hWndMessageWindow, SW_HIDE);
-      MapWindow::RequestFastRefresh = true;
+      MapWindow::RequestFastRefresh();
     }
     hidden = true;
   } else {
     SetWindowText(hWndMessageWindow, msgText);
-    if (hidden) {
-      ShowWindow(hWndMessageWindow, SW_SHOW);
-    }
-    hidden = false;
     GetTextExtentPoint(hdc, msgText, size, &tsize);
 
     int linecount = max(nvisible,max(1,
@@ -232,9 +228,10 @@ void Message::Resize() {
 		 rthis.right-rthis.left,
 		 rthis.bottom-rthis.top,
 		 SWP_SHOWWINDOW);
+    hidden = false;
 
     // window has resized potentially, so redraw map to reduce artifacts
-    MapWindow::RequestFastRefresh = true;
+    MapWindow::RequestFastRefresh();
 
   }
 
@@ -364,6 +361,7 @@ void Message::AddMessage(DWORD tshow, int type, TCHAR* Text) {
   _tcscpy(messages[i].text, Text);
 
   Unlock();
+  Render();
 }
 
 void Message::Repeat(int type) {
@@ -421,6 +419,7 @@ bool Message::Acknowledge(int type) {
   }
 
   Unlock();
+  Render();
   return ret;
 }
 

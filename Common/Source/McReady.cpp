@@ -124,9 +124,8 @@ void GlidePolar::SetBallast() {
 }
 
 
-double GlidePolar::SinkRateFast(double MC, int v) {
-  int i = max(4,min(v,(int)SAFTEYSPEED));
-  return sinkratecache[i]-MC;
+double GlidePolar::SinkRateFast(const double &MC, const int &v) {
+  return sinkratecache[max(4,min(v,(int)SAFTEYSPEED))]-MC;
 }
 
 
@@ -158,22 +157,22 @@ double GlidePolar::MacCreadyAltitude(double emcready,
 
   int i;
   double BestSpeed, BestGlide, Glide;
-  double BestSinkRate, TimeToDest;
+  double BestSinkRate, TimeToDestCruise;
   double AltitudeNeeded;
   double HeadWind, CrossWind;
   double CrossBearing;
-  double VMG;
   double BestTime;
+  double HeadWindSqd, CrossWindSqd;
 
   CrossBearing = Bearing - WindBearing;
-
   HeadWind = WindSpeed * fastcosine(CrossBearing);
   CrossWind = WindSpeed * fastsine(CrossBearing);
+  HeadWindSqd = HeadWind*HeadWind;
+  CrossWindSqd = CrossWind*CrossWind;
 
   // JMW TODO: Calculate best cruise bearing
   double sinkrate;
   double tc; // time spent in cruise
-  VMG = 0.00001;
 
   // JMW TODO this should be modified to incorporate:
   // - [done] best cruise track and bearing (final glide and for waypoint)
@@ -187,7 +186,7 @@ double GlidePolar::MacCreadyAltitude(double emcready,
   //Calculate Best Glide Speed
   BestSpeed = 2;
   BestGlide = 10000;
-  BestTime = 0;
+  BestTime = 1e6;
 
   bool effectivefinalglide = isFinalGlide;
 
@@ -200,111 +199,100 @@ double GlidePolar::MacCreadyAltitude(double emcready,
     Distance = 1;
   }
 
-  double TimeToDestTotal = -1; // initialise to error value
-  double tcruise, tclimb, tdest;
+  double TimeToDestTotal = 1e6; // initialise to error value
+  double tcruise, tclimb;
+  TimeToDestCruise = 1e6; // initialise to error value
 
-  for(i=Vminsink;i<SAFTEYSPEED;i+=1)
-    {
-      double vtrack = (double)i; // TAS along bearing in cruise
+  for(i=Vminsink;i<SAFTEYSPEED;i+=1) {
+    double vtrack = (double)i; // TAS along bearing in cruise
 
-      // glide angle = velocity projected along path / sink rate
-      // need to work out best velocity along path given wind vector
-      // need to work out percent time spent cruising
-      // SinkRate function returns negative value for sink
+    // glide angle = velocity projected along path / sink rate
+    // need to work out best velocity along path given wind vector
+    // need to work out percent time spent cruising
+    // SinkRate function returns negative value for sink
 
-      if (effectivefinalglide) {
-
-        sinkrate = -SinkRateFast(emcready, i);
-	tc = 1.0; // assume no circling, e.g. final glide at best LD
-                  // with no climbs
-
-      } else {
-
-        sinkrate = -SinkRateFast(0, i);
-        tc = max(0.0,min(1.0,emcready/(sinkrate+emcready)));
-      }
-
-      // calculate average speed along track relative to wind
-      vtot = (vtrack*vtrack*tc*tc-CrossWind*CrossWind);
-
-      // if able to advance against crosswind
-      if (vtot>0) {
-
-        // calculate average speed along track relative to ground
-	vtot = sqrt(vtot)-HeadWind;
-
-        // if able to advance against headwind
-	if (vtot>0) {
-
-          // inverse glide ratio relative to ground
-          Glide = (sinkrate)/vtot;
-
-          // time spent in cruise
-	  tcruise = (Distance/(vtot))*tc;
-
-          // time spent in climb
-	  tclimb;
-
-	  if (effectivefinalglide) {
-	    tclimb = 0.0;
-	  } else {
-            tclimb = sinkrate*(tcruise/emcready);
-	  }
-
-          // total time to destination
-	  tdest = max(tcruise+tclimb,0.00000001);
-
-	  if(
-             // best glide angle when in final glide
-	     ((Glide <= BestGlide)&&(effectivefinalglide))
-	     ||
-             // best average speed when in maintaining height mode
-	     ((1/tdest >= BestTime)&&(!effectivefinalglide))
-	     )
-	    {
-
-	      if (effectivefinalglide) {
-		BestGlide = Glide;
-	      } else {
-                BestTime = 1/tdest;
-              }
-
-	      BestSpeed = vtrack;
-              TimeToDestTotal = tdest;
-
-	      if (BestCruiseTrack) {
-		// best track bearing is the track along cruise that
-		// compensates for the drift during climb
-		*BestCruiseTrack =
-		  atan2(-CrossWind*(1-tc),vtot
-			+HeadWind*(1-tc))*RAD_TO_DEG+Bearing;
-	      }
-
-	      if (VMacCready) {
-		*VMacCready = vtrack;
-	      }
-
-	      VMG = vtot/tc; // speed along track during cruise component
-	    }
-	  else
-	    {
-	      // no need to continue search, max already found..
-	      // break;
-	    }
-	}
-      }
-
+    if (effectivefinalglide) {
+      sinkrate = -SinkRateFast(emcready, i);
+      tc = 1.0; // assume no circling, e.g. final glide at best LD
+      // with no climbs
+    } else {
+      sinkrate = -SinkRateFast(0, i);
+      tc = max(0.0,min(1.0,emcready/(sinkrate+emcready)));
     }
 
-  BestSinkRate =
-    SinkRateFast(0,(int)BestSpeed);
-  TimeToDest = Distance / (VMG); // this time does not include thermalling part!
+    // calculate average speed along track relative to wind
+    vtot = (vtrack*vtrack*tc*tc-CrossWindSqd);
+
+    // if able to advance against crosswind
+    if (vtot>0) {
+      // if able to advance against headwind
+      if (vtot>HeadWindSqd) {
+	// calculate average speed along track relative to ground
+	vtot = sqrt(vtot)-HeadWind;
+      } else {
+	vtot= -1;
+      }
+    }
+
+    // can't advance at this speed
+    if (vtot<0) continue;
+
+    // time spent in cruise
+    tcruise = (tc/vtot)*Distance;
+
+    bool bestfound = false;
+
+    if (effectivefinalglide) {
+      tclimb = 0.0;
+      // inverse glide ratio relative to ground
+      Glide = sinkrate/vtot;
+
+      // best glide angle when in final glide
+      if (Glide <= BestGlide) {
+	bestfound = true;
+	BestGlide = Glide;
+	TimeToDestTotal = tcruise;
+      }
+    } else {
+      tclimb = sinkrate*(tcruise/emcready);
+      // total time to destination
+      TimeToDestTotal = max(tcruise+tclimb,0.0001);
+      // best average speed when in maintaining height mode
+      if (TimeToDestTotal <= BestTime) {
+	bestfound = true;
+	BestTime = TimeToDestTotal;
+      }
+    }
+
+    if (bestfound) {
+      BestSpeed = vtrack;
+      if (BestCruiseTrack) {
+	// best track bearing is the track along cruise that
+	// compensates for the drift during climb
+	*BestCruiseTrack =
+	  atan2(-CrossWind*(1-tc),vtot
+		+HeadWind*(1-tc))*RAD_TO_DEG+Bearing;
+      }
+      if (VMacCready) {
+	*VMacCready = vtrack;
+      }
+
+      // speed along track during cruise component
+      TimeToDestCruise = Distance*tc/vtot;
+    } else {
+	// no need to continue search, max already found..
+      break;
+    }
+  }
+
+  BestSinkRate = SinkRateFast(0,(int)BestSpeed);
 
   if (TimeToGo) {
     *TimeToGo = TimeToDestTotal;
   }
 
-  AltitudeNeeded = -BestSinkRate * TimeToDest;
+  AltitudeNeeded = -BestSinkRate * TimeToDestCruise;
+
   // this is the altitude needed to final glide to destination
 
   return AltitudeNeeded;

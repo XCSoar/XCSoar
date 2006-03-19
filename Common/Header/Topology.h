@@ -47,7 +47,7 @@ class Topology {
 
   bool append;
 
-  void updateCache(rectObj thebounds);
+  void updateCache(rectObj thebounds, bool purgeonly=false);
   void Paint(HDC hdc, RECT rc);
 
   shapefileObj shpfile;

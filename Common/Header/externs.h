@@ -65,6 +65,8 @@ extern unsigned int NumberOfAirspacePoints;
 extern unsigned int NumberOfAirspaceAreas;
 extern unsigned int NumberOfAirspaceCircles;
 
+extern bool GlobalRunning;
+
 // task data
 extern TASK_POINT Task[];
 extern TASKSTATS_POINT TaskStats[];

@@ -901,21 +901,21 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
     dX = (mag*WINDVECTORMAG);
     dY = 0;
-    rotate(&dX,&dY,angle);
+    rotate(dX,dY,angle);
     wv[1].x = (int)(wv[0].x + dX);
     wv[1].y = (int)(wv[0].y + dY);
     StyleLine(hdc, wv[0], wv[1], STYLE_MEDIUMBLACK);
 
     dX = (mag*WINDVECTORMAG-5);
     dY = -3;
-    rotate(&dX,&dY,angle);
+    rotate(dX,dY,angle);
     wv[2].x = (int)(wv[0].x + dX);
     wv[2].y = (int)(wv[0].y + dY);
     StyleLine(hdc, wv[1], wv[2], STYLE_MEDIUMBLACK);
 
     dX = (mag*WINDVECTORMAG-5);
     dY = 3;
-    rotate(&dX,&dY,angle);
+    rotate(dX,dY,angle);
     wv[3].x = (int)(wv[0].x + dX);
     wv[3].y = (int)(wv[0].y + dY);
 
@@ -1169,7 +1169,7 @@ void dlgAnalysisShowModal(void){
 
   DeleteObject(penThinSignal);
 
-  MapWindow::RequestFastRefresh= true;
+  MapWindow::RequestFastRefresh();
   ClearAirspaceWarnings(false); // airspace warning gets refreshed
   FullScreen();
 
@@ -1228,7 +1228,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         {
           ::ReleaseDC(hDlg, hdcScreen);
           EndDialog(hDlg, LOWORD(wParam));
-          MapWindow::RequestFastRefresh= true;
+          MapWindow::RequestFastRefresh();
           ClearAirspaceWarnings(false); // airspace warning gets refreshed
           FullScreen();
           return TRUE;
@@ -1369,7 +1369,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       return FALSE;
 
     case WM_CLOSE:
-      MapWindow::RequestFastRefresh= true;
+      MapWindow::RequestFastRefresh();
       ClearAirspaceWarnings(false); // airspace warning gets refreshed
       FullScreen();
     }

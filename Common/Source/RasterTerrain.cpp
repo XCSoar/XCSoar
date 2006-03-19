@@ -95,7 +95,7 @@ void RasterTerrain::OptimizeCash(void){
 
 }
 
-short RasterTerrain::LookupTerrainCacheFile(long SeekPos) {
+short RasterTerrain::LookupTerrainCacheFile(const long &SeekPos) {
   // put new value in slot tcpmin
 
   __int16 NewAlt = 0;
@@ -139,7 +139,7 @@ int TerrainCacheSearch(const void *key, const void *elem2 ){
   return (0);
 }
 
-short RasterTerrain::LookupTerrainCache(long SeekPos) {
+short RasterTerrain::LookupTerrainCache(const long &SeekPos) {
   int ifound= -1;
   unsigned int recencymin = 0;
   int i;
@@ -148,7 +148,8 @@ short RasterTerrain::LookupTerrainCache(long SeekPos) {
   if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
     return -1;
 
-  terraincacheefficiency = (100*terraincachehits)/(terraincachehits+terraincachemisses);
+  //  terraincacheefficiency =
+  // (100*terraincachehits)/(terraincachehits+terraincachemisses);
 
   // search to see if it is found in the cache
   tcp = (_TERRAIN_CACHE *)bsearch((void *)SeekPos, &TerrainCache,
@@ -200,17 +201,6 @@ short RasterTerrain::LookupTerrainCache(long SeekPos) {
 }
 
 
-float RasterTerrain::GetTerrainSlopeStep() {
-  if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
-    return 0;
-  float kpixel = (float)256.0/(
-			  GetTerrainStepSize()
-                          * (float)rounding
-                          );
-    return kpixel;
-}
-
-
 float RasterTerrain::GetTerrainStepSize() {
   if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
     return 0;
@@ -219,15 +209,6 @@ float RasterTerrain::GetTerrainStepSize() {
   return fstepsize;
 }
 
-
-void RasterTerrain::SetTerrainRounding(double dist) {
-  if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
-    return;
-  rounding = iround(dist/(GetTerrainStepSize()/1000.0));
-  if (rounding<1) {
-    rounding = 1;
-  }
-}
 
 int RasterTerrain::GetEffectivePixelSize(double dist) {
   int grounding;
@@ -238,18 +219,35 @@ int RasterTerrain::GetEffectivePixelSize(double dist) {
   return grounding;
 }
 
+/////////
+
+void RasterTerrain::SetTerrainRounding(double xr, double yr) {
+  if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
+    return;
+
+  Xrounding = iround(xr/TerrainInfo.StepSize);
+  if (Xrounding<1) {
+    Xrounding = 1;
+  }
+  fXrounding = 1.0/(Xrounding*TerrainInfo.StepSize);
+  Yrounding = iround(yr/TerrainInfo.StepSize);
+  if (Yrounding<1) {
+    Yrounding = 1;
+  }
+  fYrounding = 1.0/(Yrounding*TerrainInfo.StepSize);
+}
+
+
 // JMW rounding further reduces data as required to speed up terrain
 // display on low zoom levels
 
 
-short RasterTerrain::GetTerrainHeight(double Lattitude,
-				      double Longditude)
+short RasterTerrain::GetTerrainHeight(const double &Lattitude,
+				      const double &Longditude)
 {
   long SeekPos;
-  double X,Y;
   long lx, ly;
 
-  //if(hTerrain == NULL)
   if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
     return -1;
 
@@ -259,34 +257,18 @@ short RasterTerrain::GetTerrainHeight(double Lattitude,
       (Longditude > TerrainInfo.Right )) {
     return -1;
   }
-
-  X =  Longditude -TerrainInfo.Left;
-  X = X / TerrainInfo.StepSize ;
-
-  lx = lround(X/rounding)*rounding;
-
-  Y = TerrainInfo.Top  - Lattitude ;
-  Y = Y / TerrainInfo.StepSize ;
-
-  if ((Y<0)||(X<0)) {
-    return 0;
-  }
-
-  ly = lround(Y/rounding)*rounding;
+  lx = lround((Longditude-TerrainInfo.Left)*fXrounding)*Xrounding;
+  ly = lround((TerrainInfo.Top-Lattitude)*fYrounding)*Yrounding;
 
   ly *= TerrainInfo.Columns;
   ly +=  lx;
 
-  SeekPos = ly;
-  SeekPos *= 2;
-  SeekPos += sizeof(TERRAIN_INFO);
+  SeekPos = ly*2+sizeof(TERRAIN_INFO);
 
   ////// JMW added terrain cache lookup
-  short h = LookupTerrainCache(SeekPos);
-  return h;
+
+  return LookupTerrainCache(SeekPos);
 }
-
-
 
 
 

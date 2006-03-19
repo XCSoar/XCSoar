@@ -58,6 +58,10 @@ HDC GaugeVario::hdcTemp = NULL;
 HBITMAP GaugeVario::hDrawBitMap = NULL;
 RECT GaugeVario::rc;
 bool GaugeVario::dirty;
+int GaugeVario::xoffset;
+int GaugeVario::yoffset;
+int GaugeVario::gmax;
+POINT* GaugeVario::polys=NULL;
 
 HBITMAP GaugeVario::hBitmapUnit;
 POINT GaugeVario::BitmapUnitPos;
@@ -94,7 +98,7 @@ void GaugeVario::Create() {
                bigrc.right+InfoBoxLayout::ControlWidth,
 	       bigrc.top,
                GAUGEXSIZE,GAUGEYSIZE,
-	       SWP_SHOWWINDOW);
+	       SWP_HIDEWINDOW);
 
   GetClientRect(hWndVarioWindow, &rc);
 
@@ -103,7 +107,9 @@ void GaugeVario::Create() {
   hdcTemp = CreateCompatibleDC(hdcScreen);                  // temp DC to select Uniz Bmp's
 
                                                             // prepare drawing DC, setup size and coler deep
-  HBITMAP memBM = CreateCompatibleBitmap (hdcScreen, rc.right-rc.left, rc.bottom-rc.top);
+  HBITMAP memBM = CreateCompatibleBitmap (hdcScreen,
+					  rc.right-rc.left,
+					  rc.bottom-rc.top);
   SelectObject(hdcDrawWindow, memBM);
                                                             // load vario scale
   hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEA));
@@ -129,6 +135,9 @@ void GaugeVario::Create() {
       &hBitmapUnit, &BitmapUnitPos, &BitmapUnitSize, UNITBITMAPGRAY);
   }
 
+  xoffset = (rc.right-rc.left);
+  yoffset = (rc.bottom-rc.top)/2;
+
   SetWindowLong(hWndVarioWindow, GWL_WNDPROC, (LONG) GaugeVarioWndProc);
 
   Render();
@@ -148,6 +157,10 @@ void GaugeVario::Show(bool doshow) {
 }
 
 void GaugeVario::Destroy() {
+  if (polys) {
+    free(polys);
+    polys=NULL;
+  }
   ReleaseDC(hWndVarioWindow, hdcScreen);
   DeleteDC(hdcDrawWindow);
   DeleteDC(hdcTemp);
@@ -167,8 +180,6 @@ void GaugeVario::Render() {
   static POINT orgTop     = {-1,-1};
   static POINT orgMiddle  = {-1,-1};
   static POINT orgBottom  = {-1,-1};
-  static int xoffset;
-  static int yoffset;
   static int ValueHeight;
   static InitDone = false;
 
@@ -180,9 +191,6 @@ void GaugeVario::Render() {
 
   if (!InitDone){
     HBITMAP oldBmp;
-
-    xoffset = (rc.right-rc.left);
-    yoffset = (rc.bottom-rc.top)/2;
     ValueHeight = (1 + Appearance.CDIWindowFont.CapitalHeight + 2 + Appearance.TitleWindowFont.CapitalHeight + 1);
     /*
     orgTop.y = (ValueHeight/2 + ValueHeight);
@@ -267,7 +275,7 @@ void GaugeVario::Render() {
   }
 
   dirty = false;
-  RenderNeedle(vval, xoffset, yoffset);
+  RenderNeedle(vval);
 
   RenderValue(orgMiddle.x, orgMiddle.y, &diValueMiddle, &diLabelMiddle,
 	      vvaldisplay,
@@ -284,18 +292,13 @@ void GaugeVario::Repaint(HDC hDC){
 void GaugeVario::RenderBg() {
 }
 
-void GaugeVario::RenderNeedle(double Value, int x, int y){
-
-  static int lastI = -99999;
-  static POINT lastBit[3];
+void GaugeVario::MakePolygon(const int i) {
   static bool InitDone = false;
-  static int degrees_per_unit;
-  static int gmax;
-  static first = true;
   static int nlength0, nlength1, nwidth;
+  double dx, dy;
+  POINT *bit = getPolygon(i);
 
-  if (first) {
-    first = false;
+  if (!InitDone){
     if (Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle) {
       nlength0 = 25*InfoBoxLayout::scale;
       nlength1 = 6*InfoBoxLayout::scale;
@@ -305,24 +308,66 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
       nlength1 = 6*InfoBoxLayout::scale;
       nwidth = 4*InfoBoxLayout::scale;
     }
+    InitDone = true;
   }
 
-  POINT bit[3];
+  dx = -xoffset+nlength0; dy = nwidth;
+  rotate(dx, dy, i);
+  bit[0].x = lround(dx)+xoffset; bit[0].y = lround(dy)+yoffset;
+
+  dx = -xoffset+nlength0; dy = -nwidth;
+  rotate(dx, dy, i);
+  bit[1].x = lround(dx)+xoffset; bit[1].y = lround(dy)+yoffset;
+
+  dx = -xoffset+nlength1; dy = 0;
+  rotate(dx, dy, i);
+  bit[2].x = lround(dx)+xoffset; bit[2].y = lround(dy)+yoffset;
+}
+
+
+POINT *GaugeVario::getPolygon(int i) {
+  return polys+(i+gmax)*3;
+}
+
+void GaugeVario::MakeAllPolygons() {
+  polys = (POINT*)malloc((gmax*2+1)*3*sizeof(POINT));
+  ASSERT(polys);
+  if (polys) {
+    for (int i= -gmax; i<= gmax; i++) {
+      MakePolygon(i);
+    }
+  }
+}
+
+
+void GaugeVario::RenderNeedle(double Value){
+
+  static int lastI = -99999;
+  static POINT lastBit[3];
+  static bool InitDone = false;
+  static int degrees_per_unit;
+
+  POINT *bit;
   int i;
-  double dx, dy;
+  static DWORD fpsTimeLast =0;
 
   if (!InitDone){
     degrees_per_unit = (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
     gmax = (int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY))+2;
+    MakeAllPolygons();
     InitDone = true;
   }
 
-  i = (int)(Value*degrees_per_unit*LIFTMODIFY);
+  i = iround(Value*degrees_per_unit*LIFTMODIFY);
 
   if (i != lastI){
     i = min(gmax,max(-gmax,i));
 
-    dirty = true;
+    DWORD fpsTime = ::GetTickCount();
+    if (fpsTime-fpsTimeLast>500) {
+      dirty = true;
+      fpsTimeLast = fpsTime;
+    }
 
     if (lastI != -99999){
       if (Appearance.InverseInfoBox){
@@ -344,21 +389,9 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
       SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
     }
 
-    dx = -x+nlength0; dy = nwidth;
-    rotate(&dx, &dy, i);
-    bit[0].x = (int)(dx+x); bit[0].y = (int)(dy+y);
-
-    dx = -x+nlength0; dy = -nwidth;
-    rotate(&dx, &dy, i);
-    bit[1].x = (int)(dx+x); bit[1].y = (int)(dy+y);
-
-    dx = -x+nlength1; dy = 0;
-    rotate(&dx, &dy, i);
-    bit[2].x = (int)(dx+x); bit[2].y = (int)(dy+y);
-
+    bit = getPolygon(i);
     Polygon(hdcDrawWindow, bit, 3);
-
-    memcpy(lastBit, bit, sizeof(bit));
+    memcpy(lastBit, bit, 3*sizeof(POINT));
 
     lastI = i;
   }
@@ -366,6 +399,7 @@ void GaugeVario::RenderNeedle(double Value, int x, int y){
 }
 
 
+// TODO: Optimise, this is slow
 void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, TCHAR *Label) {
 
   SIZE tsize;
@@ -415,50 +449,35 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
 
   SetBkMode(hdcDrawWindow, TRANSPARENT);
 
-  if (dirty || (_tcscmp(diLabel->lastText, Label) != 0)) {
-
+  if (dirty && (_tcscmp(diLabel->lastText, Label) != 0)) {
     SetBkColor(hdcDrawWindow, colTextBackgnd);
-
     SetTextColor(hdcDrawWindow, colTextGray);
-
     SelectObject(hdcDrawWindow, TitleWindowFont);
-
     GetTextExtentPoint(hdcDrawWindow, Label, _tcslen(Label), &tsize);
     diLabel->orgText.x = diLabel->recBkg.right - tsize.cx;
-
     ExtTextOut(hdcDrawWindow, diLabel->orgText.x, diLabel->orgText.y,
-      ETO_OPAQUE, &diLabel->recBkg, Label, _tcslen(Label), NULL);
-
+	       ETO_OPAQUE, &diLabel->recBkg, Label, _tcslen(Label), NULL);
     diLabel->recBkg.left = diLabel->orgText.x;
-
     _tcscpy(diLabel->lastText, Label);
-
   }
 
-  if (dirty || (diValue->lastValue != Value)) {
-
+  if (dirty && (diValue->lastValue != Value)) {
     TCHAR Temp[18];
-
     SetBkColor(hdcDrawWindow, colTextBackgnd);
-
     SetTextColor(hdcDrawWindow, colText);
-
     _stprintf(Temp, TEXT("%.1f"), Value);
-
     SelectObject(hdcDrawWindow, CDIWindowFont);
-
     GetTextExtentPoint(hdcDrawWindow, Temp, _tcslen(Temp), &tsize);
     diValue->orgText.x = diValue->recBkg.right - tsize.cx;
 
     ExtTextOut(hdcDrawWindow, diValue->orgText.x, diValue->orgText.y,
-      ETO_OPAQUE, &diValue->recBkg, Temp, _tcslen(Temp), NULL);
+	       ETO_OPAQUE, &diValue->recBkg, Temp, _tcslen(Temp), NULL);
 
     diValue->recBkg.left = diValue->orgText.x;
-
     diValue->lastValue = Value;
   }
 
-  if (dirty || (diLabel->lastBitMap != hBitmapUnit)) {
+  if (dirty && (diLabel->lastBitMap != hBitmapUnit)) {
     HBITMAP oldBmp;
 
     oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapUnit);
@@ -776,7 +795,7 @@ LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
   switch (uMsg){
 
     case WM_PAINT:
-      if (EnableVarioGauge) {
+      if (GlobalRunning && EnableVarioGauge) {
 	hDC = BeginPaint(hwnd, &ps);
 	GaugeVario::Repaint(hDC);
 	DeleteDC(hDC);
