@@ -59,7 +59,7 @@
 			</div>
 			    
 			<div id="content">
-				<xsl:apply-templates select="//document/content/*"/>
+				<xsl:apply-templates select="//document/section/*"/>
 			</div>
 
 			<!-- XXX Should be copyright, fix later -->
