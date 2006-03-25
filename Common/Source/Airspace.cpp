@@ -90,6 +90,8 @@ static float Width = 0;
 static float Zoom = 0;
 static int LineCount;
 
+int AirspacePriority[AIRSPACECLASSCOUNT];
+
 static const int k_nLineTypes = 9;
 
 static const int k_nLtAC	= 0;
@@ -987,7 +989,8 @@ BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
 	return FALSE;
 
     case AUTO:
-      if( ( GPS_INFO.Altitude > (Base - AltWarningMargin) ) && ( GPS_INFO.Altitude < (Top + AltWarningMargin) ))
+      if( ( GPS_INFO.Altitude > (Base - AltWarningMargin) ) 
+	  && ( GPS_INFO.Altitude < (Top + AltWarningMargin) ))
 	return TRUE;
       else
 	return FALSE;
@@ -995,6 +998,11 @@ BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
     case ALLBELOW:
       if(  (Base - AltWarningMargin) < GPS_INFO.Altitude )
 	return  TRUE;
+      else
+	return FALSE;
+    case INSIDE:
+      if( ( GPS_INFO.Altitude > (Base) ) && ( GPS_INFO.Altitude < (Top) ))
+	return TRUE;
       else
 	return FALSE;
     }
@@ -1114,7 +1122,8 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 
 
 int FindNearestAirspaceCircle(double longitude, double latitude, 
-			      double *nearestdistance, double *nearestbearing)
+			      double *nearestdistance, double *nearestbearing,
+			      double *height=NULL)
 {
   unsigned i;
   int NearestIndex = 0;
@@ -1150,25 +1159,28 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 	      
 	      if(Dist < *nearestdistance )
 		{
-		  if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, 
-					   AirspaceCircle[i].Top.Altitude))
-		    {
-		      
-		      *nearestdistance = Dist;
-		      *nearestbearing = Bearing(latitude,
-						longitude,
-						AirspaceCircle[i].Latitude, 
-						AirspaceCircle[i].Longitude);
-		      
-		      return i;
-		      		      
-		    }
+		  bool altok;
+
+		  if (height) {
+		    altok = ((*height>AirspaceCircle[i].Base.Altitude)&&
+			     (*height<AirspaceCircle[i].Top.Altitude));
+		  } else {
+		    altok = CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude, 
+						  AirspaceCircle[i].Top.Altitude)==TRUE;
+		  }
+		  if(altok) {
+		    *nearestdistance = Dist;
+		    *nearestbearing = Bearing(latitude,
+					      longitude,
+					      AirspaceCircle[i].Latitude, 
+					      AirspaceCircle[i].Longitude);
+		    return i;
+		  }
 		}
 	    }
 	}
     }
   return -1;
-
 }
 
 
@@ -1302,7 +1314,8 @@ double ScreenCrossTrackError(double lon1, double lat1,
 
 
 int FindNearestAirspaceArea(double longitude, double latitude, 
-			      double *nearestdistance, double *nearestbearing)
+			    double *nearestdistance, double *nearestbearing,
+			    double *height=NULL)
 {
   unsigned i;
   int ifound = -1;
@@ -1332,8 +1345,17 @@ int FindNearestAirspaceArea(double longitude, double latitude,
       // in almost all cases it will be, so ok.
       if(AirspaceArea[i].Visible || 1) 
 	{
-	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, 
-				   AirspaceArea[i].Top.Altitude))
+	  bool altok;
+
+	  if (!height) {
+	    altok = CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude, 
+					  AirspaceArea[i].Top.Altitude)==TRUE;
+	  } else {
+	    altok = ((*height<AirspaceArea[i].Top.Altitude)&&
+		     (*height>AirspaceArea[i].Base.Altitude));
+	  }
+
+	  if(altok)
 	    {
 
 	      inside = false;
@@ -1415,7 +1437,8 @@ int FindNearestAirspaceArea(double longitude, double latitude,
 
 void FindNearestAirspace(double longitude, double latitude,
 			 double *nearestdistance, double *nearestbearing,
-			 int *foundcircle, int *foundarea)
+			 int *foundcircle, int *foundarea,
+			 double *height)
 {
   double nearestd1 = 100000; // 100km
   double nearestd2 = 100000; // 100km
@@ -1423,19 +1446,69 @@ void FindNearestAirspace(double longitude, double latitude,
   double nearestb2 = 0;
 
   *foundcircle = FindNearestAirspaceCircle(longitude, latitude,
-					   &nearestd1, &nearestb1);
+					   &nearestd1, &nearestb1, height);
 
   *foundarea = FindNearestAirspaceArea(longitude, latitude,
-				       &nearestd2, &nearestb2);
+				       &nearestd2, &nearestb2, height);
 
   if (nearestd1<nearestd2) {
-    *nearestdistance = nearestd1;
-    *nearestbearing = nearestb1;
-    *foundarea = -1;
+    if (nearestd1<100000) {
+      *nearestdistance = nearestd1;
+      *nearestbearing = nearestb1;
+      *foundarea = -1;
+    }
   } else {
-    *nearestdistance = nearestd2;
-    *nearestbearing = nearestb2;
-    *foundcircle = -1;
+    if (nearestd2<100000) {
+      *nearestdistance = nearestd2;
+      *nearestbearing = nearestb2;
+      *foundcircle = -1;
+    }
   }
+}
+
+
+/////////////////////////////
+
+
+static int _cdecl SortAirspaceAreaCompare(const void *elem1, const void *elem2 )
+{
+  if (AirspacePriority[((AIRSPACE_AREA *)elem1)->Type] >
+      AirspacePriority[((AIRSPACE_AREA *)elem2)->Type])
+    return (-1);
+  if (AirspacePriority[((AIRSPACE_AREA *)elem1)->Type] <
+      AirspacePriority[((AIRSPACE_AREA *)elem2)->Type])
+    return (+1);
+
+  // otherwise sort on height?
+  return (0);
+}
+
+static int _cdecl SortAirspaceCircleCompare(const void *elem1, const void *elem2 )
+{
+  if (AirspacePriority[((AIRSPACE_CIRCLE *)elem1)->Type] >
+      AirspacePriority[((AIRSPACE_CIRCLE *)elem2)->Type])
+    return (-1);
+  if (AirspacePriority[((AIRSPACE_CIRCLE *)elem1)->Type] <
+      AirspacePriority[((AIRSPACE_CIRCLE *)elem2)->Type])
+    return (+1);
+
+  // otherwise sort on height?
+  return (0);
+}
+
+
+void SortAirspace(void) {
+  // force acknowledgement before sorting
+  ClearAirspaceWarnings(true, false);
+
+  qsort(AirspaceArea,
+	NumberOfAirspaceAreas,
+	sizeof(AIRSPACE_AREA),
+	SortAirspaceAreaCompare);
+
+  qsort(AirspaceCircle,
+	NumberOfAirspaceCircles,
+	sizeof(AIRSPACE_CIRCLE),
+	SortAirspaceCircleCompare);
 
 }

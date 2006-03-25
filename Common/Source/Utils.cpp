@@ -110,6 +110,24 @@ TCHAR *szRegistryAirspaceMode[] =     {  TEXT("AirspaceMode0"),
 }; // pL
 
 
+TCHAR *szRegistryAirspacePriority[] = {  TEXT("AirspacePriority0"),
+					 TEXT("AirspacePriority1"),
+					 TEXT("AirspacePriority2"),
+					 TEXT("AirspacePriority3"),
+					 TEXT("AirspacePriority4"),
+					 TEXT("AirspacePriority5"),
+					 TEXT("AirspacePriority6"),
+					 TEXT("AirspacePriority7"),
+					 TEXT("AirspacePriority8"),
+					 TEXT("AirspacePriority9"),
+					 TEXT("AirspacePriority10"),
+					 TEXT("AirspacePriority11"),
+					 TEXT("AirspacePriority12"),
+					 TEXT("AirspacePriority13"),
+					 TEXT("AirspacePriority14")
+}; // pL
+
+
 TCHAR szRegistryAirspaceWarning[]= TEXT("AirspaceWarn");
 TCHAR szRegistryAirspaceBlackOutline[]= TEXT("AirspaceBlackOutline");
 TCHAR szRegistryAltMargin[]=	   TEXT("AltMargin");
@@ -136,6 +154,7 @@ TCHAR szRegistrySafetyAltitudeTerrain[] =     TEXT("SafetyAltitudeTerrain");
 TCHAR szRegistrySafteySpeed[] =          TEXT("SafteySpeed");
 TCHAR szRegistrySectorRadius[]=          TEXT("Radius");
 TCHAR szRegistrySnailTrail[]=		 TEXT("SnailTrail");
+TCHAR szRegistryTrailDrift[]=		 TEXT("TrailDrift");
 TCHAR szRegistrySpeed1Index[]=		 TEXT("SpeedIndex");
 TCHAR szRegistrySpeed2Index[]=		 TEXT("Speed2Index");
 TCHAR szRegistrySpeedUnitsValue[] =      TEXT("Speed");
@@ -207,6 +226,7 @@ TCHAR szRegistryLockSettingsInFlight[] = TEXT("LockSettingsInFlight");
 TCHAR szRegistryTerrainContrast[] = TEXT("TerrainContrast");
 TCHAR szRegistryTerrainBrightness[] = TEXT("TerrainBrightness");
 TCHAR szRegistryEnableFLARMDisplay[] = TEXT("EnableFLARMDisplay");
+TCHAR szRegistryGliderScreenPosition[] = TEXT("GliderScreenPosition");
 
 
 int UTCOffset = 0; // used for Altair
@@ -252,6 +272,48 @@ void ResetInfoBoxes(void) {
   InfoType[7] = 1644825;
 }
 
+void SetRegistryStringIfAbsent(TCHAR* name,
+			       TCHAR* value) {
+  TCHAR temp[MAX_PATH];
+  if (!GetRegistryString(name, temp, MAX_PATH)) {
+    SetRegistryString(name, value);
+  }
+}
+
+void DefaultRegistrySettingsAltair(void)
+{
+  SetRegistryStringIfAbsent(TEXT("InfoWindowFont"),
+   TEXT("24,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
+  SetRegistryStringIfAbsent(TEXT("TitleWindowFont"),
+   TEXT("10,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicNineCond"));
+  SetRegistryStringIfAbsent(TEXT("CDIWindowFont"),
+   TEXT("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
+  SetRegistryStringIfAbsent(TEXT("MapLabelFont"),
+   TEXT("13,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicTwelveCond"));
+  SetRegistryStringIfAbsent(TEXT("StatisticsFont"),
+   TEXT("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowFont"),
+   TEXT("15,0,0,0,500,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
+  SetRegistryStringIfAbsent(TEXT("MapWindowBoldFont"),
+   TEXT("15,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicFourteenCond"));
+  SetRegistryStringIfAbsent(TEXT("BugsBallastFont"),
+   TEXT("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
+  SetRegistryStringIfAbsent(TEXT("AirspacePressFont"),
+   TEXT("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
+  SetRegistryStringIfAbsent(TEXT("AirspaceColourDlgFont"),
+   TEXT("14,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("ScaleList"),
+   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
+}
+
+
+void SaveRegistryAirspacePriority() {
+  for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
+    SetToRegistry(szRegistryAirspacePriority[i], AirspacePriority[i]);
+  }
+}
+
+
 void ReadRegistrySettings(void)
 {
   DWORD Speed = 0;
@@ -261,6 +323,16 @@ void ReadRegistrySettings(void)
   DWORD DisplayUp = 0;
   DWORD Temp = 0;
   int i;
+
+#ifdef GNAV
+  DefaultRegistrySettingsAltair();
+#endif
+
+  for (i=0; i<AIRSPACECLASSCOUNT; i++) {
+    Temp=0;
+    GetFromRegistry(szRegistryAirspacePriority[i], &Temp);
+    AirspacePriority[i] = Temp;
+  }
 
   GetFromRegistry(szRegistrySpeedUnitsValue,&Speed);
   switch(Speed)
@@ -409,6 +481,10 @@ void ReadRegistrySettings(void)
   Temp = TrailActive;
   GetFromRegistry(szRegistrySnailTrail,&Temp);
   TrailActive = Temp;
+
+  Temp = MapWindow::EnableTrailDrift;
+  GetFromRegistry(szRegistryTrailDrift,&Temp);
+  MapWindow::EnableTrailDrift = (Temp==1);
 
   Temp  = EnableTopology;
   GetFromRegistry(szRegistryDrawTopology,&Temp);
@@ -624,6 +700,10 @@ void ReadRegistrySettings(void)
   Temp = TerrainBrightness;
   GetFromRegistry(szRegistryTerrainBrightness,&Temp);
   TerrainBrightness = (short)Temp;
+
+  Temp = MapWindow::GliderScreenPosition;
+  GetFromRegistry(szRegistryGliderScreenPosition,&Temp);
+  MapWindow::GliderScreenPosition = (int)Temp;
 
 }
 
@@ -1466,6 +1546,7 @@ void SetRegistryBrush(int i, DWORD c)
 {
   SetToRegistry(szRegistryBrush[i] ,c) ;
 }
+
 
 
 void SetRegistryAirspaceMode(int i)
@@ -2566,18 +2647,35 @@ loc = CSIDL_PROGRAMS
 File system directory that contains the user's program groups (which
 are also file system directories).
 
-CSIDL_PERSONAL File system directory that serves as a common
-repository for documents.
+CSIDL_PERSONAL               File system directory that serves as a common
+                             repository for documents.
 
-CSIDL_PROGRAM_FILES 0x0026 The program files folder.
+CSIDL_PROGRAM_FILES 0x0026   The program files folder.
+
 
 */
 	static TCHAR buffer[MAX_PATH];
+#if (WINDOWSPC>0)
+	_tcscpy(buffer,TEXT("C:\\XCSoar\\NOR Flash"));
+#else
+#ifdef GNAV
+	_tcscpy(buffer,TEXT("\\NOR Flash"));
+#else
 	SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
+#endif
+#endif
 	wcsncat(buffer, TEXT("\\"), MAX_PATH);    
 	wcsncat(buffer, file, MAX_PATH);
 	return buffer;
 }
+
+
+char* LocalPathS(TCHAR* file, int loc) {
+  static char buffer[MAX_PATH];
+  sprintf(buffer,"%S",LocalPath(file,loc));
+  return buffer;
+}
+
 
 void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc)
 {
@@ -2770,13 +2868,8 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
   _tcscpy(startProfileFile, 
 	  TEXT("C:\\XCSoar\\NOR Flash\\xcsoar-registry.prf"));
 #else
-#ifdef GNAV
-  _tcscpy(startProfileFile, 
-	  TEXT("\\NOR Flash\\xcsoar-registry.prf"));
-#else
   _tcscpy(startProfileFile, 
 	  LocalPath(TEXT("xcsoar-registry.prf")));
-#endif
 #endif
 
   if (CommandLine != NULL){
@@ -2836,3 +2929,45 @@ bool CheckRectOverlap(RECT rc1, RECT rc2) {
 
 
 */
+
+#ifndef GNAV
+typedef DWORD (_stdcall *GetIdleTimeProc) (void);
+GetIdleTimeProc GetIdleTime;
+#endif
+
+int MeasureCPULoad() {
+  static bool init=false;
+  static bool start=true;
+  static DWORD dwStartTick;
+  static DWORD dwIdleSt;
+  static DWORD dwStopTick;
+  static DWORD dwIdleEd;
+  static int PercentIdle;
+  static int PercentLoad;
+  static int pi;
+#ifndef GNAV
+  if (!init) {
+    // get the pointer to the function
+    GetIdleTime = (GetIdleTimeProc) 
+      GetProcAddress(LoadLibrary(_T("coredll.dll")),
+		     _T("GetIdleTime"));
+    init=true;
+  }
+  if (!GetIdleTime) return 0;
+#endif
+
+  if (start) {
+    dwStartTick = GetTickCount();
+    dwIdleSt = GetIdleTime();
+  }
+  if (!start) {
+    dwStopTick = GetTickCount();
+    dwIdleEd = GetIdleTime();
+    pi = ((100 * (dwIdleEd - dwIdleSt))/(dwStopTick - dwStartTick));
+    PercentIdle = (PercentIdle+pi)/2;
+  }
+  start = !start;
+  PercentLoad = 100-PercentIdle;
+  return PercentLoad;
+}
+

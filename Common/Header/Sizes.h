@@ -118,7 +118,7 @@
 ///////////////////////
 
 #define NUMAIRSPACECOLORS 16
-#define NUMAIRSPACEBRUSHES 5
+#define NUMAIRSPACEBRUSHES 6
 
 ////////////////////////
 

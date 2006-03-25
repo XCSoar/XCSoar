@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.39 2006/03/19 08:43:10 jwharington Exp $
+  $Id: Parser.cpp,v 1.40 2006/03/25 04:53:46 jwharington Exp $
 
 Copyright_License {
 
@@ -75,6 +75,7 @@ NMEAParser::NMEAParser() {
 void NMEAParser::Reset(void) {
   GpsUpdated = TRUE;
   SetEvent(dataTriggerEvent);
+  PulseEvent(varioTriggerEvent);
   VarioUpdated = TRUE;
   nmeaParser1.gpsValid = false;
   nmeaParser2.gpsValid = false;
@@ -803,7 +804,7 @@ BOOL NMEAParser::PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->Vario = wnet;
 
   VarioUpdated = TRUE;
-  SetEvent(dataTriggerEvent);
+  PulseEvent(varioTriggerEvent);
 
   return FALSE;
 }
@@ -931,7 +932,7 @@ BOOL NMEAParser::PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->Vario = wnet/TOKNOTS;
 
   VarioUpdated = TRUE;
-  SetEvent(dataTriggerEvent);
+  PulseEvent(varioTriggerEvent);
 
   return TRUE;
 }
@@ -945,7 +946,7 @@ BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   unsigned long switchinputs, switchoutputs;
   swscanf(String,
-	  TEXT("%lf,%lx,%lx"),
+	  TEXT("%lf,%lx,%lx,%lf"),
 	  &MACCREADY,
 	  &switchinputs,
 	  &switchoutputs,
@@ -1072,7 +1073,7 @@ BOOL NMEAParser::PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->BaroAltitudeAvailable = TRUE;
 
   VarioUpdated = TRUE;
-  SetEvent(dataTriggerEvent);
+  PulseEvent(varioTriggerEvent);
 
   return FALSE;
 }
@@ -1126,12 +1127,17 @@ BOOL NMEAParser::PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO)
 void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO) {
   int i;
   bool present = false;
-  for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    // clear this slot if it is too old (2 seconds)
-    if (GPS_INFO->Time> GPS_INFO->FLARM_Traffic[i].Time_Fix+2) {
-      GPS_INFO->FLARM_Traffic[i].ID[0]= 0;
-    } else {
-      present = true;
+  if (GPS_INFO->FLARM_Available) {
+
+    for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
+      // clear this slot if it is too old (2 seconds)
+      if (_tcslen(GPS_INFO->FLARM_Traffic[i].ID)>0) {
+	if (GPS_INFO->Time> GPS_INFO->FLARM_Traffic[i].Time_Fix+2) {
+	  GPS_INFO->FLARM_Traffic[i].ID[0]= 0;
+	} else {
+	  present = true;
+	}
+      }
     }
   }
   GaugeFLARM::Show(present);

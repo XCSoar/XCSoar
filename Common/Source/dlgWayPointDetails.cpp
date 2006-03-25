@@ -222,7 +222,7 @@ void dlgWayPointDetailsShowModal(void){
   WndProperty *wp;
 
   wf = dlgLoadFromXML(CallBackTable, 
-		      "\\NOR Flash\\dlgWayPointDetails.xml", 
+		      LocalPathS(TEXT("dlgWayPointDetails.xml")), 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_WAYPOINTDETAILS"));
 

@@ -294,7 +294,7 @@ static void GetTaskFileName(TCHAR *filename) {
     TaskFileNumber = wp->GetDataField()->GetAsInteger();
   }
 #if (WINDOWSPC>0)
-  _stprintf(filename,TEXT("C:\\XCSoar\\NOR Flash\\%02d.tsk"), 
+  _stprintf(filename,TEXT("C:\\XCSoaLocalPath(r%02d.tsk"), 
 	    TaskFileNumber);
 #else
 #ifdef GNAV
@@ -351,7 +351,7 @@ void dlgTaskOverviewShowModal(void){
 
   showAdvanced = false;
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgTaskOverview.xml", 
+  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgTaskOverview.xml")), 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TASKOVERVIEW"));
 

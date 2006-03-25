@@ -78,7 +78,7 @@ static void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int  InAATStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int  InAATurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void DoAutoMacCready(DERIVED_INFO *Calculated);
+static void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -140,14 +140,15 @@ void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (!Calculated->Flying) return;
 
-  SnailTrail[SnailNext].Latitude = Basic->Latitude;
-  SnailTrail[SnailNext].Longitude = Basic->Longitude;
+  SnailTrail[SnailNext].Latitude = (float)(Basic->Latitude);
+  SnailTrail[SnailNext].Longitude = (float)(Basic->Longitude);
+  SnailTrail[SnailNext].Time = Basic->Time;
         
   // JMW TODO: if circling, color according to 30s average?
   if (Basic->NettoVarioAvailable) {
-    SnailTrail[SnailNext].Vario = Basic->NettoVario ;
+    SnailTrail[SnailNext].Vario = (float)(Basic->NettoVario) ;
   } else {
-    SnailTrail[SnailNext].Vario = Calculated->Vario ;
+    SnailTrail[SnailNext].Vario = (float)(Calculated->Vario) ;
   }
 
   SnailNext ++;
@@ -184,7 +185,7 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   // draw snail points more often in circling mode
   if (Calculated->Circling) {
-    dtSnail = 2.0;
+    dtSnail = 1.0;
   } else {
     dtSnail = 5.0;
   }
@@ -522,7 +523,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       ||(fabs(Calculated->TaskAltitudeDifference)>30)) {
     FinalGlideAlert(Basic, Calculated);
     if (Calculated->AutoMacCready) {
-      DoAutoMacCready(Calculated);
+      DoAutoMacCready(Basic, Calculated);
     }
   }
 
@@ -1873,6 +1874,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
         {
           Calculated->LDFinish = Calculated->TaskDistanceToGo 
 	    / (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude 
+	       - SAFETYALTITUDEARRIVAL
 	       + Calculated->EnergyHeight)  ;
         }
       else
@@ -1900,17 +1902,32 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 }
 
 
-void DoAutoMacCready(DERIVED_INFO *Calculated)
+void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double tad=0.0;
   static double dmc=0.0;
-
+  /*
   tad = Calculated->TaskAltitudeDifference/(Calculated->TaskDistanceToGo+1);
-  
   dmc = dmc*0.2+0.8*0.5*min(1.0,max(-1.0,tad/0.001));
 
   MACCREADY += dmc;
   MACCREADY = min(5.0,max(0,MACCREADY));
+  */
+
+  double slope = 
+    (Basic->Altitude 
+     - SAFETYALTITUDEARRIVAL
+     - WayPointList[Task[ActiveWayPoint].Index].Altitude)/
+    (Calculated->WaypointDistance+1);
+
+  double mcp = PirkerAnalysis(Basic, Calculated,
+		       Calculated->WaypointBearing,
+		       slope);
+  if (mcp>0) {
+    MACCREADY = mcp;
+  } else {
+    MACCREADY = 0.0;
+  }
 
   /* NOT WORKING
   static double tad=0.0;
@@ -2800,3 +2817,55 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 }
 
+
+////////////
+
+double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+		      double bearing,
+		      double GlideSlope) {
+
+  bool maxfound = false;
+  bool first = true;
+  double pmc = 0.0;
+  double htarget = GlideSlope;
+  double h;
+  double dh= 1.0;
+  double pmclast = 5.0;
+  double dhlast = -1.0;
+  double pmczero = 0.0;
+
+  while (pmc<10.0) {
+
+    h = GlidePolar::MacCreadyAltitude(pmc, 
+				      // should this be zero?
+				      1.0, bearing, 
+				      Calculated->WindSpeed, 
+				      Calculated->WindBearing, 
+				      0, 0, true, 0);
+
+    dh = (htarget-h); 
+    // height difference, how much we have compared to 
+    // how much we need at that speed.
+    //   dh>0, we can afford to speed up
+
+    if (dh==dhlast) {
+      // same height, must have hit max speed.
+      if (dh>0) {
+	return pmclast;
+      } else {
+	return 0.0;
+      }
+    }
+
+    if ((dh<=0)&&(dhlast>0)) {
+      double f = (-dhlast)/(dh-dhlast);
+      pmczero = pmclast*(1.0-f)+f*pmc;
+      return pmczero;
+    }
+    dhlast = dh;
+    pmclast = pmc;
+
+    pmc += 0.5;
+  }
+  return -1.0; // no solution found, unreachable without further climb
+}

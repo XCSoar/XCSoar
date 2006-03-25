@@ -278,7 +278,7 @@ BOOL extGPSCONNECT = FALSE; // this one used by external functions
 
 bool          TaskAborted = false;
 
-bool InfoBoxesDirty= TRUE;
+bool InfoBoxesDirty= false;
 bool DialogActive = false;
 
 //Local Static data
@@ -564,7 +564,7 @@ void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
   if (DisplayLocked) {
     ShowWindow(hWndMenuButton, SW_HIDE);
-    MenuTimeOut = MenuTimeoutMax/5;
+    MenuTimeOut = MenuTimeoutMax/2;
     DisplayTimeOut = 0;
   }
 }
@@ -631,7 +631,7 @@ void SettingsLeave() {
     {
       CloseAirspace();
       ReadAirspace();
-      
+      SortAirspace();
     }
   
   if (AIRFIELDFILECHANGED)
@@ -868,7 +868,8 @@ void RestartCommPorts() {
   static bool first = true;
 
   LockComm();
-#if (WINDOWSPC<1)
+#if (WINDOWSPC>0)
+#else
   devClose(devA());
   devClose(devB());
 #endif
@@ -876,20 +877,23 @@ void RestartCommPorts() {
   // Close both first!
   if(Port1Available)
     {
-#if (WINDOWSPC<1)
+#if (WINDOWSPC>0)
+#else
       Port1Available = FALSE; 
       Port1Close ();
 #endif
     }
   if(Port2Available)
     {
-#if (WINDOWSPC<1)
+#if (WINDOWSPC>0)
+#else
       Port2Available = FALSE; 
       Port2Close ();
 #endif
     }
 
 #if (WINDOWSPC>0)
+#else
   first = true;
 #endif
   if (first) {
@@ -966,29 +970,40 @@ void TriggerRedraws(NMEA_INFO *nmea_info,
 		    DERIVED_INFO *derived_info) {
   if (MapWindow::IsDisplayRunning()) {
     if (NMEAParser::GpsUpdated) {
-      MapWindow::UpdateInfo(nmea_info, derived_info);
       MapWindow::MapDirty = true;
-      SetEvent(drawTriggerEvent);
+      PulseEvent(drawTriggerEvent); 
+      // only ask for redraw if the thread was waiting,
+      // this causes the map thread to try to synchronise
+      // with the calculation thread, which is desirable
+      // to reduce latency
+      // it also ensures that if the display is lagging,
+      // it will have a chance to catch up.
     }
   }
 }
 
 
 DWORD InstrumentThread (LPVOID lpvoid) {
+  // wait for proper startup signal
+  while (!MapWindow::IsDisplayRunning()) {
+    Sleep(100);
+  }
+
 
   while (!MapWindow::CLOSETHREAD) {
 
-    WaitForSingleObject(dataTriggerEvent, 5000);
-    if (MapWindow::CLOSETHREAD) continue; // drop out on exit
+    WaitForSingleObject(varioTriggerEvent, 5000);
+    ResetEvent(varioTriggerEvent);
+    if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
-    if (MapWindow::IsDisplayRunning()) {
-      if (NMEAParser::VarioUpdated) {
+    if (NMEAParser::VarioUpdated) {
+      NMEAParser::VarioUpdated = false;
+      if (MapWindow::IsDisplayRunning()) {
 	if (EnableVarioGauge) {
 	  GaugeVario::Render();
 	}
       }
     }
-    NMEAParser::VarioUpdated = false;
   }
   return 0;
 }
@@ -1002,13 +1017,18 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
   needcalculationsslow = false;
 
+  // wait for proper startup signal
+  while (!MapWindow::IsDisplayRunning()) {
+    Sleep(100);
+  }
+
   while (!MapWindow::CLOSETHREAD) {
 
     WaitForSingleObject(dataTriggerEvent, 5000);
-    if (MapWindow::CLOSETHREAD) continue; // drop out on exit
+    if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
     // set timer to determine latency (including calculations)
-    if (NMEAParser::GpsUpdated) { // timeout on FLARM objects
+    if (NMEAParser::GpsUpdated) { 
       MapWindow::UpdateTimeStats(true);
     }
 
@@ -1037,6 +1057,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
 	if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
 	}
 	NMEAParser::VarioUpdated = true; // emulate vario update
+	PulseEvent(varioTriggerEvent);
       }
     }
     
@@ -1048,6 +1069,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
       needcalculationsslow = true;
       InfoBoxesDirty = true;
     }
+
+    ResetEvent(dataTriggerEvent);
         
     TriggerRedraws(&tmp_GPS_INFO, &tmp_CALCULATED_INFO);
 
@@ -1082,6 +1105,8 @@ void CreateCalculationThread() {
   {
     SetThreadPriority(hCalculationThread, THREAD_PRIORITY_NORMAL); 
     CloseHandle (hCalculationThread);
+  } else {
+    ASSERT(1);
   }
 
   HANDLE hInstrumentThread;
@@ -1094,11 +1119,14 @@ void CreateCalculationThread() {
   {
     SetThreadPriority(hInstrumentThread, THREAD_PRIORITY_NORMAL); 
     CloseHandle (hInstrumentThread);
+  } else {
+    ASSERT(1);
   }
 
 }
 
 void dlgStartupShowModal(void);
+
 
 void PreloadInitialisation(bool ask) {
   SetToRegistry(TEXT("XCV"), 1);
@@ -1106,6 +1134,7 @@ void PreloadInitialisation(bool ask) {
   // Registery (early)
 
   if (ask) {
+
     RestoreRegistry();
     ReadRegistrySettings();
     StatusFileInit();
@@ -1117,6 +1146,7 @@ void PreloadInitialisation(bool ask) {
     ReadRegistrySettings();
 #endif
     //#endif
+    CreateProgressDialog(gettext(TEXT("Initialising")));
   }
 
   // Interface (before interface)
@@ -1130,7 +1160,7 @@ void PreloadInitialisation(bool ask) {
 
 HANDLE drawTriggerEvent;
 HANDLE dataTriggerEvent;
-
+HANDLE varioTriggerEvent;
 
 bool ProgramStarted = false;
 
@@ -1188,14 +1218,13 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   InitializeCriticalSection(&CritSec_Comm);
   InitializeCriticalSection(&CritSec_TerrainDataGraphics);
   InitializeCriticalSection(&CritSec_TerrainDataCalculations);
-  drawTriggerEvent = CreateEvent(NULL, FALSE, FALSE, TEXT("drawTriggerEvent"));
-  dataTriggerEvent = CreateEvent(NULL, FALSE, FALSE, TEXT("dataTriggerEvent"));
+  drawTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("drawTriggerEvent"));
+  dataTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("dataTriggerEvent"));
+  varioTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("varioTriggerEvent"));
 
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
-
-  CreateProgressDialog(gettext(TEXT("Initialising")));
 
   // display start up screen
   //  StartupScreen();
@@ -1237,6 +1266,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   ReadAirfieldFile();
   ReadAirspace();
+  SortAirspace();
 
   OpenTopology();
   ReadTopology();
@@ -1264,10 +1294,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // re-set polar in case devices need the data
   GlidePolar::SetBallast();
 
-  CreateCalculationThread();
-
-  MapWindow::CreateDrawingThread();
-
 #if (EXPERIMENTAL > 0)
   CreateProgressDialog(gettext(TEXT("Bluetooth dialup SMS")));
   bsms.Initialise();
@@ -1280,11 +1306,20 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   DoSunEphemeris(147.0,-36.0);
 
   // Finally ready to go
-  Sleep(1000);
+  MapWindow::CreateDrawingThread();
+  GlobalRunning = true;
+  ProgramStarted = true;
   CloseProgressDialog();
+  Sleep(100);
+  ShowInfoBoxes();
 
-  MapWindow::MapDirty = true;
+  //  AssignValues();
+  //  DisplayText();
+  //  Sleep(100);
   SwitchToMapWindow();
+  Sleep(100);
+
+  CreateCalculationThread();
 
   // NOTE: Must show errors AFTER all windows ready
 
@@ -1301,9 +1336,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #ifdef _INPUTDEBUG_
   InputEvents::showErrors();
 #endif
-
-  GlobalRunning = true;
-  ProgramStarted = true;
 
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0))
@@ -1687,9 +1719,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   
   ShowWindow(hWndMainWindow, nCmdShow);
   UpdateWindow(hWndMainWindow);
-  
-  ShowInfoBoxes();
-  
+    
 #if NEWINFOBOX>0
   // NOP not needed
 #else
@@ -1823,11 +1853,14 @@ void Shutdown(void) {
 #endif
   
   // Stop drawing
+  
   MapWindow::CloseDrawingThread();
 
   // Stop calculating too (wake up)
   SetEvent(dataTriggerEvent);
-  
+  SetEvent(drawTriggerEvent);
+  SetEvent(varioTriggerEvent);
+
   // Clear data
   NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1; 
   AATEnabled = FALSE;
@@ -1909,6 +1942,7 @@ void Shutdown(void) {
       
   CloseHandle(drawTriggerEvent);
   CloseHandle(dataTriggerEvent);
+  CloseHandle(varioTriggerEvent);
 
 #if (WINDOWSPC>0) 
 #if _DEBUG
@@ -1965,7 +1999,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       memset (&s_sai, 0, sizeof (s_sai));
       s_sai.cbSize = sizeof (s_sai);
 
-      iTimerID = SetTimer(hWnd,1000,1000,NULL);
+      iTimerID = SetTimer(hWnd,1000,500,NULL);
 
       hWndCB = CreateRpCommandBar(hWnd);
 
@@ -2013,7 +2047,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       // 	  processKey to handle long events - at any length
       // 	- Not sure how to do double click... (need timer call back
       // 	process unless reset etc... tricky)
+#ifdef GNAV
+    case WM_KEYDOWN: // JMW was keyup
+#else
     case WM_KEYUP: // JMW was keyup
+#endif
       if (ProgramStarted) {
 	if (!DialogActive) {
 	  
@@ -2262,6 +2300,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		ShowWindow(hWndCB,SW_HIDE);
 		
 		SettingsLeave();
+		StoreRegistry();
 	      }
 		
 		SwitchToMapWindow();
@@ -2559,18 +2598,19 @@ void DisplayText(void)
 	InfoBoxes[i]->SetComment(TEXT("MANUAL"));
       break;
     case 0: // GPS Alt
-      if (needupdate) {
-	Units::FormatAlternateUserAltitude(GPS_INFO.Altitude, 
-					   sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-	InfoBoxes[i]->SetComment(sTmp);
-      }
+      Units::FormatAlternateUserAltitude(GPS_INFO.Altitude, 
+					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+      InfoBoxes[i]->SetComment(sTmp);
+      break;
+    case 1: // AGL
+      Units::FormatAlternateUserAltitude(GPS_INFO.Altitude, 
+					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+      InfoBoxes[i]->SetComment(sTmp);
       break;
     case 33:
-      if (needupdate) {
-	Units::FormatAlternateUserAltitude(GPS_INFO.BaroAltitude, 
-					   sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
-	InfoBoxes[i]->SetComment(sTmp);
-      }
+      Units::FormatAlternateUserAltitude(GPS_INFO.BaroAltitude, 
+					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
+      InfoBoxes[i]->SetComment(sTmp);
       break;
     case 43:
       if (EnableBlockSTF) {
@@ -2621,7 +2661,7 @@ void CommonProcessTimer()
     }
 
   if (DisplayLocked) {
-    if(MenuTimeOut==MenuTimeoutMax/5) {
+    if(MenuTimeOut==MenuTimeoutMax/2) {
       ShowWindow(hWndMenuButton, SW_HIDE);
       InputEvents::setMode(TEXT("default"));
     }
@@ -2655,11 +2695,7 @@ void CommonProcessTimer()
   //
   // maybe block/delay this if a dialog is active?
   //
-  static int i=0;
-  i++;
-  if (i%5==0) {
-    Message::Render();
-  }
+  Message::Render();
 
 #if (EXPERIMENTAL > 0)
 
@@ -2691,8 +2727,12 @@ void ProcessTimer(void)
   // also service replay logger
   ReplayLogger::Update();
   if (ReplayLogger::IsEnabled()) {
-    NMEAParser::GpsUpdated = TRUE;
-    SetEvent(dataTriggerEvent);
+    static double timeLast = 0;
+    if (GPS_INFO.Time-timeLast>0) {
+      NMEAParser::GpsUpdated = TRUE;
+      SetEvent(dataTriggerEvent);
+    }
+    timeLast = GPS_INFO.Time;
     GPSCONNECT = TRUE;
     extGPSCONNECT = TRUE;
     GPS_INFO.NAVWarning = FALSE;
@@ -2739,7 +2779,7 @@ void ProcessTimer(void)
 	  // gps was waiting for fix, now waiting for connection
 	  NMEAParser::GpsUpdated = true;
 	  MapWindow::MapDirty = true;
-	  SetEvent(dataTriggerEvent);
+	  SetEvent(drawTriggerEvent);
 	  LOCKWAIT = FALSE;
 	}
       if(!CONNECTWAIT)
@@ -2748,7 +2788,7 @@ void ProcessTimer(void)
 	  
 	  NMEAParser::GpsUpdated = true;
 	  MapWindow::MapDirty = true;
-	  SetEvent(dataTriggerEvent);
+	  SetEvent(drawTriggerEvent);
 	  extGPSCONNECT = FALSE;
 	  
 	  InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
@@ -2771,7 +2811,7 @@ void ProcessTimer(void)
 	  //
 	  NMEAParser::GpsUpdated = true;
 	  MapWindow::MapDirty = true;
-	  SetEvent(dataTriggerEvent);
+	  SetEvent(drawTriggerEvent);
 
 	  extGPSCONNECT = FALSE;
 	  
@@ -2801,7 +2841,7 @@ void ProcessTimer(void)
 	{
 	  NMEAParser::GpsUpdated = true;
 	  MapWindow::MapDirty = true;
-	  SetEvent(dataTriggerEvent);
+	  SetEvent(drawTriggerEvent);
 	  CONNECTWAIT = FALSE;
 	}
     }
@@ -2814,7 +2854,7 @@ void ProcessTimer(void)
 	  
 	  NMEAParser::GpsUpdated = true;
 	  MapWindow::MapDirty = true;
-	  SetEvent(dataTriggerEvent);
+	  SetEvent(drawTriggerEvent);
 	  
 	  LOCKWAIT = TRUE;
 #ifndef DISABLEAUDIO
@@ -2827,7 +2867,7 @@ void ProcessTimer(void)
 	{
 	  NMEAParser::GpsUpdated = true;
 	  MapWindow::MapDirty = true;
-	  SetEvent(dataTriggerEvent);
+	  SetEvent(drawTriggerEvent);
 	  LOCKWAIT = FALSE;
 	}
     }
@@ -2847,8 +2887,12 @@ void SIMProcessTimer(void)
 
   GPSCONNECT = TRUE;
   extGPSCONNECT = TRUE;
+  static int i=0;
+  i++;
 
   if (!ReplayLogger::Update()) {
+
+    if (i%2==0) return;
 
     LockFlightData();
 
@@ -2865,8 +2909,10 @@ void SIMProcessTimer(void)
     UnlockFlightData();
   }
 
+  if (i%2==0) return;
+
 #ifdef DEBUG
-#if 1
+#if 0
   NMEAParser::TestRoutine(&GPS_INFO);
 #endif
 #endif
@@ -2886,8 +2932,8 @@ void SwitchToMapWindow(void)
   DefocusInfoBox();
 
   SetFocus(hWndMapWindow);
-  if (  MenuTimeOut< MenuTimeoutMax/5) {
-    MenuTimeOut = MenuTimeoutMax/5;
+  if (  MenuTimeOut< MenuTimeoutMax/2) {
+    MenuTimeOut = MenuTimeoutMax/2;
   }
   if (  InfoBoxFocusTimeOut< FOCUSTIMEOUTMAX) {
     InfoBoxFocusTimeOut = FOCUSTIMEOUTMAX;

@@ -34,6 +34,7 @@ Copyright_License {
 #include "stdafx.h"
 #include "Message.h"
 #include "MapWindow.h"
+#include "externs.h"
 #include "InfoBoxLayout.h"
 
 
@@ -121,7 +122,8 @@ void Message::Initialize(RECT rc) {
 
   rcmsg = rc; // default; message window can be full size of screen
 
-  hWndMessageWindow = CreateWindow(TEXT("EDIT"), TEXT(" "),
+  hWndMessageWindow = CreateWindow(// WS_EX_CLIENTEDGE,
+				     TEXT("EDIT"), TEXT(" "),
 				   WS_VISIBLE|WS_CHILD|ES_MULTILINE|ES_CENTER
 				   |WS_BORDER|ES_READONLY | WS_CLIPCHILDREN 
 				   | WS_CLIPSIBLINGS,
@@ -203,7 +205,7 @@ void Message::Resize() {
 
     int width =// min((rcmsg.right-rcmsg.left)*0.8,tsize.cx);
       (int)((rcmsg.right-rcmsg.left)*0.9);
-    int height = (int)min((rcmsg.bottom-rcmsg.top)*0.8,tsize.cy*(linecount+2));
+    int height = (int)min((rcmsg.bottom-rcmsg.top)*0.8,tsize.cy*(linecount+1));
     int h1 = height/2;
     int h2 = height-h1;
 
@@ -253,6 +255,8 @@ void Message::BlockRender(bool doblock) {
 
 void Message::Render() {
   DWORD	fpsTime = ::GetTickCount() - startTime;
+
+  if (!GlobalRunning) return;
 
   if (block_ref) return;
 

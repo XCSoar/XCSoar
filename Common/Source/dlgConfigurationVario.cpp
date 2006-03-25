@@ -232,6 +232,9 @@ static void UpdateParameters(bool first) {
   VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPeriodScheme"), first);
   VegaConfigurationUpdated(TEXT("ToneCirclingDescendingPeriodScale"), first);
 
+  VegaConfigurationUpdated(TEXT("VarioTimeConstantCircling"), first);
+  VegaConfigurationUpdated(TEXT("VarioTimeConstantCruise"), first);
+
   VegaConfigurationUpdated(TEXT("UTCOffset"), first);
   VegaConfigurationUpdated(TEXT("LogIGC"), first);
   VegaConfigurationUpdated(TEXT("IGCLoggerInterval"), first);
@@ -486,7 +489,7 @@ bool dlgConfigurationVarioShowModal(void){
   changed = false;
 
   wf = dlgLoadFromXML(CallBackTable, 
-		      "\\NOR Flash\\dlgVario.xml", 
+		      LocalPathS(TEXT("dlgVario.xml")), 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_VARIO"));
 
@@ -535,7 +538,7 @@ bool dlgConfigurationVarioShowModal(void){
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Gross>0"));
+    dfe->addEnumText(TEXT("None"));
     dfe->addEnumText(TEXT("Gross>MacCready"));
     dfe->addEnumText(TEXT("Gross>Average"));
     dfe->Set(0);
@@ -553,6 +556,30 @@ bool dlgConfigurationVarioShowModal(void){
     dfe->addEnumText(TEXT("Net>MacCready/2"));
     dfe->addEnumText(TEXT("Relative>MacCready"));
     dfe->addEnumText(TEXT("Net>MacCready"));
+    dfe->Set(0);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpVarioTimeConstantCircling"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT(" 1.0s"));
+    dfe->addEnumText(TEXT(" 1.3s"));
+    dfe->addEnumText(TEXT(" 1.8s"));
+    dfe->addEnumText(TEXT(" 2.7s"));
+    dfe->Set(0);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpVarioTimeConstantCruise"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT(" 1.0s"));
+    dfe->addEnumText(TEXT(" 1.3s"));
+    dfe->addEnumText(TEXT(" 1.8s"));
+    dfe->addEnumText(TEXT(" 2.7s"));
     dfe->Set(0);
     wp->RefreshDisplay();
   }

@@ -175,7 +175,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgBasicSettingsShowModal(void){
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgBasicSettings.xml", 
+  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgBasicSettings.xml")), 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_BASICSETTINGS"));
 

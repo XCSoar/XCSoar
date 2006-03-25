@@ -66,6 +66,7 @@ class Statistics {
 
   ///
     
+    static void RenderAirspace(HDC hdc, RECT rc);
     static void RenderBarograph(HDC hdc, RECT rc);
     static void RenderClimb(HDC hdc, RECT rc);
     static void RenderGlidePolar(HDC hdc, RECT rc);

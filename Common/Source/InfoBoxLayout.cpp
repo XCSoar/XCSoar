@@ -250,11 +250,11 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   } else {
     landscape = false;
     // portrait mode
+    gnav = false;
     if (InfoBoxGeometry>=3) {
       InfoBoxGeometry= 0;
 
       geometrychanged = true;
-      gnav = false;
     }
   }
 
@@ -432,7 +432,8 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 
       hWndInfoWindow[i] =
         CreateWindow(TEXT("STATIC"),TEXT("\0"),
-		     WS_VISIBLE|WS_CHILD|WS_TABSTOP
+		     /* WS_VISIBLE| */
+		     WS_CHILD|WS_TABSTOP
 		     |SS_CENTER|SS_NOTIFY
 		     |WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
 		     xoff, yoff+TitleHeight,
@@ -441,7 +442,8 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 
       hWndTitleWindow[i] =
         CreateWindow(TEXT("STATIC"), TEXT("\0"),
-		     WS_VISIBLE|WS_CHILD|WS_TABSTOP
+		     /* WS_VISIBLE|*/		     
+		     WS_CHILD|WS_TABSTOP
 		     |SS_CENTER|SS_NOTIFY
 		     |WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
 		     xoff, yoff,
@@ -562,7 +564,8 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 
   for (i=0; i<NUMBUTTONLABELS; i++) {
     hWndButtonWindow[i] =
-      CreateWindow(TEXT("STATIC"), TEXT("\0"),
+      CreateWindow(
+		   TEXT("STATIC"), TEXT("\0"),
 		   /*WS_VISIBLE|*/ WS_CHILD|WS_TABSTOP
 		   |SS_CENTER|SS_NOTIFY
 		   |WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
@@ -585,6 +588,8 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 
   if (gnav) {
     EnableVarioGauge = true;
+  } else {
+    EnableVarioGauge = false;
   }
 
 }

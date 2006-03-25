@@ -270,7 +270,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgTaskWaypointShowModal(int itemindex, int tasktype){
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgTaskWaypoint.xml", 
+  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgTaskWaypoint.xml")), 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TASKWAYPOINT"));
 

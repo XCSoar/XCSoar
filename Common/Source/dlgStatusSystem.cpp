@@ -71,7 +71,7 @@ void dlgStatusSystemShowModal(void){
 
   TCHAR Temp[1000];
 
-  wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusSystem.xml", hWndMainWindow,
+  wf = dlgLoadFromXML(NULL, LocalPathS(TEXT("dlgStatusSystem.xml")), hWndMainWindow,
 		      TEXT("IDR_XML_STATUSSYSTEM"));
   if (!wf) return;
 

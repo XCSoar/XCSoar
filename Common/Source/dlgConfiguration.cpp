@@ -319,7 +319,7 @@ void dlgConfigurationShowModal(void){
   WndProperty *wp;
 
   wf = dlgLoadFromXML(CallBackTable, 
-		      "\\NOR Flash\\dlgConfiguration.xml", 
+		      LocalPathS(TEXT("dlgConfiguration.xml")), 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_CONFIGURATION"));
 
@@ -376,9 +376,7 @@ void dlgConfigurationShowModal(void){
   */
   ///////////////////
   
-  // TODO: airspace colors
   // TODO: all appearance variables
-  // TODO: warning of need to restart for language/input/appearance
 
   TCHAR *COMMPort[] = {TEXT("COM1"),TEXT("COM2"),TEXT("COM3"),TEXT("COM4"),TEXT("COM5"),TEXT("COM6"),TEXT("COM7"),TEXT("COM8"),TEXT("COM9"),TEXT("COM10")};
   TCHAR *tSpeed[] = {TEXT("1200"),TEXT("2400"),TEXT("4800"),TEXT("9600"),TEXT("19200"),TEXT("38400"),TEXT("57600"),TEXT("115200")};
@@ -604,7 +602,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMenuTimeout"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(MenuTimeoutMax/4);
+    wp->GetDataField()->SetAsFloat(MenuTimeoutMax/2);
     wp->RefreshDisplay();
   }
 
@@ -694,10 +692,13 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
+  if (wp) {
+    wp->GetDataField()->Set(MapWindow::EnableTrailDrift);
+    wp->RefreshDisplay();
+  }
 
-  // TODO handle change
   wp = (WndProperty*)wf->FindByName(TEXT("prpTrail"));
-  //           SetToRegistry(szRegistrySnailTrail,TrailActive);
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
@@ -708,7 +709,6 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpMaxManoeuveringSpeed"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(SPEEDMODIFY*SAFTEYSPEED));
@@ -716,7 +716,6 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
-  // TODO handle change
   wp = (WndProperty*)wf->FindByName(TEXT("prpPolarType"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -903,6 +902,12 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpGliderScreenPosition"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(MapWindow::GliderScreenPosition);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainContrast"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(TerrainContrast*100/255));
@@ -1068,6 +1073,35 @@ void dlgConfigurationShowModal(void){
   wf->ShowModal();
 
   // TODO: implement a cancel button that skips all this below after exit.
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
+  if (wp) {
+    if (MapWindow::EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
+      MapWindow::EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryTrailDrift, MapWindow::EnableTrailDrift);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTrail"));
+  if (wp) {
+    if (TrailActive != wp->GetDataField()->GetAsInteger()) {
+      TrailActive = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistrySnailTrail, TrailActive);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpPolarType"));
+  if (wp) {
+    if (POLARID != wp->GetDataField()->GetAsInteger()) {
+      POLARID = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryPolarID, POLARID);
+      GlidePolar::SetBallast();
+      POLARFILECHANGED = true;
+      changed = true;
+    }
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceDisplay"));
   if (wp) {
@@ -1242,8 +1276,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMenuTimeout"));
   if (wp) {
-    if (MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*4) {
-      MenuTimeoutMax = wp->GetDataField()->GetAsInteger()*4;
+    if (MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*2) {
+      MenuTimeoutMax = wp->GetDataField()->GetAsInteger()*2;
       SetToRegistry(szRegistryMenuTimeout,MenuTimeoutMax);
       changed = true;
     }
@@ -1598,6 +1632,17 @@ void dlgConfigurationShowModal(void){
       Appearance.InverseInfoBox = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppInverseInfoBox,Appearance.InverseInfoBox);
       requirerestart = true;
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpGliderScreenPosition"));
+  if (wp) {
+    if (MapWindow::GliderScreenPosition != 
+	wp->GetDataField()->GetAsInteger()) {
+      MapWindow::GliderScreenPosition = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryGliderScreenPosition,
+		    MapWindow::GliderScreenPosition);
       changed = true;
     }
   }

@@ -84,6 +84,9 @@ extern TCHAR szRegistryLockSettingsInFlight[];
 extern TCHAR szRegistryTerrainContrast[];
 extern TCHAR szRegistryTerrainBrightness[];
 extern TCHAR szRegistryEnableFLARMDisplay[];
+extern TCHAR szRegistrySnailTrail[];
+extern TCHAR szRegistryTrailDrift[];
+extern TCHAR szRegistryGliderScreenPosition[];
 
 extern bool LockSettingsInFlight;
 
@@ -96,6 +99,7 @@ HRESULT SetRegistryString(const TCHAR *szRegValue, TCHAR *Pos);
 void ReadRegistrySettings(void);
 void SetRegistryColour(int i, DWORD c);
 void SetRegistryBrush(int i, DWORD c);
+void SetRegistryAirspacePriority(int i);
 void SetRegistryAirspaceMode(int i);
 int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
@@ -198,6 +202,7 @@ typedef struct {
 TCHAR* StringMallocParse(TCHAR* old_string);
 
 TCHAR* LocalPath(TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
+char* LocalPathS(TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
 
 void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
 void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
@@ -212,5 +217,6 @@ void StoreRegistry(void);
 void XCSoarGetOpts(LPTSTR CommandLine);
 
 bool CheckRectOverlap(RECT rc1, RECT rc2);
+int MeasureCPULoad();
 
 #endif

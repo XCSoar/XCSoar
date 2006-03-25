@@ -1,0 +1,961 @@
+# -------------------
+# NMEA switches
+# -------------------
+
+#
+#mode=default
+#type=ne
+#data=UP_OUT_CIRCLING
+#event=StatusMessage Audio cruise
+#
+#mode=default
+#type=ne
+#data=DOWN_OUT_CIRCLING
+#event=StatusMessage Audio circling
+#
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_FLAP_POS
+#event=StatusMessage Flap positive
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_FLAP_ZERO
+#event=Zoom out
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_FLAP_NEG
+#event=MarkLocation
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_SC
+#event=StatusMessage SC SWITCH
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_GEAR_EXTENDED
+#event=ScreenModes toggle
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_AUX
+#event=StatusMessage AUX SWITCH
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_ACK
+#event=StatusMessage ACKNOWLEDGE
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_REP
+#event=StatusMessage REPEAT
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_AIRBRAKELOCKED
+#event=Zoom in
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_USERSWUP
+#event=StatusMessage USER SWITCH UP
+#
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_USERSWMIDDLE
+#event=StatusMessage USER SWITCH MIDDLE
+#
+#
+#mode=default
+#type=ne
+#data=DOWN_IN_USERSWDOWN
+#event=StatusMessage USER SWITCH DOWN
+#
+
+# -------------------
+# GlideComputerEvents
+# -------------------
+mode=default
+type=gce
+data=GPS_CONNECTION_WAIT
+event=StatusMessage Waiting for GPS Connection
+
+mode=default
+type=gce
+data=COMMPORT_RESTART
+event=StatusMessage Restarting Comm Ports
+
+mode=default
+type=gce
+data=GPS_FIX_WAIT
+event=StatusMessage Waiting for GPS Fix
+
+mode=default
+type=gce
+data=STARTUP_SIMULATOR
+event=StatusMessage Key escape to leave dialogs
+event=StatusMessage Key enter to press selected button in dialogs
+event=StatusMessage Key left and right to modify values in dialogs
+event=StatusMessage Key up and down to move selector in dialogs
+event=StatusMessage Keys 67890 are horizontal buttons
+event=StatusMessage Keys 1 NAV 2 DISPLAY 3 CONFIG 4 INFO
+event=StatusMessage Simulator: Drag mouse to move glider
+
+mode=default
+type=gce
+data=STARTUP_REAL
+event=StatusMessage Key escape to leave dialogs
+event=StatusMessage Key enter to press selected button in dialogs
+event=StatusMessage Key left and right to modify values in dialogs
+event=StatusMessage Key up and down to move selector in dialogs
+event=StatusMessage Keys 67890 are horizontal buttons
+event=StatusMessage Keys 1 NAV 2 DISPLAY 3 CONFIG 4 INFO
+
+mode=default
+type=gce
+data=TAKEOFF
+event=Logger start
+#event=DLLExecute XCSoarExamplePlugin.dll DemoSound \My Documents\Sample2.wav
+event=StatusMessage Takeoff
+
+mode=default
+type=gce
+data=LANDING
+event=StatusMessage Landing
+event=Logger stop
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_ABOVE
+event=StatusMessage Above Final Glide
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_BELOW
+event=StatusMessage Below Final Glide
+
+mode=default
+type=gce
+data=FLIGHTMODE_FINALGLIDE_TERRAIN
+event=StatusMessage Final Glide Through Terrain
+
+mode=default
+type=gce
+data=TASK_FINISH
+event=StatusMessage Task finished
+
+# ------------
+# mode=default
+# ------------
+
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 VarioFilter Vario 
+type=key
+data=ESCAPE
+event=Mode default
+
+# clear main entry buttons
+
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 VarioFilter Vario
+type=key
+data=APP1
+label= 
+location=1
+
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 VarioFilter Vario
+type=key
+data=APP2
+label= 
+location=2
+
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2
+type=key
+data=APP3
+label= 
+location=3
+
+mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 VarioFilter Vario
+type=key
+data=APP4
+label= 
+location=4
+
+mode=default
+type=key
+data=6
+label= 
+event=Null
+location=5
+
+mode=default
+type=key
+data=7
+label= 
+event=Null
+location=6
+
+mode=default
+type=key
+data=8
+label= 
+event=Null
+location=7
+
+mode=default
+type=key
+data=9
+label= 
+event=Null
+location=8
+
+mode=default
+type=key
+data=0
+label= 
+event=Null
+location=9
+
+
+###### main entry buttons
+
+mode=default
+type=key
+data=APP1
+event=Mode Nav1
+label= 
+location=1
+
+mode=default
+type=key
+data=APP2
+event=Mode Display1
+label= 
+location=2
+
+mode=default
+type=key
+data=APP3
+event=Mode Config1
+label= 
+location=3
+
+mode=default
+type=key
+data=APP4
+event=Mode Info1
+label= 
+location=4
+
+# Always active buttons. (unless over-written)
+
+mode=default
+type=key
+data=DOWN
+event=Zoom out
+
+mode=default
+type=key
+data=UP
+event=Zoom in
+
+mode=default
+type=key
+data=RETURN
+event=ClearAirspaceWarnings
+event=ClearStatusMessages
+
+mode=default
+type=key
+data=l
+event=MarkLocation
+
+mode=default
+type=key
+data=r
+event=ScreenModes toggle
+
+mode=default
+type=key
+data=6
+event=Pan show
+event=Pan supertoggle
+
+mode=default
+type=key
+data=7
+event=Zoom in
+
+mode=default
+type=key
+data=8
+event=Zoom out
+
+mode=default
+type=key
+data=9
+event=StatusMessage Dropped marker
+event=Logger note Mark
+event=MarkLocation
+
+mode=default
+type=key
+data=0
+event=ArmAdvance show
+event=ArmAdvance toggle
+
+# ------------
+# mode=infobox
+# ------------
+
+mode=infobox
+type=key
+data=APP1
+event=Null 
+label= 
+location=1
+
+mode=infobox
+type=key
+data=APP4
+event=Null
+label= 
+location=4
+
+mode=infobox
+type=key
+data=APP2
+event=Null
+label= 
+location=2
+
+mode=infobox
+type=key
+data=APP3
+event=Null
+label= 
+location=3
+
+mode=infobox
+type=key
+data=UP
+event=DoInfoKey up
+
+mode=infobox
+type=key
+data=DOWN
+event=DoInfoKey down
+
+mode=infobox
+type=key
+data=LEFT
+event=DoInfoKey left
+
+mode=infobox
+type=key
+data=RIGHT
+event=DoInfoKey right
+
+mode=infobox
+type=key
+data=RETURN
+event=DoInfoKey return
+
+mode=infobox
+type=key
+data=6
+label= 
+location=5
+
+mode=infobox
+type=key
+data=7
+label= 
+location=6
+
+mode=infobox
+type=key
+data=8
+label= 
+location=7
+
+mode=infobox
+type=key
+data=9
+label= 
+location=8
+
+mode=infobox
+type=key
+data=0
+label= 
+location=9
+
+
+# -------------
+# mode=Nav1
+# -------------
+
+mode=Nav1
+type=key
+data=APP1
+event=Mode Nav2
+label=Nav/
+location=1
+
+mode=Nav1
+type=key
+data=6
+event=Calculator
+event=Mode default
+label=Task\nCalc
+location=5
+
+mode=Nav1
+type=key
+data=7
+event=ArmAdvance show
+event=ArmAdvance on
+event=Mode default
+label=Arm\nAdvance
+location=6
+
+mode=Nav1
+type=key
+data=8
+event=AdjustWaypoint previous
+label=Waypoint\nPrevious
+location=7
+
+mode=Nav1
+type=key
+data=9
+event=AdjustWaypoint next
+label=Waypoint\nNext
+location=8
+
+mode=Nav1
+type=key
+data=0
+event=Mode default
+event=WaypointDetails select
+label=Waypoint\nLookup
+location=9
+
+# -------------
+# mode=Nav2
+# -------------
+
+mode=Nav2
+type=key
+data=APP1
+event=Mode default
+label=/Nav
+location=1
+
+
+mode=Nav2
+type=key
+data=6
+event=Setup Task
+event=Mode default
+label=Task\nEdit
+location=5
+
+mode=Nav2
+type=key
+data=7
+event=StatusMessage Task saved
+event=TaskSave /My Documents/Default.tsk
+label=Task\nSave
+location=6
+
+mode=Nav2
+type=key
+data=8
+event=Mode default
+event=AbortTask toggle
+label=Task\nAbort
+location=7
+
+mode=Nav2
+type=key
+data=9
+label=
+location=8
+
+mode=Nav2
+type=key
+data=0
+label=
+location=9
+
+# -------------
+# mode=Display1
+# -------------
+
+mode=Display1
+type=key
+data=APP2
+event=Mode Display2
+label=Display/
+location=2
+
+
+mode=Display1
+type=key
+data=6
+event=Zoom in
+label=Zoom\nIn
+location=5
+
+mode=Display1
+type=key
+data=7
+event=Zoom out
+label=Zoom\nOut
+location=6
+
+mode=Display1
+type=key
+data=8
+event=Mode default
+event=StatusMessage Dropped marker
+event=Logger note Mark
+event=MarkLocation
+label=Mark\nDrop
+location=7
+
+mode=Display1
+type=key
+data=9
+event=ScreenModes togglefull
+event=Mode default
+label=Full Scrn\nToggle
+location=8
+
+mode=Display1
+type=key
+data=0
+event=Pan show
+event=Pan supertoggle
+label=Pan
+location=9
+
+mode=Display1
+type=key
+data=UP
+event=Pan up
+
+mode=Display1
+type=key
+data=DOWN
+event=Pan down
+
+mode=Display1
+type=key
+data=LEFT
+event=Pan left
+
+mode=Display1
+type=key
+data=RIGHT
+event=Pan right
+
+# -------------
+# mode=Display2
+# -------------
+
+mode=Display2
+type=key
+data=APP2
+event=Mode default
+label=/Display
+location=2
+
+mode=Display2
+type=key
+data=6
+event=Zoom auto show
+event=Zoom auto toggle
+label=Zoom\nAuto
+location=5
+
+mode=Display2
+type=key
+data=7
+event=SnailTrail show
+event=SnailTrail toggle
+label=Snail Trail\nToggle
+location=6
+
+mode=Display2
+type=key
+data=8
+event=TerrainTopology show
+event=TerrainTopology toggle
+label=Terrain\nToggle
+location=7
+
+mode=Display2
+type=key
+data=9
+event=Brightness
+label=Bright
+location=8
+
+mode=Display2
+type=key
+data=0
+event=Setup Replay
+event=Mode default
+label=Logger Replay
+location=9
+
+
+# -------------
+# mode=Config1
+# -------------
+mode=Config1
+type=key
+data=APP3
+event=Mode Config2
+label=Config/
+location=3
+
+
+mode=Config1
+type=key
+data=6
+event=MacCready up
+label=MacCready\n+
+location=5
+
+mode=Config1
+type=key
+data=7
+event=MacCready down
+label=MacCready\n-
+location=6
+
+mode=Config1
+type=key
+data=8
+event=MacCready auto show
+event=MacCready auto toggle
+label=MacCready\nAuto
+location=7
+
+mode=Config1
+type=key
+data=9
+event=Setup Basic
+event=Mode default
+label=Bugs\nBallast
+location=8
+
+mode=Config1
+type=key
+data=0
+event=Setup Wind
+event=Mode default
+label=Setup\nWind
+location=9
+
+# -------------
+# mode=Config2
+# -------------
+mode=Config2
+type=key
+data=APP3
+event=Mode default
+label=/Config
+location=3
+
+mode=Config2
+type=key
+data=6
+event=Mode Vario
+label=Vario/
+location=5
+
+mode=Config2
+type=key
+data=7
+event=Setup System
+event=Mode default
+label=Setup\nSystem
+location=6
+
+mode=Config2
+type=key
+data=8
+event=Setup Airspace
+event=Mode default
+label=Settings\nAirspace
+location=7
+
+mode=Config2
+type=key
+data=9
+event=Logger show
+event=Logger toggle ask
+label=Logger
+location=8
+
+mode=Config2
+type=key
+data=0
+event=StatusMessage Not Implemented
+label=Sounds
+location=9
+
+
+# -------------
+# mode=Vario
+# -------------
+mode=Vario
+type=key
+data=APP3
+event=Mode default
+label=/Vario
+location=3
+
+mode=Vario
+type=key
+data=6
+event=AdjustVarioFilter fast
+event=StatusMessage Vario fast
+label=Fast 1.0s
+location=5
+
+mode=Vario
+type=key
+data=7
+event=AdjustVarioFilter medium
+event=StatusMessage Vario medium
+label=Medium 1.5s
+location=6
+
+mode=Vario
+type=key
+data=8
+event=AdjustVarioFilter slow
+event=StatusMessage Vario slow
+label=Slow 3.0s
+location=7
+
+mode=Vario
+type=key
+data=9
+event=AdjustVarioFilter zero
+event=StatusMessage Vario ASI zeroed
+label=Zero ASI
+location=8
+
+mode=Vario
+type=key
+data=0
+event=Mode VarioTest
+label=Test/
+location=9
+
+
+# -------------
+# mode=Info1
+# -------------
+mode=Info1
+type=key
+data=APP4
+event=Mode Info2
+label=Info/
+location=4
+
+mode=Info1
+type=key
+data=6
+event=WaypointDetails current
+event=Mode default
+label=Waypoint\nDetails
+location=5
+
+mode=Info1
+type=key
+data=7
+event=NearestWaypointDetails pan
+event=Mode default
+label=Nearest\nWaypoint
+location=6
+
+mode=Info1
+type=key
+data=8
+event=NearestAirspaceDetails
+event=Mode default
+label=Nearest\nAirspace
+location=7
+
+mode=Info1
+type=key
+data=9
+event=Checklist
+event=Mode default
+label=Check\nlist
+location=8
+
+mode=Info1
+type=key
+data=0
+event=Analysis
+event=Mode default
+label=Analysis
+location=9
+
+# -------------
+# mode=Info2
+# -------------
+mode=Info2
+type=key
+data=APP4
+event=Mode default
+label=/Info
+location=4
+
+
+mode=Info2
+type=key
+data=6
+event=Status system
+label=Status\nSystem
+location=5
+
+mode=Info2
+type=key
+data=7
+event=Status Aircraft
+label=Status\nAircraft
+location=6
+
+mode=Info2
+type=key
+data=8
+event=Status task
+label=Status\nTask
+location=7
+
+mode=Info2
+type=key
+data=9
+event=ScreenModes toggleauxiliary
+label=Aux\nInfobox
+location=8
+
+mode=Info2
+type=key
+data=0
+event=RepeatStatusMessage
+label=Message\nRepeat
+location=9
+
+
+# -------------
+# mode=VarioFilter
+# -------------
+mode=VarioFilter
+type=key
+data=APP3
+event=Mode default
+label=/Filter
+location=3
+
+mode=VarioFilter
+type=key
+data=6
+event=AdjustVarioFilter fast
+event=StatusMessage Vario fast
+label=Fast 1.0s
+location=5
+
+mode=VarioFilter
+type=key
+data=7
+event=AdjustVarioFilter medium
+event=StatusMessage Vario medium
+label=Medium 1.5s
+location=6
+
+mode=VarioFilter
+type=key
+data=8
+event=AdjustVarioFilter slow
+event=StatusMessage Vario slow
+label=Slow 3.0s
+location=7
+
+mode=VarioFilter
+type=key
+data=9
+event=AdjustVarioFilter zero
+event=StatusMessage Vario ASI zeroed
+label=Zero ASI
+location=8
+
+mode=VarioFilter
+type=key
+data=0
+event=AdjustVarioFilter save
+event=StatusMessage Saved to Eeprom
+label=Save
+location=9
+
+
+# -------------
+# mode=VarioTest
+# -------------
+mode=VarioTest
+type=key
+data=APP3
+event=Mode default
+label=/Test
+location=3
+
+mode=VarioTest
+type=key
+data=6
+event=AdjustVarioFilter democlimb
+event=StatusMessage Demo Climb
+label=Demo climb
+location=5
+
+mode=VarioTest
+type=key
+data=7
+event=AdjustVarioFilter demostf
+event=StatusMessage Demo STF
+label=Demo STF
+location=6
+
+mode=VarioTest
+type=key
+data=8
+event=AdjustVarioFilter switch
+label=Diagnostics switch
+location=7
+
+mode=VarioTest
+type=key
+data=9
+event=AdjustVarioFilter statistics
+label=Vario stats
+location=8
+
+mode=VarioTest
+type=key
+data=0
+event=AdjustVarioFilter diagnostics
+label=Vario diagnostics
+location=9
+

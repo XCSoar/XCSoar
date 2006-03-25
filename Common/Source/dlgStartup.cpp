@@ -48,7 +48,7 @@ extern TCHAR startProfileFile[];
 void dlgStartupShowModal(void){
   WndProperty* wp;
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgStartup.xml", 
+  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgStartup.xml")), 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_STARTUP"));
   if (!wf) return;

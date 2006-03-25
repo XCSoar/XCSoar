@@ -215,6 +215,7 @@ void GaugeFLARM::Create() {
   SetWindowLong(hWndFLARMWindow, GWL_WNDPROC, (LONG) GaugeFLARMWndProc);
   ShowWindow(hWndFLARMWindow, SW_HIDE);
   Show(false);
+  Enable = false;
 }
 
 

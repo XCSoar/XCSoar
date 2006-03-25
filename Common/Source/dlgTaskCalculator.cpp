@@ -148,7 +148,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgTaskCalculatorShowModal(void){
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgTaskCalculator.xml", 
+  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgTaskCalculator.xml")), 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TASKCALCULATOR"));
 
