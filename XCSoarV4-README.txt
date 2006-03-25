@@ -2,33 +2,66 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+
 To do higher priority:
-- New dialogs:
-  - Config: Airspace colors, enable/disable individual airspaces?
-  - Config: Vario gauge, other optional display items
-  - Text in airspace details to have scrolling
-  - User defined text dialog (and corresponding inputevent)
+
+% TODO: Generate log files (extension .log) for error messages,
+% diagnostics, and include this in the download list. 
+
+- Vario gauge: STF chevrons in corner?
+- Com system
+  - Robustness for PC version, currently hanging on restart
+- Task system
+  - File save/load to contain all info
+  - Have separate ARM modes for AAT and non-AAT modes?
+  - Record (and display) start speed/altitude/time
+- Task calculator:
+  - What if I leave now?
+- Different ways of calculating average speed
+  - Based on manual input or task average
 - AAT support:
-   -- More accurate calculation of ETA etc
-       -- with respect to final glide fraction
-       -- different ways of calculating average speed
-- Proper filename extensions
-- Task overview analysis page draws wrong task if in abort mode
+  -- More accurate calculation of ETA etc with respect to final glide fraction
+- Nearest airspace
+  - Sort nearest above/below
+  - Monitoring function, infobox?
+- Warnings (issued directly and passed to Vega, gce?)
+  - Final glide through terrain
+  - Approaching/passing task waypoints
+  - Airspace
+  -- implement the protocol in Vega and XCSoar
+- Free memory check at startup, ask to delete old IGC files?
+- Dialogs:
+  - Ballast as liters
+  - Config: vario gauge, other optional display items,
+      hide vario on fullscreen
+  - Config: display blanking, other missing items?
+  - Configuration option for logger timestep
+  - Configuration option for checklist filename
+  - Configuration option for debounce
+- Files:
+  - Clean up use of file paths (use LocalPath?)
+  - Proper filename extensions
+- Pirker analysis:
+  - Given a height available, what maccready gives zero arrival altitude?
+  - This can be used to make automc more efficient
+- Consider having switching to final glide mode as soon as you are above
+  final glide.
 
 To do for next version:
+- Need 3 ports for full support of Altair.
+- Status messages now block if in dialogs, they appear on exit.
+- Colored status messages?
+- Pirker final glide calculator/display
+- Statistics/flight reset button
+- Speed to fly bars visibility in fullscreen
 - Allow finish line versus finish area?
 - Zig zag wind calculations
 - Revert to default aircraft type if polar file doesn't exist or invalid
-- Password protect on settings, or lock out settings in flight
+- Password protect on settings
 - NearestWaypoint pan in .xci not working?
 - Add track line particularly if not in north up mode
-- Fix airspace visibility bug (query, warnings should apply even if
-  not drawn on screen!)
-- 'Marginal final glide' is that the right text? (I think so - SP)
 - Disable PGRMZ if vario is already outputting altitude (or vica versa)
 - Switch GPS between multiple sources if one fails to lock and the other doesn't, and prevent aliasing.
-- Collect different settings based on pilot identification at startup 
-   (or this can be done with profiles and menu buttons)
 - In climb stats page, show direction of circling
 - Drop marker automatically conditional on significant climb
 - Generate waypoints from towns (builtupa, miscpopp)
@@ -36,7 +69,6 @@ To do for next version:
 - Improved notification of battery level - not just simulator.
   (exit should still only be the simulator)
 - Notify the user (via GCE to Input) of switching between AC and Battery mode
-- Fix strange circling bug (not sure this is a bug still)
 - Speed to fly chevrons and north arrow are hidden by vario in fullscreen mode
 - Mark to waypoint, mark to waypointfile
 - Implement cursor moveable by arrow keys for waypoint/airspace selection and
@@ -51,8 +83,6 @@ To do for next version:
 - Simple output terminal for COM ports (allow users to check serial
   connnections are working correctly).
 - Replay IGC and include examples
-- WARN the user when changing input, language, status files that they need to
-  restart.
 - Automatically select "WinPilot File" as type when selecting a file...
 	(future: Consider fixing this - it acts differently to other types)
 - Add 'Append' waypoint function, so users can create a task by selecting
@@ -61,6 +91,42 @@ To do for next version:
 
 Changes from 4.5 to HEAD:
 
+- Major speed improvements to rendering, synchronisation between threads,
+  final glide through terrain calculations, snail trail 
+- Display "AUX" on screen when in auxiliary infobox mode
+- Warning if attempting to change a task once it is declared.
+- Fixed superpan bug with autozoom
+- Added GCE for final glide through terrain
+- Added german sector type
+- Fixed bug in default.xci "Marginal final glide" now reads "Below final glide"
+- Fixed bug in final glide alert, now has low pass filter to prevent
+  too many alerts when using Auto Mc.
+- Task-alterations are queried if already declared to external device
+- All MessageBoxes now use new dialog system (when available)
+- Redundancy (dropout) and handling multiple GPS sources,
+  better autodetection of Vega.
+- Improvements to labels in map display, so we don't get so many
+  waypoint labels writing over each other.
+- Gauge vario hides on fullscreen.
+- Fixed bug in startup, program locks calculation/display before starting up
+  to ensure everything is initialised properly.
+- Option to lock out configuration settings in flight
+- Minor speedups to map drawing (removed several redundant floating point operations)
+- Bug fixes in FAI task sector auto advancement
+- Added finish line and finish area detection, this does nothing other
+  than bring up a status message currently.
+- Configuration option for user defined menu/button timeout
+- Added Airspace Settings to input events, allows user to switch on/off
+   display and warnings for each airspace type 
+- WARN the user when changing input, language, status files that they need to
+  restart. (in new dialog system)
+- Fixed strange circling bug (maybe)
+- Airspace visibility bug (airspace wasn't warning if not visible)
+- "Arm start" option
+- Added user defined checklist text dialog (and corresponding inputevent)
+- Waypoint advancing can now be manual, automatic (as before), or requiring
+   'arming' each waypoint to be advanced.
+- Text in airspace details has scrolling
 - New Waypointselect dialog allows scrolling in list box
 - Added option for autozoom optionally on at startup
   (in new config dialog)
