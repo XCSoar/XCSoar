@@ -65,6 +65,9 @@
     <WndProperty Name="prpTrail" Caption="Trail"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
+    <WndProperty Name="prpTrailDrift" Caption="Trail drift"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2>
+      <DataField name="" DataType="boolean"/>
+    </WndProperty>
 
   <WndProperty Name="prpEnableTerrain" Caption="Terrain"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
     <DataField name="" DataType="boolean"/>
@@ -380,6 +383,10 @@
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
+  <WndProperty Name="prpAppStatusMessageAlignment" Caption="Status messages"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
   </WndFrame>
 
   <WndFrame Name="frmAppearance" X=70 Y=0 Width=246 Height=222 Font=2>
@@ -400,10 +407,6 @@
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpAppStatusMessageAlignment" Caption="Status messages"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
   <WndProperty Name="prpAppInverseInfoBox" Caption="Inverse infoboxes"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
     <DataField name="" DataType="boolean"/>
   </WndProperty>
@@ -418,6 +421,10 @@
 
   <WndProperty Name="prpTerrainBrightness" Caption="Terrain brightness"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
     <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpGliderScreenPosition" Caption="Glider position"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=10 Max=50 Step=5/>
   </WndProperty>
 
   </WndFrame>

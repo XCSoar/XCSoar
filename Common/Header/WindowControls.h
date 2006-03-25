@@ -563,6 +563,7 @@ class WindowControl {
 
     HBRUSH   GetBackBrush(void){return(mhBrushBk);};
     HPEN     GetBorderPen(void){return(mhPenBorder);};
+    HPEN     GetSelectorPen(void){return(mhPenSelector);};
 
     virtual void SetCaption(TCHAR *Value);
 
@@ -673,6 +674,7 @@ class WndListFrame:public WndFrame{
     void ResetList(void);
     void SetEnterCallback(void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo));
     void RedrawScrolled(bool all);
+    void DrawScrollBar(HDC hDC);
 
   protected:
 

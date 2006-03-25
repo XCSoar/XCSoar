@@ -461,7 +461,7 @@ int dlgWayPointSelect(void){
   LowLimit = 0;
   ItemIndex = -1;
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgWayPointSelect.xml", hWndMainWindow,
+  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgWayPointSelect.xml")), hWndMainWindow,
 		      TEXT("IDR_XML_WAYPOINTSELECT"));
 
   if (!wf) return -1;

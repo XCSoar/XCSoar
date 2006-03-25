@@ -52,10 +52,11 @@ typedef struct _WAYPOINT_INFO
 
 typedef struct _SNAIL_POINT
 {
-	double Latitude;
-	double Longitude;
-	double Vario;
-	POINT Screen;
+  float Latitude;
+  float Longitude;
+  float Vario;
+  double Time;
+  POINT Screen;
 } SNAIL_POINT;
 
 
@@ -105,6 +106,9 @@ class MapWindow {
   static void ModifyMapScale();
 
   static bool MapDirty;
+
+  static bool EnableTrailDrift;
+  static int GliderScreenPosition;
 
   static void RequestFastRefresh();
   static bool RequestFullScreen;

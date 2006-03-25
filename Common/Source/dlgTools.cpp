@@ -219,10 +219,14 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   delete wf;
 
+#ifdef ALTAIRSYNC
+  // force a refresh of the window behind
+  InvalidateRect(hWnd,NULL,true);
+  UpdateWindow(hWnd);
+#endif
   return(res);
 
 }
-
 
 
 

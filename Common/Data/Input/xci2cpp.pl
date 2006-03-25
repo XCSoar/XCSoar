@@ -60,7 +60,10 @@ while (<>) {
 
 				# Key output
 				if ($rec{type} eq "key") {
-					my $data = $rec{data} || die "Invalid entry near $line - no key\n";
+					my $data = $rec{data} ;
+					if (length($data)<1) {
+					  die "Invalid entry near $line - no key\n";
+					}
 					if (length($data) == 1) {
 						$data = uc($data);
 						$data = qq{'$data'};

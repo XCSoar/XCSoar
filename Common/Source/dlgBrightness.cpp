@@ -34,6 +34,7 @@ Copyright_License {
 #include "externs.h"
 #include "units.h"
 #include "device.h"
+#include "InputEvents.h"
 #include "WindowControls.h"
 #include "dlgTools.h"
 
@@ -41,6 +42,8 @@ extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 
+//
+//
 
 static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
@@ -50,6 +53,8 @@ static void OnCloseClicked(WindowControl * Sender){
 bool EnableAutoBrightness=true;
 int BrightnessValue=50;
 // TODO implement this!
+///////////
+
 
 static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
   switch(Mode){
@@ -86,9 +91,10 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
+
 void dlgBrightnessShowModal(void){
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgBrightness.xml",
+  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgBrightness.xml")),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_BRIGHTNESS"));
 
@@ -107,9 +113,25 @@ void dlgBrightnessShowModal(void){
       wp->RefreshDisplay();
     }
     wf->ShowModal();
+
+    TCHAR text[100];
+      if (EnableAutoBrightness) {
+	InputEvents::eventDLLExecute(
+	       TEXT("altairbacklight.dll SetAutoMode on"));
+	_stprintf(text,TEXT("altairbacklight.dll SetAutoBrightness %03d"),
+		  BrightnessValue);
+      } else {
+	InputEvents::eventDLLExecute(
+	       TEXT("altairbacklight.dll SetAutoMode off"));
+	_stprintf(text,TEXT("altairbacklight.dll SetManualBrightness %03d"),
+		  BrightnessValue);
+      }
+      InputEvents::eventDLLExecute(text);
+
     delete wf;
   }
   wf = NULL;
+
 }
 
 

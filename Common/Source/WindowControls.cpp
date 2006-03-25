@@ -91,12 +91,10 @@ int DataFieldFileReader::SetAsInteger(int Value){
 
 
 void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
-#if (WINDOWSPC<1)
+#ifdef ALTAIRSYNC
   ScanDirectories(TEXT("\\NOR Flash"),filter);
-  ScanDirectories(TEXT("\\My Documents"),filter);
-  ScanDirectories(TEXT("\\XCSoarData"),filter);
 #else
-  ScanDirectories(TEXT("c:\\XCSoar"),filter);
+  ScanDirectories(LocalPath(),filter);
 #endif
 }
 
@@ -1690,6 +1688,7 @@ int WndForm::ShowModal(void){
   Message::BlockRender(false);
 #endif
 
+
   return(mModalResult);
 
 }
@@ -2616,7 +2615,49 @@ void WndListFrame::Paint(HDC hDC){
     DeleteObject(BmpMem);
     DeleteDC(HdcTemp);
 
+    DrawScrollBar(hDC);
+
   }
+}
+
+void WndListFrame::DrawScrollBar(HDC hDC) {
+  // Draw scroll line if necessary
+  int w = GetWidth()-SELECTORWIDTH;
+  int h = GetHeight()-SELECTORWIDTH;
+  int l = SELECTORWIDTH*2;
+
+  int bottom_percent =
+    min(h,
+	h*(mListInfo.BottomIndex+mListInfo.ScrollIndex+1)
+	/max(1,mListInfo.ItemCount));
+  int top_percent =
+    h*(mListInfo.ScrollIndex)/max(1,mListInfo.ItemCount);
+
+  if ((top_percent==0)&&(bottom_percent==h)) {
+    return;
+  }
+  HPEN oldPen = (HPEN)SelectObject(hDC, GetSelectorPen());
+  MoveToEx(hDC, w, top_percent+SELECTORWIDTH, NULL);
+  LineTo(hDC, w, bottom_percent-SELECTORWIDTH);
+  if (top_percent>0) {
+    MoveToEx(hDC, w, l, NULL);
+    LineTo(hDC, w-l, 0);
+    LineTo(hDC, w-l, l);
+  } else {
+    MoveToEx(hDC, w-2*l, 0, NULL);
+    LineTo(hDC, w, 0);
+    LineTo(hDC, w, l);
+  }
+  if (bottom_percent<h) {
+    MoveToEx(hDC, w, h-l, NULL);
+    LineTo(hDC, w-l, h);
+    LineTo(hDC, w-l, h-l);
+  } else {
+    MoveToEx(hDC, w-2*l, h, NULL);
+    LineTo(hDC, w, h);
+    LineTo(hDC, w, h-l);
+  }
+  SelectObject(hDC,oldPen);
 }
 
 
@@ -2626,8 +2667,9 @@ void WndListFrame::SetEnterCallback(void (*OnListCallback)(WindowControl * Sende
 
 
 void WndListFrame::RedrawScrolled(bool all) {
-  int i;
+
   if (all) {
+    int i;
     for (i=0; i<= mListInfo.ItemInViewCount; i++) {
       mListInfo.DrawIndex = mListInfo.TopIndex+i;
       mOnListCallback(this, &mListInfo);
@@ -2636,11 +2678,13 @@ void WndListFrame::RedrawScrolled(bool all) {
 
     }
   }
+
   mListInfo.DrawIndex = mListInfo.ItemIndex;
   mOnListCallback(this, &mListInfo);
   mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex
 						  -mListInfo.TopIndex));
   mClients[0]->Redraw();
+  //  Redraw();
 }
 
 

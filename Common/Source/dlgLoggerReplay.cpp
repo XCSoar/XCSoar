@@ -96,7 +96,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgLoggerReplayShowModal(void){
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgLoggerReplay.xml",
+  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgLoggerReplay.xml")),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_LOGGERREPLAY"));
 

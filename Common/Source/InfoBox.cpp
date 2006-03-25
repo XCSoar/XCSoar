@@ -93,7 +93,7 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
 		     mWidth, mHeight,
 		     Parent, NULL, hInst, NULL);
 
-  mVisible = true;
+  mVisible = false;
 
   mHdc = GetDC(mHWnd);
   mHdcTemp = CreateCompatibleDC(mHdc);
@@ -142,6 +142,8 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   mBitmapUnitSize.y = 0;
 
   SetBkMode(mHdc, TRANSPARENT);
+
+  SetVisible(true);
 
   mHasFocus = false;
 

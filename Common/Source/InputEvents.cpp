@@ -165,7 +165,20 @@ void InputEvents::readFile() {
 
   // Get defaults
   if (!InitONCE) {
+#if (WINDOWSPC>0)
+#include "InputEvents_pc.cpp"
+#else
+#ifdef GNAV
+#include "InputEvents_altair.cpp"
+#else
+#if (NEWINFOBOX>0)
+#include "InputEvents_gnav.cpp"
+#else
 #include "InputEvents_defaults.cpp"
+#endif
+#endif
+#endif
+
 #include "InputEvents_Text2Event.cpp"
     InitONCE = true;
   }
@@ -453,7 +466,7 @@ int InputEvents::findKey(TCHAR *data) {
     return VK_DOWN;
   else if (_tcscmp(data, TEXT("RETURN")) == 0)
     return VK_RETURN;
-  else if (_tcscmp(data, TEXT("ESC")) == 0)
+  else if (_tcscmp(data, TEXT("ESCAPE")) == 0)
     return VK_ESCAPE;
   else if (_tcslen(data) == 1)
     return towupper(data[0]);
@@ -1815,7 +1828,8 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 }
 
 // Load a DLL (only once, keep a cache of the handle)
-//	TODO FreeLibrary - it would be nice to call FreeLibrary before exit on each of these
+//	TODO FreeLibrary - it would be nice to call FreeLibrary
+//      before exit on each of these
 HINSTANCE _loadDLL(TCHAR *name) {
 	int i;
 	for (i = 0; i < DLLCache_Count; i++) {

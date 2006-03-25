@@ -124,7 +124,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgVegaDemoShowModal(void){
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgVegaDemo.xml",
+  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgVegaDemo.xml")),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_VEGADEMO"));
 

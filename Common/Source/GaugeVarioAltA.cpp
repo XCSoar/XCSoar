@@ -343,9 +343,11 @@ void GaugeVario::MakeAllPolygons() {
 void GaugeVario::RenderNeedle(double Value){
 
   static int lastI = -99999;
+  static int lastIv = -99999;
   static POINT lastBit[3];
   static bool InitDone = false;
   static int degrees_per_unit;
+  bool dirtytime = false;
 
   POINT *bit;
   int i;
@@ -360,14 +362,17 @@ void GaugeVario::RenderNeedle(double Value){
 
   i = iround(Value*degrees_per_unit*LIFTMODIFY);
 
-  if (i != lastI){
-    i = min(gmax,max(-gmax,i));
-
-    DWORD fpsTime = ::GetTickCount();
-    if (fpsTime-fpsTimeLast>500) {
+  DWORD fpsTime = ::GetTickCount();
+  if (fpsTime-fpsTimeLast>500) {
+    if (i != lastIv) {
       dirty = true;
       fpsTimeLast = fpsTime;
+      lastIv = i;
     }
+  }
+
+  i = min(gmax,max(-gmax,i));
+  if (i != lastI){
 
     if (lastI != -99999){
       if (Appearance.InverseInfoBox){

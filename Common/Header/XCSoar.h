@@ -121,6 +121,7 @@ extern void UnlockNavBox();
 extern void LockNavBox();
 extern HANDLE drawTriggerEvent;
 extern HANDLE dataTriggerEvent;
+extern HANDLE varioTriggerEvent;
 
 void FocusOnWindow(int i, bool selected);
 void FullScreen();

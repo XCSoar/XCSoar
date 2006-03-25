@@ -122,4 +122,8 @@ void ResumeAbortTask(int set = 0);
 void RefreshTaskStatistics(void);
 void  SetWindEstimate(double speed, double bearing);
 
+double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+		      double bearing,
+		      double GlideSlope);
+
 #endif

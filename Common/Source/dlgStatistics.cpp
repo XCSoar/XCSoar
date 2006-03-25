@@ -11,6 +11,11 @@
 
 extern HFONT                                   StatisticsFont;
 
+#if (WINDOWSPC>1)
+#define MAXPAGE 5
+#else
+#define MAXPAGE 6
+#endif
 
 double Statistics::yscale;
 double Statistics::xscale;
@@ -716,10 +721,10 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
       }
 
       if ((i==ActiveWayPoint)&&(!AATEnabled)) {
-	lat2 = GPS_INFO.Latitude;
-	lon2 = GPS_INFO.Longitude;
-	x2 = (lon2-lon_c)*fastcosine(lat2);
-	y2 = (lat2-lat_c);
+	lat1 = GPS_INFO.Latitude;
+	lon1 = GPS_INFO.Longitude;
+	x1 = (lon1-lon_c)*fastcosine(lat1);
+	y1 = (lat1-lat_c);
 	DrawLine(hdc, rc,
 		 x1, y1, x2, y2,
 		 STYLE_REDTHICK);
@@ -928,6 +933,84 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
 }
 
+
+////////////////////////////////////////////////////////////////
+
+
+void Statistics::RenderAirspace(HDC hdc, RECT rc) {
+  double range = 50.0*1000; // km
+  int airspace_scansize_i=16;
+  int airspace_scansize_j=16;
+  double aclat, aclon, ach, acb;
+  double fi, fj;
+  aclat = GPS_INFO.Latitude;
+  aclon = GPS_INFO.Longitude;
+  ach = GPS_INFO.Altitude;
+  acb = GPS_INFO.TrackBearing;
+  double hmin = max(0,GPS_INFO.Altitude-3300);
+  double hmax = max(4000,GPS_INFO.Altitude+2000);
+  RECT rcd;
+
+  double fh = (ach-hmin)/(hmax-hmin);
+
+  for (int i=0; i< airspace_scansize_i; i++) { // scan height
+    fi = i*1.0/(airspace_scansize_i);
+    for (int j=0; j< airspace_scansize_j; j++) { // scan range
+      fj = j*1.0/(airspace_scansize_j);
+
+      double lat = FindLatitude(aclat, aclon, acb, range*fj);
+      double lon = FindLongitude(aclat, aclon, acb, range*fj);
+      double h = (hmax-hmin)*fi+hmin;
+
+      double nearestdist = 0;
+      double nearestbearing = 0;
+      int foundcircle=-1;
+      int foundarea=-1;
+
+      FindNearestAirspace(lon, lat,
+			  &nearestdist, &nearestbearing,
+			  &foundcircle, &foundarea,
+			  &h);
+      if (nearestdist<0) {
+	// inside, so render
+	int type = 0;
+	if (foundcircle>=0) {
+	  type = AirspaceCircle[foundcircle].Type;
+	}
+	if (foundarea>=0) {
+	  type = AirspaceArea[foundarea].Type;
+	}
+	SelectObject(hdc, GetStockObject(BLACK_PEN));
+	SelectObject(hdc,
+		     MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[type]]);
+	SetTextColor(hdc,
+		     MapWindow::Colours[MapWindow::iAirspaceColour[type]]);
+
+	rcd.left = (int)(fj*(rc.right-rc.left)+rc.left);
+	rcd.right = (int)(rcd.left+(rc.right-rc.left)/airspace_scansize_j);
+	rcd.bottom = (int)(fi*(rc.top-rc.bottom)+rc.bottom);
+	rcd.top = (int)(rcd.bottom+(rc.top-rc.bottom)/airspace_scansize_i);
+
+	Rectangle(hdc,rcd.left,rcd.top,rcd.right,rcd.bottom);
+
+      }
+
+    }
+  }
+  //
+  POINT line[2];
+  SelectObject(hdc, GetStockObject(WHITE_PEN));
+  line[0].x = rc.left;
+  line[0].y = (int)(fh*(rc.top-rc.bottom)+rc.bottom);
+  line[1].x = (int)(line[0].x+(rc.right-rc.left)/airspace_scansize_j);
+  line[1].y = line[0].y;
+  Polyline(hdc, line, 2);
+}
+
+
+////////////////////////////////////////////////////////////////
+
+
 static int page=0;
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wGrid=NULL;
@@ -966,6 +1049,9 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
   if (page==5) {
     Statistics::RenderTask(hDC, rcgfx);
   }
+  if (page==6) {
+    Statistics::RenderAirspace(hDC, rcgfx);
+  }
 
   SelectObject(hDC, hfOld);
 
@@ -975,7 +1061,7 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
 
 static void Update(void){
   TCHAR sTmp[1000];
-  WndProperty *wp;
+  //  WndProperty *wp;
 
   switch(page){
     case 0:
@@ -1072,13 +1158,13 @@ static void Update(void){
     wInfo->SetCaption(sTmp);
     break;
   case 6:
-    wp = ((WndProperty *)wf->FindByName(TEXT("prpDetails")));
-    wp->SetText(TEXT("blah blah blah"));
+    _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Airspace"));
+    wf->SetCaption(sTmp);
     break;
   }
 
-  wGrid->SetVisible(page<6);
-  wDetails->SetVisible(page==6);
+  wGrid->SetVisible(page<7);
+  wDetails->SetVisible(page==7);
 
   if (wGrid != NULL)
     wGrid->Redraw();
@@ -1087,10 +1173,10 @@ static void Update(void){
 
 static void NextPage(int Step){
   page += Step;
-  if (page > 5)
+  if (page > MAXPAGE)
     page = 0;
   if (page < 0)
-    page = 5;
+    page = MAXPAGE;
   Update();
 }
 
@@ -1146,7 +1232,7 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgAnalysisShowModal(void){
 
 
-  wf = dlgLoadFromXML(CallBackTable, "\\NOR Flash\\dlgAnalysis.xml", hWndMainWindow,
+  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgAnalysis.xml")), hWndMainWindow,
 		      TEXT("IDR_XML_ANALYSIS"));
   if (!wf) return;
 
@@ -1362,7 +1448,10 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         Statistics::RenderTask(hdcScreen, rcgfx);
 
       }
-
+      if (page==6) {
+        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Airspace")));
+        Statistics::RenderAirspace(hdcScreen, rcgfx);
+      }
       SelectObject(hdcScreen, hfOld);
       EndPaint(hDlg, &ps);
 

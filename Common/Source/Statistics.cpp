@@ -452,6 +452,11 @@ void Statistics::Reset() {
   Altitude_Ceiling.Reset();
 }
 
+void Statistics::RenderAirspace(HDC hdc, RECT rc)
+{
+
+}
+
 void Statistics::RenderBarograph(HDC hdc, RECT rc)
 {
 

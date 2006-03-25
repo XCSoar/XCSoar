@@ -28,6 +28,7 @@
 #define CLIP 1
 #define AUTO 2
 #define ALLBELOW 3
+#define INSIDE 4
 
 typedef struct _AIRSPACE_ACK
 {
@@ -93,6 +94,10 @@ void FindNearestAirspace(double longitude,
 			 double *nearestdistance,
 			 double *nearestbearing,
 			 int *foundcircle,
-			 int *foundarea);
+			 int *foundarea,
+			 double *height=NULL);
+
+void SortAirspace(void);
+extern int AirspacePriority[AIRSPACECLASSCOUNT];
 
 #endif

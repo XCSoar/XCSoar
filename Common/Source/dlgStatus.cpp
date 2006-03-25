@@ -78,7 +78,7 @@ void dlgStatusShowModal(void){
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-  wf = dlgLoadFromXML(NULL, "\\NOR Flash\\dlgStatusAircraft.xml",
+  wf = dlgLoadFromXML(NULL, LocalPathS(TEXT("dlgStatusAircraft.xml")),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_STATUSAIRCRAFT"));
 

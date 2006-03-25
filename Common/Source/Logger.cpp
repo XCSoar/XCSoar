@@ -151,11 +151,7 @@ void StartLogger(TCHAR *strAssetNumber)
       // long filename form of IGC file.
       // XXX represents manufacturer code
        wsprintf(szLoggerFileName,TEXT("%s%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
-#ifdef GNAV
-		TEXT("\\NOR Flash\\"),
-#else
 		LocalPath(),
-#endif
 		st.wYear,
 		st.wMonth,
 		st.wDay,
@@ -639,8 +635,7 @@ bool ReplayLogger::ReadPoint(double *Time,
 
 extern NMEA_INFO GPS_INFO;
 
-TCHAR ReplayLogger::FileName[MAX_PATH]=
-  TEXT("C:\\XCSoar\\NOR Flash\\test.igc");
+TCHAR ReplayLogger::FileName[MAX_PATH];
 bool ReplayLogger::Enabled = false; // test only
 double ReplayLogger::TimeScale = 1.0;
 

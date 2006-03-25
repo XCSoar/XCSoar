@@ -175,7 +175,7 @@ void LoadChecklist(void) {
   }
 
 #if (WINDOWSPC>0)
-  TCHAR filename[] = TEXT("C:\\XCSoar\\NOR Flash\\xcsoar-checklist.txt");
+  TCHAR filename[] = TEXT("C:\\XCSoaLocalPath(rxcsoar-checklist.txt");
 #else
   TCHAR filename[] = TEXT("\\NOR Flash\\xcsoar-checklist.txt");
 #endif
@@ -253,7 +253,7 @@ void dlgChecklistShowModal(void){
   //  WndProperty *wp;
 
   wf = dlgLoadFromXML(CallBackTable,
-		      "\\NOR Flash\\dlgChecklist.xml",
+		      LocalPathS(TEXT("dlgChecklist.xml")),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_CHECKLIST"));
 
