@@ -606,16 +606,30 @@ TCHAR *DataFieldInteger::SetAsString(TCHAR *Value){
   return(res);
 }
 
+static bool DataFieldKeyUp = false;
+
 void DataFieldInteger::Inc(void){
-  SetAsInteger(mValue + mStep*SpeedUp());
+  SetAsInteger(mValue + mStep*SpeedUp(true));
 }
 
 void DataFieldInteger::Dec(void){
-  SetAsInteger(mValue - mStep*SpeedUp());
+  SetAsInteger(mValue - mStep*SpeedUp(false));
 }
 
-int DataFieldInteger::SpeedUp(void){
-  int res=1;
+int DataFieldInteger::SpeedUp(bool keyup){
+  int res=1;  
+
+#ifdef GNAV
+  return 1.0;
+#endif;
+
+  if (keyup != DataFieldKeyUp) {
+    mSpeedup = 0;
+    DataFieldKeyUp = keyup;
+    mTmLastStep = GetTickCount();
+    return 1;
+  }
+
   if ((long)(GetTickCount()-mTmLastStep) < 200){
     mSpeedup++;
 
@@ -714,15 +728,27 @@ TCHAR *DataFieldFloat::SetAsString(TCHAR *Value){
 }
 
 void DataFieldFloat::Inc(void){
-  SetAsFloat(mValue + mStep*SpeedUp());
+  SetAsFloat(mValue + mStep*SpeedUp(true));
 }
 
 void DataFieldFloat::Dec(void){
-  SetAsFloat(mValue - mStep*SpeedUp());
+  SetAsFloat(mValue - mStep*SpeedUp(false));
 }
 
-double DataFieldFloat::SpeedUp(void){
+double DataFieldFloat::SpeedUp(bool keyup){
   double res=1;
+
+#ifdef GNAV
+  return 1.0;
+#endif;
+
+  if (keyup != DataFieldKeyUp) {
+    mSpeedup = 0;
+    DataFieldKeyUp = keyup;
+    mTmLastStep = GetTickCount();
+    return 1.0;
+  }
+
   if ((long)(GetTickCount()-mTmLastStep) < 200){
     mSpeedup++;
 
@@ -1014,6 +1040,20 @@ void WindowControl::AddClient(WindowControl *Client){
     }
   }
 
+  /*
+  // TODO: also allow autosizing of height/width to 
+  // maximum of parent
+
+  if (Client->mHeight == -1){
+    // maximum height
+    Client->mHeight = mHeight - Client->mY;
+    SetWindowPos(Client->GetHandle(), 0,
+		 Client->mX, Client->mY,
+		 Client->mWidth, Client->mHeight,
+		 SWP_NOSIZE | SWP_NOZORDER 
+		 | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
+  }
+  */
 }
 
 WindowControl *WindowControl::FindByName(TCHAR *Name){
@@ -1443,6 +1483,7 @@ WndForm::WndForm(HWND Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Wid
   mOnKeyDownNotify = NULL;
   mOnKeyUpNotify = NULL;
   mOnLButtonUpNotify = NULL;
+  mOnTimerNotify = NULL;
 
   mhAccelTable = CreateAcceleratorTable(mAccel, sizeof(mAccel)/sizeof(mAccel[0]));
 
@@ -1461,6 +1502,8 @@ WndForm::WndForm(HWND Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Wid
   mClientRect.bottom=Width;
   mClientRect.right=Height;
 
+  cbTimerID = SetTimer(GetHandle(),1001,500,NULL);
+
   mModalResult = 0;
   if (Caption != NULL)
     _tcscpy(mCaption, Caption);
@@ -1476,6 +1519,8 @@ void WndForm::Destroy(void){
 
   if (mClientWindow) 
     mClientWindow->SetVisible(false);
+
+  KillTimer(GetHandle(),cbTimerID);
 
   DestroyAcceleratorTable(mhAccelTable);
   DeleteObject(mhBrushTitle);
@@ -1549,7 +1594,6 @@ void WndForm::SetToForeground(void)
 
 
 int WndForm::ShowModal(void){
-
   MSG msg;
   HWND oldFocusHwnd;
 
@@ -1643,6 +1687,14 @@ int WndForm::ShowModal(void){
           if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
             continue;
 
+      }
+      if (msg.message == WM_TIMER) {
+	if (msg.hwnd == GetHandle()) {
+	  if (mOnTimerNotify) {
+	    mOnTimerNotify(this);
+	  }
+	  continue;
+	}
       }
 
       TranslateMessage(&msg);
@@ -1793,6 +1845,9 @@ void WndForm::SetLButtonUpNotify( int (*LButtonUpNotify)(WindowControl * Sender,
   mOnLButtonUpNotify = LButtonUpNotify;
 }
 
+void WndForm::SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender)) {
+  mOnTimerNotify = OnTimerNotify;
+}
 
 //-----------------------------------------------------------
 // WndButton

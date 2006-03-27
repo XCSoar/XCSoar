@@ -41,6 +41,24 @@ typedef struct _FLARM_TRAFFIC
 } FLARM_TRAFFIC;
 
 
+typedef struct _SWITCH_INFO
+{
+  bool AirbrakeExtended;
+  bool FlapPositive;
+  bool FlapNeutral;
+  bool FlapNegative;
+  bool GearExtended;
+  bool Acknowledge;
+  bool Repeat;
+  bool SpeedCommand;
+  bool UserSwitchUp;
+  bool UserSwitchMiddle;
+  bool UserSwitchDown;
+  bool VarioCircling;
+  bool Stall;
+} SWITCH_INFO;
+
+
 typedef struct _NMEA_INFO
 {
 
@@ -93,6 +111,8 @@ typedef struct _NMEA_INFO
   FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
 
   double SupplyBatteryVoltage;
+
+  SWITCH_INFO SwitchState;
 
 } NMEA_INFO;
 

@@ -488,6 +488,14 @@ bool dlgConfigurationVarioShowModal(void){
 
   changed = false;
 
+  if (NMEAParser::FindVegaPort()== -1) {
+    MessageBoxX (hWndMainWindow, 
+		 gettext(TEXT("No communication with Vega.")), 
+		 TEXT("Vega Error"), MB_OK);
+    return false;
+  }
+
+
   wf = dlgLoadFromXML(CallBackTable, 
 		      LocalPathS(TEXT("dlgVario.xml")), 
 		      hWndMainWindow,

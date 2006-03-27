@@ -595,7 +595,7 @@ void dlgConfigurationShowModal(void){
     dfe->addEnumText(TEXT("Track up"));
     dfe->addEnumText(TEXT("North up"));
     dfe->addEnumText(TEXT("North circling"));
-    dfe->addEnumText(TEXT("Track circling"));
+    dfe->addEnumText(TEXT("Target circling"));
     dfe->Set(DisplayOrientation);
     wp->RefreshDisplay();
   }
@@ -722,6 +722,18 @@ void dlgConfigurationShowModal(void){
     dfe = (DataFieldEnum*)wp->GetDataField();
     for (i=0; i<NUMPOLARS; i++) {
       dfe->addEnumText(PolarLabels[i]);
+    }
+    i=0;
+    bool ok = true;
+    while (ok) {
+      TCHAR *name;
+      name = GetWinPilotPolarInternalName(i);
+      if (!name) {
+	ok=false;
+      } else {
+	dfe->addEnumText(name);
+      }
+      i++;
     }
     dfe->Set(POLARID);
     wp->RefreshDisplay();

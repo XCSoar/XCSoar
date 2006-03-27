@@ -174,11 +174,7 @@ void LoadChecklist(void) {
     free(ChecklistTitle[0]);
   }
 
-#if (WINDOWSPC>0)
-  TCHAR filename[] = TEXT("C:\\XCSoaLocalPath(rxcsoar-checklist.txt");
-#else
-  TCHAR filename[] = TEXT("\\NOR Flash\\xcsoar-checklist.txt");
-#endif
+  TCHAR *filename = LocalPath(TEXT("xcsoar-checklist.txt"));
 
   hChecklist = INVALID_HANDLE_VALUE;
   hChecklist = CreateFile(filename,

@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.40 2006/03/25 04:53:46 jwharington Exp $
+  $Id: Parser.cpp,v 1.41 2006/03/27 13:49:53 jwharington Exp $
 
 Copyright_License {
 
@@ -939,23 +939,68 @@ BOOL NMEAParser::PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 #include "InputEvents.h"
 
+
+#define INPUT_BIT_FLAP_POS                  0 // 1 flap pos
+#define INPUT_BIT_FLAP_ZERO                 1 // 1 flap zero
+#define INPUT_BIT_FLAP_NEG                  2 // 1 flap neg
+#define INPUT_BIT_SC                        3 // 1 circling
+#define INPUT_BIT_GEAR_EXTENDED             5 // 1 gear extended
+#define INPUT_BIT_AIRBRAKENOTLOCKED         6 // 1 airbrake extended
+#define INPUT_BIT_AUX                       7 // unused?
+#define INPUT_BIT_ACK                       8 // 1 ack pressed
+#define INPUT_BIT_REP                       9 // 1 rep pressed
+#define INPUT_BIT_STALL                     20  // 1 if detected
+#define INPUT_BIT_USERSWUP                  23 // 1 if up
+#define INPUT_BIT_USERSWMIDDLE              24 // 1 if middle
+#define INPUT_BIT_USERSWDOWN                25
+#define OUTPUT_BIT_CIRCLING                 0  // 1 if circling
+
+
 BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
 
-  unsigned long switchinputs, switchoutputs;
+  unsigned long uswitchinputs, uswitchoutputs;
   swscanf(String,
 	  TEXT("%lf,%lx,%lx,%lf"),
 	  &MACCREADY,
-	  &switchinputs,
-	  &switchoutputs,
+	  &uswitchinputs,
+	  &uswitchoutputs,
 	  &GPS_INFO->SupplyBatteryVoltage);
+
+  long switchinputs = uswitchinputs;
+  long switchoutputs = uswitchoutputs;
 
   MACCREADY /= 10;
   GPS_INFO->SupplyBatteryVoltage/= 10;
 
-  //   airdata.circling = (switchoutputs && (1<<OUTPUT_BIT_CIRCLING));
+  GPS_INFO->SwitchState.AirbrakeExtended =
+    (switchinputs & (1<<INPUT_BIT_AIRBRAKENOTLOCKED));
+  GPS_INFO->SwitchState.FlapPositive =
+    (switchinputs & (1<<INPUT_BIT_FLAP_POS));
+  GPS_INFO->SwitchState.FlapNeutral =
+    (switchinputs & (1<<INPUT_BIT_FLAP_ZERO));
+  GPS_INFO->SwitchState.FlapNegative =
+    (switchinputs & (1<<INPUT_BIT_FLAP_NEG));
+  GPS_INFO->SwitchState.GearExtended =
+    (switchinputs & (1<<INPUT_BIT_GEAR_EXTENDED));
+  GPS_INFO->SwitchState.Acknowledge =
+    (switchinputs & (1<<INPUT_BIT_ACK));
+  GPS_INFO->SwitchState.Repeat =
+    (switchinputs & (1<<INPUT_BIT_REP));
+  GPS_INFO->SwitchState.SpeedCommand =
+    (switchinputs & (1<<INPUT_BIT_SC));
+  GPS_INFO->SwitchState.UserSwitchUp =
+    (switchinputs & (1<<INPUT_BIT_USERSWUP));
+  GPS_INFO->SwitchState.UserSwitchMiddle =
+    (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE));
+  GPS_INFO->SwitchState.UserSwitchDown =
+    (switchinputs & (1<<INPUT_BIT_USERSWDOWN));
+  GPS_INFO->SwitchState.VarioCircling =
+    (switchinputs & (1<<OUTPUT_BIT_CIRCLING));
+  GPS_INFO->SwitchState.Stall =
+    (switchinputs & (1<<INPUT_BIT_STALL));
 
   long up_switchinputs;
   long down_switchinputs;

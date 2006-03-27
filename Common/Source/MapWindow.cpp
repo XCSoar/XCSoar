@@ -3066,9 +3066,11 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     ExtTextOut(hDC, rc.right-10-tsize.cx, End.y+7, 0, NULL, Scale, _tcslen(Scale), NULL);
 
     #ifdef DEBUG
+#if (WINDOWSPC<1)
     SelectObject(hDC, MapWindowFont);
     wsprintf(Scale,TEXT("%d ms %d %%"), timestats_av, cpuload);
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, Scale, _tcslen(Scale), NULL);
+#endif
     #endif
 
     // restore original color
@@ -3157,9 +3159,12 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     }
 
     #ifdef DEBUG
+#if (WINDOWSPC<1)
+
     SelectObject(hDC, MapWindowFont);
     wsprintf(ScaleInfo,TEXT("%d ms %d %%"), timestats_av, cpuload);
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
+#endif
     #endif
 
     SetTextColor(hDC, oldTextColor);
@@ -3941,9 +3946,9 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   }
 #endif
 
-  // autoscale colors
-  vmin = min(this_vmin,-5);
-  vmax = max(this_vmax,5);
+  // autoscale colors (low pass filter)
+  vmin = min(this_vmin,-5)*0.2+0.8*vmin;
+  vmax = max(this_vmax,5)*0.2+0.8*vmax;
 }
 
 

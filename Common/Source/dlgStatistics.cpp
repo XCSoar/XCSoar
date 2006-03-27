@@ -953,58 +953,72 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
 
   double fh = (ach-hmin)/(hmax-hmin);
 
-  for (int i=0; i< airspace_scansize_i; i++) { // scan height
-    fi = i*1.0/(airspace_scansize_i);
-    for (int j=0; j< airspace_scansize_j; j++) { // scan range
-      fj = j*1.0/(airspace_scansize_j);
+  double d_lat[AIRSPACE_SCANSIZE_X];
+  double d_lon[AIRSPACE_SCANSIZE_X];
+  double d_h[AIRSPACE_SCANSIZE_H];
+  int d_airspace[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X];
+  int i,j;
 
-      double lat = FindLatitude(aclat, aclon, acb, range*fj);
-      double lon = FindLongitude(aclat, aclon, acb, range*fj);
-      double h = (hmax-hmin)*fi+hmin;
+  for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
+    fj = j*1.0/(AIRSPACE_SCANSIZE_X);
+    d_lat[j]= FindLatitude(aclat, aclon, acb, range*fj);
+    d_lon[j]= FindLongitude(aclat, aclon, acb, range*fj);
+  }
+  for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
+    fi = i*1.0/(AIRSPACE_SCANSIZE_H);
+    d_h[i] = (hmax-hmin)*fi+hmin;
+  }
+  for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
+    for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
+      d_airspace[i][j]= -1; // no airspace
+    }
+  }
+  ScanAirspaceLine(d_lat, d_lon, d_h, d_airspace);
 
-      double nearestdist = 0;
-      double nearestbearing = 0;
-      int foundcircle=-1;
-      int foundarea=-1;
+  int type;
 
-      FindNearestAirspace(lon, lat,
-			  &nearestdist, &nearestbearing,
-			  &foundcircle, &foundarea,
-			  &h);
-      if (nearestdist<0) {
-	// inside, so render
-	int type = 0;
-	if (foundcircle>=0) {
-	  type = AirspaceCircle[foundcircle].Type;
-	}
-	if (foundarea>=0) {
-	  type = AirspaceArea[foundarea].Type;
-	}
-	SelectObject(hdc, GetStockObject(BLACK_PEN));
+  HPEN mpen = (HPEN)CreatePen(PS_NULL, 0, RGB(0xf0,0xf0,0xb0));
+  HPEN oldpen = (HPEN)SelectObject(hdc, (HPEN)mpen);
+
+  for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
+    fi = i*1.0/(AIRSPACE_SCANSIZE_H);
+    for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
+      fj = j*1.0/(AIRSPACE_SCANSIZE_X);
+
+      type = d_airspace[i][j];
+      if (type>=0) {
 	SelectObject(hdc,
 		     MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[type]]);
 	SetTextColor(hdc, 
 		     MapWindow::Colours[MapWindow::iAirspaceColour[type]]);
-
-	rcd.left = (int)(fj*(rc.right-rc.left)+rc.left);
-	rcd.right = (int)(rcd.left+(rc.right-rc.left)/airspace_scansize_j);
-	rcd.bottom = (int)(fi*(rc.top-rc.bottom)+rc.bottom);
-	rcd.top = (int)(rcd.bottom+(rc.top-rc.bottom)/airspace_scansize_i);
+	
+	rcd.left = iround(fj*(rc.right-rc.left)+rc.left);
+	rcd.right = iround(rcd.left+(rc.right-rc.left)/airspace_scansize_j);
+	rcd.bottom = iround(fi*(rc.top-rc.bottom)+rc.bottom);
+	rcd.top = iround(rcd.bottom+(rc.top-rc.bottom)/airspace_scansize_i);
 	
 	Rectangle(hdc,rcd.left,rcd.top,rcd.right,rcd.bottom);
-
+	
       }
-
     }
   }
   //
-  POINT line[2];
+  POINT line[4];
+  int delta;
   SelectObject(hdc, GetStockObject(WHITE_PEN));
-  line[0].x = rc.left;
-  line[0].y = (int)(fh*(rc.top-rc.bottom)+rc.bottom);
-  line[1].x = (int)(line[0].x+(rc.right-rc.left)/airspace_scansize_j);
+  SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+  line[0].x = (int)(rc.left+(rc.right-rc.left)/airspace_scansize_j);
+  line[0].y = (int)(fh*(rc.top-rc.bottom)+rc.bottom)-1;
+  line[1].x = rc.left;
   line[1].y = line[0].y;
-  Polyline(hdc, line, 2);
+  delta = (line[0].x-line[1].x);
+  line[2].x = line[1].x;
+  line[2].y = line[0].y-delta/2;
+  line[3].x = (line[1].x+line[0].x)/2;
+  line[3].y = line[0].y;
+  Polygon(hdc, line, 4);
+  SelectObject(hdc, (HPEN)oldpen);
+  DeleteObject(mpen);
 }
 
 
@@ -1450,6 +1464,8 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       }
       if (page==6) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Airspace")));
+	_stprintf(Temp, TEXT(""));
+        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
         Statistics::RenderAirspace(hdcScreen, rcgfx);
       }
       SelectObject(hdcScreen, hfOld);
