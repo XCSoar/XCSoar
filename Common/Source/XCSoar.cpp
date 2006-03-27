@@ -898,14 +898,22 @@ void RestartCommPorts() {
 #endif
   if (first) {
     if (!Port1Available) {
+#ifdef GNAV
+      PortIndex1 = 0; SpeedIndex1 = 5;
+#else
       PortIndex1 = 0; SpeedIndex1 = 2;
+#endif
       ReadPort1Settings(&PortIndex1,&SpeedIndex1);
       Port1Available =
 	Port1Initialize (COMMPort[PortIndex1],dwSpeed[SpeedIndex1]);
     }
 
     if (!Port2Available) {
+#ifdef GNAV
+      PortIndex2 = 0; SpeedIndex2 = 5;
+#else
       PortIndex2 = 0; SpeedIndex2 = 2;
+#endif
       ReadPort2Settings(&PortIndex2,&SpeedIndex2);
       if (PortIndex1 != PortIndex2) {
 	Port2Available =
@@ -1179,9 +1187,13 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #ifdef GNAV
   wcscat(XCSoar_Version, TEXT("Altair "));
 #endif
+#if (NEWINFOBOX>0)
+  wcscat(XCSoar_Version, TEXT("4.70 "));
+#else
   wcscat(XCSoar_Version, TEXT("Alpha "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
   // wcscat(XCSoar_Version, TEXT("4.5 BETA 4")); // Yet to be released
+#endif
 
   XCSoarGetOpts(lpCmdLine);
 
@@ -1231,6 +1243,20 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // not working very well at all
 
   PreloadInitialisation(false);
+
+  GPS_INFO.SwitchState.AirbrakeExtended = false;
+  GPS_INFO.SwitchState.FlapPositive = false;
+  GPS_INFO.SwitchState.FlapNeutral = false;
+  GPS_INFO.SwitchState.FlapNegative = false;
+  GPS_INFO.SwitchState.GearExtended = false;
+  GPS_INFO.SwitchState.Acknowledge = false;
+  GPS_INFO.SwitchState.Repeat = false;
+  GPS_INFO.SwitchState.SpeedCommand = false;
+  GPS_INFO.SwitchState.UserSwitchUp = false;
+  GPS_INFO.SwitchState.UserSwitchMiddle = false;
+  GPS_INFO.SwitchState.UserSwitchDown = false;
+  GPS_INFO.SwitchState.VarioCircling = false;
+  GPS_INFO.SwitchState.Stall = false;
 
 #ifdef _SIM_
   SYSTEMTIME pda_time;

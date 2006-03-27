@@ -259,8 +259,10 @@ void GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y, in
   }
   *Width = StringToIntDflt(Node->getAttribute(TEXT("Width")), 50)
     *ISCALE;
-  *Height = StringToIntDflt(Node->getAttribute(TEXT("Height")), 50)
-    *ISCALE;
+  *Height = StringToIntDflt(Node->getAttribute(TEXT("Height")), 50);
+  if (*Height>=0) {
+    (*Height) *= ISCALE;
+  }
   *Font = StringToIntDflt(Node->getAttribute(TEXT("Font")), -1);
   _tcscpy(Name, StringToStringDflt(Node->getAttribute(TEXT("Name")), TEXT("")));
   _tcscpy(Caption, StringToStringDflt(Node->getAttribute(TEXT("Caption")), TEXT("")));

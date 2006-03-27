@@ -119,7 +119,7 @@ event=StatusMessage Keys 1 NAV 2 DISPLAY 3 CONFIG 4 INFO
 mode=default
 type=gce
 data=TAKEOFF
-event=Logger start
+#event=Logger start
 #event=DLLExecute XCSoarExamplePlugin.dll DemoSound \My Documents\Sample2.wav
 event=StatusMessage Takeoff
 
@@ -153,20 +153,20 @@ event=StatusMessage Task finished
 # mode=default
 # ------------
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 VarioFilter Vario
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2
 type=key
 data=ESCAPE
 event=Mode default
 
 # clear main entry buttons
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 VarioFilter Vario
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2
 type=key
 data=APP1
 label=
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 VarioFilter Vario
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Vario1 Vario2
 type=key
 data=APP2
 label=
@@ -178,7 +178,7 @@ data=APP3
 label=
 location=3
 
-mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 VarioFilter Vario
+mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Vario1 Vario2
 type=key
 data=APP4
 label=
@@ -297,8 +297,6 @@ event=Zoom out
 mode=default
 type=key
 data=9
-event=StatusMessage Dropped marker
-event=Logger note Mark
 event=MarkLocation
 
 mode=default
@@ -610,9 +608,7 @@ location=8
 mode=Display2
 type=key
 data=0
-event=Setup Replay
-event=Mode default
-label=Logger Replay
+label=
 location=9
 
 
@@ -678,7 +674,7 @@ location=3
 mode=Config2
 type=key
 data=6
-event=Mode Vario
+event=Mode Vario1
 label=Vario/
 location=5
 
@@ -703,65 +699,111 @@ type=key
 data=9
 event=Logger show
 event=Logger toggle ask
-label=Logger
+label=Logger\nRecord
 location=8
 
 mode=Config2
 type=key
 data=0
-event=StatusMessage Not Implemented
-label=Sounds
+event=Setup Replay
+event=Mode default
+label=Logger\nReplay
 location=9
 
 
 # -------------
-# mode=Vario
+# mode=Vario1
 # -------------
-mode=Vario
+mode=Vario1
+type=key
+data=APP3
+event=Mode Vario2
+label=Vario/
+location=3
+
+mode=Vario1
+type=key
+data=6
+event=Setup Switches
+event=Mode default
+label=Airframe\nSwitches
+location=5
+
+mode=Vario1
+type=key
+data=7
+event=Setup Audio
+label=Setup Audio
+location=6
+
+mode=Vario1
+type=key
+data=8
+event=AdjustVarioFilter xdemo
+label=Manual\nDemo
+location=7
+
+mode=Vario1
+type=key
+data=9
+event=StatusMessage Not yet implemented
+label=Setup\nStall
+location=8
+
+mode=Vario1
+type=key
+data=0
+label=
+location=9
+
+# -------------
+# mode=Vario2
+# -------------
+
+mode=Vario2
 type=key
 data=APP3
 event=Mode default
 label=/Vario
 location=3
 
-mode=Vario
+mode=Vario2
 type=key
 data=6
-event=AdjustVarioFilter fast
-event=StatusMessage Vario fast
-label=Fast 1.0s
-location=5
-
-mode=Vario
-type=key
-data=7
-event=AdjustVarioFilter medium
-event=StatusMessage Vario medium
-label=Medium 1.5s
-location=6
-
-mode=Vario
-type=key
-data=8
-event=AdjustVarioFilter slow
-event=StatusMessage Vario slow
-label=Slow 3.0s
-location=7
-
-mode=Vario
-type=key
-data=9
 event=AdjustVarioFilter zero
 event=StatusMessage Vario ASI zeroed
-label=Zero ASI
+label=Zero\nASI
+location=5
+
+mode=Vario2
+type=key
+data=7
+event=StatusMessage Accelerometer leveled
+label=Accel\nZero
+location=6
+
+mode=Vario2
+type=key
+data=8
+event=AdjustVarioFilter save
+event=StatusMessage Stored to EEPROM
+label=Store
+location=7
+
+mode=Vario2
+type=key
+data=9
+event=AdjustVarioFilter demostf
+label=Cruise\nDemo
 location=8
 
-mode=Vario
+mode=Vario2
 type=key
 data=0
-event=Mode VarioTest
-label=Test/
+event=AdjustVarioFilter democlimb
+label=Climb\nDemo
 location=9
+
 
 
 # -------------
@@ -860,102 +902,4 @@ event=RepeatStatusMessage
 label=Message\nRepeat
 location=9
 
-
-# -------------
-# mode=VarioFilter
-# -------------
-mode=VarioFilter
-type=key
-data=APP3
-event=Mode default
-label=/Filter
-location=3
-
-mode=VarioFilter
-type=key
-data=6
-event=AdjustVarioFilter fast
-event=StatusMessage Vario fast
-label=Fast 1.0s
-location=5
-
-mode=VarioFilter
-type=key
-data=7
-event=AdjustVarioFilter medium
-event=StatusMessage Vario medium
-label=Medium 1.5s
-location=6
-
-mode=VarioFilter
-type=key
-data=8
-event=AdjustVarioFilter slow
-event=StatusMessage Vario slow
-label=Slow 3.0s
-location=7
-
-mode=VarioFilter
-type=key
-data=9
-event=AdjustVarioFilter zero
-event=StatusMessage Vario ASI zeroed
-label=Zero ASI
-location=8
-
-mode=VarioFilter
-type=key
-data=0
-event=AdjustVarioFilter save
-event=StatusMessage Saved to Eeprom
-label=Save
-location=9
-
-
-# -------------
-# mode=VarioTest
-# -------------
-mode=VarioTest
-type=key
-data=APP3
-event=Mode default
-label=/Test
-location=3
-
-mode=VarioTest
-type=key
-data=6
-event=AdjustVarioFilter democlimb
-event=StatusMessage Demo Climb
-label=Demo climb
-location=5
-
-mode=VarioTest
-type=key
-data=7
-event=AdjustVarioFilter demostf
-event=StatusMessage Demo STF
-label=Demo STF
-location=6
-
-mode=VarioTest
-type=key
-data=8
-event=AdjustVarioFilter switch
-label=Diagnostics switch
-location=7
-
-mode=VarioTest
-type=key
-data=9
-event=AdjustVarioFilter statistics
-label=Vario stats
-location=8
-
-mode=VarioTest
-type=key
-data=0
-event=AdjustVarioFilter diagnostics
-label=Vario diagnostics
-location=9
-
+# =============================

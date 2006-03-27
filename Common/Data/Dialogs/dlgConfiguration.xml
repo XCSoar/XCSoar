@@ -279,15 +279,15 @@
 
   <WndFrame Name="frmPolar" X=70 Y=0 Width=246 Height=222 Font=2>
 
-    <WndProperty Name="prpPolarType" Caption="Type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2>
+    <WndProperty Name="prpPolarType" Caption="Type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=70 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
-  <WndProperty Name="prpPolarFile" Caption="Polar file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+  <WndProperty Name="prpPolarFile" Caption="Polar file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2>
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpMaxManoeuveringSpeed" Caption="V rough air"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+  <WndProperty Name="prpMaxManoeuveringSpeed" Caption="V rough air"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2>
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=200 Step=1/>
   </WndProperty>
 

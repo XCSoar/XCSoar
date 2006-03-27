@@ -1512,3 +1512,70 @@ void SortAirspace(void) {
 	SortAirspaceCircleCompare);
 
 }
+
+
+/////////////
+
+void ScanAirspaceLine(double *lats, double *lons, double *heights,
+		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X])
+{
+
+  int i,j;
+  unsigned int k;
+  double latitude, longitude, height, Dist;
+
+  for(k=0;k<NumberOfAirspaceCircles;k++) {
+    for (i=0; i<AIRSPACE_SCANSIZE_X; i++) {
+      latitude = lats[i];
+      longitude = lons[i];
+      if ((latitude> AirspaceCircle[k].bounds.miny)&&
+	  (latitude< AirspaceCircle[k].bounds.maxy)&&
+	  (longitude> AirspaceCircle[k].bounds.minx)&&
+	  (longitude< AirspaceCircle[k].bounds.maxx)) {
+
+	Dist = Distance(latitude,longitude,
+			AirspaceCircle[k].Latitude,
+			AirspaceCircle[k].Longitude)-AirspaceCircle[k].Radius;
+
+	if(Dist < 0) {
+	  for (j=0; j<AIRSPACE_SCANSIZE_H; j++) {
+	    height = heights[j];
+	    if ((height>AirspaceCircle[k].Base.Altitude)&&
+		(height<AirspaceCircle[k].Top.Altitude)) {
+	      airspacetype[j][i] = AirspaceCircle[k].Type;
+	    } // inside height
+	  } // finished scanning height
+	} // inside
+      } // in bound
+    } // finished scanning range
+  } // finished scanning circles
+
+  for(k=0;k<NumberOfAirspaceAreas;k++) {
+    for (i=0; i<AIRSPACE_SCANSIZE_X; i++) {
+      latitude = lats[i];
+      longitude = lons[i];
+
+      if ((latitude> AirspaceArea[k].bounds.miny)&&
+	  (latitude< AirspaceArea[k].bounds.maxy)&&
+	  (longitude> AirspaceArea[k].bounds.minx)&&
+	  (longitude< AirspaceArea[k].bounds.maxx)) {
+	AIRSPACE_POINT thispoint;
+	thispoint.Longitude = longitude;
+	thispoint.Latitude = latitude;
+	if (wn_PnPoly(thispoint,
+		      &AirspacePoint[AirspaceArea[k].FirstPoint],
+		      AirspaceArea[k].NumPoints-1) != 0) {
+	  for (j=0; j<AIRSPACE_SCANSIZE_H; j++) {
+	    height = heights[j];
+	    if ((height>AirspaceArea[k].Base.Altitude)&&
+		(height<AirspaceArea[k].Top.Altitude)) {
+	      airspacetype[j][i] = AirspaceArea[k].Type;
+	    } // inside height
+	  } // finished scanning height
+	} // inside
+      } // in bound
+    } // finished scanning range
+  } // finished scanning areas
+
+}
+

@@ -319,7 +319,7 @@ class DataFieldInteger:public DataField{
     TCHAR mOutBuf[OUTBUFFERSIZE+1];
 
   protected:
-    int SpeedUp(void);
+    int SpeedUp(bool keyup);
 
   public:
     DataFieldInteger(TCHAR *EditFormat, TCHAR *DisplayFormat, int Min, int Max, int Default, int Step, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
@@ -370,7 +370,7 @@ class DataFieldFloat:public DataField{
     TCHAR mOutBuf[OUTBUFFERSIZE+1];
 
   protected:
-    double SpeedUp(void);
+    double SpeedUp(bool keyup);
 
 
   public:
@@ -736,12 +736,13 @@ class WndForm:public WindowControl{
     RECT mClientRect;
     RECT mTitleRect;
 
+    int (*mOnTimerNotify)(WindowControl * Sender);
     int (*mOnKeyDownNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
     int (*mOnKeyUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
     int (*mOnLButtonUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
 
     void Paint(HDC hDC);
-
+    int cbTimerID;
 
   public:
 
@@ -783,6 +784,8 @@ class WndForm:public WindowControl{
     void SetKeyDownNotify(int (*KeyDownNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam));
     void SetKeyUpNotify(int (*KeyUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam));
     void SetLButtonUpNotify(int (*LButtonUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam));
+
+    void SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender));
 
 };
 

@@ -1718,6 +1718,7 @@ void dlgWindSettingsShowModal(void);
 void dlgTaskOverviewShowModal(void);
 void dlgAirspaceShowModal(bool);
 void dlgLoggerReplayShowModal(void);
+void dlgSwitchesShowModal(void);
 #endif
 
 // Setup
@@ -1763,6 +1764,13 @@ void InputEvents::eventSetup(TCHAR *misc) {
   if (_tcscmp(misc,TEXT("Replay"))==0){
 #if NEWINFOBOX > 0
     dlgLoggerReplayShowModal();
+#else
+    0;
+#endif;
+  }
+  if (_tcscmp(misc,TEXT("Switches"))==0){
+#if NEWINFOBOX > 0
+    dlgSwitchesShowModal();
 #else
     0;
 #endif;

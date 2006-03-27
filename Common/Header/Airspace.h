@@ -100,4 +100,11 @@ void FindNearestAirspace(double longitude,
 void SortAirspace(void);
 extern int AirspacePriority[AIRSPACECLASSCOUNT];
 
+
+#define AIRSPACE_SCANSIZE_X 16
+#define AIRSPACE_SCANSIZE_H 16
+
+void ScanAirspaceLine(double *lats, double *lons, double *heights,
+		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X]);
+
 #endif
