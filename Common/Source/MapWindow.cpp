@@ -96,6 +96,7 @@ HBITMAP MapWindow::hBmpCompassBg = NULL;
 HBITMAP MapWindow::hBmpClimbeAbort = NULL;
 HBITMAP MapWindow::hBmpMapScale=NULL;
 
+POINT MapWindow::Orig_Screen;
 
 RECT MapWindow::MapRect;
 RECT MapWindow::MapRectBig;
@@ -111,10 +112,8 @@ HDC MapWindow::hDCTemp = NULL;
 
 rectObj MapWindow::screenbounds_latlon;
 
-double MapWindow::PanX=0.0;
-double MapWindow::PanY=0.0;
-double MapWindow::PanXr=0.0;
-double MapWindow::PanYr=0.0;
+double MapWindow::PanLatitude = 0.0;
+double MapWindow::PanLongitude = 0.0;
 
 bool MapWindow::EnablePan = FALSE;
 bool MapWindow::EnableTrailDrift=false;
@@ -271,7 +270,7 @@ bool MapWindow::Event_NearestWaypointDetails(double lon, double lat,
     i=FindNearestWayPoint(lon, lat, range);
   } else {
     // nearest to center of screen if in pan mode
-    i=FindNearestWayPoint(PanXr, PanYr, range);
+    i=FindNearestWayPoint(PanLongitude, PanLatitude, range);
   }
   if(i != -1)
     {
@@ -284,28 +283,38 @@ bool MapWindow::Event_NearestWaypointDetails(double lon, double lat,
 
 
 bool MapWindow::Event_InteriorAirspaceDetails(double lon, double lat) {
-  int i;
+  unsigned int i;
+  bool found=false;
+  bool inside;
 
-  i= FindAirspaceCircle(lon,lat);
-  if(i != -1)
-    {
+  for (i=0; i<NumberOfAirspaceCircles; i++) {
+    inside = false;
+    if (AirspaceCircle[i].Visible) {
+      inside = InsideAirspaceCircle(lon, lat, i);
+    }
+    if (inside) {
       DisplayAirspaceWarning(AirspaceCircle[i].Type ,
 			     AirspaceCircle[i].Name ,
 			     AirspaceCircle[i].Base,
 			     AirspaceCircle[i].Top );
-      return true;
+      found = true;
     }
-  i= FindAirspaceArea(lon,lat);
-  if(i != -1)
-    {
+  }
+  for (i=0; i<NumberOfAirspaceAreas; i++) {
+    inside = false;
+    if (AirspaceArea[i].Visible) {
+      inside = InsideAirspaceArea(lon, lat, i);
+    }
+    if (inside) {
       DisplayAirspaceWarning(AirspaceArea[i].Type ,
 			     AirspaceArea[i].Name ,
 			     AirspaceArea[i].Base,
 			     AirspaceArea[i].Top );
-      return true;
+      found = true;
     }
+  }
 
-  return false; // nothing found..
+  return found; // nothing found..
 }
 
 bool MapWindow::isAutoZoom() {
@@ -610,9 +619,8 @@ void MapWindow::Event_AutoZoom(int vswitch) {
   if (AutoZoom) {
     if (EnablePan) {
       EnablePan = false;
+      InputEvents::setMode(TEXT("default"));
       StoreRestoreFullscreen(false);
-      PanX = 0.0;
-      PanY = 0.0;
     }
   }
   RefreshMap();
@@ -625,21 +633,21 @@ void MapWindow::Event_PanCursor(int dx, int dy) {
   double Xstart=X;
   double Ystart=Y;
 
-  GetLocationFromScreen(Xstart, Ystart);
+  Screen2LatLon(Xstart, Ystart);
 
   X+= (MapRect.right-MapRect.left)/4.0*dx;
   Y+= (MapRect.bottom-MapRect.top)/4.0*dy;
-  GetLocationFromScreen(X, Y);
+  Screen2LatLon(X, Y);
 
   if (EnablePan) {
-    PanX += Xstart-X;
-    PanY += Ystart-Y;
+    PanLongitude += Xstart-X;
+    PanLatitude += Ystart-Y;
   }
   RefreshMap();
 }
 
 bool MapWindow::isPan() {
-	return EnablePan;
+  return EnablePan;
 }
 
 /* Event_TerrainToplogy Changes
@@ -729,6 +737,7 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
 
 void MapWindow::Event_Pan(int vswitch) {
   static bool oldfullscreen = 0;
+  bool oldPan = EnablePan;
   if (vswitch == -2) { // superpan, toggles fullscreen also
 
     if (!EnablePan) {
@@ -748,9 +757,13 @@ void MapWindow::Event_Pan(int vswitch) {
     EnablePan = (vswitch != 0); // 0 off, 1 on
   }
 
-  if (!EnablePan) {
-    PanX = 0.0;
-    PanY = 0.0;
+  if (EnablePan != oldPan) {
+    if (EnablePan) {
+      PanLongitude = DrawInfo.Longitude;
+      PanLatitude = DrawInfo.Latitude;
+      InputEvents::setMode(TEXT("pan"));
+    } else
+      InputEvents::setMode(TEXT("default"));
   }
   RefreshMap();
 }
@@ -797,7 +810,7 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
       value *= 2.0;
     }
 
-    RequestMapScale = max(0.1,min(160.0, value));
+    RequestMapScale = max(0.05,min(160.0, value));
   }
 
   if (lastRequestMapScale != RequestMapScale){
@@ -809,16 +822,22 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
   }
 }
 
+#if (WINDOWSPC>0)
+#define IBLSCALE(x) (x*InfoBoxLayout::scale)
+#else
+#define IBLSCALE(x) (x)
+#endif
+
 
 int MapWindow::GetMapResolutionFactor(void) {
-  return 30*InfoBoxLayout::scale;
+  return IBLSCALE(30);
 }
 
 double MapWindow::StepMapScale(int Step){
   ScaleCurrent += Step;
   ScaleCurrent = max(0,min(ScaleListCount-1, ScaleCurrent));
   return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
-	 /(Appearance.DefaultMapWidth*InfoBoxLayout::scale));
+	 /(IBLSCALE(Appearance.DefaultMapWidth)));
 }
 
 double MapWindow::FindMapScale(double Value){
@@ -827,9 +846,7 @@ double MapWindow::FindMapScale(double Value){
   double BestFit = 99999;
   int    BestFitIdx=-1;
   double DesiredScale =
-    (Value
-     *Appearance.DefaultMapWidth*InfoBoxLayout::scale) /
-    GetMapResolutionFactor();
+    (Value*IBLSCALE(Appearance.DefaultMapWidth))/GetMapResolutionFactor();
 
   for (i=0; i<ScaleListCount; i++){
     double err = fabs(DesiredScale - ScaleList[i])/DesiredScale;
@@ -842,7 +859,7 @@ double MapWindow::FindMapScale(double Value){
   if (BestFitIdx != -1){
     ScaleCurrent = BestFitIdx;
     return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
-	   /Appearance.DefaultMapWidth*InfoBoxLayout::scale);
+	   /IBLSCALE(Appearance.DefaultMapWidth));
   }
   return(Value);
 }
@@ -1001,10 +1018,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       hAirspaceBrushes[i] =
         CreatePatternBrush((HBITMAP)hAirspaceBitmap[i]);
     }
-    for (i=0; i<AIRSPACECLASSCOUNT; i++) {
-      hAirspacePens[i] =
-        CreatePen(PS_SOLID, 2 /*todo*/, Colours[iAirspaceColour[i]]);
-    }
     BYTE Red,Green,Blue;
     int width;
     for (i=0; i<NUMSNAILCOLORS; i++) {
@@ -1014,7 +1027,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       if (i<NUMSNAILCOLORS/2) {
 	width=2;
       } else {
-	width = (i-NUMSNAILCOLORS/2)*InfoBoxLayout::scale*16/NUMSNAILCOLORS;
+	width = (i-NUMSNAILCOLORS/IBLSCALE(2))*16/NUMSNAILCOLORS;
       }
 
       hSnailPens[i] = (HPEN)CreatePen(PS_SOLID, width,
@@ -1023,45 +1036,45 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     /* JMW created all re-used pens here */
 
-    hpAircraft = (HPEN)CreatePen(PS_SOLID, 3*InfoBoxLayout::scale,
+    hpAircraft = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
 				 RGB(0xf0,0xf0,0xf0));
-    hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, 1*InfoBoxLayout::scale,
+    hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
 				       RGB(0x00,0x00,0x00));
     #if (MONOCHROME_SCREEN > 0)
-    hpWind = (HPEN)CreatePen(PS_SOLID, 2*InfoBoxLayout::scale, RGB(0,0,0));
+    hpWind = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0,0,0));
     #else
-    hpWind = (HPEN)CreatePen(PS_SOLID, 2*InfoBoxLayout::scale, RGB(255,0,0));
+    hpWind = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(255,0,0));
     #endif
 
-    hpWindThick = (HPEN)CreatePen(PS_SOLID, 4*InfoBoxLayout::scale,
+    hpWindThick = (HPEN)CreatePen(PS_SOLID, IBLSCALE(4),
 				  RGB(255,220,220));
 
-    hpBearing = (HPEN)CreatePen(PS_SOLID, 2*InfoBoxLayout::scale,
+    hpBearing = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2),
 				RGB(0,0,0));
-    hpBestCruiseTrack = (HPEN)CreatePen(PS_SOLID, 1*InfoBoxLayout::scale,
+    hpBestCruiseTrack = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
 					RGB(0,0,255));
     #if (MONOCHROME_SCREEN > 0)
-    hpCompass = (HPEN)CreatePen(PS_SOLID, 1*InfoBoxLayout::scale, RGB(0x00,0x00,0x00));
+    hpCompass = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0x00,0x00,0x00));
     //hpCompass = (HPEN)CreatePen(PS_SOLID, 1, RGB(0xff,0xff,0xff));
     #else
-    hpCompass = (HPEN)CreatePen(PS_SOLID, 1*InfoBoxLayout::scale, RGB(0xcf,0xcf,0xFF));
+    hpCompass = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xcf,0xcf,0xFF));
     #endif
-    hpThermalBand = (HPEN)CreatePen(PS_SOLID, 2*InfoBoxLayout::scale, RGB(0x40,0x40,0xFF));
-    hpThermalBandGlider = (HPEN)CreatePen(PS_SOLID, 2*InfoBoxLayout::scale, RGB(0x00,0x00,0x30));
+    hpThermalBand = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0x40,0x40,0xFF));
+    hpThermalBandGlider = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0x00,0x00,0x30));
 
-    hpFinalGlideBelow = (HPEN)CreatePen(PS_SOLID, 1*InfoBoxLayout::scale, RGB(0xFF,0xA0,0xA0));
-    hpFinalGlideAbove = (HPEN)CreatePen(PS_SOLID, 1*InfoBoxLayout::scale, RGB(0xA0,0xFF,0xA0));
+    hpFinalGlideBelow = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xFF,0xA0,0xA0));
+    hpFinalGlideAbove = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xA0,0xFF,0xA0));
 
-    hpSpeedSlow=(HPEN)CreatePen(PS_SOLID, 1*InfoBoxLayout::scale,
+    hpSpeedSlow=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
 				RGB(0xFF,0x00,0x00));
-    hpSpeedFast=(HPEN)CreatePen(PS_SOLID, 1*InfoBoxLayout::scale,
+    hpSpeedFast=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
 				RGB(0x00,0xFF,0x00));
 
-    hpMapScale = (HPEN)CreatePen(PS_SOLID, 1*InfoBoxLayout::scale,
+    hpMapScale = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
 				 RGB(0,0,0));
-    hpTerrainLine = (HPEN)CreatePen(PS_DASH, 1*InfoBoxLayout::scale,
+    hpTerrainLine = (HPEN)CreatePen(PS_DASH, IBLSCALE(1),
 				    RGB(0x30,0x30,0x30));
-    hpTerrainLineBg = (HPEN)CreatePen(PS_SOLID, 1*InfoBoxLayout::scale,
+    hpTerrainLineBg = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
 				      RGB(0xFF,0xFF,0xFF));
 
     #if (MONOCHROME_SCREEN > 0)
@@ -1086,7 +1099,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     hBmpMapScale = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_MAPSCALE_A));
 
-    hpCompassBorder = (HPEN)CreatePen(PS_SOLID, 3*InfoBoxLayout::scale,
+    hpCompassBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
 				      RGB(0xff,0xff,0xff));
     hBrushFlyingModeAbort = (HBRUSH)CreateSolidBrush(RGB(0xff,0x00,0x00));
 
@@ -1200,7 +1213,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     Xstart = LOWORD(lParam); Ystart = HIWORD(lParam);
     XstartScreen = Xstart;
     YstartScreen = Ystart;
-    GetLocationFromScreen(Xstart, Ystart);
+    Screen2LatLon(Xstart, Ystart);
     FullScreen();
     break;
 
@@ -1218,11 +1231,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 			     (YstartScreen-Y)*(YstartScreen-Y)))
       /InfoBoxLayout::scale;
 
-    GetLocationFromScreen(X, Y);
+    Screen2LatLon(X, Y);
 
     if (EnablePan && (distance>36)) {
-      PanX += Xstart-X;
-      PanY += Ystart-Y;
+      PanLongitude += Xstart-X;
+      PanLatitude  += Ystart-Y;
       RefreshMap();
       break; // disable picking when in pan mode
     } else {
@@ -1249,7 +1262,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       }
     }
     break;
-  case WM_KEYDOWN:
+#ifdef GNAV
+    case WM_KEYDOWN: // JMW was keyup
+#else
+    case WM_KEYUP: // JMW was keyup
+#endif
     if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
       if (InputEvents::processKey(wParam)) {
 	// TODO - change to debugging DoStatusMessage(TEXT("Event in default"));
@@ -1272,7 +1289,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 void MapWindow::ModifyMapScale(void) {
   // limit zoomed in so doesn't reach silly levels
   if (MapScale<0.05) {
-    MapScale = 0.5;
+    MapScale = 0.05;
   }
   MapScaleOverDistanceModify = MapScale/DISTANCEMODIFY;
   ResMapScaleOverDistanceModify =
@@ -1544,14 +1561,15 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     // draw wind vector at aircraft
     #if (ALTERNATEWINDVECTOR == 0)
-    if (!DerivedDrawInfo.Circling && (!EnablePan)) {
+    if (!EnablePan) {
       DrawWindAtAircraft(hdcDrawWindowBg, Orig, rc);
     }
     #endif
 
-
     #if (ALTERNATEWINDVECTOR == 1)
-    DrawWindAtAircraft2(hdcDrawWindowBg, Orig, rc);
+    if (!EnablePan) {
+      DrawWindAtAircraft2(hdcDrawWindowBg, Orig, rc);
+    }
     #endif
 
     if (EnableFLARMDisplay)
@@ -1589,9 +1607,9 @@ void MapWindow::RenderMapWindow(  RECT rc)
   DrawCompass(hdcDrawWindow, rc);
 
   #if (ALTERNATEWINDVECTOR == 0)
-  if (DerivedDrawInfo.Circling || EnablePan) {
-    DrawWind(hdcDrawWindow, Orig, rc); // JMW shouldn't need Orig here
-  }
+  //  if (DerivedDrawInfo.Circling || EnablePan) {
+  //    DrawWind(hdcDrawWindow, Orig, rc); // JMW shouldn't need Orig here
+  //  }
   #endif
 
   DrawFlightMode(hdcDrawWindow, rc);
@@ -1680,6 +1698,11 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   //////
 
   bool first = true;
+
+  for (int i=0; i<AIRSPACECLASSCOUNT; i++) {
+    hAirspacePens[i] =
+      CreatePen(PS_SOLID, IBLSCALE(2), Colours[iAirspaceColour[i]]);
+  }
 
   while (!CLOSETHREAD)
   {
@@ -1891,8 +1914,8 @@ void MapWindow::DrawBitmapX(HDC hdc, int x, int y,
 			    DWORD mode) {
 #if (WINDOWSPC>0)
   StretchBlt(hdc, x, y,
-	     sizex*InfoBoxLayout::scale,
-	     sizey*InfoBoxLayout::scale,
+	     IBLSCALE(sizex),
+	     IBLSCALE(sizey),
 	     source,
 	     offsetx, offsety, sizex, sizey,
 	     mode);
@@ -1907,13 +1930,13 @@ void MapWindow::DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h) {
   SelectObject(hDCTemp, h);
 
   DrawBitmapX(hdc,
-	      sc.x-5*InfoBoxLayout::scale,
-	      sc.y-5*InfoBoxLayout::scale,
+	      sc.x-IBLSCALE(5),
+	      sc.y-IBLSCALE(5),
 	      10,10,
     hDCTemp,0,0,SRCPAINT);
   DrawBitmapX(hdc,
-	      sc.x-5*InfoBoxLayout::scale,
-	      sc.y-5*InfoBoxLayout::scale,
+	      sc.x-IBLSCALE(5),
+	      sc.y-IBLSCALE(5),
 	      10,10,
 	      hDCTemp,10,0,SRCAND);
 }
@@ -1933,17 +1956,15 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
   if (!extGPSCONNECT) {
     SelectObject(hDCTemp,hGPSStatus2);
     DrawBitmapX(hDC,
-		rc.left+2*InfoBoxLayout::scale,
-		rc.bottom+(Appearance.GPSStatusOffset.y-22)
-		*InfoBoxLayout::scale,
+		rc.left+IBLSCALE(2),
+		rc.bottom+IBLSCALE(Appearance.GPSStatusOffset.y-22),
 		20, 20,
 		hDCTemp,
 		0, 0, SRCAND);
 
     TextInBox(hDC, gettext(gpswarningtext1),
-	      rc.left+24*InfoBoxLayout::scale,
-	      rc.bottom+(Appearance.GPSStatusOffset.y-19)
-	      *InfoBoxLayout::scale,
+	      rc.left+IBLSCALE(24),
+	      rc.bottom+IBLSCALE(Appearance.GPSStatusOffset.y-19),
 	      0, TextInBoxMode);
 
   } else
@@ -1951,17 +1972,16 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
       SelectObject(hDCTemp,hGPSStatus1);
 
       DrawBitmapX(hDC,
-		  rc.left+2*InfoBoxLayout::scale,
-		  rc.bottom+(Appearance.GPSStatusOffset.y-22)
-		  *InfoBoxLayout::scale,
+		  rc.left+IBLSCALE(2),
+		  rc.bottom+IBLSCALE(Appearance.GPSStatusOffset.y-22),
 		  20, 20,
 		  hDCTemp,
 		  0, 0, SRCAND);
 
       TextInBox(hDC, gettext(gpswarningtext2),
-		rc.left+24*InfoBoxLayout::scale,
+		rc.left+IBLSCALE(24),
 		rc.bottom+
-		(Appearance.GPSStatusOffset.y-19)*InfoBoxLayout::scale,
+		IBLSCALE(Appearance.GPSStatusOffset.y-19),
 		0, TextInBoxMode);
 
     }
@@ -2003,19 +2023,15 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
       }
       //changed draw mode & icon for higher opacity 12aug -st
       DrawBitmapX(hdc,
-		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
-		  *InfoBoxLayout::scale,
-		  rc.bottom+(-7-3+Appearance.FlightModeOffset.y)
-		  *InfoBoxLayout::scale,
+		  rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
+		  rc.bottom+IBLSCALE(-7-3+Appearance.FlightModeOffset.y),
 		  7,7,
 		  hDCTemp,
 		  0,0,SRCPAINT);
 
       DrawBitmapX(hdc,
-		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
-		  *InfoBoxLayout::scale,
-		  rc.bottom+(-7-3+Appearance.FlightModeOffset.y)
-		  *InfoBoxLayout::scale,
+		  rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
+		  rc.bottom+IBLSCALE(-7-3+Appearance.FlightModeOffset.y),
 		  7,7,
 		  hDCTemp,
 		  7,0,SRCAND);
@@ -2046,19 +2062,15 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
     offset -= 24;
 
       DrawBitmapX(hdc,
-		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
-		  *InfoBoxLayout::scale,
-		  rc.bottom+(-20-3+Appearance.FlightModeOffset.y)
-		  *InfoBoxLayout::scale,
+		  rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
+		  rc.bottom+IBLSCALE(-20-3+Appearance.FlightModeOffset.y),
 		  24,20,
 		  hDCTemp,
 		  0,0,SRCPAINT);
 
       DrawBitmapX(hdc,
-		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
-		  *InfoBoxLayout::scale,
-		  rc.bottom+(-20-3+Appearance.FlightModeOffset.y)
-		  *InfoBoxLayout::scale,
+		  rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
+		  rc.bottom+IBLSCALE(-20-3+Appearance.FlightModeOffset.y),
 		  24,20,
 		  hDCTemp,
 		  24,0,SRCAND);
@@ -2079,36 +2091,36 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
 
       SetPoint(0,
 	       Center.x,
-	       Center.y-4*InfoBoxLayout::scale);
+	       Center.y-IBLSCALE(4));
       SetPoint(1,
-	       Center.x-8*InfoBoxLayout::scale,
-	       Center.y+4*InfoBoxLayout::scale);
+	       Center.x-IBLSCALE(8),
+	       Center.y+IBLSCALE(4));
       SetPoint(2,
-	       Center.x+8*InfoBoxLayout::scale,
-	       Center.y+4*InfoBoxLayout::scale);
+	       Center.x+IBLSCALE(8),
+	       Center.y+IBLSCALE(4));
 
     } else if (DerivedDrawInfo.FinalGlide) {
 
       SetPoint(0,
 	       Center.x,
-	       Center.y+4*InfoBoxLayout::scale);
+	       Center.y+IBLSCALE(4));
       SetPoint(1,
-	       Center.x-8*InfoBoxLayout::scale,
-	       Center.y-4*InfoBoxLayout::scale);
+	       Center.x-IBLSCALE(8),
+	       Center.y-IBLSCALE(4));
       SetPoint(2,
-	       Center.x+8*InfoBoxLayout::scale,
-	       Center.y-4*InfoBoxLayout::scale);
+	       Center.x+IBLSCALE(8),
+	       Center.y-IBLSCALE(4));
     } else {
 
       SetPoint(0,
-	       Center.x+4*InfoBoxLayout::scale,
+	       Center.x+IBLSCALE(4),
 	       Center.y);
       SetPoint(1,
-	       Center.x-4*InfoBoxLayout::scale,
-	       Center.y+8*InfoBoxLayout::scale);
+	       Center.x-IBLSCALE(4),
+	       Center.y+IBLSCALE(8));
       SetPoint(2,
-	       Center.x-4*InfoBoxLayout::scale,
-	       Center.y-8*InfoBoxLayout::scale);
+	       Center.x-IBLSCALE(4),
+	       Center.y-IBLSCALE(8));
 
     }
 
@@ -2137,19 +2149,15 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
     //changed draw mode & icon for higher opacity 12aug -st
 
       DrawBitmapX(hdc,
-		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
-		  *InfoBoxLayout::scale,
-		  rc.bottom+(-20-3+Appearance.FlightModeOffset.y)
-		  *InfoBoxLayout::scale,
+		  rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
+		  rc.bottom+IBLSCALE(-20-3+Appearance.FlightModeOffset.y),
 		  24,20,
 		  hDCTemp,
 		  0,0,SRCPAINT);
 
       DrawBitmapX(hdc,
-		  rc.right+(offset-3+Appearance.FlightModeOffset.x)
-		  *InfoBoxLayout::scale,
-		  rc.bottom+(-20-3+Appearance.FlightModeOffset.y)
-		  *InfoBoxLayout::scale,
+		  rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
+		  rc.bottom+IBLSCALE(-20-3+Appearance.FlightModeOffset.y),
 		  24,20,
 		  hDCTemp,
 		  24,0,SRCAND);
@@ -2259,14 +2267,14 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
       {
 
         DrawBitmapX(hdc,
-		    WayPointList[i].Screen.x-10*InfoBoxLayout::scale,
-		    WayPointList[i].Screen.y-10*InfoBoxLayout::scale,
+		    WayPointList[i].Screen.x-IBLSCALE(10),
+		    WayPointList[i].Screen.y-IBLSCALE(10),
 		    20,20,
 		    hDCTemp,0,0,SRCPAINT);
 
         DrawBitmapX(hdc,
-		    WayPointList[i].Screen.x-10*InfoBoxLayout::scale,
-		    WayPointList[i].Screen.y-10*InfoBoxLayout::scale,
+		    WayPointList[i].Screen.x-IBLSCALE(10),
+		    WayPointList[i].Screen.y-IBLSCALE(10),
 		    20,20,
 		    hDCTemp,20,0,SRCAND);
       }
@@ -2946,34 +2954,29 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 }
 
 
-POINT Orig_Screen;
-
-
-// JMW TODO: This should have orig saved so it's faster
-// actually, orig gets calculated with displayorientation everywhere
-// and it is inefficient.
 // TODO: Optimise
 // RETURNS Longitude, Latitude!
 
-void MapWindow::GetLocationFromScreen(double &X, double &Y)
+void MapWindow::Screen2LatLon(double &X, double &Y)
 {
-  X = (X-Orig_Screen.x)/DrawScale;
-  Y = (Y-Orig_Screen.y)/DrawScale;
-  rotate(X,Y,DisplayAngle);
-  Y = (PanYr)-Y;
-  X /= fastcosine(Y);
-  X += PanXr;
+  X-= Orig_Screen.x;
+  Y-= Orig_Screen.y;
+  rotatescale(X,Y,DisplayAngle, 1.0/DrawScale);
+  Y = PanLatitude-Y;
+  X = PanLongitude + X*invfastcosine(Y);
+  // JMW pan
 }
 
-void MapWindow::GetLocationFromScreen(float &X, float &Y)
+void MapWindow::Screen2LatLon(float &X, float &Y)
 {
-  X = (X-Orig_Screen.x)/(float)DrawScale;
-  Y = (Y-Orig_Screen.y)/(float)DrawScale;
-  frotate(X,Y,(float)DisplayAngle);
-  Y = (float)PanYr-Y;
-  X /= ffastcosine(Y);
-  X += (float)PanXr;
+  X -= Orig_Screen.x;
+  Y -= Orig_Screen.y;
+  frotatescale(X,Y,(float)DisplayAngle,(float)(1.0/(DrawScale)));
+  Y = (float)PanLatitude-Y;
+  X = (float)PanLongitude + X*(float)invfastcosine(Y);
+  // JMW pan
 }
+
 
 double MapWindow::GetApproxScreenRange() {
   return (MapScale * max(MapRectBig.right-MapRectBig.left,
@@ -3298,8 +3301,8 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
 
   if (Appearance.CompassAppearance == apCompassDefault){
 
-    Start.y = 19*InfoBoxLayout::scale+rc.top;
-    Start.x = rc.right - 19*InfoBoxLayout::scale;
+    Start.y = IBLSCALE(19)+rc.top;
+    Start.x = rc.right - IBLSCALE(19);
 
     if (EnableVarioGauge && MapRectBig.right == rc.right)
         Start.x -= InfoBoxLayout::ControlWidth;
@@ -3352,8 +3355,8 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
       Arrow[4].x  = 0;
       Arrow[4].y  = -11;
 
-      Start.y = rc.top + 10*InfoBoxLayout::scale;
-      Start.x = rc.right - 11*InfoBoxLayout::scale;
+      Start.y = rc.top + IBLSCALE(10);
+      Start.x = rc.right - IBLSCALE(11);
       if (EnableVarioGauge && MapRectBig.right == rc.right)
         Start.x -= InfoBoxLayout::ControlWidth;
 
@@ -3396,24 +3399,20 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
 
 void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 {
-  unsigned i;
-  POINT *pt = NULL;
+  unsigned int i;
 
-  COLORREF whitecolor = RGB(0xff,0xff, 0xff);
+  COLORREF whitecolor = RGB(0xff,0xff,0xff);
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
 
   SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
+  SetBkColor(hDCTemp, whitecolor);
 
   SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
   SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
   Rectangle(hDCTemp,rc.left,rc.top,rc.right,rc.bottom);
 
-  if (bAirspaceBlackOutline) {
-    SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
-  } else {
-    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
-  }
-
+  // draw without border
+  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
   for(i=0;i<NumberOfAirspaceCircles;i++)
   {
     if (AirspaceCircle[i].Visible) {
@@ -3421,14 +3420,9 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 	// this color is used as the black bit
 	SetTextColor(hDCTemp,
 		     Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
-	// this color is the transparent bit
-	SetBkColor(hDCTemp,
-		   whitecolor);
-
 	// get brush, can be solid or a 1bpp bitmap
 	SelectObject(hDCTemp,
 		     hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
-
 	Circle(hDCTemp,
 	       AirspaceCircle[i].Screen.x ,
 	       AirspaceCircle[i].Screen.y ,
@@ -3436,7 +3430,6 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
       }
     }
   }
-
   /////////
   for(i=0;i<NumberOfAirspaceAreas;i++)
   {
@@ -3445,30 +3438,45 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
       // this color is used as the black bit
       SetTextColor(hDCTemp,
 		   Colours[iAirspaceColour[AirspaceArea[i].Type]]);
-      // this color is the transparent bit
-      SetBkColor(hDCTemp,
-		 whitecolor);
-
       SelectObject(hDCTemp,
 		   hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
-      // test only!
-      SelectObject(hDCTemp, hAirspacePens[AirspaceArea[i].Type]);
-      Polygon(hDCTemp,pt,AirspaceArea[i].NumPoints);
-
-      Polygon(hDCTemp,AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
+      Polygon(hDCTemp,
+	      AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
 	      AirspaceArea[i].NumPoints);
-
     }
   }
 
-  // restore original color
-  SetTextColor(hDCTemp, origcolor);
+  ////////// draw it again, just the outlines
+  SelectObject(hDCTemp, GetStockObject(HOLLOW_BRUSH));
+  if (bAirspaceBlackOutline) {
+    SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+  } else {
+    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  }
+  for(i=0;i<NumberOfAirspaceCircles;i++)
+  {
+    if (AirspaceCircle[i].Visible) {
+      {
+	SelectObject(hDCTemp, hAirspacePens[AirspaceCircle[i].Type]);
+	Circle(hDCTemp,
+	       AirspaceCircle[i].Screen.x ,
+	       AirspaceCircle[i].Screen.y ,
+	       AirspaceCircle[i].ScreenR ,rc);
+      }
+    }
+  }
+  /////////
+  for(i=0;i<NumberOfAirspaceAreas;i++)
+  {
+    if(AirspaceArea[i].Visible) {
+      SelectObject(hDCTemp, hAirspacePens[AirspaceArea[i].Type]);
+      Polygon(hDCTemp,
+	      AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
+	      AirspaceArea[i].NumPoints);
+    }
+  }
 
   #if (WINDOWSPC<1)
-    // old version
-    //  BitBlt(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
-    //	   hDCTemp,rc.left,rc.top,SRCAND /*SRCAND*/);
-
   TransparentImage(hdcDrawWindowBg,
 		   rc.left,rc.top,
 		   rc.right-rc.left,rc.bottom-rc.top,
@@ -3479,7 +3487,6 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 		   );
 
   #else
-
   TransparentBlt(hdcDrawWindowBg,
 		   rc.left,rc.top,
 		   rc.right-rc.left,rc.bottom-rc.top,
@@ -3490,8 +3497,10 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 		   );
   #endif
 
-  if (pt != NULL)
-    free (pt);
+  // restore original color
+  SetTextColor(hDCTemp, origcolor);
+  SetBkMode(hDCTemp,OPAQUE);
+
 }
 
 
@@ -3616,12 +3625,12 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 
   // position of thermal band
   for (i=0; i<NUMTHERMALBUCKETS; i++) {
-    ThermalProfile[1+i].x = (7+iround((Wt[i]/Wtot)*TBSCALEX))*InfoBoxLayout::scale+rc.left;
+    ThermalProfile[1+i].x = (7+iround((Wt[i]/Wtot)*IBLSCALE(TBSCALEX)))+rc.left;
     ThermalProfile[1+i].y = 5+iround(TBSCALEY*(1.0-(mth/maxh)*(i)/NUMTHERMALBUCKETS))+rc.top;
   }
-  ThermalProfile[0].x = 7*InfoBoxLayout::scale+rc.left;
+  ThermalProfile[0].x = IBLSCALE(7)+rc.left;
   ThermalProfile[0].y = ThermalProfile[1].y;
-  ThermalProfile[NUMTHERMALBUCKETS+1].x = 7*InfoBoxLayout::scale+rc.left;
+  ThermalProfile[NUMTHERMALBUCKETS+1].x = IBLSCALE(7)+rc.left;
   ThermalProfile[NUMTHERMALBUCKETS+1].y = ThermalProfile[NUMTHERMALBUCKETS].y;
 
 
@@ -3630,7 +3639,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   GliderBand[1].y = GliderBand[0].y;
   GliderBand[2].y = GliderBand[0].y-4;
   GliderBand[3].y = GliderBand[0].y+4;
-  GliderBand[1].x = (7+iround((mc/Wtot)*TBSCALEX))*InfoBoxLayout::scale+rc.left;
+  GliderBand[1].x = (7+iround((mc/Wtot)*IBLSCALE(TBSCALEX)))+rc.left;
   GliderBand[2].x = GliderBand[1].x-4;
   GliderBand[3].x = GliderBand[1].x-4;
 
@@ -3782,12 +3791,14 @@ static int iSnailNext=0;
 void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 {
   int i, j;
-  int P1,P2;
+  SNAIL_POINT *P1,*P2;
   bool p1Visible = false;
   bool p2Visible = false;
   bool havep2 = true;
+  static BOOL lastCircling = FALSE;
   static float vmax= 5.0;
   static float vmin= -5.0;
+  static bool needcolour = true;
   float this_vmax=0;
   float this_vmin=0;
 
@@ -3796,19 +3807,24 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
   /////////////
 
-    float traildrift_lat;
-    float traildrift_lon;
+    if (DerivedDrawInfo.Circling != lastCircling) {
+      needcolour = true;
+    }
+    lastCircling = DerivedDrawInfo.Circling;
+
+    double traildrift_lat;
+    double traildrift_lon;
 
     bool dotraildrift = EnableTrailDrift && DerivedDrawInfo.Circling;
 
   if (dotraildrift) {
 
-    traildrift_lat = (float)(DrawInfo.Latitude
+    traildrift_lat = (DrawInfo.Latitude
 		      -FindLatitude(DrawInfo.Latitude,
 				    DrawInfo.Longitude,
 				    DerivedDrawInfo.WindBearing,
 				    DerivedDrawInfo.WindSpeed));
-    traildrift_lon = (float)(DrawInfo.Longitude
+    traildrift_lon = (DrawInfo.Longitude
 		      -FindLongitude(DrawInfo.Latitude,
 				     DrawInfo.Longitude,
 				     DerivedDrawInfo.WindBearing,
@@ -3829,24 +3845,18 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   int skipdivisor = ntrail/7;
   int skipborder = skipdivisor;
   int skiplevel=5;
-  int jlast;
   bool lastbroken = true;
+  POINT lastdrawn;
+
+  lastdrawn.x = 0;
+  lastdrawn.y = 0;
+
+  p2Visible = false; // force first one to skip
+
   for(i=1;i< ntrail;i++)
   {
     j= (TRAILSIZE+iSnailNext-ntrail+i)% TRAILSIZE;
-    if (i==1) {
-      jlast= j;
-    }
-
-    P1 = j; P2 = jlast;
-
-    if (i == 0) {
-      // set first point up
-      p2Visible = PointVisible(SnailTrail[P2].Longitude ,
-                               SnailTrail[P2].Latitude);
-    }
-
-    if (j%skiplevel!=0) {
+    if (i%skiplevel!=0) {
       continue;
     }
     if (i>skipborder) {
@@ -3854,8 +3864,10 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       skipborder+= skipdivisor;
     }
 
-    p1Visible = PointVisible(SnailTrail[P1].Longitude ,
-                             SnailTrail[P1].Latitude);
+    P1 = SnailTrail+j;
+
+    p1Visible = PointVisible(P1->Longitude ,
+                             P1->Latitude);
 
     // the line is invalid
     if ((!p2Visible) || (!p1Visible)) {
@@ -3866,6 +3878,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       // time if required
       havep2 = false;
       lastbroken = true;
+      P2 = P1;
       continue;
     }
 
@@ -3876,67 +3889,88 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
     if (!havep2) {
       if (dotraildrift) {
-	dt = max(0,(DrawInfo.Time-SnailTrail[P2].Time));
-	LatLon2Screen(SnailTrail[P2].Longitude+traildrift_lon*dt,
-		      SnailTrail[P2].Latitude+traildrift_lat*dt,
-		      SnailTrail[P2].Screen);
+	dt = max(0,(DrawInfo.Time-P2->Time));
+	LatLon2Screen(P2->Longitude+traildrift_lon*dt,
+		      P2->Latitude+traildrift_lat*dt,
+		      P2->Screen);
       } else {
-	LatLon2Screen(SnailTrail[P2].Longitude,
-		      SnailTrail[P2].Latitude,
-		      SnailTrail[P2].Screen);
+	LatLon2Screen(P2->Longitude,
+		      P2->Latitude,
+		      P2->Screen);
       }
       havep2 = true; // next time our p2 will be in screen coords
     }
 
     if (dotraildrift) {
-      dt = max(0,(DrawInfo.Time-SnailTrail[P1].Time));
-      LatLon2Screen(SnailTrail[P1].Longitude+traildrift_lon*dt,
-		    SnailTrail[P1].Latitude+traildrift_lat*dt,
-		    SnailTrail[P1].Screen);
+      dt = max(0,(DrawInfo.Time-P1->Time));
+      LatLon2Screen(P1->Longitude+traildrift_lon*dt,
+		    P1->Latitude+traildrift_lat*dt,
+		    P1->Screen);
     } else {
-      LatLon2Screen(SnailTrail[P1].Longitude,
-		    SnailTrail[P1].Latitude,
-		    SnailTrail[P1].Screen);
+      LatLon2Screen(P1->Longitude,
+		    P1->Latitude,
+		    P1->Screen);
     }
 
     // shuffle visibility along
     p2Visible = p1Visible;
 
+    if (abs(P1->Screen.y-lastdrawn.y)
+	+abs(P1->Screen.x-lastdrawn.x)<IBLSCALE(5)) {
+      continue;
+      // don't draw if very short line
+    }
+    lastdrawn = P1->Screen;
+
     // ok, we got this far, so draw the line
 
-    float cv = SnailTrail[P2].Vario;
+    // get the colour
+    short ipen;
+    if (needcolour || (P2->Colour == -1)) {
+      float cv = P2->Vario;
 
-    if (cv<this_vmin) {
-      this_vmin = cv;
-    }
-    if (cv>this_vmax) {
-      this_vmax = cv;
-    }
+      if (needcolour) {
+	if (cv<this_vmin) {
+	  this_vmin = cv;
+	}
+	if (cv>this_vmax) {
+	  this_vmax = cv;
+	}
+      }
 
-    if (cv<0) {
-      cv /= (-vmin); // JMW fixed bug here
+      if (cv<0) {
+	cv /= (-vmin); // JMW fixed bug here
+      } else {
+	cv /= vmax;
+      }
+
+      ipen = min(NUMSNAILCOLORS-1,(short)((cv+1.0)/2.0*NUMSNAILCOLORS));
+      if (needcolour) {
+	P2->Colour = -1; // force recolourisation again
+      } else {
+	P2->Colour = ipen;
+      }
     } else {
-      cv /= vmax;
+      ipen = P2->Colour;
     }
-
-    short ipen = min(NUMSNAILCOLORS-1,(short)((cv+1.0)/2.0*NUMSNAILCOLORS));
     SelectObject(hdc,hSnailPens[ipen]);
 
 #ifndef NOLINETO
     if (lastbroken) { // draw set cursor at P1
-      MoveToEx(hdc, SnailTrail[P1].Screen.x, SnailTrail[P1].Screen.y, NULL);
+      MoveToEx(hdc, P1->Screen.x, P1->Screen.y, NULL);
     } else {
-      LineTo(hdc, SnailTrail[P1].Screen.x, SnailTrail[P1].Screen.y);
+      LineTo(hdc, P1->Screen.x, P1->Screen.y);
     }
 #else
     if (!lastbroken) {
-      DrawSolidLine(hdc, SnailTrail[P1].Screen, SnailTrail[P2].Screen);
+      DrawSolidLine(hdc, P1->Screen, P2->Screen);
     }
 #endif
 
     lastbroken = false;
 
-    jlast = j;
+    P2 = P1;
+    havep2 = true; // next time our p2 will be in screen coords
   }
 
   // draw final point to glider
@@ -3946,9 +3980,12 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   }
 #endif
 
-  // autoscale colors (low pass filter)
-  vmin = min(this_vmin,-5)*0.2+0.8*vmin;
-  vmax = max(this_vmax,5)*0.2+0.8*vmax;
+  if (needcolour) {
+    // autoscale colors (low pass filter)
+    vmin = (float)(min(this_vmin,-5));
+    vmax = (float)(max(this_vmax,5));
+  }
+  needcolour = false;
 }
 
 
@@ -3991,13 +4028,15 @@ void MapWindow::DisplayAirspaceWarning(int Type, TCHAR *Name ,
 }
 
 
+////////////////////////////////////////////////////////////////////
+
 // TODO Optimise
 void MapWindow::LatLon2Screen(const float &lon, const float &lat, int &scX, int &scY) {
   float X, Y;
-  X = (float)DrawScale*((float)PanXr - lon)*ffastcosine(lat);
-  Y = (float)DrawScale*((float)PanYr  - lat);
+  X = ((float)PanLongitude-lon)*ffastcosine(lat);
+  Y = ((float)PanLatitude-lat);
 
-  frotate(X, Y, (float)DisplayAngle);
+  frotatescale(X, Y, (float)DisplayAngle, (float)DrawScale);
 
   scX = Orig_Screen.x - iround(X);
   scY = Orig_Screen.y + iround(Y);
@@ -4007,10 +4046,10 @@ void MapWindow::LatLon2Screen(const float &lon, const float &lat, int &scX, int 
 // TODO Optimise
 void MapWindow::LatLon2Screen(const double &lon, const double &lat, int &scX, int &scY) {
   double X, Y;
-  X = DrawScale*(PanXr - lon)*fastcosine(lat);
-  Y = DrawScale*(PanYr  - lat);
+  X = (PanLongitude-lon)*fastcosine(lat);
+  Y = (PanLatitude-lat);
 
-  rotate(X, Y, DisplayAngle );
+  rotatescale(X, Y, DisplayAngle, DrawScale);
 
   scX = Orig_Screen.x - iround(X);
   scY = Orig_Screen.y + iround(Y);
@@ -4019,30 +4058,31 @@ void MapWindow::LatLon2Screen(const double &lon, const double &lat, int &scX, in
 
 void MapWindow::LatLon2Screen(const double &lon, const double &lat, POINT &sc) {
   double X, Y;
-  X = DrawScale*(PanXr - lon)*fastcosine(lat);
-  Y = DrawScale*(PanYr  - lat);
+  X = (PanLongitude-lon)*fastcosine(lat);
+  Y = (PanLatitude-lat);
 
-  rotate(X, Y, DisplayAngle );
+  rotatescale(X, Y, DisplayAngle, DrawScale );
 
   sc.x = Orig_Screen.x - iround(X);
   sc.y = Orig_Screen.y + iround(Y);
 }
+
+////////////////////////////////////////////////////////////////////////
 
 
 void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
   circ.Visible = false;
   if (iAirspaceMode[circ.Type]%2 == 1)
     if(CheckAirspaceAltitude(circ.Base.Altitude,
-			     circ.Top.Altitude))
-      {
-	if (msRectOverlap(&circ.bounds, &screenbounds_latlon)) {
-	  circ.Visible = true;
-	  LatLon2Screen(circ.Longitude,
-			circ.Latitude,
-			circ.Screen);
-	  circ.ScreenR = iround(circ.Radius*ResMapScaleOverDistanceModify);
-	}
+			     circ.Top.Altitude)) {
+      if (msRectOverlap(&circ.bounds, &screenbounds_latlon)) {
+	circ.Visible = true;
+	LatLon2Screen(circ.Longitude,
+		      circ.Latitude,
+		      circ.Screen);
+	circ.ScreenR = iround(circ.Radius*ResMapScaleOverDistanceModify);
       }
+    }
 }
 
 void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
@@ -4087,10 +4127,11 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
   // compute lat lon extents of visible screen
   screenbounds_latlon = GetRectBounds(rc);
 
+  if (!EnablePan) {
+    PanLongitude = DrawInfo.Longitude;
+    PanLatitude = DrawInfo.Latitude;
+  }
   Orig_Screen = Orig;
-
-  PanXr = DrawInfo.Longitude + PanX;
-  PanYr = DrawInfo.Latitude + PanY;
 
   LatLon2Screen(DrawInfo.Longitude,
 		DrawInfo.Latitude,
@@ -4131,23 +4172,9 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 
   if(TrailActive)
   {
-
     iSnailNext = SnailNext;
     // set this so that new data doesn't arrive between calculating
     // this and the screen updates
-
-    /* don't bother doing this now! we are checking visibility from
-       the lat/long.... faster
-    for(i=0;i<TRAILSIZE;i++)
-    {
-      LatLon2Screen(SnailTrail[i].Longitude,
-        SnailTrail[i].Latitude, scx, scy);
-
-      SnailTrail[i].Screen.x = scx;
-      SnailTrail[i].Screen.y = scy;
-    }
-    */
-
   }
 
   for(i=0;i<MAXTASKPOINTS-1;i++)

@@ -818,6 +818,7 @@ static void FindAirspaceCircleBounds() {
     ScanAirspaceCircleBounds(i,90);
     ScanAirspaceCircleBounds(i,180);
     ScanAirspaceCircleBounds(i,270);
+    AirspaceCircle[i].WarningLevel = 0; // clear warnings to initialise
   }
 }
 
@@ -845,13 +846,9 @@ static void FindAirspaceAreaBounds() {
         AirspaceArea[i].bounds.maxy = max(AirspacePoint[j].Latitude,
                                           AirspaceArea[i].bounds.maxy);
       }
-
-
     }
+    AirspaceArea[i].WarningLevel = 0; // clear warnings to initialise
   }
-
-
-
 }
 
 
@@ -929,55 +926,65 @@ void ReadAirspace(void)
 }
 
 
+
+
+
+double RangeAirspaceCircle(const double &longitude,
+			   const double &latitude,
+			   int i) {
+  return Distance(latitude,longitude,
+		  AirspaceCircle[i].Latitude,
+		  AirspaceCircle[i].Longitude)
+    -AirspaceCircle[i].Radius;
+}
+
+
+bool InsideAirspaceCircle(const double &longitude,
+			    const double &latitude,
+			    int i) {
+  if ((latitude> AirspaceCircle[i].bounds.miny)&&
+      (latitude< AirspaceCircle[i].bounds.maxy)&&
+      (longitude> AirspaceCircle[i].bounds.minx)&&
+      (longitude< AirspaceCircle[i].bounds.maxx)) {
+
+    if (RangeAirspaceCircle(longitude, latitude, i)<0) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
 int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
 {
   unsigned i;
   int NearestIndex = 0;
-  double Dist;
 
   if(NumberOfAirspaceCircles == 0)
     {
       return -1;
     }
 
-  for(i=0;i<NumberOfAirspaceCircles;i++)
-    {
-      if (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]< 2) {
-	// don't want warnings for this one
-	continue;
-      }
-      if(AirspaceCircle[i].Visible || (!visibleonly))
-	{
-	  if (
-	      (Latitude> AirspaceCircle[i].bounds.miny)&&
-	      (Latitude< AirspaceCircle[i].bounds.maxy)&&
-	      (Longitude> AirspaceCircle[i].bounds.minx)&&
-	      (Longitude< AirspaceCircle[i].bounds.maxx)
-	      )
-	    {
-
-	      if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
-				       AirspaceCircle[i].Top.Altitude))
-		{
-		  Dist = Distance(Latitude,
-				  Longitude,
-				  AirspaceCircle[i].Latitude,
-				  AirspaceCircle[i].Longitude);
-		  if(Dist < AirspaceCircle[i].Radius )
-		    {
-		      return i;
-		    }
-		}
-	    }
-	}
+  for(i=0;i<NumberOfAirspaceCircles;i++) {
+    if (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]< 2) {
+      // don't want warnings for this one
+      continue;
     }
+    if(AirspaceCircle[i].Visible || (!visibleonly)) {
+      if(CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
+			       AirspaceCircle[i].Top.Altitude)) {
+	if (InsideAirspaceCircle(Longitude,Latitude,i)) {
+	  return i;
+	}
+      }
+    }
+  }
   return -1;
 }
 
 
 BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
 {
-
   switch (AltitudeMode)
     {
     case ALLON : return TRUE;
@@ -1063,6 +1070,31 @@ wn_PnPoly( AIRSPACE_POINT P, AIRSPACE_POINT* V, int n )
 //===================================================================
 
 
+bool InsideAirspaceArea(const double &longitude,
+			  const double &latitude,
+			  int i) {
+  AIRSPACE_POINT thispoint;
+  thispoint.Longitude = longitude;
+  thispoint.Latitude = latitude;
+
+  // first check if point is within bounding box
+  if (
+      (latitude> AirspaceArea[i].bounds.miny)&&
+      (latitude< AirspaceArea[i].bounds.maxy)&&
+      (longitude> AirspaceArea[i].bounds.minx)&&
+      (longitude< AirspaceArea[i].bounds.maxx)
+      ) {
+    // it is within, so now do detailed polygon test
+    if (wn_PnPoly(thispoint,
+		  &AirspacePoint[AirspaceArea[i].FirstPoint],
+		  AirspaceArea[i].NumPoints-1) != 0) {
+      // we are inside the i'th airspace area
+      return true;
+    }
+  }
+  return false;
+}
+
 
 int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 {
@@ -1072,43 +1104,20 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
     {
       return -1;
     }
-
-  AIRSPACE_POINT thispoint;
-
-  thispoint.Longitude = Longitude;
-  thispoint.Latitude = Latitude;
-
-  for(i=0;i<NumberOfAirspaceAreas;i++)
-    {
-      if (MapWindow::iAirspaceMode[AirspaceArea[i].Type]< 2) {
-	// don't want warnings for this one
-	continue;
-      }
-      if(AirspaceArea[i].Visible || (!visibleonly))
-	{
-	  if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
-				   AirspaceArea[i].Top.Altitude))
-	    {
-
-              // first check if point is within bounding box
-              if (
-                  (Latitude> AirspaceArea[i].bounds.miny)&&
-                  (Latitude< AirspaceArea[i].bounds.maxy)&&
-                  (Longitude> AirspaceArea[i].bounds.minx)&&
-                  (Longitude< AirspaceArea[i].bounds.maxx)
-                  )
-                {
-                  // it is within, so now do detailed polygon test
-                  if (wn_PnPoly(thispoint,
-                                &AirspacePoint[AirspaceArea[i].FirstPoint],
-                                AirspaceArea[i].NumPoints-1) != 0) {
-                    // we are inside the i'th airspace area
-                    return i;
-                  }
-                }
-	    }
-	}
+  for(i=0;i<NumberOfAirspaceAreas;i++) {
+    if (MapWindow::iAirspaceMode[AirspaceArea[i].Type]< 2) {
+      // don't want warnings for this one
+      continue;
     }
+    if(AirspaceArea[i].Visible || (!visibleonly)) {
+      if(CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
+			       AirspaceArea[i].Top.Altitude)) {
+	if (InsideAirspaceArea(Longitude,Latitude,i)) {
+	  return i;
+	}
+      }
+    }
+  }
   // not inside any airspace
   return -1;
 }
@@ -1120,7 +1129,6 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 /////////////////////////////////////////////////////////////////////////////////
 
 
-
 int FindNearestAirspaceCircle(double longitude, double latitude,
 			      double *nearestdistance, double *nearestbearing,
 			      double *height=NULL)
@@ -1129,57 +1137,41 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
   int NearestIndex = 0;
   double Dist;
 
-  if(NumberOfAirspaceCircles == 0)
-    {
+  if(NumberOfAirspaceCircles == 0) {
       return -1;
+  }
+
+  for(i=0;i<NumberOfAirspaceCircles;i++) {
+    if (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]< 2) {
+      // don't want warnings for this one
+      continue;
     }
 
-  for(i=0;i<NumberOfAirspaceCircles;i++)
-    {
-      if (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]< 2) {
-	// don't want warnings for this one
-	continue;
+    bool altok;
+    if (height) {
+      altok = ((*height>AirspaceCircle[i].Base.Altitude)&&
+	       (*height<AirspaceCircle[i].Top.Altitude));
+    } else {
+      altok = CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
+				    AirspaceCircle[i].Top.Altitude)==TRUE;
+    }
+    if(altok) {
+
+      Dist = RangeAirspaceCircle(longitude, latitude, i);
+
+      if(Dist < *nearestdistance ) {
+	  *nearestdistance = Dist;
+	  *nearestbearing = Bearing(latitude,
+				    longitude,
+				    AirspaceCircle[i].Latitude,
+				    AirspaceCircle[i].Longitude);
+	  if (Dist<0) {
+	    // no need to continue search, inside
+	    return i;
+	  }
       }
-
-      if(AirspaceCircle[i].Visible || 1) // JMW this is a problem BUG?
-	{
-
-	  if (
-	      (latitude> AirspaceCircle[i].bounds.miny)&&
-	      (latitude< AirspaceCircle[i].bounds.maxy)&&
-	      (longitude> AirspaceCircle[i].bounds.minx)&&
-	      (longitude< AirspaceCircle[i].bounds.maxx)
-	      )
-	    {
-
-	      Dist = Distance(latitude,longitude,
-			      AirspaceCircle[i].Latitude,
-			      AirspaceCircle[i].Longitude)
-		-AirspaceCircle[i].Radius;
-
-	      if(Dist < *nearestdistance )
-		{
-		  bool altok;
-
-		  if (height) {
-		    altok = ((*height>AirspaceCircle[i].Base.Altitude)&&
-			     (*height<AirspaceCircle[i].Top.Altitude));
-		  } else {
-		    altok = CheckAirspaceAltitude(AirspaceCircle[i].Base.Altitude,
-						  AirspaceCircle[i].Top.Altitude)==TRUE;
-		  }
-		  if(altok) {
-		    *nearestdistance = Dist;
-		    *nearestbearing = Bearing(latitude,
-					      longitude,
-					      AirspaceCircle[i].Latitude,
-					      AirspaceCircle[i].Longitude);
-		    return i;
-		  }
-		}
-	    }
-	}
     }
+  }
   return -1;
 }
 
@@ -1302,7 +1294,7 @@ double ScreenCrossTrackError(double lon1, double lat1,
     // location of 'closest' point
     *lon4 = (v12x)*f+x1;
     *lat4 = (v12y)*f+y1;
-    MapWindow::GetLocationFromScreen(*lon4, *lat4);
+    MapWindow::Screen2LatLon(*lon4, *lat4);
   } else {
     *lon4 = lon1;
     *lat4 = lat1;
@@ -1313,13 +1305,46 @@ double ScreenCrossTrackError(double lon1, double lat1,
 }
 
 
-int FindNearestAirspaceArea(double longitude, double latitude,
-			    double *nearestdistance, double *nearestbearing,
+double RangeAirspaceArea(const double &longitude,
+			 const double &latitude,
+			 int i, double *bearing) {
+
+  // find nearest distance to line segment
+  unsigned int j;
+  double dist=100000;
+  double nearestdistance = dist;
+  double nearestbearing = *bearing;
+  double lon4, lat4;
+  for (j=0; j<AirspaceArea[i].NumPoints-1; j++) {
+    dist = ScreenCrossTrackError(
+				 AirspacePoint[AirspaceArea[i].FirstPoint+j].Longitude,
+				 AirspacePoint[AirspaceArea[i].FirstPoint+j].Latitude,
+				 AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Longitude,
+				 AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Latitude,
+				 longitude, latitude,
+				 &lon4, &lat4);
+    if (dist<nearestdistance) {
+      nearestdistance = dist;
+      nearestbearing = Bearing(latitude, longitude,
+			       lat4, lon4);
+    }
+  }
+  *bearing = nearestbearing;
+  return nearestdistance;
+}
+
+
+
+
+
+int FindNearestAirspaceArea(double longitude,
+			    double latitude,
+			    double *nearestdistance,
+			    double *nearestbearing,
 			    double *height=NULL)
 {
   unsigned i;
   int ifound = -1;
-  double lon4, lat4;
   bool inside=false;
   // location of point the target is abeam along line in airspace area
 
@@ -1328,92 +1353,37 @@ int FindNearestAirspaceArea(double longitude, double latitude,
       return -1;
     }
 
-  AIRSPACE_POINT thispoint;
-
-  thispoint.Longitude = longitude;
-  thispoint.Latitude = latitude;
-
-  for(i=0;i<NumberOfAirspaceAreas;i++)
-    {
-      if (MapWindow::iAirspaceMode[AirspaceArea[i].Type]< 2) {
-	// don't want warnings for this one
-	continue;
-      }
-
-      // JMW is this a bug?
-      // surely we should check it whether it is visible or not
-      // in almost all cases it will be, so ok.
-      if(AirspaceArea[i].Visible || 1)
-	{
-	  bool altok;
-
-	  if (!height) {
-	    altok = CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
-					  AirspaceArea[i].Top.Altitude)==TRUE;
-	  } else {
-	    altok = ((*height<AirspaceArea[i].Top.Altitude)&&
-		     (*height>AirspaceArea[i].Base.Altitude));
-	  }
-
-	  if(altok)
-	    {
-
-	      inside = false;
-
-              // first check if point is within bounding box
-              if (
-                  (latitude> AirspaceArea[i].bounds.miny)&&
-                  (latitude< AirspaceArea[i].bounds.maxy)&&
-                  (longitude> AirspaceArea[i].bounds.minx)&&
-                  (longitude< AirspaceArea[i].bounds.maxx)
-                  )
-                {
-                  // it is within, so now do detailed polygon test
-                  if (wn_PnPoly(thispoint,
-                                &AirspacePoint[AirspaceArea[i].FirstPoint],
-                                AirspaceArea[i].NumPoints-1) != 0) {
-                    // we are inside the i'th airspace area
-
-		    inside = true;
-
-                  }
-                }
-
-	      // find nearest distance to line segment
-	      unsigned int j;
-	      double dist;
-	      for (j=0; j<AirspaceArea[i].NumPoints-1; j++) {
-
-		dist =
-		  ScreenCrossTrackError(
-		AirspacePoint[AirspaceArea[i].FirstPoint+j].Longitude,
-		AirspacePoint[AirspaceArea[i].FirstPoint+j].Latitude,
-		AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Longitude,
-		AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Latitude,
-		longitude, latitude,
-		&lon4, &lat4);
-
-		if ((dist< *nearestdistance)
-		    || ((j==0)&&(inside))) {
-		      // found new closest, or if we are inside,
-		      // ignore previous nearest airspace since it
-		      // is irrelevant now
-		  *nearestdistance = dist;
-		  *nearestbearing = Bearing(latitude, longitude,
-					    lat4, lon4);
-		  ifound = i;
-		}
-	      }
-
-	      if (inside) {
-		// no need to continue the search
-		*nearestdistance = -(*nearestdistance);
-		return i;
-	      }
-
-	    }
-	}
+  for(i=0;i<NumberOfAirspaceAreas;i++) {
+    if (MapWindow::iAirspaceMode[AirspaceArea[i].Type]< 2) {
+      // don't want warnings for this one
+      continue;
     }
+    bool altok;
+    if (!height) {
+      altok = CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
+				    AirspaceArea[i].Top.Altitude)==TRUE;
+    } else {
+      altok = ((*height<AirspaceArea[i].Top.Altitude)&&
+	       (*height>AirspaceArea[i].Base.Altitude));
+    }
+    if(altok) {
+      inside = InsideAirspaceArea(longitude, latitude, i);
+      double dist, bearing;
+
+      dist = RangeAirspaceArea(longitude, latitude, i, &bearing);
+
+      if (dist< *nearestdistance) {
+	*nearestdistance = dist;
+	*nearestbearing = bearing;
+	ifound = i;
+      }
+      if (inside) {
+	// no need to continue the search
+	*nearestdistance = -(*nearestdistance);
+	return i;
+      }
+    }
+  }
   // not inside any airspace, so return closest one
   return ifound;
 }
@@ -1578,4 +1548,9 @@ void ScanAirspaceLine(double *lats, double *lons, double *heights,
   } // finished scanning areas
 
 }
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+
 

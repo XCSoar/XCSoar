@@ -2743,6 +2743,44 @@ void WndListFrame::RedrawScrolled(bool all) {
 }
 
 
+int WndListFrame::RecalculateIndices(bool bigscroll) {
+  mListInfo.ScrollIndex = max(0,
+			      min(mListInfo.ScrollIndex,
+				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
+  if (mListInfo.ItemIndex >= mListInfo.BottomIndex){
+
+    if ((mListInfo.ItemIndex+mListInfo.ScrollIndex<
+	 mListInfo.ItemCount)
+	&&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
+
+      mListInfo.ScrollIndex++;
+      mListInfo.ItemIndex = mListInfo.BottomIndex-1;
+      // JMW scroll
+      RedrawScrolled(true);
+      return(0);
+    } else {
+      mListInfo.ItemIndex = mListInfo.BottomIndex-1;
+      return(1);
+    }
+  }
+  if (mListInfo.ItemIndex < 0){
+
+    mListInfo.ItemIndex = 0;
+    // JMW scroll
+    if (mListInfo.ScrollIndex>0) {
+      mListInfo.ScrollIndex--;
+      RedrawScrolled(true);
+      return(0);
+    } else {
+      // only return if no more scrolling left to do
+      return(1);
+    }
+  }
+  RedrawScrolled(bigscroll);
+  return (0);
+}
+
+
 int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lParam){
   switch (wParam){
   case VK_RETURN:
@@ -2752,46 +2790,27 @@ int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lPa
       return(0);
     } else
       return(1);
+    //#ifndef GNAV
+  case VK_LEFT:
+    if ((mListInfo.ScrollIndex>0)
+	&&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
+      mListInfo.ScrollIndex -= mListInfo.ItemInPageCount;
+    }
+    return RecalculateIndices(true);
+  case VK_RIGHT:
+    if ((mListInfo.ItemIndex+mListInfo.ScrollIndex<
+	 mListInfo.ItemCount)
+	&&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
+      mListInfo.ScrollIndex += mListInfo.ItemInPageCount;
+    }
+    return RecalculateIndices(true);
+    //#endif
   case VK_DOWN:
     mListInfo.ItemIndex++;
-    if (mListInfo.ItemIndex >= mListInfo.BottomIndex){
-
-      if ((mListInfo.ItemIndex+mListInfo.ScrollIndex<
-	   mListInfo.ItemCount)
-	  &&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
-
-	mListInfo.ScrollIndex++;
-	mListInfo.ItemIndex = mListInfo.BottomIndex-1;
-	// JMW scroll
-	RedrawScrolled(true);
-	return(0);
-      } else {
-	mListInfo.ItemIndex = mListInfo.BottomIndex-1;
-	return(1);
-      }
-    }
-    RedrawScrolled(false);
-    return(0);
+    return RecalculateIndices(false);
   case VK_UP:
     mListInfo.ItemIndex--;
-
-    if (mListInfo.ItemIndex < 0){
-
-      mListInfo.ItemIndex = 0;
-      // JMW scroll
-      if (mListInfo.ScrollIndex>0) {
-	mListInfo.ScrollIndex--;
-	RedrawScrolled(true);
-	return(0);
-      } else {
-	// only return if no more scrolling left to do
-	return(1);
-      }
-    }
-
-    RedrawScrolled(false);
-
-    return(0);
+    return RecalculateIndices(false);
   }
   return(1);
 

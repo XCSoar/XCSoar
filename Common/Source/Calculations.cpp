@@ -144,12 +144,12 @@ void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   SnailTrail[SnailNext].Longitude = (float)(Basic->Longitude);
   SnailTrail[SnailNext].Time = Basic->Time;
 
-  // JMW TODO: if circling, color according to 30s average?
   if (Basic->NettoVarioAvailable) {
     SnailTrail[SnailNext].Vario = (float)(Basic->NettoVario) ;
   } else {
     SnailTrail[SnailNext].Vario = (float)(Calculated->Vario) ;
   }
+  SnailTrail[SnailNext].Colour = -1; // need to have colour calculated
 
   SnailNext ++;
   SnailNext %= TRAILSIZE;
@@ -236,8 +236,6 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   } else {
     n = 1.0;
   }
-
-  // TODO: Stall warning
 
   // calculate sink rate of glider
 
@@ -348,8 +346,6 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     if (Calculated->Circling) {
       Calculated->STFMode = false;
     }
-    // TODO: Work out effect on maccready speed to be in speed error
-    // and the volume should be scaled by this.
   }
 
   // STF test
@@ -691,8 +687,6 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
             }
         }
       else if (AltLost < 0) {
-        // JMW added negative LD calculations TODO: TEST
-
         Calculated->LD = DistanceFlown / AltLost;
         if (Calculated->LD<-999) {
           Calculated->LD = 999;
@@ -731,7 +725,6 @@ void CruiseLD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
               Calculated->CruiseLD = 999;
             }
         }
-      // JMW added negative LD calculations TODO: TEST
       else if (AltLost <0) {
         Calculated->CruiseLD = DistanceFlown / AltLost;
         if(Calculated->CruiseLD< -999)
@@ -885,7 +878,6 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       LEFT = false;
     }
   }
-  // JMW TODO: switch flight modes if changing direction?
 
   LastTime = Basic->Time;
   LastTrack = Basic->TrackBearing;
@@ -919,7 +911,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 	// TODO InputEvents GCE - Move this to InputEvents
 	// Consider a way to take the CircleZoom and other logic
-	// into InputEvents instead
+	// into InputEvents instead?
+	// JMW: NO.  Core functionality must be built into the
+	// main program, unable to be overridden.
 	SwitchZoomClimb(true, LEFT);
 	InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
       }
@@ -1751,8 +1745,6 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 	}
       }
 
-      // JMW TODO: use instantaneous maccready here again to calculate
-      // dolphin speed to fly
       LegAltitude =
 	GlidePolar::MacCreadyAltitude(maccready,
 				      LegToGo,
@@ -1776,7 +1768,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 				   LegToGo);
 
         if (distancesoarable< LegToGo) {
-          // JMW TODO display terrain warning
+          // JMW TODO issue terrain warning (audio?)
           Calculated->TerrainWarningLatitude = lat;
           Calculated->TerrainWarningLongitude = lon;
 
@@ -2031,24 +2023,28 @@ void CalculateNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
-int AirspaceLastCircle =-1;
-int AirspaceLastArea =-1;
+//////////////////////////////////////////////
 
 bool ClearAirspaceWarnings(bool ack, bool allday) {
+  unsigned int i;
   if (ack) {
-    if (AirspaceLastCircle!= -1) {
-      AirspaceCircle[AirspaceLastCircle].Ack.AcknowledgementTime = GPS_INFO.Time;
-      if (allday) {
-		AirspaceCircle[AirspaceLastCircle].Ack.AcknowledgedToday = true;
+    for (i=0; i<NumberOfAirspaceCircles; i++) {
+      if (AirspaceCircle[i].WarningLevel>0) {
+	AirspaceCircle[i].Ack.AcknowledgementTime = GPS_INFO.Time;
+	if (allday) {
+	  AirspaceCircle[i].Ack.AcknowledgedToday = true;
+	}
+	AirspaceCircle[i].WarningLevel = 0;
       }
-      AirspaceLastCircle = -1;
     }
-    if (AirspaceLastArea!= -1) {
-      AirspaceArea[AirspaceLastArea].Ack.AcknowledgementTime = GPS_INFO.Time;
-      if (allday) {
-		AirspaceArea[AirspaceLastArea].Ack.AcknowledgedToday = true;
+    for (i=0; i<NumberOfAirspaceAreas; i++) {
+      if (AirspaceArea[i].WarningLevel>0) {
+	AirspaceArea[i].Ack.AcknowledgementTime = GPS_INFO.Time;
+	if (allday) {
+	  AirspaceArea[i].Ack.AcknowledgedToday = true;
+	}
+	AirspaceArea[i].WarningLevel = 0;
       }
-      AirspaceLastArea = -1;
     }
     return Message::Acknowledge(MSG_AIRSPACE);
   }
@@ -2058,36 +2054,63 @@ bool ClearAirspaceWarnings(bool ack, bool allday) {
 
 void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
-  int i;
+  unsigned int i;
   TCHAR szMessageBuffer[1024];
   TCHAR szTitleBuffer[1024];
   TCHAR text[1024];
+  bool inside;
 
   if(!AIRSPACEWARNINGS)
       return;
 
+  static bool next = false;
+
+  next = !next;
+  // every second time step, do predicted position rather than
+  // current position
+
+  double alt;
+  double lat;
+  double lon;
+
+  if (next) {
+    alt = Calculated->NextAltitude;
+    lat = Calculated->NextLatitude;
+    lon = Calculated->NextLongitude;
+  } else {
+    alt = Basic->Altitude;
+    lat = Basic->Latitude;
+    lon = Basic->Longitude;
+  }
+
   // JMW TODO: FindAirspaceCircle etc should sort results, return
   // the most critical or closest.
-  // TODO: It should also check against current position, not just next position.
 
-  i= FindAirspaceCircle(Calculated->NextLongitude,
-			Calculated->NextLatitude, false);
-  if(i != -1)
-    {
+  for (i=0; i<NumberOfAirspaceCircles; i++) {
+    inside = false;
 
-      if(i == AirspaceLastCircle)
-        {   // already being displayed
-          return;
-        }
-
-      if (AirspaceCircle[i].Ack.AcknowledgedToday) {
-	return;
+    if ((alt > AirspaceCircle[i].Base.Altitude )
+	&& (alt < AirspaceCircle[i].Top.Altitude)) {
+      inside = InsideAirspaceCircle(lon, lat, i);
+    }
+    if (inside) {
+      if (AirspaceCircle[i].WarningLevel>0) {
+	// already warned
+	continue;
       }
 
+      if (AirspaceCircle[i].Ack.AcknowledgedToday) {
+	continue;
+      }
       if ((AirspaceCircle[i].Ack.AcknowledgementTime!=0) &&
-	  ((GPS_INFO.Time-AirspaceCircle[i].Ack.AcknowledgementTime)<
+	  ((Basic->Time-AirspaceCircle[i].Ack.AcknowledgementTime)<
 	   AcknowledgementTime)) {
-	return;
+	continue;
+      }
+      if (next) {
+	AirspaceCircle[i].WarningLevel |= 1;
+      } else {
+	AirspaceCircle[i].WarningLevel |= 2;
       }
 
       MessageBeep(MB_ICONEXCLAMATION);
@@ -2099,47 +2122,59 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	       szTitleBuffer,szMessageBuffer);
 
       // clear previous warning if any
-      Message::Acknowledge(MSG_AIRSPACE);
+      // Message::Acknowledge(MSG_AIRSPACE);
       Message::AddMessage(5000, MSG_AIRSPACE, text);
 
-      if (AirspaceLastCircle != i) {
-	InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+      InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+
+    } else {
+      if (AirspaceCircle[i].WarningLevel>0) {
+	if (next) {
+	  if (AirspaceCircle[i].WarningLevel %2 == 1) {
+	    AirspaceCircle[i].WarningLevel -= 1;
+	  }
+	} else {
+	  if (AirspaceCircle[i].WarningLevel>1) {
+	    AirspaceCircle[i].WarningLevel -= 2;
+	  }
+	}
+	if (AirspaceCircle[i].WarningLevel == 0) {
+
+	  AirspaceCircle[i].Ack.AcknowledgementTime =
+	    Basic->Time-AcknowledgementTime;
+	  Message::Acknowledge(MSG_AIRSPACE);
+	  InputEvents::processGlideComputer(GCE_AIRSPACE_LEAVE);
+	}
       }
-
-      AirspaceLastCircle = i;
-      return;
     }
-  else
-    {
-      if (AirspaceLastCircle != -1) {
-	// left area, so re-set acknowledgement
-	AirspaceCircle[AirspaceLastCircle].Ack.AcknowledgementTime =
-	  GPS_INFO.Time-AcknowledgementTime;
+  }
 
-	Message::Acknowledge(MSG_AIRSPACE);
-	InputEvents::processGlideComputer(GCE_AIRSPACE_LEAVE);
+  // repeat process for areas
+
+  for (i=0; i<NumberOfAirspaceAreas; i++) {
+    inside = false;
+
+    if ((alt > AirspaceArea[i].Base.Altitude )
+	&& (alt < AirspaceArea[i].Top.Altitude)) {
+      inside = InsideAirspaceArea(lon, lat, i);
+    }
+    if (inside) {
+      if (AirspaceArea[i].WarningLevel>0) {
+	// already warned
+	continue;
       }
-      AirspaceLastCircle = -1;
-    }
-
-
-  i= FindAirspaceArea(Calculated->NextLongitude,
-		      Calculated->NextLatitude, false);
-  if(i != -1)
-    {
-      if(i == AirspaceLastArea)
-        {
-          return;
-        }
-
       if (AirspaceArea[i].Ack.AcknowledgedToday) {
-	return;
+	continue;
       }
-
       if ((AirspaceArea[i].Ack.AcknowledgementTime!=0) &&
-	  ((GPS_INFO.Time-AirspaceArea[i].Ack.AcknowledgementTime)<
+	  ((Basic->Time-AirspaceArea[i].Ack.AcknowledgementTime)<
 	   AcknowledgementTime)) {
-	return;
+	continue;
+      }
+      if (next) {
+	AirspaceArea[i].WarningLevel |= 1;
+      } else {
+	AirspaceArea[i].WarningLevel |= 2;
       }
 
       MessageBeep(MB_ICONEXCLAMATION);
@@ -2148,31 +2183,42 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 			  szMessageBuffer, szTitleBuffer );
 
       wsprintf(text,TEXT("AIRSPACE: %s\r\n%s"),
-	       szTitleBuffer,
-	       szMessageBuffer);
-      Message::Acknowledge(MSG_AIRSPACE);
-      Message::AddMessage(10000, MSG_AIRSPACE, text);
+	       szTitleBuffer,szMessageBuffer);
 
-      if (AirspaceLastArea != i) {
-	InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+      // clear previous warning if any
+      // Message::Acknowledge(MSG_AIRSPACE);
+      Message::AddMessage(5000, MSG_AIRSPACE, text);
+
+      InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+
+    } else {
+      if (AirspaceArea[i].WarningLevel>0) {
+
+	if (next) {
+	  if (AirspaceArea[i].WarningLevel %2 == 1) {
+	    AirspaceArea[i].WarningLevel -= 1;
+	  }
+	} else {
+	  if (AirspaceArea[i].WarningLevel>1) {
+	    AirspaceArea[i].WarningLevel -= 2;
+	  }
+	}
+	if (AirspaceArea[i].WarningLevel == 0) {
+
+	  AirspaceArea[i].Ack.AcknowledgementTime =
+	    Basic->Time-AcknowledgementTime;
+	  Message::Acknowledge(MSG_AIRSPACE);
+	  InputEvents::processGlideComputer(GCE_AIRSPACE_LEAVE);
+	}
+
       }
-
-      AirspaceLastArea = i;
-      return;
     }
-  else
-    {
-      if (AirspaceLastArea != -1) {
-	AirspaceArea[AirspaceLastArea].Ack.AcknowledgementTime =
-	  GPS_INFO.Time-AcknowledgementTime;
+  }
 
-	Message::Acknowledge(MSG_AIRSPACE);
-	InputEvents::processGlideComputer(GCE_AIRSPACE_LEAVE);
-      }
-      AirspaceLastArea = -1;
-    }
 }
 
+
+//////////////////////////////////////////////
 
 void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
@@ -2695,7 +2741,7 @@ void SortLandableWaypoints (NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       if (aa <= 0)
 	{
-	  DoStatusMessage(TEXT("Closest Airfield Changed!"));
+	  DoStatusMessage(gettext(TEXT("Closest Airfield Changed!")));
 	  ActiveWayPoint = 0;
 	}
       else
@@ -2792,10 +2838,10 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   // JMW logic to detect takeoff and landing is as follows:
   //   detect takeoff when above threshold speed for 10 seconds
-
+  //
   //   detect landing when below threshold speed for 30 seconds
-
-  // TODO: make this more robust my making use of terrain height data if available
+  //
+  // TODO: make this more robust by making use of terrain height data if available
 
   if (!Calculated->Flying) {
     // detect takeoff

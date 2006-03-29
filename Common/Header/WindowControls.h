@@ -675,6 +675,7 @@ class WndListFrame:public WndFrame{
     void SetEnterCallback(void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo));
     void RedrawScrolled(bool all);
     void DrawScrollBar(HDC hDC);
+    int RecalculateIndices(bool bigscroll);
 
   protected:
 

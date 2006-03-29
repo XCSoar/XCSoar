@@ -57,6 +57,7 @@ typedef struct _SNAIL_POINT
   float Vario;
   double Time;
   POINT Screen;
+  short Colour;
 } SNAIL_POINT;
 
 
@@ -119,8 +120,6 @@ class MapWindow {
   static bool isAutoZoom();
   static bool isPan();
 
-  static void GetLocationFromScreen(double &X, double &Y);
-  static void GetLocationFromScreen(float &X, float &Y);
   static void DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h);
   static void DrawBitmapX(HDC hdc, int top, int right,
 		     int sizex, int sizey,
@@ -130,6 +129,9 @@ class MapWindow {
   static void RequestToggleFullScreen();
   static void RequestOnFullScreen();
   static void RequestOffFullScreen();
+
+  static void Screen2LatLon(double &X, double &Y);
+  static void Screen2LatLon(float &X, float &Y);
   static void LatLon2Screen(const float &lon, const float &lat, int &scX, int &scY);
   static void LatLon2Screen(const double &lon, const double &lat, int &scX, int &scY);
   static void LatLon2Screen(const double &lon, const double &lat, POINT &sc);
@@ -198,6 +200,7 @@ class MapWindow {
   static void ToggleFullScreenStart();
   static void RefreshMap();
 
+ private:
   static HBITMAP hDrawBitMap;
   static HBITMAP hDrawBitMapBg;
   static HBITMAP hDrawBitMapTmp;
@@ -205,30 +208,25 @@ class MapWindow {
   static HDC hdcDrawWindowBg;
   static HDC hdcScreen;
   static HDC hDCTemp;
+  static double PanLatitude;
+  static double PanLongitude;
+  static bool EnablePan;
+  static DWORD  dwDrawThreadID;
+  static HANDLE hDrawThread;
+  static double DisplayAngle;
+  static double DisplayAircraftAngle;
+  static double DrawScale;
+  static int dTDisplay;
 
+ public:
   static HANDLE hRenderEvent;
 
   static rectObj screenbounds_latlon;
 
-  static double PanX;
-  static double PanY;
-  static double PanXr;
-  static double PanYr;
-
-  static bool EnablePan;
-
   static BOOL THREADRUNNING;
   static BOOL THREADEXIT;
 
-  static DWORD  dwDrawThreadID;
-  static HANDLE hDrawThread;
-
-  static double DisplayAngle;
-  static double DisplayAircraftAngle;
-  static double DrawScale;
-
-  static int dTDisplay;
-
+ private:
   static HBITMAP hLandable, hReachable,
     hTurnPoint, hSmall, hCruise, hClimb,
     hFinalGlide, hAutoMacCready, hTerrainWarning, hGPSStatus1, hGPSStatus2,
@@ -304,8 +302,9 @@ class MapWindow {
 
   static double GetApproxScreenRange(void);
   static int GetMapResolutionFactor();
-  static bool checkLabelBlock(RECT rc);
 
+ private:
+  static POINT Orig_Screen;
   static HBITMAP hBmpMapScale;
   static HBITMAP hBmpCompassBg;
   static HBITMAP hBmpClimbeAbort;
@@ -316,11 +315,12 @@ class MapWindow {
   static HBITMAP hBmpUnitFt;
   static HBITMAP hBmpUnitMpS;
 
-  static bool RenderTimeAvailable();
-  static bool BigZoom;
-  static bool AutoZoom;
 
  public:
+  static bool AutoZoom;
+  static bool checkLabelBlock(RECT rc);
+  static bool RenderTimeAvailable();
+  static bool BigZoom;
   static pointObj GlideFootPrint[NUMTERRAINSWEEPS+1];
 };
 

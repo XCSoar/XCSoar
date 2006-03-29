@@ -44,41 +44,43 @@ typedef struct _AIRSPACE_ALT
 
 typedef struct _AIRSPACE_AREA
 {
-	TCHAR Name[NAME_SIZE + 1];
-        int Type;
-	AIRSPACE_ALT Base;
-	AIRSPACE_ALT Top;
-	unsigned FirstPoint;
-	unsigned NumPoints;
-	int Visible;
-	double MinLatitude;
-	double MaxLatitude;
-	double MinLongitude;
-	double MaxLongitude;
-        rectObj bounds;
-        AIRSPACE_ACK Ack;
+  TCHAR Name[NAME_SIZE + 1];
+  int Type;
+  AIRSPACE_ALT Base;
+  AIRSPACE_ALT Top;
+  unsigned FirstPoint;
+  unsigned NumPoints;
+  int Visible;
+  double MinLatitude;
+  double MaxLatitude;
+  double MinLongitude;
+  double MaxLongitude;
+  rectObj bounds;
+  AIRSPACE_ACK Ack;
+  unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
 } AIRSPACE_AREA;
 
 typedef struct _AIRSPACE_POINT
 {
-	double Latitude;
-	double Longitude;
+  double Latitude;
+  double Longitude;
 } AIRSPACE_POINT;
 
 typedef struct _AIRSPACE_CIRCLE
 {
-	TCHAR Name[NAME_SIZE + 1];
-        int Type;
-	AIRSPACE_ALT Base;
-	AIRSPACE_ALT Top;
-	double Latitude;
-	double Longitude;
-	double Radius;
-	POINT Screen;
-	int ScreenR;
-	int Visible;
-        AIRSPACE_ACK Ack;
-        rectObj bounds;
+  TCHAR Name[NAME_SIZE + 1];
+  int Type;
+  AIRSPACE_ALT Base;
+  AIRSPACE_ALT Top;
+  double Latitude;
+  double Longitude;
+  double Radius;
+  POINT Screen;
+  int ScreenR;
+  int Visible;
+  AIRSPACE_ACK Ack;
+  rectObj bounds;
+  unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
 } AIRSPACE_CIRCLE;
 
 
@@ -100,6 +102,13 @@ void FindNearestAirspace(double longitude,
 void SortAirspace(void);
 extern int AirspacePriority[AIRSPACECLASSCOUNT];
 
+bool InsideAirspaceCircle(const double &longitude,
+			  const double &latitude,
+			  int i);
+
+bool InsideAirspaceArea(const double &longitude,
+			const double &latitude,
+			int i);
 
 #define AIRSPACE_SCANSIZE_X 16
 #define AIRSPACE_SCANSIZE_H 16

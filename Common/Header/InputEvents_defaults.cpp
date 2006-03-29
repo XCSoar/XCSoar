@@ -113,6 +113,31 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_RETURN] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_RETURN] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("left"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_LEFT] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("right"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_RIGHT] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("up"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_UP] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("down"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_DOWN] = event_id;
+
+event_id = 0;
 event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT("previous"), event_id);
 mode_id = InputEvents::mode2int(TEXT("infobox"), true);
 makeLabel(mode_id,TEXT("<<"),1,event_id);

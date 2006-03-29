@@ -136,6 +136,35 @@ data=RETURN
 event=ClearWarningsOrTerrainTopology
 title=Acknowledge messages OR Toggle Terrain/Topology
 
+
+# Pan mode
+
+mode=pan
+type=key
+data=RETURN
+event=Pan supertoggle
+
+
+mode=pan
+type=key
+data=LEFT
+event=Pan left
+
+mode=pan
+type=key
+data=RIGHT
+event=Pan right
+
+mode=pan
+type=key
+data=UP
+event=Pan up
+
+mode=pan
+type=key
+data=DOWN
+event=Pan down
+
 # ------------
 # mode=infobox
 # ------------

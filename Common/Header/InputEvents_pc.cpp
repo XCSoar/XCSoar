@@ -99,6 +99,11 @@ mode_id = InputEvents::mode2int(TEXT("Vario2"), true);
 Key2Event[mode_id][VK_ESCAPE] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_ESCAPE] = event_id;
+
+event_id = 0;
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
@@ -132,6 +137,10 @@ makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("Vario2"), true);
+makeLabel(mode_id,TEXT(""),1,event_id);
+Key2Event[mode_id][VK_APP1] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
@@ -172,6 +181,10 @@ mode_id = InputEvents::mode2int(TEXT("Vario2"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT(""),2,event_id);
+Key2Event[mode_id][VK_APP2] = event_id;
+
 event_id = 0;
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),3,event_id);
@@ -198,6 +211,10 @@ makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
+makeLabel(mode_id,TEXT(""),3,event_id);
+Key2Event[mode_id][VK_APP3] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
@@ -235,6 +252,10 @@ makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("Vario2"), true);
+makeLabel(mode_id,TEXT(""),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
@@ -265,6 +286,55 @@ Key2Event[mode_id]['9'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),9,event_id);
+Key2Event[mode_id]['0'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("down"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_DOWN] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("up"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_UP] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("left"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_LEFT] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("right"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_RIGHT] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT("Pan\nOff"),5,event_id);
+Key2Event[mode_id]['6'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("in"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT("Zoom\nin"),6,event_id);
+Key2Event[mode_id]['7'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("out"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT("Zoom\nout"),7,event_id);
+Key2Event[mode_id]['8'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventNearestWaypointDetails, TEXT("pan"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT("Nearest\nWaypoint "),8,event_id);
+Key2Event[mode_id]['9'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
@@ -503,16 +573,23 @@ makeLabel(mode_id,TEXT("Display/"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("show"), event_id);
+event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Display1"), true);
+makeLabel(mode_id,TEXT("Pan\nOn"),5,event_id);
+Key2Event[mode_id]['6'] = event_id;
+
+event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("in"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Zoom\nIn"),5,event_id);
-Key2Event[mode_id]['6'] = event_id;
+makeLabel(mode_id,TEXT("Zoom\nIn"),6,event_id);
+Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("out"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Zoom\nOut"),6,event_id);
-Key2Event[mode_id]['7'] = event_id;
+makeLabel(mode_id,TEXT("Zoom\nOut"),7,event_id);
+Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
@@ -520,42 +597,15 @@ event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Dropped marker"), e
 event_id = InputEvents::makeEvent(&eventLogger, TEXT("note Mark"), event_id);
 event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Mark\nDrop"),7,event_id);
-Key2Event[mode_id]['8'] = event_id;
+makeLabel(mode_id,TEXT("Mark\nDrop"),8,event_id);
+Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("togglefull"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Full Scrn\nToggle"),8,event_id);
-Key2Event[mode_id]['9'] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventPan, TEXT("show"), event_id);
-event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
-mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Pan"),9,event_id);
+makeLabel(mode_id,TEXT("Full Scrn\nToggle"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventPan, TEXT("up"), event_id);
-mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-Key2Event[mode_id][VK_UP] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventPan, TEXT("down"), event_id);
-mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-Key2Event[mode_id][VK_DOWN] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventPan, TEXT("left"), event_id);
-mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-Key2Event[mode_id][VK_LEFT] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventPan, TEXT("right"), event_id);
-mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-Key2Event[mode_id][VK_RIGHT] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);

@@ -301,25 +301,25 @@ void CalculateScreenBounds(RECT rc, rectObj *screenRect) {
 
   x = rc.left;
   y = rc.top;
-  MapWindow::GetLocationFromScreen(x, y);
+  MapWindow::Screen2LatLon(x, y);
   xmin = x; xmax = x;
   ymin = y; ymax = y;
 
   x = rc.right;
   y = rc.top;
-  MapWindow::GetLocationFromScreen(x, y);
+  MapWindow::Screen2LatLon(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.right;
   y = rc.bottom;
-  MapWindow::GetLocationFromScreen(x, y);
+  MapWindow::Screen2LatLon(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.left;
   y = rc.bottom;
-  MapWindow::GetLocationFromScreen(x, y);
+  MapWindow::Screen2LatLon(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 

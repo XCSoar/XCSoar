@@ -71,6 +71,8 @@ public:
 	// the given point (top left corner)
 	BOOL DrawStretch(HDC *pDC, POINT ptDest, int cx, int cy);
 
+	HDC memDc;
+
 	// Draws buffer into given device context within rectangle
 	BOOL DrawStretch(HDC* pDC, RECT rcDest);
 

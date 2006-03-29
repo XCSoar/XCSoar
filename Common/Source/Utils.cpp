@@ -236,6 +236,7 @@ bool LockSettingsInFlight = true;
 
 static double SINETABLE[910];
 static float FSINETABLE[910];
+static double INVCOSINETABLE[910];
 
 void StoreType(int Index,int InfoType)
 {
@@ -847,7 +848,7 @@ void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex)
   SetToRegistry(szRegistrySpeed2Index, SpeedIndex);
 }
 
-void rotate(double &xin, double &yin, const double angle)
+void rotate(double &xin, double &yin, const double &angle)
 {
   double x= xin;
   double y= yin;
@@ -865,7 +866,7 @@ void rotate(double &xin, double &yin, const double angle)
 }
 
 
-void frotate(float &xin, float &yin, const float angle)
+void frotate(float &xin, float &yin, const float &angle)
 {
   float x= xin;
   float y= yin;
@@ -877,6 +878,46 @@ void frotate(float &xin, float &yin, const float angle)
       lastangle = angle;
       cost = ffastcosine(angle);
       sint = ffastsine(angle);
+    }
+  xin = x*cost - y*sint;
+  yin = y*cost + x*sint;
+}
+
+
+void rotatescale(double &xin, double &yin, const double &angle, const double &scale)
+{
+  double x= xin;
+  double y= yin;
+  static double lastangle = 0;
+  static double lastscale = 0;
+  static double cost=1,sint=0;
+
+  if((angle != lastangle)||(scale != lastscale))
+    {
+      lastangle = angle;
+      lastscale = scale;
+      cost = (double)fastcosine(angle)*scale;
+      sint = (double)fastsine(angle)*scale;
+    }
+  xin = x*cost - y*sint;
+  yin = y*cost + x*sint;
+}
+
+
+void frotatescale(float &xin, float &yin, const float &angle, const float &scale)
+{
+  float x= xin;
+  float y= yin;
+  static float lastangle = 0;
+  static float lastscale = 0;
+  static float cost=1,sint=0;
+
+  if((angle != lastangle)||(scale != lastscale))
+    {
+      lastangle = angle;
+      lastscale = scale;
+      cost = ffastcosine(angle)*scale;
+      sint = ffastsine(angle)*scale;
     }
   xin = x*cost - y*sint;
   yin = y*cost + x*sint;
@@ -895,8 +936,8 @@ double Distance(double lat1, double lon1, double lat2, double lon2)
   dTmp =  sin(lat1)*sin(lat2) +
 			cos(lat1)*cos(lat2) * cos(lon1-lon2);
 
-  if (dTmp > 1.0)                                   // be shure we dont call acos with
-    distance = 0;                                   // values greater than 1 (like 1.0000000000001)
+  if (dTmp > 1.0)         // be shure we dont call acos with
+    distance = 0;         // values greater than 1 (like 1.0000000000001)
   else
     distance = (double)acos(dTmp) * (double)(RAD_TO_DEG * 111194.9267);
 
@@ -1903,6 +1944,51 @@ void InitSineTable(void)
       angle *= DEG_TO_RAD;
       SINETABLE[i] = (double)sin(angle);
       FSINETABLE[i] = (float)sin(angle);
+      double cs = cos(angle);
+      if ((cs>0) && (cs<1.0e-8)) {
+	cs = 1.0e-8;
+      }
+      if ((cs<0) && (cs>-1.0e-8)) {
+	cs = -1.0e-8;
+      }
+      INVCOSINETABLE[i] = 1.0/cs;
+    }
+}
+
+double invfastcosine(const double &x)
+{
+  int index;
+  double xi = x;
+
+  while(xi<0)
+    {
+      xi += 360;
+    }
+  while(xi>=360)
+    {
+      xi -= 360;
+    }
+  index = (int)(xi*10);
+  if((index>=0 )&&(index<=900))
+    {
+      return INVCOSINETABLE[index];
+    }
+  else if((index>900)&&(index<=1800))
+    {
+      return -INVCOSINETABLE[1800 - index];
+    }
+  else if((index>1800)&&(index<=2700))
+    {
+      return -INVCOSINETABLE[index-1800];
+    }
+  else if((index>2700)&&(index<=3600))
+    {
+      index = index - 1800;
+      return INVCOSINETABLE[1800-index];
+    }
+  else
+    {
+      return 0;
     }
 }
 
@@ -1941,12 +2027,12 @@ double fastsine(const double &x)
     }
   else if((index>1800)&&(index<=2700))
     {
-      return -1*SINETABLE[index-1800];
+      return -SINETABLE[index-1800];
     }
   else if((index>2700)&&(index<=3600))
     {
       index = index - 1800;
-      return -1*SINETABLE[1800-index];
+      return -SINETABLE[1800-index];
     }
   else
     {

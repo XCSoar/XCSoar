@@ -254,13 +254,11 @@ void Message::BlockRender(bool doblock) {
 
 
 void Message::Render() {
-  DWORD	fpsTime = ::GetTickCount() - startTime;
-
+  if (block_ref) return;
   if (!GlobalRunning) return;
 
-  if (block_ref) return;
-
   Lock();
+  DWORD	fpsTime = ::GetTickCount() - startTime;
 
   // this has to be done quickly, since it happens in GUI thread
   // at subsecond interval
@@ -365,7 +363,7 @@ void Message::AddMessage(DWORD tshow, int type, TCHAR* Text) {
   _tcscpy(messages[i].text, Text);
 
   Unlock();
-  Render();
+  //  Render(); // NO this causes crashes (don't know why..)
 }
 
 void Message::Repeat(int type) {
@@ -406,11 +404,11 @@ void Message::CheckTouch(HWND wmControl) {
   }
 }
 
+
 bool Message::Acknowledge(int type) {
+  Lock();
   int i;
   bool ret = false;	// Did we acknowledge?
-
-  Lock();
   DWORD	fpsTime = ::GetTickCount() - startTime;
 
   for (i=0; i<MAXMESSAGES; i++) {
@@ -423,7 +421,7 @@ bool Message::Acknowledge(int type) {
   }
 
   Unlock();
-  Render();
+  //  Render(); NO! this can cause crashes
   return ret;
 }
 
