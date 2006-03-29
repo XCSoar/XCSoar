@@ -935,10 +935,15 @@ void RestartCommPorts() {
 }
 
 
+
 void DefocusInfoBox() {
   FocusOnWindow(InfoFocus,false);
   InfoFocus = -1;
-  InputEvents::setMode(TEXT("default"));
+  if (MapWindow::isPan()) {
+    InputEvents::setMode(TEXT("pan"));
+  } else {
+    InputEvents::setMode(TEXT("default"));
+  }
   InfoWindowActive = FALSE;
 }
 
@@ -2078,6 +2083,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
+      /* DON'T PROCESS KEYS HERE, IT CAUSES CRASHES!
       if (ProgramStarted) {
 	if (!DialogActive) {
 	  
@@ -2091,6 +2097,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return TRUE; // JMW trying to fix multiple processkey bug
       }
+      */
       break;
     case WM_TIMER:
       if (ProgramStarted) {
@@ -2689,7 +2696,9 @@ void CommonProcessTimer()
   if (DisplayLocked) {
     if(MenuTimeOut==MenuTimeoutMax/2) {
       ShowWindow(hWndMenuButton, SW_HIDE);
-      InputEvents::setMode(TEXT("default"));
+      if (!MapWindow::isPan()) {
+	InputEvents::setMode(TEXT("default"));
+      }
     }
     MenuTimeOut++;
   }
@@ -3064,7 +3073,7 @@ void DebugStore(char *Str)
 {
 #ifdef DEBUG
   FILE *stream;
-  static TCHAR szFileName[] = TEXT("\\TEMP.TXT");
+  static TCHAR szFileName[] = TEXT("\\xcsoar-debug.log");
 
   stream = _wfopen(szFileName,TEXT("a+"));
 

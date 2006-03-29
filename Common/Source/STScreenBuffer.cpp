@@ -65,7 +65,8 @@ CSTScreenBuffer::CSTScreenBuffer()
 	: m_hBitmap(NULL),
 	  m_pBuffer(NULL),
 	  m_pBufferTmp(NULL),
-	  m_pDC(NULL)
+	  m_pDC(NULL),
+	  memDc(NULL)
 {
 }
 
@@ -77,6 +78,9 @@ CSTScreenBuffer::~CSTScreenBuffer()
 	}
 	if (m_pBufferTmp) {
 	  free(m_pBufferTmp);
+	}
+	if (memDc) {
+	  DeleteDC(memDc);
 	}
 }
 
@@ -247,20 +251,18 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest, int cx, int cy)
   
   BOOL bResult = FALSE;
   
-  HDC memDc = CreateCompatibleDC(*pDC);
+  if (!memDc) {
+    memDc = CreateCompatibleDC(*pDC);
+    SelectObject(memDc, m_hBitmap);
+  }
   if (!memDc) {
     return FALSE;
   }
-  
-  HBITMAP m_hOldBitmap = (HBITMAP)::SelectObject(memDc, m_hBitmap);
   
   bResult = StretchBlt(*pDC, ptDest.x, ptDest.y, 
 		       cx, cy, memDc, 
 		       Origin.x, Origin.y, 
 		       m_nWidth, m_nHeight, SRCCOPY);
-  
-  ::SelectObject(memDc, m_hOldBitmap);
-  DeleteDC(memDc);
   
   return bResult;
 }

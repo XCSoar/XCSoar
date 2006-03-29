@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.41 2006/03/27 13:49:53 jwharington Exp $
+  $Id: Parser.cpp,v 1.42 2006/03/29 20:59:24 jwharington Exp $
 
 Copyright_License {
 
@@ -976,31 +976,31 @@ BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->SupplyBatteryVoltage/= 10;
 
   GPS_INFO->SwitchState.AirbrakeExtended =
-    (switchinputs & (1<<INPUT_BIT_AIRBRAKENOTLOCKED));
+    (switchinputs & (1<<INPUT_BIT_AIRBRAKENOTLOCKED))>0;
   GPS_INFO->SwitchState.FlapPositive =
-    (switchinputs & (1<<INPUT_BIT_FLAP_POS));
+    (switchinputs & (1<<INPUT_BIT_FLAP_POS))>0;
   GPS_INFO->SwitchState.FlapNeutral =
-    (switchinputs & (1<<INPUT_BIT_FLAP_ZERO));
+    (switchinputs & (1<<INPUT_BIT_FLAP_ZERO))>0;
   GPS_INFO->SwitchState.FlapNegative =
-    (switchinputs & (1<<INPUT_BIT_FLAP_NEG));
+    (switchinputs & (1<<INPUT_BIT_FLAP_NEG))>0;
   GPS_INFO->SwitchState.GearExtended =
-    (switchinputs & (1<<INPUT_BIT_GEAR_EXTENDED));
+    (switchinputs & (1<<INPUT_BIT_GEAR_EXTENDED))>0;
   GPS_INFO->SwitchState.Acknowledge =
-    (switchinputs & (1<<INPUT_BIT_ACK));
+    (switchinputs & (1<<INPUT_BIT_ACK))>0;
   GPS_INFO->SwitchState.Repeat =
-    (switchinputs & (1<<INPUT_BIT_REP));
+    (switchinputs & (1<<INPUT_BIT_REP))>0;
   GPS_INFO->SwitchState.SpeedCommand =
-    (switchinputs & (1<<INPUT_BIT_SC));
+    (switchinputs & (1<<INPUT_BIT_SC))>0;
   GPS_INFO->SwitchState.UserSwitchUp =
-    (switchinputs & (1<<INPUT_BIT_USERSWUP));
+    (switchinputs & (1<<INPUT_BIT_USERSWUP))>0;
   GPS_INFO->SwitchState.UserSwitchMiddle =
-    (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE));
+    (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE))>0;
   GPS_INFO->SwitchState.UserSwitchDown =
-    (switchinputs & (1<<INPUT_BIT_USERSWDOWN));
+    (switchinputs & (1<<INPUT_BIT_USERSWDOWN))>0;
   GPS_INFO->SwitchState.VarioCircling =
-    (switchinputs & (1<<OUTPUT_BIT_CIRCLING));
+    (switchinputs & (1<<OUTPUT_BIT_CIRCLING))>0;
   GPS_INFO->SwitchState.Stall =
-    (switchinputs & (1<<INPUT_BIT_STALL));
+    (switchinputs & (1<<INPUT_BIT_STALL))>0;
 
   long up_switchinputs;
   long down_switchinputs;

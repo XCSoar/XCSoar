@@ -57,27 +57,27 @@ rectObj GetRectBounds(const RECT rc) {
   double y;
 
   x= (rc.left+rc.right)/2; y=(rc.bottom+rc.top)/2;
-  MapWindow::GetLocationFromScreen(x, y);
+  MapWindow::Screen2LatLon(x, y);
   xmin = x; xmax = x;
   ymin = y; ymax = y;
 
   x = rc.left; y = rc.top;
-  MapWindow::GetLocationFromScreen(x, y);
+  MapWindow::Screen2LatLon(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.right; y = rc.top;
-  MapWindow::GetLocationFromScreen(x, y);
+  MapWindow::Screen2LatLon(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.left; y = rc.bottom;
-  MapWindow::GetLocationFromScreen(x, y);
+  MapWindow::Screen2LatLon(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
   x = rc.right; y = rc.bottom;
-  MapWindow::GetLocationFromScreen(x, y);
+  MapWindow::Screen2LatLon(x, y);
   xmin = min(xmin, x); xmax = max(xmax, x);
   ymin = min(ymin, y); ymax = max(ymax, y);
 
@@ -466,18 +466,18 @@ public:
     // JMW attempting to remove wobbling terrain
     X = (float)((X0+X1)/2);
     Y = (float)((Y0+Y1)/2);
-    MapWindow::GetLocationFromScreen(X, Y);
+    MapWindow::Screen2LatLon(X, Y);
     float xmiddle = X;
     float ymiddle = Y;
 
     X = (float)((X0+X1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact);
     Y = (float)((Y0+Y1)/2);
-    MapWindow::GetLocationFromScreen(X, Y);
+    MapWindow::Screen2LatLon(X, Y);
     Xrounding = (float)fabs(X-xmiddle);
 
     X = (float)((X0+X1)/2);
     Y = (float)((Y0+Y1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact);
-    MapWindow::GetLocationFromScreen(X, Y);
+    MapWindow::Screen2LatLon(X, Y);
     Yrounding = (float)fabs(Y-ymiddle);
 
     // ok, ready to fill the buffer now.
@@ -488,7 +488,7 @@ public:
       for (int x = X0; x<X1; x+= DTQUANT) {
         X = (float)x;
         Y = (float)y;
-        MapWindow::GetLocationFromScreen(X, Y);
+        MapWindow::Screen2LatLon(X, Y);
         *myhbuf = terrain_dem_graphics.GetTerrainHeight(Y, X);
         ++myhbuf;
       }
@@ -511,8 +511,8 @@ public:
 
     int tss = (int)(epx*pixelsize*1000);
 
-    for (int y = 0; y<iys; y++) {
-      for (int x = 0; x<ixs; x++) {
+    for (int y = 0; y<iys; ++y) {
+      for (int x = 0; x<ixs; ++x) {
 
 	// JMW: if zoomed right in (e.g. one unit
 	// is larger than terrain grid), then increase the
@@ -613,7 +613,8 @@ public:
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
 
-    for (int i=0; i<ixs*iys; i++) {
+    int gsize = ixs*iys;
+    for (int i=0; i<gsize; ++i) {
       
       mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256;
       *tilBuf = max(0,(short)mag);
@@ -669,8 +670,10 @@ public:
 
     UpdateContrast();
 
-    for (int y = 0; y<iys; y++) {
-      for (int x = 0; x<ixs; x++) {
+    int ixsOVS = ixs*OVS;
+    int iysOVS = iys*OVS;
+    for (int y = 0; y<iysOVS; y+= OVS) {
+      for (int x = 0; x<ixsOVS; x+= OVS) {
         if (hBuf[pval]<=0) {
           // water color
           r = 64;
@@ -680,15 +683,10 @@ public:
           TerrainColorMap(hBuf[pval],r,g,b);
           TerrainIllumination(ilBuf[pval], r,g,b);
         }
-
-        int ix0, iy0, ix1, iy1;
-        ix0 = x*OVS;
-        ix1 = ix0+OVS;
-        iy0 = y*OVS;
-        iy1 = iy0+OVS;
-
-        for (int iy=iy0; iy< iy1; iy++) {
-          for (int ix=ix0; ix< ix1; ix++) {
+	int ix1 = x+OVS;
+	int iy1 = y+OVS;
+        for (int iy=y; iy< iy1; ++iy) {
+          for (int ix=x; ix< ix1; ++ix) {
             sbuf->SetPoint(ix, iy, r, g, b);
           }
         }
