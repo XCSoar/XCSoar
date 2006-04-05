@@ -44,7 +44,7 @@ Copyright_License {
   double c = -1.141438761599;
 */
 
-double GlidePolar::BallastFactor;
+//double GlidePolar::BallastFactor;
 double GlidePolar::polar_a;
 double GlidePolar::polar_b;
 double GlidePolar::polar_c;
@@ -53,13 +53,14 @@ int GlidePolar::Vbestld = 2;
 double GlidePolar::sinkratecache[200];
 double GlidePolar::bestld = 0.0;
 double GlidePolar::minsink = 10000.0;
+double GlidePolar::BallastLitres = 0.0;
 
 
 void GlidePolar::SetBallast() {
   LockFlightData();
   double BallastWeight;
-  BallastWeight = WEIGHTS[2] * BALLAST;
-  BallastWeight += WEIGHTS[0] + WEIGHTS[1];
+  BallastLitres = WEIGHTS[2] * BALLAST;
+  BallastWeight = BallastLitres + WEIGHTS[0] + WEIGHTS[1];
   BallastWeight = (double)sqrt(BallastWeight);
   double bugfactor = 1.0/BUGS;
   polar_a = POLAR[0] / BallastWeight*bugfactor;

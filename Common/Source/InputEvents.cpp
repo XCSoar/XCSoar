@@ -138,14 +138,14 @@ typedef struct {
   TCHAR *text;
   pt2Event event;
 } Text2EventSTRUCT;
-Text2EventSTRUCT Text2Event[256];
+Text2EventSTRUCT Text2Event[256];  // why 256?
 int Text2Event_count;
 
 // Mapping text names of events to the real thing
-TCHAR *Text2GCE[GCE_COUNT];
+TCHAR *Text2GCE[GCE_COUNT+1];
 
 // Mapping text names of events to the real thing
-TCHAR *Text2NE[NE_COUNT];
+TCHAR *Text2NE[NE_COUNT+1];
 
 // DLL Cache
 typedef void (CALLBACK *DLLFUNC_INPUTEVENT)(TCHAR*);
@@ -628,7 +628,9 @@ bool InputEvents::processButton(int bindex) {
       // JMW need a debounce method here..
       if (!Debounce()) return true;
 
+      ButtonLabel::AnimateButton(bindex);
       processGo(ModeLabel[thismode][i].event);
+
       return true;
     }
   }
@@ -661,6 +663,17 @@ bool InputEvents::processKey(int dWord) {
 
   if (event_id > 0) {
     if (!Debounce()) return true;
+
+    int i;
+    for (i = ModeLabel_count[mode]; i >= 0; i--) {
+      if ((ModeLabel[mode][i].event == event_id)) {
+	int bindex = ModeLabel[mode][i].location;
+	if (bindex>0) {
+	  ButtonLabel::AnimateButton(bindex);
+	}
+      }
+    }
+
     InputEvents::processGo(event_id);
     return true;
   }
@@ -1173,9 +1186,7 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
 	return;
       }
     }
-    LockFlightData();
     PopupWaypointDetails();
-    UnlockFlightData();
   } else
   if (_tcscmp(misc, TEXT("select")) == 0) {
 #if NEWINFOBOX > 0
@@ -1357,7 +1368,9 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
     return;
   }
   if (_tcscmp(misc, TEXT("zero"))==0) {
-    VarioWriteNMEA(TEXT("PDVSC,S,ZeroASI,1"));
+    if (!CALCULATED_INFO.Flying) {
+      VarioWriteNMEA(TEXT("PDVSC,S,ZeroASI,1"));
+    }
     // zero, no mixing
     return;
   }
@@ -1367,25 +1380,27 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
   }
 
   // accel calibration
-  if (_tcscmp(misc, TEXT("X1"))==0) {
-    VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,1"));
-    return;
-  }
-  if (_tcscmp(misc, TEXT("X2"))==0) {
-    VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,2"));
-    return;
-  }
-  if (_tcscmp(misc, TEXT("X3"))==0) {
-    VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,3"));
-    return;
-  }
-  if (_tcscmp(misc, TEXT("X4"))==0) {
-    VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,4"));
-    return;
-  }
-  if (_tcscmp(misc, TEXT("X5"))==0) {
-    VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,5"));
-    return;
+  if (!CALCULATED_INFO.Flying) {
+    if (_tcscmp(misc, TEXT("X1"))==0) {
+      VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,1"));
+      return;
+    }
+    if (_tcscmp(misc, TEXT("X2"))==0) {
+      VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,2"));
+      return;
+    }
+    if (_tcscmp(misc, TEXT("X3"))==0) {
+      VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,3"));
+      return;
+    }
+    if (_tcscmp(misc, TEXT("X4"))==0) {
+      VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,4"));
+      return;
+    }
+    if (_tcscmp(misc, TEXT("X5"))==0) {
+      VarioWriteNMEA(TEXT("PDVSC,S,CalibrateAccel,5"));
+      return;
+    }
   }
 }
 
@@ -1597,8 +1612,11 @@ void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
 // If the aircraft is within airspace, this displays the distance and bearing
 // to the nearest exit to the airspace.
 void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
-  double nearestdistance, nearestbearing;
-  int foundcircle, foundarea, i;
+  double nearestdistance=0;
+  double nearestbearing=0;
+  int foundcircle = -1;
+  int foundarea = -1;
+  int i;
   bool inside = false;
 
   TCHAR szMessageBuffer[1024];

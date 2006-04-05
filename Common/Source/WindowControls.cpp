@@ -40,8 +40,14 @@ Copyright_License {
 #endif
 #include "Utils.h"
 
+
 #ifdef ALTAIRSYNC
 #define ISCALE 1
+void SetSourceRectangle(RECT fromRect) {};
+RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed) {
+  return *lprcTo;
+}
+
 #else
 #define ISCALE InfoBoxLayout::scale
 #endif
@@ -57,7 +63,7 @@ int numkeyup=0;
 // returns true if it is a long press,
 // otherwise returns false
 bool KeyTimer(bool isdown, DWORD thekey) {
-  static DWORD fpsTimeDown= -1;
+  static DWORD fpsTimeDown= 0;
   static DWORD savedKey=0;
   if (!isdown) {
     int dT = ::GetTickCount()-fpsTimeDown;
@@ -620,7 +626,7 @@ int DataFieldInteger::SpeedUp(bool keyup){
   int res=1;  
 
 #ifdef GNAV
-  return 1.0;
+  return res;
 #endif;
 
   if (keyup != DataFieldKeyUp) {
@@ -736,10 +742,10 @@ void DataFieldFloat::Dec(void){
 }
 
 double DataFieldFloat::SpeedUp(bool keyup){
-  double res=1;
+  double res=1.0;
 
 #ifdef GNAV
-  return 1.0;
+  return res;
 #endif;
 
   if (keyup != DataFieldKeyUp) {
@@ -1515,7 +1521,10 @@ WndForm::~WndForm(void){
 }
 
 
+
 void WndForm::Destroy(void){
+
+  // animation
 
   if (mClientWindow) 
     mClientWindow->SetVisible(false);
@@ -1603,7 +1612,13 @@ int WndForm::ShowModal(void){
   Message::BlockRender(true);
 #endif
 
+  RECT mRc;
+  GetWindowRect(GetHandle(), &mRc);
+  // RECT aniRect = 
+      DrawWireRects(&mRc, 5);
+
   SetVisible(true);
+
   SetToForeground();
 
   mModalResult = 0;
@@ -1730,6 +1745,18 @@ int WndForm::ShowModal(void){
       }
     }
   }
+
+  //  SetSourceRectangle(mRc);
+  //  DrawWireRects(&aniRect, 5);
+
+  /*
+  // reset to center?
+  aniRect.top = (mRc.top+mRc.bottom)/2;;
+  aniRect.left = (mRc.left+mRc.right)/2;
+  aniRect.right = (mRc.left+mRc.right)/2;
+  aniRect.bottom = (mRc.top+mRc.bottom)/2;
+  SetSourceRectangle(aniRect);
+  */
 
   SetFocus(oldFocusHwnd);
 
@@ -1888,8 +1915,12 @@ int WndButton::OnLButtonUp(WPARAM wParam, LPARAM lParam){
   //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
 
   if (PtInRect(GetBoundRect(), Pos)){
-    if (mOnClickNotify != NULL)
+    if (mOnClickNotify != NULL) {
+      RECT mRc;
+      GetWindowRect(GetHandle(), &mRc);
+      SetSourceRectangle(mRc);
       (mOnClickNotify)(this);
+    }
   }
 
   return(1);
@@ -1912,11 +1943,16 @@ int WndButton::OnKeyUp(WPARAM wParam, LPARAM lParam){
   switch (wParam){
     case VK_RETURN:
     case VK_SPACE:
+      if (!Debounce()) return(1); // prevent false trigger
       if (mDown){
         mDown = false;
         Paint(GetDeviceContext());
-        if (mOnClickNotify != NULL)
+        if (mOnClickNotify != NULL) {
+	  RECT mRc;
+	  GetWindowRect(GetHandle(), &mRc);
+	  SetSourceRectangle(mRc);
           (mOnClickNotify)(this);
+	}
       }
     return(0);
   }
@@ -2518,6 +2554,9 @@ void WndFrame::Destroy(void){
 
 int WndFrame::OnKeyDown(WPARAM wParam, LPARAM lParam){
   if (mIsListItem && GetOwner()!=NULL){
+    RECT mRc;
+    GetWindowRect(GetHandle(), &mRc);
+    SetSourceRectangle(mRc);
     return(((WndListFrame*)GetOwner())->OnItemKeyDown(this, wParam, lParam));
   }
   return(1);

@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.17 2006/03/10 13:19:47 jwharington Exp $
+// $Id: devCAI302.cpp,v 1.18 2006/04/05 11:26:43 jwharington Exp $
 
 /*
 Copyright_License {
@@ -139,7 +139,7 @@ static cai302_Gdata_t cai302_Gdata;
 // Additional sentance for CAI302 support
 static BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL cai_PCAIB(TCHAR *String, NMEA_INFO *GPS_INFO);
-static cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO);
 
 static int  MacCreadyUpdateTimeout = 0;
 static int  BugsUpdateTimeout = 0;

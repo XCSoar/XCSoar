@@ -726,7 +726,7 @@ makeLabel(mode_id,TEXT("Nearest\nWaypoint"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNearestAirspaceDetails, TEXT(""), event_id);
+event_id = InputEvents::makeEvent(&eventNearestAirspaceDetails, TEXT("aircraft"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
 makeLabel(mode_id,TEXT("Nearest\nAirspace"),7,event_id);

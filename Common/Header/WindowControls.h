@@ -832,7 +832,7 @@ class WndProperty:public WindowControl{
     static HBITMAP hBmpLeft16;
     static HBITMAP hBmpRight32;
     static HBITMAP hBmpRight16;
-    static InstCount;
+    static int InstCount;
 
     HWND mhEdit;
     POINT mEditSize;

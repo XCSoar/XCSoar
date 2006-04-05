@@ -46,7 +46,7 @@ Copyright_License {
 
 static BOOL fDeclarationPending = FALSE;
 static unsigned long lLastBaudrate = 0;
-static nDeclErrorCode = 0;
+static int nDeclErrorCode = 0;
 static int ewDecelTpIndex = 0;
 
 #ifdef _SIM_

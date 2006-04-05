@@ -38,10 +38,9 @@ Copyright_License {
 #include <tchar.h>
 
 
-HANDLE				hRead2Thread = NULL;              // Handle to the read thread
+HANDLE hRead2Thread = NULL;              // Handle to the read thread
 static TCHAR sPortName[8];
-static BOOL  fRxThreadTerminated;
-
+static BOOL  fRxThreadTerminated=TRUE;
 static BOOL  Port2CloseThread;
 
 BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
@@ -272,9 +271,10 @@ DWORD Port2ReadThread (LPVOID lpvoid)
 
   }
   fRxThreadTerminated = TRUE;
-  PurgeComm(hPort1, 
+  PurgeComm(hPort2, 
             PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
-  CloseHandle (hPort1);
+  CloseHandle (hPort2);
+  hPort2 = INVALID_HANDLE_VALUE;
 
   return 0;
 }
@@ -368,16 +368,20 @@ BOOL Port2Close ()
 
 void Port2WriteString(TCHAR *Text)
 {
+  LockComm();
+
 	int i,len;
 	len = _tcslen(Text);
 
 	for(i=0;i<len;i++)
 		Port2Write ((BYTE)Text[i]);
+  UnlockComm();
 }
 
 
 void Port2WriteNMEA(TCHAR *Text) 
 {
+  LockComm();
 
   int i,len;
   len = _tcslen(Text);
@@ -395,4 +399,5 @@ void Port2WriteNMEA(TCHAR *Text)
   Port2Write((BYTE)tbuf[1]);
   Port2Write((BYTE)_T('\r'));
   Port2Write((BYTE)_T('\n'));
+  UnlockComm();
 }

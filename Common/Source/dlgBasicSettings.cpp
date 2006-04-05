@@ -98,7 +98,7 @@ static void OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode){
 }
 
 static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
-
+  WndProperty* wp;
   static double lastRead = -1;
 
   switch(Mode){
@@ -106,15 +106,20 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
       lastRead = BALLAST;
       Sender->Set(BALLAST*100);
     break;
+    case DataField::daChange:
     case DataField::daPut:
       if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
         BALLAST = Sender->GetAsFloat()/100.0;
         GlidePolar::SetBallast();
         devPutBallast(devA(), BALLAST);
         devPutBallast(devB(), BALLAST);
+	wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
+	if (wp) {
+	  wp->GetDataField()->
+	    SetAsFloat(GlidePolar::BallastLitres);
+	  wp->RefreshDisplay();
+	}
       }
-    break;
-    case DataField::daChange:
     break;
   }
 
@@ -129,6 +134,7 @@ static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
       lastRead = BUGS;
       Sender->Set(BUGS*100);
     break;
+    case DataField::daChange:
     case DataField::daPut:
       if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
         BUGS = Sender->GetAsFloat()/100.0;
@@ -136,8 +142,6 @@ static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
         devPutBugs(devA(), BUGS);
         devPutBugs(devB(), BUGS);
       }
-    break;
-    case DataField::daChange:
     break;
   }
 
@@ -152,12 +156,11 @@ static void OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode){
       lastRead = CuSonde::maxGroundTemperature;
       Sender->Set(CuSonde::maxGroundTemperature);
     break;
+    case DataField::daChange:
     case DataField::daPut:
       if (fabs(lastRead-Sender->GetAsFloat()) >= 1.0){
 	CuSonde::setForecastTemperature(Sender->GetAsFloat());
       }
-    break;
-    case DataField::daChange:
     break;
   }
 }
@@ -188,6 +191,12 @@ void dlgBasicSettingsShowModal(void){
       wp->GetDataField()->SetAsFloat(
 				     Units::ToUserAltitude(GPS_INFO.BaroAltitude));
       wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+      wp->RefreshDisplay();
+    }
+    wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
+    if (wp) {
+      wp->GetDataField()->
+	SetAsFloat(GlidePolar::BallastLitres);
       wp->RefreshDisplay();
     }
 

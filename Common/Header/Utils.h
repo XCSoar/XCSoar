@@ -43,6 +43,7 @@ extern TCHAR szRegistrySnailTrail[];
 extern TCHAR szRegistryDrawTopology[];
 extern TCHAR szRegistryDrawTerrain[];
 extern TCHAR szRegistryFinalGlideTerrain[];
+extern TCHAR szRegistryAutoWind[];
 extern TCHAR szRegistryStartLine[];
 extern TCHAR szRegistryStartRadius[];
 extern TCHAR szRegistryFinishLine[];
@@ -87,6 +88,7 @@ extern TCHAR szRegistryEnableFLARMDisplay[];
 extern TCHAR szRegistrySnailTrail[];
 extern TCHAR szRegistryTrailDrift[];
 extern TCHAR szRegistryGliderScreenPosition[];
+extern TCHAR szRegistryAnimation[];
 
 extern bool LockSettingsInFlight;
 
@@ -224,5 +226,12 @@ bool CheckRectOverlap(RECT rc1, RECT rc2);
 int MeasureCPULoad();
 
 TCHAR* GetWinPilotPolarInternalName(int i);
+
+void SetSourceRectangle(RECT fromRect);
+RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed);
+
+void OpenFLARMDetails();
+void CloseFLARMDetails();
+TCHAR* LookupFLARMDetails(long id);
 
 #endif

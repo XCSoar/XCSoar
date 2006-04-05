@@ -93,7 +93,6 @@ static void OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t M
         Sender->Set(1.0);
     break;
   }
-
 }
 
 static CallBackTableEntry_t CallBackTable[]={
@@ -106,7 +105,9 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgWindSettingsShowModal(void){
 
-  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgWindSettings.xml")), hWndMainWindow,
+  wf = dlgLoadFromXML(CallBackTable, 
+		      LocalPathS(TEXT("dlgWindSettings.xml")), 
+		      hWndMainWindow,
 		      TEXT("IDR_XML_WINDSETTINGS"));
 
   if (wf) {
@@ -116,7 +117,21 @@ void dlgWindSettingsShowModal(void){
       wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
       wp->RefreshDisplay();
     }
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
+    if (wp) {
+      wp->GetDataField()->Set(EnableAutoWind);
+      wp->RefreshDisplay();
+    }
+
     wf->ShowModal();
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
+    if (wp) {
+      if (EnableAutoWind != wp->GetDataField()->GetAsBoolean()) {
+	EnableAutoWind = wp->GetDataField()->GetAsBoolean();
+      }
+    }
     
     delete wf;
   }

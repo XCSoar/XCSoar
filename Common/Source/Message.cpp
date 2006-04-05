@@ -188,10 +188,18 @@ void Message::Resize() {
   SIZE tsize;
   int size = _tcslen(msgText);
   RECT rthis;
+  RECT mRc;
 
   if (size==0) {
     if (!hidden) {
       ShowWindow(hWndMessageWindow, SW_HIDE);
+
+      // animation
+      //      GetWindowRect(hWndMessageWindow, &mRc);
+      //      SetSourceRectangle(mRc);
+      //      mRc.top=0; mRc.bottom=0;
+      //      DrawWireRects(&mRc, 5);
+
       MapWindow::RequestFastRefresh();      
     }
     hidden = true;
@@ -224,6 +232,16 @@ void Message::Resize() {
       rthis.top = midy-h1;
       rthis.bottom = midy+h2;
     }
+    /*
+    if (hidden) {
+      RECT bigrect;
+      GetWindowRect(hWndMapWindow, &bigrect);
+      GetWindowRect(hWndMessageWindow, &mRc);
+      bigrect.bottom= bigrect.top;
+      SetSourceRectangle(mRc);
+      DrawWireRects(&mRc, 10);
+    }
+    */
 
     SetWindowPos(hWndMessageWindow, HWND_TOP,
 		 rthis.left, rthis.top,

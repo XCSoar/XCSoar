@@ -61,6 +61,11 @@ Copyright_License {
 #include <Wingdi.h>
 #endif
 
+
+#ifdef DEBUG
+#define DRAWLOAD
+#endif
+
 int TrailActive = TRUE;
 
 #define NUMSNAILRAMP 3
@@ -455,12 +460,11 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInB
 
   if (Mode.AsFlag.AlligneRight){
     x -= tsize.cx;
-  }
-
-  if (Mode.AsFlag.AlligneCenter){
-    x -= tsize.cx/2;
-    y -= tsize.cy/2;
-  }
+  } else 
+    if (Mode.AsFlag.AlligneCenter){
+      x -= tsize.cx/2;
+      y -= tsize.cy/2;
+    }
 
   bool notoverlapping = true;
 
@@ -470,8 +474,8 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInB
 
     brect.left = x-2;
     brect.right = brect.left+tsize.cx+4;
-    brect.top = y+((tsize.cy+4) / 8)-2;
-    brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4) / 8);
+    brect.top = y+((tsize.cy+4)>>3)-2;
+    brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
     if (Mode.AsFlag.AlligneRight)
       x -= 3;
@@ -498,8 +502,8 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInB
 
     brect.left = x-1;
     brect.right = brect.left+tsize.cx+1;  
-    brect.top = y+((tsize.cy+4) / 8);
-    brect.bottom = brect.top+tsize.cy-((tsize.cy+4) / 8);
+    brect.top = y+((tsize.cy+4)>>3);
+    brect.bottom = brect.top+tsize.cy-((tsize.cy+4)>>3);
 
     if (Mode.AsFlag.AlligneRight)
       x -= 2;
@@ -530,8 +534,8 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInB
 
     brect.left = x-2;
     brect.right = brect.left+tsize.cx+4;
-    brect.top = y+((tsize.cy+4) / 8)-2;
-    brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4) / 8);
+    brect.top = y+((tsize.cy+4)>>3)-2;
+    brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
     notoverlapping = checkLabelBlock(brect);
   
@@ -823,7 +827,7 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
 }
 
 #if (WINDOWSPC>0)
-#define IBLSCALE(x) (x*InfoBoxLayout::scale)
+#define IBLSCALE(x) ((x)*InfoBoxLayout::scale)
 #else
 #define IBLSCALE(x) (x) 
 #endif
@@ -1226,6 +1230,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       break;
     }
     dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
+
     
     distance = isqrt4((long)((XstartScreen-X)*(XstartScreen-X)+
 			     (YstartScreen-Y)*(YstartScreen-Y)))
@@ -1233,14 +1238,14 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     
     Screen2LatLon(X, Y);
     
-    if (EnablePan && (distance>36)) {
+    if (EnablePan && (distance>IBLSCALE(36))) {
       PanLongitude += Xstart-X;
       PanLatitude  += Ystart-Y;
       RefreshMap();
       break; // disable picking when in pan mode
     } else {
 #ifdef _SIM_
-      if (distance>36) {
+      if (distance>IBLSCALE(36)) {
         double newbearing = Bearing(Ystart, Xstart, Y, X);
         GPS_INFO.TrackBearing = newbearing;
         GPS_INFO.Speed = min(100.0,distance/3);
@@ -1478,7 +1483,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
   UpdateMapScale();
 
   // only redraw map part every 800 s unless triggered
-  if (((fpsTime-fpsTime0)>800)||(fpsTime0== -1)||(userasked)) {
+  if (((fpsTime-fpsTime0)>800)||(fpsTime0== 0)||(userasked)) {
     fpsTime0 = fpsTime;
     drawmap = true;
     userasked = false;
@@ -1707,14 +1712,13 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   while (!CLOSETHREAD) 
   {
     WaitForSingleObject(drawTriggerEvent, 5000);
+    ResetEvent(drawTriggerEvent);
     if (CLOSETHREAD) break; // drop out without drawing
 
     if (!THREADRUNNING && !GlobalRunning) {
       Sleep(100);
       continue;
     }
-
-    ResetEvent(drawTriggerEvent);
 
     if (!MapDirty) {
       // redraw old screen, must have been a request for fast refresh
@@ -2257,7 +2261,11 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
       }
       else
       {
-        SelectObject(hDCTemp,hTurnPoint);
+	if(MapScale > 4) {
+	  SelectObject(hDCTemp,hSmall);
+	} else {
+	  SelectObject(hDCTemp,hTurnPoint);
+	}
       }
 
       irange = ((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) 
@@ -2282,12 +2290,15 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
       // JMW
       if (pDisplayTextType == DISPLAYNAMEIFINTASK) {
 
-        if (intask
-	    || ((((WayPointList[i].Flags & AIRPORT) == AIRPORT) || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT))&&(irange))) 
+        if (intask ||
+	    (irange && 
+	     (((WayPointList[i].Flags & AIRPORT) == AIRPORT)
+	      || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)))) 
 	  {
 
           if (DisplayMode.AsInt)
-            wsprintf(Buffer, TEXT("%s:%d%s"),WayPointList[i].Name, (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
+            wsprintf(Buffer, TEXT("%s:%d%s"),WayPointList[i].Name, 
+		     (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), sAltUnit);
           else
             wsprintf(Buffer, TEXT("%s"),WayPointList[i].Name);
 
@@ -2990,7 +3001,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
 
   if (Appearance.MapScale == apMsDefault){
 
-    TCHAR Scale[20];
+    TCHAR Scale[80];
     POINT Start, End;
     HPEN hpOld;
     hpOld = (HPEN)SelectObject(hDC, hpMapScale);
@@ -3068,12 +3079,10 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     SetTextColor(hDC, blackcolor);
     ExtTextOut(hDC, rc.right-10-tsize.cx, End.y+7, 0, NULL, Scale, _tcslen(Scale), NULL);
 
-    #ifdef DEBUG
-#if (WINDOWSPC<1)
+    #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
-    wsprintf(Scale,TEXT("%d ms %d %%"), timestats_av, cpuload);
+    wsprintf(Scale,TEXT("        %d ms %d %%"), timestats_av, cpuload);
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, Scale, _tcslen(Scale), NULL);
-#endif
     #endif
 
     // restore original color
@@ -3084,9 +3093,9 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
   }
   if (Appearance.MapScale == apMsAltA){
 
-    static LastMapWidth = 0;
+    static int LastMapWidth = 0;
     double MapWidth;
-    TCHAR ScaleInfo[50];
+    TCHAR ScaleInfo[80];
 
     HFONT          oldFont;
     int            Height;
@@ -3161,13 +3170,10 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
       }
     }
 
-    #ifdef DEBUG
-#if (WINDOWSPC<1)
-
+    #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
-    wsprintf(ScaleInfo,TEXT("%d ms %d %%"), timestats_av, cpuload);
+    wsprintf(ScaleInfo,TEXT("        %d ms %d %%"), timestats_av, cpuload);
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
-#endif
     #endif
 
     SetTextColor(hDC, oldTextColor);
@@ -3684,7 +3690,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
   
   TCHAR Value[10];
   
-  double Offset;
+  int Offset;
   int i;
   
   if (ActiveWayPoint == -1) {
@@ -3692,8 +3698,8 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     // JMW not going anywhere, so nothing to display
   }
 
-  Offset = DerivedDrawInfo.TaskAltitudeDifference / 300;	// JMW TODO: should be an angle if in final glide mode
-  Offset *= 20;
+  Offset = ((int)DerivedDrawInfo.TaskAltitudeDifference)>>4; 
+  // JMW TODO: should be an angle if in final glide mode
 
   if(Offset > 60) Offset = 60;
   if(Offset < -60) Offset = -60;
@@ -3721,9 +3727,9 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     GlideBar[i].y += ( (rc.bottom - rc.top )/2)+rc.top;
     GlideBar[i].x += rc.left;
   }
-  GlideBar[0].y -= (int)Offset;
-  GlideBar[1].y -= (int)Offset;
-  GlideBar[2].y -= (int)Offset;
+  GlideBar[0].y -= Offset;
+  GlideBar[1].y -= Offset;
+  GlideBar[2].y -= Offset;
 
   if (Appearance.IndFinalGlide == fgFinalGlideAltA){
     for(i=0;i<sizeof(GlideBar)/sizeof(GlideBar[0]);i++){
@@ -3757,7 +3763,8 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     POINT  BmpPos;
     POINT  BmpSize;
 
-    _stprintf(Value, TEXT("%1.0f"), Units::ToUserAltitude(DerivedDrawInfo.TaskAltitudeDifference));
+    _stprintf(Value, TEXT("%1.0f"), 
+	      Units::ToUserAltitude(DerivedDrawInfo.TaskAltitudeDifference));
 
     oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
     GetTextExtentPoint(hDC, Value, _tcslen(Value), &TextSize);
@@ -3766,11 +3773,15 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     SelectObject(hDC, GetStockObject(WHITE_PEN));
     Rectangle(hDC, x, y, x+1+TextSize.cx, y+Appearance.MapWindowBoldFont.CapitalHeight+2);
 
-    ExtTextOut(hDC, x+1, y+rc.top+Appearance.MapWindowBoldFont.CapitalHeight-Appearance.MapWindowBoldFont.AscentHeight+1, 0, NULL, Value, _tcslen(Value), NULL);
+    ExtTextOut(hDC, x+1, 
+	       y+rc.top+Appearance.MapWindowBoldFont.CapitalHeight
+	       -Appearance.MapWindowBoldFont.AscentHeight+1, 
+	       0, NULL, Value, _tcslen(Value), NULL);
 
     if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), &Bmp, &BmpPos, &BmpSize, 0)){
       HBITMAP oldBitMap = (HBITMAP)SelectObject(hDCTemp, Bmp);
-      BitBlt(hDC, x+TextSize.cx+1, y, BmpSize.x, BmpSize.y, hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
+      BitBlt(hDC, x+TextSize.cx+1, y, BmpSize.x, BmpSize.y, 
+	     hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
       SelectObject(hDCTemp, oldBitMap);
     }
 
@@ -3792,33 +3803,26 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 {
   int i, j;
   SNAIL_POINT *P1,*P2;
-  bool p1Visible = false;
-  bool p2Visible = false;
-  bool havep2 = true;
   static BOOL lastCircling = FALSE;
   static float vmax= 5.0;
   static float vmin= -5.0;
   static bool needcolour = true;
-  float this_vmax=0;
-  float this_vmin=0;
+
+  if (DerivedDrawInfo.Circling != lastCircling) {
+    needcolour = true;
+  }
+  lastCircling = DerivedDrawInfo.Circling;
 
   if(!TrailActive)
     return;
 
-  /////////////
-
-    if (DerivedDrawInfo.Circling != lastCircling) {
-      needcolour = true;
-    }
-    lastCircling = DerivedDrawInfo.Circling;
-
-    double traildrift_lat;
-    double traildrift_lon;
-
-    bool dotraildrift = EnableTrailDrift && DerivedDrawInfo.Circling;
+  double traildrift_lat;
+  double traildrift_lon;
+  
+  bool dotraildrift = EnableTrailDrift && DerivedDrawInfo.Circling;
 
   if (dotraildrift) {
-
+    
     traildrift_lat = (DrawInfo.Latitude
 		      -FindLatitude(DrawInfo.Latitude, 
 				    DrawInfo.Longitude, 
@@ -3833,50 +3837,94 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   
   // JMW don't draw first bit from home airport
 
-  havep2 = false;
-
   int ntrail;
-  if (TrailActive==1) {
+  if (needcolour) {
+
+    if (DerivedDrawInfo.Circling) {
+      ntrail = TRAILSIZE; // scan entire trail for sink magnitude
+    } else {
+      ntrail = TRAILSIZE/TRAILSHRINK; // scan only recently for lift magnitude
+    }
+
+    float this_vmax=0;
+    float this_vmin=0;
+    for(i=1;i< ntrail; i++) {
+      j= (TRAILSIZE+iSnailNext-ntrail+i)% TRAILSIZE;
+      P1 = SnailTrail+j; 
+      float cv = P1->Vario;
+      if (cv<this_vmin) {
+	this_vmin = cv;
+      }
+      if (cv>this_vmax) {
+	this_vmax = cv;
+      }
+      P1->Colour = -1; // force recalculation of colour
+    }
+    if (DerivedDrawInfo.Circling) {
+      // scan only for sink after exiting cruise
+      vmin = (float)(min(this_vmin,-5));
+    } else {
+      // scan only for lift after exiting climb
+      vmax = (float)(max(this_vmax,5));
+    }
+    needcolour = false;
+  }
+
+
+  if ((TrailActive==1)&&(!DerivedDrawInfo.Circling)) {
     ntrail = TRAILSIZE;
   } else {
     ntrail = TRAILSIZE/TRAILSHRINK;
   }
 
-  int skipdivisor = ntrail/7;
+
+  int skipdivisor = ntrail/5;
   int skipborder = skipdivisor;
-  int skiplevel=5;
-  bool lastbroken = true;
+  int skiplevel= 3;
+  bool lastbroken = true; // force last one to skip
   POINT lastdrawn;
 
   lastdrawn.x = 0;
   lastdrawn.y = 0;
+  int kd = TRAILSIZE+iSnailNext-ntrail;
 
-  p2Visible = false; // force first one to skip
-
-  for(i=1;i< ntrail;i++) 
+  int is = ((int)DrawInfo.Time)%skiplevel;
+  for(i=1;i< ntrail; ++i) 
   {
-    j= (TRAILSIZE+iSnailNext-ntrail+i)% TRAILSIZE;
-    if (i%skiplevel!=0) {
+    j= kd+i;
+    if (j>=TRAILSIZE) {
+      j-= TRAILSIZE;
+    }
+    is++;
+    if (is < skiplevel) {
       continue;
     }
+    is=0;
     if (i>skipborder) {
       skiplevel=max(1,skiplevel-1);
       skipborder+= skipdivisor;
     }
 
     P1 = SnailTrail+j; 
-    
-    p1Visible = PointVisible(P1->Longitude , 
-                             P1->Latitude);
 
-    // the line is invalid
-    if ((!p2Visible) || (!p1Visible)) {
+    if (DerivedDrawInfo.Circling) {
+      if ((!P1->Circling)&&( i<ntrail-60 )) {
+	// ignore cruise mode lines unless very recent
+	
+	lastbroken = true;
+	P2 = P1;
+	continue;
+      }
+    } else {
+      if ((P1->Circling)&&( j%5 != 0 )) {
+	// draw only every 5 points from circling when in cruise mode
+	continue;
+      }
+    }
 
-      p2Visible = p1Visible;
-
-      // p2 wasn't computed in screen coordinates, better do it next
-      // time if required
-      havep2 = false;
+    if (!PointVisible(P1->Longitude , 
+		      P1->Latitude)) {
+      // the line is invalid
       lastbroken = true;
       P2 = P1;
       continue;
@@ -3885,23 +3933,8 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     // now we know both points are visible, better get screen coords
     // if we don't already.
 
-    double dt;
-
-    if (!havep2) {
-      if (dotraildrift) {
-	dt = max(0,(DrawInfo.Time-P2->Time));
-	LatLon2Screen(P2->Longitude+traildrift_lon*dt, 
-		      P2->Latitude+traildrift_lat*dt, 
-		      P2->Screen);
-      } else {
-	LatLon2Screen(P2->Longitude, 
-		      P2->Latitude, 
-		      P2->Screen);
-      }
-      havep2 = true; // next time our p2 will be in screen coords
-    }
-
     if (dotraildrift) {
+      double dt;
       dt = max(0,(DrawInfo.Time-P1->Time));
       LatLon2Screen(P1->Longitude+traildrift_lon*dt, 
 		    P1->Latitude+traildrift_lat*dt, 
@@ -3911,50 +3944,29 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 		    P1->Latitude, 
 		    P1->Screen);
     }
-
-    // shuffle visibility along
-    p2Visible = p1Visible;
-
+    
     if (abs(P1->Screen.y-lastdrawn.y)
 	+abs(P1->Screen.x-lastdrawn.x)<IBLSCALE(5)) {
       continue;
       // don't draw if very short line
     }
-    lastdrawn = P1->Screen;
+    lastdrawn = P1->Screen;    
 
     // ok, we got this far, so draw the line
 
-    // get the colour
-    short ipen;
-    if (needcolour || (P2->Colour == -1)) {
-      float cv = P2->Vario;
-      
-      if (needcolour) {
-	if (cv<this_vmin) {
-	  this_vmin = cv;
+    if (!lastbroken) {
+      // get the colour
+      if (P1->Colour == -1) {
+	float cv = P1->Vario;
+	if (cv<0) {
+	  cv /= (-vmin); // JMW fixed bug here
+	} else {
+	  cv /= vmax;
 	}
-	if (cv>this_vmax) {
-	  this_vmax = cv;
-	}
+	P1->Colour = min(NUMSNAILCOLORS-1,(short)((cv+1.0)/2.0*NUMSNAILCOLORS));
       }
-
-      if (cv<0) {
-	cv /= (-vmin); // JMW fixed bug here
-      } else {
-	cv /= vmax;
-      }
-
-      ipen = min(NUMSNAILCOLORS-1,(short)((cv+1.0)/2.0*NUMSNAILCOLORS));
-      if (needcolour) {
-	P2->Colour = -1; // force recolourisation again
-      } else {
-	P2->Colour = ipen;
-      }
-    } else {
-      ipen = P2->Colour;
+      SelectObject(hdc,hSnailPens[P1->Colour]);
     }
-    SelectObject(hdc,hSnailPens[ipen]);
-
 #ifndef NOLINETO 
     if (lastbroken) { // draw set cursor at P1
       MoveToEx(hdc, P1->Screen.x, P1->Screen.y, NULL);
@@ -3966,11 +3978,8 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       DrawSolidLine(hdc, P1->Screen, P2->Screen);
     }
 #endif
-
     lastbroken = false;
-
     P2 = P1;
-    havep2 = true; // next time our p2 will be in screen coords
   }
 
   // draw final point to glider
@@ -3980,12 +3989,6 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   }
 #endif
 
-  if (needcolour) {
-    // autoscale colors (low pass filter)
-    vmin = (float)(min(this_vmin,-5));
-    vmax = (float)(max(this_vmax,5));
-  }
-  needcolour = false;
 }
 
 
@@ -4398,24 +4401,22 @@ void MapWindow::DrawMapScale2(HDC hDC, RECT rc, POINT Orig_Aircraft)
   if (Appearance.MapScale2 == apMs2None) return;
 
   HPEN hpOld   = (HPEN)SelectObject(hDC, hpMapScale);
-  HPEN hpWhite = (HPEN)CreatePen(PS_SOLID, 2, RGB(0xd0,0xd0,0xd0));
-  HPEN hpBlack = (HPEN)CreatePen(PS_SOLID, 2, RGB(0x30,0x30,0x30));
+  HPEN hpWhite = (HPEN)GetStockObject(WHITE_PEN);
+  HPEN hpBlack = (HPEN)GetStockObject(BLACK_PEN);
 
-  double y;
   bool color = false;
   POINT Start, End={0,0};
   bool first=true;
 
-  double barsize = findMapScaleBarSize(rc);
+  int barsize = iround(findMapScaleBarSize(rc));
 
-  for (y=(double)Orig_Aircraft.y; y<(double)rc.bottom+barsize; y+= barsize) {
+  Start.x = rc.right-2;
+  for (Start.y=Orig_Aircraft.y; Start.y<rc.bottom+barsize; Start.y+= barsize) {
     if (color) {
       SelectObject(hDC, hpWhite);
     } else {
       SelectObject(hDC, hpBlack);
     }
-    Start.x = rc.right-1;
-    Start.y = (int)y;
     if (!first) {
       DrawSolidLine(hDC,Start,End);
     } else {
@@ -4427,14 +4428,12 @@ void MapWindow::DrawMapScale2(HDC hDC, RECT rc, POINT Orig_Aircraft)
 
   color = true;
   first = true;
-  for (y=(double)Orig_Aircraft.y; y>(double)rc.top-barsize; y-= barsize) {
+  for (Start.y=Orig_Aircraft.y; Start.y>rc.top-barsize; Start.y-= barsize) {
     if (color) {
       SelectObject(hDC, hpWhite);
     } else {
       SelectObject(hDC, hpBlack);
     }
-    Start.x = rc.right-1;
-    Start.y = (int)y;
     if (!first) {
       DrawSolidLine(hDC,Start,End);
     } else {
@@ -4444,12 +4443,9 @@ void MapWindow::DrawMapScale2(HDC hDC, RECT rc, POINT Orig_Aircraft)
     color = !color;
   }
 
-
   // draw text as before
   
   SelectObject(hDC, hpOld);
-  DeleteObject(hpWhite);
-  DeleteObject(hpBlack);
 
 }
 
@@ -4542,14 +4538,22 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
 
   int i;
 //  double dX, dY;
+  TextInBoxMode_t displaymode;
+  displaymode.AsInt = 0;
+
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    if (_tcslen(DrawInfo.FLARM_Traffic[i].ID)>0) {
+    if (DrawInfo.FLARM_Traffic[i].ID!=0) {
       
       // TODO: draw direction, height?
       POINT sc;
       LatLon2Screen(DrawInfo.FLARM_Traffic[i].Longitude, 
 		    DrawInfo.FLARM_Traffic[i].Latitude, 
 		    sc);
+      if (DrawInfo.FLARM_Traffic[i].Name) {
+	TextInBox(hDC, DrawInfo.FLARM_Traffic[i].Name, sc.x+IBLSCALE(3),
+		  sc.y, 0, displaymode, 
+		  true);
+      }
 
       /*  Direction line disabled, not working very well
 

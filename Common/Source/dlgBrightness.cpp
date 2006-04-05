@@ -52,9 +52,31 @@ static void OnCloseClicked(WindowControl * Sender){
 
 bool EnableAutoBrightness=true;
 int BrightnessValue=50;
-// TODO implement this!
 ///////////
 
+static void UpdateValues() {
+  static DWORD fpsTimeLast = 0;
+  DWORD fpsTime = ::GetTickCount();
+  if (fpsTime-fpsTimeLast<200) {
+    return;
+  }
+  fpsTimeLast = fpsTime;
+
+  TCHAR text[100];
+  if (EnableAutoBrightness) {
+    InputEvents::eventDLLExecute(
+				 TEXT("altairplatform.dll SetAutoMode on"));
+    _stprintf(text,TEXT("altairplatform.dll SetAutoBrightness %03d"),
+	      BrightnessValue);
+  } else {
+    InputEvents::eventDLLExecute(
+				 TEXT("altairplatform.dll SetAutoMode off"));
+    _stprintf(text,TEXT("altairplatform.dll SetManualBrightness %03d"),
+	      BrightnessValue);
+  }
+  InputEvents::eventDLLExecute(text);
+
+}
 
 static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
   switch(Mode){
@@ -64,6 +86,7 @@ static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daPut: 
     case DataField::daChange:
       EnableAutoBrightness = (Sender->GetAsInteger()!=0);
+      UpdateValues();
     break;
   }
 }
@@ -78,6 +101,7 @@ static void OnBrightnessData(DataField *Sender,
     case DataField::daPut: 
     case DataField::daChange:
       BrightnessValue = iround(Sender->GetAsFloat());
+      UpdateValues();
     break;
   }
 }
@@ -114,19 +138,7 @@ void dlgBrightnessShowModal(void){
     }
     wf->ShowModal();
 
-    TCHAR text[100];
-      if (EnableAutoBrightness) {
-	InputEvents::eventDLLExecute(
-	       TEXT("altairbacklight.dll SetAutoMode on"));
-	_stprintf(text,TEXT("altairbacklight.dll SetAutoBrightness %03d"),
-		  BrightnessValue);
-      } else {
-	InputEvents::eventDLLExecute(
-	       TEXT("altairbacklight.dll SetAutoMode off"));
-	_stprintf(text,TEXT("altairbacklight.dll SetManualBrightness %03d"),
-		  BrightnessValue);
-      }
-      InputEvents::eventDLLExecute(text);
+    UpdateValues();
 
     delete wf;
   }

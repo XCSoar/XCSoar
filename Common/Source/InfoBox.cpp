@@ -48,12 +48,12 @@ extern HFONT  InfoWindowFont;
 extern HFONT  CDIWindowFont;
 
 //static ATOM atmWndClass;
-static redColor = RGB(0xff,0x0,0x0);
-static blueColor = RGB(0x0,0x0,0xff);
-static fgColor = RGB(0x0,0x0,0x0);
-static bkColor = RGB(0xff,0xff,0xff);
-static bkColorSel = RGB(150,0x0,0x0);
-static bdColor = RGB(80,80,80);  
+static COLORREF redColor = RGB(0xff,0x0,0x0);
+static COLORREF blueColor = RGB(0x0,0x0,0xff);
+static COLORREF fgColor = RGB(0x0,0x0,0x0);
+static COLORREF bkColor = RGB(0xff,0xff,0xff);
+static COLORREF bkColorSel = RGB(150,0x0,0x0);
+static COLORREF bdColor = RGB(80,80,80);  
 static DWORD lastErr;
 static HBRUSH hBrushDefaultBackGround;
 static HBRUSH hBrushDefaultBackGroundSel;
@@ -436,7 +436,7 @@ void InfoBox::Paint(void){
 
   if (!GlobalRunning) return; // safety
 
-  static InitDone = false;
+  static bool InitDone = false;
   RECT rc;
 
   rc.left = 0;

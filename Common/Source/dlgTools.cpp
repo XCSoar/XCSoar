@@ -306,12 +306,17 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
   LPTSTR lpRes; 
   HRSRC hResInfo;
   HGLOBAL hRes; 
-  int l;
+  int l, len;
 
   // Find the xml resource.
   hResInfo = FindResource (hInst, lpName, TEXT("XMLDialog")); 
 
   if (hResInfo == NULL) {
+    MessageBoxX(hWndMainWindow,
+      gettext(TEXT("Can't find resource")),
+      gettext(TEXT("Dialog error")),
+      MB_OK|MB_ICONEXCLAMATION);
+
     // unable to find the resource
     return XMLNode::emptyXMLNode;
   }
@@ -320,6 +325,11 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
   hRes = LoadResource (hInst, hResInfo); 
 
   if (hRes == NULL) {
+    MessageBoxX(hWndMainWindow,
+      gettext(TEXT("Can't load resource")),
+      gettext(TEXT("Dialog error")),
+      MB_OK|MB_ICONEXCLAMATION);
+
     // unable to load the resource
     return XMLNode::emptyXMLNode;
   }
@@ -330,14 +340,20 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
   if (lpRes) {
     l = SizeofResource(hInst,hResInfo);
     if (l>0) {
-      char *buf= (char*)malloc(l+1);
+      char *buf= (char*)malloc(l+2);
       if (!buf) {
+	MessageBoxX(hWndMainWindow,
+		    gettext(TEXT("Can't allocate memory")),
+		    gettext(TEXT("Dialog error")),
+		    MB_OK|MB_ICONEXCLAMATION);
 	// unable to allocate memory
 	return XMLNode::emptyXMLNode;
       }
       strncpy(buf,(char*)lpRes,l);
       buf[l]=0; // need to explicitly null-terminate.
-
+      buf[l+1]=0;
+      len = l;      
+      
 #if defined(WIN32) || defined(UNDER_CE)
 #ifdef _UNICODE
 #if !defined(UNDER_CE)
@@ -353,6 +369,8 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
 			      l*2+2);          // size of buffer
 	  free(buf);
 	  buf=(char*)b2;
+	  buf[l*2]= 0;
+	  buf[l*2+1]= 0;
 #if !defined(UNDER_CE)
 	}
 #endif
@@ -375,13 +393,17 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
 	}
 #endif
 #endif
-
+      
       XMLNode x=XMLNode::parseString((LPTSTR)buf,tag,pResults);
 
       free(buf);
       return x;
     }
   }
+  MessageBoxX(hWndMainWindow,
+	      gettext(TEXT("Can't lock resource")),
+	      gettext(TEXT("Dialog error")),
+	      MB_OK|MB_ICONEXCLAMATION);
   return XMLNode::emptyXMLNode;
 }
 
@@ -390,12 +412,23 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
 XMLNode xmlOpenResourceHelper(TCHAR *lpszXML, LPCTSTR tag)
 {
     XMLResults pResults;
+
+    pResults.error = eXMLErrorNone;
     XMLNode::GlobalError = false;
     XMLNode xnode=xmlLoadFromResource(lpszXML, tag, &pResults);
     if (pResults.error != eXMLErrorNone)
     {
-	XMLNode::GlobalError = true;
+      XMLNode::GlobalError = true;
+      TCHAR errortext[100];
+      _stprintf(errortext,TEXT("%s %i %i"), XMLNode::getError(pResults.error),
+		pResults.nLine, pResults.nColumn);
+		
+      MessageBoxX(hWndMainWindow,
+		  errortext,
+		  gettext(TEXT("Dialog error")),
+		  MB_OK|MB_ICONEXCLAMATION);
 	// was exit(255);
+
     }
     return xnode;
 }

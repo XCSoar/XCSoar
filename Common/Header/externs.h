@@ -141,6 +141,7 @@ extern bool CircleZoom;
 extern bool EnableTopology;
 extern bool EnableTerrain;
 extern bool FinalGlideTerrain;
+extern bool EnableAutoWind;
 extern bool EnableSoundVario;
 extern bool EnableSoundTask;
 extern bool EnableSoundModes;

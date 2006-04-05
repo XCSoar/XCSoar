@@ -1133,9 +1133,10 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 			      double *nearestdistance, double *nearestbearing,
 			      double *height=NULL)
 {
-  unsigned i;
+  unsigned int i;
   int NearestIndex = 0;
   double Dist;
+  int ifound = -1;
 
   if(NumberOfAirspaceCircles == 0) {
       return -1;
@@ -1169,10 +1170,11 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 	    // no need to continue search, inside
 	    return i;
 	  }
+	  ifound = i;
       }
     }
   }
-  return -1;
+  return ifound;
 }
 
 
@@ -1421,6 +1423,20 @@ void FindNearestAirspace(double longitude, double latitude,
   *foundarea = FindNearestAirspaceArea(longitude, latitude,
 				       &nearestd2, &nearestb2, height);
 
+  if ((*foundcircle>=0)&&(*foundarea<0)) {
+      *nearestdistance = nearestd1;
+      *nearestbearing = nearestb1;
+      *foundarea = -1;
+      return;
+  }
+  if ((*foundarea>=0)&&(*foundcircle<0)) {
+      *nearestdistance = nearestd2;
+      *nearestbearing = nearestb2;
+      *foundcircle = -1;
+      return;
+  }
+
+
   if (nearestd1<nearestd2) {
     if (nearestd1<100000) {
       *nearestdistance = nearestd1;
@@ -1434,6 +1450,7 @@ void FindNearestAirspace(double longitude, double latitude,
       *foundcircle = -1;
     }
   }
+  return;
 }
 
 

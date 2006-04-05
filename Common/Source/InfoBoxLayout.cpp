@@ -468,6 +468,7 @@ void InfoBoxLayout::DestroyInfoBoxes(void){
 ///////////////////////
 
 HWND ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
+bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
 
 int ButtonLabel::ButtonLabelGeometry = 0; // unused currently
 
@@ -579,6 +580,7 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
     SetWindowPos(hWndButtonWindow[i],HWND_TOP,
 		 x, y,
 		 xsize, ysize, SWP_SHOWWINDOW);
+    ButtonVisible[i]= true;
 
     SetLabelText(i,NULL);
     SetWindowLong(hWndButtonWindow[i], GWL_USERDATA, 4);	  
@@ -620,9 +622,11 @@ void ButtonLabel::SetLabelText(int index, TCHAR *text) {
 
   if ((text==NULL) || (*text==_T('\0'))||(*text==_T(' '))) {
     ShowWindow(hWndButtonWindow[index], SW_HIDE);
+    ButtonVisible[index]= false;
   } else {
     SetWindowText(hWndButtonWindow[index], gettext(text));
     ShowWindow(hWndButtonWindow[index], SW_SHOW);
+    ButtonVisible[index]= true;
   }
 
 }
@@ -638,4 +642,22 @@ bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
     }
   }
   return FALSE;
+}
+
+
+void ButtonLabel::AnimateButton(int i) {
+  RECT mRc, aniRect;
+  GetWindowRect(hWndButtonWindow[i], &mRc);
+  
+  if (ButtonVisible[i]) {
+    aniRect.top = (mRc.top*5+mRc.bottom)/6;
+    aniRect.left = (mRc.left*5+mRc.right)/6;
+    aniRect.right = (mRc.left+mRc.right*5)/6;
+    aniRect.bottom = (mRc.top+mRc.bottom*5)/6;
+    SetSourceRectangle(aniRect);
+    DrawWireRects(&mRc, 5);
+  }
+  
+  SetSourceRectangle(mRc);
+
 }

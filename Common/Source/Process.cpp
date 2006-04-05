@@ -246,6 +246,8 @@ extern void PopupWaypointDetails();
 */
 void NextUpDown(int UpDown)
 {
+  LockFlightData();
+
   if(UpDown>0) {
     if(ActiveWayPoint < MAXTASKPOINTS) {
       // Increment Waypoint
@@ -291,13 +293,12 @@ void NextUpDown(int UpDown)
   } 
   else if (UpDown==0) {
     SelectedWaypoint = Task[ActiveWayPoint].Index;
-    UnlockFlightData();
     PopupWaypointDetails();
-    LockFlightData();
   }
   if (ActiveWayPoint>=0) {
     SelectedWaypoint = Task[ActiveWayPoint].Index;
   }
+  UnlockFlightData();
 }
 
 

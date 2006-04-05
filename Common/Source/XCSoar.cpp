@@ -564,7 +564,7 @@ void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
   if (DisplayLocked) {
     ShowWindow(hWndMenuButton, SW_HIDE);
-    MenuTimeOut = MenuTimeoutMax/2;
+    MenuTimeOut = MenuTimeoutMax;
     DisplayTimeOut = 0;
   }
 }
@@ -605,15 +605,19 @@ void SettingsLeave() {
   LockNavBox();
   MenuActive = false;
     
-  if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED))
+  if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED))
     {
-      CloseTerrain();
       Task[0].Index = -1;  ActiveWayPoint = -1;
-      
+
+      // re-load terrain
+      CloseTerrain();
       OpenTerrain();
+
+      // re-load waypoints
       ReadWayPoints();
       ReadAirfieldFile();
       
+      // re-set home
       if (WAYPOINTFILECHANGED) {
 	HomeWaypoint = -1;
 	if(NumberOfWayPoints) SetHome();
@@ -632,12 +636,7 @@ void SettingsLeave() {
       CloseAirspace();
       ReadAirspace();
       SortAirspace();
-    }
-  
-  if (AIRFIELDFILECHANGED)
-    {
-      ReadAirfieldFile();
-    }
+    }  
   
   if (POLARFILECHANGED) {
     CalculateNewPolarCoef();
@@ -648,8 +647,10 @@ void SettingsLeave() {
       || AIRSPACEFILECHANGED
       || WAYPOINTFILECHANGED
       || TERRAINFILECHANGED
-      )
+      ) {
     CloseProgressDialog();
+    SetFocus(hWndMapWindow);
+  }
   
   UnlockFlightData();
   UnlockNavBox();
@@ -892,6 +893,10 @@ void RestartCommPorts() {
 #endif
     }
 
+#if (WINDOWSPC<1)
+  NMEAParser::Reset();
+#endif
+
 #if (WINDOWSPC>0)
 #else
   first = true;
@@ -927,7 +932,6 @@ void RestartCommPorts() {
 
 #if (WINDOWSPC<1)
   devInit(TEXT(""));      
-  NMEAParser::Reset();
 #endif
 
   UnlockComm();
@@ -1301,6 +1305,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   OpenTopology();
   ReadTopology();
+
+  OpenFLARMDetails();
 
   VarioSound_Init();
   VarioSound_EnableSound(EnableSoundVario);
@@ -1839,7 +1845,7 @@ void DoInfoKey(int keycode) {
 int debounceTimeout=200;
 
 bool Debounce(void) {
-  static DWORD fpsTimeLast= -1;
+  static DWORD fpsTimeLast= 0;
   DWORD fpsTimeThis = ::GetTickCount();
   DWORD dT = fpsTimeThis-fpsTimeLast;
 
@@ -1893,7 +1899,8 @@ void Shutdown(void) {
   SetEvent(varioTriggerEvent);
 
   // Clear data
-  NumberOfWayPoints = 0; Task[0].Index = -1;  ActiveWayPoint = -1; 
+  Task[0].Index = -1;  ActiveWayPoint = -1; 
+  CloseWayPoints();
   AATEnabled = FALSE;
   NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; 
   NumberOfAirspaceCircles = 0;
@@ -1910,6 +1917,8 @@ void Shutdown(void) {
   if (Port2Available)
     Port2Close();
 #endif
+
+  CloseFLARMDetails();
 
   // Kill windows
 
@@ -1956,8 +1965,6 @@ void Shutdown(void) {
   if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
   if(AirspaceScreenPoint != NULL)  LocalFree((HLOCAL)AirspaceScreenPoint);
   if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
-  
-  CloseWayPoints();
   
   DeleteCriticalSection(&CritSec_FlightData);
   DeleteCriticalSection(&CritSec_NavBox);
@@ -2030,7 +2037,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       memset (&s_sai, 0, sizeof (s_sai));
       s_sai.cbSize = sizeof (s_sai);
 
-      iTimerID = SetTimer(hWnd,1000,500,NULL);
+      iTimerID = SetTimer(hWnd,1000,500,NULL); // 2 times per second
 
       hWndCB = CreateRpCommandBar(hWnd);
 
@@ -2195,17 +2202,19 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 #ifdef _SIM_
                 (true)
                 #else
-	                MessageBoxX(hWnd,
-				    gettext(TEXT("Do you wish to exit?")),
-				    gettext(TEXT("Exit?")),
-				    MB_YESNO|MB_ICONQUESTION) == IDYES
+		MessageBoxX(hWnd,
+			    gettext(TEXT("Do you wish to exit?")),
+			    gettext(TEXT("Exit?")),
+			    MB_YESNO|MB_ICONQUESTION) == IDYES
                 #endif
-              ) {
+		) {
 
-		SendMessage(hWnd, WM_ACTIVATE, MAKEWPARAM(WA_INACTIVE, 0), (LPARAM)hWnd);
+		SendMessage(hWnd, 
+			    WM_ACTIVATE, 
+			    MAKEWPARAM(WA_INACTIVE, 0), 
+			    (LPARAM)hWnd);
 		SendMessage (hWnd, WM_CLOSE, 0, 0);
-                } else {
-              }
+	      }
               MapWindow::MapDirty = true;
 	      HideMenu();
               FullScreen();
@@ -2694,7 +2703,7 @@ void CommonProcessTimer()
     }
 
   if (DisplayLocked) {
-    if(MenuTimeOut==MenuTimeoutMax/2) {
+    if(MenuTimeOut==MenuTimeoutMax) {
       ShowWindow(hWndMenuButton, SW_HIDE);
       if (!MapWindow::isPan()) {
 	InputEvents::setMode(TEXT("default"));
@@ -2757,7 +2766,9 @@ void ProcessTimer(void)
   itimeout++;
   
   // write settings to vario every second
-  VarioWriteSettings();
+  if (itimeout %2==0) {
+    VarioWriteSettings();
+  }
     
   // also service replay logger
   ReplayLogger::Update();
@@ -2775,7 +2786,7 @@ void ProcessTimer(void)
     return;
   }
   
-  if (itimeout % 5 != 0) {
+  if (itimeout % 10 != 0) {
     // timeout if no new data in 5 seconds
     return;
   }
@@ -2844,6 +2855,7 @@ void ProcessTimer(void)
 	  // no activity for 30 seconds, so assume PDA has been
 	  // switched off and on again
 	  //
+#if (WINDOWSPC<1)
 	  NMEAParser::GpsUpdated = true;
 	  MapWindow::MapDirty = true;
 	  SetEvent(drawTriggerEvent);
@@ -2854,6 +2866,7 @@ void ProcessTimer(void)
 	  
 #ifndef GNAV
 	  RestartCommPorts();
+#endif
 #endif
 	  
 #if (EXPERIMENTAL > 0)
@@ -2947,9 +2960,7 @@ void SIMProcessTimer(void)
   if (i%2==0) return;
 
 #ifdef DEBUG
-#if 0
-  NMEAParser::TestRoutine(&GPS_INFO);
-#endif
+  //  NMEAParser::TestRoutine(&GPS_INFO);
 #endif
 
   NMEAParser::GpsUpdated = TRUE;
@@ -2967,8 +2978,8 @@ void SwitchToMapWindow(void)
   DefocusInfoBox();
 
   SetFocus(hWndMapWindow);
-  if (  MenuTimeOut< MenuTimeoutMax/2) {
-    MenuTimeOut = MenuTimeoutMax/2;
+  if (  MenuTimeOut< MenuTimeoutMax) {
+    MenuTimeOut = MenuTimeoutMax;
   }
   if (  InfoBoxFocusTimeOut< FOCUSTIMEOUTMAX) {
     InfoBoxFocusTimeOut = FOCUSTIMEOUTMAX;

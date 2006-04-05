@@ -19,7 +19,7 @@
 // Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 // Boston, MA  02111-1307, USA.
 //
-// $Id: leastsqs.cpp,v 1.5 2005/11/03 20:11:07 samgi Exp $
+// $Id: leastsqs.cpp,v 1.6 2006/04/05 11:26:43 jwharington Exp $
 //
 /*
 NOTE: Sompe portions copyright as above
@@ -97,7 +97,7 @@ void LeastSquares::least_squares_update(double y) {
 }
 
 
-/* incrimentally update existing values with a new data point */
+/* incrementally update existing values with a new data point */
 void LeastSquares::least_squares_update(double x, double y) {
     double error;
 
@@ -134,7 +134,7 @@ void LeastSquares::least_squares_update(double x, double y) {
 
     double denom = 	( (double)sum_n * sum_xi_2 - sum_xi * sum_xi );
 
-    if (fabs(denom)>0) {
+    if (fabs(denom)>0.001) {
       m = ( (double)sum_n * sum_xi_yi - sum_xi * sum_yi ) / 
 	denom;
     } else {

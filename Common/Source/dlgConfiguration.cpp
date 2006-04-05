@@ -71,6 +71,8 @@ static WndFrame *wConfig13=NULL;
 static WndFrame *wConfig14=NULL;
 static WndFrame *wConfig15=NULL;
 
+extern bool EnableAnimation;
+
 #define NUMPAGES 14
 
 static void NextPage(int Step){
@@ -85,7 +87,7 @@ static void NextPage(int Step){
     wf->SetCaption(TEXT("2 Map Display"));
     break;
   case 2:
-    wf->SetCaption(TEXT("3 Final Glide"));
+    wf->SetCaption(TEXT("3 Glide Computer"));
     break;
   case 3:
     wf->SetCaption(TEXT("4 Polar"));
@@ -633,6 +635,12 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableAutoWind);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpBlockSTF"));
   if (wp) {
     wp->GetDataField()->Set(EnableBlockSTF);
@@ -695,6 +703,12 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
   if (wp) {
     wp->GetDataField()->Set(MapWindow::EnableTrailDrift);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAnimation"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableAnimation);
     wp->RefreshDisplay();
   }
 
@@ -1086,6 +1100,15 @@ void dlgConfigurationShowModal(void){
 
   // TODO: implement a cancel button that skips all this below after exit.
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAnimation"));
+  if (wp) {
+    if (EnableAnimation != wp->GetDataField()->GetAsBoolean()) {
+      EnableAnimation = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryAnimation, EnableAnimation);
+      changed = true;
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
   if (wp) {
     if (MapWindow::EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
@@ -1324,6 +1347,15 @@ void dlgConfigurationShowModal(void){
       SAFETYALTITUDETERRAIN = ival;
       SetToRegistry(szRegistrySafetyAltitudeTerrain,
 		    (DWORD)SAFETYALTITUDETERRAIN);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
+  if (wp) {
+    if (EnableAutoWind != wp->GetDataField()->GetAsBoolean()) {
+      EnableAutoWind = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryAutoWind, EnableAutoWind);
       changed = true;
     }
   }

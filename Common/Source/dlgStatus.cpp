@@ -97,18 +97,26 @@ void dlgStatusShowModal(void){
   sunsetmins = (int)((sunsettime-sunsethours)*60);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLongitude"));
-  wp->SetText(sLongitude);
+  if (wp) {
+    wp->SetText(sLongitude);
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLatitude"));
-  wp->SetText(sLatitude);
+  if (wp) {
+    wp->SetText(sLatitude);
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
-  _stprintf(Temp, TEXT("%.0f %s"), GPS_INFO.Altitude*ALTITUDEMODIFY, Units::GetAltitudeName());
-  wp->SetText(Temp);
+  if (wp) {
+    _stprintf(Temp, TEXT("%.0f %s"), GPS_INFO.Altitude*ALTITUDEMODIFY, Units::GetAltitudeName());
+    wp->SetText(Temp);
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSunset"));
-  _stprintf(Temp, TEXT("%02d:%02d"), sunsethours,sunsetmins);
-  wp->SetText(Temp);
+  if (wp) {
+    _stprintf(Temp, TEXT("%02d:%02d"), sunsethours,sunsetmins);
+    wp->SetText(Temp);
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLocalTime"));
   if (wp) {
@@ -132,23 +140,35 @@ void dlgStatusShowModal(void){
                         WayPointList[iwaypoint].Longitude)*DISTANCEMODIFY;
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpNear"));
-    wp->SetText(WayPointList[iwaypoint].Name);
+    if (wp) {
+      wp->SetText(WayPointList[iwaypoint].Name);
+    }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpBearing"));
-    _stprintf(Temp, TEXT("%d"), (int)(bearing+0.5));
-    wp->SetText(Temp);
+    if (wp) {
+      _stprintf(Temp, TEXT("%d"), (int)(bearing+0.5));
+      wp->SetText(Temp);
+    }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpDistance"));
-    _stprintf(Temp, TEXT("%.1f %s"), distance, Units::GetDistanceName());
-    wp->SetText(Temp);
+    if (wp) {
+      _stprintf(Temp, TEXT("%.1f %s"), distance, Units::GetDistanceName());
+      wp->SetText(Temp);
+    }
 
   } else {
     wp = (WndProperty*)wf->FindByName(TEXT("prpNear"));
-    wp->SetText(TEXT("-"));
+    if (wp) {
+      wp->SetText(TEXT("-"));
+    }
     wp = (WndProperty*)wf->FindByName(TEXT("prpBearing"));
-    wp->SetText(TEXT("-"));
+    if (wp) {
+      wp->SetText(TEXT("-"));
+    }
     wp = (WndProperty*)wf->FindByName(TEXT("prpDistance"));
-    wp->SetText(TEXT("-"));
+    if (wp) {
+      wp->SetText(TEXT("-"));
+    }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFlightTime"));
