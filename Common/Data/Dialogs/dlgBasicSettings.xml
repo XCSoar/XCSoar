@@ -7,13 +7,16 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmBasicSettingRegular" Type="Dialog" X=5 Y=5 Width=163 Height=160 Caption="Basic Settings" Font=2 BackColor=0xDADBAB>
+<WndForm Name="frmBasicSettingRegular" Type="Dialog" X=5 Y=5 Width=163 Height=190 Caption="Basic Settings" Font=2 BackColor=0xDADBAB>
 
   <WndButton   Caption="Close"    X=78 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked">
   </WndButton>
 
   <WndProperty Caption="Ballast"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2>
     <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=0 Max=100 Step=5  OnDataAccess="OnBallastData"/>
+  </WndProperty>
+  <WndProperty Name="prpBallastLitres" Caption="Volume" X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
+    <DataField name="" DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" ReadOnly=1 />
   </WndProperty>
   <WndProperty Caption="Bugs"     X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2>
     <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=50 Max=100 Step=1  OnDataAccess="OnBugsData"/>

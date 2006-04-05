@@ -25,7 +25,7 @@ event=TaskLoad /NOR Flash/Default.tsk
 mode=default
 type=gce
 data=STARTUP_REAL
-event=DLLExecute AltairBacklight.dll WakeUp
+event=DLLExecute AltairPlatform.dll WakeUp
 
 mode=default
 type=gce
@@ -42,7 +42,7 @@ event=Logger stop
 # mode=default
 # ------------
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2
 type=key
 data=ESCAPE
 event=Mode default
@@ -77,41 +77,6 @@ type=key
 data=F4
 label=
 location=4
-
-mode=default
-type=key
-data=6
-label=
-event=Null
-location=5
-
-mode=default
-type=key
-data=7
-label=
-event=Null
-location=6
-
-mode=default
-type=key
-data=8
-label=
-event=Null
-location=7
-
-mode=default
-type=key
-data=9
-label=
-event=Null
-location=8
-
-mode=default
-type=key
-data=0
-label=
-event=Null
-location=9
 
 ###### main entry buttons
 
@@ -218,44 +183,43 @@ type=key
 data=6
 event=Pan show
 event=Pan supertoggle
+label=
+location=5
 
 mode=default
 type=key
 data=7
 event=Zoom in
+label=
+location=6
 
 mode=default
 type=key
 data=8
 event=Zoom out
+label=
+location=7
 
 mode=default
 type=key
 data=9
 event=MarkLocation
+label=
+location=8
 
 mode=default
 type=key
 data=0
 event=ArmAdvance show
 event=ArmAdvance toggle
+label=
+location=9
 
 mode=default
 type=key
 data=RETURN
 event=ClearAirspaceWarnings
 event=ClearStatusMessages
-
-mode=default
-type=key
-data=l
-event=MarkLocation
-
-mode=default
-type=key
-data=r
-event=ScreenModes toggle
-
 
 # ------------
 # mode=infobox

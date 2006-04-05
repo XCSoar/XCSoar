@@ -181,7 +181,7 @@ void GaugeVario::Render() {
   static POINT orgMiddle  = {-1,-1};
   static POINT orgBottom  = {-1,-1};
   static int ValueHeight;
-  static InitDone = false;
+  static bool InitDone = false;
 
   double vval;
 
@@ -300,7 +300,7 @@ void GaugeVario::MakePolygon(const int i) {
 
   if (!InitDone){
     if (Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle) {
-      nlength0 = 25*InfoBoxLayout::scale;
+      nlength0 = 18*InfoBoxLayout::scale;
       nlength1 = 6*InfoBoxLayout::scale;
       nwidth = 3*InfoBoxLayout::scale;
     } else {

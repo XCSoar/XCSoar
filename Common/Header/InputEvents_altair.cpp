@@ -24,7 +24,7 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_SIMULATOR] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventDLLExecute, TEXT("AltairBacklight.dll WakeUp"), event_id);
+event_id = InputEvents::makeEvent(&eventDLLExecute, TEXT("AltairPlatform.dll WakeUp"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
 
@@ -41,7 +41,10 @@ GC2Event[mode_id][GCE_LANDING] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
-mode_id = InputEvents::mode2int(TEXT("default"), true);
+mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
+Key2Event[mode_id][VK_ESCAPE] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
 Key2Event[mode_id][VK_ESCAPE] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
@@ -228,36 +231,6 @@ Key2Event[mode_id][VK_F4] = event_id;
 mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_F4] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
-mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT(""),5,event_id);
-Key2Event[mode_id]['6'] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
-mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT(""),6,event_id);
-Key2Event[mode_id]['7'] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
-mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT(""),7,event_id);
-Key2Event[mode_id]['8'] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
-mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT(""),8,event_id);
-Key2Event[mode_id]['9'] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
-mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT(""),9,event_id);
-Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Nav1"), event_id);
@@ -346,27 +319,32 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventPan, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("in"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("out"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -374,16 +352,6 @@ event_id = InputEvents::makeEvent(&eventClearAirspaceWarnings, TEXT(""), event_i
 event_id = InputEvents::makeEvent(&eventClearStatusMessages, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_RETURN] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""), event_id);
-mode_id = InputEvents::mode2int(TEXT("default"), true);
-Key2Event[mode_id]['L'] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"), event_id);
-mode_id = InputEvents::mode2int(TEXT("default"), true);
-Key2Event[mode_id]['R'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT("previous"), event_id);

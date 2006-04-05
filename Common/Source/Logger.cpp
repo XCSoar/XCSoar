@@ -796,6 +796,9 @@ bool ReplayLogger::UpdateInternal(void) {
 
     if (SpeedX>0) {
       LockFlightData();
+      if (init) {
+	flightstats.Reset();
+      }
       GPS_INFO.Latitude = LatX;
       GPS_INFO.Longitude = LonX;
       GPS_INFO.Speed = SpeedX;
@@ -828,6 +831,7 @@ void ReplayLogger::Start(void) {
   if (Enabled) {
     Stop();
   }
+  flightstats.Reset();
   if (!UpdateInternal()) {
     // TODO couldn't start, give error dialog
     MessageBoxX(hWndMapWindow,

@@ -42,7 +42,7 @@ Copyright_License {
 
 HANDLE hRead1Thread = NULL;              // Handle to the read thread
 static BOOL  Port1CloseThread;
-static BOOL  fRxThreadTerminated;
+static BOOL  fRxThreadTerminated=TRUE;
 static TCHAR sPortName[8];
 
 static DWORD dwMask1;
@@ -242,7 +242,7 @@ DWORD Port1ReadThread (LPVOID lpvoid)
   PurgeComm(hPort1,
             PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
   CloseHandle (hPort1);
-
+  hPort1 = INVALID_HANDLE_VALUE;
   return 0;
 }
 
@@ -284,15 +284,21 @@ BOOL Port1Close ()
   return FALSE;
 }
 
+
 void Port1WriteString(TCHAR *Text)
 {
-	int i,len;
+  LockComm();
 
-	len = _tcslen(Text);
+  int i,len;
 
-	for(i=0;i<len;i++)
-		Port1Write ((BYTE)Text[i]);
+  len = _tcslen(Text);
+
+  for(i=0;i<len;i++)
+    Port1Write ((BYTE)Text[i]);
+
+  UnlockComm();
 }
+
 
 // Stop Rx Thread
 // return: TRUE on success, FALSE on error
@@ -339,7 +345,6 @@ BOOL Port1StopRxThread(void){
   return(fRxThreadTerminated);
 
 }
-
 
                                         // Restart Rx Thread
                                         // return: TRUE on success, FALSE on error
@@ -472,7 +477,7 @@ int Port1Read(void *Buffer, size_t Size){
 
 void Port1WriteNMEA(TCHAR *Text)
 {
-
+  LockComm();
   int i,len;
   len = _tcslen(Text);
   Port1Write((BYTE)_T('$'));
@@ -489,6 +494,7 @@ void Port1WriteNMEA(TCHAR *Text)
   Port1Write((BYTE)tbuf[1]);
   Port1Write((BYTE)_T('\r'));
   Port1Write((BYTE)_T('\n'));
+  UnlockComm();
 }
 
 

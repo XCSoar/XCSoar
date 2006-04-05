@@ -97,7 +97,7 @@ void LeastSquares::least_squares_update(double y) {
 }
 
 
-/* incrimentally update existing values with a new data point */
+/* incrementally update existing values with a new data point */
 void LeastSquares::least_squares_update(double x, double y) {
     double error;
 
@@ -134,7 +134,7 @@ void LeastSquares::least_squares_update(double x, double y) {
 
     double denom = 	( (double)sum_n * sum_xi_2 - sum_xi * sum_xi );
 
-    if (fabs(denom)>0) {
+    if (fabs(denom)>0.001) {
       m = ( (double)sum_n * sum_xi_yi - sum_xi * sum_yi ) /
 	denom;
     } else {

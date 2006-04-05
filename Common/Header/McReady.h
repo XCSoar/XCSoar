@@ -18,7 +18,7 @@ class GlidePolar {
 
   static void SetBallast();
 
-  static double BallastFactor;
+  //  static double BallastFactor;
   static double polar_a;
   static double polar_b;
   static double polar_c;
@@ -26,6 +26,7 @@ class GlidePolar {
   static int Vbestld;
   static double bestld;
   static double minsink;
+  static double BallastLitres;
 
   static double sinkratecache[200];
 

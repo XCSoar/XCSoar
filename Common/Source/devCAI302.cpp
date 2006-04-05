@@ -139,7 +139,7 @@ static cai302_Gdata_t cai302_Gdata;
 // Additional sentance for CAI302 support
 static BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL cai_PCAIB(TCHAR *String, NMEA_INFO *GPS_INFO);
-static cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO);
 
 static int  MacCreadyUpdateTimeout = 0;
 static int  BugsUpdateTimeout = 0;

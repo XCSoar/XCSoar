@@ -130,7 +130,7 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
   HBRUSH redBrush = CreateSolidBrush(RGB(0xFF,0x00,0x00));
   SelectObject(hdcDrawWindow, redBrush);
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    if (_tcslen(gps_info->FLARM_Traffic[i].ID)>0) {
+    if (gps_info->FLARM_Traffic[i].ID>0) {
 
       // TODO: draw direction, height?
       double x, y;

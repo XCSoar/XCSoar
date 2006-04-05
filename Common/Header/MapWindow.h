@@ -58,6 +58,7 @@ typedef struct _SNAIL_POINT
   double Time;
   POINT Screen;
   short Colour;
+  BOOL Circling;
 } SNAIL_POINT;
 
 

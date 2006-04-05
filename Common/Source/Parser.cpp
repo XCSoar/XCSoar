@@ -73,16 +73,19 @@ NMEAParser::NMEAParser() {
 }
 
 void NMEAParser::Reset(void) {
-  GpsUpdated = TRUE;
-  SetEvent(dataTriggerEvent);
-  PulseEvent(varioTriggerEvent);
-  VarioUpdated = TRUE;
+  // clear status
   nmeaParser1.gpsValid = false;
   nmeaParser2.gpsValid = false;
   nmeaParser1.activeGPS = true;
   nmeaParser2.activeGPS = true;
   nmeaParser1.hasVega = false;
   nmeaParser2.hasVega = false;
+
+  // trigger updates
+  GpsUpdated = TRUE;
+  VarioUpdated = TRUE;
+  SetEvent(dataTriggerEvent);
+  PulseEvent(varioTriggerEvent);
 }
 
 
@@ -1072,6 +1075,7 @@ BOOL NMEAParser::PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
 	    GPS_INFO->AccelZ);
     DebugStore(buffer);
   }
+  GPS_INFO->VarioAvailable = TRUE;
   hasVega = true;
 
   return FALSE;
@@ -1176,9 +1180,10 @@ void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO) {
 
     for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
       // clear this slot if it is too old (2 seconds)
-      if (_tcslen(GPS_INFO->FLARM_Traffic[i].ID)>0) {
+      if (GPS_INFO->FLARM_Traffic[i].ID>0) {
 	if (GPS_INFO->Time> GPS_INFO->FLARM_Traffic[i].Time_Fix+2) {
-	  GPS_INFO->FLARM_Traffic[i].ID[0]= 0;
+	  GPS_INFO->FLARM_Traffic[i].ID= 0;
+	  GPS_INFO->FLARM_Traffic[i].Name[0] = 0;
 	} else {
 	  present = true;
 	}
@@ -1239,13 +1244,13 @@ BOOL NMEAParser::PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
-int FLARM_FindSlot(NMEA_INFO *GPS_INFO, TCHAR *Id)
+int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
 {
   int i;
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
 
     // find position in existing slot
-    if (_tcscmp(Id, GPS_INFO->FLARM_Traffic[i].ID)==0) {
+    if (Id==GPS_INFO->FLARM_Traffic[i].ID) {
       return i;
     }
 
@@ -1254,7 +1259,7 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, TCHAR *Id)
   }
   // not found, so try to find an empty slot
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    if (GPS_INFO->FLARM_Traffic[i].ID[0]==0) {
+    if (GPS_INFO->FLARM_Traffic[i].ID==0) {
       return i;
     }
   }
@@ -1272,20 +1277,21 @@ BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   // 5 id, 6 digit hex
   ExtractParameter(String,ctemp,5);
+  long ID;
+  swscanf(ctemp,TEXT("%lx"), &ID);
+  unsigned long uID = ID;
 
-  flarm_slot = FLARM_FindSlot(GPS_INFO, ctemp);
+  flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
   if (flarm_slot<0) {
     // no more slots available,
     return FALSE;
   }
 
-  _tcscpy(GPS_INFO->FLARM_Traffic[flarm_slot].ID, ctemp);
-
   // set time of fix to current time
   GPS_INFO->FLARM_Traffic[flarm_slot].Time_Fix = GPS_INFO->Time;
 
   swscanf(String,
-	  TEXT("%hu,%lf,%lf,%lf,%hu,%6s,%lf,%lf,%lf,%lf,%hu"),
+	  TEXT("%hu,%lf,%lf,%lf,%hu,%lx,%lf,%lf,%lf,%lf,%hu"),
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].AlarmLevel, // unsigned short 0
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth, // double?     1
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast, // double?      2
@@ -1309,6 +1315,17 @@ BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->FLARM_Traffic[flarm_slot].Altitude +=
     GPS_INFO->Altitude;
 
+  TCHAR *name = GPS_INFO->FLARM_Traffic[flarm_slot].Name;
+  if (!_tcslen(name)) {
+    // need to lookup name for this target
+    TCHAR *fname = LookupFLARMDetails(GPS_INFO->FLARM_Traffic[flarm_slot].ID);
+    if (fname) {
+      _tcscpy(name,fname);
+    } else {
+      name[0]=0;
+    }
+  }
+
   return FALSE;
 }
 
@@ -1319,7 +1336,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   static int i=90;
   static TCHAR t1[] = TEXT("1,1,1,1");
   static TCHAR t2[] = TEXT("0,300,500,220,2,DD8F12,120,-4.5,30,-1.4,1");
-  static TCHAR t3[] = TEXT("0,0,1200,50,2,DA8F12,120,-4.5,30,-1.4,1");
+  static TCHAR t3[] = TEXT("0,0,1200,50,2,DA8B06,120,-4.5,30,-1.4,1");
   //  static TCHAR t4[] = TEXT("-3,500,1024,50");
 
   i++;

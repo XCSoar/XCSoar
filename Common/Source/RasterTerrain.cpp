@@ -142,8 +142,7 @@ int TerrainCacheSearch(const void *key, const void *elem2 ){
 short RasterTerrain::LookupTerrainCache(const long &SeekPos) {
   int ifound= -1;
   unsigned int recencymin = 0;
-  int i;
-  _TERRAIN_CACHE* tcp, *tcpmin;
+  _TERRAIN_CACHE* tcp, *tcpmin, *tcplim;
 
   if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
     return -1;
@@ -165,7 +164,8 @@ short RasterTerrain::LookupTerrainCache(const long &SeekPos) {
   // bsearch failed, so try exhaustive search
 
   tcp = &TerrainCache[SortThresold];
-  for (i=SortThresold; i<MAXTERRAINCACHE; i++) {
+  tcplim = tcp+MAXTERRAINCACHE-SortThresold;
+  while (tcp< tcplim) {
     if (tcp->index == SeekPos) {
       tcp->recency = cachetime;
       terraincachehits++;
@@ -179,10 +179,10 @@ short RasterTerrain::LookupTerrainCache(const long &SeekPos) {
 
   if (SortThresold>= MAXTERRAINCACHE) {
     SortThresold= MAXTERRAINCACHE-1;
-  }
-  if (SortThresold<0) {
-    SortThresold = 0;
-  }
+  } else
+    if (SortThresold<0) {
+      SortThresold = 0;
+    }
 
   tcpmin = &TerrainCache[SortThresold];
 

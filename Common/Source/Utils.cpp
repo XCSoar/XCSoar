@@ -44,6 +44,8 @@ Copyright_License {
 #include "Calculations.h"
 #include "GaugeFLARM.h"
 
+bool EnableAnimation=false;
+
 void ReadWinPilotPolarInternal(int i);
 
 TCHAR szRegistryKey[] =                TEXT("Software\\MPSR\\XCSoar");
@@ -144,6 +146,7 @@ TCHAR szRegistryDrawTerrain[]= TEXT("DrawTerrain");
 TCHAR szRegistryDrawTopology[]= TEXT("DrawTopology");
 TCHAR szRegistryFAISector[] = TEXT("FAISector");
 TCHAR szRegistryFinalGlideTerrain[]= TEXT("FinalGlideTerrain");
+TCHAR szRegistryAutoWind[]= TEXT("AutoWind");
 TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
 TCHAR szRegistryLiftUnitsValue[] = TEXT("Lift");
 TCHAR szRegistryPolarID[] = TEXT("Polar"); // pL
@@ -157,6 +160,7 @@ TCHAR szRegistrySafteySpeed[] =          TEXT("SafteySpeed");
 TCHAR szRegistrySectorRadius[]=          TEXT("Radius");
 TCHAR szRegistrySnailTrail[]=		 TEXT("SnailTrail");
 TCHAR szRegistryTrailDrift[]=		 TEXT("TrailDrift");
+TCHAR szRegistryAnimation[]=		 TEXT("Animation");
 TCHAR szRegistrySpeed1Index[]=		 TEXT("SpeedIndex");
 TCHAR szRegistrySpeed2Index[]=		 TEXT("Speed2Index");
 TCHAR szRegistrySpeedUnitsValue[] =      TEXT("Speed");
@@ -489,6 +493,10 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryTrailDrift,&Temp);
   MapWindow::EnableTrailDrift = (Temp==1);
 
+  Temp = EnableAnimation;
+  GetFromRegistry(szRegistryAnimation,&Temp);
+  EnableAnimation = (Temp==1);
+
   Temp  = EnableTopology;
   GetFromRegistry(szRegistryDrawTopology,&Temp);
   EnableTopology = (Temp == 1);
@@ -500,6 +508,10 @@ void ReadRegistrySettings(void)
   Temp  = FinalGlideTerrain;
   GetFromRegistry(szRegistryFinalGlideTerrain,&Temp);
   FinalGlideTerrain = (Temp == 1);
+
+  Temp  = EnableAutoWind;
+  GetFromRegistry(szRegistryAutoWind,&Temp);
+  EnableAutoWind = (Temp == 1);
 
   Temp  = CircleZoom;
   GetFromRegistry(szRegistryCircleZoom,&Temp);
@@ -3174,4 +3186,161 @@ void ReadWinPilotPolarInternal(int i) {
   POLARW[2] = WinPilotPolars[i].w2;
   PolarWinPilot2XCSoar(POLARV, POLARW, ww);
 
+}
+
+
+
+/////////////
+
+#if (WINDOWSPC<1)
+void GdiFlush() {};
+#endif
+
+////////////////////////////////////////////////////////////////////////////
+//
+// FUNCTION:    DrawWireRects
+//
+// DESCRIPTION: Creates exploding wire rectanges
+//
+// INPUTS:  LPRECT lprcFrom      Source Rectangle
+//          LPRECT lprcTo        Destination Rectangle
+//          UINT nMilliSecSpeed  Speed in millisecs for animation
+//
+// RETURN:    None
+// NOTES:    None
+//
+//  Maintenance Log
+//  Author      Date    Version     Notes
+//  NT Almond   011199  1.0         Origin
+//  CJ Maunder  010899  1.1         Modified rectangle transition code
+//
+/////////////////////////////////////////////////////////////////////////
+
+static RECT AnimationRectangle = {0,0,0,0};
+
+void SetSourceRectangle(RECT fromRect) {
+  AnimationRectangle = fromRect;
+}
+
+
+RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed)
+{
+  if (!EnableAnimation)
+    return AnimationRectangle;
+
+  LPRECT lprcFrom = &AnimationRectangle;
+    const int nNumSteps = 10;
+
+    GdiFlush();
+    Sleep(10);  // Let the desktop window sort itself out
+
+    // if hwnd is null - "you have the CON".
+    HDC hDC = ::GetDC(NULL);
+
+    // Pen size, urmmm not too thick
+    HPEN hPen = ::CreatePen(PS_SOLID, 2, RGB(0,0,0));
+
+    int nMode = ::SetROP2(hDC, R2_NOT);
+    HPEN hOldPen = (HPEN) ::SelectObject(hDC, hPen);
+
+    for (int i = 0; i < nNumSteps; i++)
+    {
+        double dFraction = (double) i / (double) nNumSteps;
+
+        RECT transition;
+        transition.left   = lprcFrom->left +
+            (int)((lprcTo->left - lprcFrom->left) * dFraction);
+        transition.right  = lprcFrom->right +
+            (int)((lprcTo->right - lprcFrom->right) * dFraction);
+        transition.top    = lprcFrom->top +
+            (int)((lprcTo->top - lprcFrom->top) * dFraction);
+        transition.bottom = lprcFrom->bottom +
+            (int)((lprcTo->bottom - lprcFrom->bottom) * dFraction);
+
+        POINT pt[5];
+        pt[0].x = transition.left; pt[0].y= transition.top;
+        pt[1].x = transition.right; pt[1].y= transition.top;
+        pt[2].x = transition.right; pt[2].y= transition.bottom;
+        pt[3].x = transition.left; pt[3].y= transition.bottom;
+        pt[4].x = transition.left; pt[4].y= transition.top;
+
+        // We use Polyline because we can determine our own pen size
+        // Draw Sides
+        ::Polyline(hDC,pt,5);
+
+        GdiFlush();
+
+        Sleep(nMilliSecSpeed);
+
+        // UnDraw Sides
+        ::Polyline(hDC,pt,5);
+
+        GdiFlush();
+    }
+
+    ::SetROP2(hDC, nMode);
+    ::SelectObject(hDC, hOldPen);
+
+    ::ReleaseDC(NULL,hDC);
+    return AnimationRectangle;
+}
+
+
+///////////////
+
+int NumberOfFLARMNames = 0;
+
+typedef struct {
+  long ID;
+  TCHAR Name[10];
+} FLARM_Names_t;
+
+#define MAXFLARMNAMES 200
+
+FLARM_Names_t FLARM_Names[MAXFLARMNAMES];
+
+void CloseFLARMDetails() {
+  int i;
+  for (i=0; i<NumberOfFLARMNames; i++) {
+    //    free(FLARM_Names[i]);
+  }
+  NumberOfFLARMNames = 0;
+}
+
+void OpenFLARMDetails() {
+  if (NumberOfFLARMNames) {
+    CloseFLARMDetails();
+  }
+
+  TCHAR *filename=LocalPath(TEXT("xcsoar-flarm.txt"));
+
+  HANDLE hFile = CreateFile(filename,GENERIC_READ,0,NULL,
+			    OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  if( hFile == INVALID_HANDLE_VALUE) return;
+
+  TCHAR line[MAX_PATH];
+  while (ReadString(hFile,MAX_PATH, line)) {
+    long id;
+    TCHAR Name[MAX_PATH];
+
+    if (_stscanf(line, TEXT("%lx=%s"), &id, Name) == 2) {
+      FLARM_Names[NumberOfFLARMNames].ID = id;
+      _tcsncpy(FLARM_Names[NumberOfFLARMNames].Name,Name,20);
+      NumberOfFLARMNames++;
+      if (NumberOfFLARMNames>=MAXFLARMNAMES)
+	break;
+    }
+  }
+  CloseHandle(hFile);
+}
+
+
+TCHAR* LookupFLARMDetails(long id) {
+  int i;
+  for (i=0; i<NumberOfFLARMNames; i++) {
+    if (FLARM_Names[i].ID == id) {
+      return FLARM_Names[i].Name;
+    }
+  }
+  return NULL;
 }

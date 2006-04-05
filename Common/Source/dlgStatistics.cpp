@@ -362,6 +362,7 @@ void Statistics::DrawXGrid(HDC hdc, RECT rc, double ticstep, double zero,
   double xval;
 
   int xmin, ymin, xmax, ymax;
+  if (!ticstep) return;
 
   for (xval=zero; xval<= x_max; xval+= ticstep) {
 
@@ -404,6 +405,8 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
   int xmin, ymin, xmax, ymax;
 
+  if (!ticstep) return;
+
   for (yval=zero; yval<= y_max; yval+= ticstep) {
 
     xmin = rc.left;
@@ -445,14 +448,11 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
 {
 
   ResetScale();
+
+  if (flightstats.Altitude.sum_n<2) return;
+
   ScaleXFromData(rc, &flightstats.Altitude);
   ScaleYFromData(rc, &flightstats.Altitude);
-  ScaleXFromData(rc, &flightstats.Altitude_Base);
-  ScaleYFromData(rc, &flightstats.Altitude_Base);
-  ScaleXFromData(rc, &flightstats.Altitude_Ceiling);
-  ScaleYFromData(rc, &flightstats.Altitude_Ceiling);
-
-  if (flightstats.Altitude.sum_n==0) return;
 
   DrawXGrid(hdc, rc,
             0.25, flightstats.Altitude.x_min,
@@ -486,7 +486,7 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
             1.0/LIFTMODIFY, 0,
             STYLE_THINDASHPAPER);
 
-  if (flightstats.ThermalAverage.sum_n==0) return;
+  if (flightstats.ThermalAverage.sum_n<1) return;
 
   DrawBarChart(hdc, rc,
                &flightstats.ThermalAverage);

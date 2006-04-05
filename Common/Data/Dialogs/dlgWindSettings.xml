@@ -7,13 +7,16 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmWindSettingRegular" Type="Dialog" X=5 Y=5 Width=153 Height=111 Caption="Wind Settings" Font=2 BackColor=0xDADBAB>
+<WndForm Name="frmWindSettingRegular" Type="Dialog" X=5 Y=5 Width=153 Height=133 Caption="Wind Settings" Font=2 BackColor=0xDADBAB>
   <WndButton   Caption="Close"    X=68 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
   <WndProperty Name="prpSpeed" Caption="Speed"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2>
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Step=1 OnDataAccess="OnWindSpeedData"/>
   </WndProperty>
   <WndProperty Name="prpDirection" Caption="Direction" X=2 Y=-1  Width=145 Height=22 CaptionWidth=68 Font=2 >
     <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=361 Step=1 OnDataAccess="OnWindDirectionData"/>
+  </WndProperty>
+  <WndProperty Name="prpAutoWind" Caption="Auto wind"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2>
+    <DataField name="" DataType="boolean"/>
   </WndProperty>
   <WndButton   Caption="Save"    X=68 Y=-1 Width=60  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
 

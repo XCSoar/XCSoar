@@ -474,7 +474,7 @@ LRESULT CALLBACK SetPolar(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   int i;
   int Temp;
   int Temp1;
-  static ACTIVE = FALSE;
+  static BOOL ACTIVE = FALSE;
   static TCHAR  szPolarFile[MAX_PATH] = TEXT("\0");
   static OPENFILENAME           ofnPolar;
   TCHAR szFile[MAX_PATH];
@@ -1728,7 +1728,7 @@ LRESULT CALLBACK SetFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   static TCHAR  szAdditionalWaypointFile[MAX_PATH] = TEXT("\0");
   static OPENFILENAME           ofnAdditionalWaypoint;
 
-  static ACTIVE = FALSE;
+  static BOOL ACTIVE = FALSE;
   SHINITDLGINFO shidi;
   TCHAR szFile[MAX_PATH];
 
@@ -1897,7 +1897,7 @@ LRESULT CALLBACK SetMapFiles(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
   static TCHAR  szTopologyFile[MAX_PATH] = TEXT("\0");
   static OPENFILENAME           ofnTopology;
 
-  static ACTIVE = FALSE;
+  static BOOL ACTIVE = FALSE;
   SHINITDLGINFO shidi;
   TCHAR szFile[MAX_PATH];
 
@@ -2027,7 +2027,7 @@ LRESULT CALLBACK SetInterfaceFiles(HWND hDlg, UINT message, WPARAM wParam, LPARA
   static TCHAR  szInputFile[MAX_PATH] = TEXT("\0");
   static OPENFILENAME           ofnInput;
 
-  static ACTIVE = FALSE;
+  static BOOL ACTIVE = FALSE;
   SHINITDLGINFO shidi;
   TCHAR szFile[MAX_PATH];
 

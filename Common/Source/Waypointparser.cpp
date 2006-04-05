@@ -59,6 +59,14 @@ static TCHAR TempString[210];
 
 
 void CloseWayPoints() {
+  unsigned int i;
+  if (NumberOfWayPoints) {
+    for (i=0; i<NumberOfWayPoints; i++) {
+      if (WayPointList[i].Details) {
+	free(WayPointList[i].Details);
+      }
+    }
+  }
   NumberOfWayPoints = 0;
   if(WayPointList != NULL) {
     LocalFree((HLOCAL)WayPointList);

@@ -275,6 +275,10 @@
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 
+  <WndProperty Name="prpAutoWind" Caption="Auto wind"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
   </WndFrame>
 
   <WndFrame Name="frmPolar" X=70 Y=0 Width=246 Height=222 Font=2>
@@ -383,8 +387,12 @@
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpAppStatusMessageAlignment" Caption="Status messages"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpAppStatusMessageAlignment" Caption="Msg window"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAnimation" Caption="Animation"  X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+    <DataField name="" DataType="boolean"/>
   </WndProperty>
 
   </WndFrame>

@@ -28,7 +28,9 @@ class ButtonLabel {
  public:
   static int ButtonLabelGeometry;
   static HWND hWndButtonWindow[NUMBUTTONLABELS];
+  static bool ButtonVisible[NUMBUTTONLABELS];
   static void CreateButtonLabels(RECT rc);
+  static void AnimateButton(int i);
   #if NEWINFOBOX > 0
   static void SetFont(HFONT Font);
   #endif

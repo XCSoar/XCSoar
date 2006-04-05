@@ -351,8 +351,11 @@ DBFHandle msDBFCreate( const char * pszFilename )
     psDBF->bCurrentRecordModified = MS_FALSE;
     psDBF->pszCurrentRecord = NULL;
 
+
     psDBF->pszStringField = NULL;
+
     psDBF->nStringFieldLen = 0;
+
 
     psDBF->bNoHeader = MS_TRUE;
 
@@ -461,7 +464,7 @@ int	msDBFAddField(DBFHandle psDBF, const char * pszFieldName, DBFFieldType eType
 static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
 
 {
-    unsigned int	       	nRecordOffset, i;
+    int	       	nRecordOffset, i;
     uchar	*pabyRec;
     char	*pReturnField = NULL;
 

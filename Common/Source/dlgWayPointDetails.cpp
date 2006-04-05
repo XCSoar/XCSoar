@@ -155,28 +155,38 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 static void OnGotoClicked(WindowControl * Sender){
+  LockFlightData();
   FlyDirectTo(SelectedWaypoint);
+  UnlockFlightData();
   wf->SetModalResult(mrOK);
 }
 
 static void OnReplaceClicked(WindowControl * Sender){
+  LockFlightData();
   ReplaceWaypoint(SelectedWaypoint);
+  UnlockFlightData();
   wf->SetModalResult(mrOK);
 }
 
 static void OnNewHomeClicked(WindowControl * Sender){
+  LockFlightData();
   HomeWaypoint = SelectedWaypoint;
   SetToRegistry(szRegistryHomeWaypoint, HomeWaypoint);
+  UnlockFlightData();
   wf->SetModalResult(mrOK);
 }
 
 static void OnInserInTaskClicked(WindowControl * Sender){
+  LockFlightData();
   InsertWaypoint(SelectedWaypoint);
+  UnlockFlightData();
   wf->SetModalResult(mrOK);
 }
 
 static void OnRemoveFromTaskClicked(WindowControl * Sender){
+  LockFlightData();
   RemoveWaypoint(SelectedWaypoint);
+  UnlockFlightData();
   wf->SetModalResult(mrOK);
 }
 

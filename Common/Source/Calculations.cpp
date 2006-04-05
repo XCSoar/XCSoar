@@ -52,6 +52,8 @@ Copyright_License {
 
 WindAnalyser *windanalyser = NULL;
 
+bool EnableAutoWind= true;
+
 #include "Port.h"
 
 static void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -150,6 +152,7 @@ void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     SnailTrail[SnailNext].Vario = (float)(Calculated->Vario) ;
   }
   SnailTrail[SnailNext].Colour = -1; // need to have colour calculated
+  SnailTrail[SnailNext].Circling = Calculated->Circling;
 
   SnailNext ++;
   SnailNext %= TRAILSIZE;
@@ -490,8 +493,11 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   maccready = MACCREADY;
 
   DistanceToNext(Basic, Calculated);
+
   EnergyHeight(Basic, Calculated);
+
   AltitudeRequired(Basic, Calculated, maccready);
+
   Heading(Basic, Calculated);
 
   TerrainHeight(Basic, Calculated);
@@ -783,8 +789,9 @@ void SwitchZoomClimb(bool isclimb, bool left) {
       // nothing to do.
     }
   }
-
-  windanalyser->slot_newFlightMode(left, 0);
+  if (EnableAutoWind) {
+    windanalyser->slot_newFlightMode(left, 0);
+  }
 
 }
 
@@ -923,7 +930,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
     break;
   case CLIMB:
-    windanalyser->slot_newSample();
+    if (EnableAutoWind) {
+      windanalyser->slot_newSample();
+    }
 
     if(Rate < MinTurnRate) {
       StartTime = Basic->Time;
@@ -964,7 +973,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
   // generate new wind vector if altitude changes or a new
   // estimate is available
-  windanalyser->slot_Altitude();
+  if (EnableAutoWind) {
+    windanalyser->slot_Altitude();
+  }
 
   // update atmospheric model
   CuSonde::updateMeasurements(Basic, Calculated);
@@ -1047,6 +1058,8 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if (!WayPointList) return;
 
+  LockFlightData();
+
   if(ActiveWayPoint >=0)
     {
       Calculated->WaypointDistance = Distance(Basic->Latitude, Basic->Longitude,
@@ -1065,10 +1078,13 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     {
       Calculated->WaypointDistance = 0;
     }
+  UnlockFlightData();
 }
+
 
 void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 {
+  LockFlightData();
   if((ActiveWayPoint >=0)&&(WayPointList))
     {
       Calculated->NextAltitudeRequired =
@@ -1095,6 +1111,7 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccrea
       Calculated->NextAltitudeRequired = 0;
       Calculated->NextAltitudeDifference = 0;
     }
+  UnlockFlightData();
 }
 
 int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
@@ -1387,6 +1404,8 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if(AATEnabled)
     return;
 
+  LockFlightData();
+
   if(ActiveWayPoint == 0)
     {
       TaskFinished = false;
@@ -1443,6 +1462,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	      InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 	    }
 	    TaskFinished = false;
+	    UnlockFlightData();
 
 	    return;
 	  }
@@ -1459,7 +1479,9 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	}
       }
     }
+  UnlockFlightData();
 }
+
 
 void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
@@ -1468,6 +1490,8 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if(!AATEnabled)
     return;
+
+  LockFlightData();
 
   if(ActiveWayPoint == 0)
     {
@@ -1527,7 +1551,7 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	      AnnounceWayPointSwitch();
 	    }
 	    TaskFinished = false;
-
+	    UnlockFlightData();
 	    return;
 	  }
 	} else {
@@ -1543,6 +1567,7 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	}
       }
     }
+  UnlockFlightData();
 }
 
 
@@ -1617,6 +1642,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
   double w1lon;
   double w0lat;
   double w0lon;
+
+  LockFlightData();
 
   // Calculate Task Distances
   if(ActiveWayPoint >=1)
@@ -1890,6 +1917,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
                                  0);
 
   }
+  UnlockFlightData();
 
 }
 
@@ -1898,13 +1926,8 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double tad=0.0;
   static double dmc=0.0;
-  /*
-  tad = Calculated->TaskAltitudeDifference/(Calculated->TaskDistanceToGo+1);
-  dmc = dmc*0.2+0.8*0.5*min(1.0,max(-1.0,tad/0.001));
 
-  MACCREADY += dmc;
-  MACCREADY = min(5.0,max(0,MACCREADY));
-  */
+  LockFlightData();
 
   double slope =
     (Basic->Altitude
@@ -1921,58 +1944,8 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     MACCREADY = 0.0;
   }
 
-  /* NOT WORKING
-  static double tad=0.0;
-  static double mclast = 0.0;
-  static double tadlast= 0.0;
-  static double slope = 0.0;
-  double mcnew;
-  double delta;
+  UnlockFlightData();
 
-  tad = Calculated->TaskAltitudeDifference;
-
-  if (fabs(tad)<5.0) {
-    tadlast = tad;
-    mclast = MACCREADY;
-    return;
-  }
-
-  // no change detected, increment until see something
-
-  if (fabs(tad-tadlast)>0.0001) {
-    slope = 0.9*slope+0.1*(MACCREADY-mclast)/(tad-tadlast);
-  } else {
-  }
-
-  if (fabs(slope)<0.01) {
-    if (tad>0) {
-      mcnew= MACCREADY+0.1;
-    } else {
-      mcnew= MACCREADY-0.1;
-    }
-  } else {
-
-    // y = mx + c
-    // -c = mx
-    // x = -c/m
-    // 5 -> 100
-    // 4 -> 200
-    // slope=(5-4)/(100-200)= -0.1
-    delta = (-slope*tad);
-    delta = min(1.0,max(-1.0,delta));
-    mcnew = MACCREADY+0.3*(delta);
-  }
-  tadlast = tad;
-  mclast = MACCREADY;
-
-  MACCREADY = mcnew;
-  if (MACCREADY>10.0) {
-    MACCREADY = 10.0;
-  }
-  if (MACCREADY<0.0) {
-    MACCREADY = 0.0;
-  }
-  */
 }
 
 void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
@@ -2016,8 +1989,14 @@ void CalculateNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   else
     {
-      Calculated->NextLatitude = FindLatitude(Basic->Latitude, Basic->Longitude, Basic->TrackBearing, Basic->Speed*WarningTime );
-      Calculated->NextLongitude = FindLongitude(Basic->Latitude, Basic->Longitude, Basic->TrackBearing, Basic->Speed*WarningTime);
+      Calculated->NextLatitude = FindLatitude(Basic->Latitude,
+					      Basic->Longitude,
+					      Basic->TrackBearing,
+					      Basic->Speed*WarningTime );
+      Calculated->NextLongitude = FindLongitude(Basic->Latitude,
+						Basic->Longitude,
+						Basic->TrackBearing,
+						Basic->Speed*WarningTime);
       Calculated->NextAltitude = Basic->Altitude + Calculated->Average30s * WarningTime;
     }
 }
@@ -2235,6 +2214,8 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       return;
     }
 
+  LockFlightData();
+
   Temp = Basic->Time - Calculated->TaskStartTime;
 
   if ((ActiveWayPoint==0)&&(Calculated->AATTimeToGo==0)) {
@@ -2322,6 +2303,7 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           Calculated->AATTargetSpeed = Calculated->AATTargetDistance / Calculated->AATTimeToGo;
         }
     }
+  UnlockFlightData();
 }
 
 
@@ -2573,6 +2555,8 @@ void SortLandableWaypoints (NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if (!WayPointList) return;
 
+  LockFlightData();
+
   // Do preliminary fast search
   int scx_aircraft, scy_aircraft;
   LatLon2Flat(Basic->Longitude, Basic->Latitude, &scx_aircraft, &scy_aircraft);
@@ -2766,6 +2750,7 @@ void SortLandableWaypoints (NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     {
       Task[i].Index = SortedLandableIndex[i];
     }
+  UnlockFlightData();
 }
 
 
@@ -2776,6 +2761,8 @@ void ResumeAbortTask(int set) {
   int i;
 
   bool oldTaskAborted = TaskAborted;
+
+  LockFlightData();
 
   if (set == 0)
 	TaskAborted = !TaskAborted;
@@ -2818,6 +2805,7 @@ void ResumeAbortTask(int set) {
       RefreshTask();
     }
   }
+  UnlockFlightData();
 
 }
 
@@ -2849,6 +2837,9 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     if (ntimeinflight>10) {
       Calculated->Flying = TRUE;
       InputEvents::processGlideComputer(GCE_TAKEOFF);
+
+      // reset stats on takeoff
+      flightstats.Reset();
     }
 
   } else {
