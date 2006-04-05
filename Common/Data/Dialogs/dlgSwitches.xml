@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmSwitches" Type="Dialog" X=0 Y=0 Width=300 Height=240 Caption="Switches" Font=2 BackColor=0xDADBAB>
+  <WndButton   Caption="Close"    X=2 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
+
+  <WndFrame Name="frmFrm1" X=0 Y=30 Width=145 Height=200 Font=2>
+
+  <WndProperty Name="prpAirbrakeExtended" Caption="Airbrake"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpFlapPositive" Caption="Flap positive"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpFlapNeutral" Caption="Flap neutral"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpFlapNegative" Caption="Flap negative"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpGearExtended" Caption="Gear down"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpAcknowledge" Caption="Acknowledge"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpRepeat" Caption="Repeat"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpSpeedCommand" Caption="Speed command"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  </WndFrame>
+
+  <WndFrame Name="frmFrm2" X=150 Y=30 Width=145 Height=200 Font=2>
+
+  <WndProperty Name="prpUserSwitchUp" Caption="User up"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpUserSwitchMiddle" Caption="User middle"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpUserSwitchDown" Caption="User down"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpVarioCircling" Caption="Vario circling"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  <WndProperty Name="prpStall" Caption="Stall"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
+  </WndFrame>
+
+</WndForm>
+
+</PMML>
