@@ -50,7 +50,6 @@
 #endif
 
 #include <memory.h>
-// #include <assert.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -301,7 +300,7 @@ static TCHAR FindNonWhiteSpace(XML *pXML)
     TCHAR ch;
     int nExit = FALSE;
 
-    assert(pXML);
+    ASSERT(pXML);
 
     // Iterate through characters in the string until we find a NULL or a
     // non-white space character
@@ -671,12 +670,12 @@ static void FindEndOfText(LPCTSTR lpszToken, int *pcbText)
 {
     TCHAR   ch;
     int     cbText;
-    assert(lpszToken);
-    assert(pcbText);
+    ASSERT(lpszToken);
+    ASSERT(pcbText);
     cbText = (*pcbText)-1;
     while(TRUE)
     {
-        assert(cbText >= 0);
+        ASSERT(cbText >= 0);
         ch = lpszToken[cbText];
         switch(ch)
         {
@@ -753,7 +752,7 @@ int XMLNode::ParseXMLElement(void *pa)
     enum Status status; // inside or outside a tag
     enum Attrib attrib = eAttribName;
 
-    assert(pXML);
+    ASSERT(pXML);
 
     // If this is the first call to the function
     if (pXML->nFirst)
@@ -1159,15 +1158,15 @@ static void CountLinesAndColumns(LPCTSTR lpXML, int nUpto, XMLResults *pResults)
     TCHAR ch;
     int n;
 
-    assert(lpXML);
-    assert(pResults);
+    ASSERT(lpXML);
+    ASSERT(pResults);
 
     pResults->nLine = 1;
     pResults->nColumn = 1;
     for(n=0; n<nUpto; n++)
     {
         ch = lpXML[n];
-        assert(ch);
+        ASSERT(ch);
         if (ch == _T('\n'))
         {
             pResults->nLine++;
@@ -1412,7 +1411,7 @@ int XMLNode::CreateXMLStringR(XMLNodeData *pEntry, LPTSTR lpszMarker, int nForma
     int i;
     XMLAttribute * pAttr;
 
-    assert(pEntry);
+    ASSERT(pEntry);
 
 #define LENSTR(lpsz) (lpsz ? _tcslen(lpsz) : 0)
 
@@ -1681,7 +1680,7 @@ LPTSTR XMLNode::createXMLString(int nFormat, int *pnSize)
     // Recursively Calculate the size of the XML string
     nFormat = nFormat ? 0 : -1;
     cbStr = CreateXMLStringR(d, 0, nFormat);
-    assert(cbStr);
+    ASSERT(cbStr);
     // Alllocate memory for the XML string + the NULL terminator and
     // create the recursively XML string.
     lpszResult=(LPTSTR)malloc((cbStr+1)*sizeof(TCHAR));
