@@ -23,6 +23,8 @@
 	#if (_WIN32_WCE == 300)
 	// Pocket PC 2000
 
+#define ASSERT(x) 0
+
 		// App keys
 		#define VK_APP1     0xC1 
 		#define VK_APP2     0xC2 
@@ -44,6 +46,8 @@
 	#elif (WIN32_PLATFORM_PSPC == 310)
 	// Pocket PC 2002
 
+#define ASSERT(x) 0
+
 		#ifndef NOCLEARTYPE
 		#define NOCLEARTYPE
 		#endif
@@ -53,10 +57,12 @@
 
 	#elif (WIN32_PLATFORM_PSPC == 400)
 	// Pocket PC 2003
+#include <assert.h>
 
 
 	#else
 	// Some other Pocket PC
+#include <assert.h>
 		
 	// NOT EXPLICITLY SUPPORTED
 
@@ -68,15 +74,6 @@
 #else
 // etc.
 #endif
-
-
-
-
-
-
-
-
-
 
 
 #endif // __COMPATIBILITY_H_

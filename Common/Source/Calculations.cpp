@@ -56,7 +56,7 @@ bool EnableAutoWind= true;
 
 #include "Port.h"
 
-#ifdef EXPERIMENTAL
+#if (EXPERIMENTAL > 0)
 #include "WindZigZag.h"
 #endif
 
@@ -421,7 +421,7 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Basic->TrueAirspeed = mag;
     }
 #endif
-#ifdef EXPERIMENTAL
+#if (EXPERIMENTAL > 0)
     WindZigZagUpdate(Basic, Calculated);
 #endif
 
