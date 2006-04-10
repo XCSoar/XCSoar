@@ -11,7 +11,8 @@ InstallDir  = "%CE1%\%AppName%"	; %CE1% = \Program Files\
 
 [Strings]
 reg_path = Software\OpenSource\XCSoar
-LinkFilename = "XCSoar"
+LinkFilename1 = "XCSoar FLY"
+LinkFilename2 = "XCSoar SIM"
 
 [CEDevice.ARMV4]
 ProcessorType=2577
@@ -70,7 +71,7 @@ cobra.plr = 8
 [DefaultInstall]
 CopyFiles   = TheFiles,Files.Windows,Files.Fonts,Files.Language,Files.Input,Files.Polar
 AddReg = AddRegistry
-;CEShortcuts = Links
+CEShortcuts = Links
 CESetupDLL=XCSoarSetup.dll
 
 [DestinationDirs]
@@ -118,7 +119,8 @@ HKLM,\Software\Microsoft\Today\Items\%AppName%,DLL,0x00000002,"\Windows\XCSoarLa
 HKLM,%reg_path%,InstallDir,0x00000000,%InstallDir%
 
 
-;[Links]
-;%LinkFilename%,0,"XCSoar.exe",%CE14%
-;; shortcut to a file, created in the standard destination path %CE14%
+[Links]
+%LinkFilename1%,0,"XCSoar.exe",%CE11%
+%LinkFilename2%,0,"XCSoarSimulator.exe",%CE11%
+;; shortcut to a file, created in the standard destination path %CE11% (/Windows/Start Menu/)
 
