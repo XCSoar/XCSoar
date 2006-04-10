@@ -216,10 +216,12 @@ LPTSTR fromXMLString(LPCTSTR s, int lo)
                 d=(LPTSTR)malloc((ll+1)*sizeof(TCHAR));
                 d[ll]=0;
                 while(ll--) d[ll]=s[ll];
+#ifdef DEBUG
 #ifdef _UNICODE
                     printf("unknown escape character: '&%S'",d);
 #else
                     printf("unknown escape character: '&%s'",d);
+#endif
 #endif
                 free(d);
 		XMLNode::GlobalError = true;
@@ -1326,6 +1328,7 @@ XMLNode XMLNode::openFileHelper(const char *lpszXML, LPCTSTR tag)
     XMLNode xnode=XMLNode::parseFile(lpszXML, tag, &pResults);
     if (pResults.error != eXMLErrorNone)
     {
+#ifdef DEBUG
         printf(
             "XML Parsing error inside file '%s'.\n"
 #ifdef _UNICODE
@@ -1343,6 +1346,7 @@ XMLNode XMLNode::openFileHelper(const char *lpszXML, LPCTSTR tag)
             printf("Tag is '%s'.\n",tag);
 #endif
         }
+#endif
 	XMLNode::GlobalError = true;
 	// was exit(255);
     }

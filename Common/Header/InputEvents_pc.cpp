@@ -642,7 +642,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Basic"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config1"), true);
-makeLabel(mode_id,TEXT("Bugs\nBallast"),8,event_id);
+makeLabel(mode_id,TEXT("Setup\nBasic"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;

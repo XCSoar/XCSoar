@@ -337,8 +337,8 @@ void TerrainColorMap(const short h, BYTE &r, BYTE &g, BYTE &b) {
 
 static short ContrastPos;
 static short ContrastNeg;
-short TerrainContrast = 40*256/100;
-short TerrainBrightness = 10*256/100;
+short TerrainContrast = 150;
+short TerrainBrightness = 36;
 short TerrainWhiteness = 0;
 
 static void UpdateContrast(void) {

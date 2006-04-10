@@ -1738,11 +1738,13 @@ int WndForm::ShowModal(void){
     // TODO: maybe this should block all key handlers
     // to avoid accidental key presses
     if (!hastimed) {
+#ifndef GNAV
       if (::GetTickCount()-enterTime<1000) {
 	mModalResult = 0;
       } else {
 	hastimed = true;
       }
+#endif
     }
   }
 

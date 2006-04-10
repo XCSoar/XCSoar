@@ -195,14 +195,29 @@ HWND                                    hWndInfoWindow[MAXINFOWINDOWS];
 HWND                                    hWndTitleWindow[MAXINFOWINDOWS];
 #endif
 
-int                                     InfoType[MAXINFOWINDOWS] = {921102,
-                                                                    725525,
-                                                                    262144,
-                                                                    74518,
-                                                                    657930,
-                                                                    2236963,
-                                                                    394758,
-                                                                    1644825};
+int                                     InfoType[MAXINFOWINDOWS] =
+#ifdef GNAV
+  {
+    873336334,
+    856820491,
+    822280982,
+    2829105,
+    103166000,
+    421601569,
+    657002759,
+    621743887,
+    439168301
+  };
+#else
+  {921102,
+   725525,
+   262144,
+   74518,
+   657930,
+   2236963,
+   394758,
+   1644825};
+#endif
 
 bool                                    DisplayLocked = true;
 bool                                    InfoWindowActive = true;
@@ -904,7 +919,7 @@ void RestartCommPorts() {
   if (first) {
     if (!Port1Available) {
 #ifdef GNAV
-      PortIndex1 = 0; SpeedIndex1 = 5;
+      PortIndex1 = 2; SpeedIndex1 = 5;
 #else
       PortIndex1 = 0; SpeedIndex1 = 2;
 #endif
@@ -1911,6 +1926,12 @@ void Shutdown(void) {
   // Stop COM devices
   devCloseAll();
 
+  #if GNAV
+    InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
+    while(1);
+  #endif
+
+
 #if (WINDOWSPC<1)
   if(Port1Available)
     Port1Close();
@@ -2856,6 +2877,7 @@ void ProcessTimer(void)
 	  // switched off and on again
 	  //
 #if (WINDOWSPC<1)
+#ifndef GNAV
 	  NMEAParser::GpsUpdated = true;
 	  MapWindow::MapDirty = true;
 	  SetEvent(drawTriggerEvent);
@@ -2864,7 +2886,6 @@ void ProcessTimer(void)
 
 	  InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
 
-#ifndef GNAV
 	  RestartCommPorts();
 #endif
 #endif

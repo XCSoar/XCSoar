@@ -25,6 +25,7 @@ class GaugeVario {
   static void RenderBallast(void);
   static void RenderBugs(void);
   static void RenderNeedle(double Value);
+  static void RenderClimb(void);
   static void Repaint(HDC hDC);
   static void Show(bool doshow);
 
@@ -49,6 +50,7 @@ class GaugeVario {
   static DrawInfo_t diLabelMiddle;
   static DrawInfo_t diLabelBottom;
   static HBITMAP hBitmapUnit;
+  static HBITMAP hBitmapClimb;
   static POINT BitmapUnitPos;
   static POINT BitmapUnitSize;
 

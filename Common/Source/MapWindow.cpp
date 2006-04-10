@@ -164,9 +164,12 @@ HBITMAP MapWindow::hLoggerOff;
 HPEN MapWindow::hSnailPens[NUMSNAILCOLORS];
 
   // 12 is number of airspace types
-int	 MapWindow::iAirspaceBrush[AIRSPACECLASSCOUNT];
-int	 MapWindow::iAirspaceColour[AIRSPACECLASSCOUNT];
-int      MapWindow::iAirspaceMode[AIRSPACECLASSCOUNT];
+int	 MapWindow::iAirspaceBrush[AIRSPACECLASSCOUNT] =
+  {2,0,0,0,3,3,3,3,0,3,2,3,3,3};
+int	 MapWindow::iAirspaceColour[AIRSPACECLASSCOUNT] =
+  {5,0,0,10,0,0,10,2,0,10,9,3,7,7};
+int      MapWindow::iAirspaceMode[AIRSPACECLASSCOUNT] =
+  {0,0,0,0,0,0,0,0,0,0,0,1,1,0};
 
 HPEN MapWindow::hAirspacePens[AIRSPACECLASSCOUNT];
 bool MapWindow::bAirspaceBlackOutline = false;
@@ -906,12 +909,17 @@ static void SetFontInfo(HDC hDC, FontHeightInfo_t *FontHeightInfo){
     }
   }
 
+#ifdef GNAV
+  // TODO: don't know why we need this in GNAV
   if (FontHeightInfo->CapitalHeight<y)
     FontHeightInfo->CapitalHeight = bottom - top + 1;
-
+#endif
+  // This works for PPC
   if (FontHeightInfo->CapitalHeight <= 0)
     FontHeightInfo->CapitalHeight = tm.tmAscent - 1 -(tm.tmHeight/10);
 
+  //  int lx = GetDeviceCaps(hDC,LOGPIXELSX);
+  // dpi
 }
 
 extern bool ProgramStarted;
@@ -1272,6 +1280,28 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
+
+      #if GNAV
+        if (wParam == 0xF5){
+
+		      if (MessageBoxX(hWnd,
+			      gettext(TEXT("Shutdown?")),
+			      gettext(TEXT("Altair system message")),
+			        MB_YESNO|MB_ICONQUESTION) == IDYES
+      	  ) {
+
+            SendMessage(hWnd,
+			        WM_ACTIVATE,
+			        MAKEWPARAM(WA_INACTIVE, 0),
+			        (LPARAM)hWndMainWindow);
+		        SendMessage (hWndMainWindow, WM_CLOSE, 0, 0);
+          }
+
+          break;
+
+        }
+      #endif
+
     if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
       if (InputEvents::processKey(wParam)) {
 	// TODO - change to debugging DoStatusMessage(TEXT("Event in default"));
@@ -3141,7 +3171,10 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
 
       if (Units::GetUnitBitmap(Unit, &Bmp, &BmpPos, &BmpSize, 0)){
         HBITMAP oldBitMap = (HBITMAP)SelectObject(hDCTemp, Bmp);
-        BitBlt(hDC, 7+TextSize.cx, rc.bottom-Height, BmpSize.x, BmpSize.y, hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
+        BitBlt(hDC,
+	       7+TextSize.cx, rc.bottom-Height,
+	       BmpSize.x, BmpSize.y,
+	       hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
         SelectObject(hDCTemp, oldBitMap);
       }
     }

@@ -557,6 +557,32 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
     ctemp[2] = '\0';
     GPS_INFO->Day = _tcstol(&ctemp[0], &Stop, 10);
 
+#ifdef GNAV
+    // Altair doesn't have a battery-backed up realtime clock,
+    // so as soon as we get a fix for the first time, set the
+    // system clock to the GPS time.
+    static bool sysTimeInitialised = false;
+
+    if (!GPS_INFO->NAVWarning) {
+      if (!sysTimeInitialised) {
+
+	SYSTEMTIME sysTime;
+	::GetSystemTime(&sysTime);
+	int hours = ((int)ThisTime)/3600;
+	int mins = ((int)ThisTime-hours*60)/60;
+	int secs = ThisTime-hours*3600-mins*60;
+	sysTime.wYear = GPS_INFO->Year;
+	sysTime.wMonth = GPS_INFO->Month;
+	sysTime.wDay = GPS_INFO->Day;
+	sysTime.wHour = hours;
+	sysTime.wMin = mins;
+	sysTime.wSecond = secs;
+	::SetSystemTime(&sysTime);
+	sysTimeInitialised =true;
+      }
+    }
+#endif
+
     if(GPS_INFO->Day > 1)
       {
 	GPS_INFO->Time = (( GPS_INFO->Day -1) * 86400) + ThisTime;
@@ -1000,10 +1026,10 @@ BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
     (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE))>0;
   GPS_INFO->SwitchState.UserSwitchDown =
     (switchinputs & (1<<INPUT_BIT_USERSWDOWN))>0;
-  GPS_INFO->SwitchState.VarioCircling =
-    (switchinputs & (1<<OUTPUT_BIT_CIRCLING))>0;
   GPS_INFO->SwitchState.Stall =
     (switchinputs & (1<<INPUT_BIT_STALL))>0;
+  GPS_INFO->SwitchState.VarioCircling =
+    (switchoutputs & (1<<OUTPUT_BIT_CIRCLING))>0;
 
   long up_switchinputs;
   long down_switchinputs;
