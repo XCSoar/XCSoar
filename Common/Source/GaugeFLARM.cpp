@@ -136,8 +136,8 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       double x, y;
       x = gps_info->FLARM_Traffic[i].RelativeEast;
       y = -gps_info->FLARM_Traffic[i].RelativeNorth;
-      double d = sqrt(x*x+y*y);
-      if (d<FLARMMAXRANGE) {
+      double d = min(sqrt(x*x+y*y),FLARMMAXRANGE);
+      if (d<=FLARMMAXRANGE) {
 	rotate(x, y, -gps_info->TrackBearing); 	// or use .Heading
 	double xp = x/d;
 	double yp = y/d;
@@ -145,7 +145,9 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
 	int targetsize = 3*InfoBoxLayout::scale;
 	int xs = center.x + iround(xp*scale);
 	int ys = center.y + iround(yp*scale);
-	Rectangle(hdcDrawWindow, xs-targetsize, ys-targetsize, xs+targetsize, ys+targetsize);
+	Rectangle(hdcDrawWindow, 
+		  xs-targetsize, ys-targetsize, 
+		  xs+targetsize, ys+targetsize);
       }
     }
   }

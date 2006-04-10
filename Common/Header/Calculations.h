@@ -100,6 +100,8 @@ typedef struct _DERIVED_INFO
   // JMW energy height excess to slow to best glide speed
   double EnergyHeight;
 
+  double TurnRate;
+
 } DERIVED_INFO;
 
 #include "RasterTerrain.h"

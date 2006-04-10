@@ -758,6 +758,8 @@ IDB_DLGBUTTONRIGHT32    BITMAP  DISCARDABLE     "Bitmaps\\DialogButtonRight32x32
 IDB_AIRSPACE4           BITMAP  DISCARDABLE     "Bitmaps\\airspace4.bmp"
 IDB_FLARMROSE           BITMAP  DISCARDABLE     "Bitmaps\\flarmcluster.bmp"
 IDB_AIRSPACE5           BITMAP  DISCARDABLE     "Bitmaps\\airspace5.bmp"
+IDB_CLIMBSMALL          BITMAP  DISCARDABLE     "Bitmaps\\climb_12.bmp"
+IDB_CLIMBSMALLINV       BITMAP  DISCARDABLE     "Bitmaps\\climb_12inv.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -952,24 +954,6 @@ END
 // Bitmap
 //
 
-IDB_BITMAP1             BITMAP  DISCARDABLE     "Bitmaps\\bitmap1.bmp"
-IDB_BITMAP2             BITMAP  DISCARDABLE     "Bitmaps\\bitmap2.bmp"
-IDB_BITMAP3             BITMAP  DISCARDABLE     "Bitmaps\\bitmap3.bmp"
-IDB_BITMAP4             BITMAP  DISCARDABLE     "Bitmaps\\bitmap4.bmp"
-IDB_BITMAP5             BITMAP  DISCARDABLE     "Bitmaps\\bitmap5.bmp"
-IDB_BITMAP6             BITMAP  DISCARDABLE     "Bitmaps\\bitmap6.bmp"
-IDB_BITMAP7             BITMAP  DISCARDABLE     "Bitmaps\\bitmap7.bmp"
-IDB_BITMAP8             BITMAP  DISCARDABLE     "Bitmaps\\bitmap8.bmp"
-IDB_BITMAP9             BITMAP  DISCARDABLE     "Bitmaps\\bitmap9.bmp"
-IDB_BITMAP10            BITMAP  DISCARDABLE     "Bitmaps\\bitmap10.bmp"
-IDB_BITMAP11            BITMAP  DISCARDABLE     "Bitmaps\\bitmap11.bmp"
-IDB_BITMAP12            BITMAP  DISCARDABLE     "Bitmaps\\bitmap12.bmp"
-IDB_BITMAP13            BITMAP  DISCARDABLE     "Bitmaps\\bitmap13.bmp"
-IDB_BITMAP14            BITMAP  DISCARDABLE     "Bitmaps\\bitmap14.bmp"
-IDB_BITMAP15            BITMAP  DISCARDABLE     "Bitmaps\\bitmap15.bmp"
-IDB_BITMAP16            BITMAP  DISCARDABLE     "Bitmaps\\bitmap16.bmp"
-IDB_BITMAP17            BITMAP  DISCARDABLE     "Bitmaps\\bitmap17.bmp"
-IDB_BITMAP18            BITMAP  DISCARDABLE     "Bitmaps\\bitmap18.bmp"
 IDB_LANDABLE            BITMAP  DISCARDABLE     "Bitmaps\\Landable.bmp"
 IDB_REACHABLE           BITMAP  DISCARDABLE     "Bitmaps\\Reachable.bmp"
 IDB_TURNPOINT           BITMAP  DISCARDABLE     "Bitmaps\\Turnpoint.bmp"

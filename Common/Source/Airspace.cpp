@@ -104,13 +104,14 @@ static const int k_nLtDB	= 6;
 static const int k_nLtDA	= 7;
 static const int k_nLtDC	= 8;
 
-static const int k_nAreaCount = 11;
+static const int k_nAreaCount = 12;
 static const TCHAR* k_strAreaStart[k_nAreaCount] = {
 					_T("R"),  
 					_T("Q"), 
 					_T("P"), 
 					_T("A"), 
 					_T("B"), 
+					_T("C"), 
 					_T("CTR"),
 					_T("D"), 
 					_T("GP"), 
@@ -124,6 +125,7 @@ static const int k_nAreaType[k_nAreaCount] = {
 					PROHIBITED, 
 					CLASSA, 
 					CLASSB, 
+					CLASSC, 
 					CTR,
 					CLASSD, 
 					NOGLIDER, 

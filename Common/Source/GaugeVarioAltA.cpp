@@ -64,6 +64,7 @@ int GaugeVario::gmax;
 POINT* GaugeVario::polys=NULL;
 
 HBITMAP GaugeVario::hBitmapUnit;
+HBITMAP GaugeVario::hBitmapClimb;
 POINT GaugeVario::BitmapUnitPos;
 POINT GaugeVario::BitmapUnitSize;
 
@@ -81,6 +82,12 @@ DrawInfo_t GaugeVario::diLabelBottom = {false};
 COLORREF colTextGray;
 COLORREF colText;
 COLORREF colTextBackgnd;
+
+
+#define NARROWS 3
+#define ARROWYSIZE 3*InfoBoxLayout::scale
+#define ARROWXSIZE 5*InfoBoxLayout::scale
+
 
 LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -102,11 +109,11 @@ void GaugeVario::Create() {
 
   GetClientRect(hWndVarioWindow, &rc);
 
-  hdcScreen = GetDC(hWndVarioWindow);                       // the screen DC
+  hdcScreen = GetDC(hWndVarioWindow);       // the screen DC
   hdcDrawWindow = CreateCompatibleDC(hdcScreen);            // the memory DC
-  hdcTemp = CreateCompatibleDC(hdcScreen);                  // temp DC to select Uniz Bmp's
+  hdcTemp = CreateCompatibleDC(hdcScreen);  // temp DC to select Uniz Bmp's
 
-                                                            // prepare drawing DC, setup size and coler deep
+                                            // prepare drawing DC, setup size and coler deep
   HBITMAP memBM = CreateCompatibleBitmap (hdcScreen, 
 					  rc.right-rc.left, 
 					  rc.bottom-rc.top);
@@ -118,10 +125,12 @@ void GaugeVario::Create() {
     colText = RGB(0xff, 0xff, 0xff);
     colTextBackgnd = RGB(0x00, 0x00, 0x00);
     colTextGray = RGB(0xa0, 0xa0, 0xa0);
+    hBitmapClimb = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMBSMALLINV));
   } else {
     colText = RGB(0x00, 0x00, 0x00);
     colTextBackgnd = RGB(0xff, 0xff, 0xff);
     colTextGray = RGB(~0xa0, ~0xa0, ~0xa0);
+    hBitmapClimb = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMBSMALL));
   }
 
   SetTextColor(hdcDrawWindow, colText);
@@ -156,6 +165,7 @@ void GaugeVario::Show(bool doshow) {
   lastvisible = EnableVarioGauge;
 }
 
+
 void GaugeVario::Destroy() {
   if (polys) {
     free(polys);
@@ -167,6 +177,7 @@ void GaugeVario::Destroy() {
   DeleteObject(hDrawBitMap);
   DestroyWindow(hWndVarioWindow);
 }
+
 
 #define GAUGEVARIORANGE 5.0 //2.50 // 5 m/s
 #define GAUGEVARIOSWEEP 180 // degrees total sweep
@@ -191,15 +202,10 @@ void GaugeVario::Render() {
 
   if (!InitDone){
     HBITMAP oldBmp;
-    ValueHeight = (1 + Appearance.CDIWindowFont.CapitalHeight + 2 + Appearance.TitleWindowFont.CapitalHeight + 1);
-    /*
-    orgTop.y = (ValueHeight/2 + ValueHeight);
-    orgTop.x = rc.right;
-    orgMiddle.y = orgTop.y + ValueHeight;
-    orgMiddle.x = rc.right;
-    orgBottom.y = orgMiddle.y + ValueHeight;
-    orgBottom.x = rc.right;
-    */
+    ValueHeight = (4 
+		   + Appearance.CDIWindowFont.CapitalHeight 
+		   + Appearance.TitleWindowFont.CapitalHeight);
+
     orgMiddle.y = yoffset - ValueHeight/2;
     orgMiddle.x = rc.right;
     orgTop.y = orgMiddle.y-ValueHeight;
@@ -264,6 +270,8 @@ void GaugeVario::Render() {
 
   if (Appearance.GaugeVarioSpeedToFly) {
     RenderSpeedToFly(rc.right - 11, (rc.bottom-rc.top)/2);
+  } else {
+    RenderClimb();
   }
 
   if (Appearance.GaugeVarioBallast) {
@@ -300,9 +308,9 @@ void GaugeVario::MakePolygon(const int i) {
 
   if (!InitDone){
     if (Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle) {
-      nlength0 = 18*InfoBoxLayout::scale;
+      nlength0 = 15*InfoBoxLayout::scale; // was 18
       nlength1 = 6*InfoBoxLayout::scale;
-      nwidth = 3*InfoBoxLayout::scale;
+      nwidth = 4*InfoBoxLayout::scale;  // was 3
     } else {
       nlength0 = 13*InfoBoxLayout::scale;
       nlength1 = 6*InfoBoxLayout::scale;
@@ -340,11 +348,61 @@ void GaugeVario::MakeAllPolygons() {
 }
 
 
+void GaugeVario::RenderClimb() {
+
+  int x = rc.right-14*InfoBoxLayout::scale;
+  int y = rc.bottom-24*InfoBoxLayout::scale;
+
+  // testing  DrawInfo.SwitchState.VarioCircling = true;
+  
+  if (!dirty) return;
+
+  if (!DrawInfo.SwitchState.VarioCircling) {
+    if (Appearance.InverseInfoBox){
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    } else {
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+    }
+    SetBkMode(hdcDrawWindow, OPAQUE);
+
+    Rectangle(hdcDrawWindow, 
+	      x, y, 
+	      x+12*InfoBoxLayout::scale,y+12*InfoBoxLayout::scale);
+  } else {
+    HBITMAP oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapClimb);
+    if (InfoBoxLayout::scale>1) {
+      StretchBlt(hdcDrawWindow,
+		 x,
+		 y,
+		 12*InfoBoxLayout::scale, 
+		 12*InfoBoxLayout::scale,
+		 hdcTemp,
+		 12, 0,
+		 12, 12,
+		 SRCCOPY
+		 );
+    } else {
+      BitBlt(hdcDrawWindow,
+	     x, 
+	     y,
+	     12, 12,
+	     hdcTemp,
+	     12, 0,
+	     SRCCOPY
+	     );
+    }
+    SelectObject(hdcTemp, oldBmp);
+  }
+}
+
 void GaugeVario::RenderNeedle(double Value){
 
   static int lastI = -99999;
   static int lastIv = -99999;
   static POINT lastBit[3];
+  static POINT lp[2];
   static bool InitDone = false;
   static int degrees_per_unit;
   bool dirtytime = false;
@@ -364,11 +422,11 @@ void GaugeVario::RenderNeedle(double Value){
 
   DWORD fpsTime = ::GetTickCount();
   if (fpsTime-fpsTimeLast>500) {
-    if (i != lastIv) {
-      dirty = true;
-      fpsTimeLast = fpsTime;
-      lastIv = i;
-    }
+    //    if (i != lastIv) {
+    dirty = true;
+    fpsTimeLast = fpsTime;
+    lastIv = i;
+    //    }
   }
 
   i = min(gmax,max(-gmax,i));
@@ -396,6 +454,9 @@ void GaugeVario::RenderNeedle(double Value){
 
     bit = getPolygon(i);
     Polygon(hdcDrawWindow, bit, 3);
+    lp[0].x = 0; lp[0].y = yoffset+1;
+    lp[1].x = 15*InfoBoxLayout::scale; lp[1].y = yoffset+1;
+    Polyline(hdcDrawWindow,lp,2);
     memcpy(lastBit, bit, 3*sizeof(POINT));
 
     lastI = i;
@@ -405,7 +466,10 @@ void GaugeVario::RenderNeedle(double Value){
 
 
 // TODO: Optimise, this is slow
-void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, TCHAR *Label) {
+void GaugeVario::RenderValue(int x, int y, 
+			     DrawInfo_t *diValue, 
+			     DrawInfo_t *diLabel, double Value, 
+			     TCHAR *Label) {
 
   SIZE tsize;
 
@@ -513,6 +577,7 @@ void GaugeVario::RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLa
 
 }
 
+
 void GaugeVario::RenderSpeedToFly(int x, int y){
 
   #define  YOFFSET     36
@@ -531,27 +596,28 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
   static double lastVdiff;
   double vdiff;
 
-#define NARROWS 4
-#define ARROWYSIZE 4*InfoBoxLayout::scale
-#define ARROWXSIZE 5*InfoBoxLayout::scale
-
   int nary = NARROWS*ARROWYSIZE;
   int ytop = rc.top
     +YOFFSET+nary; // JMW
   int ybottom = rc.bottom
     -YOFFSET-nary-InfoBoxLayout::scale; // JMW
 
+  ytop += 14*InfoBoxLayout::scale;
+  ybottom -= 14*InfoBoxLayout::scale;
   // JMW
-  x = rc.left+1*InfoBoxLayout::scale;
+  //  x = rc.left+1*InfoBoxLayout::scale;
+  x = rc.right-2*ARROWYSIZE-6*InfoBoxLayout::scale;
 
-  if (DerivedDrawInfo.Flying && !DerivedDrawInfo.Circling){
+  if ((DerivedDrawInfo.Flying) 
+      && !DerivedDrawInfo.Circling  
+      && !DrawInfo.SwitchState.VarioCircling) {
     vdiff = (DerivedDrawInfo.VOpt - DrawInfo.IndicatedAirspeed);
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;
   } else
     vdiff = 0;
 
-  if (lastVdiff != vdiff){
+  if ((lastVdiff != vdiff)||(dirty)) {
 
     lastVdiff = vdiff;
 
@@ -569,12 +635,14 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
     // bottom (too slow)
     Rectangle(hdcDrawWindow, 
 	      x, (ybottom+YOFFSET), 
-	      x+ARROWXSIZE*2+1, (ybottom+YOFFSET)+nary);
+	      x+ARROWXSIZE*2+1, (ybottom+YOFFSET)+nary+ARROWYSIZE+InfoBoxLayout::scale*2);
 
     // top (too fast)
     Rectangle(hdcDrawWindow, 
 	      x, (ytop-YOFFSET)+1, 
-	      x+ARROWXSIZE*2+1, (ytop-YOFFSET)-nary+1);
+	      x+ARROWXSIZE*2+1, (ytop-YOFFSET)-nary+1-ARROWYSIZE-InfoBoxLayout::scale*2);
+
+    RenderClimb();
 
     if (Appearance.InverseInfoBox){
       SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
@@ -589,7 +657,6 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
       y = ybottom;
       y += YOFFSET;
 
-      // JMW TODO: use InfoBoxLayout::scale to scale sizes
       while (vdiff > 0){
         if (vdiff > DeltaVstep){
           Rectangle(hdcDrawWindow, 
@@ -650,15 +717,23 @@ void GaugeVario::RenderBallast(void){
     SIZE tSize;
 
     orgLabel.x = 1;                                         // position of ballast label
-    orgLabel.y = rc.top + 2 + (Appearance.TitleWindowFont.CapitalHeight*2) - Appearance.TitleWindowFont.AscentHeight;
+    orgLabel.y = rc.top + 2 + 
+      (Appearance.TitleWindowFont.CapitalHeight*2) 
+      - Appearance.TitleWindowFont.AscentHeight;
 
     orgValue.x = 1;                                         // position of ballast value
-    orgValue.y = rc.top + 1 + Appearance.TitleWindowFont.CapitalHeight - Appearance.TitleWindowFont.AscentHeight;
+    orgValue.y = rc.top + 1 + 
+      Appearance.TitleWindowFont.CapitalHeight 
+      - Appearance.TitleWindowFont.AscentHeight;
 
     recLabelBk.left = orgLabel.x;                           // set upper left corner
-    recLabelBk.top = orgLabel.y + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
+    recLabelBk.top = orgLabel.y 
+      + Appearance.TitleWindowFont.AscentHeight 
+      - Appearance.TitleWindowFont.CapitalHeight;
     recValueBk.left = orgValue.x;                           // set upper left corner
-    recValueBk.top = orgValue.y + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
+    recValueBk.top = orgValue.y 
+      + Appearance.TitleWindowFont.AscentHeight 
+      - Appearance.TitleWindowFont.CapitalHeight;
 
     SelectObject(hdcDrawWindow, TitleWindowFont);           // get max label size
     GetTextExtentPoint(hdcDrawWindow, TextBal, _tcslen(TextBal), &tSize);
@@ -669,13 +744,15 @@ void GaugeVario::RenderBallast(void){
                                                             // get max value size
     GetTextExtentPoint(hdcDrawWindow, TEXT("100%"), _tcslen(TEXT("100%")), &tSize);
 
-    recValueBk.right = recValueBk.left + tSize.cx;          // update back rect with max label size
+    recValueBk.right = recValueBk.left + tSize.cx;          
+     // update back rect with max label size
     recValueBk.bottom = recValueBk.top + Appearance.TitleWindowFont.CapitalHeight;
 
   }
 
 
-  if (BALLAST != lastBallast){                              // ballast hase been changed
+  if (BALLAST != lastBallast){         
+       // ballast hase been changed
 
     TCHAR Temp[18];
 
@@ -683,13 +760,14 @@ void GaugeVario::RenderBallast(void){
     SetBkColor(hdcDrawWindow, colTextBackgnd);
 
     if (lastBallast < 0.001 || BALLAST < 0.001){
-      if (BALLAST < 0.001)                                  // new ballast is 0, hide label
+      if (BALLAST < 0.001)    // new ballast is 0, hide label
         ExtTextOut(hdcDrawWindow,
           orgLabel.x,
           orgLabel.y,
           ETO_OPAQUE, &recLabelBk, TEXT(""), 0, NULL);
       else {
-        SetTextColor(hdcDrawWindow, colTextGray);           // ols ballast was 0, show label
+        SetTextColor(hdcDrawWindow, colTextGray); 
+          // ols ballast was 0, show label
         ExtTextOut(hdcDrawWindow,
           orgLabel.x,
           orgLabel.y,
@@ -697,12 +775,12 @@ void GaugeVario::RenderBallast(void){
       }
     }
 
-    if (BALLAST < 0.001)                                    // new ballast 0, hide value
+    if (BALLAST < 0.001)         // new ballast 0, hide value
       _stprintf(Temp, TEXT(""));
     else
       _stprintf(Temp, TEXT("%.0f%%"), BALLAST*100);
 
-    SetTextColor(hdcDrawWindow, colText);              // display value
+    SetTextColor(hdcDrawWindow, colText);  // display value
     ExtTextOut(hdcDrawWindow,
       orgValue.x,
       orgValue.y,
@@ -728,21 +806,27 @@ void GaugeVario::RenderBugs(void){
     SIZE tSize;
 
     orgLabel.x = 1;
-    orgLabel.y = rc.bottom - 2 - Appearance.TitleWindowFont.CapitalHeight - Appearance.TitleWindowFont.AscentHeight;
+    orgLabel.y = rc.bottom 
+      - 2 - Appearance.TitleWindowFont.CapitalHeight - Appearance.TitleWindowFont.AscentHeight;
 
     orgValue.x = 1;
-    orgValue.y = rc.bottom - 1 - Appearance.TitleWindowFont.AscentHeight;
+    orgValue.y = rc.bottom 
+      - 1 - Appearance.TitleWindowFont.AscentHeight;
 
     recLabelBk.left = orgLabel.x;
-    recLabelBk.top = orgLabel.y + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
+    recLabelBk.top = orgLabel.y 
+      + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
     recValueBk.left = orgValue.x;
-    recValueBk.top = orgValue.y + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
+    recValueBk.top = orgValue.y 
+      + Appearance.TitleWindowFont.AscentHeight - Appearance.TitleWindowFont.CapitalHeight;
 
     SelectObject(hdcDrawWindow, TitleWindowFont);
     GetTextExtentPoint(hdcDrawWindow, TextBug, _tcslen(TextBug), &tSize);
 
-    recLabelBk.right = recLabelBk.left + tSize.cx;
-    recLabelBk.bottom = recLabelBk.top + Appearance.TitleWindowFont.CapitalHeight + Appearance.TitleWindowFont.Height - Appearance.TitleWindowFont.AscentHeight;
+    recLabelBk.right = recLabelBk.left 
+      + tSize.cx;
+    recLabelBk.bottom = recLabelBk.top 
+      + Appearance.TitleWindowFont.CapitalHeight + Appearance.TitleWindowFont.Height - Appearance.TitleWindowFont.AscentHeight;
 
     GetTextExtentPoint(hdcDrawWindow, TEXT("100%"), _tcslen(TEXT("100%")), &tSize);
 
@@ -788,7 +872,6 @@ void GaugeVario::RenderBugs(void){
     lastBugs = BUGS;
 
   }
-
 }
 
 

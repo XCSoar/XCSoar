@@ -517,7 +517,7 @@ type=key
 data=9
 event=Setup Basic
 event=Mode default
-label=Bugs\nBallast
+label=Setup\nBasic
 location=8
 
 mode=Config1

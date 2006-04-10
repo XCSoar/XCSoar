@@ -56,6 +56,10 @@ bool EnableAutoWind= true;
 
 #include "Port.h"
 
+#ifdef EXPERIMENTAL
+#include "WindZigZag.h"
+#endif
+
 static void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -411,12 +415,23 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Calculated->Heading += 360;
     }
 
+#ifdef _SIM_
+    if (!Calculated->Circling) {
+      mag = isqrt4((unsigned long)(x0*x0*100+y0*y0*100))/10.0;
+      Basic->TrueAirspeed = mag;
+    }
+#endif
+#ifdef EXPERIMENTAL
+    WindZigZagUpdate(Basic, Calculated);
+#endif
+
     if (EnableCalibration) {
       mag = isqrt4((unsigned long)(x0*x0*100+y0*y0*100))/10.0;
       if ((Basic->AirspeedAvailable) && (Basic->IndicatedAirspeed>0)) {
         
         double k = (mag / Basic->TrueAirspeed);
         
+#ifdef DEBUG
         char buffer[200];
 	sprintf(buffer,"%g %g %g %g %g %g %g %g %g # airspeed\r\n",
                 Basic->IndicatedAirspeed, 
@@ -429,6 +444,7 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 		Basic->BaroAltitude,
 		Basic->Altitude);
         DebugStore(buffer);
+#endif
 		
       }
     }
@@ -618,6 +634,7 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
   static double Altitude[30];
+  static double Vario[30];
   int Elapsed, i;
   long temp;
   double Gain;
@@ -631,7 +648,13 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           temp %=30;
 
           Altitude[temp] = Basic->Altitude;
+	  Vario[temp] = Basic->Vario;
         }
+      double Vave = 0;
+      for (i=0; i<30; i++) {
+	Vave += Vario[i];
+      }
+
       temp = (long)Basic->Time - 1;
       temp = temp%30;
       Gain = Altitude[temp];
@@ -641,7 +664,11 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Gain = Gain - Altitude[temp];
 
       LastTime = Basic->Time;
-      Calculated->Average30s = Gain/30;
+      if (Basic->VarioAvailable) {
+	Calculated->Average30s = Vave/30;
+      } else {
+	Calculated->Average30s = Gain/30;
+      }
     }
   else
     {
@@ -850,6 +877,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     // time step too big, so just take it at last measurement
     Calculated->NextTrackBearing = Basic->TrackBearing;
   }
+
+  Calculated->TurnRate = Rate;
 
   LastRate = Rate;
 
