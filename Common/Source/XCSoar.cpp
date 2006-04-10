@@ -1199,9 +1199,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #if (NEWINFOBOX>0) 
   wcscat(XCSoar_Version, TEXT("4.70 "));
 #else
-  wcscat(XCSoar_Version, TEXT("Alpha "));
-  wcscat(XCSoar_Version, TEXT(__DATE__));
-  // wcscat(XCSoar_Version, TEXT("4.5 BETA 4")); // Yet to be released
+  // wcscat(XCSoar_Version, TEXT("Alpha "));
+  // wcscat(XCSoar_Version, TEXT(__DATE__));
+  wcscat(XCSoar_Version, TEXT("BETA 4.5.4")); // Yet to be released
 #endif
 
   XCSoarGetOpts(lpCmdLine);

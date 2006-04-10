@@ -90,10 +90,10 @@ XCSoarSetup.dll
 XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
 
 [Files.Fonts]
-DejaVuSansCondensed-Bold2.ttf
-DejaVuSansCondensed-BoldOblique2.ttf
-DejaVuSansCondensed-Oblique2.ttf
-DejaVuSansCondensed2.ttf
+DejaVuSansCondensed-Bold2.ttf,,,0x00000010
+DejaVuSansCondensed-BoldOblique2.ttf,,,0x00000010
+DejaVuSansCondensed-Oblique2.ttf,,,0x00000010
+DejaVuSansCondensed2.ttf,,,0x00000010
 
 [Files.Input]
 standard.xci
