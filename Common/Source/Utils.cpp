@@ -2909,11 +2909,16 @@ long GetUTCOffset(void) {
   long utcoffset=0;
   // returns offset in seconds
   TIME_ZONE_INFORMATION TimeZoneInformation;
-  GetTimeZoneInformation(&TimeZoneInformation);
+  DWORD dwStandardDaylight = 
+    GetTimeZoneInformation(&TimeZoneInformation);
 
   utcoffset = -TimeZoneInformation.Bias*60;
   
-  if (GetTimeZoneInformation(&TimeZoneInformation)==TIME_ZONE_ID_DAYLIGHT) {
+  if (dwStandardDaylight==TIME_ZONE_ID_STANDARD) {
+    utcoffset = -TimeZoneInformation.StandardBias*60;
+  }
+  
+  if (dwStandardDaylight==TIME_ZONE_ID_DAYLIGHT) {
     utcoffset -= TimeZoneInformation.DaylightBias*60;
   }
 #if (WINDOWSPC>0)
