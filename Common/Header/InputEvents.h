@@ -46,6 +46,7 @@ class InputEvents {
   static void eventClearWarningsOrTerrainTopology(TCHAR *misc);
   static void eventDLLExecute(TCHAR *misc);
   static void eventDoInfoKey(TCHAR *misc);
+  static void eventFlightMode(TCHAR *misc);
   static void eventLogger(TCHAR *misc);
   static void eventMacCready(TCHAR *misc);
   static void eventMainMenu(TCHAR *misc);

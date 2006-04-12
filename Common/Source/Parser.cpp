@@ -475,6 +475,10 @@ BOOL NMEAParser::RMB(TCHAR *String, NMEA_INFO *GPS_INFO)
   return TRUE;
 }
 
+
+bool SetSystemTimeFromGPS = false;
+
+
 BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
@@ -557,31 +561,34 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
     ctemp[2] = '\0';
     GPS_INFO->Day = _tcstol(&ctemp[0], &Stop, 10);
 
-#ifdef GNAV
     // Altair doesn't have a battery-backed up realtime clock,
     // so as soon as we get a fix for the first time, set the
     // system clock to the GPS time.
     static bool sysTimeInitialised = false;
 
     if (!GPS_INFO->NAVWarning) {
-      if (!sysTimeInitialised) {
+#ifdef GNAV
+      SetSystemTimeFromGPS = true;
+#endif
+      if (SetSystemTimeFromGPS) {
+	if (!sysTimeInitialised) {
 
-	SYSTEMTIME sysTime;
-	::GetSystemTime(&sysTime);
-	int hours = ((int)ThisTime)/3600;
-	int mins = ((int)ThisTime-hours*60)/60;
-	int secs = ThisTime-hours*3600-mins*60;
-	sysTime.wYear = GPS_INFO->Year;
-	sysTime.wMonth = GPS_INFO->Month;
-	sysTime.wDay = GPS_INFO->Day;
-	sysTime.wHour = hours;
-	sysTime.wMin = mins;
-	sysTime.wSecond = secs;
-	::SetSystemTime(&sysTime);
-	sysTimeInitialised =true;
+	  SYSTEMTIME sysTime;
+	  ::GetSystemTime(&sysTime);
+	  int hours = ((int)ThisTime)/3600;
+	  int mins = ((int)ThisTime-hours*60)/60;
+	  int secs = (int)ThisTime-hours*3600-mins*60;
+	  sysTime.wYear = GPS_INFO->Year;
+	  sysTime.wMonth = GPS_INFO->Month;
+	  sysTime.wDay = GPS_INFO->Day;
+	  sysTime.wHour = hours;
+	  sysTime.wMinute = mins;
+	  sysTime.wSecond = secs;
+	  ::SetSystemTime(&sysTime);
+	  sysTimeInitialised =true;
+	}
       }
     }
-#endif
 
     if(GPS_INFO->Day > 1)
       {

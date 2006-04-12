@@ -279,6 +279,10 @@
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
+  <WndProperty Name="prpAutoForceFinalGlide" Caption="Auto Force Final Glide"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=200 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
   </WndFrame>
 
   <WndFrame Name="frmPolar" X=70 Y=0 Width=246 Height=222 Font=2>
@@ -299,31 +303,35 @@
 
   <WndFrame Name="frmComm" X=70 Y=0 Width=246 Height=222 Font=2>
 
-    <WndProperty Name="prpComPort1" Caption="Com port 1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpComDevice1" Caption="Com A device"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpComSpeed1" Caption="Com speed 1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpComPort1" Caption="Com A port"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpComDevice1" Caption="Com device 1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpComSpeed1" Caption="Com A speed"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpComPort2" Caption="Com port 2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpComDevice2" Caption="Com B device"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpComSpeed2" Caption="Com speed 2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpComPort2" Caption="Com B port"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpComDevice2" Caption="Com device 2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpComSpeed2" Caption="Com B speed "     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
   <WndButton Name="cmdVario" Caption="Vario config" X=5 Y=-1 Width=80  Height=28 Font=2 Tag=4 OnClickNotify="OnVarioClicked" />
+
+  <WndProperty Name="prpSetSystemTimeFromGPS" Caption="Use GPS time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
 
   </WndFrame>
 

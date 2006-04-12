@@ -233,7 +233,8 @@ TCHAR szRegistryTerrainContrast[] = TEXT("TerrainContrast");
 TCHAR szRegistryTerrainBrightness[] = TEXT("TerrainBrightness");
 TCHAR szRegistryEnableFLARMDisplay[] = TEXT("EnableFLARMDisplay");
 TCHAR szRegistryGliderScreenPosition[] = TEXT("GliderScreenPosition");
-
+TCHAR szRegistrySetSystemTimeFromGPS[] = TEXT("SetSystemTimeFromGPS");
+TCHAR szRegistryAutoForceFinalGlide[] = TEXT("AutoForceFinalGlide");
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -731,6 +732,14 @@ void ReadRegistrySettings(void)
   Temp = MapWindow::GliderScreenPosition;
   GetFromRegistry(szRegistryGliderScreenPosition,&Temp);
   MapWindow::GliderScreenPosition = (int)Temp;
+
+  Temp = SetSystemTimeFromGPS;
+  GetFromRegistry(szRegistrySetSystemTimeFromGPS,&Temp);
+  SetSystemTimeFromGPS = (Temp!=0);
+
+  Temp = AutoForceFinalGlide;
+  GetFromRegistry(szRegistryAutoForceFinalGlide,&Temp);
+  AutoForceFinalGlide = (Temp!=0);
 
 }
 
@@ -2909,16 +2918,14 @@ long GetUTCOffset(void) {
   long utcoffset=0;
   // returns offset in seconds
   TIME_ZONE_INFORMATION TimeZoneInformation;
-  DWORD dwStandardDaylight =
-    GetTimeZoneInformation(&TimeZoneInformation);
+  DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
 
   utcoffset = -TimeZoneInformation.Bias*60;
 
-  if (dwStandardDaylight==TIME_ZONE_ID_STANDARD) {
-    utcoffset = -TimeZoneInformation.StandardBias*60;
+  if (tzi==TIME_ZONE_ID_STANDARD) {
+    utcoffset -= TimeZoneInformation.StandardBias*60;
   }
-
-  if (dwStandardDaylight==TIME_ZONE_ID_DAYLIGHT) {
+  if (tzi==TIME_ZONE_ID_DAYLIGHT) {
     utcoffset -= TimeZoneInformation.DaylightBias*60;
   }
 #if (WINDOWSPC>0)
@@ -3309,7 +3316,7 @@ int NumberOfFLARMNames = 0;
 
 typedef struct {
   long ID;
-  TCHAR Name[10];
+  TCHAR Name[21];
 } FLARM_Names_t;
 
 #define MAXFLARMNAMES 200
@@ -3343,6 +3350,7 @@ void OpenFLARMDetails() {
     if (_stscanf(line, TEXT("%lx=%s"), &id, Name) == 2) {
       FLARM_Names[NumberOfFLARMNames].ID = id;
       _tcsncpy(FLARM_Names[NumberOfFLARMNames].Name,Name,20);
+      FLARM_Names[NumberOfFLARMNames].Name[20]=0;
       NumberOfFLARMNames++;
       if (NumberOfFLARMNames>=MAXFLARMNAMES)
 	break;

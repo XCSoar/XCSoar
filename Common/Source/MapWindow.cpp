@@ -63,7 +63,9 @@ Copyright_License {
 
 
 #ifdef DEBUG
+#if (WINDOWSPC<1)
 #define DRAWLOAD
+#endif
 #endif
 
 int TrailActive = TRUE;
@@ -3487,11 +3489,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
   ////////// draw it again, just the outlines
   SelectObject(hDCTemp, GetStockObject(HOLLOW_BRUSH));
-  if (bAirspaceBlackOutline) {
-    SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
-  } else {
-    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
-  }
+  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
   for(i=0;i<NumberOfAirspaceCircles;i++)
   {
     if (AirspaceCircle[i].Visible) {
@@ -3508,7 +3506,11 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
   for(i=0;i<NumberOfAirspaceAreas;i++)
   {
     if(AirspaceArea[i].Visible) {
-      SelectObject(hDCTemp, hAirspacePens[AirspaceArea[i].Type]);
+      if (bAirspaceBlackOutline) {
+	SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+      } else {
+	SelectObject(hDCTemp, hAirspacePens[AirspaceArea[i].Type]);
+      }
       Polygon(hDCTemp,
 	      AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
 	      AirspaceArea[i].NumPoints);

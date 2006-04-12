@@ -93,7 +93,7 @@ static void NextPage(int Step){
     wf->SetCaption(TEXT("4 Polar"));
     break;
   case 4:
-    wf->SetCaption(TEXT("5 Comm Ports and Devices"));
+    wf->SetCaption(TEXT("5 Devices"));
     break;
   case 5:
     wf->SetCaption(TEXT("6 Units"));
@@ -641,6 +641,12 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoForceFinalGlide"));
+  if (wp) {
+    wp->GetDataField()->Set(AutoForceFinalGlide);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpBlockSTF"));
   if (wp) {
     wp->GetDataField()->Set(EnableBlockSTF);
@@ -703,6 +709,12 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
   if (wp) {
     wp->GetDataField()->Set(MapWindow::EnableTrailDrift);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSetSystemTimeFromGPS"));
+  if (wp) {
+    wp->GetDataField()->Set(SetSystemTimeFromGPS);
     wp->RefreshDisplay();
   }
 
@@ -1100,6 +1112,15 @@ void dlgConfigurationShowModal(void){
 
   // TODO: implement a cancel button that skips all this below after exit.
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSetSystemTimeFromGPS"));
+  if (wp) {
+    if (SetSystemTimeFromGPS != wp->GetDataField()->GetAsBoolean()) {
+      SetSystemTimeFromGPS = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistrySetSystemTimeFromGPS, SetSystemTimeFromGPS);
+      changed = true;
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAnimation"));
   if (wp) {
     if (EnableAnimation != wp->GetDataField()->GetAsBoolean()) {
@@ -1356,6 +1377,15 @@ void dlgConfigurationShowModal(void){
     if (EnableAutoWind != wp->GetDataField()->GetAsBoolean()) {
       EnableAutoWind = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryAutoWind, EnableAutoWind);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoForceFinalGlide"));
+  if (wp) {
+    if (AutoForceFinalGlide != wp->GetDataField()->GetAsBoolean()) {
+      AutoForceFinalGlide = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryAutoForceFinalGlide, AutoForceFinalGlide);
       changed = true;
     }
   }

@@ -165,7 +165,11 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
                  RGB(0,255,0));
     break;
   case STYLE_MEDIUMBLACK:
+#if (NEWINFOBOX>0)
     SelectObject(hdc, penThinSignal /*GetStockObject(BLACK_PEN)*/);
+#else
+    SelectObject(hdc, GetStockObject(BLACK_PEN));
+#endif
     Polyline(hdc, line, 2);
     break;
   case STYLE_THINDASHPAPER:

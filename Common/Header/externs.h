@@ -133,6 +133,9 @@ extern bool EnableCalibration;
 extern bool EnableAutoBlank;
 extern bool EnableAuxiliaryInfo;
 extern int debounceTimeout;
+extern bool SetSystemTimeFromGPS;
+extern bool ForceFinalGlide;
+extern bool AutoForceFinalGlide;
 
 // user interface options
 extern bool bAirspaceBlackOutline;

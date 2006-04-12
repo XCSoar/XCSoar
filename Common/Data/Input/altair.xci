@@ -398,7 +398,8 @@ location=7
 mode=Nav2
 type=key
 data=9
-label=
+event=FlightMode finalglide toggle
+label=Force\nFinal
 location=8
 
 mode=Nav2

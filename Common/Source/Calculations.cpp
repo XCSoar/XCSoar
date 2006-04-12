@@ -53,6 +53,8 @@ Copyright_License {
 WindAnalyser *windanalyser = NULL;
 
 bool EnableAutoWind= true;
+bool ForceFinalGlide= false;
+bool AutoForceFinalGlide= false;
 
 #include "Port.h"
 
@@ -1761,8 +1763,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 
       // update final glide mode status
       if (
-          ((ActiveWayPoint == FinalWayPoint)
-           &&(ActiveWayPoint>=0))
+          ((ActiveWayPoint == FinalWayPoint)&&(ActiveWayPoint>=0))
+	  ||(ForceFinalGlide)
           ||(TaskAborted)) {
         // JMW on final glide
 	if (Calculated->FinalGlide == 0)
@@ -1809,13 +1811,11 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 				      Calculated->WindBearing,
 				      &(Calculated->BestCruiseTrack),
 				      &(Calculated->VMacCready),
-				      (i==FinalWayPoint),
+				      (Calculated->FinalGlide==1),
 				      &(Calculated->LegTimeToGo)
-				      // ||()
-				      // JMW TODO!!!!!!!!!!!
 				      );
 
-      if ((i==FinalWayPoint)||(TaskAborted)) {
+      if (Calculated->FinalGlide) {
         double lat, lon;
         double distancesoarable =
           FinalGlideThroughTerrain(LegBearing, Basic, Calculated,
@@ -1888,8 +1888,9 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 	    MacCreadyAltitude(maccready,
 			      LegDistance, LegBearing,
 			      Calculated->WindSpeed,
-			      Calculated->WindBearing, 0, 0,
-			      (i==FinalWayPoint), // ||() JMW TODO!!!!!!!!!
+			      Calculated->WindBearing,
+			      0, 0,
+			      (Calculated->FinalGlide==1),
 			      &LegTimeToGo);
 
           TaskAltitudeRequired += LegAltitude;
@@ -1930,6 +1931,16 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
           Calculated->LDFinish = 999;
         }
 
+      // Auto Force Final Glide forces final glide mode
+      // if above final glide...
+      if (AutoForceFinalGlide) {
+	if (Calculated->TaskAltitudeDifference>0) {
+	  ForceFinalGlide = true;
+	} else {
+	  ForceFinalGlide = false;
+	}
+      }
+
     } else {
     // no task selected, so work things out at current heading
 
@@ -1940,9 +1951,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
                                  Calculated->WindBearing,
                                  &(Calculated->BestCruiseTrack),
                                  &(Calculated->VMacCready),
-                                 false,
-                                 // ||()
-                                 // JMW TODO!!!!!!!!!!!
+				  (Calculated->FinalGlide==1),
                                  0);
 
   }
