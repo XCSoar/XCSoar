@@ -913,6 +913,14 @@ double StaticPressureToAltitude(double ps) {
 }
 
 
+// Converts altitude with QNH=1013.25 reference to QNH adjusted altitude
+double AltitudeToQNHAltitude(double alt) {
+  const double k1=0.190263;
+  double ps = pow((44330.8-alt)/4946.54,1.0/k1);
+  return StaticPressureToAltitude(ps);
+}
+
+
 double AirDensity(double altitude) {
   double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
   return rho;
@@ -1371,6 +1379,16 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   static TCHAR t2[] = TEXT("0,300,500,220,2,DD8F12,120,-4.5,30,-1.4,1");
   static TCHAR t3[] = TEXT("0,0,1200,50,2,DA8B06,120,-4.5,30,-1.4,1");
   //  static TCHAR t4[] = TEXT("-3,500,1024,50");
+
+  QNH=1020.0;
+  double h;
+  h = AltitudeToQNHAltitude(0);
+  h = AltitudeToQNHAltitude(100);
+  QNH=1013.25;
+  h = AltitudeToQNHAltitude(0);
+  h = AltitudeToQNHAltitude(100);
+
+  ////
 
   i++;
 
