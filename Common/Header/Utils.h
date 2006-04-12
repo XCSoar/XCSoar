@@ -89,6 +89,8 @@ extern TCHAR szRegistrySnailTrail[];
 extern TCHAR szRegistryTrailDrift[];
 extern TCHAR szRegistryGliderScreenPosition[];
 extern TCHAR szRegistryAnimation[];
+extern TCHAR szRegistrySetSystemTimeFromGPS[];
+extern TCHAR szRegistryAutoForceFinalGlide[];
 
 extern bool LockSettingsInFlight;
 

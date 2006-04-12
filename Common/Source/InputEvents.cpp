@@ -1246,6 +1246,28 @@ void InputEvents::eventMacCready(TCHAR *misc) {
 }
 
 
+// Allows forcing of flight mode (final glide)
+void InputEvents::eventFlightMode(TCHAR *misc) {
+  if (_tcscmp(misc, TEXT("finalglide on")) == 0) {
+    ForceFinalGlide = true;
+  }
+  if (_tcscmp(misc, TEXT("finalglide off")) == 0) {
+    ForceFinalGlide = false;
+  }
+  if (_tcscmp(misc, TEXT("finalglide toggle")) == 0) {
+    ForceFinalGlide = !ForceFinalGlide;
+  }
+  if (_tcscmp(misc, TEXT("show")) == 0) {
+    if (ForceFinalGlide) {
+      DoStatusMessage(TEXT("Final glide forced ON"));
+    } else {
+      DoStatusMessage(TEXT("Final glide automatic"));
+    }
+  }
+}
+
+
+
 // Wind
 // Adjusts the wind magnitude and direction
 //     up: increases wind magnitude

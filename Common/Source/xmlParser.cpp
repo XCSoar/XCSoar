@@ -54,6 +54,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include "xmlParser.h"
+#include "compatibility.h"
+#include "stdAfx.h"
 
 bool XMLNode::GlobalError = false;
 
