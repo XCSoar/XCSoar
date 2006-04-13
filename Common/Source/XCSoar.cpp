@@ -2115,7 +2115,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
-      /* DON'T PROCESS KEYS HERE, IT CAUSES CRASHES!
+      /* DON'T PROCESS KEYS HERE WITH NEWINFOBOX, IT CAUSES CRASHES! */
+#if (NEWINFOBOX<1)       
       if (ProgramStarted) {
 	if (!DialogActive) {
 	  
@@ -2129,7 +2130,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return TRUE; // JMW trying to fix multiple processkey bug
       }
-      */
+#endif 
       break;
     case WM_TIMER:
       if (ProgramStarted) {
