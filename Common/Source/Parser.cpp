@@ -1088,7 +1088,7 @@ BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
 BOOL NMEAParser::PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   double flap, stallratio;
-  swscanf(String,
+  int found = swscanf(String,
 	  TEXT("%lf,%lf,%lf,%lf,%lf"),
 	  &GPS_INFO->AccelX,
 	  &GPS_INFO->AccelZ,
@@ -1102,7 +1102,11 @@ BOOL NMEAParser::PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
 			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
   GPS_INFO->Gload = mag/100.0;
   GPS_INFO->AccelerationAvailable = TRUE;
-  GPS_INFO->NettoVarioAvailable = TRUE;
+  if (found==5) {
+	  GPS_INFO->NettoVarioAvailable = TRUE;
+  } else {
+	  GPS_INFO->NettoVarioAvailable = FALSE;
+  }
   GPS_INFO->NettoVario /= 10.0;
 
   if (EnableCalibration) {
