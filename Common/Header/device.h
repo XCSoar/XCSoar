@@ -10,13 +10,15 @@
 #define	NUMDEV		 2
 #define	NUMREGDEV	 10
 
-#define	devA()	(&DeviceList[0])
-#define	devB()	(&DeviceList[1])
+#define	devA()	    (&DeviceList[0])
+#define	devB()	    (&DeviceList[1])
+#define devAll()    (NULL)
 
 typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind} DeviceFlags_t;
 
 typedef struct{
   void (*WriteString)(TCHAR *Text);
+  void (*WriteNMEAString)(TCHAR *Text);
   BOOL (*StopRxThread)(void);
   BOOL (*StartRxThread)(void);
   int  (*GetChar)(void);
@@ -43,6 +45,9 @@ typedef	struct DeviceDescriptor_t{
 	BOOL (*DeclAddWayPoint)(DeviceDescriptor_t *d, WAYPOINT	*wp);
 	BOOL (*IsLogger)(DeviceDescriptor_t	*d);
 	BOOL (*IsGPSSource)(DeviceDescriptor_t *d);
+	BOOL (*IsBaroSource)(DeviceDescriptor_t *d);
+	BOOL (*PutQNH)(DeviceDescriptor_t *d, double NewQNH);
+	BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
   int PortNumber;
 }DeviceDescriptor_t;
 
@@ -59,9 +64,11 @@ typedef	struct{
 extern DeviceDescriptor_t	DeviceList[NUMDEV];
 extern DeviceRegister_t   DeviceRegister[NUMREGDEV];
 extern int DeviceRegisterCount;
+extern DeviceDescriptor_t *pDevPrimaryBaroSource;
+extern DeviceDescriptor_t *pDevSecondaryBaroSource;
 
 BOOL devRegister(TCHAR *Name,	int	Flags, BOOL (*Installer)(PDeviceDescriptor_t d));
-BOOL decRegisterGetName(int Index, TCHAR *Name);
+BOOL devRegisterGetName(int Index, TCHAR *Name);
 
 BOOL devInit(LPTSTR CommandLine);
 BOOL devCloseAll(void);
@@ -81,9 +88,15 @@ BOOL devDeclEnd(PDeviceDescriptor_t	d);
 BOOL devDeclAddWayPoint(PDeviceDescriptor_t	d, WAYPOINT	*wp);
 BOOL devIsLogger(PDeviceDescriptor_t d);
 BOOL devIsGPSSource(PDeviceDescriptor_t	d);
+BOOL devIsBaroSource(PDeviceDescriptor_t d);
+
 
 BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName);
 BOOL devCloseLog(PDeviceDescriptor_t d);
 
+BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH);
+BOOL devOnSysTicker(DeviceDescriptor_t *d);
+
+BOOL devGetBaroAltitude(double *Value);
 
 #endif

@@ -368,6 +368,24 @@ static void OnDemoClicked(WindowControl * Sender){
   dlgVegaDemoShowModal();
 }
 
+static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+  switch(wParam & 0xffff){
+    case VK_LEFT:
+    case '6':
+      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdPrev")))->GetHandle());
+      NextPage(-1);
+      //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
+    return(0);
+    case VK_RIGHT:
+    case '7':
+      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdNext")))->GetHandle());
+      NextPage(+1);
+      //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
+    return(0);
+  }
+  return(1);
+}
+
 /*
 int enumval = 0;
 
@@ -502,6 +520,9 @@ bool dlgConfigurationVarioShowModal(void){
 		      TEXT("IDR_XML_VARIO"));
 
   if (!wf) return false;
+
+  wf->SetKeyDownNotify(FormKeyDown);
+
   
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))
     ->SetOnClickNotify(OnCloseClicked);

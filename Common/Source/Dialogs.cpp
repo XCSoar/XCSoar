@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.104 2006/04/05 11:26:41 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.105 2006/04/17 15:36:31 samgi Exp $
 
 Copyright_License {
 
@@ -2678,7 +2678,7 @@ LRESULT CALLBACK COMMOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
     case WM_INITDIALOG:
       SendDlgItemMessage(hDlg, IDC_DEVICE, CB_ADDSTRING, 0, (LPARAM)(LPCSTR)TEXT("Generic GPS"));                       
       for (i=0; i<DeviceRegisterCount; i++){
-        decRegisterGetName(i, DeviceName);
+        devRegisterGetName(i, DeviceName);
         SendDlgItemMessage(hDlg, IDC_DEVICE, CB_ADDSTRING, 0, (LPARAM)(LPCSTR)DeviceName);                       
         if (devA() != NULL){
           if (_tcscmp(DeviceName, devA()->Name) == 0)
@@ -2714,7 +2714,7 @@ LRESULT CALLBACK COMMOptions(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
           DWORD x;
           COMPORTCHANGED = TRUE;
           x = SendDlgItemMessage(hDlg, IDC_DEVICE, CB_GETCURSEL, 0, 0);
-          decRegisterGetName(x-1, DeviceName);
+          devRegisterGetName(x-1, DeviceName);
           WriteDeviceSettings(0, DeviceName);  
           dwPortIndex = SendDlgItemMessage(hDlg,IDC_COMMPORT,CB_GETCURSEL, 0,0);
           dwSpeedIndex = SendDlgItemMessage(hDlg,IDC_PORTSPEED,CB_GETCURSEL, 0,0);

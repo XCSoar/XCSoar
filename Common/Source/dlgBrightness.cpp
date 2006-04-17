@@ -51,7 +51,7 @@ static void OnCloseClicked(WindowControl * Sender){
 
 
 bool EnableAutoBrightness=true;
-int BrightnessValue=50;
+int BrightnessValue=0;
 ///////////
 
 static void UpdateValues() {

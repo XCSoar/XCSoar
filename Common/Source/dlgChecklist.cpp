@@ -133,14 +133,19 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
-
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   switch(wParam & 0xffff){
     case VK_LEFT:
+    case '6':
+      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdPrev")))->GetHandle());
       NextPage(-1);
+      //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
     return(0);
     case VK_RIGHT:
+    case '7':
+      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdNext")))->GetHandle());
       NextPage(+1);
+      //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
     return(0);
   }
   return(1);

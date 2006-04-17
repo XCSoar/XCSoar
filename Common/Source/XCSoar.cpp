@@ -56,6 +56,8 @@ Copyright_License {
 #include "device.h"
 #include "devCAI302.h"
 #include "devEW.h"
+#include "devAltairPro.h"
+#include "devVega.h"
 #include "Externs.h"
 #include "units.h"
 #include "InputEvents.h"
@@ -68,6 +70,9 @@ Copyright_License {
 
 
 #if NEWINFOBOX
+#if !defined(MapScale2)
+  #define MapScale2  apMs2Default
+#endif
 
 #if SAMGI
 Appearance_t Appearance = {
@@ -106,7 +111,7 @@ Appearance_t Appearance = {
 
 Appearance_t Appearance = {
   apMsAltA, // mapscale
-  apMs2Default, 
+  MapScale2, 
   false, // don't show logger indicator
   206,
   {0,-13},
@@ -1216,7 +1221,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   wcscat(XCSoar_Version, TEXT("Altair "));
 #endif
 #if (NEWINFOBOX>0) 
-  wcscat(XCSoar_Version, TEXT("4.70 "));
+  wcscat(XCSoar_Version, TEXT("4.71 "));
 #else
   // wcscat(XCSoar_Version, TEXT("Alpha "));
   // wcscat(XCSoar_Version, TEXT(__DATE__));
@@ -1337,6 +1342,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // ... register all supported devices
   cai302Register();
   ewRegister();
+  atrRegister();
+  vgaRegister();
 
   //JMW disabled  devInit(lpCmdLine);
 
@@ -2845,8 +2852,7 @@ void ProcessTimer(void)
       
       MapWindow::RequestFastRefresh();
       
-      devLinkTimeout(devA());
-      devLinkTimeout(devB());
+      devLinkTimeout(devAll());
 
       if(LOCKWAIT == TRUE)
 	{

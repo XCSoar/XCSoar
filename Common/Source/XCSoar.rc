@@ -771,7 +771,7 @@ IDR_XML_AIRSPACECOLOURS XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceC
 IDR_XML_AIRSPACEPATTERNS XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspacePatterns.xml"
 IDR_XML_ANALYSIS        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAnalysis.xml"
 IDR_XML_BASICSETTINGS   XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgBasicSettings.xml"
-IDR_XML_BRIGHTNESS      XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgBrightness.xml"
+IDR_XML_BRIGHTNESS      XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgBrightness.xml"  
 IDR_XML_CHECKLIST       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgChecklist.xml"
 IDR_XML_CONFIGURATION   XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgConfiguration.xml"
 IDR_XML_LOGGERREPLAY    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgLoggerReplay.xml"

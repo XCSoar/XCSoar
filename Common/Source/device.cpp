@@ -44,8 +44,30 @@ Copyright_License {
 
 DeviceRegister_t   DeviceRegister[NUMREGDEV];
 DeviceDescriptor_t DeviceList[NUMDEV];
+
+DeviceDescriptor_t *pDevPrimaryBaroSource=NULL;
+DeviceDescriptor_t *pDevSecondaryBaroSource=NULL;
+
 int DeviceRegisterCount = 0;
 
+
+BOOL devGetBaroAltitude(double *Value){
+  // hack, just return GPS_INFO->BaroAltitude
+  if (Value == NULL)
+    return(FALSE);
+  if (GPS_INFO.AccelerationAvailable)
+    *Value = GPS_INFO.BaroAltitude;
+  return(TRUE);
+
+  // ToDo
+  // more than one baro source may be available
+  // eg Altair (w. Logger) and intelligent vario
+  // - which source should be used?
+  // - whats happen if primary source fails
+  // - plausibility check? against second baro? or GPS alt?
+  // - whats happen if the diference is too big?
+
+}
 
 BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token){
 
@@ -81,7 +103,7 @@ BOOL devRegister(TCHAR *Name, int Flags, BOOL (*Installer)(PDeviceDescriptor_t d
   return(TRUE);
 }
 
-BOOL decRegisterGetName(int Index, TCHAR *Name){
+BOOL devRegisterGetName(int Index, TCHAR *Name){
   Name[0] = '\0';
   if (Index < 0 || Index >= DeviceRegisterCount) 
     return (FALSE);
@@ -110,8 +132,14 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].DeclAddWayPoint = NULL;
     DeviceList[i].IsLogger = NULL;
     DeviceList[i].IsGPSSource = NULL;
+    DeviceList[i].IsBaroSource = NULL;
     DeviceList[i].PortNumber = i;
+    DeviceList[i].PutQNH = NULL;
+    DeviceList[i].OnSysTicker = NULL;
   }
+
+  pDevPrimaryBaroSource = NULL;
+  pDevSecondaryBaroSource=NULL;
 
   ReadDeviceSettings(0, DeviceName);
 
@@ -120,7 +148,9 @@ BOOL devInit(LPTSTR CommandLine){
 
       DeviceRegister[i].Installer(devA());
 
+      // remember: Port1 is the port used by device A, port1 may be Com3 or Com1 etc
       devA()->Com.WriteString = Port1WriteString;
+      devA()->Com.WriteNMEAString = Port1WriteNMEA;
       devA()->Com.StopRxThread = Port1StopRxThread;
       devA()->Com.StartRxThread = Port1StartRxThread;
       devA()->Com.GetChar = Port1GetChar;
@@ -130,6 +160,15 @@ BOOL devInit(LPTSTR CommandLine){
 
       devInit(devA());
       devOpen(devA(), 0);
+
+      if (devA()->IsBaroSource(devA())){
+        if (pDevPrimaryBaroSource == NULL){
+          pDevPrimaryBaroSource = devA();
+        } else 
+        if (pDevSecondaryBaroSource == NULL){
+          pDevSecondaryBaroSource = devA();
+        }
+      }
 
       break;
     }
@@ -142,17 +181,29 @@ BOOL devInit(LPTSTR CommandLine){
     if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
       DeviceRegister[i].Installer(devB());
 
-/* todo port2 driver's
+      
       devB()->Com.WriteString = Port2WriteString;
+      devB()->Com.WriteNMEAString = Port2WriteNMEA;
       devB()->Com.StopRxThread = Port2StopRxThread;
+      /* following methodes are not jet suppoerted
       devB()->Com.StartRxThread = Port2StartRxThread;
       devB()->Com.GetChar = Port2GetChar;
       devB()->Com.SetRxTimeout = Port2SetRxTimeout;
       devB()->Com.SetBaudrate = Port2SetBaudrate;
       devB()->Com.Read = Port2Read;
-*/
+      */
+
       devInit(devB());
       devOpen(devB(), 1);
+
+      if (devB()->IsBaroSource(devB())){
+        if (pDevPrimaryBaroSource == NULL){
+          pDevPrimaryBaroSource = devB();
+        } else 
+        if (pDevSecondaryBaroSource == NULL){
+          pDevSecondaryBaroSource = devB();
+        }
+      }
 
       break;
     }
@@ -349,10 +400,18 @@ BOOL devInit(PDeviceDescriptor_t d){
 }
 
 BOOL devLinkTimeout(PDeviceDescriptor_t d){
-  if (d != NULL && d->LinkTimeout != NULL)
-    return ((d->LinkTimeout)(d));
-  else
-    return(TRUE);
+  if (d == NULL){
+    for (int i=0; i<NUMDEV; i++){
+      d = &DeviceList[i];
+      if (d->LinkTimeout != NULL)
+        (d->LinkTimeout)(d);
+    }
+    return (TRUE);
+  } else {
+    if (d->LinkTimeout != NULL)
+      return ((d->LinkTimeout)(d));
+  }
+  return(FALSE);
 }
 
 BOOL devDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
@@ -390,6 +449,13 @@ BOOL devIsGPSSource(PDeviceDescriptor_t d){
     return(FALSE);
 }
 
+BOOL devIsBaroSource(PDeviceDescriptor_t d){
+  if (d != NULL && d->IsBaroSource != NULL)
+    return ((d->IsBaroSource)(d));
+  else
+    return(FALSE);
+}
+
 BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName){
   if (d != NULL){
     d->fhLogFile = _tfopen(FileName, TEXT("wb"));
@@ -404,4 +470,34 @@ BOOL devCloseLog(PDeviceDescriptor_t d){
     return(TRUE);
   } else
     return(FALSE);
+}
+
+BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH){
+  if (d == NULL){
+    for (int i=0; i<NUMDEV; i++){
+      d = &DeviceList[i];
+      if (d->PutQNH != NULL)
+        (d->PutQNH)(d, NewQNH);
+    }
+    return(TRUE);
+  } else {
+    if (d->PutQNH != NULL)
+      return ((d->PutQNH)(d, NewQNH));
+  }
+  return(FALSE);
+}
+
+BOOL devOnSysTicker(DeviceDescriptor_t *d){
+  if (d == NULL){
+    for (int i=0; i<NUMDEV; i++){
+      d = &DeviceList[i];
+      if (d->OnSysTicker != NULL)
+        (d->OnSysTicker)(d);
+    }
+    return(TRUE);
+  } else {
+    if (d->OnSysTicker != NULL)
+      return ((d->OnSysTicker)(d));
+  }
+  return(FALSE);
 }

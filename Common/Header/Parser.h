@@ -129,7 +129,7 @@ class NMEAParser {
 
   BOOL ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO);
   bool gpsValid;
-  bool hasVega;
+  //bool hasVega;
   int nSatellites;
 
   bool activeGPS;
@@ -164,13 +164,14 @@ class NMEAParser {
   BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO);
   BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO);
   
-  BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL PDAPL(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO);
+  // Vega proprietary sentence moved to devVega.cpp
+  //BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO);
+  //BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO);
+  //BOOL PDAPL(TCHAR *String, NMEA_INFO *GPS_INFO);
+  //BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO);
+  //BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO);
+  //BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO);
+  //BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO);
   
   // FLARM sentances
   BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO);

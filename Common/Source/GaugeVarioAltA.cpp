@@ -321,15 +321,15 @@ void GaugeVario::MakePolygon(const int i) {
 
   dx = -xoffset+nlength0; dy = nwidth;
   rotate(dx, dy, i);
-  bit[0].x = lround(dx)+xoffset; bit[0].y = lround(dy)+yoffset;
+  bit[0].x = lround(dx)+xoffset; bit[0].y = lround(dy)+yoffset+1;
   
   dx = -xoffset+nlength0; dy = -nwidth;
   rotate(dx, dy, i);
-  bit[1].x = lround(dx)+xoffset; bit[1].y = lround(dy)+yoffset;
+  bit[1].x = lround(dx)+xoffset; bit[1].y = lround(dy)+yoffset+1;
   
   dx = -xoffset+nlength1; dy = 0;
   rotate(dx, dy, i);
-  bit[2].x = lround(dx)+xoffset; bit[2].y = lround(dy)+yoffset;
+  bit[2].x = lround(dx)+xoffset; bit[2].y = lround(dy)+yoffset+1;
 }
 
 
@@ -472,6 +472,8 @@ void GaugeVario::RenderValue(int x, int y,
 			     TCHAR *Label) {
 
   SIZE tsize;
+
+  Value = (double)iround(Value*10)/10;  // prevent the -0.0 case
 
   if (!diValue->InitDone){
     
