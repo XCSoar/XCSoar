@@ -1,256 +1,214 @@
+Work To Do, Outstanding Items:
 
-============================================================================
-USER INTERFACE
-============================================================================
+===========
+TASK SYSTEM
+===========
 
-User control of autowind parameters
-- Icon or user feedback to show when wind is updated or what mode it is in?
+- Task system
+  - File save/load to contain all info
+  - XML based task file
+  - Have separate Arm modes for AAT and non-AAT modes?
+  - Record (and display) start speed/altitude/time
+  - (Feature request 1444340) Limits on start/finish speed/altitude
+  - Different ways of calculating average speed
+  - Based on manual input or task average
+  - Add 'Append' waypoint function, so users can create a task by selecting
+    waypoints from the map in sequence
+  - Add 'PanTo' waypoint function, to pan towards the selected waypoint
+  - Task waypoint move up/down
+  - Online Contest optimisation (related also to AAT optimisation)
+  - (Feature request 1237800) Preserve TPs in tasks when waypoint file changed
+  - Allow for alternate start points, or alternate tasks
+- AAT support:
+  - More accurate calculation of ETA etc with respect to final glide fraction
+  - Calculator, What if I leave now?
+- TeamCode
+  - Port teamcode to new dialog system
+- (Idea) Tour mode: home waypoint entered twice in task, so allows non-final
+  glide cruise around, then by advancing waypoint, it turns to final glide
+  mode.
+- Additional waypoint info: 
+  - Info from ERSA or other sources for airfields
+    -- Runways (preferred runway given wind)
+    -- Runway diagram?
+  - Info for all waypoints
+    -- Computed arrival height AGL at Mc0 Mc1 Mc2
 
-Voice/audio prompts
+
+=====================
+AIRSPACE AND WARNINGS
+=====================
+
 - Airspace
-- Distance to goal readout
-- Speed-up/slow down sounds in final glide (find suitable audio files)
-- Speed-up/slow down in cruise when connected to variometer and ASI
-
-Mark points
-- Allow users to toggle whether marked points get deleted on startup
-- Auto-mark all thermals?  Save to file for later analysis?
-
-Context specific display: 
-- Tour (no waypoint selected?)
-- Multiple display pages per mode, so user can configure for each mode,
-  two sets of navboxes and cycle between them?
-
-Waypoint selection
-- Cursor keys to allow moving to next waypoints in direction of cursor.
-
-CDI Display
-- Fix bugs with CDI display
-- Rework to make it use vector graphics, so can display better symbology
+  - ** (Feature request 1399775) configurable border thickness
+  - Sort nearest above/below
+  - Monitoring function, infobox?
+- Warnings and voice prompts (issued directly and passed to Vega, gce?)
+  - Final glide through terrain
+  - Distance to waypoint readout
+  - Passing task waypoints
+  - Airspace
+  - Implement the Vega protocol in XCSoar
+  - (Feature request 1394440) Gear warning
+  - (Feature request 1233220) Sunset warning
+  - Terrain out of range
 
 
-Profiles
-- Ensure all options are set in registry
-  -- Auto mcready
-  -- Auto circle
-  -- Circle zoom
-- Make profiles include ALL registry settings?
-- Have filtering on loading from profile so user can just load any of:
-  -- Aircraft settings
-  -- Competition/task settings
-  -- Locality settings (terrain, topo, airspace, waypoints)
-
-Add extra options to processing functions of navbox
-- Bugsballast on LD fin
-- Sort/organise navbox options
-- Rework navbox titles?
-
-
-Status warnings/info icons
-- Terrain out of range
-- GPS signal strength?
-- Vario connected
-
-
-============================================================================
-WAYPOINT INFO 
-============================================================================
-
-Waypoint information graphics/text
-- Info from ERSA or other sources for airfields
-  -- Runways (preferred runway given wind)
-  -- Runway diagram?
-- Info for all waypoints
-  -- Computed arrival height AGL
-
-Airfield display as different logo (winpilot look)
-- Display height at arrival on map like winpilot?
-
-
-============================================================================
-MAP DISPLAY
-============================================================================
-
-Display north arrow 
-- click on it to toggle modes (track-up, north-up etc)
-
-Declutter names
-- Display names only when clicking on screen (like menu timeout?)
-
-============================================================================
-DATA LOGGING
-============================================================================
-
-IGC logging: 
-- Allow loading/replay of IGC files in simulator mode
-
-
-Improved snailtrail
-- could be more done to make it more efficient (lower data rates when flying straight)
-
-Thermal marking:
-- Save history of climb modes (stats already calculated)
-- Display of encountered thermals in map
- -- projected to location of expected arrival to compensate for wind
-
-============================================================================
-TASK MANAGEMENT
-============================================================================
-
-Task manager UI
-- Optionally sort waypoints by distance
-- Bigger fonts in task selector
-- Allow user to add new waypoints from interface 
-  (current lat/long and via editor)
-- Bring up airfield display box
-
-Start/restart task button
-- Stats only collected once starting
-- Check stats reset when starting, don't go crazy when changing task during flight
-
-Audio when going around turnpoints
-- Pips with data logger at fast rate
-
-============================================================================
+==============
 GLIDE COMPUTER
-============================================================================
+==============
 
+- Wind calculations
+  - Zig zag wind estimator
+  - Compass wind estimator
+- Flight modes
+  - (Feature request 1459280) user-commanded flight modes
+  - Externally (vario or switch) forced climb/cruise
+  - In climb stats page, show direction of circling
+  - Drop marker automatically conditional on significant climb
+- Pirker analysis:
+  - Given a height available, what maccready gives zero arrival altitude?
+  - This can be used to make automc more efficient
+  - Final glide calculations to be made with respect to true airspeed,
+    variation of wind with height: glide angle doesn't change, but
+    speed does (and therefore time) as well as wind relative to indicated
+    airspeed.  ->
+      do calculations over 10 steps, optimal at each step, in terms of
+      indicated airspeed, then convert to true airspeed for time and
+      distance/height calculations.
+- Smart mcready management
+  - Scale MC value to allow for decreased thermal strength with low altitude
+  - Scale MC value to allow for risk of not encountering thermal with low
+    altitude (and take into account wind factor here?)
+  - Calculate MC value based on average climb rate
+  - Allow user to adjust optimism/pessimism
+- Altitude representation
+  - Proper handling of PGRMZ with respect to QNH and when altimeter
+     also available from variometer
+  - Flight level versus altitude in airspace warnings
+  - (Feature request 1278082) Ellipsoid error correction
+- Calculations for cloud streets
+  - draw rough lines for streets and to indicate traversal track
+- Density altitude correction factors for speeds, climb rates etc
+- (Idea) Calculate/display thermal drift as % of wind speed
+- Detect flying backwards in strong headwinds
+  - Currently, wind calculation will fail if going backwards 
+  - Can detect this from rapid change in heading (approx 180 degrees)
+  - If we know roughly the wind, can estimate what the glider heading is.
 
-Smart mcready management
-- Scale MC value to allow for decreased thermal strength with low altitude
-- Scale MC value to allow for risk of not encountering thermal with low
-  altitude (and take into account wind factor here?)
-- Calculate MC value based on average climb rate
-- Allow user to adjust optimism/pessimism
+===================
+MARKS AND WAYPOINTS
+===================
 
-Thermal band management
-- Autoset recommended floor and ceiling or allow user to set height band
-  -- Maybe not important, users can see from display where they are in the band
+- Marker system
+   - (Feature request 1281642) Mark to waypoint, mark to waypointfile
+   - (Feature request 1463308) Auto-mark thermal
+   - Display of encountered thermals in map
+     -- projected to location of expected arrival to compensate for wind
+   - Allow users to toggle whether marked points get deleted on startup
+- Thermal markers:
+   - Implemented as normal markers, but with position offset to estimated
+     source of thermal.
+   - When rendering, estimate position of thermal at glider's height.
+- Waypoints
+  - (Feature request 1281639) Editing/saving waypoints
+  - Generate waypoints from towns (builtupa, miscpopp)
+  - Cursor keys to allow moving to next waypoints in direction of cursor.
 
-Clicking on infobox items:
-- Height AGL -> bring up dialog for pressure QNH
+===========================
+MAP, GAUGE AND ICON DISPLAY
+===========================
 
-Variometer input
-- integrate Vmc display value with vario when connected to one
+- Info icons/symbols
+  - GPS signal strength?
+  - FLARM traffic (use FLARM logo?)
+- Display elements
+  - Add (optional) track line particularly if not in north up mode
+  - Speed to fly bars visibility in fullscreen
+  - (Feature request 1281820) configurable glider icon
+  - (Feature request 1444335) configurable max/min zoom
+- Terrain rendering
+  - (Feature request 1370830) display satellite weather imagery on map
+  - Predefined brightness/contrast settings
+  - Configuration of various colour ramps
+  - (Idea) Draw land use with pattern, for areas of forrest or crop fields
+     -- Do this with pattern brush over top of normal terrain/topo
+- Gauges
+  - (Bug 1459609) CDI gauge rewrite to use vector graphics
+  - Vario gauge needle not visible when hitting upper limit
+  - Vario gauge knots scale
+  - Option for Vario gauge display mode to display netto or relative during
+    cruise
+  - FLARM gauge, show colors for threat levels
 
+=============
+CONFIGURATION
+=============
 
-FAI triangles
-- Done? Need to check it obeys the rules
-- 28% rule?
+- Dialogs:
+  - Config: vario gauge, other optional display items,
+      hide vario on fullscreen
+  - Config: display blanking, other missing items?
+  - ** (Feature request 1403702) Configuration option for logger timestep
+  - Configuration option for checklist filename
+- Fonts
+  - Adjustable font for long infoboxes (especially time)
+  - (Feature request 1374130) Font customisation in settings (font type, size)
 
-Task optimisation
-- OLC
+==============
+USER INTERFACE
+==============
 
+- Status messages
+  - Status messages now block if in dialogs, they appear on exit.
+  - Colored status messages?
+- Miscellaneous UI
+  - (Bug 1368752) Infoboxes cropped on square displays
+  - Password protect on settings
+  - Implement cursor moveable by arrow keys for waypoint/airspace selection 
+    and to move/edit waypoints.
+- Input events
+  - Timed buttons (pass time of button press to processKey and support
+  threshold passing in InputEvents - eg: Set long press as nnn ms -
+  over that is long press, under is short) (assume for simplicity that
+  we still only press single buttons at a time - thus time last
+  button.
+  - Consider support of double click (harder...)
+- (Idea) Multiple Auxiliary infobox pages, so user can configure for each mode,
+  two sets of navboxes and cycle between them?  Maybe too much.
 
-Work out some way of representing how close different landable fields are
-- Different sized green rings perhaps (bigger rings = closer)
-- Is this really that useful?
+=====================
+SYSTEM/INFRASTRUCTURE
+=====================
 
+- Robustness
+  - Revert to default aircraft type if polar file doesn't exist or invalid
+  - Free memory check at startup, ask to delete old IGC files?
+  - Log file to report errors, include file and line number
+  - xmlParser unicode handling not very robust
+  - SetFontInfo not reliable
+- Miscellaneous
+  - (Bug 1428871) PPC2002 installer chooses wrong CAB
+  - (Bug 1366492) Logger start sensitivity
+- Comms
+  - Robustness for PC version, currently hanging on restart
+  - Disable PGRMZ if vario is already outputting altitude (or vica versa)
+  - Need 3 ports for full support of Altair.
+  - Simple output terminal for COM ports (allow users to check serial
+    connnections are working correctly).
+- Battery management
+  - Low battery exit is not working, fix it.
+  - Improved notification of battery level - not just simulator.
+    (exit should still only be the simulator)
+  - Notify the user (via GCE to Input) of switching between AC and Battery mode
+- Files:
+  - Proper filename extensions
+  - ** (Feature request 1379262) Configurable output file path
+- Profiles:
+  - Need profile load/save page
+  - Filtering, so user can load any of:
+    -- Aircraft settings
+    -- Competition/task settings
+    -- Locality settings (terrain, topo, airspace, waypoints)
 
-Final glide correction for kinetic energy if airspeed available
-
-
-Calculations for cloud streets
-- draw rough lines for streets and to indicate traversal track
-
-Check average speed calculation
-
-
-============================================================================
-WIND DATA
-============================================================================
-
-Implement auto-wind switch (three modes)
-- Manual
-- Auto with one climb (as it currently uses)
-- Auto incremental
-
-Wind calculations making use of IAS data
-
-
-============================================================================
-VARIOMETER
-============================================================================
-
-Audio options in settings
-- Scale sensitivity in up/down
-
-Netto vario options
-- Super netto or normal netto
-
-Second comm port for vario instrument
-- only first one will process GPS info
-- if vario is present, change calculations so vario readings are used
-
-============================================================================
-PERFORMANCE AND COMPILATION
-============================================================================
-
-
-Collect globals into structs to make it easier to manage with respect to locks
-
-Memory cleanups
-- Don't think the port thread is being closed well at exit.
-- Periodic hangs
-- Should run memory checker on this.
-
-
-============================================================================
-FLIGHT DATA
-============================================================================
-
-Read data from instruments if available
-- Implement DoCalculations2 for vario-specific calculations
-
-Calculate pressure altitude correction factors for speed, climb rates etc
-
-From ground speed, wind speed and altitude, estimate vario and IAS if
-not available from instruments
-
-Energy height calculations from IAS or windspeed + groundspeed and height
-
-Calculate/display thermal drift as percent of wind speed
-
-Detect flying backwards in strong headwinds
-- Currently, wind calculation will fail if going backwards 
-- Can detect this from rapid change in heading (approx 180 degrees)
-- If we know roughly the wind, can estimate what the glider heading is.
-
-============================================================================
-TOPOLOGY
-============================================================================
-
-
-Allow supplemental raster data
-- Shade areas of significant forrest or crop fields 
-- maybe lay pattern brush over top
-
-
-============================================================================
-TERRAIN ELEVATION
-============================================================================
-
-
-Sunlight rendering
-- Implement sun ephemeris
-
-============================================================================
-MISCELLANEOUS
-============================================================================
-
-Display warranty/warning dialog
-- Need GPL no warranty dialog
-
-============================================================================
-TASK DECLARATION
-============================================================================
-
-Support major loggers and intelligent varios
-- C302
-- Volkslogger
-- Colibri
-
-Task declaration and waypoint upload/download
-
-Download of igc tracks
 

@@ -2,119 +2,21 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Work To Do, Outstanding Items:
 
-- Miscellaneous
-  - (Bug 1428871) PPC2002 installer chooses wrong CAB
-  - (Bug 1366492) Logger start sensitivity
-  - (Feature request 1430326) configuration of sys time set by GPS
-- Altitude representation
-  - Proper handling of PGRMZ with respect to QNH and when altimeter
-     also available from variometer
-  - Flight level versus altitude in airspace warnings
-  - (Feature request 1278082) Ellipsoid error correction
-- Gauges
-  - Vario gauge needle not visible when hitting upper limit
-  - Vario gauge knots scale
-  - (Bug 1459609) CDI gauge rewrite
-- Robustness
-  - Revert to default aircraft type if polar file doesn't exist or invalid
-  - Free memory check at startup, ask to delete old IGC files?
-  - Log file to report errors, include file and line number
-  - xmlParser unicode handling not very robust
-  - SetFontInfo not reliable
-- Task system
-  - File save/load to contain all info
-  - Have separate Arm modes for AAT and non-AAT modes?
-  - Record (and display) start speed/altitude/time
-  - (Feature request 1444340) Limits on start/finish speed/altitude
-  - Different ways of calculating average speed
-  - Based on manual input or task average
-  - Add 'Append' waypoint function, so users can create a task by selecting
-    waypoints from the map in sequence
-  - Add 'PanTo' waypoint function, to pan towards the selected waypoint
-  - Task waypoint move up/down
-  - Online Contest optimisation (related also to AAT optimisation)
-  - (Feature request 1237800) Preserve TPs in tasks when waypoint file changed 
-- AAT support:
-  - More accurate calculation of ETA etc with respect to final glide fraction
-  - Calculator, What if I leave now?
-- Waypoints
-  - (Feature request 1281639) Editing/saving waypoints
-  - Generate waypoints from towns (builtupa, miscpopp)
-- Marker system
-   - (Feature request 1281642) Mark to waypoint, mark to waypointfile
-   - (Feature request 1463308) Auto-mark thermal
-- Files:
-  - Proper filename extensions
-  - (Feature request 1379262) Configurable output file path
-- Airspace
-  - (Bug 1388996) Airspace outline black option ignored
-  - Sort nearest above/below
-  - Monitoring function, infobox?
-  - (Feature request 1399775) configurable border thickness
-- Warnings (issued directly and passed to Vega, gce?)
-  - Final glide through terrain
-  - Approaching/passing task waypoints
-  - Airspace
-  - Implement the Vega protocol in XCSoar
-  - (Feature request 1394440) Gear warning
-  - (Feature request 1233220) Sunset warning
-- Dialogs:
-  - Config: vario gauge, other optional display items,
-      hide vario on fullscreen
-  - Config: display blanking, other missing items?
-  - (Feature request 1403702) Configuration option for logger timestep
-  - Configuration option for checklist filename
-  - (Feature request 1370449) Configuration of autozoom at startup
-- Pirker analysis:
-  - Given a height available, what maccready gives zero arrival altitude?
-  - This can be used to make automc more efficient
-- Flight modes
-  - (Feature request 1459280) user-commanded flight modes
-  - Consider having switching to final glide mode as soon as you are above
-    final glide.
-  - User-forced final glide mode?
-  - Externally forced climb/cruise
-  - In climb stats page, show direction of circling
-  - Drop marker automatically conditional on significant climb
-- Comms
-  - Robustness for PC version, currently hanging on restart
-  - Disable PGRMZ if vario is already outputting altitude (or vica versa)
-  - Need 3 ports for full support of Altair.
-  - Simple output terminal for COM ports (allow users to check serial
-    connnections are working correctly).
-- Status messages
-  - Status messages now block if in dialogs, they appear on exit.
-  - Colored status messages?
-- Miscellaneous UI
-  - (Bug 1368752) Infoboxes cropped on square displays
-  - Password protect on settings
-  - Implement cursor moveable by arrow keys for waypoint/airspace selection 
-    and to move/edit waypoints.
-- Wind calculations
-  - Zig zag wind calculations
-- Display elements
-  - Add track line particularly if not in north up mode
-  - Speed to fly bars visibility in fullscreen
-  - (Feature request 1281820) configurable glider icon
-  - (Feature request 1444335) configurable max/min zoom
-  - (Feature request 1370830) display satellite weather imagery on map
-- Battery management
-  - Low battery exit is not working, fix it.
-  - Improved notification of battery level - not just simulator.
-    (exit should still only be the simulator)
-  - Notify the user (via GCE to Input) of switching between AC and Battery mode
-- Fonts
-  - Adjustable font for long infoboxes (especially time)
-  - (Feature request 1374130) Font customisation in settings (font type, size)
-- Input events
-  - Timed buttons (pass time of button press to processKey and support
-  threshold passing in InputEvents - eg: Set long press as nnn ms -
-  over that is long press, under is short) (assume for simplicity that
-  we still only press single buttons at a time - thus time last
-  button.
-  - Consider support of double click (harder...)
+
+Changes from 4.7:
+- Changed "Bugs" to "Clean" in basic settings so meaning is clearer
+- Changed "Device 1" etc to "Device A" in configuration settings so meaning
+  is clearer
+- Fixed (Bug 1388996) Airspace outline black option ignored
+- (Feature request 1370449) Configuration of autozoom at startup
+- (Feature request 1430326) configuration of sys time set by GPS
+- Force final glide mode, input event
+- Auto force final glide mode option, forces final glide as soon as
+  you are above final glide.
+- Startup reliability fixes
+- Terrain offset fixes
+- FLARM gauge minor fixes (draws aircraft beyond 2km at 2km)
 
 
 Changes from 4.6 to 4.7:
@@ -460,14 +362,6 @@ Bug fixes and code improvements
 - Wind calculation more reliable
 - Fast loading of all startup files
 
-============================================================================
-INSTALLATION AND RUNNING
-============================================================================
-
-Connect your PDA to a PC and run the Install-XXX.exe on the PC.  This
-will start ActiveSync and initiate the install on the PDA.
-
-To run, click on either of the XCSoar icons on the Today screen...
 
 
 ============================================================================
