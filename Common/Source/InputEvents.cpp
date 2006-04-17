@@ -613,8 +613,12 @@ int InputEvents::getModeID() {
 // Processing functions - which one to do
 // -----------------------------------------------------------------------
 
+extern bool ProgramStarted;
+
 // Input is a via the user touching the label on a touch screen / mouse
 bool InputEvents::processButton(int bindex) {
+  if (!ProgramStarted) return false;
+
   int thismode = getModeID();
 
   int i;
@@ -645,6 +649,8 @@ bool InputEvents::processButton(int bindex) {
   Return = We had a valid key (even if nothing happens because of Bounce)
 */
 bool InputEvents::processKey(int dWord) {
+  if (!ProgramStarted) return false;
+
   int event_id;
 
   // Valid input ?
@@ -687,6 +693,7 @@ bool InputEvents::processKey(int dWord) {
   Return = TRUE if we have a valid key match
 */
 bool InputEvents::processNmea(int ne_id) {
+  if (!ProgramStarted) return false;
   int event_id = 0;
 
   // Valid input ?
@@ -716,6 +723,7 @@ bool InputEvents::processNmea(int ne_id) {
   Take virtual inputs from a Glide Computer to do special events
 */
 bool InputEvents::processGlideComputer(int gce_id) {
+  if (!ProgramStarted) return false;
   int event_id = 0;
 
   // TODO: Log to IGC file
@@ -746,6 +754,7 @@ extern int MenuTimeOut;
 
 // EXECUTE an Event - lookup event handler and call back - no return
 void InputEvents::processGo(int eventid) {
+  if (!ProgramStarted) return;
 
   // 
   // JMW TODO: event/macro recorder

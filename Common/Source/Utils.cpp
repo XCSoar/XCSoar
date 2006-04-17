@@ -322,8 +322,11 @@ void DefaultRegistrySettingsAltair(void)
    TEXT("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
   SetRegistryStringIfAbsent(TEXT("AirspaceColourDlgFont"),
    TEXT("14,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+#if 0
+  // TODO: Fixe scale bug
   SetRegistryStringIfAbsent(TEXT("ScaleList"),
    TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
+#endif
 }
 
 

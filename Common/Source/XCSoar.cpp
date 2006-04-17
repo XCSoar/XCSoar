@@ -1364,18 +1364,16 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // Finally ready to go
   MapWindow::CreateDrawingThread();
   GlobalRunning = true;
-  ProgramStarted = true;
   CloseProgressDialog();
   Sleep(100);
   ShowInfoBoxes();
 
-  //  AssignValues();
-  //  DisplayText();
-  //  Sleep(100);
   SwitchToMapWindow();
-  Sleep(100);
-
   CreateCalculationThread();
+  Sleep(500);
+
+  // Da-da, start everything now
+  ProgramStarted = true;
 
   // NOTE: Must show errors AFTER all windows ready
 
@@ -2456,6 +2454,8 @@ void ProcessChar1 (char c)
   static TCHAR BuildingString[100];
   static int i = 0;
 
+  if (!ProgramStarted) return; // ignore everything until started
+
   if (i<90) {
     if(c=='\n') {
       BuildingString[i] = '\0';
@@ -2476,6 +2476,8 @@ void ProcessChar2 (char c)
 {
   static TCHAR BuildingString[100];
   static int i = 0;
+
+  if (!ProgramStarted) return; // ignore everything until started
 
   if (i<90) {
     if(c=='\n') {
@@ -2671,7 +2673,7 @@ void DisplayText(void)
       InfoBoxes[i]->SetComment(sTmp);
       break;
     case 1: // AGL
-      Units::FormatAlternateUserAltitude(GPS_INFO.Altitude, 
+      Units::FormatAlternateUserAltitude(CALCULATED_INFO.AltitudeAGL, 
 					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;

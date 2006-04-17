@@ -1700,6 +1700,10 @@ void MapWindow::UpdateCaches(bool force) {
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
+  while (!ProgramStarted) {
+    Sleep(100);
+  }
+
   MapScale = RequestMapScale;
   ModifyMapScale();
   
@@ -3230,6 +3234,7 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
 
   hpOld = (HPEN)SelectObject(hDC, 
 			     hpTerrainLineBg);	//sjt 02feb06 added bg line
+  LockFlightData();
 
   bool lastvisible = false;
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
@@ -3259,6 +3264,7 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
     DrawBitmapIn(hDC, sc, hTerrainWarning);
   }
 
+  UnlockFlightData();
   SelectObject(hDC, hpOld);
 
 }
@@ -3548,7 +3554,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 extern bool ScreenBlanked;
 
 bool MapWindow::IsDisplayRunning() {
-  return (THREADRUNNING && GlobalRunning && !ScreenBlanked);
+  return (THREADRUNNING && GlobalRunning && !ScreenBlanked && ProgramStarted);
 }
 
 
@@ -3881,8 +3887,8 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       ntrail = TRAILSIZE/TRAILSHRINK; // scan only recently for lift magnitude
     }
 
-    float this_vmax=0;
-    float this_vmin=0;
+    float this_vmax=0.1;
+    float this_vmin=-0.1;
     for(i=1;i< ntrail; i++) {
       j= (TRAILSIZE+iSnailNext-ntrail+i)% TRAILSIZE;
       P1 = SnailTrail+j; 
@@ -3927,7 +3933,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   for(i=1;i< ntrail; ++i) 
   {
     j= kd+i;
-    if (j>=TRAILSIZE) {
+    while (j>=TRAILSIZE) {
       j-= TRAILSIZE;
     }
     is++;
@@ -3953,6 +3959,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     } else {
       if ((P1->Circling)&&( j%5 != 0 )) {
 	// draw only every 5 points from circling when in cruise mode
+	P2 = P1;
 	continue;
       }
     }

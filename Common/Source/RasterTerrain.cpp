@@ -230,6 +230,7 @@ void RasterTerrain::SetTerrainRounding(double xr, double yr) {
     Xrounding = 1;
   }
   fXrounding = 1.0/(Xrounding*TerrainInfo.StepSize);
+
   Yrounding = iround(yr/TerrainInfo.StepSize);
   if (Yrounding<1) {
     Yrounding = 1;
@@ -257,8 +258,14 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
       (Longditude > TerrainInfo.Right )) {
     return -1;
   }
-  lx = lround((Longditude-TerrainInfo.Left)*fXrounding)*Xrounding;
-  ly = lround((TerrainInfo.Top-Lattitude)*fYrounding)*Yrounding;
+  lx = lround((Longditude-TerrainInfo.Left)*fXrounding)*Xrounding-1;
+  ly = lround((TerrainInfo.Top-Lattitude)*fYrounding)*Yrounding-1;
+
+  if ((lx<0)
+      ||(ly<0)
+      ||(ly>=TerrainInfo.Rows)
+      ||(lx>=TerrainInfo.Columns))
+    return -1;
 
   ly *= TerrainInfo.Columns;
   ly +=  lx;

@@ -73,42 +73,7 @@ int GaugeFLARM::RangeScale(double d) {
 }
 
 void GaugeFLARM::RenderBg() {
-  /*
-  if (Appearance.InverseInfoBox){
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
-  } else {
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
-  }
-  Rectangle(hdcDrawWindow,
-	    rc.left, rc.top,
-	    rc.right-rc.left, rc.bottom-rc.top);
 
-  //
-
-  if (Appearance.InverseInfoBox){
-    SelectObject(hdcDrawWindow, GetStockObject(HOLLOW_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
-  } else {
-    SelectObject(hdcDrawWindow, GetStockObject(HOLLOW_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
-  }
-
-  SetTextColor(hdcDrawWindow, colTextGray);
-  SetBkColor(hdcDrawWindow, colTextBackgnd);
-
-  HPEN greyPen = CreatePen(PS_SOLID, 1, colTextGray);
-
-  SelectObject(hdcDrawWindow, greyPen);
-  Circle(hdcDrawWindow, center.x, center.y, radius, rc);
-  Circle(hdcDrawWindow, center.x, center.y, RangeScale(FLARMMAXRANGE*0.75), rc);
-  Circle(hdcDrawWindow, center.x, center.y, RangeScale(FLARMMAXRANGE*0.50), rc);
-  Circle(hdcDrawWindow, center.x, center.y, RangeScale(FLARMMAXRANGE*0.25), rc);
-
-  SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
-  DeleteObject(greyPen);
-  */
   SelectObject(hdcTemp, hRoseBitMap);
 #if (WINDOWSPC>0) 
   StretchBlt(hdcDrawWindow, 0, 0, 
@@ -136,19 +101,22 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       double x, y;
       x = gps_info->FLARM_Traffic[i].RelativeEast;
       y = -gps_info->FLARM_Traffic[i].RelativeNorth;
-      double d = min(sqrt(x*x+y*y),FLARMMAXRANGE);
-      if (d<=FLARMMAXRANGE) {
-	rotate(x, y, -gps_info->TrackBearing); 	// or use .Heading
-	double xp = x/d;
-	double yp = y/d;
-	double scale = RangeScale(d);
-	int targetsize = 3*InfoBoxLayout::scale;
-	int xs = center.x + iround(xp*scale);
-	int ys = center.y + iround(yp*scale);
-	Rectangle(hdcDrawWindow, 
-		  xs-targetsize, ys-targetsize, 
-		  xs+targetsize, ys+targetsize);
+      double d = sqrt(x*x+y*y);
+      if (d>0) {
+	x/= d;
+	y/= d;
+      } else {
+	x= 0;
+	y= 0;
       }
+      rotate(x, y, -gps_info->TrackBearing); 	// or use .Heading?
+      double scale = RangeScale(d);
+      int targetsize = 3*InfoBoxLayout::scale;
+      int xs = center.x + iround(x*scale);
+      int ys = center.y + iround(y*scale);
+      Rectangle(hdcDrawWindow, 
+		xs-targetsize, ys-targetsize, 
+		xs+targetsize, ys+targetsize);
     }
   }
   DeleteObject(redBrush);
