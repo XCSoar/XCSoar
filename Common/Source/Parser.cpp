@@ -1205,11 +1205,13 @@ BOOL NMEAParser::PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
 
   ExtractParameter(String,ctemp,0);
-  GPS_INFO->OutsideAirTemperature = StrToDouble(ctemp,NULL)/10.0-273.0;
+  GPS_INFO->OutsideAirTemperature = StrToDouble(ctemp,NULL)/10.0-273.0
+    -5.0; // correct for internal heating element
   GPS_INFO->TemperatureAvailable = TRUE;
 
   ExtractParameter(String,ctemp,1);
   GPS_INFO->RelativeHumidity = StrToDouble(ctemp,NULL); // %
+  // TODO: adjust relative humidity for heating element correction
   GPS_INFO->HumidityAvailable = TRUE;
 
   return FALSE;
@@ -1256,13 +1258,16 @@ BOOL NMEAParser::PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   double dlat = Distance(GPS_INFO->Latitude, GPS_INFO->Longitude,
 			 GPS_INFO->Latitude+delta_lat, GPS_INFO->Longitude);
-
-  FLARM_NorthingToLatitude = delta_lat / dlat;
-
   double dlon = Distance(GPS_INFO->Latitude, GPS_INFO->Longitude,
 			 GPS_INFO->Latitude, GPS_INFO->Longitude+delta_lon);
 
-  FLARM_EastingToLongitude = delta_lon / dlon;
+  if ((fabs(dlat)>0.0)&&(fabs(dlon)>0.0)) {
+    FLARM_NorthingToLatitude = delta_lat / dlat;
+    FLARM_EastingToLongitude = delta_lon / dlon;
+  } else {
+    FLARM_NorthingToLatitude=0.0;
+    FLARM_EastingToLongitude=0.0;
+  }
 
   swscanf(String,
 	  TEXT("%hu,%hu,%hu,%hu"),

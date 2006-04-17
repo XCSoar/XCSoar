@@ -107,12 +107,14 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
     //    bearing = -90+i*180/NUMTERRAINSWEEPS+Basic->TrackBearing;
     bearing = i*360/NUMTERRAINSWEEPS;
+    LockFlightData();
     distance = FinalGlideThroughTerrain(bearing,
 					Basic,
 					Calculated, &lat, &lon,
 					mymaxrange);
     MapWindow::GlideFootPrint[i].x = lon;
     MapWindow::GlideFootPrint[i].y = lat;
+    UnlockFlightData();
   }
 }
 
@@ -2082,6 +2084,8 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   static bool next = false;
 
+  LockFlightData();
+
   next = !next;
   // every second time step, do predicted position rather than
   // current position
@@ -2130,7 +2134,9 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	AirspaceCircle[i].WarningLevel |= 2;
       }
 
+#ifndef DISABLEAUDIO
       MessageBeep(MB_ICONEXCLAMATION);
+#endif
       FormatWarningString(AirspaceCircle[i].Type , AirspaceCircle[i].Name ,
 			  AirspaceCircle[i].Base, AirspaceCircle[i].Top,
 			  szMessageBuffer, szTitleBuffer );
@@ -2194,7 +2200,9 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	AirspaceArea[i].WarningLevel |= 2;
       }
 
+#ifndef DISABLEAUDIO
       MessageBeep(MB_ICONEXCLAMATION);
+#endif
       FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name ,
 			  AirspaceArea[i].Base, AirspaceArea[i].Top,
 			  szMessageBuffer, szTitleBuffer );
@@ -2231,6 +2239,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       }
     }
   }
+  UnlockFlightData();
 
 }
 
@@ -2371,6 +2380,8 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   // only do this if in thermal and have been climbing
   if ((!Calculated->Circling)||(Calculated->Average30s<0)) return;
 
+  LockFlightData();
+
   if (dheight > Calculated->MaxThermalHeight) {
 
     /* JMW oh, it is a bit annoying really
@@ -2400,7 +2411,8 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
     // shift data into new buckets
     for (i=0; i<NUMTHERMALBUCKETS; i++) {
-      h = (i)*(Calculated->MaxThermalHeight)/(NUMTHERMALBUCKETS); // height of center of bucket
+      h = (i)*(Calculated->MaxThermalHeight)/(NUMTHERMALBUCKETS);
+      // height of center of bucket
       j = iround(NUMTHERMALBUCKETS*h/mthnew);
 
       //      h = (i)*(mthnew)/(NUMTHERMALBUCKETS); // height of center of bucket
@@ -2420,13 +2432,15 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     Calculated->MaxThermalHeight= mthnew;
   }
 
-  index = iround(NUMTHERMALBUCKETS*(dheight/Calculated->MaxThermalHeight));
+  index = iround(NUMTHERMALBUCKETS*(dheight/max(1.0,
+			    Calculated->MaxThermalHeight)));
   if (index==NUMTHERMALBUCKETS) {
     index= NUMTHERMALBUCKETS-1;
   }
 
   Calculated->ThermalProfileW[index]+= Calculated->Vario;
   Calculated->ThermalProfileN[index]++;
+  UnlockFlightData();
 
 }
 
@@ -2451,6 +2465,14 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 						   Calculated->WindSpeed,
 						   Calculated->WindBearing,
 						   0, 0, true, 0);
+  if (retlat && retlon) {
+    *retlat = 0;
+    *retlon = 0;
+  }
+
+  if (ialtitude<=0.0)
+    return 0;
+
   double glidemaxrange = Basic->Altitude/ialtitude;
 
   // returns distance one would arrive at altitude in straight glide
@@ -2461,11 +2483,6 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   int imax=0;
   double dhlast=0;
   double altitude;
-
-  if (retlat && retlon) {
-    *retlat = 0;
-    *retlon = 0;
-  }
 
   LockTerrainDataCalculations();
 
@@ -2503,12 +2520,16 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 
     // find height over terrain
     h =  terrain_dem_calculations.GetTerrainHeight(lat, lon);
-                 // latitude, longitude
 
     dh = altitude - h -  SAFETYALTITUDETERRAIN;
 
     if ((dh<=0)&&(dhlast>0)) {
-      double f = (-dhlast)/(dh-dhlast);
+      double f;
+      if (dhlast-dh>0) {
+	f = (-dhlast)/(dh-dhlast);
+      } else {
+	f = 0.0;
+      }
       if (retlat && retlon) {
         *retlat = latlast*(1.0-f)+lat*f;
         *retlon = lonlast*(1.0-f)+lon*f;

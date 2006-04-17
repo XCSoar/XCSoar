@@ -188,7 +188,7 @@ void Message::Resize() {
   SIZE tsize;
   int size = _tcslen(msgText);
   RECT rthis;
-  RECT mRc;
+  //  RECT mRc;
 
   if (size==0) {
     if (!hidden) {
