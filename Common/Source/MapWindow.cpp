@@ -819,8 +819,8 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
       value *= 2.0;
     }
 
-    RequestMapScale = max(0.05,min(160.0, value));
   }
+  RequestMapScale = max(0.05,min(160.0, value));
 
   if (lastRequestMapScale != RequestMapScale){
     lastRequestMapScale = RequestMapScale;
@@ -846,7 +846,7 @@ double MapWindow::StepMapScale(int Step){
   ScaleCurrent += Step;
   ScaleCurrent = max(0,min(ScaleListCount-1, ScaleCurrent));
   return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
-	 /(IBLSCALE(Appearance.DefaultMapWidth)));
+	 /(IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right)));
 }
 
 double MapWindow::FindMapScale(double Value){
@@ -855,7 +855,7 @@ double MapWindow::FindMapScale(double Value){
   double BestFit = 99999;
   int    BestFitIdx=-1;
   double DesiredScale =
-    (Value*IBLSCALE(Appearance.DefaultMapWidth))/GetMapResolutionFactor();
+    (Value*IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right))/GetMapResolutionFactor();
 
   for (i=0; i<ScaleListCount; i++){
     double err = fabs(DesiredScale - ScaleList[i])/DesiredScale;
@@ -868,7 +868,7 @@ double MapWindow::FindMapScale(double Value){
   if (BestFitIdx != -1){
     ScaleCurrent = BestFitIdx;
     return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
-	   /IBLSCALE(Appearance.DefaultMapWidth));
+	   /IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right));
   }
   return(Value);
 }

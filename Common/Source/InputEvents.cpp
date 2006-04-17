@@ -1273,6 +1273,9 @@ void InputEvents::eventFlightMode(TCHAR *misc) {
       DoStatusMessage(TEXT("Final glide automatic"));
     }
   }
+  if (ForceFinalGlide && ActiveWayPoint == -1){
+    DoStatusMessage(TEXT("No Active Waypoint!"));
+  }
 }
 
 

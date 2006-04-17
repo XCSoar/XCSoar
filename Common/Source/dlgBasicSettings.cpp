@@ -67,12 +67,14 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
       INHg = (int)QNH;
       INHg = INHg*29.91/1013.2;
 
-      VarioWriteSettings();
+      devPutQNH(devAll(), QNH);
+      // VarioWriteSettings();
+
       wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
       if (wp) {
-	wp->GetDataField()->
-	  SetAsFloat(Units::ToUserAltitude(GPS_INFO.BaroAltitude));
-	wp->RefreshDisplay();
+	      wp->GetDataField()->
+	        SetAsFloat(Units::ToUserAltitude(GPS_INFO.BaroAltitude));
+	      wp->RefreshDisplay();
       }
     break;
   }

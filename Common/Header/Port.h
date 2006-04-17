@@ -30,6 +30,9 @@ unsigned long Port1SetBaudrate(unsigned long BaudRate);
 int Port1Read(void *Buffer, size_t Size);
 void Port1WriteNMEA(TCHAR *Text);
 
+BOOL Port2StopRxThread(void);
+
+
 void VarioWriteNMEA(TCHAR *Text);
 void VarioWriteSettings(void);
 

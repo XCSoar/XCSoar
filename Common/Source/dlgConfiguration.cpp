@@ -179,6 +179,21 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
+static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+  switch(wParam & 0xffff){
+    case '6':
+      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdPrev")))->GetHandle());
+      NextPage(-1);
+      //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
+    return(0);
+    case '7':
+      SetFocus(((WndButton *)wf->FindByName(TEXT("cmdNext")))->GetHandle());
+      NextPage(+1);
+      //((WndButton *)wf->FindByName(TEXT("cmdNext")))->SetFocused(true, NULL);
+    return(0);
+  }
+  return(1);
+}
 
 static void SetLocalTime(void) {
   WndProperty* wp;
@@ -327,7 +342,8 @@ void dlgConfigurationShowModal(void){
 
   if (!wf) return;
 
-  //  wf->SetKeyDownNotify(FormKeyDown);
+  wf->SetKeyDownNotify(FormKeyDown);
+
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   wConfig1    = ((WndFrame *)wf->FindByName(TEXT("frmAirspace")));
@@ -424,7 +440,7 @@ void dlgConfigurationShowModal(void){
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Generic"));
     for (i=0; i<DeviceRegisterCount; i++) {
-      decRegisterGetName(i, DeviceName);
+      devRegisterGetName(i, DeviceName);
       dfe->addEnumText(DeviceName);
       if (devA() != NULL){
 	if (_tcscmp(DeviceName, devA()->Name) == 0)
@@ -465,7 +481,7 @@ void dlgConfigurationShowModal(void){
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Generic"));
     for (i=0; i<DeviceRegisterCount; i++) {
-      decRegisterGetName(i, DeviceName);
+      devRegisterGetName(i, DeviceName);
       dfe->addEnumText(DeviceName);
       if (devB() != NULL){
 	if (_tcscmp(DeviceName, devB()->Name) == 0)
@@ -1844,7 +1860,7 @@ void dlgConfigurationShowModal(void){
       dwDeviceIndex1 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
-      decRegisterGetName(dwDeviceIndex1-1, DeviceName);
+      devRegisterGetName(dwDeviceIndex1-1, DeviceName);
       WriteDeviceSettings(0, DeviceName);
     }
   }
@@ -1873,7 +1889,7 @@ void dlgConfigurationShowModal(void){
       dwDeviceIndex2 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
-      decRegisterGetName(dwDeviceIndex2-1, DeviceName);
+      devRegisterGetName(dwDeviceIndex2-1, DeviceName);
       WriteDeviceSettings(1, DeviceName);
     }
   }

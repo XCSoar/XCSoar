@@ -41,6 +41,7 @@ Copyright_License {
 #include "Logger.h"
 #include "GaugeFLARM.h"
 #include "parser.h"
+#include "device.h"
 
 extern bool EnableCalibration;
 
@@ -66,7 +67,7 @@ NMEAParser nmeaParser2;
 
 NMEAParser::NMEAParser() {
   gpsValid = false;
-  hasVega = false;
+  //hasVega = false;
   nSatellites = 0;
 
   activeGPS = false;
@@ -78,8 +79,8 @@ void NMEAParser::Reset(void) {
   nmeaParser2.gpsValid = false;
   nmeaParser1.activeGPS = true;
   nmeaParser2.activeGPS = true;
-  nmeaParser1.hasVega = false;
-  nmeaParser2.hasVega = false;
+  //nmeaParser1.hasVega = false;
+  //nmeaParser2.hasVega = false;
 
   // trigger updates
   GpsUpdated = TRUE;
@@ -90,10 +91,21 @@ void NMEAParser::Reset(void) {
 
 
 int NMEAParser::FindVegaPort(void) {
+
+  // hack, should be removed later if vega device driver is fully implemented
+
+  if (_tcscmp(devA()->Name, TEXT("Vega")) == 0)
+    return 0;
+  if (_tcscmp(devB()->Name, TEXT("Vega")) == 0)
+    return 1;
+
+  /*
   if (nmeaParser1.hasVega)
     return 0;
   if (nmeaParser2.hasVega)
     return 1;
+  */
+
   return -1;
 }
 
@@ -186,6 +198,8 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
         {
           return PBJVH(&String[7], GPS_INFO);
         }
+
+      /*
       if(_tcscmp(SentanceString,TEXT("PDSWC"))==0)
         {
           return PDSWC(&String[7], GPS_INFO);
@@ -224,7 +238,7 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
 	  DoStatusMessage(cptext);
 	  return FALSE;
 	}
-
+      */
       if(_tcscmp(SentanceString,TEXT("PFLAA"))==0)
         {
           return PFLAA(&String[7], GPS_INFO);
@@ -981,241 +995,6 @@ BOOL NMEAParser::PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
   return TRUE;
 }
 
-#include "InputEvents.h"
-
-
-#define INPUT_BIT_FLAP_POS                  0 // 1 flap pos
-#define INPUT_BIT_FLAP_ZERO                 1 // 1 flap zero
-#define INPUT_BIT_FLAP_NEG                  2 // 1 flap neg
-#define INPUT_BIT_SC                        3 // 1 circling
-#define INPUT_BIT_GEAR_EXTENDED             5 // 1 gear extended
-#define INPUT_BIT_AIRBRAKENOTLOCKED         6 // 1 airbrake extended
-#define INPUT_BIT_AUX                       7 // unused?
-#define INPUT_BIT_ACK                       8 // 1 ack pressed
-#define INPUT_BIT_REP                       9 // 1 rep pressed
-#define INPUT_BIT_STALL                     20  // 1 if detected
-#define INPUT_BIT_USERSWUP                  23 // 1 if up
-#define INPUT_BIT_USERSWMIDDLE              24 // 1 if middle
-#define INPUT_BIT_USERSWDOWN                25
-#define OUTPUT_BIT_CIRCLING                 0  // 1 if circling
-
-
-BOOL NMEAParser::PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  static long last_switchinputs;
-  static long last_switchoutputs;
-
-  unsigned long uswitchinputs, uswitchoutputs;
-  swscanf(String,
-	  TEXT("%lf,%lx,%lx,%lf"),
-	  &MACCREADY,
-	  &uswitchinputs,
-	  &uswitchoutputs,
-	  &GPS_INFO->SupplyBatteryVoltage);
-
-  long switchinputs = uswitchinputs;
-  long switchoutputs = uswitchoutputs;
-
-  MACCREADY /= 10;
-  GPS_INFO->SupplyBatteryVoltage/= 10;
-
-  GPS_INFO->SwitchState.AirbrakeExtended =
-    (switchinputs & (1<<INPUT_BIT_AIRBRAKENOTLOCKED))>0;
-  GPS_INFO->SwitchState.FlapPositive =
-    (switchinputs & (1<<INPUT_BIT_FLAP_POS))>0;
-  GPS_INFO->SwitchState.FlapNeutral =
-    (switchinputs & (1<<INPUT_BIT_FLAP_ZERO))>0;
-  GPS_INFO->SwitchState.FlapNegative =
-    (switchinputs & (1<<INPUT_BIT_FLAP_NEG))>0;
-  GPS_INFO->SwitchState.GearExtended =
-    (switchinputs & (1<<INPUT_BIT_GEAR_EXTENDED))>0;
-  GPS_INFO->SwitchState.Acknowledge =
-    (switchinputs & (1<<INPUT_BIT_ACK))>0;
-  GPS_INFO->SwitchState.Repeat =
-    (switchinputs & (1<<INPUT_BIT_REP))>0;
-  GPS_INFO->SwitchState.SpeedCommand =
-    (switchinputs & (1<<INPUT_BIT_SC))>0;
-  GPS_INFO->SwitchState.UserSwitchUp =
-    (switchinputs & (1<<INPUT_BIT_USERSWUP))>0;
-  GPS_INFO->SwitchState.UserSwitchMiddle =
-    (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE))>0;
-  GPS_INFO->SwitchState.UserSwitchDown =
-    (switchinputs & (1<<INPUT_BIT_USERSWDOWN))>0;
-  GPS_INFO->SwitchState.Stall =
-    (switchinputs & (1<<INPUT_BIT_STALL))>0;
-  GPS_INFO->SwitchState.VarioCircling =
-    (switchoutputs & (1<<OUTPUT_BIT_CIRCLING))>0;
-
-  long up_switchinputs;
-  long down_switchinputs;
-  long up_switchoutputs;
-  long down_switchoutputs;
-
-  // detect changes to ON: on now (x) and not on before (!lastx)
-  // detect changes to OFF: off now (!x) and on before (lastx)
-
-  down_switchinputs = (switchinputs & (~last_switchinputs));
-  up_switchinputs = ((~switchinputs) & (last_switchinputs));
-  down_switchoutputs = (switchoutputs & (~last_switchoutputs));
-  up_switchoutputs = ((~switchoutputs) & (last_switchoutputs));
-
-  int i;
-  long thebit;
-  for (i=0; i<32; i++) {
-    thebit = 1<<i;
-    if ((down_switchinputs & thebit) == thebit) {
-      InputEvents::processNmea(i);
-    }
-    if ((down_switchoutputs & thebit) == thebit) {
-      InputEvents::processNmea(i+32);
-    }
-    if ((up_switchinputs & thebit) == thebit) {
-      InputEvents::processNmea(i+64);
-    }
-    if ((up_switchoutputs & thebit) == thebit) {
-      InputEvents::processNmea(i+96);
-    }
-  }
-
-  last_switchinputs = switchinputs;
-  last_switchoutputs = switchoutputs;
-
-  return TRUE;
-}
-
-
-// $PDVDS,nx,nz,flap,stallratio,netto
-BOOL NMEAParser::PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  double flap, stallratio;
-  int found = swscanf(String,
-	  TEXT("%lf,%lf,%lf,%lf,%lf"),
-	  &GPS_INFO->AccelX,
-	  &GPS_INFO->AccelZ,
-	  &flap,
-	  &stallratio,
-	  &GPS_INFO->NettoVario);
-
-  GPS_INFO->AccelX /= AccelerometerZero;
-  GPS_INFO->AccelZ /= AccelerometerZero;
-  int mag = isqrt4((int)((GPS_INFO->AccelX*GPS_INFO->AccelX
-			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
-  GPS_INFO->Gload = mag/100.0;
-  GPS_INFO->AccelerationAvailable = TRUE;
-  if (found==5) {
-	  GPS_INFO->NettoVarioAvailable = TRUE;
-  } else {
-	  GPS_INFO->NettoVarioAvailable = FALSE;
-  }
-  GPS_INFO->NettoVario /= 10.0;
-
-  if (EnableCalibration) {
-    char buffer[200];
-    sprintf(buffer,"%g %g %g %g %g %g #te net\r\n",
-	    GPS_INFO->IndicatedAirspeed,
-	    GPS_INFO->BaroAltitude,
-	    GPS_INFO->Vario,
-	    GPS_INFO->NettoVario,
-	    GPS_INFO->AccelX,
-	    GPS_INFO->AccelZ);
-    DebugStore(buffer);
-  }
-  GPS_INFO->VarioAvailable = TRUE;
-  hasVega = true;
-
-  return FALSE;
-}
-
-
-#include "VarioSound.h"
-
-BOOL NMEAParser::PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  TCHAR ctemp[80];
-
-  ExtractParameter(String,ctemp,0);
-  unsigned short beepfrequency = (unsigned short)StrToDouble(ctemp, NULL);
-  ExtractParameter(String,ctemp,1);
-  unsigned short soundfrequency = (unsigned short)StrToDouble(ctemp, NULL);
-  ExtractParameter(String,ctemp,2);
-  unsigned char soundtype = (unsigned char)StrToDouble(ctemp, NULL);
-
-	// Temporarily commented out - function as yet undefined
-//  audio_setconfig(beepfrequency, soundfrequency, soundtype);
-
-  return FALSE;
-}
-
-// $PDVDV,vario,ias,densityratio,altitude,staticpressure
-
-BOOL NMEAParser::PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  swscanf(String,
-	  TEXT("%lf,%lf,%lf,%lf"),
-	  &GPS_INFO->Vario, //
-	  &GPS_INFO->IndicatedAirspeed,
-	  &GPS_INFO->TrueAirspeed,
-	  &GPS_INFO->BaroAltitude);
-
-  GPS_INFO->Vario /= 10.0;
-  GPS_INFO->VarioAvailable = TRUE;
-  hasVega = true;
-
-  GPS_INFO->IndicatedAirspeed /= 10.0;
-  GPS_INFO->AirspeedAvailable = TRUE;
-  GPS_INFO->TrueAirspeed *= GPS_INFO->IndicatedAirspeed/1024.0;
-  GPS_INFO->BaroAltitudeAvailable = TRUE;
-
-  VarioUpdated = TRUE;
-  PulseEvent(varioTriggerEvent);
-
-  return FALSE;
-}
-
-
-BOOL NMEAParser::PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  TCHAR ctemp[80];
-  TCHAR name[80];
-  TCHAR responsetype[10];
-  ExtractParameter(String,responsetype,0);
-  ExtractParameter(String,name,1);
-  ExtractParameter(String,ctemp,2);
-  long value =  (long)StrToDouble(ctemp,NULL);
-  DWORD dwvalue;
-
-  TCHAR updatename[100];
-  TCHAR fullname[100];
-  _stprintf(updatename, TEXT("Vega%sUpdated"), name);
-  _stprintf(fullname, TEXT("Vega%s"), name);
-  SetToRegistry(updatename, 1);
-  dwvalue = *((DWORD*)&value);
-  SetToRegistry(fullname, dwvalue);
-
-  /*
-  wsprintf(ctemp,TEXT("%s"), &String[0]);
-  DoStatusMessage(ctemp);
-  */
-  return FALSE;
-}
-
-
-BOOL NMEAParser::PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  TCHAR ctemp[80];
-
-  ExtractParameter(String,ctemp,0);
-  GPS_INFO->OutsideAirTemperature = StrToDouble(ctemp,NULL)/10.0-273.0
-    -5.0; // correct for internal heating element
-  GPS_INFO->TemperatureAvailable = TRUE;
-
-  ExtractParameter(String,ctemp,1);
-  GPS_INFO->RelativeHumidity = StrToDouble(ctemp,NULL); // %
-  // TODO: adjust relative humidity for heating element correction
-  GPS_INFO->HumidityAvailable = TRUE;
-
-  return FALSE;
-}
 
 
 ////////////// FLARM
@@ -1240,6 +1019,8 @@ void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO) {
   GaugeFLARM::Show(present);
 }
 
+
+#include "InputEvents.h"
 
 double FLARM_NorthingToLatitude = 0.0;
 double FLARM_EastingToLongitude = 0.0;

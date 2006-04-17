@@ -15,7 +15,7 @@
   </WndProperty>
 
   <WndProperty Name="prpBrightness" Caption="Brightness"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=1 OnDataAccess="OnBrightnessData"/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=5 OnDataAccess="OnBrightnessData"/>
   </WndProperty>
 
 </WndForm>
