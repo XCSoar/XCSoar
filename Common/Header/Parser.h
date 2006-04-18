@@ -44,7 +44,7 @@ typedef struct _FLARM_TRAFFIC
 
 typedef struct _SWITCH_INFO
 {
-  bool AirbrakeExtended;
+  bool AirbrakeLocked;
   bool FlapPositive;
   bool FlapNeutral;
   bool FlapNegative;
@@ -56,7 +56,7 @@ typedef struct _SWITCH_INFO
   bool UserSwitchMiddle;
   bool UserSwitchDown;
   bool VarioCircling;
-  bool Stall;
+  // bool Stall;
 } SWITCH_INFO;
 
 
