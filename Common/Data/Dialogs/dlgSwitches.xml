@@ -12,7 +12,7 @@
 
   <WndFrame Name="frmFrm1" X=0 Y=30 Width=145 Height=200 Font=2>
 
-  <WndProperty Name="prpAirbrakeExtended" Caption="Airbrake"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <WndProperty Name="prpAirbrakeExtended" Caption="Airbrake locked"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
@@ -61,10 +61,6 @@
   </WndProperty>
 
   <WndProperty Name="prpVarioCircling" Caption="Vario circling"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
-  <DataField name="" DataType="boolean" />
-  </WndProperty>
-
-  <WndProperty Name="prpStall" Caption="Stall"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
   <DataField name="" DataType="boolean" />
   </WndProperty>
 

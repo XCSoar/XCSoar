@@ -59,10 +59,10 @@ static BOOL fSimMode = FALSE;
 #define INPUT_BIT_SC                        3 // 1 circling
 #define INPUT_BIT_GEAR_EXTENDED             5 // 1 gear extended
 #define INPUT_BIT_AIRBRAKENOTLOCKED         6 // 1 airbrake extended
-#define INPUT_BIT_AUX                       7 // unused?
 #define INPUT_BIT_ACK                       8 // 1 ack pressed
 #define INPUT_BIT_REP                       9 // 1 rep pressed
-#define INPUT_BIT_STALL                     20  // 1 if detected
+//#define INPUT_BIT_STALL                     20  // 1 if detected
+#define INPUT_BIT_AIRBRAKELOCKED            21 // 1 airbrake locked
 #define INPUT_BIT_USERSWUP                  23 // 1 if up
 #define INPUT_BIT_USERSWMIDDLE              24 // 1 if middle
 #define INPUT_BIT_USERSWDOWN                25
@@ -88,8 +88,8 @@ static BOOL PDSWC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   MACCREADY /= 10;
   GPS_INFO->SupplyBatteryVoltage/= 10;
 
-  GPS_INFO->SwitchState.AirbrakeExtended =
-    (switchinputs & (1<<INPUT_BIT_AIRBRAKENOTLOCKED))>0;
+  GPS_INFO->SwitchState.AirbrakeLocked =
+    (switchinputs & (1<<INPUT_BIT_AIRBRAKELOCKED))>0;
   GPS_INFO->SwitchState.FlapPositive =
     (switchinputs & (1<<INPUT_BIT_FLAP_POS))>0;
   GPS_INFO->SwitchState.FlapNeutral =
@@ -110,8 +110,10 @@ static BOOL PDSWC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
     (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE))>0;
   GPS_INFO->SwitchState.UserSwitchDown =
     (switchinputs & (1<<INPUT_BIT_USERSWDOWN))>0;
+  /*
   GPS_INFO->SwitchState.Stall =
     (switchinputs & (1<<INPUT_BIT_STALL))>0;
+  */
   GPS_INFO->SwitchState.VarioCircling =
     (switchoutputs & (1<<OUTPUT_BIT_CIRCLING))>0;
 
