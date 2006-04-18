@@ -55,7 +55,7 @@ BOOL devGetBaroAltitude(double *Value){
   // hack, just return GPS_INFO->BaroAltitude
   if (Value == NULL)
     return(FALSE);
-  if (GPS_INFO.AccelerationAvailable)
+  if (GPS_INFO.BaroAltitudeAvailable)
     *Value = GPS_INFO.BaroAltitude;
   return(TRUE);
 
