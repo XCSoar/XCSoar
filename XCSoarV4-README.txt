@@ -3,7 +3,6 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 
-
 Changes from 4.7:
 - Changed "Bugs" to "Clean" in basic settings so meaning is clearer
 - Changed "Device 1" etc to "Device A" in configuration settings so meaning
@@ -17,7 +16,13 @@ Changes from 4.7:
 - Startup reliability fixes
 - Terrain offset fixes
 - FLARM gauge minor fixes (draws aircraft beyond 2km at 2km)
-
+- Added Ventus2C polar
+- Added missing vega configuration parameters
+- Fixed PGRMZ parsing to set BaroAltitude, not Altitude
+- Airspace warnings etc uses baro altitude if available
+- Removed dead code in parser.cpp
+- Removed "stall" from switch dialog
+- Changed "airbrake extended" to "airbrake locked" in switch dialog
 
 Changes from 4.6 to 4.7:
 - Ballast also shown as volume in liters in basic settings dialog

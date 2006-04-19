@@ -52,8 +52,8 @@ static void UpdateValues() {
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirbrakeExtended"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.AirbrakeExtended) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.AirbrakeExtended);
+	GPS_INFO.SwitchState.AirbrakeLocked) {
+      wp->GetDataField()->Set(GPS_INFO.SwitchState.AirbrakeLocked);
       wp->RefreshDisplay();
     }
   }
@@ -142,14 +142,6 @@ static void UpdateValues() {
     if (wp->GetDataField()->GetAsBoolean() !=
 	GPS_INFO.SwitchState.VarioCircling) {
       wp->GetDataField()->Set(GPS_INFO.SwitchState.VarioCircling);
-      wp->RefreshDisplay();
-    }
-  }
-  wp = (WndProperty*)wf->FindByName(TEXT("prpStall"));
-  if (wp) {
-    if (wp->GetDataField()->GetAsBoolean() !=
-	GPS_INFO.SwitchState.Stall) {
-      wp->GetDataField()->Set(GPS_INFO.SwitchState.Stall);
       wp->RefreshDisplay();
     }
   }

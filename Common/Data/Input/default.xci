@@ -143,6 +143,8 @@ mode=pan
 type=key
 data=RETURN
 event=Pan supertoggle
+label=Pan
+location=1
 
 
 mode=pan

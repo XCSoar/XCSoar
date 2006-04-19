@@ -1221,11 +1221,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   wcscat(XCSoar_Version, TEXT("Altair "));
 #endif
 #if (NEWINFOBOX>0) 
-  wcscat(XCSoar_Version, TEXT("4.71 "));
+  wcscat(XCSoar_Version, TEXT("4.7.2 "));
 #else
   // wcscat(XCSoar_Version, TEXT("Alpha "));
   // wcscat(XCSoar_Version, TEXT(__DATE__));
-  wcscat(XCSoar_Version, TEXT("BETA 4.5.4")); // Yet to be released
+  wcscat(XCSoar_Version, TEXT("BETA 4.5.5")); // Yet to be released
 #endif
 
   XCSoarGetOpts(lpCmdLine);
@@ -1277,7 +1277,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   PreloadInitialisation(false);
 
-  GPS_INFO.SwitchState.AirbrakeExtended = false;
+  GPS_INFO.SwitchState.AirbrakeLocked = false;
   GPS_INFO.SwitchState.FlapPositive = false;
   GPS_INFO.SwitchState.FlapNeutral = false;
   GPS_INFO.SwitchState.FlapNegative = false;
@@ -1289,7 +1289,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   GPS_INFO.SwitchState.UserSwitchMiddle = false;
   GPS_INFO.SwitchState.UserSwitchDown = false;
   GPS_INFO.SwitchState.VarioCircling = false;
-  GPS_INFO.SwitchState.Stall = false;
 
 #ifdef _SIM_
   SYSTEMTIME pda_time;

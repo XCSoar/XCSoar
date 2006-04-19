@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.49 2006/04/17 15:36:31 samgi Exp $
+  $Id: Parser.cpp,v 1.50 2006/04/19 14:54:29 jwharington Exp $
 
 Copyright_License {
 
@@ -174,7 +174,6 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
   if(String[1] == 'P')
     {
       //Proprietary String
-      // JMW added Vega variometer
 
       for(i=0;i<5;i++)
         {
@@ -182,63 +181,12 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
         }
       SentanceString[5] = '\0';
 
-      if(_tcscmp(SentanceString,TEXT("PBJVA"))==0)
-        {
-          return PBJVA(&String[7], GPS_INFO);
-        }
-      if(_tcscmp(SentanceString,TEXT("PJV01"))==0)
-        {
-          return PJV01(&String[7], GPS_INFO);
-        }
       if(_tcscmp(SentanceString,TEXT("PBB50"))==0)
         {
           return PBB50(&String[7], GPS_INFO);
         }
-      if(_tcscmp(SentanceString,TEXT("PBJVH"))==0)
-        {
-          return PBJVH(&String[7], GPS_INFO);
-        }
 
-      /*
-      if(_tcscmp(SentanceString,TEXT("PDSWC"))==0)
-        {
-          return PDSWC(&String[7], GPS_INFO);
-        }
-      if(_tcscmp(SentanceString,TEXT("PDAAV"))==0)
-        {
-          return PDAAV(&String[7], GPS_INFO);
-        }
-
-      if(_tcscmp(SentanceString,TEXT("PDVSC"))==0)
-        {
-          return PDVSC(&String[7], GPS_INFO);
-        }
-
-      if(_tcscmp(SentanceString,TEXT("PDVDV"))==0)
-        {
-          return PDVDV(&String[7], GPS_INFO);
-        }
-      if(_tcscmp(SentanceString,TEXT("PDVDS"))==0)
-        {
-          return PDVDS(&String[7], GPS_INFO);
-        }
-      if(_tcscmp(SentanceString,TEXT("PDVVT"))==0)
-        {
-          return PDVVT(&String[7], GPS_INFO);
-        }
-      if(_tcscmp(SentanceString,TEXT("PDVSD"))==0)
-	{
-	  TCHAR cptext[80];
-	  wsprintf(cptext,TEXT("%s"), &String[7]);
-	  // TODO - JMW (from Scott)
-	  // 	Either use something like
-	  // 		DoStatusMessage(TEXT("Vario Message"), cptext);
-	  // 		(then you can assign time and sound to Vario Message)
-	  // 	or	Message::AddMessage
-	  DoStatusMessage(cptext);
-	  return FALSE;
-	}
-      */
+      // FLARM sentences
       if(_tcscmp(SentanceString,TEXT("PFLAA"))==0)
         {
           return PFLAA(&String[7], GPS_INFO);
@@ -615,11 +563,13 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
     
     if(RMZAvailable)
       {
-	GPS_INFO->Altitude = RMZAltitude;
+	// JMW changed from Altitude to BaroAltitude
+	GPS_INFO->BaroAltitude = RMZAltitude;
       }
     else if(RMAAvailable)
 	{
-	  GPS_INFO->Altitude = RMAAltitude;
+	// JMW changed from Altitude to BaroAltitude
+	  GPS_INFO->BaroAltitude = RMAAltitude;
 	}
     
     LastTime = ThisTime;
@@ -681,14 +631,17 @@ BOOL NMEAParser::GGA(TCHAR *String, NMEA_INFO *GPS_INFO)
     
     if(RMZAvailable)
       {
-	GPS_INFO->Altitude = RMZAltitude;
+	// TODO: changed to BaroAltitude = ...
+	GPS_INFO->BaroAltitude = RMZAltitude;
       }
     else if(RMAAvailable)
       {
-	GPS_INFO->Altitude = RMAAltitude;
+	// TODO: changed to BaroAltitude = ...
+	GPS_INFO->BaroAltitude = RMAAltitude;
       }
     else
       {
+	// "Altitude" should always be GPS Altitude.
 	ExtractParameter(String,ctemp,8);
 	GPS_INFO->Altitude = StrToDouble(ctemp, NULL);
 	ExtractParameter(String,ctemp,9);
@@ -861,52 +814,6 @@ BOOL NMEAParser::PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 double AccelerometerZero=100.0;
 
-BOOL NMEAParser::PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  int xval, zval;
-  TCHAR ctemp[80];
-  TCHAR *Stop;
-
-  ExtractParameter(String,ctemp,0);
-  if (ctemp[0]=='+') {
-    xval = _tcstol(ctemp+1, &Stop, 10);
-  } else {
-    xval = _tcstol(ctemp, &Stop, 10);
-  }
-  ExtractParameter(String,ctemp,1);
-  if (ctemp[0]=='+') {
-    zval = _tcstol(ctemp+1, &Stop, 10);
-  } else {
-    zval = _tcstol(ctemp, &Stop, 10);
-  }
-
-  int mag = isqrt4(xval*xval+zval*zval);
-  GPS_INFO->AccelX = xval/AccelerometerZero;
-  GPS_INFO->AccelZ = zval/AccelerometerZero;
-  GPS_INFO->Gload = mag/AccelerometerZero;
-  GPS_INFO->AccelerationAvailable = TRUE;
-
-  return FALSE;
-}
-
-
-
-BOOL NMEAParser::PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  double rh, oat;
-  TCHAR ctemp[80];
-
-  ExtractParameter(String,ctemp,0);
-  rh = StrToDouble(ctemp,NULL)/100.0;
-  ExtractParameter(String,ctemp,1);
-  oat = StrToDouble(ctemp,NULL)/100.0;
-
-  oat = oat/10.0-273.15;
-  rh = rh/10.0;
-
-  return FALSE;
-}
-
 
 double StaticPressureToAltitude(double ps) {
   double altitude;
@@ -945,54 +852,6 @@ double AirDensityRatio(double altitude) {
   double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
   double rho_rat = sqrt(1.225/rho);
   return rho_rat;
-}
-
-
-BOOL NMEAParser::PJV01(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  double vias, wnet, vtas;
-  TCHAR ctemp[80];
-  int pstatic;
-  TCHAR *Stop;
-
-  ExtractParameter(String,ctemp,0);
-  vias = StrToDouble(ctemp,NULL)/TOKNOTS;
-
-  double kcal = 1.0;
-  if (vias<33.0) {
-    kcal = (1.0-1.25)/(33.0-15.0)*(vias-15.0)+1.25;
-  } else {
-    kcal = 1.0;
-  }
-  vias = vias*kcal;
-  
-
-  vtas = vias*AirDensityRatio(GPS_INFO->BaroAltitude);
-
-  ExtractParameter(String,ctemp,1);
-  if (ctemp[0]=='+') {
-    wnet = StrToDouble(ctemp+1,NULL);
-  } else {
-    wnet = StrToDouble(ctemp,NULL);
-  }
-
-  ExtractParameter(String,ctemp,2);
-  pstatic = _tcstol(ctemp, &Stop, 10);
-
-  // for testing only, this is really static pressure
-  GPS_INFO->BaroAltitude = StaticPressureToAltitude(pstatic*10.0);
-  GPS_INFO->BaroAltitudeAvailable = TRUE;
-
-  GPS_INFO->AirspeedAvailable = TRUE;
-  GPS_INFO->IndicatedAirspeed = vias;
-  GPS_INFO->TrueAirspeed = vtas;
-  GPS_INFO->VarioAvailable = TRUE;
-  GPS_INFO->Vario = wnet/TOKNOTS;
-
-  VarioUpdated = TRUE;
-  PulseEvent(varioTriggerEvent);
-
-  return TRUE;
 }
 
 

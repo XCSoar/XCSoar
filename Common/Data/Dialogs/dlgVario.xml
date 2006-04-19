@@ -425,6 +425,35 @@
 
   </WndFrame>
 
+  <WndFrame Name="frmLimits" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpVelocityNeverExceed" Caption="VNE"      
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  <WndProperty Name="prpVelocitySafeTerrain" Caption="V Terrain"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainSafetyHeight" Caption="Height terrain"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  <WndProperty Name="prpVelocityManoeuvering" Caption="V Manoeuvering"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  <WndProperty Name="prpVelocityAirbrake" Caption="V Airbrake"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
+  </WndFrame>
+
 </WndForm>    
 
 </PMML>
