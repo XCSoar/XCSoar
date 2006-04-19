@@ -167,7 +167,7 @@ static BOOL PDAAV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   NMEAParser::ExtractParameter(String,ctemp,2);
   unsigned char soundtype = (unsigned char)StrToDouble(ctemp, NULL);
 
-	// Temporarily commented out - function as yet undefined
+  // Temporarily commented out - function as yet undefined
   //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
 
   return FALSE;
@@ -226,7 +226,6 @@ static BOOL PDVDV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
     GPS_INFO->BaroAltitudeAvailable = TRUE;
     GPS_INFO->BaroAltitude = alt;
   }
-
 
   NMEAParser::VarioUpdated = TRUE;
   PulseEvent(varioTriggerEvent);

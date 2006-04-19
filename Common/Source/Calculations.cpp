@@ -2037,7 +2037,11 @@ void CalculateNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 						Basic->Longitude,
 						Basic->TrackBearing,
 						Basic->Speed*WarningTime);
-      Calculated->NextAltitude = Basic->Altitude + Calculated->Average30s * WarningTime;
+      if (Basic->BaroAltitudeAvailable) {
+	Calculated->NextAltitude = Basic->BaroAltitude + Calculated->Average30s * WarningTime;
+      } else {
+	Calculated->NextAltitude = Basic->Altitude + Calculated->Average30s * WarningTime;
+      }
     }
 }
 
@@ -2099,7 +2103,11 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     lat = Calculated->NextLatitude;
     lon = Calculated->NextLongitude;
   } else {
-    alt = Basic->Altitude;
+    if (Basic->BaroAltitudeAvailable) {
+      alt = Basic->BaroAltitude;
+    } else {
+      alt = Basic->Altitude;
+    }
     lat = Basic->Latitude;
     lon = Basic->Longitude;
   }

@@ -91,7 +91,6 @@ typedef struct _NMEA_INFO
   BOOL AirspeedAvailable;
   double Vario;
   double NettoVario;
-  double IAS;
   double Ballast;
   double Bugs;
   double Gload;
@@ -159,19 +158,7 @@ class NMEAParser {
   BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO);
 
   // Additional sentances added by JMW
-  BOOL PJV01(TCHAR *String, NMEA_INFO *GPS_INFO);
   BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL PBJVA(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL PBJVH(TCHAR *String, NMEA_INFO *GPS_INFO);
-
-  // Vega proprietary sentence moved to devVega.cpp
-  //BOOL PDVDS(TCHAR *String, NMEA_INFO *GPS_INFO);
-  //BOOL PDVDV(TCHAR *String, NMEA_INFO *GPS_INFO);
-  //BOOL PDAPL(TCHAR *String, NMEA_INFO *GPS_INFO);
-  //BOOL PDAAV(TCHAR *String, NMEA_INFO *GPS_INFO);
-  //BOOL PDVSC(TCHAR *String, NMEA_INFO *GPS_INFO);
-  //BOOL PDSWC(TCHAR *String, NMEA_INFO *GPS_INFO);
-  //BOOL PDVVT(TCHAR *String, NMEA_INFO *GPS_INFO);
 
   // FLARM sentances
   BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO);

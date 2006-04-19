@@ -115,6 +115,7 @@ Key2Event[mode_id][VK_RETURN] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT("Pan"),1,event_id);
 Key2Event[mode_id][VK_RETURN] = event_id;
 
 event_id = 0;

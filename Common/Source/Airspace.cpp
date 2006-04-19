@@ -987,6 +987,13 @@ int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
 
 BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
 {
+  double alt;
+  if (GPS_INFO.BaroAltitudeAvailable) {
+    alt = GPS_INFO.BaroAltitude;
+  } else {
+    alt = GPS_INFO.Altitude;
+  }
+
   switch (AltitudeMode)
     {
     case ALLON : return TRUE;
@@ -998,19 +1005,19 @@ BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
 	return FALSE;
 
     case AUTO:
-      if( ( GPS_INFO.Altitude > (Base - AltWarningMargin) )
-	  && ( GPS_INFO.Altitude < (Top + AltWarningMargin) ))
+      if( ( alt > (Base - AltWarningMargin) )
+	  && ( alt < (Top + AltWarningMargin) ))
 	return TRUE;
       else
 	return FALSE;
 
     case ALLBELOW:
-      if(  (Base - AltWarningMargin) < GPS_INFO.Altitude )
+      if(  (Base - AltWarningMargin) < alt )
 	return  TRUE;
       else
 	return FALSE;
     case INSIDE:
-      if( ( GPS_INFO.Altitude > (Base) ) && ( GPS_INFO.Altitude < (Top) ))
+      if( ( alt >= (Base) ) && ( alt < (Top) ))
 	return TRUE;
       else
 	return FALSE;

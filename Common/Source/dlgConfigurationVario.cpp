@@ -66,8 +66,9 @@ static WndFrame *wConfig13=NULL;
 static WndFrame *wConfig14=NULL;
 static WndFrame *wConfig15=NULL;
 static WndFrame *wConfig16=NULL;
+static WndFrame *wConfig17=NULL;
 
-#define NUMPAGES 16
+#define NUMPAGES 17
 
 
 static bool VegaConfigurationUpdated(TCHAR *name, bool first) {
@@ -267,6 +268,12 @@ static void UpdateParameters(bool first) {
 
   VegaConfigurationUpdated(TEXT("NeedleGaugeType"), first);
 
+  VegaConfigurationUpdated(TEXT("VelocityNeverExceed"), first);
+  VegaConfigurationUpdated(TEXT("VelocitySafeTerrain"), first);
+  VegaConfigurationUpdated(TEXT("TerrainSafetyHeight"), first);
+  VegaConfigurationUpdated(TEXT("VelocityManoeuvering"), first);
+  VegaConfigurationUpdated(TEXT("VelocityAirbrake"), first);
+
 }
 
 
@@ -323,6 +330,9 @@ static void NextPage(int Step){
   case 15:
     wf->SetCaption(TEXT("16 Alerts"));
     break;
+  case 16:
+    wf->SetCaption(TEXT("17 Airframe Limits"));
+    break;
   }
   wConfig1->SetVisible(page == 0);
   wConfig2->SetVisible(page == 1);
@@ -340,6 +350,7 @@ static void NextPage(int Step){
   wConfig14->SetVisible(page == 13);
   wConfig15->SetVisible(page == 14);
   wConfig16->SetVisible(page == 15);
+  wConfig17->SetVisible(page == 16);
 
   UpdateParameters(false);
 
@@ -370,13 +381,13 @@ static void OnDemoClicked(WindowControl * Sender){
 
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   switch(wParam & 0xffff){
-    case VK_LEFT:
+    // JMW NO! This disables editing! ///   case VK_LEFT:
     case '6':
       SetFocus(((WndButton *)wf->FindByName(TEXT("cmdPrev")))->GetHandle());
       NextPage(-1);
       //((WndButton *)wf->FindByName(TEXT("cmdPrev")))->SetFocused(true, NULL);
     return(0);
-    case VK_RIGHT:
+    // JMW NO! This disables editing!  ///  case VK_RIGHT:
     case '7':
       SetFocus(((WndButton *)wf->FindByName(TEXT("cmdNext")))->GetHandle());
       NextPage(+1);
@@ -386,25 +397,6 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   return(1);
 }
 
-/*
-int enumval = 0;
-
-static void OnTestEnumData(DataField *Sender, DataField::DataAccessKind_t Mode){
-  static int lastRead = -1;
-
-  switch(Mode){
-    case DataField::daGet:
-      lastRead = enumval;
-      Sender->Set(enumval);
-    break;
-    case DataField::daPut:
-      enumval = Sender->GetAsInteger();
-    break;
-    case DataField::daChange:
-    break;
-  }
-}
-*/
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnNextClicked),
@@ -506,13 +498,16 @@ bool dlgConfigurationVarioShowModal(void){
 
   changed = false;
 
+#ifdef _SIM_
+
+#else
   if (NMEAParser::FindVegaPort()== -1) {
     MessageBoxX (hWndMainWindow,
 		 gettext(TEXT("No communication with Vega.")),
 		 TEXT("Vega Error"), MB_OK);
     return false;
   }
-
+#endif
 
   wf = dlgLoadFromXML(CallBackTable,
 		      LocalPathS(TEXT("dlgVario.xml")),
@@ -543,6 +538,7 @@ bool dlgConfigurationVarioShowModal(void){
   wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmFlarmIdentification")));
   wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmFlarmRepeats")));
   wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmAlerts")));
+  wConfig17    = ((WndFrame *)wf->FindByName(TEXT("frmLimits")));
 
   ASSERT(wConfig1!=NULL);
   ASSERT(wConfig2!=NULL);
@@ -560,6 +556,7 @@ bool dlgConfigurationVarioShowModal(void){
   ASSERT(wConfig14!=NULL);
   ASSERT(wConfig15!=NULL);
   ASSERT(wConfig16!=NULL);
+  ASSERT(wConfig17!=NULL);
 
   //// populate enums
 

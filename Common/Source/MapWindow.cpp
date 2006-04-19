@@ -3351,8 +3351,10 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
     Start.y = IBLSCALE(19)+rc.top;
     Start.x = rc.right - IBLSCALE(19);
 
+#if (NEWINFOBOX>0)
     if (EnableVarioGauge && MapRectBig.right == rc.right)
         Start.x -= InfoBoxLayout::ControlWidth;
+#endif
 
     POINT Arrow[5] = { {0,-18}, {-6,10}, {0,0}, {6,10}, {0,-18}};
     double dX,dY;
@@ -3404,8 +3406,10 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
 
       Start.y = rc.top + IBLSCALE(10);
       Start.x = rc.right - IBLSCALE(11);
+#if (NEWINFOBOX>0)
       if (EnableVarioGauge && MapRectBig.right == rc.right)
         Start.x -= InfoBoxLayout::ControlWidth;
+#endif
 
       double dX,dY;
       int i;
