@@ -40,7 +40,7 @@
   </WndProperty>
 
   <WndProperty Name="prpHasTemperature" Caption="Temperature"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="boolean"/>
+    <DataField name="" DataType="enum"  Min=0 Max=2 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpFlarmConnected" Caption="FLARM connected"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
@@ -54,6 +54,10 @@
   <WndProperty Name="prpNeedleGaugeType" Caption="Needle gauge type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
     </WndProperty>
+
+  <WndProperty Name="prpLedBrightness" Caption="LED Bright"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f/15" EditFormat="%.0f" Min=1 Max=15 Step=1/>
+  </WndProperty>
 
   </WndFrame>
 

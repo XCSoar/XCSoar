@@ -109,13 +109,20 @@ static bool VegaConfigurationUpdated(TCHAR *name, bool first) {
     // so no sensible defaults
     return false;
   } else {
+
+    // hack, fix the -1 (plug and play settings) 
+    if (_tcscmp(name, TEXT("HasTemperature")) == 0){
+      if (lvalue == 255)
+        lvalue = 2;
+    }
+
     if (first) {
       // at start, set from last known registry value, this
       // helps if variables haven't been modified.
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-	wp->GetDataField()->Set((int)lvalue);
-	wp->RefreshDisplay();
+	      wp->GetDataField()->Set((int)lvalue);
+	      wp->RefreshDisplay();
       }
     }
   }
@@ -130,36 +137,42 @@ static bool VegaConfigurationUpdated(TCHAR *name, bool first) {
 
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-	wp->GetDataField()->Set((int)lvalue);
-	wp->RefreshDisplay();
+	      wp->GetDataField()->Set((int)lvalue);
+	      wp->RefreshDisplay();
       }
     } 
 
     if (updated==2) {
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
-	newval = (long)(wp->GetDataField()->GetAsInteger());
-	if (newval != lvalue) {
-	  // value has changed
-	  SetToRegistry(updatename, 2);
+	      newval = (long)(wp->GetDataField()->GetAsInteger());
+	      if (newval != lvalue) {
+	        // value has changed
+	        SetToRegistry(updatename, 2);
 
-	  dwvalue = *((DWORD*)&lvalue);
+	        dwvalue = *((DWORD*)&lvalue);
 
-	  SetToRegistry(fullname, dwvalue);
+	        SetToRegistry(fullname, dwvalue);
 
-	  changed = true;
+	        changed = true;
 
-	  // maybe represent all as text?
-	  // note that this code currently won't work for longs
+	        // maybe represent all as text?
+	        // note that this code currently won't work for longs
 
-	  _stprintf(requesttext,TEXT("PDVSC,S,%s,%d"),name, newval);
-	  VarioWriteNMEA(requesttext);
-#ifndef _SIM_
-	  Sleep(250);
-#endif
+          // hack, fix the -1 (plug and play settings) 
+          if (_tcscmp(name, TEXT("HasTemperature")) == 0){
+            if (newval == 2)
+              newval = 255;
+          }
+    
+          _stprintf(requesttext,TEXT("PDVSC,S,%s,%d"),name, newval);
+	        VarioWriteNMEA(requesttext);
+      #ifndef _SIM_
+	        Sleep(250);
+      #endif
 
-	  return true;
-	}
+	        return true;
+	      }
       }
     }
   }
@@ -273,6 +286,7 @@ static void UpdateParameters(bool first) {
   VegaConfigurationUpdated(TEXT("TerrainSafetyHeight"), first);
   VegaConfigurationUpdated(TEXT("VelocityManoeuvering"), first);
   VegaConfigurationUpdated(TEXT("VelocityAirbrake"), first);
+  VegaConfigurationUpdated(TEXT("LedBrightness"), first);
 
 }
 
@@ -559,6 +573,17 @@ bool dlgConfigurationVarioShowModal(void){
   ASSERT(wConfig17!=NULL);
 
   //// populate enums
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpHasTemperature"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("OFF"));
+    dfe->addEnumText(TEXT("ON"));
+    dfe->addEnumText(TEXT("AUTO"));
+    dfe->Set(0);
+    wp->RefreshDisplay();
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpToneClimbComparisonType"));
   if (wp) {
