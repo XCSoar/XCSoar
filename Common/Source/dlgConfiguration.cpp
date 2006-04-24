@@ -507,7 +507,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpUTCOffset"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(UTCOffset/3600.0);
+    wp->GetDataField()->SetAsFloat(iround(UTCOffset/3600.0));
     wp->RefreshDisplay();
   }
   SetLocalTime();

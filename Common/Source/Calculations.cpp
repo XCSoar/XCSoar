@@ -50,7 +50,10 @@ Copyright_License {
 #include "windanalyser.h"
 #include "Atmosphere.h"
 
+#include "VegaVoice.h"
+
 WindAnalyser *windanalyser = NULL;
+VegaVoice vegavoice;
 
 bool EnableAutoWind= true;
 bool ForceFinalGlide= false;
@@ -585,6 +588,8 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   CalculateNextPosition(Basic, Calculated);
 
   DoLogging(Basic, Calculated);
+
+  vegavoice.Update(Basic, Calculated);
 
   return TRUE;
 }
@@ -1439,11 +1444,14 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LockFlightData();
 
+  Calculated->IsInSector = false;
+
   if(ActiveWayPoint == 0)
     {
       TaskFinished = false;
       if(InStartSector(Basic,Calculated))
         {
+	  Calculated->IsInSector = true;
           StartSectorEntered = TRUE;
         }
       else
@@ -1473,6 +1481,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       // JMW what does this do? restart?
       if(InStartSector(Basic, Calculated))
         {
+	  Calculated->IsInSector = true;
           if(Basic->Time - Calculated->TaskStartTime < 600)
             {
 	      if (ReadyToAdvance()) {
@@ -1487,6 +1496,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       if(ActiveWayPoint < MAXTASKPOINTS) {
 	if(Task[ActiveWayPoint+1].Index >= 0) {
 	  if(InTurnSector(Basic,Calculated)) {
+	    Calculated->IsInSector = true;
 	    Calculated->LegStartTime = Basic->Time;
 
 	    if (ReadyToAdvance()) {
@@ -1501,6 +1511,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	  }
 	} else {
 	  if (InFinishSector(Basic,Calculated, ActiveWayPoint)) {
+	    Calculated->IsInSector = true;
 	    if (!TaskFinished) {
 	      AnnounceWayPointSwitch();
 	      InputEvents::processGlideComputer(GCE_TASK_FINISH);
@@ -1526,11 +1537,14 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LockFlightData();
 
+  Calculated->IsInSector = false;
+
   if(ActiveWayPoint == 0)
     {
       TaskFinished = false;
       if(InStartSector(Basic,Calculated))
         {
+	  Calculated->IsInSector = true;
           StartSectorEntered = TRUE;
         }
       else
@@ -1558,22 +1572,23 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   else if(ActiveWayPoint >0)
     {
-      if(InStartSector(Basic, Calculated))
-        {
-          if(Basic->Time - Calculated->TaskStartTime < 600)
-	    // this allows restart if returned to start sector before
-	    // 10 minutes after task start
-            {
-	      if (ReadyToAdvance()) {
-		ActiveWayPoint = 0;
-		StartSectorEntered = TRUE;
-	      }
-	      TaskFinished = false;
-            }
-        }
+      if(InStartSector(Basic, Calculated)) {
+	Calculated->IsInSector = true;
+	if(Basic->Time - Calculated->TaskStartTime < 600)
+	  // this allows restart if returned to start sector before
+	  // 10 minutes after task start
+	  {
+	    if (ReadyToAdvance()) {
+	      ActiveWayPoint = 0;
+	      StartSectorEntered = TRUE;
+	    }
+	    TaskFinished = false;
+	  }
+      }
       if(ActiveWayPoint < MAXTASKPOINTS) {
 	if(Task[ActiveWayPoint+1].Index >= 0) {
 	  if(InAATTurnSector(Basic,Calculated)) {
+	    Calculated->IsInSector = true;
 	    Calculated->LegStartTime = Basic->Time;
 
 	    if (ReadyToAdvance()) {
@@ -1589,6 +1604,7 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	  }
 	} else {
 	  if (InFinishSector(Basic,Calculated, ActiveWayPoint)) {
+	    Calculated->IsInSector = true;
 	    if (!TaskFinished) {
 	      AnnounceWayPointSwitch();
 	      InputEvents::processGlideComputer(GCE_TASK_FINISH);
@@ -2048,9 +2064,12 @@ void CalculateNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 //////////////////////////////////////////////
 
+bool GlobalClearAirspaceWarnings = false;
+
 bool ClearAirspaceWarnings(bool ack, bool allday) {
   unsigned int i;
   if (ack) {
+    GlobalClearAirspaceWarnings = true;
     for (i=0; i<NumberOfAirspaceCircles; i++) {
       if (AirspaceCircle[i].WarningLevel>0) {
 	AirspaceCircle[i].Ack.AcknowledgementTime = GPS_INFO.Time;
@@ -2090,6 +2109,11 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LockFlightData();
 
+  if (GlobalClearAirspaceWarnings == true) {
+    GlobalClearAirspaceWarnings = false;
+    Calculated->IsInAirspace = false;
+  }
+
   next = !next;
   // every second time step, do predicted position rather than
   // current position
@@ -2118,9 +2142,15 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   for (i=0; i<NumberOfAirspaceCircles; i++) {
     inside = false;
 
-    if ((alt > AirspaceCircle[i].Base.Altitude )
+    if ((alt >= AirspaceCircle[i].Base.Altitude )
 	&& (alt < AirspaceCircle[i].Top.Altitude)) {
       inside = InsideAirspaceCircle(lon, lat, i);
+
+      if (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]< 2) {
+	// don't want warnings for this one
+	inside = false;
+      }
+
     }
     if (inside) {
       if (AirspaceCircle[i].WarningLevel>0) {
@@ -2157,6 +2187,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Message::AddMessage(5000, MSG_AIRSPACE, text);
 
       InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+      Calculated->IsInAirspace = true;
 
     } else {
       if (AirspaceCircle[i].WarningLevel>0) {
@@ -2175,6 +2206,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	    Basic->Time-AcknowledgementTime;
 	  Message::Acknowledge(MSG_AIRSPACE);
 	  InputEvents::processGlideComputer(GCE_AIRSPACE_LEAVE);
+	  Calculated->IsInAirspace = false;
 	}
       }
     }
@@ -2185,9 +2217,15 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   for (i=0; i<NumberOfAirspaceAreas; i++) {
     inside = false;
 
-    if ((alt > AirspaceArea[i].Base.Altitude )
+    if ((alt >= AirspaceArea[i].Base.Altitude )
 	&& (alt < AirspaceArea[i].Top.Altitude)) {
       inside = InsideAirspaceArea(lon, lat, i);
+
+      if (MapWindow::iAirspaceMode[AirspaceArea[i].Type]< 2) {
+	// don't want warnings for this one
+	inside = false;
+      }
+
     }
     if (inside) {
       if (AirspaceArea[i].WarningLevel>0) {
@@ -2224,6 +2262,8 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
 
+      Calculated->IsInAirspace = true;
+
     } else {
       if (AirspaceArea[i].WarningLevel>0) {
 
@@ -2242,6 +2282,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	    Basic->Time-AcknowledgementTime;
 	  Message::Acknowledge(MSG_AIRSPACE);
 	  InputEvents::processGlideComputer(GCE_AIRSPACE_LEAVE);
+	  Calculated->IsInAirspace = false;
 	}
 
       }

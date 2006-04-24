@@ -92,6 +92,16 @@ extern TCHAR szRegistryAnimation[];
 extern TCHAR szRegistrySetSystemTimeFromGPS[];
 extern TCHAR szRegistryAutoForceFinalGlide[];
 
+extern TCHAR szRegistryVoiceClimbRate[];
+extern TCHAR szRegistryVoiceTerrain[];
+extern TCHAR szRegistryVoiceWaypointDistance[];
+extern TCHAR szRegistryVoiceTaskAltitudeDifference[];
+extern TCHAR szRegistryVoiceMacCready[];
+extern TCHAR szRegistryVoiceNewWaypoint[];
+extern TCHAR szRegistryVoiceInSector[];
+extern TCHAR szRegistryVoiceAirspace[];
+
+
 extern bool LockSettingsInFlight;
 
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);

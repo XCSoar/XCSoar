@@ -738,7 +738,7 @@ location=5
 mode=Vario1
 type=key
 data=7
-event=Setup Audio
+event=Setup Voice
 label=Setup Audio
 location=6
 

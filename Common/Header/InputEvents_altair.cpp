@@ -677,7 +677,7 @@ makeLabel(mode_id,TEXT("Airframe\nSwitches"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Not yet implemented"), event_id);
+event_id = InputEvents::makeEvent(&eventSetup, TEXT("Voice"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Vario1"), true);
 makeLabel(mode_id,TEXT("Setup Audio"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;

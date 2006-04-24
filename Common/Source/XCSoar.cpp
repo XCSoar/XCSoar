@@ -701,10 +701,12 @@ void dlgStatusSystemShowModal(void);
 void dlgConfigurationShowModal(void);
 
 void SystemConfiguration(void) {
+#ifndef _SIM_
   if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
     DoStatusMessage(TEXT("Settings locked in flight"));
     return;
   }
+#endif
 
   SettingsEnter();
   dlgConfigurationShowModal();
@@ -1221,7 +1223,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   wcscat(XCSoar_Version, TEXT("Altair "));
 #endif
 #if (NEWINFOBOX>0)
-  wcscat(XCSoar_Version, TEXT("4.7.2 "));
+  wcscat(XCSoar_Version, TEXT("4.7.3 "));
 #else
   // wcscat(XCSoar_Version, TEXT("Alpha "));
   // wcscat(XCSoar_Version, TEXT(__DATE__));
