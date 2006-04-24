@@ -43,6 +43,8 @@ Copyright_License {
 #include "Units.h"
 #include "Calculations.h"
 #include "GaugeFLARM.h"
+#include "VegaVoice.h"
+
 
 bool EnableAnimation=false;
 
@@ -235,6 +237,16 @@ TCHAR szRegistryEnableFLARMDisplay[] = TEXT("EnableFLARMDisplay");
 TCHAR szRegistryGliderScreenPosition[] = TEXT("GliderScreenPosition");
 TCHAR szRegistrySetSystemTimeFromGPS[] = TEXT("SetSystemTimeFromGPS");
 TCHAR szRegistryAutoForceFinalGlide[] = TEXT("AutoForceFinalGlide");
+
+TCHAR szRegistryVoiceClimbRate[]= TEXT("VoiceClimbRate");
+TCHAR szRegistryVoiceTerrain[]= TEXT("VoiceTerrain");
+TCHAR szRegistryVoiceWaypointDistance[]= TEXT("VoiceWaypointDistance");
+TCHAR szRegistryVoiceTaskAltitudeDifference[]= TEXT("VoiceTaskAltitudeDifference");
+TCHAR szRegistryVoiceMacCready[]= TEXT("VoiceMacCready");
+TCHAR szRegistryVoiceNewWaypoint[]= TEXT("VoiceNewWaypoint");
+TCHAR szRegistryVoiceInSector[]= TEXT("VoiceInSector");
+TCHAR szRegistryVoiceAirspace[]= TEXT("VoiceAirspace");
+
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -744,9 +756,43 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAutoForceFinalGlide,&Temp);
   AutoForceFinalGlide = (Temp!=0);
 
+  ////
+
+  Temp = EnableVoiceClimbRate; 
+  GetFromRegistry(szRegistryVoiceClimbRate,&Temp);
+  EnableVoiceClimbRate = (Temp!=0);
+
+  Temp = EnableVoiceTerrain; 
+  GetFromRegistry(szRegistryVoiceTerrain,&Temp);
+  EnableVoiceTerrain = (Temp!=0);
+
+  Temp = EnableVoiceWaypointDistance; 
+  GetFromRegistry(szRegistryVoiceWaypointDistance,&Temp);
+  EnableVoiceWaypointDistance = (Temp!=0);
+
+  Temp = EnableVoiceTaskAltitudeDifference; 
+  GetFromRegistry(szRegistryVoiceTaskAltitudeDifference,&Temp);
+  EnableVoiceTaskAltitudeDifference = (Temp!=0);
+
+  Temp = EnableVoiceMacCready; 
+  GetFromRegistry(szRegistryVoiceMacCready,&Temp);
+  EnableVoiceMacCready = (Temp!=0);
+
+  Temp = EnableVoiceNewWaypoint; 
+  GetFromRegistry(szRegistryVoiceNewWaypoint,&Temp);
+  EnableVoiceNewWaypoint = (Temp!=0);
+
+  Temp = EnableVoiceInSector; 
+  GetFromRegistry(szRegistryVoiceInSector,&Temp);
+  EnableVoiceInSector = (Temp!=0);
+
+  Temp = EnableVoiceAirspace; 
+  GetFromRegistry(szRegistryVoiceAirspace,&Temp);
+  EnableVoiceAirspace = (Temp!=0);
+
 }
 
-
+//
 // NOTE: all registry variables are unsigned!
 //
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos)

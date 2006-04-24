@@ -5,7 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "parser.h"
+#include "Parser.h"
 #include <windows.h>
 
 #define NUMTHERMALBUCKETS 10
@@ -101,6 +101,10 @@ typedef struct _DERIVED_INFO
   double EnergyHeight;
 
   double TurnRate;
+  
+  // reflects whether aircraft is in a start/finish/aat/turn sector
+  bool IsInSector; 
+  bool IsInAirspace;
 
 } DERIVED_INFO;
 

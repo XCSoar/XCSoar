@@ -629,7 +629,7 @@ location=5
 mode=Vario1
 type=key
 data=7
-event=StatusMessage Not yet implemented
+event=Setup Voice
 label=Setup Audio
 location=6
 

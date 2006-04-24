@@ -1930,6 +1930,10 @@ int WndButton::OnLButtonUp(WPARAM wParam, LPARAM lParam){
 
 int WndButton::OnKeyDown(WPARAM wParam, LPARAM lParam){
   switch (wParam){
+#ifdef GNAV
+    // JMW added this to make data entry easier
+    case VK_F4:
+#endif
     case VK_RETURN:
     case VK_SPACE:
       if (!mDown){
@@ -1943,6 +1947,10 @@ int WndButton::OnKeyDown(WPARAM wParam, LPARAM lParam){
 
 int WndButton::OnKeyUp(WPARAM wParam, LPARAM lParam){
   switch (wParam){
+#ifdef GNAV
+    // JMW added this to make data entry easier
+    case VK_F4:
+#endif
     case VK_RETURN:
     case VK_SPACE:
       if (!Debounce()) return(1); // prevent false trigger
@@ -2824,6 +2832,10 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
 
 int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lParam){
   switch (wParam){
+#ifdef GNAV
+    // JMW added this to make data entry easier
+    case VK_F4:
+#endif
   case VK_RETURN:
     if (mOnListEnterCallback) {
       mOnListEnterCallback(this, &mListInfo);
