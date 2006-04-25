@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.51 2006/04/25 15:48:42 jwharington Exp $
+  $Id: Parser.cpp,v 1.52 2006/04/25 16:03:05 jwharington Exp $
 
 Copyright_License {
 
@@ -692,7 +692,7 @@ BOOL NMEAParser::RMA(TCHAR *String, NMEA_INFO *GPS_INFO)
 BOOL NMEAParser::WP0(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
- 
+
   GPS_INFO->BaroAltitudeAvailable = TRUE;
   ExtractParameter(String,ctemp,2);
   GPS_INFO->BaroAltitude = StrToDouble(ctemp, NULL);

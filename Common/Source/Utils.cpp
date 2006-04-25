@@ -1553,6 +1553,8 @@ void ConvertFlightLevels(void)
 {
   unsigned i;
 
+  // JMW TODO: This is inaccurate!
+
   for(i=0;i<NumberOfAirspaceCircles;i++)
     {
       if(AirspaceCircle[i].Base.FL  != 0)
@@ -3453,10 +3455,19 @@ double FindQNH(double alt_raw, double alt_known) {
   // (altitude can come from GPS or known airfield altitude or terrain
   // height on ground)
 
+  // This function assumes the barometric altitude (alt_raw) is 
+  // already adjusted for QNH ---> the function returns the
+  // QNH value to make the barometric altitude equal to the
+  // alt_known value.
+
   const double k1=0.190263;
 
-  double psraw = pow((44330.8-alt_raw)/4946.54,1.0/k1);
+  double psraw = pow((44330.8-alt_raw)/4946.54,1.0/k1)
+    +(QNH-1013.25)*100.0;
   double psknown = pow((44330.8-alt_known)/4946.54,1.0/k1);
+
+  // If alt_raw=alt_known, this function will return
+  // the current QNH value
 
   return (psraw-psknown)/100.0+1013.25;
 }
