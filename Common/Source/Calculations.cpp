@@ -436,13 +436,13 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       mag = isqrt4((unsigned long)(x0*x0*100+y0*y0*100))/10.0;
       if ((Basic->AirspeedAvailable) && (Basic->IndicatedAirspeed>0)) {
 
-        double k = (mag / Basic->TrueAirspeed);
+        double k = (mag / max(1.0,Basic->TrueAirspeed));
 
 #ifdef DEBUG
         char buffer[200];
 	sprintf(buffer,"%g %g %g %g %g %g %g %g %g # airspeed\r\n",
                 Basic->IndicatedAirspeed,
-                mag*Basic->IndicatedAirspeed/Basic->TrueAirspeed,
+                mag*Basic->IndicatedAirspeed/max(1.0,Basic->TrueAirspeed),
 		k,
 		Basic->Speed,
 		Calculated->WindSpeed,
@@ -1734,7 +1734,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
       Calculated->LegDistanceToGo = LegToGo;
       Calculated->LegDistanceCovered = Calculated->TaskDistanceCovered;
 
-      if(Basic->Time != Calculated->LegStartTime)
+      if(Basic->Time > Calculated->LegStartTime)
         Calculated->LegSpeed = Calculated->LegDistanceCovered
           / (Basic->Time - Calculated->LegStartTime);
 
@@ -1764,7 +1764,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
           Calculated->TaskDistanceCovered += LegDistance;
 	}
 
-      if(Basic->Time != Calculated->TaskStartTime)
+      if(Basic->Time > Calculated->TaskStartTime)
         Calculated->TaskSpeed =
           Calculated->TaskDistanceCovered
           / (Basic->Time - Calculated->TaskStartTime);
@@ -1936,13 +1936,14 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 	fgtt = false;
       }
 
-      if(  (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude
-	    + Calculated->EnergyHeight) > 0)
+      double temp = Basic->Altitude
+	- WayPointList[Task[i-1].Index].Altitude
+	+ Calculated->EnergyHeight - SAFETYALTITUDEARRIVAL;
+
+      if(  (temp) > 0)
         {
           Calculated->LDFinish = Calculated->TaskDistanceToGo
-	    / (Basic->Altitude - WayPointList[Task[i-1].Index].Altitude
-	       - SAFETYALTITUDEARRIVAL
-	       + Calculated->EnergyHeight)  ;
+	    /(temp);
         }
       else
         {
@@ -2448,7 +2449,7 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     // calculate new buckets so glider is below max
     double hbuk = Calculated->MaxThermalHeight/NUMTHERMALBUCKETS;
 
-    mthnew = Calculated->MaxThermalHeight;
+    mthnew = max(1, Calculated->MaxThermalHeight);
     while (mthnew<dheight) {
       mthnew += hbuk;
     }
@@ -2523,6 +2524,8 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     return 0;
 
   double glidemaxrange = Basic->Altitude/ialtitude;
+  if (glidemaxrange<=0.0)
+    return 0;
 
   // returns distance one would arrive at altitude in straight glide
   // first estimate max range at this altitude
