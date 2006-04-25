@@ -3419,3 +3419,59 @@ TCHAR* LookupFLARMDetails(long id) {
   }
   return NULL;
 }
+
+
+double StaticPressureToAltitude(double ps) {
+  double altitude;
+  // http://wahiduddin.net/calc/density_altitude.htm
+
+  const double k1=0.190263;
+  const double k2=8.417286e-5;
+  double h_gps0 = 0;
+
+  double Pa = pow(
+                  pow(ps-(QNH-1013.25)*100.0,k1)
+                  -(k2*h_gps0)
+                  ,(1.0/k1));
+
+  altitude = 44330.8-4946.54*pow(Pa,k1);
+  return altitude;
+
+}
+
+
+// Converts altitude with QNH=1013.25 reference to QNH adjusted altitude
+double AltitudeToQNHAltitude(double alt) {
+  const double k1=0.190263;
+  double ps = pow((44330.8-alt)/4946.54,1.0/k1);
+  return StaticPressureToAltitude(ps);
+}
+
+
+double FindQNH(double alt_raw, double alt_known) {
+  // find QNH so that the static pressure gives the specified altitude
+  // (altitude can come from GPS or known airfield altitude or terrain
+  // height on ground)
+
+  const double k1=0.190263;
+
+  double psraw = pow((44330.8-alt_raw)/4946.54,1.0/k1);
+  double psknown = pow((44330.8-alt_known)/4946.54,1.0/k1);
+
+  return (psraw-psknown)/100.0+1013.25;
+}
+
+
+
+double AirDensity(double altitude) {
+  double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
+  return rho;
+}
+
+
+double AirDensityRatio(double altitude) {
+  double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
+  double rho_rat = sqrt(1.225/rho);
+  return rho_rat;
+}
+

@@ -246,4 +246,10 @@ void OpenFLARMDetails();
 void CloseFLARMDetails();
 TCHAR* LookupFLARMDetails(long id);
 
+double FindQNH(double alt_raw, double alt_known);
+double AltitudeToQNHAltitude(double alt);
+double StaticPressureToAltitude(double ps);
+double AirDensity(double altitude);
+double AirDensityRatio(double altitude);
+
 #endif

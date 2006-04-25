@@ -500,6 +500,11 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 }
 
 
+void ResetFlightStats() {
+  flightstats.Reset();
+}
+
+
 BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
@@ -535,7 +540,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       if (Basic->Time<LastTime) {
 	// Reset statistics.. (probably due to being in IGC replay mode)
-	flightstats.Reset();
+	ResetFlightStats();
       }
 
       LastTime = Basic->Time;
@@ -582,8 +587,6 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
 
   AltitudeRequired(Basic, Calculated, maccready);
-
-  TerrainHeight(Basic, Calculated);
 
   CalculateNextPosition(Basic, Calculated);
 
@@ -2923,36 +2926,74 @@ void ResumeAbortTask(int set) {
 
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 
+void DoAutoQNH(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  static bool done_autoqnh = false;
+
+  // Reject if already done
+  if (done_autoqnh) return;
+
+  // Reject if in IGC logger mode
+  if (ReplayLogger::IsEnabled()) return;
+
+  // Reject if no valid GPS fix
+  if (Basic->NAVWarning) return;
+
+  // Reject if no baro altitude
+  if (!Basic->BaroAltitudeAvailable) return;
+
+  // Reject if terrain height is invalid
+  if (!Calculated->TerrainValid) return;
+
+  double fixaltitude = Calculated->TerrainAlt;
+
+  QNH = FindQNH(Basic->BaroAltitude, fixaltitude);
+  done_autoqnh = true;
+}
+
+
 void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   static int ntimeinflight = 0;
+  static int ntimeonground = 0;
 
   if (Basic->Speed> TAKEOFFSPEEDTHRESHOLD) {
     ntimeinflight++;
+    ntimeonground=0;
   } else {
     if ((Calculated->AltitudeAGL<300)&&(Calculated->TerrainValid)) {
       ntimeinflight--;
     }
+    ntimeonground++;
   }
+
   ntimeinflight = min(30, max(0,ntimeinflight));
+  ntimeonground = min(30, max(0,ntimeonground));
 
   // JMW logic to detect takeoff and landing is as follows:
   //   detect takeoff when above threshold speed for 10 seconds
   //
   //   detect landing when below threshold speed for 30 seconds
   //
-  // TODO: make this more robust by making use of terrain height data if available
+  // TODO: make this more robust by making use of terrain height data
+  // if available
+
+  if ((ntimeonground<=10)||(ReplayLogger::IsEnabled())) {
+    // Don't allow 'OnGround' calculations if in IGC replay mode
+    Calculated->OnGround = FALSE;
+  }
 
   if (!Calculated->Flying) {
     // detect takeoff
-
     if (ntimeinflight>10) {
       Calculated->Flying = TRUE;
       InputEvents::processGlideComputer(GCE_TAKEOFF);
 
       // reset stats on takeoff
-      flightstats.Reset();
+      ResetFlightStats();
     }
-
+    if (ntimeonground>10) {
+      Calculated->OnGround = TRUE;
+      DoAutoQNH(Basic, Calculated);
+    }
   } else {
     // detect landing
     if (ntimeinflight==0) {
