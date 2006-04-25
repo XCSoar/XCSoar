@@ -129,6 +129,7 @@ int MapWindow::GliderScreenPosition = 20; // 20% from bottom
 BOOL MapWindow::CLOSETHREAD = FALSE;
 BOOL MapWindow::THREADRUNNING = TRUE;
 BOOL MapWindow::THREADEXIT = FALSE;
+BOOL MapWindow::Initialised = FALSE;
 
 bool MapWindow::BigZoom = true;
 
@@ -1130,8 +1131,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       hBmpFieldUnReachable = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_OUTFILED_UNREACHABLE));
     }
 
-    //JMWFOO
-
+    // Signal that draw thread can run now
+    Initialised = TRUE;
 
     break;
 
@@ -1700,7 +1701,7 @@ void MapWindow::UpdateCaches(bool force) {
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
-  while (!ProgramStarted) {
+  while ((!ProgramStarted) || (!Initialised)) {
     Sleep(100);
   }
 
@@ -1756,7 +1757,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
       continue;
     }
 
-    if (!MapDirty) {
+    if (!MapDirty && !first) {
       // redraw old screen, must have been a request for fast refresh
       BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
 	     MapRectBig.bottom-MapRectBig.top, 

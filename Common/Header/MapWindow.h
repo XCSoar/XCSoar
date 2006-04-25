@@ -98,6 +98,7 @@ class MapWindow {
   static COLORREF Colours[NUMAIRSPACECOLORS];
 
   static BOOL CLOSETHREAD;
+  static BOOL Initialised;
 
   static RECT MapRect;
   static RECT MapRectBig;
