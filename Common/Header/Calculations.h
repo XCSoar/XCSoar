@@ -106,6 +106,9 @@ typedef struct _DERIVED_INFO
   bool IsInSector; 
   bool IsInAirspace;
 
+  // detects when glider is on ground for several seconds
+  bool OnGround;
+
 } DERIVED_INFO;
 
 #include "RasterTerrain.h"

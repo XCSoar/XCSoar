@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.50 2006/04/19 14:54:29 jwharington Exp $
+  $Id: Parser.cpp,v 1.51 2006/04/25 15:48:42 jwharington Exp $
 
 Copyright_License {
 
@@ -815,44 +815,6 @@ BOOL NMEAParser::PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 double AccelerometerZero=100.0;
 
 
-double StaticPressureToAltitude(double ps) {
-  double altitude;
-  // http://wahiduddin.net/calc/density_altitude.htm
-
-  const double k1=0.190263;
-  const double k2=8.417286e-5;
-  double h_gps0 = 0;
-
-  double Pa = pow(
-                  pow(ps-(QNH-1013.25)*100.0,k1)
-                  -(k2*h_gps0)
-                  ,(1.0/k1));
-
-  altitude = 44330.8-4946.54*pow(Pa,k1);
-  return altitude;
-  
-}
-
-
-// Converts altitude with QNH=1013.25 reference to QNH adjusted altitude
-double AltitudeToQNHAltitude(double alt) {
-  const double k1=0.190263;
-  double ps = pow((44330.8-alt)/4946.54,1.0/k1);
-  return StaticPressureToAltitude(ps);
-}
-
-
-double AirDensity(double altitude) {
-  double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
-  return rho;
-}
-
-
-double AirDensityRatio(double altitude) {
-  double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
-  double rho_rat = sqrt(1.225/rho);
-  return rho_rat;
-}
 
 
 
@@ -1029,13 +991,12 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   static TCHAR t3[] = TEXT("0,0,1200,50,2,DA8B06,120,-4.5,30,-1.4,1");
   //  static TCHAR t4[] = TEXT("-3,500,1024,50");
 
-  QNH=1020.0;
-  double h;
-  h = AltitudeToQNHAltitude(0);
-  h = AltitudeToQNHAltitude(100);
   QNH=1013.25;
-  h = AltitudeToQNHAltitude(0);
-  h = AltitudeToQNHAltitude(100);
+  double h;
+  double altraw= 5.0;
+  h = AltitudeToQNHAltitude(altraw);
+  QNH = FindQNH(altraw, 50.0);
+  h = AltitudeToQNHAltitude(altraw);
 
   ////
 
