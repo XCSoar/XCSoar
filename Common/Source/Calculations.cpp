@@ -531,6 +531,8 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   flightstats.Reset();
   TaskFinished = false;
   Calculated->TaskStartTime = 0;
+  Calculated->TaskStartSpeed = 0;
+  Calculated->TaskStartAltitude = 0;
   Calculated->LegStartTime = 0;
   Calculated->ValidStart = false;
 }
@@ -557,8 +559,6 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   }
 
-  maccready = MACCREADY;
-
   // Determine which altitude to use for nav functions
   if (EnableNavBaroAltitude && Basic->BaroAltitudeAvailable) {
     Calculated->NavAltitude = Basic->BaroAltitude;
@@ -570,7 +570,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   EnergyHeight(Basic, Calculated);
 
-  AltitudeRequired(Basic, Calculated, maccready);
+  AltitudeRequired(Basic, Calculated, MACCREADY);
 
   Heading(Basic, Calculated);
 
@@ -579,7 +579,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (TaskAborted) {
     SortLandableWaypoints(Basic, Calculated);
   }
-  TaskStatistics(Basic, Calculated, maccready);
+  TaskStatistics(Basic, Calculated, MACCREADY);
 
   if(Basic->Time <= LastTime)
     {
@@ -620,7 +620,6 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (TaskAborted) {
 
     SortLandableWaypoints(Basic, Calculated);
-    //    TaskStatistics(Basic, Calculated, maccready);
 
   } else {
 
@@ -628,11 +627,11 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     InAATSector(Basic, Calculated);
 
     AATStats(Basic, Calculated);
-    TaskStatistics(Basic, Calculated, maccready);
+    TaskStatistics(Basic, Calculated, MACCREADY);
 
   }
 
-  AltitudeRequired(Basic, Calculated, maccready);
+  AltitudeRequired(Basic, Calculated, MACCREADY);
 
   CalculateNextPosition(Basic, Calculated);
 
@@ -1578,6 +1577,8 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 		      if (ReadyToAdvance()) {
 			ActiveWayPoint++;
 			Calculated->TaskStartTime = Basic->Time ;
+			Calculated->TaskStartSpeed = Basic->Speed;
+			Calculated->TaskStartAltitude = Basic->Altitude;
 			Calculated->LegStartTime = Basic->Time;
 			AnnounceWayPointSwitch();
 
@@ -1679,6 +1680,8 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 		      if (ReadyToAdvance()) {
 			ActiveWayPoint++;
 			Calculated->TaskStartTime = Basic->Time ;
+			Calculated->TaskStartSpeed = Basic->Speed;
+			Calculated->TaskStartAltitude = Basic->Altitude;
 			Calculated->LegStartTime = Basic->Time;
 			AnnounceWayPointSwitch();
 		      }
@@ -2641,7 +2644,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 				double maxrange)
 {
   double ialtitude = GlidePolar::MacCreadyAltitude(MACCREADY,
-						   // should this be zero?
+				 // should this be zero?
 						   1.0, bearing,
 						   Calculated->WindSpeed,
 						   Calculated->WindBearing,
@@ -2770,22 +2773,25 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
 		     WayPointList[i].Latitude,
 		     WayPointList[i].Longitude);
 
-  AltReqd = GlidePolar::MacCreadyAltitude(0.0,
-                                         wDistance,
-                                         wBearing,
-                                         Calculated->WindSpeed,
-                                         Calculated->WindBearing,
-                                         0,
-                                         0,
-                                         true,
-                                         0);
+  AltReqd = GlidePolar::MacCreadyAltitude
+    (GlidePolar::AbortSafetyMacCready(),
+     wDistance,
+     wBearing,
+     Calculated->WindSpeed,
+     Calculated->WindBearing,
+     0,
+     0,
+     true,
+     0);
 
-  return ((Calculated->NavAltitude) - AltReqd - WayPointList[i].Altitude - SAFETYALTITUDEARRIVAL);
+  return ((Calculated->NavAltitude) - AltReqd
+	  - WayPointList[i].Altitude - SAFETYALTITUDEARRIVAL);
 }
 
 
 
-void SortLandableWaypoints (NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+void SortLandableWaypoints(NMEA_INFO *Basic,
+			   DERIVED_INFO *Calculated)
 {
   int SortedLandableIndex[MAXTASKPOINTS];
   double SortedArrivalAltitude[MAXTASKPOINTS];
@@ -2874,7 +2880,9 @@ void SortLandableWaypoints (NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	      continue;
 	    }
 
-	  aa = CalculateWaypointArrivalAltitude(Basic, Calculated, SortedApproxIndex[i]);
+	  aa = CalculateWaypointArrivalAltitude(Basic,
+						Calculated,
+				       SortedApproxIndex[i]);
 
 	  if (scanairportsfirst==0)
 	    {
@@ -3033,6 +3041,9 @@ void ResumeAbortTask(int set) {
 
       // force AAT off
       AATEnabled = false;
+
+      // set MacCready
+      MACCREADY = min(MACCREADY,GlidePolar::AbortSafetyMacCready());
 
     } else {
 

@@ -4284,11 +4284,14 @@ void MapWindow::CalculateWaypointReachable(void)
         WaypointDistance = Distance(DrawInfo.Latitude, DrawInfo.Longitude, WayPointList[i].Latitude, WayPointList[i].Longitude);
 
         WaypointBearing =  Bearing(DrawInfo.Latitude, DrawInfo.Longitude, WayPointList[i].Latitude, WayPointList[i].Longitude);
-        AltitudeRequired = GlidePolar::MacCreadyAltitude(0.0,
-                                     // JMW was MACCREADY
-          WaypointDistance,WaypointBearing,
-          DerivedDrawInfo.WindSpeed,
-          DerivedDrawInfo.WindBearing,0,0,true,0);
+        AltitudeRequired =
+	  GlidePolar::MacCreadyAltitude
+	  (GlidePolar::SafetyMacCready,
+	   WaypointDistance,
+	   WaypointBearing,
+	   DerivedDrawInfo.WindSpeed,
+	   DerivedDrawInfo.WindBearing,
+	   0,0,true,0);
         AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL + WayPointList[i].Altitude ;
         AltitudeRequired = DrawInfo.Altitude - AltitudeRequired;
 

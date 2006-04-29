@@ -1226,7 +1226,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   wcscat(XCSoar_Version, TEXT("Altair "));
 #endif
 #if (NEWINFOBOX>0)
-  wcscat(XCSoar_Version, TEXT("4.7.3 "));
+  wcscat(XCSoar_Version, TEXT("4.7.4 "));
 #else
   // wcscat(XCSoar_Version, TEXT("Alpha "));
   // wcscat(XCSoar_Version, TEXT(__DATE__));

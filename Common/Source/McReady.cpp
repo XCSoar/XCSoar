@@ -55,6 +55,17 @@ double GlidePolar::bestld = 0.0;
 double GlidePolar::minsink = 10000.0;
 double GlidePolar::BallastLitres = 0.0;
 
+double GlidePolar::SafetyMacCready= 0.0;
+bool GlidePolar::AbortSafetyUseCurrent = false;
+
+double GlidePolar::AbortSafetyMacCready() {
+  if (AbortSafetyUseCurrent) {
+    return MACCREADY;
+  } else {
+    return SafetyMacCready;
+  }
+}
+
 
 void GlidePolar::SetBallast() {
   LockFlightData();
