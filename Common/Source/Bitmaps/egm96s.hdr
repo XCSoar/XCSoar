@@ -1,0 +1,14 @@
+ENVI
+description = {
+egm96s.dem}
+samples = 180
+lines   = 90
+bands   = 1
+header offset = 0
+file type = ENVI Standard
+data type = 1
+interleave = bsq
+byte order = 0
+map info = {Unknown, 1, 1, 0.000000, 90.000000, 2.000000, 2.000000, 0, North}
+band names = {
+Band 1}

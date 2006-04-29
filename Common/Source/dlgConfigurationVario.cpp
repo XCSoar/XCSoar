@@ -286,6 +286,7 @@ static void UpdateParameters(bool first) {
   VegaConfigurationUpdated(TEXT("TerrainSafetyHeight"), first);
   VegaConfigurationUpdated(TEXT("VelocityManoeuvering"), first);
   VegaConfigurationUpdated(TEXT("VelocityAirbrake"), first);
+  VegaConfigurationUpdated(TEXT("VelocityFlap"), first);
   VegaConfigurationUpdated(TEXT("LedBrightness"), first);
 
 }

@@ -791,6 +791,8 @@ IDR_XML_FILESELECT      XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgFileSelec
 IDR_XML_SWITCHES        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgSwitches.xml"
 IDR_XML_VOICE           XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgVoice.xml"
 
+IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "Bitmaps\\egm96s.dem"
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table

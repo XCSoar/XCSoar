@@ -456,6 +456,11 @@
    <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
   </WndProperty>
 
+  <WndProperty Name="prpVelocityFlap" Caption="V Flap"
+    X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+   <DataField name="" DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min=0 Max=2000 Step=10/>
+  </WndProperty>
+
   </WndFrame>
 
 </WndForm>    
