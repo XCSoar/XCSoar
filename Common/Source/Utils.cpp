@@ -44,6 +44,7 @@ Copyright_License {
 #include "Calculations.h"
 #include "GaugeFLARM.h"
 #include "VegaVoice.h"
+#include "McReady.h"
 
 
 bool EnableAnimation=false;
@@ -254,6 +255,9 @@ TCHAR szRegistryEnableNavBaroAltitude[] = TEXT("EnableNavBaroAltitude");
 
 TCHAR szRegistryLoggerTimeStepCruise[]= TEXT("LoggerTimeStepCruise");
 TCHAR szRegistryLoggerTimeStepCircling[]= TEXT("LoggerTimeStepCircling");
+
+TCHAR szRegistrySafetyMacCready[] = TEXT("SafetyMacCready");
+TCHAR szRegistryAbortSafetyUseCurrent[] = TEXT("AbortSafetyUseCurrent");
 
 
 int UTCOffset = 0; // used for Altair
@@ -815,6 +819,14 @@ void ReadRegistrySettings(void)
   Temp = LoggerTimeStepCircling;
   GetFromRegistry(szRegistryLoggerTimeStepCircling,&Temp);
   LoggerTimeStepCircling = Temp;
+
+  Temp = GlidePolar::AbortSafetyUseCurrent;
+  GetFromRegistry(szRegistryAbortSafetyUseCurrent, &Temp);
+  GlidePolar::AbortSafetyUseCurrent = (Temp != 0);
+
+  Temp = iround(GlidePolar::SafetyMacCready*10);
+  GetFromRegistry(szRegistrySafetyMacCready,&Temp);
+  GlidePolar::SafetyMacCready = Temp/10.0;
 
 }
 

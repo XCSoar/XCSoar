@@ -46,6 +46,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "device.h"
 #include "Process.h"
+#include "McReady.h"
 
 extern int UTCOffset;
 
@@ -71,10 +72,11 @@ static WndFrame *wConfig13=NULL;
 static WndFrame *wConfig14=NULL;
 static WndFrame *wConfig15=NULL;
 static WndFrame *wConfig16=NULL;
+static WndFrame *wConfig17=NULL;
 
 extern bool EnableAnimation;
 
-#define NUMPAGES 16
+#define NUMPAGES 17
 
 static void NextPage(int Step){
   page += Step;
@@ -91,43 +93,46 @@ static void NextPage(int Step){
     wf->SetCaption(TEXT("3 Glide Computer"));
     break;
   case 3:
-    wf->SetCaption(TEXT("4 Polar"));
+    wf->SetCaption(TEXT("4 Safety factors"));
     break;
   case 4:
-    wf->SetCaption(TEXT("5 Devices"));
+    wf->SetCaption(TEXT("5 Polar"));
     break;
   case 5:
-    wf->SetCaption(TEXT("6 Units"));
+    wf->SetCaption(TEXT("6 Devices"));
     break;
   case 6:
-    wf->SetCaption(TEXT("7 Interface"));
+    wf->SetCaption(TEXT("7 Units"));
     break;
   case 7:
-    wf->SetCaption(TEXT("8 Appearance"));
+    wf->SetCaption(TEXT("8 Interface"));
     break;
   case 8:
-    wf->SetCaption(TEXT("9 Vario Gauge"));
+    wf->SetCaption(TEXT("9 Appearance"));
     break;
   case 9:
-    wf->SetCaption(TEXT("10 Task"));
+    wf->SetCaption(TEXT("10 Vario Gauge"));
     break;
   case 10:
-    wf->SetCaption(TEXT("11 Task rules"));
+    wf->SetCaption(TEXT("11 Task"));
     break;
   case 11:
-    wf->SetCaption(TEXT("12 InfoBox Circling"));
+    wf->SetCaption(TEXT("12 Task rules"));
     break;
   case 12:
-    wf->SetCaption(TEXT("13 InfoBox Cruise"));
+    wf->SetCaption(TEXT("13 InfoBox Circling"));
     break;
   case 13:
-    wf->SetCaption(TEXT("14 InfoBox Final Glide"));
+    wf->SetCaption(TEXT("14 InfoBox Cruise"));
     break;
   case 14:
-    wf->SetCaption(TEXT("15 InfoBox Auxiliary"));
+    wf->SetCaption(TEXT("15 InfoBox Final Glide"));
     break;
   case 15:
-    wf->SetCaption(TEXT("16 Logger"));
+    wf->SetCaption(TEXT("16 InfoBox Auxiliary"));
+    break;
+  case 16:
+    wf->SetCaption(TEXT("17 Logger"));
     break;
   }
   wConfig1->SetVisible(page == 0);
@@ -146,6 +151,7 @@ static void NextPage(int Step){
   wConfig14->SetVisible(page == 13); 
   wConfig15->SetVisible(page == 14); 
   wConfig16->SetVisible(page == 15); 
+  wConfig17->SetVisible(page == 16); 
 }
 
 
@@ -354,19 +360,20 @@ void dlgConfigurationShowModal(void){
   wConfig1    = ((WndFrame *)wf->FindByName(TEXT("frmAirspace")));
   wConfig2    = ((WndFrame *)wf->FindByName(TEXT("frmDisplay")));
   wConfig3    = ((WndFrame *)wf->FindByName(TEXT("frmFinalGlide")));
-  wConfig4    = ((WndFrame *)wf->FindByName(TEXT("frmPolar")));
-  wConfig5    = ((WndFrame *)wf->FindByName(TEXT("frmComm")));
-  wConfig6    = ((WndFrame *)wf->FindByName(TEXT("frmUnits")));
-  wConfig7    = ((WndFrame *)wf->FindByName(TEXT("frmInterface")));
-  wConfig8    = ((WndFrame *)wf->FindByName(TEXT("frmAppearance")));
-  wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
-  wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
-  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmTaskRules")));
-  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
-  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
-  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
-  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
-  wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
+  wConfig4    = ((WndFrame *)wf->FindByName(TEXT("frmSafety")));
+  wConfig5    = ((WndFrame *)wf->FindByName(TEXT("frmPolar")));
+  wConfig6    = ((WndFrame *)wf->FindByName(TEXT("frmComm")));
+  wConfig7    = ((WndFrame *)wf->FindByName(TEXT("frmUnits")));
+  wConfig8    = ((WndFrame *)wf->FindByName(TEXT("frmInterface")));
+  wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmAppearance")));
+  wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
+  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
+  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmTaskRules")));
+  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
+  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
+  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
+  wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
+  wConfig17    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
 
   ASSERT(wConfig1!=NULL);
   ASSERT(wConfig2!=NULL);
@@ -384,6 +391,7 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig14!=NULL);
   ASSERT(wConfig15!=NULL);
   ASSERT(wConfig16!=NULL);
+  ASSERT(wConfig17!=NULL);
 
   //////////
   /*
@@ -750,6 +758,20 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpSetSystemTimeFromGPS"));
   if (wp) {
     wp->GetDataField()->Set(SetSystemTimeFromGPS);
+    wp->RefreshDisplay();
+  }
+
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAbortSafetyUseCurrent"));
+  if (wp) {
+    wp->GetDataField()->Set(GlidePolar::AbortSafetyUseCurrent);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyMacCready"));
+  if (wp) {
+    wp->GetDataField()->Set(GlidePolar::SafetyMacCready*LIFTMODIFY);
+    wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
 
@@ -1179,6 +1201,30 @@ void dlgConfigurationShowModal(void){
   wf->ShowModal();
 
   // TODO: implement a cancel button that skips all this below after exit.
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAbortSafetyUseCurrent"));
+  if (wp) {
+    if (GlidePolar::AbortSafetyUseCurrent
+	!= wp->GetDataField()->GetAsBoolean()) {
+      GlidePolar::AbortSafetyUseCurrent = 
+	wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryAbortSafetyUseCurrent, 
+		    GlidePolar::AbortSafetyUseCurrent);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyMacCready"));
+  if (wp) {
+    double val = wp->GetDataField()->GetAsFloat()/LIFTMODIFY;
+    if (GlidePolar::SafetyMacCready != val) {
+      GlidePolar::SafetyMacCready = val;
+      SetToRegistry(szRegistrySafetyMacCready, 
+		    iround(GlidePolar::SafetyMacCready*10));
+      changed = true;
+    }
+  }
+
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSetSystemTimeFromGPS"));
   if (wp) {

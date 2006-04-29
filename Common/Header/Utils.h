@@ -110,6 +110,9 @@ extern TCHAR szRegistryEnableNavBaroAltitude[];
 extern TCHAR szRegistryLoggerTimeStepCruise[];
 extern TCHAR szRegistryLoggerTimeStepCircling[];
 
+extern TCHAR szRegistrySafetyMacCready[];
+extern TCHAR szRegistryAbortSafetyUseCurrent[];
+
 extern bool LockSettingsInFlight;
 
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);

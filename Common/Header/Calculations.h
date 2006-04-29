@@ -111,6 +111,8 @@ typedef struct _DERIVED_INFO
 
   double NavAltitude;
   bool ValidStart;
+  double TaskStartSpeed;
+  double TaskStartAltitude;
 
 } DERIVED_INFO;
 
