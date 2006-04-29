@@ -42,6 +42,7 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "parser.h"
 #include "device.h"
+#include "Geoid.h"
 
 extern bool EnableCalibration;
 
@@ -646,6 +647,30 @@ BOOL NMEAParser::GGA(TCHAR *String, NMEA_INFO *GPS_INFO)
 	GPS_INFO->Altitude = StrToDouble(ctemp, NULL);
 	ExtractParameter(String,ctemp,9);
 	GPS_INFO->Altitude = AltitudeModify(GPS_INFO->Altitude,ctemp[0]);
+
+	//
+	double GeoidSeparation;
+	ExtractParameter(String,ctemp,10);
+	if (_tcslen(ctemp)>0) {
+	  // No real need to parse this value,
+	  // but we do assume that no correction is required in this case
+	  GeoidSeparation = StrToDouble(ctemp, NULL);
+	  ExtractParameter(String,ctemp,11);
+	  GeoidSeparation = AltitudeModify(GeoidSeparation,ctemp[0]);
+	} else {
+	  // need to estimate Geoid Separation internally (optional)
+      	  // FLARM uses MSL altitude
+	  //
+	  // Some others don't.
+	  //
+	  // If the separation doesn't appear in the sentence,
+	  // we can assume the GPS unit is giving ellipsoid height
+	  //
+	  GeoidSeparation = LookupGeoidSeparation(GPS_INFO->Latitude,
+						  GPS_INFO->Longitude);
+	  GPS_INFO->Altitude -= GeoidSeparation;
+	}
+
       }
 
     if(GPS_INFO->Day > 1)

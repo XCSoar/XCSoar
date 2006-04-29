@@ -219,7 +219,7 @@ makeLabel(mode_id,TEXT("Mark"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventWaypointDetails, TEXT(""), event_id);
+event_id = InputEvents::makeEvent(&eventWaypointDetails, TEXT("current"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
 makeLabel(mode_id,TEXT("Waypt detail"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;

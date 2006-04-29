@@ -63,6 +63,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Message.h"
 #include "Atmosphere.h"
+#include "Geoid.h"
 
 #if NEWINFOBOX > 0
 #include "InfoBox.h"
@@ -1280,6 +1281,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   //  StartupScreen();
   // not working very well at all
 
+  OpenGeoid();
+
   PreloadInitialisation(false);
 
   GPS_INFO.SwitchState.AirbrakeLocked = false;
@@ -2009,6 +2012,8 @@ void Shutdown(void) {
   CloseProgressDialog();
 
   CloseCalculations();
+
+  CloseGeoid();
 
   DestroyWindow(hWndMapWindow);
   DestroyWindow(hWndMainWindow);
