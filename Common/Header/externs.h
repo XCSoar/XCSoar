@@ -81,6 +81,9 @@ extern int FinishLine;
 extern DWORD FinishRadius;
 extern double AATTaskLength;
 extern BOOL AATEnabled;
+extern DWORD FinishMinHeight;
+extern DWORD StartMaxHeight;
+extern DWORD StartMaxSpeed;
 
 // master flight data
 extern NMEA_INFO GPS_INFO;
@@ -117,6 +120,11 @@ extern SNAIL_POINT SnailTrail[TRAILSIZE];
 extern	int SnailNext;
 extern int TrailLock;
 
+// Logger
+extern bool LoggerActive;
+extern int LoggerTimeStepCruise;
+extern int LoggerTimeStepCircling;
+
 // user controls/parameters
 extern double MACCREADY;
 extern bool   AutoMacCready;
@@ -125,7 +133,7 @@ extern double SAFETYALTITUDEARRIVAL;
 extern double SAFETYALTITUDEBREAKOFF;
 extern double SAFETYALTITUDETERRAIN;
 extern double SAFTEYSPEED;
-extern bool LoggerActive;
+
 extern int WindUpdateMode; // unused
 extern double QNH;
 extern int NettoSpeed;
@@ -144,7 +152,8 @@ extern bool CircleZoom;
 extern bool EnableTopology;
 extern bool EnableTerrain;
 extern bool FinalGlideTerrain;
-extern bool EnableAutoWind;
+extern int AutoWindMode;
+extern bool EnableNavBaroAltitude;
 extern bool EnableSoundVario;
 extern bool EnableSoundTask;
 extern bool EnableSoundModes;

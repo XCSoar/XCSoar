@@ -1,5 +1,20 @@
 Work To Do, Outstanding Items:
 
+Documentation:
+- Start/Finish line: 'radius' parameter is half line width
+- Explain more about task starting, valid task starts etc
+
+- Arm advance:
+    if press again after advance and still in sector,
+    restart that waypoint; or if on waypoint 1, restart the task
+    Also display green button with "Arm Advance" if task isn't started
+- Task details dialog: start details and details on each waypoint
+- Alternate start locations
+
+Priority:
+  - (Feature request 1278082) Ellipsoid error correction
+
+
 ===========
 TASK SYSTEM
 ===========
@@ -9,7 +24,6 @@ TASK SYSTEM
   - XML based task file
   - Have separate Arm modes for AAT and non-AAT modes?
   - Record (and display) start speed/altitude/time
-  - (Feature request 1444340) Limits on start/finish speed/altitude
   - Different ways of calculating average speed
   - Based on manual input or task average
   - Add 'Append' waypoint function, so users can create a task by selecting
@@ -33,7 +47,10 @@ TASK SYSTEM
     -- Runway diagram?
   - Info for all waypoints
     -- Computed arrival height AGL at Mc0 Mc1 Mc2
-
+- Task statistics
+  - Bug: Average speed is corrupted if user selects previous waypoint
+  - Need to track average speed and time spent on each leg for statistics
+    review after flight anyway.
 
 =====================
 AIRSPACE AND WARNINGS
@@ -42,12 +59,14 @@ AIRSPACE AND WARNINGS
 - Airspace
   - ** (Feature request 1399775) configurable border thickness
   - Sort nearest above/below
-  - Monitoring function, infobox?
+  - Monitoring function (distance/bearing to nearest airspace or exit),
+     with associated infoboxes?
 - Warnings and voice prompts (issued directly and passed to Vega, gce?)
   - Final glide through terrain
   - Distance to waypoint readout
   - Passing task waypoints
   - Airspace
+  - Fast descent freezing
   - Implement the Vega protocol in XCSoar
   - (Feature request 1394440) Gear warning
   - (Feature request 1233220) Sunset warning
@@ -59,7 +78,6 @@ GLIDE COMPUTER
 ==============
 
 - Wind calculations
-  - Zig zag wind estimator
   - Compass wind estimator
 - Flight modes
   - (Feature request 1459280) user-commanded flight modes
@@ -83,8 +101,6 @@ GLIDE COMPUTER
   - Calculate MC value based on average climb rate
   - Allow user to adjust optimism/pessimism
 - Altitude representation
-  - Proper handling of PGRMZ with respect to QNH and when altimeter
-     also available from variometer
   - Flight level versus altitude in airspace warnings
   - (Feature request 1278082) Ellipsoid error correction
 - Calculations for cloud streets
@@ -95,6 +111,9 @@ GLIDE COMPUTER
   - Currently, wind calculation will fail if going backwards
   - Can detect this from rapid change in heading (approx 180 degrees)
   - If we know roughly the wind, can estimate what the glider heading is.
+- Ballast
+  - Allow entry of pilot weight, recalculation of ballast limits
+  - Trim calculations/display
 
 ===================
 MARKS AND WAYPOINTS
@@ -139,7 +158,6 @@ MAP, GAUGE AND ICON DISPLAY
   - Vario gauge knots scale
   - Option for Vario gauge display mode to display netto or relative during
     cruise
-  - FLARM gauge, show colors for threat levels
 
 =============
 CONFIGURATION
@@ -149,8 +167,7 @@ CONFIGURATION
   - Config: vario gauge, other optional display items,
       hide vario on fullscreen
   - Config: display blanking, other missing items?
-  - ** (Feature request 1403702) Configuration option for logger timestep
-  - Configuration option for checklist filename
+  - Configuration option for checklist and flarm filename
 - Fonts
   - Adjustable font for long infoboxes (especially time)
   - (Feature request 1374130) Font customisation in settings (font type, size)
@@ -187,12 +204,12 @@ SYSTEM/INFRASTRUCTURE
   - Log file to report errors, include file and line number
   - xmlParser unicode handling not very robust
   - SetFontInfo not reliable
+  - Fix LocalPath so it is thread safe
 - Miscellaneous
   - (Bug 1428871) PPC2002 installer chooses wrong CAB
   - (Bug 1366492) Logger start sensitivity
 - Comms
   - Robustness for PC version, currently hanging on restart
-  - Disable PGRMZ if vario is already outputting altitude (or vica versa)
   - Need 3 ports for full support of Altair.
   - Simple output terminal for COM ports (allow users to check serial
     connnections are working correctly).
@@ -210,5 +227,3 @@ SYSTEM/INFRASTRUCTURE
     -- Aircraft settings
     -- Competition/task settings
     -- Locality settings (terrain, topo, airspace, waypoints)
-
-

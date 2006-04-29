@@ -96,12 +96,16 @@ void dlgStatusTaskShowModal(void){
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartTime"));
-  if (CALCULATED_INFO.TaskStartTime>0) {
-    Units::TimeToText(Temp, (int)TimeLocal((int)(CALCULATED_INFO.TaskStartTime)));
+  if (CALCULATED_INFO.ValidStart) {
+    if (CALCULATED_INFO.TaskStartTime>0) {
+      Units::TimeToText(Temp, (int)TimeLocal((int)(CALCULATED_INFO.TaskStartTime)));
+    } else {
+      Units::TimeToText(Temp, 0);
+    }
+    wp->SetText(Temp);
   } else {
-    Units::TimeToText(Temp, 0);
+    wp->SetText(TEXT("INVALID"));
   }
-  wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskDistance"));
   _stprintf(Temp, TEXT("%.0f %s"), DISTANCEMODIFY*

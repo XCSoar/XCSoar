@@ -645,6 +645,10 @@ void XShapeLabel::clear() {
 
 /////////////////////////////////////////////////////////
 
+TopologyWriter::~TopologyWriter() {
+  if (shapefileopen)
+    Close();
+}
 
 
 TopologyWriter::TopologyWriter(char* shpname, COLORREF thecolor):

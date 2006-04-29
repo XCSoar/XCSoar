@@ -80,6 +80,7 @@ class Topology {
 class TopologyWriter: public Topology {
  public:
   TopologyWriter(char *shpname, COLORREF thecolor);
+  ~TopologyWriter();
 
   void addPoint(double x, double y);
 };

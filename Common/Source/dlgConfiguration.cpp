@@ -70,10 +70,11 @@ static WndFrame *wConfig12=NULL;
 static WndFrame *wConfig13=NULL;
 static WndFrame *wConfig14=NULL;
 static WndFrame *wConfig15=NULL;
+static WndFrame *wConfig16=NULL;
 
 extern bool EnableAnimation;
 
-#define NUMPAGES 14
+#define NUMPAGES 16
 
 static void NextPage(int Step){
   page += Step;
@@ -111,19 +112,22 @@ static void NextPage(int Step){
     wf->SetCaption(TEXT("10 Task"));
     break;
   case 10:
-    wf->SetCaption(TEXT("11 InfoBox Circling"));
+    wf->SetCaption(TEXT("11 Task rules"));
     break;
   case 11:
-    wf->SetCaption(TEXT("12 InfoBox Cruise"));
+    wf->SetCaption(TEXT("12 InfoBox Circling"));
     break;
   case 12:
-    wf->SetCaption(TEXT("13 InfoBox Final Glide"));
+    wf->SetCaption(TEXT("13 InfoBox Cruise"));
     break;
   case 13:
-    wf->SetCaption(TEXT("14 InfoBox Auxiliary"));
+    wf->SetCaption(TEXT("14 InfoBox Final Glide"));
     break;
   case 14:
-    wf->SetCaption(TEXT("15 Core files"));
+    wf->SetCaption(TEXT("15 InfoBox Auxiliary"));
+    break;
+  case 15:
+    wf->SetCaption(TEXT("16 Logger"));
     break;
   }
   wConfig1->SetVisible(page == 0);
@@ -141,6 +145,7 @@ static void NextPage(int Step){
   wConfig13->SetVisible(page == 12);
   wConfig14->SetVisible(page == 13);
   wConfig15->SetVisible(page == 14);
+  wConfig16->SetVisible(page == 15);
 }
 
 
@@ -356,11 +361,12 @@ void dlgConfigurationShowModal(void){
   wConfig8    = ((WndFrame *)wf->FindByName(TEXT("frmAppearance")));
   wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
   wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
-  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
-  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
-  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
-  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
-  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmFiles")));
+  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmTaskRules")));
+  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
+  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
+  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
+  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
+  wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
 
   ASSERT(wConfig1!=NULL);
   ASSERT(wConfig2!=NULL);
@@ -377,6 +383,7 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig13!=NULL);
   ASSERT(wConfig14!=NULL);
   ASSERT(wConfig15!=NULL);
+  ASSERT(wConfig16!=NULL);
 
   //////////
   /*
@@ -651,9 +658,21 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableNavBaroAltitude"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableNavBaroAltitude);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
   if (wp) {
-    wp->GetDataField()->Set(EnableAutoWind);
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Manual"));
+    dfe->addEnumText(TEXT("Circling"));
+    dfe->addEnumText(TEXT("ZigZag"));
+    dfe->addEnumText(TEXT("Both"));
+    wp->GetDataField()->Set(AutoWindMode);
     wp->RefreshDisplay();
   }
 
@@ -1022,7 +1041,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(FinishRadius*2);
+    wp->GetDataField()->SetAsFloat(FinishRadius);
     wp->RefreshDisplay();
   }
 
@@ -1038,7 +1057,7 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(StartRadius*2);
+    wp->GetDataField()->SetAsFloat(StartRadius);
     wp->RefreshDisplay();
   }
 
@@ -1068,6 +1087,39 @@ void dlgConfigurationShowModal(void){
     dfe->addEnumText(TEXT("Arm"));
     dfe->addEnumText(TEXT("Arm start"));
     dfe->Set(AutoAdvance);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFinishMinHeight"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(iround(FinishMinHeight*ALTITUDEMODIFY));
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxHeight"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(iround(StartMaxHeight*ALTITUDEMODIFY));
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxSpeed"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(iround(StartMaxSpeed*SPEEDMODIFY));
+    wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLoggerTimeStepCruise"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(LoggerTimeStepCruise);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLoggerTimeStepCircling"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(LoggerTimeStepCircling);
     wp->RefreshDisplay();
   }
 
@@ -1390,9 +1442,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
   if (wp) {
-    if (EnableAutoWind != wp->GetDataField()->GetAsBoolean()) {
-      EnableAutoWind = wp->GetDataField()->GetAsBoolean();
-      SetToRegistry(szRegistryAutoWind, EnableAutoWind);
+    if (AutoWindMode != wp->GetDataField()->GetAsInteger()) {
+      AutoWindMode = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryAutoWind, AutoWindMode);
       changed = true;
     }
   }
@@ -1402,6 +1454,15 @@ void dlgConfigurationShowModal(void){
     if (AutoForceFinalGlide != wp->GetDataField()->GetAsBoolean()) {
       AutoForceFinalGlide = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryAutoForceFinalGlide, AutoForceFinalGlide);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableNavBaroAltitude"));
+  if (wp) {
+    if (EnableNavBaroAltitude != wp->GetDataField()->GetAsBoolean()) {
+      EnableNavBaroAltitude = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryEnableNavBaroAltitude, EnableNavBaroAltitude);
       changed = true;
     }
   }
@@ -1625,8 +1686,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
   if (wp) {
-    if ((int)FinishRadius*2 != wp->GetDataField()->GetAsInteger()) {
-      FinishRadius = wp->GetDataField()->GetAsInteger()/2;
+    if ((int)FinishRadius != wp->GetDataField()->GetAsInteger()) {
+      FinishRadius = wp->GetDataField()->GetAsInteger();
       changed = true;
       taskchanged = true;
     }
@@ -1644,8 +1705,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
-    if ((int)StartRadius*2 != wp->GetDataField()->GetAsInteger()) {
-      StartRadius = wp->GetDataField()->GetAsInteger()/2;
+    if ((int)StartRadius != wp->GetDataField()->GetAsInteger()) {
+      StartRadius = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryStartRadius,StartRadius);
       changed = true;
       taskchanged = true;
@@ -1826,12 +1887,64 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFinishMinHeight"));
+  if (wp) {
+    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    if (FinishMinHeight != ival) {
+      FinishMinHeight = ival;
+      SetToRegistry(szRegistryFinishMinHeight,FinishMinHeight);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxHeight"));
+  if (wp) {
+    ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
+    if (StartMaxHeight != ival) {
+      StartMaxHeight = ival;
+      SetToRegistry(szRegistryStartMaxHeight,StartMaxHeight);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxSpeed"));
+  if (wp) {
+    ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
+    if (StartMaxSpeed != ival) {
+      StartMaxSpeed = ival;
+      SetToRegistry(szRegistryStartMaxSpeed,StartMaxSpeed);
+      changed = true;
+    }
+  }
+
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
   if (wp) {
     if (AutoAdvance != wp->GetDataField()->GetAsInteger()) {
       AutoAdvance = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryAutoAdvance,
 		    AutoAdvance);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLoggerTimeStepCruise"));
+  if (wp) {
+    ival = iround(wp->GetDataField()->GetAsInteger());
+    if (LoggerTimeStepCruise != ival) {
+      LoggerTimeStepCruise = ival;
+      SetToRegistry(szRegistryLoggerTimeStepCruise,LoggerTimeStepCruise);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLoggerTimeStepCircling"));
+  if (wp) {
+    ival = iround(wp->GetDataField()->GetAsInteger());
+    if (LoggerTimeStepCircling != ival) {
+      LoggerTimeStepCircling = ival;
+      SetToRegistry(szRegistryLoggerTimeStepCircling,LoggerTimeStepCircling);
       changed = true;
     }
   }

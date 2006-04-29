@@ -109,6 +109,9 @@ typedef struct _DERIVED_INFO
   // detects when glider is on ground for several seconds
   bool OnGround;
 
+  double NavAltitude;
+  bool ValidStart;
+
 } DERIVED_INFO;
 
 #include "RasterTerrain.h"
@@ -134,5 +137,7 @@ void  SetWindEstimate(double speed, double bearing);
 double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 		      double bearing,
 		      double GlideSlope);
+
+void CloseCalculations(void);
 
 #endif

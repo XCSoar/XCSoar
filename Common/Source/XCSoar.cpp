@@ -400,6 +400,9 @@ int ActiveWayPoint = -1;
 // Assigned Area Task
 double AATTaskLength = 120;
 BOOL AATEnabled = FALSE;
+DWORD FinishMinHeight = 0;
+DWORD StartMaxHeight = 0;
+DWORD StartMaxSpeed = 0;
 
 
 // Statistics
@@ -2004,6 +2007,8 @@ void Shutdown(void) {
   DeleteCriticalSection(&CritSec_TerrainDataGraphics);
 
   CloseProgressDialog();
+
+  CloseCalculations();
 
   DestroyWindow(hWndMapWindow);
   DestroyWindow(hWndMainWindow);

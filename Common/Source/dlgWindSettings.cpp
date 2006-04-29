@@ -120,7 +120,13 @@ void dlgWindSettingsShowModal(void){
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
     if (wp) {
-      wp->GetDataField()->Set(EnableAutoWind);
+      DataFieldEnum* dfe;
+      dfe = (DataFieldEnum*)wp->GetDataField();
+      dfe->addEnumText(TEXT("Manual"));
+      dfe->addEnumText(TEXT("Circling"));
+      dfe->addEnumText(TEXT("ZigZag"));
+      dfe->addEnumText(TEXT("Both"));
+      wp->GetDataField()->Set(AutoWindMode);
       wp->RefreshDisplay();
     }
 
@@ -128,8 +134,9 @@ void dlgWindSettingsShowModal(void){
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
     if (wp) {
-      if (EnableAutoWind != wp->GetDataField()->GetAsBoolean()) {
-	EnableAutoWind = wp->GetDataField()->GetAsBoolean();
+      if (AutoWindMode != wp->GetDataField()->GetAsInteger()) {
+	AutoWindMode = wp->GetDataField()->GetAsInteger();
+	SetToRegistry(szRegistryAutoWind, AutoWindMode);
       }
     }
 

@@ -2,8 +2,36 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Dialogs changed:
+ dlgConfiguration.xml
+ dlgWindSettings.xml
 
-Changes from 4.7:
+
+Changes from 4.7.3:
+- Added Auto QNH function
+- Minor improvements to robustness
+- Added preliminary support for vega voice
+- Limits on altitude/speed for start, altitude for finish
+  (Feature request 1444340)
+- Changed AutoWind from bool to enum: Manual, Circling, ZigZag, Both
+- Added zig zag wind estimator
+- Added option to use of barometric altitude for all nav functions
+- ** (Feature request 1403702) Configuration option for logger timestep
+- FLARM gauge, show colors for threat levels
+- Fixed bug, Start/Finish radius drawn half size
+- Fixed bug, v task calculations if selecting a previous waypoint after
+    starting
+- Added detection of valid start, now in task status dialog if
+    start wasn't valid, the start time shows "INVALID"
+
+
+Changes from 4.7.2:
+- Fixed bug: Disabling of airspace warnings by individual types was
+   ignored.  Now working correctly.
+- Proper handling of PGRMZ with respect to QNH and when altimeter
+   also available from variometer
+
+Changes from 4.7.0:
 - Changed "Bugs" to "Clean" in basic settings so meaning is clearer
 - Changed "Device 1" etc to "Device A" in configuration settings so meaning
   is clearer
@@ -23,6 +51,7 @@ Changes from 4.7:
 - Removed dead code in parser.cpp
 - Removed "stall" from switch dialog
 - Changed "airbrake extended" to "airbrake locked" in switch dialog
+- Added devices for Vega and AltairPro
 
 Changes from 4.6 to 4.7:
 - Ballast also shown as volume in liters in basic settings dialog

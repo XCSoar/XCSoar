@@ -93,7 +93,7 @@ static void SetValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(FinishRadius*2);
+    wp->GetDataField()->SetAsFloat(FinishRadius);
     wp->RefreshDisplay();
   }
 
@@ -109,7 +109,7 @@ static void SetValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(StartRadius*2);
+    wp->GetDataField()->SetAsFloat(StartRadius);
     wp->RefreshDisplay();
   }
 
@@ -174,8 +174,8 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
   if (wp) {
-    if ((int)FinishRadius*2 != wp->GetDataField()->GetAsInteger()) {
-      FinishRadius = wp->GetDataField()->GetAsInteger()/2;
+    if ((int)FinishRadius != wp->GetDataField()->GetAsInteger()) {
+      FinishRadius = wp->GetDataField()->GetAsInteger();
     }
   }
 
@@ -188,8 +188,8 @@ static void ReadValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
-    if ((int)StartRadius*2 != wp->GetDataField()->GetAsInteger()) {
-      StartRadius = wp->GetDataField()->GetAsInteger()/2;
+    if ((int)StartRadius != wp->GetDataField()->GetAsInteger()) {
+      StartRadius = wp->GetDataField()->GetAsInteger();
     }
   }
 
