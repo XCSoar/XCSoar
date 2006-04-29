@@ -254,8 +254,11 @@ void NextUpDown(int UpDown)
       if(Task[ActiveWayPoint+1].Index >= 0) {
 	if(ActiveWayPoint == 0)	{
 	  // manual start
-	  CALCULATED_INFO.TaskDistanceCovered = 0.0;
-	  CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
+	  // JMW: TODO allow restart
+	  // JMW: make this work only for manual
+	  if (CALCULATED_INFO.TaskStartTime==0) {
+	    CALCULATED_INFO.TaskStartTime = GPS_INFO.Time;
+	  }
 	}
 	ActiveWayPoint ++;
 	AdvanceArmed = false;
@@ -264,7 +267,11 @@ void NextUpDown(int UpDown)
       // No more, try first
       else if((UpDown == 2) && (Task[0].Index >= 0)) {
 	if(ActiveWayPoint == 0)	{
-	  CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
+	  // JMW: TODO allow restart
+	  // JMW: make this work only for manual
+	  if (CALCULATED_INFO.TaskStartTime==0) {
+	    CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
+	  }
 	}
 	AdvanceArmed = false;
 	ActiveWayPoint = 0;
@@ -285,8 +292,7 @@ void NextUpDown(int UpDown)
       if (ActiveWayPoint==0) {
 	// restarted task..
 	// JMW TODO: ask if user wants to restart task?
-	CALCULATED_INFO.TaskDistanceCovered = 0.0;
-	CALCULATED_INFO.TaskStartTime = 0;
+	//	CALCULATED_INFO.TaskStartTime = 0;
       }
     }
     

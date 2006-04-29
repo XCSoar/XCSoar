@@ -247,6 +247,14 @@ TCHAR szRegistryVoiceNewWaypoint[]= TEXT("VoiceNewWaypoint");
 TCHAR szRegistryVoiceInSector[]= TEXT("VoiceInSector");
 TCHAR szRegistryVoiceAirspace[]= TEXT("VoiceAirspace");
 
+TCHAR szRegistryFinishMinHeight[]= TEXT("FinishMinHeight");
+TCHAR szRegistryStartMaxHeight[]= TEXT("StartMaxHeight");
+TCHAR szRegistryStartMaxSpeed[]= TEXT("StartMaxSpeed");
+TCHAR szRegistryEnableNavBaroAltitude[] = TEXT("EnableNavBaroAltitude");
+
+TCHAR szRegistryLoggerTimeStepCruise[]= TEXT("LoggerTimeStepCruise");
+TCHAR szRegistryLoggerTimeStepCircling[]= TEXT("LoggerTimeStepCircling");
+
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -453,23 +461,19 @@ void ReadRegistrySettings(void)
 
   Temp=(DWORD)SAFETYALTITUDEARRIVAL;
   GetFromRegistry(szRegistrySafetyAltitudeArrival,&Temp);
-  if(Temp != 0)
-    SAFETYALTITUDEARRIVAL = (double)Temp;
+  SAFETYALTITUDEARRIVAL = (double)Temp;
 
   Temp=(DWORD)SAFETYALTITUDEBREAKOFF;
   GetFromRegistry(szRegistrySafetyAltitudeBreakOff,&Temp);
-  if(Temp != 0)
-    SAFETYALTITUDEBREAKOFF = (double)Temp;
+  SAFETYALTITUDEBREAKOFF = (double)Temp;
 
   Temp=(DWORD)SAFETYALTITUDETERRAIN;
   GetFromRegistry(szRegistrySafetyAltitudeTerrain,&Temp);
-  if(Temp != 0)
-    SAFETYALTITUDETERRAIN = (double)Temp;
+  SAFETYALTITUDETERRAIN = (double)Temp;
 
   Temp=(DWORD)SAFTEYSPEED;
   GetFromRegistry(szRegistrySafteySpeed,&Temp);
-  if(Temp != 0)
-    SAFTEYSPEED = (double)Temp;
+  SAFTEYSPEED = (double)Temp;
 
   Temp = SectorType;
   GetFromRegistry(szRegistryFAISector,&Temp);
@@ -489,16 +493,13 @@ void ReadRegistrySettings(void)
     {
       MapWindow::iAirspaceMode[i] = GetRegistryAirspaceMode(i);
 
-      Temp=0;
+      Temp= MapWindow::iAirspaceBrush[i];
       if(GetFromRegistry(szRegistryBrush[i],&Temp)==ERROR_SUCCESS)
         MapWindow::iAirspaceBrush[i] =			(int)Temp;
-      else
-        MapWindow::iAirspaceBrush[i] =			0;
 
+      Temp= MapWindow::iAirspaceColour[i];
       if(GetFromRegistry(szRegistryColour[i],&Temp)==ERROR_SUCCESS)
         MapWindow::iAirspaceColour[i] =			(int)Temp;
-      else
-        MapWindow::iAirspaceColour[i] =			0;
 
       if (MapWindow::iAirspaceColour[i]>= NUMAIRSPACECOLORS) {
         MapWindow::iAirspaceColour[i]= 0;
@@ -538,9 +539,9 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryFinalGlideTerrain,&Temp);
   FinalGlideTerrain = (Temp == 1);
 
-  Temp  = EnableAutoWind;
+  Temp  = AutoWindMode;
   GetFromRegistry(szRegistryAutoWind,&Temp);
-  EnableAutoWind = (Temp == 1);
+  AutoWindMode = Temp;
 
   Temp  = CircleZoom;
   GetFromRegistry(szRegistryCircleZoom,&Temp);
@@ -789,6 +790,31 @@ void ReadRegistrySettings(void)
   Temp = EnableVoiceAirspace; 
   GetFromRegistry(szRegistryVoiceAirspace,&Temp);
   EnableVoiceAirspace = (Temp!=0);
+
+  Temp = FinishMinHeight;
+  GetFromRegistry(szRegistryFinishMinHeight,&Temp);
+  FinishMinHeight = Temp;
+
+  Temp = StartMaxHeight;
+  GetFromRegistry(szRegistryStartMaxHeight,&Temp);
+  StartMaxHeight = Temp;
+
+  Temp = StartMaxSpeed;
+  GetFromRegistry(szRegistryStartMaxSpeed,&Temp);
+  StartMaxSpeed = Temp;
+
+  Temp = EnableNavBaroAltitude;
+  GetFromRegistry(szRegistryEnableNavBaroAltitude,&Temp);
+  EnableNavBaroAltitude = (Temp!=0);
+
+
+  Temp = LoggerTimeStepCruise;
+  GetFromRegistry(szRegistryLoggerTimeStepCruise,&Temp);
+  LoggerTimeStepCruise = Temp;
+
+  Temp = LoggerTimeStepCircling;
+  GetFromRegistry(szRegistryLoggerTimeStepCircling,&Temp);
+  LoggerTimeStepCircling = Temp;
 
 }
 

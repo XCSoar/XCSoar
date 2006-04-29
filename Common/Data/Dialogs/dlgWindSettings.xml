@@ -16,7 +16,7 @@
     <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=361 Step=1 OnDataAccess="OnWindDirectionData"/>
   </WndProperty>
   <WndProperty Name="prpAutoWind" Caption="Auto wind"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2>
-    <DataField name="" DataType="boolean"/>
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
   <WndButton   Caption="Save"    X=68 Y=-1 Width=60  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
   

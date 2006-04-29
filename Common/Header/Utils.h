@@ -101,6 +101,14 @@ extern TCHAR szRegistryVoiceNewWaypoint[];
 extern TCHAR szRegistryVoiceInSector[];
 extern TCHAR szRegistryVoiceAirspace[];
 
+extern TCHAR szRegistryFinishMinHeight[];
+extern TCHAR szRegistryStartMaxHeight[];
+extern TCHAR szRegistryStartMaxSpeed[];
+
+extern TCHAR szRegistryEnableNavBaroAltitude[];
+
+extern TCHAR szRegistryLoggerTimeStepCruise[];
+extern TCHAR szRegistryLoggerTimeStepCircling[];
 
 extern bool LockSettingsInFlight;
 
