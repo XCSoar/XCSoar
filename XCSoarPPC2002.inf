@@ -79,6 +79,7 @@ TheFiles    = 0,%InstallDir%
 Files.Language    = 0,"%CE5%\XCSoarData"
 Files.Input    = 0,"%CE5%\XCSoarData"
 Files.Polar    = 0,"%CE5%\XCSoarData"
+Links	=	0,"%CE11%
 
 ;File copy list.
 
@@ -117,6 +118,6 @@ HKLM,\Software\Microsoft\Today\Items\%AppName%,DLL,0x00000002,"\Windows\XCSoarLa
 HKLM,%reg_path%,InstallDir,0x00000002,%InstallDir%
 
 [Links]
-%LinkFilename1%,0,"XCSoar.exe",%CE11%
-%LinkFilename2%,0,"XCSoarSimulator.exe",%CE11%
+%LinkFilename1%,0,"XCSoar.exe"
+%LinkFilename2%,0,"XCSoarSimulator.exe"
 ;; shortcut to a file, created in the standard destination path %CE14%
