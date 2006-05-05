@@ -81,6 +81,7 @@ TheFiles    = 0, %InstallDir%
 Files.Language    = 0, "%CE5%\XCSoarData"
 Files.Input    = 0, "%CE5%\XCSoarData"
 Files.Polar    = 0, "%CE5%\XCSoarData"
+Links          = 0,%CE11%           ; "\Windows\Start Menu" directory
 
 
 ;File copy list.
