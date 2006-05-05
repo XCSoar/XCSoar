@@ -1,2 +1,2 @@
-BETA 4.5.4
+BETA 4.5.5
 ALPHA __DATE__
