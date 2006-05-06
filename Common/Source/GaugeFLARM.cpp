@@ -38,7 +38,6 @@ bool EnableFLARMDisplay = true;
 HWND hWndFLARMWindow = NULL; //FLARM Window
 
 extern HWND hWndMainWindow; // Main Windows
-extern HWND hWndMenuButton;
 extern HINSTANCE hInst;      // The current instance
 HBITMAP GaugeFLARM::hDrawBitMap = NULL;
 HBITMAP GaugeFLARM::hRoseBitMap = NULL;

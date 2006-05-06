@@ -44,7 +44,6 @@ HWND   hWndVarioWindow = NULL; // Vario Window
 extern HINSTANCE hInst;      // The current instance
 extern HWND hWndMainWindow; // Main Windows
 extern HFONT CDIWindowFont; // New
-extern HWND hWndMenuButton;
 
 extern HFONT InfoWindowFont;
 extern HFONT TitleWindowFont;
@@ -101,7 +100,7 @@ void GaugeVario::Create() {
 			       | WS_CLIPSIBLINGS,
                                0,0,0,0,
 			       hWndMainWindow,NULL,hInst,NULL);
-  SetWindowPos(hWndVarioWindow,hWndMenuButton,
+  SetWindowPos(hWndVarioWindow, HWND_TOP,
                bigrc.right+InfoBoxLayout::ControlWidth,
 	       bigrc.top,
                GAUGEXSIZE,GAUGEYSIZE,

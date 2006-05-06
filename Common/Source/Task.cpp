@@ -531,3 +531,221 @@ void guiToggleLogger(bool noAsk) {
     guiStartLogger(noAsk);
   }
 }
+
+
+//////////////
+
+
+void RefreshTaskWaypoint(int i) {
+  if(i==0)
+    {
+      Task[i].Leg = 0;
+      Task[i].InBound = 0;
+    }
+  else
+    {
+      Task[i].Leg = Distance(WayPointList[Task[i].Index].Latitude,   
+                             WayPointList[Task[i].Index].Longitude,
+                             WayPointList[Task[i-1].Index].Latitude, 
+                             WayPointList[Task[i-1].Index].Longitude);
+      Task[i].InBound = Bearing(WayPointList[Task[i-1].Index].Latitude,   
+				WayPointList[Task[i-1].Index].Longitude,
+                                WayPointList[Task[i].Index].Latitude, 
+				WayPointList[Task[i].Index].Longitude);
+      Task[i-1].OutBound = Task[i].InBound;
+      Task[i-1].Bisector = BiSector(Task[i-1].InBound,Task[i-1].OutBound);
+    }
+}
+
+
+void ReadNewTask(HWND hDlg)
+{
+  int i;
+  int TaskSize;
+  int WayPointIndex;
+  double TaskLength = 0;
+  TCHAR szTaskLength[10];
+  TCHAR  WaypointID[WAY_POINT_ID_SIZE + 1];
+
+  ActiveWayPoint = -1;
+
+  for(i=0;i<MAXTASKPOINTS;i++)
+    {
+      Task[i].Index = -1;
+    }
+  TaskSize = SendDlgItemMessage(hDlg,IDC_TASK,LB_GETCOUNT,0,0);
+  for(i=0;i<TaskSize;i++)
+    {
+      SendDlgItemMessage(hDlg,IDC_TASK,LB_GETTEXT,i,(LPARAM)(LPCTSTR)WaypointID);
+      WayPointIndex = SendDlgItemMessage(hDlg,IDC_WAYPOINTS,LB_FINDSTRING,0,(LPARAM)(LPCTSTR)WaypointID);
+
+      if(WayPointIndex == LB_ERR)
+        break;
+      else
+        {
+          Task[i].Index = WayPointIndex;
+
+          RefreshTaskWaypoint(i);
+
+          // JMW TODO: do this for next and previous waypoint also
+
+          TaskLength += Task[i].Leg; 
+        }
+    }
+
+  RefreshTask();
+
+  _stprintf(szTaskLength,TEXT("%2.1f"), DISTANCEMODIFY * TaskLength );
+  SetDlgItemText(hDlg,IDC_TASKLENGTH,szTaskLength);
+  if(Task[0].Index != -1)
+    ActiveWayPoint = 0;
+}
+
+
+// loads a new task from scratch.
+void LoadNewTask(TCHAR *szFileName)
+{
+  HANDLE hFile;
+  TASK_POINT Temp;
+  DWORD dwBytesRead;
+  int i;
+  bool TaskInvalid = false;
+
+  ActiveWayPoint = -1;
+  for(i=0;i<MAXTASKPOINTS;i++)
+    {
+      Task[i].Index = -1;
+    }
+  
+  hFile = CreateFile(szFileName,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  
+  if(hFile!= INVALID_HANDLE_VALUE )
+    {
+      for(i=0;i<MAXTASKPOINTS;i++)
+        {
+          if(!ReadFile(hFile,&Temp,sizeof(TASK_POINT),&dwBytesRead, (OVERLAPPED *)NULL))
+            {
+              break;
+            }
+	  memcpy(&Task[i],&Temp, sizeof(TASK_POINT));
+	  /*Task[i].InBound = Temp.InBound;
+	    Task[i].Index = Temp.Index;
+	    Task[i].Leg = Temp.Leg;
+	    Task[i].OutBound = Temp.OutBound;
+	    Task[i].AATCircleRadius = Temp */
+
+          if((Temp.Index >= (int)NumberOfWayPoints)||(Temp.Index<-1)) {
+	    TaskInvalid = true;
+	  }
+
+        }
+
+      if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
+	AATEnabled = FALSE;
+      if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
+	AATTaskLength = 0;
+
+      CloseHandle(hFile);
+    }
+
+  if (TaskInvalid) {
+    for(i=0;i<MAXTASKPOINTS;i++)
+      {
+	Task[i].Index = -1;
+      }
+  }
+  
+  RefreshTask();
+  
+  if(Task[0].Index != -1)
+    ActiveWayPoint = 0;
+}
+
+
+// this one inserts the task in the task list!
+void LoadTask(TCHAR *szFileName, HWND hDlg)
+{
+  HANDLE hFile;
+  TASK_POINT Temp;
+  DWORD dwBytesRead;
+  int i;
+  bool TaskInvalid = false;
+
+  ActiveWayPoint = -1;
+  for(i=0;i<MAXTASKPOINTS;i++)
+    {
+      Task[i].Index = -1;
+    }
+
+  SendDlgItemMessage(hDlg,IDC_TASK,LB_RESETCONTENT,0,0);
+
+  hFile = CreateFile(szFileName,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  
+  if(hFile!=INVALID_HANDLE_VALUE )
+    {
+      for(i=0;i<MAXTASKPOINTS;i++)
+        {
+          if(!ReadFile(hFile,&Temp,sizeof(TASK_POINT),&dwBytesRead, (OVERLAPPED *)NULL))
+            {
+              break;
+            }
+	  
+          if(Temp.Index < (int)NumberOfWayPoints)
+            {
+              memcpy(&Task[i],&Temp, sizeof(TASK_POINT));
+              /*Task[i].InBound = Temp.InBound;
+                Task[i].Index = Temp.Index;
+                Task[i].Leg = Temp.Leg;
+                Task[i].OutBound = Temp.OutBound;
+                Task[i].AATCircleRadius = Temp*/
+            } else {
+	    TaskInvalid = true;
+	  }
+        }
+
+      if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
+	AATEnabled = FALSE;
+      if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
+	AATTaskLength = 0;
+
+      // TODO: include StartLine/StartRadius and FinishLine/FinishRadius
+      // etc in this file?
+      
+      CloseHandle(hFile);
+    }
+
+  if (TaskInvalid) {
+    for(i=0;i<MAXTASKPOINTS;i++)
+      {
+	Task[i].Index = -1;
+      }
+  }
+
+  for(i=0;i<MAXTASKPOINTS;i++)
+    {
+      if(Task[i].Index >=0)
+        {
+	  SendDlgItemMessage(hDlg,IDC_TASK,LB_ADDSTRING,0,(LPARAM)(LPCTSTR)WayPointList[Task[i].Index].Name);
+        }
+    }
+
+  if(Task[0].Index != -1)
+    ActiveWayPoint = 0;
+}
+
+
+void SaveTask(TCHAR *szFileName)
+{
+  HANDLE hFile;
+  DWORD dwBytesWritten;
+        
+  hFile = CreateFile(szFileName,GENERIC_WRITE,0,(LPSECURITY_ATTRIBUTES)NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
+        
+  if(hFile!=INVALID_HANDLE_VALUE )
+    {
+      WriteFile(hFile,&Task[0],sizeof(TASK_POINT)*MAXTASKPOINTS,&dwBytesWritten,(OVERLAPPED *)NULL);
+      WriteFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesWritten,(OVERLAPPED*)NULL);
+      WriteFile(hFile,&AATTaskLength,sizeof(double),&dwBytesWritten,(OVERLAPPED*)NULL);
+    }
+  CloseHandle(hFile);
+}

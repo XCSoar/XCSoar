@@ -647,7 +647,7 @@ void EnergyHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (Basic->AirspeedAvailable) {
     Calculated->EnergyHeight = 
-      (Basic->IndicatedAirspeed*Basic->IndicatedAirspeed
+      max(0, Basic->IndicatedAirspeed*Basic->IndicatedAirspeed
        -GlidePolar::Vbestld*GlidePolar::Vbestld)/(9.81*2.0);
   } else {
     Calculated->EnergyHeight = 0.0;
@@ -2301,27 +2301,33 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	   AcknowledgementTime)) {
 	continue;
       }
+
+      int oldwarninglevel = AirspaceCircle[i].WarningLevel;
+
       if (next) {
 	AirspaceCircle[i].WarningLevel |= 1;
       } else {
 	AirspaceCircle[i].WarningLevel |= 2;
       }
 
+      if (AirspaceCircle[i].WarningLevel > oldwarninglevel) {
+
 #ifndef DISABLEAUDIO
-      MessageBeep(MB_ICONEXCLAMATION);
+	MessageBeep(MB_ICONEXCLAMATION);
 #endif
-      FormatWarningString(AirspaceCircle[i].Type , AirspaceCircle[i].Name , 
-			  AirspaceCircle[i].Base, AirspaceCircle[i].Top, 
-			  szMessageBuffer, szTitleBuffer );
+	FormatWarningString(AirspaceCircle[i].Type , AirspaceCircle[i].Name , 
+			    AirspaceCircle[i].Base, AirspaceCircle[i].Top, 
+			    szMessageBuffer, szTitleBuffer );
       
-      wsprintf(text,TEXT("AIRSPACE: %s\r\n%s"),
-	       szTitleBuffer,szMessageBuffer);
+	wsprintf(text,TEXT("AIRSPACE: %s\r\n%s"),
+		 szTitleBuffer,szMessageBuffer);
       
-      // clear previous warning if any
-      // Message::Acknowledge(MSG_AIRSPACE);
-      Message::AddMessage(5000, MSG_AIRSPACE, text);
+	// clear previous warning if any
+	// Message::Acknowledge(MSG_AIRSPACE);
+	Message::AddMessage(5000, MSG_AIRSPACE, text);
       
-      InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+	InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+      }
       Calculated->IsInAirspace = true;
 
     } else {
@@ -2375,28 +2381,33 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	   AcknowledgementTime)) {
 	continue;
       }
+
+      int oldwarninglevel = AirspaceArea[i].WarningLevel;
+
       if (next) {
 	AirspaceArea[i].WarningLevel |= 1;
       } else {
 	AirspaceArea[i].WarningLevel |= 2;
       }
       
-#ifndef DISABLEAUDIO
-      MessageBeep(MB_ICONEXCLAMATION);
-#endif
-      FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name , 
-			  AirspaceArea[i].Base, AirspaceArea[i].Top, 
-			  szMessageBuffer, szTitleBuffer );
-      
-      wsprintf(text,TEXT("AIRSPACE: %s\r\n%s"),
-	       szTitleBuffer,szMessageBuffer);
-      
-      // clear previous warning if any
-      // Message::Acknowledge(MSG_AIRSPACE);
-      Message::AddMessage(5000, MSG_AIRSPACE, text);
-      
-      InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+      if (AirspaceArea[i].WarningLevel > oldwarninglevel) {
 
+#ifndef DISABLEAUDIO
+	MessageBeep(MB_ICONEXCLAMATION);
+#endif
+	FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name , 
+			    AirspaceArea[i].Base, AirspaceArea[i].Top, 
+			    szMessageBuffer, szTitleBuffer );
+      
+	wsprintf(text,TEXT("AIRSPACE: %s\r\n%s"),
+		 szTitleBuffer,szMessageBuffer);
+      
+	// clear previous warning if any
+	// Message::Acknowledge(MSG_AIRSPACE);
+	Message::AddMessage(5000, MSG_AIRSPACE, text);
+      
+	InputEvents::processGlideComputer(GCE_AIRSPACE_ENTER);
+      }
       Calculated->IsInAirspace = true;
 
     } else {

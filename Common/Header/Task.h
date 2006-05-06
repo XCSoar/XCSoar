@@ -68,5 +68,10 @@ void guiStartLogger(bool noAsk = false);
 void guiStopLogger(bool noAsk = false);
 void guiToggleLogger(bool noAsk = false);
 
+void LoadNewTask(TCHAR *FileName);
+void LoadTask(TCHAR *FileName,HWND hDlg);
+void SaveTask(TCHAR *FileName);
+
+
 
 #endif

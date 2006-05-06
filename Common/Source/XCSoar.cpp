@@ -189,7 +189,10 @@ HINSTANCE                       hInst;                                  // The c
 HWND                                    hWndCB;                                 // The command bar handle
 HWND                                    hWndMainWindow; // Main Windows
 HWND                                    hWndMapWindow;  // MapWindow
+
+#ifndef GNAV
 HWND          hWndMenuButton = NULL;
+#endif
 
 
 int numInfoWindows = 8;
@@ -591,7 +594,9 @@ void                                            DebugStore(char *Str);
 void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
   if (DisplayLocked) {
+#ifndef GNAV
     ShowWindow(hWndMenuButton, SW_HIDE);
+#endif
     MenuTimeOut = MenuTimeoutMax;
     DisplayTimeOut = 0;
   }
@@ -599,7 +604,9 @@ void HideMenu() {
 
 void ShowMenu() {
   MenuTimeOut = 0;
+#ifndef GNAV
   ShowWindow(hWndMenuButton, SW_SHOW);
+#endif
   DisplayTimeOut = 0;
 }
 
@@ -1755,6 +1762,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 			       (rc.bottom-rc.top) ,
                                hWndMainWindow, NULL ,hInstance,NULL);
 
+#ifndef GNAV
   hWndMenuButton = CreateWindow(TEXT("BUTTON"),gettext(TEXT("Menu")),
 				WS_VISIBLE | WS_CHILD
 				| WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
@@ -1774,6 +1782,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 	       menubuttonsize, menubuttonsize,
 	       SWP_SHOWWINDOW);
 
+  ShowWindow(hWndMenuButton, SW_HIDE);
+  
+#endif
+
   GaugeCDI::Create();
   GaugeVario::Create();
 
@@ -1783,8 +1795,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     ShowWindow(hWndVarioWindow,SW_HIDE);
   }
 
-  ShowWindow(hWndMenuButton, SW_HIDE);
-  
   ShowWindow(hWndMainWindow, nCmdShow);
   UpdateWindow(hWndMainWindow);
     
@@ -2017,7 +2027,9 @@ void Shutdown(void) {
 
   DestroyWindow(hWndMapWindow);
   DestroyWindow(hWndMainWindow);
+#ifndef GNAV
   DestroyWindow(hWndMenuButton);
+#endif
       
   CloseHandle(drawTriggerEvent);
   CloseHandle(dataTriggerEvent);
@@ -2226,7 +2238,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   if(wmControl != NULL)
     {
       if (ProgramStarted) {
-
+#ifndef GNAV
       if(wmControl == hWndMenuButton)
         {
 	  if (InfoBoxLayout::landscape) {
@@ -2410,6 +2422,8 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
               return 0;
             }
         }
+#endif
+
       DialogActive = false;
 
       FullScreen();
@@ -2750,7 +2764,9 @@ void CommonProcessTimer()
 
   if (DisplayLocked) {
     if(MenuTimeOut==MenuTimeoutMax) {
+#ifndef GNAV
       ShowWindow(hWndMenuButton, SW_HIDE);
+#endif
       if (!MapWindow::isPan()) {
 	InputEvents::setMode(TEXT("default"));
       }
@@ -3096,7 +3112,8 @@ void PopupBugsBallast(int UpDown)
 {
   DialogActive = true;
   #if NEWINFOBOX>0
-  DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWndMapWindow, (DLGPROC)SetBugsBallast);
+  // JMW Not used anymore
+  //  DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWndMapWindow, (DLGPROC)SetBugsBallast);
   #else
   DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWndInfoWindow[0], (DLGPROC)SetBugsBallast);
   #endif
@@ -3112,7 +3129,8 @@ void PopUpSelect(int Index)
   DialogActive = true;
   CurrentInfoType = InfoType[Index];
   #if NEWINFOBOX>0
-  InfoType[Index] = DialogBox(hInst, (LPCTSTR)IDD_SELECT, hWndMapWindow, (DLGPROC)Select);
+  // JMW not used anymore
+  //  InfoType[Index] = DialogBox(hInst, (LPCTSTR)IDD_SELECT, hWndMapWindow, (DLGPROC)Select);
   #else
   InfoType[Index] = DialogBox(hInst, (LPCTSTR)IDD_SELECT, hWndInfoWindow[Index], (DLGPROC)Select);
   #endif
