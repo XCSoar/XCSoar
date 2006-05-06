@@ -52,10 +52,6 @@ BOOL StepProgressDialog();
 BOOL SetProgressStepSize(int nSize);
 
 
-void LoadNewTask(TCHAR *FileName);
-void LoadTask(TCHAR *FileName,HWND hDlg);
-void SaveTask(TCHAR *FileName);
-
 extern void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
 
 #define NUMPOLARS 7 // number of in-built polars

@@ -34,7 +34,6 @@ Copyright_License {
 HWND hWndCDIWindow = NULL; //CDI Window
 extern HFONT CDIWindowFont;
 extern HWND hWndMainWindow; // Main Windows
-extern HWND hWndMenuButton;
 extern HINSTANCE hInst;      // The current instance
 
 #include "InfoBoxLayout.h"
@@ -55,7 +54,7 @@ void GaugeCDI::Create() {
   SendMessage(hWndCDIWindow,WM_SETFONT,
 	      (WPARAM)CDIWindowFont,MAKELPARAM(TRUE,0));
 
-  SetWindowPos(hWndCDIWindow,hWndMenuButton,
+  SetWindowPos(hWndCDIWindow,HWND_TOP,
 	       (int)(InfoBoxLayout::ControlWidth*0.6),
 	       (int)(InfoBoxLayout::ControlHeight+1),
 	       (int)(InfoBoxLayout::ControlWidth*2.8),
