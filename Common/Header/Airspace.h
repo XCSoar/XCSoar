@@ -36,10 +36,13 @@ typedef struct _AIRSPACE_ACK
   double AcknowledgementTime;
 } AIRSPACE_ACK;
 
+typedef enum {abUndef, abMSL, abAGL, abQNH, abFL} AirspaceAltBase_t;
+
 typedef struct _AIRSPACE_ALT
 {
 	double Altitude;
 	double FL;
+  AirspaceAltBase_t Base;
 } AIRSPACE_ALT;
 
 typedef struct _AIRSPACE_AREA
@@ -51,6 +54,7 @@ typedef struct _AIRSPACE_AREA
   unsigned FirstPoint;
   unsigned NumPoints;
   int Visible;
+  bool _NewWarnAckNoBrush;
   double MinLatitude;
   double MaxLatitude;
   double MinLongitude;
@@ -78,6 +82,7 @@ typedef struct _AIRSPACE_CIRCLE
   POINT Screen;
   int ScreenR;
   int Visible;
+  bool _NewWarnAckNoBrush;
   AIRSPACE_ACK Ack;
   rectObj bounds;
   unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
@@ -115,5 +120,52 @@ bool InsideAirspaceArea(const double &longitude,
 
 void ScanAirspaceLine(double *lats, double *lons, double *heights,
 		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X]);
+
+
+//*******************************************************************************
+// experimental: new dialog based warning system
+
+
+#define OUTSIDE_CHECK_INTERVAL 4
+
+class AirspaceInfo_c{
+
+public:
+
+  int    TimeOut;             // in systicks
+  int    InsideAckTimeOut;    // downgrade auto ACK timer
+  int    Sequence;            // Sequence nummer is equal for real and predicted calculation
+  int    hDistance;           // horizontal distance in m
+  int    vDistance;           // vertical distance in m
+  int    Bearing;             // in deg
+  DWORD  PredictedEntryTime;  // in ms
+  int    Acknowledge;         // 0=not Acked, 1=Acked til closer, 2=Acked til leave, 3= Acked whole day
+  bool   Inside;              // true if inside
+  bool   Predicted;           // true if predicted inside, menas close and entry expected
+  bool   IsCircle;            // true if Airspace is a circle
+  int    AirspaceIndex;       // index of airspace
+  int    SortKey;             // SortKey
+  int    LastListIndex;       // Last index in List, used to sort items with same sort criteria
+  int    ID;                  // Unique ID
+  int    WarnLevel;           // WarnLevel 0 far away, 1 prdicted entry, 2 predicted entry and close, 3 inside
+
+};
+
+typedef enum {asaNull, asaItemAdded, asaItemChanged, asaClearAll, asaItemRemoved, asaWarnLevelIncreased, asaProcessEnd, asaProcessBegin} AirspaceWarningNotifyAction_t;
+typedef void (*AirspaceWarningNotifier_t)(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace) ;
+
+void AirspaceWarnListAddNotifier(AirspaceWarningNotifier_t Notifier);
+void AirspaceWarnListRemoveNotifier(AirspaceWarningNotifier_t Notifier);
+bool AirspaceWarnGetItem(int Index, AirspaceInfo_c *Item);
+int AirspaceWarnGetItemCount(void);
+int dlgAirspaceWarningInit(void);
+int dlgAirspaceWarningDeInit(void);
+void AirspaceWarnListClear(void);
+void AirspaceWarnDoAck(int ID, int Ack);
+int AirspaceWarnFindIndexByID(int ID);
+void AirspaceWarnListInit(void);
+void AirspaceWarnListDeInit(void);
+
+
 
 #endif

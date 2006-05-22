@@ -7,10 +7,17 @@
 
 #include <windows.h>
 
+#define wpTerrainBoundsYes    100
+#define wpTerrainBoundsYesAll 101
+#define wpTerrainBoundsNo     102
+#define wpTerrainBoundsNoAll  103
+
 void ReadWayPointFile(HANDLE hFile);
 void ReadWayPoints(void);
 void SetHome(void);
 int FindNearestWayPoint(double X, double Y, double MaxRange);
 void CloseWayPoints(void);
+int dlgWaypointOutOfTerrain(TCHAR *Message);
+
 #endif
 

@@ -14,7 +14,7 @@
 #define	devB()	    (&DeviceList[1])
 #define devAll()    (NULL)
 
-typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind} DeviceFlags_t;
+typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice} DeviceFlags_t;
 
 typedef struct{
   void (*WriteString)(TCHAR *Text);
@@ -48,6 +48,7 @@ typedef	struct DeviceDescriptor_t{
 	BOOL (*IsBaroSource)(DeviceDescriptor_t *d);
 	BOOL (*PutQNH)(DeviceDescriptor_t *d, double NewQNH);
 	BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
+  BOOL (*PutVoice)(DeviceDescriptor_t *d, TCHAR *Sentence);
   int PortNumber;
 }DeviceDescriptor_t;
 
@@ -98,5 +99,8 @@ BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH);
 BOOL devOnSysTicker(DeviceDescriptor_t *d);
 
 BOOL devGetBaroAltitude(double *Value);
+
+BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence);
+
 
 #endif
