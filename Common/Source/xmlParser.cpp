@@ -854,9 +854,15 @@ int XMLNode::ParseXMLElement(void *pa)
                             {
                                 d->pOrder=(int*)realloc(d->pOrder,nElement()*sizeof(int));
                                 d->pChild=(XMLNode*)realloc(d->pChild,d->nChild*sizeof(XMLNode));
-                                d->pAttribute=(XMLAttribute*)realloc(d->pAttribute,d->nAttribute*sizeof(XMLAttribute));
-                                d->pText=(LPCTSTR*)realloc(d->pText,d->nText*sizeof(LPTSTR));
-                                d->pClear=(XMLClear *)realloc(d->pClear,d->nClear*sizeof(XMLClear));
+                                if (d->nAttribute > 0){
+                                  d->pAttribute=(XMLAttribute*)realloc(d->pAttribute,d->nAttribute*sizeof(XMLAttribute));
+                                }
+                                if (d->nText > 0) {
+                                  d->pText=(LPCTSTR*)realloc(d->pText,d->nText*sizeof(LPTSTR));
+                                }
+                                if (d->nClear > 0) {
+                                  d->pClear=(XMLClear *)realloc(d->pClear,d->nClear*sizeof(XMLClear));
+                                }
                                 return FALSE;
                             }
                             else
@@ -1279,6 +1285,7 @@ XMLNode XMLNode::parseFile(const char *filename, LPCTSTR tag, XMLResults *pResul
     fread(buf,l,1,f);
     fclose(f);
     buf[l]=0;
+    l++;     // 20060515:sgi make shure MultiByteToWideChar also translate the terminating char!!!
 #if defined(WIN32) || defined(UNDER_CE)
 #ifdef _UNICODE
 #if !defined(UNDER_CE)

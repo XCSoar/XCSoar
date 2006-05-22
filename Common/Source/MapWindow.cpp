@@ -746,7 +746,7 @@ void MapWindow::StoreRestoreFullscreen(bool store) {
 
 
 void MapWindow::Event_Pan(int vswitch) {
-  static bool oldfullscreen = 0;
+//  static bool oldfullscreen = 0;  never assigned!
   bool oldPan = EnablePan;
   if (vswitch == -2) { // superpan, toggles fullscreen also
 
@@ -1284,7 +1284,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     case WM_KEYUP: // JMW was keyup
 #endif
 
-      #if GNAV
+      #if defined(GNAV)
         if (wParam == 0xF5){
 
 		      if (MessageBoxX(hWnd,
@@ -1317,7 +1317,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       }
       return TRUE; // don't go to default handler
     }
-    break;
+    // break; unreachable!
   }
 
   return (DefWindowProc (hWnd, uMsg, wParam, lParam));
@@ -2306,10 +2306,10 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
       }
 
       irange = ((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) 
-	&& (MapScale <= 10);
+        && (MapScale <= 10);
 
-    if((Task[ActiveWayPoint].Index == (int)i) || irange)
-      {
+    if((ActiveWayPoint >= 0) && (Task[ActiveWayPoint].Index == (int)i) || irange){
+      // ((ActiveWayPoint >= 0) && 20060516:sgi added to avoid -1 index access
 
         DrawBitmapX(hdc,
 		    WayPointList[i].Screen.x-IBLSCALE(10), 
@@ -2544,15 +2544,24 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
   
   if((Task[0].Index >=0) &&  (Task[1].Index >=0) && (ActiveWayPoint<2))
   {
-    if(StartLine)
-    { 
-      DrawDashLine(hdc, 2, WayPointList[Task[0].Index].Screen, Task[0].End, RGB(127,127,127));
-      DrawDashLine(hdc, 2, WayPointList[Task[0].Index].Screen, Task[0].Start , RGB(127,127,127));
+    if(StartLine){
+      #if defined(TASKSTARTLINEWIDTH)
+      int LineWidth = TASKSTARTLINEWIDTH;
+      #else
+      int LineWidth = 2;
+      #endif
+      DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen, Task[0].End, RGB(127,127,127));
+      DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen, Task[0].Start , RGB(127,127,127));
     }
-    tmp = StartRadius*ResMapScaleOverDistanceModify; 
-    SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-    SelectObject(hdc, GetStockObject(BLACK_PEN));
-    Circle(hdc,WayPointList[Task[0].Index].Screen.x,WayPointList[Task[0].Index].Screen.y,(int)tmp, rc); 
+    #if defined(NOCIRCLEONSTARTLINE)
+    else
+    #endif
+    {
+      tmp = StartRadius*ResMapScaleOverDistanceModify;
+      SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
+      SelectObject(hdc, GetStockObject(BLACK_PEN));
+      Circle(hdc,WayPointList[Task[0].Index].Screen.x,WayPointList[Task[0].Index].Screen.y,(int)tmp, rc);
+    }
   }
   
   for(i=1;i<MAXTASKPOINTS-1;i++)
@@ -3188,7 +3197,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
 
     int y = rc.bottom-Height-(Appearance.TitleWindowFont.AscentHeight+1);
     if (!ScaleChangeFeedback){
-      bool FontSelected = false;
+      // bool FontSelected = false;
       ScaleInfo[0] = 0;
       if (AutoZoom) {
         _tcscat(ScaleInfo, TEXT("AUTO "));
@@ -3204,7 +3213,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
       }
       if (ScaleInfo[0]) {
         SelectObject(hDC, TitleWindowFont);
-        FontSelected = true;
+        // FontSelected = true;
         ExtTextOut(hDC, 1, y, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
         y -= (Appearance.TitleWindowFont.CapitalHeight+1);
       }
@@ -3467,25 +3476,25 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
   SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
   for(i=0;i<NumberOfAirspaceCircles;i++)
   {
-    if (AirspaceCircle[i].Visible) {
-      {	      
-	// this color is used as the black bit
-	SetTextColor(hDCTemp, 
-		     Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
-	// get brush, can be solid or a 1bpp bitmap
-	SelectObject(hDCTemp, 
-		     hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);	
-	Circle(hDCTemp,
-	       AirspaceCircle[i].Screen.x ,
-	       AirspaceCircle[i].Screen.y ,
-	       AirspaceCircle[i].ScreenR ,rc);
+    if (AirspaceCircle[i].Visible && !AirspaceCircle[i]._NewWarnAckNoBrush) {
+      {
+        // this color is used as the black bit
+        SetTextColor(hDCTemp,
+        Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
+        // get brush, can be solid or a 1bpp bitmap
+        SelectObject(hDCTemp,
+        hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
+        Circle(hDCTemp,
+        AirspaceCircle[i].Screen.x ,
+        AirspaceCircle[i].Screen.y ,
+        AirspaceCircle[i].ScreenR ,rc);
       }
     }
   }
   /////////
   for(i=0;i<NumberOfAirspaceAreas;i++)
   {
-    if(AirspaceArea[i].Visible) {
+    if(AirspaceArea[i].Visible && !AirspaceArea[i]._NewWarnAckNoBrush) {
 	
       // this color is used as the black bit
       SetTextColor(hDCTemp, 
@@ -3505,8 +3514,8 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
   {
     if (AirspaceCircle[i].Visible) {
       {	      
-	SelectObject(hDCTemp, hAirspacePens[AirspaceCircle[i].Type]);
-	Circle(hDCTemp,
+	       SelectObject(hDCTemp, hAirspacePens[AirspaceCircle[i].Type]);
+         Circle(hDCTemp,
 	       AirspaceCircle[i].Screen.x ,
 	       AirspaceCircle[i].Screen.y ,
 	       AirspaceCircle[i].ScreenR ,rc);
@@ -3518,9 +3527,9 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
   {
     if(AirspaceArea[i].Visible) {
       if (bAirspaceBlackOutline) {
-	SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+        SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
       } else {
-	SelectObject(hDCTemp, hAirspacePens[AirspaceArea[i].Type]);
+        SelectObject(hDCTemp, hAirspacePens[AirspaceArea[i].Type]);
       }
       Polygon(hDCTemp,
 	      AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
@@ -3718,16 +3727,17 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 
 void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 {
-  
-  POINT Scale[18] = {				
-    {5,-50 }, {14,-60 }, {23, -50}, 
+
+  /*
+  POINT Scale[18] = {
+    {5,-50 }, {14,-60 }, {23, -50},
     {5,-40 }, {14,-50 }, {23, -40},
-    {5,-30 }, {14,-40 }, {23, -30}, 
-    {5,-20 }, {14,-30 }, {23, -20}, 
-    {5,-10 }, {14,-20 }, {23, -10}, 
-    {5, 0  }, {14,-10 }, {23,   0}, 
-  };
-  
+    {5,-30 }, {14,-40 }, {23, -30},
+    {5,-20 }, {14,-30 }, {23, -20},
+    {5,-10 }, {14,-20 }, {23, -10},
+    {5, 0  }, {14,-10 }, {23,   0},
+  };*/
+
   POINT	GlideBar[5] =
   { {5,0},{14,-10},{23,0},{23,0},{5,0} };
   
@@ -4420,8 +4430,8 @@ void MapWindow::DrawCDI() {
 double MapWindow::findMapScaleBarSize(RECT rc) {
 
   int range = rc.bottom-rc.top;
-  int nbars = 0;
-  int nscale = 1;
+//  int nbars = 0;
+//  int nscale = 1;
   double pixelsize = MapScale/GetMapResolutionFactor(); // km/pixel
   
   // find largest bar size that will fit in display

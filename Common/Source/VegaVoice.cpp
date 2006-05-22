@@ -1,5 +1,10 @@
+
+#include <math.h>
+
+#include "InputEvents.h"  // used for altair beep hack
 #include "stdafx.h"
 #include "VegaVoice.h"
+#include "device.h"
 
 bool EnableVoiceClimbRate=true;
 bool EnableVoiceTerrain=true;
@@ -139,7 +144,6 @@ int VegaVoiceMessage::LookupDigit(int number) {
   return VWI_ZERO;
 }
 
-
 void VegaVoiceMessage::Initialise(int the_id) {
   last_messageText[0]=0;
   id_active = -1;
@@ -187,23 +191,29 @@ void VegaVoiceMessage::Initialise(int the_id) {
     singleplay = true;
     break;
   };
+
 }
 
 void VegaVoiceMessage::MessageHeader() {
-  wsprintf(messageText,TEXT("PDVMS,%2d,%1d,%3d,%1d"),
+  wsprintf(messageText,TEXT("PDVMS,%d,%d,%d,%d"),
 	   id, // message ID
 	   alarmlevel,
-	   repeatInterval,
+	   repeatInterval*1000,
 	   singleplay);
 }
 
 void VegaVoiceMessage::SendMessage() {
+
+  /*
   if (_tcscmp(messageText, last_messageText)==0) {
     // no change, no need to send
     return;
   }
   _tcscpy(last_messageText, messageText);
-  // TODO: Send the text..
+  */
+
+//  devPutVoice(NULL, messageText);
+  
 }
 
 
@@ -247,6 +257,8 @@ bool VegaVoiceMessage::TimeReady(double time) {
 
 void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
 
+  /*
+
   // this ensures that if a repeated message is played,
   // and another message from XCSoar interrupts it,
   // and then it returns to this message type, it will
@@ -257,16 +269,18 @@ void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
       id_active = id;
     } else {
       if (active) {
-	// message was already active when it may have been
-	// interrupted, so wait until time is ready for this message
-	return;
+	      // message was already active when it may have been
+	      // interrupted, so wait until time is ready for this message
+	      return;
       } else {
-	// if message wasn't already active, it is now,
-	// so it should be played immediately
-	lastTime = time;
+	      // if message wasn't already active, it is now,
+	      // so it should be played immediately
+	      lastTime = time;
       }
     }
   }
+
+  */
 
   id_active = id;
   active = true;
@@ -308,7 +322,7 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     break;
   case VV_WAYPOINTDISTANCE:
     if ((!Calculated->Circling) 
-	&& (ActiveWayPoint>=0)) {
+        	&& (ActiveWayPoint>=0)) {
 
       // Gives the distance to the active waypoint every X seconds,
       // optionally limited when at last 20 km to go?
@@ -323,31 +337,31 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
       if (Calculated->WaypointDistance*DISTANCEMODIFY<20.0) {
 
-	if (!EnableVoiceWaypointDistance) return false;
+	      if (!EnableVoiceWaypointDistance) return false;
 
-	wsprintf(text,TEXT(",%d"), VWI_PLUS);
-	TextToDigitsLarge(text, Calculated->WaypointDistance*DISTANCEMODIFY);
-	DoSend(Basic->Time, text);
-	return true;
+	      wsprintf(text,TEXT(",%d"), VWI_PLUS);
+	      TextToDigitsLarge(text, Calculated->WaypointDistance*DISTANCEMODIFY);
+	      DoSend(Basic->Time, text);
+	      return true;
       } else {
 
-	if (Calculated->FinalGlide) {
+	      if (Calculated->FinalGlide) {
 
-	  if (!EnableVoiceTaskAltitudeDifference) return false;
+	        if (!EnableVoiceTaskAltitudeDifference) return false;
 
-	  // TODO: BELOW FOUR HUNDRED
-	  double tad = Calculated->TaskAltitudeDifference*ALTITUDEMODIFY; 
-	  if (fabs(tad)>100) {
-	    if (tad>0) {
-	      wsprintf(text,TEXT(",%d"), VWI_ABOVE);
-	    } else {
-	      wsprintf(text,TEXT(",%d"), VWI_BELOW);
-	    }
-	    TextToDigitsHuge(text, fabs(tad));
-	    DoSend(Basic->Time, text);
-	    return true;
-	  }
-	}
+	        // TODO: BELOW FOUR HUNDRED
+	        double tad = Calculated->TaskAltitudeDifference*ALTITUDEMODIFY; 
+	        if (fabs(tad)>100) {
+	          if (tad>0) {
+	            wsprintf(text,TEXT(",%d"), VWI_ABOVE);
+	          } else {
+	            wsprintf(text,TEXT(",%d"), VWI_BELOW);
+	          }
+	          TextToDigitsHuge(text, fabs(tad));
+	          DoSend(Basic->Time, text);
+	          return true;
+	        }
+	      }
 	
       }
     }
@@ -395,7 +409,7 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       //
       // Later give distance/height/direction?
       // Later: "WARNING AIRSPACE ABOVE"
-      wsprintf(text,TEXT(",%d,%d"), VWI_WARNING, VWI_AIRSPACE);
+      wsprintf(text,TEXT(",%d,%d,0"), VWI_WARNING, VWI_AIRSPACE);
       DoSend(Basic->Time, text);
       return true;
     }
@@ -411,6 +425,37 @@ int VegaVoiceMessage::id_active = -1;
 TCHAR VegaVoiceMessage::last_messageText[80];
 
 ///////////////////////////////////////////
+
+
+static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace){
+
+  static bool PlaySimpleWarning = false;
+
+  switch (Action){
+    case asaItemAdded:
+    case asaWarnLevelIncreased:
+      PlaySimpleWarning = true;
+    case asaItemRemoved:
+    case asaClearAll:
+    case asaItemChanged:
+    break;
+
+    case asaProcessEnd:
+      if (PlaySimpleWarning){
+        PlaySimpleWarning = false;
+        #ifndef DISABLEAUDIO
+        MessageBeep(MB_ICONEXCLAMATION);
+        #endif
+        #if defined(GNAV)
+        InputEvents::eventDLLExecute(TEXT("altairplatform.dll DoBeep2 1"));
+        #endif
+      }
+    break;
+
+  }
+
+}
+
 
 VegaVoice::VegaVoice() {
   InitializeCriticalSection(&CritSec_Voice);
@@ -432,6 +477,14 @@ void VegaVoice::UnLock() {
 }
 
 void VegaVoice::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+
+  static bool AirspaceNotivierInstalled = false;
+
+  if (!AirspaceNotivierInstalled){
+    AirspaceNotivierInstalled = true;
+    AirspaceWarnListAddNotifier(AirspaceWarningNotify);
+  }
+
   Lock();
   // update values in each message to determine whether
   // the message should be active
@@ -440,10 +493,10 @@ void VegaVoice::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       UnLock();
       return;
     }
-  }    
+  }
   // no message is active now
   // need to send null message (cancel all)
-  message[0].SendNullMessage();
+  // message[0].SendNullMessage();
   UnLock();
 }
 

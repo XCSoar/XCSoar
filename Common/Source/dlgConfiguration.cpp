@@ -1277,7 +1277,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (AltitudeMode != wp->GetDataField()->GetAsInteger()) {
       AltitudeMode = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryAltMode,AltitudeMode);
+      SetToRegistry(szRegistryAltMode, AltitudeMode);
       changed = true;
     }
   }
@@ -1356,7 +1356,7 @@ void dlgConfigurationShowModal(void){
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
     if (ClipAltitude != ival) {
       ClipAltitude = ival;
-      SetToRegistry(szRegistryAltMode,ClipAltitude);
+      SetToRegistry(szRegistryClipAlt,ClipAltitude);  // fixed 20060430/sgi was szRegistryAltMode
       changed = true;
     }
   }

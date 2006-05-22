@@ -3,7 +3,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
-  Copyright (C) 2000 - 2005  
+  Copyright (C) 2000 - 2005
 
   	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -1620,7 +1620,7 @@ extern "C" {
   VARIOSOUND_API void VarioSound_SetVdead(short v) {
 
     EnterCriticalSection(&CritSec_VarioSound);
- 
+
     audio_deadband_hi = 100+v/2;
     audio_deadband_low = 100-v/2;
     // TODO
@@ -1639,7 +1639,7 @@ extern "C" {
 #endif
 
     variosound_waveOut.Init(variosound_waveOutEventCB,
-			    THREAD_PRIORITY_TIME_CRITICAL, 
+			    THREAD_PRIORITY_TIME_CRITICAL,
 			    BCOUNT,
 			    BSIZE*FREQZ*CHANNELS,
 			    CHANNELS,
@@ -1651,7 +1651,7 @@ extern "C" {
     VarioSound_SetVdead(0);
     VarioSound_SetV(0);
     VarioSound_EnableSound(false);
- 
+
     variosound_waveOut.StartThread();
     variosound_sound = TRUE;
     int i;
@@ -1678,7 +1678,7 @@ extern "C" {
     //	variosound_sound = !variosound_sound;
   }
 
-  
+
   VARIOSOUND_API void VarioSound_Close(void) {  // added sgi
 #ifndef DISABLEAUDIO
     variosound_waveOut.StopThread();   // added manually stop the thread
@@ -1698,11 +1698,11 @@ extern "C" {
 
 extern HINSTANCE                       hInst; // The current instance
 
-BOOL PlayResource (LPTSTR lpName) 
-{ 
-  BOOL bRtn; 
-  LPTSTR lpRes; 
-  HANDLE hResInfo, hRes; 
+BOOL PlayResource (LPTSTR lpName)
+{
+  BOOL bRtn;
+  LPTSTR lpRes;
+  HANDLE hResInfo, hRes;
 
 #ifdef DISABLEAUDIO
   return false;
@@ -1980,3 +1980,4 @@ void VarioSound_synthesiseSound() {
 
   }
 }
+

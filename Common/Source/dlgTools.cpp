@@ -451,6 +451,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 
   XMLNode xMainNode;
 
+/* -> filename is still localized
 #if (WINDOWSPC<1)
   xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
 #else
@@ -458,6 +459,10 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
   sprintf(winname,"C:\\XCSoar%s",FileName);
   xMainNode=XMLNode::openFileHelper(winname ,TEXT("PMML"));
 #endif
+*/
+
+  xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
+
   if (xMainNode.isEmpty()) {
     if (resource) {
       xMainNode =xmlOpenResourceHelper(resource,

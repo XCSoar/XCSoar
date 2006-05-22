@@ -842,6 +842,11 @@ WindowControl::WindowControl(WindowControl *Owner,
   mHeight = Height;
   mParent = Parent;
   mOwner = Owner;
+  // setup Master Window (the owner of all)
+  mTopOwner = Owner;
+  while (Owner != NULL && mTopOwner->GetOwner() != NULL)
+    mTopOwner = mTopOwner->GetOwner();
+    
   // todo
   mhFont = MapWindowFont;
   mVisible = Visible;
@@ -1425,14 +1430,16 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     break;
 
     case WM_KEYDOWN:
-//      if (!OnKeyDown(wParam, lParam)) return(0);
-      return(OnKeyDown(wParam, lParam));
-//    break;
+      // return(OnKeyDown(wParam, lParam));
+      // experimental 20060516:sgi
+      if (!OnKeyDown(wParam, lParam)) return(0);
+      break;
 
     case WM_KEYUP:
-//      if (!OnKeyUp(wParam, lParam)) return(0);
-      return(OnKeyUp(wParam, lParam));
-//    break;
+      // return(OnKeyUp(wParam, lParam));
+      // experimental 20060516:sgi
+      if (!OnKeyUp(wParam, lParam)) return(0);
+      break;
 
     case WM_SETFOCUS:
       SetFocused(true, (HWND) wParam);
@@ -1457,6 +1464,14 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
       Close();
     return(0);
 
+  }
+
+  if (mTopOwner != NULL){
+    if (!mTopOwner->OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
+     return(0);
+  } else {
+    if (OnUnhandledMessage(hwnd, uMsg, wParam, lParam))
+     return(0);
   }
 
   return (DefWindowProc (hwnd, uMsg, wParam, lParam));
@@ -1526,7 +1541,7 @@ void WndForm::Destroy(void){
 
   // animation
 
-  if (mClientWindow) 
+  if (mClientWindow)
     mClientWindow->SetVisible(false);
 
   KillTimer(GetHandle(),cbTimerID);
@@ -1614,7 +1629,7 @@ int WndForm::ShowModal(void){
 
   RECT mRc;
   GetWindowRect(GetHandle(), &mRc);
-  // RECT aniRect = 
+  // RECT aniRect =
       DrawWireRects(&mRc, 5);
 
   SetVisible(true);
@@ -1704,17 +1719,37 @@ int WndForm::ShowModal(void){
 
       }
       if (msg.message == WM_TIMER) {
-	if (msg.hwnd == GetHandle()) {
-	  if (mOnTimerNotify) {
-	    mOnTimerNotify(this);
-	  }
-	  continue;
-	}
+        if (msg.hwnd == GetHandle()) {
+          if (mOnTimerNotify) {
+            mOnTimerNotify(this);
+          }
+          continue;
+        }
       }
 
       TranslateMessage(&msg);
       if (DispatchMessage(&msg)){
 
+        /*
+        // navigation messages are moved to unhandled messages, duto nav events handling changes in event loop
+        if (msg.message == WM_KEYDOWN){
+          if (ActiveControl != NULL){
+            switch(msg.wParam & 0xffff){
+              case VK_UP:
+                if (ActiveControl->GetOwner() != NULL)
+                  ActiveControl->GetOwner()->FocusPrev(ActiveControl);
+              continue;
+              case VK_DOWN:
+                if (ActiveControl->GetOwner() != NULL)
+                  ActiveControl->GetOwner()->FocusNext(ActiveControl);
+              continue;
+            }
+          }
+        } */
+
+      } else {
+
+        /*
         if (msg.message == WM_KEYDOWN){
           if (ActiveControl != NULL){
             switch(msg.wParam & 0xffff){
@@ -1729,7 +1764,9 @@ int WndForm::ShowModal(void){
             }
           }
         }
-      }
+        */
+
+      }
 
     }
 
@@ -1738,7 +1775,7 @@ int WndForm::ShowModal(void){
     // TODO: maybe this should block all key handlers
     // to avoid accidental key presses
     if (!hastimed) {
-#ifndef GNAV
+#if !defined(GNAV) && !defined(NOKEYDEBONCE)
       if (::GetTickCount()-enterTime<1000) {
 	mModalResult = 0;
       } else {
@@ -1878,6 +1915,114 @@ void WndForm::SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender)) {
   mOnTimerNotify = OnTimerNotify;
 }
 
+void WndForm::SetUserMsgNotify(int (*OnUserMsgNotify)(WindowControl * Sender, MSG *msg)){
+  mOnUserMsgNotify = OnUserMsgNotify;
+}
+
+// normal form stuff (nonmodal)
+
+bool WndForm::SetFocused(bool Value, HWND FromTo){
+
+  bool res = WindowControl::SetFocused(Value, FromTo);
+
+  return(res);
+
+}
+
+
+int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
+
+  MSG msg;
+  msg.hwnd = hwnd;
+  msg.message = uMsg;
+  msg.wParam = wParam;
+  msg.lParam = lParam;
+  msg.time = 0;
+  msg.pt.x = 0;
+  msg.pt.y = 0;
+
+  /*if (msg.message == WM_ACTIVATE){
+    msg.wParam = WA_ACTIVE;
+  }*/
+
+  if (msg.message >= WM_USER && msg.message < WM_USER+100){
+    if (mOnUserMsgNotify != NULL)
+      if (!(mOnUserMsgNotify)(this, &msg))
+        return(0);
+  }
+  if (msg.message == WM_KEYUP){
+  }
+  if (msg.message == WM_KEYDOWN){
+    if (mOnKeyDownNotify != NULL)
+      if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
+        return(0);
+
+  }
+  if (msg.message == WM_KEYUP){
+    if (mOnKeyUpNotify != NULL)
+      if (!(mOnKeyUpNotify)(this, msg.wParam, msg.lParam))
+        return(0);
+  }
+  if (msg.message == WM_LBUTTONUP){
+    if (mOnLButtonUpNotify != NULL)
+      if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
+        return(0);
+
+  }
+  if (msg.message == WM_TIMER) {
+    if (msg.hwnd == GetHandle()) {
+      if (mOnTimerNotify) {
+        mOnTimerNotify(this);
+      }
+      return(1);
+    }
+  }
+
+  if (uMsg == WM_KEYDOWN){
+    if (ActiveControl != NULL){
+      switch(wParam & 0xffff){
+        case VK_UP:
+          if (ActiveControl->GetOwner() != NULL)
+            ActiveControl->GetOwner()->FocusPrev(ActiveControl);
+        return(0);
+        case VK_DOWN:
+          if (ActiveControl->GetOwner() != NULL)
+            ActiveControl->GetOwner()->FocusNext(ActiveControl);
+        return(0);
+      }
+    }
+  }
+  else if (uMsg == WM_LBUTTONDOWN){
+
+    /*
+
+    SetActiveWindow(hwnd);
+    SetFocus(hwnd);
+
+    if (!IsChild(GetHandle(), GetTopWindow(GetHandle()))){
+      Show();
+    }
+
+    */
+
+  }
+
+  return(1);
+
+}
+
+void WndForm::Show(void){
+
+  WindowControl::Show();
+
+  SetToForeground();
+
+//  SetFocus(GetTopWindow(GetHandle()));
+
+//  SetActiveWindow(GetHandle());
+
+}
+
 //-----------------------------------------------------------
 // WndButton
 //-----------------------------------------------------------
@@ -1894,6 +2039,8 @@ WndButton::WndButton(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, 
   SetBackColor(GetOwner()->GetBackColor());
 
   _tcscpy(mCaption, Caption);
+
+  mLastDrawTextHeight = -1;
 
 };
 
@@ -1958,11 +2105,11 @@ int WndButton::OnKeyUp(WPARAM wParam, LPARAM lParam){
         mDown = false;
         Paint(GetDeviceContext());
         if (mOnClickNotify != NULL) {
-	  RECT mRc;
-	  GetWindowRect(GetHandle(), &mRc);
-	  SetSourceRectangle(mRc);
+          RECT mRc;
+          GetWindowRect(GetHandle(), &mRc);
+          SetSourceRectangle(mRc);
           (mOnClickNotify)(this);
-	}
+        }
       }
     return(0);
   }
@@ -1992,38 +2139,78 @@ int WndButton::OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
 
 void WndButton::Paint(HDC hDC){
 
-  RECT r;
-  SIZE tsize;
-  POINT org;
+  RECT rc;
 
   if (!GetVisible()) return;
 
   WindowControl::Paint(hDC);
 
-  r.left = 2;
-  r.top = 2;
-  r.right = GetWidth()-2;
-  r.bottom = GetHeight()-2;
-
-
-  SetTextColor(hDC, GetForeColor());
-  SetBkMode(hDC, TRANSPARENT);
-  SelectObject(hDC, GetFont());
-  GetTextExtentPoint(hDC, mCaption, _tcslen(mCaption), &tsize);
-
-  org.x = (GetWidth() - tsize.cx)/2;
-  org.y = (GetHeight() - tsize.cy)/2;
+  CopyRect(&rc, GetBoundRect());
+  InflateRect(&rc, -2, -2); // todo border width
 
   if (mDown){
-    DrawFrameControl(hDC, &r, DFC_BUTTON, DFCS_BUTTONPUSH | DFCS_PUSHED);
-    org.x+=2;
-    org.y+=2;
+    DrawFrameControl(hDC, &rc, DFC_BUTTON, DFCS_BUTTONPUSH | DFCS_PUSHED);
   }else{
-    DrawFrameControl(hDC, &r, DFC_BUTTON, DFCS_BUTTONPUSH);
+    DrawFrameControl(hDC, &rc, DFC_BUTTON, DFCS_BUTTONPUSH);
   }
 
-  ExtTextOut(hDC, org.x, org.y,
-    ETO_OPAQUE, NULL, mCaption, _tcslen(mCaption), NULL);
+  if (mCaption != NULL && mCaption[0] != '\0'){
+
+    SetTextColor(hDC, GetForeColor());
+    SetBkColor(hDC, GetBackColor());
+    SetBkMode(hDC, TRANSPARENT);
+
+    SelectObject(hDC, GetFont());
+
+    CopyRect(&rc, GetBoundRect());
+    InflateRect(&rc, -2, -2); // todo border width
+
+    if (mDown)
+      OffsetRect(&rc, 2, 2);
+
+    if (mLastDrawTextHeight < 0){
+
+      DrawText(hDC, mCaption, _tcslen(mCaption), &rc,
+          DT_CALCRECT
+        | DT_EXPANDTABS
+        | DT_CENTER
+        | DT_NOCLIP
+        | DT_WORDBREAK // mCaptionStyle // | DT_CALCRECT
+      );
+
+      mLastDrawTextHeight = rc.bottom - rc.top;
+      // DoTo optimize
+      CopyRect(&rc, GetBoundRect());
+      InflateRect(&rc, -2, -2); // todo border width
+      if (mDown)
+        OffsetRect(&rc, 2, 2);
+
+    }
+
+    rc.top += ((GetHeight()-4-mLastDrawTextHeight)/2);
+
+    DrawText(hDC, mCaption, _tcslen(mCaption), &rc,
+        DT_EXPANDTABS
+      | DT_CENTER
+      | DT_NOCLIP
+      | DT_WORDBREAK // mCaptionStyle // | DT_CALCRECT
+    );
+
+//    mLastDrawTextHeight = rc.bottom - rc.top;
+
+  }
+
+//  UINT lastAlign = SetTextAlign(hDC, TA_CENTER /*| VTA_CENTER*/);
+//  ExtTextOut(hDC, GetWidth()/2, GetHeight()/2,
+//    /*ETO_OPAQUE | */ETO_CLIPPED, &r, mCaption, _tcslen(mCaption), NULL);
+//  if (lastAlign != GDI_ERROR){
+//    SetTextAlign(hDC, lastAlign);
+//  }
+
+
+// 20060518:sgi old version
+//  ExtTextOut(hDC, org.x, org.y,
+//    /*ETO_OPAQUE | */ETO_CLIPPED, &r, mCaption, _tcslen(mCaption), NULL);
 
 }
 
@@ -2242,8 +2429,14 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
   switch (uMsg){
 
     case WM_KEYDOWN:
-      if (!OnEditKeyDown(wParam, lParam))
+      // tmep hack, do not process nav keys
+      if (wParam == VK_UP || wParam == VK_DOWN){
+        PostMessage(GetParent(), uMsg, wParam, lParam);   // pass the message to the parent window;
         return(0);
+        // return(1);
+      }
+      if (!OnEditKeyDown(wParam, lParam))
+        return(1);
     break;
 
     case WM_KEYUP:
@@ -2697,6 +2890,8 @@ void WndListFrame::Paint(HDC hDC){
 
       if (mOnListCallback != NULL){
         mListInfo.DrawIndex = mListInfo.TopIndex + i;
+        if (mListInfo.DrawIndex == mListInfo.ItemIndex)
+          continue;
         mOnListCallback(this, &mListInfo);
       }
 
@@ -2722,6 +2917,11 @@ void WndListFrame::Paint(HDC hDC){
     DrawScrollBar(hDC);
 
   }
+}
+
+void WndListFrame::Redraw(void){
+  WindowControl::Redraw();  // redraw all but nor the current
+  mClients[0]->Redraw();    // redraw the current                                      
 }
 
 void WndListFrame::DrawScrollBar(HDC hDC) {

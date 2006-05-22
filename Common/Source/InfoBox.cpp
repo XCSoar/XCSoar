@@ -562,8 +562,8 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     case WM_LBUTTONDOWN:
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
-      if (ib) 
-	SendMessage(ib->GetParent(), WM_COMMAND, (WPARAM)0, (LPARAM)ib->GetHandle());
+      if (ib)
+	      SendMessage(ib->GetParent(), WM_COMMAND, (WPARAM)0, (LPARAM)ib->GetHandle());
     return(0);
 
     case WM_LBUTTONUP:

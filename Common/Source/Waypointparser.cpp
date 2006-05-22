@@ -55,7 +55,10 @@ static double CalculateAngle(TCHAR *temp);
 static int CheckFlags(TCHAR *temp);
 static double ReadAltitude(TCHAR *temp);
 
-static TCHAR TempString[210];
+#define WPPARSESTRINGLENGTH 210
+static TCHAR TempString[WPPARSESTRINGLENGTH];
+
+static int WaypointOutOfTerrainRangeDontAskAgain = 0;
 
 
 void CloseWayPoints() {
@@ -63,7 +66,7 @@ void CloseWayPoints() {
   if (NumberOfWayPoints) {
     for (i=0; i<NumberOfWayPoints; i++) {
       if (WayPointList[i].Details) {
-	free(WayPointList[i].Details);
+	      free(WayPointList[i].Details);
       }
     }
   }
@@ -72,29 +75,76 @@ void CloseWayPoints() {
     LocalFree((HLOCAL)WayPointList);
     WayPointList = NULL;
   }
+
+  WaypointOutOfTerrainRangeDontAskAgain = 0;
+
 }
 
 
 
-bool WaypointInTerrainRange(WAYPOINT *List) {
+static bool WaypointInTerrainRange(WAYPOINT *List) {
 
+  if (WaypointOutOfTerrainRangeDontAskAgain == 1){
+    return(true);
+  }
+  
   if (terrain_dem_calculations.isTerrainLoaded()) {
     if (
-	(List->Latitude<=RasterTerrain::TerrainInfo.Top) &&
-	(List->Latitude>=RasterTerrain::TerrainInfo.Bottom) &&
-	(List->Longitude<=RasterTerrain::TerrainInfo.Right) &&
-	(List->Longitude>=RasterTerrain::TerrainInfo.Left)) {
+	    (List->Latitude<=RasterTerrain::TerrainInfo.Top) &&
+	    (List->Latitude>=RasterTerrain::TerrainInfo.Bottom) &&
+	    (List->Longitude<=RasterTerrain::TerrainInfo.Right) &&
+	    (List->Longitude>=RasterTerrain::TerrainInfo.Left)) {
       return true;
-    } else 
+    } else {
+
+      if (WaypointOutOfTerrainRangeDontAskAgain == 0){
+        
+        TCHAR sTmp[250];
+        int res;
+
+        _stprintf(sTmp, gettext(TEXT("Waypoint #%d \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")), List->Number, List->Name);
+  
+        res = dlgWaypointOutOfTerrain(sTmp);
+
+        switch(res){
+          case wpTerrainBoundsYes: 
+            return true;
+          case wpTerrainBoundsNo: 
+            return false;
+          case wpTerrainBoundsYesAll: 
+            WaypointOutOfTerrainRangeDontAskAgain = 1;
+            return true;
+          case mrCancle: 
+          case wpTerrainBoundsNoAll: 
+            WaypointOutOfTerrainRangeDontAskAgain = 2;
+            return false;
+        }
+
+
+      } else {
+        if (WaypointOutOfTerrainRangeDontAskAgain == 2)
+          return(false);
+      }
+
       return false;
+    }
   }
   // no terrain database, so all waypoints are ok
   return true;
 
 }
 
+static int ParseWayPointError(int LineNumber, TCHAR *FileName, TCHAR *String){
+  TCHAR szTemp[250];
 
-void ReadWayPointFile(FILE *fp)
+  _stprintf(szTemp, gettext(TEXT("Waypointfile Parse Error\r\nFile %s Line %d\r\n%s")), FileName, LineNumber, String);
+  MessageBoxX(hWndMainWindow,szTemp,gettext(TEXT("Error")),
+      MB_OK | MB_ICONWARNING);
+  return(1);
+}
+
+
+void ReadWayPointFile(FILE *fp, TCHAR *CurrentWpFileName)
 {
   WAYPOINT *List, *p;
   TCHAR szTemp[100];
@@ -141,43 +191,55 @@ void ReadWayPointFile(FILE *fp)
       StepProgressDialog();
     }
     
-    if(_tcsstr(TempString,TEXT("**")) != TempString) // Look For Comment
-      {
-        List->Details = NULL; 
-        if (ParseWayPointString(TempString,List)) {
+    if (_tcsstr(TempString, TEXT("**")) == TempString) // Look For Comment
+      continue;
 
-	  if (WaypointInTerrainRange(List)) {
+    if (_tcsstr(TempString, TEXT("*")) == TempString)  // Look For SeeYou Comment
+      continue;
 
-	    List ++;
-	    NumberOfWayPoints++;
-	    
-	    if ((NumberOfWayPoints % 50) == 0){
-	      
-	      if ((p = (WAYPOINT *)LocalReAlloc(WayPointList, ((NumberOfWayPoints/50)+1) * 50 * sizeof(WAYPOINT), LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
-		
-		MessageBoxX(hWndMainWindow,
-			    gettext(TEXT("Not Enough Memory For Waypoints")),
-			    gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
-		
-		return;
+    if (TempString[0] == '\0')
+      continue;
+
+    List->Details = NULL; 
+    __try{
+      if (ParseWayPointString(TempString, List)) {
+
+        if (WaypointInTerrainRange(List)) {  // WHY???
+
+	        List ++;
+	        NumberOfWayPoints++;
+	        
+	        if ((NumberOfWayPoints % 50) == 0){
+	          
+	          if ((p = (WAYPOINT *)LocalReAlloc(WayPointList, ((NumberOfWayPoints/50)+1) * 50 * sizeof(WAYPOINT), LMEM_MOVEABLE | LMEM_ZEROINIT)) == NULL){
+		    
+		          MessageBoxX(hWndMainWindow,
+			              gettext(TEXT("Not Enough Memory For Waypoints")),
+			              gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
+		          
+		          return;
+	          }
+	          
+	          if (p != WayPointList){
+		          WayPointList = p;
+		          List = WayPointList + NumberOfWayPoints;
+	          }
+	          
+	        }
 	      }
-	      
-	      if (p != WayPointList){
-		WayPointList = p;
-		List = WayPointList + NumberOfWayPoints;
-	      }
-	      
-	    }
-	  }
 
-        } else {
-
-          _stprintf(szTemp, gettext(TEXT("Waypointfile Parse Error at Line %d")), nLineNumber);
-          MessageBoxX(hWndMainWindow,szTemp,gettext(TEXT("Error")),
-		      MB_OK | MB_ICONWARNING);
-
-        }
       }
+      continue;
+    }__except(EXCEPTION_EXECUTE_HANDLER){
+      if (ParseWayPointError(nLineNumber, CurrentWpFileName, TempString)==1)
+        continue;
+    }
+
+    if (ParseWayPointError(nLineNumber, CurrentWpFileName, TempString)==1)
+      continue;
+
+    break;
+
   }
 
   wsprintf(szTemp,TEXT("100%%"));       
@@ -187,12 +249,15 @@ void ReadWayPointFile(FILE *fp)
 
 
 
-int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp)
+int ParseWayPointString(TCHAR *String,WAYPOINT *Temp)
 {
   TCHAR ctemp[80];
   TCHAR *Zoom;
   TCHAR *pWClast = NULL;
   TCHAR *pToken;
+  TCHAR TempString[WPPARSESTRINGLENGTH];
+
+  _tcscpy(TempString, String);  // 20060513:sgi added wor on a copy of the string, do not modify the source string, needed on error messages
 
   // ExtractParameter(TempString,ctemp,0);
   if ((pToken = strtok_r(TempString, TEXT(","), &pWClast)) == NULL)
@@ -433,36 +498,67 @@ void ReadWayPoints(void)
         
   FILE *fp=NULL;
 
-  LockFlightData();
-  CloseWayPoints();
-  GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
-  SetRegistryString(szRegistryWayPointFile, TEXT("\0"));  
+  __try{
+
+    LockFlightData();
+    CloseWayPoints();
+    GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
+    // SetRegistryString(szRegistryWayPointFile, TEXT("\0"));  
       
-  if (_tcslen(szFile1)>0)      
-    fp = _tfopen(szFile1, TEXT("rt"));
+    if (_tcslen(szFile1)>0)      
+      fp = _tfopen(szFile1, TEXT("rt"));
                         
-  if(fp != NULL)
-    {
-      ReadWayPointFile(fp);
-      fclose(fp);
-      // read OK, so set the registry to the actual file name
-      SetRegistryString(szRegistryWayPointFile, szFile1);  
-    }
+    if(fp != NULL)
+      {
+        ReadWayPointFile(fp, szFile1);
+        fclose(fp);
+        // read OK, so set the registry to the actual file name
+        // SetRegistryString(szRegistryWayPointFile, szFile1);  
+      }
+
+  }__except(EXCEPTION_EXECUTE_HANDLER){
+    CloseWayPoints();
+    MessageBoxX(hWndMainWindow,
+		  gettext(TEXT("Unhandled Error in first Waypoint file\r\nNo Wp's loaded from that File!")),
+			gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
+    SetRegistryString(szRegistryWayPointFile, TEXT("\0"));  
+  }
+
 
   // read additional waypoint file
+  int NumberOfWayPointsAfterFirstFile = NumberOfWayPoints;
 
-  GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
-  SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));  
+  __try{
+    GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
+    //SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));  
 
-  if (_tcslen(szFile2)>0)      
-    fp = _tfopen(szFile2, TEXT("rt"));
-  if(fp != NULL)
-    {
-      ReadWayPointFile(fp);
-      fclose(fp);
-      // read OK, so set the registry to the actual file name
-      SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);  
+    if (_tcslen(szFile2)>0)      
+      fp = _tfopen(szFile2, TEXT("rt"));
+    if(fp != NULL)
+      {
+        ReadWayPointFile(fp, szFile2);
+        fclose(fp);
+        // read OK, so set the registry to the actual file name
+        // SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);  
+      }
+
+  }__except(EXCEPTION_EXECUTE_HANDLER){
+
+    if (NumberOfWayPointsAfterFirstFile == 0){
+      CloseWayPoints();
+    } else {
+      unsigned int i;
+      for (i=NumberOfWayPointsAfterFirstFile; i<NumberOfWayPoints; i++) {
+        if (WayPointList[i].Details) {
+          free(WayPointList[i].Details);
+        }
+      }
     }
+    MessageBoxX(hWndMainWindow,
+		  gettext(TEXT("Unhandled Error in second Waypoint file\r\nNo Wp's loaded from that File!")),
+			gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
+    SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));  
+  }
 
   UnlockFlightData();
 
@@ -514,7 +610,7 @@ void SetHome(void)
 int FindNearestWayPoint(double X, double Y, double MaxRange)
 {
   unsigned int i;
-  int NearestIndex = 0;
+  int NearestIndex = -1;  // 20060504/sgi was 0
   double NearestDistance, Dist;
 
   if(NumberOfWayPoints ==0)
@@ -522,7 +618,8 @@ int FindNearestWayPoint(double X, double Y, double MaxRange)
       return -1;
     }
                 
-  NearestDistance = Distance(Y,X,WayPointList[0].Latitude, WayPointList[0].Longitude);
+  // 20060504/sgi was NearestDistance = Distance(Y,X,WayPointList[0].Latitude, WayPointList[0].Longitude);
+  NearestDistance = MaxRange;
   for(i=1;i<NumberOfWayPoints;i++)
     {
       if (((WayPointList[i].Zoom >= MapWindow::MapScale*10)||

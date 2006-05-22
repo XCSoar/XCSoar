@@ -161,7 +161,10 @@ public:
     int nf=0;
     double ctg=0.0;
     double stg=0.0;
-    for (int i=0; i<NUMP; i++) {
+    int i;
+
+
+    for (i=0; i<NUMP; i++) {
       if (points[i].time>0) {
 	nf++;
 	if (t-points[i].time>10*60) {
