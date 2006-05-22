@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmWaypointOutOfTerrain" Type="Dialog" X=60 Y=45 Width=200 Height=120 Caption="Waypoint Parser" Font=2 BackColor=0xDADBAB>
+  <WndFrame Name="frmWaypointOutOfTerrainText" X=0 Y=0 Width=200 Height=80 Font=2 />
+
+  <WndButton   Caption="Yes"      X=4   Y=74 width=35 height=22 Font=2 OnClickNotify="OnYesClicked"/>
+  <WndButton   Caption="No"       X=41  Y=74 width=35 height=22 Font=2 OnClickNotify="OnNoClicked"/>
+  <WndButton   Caption="Yes All"  X=83  Y=74 width=50 height=22 Font=2 OnClickNotify="OnYesAllClicked"/>
+  <WndButton   Caption="No All"   X=139 Y=74 width=50 height=22 Font=2 OnClickNotify="OnNoAllClicked"/>
+  
+</WndForm>    
+
+</PMML>

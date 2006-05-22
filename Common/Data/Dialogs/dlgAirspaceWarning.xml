@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmAirspaceWarning" Type="Dialog" X=10 Y=10 Width=228 Height=160 Caption="Airspace Warnings" Font=2 BackColor=0xDADBAB>
+
+  <WndListFrame Name=frmAirspaceWarningList X=0 Y=1 Width=228 Height=110 Font=2 OnListInfo="OnAirspaceListInfo">
+    <WndOwnerDrawFrame Name=frmAirspaceWarningListEntry X=0 Y=0 Width=224 Height=30 Font=2 OnPaint="OnAirspaceListItemPaint"/>
+  </WndListFrame>
+
+  <WndButton   name="cmdAckOutside" Caption="ACK Warn"    X=2   Y=106 width=44 height=36 Font=2 OnClickNotify="OnAck1Clicked"/>
+  <WndButton   name="cmdAck"        Caption="ACK Space"   X=46  Y=106 width=44 height=36 Font=2 OnClickNotify="OnAckClicked"/>
+  <WndButton   Caption="ACK Day"  			  X=90  Y=106 width=44 height=36 Font=2 OnClickNotify="OnAck2Clicked"/>
+  <WndButton   Caption="Enable"                           X=134 Y=106 width=44 height=36 Font=2 OnClickNotify="OnEnableClicked"/>
+  <WndButton   Caption="Close"                            X=178 Y=106 width=44 height=36 Font=2 OnClickNotify="OnCloseClicked"/>
+  
+</WndForm>    
+
+</PMML>
