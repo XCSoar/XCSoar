@@ -123,6 +123,7 @@ public:
   static bool FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer, size_t size);
 
   static double ToUserAltitude(double Altitude);
+  static double Units::ToSysAltitude(double Altitude);
 
   static bool GetUnitBitmap(Units_t Unit, HBITMAP *HBmp, POINT *Org, POINT *Size, int Kind);
   static bool LoadUnitBitmap(HINSTANCE hInst);

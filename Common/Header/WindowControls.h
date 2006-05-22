@@ -457,6 +457,7 @@ class WindowControl {
 
     HWND mParent;
     WindowControl *mOwner;
+    WindowControl *mTopOwner;
     HDC  mHdc;
     HDC  mHdcTemp;
     HBITMAP mBmpMem;
@@ -524,6 +525,9 @@ class WindowControl {
       return(1);
     };
     virtual int OnCommand(WPARAM wParam, LPARAM lParam){
+      return(1);
+    };
+    virtual int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
       return(1);
     };
     virtual void Close(void){
@@ -595,7 +599,7 @@ class WindowControl {
 
     virtual void Destroy(void);
 
-    void Redraw(void);
+    virtual void Redraw(void);
 
     void PaintSelector(bool Value){mDontPaintSelector = Value;};
 
@@ -676,6 +680,8 @@ class WndListFrame:public WndFrame{
     void RedrawScrolled(bool all);
     void DrawScrollBar(HDC hDC);
     int RecalculateIndices(bool bigscroll);
+    void Redraw(void);
+    int GetItemIndex(void){return(mListInfo.ItemIndex);}
 
   protected:
 
@@ -741,6 +747,10 @@ class WndForm:public WindowControl{
     int (*mOnKeyDownNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
     int (*mOnKeyUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
     int (*mOnLButtonUpNotify)(WindowControl * Sender, WPARAM wParam, LPARAM lParam);
+    int (*mOnUserMsgNotify)(WindowControl * Sender, MSG *msg);
+
+
+    int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     void Paint(HDC hDC);
     int cbTimerID;
@@ -753,6 +763,9 @@ class WndForm:public WindowControl{
 
     HWND GetClientAeraHandle(void);
     void AddClient(WindowControl *Client);
+
+    virtual bool SetFocused(bool Value, HWND FromTo);
+
 
     int OnLButtonUp(WPARAM wParam, LPARAM lParam){
       return(0);
@@ -773,6 +786,7 @@ class WndForm:public WindowControl{
     HFONT SetTitleFont(HFONT Value);
 
     int ShowModal(void);
+    void Show(void);
 
     void SetCaption(TCHAR *Value);
     TCHAR *GetCaption(void){return(mCaption);};
@@ -788,6 +802,8 @@ class WndForm:public WindowControl{
 
     void SetTimerNotify(int (*OnTimerNotify)(WindowControl * Sender));
 
+    void SetUserMsgNotify(int (*OnUserMsgNotify)(WindowControl * Sender, MSG *msg));
+
 };
 
 class WndButton:public WindowControl{
@@ -797,6 +813,7 @@ class WndButton:public WindowControl{
     void Paint(HDC hDC);
     bool mDown;
     bool mDefault;
+    int mLastDrawTextHeight;
     void (*mOnClickNotify)(WindowControl * Sender);
 
   public:
