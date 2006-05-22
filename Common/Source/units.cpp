@@ -473,6 +473,14 @@ double Units::ToUserAltitude(double Altitude){
   return(Altitude);
 }
 
+double Units::ToSysAltitude(double Altitude){
+  UnitDescriptor_t *pU = &UnitDescriptors[UserAltitudeUnit];
+
+  Altitude = Altitude / pU->ToUserFact; // + pU->ToUserOffset;
+
+  return(Altitude);
+}
+
 
 
 void Units::setupUnitBitmap(Units_t Unit, HINSTANCE hInst, WORD IDB, int Width, int Height){

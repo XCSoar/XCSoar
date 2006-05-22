@@ -52,7 +52,7 @@ bool EnableAnimation=false;
 void ReadWinPilotPolarInternal(int i);
 
 TCHAR szRegistryKey[] =                TEXT("Software\\MPSR\\XCSoar");
-TCHAR *szRegistryDisplayType[] =     { TEXT("Info0"),
+TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =     { TEXT("Info0"),
 				       TEXT("Info1"),
 				       TEXT("Info2"),
 				       TEXT("Info3"),
@@ -62,6 +62,10 @@ TCHAR *szRegistryDisplayType[] =     { TEXT("Info0"),
 				       TEXT("Info7"),
 				       TEXT("Info8"),
 				       TEXT("Info9")
+				       TEXT("Info10")
+				       TEXT("Info11")
+				       TEXT("Info12")
+				       TEXT("Info13")
 }; // pL
 
 TCHAR *szRegistryColour[] =     { TEXT("Colour0"),
@@ -986,6 +990,7 @@ void rotate(double &xin, double &yin, const double &angle)
 }
 
 
+
 void frotate(float &xin, float &yin, const float &angle)
 {
   float x= xin;
@@ -1247,7 +1252,7 @@ void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber
 }
 
 
-void ReadWinPilotPolar() {
+bool ReadWinPilotPolar(void) {
 
   TCHAR	szFile[MAX_PATH] = TEXT("\0");
   TCHAR ctemp[80];
@@ -1257,65 +1262,76 @@ void ReadWinPilotPolar() {
   double POLARV[3];
   double POLARW[3];
   double ww[2];
+  bool foundline = false;
 
-  ww[0]= 403.0; // 383
-  ww[1]= 101.0; // 121
-  POLARV[0]= 115.03;
-  POLARW[0]= -0.86;
-  POLARV[1]= 174.04;
-  POLARW[1]= -1.76;
-  POLARV[2]= 212.72;
-  POLARW[2]= -3.4;
+  __try{
 
-  GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
-  SetRegistryString(szRegistryPolarFile, TEXT("\0"));
+    ww[0]= 403.0; // 383
+    ww[1]= 101.0; // 121
+    POLARV[0]= 115.03;
+    POLARW[0]= -0.86;
+    POLARV[1]= 174.04;
+    POLARW[1]= -1.76;
+    POLARV[2]= 212.72;
+    POLARW[2]= -3.4;
 
-  hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+    GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
+    // SetRegistryString(szRegistryPolarFile, TEXT("\0"));
 
-  if(hFile != INVALID_HANDLE_VALUE )
-    {
+    hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 
-      bool foundline = false;
+    if (hFile != INVALID_HANDLE_VALUE ){
 
-      while(ReadString(hFile,200,TempString) && (!foundline))
-	{
+      __try{
 
-	  if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
-	    {
-	      PExtractParameter(TempString, ctemp, 0);
-	      ww[0] = StrToDouble(ctemp,NULL);
 
-	      PExtractParameter(TempString, ctemp, 1);
-	      ww[1] = StrToDouble(ctemp,NULL);
+      int *p=NULL; // test, force an exception
+      p=0;
 
-	      PExtractParameter(TempString, ctemp, 2);
-	      POLARV[0] = StrToDouble(ctemp,NULL);
-	      PExtractParameter(TempString, ctemp, 3);
-	      POLARW[0] = StrToDouble(ctemp,NULL);
+        while(ReadString(hFile,200,TempString) && (!foundline)){
 
-	      PExtractParameter(TempString, ctemp, 4);
-	      POLARV[1] = StrToDouble(ctemp,NULL);
-	      PExtractParameter(TempString, ctemp, 5);
-	      POLARW[1] = StrToDouble(ctemp,NULL);
+          if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
+            {
+              PExtractParameter(TempString, ctemp, 0);
+              ww[0] = StrToDouble(ctemp,NULL);
 
-	      PExtractParameter(TempString, ctemp, 6);
-	      POLARV[2] = StrToDouble(ctemp,NULL);
-	      PExtractParameter(TempString, ctemp, 7);
-	      POLARW[2] = StrToDouble(ctemp,NULL);
+              PExtractParameter(TempString, ctemp, 1);
+              ww[1] = StrToDouble(ctemp,NULL);
 
-	      PolarWinPilot2XCSoar(POLARV, POLARW, ww);
+              PExtractParameter(TempString, ctemp, 2);
+              POLARV[0] = StrToDouble(ctemp,NULL);
+              PExtractParameter(TempString, ctemp, 3);
+              POLARW[0] = StrToDouble(ctemp,NULL);
 
-	      foundline = true;
-	    }
-	}
+              PExtractParameter(TempString, ctemp, 4);
+              POLARV[1] = StrToDouble(ctemp,NULL);
+              PExtractParameter(TempString, ctemp, 5);
+              POLARW[1] = StrToDouble(ctemp,NULL);
 
-      // file was OK, so save it
-      if (foundline) {
-	SetRegistryString(szRegistryPolarFile, szFile);
+              PExtractParameter(TempString, ctemp, 6);
+              POLARV[2] = StrToDouble(ctemp,NULL);
+              PExtractParameter(TempString, ctemp, 7);
+              POLARW[2] = StrToDouble(ctemp,NULL);
+
+              PolarWinPilot2XCSoar(POLARV, POLARW, ww);
+
+              foundline = true;
+            }
+        }
+
+        // file was OK, so save it
+        if (foundline) {
+          SetRegistryString(szRegistryPolarFile, szFile);
+        }
+      }__finally{
+        CloseHandle (hFile);
       }
-
-      CloseHandle (hFile);
     }
+  }__except(EXCEPTION_EXECUTE_HANDLER){
+    foundline = false;
+  }
+
+  return(foundline);
 
 }
 
@@ -1364,7 +1380,12 @@ void CalculateNewPolarCoef(void)
       WEIGHTS[i] = Weights[POLARID][i];
     }
   if (POLARID==6) {
-    ReadWinPilotPolar();
+    if (!ReadWinPilotPolar()){  // error reading winpilot file
+      POLARID = 2;              // do it again with default polar (LS8)
+      CalculateNewPolarCoef();
+  		MessageBoxX(NULL, gettext(TEXT("Error loading Polar file!\r\nUse LS8 Polar.")), gettext(TEXT("Warning")),
+			    MB_OK|MB_ICONERROR);
+    };
   }
   if (POLARID>6) {
     ReadWinPilotPolarInternal(POLARID-7);
@@ -1703,14 +1724,21 @@ BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
     }
 }
 
+#define CheckIndex(x, i)    ASSERT((i>=0) && (sizeof(x)/sizeof(x[0]) > i));
+
 void SetRegistryColour(int i, DWORD c)
 {
+
+  CheckIndex(szRegistryColour, i);
+
   SetToRegistry(szRegistryColour[i] ,c) ;
 }
 
 
 void SetRegistryBrush(int i, DWORD c)
 {
+  CheckIndex(szRegistryBrush, i);
+
   SetToRegistry(szRegistryBrush[i] ,c) ;
 }
 
@@ -1718,12 +1746,17 @@ void SetRegistryBrush(int i, DWORD c)
 
 void SetRegistryAirspaceMode(int i)
 {
+
+  CheckIndex(MapWindow::iAirspaceMode, i);
+  CheckIndex(szRegistryAirspaceMode, i);
+
   DWORD val = MapWindow::iAirspaceMode[i];
   SetToRegistry(szRegistryAirspaceMode[i], val);
 }
 
 int GetRegistryAirspaceMode(int i) {
   DWORD Temp= 3; // display + warnings
+  CheckIndex(szRegistryAirspaceMode, i);
   GetFromRegistry(szRegistryAirspaceMode[i],&Temp);
   return Temp;
 }
@@ -2037,14 +2070,15 @@ BOOL ReadStringX(FILE *fp, int Max, TCHAR *String){
   if (fp == NULL || Max < 1 || String == NULL)
     return (0);
 
-  if (_fgetts(String, 200, fp) != NULL){
+  if (_fgetts(String, Max, fp) != NULL){     // 20060512/sgi change 200 to max
 
-    TCHAR *pWC = &String[_tcslen(String)];
+    String[Max-1] = '\0';                    // 20060512/sgi added make shure the  string is terminated
+    TCHAR *pWC = &String[_tcslen(String)-1]; // 20060512/sgi change add -1 to set pWC at the end of the string
 
-    while (pWC > String && (*pWC == '\r' || *pWC == '\n'))
+    while (pWC > String && (*pWC == '\r' || *pWC == '\n')){
+      *pWC = '\0';
       pWC--;
-
-    *pWC = '\0';
+    }
 
     return (1);
   }
@@ -2724,7 +2758,7 @@ void LoadRegistryFromFile(TCHAR *szFile)
 {
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
-    fp = _tfopen(szFile, TEXT("r"));
+    fp = _tfopen(szFile, TEXT("r"));    //20060515:sgi add b
   if(fp == NULL) {
     // error
     return;
@@ -2766,7 +2800,7 @@ void SaveRegistryToFile(TCHAR *szFile)
 
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
-    fp = _tfopen(szFile, TEXT("w"));
+    fp = _tfopen(szFile, TEXT("w"));  //20060515:sgi add b
   if(fp == NULL) {
     // error
     return;
@@ -3145,7 +3179,7 @@ bool CheckRectOverlap(RECT rc1, RECT rc2) {
 
 */
 
-#ifndef GNAV
+#if !defined(GNAV) || defined(WINDOWSPC)
 typedef DWORD (_stdcall *GetIdleTimeProc) (void);
 GetIdleTimeProc GetIdleTime;
 #endif
@@ -3160,7 +3194,7 @@ int MeasureCPULoad() {
   static int PercentIdle;
   static int PercentLoad;
   static int pi;
-#ifndef GNAV
+#if !defined(GNAV) || defined(WINDOWSPC)
   if (!init) {
     // get the pointer to the function
     GetIdleTime = (GetIdleTimeProc)

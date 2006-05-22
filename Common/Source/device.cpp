@@ -111,6 +111,10 @@ BOOL devRegisterGetName(int Index, TCHAR *Name){
   return(TRUE);
 }
 
+static devIsFalseReturn(PDeviceDescriptor_t d){
+  return(FALSE);
+}
+
 BOOL devInit(LPTSTR CommandLine){
   int i;
   TCHAR DeviceName[DEVNAMESIZE];
@@ -130,9 +134,10 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].DeclBegin = NULL;
     DeviceList[i].DeclEnd = NULL;
     DeviceList[i].DeclAddWayPoint = NULL;
-    DeviceList[i].IsLogger = NULL;
-    DeviceList[i].IsGPSSource = NULL;
-    DeviceList[i].IsBaroSource = NULL;
+    DeviceList[i].IsLogger = devIsFalseReturn;
+    DeviceList[i].IsGPSSource = devIsFalseReturn;
+    DeviceList[i].IsBaroSource = devIsFalseReturn;
+    DeviceList[i].PutVoice = (int (*)(struct DeviceDescriptor_t *,TCHAR *))devIsFalseReturn;
     DeviceList[i].PortNumber = i;
     DeviceList[i].PutQNH = NULL;
     DeviceList[i].OnSysTicker = NULL;
@@ -410,6 +415,21 @@ BOOL devLinkTimeout(PDeviceDescriptor_t d){
   } else {
     if (d->LinkTimeout != NULL)
       return ((d->LinkTimeout)(d));
+  }
+  return(FALSE);
+}
+
+BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence){
+  if (d == NULL){
+    for (int i=0; i<NUMDEV; i++){
+      d = &DeviceList[i];
+      if (d->PutVoice != NULL)
+        (d->PutVoice)(d, Sentence);
+    }
+    return (TRUE);
+  } else {
+    if (d->PutVoice != NULL)
+      return ((d->PutVoice)(d, Sentence));
   }
   return(FALSE);
 }

@@ -123,46 +123,48 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
       SelectObject(hDC, GetStockObject(WHITE_PEN));
       SelectObject(hDC, GetStockObject(WHITE_BRUSH));
       Rectangle(hDC,
-		100*InfoBoxLayout::scale,
-		2*InfoBoxLayout::scale,
-		180*InfoBoxLayout::scale,
-		22*InfoBoxLayout::scale);
+          100*InfoBoxLayout::scale,
+          2*InfoBoxLayout::scale,
+          180*InfoBoxLayout::scale,
+          22*InfoBoxLayout::scale);
       SetTextColor(hDC,
-		   MapWindow::Colours[MapWindow::iAirspaceColour[i]]);
-      SetBkColor(hDC,
-		 RGB(0xFF, 0xFF, 0xFF));
+         MapWindow::Colours[MapWindow::iAirspaceColour[i]]);
+         SetBkColor(hDC,
+         RGB(0xFF, 0xFF, 0xFF));
       SelectObject(hDC,
-		   MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[i]]);
-      Rectangle(hDC,
-		100*InfoBoxLayout::scale,
-		2*InfoBoxLayout::scale,
-		180*InfoBoxLayout::scale,
-		22*InfoBoxLayout::scale);
+        MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[i]]);
+        Rectangle(hDC,
+        100*InfoBoxLayout::scale,
+        2*InfoBoxLayout::scale,
+        180*InfoBoxLayout::scale,
+        22*InfoBoxLayout::scale);
+
     } else {
+
       bool iswarn;
       bool isdisplay;
 
       iswarn = (MapWindow::iAirspaceMode[i]>=2);
       isdisplay = ((MapWindow::iAirspaceMode[i]%2)>0);
       if (iswarn) {
-	_tcscpy(label, TEXT("Warn"));
-	ExtTextOut(hDC,
-		   90*InfoBoxLayout::scale,
-		   2*InfoBoxLayout::scale,
-		   ETO_OPAQUE, NULL,
-		   label,
-		   _tcslen(label),
-		   NULL);
+        _tcscpy(label, TEXT("Warn"));
+        ExtTextOut(hDC,
+             90*InfoBoxLayout::scale,
+             2*InfoBoxLayout::scale,
+             ETO_OPAQUE, NULL,
+             label,
+             _tcslen(label),
+             NULL);
       }
       if (isdisplay) {
-	_tcscpy(label, TEXT("Display"));
-	ExtTextOut(hDC,
-		   150*InfoBoxLayout::scale,
-		   2*InfoBoxLayout::scale,
-		   ETO_OPAQUE, NULL,
-		   label,
-		   _tcslen(label),
-		   NULL);
+        _tcscpy(label, TEXT("Display"));
+        ExtTextOut(hDC,
+             150*InfoBoxLayout::scale,
+             2*InfoBoxLayout::scale,
+             ETO_OPAQUE, NULL,
+             label,
+             _tcslen(label),
+             NULL);
       }
 
     }

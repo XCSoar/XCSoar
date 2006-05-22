@@ -1,4 +1,4 @@
-/*
+ /*
 Copyright_License {
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
@@ -565,10 +565,15 @@ int NUMSELECTSTRINGS = 53;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
+bool csFlightDataInitialized = false;
 CRITICAL_SECTION  CritSec_TerrainDataGraphics;
+bool csTerrainDataGraphicsInitialized = false;
 CRITICAL_SECTION  CritSec_TerrainDataCalculations;
+bool csTerrainDataCalculationsInitialized = false;
 CRITICAL_SECTION  CritSec_NavBox;
+bool csNavBoxInitialized = false;
 CRITICAL_SECTION  CritSec_Comm;
+bool csCommInitialized = false;
 
 
 // Forward declarations of functions included in this code module:
@@ -894,10 +899,12 @@ void FullScreen() {
 
 
 void LockComm() {
+  if (!csCommInitialized) throw TEXT("LockComm Error");
   EnterCriticalSection(&CritSec_Comm);
 }
 
 void UnlockComm() {
+  if (!csCommInitialized) throw TEXT("LockComm Error");
   LeaveCriticalSection(&CritSec_Comm);
 }
 
@@ -1053,9 +1060,9 @@ DWORD InstrumentThread (LPVOID lpvoid) {
     if (NMEAParser::VarioUpdated) {
       NMEAParser::VarioUpdated = false;
       if (MapWindow::IsDisplayRunning()) {
-	if (EnableVarioGauge) {
-	  GaugeVario::Render();
-	}
+        if (EnableVarioGauge) {
+	        GaugeVario::Render();
+        }
       }
     }
   }
@@ -1097,21 +1104,21 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
     // Do vario first to reduce audio latency
     if (GPS_INFO.VarioAvailable) {
-      if (NMEAParser::VarioUpdated) {
-	if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
+      // if (NMEAParser::VarioUpdated) {  20060511/sgi commented out dueto asynchronus reset of VarioUpdate in InstrumentThread
+	      if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
 
-	}
-	// assume new vario data has arrived, so infoboxes
-	// need to be redrawn
-      }
+	      }
+	      // assume new vario data has arrived, so infoboxes
+	      // need to be redrawn
+      //} 20060511/sgi commented out
     } else {
       // run the function anyway, because this gives audio functions
       // if no vario connected
       if (NMEAParser::GpsUpdated) {
-	if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
-	}
-	NMEAParser::VarioUpdated = true; // emulate vario update
-	PulseEvent(varioTriggerEvent);
+	      if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
+	      }
+	      NMEAParser::VarioUpdated = true; // emulate vario update
+	      PulseEvent(varioTriggerEvent);
       }
     }
 
@@ -1272,10 +1279,15 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
 
   InitializeCriticalSection(&CritSec_FlightData);
+  csFlightDataInitialized = true;
   InitializeCriticalSection(&CritSec_NavBox);
+  csNavBoxInitialized = true;
   InitializeCriticalSection(&CritSec_Comm);
+  csCommInitialized = true;
   InitializeCriticalSection(&CritSec_TerrainDataGraphics);
+  csTerrainDataGraphicsInitialized = true;
   InitializeCriticalSection(&CritSec_TerrainDataCalculations);
+  csTerrainDataCalculationsInitialized = true;
   drawTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("drawTriggerEvent"));
   dataTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("dataTriggerEvent"));
   varioTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("varioTriggerEvent"));
@@ -1392,6 +1404,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SwitchToMapWindow();
   CreateCalculationThread();
   Sleep(500);
+
+// experimental
+AirspaceWarnListInit();
+dlgAirspaceWarningInit();
+
 
   // Da-da, start everything now
   ProgramStarted = true;
@@ -1913,8 +1930,11 @@ void Shutdown(void) {
   // turn off all displays
   GlobalRunning = false;
 
-  // Save settings
+// experimental
+dlgAirspaceWarningDeInit();
+AirspaceWarnListDeInit();
 
+  // Save settings
   StoreRegistry();
 
   // Stop sound
@@ -1952,9 +1972,12 @@ void Shutdown(void) {
   // Stop COM devices
   devCloseAll();
 
-  #if GNAV
+  #if defined(GNAV)
+    Sleep(2500);
     InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
+    #if !defined(WINDOWSPC)
     while(1);
+    #endif
   #endif
 
 
@@ -2014,10 +2037,15 @@ void Shutdown(void) {
   if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
 
   DeleteCriticalSection(&CritSec_FlightData);
+  csFlightDataInitialized = false;
   DeleteCriticalSection(&CritSec_NavBox);
+  csNavBoxInitialized = false;
   DeleteCriticalSection(&CritSec_Comm);
+  csCommInitialized = false;
   DeleteCriticalSection(&CritSec_TerrainDataCalculations);
+  csTerrainDataGraphicsInitialized = false;
   DeleteCriticalSection(&CritSec_TerrainDataGraphics);
+  csTerrainDataCalculationsInitialized = false;
 
   CloseProgressDialog();
 
@@ -2040,6 +2068,7 @@ void Shutdown(void) {
   _CrtDumpMemoryLeaks();
 #endif
 #endif
+
 }
 
 
@@ -3166,26 +3195,32 @@ void UnlockNavBox() {
 
 
 void LockFlightData() {
+  if (!csFlightDataInitialized) throw TEXT("LockFlightData Error");
   EnterCriticalSection(&CritSec_FlightData);
 }
 
 void UnlockFlightData() {
+  if (!csFlightDataInitialized) throw TEXT("LockFlightData Error");
   LeaveCriticalSection(&CritSec_FlightData);
 }
 
 void LockTerrainDataCalculations() {
+  if (!csTerrainDataCalculationsInitialized) throw TEXT("LockTerrainDataCalculations Error");
   EnterCriticalSection(&CritSec_TerrainDataCalculations);
 }
 
 void UnlockTerrainDataCalculations() {
+  if (!csTerrainDataCalculationsInitialized) throw TEXT("LockTerrainDataCalculations Error");
   LeaveCriticalSection(&CritSec_TerrainDataCalculations);
 }
 
 void LockTerrainDataGraphics() {
+  if (!csTerrainDataGraphicsInitialized) throw TEXT("LockTerrainDataGraphics Error");
   EnterCriticalSection(&CritSec_TerrainDataGraphics);
 }
 
 void UnlockTerrainDataGraphics() {
+  if (!csTerrainDataGraphicsInitialized) throw TEXT("LockTerrainDataGraphics Error");
   LeaveCriticalSection(&CritSec_TerrainDataGraphics);
 }
 

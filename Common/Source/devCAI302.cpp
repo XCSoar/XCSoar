@@ -137,7 +137,7 @@ static cai302_GdataNoArgs_t cai302_GdataNoArgs;
 static cai302_Gdata_t cai302_Gdata;
 
 // Additional sentance for CAI302 support
-static BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL cai_w(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL cai_PCAIB(TCHAR *String, NMEA_INFO *GPS_INFO);
 static BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO);
 
@@ -161,7 +161,7 @@ BOOL cai302ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
   }
 
   if(_tcsstr(String,TEXT("!w")) == String){
-    return cai_w(&String[3], GPS_INFO);
+    return cai_w(d, &String[3], GPS_INFO);
   }
 
   return FALSE;
@@ -621,7 +621,7 @@ BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO){
 *hh  Checksum, XOR of all bytes
 */
 
-BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO){
+BOOL cai_w(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
   TCHAR ctemp[80];
 
@@ -634,8 +634,10 @@ BOOL cai_w(TCHAR *String, NMEA_INFO *GPS_INFO){
 
 
   NMEAParser::ExtractParameter(String,ctemp,4);
-  GPS_INFO->BaroAltitudeAvailable = TRUE;
-  GPS_INFO->BaroAltitude = StrToDouble(ctemp, NULL) - 1000;
+  if (d == pDevPrimaryBaroSource){
+    GPS_INFO->BaroAltitudeAvailable = TRUE;
+    GPS_INFO->BaroAltitude = StrToDouble(ctemp, NULL) - 1000;
+  }
 
 //  ExtractParameter(String,ctemp,5);
 //  GPS_INFO->QNH = StrToDouble(ctemp, NULL) - 1000;

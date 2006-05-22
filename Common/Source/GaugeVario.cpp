@@ -130,7 +130,7 @@ void GaugeVario::Render() {
   bit[0].x = (int)(dx+xoffset); bit[0].y = (int)(dy+yoffset);
 
   dx = -xoffset+10; dy = -4;
-  rotate(&dx, &dy, i);
+  rotate(dx, dy, i);
   bit[1].x = (int)(dx+xoffset); bit[1].y = (int)(dy+yoffset);
 
   dx = -xoffset+3; dy = 0;

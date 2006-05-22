@@ -180,18 +180,19 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 
   PortWrite (BYTE Byte)
 
+  20060514:sgi change to block write, writting byte by byte is very slow
+
 ***********************************************************************/
-void Port2Write (BYTE Byte)
-{
+void Port2Write(void *Buffer, size_t Size){
 
   if (hPort2 == INVALID_HANDLE_VALUE) return;
 
   DWORD dwError,
         dwNumBytesWritten;
 
-  if (!WriteFile (hPort2,              // Port handle
-                  &Byte,              // Pointer to the data to write
-                  1,                  // Number of bytes to write
+  if (!WriteFile (hPort2,             // Port handle
+                  Buffer,             // Pointer to the data to write
+                  Size,               // Number of bytes to write
                   &dwNumBytesWritten, // Pointer to the number of bytes
                                       // written
                   (OVERLAPPED *)NULL))              // Must be NULL for Windows CE
@@ -366,38 +367,63 @@ BOOL Port2Close ()
 }
 
 
-void Port2WriteString(TCHAR *Text)
-{
+void Port2WriteString(TCHAR *Text){
+
+  char sTmp[512];
+
   LockComm();
 
 	int i,len;
 	len = _tcslen(Text);
 
+  // 20060514: sgi change to block write
+
+  WideCharToMultiByte( CP_ACP, 0, Text,
+			 _tcslen(Text)+1,
+			 sTmp,
+			 512, NULL, NULL);
+
+  sTmp[512-1] = '\0';
+
+  Port2Write(sTmp, len);
+
+  /*
 	for(i=0;i<len;i++)
 		Port2Write ((BYTE)Text[i]);
+  */
   UnlockComm();
 }
 
 
-void Port2WriteNMEA(TCHAR *Text)
-{
+void Port2WriteNMEA(TCHAR *Text){
+
+  // 20060514: sgi change to block write
+
+  char sTmp[512];
+  char *pC=sTmp;
+  unsigned char chk=0;
+  int i, len;
+
   LockComm();
 
-  int i,len;
-  len = _tcslen(Text);
-  Port2Write((BYTE)_T('$'));
-  unsigned char chk=0;
-  for (i=0;i<len; i++) {
-    chk ^= (BYTE)Text[i];
-    Port2Write((BYTE)Text[i]);
-  }
-  Port2Write((BYTE)_T('*'));
+  WideCharToMultiByte( CP_ACP, 0, Text,
+			 _tcslen(Text)+1,
+			 sTmp,
+			 512, NULL, NULL);
 
-  TCHAR tbuf[3];
-  wsprintf(tbuf,TEXT("%02X"),chk);
-  Port2Write((BYTE)tbuf[0]);
-  Port2Write((BYTE)tbuf[1]);
-  Port2Write((BYTE)_T('\r'));
-  Port2Write((BYTE)_T('\n'));
+	len = _tcslen(Text);
+  *pC = '$';
+  pC++;
+
+  for (i=0;i<len; i++) {
+    *pC = (BYTE)Text[i];
+    chk ^= *pC;
+    pC++;
+  }
+
+  sprintf(pC, "*%02X\r\n", chk);
+
+  Port2Write(sTmp, strlen(sTmp));
+
   UnlockComm();
 }

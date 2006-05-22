@@ -1657,6 +1657,10 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   TCHAR szTitleBuffer[1024];
   TCHAR text[1024];
 
+bool dlgAirspaceWarningShow(void);
+if (dlgAirspaceWarningShow())
+  return;
+
   FindNearestAirspace(GPS_INFO.Longitude, GPS_INFO.Latitude,
 		      &nearestdistance, &nearestbearing,
 		      &foundcircle, &foundarea);

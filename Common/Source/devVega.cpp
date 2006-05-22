@@ -252,6 +252,10 @@ static BOOL PDVDS(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   int mag = isqrt4((int)((GPS_INFO->AccelX*GPS_INFO->AccelX
 			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
   GPS_INFO->Gload = mag/100.0;
+#pragma message( "----------------->>>> Experimantal remove later! <<<<----------------------")
+
+//GPS_INFO->Gload = stallratio/100.0;
+
   GPS_INFO->AccelerationAvailable = TRUE;
   if (found==5) {
 	  GPS_INFO->NettoVarioAvailable = TRUE;
@@ -292,6 +296,27 @@ static BOOL PDVVT(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   return FALSE;
 }
 
+// PDTSM,duration_ms,"free text"
+static BOOL PDTSM(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+
+  int   duration;
+  TCHAR  *pWClast = NULL;
+  TCHAR  *pToken;
+
+  if ((pToken = strtok_r(String, TEXT(","), &pWClast)) == NULL)
+    return FALSE;
+
+  duration = (int)StrToDouble(pToken, NULL);
+
+  if ((pToken = strtok_r(NULL, TEXT("*"), &pWClast)) == NULL)
+    return FALSE;
+
+  // todo duration handling
+  DoStatusMessage(TEXT("VEGA:"), pToken);
+
+  return FALSE;
+
+}
 
 
 
@@ -307,12 +332,10 @@ BOOL vgaParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
     {
       return PDAAV(d, &String[7], GPS_INFO);
     }
-
   if(_tcsncmp(TEXT("$PDVSC"), String, 6)==0)
     {
       return PDVSC(d, &String[7], GPS_INFO);
     }
-
   if(_tcsncmp(TEXT("$PDVDV"), String, 6)==0)
     {
       return PDVDV(d, &String[7], GPS_INFO);
@@ -337,6 +360,11 @@ BOOL vgaParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 	    DoStatusMessage(cptext);
 	    return FALSE;
 	  }
+  if(_tcsncmp(TEXT("$PDTSM"), String, 6)==0)
+    {
+      return PDTSM(d, &String[7], GPS_INFO);
+    }
+
 
   return FALSE;
 
@@ -392,12 +420,16 @@ BOOL vgaIsLogger(PDeviceDescriptor_t d){
   return(FALSE);
 }
 
-
 BOOL vgaIsGPSSource(PDeviceDescriptor_t d){
   return(TRUE);  // this is only true if GPS source is connected on VEGA.NmeaIn
 }
 
 BOOL vgaIsBaroSource(PDeviceDescriptor_t d){
+  return(TRUE);
+}
+
+BOOL vgaPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence){
+  (d->Com.WriteNMEAString)(Sentence);
   return(TRUE);
 }
 
@@ -453,6 +485,7 @@ BOOL vgaInstall(PDeviceDescriptor_t d){
   d->IsLogger = vgaIsLogger;
   d->IsGPSSource = vgaIsGPSSource;
   d->IsBaroSource = vgaIsBaroSource;
+  d->PutVoice = vgaPutVoice;
   d->PutQNH = vgaPutQNH;
   d->OnSysTicker = vgaOnSysTicker;
 
