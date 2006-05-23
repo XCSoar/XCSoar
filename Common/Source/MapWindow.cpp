@@ -3902,8 +3902,8 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       ntrail = TRAILSIZE/TRAILSHRINK; // scan only recently for lift magnitude
     }
 
-    float this_vmax=0.1;
-    float this_vmin=-0.1;
+    float this_vmax=(float)0.1;
+    float this_vmin=(float)-0.1;
     for(i=1;i< ntrail; i++) {
       j= (TRAILSIZE+iSnailNext-ntrail+i)% TRAILSIZE;
       P1 = SnailTrail+j; 
