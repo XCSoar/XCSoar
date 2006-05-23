@@ -23,7 +23,7 @@
 	#if (_WIN32_WCE == 300)
 	// Pocket PC 2000
 
-#define ASSERT(x) 0
+//#define ASSERT(x) 0
 
 		// App keys
 		#define VK_APP1     0xC1 
@@ -46,7 +46,7 @@
 	#elif (WIN32_PLATFORM_PSPC == 310)
 	// Pocket PC 2002
 
-#define ASSERT(x) 0
+//#define ASSERT(x) 0
 
 		#ifndef NOCLEARTYPE
 		#define NOCLEARTYPE
