@@ -531,7 +531,7 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
     ** Trim/skip leading blanks (SDL/DM Modification - only on numeric types)
     */
     if( psDBF->pachFieldType[iField] == 'N' || psDBF->pachFieldType[iField] == 'F' || psDBF->pachFieldType[iField] == 'D' ) {
-        for(i=0;i<strlen(psDBF->pszStringField);i++) {
+        for(i=0;i<(int)strlen(psDBF->pszStringField);i++) {
             if(psDBF->pszStringField[i] != ' ')
                 break;
         }
