@@ -2463,7 +2463,7 @@ void AirspaceWarnListProcess(NMEA_INFO *Basic);
 void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
   unsigned int i;
 
-  TCHAR text[1024];
+//  TCHAR text[1024];
   bool inside;
 
   if(!AIRSPACEWARNINGS)
