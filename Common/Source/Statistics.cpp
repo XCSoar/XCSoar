@@ -433,14 +433,14 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
 /////////////////
 
-void Statistics::Reset() {
-  ThermalAverage.Reset();
-  Wind_x.Reset();
-  Wind_y.Reset();
-  Altitude.Reset();
-  Altitude_Base.Reset();
-  Altitude_Ceiling.Reset();
-}
+//void Statistics::Reset() {		// duplicate declaration
+ // ThermalAverage.Reset();
+//  Wind_x.Reset();
+//  Wind_y.Reset();
+//  Altitude.Reset();
+//  Altitude_Base.Reset();
+//  Altitude_Ceiling.Reset();
+//}
 
 
 void Statistics::Reset() {
@@ -683,21 +683,21 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
     dX = (mag*WINDVECTORMAG);
     dY = 0;
-    rotate(&dX,&dY,angle);
+    rotate(dX,dY,angle);
     wv[1].x = (int)(wv[0].x + dX);
     wv[1].y = (int)(wv[0].y + dY);
     StyleLine(hdc, wv[0], wv[1], STYLE_MEDIUMBLACK);
 
     dX = (mag*WINDVECTORMAG-5);
     dY = -3;
-    rotate(&dX,&dY,angle);
+    rotate(dX,dY,angle);
     wv[2].x = (int)(wv[0].x + dX);
     wv[2].y = (int)(wv[0].y + dY);
     StyleLine(hdc, wv[1], wv[2], STYLE_MEDIUMBLACK);
 
     dX = (mag*WINDVECTORMAG-5);
     dY = 3;
-    rotate(&dX,&dY,angle);
+    rotate(dX,dY,angle);
     wv[3].x = (int)(wv[0].x + dX);
     wv[3].y = (int)(wv[0].y + dY);
 
