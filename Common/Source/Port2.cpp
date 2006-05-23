@@ -180,7 +180,9 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 
   PortWrite (BYTE Byte)
 
+
   20060514:sgi change to block write, writting byte by byte is very slow
+
 
 ***********************************************************************/
 void Port2Write(void *Buffer, size_t Size){
@@ -369,27 +371,44 @@ BOOL Port2Close ()
 
 void Port2WriteString(TCHAR *Text){
 
+
+
   char sTmp[512];
+
 
   LockComm();
 
-	int i,len;
+//	int i,len;
+	int len;
 	len = _tcslen(Text);
+
 
   // 20060514: sgi change to block write
 
+
+
   WideCharToMultiByte( CP_ACP, 0, Text,
+
 			 _tcslen(Text)+1,
+
 			 sTmp,
+
 			 512, NULL, NULL);
+
+
 
   sTmp[512-1] = '\0';
 
+
+
   Port2Write(sTmp, len);
+
+
 
   /*
 	for(i=0;i<len;i++)
 		Port2Write ((BYTE)Text[i]);
+
   */
   UnlockComm();
 }
@@ -397,33 +416,57 @@ void Port2WriteString(TCHAR *Text){
 
 void Port2WriteNMEA(TCHAR *Text){
 
+
+
   // 20060514: sgi change to block write
 
+
+
   char sTmp[512];
+
   char *pC=sTmp;
+
   unsigned char chk=0;
+
   int i, len;
+
 
   LockComm();
 
   WideCharToMultiByte( CP_ACP, 0, Text,
+
 			 _tcslen(Text)+1,
+
 			 sTmp,
+
 			 512, NULL, NULL);
 
+
+
 	len = _tcslen(Text);
+
   *pC = '$';
+
   pC++;
 
+
   for (i=0;i<len; i++) {
+
     *pC = (BYTE)Text[i];
+
     chk ^= *pC;
+
     pC++;
   }
 
+
   sprintf(pC, "*%02X\r\n", chk);
 
+
+
   Port2Write(sTmp, strlen(sTmp));
+
+
 
   UnlockComm();
 }
