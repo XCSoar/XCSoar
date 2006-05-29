@@ -211,9 +211,9 @@ double GlidePolar::MacCreadyAltitude(double emcready,
     Distance = 1;
   }
 
-  double TimeToDestTotal = 1e6; // initialise to error value
+  double TimeToDestTotal = -1; // initialise to error value
   double tcruise, tclimb;
-  TimeToDestCruise = 1e6; // initialise to error value
+  TimeToDestCruise = -1; // initialise to error value
 
   for(i=Vminsink;i<SAFTEYSPEED;i+=1) {
     double vtrack = (double)i; // TAS along bearing in cruise

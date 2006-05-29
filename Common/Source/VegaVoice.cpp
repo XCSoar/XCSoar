@@ -1,10 +1,42 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+  Copyright (C) 2000 - 2005  
+
+  	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
+	Scott Penrose <scottp@dd.com.au>
+	John Wharington <jwharington@bigfoot.com>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+}
+*/
 
 #include <math.h>
 
-#include "InputEvents.h"  // used for altair beep hack
 #include "stdafx.h"
+#include "InputEvents.h"  // used for altair beep hack
 #include "VegaVoice.h"
+
 #include "device.h"
+
 
 bool EnableVoiceClimbRate=true;
 bool EnableVoiceTerrain=true;
@@ -14,7 +46,7 @@ bool EnableVoiceMacCready=true;
 bool EnableVoiceNewWaypoint=true;
 bool EnableVoiceInSector=true;
 bool EnableVoiceAirspace=true;
-
+ 
 
 enum {
   VWI_ZERO=20,
@@ -116,7 +148,7 @@ void VegaVoiceMessage::TextToDigitsHuge(TCHAR *text, double number) {
 }
 
 
-  
+
 int VegaVoiceMessage::LookupDigit(int number) {
   switch(number) {
   case 0:
@@ -154,9 +186,9 @@ void VegaVoiceMessage::Initialise(int the_id) {
   id = the_id;
   active = false;
   alarmlevel = 0;
-  
+
   repeatInterval = 30;
-  
+
   switch(id) {
   case VV_GENERAL:
     singleplay = true;
@@ -204,16 +236,22 @@ void VegaVoiceMessage::MessageHeader() {
 
 void VegaVoiceMessage::SendMessage() {
 
+
+
   /*
   if (_tcscmp(messageText, last_messageText)==0) {
     // no change, no need to send
     return;
   }
+
   _tcscpy(last_messageText, messageText);
+
   */
 
+
+
 //  devPutVoice(NULL, messageText);
-  
+
 }
 
 
@@ -236,7 +274,7 @@ void VegaVoiceMessage::Acknowledge(double time) {
     // Send cancel message
     SendNullMessage();
   }
-  
+
 }
 
 
@@ -257,7 +295,9 @@ bool VegaVoiceMessage::TimeReady(double time) {
 
 void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
 
+
   /*
+
 
   // this ensures that if a repeated message is played,
   // and another message from XCSoar interrupts it,
@@ -280,7 +320,9 @@ void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
     }
   }
 
+
   */
+
 
   id_active = id;
   active = true;
@@ -294,7 +336,7 @@ void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
 bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   TCHAR text[80];
   static int LastWayPoint = -1;
-  
+
   switch(id) {
   case VV_GENERAL:
     // TODO: Allow this to be triggered to give generic alert
@@ -302,12 +344,12 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     break;
   case VV_CLIMBRATE:
     if (!EnableVoiceClimbRate) return false;
-    
+
     if (Calculated->Circling && (Calculated->Average30s > 0)) {
       // Gives the average climb rate in user units every X seconds
       // while in circling mode
       // e.g. if average = 3.4 (user units)
-      // Now: "CIRCLING THREE FOUR"	
+      // Now: "CIRCLING THREE FOUR"
       // Later: "AVERAGE THREE POINT FOUR"
       wsprintf(text,TEXT(",%d"), VWI_CIRCLING);
       TextToDigitsSmall(text, Calculated->Average30s*LIFTMODIFY);
@@ -321,7 +363,7 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     // CAUTION TERRAIN
     break;
   case VV_WAYPOINTDISTANCE:
-    if ((!Calculated->Circling) 
+    if ((!Calculated->Circling)
         	&& (ActiveWayPoint>=0)) {
 
       // Gives the distance to the active waypoint every X seconds,
@@ -350,7 +392,7 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 	        if (!EnableVoiceTaskAltitudeDifference) return false;
 
 	        // TODO: BELOW FOUR HUNDRED
-	        double tad = Calculated->TaskAltitudeDifference*ALTITUDEMODIFY; 
+	        double tad = Calculated->TaskAltitudeDifference*ALTITUDEMODIFY;
 	        if (fabs(tad)>100) {
 	          if (tad>0) {
 	            wsprintf(text,TEXT(",%d"), VWI_ABOVE);
@@ -362,7 +404,7 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 	          return true;
 	        }
 	      }
-	
+
       }
     }
     break;
@@ -371,7 +413,7 @@ bool VegaVoiceMessage::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     // TODO: report when not in auto maccready mode, if
     // vario has changed in last 3 seconds but hasn't changed
     // for more than one second
-    // 
+    //
     // Now: ---
     // Later: "MACCREADY THREE DECIMAL FOUR"
     break;
@@ -431,28 +473,50 @@ static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, Airspace
 
   static bool PlaySimpleWarning = false;
 
+
   switch (Action){
+
     case asaItemAdded:
+
     case asaWarnLevelIncreased:
+
       PlaySimpleWarning = true;
+
     case asaItemRemoved:
+
     case asaClearAll:
+
     case asaItemChanged:
+
     break;
 
+
+
     case asaProcessEnd:
+
       if (PlaySimpleWarning){
+
         PlaySimpleWarning = false;
+
         #ifndef DISABLEAUDIO
+
         MessageBeep(MB_ICONEXCLAMATION);
+
         #endif
+
         #if defined(GNAV)
+
         InputEvents::eventDLLExecute(TEXT("altairplatform.dll DoBeep2 1"));
+
         #endif
       }
     break;
 
+
+
   }
+
+
 
 }
 
@@ -483,7 +547,9 @@ void VegaVoice::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (!AirspaceNotivierInstalled){
     AirspaceNotivierInstalled = true;
     AirspaceWarnListAddNotifier(AirspaceWarningNotify);
+
   }
+
 
   Lock();
   // update values in each message to determine whether

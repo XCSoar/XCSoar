@@ -153,7 +153,9 @@ void CheckAirspacePoint(int Idx){
 
 void CloseAirspace() {
 
+#if (NEWAIRSPACEWARNING>0)
   AirspaceWarnListClear();
+#endif
 
   NumberOfAirspacePoints = 0;
   NumberOfAirspaceAreas = 0;
@@ -439,9 +441,15 @@ static bool ParseLine(int nLineType)
 		else if(StartsWith(&TempString[2],TEXT("W")) || StartsWith(&TempString[2],TEXT("w")))
 		{
       // ToDo width of an airway
+		  break;
+		}
+		else if(StartsWith(&TempString[2],TEXT("T")) || StartsWith(&TempString[2],TEXT("t")))
+		{
+      // ----- JMW THIS IS REQUIRED FOR LEGACY FILES
+      break;
 		}
 
-    goto OnError;
+		goto OnError;
 
 	case k_nLtDP:
     /*
@@ -455,7 +463,9 @@ static bool ParseLine(int nLineType)
 			NumberOfAirspacePoints++;
     */
 //		if (bFillMode)
-    if (!ReadCoords(&TempString[3],&TempPoint.Longitude , &TempPoint.Latitude)) goto OnError;
+    if (!ReadCoords(&TempString[3],&TempPoint.Longitude , 
+		    &TempPoint.Latitude)) 
+      goto OnError;
   	AddPoint(&TempPoint, &TempArea.NumPoints);
 		// TempArea.NumPoints++;
 		break;
@@ -548,17 +558,17 @@ static int GetNextLine(FILE *fp, TCHAR *Text)
 				nLineType = k_nLtAH;
 				break;
 
-			case _T('T'):     // ignore airspace lables
-        // ToDo: adding airspace labels
-        continue;
+			case _T('T'): // ignore airspace lables
+			              // ToDo: adding airspace labels
+			  continue;
 
 			default:
-        if (bFillMode){
-          wsprintf(sTmp, gettext(TEXT("Parse Error at Line: %d\r\n\"%s\"\r\nLine skiped.")), LineCount, TempString);
-          if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
-            return(-1);
-        }
-				continue;
+			  if (bFillMode){
+			    wsprintf(sTmp, gettext(TEXT("Parse Error at Line: %d\r\n\"%s\"\r\nLine skiped.")), LineCount, TempString);
+			    if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
+			      return(-1);
+			  }
+			  continue;
 			}
 
 			break;
@@ -583,36 +593,36 @@ static int GetNextLine(FILE *fp, TCHAR *Text)
 				break;
 
       // todo DY airway segment
-
+				// what about 'V T=' ?
 
 			default:
-        if (bFillMode){
-          wsprintf(sTmp, gettext(TEXT("Parse Error at Line: %d\r\n\"%s\"\r\nLine skiped.")), LineCount, TempString);
-          if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
-            return(-1);
-        }
-				continue;
+			  if (bFillMode){
+			    wsprintf(sTmp, gettext(TEXT("Parse Error at Line: %d\r\n\"%s\"\r\nLine skiped.")), LineCount, TempString);
+			    if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
+			      return(-1);
+			  }
+			  continue;
 			}
 
 			break;
 
 		case _T('V'):
-			nLineType = k_nLtV;
-			break;
+		  nLineType = k_nLtV;
+		  break;
 
-    case _T('S'):  // ignore the SB,SP ...
-      if (sTmp[1] == _T('B'))
-        continue;
-      if (sTmp[1] == _T('P'))
-        continue;
+		case _T('S'):  // ignore the SB,SP ...
+		  if (sTmp[1] == _T('B'))
+		    continue;
+		  if (sTmp[1] == _T('P'))
+		    continue;
 
 		default:
-      if (bFillMode){
-        wsprintf(sTmp, gettext(TEXT("Parse Error at Line: %d\r\n\"%s\"\r\nLine skiped.")), LineCount, TempString);
-        if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
-          return(-1);
-      }
-			continue;
+		  if (bFillMode){
+		    wsprintf(sTmp, gettext(TEXT("Parse Error at Line: %d\r\n\"%s\"\r\nLine skiped.")), LineCount, TempString);
+		    if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
+		      return(-1);
+		  }
+		  continue;
 		}
 
 		if (nLineType >= 0)		// Valid line found

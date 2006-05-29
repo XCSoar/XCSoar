@@ -619,8 +619,8 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
       lon1 = WayPointList[Task[i].Index].Longitude;
       x1 = (lon1-lon_c)*fastcosine(lat1);
       y1 = (lat1-lat_c);
-      ScaleYFromValue(rc, y1);
       ScaleXFromValue(rc, x1);
+      ScaleYFromValue(rc, y1);
 
       if (AATEnabled) {
 	double aatlat;
@@ -642,16 +642,15 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 	  aatlon = FindLongitude(WayPointList[Task[i].Index].Latitude,
 				 WayPointList[Task[i].Index].Longitude, 
 				 bearing, radius);
-	  x1 = (aatlon-lon_c)*fastcosine(lat1);
+	  x1 = (aatlon-lon_c)*fastcosine(aatlat);
 	  y1 = (aatlat-lat_c);
-	  ScaleYFromValue(rc, y1);
 	  ScaleXFromValue(rc, x1);
+	  ScaleYFromValue(rc, y1);
+	  if (j==0) {
+	    aatradius[i] = fabs(aatlat-WayPointList[Task[i].Index].Latitude);
+	  }
 	}
-	aatlat-= lat1;
-	aatlon-= lon1;
-	aatradius[i]= sqrt(aatlat*aatlat+aatlon*aatlon);
       }
-
     }
   }
   ScaleMakeSquare(rc);
@@ -677,7 +676,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
           Segment(hdc,
 		  (long)((x2-x_min)*xscale+rc.left),
 		  (long)((y_max-y2)*yscale+rc.top),
-		  (long)(aatradius[i]*xscale), 
+		  (long)(aatradius[i]*yscale), 
 		  rc, 
 		  Task[i].AATStartRadial, 
 		  Task[i].AATFinishRadial); 
@@ -685,7 +684,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
           Circle(hdc,
 		 (long)((x2-x_min)*xscale+rc.left),
 		 (long)((y_max-y2)*yscale+rc.top),
-		 (long)(aatradius[i]*xscale), 
+		 (long)(aatradius[i]*yscale), 
 		  rc);
 	}
       }

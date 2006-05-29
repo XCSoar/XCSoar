@@ -69,7 +69,9 @@ static void RefreshCalculator(void) {
     if (CALCULATED_INFO.TaskStartTime>0.0) {
       dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
     }
-    wp->GetDataField()->SetAsFloat(dd/60.0);
+	dd= min(24.0*60.0,dd/60.0);
+	
+    wp->GetDataField()->SetAsFloat(dd);
     wp->RefreshDisplay();
   }
 

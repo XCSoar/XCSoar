@@ -1,4 +1,4 @@
- /*
+/*
 Copyright_License {
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
@@ -899,12 +899,16 @@ void FullScreen() {
 
 
 void LockComm() {
+#ifdef HAVEEXCEPTIONS
   if (!csCommInitialized) throw TEXT("LockComm Error");
+#endif
   EnterCriticalSection(&CritSec_Comm);
 }
 
 void UnlockComm() {
+#ifdef HAVEEXCEPTIONS
   if (!csCommInitialized) throw TEXT("LockComm Error");
+#endif
   LeaveCriticalSection(&CritSec_Comm);
 }
 
@@ -1115,10 +1119,10 @@ DWORD CalculationThread (LPVOID lpvoid) {
       // run the function anyway, because this gives audio functions
       // if no vario connected
       if (NMEAParser::GpsUpdated) {
-	      if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
-	      }
-	      NMEAParser::VarioUpdated = true; // emulate vario update
-	      PulseEvent(varioTriggerEvent);
+	if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
+	}
+	NMEAParser::VarioUpdated = true; // emulate vario update
+	PulseEvent(varioTriggerEvent);
       }
     }
     
@@ -1241,7 +1245,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   wcscat(XCSoar_Version, TEXT("Altair "));
 #endif
 #if (NEWINFOBOX>0) 
-  wcscat(XCSoar_Version, TEXT("4.7.4 "));
+  wcscat(XCSoar_Version, TEXT("4.7.5 "));
 #else
   // wcscat(XCSoar_Version, TEXT("Alpha "));
   // wcscat(XCSoar_Version, TEXT(__DATE__));
@@ -1303,6 +1307,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   OpenGeoid();
 
   PreloadInitialisation(false);
+
+  GaugeCDI::Create();
+  GaugeVario::Create();
+  if (EnableVarioGauge) {
+    ShowWindow(hWndVarioWindow,SW_SHOW);
+  } else {
+    ShowWindow(hWndVarioWindow,SW_HIDE);
+  }
 
   GPS_INFO.SwitchState.AirbrakeLocked = false;
   GPS_INFO.SwitchState.FlapPositive = false;
@@ -1405,10 +1417,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   CreateCalculationThread();
   Sleep(500);
 
-// experimental
-AirspaceWarnListInit();
-dlgAirspaceWarningInit();
-
+#if (NEWAIRSPACEWARNING>0)
+  // experimental
+  AirspaceWarnListInit();
+  dlgAirspaceWarningInit();
+#endif
 
   // Da-da, start everything now
   ProgramStarted = true;
@@ -1803,14 +1816,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   
 #endif
 
-  GaugeCDI::Create();
-  GaugeVario::Create();
-
-  if (EnableVarioGauge) {
-    ShowWindow(hWndVarioWindow,SW_SHOW);
-  } else {
-    ShowWindow(hWndVarioWindow,SW_HIDE);
-  }
+  // JMW gauge creation was here
 
   ShowWindow(hWndMainWindow, nCmdShow);
   UpdateWindow(hWndMainWindow);
@@ -1930,9 +1936,11 @@ void Shutdown(void) {
   // turn off all displays
   GlobalRunning = false;
 
-// experimental
-dlgAirspaceWarningDeInit();
-AirspaceWarnListDeInit();
+#if (NEWAIRSPACEWARNING>0)
+  // experimental
+  dlgAirspaceWarningDeInit();
+  AirspaceWarnListDeInit();
+#endif
 
   // Save settings
   StoreRegistry();
@@ -3195,32 +3203,44 @@ void UnlockNavBox() {
 
 
 void LockFlightData() {
+#ifdef HAVEEXCEPTIONS
   if (!csFlightDataInitialized) throw TEXT("LockFlightData Error");
+#endif
   EnterCriticalSection(&CritSec_FlightData);
 }
 
 void UnlockFlightData() {
+#ifdef HAVEEXCEPTIONS
   if (!csFlightDataInitialized) throw TEXT("LockFlightData Error");
+#endif
   LeaveCriticalSection(&CritSec_FlightData);
 }
 
 void LockTerrainDataCalculations() {
+#ifdef HAVEEXCEPTIONS
   if (!csTerrainDataCalculationsInitialized) throw TEXT("LockTerrainDataCalculations Error");
+#endif
   EnterCriticalSection(&CritSec_TerrainDataCalculations);
 }
 
 void UnlockTerrainDataCalculations() {
+#ifdef HAVEEXCEPTIONS
   if (!csTerrainDataCalculationsInitialized) throw TEXT("LockTerrainDataCalculations Error");
+#endif
   LeaveCriticalSection(&CritSec_TerrainDataCalculations);
 }
 
 void LockTerrainDataGraphics() {
+#ifdef HAVEEXCEPTIONS
   if (!csTerrainDataGraphicsInitialized) throw TEXT("LockTerrainDataGraphics Error");
+#endif
   EnterCriticalSection(&CritSec_TerrainDataGraphics);
 }
 
 void UnlockTerrainDataGraphics() {
+#ifdef HAVEEXCEPTIONS
   if (!csTerrainDataGraphicsInitialized) throw TEXT("LockTerrainDataGraphics Error");
+#endif
   LeaveCriticalSection(&CritSec_TerrainDataGraphics);
 }
 

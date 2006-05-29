@@ -69,6 +69,11 @@ bool EnableNavBaroAltitude=false;
 bool ForceFinalGlide= false;
 bool AutoForceFinalGlide= false;
 
+int    AutoMcMode = 0;
+// 0: Final glide only
+// 1: Set to average if in climb mode
+// 2: Average if in climb mode, final glide in final glide mode
+
 #include "Port.h"
 
 #include "WindZigZag.h"
@@ -252,7 +257,8 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 extern int jmw_demo;
 
-void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void NettoVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+
   double n;
 
   // get load factor
@@ -266,8 +272,6 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   // calculate sink rate of glider
 
   double theSinkRate;    
-
-#define AUDIOSCALE 100/7.5  // +/- 7.5 m/s range
 
   if (Basic->AirspeedAvailable) {
     theSinkRate= GlidePolar::SinkRate(Basic->IndicatedAirspeed, n);
@@ -284,27 +288,6 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     } else {
       Calculated->NettoVario = Calculated->Vario - theSinkRate;
     }
-  }
-
-  if (
-      (Basic->AirspeedAvailable && 
-       (Basic->IndicatedAirspeed >= NettoSpeed))
-      || 
-      (!Basic->AirspeedAvailable &&
-       (Basic->Speed >= NettoSpeed))
-      ) {
-    // TODO: slow/smooth switching between netto and not
-
-    VarioSound_SetV((short)((Calculated->NettoVario-GlidePolar::minsink)*AUDIOSCALE));
-
-  } else {
-
-    if (Basic->VarioAvailable) {
-      VarioSound_SetV((short)(Basic->Vario*AUDIOSCALE));
-    } else {
-      VarioSound_SetV((short)(Calculated->Vario*AUDIOSCALE));
-    }
-
   }
 
   // calculate optimum cruise speed in current track direction
@@ -357,7 +340,6 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     } else {
       vdiff = 100*(1.0-Calculated->VOpt/(Basic->Speed+0.01));
     }
-    VarioSound_SetVAlt((short)(vdiff));
     Calculated->STFMode = false;
     if ((Basic->Speed>NettoSpeed)||
         ((Calculated->VOpt>NettoSpeed)&&(Basic->Speed<Calculated->VOpt*1.1))
@@ -374,25 +356,46 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
   }
 
-  // STF test
-  if (jmw_demo==1) {
-    Calculated->STFMode = true; 
-    Calculated->VOpt = 35.0;
-    vdiff = 100*(1.0-Calculated->VOpt/(Basic->IndicatedAirspeed+0.01));
-    VarioSound_SetVAlt((short)(vdiff));
-    VarioSound_SetSTFMode(Calculated->STFMode);
-  } 
-  // Climb test
-  if (jmw_demo==2) {
-    Calculated->STFMode = false;
-    VarioSound_SetV((short)(Basic->Vario*AUDIOSCALE));   
-    VarioSound_SetVAlt(0);
-    VarioSound_SetSTFMode(Calculated->STFMode);
-  }
-  VarioSound_SoundParam();
-
   Calculated->STFMode = !Calculated->Circling;
-  //  audio_send(Basic, Calculated);
+
+}
+
+
+void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+
+#define AUDIOSCALE 100/7.5  // +/- 7.5 m/s range
+
+  if (
+      (Basic->AirspeedAvailable && 
+       (Basic->IndicatedAirspeed >= NettoSpeed))
+      || 
+      (!Basic->AirspeedAvailable &&
+       (Basic->Speed >= NettoSpeed))
+      ) {
+    // TODO: slow/smooth switching between netto and not
+
+    VarioSound_SetV((short)((Calculated->NettoVario-GlidePolar::minsink)*AUDIOSCALE));
+
+  } else {
+    if (Basic->VarioAvailable) {
+      VarioSound_SetV((short)(Basic->Vario*AUDIOSCALE));
+    } else {
+      VarioSound_SetV((short)(Calculated->Vario*AUDIOSCALE));
+    }
+  }
+
+  double vdiff;
+
+  if (Basic->AirspeedAvailable) {
+    if (Basic->AirspeedAvailable) {
+      vdiff = 100*(1.0-Calculated->VOpt/(Basic->IndicatedAirspeed+0.01));
+    } else {
+      vdiff = 100*(1.0-Calculated->VOpt/(Basic->Speed+0.01));
+    }
+    VarioSound_SetVAlt((short)(vdiff));
+  }
+
+  VarioSound_SoundParam();
 
 }
 
@@ -401,7 +404,10 @@ BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
 
+  NettoVario(Basic, Calculated);
+#ifndef DISABLEAUDIO
   AudioVario(Basic, Calculated);
+#endif
 
   // has GPS time advanced?
   if(Basic->Time <= LastTime)
@@ -599,9 +605,9 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if ((Calculated->FinalGlide)
       ||(fabs(Calculated->TaskAltitudeDifference)>30)) {
     FinalGlideAlert(Basic, Calculated);
-    if (Calculated->AutoMacCready) {
-      DoAutoMacCready(Basic, Calculated);
-    }
+  }
+  if (Calculated->AutoMacCready && !TaskAborted) {
+    DoAutoMacCready(Basic, Calculated);
   }
 
   TakeoffLanding(Basic, Calculated);
@@ -693,10 +699,11 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static double LastTime = 0;
   static double Altitude[30];
   static double Vario[30];
+  static double NettoVario[30];
   int Elapsed, i;
   long temp;
   double Gain;
-        
+
   if(Basic->Time > LastTime)
     {
       Elapsed = (int)(Basic->Time - LastTime);
@@ -706,11 +713,21 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           temp %=30;
 
           Altitude[temp] = Calculated->NavAltitude;
+#ifdef _SIM_
+          Vario[temp] = Calculated->Vario;
+	  NettoVario[temp] = Calculated->NettoVario;
+#else
+	  if (Basic->NettoVarioAvailable) {
+	    NettoVario[temp] = Basic->NettoVario;
+	  }
           Vario[temp] = Basic->Vario;
+#endif
         }
       double Vave = 0;
+      double NVave = 0;
       for (i=0; i<30; i++) {
         Vave += Vario[i];
+	NVave += NettoVario[i];
       }
 
       temp = (long)Basic->Time - 1;
@@ -727,13 +744,20 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       } else {
         Calculated->Average30s = Gain/30;
       }
+      Calculated->NettoAverage30s = NVave/30;
     }
   else
     {
-      LastTime = Basic->Time;
+      if (Basic->Time<LastTime) {
+	// gone back in time
+	for (i=0; i<30; i++) {
+	  Altitude[i]= 0;
+	  Vario[i]=0;
+	  NettoVario[i]=0;
+	}
+	LastTime = Basic->Time;
+      }
     }
-
-
 }
 
 void AverageThermal(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
@@ -1141,29 +1165,38 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
-  // JMW these things should be in Calculated, not Basic
-
   if (!WayPointList) return;
 
   LockFlightData();
 
   if(ActiveWayPoint >=0)
     {
-      Calculated->WaypointDistance = Distance(Basic->Latitude, Basic->Longitude,
-                                         WayPointList[Task[ActiveWayPoint].Index].Latitude, 
-                                         WayPointList[Task[ActiveWayPoint].Index].Longitude);
+      double wlat, wlon;
+
+      if (AATEnabled && !TaskAborted) {
+        wlat = Task[ActiveWayPoint].AATTargetLat;
+        wlon = Task[ActiveWayPoint].AATTargetLon;
+      } else {
+	wlat = WayPointList[Task[ActiveWayPoint].Index].Latitude; 
+	wlon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
+
+      }
+      Calculated->WaypointDistance = 
+	Distance(Basic->Latitude, Basic->Longitude,
+		 wlat, wlon); 
       if (Calculated->WaypointDistance > 0.5)
-        Calculated->WaypointBearing = Bearing(Basic->Latitude, Basic->Longitude,
-                                       WayPointList[Task[ActiveWayPoint].Index].Latitude,
-                                       WayPointList[Task[ActiveWayPoint].Index].Longitude);
+	Calculated->WaypointBearing = 
+	  Bearing(Basic->Latitude, Basic->Longitude,
+		  wlat, wlon);
       else {
-        Calculated->WaypointDistance = 0;
-        Calculated->WaypointBearing = 360;
+	Calculated->WaypointDistance = 0;
+	Calculated->WaypointBearing = 360;
       }
     }
   else
     {
       Calculated->WaypointDistance = 0;
+      Calculated->WaypointBearing = 0;
     }
   UnlockFlightData();
 }
@@ -1968,6 +2001,24 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
                                       &(Calculated->LegTimeToGo)
                                       );
 
+      if ((Calculated->LegTimeToGo<0)&&(!Calculated->FinalGlide)) {
+	// this leg was invalid at set maccready, so assume
+	// it is done in final glide
+
+	LegAltitude = 
+	  GlidePolar::MacCreadyAltitude(maccready, 
+					LegToGo, 
+					LegBearing, 
+					Calculated->WindSpeed, 
+					Calculated->WindBearing,
+					&(Calculated->BestCruiseTrack),
+					&(Calculated->VMacCready),
+					true,
+					&(Calculated->LegTimeToGo)
+					);
+      }
+
+
       if (Calculated->FinalGlide) {
         double lat, lon;
         double distancesoarable = 
@@ -2027,15 +2078,15 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
             w0lon = Task[i-1].AATTargetLon;
           }
 
-          LegDistance = Distance(w1lat, 
-                                 w1lon,
-                                 w0lat, 
-                                 w0lon);
+          LegDistance = Distance(w0lat, 
+                                 w0lon,
+                                 w1lat, 
+                                 w1lon);
 
-          LegBearing = Bearing(w1lat, 
-                               w1lon,
-                               w0lat, 
-                               w0lon);
+          LegBearing = Bearing(w0lat, 
+                               w0lon,
+                               w1lat, 
+                               w1lon);
 
           LegAltitude = GlidePolar::
             MacCreadyAltitude(maccready, 
@@ -2045,6 +2096,17 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
                               0, 0,
                               (Calculated->FinalGlide==1),
                               &LegTimeToGo);
+
+	  if ((LegTimeToGo<0)&&(!Calculated->FinalGlide)) {
+	    LegAltitude = GlidePolar::
+	      MacCreadyAltitude(maccready, 
+				LegDistance, LegBearing, 
+				Calculated->WindSpeed, 
+				Calculated->WindBearing, 
+				0, 0,
+				true,
+				&LegTimeToGo);
+	  }
 
           TaskAltitudeRequired += LegAltitude;
 
@@ -2121,19 +2183,29 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LockFlightData();
 
-  double slope = 
-    (Calculated->NavAltitude 
-     - SAFETYALTITUDEARRIVAL
-     - WayPointList[Task[ActiveWayPoint].Index].Altitude)/
-    (Calculated->WaypointDistance+1);
+  if ((AutoMcMode==0)||((AutoMcMode==2)&&(Calculated->FinalGlide))) {
 
-  double mcp = PirkerAnalysis(Basic, Calculated,
-                       Calculated->WaypointBearing,
-                       slope);
-  if (mcp>0) {
-    MACCREADY = mcp;
-  } else {
-    MACCREADY = 0.0;
+    double slope = 
+      (Calculated->NavAltitude 
+       - SAFETYALTITUDEARRIVAL
+       - WayPointList[Task[ActiveWayPoint].Index].Altitude)/
+      (Calculated->WaypointDistance+1);
+    
+    double mcp = PirkerAnalysis(Basic, Calculated,
+				Calculated->WaypointBearing,
+				slope);
+    if (mcp>0) {
+      MACCREADY = mcp;
+    } else {
+      MACCREADY = 0.0;
+    }
+    
+  } else if ((AutoMcMode==1)||((AutoMcMode==2)&&(!Calculated->FinalGlide))) {
+
+    if (flightstats.ThermalAverage.y_ave>0) {
+      MACCREADY = flightstats.ThermalAverage.y_ave;
+    }
+
   }
 
   UnlockFlightData();
@@ -2229,7 +2301,7 @@ bool ClearAirspaceWarnings(bool ack, bool allday) {
   return false;
 }
 
-#if 0
+#if (NEWAIRSPACEWARNING<1)
 void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   unsigned int i;
@@ -2288,7 +2360,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       }
 
     }
-    if (inside) { hash
+    if (inside) { // hash
       if (AirspaceCircle[i].WarningLevel>0) {
               // already warned
               continue;
@@ -2453,7 +2525,6 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 #else // new style airspace warnings
-
 // defined in AirspaceWarning.cpp
 
 void AirspaceWarnListAdd(NMEA_INFO *Basic, int Sequence, bool Predicted, bool IsCircle, int AsIdx);
@@ -2734,11 +2805,9 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     Calculated->MaxThermalHeight= mthnew;
   }
 
-  index = iround(NUMTHERMALBUCKETS*(dheight/max(1.0,
-                            Calculated->MaxThermalHeight)));
-  if (index==NUMTHERMALBUCKETS) {
-    index= NUMTHERMALBUCKETS-1;
-  }
+  index = min(NUMTHERMALBUCKETS-1,
+	      iround(NUMTHERMALBUCKETS*(dheight/max(1.0,
+						    Calculated->MaxThermalHeight))));
 
   Calculated->ThermalProfileW[index]+= Calculated->Vario;
   Calculated->ThermalProfileN[index]++;

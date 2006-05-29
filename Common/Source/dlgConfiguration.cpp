@@ -684,6 +684,17 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoMcMode"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Final glide"));
+    dfe->addEnumText(TEXT("Average climb"));
+    dfe->addEnumText(TEXT("Both"));
+    wp->GetDataField()->Set(AutoMcMode);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoForceFinalGlide"));
   if (wp) {
     wp->GetDataField()->Set(AutoForceFinalGlide);
@@ -1491,6 +1502,15 @@ void dlgConfigurationShowModal(void){
     if (AutoWindMode != wp->GetDataField()->GetAsInteger()) {
       AutoWindMode = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryAutoWind, AutoWindMode);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoMcMode"));
+  if (wp) {
+    if (AutoMcMode != wp->GetDataField()->GetAsInteger()) {
+      AutoMcMode = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryAutoMcMode, AutoMcMode);
       changed = true;
     }
   }

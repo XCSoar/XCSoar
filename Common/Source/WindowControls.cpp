@@ -57,6 +57,40 @@ RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed) {
 
 // utility functions
 
+void DrawLine(const HDC&hdc, int x1, int y1, int x2, int y2) {
+#ifndef NOLINETO
+  MoveToEx(hdc, x1, y1, NULL);
+  LineTo(hdc, x2, y2);
+#else
+  POINT p[2];
+  p[0].x = x1;
+  p[0].y = y1;
+  p[1].x = x2;
+  p[1].y = y2;
+  Polyline(hdc, p, 2);
+#endif
+
+}
+
+
+void DrawLine2(const HDC&hdc, int x1, int y1, int x2, int y2, int x3, int y3) {
+#ifndef NOLINETO
+  MoveToEx(hdc, x1, y1, NULL);
+  LineTo(hdc, x2, y2);
+  LineTo(hdc, x3, y3);
+#else
+  POINT p[3];
+  p[0].x = x1;
+  p[0].y = y1;
+  p[1].x = x2;
+  p[1].y = y2;
+  p[2].x = x3;
+  p[2].y = y3;
+  Polyline(hdc, p, 3);
+#endif
+}
+
+
 
 int numkeyup=0;
 
@@ -1254,21 +1288,25 @@ void WindowControl::PaintSelector(HDC hDC){
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
     HPEN oldPen = (HPEN)SelectObject(hDC, hPenDefaultSelector);
 
-    MoveToEx(hDC, mWidth-SELECTORWIDTH-1, 0, NULL);
-    LineTo(hDC, mWidth-1, 0);
-    LineTo(hDC, mWidth-1, SELECTORWIDTH+1);
+    DrawLine2(hDC, 
+	      mWidth-SELECTORWIDTH-1, 0,
+	      mWidth-1, 0,
+	      mWidth-1, SELECTORWIDTH+1);
 
-    MoveToEx(hDC, mWidth-1, mHeight-SELECTORWIDTH-2, NULL);
-    LineTo(hDC, mWidth-1, mHeight-1);
-    LineTo(hDC, mWidth-SELECTORWIDTH-1, mHeight-1);
+    DrawLine2(hDC, 
+	      mWidth-1, mHeight-SELECTORWIDTH-2,
+	      mWidth-1, mHeight-1,
+	      mWidth-SELECTORWIDTH-1, mHeight-1);
 
-    MoveToEx(hDC, SELECTORWIDTH+1, mHeight-1, NULL);
-    LineTo(hDC, 0, mHeight-1);
-    LineTo(hDC, 0, mHeight-SELECTORWIDTH-2);
+    DrawLine2(hDC, 
+	      SELECTORWIDTH+1, mHeight-1, 
+	      0, mHeight-1,
+	      0, mHeight-SELECTORWIDTH-2);
 
-    MoveToEx(hDC, 0, SELECTORWIDTH+1, NULL);
-    LineTo(hDC, 0, 0);
-    LineTo(hDC, SELECTORWIDTH+1, 0);
+    DrawLine2(hDC, 
+	      0, SELECTORWIDTH+1,
+	      0, 0,
+	      SELECTORWIDTH+1, 0);
 
     SelectObject(hDC,oldPen);
   }
@@ -1301,20 +1339,21 @@ void WindowControl::Paint(HDC hDC){
     HPEN oldPen = (HPEN)SelectObject(hDC, mhPenBorder);
 
     if (mBorderKind & BORDERTOP){
-      MoveToEx(hDC, 0, 0, NULL);
-      LineTo(hDC, mWidth, 0);
+      DrawLine(hDC,0,0, mWidth, 0);
     }
     if (mBorderKind & BORDERRIGHT){
-      MoveToEx(hDC, mWidth-1, 0, NULL);
-      LineTo(hDC, mWidth-1, mHeight);
+      DrawLine(hDC, mWidth-1, 0,
+	       mWidth-1, mHeight);
     }
     if (mBorderKind & BORDERBOTTOM){
-      MoveToEx(hDC, mWidth-1, mHeight-1, NULL);
-      LineTo(hDC, -1, mHeight-1);
+      DrawLine(hDC, 
+	       mWidth-1, mHeight-1, 
+	       -1, mHeight-1);
     }
     if (mBorderKind & BORDERLEFT){
-      MoveToEx(hDC, 0, mHeight-1, NULL);
-      LineTo(hDC, 0, -1);
+      DrawLine(hDC, 
+	       0, mHeight-1,
+	       0, -1);
     }
     SelectObject(hDC,oldPen);
   }
@@ -2941,26 +2980,33 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
     return;
   }
   HPEN oldPen = (HPEN)SelectObject(hDC, GetSelectorPen());
-  MoveToEx(hDC, w, top_percent+SELECTORWIDTH, NULL);
-  LineTo(hDC, w, bottom_percent-SELECTORWIDTH);
+
+  DrawLine(hDC,
+	   w, top_percent+SELECTORWIDTH,
+	   w, bottom_percent-SELECTORWIDTH);
   if (top_percent>0) {
-    MoveToEx(hDC, w, l, NULL);
-    LineTo(hDC, w-l, 0);
-    LineTo(hDC, w-l, l);
+    DrawLine2(hDC,
+	      w, l, 
+	      w-l, 0,
+	      w-l, l);
   } else {
-    MoveToEx(hDC, w-2*l, 0, NULL);
-    LineTo(hDC, w, 0);
-    LineTo(hDC, w, l);
+    DrawLine2(hDC,
+	      w-2*l, 0, 
+	      w, 0,
+	      w, l);
   }
   if (bottom_percent<h) {
-    MoveToEx(hDC, w, h-l, NULL);
-    LineTo(hDC, w-l, h);
-    LineTo(hDC, w-l, h-l);
+    DrawLine2(hDC,
+	      w, h-l, 
+	      w-l, h,
+	      w-l, h-l);
   } else {
-    MoveToEx(hDC, w-2*l, h, NULL);
-    LineTo(hDC, w, h);
-    LineTo(hDC, w, h-l);
+    DrawLine2(hDC,
+	      w-2*l, h, 
+	      w, h,
+	      w, h-l);
   }
+
   SelectObject(hDC,oldPen);
 }
 
