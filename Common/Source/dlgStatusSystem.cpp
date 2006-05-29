@@ -65,71 +65,144 @@ static int OnFormLButtonUp(WindowControl * Sender, WPARAM wParam, LPARAM lParam)
 }
 
 
+static bool first = true;
+
+static void UpdateValues() {
+  static int extGPSCONNECT_last = extGPSCONNECT;
+  static int NAVWarning_last = GPS_INFO.NAVWarning;
+  static int SatellitesUsed_last = GPS_INFO.SatellitesUsed;
+  static int VarioAvailable_last = GPS_INFO.VarioAvailable;
+  static int FLARM_Available_last = GPS_INFO.FLARM_Available;
+  static bool LoggerActive_last = LoggerActive;
+  static bool DeclaredToDevice_last = DeclaredToDevice;
+  static double SupplyBatteryVoltage_last = GPS_INFO.SupplyBatteryVoltage;
+
+  if (first ||
+      (extGPSCONNECT_last != extGPSCONNECT) ||
+      (NAVWarning_last != GPS_INFO.NAVWarning) ||
+      (SatellitesUsed_last != GPS_INFO.SatellitesUsed) ||
+      (VarioAvailable_last != GPS_INFO.VarioAvailable) ||
+      (FLARM_Available_last != GPS_INFO.FLARM_Available) ||
+      (LoggerActive_last != LoggerActive) ||
+      (DeclaredToDevice_last != DeclaredToDevice) ||
+      (SupplyBatteryVoltage_last != GPS_INFO.SupplyBatteryVoltage)) {
+    first = false;
+
+    extGPSCONNECT_last = extGPSCONNECT;
+    NAVWarning_last = GPS_INFO.NAVWarning;
+    SatellitesUsed_last = GPS_INFO.SatellitesUsed;
+    VarioAvailable_last = GPS_INFO.VarioAvailable;
+    FLARM_Available_last = GPS_INFO.FLARM_Available;
+    LoggerActive_last = LoggerActive;
+    DeclaredToDevice_last = DeclaredToDevice;
+    SupplyBatteryVoltage_last = GPS_INFO.SupplyBatteryVoltage;
+
+  } else {
+    return;
+  }
+
+  TCHAR Temp[80];
+
+  WndProperty* wp;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpGPS"));
+  if (wp) {
+    if (extGPSCONNECT) {
+      if (GPS_INFO.NAVWarning) {
+	wp->SetText(gettext(TEXT("Fix invalid")));
+      } else {
+	if (GPS_INFO.SatellitesUsed==0) {
+	  wp->SetText(gettext(TEXT("No fix")));
+
+	} else {
+	  wp->SetText(gettext(TEXT("3D fix")));
+	}
+      }
+      wp->RefreshDisplay();
+
+      wp = (WndProperty*)wf->FindByName(TEXT("prpNumSat"));
+      if (wp) {
+	_stprintf(Temp,TEXT("%d"),GPS_INFO.SatellitesUsed);
+	wp->SetText(Temp);
+	wp->RefreshDisplay();
+      }
+    } else {
+      wp->SetText(gettext(TEXT("Disconnected")));
+      wp->RefreshDisplay();
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpVario"));
+  if (wp) {
+    if (GPS_INFO.VarioAvailable) {
+      wp->SetText(gettext(TEXT("Connected")));
+    } else {
+      wp->SetText(gettext(TEXT("Disconnected")));
+    }
+    wp->RefreshDisplay();
+  }
+
+  if (wp) {
+    wp = (WndProperty*)wf->FindByName(TEXT("prpFLARM"));
+    if (GPS_INFO.FLARM_Available) {
+      wp->SetText(gettext(TEXT("Connected")));
+    } else {
+      wp->SetText(gettext(TEXT("Disconnected")));
+    }
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLogger"));
+  if (wp) {
+    if (LoggerActive) {
+      wp->SetText(gettext(TEXT("ON")));
+    } else {
+      wp->SetText(gettext(TEXT("OFF")));
+    }
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpDeclared"));
+  if (wp) {
+    if (DeclaredToDevice) {
+      wp->SetText(gettext(TEXT("YES")));
+    } else {
+      wp->SetText(gettext(TEXT("NO")));
+    }
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpBattery"));
+  if (wp) {
+    _stprintf(Temp,TEXT("%.1f V"),GPS_INFO.SupplyBatteryVoltage);
+    wp->SetText(Temp);
+    wp->RefreshDisplay();
+  }
+}
+
+
+static int OnTimerNotify(WindowControl * Sender) {
+  UpdateValues();
+  return 0;
+}
+
+
 void dlgStatusSystemShowModal(void){
 
-  WndProperty *wp;
+  first = true;
 
-  TCHAR Temp[1000];
-
-  wf = dlgLoadFromXML(NULL, LocalPathS(TEXT("dlgStatusSystem.xml")), hWndMainWindow,
+  wf = dlgLoadFromXML(NULL,
+		      LocalPathS(TEXT("dlgStatusSystem.xml")),
+		      hWndMainWindow,
 		      TEXT("IDR_XML_STATUSSYSTEM"));
   if (!wf) return;
 
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
+  wf->SetTimerNotify(OnTimerNotify);
+
   wf->SetLButtonUpNotify(OnFormLButtonUp);
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpGPS"));
-  if (extGPSCONNECT) {
-    if (GPS_INFO.NAVWarning) {
-      wp->SetText(gettext(TEXT("Fix invalid")));
-    } else {
-      if (GPS_INFO.SatellitesUsed==0) {
-	wp->SetText(gettext(TEXT("No fix")));
-      } else {
-	wp->SetText(gettext(TEXT("3D fix")));
-      }
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpNumSat"));
-    _stprintf(Temp,TEXT("%d"),GPS_INFO.SatellitesUsed);
-    wp->SetText(Temp);
-
-  } else {
-    wp->SetText(gettext(TEXT("Disconnected")));
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpVario"));
-  if (GPS_INFO.VarioAvailable) {
-    wp->SetText(gettext(TEXT("Connected")));
-  } else {
-    wp->SetText(gettext(TEXT("Disconnected")));
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFLARM"));
-  if (GPS_INFO.FLARM_Available) {
-    wp->SetText(gettext(TEXT("Connected")));
-  } else {
-    wp->SetText(gettext(TEXT("Disconnected")));
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpLogger"));
-  if (LoggerActive) {
-    wp->SetText(gettext(TEXT("ON")));
-  } else {
-    wp->SetText(gettext(TEXT("OFF")));
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpDeclared"));
-  if (DeclaredToDevice) {
-    wp->SetText(gettext(TEXT("YES")));
-  } else {
-    wp->SetText(gettext(TEXT("NO")));
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpBattery"));
-  _stprintf(Temp,TEXT("%.1f V"),GPS_INFO.SupplyBatteryVoltage);
-  wp->SetText(Temp);
+  UpdateValues();
 
   wf->ShowModal();
 
@@ -138,7 +211,5 @@ void dlgStatusSystemShowModal(void){
   wf = NULL;
 
 }
-
-
 
 #endif

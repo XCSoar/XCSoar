@@ -832,7 +832,7 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
   }
 }
 
-#if (WINDOWSPC>0)
+#ifdef BIGDISPLAY
 #define IBLSCALE(x) ((x)*InfoBoxLayout::scale)
 #else
 #define IBLSCALE(x) (x)
@@ -3624,6 +3624,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   double maxh;
   double h;
   double Wt[NUMTHERMALBUCKETS];
+  double ht[NUMTHERMALBUCKETS];
   double Wtot=0.0;
   int TBSCALEY = ( (rc.bottom - rc.top )/2)-30;
 #define TBSCALEX 20
@@ -3654,25 +3655,24 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   // calculate averages
   int numtherm = 0;
   for (i=0; i<NUMTHERMALBUCKETS; i++) {
+    double wthis;
     if (DerivedDrawInfo.ThermalProfileN[i]>10) {
       // now requires 10 items in bucket before displaying,
       // to eliminate kinks
-      Wt[i] = DerivedDrawInfo.ThermalProfileW[i]/DerivedDrawInfo.ThermalProfileN[i];
-      if (Wt[i]<0) {
-        Wt[i]= 0.0;
+      wthis = DerivedDrawInfo.ThermalProfileW[i]
+	         /DerivedDrawInfo.ThermalProfileN[i];
+      if (wthis>0.0) {
+	ht[numtherm]= (i*mth/maxh)/NUMTHERMALBUCKETS;
+	Wt[numtherm]= wthis;
+	Wtot += wthis;
+	numtherm++;
       }
-    } else {
-      Wt[i] = 0.0;
-    }
-    if (Wt[i]>0) {
-      numtherm++;
-      Wtot += Wt[i];
     }
   }
-  if (numtherm) {
+  if (numtherm>1) {
     Wtot/= numtherm;
   } else {
-    Wtot = 1.0;
+    return; // don't display if insufficient statistics
   }
 
   double mc = MACCREADY;
@@ -3685,15 +3685,14 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   }
 
   // position of thermal band
-  for (i=0; i<NUMTHERMALBUCKETS; i++) {
+  for (i=0; i<numtherm; i++) {
     ThermalProfile[1+i].x = (7+iround((Wt[i]/Wtot)*IBLSCALE(TBSCALEX)))+rc.left;
-    ThermalProfile[1+i].y = 5+iround(TBSCALEY*(1.0-(mth/maxh)*(i)/NUMTHERMALBUCKETS))+rc.top;
+    ThermalProfile[1+i].y = 5+iround(TBSCALEY*(1.0-ht[i]))+rc.top;
   }
   ThermalProfile[0].x = IBLSCALE(7)+rc.left;
   ThermalProfile[0].y = ThermalProfile[1].y;
-  ThermalProfile[NUMTHERMALBUCKETS+1].x = IBLSCALE(7)+rc.left;
-  ThermalProfile[NUMTHERMALBUCKETS+1].y = ThermalProfile[NUMTHERMALBUCKETS].y;
-
+  ThermalProfile[numtherm+1].x = IBLSCALE(7)+rc.left;
+  ThermalProfile[numtherm+1].y = ThermalProfile[numtherm].y;
 
   // position of thermal band
   GliderBand[0].y = 5+iround(TBSCALEY*(1.0-h/maxh))+rc.top;
@@ -3711,7 +3710,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   hpOld = (HPEN)SelectObject(hDC, hpThermalBand);
   hbOld = (HBRUSH)SelectObject(hDC, hbThermalBand);
 
-  Polygon(hDC,ThermalProfile,NUMTHERMALBUCKETS+2);
+  Polygon(hDC,ThermalProfile,numtherm+2);
 
   (HPEN)SelectObject(hDC, hpThermalBandGlider);
 
@@ -3877,6 +3876,8 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
   bool dotraildrift = EnableTrailDrift && DerivedDrawInfo.Circling;
 
+  P1 = NULL; P2 = NULL;
+
   if (dotraildrift) {
 
     traildrift_lat = (DrawInfo.Latitude
@@ -4011,6 +4012,10 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
     // ok, we got this far, so draw the line
 
+    if (!P2) {
+      P2 = P1;
+    }
+
     if (!lastbroken) {
       // get the colour
       if (P1->Colour == -1) {
@@ -4020,9 +4025,10 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 	} else {
 	  cv /= vmax;
 	}
-	P1->Colour = min(NUMSNAILCOLORS-1,(short)((cv+1.0)/2.0*NUMSNAILCOLORS));
+	P1->Colour = min(NUMSNAILCOLORS-1,
+			 (short)((cv+1.0)/2.0*NUMSNAILCOLORS));
       }
-      SelectObject(hdc,hSnailPens[P1->Colour]);
+      SelectObject(hdc,hSnailPens[max(0,min(NUMSNAILCOLORS-1,P1->Colour))]);
     }
 #ifndef NOLINETO
     if (lastbroken) { // draw set cursor at P1

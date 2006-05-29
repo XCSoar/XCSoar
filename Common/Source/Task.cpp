@@ -391,13 +391,16 @@ void CalculateAATTaskSectors(void)
 		targetrange = 1.0-targetrange;
 	      }
 	    } else {
-	      if (targetbearing<Task[i].AATFinishRadial) {
+	      if (targetbearing<=Task[i].AATFinishRadial) {
 		targetbearing = targetbearing+180;
 		targetrange = 1.0-targetrange;
-	      } else if (targetbearing>Task[i].AATStartRadial) {
+	      } else if (targetbearing>=Task[i].AATStartRadial) {
 		targetbearing = targetbearing+180;
 		targetrange = 1.0-targetrange;
 	      }
+	    }
+	    if (targetbearing>360) {
+	      targetbearing-= 360;
 	    }
 	    targetrange*= Task[i].AATSectorRadius;
 	  } else {

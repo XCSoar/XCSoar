@@ -482,14 +482,14 @@ bool WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
       ZigZagStore(text);
       */
 
-      if (Basic->Time<= tlastupdate) {
-	tlastupdate = Basic->Time;
+      if ((Basic->Time<= tlastupdate)||(tlastupdate==-1)) {
+	tlastupdate = Basic->Time-20;
       }
 
       // don't update wind from zigzag more often than
       // every 20 seconds, so it is balanced with respect
       // to circling
-      if (Basic->Time-tlastupdate>20) {
+      if (Basic->Time-tlastupdate>=20) {
 	tlastupdate = Basic->Time;
 	return true;
       } else {

@@ -1645,6 +1645,8 @@ void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
 // 100km of the aircraft.
 // If the aircraft is within airspace, this displays the distance and bearing
 // to the nearest exit to the airspace.
+bool dlgAirspaceWarningShow(void);
+
 void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   double nearestdistance=0;
   double nearestbearing=0;
@@ -1657,9 +1659,10 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   TCHAR szTitleBuffer[1024];
   TCHAR text[1024];
 
-bool dlgAirspaceWarningShow(void);
-if (dlgAirspaceWarningShow())
-  return;
+#if (NEWAIRSPACEWARNING>0)
+  if (dlgAirspaceWarningShow())
+    return;
+#endif
 
   FindNearestAirspace(GPS_INFO.Longitude, GPS_INFO.Latitude,
 		      &nearestdistance, &nearestbearing,

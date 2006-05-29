@@ -28,9 +28,11 @@ Copyright_License {
 
 }
 */
+
 #if (NEWINFOBOX>0)
 
 #include "stdafx.h"
+#include <aygshell.h>
 
 #include "InfoBoxLayout.h"
 
@@ -40,6 +42,8 @@ Copyright_License {
 #include "MapWindow.h"
 
 #include "dlgTools.h"
+
+#if (NEWAIRSPACEWARNING>0)
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
@@ -122,6 +126,7 @@ static int OnKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
     case VK_ESCAPE:
       OnCloseClicked(Sender);
       return(0);
+#ifdef GNAV
     case VK_APP1:
     case '6':
       OnAckClicked(Sender);
@@ -138,6 +143,7 @@ static int OnKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
     case '9':
       OnEnableClicked(Sender);
       return(0);
+#endif
   }
 
   return(1);
@@ -473,7 +479,9 @@ int dlgAirspaceWarningInit(void){
 
   int res = 0;
 
+#ifdef HAVEEXCEPTIONS
   __try{
+#endif
 
 //    hActiveWindow = GetActiveWindow();
 
@@ -504,12 +512,14 @@ int dlgAirspaceWarningInit(void){
     }
 
 
+#ifdef HAVEEXCEPTIONS
   }__except(EXCEPTION_EXECUTE_HANDLER ){
 
     res = 0;
     // ToDo: log that problem
 
   };
+#endif
 
   return(res);
 
@@ -530,4 +540,5 @@ int dlgAirspaceWarningDeInit(void){
 }
 
 
+#endif
 #endif

@@ -30,4 +30,20 @@
 #include <crtdbg.h>
 #endif
 
+#if (GNAV)
+#define NEWAIRSPACEWARNING 1
+// use exception handling
+#define HAVEEXCEPTIONS
+// disable internally generated sounds
+#define DISABLEAUDIO
+
+#else
+#define BIGDISPLAY
+#if (NEWINFOBOX>0)
+#define NEWAIRSPACEWARNING 1
+#else
+#define NEWAIRSPACEWARNING 0
+#endif
+#endif
+
 #endif

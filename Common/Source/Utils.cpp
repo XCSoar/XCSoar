@@ -262,6 +262,7 @@ TCHAR szRegistryLoggerTimeStepCircling[]= TEXT("LoggerTimeStepCircling");
 
 TCHAR szRegistrySafetyMacCready[] = TEXT("SafetyMacCready");
 TCHAR szRegistryAbortSafetyUseCurrent[] = TEXT("AbortSafetyUseCurrent");
+TCHAR szRegistryAutoMcMode[] = TEXT("AutoMcMode");
 
 
 int UTCOffset = 0; // used for Altair
@@ -718,6 +719,10 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAutoAdvance,&Temp);
   AutoAdvance = (Temp == 1);
 
+  Temp = AutoMcMode;
+  GetFromRegistry(szRegistryAutoMcMode,&Temp);
+  AutoMcMode = Temp;
+
   Temp = 0;
   GetFromRegistry(szRegistryUTCOffset,&Temp);
   UTCOffset = Temp;
@@ -988,6 +993,7 @@ void rotate(double &xin, double &yin, const double &angle)
   xin = x*cost - y*sint;
   yin = y*cost + x*sint;
 }
+
 
 
 
@@ -1264,7 +1270,9 @@ bool ReadWinPilotPolar(void) {
   double ww[2];
   bool foundline = false;
 
+#ifdef HAVEEXCEPTIONS
   __try{
+#endif
 
     ww[0]= 403.0; // 383
     ww[1]= 101.0; // 121
@@ -1282,9 +1290,9 @@ bool ReadWinPilotPolar(void) {
 
     if (hFile != INVALID_HANDLE_VALUE ){
 
+#ifdef HAVEEXCEPTIONS
       __try{
-
-
+#endif
       int *p=NULL; // test, force an exception
       p=0;
 
@@ -1323,14 +1331,18 @@ bool ReadWinPilotPolar(void) {
         if (foundline) {
           SetRegistryString(szRegistryPolarFile, szFile);
         }
-      }__finally{
+#ifdef HAVEEXCEPTIONS
+      }__finally
+#endif
+      {
         CloseHandle (hFile);
       }
     }
+#ifdef HAVEEXCEPTIONS
   }__except(EXCEPTION_EXECUTE_HANDLER){
     foundline = false;
   }
-
+#endif
   return(foundline);
 
 }
@@ -2072,11 +2084,13 @@ BOOL ReadStringX(FILE *fp, int Max, TCHAR *String){
 
   if (_fgetts(String, Max, fp) != NULL){     // 20060512/sgi change 200 to max
 
+
     String[Max-1] = '\0';                    // 20060512/sgi added make shure the  string is terminated
     TCHAR *pWC = &String[_tcslen(String)-1]; // 20060512/sgi change add -1 to set pWC at the end of the string
 
     while (pWC > String && (*pWC == '\r' || *pWC == '\n')){
       *pWC = '\0';
+
       pWC--;
     }
 
@@ -3179,7 +3193,7 @@ bool CheckRectOverlap(RECT rc1, RECT rc2) {
 
 */
 
-#if !defined(GNAV) || defined(WINDOWSPC)
+#if !defined(GNAV) || (WINDOWSPC>0)
 typedef DWORD (_stdcall *GetIdleTimeProc) (void);
 GetIdleTimeProc GetIdleTime;
 #endif
@@ -3194,7 +3208,7 @@ int MeasureCPULoad() {
   static int PercentIdle;
   static int PercentLoad;
   static int pi;
-#if !defined(GNAV) || defined(WINDOWSPC)
+#if !defined(GNAV) || (WINDOWSPC>0)
   if (!init) {
     // get the pointer to the function
     GetIdleTime = (GetIdleTimeProc)

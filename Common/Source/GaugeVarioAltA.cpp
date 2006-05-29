@@ -252,8 +252,18 @@ void GaugeVario::Render() {
   double vvaldisplay = min(99.9,max(-99.9,vval*LIFTMODIFY));
 
   if (Appearance.GaugeVarioAvgText) {
-    RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
-		CALCULATED_INFO.Average30s*LIFTMODIFY, TEXT("Avg"));
+    // JMW averager now displays netto average if not circling
+    if (
+#ifndef _SIM_
+	DrawInfo.NettoVarioAvailable &&
+#endif
+	!DerivedDrawInfo.Circling) {
+      RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
+		  CALCULATED_INFO.NettoAverage30s*LIFTMODIFY, TEXT("Net Avg"));
+    } else {
+      RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
+		  CALCULATED_INFO.Average30s*LIFTMODIFY, TEXT("Avg"));
+    }
   }
 
   if (Appearance.GaugeVarioMc) {
@@ -609,8 +619,12 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
   //  x = rc.left+1*InfoBoxLayout::scale;
   x = rc.right-2*ARROWYSIZE-6*InfoBoxLayout::scale;
 
+  // only draw speed command if flying and vario is not circling
+  //
   if ((DerivedDrawInfo.Flying)
+#ifdef _SIM_
       && !DerivedDrawInfo.Circling
+#endif
       && !DrawInfo.SwitchState.VarioCircling) {
     vdiff = (DerivedDrawInfo.VOpt - DrawInfo.IndicatedAirspeed);
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
