@@ -293,18 +293,32 @@ static void GetTaskFileName(TCHAR *filename) {
   if (wp) {
     TaskFileNumber = wp->GetDataField()->GetAsInteger();
   }
+
+// ToDo: review by JW
+
+  TCHAR sTmp[MAX_PATH];
+
+  _stprintf(sTmp,TEXT("%02d.tsk"), TaskFileNumber);
+  _tcscpy(filename, LocalPath(sTmp));
+
+
+/* all this is handled in LocalPath(...
+
 #if (WINDOWSPC>0)
-  _stprintf(filename,TEXT("C:\\XCSoaLocalPath(r%02d.tsk"), 
-	    TaskFileNumber);
+  _stprintf(filename,TEXT("C:\\XCSoar%02d.tsk"),
+	    TaskFileNumber);   LocalPath(
 #else
 #ifdef GNAV
-  _stprintf(filename,TEXT("\\NOR Flash\\%02d.tsk"), 
+  _stprintf(filename,TEXT("\\NOR Flash\\%02d.tsk"),
 	    TaskFileNumber);
-#else 
-  _stprintf(filename,TEXT("\\%02d.tsk"), 
+#else
+  _stprintf(filename,TEXT("\\%02d.tsk"),
 	    TaskFileNumber);
 #endif
 #endif
+
+*/
+
 }
 
 

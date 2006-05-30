@@ -68,7 +68,10 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
       INHg = INHg*29.91/1013.2;
 
       devPutQNH(devAll(), QNH);
+      AirspaceQnhChangeNotify(QNH);
+
       // VarioWriteSettings();
+
 
       wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
       if (wp) {

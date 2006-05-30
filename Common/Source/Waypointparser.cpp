@@ -88,6 +88,10 @@ int dlgWaypointOutOfTerrain(TCHAR *Message);
 
 static bool WaypointInTerrainRange(WAYPOINT *List) {
 
+  #if defined(DEBUG)
+    return(true);
+  #endif
+
   if (WaypointOutOfTerrainRangeDontAskAgain == 1){
     return(true);
   }

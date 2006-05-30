@@ -443,7 +443,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
   WndForm *theForm = NULL;
   //  TCHAR sFileName[128];
 
-  ASSERT(hWndMainWindow == Parent);
+//  ASSERT(hWndMainWindow == Parent);  // Airspace warning has MapWindow as parent, ist that ok?
 
 // T:\\Project\\WINCE\\TNAV\\XCSoar\\
 

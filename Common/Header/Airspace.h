@@ -122,6 +122,8 @@ void ScanAirspaceLine(double *lats, double *lons, double *heights,
 		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X]);
 
 
+void AirspaceQnhChangeNotify(double newQNH);
+
 //*******************************************************************************
 // experimental: new dialog based warning system
 
@@ -166,6 +168,7 @@ int AirspaceWarnFindIndexByID(int ID);
 void AirspaceWarnListInit(void);
 void AirspaceWarnListDeInit(void);
 
-
+// MapWindow interface ...
+bool dlgAirspaceWarningShowDlg(bool Force);
 
 #endif

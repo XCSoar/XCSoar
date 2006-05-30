@@ -942,6 +942,10 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
   switch (uMsg)
   {
+
+  case WM_USER+1:
+    dlgAirspaceWarningShowDlg(false);
+  return(0);
   case WM_ERASEBKGND:
     // JMW trying to reduce flickering
     if (first || MapDirty) {
@@ -1418,6 +1422,10 @@ void MapWindow::UpdateMapScale()
   }
 
 
+  LockFlightData();  // protect from external task changes
+  #ifdef HAVEEXCEPTIONS
+  __try{
+  #endif
   // if we aren't looking at a waypoint, see if we are now
   if (AutoMapScaleWaypointIndex == -1) {
     if (ActiveWayPoint>=0) {
@@ -1441,6 +1449,12 @@ void MapWindow::UpdateMapScale()
       StartingAutoMapScale = 0.0;
     }
 
+    }
+  #ifdef HAVEEXCEPTIONS
+  }__finally
+  #endif
+  {
+    UnlockFlightData();
   }
 
 }
@@ -2267,6 +2281,11 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
     if(WayPointList[i].Visible )
     {
 
+      LockFlightData();  // protect from external task changes
+      #ifdef HAVEEXCEPTIONS
+      __try{
+      #endif
+
       bool irange = false;
       bool intask = false;
 
@@ -2308,7 +2327,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
       irange = ((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0)) 
         && (MapScale <= 10);
 
-    if((ActiveWayPoint >= 0) && (Task[ActiveWayPoint].Index == (int)i) || irange){
+        if(((ActiveWayPoint >= 0) && (Task[ActiveWayPoint].Index == (int)i)) || irange){
       // ((ActiveWayPoint >= 0) && 20060516:sgi added to avoid -1 index access
 
         DrawBitmapX(hdc,
@@ -2354,7 +2373,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         
       } else
 
-        if((Task[ActiveWayPoint].Index == (int)i) || irange)
+          if(((ActiveWayPoint >= 0) && (Task[ActiveWayPoint].Index == (int)i)) || irange)
         {
           switch(pDisplayTextType)
           {
@@ -2429,7 +2448,14 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
             (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
 	    intask);
 
-        }
+          }
+
+      #ifdef HAVEEXCEPTIONS
+      }__finally
+      #endif
+      {
+        UnlockFlightData();
+      }
     }
   }
 
@@ -2519,6 +2545,10 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
   int i;
   if (!WayPointList) return;
   
+  LockFlightData();  // protect from external task changes
+  #ifdef HAVEEXCEPTIONS
+  __try{
+  #endif
   for(i=0;i<MAXTASKPOINTS-1;i++)
   {
     if(Task[i].Index >=0)
@@ -2528,6 +2558,12 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
         me,
         RGB(0,255,0));
     }
+    }
+  #ifdef HAVEEXCEPTIONS
+  }__finally
+  #endif
+  {
+    UnlockFlightData();
   }
 }
 
@@ -2541,19 +2577,24 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
 
   if (!WayPointList) return;
-  
+
+  LockFlightData();  // protect from external task changes
+  #ifdef HAVEEXCEPTIONS
+  __try{
+  #endif
   if((Task[0].Index >=0) &&  (Task[1].Index >=0) && (ActiveWayPoint<2))
   {
     if(StartLine){
-      #if defined(TASKSTARTLINEWIDTH)
-      int LineWidth = TASKSTARTLINEWIDTH;
-      #else
-      int LineWidth = 2;
-      #endif
-      DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen, Task[0].End, RGB(127,127,127));
-      DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen, Task[0].Start , RGB(127,127,127));
+        #if EXPERIMENTAL_STARTLINE > 0
+        _DrawLine(hdc, PS_SOLID, 5, Task[0].End, Task[0].Start, RGB(0,255,0));
+        _DrawLine(hdc, PS_SOLID, 1, Task[0].End, Task[0].Start, RGB(255,0,0));
+        #else
+        int LineWidth = 2;
+        DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen, Task[0].End, RGB(127,127,127));
+        DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen, Task[0].Start , RGB(127,127,127));
+        #endif
     }
-    #if defined(NOCIRCLEONSTARTLINE)
+    #if NOCIRCLEONSTARTLINE > 0
     else
     #endif
     {
@@ -2567,33 +2608,43 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
   for(i=1;i<MAXTASKPOINTS-1;i++)
   {
     if((Task[i].Index >=0) &&  (Task[i+1].Index <0))
-      { // final waypoint
-	if (ActiveWayPoint>1) { 
+    { // final waypoint
+      if (ActiveWayPoint>1) { 
 	  // only draw finish line when past the first
 	  // waypoint.
 
 	if(FinishLine)
-	  { 
-	    DrawDashLine(hdc, 2, 
-			 WayPointList[Task[i].Index].Screen, 
-			 Task[i].End, 
-			 RGB(127,127,127));
-	    DrawDashLine(hdc, 2, 
-			 WayPointList[Task[i].Index].Screen, 
-			 Task[i].Start, 
-			 RGB(127,127,127));
-	  }
-	tmp = FinishRadius*ResMapScaleOverDistanceModify; 
-	SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-	SelectObject(hdc, GetStockObject(BLACK_PEN));
-	Circle(hdc,
-	       WayPointList[Task[i].Index].Screen.x,
-	       WayPointList[Task[i].Index].Screen.y,
-	       (int)tmp, rc); 
-	}
+            {
+
+              #if EXPERIMENTAL_STARTLINE > 0
+              _DrawLine(hdc, PS_SOLID, 5, Task[i].End, Task[i].Start, RGB(0,255,0));
+              _DrawLine(hdc, PS_SOLID, 1, Task[i].End, Task[i].Start, RGB(255,0,0));
+              #else
+              DrawDashLine(hdc, 2,
+               WayPointList[Task[i].Index].Screen,
+               Task[i].End,
+               RGB(127,127,127));
+              DrawDashLine(hdc, 2,
+               WayPointList[Task[i].Index].Screen,
+               Task[i].Start,
+               RGB(127,127,127));
+              #endif
+            }
+          #if NOCIRCLEONFINISHLINE > 0
+          else
+          #endif
+            {
+        	tmp = FinishRadius*ResMapScaleOverDistanceModify; 
+        	SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
+        	SelectObject(hdc, GetStockObject(BLACK_PEN));
+        	Circle(hdc,
+        	       WayPointList[Task[i].Index].Screen.x,
+        	       WayPointList[Task[i].Index].Screen.y,
+        	       (int)tmp, rc); 
+	    }
 	
       }
-
+    }
     if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
     {
       if(AATEnabled != TRUE)
@@ -2641,6 +2692,12 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
         RGB(0,255,0));
     }
   }
+  #ifdef HAVEEXCEPTIONS
+  }__finally
+  #endif
+  {
+    UnlockFlightData();
+  }
 
   // restore original color
   SetTextColor(hDCTemp, origcolor);
@@ -2656,6 +2713,11 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
 
   if (!WayPointList) return;
   if (!AATEnabled) return;
+  
+  LockFlightData();  // protect from external task changes
+  #ifdef HAVEEXCEPTIONS
+  __try{
+  #endif
 
   COLORREF whitecolor = RGB(0xff,0xff, 0xff);
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
@@ -2750,6 +2812,12 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
 		   );
   #endif
 
+  #ifdef HAVEEXCEPTIONS
+  }__finally
+  #endif
+  {
+    UnlockFlightData();
+  }
 }
 
 
@@ -2993,6 +3061,10 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 
   hpOld = (HPEN)SelectObject(hdc, hpBearing);
   
+  LockFlightData();  // protect from external task changes
+  #ifdef HAVEEXCEPTIONS
+  __try{
+  #endif
   if(ActiveWayPoint >= 0)
   {
     if (AATEnabled) {
@@ -3005,6 +3077,12 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
     End.x = Orig.x;
     End.y = Orig.y;
     DrawSolidLine(hdc, Start, End);
+  }
+  #ifdef HAVEEXCEPTIONS
+  }__finally
+  #endif
+  {
+    UnlockFlightData();  // protect from external task changes
   }
   
   SelectObject(hdc, hpOld);
@@ -3748,10 +3826,13 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
   int Offset;
   int i;
   
-  if (ActiveWayPoint == -1) {
-    return;
-    // JMW not going anywhere, so nothing to display
-  }
+
+  LockFlightData();  // protect from external task changes
+  #ifdef HAVEEXCEPTIONS
+  __try{
+  #endif
+
+    if (ActiveWayPoint >= 0) {
 
   Offset = ((int)DerivedDrawInfo.TaskAltitudeDifference)>>4; 
   // JMW TODO: should be an angle if in final glide mode
@@ -3846,6 +3927,13 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
   SelectObject(hDC, hbOld);
   SelectObject(hDC, hpOld);
+    }
+  #ifdef HAVEEXCEPTIONS
+  }__finally
+  #endif
+  {
+    UnlockFlightData();
+  }
 
 }
 
@@ -4336,7 +4424,25 @@ void MapWindow::DrawSolidLine(const HDC& hdc, const POINT &ptStart, const POINT 
   Polyline(hdc, pt, NUMPOINTS);
 } 
 
+void _DrawLine(HDC hdc, int PenStyle, int width, POINT ptStart, POINT ptEnd, COLORREF cr){
 
+  HPEN hpDash,hpOld;
+  POINT pt[2];
+  //Create a dot pen
+  hpDash = (HPEN)CreatePen(PenStyle, width, cr);
+  hpOld = (HPEN)SelectObject(hdc, hpDash);
+
+  pt[0].x = ptStart.x;
+  pt[0].y = ptStart.y;
+  pt[1].x = ptEnd.x;
+  pt[1].y = ptEnd.y;
+
+  Polyline(hdc, pt, NUMPOINTS);
+
+  SelectObject(hdc, hpOld);
+  DeleteObject((HPEN)hpDash);
+
+}
 void DrawDashLine(HDC hdc, INT width, POINT ptStart, POINT ptEnd, COLORREF cr)
 {
   int i;

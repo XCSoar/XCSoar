@@ -252,8 +252,8 @@ static BOOL PDVDS(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   int mag = isqrt4((int)((GPS_INFO->AccelX*GPS_INFO->AccelX
 			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
   GPS_INFO->Gload = mag/100.0;
-#pragma message( "----------------->>>> Experimantal remove later! <<<<----------------------") 
 
+//#pragma message( "----------------->>>> Experimantal remove later! <<<<----------------------") 
 //GPS_INFO->Gload = stallratio/100.0;
 
   GPS_INFO->AccelerationAvailable = TRUE;
