@@ -93,6 +93,7 @@ static float Radius = 0;
 static float Width = 0;
 static float Zoom = 0;
 static int LineCount;
+static double lastQNH;
 
 int AirspacePriority[AIRSPACECLASSCOUNT];
 
@@ -198,8 +199,9 @@ void ReadAirspace(FILE *fp)
   int	NumberOfAirspaceCirclesPass[2];
 
   LineCount = 0;
-
   HWND hProgress;
+
+  lastQNH = QNH;
 
   hProgress=CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
   // Need step size finer than default 10
@@ -362,7 +364,7 @@ void ReadAirspace(FILE *fp)
 
   }
 
-//  DumpAirspaceFile();
+  DumpAirspaceFile();
 
 //  if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
 
@@ -891,7 +893,7 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
       double d = (double)StrToDouble(pToken, &Stop);;
       if (Alt->Base == abFL){
         Alt->FL = d;
-        Alt->Altitude = (100 * d)/TOFEET ;
+        Alt->Altitude = AltitudeToQNHAltitude((Alt->FL * 100)/TOFEET);
       } else {
         Alt->Altitude = d;
       }
@@ -933,17 +935,28 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
       Alt->Base = abAGL;
     }
 
+    else if (_tcscmp(pToken, TEXT("STD")) == 0){
+      if (Alt->Base != abUndef) {
+        // warning! multiple base tags
+      }
+      Alt->Base = abFL;
+      Alt->FL = (Alt->Altitude * TOFEET) / 100;
+      Alt->Altitude = AltitudeToQNHAltitude((Alt->FL * 100)/TOFEET);
+
+    }
+
     pToken = strtok_r(NULL, TEXT(" \t"), &pWClast);
 
   }
 
   if (!fHasUnit && Alt->Base != abFL) {
-    // warning! no unit defined use user alt unit
-    Alt->Altitude = Units::ToSysAltitude(Alt->Altitude);
+    // ToDo warning! no unit defined use feet or user alt unit
+    // Alt->Altitude = Units::ToSysAltitude(Alt->Altitude);
+    Alt->Altitude = Alt->Altitude/TOFEET;
   }
 
   if (Alt->Base == abUndef) {
-    // warning! no base defined use MSL
+    // ToDo warning! no base defined use MSL
     Alt->Base = abMSL;
   }
 
@@ -1266,6 +1279,51 @@ BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
   return TRUE;
 }
 
+
+// hack, shoukd be replaced with a data change notifier in the future...
+void AirspaceQnhChangeNotify(double newQNH){
+
+  int i;
+  AIRSPACE_ALT *Alt;
+
+  if (newQNH != lastQNH){
+
+    for(i=0;i<(int)NumberOfAirspaceAreas;i++) {
+
+      Alt = &AirspaceArea[i].Top;
+
+      if (Alt->Base == abFL){
+        Alt->Altitude = AltitudeToQNHAltitude((Alt->FL * 100)/TOFEET);
+      }
+
+      Alt = &AirspaceArea[i].Base;
+
+      if (Alt->Base == abFL){
+        Alt->Altitude = AltitudeToQNHAltitude((Alt->FL * 100)/TOFEET);
+      }
+    }
+
+    for(i=0;i<(int)NumberOfAirspaceCircles;i++) {
+
+      Alt = &AirspaceCircle[i].Top;
+
+      if (Alt->Base == abFL){
+        Alt->Altitude = AltitudeToQNHAltitude((Alt->FL * 100)/TOFEET);
+      }
+
+      Alt = &AirspaceCircle[i].Base;
+
+      if (Alt->Base == abFL){
+        Alt->Altitude = AltitudeToQNHAltitude((Alt->FL * 100)/TOFEET);
+      }
+    }
+
+    lastQNH = newQNH;
+
+  }
+
+
+}
 
 ///////////////////////////////////////////////////
 
@@ -1833,7 +1891,7 @@ void DumpAirspaceFile(void){
 
   fp  = _tfopen(TEXT("XCSoarAirspace.dmp"), TEXT("wt"));
 
-  for (i=0; i < NumberOfAirspaceAreas; i++){
+  for (i=0; i < (int)NumberOfAirspaceAreas; i++){
 
     _ftprintf(fp, TEXT("*** Aera id: %d %s "), i, AirspaceArea[i].Name);
 
@@ -1907,7 +1965,7 @@ void DumpAirspaceFile(void){
     _ftprintf(fp, TEXT("\r\n"), i);
   }
 
-  for (i=0; i < NumberOfAirspaceCircles; i++){
+  for (i=0; i < (int)NumberOfAirspaceCircles; i++){
 
     _ftprintf(fp, TEXT("\r\n*** Circle id: %d %s ("), i, AirspaceCircle[i].Name);
 

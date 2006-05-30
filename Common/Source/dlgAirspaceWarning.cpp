@@ -46,6 +46,7 @@ Copyright_License {
 #if (NEWAIRSPACEWARNING>0)
 
 extern HWND   hWndMainWindow;
+extern HWND   hWndMapWindow;
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
 static WndOwnerDrawFrame *wAirspaceListEntry = NULL;
@@ -62,6 +63,7 @@ static int FocusedID = -1;     // Currently focused airspace ID
 static int FocusedIdx = -1;    // Currently socused airspace List Index
 static int SelectedID = -1;    // Currently selected airspace ID
 static int SelectedIdx = -1;   // Currently selected airspace List Index
+static bool fDialogOpen = false;
 
 void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace);
 
@@ -105,7 +107,10 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetVisible(false);
   MapWindow::RequestFastRefresh();
 
-  SetFocus(hWndMainWindow);
+//  SetFocus(hWndMainWindow);
+//  SetFocus(hWndMapWindow);
+
+  wf->SetModalResult(mrOK);
 
 }
 
@@ -214,7 +219,7 @@ static TCHAR *fmtAirspaceAlt(TCHAR *Buffer, AIRSPACE_ALT *alt){
       _stprintf(Buffer, TEXT("%.0fm %.0fft STD"), alt->Altitude, alt->Altitude*TOFEET);
     break;
     case abFL:
-      _stprintf(Buffer, TEXT("FL %.0f %.0fm"), alt->FL, AltitudeToQNHAltitude(alt->Altitude));
+      _stprintf(Buffer, TEXT("FL %.0f %.0fm"), alt->FL, alt->Altitude /*AltitudeToQNHAltitude(alt->Altitude)*/);
     break;
   }
   return(Buffer);
@@ -275,7 +280,7 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
     pType = getAirspaceType(Type);
 
     if (pAS.Inside){
-      if (pAS.Acknowledge >= 2)
+      if (pAS.Acknowledge >= 3)
         hBrushBk = hBrushInsideAckBk;
       else
         hBrushBk = hBrushInsideBk;
@@ -348,6 +353,9 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
 
 static void OnAirspaceListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   if (ListInfo->DrawIndex == -1){
+    if (FocusedIdx < 0) {
+      FocusedIdx = 0;
+    }
     ListInfo->ItemIndex = FocusedIdx;
     if (Count == 0)
       ListInfo->ItemCount = 1;
@@ -373,6 +381,7 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
 
   if (actShow){
     actShow = false;
+    /*
     if (!wf->GetVisible()){
 
       Count = AirspaceWarnGetItemCount();
@@ -388,6 +397,7 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
       SetFocus(wAirspaceListEntry->GetHandle());
 
     }
+    */
 
     return(0);
 
@@ -434,22 +444,23 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
 // WARNING: this is NOT called from the windows thread!
 void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace) {
 
-  if (Action == asaItemAdded || Action == asaItemRemoved || Action == asaClearAll) {
+  if (Action == asaItemAdded || Action == asaItemRemoved || Action == asaWarnLevelIncreased) {
     actShow = true;
+  }
+
+  if (Action == asaItemAdded || Action == asaItemRemoved || Action == asaClearAll) {
     actListSizeChange = true;
   }
 
-  if (Action == asaWarnLevelIncreased){
-    actShow = true;
+  if (Action == asaItemChanged || Action == asaWarnLevelIncreased){
     actListChange = true;
   }
 
-  if (Action == asaItemChanged){
-    actListChange = true;
-  }
-
-  if (Action == asaProcessEnd){
-    PostMessage(wf->GetHandle(), WM_USER+1, 0, 0);
+  if (Action == asaProcessEnd && (actShow || actListSizeChange || actListChange)){
+    if (fDialogOpen)
+      PostMessage(wf->GetHandle(), WM_USER+1, 0, 0);
+    else
+      PostMessage(hWndMapWindow, WM_USER+1, 0, 0);  // sync dialog with MapWindow (event processing etc)
   }
 
 }
@@ -466,11 +477,37 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(NULL)
 };
 
+/*
 bool dlgAirspaceWarningShow(void){
   if (Count == 0)
     return(false);
   actShow = true;
   PostMessage(wf->GetHandle(), WM_USER+1, 0, 0);
+
+  return(true);
+}
+*/
+
+// WARING: may only be called from MapWindow event loop!
+bool dlgAirspaceWarningShowDlg(bool Force){
+
+  if (!actShow && !Force)
+    return(false);
+
+  Count = AirspaceWarnGetItemCount();
+
+  if (Force && Count == 0)
+    return(false);
+
+  ASSERT(wf != NULL);
+  ASSERT(wAirspaceList != NULL);
+
+  wAirspaceList->ResetList();
+  fDialogOpen = true;
+  wf->ShowModal();
+  fDialogOpen = false;
+
+  SetFocus(hWndMapWindow);
 
   return(true);
 }

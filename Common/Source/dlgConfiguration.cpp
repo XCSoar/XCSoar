@@ -1957,7 +1957,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinishMinHeight"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if (FinishMinHeight != ival) {
+    if ((int)FinishMinHeight != ival) {
       FinishMinHeight = ival;
       SetToRegistry(szRegistryFinishMinHeight,FinishMinHeight);
       changed = true;
@@ -1967,7 +1967,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxHeight"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
-    if (StartMaxHeight != ival) {
+    if ((int)StartMaxHeight != ival) {
       StartMaxHeight = ival;
       SetToRegistry(szRegistryStartMaxHeight,StartMaxHeight);
       changed = true;
@@ -1977,7 +1977,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxSpeed"));
   if (wp) {
     ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
-    if (StartMaxSpeed != ival) {
+    if ((int)StartMaxSpeed != ival) {
       StartMaxSpeed = ival;
       SetToRegistry(szRegistryStartMaxSpeed,StartMaxSpeed);
       changed = true;

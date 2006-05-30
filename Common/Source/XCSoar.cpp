@@ -2266,7 +2266,9 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   int wmId, wmEvent;
   HWND wmControl;
   int i;
+  #ifndef GNAV
   WORD wID;
+  #endif
 
   wmId    = LOWORD(wParam);
   wmEvent = HIWORD(wParam);
@@ -2704,6 +2706,9 @@ void DisplayText(void)
 	InfoBoxes[i]->SetValue(TEXT("---"));
 	InfoBoxes[i]->SetColor(0);
       }
+      if (needupdate)
+       InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
+		       Data_Options[DisplayType[i]].UnitGroup));
 	break;
     default:
       if (needupdate)

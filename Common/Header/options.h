@@ -10,8 +10,9 @@
                                               // ie TEXT("-logA=\\Speicherkarte\\logA.log ""-logB=\\SD Card\\logB.log""")
 #define   AIRSPACEUSEBINFILE    0             // use and maintain binary airspace file
 
-#define   NOCIRCLEONSTARTLINE   1             // draw no circle if task start sector is a line
-#define   TASKSTARTLINEWIDTH    4             // width of start-line
+#define   NOCIRCLEONSTARTLINE    1             // draw no circle if task start sector is a line
+#define   NOCIRCLEONFINISHLINE   1             // draw no circle if task finish sector is a line
+#define   EXPERIMENTAL_STARTLINE 1             // bether visible start line
 
 // define this to be true for windows PC port
 #if !defined(WINDOWSPC)

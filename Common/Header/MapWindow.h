@@ -63,6 +63,7 @@ typedef struct _SNAIL_POINT
 
 
 void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
+void _DrawLine(HDC hdc, int PenStyle, int width, POINT ptStart, POINT ptEnd, COLORREF cr);
 
 typedef union{
   unsigned int AsInt;

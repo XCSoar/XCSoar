@@ -1499,6 +1499,7 @@ void AnnounceWayPointSwitch() {
     InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
   }
 
+  SelectedWaypoint = ActiveWayPoint;  // set aypoint detail to active task WP
   // start logging data at faster rate
   FastLogNum = 5;
 
@@ -2360,7 +2361,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       }
 
     }
-    if (inside) { // hash
+    if (inside) {
       if (AirspaceCircle[i].WarningLevel>0) {
               // already warned
               continue;
@@ -2987,10 +2988,12 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
   int i, k, l;
   double aa;
   int ai;
+  int lastActiveWayPoint;
 
   if (!WayPointList) return;
 
   LockFlightData();
+  lastActiveWayPoint = ActiveWayPoint;
 
   // Do preliminary fast search
   int scx_aircraft, scy_aircraft;
@@ -3060,7 +3063,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
             continue;
           }
 
-          if (((WayPointList[SortedApproxIndex[i]].Flags & LANDPOINT) == LANDPOINT) &&
+          if (((WayPointList[SortedApproxIndex[i]].Flags & AIRPORT) != AIRPORT) &&
               (scanairportsfirst==0))
             {
               // we are in the first scan, looking for airports only
@@ -3154,39 +3157,36 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
   else
     {
       // if not found, keep on field or set active waypoint to closest
-      if (ActiveWayPoint>=0)
-        {
-          aa = CalculateWaypointArrivalAltitude(Basic, Calculated,
+      if (ActiveWayPoint>=0){
+        aa = CalculateWaypointArrivalAltitude(Basic, Calculated,
                                                 Task[ActiveWayPoint].Index);
+      } else {
+        aa = 0;
+      }
+      if (aa <= 0){   // last active is no more reachable, switch to new closest
+        DoStatusMessage(gettext(TEXT("Closest Airfield Changed!")));
+        ActiveWayPoint = 0;
+      } else {        // last active is reachable but not in list, add to end of list (or overwrite laste one)
+        if (ActiveWayPoint>=0){
+          for (i=0; (i<MAXTASKPOINTS-1); i++){    // find free slot
+            if (SortedLandableIndex[i] == -1)     // free slot found (if not, i index the last entry of the list)
+              break;
+          }
+          SortedLandableIndex[i] = Task[ActiveWayPoint].Index;
+          ActiveWayPoint = i;
         }
-
-      if (aa <= 0)
-        {
-          DoStatusMessage(gettext(TEXT("Closest Airfield Changed!")));
-          ActiveWayPoint = 0;
-        }
-      else
-        {
-          if (ActiveWayPoint>=0)
-            {
-              SortedLandableIndex[MAXTASKPOINTS-1] = Task[ActiveWayPoint].Index;
-            }
-          else
-            {
-              // JMW not sure this is right..
-              SortedLandableIndex[MAXTASKPOINTS-1] = 0;
-            }
-
-          ActiveWayPoint = MAXTASKPOINTS-1;
-        }
+      }
     }
 
   // set new waypoints in task
 
-  for (i=0; i<MAXTASKPOINTS; i++)
-    {
-      Task[i].Index = SortedLandableIndex[i];
-    }
+  for (i=0; i<MAXTASKPOINTS; i++){
+    Task[i].Index = SortedLandableIndex[i];
+  }
+
+  if (lastActiveWayPoint != ActiveWayPoint){
+    SelectedWaypoint = ActiveWayPoint;
+  }
   UnlockFlightData();
 }
 
@@ -3196,10 +3196,12 @@ void ResumeAbortTask(int set) {
   static int OldActiveWayPoint= -1;
   static bool OldAATEnabled= false;
   int i;
+  int lastActiveWayPoint;
 
   bool oldTaskAborted = TaskAborted;
 
   LockFlightData();
+  lastActiveWayPoint = ActiveWayPoint;
 
   if (set == 0)
         TaskAborted = !TaskAborted;
@@ -3246,6 +3248,11 @@ void ResumeAbortTask(int set) {
       RefreshTask();
     }
   }
+
+  if (lastActiveWayPoint != ActiveWayPoint){
+    SelectedWaypoint = ActiveWayPoint;
+  }
+
   UnlockFlightData();
 
 }
@@ -3274,6 +3281,9 @@ void DoAutoQNH(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double fixaltitude = Calculated->TerrainAlt;
 
   QNH = FindQNH(Basic->BaroAltitude, fixaltitude);
+
+  AirspaceQnhChangeNotify(QNH);
+
   done_autoqnh = true;
 }
 

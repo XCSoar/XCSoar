@@ -1091,6 +1091,9 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
   double slat1 = sin(lat1);
   double slat2 = sin(lat2);
 
+  #ifdef HAVEEXCEPTIONS
+  __try{
+  #endif
 
   d = (slat1*slat2 +  clat1*clat2 * cos(lon1-lon2) );
   if(d>1) d = 0.99999999999999;
@@ -1127,6 +1130,11 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
 
       angle = 360 - (angle * RAD_TO_DEG);
     }
+  #ifdef HAVEEXCEPTIONS
+  }__except(EXCEPTION_EXECUTE_HANDLER ){
+    return(0);
+  }
+  #endif
 
   return (double)angle;
 }

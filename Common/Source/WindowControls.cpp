@@ -1056,8 +1056,9 @@ WindowControl *WindowControl::GetCanFocus(void){
     return(NULL);
 
   for (int idx=0; idx<mClientCount; idx++){
-    if (mClients[idx]->GetCanFocus()){
-      return(mClients[idx]);
+    WindowControl *w;
+    if ((w = mClients[idx]->GetCanFocus()) != NULL){
+      return(w);
     }
   }
   return(NULL);
