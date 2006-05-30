@@ -832,12 +832,6 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
   }
 }
 
-#ifdef BIGDISPLAY
-#define IBLSCALE(x) ((x)*InfoBoxLayout::scale)
-#else
-#define IBLSCALE(x) (x)
-#endif
-
 
 int MapWindow::GetMapResolutionFactor(void) {
   return IBLSCALE(30);
@@ -3119,7 +3113,8 @@ double MapWindow::GetApproxScreenRange() {
     *1000.0/GetMapResolutionFactor();
 }
 
-void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChangeFeedback)
+void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
+			     bool ScaleChangeFeedback)
 {
 
 
@@ -3241,23 +3236,28 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
     GetTextExtentPoint(hDC, ScaleInfo, _tcslen(ScaleInfo), &TextSize);
     LastMapWidth = (int)MapWidth;
 
-    Height = Appearance.MapWindowBoldFont.CapitalHeight+2;  // 2: add 1pix border
+    Height = Appearance.MapWindowBoldFont.CapitalHeight+IBLSCALE(2);
+    // 2: add 1pix border
 
     oldBrush = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
     oldPen = (HPEN)SelectObject(hDC, GetStockObject(WHITE_PEN));
-    Rectangle(hDC, 0, rc.bottom-Height, TextSize.cx + 6 + 15, rc.bottom);
+    Rectangle(hDC, 0, rc.bottom-Height, TextSize.cx + IBLSCALE(21), rc.bottom);
     if (ScaleChangeFeedback){
       SetBkMode(hDC, TRANSPARENT);
       oldTextColor = SetTextColor(hDC, RGB(0xff,0,0));
     }else
       oldTextColor = SetTextColor(hDC, RGB(0,0,0));
 
-    ExtTextOut(hDC, 7, rc.bottom-Appearance.MapWindowBoldFont.AscentHeight-1, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
+    ExtTextOut(hDC, IBLSCALE(7),
+	       rc.bottom-Appearance.MapWindowBoldFont.AscentHeight-IBLSCALE(1),
+	       0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
 
     oldBitMap = (HBITMAP)SelectObject(hDCTemp, hBmpMapScale);
 
-    BitBlt(hDC, 0, rc.bottom-Height, 6, 11, hDCTemp, 0, 0, SRCCOPY);
-    BitBlt(hDC, 7+7+TextSize.cx, rc.bottom-Height, 8, 11, hDCTemp, 6, 0, SRCCOPY);
+    DrawBitmapX(hDC, 0, rc.bottom-Height, 6, 11, hDCTemp, 0, 0, SRCCOPY);
+    DrawBitmapX(hDC,
+	   IBLSCALE(14)+TextSize.cx,
+	   rc.bottom-Height, 8, 11, hDCTemp, 6, 0, SRCCOPY);
 
     if (!ScaleChangeFeedback){
       HBITMAP Bmp;
@@ -3265,15 +3265,16 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
 
       if (Units::GetUnitBitmap(Unit, &Bmp, &BmpPos, &BmpSize, 0)){
         HBITMAP oldBitMap = (HBITMAP)SelectObject(hDCTemp, Bmp);
-        BitBlt(hDC,
-	       7+TextSize.cx, rc.bottom-Height,
-	       BmpSize.x, BmpSize.y,
-	       hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
+
+        DrawBitmapX(hDC,
+		    IBLSCALE(7)+TextSize.cx, rc.bottom-Height,
+		    BmpSize.x, BmpSize.y,
+		    hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
         SelectObject(hDCTemp, oldBitMap);
       }
     }
 
-    int y = rc.bottom-Height-(Appearance.TitleWindowFont.AscentHeight+1);
+    int y = rc.bottom-Height-(Appearance.TitleWindowFont.AscentHeight+IBLSCALE(1));
     if (!ScaleChangeFeedback){
       // bool FontSelected = false;
       ScaleInfo[0] = 0;
@@ -3292,8 +3293,8 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChan
       if (ScaleInfo[0]) {
         SelectObject(hDC, TitleWindowFont);
         // FontSelected = true;
-        ExtTextOut(hDC, 1, y, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
-        y -= (Appearance.TitleWindowFont.CapitalHeight+1);
+        ExtTextOut(hDC, IBLSCALE(1), y, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
+        y -= (Appearance.TitleWindowFont.CapitalHeight+IBLSCALE(1));
       }
     }
 
@@ -3850,7 +3851,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
   if(Offset<0)
   {
-    GlideBar[1].y = 10;
+    GlideBar[1].y = IBLSCALE(10);
     (HBRUSH)SelectObject(hDC, hbFinalGlideBelow);
   }
   else
@@ -3858,10 +3859,12 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     (HBRUSH)SelectObject(hDC, hbFinalGlideAbove);
   }
 
+  Offset = IBLSCALE(Offset);
+
   for(i=0;i<5;i++)
   {
     GlideBar[i].y += ( (rc.bottom - rc.top )/2)+rc.top;
-    GlideBar[i].x += rc.left;
+    GlideBar[i].x = IBLSCALE(GlideBar[i].x)+rc.left;
   }
   GlideBar[0].y -= Offset;
   GlideBar[1].y -= Offset;
@@ -3869,7 +3872,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
   if (Appearance.IndFinalGlide == fgFinalGlideAltA){
     for(i=0;i<sizeof(GlideBar)/sizeof(GlideBar[0]);i++){
-      GlideBar[i].x -= 5;
+      GlideBar[i].x -= IBLSCALE(5);
     }
   }
 
@@ -3880,9 +3883,9 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     _stprintf(Value,TEXT("%1.0f "), ALTITUDEMODIFY*DerivedDrawInfo.TaskAltitudeDifference);
 
     if (Offset>=0) {
-      Offset = (GlideBar[2].y+Offset)+5;
+      Offset = GlideBar[2].y+Offset+IBLSCALE(5);
     } else {
-      Offset = (GlideBar[2].y+Offset)-15;
+      Offset = GlideBar[2].y+Offset-IBLSCALE(15);
     }
 
     TextInBoxMode_t TextInBoxMode = {1|8};
@@ -3894,7 +3897,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     SIZE  TextSize;
     HFONT oldFont;
     int y = ((rc.bottom - rc.top )/2)-rc.top-Appearance.MapWindowBoldFont.CapitalHeight/2-1;
-    int x = GlideBar[2].x+1;
+    int x = GlideBar[2].x+IBLSCALE(1);
     HBITMAP Bmp;
     POINT  BmpPos;
     POINT  BmpSize;
@@ -3907,16 +3910,18 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
     SelectObject(hDC, GetStockObject(WHITE_BRUSH));
     SelectObject(hDC, GetStockObject(WHITE_PEN));
-    Rectangle(hDC, x, y, x+1+TextSize.cx, y+Appearance.MapWindowBoldFont.CapitalHeight+2);
+    Rectangle(hDC, x, y,
+	      x+IBLSCALE(1)+TextSize.cx,
+	      y+Appearance.MapWindowBoldFont.CapitalHeight+IBLSCALE(2));
 
-    ExtTextOut(hDC, x+1,
+    ExtTextOut(hDC, x+IBLSCALE(1),
 	       y+rc.top+Appearance.MapWindowBoldFont.CapitalHeight
-	       -Appearance.MapWindowBoldFont.AscentHeight+1,
+	       -Appearance.MapWindowBoldFont.AscentHeight+IBLSCALE(1),
 	       0, NULL, Value, _tcslen(Value), NULL);
 
     if (Units::GetUnitBitmap(Units::GetUserAltitudeUnit(), &Bmp, &BmpPos, &BmpSize, 0)){
       HBITMAP oldBitMap = (HBITMAP)SelectObject(hDCTemp, Bmp);
-      BitBlt(hDC, x+TextSize.cx+1, y, BmpSize.x, BmpSize.y,
+      DrawBitmapX(hDC, x+TextSize.cx+IBLSCALE(1), y, BmpSize.x, BmpSize.y,
 	     hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
       SelectObject(hDCTemp, oldBitMap);
     }
@@ -4656,7 +4661,7 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
   int yoffset=0;
   int hyoffset=0;
   vsize = iround(fabs(vdiff*vsize));
-  int xoffset = rc.right-25;
+  int xoffset = rc.right-IBLSCALE(25);
   int ycenter = (rc.bottom+rc.top)/2;
 
   int k=0;
@@ -4666,16 +4671,16 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
     for (i=0; i< vsize; i+= 5) {
       if (vdiff>0) {
         yoffset = i+ycenter+k;
-        hyoffset = 4;
+        hyoffset = IBLSCALE(4);
       } else {
         yoffset = -i+ycenter-k;
-        hyoffset = -4;
+        hyoffset = -IBLSCALE(4);
       }
       chevron[0].x = xoffset;
       chevron[0].y = yoffset;
-      chevron[1].x = xoffset+10;
+      chevron[1].x = xoffset+IBLSCALE(10);
       chevron[1].y = yoffset+hyoffset;
-      chevron[2].x = xoffset+20;
+      chevron[2].x = xoffset+IBLSCALE(20);
       chevron[2].y = yoffset;
 
       Polyline(hDC, chevron, 3);
@@ -4688,9 +4693,9 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
   }
 
   SelectObject(hDC, hpBearing);
-  chevron[0].x = xoffset-3;
+  chevron[0].x = xoffset-IBLSCALE(3);
   chevron[0].y = ycenter;
-  chevron[1].x = xoffset+3+20;
+  chevron[1].x = xoffset+IBLSCALE(3+20);
   chevron[1].y = ycenter;
   Polyline(hDC, chevron, 2);
 

@@ -76,8 +76,8 @@ void GaugeFLARM::RenderBg() {
   SelectObject(hdcTemp, hRoseBitMap);
 #if (WINDOWSPC>0)
   StretchBlt(hdcDrawWindow, 0, 0,
-	     114*InfoBoxLayout::scale,
-	     79*InfoBoxLayout::scale,
+	     IBLSCALE(114),
+	     IBLSCALE(79),
 	     hdcTemp,
 	     0, 0, 114, 79,
 	     SRCCOPY);
@@ -125,7 +125,7 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       }
       rotate(x, y, -gps_info->TrackBearing); 	// or use .Heading?
       double scale = RangeScale(d);
-      int targetsize = 3*InfoBoxLayout::scale;
+      int targetsize = IBLSCALE(3);
       int xs = center.x + iround(x*scale);
       int ys = center.y + iround(y*scale);
       Rectangle(hdcDrawWindow,

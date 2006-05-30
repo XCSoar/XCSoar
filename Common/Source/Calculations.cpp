@@ -606,7 +606,11 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       ||(fabs(Calculated->TaskAltitudeDifference)>30)) {
     FinalGlideAlert(Basic, Calculated);
   }
-  if (Calculated->AutoMacCready && !TaskAborted) {
+
+  if ((ActiveWayPoint>=0)
+      && Calculated->AutoMacCready
+      && (!TaskAborted)
+      && (Task[ActiveWayPoint].Index != -1)) {
     DoAutoMacCready(Basic, Calculated);
   }
 
@@ -740,11 +744,11 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       LastTime = Basic->Time;
       if (Basic->VarioAvailable) {
-        Calculated->Average30s = Vave/30;
+        Calculated->Average30s = (Calculated->Average30s+Vave/30)/2;
       } else {
-        Calculated->Average30s = Gain/30;
+        Calculated->Average30s = (Calculated->Average30s+Gain/30)/2;
       }
-      Calculated->NettoAverage30s = NVave/30;
+      Calculated->NettoAverage30s = (Calculated->NettoAverage30s+NVave/30)/2;
     }
   else
     {
@@ -2151,11 +2155,19 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
       // Auto Force Final Glide forces final glide mode
       // if above final glide...
       if (AutoForceFinalGlide) {
-        if (Calculated->TaskAltitudeDifference>0) {
-          ForceFinalGlide = true;
-        } else {
-          ForceFinalGlide = false;
-        }
+	if (!Calculated->FinalGlide) {
+	  if (Calculated->TaskAltitudeDifference>120) {
+	    ForceFinalGlide = true;
+	  } else {
+	    ForceFinalGlide = false;
+	  }
+	} else {
+	  if (Calculated->TaskAltitudeDifference<-120) {
+	    ForceFinalGlide = false;
+	  } else {
+	    ForceFinalGlide = true;
+	  }
+	}
       }
 
     } else {
@@ -2182,9 +2194,17 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static double tad=0.0;
   static double dmc=0.0;
 
+  bool isfinalglide = false;
+
   LockFlightData();
 
-  if ((AutoMcMode==0)||((AutoMcMode==2)&&(Calculated->FinalGlide))) {
+  double mcnew = MACCREADY;
+
+  if (Calculated->FinalGlide && (Task[ActiveWayPoint+1].Index== -1)) {
+    isfinalglide = true;
+  }
+
+  if ((AutoMcMode==0)||((AutoMcMode==2)&& isfinalglide)) {
 
     double slope =
       (Calculated->NavAltitude
@@ -2196,18 +2216,20 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 				Calculated->WaypointBearing,
 				slope);
     if (mcp>0) {
-      MACCREADY = mcp;
+      mcnew = mcp;
     } else {
-      MACCREADY = 0.0;
+      mcnew = 0.0;
     }
 
-  } else if ((AutoMcMode==1)||((AutoMcMode==2)&&(!Calculated->FinalGlide))) {
+  } else if ((AutoMcMode==1)||((AutoMcMode==2)&&(!isfinalglide))) {
 
     if (flightstats.ThermalAverage.y_ave>0) {
-      MACCREADY = flightstats.ThermalAverage.y_ave;
+      mcnew = flightstats.ThermalAverage.y_ave;
     }
 
   }
+
+  MACCREADY = 0.85*MACCREADY+0.15*mcnew;
 
   UnlockFlightData();
 

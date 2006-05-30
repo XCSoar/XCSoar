@@ -37,7 +37,6 @@
 #define HAVEEXCEPTIONS
 // disable internally generated sounds
 #define DISABLEAUDIO
-
 #else
 #define BIGDISPLAY
 #if (NEWINFOBOX>0)
@@ -46,5 +45,13 @@
 #define NEWAIRSPACEWARNING 0
 #endif
 #endif
+
+
+#ifdef BIGDISPLAY
+#define IBLSCALE(x) ((x)*InfoBoxLayout::scale)
+#else
+#define IBLSCALE(x) (x)
+#endif
+
 
 #endif
