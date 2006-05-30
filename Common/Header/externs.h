@@ -1,3 +1,6 @@
+#ifndef EXTERNS_H
+#define EXTERNS_H
+
 extern TCHAR XCSoar_Version[256];
 
 #if !defined(AFX_EXTERNS_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)
@@ -202,6 +205,8 @@ extern int StatusMessageData_Size;
 
 #if (EXPERIMENTAL > 0)
 extern BlueDialupSMS bsms;
+#endif
+
 #endif
 
 #endif

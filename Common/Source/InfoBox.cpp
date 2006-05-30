@@ -174,18 +174,7 @@ void InfoBox::SetFocus(bool Value){
 
   if (mHasFocus != Value){
     mHasFocus = Value;
-
-/*
-    if (mHasFocus)
-      mColorTitleBk = bkColorSel;
-    else
-      mColorTitleBk = bkColor;
-
-    PaintTitle();
-*/
-
     Paint();
-    
   }
 }
 

@@ -84,8 +84,8 @@ COLORREF colTextBackgnd;
 
 
 #define NARROWS 3
-#define ARROWYSIZE 3*InfoBoxLayout::scale
-#define ARROWXSIZE 5*InfoBoxLayout::scale
+#define ARROWYSIZE IBLSCALE(3)
+#define ARROWXSIZE IBLSCALE(5)
 
 
 LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -317,28 +317,30 @@ void GaugeVario::MakePolygon(const int i) {
 
   if (!InitDone){
     if (Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle) {
-      nlength0 = 15*InfoBoxLayout::scale; // was 18
-      nlength1 = 6*InfoBoxLayout::scale;
-      nwidth = 4*InfoBoxLayout::scale;  // was 3
+      nlength0 = IBLSCALE(15); // was 18
+      nlength1 = IBLSCALE(6);
+      nwidth = IBLSCALE(4);  // was 3
     } else {
-      nlength0 = 13*InfoBoxLayout::scale;
-      nlength1 = 6*InfoBoxLayout::scale;
-      nwidth = 4*InfoBoxLayout::scale;
+      nlength0 = IBLSCALE(13);
+      nlength1 = IBLSCALE(6);
+      nwidth = IBLSCALE(4);
     }    
     InitDone = true;
   }
 
+#define ELLIPSE 1.06
+
   dx = -xoffset+nlength0; dy = nwidth;
   rotate(dx, dy, i);
-  bit[0].x = lround(dx)+xoffset; bit[0].y = lround(dy)+yoffset+1;
+  bit[0].x = lround(dx)+xoffset; bit[0].y = lround(dy*ELLIPSE)+yoffset+1;
   
   dx = -xoffset+nlength0; dy = -nwidth;
   rotate(dx, dy, i);
-  bit[1].x = lround(dx)+xoffset; bit[1].y = lround(dy)+yoffset+1;
+  bit[1].x = lround(dx)+xoffset; bit[1].y = lround(dy*ELLIPSE)+yoffset+1;
   
   dx = -xoffset+nlength1; dy = 0;
   rotate(dx, dy, i);
-  bit[2].x = lround(dx)+xoffset; bit[2].y = lround(dy)+yoffset+1;
+  bit[2].x = lround(dx)+xoffset; bit[2].y = lround(dy*ELLIPSE)+yoffset+1;
 }
 
 
@@ -359,8 +361,8 @@ void GaugeVario::MakeAllPolygons() {
 
 void GaugeVario::RenderClimb() {
 
-  int x = rc.right-14*InfoBoxLayout::scale;
-  int y = rc.bottom-24*InfoBoxLayout::scale;
+  int x = rc.right-IBLSCALE(14);
+  int y = rc.bottom-IBLSCALE(24);
 
   // testing  DrawInfo.SwitchState.VarioCircling = true;
   
@@ -378,15 +380,15 @@ void GaugeVario::RenderClimb() {
 
     Rectangle(hdcDrawWindow, 
 	      x, y, 
-	      x+12*InfoBoxLayout::scale,y+12*InfoBoxLayout::scale);
+	      x+IBLSCALE(12),y+IBLSCALE(12));
   } else {
     HBITMAP oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapClimb);
     if (InfoBoxLayout::scale>1) {
       StretchBlt(hdcDrawWindow,
 		 x,
 		 y,
-		 12*InfoBoxLayout::scale, 
-		 12*InfoBoxLayout::scale,
+		 IBLSCALE(12), 
+		 IBLSCALE(12),
 		 hdcTemp,
 		 12, 0,
 		 12, 12,
@@ -422,7 +424,7 @@ void GaugeVario::RenderNeedle(double Value){
 
   if (!InitDone){
     degrees_per_unit = (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
-    gmax = (int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY))+2;
+    gmax = max(80,(int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY))+2);
     MakeAllPolygons();
     InitDone = true;
   }
@@ -439,7 +441,7 @@ void GaugeVario::RenderNeedle(double Value){
   }
 
   i = min(gmax,max(-gmax,i));
-  if (i != lastI){
+  if ((i != lastI) || (i==gmax) || (i== -gmax)){
 
     if (lastI != -99999){
       if (Appearance.InverseInfoBox){
@@ -464,7 +466,7 @@ void GaugeVario::RenderNeedle(double Value){
     bit = getPolygon(i);
     Polygon(hdcDrawWindow, bit, 3);
     lp[0].x = 0; lp[0].y = yoffset+1;
-    lp[1].x = 15*InfoBoxLayout::scale; lp[1].y = yoffset+1;
+    lp[1].x = IBLSCALE(15); lp[1].y = yoffset+1;
     Polyline(hdcDrawWindow,lp,2);
     memcpy(lastBit, bit, 3*sizeof(POINT));
 
@@ -486,8 +488,8 @@ void GaugeVario::RenderValue(int x, int y,
 
   if (!diValue->InitDone){
     
-    diValue->recBkg.right = x-5*InfoBoxLayout::scale;
-    diValue->recBkg.top = y +3*InfoBoxLayout::scale
+    diValue->recBkg.right = x-IBLSCALE(5);
+    diValue->recBkg.top = y +IBLSCALE(3)
       + Appearance.TitleWindowFont.CapitalHeight;
     
     diValue->recBkg.left = diValue->recBkg.right; 
@@ -509,7 +511,7 @@ void GaugeVario::RenderValue(int x, int y,
   if (!diLabel->InitDone){
 
     diLabel->recBkg.right = x;
-    diLabel->recBkg.top = y+1*InfoBoxLayout::scale;
+    diLabel->recBkg.top = y+IBLSCALE(1);
 
     diLabel->recBkg.left = diLabel->recBkg.right;           
     // update back rect with max label size
@@ -563,10 +565,10 @@ void GaugeVario::RenderValue(int x, int y,
     oldBmp = (HBITMAP)SelectObject(hdcTemp, hBitmapUnit);
     if (InfoBoxLayout::scale>1) {
       StretchBlt(hdcDrawWindow,
-		 x-5*InfoBoxLayout::scale, 
+		 x-IBLSCALE(5), 
 		 diValue->recBkg.top,
-		 BitmapUnitSize.x*InfoBoxLayout::scale, 
-		 BitmapUnitSize.y*InfoBoxLayout::scale,
+		 IBLSCALE(BitmapUnitSize.x), 
+		 IBLSCALE(BitmapUnitSize.y),
 		 hdcTemp,
 		 BitmapUnitPos.x, BitmapUnitPos.y,
 		 BitmapUnitSize.x, BitmapUnitSize.y,
@@ -613,11 +615,11 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
   int ybottom = rc.bottom
     -YOFFSET-nary-InfoBoxLayout::scale; // JMW
 
-  ytop += 14*InfoBoxLayout::scale;
-  ybottom -= 14*InfoBoxLayout::scale;
+  ytop += IBLSCALE(14);
+  ybottom -= IBLSCALE(14);
   // JMW
-  //  x = rc.left+1*InfoBoxLayout::scale;
-  x = rc.right-2*ARROWYSIZE-6*InfoBoxLayout::scale;
+  //  x = rc.left+IBLSCALE(1);
+  x = rc.right-2*ARROWYSIZE-IBLSCALE(6);
 
   // only draw speed command if flying and vario is not circling
   // 

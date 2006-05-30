@@ -41,6 +41,7 @@ Copyright_License {
 #include "externs.h"
 #include "Utils.h"
 #include "VarioSound.h"
+#include "InfoBoxLayout.h"
 #include "Sizes.h"
 
 //////////////////////////////////////////////////
@@ -377,8 +378,15 @@ class TerrainRenderer {
 public:
   TerrainRenderer(RECT rc) {
 
-    ixs = iround((rc.right-rc.left)/DTQUANT);
-    iys = iround((rc.bottom-rc.top)/DTQUANT);
+    dtquant = DTQUANT;
+
+    // scale dtquant so resolution is not too high (slow) on large PDA displays
+#if (WINDOWSPC<1) 
+    dtquant *= InfoBoxLayout::scale;
+#endif
+
+    ixs = iround((rc.right-rc.left)/dtquant);
+    iys = iround((rc.bottom-rc.top)/dtquant);
 
     sbuf = new CSTScreenBuffer();
     sbuf->Create(ixs*OVS,iys*OVS,RGB(0xff,0xff,0xff));
@@ -391,7 +399,7 @@ public:
     ilBuf = (short*)malloc(sizeof(short)*ixs*iys);
 
     pixelsize = (float)(MapWindow::MapScale/MapWindow::GetMapResolutionFactor()
-			*DTQUANT);
+			*dtquant);
 
   }
   ~TerrainRenderer() {
@@ -404,6 +412,7 @@ public:
   }
 
   int ixs, iys; // screen dimensions in coarse pixels
+  int dtquant;
 
   CSTScreenBuffer *sbuf;
 
@@ -424,14 +433,14 @@ public:
     float X, Y;
     short X0, Y0;
     short X1, Y1;
-    X0 = DTQUANT/2; 
-    Y0 = DTQUANT/2;
-    X1 = X0+DTQUANT*ixs;
-    Y1 = Y0+DTQUANT*iys;
+    X0 = dtquant/2; 
+    Y0 = dtquant/2;
+    X1 = X0+dtquant*ixs;
+    Y1 = Y0+dtquant*iys;
     short* myhbuf = hBuf;
 
     pixelsize = (float)(MapWindow::MapScale/MapWindow::GetMapResolutionFactor()
-			*DTQUANT);
+			*dtquant);
 
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
@@ -456,10 +465,10 @@ public:
 
     short pval = 0; // y*ixs+x;
     if (rc.top>0) {
-      pval = ixs*(rc.top/DTQUANT-1);
+      pval = ixs*(rc.top/dtquant-1);
       myhbuf+= pval;
-      Y0 += rc.top-DTQUANT;
-      Y1 -= rc.top-DTQUANT; // this is a cheat since we don't really know how
+      Y0 += rc.top-dtquant;
+      Y1 -= rc.top-dtquant; // this is a cheat since we don't really know how
 		    // far the bottom goes down
     }
 
@@ -470,13 +479,13 @@ public:
     float xmiddle = X;
     float ymiddle = Y;
 
-    X = (float)((X0+X1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact);
+    X = (float)((X0+X1)/2+dtquant*TERRAIN_ANTIALIASING*rfact);
     Y = (float)((Y0+Y1)/2);
     MapWindow::Screen2LatLon(X, Y);
     Xrounding = (float)fabs(X-xmiddle);
 
     X = (float)((X0+X1)/2);
-    Y = (float)((Y0+Y1)/2+DTQUANT*TERRAIN_ANTIALIASING*rfact);
+    Y = (float)((Y0+Y1)/2+dtquant*TERRAIN_ANTIALIASING*rfact);
     MapWindow::Screen2LatLon(X, Y);
     Yrounding = (float)fabs(Y-ymiddle);
 
@@ -484,8 +493,8 @@ public:
 
     terrain_dem_graphics.SetTerrainRounding(Xrounding,Yrounding);
     
-    for (int y = Y0; y<Y1; y+= DTQUANT) {
-      for (int x = X0; x<X1; x+= DTQUANT) {
+    for (int y = Y0; y<Y1; y+= dtquant) {
+      for (int x = X0; x<X1; x+= dtquant) {
         X = (float)x;
         Y = (float)y;
         MapWindow::Screen2LatLon(X, Y);

@@ -271,7 +271,6 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   } else {
     numInfoWindows = 8;
   }
-
 }
 
 
@@ -502,13 +501,13 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
     switch (ButtonLabelGeometry) {
     case 0:
       if (i==0) {
-	*sizex = 52*InfoBoxLayout::scale;
-	*sizey = 37*InfoBoxLayout::scale;
+	*sizex = IBLSCALE(52);
+	*sizey = IBLSCALE(37);
 	*x = rc.left+3+hwidth*3-3;
 	*y = (rc.bottom-(*sizey)-3-InfoBoxLayout::ControlHeight);
       } else {
-	*sizex = 52*InfoBoxLayout::scale;
-	*sizey = 37*InfoBoxLayout::scale;
+	*sizex = IBLSCALE(52);
+	*sizey = IBLSCALE(37);
 	*x = rc.left+3+hwidth*(i-1);
 	*y = (rc.bottom-(*sizey)-InfoBoxLayout::ControlHeight);
       }
@@ -519,19 +518,19 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
       hheight = (rc.bottom-rc.top)/(4+1);
 
       if (i==0) {
-	*sizex = 52*InfoBoxLayout::scale;
-	*sizey = 20*InfoBoxLayout::scale;
+	*sizex = IBLSCALE(52);
+	*sizey = IBLSCALE(20);
 	*x = rc.left+3-(*sizex); // JMW make it offscreen for now
 	*y = (rc.top);
       } else {
 	if (i<5) {
-	  *sizex = 52*InfoBoxLayout::scale;
-	  *sizey = 20*InfoBoxLayout::scale;
+	  *sizex = IBLSCALE(52);
+	  *sizey = IBLSCALE(20);
 	  *x = rc.left+3;
 	  *y = (rc.top+hheight*(i-1+1)-(*sizey)/2);
 	} else {
-	  *sizex = 60*InfoBoxLayout::scale;
-	  *sizey = 40*InfoBoxLayout::scale;
+	  *sizex = IBLSCALE(60);
+	  *sizey = IBLSCALE(40);
 	  *x = rc.left+hwidth*(i-5);
 	  *y = (rc.bottom-(*sizey));
 	}
@@ -554,8 +553,8 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
   int i;
   int x, y, xsize, ysize;
 
-  int buttonWidth = 50*InfoBoxLayout::scale;
-  int buttonHeight = 15*InfoBoxLayout::scale;
+  int buttonWidth = IBLSCALE(50);
+  int buttonHeight = IBLSCALE(15);
 
   if (gnav) {
     ButtonLabelGeometry = 1;

@@ -1758,18 +1758,18 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   rc.top = 0;
   rc.bottom = SCREENHEIGHT;
 #endif
+
   InfoBoxLayout::ScreenGeometry(rc);
 
   ///////////////////////////////////////// create infoboxes
 
   Units::LoadUnitBitmap(hInstance);
-  InfoBoxLayout::CreateInfoBoxes(rc);
 
+  InfoBoxLayout::CreateInfoBoxes(rc);
   GaugeFLARM::Create();
 
   ButtonLabel::CreateButtonLabels(rc);
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
-
 
   ////////////////// do fonts
   InitialiseFonts(rc);
