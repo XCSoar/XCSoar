@@ -729,8 +729,21 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
       if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
 	AATTaskLength = 0;
 
-      // TODO: include StartLine/StartRadius and FinishLine/FinishRadius
-      // etc in this file?
+      // 20060521:sgi added additional task parameters
+      if (!ReadFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesRead,(OVERLAPPED*)NULL))
+        void(0);  // todo set default values
+      if (!ReadFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesRead,(OVERLAPPED*)NULL))
+        void(0);
+      if (!ReadFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesRead,(OVERLAPPED*)NULL))
+        void(0);
+      if (!ReadFile(hFile,&StartLine,sizeof(StartLine),&dwBytesRead,(OVERLAPPED*)NULL))
+        void(0);
+      if (!ReadFile(hFile,&SectorType,sizeof(SectorType),&dwBytesRead,(OVERLAPPED*)NULL))
+        void(0);
+      if (!ReadFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesRead,(OVERLAPPED*)NULL))
+        void(0);
+      if (!ReadFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesRead,(OVERLAPPED*)NULL))
+        void(0);
 
       CloseHandle(hFile);
     }
