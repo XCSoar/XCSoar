@@ -58,6 +58,7 @@ extern int numInfoWindows;
 extern int HomeWaypoint;
 extern WAYPOINT *WayPointList;
 extern unsigned int NumberOfWayPoints;
+extern int WaypointsOutOfRange;
 
 // airspace data
 extern AIRSPACE_AREA *AirspaceArea;

@@ -113,6 +113,7 @@ extern TCHAR szRegistryLoggerTimeStepCircling[];
 extern TCHAR szRegistrySafetyMacCready[];
 extern TCHAR szRegistryAbortSafetyUseCurrent[];
 extern TCHAR szRegistryAutoMcMode[];
+extern TCHAR szRegistryWaypointsOutOfRange[];
 
 extern bool LockSettingsInFlight;
 

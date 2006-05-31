@@ -59,7 +59,8 @@ static double ReadAltitude(TCHAR *temp);
 #define WPPARSESTRINGLENGTH 210
 static TCHAR TempString[WPPARSESTRINGLENGTH];
 
-static int WaypointOutOfTerrainRangeDontAskAgain = 0;
+int WaypointsOutOfRange = 0; // ask
+static int WaypointOutOfTerrainRangeDontAskAgain = -1;
 
 
 void CloseWayPoints() {
@@ -76,7 +77,7 @@ void CloseWayPoints() {
     LocalFree((HLOCAL)WayPointList);
     WayPointList = NULL;
   }
-  WaypointOutOfTerrainRangeDontAskAgain = 0;
+  WaypointOutOfTerrainRangeDontAskAgain = WaypointsOutOfRange;
 
 }
 
@@ -88,9 +89,11 @@ int dlgWaypointOutOfTerrain(TCHAR *Message);
 
 static bool WaypointInTerrainRange(WAYPOINT *List) {
 
+  /*
   #if defined(DEBUG)
     return(true);
   #endif
+  */
 
   if (WaypointOutOfTerrainRangeDontAskAgain == 1){
     return(true);

@@ -71,6 +71,14 @@ Key2Event[mode_id][VK_ESCAPE] = event_id;
 mode_id = InputEvents::mode2int(TEXT("Vario2"), true);
 Key2Event[mode_id][VK_ESCAPE] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
+Key2Event[mode_id][VK_ESCAPE] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventMode, TEXT("Preview"), event_id);
+mode_id = InputEvents::mode2int(TEXT("default"), true);
+Key2Event[mode_id][VK_ESCAPE] = event_id;
+
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("pan"), true);
@@ -117,6 +125,10 @@ mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_F1] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
+makeLabel(mode_id,TEXT(""),1,event_id);
+Key2Event[mode_id][VK_F1] = event_id;
+
 event_id = 0;
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
@@ -158,6 +170,10 @@ mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_F2] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
+makeLabel(mode_id,TEXT(""),2,event_id);
+Key2Event[mode_id][VK_F2] = event_id;
+
 event_id = 0;
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),3,event_id);
@@ -188,6 +204,10 @@ makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_F3] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT(""),3,event_id);
+Key2Event[mode_id][VK_F3] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
 makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_F3] = event_id;
 
@@ -229,6 +249,10 @@ makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_F4] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT(""),4,event_id);
+Key2Event[mode_id][VK_F4] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
 makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_F4] = event_id;
 
@@ -352,6 +376,38 @@ event_id = InputEvents::makeEvent(&eventClearAirspaceWarnings, TEXT(""), event_i
 event_id = InputEvents::makeEvent(&eventClearStatusMessages, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_RETURN] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("show"), event_id);
+event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
+makeLabel(mode_id,TEXT("Pan"),5,event_id);
+Key2Event[mode_id]['6'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("in"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
+makeLabel(mode_id,TEXT("Zoom\nIn"),6,event_id);
+Key2Event[mode_id]['7'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("out"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
+makeLabel(mode_id,TEXT("Zoom\nOut"),7,event_id);
+Key2Event[mode_id]['8'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""), event_id);
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
+makeLabel(mode_id,TEXT("Mark\nLocation"),8,event_id);
+Key2Event[mode_id]['9'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
+event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
+makeLabel(mode_id,TEXT("Arm\nAdvance"),9,event_id);
+Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSelectInfoBox, TEXT("previous"), event_id);

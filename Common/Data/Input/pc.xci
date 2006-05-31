@@ -153,10 +153,15 @@ event=StatusMessage Task finished
 # mode=default
 # ------------
 
-mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2 Preview
 type=key
 data=ESCAPE
 event=Mode default
+
+mode=default
+type=key
+data=ESCAPE
+event=Mode Preview
 
 mode=pan
 type=key
@@ -165,25 +170,25 @@ event=Pan supertoggle
 
 # clear main entry buttons
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2 pan
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2 pan Preview
 type=key
 data=APP1
 label=
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Vario1 Vario2 pan
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Vario1 Vario2 pan Preview
 type=key
 data=APP2
 label=
 location=2
 
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 pan
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 pan Preview
 type=key
 data=APP3
 label=
 location=3
 
-mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Vario1 Vario2 pan
+mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Vario1 Vario2 pan Preview
 type=key
 data=APP4
 label=
@@ -293,6 +298,8 @@ data=RETURN
 event=ClearAirspaceWarnings
 event=ClearStatusMessages
 
+###
+
 mode=default
 type=key
 data=6
@@ -329,6 +336,44 @@ event=ArmAdvance show
 event=ArmAdvance toggle
 label=
 location=9
+
+mode=Preview
+type=key
+data=6
+event=Pan show
+event=Pan supertoggle
+label=Pan
+location=5
+
+mode=Preview
+type=key
+data=7
+event=Zoom in
+label=Zoom\nIn
+location=6
+
+mode=Preview
+type=key
+data=8
+event=Zoom out
+label=Zoom\nOut
+location=7
+
+mode=Preview
+type=key
+data=9
+event=MarkLocation
+label=Mark\nLocation
+location=8
+
+mode=Preview
+type=key
+data=0
+event=ArmAdvance show
+event=ArmAdvance toggle
+label=Arm\nAdvance
+location=9
+
 
 # ------------
 # mode=infobox
