@@ -263,6 +263,7 @@ TCHAR szRegistryLoggerTimeStepCircling[]= TEXT("LoggerTimeStepCircling");
 TCHAR szRegistrySafetyMacCready[] = TEXT("SafetyMacCready");
 TCHAR szRegistryAbortSafetyUseCurrent[] = TEXT("AbortSafetyUseCurrent");
 TCHAR szRegistryAutoMcMode[] = TEXT("AutoMcMode");
+TCHAR szRegistryWaypointsOutOfRange[] = TEXT("WaypointsOutOfRange");
 
 
 int UTCOffset = 0; // used for Altair
@@ -722,6 +723,10 @@ void ReadRegistrySettings(void)
   Temp = AutoMcMode;
   GetFromRegistry(szRegistryAutoMcMode,&Temp);
   AutoMcMode = Temp;
+
+  Temp = WaypointsOutOfRange;
+  GetFromRegistry(szRegistryWaypointsOutOfRange,&Temp);
+  WaypointsOutOfRange = Temp;
 
   Temp = 0;
   GetFromRegistry(szRegistryUTCOffset,&Temp);

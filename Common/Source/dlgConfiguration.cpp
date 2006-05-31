@@ -695,6 +695,17 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointsOutOfRange"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Ask"));
+    dfe->addEnumText(TEXT("Include"));
+    dfe->addEnumText(TEXT("Exclude"));
+    wp->GetDataField()->Set(WaypointsOutOfRange);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoForceFinalGlide"));
   if (wp) {
     wp->GetDataField()->Set(AutoForceFinalGlide);
@@ -1511,6 +1522,16 @@ void dlgConfigurationShowModal(void){
     if (AutoMcMode != wp->GetDataField()->GetAsInteger()) {
       AutoMcMode = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryAutoMcMode, AutoMcMode);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointsOutOfRange"));
+  if (wp) {
+    if (WaypointsOutOfRange != wp->GetDataField()->GetAsInteger()) {
+      WaypointsOutOfRange = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
+      WAYPOINTFILECHANGED= true;
       changed = true;
     }
   }
