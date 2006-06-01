@@ -202,24 +202,27 @@ static void OnDistroy(WindowControl * Sender){
 
 static TCHAR *fmtAirspaceAlt(TCHAR *Buffer, AIRSPACE_ALT *alt){
 
+  TCHAR sUnitBuffer[24];
+  TCHAR sAltUnitBuffer[24];
+
+  Units::FormatUserAltitude(alt->Altitude, sUnitBuffer, sizeof(sUnitBuffer)/sizeof(sUnitBuffer[0]));
+  Units::FormatAlternateUserAltitude(alt->Altitude, sAltUnitBuffer, sizeof(sAltUnitBuffer)/sizeof(sAltUnitBuffer[0]));
+
   switch (alt->Base){
     case abUndef:
-      _stprintf(Buffer, TEXT("%.0fm %.0fft"), alt->Altitude, alt->Altitude*TOFEET);
+      _stprintf(Buffer, TEXT("%s %s"), sUnitBuffer, sAltUnitBuffer);
     break;
     case abMSL:
-      _stprintf(Buffer, TEXT("%.0fm %.0fft MSL"), alt->Altitude, alt->Altitude*TOFEET);
+      _stprintf(Buffer, TEXT("%s %s MSL"), sUnitBuffer, sAltUnitBuffer);
     break;
     case abAGL:
       if (alt->Altitude == 0)
         _stprintf(Buffer, TEXT("SFC"));
       else
-        _stprintf(Buffer, TEXT("%.0fm %.0fft AGL"), alt->Altitude, alt->Altitude*TOFEET);
-    break;
-    case abQNH:
-      _stprintf(Buffer, TEXT("%.0fm %.0fft STD"), alt->Altitude, alt->Altitude*TOFEET);
+        _stprintf(Buffer, TEXT("%s %s AGL"), sUnitBuffer, sAltUnitBuffer);
     break;
     case abFL:
-      _stprintf(Buffer, TEXT("FL %.0f %.0fm"), alt->FL, alt->Altitude /*AltitudeToQNHAltitude(alt->Altitude)*/);
+      _stprintf(Buffer, TEXT("FL %.0f %s"), alt->FL, sUnitBuffer/*AltitudeToQNHAltitude(alt->Altitude)*/);
     break;
   }
   return(Buffer);
@@ -303,7 +306,11 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
       SetTextColor(hDC, clGray);
     }
 
-    wsprintf(sTmp, TEXT("%-20s%d"), sName, pAS.WarnLevel - pAS.Acknowledge);
+    #if defined(DEBUG)
+    wsprintf(sTmp, TEXT("%-20s%d"), sName , pAS.WarnLevel - pAS.Acknowledge);
+    #else
+    wsprintf(sTmp, TEXT("%-20s"), sName);
+    #endif
 
     ExtTextOut(hDC, Col0Left*InfoBoxLayout::scale, TextTop*InfoBoxLayout::scale,
       ETO_CLIPPED, &rcTextClip, sTmp, _tcslen(sTmp), NULL);
@@ -322,18 +329,18 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
       wsprintf(sTmp, TEXT("> %c %s"), sAckIndicator[pAS.Acknowledge], pType);
     } else {
       if (pAS.hDistance == 0 && pAS.vDistance > 0){
-        wsprintf(sTmp, TEXT("< %c %s ab %dm"), sAckIndicator[pAS.Acknowledge], pType, (int)pAS.vDistance);
+        wsprintf(sTmp, TEXT("< %c %s ab %d%s"), sAckIndicator[pAS.Acknowledge], pType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
       }
       else if (pAS.hDistance == 0 && pAS.vDistance < 0){
-        wsprintf(sTmp, TEXT("< %c %s bl %dm"), sAckIndicator[pAS.Acknowledge], pType, (int)-pAS.vDistance);
+        wsprintf(sTmp, TEXT("< %c %s bl %d%s"), sAckIndicator[pAS.Acknowledge], pType, (int)Units::ToUserDistance(-pAS.vDistance), Units::GetDistanceName());
       } else {
         if ((pAS.vDistance == 0) || (pAS.hDistance < (abs(pAS.vDistance)*30)))
-          wsprintf(sTmp, TEXT("< %c %s H %dm"), sAckIndicator[pAS.Acknowledge], pType, (int)pAS.hDistance);
+          wsprintf(sTmp, TEXT("< %c %s H %d%s"), sAckIndicator[pAS.Acknowledge], pType, (int)Units::ToUserDistance(pAS.hDistance),Units::GetDistanceName());
         else
           if (pAS.vDistance > 0)
-            wsprintf(sTmp, TEXT("< %c %s ab %dm"), sAckIndicator[pAS.Acknowledge], pType, (int)pAS.vDistance);
+            wsprintf(sTmp, TEXT("< %c %s ab %d%s"), sAckIndicator[pAS.Acknowledge], pType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
           else
-            wsprintf(sTmp, TEXT("< %c %s bl %dm"), sAckIndicator[pAS.Acknowledge], pType, (int)pAS.vDistance);
+            wsprintf(sTmp, TEXT("< %c %s bl %d%s"), sAckIndicator[pAS.Acknowledge], pType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
       }
     }
 

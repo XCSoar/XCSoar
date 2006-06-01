@@ -1297,7 +1297,9 @@ bool ReadWinPilotPolar(void) {
     POLARW[2]= -3.4;
 
     GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
-    // SetRegistryString(szRegistryPolarFile, TEXT("\0"));
+    #ifndef HAVEEXCEPTIONS
+    SetRegistryString(szRegistryPolarFile, TEXT("\0"));
+    #endif
 
     hFile = CreateFile(szFile,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 

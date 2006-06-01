@@ -36,7 +36,7 @@ typedef struct _AIRSPACE_ACK
   double AcknowledgementTime;
 } AIRSPACE_ACK;
 
-typedef enum {abUndef, abMSL, abAGL, abQNH, abFL} AirspaceAltBase_t;
+typedef enum {abUndef, abMSL, abAGL, abFL} AirspaceAltBase_t;
 
 typedef struct _AIRSPACE_ALT
 {
