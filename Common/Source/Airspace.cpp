@@ -1111,6 +1111,8 @@ static void FindAirspaceAreaBounds() {
 extern TCHAR szRegistryAirspaceFile[];
 extern TCHAR szRegistryAdditionalAirspaceFile[];
 
+// ToDo add exception handler to protect parser code against chrashes
+
 void ReadAirspace(void)
 {
   TCHAR	szFile1[MAX_PATH] = TEXT("\0");
@@ -1280,7 +1282,7 @@ BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
 }
 
 
-// hack, shoukd be replaced with a data change notifier in the future...
+// hack, should be replaced with a data change notifier in the future...
 void AirspaceQnhChangeNotify(double newQNH){
 
   int i;
@@ -1936,9 +1938,6 @@ void DumpAirspaceFile(void){
       case abAGL:
         _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
       break;
-      case abQNH:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [STD]\r\n"), AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
-      break;
       case abFL:
         _ftprintf(fp, TEXT("  Top  : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceArea[i].Top.FL, AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
       break;
@@ -1953,9 +1952,6 @@ void DumpAirspaceFile(void){
       break;
       case abAGL:
         _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
-      break;
-      case abQNH:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [STD]\r\n"), AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
       break;
       case abFL:
         _ftprintf(fp, TEXT("  Base : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceArea[i].Base.FL, AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
@@ -2010,9 +2006,6 @@ void DumpAirspaceFile(void){
       case abAGL:
         _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
       break;
-      case abQNH:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [STD]\r\n"), AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
-      break;
       case abFL:
         _ftprintf(fp, TEXT("  Top  : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceCircle[i].Top.FL, AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
       break;
@@ -2027,9 +2020,6 @@ void DumpAirspaceFile(void){
       break;
       case abAGL:
         _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);
-      break;
-      case abQNH:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [STD]\r\n"), AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);
       break;
       case abFL:
         _ftprintf(fp, TEXT("  Base : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceCircle[i].Base.FL, AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);

@@ -525,7 +525,9 @@ void ReadWayPoints(void)
     LockFlightData();
     CloseWayPoints();
     GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
-    // SetRegistryString(szRegistryWayPointFile, TEXT("\0"));  
+    #ifndef HAVEEXCEPTIONS
+    SetRegistryString(szRegistryWayPointFile, TEXT("\0"));  
+    #endif
       
     if (_tcslen(szFile1)>0)      
       fp = _tfopen(szFile1, TEXT("rt"));
@@ -535,7 +537,9 @@ void ReadWayPoints(void)
         ReadWayPointFile(fp, szFile1);
         fclose(fp);
         // read OK, so set the registry to the actual file name
-        // SetRegistryString(szRegistryWayPointFile, szFile1);  
+        #ifndef HAVEEXCEPTIONS
+        SetRegistryString(szRegistryWayPointFile, szFile1);  
+        #endif
       }
 #ifdef HAVEEXCEPTIONS
   }__except(EXCEPTION_EXECUTE_HANDLER){
