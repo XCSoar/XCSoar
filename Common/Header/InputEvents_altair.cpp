@@ -24,6 +24,7 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_SIMULATOR] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("/NOR Flash/Default.tsk"), event_id);
 event_id = InputEvents::makeEvent(&eventDLLExecute, TEXT("AltairPlatform.dll WakeUp"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
@@ -538,7 +539,7 @@ Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task saved"), event_id);
-event_id = InputEvents::makeEvent(&eventTaskSave, TEXT("/My Documents/Default.tsk"), event_id);
+event_id = InputEvents::makeEvent(&eventTaskSave, TEXT("/NOR Flash/Default.tsk"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
 makeLabel(mode_id,TEXT("Task\nSave"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
