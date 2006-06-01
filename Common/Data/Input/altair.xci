@@ -25,6 +25,7 @@ event=TaskLoad /NOR Flash/Default.tsk
 mode=default
 type=gce
 data=STARTUP_REAL
+event=TaskLoad /NOR Flash/Default.tsk
 event=DLLExecute AltairPlatform.dll WakeUp
 
 mode=default
@@ -427,7 +428,7 @@ mode=Nav2
 type=key
 data=7
 event=StatusMessage Task saved
-event=TaskSave /My Documents/Default.tsk
+event=TaskSave /NOR Flash/Default.tsk
 label=Task\nSave
 location=6
 
