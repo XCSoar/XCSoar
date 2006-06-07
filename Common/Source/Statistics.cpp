@@ -758,7 +758,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
         {
           ::ReleaseDC(hDlg, hdcScreen);
           EndDialog(hDlg, LOWORD(wParam));
-          MapWindow::RequestFastRefresh= true;
+          MapWindow::RequestFastRefresh();
           ClearAirspaceWarnings(false); // airspace warning gets refreshed
           FullScreen();
           return TRUE;
@@ -873,7 +873,7 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       return FALSE;
 
     case WM_CLOSE:
-      MapWindow::RequestFastRefresh= true;
+      MapWindow::RequestFastRefresh();
       ClearAirspaceWarnings(false); // airspace warning gets refreshed
       FullScreen();
     }

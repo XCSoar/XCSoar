@@ -792,7 +792,6 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   double DistanceFlown;
   double AltLost;
 
-
   if(Basic->Time - LastTime >20)
     {
       DistanceFlown = Distance(Basic->Latitude, Basic->Longitude, LastLat, LastLon);
@@ -819,6 +818,17 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       LastAlt = Calculated->NavAltitude;
       LastTime = Basic->Time;
     }
+
+  if (Basic->VarioAvailable && Basic->AirspeedAvailable) {
+    if (fabs(Basic->Vario)>=0.1) {
+      Calculated->LDvario = Basic->IndicatedAirspeed/Basic->Vario;
+      if (fabs(Calculated->LDvario)>999) {
+	Calculated->LDvario = 999;
+      }
+    } else {
+      Calculated->LDvario = 999;
+    }
+  }
 }
 
 void CruiseLD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)

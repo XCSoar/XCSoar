@@ -115,6 +115,8 @@ typedef struct _DERIVED_INFO
   double TaskStartSpeed;
   double TaskStartAltitude;
 
+  double LDvario;
+
 } DERIVED_INFO;
 
 #include "RasterTerrain.h"
