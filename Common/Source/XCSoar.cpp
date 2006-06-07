@@ -442,7 +442,7 @@ DWORD BatteryWarningTime = 0;
 // Groups:
 //   Altitude 0,1,20,33
 //   Aircraft info 3,6,23,32,37,47
-//   LD 4,5,19,38
+//   LD 4,5,19,38,53
 //   Vario 2,7,8,9,21,22,24,44
 //   Wind 25,26,48,49,50
 //   Mcready 10,34,35,43
@@ -530,7 +530,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 37
 	  {ugNone,            TEXT("G load"), TEXT("G"), new InfoBoxFormatter(TEXT("%2.2f")), AccelerometerProcessing, 47, 32},
 	  // 38
-	  {ugNone,            TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 4, 19},
+	  {ugNone,            TEXT("Next L/D"), TEXT("WP L/D"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 53, 19},
 	  // 39
 	  {ugNone,            TEXT("Time local"), TEXT("Time loc"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 40, 36},
 	  // 40
@@ -559,9 +559,11 @@ SCREEN_INFO Data_Options[] = {
 	  {ugDistance,        TEXT("AA Distance Tgt"), TEXT("AA Dtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 52, 31},
 	  // 52
 	  {ugHorizontalSpeed, TEXT("AA Speed Tgt"), TEXT("AA Vtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 51},
+	  // 53
+	  {ugNone,            TEXT("L/D vario"), TEXT("L/D vario"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 4, 38},
 
 	};
-int NUMSELECTSTRINGS = 53;
+int NUMSELECTSTRINGS = 54;
 
 
 CRITICAL_SECTION  CritSec_FlightData;

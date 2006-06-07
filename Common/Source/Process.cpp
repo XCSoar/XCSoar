@@ -662,6 +662,14 @@ void InfoBoxFormatter::AssignValue(int i) {
       Valid = false;
     }
     break;
+  case 53:
+    if (CALCULATED_INFO.LDvario== 999) {
+      Valid = false;
+    } else {
+      Valid = true;
+      Value = CALCULATED_INFO.LDvario;
+    }
+    break;
   default:
     break;
 
