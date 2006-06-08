@@ -41,7 +41,7 @@
 		#define NOCLEARTYPE
 		#endif
 
-#define NOLINETO
+		#define NOLINETO
 
 	#elif (WIN32_PLATFORM_PSPC == 310)
 	// Pocket PC 2002
@@ -52,7 +52,7 @@
 		#define NOCLEARTYPE
 		#endif
 
-#define NOLINETO
+		#define NOLINETO
 
 
 	#elif (WIN32_PLATFORM_PSPC == 400)
