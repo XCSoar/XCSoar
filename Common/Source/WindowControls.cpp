@@ -39,6 +39,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #endif
 #include "Utils.h"
+#include "compatibility.h"
 
 
 #ifdef ALTAIRSYNC
