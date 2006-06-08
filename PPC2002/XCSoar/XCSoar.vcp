@@ -181,8 +181,10 @@ SOURCE=..\..\Common\Source\AirfieldDetails.cpp
 
 DEP_CPP_AIRFI=\
 	"..\..\Common\Header\AirfieldDetails.h"\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -194,13 +196,15 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_AIRFI=\
 	"..\..\Common\Header\BlueSMS.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -288,6 +292,7 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -299,13 +304,15 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_AIRSP=\
 	"..\..\Common\Header\BlueSMS.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -389,9 +396,11 @@ SOURCE=..\..\Common\Source\AirspaceColourDlg.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_AIRSPA=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -403,13 +412,15 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_AIRSPA=\
 	"..\..\Common\Header\BlueSMS.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -495,14 +506,139 @@ NODEP_CPP_AIRSPA=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Source\AirspaceWarning.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_AIRSPAC=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\simpleList.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_AIRSPAC=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_AIRSPAC=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\simpleList.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_AIRSPAC=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_AIRSPAC=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\simpleList.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_AIRSPAC=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_AIRSPAC=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\simpleList.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_AIRSPAC=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Source\Atmosphere.cpp
 
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_ATMOS=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Atmosphere.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -516,6 +652,7 @@ DEP_CPP_ATMOS=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_ATMOS=\
@@ -611,8 +748,10 @@ SOURCE=..\..\Common\Source\Calculations.cpp
 
 DEP_CPP_CALCU=\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Atmosphere.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -629,12 +768,16 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\vector.h"\
+	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\windanalyser.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\WindZigZag.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_CALCU=\
@@ -874,10 +1017,12 @@ SOURCE=..\..\Common\Source\devCAI302.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_DEVCA=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -890,7 +1035,9 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_DEVCA=\
@@ -980,10 +1127,12 @@ SOURCE=..\..\Common\Source\devEW.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_DEVEW=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -996,7 +1145,9 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_DEVEW=\
@@ -1086,9 +1237,11 @@ SOURCE=..\..\Common\Source\device.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_DEVIC=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -1101,7 +1254,9 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_DEVIC=\
@@ -1324,10 +1479,12 @@ SOURCE=..\..\Common\Source\Dialogs.cpp
 
 DEP_CPP_DIALO=\
 	"..\..\Common\Header\AirfieldDetails.h"\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\GaugeVario.h"\
 	"..\..\Common\Header\imgdecmp.h"\
@@ -1335,6 +1492,7 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -1351,12 +1509,13 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DIALO=\
 	"..\..\Common\Header\BlueSMS.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -1500,7 +1659,7 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAI=\
@@ -1531,11 +1690,11 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAI=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -1562,11 +1721,11 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAI=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -1593,11 +1752,11 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAI=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -1631,7 +1790,7 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIR=\
@@ -1662,11 +1821,11 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIR=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -1693,11 +1852,11 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIR=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -1724,11 +1883,11 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIR=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -1762,7 +1921,7 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIRS=\
@@ -1793,11 +1952,11 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -1824,11 +1983,11 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -1855,11 +2014,11 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -1892,7 +2051,7 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIRSP=\
@@ -1922,11 +2081,11 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -1952,11 +2111,11 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -1982,11 +2141,11 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -2273,7 +2432,7 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCH=\
@@ -2303,11 +2462,11 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCH=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -2333,11 +2492,11 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCH=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -2363,11 +2522,11 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCH=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -2404,7 +2563,7 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCO=\
@@ -2438,11 +2597,11 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCO=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -2472,11 +2631,11 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCO=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -2506,11 +2665,11 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCO=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -2545,7 +2704,7 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCON=\
@@ -2577,11 +2736,11 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCON=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -2609,11 +2768,11 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCON=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -2641,11 +2800,11 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGCON=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -3680,7 +3839,7 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGTAS=\
@@ -3712,11 +3871,11 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGTAS=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -3744,11 +3903,11 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGTAS=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -3776,11 +3935,11 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGTAS=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -3814,7 +3973,7 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGTASK=\
@@ -3845,11 +4004,11 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGTASK=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -3876,11 +4035,11 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGTASK=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -3907,11 +4066,11 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGTASK=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -4269,7 +4428,7 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGWA=\
@@ -4303,11 +4462,11 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGWA=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -4337,11 +4496,11 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGWA=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -4371,11 +4530,11 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGWA=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -4409,7 +4568,7 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGWAY=\
@@ -4440,11 +4599,11 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGWAY=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -4471,11 +4630,11 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGWAY=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -4502,11 +4661,11 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_DLGWAY=\
 	"..\..\Common\Header\BlueSMS.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -5129,9 +5288,12 @@ SOURCE=..\..\Common\Source\InfoBoxLayout.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_INFOBO=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBox.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -5144,7 +5306,9 @@ DEP_CPP_INFOBO=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_INFOBO=\
@@ -5242,16 +5406,22 @@ SOURCE=..\..\Common\Source\InputEvents.cpp
 
 DEP_CPP_INPUT=\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Atmosphere.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\InputEvents_altair.cpp"\
 	"..\..\Common\Header\InputEvents_defaults.cpp"\
+	"..\..\Common\Header\InputEvents_gnav.cpp"\
+	"..\..\Common\Header\InputEvents_pc.cpp"\
 	"..\..\Common\Header\InputEvents_Text2Event.cpp"\
 	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -5269,12 +5439,13 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_INPUT=\
 	"..\..\Common\Header\BlueSMS.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -5410,6 +5581,8 @@ SOURCE=..\..\Common\Source\leastsqs.cpp
 
 DEP_CPP_LEAST=\
 	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\StdAfx.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -5442,9 +5615,13 @@ SOURCE=..\..\Common\Source\Logger.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_LOGGE=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -5457,7 +5634,9 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_LOGGE=\
@@ -5790,12 +5969,17 @@ SOURCE=..\..\Common\Source\MapWindow.cpp
 DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\GaugeCDI.h"\
-	"..\..\Common\Header\GaugeVario.h"\
+	"..\..\Common\Header\GaugeFLARM.h"\
+	"..\..\Common\Header\GaugeVarioAltA.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -5812,6 +5996,7 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_MAPWI=\
@@ -5964,8 +6149,10 @@ SOURCE=..\..\Common\Source\McReady.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_MCREA=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -5979,7 +6166,9 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_MCREA=\
@@ -6065,14 +6254,30 @@ SOURCE=..\..\Common\Source\Message.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_MESSA=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\Message.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_MESSA=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -6140,10 +6345,17 @@ SOURCE=..\..\Common\Source\Parser.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_PARSE=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\GaugeFLARM.h"\
+	"..\..\Common\Header\Geoid.h"\
+	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -6153,8 +6365,10 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_PARSE=\
@@ -6243,8 +6457,10 @@ SOURCE=..\..\Common\Source\Port.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_PORT_=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -6257,7 +6473,9 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_PORT_=\
@@ -6341,8 +6559,10 @@ SOURCE=..\..\Common\Source\Port2.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_PORT2=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -6355,7 +6575,9 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_PORT2=\
@@ -6439,9 +6661,12 @@ SOURCE=..\..\Common\Source\Process.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_PROCE=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Atmosphere.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -6454,7 +6679,9 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_PROCE=\
@@ -6541,6 +6768,8 @@ SOURCE=..\..\Common\Source\RasterTerrain.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_RASTE=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -6549,6 +6778,7 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -6608,8 +6838,10 @@ SOURCE=..\..\Common\Source\rscalc.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_RSCAL=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -6621,7 +6853,9 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_RSCAL=\
@@ -6782,8 +7016,10 @@ SOURCE=..\..\Common\Source\Task.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_TASK_=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
@@ -6796,7 +7032,9 @@ DEP_CPP_TASK_=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_TASK_=\
@@ -6889,9 +7127,12 @@ SOURCE=..\..\Common\Source\Terrain.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_TERRA=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -6905,8 +7146,10 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Topology.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_TERRA=\
@@ -7002,8 +7245,10 @@ SOURCE=..\..\Common\Source\Topology.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_TOPOL=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -7016,7 +7261,9 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Topology.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_TOPOL=\
@@ -7102,8 +7349,10 @@ SOURCE=..\..\Common\Source\units.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_UNITS=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -7117,6 +7366,7 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_UNITS=\
@@ -7210,24 +7460,32 @@ SOURCE=..\..\Common\Source\Utils.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_UTILS=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\GaugeFLARM.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\Status_defaults.cpp"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Terrain.h"\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\uniqueid.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VegaVoice.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_UTILS=\
@@ -7321,12 +7579,30 @@ SOURCE=..\..\Common\Source\VarioSound.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_VARIO=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WaveThread.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_VARIO=\
+	"..\..\Common\Header\BlueSMS.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -7374,6 +7650,133 @@ DEP_CPP_VARIO=\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_VARIO=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\VegaVoice.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_VEGAV=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VegaVoice.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_VEGAV=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_VEGAV=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VegaVoice.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_VEGAV=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_VEGAV=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VegaVoice.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_VEGAV=\
+	"..\..\Common\Header\BlueSMS.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_VEGAV=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\VegaVoice.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+NODEP_CPP_VEGAV=\
 	"..\..\Common\Header\BlueSMS.h"\
 	
 
@@ -7471,8 +7874,10 @@ SOURCE=..\..\Common\Source\Waypointparser.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_WAYPO=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -7484,14 +7889,17 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\xmlParser.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_WAYPO=\
 	"..\..\Common\Header\BlueSMS.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -7577,6 +7985,7 @@ SOURCE=..\..\Common\Source\windanalyser.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_WINDA=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -7586,6 +7995,7 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\windanalyser.h"\
@@ -7662,6 +8072,7 @@ SOURCE=..\..\Common\Source\windmeasurementlist.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_WINDM=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -7737,6 +8148,7 @@ SOURCE=..\..\Common\Source\WindowControls.cpp
 DEP_CPP_WINDO=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -7862,6 +8274,7 @@ SOURCE=..\..\Common\Source\windstore.cpp
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
 
 DEP_CPP_WINDS=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -7871,6 +8284,7 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\StdAfx.h"\
 	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
@@ -8024,15 +8438,22 @@ SOURCE=..\..\Common\Source\XCSoar.cpp
 DEP_CPP_XCSOA=\
 	"..\..\Common\Header\AirfieldDetails.h"\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Atmosphere.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devAltairPro.h"\
 	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devVega.h"\
 	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\GaugeCDI.h"\
+	"..\..\Common\Header\GaugeFLARM.h"\
 	"..\..\Common\Header\GaugeVario.h"\
+	"..\..\Common\Header\Geoid.h"\
+	"..\..\Common\Header\InfoBox.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -8055,13 +8476,14 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\Waypointparser.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
 	
 NODEP_CPP_XCSOA=\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Source\BlueSMS.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
