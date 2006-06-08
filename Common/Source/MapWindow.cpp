@@ -30,7 +30,7 @@ Copyright_License {
 */
 
 #include "stdafx.h"
-
+#include "compatibility.h"
 #include "Mapwindow.h"
 #include "Utils.h"
 #include "Units.h"
