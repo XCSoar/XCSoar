@@ -3709,7 +3709,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 #define TBSCALEX 20
   
   // calculate height above safety altitude
-  h = DrawInfo.Altitude-SAFETYALTITUDEBREAKOFF-DerivedDrawInfo.TerrainAlt;
+  h = DerivedDrawInfo.NavAltitude-SAFETYALTITUDEBREAKOFF-DerivedDrawInfo.TerrainAlt;
   // calculate top height
   if (h>mth) {
     maxh = h;
@@ -4402,7 +4402,7 @@ void MapWindow::CalculateWaypointReachable(void)
 	   DerivedDrawInfo.WindBearing,
 	   0,0,true,0);
         AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL + WayPointList[i].Altitude ;
-        AltitudeRequired = DrawInfo.Altitude - AltitudeRequired;				
+        AltitudeRequired = DerivedDrawInfo.NavAltitude - AltitudeRequired;				
         
         WayPointList[i].AltArivalAGL = AltitudeRequired;
 
