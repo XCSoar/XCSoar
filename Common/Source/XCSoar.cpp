@@ -1247,11 +1247,13 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   wcscat(XCSoar_Version, TEXT("Altair "));
 #endif
 #if (NEWINFOBOX>0)
-  wcscat(XCSoar_Version, TEXT("4.7.5 "));
+  /* PLEASE NOTE - BETA of 4.7 would be 4.6.1, not 4.7.1 !!! */
+  /* NOTE: 4.7 is not in beta but currently in ALPHA, use entry below */
+  wcscat(XCSoar_Version, TEXT("4.6.5 "));
 #else
   // wcscat(XCSoar_Version, TEXT("Alpha "));
   // wcscat(XCSoar_Version, TEXT(__DATE__));
-  wcscat(XCSoar_Version, TEXT("BETA 4.5.5")); // Yet to be released
+  wcscat(XCSoar_Version, TEXT("BETA 4.5.6")); // Yet to be released
 #endif
 
   XCSoarGetOpts(lpCmdLine);

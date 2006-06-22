@@ -938,7 +938,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   {
 
   case WM_USER+1:
+#if (NEWINFOBOX>0)
     dlgAirspaceWarningShowDlg(false);
+#endif
   return(0);
   case WM_ERASEBKGND:
     // JMW trying to reduce flickering
