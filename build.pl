@@ -51,7 +51,7 @@ push @platforms_all, "ALL";
 # ------------------------------------------------------------------------------
 my $user = shift;
 if ($user) {
-	if (exists($platforms{$user})) {
+	if (exists($platforms{$user}) || $user eq "ALL") {
 		foreach my $key (keys %platforms) {
 			delete $platforms{$key} unless ($key eq $user);
 		}
