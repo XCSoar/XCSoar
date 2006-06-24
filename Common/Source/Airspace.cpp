@@ -912,9 +912,14 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
       fHasUnit = true;
     }
 
-    else if (_tcscmp(pToken, TEXT("FL")) == 0){
+    else if (_tcsstrip(pToken, TEXT("FL")) == pToken){ 
+      // this parses "FL=150" and "FL150"
       Alt->Base = abFL;
       fHasUnit = true;
+      if (pToken[2] != '\0'){// no separator between FL and number
+	pToken = &pToken[2];
+	continue;
+      }
     }
 
     else if ((_tcscmp(pToken, TEXT("FT")) == 0)
