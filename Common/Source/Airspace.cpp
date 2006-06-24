@@ -912,7 +912,7 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
       fHasUnit = true;
     }
 
-    else if (_tcsstrip(pToken, TEXT("FL")) == pToken){
+    else if (_tcsstr(pToken, TEXT("FL")) == pToken){
       // this parses "FL=150" and "FL150"
       Alt->Base = abFL;
       fHasUnit = true;
