@@ -1246,15 +1246,17 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #ifdef GNAV
   wcscat(XCSoar_Version, TEXT("Altair "));
 #endif
-#if (NEWINFOBOX>0) 
-  /* PLEASE NOTE - BETA of 4.7 would be 4.6.1, not 4.7.1 !!! */
-  /* NOTE: 4.7 is not in beta but currently in ALPHA, use entry below */
+  /* NEWINFOBOX is now always on in HEAD - non NEWINFOBOX code should be removed 
+   * 
+	// #if (NEWINFOBOX>0) 
+  * PLEASE NOTE - BETA of 4.7 would be 4.6.1, not 4.7.1 !!! *
+  * NOTE: 4.7 is not in beta but currently in ALPHA, use entry below *
   wcscat(XCSoar_Version, TEXT("4.6.5 "));
-#else
-  // wcscat(XCSoar_Version, TEXT("Alpha "));
-  // wcscat(XCSoar_Version, TEXT(__DATE__));
-  wcscat(XCSoar_Version, TEXT("BETA 4.5.6")); // Yet to be released
-#endif
+	// #else
+   */
+  wcscat(XCSoar_Version, TEXT("Alpha "));
+  wcscat(XCSoar_Version, TEXT(__DATE__));
+  // (future/next version) wcscat(XCSoar_Version, TEXT("BETA 4.6.1"));
 
   XCSoarGetOpts(lpCmdLine);
 
