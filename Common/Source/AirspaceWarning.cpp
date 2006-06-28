@@ -306,7 +306,7 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, int Sequence, bool Predicted, bool Is
   
 }
 
-static int cmp(const void *a, const void *b){
+static int _cdecl cmp(const void *a, const void *b){
 
   int adAL, bdAL;
 
