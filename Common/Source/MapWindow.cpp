@@ -4064,13 +4064,11 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 	// ignore cruise mode lines unless very recent
 	
 	lastbroken = true;
-	P2 = P1;
 	continue;
       }
     } else {
       if ((P1->Circling)&&( j%5 != 0 )) {
 	// draw only every 5 points from circling when in cruise mode
-	P2 = P1;
 	continue;
       }
     }
@@ -4079,7 +4077,6 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 		      P1->Latitude)) {
       // the line is invalid
       lastbroken = true;
-      P2 = P1;
       continue;
     }
 
@@ -4107,10 +4104,6 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
     // ok, we got this far, so draw the line
 
-    if (!P2) {
-      P2 = P1;
-    }
-
     if (!lastbroken) {
       // get the colour
       if (P1->Colour == -1) {
@@ -4125,7 +4118,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       }
       SelectObject(hdc,hSnailPens[max(0,min(NUMSNAILCOLORS-1,P1->Colour))]);
     }
-#ifndef NOLINETO 
+#ifndef NOLINETO
     if (lastbroken) { // draw set cursor at P1
       MoveToEx(hdc, P1->Screen.x, P1->Screen.y, NULL);
     } else {
@@ -4133,11 +4126,15 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     }
 #else
     if (!lastbroken) {
-      DrawSolidLine(hdc, P1->Screen, P2->Screen);
+      if (P2) {
+	DrawSolidLine(hdc, P1->Screen, P2->Screen);
+      }
+      P2 = P1;
+    } else {
+      P2 = NULL;
     }
 #endif
     lastbroken = false;
-    P2 = P1;
   }
 
   // draw final point to glider
