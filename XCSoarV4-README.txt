@@ -23,6 +23,7 @@ Changes from 4.7.3:
     starting
 - Added detection of valid start, now in task status dialog if 
     start wasn't valid, the start time shows "INVALID"
+- Added basic support for Cambridge GPS-NAV as a GPS source only
 
 
 Changes from 4.7.2:
