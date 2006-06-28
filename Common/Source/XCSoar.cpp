@@ -1385,11 +1385,12 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   VarioSound_SetSoundVolume(SoundVolume);
 
   // ... register all supported devices
+  // ADD NEW ONES TO BOTTOM OF THIS LIST
   cai302Register();
-  caiGpsNavRegister();
   ewRegister();
   atrRegister();
   vgaRegister();
+  caiGpsNavRegister();
 
   //JMW disabled  devInit(lpCmdLine);
 
