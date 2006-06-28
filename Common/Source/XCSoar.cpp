@@ -55,6 +55,7 @@ Copyright_License {
 #include "VarioSound.h"
 #include "device.h"
 #include "devCAI302.h"
+#include "devCaiGpsNav.h"
 #include "devEW.h"
 #include "devAltairPro.h"
 #include "devVega.h"
@@ -1385,6 +1386,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // ... register all supported devices
   cai302Register();
+  caiGpsNavRegister();
   ewRegister();
   atrRegister();
   vgaRegister();
