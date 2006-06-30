@@ -64,21 +64,19 @@ static BOOL fSimMode = FALSE;
 #define  swap(x)      x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
 
 
-// Additional sentance for CAI302 support
-static BOOL cai_w(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL cai_PCAIB(TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO);
-
-
-
 BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
 
   d->Port = Port;
 
   if (!fSimMode){
-    (d->Com.WriteString)(TEXT("\x03"));
-    (d->Com.WriteString)(TEXT("PNP\r\n"));
-    (d->Com.WriteString)(TEXT("LOG 0\r\n"));
+	  (d->Com.WriteString)(TEXT("\x03"));
+	  Sleep(50);
+	  (d->Com.WriteString)(TEXT("NMEA\r"));
+
+	  // This is for a slightly different mode, that
+	  // apparently outputs pressure info too...
+	  //(d->Com.WriteString)(TEXT("PNP\r\n"));
+	  //(d->Com.WriteString)(TEXT("LOG 0\r\n"));
   }
 
   return(TRUE);
