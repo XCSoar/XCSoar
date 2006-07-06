@@ -207,10 +207,12 @@ class MapWindow {
   static HBITMAP hDrawBitMap;
   static HBITMAP hDrawBitMapBg;
   static HBITMAP hDrawBitMapTmp;
+  static HBITMAP hMaskBitMap;
   static HDC hdcDrawWindow;
   static HDC hdcDrawWindowBg;
   static HDC hdcScreen;
   static HDC hDCTemp;
+  static HDC hDCMask;
   static double PanLatitude;
   static double PanLongitude;
   static bool EnablePan;

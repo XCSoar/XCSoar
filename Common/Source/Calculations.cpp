@@ -65,7 +65,8 @@ int AutoWindMode= 1;
 // 3: Both
 
 bool EnableNavBaroAltitude=false;
-
+bool EnableExternalTriggerCruise=false;
+bool ExternalTriggerCruise= false;
 bool ForceFinalGlide= false;
 bool AutoForceFinalGlide= false;
 
@@ -451,13 +452,15 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Vector v;
       double zzwindspeed;
       double zzwindbearing;
-      if (WindZigZagUpdate(Basic, Calculated,
+      int quality;
+      quality = WindZigZagUpdate(Basic, Calculated,
                            &zzwindspeed,
-                           &zzwindbearing)) {
+				 &zzwindbearing);
+      if (quality>0) {
         v.x = zzwindspeed*cos(zzwindbearing*3.1415926/180.0);
         v.y = zzwindspeed*sin(zzwindbearing*3.1415926/180.0);
         if (windanalyser) {
-          windanalyser->slot_newEstimate(v, 3);
+	  windanalyser->slot_newEstimate(v, quality);
         }
       }
     }
@@ -493,12 +496,12 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
-void  SetWindEstimate(double speed, double bearing) {
+void  SetWindEstimate(double speed, double bearing, int quality) {
   Vector v;
   v.x = speed*cos(bearing*3.1415926/180.0);
   v.y = speed*sin(bearing*3.1415926/180.0);
   if (windanalyser) {
-    windanalyser->slot_newEstimate(v, 6);
+    windanalyser->slot_newEstimate(v, quality);
   }
 }
 
@@ -561,7 +564,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     windanalyser = new WindAnalyser(Basic, Calculated);
 
     // seed initial wind store with current conditions
-    SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing);
+    SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing, 1);
 
   }
 
@@ -719,12 +722,17 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           Altitude[temp] = Calculated->NavAltitude;
 #ifdef _SIM_
           Vario[temp] = Calculated->Vario;
-	  NettoVario[temp] = Calculated->NettoVario;
 #else
 	  if (Basic->NettoVarioAvailable) {
 	    NettoVario[temp] = Basic->NettoVario;
+	  } else {
+	    NettoVario[temp] = Calculated->NettoVario;
 	  }
-          Vario[temp] = Basic->Vario;
+	  if (Basic->VarioAvailable) {
+	    Vario[temp] = Basic->Vario;
+	  } else {
+	    Vario[temp] = Calculated->Vario;
+	  }
 #endif
         }
       double Vave = 0;
@@ -791,6 +799,7 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static double LastAlt = 0;
   double DistanceFlown;
   double AltLost;
+  static double glideangle = 0;
 
   if(Basic->Time - LastTime >20)
     {
@@ -819,15 +828,24 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       LastTime = Basic->Time;
     }
 
+  // LD instantaneous from vario
   if (Basic->VarioAvailable && Basic->AirspeedAvailable) {
-    if (fabs(Basic->Vario)>=0.1) {
-      Calculated->LDvario = Basic->IndicatedAirspeed/Basic->Vario;
-      if (fabs(Calculated->LDvario)>999) {
-	Calculated->LDvario = 999;
+    if (Basic->IndicatedAirspeed>1) {
+      glideangle = glideangle*0.7-0.3*Basic->Vario/Basic->IndicatedAirspeed;
+      if (fabs(glideangle)>=0.001) {
+	Calculated->LDvario = 1.0/glideangle;
+      } else {
+	if (glideangle>=0) {
+	  Calculated->LDvario = 999;
+	} else {
+	  Calculated->LDvario = -999;
+	}
       }
     } else {
       Calculated->LDvario = 999;
     }
+  } else {
+    Calculated->LDvario = 999;
   }
 }
 
@@ -1016,6 +1034,11 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   double temp = StartTime;
 
+  bool forcecruise = false;
+  if (EnableExternalTriggerCruise && ExternalTriggerCruise) {
+    forcecruise = true;
+  }
+
   switch(MODE) {
   case CRUISE:
     if(Rate >= MinTurnRate) {
@@ -1027,6 +1050,10 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
     break;
   case WAITCLIMB:
+    if (forcecruise) {
+      MODE = CRUISE;
+      break;
+    }
     if(Rate >= MinTurnRate) {
       if( (Basic->Time  - StartTime) > CruiseClimbSwitch) {
         Calculated->Circling = TRUE;
@@ -1067,9 +1094,13 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       // JMW Transition to cruise, due to not properly turning
       MODE = WAITCRUISE;
     }
-    break;
+    if (forcecruise) {
+      MODE = WAITCRUISE;
+    } else {
+      break;
+    }
   case WAITCRUISE:
-    if(Rate < MinTurnRate) {
+    if((Rate < MinTurnRate) || forcecruise) {
       if( (Basic->Time  - StartTime) > ClimbCruiseSwitch) {
         Calculated->Circling = FALSE;
 
@@ -1146,32 +1177,6 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
             DebugStore(Temp);
 #endif
           }
-
-
-          /*
-          if(ThermalTime > 120)
-            {
-
-              // Don't set it immediately, go through the new
-              //   wind model
-              Calculated->WindSpeed = ThermalDrift/ThermalTime;
-
-              if(DriftAngle >=180)
-                DriftAngle -= 180;
-              else
-                DriftAngle += 180;
-
-              Calculated->WindBearing = DriftAngle;
-
-              // NOW DONE INTERNALLY TO WINDANALYSER
-              Vector v;
-              v.x = -ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
-              v.y = -ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);
-
-              windanalyser->slot_newEstimate(v, 6);
-              // 6 is the code for external estimates
-            }
-          */
         }
     }
   LastCircling = Calculated->Circling;

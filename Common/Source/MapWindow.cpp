@@ -112,10 +112,12 @@ RECT MapWindow::MapRectSmall;
 HBITMAP MapWindow::hDrawBitMap = NULL;
 HBITMAP MapWindow::hDrawBitMapBg = NULL;
 HBITMAP MapWindow::hDrawBitMapTmp = NULL;
+HBITMAP MapWindow::hMaskBitMap = NULL;
 HDC MapWindow::hdcDrawWindow = NULL;
 HDC MapWindow::hdcDrawWindowBg = NULL;
 HDC MapWindow::hdcScreen = NULL;
 HDC MapWindow::hDCTemp = NULL;
+HDC MapWindow::hDCMask = NULL;
 
 rectObj MapWindow::screenbounds_latlon;
 
@@ -931,6 +933,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   static double XstartScreen, YstartScreen;
   double distance;
   static bool first = true;
+  int width = (int) LOWORD(lParam);
+  int height = (int) HIWORD(lParam);
 
   static DWORD dwDownTime=0, dwUpTime=0;
 
@@ -952,13 +956,15 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       return TRUE;
   case WM_SIZE:
 
-    hDrawBitMap = CreateCompatibleBitmap (hdcScreen, (int) LOWORD (lParam), (int) HIWORD (lParam));
+    hDrawBitMap = CreateCompatibleBitmap (hdcScreen, width, height);
     SelectObject(hdcDrawWindow, (HBITMAP)hDrawBitMap);
-    hDrawBitMapBg = CreateCompatibleBitmap (hdcScreen, (int) LOWORD (lParam), (int) HIWORD (lParam));
+    hDrawBitMapBg = CreateCompatibleBitmap (hdcScreen, width, height);
     SelectObject(hdcDrawWindowBg, (HBITMAP)hDrawBitMapBg);
-    hDrawBitMapTmp = CreateCompatibleBitmap (hdcScreen, (int) LOWORD (lParam), (int) HIWORD (lParam));
+    hDrawBitMapTmp = CreateCompatibleBitmap (hdcScreen, width, height);
     SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
 
+    hMaskBitMap = CreateBitmap(width+1, height+1, 1, 1, NULL);
+    SelectObject(hDCMask, (HBITMAP)hMaskBitMap);
 
     {
     HFONT      oldFont;
@@ -989,6 +995,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hdcDrawWindow = CreateCompatibleDC(hdcScreen);
     hdcDrawWindowBg = CreateCompatibleDC(hdcScreen);
     hDCTemp = CreateCompatibleDC(hdcDrawWindow);
+    hDCMask = CreateCompatibleDC(hdcDrawWindow);
 
     hBackgroundBrush = CreateSolidBrush(BackgroundColor);
 
@@ -1142,8 +1149,10 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteDC(hdcDrawWindow);
     DeleteDC(hdcDrawWindowBg);
     DeleteDC(hDCTemp);
+    DeleteDC(hDCMask);
     DeleteObject(hDrawBitMap);
     DeleteObject(hDrawBitMapBg);
+    DeleteObject(hMaskBitMap);
 
     DeleteObject(hLandable);
     DeleteObject(hReachable);
@@ -1592,8 +1601,38 @@ void MapWindow::RenderMapWindow(  RECT rc)
     // then airspace..
     DrawAirSpace(hdcDrawWindowBg, rc);
 
-    if(TrailActive)
-      DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
+    if(TrailActive) {
+      if (!EnableTerrain) {
+	DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
+      } else {
+	// clear background bitmap
+	SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
+	Rectangle(hDCTemp, 0, 0, MapRectBig.right, MapRectBig.bottom);
+	SelectObject(hDCMask, GetStockObject(WHITE_BRUSH));
+	Rectangle(hDCMask, 0, 0, MapRectBig.right+1, MapRectBig.bottom+1);
+
+	SetTextColor(hDCMask,
+		     RGB(0x00,0x00,0x00));
+	SetBkColor(hDCMask,
+		   RGB(0xff,0xff,0xff));
+
+	// draw trail on background bitmap
+	DrawTrail(hDCTemp, Orig_Aircraft, rc);
+
+	// make mask
+	BitBlt(hDCMask, 0, 0, MapRectBig.right, MapRectBig.bottom,
+	       hDCTemp, 0, 0, SRCCOPY);
+
+	BitBlt(hdcDrawWindowBg, 0, 0, MapRectBig.right, MapRectBig.bottom,
+	       hDCTemp, 0, 0, SRCINVERT);
+	BitBlt(hdcDrawWindowBg, 0, 0, MapRectBig.right, MapRectBig.bottom,
+	       hDCMask, 0, 0, SRCAND);
+	BitBlt(hdcDrawWindowBg, 0, 0, MapRectBig.right-1, MapRectBig.bottom-1,
+	       hDCMask, 1, 1, SRCAND);
+	BitBlt(hdcDrawWindowBg, 0, 0, MapRectBig.right, MapRectBig.bottom,
+	       hDCTemp, 0, 0, SRCINVERT);
+      }
+    }
 
     if (TaskAborted) {
       DrawAbortedTask(hdcDrawWindowBg, rc, Orig_Aircraft);
@@ -1733,6 +1772,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   SetBkMode(hdcDrawWindow,TRANSPARENT);
   SetBkMode(hdcDrawWindowBg,TRANSPARENT);
   SetBkMode(hDCTemp,OPAQUE);
+  SetBkMode(hDCMask,OPAQUE);
 
   // paint draw window black to start
   SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));

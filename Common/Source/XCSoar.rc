@@ -984,6 +984,7 @@ IDB_AIRPORT_UNREACHABLE BITMAP  DISCARDABLE     "bitmaps\\UnreachableAirport.bmp
 IDB_OUTFILED_REACHABLE  BITMAP  DISCARDABLE     "bitmaps\\LandableField.bmp"
 IDB_OUTFILED_UNREACHABLE BITMAP  DISCARDABLE     "bitmaps\\UnreachableField.bmp"
 IDB_VARIOSCALEA         BITMAP  DISCARDABLE     "bitmaps\\VarioScaleB.bmp"
+IDB_VARIOSCALEC         BITMAP  DISCARDABLE     "bitmaps\\VarioScaleC.bmp"
 IDB_UNIT_KT             BITMAP  DISCARDABLE     "bitmaps\\UnitKt.bmp"
 IDB_UNIT_FL             BITMAP  DISCARDABLE     "bitmaps\\UnitFL.bmp"
 IDB_UNIT_DegK           BITMAP  DISCARDABLE     "bitmaps\\UnitDegKelvin.bmp"

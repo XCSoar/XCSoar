@@ -181,6 +181,9 @@ extern bool EnableBlockSTF; // block speed to fly instead of dolphin
 extern int MenuTimeoutMax;
 //
 
+extern bool ExternalTriggerCruise;
+extern bool EnableExternalTriggerCruise;
+
 // statistics
 extern Statistics flightstats;
 

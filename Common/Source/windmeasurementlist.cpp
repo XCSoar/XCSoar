@@ -74,22 +74,24 @@ WindMeasurementList::~WindMeasurementList(){
 
 extern int iround(double);
 
+
 Vector WindMeasurementList::getWind(double alt, bool *found){
   //relative weight for each factor
   #define REL_FACTOR_QUALITY 100
   #define REL_FACTOR_ALTITUDE 100
   #define REL_FACTOR_TIME 200
+#define TIME_RANGE 36 // one hour
 
   int altRange  = 1000; //conf->getWindAltitudeRange();
-  int timeRange = 7200; //conf->getWindTimeRange();
+  int timeRange = TIME_RANGE*100; //conf->getWindTimeRange();
 
   unsigned int total_quality=0;
   unsigned int quality=0, q_quality=0, a_quality=0, t_quality=0;
   Vector result;
   WindMeasurement * m;
   int now= (int)(nmeaInfo->Time);
-  int altdiff=0;
-  int timediff=0;
+  double altdiff=0;
+  double timediff=0;
 
   *found = false;
 
@@ -98,23 +100,28 @@ Vector WindMeasurementList::getWind(double alt, bool *found){
 
   for(uint i=0;i< nummeasurementlist; i++) {
     m= measurementlist[i];
-    altdiff= iround((alt - m->altitude));
-    timediff= now - m->time;
+    altdiff= (alt - m->altitude)*1.0/altRange;
+    timediff= fabs((now - m->time)/timeRange);
 
-    if (altdiff > -altRange && altdiff < altRange && timediff < timeRange) {
+    if ((fabs(altdiff)< 1.0) && (timediff < 1.0)) {
 
-      q_quality = m->quality * REL_FACTOR_QUALITY / 5;
+      q_quality = m->quality* REL_FACTOR_QUALITY / 5;
       //measurement quality
 
-      a_quality = ((10*altRange) - (altdiff*altdiff/100))  * REL_FACTOR_ALTITUDE / (10*altRange);
+      a_quality = iround(((2.0/
+			   (altdiff*altdiff+1.0))
+			  -1.0)
+			 * REL_FACTOR_ALTITUDE);
       //factor in altitude difference between current altitude and
       //measurement.  Maximum alt difference is 1000 m.
 
-      timediff=(timeRange-timediff)/10;
-      t_quality = (((timediff)*(timediff))) * REL_FACTOR_TIME / (72*timeRange);
-      //factor in timedifference. Maximum difference is 2 hours.
+      double k=0.01;
 
-      quality= q_quality * a_quality * t_quality;
+      t_quality = iround(k*(1.0-timediff)/(timediff*timediff+k)
+			 * REL_FACTOR_TIME);
+      //factor in timedifference. Maximum difference is 1 hours.
+
+      quality= q_quality * (a_quality * t_quality);
 
       result.x += m->vector.x * quality;
       result.y += m->vector.y * quality;

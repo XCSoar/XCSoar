@@ -466,11 +466,11 @@ void WindAnalyser::slot_newEstimate(Vector a, int quality)
   char Temp[100];
 #endif
 
-  if (quality==6) {
-    quality = 3; // provided externally
+  if (quality>=6) {
 #ifdef DEBUG
-    sprintf(Temp,"%f %f %d # thermal drift\n",a.x,a.y, quality);
+    sprintf(Temp,"%f %f %d # external\n",a.x,a.y, quality);
 #endif
+    quality = 3; // provided externally
   } else {
 #ifdef DEBUG
     sprintf(Temp,"%f %f %d # circling\n",a.x,a.y, quality);

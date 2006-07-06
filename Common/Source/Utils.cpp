@@ -264,7 +264,7 @@ TCHAR szRegistrySafetyMacCready[] = TEXT("SafetyMacCready");
 TCHAR szRegistryAbortSafetyUseCurrent[] = TEXT("AbortSafetyUseCurrent");
 TCHAR szRegistryAutoMcMode[] = TEXT("AutoMcMode");
 TCHAR szRegistryWaypointsOutOfRange[] = TEXT("WaypointsOutOfRange");
-
+TCHAR szRegistryEnableExternalTriggerCruise[] = TEXT("EnableExternalTriggerCruise");
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -727,6 +727,10 @@ void ReadRegistrySettings(void)
   Temp = WaypointsOutOfRange;
   GetFromRegistry(szRegistryWaypointsOutOfRange,&Temp);
   WaypointsOutOfRange = Temp;
+
+  Temp = EnableExternalTriggerCruise;
+  GetFromRegistry(szRegistryEnableExternalTriggerCruise,&Temp);
+  EnableExternalTriggerCruise = (Temp==1);
 
   Temp = 0;
   GetFromRegistry(szRegistryUTCOffset,&Temp);

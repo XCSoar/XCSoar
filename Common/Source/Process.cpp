@@ -670,6 +670,10 @@ void InfoBoxFormatter::AssignValue(int i) {
       Value = CALCULATED_INFO.LDvario;
     }
     break;
+  case 54:
+    Valid = GPS_INFO.AirspeedAvailable;
+    Value = SPEEDMODIFY*GPS_INFO.TrueAirspeed;
+    break;
   default:
     break;
 

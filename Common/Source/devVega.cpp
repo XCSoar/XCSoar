@@ -67,7 +67,7 @@ static BOOL fSimMode = FALSE;
 #define INPUT_BIT_USERSWMIDDLE              24 // 1 if middle
 #define INPUT_BIT_USERSWDOWN                25
 #define OUTPUT_BIT_CIRCLING                 0  // 1 if circling
-
+#define OUTPUT_BIT_FLAP_LANDING             7  // 1 if positive flap
 
 static BOOL PDSWC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 {
@@ -116,6 +116,17 @@ static BOOL PDSWC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   */
   GPS_INFO->SwitchState.VarioCircling =
     (switchoutputs & (1<<OUTPUT_BIT_CIRCLING))>0;
+
+  if (EnableExternalTriggerCruise) {
+    if (!GPS_INFO->SwitchState.FlapPositive) {
+      // JMW TODO: Change to OUTPUT_BIT_FLAP_LANDING
+      ExternalTriggerCruise = true;
+    } else {
+      ExternalTriggerCruise = false;
+    }
+  } else {
+    ExternalTriggerCruise = false;
+  }
 
   long up_switchinputs;
   long down_switchinputs;

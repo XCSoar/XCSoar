@@ -1007,6 +1007,12 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableExternalTriggerCruise"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableExternalTriggerCruise);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInverseInfoBox"));
   if (wp) {
     wp->GetDataField()->Set(Appearance.InverseInfoBox);
@@ -1861,6 +1867,17 @@ void dlgConfigurationShowModal(void){
       SetToRegistry(szRegistryAppIndLandable,(DWORD)(Appearance.IndLandable));
       changed = true;
       requirerestart = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableExternalTriggerCruise"));
+  if (wp) {
+    if ((int)(EnableExternalTriggerCruise) !=
+	wp->GetDataField()->GetAsInteger()) {
+      EnableExternalTriggerCruise = (wp->GetDataField()->GetAsInteger() != 0);
+      SetToRegistry(szRegistryEnableExternalTriggerCruise,
+		    EnableExternalTriggerCruise);
+      changed = true;
     }
   }
 
