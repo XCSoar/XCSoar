@@ -4,8 +4,50 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Dialogs changed:
  dlgConfiguration.xml
- dlgWindSettings.xml
 
+Changes from 4.7.5:
+- Added small histeresis to instantenous LD vario
+- Airspace parser updates
+- Added Cambridge GPS NAV device
+- Added option to force cruise on neutral/negative flap (for Vega)
+   (Flap forces cruise)
+- Terrain contrast/shading improvements
+- Snail trail now drawn with outline to improve visibility over terrain
+- Added V TAS infobox
+- Improvements to wind estimator algorithm
+- Vario gauge unit bitmap for knots
+
+Dialogs changed:
+ dlgConfiguration.xml
+ dlgWindSettings.xml
+ dlgVario.xml
+ dlgAirspaceWarning.xml
+ dlgWaypointOutOfTerrain.xml
+ dlgAirspaceWarning.xml
+
+Changes from 4.7.4:
+- Fixed total energy compensation (final glide) when on ground
+- Fixed minor bug, silly ETE values were presented when Mc=0 in AAT
+  in Task Calculator
+- AutoMc disabled if in abort mode
+- Fixed: Thermal profile showing distortion (negative values?)
+- Fixed: Mc=0 Est task time on task calculator
+- Fixed: Trail hang
+- Fixed: PC registry not recognising all registry values correctly!
+- Auto Mc modes: final glide, set to average, both
+- Vario gauge averager should switch to netto averager if not in circling mode
+- sam's bug fixes and new features
+  --> legbearing bug
+  --> New airspace dialog
+  --> Waypoints out of terrain
+- Fixed: AAT radius display in analysis page shows distortion
+- Fixed: Waypoint infobox shows bearing to waypoint, not to target (for AAT)
+- Fixed: Vario gauge chevrons not always appearing when they should,
+  now chevrons always drawn if vario is in non-circling mode
+- Fixed: Averager jumps around too much
+- Added configuration setting to determine whether to ask/exclude/include
+  waypoints out of terrain range.
+- Added LD vario infobox
 
 Changes from 4.7.3:
 - Added Auto QNH function
@@ -23,8 +65,13 @@ Changes from 4.7.3:
     starting
 - Added detection of valid start, now in task status dialog if
     start wasn't valid, the start time shows "INVALID"
+- Added safety McReady for use in calculating reachable fields and
+   display of arrival heights, and in abort mode.  Option to use
+   current Mc value for safety McReady when in abort mode.
+- (Feature request 1278082) Ellipsoid error correction.  Now
+  detects if ellipsoid/geoid offset is produced by GPS.  If not,
+  it applies geoid correction.
 - Added basic support for Cambridge GPS-NAV as a GPS source only
-
 
 Changes from 4.7.2:
 - Fixed bug: Disabling of airspace warnings by individual types was
