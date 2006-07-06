@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.53 2006/04/29 19:38:57 jwharington Exp $
+  $Id: Parser.cpp,v 1.54 2006/07/06 14:14:39 jwharington Exp $
 
 Copyright_License {
 
@@ -910,7 +910,7 @@ BOOL NMEAParser::PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
     InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
   }
   if ((GPS_INFO->FLARM_RX==0) && (old_flarm_rx)) {
-    // traffic has appeared..
+    // traffic has disappeared..
     InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
   }
   // XX: TODO also another event for new traffic.

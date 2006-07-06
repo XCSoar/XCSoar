@@ -353,10 +353,15 @@ static void UpdateContrast(void) {
 
 void TerrainIllumination(const short illum, BYTE &r, BYTE &g, BYTE &b)
 {
+  /*
   short il = (illum*ContrastPos)/256+ContrastNeg;
   r = (BYTE)((r*il>>8)+TerrainWhiteness);
   g = (BYTE)((g*il>>8)+TerrainWhiteness);
   b = (BYTE)((b*il>>8)+TerrainWhiteness);
+  */
+  r = (BYTE)((r*illum>>8));
+  g = (BYTE)((g*illum>>8));
+  b = (BYTE)((b*illum>>8));
 }
 
 
@@ -622,19 +627,48 @@ public:
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
 
+    UpdateContrast();
+
     int gsize = ixs*iys;
+    short min_illumination = 1000;
+    short max_illumination = 0;
+    short illumination;
+    int av_illumination = 0;
     for (int i=0; i<gsize; ++i) {
       
-      mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256;
-      *tilBuf = max(0,(short)mag);
-      *tnxBuf = *tilBuf;
+      mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256; // 8
+      illumination = max(0,(short)mag);
+      *tnxBuf = illumination;
+
+      max_illumination = max(illumination, max_illumination);
+      min_illumination = min(illumination, min_illumination);
+      av_illumination += illumination;
 
       ++tnxBuf;
       ++tnyBuf;
       ++tnzBuf;
-      ++tilBuf;
+
     }
-    
+    av_illumination /= gsize;
+
+    // rescale illumination to improve contrast
+
+    short mslope=0;
+    short moffset=0;
+    short bright = 128+TerrainBrightness/2;
+    if (max_illumination-av_illumination > 0) {
+      mslope = (256-bright)/(max_illumination-av_illumination);
+      moffset = 256-mslope*max_illumination;
+    } else {
+      mslope = 1;
+      moffset = 170;
+    }
+    tnxBuf = nxBuf;
+    for (i=0; i<gsize; ++i) {
+      *nxBuf = max(0, *nxBuf*mslope+moffset);
+      ++tnxBuf;
+    }
+
     // smooth illumination buffer
     short ff;
     short vv;
@@ -642,9 +676,9 @@ public:
 
     for (int y = 0; y<iys; y++) {
       for (int x = 0; x<ixs; x++) {
+
 	vv = 3;
 	ff = 3*nxBuf[index];
-
 	if (x>0) {
 	  ++vv;
 	  ff += nxBuf[index-1];
@@ -676,8 +710,6 @@ public:
 
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
-
-    UpdateContrast();
 
     int ixsOVS = ixs*OVS;
     int iysOVS = iys*OVS;

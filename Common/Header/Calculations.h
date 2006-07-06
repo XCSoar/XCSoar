@@ -137,7 +137,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 bool ClearAirspaceWarnings(bool ack, bool allday=false);
 void ResumeAbortTask(int set = 0);
 void RefreshTaskStatistics(void);
-void  SetWindEstimate(double speed, double bearing);
+void  SetWindEstimate(double speed, double bearing, int quality=6);
 
 double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 		      double bearing,

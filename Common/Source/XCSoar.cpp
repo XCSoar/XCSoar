@@ -442,7 +442,7 @@ DWORD BatteryWarningTime = 0;
 #endif
 // Groups:
 //   Altitude 0,1,20,33
-//   Aircraft info 3,6,23,32,37,47
+//   Aircraft info 3,6,23,32,37,47,54
 //   LD 4,5,19,38,53
 //   Vario 2,7,8,9,21,22,24,44
 //   Wind 25,26,48,49,50
@@ -457,7 +457,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 2
 	  {ugVerticalSpeed,   TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 44},
 	  // 3
-	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f°T")), NoProcessing, 6, 37},
+	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f°T")), NoProcessing, 6, 54},
 	  // 4
 	  {ugNone,            TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 38},
 	  // 5
@@ -549,7 +549,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 46
 	  {ugNone,            TEXT("Next Arrival Time"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 45},
 	  // 47
-	  {ugNone,            TEXT("Bearing Difference"), TEXT("Brng D"), new FormatterDiffBearing(TEXT("")), NoProcessing, 3, 37},
+	  {ugNone,            TEXT("Bearing Difference"), TEXT("Brng D"), new FormatterDiffBearing(TEXT("")), NoProcessing, 54, 37},
 	  // 48
 	  {ugNone,            TEXT("Outside Air Temperature"), TEXT("OAT"), new InfoBoxFormatter(TEXT("%2.1f°")), NoProcessing, 49, 26},
 	  // 49
@@ -562,9 +562,11 @@ SCREEN_INFO Data_Options[] = {
 	  {ugHorizontalSpeed, TEXT("AA Speed Tgt"), TEXT("AA Vtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 51},
 	  // 53
 	  {ugNone,            TEXT("L/D vario"), TEXT("L/D vario"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 4, 38},
+	  // 54
+	  {ugHorizontalSpeed, TEXT("Airspeed TAS"), TEXT("V TAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 3, 47},
 
 	};
-int NUMSELECTSTRINGS = 54;
+int NUMSELECTSTRINGS = 55;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -1255,8 +1257,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   wcscat(XCSoar_Version, TEXT("4.6.5 "));
 	// #else
    */
+#ifdef GNAV
+  // HEAD 4.7 (series) is NOT necessarily alpha, as it is in production
+  // use in Altair, and there are already several stable versions of 4.7 out.
+  wcscat(XCSoar_Version, TEXT("4.7.6 alpha"));
+#else
   wcscat(XCSoar_Version, TEXT("Alpha "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
+#endif
   // (future/next version) wcscat(XCSoar_Version, TEXT("BETA 4.6.1"));
 
   XCSoarGetOpts(lpCmdLine);
@@ -3071,9 +3079,9 @@ void SIMProcessTimer(void)
 
   if (i%2==0) return;
 
-#ifdef DEBUG
+  //  #ifdef DEBUG
   //  NMEAParser::TestRoutine(&GPS_INFO);
-#endif
+  //  #endif
 
   NMEAParser::GpsUpdated = TRUE;
   SetEvent(dataTriggerEvent);

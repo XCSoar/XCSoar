@@ -117,8 +117,13 @@ void GaugeVario::Create() {
 					  rc.right-rc.left, 
 					  rc.bottom-rc.top);
   SelectObject(hdcDrawWindow, memBM);
-                                                            // load vario scale
-  hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEA));
+
+  // load vario scale
+  if (Units::GetUserVerticalSpeedUnit()==unKnots) {
+    hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEC));
+  } else {
+    hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEA));
+  }
 
   if (Appearance.InverseInfoBox){
     colText = RGB(0xff, 0xff, 0xff);
@@ -253,11 +258,7 @@ void GaugeVario::Render() {
 
   if (Appearance.GaugeVarioAvgText) {
     // JMW averager now displays netto average if not circling
-    if (
-#ifndef _SIM_
-	DrawInfo.NettoVarioAvailable && 
-#endif
-	!DerivedDrawInfo.Circling) {
+    if (!DerivedDrawInfo.Circling) {
       RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop, 
 		  CALCULATED_INFO.NettoAverage30s*LIFTMODIFY, TEXT("Net Avg"));
     } else {
@@ -423,8 +424,10 @@ void GaugeVario::RenderNeedle(double Value){
   static DWORD fpsTimeLast =0;
 
   if (!InitDone){
-    degrees_per_unit = (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
-    gmax = max(80,(int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY))+2);
+    degrees_per_unit = 
+      (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
+    gmax = 
+      max(80,(int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY))+2);
     MakeAllPolygons();
     InitDone = true;
   }

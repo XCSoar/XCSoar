@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.20 2006/03/17 17:01:56 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.21 2006/07/06 14:14:39 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -466,11 +466,11 @@ void WindAnalyser::slot_newEstimate(Vector a, int quality)
   char Temp[100];
 #endif
 
-  if (quality==6) {
-    quality = 3; // provided externally
+  if (quality>=6) {
 #ifdef DEBUG
-    sprintf(Temp,"%f %f %d # thermal drift\n",a.x,a.y, quality);
+    sprintf(Temp,"%f %f %d # external\n",a.x,a.y, quality);
 #endif
+    quality = 3; // provided externally
   } else {
 #ifdef DEBUG
     sprintf(Temp,"%f %f %d # circling\n",a.x,a.y, quality);

@@ -1,10 +1,43 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+  Copyright (C) 2000 - 2005  
+
+        M Roberts (original release)
+        Robin Birch <robinb@ruffnready.co.uk>
+        Samuel Gisiger <samuel.gisiger@triadis.ch>
+        Jeff Goodenough <jeff@enborne.f2s.com>
+        Alastair Harrison <aharrison@magic.force9.co.uk>
+        Scott Penrose <scottp@dd.com.au>
+        John Wharington <jwharington@bigfoot.com>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+}
+
+*/
+
+
 #include "stdafx.h"
 #include "XCSoar.h"
 #include "Utils.h"
 
 #include <math.h>
-#define NUMV 40
-#define VSCALE 10.0
+#define NUMV 30
+#define VSCALE 15.0 // 15 m/s = 30 knots
 #define NUMP 20
 #define NUMTHETA (36)
 #define DEGTORAD (M_PI/180.0)
@@ -153,16 +186,14 @@ public:
     points[i].Set(t,V_tas,V_gps,theta_gps);
   }
 
-  bool CheckValidity(double t) {
+  double CheckValidity(double t) {
     // requires:
     // -- all points to be initialised
     // -- all points to be within last 5 minutes
-    // -- spread in bearing of >40 degrees
     int nf=0;
     double ctg=0.0;
     double stg=0.0;
     int i;
-
 
     for (i=0; i<NUMP; i++) {
       if (points[i].time>0) {
@@ -170,14 +201,14 @@ public:
 	if (t-points[i].time>10*60) {
 	  // clear point so it gets filled next time
 	  points[i].time = -1;
-	  return false;
+	  return -1;
 	}
 	ctg += points[i].cos_theta_gps;
 	stg += points[i].sin_theta_gps;
       }
     }
     if (nf<NUMP) {
-      return false;
+      return -1;
     } else {
       double theta_av = atan2(stg,ctg);
       double dtheta_max = 0;
@@ -191,12 +222,7 @@ public:
 	  dtheta_min = da;
 	}
       }
-      double spread = dtheta_max-dtheta_min;
-      if ((spread<40*DEGTORAD)||(spread>270*DEGTORAD)) {
-	return false;
-      } else {
-	return true;
-      }
+      return dtheta_max-dtheta_min;
     }
   }
 
@@ -264,7 +290,7 @@ private:
 
   bool UpdateSearch(double V_west, double theta_west, 
 		    double *V_westb, double *theta_westb,
-		    bool start) {
+		    bool start, double *error) {
 
     static int vdebest = 10000;
     int i = iround(V_west*NUMV/VSCALE);
@@ -295,16 +321,27 @@ private:
       vdebest = verr;
       *V_westb = V_west;
       *theta_westb = theta_best;
+      *error = vdebest;
       return true;
     } else {
       if (start) {
 	vdebest = verr;
+	*error = vdebest;
       }
       return false;
     }
   }
 
 public:
+  double ErrorStart(double *V_westb, double *theta_westb) {
+    double error_start;
+    // find error at current wind estimate
+    UpdateSearch(*V_westb, *theta_westb, 
+		 V_westb, theta_westb,
+		 true, &error_start);
+    return error_start/10;
+  }
+
   bool Estimate(double *V_westb, double *theta_westb, double *error) {
     int i;
     bool improved=false;
@@ -313,31 +350,52 @@ public:
       scanned[i]=false;
     }
 
-    // find error at current wind estimate
-    UpdateSearch(*V_westb, *theta_westb, 
-		 V_westb, theta_westb,
-		 true);
-
     // scan for 6 points around current best estimate.
     // if a better estimate is found, keep scanning around
     // that point, and don't repeat scans
-    
+
     bool improved_this = true;
     while (improved_this) {
-      improved_this = false;
       int ib = iround(*V_westb*NUMV/VSCALE);
       int il, ih;
       il = min(NUMV-1,max(0,ib-3));
       ih = min(NUMV-1,max(0,ib+3));
+      improved_this = false;
+      double error_this;
+      bool improved_one;
       for (i=il; i<=ih; i++) {
 	if (scanned[i]) continue;
 	// see if we can find a better estimate
 	double V_west = i*VSCALE/NUMV;
-	improved_this |= UpdateSearch(V_west, *theta_westb, 
+	improved_one = UpdateSearch(V_west, *theta_westb, 
 				      V_westb, theta_westb,
-				      false);
+				      false, &error_this);
+	improved_this |= improved_one;
 	scanned[i]= true;
+	if (improved_this) {
+	  *error = error_this/10;
+	}
       }
+      
+      // still no improvement, maybe wind has changed a lot,
+      // so do full scan --> this is required to detect large
+      // changes in wind speed
+      if ((!improved_this) && (*error>10.0)) {
+	for (i=0; i<NUMV; i++) {
+	  if (scanned[i]) continue;
+	  // see if we can find a better estimate
+	  double V_west = i*VSCALE/NUMV;
+	  improved_one = UpdateSearch(V_west, *theta_westb, 
+				      V_westb, theta_westb,
+				      false, &error_this);
+	  improved_this |= improved_one;
+	  scanned[i]= true;
+	  if (improved_this) {
+	    *error = error_this/10;
+	  }
+	}
+      }
+
       improved |= improved_this;
     }
     // return true if estimate was improved
@@ -377,7 +435,9 @@ void TestZigZag() {
   }
 
   // ok, ready to calculate
-  if (myzigzag.CheckValidity(t+1)) {
+  double spread = myzigzag.CheckValidity(t+1);
+
+  if ((spread>0) && ((spread<30*DEGTORAD)||(spread>270*DEGTORAD))) {
     // data is ok to make an estimate
     double V_wind_estimate=0;
     double theta_wind_estimate=0;
@@ -401,14 +461,14 @@ static void ZigZagStore(char *Str)
 }
 
 
-bool WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
+int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
 		      double *zzwindspeed, double *zzwindbearing) {
   bool doupdate = false;
   static double tlastupdate = -1;
 
 #ifndef _SIM_
   if (!Basic->AirspeedAvailable) {
-    return false;
+    return 0;
   }
 #endif
 
@@ -417,15 +477,15 @@ bool WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
   // TODO: also reject if accelerating (|n-1|>0.1 ?)
   // TODO: correct TAS for vertical speed
   if (fabs(Calculated->TurnRate)>10.0) {
-    return false;
+    return 0;
   }
   if (fabs(Basic->TrueAirspeed)<10.0) {
-    return false;
+    return 0;
   }
 
   if (Basic->AccelerationAvailable) {
     if (fabs(Basic->Gload-1.0)>0.2) {
-      return false;
+      return 0;
     }
   }
 
@@ -440,7 +500,7 @@ bool WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
   }
 
   if (!doupdate) {
-    return false;
+    return 0;
   }
 
   tLast = Basic->Time;
@@ -449,12 +509,36 @@ bool WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
   myzigzag.AddPoint(Basic->Time, Basic->TrueAirspeed, 
 		    Basic->Speed, Basic->TrackBearing*DEGTORAD);
 
-  if (myzigzag.CheckValidity(Basic->Time)) {
+  double spread = myzigzag.CheckValidity(Basic->Time);
+  if (spread<0) { 
+    return 0;
+  }
+
+  if ((Basic->Time<= tlastupdate)||(tlastupdate==-1)) {
+    tlastupdate = Basic->Time-20;
+  }
+
+  // don't update wind from zigzag more often than 
+  // every 20 seconds, so it is balanced with respect
+  // to circling
+  if (Basic->Time-tlastupdate<20) {
+    return 0;
+  } 
+
+  double V_wind_estimate = Calculated->WindSpeed;
+  double theta_wind_estimate = Calculated->WindBearing*DEGTORAD;
+  double percent_error = 
+    myzigzag.ErrorStart(&V_wind_estimate, &theta_wind_estimate);
+
+  if (spread>270*DEGTORAD) {
+    // invalid if really circling
+    return 0;
+  }
+  if ((spread>40*DEGTORAD) // invalid if no zig-zag
+      ||(percent_error*Basic->TrueAirspeed/100.0>3.0)
+       ) {
     // data is ok to make an estimate
 
-    double V_wind_estimate = Calculated->WindSpeed;
-    double theta_wind_estimate = Calculated->WindBearing*DEGTORAD;
-    double percent_error=0;
     DWORD tzero = ::GetTickCount();
 
     if (myzigzag.Estimate(&V_wind_estimate, 
@@ -470,7 +554,10 @@ bool WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
       *zzwindspeed = V_wind_estimate;
       *zzwindbearing = theta_wind_estimate;
 
-      /*
+      // ok, we make an update now
+      tlastupdate = Basic->Time;
+      
+#ifdef DEBUG      
       char text[100];
       sprintf(text,"%f %3.1f %03.0f %3.1f %03.0f %f # zigzag\n", 
 	      Basic->Time,
@@ -479,23 +566,16 @@ bool WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
 	      Calculated->WindSpeed, 
 	      Calculated->WindBearing,
 	      percent_error);
-      ZigZagStore(text);
-      */
-
-      if ((Basic->Time<= tlastupdate)||(tlastupdate==-1)) {
-	tlastupdate = Basic->Time-20;
-      }
-
-      // don't update wind from zigzag more often than 
-      // every 20 seconds, so it is balanced with respect
-      // to circling
-      if (Basic->Time-tlastupdate>=20) {
-	tlastupdate = Basic->Time;
-	return true;
+      DebugStore(text);
+#endif
+      int quality;
+      quality = max(0,5-iround(percent_error/2));
+      if (Calculated->Circling) {
+	return quality/2; // de-value updates in circling mode
       } else {
-	return false;
+	return quality;
       }
     }
   }
-  return false;
+  return 0;
 }
