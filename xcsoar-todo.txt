@@ -1,19 +1,60 @@
 Work To Do, Outstanding Items:
 
-Documentation:
-- Start/Finish line: 'radius' parameter is half line width
-- Explain more about task starting, valid task starts etc
+ccrtrtti.lib
 
+Sam:
+- New firmware for TR-DVVS (stall sensor, voice commands)
+- Modify Vega/DVS to output switch logic for vario circling with
+   PDA circling forced false
+
+
+- Audio schemes
+- Profile selector not getting in before everything is initialised!
+  --> inverse infoboxes
+- Auto Mc not updating when final glide forced early
+  --> due to pirker function not working across more than one point to go
+- Spurious airspace warning when leaving airspace
+- Vario gauge needle doesn't follow bitmap exactly
+- mc alt required sometimes decreases with mc, why?
+  --> could be due to final glide switching if low mc in strong wind
+- AAT segment line for targets bug, not always in sector, and range not
+  always going to be increasing.  Need better logic here.
+- Distance/bearing great circle calculations?
+- Stop IGC on full disk, memory check at startup
+  --> memory check at startup potentially buggy
+- Spurious touchscreen detect when pressing menu buttons
 - Arm advance: 
     if press again after advance and still in sector,
     restart that waypoint; or if on waypoint 1, restart the task
     Also display green button with "Arm Advance" if task isn't started
 - Task details dialog: start details and details on each waypoint
 - Alternate start locations
+- Handle 640x480 displays
+- FAI 90 start/finish type
 
-Priority:
-  - (Feature request 1278082) Ellipsoid error correction
+John Buchannon feedback:
+ - Tie circling mode to vario
+   -- Need extra flag to indicate to Vega that XCSoar is getting
+      its mode from it, not the other way around?
+      --> slave mode, but don't bugger wind calculations
+ - Vario gauge
+   -- Needle showing overshoot, needs faster animation
+   -- Averager jumps around too much (update only every 2-5 seconds maybe)
+   -- No need to show gross, when showing only some items, make text bigger
 
+Ring tasman instruments guy
+Send price to stu
+
+
+Documentation:
+- Start/Finish line: 'radius' parameter is half line width
+- Explain more about task starting, valid task starts etc
+- Update configuration screenshots and text
+- Make sure all release note info is in the manual.
+- Better description of prioritisation of messages
+- Better description of speed command sounds
+- Better description of auto mc
+- Better description of how to add new tasks
 
 ===========
 TASK SYSTEM
@@ -23,7 +64,7 @@ TASK SYSTEM
   - File save/load to contain all info
   - XML based task file
   - Have separate Arm modes for AAT and non-AAT modes?
-  - Record (and display) start speed/altitude/time 
+  - Display start speed/altitude/time 
   - Different ways of calculating average speed
   - Based on manual input or task average
   - Add 'Append' waypoint function, so users can create a task by selecting
@@ -33,6 +74,7 @@ TASK SYSTEM
   - Online Contest optimisation (related also to AAT optimisation)
   - (Feature request 1237800) Preserve TPs in tasks when waypoint file changed
   - Allow for alternate start points, or alternate tasks
+  - FAI style start/end sectors (OO zones)
 - AAT support:
   - More accurate calculation of ETA etc with respect to final glide fraction
   - Calculator, What if I leave now?
@@ -48,9 +90,8 @@ TASK SYSTEM
   - Info for all waypoints
     -- Computed arrival height AGL at Mc0 Mc1 Mc2
 - Task statistics
-  - Bug: Average speed is corrupted if user selects previous waypoint
   - Need to track average speed and time spent on each leg for statistics
-    review after flight anyway.
+    review after flight.
 
 =====================
 AIRSPACE AND WARNINGS
