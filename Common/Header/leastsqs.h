@@ -22,7 +22,7 @@
 // Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 // Boston, MA  02111-1307, USA.
 //
-// $Id: leastsqs.h,v 1.1 2005/07/29 15:02:42 jwharington Exp $
+// $Id: leastsqs.h,v 1.2 2006/07/14 14:29:12 jwharington Exp $
 
 
 #ifndef _LEASTSQS_H
@@ -47,6 +47,7 @@ class LeastSquares {
 
   double rms_error;
   double max_error;
+  double sum_weights;
   double y_max;
   double y_min;
   double x_min;
@@ -56,6 +57,7 @@ class LeastSquares {
 
   double xstore[MAX_STATISTICS];
   double ystore[MAX_STATISTICS];
+  double weightstore[MAX_STATISTICS];
 
   LeastSquares() {
     Reset();
@@ -82,15 +84,19 @@ Classical least squares fit:
 
 
 /**
- * Incrimentally update existing values with a new data point.
+ * Incrementally update existing values with a new data point.
  */
-  void least_squares_update(double x, double y);
+  void least_squares_update(double x, double y, double weight=1.0);
 
   // assume x is the sample number
   void least_squares_update(double y);
 
   void least_squares_error_update();
 
+  // add one point, for single update later
+  void least_squares_add(double x, double y, double weight=1.0);
+  // global update
+  void least_squares_update();
 
 /**
   @return the least squares error:.

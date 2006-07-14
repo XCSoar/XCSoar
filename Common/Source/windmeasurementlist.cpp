@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windmeasurementlist.cpp,v 1.7 2006/07/06 14:14:39 jwharington Exp $
+**   $Id: windmeasurementlist.cpp,v 1.8 2006/07/14 14:29:13 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -115,7 +115,7 @@ Vector WindMeasurementList::getWind(double alt, bool *found){
       //factor in altitude difference between current altitude and
       //measurement.  Maximum alt difference is 1000 m.
 
-      double k=0.01;
+      double k=0.0025;
 
       t_quality = iround(k*(1.0-timediff)/(timediff*timediff+k)
 			 * REL_FACTOR_TIME);

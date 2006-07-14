@@ -18,7 +18,7 @@
 #if !defined(WINDOWSPC)
 #define   WINDOWSPC             0
 #endif
-        
+
 #define   GAUGEVARIOENABLED     1
 
 #define   FONTQUALITY           NONANTIALIASED_QUALITY
@@ -38,7 +38,7 @@
 // disable internally generated sounds
 #define DISABLEAUDIO
 #else
-#define BIGDISPLAY 
+#define BIGDISPLAY
 #if (NEWINFOBOX>0)
 #define NEWAIRSPACEWARNING 1
 #else
@@ -50,7 +50,7 @@
 #ifdef BIGDISPLAY
 #define IBLSCALE(x) ((x)*InfoBoxLayout::scale)
 #else
-#define IBLSCALE(x) (x) 
+#define IBLSCALE(x) (x)
 #endif
 
 

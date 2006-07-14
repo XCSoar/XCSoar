@@ -77,6 +77,7 @@ Units_t Units::UserAltitudeUnit = unMeter;
 Units_t Units::UserHorizontalSpeedUnit = unKiloMeterPerHour;
 Units_t Units::UserVerticalSpeedUnit = unMeterPerSecond;
 Units_t Units::UserWindSpeedUnit = unKiloMeterPerHour;
+Units_t Units::UserTaskSpeedUnit = unKiloMeterPerHour;
 
 bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
 
@@ -225,6 +226,19 @@ Units_t Units::SetUserHorizontalSpeedUnit(Units_t NewUnit){
   return(last);
 }
 
+Units_t Units::GetUserTaskSpeedUnit(void){
+  return(UserTaskSpeedUnit);
+}
+
+Units_t Units::SetUserTaskSpeedUnit(Units_t NewUnit){
+  Units_t last = UserTaskSpeedUnit;
+  if (UserTaskSpeedUnit != NewUnit){
+    UserTaskSpeedUnit = NewUnit;
+    NotifyUnitChanged();
+  }
+  return(last);
+}
+
 Units_t Units::GetUserVerticalSpeedUnit(void){
   return(UserVerticalSpeedUnit);
 }
@@ -264,6 +278,8 @@ Units_t Units::GetUserUnitByGroup(UnitGroup_t UnitGroup){
     return(GetUserVerticalSpeedUnit());
     case ugWindSpeed:
     return(GetUserWindSpeedUnit());
+    case ugTaskSpeed:
+    return(GetUserTaskSpeedUnit());
     default:
       return(unUndef);
   }
@@ -326,6 +342,10 @@ TCHAR *Units::GetDistanceName(){
 
 TCHAR *Units::GetAltitudeName(){
   return(GetUnitName(GetUserAltitudeUnit()));
+}
+
+TCHAR *Units::GetTaskSpeedName(){
+  return(GetUnitName(GetUserTaskSpeedUnit()));
 }
 
 

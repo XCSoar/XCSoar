@@ -43,20 +43,16 @@
     <DataField name="" DataType="enum"  Min=0 Max=2 Step=1/>
   </WndProperty>
 
+  <WndProperty Name="prpBaudRateA" Caption="Baud Rate Vega"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="enum"  Min=0 Max=2 Step=1/>
+  </WndProperty>
+
   <WndProperty Name="prpFlarmConnected" Caption="FLARM connected"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
   <WndProperty Name="prpPDAPower" Caption="PDA power"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
     <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpNeedleGaugeType" Caption="Needle gauge type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
-      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
-    </WndProperty>
-
-  <WndProperty Name="prpLedBrightness" Caption="LED Bright"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f/15" EditFormat="%.0f" Min=1 Max=15 Step=1/>
   </WndProperty>
 
   </WndFrame>
@@ -462,6 +458,31 @@
   </WndProperty>
 
   </WndFrame>
+
+  <WndFrame Name="frmSchemes" X=70 Y=0 Width=246 Height=222 Font=2>
+
+    <WndButton Name="cmdSchemeVega"  Caption="Vega" X=50 Y=-1 Width=90  Height=28 Font=2 OnClickNotify="OnSchemeVegaClicked" />
+
+    <WndButton Name="cmdSchemeBorgelt"  Caption="Borgelt" X=50 Y=-1 Width=90  Height=28 Font=2 OnClickNotify="OnSchemeBorgeltClicked" />
+
+    <WndButton Name="cmdSchemeCambridge"  Caption="Cambridge" X=50 Y=-1 Width=90  Height=28 Font=2 OnClickNotify="OnSchemeCambridgeClicked" />
+
+    <WndButton Name="cmdSchemeZander"  Caption="Zander" X=50 Y=-1 Width=90  Height=28 Font=2 OnClickNotify="OnSchemeZanderClicked" />
+
+  </WndFrame>
+
+  <WndFrame Name="frmDisplay" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpNeedleGaugeType" Caption="Needle gauge type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
+    </WndProperty>
+
+  <WndProperty Name="prpLedBrightness" Caption="LED Bright"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f/15" EditFormat="%.0f" Min=1 Max=15 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
 
 </WndForm>    
 

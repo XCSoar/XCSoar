@@ -100,6 +100,7 @@ class MapWindow {
 
   static BOOL CLOSETHREAD;
   static BOOL Initialised;
+  static bool GliderCenter;
 
   static RECT MapRect;
   static RECT MapRectBig;
@@ -185,6 +186,7 @@ class MapWindow {
   static void DrawGPSStatus(HDC hdc, RECT rc);
   static void DrawTrail(HDC hdc, POINT Orig, RECT rc);
   static void DrawTask(HDC hdc, RECT rc);
+  static void DrawThermalEstimate(HDC hdc, RECT rc);
   static void DrawTaskAAT(HDC hdc, RECT rc);
   static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
   static void DrawBearing(HDC hdc, POINT Orig);

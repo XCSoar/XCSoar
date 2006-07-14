@@ -720,10 +720,11 @@ void dlgConfigurationShowModal(void){
 
   ////
 
-  DWORD Speed = 0;
-  DWORD Distance = 0;
+  DWORD Speed = 1; // default is knots
+  DWORD TaskSpeed = 2; // default is kph
+  DWORD Distance = 2; // default is km
   DWORD Lift = 0;
-  DWORD Altitude = 0;
+  DWORD Altitude = 0; //default ft
 
   GetFromRegistry(szRegistrySpeedUnitsValue,&Speed);
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsSpeed"));
@@ -734,6 +735,18 @@ void dlgConfigurationShowModal(void){
     dfe->addEnumText(TEXT("Nautical"));
     dfe->addEnumText(TEXT("Metric"));
     dfe->Set(Speed);
+    wp->RefreshDisplay();
+  }
+
+  GetFromRegistry(szRegistryTaskSpeedUnitsValue,&TaskSpeed);
+  wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsTaskSpeed"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Statue"));
+    dfe->addEnumText(TEXT("Nautical"));
+    dfe->addEnumText(TEXT("Metric"));
+    dfe->Set(TaskSpeed);
     wp->RefreshDisplay();
   }
 
@@ -774,6 +787,17 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
   if (wp) {
     wp->GetDataField()->Set(MapWindow::EnableTrailDrift);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpThermalLocator"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("OFF"));
+    dfe->addEnumText(TEXT("Circle at center"));
+    dfe->addEnumText(TEXT("Pan to center"));
+    dfe->Set(EnableThermalLocator);
     wp->RefreshDisplay();
   }
 
@@ -1085,6 +1109,7 @@ void dlgConfigurationShowModal(void){
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Cylinder"));
     dfe->addEnumText(TEXT("Line"));
+    dfe->addEnumText(TEXT("FAI Sector"));
     dfe->Set(FinishLine);
     wp->RefreshDisplay();
   }
@@ -1101,6 +1126,7 @@ void dlgConfigurationShowModal(void){
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Cylinder"));
     dfe->addEnumText(TEXT("Line"));
+    dfe->addEnumText(TEXT("FAI Sector"));
     dfe->Set(StartLine);
     wp->RefreshDisplay();
   }
@@ -1277,6 +1303,15 @@ void dlgConfigurationShowModal(void){
     if (MapWindow::EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
       MapWindow::EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryTrailDrift, MapWindow::EnableTrailDrift);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpThermalLocator"));
+  if (wp) {
+    if (EnableThermalLocator != wp->GetDataField()->GetAsInteger()) {
+      EnableThermalLocator = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryThermalLocator, EnableThermalLocator);
       changed = true;
     }
   }
@@ -1583,6 +1618,17 @@ void dlgConfigurationShowModal(void){
     if ((int)Speed != wp->GetDataField()->GetAsInteger()) {
       Speed = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistrySpeedUnitsValue, Speed);
+      Units::NotifyUnitChanged();
+      requirerestart = true;
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsTaskSpeed"));
+  if (wp) {
+    if ((int)TaskSpeed != wp->GetDataField()->GetAsInteger()) {
+      TaskSpeed = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryTaskSpeedUnitsValue, TaskSpeed);
       Units::NotifyUnitChanged();
       requirerestart = true;
       changed = true;

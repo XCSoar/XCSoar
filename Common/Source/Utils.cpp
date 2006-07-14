@@ -167,10 +167,12 @@ TCHAR szRegistrySafteySpeed[] =          TEXT("SafteySpeed");
 TCHAR szRegistrySectorRadius[]=          TEXT("Radius");
 TCHAR szRegistrySnailTrail[]=		 TEXT("SnailTrail");
 TCHAR szRegistryTrailDrift[]=		 TEXT("TrailDrift");
+TCHAR szRegistryThermalLocator[]=	 TEXT("ThermalLocator");
 TCHAR szRegistryAnimation[]=		 TEXT("Animation");
 TCHAR szRegistrySpeed1Index[]=		 TEXT("SpeedIndex");
 TCHAR szRegistrySpeed2Index[]=		 TEXT("Speed2Index");
 TCHAR szRegistrySpeedUnitsValue[] =      TEXT("Speed");
+TCHAR szRegistryTaskSpeedUnitsValue[] =      TEXT("TaskSpeed");
 TCHAR szRegistryStartLine[]=		 TEXT("StartLine");
 TCHAR szRegistryStartRadius[]=		 TEXT("StartRadius");
 TCHAR szRegistryFinishLine[]=		 TEXT("FinishLine");
@@ -371,6 +373,7 @@ void ReadRegistrySettings(void)
 {
   DWORD Speed = 0;
   DWORD Distance = 0;
+  DWORD TaskSpeed = 0;
   DWORD Lift = 0;
   DWORD Altitude = 0;
   DWORD DisplayUp = 0;
@@ -398,6 +401,21 @@ void ReadRegistrySettings(void)
       break;
     case 2 :
       SPEEDMODIFY = TOKPH;
+      break;
+    }
+
+  TaskSpeed = 2;
+  GetFromRegistry(szRegistryTaskSpeedUnitsValue,&TaskSpeed);
+  switch(TaskSpeed)
+    {
+    case 0 :
+      TASKSPEEDMODIFY = TOMPH;
+      break;
+    case 1 :
+      TASKSPEEDMODIFY = TOKNOTS;
+      break;
+    case 2 :
+      TASKSPEEDMODIFY = TOKPH;
       break;
     }
 
@@ -532,6 +550,10 @@ void ReadRegistrySettings(void)
   Temp = MapWindow::EnableTrailDrift;
   GetFromRegistry(szRegistryTrailDrift,&Temp);
   MapWindow::EnableTrailDrift = (Temp==1);
+
+  Temp = EnableThermalLocator;
+  GetFromRegistry(szRegistryThermalLocator,&Temp);
+  EnableThermalLocator = Temp;
 
   Temp = EnableAnimation;
   GetFromRegistry(szRegistryAnimation,&Temp);

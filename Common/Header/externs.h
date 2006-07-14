@@ -102,6 +102,7 @@ extern double SPEEDMODIFY;
 extern double LIFTMODIFY;
 extern double DISTANCEMODIFY;
 extern double ALTITUDEMODIFY; 
+extern double TASKSPEEDMODIFY;
 
 // polar info
 extern double BUGS;
@@ -179,6 +180,7 @@ extern int AutoAdvance;
 extern bool AdvanceArmed;
 extern bool EnableBlockSTF; // block speed to fly instead of dolphin
 extern int MenuTimeoutMax;
+extern int EnableThermalLocator;
 //
 
 extern bool ExternalTriggerCruise;

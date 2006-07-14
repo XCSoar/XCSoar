@@ -1343,7 +1343,7 @@ void MapWindow::ModifyMapScale(void) {
     GetMapResolutionFactor()/MapScaleOverDistanceModify;
   RequestMapScale = MapScale;
   DrawScale = MapScaleOverDistanceModify;
-  DrawScale = DrawScale/111000;
+  DrawScale = DrawScale/111194;
   DrawScale = GetMapResolutionFactor()/DrawScale;
 }
 
@@ -1465,9 +1465,10 @@ void MapWindow::UpdateMapScale()
 }
 
 
+bool MapWindow::GliderCenter=false;
+
 void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
 {
-  bool GliderCenter=false;
   double trackbearing = DrawInfo.TrackBearing;
 
   //  trackbearing = DerivedDrawInfo.NextTrackBearing;
@@ -1480,7 +1481,7 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
     && (DerivedDrawInfo.Circling == TRUE) )
     )
   {
-    GliderCenter = TRUE;
+    GliderCenter = true;
     
     if (DisplayOrientation == TRACKCIRCLE) {
       DisplayAngle = DerivedDrawInfo.WaypointBearing;
@@ -1492,7 +1493,7 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
     
   } else {
     // normal, glider forward
-    GliderCenter = FALSE;
+    GliderCenter = false;
     DisplayAngle = trackbearing;
     DisplayAircraftAngle = 0.0;
     
@@ -1524,6 +1525,22 @@ bool MapWindow::RenderTimeAvailable() {
   }
 }
 
+
+void MapWindow::DrawThermalEstimate(HDC hdc, RECT rc) {
+  POINT screen;
+  if (DerivedDrawInfo.Circling && EnableThermalLocator) {
+    if (DerivedDrawInfo.ThermalEstimate_R>0) {
+      LatLon2Screen(DerivedDrawInfo.ThermalEstimate_Longitude, 
+		    DerivedDrawInfo.ThermalEstimate_Latitude, 
+		    screen);
+      SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
+      SelectObject(hdc, GetStockObject(BLACK_PEN));
+      Circle(hdc,
+	     screen.x,
+	     screen.y, 5, rc);
+    }
+  }
+}
 
 void MapWindow::RenderMapWindow(  RECT rc)
 {
@@ -1634,6 +1651,8 @@ void MapWindow::RenderMapWindow(  RECT rc)
       }
     }
 
+    DrawThermalEstimate(hdcDrawWindowBg, rc);
+
     if (TaskAborted) {
       DrawAbortedTask(hdcDrawWindowBg, rc, Orig_Aircraft);
     } else {
@@ -1649,13 +1668,13 @@ void MapWindow::RenderMapWindow(  RECT rc)
     // draw wind vector at aircraft
     #if (ALTERNATEWINDVECTOR == 0)
     if (!EnablePan) {
-      DrawWindAtAircraft(hdcDrawWindowBg, Orig, rc);
+      DrawWindAtAircraft(hdcDrawWindowBg, Orig_Aircraft, rc);
     }
     #endif
 
     #if (ALTERNATEWINDVECTOR == 1)
     if (!EnablePan) {
-      DrawWindAtAircraft2(hdcDrawWindowBg, Orig, rc);
+      DrawWindAtAircraft2(hdcDrawWindowBg, Orig_Aircraft, rc);
     }
     #endif
 
@@ -2622,12 +2641,20 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
   {
     if(StartLine){
         #if EXPERIMENTAL_STARTLINE > 0
-        _DrawLine(hdc, PS_SOLID, 5, Task[0].End, Task[0].Start, RGB(0,255,0));
-        _DrawLine(hdc, PS_SOLID, 1, Task[0].End, Task[0].Start, RGB(255,0,0));
+      _DrawLine(hdc, PS_SOLID, 5, WayPointList[Task[0].Index].Screen,
+		Task[0].Start, RGB(0,255,0));
+      _DrawLine(hdc, PS_SOLID, 5, WayPointList[Task[0].Index].Screen,
+		Task[0].End, RGB(0,255,0));
+      _DrawLine(hdc, PS_SOLID, 1, WayPointList[Task[0].Index].Screen,
+		Task[0].Start, RGB(255,0,0));
+      _DrawLine(hdc, PS_SOLID, 1, WayPointList[Task[0].Index].Screen,
+		Task[0].End, RGB(255,0,0));
         #else
         int LineWidth = 2;
-        DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen, Task[0].End, RGB(127,127,127));
-        DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen, Task[0].Start , RGB(127,127,127));
+        DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen, 
+		     Task[0].End, RGB(127,127,127));
+        DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen, 
+		     Task[0].Start, RGB(127,127,127));
         #endif
     }
     #if NOCIRCLEONSTARTLINE > 0
@@ -2637,7 +2664,9 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
       tmp = StartRadius*ResMapScaleOverDistanceModify;
       SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
       SelectObject(hdc, GetStockObject(BLACK_PEN));
-      Circle(hdc,WayPointList[Task[0].Index].Screen.x,WayPointList[Task[0].Index].Screen.y,(int)tmp, rc);
+      Circle(hdc,
+	     WayPointList[Task[0].Index].Screen.x,
+	     WayPointList[Task[0].Index].Screen.y,(int)tmp, rc);
     }
   }
   
@@ -2653,8 +2682,14 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
             {
 
               #if EXPERIMENTAL_STARTLINE > 0
-              _DrawLine(hdc, PS_SOLID, 5, Task[i].End, Task[i].Start, RGB(0,255,0));
-              _DrawLine(hdc, PS_SOLID, 1, Task[i].End, Task[i].Start, RGB(255,0,0));
+	      _DrawLine(hdc, PS_SOLID, 5, WayPointList[Task[i].Index].Screen,
+			Task[i].Start, RGB(0,255,0));
+	      _DrawLine(hdc, PS_SOLID, 5, WayPointList[Task[i].Index].Screen,
+			Task[i].End, RGB(0,255,0));
+	      _DrawLine(hdc, PS_SOLID, 1, WayPointList[Task[i].Index].Screen,
+			Task[i].Start, RGB(255,0,0));
+	      _DrawLine(hdc, PS_SOLID, 1, WayPointList[Task[i].Index].Screen,
+			Task[i].End, RGB(255,0,0));
               #else
               DrawDashLine(hdc, 2,
                WayPointList[Task[i].Index].Screen,
@@ -4324,13 +4359,49 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 
   // compute lat lon extents of visible screen
   screenbounds_latlon = GetRectBounds(rc);
-  
-  if (!EnablePan) {
-    PanLongitude = DrawInfo.Longitude;
-    PanLatitude = DrawInfo.Latitude;
-  }
+
   Orig_Screen = Orig;
+
+  if (!EnablePan) {
   
+    if (GliderCenter 
+	&& DerivedDrawInfo.Circling 
+	&& (EnableThermalLocator==2)) {
+      
+      if (DerivedDrawInfo.ThermalEstimate_R>0) {
+	PanLongitude = DerivedDrawInfo.ThermalEstimate_Longitude; 
+	PanLatitude = DerivedDrawInfo.ThermalEstimate_Latitude;
+	// JMW TODO: only pan if distance of center to aircraft is smaller 
+	// than one third screen width
+
+	POINT screen;
+	LatLon2Screen(PanLongitude, 
+		      PanLatitude, 
+		      screen);
+
+	LatLon2Screen(DrawInfo.Longitude, 
+		      DrawInfo.Latitude, 
+		      *Orig_Aircraft);
+
+	if ((fabs(Orig_Aircraft->x-screen.x)<(rc.right-rc.left)/3)
+	    && (fabs(Orig_Aircraft->y-screen.y)<(rc.bottom-rc.top)/3)) {
+	  
+	} else {
+	  // out of bounds, center on aircraft
+	  PanLongitude = DrawInfo.Longitude;
+	  PanLatitude = DrawInfo.Latitude;
+	}
+      } else {
+	PanLongitude = DrawInfo.Longitude;
+	PanLatitude = DrawInfo.Latitude;
+      }
+    } else {
+      // Pan is off
+      PanLongitude = DrawInfo.Longitude;
+      PanLatitude = DrawInfo.Latitude;
+    }
+  }
+
   LatLon2Screen(DrawInfo.Longitude, 
 		DrawInfo.Latitude, 
 		*Orig_Aircraft);

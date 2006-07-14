@@ -93,6 +93,10 @@
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 
+    <WndProperty Name="prpThermalLocator" Caption="Lift center"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2>
+      <DataField name="" DataType="enum" Min=0 Max=2 Step=1/>
+    </WndProperty>
+
   </WndFrame>
 
 
@@ -396,6 +400,10 @@
     </WndProperty>
 
     <WndProperty Name="prpUnitsAltitude" Caption="Altitude"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+    <WndProperty Name="prpUnitsTaskSpeed" Caption="Task Speed"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
