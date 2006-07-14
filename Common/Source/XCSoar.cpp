@@ -289,6 +289,7 @@ double        SPEEDMODIFY = TOKNOTS;
 double                          LIFTMODIFY  = TOKNOTS;
 double                          DISTANCEMODIFY = TONAUTICALMILES;
 double        ALTITUDEMODIFY = TOFEET;
+double        TASKSPEEDMODIFY = TOKPH;
 
 //Flight Data Globals
 double        MACCREADY = 0; // JMW now in SI units (m/s) for consistency
@@ -485,7 +486,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 16
 	  {ugAltitude,        TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15},
 	  // 17
-	  {ugHorizontalSpeed, TEXT("Speed Task Average"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+	  {ugTaskSpeed, TEXT("Speed Task Average"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
 	  // 18
 	  {ugDistance,        TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
 	  // 19
@@ -511,9 +512,9 @@ SCREEN_INFO Data_Options[] = {
 	  // 29
 	  {ugDistance,        TEXT("AA Distance Min"), TEXT("AA Dmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 30, 28},
 	  // 30
-	  {ugHorizontalSpeed, TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
+	  {ugTaskSpeed, TEXT("AA Speed Max"), TEXT("AA Vmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 31, 29},
 	  // 31
-	  {ugHorizontalSpeed, TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 51, 30},
+	  {ugTaskSpeed, TEXT("AA Speed Min"), TEXT("AA Vmin"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 51, 30},
 	  // 32
 	  {ugHorizontalSpeed, TEXT("Airspeed IAS"), TEXT("V IAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 37, 23},
 	  // 33
@@ -559,7 +560,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 51
 	  {ugDistance,        TEXT("AA Distance Tgt"), TEXT("AA Dtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 52, 31},
 	  // 52
-	  {ugHorizontalSpeed, TEXT("AA Speed Tgt"), TEXT("AA Vtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 51},
+	  {ugTaskSpeed, TEXT("AA Speed Tgt"), TEXT("AA Vtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 11, 51},
 	  // 53
 	  {ugNone,            TEXT("L/D vario"), TEXT("L/D vario"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 4, 38},
 	  // 54

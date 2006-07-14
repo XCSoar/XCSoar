@@ -47,12 +47,14 @@ Copyright_License {
 
 #include <tchar.h>
 
+#include "ThermalLocator.h"
 #include "windanalyser.h"
 #include "Atmosphere.h"
 
 #include "VegaVoice.h"
 
 WindAnalyser *windanalyser = NULL;
+ThermalLocator thermallocator;
 VegaVoice vegavoice;
 
 int AutoWindMode= 1;
@@ -610,10 +612,8 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     FinalGlideAlert(Basic, Calculated);
   }
 
-  if ((ActiveWayPoint>=0)
-      && Calculated->AutoMacCready
-      && (!TaskAborted)
-      && (Task[ActiveWayPoint].Index != -1)) {
+  if (Calculated->AutoMacCready
+      && (!TaskAborted)) {
     DoAutoMacCready(Basic, Calculated);
   }
 
@@ -720,9 +720,6 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           temp %=30;
 
           Altitude[temp] = Calculated->NavAltitude;
-#ifdef _SIM_
-          Vario[temp] = Calculated->Vario;
-#else
 	  if (Basic->NettoVarioAvailable) {
 	    NettoVario[temp] = Basic->NettoVario;
 	  } else {
@@ -733,7 +730,6 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	  } else {
 	    Vario[temp] = Calculated->Vario;
 	  }
-#endif
         }
       double Vave = 0;
       double NVave = 0;
@@ -1133,6 +1129,23 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     windanalyser->slot_Altitude();
   }
 
+  if (EnableThermalLocator) {
+    if (Calculated->Circling) {
+      thermallocator.AddPoint(Basic->Time, Basic->Longitude, Basic->Latitude,
+			      Calculated->NettoVario);
+      thermallocator.Update(Basic->Time, Basic->Longitude, Basic->Latitude,
+			    Calculated->WindSpeed, Calculated->WindBearing,
+			    &Calculated->ThermalEstimate_Longitude,
+			    &Calculated->ThermalEstimate_Latitude,
+			    &Calculated->ThermalEstimate_W,
+			    &Calculated->ThermalEstimate_R);
+    } else {
+      Calculated->ThermalEstimate_W = 0;
+      Calculated->ThermalEstimate_R = 0;
+      thermallocator.Reset();
+    }
+  }
+
   // update atmospheric model
   CuSonde::updateMeasurements(Basic, Calculated);
 
@@ -1411,7 +1424,12 @@ int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   // JMW bugfix, was Bisector, which is invalid
 
   bool approaching;
-  approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
+  if(FinishLine==1) { // Finish line
+    approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
+  } else {
+    // FAI 90 degree
+    approaching = ((AircraftBearing >= -45) && (AircraftBearing <= 45));
+  }
 
   if (inrange) {
 
@@ -1483,7 +1501,12 @@ int InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   // JMW bugfix, was Bisector, which is invalid
 
   bool approaching;
-  approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
+  if(StartLine==1) { // Start line
+    approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
+  } else {
+    // FAI 90 degree
+    approaching = ((AircraftBearing >= -45) && (AircraftBearing <= 45));
+  }
 
   if (inrange) {
 
@@ -1847,7 +1870,7 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     Calculated->TerrainValid = true;
     Calculated->TerrainAlt = Alt;
   }
-  Calculated->AltitudeAGL = Basic->Altitude - Calculated->TerrainAlt;
+  Calculated->AltitudeAGL = Calculated->NavAltitude - Calculated->TerrainAlt;
 
 }
 
@@ -2221,21 +2244,23 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if ((AutoMcMode==0)||((AutoMcMode==2)&& isfinalglide)) {
 
-    double slope =
-      (Calculated->NavAltitude
-       - SAFETYALTITUDEARRIVAL
-       - WayPointList[Task[ActiveWayPoint].Index].Altitude)/
-      (Calculated->WaypointDistance+1);
+    if (Task[ActiveWayPoint].Index != -1) {
 
-    double mcp = PirkerAnalysis(Basic, Calculated,
-				Calculated->WaypointBearing,
-				slope);
-    if (mcp>0) {
-      mcnew = mcp;
-    } else {
-      mcnew = 0.0;
+      double slope =
+	(Calculated->NavAltitude
+	 - SAFETYALTITUDEARRIVAL
+	 - WayPointList[Task[ActiveWayPoint].Index].Altitude)/
+	(Calculated->WaypointDistance+1);
+
+      double mcp = PirkerAnalysis(Basic, Calculated,
+				  Calculated->WaypointBearing,
+				  slope);
+      if (mcp>0) {
+	mcnew = mcp;
+      } else {
+	mcnew = 0.0;
+      }
     }
-
   } else if ((AutoMcMode==1)||((AutoMcMode==2)&&(!isfinalglide))) {
 
     if (flightstats.ThermalAverage.y_ave>0) {

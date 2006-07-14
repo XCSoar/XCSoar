@@ -522,7 +522,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 17:
-    Value = SPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
+    Value = TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
     if (ActiveWayPoint>=0) {
       Valid = true;
     } else {
@@ -588,7 +588,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 30:
-    Value = SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
+    Value = TASKSPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
     if (ActiveWayPoint>=0) {
       Valid = AATEnabled;
     } else {
@@ -596,7 +596,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 31:
-    Value = SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
+    Value = TASKSPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
     if (ActiveWayPoint>=0) {
       Valid = AATEnabled;
     } else {
@@ -655,7 +655,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 52:
-    Value = SPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed;
+    Value = TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed;
     if (ActiveWayPoint>=0) {
       Valid = AATEnabled;
     } else {

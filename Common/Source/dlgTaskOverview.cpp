@@ -99,7 +99,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 
   } else {
     if (DrawListIndex==n) {
-      _stprintf(sTmp, TEXT("%s"), TEXT("(add waypoint)"));
+      _stprintf(sTmp, TEXT("%s"), TEXT("   (add waypoint)"));
       ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		 ETO_OPAQUE, NULL,
 		 sTmp, _tcslen(sTmp), NULL);

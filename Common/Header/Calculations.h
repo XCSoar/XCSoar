@@ -117,6 +117,11 @@ typedef struct _DERIVED_INFO
 
   double LDvario;
 
+  double ThermalEstimate_Longitude;
+  double ThermalEstimate_Latitude;
+  double ThermalEstimate_W;
+  double ThermalEstimate_R;
+
 } DERIVED_INFO;
 
 #include "RasterTerrain.h"

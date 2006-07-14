@@ -58,8 +58,9 @@ typedef enum {
   ugAltitude,
   ugHorizontalSpeed,
   ugVerticalSpeed,
-  ugWindSpeed
-}UnitGroup_t;
+  ugWindSpeed,
+  ugTaskSpeed
+} UnitGroup_t;
 
 typedef struct{
   TCHAR   *Name;
@@ -78,6 +79,7 @@ private:
   static Units_t UserHorizontalSpeedUnit;
   static Units_t UserVerticalSpeedUnit;
   static Units_t UserWindSpeedUnit;
+  static Units_t UserTaskSpeedUnit;
 
   static void setupUnitBitmap(Units_t Unit, HINSTANCE hInst, WORD IDB, int Width, int Height);
 
@@ -95,6 +97,9 @@ public:
 
   static Units_t GetUserHorizontalSpeedUnit(void);
   static Units_t SetUserHorizontalSpeedUnit(Units_t NewUnit);
+
+  static Units_t GetUserTaskSpeedUnit(void);
+  static Units_t SetUserTaskSpeedUnit(Units_t NewUnit);
 
   static Units_t GetUserVerticalSpeedUnit(void);
   static Units_t SetUserVerticalSpeedUnit(Units_t NewUnit);
@@ -116,6 +121,8 @@ public:
   static TCHAR *GetDistanceName();
 
   static TCHAR *GetAltitudeName();
+
+  static TCHAR *GetTaskSpeedName();
 
   static bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
   static bool FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size);

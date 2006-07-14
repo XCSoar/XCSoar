@@ -272,7 +272,11 @@ void CalculateTaskSectors(void)
 	    if(i == 0)
 	      {
 		// start line
-		SectorAngle = 90;
+		if (StartLine==2) {
+		  SectorAngle = 45+90;
+		} else {
+		  SectorAngle = 90;
+		}
 		SectorSize = StartRadius;
 		SectorBearing = Task[i].OutBound;
 	      }
@@ -289,7 +293,11 @@ void CalculateTaskSectors(void)
 	      }
 	  } else {
 	    // finish line
-	    SectorAngle = 90;
+	    if (FinishLine==2) {
+	      SectorAngle = 45;
+	    } else {
+	      SectorAngle = 90;
+	    }
 	    SectorSize = FinishRadius;
 	    SectorBearing = Task[i].InBound;
 	  }

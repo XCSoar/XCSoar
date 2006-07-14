@@ -87,6 +87,7 @@ static void SetValues(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Cylinder"));
     dfe->addEnumText(TEXT("Line"));
+    dfe->addEnumText(TEXT("FAI Sector"));
     dfe->Set(FinishLine);
     wp->RefreshDisplay();
   }
@@ -103,6 +104,7 @@ static void SetValues(void) {
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Cylinder"));
     dfe->addEnumText(TEXT("Line"));
+    dfe->addEnumText(TEXT("FAI Sector"));
     dfe->Set(StartLine);
     wp->RefreshDisplay();
   }

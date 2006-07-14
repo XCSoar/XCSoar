@@ -115,7 +115,7 @@ Vector WindMeasurementList::getWind(double alt, bool *found){
       //factor in altitude difference between current altitude and
       //measurement.  Maximum alt difference is 1000 m.
 
-      double k=0.01;
+      double k=0.0025;
 
       t_quality = iround(k*(1.0-timediff)/(timediff*timediff+k)
 			 * REL_FACTOR_TIME);
