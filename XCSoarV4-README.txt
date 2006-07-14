@@ -4,6 +4,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Dialogs changed:
  dlgConfiguration.xml
+ dlgVario.xml
 
 Changes from 4.7.5:
 - Added small histeresis to instantenous LD vario
@@ -16,6 +17,16 @@ Changes from 4.7.5:
 - Added V TAS infobox
 - Improvements to wind estimator algorithm
 - Vario gauge unit bitmap for knots
+- Vega configuration, added page for audio schemes
+- Vega configuration, added missing parameter (BaudRateA)
+- Altitude AGL uses baro altitude if "Nav by baro altitude"
+- New units for task speed (separate from airspeed/wind/ground speed units)
+- Added FAI 90 start/finish type
+- Added thermal locator (shows centroid of lift when circling), option 'Lift center'
+   in configuration options.
+- Fixed minor bug, auto macready by average was not working when no
+  task was defined.
+- Modified least squares algorithm to handle weighted least squares.
 
 Dialogs changed:
  dlgConfiguration.xml
