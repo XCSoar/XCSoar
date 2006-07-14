@@ -7,8 +7,12 @@ Sam:
 - Modify Vega/DVS to output switch logic for vario circling with
    PDA circling forced false
 
-
-- Audio schemes
+- Detect when `circling' but not in thermal (e.g. ridge, wave), in order
+  to disable trail drift and thermal centering drift calculations.
+- When wind changes, de-value older wind estimates so they don't 
+   affect the new conditions.
+- Warble sounds
+- Improved snail trail shading
 - Profile selector not getting in before everything is initialised!
   --> inverse infoboxes
 - Auto Mc not updating when final glide forced early
@@ -29,8 +33,6 @@ Sam:
     Also display green button with "Arm Advance" if task isn't started
 - Task details dialog: start details and details on each waypoint
 - Alternate start locations
-- Handle 640x480 displays
-- FAI 90 start/finish type
 
 John Buchannon feedback:
  - Tie circling mode to vario
@@ -39,12 +41,7 @@ John Buchannon feedback:
       --> slave mode, but don't bugger wind calculations
  - Vario gauge
    -- Needle showing overshoot, needs faster animation
-   -- Averager jumps around too much (update only every 2-5 seconds maybe)
    -- No need to show gross, when showing only some items, make text bigger
-
-Ring tasman instruments guy
-Send price to stu
-
 
 Documentation:
 - Start/Finish line: 'radius' parameter is half line width
@@ -74,7 +71,6 @@ TASK SYSTEM
   - Online Contest optimisation (related also to AAT optimisation)
   - (Feature request 1237800) Preserve TPs in tasks when waypoint file changed
   - Allow for alternate start points, or alternate tasks
-  - FAI style start/end sectors (OO zones)
 - AAT support:
   - More accurate calculation of ETA etc with respect to final glide fraction
   - Calculator, What if I leave now?
@@ -139,11 +135,7 @@ GLIDE COMPUTER
   - Scale MC value to allow for decreased thermal strength with low altitude
   - Scale MC value to allow for risk of not encountering thermal with low
     altitude (and take into account wind factor here?)
-  - Calculate MC value based on average climb rate
   - Allow user to adjust optimism/pessimism
-- Altitude representation
-  - Flight level versus altitude in airspace warnings
-  - (Feature request 1278082) Ellipsoid error correction
 - Calculations for cloud streets
   - draw rough lines for streets and to indicate traversal track
 - Density altitude correction factors for speeds, climb rates etc
@@ -195,10 +187,6 @@ MAP, GAUGE AND ICON DISPLAY
      -- Do this with pattern brush over top of normal terrain/topo
 - Gauges
   - (Bug 1459609) CDI gauge rewrite to use vector graphics
-  - Vario gauge needle not visible when hitting upper limit
-  - Vario gauge knots scale
-  - Option for Vario gauge display mode to display netto or relative during
-    cruise
 
 =============
 CONFIGURATION
@@ -243,7 +231,6 @@ SYSTEM/INFRASTRUCTURE
   - Revert to default aircraft type if polar file doesn't exist or invalid
   - Free memory check at startup, ask to delete old IGC files?
   - Log file to report errors, include file and line number
-  - xmlParser unicode handling not very robust
   - SetFontInfo not reliable
   - Fix LocalPath so it is thread safe
 - Miscellaneous
