@@ -6,6 +6,7 @@
 
 int EnableThermalLocator = 1;
 
+#define SFACT 111195
 
 void ThermalLocator_Point::Drift(double t_0,
 				 double longitude_0, double latitude_0,
@@ -16,6 +17,11 @@ void ThermalLocator_Point::Drift(double t_0,
   weight = 1.0/(exp(-3.0*dt/TLOCATOR_NMAX));
   x = (longitude+drift_lon*dt-longitude_0)*fastcosine(latitude_0);
   y = (latitude+drift_lat*dt-latitude_0);
+
+  iweight = iround(weight*100);
+  xiw = iround(x*SFACT*iweight);
+  yiw = iround(y*SFACT*iweight);
+
 };
 
 
@@ -44,7 +50,8 @@ void ThermalLocator::AddPoint(double t, double longitude, double latitude, doubl
   points[nindex].latitude = latitude;
   points[nindex].t = t;
   points[nindex].w = w;
-  points[nindex].logw = log(max(w,0.1)*10.0);
+  points[nindex].iw = iround(w*10);
+  //  points[nindex].logw = log(max(w,0.1)*10.0);
   points[nindex].valid = true;
   nindex++;
   nindex = (nindex % TLOCATOR_NMAX);
@@ -102,26 +109,40 @@ void ThermalLocator::Update(double t_0,
   est_x = (est_longitude-longitude_0)*fastcosine(latitude_0);
   est_y = (est_latitude-latitude_0);
 
-  double slogw = 0;
-  double sx=0;
-  double sy=0;
+  int slogw = 0;
+  int sx=0;
+  int sy=0;
   int i;
+
+  int xav=0;
+  int yav=0;
+
   for (i=0; i<TLOCATOR_NMAX; i++) {
     if (points[i].valid) {
-      double wthis = (points[i].w)*points[i].weight;
-      double dx = points[i].x*wthis;
-      double dy = points[i].y*wthis;
+      xav+= points[i].xiw;
+      yav+= points[i].yiw;
+      slogw += points[i].iweight;
+    }
+  }
+  xav/= slogw;
+  yav/= slogw;
+
+  slogw = 0;
+  for (i=0; i<TLOCATOR_NMAX; i++) {
+    if (points[i].valid) {
+      int dx = (points[i].xiw-xav*points[i].iweight)*points[i].iw;
+      int dy = (points[i].yiw-yav*points[i].iweight)*points[i].iw;
       sx += dx;
       sy += dy;
-      slogw += wthis;
+      slogw += points[i].iw*points[i].iweight;
     }
   }
   if (slogw>0) {
     sx /= slogw;
     sy /= slogw;
     
-    est_x = sx;
-    est_y = sy;
+    est_x = (sx+xav)/(1.0*SFACT);
+    est_y = (sy+yav)/(1.0*SFACT);
     
     est_t =  t_0;
     est_latitude = est_y+latitude_0;
@@ -208,7 +229,7 @@ void ThermalLocator::Update(double t_0,
   */
 }
 
-
+/*
 double ThermalLocator::Estimate(double t_x, double t_y) {
   double error = -1;
 
@@ -220,7 +241,7 @@ double ThermalLocator::Estimate(double t_x, double t_y) {
       double dx = t_x-points[i].x;
       double dy = t_y-points[i].y;
       double ex = dx*dx+dy*dy;
-      double ey = points[i].logw;
+      double ey = 0; // points[i].logw;
       points[i].d = ex;
       ols.least_squares_add(ex, ey, 1.0); // points[i].weight);
     }
@@ -259,7 +280,7 @@ double ThermalLocator::Estimate(double t_x, double t_y) {
   
   return error;
 }
-
+*/
 
 void ThermalLocator::Drift(double t_0, 
 			   double longitude_0, double latitude_0,

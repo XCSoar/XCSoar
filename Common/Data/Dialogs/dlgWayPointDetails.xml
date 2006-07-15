@@ -35,11 +35,12 @@
 
   <WndFrame Name="frmCommands" X=70 Y=0 Width=246 Height=222 Font=2 Visible=0>
     
-    <WndButton Name="cmdGoto"        Caption="Goto (and clear Task)" X=50 Y=10 Width=150  Height=40 Font=2 />
-    <WndButton Name="cmdReplace"     Caption="Replace in Task"       X=50 Y=-1 Width=150  Height=40 Font=2 />
-    <WndButton Name="cmdInserInTask" Caption="Insert in Task"        X=50 Y=-1 Width=150  Height=40 Font=2 />
-    <WndButton Name="cmdRemoveFromTask" Caption="Remove from Task"      X=50 Y=-1 Width=150  Height=40 Font=2 />
-    <WndButton Name="cmdNewHome"     Caption="Set as new Home"       X=50 Y=-1 Width=150  Height=40 Font=2 />
+    <WndButton Name="cmdGoto"        Caption="Goto (and clear Task)" X=50 Y=10 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdReplace"     Caption="Replace in Task"       X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdInserInTask" Caption="Insert in Task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdAppendInTask" Caption="Append to Task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdRemoveFromTask" Caption="Remove from Task"      X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdNewHome"     Caption="Set as new Home"       X=50 Y=-1 Width=150  Height=30 Font=2 />
 
   </WndFrame>
 

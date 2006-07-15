@@ -131,6 +131,12 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
                                         Basic, 
                                         Calculated, &lat, &lon,
                                         mymaxrange);
+    if ((lon==0.0) && (lat==0.0)) {
+      lat = FindLatitude(Basic->Latitude, Basic->Longitude, bearing, 
+			  mymaxrange*2);
+      lon = FindLongitude(Basic->Latitude, Basic->Longitude, bearing, 
+			  mymaxrange*2);
+    }
     MapWindow::GlideFootPrint[i].x = lon;
     MapWindow::GlideFootPrint[i].y = lat;
     UnlockFlightData();
@@ -1097,7 +1103,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   case WAITCRUISE:
     if((Rate < MinTurnRate) || forcecruise) {
-      if( (Basic->Time  - StartTime) > ClimbCruiseSwitch) {
+      if( ((Basic->Time  - StartTime) > ClimbCruiseSwitch) || forcecruise) {
         Calculated->Circling = FALSE;
         
         // Transition to cruise

@@ -384,6 +384,9 @@ public:
   TerrainRenderer(RECT rc) {
 
     dtquant = DTQUANT;
+    if (RasterTerrain::DirectAccess) {
+      dtquant -= 2;
+    }
 
     // scale dtquant so resolution is not too high (slow) on large PDA displays
 #if (WINDOWSPC<1) 
@@ -432,7 +435,7 @@ public:
   float Xrounding;
   float Yrounding;
 
-#define TERRAIN_ANTIALIASING 1.5
+#define TERRAIN_ANTIALIASING 1
 
   void Height(RECT rc) {
     float X, Y;
@@ -464,11 +467,14 @@ public:
     } else {
       rfact = 1.0;
     }
+    if (RasterTerrain::DirectAccess) {
+      rfact = 0.5;
+    }
 
     // magnify gradient to make it
     // more obvious
 
-    short pval = 0; // y*ixs+x;
+    int pval = 0; // y*ixs+x;
     if (rc.top>0) {
       pval = ixs*(rc.top/dtquant-1);
       myhbuf+= pval;
@@ -514,13 +520,17 @@ public:
 
   void Slope() {
     int mag;
-    short pval=0;
+    int pval=0;
 
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
 
-    int epx = min(100,terrain_dem_graphics.
-		  GetEffectivePixelSize(pixelsize));
+    int epx = terrain_dem_graphics.GetEffectivePixelSize(pixelsize);
+    if (RasterTerrain::DirectAccess) {
+      epx = min(100,epx);
+    } else {
+      epx = min(100,epx);
+    }
     int ixsepx = ixs*epx;
 
     int tss = (int)(epx*pixelsize*1000);
@@ -637,7 +647,7 @@ public:
     for (int i=0; i<gsize; ++i) {
       
       mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256; // 8
-      illumination = max(0,(short)mag);
+      illumination = max(0,min(255,(short)mag));
       *tnxBuf = illumination;
 
       max_illumination = max(illumination, max_illumination);
@@ -656,29 +666,48 @@ public:
     short mslope=0;
     short moffset=0;
     short bright = 128+TerrainBrightness/2;
+
+    static short t_mslope = 256;
+    static short t_moffset = 170;
+
     if (max_illumination-av_illumination > 0) {
-      mslope = (256-bright)/(max_illumination-av_illumination);
-      moffset = 256-mslope*max_illumination;
+      // we want max illumination to be 255
+      // we want average illumination to equal bright
+
+      // bright = av_illumination*slope/256+offset
+      // 255 = max_illumination*slope/256+offset
+      // 
+      // offset = 255-max_illum*slope/256 = bright-av_illum*slope/256
+      // 255-bright = (max_ill-av_illum)*slope/256
+      // slope = 256*(255-bright)/(max_illum-av_illum)
+
+      mslope = (255*256-bright*256)/(max_illumination-av_illumination);
     } else {
-      mslope = 1;
-      moffset = 170;
+      mslope = 256;
     }
-    tnxBuf = nxBuf;
-    for (i=0; i<gsize; ++i) {
-      *nxBuf = max(0, *nxBuf*mslope+moffset);
-      ++tnxBuf;
+    mslope = min(256*2,mslope);
+    moffset = 256-mslope*max_illumination/256;
+
+    t_mslope = (4*t_mslope+4*mslope)/8;
+    t_moffset = (4*t_moffset+4*moffset)/8;
+
+    // make quick tabular lookup for illumination
+    short ttab[256];
+    for (i=0; i<256; i++) {
+      ttab[i] = max(0,min(255,i*t_mslope/256+t_moffset));
     }
 
     // smooth illumination buffer
     short ff;
     short vv;
-    short index = 0;
+    int index = 0;
 
+    tilBuf = ilBuf;
     for (int y = 0; y<iys; y++) {
       for (int x = 0; x<ixs; x++) {
-
-	vv = 3;
-	ff = 3*nxBuf[index];
+	
+	vv = 2;
+	ff = 2*nxBuf[index];
 	if (x>0) {
 	  ++vv;
 	  ff += nxBuf[index-1];
@@ -696,8 +725,11 @@ public:
 	  ff += nxBuf[index+ixs];
 	}
 	ff/= vv;
+	*tilBuf= ttab[ff];
+	
+	// ilBuf[index] = nxBuf[index];
 
-	ilBuf[index]= ff;
+	++tilBuf;
 	++index;
       }
     }    
@@ -706,7 +738,7 @@ public:
 
   void FillColorBuffer() {
     BYTE r=0xff,g=0xff,b=0xff;
-    short pval = 0; 
+    int pval = 0; 
 
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;

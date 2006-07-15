@@ -15,7 +15,7 @@ class ThermalLocator_Point {
   double longitude;
   double t;
   double w;
-  double logw;
+  //  double logw;
   double d;
   bool valid;
   double weight;
@@ -25,7 +25,10 @@ class ThermalLocator_Point {
 	     double wind_lon, double wind_lat);
   double x;
   double y;
-  
+  int xiw;
+  int yiw;
+  int iweight;
+  int iw;
 };
 
 class ThermalLocator {
@@ -41,7 +44,7 @@ class ThermalLocator {
 	      double *Thermal_Latitude,
 	      double *Thermal_W,
 	      double *Thermal_R);
-  double Estimate(double t_x, double t_y);
+  //  double Estimate(double t_x, double t_y);
 
   double est_x;
   double est_y;

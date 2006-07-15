@@ -53,7 +53,8 @@ typedef TASKSTATS_POINT TaskStats_t[MAXTASKPOINTS +1];
 
 
 void ReplaceWaypoint(int index);
-void InsertWaypoint(int index);
+void InsertWaypoint(int index, bool append=false);
+void SwapWaypoint(int index);
 void RemoveWaypoint(int index);
 void RemoveTaskPoint(int index);
 void FlyDirectTo(int index);

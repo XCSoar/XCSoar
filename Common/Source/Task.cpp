@@ -52,9 +52,30 @@ void FlyDirectTo(int index) {
 }
 
 
+// Swaps waypoint at current index with next one.
+void SwapWaypoint(int index) {
+  if (!CheckDeclaration())
+    return;
+
+  if (index<0) {
+    return;
+  }
+  if (index+1>= MAXTASKPOINTS-1) {
+    return;
+  }
+  if ((Task[index].Index != -1)&&(Task[index+1].Index != -1)) {
+    TASK_POINT tmpPoint;
+    tmpPoint = Task[index];
+    Task[index] = Task[index+1];
+    Task[index+1] = tmpPoint;
+  }
+}
+
+
 // Inserts a waypoint into the task, in the
-// position of the ActiveWaypoint
-void InsertWaypoint(int index) {
+// position of the ActiveWaypoint.  If append=true, insert at end of the
+// task.
+void InsertWaypoint(int index, bool append) {
   if (!CheckDeclaration())
     return;
 
@@ -76,18 +97,30 @@ void InsertWaypoint(int index) {
     
     return;
   }
-  
-  // Shuffle ActiveWaypoint and all later task points
-  // to the right by one position
-  for (i=MAXTASKPOINTS-1; i>ActiveWayPoint; i--) {
-    Task[i].Index = Task[i-1].Index;
-    Task[i].AATTargetOffsetRadius= Task[i-1].AATTargetOffsetRadius;
+
+  int indexInsert;
+  if (append) {
+    for (i=ActiveWayPoint; i<MAXTASKPOINTS-2; i++) {
+      if (Task[i+1].Index<0) {
+	Task[i+1].Index = index;
+	Task[i+1].AATTargetOffsetRadius= 0.0;
+	break;
+      }
+    }  
+  } else {
+    indexInsert = ActiveWayPoint;
+
+    // Shuffle ActiveWaypoint and all later task points
+    // to the right by one position
+    for (i=MAXTASKPOINTS-1; i>indexInsert; i--) {
+      Task[i].Index = Task[i-1].Index;
+      Task[i].AATTargetOffsetRadius= Task[i-1].AATTargetOffsetRadius;
+    }  
+    // Insert new point and update task details
+    Task[indexInsert].Index = index;
+    Task[indexInsert].AATTargetOffsetRadius= 0.0;
   }
   
-  // Insert new point and update task details
-  Task[ActiveWayPoint].Index = index;
-  Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
-
   RefreshTask();
   
 }

@@ -203,6 +203,14 @@ static void OnInserInTaskClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
+static void OnAppendInTaskClicked(WindowControl * Sender){
+  LockFlightData();
+  InsertWaypoint(SelectedWaypoint, true);
+  UnlockFlightData();
+  wf->SetModalResult(mrOK);
+}
+
+
 static void OnRemoveFromTaskClicked(WindowControl * Sender){
   LockFlightData();
   RemoveWaypoint(SelectedWaypoint);
@@ -347,20 +355,31 @@ void dlgWayPointDetailsShowModal(void){
   wImage->SetCaption(TEXT("Blank!"));
   wImage->SetOnPaintNotify(OnImagePaint);
 
-  ((WndButton *)wf->FindByName(TEXT("cmdGoto")))
-    ->SetOnClickNotify(OnGotoClicked);
+  WndButton *wb;
 
-  ((WndButton *)wf->FindByName(TEXT("cmdReplace")))
-    ->SetOnClickNotify(OnReplaceClicked);
+  wb = ((WndButton *)wf->FindByName(TEXT("cmdGoto")));
+  if (wb) 
+    wb->SetOnClickNotify(OnGotoClicked);
 
-  ((WndButton *)wf->FindByName(TEXT("cmdNewHome")))
-    ->SetOnClickNotify(OnNewHomeClicked);
+  wb = ((WndButton *)wf->FindByName(TEXT("cmdReplace")));
+  if (wb)
+    wb->SetOnClickNotify(OnReplaceClicked);
 
-  ((WndButton *)wf->FindByName(TEXT("cmdInserInTask")))
-    ->SetOnClickNotify(OnInserInTaskClicked);
+  wb = ((WndButton *)wf->FindByName(TEXT("cmdNewHome")));
+  if (wb) 
+    wb->SetOnClickNotify(OnNewHomeClicked);
 
-  ((WndButton *)wf->FindByName(TEXT("cmdRemoveFromTask")))
-    ->SetOnClickNotify(OnRemoveFromTaskClicked);
+  wb = ((WndButton *)wf->FindByName(TEXT("cmdInserInTask")));
+  if (wb) 
+    wb->SetOnClickNotify(OnInserInTaskClicked);
+
+  wb = ((WndButton *)wf->FindByName(TEXT("cmdAppendInTask")));
+  if (wb) 
+    wb->SetOnClickNotify(OnAppendInTaskClicked);
+
+  wb = ((WndButton *)wf->FindByName(TEXT("cmdRemoveFromTask")));
+  if (wb) 
+    wb->SetOnClickNotify(OnRemoveFromTaskClicked);
 
   hasimage1 = jpgimage1.Load(wImage->GetDeviceContext() ,path_modis );
   hasimage2 = jpgimage2.Load(wImage->GetDeviceContext() ,path_fname2 );
