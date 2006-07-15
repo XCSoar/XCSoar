@@ -46,6 +46,9 @@ FILE *RasterTerrain::fpTerrain=NULL;
 
 CRITICAL_SECTION  CritSec_TerrainFile;
 
+short* RasterTerrain::TerrainMem = NULL;
+bool RasterTerrain::DirectAccess = false;
+
 
 void RasterTerrain::SetCacheTime() {
   terraincachehits = 1;
@@ -88,6 +91,10 @@ static int _cdecl TerrainCacheCompare(const void *elem1, const void *elem2 ){
 }
 
 void RasterTerrain::OptimizeCash(void){
+
+  if (DirectAccess) {
+    return; // nothing to do!
+  }
 
   qsort(&TerrainCache, MAXTERRAINCACHE,
         sizeof(_TERRAIN_CACHE), TerrainCacheCompare);
@@ -226,16 +233,17 @@ void RasterTerrain::SetTerrainRounding(double xr, double yr) {
     return;
 
   Xrounding = iround(xr/TerrainInfo.StepSize);
+  Yrounding = iround(yr/TerrainInfo.StepSize);
+
   if (Xrounding<1) {
     Xrounding = 1;
   }
   fXrounding = 1.0/(Xrounding*TerrainInfo.StepSize);
-
-  Yrounding = iround(yr/TerrainInfo.StepSize);
   if (Yrounding<1) {
     Yrounding = 1;
   }
   fYrounding = 1.0/(Yrounding*TerrainInfo.StepSize);
+
 }
 
 
@@ -258,22 +266,40 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
       (Longditude > TerrainInfo.Right )) {
     return -1;
   }
-  lx = lround((Longditude-TerrainInfo.Left)*fXrounding)*Xrounding-1;
-  ly = lround((TerrainInfo.Top-Lattitude)*fYrounding)*Yrounding-1;
 
-  if ((lx<0)
-      ||(ly<0)
-      ||(ly>=TerrainInfo.Rows)
-      ||(lx>=TerrainInfo.Columns))
+  double dx = (Longditude-TerrainInfo.Left)*fXrounding;
+  double dy = (TerrainInfo.Top-Lattitude)*fYrounding;
+
+  lx = lround(dx)*Xrounding-1;
+  ly = lround(dy)*Yrounding-1;
+
+  if ((lx<1)
+      ||(ly<1)
+      ||(ly>=TerrainInfo.Rows-1)
+      ||(lx>=TerrainInfo.Columns-1))
     return -1;
 
-  ly *= TerrainInfo.Columns;
-  ly +=  lx;
+  SeekPos = ly*TerrainInfo.Columns+lx;
 
-  SeekPos = ly*2+sizeof(TERRAIN_INFO);
+  if (DirectAccess) {
+    short h1 = TerrainMem[SeekPos];
+    if ((Xrounding==1)&&(Yrounding==1)) {
+      double fx = (dx-0.5)-lx;
+      double fy = (dy-0.5)-ly;
+      short h2, h3, h4;
+      h3 = TerrainMem[SeekPos+TerrainInfo.Columns+1];
+      if (fy<fx) {
+	h2 = TerrainMem[SeekPos+1]; // x
+	return h1+fx*(h2-h1)+fy*(h3-h2);
+      } else {
+	h4 = TerrainMem[SeekPos+TerrainInfo.Columns];
+	return h1+fx*(h3-h4)+fy*(h4-h1);
+      }
+    }
+    return h1;
+  }
 
-  ////// JMW added terrain cache lookup
-
+  SeekPos = SeekPos*2+sizeof(TERRAIN_INFO);
   return LookupTerrainCache(SeekPos);
 }
 
@@ -299,6 +325,21 @@ void RasterTerrain::OpenTerrain(void)
 //  setvbuf(fpTerrain, NULL, 0x00 /*_IOFBF*/, 4096*8);
   dwBytesRead = fread(&TerrainInfo, 1, sizeof(TERRAIN_INFO), fpTerrain);
 
+  unsigned long nsize = TerrainInfo.Rows*TerrainInfo.Columns;
+  if (CheckFreeRam()>nsize*sizeof(short)+5000000) {
+    // make sure there is 5 meg of ram left after allocating space
+    TerrainMem = (short*)malloc(sizeof(short)*nsize);
+  } else {
+    TerrainMem = NULL;
+  }
+  if (!TerrainMem) {
+    DirectAccess = false;
+    TerrainMem = NULL;
+  } else {
+    DirectAccess = true;
+    dwBytesRead = fread(TerrainMem, nsize, sizeof(short), fpTerrain);
+  }
+
   // TODO: sanity check of terrain info, to check validity of file
   // this can be done by checking the bounds compute correctly and
   // that we can seek to the end of the file
@@ -319,6 +360,11 @@ void RasterTerrain::CloseTerrain(void)
     }
   else
     {
+      if (TerrainMem) {
+	free(TerrainMem);
+	DirectAccess = false;
+      }
+
       //CloseHandle(hTerrain);
       fclose(fpTerrain);
       DeleteCriticalSection(&CritSec_TerrainFile);

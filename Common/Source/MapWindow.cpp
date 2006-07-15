@@ -1624,9 +1624,9 @@ void MapWindow::RenderMapWindow(  RECT rc)
       } else {
 	// clear background bitmap
 	SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
-	Rectangle(hDCTemp, 0, 0, MapRectBig.right, MapRectBig.bottom);
+	Rectangle(hDCTemp, rc.left, rc.top, rc.right, rc.bottom);
 	SelectObject(hDCMask, GetStockObject(WHITE_BRUSH));
-	Rectangle(hDCMask, 0, 0, MapRectBig.right+1, MapRectBig.bottom+1);
+	Rectangle(hDCMask, rc.left, rc.top, rc.right+1, rc.bottom+1);
 
 	SetTextColor(hDCMask,
 		     RGB(0x00,0x00,0x00));
@@ -1637,17 +1637,17 @@ void MapWindow::RenderMapWindow(  RECT rc)
 	DrawTrail(hDCTemp, Orig_Aircraft, rc);
 
 	// make mask
-	BitBlt(hDCMask, 0, 0, MapRectBig.right, MapRectBig.bottom,
-	       hDCTemp, 0, 0, SRCCOPY);
+	BitBlt(hDCMask, rc.left, rc.top, rc.right, rc.bottom,
+	       hDCTemp, rc.left, rc.top, SRCCOPY);
 
-	BitBlt(hdcDrawWindowBg, 0, 0, MapRectBig.right, MapRectBig.bottom,
-	       hDCTemp, 0, 0, SRCINVERT);
-	BitBlt(hdcDrawWindowBg, 0, 0, MapRectBig.right, MapRectBig.bottom,
+	BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+	       hDCTemp, rc.left, rc.top, SRCINVERT);
+	BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
 	       hDCMask, 0, 0, SRCAND);
-	BitBlt(hdcDrawWindowBg, 0, 0, MapRectBig.right-1, MapRectBig.bottom-1,
-	       hDCMask, 1, 1, SRCAND);
-	BitBlt(hdcDrawWindowBg, 0, 0, MapRectBig.right, MapRectBig.bottom,
-	       hDCTemp, 0, 0, SRCINVERT);
+	BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right-1, rc.bottom-1,
+	       hDCMask, rc.left+1, rc.top+1, SRCAND);
+	BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+	       hDCTemp, rc.left, rc.top, SRCINVERT);
       }
     }
 
@@ -3621,6 +3621,8 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
   COLORREF whitecolor = RGB(0xff,0xff,0xff);
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
 
+  SetBkMode(hDCTemp, TRANSPARENT);
+
   SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
   SetBkColor(hDCTemp, whitecolor);
 
@@ -3636,14 +3638,14 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
       {
         // this color is used as the black bit
         SetTextColor(hDCTemp,
-        Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
+		     Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
         // get brush, can be solid or a 1bpp bitmap
         SelectObject(hDCTemp,
-        hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
+		     hAirspaceBrushes[iAirspaceBrush[AirspaceCircle[i].Type]]);
         Circle(hDCTemp,
-        AirspaceCircle[i].Screen.x ,
-        AirspaceCircle[i].Screen.y ,
-        AirspaceCircle[i].ScreenR ,rc);
+	       AirspaceCircle[i].Screen.x ,
+	       AirspaceCircle[i].Screen.y ,
+	       AirspaceCircle[i].ScreenR ,rc);
       }
     }
   }
@@ -3670,8 +3672,8 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
   {
     if (AirspaceCircle[i].Visible) {
       {
-	       SelectObject(hDCTemp, hAirspacePens[AirspaceCircle[i].Type]);
-         Circle(hDCTemp,
+	SelectObject(hDCTemp, hAirspacePens[AirspaceCircle[i].Type]);
+	Circle(hDCTemp,
 	       AirspaceCircle[i].Screen.x ,
 	       AirspaceCircle[i].Screen.y ,
 	       AirspaceCircle[i].ScreenR ,rc);
@@ -3695,10 +3697,10 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
   #if (WINDOWSPC<1)
   TransparentImage(hdcDrawWindowBg,
-		   rc.left,rc.top,
+		   rc.left, rc.top,
 		   rc.right-rc.left,rc.bottom-rc.top,
 		   hDCTemp,
-		   rc.left,rc.top,
+		   rc.left, rc.top,
 		   rc.right-rc.left,rc.bottom-rc.top,
 		   whitecolor
 		   );
@@ -4357,9 +4359,6 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 {
   unsigned int i;
 
-  // compute lat lon extents of visible screen
-  screenbounds_latlon = GetRectBounds(rc);
-
   Orig_Screen = Orig;
 
   if (!EnablePan) {
@@ -4405,6 +4404,9 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
   LatLon2Screen(DrawInfo.Longitude,
 		DrawInfo.Latitude,
 		*Orig_Aircraft);
+
+  // compute lat lon extents of visible screen
+  screenbounds_latlon = GetRectBounds(rc);
 
   // get screen coordinates for all task waypoints
 

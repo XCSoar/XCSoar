@@ -297,11 +297,11 @@
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpAutoForceFinalGlide" Caption="Auto Force Final Glide"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=200 Font=2>
+  <WndProperty Name="prpAutoForceFinalGlide" Caption="Auto Force Final Glide"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpEnableNavBaroAltitude" Caption="Nav by baro altitude"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=200 Font=2>
+  <WndProperty Name="prpEnableNavBaroAltitude" Caption="Nav by baro altitude"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
@@ -361,11 +361,11 @@
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
-  <WndButton Name="cmdVario" Caption="Vario config" X=5 Y=-1 Width=80  Height=28 Font=2 Tag=4 OnClickNotify="OnVarioClicked" />
-
   <WndProperty Name="prpSetSystemTimeFromGPS" Caption="Use GPS time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
     <DataField name="" DataType="boolean"/>
   </WndProperty>
+
+  <WndButton Name="cmdVario" Caption="Vega vario config" X=50 Y=-1 Width=100  Height=28 Font=2 Tag=4 OnClickNotify="OnVarioClicked" />
 
   </WndFrame>
 

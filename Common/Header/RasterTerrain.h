@@ -55,6 +55,8 @@ public:
 
   void OptimizeCash(void);
 
+  static short *TerrainMem;
+  static bool DirectAccess;
   static void OpenTerrain();
   static void CloseTerrain();
   static TERRAIN_INFO TerrainInfo;

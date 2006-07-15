@@ -184,15 +184,14 @@ Appearance_t Appearance = {
 
 extern TCHAR XCSoar_Version[256] = TEXT("");
 
-HWND hWnd1, hWnd2, hWnd3;
 
-HINSTANCE                       hInst;                                  // The current instance
-HWND                                    hWndCB;                                 // The command bar handle
-HWND                                    hWndMainWindow; // Main Windows
-HWND                                    hWndMapWindow;  // MapWindow
+HINSTANCE hInst; // The current instance
+HWND hWndCB; // The command bar handle
+HWND hWndMainWindow; // Main Windows
+HWND hWndMapWindow;  // MapWindow
 
 #ifndef GNAV
-HWND          hWndMenuButton = NULL;
+HWND hWndMenuButton = NULL;
 #endif
 
 

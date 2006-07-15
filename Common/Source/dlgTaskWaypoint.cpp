@@ -243,6 +243,20 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 
+static void OnMoveAfterClicked(WindowControl * Sender){
+  LockFlightData();
+  SwapWaypoint(twItemIndex);
+  UnlockFlightData();
+  wf->SetModalResult(mrOK);
+}
+
+static void OnMoveBeforeClicked(WindowControl * Sender){
+  LockFlightData();
+  SwapWaypoint(twItemIndex-1);
+  UnlockFlightData();
+  wf->SetModalResult(mrOK);
+}
+
 static void OnDetailsClicked(WindowControl * Sender){
   SelectedWaypoint = Task[twItemIndex].Index;
   PopupWaypointDetails();
@@ -266,6 +280,8 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnDetailsClicked),
   DeclearCallBackEntry(OnRemoveClicked),
   DeclearCallBackEntry(OnCloseClicked),
+  DeclearCallBackEntry(OnMoveAfterClicked),
+  DeclearCallBackEntry(OnMoveBeforeClicked),
   DeclearCallBackEntry(NULL)
 };
 

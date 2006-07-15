@@ -268,4 +268,6 @@ double StaticPressureToAltitude(double ps);
 double AirDensity(double altitude);
 double AirDensityRatio(double altitude);
 
+long CheckFreeRam(void);
+
 #endif

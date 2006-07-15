@@ -387,13 +387,13 @@ void CSTScreenBuffer::Smooth2()
   */
 
 
-  unsigned short kk[5][5] = {{0,1,2,1,0},
-			     {1,2,3,2,1},
-			     {2,3,4,3,2},
-			     {1,2,3,2,1},
-			     {0,1,2,1,0}};
+  static unsigned short kk[5][5] = {{0,1,2,1,0},
+				    {1,2,3,2,1},
+				    {2,3,4,3,2},
+				    {1,2,3,2,1},
+				    {0,1,2,1,0}};
 
-  unsigned int kdelta[5][5];
+  static unsigned int kdelta[5][5];
 
   /*
   unsigned short kk[3][3] = {{1,2,1},
@@ -403,37 +403,43 @@ void CSTScreenBuffer::Smooth2()
 
   short ix, iy;
   short iix, iiy;
-  int i, ik, i0;
+  int ik, i0;
 
 #define KSIZE 5
 #define KOFFS 2
 
   BGRColor *col;
 
-  for (iiy= 0; iiy<KSIZE; iiy++) {
-    for (iix= 0; iix<KSIZE; iix++) {
-      ix = iix-KOFFS;
-      iy = iiy-KOFFS;
-      kdelta[iiy][iix] = m_nCorrectedWidth*iy+ix;
+  static bool initialised = false;
+
+  if (!initialised) {
+    for (iiy= 0; iiy<KSIZE; iiy++) {
+      for (iix= 0; iix<KSIZE; iix++) {
+	ix = iix-KOFFS;
+	iy = iiy-KOFFS;
+	kdelta[iiy][iix] = m_nCorrectedWidth*iy+ix;
+      }
     }
+    initialised = true;
   }
 
-  for (iy = 0; iy< m_nHeight; iy++) {
-    for (ix = 0; ix< m_nCorrectedWidth; ix++) {
+  i0 = 0;
+  int i;
+  for (iy = 0; iy< m_nHeight; ++iy) {
+    for (ix = 0; ix< m_nCorrectedWidth; ++ix) {
 
       r = 0;
       g = 0;
       b = 0;
-
       ic = 0;
 
-      i0 = m_nCorrectedWidth*iy+ix;
+      for (iiy= -KOFFS; iiy<=KOFFS; ++iiy) {
+	for (iix= -KOFFS; iix<=KOFFS; ++iix) {
 
-      for (iiy= -KOFFS; iiy<=KOFFS; iiy++) {
-	for (iix= -KOFFS; iix<=KOFFS; iix++) {
-
-	  if ((iix+ix>0)&&(iix+ix< m_nCorrectedWidth)&&
-	      (iiy+iy>0)&&(iiy+iy< m_nHeight)) {
+	  short dx = iix+ix;
+	  short dy = iiy+iy;
+	  if ((dx>0)&&(dx< m_nCorrectedWidth)&&
+	      (dy>0)&&(dy< m_nHeight)) {
 
 	    ik = kk[iiy+KOFFS][iix+KOFFS];
 
@@ -447,19 +453,21 @@ void CSTScreenBuffer::Smooth2()
 	  }
 	}
       }
-
       i = m_nCorrectedWidth*(m_nHeight-iy-1)+ix;
+
       m_pBufferTmp[i].m_R = (r/ic);
       m_pBufferTmp[i].m_G = (g/ic);
       m_pBufferTmp[i].m_B = (b/ic);
 
+      i0++;
     }
   }
 
   // copy it back to main buffer
-//  for (i=0; i<m_nCorrectedWidth*m_nHeight; i++) {
-//    m_pBuffer[i] = m_pBufferTmp[i];
-//  }
+  //  for (i=0; i<m_nCorrectedWidth*m_nHeight; i++) {
+  //    m_pBuffer[i] = m_pBufferTmp[i];
+  //  }
+
   memcpy((char*)m_pBuffer, (char*)m_pBufferTmp,
 	 m_nCorrectedWidth*m_nHeight*sizeof(BGRColor));
 
@@ -473,9 +481,9 @@ void CSTScreenBuffer::Quantise()
   BGRColor* mpbtop = m_pBuffer+m_nCorrectedWidth*m_nHeight;
 
   for (mpb= m_pBuffer; mpb<mpbtop; mpb++) {
-    mpb->m_R |= (0x03);
-    mpb->m_G |= (0x03);
-    mpb->m_B |= (0x03);
+    mpb->m_R |= (0x07);
+    mpb->m_G |= (0x07);
+    mpb->m_B |= (0x07);
   }
 
 }

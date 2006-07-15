@@ -3613,3 +3613,16 @@ double AirDensityRatio(double altitude) {
   return rho_rat;
 }
 
+
+long CheckFreeRam(void) {
+  MEMORYSTATUS    memInfo;
+  // Program memory
+  memInfo.dwLength = sizeof(memInfo);
+  GlobalMemoryStatus(&memInfo);
+
+  //	   memInfo.dwTotalPhys,
+  //	   memInfo.dwAvailPhys,
+  //	   memInfo.dwTotalPhys- memInfo.dwAvailPhys);
+
+  return memInfo.dwAvailPhys;
+}
