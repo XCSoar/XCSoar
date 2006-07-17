@@ -126,7 +126,7 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
     //    bearing = -90+i*180/NUMTERRAINSWEEPS+Basic->TrackBearing;
     bearing = i*360/NUMTERRAINSWEEPS;
-    LockFlightData();
+    //    LockFlightData();
     distance = FinalGlideThroughTerrain(bearing, 
                                         Basic, 
                                         Calculated, &lat, &lon,
@@ -139,7 +139,7 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
     MapWindow::GlideFootPrint[i].x = lon;
     MapWindow::GlideFootPrint[i].y = lat;
-    UnlockFlightData();
+    //    UnlockFlightData();
   }
 }
 

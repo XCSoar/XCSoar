@@ -223,6 +223,7 @@ class MapWindow {
   static double DisplayAngle;
   static double DisplayAircraftAngle;
   static double DrawScale;
+  static double InvDrawScale;
   static int dTDisplay;
   
  public:
