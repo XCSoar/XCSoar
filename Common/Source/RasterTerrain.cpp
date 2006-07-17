@@ -270,37 +270,58 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
   double dx = (Longditude-TerrainInfo.Left)*fXrounding;
   double dy = (TerrainInfo.Top-Lattitude)*fYrounding;
 
-  lx = lround(dx)*Xrounding-1;
-  ly = lround(dy)*Yrounding-1;
+  bool subsample = (DirectAccess)&&(Xrounding==1)&&(Yrounding==1);
 
-  if ((lx<1)
-      ||(ly<1)
-      ||(ly>=TerrainInfo.Rows-1)
-      ||(lx>=TerrainInfo.Columns-1))
-    return -1;
+  if (subsample) {
+    lx = (long)(dx*256);
+    ly = (long)(dy*256);
+    int ix = lx % 256;
+    int iy = ly % 256;
+    lx/= 256;
+    ly/= 256;
 
-  SeekPos = ly*TerrainInfo.Columns+lx;
+    if ((lx<1)
+	||(ly<1)
+	||(ly>=TerrainInfo.Rows-2)
+	||(lx>=TerrainInfo.Columns-2))
+      return -1;
 
-  if (DirectAccess) {
-    short h1 = TerrainMem[SeekPos];
-    if ((Xrounding==1)&&(Yrounding==1)) {
-      double fx = (dx-0.5)-lx;
-      double fy = (dy-0.5)-ly;
-      short h2, h3, h4;
-      h3 = TerrainMem[SeekPos+TerrainInfo.Columns+1];
-      if (fy<fx) {
-	h2 = TerrainMem[SeekPos+1]; // x
-	return h1+fx*(h2-h1)+fy*(h3-h2);
-      } else {
-	h4 = TerrainMem[SeekPos+TerrainInfo.Columns];
-	return h1+fx*(h3-h4)+fy*(h4-h1);
-      }
+    SeekPos = ly*TerrainInfo.Columns+lx;
+
+    // perform piecewise linear interpolation
+    int h1 = TerrainMem[SeekPos]; // (x,y)
+    int h2, h3, h4;
+    h3 = TerrainMem[SeekPos+TerrainInfo.Columns+1]; // (x+1, y+1)
+    if (iy<ix) {
+      // lower triangle
+      h2 = TerrainMem[SeekPos+1]; // (x+1,y)
+      //	return iround(h1+fx*(h2-h1)+fy*(h3-h2));
+      return h1+((ix*(h2-h1)+iy*(h3-h2))/256);
+    } else {
+      // upper triangle
+      h4 = TerrainMem[SeekPos+TerrainInfo.Columns]; // (x,y+1)
+      //	return iround(h1+fx*(h3-h4)+fy*(h4-h1));
+      return h1+((ix*(h3-h4)+iy*(h4-h1))/256);
     }
-    return h1;
-  }
 
-  SeekPos = SeekPos*2+sizeof(TERRAIN_INFO);
-  return LookupTerrainCache(SeekPos);
+  } else {
+    lx = lround(dx)*Xrounding-1;
+    ly = lround(dy)*Yrounding-1;
+
+    if ((lx<1)
+	||(ly<1)
+	||(ly>=TerrainInfo.Rows-1)
+	||(lx>=TerrainInfo.Columns-1))
+      return -1;
+
+    SeekPos = ly*TerrainInfo.Columns+lx;
+    if (DirectAccess) {
+      return TerrainMem[SeekPos];
+    } else {
+      SeekPos = SeekPos*2+sizeof(TERRAIN_INFO);
+      return LookupTerrainCache(SeekPos);
+    }
+  }
 }
 
 
@@ -325,8 +346,8 @@ void RasterTerrain::OpenTerrain(void)
 //  setvbuf(fpTerrain, NULL, 0x00 /*_IOFBF*/, 4096*8);
   dwBytesRead = fread(&TerrainInfo, 1, sizeof(TERRAIN_INFO), fpTerrain);
 
-  unsigned long nsize = TerrainInfo.Rows*TerrainInfo.Columns;
-  if (CheckFreeRam()>nsize*sizeof(short)+5000000) {
+  long nsize = TerrainInfo.Rows*TerrainInfo.Columns;
+  if (CheckFreeRam()>(long)(nsize*sizeof(short)+5000000)) {
     // make sure there is 5 meg of ram left after allocating space
     TerrainMem = (short*)malloc(sizeof(short)*nsize);
   } else {

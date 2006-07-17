@@ -384,47 +384,46 @@ void CSTScreenBuffer::Smooth2()
 			     {1,3,6,3,1},
 			     {0,2,3,2,0},
 			     {0,0,1,0,0}};
-  */
-
-
-  static unsigned short kk[5][5] = {{0,1,2,1,0},
-				    {1,2,3,2,1},
-				    {2,3,4,3,2},
-				    {1,2,3,2,1},
-				    {0,1,2,1,0}};
-
-  static unsigned int kdelta[5][5];
-
-  /*
   unsigned short kk[3][3] = {{1,2,1},
 			     {2,3,2},
 			     {1,2,1}};
   */
 
-  short ix, iy;
-  short iix, iiy;
-  int ik, i0;
-
+  static unsigned short kk[25] =  {0,1,2,1,0,
+				   1,2,3,2,1,
+				   2,3,4,3,2,
+				   1,2,3,2,1,
+				   0,1,2,1,0};
+  static unsigned int kdelta[25];
 #define KSIZE 5
 #define KOFFS 2
+#define KSIZE2 25
+
+  short ix, iy;
+  short iix, iiy;
+  int ik;
 
   BGRColor *col;
 
   static bool initialised = false;
+
+  int i=0;
 
   if (!initialised) {
     for (iiy= 0; iiy<KSIZE; iiy++) {
       for (iix= 0; iix<KSIZE; iix++) {
 	ix = iix-KOFFS;
 	iy = iiy-KOFFS;
-	kdelta[iiy][iix] = m_nCorrectedWidth*iy+ix;
+	kdelta[i] = m_nCorrectedWidth*iy+ix;
+	i++;
       }
     }
     initialised = true;
   }
 
-  i0 = 0;
-  int i;
+  BGRColor* mpb_out = m_pBufferTmp;
+  BGRColor* mpb_in = m_pBuffer;
+
   for (iy = 0; iy< m_nHeight; ++iy) {
     for (ix = 0; ix< m_nCorrectedWidth; ++ix) {
 
@@ -433,6 +432,7 @@ void CSTScreenBuffer::Smooth2()
       b = 0;
       ic = 0;
 
+      i=0;
       for (iiy= -KOFFS; iiy<=KOFFS; ++iiy) {
 	for (iix= -KOFFS; iix<=KOFFS; ++iix) {
 
@@ -441,33 +441,29 @@ void CSTScreenBuffer::Smooth2()
 	  if ((dx>0)&&(dx< m_nCorrectedWidth)&&
 	      (dy>0)&&(dy< m_nHeight)) {
 
-	    ik = kk[iiy+KOFFS][iix+KOFFS];
+	    ik = kk[i];
 
 	    if (ik) {
-	      col = &m_pBuffer[kdelta[iiy+KOFFS][iix+KOFFS]+i0];
+	      col = mpb_in+kdelta[i];
 	      r += ik*col->m_R;
 	      g += ik*col->m_G;
 	      b += ik*col->m_B;
 	      ic += ik;
 	    }
 	  }
+	  i++;
 	}
       }
-      i = m_nCorrectedWidth*(m_nHeight-iy-1)+ix;
 
-      m_pBufferTmp[i].m_R = (r/ic);
-      m_pBufferTmp[i].m_G = (g/ic);
-      m_pBufferTmp[i].m_B = (b/ic);
-
-      i0++;
+      mpb_out->m_R = r/ic;
+      mpb_out->m_G = g/ic;
+      mpb_out->m_B = b/ic;
+      mpb_out++;
+      mpb_in++;
     }
   }
 
   // copy it back to main buffer
-  //  for (i=0; i<m_nCorrectedWidth*m_nHeight; i++) {
-  //    m_pBuffer[i] = m_pBufferTmp[i];
-  //  }
-
   memcpy((char*)m_pBuffer, (char*)m_pBufferTmp,
 	 m_nCorrectedWidth*m_nHeight*sizeof(BGRColor));
 
@@ -489,3 +485,109 @@ void CSTScreenBuffer::Quantise()
 }
 
 // 1 + 2 + 4 = 7
+
+
+void CSTScreenBuffer::HorizontalBlur(int boxw) {
+
+  int muli = (boxw*2+1);
+  int mul;
+  BGRColor* src = m_pBuffer;
+  BGRColor* dst = m_pBufferTmp;
+  BGRColor *c;
+
+  for (int y=0;y< m_nHeight;y++)
+    {
+      int tot_r=0;
+      int tot_g=0;
+      int tot_b=0;
+      for (int x=0;x<boxw;x++) {
+	tot_r+= src[x].m_R;
+	tot_g+= src[x].m_G;
+	tot_b+= src[x].m_B;
+      }
+      for (x=0;x< m_nCorrectedWidth; x++)
+	{
+	  mul = muli;
+	  if (x>boxw) {
+	    c = src-boxw-1;
+	    tot_r-= c->m_R;
+	    tot_g-= c->m_G;
+	    tot_b-= c->m_B;
+	  }  else {
+	    mul -= (boxw-x);
+	  }
+	  if (x+boxw< m_nCorrectedWidth) {
+	    c = src+boxw;
+	    tot_r+= c->m_R;
+	    tot_g+= c->m_G;
+	    tot_b+= c->m_B;
+	  } else {
+	    mul -= (boxw-m_nCorrectedWidth+x+1);
+	  }
+	  dst->m_R=(tot_r/mul);
+	  dst->m_G=(tot_g/mul);
+	  dst->m_B=(tot_b/mul);
+
+	  src++;
+	  dst++;
+	}
+    }
+
+  // copy it back to main buffer
+  memcpy((char*)m_pBuffer, (char*)m_pBufferTmp,
+	 m_nCorrectedWidth*m_nHeight*sizeof(BGRColor));
+
+}
+
+void CSTScreenBuffer::VerticalBlur(int boxh) {
+
+  int mul;
+  BGRColor* src = m_pBuffer;
+  BGRColor* dst = m_pBufferTmp;
+  BGRColor *c;
+
+  int i;
+  int muli = (boxh*2+1);
+  int iboxh = m_nCorrectedWidth*boxh;
+  for (int x=0;x< m_nCorrectedWidth; x++)
+    {
+      int tot_r=0;
+      int tot_g=0;
+      int tot_b=0;
+      for (int y=0;y<boxh;y++) {
+	i = x+y*m_nCorrectedWidth;
+	tot_r+= src[i].m_R;
+	tot_g+= src[i].m_G;
+	tot_b+= src[i].m_B;
+      }
+      for (y=0;y< m_nHeight; y++)
+	{
+	  mul = muli;
+	  i = x+y*m_nCorrectedWidth;
+	  if (y>boxh) {
+	    c = src+i-iboxh-m_nCorrectedWidth;
+	    tot_r-= c->m_R;
+	    tot_g-= c->m_G;
+	    tot_b-= c->m_B;
+	  }  else {
+	    mul -= (boxh-y);
+	  }
+	  if (y+boxh< m_nHeight) {
+	    c = src+i+iboxh;
+	    tot_r+= c->m_R;
+	    tot_g+= c->m_G;
+	    tot_b+= c->m_B;
+	  } else {
+	    mul -= (boxh-m_nHeight+y+1);
+	  }
+	  dst[i].m_R=(tot_r)/mul;
+	  dst[i].m_G=(tot_g)/mul;
+	  dst[i].m_B=(tot_b)/mul;
+	}
+    }
+
+  // copy it back to main buffer
+  memcpy((char*)m_pBuffer, (char*)m_pBufferTmp,
+	 m_nCorrectedWidth*m_nHeight*sizeof(BGRColor));
+
+}

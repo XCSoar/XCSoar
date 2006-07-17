@@ -1260,7 +1260,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #ifdef GNAV
   // HEAD 4.7 (series) is NOT necessarily alpha, as it is in production
   // use in Altair, and there are already several stable versions of 4.7 out.
-  wcscat(XCSoar_Version, TEXT("4.7.6 alpha"));
+  wcscat(XCSoar_Version, TEXT("4.7.6 Beta"));
 #else
   wcscat(XCSoar_Version, TEXT("Alpha "));
   wcscat(XCSoar_Version, TEXT(__DATE__));

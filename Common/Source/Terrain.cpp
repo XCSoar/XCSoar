@@ -421,6 +421,7 @@ public:
 
   int ixs, iys; // screen dimensions in coarse pixels
   int dtquant;
+  int epx; // step size used for slope calculations
 
   CSTScreenBuffer *sbuf;
 
@@ -447,11 +448,11 @@ public:
     Y1 = Y0+dtquant*iys;
     short* myhbuf = hBuf;
 
-    pixelsize = (float)(MapWindow::MapScale/MapWindow::GetMapResolutionFactor()
-			*dtquant);
-
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
+
+    DWORD tm, tmstart;
+    tmstart = GetTickCount();
 
     LockTerrainDataGraphics();
 
@@ -500,9 +501,24 @@ public:
     MapWindow::Screen2LatLon(X, Y);
     Yrounding = (float)fabs(Y-ymiddle);
 
-    // ok, ready to fill the buffer now.
+    // set resolution
 
     terrain_dem_graphics.SetTerrainRounding(Xrounding,Yrounding);
+
+    pixelsize = (float)(MapWindow::MapScale/MapWindow::GetMapResolutionFactor()
+			*dtquant);
+
+    epx = max(terrain_dem_graphics.GetEffectivePixelSize(pixelsize)/2,1);
+    epx = min(min(ixs,iys)/2, epx);
+    if (!RasterTerrain::DirectAccess) {
+      epx = min(100,epx);
+    }
+
+    tm = GetTickCount();
+    tm = tm-tmstart;
+    tmstart = GetTickCount();
+
+    // fill the buffer
 
     for (int y = Y0; y<Y1; y+= dtquant) {
       for (int x = X0; x<X1; x+= dtquant) {
@@ -514,29 +530,34 @@ public:
       }
     }
 
+    tm = GetTickCount();
+    tm = tm-tmstart;
+    tmstart = GetTickCount();
+
     UnlockTerrainDataGraphics();
 
   }
 
   void Slope() {
     int mag;
-    int pval=0;
 
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
 
-    int epx = terrain_dem_graphics.GetEffectivePixelSize(pixelsize);
-    if (RasterTerrain::DirectAccess) {
-      epx = min(100,epx);
-    } else {
-      epx = min(100,epx);
-    }
     int ixsepx = ixs*epx;
 
     int tss = (int)(epx*pixelsize*1000);
 
-    for (int y = 0; y<iys; ++y) {
-      for (int x = 0; x<ixs; ++x) {
+    int ixsright = ixs-epx;
+    int iysbottom = iys-epx;
+
+    short *tnxBuf = nxBuf;
+    short *tnyBuf = nyBuf;
+    short *tnzBuf = nzBuf;
+    short *thBuf = hBuf;
+
+    for (int y = 0; y<iys; y++) {
+      for (int x = 0; x<ixs; x++) {
 
 	// JMW: if zoomed right in (e.g. one unit
 	// is larger than terrain grid), then increase the
@@ -546,83 +567,78 @@ public:
 	// This is why epx is used instead of 1 previously.
 	// for large zoom levels, epx=1
 
-	int p1[3], p2[3], p3[3];
-	p1[0]= 0;
-	p1[1]= 0;
-	p1[2]= hBuf[pval];
-	p2[0]= 0;
-	p2[1]= 0;
-	p2[2]= 0;
-	p3[0]= 0;
-	p3[1]= 0;
-	p3[2]= 0;
-	bool rev=false;
-	if ((epx<ixs)&&(epx<iys)&&(epx<10)) {
-	  if (x<epx) {
-	    p2[0]= tss;
-	    p2[2]= hBuf[pval+epx]-p1[2];
-	  } else if (x>=ixs-epx) {
-	    p2[0]= -tss;
-	    p2[2]= hBuf[pval-epx]-p1[2];
-	    rev= !rev;
-	  } else {
-	    p2[0] = tss;
-	    p2[2]= hBuf[pval+epx]-p1[2];
-	  }
-	  if (y<epx) {
-	    p3[1]= tss;
-	    p3[2]= hBuf[pval+ixsepx]-p1[2];
-	  } else if (y>=iys-epx) {
-	    p3[1]= -tss;
-	    p3[2]= hBuf[pval-ixsepx]-p1[2];
-	    rev= !rev;
-	  } else {
-	    p3[1]= tss;
-	    p3[2]= hBuf[pval+ixsepx]-p1[2];
-	  }
-
-	  p1[2]= 0;
-
-	  long dp21[3];
-	  long dp31[3];
-
-	  dp21[0]= p2[0]-p1[0];
-	  dp21[1]= p2[1]-p1[1];
-	  dp21[2]= (p2[2]-p1[2])*2; // magnify slope
-
-	  dp31[0]= p3[0]-p1[0];
-	  dp31[1]= p3[1]-p1[1];
-	  dp31[2]= (p3[2]-p1[2])*2; // magnify slope
-
-	  long dd[3];
-	  dd[0] = (dp21[1]*dp31[2]-dp21[2]*dp31[1])/tss;
-	  dd[1] = (dp21[2]*dp31[0]-dp21[0]*dp31[2])/tss;
-	  dd[2] = (dp21[0]*dp31[1]-dp21[1]*dp31[0])/tss;
-	  mag = isqrt4(dd[0]*dd[0]+dd[1]*dd[1]+dd[2]*dd[2]);
-	  if (mag>0) {
-	    dd[0]= 255*dd[0]/mag;
-	    dd[1]= 255*dd[1]/mag;
-	    dd[2]= 255*dd[2]/mag;
-	    if (dd[2]<0) {
-	      dd[0]= -dd[0];
-	      dd[1]= -dd[1];
-	      dd[2]= -dd[2];
-	    }
-	  } else {
-	    dd[0]= 0;
-	    dd[1]= 0;
-	    dd[2]= 255;
-	  }
-	  nxBuf[pval] = (short)dd[0];
-	  nyBuf[pval] = (short)dd[1];
-	  nzBuf[pval] = (short)dd[2];
+	int p20, p22, p31, p32;
+	if (x>=ixsright) {
+	  int itss = (ixs-x)-1;
+	  p20= tss*itss/epx;
+	  p22= thBuf[itss];
 	} else {
-	  nxBuf[pval] = 0;
-	  nyBuf[pval] = 0;
-	  nzBuf[pval] = 255;
+	  p20= tss;
+	  p22= thBuf[epx];
+	}
+	if (x<epx) {
+	  int itss = x;
+	  p20+= tss*itss/epx;
+	  p22-= thBuf[-itss];
+	} else {
+	  p20+= tss;
+	  p22-= thBuf[-epx];
 	}
 
-	++pval;
+	if (y>=iysbottom) {
+	  int itss = (iys-y)-1;
+	  p31= tss*itss/epx;
+	  p32= thBuf[itss*ixs];
+	} else {
+	  p31= tss;
+	  p32= thBuf[ixsepx];
+	}
+	if (y<epx) {
+	  int itss = y;
+	  p31+= tss*itss/epx;
+       	  p32-= thBuf[-itss*ixs];
+	} else {
+	  p31+= tss;
+	  p32-= thBuf[-ixsepx];
+	}
+
+	int dp210, dp212;
+	int dp311, dp312;
+
+	dp210= p20;
+	dp212= p22*2; // magnify slope
+
+	dp311= p31;
+	dp312= p32*2; // magnify slope
+
+	int dd0, dd1, dd2;
+	dd0 = (-dp212*dp311)/tss;
+	dd1 = (-dp210*dp312)/tss;
+	dd2 = (dp210*dp311)/tss;
+	mag = isqrt4(dd0*dd0+dd1*dd1+dd2*dd2);
+	if (mag>0) {
+	  dd0= (dd0<<8)/mag;
+	  dd1= (dd1<<8)/mag;
+	  dd2= (dd2<<8)/mag;
+	  if (dd2<0) {
+	    dd0= -dd0;
+	    dd1= -dd1;
+	    dd2= -dd2;
+	  }
+	} else {
+	  dd0= 0;
+	  dd1= 0;
+	  dd2= 255;
+	}
+	*tnxBuf = (short)dd0;
+	*tnyBuf = (short)dd1;
+	*tnzBuf = (short)dd2;
+
+	thBuf++;
+	tnxBuf++;
+	tnyBuf++;
+	tnzBuf++;
+
       }
     }
   }
@@ -644,7 +660,8 @@ public:
     short max_illumination = 0;
     short illumination;
     int av_illumination = 0;
-    for (int i=0; i<gsize; ++i) {
+    int i;
+    for (i=0; i<gsize; ++i) {
 
       mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256; // 8
       illumination = max(0,min(255,(short)mag));
@@ -692,26 +709,37 @@ public:
     t_moffset = (4*t_moffset+4*moffset)/8;
 
     // make quick tabular lookup for illumination
-    short ttab[256];
+    short ttab[257];
     for (i=0; i<256; i++) {
       ttab[i] = max(0,min(255,i*t_mslope/256+t_moffset));
     }
+    ttab[256]=ttab[255];
 
-    // smooth illumination buffer
-    short ff;
-    short vv;
+    // smooth shading buffer
+
+#ifndef NEWSMOOTH
+    tilBuf = ilBuf;
+    tnxBuf = nxBuf;
+    for (i=0; i<gsize; ++i) {
+      *tilBuf = ttab[*tnxBuf];
+      tilBuf++;
+      tnxBuf++;
+    }
+#else
     int index = 0;
-
     tilBuf = ilBuf;
     for (int y = 0; y<iys; y++) {
       for (int x = 0; x<ixs; x++) {
 
-	vv = 2;
-	ff = 2*nxBuf[index];
-	if (x>0) {
+	  short ff;
+	  short vv;
+
+	  vv = 3;
+	  ff = 3*nxBuf[index];
+	  if (x>0) {
 	  ++vv;
 	  ff += nxBuf[index-1];
-	}
+	  }
 	if (x<ixs-1) {
 	  ++vv;
 	  ff += nxBuf[index+1];
@@ -725,14 +753,16 @@ public:
 	  ff += nxBuf[index+ixs];
 	}
 	ff/= vv;
-	*tilBuf= ttab[ff];
 
-	// ilBuf[index] = nxBuf[index];
 
-	++tilBuf;
-	++index;
+	// *tilBuf= ttab[min(255,max(0,ff))];
+	ilBuf[index] = ttab[nxBuf[index]];
+
+	//	++tilBuf;
+	index++;
       }
     }
+#endif
 
   }
 
@@ -745,7 +775,7 @@ public:
 
     int ixsOVS = ixs*OVS;
     int iysOVS = iys*OVS;
-    for (int y = 0; y<iysOVS; y+= OVS) {
+    for (int y = iysOVS-OVS; y>=0; y-= OVS) {
       for (int x = 0; x<ixsOVS; x+= OVS) {
         if (hBuf[pval]<=0) {
           // water color
@@ -758,8 +788,8 @@ public:
         }
 	int ix1 = x+OVS;
 	int iy1 = y+OVS;
-        for (int iy=y; iy< iy1; ++iy) {
-          for (int ix=x; ix< ix1; ++ix) {
+        for (int iy=y; iy< iy1; iy++) {
+          for (int ix=x; ix< ix1; ix++) {
             sbuf->SetPoint(ix, iy, r, g, b);
           }
         }
@@ -774,9 +804,25 @@ public:
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
 
-    sbuf->Smooth2();
+    DWORD tm, tmstart;
+
+    tmstart = GetTickCount();
+
+    //    sbuf->Smooth2(); // 334 ms -> 283 ms
+    sbuf->HorizontalBlur(3); // now 58 ms!
+    sbuf->VerticalBlur(3);
+
+    tm = GetTickCount();
+    tm = tm-tmstart;
+    tmstart = GetTickCount();
+
     //    sbuf->Quantise();
-    sbuf->DrawStretch(&hdc, rc);
+    sbuf->DrawStretch(&hdc, rc); // 84 ms
+
+    tm = GetTickCount();
+    tm = tm-tmstart;
+    tmstart = GetTickCount();
+
   }
 
 };
@@ -809,7 +855,6 @@ void OptimizeTerrainCache()
     DWORD tm =GetTickCount();
     terrain_dem_graphics.OptimizeCash();
     tm =GetTickCount()-tm;
-    tm =GetTickCount();
   }
 
   UnlockTerrainDataGraphics();
@@ -819,7 +864,7 @@ void OptimizeTerrainCache()
 void DrawTerrain( const HDC hdc, const RECT rc, const double sunazimuth, const double sunelevation)
 {
 
-  DWORD tm;
+  DWORD tm, tmstart;
 
   if(!terrain_dem_graphics.isTerrainLoaded())
     return;
@@ -832,36 +877,52 @@ void DrawTerrain( const HDC hdc, const RECT rc, const double sunazimuth, const d
   short sx, sy, sz;
   double fudgeelevation = (90.0-80.0*TerrainContrast/255.0);
 
-  sx = (short)(256*(fastcosine(fudgeelevation)*fastsine(sunazimuth)));
-  sy = (short)(256*(fastcosine(fudgeelevation)*fastcosine(sunazimuth)));
+  sx = (short)(-256*(fastcosine(fudgeelevation)*fastsine(sunazimuth)));
+  sy = (short)(-256*(fastcosine(fudgeelevation)*fastcosine(sunazimuth)));
   sz = (short)(256*fastsine(fudgeelevation));
 
   // step 2: fill height buffer
+  tmstart = GetTickCount();
+
+  trenderer->Height(rc); // 114ms
 
   tm = GetTickCount();
-  trenderer->Height(rc);
-  tm = GetTickCount()-tm;
+  tm = tm-tmstart;
+  tmstart = GetTickCount();
 
   CacheEfficiency = terrain_dem_graphics.terraincacheefficiency;
-  Performance = tm;
+  //  Performance = tm;
 
   // step 3: calculate derivatives of height buffer
-  trenderer->Slope();
+  trenderer->Slope(); // 15ms
+
+  tm = GetTickCount();
+  tm = tm-tmstart;
+  tmstart = GetTickCount();
 
   // step 4: calculate illumination
 
-  trenderer->Illumination(sx, sy, sz);
+  trenderer->Illumination(sx, sy, sz); // 4ms
+
+  tm = GetTickCount();
+  tm = tm-tmstart;
+  tmstart = GetTickCount();
 
   // step 5: calculate colors
 
-  trenderer->FillColorBuffer();
+  trenderer->FillColorBuffer(); // 21ms
 
   tm = GetTickCount();
+  tm = tm-tmstart;
+  tmstart = GetTickCount();
 
   // step 6: draw
-  trenderer->Draw(hdc, MapWindow::MapRectBig);
+  trenderer->Draw(hdc, MapWindow::MapRectBig); // 400 ms
 
-  tm = GetTickCount()-tm;
+  tm = GetTickCount();
+  tm = tm-tmstart;
+  tmstart = GetTickCount();
+
 }
 
 

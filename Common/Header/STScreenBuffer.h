@@ -85,6 +85,8 @@ public:
 		m_pBuffer[i] = BGRColor(R,G,B);
 	}
 
+	void HorizontalBlur(int boxw);
+	void VerticalBlur(int boxh);
 	void Smooth2();
 	void Smooth();
 	void Quantise();

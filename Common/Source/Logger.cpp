@@ -740,6 +740,7 @@ bool ReplayLogger::UpdateInternal(void) {
   static double time=0;
   double deltatimereal;
   static double tthis=0;
+  static double tlast;
 
   bool finished = false;
 
@@ -752,6 +753,7 @@ bool ReplayLogger::UpdateInternal(void) {
     time = 0;
     deltatimereal = 0;
     tthis = 0;
+    tlast = tthis;
 
     li_lat.Reset();
     li_lon.Reset();
@@ -762,6 +764,15 @@ bool ReplayLogger::UpdateInternal(void) {
 
   double mintime = li_lat.GetMinTime();
   if (tthis<mintime) { tthis = mintime; }
+  /*
+  if (tlast>tthis) {
+    tlast = tthis;
+  }
+  if ((int)tthis-(int)tlast<1) {
+    return true;
+  }
+  tlast = tthis;
+  */
 
   // if need a new point
   while (

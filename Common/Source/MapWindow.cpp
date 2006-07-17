@@ -145,6 +145,7 @@ double MapWindow::ResMapScaleOverDistanceModify = 0.0;
 double MapWindow::DisplayAngle = 0.0;
 double MapWindow::DisplayAircraftAngle = 0.0;
 double MapWindow::DrawScale;
+double MapWindow::InvDrawScale;
 
 bool MapWindow::AutoZoom = false;
 
@@ -1345,6 +1346,7 @@ void MapWindow::ModifyMapScale(void) {
   DrawScale = MapScaleOverDistanceModify;
   DrawScale = DrawScale/111194;
   DrawScale = GetMapResolutionFactor()/DrawScale;
+  InvDrawScale = 1.0/DrawScale;
 }
 
 
@@ -3167,7 +3169,7 @@ void MapWindow::Screen2LatLon(double &X, double &Y)
 {
   X-= Orig_Screen.x;
   Y-= Orig_Screen.y;
-  rotatescale(X,Y,DisplayAngle, 1.0/DrawScale);
+  rotatescale(X,Y,DisplayAngle, InvDrawScale);
   Y = PanLatitude-Y;
   X = PanLongitude + X*invfastcosine(Y);
   // JMW pan
@@ -3177,7 +3179,7 @@ void MapWindow::Screen2LatLon(float &X, float &Y)
 {
   X -= Orig_Screen.x;
   Y -= Orig_Screen.y;
-  frotatescale(X,Y,(float)DisplayAngle,(float)(1.0/(DrawScale)));
+  frotatescale(X,Y,(float)DisplayAngle,(float)InvDrawScale);
   Y = (float)PanLatitude-Y;
   X = (float)PanLongitude + X*(float)invfastcosine(Y);
   // JMW pan
@@ -3798,7 +3800,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   if (h<0) {
     // JMW TODO: below safety height, maybe give warning here
     h=0;
-    return;
+    //    return;
   }
 
   if (maxh>mth) {
