@@ -78,15 +78,17 @@ public:
 
 	// Sets color of the given point
 	inline void SetPoint(int nX, int nY, byte R, byte G, byte B) {
-	  //		m_pBuffer[m_nCorrectedWidth*(m_nHeight-nY-1)+nX] = BGRColor(R,G,B);
-		m_pBuffer[m_nCorrectedWidth*(nY)+nX] = BGRColor(R,G,B);
+	  // m_pBuffer[m_nCorrectedWidth*(m_nHeight-nY-1)+nX] = BGRColor(R,G,B);
+	  m_pBuffer[m_nCorrectedWidth*(nY)+nX] = BGRColor(R,G,B);
 	}
+
 	inline void SetPoint(int i, byte R, byte G, byte B) {
-		m_pBuffer[i] = BGRColor(R,G,B);
+	  m_pBuffer[i] = BGRColor(R,G,B);
 	}
 
 	void HorizontalBlur(int boxw);
 	void VerticalBlur(int boxh);
+	void Zoom(int step);
 	void Smooth2();
 	void Smooth();
 	void Quantise();

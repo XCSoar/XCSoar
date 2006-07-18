@@ -641,20 +641,19 @@ void MapWindow::Event_AutoZoom(int vswitch) {
 
 
 void MapWindow::Event_PanCursor(int dx, int dy) {
-  double X= (MapRect.right+MapRect.left)/2;
-  double Y= (MapRect.bottom+MapRect.top)/2;
-  double Xstart=X;
-  double Ystart=Y;
+  int X= (MapRect.right+MapRect.left)/2;
+  int Y= (MapRect.bottom+MapRect.top)/2;
+  double Xstart, Ystart, Xnew, Ynew;
 
-  Screen2LatLon(Xstart, Ystart);
+  Screen2LatLon(X, Y, Xstart, Ystart);
 
-  X+= (MapRect.right-MapRect.left)/4.0*dx;
-  Y+= (MapRect.bottom-MapRect.top)/4.0*dy;
-  Screen2LatLon(X, Y);
+  X+= (MapRect.right-MapRect.left)*dx/4;
+  Y+= (MapRect.bottom-MapRect.top)*dy/4;
+  Screen2LatLon(X, Y, Xnew, Ynew);
 
   if (EnablePan) {
-    PanLongitude += Xstart-X;
-    PanLatitude += Ystart-Y;
+    PanLongitude += Xstart-Xnew;
+    PanLatitude += Ystart-Ynew;
   }
   RefreshMap();
 }
@@ -831,7 +830,8 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
     BigZoom = true;
     RefreshMap();
 
-    DrawMapScale(hdcScreen, MapRect, true);
+    //    DrawMapScale(hdcScreen, MapRect, true);
+    // JMW this is bad, happening from wrong thread.
   }
 }
 
@@ -929,9 +929,10 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 {
   int i;
   //  TCHAR szMessageBuffer[1024];
-  double X,Y;
   static double Xstart, Ystart;
-  static double XstartScreen, YstartScreen;
+  static int XstartScreen, YstartScreen;
+  int X,Y;
+  double Xlat, Ylat;
   double distance;
   static bool first = true;
   int width = (int) LOWORD(lParam);
@@ -1235,10 +1236,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   case WM_LBUTTONDOWN:
     DisplayTimeOut = 0;
     dwDownTime = GetTickCount();
-    Xstart = LOWORD(lParam); Ystart = HIWORD(lParam);
-    XstartScreen = Xstart;
-    YstartScreen = Ystart;
-    Screen2LatLon(Xstart, Ystart);
+    XstartScreen = LOWORD(lParam); YstartScreen = HIWORD(lParam);
+    Screen2LatLon(XstartScreen, YstartScreen, Xstart, Ystart);
     FullScreen();
     break;
 
@@ -1257,17 +1256,17 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 			     (YstartScreen-Y)*(YstartScreen-Y)))
       /InfoBoxLayout::scale;
 
-    Screen2LatLon(X, Y);
+    Screen2LatLon(X, Y, Xlat, Ylat);
 
     if (EnablePan && (distance>IBLSCALE(36))) {
-      PanLongitude += Xstart-X;
-      PanLatitude  += Ystart-Y;
+      PanLongitude += Xstart-Xlat;
+      PanLatitude  += Ystart-Ylat;
       RefreshMap();
       break; // disable picking when in pan mode
     } else {
 #ifdef _SIM_
       if (distance>IBLSCALE(36)) {
-        double newbearing = Bearing(Ystart, Xstart, Y, X);
+        double newbearing = Bearing(Ystart, Xstart, Ylat, Xlat);
         GPS_INFO.TrackBearing = newbearing;
         GPS_INFO.Speed = min(100.0,distance/3);
         break;
@@ -1336,17 +1335,17 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
 void MapWindow::ModifyMapScale(void) {
   // limit zoomed in so doesn't reach silly levels
-  if (MapScale<0.05) {
-    MapScale = 0.05;
+  if (RequestMapScale<0.05) {
+    RequestMapScale = 0.05;
   }
-  MapScaleOverDistanceModify = MapScale/DISTANCEMODIFY;
+  MapScaleOverDistanceModify = RequestMapScale/DISTANCEMODIFY;
   ResMapScaleOverDistanceModify =
     GetMapResolutionFactor()/MapScaleOverDistanceModify;
-  RequestMapScale = MapScale;
   DrawScale = MapScaleOverDistanceModify;
   DrawScale = DrawScale/111194;
   DrawScale = GetMapResolutionFactor()/DrawScale;
   InvDrawScale = 1.0/DrawScale;
+  MapScale = RequestMapScale;
 }
 
 
@@ -1362,7 +1361,6 @@ void MapWindow::UpdateMapScale()
   // if there is user intervention in the scale
   if(MapScale != RequestMapScale)
   {
-    MapScale = RequestMapScale;
     ModifyMapScale();
     useraskedforchange = true;
   }
@@ -1404,7 +1402,7 @@ void MapWindow::UpdateMapScale()
 
         // set scale exactly so that waypoint distance is the zoom factor
         // across the screen
-        MapScale = DerivedDrawInfo.WaypointDistance*DISTANCEMODIFY
+        RequestMapScale = DerivedDrawInfo.WaypointDistance*DISTANCEMODIFY
 	  / AutoZoomFactor;
 	ModifyMapScale();
 
@@ -1595,15 +1593,17 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     if (EnableTerrain) {
       double sunelevation = 40.0;
-      double sunazimuth = -DerivedDrawInfo.WindBearing;
-
-      // BUG?   sunazimuth+= DisplayAngle;
+      double sunazimuth = DisplayAngle-DerivedDrawInfo.WindBearing;
 
       if (MapDirty) {
 	// map has been dirtied since we started drawing, so hurry up
 	BigZoom = true;
       }
       DrawTerrain(hdcDrawWindowBg, rc, sunazimuth, sunelevation);
+    } else {
+      if (BigZoom) {
+	BigZoom = false;
+      }
     }
 
     if (EnableTopology) {
@@ -1709,7 +1709,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
   hfOld = (HFONT)SelectObject(hdcDrawWindow, MapWindowFont);
 
-  DrawMapScale(hdcDrawWindow,rc, false);
+  DrawMapScale(hdcDrawWindow,rc, BigZoom);
   DrawMapScale2(hdcDrawWindow,rc, Orig_Aircraft);
 
   DrawCompass(hdcDrawWindow, rc);
@@ -1775,7 +1775,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     Sleep(100);
   }
 
-  MapScale = RequestMapScale;
+  RequestMapScale = MapScale;
   ModifyMapScale();
 
   //  THREADRUNNING = FALSE;
@@ -1837,6 +1837,10 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     } else {
       MapDirty = false;
     }
+    if (BigZoom) {
+      // quickly draw zoom level on top
+      DrawMapScale(hdcScreen, MapRect, true);
+    }
 
     MapWindow::UpdateInfo(&GPS_INFO, &CALCULATED_INFO);
 
@@ -1849,7 +1853,8 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     RenderMapWindow(MapRect);
 
     if (!first) {
-      BitBlt(hdcScreen, 0, 0, MapRectBig.right-MapRectBig.left,
+      BitBlt(hdcScreen, 0, 0,
+	     MapRectBig.right-MapRectBig.left,
 	     MapRectBig.bottom-MapRectBig.top,
 	     hdcDrawWindow, 0, 0, SRCCOPY);
     }
@@ -3165,24 +3170,24 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 // TODO: Optimise
 // RETURNS Longitude, Latitude!
 
-void MapWindow::Screen2LatLon(double &X, double &Y)
+void MapWindow::Screen2LatLon(const int &x, const int &y,
+			      double &X, double &Y)
 {
-  X-= Orig_Screen.x;
-  Y-= Orig_Screen.y;
+  X=(double)(x-Orig_Screen.x);
+  Y=(double)(y-Orig_Screen.y);
   rotatescale(X,Y,DisplayAngle, InvDrawScale);
   Y = PanLatitude-Y;
   X = PanLongitude + X*invfastcosine(Y);
-  // JMW pan
 }
 
-void MapWindow::Screen2LatLon(float &X, float &Y)
+void MapWindow::Screen2LatLon(const int &x, const int &y,
+			      float &X, float &Y)
 {
-  X -= Orig_Screen.x;
-  Y -= Orig_Screen.y;
+  X=(float)(x-Orig_Screen.x);
+  Y=(float)(y-Orig_Screen.y);
   frotatescale(X,Y,(float)DisplayAngle,(float)InvDrawScale);
   Y = (float)PanLatitude-Y;
   X = (float)PanLongitude + X*(float)invfastcosine(Y);
-  // JMW pan
 }
 
 
