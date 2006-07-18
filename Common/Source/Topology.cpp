@@ -296,32 +296,33 @@ int Topology::getCorner(int n, int n2) {
 
 
 void CalculateScreenBounds(RECT rc, rectObj *screenRect) {
-  double xmin, xmax, ymin, ymax;
-  double x, y;
+  float xmin, xmax, ymin, ymax;
+  int x, y;
+  float X, Y;
   
   x = rc.left; 
   y = rc.top; 
-  MapWindow::Screen2LatLon(x, y);
-  xmin = x; xmax = x;
-  ymin = y; ymax = y;
+  MapWindow::Screen2LatLon(x, y, X, Y);
+  xmin = X; xmax = X;
+  ymin = Y; ymax = Y;
   
   x = rc.right; 
   y = rc.top; 
-  MapWindow::Screen2LatLon(x, y);
-  xmin = min(xmin, x); xmax = max(xmax, x);
-  ymin = min(ymin, y); ymax = max(ymax, y);
+  MapWindow::Screen2LatLon(x, y, X, Y);
+  xmin = min(xmin, X); xmax = max(xmax, X);
+  ymin = min(ymin, Y); ymax = max(ymax, Y);
   
   x = rc.right; 
   y = rc.bottom; 
-  MapWindow::Screen2LatLon(x, y);
-  xmin = min(xmin, x); xmax = max(xmax, x);
-  ymin = min(ymin, y); ymax = max(ymax, y);
+  MapWindow::Screen2LatLon(x, y, X, Y);
+  xmin = min(xmin, X); xmax = max(xmax, X);
+  ymin = min(ymin, Y); ymax = max(ymax, Y);
   
   x = rc.left; 
   y = rc.bottom; 
-  MapWindow::Screen2LatLon(x, y);
-  xmin = min(xmin, x); xmax = max(xmax, x);
-  ymin = min(ymin, y); ymax = max(ymax, y);
+  MapWindow::Screen2LatLon(x, y, X, Y);
+  xmin = min(xmin, X); xmax = max(xmax, X);
+  ymin = min(ymin, Y); ymax = max(ymax, Y);
   
   screenRect->minx = xmin;
   screenRect->maxx = xmax;

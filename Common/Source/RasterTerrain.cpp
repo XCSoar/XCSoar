@@ -257,22 +257,23 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
   long SeekPos;
   long lx, ly;
         
-  if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
+  if((fpTerrain == NULL) || (TerrainInfo.StepSize == 0))
     return -1;
 
+  /*
   if ((Lattitude > TerrainInfo.Top )||
       (Lattitude < TerrainInfo.Bottom )||
       (Longditude < TerrainInfo.Left )||
       (Longditude > TerrainInfo.Right )) {
     return -1;
   }
+    No longer needed, check done in integer math
+  */
 
   double dx = (Longditude-TerrainInfo.Left)*fXrounding;
   double dy = (TerrainInfo.Top-Lattitude)*fYrounding;
 
-  bool subsample = (DirectAccess)&&(Xrounding==1)&&(Yrounding==1);
-
-  if (subsample) {
+  if ((DirectAccess)&&(Xrounding==1)&&(Yrounding==1)) {
     lx = (long)(dx*256);
     ly = (long)(dy*256);
     int ix = lx % 256;
@@ -296,12 +297,12 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
       // lower triangle 
       h2 = TerrainMem[SeekPos+1]; // (x+1,y)
       //	return iround(h1+fx*(h2-h1)+fy*(h3-h2));
-      return h1+((ix*(h2-h1)+iy*(h3-h2))/256);
+      return h1+((ix*(h2-h1)+iy*(h3-h2))>>8);
     } else {
       // upper triangle
       h4 = TerrainMem[SeekPos+TerrainInfo.Columns]; // (x,y+1)
       //	return iround(h1+fx*(h3-h4)+fy*(h4-h1));
-      return h1+((ix*(h3-h4)+iy*(h4-h1))/256);
+      return h1+((ix*(h3-h4)+iy*(h4-h1))>>8);
     }
 
   } else {
@@ -314,11 +315,11 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
 	||(lx>=TerrainInfo.Columns-1))
       return -1;
 
-    SeekPos = ly*TerrainInfo.Columns+lx;
     if (DirectAccess) {
+      SeekPos = ly*TerrainInfo.Columns+lx;
       return TerrainMem[SeekPos];
     } else {
-      SeekPos = SeekPos*2+sizeof(TERRAIN_INFO);
+      SeekPos = (ly*TerrainInfo.Columns+lx)*2+sizeof(TERRAIN_INFO);
       return LookupTerrainCache(SeekPos);
     }
   }
@@ -353,6 +354,7 @@ void RasterTerrain::OpenTerrain(void)
   } else {
     TerrainMem = NULL;
   }
+
   if (!TerrainMem) {
     DirectAccess = false;
     TerrainMem = NULL;

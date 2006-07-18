@@ -86,43 +86,43 @@ CSTScreenBuffer::~CSTScreenBuffer()
 
 BOOL CSTScreenBuffer::CreateBitmap(int nWidth, int nHeight)
 {
-	ASSERT(nWidth>0);
-	ASSERT(nHeight>0);
-
-	if (m_hBitmap!=NULL) DeleteObject(m_hBitmap);
-
-	m_nCorrectedWidth = CorrectedWidth(nWidth);
-	m_nWidth = nWidth;
-	m_nHeight = nHeight;
-
-	DIBINFO  dibInfo;
-
-	dibInfo.bmiHeader.biBitCount = 24;
-	dibInfo.bmiHeader.biClrImportant = 0;
-	dibInfo.bmiHeader.biClrUsed = 0;
-	dibInfo.bmiHeader.biCompression = 0;
-	dibInfo.bmiHeader.biHeight = m_nHeight;
-	dibInfo.bmiHeader.biPlanes = 1;
-	dibInfo.bmiHeader.biSize = 40;
-	dibInfo.bmiHeader.biSizeImage = m_nCorrectedWidth*m_nHeight*3;
-	dibInfo.bmiHeader.biWidth = m_nCorrectedWidth;
-	dibInfo.bmiHeader.biXPelsPerMeter = 3780;
-	dibInfo.bmiHeader.biYPelsPerMeter = 3780;
-	dibInfo.bmiColors[0].rgbBlue = 0;
-	dibInfo.bmiColors[0].rgbGreen = 0;
-	dibInfo.bmiColors[0].rgbRed = 0;
-	dibInfo.bmiColors[0].rgbReserved = 0;
-
-	HDC hDC = ::GetDC(NULL);
-	ASSERT(hDC);
-	m_hBitmap = CreateDIBSection(hDC, (const BITMAPINFO*)dibInfo, DIB_RGB_COLORS, (void**)&m_pBuffer, NULL, 0);
-	::ReleaseDC(NULL, hDC);
-	ASSERT(m_hBitmap);
-	ASSERT(m_pBuffer);
-
-	m_pBufferTmp = (BGRColor*)malloc(sizeof(BGRColor)*m_nHeight*m_nCorrectedWidth);
-
-	return TRUE;
+  ASSERT(nWidth>0);
+  ASSERT(nHeight>0);
+  
+  if (m_hBitmap!=NULL) DeleteObject(m_hBitmap);
+  
+  m_nCorrectedWidth = CorrectedWidth(nWidth);
+  m_nWidth = nWidth;
+  m_nHeight = nHeight;
+  
+  DIBINFO  dibInfo;
+  
+  dibInfo.bmiHeader.biBitCount = 24;
+  dibInfo.bmiHeader.biClrImportant = 0;
+  dibInfo.bmiHeader.biClrUsed = 0;
+  dibInfo.bmiHeader.biCompression = 0;
+  dibInfo.bmiHeader.biHeight = m_nHeight;
+  dibInfo.bmiHeader.biPlanes = 1;
+  dibInfo.bmiHeader.biSize = 40;
+  dibInfo.bmiHeader.biSizeImage = m_nCorrectedWidth*m_nHeight*3;
+  dibInfo.bmiHeader.biWidth = m_nCorrectedWidth;
+  dibInfo.bmiHeader.biXPelsPerMeter = 3780;
+  dibInfo.bmiHeader.biYPelsPerMeter = 3780;
+  dibInfo.bmiColors[0].rgbBlue = 0;
+  dibInfo.bmiColors[0].rgbGreen = 0;
+  dibInfo.bmiColors[0].rgbRed = 0;
+  dibInfo.bmiColors[0].rgbReserved = 0;
+  
+  HDC hDC = ::GetDC(NULL);
+  ASSERT(hDC);
+  m_hBitmap = CreateDIBSection(hDC, (const BITMAPINFO*)dibInfo, DIB_RGB_COLORS, (void**)&m_pBuffer, NULL, 0);
+  ::ReleaseDC(NULL, hDC);
+  ASSERT(m_hBitmap);
+  ASSERT(m_pBuffer);
+  
+  m_pBufferTmp = (BGRColor*)malloc(sizeof(BGRColor)*m_nHeight*m_nCorrectedWidth);
+  
+  return TRUE;
 }
 
 void CSTScreenBuffer::Create(int nWidth, int nHeight)
@@ -221,7 +221,10 @@ BOOL CSTScreenBuffer::Draw(HDC* pDC, POINT ptDest)
 	}
 
 	HBITMAP m_hOldBitmap = (HBITMAP)::SelectObject(memDc, m_hBitmap);
-	bResult = BitBlt(*pDC, ptDest.x, ptDest.y, m_nWidth, m_nHeight, memDc, Origin.x, Origin.y, SRCCOPY);
+	bResult = BitBlt(*pDC, ptDest.x, ptDest.y, 
+			 m_nWidth, m_nHeight, 
+			 memDc, 
+			 Origin.x, Origin.y, SRCCOPY);
 	::SelectObject(memDc, m_hOldBitmap);
 	DeleteDC(memDc);
 
@@ -258,11 +261,13 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest, int cx, int cy)
   if (!memDc) {
     return FALSE;
   }
+
+  int cropsize = m_nHeight*cx/cy;
   
   bResult = StretchBlt(*pDC, ptDest.x, ptDest.y, 
 		       cx, cy, memDc, 
 		       Origin.x, Origin.y, 
-		       m_nWidth, m_nHeight, SRCCOPY);
+		       cropsize, m_nHeight, SRCCOPY);
   
   return bResult;
 }
@@ -485,6 +490,39 @@ void CSTScreenBuffer::Quantise()
 }
 
 // 1 + 2 + 4 = 7
+
+void CSTScreenBuffer::Zoom(int step) {
+  BGRColor* src = m_pBuffer;
+  BGRColor* dst = m_pBufferTmp;
+  BGRColor* dst_start = m_pBufferTmp;
+
+  int smallx = m_nCorrectedWidth/step;
+  int smally = m_nHeight/step;
+  int j, x, y;
+  int rowsize = m_nCorrectedWidth*sizeof(BGRColor);
+
+  for (y= (smally-1); y>=0; y--) {
+    dst = m_pBufferTmp+m_nCorrectedWidth*(y*step);
+    dst_start = dst;
+    for (x=0;x< smallx; x++) {
+      for (j=0; j<step; j++) {
+	*dst = *src;
+	dst++;  
+      }
+      src++;
+    }
+    // done first row, now copy each row
+    for (j=1; j<step; j++) {
+      memcpy((char*)dst, (char*)dst_start, rowsize);
+      dst+= m_nCorrectedWidth;
+    }
+  }
+
+  // copy it back to main buffer
+  memcpy((char*)m_pBuffer, (char*)m_pBufferTmp, 
+	 m_nCorrectedWidth*m_nHeight*sizeof(BGRColor));
+
+}
 
 
 void CSTScreenBuffer::HorizontalBlur(int boxw) {

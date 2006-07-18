@@ -1046,7 +1046,8 @@ void frotate(float &xin, float &yin, const float &angle)
 }
 
 
-void rotatescale(double &xin, double &yin, const double &angle, const double &scale)
+void rotatescale(double &xin, double &yin, 
+		 const double &angle, const double &scale)
 {
   double x= xin;
   double y= yin;

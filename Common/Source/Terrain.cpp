@@ -54,33 +54,34 @@ TopologyWriter *topo_marks;
 rectObj GetRectBounds(const RECT rc) {
   rectObj bounds;
   double xmin, xmax, ymin, ymax;
-  double x;
-  double y;
+  int x;
+  int y;
+  double X, Y;
 
   x= (rc.left+rc.right)/2; y=(rc.bottom+rc.top)/2;
-  MapWindow::Screen2LatLon(x, y);
-  xmin = x; xmax = x;
-  ymin = y; ymax = y;
+  MapWindow::Screen2LatLon(x, y, X, Y);
+  xmin = X; xmax = X;
+  ymin = Y; ymax = Y;
 
   x = rc.left; y = rc.top;
-  MapWindow::Screen2LatLon(x, y);
-  xmin = min(xmin, x); xmax = max(xmax, x);
-  ymin = min(ymin, y); ymax = max(ymax, y);
+  MapWindow::Screen2LatLon(x, y, X, Y);
+  xmin = min(xmin, X); xmax = max(xmax, X);
+  ymin = min(ymin, Y); ymax = max(ymax, Y);
 
   x = rc.right; y = rc.top;
-  MapWindow::Screen2LatLon(x, y);
-  xmin = min(xmin, x); xmax = max(xmax, x);
-  ymin = min(ymin, y); ymax = max(ymax, y);
+  MapWindow::Screen2LatLon(x, y, X, Y);
+  xmin = min(xmin, x); xmax = max(xmax, X);
+  ymin = min(ymin, y); ymax = max(ymax, Y);
 
   x = rc.left; y = rc.bottom;
-  MapWindow::Screen2LatLon(x, y);
-  xmin = min(xmin, x); xmax = max(xmax, x);
-  ymin = min(ymin, y); ymax = max(ymax, y);
+  MapWindow::Screen2LatLon(x, y, X, Y);
+  xmin = min(xmin, X); xmax = max(xmax, X);
+  ymin = min(ymin, Y); ymax = max(ymax, Y);
 
   x = rc.right; y = rc.bottom;
-  MapWindow::Screen2LatLon(x, y);
-  xmin = min(xmin, x); xmax = max(xmax, x);
-  ymin = min(ymin, y); ymax = max(ymax, y);
+  MapWindow::Screen2LatLon(x, y, X, Y);
+  xmin = min(xmin, X); xmax = max(xmax, X);
+  ymin = min(ymin, Y); ymax = max(ymax, Y);
 
   bounds.maxx = xmax;
   bounds.minx = xmin;
@@ -279,16 +280,16 @@ void DrawTopology(const HDC hdc, const RECT rc)
 COLORRAMP terrain_colors[] = {
   {-1,          0xff, 0xff, 0xff},
   {0,           0x70, 0xc0, 0xa7},
-  {500,         0xca, 0xe7, 0xb9},
-  {1000,        0xf4, 0xea, 0xaf},
-  {1500,        0xdc, 0xb2, 0x82},
-  {2000,        0xca, 0x8e, 0x72},
-  {2500,        0xde, 0xc8, 0xbd},
-  {3000,        0xe3, 0xe4, 0xe9},
-  {3500,        0xdb, 0xd9, 0xef},
-  {4000,        0xce, 0xcd, 0xf5},
-  {4500,        0xc2, 0xc1, 0xfa},
-  {5000,        0xb7, 0xb9, 0xff}
+  {250,         0xca, 0xe7, 0xb9},
+  {500,        0xf4, 0xea, 0xaf},
+  {750,        0xdc, 0xb2, 0x82},
+  {1000,        0xca, 0x8e, 0x72},
+  {1250,        0xde, 0xc8, 0xbd},
+  {1500,        0xe3, 0xe4, 0xe9},
+  {1750,        0xdb, 0xd9, 0xef},
+  {2000,        0xce, 0xcd, 0xf5},
+  {2250,        0xc2, 0xc1, 0xfa},
+  {2500,        0xb7, 0xb9, 0xff}
 };
 
 
@@ -333,7 +334,7 @@ void ColorRampLookup(const short h, BYTE &r, BYTE &g, BYTE &b,
 
 
 void TerrainColorMap(const short h, BYTE &r, BYTE &g, BYTE &b) {
-  ColorRampLookup(h*8/4, r, g, b, terrain_colors, NUMTERRAINRAMP);
+  ColorRampLookup(h, r, g, b, terrain_colors, NUMTERRAINRAMP);
 }
 
 static short ContrastPos;
@@ -439,7 +440,8 @@ public:
 #define TERRAIN_ANTIALIASING 1
 
   void Height(RECT rc) {
-    float X, Y;
+    double X, Y;
+    int x, y; 
     short X0, Y0;
     short X1, Y1;
     X0 = dtquant/2; 
@@ -460,16 +462,16 @@ public:
 
     // grid spacing = 250*rounding; in meters (dependent on resolution)
 
-    double rfact=1.0;
+    int rfact=1;
 
     if (MapWindow::BigZoom) {
       MapWindow::BigZoom = false;
-      rfact = 2.0;
+      rfact = 2;
     } else {
-      rfact = 1.0;
+      rfact = 1;
     }
     if (RasterTerrain::DirectAccess) {
-      rfact = 0.5;
+      rfact = 1;
     }
 
     // magnify gradient to make it
@@ -480,25 +482,26 @@ public:
       pval = ixs*(rc.top/dtquant-1);
       myhbuf+= pval;
       Y0 += rc.top-dtquant;
-      Y1 -= rc.top-dtquant; // this is a cheat since we don't really know how
-		    // far the bottom goes down
+      Y1 -= rc.top-dtquant; 
+       // this is a cheat since we don't really know how
+       // far the bottom goes down
     }
 
     // JMW attempting to remove wobbling terrain
-    X = (float)((X0+X1)/2);
-    Y = (float)((Y0+Y1)/2);
-    MapWindow::Screen2LatLon(X, Y);
-    float xmiddle = X;
-    float ymiddle = Y;
+    x = ((X0+X1)/2);
+    y = ((Y0+Y1)/2);
+    MapWindow::Screen2LatLon(x, y, X, Y);
+    double xmiddle = X;
+    double ymiddle = Y;
 
-    X = (float)((X0+X1)/2+dtquant*TERRAIN_ANTIALIASING*rfact);
-    Y = (float)((Y0+Y1)/2);
-    MapWindow::Screen2LatLon(X, Y);
+    x = ((X0+X1)/2+dtquant*TERRAIN_ANTIALIASING*rfact);
+    y = ((Y0+Y1)/2);
+    MapWindow::Screen2LatLon(x, y, X, Y);
     Xrounding = (float)fabs(X-xmiddle);
 
-    X = (float)((X0+X1)/2);
-    Y = (float)((Y0+Y1)/2+dtquant*TERRAIN_ANTIALIASING*rfact);
-    MapWindow::Screen2LatLon(X, Y);
+    x = ((X0+X1)/2);
+    y = ((Y0+Y1)/2+dtquant*TERRAIN_ANTIALIASING*rfact);
+    MapWindow::Screen2LatLon(x, y, X, Y);
     Yrounding = (float)fabs(Y-ymiddle);
 
     // set resolution
@@ -520,11 +523,9 @@ public:
 
     // fill the buffer
 
-    for (int y = Y0; y<Y1; y+= dtquant) {
-      for (int x = X0; x<X1; x+= dtquant) {
-        X = (float)x;
-        Y = (float)y;
-        MapWindow::Screen2LatLon(X, Y);
+    for (y = Y0; y<Y1; y+= dtquant) {
+      for (x = X0; x<X1; x+= dtquant) {
+        MapWindow::Screen2LatLon(x, y, X, Y);
         *myhbuf = terrain_dem_graphics.GetTerrainHeight(Y, X);
         ++myhbuf;
       }
@@ -546,7 +547,7 @@ public:
 
     int ixsepx = ixs*epx;
 
-    int tss = (int)(epx*pixelsize*1000);
+    int tss = (int)(epx*pixelsize*1024);
 
     int ixsright = ixs-epx;
     int iysbottom = iys-epx;
@@ -620,11 +621,6 @@ public:
 	  dd0= (dd0<<8)/mag;
 	  dd1= (dd1<<8)/mag;
 	  dd2= (dd2<<8)/mag;
-	  if (dd2<0) {
-	    dd0= -dd0;
-	    dd1= -dd1;
-	    dd2= -dd2;
-	  }
 	} else {
 	  dd0= 0;
 	  dd1= 0;
@@ -773,30 +769,20 @@ public:
     if(!terrain_dem_graphics.isTerrainLoaded())
       return;
 
-    int ixsOVS = ixs*OVS;
-    int iysOVS = iys*OVS;
-    for (int y = iysOVS-OVS; y>=0; y-= OVS) {
-      for (int x = 0; x<ixsOVS; x+= OVS) {
-        if (hBuf[pval]<=0) {
-          // water color
-          r = 64;
-          g = 96;
-          b = 240;
-        } else {
-          TerrainColorMap(hBuf[pval],r,g,b);
-          TerrainIllumination(ilBuf[pval], r,g,b);
-        }
-	int ix1 = x+OVS;
-	int iy1 = y+OVS;
-        for (int iy=y; iy< iy1; iy++) {
-          for (int ix=x; ix< ix1; ix++) {
-            sbuf->SetPoint(ix, iy, r, g, b);
-          }
-        }
-	++pval;
+    int gsize = iys*ixs;
+    for (pval=0; pval< gsize; pval++) {
+      if (hBuf[pval]<=0) {
+	// water color
+	r = 64;
+	g = 96;
+	b = 240;
+      } else {
+	TerrainColorMap(hBuf[pval],r,g,b);
+	TerrainIllumination(ilBuf[pval], r,g,b);
       }
+      sbuf->SetPoint(pval, r, g, b);
     }
-
+    sbuf->Zoom(OVS);
   }
 
   void Draw(HDC hdc, RECT rc) {
@@ -808,8 +794,7 @@ public:
 
     tmstart = GetTickCount();
 
-    //    sbuf->Smooth2(); // 334 ms -> 283 ms
-    sbuf->HorizontalBlur(3); // now 58 ms!
+    sbuf->HorizontalBlur(3); // now 51 ms!
     sbuf->VerticalBlur(3);
 
     tm = GetTickCount();
@@ -817,6 +802,7 @@ public:
     tmstart = GetTickCount();
 
     //    sbuf->Quantise();
+
     sbuf->DrawStretch(&hdc, rc); // 84 ms
 
     tm = GetTickCount();
@@ -884,7 +870,7 @@ void DrawTerrain( const HDC hdc, const RECT rc, const double sunazimuth, const d
   // step 2: fill height buffer
   tmstart = GetTickCount();
 
-  trenderer->Height(rc); // 114ms
+  trenderer->Height(rc); // 106ms
 
   tm = GetTickCount();
   tm = tm-tmstart;
@@ -910,14 +896,14 @@ void DrawTerrain( const HDC hdc, const RECT rc, const double sunazimuth, const d
 
   // step 5: calculate colors
 
-  trenderer->FillColorBuffer(); // 21ms
+  trenderer->FillColorBuffer(); // 16 ms
 
   tm = GetTickCount();
   tm = tm-tmstart;
   tmstart = GetTickCount();
 
-  // step 6: draw
-  trenderer->Draw(hdc, MapWindow::MapRectBig); // 400 ms
+  // step 6: draw // 128 ms
+  trenderer->Draw(hdc, MapWindow::MapRect); 
 
   tm = GetTickCount();
   tm = tm-tmstart;

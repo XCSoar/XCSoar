@@ -880,6 +880,7 @@ void ShowStatus() {
 
 
 
+
 void FullScreen() {
 
   if (!MenuActive) {
@@ -1114,11 +1115,11 @@ DWORD CalculationThread (LPVOID lpvoid) {
     // Do vario first to reduce audio latency
     if (GPS_INFO.VarioAvailable) {
       // if (NMEAParser::VarioUpdated) {  20060511/sgi commented out dueto asynchronus reset of VarioUpdate in InstrumentThread
-	      if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
+      if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
 	        
-	      }
-	      // assume new vario data has arrived, so infoboxes
-	      // need to be redrawn
+      }
+      // assume new vario data has arrived, so infoboxes
+      // need to be redrawn
       //} 20060511/sgi commented out 
     } else {
       // run the function anyway, because this gives audio functions
@@ -1198,6 +1199,7 @@ void CreateCalculationThread() {
 void dlgStartupShowModal(void);
 
 
+
 void PreloadInitialisation(bool ask) {
   SetToRegistry(TEXT("XCV"), 1);
 
@@ -1209,13 +1211,12 @@ void PreloadInitialisation(bool ask) {
     ReadRegistrySettings();
     StatusFileInit();
   } else {
-    //#if (WINDOWSPC<1) 
 #if (NEWINFOBOX>0)
     dlgStartupShowModal();
     RestoreRegistry();
     ReadRegistrySettings();
 #endif
-    //#endif
+
     CreateProgressDialog(gettext(TEXT("Initialising")));
   }
 
@@ -1426,7 +1427,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // Finally ready to go
   MapWindow::CreateDrawingThread();
   GlobalRunning = true;
-  CloseProgressDialog();
   Sleep(100);
   ShowInfoBoxes();
 
@@ -1442,6 +1442,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // Da-da, start everything now
   ProgramStarted = true;
+  CloseProgressDialog();
 
   // NOTE: Must show errors AFTER all windows ready
 
@@ -1836,6 +1837,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   // JMW gauge creation was here
 
   ShowWindow(hWndMainWindow, nCmdShow);
+
   UpdateWindow(hWndMainWindow);
     
 #if NEWINFOBOX>0
