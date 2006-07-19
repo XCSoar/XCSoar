@@ -5,6 +5,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Dialogs changed:
  dlgConfiguration.xml
  dlgVario.xml
+ dlgWayPointDetails.xml
+ dlgTaskWaypoint.xml
 
 Changes from 4.7.5:
 - Added small histeresis to instantenous LD vario
@@ -27,6 +29,11 @@ Changes from 4.7.5:
 - Fixed minor bug, auto macready by average was not working when no
   task was defined.
 - Modified least squares algorithm to handle weighted least squares.
+- Add 'Append' waypoint function, so users can create a task by selecting
+    waypoints from the map in sequence
+- Task waypoint move up/down in task waypoint pages.
+- Terrain database loaded into memory if sufficient RAM + 5 Meg free
+- New smooth shading of terrain, major improvement
 
 Dialogs changed:
  dlgConfiguration.xml
