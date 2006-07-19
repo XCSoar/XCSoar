@@ -34,6 +34,7 @@ Copyright_License {
 #include "stdafx.h"
 #include "XCSoar.h"
 #include "Utils.h"
+#include "MapWindow.h"
 
 #include <math.h>
 #define NUMV 30

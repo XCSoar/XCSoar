@@ -125,25 +125,31 @@ BEGIN
     RTEXT           "unknown",IDC_VERSION,10,116,117,8
     CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,2,2,
                     129,113
-    CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,
+    CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",
+			WS_EX_CLIENTEDGE,
                     4,141,124,8
 END
 
-IDD_PROGRESS_LANDSCAPE DIALOG DISCARDABLE  0, 0, 143, 119
-STYLE DS_CENTER | WS_CHILD | WS_VISIBLE | WS_BORDER
+
+IDD_PROGRESS_LANDSCAPE DIALOG DISCARDABLE  0, 0, 158, 121
+STYLE DS_CENTER | WS_CHILD | WS_VISIBLE | WS_GROUP
 FONT 10, "System"
 BEGIN
-    EDITTEXT        IDC_MESSAGE,1,106,127,12,ES_CENTER | ES_MULTILINE |
-                    ES_AUTOHSCROLL | ES_READONLY
-    RTEXT           "unknown",IDC_VERSION,4,96,123,8
-    CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,1,1,
+    LTEXT           "Version",IDC_VERSION,9,2,123,8
+    CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,8,12,
                     127,94
     CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",
 #ifndef WINDOWSPC
-                    PBS_VERTICAL | PBS_SMOOTH |
+                    PBS_VERTICAL | PBS_SMOOTH,
+#else
+		    WS_EX_CLIENTEDGE,
 #endif
-			 WS_BORDER,129,0,14,119
+		    140,0,17,121,
+                    WS_EX_DLGMODALFRAME
+    RTEXT           "Progress please wait",IDC_MESSAGE,2,107,136,11,
+                    SS_CENTERIMAGE
 END
+
 
 IDD_SELECT DIALOG DISCARDABLE  0, 0, 140, 123
 STYLE DS_CENTER | WS_POPUP | WS_CAPTION
@@ -1405,7 +1411,6 @@ IDB_AIRSPACE0           BITMAP  DISCARDABLE     "Bitmaps\\airspace0.bmp"
 IDB_AIRSPACE1           BITMAP  DISCARDABLE     "Bitmaps\\airspace1.bmp"
 IDB_AIRSPACE2           BITMAP  DISCARDABLE     "Bitmaps\\airspace2.bmp"
 IDB_DISCLAIMER          BITMAP  DISCARDABLE     "Bitmaps\\startupdisclaimer.bmp"
-IDB_SPLASH              BITMAP  DISCARDABLE     "Bitmaps\\xcsoar-splash.bmp"
 IDB_SWIFT               BITMAP  DISCARDABLE     "Bitmaps\\xcsoarswiftsplash.bmp"
 IDB_GPSSTATUS1          BITMAP  DISCARDABLE     "Bitmaps\\20x20_gpslost_1.bmp"
 IDB_GPSSTATUS2          BITMAP  DISCARDABLE     "Bitmaps\\20x20_gpslost_2.bmp"

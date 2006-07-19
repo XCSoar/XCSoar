@@ -26,6 +26,9 @@ extern TCHAR XCSoar_Version[256];
 // instance of main program
 extern HINSTANCE hInst;
 
+extern int ProgramStarted;
+
+
 // comms data
 extern HANDLE hPort1;            // Serial port handle
 extern HANDLE hPort2;            // Serial port handle

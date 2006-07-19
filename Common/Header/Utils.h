@@ -8,7 +8,7 @@
 #include <windows.h>
 #include <shlobj.h>
 #include "task.h"
-#include "mapwindow.h"
+#include "Airspace.h"
 
 extern TCHAR szRegistryKey[];
 extern TCHAR szRegistrySpeedUnitsValue[];

@@ -922,7 +922,6 @@ static void SetFontInfo(HDC hDC, FontHeightInfo_t *FontHeightInfo){
   // dpi
 }
 
-extern bool ProgramStarted;
 
 LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
                                         LPARAM lParam)
@@ -1768,7 +1767,6 @@ void MapWindow::UpdateCaches(bool force) {
   }
 }
 
-
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
   while ((!ProgramStarted) || (!Initialised)) {
@@ -1862,8 +1860,9 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
     // we do caching after screen update, to minimise perceived delay
     UpdateCaches(first);
-    if (first) {
-      first = false;
+    first = false;
+    if (ProgramStarted==1) {
+      ProgramStarted = 2;
     }
 
   }
@@ -2010,8 +2009,11 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
       Aircraft[i].x =iround(dX+Orig.x);  Aircraft[i].y = iround(dY+Orig.y);
     }
 
-    oldPen = (HPEN)SelectObject(hdc, hpCompassBorder);
+    HBRUSH hbAircraftSolid = (HBRUSH) CreateSolidBrush(RGB(0x00,0x00,0x00));
+    HBRUSH hbOld = (HBRUSH)SelectObject(hdc, hbAircraftSolid);
 
+    // draw white thick
+    oldPen = (HPEN)SelectObject(hdc, hpCompassBorder);
     Polygon(hdc, Aircraft, (sizeof(Aircraft)/sizeof(Aircraft[0])));
 
     SelectObject(hdc, GetStockObject(BLACK_PEN));
@@ -2019,6 +2021,7 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
     Polygon(hdc, Aircraft, (sizeof(Aircraft)/sizeof(Aircraft[0])));
 
     SelectObject(hdc, oldPen);
+    SelectObject(hdc, hbOld);
 
   }
 
@@ -3169,7 +3172,7 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 
 // TODO: Optimise
 // RETURNS Longitude, Latitude!
-
+/* Now moved to inline function
 void MapWindow::Screen2LatLon(const int &x, const int &y,
 			      double &X, double &Y)
 {
@@ -3189,7 +3192,7 @@ void MapWindow::Screen2LatLon(const int &x, const int &y,
   Y = (float)PanLatitude-Y;
   X = (float)PanLongitude + X*(float)invfastcosine(Y);
 }
-
+*/
 
 double MapWindow::GetApproxScreenRange() {
   return (MapScale * max(MapRectBig.right-MapRectBig.left,
@@ -3284,7 +3287,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
 
     #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
-    wsprintf(Scale,TEXT("        %d ms %d %%"), timestats_av, cpuload);
+    wsprintf(Scale,TEXT("            %d ms"), timestats_av);
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, Scale, _tcslen(Scale), NULL);
     #endif
 
@@ -3384,7 +3387,7 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
 
     #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
-    wsprintf(ScaleInfo,TEXT("        %d ms %d %%"), timestats_av, cpuload);
+    wsprintf(ScaleInfo,TEXT("           %d ms"), timestats_av);
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
     #endif
 
@@ -3687,6 +3690,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
       }
     }
   }
+
   /////////
   for(i=0;i<NumberOfAirspaceAreas;i++)
   {
@@ -3701,6 +3705,9 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 	      AirspaceArea[i].NumPoints);
     }
   }
+
+  // need to do this to prevent drawing of colored outline
+  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
 
   #if (WINDOWSPC<1)
   TransparentImage(hdcDrawWindowBg,
@@ -4273,6 +4280,7 @@ void MapWindow::DisplayAirspaceWarning(int Type, TCHAR *Name ,
 ////////////////////////////////////////////////////////////////////
 
 // TODO Optimise
+/*
 void MapWindow::LatLon2Screen(const float &lon, const float &lat, int &scX, int &scY) {
   float X, Y;
   X = ((float)PanLongitude-lon)*ffastcosine(lat);
@@ -4297,17 +4305,16 @@ void MapWindow::LatLon2Screen(const double &lon, const double &lat, int &scX, in
   scY = Orig_Screen.y + iround(Y);
 }
 
-
 void MapWindow::LatLon2Screen(const double &lon, const double &lat, POINT &sc) {
-  double X, Y;
-  X = (PanLongitude-lon)*fastcosine(lat);
-  Y = (PanLatitude-lat);
+  double X = (PanLongitude-lon)*fastcosine(lat);
+  double Y = (PanLatitude-lat);
 
   rotatescale(X, Y, DisplayAngle, DrawScale );
 
   sc.x = Orig_Screen.x - iround(X);
   sc.y = Orig_Screen.y + iround(Y);
 }
+*/
 
 ////////////////////////////////////////////////////////////////////////
 

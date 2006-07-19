@@ -3456,11 +3456,16 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 /////////////////////////////////////////////////
 
 static HWND hProgress = NULL;
+static HWND hWndCurtain = NULL;
 
 void CloseProgressDialog() {
   if (hProgress) {
     DestroyWindow(hProgress);
     hProgress = NULL;
+  }
+  if (hWndCurtain) {
+    DestroyWindow(hWndCurtain);
+    hWndCurtain = NULL;
   }
 }
 
@@ -3509,7 +3514,21 @@ HWND CreateProgressDialog(TCHAR* text) {
 
     ShowWindow(hProgress,SW_SHOW);
 
+    RECT rc;
+    GetClientRect(hWndMainWindow, &rc);
+    hWndCurtain = CreateWindow(TEXT("STATIC"), TEXT(" "),
+			       WS_VISIBLE | WS_CHILD,
+                               0, 0, (rc.right - rc.left),
+			       (rc.bottom-rc.top),
+                               hWndMainWindow, NULL, hInst, NULL);
+    SetWindowPos(hWndCurtain,HWND_TOPMOST,0,0,0,0,
+                 SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+    ShowWindow(hWndCurtain,SW_SHOW);
+    SetForegroundWindow(hWndCurtain);
+    UpdateWindow(hWndCurtain);
+
     SetForegroundWindow(hProgress);
+
 #if (WINDOWSPC>0)
     SetWindowPos(hProgress,HWND_TOPMOST,
                  0, 0, 0, 0,

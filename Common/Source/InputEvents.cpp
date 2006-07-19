@@ -613,7 +613,6 @@ int InputEvents::getModeID() {
 // Processing functions - which one to do
 // -----------------------------------------------------------------------
 
-extern bool ProgramStarted;
 
 // Input is a via the user touching the label on a touch screen / mouse
 bool InputEvents::processButton(int bindex) {

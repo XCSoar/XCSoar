@@ -133,9 +133,9 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
                                         mymaxrange);
     if ((lon==0.0) && (lat==0.0)) {
       lat = FindLatitude(Basic->Latitude, Basic->Longitude, bearing,
-			  mymaxrange*2);
+			  mymaxrange*20);
       lon = FindLongitude(Basic->Latitude, Basic->Longitude, bearing,
-			  mymaxrange*2);
+			  mymaxrange*20);
     }
     MapWindow::GlideFootPrint[i].x = lon;
     MapWindow::GlideFootPrint[i].y = lat;
