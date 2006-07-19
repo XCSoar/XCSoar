@@ -1233,7 +1233,38 @@ HANDLE drawTriggerEvent;
 HANDLE dataTriggerEvent;
 HANDLE varioTriggerEvent;
 
-bool ProgramStarted = false;
+int ProgramStarted = 0; 
+// 0: not started at all
+// 1: everything is alive
+// 2: done first draw
+// 3: normal operation
+
+void AfterStartup() {
+  CloseProgressDialog();
+
+  NMEAParser::GpsUpdated = true;
+  MapWindow::MapDirty = true;
+  SetEvent(drawTriggerEvent);
+
+  UpdateWindow(hWndMainWindow);
+
+  // NOTE: Must show errors AFTER all windows ready
+  int olddelay = StatusMessageData[0].delay_ms;
+  StatusMessageData[0].delay_ms = 20000; // 20 seconds
+
+#ifdef _SIM_
+  InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
+#else
+  InputEvents::processGlideComputer(GCE_STARTUP_REAL);
+#endif
+  StatusMessageData[0].delay_ms = olddelay; 
+
+#ifdef _INPUTDEBUG_
+  InputEvents::showErrors();
+#endif
+
+}
+
 
 int WINAPI WinMain(     HINSTANCE hInstance,
                         HINSTANCE hPrevInstance,
@@ -1441,24 +1472,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 
   // Da-da, start everything now
-  ProgramStarted = true;
-  CloseProgressDialog();
-
-  // NOTE: Must show errors AFTER all windows ready
-
-  int olddelay = StatusMessageData[0].delay_ms;
-  StatusMessageData[0].delay_ms = 20000; // 20 seconds
-
-#ifdef _SIM_
-  InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
-#else
-  InputEvents::processGlideComputer(GCE_STARTUP_REAL);
-#endif
-  StatusMessageData[0].delay_ms = olddelay; 
-
-#ifdef _INPUTDEBUG_
-  InputEvents::showErrors();
-#endif
+  ProgramStarted = 1;
 
   // Main message loop:
   while (GetMessage(&msg, NULL, 0, 0))
@@ -2223,6 +2237,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #else
 	ProcessTimer();
 #endif
+	if (ProgramStarted==2) {
+	  ProgramStarted= 3;
+	  AfterStartup();
+	}
       }
       break;
 
@@ -2963,11 +2981,11 @@ void ProcessTimer(void)
 
 	  //            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
 	  
-            CONNECTWAIT = TRUE;
+	  CONNECTWAIT = TRUE;
 #ifndef DISABLEAUDIO
-            MessageBeep(MB_ICONEXCLAMATION);
+	  MessageBeep(MB_ICONEXCLAMATION);
 #endif
-            FullScreen();
+	  FullScreen();
 	    
 	} else {
 	

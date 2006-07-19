@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.54 2006/07/06 14:14:39 jwharington Exp $
+  $Id: Parser.cpp,v 1.55 2006/07/19 01:21:52 jwharington Exp $
 
 Copyright_License {
 
@@ -851,9 +851,11 @@ void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO) {
   if (GPS_INFO->FLARM_Available) {
 
     for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-      // clear this slot if it is too old (2 seconds)
       if (GPS_INFO->FLARM_Traffic[i].ID>0) {
-	if (GPS_INFO->Time> GPS_INFO->FLARM_Traffic[i].Time_Fix+2) {
+	if ((GPS_INFO->Time> GPS_INFO->FLARM_Traffic[i].Time_Fix+2)
+	    || (GPS_INFO->Time< GPS_INFO->FLARM_Traffic[i].Time_Fix)) {
+	  // clear this slot if it is too old (2 seconds), or if
+	  // time has gone backwards (due to replay)
 	  GPS_INFO->FLARM_Traffic[i].ID= 0;
 	  GPS_INFO->FLARM_Traffic[i].Name[0] = 0;
 	} else {

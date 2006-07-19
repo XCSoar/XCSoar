@@ -112,7 +112,7 @@ void GaugeVario::Create() {
   hdcDrawWindow = CreateCompatibleDC(hdcScreen);            // the memory DC
   hdcTemp = CreateCompatibleDC(hdcScreen);  // temp DC to select Uniz Bmp's
 
-                                            // prepare drawing DC, setup size and coler deep
+                       // prepare drawing DC, setup size and color depth
   HBITMAP memBM = CreateCompatibleBitmap (hdcScreen, 
 					  rc.right-rc.left, 
 					  rc.bottom-rc.top);
@@ -885,9 +885,9 @@ void GaugeVario::RenderBugs(void){
     SetTextColor(hdcDrawWindow, colText);
 
     ExtTextOut(hdcDrawWindow,
-    orgValue.x,
-    orgValue.y,
-    ETO_OPAQUE, &recValueBk, Temp, _tcslen(Temp), NULL);
+	       orgValue.x,
+	       orgValue.y,
+	       ETO_OPAQUE, &recValueBk, Temp, _tcslen(Temp), NULL);
 
     lastBugs = BUGS;
 

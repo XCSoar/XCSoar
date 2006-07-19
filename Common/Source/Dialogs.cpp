@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.106 2006/05/06 05:00:44 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.107 2006/07/19 01:21:52 jwharington Exp $
 
 Copyright_License {
 
@@ -3456,11 +3456,16 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 /////////////////////////////////////////////////
 
 static HWND hProgress = NULL;
+static HWND hWndCurtain = NULL;
 
 void CloseProgressDialog() {
   if (hProgress) {
     DestroyWindow(hProgress);
     hProgress = NULL;
+  }
+  if (hWndCurtain) {
+    DestroyWindow(hWndCurtain);
+    hWndCurtain = NULL;
   }
 }
 
@@ -3508,8 +3513,22 @@ HWND CreateProgressDialog(TCHAR* text) {
     SetWindowText(GetDlgItem(hProgress,IDC_VERSION),Temp);
 
     ShowWindow(hProgress,SW_SHOW);
-    
+
+    RECT rc;
+    GetClientRect(hWndMainWindow, &rc);
+    hWndCurtain = CreateWindow(TEXT("STATIC"), TEXT(" "),
+			       WS_VISIBLE | WS_CHILD,
+                               0, 0, (rc.right - rc.left),
+			       (rc.bottom-rc.top),
+                               hWndMainWindow, NULL, hInst, NULL);
+    SetWindowPos(hWndCurtain,HWND_TOPMOST,0,0,0,0,
+                 SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
+    ShowWindow(hWndCurtain,SW_SHOW);
+    SetForegroundWindow(hWndCurtain);
+    UpdateWindow(hWndCurtain);
+
     SetForegroundWindow(hProgress);
+
 #if (WINDOWSPC>0)
     SetWindowPos(hProgress,HWND_TOPMOST,
                  0, 0, 0, 0,

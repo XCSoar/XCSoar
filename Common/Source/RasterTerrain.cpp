@@ -254,8 +254,6 @@ void RasterTerrain::SetTerrainRounding(double xr, double yr) {
 short RasterTerrain::GetTerrainHeight(const double &Lattitude, 
 				      const double &Longditude)
 {
-  long SeekPos;
-  long lx, ly;
         
   if((fpTerrain == NULL) || (TerrainInfo.StepSize == 0))
     return -1;
@@ -274,8 +272,9 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
   double dy = (TerrainInfo.Top-Lattitude)*fYrounding;
 
   if ((DirectAccess)&&(Xrounding==1)&&(Yrounding==1)) {
-    lx = (long)(dx*256);
-    ly = (long)(dy*256);
+    long SeekPos;
+    long lx = (long)(dx*256);
+    long ly = (long)(dy*256);
     int ix = lx % 256;
     int iy = ly % 256;
     lx/= 256;
@@ -306,21 +305,20 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
     }
 
   } else {
-    lx = lround(dx)*Xrounding-1;
-    ly = lround(dy)*Yrounding-1;
+    long llx = lround(dx)*Xrounding-1;
+    long lly = lround(dy)*Yrounding-1;
 
-    if ((lx<1)
-	||(ly<1)
-	||(ly>=TerrainInfo.Rows-1)
-	||(lx>=TerrainInfo.Columns-1))
+    if ((llx<1)
+	||(lly<1)
+	||(lly>=TerrainInfo.Rows-1)
+	||(llx>=TerrainInfo.Columns-1))
       return -1;
 
     if (DirectAccess) {
-      SeekPos = ly*TerrainInfo.Columns+lx;
-      return TerrainMem[SeekPos];
+      return TerrainMem[lly*TerrainInfo.Columns+llx];
     } else {
-      SeekPos = (ly*TerrainInfo.Columns+lx)*2+sizeof(TERRAIN_INFO);
-      return LookupTerrainCache(SeekPos);
+      return LookupTerrainCache((lly*TerrainInfo.Columns+llx)*2
+				+sizeof(TERRAIN_INFO));
     }
   }
 }
