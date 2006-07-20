@@ -2017,7 +2017,6 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
     Polygon(hdc, Aircraft, (sizeof(Aircraft)/sizeof(Aircraft[0])));
 
     SelectObject(hdc, GetStockObject(BLACK_PEN));
-
     Polygon(hdc, Aircraft, (sizeof(Aircraft)/sizeof(Aircraft[0])));
 
     SelectObject(hdc, oldPen);
