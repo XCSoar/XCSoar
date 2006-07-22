@@ -414,7 +414,7 @@ BOOL DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static double LastTime = 0;
 
   NettoVario(Basic, Calculated);
-#ifndef DISABLEAUDIO
+#ifndef DISABLEAUDIOVARIO
   AudioVario(Basic, Calculated);
 #endif
 
@@ -1141,6 +1141,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 			      Calculated->NettoVario);
       thermallocator.Update(Basic->Time, Basic->Longitude, Basic->Latitude,
 			    Calculated->WindSpeed, Calculated->WindBearing,
+			    Basic->TrackBearing,
 			    &Calculated->ThermalEstimate_Longitude,
 			    &Calculated->ThermalEstimate_Latitude,
 			    &Calculated->ThermalEstimate_W,

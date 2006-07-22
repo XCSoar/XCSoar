@@ -125,6 +125,17 @@ void InsertWaypoint(int index, bool append) {
 
 }
 
+// Create a default task to home at startup if no task is present
+void DefaultTask(void) {
+  if (Task[0].Index == -1) {
+    if (HomeWaypoint != -1) {
+      Task[0].Index = HomeWaypoint;
+      ActiveWayPoint = 0;
+    }
+  }
+  RefreshTask();
+}
+
 
 // RemoveTaskpoint removes a single waypoint
 // from the current task.  index specifies an entry

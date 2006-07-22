@@ -500,6 +500,9 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
            MACCREADY,
            STYLE_REDTHICK);
 
+  DrawLabel(hdc, rc, TEXT("MC"),
+	    0, MACCREADY);
+
   DrawTrendN(hdc, rc,
              &flightstats.ThermalAverage,
              STYLE_BLUETHIN);
@@ -810,6 +813,10 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
   ScaleXFromValue(rc, tmin);
   ScaleXFromValue(rc, tmax);
 
+  bool labelDry = false;
+  bool labelAir = false;
+  bool labelDew = false;
+
   for (i=0; i<CUSONDE_NUMLEVELS; i++) {
 
     if (CuSonde::cslevels[i].nmeasurements &&
@@ -830,6 +837,23 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 	       CuSonde::cslevels[i+1].dewpoint, i+1,
 	       STYLE_BLUETHIN);
 
+      if (!labelDry && (i>0)) {
+	DrawLabel(hdc, rc, TEXT("DALR"),
+		  CuSonde::cslevels[i+1].tempDry, i);
+	labelDry = true;
+      } else {
+	if (!labelAir) {
+	  DrawLabel(hdc, rc, TEXT("Air"),
+		    CuSonde::cslevels[i+1].airTemp, i);
+	  labelAir = true;
+	} else {
+	  if (!labelDew) {
+	    DrawLabel(hdc, rc, TEXT("Dew"),
+		      CuSonde::cslevels[i+1].dewpoint, i);
+	    labelDew = true;
+	  }
+	}
+      }
     }
   }
 

@@ -664,8 +664,7 @@ void SettingsLeave() {
 
       // re-set home
       if (WAYPOINTFILECHANGED) {
-	HomeWaypoint = -1;
-	if(NumberOfWayPoints) SetHome();
+	SetHome();
       }
     }
 
@@ -1263,6 +1262,9 @@ void AfterStartup() {
   InputEvents::showErrors();
 #endif
 
+  // Create default task if none exists
+  DefaultTask();
+
 }
 
 
@@ -1403,10 +1405,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   OpenTerrain();
 
   ReadWayPoints();
-  if(NumberOfWayPoints)
-    {
-      SetHome();
-    }
+  SetHome();
 
   ReadAirfieldFile();
   ReadAirspace();
@@ -1417,12 +1416,13 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   OpenFLARMDetails();
 
+#ifndef DISABLEAUDIOVARIO
   VarioSound_Init();
   VarioSound_EnableSound(EnableSoundVario);
   VarioSound_SetVdead(SoundDeadband);
   VarioSound_SetV(0);
-
   VarioSound_SetSoundVolume(SoundVolume);
+#endif
 
   // ... register all supported devices
   // ADD NEW ONES TO BOTTOM OF THIS LIST
@@ -1982,9 +1982,10 @@ void Shutdown(void) {
 
   SaveSoundSettings();
 
+#ifndef DISABLEAUDIOVARIO
   VarioSound_EnableSound(false);
-
   VarioSound_Close();
+#endif
 
   // Stop SMS device
 #if (EXPERIMENTAL > 0)

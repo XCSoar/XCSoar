@@ -40,6 +40,7 @@ class ThermalLocator {
   void Update(double t_0,
 	      double longitude_0, double latitude_0,
 	      double wind_speed, double wind_bearing,
+	      double trackbearing,
 	      double *Thermal_Longitude,
 	      double *Thermal_Latitude,
 	      double *Thermal_W,

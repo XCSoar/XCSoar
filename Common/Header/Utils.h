@@ -7,6 +7,7 @@
 
 #include <windows.h>
 #include <shlobj.h>
+#include <math.h>
 #include "task.h"
 #include "Airspace.h"
 
@@ -133,6 +134,9 @@ void SetRegistryAirspacePriority(int i);
 void SetRegistryAirspaceMode(int i);
 int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
+void irotate(int &xin, int &yin, const double &angle);
+void protate(POINT &pin, const double &angle);
+void protateshift(POINT &pin, const double &angle, const int &x, const int &y);
 void rotate(double &xin, double &yin, const double &angle);
 void frotate(float &xin, float &yin, const float &angle);
 void rotatescale(double &xin, double &yin, const double &angle, const double &scale);
@@ -168,6 +172,8 @@ BOOL ReadStringX(FILE *fp, int Max, TCHAR *String);
 void InitSineTable(void);
 double fastcosine(const double &x);
 double fastsine(const double &x);
+int ifastcosine(const double &x);
+int ifastsine(const double &x);
 float ffastcosine(const float &x);
 float ffastsine(const float &x);
 double invfastcosine(const double &x);
@@ -180,8 +186,14 @@ void ReadDeviceSettings(int devIdx, TCHAR *Name);
 void WriteDeviceSettings(int devIdx, TCHAR *Name);
 
 unsigned int isqrt4(unsigned long val);
-int iround(double i);
-long lround(double i);
+
+inline int iround(double i) {
+    return (int)(floor(i+0.5));
+}
+
+inline long lround(double i) {
+    return (long)(floor(i+0.5));
+}
 
 WORD crcCalc(void *Buffer, size_t size);
 void ExtractDirectory(TCHAR *Dest, TCHAR *Source);

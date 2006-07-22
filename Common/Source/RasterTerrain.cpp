@@ -239,10 +239,12 @@ void RasterTerrain::SetTerrainRounding(double xr, double yr) {
     Xrounding = 1;
   }
   fXrounding = 1.0/(Xrounding*TerrainInfo.StepSize);
+  fXroundingFine = fXrounding*256.0;
   if (Yrounding<1) {
     Yrounding = 1;
   }
   fYrounding = 1.0/(Yrounding*TerrainInfo.StepSize);
+  fYroundingFine = fYrounding*256.0;
 
 }
 
@@ -258,23 +260,12 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
   if((fpTerrain == NULL) || (TerrainInfo.StepSize == 0))
     return -1;
 
-  /*
-  if ((Lattitude > TerrainInfo.Top )||
-      (Lattitude < TerrainInfo.Bottom )||
-      (Longditude < TerrainInfo.Left )||
-      (Longditude > TerrainInfo.Right )) {
-    return -1;
-  }
-    No longer needed, check done in integer math
-  */
-
-  double dx = (Longditude-TerrainInfo.Left)*fXrounding;
-  double dy = (TerrainInfo.Top-Lattitude)*fYrounding;
 
   if ((DirectAccess)&&(Xrounding==1)&&(Yrounding==1)) {
+
     long SeekPos;
-    long lx = (long)(dx*256);
-    long ly = (long)(dy*256);
+    long lx = (long)((Longditude-TerrainInfo.Left)*fXroundingFine);
+    long ly = (long)((TerrainInfo.Top-Lattitude)*fYroundingFine);
     int ix = lx % 256;
     int iy = ly % 256;
     lx/= 256;
@@ -305,8 +296,8 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
     }
 
   } else {
-    long llx = lround(dx)*Xrounding-1;
-    long lly = lround(dy)*Yrounding-1;
+    long llx = lround((Longditude-TerrainInfo.Left)*fXrounding)*Xrounding-1;
+    long lly = lround((TerrainInfo.Top-Lattitude)*fYrounding)*Yrounding-1;
 
     if ((llx<1)
 	||(lly<1)
