@@ -1582,6 +1582,7 @@ double CrossTrackError(double lon1, double lat1,
   return XTD;
 }
 
+
 // this one uses screen coordinates to avoid as many trig functions
 // as possible.. it means it is approximate but for our use it is ok.
 double ScreenCrossTrackError(double lon1, double lat1,
@@ -1612,9 +1613,10 @@ double ScreenCrossTrackError(double lon1, double lat1,
     double f = min(1.0,max(0,proj*1.0/mag12));
     
     // location of 'closest' point 
-    *lon4 = (v12x)*f+x1;
-    *lat4 = (v12y)*f+y1;
-    MapWindow::Screen2LatLon(*lon4, *lat4);
+    int x, y;
+    x = (int)((v12x)*f+x1);
+    y = (int)((v12y)*f+y1);
+    MapWindow::Screen2LatLon(x, y, *lon4, *lat4);
   } else {
     *lon4 = lon1;
     *lat4 = lat1;
