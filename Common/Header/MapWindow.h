@@ -136,45 +136,45 @@ class MapWindow {
   static void RequestOffFullScreen();
 
   inline static void Screen2LatLon(const int &x, const int &y, double &X, double &Y) {
-    X=(double)(x-Orig_Screen.x); 
-    Y=(double)(y-Orig_Screen.y);
-    rotatescale(X,Y,DisplayAngle, InvDrawScale);
-    Y = PanLatitude-Y;
-    X = PanLongitude + X*invfastcosine(Y);
+    int sx= x-Orig_Screen.x;
+    int sy= y-Orig_Screen.y;
+    irotate(sx, sy, DisplayAngle);
+    Y= PanLatitude-sy*InvDrawScale;
+    X = PanLongitude + sx*InvDrawScale*invfastcosine(Y);
   }
   inline static void Screen2LatLon(const int &x, const int &y, float &X, float &Y) {
-    X=(float)(x-Orig_Screen.x); 
-    Y=(float)(y-Orig_Screen.y);
-    frotatescale(X,Y,(float)DisplayAngle,(float)InvDrawScale);
-    Y = (float)PanLatitude-Y;
-    X = (float)PanLongitude + X*(float)invfastcosine(Y);
+    int sx= x-Orig_Screen.x;
+    int sy= y-Orig_Screen.y;
+    irotate(sx, sy, DisplayAngle);
+    Y= (float)(PanLatitude-sy*InvDrawScale);
+    X = (float)(PanLongitude+sx*InvDrawScale*invfastcosine(Y));
   }
   inline static void LatLon2Screen(const float &lon, const float &lat, int &scX, int &scY) {
-    float X = ((float)PanLongitude-lon)*ffastcosine(lat);
-    float Y = ((float)PanLatitude-lat);
+    int X = iround((PanLongitude-lon)*ffastcosine(lat)*DrawScale);
+    int Y = iround((PanLatitude-lat)*DrawScale);
     
-    frotatescale(X, Y, (float)DisplayAngle, (float)DrawScale);
+    irotate(X, Y, DisplayAngle);
     
-    scX = Orig_Screen.x - iround(X);
-    scY = Orig_Screen.y + iround(Y);
+    scX = Orig_Screen.x - X;
+    scY = Orig_Screen.y + Y;
   }
   inline static void LatLon2Screen(const double &lon, const double &lat, int &scX, int &scY) {
-    double X = (PanLongitude-lon)*fastcosine(lat);
-    double Y = (PanLatitude-lat);
+    int X = iround((PanLongitude-lon)*fastcosine(lat)*DrawScale);
+    int Y = iround((PanLatitude-lat)*DrawScale);
   
-    rotatescale(X, Y, DisplayAngle, DrawScale);
+    irotate(X, Y, DisplayAngle);
     
-    scX = Orig_Screen.x - iround(X);
-    scY = Orig_Screen.y + iround(Y);
+    scX = Orig_Screen.x - X;
+    scY = Orig_Screen.y + Y;
   }
   inline static void LatLon2Screen(const double &lon, const double &lat, POINT &sc) {
-    double X = (PanLongitude-lon)*fastcosine(lat);
-    double Y = (PanLatitude-lat);
+    int X = (int)((PanLongitude-lon)*fastcosine(lat)*DrawScale);
+    int Y = (int)((PanLatitude-lat)*DrawScale);
     
-    rotatescale(X, Y, DisplayAngle, DrawScale );
+    irotate(X, Y, DisplayAngle);
     
-    sc.x = Orig_Screen.x - iround(X);
-    sc.y = Orig_Screen.y + iround(Y);
+    sc.x = Orig_Screen.x - X;
+    sc.y = Orig_Screen.y + Y;
   }
 
   static void CloseDrawingThread(void);

@@ -140,13 +140,15 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
       } else {
         if (WaypointOutOfTerrainRangeDontAskAgain == 2)
           return(false);
+        if (WaypointOutOfTerrainRangeDontAskAgain == 1)
+          return(true);
       }
-
       return false;
     }
+  } else {
+    // no terrain database, so all waypoints are ok
+    return true;
   }
-  // no terrain database, so all waypoints are ok
-  return true;
 
 }
 
@@ -599,6 +601,11 @@ void SetHome(void)
 {
   TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
   unsigned int i;
+
+  if (NumberOfWayPoints==0) {
+    HomeWaypoint = -1;
+    return;
+  }
 
   // check invalid home waypoint
   if((HomeWaypoint <0)||(HomeWaypoint >= (int)NumberOfWayPoints))

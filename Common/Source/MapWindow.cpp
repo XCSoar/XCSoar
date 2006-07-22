@@ -1894,6 +1894,18 @@ void MapWindow::DrawCrossHairs(HDC hdc, POINT Orig)
 }
 
 
+void PolygonRotateShift(POINT* poly, int n, int x, int y, double angle) {
+  for(int i=0; i<n; i++)
+    {
+      if (InfoBoxLayout::scale>1) {
+	poly[i].x *= InfoBoxLayout::scale;
+	poly[i].y *= InfoBoxLayout::scale;
+      }
+      protateshift(poly[i], angle, x, y);
+    }
+}
+
+
 void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
 {
 
@@ -1920,7 +1932,6 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
       {-1,-6}
     };
 
-    double dX,dY;
     int i;
     HPEN hpOld;
     HBRUSH hbAircraftSolid = (HBRUSH) CreateSolidBrush(RGB(0x00,0x00,0x00));
@@ -1928,25 +1939,9 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
     HBRUSH hbOld = (HBRUSH)SelectObject(hdc, hbAircraftSolidBg);
     hpOld = (HPEN)SelectObject(hdc, hpAircraft);
   
-    for(i=0; i<NUMAIRCRAFTPOINTS; i++)
-    {
-
-  // JMW now corrects displayed aircraft heading for wind
-
-      dX = (double)Aircraft[i].x;
-      dY = (double)Aircraft[i].y;
-      rotate(dX, dY, DisplayAircraftAngle+
-             (DerivedDrawInfo.Heading-DrawInfo.TrackBearing) 
-             );
-#if (WINDOWSPC>0) 
-      if (InfoBoxLayout::scale>1) {
-	dX*= InfoBoxLayout::scale;
-	dY*= InfoBoxLayout::scale;
-      }
-#endif
-
-      Aircraft[i].x =iround(dX+Orig.x)+1;  Aircraft[i].y = iround(dY+Orig.y)+1;
-    }
+    PolygonRotateShift(Aircraft, NUMAIRCRAFTPOINTS, Orig.x+1, Orig.y+1,
+		       DisplayAircraftAngle+
+		       (DerivedDrawInfo.Heading-DrawInfo.TrackBearing));
 
     Polygon(hdc, Aircraft, NUMAIRCRAFTPOINTS);
 
@@ -1971,53 +1966,42 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
 
   if (Appearance.Aircraft == afAircraftAltA){
 
-    int i;
-    double dX,dY;
     HPEN oldPen;
     POINT Aircraft[] = {
-      {0, -5},
       {1, -5},
       {1, 0},
       {14, 0},
       {14, 1},
       {1, 1},
       {1, 8},
-      {3, 8},
-      {3, 9},
-      {-2, 9},
-      {-2, 8},
+      {4, 8},
+      {4, 9},
+      {-3, 9},
+      {-3, 8},
       {0, 8},
       {0, 1},
       {-13, 1},
       {-13, 0},
-      {0 ,0},
-      {0, -5}
+      {0, 0},
+      {0, -5},
+      {1, -5},
     };
 
-    for(i=0; i<(sizeof(Aircraft)/sizeof(Aircraft[0])); i++){
-      dX = (double)Aircraft[i].x-2 ;dY = (double)Aircraft[i].y;
-      rotate(dX, dY, DisplayAircraftAngle+
-             (DerivedDrawInfo.Heading-DrawInfo.TrackBearing)
-             );
-#if (WINDOWSPC>0) 
-      if (InfoBoxLayout::scale>1) {
-	dX*= InfoBoxLayout::scale;
-	dY*= InfoBoxLayout::scale;
-      }
-#endif
+    int n = sizeof(Aircraft)/sizeof(Aircraft[0]);
 
-      Aircraft[i].x =iround(dX+Orig.x);  Aircraft[i].y = iround(dY+Orig.y);
-    }
+    double angle = DisplayAircraftAngle+
+      (DerivedDrawInfo.Heading-DrawInfo.TrackBearing);
 
-    HBRUSH hbAircraftSolid = (HBRUSH) CreateSolidBrush(RGB(0x00,0x00,0x00));
-    HBRUSH hbOld = (HBRUSH)SelectObject(hdc, hbAircraftSolid);
+    PolygonRotateShift(Aircraft, n,
+		       Orig.x-1, Orig.y, angle);
 
-    // draw white thick
     oldPen = (HPEN)SelectObject(hdc, hpCompassBorder);
-    Polygon(hdc, Aircraft, (sizeof(Aircraft)/sizeof(Aircraft[0])));
+    Polygon(hdc, Aircraft, n);
 
-    SelectObject(hdc, GetStockObject(BLACK_PEN));
-    Polygon(hdc, Aircraft, (sizeof(Aircraft)/sizeof(Aircraft[0])));
+    HBRUSH hbOld;
+    hbOld = (HBRUSH)SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+    SelectObject(hdc, hpAircraftBorder); // hpBearing
+    Polygon(hdc, Aircraft, n);
 
     SelectObject(hdc, oldPen);
     SelectObject(hdc, hbOld);
@@ -2031,18 +2015,17 @@ void MapWindow::DrawBitmapX(HDC hdc, int x, int y,
 			    HDC source,
 			    int offsetx, int offsety,
 			    DWORD mode) {
-#if (WINDOWSPC>0) 
-  StretchBlt(hdc, x, y, 
-	     IBLSCALE(sizex), 
-	     IBLSCALE(sizey), 
-	     source,
-	     offsetx, offsety, sizex, sizey,
-	     mode);
-#else
-  BitBlt(hdc, x, y, sizex, sizey, 
-	 source, offsetx, offsety, mode); 
-#endif
-
+  if (InfoBoxLayout::scale>1) {
+    StretchBlt(hdc, x, y, 
+	       IBLSCALE(sizex), 
+	       IBLSCALE(sizey), 
+	       source,
+	       offsetx, offsety, sizex, sizey,
+	       mode);
+  } else {
+    BitBlt(hdc, x, y, sizex, sizey, 
+	   source, offsetx, offsety, mode); 
+  }
 }
 
 void MapWindow::DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h) {
@@ -2903,7 +2886,6 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
 
 
 void MapWindow::DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
-  double dX,dY;
   int i, j;
   POINT Start;
   HPEN hpOld;
@@ -2952,19 +2934,10 @@ void MapWindow::DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
     
     for(i=0;i<4;i++)
     {
-      dX = (double)Arrow[i].x ;dY = (double)(Arrow[i].y-iwind/2-25);
-      rotate(dX, dY, -1*(DisplayAngle - DerivedDrawInfo.WindBearing));
-      
-#if (WINDOWSPC>0) 
-      if (InfoBoxLayout::scale>1) {
-	dX*= InfoBoxLayout::scale;
-	dY*= InfoBoxLayout::scale;
-      }
-#endif
-
-      Arrow[i].x = iround(Start.x+dX);  Arrow[i].y = iround(dY+Start.y);
-      
+      Arrow[i].y -= iwind/2-25;
     }
+    PolygonRotateShift(Arrow, 4, Start.x, Start.y, 
+		       DerivedDrawInfo.WindBearing-DisplayAngle);
 
     SelectObject(hdc, hpWindThick);
     
@@ -2985,7 +2958,6 @@ void MapWindow::DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
 
 #if (ALTERNATEWINDVECTOR > 0)
 void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
-  double dX,dY;
   int i;
   POINT Start;
   HPEN hpOld;
@@ -3018,20 +2990,8 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
   for (i=1;i<4;i++)
     Arrow[i].y -= wmag;
 
-  for(i=0;i<7;i++)
-  {
-    dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
-    rotate(dX, dY, -1*(DisplayAngle - DerivedDrawInfo.WindBearing));
-#if (WINDOWSPC>0) 
-      if (InfoBoxLayout::scale>1) {
-	dX*= InfoBoxLayout::scale;
-	dY*= InfoBoxLayout::scale;
-      }
-#endif
-
-    Arrow[i].x = iround(dX+Start.x);  Arrow[i].y = iround(dY+Start.y);
-    
-  }
+  PolygonRotateShift(Arrow, 7, Start.x, Start.y, 
+	    DerivedDrawInfo.WindBearing-DisplayAngle);
 
   _itot(iround(DerivedDrawInfo.WindSpeed * SPEEDMODIFY), sTmp, 10);
 
@@ -3051,8 +3011,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
 
 void MapWindow::DrawWind(HDC hdc, POINT Orig, RECT rc)
 {
-  double dX,dY;
-  int i, j;
+  int j;
   POINT Start;
   HPEN hpOld;
   int iwind;
@@ -3098,21 +3057,9 @@ void MapWindow::DrawWind(HDC hdc, POINT Orig, RECT rc)
     */
     
     // JMW TODO: if wind is stronger than 10 knots, draw two arrowheads
-    
-    for(i=0;i<4;i++)
-    {
-      dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
-      rotate(dX, dY, -1*(DisplayAngle - DerivedDrawInfo.WindBearing));
-#if (WINDOWSPC>0) 
-      if (InfoBoxLayout::scale>1) {
-	dX*= InfoBoxLayout::scale;
-	dY*= InfoBoxLayout::scale;
-      }
-#endif
-      
-      Arrow[i].x = iround(Start.x+dX);  Arrow[i].y = iround(dY+Start.y);
-      
-    }
+
+    PolygonRotateShift(Arrow, 4, Start.x, Start.y, 
+	      DerivedDrawInfo.WindBearing-DisplayAngle);
     
     SelectObject(hdc, hpWindThick);
     
@@ -3446,8 +3393,6 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
 
 void MapWindow::DrawBestCruiseTrack(HDC hdc, POINT Orig)
 {
-  double dX,dY;
-  int i;
   HPEN hpOld;
   HBRUSH hbOld;
 
@@ -3471,19 +3416,8 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, POINT Orig)
     Arrow[4].y -= dy;
     Arrow[5].y -= dy;
 
-    for(i=0;i<7;i++)
-    {
-      dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
-      rotate(dX, dY, -(DisplayAngle - DerivedDrawInfo.BestCruiseTrack));
-#if (WINDOWSPC>0) 
-      if (InfoBoxLayout::scale>1) {
-	dX*= InfoBoxLayout::scale;
-	dY*= InfoBoxLayout::scale;
-      }
-#endif
-
-      Arrow[i].x = iround(dX+Orig.x);  Arrow[i].y = iround(dY+Orig.y);
-    }
+    PolygonRotateShift(Arrow, 7, Orig.x, Orig.y, 
+		       DerivedDrawInfo.BestCruiseTrack-DisplayAngle);
 
     Polygon(hdc,Arrow,7);
 
@@ -3492,21 +3426,10 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, POINT Orig)
 
     POINT Arrow[] = { {-1,-40}, {-1,-62}, {-6,-62}, {0,-70}, {6,-62}, {1,-62}, {1,-40}, {-1,-40}};
 
-    for(i=0;i<(sizeof(Arrow)/sizeof(Arrow[0]));i++){
-      dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
-      rotate(dX, dY, -(DisplayAngle - DerivedDrawInfo.BestCruiseTrack));
-#if (WINDOWSPC>0) 
-      if (InfoBoxLayout::scale>1) {
-	dX*= InfoBoxLayout::scale;
-	dY*= InfoBoxLayout::scale;
-      }
-#endif
-
-      Arrow[i].x = iround(dX+Orig.x);  Arrow[i].y = iround(dY+Orig.y);
-    }
-
+    PolygonRotateShift(Arrow, sizeof(Arrow)/sizeof(Arrow[0]),
+		       Orig.x, Orig.y, 
+		       DerivedDrawInfo.BestCruiseTrack-DisplayAngle);
     Polygon(hdc, Arrow, (sizeof(Arrow)/sizeof(Arrow[0])));
-
   }
 
   SelectObject(hdc, hpOld);
@@ -3532,27 +3455,12 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
 #endif
 
     POINT Arrow[5] = { {0,-18}, {-6,10}, {0,0}, {6,10}, {0,-18}};
-    double dX,dY;
-    int i;
 
     hpOld = (HPEN)SelectObject(hDC, hpCompass);
     hbOld = (HBRUSH)SelectObject(hDC, hbCompass);
 
-    for(i=0;i<5;i++)
-    {
-      dX = (double)Arrow[i].x ;dY = (double)Arrow[i].y;
-      rotate(dX, dY, -DisplayAngle);
-#if (WINDOWSPC>0) 
-      if (InfoBoxLayout::scale>1) {
-	dX*= InfoBoxLayout::scale;
-	dY*= InfoBoxLayout::scale;
-      }
-#endif
-
-      Arrow[i].x = iround(dX+Start.x);  Arrow[i].y = iround(dY+Start.y);
-
-    }
-
+    PolygonRotateShift(Arrow, 5, Start.x, Start.y, 
+		       -DisplayAngle);
     Polygon(hDC,Arrow,5);
 
     SelectObject(hDC, hbOld);
@@ -3586,24 +3494,9 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
         Start.x -= InfoBoxLayout::ControlWidth;
 #endif
 
-      double dX,dY;
-      int i;
+      PolygonRotateShift(Arrow, 5, Start.x, Start.y, 
+			 -DisplayAngle);
 
-      for(i=0;i<5;i++){
-        dX = (double)Arrow[i].x;
-        dY = (double)Arrow[i].y;
-        rotate(dX, dY, -1*DisplayAngle);
-#if (WINDOWSPC>0) 
-      if (InfoBoxLayout::scale>1) {
-	dX*= InfoBoxLayout::scale;
-	dY*= InfoBoxLayout::scale;
-      }
-#endif
-
-        Arrow[i].x = iround(dX+Start.x);
-        Arrow[i].y = iround(dY+Start.y);
-
-      }
       lastDisplayAngle = DisplayAngle;
       lastRcRight = rc.right;
     }
@@ -3811,7 +3704,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   if (h<0) { 
     // JMW TODO: below safety height, maybe give warning here
     h=0;
-    //    return;
+    return;
   }
   
   if (maxh>mth) {

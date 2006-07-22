@@ -63,6 +63,7 @@ public:
   static FILE *fpTerrain;
 
   double fXrounding, fYrounding;
+  double fXroundingFine, fYroundingFine;
   int Xrounding, Yrounding;
 
   float GetTerrainStepSize();

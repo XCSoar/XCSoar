@@ -76,6 +76,7 @@ void ThermalLocator::AddPoint(double t, double longitude, double latitude, doubl
 void ThermalLocator::Update(double t_0, 
 			    double longitude_0, double latitude_0,
 			    double wind_speed, double wind_bearing,
+			    double trackbearing,
 			    double *Thermal_Longitude,
 			    double *Thermal_Latitude,
 			    double *Thermal_W,
@@ -127,6 +128,8 @@ void ThermalLocator::Update(double t_0,
   xav/= slogw;
   yav/= slogw;
 
+  // xav, yav is average glider's position
+
   slogw = 0;
   for (i=0; i<TLOCATOR_NMAX; i++) {
     if (points[i].valid) {
@@ -140,10 +143,28 @@ void ThermalLocator::Update(double t_0,
   if (slogw>0) {
     sx /= slogw;
     sy /= slogw;
-    
+
+
+    int vx = iround(100*fastsine(trackbearing));
+    int vy = iround(100*fastcosine(trackbearing));
+    long dx = sx;
+    long dy = sy;
+    int mag = isqrt4((dx*dx+dy*dy)*256*256)/256;
+
+    // find magnitude of angle error
+    double g = max(-1.0,min(1.0,(dx*vx + dy*vy)/(100.0*mag)));
+    double angle = acos(g)*RAD_TO_DEG-90;
+
+#ifdef DEBUG
+    char buffer[100];
+    sprintf(buffer,"%d %d %d %d %d %f # centering\n",
+	    sx, sy, xav, yav, mag, angle);
+    DebugStore(buffer);
+#endif
+
     est_x = (sx+xav)/(1.0*SFACT);
     est_y = (sy+yav)/(1.0*SFACT);
-    
+
     est_t =  t_0;
     est_latitude = est_y+latitude_0;
     est_longitude = est_x/fastcosine(latitude_0)+longitude_0;

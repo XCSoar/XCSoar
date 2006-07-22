@@ -274,6 +274,7 @@ bool LockSettingsInFlight = true;
 static double SINETABLE[910];
 static float FSINETABLE[910];
 static double INVCOSINETABLE[910];
+static int ISINETABLE[910];
 
 void StoreType(int Index,int InfoType)
 {
@@ -1043,6 +1044,71 @@ void frotate(float &xin, float &yin, const float &angle)
     }
   xin = x*cost - y*sint;
   yin = y*cost + x*sint;
+}
+
+
+void protate(POINT &pin, const double &angle)
+{
+  int x= pin.x;
+  int y= pin.y;
+  static double lastangle = 0;
+  static int cost=1024,sint=0;
+
+  if(angle != lastangle)
+    {
+      lastangle = angle;
+      cost = ifastcosine(angle);
+      sint = ifastsine(angle);
+    }
+  pin.x = (x*cost - y*sint + 512)/1024;
+  pin.y = (y*cost + x*sint + 512)/1024;
+
+  // round (x/b) = (x+b/2)/b;
+  // b = 2; x = 10 -> (10+1)/2=5
+  // b = 2; x = 11 -> (11+1)/2=6
+  // b = 2; x = -10 -> (-10+1)/2=4
+}
+
+
+void protateshift(POINT &pin, const double &angle, 
+		  const int &xs, const int &ys)
+{
+  int x= pin.x;
+  int y= pin.y;
+  static double lastangle = 0;
+  static int cost=1024,sint=0;
+
+  if(angle != lastangle)
+    {
+      lastangle = angle;
+      cost = ifastcosine(angle);
+      sint = ifastsine(angle);
+    }
+  pin.x = (x*cost - y*sint + 512 + xs*1024)/1024;
+  pin.y = (y*cost + x*sint + 512 + ys*1024)/1024;
+
+  // round (x/b) = (x+b/2)/b;
+  // b = 2; x = 10 -> (10+1)/2=5
+  // b = 2; x = 11 -> (11+1)/2=6
+  // b = 2; x = -10 -> (-10+1)/2=4
+}
+
+
+void irotate(int &xin, int &yin, const double &angle)
+{
+  int x= xin;
+  int y= yin;
+  static double lastangle = 0;
+  static int cost=1024,sint=0;
+
+  if(angle != lastangle)
+    {
+      lastangle = angle;
+      cost = ifastcosine(angle);
+      sint = ifastsine(angle);
+    }
+  xin = (x*cost - y*sint + 512)/1024;
+  yin = (y*cost + x*sint + 512)/1024;
 }
 
 
@@ -2156,6 +2222,7 @@ void InitSineTable(void)
       angle *= DEG_TO_RAD;
       SINETABLE[i] = (double)sin(angle);
       FSINETABLE[i] = (float)sin(angle);
+      ISINETABLE[i] = iround(sin(angle)*1024);
       double cs = cos(angle);
       if ((cs>0) && (cs<1.0e-8)) {
 	cs = 1.0e-8;
@@ -2202,6 +2269,11 @@ double invfastcosine(const double &x)
     {
       return 0;
     }
+}
+
+int ifastcosine(const double &x)
+{
+  return ifastsine(x+90);
 }
 
 
@@ -2283,6 +2355,44 @@ float ffastsine(const float &x)
     {
       index = index - 1800;
       return -FSINETABLE[1800-index];
+    }
+  else
+    {
+      return 0;
+    }
+}
+
+
+int ifastsine(const double &x)
+{
+  int index;
+  double xi = x;
+
+  while(xi<0)
+    {
+      xi += 360;
+    }
+  while(xi>=360)
+    {
+      xi -= 360;
+    }
+  index = (int)(xi*10);
+  if((index>=0 )&&(index<=900))
+    {
+      return ISINETABLE[index];
+    }
+  else if((index>900)&&(index<=1800))
+    {
+      return ISINETABLE[1800 - index];
+    }
+  else if((index>1800)&&(index<=2700))
+    {
+      return -ISINETABLE[index-1800];
+    }
+  else if((index>2700)&&(index<=3600))
+    {
+      index = index - 1800;
+      return -ISINETABLE[1800-index];
     }
   else
     {
@@ -2443,31 +2553,6 @@ unsigned int isqrt4(unsigned long val) {
 // http://www.azillionmonkeys.com/qed/sqroot.html
 
 
-int iround(double i) {
-  int g=(int)i;
-  if (fabs(i-g)>0.5) {
-    if (i<0) {
-      return g-1;
-    } else {
-      return g+1;
-    }
-  } else {
-    return g;
-  }
-}
-
-long lround(double i) {
-  long g=(long)i;
-  if (fabs(i-g)>0.5) {
-    if (i<0) {
-      return (g-1);
-    } else {
-      return (g+1);
-    }
-  } else {
-    return g;
-  }
-}
 
 
 static int ByteCRC16(int value, int crcin)

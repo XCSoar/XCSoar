@@ -72,7 +72,7 @@ void guiToggleLogger(bool noAsk = false);
 void LoadNewTask(TCHAR *FileName);
 void LoadTask(TCHAR *FileName,HWND hDlg);
 void SaveTask(TCHAR *FileName);
-
+void DefaultTask(void);
 
 
 #endif

@@ -537,6 +537,7 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpAltWarningMargin"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(AltWarningMargin*ALTITUDEMODIFY));
+    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 

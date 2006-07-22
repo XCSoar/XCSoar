@@ -260,7 +260,7 @@ void GaugeVario::Render() {
     // JMW averager now displays netto average if not circling
     if (!DerivedDrawInfo.Circling) {
       RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop, 
-		  CALCULATED_INFO.NettoAverage30s*LIFTMODIFY, TEXT("Net Avg"));
+		  CALCULATED_INFO.NettoAverage30s*LIFTMODIFY, TEXT("NetAvg"));
     } else {
       RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop, 
 		  CALCULATED_INFO.Average30s*LIFTMODIFY, TEXT("Avg"));
