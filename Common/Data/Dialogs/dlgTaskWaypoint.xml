@@ -19,33 +19,44 @@
 
   <WndFrame Name="frmStart" X=80 Y=0 Width=246 Height=222 Font=2>
 
-  <WndProperty Name="prpTaskStartLine" Caption="Start type"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpTaskStartLine" Caption="Start type"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Type of the start.
+[Line]: The task is started when the line is crossed.  The line length is set via the 'Start radius' property.
+[Cylinder]: The task is started when the glider leaves the cylinder.  The cylinder radius is set via the 'Start radius' property.
+[FAI Sector]: Defines a 90 degree sector.  The task is started when the glider crosses the sector lines.  The radius of the sector is set via the 'Start radius' property.">
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpTaskStartRadius" Caption="Start radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpTaskStartRadius" Caption="Start radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Radius of the start cylinder/sector or half-length of the start line.">
     <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
 
   </WndProperty>
 
-  <WndProperty Name="prpTaskFAISector" Caption="Sector type"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpTaskFAISector" Caption="Sector type"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2   Help="Type of sectors used for non-AAT tasks.
+[Cylinder]  Barrel cylinder of specified radius.
+[FAI sector]  90 degree sector centered at bisector, at specified range
+[DAe 0.5/10] German national sector type, equivalent to 0.5 km radius barrel and 10 km FAI sector.">
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpTaskSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpTaskSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Radius of the turnpoint observation area for non-AAT tasks.">
     <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
 
   </WndProperty>
 
-  <WndProperty Name="prpAATEnabled" Caption="AAT" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0>
+  <WndProperty Name="prpAATEnabled" Caption="AAT" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables AAT tasks.  When enabled, the AAT observation parameters can be set for each turnpoint.">
     <DataField name="" DataType="boolean" ReadOnly=0/>
   </WndProperty>
 
-  <WndProperty Name="prpMinTime" Caption="Min time" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 min=0 max=600 step=10>
+  <WndProperty Name="prpMinTime" Caption="Min time" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 min=0 max=600 step=10 Help="Minimum AAT task time in minutes.">
     <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
   </WndProperty>
 
-  <WndProperty Name="prpAutoAdvance" Caption="Auto advance"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpAutoAdvance" Caption="Auto advance"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2   Help="Determines how waypoints are advanced through the task.
+[Manual] Fully manual task waypoint advancing
+[Auto] Fully automatic task waypoint advancing
+[Arm] Automatic task waypoint advancing needs to be armed each waypoint
+[Arm start] Automatic task waypoint advancing needs to be armed for the start
+">
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
@@ -57,27 +68,29 @@
 
   <WndFrame Name="frmAATTurnpoint" X=80 Y=0 Width=240 Height=222 Font=2>
 
-  <WndProperty Name="prpAATOffsetRadius" Caption="Target distance"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpAATOffsetRadius" Caption="Target distance"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Target distance adjusts the location of the target within the observation area.  Large values increases the distance (moves the target further away from the previous turnpoint), low values decreases the distance." >
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=10/>
     </WndProperty>
 
-    <WndProperty Name="prpAATType" Caption="Type"     X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpAATType" Caption="Type"     X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 Help="Type of the AAT observation area:
+[Cylinder]: Defines a cylindrical AAT area, radius is defined by the 'Circle radius' properties.
+[Sector]: Defines a sector AAT area, radius is defined by the 'Sector radius' parameter, and the sector is bounded by the 'Start radial' and 'End radial' properties.">
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
-  <WndProperty Name="prpAATCircleRadius" Caption="Circle radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpAATCircleRadius" Caption="Circle radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2  Help="Radius of the AAT observation area for cylindrical type.">
     <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
     </WndProperty>
 
-  <WndProperty Name="prpAATSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpAATSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Radius of the AAT observation area for sector type.">
     <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
     </WndProperty>
 
-  <WndProperty Name="prpAATStartRadial" Caption="Start radial"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpAATStartRadial" Caption="Start radial"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Start radial of the AAT observation area for sector type.">
     <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=360 Step=10/>
     </WndProperty>
 
-  <WndProperty Name="prpAATFinishRadial" Caption="Finish radial"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpAATFinishRadial" Caption="Finish radial"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Finish radial of the AAT observation area for sector type.">
     <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=360 Step=10/>
     </WndProperty>
 
@@ -85,11 +98,14 @@
 
   <WndFrame Name="frmFinish" X=80 Y=0 Width=240 Height=222 Font=2>
 
-  <WndProperty Name="prpTaskFinishLine" Caption="Finish type"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpTaskFinishLine" Caption="Finish type"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Type of the finish.
+[Line]: The task is finished when the line is crossed.  The line length is set via the 'Finish radius' property.
+[Cylinder]: The task is finished when the glider enters the cylinder.  The cylinder radius is set via the 'Finish radius' property.
+[FAI Sector]: Defines a 90 degree sector.  The task is finished when the glider crosses the sector lines.  The radius of the sector is set via the 'Finish radius' property.">
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpTaskFinishRadius" Caption="Finish radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpTaskFinishRadius" Caption="Finish radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Radius of the finish cylinder or half length of the finish line.">
     <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
 
   </WndProperty>

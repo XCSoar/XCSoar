@@ -134,7 +134,7 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
     //    bearing = -90+i*180/NUMTERRAINSWEEPS+Basic->TrackBearing;
     bearing = i*360/NUMTERRAINSWEEPS;
-    //    LockFlightData();
+    // LockFlightData();
     distance = FinalGlideThroughTerrain(bearing,
                                         Basic,
                                         Calculated, &lat, &lon,
@@ -147,7 +147,7 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
     MapWindow::GlideFootPrint[i].x = lon;
     MapWindow::GlideFootPrint[i].y = lat;
-    //    UnlockFlightData();
+    // UnlockFlightData();
   }
 }
 
@@ -2831,9 +2831,11 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   LastTime = Basic->Time;
 
-
-  // JMW TODO: Should really work out dt here, but i'm assuming constant time steps
-  double dheight = Calculated->NavAltitude-SAFETYALTITUDEBREAKOFF;
+  // JMW TODO: Should really work out dt here,
+  //           but i'm assuming constant time steps
+  double dheight = Calculated->NavAltitude
+    -SAFETYALTITUDEBREAKOFF
+    -Calculated->TerrainAlt;
 
   int index, i, j;
 
@@ -2882,9 +2884,6 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       // height of center of bucket
       j = iround(NUMTHERMALBUCKETS*h/mthnew);
 
-      //      h = (i)*(mthnew)/(NUMTHERMALBUCKETS); // height of center of bucket
-      //      j = iround(NUMTHERMALBUCKETS*h/Calculated->MaxThermalHeight);
-
       if (j<NUMTHERMALBUCKETS) {
         if (Calculated->ThermalProfileN[i]>0) {
           tmpW[j] += Calculated->ThermalProfileW[i];
@@ -2901,7 +2900,7 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   index = min(NUMTHERMALBUCKETS-1,
 	      iround(NUMTHERMALBUCKETS*(dheight/max(1.0,
-						    Calculated->MaxThermalHeight))));
+		     Calculated->MaxThermalHeight))));
 
   Calculated->ThermalProfileW[index]+= Calculated->Vario;
   Calculated->ThermalProfileN[index]++;
@@ -2966,6 +2965,9 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   double Yrounding = fabs(lat-Basic->Latitude)/2;
   terrain_dem_calculations.SetTerrainRounding(Xrounding, Yrounding);
 
+  latlast = Basic->Latitude;
+  lonlast = Basic->Longitude;
+
   // find grid
   double dlat = FindLatitude(Basic->Latitude, Basic->Longitude, bearing,
                                 glidemaxrange)-Basic->Latitude;
@@ -2993,7 +2995,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     // find height over terrain
     h =  terrain_dem_calculations.GetTerrainHeight(lat, lon);
 
-    dh = altitude - h -  SAFETYALTITUDETERRAIN;
+    dh = altitude - h - SAFETYALTITUDETERRAIN;
 
     if ((dh<=0)&&(dhlast>=0)) {
       double f;

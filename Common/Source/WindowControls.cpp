@@ -873,6 +873,8 @@ WindowControl::WindowControl(WindowControl *Owner,
 
   mClientCount = 0;
 
+  mOnHelpCallback = NULL;
+
   // todo
 
   DWORD Style = 0;
@@ -1364,12 +1366,15 @@ int WindowControl::OnHelp() {
     return(0); // undefined. return 1 if defined
 #else
     if (mHelpText) {
-
       dlgHelpShowModal(mCaption, mHelpText);
-
       return(1);
     } else {
-      return(0);
+      if (mOnHelpCallback) {
+	(mOnHelpCallback)(this);
+	return(1);
+      } else {
+	return(0);
+      }
     }
 #endif
 };

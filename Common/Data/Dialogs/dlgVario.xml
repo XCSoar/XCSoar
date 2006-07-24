@@ -19,39 +19,39 @@
 
   <WndFrame Name="frmHardware" X=70 Y=0 Width=246 Height=222 Font=2>
 
-  <WndProperty Name="prpHasPressureTE" Caption="TE port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpHasPressureTE" Caption="TE port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the Total Energy port is connected.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpHasPressurePitot" Caption="Pitot port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpHasPressurePitot" Caption="Pitot port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the Pitot port is connected.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpHasPressureStatic" Caption="Static port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpHasPressureStatic" Caption="Static port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the Static port is connected.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpHasPressureStall" Caption="Stall port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpHasPressureStall" Caption="Stall port"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the Stall pressure port is connected.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpHasAccelerometer" Caption="Accelerometer"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpHasAccelerometer" Caption="Accelerometer"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether the internal accelerometer is used.  Only change this if the accelerometer has malfunctioned or the instrument cannot be installed with correct alignment.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpHasTemperature" Caption="Temperature"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpHasTemperature" Caption="Temperature"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Whether a temperature and humidity sensor is installed.  Set to 0 to disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be specified.">
     <DataField name="" DataType="enum"  Min=0 Max=2 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpBaudRateA" Caption="Baud Rate Vega"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpBaudRateA" Caption="Baud Rate Vega"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Baud rate of serial device connected to Vega port X1.  Use this as necessary when using a third party GPS or data-logger instead of FLARM.  If FLARM is connected the baud rate will be fixed at 38400.  For OzFLARM, the value can be set to 19200.">
     <DataField name="" DataType="enum"  Min=0 Max=2 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpFlarmConnected" Caption="FLARM connected"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpFlarmConnected" Caption="FLARM connected"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Enable detection of FLARM.  Disable only if FLARM is not used or disconnected.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpPDAPower" Caption="PDA power"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpEnablePDASupply" Caption="PDA power"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If Vega is connected to Altair, this should be set to FALSE.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
@@ -59,19 +59,19 @@
 
   <WndFrame Name="frmCalibration" X=70 Y=0 Width=246 Height=222 Font=2>
 
-  <WndProperty Name="prpTotalEnergyMixingRatio" Caption="TE mixing"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpTotalEnergyMixingRatio" Caption="TE mixing"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Proportion of TE probe value used in total energy mixing with pitot/static total energy.">
     <DataField name="" DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min=0 Max=8 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpCalibrationAirSpeed" Caption="ASI cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpCalibrationAirSpeed" Caption="ASI cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Calibration factor applied to measured airspeed to obtain indicated airspeed.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=200 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpCalibrationTEStatic" Caption="TE static cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpCalibrationTEStatic" Caption="TE static cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Calibration factor applied to static pressure used in total energy calculation. ">
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=200 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpCalibrationTEDynamic" Caption="TE dynamic cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpCalibrationTEDynamic" Caption="TE dynamic cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Calibration factor applied to dynamic pressure used in total energy calculation. ">
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=200 Step=1/>
   </WndProperty>
 
@@ -79,39 +79,48 @@
 
   <WndFrame Name="frmAudioModes" X=70 Y=0 Width=246 Height=222 Font=2>
 
-    <WndProperty Name="prpToneClimbComparisonType" Caption="Climb fast trigger"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpToneClimbComparisonType" Caption="Climb fast trigger"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Comparison method used to detect climb states (HIGH/LOW).
+[NONE]: State LOW disabled
+[MACCREADY]: State High if gross vario is greater than MacCready setting.
+[AVERAGE]: State HIGH if gross vario value is greater than average gross vario value.">
       <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpToneCruiseLiftDetectionType" Caption="Cruise lift trigger"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpToneCruiseLiftDetectionType" Caption="Cruise lift trigger"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Comparison method used to detect cruise states for switching to lift tones during cruise.
+[NONE]: LIFT tone disabled in cruise
+[RELATIVE ZERO] LIFT tone when relative vario greater than zero.
+[GROSS ZERO] LIFT tone when glider is climbing.
+[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.
+[NET MC/2] LIFT tone when airmass velocity greater than half MC.
+ ">
       <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpToneAveragerVarioTimeScale" Caption="Climb averager scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpToneAveragerVarioTimeScale" Caption="Climb averager scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Time scale used for vario averager.">
       <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpToneAveragerCruiseTimeScale" Caption="Cruise averager scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpToneAveragerCruiseTimeScale" Caption="Cruise averager scale"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Time scale used for cruise speed command averager.">
       <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
     </WndProperty>
 
-  <WndProperty Name="prpToneMeanVolumeCircling" Caption="Circling volume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpToneMeanVolumeCircling" Caption="Circling volume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Mean volume level in circling modes.">
     <DataField name="" DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min=0 Max=8 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpToneMeanVolumeCruise" Caption="Cruise volume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpToneMeanVolumeCruise" Caption="Cruise volume"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Mean volume level in cruise modes.  If set to zero, scales with airspeed.">
     <DataField name="" DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min=0 Max=8 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpToneBaseFrequencyOffset" Caption="Base frequency"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpToneBaseFrequencyOffset" Caption="Base frequency"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Adjustment to base frequency of tones in all modes.">
     <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=-30 Max=30 Step=1/>
   </WndProperty>
 
-    <WndProperty Name="prpVarioTimeConstantCircling" Caption="Filter circling"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpVarioTimeConstantCircling" Caption="Filter circling"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Variometer low pass filter time constant in circling mode.">
       <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpVarioTimeConstantCruise" Caption="Filter cruise"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpVarioTimeConstantCruise" Caption="Filter cruise"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Variometer low pass filter time constant in cruise mode.">
       <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
     </WndProperty>
 
@@ -119,27 +128,27 @@
 
   <WndFrame Name="frmAudioDeadband" X=70 Y=0 Width=246 Height=222 Font=2>
 
-    <WndProperty Name="prpToneDeadbandCirclingType" Caption="Circling deadband type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+    <WndProperty Name="prpToneDeadbandCirclingType" Caption="Circling deadband type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Type of dead band used in circling mode.">
       <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
     </WndProperty>
 
-  <WndProperty Name="prpToneDeadbandCirclingHigh" Caption="Circling hi cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpToneDeadbandCirclingHigh" Caption="Circling hi cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="High limit of circling dead band">
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpToneDeadbandCirclingLow" Caption="Circling low cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpToneDeadbandCirclingLow" Caption="Circling low cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Low limit of circling dead band">
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpToneDeadbandCruiseType" Caption="Cruise deadband type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpToneDeadbandCruiseType" Caption="Cruise deadband type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Type of dead band used in cruise mode.">
       <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpToneDeadbandCruiseHigh" Caption="Cruise hi cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpToneDeadbandCruiseHigh" Caption="Cruise hi cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="High limit of cruise dead band">
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpToneDeadbandCruiseLow" Caption="Cruise low cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpToneDeadbandCruiseLow" Caption="Cruise low cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Low limit of cruise dead band">
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=1/>
   </WndProperty>
 

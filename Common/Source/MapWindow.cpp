@@ -3358,39 +3358,37 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
 pointObj MapWindow::GlideFootPrint[NUMTERRAINSWEEPS+1];
 
 void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
-  POINT Groundline[NUMTERRAINSWEEPS+1];
+  POINT Groundline[2];
   HPEN hpOld;
 
   hpOld = (HPEN)SelectObject(hDC,
 			     hpTerrainLineBg);	//sjt 02feb06 added bg line
   LockFlightData();
 
-  bool lastvisible = false;
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-    if ((fabs(GlideFootPrint[i].x)>0)
-	&&(fabs(GlideFootPrint[i].y)>0)) {
-      LatLon2Screen(GlideFootPrint[i].x,
-		    GlideFootPrint[i].y,
-		    Groundline[i]);
-      if (lastvisible) {
-	SelectObject(hDC,hpTerrainLineBg);
-	Polyline(hDC,Groundline+i-1,2);
-	SelectObject(hDC,hpTerrainLine);
-	Polyline(hDC,Groundline+i-1,2);
-      }
-      lastvisible = true;
-    } else {
-      lastvisible = false;
+    LatLon2Screen(GlideFootPrint[i].x,
+		  GlideFootPrint[i].y,
+		  Groundline[1]);
+    if (i>0) {
+      SelectObject(hDC,hpTerrainLineBg);
+      Polyline(hDC,Groundline,2);
+      SelectObject(hDC,hpTerrainLine);
+      Polyline(hDC,Groundline,2);
     }
+    Groundline[0].x= Groundline[1].x;
+    Groundline[0].y= Groundline[1].y;
   }
 
   if ((DerivedDrawInfo.TerrainWarningLatitude != 0.0)
     &&(DerivedDrawInfo.TerrainWarningLongitude != 0.0)) {
 
     POINT sc;
-    LatLon2Screen(DerivedDrawInfo.TerrainWarningLongitude,
-      DerivedDrawInfo.TerrainWarningLatitude, sc);
-    DrawBitmapIn(hDC, sc, hTerrainWarning);
+    if (PointVisible(DerivedDrawInfo.TerrainWarningLongitude,
+		     DerivedDrawInfo.TerrainWarningLatitude)) {
+      LatLon2Screen(DerivedDrawInfo.TerrainWarningLongitude,
+		    DerivedDrawInfo.TerrainWarningLatitude, sc);
+      DrawBitmapIn(hDC, sc, hTerrainWarning);
+    }
   }
 
   UnlockFlightData();
@@ -3691,8 +3689,8 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   // JMW TODO: gather proper statistics
   // note these should/may also be relative to ground
   int i;
-  double mth = DerivedDrawInfo.MaxThermalHeight-DerivedDrawInfo.TerrainAlt;
-  double maxh;
+  double mth = DerivedDrawInfo.MaxThermalHeight;
+  double maxh, minh;
   double h;
   double Wt[NUMTHERMALBUCKETS];
   double ht[NUMTHERMALBUCKETS];
@@ -3701,25 +3699,16 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 #define TBSCALEX 20
 
   // calculate height above safety altitude
-  h = DerivedDrawInfo.NavAltitude-SAFETYALTITUDEBREAKOFF-DerivedDrawInfo.TerrainAlt;
-  // calculate top height
-  if (h>mth) {
-    maxh = h;
-  } else {
-    maxh = mth;
-  }
-  if (h<0) {
-    // JMW TODO: below safety height, maybe give warning here
-    h=0;
-    return;
-  }
+  h = DerivedDrawInfo.NavAltitude
+    -SAFETYALTITUDEBREAKOFF
+    -DerivedDrawInfo.TerrainAlt;
 
-  if (maxh>mth) {
-    // above highest thermal
-    return;
-  }
+  // calculate top height
+  maxh = max(h, mth);
+  minh = min(h, 0);
+
   // no thermalling has been done above safety altitude
-  if (maxh<0) {
+  if (mth<=0) {
     return;
   }
 
@@ -3733,7 +3722,13 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
       wthis = DerivedDrawInfo.ThermalProfileW[i]
 	         /DerivedDrawInfo.ThermalProfileN[i];
       if (wthis>0.0) {
-	ht[numtherm]= (i*mth/maxh)/NUMTHERMALBUCKETS;
+
+	// height of this thermal point [0,mth]
+	double hi = i*mth/NUMTHERMALBUCKETS;
+
+	double hp = ((hi-minh)/(maxh-minh));
+
+	ht[numtherm]= hp;
 	Wt[numtherm]= wthis;
 	Wtot += wthis;
 	numtherm++;
@@ -3757,8 +3752,11 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 
   // position of thermal band
   for (i=0; i<numtherm; i++) {
-    ThermalProfile[1+i].x = (7+iround((Wt[i]/Wtot)*IBLSCALE(TBSCALEX)))+rc.left;
-    ThermalProfile[1+i].y = 5+iround(TBSCALEY*(1.0-ht[i]))+rc.top;
+    ThermalProfile[1+i].x =
+      (7+iround((Wt[i]/Wtot)*IBLSCALE(TBSCALEX)))+rc.left;
+
+    ThermalProfile[1+i].y =
+      5+iround(TBSCALEY*(1.0-ht[i]))+rc.top;
   }
   ThermalProfile[0].x = IBLSCALE(7)+rc.left;
   ThermalProfile[0].y = ThermalProfile[1].y;
@@ -3766,7 +3764,10 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   ThermalProfile[numtherm+1].y = ThermalProfile[numtherm].y;
 
   // position of thermal band
-  GliderBand[0].y = 5+iround(TBSCALEY*(1.0-h/maxh))+rc.top;
+
+  double hglider = ((h-minh)/(maxh-minh));
+
+  GliderBand[0].y = 5+iround(TBSCALEY*(1.0-hglider))+rc.top;
   GliderBand[1].y = GliderBand[0].y;
   GliderBand[2].y = GliderBand[0].y-4;
   GliderBand[3].y = GliderBand[0].y+4;

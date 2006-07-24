@@ -447,6 +447,8 @@ typedef enum{
 }BorderKind_t;
 
 class WindowControl {
+ public:
+    typedef void (*OnHelpCallback_t)(WindowControl * Sender);
 
   private:
 
@@ -471,6 +473,8 @@ class WindowControl {
     HFONT mhFont;
     TCHAR mName[64];
     TCHAR *mHelpText;
+
+    OnHelpCallback_t mOnHelpCallback;
 
     int mTag;
     bool mReadOnly;
@@ -539,6 +543,10 @@ class WindowControl {
     virtual void Show(void){
       SetVisible(true);
     };
+
+    void SetOnHelpCallback(void(*Function)(WindowControl * Sender)){
+      mOnHelpCallback = Function;
+    }
 
     RECT *GetBoundRect(void){return(&mBoundRect);};
 
@@ -890,6 +898,8 @@ class WndProperty:public WindowControl{
     virtual void Destroy(void);
 
     int WndProcEditControl(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+    TCHAR *GetCaption(void){return(mCaption);};
 
     bool SetFocused(bool Value, HWND FromTo);
 
