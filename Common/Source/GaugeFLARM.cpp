@@ -123,14 +123,41 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
 	x= 0;
 	y= 0;
       }
+      double dh = gps_info->FLARM_Traffic[i].RelativeAltitude;
+      double slope = atan2(dh,d)*2.0/3.14159; // (-1,1)
+
+      slope = max(-1.0,min(1.0,slope*2)); // scale so 45 degrees or more=90
+
       rotate(x, y, -gps_info->TrackBearing); 	// or use .Heading?
       double scale = RangeScale(d);
       int targetsize = IBLSCALE(3);
+
+      POINT shape[5];
+
       int xs = center.x + iround(x*scale);
       int ys = center.y + iround(y*scale);
-      Rectangle(hdcDrawWindow, 
-		xs-targetsize, ys-targetsize, 
-		xs+targetsize, ys+targetsize);
+      
+      shape[0].y = ys-targetsize;
+      shape[1].y = ys-targetsize;
+      shape[2].y = ys+targetsize;
+      shape[3].y = ys+targetsize;
+      if (slope>=0) {
+	// target aircraft is higher
+	shape[0].x = xs-iround((1.0-slope)*targetsize);	
+	shape[1].x = xs+iround((1.0-slope)*targetsize);	
+	shape[2].x = xs+targetsize;	
+	shape[3].x = xs-targetsize;	
+      } else {
+	// target aircraft is lower
+	shape[0].x = xs-targetsize;	
+	shape[1].x = xs+targetsize;	
+	shape[2].x = xs+iround((1.0+slope)*targetsize);	
+	shape[3].x = xs-iround((1.0+slope)*targetsize);	
+      }
+      shape[4].x = shape[0].x;
+      shape[4].y = shape[0].y;
+
+      Polygon(hdcDrawWindow, shape, 5);
     }
   }
   DeleteObject(greenBrush);

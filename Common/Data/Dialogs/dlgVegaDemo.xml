@@ -12,15 +12,15 @@
   <WndButton   Caption="Close"    X=78 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked">
   </WndButton> 
 
-  <WndProperty name="prpVegaDemoW" Caption="TE vario"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2>
+  <WndProperty name="prpVegaDemoW" Caption="TE vario"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="This produces a fake TE vario gross vertical velocity.  It can be used when in circling mode to demonstrate the lift tones.  When not in circling mode, set this to a realistic negative value so speed command tones are produced.">
     <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=-10 Max=10 Step=0.1  OnDataAccess="OnVegaDemoW"/>
   </WndProperty>
 
-  <WndProperty name="prpVegaDemoV" Caption="Airspeed"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2>
+  <WndProperty name="prpVegaDemoV" Caption="Airspeed"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2  Help="This produces a fake airspeed.  It can be used when not in circling mode to demonstrate the speed command tones.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=200 Step=2  OnDataAccess="OnVegaDemoV"/>
   </WndProperty>
 
-  <WndProperty name="prpVegaDemoV" Caption="Circling"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2>
+  <WndProperty name="prpVegaDemoV" Caption="Circling"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="This forces the variometer into circling or cruise mode">
     <DataField name="" DataType="boolean" OnDataAccess="OnVegaDemoAudioClimb"/>
   </WndProperty>
   

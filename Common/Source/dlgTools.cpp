@@ -626,6 +626,10 @@ void LoadChildsFromXML(WindowControl *Parent,
 			CallBackLookup(LookUpTable, DataNotifyCallback), 
 			MultiLine);
 
+      W->SetHelpText(StringToStringDflt(
+		     childNode.getAttribute(TEXT("Help")), 
+		     TEXT("")));
+
       Caption[0] = '\0';
       W->SetReadOnly(ReadOnly != 0);
 

@@ -137,7 +137,8 @@ void AddSnailPoint(void);
 double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic, 
 				DERIVED_INFO *Calculated, double *retlat, 
 				double *retlon,
-				double maxsearchrange); 
+				double maxsearchrange,
+				bool *outofrange); 
 
 bool ClearAirspaceWarnings(bool ack, bool allday=false);
 void ResumeAbortTask(int set = 0);

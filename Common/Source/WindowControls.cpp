@@ -93,20 +93,24 @@ void DrawLine2(const HDC&hdc, int x1, int y1, int x2, int y2, int x3, int y3) {
 
 
 
-int numkeyup=0;
 
 // returns true if it is a long press,
 // otherwise returns false
-bool KeyTimer(bool isdown, DWORD thekey) {
+static bool KeyTimer(bool isdown, DWORD thekey) {
   static DWORD fpsTimeDown= 0;
   static DWORD savedKey=0;
+
+  int dT = ::GetTickCount()-fpsTimeDown;
+  if ((dT>2000)&&(thekey==savedKey)) {
+    fpsTimeDown = ::GetTickCount();
+    savedKey = 0;
+    return true;
+  }
+
   if (!isdown) {
-    int dT = ::GetTickCount()-fpsTimeDown;
-    if ((dT>3000)&&(thekey==savedKey)) {
-      numkeyup++;
-      return true;
-    }
+    // key is released
   } else {
+    // key is lowered
     if (thekey != savedKey) {
       fpsTimeDown = ::GetTickCount();
       savedKey = thekey;
@@ -860,6 +864,8 @@ WindowControl::WindowControl(WindowControl *Owner,
 			     int Width, int Height, 
 			     bool Visible){
 
+  mHelpText = NULL;
+
   mHasFocus = false;
   mCanFocus = false;
 
@@ -961,7 +967,10 @@ WindowControl::WindowControl(WindowControl *Owner,
 }
 
 WindowControl::~WindowControl(void){
-
+  if (mHelpText) {
+    free(mHelpText);
+    mHelpText = NULL;
+  }
 }
 
 void WindowControl::Destroy(void){
@@ -1128,6 +1137,27 @@ WindowControl *WindowControl::SetOwner(WindowControl *Value){
   }
   return(res);
 }
+
+
+void WindowControl::SetHelpText(const TCHAR *Value) {  
+  if (mHelpText) {
+    free(mHelpText);
+    mHelpText = NULL;
+  }
+  if (Value == NULL) {
+    return;
+  }
+  int len = _tcslen(Value);
+  if (len==0) {
+    return;
+  }
+
+  mHelpText= (TCHAR*)malloc((len+1)*sizeof(TCHAR));
+  if (mHelpText != NULL) {
+    _tcscpy(mHelpText, Value);
+  }
+}
+
 
 void WindowControl::SetCaption(TCHAR *Value){
 
@@ -1323,6 +1353,27 @@ void WindowControl::Redraw(void){
 }
 
 
+#ifdef ALTAIRSYNC
+#else
+extern void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText);
+#endif
+
+
+int WindowControl::OnHelp() {
+#ifdef ALTAIRSYNC
+    return(0); // undefined. return 1 if defined
+#else
+    if (mHelpText) {
+
+      dlgHelpShowModal(mCaption, mHelpText);
+
+      return(1);
+    } else {
+      return(0);
+    }
+#endif
+};
+
 void WindowControl::Paint(HDC hDC){
 
   RECT rc;
@@ -1449,9 +1500,6 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     break;
 
     case WM_DESTROY:
-#ifndef ALTAIRSYNC
-      MapWindow::RequestFastRefresh();
-#endif
     break;
 
     case WM_COMMAND:
@@ -1471,12 +1519,22 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     break;
 
     case WM_KEYDOWN:
+      // JMW: HELP
+      KeyTimer(true, wParam & 0xffff);
+
       // return(OnKeyDown(wParam, lParam));
       // experimental 20060516:sgi
       if (!OnKeyDown(wParam, lParam)) return(0);
       break;
 
     case WM_KEYUP:
+      // JMW: detect long enter release
+	if (KeyTimer(false, wParam & 0xffff)) {
+	  // activate tool tips if hit return for long time
+	  if ((wParam & 0xffff) == VK_RETURN) {
+	    if (OnHelp()) return (0);
+	  }
+	} 
       // return(OnKeyUp(wParam, lParam));
       // experimental 20060516:sgi
       if (!OnKeyUp(wParam, lParam)) return(0);
@@ -1846,7 +1904,6 @@ int WndForm::ShowModal(void){
 
   Message::BlockRender(false);
 #endif
-
 
   return(mModalResult);
 
@@ -2307,7 +2364,7 @@ WndProperty::WndProperty(WindowControl *Parent,
   if (MultiLine) {
     mhEdit = CreateWindow(TEXT("EDIT"), TEXT("\0"),
 			  WS_BORDER | WS_VISIBLE | WS_CHILD 
-			  | ES_LEFT | ES_AUTOHSCROLL
+			  | ES_LEFT // | ES_AUTOHSCROLL
 			  | WS_CLIPCHILDREN
 			  | WS_CLIPSIBLINGS
 			  | ES_MULTILINE, // JMW added MULTILINE
@@ -2471,8 +2528,16 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 
     case WM_KEYDOWN:
       // tmep hack, do not process nav keys
+      if (KeyTimer(true, wParam & 0xffff)) {
+	// activate tool tips if hit return for long time
+	if ((wParam & 0xffff) == VK_RETURN) {
+	  if (OnHelp()) return (0);
+	}
+      } 
+
       if (wParam == VK_UP || wParam == VK_DOWN){
-        PostMessage(GetParent(), uMsg, wParam, lParam);   // pass the message to the parent window;
+        PostMessage(GetParent(), uMsg, wParam, lParam);   
+	// pass the message to the parent window;
         return(0);
         // return(1);
       }
@@ -2481,9 +2546,16 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
     break;
 
     case WM_KEYUP:
+	if (KeyTimer(false, wParam & 0xffff)) {
+	  // activate tool tips if hit return for long time
+	  if ((wParam & 0xffff) == VK_RETURN) {
+	    if (OnHelp()) return (0);
+	  }
+	} 
     break;
 
     case WM_SETFOCUS:
+      KeyTimer(true, 0);
       if (GetReadOnly()){
         SetFocus((HWND)wParam);
         return(0);
@@ -2495,6 +2567,7 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
     break;
 
     case WM_KILLFOCUS:
+      KeyTimer(true, 0);
       if ((HWND)wParam != GetHandle()){
         SetFocused(false, (HWND) wParam);
       }

@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.55 2006/07/19 01:21:52 jwharington Exp $
+  $Id: Parser.cpp,v 1.56 2006/07/24 10:59:17 jwharington Exp $
 
 Copyright_License {
 
@@ -974,7 +974,7 @@ BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].AlarmLevel, // unsigned short 0
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeNorth, // double?     1
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast, // double?      2
-	  &GPS_INFO->FLARM_Traffic[flarm_slot].Altitude, // double           3
+	  &GPS_INFO->FLARM_Traffic[flarm_slot].RelativeAltitude, // double   3
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].IDType, // unsigned short     4
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].ID, // 6 char hex
 	  &GPS_INFO->FLARM_Traffic[flarm_slot].TrackBearing, // double       6
@@ -991,7 +991,8 @@ BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
     GPS_INFO->FLARM_Traffic[flarm_slot].RelativeEast
     *FLARM_EastingToLongitude + GPS_INFO->Longitude;
   // alt
-  GPS_INFO->FLARM_Traffic[flarm_slot].Altitude += 
+  GPS_INFO->FLARM_Traffic[flarm_slot].Altitude = 
+    GPS_INFO->FLARM_Traffic[flarm_slot].RelativeAltitude +
     GPS_INFO->Altitude;
 
   TCHAR *name = GPS_INFO->FLARM_Traffic[flarm_slot].Name;

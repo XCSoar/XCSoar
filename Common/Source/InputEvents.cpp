@@ -1659,12 +1659,9 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   TCHAR text[1024];
 
 #if (NEWAIRSPACEWARNING>0)
-
-  // bool dlgAirspaceWarningShowDlg(bool Force)M
-  
+  // bool dlgAirspaceWarningShowDlg(bool Force)
   if (dlgAirspaceWarningShowDlg(true))
     return;
-
 #endif
 
   FindNearestAirspace(GPS_INFO.Longitude, GPS_INFO.Latitude,

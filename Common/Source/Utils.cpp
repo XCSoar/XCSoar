@@ -267,6 +267,7 @@ TCHAR szRegistryAbortSafetyUseCurrent[] = TEXT("AbortSafetyUseCurrent");
 TCHAR szRegistryAutoMcMode[] = TEXT("AutoMcMode");
 TCHAR szRegistryWaypointsOutOfRange[] = TEXT("WaypointsOutOfRange");
 TCHAR szRegistryEnableExternalTriggerCruise[] = TEXT("EnableExternalTriggerCruise");
+TCHAR szRegistryOLCRules[] = TEXT("OLCRules");
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -750,6 +751,10 @@ void ReadRegistrySettings(void)
   Temp = WaypointsOutOfRange;
   GetFromRegistry(szRegistryWaypointsOutOfRange,&Temp);
   WaypointsOutOfRange = Temp;
+
+  Temp = OLCRules;
+  GetFromRegistry(szRegistryOLCRules,&Temp);
+  OLCRules = Temp;
 
   Temp = EnableExternalTriggerCruise;
   GetFromRegistry(szRegistryEnableExternalTriggerCruise,&Temp);
@@ -3239,6 +3244,7 @@ int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines) {
 
 
 TCHAR startProfileFile[MAX_PATH];
+TCHAR defaultProfileFile[MAX_PATH];
 
 void RestoreRegistry(void) {
   // load registry backup if it exists
@@ -3248,6 +3254,7 @@ void RestoreRegistry(void) {
 void StoreRegistry(void) {
   // save registry backup first (try a few places)
   SaveRegistryToFile(startProfileFile);
+  SaveRegistryToFile(defaultProfileFile);
 }
 
 void XCSoarGetOpts(LPTSTR CommandLine) {
@@ -3255,12 +3262,13 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
 // SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 
 #if (WINDOWSPC>0)
-  _tcscpy(startProfileFile, 
+  _tcscpy(defaultProfileFile, 
 	  TEXT("C:\\XCSoar\\NOR Flash\\xcsoar-registry.prf"));
 #else
-  _tcscpy(startProfileFile, 
+  _tcscpy(defaultProfileFile, 
 	  LocalPath(TEXT("xcsoar-registry.prf")));
 #endif
+  _tcscpy(startProfileFile, defaultProfileFile);
 
   if (CommandLine != NULL){
     TCHAR *pC, *pCe;

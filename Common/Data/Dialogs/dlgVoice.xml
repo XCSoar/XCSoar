@@ -10,35 +10,35 @@
 <WndForm Name="frmVoice" Type="Dialog" X=0 Y=0 Width=250 Height=240 Caption="Vega Voice Extensions" Font=2 BackColor=0xDADBAB>
   <WndButton   Caption="Close"    X=2 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
 
-  <WndProperty Name="prpVoiceClimbRate" Caption="Climb Rate" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0>
+  <WndProperty Name="prpVoiceClimbRate" Caption="Climb Rate" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0 Help="Enable voice read-back of the average climb rate when circling.">
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
-  <WndProperty Name="prpVoiceTerrain" Caption="Terrain" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0>
+  <WndProperty Name="prpVoiceTerrain" Caption="Terrain" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0 Help="Enable warnings for final glide through terrain.">
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
-  <WndProperty Name="prpVoiceWaypointDistance" Caption="Waypoint Distance" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0>
+  <WndProperty Name="prpVoiceWaypointDistance" Caption="Waypoint Distance" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0 Help="Enable voice read-back of the distance to next waypoint when in cruise mode.">
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
-  <WndProperty Name="prpVoiceTaskAltitudeDifference" Caption="Task Altitude Difference" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0>
+  <WndProperty Name="prpVoiceTaskAltitudeDifference" Caption="Task Altitude Difference" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0 Help="Enable voice read-back of height above/below final glide when in final glide.">
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
-  <WndProperty Name="prpVoiceMacCready" Caption="MacCready" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0>
+  <WndProperty Name="prpVoiceMacCready" Caption="MacCready" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0 Help="Enable voice read-back of MacReady setting after it is adjusted.">
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
-  <WndProperty Name="prpVoiceNewWaypoint" Caption="New Waypoint" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0>
+  <WndProperty Name="prpVoiceNewWaypoint" Caption="New Waypoint" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0 Help="Enable voice announcement that the task waypoint has changed.">
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
-  <WndProperty Name="prpVoiceInSector" Caption="In Sector" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0>
+  <WndProperty Name="prpVoiceInSector" Caption="In Sector" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0 Help="Enable voice announcement that the glider is within the task observation sector.">
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
-  <WndProperty Name="prpVoiceAirspace" Caption="Airspace" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0>
+  <WndProperty Name="prpVoiceAirspace" Caption="Airspace" X=2 Y=-1 Width=245 Height=22 CaptionWidth=188 Font=2 Readonly=0 Help="Enable voice warnings for airspace incursions.">
   <DataField name="" DataType="boolean" />
   </WndProperty>
 

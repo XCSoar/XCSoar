@@ -53,9 +53,12 @@ Copyright_License {
 
 #include "VegaVoice.h"
 
+#include "OnLineContest.h"
+
 WindAnalyser *windanalyser = NULL;
 ThermalLocator thermallocator;
 VegaVoice vegavoice;
+OLCOptimizer olc;
 
 int AutoWindMode= 1; 
 #define D_AUTOWIND_CIRCLING 1
@@ -116,9 +119,14 @@ static void SortLandableWaypoints(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 static void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
+
+//////////////////
+
+
 void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double bearing, distance;
   double lat, lon;
+  bool outofrange;
 
   // estimate max range (only interested in at most one screen distance away)
   double mymaxrange = MapWindow::GetApproxScreenRange();
@@ -130,8 +138,8 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     distance = FinalGlideThroughTerrain(bearing, 
                                         Basic, 
                                         Calculated, &lat, &lon,
-                                        mymaxrange);
-    if ((lon==0.0) && (lat==0.0)) {
+                                        mymaxrange, &outofrange);
+    if (outofrange) {
       lat = FindLatitude(Basic->Latitude, Basic->Longitude, bearing, 
 			  mymaxrange*20);
       lon = FindLongitude(Basic->Latitude, Basic->Longitude, bearing, 
@@ -201,9 +209,11 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   static double SnailLastTime=0;
   static double LogLastTime=0;
   static double StatsLastTime=0;
+  static double OLCLastTime = 0;
   double dtLog = 5.0;
   double dtSnail = 2.0;
   double dtStats = 60.0;
+  double dtOLC = 60.0;
 
   if(Basic->Time <= LogLastTime)
     {
@@ -216,6 +226,10 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if(Basic->Time <= StatsLastTime)
     {
       StatsLastTime = Basic->Time;
+    }
+  if(Basic->Time <= OLCLastTime)
+    {
+      OLCLastTime = Basic->Time;
     }
 
   if (FastLogNum) {
@@ -260,6 +274,14 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
   }
 
+  if (Basic->Time - OLCLastTime >= dtOLC) {
+    if (Calculated->Flying) {
+      olc.addPoint(Basic->Longitude, 
+		   Basic->Latitude, 
+		   Calculated->NavAltitude,
+		   Basic->Time);
+    }
+  }
 
 }
 
@@ -545,6 +567,7 @@ bool TaskFinished = false;
 
 
 void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  olc.ResetFlight();
   flightstats.Reset();
   TaskFinished = false;
   Calculated->TaskStartTime = 0;
@@ -2071,13 +2094,14 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 
       if (Calculated->FinalGlide) {
         double lat, lon;
+	bool outofrange;
         double distancesoarable = 
           FinalGlideThroughTerrain(LegBearing, Basic, Calculated, 
                                    &lat,
                                    &lon,
-                                   LegToGo);
+                                   LegToGo, &outofrange);
 
-        if (distancesoarable< LegToGo) {
+        if ((distancesoarable< LegToGo)&&(!outofrange)) {
           // JMW TODO issue terrain warning (audio?)
           Calculated->TerrainWarningLatitude = lat;
           Calculated->TerrainWarningLongitude = lon;
@@ -2898,25 +2922,27 @@ void ExitFinalGlideThroughTerrain() {
 double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic, 
                                 DERIVED_INFO *Calculated,
                                 double *retlat, double *retlon,
-                                double maxrange) 
+                                double maxrange,
+				bool *outofrange) 
 {
-  double ialtitude = GlidePolar::MacCreadyAltitude(MACCREADY, 
-                                 // should this be zero?
-                                                   1.0, bearing, 
-                                                   Calculated->WindSpeed, 
-                                                   Calculated->WindBearing, 
-                                                   0, 0, true, 0);
+  double irange = GlidePolar::MacCreadyAltitude(MACCREADY, 
+						// should this be zero?
+						1.0, bearing, 
+						Calculated->WindSpeed, 
+						Calculated->WindBearing, 
+						0, 0, true, 0);
   if (retlat && retlon) {
-    *retlat = 0;
-    *retlon = 0;
+    *retlat = Basic->Latitude;
+    *retlon = Basic->Longitude;
+  }
+  *outofrange = false;
+
+  if ((irange<=0.0)||(Calculated->NavAltitude<=0)) {
+    // can't make progress in this direction at the current windspeed/mc
+    return 0;
   }
 
-  if (ialtitude<=0.0)
-    return 0;
-
-  double glidemaxrange = Calculated->NavAltitude/ialtitude;
-  if (glidemaxrange<=0.0)
-    return 0;
+  double glidemaxrange = Calculated->NavAltitude/irange;
 
   // returns distance one would arrive at altitude in straight glide
   // first estimate max range at this altitude
@@ -2931,10 +2957,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 
   // calculate terrain rounding factor
 
+
   lat = FindLatitude(Basic->Latitude, Basic->Longitude, 0, 
-                     glidemaxrange/NUMFINALGLIDETERRAIN);
+		     glidemaxrange/NUMFINALGLIDETERRAIN);
   lon = FindLongitude(Basic->Latitude, Basic->Longitude, 90, 
-                      glidemaxrange/NUMFINALGLIDETERRAIN);
+		      glidemaxrange/NUMFINALGLIDETERRAIN);
   double Xrounding = fabs(lon-Basic->Longitude)/2;
   double Yrounding = fabs(lat-Basic->Latitude)/2;
   terrain_dem_calculations.SetTerrainRounding(Xrounding, Yrounding);
@@ -2947,9 +2974,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 
   for (int i=0; i<=NUMFINALGLIDETERRAIN; i++) {
     double fi = (i*1.0)/NUMFINALGLIDETERRAIN;
+    // fraction of glidemaxrange
 
     if ((maxrange>0)&&(fi>maxrange/glidemaxrange)) {
       // early exit
+      *outofrange = true;
       ExitFinalGlideThroughTerrain();
       return maxrange;
     }
@@ -2966,7 +2995,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 
     dh = altitude - h -  SAFETYALTITUDETERRAIN;
 
-    if ((dh<=0)&&(dhlast>0)) {
+    if ((dh<=0)&&(dhlast>=0)) {
       double f;
       if (dhlast-dh>0) {
         f = (-dhlast)/(dh-dhlast);
@@ -2985,6 +3014,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     lonlast = lon;
   }
 
+  *outofrange = true;
   ExitFinalGlideThroughTerrain();
   return glidemaxrange;
 }
@@ -3174,13 +3204,15 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
                              WayPointList[SortedApproxIndex[i]].Latitude,
                              WayPointList[SortedApproxIndex[i]].Longitude);
 
+		  bool outofrange;
                   double distancesoarable =
                     FinalGlideThroughTerrain(LegBearing, Basic, Calculated,
                                              NULL,
                                              NULL,
-                                             LegToGo);
+                                             LegToGo,
+					     &outofrange);
 
-                  if ((distancesoarable>= LegToGo)||(aa<0)) {
+                  if ((distancesoarable>= LegToGo)||(aa<0)||(outofrange)) {
                     // only put this in the index if it is reachable
                     // and doesn't go through terrain, OR, if it is unreachable
                     // it doesn't matter if it goes through terrain because

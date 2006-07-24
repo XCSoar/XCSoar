@@ -10,11 +10,11 @@
 <WndForm Name="frmBrightness" Type="Dialog" X=5 Y=5 Width=153 Height=111 Caption="Screen Brightness" Font=2 BackColor=0xDADBAB>
   <WndButton   Caption="Close"    X=68 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
 
-  <WndProperty Name="prpAuto" Caption="Auto"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2>
+  <WndProperty Name="prpAuto" Caption="Auto"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2 Help=" (Altair only) Enables automatic backlight, responsive to light sensor.">
   <DataField name="" DataType="boolean" OnDataAccess="OnAutoData"/>
   </WndProperty>
 
-  <WndProperty Name="prpBrightness" Caption="Brightness"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2>
+  <WndProperty Name="prpBrightness" Caption="Brightness"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=68 Font=2 Help="(Altair only) Adjusts backlight.  When automatic backlight is enabled, this biases the backlight algorithm. When the automatic backlight is disabled, this controls the backlight directly.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=5 OnDataAccess="OnBrightnessData"/>
   </WndProperty>
   
