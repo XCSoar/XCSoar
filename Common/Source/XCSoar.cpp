@@ -285,8 +285,8 @@ bool GlobalRunning = false;
 
 //SI to Local Units
 double        SPEEDMODIFY = TOKNOTS;
-double                          LIFTMODIFY  = TOKNOTS;
-double                          DISTANCEMODIFY = TONAUTICALMILES;
+double        LIFTMODIFY  = TOKNOTS;
+double        DISTANCEMODIFY = TONAUTICALMILES;
 double        ALTITUDEMODIFY = TOFEET;
 double        TASKSPEEDMODIFY = TOKPH;
 

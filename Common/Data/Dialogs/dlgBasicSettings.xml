@@ -12,22 +12,22 @@
   <WndButton   Caption="Close"    X=78 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked">
   </WndButton>
 
-  <WndProperty Caption="Ballast"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=0 Max=100 Step=5  OnDataAccess="OnBallastData"/>
+  <WndProperty Caption="Ballast"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).">
+    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=0 Max=100 Step=5  OnDataAccess="OnBallastData" />
   </WndProperty>
   <WndProperty Name="prpBallastLitres" Caption="Volume" X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
     <DataField name="" DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" ReadOnly=1 />
   </WndProperty>
-  <WndProperty Caption="Clean"     X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2>
+  <WndProperty Caption="Clean"     X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="How clean the glider is. Set to 100% for clean, lower numbers as the wings pick up bugs or get wet.  50% indicates the glider's sink rate is doubled.">
     <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=50 Max=100 Step=1  OnDataAccess="OnBugsData"/>
   </WndProperty>
-  <WndProperty Caption="QNH"      X=2 Y=-1   Width=155 Height=22 CaptionWidth=78 Font=2>
+  <WndProperty Caption="QNH"      X=2 Y=-1   Width=155 Height=22 CaptionWidth=78 Font=2 Help="Area pressure for barometric altimeter calibration.  This is set automatically if Vega connected.">
     <DataField name="" DataType="double" DisplayFormat="%.1fhPa" EditFormat="%.1f" Min=850 Max=1300 Step=0.1 OnDataAccess="OnQnhData"/>
   </WndProperty>
   <WndProperty Name="prpAltitude" Caption="Altitude" X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 ReadOnly=1>
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" ReadOnly=1  OnDataAccess="OnAltitudeData"/>
   </WndProperty>
-  <WndProperty Caption="Max Temp"     X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2>
+  <WndProperty Caption="Max Temp"     X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="Set to forecast ground temperature.  Used by convection estimator (temperature trace page of Analysis dialog)">
     <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=50 Step=1  OnDataAccess="OnTempData"/>
   </WndProperty>
 

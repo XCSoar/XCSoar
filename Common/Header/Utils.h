@@ -118,6 +118,7 @@ extern TCHAR szRegistryAbortSafetyUseCurrent[];
 extern TCHAR szRegistryAutoMcMode[];
 extern TCHAR szRegistryWaypointsOutOfRange[];
 extern TCHAR szRegistryEnableExternalTriggerCruise[];
+extern TCHAR szRegistryOLCRules[];
 
 extern bool LockSettingsInFlight;
 

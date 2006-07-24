@@ -11,11 +11,7 @@
 
 extern HFONT                                   StatisticsFont;
 
-#if (WINDOWSPC>1)
-#define MAXPAGE 5
-#else
-#define MAXPAGE 6
-#endif
+#define MAXPAGE 7
 
 double Statistics::yscale;
 double Statistics::xscale;
@@ -27,6 +23,8 @@ bool   Statistics::unscaled_x;
 bool   Statistics::unscaled_y;
 
 void dlgTaskCalculatorShowModal(void);
+void dlgBasicSettingsShowModal(void);
+void dlgWindSettingsShowModal(void);
 
 static HPEN penThinSignal = NULL;
 
@@ -501,7 +499,7 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
            STYLE_REDTHICK);
 
   DrawLabel(hdc, rc, TEXT("MC"),
-	    0, MACCREADY);
+	    1, MACCREADY);
 
   DrawTrendN(hdc, rc,
              &flightstats.ThermalAverage,
@@ -577,8 +575,10 @@ void Statistics::ScaleMakeSquare(RECT rc) {
   xscale = (rc.right-rc.left)/(x_max-x_min);
 }
 
+#include "OnLineContest.h"
+extern OLCOptimizer olc;
 
-void Statistics::RenderTask(HDC hdc, RECT rc)
+void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 {
   int i;
 
@@ -589,14 +589,14 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
   double x1, y1, x2, y2;
   double lat_c, lon_c;
   double aatradius[MAXTASKPOINTS];
-  bool nowaypoints = true;
 
   // find center
   ResetScale();
+
   for (i=0; i<MAXTASKPOINTS; i++) {
     aatradius[i]=0;
   }
-
+  bool nowaypoints = true;
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (Task[i].Index != -1) {
       lat1 = WayPointList[Task[i].Index].Latitude;
@@ -606,10 +606,19 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
       nowaypoints = false;
     }
   }
+  if (nowaypoints) return;
+
+  int nolc = olc.getN();
+
+  for (i=0; i< nolc; i++) {
+    lat1 = olc.getLatitude(i);
+    lon1 = olc.getLongitude(i);
+    ScaleYFromValue(rc, lat1);
+    ScaleXFromValue(rc, lon1);
+  }
+
   lat_c = (y_max+y_min)/2;
   lon_c = (x_max+x_min)/2;
-
-  if (nowaypoints) return;
 
   int nwps = 0;
 
@@ -656,110 +665,84 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
       }
     }
   }
+  for (i=0; i< nolc; i++) {
+    lat1 = olc.getLatitude(i);
+    lon1 = olc.getLongitude(i);
+    x1 = (lon1-lon_c)*fastcosine(lat1);
+    y1 = (lat1-lat_c);
+    ScaleXFromValue(rc, x1);
+    ScaleYFromValue(rc, y1);
+  }
+
   ScaleMakeSquare(rc);
 
   // draw aat areas
+  if (!olcmode) {
+    if (AATEnabled) {
+      for (i=MAXTASKPOINTS-1; i>0; i--) {
+	if (Task[i].Index != -1) {
+	  lat1 = WayPointList[Task[i-1].Index].Latitude;
+	  lon1 = WayPointList[Task[i-1].Index].Longitude;
+	  lat2 = WayPointList[Task[i].Index].Latitude;
+	  lon2 = WayPointList[Task[i].Index].Longitude;
+	  x1 = (lon1-lon_c)*fastcosine(lat1);
+	  y1 = (lat1-lat_c);
+	  x2 = (lon2-lon_c)*fastcosine(lat2);
+	  y2 = (lat2-lat_c);
 
-  if (AATEnabled) {
-    for (i=MAXTASKPOINTS-1; i>0; i--) {
-      if (Task[i].Index != -1) {
-	lat1 = WayPointList[Task[i-1].Index].Latitude;
-	lon1 = WayPointList[Task[i-1].Index].Longitude;
-	lat2 = WayPointList[Task[i].Index].Latitude;
-	lon2 = WayPointList[Task[i].Index].Longitude;
-	x1 = (lon1-lon_c)*fastcosine(lat1);
-	y1 = (lat1-lat_c);
-	x2 = (lon2-lon_c)*fastcosine(lat2);
-	y2 = (lat2-lat_c);
-
-	SelectObject(hdc,
-		     MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[AATASK]]);
-	SelectObject(hdc, GetStockObject(WHITE_PEN));
-	if (Task[i].AATType == SECTOR) {
-          Segment(hdc,
-		  (long)((x2-x_min)*xscale+rc.left),
-		  (long)((y_max-y2)*yscale+rc.top),
-		  (long)(aatradius[i]*yscale),
-		  rc,
-		  Task[i].AATStartRadial,
-		  Task[i].AATFinishRadial);
-	} else {
-          Circle(hdc,
-		 (long)((x2-x_min)*xscale+rc.left),
-		 (long)((y_max-y2)*yscale+rc.top),
-		 (long)(aatradius[i]*yscale),
-		  rc);
+	  SelectObject(hdc,
+		       MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[AATASK]]);
+	  SelectObject(hdc, GetStockObject(WHITE_PEN));
+	  if (Task[i].AATType == SECTOR) {
+	    Segment(hdc,
+		    (long)((x2-x_min)*xscale+rc.left),
+		    (long)((y_max-y2)*yscale+rc.top),
+		    (long)(aatradius[i]*yscale),
+		    rc,
+		    Task[i].AATStartRadial,
+		    Task[i].AATFinishRadial);
+	  } else {
+	    Circle(hdc,
+		   (long)((x2-x_min)*xscale+rc.left),
+		   (long)((y_max-y2)*yscale+rc.top),
+		   (long)(aatradius[i]*yscale),
+		   rc);
+	  }
 	}
       }
     }
+  }
+
+  // draw track
+
+  for (i=0; i< nolc-1; i++) {
+    lat1 = olc.getLatitude(i);
+    lon1 = olc.getLongitude(i);
+    lat2 = olc.getLatitude(i+1);
+    lon2 = olc.getLongitude(i+1);
+    x1 = (lon1-lon_c)*fastcosine(lat1);
+    y1 = (lat1-lat_c);
+    x2 = (lon2-lon_c)*fastcosine(lat2);
+    y2 = (lat2-lat_c);
+    DrawLine(hdc, rc,
+	     x1, y1, x2, y2,
+	     STYLE_BLUETHIN);
   }
 
   // draw task lines and labels
 
-  for (i=MAXTASKPOINTS-1; i>0; i--) {
-    if (Task[i].Index != -1) {
-
-      lat1 = WayPointList[Task[i-1].Index].Latitude;
-      lon1 = WayPointList[Task[i-1].Index].Longitude;
-      if (TaskAborted) {
-	lat2 = GPS_INFO.Latitude;
-	lon2 = GPS_INFO.Longitude;
-      } else {
-	lat2 = WayPointList[Task[i].Index].Latitude;
-	lon2 = WayPointList[Task[i].Index].Longitude;
-      }
-      x1 = (lon1-lon_c)*fastcosine(lat1);
-      y1 = (lat1-lat_c);
-      x2 = (lon2-lon_c)*fastcosine(lat2);
-      y2 = (lat2-lat_c);
-
-      DrawLine(hdc, rc,
-	       x1, y1, x2, y2,
-	       STYLE_DASHGREEN);
-
-      TCHAR text[100];
-      if ((i==nwps-1) && (Task[i].Index == Task[0].Index)) {
-	_stprintf(text,TEXT("%0d"),1);
-	DrawLabel(hdc, rc, text, x2, y2);
-      } else {
-	_stprintf(text,TEXT("%0d"),i+1);
-	DrawLabel(hdc, rc, text, x2, y2);
-      }
-
-      if ((i==ActiveWayPoint)&&(!AATEnabled)) {
-	lat1 = GPS_INFO.Latitude;
-	lon1 = GPS_INFO.Longitude;
-	x1 = (lon1-lon_c)*fastcosine(lat1);
-	y1 = (lat1-lat_c);
-	DrawLine(hdc, rc,
-		 x1, y1, x2, y2,
-		 STYLE_REDTHICK);
-      }
-
-    }
-  }
-
-  // draw aat task line
-
-  if (AATEnabled) {
+  if (!olcmode) {
     for (i=MAXTASKPOINTS-1; i>0; i--) {
       if (Task[i].Index != -1) {
-	if (i<ActiveWayPoint) continue;
-	if (i>=ActiveWayPoint) {
-	  if (i==1) {
-	    lat1 = WayPointList[Task[i-1].Index].Latitude;
-	    lon1 = WayPointList[Task[i-1].Index].Longitude;
-	  } else {
-	    lat1 = Task[i-1].AATTargetLat;
-	    lon1 = Task[i-1].AATTargetLon;
-	  }
-	  lat2 = Task[i].AATTargetLat;
-	  lon2 = Task[i].AATTargetLon;
-	}
 
-	if (i==ActiveWayPoint) {
-	  lat1 = GPS_INFO.Latitude;
-	  lon1 = GPS_INFO.Longitude;
+	lat1 = WayPointList[Task[i-1].Index].Latitude;
+	lon1 = WayPointList[Task[i-1].Index].Longitude;
+	if (TaskAborted) {
+	  lat2 = GPS_INFO.Latitude;
+	  lon2 = GPS_INFO.Longitude;
+	} else {
+	  lat2 = WayPointList[Task[i].Index].Latitude;
+	  lon2 = WayPointList[Task[i].Index].Longitude;
 	}
 	x1 = (lon1-lon_c)*fastcosine(lat1);
 	y1 = (lat1-lat_c);
@@ -768,7 +751,86 @@ void Statistics::RenderTask(HDC hdc, RECT rc)
 
 	DrawLine(hdc, rc,
 		 x1, y1, x2, y2,
-		 STYLE_REDTHICK);
+		 STYLE_DASHGREEN);
+
+	TCHAR text[100];
+	if ((i==nwps-1) && (Task[i].Index == Task[0].Index)) {
+	  _stprintf(text,TEXT("%0d"),1);
+	  DrawLabel(hdc, rc, text, x2, y2);
+	} else {
+	  _stprintf(text,TEXT("%0d"),i+1);
+	  DrawLabel(hdc, rc, text, x2, y2);
+	}
+
+	if ((i==ActiveWayPoint)&&(!AATEnabled)) {
+	  lat1 = GPS_INFO.Latitude;
+	  lon1 = GPS_INFO.Longitude;
+	  x1 = (lon1-lon_c)*fastcosine(lat1);
+	  y1 = (lat1-lat_c);
+	  DrawLine(hdc, rc,
+		   x1, y1, x2, y2,
+		   STYLE_REDTHICK);
+	}
+
+      }
+    }
+
+    // draw aat task line
+
+    if (AATEnabled) {
+      for (i=MAXTASKPOINTS-1; i>0; i--) {
+	if (Task[i].Index != -1) {
+	  if (i<ActiveWayPoint) continue;
+	  if (i>=ActiveWayPoint) {
+	    if (i==1) {
+	      lat1 = WayPointList[Task[i-1].Index].Latitude;
+	      lon1 = WayPointList[Task[i-1].Index].Longitude;
+	    } else {
+	      lat1 = Task[i-1].AATTargetLat;
+	      lon1 = Task[i-1].AATTargetLon;
+	    }
+	    lat2 = Task[i].AATTargetLat;
+	    lon2 = Task[i].AATTargetLon;
+	  }
+
+	  if (i==ActiveWayPoint) {
+	    lat1 = GPS_INFO.Latitude;
+	    lon1 = GPS_INFO.Longitude;
+	  }
+	  x1 = (lon1-lon_c)*fastcosine(lat1);
+	  y1 = (lat1-lat_c);
+	  x2 = (lon2-lon_c)*fastcosine(lat2);
+	  y2 = (lat2-lat_c);
+
+	  DrawLine(hdc, rc,
+		   x1, y1, x2, y2,
+		   STYLE_REDTHICK);
+	}
+      }
+    }
+  }
+
+  if (olcmode) {
+    if (olc.solution_FAI_sprint.valid) {
+      for (i=0; i< 5-1; i++) {
+	if (OLCRules==0) {
+	  lat1 = olc.solution_FAI_sprint.latitude[i];
+	  lon1 = olc.solution_FAI_sprint.longitude[i];
+	  lat2 = olc.solution_FAI_sprint.latitude[i+1];
+	  lon2 = olc.solution_FAI_sprint.longitude[i+1];
+	} else {
+	  lat1 = olc.solution_FAI_triangle.latitude[i];
+	  lon1 = olc.solution_FAI_triangle.longitude[i];
+	  lat2 = olc.solution_FAI_triangle.latitude[i+1];
+	  lon2 = olc.solution_FAI_triangle.longitude[i+1];
+	}
+	x1 = (lon1-lon_c)*fastcosine(lat1);
+	y1 = (lat1-lat_c);
+	x2 = (lon2-lon_c)*fastcosine(lat2);
+	y2 = (lat2-lat_c);
+	DrawLine(hdc, rc,
+		 x1, y1, x2, y2,
+		 STYLE_DASHGREEN);
       }
     }
   }
@@ -837,7 +899,7 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 	       CuSonde::cslevels[i+1].dewpoint, i+1,
 	       STYLE_BLUETHIN);
 
-      if (!labelDry && (i>0)) {
+      if (!labelDry && (i>1)) {
 	DrawLabel(hdc, rc, TEXT("DALR"),
 		  CuSonde::cslevels[i+1].tempDry, i);
 	labelDry = true;
@@ -1055,8 +1117,15 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
 static int page=0;
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wGrid=NULL;
-static WndOwnerDrawFrame *wDetails=NULL;
 static WndOwnerDrawFrame *wInfo=NULL;
+static WndButton *wCalc=NULL;
+
+static void SetCalcCaption(TCHAR* caption) {
+  if (wCalc) {
+    wCalc->SetCaption(caption);
+  }
+}
+
 
 static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
 
@@ -1073,24 +1142,35 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
   SetTextColor(hDC, Sender->GetForeColor());
 
   if (page==0) {
+    SetCalcCaption(TEXT("Settings"));
     Statistics::RenderBarograph(hDC, rcgfx);
   }
   if (page==1) {
+    SetCalcCaption(TEXT("Task calc"));
     Statistics::RenderClimb(hDC, rcgfx);
   }
   if (page==2) {
+    SetCalcCaption(TEXT("Set wind"));
     Statistics::RenderWind(hDC, rcgfx);
   }
   if (page==3) {
+    SetCalcCaption(TEXT("Settings"));
     Statistics::RenderGlidePolar(hDC, rcgfx);
   }
   if (page==4) {
+    SetCalcCaption(TEXT("Settings"));
     Statistics::RenderTemperature(hDC, rcgfx);
   }
   if (page==5) {
-    Statistics::RenderTask(hDC, rcgfx);
+    SetCalcCaption(TEXT("Task calc"));
+    Statistics::RenderTask(hDC, rcgfx, false);
   }
   if (page==6) {
+    SetCalcCaption(TEXT("Optimise"));
+    Statistics::RenderTask(hDC, rcgfx, true);
+  }
+  if (page==7) {
+    SetCalcCaption(TEXT("Nearest"));
     Statistics::RenderAirspace(hDC, rcgfx);
   }
 
@@ -1140,7 +1220,7 @@ static void Update(void){
     case 2:
       _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Wind at Altitude")));
       wf->SetCaption(sTmp);
-      _stprintf(sTmp, TEXT(""));
+      _stprintf(sTmp, TEXT(" "));
       wInfo->SetCaption(sTmp);
     break;
     case 3:
@@ -1165,11 +1245,14 @@ static void Update(void){
     _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Temp trace")));
     wf->SetCaption(sTmp);
 
-    _stprintf(sTmp, TEXT("%s: %5.0f\r\n%s: %5.0f\r\n"),
+    _stprintf(sTmp, TEXT("%s:\r\n %5.0f %s\r\n%s:\r\n %5.0f %s\r\n"),
 	      gettext(TEXT("Thermal height")),
 	      CuSonde::thermalHeight*ALTITUDEMODIFY,
+	      Units::GetAltitudeName(),
 	      gettext(TEXT("Cloud base")),
-	      CuSonde::cloudBase*ALTITUDEMODIFY);
+	      CuSonde::cloudBase*ALTITUDEMODIFY,
+	      Units::GetAltitudeName());
+
     wInfo->SetCaption(sTmp);
     break;
   case 5:
@@ -1183,29 +1266,73 @@ static void Update(void){
     if (AATEnabled) {
       Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
       Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
-      _stprintf(sTmp, TEXT("Task to go: %s\r\nAAT to go: %s\r\nDistance to go: %5.0f\r\nTarget speed: %5.0f\r\n"),
+
+      _stprintf(sTmp, TEXT("Task to go: %s\r\nAAT to go: %s\r\nDistance to go: %5.0f %s\r\nTarget speed: %5.0f %s\r\n"),
+
 		timetext1,
 		timetext2,
 		DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
-		SPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed
+		Units::GetDistanceName(),
+		TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
+		Units::GetTaskSpeedName()
 		);
     } else {
       Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
-      _stprintf(sTmp, TEXT("Time to go: %s\r\nDistance to go: %5.0f\r\n"),
+      _stprintf(sTmp, TEXT("Time to go: %s\r\nDistance to go: %5.0f %s\r\n"),
 		timetext1,
-		DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo);
+		DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo,
+		Units::GetDistanceName());
     }
 
     wInfo->SetCaption(sTmp);
     break;
   case 6:
+    _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("OnLine Contest"));
+    wf->SetCaption(sTmp);
+
+    TCHAR sRules[20];
+    //      TCHAR timetext2[100];
+    bool valid;
+    int dt;
+    double d;
+
+    valid = false;
+    if (OLCRules==0) {
+      _stprintf(sRules,TEXT("Sprint (IGC League)"));
+      dt = olc.solution_FAI_sprint.time;
+      d = olc.solution_FAI_sprint.distance;
+      valid = olc.solution_FAI_sprint.valid;
+    } else {
+      _stprintf(sRules,TEXT("FAI Triangle"));
+      dt = olc.solution_FAI_triangle.time;
+      d = olc.solution_FAI_triangle.distance;
+      valid = olc.solution_FAI_triangle.valid;
+    }
+
+    if (valid) {
+      TCHAR timetext1[100];
+      Units::TimeToText(timetext1, dt);
+      _stprintf(sTmp, TEXT("Rules: %s\r\nDistance: %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\n"),
+		sRules,
+		DISTANCEMODIFY*d,
+		Units::GetDistanceName(),
+		timetext1,
+		TASKSPEEDMODIFY*d/dt,
+		Units::GetTaskSpeedName());
+      wInfo->SetCaption(sTmp);
+    } else {
+      wInfo->SetCaption(TEXT("No valid path.\r\n"));
+    }
+
+    break;
+  case 7:
     _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Airspace"));
     wf->SetCaption(sTmp);
+    wInfo->SetCaption(TEXT(" "));
     break;
   }
 
-  wGrid->SetVisible(page<7);
-  wDetails->SetVisible(page==7);
+  wGrid->SetVisible(page<8);
 
   if (wGrid != NULL)
     wGrid->Redraw();
@@ -1258,11 +1385,40 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
 static void OnCalcClicked(WindowControl * Sender,
 			  WndListFrame::ListInfo_t *ListInfo){
+
+  if (page==0) {
+    dlgBasicSettingsShowModal();
+  }
+  if (page==1) {
 #if (NEWINFOBOX>0)
-  dlgTaskCalculatorShowModal();
+    dlgTaskCalculatorShowModal();
 #endif
+  }
+  if (page==2) {
+    dlgWindSettingsShowModal();
+  }
+  if (page==3) {
+    dlgBasicSettingsShowModal();
+  }
+  if (page==4) {
+    dlgBasicSettingsShowModal();
+  }
+  if (page==5) {
+#if (NEWINFOBOX>0)
+    dlgTaskCalculatorShowModal();
+#endif
+  }
+  if (page==6) {
+    olc.Optimize();
+  }
+  if (page==7) {
+#if (NEWAIRSPACEWARNING>0)
+    dlgAirspaceWarningShowDlg(true);
+#endif
+  }
   Update();
 }
+
 
 
 static CallBackTableEntry_t CallBackTable[]={
@@ -1270,6 +1426,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnNextClicked),
   DeclearCallBackEntry(OnPrevClicked),
   DeclearCallBackEntry(OnCalcClicked),
+  DeclearCallBackEntry(OnCloseClicked),
   DeclearCallBackEntry(NULL)
 };
 
@@ -1278,7 +1435,9 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgAnalysisShowModal(void){
 
 
-  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgAnalysis.xml")), hWndMainWindow,
+  wf = dlgLoadFromXML(CallBackTable,
+		      LocalPathS(TEXT("dlgAnalysis.xml")),
+		      hWndMainWindow,
 		      TEXT("IDR_XML_ANALYSIS"));
   if (!wf) return;
 
@@ -1287,9 +1446,10 @@ void dlgAnalysisShowModal(void){
   wf->SetKeyDownNotify(FormKeyDown);
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmGrid"));
-  wDetails = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmDetails"));
   wInfo = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmInfo"));
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+
+  wCalc = ((WndButton *)wf->FindByName(TEXT("cmdCalc")));
 
   Update();
 
@@ -1425,7 +1585,8 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 
       }
       if (page==2) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Wind at Altitude")));
+        SetDlgItemText(hDlg,IDC_ANALYSISLABEL,
+		       gettext(TEXT("Wind at Altitude")));
 
         _stprintf(Temp, TEXT("    "));
 
@@ -1458,11 +1619,13 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
       if (page==4) {
         SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Temp trace")));
 
-        _stprintf(Temp, TEXT("%s: %5.0f\r\n%s: %5.0f\r\n"),
+        _stprintf(Temp, TEXT("%s: %5.0f %s\r\n%s: %5.0f %s\r\n"),
 		  gettext(TEXT("Thermal height")),
 		  CuSonde::thermalHeight*ALTITUDEMODIFY,
+		  Units::GetAltitudeName(),
 		  gettext(TEXT("Cloud base")),
-		  CuSonde::cloudBase*ALTITUDEMODIFY);
+		  CuSonde::cloudBase*ALTITUDEMODIFY,
+		  Units::GetAltitudeName());
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
         Statistics::RenderTemperature(hdcScreen, rcgfx);
@@ -1475,23 +1638,28 @@ LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lP
 	if (AATEnabled) {
 	  Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
 	  Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
-	  _stprintf(Temp, TEXT("Task time to go: %s\r\nAAT time to go: %s\r\nMax dist: %5.0f\r\nMin dist: %5.0f\r\nMax speed: %5.0f\r\nMin speed: %5.0f\r\n"),
+	  _stprintf(Temp, TEXT("Task time to go: %s\r\nAAT time to go: %s\r\nMax dist: %5.0f %s\r\nMin dist: %5.0f %s\r\nMax speed: %5.0f %s\r\nMin speed: %5.0f %s\r\n"),
 		    timetext1,
 		    timetext2,
 		    DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance,
+		  Units::GetDistanceName(),
 		    DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance,
-		    SPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed,
-		    SPEEDMODIFY*CALCULATED_INFO.AATMinSpeed
+		  Units::GetDistanceName(),
+		    TASKSPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed,
+		  Units::GetTaskSpeedName(),
+		    TASKSPEEDMODIFY*CALCULATED_INFO.AATMinSpeed,
+		  Units::GetTaskSpeedName()
 		   );
 	} else {
 	  Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
-	  _stprintf(Temp, TEXT("Time to go: %s\r\nDistance to go: %5.0f\r\n"),
+	  _stprintf(Temp, TEXT("Time to go: %s\r\nDistance to go: %5.0f %s\r\n"),
 		    timetext1,
-		    DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo);
+		    DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo,
+		    Units::GetDistanceName());
 	}
         SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
 
-        Statistics::RenderTask(hdcScreen, rcgfx);
+        Statistics::RenderTask(hdcScreen, rcgfx, false);
 
       }
       if (page==6) {

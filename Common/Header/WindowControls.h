@@ -470,6 +470,7 @@ class WindowControl {
     RECT mBoundRect;
     HFONT mhFont;
     TCHAR mName[64];
+    TCHAR *mHelpText;
 
     int mTag;
     bool mReadOnly;
@@ -508,6 +509,8 @@ class WindowControl {
     virtual void AddClient(WindowControl *Client);
 
     virtual void Paint(HDC hDC);
+
+    virtual int OnHelp();
 
     virtual int OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
       return(1);
@@ -570,6 +573,7 @@ class WindowControl {
     HPEN     GetSelectorPen(void){return(mhPenSelector);};
 
     virtual void SetCaption(TCHAR *Value);
+    void SetHelpText(const TCHAR *Value);
 
     HWND GetHandle(void){return(mHWnd);};
     virtual HWND GetClientAeraHandle(void){return(mHWnd);};

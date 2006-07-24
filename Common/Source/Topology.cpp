@@ -176,7 +176,6 @@ void Topology::updateCache(rectObj thebounds, bool purgeonly) {
 
       if (shpCache[i] != NULL) {
 	removeShape(i);
-	shpCache[i]= NULL;
       }
     }
   }
@@ -192,6 +191,7 @@ XShape* Topology::addShape(int i) {
 
 void Topology::removeShape(int i) {
   delete shpCache[i];
+  shpCache[i]= NULL;
 }
 
 

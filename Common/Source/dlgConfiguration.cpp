@@ -721,6 +721,16 @@ void dlgConfigurationShowModal(void){
 
   ////
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Sprint"));
+    dfe->addEnumText(TEXT("Triangle"));
+    dfe->Set(OLCRules);
+    wp->RefreshDisplay();
+  }
+
   DWORD Speed = 1; // default is knots
   DWORD TaskSpeed = 2; // default is kph
   DWORD Distance = 2; // default is km
@@ -1666,6 +1676,16 @@ void dlgConfigurationShowModal(void){
       Units::NotifyUnitChanged();
       changed = true;
       requirerestart = true;
+    }
+  }
+
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
+  if (wp) {
+    if (OLCRules != wp->GetDataField()->GetAsInteger()) {
+      OLCRules = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryOLCRules, OLCRules);
+      changed = true;
     }
   }
 

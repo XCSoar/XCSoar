@@ -32,6 +32,7 @@ typedef struct _FLARM_TRAFFIC
   double ClimbRate;
   double RelativeNorth;
   double RelativeEast;
+  double RelativeAltitude;
   long ID;
   TCHAR Name[10];
   unsigned short IDType;

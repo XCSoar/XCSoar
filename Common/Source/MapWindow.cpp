@@ -1682,9 +1682,13 @@ void MapWindow::RenderMapWindow(  RECT rc)
     if (EnableFLARMDisplay)
       DrawFLARMTraffic(hdcDrawWindowBg, rc);
 
-    DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
+    if (extGPSCONNECT) {
+      DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
+    }
 
-    DrawBearing(hdcDrawWindowBg, Orig_Aircraft);
+    if (extGPSCONNECT) {
+      DrawBearing(hdcDrawWindowBg, Orig_Aircraft);
+    }
 
     // finally, draw you!
 
@@ -2371,10 +2375,12 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 	}
       }
 
-      irange = ((WayPointList[i].Zoom >= MapScale*10) || (WayPointList[i].Zoom == 0))
-        && (MapScale <= 10);
+      irange = ((WayPointList[i].Zoom >= MapScale*10)
+		|| (WayPointList[i].Zoom == 0))
+                && (MapScale <= 10);
 
-        if(((ActiveWayPoint >= 0) && (Task[ActiveWayPoint].Index == (int)i)) || irange){
+        if(((ActiveWayPoint >= 0) && (Task[ActiveWayPoint].Index == (int)i))
+	   || irange || intask){
       // ((ActiveWayPoint >= 0) && 20060516:sgi added to avoid -1 index access
 
         DrawBitmapX(hdc,
@@ -2420,7 +2426,8 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 
       } else
 
-          if(((ActiveWayPoint >= 0) && (Task[ActiveWayPoint].Index == (int)i)) || irange)
+          if(((ActiveWayPoint >= 0) &&
+	      (Task[ActiveWayPoint].Index == (int)i)) || irange)
         {
           switch(pDisplayTextType)
           {

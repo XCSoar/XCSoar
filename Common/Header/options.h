@@ -31,9 +31,8 @@
 #include <crtdbg.h>
 #endif
 
-#define DISABLEAUDIOVARIO
-
 #if (GNAV)
+#define DISABLEAUDIOVARIO
 #define NEWAIRSPACEWARNING 1
 // use exception handling
 #define HAVEEXCEPTIONS

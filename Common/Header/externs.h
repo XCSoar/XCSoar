@@ -91,6 +91,7 @@ extern BOOL AATEnabled;
 extern DWORD FinishMinHeight;
 extern DWORD StartMaxHeight;
 extern DWORD StartMaxSpeed;
+extern int OLCRules;
 
 // master flight data
 extern NMEA_INFO GPS_INFO;

@@ -798,6 +798,7 @@ IDR_XML_SWITCHES        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgSwitches.
 IDR_XML_VOICE           XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgVoice.xml"
 IDR_XML_WAYPOINTTERRAIN XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointOutOfTerrain.xml"
 IDR_XML_AIRSPACEWARNING XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceWarning.xml"
+IDR_XML_HELP XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgHelp.xml"
 
 IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "Bitmaps\\egm96s.dem"
 

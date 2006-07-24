@@ -152,7 +152,7 @@ void ThermalLocator::Update(double t_0,
     int mag = isqrt4((dx*dx+dy*dy)*256*256)/256;
 
     // find magnitude of angle error
-    double g = max(-1.0,min(1.0,(dx*vx + dy*vy)/(100.0*mag)));
+    double g = max(-0.99,min(0.99,(dx*vx + dy*vy)/(100.0*mag)));
     double angle = acos(g)*RAD_TO_DEG-90;
 
 #ifdef DEBUG

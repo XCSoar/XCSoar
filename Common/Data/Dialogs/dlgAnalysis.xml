@@ -11,15 +11,11 @@
 
   <WndOwnerDrawFrame Name="frmGrid" X=90 Y=2 Width=224 Height=218 Font=0 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnAnalysisPaint" />
 
-  <WndFrame Name="frmDetails" X=90 Y=2 Width=224 Height=218 Font=2 >
-    <WndProperty Name="prpDetails"   Caption=""       X=2 Y=2  Width=280 Height=215 CaptionWidth=2 Font=2 ReadOnly=1 MultiLine=1/>
-  </WndFrame>
-
   <WndOwnerDrawFrame Name="frmInfo" X=0 Y=5 Width=90 Height=150 Font=1 ForeColor=0x000000 _BackColor=0xFFFFFF/>
 
-  <WndButton Name="cmdCalc"  Caption="Calc" X=5 Y=130 Width=80  Height=28 Font=2 OnClickNotify="OnCalcClicked" Tag=4 />
-  <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
-  <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
+  <WndButton Name="cmdCalc"  Caption="Calc" X=5 Y=130 Width=80  Height=28 Font=2 OnClickNotify="OnCalcClicked" />
+  <WndButton Name="cmdNext"  Caption="&gt;" X=48 Y=160 Width=37  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
+  <WndButton Name="cmdPrev"  Caption="&lt;" X=5 Y=160 Width=37  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=80  Height=28 Font=2 Tag=3 />
 
 </WndForm>
