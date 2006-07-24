@@ -121,39 +121,39 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   <WndFrame Name="frmInfoBoxCruise" X=70 Y=0 Width=246 Height=222 Font=2>
     
-    <WndProperty Name="prpInfoBoxCruise0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCruise0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxCruise1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCruise1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxCruise2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCruise2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxCruise3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCruise3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxCruise4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCruise4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxCruise5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCruise5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxCruise6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCruise6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxCruise7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCruise7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxCruise8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCruise8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
@@ -161,32 +161,32 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   <WndFrame Name="frmInfoBoxCircling" X=70 Y=0 Width=246 Height=222 Font=2>
     
-    <WndProperty Name="prpInfoBoxCircling0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCircling0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxCircling1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCircling1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCircling2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCircling3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCircling4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCircling5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCircling6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCircling7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
-    <WndProperty Name="prpInfoBoxCircling8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxCircling8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
@@ -194,39 +194,39 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   <WndFrame Name="frmInfoBoxFinalGlide" X=70 Y=0 Width=246 Height=222 Font=2>
     
-    <WndProperty Name="prpInfoBoxFinalGlide0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxFinalGlide0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxFinalGlide1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxFinalGlide1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxFinalGlide2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxFinalGlide2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxFinalGlide3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxFinalGlide3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxFinalGlide4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxFinalGlide4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxFinalGlide5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxFinalGlide5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxFinalGlide6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxFinalGlide6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxFinalGlide7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxFinalGlide7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxFinalGlide8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxFinalGlide8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
@@ -234,39 +234,39 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   <WndFrame Name="frmInfoBoxAuxiliary" X=70 Y=0 Width=246 Height=222 Font=2>
     
-    <WndProperty Name="prpInfoBoxAux0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxAux0" Caption="1"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxAux1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxAux1" Caption="2"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxAux2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxAux2" Caption="3"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxAux3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxAux3" Caption="4"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxAux4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxAux4" Caption="5"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxAux5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxAux5" Caption="6"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxAux6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxAux6" Caption="7"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxAux7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxAux7" Caption="8"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpInfoBoxAux8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2>
+    <WndProperty Name="prpInfoBoxAux8" Caption="9"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=20 Font=2 OnHelp="OnInfoBoxHelp">
       <DataField name="" DataType="enum"  Min=0 Max=100 Step=1/>
     </WndProperty>
 
@@ -626,11 +626,14 @@ other languages.  If this field is left blank, then XCSoar uses English.
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpTaskStartLine" Caption="Start type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+  <WndProperty Name="prpTaskStartLine" Caption="Start type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="Type of the start.
+[Line]: The task is started when the line is crossed.  The line length is set via the 'Start radius' property.
+[Cylinder]: The task is started when the glider leaves the cylinder.  The cylinder radius is set via the 'Start radius' property.
+[FAI Sector]: Defines a 90 degree sector.  The task is started when the glider crosses the sector lines.  The radius of the sector is set via the 'Start radius' property.">
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpTaskStartRadius" Caption="Start radius"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="Radius of the start cylinder or half-length of the start line.">
+  <WndProperty Name="prpTaskStartRadius" Caption="Start radius"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="Radius of the start cylinder/sector or half-length of the start line.">
     <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
 
   </WndProperty>
@@ -644,12 +647,15 @@ other languages.  If this field is left blank, then XCSoar uses English.
   </WndProperty>
 
   <WndProperty Name="prpTaskSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
-  Help="Radius of the observation area.">
+  Help="Radius of the turnpoint observation area for non-AAT tasks.">
     <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
 
   </WndProperty>
 
-  <WndProperty Name="prpTaskFinishLine" Caption="Finish type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2>
+  <WndProperty Name="prpTaskFinishLine" Caption="Finish type"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="Type of the finish.
+[Line]: The task is finished when the line is crossed.  The line length is set via the 'Finish radius' property.
+[Cylinder]: The task is finished when the glider enters the cylinder.  The cylinder radius is set via the 'Finish radius' property.
+[FAI Sector]: Defines a 90 degree sector.  The task is finished when the glider crosses the sector lines.  The radius of the sector is set via the 'Finish radius' property.">
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
   </WndProperty>
 

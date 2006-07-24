@@ -76,6 +76,7 @@ public:
   void addPoint(double lon, double lat, double alt, double time);
 
 public:
+  void SetLine(); 
   bool Optimize();
   bool OptimizeProjection(double lon, double lat, double alt);
   int getN();

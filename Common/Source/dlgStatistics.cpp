@@ -606,7 +606,9 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
       nowaypoints = false;
     }
   }
-  if (nowaypoints) return;
+  if (nowaypoints && !olcmode) return;
+
+  olc.SetLine();
 
   int nolc = olc.getN();
 
@@ -726,7 +728,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
     y2 = (lat2-lat_c);
     DrawLine(hdc, rc,
 	     x1, y1, x2, y2,
-	     STYLE_BLUETHIN);
+	     STYLE_MEDIUMBLACK);
   }
 
   // draw task lines and labels
@@ -830,7 +832,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 	y2 = (lat2-lat_c);
 	DrawLine(hdc, rc,
 		 x1, y1, x2, y2,
-		 STYLE_DASHGREEN);
+		 STYLE_REDTHICK);
       }
     }
   }
@@ -1298,12 +1300,12 @@ static void Update(void){
 
     valid = false;
     if (OLCRules==0) {
-      _stprintf(sRules,TEXT("Sprint (IGC League)"));
+      _stprintf(sRules,TEXT("Sprint"));
       dt = olc.solution_FAI_sprint.time;
       d = olc.solution_FAI_sprint.distance;
       valid = olc.solution_FAI_sprint.valid;
     } else {
-      _stprintf(sRules,TEXT("FAI Triangle"));
+      _stprintf(sRules,TEXT("Triangle"));
       dt = olc.solution_FAI_triangle.time;
       d = olc.solution_FAI_triangle.distance;
       valid = olc.solution_FAI_triangle.valid;
@@ -1319,10 +1321,11 @@ static void Update(void){
 		timetext1,
 		TASKSPEEDMODIFY*d/dt,
 		Units::GetTaskSpeedName());
-      wInfo->SetCaption(sTmp);
     } else {
-      wInfo->SetCaption(TEXT("No valid path.\r\n"));
+      _stprintf(sTmp, TEXT("Rules: %s\r\nNo valid path\r\n"),
+		sRules);
     }
+    wInfo->SetCaption(sTmp);
 
     break;
   case 7:
@@ -1434,7 +1437,11 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgAnalysisShowModal(void){
 
-
+  wf=NULL;
+  wGrid=NULL;
+  wInfo=NULL;
+  wCalc=NULL;
+  
   wf = dlgLoadFromXML(CallBackTable, 
 		      LocalPathS(TEXT("dlgAnalysis.xml")), 
 		      hWndMainWindow,

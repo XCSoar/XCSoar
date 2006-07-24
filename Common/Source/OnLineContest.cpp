@@ -317,6 +317,17 @@ double OLCOptimizer::getLongitude(int i) {
 }
 
 
+void OLCOptimizer::SetLine() {
+
+  LockFlightData();
+  pnts = pnts_in; // save value in case we get new data while
+		  // performing the analysis/display
+  pnts_offset = pnts_offset_in;
+  UnlockFlightData();
+
+}
+
+
 bool OLCOptimizer::OptimizeProjection(double lon, double lat, double alt)
 {
   LockFlightData();
@@ -371,12 +382,7 @@ bool OLCOptimizer::OptimizeProjection(double lon, double lat, double alt)
 
 
 bool OLCOptimizer::Optimize() {
-
-  LockFlightData();
-  pnts = pnts_in; // save value in case we get new data while
-		  // performing the analysis
-  pnts_offset = pnts_offset_in;
-  UnlockFlightData();
+  SetLine();
 
   project = false;
 

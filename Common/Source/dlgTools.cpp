@@ -599,6 +599,7 @@ void LoadChildsFromXML(WindowControl *Parent,
       WndProperty *W;
       int CaptionWidth;
       TCHAR DataNotifyCallback[128];
+      TCHAR OnHelpCallback[128];
       int ReadOnly;
       int MultiLine;
 
@@ -615,6 +616,11 @@ void LoadChildsFromXML(WindowControl *Parent,
       _tcscpy(DataNotifyCallback, 
 	      StringToStringDflt(childNode.getAttribute(TEXT("OnDataNotify")),
 				 TEXT("")));
+
+      _tcscpy(OnHelpCallback, 
+	      StringToStringDflt(childNode.getAttribute(TEXT("OnHelp")),
+				 TEXT("")));
+
       _tcscpy(Caption, 
 	      StringToStringDflt(childNode.getAttribute(TEXT("Caption")), 
 				 TEXT("")));
@@ -625,6 +631,9 @@ void LoadChildsFromXML(WindowControl *Parent,
 			(WndProperty::DataChangeCallback_t) 
 			CallBackLookup(LookUpTable, DataNotifyCallback), 
 			MultiLine);
+
+      W->SetOnHelpCallback((WindowControl::OnHelpCallback_t) 
+			   CallBackLookup(LookUpTable, OnHelpCallback));
 
       W->SetHelpText(StringToStringDflt(
 		     childNode.getAttribute(TEXT("Help")), 
