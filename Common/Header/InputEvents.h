@@ -23,6 +23,7 @@ class InputEvents {
   static bool processNmea(int key);
   static bool processButton(int bindex);
   static bool processGlideComputer(int);
+  static void DoQueuedEvents(void);
   static void processGo(int event_id);
   static int  makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next = 0);
   static void makeLabel(int mode_id, TCHAR *label, int location, int event_id);
@@ -78,40 +79,43 @@ class InputEvents {
   static void eventWind(TCHAR *misc);
   static void eventZoom(TCHAR *misc);
   static void eventBrightness(TCHAR *misc);
+  static void eventDeclutterLabels(TCHAR *misc);
   // -------
 
 #ifdef _SIM_
   static void InputEvents::showErrors();
 #endif
 
+ private:
+  static bool processGlideComputer_real(int);
+  static bool processNmea_real(int key);
 };
 
 
 // GCE = Glide Computer Event
 enum {
-		GCE_AIRSPACE_ENTER,
-		GCE_AIRSPACE_LEAVE,
-		GCE_COMMPORT_RESTART,
-		GCE_FLARM_NOTRAFFIC,
-		GCE_FLARM_TRAFFIC,
-		GCE_FLIGHTMODE_CLIMB,
-		GCE_FLIGHTMODE_CRUISE,
-		GCE_FLIGHTMODE_FINALGLIDE,
-		GCE_FLIGHTMODE_FINALGLIDE_TERRAIN,
-		GCE_FLIGHTMODE_FINALGLIDE_ABOVE,
-		GCE_FLIGHTMODE_FINALGLIDE_BELOW,
-		GCE_GPS_CONNECTION_WAIT,
-		GCE_GPS_FIX_WAIT,
-		GCE_HEIGHT_MAX,
-		GCE_LANDING,
-		GCE_STARTUP_REAL,
-		GCE_STARTUP_SIMULATOR,
-		GCE_TAKEOFF,
-		GCE_TASK_NEXTWAYPOINT,
-		GCE_TASK_START,
-		GCE_TASK_FINISH,
-
-		GCE_COUNT			// How many we have for arrays etc
+  GCE_AIRSPACE_ENTER,
+  GCE_AIRSPACE_LEAVE,
+  GCE_COMMPORT_RESTART,
+  GCE_FLARM_NOTRAFFIC,
+  GCE_FLARM_TRAFFIC,
+  GCE_FLIGHTMODE_CLIMB,
+  GCE_FLIGHTMODE_CRUISE,
+  GCE_FLIGHTMODE_FINALGLIDE,
+  GCE_FLIGHTMODE_FINALGLIDE_TERRAIN,
+  GCE_FLIGHTMODE_FINALGLIDE_ABOVE,
+  GCE_FLIGHTMODE_FINALGLIDE_BELOW,
+  GCE_GPS_CONNECTION_WAIT,
+  GCE_GPS_FIX_WAIT,
+  GCE_HEIGHT_MAX,
+  GCE_LANDING,
+  GCE_STARTUP_REAL,
+  GCE_STARTUP_SIMULATOR,
+  GCE_TAKEOFF,
+  GCE_TASK_NEXTWAYPOINT,
+  GCE_TASK_START,
+  GCE_TASK_FINISH,
+  GCE_COUNT			// How many we have for arrays etc
 };
 
 // NE = NMEA Events (hard coded triggered events from the NMEA processor)

@@ -156,6 +156,12 @@ static void SetValues(void) {
     wp->GetDataField()->Set(aw);
     wp->RefreshDisplay();
   }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableOLC);
+    wp->RefreshDisplay();
+  }
 }
 
 
@@ -165,6 +171,11 @@ static void ReadValues(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
   if (wp) {
     AATEnabled = wp->GetDataField()->GetAsInteger();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
+  if (wp) {
+    EnableOLC = wp->GetDataField()->GetAsBoolean();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));

@@ -268,6 +268,7 @@ TCHAR szRegistryAutoMcMode[] = TEXT("AutoMcMode");
 TCHAR szRegistryWaypointsOutOfRange[] = TEXT("WaypointsOutOfRange");
 TCHAR szRegistryEnableExternalTriggerCruise[] = TEXT("EnableExternalTriggerCruise");
 TCHAR szRegistryOLCRules[] = TEXT("OLCRules");
+TCHAR szRegistryHandicap[] = TEXT("Handicap");
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -755,6 +756,10 @@ void ReadRegistrySettings(void)
   Temp = OLCRules;
   GetFromRegistry(szRegistryOLCRules,&Temp);
   OLCRules = Temp;
+
+  Temp = Handicap;
+  GetFromRegistry(szRegistryHandicap,&Temp);
+  Handicap = Temp;
 
   Temp = EnableExternalTriggerCruise;
   GetFromRegistry(szRegistryEnableExternalTriggerCruise,&Temp);
@@ -3526,60 +3531,60 @@ RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed)
     return AnimationRectangle;
 
   LPRECT lprcFrom = &AnimationRectangle;
-    const int nNumSteps = 10;
+  const int nNumSteps = 10;
 
-    GdiFlush();
-    Sleep(10);  // Let the desktop window sort itself out
+  GdiFlush();
+  Sleep(10);  // Let the desktop window sort itself out
 
-    // if hwnd is null - "you have the CON".
-    HDC hDC = ::GetDC(NULL);
+  // if hwnd is null - "you have the CON".
+  HDC hDC = ::GetDC(NULL);
 
-    // Pen size, urmmm not too thick
-    HPEN hPen = ::CreatePen(PS_SOLID, 2, RGB(0,0,0));
+  // Pen size, urmmm not too thick
+  HPEN hPen = ::CreatePen(PS_SOLID, 2, RGB(0,0,0));
 
-    int nMode = ::SetROP2(hDC, R2_NOT);
-    HPEN hOldPen = (HPEN) ::SelectObject(hDC, hPen);
+  int nMode = ::SetROP2(hDC, R2_NOT);
+  HPEN hOldPen = (HPEN) ::SelectObject(hDC, hPen);
 
-    for (int i = 0; i < nNumSteps; i++)
+  for (int i = 0; i < nNumSteps; i++)
     {
-        double dFraction = (double) i / (double) nNumSteps;
+      double dFraction = (double) i / (double) nNumSteps;
 
-        RECT transition;
-        transition.left   = lprcFrom->left +
-            (int)((lprcTo->left - lprcFrom->left) * dFraction);
-        transition.right  = lprcFrom->right +
-            (int)((lprcTo->right - lprcFrom->right) * dFraction);
-        transition.top    = lprcFrom->top +
-            (int)((lprcTo->top - lprcFrom->top) * dFraction);
-        transition.bottom = lprcFrom->bottom +
-            (int)((lprcTo->bottom - lprcFrom->bottom) * dFraction);
+      RECT transition;
+      transition.left   = lprcFrom->left +
+	(int)((lprcTo->left - lprcFrom->left) * dFraction);
+      transition.right  = lprcFrom->right +
+	(int)((lprcTo->right - lprcFrom->right) * dFraction);
+      transition.top    = lprcFrom->top +
+	(int)((lprcTo->top - lprcFrom->top) * dFraction);
+      transition.bottom = lprcFrom->bottom +
+	(int)((lprcTo->bottom - lprcFrom->bottom) * dFraction);
 
-        POINT pt[5];
-        pt[0].x = transition.left; pt[0].y= transition.top;
-        pt[1].x = transition.right; pt[1].y= transition.top;
-        pt[2].x = transition.right; pt[2].y= transition.bottom;
-        pt[3].x = transition.left; pt[3].y= transition.bottom;
-        pt[4].x = transition.left; pt[4].y= transition.top;
+      POINT pt[5];
+      pt[0].x = transition.left; pt[0].y= transition.top;
+      pt[1].x = transition.right; pt[1].y= transition.top;
+      pt[2].x = transition.right; pt[2].y= transition.bottom;
+      pt[3].x = transition.left; pt[3].y= transition.bottom;
+      pt[4].x = transition.left; pt[4].y= transition.top;
 
-        // We use Polyline because we can determine our own pen size
-        // Draw Sides
-        ::Polyline(hDC,pt,5);
+      // We use Polyline because we can determine our own pen size
+      // Draw Sides
+      ::Polyline(hDC,pt,5);
 
-        GdiFlush();
+      GdiFlush();
 
-        Sleep(nMilliSecSpeed);
+      Sleep(nMilliSecSpeed);
 
-        // UnDraw Sides
-        ::Polyline(hDC,pt,5);
+      // UnDraw Sides
+      ::Polyline(hDC,pt,5);
 
-        GdiFlush();
+      GdiFlush();
     }
 
-    ::SetROP2(hDC, nMode);
-    ::SelectObject(hDC, hOldPen);
-
-    ::ReleaseDC(NULL,hDC);
-    return AnimationRectangle;
+  ::SetROP2(hDC, nMode);
+  ::SelectObject(hDC, hOldPen);
+  ::DeleteObject(hPen);
+  ::ReleaseDC(NULL,hDC);
+  return AnimationRectangle;
 }
 
 
@@ -3719,4 +3724,63 @@ long CheckFreeRam(void) {
   //	   memInfo.dwTotalPhys- memInfo.dwAvailPhys);
 
   return memInfo.dwAvailPhys;
+}
+
+
+#if (WINDOWSPC>0)
+#if _DEBUG
+_CrtMemState memstate_s1;
+#endif
+#endif
+
+void MemCheckPoint()
+{
+#if (WINDOWSPC>0)
+#if _DEBUG
+  _CrtMemCheckpoint( &memstate_s1 );
+#endif
+#endif
+}
+
+
+void MemLeakCheck() {
+#if (WINDOWSPC>0)
+#if _DEBUG
+  _CrtMemState memstate_s2, memstate_s3;
+
+   // Store a 2nd memory checkpoint in s2
+   _CrtMemCheckpoint( &memstate_s2 );
+
+   if ( _CrtMemDifference( &memstate_s3, &memstate_s1, &memstate_s2 ) ) {
+     _CrtMemDumpStatistics( &memstate_s3 );
+     _CrtMemDumpAllObjectsSince(&memstate_s1);
+   }
+
+  _CrtCheckMemory();
+#endif
+#endif
+}
+
+
+///////////////
+
+/// This is necessary to be called periodically to get rid of
+void MyCompactHeaps() {
+#if (WINDOWSPC>0)||(GNAV)
+  HeapCompact(GetProcessHeap(),0);
+#else
+  typedef DWORD (_stdcall *CompactAllHeapsFn) (void);
+  static CompactAllHeapsFn CompactAllHeaps = NULL;
+  static bool init=false;
+  if (!init) {
+    // get the pointer to the function
+    CompactAllHeaps = (CompactAllHeapsFn)
+      GetProcAddress(LoadLibrary(_T("coredll.dll")),
+		     _T("CompactAllHeaps"));
+    init=true;
+  }
+  if (CompactAllHeaps) {
+    CompactAllHeaps();
+  }
+#endif
 }

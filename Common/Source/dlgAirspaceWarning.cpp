@@ -80,7 +80,7 @@ static void DoAck(int Ack){
   if (Idx < 0)
     Idx = 0;
 
-  if (AirspaceWarnGetItem(Idx, &pAS)){
+  if (AirspaceWarnGetItem(Idx, pAS)){
     AirspaceWarnDoAck(pAS.ID, Ack);
     wAirspaceList->Redraw();
   }
@@ -168,35 +168,48 @@ static void OnDistroy(WindowControl * Sender){
 
 }
 
- static TCHAR * getAirspaceType(int Type){
-   switch (Type)
+static void getAirspaceType(TCHAR *buf, int Type){
+  switch (Type)
     {
     case RESTRICT:
-      return(TEXT("LxR"));
+      _tcscpy(buf, TEXT("LxR"));
+      return;
     case PROHIBITED:
-      return(TEXT("LxP"));
+      _tcscpy(buf, TEXT("LxP"));
+      return;
     case DANGER:
-      return(TEXT("LxD"));
+      _tcscpy(buf, TEXT("LxD"));
+      return;
     case CLASSA:
-      return(TEXT("A"));
+      _tcscpy(buf, TEXT("A"));
+      return;
     case CLASSB:
-      return(TEXT("B"));
+      _tcscpy(buf, TEXT("B"));
+      return;
     case CLASSC:
-      return(TEXT("C"));
+      _tcscpy(buf, TEXT("C"));
+      return;
     case CLASSD:
-      return(TEXT("D"));
+      _tcscpy(buf, TEXT("D"));
+      return;
     case CLASSE:
-      return(TEXT("E"));
+      _tcscpy(buf, TEXT("E"));
+      return;
     case CLASSF:
-      return(TEXT("F"));
+      _tcscpy(buf, TEXT("F"));
+      return;
     case NOGLIDER:
-      return(TEXT("NoGld"));
+      _tcscpy(buf, TEXT("NoGld"));
+      return;
     case CTR:
-      return(TEXT("CTR"));
+      _tcscpy(buf, TEXT("CTR"));
+      return;
     case WAVE:
-      return(TEXT("Wav"));
+      _tcscpy(buf, TEXT("Wav"));
+      return;
     default:
-      return(TEXT("?"));
+      _tcscpy(buf, TEXT("?"));
+      return;
     }
 }
 
@@ -237,7 +250,7 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
     TCHAR sName[21];
     TCHAR sTop[32];
     TCHAR sBase[32];
-    TCHAR *pType;
+    TCHAR sType[32];
     AIRSPACE_ALT Base;
     AIRSPACE_ALT Top;
     int i = DrawListIndex;
@@ -251,26 +264,27 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
     RECT         rcTextClip;
     HBRUSH       hBrushBk;
 
-
     CopyRect(&rc, Sender->GetBoundRect());
     CopyRect(&rcTextClip, Sender->GetBoundRect());
     rcTextClip.right = Col1Left - 2;
 
     InflateRect(&rc, -2, -2);
 
-    if (!AirspaceWarnGetItem(i, &pAS)) return;
+    if (!AirspaceWarnGetItem(i, pAS)) return;
 
     if (ItemIndex == DrawListIndex){
       FocusedID = pAS.ID;
     }
 
     if (pAS.IsCircle){
-      _tcsncpy(sName, AirspaceCircle[pAS.AirspaceIndex].Name, sizeof(sName)/sizeof(sName[0]));
+      _tcsncpy(sName, AirspaceCircle[pAS.AirspaceIndex].Name,
+	       sizeof(sName)/sizeof(sName[0]));
       Base = AirspaceCircle[pAS.AirspaceIndex].Base;
       Top  = AirspaceCircle[pAS.AirspaceIndex].Top;
       Type = AirspaceCircle[pAS.AirspaceIndex].Type;
     } else {
-      _tcsncpy(sName, AirspaceArea[pAS.AirspaceIndex].Name, sizeof(sName)/sizeof(sName[0]));
+      _tcsncpy(sName, AirspaceArea[pAS.AirspaceIndex].Name,
+	       sizeof(sName)/sizeof(sName[0]));
       Base = AirspaceArea[pAS.AirspaceIndex].Base;
       Top  = AirspaceArea[pAS.AirspaceIndex].Top;
       Type = AirspaceArea[pAS.AirspaceIndex].Type;
@@ -280,7 +294,7 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
 
     fmtAirspaceAlt(sTop, &Top);
     fmtAirspaceAlt(sBase, &Base);
-    pType = getAirspaceType(Type);
+    getAirspaceType(sType, Type);
 
     if (pAS.Inside){
       if (pAS.Acknowledge >= 3)
@@ -326,27 +340,26 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
       ETO_OPAQUE, NULL, sTmp, _tcslen(sTmp), NULL);
 
     if (pAS.Inside){
-      wsprintf(sTmp, TEXT("> %c %s"), sAckIndicator[pAS.Acknowledge], pType);
+      wsprintf(sTmp, TEXT("> %c %s"), sAckIndicator[pAS.Acknowledge], sType);
     } else {
       if (pAS.hDistance == 0 && pAS.vDistance > 0){
-        wsprintf(sTmp, TEXT("< %c %s ab %d%s"), sAckIndicator[pAS.Acknowledge], pType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
+        wsprintf(sTmp, TEXT("< %c %s ab %d%s"), sAckIndicator[pAS.Acknowledge], sType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
       }
       else if (pAS.hDistance == 0 && pAS.vDistance < 0){
-        wsprintf(sTmp, TEXT("< %c %s bl %d%s"), sAckIndicator[pAS.Acknowledge], pType, (int)Units::ToUserDistance(-pAS.vDistance), Units::GetDistanceName());
+        wsprintf(sTmp, TEXT("< %c %s bl %d%s"), sAckIndicator[pAS.Acknowledge], sType, (int)Units::ToUserDistance(-pAS.vDistance), Units::GetDistanceName());
       } else {
         if ((pAS.vDistance == 0) || (pAS.hDistance < (abs(pAS.vDistance)*30)))
-          wsprintf(sTmp, TEXT("< %c %s H %d%s"), sAckIndicator[pAS.Acknowledge], pType, (int)Units::ToUserDistance(pAS.hDistance),Units::GetDistanceName());
+          wsprintf(sTmp, TEXT("< %c %s H %d%s"), sAckIndicator[pAS.Acknowledge], sType, (int)Units::ToUserDistance(pAS.hDistance),Units::GetDistanceName());
         else
           if (pAS.vDistance > 0)
-            wsprintf(sTmp, TEXT("< %c %s ab %d%s"), sAckIndicator[pAS.Acknowledge], pType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
+            wsprintf(sTmp, TEXT("< %c %s ab %d%s"), sAckIndicator[pAS.Acknowledge], sType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
           else
-            wsprintf(sTmp, TEXT("< %c %s bl %d%s"), sAckIndicator[pAS.Acknowledge], pType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
+            wsprintf(sTmp, TEXT("< %c %s bl %d%s"), sAckIndicator[pAS.Acknowledge], sType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
       }
     }
 
     ExtTextOut(hDC, Col0Left*InfoBoxLayout::scale, (TextTop+TextHeight)*InfoBoxLayout::scale,
       ETO_CLIPPED, &rcTextClip, sTmp, _tcslen(sTmp), NULL);
-
 
   } else {
     if (DrawListIndex == 0){
@@ -405,15 +418,14 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
 
     }
     */
-
     return(0);
-
   }
 
   if (!wf->GetVisible())
     return(0);
 
   if (actListSizeChange){
+
     actListSizeChange = false;
 
     Count = AirspaceWarnGetItemCount();
@@ -432,10 +444,10 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
 
     wAirspaceList->ResetList();
 
-    if (Count == 0 && wf->GetVisible()){
+    if (Count == 0) {
+      // auto close
       OnCloseClicked(Sender);
     }
-
   }
 
   if (actListChange){
@@ -444,30 +456,38 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
     wAirspaceList->Redraw();
   }
 
-  return(1);
-
+  // this is our message, we have handled it.
+  return(0);
 }
+
+
+extern bool RequestAirspaceWarningDialog;
 
 // WARNING: this is NOT called from the windows thread!
 void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace) {
 
-  if (Action == asaItemAdded || Action == asaItemRemoved || Action == asaWarnLevelIncreased) {
+  if ((Action == asaItemAdded) || (Action == asaItemRemoved) || (Action == asaWarnLevelIncreased)) {
     actShow = true;
   }
 
-  if (Action == asaItemAdded || Action == asaItemRemoved || Action == asaClearAll) {
+  if ((Action == asaItemAdded) || (Action == asaItemRemoved) || (Action == asaClearAll)) {
     actListSizeChange = true;
   }
 
-  if (Action == asaItemChanged || Action == asaWarnLevelIncreased){
+  if ((Action == asaItemChanged) || (Action == asaWarnLevelIncreased)){
     actListChange = true;
   }
 
-  if (Action == asaProcessEnd && (actShow || actListSizeChange || actListChange)){
-    if (fDialogOpen)
+  if ((Action == asaProcessEnd) && (actShow || actListSizeChange || actListChange)){
+    if (fDialogOpen) {
       PostMessage(wf->GetHandle(), WM_USER+1, 0, 0);
-    else
-      PostMessage(hWndMapWindow, WM_USER+1, 0, 0);  // sync dialog with MapWindow (event processing etc)
+    }
+    else {
+      RequestAirspaceWarningDialog= true;
+      // JMW this is bad! PostMessage(hWndMapWindow, WM_USER+1, 0, 0);
+      // (Makes it serviced by the main gui thread, much better)
+    }
+    // sync dialog with MapWindow (event processing etc)
   }
 
 }
@@ -496,6 +516,7 @@ bool dlgAirspaceWarningShow(void){
 */
 
 // WARING: may only be called from MapWindow event loop!
+// JMW this is now called from ProcessCommon (main GUI loop)
 bool dlgAirspaceWarningShowDlg(bool Force){
 
   if (!actShow && !Force)
@@ -503,21 +524,32 @@ bool dlgAirspaceWarningShowDlg(bool Force){
 
   Count = AirspaceWarnGetItemCount();
 
-  if (Force && Count == 0)
+  if (!Force && (Count == 0))
     return(false);
 
   ASSERT(wf != NULL);
   ASSERT(wAirspaceList != NULL);
 
   wAirspaceList->ResetList();
-  fDialogOpen = true;
-  wf->ShowModal();
-  fDialogOpen = false;
 
-  SetFocus(hWndMapWindow);
+  if (!fDialogOpen) {
+    fDialogOpen = true;
+    HWND oldFocusHwnd = GetFocus();
+    wf->ShowModal();
+    if (oldFocusHwnd) {
+      SetFocus(oldFocusHwnd);
+    }
+
+    fDialogOpen = false;
+
+    //    SetFocus(hWndMapWindow);
+    // JMW why do this? --- not necessary?
+    // concerned it may interfere if a dialog is already open
+  }
 
   return(true);
 }
+
 
 int dlgAirspaceWarningInit(void){
 
@@ -571,7 +603,8 @@ int dlgAirspaceWarningInit(void){
 
 int dlgAirspaceWarningDeInit(void){
 
-  wf->SetVisible(false);
+  if (wf)
+    wf->SetVisible(false);
 
   AirspaceWarnListRemoveNotifier(AirspaceWarningNotify);
 

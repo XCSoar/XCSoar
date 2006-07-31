@@ -475,7 +475,9 @@ location=8
 mode=Display2
 type=key
 data=0
-label=
+event=DeclutterLabels show
+event=DeclutterLabels toggle
+label=Declutter\nLabels
 location=9
 
 

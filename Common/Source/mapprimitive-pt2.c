@@ -29,6 +29,7 @@ Copyright_License {
 
 }
 */
+#include "stdafx.h"
 #include "mapprimitive.h"
 #include "maperror.h"
 #include <string.h>

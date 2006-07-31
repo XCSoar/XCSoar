@@ -47,6 +47,15 @@ class ThermalLocator {
 	      double *Thermal_R);
   //  double Estimate(double t_x, double t_y);
 
+  void EstimateThermalBase(double Thermal_Longitude,
+			   double Thermal_Latitude,
+			   double altitude,
+			   double wthermal,
+			   double wind_speed,
+			   double wind_bearing,
+			   double *ground_longitude,
+			   double *ground_latitude,
+			   double *ground_alt);
   double est_x;
   double est_y;
   double est_w;

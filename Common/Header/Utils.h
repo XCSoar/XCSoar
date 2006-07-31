@@ -119,6 +119,7 @@ extern TCHAR szRegistryAutoMcMode[];
 extern TCHAR szRegistryWaypointsOutOfRange[];
 extern TCHAR szRegistryEnableExternalTriggerCruise[];
 extern TCHAR szRegistryOLCRules[];
+extern TCHAR szRegistryHandicap[];
 
 extern bool LockSettingsInFlight;
 
@@ -282,5 +283,9 @@ double AirDensity(double altitude);
 double AirDensityRatio(double altitude);
 
 long CheckFreeRam(void);
+
+void MemCheckPoint();
+void MemLeakCheck();
+void MyCompactHeaps();
 
 #endif

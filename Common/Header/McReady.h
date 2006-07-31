@@ -40,6 +40,7 @@ class GlidePolar {
                 double loadfactor);
   static double SinkRate(double a,double b, double c,
                          double MC, double HW, double V);
+  static double FindSpeedForSinkRate(double w);
 };
 
 #endif

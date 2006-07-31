@@ -3435,22 +3435,23 @@ void DoStatusMessage(TCHAR* text, TCHAR *data) {
    TODO - Fast search
 
 */
+
 TCHAR* gettext(TCHAR* text) {
-	int i;
-	for (i=0; i<GetTextData_Size; i++) {
-		if (!text || !GetTextData[i].key) continue;
-		if (wcscmp(text, GetTextData[i].key) == 0)
-			return GetTextData[i].text;
-	}
-	return text;
+  int i;
+  for (i=0; i<GetTextData_Size; i++) {
+    if (!text || !GetTextData[i].key) continue;
+    if (wcscmp(text, GetTextData[i].key) == 0)
+      return GetTextData[i].text;
+  }
+  return text;
 }
 
 // Set the window text value, by passing through gettext
 // TODO - Review if this needs to be done every time?
 void SetWindowText_gettext(HWND hDlg, int entry) {
-	  TCHAR strTemp[1024];
-	  GetWindowText(GetDlgItem(hDlg,entry),strTemp, 1023);
-	  SetWindowText(GetDlgItem(hDlg,entry),gettext(strTemp));
+  TCHAR strTemp[1024];
+  GetWindowText(GetDlgItem(hDlg,entry),strTemp, 1023);
+  SetWindowText(GetDlgItem(hDlg,entry),gettext(strTemp));
 }
 
 /////////////////////////////////////////////////

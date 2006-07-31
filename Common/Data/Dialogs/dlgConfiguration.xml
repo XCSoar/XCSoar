@@ -340,7 +340,9 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   <WndProperty Name="prpAutoMcMode" Caption="Auto Mc mode"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
   Help="This option defines which auto MacCready algorithm is used.
-[Final glide] adjusts Mc for fastest arrival.
+[Final glide] adjusts Mc for fastest arrival.  For OLC sprint tasks,
+ the MacCready is adjusted in order to cover the greatest distance in the remaining
+ time and reach the finish height.
 [Average] sets Mc to the average climb rate across all climbs.
 [Both] Uses average during task, then fastest arrival when in final glide mode.">
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
@@ -374,6 +376,12 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   Help="The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=200 Step=1/>
   </WndProperty>
+
+  <WndProperty Name="prpHandicap" Caption="Handicap"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2
+  Help="The handicap factor used for OLC scoring.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=1 Max=200 Step=1/>
+  </WndProperty>
+
 
   </WndFrame>
 
@@ -439,7 +447,8 @@ Help="Altair Pro or Vega users should set this to 38400."
     <WndProperty Name="prpOLCRules" Caption="Online contest"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2
 Help="Rules used for calculating optimal points for OnLine Contest.
 [Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
-[Triangle]: Conforms to FAI OLC triangle rules.  Four points with common start and finish, no leg greater than 25% of total.  Finish height must not be lower than start height less 1000 meters.
+[Triangle]: Conforms to FAI OLC triangle rules.  Four points with common start and finish.  For tasks longer than 500km, no leg less than 25% or larger than 45%; otherwise no leg less than 28% of total.  Finish height must not be lower than start height less 1000 meters.
+[Classic]: Conforms to OLC classic rules.  Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.  Points awarded 80% on second last leg and 60% on last leg.
 ">
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>

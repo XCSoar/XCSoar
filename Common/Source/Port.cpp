@@ -327,19 +327,23 @@ BOOL Port1StopRxThread(void){
             PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
   // setting the comm event mask with the same value
   //  GetCommMask(hPort1, &dwMask1);
-  SetCommMask(hPort1, dwMask1);          // will cancel any
-                                         // WaitCommEvent!  this is a
+  SetCommMask(hPort1, dwMask1);         // will cancel any
+                                        // WaitCommEvent!  this is a
                                         // documented CE trick to
                                         // cancel the WaitCommEvent
-  while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0){
+  while (!fRxThreadTerminated && (long)(GetTickCount()-tm) < 100){
     Sleep(10);
   }
-  //  #if COMMDEBUG > 0
-  if (!fRxThreadTerminated)
+  if (!fRxThreadTerminated) {
+    //  #if COMMDEBUG > 0
     MessageBoxX (hWndMainWindow,
 		 gettext(TEXT("Port1 RX Thread not Terminated!")),
 		 TEXT("Error"), MB_OK);
-  //  #endif
+    //  #endif
+  } else {
+    CloseHandle(hRead1Thread);
+  }
+
 #endif
 
   return(fRxThreadTerminated);
@@ -354,8 +358,9 @@ BOOL Port1StartRxThread(void){
   TCHAR sTmp[127];
 
   Port1CloseThread = FALSE;
-                                        // Create a read thread for reading data from the communication port.
-  if (hRead1Thread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )Port1ReadThread, 0, 0, &dwThreadID))
+  // Create a read thread for reading data from the communication port.
+  if (hRead1Thread = CreateThread
+      (NULL, 0, (LPTHREAD_START_ROUTINE )Port1ReadThread, 0, 0, &dwThreadID))
   {
     SetThreadPriority(hRead1Thread, THREAD_PRIORITY_NORMAL); //THREAD_PRIORITY_ABOVE_NORMAL
     CloseHandle (hRead1Thread);

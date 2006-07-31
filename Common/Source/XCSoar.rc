@@ -766,6 +766,7 @@ IDB_FLARMROSE           BITMAP  DISCARDABLE     "Bitmaps\\flarmcluster.bmp"
 IDB_AIRSPACE5           BITMAP  DISCARDABLE     "Bitmaps\\airspace5.bmp"
 IDB_CLIMBSMALL          BITMAP  DISCARDABLE     "Bitmaps\\climb_12.bmp"
 IDB_CLIMBSMALLINV       BITMAP  DISCARDABLE     "Bitmaps\\climb_12inv.bmp"
+IDB_THERMALSOURCE       BITMAP  DISCARDABLE     "Bitmaps\\thermalsource.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -798,7 +799,12 @@ IDR_XML_SWITCHES        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgSwitches.
 IDR_XML_VOICE           XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgVoice.xml"
 IDR_XML_WAYPOINTTERRAIN XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointOutOfTerrain.xml"
 IDR_XML_AIRSPACEWARNING XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceWarning.xml"
-IDR_XML_HELP XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgHelp.xml"
+IDR_XML_HELP            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgHelp.xml"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// RASTERDATA
+//
 
 IDR_RASTER_EGM96S       RASTERDATA DISCARDABLE  "Bitmaps\\egm96s.dem"
 

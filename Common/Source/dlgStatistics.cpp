@@ -148,7 +148,7 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
     DrawDashLine(hdc, 1,
                  l1,
                  l2,
-                 RGB(0,0,255));
+                 RGB(0,50,255));
     break;
   case STYLE_REDTHICK:
     DrawDashLine(hdc, 3,
@@ -577,6 +577,8 @@ void Statistics::ScaleMakeSquare(RECT rc) {
 
 #include "OnLineContest.h"
 extern OLCOptimizer olc;
+static bool olcvalid=false;
+static bool olcfinished=false;
 
 void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 {
@@ -609,14 +611,21 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
   if (nowaypoints && !olcmode) return;
 
   olc.SetLine();
-
   int nolc = olc.getN();
 
-  for (i=0; i< nolc; i++) {
-    lat1 = olc.getLatitude(i);
-    lon1 = olc.getLongitude(i);
-    ScaleYFromValue(rc, lat1);
-    ScaleXFromValue(rc, lon1);
+  if (olcvalid) {
+    for (i=0; i< nolc; i++) {
+      lat1 = olc.getLatitude(i);
+      lon1 = olc.getLongitude(i);
+      ScaleYFromValue(rc, lat1);
+      ScaleXFromValue(rc, lon1);
+    }
+    if (!olcfinished) {
+      lat1 = olc.lat_proj;
+      lon1 = olc.lon_proj;
+      ScaleYFromValue(rc, lat1);
+      ScaleXFromValue(rc, lon1);
+    }
   }
 
   lat_c = (y_max+y_min)/2;
@@ -626,6 +635,14 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 
   // find scale
   ResetScale();
+
+  lat1 = GPS_INFO.Latitude;
+  lon1 = GPS_INFO.Longitude;
+  x1 = (lon1-lon_c)*fastcosine(lat1);
+  y1 = (lat1-lat_c);
+  ScaleXFromValue(rc, x1);
+  ScaleYFromValue(rc, y1);
+
   for (i=0; i<MAXTASKPOINTS; i++) {
     if (Task[i].Index != -1) {
       nwps++;
@@ -812,28 +829,42 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
     }
   }
 
-  if (olcmode) {
-    if (olc.solution_FAI_sprint.valid) {
-      for (i=0; i< 5-1; i++) {
-	if (OLCRules==0) {
-	  lat1 = olc.solution_FAI_sprint.latitude[i];
-	  lon1 = olc.solution_FAI_sprint.longitude[i];
-	  lat2 = olc.solution_FAI_sprint.latitude[i+1];
-	  lon2 = olc.solution_FAI_sprint.longitude[i+1];
-	} else {
-	  lat1 = olc.solution_FAI_triangle.latitude[i];
-	  lon1 = olc.solution_FAI_triangle.longitude[i];
-	  lat2 = olc.solution_FAI_triangle.latitude[i+1];
-	  lon2 = olc.solution_FAI_triangle.longitude[i+1];
-	}
-	x1 = (lon1-lon_c)*fastcosine(lat1);
-	y1 = (lat1-lat_c);
-	x2 = (lon2-lon_c)*fastcosine(lat2);
-	y2 = (lat2-lat_c);
-	DrawLine(hdc, rc,
-		 x1, y1, x2, y2,
-		 STYLE_REDTHICK);
+  if (olcmode && olcvalid) {
+    for (i=0; i< 7-1; i++) {
+      switch(OLCRules) {
+      case 0:
+	lat1 = olc.solution_FAI_sprint.latitude[i];
+	lon1 = olc.solution_FAI_sprint.longitude[i];
+	lat2 = olc.solution_FAI_sprint.latitude[i+1];
+	lon2 = olc.solution_FAI_sprint.longitude[i+1];
+	break;
+      case 1:
+	lat1 = olc.solution_FAI_triangle.latitude[i];
+	lon1 = olc.solution_FAI_triangle.longitude[i];
+	lat2 = olc.solution_FAI_triangle.latitude[i+1];
+	lon2 = olc.solution_FAI_triangle.longitude[i+1];
+	break;
+      case 2:
+	lat1 = olc.solution_FAI_classic.latitude[i];
+	lon1 = olc.solution_FAI_classic.longitude[i];
+	lat2 = olc.solution_FAI_classic.latitude[i+1];
+	lon2 = olc.solution_FAI_classic.longitude[i+1];
+	break;
       }
+      x1 = (lon1-lon_c)*fastcosine(lat1);
+      y1 = (lat1-lat_c);
+      x2 = (lon2-lon_c)*fastcosine(lat2);
+      y2 = (lat2-lat_c);
+      DrawLine(hdc, rc,
+	       x1, y1, x2, y2,
+	       STYLE_REDTHICK);
+    }
+    if (!olcfinished) {
+      x1 = (olc.lon_proj-lon_c)*fastcosine(lat1);
+      y1 = (olc.lat_proj-lat_c);
+      DrawLine(hdc, rc,
+	       x1, y1, x2, y2,
+	       STYLE_BLUETHIN);
     }
   }
 
@@ -901,20 +932,22 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 	       CuSonde::cslevels[i+1].dewpoint, i+1,
 	       STYLE_BLUETHIN);
 
-      if (!labelDry && (i>1)) {
-	DrawLabel(hdc, rc, TEXT("DALR"),
-		  CuSonde::cslevels[i+1].tempDry, i);
-	labelDry = true;
-      } else {
-	if (!labelAir) {
-	  DrawLabel(hdc, rc, TEXT("Air"),
-		    CuSonde::cslevels[i+1].airTemp, i);
-	  labelAir = true;
+      if (i>1) {
+	if (!labelDry) {
+	  DrawLabel(hdc, rc, TEXT("DALR"),
+		    CuSonde::cslevels[i+1].tempDry, i);
+	  labelDry = true;
 	} else {
-	  if (!labelDew) {
-	    DrawLabel(hdc, rc, TEXT("Dew"),
-		      CuSonde::cslevels[i+1].dewpoint, i);
-	    labelDew = true;
+	  if (!labelAir) {
+	    DrawLabel(hdc, rc, TEXT("Air"),
+		      CuSonde::cslevels[i+1].airTemp, i);
+	    labelAir = true;
+	  } else {
+	    if (!labelDew) {
+	      DrawLabel(hdc, rc, TEXT("Dew"),
+			CuSonde::cslevels[i+1].dewpoint, i);
+	      labelDew = true;
+	    }
 	  }
 	}
       }
@@ -1293,34 +1326,59 @@ static void Update(void){
     wf->SetCaption(sTmp);
 
     TCHAR sRules[20];
+    TCHAR sFinished[20];
     //      TCHAR timetext2[100];
-    bool valid;
     int dt;
     double d;
+    double score;
 
-    valid = false;
-    if (OLCRules==0) {
+    olcvalid = false;
+    olcfinished = false;
+    score = 0;
+    switch(OLCRules) {
+    case 0:
       _stprintf(sRules,TEXT("Sprint"));
       dt = olc.solution_FAI_sprint.time;
       d = olc.solution_FAI_sprint.distance;
-      valid = olc.solution_FAI_sprint.valid;
-    } else {
+      olcvalid = olc.solution_FAI_sprint.valid;
+      score = olc.solution_FAI_sprint.score;
+      olcfinished = olc.solution_FAI_sprint.finished;
+      break;
+    case 1:
       _stprintf(sRules,TEXT("Triangle"));
       dt = olc.solution_FAI_triangle.time;
       d = olc.solution_FAI_triangle.distance;
-      valid = olc.solution_FAI_triangle.valid;
+      olcvalid = olc.solution_FAI_triangle.valid;
+      score = olc.solution_FAI_triangle.score;
+      olcfinished = olc.solution_FAI_triangle.finished;
+      break;
+    case 2:
+      _stprintf(sRules,TEXT("Classic"));
+      dt = olc.solution_FAI_classic.time;
+      d = olc.solution_FAI_classic.distance;
+      olcvalid = olc.solution_FAI_classic.valid;
+      score = olc.solution_FAI_classic.score;
+      olcfinished = olc.solution_FAI_classic.finished;
+      break;
+    }
+    if (olcfinished) {
+      _tcscpy(sFinished,TEXT(" (Finished)"));
+    } else {
+      _tcscpy(sFinished,TEXT(" (In progress)"));
     }
 
-    if (valid) {
+    if (olcvalid) {
       TCHAR timetext1[100];
       Units::TimeToText(timetext1, dt);
-      _stprintf(sTmp, TEXT("Rules: %s\r\nDistance: %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\n"),
+      _stprintf(sTmp, TEXT("Rules: %s\r\n%s\r\nDistance: %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\nScore: %.2f\r\n"),
 		sRules,
+		sFinished,
 		DISTANCEMODIFY*d,
 		Units::GetDistanceName(),
 		timetext1,
 		TASKSPEEDMODIFY*d/dt,
-		Units::GetTaskSpeedName());
+		Units::GetTaskSpeedName(),
+		score);
     } else {
       _stprintf(sTmp, TEXT("Rules: %s\r\nNo valid path\r\n"),
 		sRules);
@@ -1429,7 +1487,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnNextClicked),
   DeclearCallBackEntry(OnPrevClicked),
   DeclearCallBackEntry(OnCalcClicked),
-  DeclearCallBackEntry(OnCloseClicked),
   DeclearCallBackEntry(NULL)
 };
 
@@ -1437,10 +1494,14 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgAnalysisShowModal(void){
 
+  //  MemCheckPoint();
+
   wf=NULL;
   wGrid=NULL;
   wInfo=NULL;
   wCalc=NULL;
+  olcvalid = false;
+  olcfinished = false;
 
   wf = dlgLoadFromXML(CallBackTable,
 		      LocalPathS(TEXT("dlgAnalysis.xml")),
@@ -1463,6 +1524,8 @@ void dlgAnalysisShowModal(void){
   wf->ShowModal();
 
   delete wf;
+
+  //  MemLeakCheck();
 
   wf = NULL;
 

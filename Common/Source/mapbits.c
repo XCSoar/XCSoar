@@ -29,6 +29,7 @@ Copyright_License {
 
 }
 */
+#include "stdafx.h"
 
 #include <stdlib.h>
 #include "maperror.h"

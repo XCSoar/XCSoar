@@ -52,7 +52,8 @@ Copyright_License {
 #include "windmeasurementlist.h"
 
 
-WindMeasurementList::WindMeasurementList(NMEA_INFO *thenmeaInfo, DERIVED_INFO *thederivedInfo){
+WindMeasurementList::WindMeasurementList(NMEA_INFO *thenmeaInfo,
+					 DERIVED_INFO *thederivedInfo){
   nmeaInfo = thenmeaInfo;
   derivedInfo = thederivedInfo;
   nummeasurementlist = 0;
@@ -170,8 +171,9 @@ uint WindMeasurementList::getLeastImportantItem() {
 
   for (int i=founditem;i>=0;i--) {
 
-    //Calculate the score of this item. The item with the highest score is the least important one.
-    //We may need to adjust the proportion of the quality and the elapsed time. Currently, one
+    //Calculate the score of this item. The item with the highest
+    //score is the least important one.  We may need to adjust the
+    //proportion of the quality and the elapsed time. Currently, one
     //quality-point (scale: 1 to 5) is equal to 10 minutes.
 
     score=600*(6-measurementlist[i]->quality);

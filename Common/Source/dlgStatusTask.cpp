@@ -129,16 +129,17 @@ void dlgStatusTaskShowModal(void){
   double d1 =
     (CALCULATED_INFO.TaskDistanceToGo
      +CALCULATED_INFO.TaskDistanceCovered)/dd;
+  // JMW this fails for OLC
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEstimatedSpeed"));
   _stprintf(Temp, TEXT("%.0f %s"),
-	    SPEEDMODIFY*d1, Units::GetHorizontalSpeedName());
+	    TASKSPEEDMODIFY*d1, Units::GetTaskSpeedName());
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAverageSpeed"));
   _stprintf(Temp, TEXT("%.0f %s"),
-	    SPEEDMODIFY*CALCULATED_INFO.TaskSpeed,
-	    Units::GetHorizontalSpeedName());
+	    TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeed,
+	    Units::GetTaskSpeedName());
   wp->SetText(Temp);
 
   wf->ShowModal();

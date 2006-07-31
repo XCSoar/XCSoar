@@ -520,9 +520,11 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   switch (uMsg){
 
     case WM_ERASEBKGND:
+      /*
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
       if (ib)
 	ib->Paint();
+      */
     return TRUE;
 
     case WM_PAINT:

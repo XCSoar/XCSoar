@@ -5,6 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "StdAfx.h"
 #include "Sizes.h"
 #include "mapshape.h"
 
@@ -158,7 +159,7 @@ typedef void (*AirspaceWarningNotifier_t)(AirspaceWarningNotifyAction_t Action, 
 
 void AirspaceWarnListAddNotifier(AirspaceWarningNotifier_t Notifier);
 void AirspaceWarnListRemoveNotifier(AirspaceWarningNotifier_t Notifier);
-bool AirspaceWarnGetItem(int Index, AirspaceInfo_c *Item);
+bool AirspaceWarnGetItem(int Index, AirspaceInfo_c &Item);
 int AirspaceWarnGetItemCount(void);
 int dlgAirspaceWarningInit(void);
 int dlgAirspaceWarningDeInit(void);
