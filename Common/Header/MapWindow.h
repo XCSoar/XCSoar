@@ -113,6 +113,7 @@ class MapWindow {
 
   static bool MapDirty;
 
+  static bool DeclutterLabels;
   static bool EnableTrailDrift;
   static int GliderScreenPosition;
 
@@ -198,13 +199,14 @@ class MapWindow {
 
   static void UpdateInfo(NMEA_INFO *nmea_info,
 			 DERIVED_INFO *derived_info);
+  static rectObj CalculateScreenBounds(double scale);
  private:
-
   static void CalculateScreenPositions(POINT Orig, RECT rc, 
                                        POINT *Orig_Aircraft);
   static void CalculateScreenPositionsAirspace();
   static void CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE& circ);
   static void CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA& area);
+  static void CalculateScreenPositionsThermalSources();
   static void CalculateWaypointReachable(void);
   
   static bool PointVisible(const POINT &P, const RECT &rc);
@@ -337,6 +339,7 @@ class MapWindow {
   static HBITMAP hBmpAirportUnReachable;
   static HBITMAP hBmpFieldReachable;
   static HBITMAP hBmpFieldUnReachable;
+  static HBITMAP hBmpThermalSource;
 
 #define MAXLABELBLOCKS 100
   static int nLabelBlocks;

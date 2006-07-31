@@ -1488,6 +1488,11 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
   switch (uMsg){
 
+
+    case WM_ERASEBKGND:
+      // we don't need one, we just paint over the top
+    return TRUE;
+
     case WM_PAINT:
       hDC = BeginPaint(GetHandle(), &ps);
       Paint(hDC);
@@ -1733,8 +1738,7 @@ int WndForm::ShowModal(void){
 
   RECT mRc;
   GetWindowRect(GetHandle(), &mRc);
-  // RECT aniRect =
-      DrawWireRects(&mRc, 5);
+  DrawWireRects(&mRc, 5);
 
   SetVisible(true);
 
@@ -3212,7 +3216,7 @@ void WndListFrame::ResetList(void){
   if (mOnListCallback != NULL){
     mListInfo.DrawIndex = -1;                               // -1 -> initialize data
     mOnListCallback(this, &mListInfo);
-    mListInfo.DrawIndex = 0;                                // setup data for first ite,
+    mListInfo.DrawIndex = 0;                                // setup data for first item,
     mOnListCallback(this, &mListInfo);
   }
 
@@ -3225,7 +3229,6 @@ void WndListFrame::ResetList(void){
 
   mClients[0]->SetTop(0);                                   // move item windoe to the top
   mClients[0]->Redraw();
-
 }
 
 int WndListFrame::PrepareItemDraw(void){

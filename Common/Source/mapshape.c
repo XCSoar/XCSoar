@@ -244,13 +244,19 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   pszFullname = (char *) malloc(strlen(pszBasename) + 5);
   sprintf( pszFullname, "%s.shp", pszBasename );
   psSHP->fpSHP = ppc_fopen(pszFullname, pszAccess );
-  if( psSHP->fpSHP == NULL )
+  if( psSHP->fpSHP == NULL ) {
+    free(psSHP);
+    free(pszFullname);
     return( NULL );
+  }
   
   sprintf( pszFullname, "%s.shx", pszBasename );
   psSHP->fpSHX = ppc_fopen(pszFullname, pszAccess );
-  if( psSHP->fpSHX == NULL )
+  if( psSHP->fpSHX == NULL ) {
+    free(psSHP);
+    free(pszFullname);
     return( NULL );
+  }
   
   free( pszFullname );
   free( pszBasename ); 
@@ -260,11 +266,13 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   /*   Read the file size from the SHP file.				    */
   /* -------------------------------------------------------------------- */
   pabyBuf = (uchar *) malloc(100);
-  if (pabyBuf == 0) {
-	return NULL;
+  if (pabyBuf == 0) { 
+    free(psSHP);
+    return NULL;
   }
   if (fread( pabyBuf, 1, 100, psSHP->fpSHP )<100) {
-	return NULL;
+    free(psSHP);
+    return NULL;
   }
   
   psSHP->nFileSize = (pabyBuf[24] * 256 * 256 * 256
@@ -326,8 +334,8 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   /* -------------------------------------------------------------------- */
   psSHP->nMaxRecords = psSHP->nRecords;
   
-  psSHP->panRecOffset = (int *) malloc(sizeof(int) * psSHP->nMaxRecords );
-  psSHP->panRecSize = (int *) malloc(sizeof(int) * psSHP->nMaxRecords );
+  psSHP->panRecOffset = (int *) malloc(sizeof(int) * (psSHP->nMaxRecords) );
+  psSHP->panRecSize = (int *) malloc(sizeof(int) * (psSHP->nMaxRecords) );
   
   pabyBuf = (uchar *) malloc(8 * psSHP->nRecords );
   fread( pabyBuf, 8, psSHP->nRecords, psSHP->fpSHX );

@@ -72,6 +72,8 @@ Topology::Topology(char* shpname, COLORREF thecolor):append(FALSE) {
   shpCache=NULL;
   hBitmap = NULL;
 
+  in_scale = false;
+
   filename = (char *) malloc(strlen(shpname)+1);
   strcpy( filename, shpname );
   hPen = (HPEN)CreatePen(PS_SOLID, 1, thecolor);
@@ -110,15 +112,12 @@ void Topology::Open() {
 
 void Topology::Close() {
   if (shapefileopen) {
-    for (int i=0; i<shpfile.numshapes; i++) {
-      if (shpCache[i] != NULL) {
-        delete shpCache[i];
-        shpCache[i]= NULL;
-      }
+    if (shpCache) {
+      flushCache();
+      free(shpCache); shpCache = NULL;
     }
-    free(shpCache);
     msSHPCloseFile(&shpfile);
-	shapefileopen = false;  // added sgi
+    shapefileopen = false;  // added sgi
   }
 }
 
@@ -127,32 +126,43 @@ Topology::~Topology() {
   Close();
   DeleteObject((HPEN)hPen);
   DeleteObject((HBRUSH)hbBrush);    
-  free(filename);
+  if (filename) { free(filename); }
   if (hBitmap) {
     DeleteObject(hBitmap);
   }
 }
 
 
+bool Topology::CheckScale(void) {
+  return (MapWindow::MapScale <= scaleThreshold);
+}
+
+void Topology::TriggerIfScaleNowVisible(void) {
+  triggerUpdateCache |= (CheckScale() != in_scale);
+}
+
+void Topology::flushCache() {
+  for (int i=0; i<shpfile.numshapes; i++) {
+    removeShape(i);
+  }
+  shapes_visible_count = 0;
+}
+
 void Topology::updateCache(rectObj thebounds, bool purgeonly) {
   if (!triggerUpdateCache) return;
 
   if (!shapefileopen) return;
 
-  if (MapWindow::MapScale > scaleThreshold) {
+  in_scale = CheckScale();
+
+  if (!in_scale) {
     // not visible, so flush the cache
     // otherwise we waste time on looking up which shapes are in bounds
-    for (int i=0; i<shpfile.numshapes; i++) {
-      if (shpCache[i] != NULL) {
-	delete shpCache[i];
-	shpCache[i]= NULL;
-      }
-    }
-    // note that the trigger will still be active, because as soon as
-    // the map scale comes within range, we will need to regenerate the cache
+    flushCache();
     triggerUpdateCache = false;
     return;
   }
+
   if (purgeonly) return;
 
   triggerUpdateCache = false;
@@ -160,9 +170,13 @@ void Topology::updateCache(rectObj thebounds, bool purgeonly) {
   msSHPWhichShapes(&shpfile, thebounds, 0);
   if (!shpfile.status) {
     // this happens if entire shape is out of range
+    // so clear buffer.
+    flushCache();
     return;
   }
   int nn = 0;
+  shapes_visible_count = 0;
+
   for (int i=0; i<shpfile.numshapes; i++) {
 
     if (msGetBit(shpfile.status, i)) {
@@ -171,12 +185,9 @@ void Topology::updateCache(rectObj thebounds, bool purgeonly) {
 	// shape is now in range, and wasn't before
 	shpCache[i] = addShape(i);
       }
-      
+      shapes_visible_count++;
     } else {
-      
-      if (shpCache[i] != NULL) {
-	removeShape(i);
-      }
+      removeShape(i);
     }
   }
 }
@@ -190,8 +201,10 @@ XShape* Topology::addShape(int i) {
 
 
 void Topology::removeShape(int i) {
-  delete shpCache[i];
-  shpCache[i]= NULL;
+  if (shpCache[i]) {
+    delete shpCache[i];
+    shpCache[i]= NULL;
+  }
 }
 
 
@@ -204,94 +217,94 @@ bool Topology::checkVisible(shapeObj* shape, rectObj *screenRect) {
 
 
 int Topology::getQuad(double x, double y, RECT rc) {
-	int quad;
-	
-	double eq1, eq2, xOffs, yOffs;
-
-	//rc.bottom = rc.bottom - 30;
-	//rc.top = rc.top + 30;
-	//rc.left = rc.left + 30;
-	//rc.right = rc.right - 30;
-	// /\ For testing
-
-	eq1 = (rc.right-rc.left);
-	eq1 = (rc.bottom-rc.top)/eq1;
-	eq2 = (rc.right-rc.left);
-	eq2 = (rc.top-rc.bottom)/eq2;
-
-	xOffs = ((rc.right)-(rc.left));
-	xOffs = 0.5*xOffs;
-	xOffs = xOffs + rc.left;
-
-	yOffs = ((rc.bottom)-(rc.top));
-	yOffs = 0.5*yOffs;
-	yOffs = yOffs + rc.top;
-
-	if ((y-yOffs)<((x-xOffs)*eq1))
-		if ((y-yOffs)>((x-xOffs)*eq2))
-			quad=3; //RIGHT of screen
-		else
-			quad=2; //ABOVE screen
-	else
-		if ((y-yOffs)<((x-xOffs)*eq2))
-			quad=1; //LEFT of screen
-		else
-			quad=4; //BELOW screen
-	return quad;
+  int quad;
+  
+  double eq1, eq2, xOffs, yOffs;
+  
+  //rc.bottom = rc.bottom - 30;
+  //rc.top = rc.top + 30;
+  //rc.left = rc.left + 30;
+  //rc.right = rc.right - 30;
+  // /\ For testing
+  
+  eq1 = (rc.right-rc.left);
+  eq1 = (rc.bottom-rc.top)/eq1;
+  eq2 = (rc.right-rc.left);
+  eq2 = (rc.top-rc.bottom)/eq2;
+  
+  xOffs = ((rc.right)-(rc.left));
+  xOffs = 0.5*xOffs;
+  xOffs = xOffs + rc.left;
+  
+  yOffs = ((rc.bottom)-(rc.top));
+  yOffs = 0.5*yOffs;
+  yOffs = yOffs + rc.top;
+  
+  if ((y-yOffs)<((x-xOffs)*eq1))
+    if ((y-yOffs)>((x-xOffs)*eq2))
+      quad=3; //RIGHT of screen
+    else
+      quad=2; //ABOVE screen
+  else
+    if ((y-yOffs)<((x-xOffs)*eq2))
+      quad=1; //LEFT of screen
+    else
+      quad=4; //BELOW screen
+  return quad;
 }
 
 bool Topology::checkInside(int x, int y, int quad, RECT rc) {
-	bool inside=false;
-
-	//rc.bottom = rc.bottom - 30;
-	//rc.top = rc.top + 30;
-	//rc.left = rc.left + 30;
-	//rc.right = rc.right - 30;
-	// /\ for testing
-
-	if (quad==1)
-		if (x > rc.left)
-			inside=true;
-	if (quad==2)
-		if (y > rc.top)
-			inside=true;
-	if (quad==3)
-		if (x < rc.right)
-			inside=true;
-	if (quad==4)
-		if (y < rc.bottom)
-			inside=true;
-	return inside;
+  bool inside=false;
+  
+  //rc.bottom = rc.bottom - 30;
+  //rc.top = rc.top + 30;
+  //rc.left = rc.left + 30;
+  //rc.right = rc.right - 30;
+  // /\ for testing
+  
+  if (quad==1)
+    if (x > rc.left)
+      inside=true;
+  if (quad==2)
+    if (y > rc.top)
+      inside=true;
+  if (quad==3)
+    if (x < rc.right)
+      inside=true;
+  if (quad==4)
+    if (y < rc.bottom)
+      inside=true;
+  return inside;
 }
 
 int Topology::getCorner(int n, int n2) {
-	//nb - tidy this up
-
-	if (n==1){
-		if (n2==2)
-			return 1;
-		if (n2==4)
-			return 4;
-	}
-	if (n==2){
-		if (n2==1)
-			return 1;
-		if (n2==3)
-			return 2;
-	}
-	if (n==3){
-		if (n2==2)
-			return 2;
-		if (n2==4)
-			return 3;
-	}
-	if (n==4){
-		if (n2==3)
-			return 3;
-		if (n2==1)
-			return 4;
-	}
-	return 0;
+  //nb - tidy this up
+  
+  if (n==1){
+    if (n2==2)
+      return 1;
+    if (n2==4)
+      return 4;
+  }
+  if (n==2){
+    if (n2==1)
+      return 1;
+    if (n2==3)
+      return 2;
+  }
+  if (n==3){
+    if (n2==2)
+      return 2;
+    if (n2==4)
+      return 3;
+  }
+  if (n==4){
+    if (n2==3)
+      return 3;
+    if (n2==1)
+      return 4;
+  }
+  return 0;
 }
 
 
@@ -447,7 +460,8 @@ void Topology::Paint(HDC hdc, RECT rc) {
 	    pt = (POINT*)SfRealloc(pt,
 				   int((sizeof(POINT)
 					*shape->line[tt].numpoints/iskip)*1.3)); 
-	    //Uh-oh.. chance of running out of array space here, since the number of points is dynamic. Can anyone help?
+	    //Uh-oh.. chance of running out of array space here, since
+	    //the number of points is dynamic. Can anyone help?
 
 	    for (int jj=0; jj< shape->line[tt].numpoints/iskip; jj++) {
 	      int x, y, quad;
@@ -535,7 +549,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
     }
   }
   //   
-  if (pt) free(pt);
+  if (pt) { free(pt); pt=NULL; }
         
   SelectObject(hdc, hbOld);
   SelectObject(hdc, hpOld);
@@ -573,7 +587,7 @@ XShape* TopologyLabel::addShape(int i) {
 
 
 void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
-  if (label) {
+  if (label && !MapWindow::DeclutterLabels) {
 
     TCHAR Temp[100];
     wsprintf(Temp,TEXT("%S"),label);
@@ -616,8 +630,11 @@ void XShapeLabel::setlabel(const char* src) {
       (strcmp(src,"RAILWAY STATION") != 0) &&
       (strcmp(src,"RAILROAD STATION") != 0)
       ) {
+    if (label) free(label);
     label = (char*)malloc(strlen(src)+1);
-    strcpy(label,src);
+    if (label) {
+      strcpy(label,src);
+    }
     hide=false;
   } else {
     if (label) free(label);
@@ -669,9 +686,7 @@ TopologyWriter::TopologyWriter(char* shpname, COLORREF thecolor):
   if (msSHPCreateFile(&shpfile, shpname, SHP_POINT) == -1) {
   } else {
     shpfile.hDBF = msDBFCreate(dbfname);
-    if (shpfile.hDBF) {
-      msDBFClose(shpfile.hDBF);
-    }
+    shapefileopen=true;
     Close();
   }
   Open();

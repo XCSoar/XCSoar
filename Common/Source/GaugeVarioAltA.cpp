@@ -901,6 +901,9 @@ LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
   HDC hDC;                   // handle to graphics device context,
   
   switch (uMsg){
+    case WM_ERASEBKGND:
+      // we don't need one, we just paint over the top
+    return TRUE;
 
     case WM_PAINT:
       if (GlobalRunning && EnableVarioGauge) {

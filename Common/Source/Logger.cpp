@@ -132,7 +132,8 @@ void LogPoint(double Latitude, double Longitude, double Altitude)
   SetFilePointer(hFile, 0, NULL, FILE_END); 
   WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead, 
 	    (OVERLAPPED *)NULL);
-	
+  FlushFileBuffers(hFile);
+
   CloseHandle(hFile);
 }
 
@@ -223,6 +224,7 @@ void LoggerHeader(void)
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
   sprintf(temp,"HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_Version);
+  FlushFileBuffers(hFile);
   CloseHandle(hFile);			
 
 }
@@ -271,6 +273,8 @@ void StartDeclaration(int ntp)
   // IGC GNSS specification 3.6.3
   WriteFile(hFile, start, strlen(start), &dwBytesRead, (OVERLAPPED *)NULL);
 	
+  FlushFileBuffers(hFile);
+
   CloseHandle(hFile);			
 }
 
@@ -288,7 +292,8 @@ void EndDeclaration(void)
 	
   SetFilePointer(hFile, 0, NULL, FILE_END); 
   WriteFile(hFile, start, strlen(start), &dwBytesRead,(OVERLAPPED *)NULL);
-	
+  FlushFileBuffers(hFile);
+
   CloseHandle(hFile);			
 }
 
@@ -338,14 +343,16 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
 
   GetLocalTime(&st);
 
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
+  hFile = CreateFile(szLoggerFileName, 
+		     GENERIC_WRITE, FILE_SHARE_WRITE, 
+		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
 	
-  sprintf(szCRecord,"C%02d%05.0f%c%03d%05.0f%c%s\r\n", DegLat, MinLat, NoS, DegLon, MinLon, EoW, IDString);
-
-
+  sprintf(szCRecord,"C%02d%05.0f%c%03d%05.0f%c%s\r\n", 
+	  DegLat, MinLat, NoS, DegLon, MinLon, EoW, IDString);
 
   SetFilePointer(hFile, 0, NULL, FILE_END); 
   WriteFile(hFile, szCRecord, strlen(szCRecord), &dwBytesRead, (OVERLAPPED *)NULL); 
+  FlushFileBuffers(hFile);
 	
   CloseHandle(hFile);			
 }
@@ -366,7 +373,7 @@ void LoggerNote(TCHAR *text) {
     SetFilePointer(hFile, 0, NULL, FILE_END); 
     WriteFile(hFile, fulltext, strlen(fulltext), &dwBytesRead, 
 	      (OVERLAPPED *)NULL);
-	
+    FlushFileBuffers(hFile);
     CloseHandle(hFile);
 
   }

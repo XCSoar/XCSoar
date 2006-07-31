@@ -87,42 +87,42 @@ public:
 
   static CoordinateFormats_t CoordinateFormat;
 
-  static TCHAR *GetUnitName(Units_t Unit);
+  static const TCHAR *GetUnitName(Units_t Unit);
 
-  static Units_t GetUserDistanceUnit(void);
+  static  Units_t GetUserDistanceUnit(void);
   static Units_t SetUserDistanceUnit(Units_t NewUnit);
 
-  static Units_t GetUserAltitudeUnit(void);
+  static  Units_t GetUserAltitudeUnit(void);
   static Units_t SetUserAltitudeUnit(Units_t NewUnit);
 
-  static Units_t GetUserHorizontalSpeedUnit(void);
+  static  Units_t GetUserHorizontalSpeedUnit(void);
   static Units_t SetUserHorizontalSpeedUnit(Units_t NewUnit);
 
-  static Units_t GetUserTaskSpeedUnit(void);
+  static  Units_t GetUserTaskSpeedUnit(void);
   static Units_t SetUserTaskSpeedUnit(Units_t NewUnit);
 
-  static Units_t GetUserVerticalSpeedUnit(void);
+  static  Units_t GetUserVerticalSpeedUnit(void);
   static Units_t SetUserVerticalSpeedUnit(Units_t NewUnit);
 
-  static Units_t GetUserWindSpeedUnit(void);
+  static  Units_t GetUserWindSpeedUnit(void);
   static Units_t SetUserWindSpeedUnit(Units_t NewUnit);
 
-  static Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
+  static  Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
 
   static bool LongitudeToString(double Longitude, TCHAR *Buffer, size_t size);
   static bool LatitudeToString(double Latitude, TCHAR *Buffer, size_t size);
 
   static void NotifyUnitChanged(void);
 
-  static TCHAR *GetHorizontalSpeedName();
+  static const TCHAR *GetHorizontalSpeedName();
 
-  static TCHAR *GetVerticalSpeedName();
+  static const TCHAR *GetVerticalSpeedName();
 
-  static TCHAR *GetDistanceName();
+  static const TCHAR *GetDistanceName();
 
-  static TCHAR *GetAltitudeName();
+  static const TCHAR *GetAltitudeName();
 
-  static TCHAR *GetTaskSpeedName();
+  static const TCHAR *GetTaskSpeedName();
 
   static bool FormatUserAltitude(double Altitude, TCHAR *Buffer, size_t size);
   static bool FormatAlternateUserAltitude(double Altitude, TCHAR *Buffer, size_t size);

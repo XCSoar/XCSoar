@@ -2,49 +2,49 @@
 
 InputEvents
 
-  This class is used to control all user and external InputEvents.
-  This includes some Nmea strings, virtual events (Glide Computer
-  Evnets) and Keyboard.
+This class is used to control all user and external InputEvents.
+This includes some Nmea strings, virtual events (Glide Computer
+Evnets) and Keyboard.
 
-  What it does not cover is Glide Computer normal processing - this
-  includes GPS and Vario processing.
+What it does not cover is Glide Computer normal processing - this
+includes GPS and Vario processing.
 
-  What it does include is what to do when an automatic event (switch
-  to Climb mode) and user events are entered.
+What it does include is what to do when an automatic event (switch
+to Climb mode) and user events are entered.
 
-  It also covers the configuration side of on screen labels.
+It also covers the configuration side of on screen labels.
 
-  For further information on config file formats see
+For further information on config file formats see
 
-	source/Common/Data/Input/ALL
-	doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
+source/Common/Data/Input/ALL
+doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
 Copyright_License {
 
-  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
-  Copyright (C) 2000 - 2005  
+XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+Copyright (C) 2000 - 2005  
 
-  	M Roberts (original release)
-	Robin Birch <robinb@ruffnready.co.uk>
-	Samuel Gisiger <samuel.gisiger@triadis.ch>
-	Jeff Goodenough <jeff@enborne.f2s.com>
-	Alastair Harrison <aharrison@magic.force9.co.uk>
-	Scott Penrose <scottp@dd.com.au>
-	John Wharington <jwharington@bigfoot.com>
+M Roberts (original release)
+Robin Birch <robinb@ruffnready.co.uk>
+Samuel Gisiger <samuel.gisiger@triadis.ch>
+Jeff Goodenough <jeff@enborne.f2s.com>
+Alastair Harrison <aharrison@magic.force9.co.uk>
+Scott Penrose <scottp@dd.com.au>
+John Wharington <jwharington@bigfoot.com>
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License
-  as published by the Free Software Foundation; either version 2
-  of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 }
 
@@ -78,35 +78,35 @@ Copyright_License {
 #define MAX_LABEL NUMBUTTONLABELS
 
 /*
-	TODO - All of this input_Errors code needs to be removed and replaced with standard logger.
-	The logger can then display messages through Message:: if ncessary and log to files etc
-	This code, and baddly written #ifdef should be moved to Macros in the Log class.
+  TODO - All of this input_Errors code needs to be removed and replaced with standard logger.
+  The logger can then display messages through Message:: if ncessary and log to files etc
+  This code, and baddly written #ifdef should be moved to Macros in the Log class.
 */
 
 
 #ifdef _INPUTDEBUG_
-	// Log first NN input event errors for display in simulator mode
-	#define MAX_INPUT_ERRORS 5
-	TCHAR input_errors[MAX_INPUT_ERRORS][3000];
-	int input_errors_count = 0; 
-	// JMW this is just far too annoying right now,
-	// since "title" "note" and commencts are not parsed, they
-	// come up as errors.
+// Log first NN input event errors for display in simulator mode
+#define MAX_INPUT_ERRORS 5
+TCHAR input_errors[MAX_INPUT_ERRORS][3000];
+int input_errors_count = 0; 
+// JMW this is just far too annoying right now,
+// since "title" "note" and commencts are not parsed, they
+// come up as errors.
 #endif
 
 // Current modes - map mode to integer (primitive hash)
-TCHAR mode_current[MAX_MODE_STRING] = TEXT("default");		// Current mode
-TCHAR mode_map[MAX_MODE][MAX_MODE_STRING];					// Map mode to location
-int mode_map_count = 0;
+static TCHAR mode_current[MAX_MODE_STRING] = TEXT("default");		// Current mode
+static TCHAR mode_map[MAX_MODE][MAX_MODE_STRING];					// Map mode to location
+static int mode_map_count = 0;
 
 // Key map to Event - Keys (per mode) mapped to events
-int Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
+static int Key2Event[MAX_MODE][MAX_KEY];		// Points to Events location
 
 // Glide Computer Events
-int GC2Event[MAX_MODE][GCE_COUNT];
+static int GC2Event[MAX_MODE][GCE_COUNT];
 
 // NMEA Triggered Events
-int N2Event[MAX_MODE][NE_COUNT];
+static int N2Event[MAX_MODE][NE_COUNT];
 
 // Events - What do you want to DO
 typedef struct {
@@ -114,8 +114,9 @@ typedef struct {
   TCHAR *misc;    // Parameters
   int next;       // Next in event list - eg: Macros
 } EventSTRUCT;
-EventSTRUCT Events[MAX_EVENTS];	
-int Events_count;				// How many have we defined
+
+static EventSTRUCT Events[MAX_EVENTS];	
+static int Events_count;				// How many have we defined
 
 // Labels - defined per mode
 typedef struct {
@@ -123,8 +124,15 @@ typedef struct {
   int location;
   int event;
 } ModeLabelSTRUCT;
-ModeLabelSTRUCT ModeLabel[MAX_MODE][MAX_LABEL];
-int ModeLabel_count[MAX_MODE];				// Where are we up to in this mode...
+static ModeLabelSTRUCT ModeLabel[MAX_MODE][MAX_LABEL];
+static int ModeLabel_count[MAX_MODE];	       // Where are we up to in this mode...
+
+
+#define MAX_GCE_QUEUE 10
+static int GCE_Queue[MAX_GCE_QUEUE];
+#define MAX_NMEA_QUEUE 10
+static int NMEA_Queue[MAX_NMEA_QUEUE];
+
 
 // -----------------------------------------------------------------------
 // Initialisation and Defaults
@@ -162,6 +170,17 @@ int DLLCache_Count = 0;
 
 // Read the data files
 void InputEvents::readFile() {
+
+  // clear the GCE and NMEA queues
+  LockFlightData();
+  int i;
+  for (i=0; i<MAX_GCE_QUEUE; i++) {
+    GCE_Queue[i]= -1;
+  }
+  for (i=0; i<MAX_NMEA_QUEUE; i++) {
+    NMEA_Queue[i]= -1;
+  }
+  UnlockFlightData();
 
   // Get defaults 
   if (!InitONCE) {
@@ -213,195 +232,195 @@ void InputEvents::readFile() {
   int event_id = 0;
   TCHAR d_label[256] = TEXT("");
   int d_location = 0;
-	TCHAR d_event[256] = TEXT("");
-	TCHAR d_misc[256] = TEXT("");
+  TCHAR d_event[256] = TEXT("");
+  TCHAR d_misc[256] = TEXT("");
 
-	int line = 0;
+  int line = 0;
 
-                                                                                                                                              /* Read from the file */
+  /* Read from the file */
   while (
 	 _fgetts(buffer, 2048, fp)
 	 // TODO What about \r - as in \r\n ?
 	 // TODO Note that ^# does not allow # in key - might be required (probably not)
 	 //		Better way is to separate the check for # and the scanf 
 	 && ((found = _stscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
-  ) {
-	  line++;
+	 ) {
+    line++;
 
     // Check valid line? If not valid, assume next record (primative, but works ok!)
-	if ((buffer[0] == '\r') || (buffer[0] == '\n') || (buffer[0] == NULL)) {
-		// General checks before continue...
-		if (
-			some_data
-			&& (d_mode != NULL)						// We have a mode
-			&& (_tcscmp(d_mode, TEXT("")) != 0)		//
-		) {
+    if ((buffer[0] == '\r') || (buffer[0] == '\n') || (buffer[0] == NULL)) {
+      // General checks before continue...
+      if (
+	  some_data
+	  && (d_mode != NULL)						// We have a mode
+	  && (_tcscmp(d_mode, TEXT("")) != 0)		//
+	  ) {
 
-			TCHAR *token;
+	TCHAR *token;
 
-			// For each mode
-			token = _tcstok(d_mode, TEXT(" "));
+	// For each mode
+	token = _tcstok(d_mode, TEXT(" "));
 
-			// General errors - these should be true
-			ASSERT(d_location >= 0);
-  			ASSERT(d_location < 1024);	// Scott arbitrary limit
-			ASSERT(event_id >= 0);
-			ASSERT(d_mode != NULL);
-			ASSERT(d_type != NULL);
-			ASSERT(d_label != NULL);
+	// General errors - these should be true
+	ASSERT(d_location >= 0);
+	ASSERT(d_location < 1024);	// Scott arbitrary limit
+	ASSERT(event_id >= 0);
+	ASSERT(d_mode != NULL);
+	ASSERT(d_type != NULL);
+	ASSERT(d_label != NULL);
 
-			// These could indicate bad data - thus not an ASSERT (debug only)
-			// ASSERT(_tcslen(d_mode) < 1024);
-			// ASSERT(_tcslen(d_type) < 1024);
-			// ASSERT(_tcslen(d_label) < 1024);
+	// These could indicate bad data - thus not an ASSERT (debug only)
+	// ASSERT(_tcslen(d_mode) < 1024);
+	// ASSERT(_tcslen(d_type) < 1024);
+	// ASSERT(_tcslen(d_label) < 1024);
 
-			while( token != NULL ) {
+	while( token != NULL ) {
 
-				// All modes are valid at this point
-				int mode_id = mode2int(token, true);
-				ASSERT(mode_id >= 0);
-
-				// Make label event
-				// TODO Consider Reuse existing entries...
-				if (d_location > 0) {
-					// Only copy this once per object - save string space
-					if (!new_label) {
-						new_label = StringMallocParse(d_label);
-					}
-					InputEvents::makeLabel(mode_id, new_label, d_location, event_id);
-				} 
-
-				// Make key (Keyboard input)
-				if (_tcscmp(d_type, TEXT("key")) == 0)	{	// key - Hardware key or keyboard
-					int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
-					if (key > 0)
-						Key2Event[mode_id][key] = event_id;
-   					#ifdef _INPUTDEBUG_
-					else if (input_errors_count < MAX_INPUT_ERRORS)
-					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid key data: %s at %i"), d_data, line);
-					#endif
-
-
-				// Make gce (Glide Computer Event)
-				} else if (_tcscmp(d_type, TEXT("gce")) == 0) {		// GCE - Glide Computer Event
-					int key = findGCE(d_data);				// Get the int key (eg: APP1 vs 'a')
-					if (key >= 0)
-						GC2Event[mode_id][key] = event_id;
-   					#ifdef _INPUTDEBUG_
-					else if (input_errors_count < MAX_INPUT_ERRORS)
-					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
-					#endif
-
-				// Make ne (NMEA Event)
-				} else if (_tcscmp(d_type, TEXT("ne")) == 0) { 		// NE - NMEA Event
-					int key = findNE(d_data);			// Get the int key (eg: APP1 vs 'a')
-					if (key >= 0)
-						N2Event[mode_id][key] = event_id;
-   					#ifdef _INPUTDEBUG_
-					else if (input_errors_count < MAX_INPUT_ERRORS)
-					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
-					#endif
-
-				} else if (_tcscmp(d_type, TEXT("label")) == 0)	{	// label only - no key associated (label can still be touch screen)
-					// Nothing to do here...
-
-   				#ifdef _INPUTDEBUG_
-				} else if (input_errors_count < MAX_INPUT_ERRORS) {
-				  _stprintf(input_errors[input_errors_count++], TEXT("Invalid type: %s at %i"), d_type, line);
-				#endif
-
-				}
-
-				token = _tcstok( NULL, TEXT(" "));
-			}
-
-		}
+	  // All modes are valid at this point
+	  int mode_id = mode2int(token, true);
+	  ASSERT(mode_id >= 0);
+			  
+	  // Make label event
+	  // TODO Consider Reuse existing entries...
+	  if (d_location > 0) {
+	    // Only copy this once per object - save string space
+	    if (!new_label) {
+	      new_label = StringMallocParse(d_label);
+	    }
+	    InputEvents::makeLabel(mode_id, new_label, d_location, event_id);
+	  } 
+			  
+	  // Make key (Keyboard input)
+	  if (_tcscmp(d_type, TEXT("key")) == 0)	{	// key - Hardware key or keyboard
+	    int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
+	    if (key > 0)
+	      Key2Event[mode_id][key] = event_id;
+#ifdef _INPUTDEBUG_
+	    else if (input_errors_count < MAX_INPUT_ERRORS)
+	      _stprintf(input_errors[input_errors_count++], TEXT("Invalid key data: %s at %i"), d_data, line);
+#endif
+			    
+			    
+	    // Make gce (Glide Computer Event)
+	  } else if (_tcscmp(d_type, TEXT("gce")) == 0) {		// GCE - Glide Computer Event
+	    int key = findGCE(d_data);				// Get the int key (eg: APP1 vs 'a')
+	    if (key >= 0)
+	      GC2Event[mode_id][key] = event_id;
+#ifdef _INPUTDEBUG_
+	    else if (input_errors_count < MAX_INPUT_ERRORS)
+	      _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
+#endif
+			    
+	    // Make ne (NMEA Event)
+	  } else if (_tcscmp(d_type, TEXT("ne")) == 0) { 		// NE - NMEA Event
+	    int key = findNE(d_data);			// Get the int key (eg: APP1 vs 'a')
+	    if (key >= 0)
+	      N2Event[mode_id][key] = event_id;
+#ifdef _INPUTDEBUG_
+	    else if (input_errors_count < MAX_INPUT_ERRORS)
+	      _stprintf(input_errors[input_errors_count++], TEXT("Invalid GCE data: %s at %i"), d_data, line);
+#endif
+			    
+	  } else if (_tcscmp(d_type, TEXT("label")) == 0)	{	// label only - no key associated (label can still be touch screen)
+	    // Nothing to do here...
+			    
+#ifdef _INPUTDEBUG_
+	  } else if (input_errors_count < MAX_INPUT_ERRORS) {
+	    _stprintf(input_errors[input_errors_count++], TEXT("Invalid type: %s at %i"), d_type, line);
+#endif
+			    
+	  }
+			  
+	  token = _tcstok( NULL, TEXT(" "));
+	}
+			
+      }
 		
-		// Clear all data.
-		some_data = false;
-		_tcscpy(d_mode, TEXT(""));
-		_tcscpy(d_type, TEXT(""));
-		_tcscpy(d_data, TEXT(""));
-		event_id = 0;
-		_tcscpy(d_label, TEXT(""));
-		d_location = 0;
-		new_label = NULL;
+      // Clear all data.
+      some_data = false;
+      _tcscpy(d_mode, TEXT(""));
+      _tcscpy(d_type, TEXT(""));
+      _tcscpy(d_data, TEXT(""));
+      event_id = 0;
+      _tcscpy(d_label, TEXT(""));
+      d_location = 0;
+      new_label = NULL;
 
-	} else if ((found != 2) || !key || !value) {
-		// Do nothing - we probably just have a comment line
-		// JG removed "void;" - causes warning (void is declaration and needs variable)
-		// NOTE: Do NOT display buffer to user as it may contain an invalid stirng !
+    } else if ((found != 2) || !key || !value) {
+      // Do nothing - we probably just have a comment line
+      // JG removed "void;" - causes warning (void is declaration and needs variable)
+      // NOTE: Do NOT display buffer to user as it may contain an invalid stirng !
 
     } else {
       if (_tcscmp(key, TEXT("mode")) == 0) {
-		  if (_tcslen(value) < 1024) {
-				some_data = true;	// Success, we have a real entry
-				_tcscpy(d_mode, value);				
-		  }
+	if (_tcslen(value) < 1024) {
+	  some_data = true;	// Success, we have a real entry
+	  _tcscpy(d_mode, value);				
+	}
       } else if (_tcscmp(key, TEXT("type")) == 0) {
-		  if (_tcslen(value) < 256)
-			_tcscpy(d_type, value);				
+	if (_tcslen(value) < 256)
+	  _tcscpy(d_type, value);				
       } else if (_tcscmp(key, TEXT("data")) == 0) {
-		  if (_tcslen(value) < 256)
-			_tcscpy(d_data, value);				
+	if (_tcslen(value) < 256)
+	  _tcscpy(d_data, value);				
       } else if (_tcscmp(key, TEXT("event")) == 0) {
-		  if (_tcslen(value) < 256) {
-				_tcscpy(d_event, TEXT(""));
-				_tcscpy(d_misc, TEXT(""));
-				int ef;
-        #if defined(__BORLANDC__	)
-        memset(d_event, 0, sizeof(d_event));
-        memset(d_misc, 0, sizeof(d_event));
-        if (_tcschr(value, ' ') == NULL){
-          _tcscpy(d_event, value);
-        } else {
-        #endif
-	  ef = _stscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event, d_misc);
-        #if defined(__BORLANDC__	)
-        }
-        #endif
-
-				// TODO Can't use token here - breaks
-				// other token - damn C - how about
-				// C++ String class ?
-
-				// TCHAR *eventtoken;
-				// eventtoken = _tcstok(value, TEXT(" "));
-				// d_event = token;
-				// eventtoken = _tcstok(value, TEXT(" "));
-
-				if ((ef == 1) || (ef == 2)) {
-
-					// TODO - Consider reusing
-					// existing identical events
-					// (not worth it right now)
-
-					pt2Event event = findEvent(d_event);
-					if (event) {
-						event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
-   					#ifdef _INPUTDEBUG_
-					} else  if (input_errors_count < MAX_INPUT_ERRORS) {
-					  _stprintf(input_errors[input_errors_count++], TEXT("Invalid event type: %s at %i"), d_event, line);
-					#endif
-					}
-   				#ifdef _INPUTDEBUG_
-				} else  if (input_errors_count < MAX_INPUT_ERRORS) {
-				  _stprintf(input_errors[input_errors_count++], TEXT("Invalid event type at %i"), line);
-				#endif
-				}
-		  }
-	  } else if (_tcscmp(key, TEXT("label")) == 0) {
-		_tcscpy(d_label, value);				
-	  } else if (_tcscmp(key, TEXT("location")) == 0) {
-		_stscanf(value, TEXT("%d"), &d_location);
-
-	  #ifdef _INPUTDEBUG_
-	  } else if (input_errors_count < MAX_INPUT_ERRORS) {
-		  _stprintf(input_errors[input_errors_count++], TEXT("Invalid key/value pair %s=%s at %i"), key, value, line);
-	  #endif
+	if (_tcslen(value) < 256) {
+	  _tcscpy(d_event, TEXT(""));
+	  _tcscpy(d_misc, TEXT(""));
+	  int ef;
+#if defined(__BORLANDC__	)
+	  memset(d_event, 0, sizeof(d_event));
+	  memset(d_misc, 0, sizeof(d_event));
+	  if (_tcschr(value, ' ') == NULL){
+	    _tcscpy(d_event, value);
+	  } else {
+#endif
+	    ef = _stscanf(value, TEXT("%[^ ] %[A-Za-z0-9 \\/().,]"), d_event, d_misc);
+#if defined(__BORLANDC__	)
 	  }
-    }
+#endif
 
+	  // TODO Can't use token here - breaks
+	  // other token - damn C - how about
+	  // C++ String class ?
+	
+	  // TCHAR *eventtoken;
+	  // eventtoken = _tcstok(value, TEXT(" "));
+	  // d_event = token;
+	  // eventtoken = _tcstok(value, TEXT(" "));
+
+	  if ((ef == 1) || (ef == 2)) {
+	  
+	    // TODO - Consider reusing
+	    // existing identical events
+	    // (not worth it right now)
+	  
+	    pt2Event event = findEvent(d_event);
+	    if (event) {
+	      event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
+#ifdef _INPUTDEBUG_
+	    } else  if (input_errors_count < MAX_INPUT_ERRORS) {
+	      _stprintf(input_errors[input_errors_count++], TEXT("Invalid event type: %s at %i"), d_event, line);
+#endif
+	    }
+#ifdef _INPUTDEBUG_
+	  } else  if (input_errors_count < MAX_INPUT_ERRORS) {
+	    _stprintf(input_errors[input_errors_count++], TEXT("Invalid event type at %i"), line);
+#endif
+	  }
+	}
+      } else if (_tcscmp(key, TEXT("label")) == 0) {
+	_tcscpy(d_label, value);				
+      } else if (_tcscmp(key, TEXT("location")) == 0) {
+	_stscanf(value, TEXT("%d"), &d_location);
+	
+#ifdef _INPUTDEBUG_
+      } else if (input_errors_count < MAX_INPUT_ERRORS) {
+	_stprintf(input_errors[input_errors_count++], TEXT("Invalid key/value pair %s=%s at %i"), key, value, line);
+#endif
+      }
+    }
+	
   } // end while
 
   // file was ok, so save it to registry
@@ -413,13 +432,13 @@ void InputEvents::readFile() {
 
 #ifdef _INPUTDEBUG_
 void InputEvents::showErrors() {
-	TCHAR buffer[2048];
-	int i;
-	for (i = 0; i < input_errors_count; i++) {
-		_stprintf(buffer, TEXT("%i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
-		DoStatusMessage(TEXT("XCI Error"), buffer);
-	}
-	input_errors_count = 0;
+  TCHAR buffer[2048];
+  int i;
+  for (i = 0; i < input_errors_count; i++) {
+    _stprintf(buffer, TEXT("%i of %i\r\n%s"), i + 1, input_errors_count, input_errors[i]);
+    DoStatusMessage(TEXT("XCI Error"), buffer);
+  }
+  input_errors_count = 0;
 }
 #endif
 
@@ -558,7 +577,7 @@ void InputEvents::setMode(TCHAR *mode) {
   static int lastmode = -1;
   int thismode;
 
-	ASSERT(mode != NULL);
+  ASSERT(mode != NULL);
 
   _tcsncpy(mode_current, mode, MAX_MODE_STRING);
 
@@ -566,18 +585,18 @@ void InputEvents::setMode(TCHAR *mode) {
   thismode = mode2int(mode,false);
   if (thismode < 0)	// Technically an error in config (eg
 			// event=Mode DoesNotExist)
-	  return;	// TODO Add debugging here
+    return;	// TODO Add debugging here
 
   if (thismode == lastmode) return;
 
   // TODO Enable this in debug modes
   // for debugging at least, set mode indicator on screen
   /* 
-	  if (thismode==0) {
-		ButtonLabel::SetLabelText(0,NULL);
-	  } else {
-		ButtonLabel::SetLabelText(0,mode);
-	  }
+     if (thismode==0) {
+     ButtonLabel::SetLabelText(0,NULL);
+     } else {
+     ButtonLabel::SetLabelText(0,mode);
+     }
   */
   ButtonLabel::SetLabelText(0,NULL);
 
@@ -588,10 +607,10 @@ void InputEvents::setMode(TCHAR *mode) {
     if (// (ModeLabel[thismode][i].label != NULL) && 
 	(ModeLabel[thismode][i].location > 0)) {
 
-	ButtonLabel::SetLabelText(
-				  ModeLabel[thismode][i].location,
-				  ModeLabel[thismode][i].label
-				  );
+      ButtonLabel::SetLabelText(
+				ModeLabel[thismode][i].location,
+				ModeLabel[thismode][i].label
+				);
     }
   }
   MapWindow::RequestFastRefresh();
@@ -686,12 +705,26 @@ bool InputEvents::processKey(int dWord) {
   return false;
 }
 
+
+bool InputEvents::processNmea(int ne_id) {
+  // add an event to the bottom of the queue
+  LockFlightData();
+  for (int i=0; i< MAX_NMEA_QUEUE; i++) {
+    if (NMEA_Queue[i]== -1) {
+      NMEA_Queue[i]= ne_id;
+      break;
+    }
+  }
+  UnlockFlightData();
+  return true; // ok.
+}
+
 /*
   InputEvent::processNmea(TCHAR* data)
   Take hard coded inputs from NMEA processor.
   Return = TRUE if we have a valid key match
 */
-bool InputEvents::processNmea(int ne_id) {
+bool InputEvents::processNmea_real(int ne_id) {
   if (!ProgramStarted) return false;
   int event_id = 0;
 
@@ -717,11 +750,65 @@ bool InputEvents::processNmea(int ne_id) {
   return false;
 }
 
+
+// This should be called ONLY by the GUI thread.
+void InputEvents::DoQueuedEvents(void) {
+  int GCE_Queue_copy[MAX_GCE_QUEUE];
+  int NMEA_Queue_copy[MAX_NMEA_QUEUE];
+  int i;
+
+  // copy the queue first, blocking
+  LockFlightData();
+  for (i=0; i<MAX_GCE_QUEUE; i++) {
+    GCE_Queue_copy[i]= GCE_Queue[i];
+  }
+  for (i=0; i<MAX_NMEA_QUEUE; i++) {
+    NMEA_Queue_copy[i]= NMEA_Queue[i];
+  }
+  UnlockFlightData();
+
+  // process each item in the queue
+  for (i=0; i< MAX_GCE_QUEUE; i++) {
+    if (GCE_Queue_copy[i]!= -1) {
+      processGlideComputer_real(GCE_Queue_copy[i]);
+    }
+  }
+  for (i=0; i< MAX_NMEA_QUEUE; i++) {
+    if (NMEA_Queue_copy[i]!= -1) {
+      processNmea_real(NMEA_Queue_copy[i]);
+    }
+  }
+
+  // now flush the queue, again blocking
+  LockFlightData();
+  for (i=0; i<MAX_GCE_QUEUE; i++) {
+    GCE_Queue[i]= -1;
+  }
+  for (i=0; i<MAX_NMEA_QUEUE; i++) {
+    NMEA_Queue[i]= -1;
+  }
+  UnlockFlightData();
+}
+
+
+bool InputEvents::processGlideComputer(int gce_id) {
+  // add an event to the bottom of the queue
+  LockFlightData();
+  for (int i=0; i< MAX_GCE_QUEUE; i++) {
+    if (GCE_Queue[i]== -1) {
+      GCE_Queue[i]= gce_id;
+      break;
+    }
+  }
+  UnlockFlightData();
+  return true; // ok.
+}
+
 /*
   InputEvents::processGlideComputer
   Take virtual inputs from a Glide Computer to do special events
 */
-bool InputEvents::processGlideComputer(int gce_id) {
+bool InputEvents::processGlideComputer_real(int gce_id) {
   if (!ProgramStarted) return false;
   int event_id = 0;
 
@@ -758,9 +845,9 @@ void InputEvents::processGo(int eventid) {
   // 
   // JMW TODO: event/macro recorder
   /*
-  if (LoggerActive) {
+    if (LoggerActive) {
     LoggerNoteEvent(Events[eventid].);
-  }
+    }
   */
 
   // evnentid 0 is special for "noop" - otherwise check event
@@ -861,12 +948,12 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
       MapWindow::RequestOnFullScreen();
     }
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
-		if (MapWindow::IsMapFullScreen()) 
-			DoStatusMessage(TEXT("Screen Mode Full"));
-		else if (EnableAuxiliaryInfo)
-			DoStatusMessage(TEXT("Screen Mode Auxiliary"));
-		else 
-			DoStatusMessage(TEXT("Screen Mode Normal"));
+    if (MapWindow::IsMapFullScreen()) 
+      DoStatusMessage(TEXT("Screen Mode Full"));
+    else if (EnableAuxiliaryInfo)
+      DoStatusMessage(TEXT("Screen Mode Auxiliary"));
+    else 
+      DoStatusMessage(TEXT("Screen Mode Normal"));
   } else {
     // toggle?
     if (EnableAuxiliaryInfo) {
@@ -911,10 +998,10 @@ void InputEvents::eventZoom(TCHAR* misc) {
   else if (_tcscmp(misc, TEXT("auto off")) == 0)
     MapWindow::Event_AutoZoom(0);
   else if (_tcscmp(misc, TEXT("auto show")) == 0) {
-	  if (MapWindow::isAutoZoom())
-		DoStatusMessage(TEXT("AutoZoom ON"));
-	  else
-		DoStatusMessage(TEXT("AutoZoom OFF"));
+    if (MapWindow::isAutoZoom())
+      DoStatusMessage(TEXT("AutoZoom ON"));
+    else
+      DoStatusMessage(TEXT("AutoZoom OFF"));
   }
   else if (_tcscmp(misc, TEXT("out")) == 0)
     MapWindow::Event_ScaleZoom(-1);
@@ -929,7 +1016,7 @@ void InputEvents::eventZoom(TCHAR* misc) {
   else if (_tcscmp(misc, TEXT("++")) == 0) 
     MapWindow::Event_ScaleZoom(2);
   else if (_stscanf(misc, TEXT("%f"), &zoom) == 1)
-		MapWindow::Event_SetZoom((double)zoom);
+    MapWindow::Event_SetZoom((double)zoom);
 }
 
 // Pan
@@ -973,32 +1060,32 @@ void InputEvents::eventPan(TCHAR *misc) {
 void InputEvents::eventTerrainTopology(TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("terrain toggle")) == 0) 
-	  MapWindow::Event_TerrainTopology(-2);
+    MapWindow::Event_TerrainTopology(-2);
 
   else if (_tcscmp(misc, TEXT("toplogy toggle")) == 0) 
-	  MapWindow::Event_TerrainTopology(-3);
+    MapWindow::Event_TerrainTopology(-3);
 
   else if (_tcscmp(misc, TEXT("terrain on")) == 0) 
-	  MapWindow::Event_TerrainTopology(3);
+    MapWindow::Event_TerrainTopology(3);
 
   else if (_tcscmp(misc, TEXT("terrain off")) == 0) 
-	  MapWindow::Event_TerrainTopology(4);
+    MapWindow::Event_TerrainTopology(4);
 
   else if (_tcscmp(misc, TEXT("topology on")) == 0) 
-	  MapWindow::Event_TerrainTopology(1);
+    MapWindow::Event_TerrainTopology(1);
 
   else if (_tcscmp(misc, TEXT("topology off")) == 0) 
-	  MapWindow::Event_TerrainTopology(2);
+    MapWindow::Event_TerrainTopology(2);
 
   else if (_tcscmp(misc, TEXT("show")) == 0) 
-	  MapWindow::Event_TerrainTopology(0);
+    MapWindow::Event_TerrainTopology(0);
 
   else if (_tcscmp(misc, TEXT("toggle")) == 0) 
-	  MapWindow::Event_TerrainTopology(-1);
+    MapWindow::Event_TerrainTopology(-1);
 
 }
 
- // Do clear warnings IF NONE Toggle Terrain/Topology
+// Do clear warnings IF NONE Toggle Terrain/Topology
 void InputEvents::eventClearWarningsOrTerrainTopology(TCHAR *misc) {
   if (ClearAirspaceWarnings(true,false)) {
     // airspace was active, enter was used to acknowledge
@@ -1015,11 +1102,11 @@ void InputEvents::eventClearWarningsOrTerrainTopology(TCHAR *misc) {
 //     ack: clears the warnings for the acknowledgement time
 void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("day")) == 0) 
-	// JMW clear airspace warnings for entire day (for selected airspace)
-	ClearAirspaceWarnings(true,true);
+    // JMW clear airspace warnings for entire day (for selected airspace)
+    ClearAirspaceWarnings(true,true);
   else 
-	// default, clear airspace for short acknowledgement time
-	ClearAirspaceWarnings(true,false);
+    // default, clear airspace for short acknowledgement time
+    ClearAirspaceWarnings(true,false);
 }
 
 // ClearStatusMessages
@@ -1183,33 +1270,35 @@ void InputEvents::eventAnalysis(TCHAR *misc) {
 void InputEvents::eventWaypointDetails(TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
-    if (SelectedWaypoint<0){
-      if (ActiveWayPoint<0) {
-	DoStatusMessage(TEXT("No Active Waypoint!"));
-	return;
-      }
-      SelectedWaypoint = Task[ActiveWayPoint].Index;
+    if (ActiveWayPoint<0) {
       if (SelectedWaypoint<0){
 	DoStatusMessage(TEXT("No Active Waypoint!"));
 	return;
+      } else {
+	PopupWaypointDetails();
       }
+    }
+    SelectedWaypoint = Task[ActiveWayPoint].Index;
+    if (SelectedWaypoint<0){
+      DoStatusMessage(TEXT("No Active Waypoint!"));
+      return;
     }
     PopupWaypointDetails();
   } else
-  if (_tcscmp(misc, TEXT("select")) == 0) {
+    if (_tcscmp(misc, TEXT("select")) == 0) {
 #if NEWINFOBOX > 0
-    extern int dlgWayPointSelect(void);
-    int res = dlgWayPointSelect();
+      extern int dlgWayPointSelect(void);
+      int res = dlgWayPointSelect();
 
-    if (res != -1){
-      SelectedWaypoint = res;
-      PopupWaypointDetails();
-    };
+      if (res != -1){
+	SelectedWaypoint = res;
+	PopupWaypointDetails();
+      };
 #else
-	0;
+      0;
 #endif
 
-  }
+    }
 }
 
 
@@ -1247,9 +1336,9 @@ void InputEvents::eventMacCready(TCHAR *misc) {
       DoStatusMessage(TEXT("Auto MacCready OFF"));
     }
   } else if (_tcscmp(misc, TEXT("show")) == 0) {
-	TCHAR Temp[100];
-	_stprintf(Temp,TEXT("%0.1f"),MACCREADY*LIFTMODIFY);
-	DoStatusMessage(TEXT("MacCready "), Temp);
+    TCHAR Temp[100];
+    _stprintf(Temp,TEXT("%0.1f"),MACCREADY*LIFTMODIFY);
+    DoStatusMessage(TEXT("MacCready "), Temp);
   }
 }
 
@@ -1481,19 +1570,19 @@ void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
 // toggle: toggles between abort and resume
 // show: displays a status message showing the task abort status
 void InputEvents::eventAbortTask(TCHAR *misc) {
-    LockFlightData();
-    if (_tcscmp(misc, TEXT("abort")) == 0)
-      ResumeAbortTask(1);
-    else if (_tcscmp(misc, TEXT("resume")) == 0)
-	  ResumeAbortTask(-1);
-    else if (_tcscmp(misc, TEXT("show")) == 0) {
-      if (TaskAborted)
-	DoStatusMessage(TEXT("Task Aborted"));
-      else 
-	DoStatusMessage(TEXT("Task Resume"));			
-    } else 
-      ResumeAbortTask();  // ToDo arg?
-    UnlockFlightData();
+  LockFlightData();
+  if (_tcscmp(misc, TEXT("abort")) == 0)
+    ResumeAbortTask(1);
+  else if (_tcscmp(misc, TEXT("resume")) == 0)
+    ResumeAbortTask(-1);
+  else if (_tcscmp(misc, TEXT("show")) == 0) {
+    if (TaskAborted)
+      DoStatusMessage(TEXT("Task Aborted"));
+    else 
+      DoStatusMessage(TEXT("Task Resume"));			
+  } else 
+    ResumeAbortTask();  // ToDo arg?
+  UnlockFlightData();
 }
 
 #include "device.h"
@@ -1645,6 +1734,8 @@ void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
 // If the aircraft is within airspace, this displays the distance and bearing
 // to the nearest exit to the airspace.
 
+// bool dlgAirspaceWarningShowDlg(bool Force);
+
 
 void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   double nearestdistance=0;
@@ -1659,7 +1750,6 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   TCHAR text[1024];
 
 #if (NEWAIRSPACEWARNING>0)
-  // bool dlgAirspaceWarningShowDlg(bool Force)
   if (dlgAirspaceWarningShowDlg(true))
     return;
 #endif
@@ -1687,7 +1777,7 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
     FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name , 
 			AirspaceArea[i].Base, AirspaceArea[i].Top, 
 			szMessageBuffer, szTitleBuffer );
- }
+  }
 
   if (nearestdistance<0) {
     inside = true;
@@ -1696,18 +1786,18 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
 
   if (inside) {
     _stprintf(text,TEXT("Inside airspace: %s\r\n%s\r\nExit: %.1f %s\r\nBearing %d\r\n"), 
-	     szTitleBuffer, 
-	     szMessageBuffer,
-	     nearestdistance*DISTANCEMODIFY,
-	     Units::GetDistanceName(),
-	     (int)nearestbearing);
+	      szTitleBuffer, 
+	      szMessageBuffer,
+	      nearestdistance*DISTANCEMODIFY,
+	      Units::GetDistanceName(),
+	      (int)nearestbearing);
   } else {
     _stprintf(text,TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %.1f %s\r\nBearing %d\r\n"), 
-	     szTitleBuffer, 
-	     szMessageBuffer,
-	     nearestdistance*DISTANCEMODIFY,
-	     Units::GetDistanceName(),
-	     (int)nearestbearing);
+	      szTitleBuffer, 
+	      szMessageBuffer,
+	      nearestdistance*DISTANCEMODIFY,
+	      Units::GetDistanceName(),
+	      (int)nearestbearing);
   }
     
   // clear previous warning if any
@@ -1794,33 +1884,33 @@ void InputEvents::eventSetup(TCHAR *misc) {
 #if NEWINFOBOX > 0
     dlgBasicSettingsShowModal();
 #else
-	0;
-#endif
-  } else
-  if (_tcscmp(misc,TEXT("Wind"))==0){
-#if NEWINFOBOX > 0
-    dlgWindSettingsShowModal();
-#else
-	0;
-#endif
-  } else
-  if (_tcscmp(misc,TEXT("System"))==0){
-    SystemConfiguration();
-  } else
-  if (_tcscmp(misc,TEXT("Task"))==0){
-#if NEWINFOBOX > 0
-    dlgTaskOverviewShowModal();
-#else
-	0;
-#endif;
-  } else 
-  if (_tcscmp(misc,TEXT("Airspace"))==0){
-#if NEWINFOBOX > 0
-    dlgAirspaceShowModal(false);
-#else
     0;
+#endif
+  } else
+    if (_tcscmp(misc,TEXT("Wind"))==0){
+#if NEWINFOBOX > 0
+      dlgWindSettingsShowModal();
+#else
+      0;
+#endif
+    } else
+      if (_tcscmp(misc,TEXT("System"))==0){
+	SystemConfiguration();
+      } else
+	if (_tcscmp(misc,TEXT("Task"))==0){
+#if NEWINFOBOX > 0
+	  dlgTaskOverviewShowModal();
+#else
+	  0;
 #endif;
-  }
+	} else 
+	  if (_tcscmp(misc,TEXT("Airspace"))==0){
+#if NEWINFOBOX > 0
+	    dlgAirspaceShowModal(false);
+#else
+	    0;
+#endif;
+	  }
   if (_tcscmp(misc,TEXT("Replay"))==0){
 #if NEWINFOBOX > 0
     dlgLoggerReplayShowModal();
@@ -1848,91 +1938,96 @@ void InputEvents::eventSetup(TCHAR *misc) {
 // DLLExecute
 // Runs the plugin of the specified filename
 void InputEvents::eventDLLExecute(TCHAR *misc) {
-	// LoadLibrary(TEXT("test.dll"));
+  // LoadLibrary(TEXT("test.dll"));
 	
-	TCHAR data[MAX_PATH];
-	TCHAR* dll_name;
-	TCHAR* func_name;
-	TCHAR* other;
-	TCHAR* pdest;
+  TCHAR data[MAX_PATH];
+  TCHAR* dll_name;
+  TCHAR* func_name;
+  TCHAR* other;
+  TCHAR* pdest;
 	
-	_tcscpy(data, misc);
+  _tcscpy(data, misc);
 
-	// dll_name (up to first space)
-	pdest = _tcsstr(data, TEXT(" "));
-	if (pdest == NULL) {
-		#ifdef _INPUTDEBUG_
-		_stprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute string - no DLL"));
-		InputEvents::showErrors();
-		#endif
-		return;
-	}
-	*pdest = NULL;
-	dll_name = data;
+  // dll_name (up to first space)
+  pdest = _tcsstr(data, TEXT(" "));
+  if (pdest == NULL) {
+#ifdef _INPUTDEBUG_
+    _stprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute string - no DLL"));
+    InputEvents::showErrors();
+#endif
+    return;
+  }
+  *pdest = NULL;
+  dll_name = data;
 
-	// func_name (after first space)
-	func_name = pdest + 1;
+  // func_name (after first space)
+  func_name = pdest + 1;
 
-	// other (after next space to end of string)
-	pdest = _tcsstr(func_name, TEXT(" "));
-	if (pdest != NULL) {
-		*pdest = NULL;
-		other = pdest + 1;
-	} else {
-		other = NULL;
-	}
+  // other (after next space to end of string)
+  pdest = _tcsstr(func_name, TEXT(" "));
+  if (pdest != NULL) {
+    *pdest = NULL;
+    other = pdest + 1;
+  } else {
+    other = NULL;
+  }
 
-	HINSTANCE hinstLib;	// Library pointer
-	DLLFUNC_INPUTEVENT lpfnDLLProc;	// Function pointer
+  HINSTANCE hinstLib;	// Library pointer
+  DLLFUNC_INPUTEVENT lpfnDLLProc;	// Function pointer
 
-	// Load library, find function, execute, unload library
-	hinstLib = _loadDLL(dll_name);
-	if (hinstLib != NULL) {
-		lpfnDLLProc = (DLLFUNC_INPUTEVENT)GetProcAddress(hinstLib, func_name);
-		if (lpfnDLLProc != NULL) {
-			(*lpfnDLLProc)(other);
-	    #ifdef _INPUTDEBUG_
-		} else {
-			DWORD le;
-			le = GetLastError();
-			_stprintf(input_errors[input_errors_count++], TEXT("Problem loading function (%s) in DLL (%s) = %d"), func_name, dll_name, le);
-			InputEvents::showErrors();
-		#endif
-		}
-	}
+  // Load library, find function, execute, unload library
+  hinstLib = _loadDLL(dll_name);
+  if (hinstLib != NULL) {
+    lpfnDLLProc = (DLLFUNC_INPUTEVENT)GetProcAddress(hinstLib, func_name);
+    if (lpfnDLLProc != NULL) {
+      (*lpfnDLLProc)(other);
+#ifdef _INPUTDEBUG_
+    } else {
+      DWORD le;
+      le = GetLastError();
+      _stprintf(input_errors[input_errors_count++], 
+		TEXT("Problem loading function (%s) in DLL (%s) = %d"), 
+		func_name, dll_name, le);
+      InputEvents::showErrors();
+#endif
+    }
+  }
 }
 
 // Load a DLL (only once, keep a cache of the handle)
 //	TODO FreeLibrary - it would be nice to call FreeLibrary 
 //      before exit on each of these
 HINSTANCE _loadDLL(TCHAR *name) {
-	int i;
-	for (i = 0; i < DLLCache_Count; i++) {
-		if (_tcscmp(name, DLLCache[i].text) == 0)
-			return DLLCache[i].hinstance;
-	}
-	if (DLLCache_Count < MAX_DLL_CACHE) {
-		DLLCache[DLLCache_Count].hinstance = LoadLibrary(name);
-		if (DLLCache[DLLCache_Count].hinstance) {
-			DLLCache[DLLCache_Count].text = StringMallocParse(name);
-			DLLCache_Count++;
+  int i;
+  for (i = 0; i < DLLCache_Count; i++) {
+    if (_tcscmp(name, DLLCache[i].text) == 0)
+      return DLLCache[i].hinstance;
+  }
+  if (DLLCache_Count < MAX_DLL_CACHE) {
+    DLLCache[DLLCache_Count].hinstance = LoadLibrary(name);
+    if (DLLCache[DLLCache_Count].hinstance) {
+      DLLCache[DLLCache_Count].text = StringMallocParse(name);
+      DLLCache_Count++;
+      
+      // First time setup... (should check version numbers etc...)
+      DLLFUNC_SETHINST lpfnDLLProc;
+      lpfnDLLProc = (DLLFUNC_SETHINST)
+	GetProcAddress(DLLCache[DLLCache_Count - 1].hinstance, 
+		       TEXT("XCSAPI_SetHInst"));
+      if (lpfnDLLProc)
+	lpfnDLLProc(GetModuleHandle(NULL));
+      
+      return DLLCache[DLLCache_Count - 1].hinstance;
+#ifdef _INPUTDEBUG_
+    } else {
+      _stprintf(input_errors[input_errors_count++], 
+		TEXT("Invalid DLLExecute - not loaded - %s"), name);
+      InputEvents::showErrors();
+#endif
+    }
+  }
 
-			// First time setup... (should check version numbers etc...)
-			DLLFUNC_SETHINST lpfnDLLProc;
-			lpfnDLLProc = (DLLFUNC_SETHINST)GetProcAddress(DLLCache[DLLCache_Count - 1].hinstance, TEXT("XCSAPI_SetHInst"));
-			if (lpfnDLLProc)
-				lpfnDLLProc(GetModuleHandle(NULL));
-
-			return DLLCache[DLLCache_Count - 1].hinstance;
-		#ifdef _INPUTDEBUG_
-		} else {
-			_stprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute - not loaded - %s"), name);
-			InputEvents::showErrors();
-		#endif
-		}
-	}
-
-	return NULL;
+  return NULL;
 }
 
 // AdjustForecastTemperature
@@ -1963,9 +2058,27 @@ void InputEvents::eventRun(TCHAR *misc) {
 		       NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi))
     return;
 
-  // wait for program to finish
+  // wait for program to finish!  
   ::WaitForSingleObject(pi.hProcess, INFINITE);
 }
+
+
+void InputEvents::eventDeclutterLabels(TCHAR *misc) {
+  if (_tcscmp(misc, TEXT("toggle")) == 0)
+    MapWindow::DeclutterLabels = !MapWindow::DeclutterLabels;
+  else if (_tcscmp(misc, TEXT("on")) == 0)
+    MapWindow::DeclutterLabels = true;
+  else if (_tcscmp(misc, TEXT("off")) == 0)
+    MapWindow::DeclutterLabels = false;
+  else if (_tcscmp(misc, TEXT("show")) == 0) {
+    if (MapWindow::DeclutterLabels)
+      DoStatusMessage(TEXT("Map labels OFF"));
+    else
+      DoStatusMessage(TEXT("Map labels ON"));  
+  }
+}
+
+
 
 #if (NEWINFOBOX>0)
 void dlgBrightnessShowModal(void);
@@ -1991,31 +2104,31 @@ void InputEvents::eventBrightness(TCHAR *misc) {
 
 /* Recently done
 
-   eventTaskLoad		- Load tasks from a file (misc = filename)
-   eventTaskSave		- Save tasks to a file (misc = filename)
-   eventProfileLoad		- Load profile from a file (misc = filename)
-   eventProfileSave		- Save profile to a file (misc = filename)
+eventTaskLoad		- Load tasks from a file (misc = filename)
+eventTaskSave		- Save tasks to a file (misc = filename)
+eventProfileLoad		- Load profile from a file (misc = filename)
+eventProfileSave		- Save profile to a file (misc = filename)
 
 */
 
 /* TODO
 
-   eventMainMenu
-   eventMenu
+eventMainMenu
+eventMenu
 
-   eventPanWaypoint		                - Set pan to a waypoint
-						- Waypoint could be "next", "first", "last", "previous", or named
-						- Note: wrong name - probably just part of eventPan
-   eventPressure		- Increase, Decrease, show, Set pressure value
-   eventDeclare			- (JMW separate from internal logger)
-   eventAirspaceDisplay	- all, below nnn, below me, auto nnn
-   eventAirspaceWarnings- on, off, time nn, ack nn
-   eventTerrain			- see MapWindow::Event_Terrain
-   eventCompass			- on, off, cruise on, crusie off, climb on, climb off
-   eventVario			- on, off // JMW what does this do?
-   eventOrientation		- north, track,  ???
-   eventTerrainRange	        - on, off (might be part of eventTerrain)
-   eventSounds			- Include Task and Modes sounds along with Vario
-                                    - Include master nn, deadband nn, netto trigger mph/kts/...
+eventPanWaypoint		                - Set pan to a waypoint
+- Waypoint could be "next", "first", "last", "previous", or named
+- Note: wrong name - probably just part of eventPan
+eventPressure		- Increase, Decrease, show, Set pressure value
+eventDeclare			- (JMW separate from internal logger)
+eventAirspaceDisplay	- all, below nnn, below me, auto nnn
+eventAirspaceWarnings- on, off, time nn, ack nn
+eventTerrain			- see MapWindow::Event_Terrain
+eventCompass			- on, off, cruise on, crusie off, climb on, climb off
+eventVario			- on, off // JMW what does this do?
+eventOrientation		- north, track,  ???
+eventTerrainRange	        - on, off (might be part of eventTerrain)
+eventSounds			- Include Task and Modes sounds along with Vario
+- Include master nn, deadband nn, netto trigger mph/kts/...
 
 */

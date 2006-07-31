@@ -47,8 +47,12 @@
     <DataField name="" DataType="boolean" ReadOnly=0/>
   </WndProperty>
 
-  <WndProperty Name="prpMinTime" Caption="Min time" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 min=0 max=600 step=10 Help="Minimum AAT task time in minutes.">
+  <WndProperty Name="prpMinTime" Caption="AAT min time" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 min=0 max=600 step=10 Help="Minimum AAT task time in minutes.">
     <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
+  </WndProperty>
+
+  <WndProperty Name="prpOLCEnabled" Caption="OnLine Contest" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables OLC tasks.  When enabled, OLC style task start is detected automatically (lowest point of flight after initial climb).  Auto MacCready in final glide sets MacCready to obtain greatest distance in remaining height and time for OLC sprint tasks.">
+    <DataField name="" DataType="boolean" ReadOnly=0/>
   </WndProperty>
 
   <WndProperty Name="prpAutoAdvance" Caption="Auto advance"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2   Help="Determines how waypoints are advanced through the task.

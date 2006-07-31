@@ -9,6 +9,20 @@
 #include <windows.h>
 
 #define NUMTHERMALBUCKETS 10
+#define MAX_THERMAL_SOURCES 20
+
+
+typedef struct _THERMAL_SOURCE_INFO
+{
+  POINT Screen;
+  double Latitude;
+  double Longitude;
+  double GroundHeight;
+  double LiftRate;
+  bool Visible;
+  double Time;
+} THERMAL_SOURCE_INFO;
+
 
 typedef struct _DERIVED_INFO
 {
@@ -114,6 +128,7 @@ typedef struct _DERIVED_INFO
   bool ValidStart;
   double TaskStartSpeed;
   double TaskStartAltitude;
+  bool ValidFinish;
 
   double LDvario;
 
@@ -121,6 +136,8 @@ typedef struct _DERIVED_INFO
   double ThermalEstimate_Latitude;
   double ThermalEstimate_W;
   double ThermalEstimate_R;
+
+  THERMAL_SOURCE_INFO ThermalSources[MAX_THERMAL_SOURCES];
 
 } DERIVED_INFO;
 
@@ -150,5 +167,10 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 		      double GlideSlope);
 
 void CloseCalculations(void);
+
+double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+			  double bearing,
+			  double timeremaining,
+			  double hfinal);
 
 #endif

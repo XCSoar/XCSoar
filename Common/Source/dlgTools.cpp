@@ -443,7 +443,9 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
   WndForm *theForm = NULL;
   //  TCHAR sFileName[128];
 
-//  ASSERT(hWndMainWindow == Parent);  // Airspace warning has MapWindow as parent, ist that ok?
+//  ASSERT(hWndMainWindow == Parent);  // Airspace warning has MapWindow as parent, 
+  // ist that ok?  JMW: No, I think that it is better to use main UI thread for
+  // everything.  See changes regarding RequestAirspaceDialog in AirspaceWarning.cpp
 
 // T:\\Project\\WINCE\\TNAV\\XCSoar\\
 

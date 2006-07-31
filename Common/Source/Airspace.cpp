@@ -347,13 +347,13 @@ void ReadAirspace(FILE *fp)
 	  ParseLine(nLineType);
   }
 
-	// Process final area (if any). bFillMode is true.  JG 10-Nov-2005
-	if (!bWaiting)
-		AddArea(&TempArea);
+  // Process final area (if any). bFillMode is true.  JG 10-Nov-2005
+  if (!bWaiting)
+    AddArea(&TempArea);
 
-    NumberOfAirspacePointsPass[1] = NumberOfAirspacePoints - OldNumberOfAirspacePoints;
-    NumberOfAirspaceAreasPass[1] = NumberOfAirspaceAreas - OldNumberOfAirspaceAreas;
-    NumberOfAirspaceCirclesPass[1] = NumberOfAirspaceCircles - OldNumberOfAirspaceCircles;
+  NumberOfAirspacePointsPass[1] = NumberOfAirspacePoints - OldNumberOfAirspacePoints;
+  NumberOfAirspaceAreasPass[1] = NumberOfAirspaceAreas - OldNumberOfAirspaceAreas;
+  NumberOfAirspaceCirclesPass[1] = NumberOfAirspaceCircles - OldNumberOfAirspaceCircles;
 
   if (NumberOfAirspacePointsPass[0] != NumberOfAirspacePointsPass[1]
       || NumberOfAirspaceAreasPass[0] != NumberOfAirspaceAreasPass[1]
@@ -364,7 +364,10 @@ void ReadAirspace(FILE *fp)
 
   }
 
+#ifdef DEBUG
+  // only do this if debugging
   DumpAirspaceFile();
+#endif
 
 //  if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
 

@@ -315,3 +315,77 @@ void ThermalLocator::Drift(double t_0,
   }
 }
 
+#include "Calculations.h"
+
+
+
+
+void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
+					 double Thermal_Latitude,
+					 double altitude,
+					 double wthermal,
+					 double wind_speed, 
+					 double wind_bearing,
+					 double *ground_longitude,
+					 double *ground_latitude,
+					 double *ground_alt) {
+
+  if ((Thermal_Longitude == 0.0)||(Thermal_Latitude==0.0)||(wthermal<1.0)) {
+    *ground_longitude = 0.0;
+    *ground_latitude = 0.0;
+    *ground_alt = -1.0;
+    return;
+  }
+
+  double Tmax;
+  Tmax = (altitude/wthermal);
+  double dt = Tmax/10;
+
+  LockTerrainDataCalculations();
+
+  double lat = FindLatitude(Thermal_Latitude, Thermal_Longitude, 
+			    wind_bearing, 
+			    wind_speed*dt);
+  double lon = FindLongitude(Thermal_Latitude, Thermal_Longitude, 
+			     wind_bearing, 
+			     wind_speed*dt);
+  double Xrounding = fabs(lon-Thermal_Longitude)/2;
+  double Yrounding = fabs(lat-Thermal_Latitude)/2;
+  terrain_dem_calculations.SetTerrainRounding(Xrounding, Yrounding);
+
+  double latlast = lat;
+  double lonlast = lon;
+  double hground;
+
+  for (double t = 0; t<=Tmax; t+= dt) {
+
+    lat = FindLatitude(Thermal_Latitude, Thermal_Longitude, 
+		       wind_bearing, 
+		       wind_speed*t);
+    lon = FindLongitude(Thermal_Latitude, Thermal_Longitude, 
+			wind_bearing, 
+			wind_speed*t);
+
+    double hthermal = altitude-wthermal*t;
+    hground = terrain_dem_calculations.GetTerrainHeight(lat, lon);
+    double dh = hthermal-hground;
+    if (dh<0) {
+      t = t+dh/wthermal;
+      lat = FindLatitude(Thermal_Latitude, Thermal_Longitude, 
+			 wind_bearing, 
+			 wind_speed*t);
+      lon = FindLongitude(Thermal_Latitude, Thermal_Longitude, 
+			  wind_bearing, 
+			  wind_speed*t);
+      break;
+    }
+  }
+  UnlockTerrainDataCalculations();
+
+  hground = terrain_dem_calculations.GetTerrainHeight(lat, lon);
+
+  *ground_longitude = lon;
+  *ground_latitude = lat;
+  *ground_alt = hground;
+
+}

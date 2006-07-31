@@ -266,6 +266,10 @@ LRESULT CALLBACK GaugeFLARMWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
   
   switch (uMsg){
 
+    case WM_ERASEBKGND:
+      // we don't need one, we just paint over the top
+    return TRUE;
+
     case WM_PAINT:
       if (GlobalRunning && GaugeFLARM::Enable) {
 	hDC = BeginPaint(hwnd, &ps);

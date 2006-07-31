@@ -184,8 +184,11 @@ bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
 
 }
 
-TCHAR *Units::GetUnitName(Units_t Unit){
-  return(gettext(UnitDescriptors[Unit].Name)); 
+const TCHAR *Units::GetUnitName(Units_t Unit){
+  //  return(gettext(UnitDescriptors[Unit].Name)); 
+  // JMW adjusted this because units are pretty standard internationally
+  // so don't need different names in different languages.
+  return(UnitDescriptors[Unit].Name); 
 }
 
 Units_t Units::GetUserDistanceUnit(void){
@@ -328,23 +331,23 @@ void Units::NotifyUnitChanged(void){
 
 }
 
-TCHAR *Units::GetHorizontalSpeedName(){
+const TCHAR *Units::GetHorizontalSpeedName(){
   return(GetUnitName(GetUserHorizontalSpeedUnit()));
 }
 
-TCHAR *Units::GetVerticalSpeedName(){
+const TCHAR *Units::GetVerticalSpeedName(){
   return(GetUnitName(GetUserVerticalSpeedUnit()));
 }
 
-TCHAR *Units::GetDistanceName(){
+const TCHAR *Units::GetDistanceName(){
   return(GetUnitName(GetUserDistanceUnit()));
 }
 
-TCHAR *Units::GetAltitudeName(){
+const TCHAR *Units::GetAltitudeName(){
   return(GetUnitName(GetUserAltitudeUnit()));
 }
 
-TCHAR *Units::GetTaskSpeedName(){
+const TCHAR *Units::GetTaskSpeedName(){
   return(GetUnitName(GetUserTaskSpeedUnit()));
 }
 

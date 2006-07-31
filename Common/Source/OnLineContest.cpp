@@ -2,305 +2,380 @@
 #include "XCSoar.h"
 #include "OnLineContest.h"
 #include "Utils.h"
+#include "McReady.h"
 #include <math.h>
 
 
-#define MAXPOINTS 300
 #define CONST_D_FAK 6371000.0
-#define DISTANCETHRESHOLD 1.0
+#define DISTANCETHRESHOLD 1000
+#define DISTANCEUNITS 100
 
+bool EnableOLC = false;
 int OLCRules = 0; 
 // 0: sprint task
 // 1: FAI triangle
+// 2: OLC classic
+int Handicap = 108; // LS-3
+
+
+/*
+
+memory requirements N*N*(int+int+int+int)
+
+  300*300*(dmval 4, isplit 2, ibestendclassic 2)/2 = 360kb 
+
+  half for diagonal matrices: 0.7 meg
+  half by using shorts? 0.35 meg
+
+*/
 
 
 OLCOptimizer::OLCOptimizer() {
 
   pnts = 0;
   pnts_in = 0;
-  pnts_offset = 0;
-  pnts_offset_in = 0;
   
-  dmval = NULL;
-  dmin = NULL;
-  dminj = NULL;
-  dmini = NULL;
-  maxenddist = NULL;
-  maxendpunkt = NULL;
-  
+  busy = false;
+
   lat_proj = 0;
   lon_proj = 0;
   alt_proj = 0;
   project = false;
 
-  altpnts = (int*)malloc(sizeof(int)*MAXPOINTS);
-  latpnts = (double*)malloc(sizeof(double)*MAXPOINTS);
-  lonpnts = (double*)malloc(sizeof(double)*MAXPOINTS);
-  timepnts = (long*)malloc(sizeof(long)*MAXPOINTS);
-  
   Clear();
   ResetFlight();
 }
 
 OLCOptimizer::~OLCOptimizer() {
   Clear();
-  if (altpnts) { free(altpnts); altpnts=NULL;}
-  if (latpnts) { free(latpnts); latpnts=NULL;}
-  if (lonpnts) { free(lonpnts); lonpnts=NULL;}
-  if (timepnts) { free(timepnts); timepnts=NULL;}
-  pnts = 0;
   ResetFlight();
 };
 
 
 void OLCOptimizer::ResetFlight() {
   pnts_in = 0;
-  pnts_offset_in = 0;
-
+  pnts = 0;
+  distancethreshold = DISTANCETHRESHOLD/2.0; // 500 meters
   maxdist = 0;
-  max1 = 0; 
-  max2 = 0;
-  max3 = 0;
-  max4 = 0;
-  max5 = 0;
-  max1fai=0; max2fai=0; max3fai=0; max4fai=0; max5fai=0;
-  max1flach=0; max2flach=0; max3flach=0; max4flach=0; max5flach=0;
-  maxroute=0; bestfai=0; bestflach=0;
+  altminimum = 100000;
+  tsprintstart = 0;
+  istart = 0;
+  waypointbearing = 0;
+  lat_proj = 0;
+  lon_proj = 0;
 
   solution_FAI_triangle.valid = false;
   solution_FAI_sprint.valid = false;
+  solution_FAI_classic.valid = false;
+
+  solution_FAI_triangle.finished = false;
+  solution_FAI_sprint.finished = false;
+  solution_FAI_classic.finished = false;
 
 }
+
 
 void OLCOptimizer::Clear() {
   stop = false;
-  
-  if (dmval) { free (dmval); dmval=NULL;}
-  if (dmin) { free (dmin); dmin=NULL;}
-  if (dminj) { free(dminj); dminj=NULL;}
-  if (dmini) { free(dmini); dmini=NULL;}
-  if (maxenddist) { free(maxenddist); maxenddist=NULL;}
-  if (maxendpunkt) { free(maxendpunkt); maxendpunkt=NULL;}
 }
 
 
-#define rotindex(x) ((x+pnts_offset)%MAXPOINTS)
-#define rotindexin(x) ((x+pnts_offset_in)%MAXPOINTS)
+#define sindex(y,x) (indexval[y]+x)
 
-    /*
-     * Matrix mit den kleinsten Abst?nden zwischen Start- und Endpunkt
-     * f?r gegebenen ersten und dritten Wendepunkt.
-     * Beispiel: dmin[5][10] ist die kleinstm?gliche Distanz d zwischen
-     * Start- und Endpunkt, wenn Punkt 5 der erste und Punkt 10 der 3te
-     * Wendepunkt ist. dmini[5][10] leifert dann, den Index des zugeh?rigen
-     * Startpunktes und dminj[5][10] den Index des Endpunktes f?r diese
-     * minimale Distanz
-     * Dies Matritzen werden mit quadratischem Aufwand vorab berechnet,
-     * da sie zur Bestimmung von Dreiecken bei der Optimierung in der
-     * innersten Schleife f?r die 3 Wendepunkte n^3 mal immer wieder
-     * ben?tigt werden. Dadurch kann der Gesamtrechaufwand in der Gr??enordnung
-     * von n^5 auf Gr??enordnung n^3+n^2 gesenkt werden.
-     *
-     * Hinweis: diese Matritzen sind voll besetzt:
-     */
-    /*
-     	Alle Distanzen zwischen allen Punkten berechnen und in
-     	Distanzmatrix speichern Die Berechnung erfolgt mit doubles,
-     	das Ergbnis wird auf ganze Meter gerundet ganzzahig
-     	gespeichert, um sp?ter schneller damit rechnen zu k?nnen
+/*
+int OLCOptimizer::sindex(int y, int x) {
+  bool err = true;
+  if (x<y) {
+    err = true;
+  }
+  int r = indexval[y]+x;
+  if (r>=MATSIZE) {
+    err = true;
+  }
+  return r;
+}
+*/
 
-        Vorsicht: Rechnerabh?ngiger Ganzzahlenbereich mu? 25mal so gro? sein,
-        wie die maximale L?nge einer Strecke in Metern!
-     */
 int OLCOptimizer::initdmval() {
   double d_fak = CONST_D_FAK; /* FAI-Erdradius in metern */
 
   /* F?r schnellere Berechnung sin/cos-Werte merken */
-  double *sinlat = (double*)malloc(sizeof(double)*pnts); 
-  if (!sinlat) 
-    return 1;
-  double *coslat = (double*)malloc(sizeof(double)*pnts);
-  if (!coslat) {
-    free(sinlat);
-    return 1;
-  }
-  double *lonrad = (double*)malloc(sizeof(double)*pnts);
-  if (!lonrad) {
-    free(coslat); free(sinlat);
-    return 1;
-  }
+  double sinlat[MAX_OLC_POINTS];
+  double coslat[MAX_OLC_POINTS];
+  double lonrad[MAX_OLC_POINTS];
 
   double latrad, sli, cli, lri;
-  int  j, dist, cmp;
-  
-  dmval = (int*)malloc(sizeof(int)*pnts*pnts);
-  if (!dmval) {
-    free(coslat); free(sinlat); free(lonrad);
-    return 1;
+  int i, j, dist, cmp;
+
+  i=0;
+  for (j=0; j<pnts; j++) {
+    indexval[j]= i-j;
+    i+= (pnts-j);
   }
 
-  int i;
-
   for(i=pnts-1;i>=0;i--) { 
-    /* alle Punkte ins Bogenma? umrechnen und sin/cos Speichern */
-    if ((i==pnts-1)&&(project)) {
-      lonrad[i] = lon_proj * DEG_TO_RAD;
-      latrad = lat_proj * DEG_TO_RAD;
-    } else {
-      lonrad[i] = lonpnts[rotindex(i)] * DEG_TO_RAD;
-      latrad = latpnts[rotindex(i)] * DEG_TO_RAD;
-    }
+    /* alle Punkte ins Bogenma? 
+       umrechnen und sin/cos Speichern */
+    lonrad[i] = lonpnts[i] * DEG_TO_RAD;
+    latrad = latpnts[i] * DEG_TO_RAD;
     sinlat[i] = sin(latrad);
     coslat[i] = cos(latrad);
-    dmval[i*pnts+i] = 0; /* Diagonale der Matrix mit Distanz 0 f?llen */
+    dmval[sindex(i,i)] = 0; 
+    /* Diagonale der Matrix mit Distanz 0 f?llen */
   }
   
   // System.out.println("initializing distances..\n");
-  maxdist = 0; /* maximale Distanz zwischen zwei Punkten neu berechnen */
-  cmp = pnts-1; /* Schleifenvergleichswert f?r schnelle Berechnung
-		   vorher merken */
+  maxdist = 0; /* maximale Distanz zwischen zwei Punkten neu
+		  berechnen */
+
+  cmp = pnts-1; 
+  /* Schleifenvergleichswert f?r schnelle Berechnung vorher merken */
   
   // JMW: this calculation is very slow!  N^2 cos!
   for(i=0;i<cmp;i++) { /* diese Schleife NICHT R?CKW?RTS!!! */
     sli = sinlat[i]; cli = coslat[i]; lri = lonrad[i];
     for(j=i+1;j<pnts;j++) {
-      if ( (dmval[i*pnts+j] = dist = 
-	    (int)(d_fak*
-		  acos(sli*sinlat[j] + cli*coslat[j]*cos(lri-lonrad[j])
-		       )+0.5)  /* auf meter runden */
-	    ) > maxdist) {
-	maxdist = dist; 
-      }
+      dist = (int)(d_fak*acos(sli*sinlat[j] 
+			      + cli*coslat[j]*cos(lri-lonrad[j])
+			      )+0.5);  /* auf meter runden */
+      dmval[sindex(i,j)]= dist/DISTANCEUNITS;
+      maxdist = max(dist,maxdist);
       /* ggf. weiteste Distanz merken */
     }
   }
   
-  free(sinlat); free(coslat); free(lonrad);
-  
   // "maximal distance between 2 points: " + maxdist + " meters\n");
   return 0;
 }
-    
+
+
+// find point k between i and j to give greatest distance ik and kj
+// k = isplit(i,j) 
+int OLCOptimizer::initisplit() {
+  int maxab, i, j, k, d, ibest;
+
+  for(i=0;i<pnts-1;i++) { 
+
+    isplit[sindex(i,i)]= i;
+
+    for(j=i+1; j<pnts;j++) { 
+
+      maxab = 0;
+      ibest = j;
+
+      for(k=i+1; k<j; k++) { 
+	d = dmval[sindex(i,k)] + dmval[sindex(k,j)];
+	if (d>maxab) {
+	  maxab = d;
+	  ibest = k;
+	}
+      }
+      isplit[sindex(i,j)]= ibest;
+    }
+  }
+  return 0;
+}
+
+
+int OLCOptimizer::initistartsprint() {
+
+  int i, j, altend, tend, ibest, alt, t, altmin;
+  for (i=pnts-1; i>=0; i--) {
+    // end point
+    altend = altpntslow[i];
+    tend = timepnts[i];
+    ibest = i;
+    altmin = altend;
+
+    for (j=1; j<i; j++) {
+      // start point... we need latest lowest within 9000 seconds
+      alt = altpntslow[j];
+      t = timepnts[j];
+      if ((alt<=altmin)&&(tend-t<9000)) {
+	ibest = j;
+	altmin = alt;
+      }
+    }
+    istartsprint[i]= max(1,ibest);
+  }
+  return 0;
+}
+
+
 /*
- * berechne kleinste Distanz dmin(i,j) zwischen allen Punkten x und y mit x<=i und y>=j
- *   f?r alle x<=i, y>=j: dmin(i,j) <= dmin(x,y)
- *      und dmval[dmini[i][j]][dminj[i][j]] <= dmval[x][y]
- */
-int OLCOptimizer::initdmin() {
-  int i, j, d, mini, minj=0, minimum = maxdist;
-  
-  // initializing dmin(i,j) with best start/endpoints for triangles..\n");
-  
-  dmin = (int*)malloc(sizeof(int)*pnts*pnts);
-  dmini = (int*)malloc(sizeof(int)*pnts*pnts);
-  dminj = (int*)malloc(sizeof(int)*pnts*pnts);
-  
-  int k, l;
+  ibestend[sindex(i,j)] is index of furthest end point from j which is valid 
+                        from start height i
+*/
+int OLCOptimizer::initibestend() {
 
-  for(j=pnts-1;j>0;j--) { /* erste Zeile separat behandeln */
-    d = dmval[0*pnts+j];
-    if (d<minimum) {/* d<=minimum falls gleichwertiger Punkt weiter
-		       vorne im track gefunden werden soll */
-      minimum = d; minj = j;
-    }
-    k = j;
-    dmin[k]  = minimum;
-    dmini[k] = 0;
-    dminj[k] = minj;
-  }
-  for(i=1;i<pnts-1;i++) { /* folgenden Zeilen von vorheriger ableiten */
+  int i,j,k, maxclassic, dh, ibestclassic, d;
 
-    // JMW: special case, last point
-    j=pnts-1; /* letzte Spalte zur Initialisierung des Minimums
-		 getrennt behandeln */
+  for(i=0;i<pnts;i++) { // for all start points
+    for(j=i;j<pnts; j++) { // for all second last points
 
-    k = (i-1)*pnts+j;
-    minimum = dmin[k]; 
-    mini = dmini[k]; 
-    minj = dminj[k];
+      maxclassic = 0;
+      ibestclassic = i;
 
-    k+= pnts;
-    d = dmval[k];
-    if (d<minimum) {
-      minimum = d; mini = i; minj = j;
-    }
-    dmin[k]  = minimum;
-    dmini[k] = mini;
-    dminj[k] = minj;
-    for(j=pnts-2;j>i;j--) { /* andere spalten von hinten nach vorne
-			       bearbeiten */
-      k = i*pnts+j;
-      d = dmval[k];
-      l = k-pnts;
-      if (d<minimum) { /* aktueller Punkt besser als bisheriges Minimum? */
-	/* d<=minimum falls gleichwertiger Punkt weiter vorne im track
-	   gefunden werden soll */
-	minimum = d; mini = i; minj = j;
+      for(k=j+1; k<pnts; k++) { // for all last points
+
+	dh = altpntshigh[k]-altpntslow[i];
+	d = dmval[sindex(j,k)];
+
+	if (dh>= -1000) {
+	  if (d>=maxclassic) {
+	    maxclassic = d;
+	    ibestclassic = k;
+	  }
+	}
       }
-      if ((d=dmin[l])<minimum) { /* Minimum aus vorheriger Zeile besser? */
-	minimum = d; mini = dmini[l]; minj = dminj[l];
-      }
-      dmin[k]  = minimum;
-      dmini[k] = mini;
-      dminj[k] = minj;
+      ibestendclassic[sindex(i,j)]= ibestclassic;
     }
   }
   return 0;
 }
 
-int OLCOptimizer::initmaxend() {
-  int w3, i, f, maxf, besti;
-  // initializing maxenddist[] with maximal distance to best endpoint ..;
-  maxenddist = (int*)malloc(sizeof(int)*pnts);
-  if (!maxenddist) return 1;
 
-  maxendpunkt = (int*)malloc(sizeof(int)*pnts);
-  if (!maxendpunkt) {
-    free(maxendpunkt);
-    return 1;
+void OLCOptimizer::thin_data() {
+  // reduce number of waypoints until smaller than buffer
+
+  if (pnts_in<MAX_OLC_POINTS) {
+    return;
+  } 
+
+  int i;
+  int nistart = 5;
+  for (i=0; i<pnts_in; i++) {
+    if (timepnts[i]>= tsprintstart) {
+      nistart = i;
+      break;
+    }
   }
 
-  for(w3=pnts-1; w3>1; w3--) {
-    maxf = 0;
-    for(i=besti=pnts-1; i>=w3; i--) {
-      if ((f = dmval[w3*pnts+i])>maxf) {
-	maxf = f; besti = i;
+  nistart = 5;
+  double contractfactor = 0.8;
+
+  while (pnts_in> MAX_OLC_POINTS*contractfactor) {
+    distancethreshold /= contractfactor;
+    // don't erase last point and don't erase up to start
+    for (i= pnts_in-3; i>nistart+1; i--) {
+      double d = Distance(latpnts[i], lonpnts[i], latpnts[i-1], lonpnts[i-1]);
+      if (d<distancethreshold) {
+	timepnts[i] = -1; // mark it for deletion
       }
     }
-    maxenddist[w3]  = maxf;
-    maxendpunkt[w3] = besti;
+
+    // now shuffle points along
+    int j;
+    i = nistart+1;
+    j = i;
+    int pnts_in_new;
+    int altlowmerge=100000;
+    while (j< pnts_in) {
+      if (timepnts[j]!= -1) {
+	latpnts[i] = latpnts[j];
+	lonpnts[i] = lonpnts[j];
+	timepnts[i] = timepnts[j];
+	altpntshigh[i] = altpntshigh[j];
+	altpntslow[i] = min(altpntslow[j],altlowmerge);
+	altlowmerge = altpntslow[j];
+	i++;
+	pnts_in_new = i;
+      } else {
+	altlowmerge = min(altpntslow[j], altlowmerge);
+      }
+      j++;
+    }
+    pnts_in = pnts_in_new;
   }
-  return 0;
+  if (pnts_in>=MAX_OLC_POINTS) {
+    // error!
+    pnts_in = MAX_OLC_POINTS-1;
+  }
 }
 
-void OLCOptimizer::addPoint(double lon, double lat, double alt, double time) {
+
+bool OLCOptimizer::addPoint(double lon, double lat, double alt, double bearing, 
+			    double time) {
   static double lonlast;
   static double latlast;
-  
+  static int alt1 = 0;
+  static int alt2 = 0;
+
   if (pnts_in==0) {
     latlast = lat;
     lonlast = lon;
+    alt1 = 0;
+    alt2 = 0;
   }
-  if ((Distance(lat, lon, latlast, lonlast)>DISTANCETHRESHOLD*1000.0)
-      || (pnts_in==0)) {
+
+  if (busy) return false; // don't add data while in analysis
+
+  waypointbearing = bearing;
+
+  int ialt = (int)alt;
+  int i;
+
+  bool isminimum = false;
+  if ((ialt>alt1) && (alt2>alt1)) {
+    isminimum = true;
+  }
+  switch(OLCRules) {
+  case 0: // sprint
+    isminimum &= (ialt<altminimum);
+    break;
+  case 1: // classic
+    isminimum &= (ialt<altminimum-1000);
+    break;
+  case 2: // classic
+    isminimum &= (ialt<altminimum-1000);
+    break;
+  }
+  if (isminimum) {
+    altminimum = min(ialt,altminimum);
+    tsprintstart = (long)time;
+  }
+
+  alt2= alt1;
+  alt1= ialt;
+
+  if ((Distance(lat, lon, latlast, lonlast)>distancethreshold)
+      || (pnts_in==0) || (isminimum)) {
+
     latlast = lat;
     lonlast = lon;
 
-    int i = (pnts_in + pnts_offset_in) % MAXPOINTS;
+    i = pnts_in;
     
     timepnts[i] = (long)time;
     latpnts[i] = lat;
     lonpnts[i] = lon;
-    altpnts[i] = (int)alt;
-    if (pnts_in<MAXPOINTS) {
-      pnts_in++;
-      pnts_offset_in = 0;
-    } else {
-      pnts_offset_in++;
-      pnts_offset_in %= MAXPOINTS;
-    }
+    altpntslow[i] = ialt;
+    altpntshigh[i] = ialt;
 
+    if (pnts_in<MAX_OLC_POINTS) {
+      pnts_in++;
+    } 
+    thin_data();
+  } else {
+    if (pnts_in>0) {
+      i = pnts_in-1;
+      if (ialt<altpntslow[i]) {
+	// if new low at this location, replace the altitude and time
+	// this gets better accuracy for start location
+	timepnts[i] = (long)time;
+	altpntslow[i] = ialt;
+      } else if (ialt>altpntshigh[i]) {
+	timepnts[i] = (long)time;
+	altpntshigh[i] = ialt;
+      }
+    }
   }
+
+  return isminimum;
+  // detect new start and return true if start detected
+  // maybe make start above safety arrival height?
+  //
+  // also detect task finish here?
 };
 
 
@@ -309,11 +384,11 @@ int OLCOptimizer::getN() {
 }
 
 double OLCOptimizer::getLatitude(int i) {
-  return latpnts[rotindex(i)];
+  return latpnts[i];
 }
 
 double OLCOptimizer::getLongitude(int i) {
-  return lonpnts[rotindex(i)];
+  return lonpnts[i];
 }
 
 
@@ -322,63 +397,11 @@ void OLCOptimizer::SetLine() {
   LockFlightData();
   pnts = pnts_in; // save value in case we get new data while
 		  // performing the analysis/display
-  pnts_offset = pnts_offset_in;
   UnlockFlightData();
 
 }
 
 
-bool OLCOptimizer::OptimizeProjection(double lon, double lat, double alt)
-{
-  LockFlightData();
-  pnts = pnts_in; // save value in case we get new data while
-		  // performing the analysis
-  pnts_offset = pnts_offset_in;
-
-  lat_proj = lat;
-  lon_proj = lon;
-  alt_proj = (int)alt;
-
-  project = true;
-
-  if (pnts<MAXPOINTS) {
-    pnts++;
-    pnts_offset = 0;
-  } else {
-    pnts_offset++;
-    pnts_offset %= MAXPOINTS;
-  }
-
-  UnlockFlightData();
-
-  DWORD tm =GetTickCount();
-
-  bool retval = (optimize_internal() == 0);
-  Clear();
-
-#ifdef DEBUG
-  if (retval) {
-    char buffer[200];
-
-    sprintf(buffer,"%d %d # OLC time\n",
-	    pnts, GetTickCount()-tm);
-    DebugStore(buffer);
-
-    sprintf(buffer,"%d  %d %d %d %d %d # OLC max12345\n",
-	    maxroute, max1, max2, max3, max4, max5);
-    DebugStore(buffer);
-    sprintf(buffer,"%d  %d %d %d %d %d # OLC max fai\n",
-	    bestfai, max1fai, max2fai, max3fai, max4fai, max5fai);
-    DebugStore(buffer);
-    sprintf(buffer,"%d  %d %d %d %d %d # OLC max flach\n",
-	    bestflach, max1flach, max2flach, max3flach, max4flach, max5flach);
-    DebugStore(buffer);
-  }
-#endif
-
-  return retval;
-
-}
 
 
 bool OLCOptimizer::Optimize() {
@@ -391,200 +414,106 @@ bool OLCOptimizer::Optimize() {
   bool retval = (optimize_internal() == 0);
   Clear();
 
-#ifdef DEBUG
   if (retval) {
-
-    char buffer[200];
-
-    sprintf(buffer,"%d %d # OLC time\n",
-	    pnts, GetTickCount()-tm);
-    DebugStore(buffer);
-
-    sprintf(buffer,"%d  %d %d %d %d %d # OLC max12345\n",
-	    maxroute, max1, max2, max3, max4, max5);
-    DebugStore(buffer);
-    sprintf(buffer,"%d  %d %d %d %d %d # OLC max fai\n",
-	    bestfai, max1fai, max2fai, max3fai, max4fai, max5fai);
-    DebugStore(buffer);
-    sprintf(buffer,"%d  %d %d %d %d %d # OLC max flach\n",
-	    bestflach, max1flach, max2flach, max3flach, max4flach, max5flach);
-    DebugStore(buffer);
-
-    sprintf(buffer,"%f %f # OLC pos 1\n",
-	    lonpnts[rotindex(max1flach)], latpnts[rotindex(max1flach)]);
-    DebugStore(buffer);
-
-    sprintf(buffer,"%f %f # OLC pos 2\n",
-	    lonpnts[rotindex(max2flach)], latpnts[rotindex(max2flach)]);
-    DebugStore(buffer);
-
-    sprintf(buffer,"%f %f # OLC pos 3\n",
-	    lonpnts[rotindex(max3flach)], latpnts[rotindex(max3flach)]);
-    DebugStore(buffer);
-
-    sprintf(buffer,"%f %f # OLC pos 4\n",
-	    lonpnts[rotindex(max4flach)], latpnts[rotindex(max4flach)]);
-    DebugStore(buffer);
-
-    sprintf(buffer,"%f %f # OLC pos 5\n",
-	    lonpnts[rotindex(max5flach)], latpnts[rotindex(max5flach)]);
-    DebugStore(buffer);
-  }
+#ifdef DEBUG
+    char tmptext[100];
+    sprintf(tmptext,"%d %d # OLC\n", pnts, GetTickCount()-tm);
+    DebugStore(tmptext);
 #endif
+  }
 
   return retval;
 }
 
 
-void OLCOptimizer::UpdateSolution(int dbest,
+void OLCOptimizer::UpdateSolution(int dbest, int tbest,
 				  int p1, int p2, int p3, int p4, int p5,
-				  OLCSolution* solution) {
+				  int p6, int p7,
+				  OLCSolution* solution, double score, bool finished) {
   bool improved = !(solution->valid);
-  if (dbest>0) {
-    if (dbest> solution->distance) {
+  if (score>0) {
+    if ((score> solution->score)
+	||(!finished)
+	||(finished && (!solution->finished))) {
       improved = true;
     }
     if (improved) {
       solution->valid = true;
-      solution->distance = dbest;
-      solution->latitude[0] = latpnts[rotindex(p1)];
-      solution->longitude[0] = lonpnts[rotindex(p1)];
-      solution->latitude[1] = latpnts[rotindex(p2)];
-      solution->longitude[1] = lonpnts[rotindex(p2)];
-      solution->latitude[2] = latpnts[rotindex(p3)];
-      solution->longitude[2] = lonpnts[rotindex(p3)];
-      solution->latitude[3] = latpnts[rotindex(p4)];
-      solution->longitude[3] = lonpnts[rotindex(p4)];
-      solution->latitude[4] = latpnts[rotindex(p5)];
-      solution->longitude[4] = lonpnts[rotindex(p5)];
-      solution->time = timepnts[rotindex(p5)]-timepnts[rotindex(p1)];
+      solution->finished = finished;
+      solution->distance = dbest*DISTANCEUNITS;
+      solution->score = score;
+      solution->latitude[0] = latpnts[(p1)];
+      solution->longitude[0] = lonpnts[(p1)];
+      solution->latitude[1] = latpnts[(p2)];
+      solution->longitude[1] = lonpnts[(p2)];
+      solution->latitude[2] = latpnts[(p3)];
+      solution->longitude[2] = lonpnts[(p3)];
+      solution->latitude[3] = latpnts[(p4)];
+      solution->longitude[3] = lonpnts[(p4)];
+      solution->latitude[4] = latpnts[(p5)];
+      solution->longitude[4] = lonpnts[(p5)];
+      solution->latitude[5] = latpnts[(p6)];
+      solution->longitude[5] = lonpnts[(p6)];
+      solution->latitude[6] = latpnts[(p7)];
+      solution->longitude[6] = lonpnts[(p7)];
+      solution->time = tbest;
     }
   }
 }
 
+
 int OLCOptimizer::optimize_internal() {
 
-  int i1, i3, i4;
-  int i, a, b, c, d, e, u, w, tmp, aplusb;
-  int i4cmp, i2cmp = pnts-2;
-  
+  busy = true;
+
   if (pnts<5) {
     // only <5 points given, no optimization
+    busy = false;
     return 0;
   }
-  if( initdmval() != 0 ) return 1;
-  if( initdmin() != 0 ) return 1;
-  if( initmaxend() != 0 ) return 1;
-  
-  max1 = max2 = max3 = max4 = max5 = maxroute= bestfai = bestflach = 0;
-  // calculating best waypoints.. for more than 500 points need some
-  // time..
-  int k24;
-  for(i2=0; i2<i2cmp; i2++) {
-    if(stop) break;
-    
-    /* 1.Wende */
-    for(i=i1=e=0; i<i2; i++) { 
-      /* Startpunkt f?r freie Strecke separat optimieren */
-      if ((tmp = dmval[i*pnts+i2])>e) { e = tmp; i1 = i; }
-    } /* e, i1 enthalten fuer dieses i2 den besten Wert */
-    
-    i4cmp = i2+2;
-    
-    for(i4=pnts; --i4>=i4cmp;) { /* 3.Wende von hinten optimieren */
-      k24 = i2*pnts+i4;
-      aplusb = 0;
 
-      int start = dmini[k24];
-      int finish = dminj[k24];
-      int dh, dt;
-      
-      for(i=i3=i2+1; i<i4; i++) { /* 2.Wende separat optimieren */
-	
-	if ((tmp=(a=dmval[i2*pnts+i])+(b=dmval[i*pnts+i4]))>aplusb) { 
-	  /* findet gr??tes a+b (und auch gr??tes Dreieck) */
-	  aplusb = tmp; i3 = i;
-	}
-	// TODO: modified rules if >500 km
+  if( initdmval() != 0 ) { busy=false; return 1; }
+  if( initisplit() != 0 ) { busy=false; return 1; }
+  if( initistartsprint() != 0 ) { busy=false; return 1; }
+  if( initibestend() != 0 ) { busy=false; return 1; }
 
-	int d5 = (d = dmin[k24])*5;
-	int a25 = a*25;
-	int b25 = b*25;
-	int c25 = (c = dmval[k24])*25; 
-
-	if (d5<=(u=tmp+c)) { /* Dreieck gefunden 5*d<= a+b+c */
-
-	  start = dmini[k24];
-	  finish = dminj[k24];
-	  if (project) {
-	    // JMW fudge
-	    dh=0;
-	    dt=0;
-	  } else {
-	    dh = altpnts[rotindex(finish)]-altpnts[rotindex(start)];
-	    dt = timepnts[rotindex(finish)]-timepnts[rotindex(start)];
-	  }
-
-	  // only valid if dh>0 (finish higher than start)
-	  // only valid if dt<2.5 hours (9000 seconds)?
-	  // currently unused.
-
-	  if ((c25>=(tmp=u*7))&&(a25>=tmp)&&(b25>=tmp)) { 
-	    /* FAI-D gefunden */
-	    if (dh>= -1000) { // no time limit
-	      if ((w=u-d)>bestfai) { /* besseres FAI-D gefunden */
-		max1fai = start;
-		max2fai = i2; 
-		max3fai = i; 
-		max4fai = i4;
-		max5fai = finish;
-		bestfai = w;
-	      }
-	    }
-	    //	      }
-	  } else { /* nicht FAI=flaches Dreieck gefunden.
-		      Non-FAI 'flat' triangle found
-		   */
-	    if ((w=u-d)>bestflach) {
-	      max1flach = start;
-	      max2flach = i2; 
-	      max3flach = i; 
-	      max4flach = i4;
-	      max5flach = finish;
-	      bestflach = w;
-	    }
-	  }
-	}
-      } /* aplusb, i3 enthalten fuer dieses i2 und i4 besten Wert */
-
-      if ((tmp = maxenddist[i4]+aplusb+e) > maxroute) {
-	// max sprint (OLC World League)
-	start = i1;
-	finish = maxendpunkt[i4];
-	dh = altpnts[rotindex(finish)]-altpnts[rotindex(start)];
-	dt = timepnts[rotindex(finish)]-timepnts[rotindex(start)];
-	if ((dh>=0)&&(dt<=9000)) {
-	  max1 = start; max2 = i2; max3 = i3; max4 = i4; max5 = finish;
-	  maxroute = tmp;
-	}
-      }
-
-
+  int i1;
+  istart = 0;
+  for (i1=0; i1<pnts-5; i1++) {
+    if (timepnts[i1]>= tsprintstart) {
+      istart = i1;
+      break;
     }
   }
 
   // World league (sprint):
   //   start height <= finish height
   //   2.5 hours max
-
+  //   start+3turnpoints+finish
+  // 
   // FAI triangle
   //   start height <= finish height+1000m 
+  // 
+  // Classic:
+  //   start height <= finish height+1000m
+  //   start+5turnpoints+finish
+  //   no time limit
+  //   points for second last leg 0.8
+  //   points for last leg 0.6
 
-  UpdateSolution(bestfai, max1fai, max2fai, max3fai, max4fai, max5fai,
-		 &solution_FAI_triangle);
-  UpdateSolution(maxroute, max1, max2, max3, max4, max5,
-		 &solution_FAI_sprint);
-
+  switch(OLCRules) {
+  case 0:
+    scan_sprint();
+    break;
+  case 1:
+    scan_triangle();
+    break;
+  case 2:
+    scan_classic();
+    break;
+  }
+  
+  busy = false;
   return 0;
 }
 
@@ -593,13 +522,9 @@ int OLCOptimizer::optimize_internal() {
 /*
   TODO:
 
-  Analysis page for OLC:
-    button to perform analysis,
-    selector property to select which type of task to display
-    handicap in glide polar?  
+  handicap in glide polar?  
 
   Estimate score?
-    check limits: start altitude, max time.
     
   Rotary buffer, and save previous best when doing optimisation.
   This means we only need a buffer large enough for 2.5 hours,
@@ -609,3 +534,403 @@ int OLCOptimizer::optimize_internal() {
   At 100 knots, one minute = 3.3 km.  Set distance threshold to 1 km.
 
 */
+
+
+int OLCOptimizer::triangle_legal(int i1, int i2, int i3, int i4) {
+  int a,b,c;
+  int minleg, maxleg;
+  int Dist;
+  a = dmval[sindex(i1,i2)];
+  b = dmval[sindex(i2,i3)];
+  c = dmval[sindex(i3,i4)];
+  Dist = a+b+c;
+  minleg = min(a,min(b,c));
+  maxleg = max(a,max(b,c));
+  if (Dist<500000) {
+    // <500km, 28% min
+    if (minleg*25>=Dist*7) {
+      return Dist;
+    } else {
+      return 0;
+    }
+  } else {
+    // >500km, 25% min 45% max
+    if ((minleg*4>=Dist)&&(maxleg*20<=9*Dist)) {
+      return Dist;
+    } else {
+      return 0;
+    }
+  }
+}
+
+
+int OLCOptimizer::scan_triangle() {
+  int i2, i3, i4, i5;
+  int dh, d;
+
+  int bestdist = 0;
+  int i2best, i3best, i4best, i5best;
+
+  //  i1 is ignored
+
+  // O(N^3)
+
+  int dfurther=0;
+  bool finished=false;
+  bool canfinish=false;
+  int ttogo=0;
+  int ttogobest=0;
+
+  for (i2=1; i2<pnts-3; i2++) {
+    for (i5=pnts-1; i5>i2+2; i5--) {
+
+      int dtogo = dmval[sindex(i2,i5)];
+      if (dtogo>DISTANCETHRESHOLD/DISTANCEUNITS) continue;
+
+      // FAI triangle
+      //   start height <= finish height+1000m 
+      dh = altpntshigh[i5]+1000-altpntslow[i2];
+      if (dh<0) continue;
+
+      canfinish = false;
+      ttogo = 0;
+      if (dh>0) {
+	dfurther = iround(GlidePolar::bestld*dh/DISTANCEUNITS);
+	if (dfurther>dtogo) {
+	  canfinish = true;
+	  ttogo = iround(dtogo*DISTANCEUNITS/GlidePolar::Vbestld);
+	}
+      } else {
+	dfurther = 0;
+      }
+
+      for (i4=i3+2; i4<i5; i4++) {
+	i3 = isplit[sindex(i2,i4)];
+
+	// check optimal triangle given i4, i3, assuming finished
+	d = triangle_legal(i2,i3,i4,i5);
+	if (d>bestdist) {
+	  i2best = i2;
+	  i3best = i3;
+	  i4best = i4;
+	  i5best = i5;
+	  bestdist = d;
+	  finished = true;
+	}
+	if (canfinish) {
+	  d = triangle_legal(i2,i3,i4,i2);
+	  if (d>bestdist) {
+	    i2best = i2;
+	    i3best = i3;
+	    i4best = i4;
+	    i5best = i2;
+	    bestdist = d;
+	    finished = false;
+	    ttogobest = ttogo;
+	  }
+	}
+      }
+    }
+  }
+
+  if (bestdist>0) {
+    double score = bestdist*100/(Handicap)/(1000.0/DISTANCEUNITS);
+    int t = timepnts[(i5best)]-timepnts[(i2best)];
+    if (!finished) {
+      lat_proj = latpnts[i2];
+      lon_proj = lonpnts[i2];
+      t += ttogobest;
+    }
+    UpdateSolution(bestdist, t, i2best, i2best, i3best, i4best, i5best, i5best, i5best,
+		   &solution_FAI_triangle, score, finished);
+    return 0;
+  } else {
+    return 1;
+  }
+
+}
+
+
+
+int OLCOptimizer::scan_sprint_finished() {
+  int i1,i2,i3,i4,i5, d, bestdist;
+  int i1best, i2best, i3best, i4best, i5best;
+
+  // O(N^2)
+
+  bool taskfinished=false;
+  bestdist = 0;
+
+  // detect task end
+  for (i5=pnts-1; i5>5; i5--) {
+    i1 = istartsprint[i5];
+    if (altpntslow[i5]>= altpntslow[i1]) {
+      if (timepnts[i5]-timepnts[i1-1]>=9000) {
+
+	for (i3=i1+2; i3<i5-1; i3++) {
+	  i2 = isplit[sindex(i1,i3)];
+	  i4 = isplit[sindex(i3,i5)];
+	  
+	  d = dmval[sindex(i1,i2)]
+	    +dmval[sindex(i2,i3)]
+	    +dmval[sindex(i3,i4)]
+	    +dmval[sindex(i4,i5)];
+	  
+	  if (d>bestdist) {
+	    bestdist = d;
+	    i1best = i1;
+	    i2best = i2;
+	    i3best = i3;
+	    i4best = i4;
+	    i5best = i5;
+	  }
+	}       
+      }
+    }
+  }
+
+  if (bestdist>0) {
+    double score = bestdist*100/(Handicap*2.5)/(1000.0/DISTANCEUNITS);
+    int t = timepnts[(i5best)]-timepnts[(i1best)];
+    UpdateSolution(bestdist, t, i1best, i2best, i3best, i4best, i5best, i5best, i5best,
+		   &solution_FAI_sprint, score, true);
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+
+int OLCOptimizer::scan_sprint() {
+  int retval=0;
+  // first scan for a finished sprint
+  // then see if improvement can be made with final glide at excess altitude
+
+  retval = scan_sprint_finished();
+  retval |= scan_sprint_inprogress();
+  return retval;
+}
+
+
+int OLCOptimizer::scan_sprint_inprogress() {
+  int i1,i2,i3,i4,i5, d, bestdist;
+  int i1best, i2best, i3best, i4best, i5best;
+
+  bestdist = 0;
+
+  // now calculate estimate:
+  // assume flying from last point to active waypoint
+  // we already know time remaining to waypoint.
+  // assume above final glide, and in final glide mode
+  // may not be flying Mc speed, because may need to rush to
+  // expend height in given remaining time.
+  // but remaining time is unknown!
+
+  // what we can do is search for best distance across height loss from current
+  // assuming height loss will be taken in maximum time remaining 
+
+  // build a table giving for a start i and height at final point to burn,
+  // time remaining (to burn the height)
+  // 
+
+  i5 = pnts-1;
+  i1 = istart;
+
+  double latend = latpnts[(i5)];
+  double lonend = lonpnts[(i5)];
+  int dh = altpntslow[(i5)]-altpntslow[(i1)];
+  int dt = 9000-(timepnts[(i5)]-timepnts[(i1)]);
+
+  if (dh<0) {
+    return 1; // finished! (altitude reached)
+  }
+  if (dt<0) {
+    return 1; // finished! (over time)
+  }
+
+  //
+  // if this data doesn't change, e.g. don't go lower than start altitude,
+  // then it is fast and can be performed online
+
+  double sinkrate = ((double)dh)/dt;
+  // we have dh of height to burn off in dt seconds
+  // this is a vertical velocity, which gives us
+  // a target speed
+
+  double Vopt;
+  int dfurther;
+
+  // TODO: Adjust for wind!
+  if (sinkrate>=GlidePolar::minsink) {
+    // no need to climb to make it
+    // (TODO: later work out time adjustment for climb here, but for 
+    // now we just assume we won't be climbing again)
+    
+    Vopt = GlidePolar::FindSpeedForSinkRate(sinkrate);      
+  } else {
+    // can't make it without further climb.  For now, just calculate
+    // what the best you can do with remaining height.
+
+    Vopt = GlidePolar::Vbestld;
+    sinkrate = (Vopt/GlidePolar::bestld);
+    dt = iround(dh/sinkrate);
+  }
+  dfurther = (int)(Vopt*dt/DISTANCEUNITS); // neglects wind speed!  we can correct this
+
+  // we can calculate the optimal instantaneous
+  // MC value for this given the netto velocity
+  // So auto mc needs to find highest Mc that results in dh=0 and largest t_ETE<9000.  
+
+  // only i4 will affect optimum direction, so this should be outer loop
+  
+  for (i4=i5-1; i4>i1+2; i4--) {
+    
+    int d0 = dmval[sindex(i4,i5)];
+    // dfurther is independent of i3 and i4 so it won't affect optimum
+    // if direction is free
+    
+    // WaypointBearing
+    // note this outer loop is linear in N
+    
+    d0 += dfurther; // big assumption, ignores effect of wind and waypoint bearing 
+    // but this is reasonable as it assumes pilot is making bearing decisions
+    // independent of track so far.
+    
+    for (i3=i1+2; i3<i4; i3++) {  // O(N^2)
+      i2 = isplit[sindex(i1,i3)];
+      
+      d = dmval[sindex(i1,i2)]
+	+dmval[sindex(i2,i3)]
+	+dmval[sindex(i3,i4)]+d0;
+      
+      if (d>bestdist) {
+	bestdist = d;
+	i1best = i1;
+	i2best = i2;
+	i3best = i3;
+	i4best = i4;
+	i5best = i5; 
+	// TODO: find equivalent Mc value?
+	// Command Vopt?
+      }
+    }   
+  }
+
+  if (bestdist>0) {
+
+    lat_proj = FindLatitude(latend, 
+			    lonend, 
+			    waypointbearing, 
+			    dfurther*DISTANCEUNITS);
+    
+    lon_proj = FindLongitude(latend, 
+			     lonend, 
+			     waypointbearing, 
+			     dfurther*DISTANCEUNITS);
+
+    double score = bestdist*100/(Handicap*2.5)/(1000.0/DISTANCEUNITS);
+    int t = timepnts[(i5best)]+dt-timepnts[(i1best)];
+    UpdateSolution(bestdist, t, i1best, i2best, i3best, i4best, i5best, i5best, i5best,
+		   &solution_FAI_sprint, score, false);
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+
+int OLCOptimizer::scan_classic() {
+  int i1,i2,i3,i4,i5,i6,i7, d, bestdist, dh;
+  int i1best, i2best, i3best, i4best, i5best, i6best, i7best;
+
+  bestdist = 0;
+  bool finished = false;
+
+  //  for (i1=0; i1<pnts-6; i1++) {
+  i1= istart; // force start to first point, to keep this algorithm  O(N^3)
+
+  // there is no time penalty so earliest valid start is always best?
+  int dfurther = 0;
+  int dfurtherbest = 0;
+
+  for (i6=i1+5; i6<pnts; i6++) {
+    
+    // TODO: eliminate this or reduce it to search across i6, since i1 is given
+    i7 = ibestendclassic[sindex(i1,i6)];
+    
+    if (i7>=i6) { // valid end point found
+      
+      for (i3=i1+2; i3<i6-3; i3++) {
+	i2 = isplit[sindex(i1,i3)];
+
+	for (i5=i3+2; i5<=i6; i5++) {
+	  i4 = isplit[sindex(i3,i5)];
+
+	  dfurther = 0;
+	  if (i7==pnts-1) {
+	    // check if can travel further with final glide
+	    dh = altpntslow[i7]-altpntslow[i1];
+	    if (dh>0) {
+	      dfurther = (int)(GlidePolar::bestld*dh/DISTANCEUNITS);
+	    }
+	  }
+	  
+	  d = (dmval[sindex(i1,i2)]*5
+	       +dmval[sindex(i2,i3)]*5
+	       +dmval[sindex(i3,i4)]*5
+	       +dmval[sindex(i4,i5)]*5
+	       +dmval[sindex(i5,i6)]*4
+	       +dmval[sindex(i6,i7)]*3)/5+dfurther;
+
+	  if (d>bestdist) {
+	    bestdist = d;
+	    i1best = i1;
+	    i2best = i2;
+	    i3best = i3;
+	    i4best = i4;
+	    i5best = i5;
+	    i6best = i6;
+	    i7best = i7;
+	    if (dfurther==0) {
+	      finished = true;
+	    } else {
+	      dfurtherbest = dfurther;
+	      finished = false;
+	    }
+	  }
+	}
+      }
+    }
+  }
+
+  if (bestdist>0) {
+    double score = bestdist*100/Handicap/(1000.0/DISTANCEUNITS);
+    int t = timepnts[(i7best)]-timepnts[(i1best)];
+    if (!finished) {
+      t += (int)(dfurtherbest*DISTANCEUNITS/GlidePolar::Vbestld);
+
+      lat_proj = FindLatitude(latpnts[i7best], 
+			      lonpnts[i7best], 
+			      waypointbearing, 
+			      dfurther*DISTANCEUNITS);
+      
+      lon_proj = FindLongitude(latpnts[i7best], 
+			       lonpnts[i7best], 
+			       waypointbearing, 
+			       dfurther*DISTANCEUNITS);
+    }
+    UpdateSolution(bestdist, t, i1best, i2best, i3best, i4best, i5best, i6best, i7best,
+		   &solution_FAI_classic, score, finished);
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+
+
+// Tip: define AAT tasks for OLC, so you can use the AAT remaining time,
+// range buttons etc to adjust
+
+// Use of ArmAdvance to reset starts?
+// Symbol on screen "ADV+" if valid for arm

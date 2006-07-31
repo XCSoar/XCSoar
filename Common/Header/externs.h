@@ -92,6 +92,8 @@ extern DWORD FinishMinHeight;
 extern DWORD StartMaxHeight;
 extern DWORD StartMaxSpeed;
 extern int OLCRules;
+extern int Handicap;
+extern bool EnableOLC;
 
 // master flight data
 extern NMEA_INFO GPS_INFO;

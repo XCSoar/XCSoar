@@ -228,6 +228,7 @@ int                                     InfoType[MAXINFOWINDOWS] =
    1644825};
 #endif
 
+bool RequestAirspaceWarningDialog= false;
 bool                                    DisplayLocked = true;
 bool                                    InfoWindowActive = true;
 bool                                    EnableAuxiliaryInfo = false;
@@ -1135,8 +1136,8 @@ DWORD CalculationThread (LPVOID lpvoid) {
       if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO))
 	{
 	  MapWindow::MapDirty = true;
+	  needcalculationsslow = true;
 	}
-      needcalculationsslow = true;
       InfoBoxesDirty = true;
     }
 
@@ -2017,12 +2018,11 @@ void Shutdown(void) {
   #if defined(GNAV)
     Sleep(2500);
     InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
-    #if !defined(WINDOWSPC)
-    while(1);
-    #endif
+    while(1) {
+      Sleep(100); // free time up for processor to perform shutdown
+    }
   #endif
 
-    
 #if (WINDOWSPC<1)
   if(Port1Available)
     Port1Close();
@@ -2108,6 +2108,7 @@ void Shutdown(void) {
 #if (WINDOWSPC>0)
 #if _DEBUG
   _CrtDumpMemoryLeaks();
+  _CrtCheckMemory();
 #endif
 #endif
 
@@ -2239,8 +2240,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	ProcessTimer();
 #endif
 	if (ProgramStarted==2) {
-	  ProgramStarted= 3;
 	  AfterStartup();
+	  ProgramStarted= 3;
 	}
       }
       break;
@@ -2824,9 +2825,23 @@ void DisplayText(void)
 
 }
 
+#include "Winbase.h"
 
 void CommonProcessTimer()
 {
+
+  // service the GCE and NMEA queue
+  InputEvents::DoQueuedEvents();
+
+#if (NEWINFOBOX>0)
+  if (ProgramStarted==3) {
+    if (RequestAirspaceWarningDialog) {
+      RequestAirspaceWarningDialog= false;
+      dlgAirspaceWarningShowDlg(false);
+    }
+  }
+#endif
+
 
 #if (WINDOWSPC<1)
   SystemIdleTimerReset();
@@ -2892,7 +2907,17 @@ void CommonProcessTimer()
 
 #endif
 
+  static int iheapcompact = 0;
+  // called 2 times per second, compact heap every minute.
+  iheapcompact++;
+  if (iheapcompact % 120==0) {
+    MyCompactHeaps();
+  }
+
 }
+
+////////////////
+
 
 void ProcessTimer(void)
 {

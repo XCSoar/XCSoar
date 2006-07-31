@@ -313,15 +313,19 @@ BOOL Port2StopRxThread(void){
                                          // WaitCommEvent!  this is a
                                         // documented CE trick to
                                         // cancel the WaitCommEvent
-  while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0){
+  while (!fRxThreadTerminated && (long)(GetTickCount()-tm) < 100){
     Sleep(10);
   }
+  if (!fRxThreadTerminated) {
   //  #if COMMDEBUG > 0
-  if (!fRxThreadTerminated)
     MessageBoxX (hWndMainWindow, 
 		 gettext(TEXT("Port2 RX Thread not Terminated!")), 
 		 TEXT("Error"), MB_OK);
   //  #endif
+  } else {
+    CloseHandle(hRead2Thread);
+  }
+
 #endif
 
   return(fRxThreadTerminated);

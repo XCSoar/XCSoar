@@ -40,7 +40,7 @@ class Topology {
   Topology(char* shpname, COLORREF thecolor);
   Topology() {};
   
-  virtual ~Topology();
+  ~Topology();
   
   void Open();
   void Close();
@@ -49,31 +49,40 @@ class Topology {
 
   void updateCache(rectObj thebounds, bool purgeonly=false);
   void Paint(HDC hdc, RECT rc);
-  
-  shapefileObj shpfile;
-  bool shapefileopen;
+
+  double scaleThreshold;
+
+  bool CheckScale();
+  void TriggerIfScaleNowVisible();
+
   bool triggerUpdateCache;
+  int shapes_visible_count;
 
   XShape** shpCache;
 
   bool checkVisible(shapeObj* shape, rectObj *screenRect);
 
-  HPEN hPen;
-  HBRUSH hbBrush;
-  double scaleThreshold;
-  HBITMAP hBitmap;
-  
   void loadBitmap(int);
 
   char* filename;
 
   virtual void removeShape(int i);
   virtual XShape* addShape(int i);
+  
+ protected:
 
+  void flushCache();
+
+  bool in_scale;
   int getQuad(double x, double y, RECT rc);
   bool checkInside(int x, int y, int quad, RECT rc);
   int getCorner(int n, int n2);
-
+  HPEN hPen;
+  HBRUSH hbBrush;
+  HBITMAP hBitmap;
+  shapefileObj shpfile;
+  bool shapefileopen;
+ 
 };
 
 

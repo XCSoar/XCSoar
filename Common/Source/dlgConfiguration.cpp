@@ -452,7 +452,7 @@ extern SCREEN_INFO Data_Options[];
 extern int NUMSELECTSTRINGS;
 extern int InfoType[];
 
-void SetInfoBoxSelector(TCHAR *name, int item, int mode)
+static void SetInfoBoxSelector(TCHAR *name, int item, int mode)
 {
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(name);
@@ -924,9 +924,18 @@ void dlgConfigurationShowModal(void){
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(TEXT("Sprint"));
     dfe->addEnumText(TEXT("Triangle"));
+    dfe->addEnumText(TEXT("Classic"));
     dfe->Set(OLCRules);
     wp->RefreshDisplay();
   }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpHandicap"));
+  if (wp) {
+    wp->GetDataField()->SetAsInteger(Handicap);
+    wp->RefreshDisplay();
+  }
+
+  ////
 
   DWORD Speed = 1; // default is knots
   DWORD TaskSpeed = 2; // default is kph
@@ -1885,6 +1894,17 @@ void dlgConfigurationShowModal(void){
       changed = true;
     }
   }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpHandicap"));
+  if (wp) {
+    int val  = wp->GetDataField()->GetAsInteger();
+    if (Handicap != val) {
+      Handicap = val;
+      SetToRegistry(szRegistryHandicap, Handicap);
+      changed = true;
+    }
+  }
+
 
   TCHAR* temptext = 0;
 

@@ -51,52 +51,13 @@ Topology* TopoStore[MAXTOPOLOGY];
 
 TopologyWriter *topo_marks;
 
-rectObj GetRectBounds(const RECT rc) {
-  rectObj bounds;
-  double xmin, xmax, ymin, ymax;
-  int x;
-  int y;
-  double X, Y;
-
-  x= (rc.left+rc.right)/2; y=(rc.bottom+rc.top)/2;
-  MapWindow::Screen2LatLon(x, y, X, Y);
-  xmin = X; xmax = X;
-  ymin = Y; ymax = Y;
-
-  x = rc.left; y = rc.top;
-  MapWindow::Screen2LatLon(x, y, X, Y);
-  xmin = min(xmin, X); xmax = max(xmax, X);
-  ymin = min(ymin, Y); ymax = max(ymax, Y);
-
-  x = rc.right; y = rc.top;
-  MapWindow::Screen2LatLon(x, y, X, Y);
-  xmin = min(xmin, x); xmax = max(xmax, X);
-  ymin = min(ymin, y); ymax = max(ymax, Y);
-
-  x = rc.left; y = rc.bottom;
-  MapWindow::Screen2LatLon(x, y, X, Y);
-  xmin = min(xmin, X); xmax = max(xmax, X);
-  ymin = min(ymin, Y); ymax = max(ymax, Y);
-
-  x = rc.right; y = rc.bottom;
-  MapWindow::Screen2LatLon(x, y, X, Y);
-  xmin = min(xmin, X); xmax = max(xmax, X);
-  ymin = min(ymin, Y); ymax = max(ymax, Y);
-
-  bounds.maxx = xmax;
-  bounds.minx = xmin;
-  bounds.maxy = ymax;
-  bounds.miny = ymin;
-  return bounds;
-
-};
-
+#define MINRANGE 0.2
 
 bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
-  if ((r_interior.minx > r_exterior.minx)&&
-      (r_interior.maxx < r_exterior.maxx)&&
-      (r_interior.miny > r_exterior.miny)&&
-      (r_interior.maxy < r_exterior.maxy))    
+  if ((r_interior.minx >= r_exterior.minx)&&
+      (r_interior.maxx <= r_exterior.maxx)&&
+      (r_interior.miny >= r_exterior.miny)&&
+      (r_interior.maxy <= r_exterior.maxy))    
     return true;
   else 
     return false;
@@ -106,16 +67,8 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
   static rectObj bounds_active;
   static double range_active = 1.0;
   rectObj bounds_screen;
-  pointObj center;
 
-  bounds_screen = GetRectBounds(rcin);
-  center.x = (bounds_screen.maxx + bounds_screen.minx)/2;
-  center.y = (bounds_screen.maxy + bounds_screen.miny)/2;
-
-  double range = BORDERFACTOR*max((bounds_screen.maxx-bounds_screen.minx), 
-				  (bounds_screen.maxy-bounds_screen.miny));
-
-  range = max(range,0.05);
+  bounds_screen = MapWindow::CalculateScreenBounds(1.0);
 
   bool recompute = false;
 
@@ -128,19 +81,27 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
   }
   
   // also trigger if the scale has changed heaps
-  if (max(range/range_active, range_active/range)>4) {
+  double range_real = max((bounds_screen.maxx-bounds_screen.minx), 
+			  (bounds_screen.maxy-bounds_screen.miny));
+  double range = max(MINRANGE,range_real);
+
+  double scale = range/range_active;
+  if (max(scale, 1.0/scale)>4) {
     recompute = true;
   }
 
   if (recompute || force) {
 
     // make bounds bigger than screen
-    bounds_active = bounds_screen;
-    bounds_active.maxx = center.x+range;
-    bounds_active.minx = center.x-range;
-    bounds_active.maxy = center.y+range;
-    bounds_active.miny = center.y-range;
-    range_active = range;
+    if (range_real<MINRANGE) {
+      scale = BORDERFACTOR*MINRANGE/range_real;
+    } else {
+      scale = BORDERFACTOR;
+    }
+    bounds_active = MapWindow::CalculateScreenBounds(scale);
+
+    range_active = max((bounds_active.maxx-bounds_active.minx), 
+		       (bounds_active.maxy-bounds_active.miny));
     
     for (int z=0; z<MAXTOPOLOGY; z++) {
       if (TopoStore[z]) {
@@ -148,6 +109,13 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
       }
     }
     topo_marks->triggerUpdateCache = true;
+  }
+
+  // check if things have come into or out of scale limit
+  for (int z=0; z<MAXTOPOLOGY; z++) {
+    if (TopoStore[z]) {
+      TopoStore[z]->TriggerIfScaleNowVisible();          
+    }
   }
 
   // ok, now update the caches
@@ -163,6 +131,7 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
     // we will make sure we update at least one cache per call
     // to make sure eventually everything gets refreshed
 
+    int total_shapes_visible = 0;
     for (int z=0; z<MAXTOPOLOGY; z++) {
       if (TopoStore[z]) {
 	rta = MapWindow::RenderTimeAvailable() || force || !sneaked;
@@ -170,8 +139,15 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
 	  sneaked = true;
 	}
 	TopoStore[z]->updateCache(bounds_active, !rta);
+	total_shapes_visible += TopoStore[z]->shapes_visible_count;
       }
     }
+#ifdef DEBUG
+    char tmptext[100];
+    sprintf(tmptext,"%d # shapes\n", total_shapes_visible);
+    DebugStore(tmptext);
+#endif
+
   }
 }
 
@@ -189,6 +165,10 @@ void ReadTopology() {
   //  ConvertTToC(buffer, LocalPath(TEXT("xcsoar-marks")));
   // DISABLED LocalPath
   // JMW localpath does NOT work for the shapefile renderer!
+
+  if (topo_marks) {
+    delete topo_marks;
+  }
 
   topo_marks = 
 	  new TopologyWriter("xcsoar-marks", RGB(0xD0,0xD0,0xD0));
@@ -208,8 +188,10 @@ void CloseTopology() {
       delete TopoStore[z];
     }
   }
-  if (topo_marks) 
+  if (topo_marks) {
     delete topo_marks;
+    topo_marks = NULL;
+  }
   UnlockTerrainDataGraphics();
 }
 
