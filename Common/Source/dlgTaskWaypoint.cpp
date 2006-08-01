@@ -52,8 +52,6 @@ static WndFrame *wTurnpoint=NULL;
 static WndFrame *wAATTurnpoint=NULL;
 static WndFrame *wFinish=NULL;
 
-int dlgWayPointSelect(void);
-
 static void UpdateCaption(void) {
   TCHAR sTmp[128];
   if (Task[twItemIndex].Index != -1) {
@@ -255,16 +253,16 @@ static void OnCloseClicked(WindowControl * Sender){
 
 
 static void OnMoveAfterClicked(WindowControl * Sender){
-  LockFlightData();
+  LockTaskData();
   SwapWaypoint(twItemIndex);
-  UnlockFlightData();
+  UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
 
 static void OnMoveBeforeClicked(WindowControl * Sender){
-  LockFlightData();
+  LockTaskData();
   SwapWaypoint(twItemIndex-1);
-  UnlockFlightData();
+  UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
 
@@ -274,7 +272,7 @@ static void OnDetailsClicked(WindowControl * Sender){
 }
 
 static void OnRemoveClicked(WindowControl * Sender) {
-  LockFlightData();
+  LockTaskData();
   RemoveTaskPoint(twItemIndex);
   if (ActiveWayPoint>=twItemIndex) {
     ActiveWayPoint--;
@@ -282,7 +280,7 @@ static void OnRemoveClicked(WindowControl * Sender) {
   if (ActiveWayPoint<0) {
     ActiveWayPoint= -1;
   }
-  UnlockFlightData();
+  UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
 

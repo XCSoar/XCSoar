@@ -308,43 +308,6 @@ int Topology::getCorner(int n, int n2) {
 }
 
 
-void CalculateScreenBounds(RECT rc, rectObj *screenRect) {
-  float xmin, xmax, ymin, ymax;
-  int x, y;
-  float X, Y;
-  
-  x = rc.left; 
-  y = rc.top; 
-  MapWindow::Screen2LatLon(x, y, X, Y);
-  xmin = X; xmax = X;
-  ymin = Y; ymax = Y;
-  
-  x = rc.right; 
-  y = rc.top; 
-  MapWindow::Screen2LatLon(x, y, X, Y);
-  xmin = min(xmin, X); xmax = max(xmax, X);
-  ymin = min(ymin, Y); ymax = max(ymax, Y);
-  
-  x = rc.right; 
-  y = rc.bottom; 
-  MapWindow::Screen2LatLon(x, y, X, Y);
-  xmin = min(xmin, X); xmax = max(xmax, X);
-  ymin = min(ymin, Y); ymax = max(ymax, Y);
-  
-  x = rc.left; 
-  y = rc.bottom; 
-  MapWindow::Screen2LatLon(x, y, X, Y);
-  xmin = min(xmin, X); xmax = max(xmax, X);
-  ymin = min(ymin, Y); ymax = max(ymax, Y);
-  
-  screenRect->minx = xmin;
-  screenRect->maxx = xmax;
-  screenRect->miny = ymin;
-  screenRect->maxy = ymax;
-}
-
-
-
 void Topology::Paint(HDC hdc, RECT rc) {
 
   if (!shapefileopen) return;
@@ -380,9 +343,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
     iskip = 4;
   }
 
-  rectObj screenRect;
-
-  CalculateScreenBounds(rc, &screenRect);
+  rectObj screenRect = MapWindow::CalculateScreenBounds(0.0);
 
   POINT *pt= NULL;
 
@@ -460,8 +421,11 @@ void Topology::Paint(HDC hdc, RECT rc) {
 	    pt = (POINT*)SfRealloc(pt,
 				   int((sizeof(POINT)
 					*shape->line[tt].numpoints/iskip)*1.3)); 
+
 	    //Uh-oh.. chance of running out of array space here, since
 	    //the number of points is dynamic. Can anyone help?
+
+	    if (!pt) continue; // JMW, well this at least is graceful to failure
 
 	    for (int jj=0; jj< shape->line[tt].numpoints/iskip; jj++) {
 	      int x, y, quad;

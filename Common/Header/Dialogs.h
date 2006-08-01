@@ -60,6 +60,35 @@ extern void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
 #define MessageBoxX MessageBox
 #else
 #include "dlgTools.h"
+
+bool dlgAirspaceWarningShowDlg(bool force);
+int dlgWayPointSelect(void);
+int dlgAirspaceColoursShowModal(void);
+int dlgAirspacePatternsShowModal(void);
+void dlgAirspaceShowModal(bool colored);
+void dlgBasicSettingsShowModal(void);
+void dlgBrightnessShowModal(void);
+void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText);
+void dlgChecklistShowModal(void);
+void dlgConfigurationShowModal(void);
+void dlgVegaDemoShowModal(void);
+bool dlgConfigurationVarioShowModal(void);
+void dlgLoggerReplayShowModal(void);
+void dlgBasicSettingsShowModal(void);
+void dlgStartupShowModal(void);
+void dlgTaskCalculatorShowModal(void);
+void dlgWindSettingsShowModal(void);
+void dlgAnalysisShowModal(void);
+void dlgStatusShowModal(void);
+void dlgStatusSystemShowModal(void);
+void dlgStatusTaskShowModal(void);
+void dlgSwitchesShowModal(void);
+void dlgTaskWaypointShowModal(int itemindex, int type);
+void dlgTaskOverviewShowModal(void);
+void dlgVoiceShowModal(void);
+void dlgWayPointDetailsShowModal(void);
+
+
 #endif
 
 #endif

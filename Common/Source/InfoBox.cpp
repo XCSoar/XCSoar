@@ -38,7 +38,7 @@ Copyright_License {
 #include "externs.h"
 #include "InfoBoxLayout.h"
 
-#define DEFAULTBORDERPENWIDTH 1
+#define DEFAULTBORDERPENWIDTH 1 // IBLSCALE(1)
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+4)
 
 extern HFONT  TitleWindowFont;
@@ -106,9 +106,13 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   mhBrushBkSel = hBrushDefaultBackGroundSel;
   mhPenBorder = hPenDefaultBorder;
   mhPenSelector = hPenSelector;
-  mBorderSize = 1;
 
+  mBorderSize = 1; 
+#ifdef DEBUG
+  mBorderKind = BORDERTAB; 
+#else
   mBorderKind = BORDERRIGHT | BORDERBOTTOM;
+#endif
 
   mphFontTitle   = &TitleWindowFont;
   mphFontValue   = &InfoWindowFont;
@@ -212,6 +216,11 @@ int InfoBox::SetBorderKind(int Value){
   int res = mBorderKind;
   if (mBorderKind != Value){
     mBorderKind = Value;
+
+#ifdef DEBUG
+    mBorderKind = BORDERTAB; // JMW testing
+#endif
+
     Paint();
   }
   return(res);
@@ -286,13 +295,42 @@ void InfoBox::PaintTitle(void){
     x = 1;
 
   if (mBorderKind & BORDERLEFT)
-    x++;
+    x+= DEFAULTBORDERPENWIDTH;
 
-  y = recTitle.top + 1 + mpFontHeightTitle->CapitalHeight - mpFontHeightTitle->AscentHeight;
+  y = recTitle.top + 1 + mpFontHeightTitle->CapitalHeight 
+    - mpFontHeightTitle->AscentHeight;
 
   ExtTextOut(mHdc, x, y,
     ETO_OPAQUE, &recTitle, mTitle, _tcslen(mTitle), NULL);
     
+
+  if (mBorderKind & BORDERTAB) {
+
+    HPEN oldPen = (HPEN)SelectObject(mHdc, mhPenBorder);
+
+    if (mWidth-tsize.cx<recTitle.right-recTitle.top-5) {
+
+      x = recTitle.left + (mWidth-tsize.cx)/ 2-3;
+      y = recTitle.top + (mpFontHeightTitle->CapitalHeight)/2; 
+      MoveToEx(mHdc, x, y, NULL);
+      LineTo(mHdc, recTitle.left+3, y);
+      LineTo(mHdc, recTitle.left+1, y+2);
+      y = recTitle.top + 4 + mpFontHeightTitle->CapitalHeight+2;
+      LineTo(mHdc, recTitle.left+1, y);
+      
+      x = recTitle.right - (mWidth-tsize.cx)/ 2+2;
+      y = recTitle.top + (mpFontHeightTitle->CapitalHeight)/2; 
+      MoveToEx(mHdc, x, y, NULL);
+      LineTo(mHdc, recTitle.right-4, y);
+      LineTo(mHdc, recTitle.right-2, y+2);
+      y = recTitle.top + 4 + mpFontHeightTitle->CapitalHeight+2;
+      LineTo(mHdc, recTitle.right-2, y);
+    
+      SelectObject(mHdc,oldPen);
+    }
+
+  }
+
 }
 
 void InfoBox::PaintValue(void){
@@ -324,7 +362,7 @@ void InfoBox::PaintValue(void){
     x = 1;
 
   if (mBorderKind & BORDERLEFT)
-    x++;
+    x+= DEFAULTBORDERPENWIDTH;
 
   y = recValue.top + 
     (recValue.bottom - recValue.top+1)/2;
@@ -386,7 +424,7 @@ void InfoBox::PaintComment(void){
     x = 1;
 
   if (mBorderKind & BORDERLEFT)
-    x++;
+    x+= DEFAULTBORDERPENWIDTH;
 
   y = recComment.top + 1 + mpFontHeightComment->CapitalHeight - mpFontHeightComment->AscentHeight;
 
@@ -443,22 +481,21 @@ void InfoBox::Paint(void){
   if (mBorderKind != 0){
 
     HPEN oldPen = (HPEN)SelectObject(mHdc, mhPenBorder);
-
     if (mBorderKind & BORDERTOP){
       MoveToEx(mHdc, 0, 0, NULL);
       LineTo(mHdc, mWidth, 0);
     }
     if (mBorderKind & BORDERRIGHT){
-      MoveToEx(mHdc, mWidth-1, 0, NULL);
-      LineTo(mHdc, mWidth-1, mHeight);
+      MoveToEx(mHdc, mWidth-DEFAULTBORDERPENWIDTH, 0, NULL);
+      LineTo(mHdc, mWidth-DEFAULTBORDERPENWIDTH, mHeight);
     }
     if (mBorderKind & BORDERBOTTOM){
-      MoveToEx(mHdc, mWidth-1, mHeight-1, NULL);
-      LineTo(mHdc, -1, mHeight-1);
+      MoveToEx(mHdc, mWidth-DEFAULTBORDERPENWIDTH, mHeight-DEFAULTBORDERPENWIDTH, NULL);
+      LineTo(mHdc, -DEFAULTBORDERPENWIDTH, mHeight-DEFAULTBORDERPENWIDTH);
     }
     if (mBorderKind & BORDERLEFT){
-      MoveToEx(mHdc, 0, mHeight-1, NULL);
-      LineTo(mHdc, 0, -1);
+      MoveToEx(mHdc, 0, mHeight-DEFAULTBORDERPENWIDTH, NULL);
+      LineTo(mHdc, 0, -DEFAULTBORDERPENWIDTH);
     }
     SelectObject(mHdc,oldPen);
   }

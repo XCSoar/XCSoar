@@ -47,6 +47,7 @@ typedef struct _WAYPOINT_INFO
 	BOOL Reachable;
 	double AltArivalAGL;
 	BOOL Visible;
+  bool InTask;
   TCHAR *Details;
 } WAYPOINT;
 
@@ -209,7 +210,7 @@ class MapWindow {
   static void CalculateScreenPositionsThermalSources();
   static void CalculateWaypointReachable(void);
   
-  static bool PointVisible(const POINT &P, const RECT &rc);
+  static bool PointVisible(const POINT &P);
   static bool PointVisible(const double &lon, const double &lat);
   
   static void DrawAircraft(HDC hdc, POINT Orig);

@@ -49,6 +49,7 @@ void FlyDirectTo(int index) {
   Task[0].Index = index;
   Task[0].AATTargetOffsetRadius = 0.0;
   ActiveWayPoint = 0;
+  RefreshTask();
 }
 
 
@@ -69,6 +70,7 @@ void SwapWaypoint(int index) {
     Task[index] = Task[index+1];
     Task[index+1] = tmpPoint;
   }
+  RefreshTask();
 }
 
 
@@ -241,6 +243,8 @@ void RemoveWaypoint(int index) {
       }
     }
   }
+  RefreshTask();
+
 }
 
 
@@ -253,8 +257,6 @@ void ReplaceWaypoint(int index) {
     
     Task[ActiveWayPoint].Index = index;
     Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
-    RefreshTask();    
-    
   } else {
     
     // Insert a new waypoint since there's
@@ -262,8 +264,8 @@ void ReplaceWaypoint(int index) {
     ActiveWayPoint=0;
     Task[ActiveWayPoint].Index = index;
     Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
-    RefreshTask();
   }
+  RefreshTask();
 }
 
 
@@ -297,6 +299,23 @@ void RefreshTask() {
       }
     }
   }
+
+  // Determine if a waypoint is in the task
+  for (i=0; i< (int)NumberOfWayPoints; i++) {
+    WayPointList[i].InTask = false;
+    if ((WayPointList[i].Flags & HOME) == HOME) {
+      WayPointList[i].InTask = true;
+    }
+  }
+  if (HomeWaypoint>=0) {
+    WayPointList[HomeWaypoint].InTask = true;
+  }
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    if (Task[i].Index != -1) {
+      WayPointList[Task[i].Index].InTask = true;
+    }
+  }
+
   CalculateTaskSectors();
   CalculateAATTaskSectors();
 }

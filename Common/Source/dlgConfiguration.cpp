@@ -155,8 +155,6 @@ static void NextPage(int Step){
 }
 
 
-extern bool dlgConfigurationVarioShowModal(void);
-
 
 static void OnVarioClicked(WindowControl * Sender){
   changed = dlgConfigurationVarioShowModal();
@@ -167,8 +165,6 @@ static void OnVarioClicked(WindowControl * Sender){
   wf->FocusNext(NULL);
 
 }
-
-void dlgAirspaceShowModal(bool);
 
 static void OnAirspaceColoursClicked(WindowControl * Sender){
   dlgAirspaceShowModal(true);
@@ -238,8 +234,6 @@ static void OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode){
   }
 
 }
-
-extern void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText);
 
 
 static void OnInfoBoxHelp(WindowControl * Sender){

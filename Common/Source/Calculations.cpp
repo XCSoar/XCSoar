@@ -134,7 +134,6 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
     //    bearing = -90+i*180/NUMTERRAINSWEEPS+Basic->TrackBearing;
     bearing = i*360/NUMTERRAINSWEEPS;
-    LockFlightData();
     distance = FinalGlideThroughTerrain(bearing, 
                                         Basic, 
                                         Calculated, &lat, &lon,
@@ -145,6 +144,7 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       lon = FindLongitude(Basic->Latitude, Basic->Longitude, bearing, 
 			  mymaxrange*20);
     }
+    LockFlightData(); // only used because this is shared
     MapWindow::GlideFootPrint[i].x = lon;
     MapWindow::GlideFootPrint[i].y = lat;
     UnlockFlightData();
@@ -158,8 +158,10 @@ DWORD FinishRadius=1000;
 
 void RefreshTaskStatistics(void) {
   LockFlightData();
+  LockTaskData();
   TaskStatistics(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
   AATStats(&GPS_INFO, &CALCULATED_INFO);
+  UnlockTaskData();
   UnlockFlightData();
 }
 
@@ -564,12 +566,16 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   // do slow part of calculations (cleanup of caches etc, nothing
   // that changes the state)
 
+  static double LastOptimiseTime = 0;
+  static double lastTime = 0;
+  if (Basic->Time<= lastTime) {
+    lastTime = Basic->Time;
+  } else {
+    AirspaceWarning(Basic, Calculated);
+  }
+
   if (FinalGlideTerrain)
      TerrainFootprint(Basic, Calculated);
-   
-  static double LastOptimiseTime = 0;
-
-  AirspaceWarning(Basic, Calculated);
 
   // moved from MapWindow.cpp
   if(Basic->Time> LastOptimiseTime+0.0)
@@ -1308,7 +1314,8 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   if (!WayPointList) return;
 
-  LockFlightData();
+  //  LockFlightData();
+  LockTaskData();
 
   if(ActiveWayPoint >=0)
     {
@@ -1339,13 +1346,15 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Calculated->WaypointDistance = 0;
       Calculated->WaypointBearing = 0;
     }
-  UnlockFlightData();
+  UnlockTaskData();
+  //  UnlockFlightData();
 }
 
 
 void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 {
-  LockFlightData();
+  //  LockFlightData();
+  LockTaskData();
   if((ActiveWayPoint >=0)&&(WayPointList))
     {
       Calculated->NextAltitudeRequired = 
@@ -1372,7 +1381,8 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccrea
       Calculated->NextAltitudeRequired = 0;
       Calculated->NextAltitudeDifference = 0;
     }
-  UnlockFlightData();
+  UnlockTaskData();
+  //  UnlockFlightData();
 }
 
 int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
@@ -1714,7 +1724,8 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if(AATEnabled)
     return;
 
-  LockFlightData();
+  //  LockFlightData();
+  LockTaskData();
 
   Calculated->IsInSector = false;
 
@@ -1772,7 +1783,8 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	    ActiveWayPoint++;
 	    AnnounceWayPointSwitch(Calculated);
 	  }
-	  UnlockFlightData();
+	  UnlockTaskData();
+	  //	  UnlockFlightData();
 	  
 	  return;
 	}
@@ -1789,7 +1801,8 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       }
     }
   }                   
-  UnlockFlightData();
+  UnlockTaskData();
+  //  UnlockFlightData();
 }
 
 
@@ -1800,7 +1813,8 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if(!AATEnabled)
     return;
 
-  LockFlightData();
+  //  LockFlightData();
+  LockTaskData();
 
   Calculated->IsInSector = false;
 
@@ -1865,7 +1879,8 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
               AnnounceWayPointSwitch(Calculated);
             }
 	    Calculated->ValidFinish = false;
-            UnlockFlightData();
+            UnlockTaskData();
+	    //            UnlockFlightData();
             return;
           }
         } else {
@@ -1881,7 +1896,8 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         }       
       }
     }
-  UnlockFlightData();
+  UnlockTaskData();
+  //  UnlockFlightData();
 }
 
 
@@ -1958,7 +1974,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
   double w0lat;
   double w0lon;
 
-  LockFlightData();
+  //  LockFlightData();
+  LockTaskData();
 
   // Calculate Task Distances
   if(ActiveWayPoint >=1)
@@ -2289,7 +2306,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready
 
   }
 
-  UnlockFlightData();
+  UnlockTaskData();
+  //  UnlockFlightData();
 
 }
 
@@ -2301,7 +2319,8 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   bool isfinalglide = false;
 
-  LockFlightData();
+  //  LockFlightData();
+  LockTaskData();
 
   double mcnew = MACCREADY;
 
@@ -2351,7 +2370,8 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   MACCREADY = 0.85*MACCREADY+0.15*mcnew;
 
-  UnlockFlightData();
+  UnlockTaskData();
+  //  UnlockFlightData();
 
 }
 
@@ -2778,7 +2798,8 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       return;
     }
 
-  LockFlightData();
+  //  LockFlightData();
+  LockTaskData();
 
   Temp = Basic->Time - Calculated->TaskStartTime;
 
@@ -2867,7 +2888,8 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           Calculated->AATTargetSpeed = Calculated->AATTargetDistance / Calculated->AATTimeToGo;
         }
     }
-  UnlockFlightData();
+  UnlockTaskData();
+  //  UnlockFlightData();
 }
 
 
@@ -2899,7 +2921,7 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   // only do this if in thermal and have been climbing
   if ((!Calculated->Circling)||(Calculated->Average30s<0)) return;
 
-  LockFlightData();
+  //  LockFlightData(); 
 
   if (dheight > Calculated->MaxThermalHeight) {
 
@@ -2954,7 +2976,7 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   Calculated->ThermalProfileW[index]+= Calculated->Vario;
   Calculated->ThermalProfileN[index]++;
-  UnlockFlightData();
+  //  UnlockFlightData();
 
 }
 
@@ -3151,7 +3173,8 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
 
   if (!WayPointList) return;
 
-  LockFlightData();
+  //  LockFlightData();
+  LockTaskData();
   lastActiveWayPoint = ActiveWayPoint;
 
   // Do preliminary fast search
@@ -3348,7 +3371,8 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
   if (lastActiveWayPoint != ActiveWayPoint){
     SelectedWaypoint = ActiveWayPoint;
   }
-  UnlockFlightData();
+  UnlockTaskData();
+  //  UnlockFlightData();
 }
 
 
@@ -3361,7 +3385,8 @@ void ResumeAbortTask(int set) {
 
   bool oldTaskAborted = TaskAborted;
 
-  LockFlightData();
+  //  LockFlightData();
+  LockTaskData();
   lastActiveWayPoint = ActiveWayPoint;
 
   if (set == 0)
@@ -3414,7 +3439,8 @@ void ResumeAbortTask(int set) {
     SelectedWaypoint = ActiveWayPoint;
   }
 
-  UnlockFlightData();
+  UnlockTaskData();
+  //  UnlockFlightData();
 
 }
 

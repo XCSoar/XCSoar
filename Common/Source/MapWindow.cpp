@@ -63,9 +63,9 @@ Copyright_License {
 
 
 #ifdef DEBUG
-#if (WINDOWSPC<1)
+//#if (WINDOWSPC<1)
 #define DRAWLOAD
-#endif
+//#endif
 #endif
 
 int TrailActive = TRUE;
@@ -1435,7 +1435,7 @@ void MapWindow::UpdateMapScale()
   }
 
 
-  LockFlightData();  // protect from external task changes
+  LockTaskData();  // protect from external task changes
   #ifdef HAVEEXCEPTIONS
   __try{
   #endif
@@ -1467,7 +1467,7 @@ void MapWindow::UpdateMapScale()
   }__finally
   #endif
   {
-    UnlockFlightData();
+    UnlockTaskData();
   }
 
 }
@@ -1524,8 +1524,8 @@ bool MapWindow::RenderTimeAvailable() {
   DWORD	fpsTime = ::GetTickCount();
   if (MapDirty) return false;
 
-  if (fpsTime-timestamp_newdata<800) { 
-    // it's been less than 800 ms since last data
+  if (fpsTime-timestamp_newdata<700) { 
+    // it's been less than 700 ms since last data
     // was posted
     return true;
   } else {
@@ -2066,6 +2066,8 @@ void MapWindow::DrawBitmapX(HDC hdc, int x, int y,
 }
 
 void MapWindow::DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h) {
+  if (!PointVisible(sc)) return;
+
   SelectObject(hDCTemp, h);
 
   DrawBitmapX(hdc,
@@ -2318,21 +2320,9 @@ typedef struct{
 }MapWaypointLabel_t;
 
 bool WaypointInTask(int ind) {
-  int ifound= -1;
   if (!WayPointList) return false;
-
-  if( (WayPointList[ind].Flags & HOME) == HOME) {
-    return true;
-  }
-  for(int i=0;i<MAXTASKPOINTS;i++)
-  {
-    if(Task[i].Index == ind) { return true; }
-  }
   
-  if (ind == HomeWaypoint) {
-    return true;
-  }
-  return false;
+  return WayPointList[ind].InTask;
 }
 
 static void MapWaypointLabelAdd(TCHAR *Name, int X, int Y, TextInBoxMode_t Mode, int AltArivalAGL, bool inTask=false);
@@ -2366,7 +2356,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
     if(WayPointList[i].Visible )
     {
 
-      LockFlightData();  // protect from external task changes
+      LockTaskData();  // protect from external task changes
       #ifdef HAVEEXCEPTIONS
       __try{
       #endif
@@ -2512,7 +2502,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 #ifdef HAVEEXCEPTIONS
       }__finally
 #endif
-	 { UnlockFlightData(); }
+	 { UnlockTaskData(); }
     }
   }
   
@@ -2602,7 +2592,7 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
   int i;
   if (!WayPointList) return;
   
-  LockFlightData();  // protect from external task changes
+  LockTaskData();  // protect from external task changes
   #ifdef HAVEEXCEPTIONS
   __try{
   #endif
@@ -2620,7 +2610,7 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
   }__finally
   #endif
   {
-    UnlockFlightData();
+    UnlockTaskData();
   }
 }
 
@@ -2635,7 +2625,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
 
   if (!WayPointList) return;
 
-  LockFlightData();  // protect from external task changes
+  LockTaskData();  // protect from external task changes
   #ifdef HAVEEXCEPTIONS
   __try{
   #endif
@@ -2769,7 +2759,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
   }__finally
   #endif
   {
-    UnlockFlightData();
+    UnlockTaskData();
   }
 
   // restore original color
@@ -2787,7 +2777,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
   if (!WayPointList) return;
   if (!AATEnabled) return;
   
-  LockFlightData();  // protect from external task changes
+  LockTaskData();  // protect from external task changes
   #ifdef HAVEEXCEPTIONS
   __try{
   #endif
@@ -2889,7 +2879,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
   }__finally
   #endif
   {
-    UnlockFlightData();
+    UnlockTaskData();
   }
 }
 
@@ -3098,7 +3088,7 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 
   hpOld = (HPEN)SelectObject(hdc, hpBearing);
   
-  LockFlightData();  // protect from external task changes
+  LockTaskData();  // protect from external task changes
   #ifdef HAVEEXCEPTIONS
   __try{
   #endif
@@ -3119,7 +3109,7 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
   }__finally
   #endif
   {
-    UnlockFlightData();  // protect from external task changes
+    UnlockTaskData();  // protect from external task changes
   }
   
   SelectObject(hdc, hpOld);
@@ -3824,7 +3814,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
   int i;
   
 
-  LockFlightData();  // protect from external task changes
+  LockTaskData();  // protect from external task changes
   #ifdef HAVEEXCEPTIONS
   __try{
   #endif
@@ -3933,7 +3923,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
   }__finally
   #endif
   {
-    UnlockFlightData();
+    UnlockTaskData();
   }
 
 }
@@ -4152,15 +4142,15 @@ bool MapWindow::PointVisible(const double &lon, const double &lat) {
 }
 
 
-bool MapWindow::PointVisible(const POINT &P, const RECT &rc)
+bool MapWindow::PointVisible(const POINT &P)
 {
-  if(( P.x > rc.left ) 
+  if(( P.x >= MapRect.left ) 
     &&
-    ( P.x < rc.right ) 
+    ( P.x <= MapRect.right ) 
     &&
-    ( P.y > rc.top  ) 
+    ( P.y >= MapRect.top  ) 
     &&
-    ( P.y < rc.bottom  ) 
+    ( P.y <= MapRect.bottom  ) 
     )
     return TRUE;
   else
@@ -4243,7 +4233,8 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
 	LatLon2Screen(lon, 
 		      lat, 
 		      DerivedDrawInfo.ThermalSources[i].Screen);
-	DerivedDrawInfo.ThermalSources[i].Visible = true;
+	DerivedDrawInfo.ThermalSources[i].Visible = 
+	  PointVisible(DerivedDrawInfo.ThermalSources[i].Screen);
       } else {
 	DerivedDrawInfo.ThermalSources[i].Visible = false;
       }
@@ -4354,7 +4345,7 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 		DrawInfo.Latitude, 
 		*Orig_Aircraft);
 
-  screenbounds_latlon = CalculateScreenBounds(1.0);
+  screenbounds_latlon = CalculateScreenBounds(0.0);
 
   // get screen coordinates for all task waypoints
 
@@ -4365,16 +4356,8 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 	LatLon2Screen(WayPointList[Task[i].Index].Longitude, 
 		      WayPointList[Task[i].Index].Latitude, 
 		      WayPointList[Task[i].Index].Screen);
-
-	if(PointVisible(WayPointList[Task[i].Index].Longitude, 
-			WayPointList[Task[i].Index].Latitude) )
-	  {
-	    WayPointList[Task[i].Index].Visible = TRUE;
-	  }
-	else
-	  {
-	    WayPointList[Task[i].Index].Visible = FALSE;
-	  }
+	WayPointList[Task[i].Index].Visible = 
+	  PointVisible(WayPointList[Task[i].Index].Screen);
       }      
     }    
   }
@@ -4386,9 +4369,9 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
     
     if(PointVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
     {
-      WayPointList[i].Visible = TRUE;
       LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude,
 		    WayPointList[i].Screen);
+      WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
     }
     else
     {
@@ -4853,40 +4836,79 @@ bool MapWindow::checkLabelBlock(RECT rc) {
 rectObj MapWindow::CalculateScreenBounds(double scale) {
   // compute lat lon extents of visible screen
   rectObj sb;
-  POINT screen_center;
-  LatLon2Screen(PanLongitude, 
-		PanLatitude,
-		screen_center);
 
-  sb.minx = sb.maxx = PanLongitude;
-  sb.miny = sb.maxy = PanLatitude;
+  if (scale>= 1.0) {
+    POINT screen_center;
+    LatLon2Screen(PanLongitude, 
+		  PanLatitude,
+		  screen_center);
+    
+    sb.minx = sb.maxx = PanLongitude;
+    sb.miny = sb.maxy = PanLatitude;
+    
+    int dx, dy;
+    unsigned int maxsc=0;
+    dx = screen_center.x-MapRect.right;
+    dy = screen_center.y-MapRect.top;
+    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
+    dx = screen_center.x-MapRect.left;
+    dy = screen_center.y-MapRect.top;
+    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
+    dx = screen_center.x-MapRect.left;
+    dy = screen_center.y-MapRect.bottom;
+    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
+    dx = screen_center.x-MapRect.right;
+    dy = screen_center.y-MapRect.bottom;
+    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
+    
+    for (int i=0; i<10; i++) {
+      double ang = i*360.0/10;
+      POINT p;
+      double X, Y;
+      p.x = screen_center.x + iround(fastcosine(ang)*maxsc*scale);
+      p.y = screen_center.y + iround(fastsine(ang)*maxsc*scale);
+      Screen2LatLon(p.x, p.y, X, Y);
+      sb.minx = min(X, sb.minx);
+      sb.miny = min(Y, sb.miny);
+      sb.maxx = max(X, sb.maxx);
+      sb.maxy = max(Y, sb.maxy);
+    }
 
-  int dx, dy;
-  unsigned int maxsc=0;
-  dx = screen_center.x-MapRect.right;
-  dy = screen_center.y-MapRect.top;
-  maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
-  dx = screen_center.x-MapRect.left;
-  dy = screen_center.y-MapRect.top;
-  maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
-  dx = screen_center.x-MapRect.left;
-  dy = screen_center.y-MapRect.bottom;
-  maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
-  dx = screen_center.x-MapRect.right;
-  dy = screen_center.y-MapRect.bottom;
-  maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
+  } else {
 
-  for (int i=0; i<10; i++) {
-    double ang = i*360.0/10;
-    POINT p;
-    double X, Y;
-    p.x = screen_center.x + iround(fastcosine(ang)*maxsc*scale);
-    p.y = screen_center.y + iround(fastsine(ang)*maxsc*scale);
-    Screen2LatLon(p.x, p.y, X, Y);
-    sb.minx = min(X, sb.minx);
-    sb.miny = min(Y, sb.miny);
-    sb.maxx = max(X, sb.maxx);
-    sb.maxy = max(Y, sb.maxy);
+    float xmin, xmax, ymin, ymax;
+    int x, y;
+    float X, Y;
+    
+    x = MapRect.left; 
+    y = MapRect.top; 
+    Screen2LatLon(x, y, X, Y);
+    xmin = X; xmax = X;
+    ymin = Y; ymax = Y;
+  
+    x = MapRect.right; 
+    y = MapRect.top; 
+    Screen2LatLon(x, y, X, Y);
+    xmin = min(xmin, X); xmax = max(xmax, X);
+    ymin = min(ymin, Y); ymax = max(ymax, Y);
+  
+    x = MapRect.right; 
+    y = MapRect.bottom; 
+    Screen2LatLon(x, y, X, Y);
+    xmin = min(xmin, X); xmax = max(xmax, X);
+    ymin = min(ymin, Y); ymax = max(ymax, Y);
+  
+    x = MapRect.left; 
+    y = MapRect.bottom; 
+    Screen2LatLon(x, y, X, Y);
+    xmin = min(xmin, X); xmax = max(xmax, X);
+    ymin = min(ymin, Y); ymax = max(ymax, Y);
+  
+    sb.minx = xmin;
+    sb.maxx = xmax;
+    sb.miny = ymin;
+    sb.maxy = ymax;
+
   }
 
   return sb;

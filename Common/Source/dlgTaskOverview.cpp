@@ -46,8 +46,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 
 
-void dlgTaskCalculatorShowModal(void);
-
 static WndForm *wf=NULL;
 static WndFrame *wfAdvanced=NULL;
 static WndListFrame *wTaskList=NULL;
@@ -59,8 +57,6 @@ static int LowLimit=0;
 
 static int ItemIndex = -1;
 
-void dlgTaskWaypointShowModal(int itemindex, int type);
-
 
 static int DrawListIndex=0;
 
@@ -71,7 +67,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 
   int n = UpLimit - LowLimit;
   TCHAR sTmp[120];
-  LockFlightData();
+  LockTaskData();
 
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
@@ -143,13 +139,13 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
       } 
     }
   }
-  UnlockFlightData();
+  UnlockTaskData();
 
 }
 
 
 static void OverviewRefreshTask(void) {
-  LockFlightData();
+  LockTaskData();
   RefreshTask();
 
   int i;
@@ -196,7 +192,7 @@ static void OverviewRefreshTask(void) {
   LowLimit =0;
   wTaskList->ResetList();
   wTaskList->Redraw();
-  UnlockFlightData();
+  UnlockTaskData();
 
 }
 

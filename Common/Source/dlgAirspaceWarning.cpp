@@ -264,6 +264,8 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
     RECT         rcTextClip;
     HBRUSH       hBrushBk;
 
+    if (i>=Count) return;
+
     CopyRect(&rc, Sender->GetBoundRect());
     CopyRect(&rcTextClip, Sender->GetBoundRect());
     rcTextClip.right = Col1Left - 2;

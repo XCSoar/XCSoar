@@ -1308,6 +1308,7 @@ COLORREF WindowControl::SetBackColor(COLORREF Value){
   if (mColorBack != Value){
     mColorBack = Value;
     if (mhBrushBk != hBrushDefaultBk){
+      // JMW possible memory leak if this brush is being used!
       DeleteObject(mhBrushBk);
     }
     mhBrushBk = (HBRUSH)CreateSolidBrush(mColorBack);
@@ -2267,7 +2268,7 @@ void WndButton::Paint(HDC hDC){
     SetBkColor(hDC, GetBackColor());
     SetBkMode(hDC, TRANSPARENT);
 
-    SelectObject(hDC, GetFont());
+    HFONT oldFont = (HFONT)SelectObject(hDC, GetFont());
 
     CopyRect(&rc, GetBoundRect());
     InflateRect(&rc, -2, -2); // todo border width
@@ -2302,6 +2303,8 @@ void WndButton::Paint(HDC hDC){
       | DT_NOCLIP
       | DT_WORDBREAK // mCaptionStyle // | DT_CALCRECT
     );
+
+    SelectObject(hDC, oldFont);
 
 //    mLastDrawTextHeight = rc.bottom - rc.top;
 
@@ -2762,7 +2765,8 @@ void WndProperty::Paint(HDC hDC){
 
   SetTextColor(hDC, GetForeColor());
   SetBkMode(hDC, TRANSPARENT);
-  SelectObject(hDC, GetFont());
+  HFONT oldFont = (HFONT)SelectObject(hDC, GetFont());
+
   GetTextExtentPoint(hDC, mCaption, _tcslen(mCaption), &tsize);
 
   if (mCaptionWidth==0){
@@ -2806,9 +2810,8 @@ void WndProperty::Paint(HDC hDC){
         GetTempDeviceContext(), 0, 0, SRCCOPY);
 
     SelectObject(GetTempDeviceContext(), oldBmp);
-
   }
-
+  SelectObject(hDC, oldFont);
 }
 
 
@@ -2859,8 +2862,12 @@ void WndOwnerDrawFrame::Paint(HDC hDC){
 
   WndFrame::Paint(hDC);
 
+  HFONT oldFont = (HFONT)SelectObject(hDC, GetFont());
+
   if (mOnPaintCallback != NULL)
     (mOnPaintCallback)(this, hDC);
+
+  SelectObject(hDC, oldFont);
 
 }
 
@@ -2906,7 +2913,7 @@ void WndFrame::Paint(HDC hDC){
     SetBkColor(hDC, GetBackColor());
     SetBkMode(hDC, TRANSPARENT);
 
-    SelectObject(hDC, GetFont());
+    HFONT oldFont = (HFONT)SelectObject(hDC, GetFont());
 
     CopyRect(&rc, GetBoundRect());
     InflateRect(&rc, -2, -2); // todo border width
@@ -2919,6 +2926,7 @@ void WndFrame::Paint(HDC hDC){
 
     mLastDrawTextHeight = rc.bottom - rc.top;
 
+    SelectObject(hDC, oldFont);
   }
 
 }
@@ -3007,9 +3015,11 @@ void WndListFrame::Paint(HDC hDC){
                mClients[0]->GetWidth(),
                mClients[0]->GetHeight());
 
-    SelectObject(HdcTemp, BmpMem);
+    HBITMAP oldBmp = (HBITMAP)SelectObject(HdcTemp, BmpMem);
 
     for (i=0; i<mListInfo.ItemInViewCount; i++){
+
+      HFONT oldFont = (HFONT)SelectObject(HdcTemp, mClients[0]->GetFont());
 
       if (mOnListCallback != NULL){
         mListInfo.DrawIndex = mListInfo.TopIndex + i;
@@ -3030,10 +3040,13 @@ void WndListFrame::Paint(HDC hDC){
           SRCCOPY
         );
 
+      SelectObject(HdcTemp, oldFont);
+
     }
 
     mListInfo.DrawIndex = mListInfo.ItemIndex;
 
+    SelectObject(HdcTemp, oldBmp);
     DeleteObject(BmpMem);
     DeleteDC(HdcTemp);
 

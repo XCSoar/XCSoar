@@ -580,6 +580,8 @@ CRITICAL_SECTION  CritSec_NavBox;
 bool csNavBoxInitialized = false;
 CRITICAL_SECTION  CritSec_Comm;
 bool csCommInitialized = false;
+CRITICAL_SECTION  CritSec_TaskData;
+bool csTaskDataInitialized = false;
 
 
 // Forward declarations of functions included in this code module:
@@ -648,6 +650,7 @@ void SettingsEnter() {
 void SettingsLeave() {
   SwitchToMapWindow();
   LockFlightData();
+  LockTaskData();
   LockNavBox();
   MenuActive = false;
     
@@ -697,8 +700,9 @@ void SettingsLeave() {
     SetFocus(hWndMapWindow);
   }
   
-  UnlockFlightData();
   UnlockNavBox();
+  UnlockTaskData();
+  UnlockFlightData();
 
 #ifndef _SIM_
   if(COMPORTCHANGED)
@@ -715,11 +719,6 @@ void SettingsLeave() {
 
 
 #if NEWINFOBOX > 0
-
-void dlgStatusShowModal(void);
-void dlgStatusTaskShowModal(void);
-void dlgStatusSystemShowModal(void);
-void dlgConfigurationShowModal(void);
 
 void SystemConfiguration(void) {
 #ifndef _SIM_
@@ -1332,6 +1331,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
 
+  InitializeCriticalSection(&CritSec_TaskData);
+  csTaskDataInitialized = true;
   InitializeCriticalSection(&CritSec_FlightData);
   csFlightDataInitialized = true;
   InitializeCriticalSection(&CritSec_NavBox);
@@ -2078,6 +2079,8 @@ void Shutdown(void) {
   if(AirspaceScreenPoint != NULL)  LocalFree((HLOCAL)AirspaceScreenPoint);
   if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
   
+  DeleteCriticalSection(&CritSec_TaskData);
+  csTaskDataInitialized = false;
   DeleteCriticalSection(&CritSec_FlightData);
   csFlightDataInitialized = false;
   DeleteCriticalSection(&CritSec_NavBox);
@@ -2233,6 +2236,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #endif 
       break;
     case WM_TIMER:
+      //      ASSERT(hWnd==hWndMainWindow);
       if (ProgramStarted) {
 #ifdef _SIM_
 	SIMProcessTimer();
@@ -2797,9 +2801,9 @@ void DisplayText(void)
       break;
     case 43:
       if (EnableBlockSTF) {
-	InfoBoxes[i]->SetComment(TEXT("Block"));
+	InfoBoxes[i]->SetComment(TEXT("BLOCK"));
       } else {
-	InfoBoxes[i]->SetComment(TEXT("Dolphin"));
+	InfoBoxes[i]->SetComment(TEXT("DOLPHIN"));
       }
       break;
     default:
@@ -3157,7 +3161,6 @@ void PopupAnalysis()
 {
   DialogActive = true;
   #if NEWINFOBOX>0
-  extern void dlgAnalysisShowModal(void);
   dlgAnalysisShowModal();
   /*
   if (InfoBoxLayout::landscape) {
@@ -3182,13 +3185,12 @@ void PopupAnalysis()
 void PopupWaypointDetails()
 {
 #if NEWINFOBOX>0
-  extern void dlgWayPointDetailsShowModal(void);
 
   dlgWayPointDetailsShowModal();
 #else
 
-	if (SelectedWaypoint<0)
-		return;
+  if (SelectedWaypoint<0)
+    return;
 
   DialogActive = true;
   #if NEWINFOBOX>0
@@ -3267,6 +3269,20 @@ void LockNavBox() {
 }
 
 void UnlockNavBox() {
+}
+
+void LockTaskData() {
+#ifdef HAVEEXCEPTIONS
+  if (!csTaskDataInitialized) throw TEXT("LockTaskData Error");
+#endif
+  EnterCriticalSection(&CritSec_TaskData);
+}
+
+void UnlockTaskData() {
+#ifdef HAVEEXCEPTIONS
+  if (!csTaskDataInitialized) throw TEXT("LockTaskData Error");
+#endif
+  LeaveCriticalSection(&CritSec_TaskData);
 }
 
 

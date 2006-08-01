@@ -1207,10 +1207,6 @@ void InputEvents::eventMainMenu(TCHAR *misc) {
   // todo: popup main menu
 }
 
-#if (NEWINFOBOX>0)
-void dlgChecklistShowModal(void);
-#endif  
-
 // Checklist
 // Displays the checklist dialog
 //  See the checklist dialog section of the reference manual for more info.
@@ -1219,10 +1215,6 @@ void InputEvents::eventChecklist(TCHAR *misc) {
   dlgChecklistShowModal();
 #endif  
 }
-
-#if (NEWINFOBOX>0)
-void dlgTaskCalculatorShowModal(void);
-#endif  
 
 // Displays the task calculator dialog
 //  See the task calculator dialog section of the reference manual
@@ -1286,8 +1278,7 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
     PopupWaypointDetails();
   } else
     if (_tcscmp(misc, TEXT("select")) == 0) {
-#if NEWINFOBOX > 0
-      extern int dlgWayPointSelect(void);
+#if NEWINFOBOX > 0      
       int res = dlgWayPointSelect();
 
       if (res != -1){
@@ -1422,10 +1413,6 @@ void InputEvents::eventSendNMEAPort2(TCHAR *misc) {
     Port2WriteNMEA(misc);
   }
 }
-
-#if (NEWINFOBOX>0)
-extern void dlgVegaDemoShowModal(void);
-#endif
 
 // AdjustVarioFilter
 // When connected to the Vega variometer, this adjusts
@@ -1570,7 +1557,7 @@ void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
 // toggle: toggles between abort and resume
 // show: displays a status message showing the task abort status
 void InputEvents::eventAbortTask(TCHAR *misc) {
-  LockFlightData();
+  LockTaskData();
   if (_tcscmp(misc, TEXT("abort")) == 0)
     ResumeAbortTask(1);
   else if (_tcscmp(misc, TEXT("resume")) == 0)
@@ -1582,7 +1569,7 @@ void InputEvents::eventAbortTask(TCHAR *misc) {
       DoStatusMessage(TEXT("Task Resume"));			
   } else 
     ResumeAbortTask();  // ToDo arg?
-  UnlockFlightData();
+  UnlockTaskData();
 }
 
 #include "device.h"
@@ -1734,7 +1721,6 @@ void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
 // If the aircraft is within airspace, this displays the distance and bearing
 // to the nearest exit to the airspace.
 
-// bool dlgAirspaceWarningShowDlg(bool Force);
 
 
 void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
@@ -1861,15 +1847,6 @@ void InputEvents::eventProfileSave(TCHAR *misc) {
 
 
 void SystemConfiguration(void);
-#if NEWINFOBOX > 0
-void dlgBasicSettingsShowModal(void);
-void dlgWindSettingsShowModal(void);
-void dlgTaskOverviewShowModal(void);
-void dlgAirspaceShowModal(bool);
-void dlgLoggerReplayShowModal(void);
-void dlgSwitchesShowModal(void);
-void dlgVoiceShowModal(void);
-#endif
 
 // Setup
 // Activates configuration and setting dialogs
@@ -2079,10 +2056,6 @@ void InputEvents::eventDeclutterLabels(TCHAR *misc) {
 }
 
 
-
-#if (NEWINFOBOX>0)
-void dlgBrightnessShowModal(void);
-#endif  
 
 
 void InputEvents::eventBrightness(TCHAR *misc) {

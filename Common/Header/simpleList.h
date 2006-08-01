@@ -9,7 +9,7 @@ template <class T> class List
 public:
   struct Node 
   {
-    Node(const T& data, Node* next=0):data(data),next(next) {}
+    Node(const T& thedata, Node* next=0):data(thedata),next(next) {}
     Node* next;
     T data;
   };
