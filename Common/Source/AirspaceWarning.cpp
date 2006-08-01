@@ -214,7 +214,8 @@ static bool calcWarnLevel(AirspaceInfo_c *asi){
 
   UpdateAirspaceAckBrush(asi, 0);
 
-  return((asi->WarnLevel > asi->Acknowledge) && (asi->WarnLevel > LastWarnLevel));
+  return((asi->WarnLevel > asi->Acknowledge)
+	 && (asi->WarnLevel > LastWarnLevel));
 
 }
 
@@ -409,7 +410,7 @@ void AirspaceWarnListProcess(NMEA_INFO *Basic){
           if ((hDistance > 500) || (abs(vDistance) > 100)){
 	    // close clear inside ack and auto ACK til closer
             if (it->data.Acknowledge > 2)
-              if (--it->data.InsideAckTimeOut < 0){      // timeout the
+              if (--(it->data.InsideAckTimeOut) < 0){      // timeout the
                 it->data.Acknowledge = 1;
               }
 
@@ -455,6 +456,11 @@ void AirspaceWarnListProcess(NMEA_INFO *Basic){
 
     AirspaceWarnListSort();
 
+#ifdef DEBUG
+    char text[100];
+    sprintf(text,"%d # airspace\n", AirspaceWarnGetItemCount());
+    DebugStore(text);
+#endif
 
     AirspaceWarnListDoNotify(asaProcessEnd, NULL);
 

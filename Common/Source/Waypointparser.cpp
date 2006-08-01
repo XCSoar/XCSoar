@@ -524,7 +524,7 @@ void ReadWayPoints(void)
   __try{
 #endif
 
-    LockFlightData();
+    LockTaskData();
     CloseWayPoints();
     GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
     #ifndef HAVEEXCEPTIONS
@@ -592,7 +592,7 @@ void ReadWayPoints(void)
   }
 #endif
 
-  UnlockFlightData();
+  UnlockTaskData();
 
 }
 

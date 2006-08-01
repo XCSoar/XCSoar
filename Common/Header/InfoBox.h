@@ -37,6 +37,7 @@ Copyright_License {
 #define BORDERRIGHT  (1<<bkRight)
 #define BORDERBOTTOM (1<<bkBottom)
 #define BORDERLEFT   (1<<bkLeft)
+#define BORDERTAB    (1<<(bkLeft+1))
 
 #define TITLESIZE    32
 #define VALUESIZE    32

@@ -812,6 +812,8 @@ void CloseTerrainRenderer() {
 
 void OptimizeTerrainCache()
 {
+  if (terrain_dem_graphics.DirectAccess)
+    return;
 
   LockTerrainDataGraphics();
 

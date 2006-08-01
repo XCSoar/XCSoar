@@ -22,10 +22,6 @@ double Statistics::y_max;
 bool   Statistics::unscaled_x;
 bool   Statistics::unscaled_y;
 
-void dlgTaskCalculatorShowModal(void);
-void dlgBasicSettingsShowModal(void);
-void dlgWindSettingsShowModal(void);
-
 static HPEN penThinSignal = NULL;
 
 void Statistics::ResetScale() {
@@ -932,7 +928,7 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 	       CuSonde::cslevels[i+1].dewpoint, i+1,
 	       STYLE_BLUETHIN);
 
-      if (i>1) {
+      if (i> CUSONDE_NUMLEVELS/3) {
 	if (!labelDry) {
 	  DrawLabel(hdc, rc, TEXT("DALR"),
 		    CuSonde::cslevels[i+1].tempDry, i);
@@ -1224,7 +1220,7 @@ static void Update(void){
       _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Barograph")));
       wf->SetCaption(sTmp);
 
-      _stprintf(sTmp, TEXT("%s:\r\n%.0f-%.0f %s\r\n\r\n%s:\r\n%.0f %s/hr"),
+      _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
              gettext(TEXT("Working band")),
              flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
              flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
@@ -1240,8 +1236,8 @@ static void Update(void){
       _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Climb")));
       wf->SetCaption(sTmp);
 
-      _stprintf(sTmp, TEXT("%s:\r\n%3.1f %s\r\n\r\n%s:\r\n%3.2f %s"),
-             gettext(TEXT("Average climb rate")),
+      _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
+             gettext(TEXT("Av climb rate")),
              flightstats.ThermalAverage.y_ave*LIFTMODIFY,
              Units::GetVerticalSpeedName(),
              gettext(TEXT("Climb trend")),
@@ -1261,16 +1257,14 @@ static void Update(void){
     case 3:
       _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Glide Polar")));
       wf->SetCaption(sTmp);
-      _stprintf(sTmp, TEXT("%s:\r\n%3.1f\r\n%s %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n%s %3.0f %s"),
+      _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
              gettext(TEXT("Best LD")),
              GlidePolar::bestld,
-             gettext(TEXT("at")),
              GlidePolar::Vbestld*SPEEDMODIFY,
              Units::GetHorizontalSpeedName(),
              gettext(TEXT("Min sink")),
              GlidePolar::minsink*LIFTMODIFY,
              Units::GetVerticalSpeedName(),
-             gettext(TEXT("at")),
              GlidePolar::Vminsink*SPEEDMODIFY,
              Units::GetHorizontalSpeedName());
 
@@ -1280,7 +1274,7 @@ static void Update(void){
     _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Temp trace")));
     wf->SetCaption(sTmp);
 
-    _stprintf(sTmp, TEXT("%s:\r\n %5.0f %s\r\n%s:\r\n %5.0f %s\r\n"),
+    _stprintf(sTmp, TEXT("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
 	      gettext(TEXT("Thermal height")),
 	      CuSonde::thermalHeight*ALTITUDEMODIFY,
 	      Units::GetAltitudeName(),
@@ -1302,7 +1296,7 @@ static void Update(void){
       Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
       Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
 
-      _stprintf(sTmp, TEXT("Task to go: %s\r\nAAT to go: %s\r\nDistance to go: %5.0f %s\r\nTarget speed: %5.0f %s\r\n"),
+      _stprintf(sTmp, TEXT("Task to go:\r\n  %s\r\nAAT to go:\r\n  %s\r\nDistance to go:\r\n  %5.0f %s\r\nTarget speed:\r\n  %5.0f %s\r\n"),
 
 		timetext1,
 		timetext2,
@@ -1370,7 +1364,7 @@ static void Update(void){
     if (olcvalid) {
       TCHAR timetext1[100];
       Units::TimeToText(timetext1, dt);
-      _stprintf(sTmp, TEXT("Rules: %s\r\n%s\r\nDistance: %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\nScore: %.2f\r\n"),
+      _stprintf(sTmp, TEXT("Rules: %s\r\n%s\r\nDistance:\r\n  %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\nScore: %.2f\r\n"),
 		sRules,
 		sFinished,
 		DISTANCEMODIFY*d,

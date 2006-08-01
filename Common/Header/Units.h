@@ -89,25 +89,25 @@ public:
 
   static const TCHAR *GetUnitName(Units_t Unit);
 
-  static  Units_t GetUserDistanceUnit(void);
+  static const  Units_t GetUserDistanceUnit(void);
   static Units_t SetUserDistanceUnit(Units_t NewUnit);
 
-  static  Units_t GetUserAltitudeUnit(void);
+  static const Units_t GetUserAltitudeUnit(void);
   static Units_t SetUserAltitudeUnit(Units_t NewUnit);
 
-  static  Units_t GetUserHorizontalSpeedUnit(void);
+  static const Units_t GetUserHorizontalSpeedUnit(void);
   static Units_t SetUserHorizontalSpeedUnit(Units_t NewUnit);
 
-  static  Units_t GetUserTaskSpeedUnit(void);
+  static const Units_t GetUserTaskSpeedUnit(void);
   static Units_t SetUserTaskSpeedUnit(Units_t NewUnit);
 
-  static  Units_t GetUserVerticalSpeedUnit(void);
+  static const Units_t GetUserVerticalSpeedUnit(void);
   static Units_t SetUserVerticalSpeedUnit(Units_t NewUnit);
 
-  static  Units_t GetUserWindSpeedUnit(void);
+  static const Units_t GetUserWindSpeedUnit(void);
   static Units_t SetUserWindSpeedUnit(Units_t NewUnit);
 
-  static  Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
+  static const Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
 
   static bool LongitudeToString(double Longitude, TCHAR *Buffer, size_t size);
   static bool LatitudeToString(double Latitude, TCHAR *Buffer, size_t size);

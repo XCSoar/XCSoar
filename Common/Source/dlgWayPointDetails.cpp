@@ -175,46 +175,51 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
 
 static void OnGotoClicked(WindowControl * Sender){
-  LockFlightData();
+  LockTaskData();
   FlyDirectTo(SelectedWaypoint);
-  UnlockFlightData();
+  UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
 
 static void OnReplaceClicked(WindowControl * Sender){
-  LockFlightData();
+  LockTaskData();
   ReplaceWaypoint(SelectedWaypoint);
-  UnlockFlightData();
+  RefreshTask();
+  UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
 
 static void OnNewHomeClicked(WindowControl * Sender){
-  LockFlightData();
+  LockTaskData();
   HomeWaypoint = SelectedWaypoint;
   SetToRegistry(szRegistryHomeWaypoint, HomeWaypoint);
-  UnlockFlightData();
+  RefreshTask();
+  UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
 
 static void OnInserInTaskClicked(WindowControl * Sender){
-  LockFlightData();
+  LockTaskData();
   InsertWaypoint(SelectedWaypoint);
-  UnlockFlightData();
+  RefreshTask();
+  UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
 
 static void OnAppendInTaskClicked(WindowControl * Sender){
-  LockFlightData();
+  LockTaskData();
   InsertWaypoint(SelectedWaypoint, true);
-  UnlockFlightData();
+  RefreshTask();
+  UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
 
 
 static void OnRemoveFromTaskClicked(WindowControl * Sender){
-  LockFlightData();
+  LockTaskData();
   RemoveWaypoint(SelectedWaypoint);
-  UnlockFlightData();
+  RefreshTask();
+  UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
 

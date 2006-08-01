@@ -604,7 +604,7 @@ int OLCOptimizer::scan_triangle() {
 	dfurther = 0;
       }
 
-      for (i4=i3+2; i4<i5; i4++) {
+      for (i4=i2+2; i4<i5; i4++) {
 	i3 = isplit[sindex(i2,i4)];
 
 	// check optimal triangle given i4, i3, assuming finished

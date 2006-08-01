@@ -115,6 +115,8 @@ extern void UnlockGraphicsData();
 extern void LockGraphicsData();
 extern void UnlockFlightData();
 extern void LockFlightData();
+extern void UnlockTaskData();
+extern void LockTaskData();
 extern void UnlockTerrainDataCalculations();
 extern void LockTerrainDataCalculations();
 extern void UnlockTerrainDataGraphics();
