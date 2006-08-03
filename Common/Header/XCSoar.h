@@ -238,6 +238,11 @@ typedef enum{
   gvnsLongNeedle,
 }GaugeVarioNeedleStyle_t;
 
+typedef enum{
+  apIbBox=0,
+  apIbTab
+}InfoBoxBorderAppearance_t;
+
 
 typedef struct{
   MapScaleAppearance_t MapScale;
@@ -269,6 +274,7 @@ typedef struct{
   bool GaugeVarioBugs;
   GaugeVarioNeedleStyle_t GaugeVarioNeedleStyle;
   bool InfoBoxColors;
+  InfoBoxBorderAppearance_t InfoBoxBorder;
 } Appearance_t;
 
 extern Appearance_t Appearance;

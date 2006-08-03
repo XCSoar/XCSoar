@@ -41,6 +41,9 @@ Copyright_License {
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 
+#define MAXTITLE 200
+#define MAXDETAILS 5000
+
 static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;
@@ -164,7 +167,9 @@ void addChecklist(TCHAR* name, TCHAR* details) {
     ChecklistTitle[nLists] = (TCHAR*)malloc((_tcslen(name)+1)*sizeof(TCHAR));
     ChecklistText[nLists] = (TCHAR*)malloc((_tcslen(details)+1)*sizeof(TCHAR));
     _tcscpy(ChecklistTitle[nLists], name);
+    ChecklistTitle[MAXTITLE-1]= 0;
     _tcscpy(ChecklistText[nLists], details);
+    ChecklistText[MAXDETAILS-1]= 0;
     nLists++;
   }
 }
@@ -174,9 +179,11 @@ void LoadChecklist(void) {
   nLists = 0;
   if (ChecklistText[0]) {
     free(ChecklistText[0]);
+    ChecklistText[0]= NULL;
   }
   if (ChecklistTitle[0]) {
     free(ChecklistTitle[0]);
+    ChecklistTitle[0]= NULL;
   }
 
   TCHAR *filename = LocalPath(TEXT("xcsoar-checklist.txt"));
@@ -191,8 +198,8 @@ void LoadChecklist(void) {
       return;
     }
   /////
-  TCHAR TempString[200];
-  TCHAR Details[5000];
+  TCHAR TempString[MAXTITLE];
+  TCHAR Details[MAXDETAILS];
   TCHAR Name[100];
   BOOL inDetails = FALSE;
   int i;
@@ -202,7 +209,7 @@ void LoadChecklist(void) {
   Name[0]= 0;
   TempString[0]=0;
 
-  while(ReadString(hChecklist,200,TempString))
+  while(ReadString(hChecklist,MAXTITLE,TempString))
     {
       if(TempString[0]=='[') { // Look for start
 
@@ -214,7 +221,7 @@ void LoadChecklist(void) {
 	}
 
 	// extract name
-	for (i=1; i<200; i++) {
+	for (i=1; i<MAXTITLE; i++) {
 	  if (TempString[i]==']') {
 	    break;
 	  }
@@ -226,7 +233,7 @@ void LoadChecklist(void) {
 
       } else {
 	// append text to details string
-	wcscat(Details,TempString);
+	wcsncat(Details,TempString,MAXDETAILS-2);
 	wcscat(Details,TEXT("\r\n"));
 	// TODO: check the string is not too long
       }

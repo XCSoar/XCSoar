@@ -30,6 +30,7 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventLogger, TEXT("start"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Takeoff"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TAKEOFF] = event_id;

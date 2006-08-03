@@ -31,8 +31,8 @@ Copyright_License {
 // omaplibdemo.cpp : Defines the entry point for the application.
 //
 #include "stdafx.h"
-
 #include "Terrain.h"
+#include "RasterTerrain.h"
 #include "MapWindow.h"
 #include "Topology.h"
 #include "resource.h"
@@ -109,6 +109,10 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
       }
     }
     topo_marks->triggerUpdateCache = true;
+
+    // now update visibility of objects in the map window
+    MapWindow::ScanVisibility(&bounds_active);
+
   }
 
   // check if things have come into or out of scale limit

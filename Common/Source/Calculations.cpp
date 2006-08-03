@@ -43,6 +43,8 @@ Copyright_License {
 #include <math.h>
 #include "InputEvents.h"
 #include "Message.h"
+#include "RasterTerrain.h"
+
 
 #include <tchar.h>
 
@@ -144,10 +146,8 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       lon = FindLongitude(Basic->Latitude, Basic->Longitude, bearing, 
 			  mymaxrange*20);
     }
-    LockFlightData(); // only used because this is shared
-    MapWindow::GlideFootPrint[i].x = lon;
-    MapWindow::GlideFootPrint[i].y = lat;
-    UnlockFlightData();
+    Calculated->GlideFootPrint[i].x = lon;
+    Calculated->GlideFootPrint[i].y = lat;
   }
 }
 
@@ -188,7 +188,8 @@ void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   SnailTrail[SnailNext].Latitude = (float)(Basic->Latitude);
   SnailTrail[SnailNext].Longitude = (float)(Basic->Longitude);
   SnailTrail[SnailNext].Time = Basic->Time;
-        
+  SnailTrail[SnailNext].FarVisible = true; // hasn't been filtered out yet.
+
   if (Basic->NettoVarioAvailable) {
     SnailTrail[SnailNext].Vario = (float)(Basic->NettoVario) ;
   } else {
@@ -581,15 +582,17 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if(Basic->Time> LastOptimiseTime+0.0)
     {
       LastOptimiseTime = Basic->Time;
-      LockTerrainDataCalculations();
-      if (terrain_dem_calculations.terraincachemisses > 0){
-        DWORD tm =GetTickCount();
-        terrain_dem_calculations.OptimizeCash();
-        tm = GetTickCount()-tm;
-        tm = GetTickCount();
+      if (!RasterTerrain::DirectAccess) {
+	LockTerrainDataCalculations();
+	if (terrain_dem_calculations.terraincachemisses > 0){
+	  DWORD tm =GetTickCount();
+	  terrain_dem_calculations.OptimizeCash();
+	  tm = GetTickCount()-tm;
+	  tm = GetTickCount();
+	}
+	terrain_dem_calculations.SetCacheTime();
+	UnlockTerrainDataCalculations();
       }
-      terrain_dem_calculations.SetCacheTime();
-      UnlockTerrainDataCalculations();
     }
 }
 

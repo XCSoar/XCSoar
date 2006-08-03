@@ -556,30 +556,34 @@ void guiStartLogger(bool noAsk) {
        (MessageBoxX(hWndMapWindow,TaskMessage,TEXT("Start Logger"),
 		   MB_YESNO|MB_ICONQUESTION) == IDYES))
       {
-	LoggerActive = true;
-	StartLogger(strAssetNumber);
-	LoggerHeader();
 
-	int ntp=0;
-	for(i=0;i<MAXTASKPOINTS;i++)
-	  {
-	    if(Task[i].Index == -1) {
-	      break;
+	if (LoggerClearFreeSpace()) {
+	  LoggerActive = true;
+	  
+	  StartLogger(strAssetNumber);
+	  LoggerHeader();
+	  
+	  int ntp=0;
+	  for(i=0;i<MAXTASKPOINTS;i++)
+	    {
+	      if(Task[i].Index == -1) {
+		break;
+	      }
+	      ntp++;
 	    }
-	    ntp++;
-	  }
-	StartDeclaration(ntp);
-	for(i=0;i<MAXTASKPOINTS;i++)
-	  {
-	    if(Task[i].Index == -1) {
-	      Debounce(); 
-	      break;
+	  StartDeclaration(ntp);
+	  for(i=0;i<MAXTASKPOINTS;i++)
+	    {
+	      if(Task[i].Index == -1) {
+		Debounce(); 
+		break;
+	      }
+	      AddDeclaration(WayPointList[Task[i].Index].Latitude, 
+			     WayPointList[Task[i].Index].Longitude, 
+			     WayPointList[Task[i].Index].Name );
 	    }
-	    AddDeclaration(WayPointList[Task[i].Index].Latitude, 
-			   WayPointList[Task[i].Index].Longitude, 
-			   WayPointList[Task[i].Index].Name );
-	  }
-	EndDeclaration();
+	  EndDeclaration();
+	}
       }
     FullScreen();
   }
@@ -685,6 +689,8 @@ void LoadNewTask(TCHAR *szFileName)
   int i;
   bool TaskInvalid = false;
 
+  LockTaskData();
+
   ActiveWayPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
     {
@@ -714,29 +720,31 @@ void LoadNewTask(TCHAR *szFileName)
 
         }
 
-      if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
-	AATEnabled = FALSE;
-      if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
-	AATTaskLength = 0;
+      if (!TaskInvalid) {
 
-// ToDo review by JW
-
-      // 20060521:sgi added additional task parameters
-      if (!ReadFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);  // todo set default values
-      if (!ReadFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-      if (!ReadFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-      if (!ReadFile(hFile,&StartLine,sizeof(StartLine),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-      if (!ReadFile(hFile,&SectorType,sizeof(SectorType),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-      if (!ReadFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-      if (!ReadFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-
+	if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
+	  AATEnabled = FALSE;
+	if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
+	  AATTaskLength = 0;
+	
+	// ToDo review by JW
+	
+	// 20060521:sgi added additional task parameters
+	if (!ReadFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);  // todo set default values
+	if (!ReadFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+	if (!ReadFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+	if (!ReadFile(hFile,&StartLine,sizeof(StartLine),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+	if (!ReadFile(hFile,&SectorType,sizeof(SectorType),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+	if (!ReadFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+	if (!ReadFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+      }
       CloseHandle(hFile);
     }
 
@@ -751,6 +759,9 @@ void LoadNewTask(TCHAR *szFileName)
   
   if(Task[0].Index != -1)
     ActiveWayPoint = 0;
+
+  UnlockTaskData();
+
 }
 
 
@@ -762,6 +773,8 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
   DWORD dwBytesRead;
   int i;
   bool TaskInvalid = false;
+
+  LockTaskData();
 
   ActiveWayPoint = -1;
   for(i=0;i<MAXTASKPOINTS;i++)
@@ -782,7 +795,7 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
               break;
             }
 	  
-          if(Temp.Index < (int)NumberOfWayPoints)
+          if((Temp.Index < (int)NumberOfWayPoints) && (Temp.Index>-2))
             {
               memcpy(&Task[i],&Temp, sizeof(TASK_POINT));
               /*Task[i].InBound = Temp.InBound;
@@ -795,27 +808,28 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
 	  }
         }
 
-      if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
-	AATEnabled = FALSE;
-      if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
-	AATTaskLength = 0;
-
-      // 20060521:sgi added additional task parameters
-      if (!ReadFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);  // todo set default values
-      if (!ReadFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesRead,(OVERLAPPED*)NULL))
+      if (!TaskInvalid) {
+	if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
+	  AATEnabled = FALSE;
+	if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
+	  AATTaskLength = 0;
+	
+	// 20060521:sgi added additional task parameters
+	if (!ReadFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);  // todo set default values
+	if (!ReadFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+	if (!ReadFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+	if (!ReadFile(hFile,&StartLine,sizeof(StartLine),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+	if (!ReadFile(hFile,&SectorType,sizeof(SectorType),&dwBytesRead,(OVERLAPPED*)NULL))
         void(0);
-      if (!ReadFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-      if (!ReadFile(hFile,&StartLine,sizeof(StartLine),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-      if (!ReadFile(hFile,&SectorType,sizeof(SectorType),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-      if (!ReadFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-      if (!ReadFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-
+	if (!ReadFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+	if (!ReadFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesRead,(OVERLAPPED*)NULL))
+	  void(0);
+      }
       CloseHandle(hFile);
     }
 
@@ -836,6 +850,8 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
 
   if(Task[0].Index != -1)
     ActiveWayPoint = 0;
+
+  UnlockTaskData();
 }
 
 
@@ -843,6 +859,8 @@ void SaveTask(TCHAR *szFileName)
 {
   HANDLE hFile;
   DWORD dwBytesWritten;
+
+  LockTaskData();
         
   hFile = CreateFile(szFileName,GENERIC_WRITE,0,(LPSECURITY_ATTRIBUTES)NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
         
@@ -864,4 +882,5 @@ void SaveTask(TCHAR *szFileName)
       WriteFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesWritten,(OVERLAPPED*)NULL);
     }
   CloseHandle(hFile);
+  UnlockTaskData();
 }

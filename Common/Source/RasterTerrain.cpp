@@ -294,8 +294,10 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
     }
 
   } else {
-    long llx = lround((Longditude-TerrainInfo.Left)*fXrounding)*Xrounding-1;
-    long lly = lround((TerrainInfo.Top-Lattitude)*fYrounding)*Yrounding-1;
+    //    long llx = lround((Longditude-TerrainInfo.Left)*fXrounding)*Xrounding-1;
+    //    long lly = lround((TerrainInfo.Top-Lattitude)*fYrounding)*Yrounding-1;
+    long llx = (long)(((Longditude-TerrainInfo.Left)*fXrounding)*Xrounding);
+    long lly = (long)(((TerrainInfo.Top-Lattitude)*fYrounding)*Yrounding);
 
     if ((llx<1)
 	||(lly<1)

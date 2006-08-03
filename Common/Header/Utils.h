@@ -78,6 +78,7 @@ extern TCHAR szRegistryAppGaugeVarioBugs[];
 extern TCHAR szRegistryAppGaugeVarioBallast[];
 extern TCHAR szRegistryAppCompassAppearance[];
 extern TCHAR szRegistryAppStatusMessageAlignment[];
+extern TCHAR szRegistryAppInfoBoxBorder[];
 extern TCHAR szRegistryAutoAdvance[];
 extern TCHAR szRegistryUTCOffset[];
 extern TCHAR szRegistryBlockSTF[];
@@ -287,5 +288,7 @@ long CheckFreeRam(void);
 void MemCheckPoint();
 void MemLeakCheck();
 void MyCompactHeaps();
+unsigned long FindFreeSpace(TCHAR *path);
+bool MatchesExtension(TCHAR *filename, TCHAR* extension);
 
 #endif

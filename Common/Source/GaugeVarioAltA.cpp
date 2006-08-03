@@ -36,8 +36,9 @@ Copyright_License {
 #include "externs.h"
 #include "InfoBoxLayout.h"
 
-extern NMEA_INFO DrawInfo;
-extern DERIVED_INFO DerivedDrawInfo;
+extern NMEA_INFO GPS_INFO;
+extern DERIVED_INFO CALCULATED_INFO;
+
 
 
 HWND   hWndVarioWindow = NULL; // Vario Window
@@ -258,7 +259,7 @@ void GaugeVario::Render() {
 
   if (Appearance.GaugeVarioAvgText) {
     // JMW averager now displays netto average if not circling
-    if (!DerivedDrawInfo.Circling) {
+    if (!CALCULATED_INFO.Circling) {
       RenderValue(orgTop.x, orgTop.y, &diValueTop, &diLabelTop, 
 		  CALCULATED_INFO.NettoAverage30s*LIFTMODIFY, TEXT("NetAvg"));
     } else {
@@ -365,11 +366,11 @@ void GaugeVario::RenderClimb() {
   int x = rc.right-IBLSCALE(14);
   int y = rc.bottom-IBLSCALE(24);
 
-  // testing  DrawInfo.SwitchState.VarioCircling = true;
+  // testing  GPS_INFO.SwitchState.VarioCircling = true;
   
   if (!dirty) return;
 
-  if (!DrawInfo.SwitchState.VarioCircling) {
+  if (!GPS_INFO.SwitchState.VarioCircling) {
     if (Appearance.InverseInfoBox){
       SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
       SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
@@ -601,12 +602,12 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
   #define  DeltaVlimit 16
 
 #ifndef _SIM_
-  if (!(DrawInfo.AirspeedAvailable && DrawInfo.VarioAvailable)) {
+  if (!(GPS_INFO.AirspeedAvailable && GPS_INFO.VarioAvailable)) {
     return;
   }
 #else
   // cheat
-  DrawInfo.IndicatedAirspeed = DrawInfo.Speed;
+  GPS_INFO.IndicatedAirspeed = GPS_INFO.Speed;
 #endif
 
   static double lastVdiff;
@@ -626,12 +627,12 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
 
   // only draw speed command if flying and vario is not circling
   // 
-  if ((DerivedDrawInfo.Flying) 
+  if ((CALCULATED_INFO.Flying) 
 #ifdef _SIM_
-      && !DerivedDrawInfo.Circling  
+      && !CALCULATED_INFO.Circling  
 #endif
-      && !DrawInfo.SwitchState.VarioCircling) {
-    vdiff = (DerivedDrawInfo.VOpt - DrawInfo.IndicatedAirspeed);
+      && !GPS_INFO.SwitchState.VarioCircling) {
+    vdiff = (CALCULATED_INFO.VOpt - GPS_INFO.IndicatedAirspeed);
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;
   } else

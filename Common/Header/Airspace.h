@@ -63,6 +63,7 @@ typedef struct _AIRSPACE_AREA
   rectObj bounds;
   AIRSPACE_ACK Ack;
   unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
+  bool FarVisible;
 } AIRSPACE_AREA;
 
 typedef struct _AIRSPACE_POINT
@@ -87,6 +88,7 @@ typedef struct _AIRSPACE_CIRCLE
   AIRSPACE_ACK Ack;
   rectObj bounds;
   unsigned char WarningLevel; // 0= no warning, 1= predicted incursion, 2= entered
+  bool FarVisible;
 } AIRSPACE_CIRCLE;
 
 

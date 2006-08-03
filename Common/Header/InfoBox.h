@@ -56,6 +56,7 @@ class InfoBox{
     HWND mHWnd;
     HDC  mHdc;
     HDC  mHdcTemp;
+    HDC mHdcBuf;
     int  mBorderKind;
     COLORREF mColorBack;
     COLORREF mColorFore;
@@ -88,6 +89,7 @@ class InfoBox{
     RECT   recValue;
     RECT   recComment;
     HBITMAP mhBitmapUnit;
+    HBITMAP mBufBitMap;
     POINT  mBitmapUnitPos;
     POINT  mBitmapUnitSize;
 
@@ -106,7 +108,7 @@ class InfoBox{
 
   public:
     void Paint(void);
-
+    void PaintFast(void);
 
     Units_t SetValueUnit(Units_t Value);
     void SetTitle(TCHAR *Value);

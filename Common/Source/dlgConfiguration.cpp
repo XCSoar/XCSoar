@@ -1212,6 +1212,16 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxBorder"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Box"));
+    dfe->addEnumText(TEXT("Tab"));
+    dfe->Set(Appearance.InfoBoxBorder);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppCompassAppearance"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2121,6 +2131,19 @@ void dlgConfigurationShowModal(void){
 	(wp->GetDataField()->GetAsInteger());
       SetToRegistry(szRegistryAppCompassAppearance,
 		    (DWORD)(Appearance.CompassAppearance));
+      changed = true;
+      requirerestart = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxBorder"));
+  if (wp) {
+    if (Appearance.InfoBoxBorder != (InfoBoxBorderAppearance_t)
+	(wp->GetDataField()->GetAsInteger())) {
+      Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)
+	(wp->GetDataField()->GetAsInteger());
+      SetToRegistry(szRegistryAppInfoBoxBorder,
+		    (DWORD)(Appearance.InfoBoxBorder));
       changed = true;
       requirerestart = true;
     }

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "XCSoar.h"
 #include "ThermalLocator.h"
+#include "RasterTerrain.h"
 #include "Utils.h"
 #include <math.h>
 

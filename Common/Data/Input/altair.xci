@@ -31,6 +31,7 @@ event=DLLExecute AltairPlatform.dll WakeUp
 mode=default
 type=gce
 data=TAKEOFF
+event=Logger start
 event=StatusMessage Takeoff
 
 mode=default

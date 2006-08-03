@@ -231,6 +231,7 @@ TCHAR szRegistryAppCompassAppearance[] = TEXT("AppCompassAppearance");
 TCHAR szRegistryAppStatusMessageAlignment[] = TEXT("AppStatusMessageAlignment");
 TCHAR szRegistryAppInfoBoxColors[] = TEXT("AppInfoBoxColors");
 TCHAR szRegistryAppDefaultMapWidth[] = TEXT("AppDefaultMapWidth");
+TCHAR szRegistryAppInfoBoxBorder[] = TEXT("AppInfoBoxBorder");
 
 TCHAR szRegistryAutoAdvance[] = TEXT("AutoAdvance");
 TCHAR szRegistryUTCOffset[] = TEXT("UTCOffset");
@@ -714,6 +715,10 @@ void ReadRegistrySettings(void)
   Temp = Appearance.CompassAppearance;
   GetFromRegistry(szRegistryAppCompassAppearance, &Temp);
   Appearance.CompassAppearance = (CompassAppearance_t)Temp;
+
+  Temp = Appearance.InfoBoxBorder;
+  GetFromRegistry(szRegistryAppInfoBoxBorder, &Temp);
+  Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)Temp;
 
   Temp = Appearance.StateMessageAlligne;
   GetFromRegistry(szRegistryAppStatusMessageAlignment, &Temp);
@@ -3783,4 +3788,32 @@ void MyCompactHeaps() {
     CompactAllHeaps();
   }
 #endif
+}
+
+
+unsigned long FindFreeSpace(TCHAR *path) {
+  // returns number of kb free on destination drive
+
+  ULARGE_INTEGER FreeBytesAvailableToCaller;
+  ULARGE_INTEGER TotalNumberOfBytes;
+  ULARGE_INTEGER TotalNumberOfFreeBytes;
+  if (GetDiskFreeSpaceEx(path, 
+			 &FreeBytesAvailableToCaller,
+			 &TotalNumberOfBytes,
+			 &TotalNumberOfFreeBytes)) {
+    return FreeBytesAvailableToCaller.LowPart/1024;
+  } else {
+    return 0;
+  }
+}
+
+
+bool MatchesExtension(TCHAR *filename, TCHAR* extension) {
+  TCHAR *ptr;
+  ptr = _tcsstr(filename, extension);
+  if (ptr != filename+_tcslen(filename)-_tcslen(extension)) {
+    return false;
+  } else {
+    return true;
+  }
 }
