@@ -381,6 +381,8 @@ void LoggerNote(TCHAR *text) {
 
 
 
+
+
 void DoLogger(TCHAR *strAssetNumber)
 {
   TCHAR TaskMessage[1024];
@@ -419,31 +421,43 @@ void DoLogger(TCHAR *strAssetNumber)
 		     gettext(TEXT("Start Logger?")),
 		     MB_YESNO|MB_ICONQUESTION) == IDYES)
 	{
-	  LoggerActive = true;
-	  StartLogger(strAssetNumber);
-	  LoggerHeader();
-	  int ntp = 0;
 
-	  // first count the number of turnpoints
-	  for(i=0;i<MAXTASKPOINTS;i++)
-	    {
-	      if(Task[i].Index == -1) break;
-	      ntp++;
-	    }
-	  StartDeclaration(ntp);
+	  if (LoggerClearFreeSpace()) {
+	    LoggerActive = true;
 
-	  for(i=0;i<MAXTASKPOINTS;i++)
-	    {
-	      if(Task[i].Index == -1) break;
-	      AddDeclaration(WayPointList[Task[i].Index].Latitude , WayPointList[Task[i].Index].Longitude  , WayPointList[Task[i].Index].Name );
-	    }
-	  EndDeclaration();
+	    StartLogger(strAssetNumber);
+	    LoggerHeader();
+	    int ntp = 0;
+
+	    // first count the number of turnpoints
+	    for(i=0;i<MAXTASKPOINTS;i++)
+	      {
+		if(Task[i].Index == -1) break;
+		ntp++;
+	      }
+	    StartDeclaration(ntp);
+
+	    for(i=0;i<MAXTASKPOINTS;i++)
+	      {
+		if(Task[i].Index == -1) break;
+		AddDeclaration(WayPointList[Task[i].Index].Latitude,
+			       WayPointList[Task[i].Index].Longitude,
+			       WayPointList[Task[i].Index].Name);
+	      }
+	    EndDeclaration();
+	  } else {
+
+	    MessageBoxX(hWndMapWindow,
+			gettext(TEXT("Logger inactive, insufficient storage!")),
+			gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
+	  }
 	}
     }
 }
 
 
 bool DeclaredToDevice = false;
+
 
 void LoggerDeviceDeclare() {
   int i;
@@ -883,3 +897,115 @@ bool ReplayLogger::Update(void) {
   return Enabled;
 }
 
+
+
+///////////////////////
+
+FILETIME LogFileDate(TCHAR* filename) {
+  FILETIME ft;
+  ft.dwLowDateTime = 0;
+  ft.dwHighDateTime = 0;
+
+  TCHAR asset[MAX_PATH];
+  SYSTEMTIME st;
+  unsigned short year, month, day, num;
+  int matches = swscanf(filename,
+			TEXT("%hu-%hu-%hu-%7s-%hu.IGC"),
+			&year,
+			&month,
+			&day,
+			asset,
+			&num);
+  if (matches==5) {
+    st.wYear = year;
+    st.wMonth = month;
+    st.wDay = day;
+    st.wHour = num;
+    st.wMinute = 0;
+    st.wSecond = 0;
+    st.wMilliseconds = 0;
+    SystemTimeToFileTime(&st,&ft);
+  }
+  return ft;
+}
+
+
+bool LogFileIsOlder(TCHAR *oldestname, TCHAR *thisname) {
+  FILETIME ftold = LogFileDate(oldestname);
+  FILETIME ftnew = LogFileDate(thisname);
+  return (CompareFileTime(&ftold, &ftnew)>0);
+}
+
+
+bool DeleteOldIGCFile(TCHAR *pathname) {
+  HANDLE hFind;  // file handle
+  WIN32_FIND_DATA FindFileData;
+  TCHAR oldestname[MAX_PATH];
+  TCHAR searchpath[MAX_PATH];
+  TCHAR fullname[MAX_PATH];
+  _stprintf(searchpath, TEXT("%s*"),pathname);
+
+  hFind = FindFirstFile(searchpath, &FindFileData); // find the first file
+  if(hFind == INVALID_HANDLE_VALUE) {
+    return false;
+  }
+  if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+    if (MatchesExtension(FindFileData.cFileName, TEXT(".igc")) ||
+	MatchesExtension(FindFileData.cFileName, TEXT(".IGC"))) {
+      // do something...
+      _tcscpy(oldestname, FindFileData.cFileName);
+    } else {
+      return false;
+    }
+  }
+  bool bSearch = true;
+  while(bSearch) { // until we finds an entry
+    if(FindNextFile(hFind,&FindFileData)) {
+      if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+	 (MatchesExtension(FindFileData.cFileName, TEXT(".igc")) ||
+	  (MatchesExtension(FindFileData.cFileName, TEXT(".IGC"))))) {
+	if (LogFileIsOlder(oldestname,FindFileData.cFileName)) {
+	  _tcscpy(oldestname, FindFileData.cFileName);
+	  // we have a new oldest name
+	}
+      }
+    } else {
+      bSearch = false;
+    }
+  }
+  FindClose(hFind);  // closing file handle
+
+  // now, delete the file...
+  _stprintf(fullname, TEXT("%s%s"),pathname,oldestname);
+  DeleteFile(fullname);
+  return true; // did delete one
+}
+
+
+#define MINFREESTORAGE 500
+// 500 kb must be free for logger to be active this is based on rough
+// estimate that a long flight will detailed logging is about 200k,
+// and we want to leave a little free.
+
+bool LoggerClearFreeSpace(void) {
+  bool found = true;
+  unsigned long kbfree;
+  TCHAR pathname[MAX_PATH];
+  int numtries = 0;
+  _tcscpy(pathname,LocalPath());
+
+  while (found && ((kbfree = FindFreeSpace(pathname))<MINFREESTORAGE)
+	 && (numtries<100)) {
+    if (numtries==0)
+      if(MessageBoxX(hWndMapWindow,
+		     gettext(TEXT("Insufficient free storage, delete old IGC files?")),
+		     gettext(TEXT("Logger")),
+		     MB_YESNO|MB_ICONQUESTION) != IDYES)
+	return false;
+
+    // search for IGC files, and delete the oldest one
+    found = DeleteOldIGCFile(pathname);
+    numtries++;
+  }
+  return (kbfree>MINFREESTORAGE);
+}

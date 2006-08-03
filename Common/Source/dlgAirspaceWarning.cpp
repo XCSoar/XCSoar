@@ -521,7 +521,7 @@ bool dlgAirspaceWarningShow(void){
 // JMW this is now called from ProcessCommon (main GUI loop)
 bool dlgAirspaceWarningShowDlg(bool Force){
 
-  if (!actShow && !Force)
+  if (!actShow && !Force || fDialogOpen)
     return(false);
 
   Count = AirspaceWarnGetItemCount();

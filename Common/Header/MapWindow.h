@@ -49,6 +49,7 @@ typedef struct _WAYPOINT_INFO
 	BOOL Visible;
   bool InTask;
   TCHAR *Details;
+  bool FarVisible;
 } WAYPOINT;
 
 
@@ -61,6 +62,7 @@ typedef struct _SNAIL_POINT
   POINT Screen;
   short Colour;
   BOOL Circling;
+  bool FarVisible;
 } SNAIL_POINT;
 
 
@@ -201,6 +203,8 @@ class MapWindow {
   static void UpdateInfo(NMEA_INFO *nmea_info,
 			 DERIVED_INFO *derived_info);
   static rectObj CalculateScreenBounds(double scale);
+  static void ScanVisibility(rectObj *bounds_active);
+
  private:
   static void CalculateScreenPositions(POINT Orig, RECT rc,
                                        POINT *Orig_Aircraft);
@@ -212,6 +216,8 @@ class MapWindow {
 
   static bool PointVisible(const POINT &P);
   static bool PointVisible(const double &lon, const double &lat);
+  static bool PointInRect(const double &lon, const double &lat,
+			  const rectObj &bounds);
 
   static void DrawAircraft(HDC hdc, POINT Orig);
   static void DrawCrossHairs(HDC hdc, POINT Orig);
@@ -370,7 +376,6 @@ class MapWindow {
   static bool checkLabelBlock(RECT rc);
   static bool RenderTimeAvailable();
   static bool BigZoom;
-  static pointObj GlideFootPrint[NUMTERRAINSWEEPS+1];
 };
 
 

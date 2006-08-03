@@ -577,6 +577,13 @@ other languages.  If this field is left blank, then XCSoar uses English.
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
+  <WndProperty Name="prpAppInfoBoxBorder" Caption="Infobox border"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  Help="Two styles for infobox borders are available:
+[Box]  Draws boxes around each infobox.
+[Tab]  Draws a tab at the top of the infobox across the title.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
   <WndProperty Name="prpTerrainContrast" Caption="Terrain contrast"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
   Help="Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
     <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>

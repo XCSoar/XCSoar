@@ -483,6 +483,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
     return NULL;
   }
 
+
   XMLNode xNode=xMainNode.getChildNode(TEXT("WndForm"));
 
   FontMap[0] = TitleWindowFont;

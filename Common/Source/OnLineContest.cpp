@@ -40,7 +40,8 @@ OLCOptimizer::OLCOptimizer() {
   lat_proj = 0;
   lon_proj = 0;
   alt_proj = 0;
-  project = false;
+
+  flying = true;
 
   Clear();
   ResetFlight();
@@ -404,10 +405,10 @@ void OLCOptimizer::SetLine() {
 
 
 
-bool OLCOptimizer::Optimize() {
+bool OLCOptimizer::Optimize(bool isflying) {
   SetLine();
 
-  project = false;
+  flying = isflying;
 
   DWORD tm =GetTickCount();
 
@@ -537,16 +538,25 @@ int OLCOptimizer::optimize_internal() {
 
 
 int OLCOptimizer::triangle_legal(int i1, int i2, int i3, int i4) {
-  int a,b,c;
+  int a,b,c,d;
   int minleg, maxleg;
   int Dist;
+  if (i3<=i4)
+    c = dmval[sindex(i3,i4)];
+  else
+    c = dmval[sindex(i4,i3)];
+  if (i1<=i4)
+    d = dmval[sindex(i1,i4)];
+  else
+    d = dmval[sindex(i4,i1)];
+  if (5*d>c) {
+    return 0; // i4 must be within 20% of c distance to i1
+  }
   a = dmval[sindex(i1,i2)];
   b = dmval[sindex(i2,i3)];
-  c = dmval[sindex(i3,i4)];
-  Dist = a+b+c;
-  minleg = min(a,min(b,c));
-  maxleg = max(a,max(b,c));
-  if (Dist<500000) {
+  Dist = a+b+c-d;
+  if (Dist<500000/DISTANCEUNITS) {
+    minleg = min(a,min(b,c));
     // <500km, 28% min
     if (minleg*25>=Dist*7) {
       return Dist;
@@ -555,6 +565,8 @@ int OLCOptimizer::triangle_legal(int i1, int i2, int i3, int i4) {
     }
   } else {
     // >500km, 25% min 45% max
+    minleg = min(a,min(b,c));
+    maxleg = max(a,max(b,c));
     if ((minleg*4>=Dist)&&(maxleg*20<=9*Dist)) {
       return Dist;
     } else {
@@ -585,7 +597,6 @@ int OLCOptimizer::scan_triangle() {
     for (i5=pnts-1; i5>i2+2; i5--) {
 
       int dtogo = dmval[sindex(i2,i5)];
-      if (dtogo>DISTANCETHRESHOLD/DISTANCEUNITS) continue;
 
       // FAI triangle
       //   start height <= finish height+1000m
@@ -617,9 +628,9 @@ int OLCOptimizer::scan_triangle() {
 	  bestdist = d;
 	  finished = true;
 	}
-	if (canfinish) {
-	  d = triangle_legal(i2,i3,i4,i2);
-	  if (d>bestdist) {
+	if (canfinish && flying) {
+	  d = triangle_legal(i2,i3,i4,i2)-dtogo;
+	  if ((d>bestdist)&&(dmval[sindex(i2,i4)]>5*dtogo)) {
 	    i2best = i2;
 	    i3best = i3;
 	    i4best = i4;
@@ -707,7 +718,9 @@ int OLCOptimizer::scan_sprint() {
   // then see if improvement can be made with final glide at excess altitude
 
   retval = scan_sprint_finished();
-  retval |= scan_sprint_inprogress();
+  if (flying) {
+    retval |= scan_sprint_inprogress();
+  }
   return retval;
 }
 
@@ -740,6 +753,10 @@ int OLCOptimizer::scan_sprint_inprogress() {
   double lonend = lonpnts[(i5)];
   int dh = altpntslow[(i5)]-altpntslow[(i1)];
   int dt = 9000-(timepnts[(i5)]-timepnts[(i1)]);
+
+  if (!flying) {
+    return 1; // finished!
+  }
 
   if (dh<0) {
     return 1; // finished! (altitude reached)
@@ -891,7 +908,7 @@ int OLCOptimizer::scan_classic() {
 	    i5best = i5;
 	    i6best = i6;
 	    i7best = i7;
-	    if (dfurther==0) {
+	    if ((dfurther==0)||(!flying)) {
 	      finished = true;
 	    } else {
 	      dfurtherbest = dfurther;

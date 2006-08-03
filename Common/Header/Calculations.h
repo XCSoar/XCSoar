@@ -7,6 +7,7 @@
 
 #include "Parser.h"
 #include <windows.h>
+#include "mapshape.h"
 
 #define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20
@@ -139,9 +140,9 @@ typedef struct _DERIVED_INFO
 
   THERMAL_SOURCE_INFO ThermalSources[MAX_THERMAL_SOURCES];
 
-} DERIVED_INFO;
+  pointObj GlideFootPrint[NUMTERRAINSWEEPS+1];
 
-#include "RasterTerrain.h"
+} DERIVED_INFO;
 
 
 int DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);

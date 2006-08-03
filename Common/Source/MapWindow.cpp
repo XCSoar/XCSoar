@@ -61,6 +61,7 @@ Copyright_License {
 #include <Wingdi.h>
 #endif
 
+//#define DRAWLOAD
 
 #ifdef DEBUG
 //#if (WINDOWSPC<1)
@@ -234,8 +235,8 @@ bool MapWindow::RequestFullScreen = false;
 
 extern int DisplayTimeOut;
 
-NMEA_INFO DrawInfo;
-DERIVED_INFO DerivedDrawInfo;
+static NMEA_INFO DrawInfo;
+static DERIVED_INFO DerivedDrawInfo;
 
 int SelectedWaypoint = -1;
 bool EnableCDICruise = false;
@@ -270,6 +271,11 @@ void MapWindow::UpdateTimeStats(bool start) {
     cpuload=0;
 #ifdef DEBUG
     cpuload= MeasureCPULoad();
+#endif
+#ifdef DEBUG
+    char tmptext[100];
+    sprintf(tmptext,"%d # mem\n%d # latency\n", CheckFreeRam()/1024, timestats_av);
+    DebugStore(tmptext);
 #endif
   }
 }
@@ -1295,6 +1301,15 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       }
     }
     break;
+    /*
+  case WM_PAINT:
+    if ((hWnd == hWndMapWindow) && (ProgramStarted==3)) {
+      //    RequestFastRefresh();
+      return TRUE;
+    } else {
+      break;
+    }
+   */
 #ifdef GNAV
     case WM_KEYDOWN: // JMW was keyup
 #else
@@ -1762,6 +1777,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
 }
 
+
 void MapWindow::UpdateInfo(NMEA_INFO *nmea_info,
 			   DERIVED_INFO *derived_info) {
   LockFlightData();
@@ -1777,12 +1793,10 @@ void MapWindow::UpdateCaches(bool force) {
   // (unless we haven't done it for 2000 ms)
   DWORD fpsTimeThis = ::GetTickCount();
 
-  if (EnableTopology) {
-      // have some time, do shape file cache update if necessary
-    LockTerrainDataGraphics();
-    SetTopologyBounds(MapRect, force);
-    UnlockTerrainDataGraphics();
-  }
+  // have some time, do shape file cache update if necessary
+  LockTerrainDataGraphics();
+  SetTopologyBounds(MapRect, force);
+  UnlockTerrainDataGraphics();
 
   fpsTimeThis = ::GetTickCount();
   static DWORD fpsTimeLast_terrain=0;
@@ -1886,6 +1900,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 	     MapRectBig.right-MapRectBig.left,
 	     MapRectBig.bottom-MapRectBig.top,
 	     hdcDrawWindow, 0, 0, SRCCOPY);
+      InvalidateRect(hWndMapWindow, &MapRect, false);
     }
     UpdateTimeStats(false);
 
@@ -1895,12 +1910,6 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     if (ProgramStarted==1) {
       ProgramStarted = 2;
     }
-
-#ifdef DEBUG
-    char tmptext[100];
-    sprintf(tmptext,"%d # mem\n%d # latency\n", CheckFreeRam()/1024, timestats_av);
-    DebugStore(tmptext);
-#endif
 
   }
   THREADEXIT = TRUE;
@@ -3348,7 +3357,6 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
 }
 
 
-pointObj MapWindow::GlideFootPrint[NUMTERRAINSWEEPS+1];
 
 void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
   POINT Groundline[2];
@@ -3356,11 +3364,10 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
 
   hpOld = (HPEN)SelectObject(hDC,
 			     hpTerrainLineBg);	//sjt 02feb06 added bg line
-  LockFlightData();
 
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-    LatLon2Screen(GlideFootPrint[i].x,
-		  GlideFootPrint[i].y,
+    LatLon2Screen(DerivedDrawInfo.GlideFootPrint[i].x,
+		  DerivedDrawInfo.GlideFootPrint[i].y,
 		  Groundline[1]);
     if (i>0) {
       SelectObject(hDC,hpTerrainLineBg);
@@ -3372,19 +3379,20 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
     Groundline[0].y= Groundline[1].y;
   }
 
-  if ((DerivedDrawInfo.TerrainWarningLatitude != 0.0)
-    &&(DerivedDrawInfo.TerrainWarningLongitude != 0.0)) {
+  if (DerivedDrawInfo.Flying) {
+    if ((DerivedDrawInfo.TerrainWarningLatitude != 0.0)
+	&&(DerivedDrawInfo.TerrainWarningLongitude != 0.0)) {
 
-    POINT sc;
-    if (PointVisible(DerivedDrawInfo.TerrainWarningLongitude,
-		     DerivedDrawInfo.TerrainWarningLatitude)) {
-      LatLon2Screen(DerivedDrawInfo.TerrainWarningLongitude,
-		    DerivedDrawInfo.TerrainWarningLatitude, sc);
-      DrawBitmapIn(hDC, sc, hTerrainWarning);
+      POINT sc;
+      if (PointVisible(DerivedDrawInfo.TerrainWarningLongitude,
+		       DerivedDrawInfo.TerrainWarningLatitude)) {
+	LatLon2Screen(DerivedDrawInfo.TerrainWarningLongitude,
+		      DerivedDrawInfo.TerrainWarningLatitude, sc);
+	DrawBitmapIn(hDC, sc, hTerrainWarning);
+      }
     }
   }
 
-  UnlockFlightData();
   SelectObject(hDC, hpOld);
 
 }
@@ -3638,7 +3646,9 @@ void MapWindow::CreateDrawingThread(void)
 {
   CLOSETHREAD = FALSE;
   THREADEXIT = FALSE;
-  hDrawThread = CreateThread (NULL, 0, (LPTHREAD_START_ROUTINE )MapWindow::DrawThread, 0, 0, &dwDrawThreadID);
+  hDrawThread = CreateThread (NULL, 0,
+			      (LPTHREAD_START_ROUTINE )MapWindow::DrawThread,
+			      0, 0, &dwDrawThreadID);
   SetThreadPriority(hDrawThread,THREAD_PRIORITY_NORMAL);
 }
 
@@ -4057,6 +4067,11 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       }
     }
 
+    if (!P1->FarVisible) {
+      lastbroken = true;
+      continue;
+    }
+
     if (!PointVisible(P1->Longitude ,
 		      P1->Latitude)) {
       // the line is invalid
@@ -4128,6 +4143,18 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   }
 #endif
 
+}
+
+
+bool MapWindow::PointInRect(const double &lon, const double &lat,
+			    const rectObj &bounds) {
+  if ((lon> bounds.minx) &&
+      (lon< bounds.maxx) &&
+      (lat> bounds.miny) &&
+      (lat< bounds.maxy))
+    return true;
+  else
+    return false;
 }
 
 
@@ -4247,6 +4274,7 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
 
 void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
   circ.Visible = false;
+  if (!circ.FarVisible) return;
   if (iAirspaceMode[circ.Type]%2 == 1)
     if(CheckAirspaceAltitude(circ.Base.Altitude,
 			     circ.Top.Altitude)) {
@@ -4261,8 +4289,8 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
 }
 
 void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
-
   area.Visible = false;
+  if (!area.FarVisible) return;
   if (iAirspaceMode[area.Type]%2 == 1)
     if(CheckAirspaceAltitude(area.Base.Altitude,
 			     area.Top.Altitude)) {
@@ -4366,16 +4394,13 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 
   for(i=0;i<NumberOfWayPoints;i++)
   {
-
+    WayPointList[i].Visible = false;
+    if (!WayPointList[i].FarVisible) continue;
     if(PointVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
     {
       LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude,
 		    WayPointList[i].Screen);
       WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
-    }
-    else
-    {
-      WayPointList[i].Visible = FALSE;
     }
   }
 
@@ -4912,4 +4937,43 @@ rectObj MapWindow::CalculateScreenBounds(double scale) {
   }
 
   return sb;
+}
+
+
+
+void MapWindow::ScanVisibility(rectObj *bounds_active) {
+  // received when the SetTopoBounds determines the visibility
+  // boundary has changed.
+  // This happens rarely, so it is good pre-filtering of what is visible.
+  // (saves from having to do it every screen redraw)
+
+  int i;
+
+  // far visibility for snail trail
+  for (i= 0; i<TRAILSIZE; i++) {
+    SnailTrail[i].FarVisible = PointInRect(SnailTrail[i].Longitude,
+					   SnailTrail[i].Latitude,
+					   *bounds_active);
+  }
+
+  // far visibility for airspace
+
+  for (AIRSPACE_CIRCLE* circ = AirspaceCircle;
+       circ < AirspaceCircle+NumberOfAirspaceCircles; circ++) {
+    circ->FarVisible = (msRectOverlap(&circ->bounds, bounds_active) == MS_TRUE);
+  }
+  for(AIRSPACE_AREA *area = AirspaceArea;
+      area < AirspaceArea+NumberOfAirspaceAreas; area++)
+  {
+    area->FarVisible = (msRectOverlap(&area->bounds, bounds_active) == MS_TRUE);
+  }
+
+  // far visibility for waypoints
+
+  for(i=0;i<(int)NumberOfWayPoints;i++) {
+    WayPointList[i].FarVisible = PointInRect(WayPointList[i].Longitude,
+					     WayPointList[i].Latitude,
+					     *bounds_active);
+  }
+
 }

@@ -5,7 +5,7 @@
 #include "Calculations.h"
 #include "Atmosphere.h"
 #include "externs.h"
-
+#include "RasterTerrain.h"
 
 unsigned short CuSonde::last_level=0;
 double CuSonde::thermalHeight = 0;

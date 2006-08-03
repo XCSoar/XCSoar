@@ -66,7 +66,7 @@ private:
   int altminimum;
 
   int alt_proj;
-  bool project;
+  bool flying;
   double waypointbearing;
 
   double distancethreshold;
@@ -86,7 +86,7 @@ public:
 
 public:
   void SetLine();
-  bool Optimize();
+  bool Optimize(bool isflying);
   int getN();
   double getLatitude(int i);
   double getLongitude(int i);

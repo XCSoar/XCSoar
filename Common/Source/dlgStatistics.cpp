@@ -1464,7 +1464,7 @@ static void OnCalcClicked(WindowControl * Sender,
 #endif
   }
   if (page==6) {
-    olc.Optimize();
+    olc.Optimize((CALCULATED_INFO.Flying==1));
   }
   if (page==7) {
 #if (NEWAIRSPACEWARNING>0)

@@ -107,7 +107,8 @@ Appearance_t Appearance = {
   true,
   true,
   gvnsDefault,
-  false
+  false,
+  apIbBox
 };
 #else
 
@@ -140,7 +141,8 @@ Appearance_t Appearance = {
   false,
   false,
   gvnsLongNeedle,
-  true
+  true,
+  apIbBox
 };
 
 #endif
@@ -176,7 +178,8 @@ Appearance_t Appearance = {
   false,
   false,
   gvnsLongNeedle,
-  true
+  true,
+  apIbBox
 };
 #endif
 
@@ -1095,6 +1098,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
   while (!MapWindow::CLOSETHREAD) {
 
     WaitForSingleObject(dataTriggerEvent, 5000);
+    ResetEvent(dataTriggerEvent);
     if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
     // set timer to determine latency (including calculations)
@@ -1139,8 +1143,6 @@ DWORD CalculationThread (LPVOID lpvoid) {
 	}
       InfoBoxesDirty = true;
     }
-
-    ResetEvent(dataTriggerEvent);
 
     TriggerRedraws(&tmp_GPS_INFO, &tmp_CALCULATED_INFO);
 
@@ -1294,7 +1296,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #ifdef GNAV
   // HEAD 4.7 (series) is NOT necessarily alpha, as it is in production
   // use in Altair, and there are already several stable versions of 4.7 out.
-  wcscat(XCSoar_Version, TEXT("4.7.6"));
+  wcscat(XCSoar_Version, TEXT("4.7.7 "));
+  wcscat(XCSoar_Version, TEXT(__DATE__));
 #else
   wcscat(XCSoar_Version, TEXT("Alpha "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
@@ -2809,7 +2812,6 @@ void DisplayText(void)
     default:
       InfoBoxes[i]->SetComment(TEXT(""));
     };
-
 #else
     Data_Options[DisplayType[i]].Formatter->Render(hWndInfoWindow[i]);
 
@@ -2822,6 +2824,13 @@ void DisplayText(void)
     DisplayTypeLast[i] = DisplayType[i];
 
   }
+#if (NEWINFOBOX>0)
+  for (i=0; i<numInfoWindows; i++)
+    InfoBoxes[i]->Paint();
+  for (i=0; i<numInfoWindows; i++)
+    InfoBoxes[i]->PaintFast();
+#endif
+
 
   first = false;
 
@@ -2835,7 +2844,9 @@ void CommonProcessTimer()
 {
 
   // service the GCE and NMEA queue
-  InputEvents::DoQueuedEvents();
+  if (ProgramStarted==3) {
+    InputEvents::DoQueuedEvents();
+  }
 
 #if (NEWINFOBOX>0)
   if (ProgramStarted==3) {

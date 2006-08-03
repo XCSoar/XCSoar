@@ -43,6 +43,8 @@ class ReplayLogger {
   static TCHAR FileName[MAX_PATH];
 };
 
+bool LoggerClearFreeSpace();
+
 #endif
 
 
