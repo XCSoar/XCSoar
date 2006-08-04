@@ -4,13 +4,13 @@ Copyright_License {
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
   Copyright (C) 2000 - 2005
 
-  	M Roberts (original release)
-	Robin Birch <robinb@ruffnready.co.uk>
-	Samuel Gisiger <samuel.gisiger@triadis.ch>
-	Jeff Goodenough <jeff@enborne.f2s.com>
-	Alastair Harrison <aharrison@magic.force9.co.uk>
-	Scott Penrose <scottp@dd.com.au>
-	John Wharington <jwharington@bigfoot.com>
+        M Roberts (original release)
+        Robin Birch <robinb@ruffnready.co.uk>
+        Samuel Gisiger <samuel.gisiger@triadis.ch>
+        Jeff Goodenough <jeff@enborne.f2s.com>
+        Alastair Harrison <aharrison@magic.force9.co.uk>
+        Scott Penrose <scottp@dd.com.au>
+        John Wharington <jwharington@bigfoot.com>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -39,8 +39,8 @@ Copyright_License {
 #include "externs.h"
 #include "InfoBoxLayout.h"
 
-#define DEFAULTBORDERPENWIDTH 1 // IBLSCALE(1)
-#define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+4)
+#define DEFAULTBORDERPENWIDTH IBLSCALE(1)
+#define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
 
 extern HFONT  TitleWindowFont;
 extern HFONT  MapWindowFont;
@@ -75,6 +75,8 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   mHeight = Height;
   mParent = Parent;
 
+  mTitleChanged = true;
+
   InitInfoBoxModule();
 
   mColorBack = bkColor;
@@ -89,11 +91,11 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   }
 
   mHWnd = CreateWindow(TEXT("STATIC"), TEXT("\0"),
-		     WS_VISIBLE | WS_CHILD | SS_CENTER | SS_NOTIFY 
-		       | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-		     mX, mY,
-		     mWidth, mHeight,
-		     Parent, NULL, hInst, NULL);
+                     WS_VISIBLE | WS_CHILD | SS_CENTER | SS_NOTIFY 
+                       | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+                     mX, mY,
+                     mWidth, mHeight,
+                     Parent, NULL, hInst, NULL);
 
   mVisible = false;
 
@@ -217,8 +219,8 @@ Units_t InfoBox::SetValueUnit(Units_t Value){
     mValueUnit = Value;
 
     Units::GetUnitBitmap(mValueUnit, &mhBitmapUnit, 
-			 &mBitmapUnitPos, 
-			 &mBitmapUnitSize, mUnitBitmapKind);
+                         &mBitmapUnitPos, 
+                         &mBitmapUnitSize, mUnitBitmapKind);
     //JMW    PaintValue();
       
   }
@@ -256,6 +258,7 @@ void InfoBox::SetTitle(TCHAR *Value){
 
   if (_tcscmp(mTitle, sTmp) != 0){
     _tcscpy(mTitle, sTmp);
+    mTitleChanged = true;
     //JMW    PaintTitle();
     //JMW    PaintSelector();
   }
@@ -297,57 +300,58 @@ HWND InfoBox::GetParent(void){
 
 void InfoBox::PaintTitle(void){
 
+  if (!mTitleChanged) return;
+
   SIZE tsize;
   int x,y;
+  int halftextwidth;
 
   SetBkColor(mHdcBuf, mColorTitleBk);
-
   SetTextColor(mHdcBuf, mColorTitle);
-
   SelectObject(mHdcBuf, *mphFontTitle);
 
   GetTextExtentPoint(mHdcBuf, mTitle, _tcslen(mTitle), &tsize);
 
-  x = recTitle.left + (mWidth - tsize.cx) / 2;
-  if (x < 1)
-    x = 1;
+  halftextwidth = (mWidth - tsize.cx)>>1;
 
-  if (mBorderKind & BORDERLEFT)
-    x+= DEFAULTBORDERPENWIDTH;
+  x = max(1,recTitle.left + halftextwidth);
 
   y = recTitle.top + 1 + mpFontHeightTitle->CapitalHeight 
     - mpFontHeightTitle->AscentHeight;
 
+  if (mBorderKind & BORDERLEFT)
+    x+= DEFAULTBORDERPENWIDTH;
+
   ExtTextOut(mHdcBuf, x, y,
     ETO_OPAQUE, &recTitle, mTitle, _tcslen(mTitle), NULL);
-    
 
-  if (mBorderKind & BORDERTAB) {
+  if ((mBorderKind & BORDERTAB) && (halftextwidth>IBLSCALE(3))) {
+
+    int ytop = recTitle.top + (mpFontHeightTitle->CapitalHeight)/2; 
+    int ytopedge = ytop+IBLSCALE(2);
+    int ybottom = recTitle.top + IBLSCALE(6) + mpFontHeightTitle->CapitalHeight;
 
     HPEN oldPen = (HPEN)SelectObject(mHdcBuf, mhPenBorder);
 
-    if (mWidth-tsize.cx<recTitle.right-recTitle.top-5) {
+    POINT tab[8];
+    tab[0].x = tab[1].x = recTitle.left+IBLSCALE(1);
+    tab[0].y = tab[7].y = ybottom;
+    tab[2].x = recTitle.left+IBLSCALE(3);
+    tab[2].y = tab[5].y = tab[3].y = tab[4].y = ytop;
+    tab[1].y = tab[6].y = ytopedge;
+    tab[5].x = recTitle.right-IBLSCALE(4);
+    tab[6].x = tab[7].x = recTitle.right-IBLSCALE(2);
+    tab[3].x = recTitle.left+halftextwidth-IBLSCALE(1);
+    tab[4].x = recTitle.right-halftextwidth+IBLSCALE(1);
 
-      x = recTitle.left + (mWidth-tsize.cx)/ 2-3;
-      y = recTitle.top + (mpFontHeightTitle->CapitalHeight)/2; 
-      MoveToEx(mHdcBuf, x, y, NULL);
-      LineTo(mHdcBuf, recTitle.left+3, y);
-      LineTo(mHdcBuf, recTitle.left+1, y+2);
-      y = recTitle.top + 4 + mpFontHeightTitle->CapitalHeight+2;
-      LineTo(mHdcBuf, recTitle.left+1, y);
-      
-      x = recTitle.right - (mWidth-tsize.cx)/ 2+2;
-      y = recTitle.top + (mpFontHeightTitle->CapitalHeight)/2; 
-      MoveToEx(mHdcBuf, x, y, NULL);
-      LineTo(mHdcBuf, recTitle.right-4, y);
-      LineTo(mHdcBuf, recTitle.right-2, y+2);
-      y = recTitle.top + 4 + mpFontHeightTitle->CapitalHeight+2;
-      LineTo(mHdcBuf, recTitle.right-2, y);
+    Polyline(mHdcBuf, tab, 4);
+    Polyline(mHdcBuf, tab+4, 4);
     
-      SelectObject(mHdcBuf,oldPen);
-    }
+    SelectObject(mHdcBuf,oldPen);
 
-  }
+  } 
+
+  mTitleChanged = false;
 
 }
 
@@ -374,10 +378,8 @@ void InfoBox::PaintValue(void){
 
   GetTextExtentPoint(mHdcBuf, mValue, _tcslen(mValue), &tsize);
 
-  x = recValue.left + 
-    (mWidth - tsize.cx - mBitmapUnitSize.x*InfoBoxLayout::scale) / 2;
-  if (x < 1)
-    x = 1;
+  x = max(1,recValue.left + 
+          (mWidth - tsize.cx - mBitmapUnitSize.x*InfoBoxLayout::scale) / 2);
 
   if (mBorderKind & BORDERLEFT)
     x+= DEFAULTBORDERPENWIDTH;
@@ -395,28 +397,28 @@ void InfoBox::PaintValue(void){
       HBITMAP oldBmp;
       oldBmp = (HBITMAP)SelectObject(mHdcTemp, mhBitmapUnit);
       if (InfoBoxLayout::scale>1) {
-	StretchBlt(mHdcBuf,
-		   x+tsize.cx,
-		   y+mpFontHeightValue->AscentHeight
-		   -mBitmapUnitSize.y*InfoBoxLayout::scale,
-		   mBitmapUnitSize.x*InfoBoxLayout::scale, 
-		   mBitmapUnitSize.y*InfoBoxLayout::scale,
-		   mHdcTemp,
-		   mBitmapUnitPos.x, mBitmapUnitPos.y,
-		   mBitmapUnitSize.x,
-		   mBitmapUnitSize.y,
-	       SRCCOPY
-	       );
+        StretchBlt(mHdcBuf,
+                   x+tsize.cx,
+                   y+mpFontHeightValue->AscentHeight
+                   -mBitmapUnitSize.y*InfoBoxLayout::scale,
+                   mBitmapUnitSize.x*InfoBoxLayout::scale, 
+                   mBitmapUnitSize.y*InfoBoxLayout::scale,
+                   mHdcTemp,
+                   mBitmapUnitPos.x, mBitmapUnitPos.y,
+                   mBitmapUnitSize.x,
+                   mBitmapUnitSize.y,
+               SRCCOPY
+               );
       } else {
-	BitBlt(mHdcBuf,
-	       x+tsize.cx,
-	       y+mpFontHeightValue->AscentHeight
-	       -mBitmapUnitSize.y,
-	       mBitmapUnitSize.x, mBitmapUnitSize.y,
-	       mHdcTemp,
-	       mBitmapUnitPos.x, mBitmapUnitPos.y,
-	       SRCCOPY
-	       );
+        BitBlt(mHdcBuf,
+               x+tsize.cx,
+               y+mpFontHeightValue->AscentHeight
+               -mBitmapUnitSize.y,
+               mBitmapUnitSize.x, mBitmapUnitSize.y,
+               mHdcTemp,
+               mBitmapUnitPos.x, mBitmapUnitPos.y,
+               SRCCOPY
+               );
       }
       SelectObject(mHdcTemp ,oldBmp);
     }
@@ -428,6 +430,8 @@ void InfoBox::PaintComment(void){
 
   SIZE tsize;
   int x,y;
+
+  if (_tcslen(mComment)==0) return; // nothing to paint
 
   SetBkColor(mHdcBuf, mColorCommentBk);
 
@@ -454,25 +458,25 @@ void InfoBox::PaintComment(void){
 void InfoBox::PaintSelector(void){
 
   if (mHasFocus){
-    HPEN oldPen = (HPEN)SelectObject(mHdcBuf, hPenSelector);
+    HPEN oldPen = (HPEN)SelectObject(mHdc, hPenSelector);
 
-    MoveToEx(mHdcBuf, mWidth-SELECTORWIDTH-1, 0, NULL);
-    LineTo(mHdcBuf, mWidth-1, 0);
-    LineTo(mHdcBuf, mWidth-1, SELECTORWIDTH+1);
+    MoveToEx(mHdc, mWidth-SELECTORWIDTH-1, 0, NULL);
+    LineTo(mHdc, mWidth-1, 0);
+    LineTo(mHdc, mWidth-1, SELECTORWIDTH+1);
 
-    MoveToEx(mHdcBuf, mWidth-1, mHeight-SELECTORWIDTH-2, NULL);
-    LineTo(mHdcBuf, mWidth-1, mHeight-1);
-    LineTo(mHdcBuf, mWidth-SELECTORWIDTH-1, mHeight-1);
+    MoveToEx(mHdc, mWidth-1, mHeight-SELECTORWIDTH-2, NULL);
+    LineTo(mHdc, mWidth-1, mHeight-1);
+    LineTo(mHdc, mWidth-SELECTORWIDTH-1, mHeight-1);
 
-    MoveToEx(mHdcBuf, SELECTORWIDTH+1, mHeight-1, NULL);
-    LineTo(mHdcBuf, 0, mHeight-1);
-    LineTo(mHdcBuf, 0, mHeight-SELECTORWIDTH-2);
+    MoveToEx(mHdc, SELECTORWIDTH+1, mHeight-1, NULL);
+    LineTo(mHdc, 0, mHeight-1);
+    LineTo(mHdc, 0, mHeight-SELECTORWIDTH-2);
 
-    MoveToEx(mHdcBuf, 0, SELECTORWIDTH+1, NULL);
-    LineTo(mHdcBuf, 0, 0);
-    LineTo(mHdcBuf, SELECTORWIDTH+1, 0);
+    MoveToEx(mHdc, 0, SELECTORWIDTH+1, NULL);
+    LineTo(mHdc, 0, 0);
+    LineTo(mHdc, SELECTORWIDTH+1, 0);
 
-    SelectObject(mHdcBuf,oldPen);
+    SelectObject(mHdc,oldPen);
   }
   
 }
@@ -484,16 +488,23 @@ void InfoBox::Paint(void){
   static bool InitDone = false;
   RECT rc;
 
-  rc.left = 0;
-  rc.top = 0;
-  rc.right = 0 + mWidth;
-  rc.bottom = 0 + mHeight;
-
   if (!InitDone){
     InitializeDrawHelpers();
     InitDone = false;
   }
 
+  if (mTitleChanged) {
+    // clear the whole area
+    rc.left = 0;
+    rc.top = 0;
+    rc.right = 0 + mWidth;
+    rc.bottom = 0 + mHeight;
+  } else {
+    rc.left = 0;
+    rc.top = recTitle.bottom;
+    rc.right = 0 + mWidth;
+    rc.bottom = 0 + mHeight;
+  }
   FillRect(mHdcBuf, &rc, mhBrushBk);
 
   if (mBorderKind != 0){
@@ -521,13 +532,13 @@ void InfoBox::Paint(void){
   PaintTitle();
   PaintComment();
   PaintValue();
-  PaintSelector();
 }
 
 
 void InfoBox::PaintFast(void) {
   BitBlt(mHdc, 0, 0, mWidth, mHeight,
-	 mHdcBuf, 0, 0, SRCCOPY);
+         mHdcBuf, 0, 0, SRCCOPY);
+  PaintSelector();
 }
 
 
@@ -582,17 +593,17 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     
     case WM_ERASEBKGND:
       /* JMW we erase ourselves so can prevent flicker by eliminating
-	 windows from doing it.
+         windows from doing it.
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
       if (ib)
-	ib->Paint();
+        ib->Paint();
       */
     return TRUE;
 
     case WM_PAINT:
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
       if (ib)
-	ib->PaintFast();
+        ib->PaintFast();
       
     break;
 
@@ -602,7 +613,7 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     case WM_WINDOWPOSCHANGED:
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
       if (ib)
-	ib->PaintFast();
+        ib->PaintFast();
     return 0;
 
     case WM_CREATE:
@@ -617,7 +628,7 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     case WM_LBUTTONDOWN:
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);
       if (ib)
-	      SendMessage(ib->GetParent(), WM_COMMAND, (WPARAM)0, (LPARAM)ib->GetHandle());
+              SendMessage(ib->GetParent(), WM_COMMAND, (WPARAM)0, (LPARAM)ib->GetHandle());
     return(0);
 
     case WM_LBUTTONUP:
@@ -646,7 +657,6 @@ void InitInfoBoxModule(void){
   }
 
   InitDone = true;
-
 }
 
 #endif
