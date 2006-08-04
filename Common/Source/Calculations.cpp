@@ -2709,7 +2709,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
   static bool predicted = false;
   static int  UpdateSequence = 0;
 
-  LockFlightData();
+  //  LockFlightData(); Not necessary, airspace stuff has its own locking
 
   if (GlobalClearAirspaceWarnings == true) {
     GlobalClearAirspaceWarnings = false;
@@ -2780,7 +2780,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
 
   AirspaceWarnListProcess(Basic);
 
-  UnlockFlightData();
+  //  UnlockFlightData();
 
 }
 #endif

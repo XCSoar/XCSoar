@@ -109,6 +109,8 @@ typedef struct _SCREEN_INFO
 void ProcessChar1 (char c);
 void ProcessChar2 (char c);
 
+extern void UnlockEventQueue();
+extern void LockEventQueue();
 extern void UnlockComm();
 extern void LockComm();
 extern void UnlockGraphicsData();

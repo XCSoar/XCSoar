@@ -575,6 +575,8 @@ int NUMSELECTSTRINGS = 55;
 
 CRITICAL_SECTION  CritSec_FlightData;
 bool csFlightDataInitialized = false;
+CRITICAL_SECTION  CritSec_EventQueue;
+bool csEventQueueInitialized = false;
 CRITICAL_SECTION  CritSec_TerrainDataGraphics;
 bool csTerrainDataGraphicsInitialized = false;
 CRITICAL_SECTION  CritSec_TerrainDataCalculations;
@@ -1334,6 +1336,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
 
+  InitializeCriticalSection(&CritSec_EventQueue);
+  csEventQueueInitialized = true;
   InitializeCriticalSection(&CritSec_TaskData);
   csTaskDataInitialized = true;
   InitializeCriticalSection(&CritSec_FlightData);
@@ -2082,6 +2086,8 @@ void Shutdown(void) {
   if(AirspaceScreenPoint != NULL)  LocalFree((HLOCAL)AirspaceScreenPoint);
   if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
 
+  DeleteCriticalSection(&CritSec_EventQueue);
+  csEventQueueInitialized = false;
   DeleteCriticalSection(&CritSec_TaskData);
   csTaskDataInitialized = false;
   DeleteCriticalSection(&CritSec_FlightData);
@@ -3337,6 +3343,21 @@ void UnlockTerrainDataGraphics() {
   if (!csTerrainDataGraphicsInitialized) throw TEXT("LockTerrainDataGraphics Error");
 #endif
   LeaveCriticalSection(&CritSec_TerrainDataGraphics);
+}
+
+
+void LockEventQueue() {
+#ifdef HAVEEXCEPTIONS
+  if (!csEventQueueInitialized) throw TEXT("LockEventQueue Error");
+#endif
+  EnterCriticalSection(&CritSec_EventQueue);
+}
+
+void UnlockEventQueue() {
+#ifdef HAVEEXCEPTIONS
+  if (!csEventQueueInitialized) throw TEXT("LockEventQueue Error");
+#endif
+  LeaveCriticalSection(&CritSec_EventQueue);
 }
 
 

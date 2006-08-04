@@ -70,6 +70,8 @@ class InfoBox{
     COLORREF mColorRed;
     COLORREF mColorBlue;
 
+    bool mTitleChanged;
+
     HBRUSH mhBrushBk;
     HBRUSH mhBrushBkSel;
     HPEN mhPenBorder;

@@ -16,15 +16,15 @@
   <WndFrame Name="frmInfos" X=70 Y=0 Width=246 Height=222 Font=2>
 
     <WndProperty Name="prpWpComment" Caption="Comment"       X=2 Y=2  Width=242 Height=40 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpLatitude"  Caption="Latitude"      X=2 Y=-1 Width=242 Height=19 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpLongitude" Caption="Longitude"     X=2 Y=-1 Width=242 Height=19 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpAltitude"  Caption="Elevation"     X=2 Y=-1 Width=242 Height=19 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpSunset"    Caption="Sunset"        X=2 Y=-1 Width=242 Height=19 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpDistance"  Caption="Distance"      X=2 Y=-1 Width=242 Height=19 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpBearing"   Caption="Bearing"       X=2 Y=-1 Width=242 Height=19 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpMc0"       Caption="Alt Dif Mc0.0" X=2 Y=-1 Width=242 Height=19 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpMc1"       Caption="Alt Dif Mc1.0" X=2 Y=-1 Width=242 Height=19 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpMc2"       Caption="Alt Dif Mc2.0" X=2 Y=-1 Width=242 Height=19 CaptionWidth=100 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpLatitude"  Caption="Latitude"      X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpLongitude" Caption="Longitude"     X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpAltitude"  Caption="Elevation"     X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpSunset"    Caption="Sunset"        X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpDistance"  Caption="Distance"      X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpBearing"   Caption="Bearing"       X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpMc0"       Caption="Alt diff Mc 0" X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpMc1"       Caption="Alt diff Mc safety" X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpMc2"       Caption="Alt diff Mc current" X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
 
   </WndFrame>
 
@@ -35,12 +35,12 @@
 
   <WndFrame Name="frmCommands" X=70 Y=0 Width=246 Height=222 Font=2 Visible=0>
 
-    <WndButton Name="cmdGoto"        Caption="Goto (and clear Task)" X=50 Y=10 Width=150  Height=30 Font=2 />
-    <WndButton Name="cmdReplace"     Caption="Replace in Task"       X=50 Y=-1 Width=150  Height=30 Font=2 />
-    <WndButton Name="cmdInserInTask" Caption="Insert in Task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
-    <WndButton Name="cmdAppendInTask" Caption="Append to Task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
-    <WndButton Name="cmdRemoveFromTask" Caption="Remove from Task"      X=50 Y=-1 Width=150  Height=30 Font=2 />
-    <WndButton Name="cmdNewHome"     Caption="Set as new Home"       X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdGoto"        Caption="Goto (and clear task)" X=50 Y=10 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdReplace"     Caption="Replace in task"       X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdInserInTask" Caption="Insert in task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdAppendInTask" Caption="Append to task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdRemoveFromTask" Caption="Remove from task"      X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdNewHome"     Caption="Set as new home"       X=50 Y=-1 Width=150  Height=30 Font=2 />
 
   </WndFrame>
 

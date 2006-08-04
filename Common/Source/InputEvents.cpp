@@ -172,7 +172,7 @@ int DLLCache_Count = 0;
 void InputEvents::readFile() {
 
   // clear the GCE and NMEA queues
-  LockFlightData();
+  LockEventQueue();
   int i;
   for (i=0; i<MAX_GCE_QUEUE; i++) {
     GCE_Queue[i]= -1;
@@ -180,7 +180,7 @@ void InputEvents::readFile() {
   for (i=0; i<MAX_NMEA_QUEUE; i++) {
     NMEA_Queue[i]= -1;
   }
-  UnlockFlightData();
+  UnlockEventQueue();
 
   // Get defaults
   if (!InitONCE) {
@@ -708,14 +708,14 @@ bool InputEvents::processKey(int dWord) {
 
 bool InputEvents::processNmea(int ne_id) {
   // add an event to the bottom of the queue
-  LockFlightData();
+  LockEventQueue();
   for (int i=0; i< MAX_NMEA_QUEUE; i++) {
     if (NMEA_Queue[i]== -1) {
       NMEA_Queue[i]= ne_id;
       break;
     }
   }
-  UnlockFlightData();
+  UnlockEventQueue();
   return true; // ok.
 }
 
@@ -765,14 +765,14 @@ void InputEvents::DoQueuedEvents(void) {
   blockqueue = true;
 
   // copy the queue first, blocking
-  LockFlightData();
+  LockEventQueue();
   for (i=0; i<MAX_GCE_QUEUE; i++) {
     GCE_Queue_copy[i]= GCE_Queue[i];
   }
   for (i=0; i<MAX_NMEA_QUEUE; i++) {
     NMEA_Queue_copy[i]= NMEA_Queue[i];
   }
-  UnlockFlightData();
+  UnlockEventQueue();
 
   // process each item in the queue
   for (i=0; i< MAX_GCE_QUEUE; i++) {
@@ -787,14 +787,14 @@ void InputEvents::DoQueuedEvents(void) {
   }
 
   // now flush the queue, again blocking
-  LockFlightData();
+  LockEventQueue();
   for (i=0; i<MAX_GCE_QUEUE; i++) {
     GCE_Queue[i]= -1;
   }
   for (i=0; i<MAX_NMEA_QUEUE; i++) {
     NMEA_Queue[i]= -1;
   }
-  UnlockFlightData();
+  UnlockEventQueue();
 
   blockqueue = false; // ok, ready to go on.
 
@@ -803,14 +803,14 @@ void InputEvents::DoQueuedEvents(void) {
 
 bool InputEvents::processGlideComputer(int gce_id) {
   // add an event to the bottom of the queue
-  LockFlightData();
+  LockEventQueue();
   for (int i=0; i< MAX_GCE_QUEUE; i++) {
     if (GCE_Queue[i]== -1) {
       GCE_Queue[i]= gce_id;
       break;
     }
   }
-  UnlockFlightData();
+  UnlockEventQueue();
   return true; // ok.
 }
 

@@ -297,31 +297,74 @@ void dlgWayPointDetailsShowModal(void){
   ((WndProperty *)wf->FindByName(TEXT("prpSunset")))
     ->SetText(sTmp);
 
-  _stprintf(sTmp, TEXT("%.0fkm"), Distance(GPS_INFO.Latitude,
-                        GPS_INFO.Longitude,
-                        WayPointList[SelectedWaypoint].Latitude,
-                        WayPointList[SelectedWaypoint].Longitude)*DISTANCEMODIFY
+  double distance = Distance(GPS_INFO.Latitude,
+			 GPS_INFO.Longitude,
+			 WayPointList[SelectedWaypoint].Latitude,
+			 WayPointList[SelectedWaypoint].Longitude);
 
-  );
+  _stprintf(sTmp, TEXT("%.0f %s"), distance*DISTANCEMODIFY,
+	    Units::GetDistanceName());
   ((WndProperty *)wf->FindByName(TEXT("prpDistance")))
     ->SetText(sTmp);
 
-  _stprintf(sTmp, TEXT("%d°"), iround(Bearing(GPS_INFO.Latitude,
-                        GPS_INFO.Longitude,
-                        WayPointList[SelectedWaypoint].Latitude,
-                        WayPointList[SelectedWaypoint].Longitude)));
+  double bearing = Bearing(GPS_INFO.Latitude,
+			   GPS_INFO.Longitude,
+			   WayPointList[SelectedWaypoint].Latitude,
+			   WayPointList[SelectedWaypoint].Longitude);
+  _stprintf(sTmp, TEXT("%d°"), iround(bearing));
 
   ((WndProperty *)wf->FindByName(TEXT("prpBearing")))
     ->SetText(sTmp);
 
+  double alt=0;
+
+  // alt reqd at mc 0
+
+  alt = CALCULATED_INFO.NavAltitude -
+    GlidePolar::MacCreadyAltitude(0.0,
+				  distance,
+				  bearing,
+				  CALCULATED_INFO.WindSpeed,
+				  CALCULATED_INFO.WindBearing,
+				  0, 0, true,
+				  0)-SAFETYALTITUDEARRIVAL;
+
+  _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
+	    Units::GetAltitudeName());
+
   ((WndProperty *)wf->FindByName(TEXT("prpMc0")))
-    ->SetText(TEXT("-"));
+    ->SetText(sTmp);
+
+  // alt reqd at safety mc
+
+  alt = CALCULATED_INFO.NavAltitude -
+    GlidePolar::MacCreadyAltitude(GlidePolar::AbortSafetyMacCready(),
+				  distance,
+				  bearing,
+				  CALCULATED_INFO.WindSpeed,
+				  CALCULATED_INFO.WindBearing,
+				  0, 0, true,
+				  0)-SAFETYALTITUDEARRIVAL;
 
   ((WndProperty *)wf->FindByName(TEXT("prpMc1")))
-    ->SetText(TEXT("-"));
+    ->SetText(sTmp);
+
+  // alt reqd at current mc
+
+  alt = CALCULATED_INFO.NavAltitude -
+    GlidePolar::MacCreadyAltitude(MACCREADY,
+				  distance,
+				  bearing,
+				  CALCULATED_INFO.WindSpeed,
+				  CALCULATED_INFO.WindBearing,
+				  0, 0, true,
+				  0)-SAFETYALTITUDEARRIVAL;
+
+  _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
+	    Units::GetAltitudeName());
 
   ((WndProperty *)wf->FindByName(TEXT("prpMc2")))
-    ->SetText(TEXT("-"));
+    ->SetText(sTmp);
 
   wf->SetKeyDownNotify(FormKeyDown);
 
