@@ -64,6 +64,7 @@ static int WaypointOutOfTerrainRangeDontAskAgain = -1;
 
 
 void CloseWayPoints() {
+  StartupStore(TEXT("Close waypoints\r\n"));
   unsigned int i;
   if (NumberOfWayPoints) {
     for (i=0; i<NumberOfWayPoints; i++) {
@@ -516,6 +517,8 @@ extern TCHAR szRegistryAdditionalWayPointFile[];
 
 void ReadWayPoints(void)
 {
+  StartupStore(TEXT("ReadWayPoints\r\n"));
+
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
 
@@ -599,6 +602,9 @@ void ReadWayPoints(void)
 
 void SetHome(void)
 {
+
+  StartupStore(TEXT("SetHome\r\n"));
+
   TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
   unsigned int i;
 

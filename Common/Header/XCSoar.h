@@ -152,6 +152,7 @@ extern bool Debounce();
 #define M_2PI 6.28318530718
 
 void DebugStore(char *Str);
+void StartupStore(TCHAR *Str);
 
 typedef struct
 {

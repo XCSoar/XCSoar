@@ -4,13 +4,13 @@ Copyright_License {
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
   Copyright (C) 2000 - 2005
 
-  	M Roberts (original release)
-	Robin Birch <robinb@ruffnready.co.uk>
-	Samuel Gisiger <samuel.gisiger@triadis.ch>
-	Jeff Goodenough <jeff@enborne.f2s.com>
-	Alastair Harrison <aharrison@magic.force9.co.uk>
-	Scott Penrose <scottp@dd.com.au>
-	John Wharington <jwharington@bigfoot.com>
+        M Roberts (original release)
+        Robin Birch <robinb@ruffnready.co.uk>
+        Samuel Gisiger <samuel.gisiger@triadis.ch>
+        Jeff Goodenough <jeff@enborne.f2s.com>
+        Alastair Harrison <aharrison@magic.force9.co.uk>
+        Scott Penrose <scottp@dd.com.au>
+        John Wharington <jwharington@bigfoot.com>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -117,17 +117,17 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   h = 32*ISCALE;
 
   wf = new WndForm(hWnd, TEXT("frmXcSoarMessageDlg"),
-		   (TCHAR*)lpCaption, X, Y, Width, Height);
+                   (TCHAR*)lpCaption, X, Y, Width, Height);
   wf->SetFont(MapWindowBoldFont);
   wf->SetTitleFont(MapWindowBoldFont);
   wf->SetBackColor(RGB(0xDA, 0xDB, 0xAB));
 
   wText = new WndFrame(wf,
-		       TEXT("frmMessageDlgText"),
-		       0,
-		       5*ISCALE,
-		       Width,
-		       Height);
+                       TEXT("frmMessageDlgText"),
+                       0,
+                       5*ISCALE,
+                       Width,
+                       Height);
   wText->SetCaption((TCHAR*)lpText);
   wText->SetFont(MapWindowBoldFont);
   wText->SetCaptionStyle(
@@ -135,7 +135,7 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
       | DT_CENTER
       | DT_NOCLIP
       | DT_WORDBREAK
-	//      | DT_VCENTER
+        //      | DT_VCENTER
   );
 
   /* TODO, dont work
@@ -154,7 +154,7 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
 
   ){
     wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("OK")),
-					  0, y, w, h, OnButtonClick);
+                                          0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDOK);
     ButtonCount++;
   }
@@ -163,11 +163,11 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
       || uType == MB_YESNOCANCEL
   ){
     wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("Yes")),
-					  0, y, w, h, OnButtonClick);
+                                          0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDYES);
     ButtonCount++;
     wButtons[ButtonCount] = new WndButton(wf, TEXT(""), gettext(TEXT("No")),
-					  0, y, w, h, OnButtonClick);
+                                          0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDNO);
     ButtonCount++;
   }
@@ -176,8 +176,8 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
       || uType == MB_RETRYCANCEL
   ){
     wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-					  gettext(TEXT("Retry")),
-					  0, y, w, h, OnButtonClick);
+                                          gettext(TEXT("Retry")),
+                                          0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDRETRY);
     ButtonCount++;
   }
@@ -187,8 +187,8 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
       || uType == MB_YESNOCANCEL
   ){
     wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-					  gettext(TEXT("Cancel")),
-					  0, y, w, h, OnButtonClick);
+                                          gettext(TEXT("Cancel")),
+                                          0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDCANCEL);
     ButtonCount++;
   }
@@ -196,13 +196,13 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   if (uType == MB_ABORTRETRYIGNORE
   ){
     wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-					  gettext(TEXT("Abort")),
-					  0, y, w, h, OnButtonClick);
+                                          gettext(TEXT("Abort")),
+                                          0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDABORT);
     ButtonCount++;
     wButtons[ButtonCount] = new WndButton(wf, TEXT(""),
-					  gettext(TEXT("Ignore")),
-					  0, y, w, h, OnButtonClick);
+                                          gettext(TEXT("Ignore")),
+                                          0, y, w, h, OnButtonClick);
     wButtons[ButtonCount]->SetTag(IDIGNORE);
     ButtonCount++;
   }
@@ -301,8 +301,8 @@ static HFONT FontMap[5] = {
 extern HINSTANCE hInst;
 
 XMLNode xmlLoadFromResource(LPTSTR lpName,
-			    LPCTSTR tag,
-			    XMLResults *pResults) {
+                            LPCTSTR tag,
+                            XMLResults *pResults) {
   LPTSTR lpRes;
   HRSRC hResInfo;
   HGLOBAL hRes;
@@ -342,12 +342,12 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
     if (l>0) {
       char *buf= (char*)malloc(l+2);
       if (!buf) {
-	MessageBoxX(hWndMainWindow,
-		    gettext(TEXT("Can't allocate memory")),
-		    gettext(TEXT("Dialog error")),
-		    MB_OK|MB_ICONEXCLAMATION);
-	// unable to allocate memory
-	return XMLNode::emptyXMLNode;
+        MessageBoxX(hWndMainWindow,
+                    gettext(TEXT("Can't allocate memory")),
+                    gettext(TEXT("Dialog error")),
+                    MB_OK|MB_ICONEXCLAMATION);
+        // unable to allocate memory
+        return XMLNode::emptyXMLNode;
       }
       strncpy(buf,(char*)lpRes,l);
       buf[l]=0; // need to explicitly null-terminate.
@@ -358,39 +358,39 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
 #ifdef _UNICODE
 #if !defined(UNDER_CE)
       if (!IsTextUnicode(buf,mmin(l,10000),NULL))
-	{
+        {
 #endif
-	  LPTSTR b2=(LPTSTR)malloc(l*2+2);
-	  MultiByteToWideChar(CP_ACP,          // code page
-			      MB_PRECOMPOSED,  // character-type options
-			      buf,             // string to map
-			      l,               // number of bytes in string
-			      b2,              // wide-character buffer
-			      l*2+2);          // size of buffer
-	  free(buf);
-	  buf=(char*)b2;
-	  buf[l*2]= 0;
-	  buf[l*2+1]= 0;
+          LPTSTR b2=(LPTSTR)malloc(l*2+2);
+          MultiByteToWideChar(CP_ACP,          // code page
+                              MB_PRECOMPOSED,  // character-type options
+                              buf,             // string to map
+                              l,               // number of bytes in string
+                              b2,              // wide-character buffer
+                              l*2+2);          // size of buffer
+          free(buf);
+          buf=(char*)b2;
+          buf[l*2]= 0;
+          buf[l*2+1]= 0;
 #if !defined(UNDER_CE)
-	}
+        }
 #endif
 #else
       if (IsTextUnicode(buf,mmin(l,10000),NULL))
-	{
-	  l>>=1;
-	  LPTSTR b2=(LPTSTR)malloc(l+2);
-	  WideCharToMultiByte(CP_ACP,                      // code page
-			      0,                           // performance and mapping flags
-			      (const WCHAR*)buf,           // wide-character string
-			      l,                           // number of chars in string
-			      b2,                          // buffer for new string
-			      l+2,                         // size of buffer
-			      NULL,                        // default for unmappable chars
-			      NULL                         // set when default char used
-			      );
-	  free(buf);
-	  buf=(char*)b2;
-	}
+        {
+          l>>=1;
+          LPTSTR b2=(LPTSTR)malloc(l+2);
+          WideCharToMultiByte(CP_ACP,                      // code page
+                              0,                           // performance and mapping flags
+                              (const WCHAR*)buf,           // wide-character string
+                              l,                           // number of chars in string
+                              b2,                          // buffer for new string
+                              l+2,                         // size of buffer
+                              NULL,                        // default for unmappable chars
+                              NULL                         // set when default char used
+                              );
+          free(buf);
+          buf=(char*)b2;
+        }
 #endif
 #endif
 
@@ -401,9 +401,9 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
     }
   }
   MessageBoxX(hWndMainWindow,
-	      gettext(TEXT("Can't lock resource")),
-	      gettext(TEXT("Dialog error")),
-	      MB_OK|MB_ICONEXCLAMATION);
+              gettext(TEXT("Can't lock resource")),
+              gettext(TEXT("Dialog error")),
+              MB_OK|MB_ICONEXCLAMATION);
   return XMLNode::emptyXMLNode;
 }
 
@@ -421,13 +421,13 @@ XMLNode xmlOpenResourceHelper(TCHAR *lpszXML, LPCTSTR tag)
       XMLNode::GlobalError = true;
       TCHAR errortext[100];
       _stprintf(errortext,TEXT("%s %i %i"), XMLNode::getError(pResults.error),
-		pResults.nLine, pResults.nColumn);
+                pResults.nLine, pResults.nColumn);
 
       MessageBoxX(hWndMainWindow,
-		  errortext,
-		  gettext(TEXT("Dialog error")),
-		  MB_OK|MB_ICONEXCLAMATION);
-	// was exit(255);
+                  errortext,
+                  gettext(TEXT("Dialog error")),
+                  MB_OK|MB_ICONEXCLAMATION);
+        // was exit(255);
 
     }
     return xnode;
@@ -438,7 +438,7 @@ XMLNode xmlOpenResourceHelper(TCHAR *lpszXML, LPCTSTR tag)
 
 
 WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND Parent,
-			TCHAR* resource) {
+                        TCHAR* resource) {
 
   WndForm *theForm = NULL;
   //  TCHAR sFileName[128];
@@ -468,7 +468,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
   if (xMainNode.isEmpty()) {
     if (resource) {
       xMainNode =xmlOpenResourceHelper(resource,
-				       TEXT("PMML"));
+                                       TEXT("PMML"));
     }
   }
 
@@ -501,11 +501,11 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
     COLORREF ForeColor;
 
     GetDefaultWindowControlProps(&xNode, Name, &X, &Y, &Width, &Height,
-				 &Font, sTmp);
+                                 &Font, sTmp);
     BackColor = StringToIntDflt(xNode.getAttribute(TEXT("BackColor")),
-				0xffffffff);
+                                0xffffffff);
     ForeColor = StringToIntDflt(xNode.getAttribute(TEXT("ForeColor")),
-				0xffffffff);
+                                0xffffffff);
 
     theForm = new WndForm(Parent, Name, sTmp, X, Y, Width, Height);
 
@@ -516,14 +516,14 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
       theForm->SetFont(FontMap[Font]);
     if (BackColor != 0xffffffff){
       BackColor = RGB((BackColor>>16)&0xff,
-		      (BackColor>>8)&0xff,
-		      (BackColor>>0)&0xff);
+                      (BackColor>>8)&0xff,
+                      (BackColor>>0)&0xff);
       theForm->SetBackColor(BackColor);
     }
     if (ForeColor != 0xffffffff){
       ForeColor = RGB((ForeColor>>16)&0xff,
-		      (ForeColor>>8)&0xff,
-		      (ForeColor>>0)&0xff);
+                      (ForeColor>>8)&0xff,
+                      (ForeColor>>0)&0xff);
       theForm->SetForeColor(ForeColor);
     }
 
@@ -531,9 +531,9 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 
     if (XMLNode::GlobalError) {
       MessageBoxX(hWndMainWindow,
-		 gettext(TEXT("Error in loading XML dialog")),
-		 gettext(TEXT("Dialog error")),
-		 MB_OK|MB_ICONEXCLAMATION);
+                 gettext(TEXT("Error in loading XML dialog")),
+                 gettext(TEXT("Dialog error")),
+                 MB_OK|MB_ICONEXCLAMATION);
 
       delete theForm;
       return NULL;
@@ -555,9 +555,9 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 
 
 void LoadChildsFromXML(WindowControl *Parent,
-		       CallBackTableEntry_t *LookUpTable,
-		       XMLNode *Node,
-		       int ParentFont) {
+                       CallBackTableEntry_t *LookUpTable,
+                       XMLNode *Node,
+                       int ParentFont) {
 
   int X,Y,Width,Height,Font;
   TCHAR Caption[128];
@@ -575,25 +575,25 @@ void LoadChildsFromXML(WindowControl *Parent,
     XMLNode childNode = Node->getChildNode(i);
 
     GetDefaultWindowControlProps(&childNode,
-				 Name,
-				 &X, &Y,
-				 &Width, &Height,
-				 &Font, Caption);
+                                 Name,
+                                 &X, &Y,
+                                 &Width, &Height,
+                                 &Font, Caption);
 
     BackColor = StringToIntDflt(childNode.getAttribute(TEXT("BackColor")),
-				0xffffffff);
+                                0xffffffff);
     ForeColor = StringToIntDflt(childNode.getAttribute(TEXT("ForeColor")),
-				0xffffffff);
+                                0xffffffff);
     Visible = StringToIntDflt(childNode.getAttribute(TEXT("Visible")), 1) == 1;
     if (BackColor != 0xffffffff){
       BackColor = RGB((BackColor>>16)&0xff,
-		      (BackColor>>8)&0xff,
-		      (BackColor>>0)&0xff);
+                      (BackColor>>8)&0xff,
+                      (BackColor>>0)&0xff);
     }
     if (ForeColor != 0xffffffff){
       ForeColor = RGB((ForeColor>>16)&0xff,
-		      (ForeColor>>8)&0xff,
-		      (ForeColor>>0)&0xff);
+                      (ForeColor>>8)&0xff,
+                      (ForeColor>>0)&0xff);
     }
     Font = StringToIntDflt(childNode.getAttribute(TEXT("Font")), ParentFont);
 
@@ -607,40 +607,40 @@ void LoadChildsFromXML(WindowControl *Parent,
       int MultiLine;
 
       CaptionWidth =
-	StringToIntDflt(childNode.getAttribute(TEXT("CaptionWidth")),
-			0)*ISCALE;
+        StringToIntDflt(childNode.getAttribute(TEXT("CaptionWidth")),
+                        0)*ISCALE;
       MultiLine =
-	StringToIntDflt(childNode.getAttribute(TEXT("MultiLine")),
-			0);
+        StringToIntDflt(childNode.getAttribute(TEXT("MultiLine")),
+                        0);
       ReadOnly =
-	StringToIntDflt(childNode.getAttribute(TEXT("ReadOnly")),
-			0);
+        StringToIntDflt(childNode.getAttribute(TEXT("ReadOnly")),
+                        0);
 
       _tcscpy(DataNotifyCallback,
-	      StringToStringDflt(childNode.getAttribute(TEXT("OnDataNotify")),
-				 TEXT("")));
+              StringToStringDflt(childNode.getAttribute(TEXT("OnDataNotify")),
+                                 TEXT("")));
 
       _tcscpy(OnHelpCallback,
-	      StringToStringDflt(childNode.getAttribute(TEXT("OnHelp")),
-				 TEXT("")));
+              StringToStringDflt(childNode.getAttribute(TEXT("OnHelp")),
+                                 TEXT("")));
 
       _tcscpy(Caption,
-	      StringToStringDflt(childNode.getAttribute(TEXT("Caption")),
-				 TEXT("")));
+              StringToStringDflt(childNode.getAttribute(TEXT("Caption")),
+                                 TEXT("")));
 
       WC = W =
-	new WndProperty(Parent, Name, Caption, X, Y,
-			Width, Height, CaptionWidth,
-			(WndProperty::DataChangeCallback_t)
-			CallBackLookup(LookUpTable, DataNotifyCallback),
-			MultiLine);
+        new WndProperty(Parent, Name, Caption, X, Y,
+                        Width, Height, CaptionWidth,
+                        (WndProperty::DataChangeCallback_t)
+                        CallBackLookup(LookUpTable, DataNotifyCallback),
+                        MultiLine);
 
       W->SetOnHelpCallback((WindowControl::OnHelpCallback_t)
-			   CallBackLookup(LookUpTable, OnHelpCallback));
+                           CallBackLookup(LookUpTable, OnHelpCallback));
 
       W->SetHelpText(StringToStringDflt(
-		     childNode.getAttribute(TEXT("Help")),
-		     TEXT("")));
+                     childNode.getAttribute(TEXT("Help")),
+                     TEXT("")));
 
       Caption[0] = '\0';
       W->SetReadOnly(ReadOnly != 0);
@@ -654,47 +654,47 @@ void LoadChildsFromXML(WindowControl *Parent,
         double Min, Max, Step;
 
         XMLNode dataFieldNode =
-	  childNode.getChildNode(TEXT("DataField"), 0);
+          childNode.getChildNode(TEXT("DataField"), 0);
 
         _tcscpy(DataType,
-		StringToStringDflt(dataFieldNode.
-				   getAttribute(TEXT("DataType")),
-				   TEXT("")));
+                StringToStringDflt(dataFieldNode.
+                                   getAttribute(TEXT("DataType")),
+                                   TEXT("")));
         _tcscpy(DisplayFmt,
-		StringToStringDflt(dataFieldNode.
-				   getAttribute(TEXT("DisplayFormat")),
-				   TEXT("")));
+                StringToStringDflt(dataFieldNode.
+                                   getAttribute(TEXT("DisplayFormat")),
+                                   TEXT("")));
         _tcscpy(EditFormat,
-		StringToStringDflt(dataFieldNode.
-				   getAttribute(TEXT("EditFormat")),
-				   TEXT("")));
+                StringToStringDflt(dataFieldNode.
+                                   getAttribute(TEXT("EditFormat")),
+                                   TEXT("")));
         _tcscpy(OnDataAccess,
-		StringToStringDflt(dataFieldNode.
-				   getAttribute(TEXT("OnDataAccess")),
-				   TEXT("")));
+                StringToStringDflt(dataFieldNode.
+                                   getAttribute(TEXT("OnDataAccess")),
+                                   TEXT("")));
         ReadOnly = StringToIntDflt(dataFieldNode.
-				   getAttribute(TEXT("ReadOnly")), 0);
+                                   getAttribute(TEXT("ReadOnly")), 0);
         Min = StringToIntDflt(dataFieldNode.
-			      getAttribute(TEXT("Min")), INT_MIN);
+                              getAttribute(TEXT("Min")), INT_MIN);
         Max = StringToIntDflt(dataFieldNode.
-			      getAttribute(TEXT("Max")), INT_MAX);
+                              getAttribute(TEXT("Max")), INT_MAX);
         Step = StringToFloatDflt(dataFieldNode.
-				 getAttribute(TEXT("Step")), 1);
+                                 getAttribute(TEXT("Step")), 1);
 
         if (_tcsicmp(DataType, TEXT("enum"))==0){
           W->SetDataField(
-			  new DataFieldEnum(EditFormat, DisplayFmt, false,
-					    (DataField::DataAccessCallback_t)
-					    CallBackLookup(LookUpTable,
-							   OnDataAccess))
+                          new DataFieldEnum(EditFormat, DisplayFmt, false,
+                                            (DataField::DataAccessCallback_t)
+                                            CallBackLookup(LookUpTable,
+                                                           OnDataAccess))
           );
         }
         if (_tcsicmp(DataType, TEXT("filereader"))==0){
           W->SetDataField(
-			  new DataFieldFileReader(EditFormat,
-						  DisplayFmt,
-						  (DataField::DataAccessCallback_t)
-						  CallBackLookup(LookUpTable, OnDataAccess))
+                          new DataFieldFileReader(EditFormat,
+                                                  DisplayFmt,
+                                                  (DataField::DataAccessCallback_t)
+                                                  CallBackLookup(LookUpTable, OnDataAccess))
           );
         }
         if (_tcsicmp(DataType, TEXT("boolean"))==0){
@@ -711,7 +711,7 @@ void LoadChildsFromXML(WindowControl *Parent,
         }
         if (_tcsicmp(DataType, TEXT("integer"))==0){
           W->SetDataField(
-			  new DataFieldInteger(EditFormat, DisplayFmt, (int)Min, (int)Max, (int)0, (int)Step,
+                          new DataFieldInteger(EditFormat, DisplayFmt, (int)Min, (int)Max, (int)0, (int)Step,
               (DataField::DataAccessCallback_t) CallBackLookup(LookUpTable, OnDataAccess))
           );
         }
@@ -734,7 +734,7 @@ void LoadChildsFromXML(WindowControl *Parent,
 
       WC = new WndButton(Parent, Name, Caption, X, Y, Width, Height,
                (WndButton::ClickNotifyCallback_t)
-			 CallBackLookup(LookUpTable, ClickCallback));
+                         CallBackLookup(LookUpTable, ClickCallback));
 
       Caption[0] = '\0';
 
@@ -749,16 +749,16 @@ void LoadChildsFromXML(WindowControl *Parent,
       TCHAR iename[100];
       TCHAR ieparameters[100];
       _tcscpy(iename,
-	      StringToStringDflt(childNode.
-				 getAttribute(TEXT("InputEvent")),
-				 TEXT("")));
+              StringToStringDflt(childNode.
+                                 getAttribute(TEXT("InputEvent")),
+                                 TEXT("")));
       _tcscpy(ieparameters,
-	      StringToStringDflt(childNode.
-				 getAttribute(TEXT("Parameters")),
-				 TEXT("")));
+              StringToStringDflt(childNode.
+                                 getAttribute(TEXT("Parameters")),
+                                 TEXT("")));
 
       WC = new WndEventButton(Parent, Name, Caption, X, Y, Width, Height,
-			      iename, ieparameters);
+                              iename, ieparameters);
 
       Caption[0] = '\0';
 

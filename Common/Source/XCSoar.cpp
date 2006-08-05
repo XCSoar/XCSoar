@@ -607,6 +607,7 @@ HWND                                                    CreateRpCommandBar(HWND 
 #ifdef DEBUG
 void                                            DebugStore(char *Str);
 #endif
+void StartupStore(char *Str);
 
 
 void HideMenu() {
@@ -925,6 +926,7 @@ void UnlockComm() {
 
 void RestartCommPorts() {
   static bool first = true;
+  StartupStore(TEXT("RestartCommPorts\r\n"));
 
   LockComm();
 #if (WINDOWSPC>0)
@@ -1199,9 +1201,6 @@ void CreateCalculationThread() {
 
 }
 
-void dlgStartupShowModal(void);
-
-
 
 void PreloadInitialisation(bool ask) {
   SetToRegistry(TEXT("XCV"), 1);
@@ -1209,7 +1208,6 @@ void PreloadInitialisation(bool ask) {
   // Registery (early)
 
   if (ask) {
-
     RestoreRegistry();
     ReadRegistrySettings();
     StatusFileInit();
@@ -1243,6 +1241,8 @@ int ProgramStarted = 0;
 // 3: normal operation
 
 void AfterStartup() {
+  StartupStore(TEXT("CloseProgressDialog\r\n"));
+
   CloseProgressDialog();
 
   NMEAParser::GpsUpdated = true;
@@ -1256,8 +1256,10 @@ void AfterStartup() {
   StatusMessageData[0].delay_ms = 20000; // 20 seconds
 
 #ifdef _SIM_
+  StartupStore(TEXT("GCE_STARTUP_SIMULATOR\r\n"));
   InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
 #else
+  StartupStore(TEXT("GCE_STARTUP_REAL\r\n"));
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
   StatusMessageData[0].delay_ms = olddelay;
@@ -1267,8 +1269,18 @@ void AfterStartup() {
 #endif
 
   // Create default task if none exists
+  StartupStore(TEXT("Create default task\r\n"));
   DefaultTask();
 
+}
+
+
+void StartupLogFreeRamAndStorage() {
+  TCHAR temp[100];
+  int freeram = CheckFreeRam()/1024;
+  int freestorage = FindFreeSpace(LocalPath());
+  _stprintf(temp,TEXT("Free ram %d\r\nFree storage %d\r\n"), freeram, freestorage);
+  StartupStore(temp);
 }
 
 
@@ -1306,12 +1318,21 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
   // (future/next version) wcscat(XCSoar_Version, TEXT("BETA 4.6.1"));
 
+  StartupStore(TEXT("Starting XCSoar "));
+  StartupStore(XCSoar_Version);
+  StartupStore(TEXT("\r\n"));
+
+  //
+  StartupLogFreeRamAndStorage();
+
   XCSoarGetOpts(lpCmdLine);
 
   icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
   icc.dwICC = ICC_UPDOWN_CLASS;
   InitCommonControls();
   InitSineTable();
+
+  StartupStore(TEXT("Initialise application instance\r\n"));
 
   // Perform application initialization:
   if (!InitInstance (hInstance, nCmdShow))
@@ -1335,6 +1356,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   //	Also APPA is record key on some systems
   SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
+
+  StartupStore(TEXT("Initialising critical sections and events\r\n"));
 
   InitializeCriticalSection(&CritSec_EventQueue);
   csEventQueueInitialized = true;
@@ -1361,6 +1384,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // display start up screen
   //  StartupScreen();
   // not working very well at all
+
 
   OpenGeoid();
 
@@ -1409,6 +1433,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
+  StartupStore(TEXT("GlidePolar::SetBallast\r\n"));
   GlidePolar::SetBallast();
 
   OpenTerrain();
@@ -1435,6 +1460,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // ... register all supported devices
   // ADD NEW ONES TO BOTTOM OF THIS LIST
+  StartupStore(TEXT("Register serial devices\r\n"));
   cai302Register();
   ewRegister();
   atrRegister();
@@ -1444,13 +1470,16 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   //JMW disabled  devInit(lpCmdLine);
 
 #ifndef _SIM_
+  StartupStore(TEXT("RestartCommPorts\r\n"));
   RestartCommPorts();
 #endif
 #if (WINDOWSPC>0)
   devInit(TEXT(""));
 #endif
 
+
   // re-set polar in case devices need the data
+  StartupStore(TEXT("GlidePolar::SetBallast\r\n"));
   GlidePolar::SetBallast();
 
 #if (EXPERIMENTAL > 0)
@@ -1465,22 +1494,28 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   DoSunEphemeris(147.0,-36.0);
 
   // Finally ready to go
+  StartupStore(TEXT("CreateDrawingThread\r\n"));
   MapWindow::CreateDrawingThread();
   GlobalRunning = true;
   Sleep(100);
+  StartupStore(TEXT("ShowInfoBoxes\r\n"));
   ShowInfoBoxes();
 
   SwitchToMapWindow();
+  StartupStore(TEXT("CreateCalculationThread\r\n"));
   CreateCalculationThread();
   Sleep(500);
 
 #if (NEWAIRSPACEWARNING>0)
   // experimental
+  StartupStore(TEXT("AirspaceWarnListInit\r\n"));
   AirspaceWarnListInit();
+  StartupStore(TEXT("dlgAirspaceWarningInit\r\n"));
   dlgAirspaceWarningInit();
 #endif
 
   // Da-da, start everything now
+  StartupStore(TEXT("ProgramStarted=1\r\n"));
   ProgramStarted = 1;
 
   // Main message loop:
@@ -1769,6 +1804,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
   #endif
 
+  StartupStore(TEXT("Create main window\r\n"));
+
   hWndMainWindow = CreateWindow(szWindowClass, szTitle,
 				WS_SYSMENU|WS_CLIPCHILDREN
 				| WS_CLIPSIBLINGS,
@@ -1800,31 +1837,44 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   rc.bottom = SCREENHEIGHT;
 #endif
 
+  StartupStore(TEXT("InfoBox geometry\r\n"));
+
   InfoBoxLayout::ScreenGeometry(rc);
 
   ///////////////////////////////////////// create infoboxes
 
+  StartupStore(TEXT("Load unit bitmaps\r\n"));
+
   Units::LoadUnitBitmap(hInstance);
 
+  StartupStore(TEXT("Create info boxes\r\n"));
+
   InfoBoxLayout::CreateInfoBoxes(rc);
+
+  StartupStore(TEXT("Create FLARM gauge\r\n"));
   GaugeFLARM::Create();
 
+  StartupStore(TEXT("Create button labels\r\n"));
   ButtonLabel::CreateButtonLabels(rc);
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
   ////////////////// do fonts
+  StartupStore(TEXT("Initialise fonts\r\n"));
   InitialiseFonts(rc);
 
   #if NEWINFOBOX > 0
   ButtonLabel::SetFont(MapWindowBoldFont);
   #endif
 
+  StartupStore(TEXT("Initialise message system\r\n"));
   Message::Initialize(rc); // creates window, sets fonts
 
   ShowWindow(hWndMainWindow, SW_SHOW);
 
   ///////////////////////////////////////////////////////
   //// create map window
+
+  StartupStore(TEXT("Create map window\r\n"));
 
   hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,
 			       WS_VISIBLE | WS_CHILD
@@ -1974,13 +2024,17 @@ bool Debounce(void) {
 
 void Shutdown(void) {
   int i;
+  StartupStore(TEXT("Entering shutdown...\r\n"));
+  StartupLogFreeRamAndStorage();
 
   // turn off all displays
   GlobalRunning = false;
 
 #if (NEWAIRSPACEWARNING>0)
   // experimental
+  StartupStore(TEXT("dlgAirspaceWarningDeInit\r\n"));
   dlgAirspaceWarningDeInit();
+  StartupStore(TEXT("AirspaceWarnListDeInit\r\n"));
   AirspaceWarnListDeInit();
 #endif
 
@@ -1989,6 +2043,7 @@ void Shutdown(void) {
 
   // Stop sound
 
+  StartupStore(TEXT("SaveSoundSettings\r\n"));
   SaveSoundSettings();
 
 #ifndef DISABLEAUDIOVARIO
@@ -2003,6 +2058,7 @@ void Shutdown(void) {
 
   // Stop drawing
 
+  StartupStore(TEXT("CloseDrawingThread\r\n"));
   MapWindow::CloseDrawingThread();
 
   // Stop calculating too (wake up)
@@ -2011,19 +2067,26 @@ void Shutdown(void) {
   SetEvent(varioTriggerEvent);
 
   // Clear data
+
+  StartupStore(TEXT("Clear task data\r\n"));
+  LockTaskData();
   Task[0].Index = -1;  ActiveWayPoint = -1;
-  CloseWayPoints();
   AATEnabled = FALSE;
   NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0;
   NumberOfAirspaceCircles = 0;
+  CloseWayPoints();
+  UnlockTaskData();
+
   CloseTerrain();
   CloseTopology();
   CloseTerrainRenderer();
 
   // Stop COM devices
+  StartupStore(TEXT("Stop COM devices\r\n"));
   devCloseAll();
 
   #if defined(GNAV)
+    StartupStore(TEXT("Altair shutdown\r\n"));
     Sleep(2500);
     InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
     while(1) {
@@ -2255,6 +2318,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (ProgramStarted==2) {
 	  AfterStartup();
 	  ProgramStarted= 3;
+          StartupStore(TEXT("ProgramStarted=3\r\n"));
+          StartupLogFreeRamAndStorage();
 	}
       }
       break;
@@ -3270,6 +3335,7 @@ void PopUpSelect(int Index)
 void DebugStore(char *Str)
 {
 #ifdef DEBUG
+  LockFlightData();
   FILE *stream;
   static TCHAR szFileName[] = TEXT("\\xcsoar-debug.log");
 
@@ -3278,7 +3344,38 @@ void DebugStore(char *Str)
   fwrite(Str,strlen(Str),1,stream);
 
   fclose(stream);
+  UnlockFlightData();
 #endif
+}
+
+
+void StartupStore(TCHAR *Str)
+{
+  if (csFlightDataInitialized) {
+    LockFlightData();
+  }
+  HANDLE hFile = INVALID_HANDLE_VALUE;
+  static TCHAR szFileName[MAX_PATH];
+  static bool initialised = false;
+  if (!initialised) {
+    _stprintf(szFileName,TEXT("%s%s"),LocalPath(),TEXT("xcsoar-startup.log"));
+    hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
+                       NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+    initialised = true;
+  } else {
+    hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
+                       NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+    SetFilePointer(hFile, 0, NULL, FILE_END);
+  }
+  if (hFile != INVALID_HANDLE_VALUE) {
+    DWORD dwBytesRead;
+    WriteFile(hFile, Str, _tcslen(Str)*sizeof(TCHAR), &dwBytesRead,
+	    (OVERLAPPED *)NULL);
+    CloseHandle(hFile);
+  }
+  if (csFlightDataInitialized) {
+    UnlockFlightData();
+  }
 }
 
 

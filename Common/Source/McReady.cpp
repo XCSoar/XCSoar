@@ -68,6 +68,7 @@ double GlidePolar::AbortSafetyMacCready() {
 
 
 void GlidePolar::SetBallast() {
+
   LockFlightData();
   double BallastWeight;
   BallastLitres = WEIGHTS[2] * BALLAST;

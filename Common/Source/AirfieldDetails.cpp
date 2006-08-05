@@ -188,6 +188,8 @@ void ParseAirfieldDetails() {
 
 void ReadAirfieldFile() {
 
+  StartupStore(TEXT("ReadAirfieldFile\r\n"));
+
   HWND hProgress;
 
   hProgress=CreateProgressDialog(gettext(TEXT("Loading Airfield Details File...")));

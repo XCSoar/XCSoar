@@ -93,6 +93,9 @@ LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
 
 void GaugeVario::Create() {
+
+  StartupStore(TEXT("Create Vario\r\n"));
+
   RECT bigrc;
   bigrc = MapWindow::MapRect;
 
