@@ -47,6 +47,7 @@ extern TCHAR startProfileFile[];
 
 void dlgStartupShowModal(void){
   WndProperty* wp;
+  StartupStore(TEXT("Startup dialog\r\n"));
 
   wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgStartup.xml")), 
 		      hWndMainWindow,

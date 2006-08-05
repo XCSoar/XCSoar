@@ -170,6 +170,7 @@ int DLLCache_Count = 0;
 
 // Read the data files
 void InputEvents::readFile() {
+  StartupStore(TEXT("Loading input events file\r\n"));
 
   // clear the GCE and NMEA queues
   LockEventQueue();
@@ -1926,6 +1927,8 @@ void InputEvents::eventSetup(TCHAR *misc) {
 // Runs the plugin of the specified filename
 void InputEvents::eventDLLExecute(TCHAR *misc) {
   // LoadLibrary(TEXT("test.dll"));
+
+  StartupStore(misc);
 	
   TCHAR data[MAX_PATH];
   TCHAR* dll_name;

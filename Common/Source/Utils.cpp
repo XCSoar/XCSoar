@@ -384,6 +384,8 @@ void ReadRegistrySettings(void)
   DWORD Temp = 0;
   int i;
 
+  StartupStore(TEXT("Read registry settings\r\n"));
+
 #ifdef GNAV
   DefaultRegistrySettingsAltair();
 #endif
@@ -1480,6 +1482,9 @@ bool ReadWinPilotPolar(void) {
 
 void CalculateNewPolarCoef(void)
 {
+
+  StartupStore(TEXT("Calculate New Polar Coef\r\n"));
+
   static double Polars[7][3] =
     {
       {-0.0538770500225782443497, 0.1323114348, -0.1273364037098239098543},
@@ -2494,6 +2499,8 @@ void SaveWindToRegistry() {
 
 
 void LoadWindFromRegistry() {
+  StartupStore(TEXT("Load wind from registry\r\n"));
+
   DWORD Temp;
   Temp=0;
   GetFromRegistry(szRegistryWindSpeed,&Temp);
@@ -2750,6 +2757,7 @@ cont:
 
 
 void ReadLanguageFile() {
+    StartupStore(TEXT("Loading language file\r\n"));
 
 	TCHAR szFile1[MAX_PATH] = TEXT("\0");
 	FILE *fp=NULL;
@@ -2792,6 +2800,8 @@ void ReadLanguageFile() {
 }
 
 void StatusFileInit() {
+  StartupStore(TEXT("StatusFileInit\r\n"));
+
   // DEFAULT - 0 is loaded as default, and assumed to exist
   StatusMessageData[0].key = TEXT("DEFAULT");
   StatusMessageData[0].doStatus = true;
@@ -2807,6 +2817,8 @@ void StatusFileInit() {
 
 void ReadStatusFile() {
   
+  StartupStore(TEXT("Loading status file\r\n"));
+
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   FILE *fp=NULL;
   
@@ -3257,11 +3269,13 @@ TCHAR startProfileFile[MAX_PATH];
 TCHAR defaultProfileFile[MAX_PATH];
 
 void RestoreRegistry(void) {
+  StartupStore(TEXT("Restore registry\r\n"));
   // load registry backup if it exists
   LoadRegistryFromFile(startProfileFile);
 }
 
 void StoreRegistry(void) {
+  StartupStore(TEXT("Store registry\r\n"));
   // save registry backup first (try a few places)
   SaveRegistryToFile(startProfileFile);
   SaveRegistryToFile(defaultProfileFile);
@@ -3615,6 +3629,8 @@ void CloseFLARMDetails() {
 }
 
 void OpenFLARMDetails() {
+  StartupStore(TEXT("OpenFLARMDetails\r\n"));
+
   if (NumberOfFLARMNames) {
     CloseFLARMDetails();
   }

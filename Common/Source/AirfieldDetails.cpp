@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.18 2006/02/28 13:38:25 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.19 2006/08/05 13:31:24 jwharington Exp $
 
 
 Copyright_License {
@@ -187,6 +187,8 @@ void ParseAirfieldDetails() {
 
 
 void ReadAirfieldFile() {
+
+  StartupStore(TEXT("ReadAirfieldFile\r\n"));
 
   HWND hProgress;
 

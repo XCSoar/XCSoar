@@ -29,6 +29,7 @@ Copyright_License {
 */
 
 #include "stdafx.h"
+#include "XCSoar.h"
 #include "GaugeCDI.h"
 
 HWND hWndCDIWindow = NULL; //CDI Window
@@ -41,6 +42,7 @@ extern HINSTANCE hInst;      // The current instance
 
 void GaugeCDI::Create() {
   // start of new code for displaying CDI window
+  StartupStore(TEXT("Create CDI\r\n"));
 
   RECT rc;
 

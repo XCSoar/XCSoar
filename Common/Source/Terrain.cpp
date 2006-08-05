@@ -185,6 +185,7 @@ void ReadTopology() {
 
 
 void CloseTopology() {
+  StartupStore(TEXT("CloseTopology\r\n"));
 
   LockTerrainDataGraphics();
   for (int z=0; z<MAXTOPOLOGY; z++) {
@@ -907,6 +908,8 @@ extern TCHAR szRegistryTopologyFile[];
 
 
 void OpenTopology() {
+  StartupStore(TEXT("OpenTopology\r\n"));
+
   static TCHAR  szFile[MAX_PATH] = TEXT("\0");
   static HANDLE hFile;
   static  TCHAR Directory[MAX_PATH];

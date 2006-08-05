@@ -318,6 +318,8 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
 
 void RasterTerrain::OpenTerrain(void)
 {
+  StartupStore(TEXT("OpenTerrain\r\n"));
+
   DWORD dwBytesRead;
   static TCHAR  szFile[MAX_PATH] = TEXT("\0");
 
@@ -365,6 +367,8 @@ void RasterTerrain::OpenTerrain(void)
 
 void RasterTerrain::CloseTerrain(void)
 {
+  StartupStore(TEXT("CloseTerrain\r\n"));
+
   //if( hTerrain == NULL)
   if( fpTerrain == NULL)
     {
