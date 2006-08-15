@@ -388,6 +388,12 @@ void DoLogger(TCHAR *strAssetNumber)
   TCHAR TaskMessage[1024];
   int i;
 
+  if (ReplayLogger::IsEnabled()) { 
+    if (LoggerActive) 
+      guiStopLogger(true); 
+    return;
+  }
+
   if(LoggerActive)
     {
       if(MessageBoxX(hWndMapWindow,
@@ -657,7 +663,7 @@ bool ReplayLogger::ReadPoint(double *Time,
 extern NMEA_INFO GPS_INFO;
 
 TCHAR ReplayLogger::FileName[MAX_PATH];
-bool ReplayLogger::Enabled = false; // test only
+bool ReplayLogger::Enabled = false; 
 double ReplayLogger::TimeScale = 1.0;
 
 bool ReplayLogger::IsEnabled(void) {

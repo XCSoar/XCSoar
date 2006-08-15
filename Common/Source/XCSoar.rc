@@ -135,7 +135,7 @@ IDD_PROGRESS_LANDSCAPE DIALOG DISCARDABLE  0, 0, 158, 121
 STYLE DS_CENTER | WS_CHILD | WS_VISIBLE | WS_GROUP
 FONT 10, "System"
 BEGIN
-    LTEXT           "Version",IDC_VERSION,9,2,123,8
+    LTEXT           "Version",IDC_VERSION,2,0,136,11
     CONTROL         251,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,8,12,
                     127,94
     CONTROL         "Progress1",IDC_PROGRESS1,"msctls_progress32",
@@ -146,7 +146,7 @@ BEGIN
 #endif
 		    140,0,17,121,
                     WS_EX_DLGMODALFRAME
-    RTEXT           "Progress please wait",IDC_MESSAGE,2,107,136,11,
+    RTEXT           "Progress please wait",IDC_MESSAGE,2,110,136,11,
                     SS_CENTERIMAGE
 END
 
@@ -800,6 +800,9 @@ IDR_XML_VOICE           XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgVoice.xml
 IDR_XML_WAYPOINTTERRAIN XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointOutOfTerrain.xml"
 IDR_XML_AIRSPACEWARNING XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceWarning.xml"
 IDR_XML_HELP            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgHelp.xml"
+IDR_XML_TEXTENTRY            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTextEntry.xml"
+
+IDR_XML_TEAMCODE            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTeamCode.xml"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -709,6 +709,12 @@ other languages.  If this field is left blank, then XCSoar uses English.
     <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=1 Max=30 Step=1/>
   </WndProperty>
 
+  <WndButton Name="cmdPilotName" Caption="Pilot name: " X=2 Y=-1 Width=246  Height=22 Font=2 />
+
+  <WndButton Name="cmdAircraftType" Caption="Aircraft type: " X=2 Y=-1 Width=246  Height=22 Font=2 />
+
+  <WndButton Name="cmdAircraftRego" Caption="Aircraft rego: " X=2 Y=-1 Width=246  Height=22 Font=2 />
+
   </WndFrame>
 
 </WndForm>    

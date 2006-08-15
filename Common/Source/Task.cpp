@@ -129,7 +129,7 @@ void InsertWaypoint(int index, bool append) {
 
 // Create a default task to home at startup if no task is present
 void DefaultTask(void) {
-  if (Task[0].Index == -1) {
+  if ((Task[0].Index == -1)||(ActiveWayPoint==-1)) {
     if (HomeWaypoint != -1) {
       Task[0].Index = HomeWaypoint;
       ActiveWayPoint = 0;
@@ -536,6 +536,11 @@ void CalculateAATTaskSectors(void)
 void guiStartLogger(bool noAsk) {
   int i;
   if (!LoggerActive) {
+    if (ReplayLogger::IsEnabled()) { 
+      if (LoggerActive) 
+        guiStopLogger(true); 
+      return;
+    }
     TCHAR TaskMessage[1024];
     _tcscpy(TaskMessage,TEXT("Start Logger With Declaration\r\n"));
     for(i=0;i<MAXTASKPOINTS;i++)
@@ -705,6 +710,7 @@ void LoadNewTask(TCHAR *szFileName)
         {
           if(!ReadFile(hFile,&Temp,sizeof(TASK_POINT),&dwBytesRead, (OVERLAPPED *)NULL))
             {
+              TaskInvalid = true;
               break;
             }
 	  memcpy(&Task[i],&Temp, sizeof(TASK_POINT));
@@ -746,13 +752,17 @@ void LoadNewTask(TCHAR *szFileName)
 	  void(0);
       }
       CloseHandle(hFile);
-    }
+  } else {
+    TaskInvalid = true;
+  }
 
   if (TaskInvalid) {
     for(i=0;i<MAXTASKPOINTS;i++)
       {
 	Task[i].Index = -1;
       }
+    ActiveWayPoint = -1;
+    DefaultTask();
   }
   
   RefreshTask();
@@ -792,6 +802,7 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
         {
           if(!ReadFile(hFile,&Temp,sizeof(TASK_POINT),&dwBytesRead, (OVERLAPPED *)NULL))
             {
+              TaskInvalid = true;
               break;
             }
 	  
@@ -831,13 +842,17 @@ void LoadTask(TCHAR *szFileName, HWND hDlg)
 	  void(0);
       }
       CloseHandle(hFile);
-    }
+    } else {
+    TaskInvalid = true;
+  }
 
   if (TaskInvalid) {
     for(i=0;i<MAXTASKPOINTS;i++)
       {
 	Task[i].Index = -1;
       }
+    ActiveWayPoint = -1;
+    DefaultTask();
   }
 
   for(i=0;i<MAXTASKPOINTS;i++)

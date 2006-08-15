@@ -36,6 +36,30 @@ class InfoBoxFormatter {
 };
 
 
+class FormatterTeamCode: public InfoBoxFormatter {
+ public:
+  FormatterTeamCode(TCHAR *theformat):InfoBoxFormatter(theformat) {};
+
+  #if NEWINFOBOX
+  virtual TCHAR *Render(int *color);
+  #else
+  virtual void Render(HWND hWnd);
+  #endif
+};
+
+
+class FormatterDiffTeamBearing: public InfoBoxFormatter {
+ public:
+  FormatterDiffTeamBearing(TCHAR *theformat):InfoBoxFormatter(theformat) {};
+
+  #if NEWINFOBOX
+  virtual TCHAR *Render(int *color);
+  #else
+  virtual void Render(HWND hWnd);
+  #endif
+};
+
+
 class FormatterWaypoint: public InfoBoxFormatter {
  public:
   FormatterWaypoint(TCHAR *theformat):InfoBoxFormatter(theformat) {};

@@ -22,7 +22,7 @@
 // Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 // Boston, MA  02111-1307, USA.
 //
-// $Id: leastsqs.h,v 1.2 2006/07/14 14:29:12 jwharington Exp $
+// $Id: leastsqs.h,v 1.3 2006/08/15 02:14:33 jwharington Exp $
 
 
 #ifndef _LEASTSQS_H
@@ -55,9 +55,9 @@ class LeastSquares {
 
   double y_ave;
 
-  double xstore[MAX_STATISTICS];
-  double ystore[MAX_STATISTICS];
-  double weightstore[MAX_STATISTICS];
+  float xstore[MAX_STATISTICS];
+  float ystore[MAX_STATISTICS];
+  float weightstore[MAX_STATISTICS];
 
   LeastSquares() {
     Reset();

@@ -11,11 +11,12 @@ int EnableThermalLocator = 1;
 
 void ThermalLocator_Point::Drift(double t_0,
 				 double longitude_0, double latitude_0,
-				 double drift_lon, double drift_lat) {
+				 double drift_lon, double drift_lat,
+                                 double decay) {
 
   // convert to flat earth coordinates, then drift by wind and delta t  
   double dt = t_0-t;
-  weight = 1.0/(exp(-3.0*dt/TLOCATOR_NMAX));
+  weight = 1.0/(exp(-3.0*decay*dt/TLOCATOR_NMAX));
   x = (longitude+drift_lon*dt-longitude_0)*fastcosine(latitude_0);
   y = (latitude+drift_lat*dt-latitude_0);
 
@@ -84,7 +85,7 @@ void ThermalLocator::Update(double t_0,
 			    double *Thermal_R) {
 
   if (npoints<TLOCATOR_NMIN) {
-    *Thermal_R = 0;
+    *Thermal_R = -1;
     *Thermal_W = 0;
     return; // nothing to do.
   }
@@ -100,16 +101,72 @@ void ThermalLocator::Update(double t_0,
 					  wind_bearing, 
 					  wind_speed));
 
-  // drift points (only do this once)
-  Drift(t_0, longitude_0, latitude_0, traildrift_lon, traildrift_lat);
-
   // drift estimate from previous time step
   double dt = t_0-est_t;
   est_longitude += traildrift_lon*dt;
   est_latitude += traildrift_lat*dt;
-
   est_x = (est_longitude-longitude_0)*fastcosine(latitude_0);
   est_y = (est_latitude-latitude_0);
+
+  double Thermal_Longitude0;
+  double Thermal_Latitude0;
+  double Thermal_W0;
+  double Thermal_R0;
+
+  Update_Internal(t_0, longitude_0, latitude_0,
+                  traildrift_lon, traildrift_lat,
+                  trackbearing, 1.0,
+                  Thermal_Longitude,
+                  Thermal_Latitude,
+                  Thermal_W,
+                  Thermal_R);
+
+  Update_Internal(t_0, longitude_0, latitude_0,
+                  traildrift_lon, traildrift_lat,
+                  trackbearing, 2.0,
+                  &Thermal_Longitude0,
+                  &Thermal_Latitude0,
+                  &Thermal_W0,
+                  &Thermal_R0);
+
+  if ((Thermal_W0>0)&&(*Thermal_W>0)) {
+
+    double d = Distance(*Thermal_Latitude, *Thermal_Longitude,
+                        Thermal_Latitude0, Thermal_Longitude0);
+    //    if (d>200.0) {
+    // big shift detected
+
+#ifdef DEBUG
+    char buffer[100];
+    sprintf(buffer,"%f %f %f %f %f # center2 \n",
+	    *Thermal_Longitude, *Thermal_Latitude,
+            Thermal_Longitude0, Thermal_Latitude0,
+            d);
+    DebugStore(buffer);
+#endif
+
+    //    }
+
+  }
+
+}
+
+
+
+void ThermalLocator::Update_Internal(double t_0, 
+                                     double longitude_0, 
+                                     double latitude_0,
+                                     double traildrift_lon, 
+                                     double traildrift_lat,
+                                     double trackbearing,
+                                     double decay,
+                                     double *Thermal_Longitude,
+                                     double *Thermal_Latitude,
+                                     double *Thermal_W,
+                                     double *Thermal_R) {
+
+  // drift points (only do this once)
+  Drift(t_0, longitude_0, latitude_0, traildrift_lon, traildrift_lat, decay);
 
   int slogw = 0;
   int sx=0;
@@ -141,10 +198,9 @@ void ThermalLocator::Update(double t_0,
       slogw += points[i].iw*points[i].iweight;
     }
   }
-  if (slogw>0) {
+  if (slogw>0.25) {
     sx /= slogw;
     sy /= slogw;
-
 
     int vx = iround(100*fastsine(trackbearing));
     int vy = iround(100*fastcosine(trackbearing));
@@ -155,13 +211,6 @@ void ThermalLocator::Update(double t_0,
     // find magnitude of angle error
     double g = max(-0.99,min(0.99,(dx*vx + dy*vy)/(100.0*mag)));
     double angle = acos(g)*RAD_TO_DEG-90;
-
-#ifdef DEBUG
-    char buffer[100];
-    sprintf(buffer,"%d %d %d %d %d %f # centering\n",
-	    sx, sy, xav, yav, mag, angle);
-    DebugStore(buffer);
-#endif
 
     est_x = (sx+xav)/(1.0*SFACT);
     est_y = (sy+yav)/(1.0*SFACT);
@@ -175,150 +224,24 @@ void ThermalLocator::Update(double t_0,
     *Thermal_R = 1;
     *Thermal_W = 1;    
   } else {
-    *Thermal_R = 0;
+    *Thermal_R = -1;
     *Thermal_W = 0;    
   }
-
-  /*
-  double error = Estimate(est_x, est_y);
-  error = 1.0;
-  if (error>=0) {
-    // solution is valid, update position of thermal center
-    est_t =  t_0;
-    est_latitude = est_y+latitude_0;
-    est_longitude = est_x/fastcosine(latitude_0)+longitude_0;
-      
-    *Thermal_R = est_r;
-    *Thermal_W = est_w;
-    *Thermal_Longitude = est_longitude;
-    *Thermal_Latitude = est_latitude;
-  } else {
-    
-    // reset?
-    est_longitude = longitude_0;
-    est_latitude = latitude_0;
-    
-    *Thermal_R = 0;
-    *Thermal_W = 0;    
-  }
-  */
-
-  /*
-  ////////
-
-  int i;
-  for (i=0; i<4; i++) {
-
-    double dx = 1.0e-4; // approx 10 meters
-    double dy = 1.0e-4; // approx 10 meters
-    
-    double e0 = Estimate(est_x, est_y);
-    double ex = Estimate(est_x+dx, est_y);
-    double ey = Estimate(est_x, est_y+dy);
-    
-    if ((e0>=0)&&(ex>=0)&&(ey>=0)) {
-      double dedx = (ex-e0)/dx;
-      double dedy = (ey-e0)/dy;
-      double ddx = dx*2;
-      double ddy = dy*2;
-      est_x -= max(min(ddx,dedx),-ddx);
-      est_y -= max(min(ddy,dedy),-ddy);
-    }
-    
-    double error = Estimate(est_x, est_y);
-    if (error>=0) {
-      // solution is valid, update position of thermal center
-      est_t =  t_0;
-      est_latitude = est_y+latitude_0;
-      est_longitude = est_x/fastcosine(latitude_0)+longitude_0;
-      
-      *Thermal_R = est_r;
-      *Thermal_W = est_w;
-      *Thermal_Longitude = est_longitude;
-      *Thermal_Latitude = est_latitude;
-    } else {
-      
-      // reset?
-      est_longitude = longitude_0;
-      est_latitude = latitude_0;
-      
-      *Thermal_R = 0;
-      *Thermal_W = 0;
-
-      break;
-    }
-  }
-  */
 }
 
-/*
-double ThermalLocator::Estimate(double t_x, double t_y) {
-  double error = -1;
-
-  ols.Reset();
-
-  int i;
-  for (i=0; i<TLOCATOR_NMAX; i++) {
-    if (points[i].valid) {
-      double dx = t_x-points[i].x;
-      double dy = t_y-points[i].y;
-      double ex = dx*dx+dy*dy;
-      double ey = 0; // points[i].logw;
-      points[i].d = ex;
-      ols.least_squares_add(ex, ey, 1.0); // points[i].weight);
-    }
-  }
-  ols.least_squares_update();
-
-  if (ols.m<0) {
-    est_r = sqrt(-1.0/ols.m);
-    est_w = exp(ols.b)/10.0;
-  } else {
-    return -1;
-  }
-
-  error = 0;
-  double sx = 0;
-  for (i=0; i<TLOCATOR_NMAX; i++) {
-    if (points[i].valid) {
-      double w = est_w*exp(points[i].d*ols.m);
-      double werr = (w-points[i].w);
-      error += werr*werr;
-      sx += fabs(points[i].w);
-    }
-  }
-  sx /= npoints;
-  error = sqrt(error/npoints)/sx;
-
-  // Model: w = W exp (-D^2/R^2)
-  // take log
-  //  ln(w)= ln(W) - D^2. (R^-2)
-  // this is of form
-  // y = m.x + c
-  // with m = -R^-2     sqrt(-1/m) = R
-  //      c = ln(W)
-  //      x = D^2
-  //      y = ln(w)
-  
-  return error;
-}
-*/
 
 void ThermalLocator::Drift(double t_0, 
 			   double longitude_0, double latitude_0,
-			   double wind_lon, double wind_lat) {
-
+			   double wind_lon, double wind_lat, double decay) {
 
   for (int i=0; i<TLOCATOR_NMAX; i++) {
     if (points[i].valid) {
-      points[i].Drift(t_0, longitude_0, latitude_0, wind_lon, wind_lat);
+      points[i].Drift(t_0, longitude_0, latitude_0, wind_lon, wind_lat, decay);
     }
   }
 }
 
 #include "Calculations.h"
-
-
 
 
 void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,

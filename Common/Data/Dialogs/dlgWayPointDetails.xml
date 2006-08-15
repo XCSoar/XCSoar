@@ -41,6 +41,7 @@
     <WndButton Name="cmdAppendInTask" Caption="Append to task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
     <WndButton Name="cmdRemoveFromTask" Caption="Remove from task"      X=50 Y=-1 Width=150  Height=30 Font=2 />
     <WndButton Name="cmdNewHome"     Caption="Set as new home"       X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdTeamCode"     Caption="Set teamcode"       X=50 Y=-1 Width=150  Height=30 Font=2 />
 
   </WndFrame>
 

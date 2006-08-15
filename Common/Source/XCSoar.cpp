@@ -328,6 +328,14 @@ double POLARV[POLARSIZE] = {21,27,40};
 double POLARLD[POLARSIZE] = {33,30,20};
 double WEIGHTS[POLARSIZE] = {250,70,100};
 
+// Team code info
+int TeamCodeRefWaypoint = -1;
+TCHAR TeammateCode[10];
+double TeammateLatitude;
+double TeammateLongitude;
+bool TeammateCodeValid = false;
+
+
 // Waypoint Database
 WAYPOINT *WayPointList = NULL;
 unsigned int NumberOfWayPoints = 0;
@@ -489,7 +497,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 16
 	  {ugAltitude,        TEXT("Final Altitude Required"), TEXT("Fin AltR"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 17, 15},
 	  // 17
-	  {ugTaskSpeed, TEXT("Speed Task Average"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+	  {ugTaskSpeed, TEXT("Speed Task Average"), TEXT("V Task Av"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
 	  // 18
 	  {ugDistance,        TEXT("Final Distance"), TEXT("Fin Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 27, 17},
 	  // 19
@@ -568,9 +576,18 @@ SCREEN_INFO Data_Options[] = {
 	  {ugNone,            TEXT("L/D vario"), TEXT("L/D vario"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 4, 38},
 	  // 54
 	  {ugHorizontalSpeed, TEXT("Airspeed TAS"), TEXT("V TAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 3, 47},
-
+	  // 55
+	  {ugNone,            TEXT("Own Team Code"), TEXT("TeamCode"), new FormatterTeamCode(TEXT("\0")), NoProcessing, 56, 54},
+	  // 56
+	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f°T")), NoProcessing, 57, 55},
+	  // 57
+	  {ugNone,            TEXT("Team Bearing Diff"), TEXT("Team Bd"), new FormatterDiffTeamBearing(TEXT("")), NoProcessing, 58, 56},	  
+	  // 58
+	  {ugNone,            TEXT("Team Range"), TEXT("Team Dis"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 55, 57},
+          // 59
+	  {ugTaskSpeed, TEXT("Speed Task Instantaneous"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
 	};
-int NUMSELECTSTRINGS = 55;
+int NUMSELECTSTRINGS = 60;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -1245,12 +1262,6 @@ void AfterStartup() {
 
   CloseProgressDialog();
 
-  NMEAParser::GpsUpdated = true;
-  MapWindow::MapDirty = true;
-  SetEvent(drawTriggerEvent);
-
-  UpdateWindow(hWndMainWindow);
-
   // NOTE: Must show errors AFTER all windows ready
   int olddelay = StatusMessageData[0].delay_ms;
   StatusMessageData[0].delay_ms = 20000; // 20 seconds
@@ -1272,6 +1283,9 @@ void AfterStartup() {
   StartupStore(TEXT("Create default task\r\n"));
   DefaultTask();
 
+  NMEAParser::GpsUpdated = true;
+  MapWindow::MapDirty = true;
+  SetEvent(drawTriggerEvent);
 }
 
 
@@ -1310,7 +1324,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #ifdef GNAV
   // HEAD 4.7 (series) is NOT necessarily alpha, as it is in production
   // use in Altair, and there are already several stable versions of 4.7 out.
-  wcscat(XCSoar_Version, TEXT("4.7.7 "));
+  wcscat(XCSoar_Version, TEXT("4.7.8 Beta "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 #else
   wcscat(XCSoar_Version, TEXT("Alpha "));
@@ -1380,6 +1394,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
+
+  InitCalculations(&GPS_INFO,&CALCULATED_INFO);
 
   // display start up screen
   //  StartupScreen();
@@ -2024,6 +2040,9 @@ bool Debounce(void) {
 
 void Shutdown(void) {
   int i;
+
+  CreateProgressDialog(gettext(TEXT("Shutdown")));
+
   StartupStore(TEXT("Entering shutdown...\r\n"));
   StartupLogFreeRamAndStorage();
 
@@ -2070,6 +2089,11 @@ void Shutdown(void) {
 
   StartupStore(TEXT("Clear task data\r\n"));
   LockTaskData();
+
+  TCHAR tfile[MAX_PATH];
+  _stprintf(tfile,TEXT("%sDefault.tsk"),LocalPath());
+  SaveTask(tfile);
+
   Task[0].Index = -1;  ActiveWayPoint = -1; 
   AATEnabled = FALSE;
   NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; 
@@ -2084,6 +2108,8 @@ void Shutdown(void) {
   // Stop COM devices
   StartupStore(TEXT("Stop COM devices\r\n"));
   devCloseAll();
+
+  SaveCalculationsPersist(&CALCULATED_INFO);
 
   #if defined(GNAV)
     StartupStore(TEXT("Altair shutdown\r\n"));
@@ -2741,8 +2767,6 @@ void ProcessChar2 (char c)
 }
 */
 
-extern int DetectStartTime();
-
 
 void    AssignValues(void)
 {
@@ -2751,7 +2775,7 @@ void    AssignValues(void)
     return;
   }
 
-  DetectStartTime();
+  //  DetectStartTime(); moved to Calculations
 
   // nothing to do here now!
 }
@@ -3027,7 +3051,7 @@ void ProcessTimer(void)
   ReplayLogger::Update();
   if (ReplayLogger::IsEnabled()) {
     static double timeLast = 0;
-    if (GPS_INFO.Time-timeLast>0) {
+    if (GPS_INFO.Time-timeLast>=1.0) {
       NMEAParser::GpsUpdated = TRUE;
       SetEvent(dataTriggerEvent);
     }
@@ -3040,6 +3064,9 @@ void ProcessTimer(void)
   }
   
   if (itimeout % 10 != 0) {
+
+
+
     // timeout if no new data in 5 seconds
     return;
   }
@@ -3064,32 +3091,26 @@ void ProcessTimer(void)
 
   GPSCONNECT = FALSE;
   BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
-  
+
   if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
     {
-      
-      MapWindow::RequestFastRefresh();
+      // re-draw screen every five seconds even if no GPS
+      NMEAParser::GpsUpdated = true;
+      SetEvent(dataTriggerEvent);
       
       devLinkTimeout(devAll());
 
       if(LOCKWAIT == TRUE)
 	{
 	  // gps was waiting for fix, now waiting for connection
-	  NMEAParser::GpsUpdated = true;
-	  MapWindow::MapDirty = true;
-	  SetEvent(drawTriggerEvent);
 	  LOCKWAIT = FALSE;
 	}
       if(!CONNECTWAIT)
 	{
 	  // gps is waiting for connection first time
 	  
-	  NMEAParser::GpsUpdated = true;
-	  MapWindow::MapDirty = true;
-	  SetEvent(drawTriggerEvent);
 	  extGPSCONNECT = FALSE;
-	  
-	  InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
+          InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
 
 	  //            SetDlgItemText(hGPSStatus,IDC_GPSMESSAGE,szLoadText);
 	  
@@ -3100,7 +3121,7 @@ void ProcessTimer(void)
 	  FullScreen();
 	    
 	} else {
-	
+
 	if (itimeout % 30 == 0) {
 	  // we've been waiting for connection a long time
 	  
@@ -3109,9 +3130,6 @@ void ProcessTimer(void)
 	  //
 #if (WINDOWSPC<1)
 #ifndef GNAV
-	  NMEAParser::GpsUpdated = true;
-	  MapWindow::MapDirty = true;
-	  SetEvent(drawTriggerEvent);
 
 	  extGPSCONNECT = FALSE;
 	  
@@ -3140,8 +3158,7 @@ void ProcessTimer(void)
       if(CONNECTWAIT)
 	{
 	  NMEAParser::GpsUpdated = true;
-	  MapWindow::MapDirty = true;
-	  SetEvent(drawTriggerEvent);
+	  SetEvent(dataTriggerEvent);
 	  CONNECTWAIT = FALSE;
 	}
     }
@@ -3153,8 +3170,7 @@ void ProcessTimer(void)
 	  InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
 	  
 	  NMEAParser::GpsUpdated = true;
-	  MapWindow::MapDirty = true;
-	  SetEvent(drawTriggerEvent);
+	  SetEvent(dataTriggerEvent);
 	  
 	  LOCKWAIT = TRUE;
 #ifndef DISABLEAUDIO
@@ -3166,8 +3182,7 @@ void ProcessTimer(void)
       else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
 	{
 	  NMEAParser::GpsUpdated = true;
-	  MapWindow::MapDirty = true;
-	  SetEvent(drawTriggerEvent);
+	  SetEvent(dataTriggerEvent);
 	  LOCKWAIT = FALSE;
 	}
     }

@@ -209,11 +209,21 @@ extern BOOL INPUTFILECHANGED;
 
 bool Debounce();
 
+// Team code
+extern int TeamCodeRefWaypoint;
+extern TCHAR TeammateCode[10];
+extern double TeammateLatitude;
+extern double TeammateLongitude;
+extern bool TeammateCodeValid;
+
+
 // Interface Globals
 extern GetTextSTRUCT GetTextData[];
 extern int GetTextData_Size;
 extern StatusMessageSTRUCT StatusMessageData[];
 extern int StatusMessageData_Size;
+
+extern bool RequestAirspaceWarningDialog;
 
 #if (EXPERIMENTAL > 0)
 extern BlueDialupSMS bsms;

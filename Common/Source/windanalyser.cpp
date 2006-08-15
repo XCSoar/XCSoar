@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.22 2006/08/03 08:45:53 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.23 2006/08/15 02:14:34 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -301,6 +301,12 @@ void WindAnalyser::_calcWindNew() {
   int i;
   double av=0;
   if (!numwindsamples) return;
+
+  // reject if average time step greater than 2.0 seconds
+  if ((windsamples[numwindsamples-1].t - windsamples[0].t)/
+      (numwindsamples-1)>2.0) {
+    return;
+  }
 
   // find average
   for (i=0; i<numwindsamples; i++) {
