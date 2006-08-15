@@ -47,6 +47,7 @@ Copyright_License {
 #include "device.h"
 #include "Process.h"
 #include "McReady.h"
+#include "Utils.h"
 
 extern int UTCOffset;
 
@@ -73,6 +74,43 @@ static WndFrame *wConfig14=NULL;
 static WndFrame *wConfig15=NULL;
 static WndFrame *wConfig16=NULL;
 static WndFrame *wConfig17=NULL;
+static WndButton *buttonPilotName=NULL;
+static WndButton *buttonAircraftType=NULL;
+static WndButton *buttonAircraftRego=NULL;
+
+
+
+static void UpdateButtons(void) {
+  TCHAR text[120];
+  TCHAR val[100];
+  if (buttonPilotName) {
+    GetRegistryString(szRegistryPilotName, val, 100);
+    if (_tcslen(val)<=0) {
+      _stprintf(text,TEXT("Pilot name: (blank)"));
+    } else {
+      _stprintf(text,TEXT("Pilot name: %s"),val);
+    }
+    buttonPilotName->SetCaption(text);
+  }
+  if (buttonAircraftType) {
+    GetRegistryString(szRegistryAircraftType, val, 100);
+    if (_tcslen(val)<=0) {
+      _stprintf(text,TEXT("Aircraft type: (blank)"));
+    } else {
+      _stprintf(text,TEXT("Aircraft type: %s"),val);
+    }
+    buttonAircraftType->SetCaption(text);
+  }
+  if (buttonAircraftRego) {
+    GetRegistryString(szRegistryAircraftRego, val, 100);
+    if (_tcslen(val)<=0) {
+      _stprintf(text,TEXT("Aircraft rego: (blank)"));
+    } else {
+      _stprintf(text,TEXT("Aircraft rego: %s"),val);
+    }
+    buttonAircraftRego->SetCaption(text);
+  }
+}
 
 extern bool EnableAnimation;
 
@@ -165,6 +203,43 @@ static void OnVarioClicked(WindowControl * Sender){
   wf->FocusNext(NULL);
 
 }
+
+
+static void OnAircraftRegoClicked(WindowControl *Sender) {
+  TCHAR Temp[100];
+  if (buttonAircraftRego) {
+    GetRegistryString(szRegistryAircraftRego,Temp,100);
+    dlgTextEntryShowModal(Temp);
+    SetRegistryString(szRegistryAircraftRego,Temp);
+    changed = true;
+  }
+  UpdateButtons();
+}
+
+
+static void OnAircraftTypeClicked(WindowControl *Sender) {
+  TCHAR Temp[100];
+  if (buttonAircraftType) {
+    GetRegistryString(szRegistryAircraftType,Temp,100);
+    dlgTextEntryShowModal(Temp);
+    SetRegistryString(szRegistryAircraftType,Temp);
+    changed = true;
+  }
+  UpdateButtons();
+}
+
+
+static void OnPilotNameClicked(WindowControl *Sender) {
+  TCHAR Temp[100];
+  if (buttonPilotName) {
+    GetRegistryString(szRegistryPilotName,Temp,100);
+    dlgTextEntryShowModal(Temp);
+    SetRegistryString(szRegistryPilotName,Temp);
+    changed = true;
+  }
+  UpdateButtons();
+}
+
 
 static void OnAirspaceColoursClicked(WindowControl * Sender){
   dlgAirspaceShowModal(true);
@@ -313,7 +388,7 @@ static void OnInfoBoxHelp(WindowControl * Sender){
     dlgHelpShowModal(caption, TEXT("[Final Altitude Required]\r\nAltitude required to finish the task."));
     break;
   case 17:
-    dlgHelpShowModal(caption, TEXT("[Speed Task Average]\r\nAverage cross country speed while on current task."));
+    dlgHelpShowModal(caption, TEXT("[Speed Task Average]\r\nAverage cross country speed while on current task, compensated for altitude."));
     break;
   case 18:
     dlgHelpShowModal(caption, TEXT("[Final Distance]\r\nDistance to finish around remaining turn points."));
@@ -425,6 +500,21 @@ static void OnInfoBoxHelp(WindowControl * Sender){
     break;
   case 54:
     dlgHelpShowModal(caption, TEXT("[Airspeed TAS]\r\nTrue Airspeed reported by a supported external intelligent vario."));
+    break;
+  case 55:
+    dlgHelpShowModal(caption, TEXT("[Own Team Code]\r\nThe current Team code for this aircraft.  Use this to report to other team members."));
+    break;
+  case 56:
+    dlgHelpShowModal(caption, TEXT("[Team Bearing]\r\nThe bearing to the team aircraft location at the last team code report."));
+    break;
+  case 57:
+    dlgHelpShowModal(caption, TEXT("[Team Bearing Diff]\r\nThe relative bearing to the team aircraft location at the last reported team code."));
+    break;
+  case 58:
+    dlgHelpShowModal(caption, TEXT("[Team range]\r\nThe range to the team aircraft location at the last reported team code."));
+    break;
+  case 59:
+    dlgHelpShowModal(caption, TEXT("[Speed Task Instantaneous]\r\nInstantaneous cross country speed while on current task, compensated for altitude."));
     break;
   };
 }
@@ -583,6 +673,21 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig15!=NULL);
   ASSERT(wConfig16!=NULL);
   ASSERT(wConfig17!=NULL);
+
+  buttonPilotName = ((WndButton *)wf->FindByName(TEXT("cmdPilotName")));
+  if (buttonPilotName) {
+    buttonPilotName->SetOnClickNotify(OnPilotNameClicked);
+  }
+  buttonAircraftType = ((WndButton *)wf->FindByName(TEXT("cmdAircraftType")));
+  if (buttonAircraftType) {
+    buttonAircraftType->SetOnClickNotify(OnAircraftTypeClicked);
+  }
+  buttonAircraftRego = ((WndButton *)wf->FindByName(TEXT("cmdAircraftRego")));
+  if (buttonAircraftRego) {
+    buttonAircraftRego->SetOnClickNotify(OnAircraftRegoClicked);
+  }
+
+  UpdateButtons();
 
   //////////
   /*

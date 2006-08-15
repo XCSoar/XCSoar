@@ -342,8 +342,8 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_UP] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPan, TEXT("show"), event_id);
-event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
+event_id = InputEvents::makeEvent(&eventSetup, TEXT("Basic"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
@@ -380,10 +380,10 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_RETURN] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPan, TEXT("show"), event_id);
-event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
+event_id = InputEvents::makeEvent(&eventSetup, TEXT("Basic"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT("Pan"),5,event_id);
+makeLabel(mode_id,TEXT("Setup\nBasic"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
@@ -559,8 +559,10 @@ makeLabel(mode_id,TEXT("Force\nFinal"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventSetup, TEXT("Teamcode"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT(""),9,event_id);
+makeLabel(mode_id,TEXT("Team\nCode"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -812,7 +814,7 @@ makeLabel(mode_id,TEXT("Waypoint\nDetails"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNearestWaypointDetails, TEXT("pan"), event_id);
+event_id = InputEvents::makeEvent(&eventNearestWaypointDetails, TEXT("aircraft"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
 makeLabel(mode_id,TEXT("Nearest\nWaypoint"),6,event_id);

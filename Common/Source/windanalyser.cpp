@@ -302,6 +302,12 @@ void WindAnalyser::_calcWindNew() {
   double av=0;
   if (!numwindsamples) return;
 
+  // reject if average time step greater than 2.0 seconds
+  if ((windsamples[numwindsamples-1].t - windsamples[0].t)/
+      (numwindsamples-1)>2.0) {
+    return;
+  }
+
   // find average
   for (i=0; i<numwindsamples; i++) {
     av += windsamples[i].mag;

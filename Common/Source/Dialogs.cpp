@@ -83,11 +83,23 @@ TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
 
 LRESULT CALLBACK Progress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
+  PAINTSTRUCT ps;            // structure for paint info
+  HDC hDC;
+  RECT rc;
+
   switch (message)
     {
     case WM_INITDIALOG:
       return TRUE;
-
+    case WM_ERASEBKGND:
+      hDC = BeginPaint(hDlg, &ps);
+      SelectObject(hDC, GetStockObject(WHITE_PEN));
+      SelectObject(hDC, GetStockObject(WHITE_BRUSH));
+      GetClientRect(hDlg, &rc);
+      Rectangle(hDC, rc.left,rc.top,rc.right,rc.bottom);
+      DeleteDC(hDC);
+      EndPaint(hDlg, &ps);
+      return TRUE;
     case WM_COMMAND:
       if (LOWORD(wParam) == IDOK)
         {

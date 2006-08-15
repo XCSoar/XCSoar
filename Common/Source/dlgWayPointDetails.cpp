@@ -198,6 +198,14 @@ static void OnNewHomeClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
+
+static void OnTeamCodeClicked(WindowControl * Sender){
+  TeamCodeRefWaypoint = SelectedWaypoint;
+  SetToRegistry(szRegistryTeamcodeRefWaypoint, TeamCodeRefWaypoint);
+  wf->SetModalResult(mrOK);
+}
+
+
 static void OnInserInTaskClicked(WindowControl * Sender){
   LockTaskData();
   InsertWaypoint(SelectedWaypoint);
@@ -416,6 +424,10 @@ void dlgWayPointDetailsShowModal(void){
   wb = ((WndButton *)wf->FindByName(TEXT("cmdNewHome")));
   if (wb)
     wb->SetOnClickNotify(OnNewHomeClicked);
+
+  wb = ((WndButton *)wf->FindByName(TEXT("cmdTeamCode")));
+  if (wb)
+    wb->SetOnClickNotify(OnTeamCodeClicked);
 
   wb = ((WndButton *)wf->FindByName(TEXT("cmdInserInTask")));
   if (wb)

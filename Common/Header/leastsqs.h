@@ -55,9 +55,9 @@ class LeastSquares {
 
   double y_ave;
 
-  double xstore[MAX_STATISTICS];
-  double ystore[MAX_STATISTICS];
-  double weightstore[MAX_STATISTICS];
+  float xstore[MAX_STATISTICS];
+  float ystore[MAX_STATISTICS];
+  float weightstore[MAX_STATISTICS];
 
   LeastSquares() {
     Reset();

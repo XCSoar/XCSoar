@@ -231,6 +231,7 @@ TCHAR szRegistryAppCompassAppearance[] = TEXT("AppCompassAppearance");
 TCHAR szRegistryAppStatusMessageAlignment[] = TEXT("AppStatusMessageAlignment");
 TCHAR szRegistryAppInfoBoxColors[] = TEXT("AppInfoBoxColors");
 TCHAR szRegistryAppDefaultMapWidth[] = TEXT("AppDefaultMapWidth");
+TCHAR szRegistryTeamcodeRefWaypoint[] = TEXT("TeamcodeRefWaypoint");
 TCHAR szRegistryAppInfoBoxBorder[] = TEXT("AppInfoBoxBorder");
 
 TCHAR szRegistryAutoAdvance[] = TEXT("AutoAdvance");
@@ -593,6 +594,10 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryHomeWaypoint,&Temp);
   HomeWaypoint = Temp;
 
+  Temp = TeamCodeRefWaypoint;
+  GetFromRegistry(szRegistryTeamcodeRefWaypoint,&Temp);
+  TeamCodeRefWaypoint = Temp;
+
   Temp = 1;
   GetFromRegistry(szRegistryStartLine,&Temp);
   StartLine = Temp;
@@ -795,7 +800,7 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryLockSettingsInFlight,&Temp);
   LockSettingsInFlight = (Temp == 1);
 
-  Temp = 1;
+  Temp = EnableFLARMDisplay;
   GetFromRegistry(szRegistryEnableFLARMDisplay,&Temp);
   EnableFLARMDisplay = (Temp == 1);
 

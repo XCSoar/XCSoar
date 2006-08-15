@@ -173,7 +173,7 @@ void dlgStatusShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFlightTime"));
   if (wp) {
-    Units::TimeToText(Temp, (int)DetectStartTime());
+    Units::TimeToText(Temp, (int)CALCULATED_INFO.FlightTime);
     wp->SetText(Temp);
   }
 

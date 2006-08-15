@@ -115,6 +115,7 @@ enum {
   GCE_TASK_NEXTWAYPOINT,
   GCE_TASK_START,
   GCE_TASK_FINISH,
+  GCE_TEAM_POS_REACHED,
   GCE_COUNT			// How many we have for arrays etc
 };
 

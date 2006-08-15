@@ -77,6 +77,7 @@ typedef union{
     unsigned AlligneRight:1;
     unsigned Reachable:1;
     unsigned AlligneCenter:1;
+    unsigned WhiteBorder:1;
   }AsFlag;
 }TextInBoxMode_t;
   // mode are flags
@@ -279,6 +280,8 @@ class MapWindow {
 
   static BOOL THREADRUNNING;
   static BOOL THREADEXIT;
+
+  static double LimitMapScale(double value);
 
  private:
   static HBITMAP hLandable, hReachable,

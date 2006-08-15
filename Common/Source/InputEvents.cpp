@@ -1733,6 +1733,7 @@ void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
 // to the nearest exit to the airspace.
 
 
+bool dlgAirspaceWarningIsEmpty(void);
 
 void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   double nearestdistance=0;
@@ -1747,8 +1748,10 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   TCHAR text[1024];
 
 #if (NEWAIRSPACEWARNING>0)
-  if (dlgAirspaceWarningShowDlg(true))
+  if (!dlgAirspaceWarningIsEmpty()) {
+    RequestAirspaceWarningDialog= true;
     return;
+  }
 #endif
 
   FindNearestAirspace(GPS_INFO.Longitude, GPS_INFO.Latitude,
@@ -1835,13 +1838,17 @@ void InputEvents::eventNull(TCHAR *misc) {
 // TaskLoad
 // Loads the task of the specified filename
 void InputEvents::eventTaskLoad(TCHAR *misc) {
+  LockTaskData();
   LoadNewTask(misc);
+  UnlockTaskData();
 }
 
 // TaskSave
 // Saves the task to the specified filename
 void InputEvents::eventTaskSave(TCHAR *misc) {
+  LockTaskData();
   SaveTask(misc);
+  UnlockTaskData();
 }
 
 // ProfileLoad
@@ -1916,6 +1923,13 @@ void InputEvents::eventSetup(TCHAR *misc) {
   if (_tcscmp(misc,TEXT("Voice"))==0){
 #if NEWINFOBOX > 0
     dlgVoiceShowModal();
+#else
+    0;
+#endif;
+  }
+  if (_tcscmp(misc,TEXT("Teamcode"))==0){
+#if NEWINFOBOX > 0
+    dlgTeamCodeShowModal();
 #else
     0;
 #endif;

@@ -120,7 +120,8 @@ Text2GCE[17] = TEXT("TAKEOFF");
 Text2GCE[18] = TEXT("TASK_NEXTWAYPOINT");
 Text2GCE[19] = TEXT("TASK_START");
 Text2GCE[20] = TEXT("TASK_FINISH");
-Text2GCE[21] = TEXT("COUNT");
+Text2GCE[21] = TEXT("TEAM_POS_REACHED");
+Text2GCE[22] = TEXT("COUNT");
 Text2NE[0] = TEXT("DOWN_IN_FLAP_POS");
 Text2NE[1] = TEXT("DOWN_IN_FLAP_ZERO");
 Text2NE[2] = TEXT("DOWN_IN_FLAP_NEG");
@@ -256,4 +257,4 @@ Text2Event_count = 50;
 // Check no array overrun
 ASSERT(130 <= NE_COUNT);
 // Check no array overrun
-ASSERT(21 <= GCE_COUNT);
+ASSERT(22 <= GCE_COUNT);

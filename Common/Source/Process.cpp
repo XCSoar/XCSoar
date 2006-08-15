@@ -367,21 +367,22 @@ int DetectStartTime() {
   static int starttime = -1;
   static int lastflighttime = -1;
 
-  if ((starttime == -1)&&(CALCULATED_INFO.Flying)) {
-    // hasn't been started yet
+  if (CALCULATED_INFO.Flying) {
+    if (starttime == -1) {
+      // hasn't been started yet
 
       starttime = (int)GPS_INFO.Time;
 
       lastflighttime = -1;
-  }
-
-  if (CALCULATED_INFO.Flying) {
+    }
     return (int)GPS_INFO.Time-starttime;
+
   } else {
+
     if (lastflighttime == -1) {
       // hasn't been stopped yet
-      if (starttime) {
-	lastflighttime = (int)(GPS_INFO.Time-starttime);
+      if (starttime>=0) {
+	lastflighttime = (int)GPS_INFO.Time-starttime;
       } else {
 	return 0; // no last flight time
       }
@@ -404,7 +405,7 @@ void FormatterTime::AssignValue(int i) {
     SecsToDisplayTime((int)CALCULATED_INFO.AATTimeToGo);
     break;
   case 36:
-    SecsToDisplayTime(DetectStartTime());
+    SecsToDisplayTime((int)CALCULATED_INFO.FlightTime);
     break;
   case 39:
     SecsToDisplayTime(DetectCurrentTime());
@@ -523,7 +524,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 17:
     Value = TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
-    if (ActiveWayPoint>=0) {
+    if (ActiveWayPoint>=1) {
       Valid = true;
     } else {
       Valid = false;
@@ -673,6 +674,29 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 54:
     Valid = GPS_INFO.AirspeedAvailable;
     Value = SPEEDMODIFY*GPS_INFO.TrueAirspeed;
+    break;
+  case 56: // team bearing
+    Value = CALCULATED_INFO.TeammateBearing;
+    Valid = true;
+  case 58: // team range
+    Value = DISTANCEMODIFY*CALCULATED_INFO.TeammateRange;
+    if (Value > 100)
+      {
+        _tcscpy(Format, _T("%.0lf"));
+      }
+    else
+      {
+        _tcscpy(Format, _T("%.1lf"));
+      }
+    Valid = true;
+    break;
+  case 59:
+    Value = TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeedInstantaneous;
+    if (ActiveWayPoint>=1) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
     break;
   default:
     break;
@@ -864,5 +888,102 @@ void FormatterDiffBearing::Render(HWND hWnd) {
   #else
   SetWindowText(hWnd, Text);
   #endif
+
+}
+
+
+
+
+#if NEWINFOBOX > 0
+TCHAR *FormatterTeamCode::Render(int *color) {
+#else
+void FormatterTeamCode::Render(HWND hWnd) {
+#endif
+
+  if((TeamCodeRefWaypoint >=0)&&(WayPointList))
+    {
+
+      #if NEWINFOBOX > 0
+			*color = 0; // black text
+      #else
+/*
+			HFONT hFont;
+			  LOGFONT logfont;
+			memset ((char *)&logfont, 0, sizeof (logfont));
+			_tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+
+			logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
+			logfont.lfHeight = 20;
+			logfont.lfWidth =  8;
+			logfont.lfWeight = FW_MEDIUM;
+
+			propGetFontSettings(TEXT("TeamCodeFont"), &logfont);
+			hFont = CreateFontIndirect (&logfont);
+
+			SendMessage(hWnd, WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
+*/
+			SetWindowLong(hWnd, GWL_USERDATA, 2); // black text
+      #endif
+
+
+       _tcsncpy(Text,CALCULATED_INFO.OwnTeamCode,5);
+       Text[5] = '\0';
+    }
+  else
+    {
+      // no waypoint selected
+      #if NEWINFOBOX > 0
+      *color = 0;
+      #else
+      SetWindowLong(hWnd, GWL_USERDATA, 0);
+      #endif
+      Text[0] = '\0';
+    }
+
+  #if NEWINFOBOX > 0
+  return(Text);
+  #else
+  SetWindowText(hWnd, Text);
+  #endif
+
+}
+
+
+#if NEWINFOBOX > 0
+TCHAR *FormatterDiffTeamBearing::Render(int *color) {
+#else
+void FormatterDiffTeamBearing::Render(HWND hWnd) {
+#endif
+
+  if((TeamCodeRefWaypoint >=0)&&(WayPointList))
+    {
+      Valid = true;
+
+      Value = CALCULATED_INFO.TeammateBearing -  GPS_INFO.TrackBearing;
+
+      if (Value < -180.0)
+        Value += 360.0;
+      else
+        if (Value > 180.0)
+          Value -= 360.0;
+
+      if (Value > 1)
+        _stprintf(Text, TEXT("%2.0f°»"), Value);
+      else if (Value < -1)
+        _stprintf(Text, TEXT("«%2.0f°"), -Value);
+      else
+        _tcscpy(Text, TEXT("«»"));
+
+    } else {
+    Valid = false;
+    _tcscpy(Text, TEXT("---"));
+  }
+
+#if NEWINFOBOX > 0
+  *color = 0;
+  return(Text);
+#else
+  SetWindowText(hWnd, Text);
+#endif
 
 }

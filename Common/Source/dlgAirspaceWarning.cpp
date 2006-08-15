@@ -517,6 +517,10 @@ bool dlgAirspaceWarningShow(void){
 }
 */
 
+bool dlgAirspaceWarningIsEmpty(void) {
+  return (AirspaceWarnGetItemCount()==0);
+}
+
 // WARING: may only be called from MapWindow event loop!
 // JMW this is now called from ProcessCommon (main GUI loop)
 bool dlgAirspaceWarningShowDlg(bool Force){

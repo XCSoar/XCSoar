@@ -619,6 +619,11 @@ void SetHome(void)
       HomeWaypoint = -1;
     }
 
+  if((TeamCodeRefWaypoint <0)||(TeamCodeRefWaypoint >= (int)NumberOfWayPoints))
+    {
+      TeamCodeRefWaypoint = -1;
+    }
+
   // search for home in waypoint list
   for(i=0;i<NumberOfWayPoints;i++)
     {
@@ -626,6 +631,9 @@ void SetHome(void)
           {
             if (HomeWaypoint== -1) {
               HomeWaypoint = i;
+            }
+            if (TeamCodeRefWaypoint== -1) {
+              TeamCodeRefWaypoint = i;
             }
           }
     }
@@ -637,6 +645,9 @@ void SetHome(void)
   if (HomeWaypoint<0) {
     HomeWaypoint = 0;
   }
+  if (TeamCodeRefWaypoint<0) {
+    TeamCodeRefWaypoint = 0;
+  }
 
   // Assume here we have a home now...
   GPS_INFO.Latitude = WayPointList[HomeWaypoint].Latitude;
@@ -647,6 +658,7 @@ void SetHome(void)
   // Save the home waypoint number in the resgistry
   //
   SetToRegistry(szRegistryHomeWaypoint,HomeWaypoint);
+  SetToRegistry(szRegistryTeamcodeRefWaypoint,TeamCodeRefWaypoint);
 }
 
 

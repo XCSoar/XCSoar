@@ -15,6 +15,26 @@ typedef struct _OLCSolution
   bool finished;
 } OLCSolution;
 
+class OLCData {
+ public:
+
+  OLCSolution solution_FAI_triangle;
+  OLCSolution solution_FAI_sprint;
+  OLCSolution solution_FAI_classic;
+
+  double latpnts[MAX_OLC_POINTS];
+  double lonpnts[MAX_OLC_POINTS];
+  int altpntslow[MAX_OLC_POINTS];
+  int altpntshigh[MAX_OLC_POINTS];
+  long timepnts[MAX_OLC_POINTS];
+
+  int altminimum;
+  long tsprintstart;
+  int pnts_in;
+  double waypointbearing;
+  double distancethreshold;
+
+};
 
 class OLCOptimizer {
 public:
@@ -30,16 +50,11 @@ private:
 
   //  int sindex(int y, int x);
 
-  int matsize;
   int pnts;
-  int pnts_offset;
-  int pnts_in;
-  int pnts_offset_in;
   unsigned short dmval[MATSIZE];
   int indexval[MAX_OLC_POINTS];
   int maxdist; /* maximale Distanz in Metern zwischen zwei Punkten */
 
-  long tsprintstart;
   int istart;
 
   void UpdateSolution(int dbest, int tbest,
@@ -52,24 +67,12 @@ public:
 
   bool stop;
 
-  OLCSolution solution_FAI_triangle;
-  OLCSolution solution_FAI_sprint;
-  OLCSolution solution_FAI_classic;
+  OLCData data;
 
 private:
-  double latpnts[MAX_OLC_POINTS];
-  double lonpnts[MAX_OLC_POINTS];
-  int altpntslow[MAX_OLC_POINTS];
-  int altpntshigh[MAX_OLC_POINTS];
-  long timepnts[MAX_OLC_POINTS];
-
-  int altminimum;
 
   int alt_proj;
   bool flying;
-  double waypointbearing;
-
-  double distancethreshold;
 
   unsigned short isplit[MATSIZE];
   unsigned short ibestendclassic[MATSIZE];

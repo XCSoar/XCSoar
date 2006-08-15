@@ -87,7 +87,8 @@ void dlgTaskWaypointShowModal(int itemindex, int type);
 void dlgTaskOverviewShowModal(void);
 void dlgVoiceShowModal(void);
 void dlgWayPointDetailsShowModal(void);
-
+void dlgTextEntryShowModal(TCHAR *text);
+void dlgTeamCodeShowModal(void);
 
 #endif
 

@@ -32,6 +32,7 @@ Copyright_License {
 #include "stdafx.h"
 #include "GaugeVarioAltA.h"
 #include "MapWindow.h"
+#include "Logger.h"
 #include "Utils.h"
 #include "externs.h"
 #include "InfoBoxLayout.h"
@@ -79,9 +80,9 @@ DrawInfo_t GaugeVario::diLabelBottom = {false};
 #define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
 #define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
 
-COLORREF colTextGray;
-COLORREF colText;
-COLORREF colTextBackgnd;
+static COLORREF colTextGray;
+static COLORREF colText;
+static COLORREF colTextBackgnd;
 
 
 #define NARROWS 3
@@ -252,7 +253,7 @@ void GaugeVario::Render() {
     InitDone = true;
   }
 
-  if (GPS_INFO.VarioAvailable) {
+  if (GPS_INFO.VarioAvailable && !ReplayLogger::IsEnabled()) {
     vval = GPS_INFO.Vario;
   } else {
     vval = CALCULATED_INFO.Vario;
@@ -333,7 +334,7 @@ void GaugeVario::MakePolygon(const int i) {
     InitDone = true;
   }
 
-#define ELLIPSE 1.06
+#define ELLIPSE 1.095
 
   dx = -xoffset+nlength0; dy = nwidth;
   rotate(dx, dy, i);
@@ -448,37 +449,39 @@ void GaugeVario::RenderNeedle(double Value){
   }
 
   i = min(gmax,max(-gmax,i));
-  if ((i != lastI) || (i==gmax) || (i== -gmax)){
 
-    if (lastI != -99999){
-      if (Appearance.InverseInfoBox){
-        SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-        SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
-      } else {
-        SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-        SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
-      }
-
-      Polygon(hdcDrawWindow, lastBit, 3);
-    }
-
+  if (lastI != -99999){
     if (Appearance.InverseInfoBox){
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
-    } else {
       SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
       SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    } else {
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
     }
 
-    bit = getPolygon(i);
-    Polygon(hdcDrawWindow, bit, 3);
-    lp[0].x = 0; lp[0].y = yoffset+1;
-    lp[1].x = IBLSCALE(15); lp[1].y = yoffset+1;
-    Polyline(hdcDrawWindow,lp,2);
-    memcpy(lastBit, bit, 3*sizeof(POINT));
-
-    lastI = i;
+    Polygon(hdcDrawWindow, lastBit, 3);
   }
+
+  if (Appearance.InverseInfoBox){
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+  } else {
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+  }
+
+  bit = getPolygon(i);
+  Polygon(hdcDrawWindow, bit, 3);
+
+  lp[0].x = 0; lp[0].y = yoffset+1;
+  lp[1].x = IBLSCALE(17); lp[1].y = yoffset+1;
+  Polyline(hdcDrawWindow,lp,2);
+  lp[0].y-= 1; lp[1].y-= 1;
+  Polyline(hdcDrawWindow,lp,2);
+
+  memcpy(lastBit, bit, 3*sizeof(POINT));
+
+  lastI = i;
 
 }
 

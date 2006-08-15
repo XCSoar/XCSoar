@@ -1,3 +1,34 @@
+/*
+Copyright_License {
+
+  XCSoar Glide Computer - http://xcsoar.sourceforge.net/
+  Copyright (C) 2000 - 2005
+
+  	M Roberts (original release)
+	Robin Birch <robinb@ruffnready.co.uk>
+	Samuel Gisiger <samuel.gisiger@triadis.ch>
+	Jeff Goodenough <jeff@enborne.f2s.com>
+	Alastair Harrison <aharrison@magic.force9.co.uk>
+	Scott Penrose <scottp@dd.com.au>
+	John Wharington <jwharington@bigfoot.com>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+}
+*/
+
 
 #include "stdafx.h"
 #include "XCSoar.h"
@@ -475,7 +506,7 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
 {
   ResetScale();
   ScaleYFromData(rc, &flightstats.ThermalAverage);
-  ScaleYFromValue(rc, MACCREADY);
+  ScaleYFromValue(rc, MACCREADY+0.5);
   ScaleYFromValue(rc, 0);
   ScaleXFromValue(rc, 0);
   ScaleXFromValue(rc, flightstats.ThermalAverage.sum_n+1);
@@ -829,22 +860,22 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
     for (i=0; i< 7-1; i++) {
       switch(OLCRules) {
       case 0:
-	lat1 = olc.solution_FAI_sprint.latitude[i];
-	lon1 = olc.solution_FAI_sprint.longitude[i];
-	lat2 = olc.solution_FAI_sprint.latitude[i+1];
-	lon2 = olc.solution_FAI_sprint.longitude[i+1];
+	lat1 = olc.data.solution_FAI_sprint.latitude[i];
+	lon1 = olc.data.solution_FAI_sprint.longitude[i];
+	lat2 = olc.data.solution_FAI_sprint.latitude[i+1];
+	lon2 = olc.data.solution_FAI_sprint.longitude[i+1];
 	break;
       case 1:
-	lat1 = olc.solution_FAI_triangle.latitude[i];
-	lon1 = olc.solution_FAI_triangle.longitude[i];
-	lat2 = olc.solution_FAI_triangle.latitude[i+1];
-	lon2 = olc.solution_FAI_triangle.longitude[i+1];
+	lat1 = olc.data.solution_FAI_triangle.latitude[i];
+	lon1 = olc.data.solution_FAI_triangle.longitude[i];
+	lat2 = olc.data.solution_FAI_triangle.latitude[i+1];
+	lon2 = olc.data.solution_FAI_triangle.longitude[i+1];
 	break;
       case 2:
-	lat1 = olc.solution_FAI_classic.latitude[i];
-	lon1 = olc.solution_FAI_classic.longitude[i];
-	lat2 = olc.solution_FAI_classic.latitude[i+1];
-	lon2 = olc.solution_FAI_classic.longitude[i+1];
+	lat1 = olc.data.solution_FAI_classic.latitude[i];
+	lon1 = olc.data.solution_FAI_classic.longitude[i];
+	lat2 = olc.data.solution_FAI_classic.latitude[i+1];
+	lon2 = olc.data.solution_FAI_classic.longitude[i+1];
 	break;
       }
       x1 = (lon1-lon_c)*fastcosine(lat1);
@@ -908,10 +939,14 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
   bool labelAir = false;
   bool labelDew = false;
 
+  int ipos = 0;
+
   for (i=0; i<CUSONDE_NUMLEVELS; i++) {
 
     if (CuSonde::cslevels[i].nmeasurements &&
 	CuSonde::cslevels[i+1].nmeasurements) {
+
+      ipos++;
 
       DrawLine(hdc, rc,
 	       CuSonde::cslevels[i].tempDry, i,
@@ -928,7 +963,7 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 	       CuSonde::cslevels[i+1].dewpoint, i+1,
 	       STYLE_BLUETHIN);
 
-      if (i> CUSONDE_NUMLEVELS/3) {
+      if (ipos> 2) {
 	if (!labelDry) {
 	  DrawLabel(hdc, rc, TEXT("DALR"),
 		    CuSonde::cslevels[i+1].tempDry, i);
@@ -1332,27 +1367,27 @@ static void Update(void){
     switch(OLCRules) {
     case 0:
       _stprintf(sRules,TEXT("Sprint"));
-      dt = olc.solution_FAI_sprint.time;
-      d = olc.solution_FAI_sprint.distance;
-      olcvalid = olc.solution_FAI_sprint.valid;
-      score = olc.solution_FAI_sprint.score;
-      olcfinished = olc.solution_FAI_sprint.finished;
+      dt = olc.data.solution_FAI_sprint.time;
+      d = olc.data.solution_FAI_sprint.distance;
+      olcvalid = olc.data.solution_FAI_sprint.valid;
+      score = olc.data.solution_FAI_sprint.score;
+      olcfinished = olc.data.solution_FAI_sprint.finished;
       break;
     case 1:
       _stprintf(sRules,TEXT("Triangle"));
-      dt = olc.solution_FAI_triangle.time;
-      d = olc.solution_FAI_triangle.distance;
-      olcvalid = olc.solution_FAI_triangle.valid;
-      score = olc.solution_FAI_triangle.score;
-      olcfinished = olc.solution_FAI_triangle.finished;
+      dt = olc.data.solution_FAI_triangle.time;
+      d = olc.data.solution_FAI_triangle.distance;
+      olcvalid = olc.data.solution_FAI_triangle.valid;
+      score = olc.data.solution_FAI_triangle.score;
+      olcfinished = olc.data.solution_FAI_triangle.finished;
       break;
     case 2:
       _stprintf(sRules,TEXT("Classic"));
-      dt = olc.solution_FAI_classic.time;
-      d = olc.solution_FAI_classic.distance;
-      olcvalid = olc.solution_FAI_classic.valid;
-      score = olc.solution_FAI_classic.score;
-      olcfinished = olc.solution_FAI_classic.finished;
+      dt = olc.data.solution_FAI_classic.time;
+      d = olc.data.solution_FAI_classic.distance;
+      olcvalid = olc.data.solution_FAI_classic.valid;
+      score = olc.data.solution_FAI_classic.score;
+      olcfinished = olc.data.solution_FAI_classic.finished;
       break;
     }
     if (olcfinished) {

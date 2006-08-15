@@ -67,8 +67,11 @@ typedef struct _DERIVED_INFO
   double TaskTimeToGo;
   double TaskStartTime;
   double TaskSpeed;
+  double TaskSpeedInstantaneous;
   double TaskAltitudeRequired;
   double TaskAltitudeDifference;
+  double TaskAltitudeDifference0; // difference with mc=0
+  double TaskAltitudeRequiredFromStart;
   double LDFinish;
   double LDNext;
   double LegDistanceToGo;
@@ -142,6 +145,12 @@ typedef struct _DERIVED_INFO
 
   pointObj GlideFootPrint[NUMTERRAINSWEEPS+1];
 
+  TCHAR OwnTeamCode[10];
+  double TeammateBearing;
+  double TeammateRange;
+  double TeammateLatetude;
+  double TeammateLongitude;
+  double FlightTime;
 } DERIVED_INFO;
 
 
@@ -173,5 +182,8 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			  double bearing,
 			  double timeremaining,
 			  double hfinal);
+
+void SaveCalculationsPersist(DERIVED_INFO *Calculated);
+void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 #endif

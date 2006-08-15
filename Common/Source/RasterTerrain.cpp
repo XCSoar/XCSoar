@@ -326,6 +326,15 @@ void RasterTerrain::OpenTerrain(void)
   GetRegistryString(szRegistryTerrainFile, szFile, MAX_PATH);
   SetRegistryString(szRegistryTerrainFile, TEXT("\0"));
 
+  unsigned long filesize;
+  HANDLE hFile = CreateFile(szFile,GENERIC_READ,
+                            0,NULL,OPEN_EXISTING,
+                            FILE_ATTRIBUTE_NORMAL,NULL);
+  if( hFile == NULL)
+    return;
+  filesize = GetFileSize(hFile, NULL);
+  CloseHandle(hFile);
+
   if (_tcslen(szFile)>0) {
     fpTerrain = _tfopen(szFile, TEXT("rb"));
   }
@@ -335,10 +344,24 @@ void RasterTerrain::OpenTerrain(void)
       return;
     }
   //ReadFile(hTerrain,&TerrainInfo,sizeof(TERRAIN_INFO),&dwBytesRead,NULL);
-//  setvbuf(fpTerrain, NULL, 0x00 /*_IOFBF*/, 4096*8);
+  //  setvbuf(fpTerrain, NULL, 0x00 /*_IOFBF*/, 4096*8);
   dwBytesRead = fread(&TerrainInfo, 1, sizeof(TERRAIN_INFO), fpTerrain);
 
+  if (dwBytesRead != sizeof(TERRAIN_INFO)) {
+    fclose(fpTerrain);
+    fpTerrain = NULL;
+    return;
+  }
+
   long nsize = TerrainInfo.Rows*TerrainInfo.Columns;
+
+  // check to see if this is a valid terrain file
+  if (filesize != sizeof(TERRAIN_INFO)+sizeof(short)*nsize) {
+    fclose(fpTerrain);
+    fpTerrain = NULL;
+    return;
+  };
+
   if (CheckFreeRam()>(long)(nsize*sizeof(short)+5000000)) {
     // make sure there is 5 meg of ram left after allocating space
     TerrainMem = (short*)malloc(sizeof(short)*nsize);

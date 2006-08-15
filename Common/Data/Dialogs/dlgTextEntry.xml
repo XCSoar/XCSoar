@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmTextEntry" Type="Dialog" X=5 Y=5 Width=200 Height=70 Caption="Edit text" Font=2 BackColor=0xDADBAB>
+
+  <WndOwnerDrawFrame Name="frmGrid" X=0 Y=-1 Width=199 Height=60 Font=2 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnTextPaint" />
+
+</WndForm>
+
+</PMML>

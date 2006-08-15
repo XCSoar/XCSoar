@@ -57,6 +57,7 @@ extern TCHAR szRegistryAcknowledgementTime[];
 extern TCHAR szRegistryCircleZoom[];
 extern TCHAR szRegistryWindUpdateMode[];
 extern TCHAR szRegistryHomeWaypoint[];
+extern TCHAR szRegistryTeamcodeRefWaypoint[];
 extern TCHAR szRegistryPilotName[];
 extern TCHAR szRegistryAircraftType[];
 extern TCHAR szRegistryAircraftRego[];
