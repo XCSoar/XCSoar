@@ -4,9 +4,42 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Dialogs changed:
  dlgConfiguration.xml
- dlgVario.xml
+ dlgStartPoint.xml
+ dlgTaskWayPoint.xml
+ dlgTeamCode.xml
+ dlgTextEntry.xml
  dlgWayPointDetails.xml
- dlgTaskWaypoint.xml
+
+
+Changes from 4.7.7:
+- Make terrain file loader check file size, to improve robustness if
+  bad file.
+- Added text entry dialog
+- Added pilot name, aircraft type and rego to configuration dialog
+- Added support for team code
+- Map zoom improvements
+- Waypoints label in abort fix
+- Default task at startup fix
+- Minor UI cleanups (cosmetics)
+- Logger inactive when in IGC replay mode
+- Circling wind estimator won't update if less than one fix every 2
+  seconds.
+- Zigzag wind estimate inactive when in IGC replay mode
+- Fixed bug in altair.xci, nearest waypoint details were pan-relative
+- Analysis dialog: base/ceiling estimation improvements
+- Task speed now altitude compensated
+- New task speed instantaneous
+- All flight statistics retained when exiting XCSoar and loaded at startup,
+   so previous flight can be reviewed later.
+- Task is saved when exiting XCSoar and loaded at startup.
+  (Default.tsk)
+- Removed unused/default processor definitions,
+  NEWINFOBOX, NEWAIRSPACEWARNING as this is default now.
+- Added support for alternate start points
+
+Dialogs changed:
+ ALL dialogs
+ dlgHelp.xml
 
 Changes from 4.7.5:
 - Added small histeresis to instantenous LD vario
@@ -34,6 +67,40 @@ Changes from 4.7.5:
 - Task waypoint move up/down in task waypoint pages.
 - Terrain database loaded into memory if sufficient RAM + 5 Meg free
 - New smooth shading of terrain, major improvement
+- New landscape progress dialog hides screen for cleaner startup
+- Default task to home if no task loaded at startup
+- Added labels to climb and temperature trace analysis pages
+- Added help system.  Press enter for 2 seconds on a dialog property
+  to display help text.
+- Fixed minor bug, landable points were not always visible for some
+  label modes.
+- Fixed minor bug, baro altitude set by GPS for IGC replay.
+- Online Contest optimisation (analysis page, configuration settings,
+   three rule sets available)
+- Analysis pages now each have a context-sensitive 'action' button.
+- Added handicap to glide polar page for OLC scoring
+- Fixed GDI resource leak in animateRectangles
+- Fixed memory leak from com port threads not having handles released
+- Fixed airspace warning dialog losing focus of previous dialog if opened
+- Fixed memory leaks in new airspace warning dialog
+  when another dialog is already open.
+- Online contest "in progress"
+- Added 'Declutter Labels' inputevent and menu item
+- Fixed GDI resource leak in WindowControls
+- Refinements to screen lat/lon bounds calculations
+- Refinements to thread locking (separate LockTaskData from LockFlightData)
+- GCE/NMEA queue blocking bug fix
+- Added check for 500kb free space on IGC destination, asks user to
+  delete old IGC files as required to free up space.
+- OLC work (rule interpretations, in-progress only valid if flying)
+- Added tab style for infobox border
+- Added double buffer for infobox rendering to reduce flicker
+- Topology bounds area used for pre-filtering of visibility to improve rendering time
+- Toggle terrain map labels button (DeclutterLabels)
+- Thread locking improvements to reduce latency
+- Computed arrival height AGL at Mc0 Mc safety Mc current
+- Startup/shutdown messages saved in xcsoar-startup.log
+
 
 Dialogs changed:
  dlgConfiguration.xml
