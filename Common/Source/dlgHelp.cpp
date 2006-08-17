@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 #include "externs.h"
@@ -90,4 +89,3 @@ void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText) {
 }
 
 
-#endif

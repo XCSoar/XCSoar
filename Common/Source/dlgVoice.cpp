@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 #include "externs.h"
@@ -208,7 +207,4 @@ void dlgVoiceShowModal(void){
   wf = NULL;
 
 }
-
-
-#endif
 

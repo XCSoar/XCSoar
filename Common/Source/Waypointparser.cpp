@@ -83,9 +83,7 @@ void CloseWayPoints() {
 }
 
 
-#if (NEWINFOBOX>0)
 int dlgWaypointOutOfTerrain(TCHAR *Message);
-#endif
 
 
 static bool WaypointInTerrainRange(WAYPOINT *List) {
@@ -116,11 +114,7 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
 
         _stprintf(sTmp, gettext(TEXT("Waypoint #%d \"%s\" \r\nout of Terrain bounds\r\n\r\nLoad anyway?")), List->Number, List->Name);
 
-#if (NEWINFOBOX>0)
         res = dlgWaypointOutOfTerrain(sTmp);
-#else
-	res = wpTerrainBoundsNoAll;
-#endif
 
         switch(res){
           case wpTerrainBoundsYes:
@@ -130,9 +124,7 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
           case wpTerrainBoundsYesAll:
             WaypointOutOfTerrainRangeDontAskAgain = 1;
             return true;
-#if (NEWINFOBOX>0)
           case mrCancle:
-#endif
           case wpTerrainBoundsNoAll:
             WaypointOutOfTerrainRangeDontAskAgain = 2;
             return false;

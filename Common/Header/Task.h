@@ -11,6 +11,21 @@
 #define CIRCLE 0
 #define SECTOR 1
 
+typedef struct _START_POINT
+{
+  int Index;
+  double OutBound;
+  double SectorStartLat;
+  double SectorStartLon;
+  double SectorEndLat;
+  double SectorEndLon;
+  POINT	 Start;
+  POINT	 End;
+  bool Active;
+  bool InSector;
+} START_POINT;
+
+
 typedef struct _TASK_POINT
 {
   int Index;
@@ -43,6 +58,7 @@ typedef struct _TASK_POINT
 }TASK_POINT;
 
 typedef TASK_POINT Task_t[MAXTASKPOINTS +1];
+typedef START_POINT Start_t[MAXSTARTPOINTS +1];
 
 typedef struct _TASKSTATS_POINT
 {

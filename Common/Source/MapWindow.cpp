@@ -71,6 +71,8 @@ int TrailActive = TRUE;
 
 #define NUMSNAILRAMP 3
 
+static COLORREF taskcolor = RGB(0,120,0); // was 255
+
 COLORRAMP snail_colors[] = {
   {-10,          0xff, 0x50, 0x50},
   {0,           0x8f, 0x8f, 0x8f},
@@ -221,6 +223,9 @@ HPEN MapWindow::hpTerrainLine;
 HPEN MapWindow::hpTerrainLineBg;
 HPEN MapWindow::hpSpeedSlow;
 HPEN MapWindow::hpSpeedFast;
+HPEN MapWindow::hpStartFinishThick;
+HPEN MapWindow::hpStartFinishThin;
+
 
 COLORREF MapWindow::BackgroundColor = RGB(0xFF,0xFF,0xFF); //sjt 02NOV05 - was F5F5F5. Changed to increase screen clarity at oblique viewing angles.
 
@@ -489,7 +494,7 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
     POINT offset;
 
     brect.left = x-2;
-    brect.right = brect.left+tsize.cx+2; // JMW was +4
+    brect.right = brect.left+tsize.cx+4;
     brect.top = y+((tsize.cy+4)>>3)-2;
     brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
@@ -962,9 +967,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   {
     /* JMW THIS IS BAD!  Now done with GCE_AIRSPACE
   case WM_USER+1:
-#if (NEWINFOBOX>0)
     dlgAirspaceWarningShowDlg(false);
-#endif
     return(0);
     */
   case WM_ERASEBKGND:
@@ -1116,11 +1119,17 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hpSpeedFast=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
                                 RGB(0x00,0xFF,0x00));
 
+    hpStartFinishThick=(HPEN)CreatePen(PS_SOLID, IBLSCALE(5),
+                                       taskcolor);
+
+    hpStartFinishThin=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
+                                      RGB(255,0,0));
+
     hpMapScale = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
                                  RGB(0,0,0));
-    hpTerrainLine = (HPEN)CreatePen(PS_DASH, IBLSCALE(1),
+    hpTerrainLine = (HPEN)CreatePen(PS_DASH, (1),
                                     RGB(0x30,0x30,0x30));
-    hpTerrainLineBg = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
+    hpTerrainLineBg = (HPEN)CreatePen(PS_SOLID, (1),
                                       RGB(0xFF,0xFF,0xFF));
 
     #if (MONOCHROME_SCREEN > 0)
@@ -1212,6 +1221,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject((HPEN)hpTerrainLineBg);
     DeleteObject((HPEN)hpSpeedFast);
     DeleteObject((HPEN)hpSpeedSlow);
+    DeleteObject((HPEN)hpStartFinishThick);
+    DeleteObject((HPEN)hpStartFinishThin);
 
     DeleteObject((HBRUSH)hbCompass);
     DeleteObject((HBRUSH)hbThermalBand);
@@ -1716,17 +1727,9 @@ void MapWindow::RenderMapWindow(  RECT rc)
     DrawWaypoints(hdcDrawWindowBg,rc);
 
     // draw wind vector at aircraft
-    #if (ALTERNATEWINDVECTOR == 0)
-    if (!EnablePan) {
-      DrawWindAtAircraft(hdcDrawWindowBg, Orig_Aircraft, rc);
-    }
-    #endif
-
-    #if (ALTERNATEWINDVECTOR == 1)
     if (!EnablePan) {
       DrawWindAtAircraft2(hdcDrawWindowBg, Orig_Aircraft, rc);
     }
-    #endif
 
     if (EnableFLARMDisplay)
       DrawFLARMTraffic(hdcDrawWindowBg, rc);
@@ -1765,12 +1768,6 @@ void MapWindow::RenderMapWindow(  RECT rc)
   DrawMapScale2(hdcDrawWindow,rc, Orig_Aircraft);
 
   DrawCompass(hdcDrawWindow, rc);
-
-  #if (ALTERNATEWINDVECTOR == 0)
-  //  if (DerivedDrawInfo.Circling || EnablePan) {
-  //    DrawWind(hdcDrawWindow, Orig, rc); // JMW shouldn't need Orig here
-  //  }
-  #endif
 
   DrawFlightMode(hdcDrawWindow, rc);
 
@@ -1826,9 +1823,6 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     Sleep(100);
   }
 
-  RequestMapScale = MapScale;
-  ModifyMapScale();
-
   //  THREADRUNNING = FALSE;
   THREADEXIT = FALSE;
 
@@ -1860,6 +1854,9 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   MapDirty = true;
   UpdateTimeStats(true);
   //////
+
+  RequestMapScale = MapScale;
+  ModifyMapScale();
 
   bool first = true;
 
@@ -2633,6 +2630,35 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
 }
 
 
+void MapWindow::DrawStartSector(HDC hdc, RECT rc,
+                                POINT &Start,
+                                POINT &End, int Index) {
+  double tmp;
+
+  if(StartLine) {
+    _DrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
+              Start, taskcolor);
+    _DrawLine(hdc, PS_SOLID, IBLSCALE(5), WayPointList[Index].Screen,
+              End, taskcolor);
+    _DrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
+              Start, RGB(255,0,0));
+    _DrawLine(hdc, PS_SOLID, IBLSCALE(1), WayPointList[Index].Screen,
+              End, RGB(255,0,0));
+  } else {
+    tmp = StartRadius*ResMapScaleOverDistanceModify;
+    SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
+    SelectObject(hdc, hpStartFinishThick);
+    Circle(hdc,
+           WayPointList[Index].Screen.x,
+           WayPointList[Index].Screen.y,(int)tmp, rc);
+    SelectObject(hdc, hpStartFinishThin);
+    Circle(hdc,
+           WayPointList[Index].Screen.x,
+           WayPointList[Index].Screen.y,(int)tmp, rc);
+  }
+}
+
+
 void MapWindow::DrawTask(HDC hdc, RECT rc)
 {
   int i;
@@ -2640,7 +2666,6 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
 
   COLORREF whitecolor = RGB(0xff,0xff, 0xff);
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
-  COLORREF taskcolor = RGB(0,120,0); // was 255
 
   if (!WayPointList) return;
 
@@ -2650,34 +2675,15 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
   #endif
   if((Task[0].Index >=0) &&  (Task[1].Index >=0) && (ActiveWayPoint<2))
   {
-    if(StartLine){
-        #if EXPERIMENTAL_STARTLINE > 0
-      _DrawLine(hdc, PS_SOLID, 5, WayPointList[Task[0].Index].Screen,
-                Task[0].Start, taskcolor);
-      _DrawLine(hdc, PS_SOLID, 5, WayPointList[Task[0].Index].Screen,
-                Task[0].End, taskcolor);
-      _DrawLine(hdc, PS_SOLID, 1, WayPointList[Task[0].Index].Screen,
-                Task[0].Start, RGB(255,0,0));
-      _DrawLine(hdc, PS_SOLID, 1, WayPointList[Task[0].Index].Screen,
-                Task[0].End, RGB(255,0,0));
-        #else
-        int LineWidth = 2;
-        DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen,
-                     Task[0].End, RGB(127,127,127));
-        DrawDashLine(hdc, LineWidth, WayPointList[Task[0].Index].Screen,
-                     Task[0].Start, RGB(127,127,127));
-        #endif
-    }
-    #if NOCIRCLEONSTARTLINE > 0
-    else
-    #endif
-    {
-      tmp = StartRadius*ResMapScaleOverDistanceModify;
-      SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-      SelectObject(hdc, GetStockObject(BLACK_PEN));
-      Circle(hdc,
-             WayPointList[Task[0].Index].Screen.x,
-             WayPointList[Task[0].Index].Screen.y,(int)tmp, rc);
+    DrawStartSector(hdc,rc,Task[0].Start, Task[0].End, Task[0].Index);
+    if (EnableMultipleStartPoints) {
+      for (i=0; i<MAXSTARTPOINTS; i++) {
+        if (StartPoints[i].Active && (StartPoints[i].Index>=0)) {
+          DrawStartSector(hdc,rc,
+                          StartPoints[i].Start,
+                          StartPoints[i].End, StartPoints[i].Index);
+        }
+      }
     }
   }
 
@@ -2692,33 +2698,29 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
         if(FinishLine)
             {
 
-              #if EXPERIMENTAL_STARTLINE > 0
-              _DrawLine(hdc, PS_SOLID, 5, WayPointList[Task[i].Index].Screen,
+              _DrawLine(hdc, PS_SOLID, IBLSCALE(5),
+                        WayPointList[Task[i].Index].Screen,
                         Task[i].Start, taskcolor);
-              _DrawLine(hdc, PS_SOLID, 5, WayPointList[Task[i].Index].Screen,
+              _DrawLine(hdc, PS_SOLID, IBLSCALE(5),
+                        WayPointList[Task[i].Index].Screen,
                         Task[i].End, taskcolor);
-              _DrawLine(hdc, PS_SOLID, 1, WayPointList[Task[i].Index].Screen,
+              _DrawLine(hdc, PS_SOLID, IBLSCALE(1),
+                        WayPointList[Task[i].Index].Screen,
                         Task[i].Start, RGB(255,0,0));
-              _DrawLine(hdc, PS_SOLID, 1, WayPointList[Task[i].Index].Screen,
+              _DrawLine(hdc, PS_SOLID, IBLSCALE(1),
+                        WayPointList[Task[i].Index].Screen,
                         Task[i].End, RGB(255,0,0));
-              #else
-              DrawDashLine(hdc, 2,
-               WayPointList[Task[i].Index].Screen,
-               Task[i].End,
-               RGB(127,127,127));
-              DrawDashLine(hdc, 2,
-               WayPointList[Task[i].Index].Screen,
-               Task[i].Start,
-               RGB(127,127,127));
-              #endif
             }
-          #if NOCIRCLEONFINISHLINE > 0
           else
-          #endif
             {
                 tmp = FinishRadius*ResMapScaleOverDistanceModify;
                 SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-                SelectObject(hdc, GetStockObject(BLACK_PEN));
+                SelectObject(hdc, hpStartFinishThick);
+                Circle(hdc,
+                       WayPointList[Task[i].Index].Screen.x,
+                       WayPointList[Task[i].Index].Screen.y,
+                       (int)tmp, rc);
+                SelectObject(hdc, hpStartFinishThin);
                 Circle(hdc,
                        WayPointList[Task[i].Index].Screen.x,
                        WayPointList[Task[i].Index].Screen.y,
@@ -2977,7 +2979,6 @@ void MapWindow::DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
   SelectObject(hdc, hpOld);
 }
 
-#if (ALTERNATEWINDVECTOR > 0)
 void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
   int i;
   POINT Start;
@@ -3028,7 +3029,6 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
   SelectObject(hdc, hbOld);
   SelectObject(hdc, hpOld);
 }
-#endif
 
 void MapWindow::DrawWind(HDC hdc, POINT Orig, RECT rc)
 {
@@ -3468,10 +3468,8 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
     Start.y = IBLSCALE(19)+rc.top;
     Start.x = rc.right - IBLSCALE(19);
 
-#if (NEWINFOBOX>0)
     if (EnableVarioGauge && MapRectBig.right == rc.right)
         Start.x -= InfoBoxLayout::ControlWidth;
-#endif
 
     POINT Arrow[5] = { {0,-18}, {-6,10}, {0,0}, {6,10}, {0,-18}};
 
@@ -3508,10 +3506,9 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
 
       Start.y = rc.top + IBLSCALE(10);
       Start.x = rc.right - IBLSCALE(11);
-#if (NEWINFOBOX>0)
+
       if (EnableVarioGauge && MapRectBig.right == rc.right)
         Start.x -= InfoBoxLayout::ControlWidth;
-#endif
 
       PolygonRotateShift(Arrow, 5, Start.x, Start.y,
                          -DisplayAngle);
@@ -3695,7 +3692,7 @@ void MapWindow::CloseDrawingThread(void)
 void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 {
   POINT ThermalProfile[NUMTHERMALBUCKETS+2];
-  POINT GliderBand[5] = { {2,0},{23,0},{22,0},{24,0},{0,0} };
+  POINT GliderBand[5] = { {0,0},{23,0},{22,0},{24,0},{0,0} };
 
   if ((DerivedDrawInfo.TaskAltitudeDifference>50)
       &&(DerivedDrawInfo.FinalGlide)) {
@@ -3725,6 +3722,9 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 
   // no thermalling has been done above safety altitude
   if (mth<=1) {
+    return;
+  }
+  if (maxh-minh<=0) {
     return;
   }
 
@@ -3765,23 +3765,24 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   // position of thermal band
   for (i=0; i<numtherm; i++) {
     ThermalProfile[1+i].x =
-      (7+iround((Wt[i]/Wtot)*IBLSCALE(TBSCALEX)))+rc.left;
+      (iround((Wt[i]/Wtot)*IBLSCALE(TBSCALEX)))+rc.left;
 
     ThermalProfile[1+i].y =
-      5+iround(TBSCALEY*(1.0-ht[i]))+rc.top;
+      IBLSCALE(4)+iround(TBSCALEY*(1.0-ht[i]))+rc.top;
   }
-  ThermalProfile[0].x = IBLSCALE(7)+rc.left;
+  ThermalProfile[0].x = rc.left;
   ThermalProfile[0].y = ThermalProfile[1].y;
-  ThermalProfile[numtherm+1].x = IBLSCALE(7)+rc.left;
+  ThermalProfile[numtherm+1].x = rc.left;
   ThermalProfile[numtherm+1].y = ThermalProfile[numtherm].y;
 
   // position of thermal band
 
   double hglider = ((h-minh)/(maxh-minh));
 
-  GliderBand[0].y = IBLSCALE(5)+iround(TBSCALEY*(1.0-hglider))+rc.top;
+  GliderBand[0].y = IBLSCALE(4)+iround(TBSCALEY*(1.0-hglider))+rc.top;
   GliderBand[1].y = GliderBand[0].y;
-  GliderBand[1].x = (IBLSCALE(7)+iround((mc/Wtot)*IBLSCALE(TBSCALEX)))+rc.left;
+  GliderBand[1].x = max(iround((mc/Wtot)*IBLSCALE(TBSCALEX)),IBLSCALE(4))
+    +rc.left;
 
   GliderBand[2].x = GliderBand[1].x-IBLSCALE(4);
   GliderBand[2].y = GliderBand[0].y-IBLSCALE(4);
@@ -4439,6 +4440,18 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
           PointVisible(WayPointList[Task[i].Index].Screen);
       }
     }
+    if (EnableMultipleStartPoints) {
+      for(i=0;i<MAXSTARTPOINTS-1;i++) {
+        if (StartPoints[i].Active && (StartPoints[i].Index>=0)) {
+
+          LatLon2Screen(WayPointList[StartPoints[i].Index].Longitude,
+                        WayPointList[StartPoints[i].Index].Latitude,
+                        WayPointList[StartPoints[i].Index].Screen);
+          WayPointList[StartPoints[i].Index].Visible =
+            PointVisible(WayPointList[StartPoints[i].Index].Screen);
+        }
+      }
+    }
   }
 
   // only calculate screen coordinates for waypoints that are visible
@@ -4460,6 +4473,18 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
     iSnailNext = SnailNext;
     // set this so that new data doesn't arrive between calculating
     // this and the screen updates
+  }
+
+  if (EnableMultipleStartPoints) {
+    for(i=0;i<MAXSTARTPOINTS-1;i++) {
+      if (StartPoints[i].Active && (StartPoints[i].Index>=0)) {
+
+        LatLon2Screen(StartPoints[i].SectorEndLon,
+                      StartPoints[i].SectorEndLat, StartPoints[i].End);
+        LatLon2Screen(StartPoints[i].SectorStartLon,
+                      StartPoints[i].SectorStartLat, StartPoints[i].Start);
+      }
+    }
   }
 
   for(i=0;i<MAXTASKPOINTS-1;i++)

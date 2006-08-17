@@ -312,14 +312,15 @@ location=5
 mode=default
 type=key
 data=7
-event=Zoom in
+event=Calculator
 label=
 location=6
 
 mode=default
 type=key
 data=8
-event=Zoom out
+event=Setup Task
+event=Mode default
 label=
 location=7
 
@@ -349,15 +350,16 @@ location=5
 mode=Preview
 type=key
 data=7
-event=Zoom in
-label=Zoom\nIn
+event=Calculator
+label=Task\nCalc
 location=6
 
 mode=Preview
 type=key
 data=8
-event=Zoom out
-label=Zoom\nOut
+event=Setup Task
+event=Mode default
+label=Task\nEdit
 location=7
 
 mode=Preview

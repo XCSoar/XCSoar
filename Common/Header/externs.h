@@ -75,6 +75,7 @@ extern unsigned int NumberOfAirspaceCircles;
 extern bool GlobalRunning;
 
 // task data
+extern START_POINT StartPoints[];
 extern TASK_POINT Task[];
 extern TASKSTATS_POINT TaskStats[];
 extern int ActiveWayPoint;
@@ -82,6 +83,8 @@ extern bool TaskAborted;
 extern int SelectedWaypoint;
 extern int SectorType;
 extern DWORD SectorRadius;
+
+extern bool EnableMultipleStartPoints;
 extern int StartLine;
 extern DWORD StartRadius;
 extern int FinishLine;

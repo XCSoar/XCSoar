@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 
@@ -165,5 +164,3 @@ void dlgVegaDemoShowModal(void){
 
 }
 
-
-#endif

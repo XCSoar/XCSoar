@@ -35,6 +35,7 @@ Copyright_License {
 #include "Utils.h"
 #include "externs.h"
 
+bool EnableMultipleStartPoints = false;
 
 void FlyDirectTo(int index) {
   if (!CheckDeclaration())
@@ -315,6 +316,13 @@ void RefreshTask() {
       WayPointList[Task[i].Index].InTask = true;
     }
   }
+  if (EnableMultipleStartPoints) {
+    for (i=0; i<MAXSTARTPOINTS; i++) {
+      if ((StartPoints[i].Index != -1)&&(StartPoints[i].Active)) {
+        WayPointList[StartPoints[i].Index].InTask = true;
+      }
+    }
+  }
 
   CalculateTaskSectors();
   CalculateAATTaskSectors();
@@ -325,6 +333,37 @@ void CalculateTaskSectors(void)
 {
   int i;
   double SectorAngle, SectorSize, SectorBearing;
+
+  if (EnableMultipleStartPoints) {
+    for(i=0;i<MAXSTARTPOINTS-1;i++) {
+      if (StartPoints[i].Active && (StartPoints[i].Index>=0)) {
+	if (StartLine==2) {
+          SectorAngle = 45+90;
+        } else {
+          SectorAngle = 90;
+        }
+        SectorSize = StartRadius;
+        SectorBearing = StartPoints[i].OutBound;
+
+        StartPoints[i].SectorStartLat =
+          FindLatitude(WayPointList[StartPoints[i].Index].Latitude,
+                       WayPointList[StartPoints[i].Index].Longitude,
+                       SectorBearing + SectorAngle, SectorSize);
+        StartPoints[i].SectorStartLon =
+          FindLongitude(WayPointList[StartPoints[i].Index].Latitude,
+                        WayPointList[StartPoints[i].Index].Longitude,
+                        SectorBearing + SectorAngle, SectorSize);
+        StartPoints[i].SectorEndLat   =
+          FindLatitude(WayPointList[StartPoints[i].Index].Latitude,
+                       WayPointList[StartPoints[i].Index].Longitude,
+                       SectorBearing - SectorAngle, SectorSize);
+        StartPoints[i].SectorEndLon   =
+          FindLongitude(WayPointList[StartPoints[i].Index].Latitude,
+                        WayPointList[StartPoints[i].Index].Longitude,
+                        SectorBearing - SectorAngle, SectorSize);
+      }
+    }
+  }
 
   for(i=0;i<MAXTASKPOINTS-1;i++)
     {
@@ -637,6 +676,19 @@ void RefreshTaskWaypoint(int i) {
 				WayPointList[Task[i].Index].Longitude);
       Task[i-1].OutBound = Task[i].InBound;
       Task[i-1].Bisector = BiSector(Task[i-1].InBound,Task[i-1].OutBound);
+      if (i==1) {
+        if (EnableMultipleStartPoints) {
+          for (int j=0; j<MAXSTARTPOINTS; j++) {
+            if ((StartPoints[j].Index != -1)&&(StartPoints[j].Active)) {
+              StartPoints[j].OutBound =
+                Bearing(WayPointList[StartPoints[j].Index].Latitude,
+                        WayPointList[StartPoints[j].Index].Longitude,
+                        WayPointList[Task[i].Index].Latitude,
+                        WayPointList[Task[i].Index].Longitude);
+            }
+          }
+        }
+      }
     }
 }
 
@@ -690,6 +742,7 @@ void LoadNewTask(TCHAR *szFileName)
 {
   HANDLE hFile;
   TASK_POINT Temp;
+  START_POINT STemp;
   DWORD dwBytesRead;
   int i;
   bool TaskInvalid = false;
@@ -750,6 +803,26 @@ void LoadNewTask(TCHAR *szFileName)
 	  void(0);
 	if (!ReadFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesRead,(OVERLAPPED*)NULL))
 	  void(0);
+
+        if (!ReadFile(hFile,&EnableMultipleStartPoints,sizeof(bool),&dwBytesRead,(OVERLAPPED*)NULL))
+          void(0);
+
+        for(i=0;i<MAXSTARTPOINTS;i++)
+        {
+          if(!ReadFile(hFile,&STemp,sizeof(START_POINT),&dwBytesRead, (OVERLAPPED *)NULL))
+            {
+              TaskInvalid = true;
+              break;
+            }
+
+          if((STemp.Index < (int)NumberOfWayPoints) && (STemp.Index>-2))
+            {
+              memcpy(&StartPoints[i],&STemp, sizeof(START_POINT));
+            } else {
+	    TaskInvalid = true;
+	  }
+        }
+
       }
       CloseHandle(hFile);
   } else {
@@ -772,101 +845,6 @@ void LoadNewTask(TCHAR *szFileName)
 
   UnlockTaskData();
 
-}
-
-
-// this one inserts the task in the task list!
-void LoadTask(TCHAR *szFileName, HWND hDlg)
-{
-  HANDLE hFile;
-  TASK_POINT Temp;
-  DWORD dwBytesRead;
-  int i;
-  bool TaskInvalid = false;
-
-  LockTaskData();
-
-  ActiveWayPoint = -1;
-  for(i=0;i<MAXTASKPOINTS;i++)
-    {
-      Task[i].Index = -1;
-    }
-
-  SendDlgItemMessage(hDlg,IDC_TASK,LB_RESETCONTENT,0,0);
-
-  hFile = CreateFile(szFileName,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-
-  if(hFile!=INVALID_HANDLE_VALUE )
-    {
-      for(i=0;i<MAXTASKPOINTS;i++)
-        {
-          if(!ReadFile(hFile,&Temp,sizeof(TASK_POINT),&dwBytesRead, (OVERLAPPED *)NULL))
-            {
-              TaskInvalid = true;
-              break;
-            }
-
-          if((Temp.Index < (int)NumberOfWayPoints) && (Temp.Index>-2))
-            {
-              memcpy(&Task[i],&Temp, sizeof(TASK_POINT));
-              /*Task[i].InBound = Temp.InBound;
-                Task[i].Index = Temp.Index;
-                Task[i].Leg = Temp.Leg;
-                Task[i].OutBound = Temp.OutBound;
-                Task[i].AATCircleRadius = Temp*/
-            } else {
-	    TaskInvalid = true;
-	  }
-        }
-
-      if (!TaskInvalid) {
-	if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
-	  AATEnabled = FALSE;
-	if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
-	  AATTaskLength = 0;
-
-	// 20060521:sgi added additional task parameters
-	if (!ReadFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);  // todo set default values
-	if (!ReadFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
-	if (!ReadFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
-	if (!ReadFile(hFile,&StartLine,sizeof(StartLine),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
-	if (!ReadFile(hFile,&SectorType,sizeof(SectorType),&dwBytesRead,(OVERLAPPED*)NULL))
-        void(0);
-	if (!ReadFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
-	if (!ReadFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
-      }
-      CloseHandle(hFile);
-    } else {
-    TaskInvalid = true;
-  }
-
-  if (TaskInvalid) {
-    for(i=0;i<MAXTASKPOINTS;i++)
-      {
-	Task[i].Index = -1;
-      }
-    ActiveWayPoint = -1;
-    DefaultTask();
-  }
-
-  for(i=0;i<MAXTASKPOINTS;i++)
-    {
-      if(Task[i].Index >=0)
-        {
-	  SendDlgItemMessage(hDlg,IDC_TASK,LB_ADDSTRING,0,(LPARAM)(LPCTSTR)WayPointList[Task[i].Index].Name);
-        }
-    }
-
-  if(Task[0].Index != -1)
-    ActiveWayPoint = 0;
-
-  UnlockTaskData();
 }
 
 
@@ -895,7 +873,10 @@ void SaveTask(TCHAR *szFileName)
       WriteFile(hFile,&SectorType,sizeof(SectorType),&dwBytesWritten,(OVERLAPPED*)NULL);
       WriteFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesWritten,(OVERLAPPED*)NULL);
       WriteFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesWritten,(OVERLAPPED*)NULL);
+
+      WriteFile(hFile,&EnableMultipleStartPoints,sizeof(bool),&dwBytesWritten,(OVERLAPPED*)NULL);
+      WriteFile(hFile,&StartPoints[0],sizeof(START_POINT)*MAXSTARTPOINTS,&dwBytesWritten,(OVERLAPPED*)NULL);
+      CloseHandle(hFile);
     }
-  CloseHandle(hFile);
   UnlockTaskData();
 }

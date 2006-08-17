@@ -64,6 +64,12 @@
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
+  <WndProperty Name="prpEnableMultipleStartPoints" Caption="Alternate start points" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables alternate start points.">
+    <DataField name="" DataType="boolean" ReadOnly=0/>
+  </WndProperty>
+
+  <WndButton   Caption="Edit start points"    X=20 Y=-1 Width=200  Height=22 Font=2 OnClickNotify="OnStartPointClicked"/>
+
   </WndFrame>
 
   <WndFrame Name="frmTurnpoint" X=80 Y=0 Width=240 Height=222 Font=2>

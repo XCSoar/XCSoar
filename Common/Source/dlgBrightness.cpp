@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 #include "externs.h"
@@ -146,5 +145,3 @@ void dlgBrightnessShowModal(void){
 
 }
 
-
-#endif

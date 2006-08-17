@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 
 #include "stdafx.h"
@@ -2616,4 +2615,3 @@ void dlgConfigurationShowModal(void){
   { AATASK,     _T("AAT")}
 */
 
-#endif

@@ -39,7 +39,6 @@ OLCOptimizer::OLCOptimizer() {
 
   lat_proj = 0;
   lon_proj = 0;
-  alt_proj = 0;
 
   flying = true;
 
@@ -402,8 +401,6 @@ void OLCOptimizer::SetLine() {
   UnlockFlightData();
 
 }
-
-
 
 
 bool OLCOptimizer::Optimize(bool isflying) {

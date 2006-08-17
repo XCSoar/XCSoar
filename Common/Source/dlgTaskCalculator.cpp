@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 
@@ -66,7 +65,7 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
   if (wp) {
     double dd = CALCULATED_INFO.TaskTimeToGo;
-    if (CALCULATED_INFO.TaskStartTime>0.0) {
+    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
       dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
     }
     dd= min(24.0*60.0,dd/60.0);
@@ -168,5 +167,3 @@ void dlgTaskCalculatorShowModal(void){
   wf = NULL;
 
 }
-
-#endif

@@ -57,10 +57,6 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Message.h"
 
-#if (NEWINFOBOX<1)
-#define USE_ARH_COLOUR_SELECTOR 1
-#endif
-
 
 void ReadWayPoints(void);
 void ReadAirspace(void);
@@ -1026,7 +1022,7 @@ void settaskUpdateControls(HWND hDlg, int TaskSize){
 
 }
 
-
+/*
 LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   unsigned int i;
@@ -1242,6 +1238,7 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     }
   return FALSE;
 }
+*/
 
 
 LRESULT CALLBACK FinalGlide(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)

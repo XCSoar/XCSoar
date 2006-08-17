@@ -71,7 +71,6 @@ public:
 
 private:
 
-  int alt_proj;
   bool flying;
 
   unsigned short isplit[MATSIZE];

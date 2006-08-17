@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 
 #include "stdafx.h"
@@ -182,7 +181,7 @@ static void OverviewRefreshTask(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
   if (wp) {
     double dd = CALCULATED_INFO.TaskTimeToGo;
-    if (CALCULATED_INFO.TaskStartTime>0.0) {
+    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
       dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
     }
     wp->GetDataField()->SetAsFloat(dd/60.0);
@@ -297,24 +296,6 @@ static void GetTaskFileName(TCHAR *filename) {
   _stprintf(sTmp,TEXT("%02d.tsk"), TaskFileNumber);
   _tcscpy(filename, LocalPath(sTmp));
 
-
-/* all this is handled in LocalPath(...
-
-#if (WINDOWSPC>0)
-  _stprintf(filename,TEXT("C:\\XCSoar%02d.tsk"),
-	    TaskFileNumber);   LocalPath(
-#else
-#ifdef GNAV
-  _stprintf(filename,TEXT("\\NOR Flash\\%02d.tsk"),
-	    TaskFileNumber);
-#else
-  _stprintf(filename,TEXT("\\%02d.tsk"),
-	    TaskFileNumber);
-#endif
-#endif
-
-*/
-
 }
 
 
@@ -397,15 +378,6 @@ void dlgTaskOverviewShowModal(void){
   // initialise and turn on the display
   OverviewRefreshTask();
 
-  /*
-  WndButton *wb;
-
-  wb = (WndButton*)wf->FindByName(TEXT("cmdClose"));
-  if (wb) {
-    SetFocus(wb->GetHandle());
-  }
-  */
-
   UpdateAdvanced();
 
   wf->ShowModal();
@@ -419,5 +391,3 @@ void dlgTaskOverviewShowModal(void){
   wf = NULL;
 
 }
-
-#endif

@@ -21,11 +21,7 @@ class InfoBoxFormatter {
     Value = 0.0;
   }
 
-  #if NEWINFOBOX
   virtual TCHAR *Render(int *color);
-  #else
-  virtual void Render(HWND hWnd);
-  #endif
   BOOL Valid;
   double Value;
   TCHAR Format[FORMAT_SIZE+1];
@@ -40,11 +36,7 @@ class FormatterTeamCode: public InfoBoxFormatter {
  public:
   FormatterTeamCode(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  #if NEWINFOBOX
   virtual TCHAR *Render(int *color);
-  #else
-  virtual void Render(HWND hWnd);
-  #endif
 };
 
 
@@ -52,11 +44,7 @@ class FormatterDiffTeamBearing: public InfoBoxFormatter {
  public:
   FormatterDiffTeamBearing(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  #if NEWINFOBOX
   virtual TCHAR *Render(int *color);
-  #else
-  virtual void Render(HWND hWnd);
-  #endif
 };
 
 
@@ -64,11 +52,7 @@ class FormatterWaypoint: public InfoBoxFormatter {
  public:
   FormatterWaypoint(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  #if NEWINFOBOX
   virtual TCHAR *Render(int *color);
-  #else
-  virtual void Render(HWND hWnd);
-  #endif
 };
 
 class FormatterLowWarning: public InfoBoxFormatter {
@@ -80,11 +64,7 @@ class FormatterLowWarning: public InfoBoxFormatter {
 
   };
 
-  #if NEWINFOBOX
   virtual TCHAR *Render(int *color);
-  #else
-  virtual void Render(HWND hWnd);
-  #endif
   double minimum;
   virtual void AssignValue(int i);
 };
@@ -94,11 +74,7 @@ class FormatterTime: public InfoBoxFormatter {
  public:
   FormatterTime(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  #if NEWINFOBOX
   virtual TCHAR *Render(int *color);
-  #else
-  virtual void Render(HWND hWnd);
-  #endif
   virtual void AssignValue(int i);
   int hours;
   int mins;
@@ -110,11 +86,7 @@ class FormatterDiffBearing: public InfoBoxFormatter {
  public:
   FormatterDiffBearing(TCHAR *theformat):InfoBoxFormatter(theformat) {};
 
-  #if NEWINFOBOX
   virtual TCHAR *Render(int *color);
-  #else
-  virtual void Render(HWND hWnd);
-  #endif
 };
 
 typedef struct _SCREEN_INFO

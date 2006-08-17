@@ -191,11 +191,7 @@ void InputEvents::readFile() {
 #ifdef GNAV
 #include "InputEvents_altair.cpp"
 #else
-#if (NEWINFOBOX>0)
 #include "InputEvents_gnav.cpp"
-#else
-#include "InputEvents_defaults.cpp"
-#endif
 #endif
 #endif
 
@@ -1222,18 +1218,14 @@ void InputEvents::eventMainMenu(TCHAR *misc) {
 // Displays the checklist dialog
 //  See the checklist dialog section of the reference manual for more info.
 void InputEvents::eventChecklist(TCHAR *misc) {
-#if (NEWINFOBOX>0)
   dlgChecklistShowModal();
-#endif
 }
 
 // Displays the task calculator dialog
 //  See the task calculator dialog section of the reference manual
 // for more info.
 void InputEvents::eventCalculator(TCHAR *misc) {
-#if (NEWINFOBOX>0)
   dlgTaskCalculatorShowModal();
-#endif
 }
 
 // Status
@@ -1289,16 +1281,12 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
     PopupWaypointDetails();
   } else
     if (_tcscmp(misc, TEXT("select")) == 0) {
-#if NEWINFOBOX > 0
       int res = dlgWayPointSelect();
 
       if (res != -1){
 	SelectedWaypoint = res;
 	PopupWaypointDetails();
       };
-#else
-      0;
-#endif
 
     }
 }
@@ -1482,9 +1470,7 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
     return;
   }
   if (_tcscmp(misc, TEXT("xdemo")) == 0) {
-#if (NEWINFOBOX>0)
     dlgVegaDemoShowModal();
-#endif
     return;
   }
   if (_tcscmp(misc, TEXT("zero"))==0) {
@@ -1747,12 +1733,10 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   TCHAR szTitleBuffer[1024];
   TCHAR text[1024];
 
-#if (NEWAIRSPACEWARNING>0)
   if (!dlgAirspaceWarningIsEmpty()) {
     RequestAirspaceWarningDialog= true;
     return;
   }
-#endif
 
   FindNearestAirspace(GPS_INFO.Longitude, GPS_INFO.Latitude,
 		      &nearestdistance, &nearestbearing,
@@ -1876,63 +1860,31 @@ void SystemConfiguration(void);
 void InputEvents::eventSetup(TCHAR *misc) {
 
   if (_tcscmp(misc,TEXT("Basic"))==0){
-#if NEWINFOBOX > 0
     dlgBasicSettingsShowModal();
-#else
-    0;
-#endif
   } else
     if (_tcscmp(misc,TEXT("Wind"))==0){
-#if NEWINFOBOX > 0
       dlgWindSettingsShowModal();
-#else
-      0;
-#endif
     } else
       if (_tcscmp(misc,TEXT("System"))==0){
 	SystemConfiguration();
       } else
 	if (_tcscmp(misc,TEXT("Task"))==0){
-#if NEWINFOBOX > 0
 	  dlgTaskOverviewShowModal();
-#else
-	  0;
-#endif;
 	} else
 	  if (_tcscmp(misc,TEXT("Airspace"))==0){
-#if NEWINFOBOX > 0
 	    dlgAirspaceShowModal(false);
-#else
-	    0;
-#endif;
 	  }
   if (_tcscmp(misc,TEXT("Replay"))==0){
-#if NEWINFOBOX > 0
     dlgLoggerReplayShowModal();
-#else
-    0;
-#endif;
   }
   if (_tcscmp(misc,TEXT("Switches"))==0){
-#if NEWINFOBOX > 0
     dlgSwitchesShowModal();
-#else
-    0;
-#endif;
   }
   if (_tcscmp(misc,TEXT("Voice"))==0){
-#if NEWINFOBOX > 0
     dlgVoiceShowModal();
-#else
-    0;
-#endif;
   }
   if (_tcscmp(misc,TEXT("Teamcode"))==0){
-#if NEWINFOBOX > 0
     dlgTeamCodeShowModal();
-#else
-    0;
-#endif;
   }
 }
 
@@ -2086,9 +2038,7 @@ void InputEvents::eventDeclutterLabels(TCHAR *misc) {
 
 
 void InputEvents::eventBrightness(TCHAR *misc) {
-#if (NEWINFOBOX>0)
   dlgBrightnessShowModal();
-#endif
 }
 
 // JMW TODO: have all inputevents return bool, indicating whether
