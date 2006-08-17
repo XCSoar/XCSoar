@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 #include <Aygshell.h>
@@ -273,4 +272,3 @@ void dlgAirspaceShowModal(bool coloredit){
 
 }
 
-#endif

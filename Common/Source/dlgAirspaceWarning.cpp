@@ -29,7 +29,6 @@ Copyright_License {
 }
 */
 
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 #include <aygshell.h>
@@ -43,7 +42,6 @@ Copyright_License {
 
 #include "dlgTools.h"
 
-#if (NEWAIRSPACEWARNING>0)
 
 extern HWND   hWndMainWindow;
 extern HWND   hWndMapWindow;
@@ -622,6 +620,3 @@ int dlgAirspaceWarningDeInit(void){
   
 }
 
-
-#endif
-#endif

@@ -66,12 +66,9 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "Geoid.h"
 
-#if NEWINFOBOX > 0
 #include "InfoBox.h"
-#endif
 
 
-#if NEWINFOBOX
 #if !defined(MapScale2)
   #define MapScale2  apMs2Default
 #endif
@@ -147,44 +144,6 @@ Appearance_t Appearance = {
 
 #endif
 
-#else 
-
-Appearance_t Appearance = {
-  apMsDefault,
-  apMs2Default,
-  false,
-  240,
-  {0,0},
-  apFlightModeIconDefault,
-  {0,0},
-  apCompassDefault,
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  {0,0,0},
-  ctBestCruiseTrackDefault,
-  afAircraftDefault,
-  false,
-  fgFinalGlideDefault,
-  wpLandableDefault,
-  false,
-  false,
-  false,
-  smAlligneCenter,
-  false,
-  false,
-  false,
-  false,
-  false,
-  gvnsLongNeedle,
-  true,
-  apIbBox
-};
-#endif
-
-
-
 extern TCHAR XCSoar_Version[256] = TEXT("");
 
 
@@ -200,12 +159,7 @@ HWND hWndMenuButton = NULL;
 
 int numInfoWindows = 8;
 
-#if NEWINFOBOX>0
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
-#else
-HWND                                    hWndInfoWindow[MAXINFOWINDOWS];
-HWND                                    hWndTitleWindow[MAXINFOWINDOWS];
-#endif
 
 int                                     InfoType[MAXINFOWINDOWS] = 
 #ifdef GNAV
@@ -411,6 +365,7 @@ bool MenuActive = false;
 
 //Task Information
 Task_t Task = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
+Start_t StartPoints;
 TaskStats_t TaskStats;
 int ActiveWayPoint = -1;
 
@@ -533,11 +488,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 34
 	  {ugHorizontalSpeed, TEXT("Speed MacReady"), TEXT("V Mc"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 35, 10},
 	  // 35
-#if (NEWINFOBOX>0)
 	  {ugNone,            TEXT("Percentage climb"), TEXT("% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
-#else
-	  {ugNone,            TEXT("Percentage climb"), TEXT("%% Climb"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 43, 34},
-#endif
 	  // 36
 	  {ugNone,            TEXT("Time of flight"), TEXT("Time flt"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 39, 14},
 	  // 37
@@ -741,7 +692,6 @@ void SettingsLeave() {
 }
 
 
-#if NEWINFOBOX > 0
 
 void SystemConfiguration(void) {
 #ifndef _SIM_
@@ -767,140 +717,6 @@ void ShowStatusSystem(void){
 void ShowStatusTask(void){
   dlgStatusTaskShowModal();
 }
-
-#else
-
-void SystemConfiguration(void) {
-}
-
-void ShowStatusSystem(void){
-}
-
-void ShowStatusTask(void){
-}
-
-void ShowStatus() {
-  TCHAR statusmessage[2000];
-  TCHAR Temp[1000];
-  int iwaypoint= -1;
-  double sunsettime;
-  int sunsethours;
-  int sunsetmins;
-  double bearing;
-  double distance;
-  TCHAR sLongitude[16];
-  TCHAR sLatitude[16];
-  int   TabStops[] = {60,80,0};
-
-  statusmessage[0]=0;
-  _tcscat(statusmessage, TEXT("\r\n"));
-
-  Units::LongitudeToString(GPS_INFO.Longitude, 
-			   sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(GPS_INFO.Latitude, 
-			  sLatitude, sizeof(sLatitude)-1);
-
-  sunsettime = DoSunEphemeris(GPS_INFO.Longitude,
-                              GPS_INFO.Latitude);
-  sunsethours = (int)sunsettime;
-  sunsetmins = (int)((sunsettime-sunsethours)*60);
-
-  _stprintf(Temp,TEXT("%s\t%s\r\n%s\t%s\r\n%s\t%.0f %s\r\n%s\t%02d:%02d\r\n\r\n"),
-		   gettext(TEXT("Longitude")),
-           sLongitude,
-		   gettext(TEXT("Latitude")),
-           sLatitude,
-		   gettext(TEXT("Altitude")),
-           GPS_INFO.Altitude*ALTITUDEMODIFY,
-            Units::GetAltitudeName(),
-		   gettext(TEXT("Sunset")),
-           sunsethours,
-           sunsetmins
-           );
-  _tcscat(statusmessage, Temp);
-
-  iwaypoint = FindNearestWayPoint(GPS_INFO.Longitude,
-                                  GPS_INFO.Latitude,
-                                  100000.0); // big range limit
-  if (iwaypoint>=0) {
-
-    bearing = Bearing(GPS_INFO.Latitude,
-                      GPS_INFO.Longitude,
-                      WayPointList[iwaypoint].Latitude,
-                      WayPointList[iwaypoint].Longitude);
-
-    distance = Distance(GPS_INFO.Latitude,
-                        GPS_INFO.Longitude,
-                        WayPointList[iwaypoint].Latitude,
-                        WayPointList[iwaypoint].Longitude)*DISTANCEMODIFY;
-
-    _stprintf(Temp,TEXT("%s\t%s\r\n%s\t%d\r\n%s\t%.1f %s\r\n\r\n"),
-		     gettext(TEXT("Near")),
-             WayPointList[iwaypoint].Name,
-			 gettext(TEXT("Bearing")),
-             (int)bearing,
-			 gettext(TEXT("Distance")),
-              distance,
-              Units::GetDistanceName());
-    _tcscat(statusmessage, Temp);
-
-  }
-
-  if (extGPSCONNECT) {
-    if (GPS_INFO.NAVWarning) {
-      wcscat(statusmessage, gettext(TEXT("GPS fix invalid")));       // JMW fixed message
-    } else {
-      if (GPS_INFO.SatellitesUsed==0) {
-	wcscat(statusmessage, gettext(TEXT("No fix")));
-      } else {
-	wcscat(statusmessage, gettext(TEXT("GPS 3D fix")));
-      }
-    }
-    wcscat(statusmessage, TEXT("\r\n"));
-
-    _stprintf(Temp,TEXT("%s\t%d\r\n"),
-			 gettext(TEXT("Satellites in view")),
-             GPS_INFO.SatellitesUsed
-             );
-    wcscat(statusmessage, Temp);
-  } else {
-    wcscat(statusmessage, gettext(TEXT("GPS disconnected")));
-	wcscat(statusmessage, TEXT("\r\n"));
-  }
-  if (GPS_INFO.VarioAvailable) {
-    wcscat(statusmessage, gettext(TEXT("Vario connected")));
-  } else {
-    wcscat(statusmessage, gettext(TEXT("Vario disconnected")));
-  }
-  wcscat(statusmessage, TEXT("\r\n"));
-  if (LoggerActive) {
-    wcscat(statusmessage, gettext(TEXT("Logger ON")));
-  } else {
-    wcscat(statusmessage, gettext(TEXT("Logger OFF")));
-  }
-  wcscat(statusmessage, TEXT("\r\n"));
-
-  if (GPS_INFO.FLARM_Available) {
-    if (GPS_INFO.FLARM_TX && GPS_INFO.FLARM_GPS) {
-      _stprintf(Temp,TEXT("FLARM: OK, level\t%d"),
-		GPS_INFO.FLARM_AlarmLevel
-		);
-      wcscat(statusmessage, Temp);
-    } else if (GPS_INFO.FLARM_TX) {
-      wcscat(statusmessage, (TEXT("FLARM: No GPS fix")));      
-    } else {
-      wcscat(statusmessage, (TEXT("FLARM: TX error")));      
-    }
-  }
-  wcscat(statusmessage, TEXT("\r\n"));
-
-  DoStatusMessage(TEXT("Status"), statusmessage);
-
-}
-#endif
-
-
-
 
 
 void FullScreen() {
@@ -1034,28 +850,8 @@ void FocusOnWindow(int i, bool selected) {
 
   if (i<0) return; // error
 
-  #if NEWINFOBOX>0
-    InfoBoxes[i]->SetFocus(selected);
-    // todo defocus all other?
-  #else
-
-  HWND wind = hWndInfoWindow[i];
-
-  if (selected) {
-    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD
-		  |WS_TABSTOP|SS_CENTER|SS_NOTIFY|WS_BORDER);
-  } else {
-    SetWindowLong(wind,GWL_STYLE,WS_VISIBLE|WS_CHILD
-		  |WS_TABSTOP|SS_CENTER|SS_NOTIFY);
-  }
-
-  wind = hWndTitleWindow[i];
-  if (selected) {
-    SetWindowLong(wind, GWL_USERDATA, 1);
-  } else {
-    SetWindowLong(wind, GWL_USERDATA, 0);
-  }
-  #endif
+  InfoBoxes[i]->SetFocus(selected);
+  // todo defocus all other?
 
 }
 
@@ -1229,11 +1025,9 @@ void PreloadInitialisation(bool ask) {
     ReadRegistrySettings();
     StatusFileInit();
   } else {
-#if (NEWINFOBOX>0)
     dlgStartupShowModal();
     RestoreRegistry();
     ReadRegistrySettings();
-#endif
 
     CreateProgressDialog(gettext(TEXT("Initialising")));
   }
@@ -1315,11 +1109,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
   /* NEWINFOBOX is now always on in HEAD - non NEWINFOBOX code should be removed 
    * 
-	// #if (NEWINFOBOX>0) 
   * PLEASE NOTE - BETA of 4.7 would be 4.6.1, not 4.7.1 !!! *
   * NOTE: 4.7 is not in beta but currently in ALPHA, use entry below *
   wcscat(XCSoar_Version, TEXT("4.6.5 "));
-	// #else
    */
 #ifdef GNAV
   // HEAD 4.7 (series) is NOT necessarily alpha, as it is in production
@@ -1391,6 +1183,15 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   dataTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("dataTriggerEvent"));
   varioTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("varioTriggerEvent"));
 
+  memset( &(Task), 0, sizeof(Task_t));
+  memset( &(StartPoints), 0, sizeof(Start_t));
+  int i;
+  for (i=0; i<MAXTASKPOINTS; i++) {
+    Task[i].Index = -1;
+  }
+  for (i=0; i<MAXSTARTPOINTS; i++) {
+    StartPoints[i].Index = -1;
+  }
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
@@ -1522,13 +1323,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   CreateCalculationThread();
   Sleep(500);
 
-#if (NEWAIRSPACEWARNING>0)
-  // experimental
   StartupStore(TEXT("AirspaceWarnListInit\r\n"));
   AirspaceWarnListInit();
   StartupStore(TEXT("dlgAirspaceWarningInit\r\n"));
   dlgAirspaceWarningInit();
-#endif
 
   // Da-da, start everything now
   StartupStore(TEXT("ProgramStarted=1\r\n"));
@@ -1650,9 +1448,6 @@ static void InitialiseFonts(RECT rc) {
   logfont.lfCharSet = ANSI_CHARSET;
   ApplyClearType(&logfont);
 
-  //  #if NEWINFOBOX > 0
-  // todo
-  //  #else
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
   SIZE tsize;
@@ -1666,7 +1461,6 @@ static void InitialiseFonts(RECT rc) {
     DeleteObject(InfoWindowFont);
   } while (tsize.cx>InfoBoxLayout::ControlWidth);
   ReleaseDC(hWndMainWindow, iwhdc);
-  //  #endif
 
   iFontHeight++;
   logfont.lfHeight = iFontHeight;
@@ -1758,18 +1552,6 @@ static void InitialiseFonts(RECT rc) {
   propGetFontSettings(TEXT("MapWindowBoldFont"), &logfont);
   MapWindowBoldFont = CreateFontIndirect (&logfont);
 
-  #if NEWINFOBOX > 0
-  // NOP not needed
-  #else
-  int i;
-  for(i=0;i<numInfoWindows;i++)
-    {
-      SendMessage(hWndInfoWindow[i],WM_SETFONT,
-		  (WPARAM)InfoWindowFont,MAKELPARAM(TRUE,0));
-      SendMessage(hWndTitleWindow[i],WM_SETFONT,
-		  (WPARAM)TitleWindowFont,MAKELPARAM(TRUE,0));
-    }
-  #endif
 }
 
 //
@@ -1878,9 +1660,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   StartupStore(TEXT("Initialise fonts\r\n"));
   InitialiseFonts(rc);
 
-  #if NEWINFOBOX > 0
   ButtonLabel::SetFont(MapWindowBoldFont);
-  #endif
 
   StartupStore(TEXT("Initialise message system\r\n"));
   Message::Initialize(rc); // creates window, sets fonts
@@ -1929,16 +1709,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   UpdateWindow(hWndMainWindow);
     
-#if NEWINFOBOX>0
-  // NOP not needed
-#else
-  for(int i=0;i<numInfoWindows;i++)
-    {
-      UpdateWindow(hWndInfoWindow[i]);
-      UpdateWindow(hWndTitleWindow[i]);
-    }
-#endif
-  
   FullScreen();
 
   return TRUE;
@@ -2041,7 +1811,7 @@ bool Debounce(void) {
 void Shutdown(void) {
   int i;
 
-  CreateProgressDialog(gettext(TEXT("Shutdown")));
+  CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
   StartupStore(TEXT("Entering shutdown...\r\n"));
   StartupLogFreeRamAndStorage();
@@ -2049,13 +1819,10 @@ void Shutdown(void) {
   // turn off all displays
   GlobalRunning = false;
 
-#if (NEWAIRSPACEWARNING>0)
-  // experimental
   StartupStore(TEXT("dlgAirspaceWarningDeInit\r\n"));
   dlgAirspaceWarningDeInit();
   StartupStore(TEXT("AirspaceWarnListDeInit\r\n"));
   AirspaceWarnListDeInit();
-#endif
 
   // Save settings
   StoreRegistry();
@@ -2139,15 +1906,7 @@ void Shutdown(void) {
   
   Units::UnLoadUnitBitmap();
   
-#if NEWINFOBOX > 0
   InfoBoxLayout::DestroyInfoBoxes();
-#else
-  for(i=0;i<numInfoWindows;i++)
-    {
-      DestroyWindow(hWndInfoWindow[i]);
-      DestroyWindow(hWndTitleWindow[i]);
-    }
-#endif
   
   ButtonLabel::Destroy();
   
@@ -2317,21 +2076,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_KEYUP: // JMW was keyup
 #endif
       /* DON'T PROCESS KEYS HERE WITH NEWINFOBOX, IT CAUSES CRASHES! */
-#if (NEWINFOBOX<1)       
-      if (ProgramStarted) {
-	if (!DialogActive) {
-	  
-	  if (InputEvents::processKey(wParam)) {
-	    //	  TODO debugging - DoStatusMessage(TEXT("Event in infobox"));
-	  }
-	} else {
-	  //	TODO debugging - DoStatusMessage(TEXT("Event in dlg"));
-	  if (InputEvents::processKey(wParam)) {
-	  }
-	}
-	return TRUE; // JMW trying to fix multiple processkey bug
-      }
-#endif 
       break;
     case WM_TIMER:
       //      ASSERT(hWnd==hWndMainWindow);
@@ -2506,7 +2250,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      Debounce();
               DialogActive = false;
               return 0;
-
+              /*
             case IDD_TASK:
               MenuActive = true;
               SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
@@ -2519,7 +2263,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	      Debounce();
               DialogActive = false;
               return 0;
-
+              */
             case IDD_LOCK:
               DisplayLocked = ! DisplayLocked;
               ShowWindow(hWndCB,SW_HIDE);
@@ -2617,17 +2361,9 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       for(i=0;i<numInfoWindows;i++)
         {
-          #if NEWINFOBOX > 0
           if(wmControl == InfoBoxes[i]->GetHandle())
-          #else
-          if(wmControl == hWndInfoWindow[i])
-          #endif
             {
               InfoWindowActive = TRUE;
-              #if NEWINFOBOX > 0
-              #else
-              SetFocus(hWnd);
-              #endif
 
               if(DisplayLocked)
                 {
@@ -2822,16 +2558,12 @@ void DisplayText(void)
     
     Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
     
-#if NEWINFOBOX>0
     TCHAR sTmp[32];
-#endif
     
     int color = 0;
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i])||first);
 
-#if NEWINFOBOX>0
-    
     // set values, title
     switch (DisplayType[i]) {
     case 14: // Next waypoint
@@ -2907,25 +2639,14 @@ void DisplayText(void)
     default:
       InfoBoxes[i]->SetComment(TEXT(""));
     };
-#else
-    Data_Options[DisplayType[i]].Formatter->Render(hWndInfoWindow[i]);
-
-      // JMW only update captions if text has really changed.
-      // this avoids unnecesary gettext lookups
-      _stprintf(Caption[i],gettext(Data_Options[DisplayType[i]].Title) );
-      SetWindowText(hWndTitleWindow[i],Caption[i]);
-#endif
 
     DisplayTypeLast[i] = DisplayType[i];
     
   }
-#if (NEWINFOBOX>0)
   for (i=0; i<numInfoWindows; i++) 
     InfoBoxes[i]->Paint();
   for (i=0; i<numInfoWindows; i++) 
     InfoBoxes[i]->PaintFast();
-#endif
-
 
   first = false;
 
@@ -2943,14 +2664,12 @@ void CommonProcessTimer()
     InputEvents::DoQueuedEvents();
   }
 
-#if (NEWINFOBOX>0)
   if (ProgramStarted==3) {
     if (RequestAirspaceWarningDialog) {
       RequestAirspaceWarningDialog= false;
       dlgAirspaceWarningShowDlg(false);
     }
   }
-#endif
 
 
 #if (WINDOWSPC<1)
@@ -3257,70 +2976,20 @@ void SwitchToMapWindow(void)
 void PopupAnalysis()
 {
   DialogActive = true;
-  #if NEWINFOBOX>0
   dlgAnalysisShowModal();
-  /*
-  if (InfoBoxLayout::landscape) {
-    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndMapWindow, (DLGPROC)AnalysisProc);
-  } else {
-    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndMapWindow, (DLGPROC)AnalysisProc);
-  }
-  */
-  #else
-  if (InfoBoxLayout::landscape) {
-    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS_LANDSCAPE, hWndInfoWindow[0],
-	      (DLGPROC)AnalysisProc);
-  } else {
-    DialogBox(hInst, (LPCTSTR)IDD_ANALYSIS, hWndInfoWindow[0],
-	      (DLGPROC)AnalysisProc);
-  }
-  #endif
   DialogActive = false;
 }
 
 
 void PopupWaypointDetails()
 {
-#if NEWINFOBOX>0
-
   dlgWayPointDetailsShowModal();
-#else
-
-  if (SelectedWaypoint<0)
-    return;
-
-  DialogActive = true;
-  #if NEWINFOBOX>0
-  if (InfoBoxLayout::landscape) {
-    DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS_LANDSCAPE,
-	      hWndMapWindow, (DLGPROC)WaypointDetails);
-  } else {
-    DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS,
-	      hWndMapWindow, (DLGPROC)WaypointDetails);
-  }
-  #else
-  if (InfoBoxLayout::landscape) {
-    DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS_LANDSCAPE,
-	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
-  } else {
-    DialogBox(hInst, (LPCTSTR)IDD_WAYPOINTDETAILS,
-	      hWndInfoWindow[0], (DLGPROC)WaypointDetails);
-  }
-  #endif
-  DialogActive = false;
-#endif
 }
 
 
 void PopupBugsBallast(int UpDown)
 {
   DialogActive = true;
-  #if NEWINFOBOX>0
-  // JMW Not used anymore
-  //  DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWndMapWindow, (DLGPROC)SetBugsBallast);
-  #else
-  DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWndInfoWindow[0], (DLGPROC)SetBugsBallast);
-  #endif
   ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
   SwitchToMapWindow();
@@ -3332,12 +3001,6 @@ void PopUpSelect(int Index)
 {
   DialogActive = true;
   CurrentInfoType = InfoType[Index];
-  #if NEWINFOBOX>0
-  // JMW not used anymore
-  //  InfoType[Index] = DialogBox(hInst, (LPCTSTR)IDD_SELECT, hWndMapWindow, (DLGPROC)Select);
-  #else
-  InfoType[Index] = DialogBox(hInst, (LPCTSTR)IDD_SELECT, hWndInfoWindow[Index], (DLGPROC)Select);
-  #endif
   StoreType(Index, InfoType[Index]);
   ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
@@ -3477,32 +3140,18 @@ void UnlockEventQueue() {
 void HideInfoBoxes() {
   int i;
   InfoBoxesHidden = true;
-  #if NEWINFOBOX > 0
   for (i=0; i<numInfoWindows; i++) {
     InfoBoxes[i]->SetVisible(false);
   }
-  #else
-  for (i=0; i<numInfoWindows; i++) {
-    ShowWindow(hWndInfoWindow[i], SW_HIDE);
-    ShowWindow(hWndTitleWindow[i], SW_HIDE);
-  }
-  #endif
 }
 
 
 void ShowInfoBoxes() {
   int i;
   InfoBoxesHidden = false;
-  #if NEWINFOBOX > 0
   for (i=0; i<numInfoWindows; i++) {
     InfoBoxes[i]->SetVisible(true);
   }
-  #else
-  for (i=0; i<numInfoWindows; i++) {
-    ShowWindow(hWndInfoWindow[i], SW_SHOW);
-    ShowWindow(hWndTitleWindow[i], SW_SHOW);
-  }
-  #endif
 }
 
 

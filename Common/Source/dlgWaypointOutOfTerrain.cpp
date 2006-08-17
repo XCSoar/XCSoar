@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 
@@ -115,5 +114,3 @@ int dlgWaypointOutOfTerrain(TCHAR *Message){
 
 }
 
-
-#endif

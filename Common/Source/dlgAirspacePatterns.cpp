@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 
 #include "stdafx.h"
@@ -150,4 +149,3 @@ int dlgAirspacePatternsShowModal(void){
   return ItemIndex;
 }
 
-#endif

@@ -151,6 +151,9 @@ typedef struct _DERIVED_INFO
   double TeammateLatetude;
   double TeammateLongitude;
   double FlightTime;
+
+  double AverageClimbRate[200];
+  long AverageClimbRateN[200];
 } DERIVED_INFO;
 
 
@@ -185,5 +188,6 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 void SaveCalculationsPersist(DERIVED_INFO *Calculated);
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void DeleteCalculationsPersist(void);
 
 #endif

@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 #include <limits.h>
@@ -828,5 +827,3 @@ void LoadChildsFromXML(WindowControl *Parent,
 
 }
 
-
-#endif

@@ -38,12 +38,7 @@ Copyright_License {
 
 #include "infobox.h"
 
-#if NEWINFOBOX>0
 extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
-#else
-extern HWND hWndInfoWindow[MAXINFOWINDOWS];
-extern HWND hWndTitleWindow[MAXINFOWINDOWS];
-#endif
 extern HWND hWndMainWindow; // Main Windows
 extern HINSTANCE hInst; // The current instance
 
@@ -415,7 +410,6 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
     {
       GetInfoBoxPosition(i, rc, &xoff, &yoff, &sizex, &sizey);
 
-      #if NEWINFOBOX > 0
       InfoBoxes[i] = new InfoBox(hWndMainWindow, xoff, yoff, sizex, sizey);
 
       if (gnav){
@@ -427,34 +421,10 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
         InfoBoxes[i]->SetBorderKind(Border);
       }
 
-      #else
-
-      hWndInfoWindow[i] =
-        CreateWindow(TEXT("STATIC"),TEXT("\0"),
-		     /* WS_VISIBLE| */
-		     WS_CHILD|WS_TABSTOP
-		     |SS_CENTER|SS_NOTIFY
-		     |WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-		     xoff, yoff+TitleHeight,
-		     sizex, sizey-TitleHeight,
-		     hWndMainWindow,NULL,hInst,NULL);
-
-      hWndTitleWindow[i] =
-        CreateWindow(TEXT("STATIC"), TEXT("\0"),
-		     /* WS_VISIBLE|*/		     
-		     WS_CHILD|WS_TABSTOP
-		     |SS_CENTER|SS_NOTIFY
-		     |WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-		     xoff, yoff,
-		     sizex, TitleHeight,
-		     hWndMainWindow,NULL,hInst,NULL);
-      #endif
-
     }
 
 }
 
-#if NEWINFOBOX > 0
 void InfoBoxLayout::DestroyInfoBoxes(void){
   int i;
   for(i=0; i<numInfoWindows; i++){
@@ -462,7 +432,6 @@ void InfoBoxLayout::DestroyInfoBoxes(void){
   }
 
 }
-#endif
 
 ///////////////////////
 
@@ -595,7 +564,6 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 
 }
 
-#if NEWINFOBOX > 0
 void ButtonLabel::SetFont(HFONT Font) {
   int i;
   for (i=0; i<NUMBUTTONLABELS; i++) {
@@ -603,7 +571,6 @@ void ButtonLabel::SetFont(HFONT Font) {
               (WPARAM)Font, MAKELPARAM(TRUE,0));
   }
 }
-#endif
 
 
 void ButtonLabel::Destroy() {

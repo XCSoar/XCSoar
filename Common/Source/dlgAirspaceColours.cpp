@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 
 #include "stdafx.h"
@@ -152,5 +151,4 @@ int dlgAirspaceColoursShowModal(void){
   return ItemIndex;
 }
 
-#endif
 

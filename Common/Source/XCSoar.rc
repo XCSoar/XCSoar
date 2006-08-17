@@ -803,6 +803,7 @@ IDR_XML_HELP            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgHelp.xml"
 IDR_XML_TEXTENTRY            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTextEntry.xml"
 
 IDR_XML_TEAMCODE            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTeamCode.xml"
+IDR_XML_STARTPOINT            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartPoint.xml"
 
 /////////////////////////////////////////////////////////////////////////////
 //

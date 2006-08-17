@@ -705,11 +705,7 @@ void InfoBoxFormatter::AssignValue(int i) {
 }
 
 
-#if NEWINFOBOX > 0
 TCHAR *InfoBoxFormatter::Render(int *color) {
-#else
-void InfoBoxFormatter::Render(HWND hWnd) {
-#endif
   if (Valid) {
     _stprintf(Text,
               Format,
@@ -717,21 +713,11 @@ void InfoBoxFormatter::Render(HWND hWnd) {
   } else {
     _stprintf(Text,TEXT("---"));
   }
-  #if NEWINFOBOX > 0
   *color = 0;
   return(Text);
-  #else
-  SetWindowLong(hWnd, GWL_USERDATA, 0);
-  SetWindowText(hWnd,Text);
-  #endif
-
 }
 
-#if NEWINFOBOX > 0
 TCHAR *FormatterLowWarning::Render(int *color) {
-#else
-void FormatterLowWarning::Render(HWND hWnd) {
-#endif
 
   if (Valid) {
     _stprintf(Text,
@@ -740,30 +726,16 @@ void FormatterLowWarning::Render(HWND hWnd) {
   } else {
     _stprintf(Text,TEXT("---"));
   }
-  #if NEWINFOBOX > 0
   if (Value<minimum) {
     *color = 1; // red
   } else {
     *color = 0;
   }
   return(Text);
-  #else
-  if (Value<minimum) {
-    SetWindowLong(hWnd, GWL_USERDATA, 2); // red text
-  } else {
-    SetWindowLong(hWnd, GWL_USERDATA, 0);
-  }
-  SetWindowText(hWnd,Text);
-  #endif
-
 }
 
 
-#if NEWINFOBOX > 0
 TCHAR *FormatterTime::Render(int *color) {
-#else
-void FormatterTime::Render(HWND hWnd) {
-#endif
   if (Valid==FALSE) {
     _stprintf(Text,TEXT("--:--"));
   } else {
@@ -778,39 +750,20 @@ void FormatterTime::Render(HWND hWnd) {
 
     }
   }
-  #if NEWINFOBOX > 0
   *color = 0;
   return(Text);
-  #else
-  SetWindowLong(hWnd, GWL_USERDATA, 0);
-  SetWindowText(hWnd,Text);
-  #endif
 }
 
-#if NEWINFOBOX > 0
 TCHAR *FormatterWaypoint::Render(int *color) {
-#else
-void FormatterWaypoint::Render(HWND hWnd) {
-#endif
 
   if((ActiveWayPoint >=0)&&(WayPointList))
     {
 
-      #if NEWINFOBOX > 0
       if (WayPointList[Task[ActiveWayPoint].Index].Reachable) {
 	*color = 2; // blue text
       } else {
 	*color = 0; // black text
       }
-
-      #else
-	  
-      if (WayPointList[Task[ActiveWayPoint].Index].Reachable) {
-        SetWindowLong(hWnd, GWL_USERDATA, 3); // blue text
-      } else {
-        SetWindowLong(hWnd, GWL_USERDATA, 0); // black text
-      }
-      #endif
 
       if ( DisplayTextType == DISPLAYFIRSTTHREE)
         {
@@ -824,40 +777,20 @@ void FormatterWaypoint::Render(HWND hWnd) {
         }
       else
         {
-          #if NEWINFOBOX > 0
           _tcsncpy(Text,WayPointList[ Task[ActiveWayPoint].Index ].Name,(sizeof(Text)/sizeof(TCHAR))-1);
           Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
-          #else
-          _tcsncpy(Text,WayPointList[ Task[ActiveWayPoint].Index ].Name,5);
-          Text[5] = '\0';
-	        // JMW this needs some work, can still be too wide for infobox
-          #endif
         }
     }
   else
     {
-      // no waypoint selected
-      #if NEWINFOBOX > 0
       *color = 0;
-      #else
-      SetWindowLong(hWnd, GWL_USERDATA, 0);
-      #endif
       Text[0] = '\0';
     }
 
-  #if NEWINFOBOX > 0
   return(Text);
-  #else
-  SetWindowText(hWnd, Text);
-  #endif
-
 }
 
-#if NEWINFOBOX > 0
 TCHAR *FormatterDiffBearing::Render(int *color) {
-#else
-void FormatterDiffBearing::Render(HWND hWnd) {
-#endif
 
   if (ActiveWayPoint>=0 && CALCULATED_INFO.WaypointDistance > 10.0) {
     Valid = true;
@@ -882,78 +815,34 @@ void FormatterDiffBearing::Render(HWND hWnd) {
     _tcscpy(Text, TEXT("---"));
   }
 
-  #if NEWINFOBOX > 0
   *color = 0;
   return(Text);
-  #else
-  SetWindowText(hWnd, Text);
-  #endif
-
 }
 
 
 
 
-#if NEWINFOBOX > 0
 TCHAR *FormatterTeamCode::Render(int *color) {
-#else
-void FormatterTeamCode::Render(HWND hWnd) {
-#endif
 
   if((TeamCodeRefWaypoint >=0)&&(WayPointList))
     {
 
-      #if NEWINFOBOX > 0
-			*color = 0; // black text
-      #else
-/*
-			HFONT hFont; 
-			  LOGFONT logfont;
-			memset ((char *)&logfont, 0, sizeof (logfont));
-			_tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
-			
-			logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
-			logfont.lfHeight = 20;
-			logfont.lfWidth =  8;
-			logfont.lfWeight = FW_MEDIUM;
-			
-			propGetFontSettings(TEXT("TeamCodeFont"), &logfont);
-			hFont = CreateFontIndirect (&logfont);
-						
-			SendMessage(hWnd, WM_SETFONT,(WPARAM)hFont,MAKELPARAM(TRUE,0));
-*/			
-			SetWindowLong(hWnd, GWL_USERDATA, 2); // black text
-      #endif
-
-	
+      *color = 0; // black text
        _tcsncpy(Text,CALCULATED_INFO.OwnTeamCode,5);
        Text[5] = '\0';
     }
   else
     {
       // no waypoint selected
-      #if NEWINFOBOX > 0
       *color = 0;
-      #else
-      SetWindowLong(hWnd, GWL_USERDATA, 0);
-      #endif
       Text[0] = '\0';
     }
 
-  #if NEWINFOBOX > 0
   return(Text);
-  #else
-  SetWindowText(hWnd, Text);
-  #endif
-
 }
 
 
-#if NEWINFOBOX > 0
 TCHAR *FormatterDiffTeamBearing::Render(int *color) {
-#else
-void FormatterDiffTeamBearing::Render(HWND hWnd) {
-#endif
 
   if((TeamCodeRefWaypoint >=0)&&(WayPointList))
     {
@@ -979,11 +868,6 @@ void FormatterDiffTeamBearing::Render(HWND hWnd) {
     _tcscpy(Text, TEXT("---"));
   }
   
-#if NEWINFOBOX > 0
   *color = 0;
   return(Text);
-#else
-  SetWindowText(hWnd, Text);
-#endif
-  
 }

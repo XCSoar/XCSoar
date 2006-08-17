@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 #include "stdafx.h"
 
@@ -212,11 +211,3 @@ void dlgBasicSettingsShowModal(void){
 
 }
 
-
-void WindowControlTest(void){
-
-//  dlgBasicSettingsShowModal();
-
-}
-
-#endif

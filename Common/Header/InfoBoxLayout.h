@@ -10,9 +10,7 @@ class InfoBoxLayout {
   static bool square;
   static int scale;
   static void CreateInfoBoxes(RECT rc);
-  #if NEWINFOBOX > 0
   static void DestroyInfoBoxes(void);
-  #endif
   static int InfoBoxGeometry;
   static int ControlWidth, ControlHeight, TitleHeight;
   static void ScreenGeometry(RECT rc);
@@ -31,9 +29,7 @@ class ButtonLabel {
   static bool ButtonVisible[NUMBUTTONLABELS];
   static void CreateButtonLabels(RECT rc);
   static void AnimateButton(int i);
-  #if NEWINFOBOX > 0
   static void SetFont(HFONT Font);
-  #endif
   static void Destroy();
   static void SetLabelText(int index, TCHAR *text);
   static bool CheckButtonPress(HWND pressedwindow);

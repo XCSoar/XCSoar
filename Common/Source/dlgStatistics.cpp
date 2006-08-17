@@ -190,11 +190,7 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
                  RGB(0,255,0));
     break;
   case STYLE_MEDIUMBLACK:
-#if (NEWINFOBOX>0)
     SelectObject(hdc, penThinSignal /*GetStockObject(BLACK_PEN)*/);
-#else
-    SelectObject(hdc, GetStockObject(BLACK_PEN));
-#endif
     Polyline(hdc, line, 2);
     break;
   case STYLE_THINDASHPAPER:
@@ -540,13 +536,14 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
 
 void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 {
+  int i;
 
   ResetScale();
   ScaleYFromValue(rc, 0);
   ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1)));
   ScaleXFromValue(rc, GlidePolar::Vminsink-2); // GlidePolar::Vminsink);
   ScaleXFromValue(rc, SAFTEYSPEED+2);
-  
+
   DrawXGrid(hdc, rc, 
             10.0/SPEEDMODIFY, 0,
             STYLE_THINDASHPAPER);
@@ -554,8 +551,11 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
             1.0/LIFTMODIFY, 0,
             STYLE_THINDASHPAPER);
   
-  int i;
   double sinkrate0, sinkrate1;
+  double v0, v1;
+  bool v0valid = false;
+  int i0=0;
+
   for (i= GlidePolar::Vminsink; i< SAFTEYSPEED-1;
        i++) {
     
@@ -565,6 +565,25 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
              i, sinkrate0 , 
              i+1, sinkrate1, 
              STYLE_MEDIUMBLACK);
+
+    if (CALCULATED_INFO.AverageClimbRateN[i]>0) {
+      v1= CALCULATED_INFO.AverageClimbRate[i]
+        /CALCULATED_INFO.AverageClimbRateN[i];
+      
+      if (v0valid) {
+
+        DrawLine(hdc, rc,
+                 i0, v0 , 
+                 i, v1, 
+                 STYLE_DASHGREEN);
+
+
+      }
+     
+      v0 = v1; i0 = i;
+      v0valid = true;
+    } 
+
   }
   DrawXLabel(hdc, rc, TEXT("V"));
   DrawYLabel(hdc, rc, TEXT("w"));
@@ -1480,9 +1499,7 @@ static void OnCalcClicked(WindowControl * Sender,
     dlgBasicSettingsShowModal();
   }
   if (page==1) {
-#if (NEWINFOBOX>0)
     dlgTaskCalculatorShowModal();
-#endif
   }
   if (page==2) {
     dlgWindSettingsShowModal();
@@ -1494,17 +1511,13 @@ static void OnCalcClicked(WindowControl * Sender,
     dlgBasicSettingsShowModal();
   }
   if (page==5) {
-#if (NEWINFOBOX>0)
     dlgTaskCalculatorShowModal();
-#endif
   }
   if (page==6) {
     olc.Optimize((CALCULATED_INFO.Flying==1));
   }
   if (page==7) {
-#if (NEWAIRSPACEWARNING>0)
     dlgAirspaceWarningShowDlg(true);
-#endif
   }
   Update();
 }
@@ -1519,7 +1532,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(NULL)
 };
 
-#if (NEWINFOBOX>0)
 
 void dlgAnalysisShowModal(void){
 
@@ -1565,218 +1577,3 @@ void dlgAnalysisShowModal(void){
   FullScreen();
 
 }
-
-#endif
-
-
-/////////////
-// For backward compatability
-
-#include "InfoBoxLayout.h"
-
-
-LRESULT CALLBACK AnalysisProc (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-  TCHAR Temp[2048];
-  static HDC hdcScreen;
-  PAINTSTRUCT ps;
-  HDC hdc;
-  RECT rc;
-  static RECT rcgfx;
-  HFONT hfOld;
-  HBRUSH background;
-
-  switch (message)
-    {
-    case WM_INITDIALOG:
-                 
-      hdcScreen = GetDC(hDlg);
-      GetClientRect(hDlg, &rc);
-
-      SendDlgItemMessage(hDlg, IDC_ANALYSISLABEL, WM_SETFONT,
-                  (WPARAM)StatisticsFont,MAKELPARAM(TRUE,0));
-      SendDlgItemMessage(hDlg, IDC_ANALYSISTEXT, WM_SETFONT,
-                  (WPARAM)StatisticsFont,MAKELPARAM(TRUE,0));
-
-      if (!InfoBoxLayout::landscape) {
-	rcgfx = rc;
-	rcgfx.left  += 10;
-	rcgfx.right -= 10;
-	rcgfx.top = (rc.bottom-rc.top)*2/10+rc.top;
-	rcgfx.bottom = (rc.bottom-rc.top)*2/3+rc.top;
-      } else {
-	rcgfx = rc;
-	rcgfx.left  = long(double(rc.right-rc.left)*0.36)+rc.left;
-	rcgfx.right = rc.right-10;
-	rcgfx.top = (rc.bottom-rc.top)*2/10+rc.top;
-	rcgfx.bottom = rc.bottom;
-      }
-      
-      return TRUE;
-
-    case WM_COMMAND:
-      if (LOWORD(wParam) == IDOK) 
-        {
-          ::ReleaseDC(hDlg, hdcScreen);
-          EndDialog(hDlg, LOWORD(wParam));
-          MapWindow::RequestFastRefresh();
-          ClearAirspaceWarnings(false); // airspace warning gets refreshed
-          FullScreen();
-          return TRUE;
-        }
-      if (LOWORD(wParam) == IDC_ANALYSISNEXT) {
-        page++;
-        
-        // cycle around to start page
-        if (page==6) {
-          page=0;
-        }
-      }
-    case WM_PAINT:
-
-      // make background white
-      GetClientRect(hDlg, &rc);
-      hdc = BeginPaint(hDlg, &ps);
-
-      background = CreateSolidBrush(RGB(0xf0,0xf0,0xb0));
-      HGDIOBJ gTemp;
-      gTemp = SelectObject(hdcScreen, background);
-      SelectObject(hdcScreen, GetStockObject(WHITE_PEN));
-
-      Rectangle(hdcScreen,rcgfx.left,rcgfx.top,rcgfx.right,rcgfx.bottom);
-      DeleteObject(background);
-
-      hfOld = (HFONT)SelectObject(hdcScreen, StatisticsFont);
-      
-      if (page==0) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Barograph")));
-
-        _stprintf(Temp, TEXT("%s: %5.0f-%5.0f %s\r\n%s: %5.0f %s/hr"),
-				 gettext(TEXT("Working band")),
-                 flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY, 
-                 flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY, 
-                 Units::GetAltitudeName(),
-				 gettext(TEXT("Ceiling trend")),
-                 flightstats.Altitude_Ceiling.m*ALTITUDEMODIFY,
-                 Units::GetAltitudeName());
-
-        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
-
-        Statistics::RenderBarograph(hdcScreen, rcgfx);
-
-
-      }
-      if (page==1) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Climb")));
-
-        _stprintf(Temp, TEXT("%s: %3.1f %s\r\n%s: %3.2f %s"),                 
-				 gettext(TEXT("Average climb rate")),
-                  flightstats.ThermalAverage.y_ave*LIFTMODIFY,
-                 Units::GetVerticalSpeedName(),
-				 gettext(TEXT("Climb trend")),
-                 flightstats.ThermalAverage.m*LIFTMODIFY,
-                 Units::GetVerticalSpeedName()
-                 );
-
-        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
-
-        Statistics::RenderClimb(hdcScreen, rcgfx);
-
-      }
-      if (page==2) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, 
-		       gettext(TEXT("Wind at Altitude")));
-
-        _stprintf(Temp, TEXT("    "));
-
-        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
-
-        Statistics::RenderWind(hdcScreen, rcgfx);
-
-      }
-      if (page==3) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Glide Polar")));
-
-        _stprintf(Temp, TEXT("%s: %3.1f %s %3.0f %s\r\n%s: %3.2f %s %s %3.0f %s"),
-                 gettext(TEXT("Best LD")),
-                 GlidePolar::bestld,
-                 gettext(TEXT("at")),
-                 GlidePolar::Vbestld*SPEEDMODIFY,
-                 Units::GetHorizontalSpeedName(),
-                 gettext(TEXT("Min sink")),
-                 GlidePolar::minsink*LIFTMODIFY,
-                 Units::GetVerticalSpeedName(),
-                 gettext(TEXT("at")),
-                 GlidePolar::Vminsink*SPEEDMODIFY,
-                 Units::GetHorizontalSpeedName());
-
-        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
-
-        Statistics::RenderGlidePolar(hdcScreen, rcgfx);
-
-      }
-      if (page==4) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Temp trace")));
-
-        _stprintf(Temp, TEXT("%s: %5.0f %s\r\n%s: %5.0f %s\r\n"),
-		  gettext(TEXT("Thermal height")),
-		  CuSonde::thermalHeight*ALTITUDEMODIFY,
-		  Units::GetAltitudeName(),
-		  gettext(TEXT("Cloud base")),
-		  CuSonde::cloudBase*ALTITUDEMODIFY,
-		  Units::GetAltitudeName());
-        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
-
-        Statistics::RenderTemperature(hdcScreen, rcgfx);
-
-      }
-      if (page==5) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Task")));
-	TCHAR timetext1[100];
-	TCHAR timetext2[100];
-	if (AATEnabled) {
-	  Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
-	  Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
-	  _stprintf(Temp, TEXT("Task time to go: %s\r\nAAT time to go: %s\r\nMax dist: %5.0f %s\r\nMin dist: %5.0f %s\r\nMax speed: %5.0f %s\r\nMin speed: %5.0f %s\r\n"),
-		    timetext1, 
-		    timetext2, 
-		    DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance,
-		  Units::GetDistanceName(),
-		    DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance,
-		  Units::GetDistanceName(),
-		    TASKSPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed,
-		  Units::GetTaskSpeedName(),
-		    TASKSPEEDMODIFY*CALCULATED_INFO.AATMinSpeed,
-		  Units::GetTaskSpeedName()
-		   );
-	} else {
-	  Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
-	  _stprintf(Temp, TEXT("Time to go: %s\r\nDistance to go: %5.0f %s\r\n"),
-		    timetext1,
-		    DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo,
-		    Units::GetDistanceName());
-	}
-        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
-
-        Statistics::RenderTask(hdcScreen, rcgfx, false);
-
-      }
-      if (page==6) {
-        SetDlgItemText(hDlg,IDC_ANALYSISLABEL, gettext(TEXT("Airspace")));
-	_stprintf(Temp, TEXT(""));
-        SetDlgItemText(hDlg,IDC_ANALYSISTEXT, Temp);
-        Statistics::RenderAirspace(hdcScreen, rcgfx);
-      }
-      SelectObject(hdcScreen, hfOld);
-      EndPaint(hDlg, &ps);
-
-      return FALSE;
-
-    case WM_CLOSE:
-      MapWindow::RequestFastRefresh();
-      ClearAirspaceWarnings(false); // airspace warning gets refreshed
-      FullScreen();
-    }
-  return FALSE;
-}
-

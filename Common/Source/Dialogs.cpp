@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.109 2006/08/15 02:14:33 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.110 2006/08/17 08:28:47 jwharington Exp $
 
 Copyright_License {
 
@@ -56,10 +56,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "InputEvents.h"
 #include "Message.h"
-
-#if (NEWINFOBOX<1)
-#define USE_ARH_COLOUR_SELECTOR 1
-#endif
 
 
 void ReadWayPoints(void);
@@ -1026,7 +1022,7 @@ void settaskUpdateControls(HWND hDlg, int TaskSize){
 
 }
 
-
+/*
 LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
   unsigned int i;
@@ -1242,6 +1238,7 @@ LRESULT CALLBACK SetTask(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     }
   return FALSE;
 }
+*/
 
 
 LRESULT CALLBACK FinalGlide(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)

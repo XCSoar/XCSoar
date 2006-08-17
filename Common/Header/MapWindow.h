@@ -232,6 +232,8 @@ class MapWindow {
   static void DrawFlightMode(HDC hdc, RECT rc);
   static void DrawGPSStatus(HDC hdc, RECT rc);
   static void DrawTrail(HDC hdc, POINT Orig, RECT rc);
+  static void DrawStartSector(HDC hdc, RECT rc, POINT &Start,
+                              POINT &End, int Index);
   static void DrawTask(HDC hdc, RECT rc);
   static void DrawThermalEstimate(HDC hdc, RECT rc);
   static void DrawTaskAAT(HDC hdc, RECT rc);
@@ -309,6 +311,8 @@ class MapWindow {
   static      HPEN hpTerrainLineBg;
   static      HPEN hpSpeedFast;
   static      HPEN hpSpeedSlow;
+  static      HPEN hpStartFinishThick;
+  static      HPEN hpStartFinishThin;
   
   static      HBRUSH hbCompass;
   static      HBRUSH hbThermalBand;

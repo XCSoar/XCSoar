@@ -154,9 +154,7 @@ void CheckAirspacePoint(int Idx){
 
 void CloseAirspace() {
 
-#if (NEWAIRSPACEWARNING>0)
   AirspaceWarnListClear();
-#endif
 
   NumberOfAirspacePoints = 0;
   NumberOfAirspaceAreas = 0;

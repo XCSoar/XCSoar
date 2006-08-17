@@ -1676,15 +1676,22 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc)
 
   // JMW added faster checking...
 
-  for(i=0;i<64;i++)
-    {
-      pt[i].x = x + (long) (radius * xcoords[i]);
-      pt[i].y = y + (long) (radius * ycoords[i]);
-    }
-  pt[64].x = x + (long) (radius * xcoords[0]);
-  pt[64].y = y + (long) (radius * ycoords[0]);
+  int j=0;
+  int step=1;
+  if (radius<20) {
+    step = 2;
+  }
 
-  Polygon(hdc,pt,65);
+  for(i=0;i<64;i+= step)
+    {
+      pt[j].x = x + (long) (radius * xcoords[i]);
+      pt[j].y = y + (long) (radius * ycoords[i]);
+      j++;
+    }
+  pt[j].x = x + (long) (radius * xcoords[0]);
+  pt[j].y = y + (long) (radius * ycoords[0]);
+
+  Polygon(hdc,pt,j+1);
   return TRUE;
 }
 

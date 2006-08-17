@@ -28,7 +28,6 @@ Copyright_License {
 
 }
 */
-#if (NEWINFOBOX>0)
 
 
 #include "stdafx.h"
@@ -148,6 +147,12 @@ static void SetValues(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableMultipleStartPoints"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableMultipleStartPoints);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
   if (wp) {
     bool aw = (AATEnabled != 0);
@@ -165,6 +170,11 @@ static void SetValues(void) {
 
 static void ReadValues(void) {
   WndProperty* wp;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEnableMultipleStartPoints"));
+  if (wp) {
+    EnableMultipleStartPoints = wp->GetDataField()->GetAsBoolean();
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
   if (wp) {
@@ -251,6 +261,10 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
+static void OnStartPointClicked(WindowControl * Sender){
+  dlgStartPointShowModal();
+}
+
 
 static void OnMoveAfterClicked(WindowControl * Sender){
   LockTaskData();
@@ -289,6 +303,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnDetailsClicked),
   DeclearCallBackEntry(OnRemoveClicked),
   DeclearCallBackEntry(OnCloseClicked),
+  DeclearCallBackEntry(OnStartPointClicked),
   DeclearCallBackEntry(OnMoveAfterClicked),
   DeclearCallBackEntry(OnMoveBeforeClicked),
   DeclearCallBackEntry(NULL)
@@ -437,5 +452,3 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
   wf = NULL;
 
 }
-
-#endif

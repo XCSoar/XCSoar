@@ -56,9 +56,6 @@ extern void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
 
 #define NUMPOLARS 7 // number of in-built polars
 
-#if (NEWINFOBOX<1) 
-#define MessageBoxX MessageBox
-#else
 #include "dlgTools.h"
 
 bool dlgAirspaceWarningShowDlg(bool force);
@@ -89,7 +86,6 @@ void dlgVoiceShowModal(void);
 void dlgWayPointDetailsShowModal(void);
 void dlgTextEntryShowModal(TCHAR *text);
 void dlgTeamCodeShowModal(void);
-
-#endif
+void dlgStartPointShowModal(void);
 
 #endif

@@ -349,13 +349,14 @@ makeLabel(mode_id,TEXT(""),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventZoom, TEXT("in"), event_id);
+event_id = InputEvents::makeEvent(&eventCalculator, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventZoom, TEXT("out"), event_id);
+event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
@@ -387,15 +388,16 @@ makeLabel(mode_id,TEXT("Setup\nBasic"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventZoom, TEXT("in"), event_id);
+event_id = InputEvents::makeEvent(&eventCalculator, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT("Zoom\nIn"),6,event_id);
+makeLabel(mode_id,TEXT("Task\nCalc"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventZoom, TEXT("out"), event_id);
+event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT("Zoom\nOut"),7,event_id);
+makeLabel(mode_id,TEXT("Task\nEdit"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
