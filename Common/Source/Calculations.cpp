@@ -1757,7 +1757,11 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
   
   bool isInSector= false;
   bool retval;
-  
+
+  if (!Calculated->Flying) {
+    return false;
+  }
+
   retval = InStartSector_Internal(Basic, Calculated, 
                                   Task[0].Index, Task[0].OutBound,
                                   LastInSector);

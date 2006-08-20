@@ -378,7 +378,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   </WndProperty>
 
   <WndProperty Name="prpHandicap" Caption="Handicap"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2 
-  Help="The handicap factor used for OLC scoring.">
+  Help="The handicap factor used for OnLine Contest scoring.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=1 Max=200 Step=1/>
   </WndProperty>
 
