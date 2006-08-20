@@ -19,7 +19,7 @@
 #include "options.h"
 
 #include <ctype.h>
-#include <commctrl.h>
+
 
 #include <windows.h>
 
@@ -45,8 +45,6 @@
 #define ASSERT(x) assert(x)
 
 
-
-
 #define NOCLEARTYPE
 
 
@@ -59,7 +57,7 @@
 
 
 
-//#define sndPlaySound(x, y)                  (1==1)
+#define sndPlaySound(x, y)                  (1==1)
 
 
 #define CommandBar_Destroy(x)               ((void)0)
@@ -195,7 +193,7 @@ typedef struct _SYSTEM_POWER_STATUS_EX2 {
 
 
 
-//DWORD   GetCurrentProcessId(void);
+//DWORD WINAPI    GetCurrentProcessId(void);
 
 
 long WINAPI     MulDiv32(long, long, long);
@@ -215,24 +213,26 @@ long WINAPI     MulDiv32(long, long, long);
 
 
 
+/*
+
+#define VK_APP1     VK_1
 
 
-#define VK_APP1     0x31
+#define VK_APP2     VK_2
 
 
-#define VK_APP2     0x32
+#define VK_APP3     VK_3
 
 
-#define VK_APP3     0x33
+#define VK_APP4     VK_4
 
 
-#define VK_APP4     0x34
+#define VK_APP5     VK_5
 
 
-#define VK_APP5     0x35
+#define VK_APP6     VK_6
 
-
-#define VK_APP6     0x36
+*/
 
 
 
@@ -286,15 +286,12 @@ FARPROC GetProcAddressW(HMODULE hModule, LPCWSTR lpProcName);
 
 // redefine WinMain
 
-
+/*
 int WINAPI xcsoarWinMain(     HINSTANCE hInstance,
-
-
   HINSTANCE hPrevInstance,  LPTSTR    lpCmdLine,  int       nCmdShow);
 
-
 #define WinMain xcsoarWinMain
-
+*/
 
 
 
@@ -305,69 +302,6 @@ int WINAPI xcsoarWinMain(     HINSTANCE hInstance,
 }
 
 #endif
-
-
-// this module does NOTHING!
-// it just simulate the aygSH interface to keep the compiler happy
-
-// some macros to keep the compiler happy
-
-#define SHCMBF_EMPTYBAR   0  //???
-#define SHCMBF_HIDDEN     0  //???
-
-#define SHIDIM_FLAGS      0
-
-#define SHIDIF_DONEBUTTON       0x0001
-// puts the OK button on the navigation bar
-#define SHIDIF_SIZEDLG         0x0002
-// sizes the dialog box, noting the current position of the input panel
-#define SHIDIF_SIZEDLGFULLSCREEN   0x0004
-// sizes the dialog box FULL screen, regardless of the position of the input panel
-#define SHIDIF_SIPDOWN         0x0008
-// puts the input panel down
-#define SHIDIF_FULLSCREENNOMENUBAR   0x0010
-// sizes the dialog box FULL screen. Does not leave room at the bottom for a menu bar
-
-
-// missing library function dummy's
-
-#define SHFullScreen(x, y)                    (1==1)
-#define SHSetAppKeyWndAssoc(x, y)             (1==1)
-#define SHHandleWMSettingChange(x, y, z, v)   (1==1)
-#define SHHandleWMActivate(x, y, z, v, w)     (1==1)
-#define SHCreateMenuBar(x)                    (1==1)
-#define SHInitDialog(x)                       ((void)0)
-#define SHSipPreference(hDlg,SIP_FORCEDOWN)   ((void)0)
-
-// some typedefs to keep the compiler happy
-
-typedef struct tagSHINITDIALOG{
-  DWORD dwMask;
-  HWND hDlg;
-  DWORD dwFlags;
-} SHINITDLGINFO, *PSHINITDLGINFO;
-
-typedef struct {
-  DWORD cbSize;
-  HWND hwndLastFocus;
-  UINT fSipUp :1;
-  UINT fSipOnDeactivation :1;
-  UINT fActive :1;
-  UINT fReserved :29;
-} SHACTIVATEINFO, *PSHACTIVATEINFO;
-
-typedef struct tagSHMENUBARINFO{
-  DWORD cbSize;
-  HWND hwndParent;
-  DWORD dwFlags;
-  UINT nToolBarId;
-  HINSTANCE hInstRes;
-  int nBmpId;
-  int cBmpImages;
-  HWND hwndMB;
-} SHMENUBARINFO, *PSHMENUBARINFO;
-
-
 
 
 // TODO: reference additional headers your program requires here
