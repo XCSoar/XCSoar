@@ -1,3 +1,15 @@
+mode=default
+type=gce
+data=TASK_START
+event=StatusMessage Task start
+
+mode=default
+type=gce
+data=TASK_FINISH
+event=StatusMessage Task finish
+
+
+
 # -------------------
 # NMEA switches
 # -------------------
@@ -105,7 +117,7 @@ event=StatusMessage Key up and down to move selector in dialogs
 event=StatusMessage Keys 67890 are horizontal buttons
 event=StatusMessage Keys 1 NAV 2 DISPLAY 3 CONFIG 4 INFO
 event=StatusMessage Simulator: Drag mouse to move glider
-event=TaskLoad /My Documents/Default.tsk
+event=TaskLoad Default.tsk
 
 mode=default
 type=gce
@@ -116,6 +128,7 @@ event=StatusMessage Key left and right to modify values in dialogs
 event=StatusMessage Key up and down to move selector in dialogs
 event=StatusMessage Keys 67890 are horizontal buttons
 event=StatusMessage Keys 1 NAV 2 DISPLAY 3 CONFIG 4 INFO
+event=TaskLoad Default.tsk
 
 mode=default
 type=gce
@@ -540,7 +553,7 @@ mode=Nav2
 type=key
 data=7
 event=StatusMessage Task saved
-event=TaskSave /My Documents/Default.tsk
+event=TaskSave Default.tsk
 label=Task\nSave
 location=6
 

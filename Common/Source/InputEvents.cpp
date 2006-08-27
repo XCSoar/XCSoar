@@ -206,6 +206,7 @@ void InputEvents::readFile() {
 
   // Open file from registry
   GetRegistryString(szRegistryInputFile, szFile1, MAX_PATH);
+  ExpandLocalPath(szFile1);
   SetRegistryString(szRegistryInputFile, TEXT("\0"));
 
   if (_tcslen(szFile1)>0)
@@ -421,6 +422,7 @@ void InputEvents::readFile() {
   } // end while
 
   // file was ok, so save it to registry
+  ContractLocalPath(szFile1);
   SetRegistryString(szRegistryInputFile, szFile1);
 
   fclose(fp);
@@ -1823,7 +1825,7 @@ void InputEvents::eventNull(TCHAR *misc) {
 // Loads the task of the specified filename
 void InputEvents::eventTaskLoad(TCHAR *misc) {
   LockTaskData();
-  LoadNewTask(misc);
+  LoadNewTask(LocalPath(misc));
   UnlockTaskData();
 }
 

@@ -152,11 +152,6 @@ HWND hWndCB; // The command bar handle
 HWND hWndMainWindow; // Main Windows
 HWND hWndMapWindow;  // MapWindow
 
-#ifndef GNAV
-HWND hWndMenuButton = NULL;
-#endif
-
-
 int numInfoWindows = 8;
 
 InfoBox *InfoBoxes[MAXINFOWINDOWS];
@@ -422,7 +417,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 1
 	  {ugAltitude,        TEXT("Height AGL"), TEXT("H AGL"), new FormatterLowWarning(TEXT("%2.0f"),0.0), NoProcessing, 20, 0},
 	  // 2
-	  {ugVerticalSpeed,   TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 7, 44},
+	  {ugVerticalSpeed,   TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new FormatterLowWarning(TEXT("%-2.1f"),0.0), NoProcessing, 7, 44},
 	  // 3
 	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f°T")), NoProcessing, 6, 54},
 	  // 4
@@ -581,9 +576,6 @@ void StartupStore(char *Str);
 void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
   if (DisplayLocked) {
-#ifndef GNAV
-    ShowWindow(hWndMenuButton, SW_HIDE);
-#endif
     MenuTimeOut = MenuTimeoutMax;
     DisplayTimeOut = 0;
   }
@@ -591,9 +583,6 @@ void HideMenu() {
 
 void ShowMenu() {
   MenuTimeOut = 0;
-#ifndef GNAV
-  ShowWindow(hWndMenuButton, SW_SHOW);
-#endif
   DisplayTimeOut = 0;
 }
 
@@ -1679,30 +1668,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 			       (rc.bottom-rc.top) ,
                                hWndMainWindow, NULL ,hInstance,NULL);
 
-#ifndef GNAV
-  hWndMenuButton = CreateWindow(TEXT("BUTTON"),gettext(TEXT("Menu")),
-				WS_VISIBLE | WS_CHILD
-				| WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
-                                0, 0,0,0,hWndMainWindow,NULL,hInstance,NULL);
-
-  SendMessage(hWndMenuButton,WM_SETFONT,(WPARAM)TitleWindowFont,
-	      MAKELPARAM(TRUE,0));
-
-  // JMW moved menu button to center, to make room for thermal indicator
-
-  int menubuttonsize = (int)(max(InfoBoxLayout::ControlWidth,
-				 InfoBoxLayout::ControlHeight)*0.8);
-
-  SetWindowPos(hWndMenuButton,HWND_TOP,
-               (int)(rc.right-rc.left-menubuttonsize)/2+rc.left,
-               (int)((rc.bottom - rc.top)/10),
-	       menubuttonsize, menubuttonsize,
-	       SWP_SHOWWINDOW);
-
-  ShowWindow(hWndMenuButton, SW_HIDE);
-
-#endif
-
   // JMW gauge creation was here
 
   ShowWindow(hWndMainWindow, nCmdShow);
@@ -1957,9 +1922,6 @@ void Shutdown(void) {
 
   DestroyWindow(hWndMapWindow);
   DestroyWindow(hWndMainWindow);
-#ifndef GNAV
-  DestroyWindow(hWndMenuButton);
-#endif
 
   CloseHandle(drawTriggerEvent);
   CloseHandle(dataTriggerEvent);
@@ -2109,10 +2071,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
 
     case WM_CLOSE:
-      if(iTimerID)
-        KillTimer(hWnd,iTimerID);
 
-      Shutdown();
+#ifndef GNAV
+      if(MessageBoxX(hWndMapWindow,
+		     gettext(TEXT("Quit program?")),
+		     gettext(TEXT("XCSoar")),
+		     MB_YESNO|MB_ICONQUESTION) == IDYES)
+#endif
+        {
+          if(iTimerID)
+            KillTimer(hWnd,iTimerID);
+
+          Shutdown();
+        }
       break;
 
     case WM_DESTROY:
@@ -2153,202 +2124,13 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   int wmId, wmEvent;
   HWND wmControl;
   int i;
-  #ifndef GNAV
-  WORD wID;
-  #endif
 
   wmId    = LOWORD(wParam);
   wmEvent = HIWORD(wParam);
   wmControl = (HWND)lParam;
 
-  if(wmControl != NULL)
-    {
-      if (ProgramStarted) {
-#ifndef GNAV
-      if(wmControl == hWndMenuButton)
-        {
-	  if (InfoBoxLayout::landscape) {
-	    wID = DialogBox(hInst, (LPCTSTR)IDD_MENU_LANDSCAPE,
-			    hWnd, (DLGPROC)Menu);
-	  } else {
-	    wID = DialogBox(hInst, (LPCTSTR)IDD_MENU, hWnd, (DLGPROC)Menu);
-	  }
-          DialogActive = true;
-
-          switch (wID)
-            {
-            case IDD_EXIT:
-              if(
-                #ifdef _SIM_
-                (true)
-                #else
-		MessageBoxX(hWnd,
-			    gettext(TEXT("Do you wish to exit?")),
-			    gettext(TEXT("Exit?")),
-			    MB_YESNO|MB_ICONQUESTION) == IDYES
-                #endif
-		) {
-
-		SendMessage(hWnd,
-			    WM_ACTIVATE,
-			    MAKEWPARAM(WA_INACTIVE, 0),
-			    (LPARAM)hWnd);
-		SendMessage (hWnd, WM_CLOSE, 0, 0);
-	      }
-              MapWindow::MapDirty = true;
-	      HideMenu();
-              FullScreen();
-	      Debounce();
-              DialogActive = false;
-              return 0;
-
-	    case IDD_BACK:
-	      HideMenu();
-	      FullScreen();
-	      Debounce();
-              DialogActive = false;
-	      return 0;
-
-            case IDD_STATUS:
-              ShowStatus();
-              MenuActive = false;
-              SwitchToMapWindow();
-	      HideMenu();
-	      FullScreen();
-	      Debounce();
-              DialogActive = false;
-              return 0;
-
-            case IDD_BUGS:
-              DWORD dwError;
-              MenuActive = true;
-
-              ShowWindow(hWndCB,SW_SHOW);
-              SHFullScreen(hWndMainWindow,SHFS_SHOWSIPBUTTON|SHFS_SHOWTASKBAR);
-              DialogBox(hInst, (LPCTSTR)IDD_BUGSBALLAST, hWnd, (DLGPROC)SetBugsBallast);
-              dwError = GetLastError();
-              ShowWindow(hWndCB,SW_HIDE);
-              MenuActive = false;
-              SwitchToMapWindow();
-	      HideMenu();
-	      FullScreen();
-	      Debounce();
-              DialogActive = false;
-              return 0;
-
-            case IDD_PRESSURE:
-              MenuActive = true;
-              ShowWindow(hWndCB,SW_SHOW);
-              SHFullScreen(hWndMainWindow,SHFS_SHOWSIPBUTTON|SHFS_SHOWTASKBAR);
-              DialogBox(hInst, (LPCTSTR)IDD_AIRSPACEPRESS, hWnd, (DLGPROC)AirspacePress);
-              ConvertFlightLevels();
-              ShowWindow(hWndCB,SW_HIDE);
-              MenuActive = false;
-              SwitchToMapWindow();
-	      HideMenu();
-	      FullScreen();
-	      Debounce();
-              DialogActive = false;
-              return 0;
-              /*
-            case IDD_TASK:
-              MenuActive = true;
-              SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
-              DialogBox(hInst, (LPCTSTR)IDD_TASK, hWnd, (DLGPROC)SetTask);
-              ShowWindow(hWndCB,SW_HIDE);
-              MenuActive = false;
-              SwitchToMapWindow();
-	      HideMenu();
-	      FullScreen();
-	      Debounce();
-              DialogActive = false;
-              return 0;
-              */
-            case IDD_LOCK:
-              DisplayLocked = ! DisplayLocked;
-              ShowWindow(hWndCB,SW_HIDE);
-              SwitchToMapWindow();
-	      if (!DisplayLocked) {
-		ShowMenu(); // must show menu here otherwise trapped
-	      } else {
-		HideMenu();
-	      }
-	      FullScreen();
-              DialogActive = false;
-	      Debounce();
-              return 0;
-
-            case IDC_ABORTTASK:
-
-              LockFlightData();
-              ResumeAbortTask();
-              UnlockFlightData();
-
-              ShowWindow(hWndCB,SW_HIDE);
-              SwitchToMapWindow();
-	      HideMenu();
-	      FullScreen();
-              DialogActive = false;
-	      Debounce();
-              return 0;
-
-            case IDC_ANALYSIS:
-
-              ShowWindow(hWndCB,SW_HIDE);
-	      FullScreen();
-              PopupAnalysis();
-              SwitchToMapWindow();
-	      HideMenu();
-	      FullScreen();
-              DialogActive = false;
-	      Debounce();
-              return 0;
-
-            case IDD_SETTINGS:
-
-	      if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
-		DoStatusMessage(TEXT("Settings locked in flight"));
-	      } else {
-
-		SettingsEnter();
-
-		ShowWindow(hWndCB,SW_SHOW);
-		SetWindowPos(hWndMainWindow,HWND_TOP,
-			     0, 0, 0, 0,
-			     SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
-
-		SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR);
-		DialogBox(hInst, (LPCTSTR)IDD_SETTINGS, hWndMainWindow, (DLGPROC)Settings);
-		ShowWindow(hWndCB,SW_HIDE);
-
-		SettingsLeave();
-		StoreRegistry();
-	      }
-
-		SwitchToMapWindow();
-		FullScreen();
-		ShowWindow(hWndCB,SW_HIDE);
-		HideMenu();
-		DialogActive = false;
-		Debounce();
-		return 0;
-
-            case IDD_LOGGER:
-              MenuActive = true;
-	      DialogActive = true;
-
-	      guiToggleLogger(true);
-
-              MenuActive = false;
-	      FullScreen();
-              SwitchToMapWindow();
-	      HideMenu();
-	      Debounce();
-              DialogActive = false;
-              return 0;
-            }
-        }
-#endif
+  if(wmControl != NULL) {
+    if (ProgramStarted) {
 
       DialogActive = false;
 
@@ -2359,42 +2141,36 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         ShowMenu();
       }
 
-      for(i=0;i<numInfoWindows;i++)
-        {
-          if(wmControl == InfoBoxes[i]->GetHandle())
-            {
+      for(i=0;i<numInfoWindows;i++) {
+        if(wmControl == InfoBoxes[i]->GetHandle()) {
+          InfoWindowActive = TRUE;
+
+          if(DisplayLocked) {
+            if( i!= InfoFocus) {
+              FocusOnWindow(i,true);
+              FocusOnWindow(InfoFocus,false);
+
+              InfoFocus = i;
               InfoWindowActive = TRUE;
-
-              if(DisplayLocked)
-                {
-                  if( i!= InfoFocus)
-                    {
-                      FocusOnWindow(i,true);
-                      FocusOnWindow(InfoFocus,false);
-
-                      InfoFocus = i;
-                      InfoWindowActive = TRUE;
-                    }
-                  DisplayText();
-                  InputEvents::setMode(TEXT("infobox"));
-
-                }
-	            else
-                {
-                  PopUpSelect(i);
-                  DisplayText();
-                }
-              return 0;
             }
+            DisplayText();
+            InputEvents::setMode(TEXT("infobox"));
+
+          } else {
+            PopUpSelect(i);
+            DisplayText();
+          }
+          return 0;
         }
+      }
       Message::CheckTouch(wmControl);
 
       if (ButtonLabel::CheckButtonPress(wmControl)) {
         return TRUE; // don't continue processing..
       }
 
-      }
     }
+  }
   return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
@@ -2571,9 +2347,9 @@ void DisplayText(void)
 	InfoBoxes[i]->
 	  SetTitle(Data_Options[DisplayType[i]].Formatter->
 		   Render(&color));
+	InfoBoxes[i]->SetColor(color);
 	InfoBoxes[i]->
 	  SetValue(Data_Options[47].Formatter->Render(&color));
-	InfoBoxes[i]->SetColor(color);
       }else{
 	InfoBoxes[i]->SetTitle(TEXT("Next"));
 	InfoBoxes[i]->SetValue(TEXT("---"));
@@ -2596,7 +2372,7 @@ void DisplayText(void)
 	  SetValueUnit(Units::GetUserUnitByGroup(
 		       Data_Options[DisplayType[i]].UnitGroup));
 
-      InfoBoxes[i]->SetColor(0);
+      InfoBoxes[i]->SetColor(color);
     };
 
     switch (DisplayType[i]) {
@@ -2688,9 +2464,6 @@ void CommonProcessTimer()
 
   if (DisplayLocked) {
     if(MenuTimeOut==MenuTimeoutMax) {
-#ifndef GNAV
-      ShowWindow(hWndMenuButton, SW_HIDE);
-#endif
       if (!MapWindow::isPan()) {
 	InputEvents::setMode(TEXT("default"));
       }

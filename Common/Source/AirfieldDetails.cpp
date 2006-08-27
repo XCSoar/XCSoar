@@ -57,6 +57,7 @@ static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
 void OpenAirfieldDetails() {
 
   GetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
+  ExpandLocalPath(szAirfieldDetailsFile);
   SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
 
   hAirfieldDetails = INVALID_HANDLE_VALUE;
@@ -76,6 +77,7 @@ void CloseAirfieldDetails() {
   }
   if (hAirfieldDetails != INVALID_HANDLE_VALUE) {
     // file was OK, so save the registry
+    ContractLocalPath(szAirfieldDetailsFile);
     SetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile);
 
     CloseHandle(hAirfieldDetails);

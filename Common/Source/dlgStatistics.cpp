@@ -845,23 +845,23 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
     if (AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
 	if (Task[i].Index != -1) {
-	  if (i<ActiveWayPoint) continue;
-	  if (i>=ActiveWayPoint) {
-	    if (i==1) {
-	      lat1 = WayPointList[Task[i-1].Index].Latitude;
-	      lon1 = WayPointList[Task[i-1].Index].Longitude;
-	    } else {
-	      lat1 = Task[i-1].AATTargetLat;
-	      lon1 = Task[i-1].AATTargetLon;
-	    }
-	    lat2 = Task[i].AATTargetLat;
-	    lon2 = Task[i].AATTargetLon;
-	  }
+          if (i==1) {
+            lat1 = WayPointList[Task[i-1].Index].Latitude;
+            lon1 = WayPointList[Task[i-1].Index].Longitude;
+          } else {
+            lat1 = Task[i-1].AATTargetLat;
+            lon1 = Task[i-1].AATTargetLon;
+          }
+          lat2 = Task[i].AATTargetLat;
+          lon2 = Task[i].AATTargetLon;
 
+          /*
 	  if (i==ActiveWayPoint) {
 	    lat1 = GPS_INFO.Latitude;
 	    lon1 = GPS_INFO.Longitude;
 	  }
+          */
+
 	  x1 = (lon1-lon_c)*fastcosine(lat1);
 	  y1 = (lat1-lat_c);
 	  x2 = (lon2-lon_c)*fastcosine(lat2);
@@ -1248,11 +1248,15 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
   }
   if (page==5) {
     SetCalcCaption(TEXT("Task calc"));
+    LockTaskData();
     Statistics::RenderTask(hDC, rcgfx, false);
+    UnlockTaskData();
   }
   if (page==6) {
     SetCalcCaption(TEXT("Optimise"));
+    LockTaskData();
     Statistics::RenderTask(hDC, rcgfx, true);
+    UnlockTaskData();
   }
   if (page==7) {
     SetCalcCaption(TEXT("Nearest"));

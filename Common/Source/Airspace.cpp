@@ -1132,7 +1132,9 @@ void ReadAirspace(void)
   FILETIME LastWriteTime2;
 
   GetRegistryString(szRegistryAirspaceFile, szFile1, MAX_PATH);
+  ExpandLocalPath(szFile1);
   GetRegistryString(szRegistryAdditionalAirspaceFile, szFile2, MAX_PATH);
+  ExpandLocalPath(szFile2);
 
   if (_tcslen(szFile1)>0)
     fp  = _tfopen(szFile1, TEXT("rt"));
@@ -1165,12 +1167,14 @@ void ReadAirspace(void)
 
       ReadAirspace(fp);
       // file 1 was OK, so save it
+      ContractLocalPath(szFile1);
       SetRegistryString(szRegistryAirspaceFile, szFile1);
 
       // also read any additional airspace
       if (fp2 != NULL) {
         ReadAirspace(fp2);
 	// file 2 was OK, so save it
+        ContractLocalPath(szFile2);
 	SetRegistryString(szRegistryAdditionalAirspaceFile, szFile2);
       }
       #if AIRSPACEUSEBINFILE > 0
@@ -1178,7 +1182,7 @@ void ReadAirspace(void)
       #endif
     }
 
-  	fclose(fp);
+    fclose(fp);
 
   }
 
@@ -1539,7 +1543,6 @@ void IntermediatePoint(double lon1, double lat1,
   *lon3=atan2(y,x)*RAD_TO_DEG;
 }
 
-
 // finds cross track error in meters and closest point p4 between p3 and
 // desired track p1-p2.
 // very slow function!
@@ -1627,6 +1630,20 @@ double ScreenCrossTrackError(double lon1, double lat1,
 
   // compute accurate distance
   return Distance(lat3, lon3, *lat4, *lon4);
+}
+
+
+// Calculates projected distance from P3 along line P1-P2
+double ProjectedDistance(double lon1, double lat1,
+                         double lon2, double lat2,
+                         double lon3, double lat3) {
+  double lon4, lat4;
+
+  CrossTrackError(lon1, lat1,
+                  lon2, lat2,
+                  lon3, lat3,
+                   &lon4, &lat4);
+  return Distance(lat1, lon1, lat4, lon4);
 }
 
 

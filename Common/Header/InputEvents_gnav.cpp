@@ -3,6 +3,16 @@ int event_id;
 int mode_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task start"), event_id);
+mode_id = InputEvents::mode2int(TEXT("default"), true);
+GC2Event[mode_id][GCE_TASK_START] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task finish"), event_id);
+mode_id = InputEvents::mode2int(TEXT("default"), true);
+GC2Event[mode_id][GCE_TASK_FINISH] = event_id;
+
+event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Waiting for GPS Connection"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_GPS_CONNECTION_WAIT] = event_id;
@@ -19,13 +29,13 @@ GC2Event[mode_id][GCE_GPS_FIX_WAIT] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Simulation\r\nNothing is real!"), event_id);
-event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("/My Documents/Default.tsk"), event_id);
+event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("Default.tsk"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_SIMULATOR] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Maintain effective\r\nLOOKOUT at all times"), event_id);
-event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("/My Documents/Default.tsk"), event_id);
+event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("Default.tsk"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
 
@@ -430,7 +440,7 @@ Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task saved"), event_id);
-event_id = InputEvents::makeEvent(&eventTaskSave, TEXT("/My Documents/Default.tsk"), event_id);
+event_id = InputEvents::makeEvent(&eventTaskSave, TEXT("Default.tsk"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
 makeLabel(mode_id,TEXT("Task\nSave"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;

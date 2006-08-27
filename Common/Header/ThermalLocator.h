@@ -2,7 +2,7 @@
 #define THERMALLOCATOR_H
 
 #define TLOCATOR_NMIN 5
-#define TLOCATOR_NMAX 100
+#define TLOCATOR_NMAX 60
 
 #include "leastsqs.h"
 

@@ -1183,126 +1183,150 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  TCHAR temptext[MAX_PATH];
+
   TCHAR szPolarFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryPolarFile, szPolarFile, MAX_PATH);
+  _tcscpy(temptext,szPolarFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpPolarFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.plr"));
-    dfe->Lookup(szPolarFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
   TCHAR szAirspaceFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryAirspaceFile, szAirspaceFile, MAX_PATH);
+  _tcscpy(temptext,szAirspaceFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirspaceFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.txt"));
-    dfe->Lookup(szAirspaceFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
   TCHAR szAdditionalAirspaceFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryAdditionalAirspaceFile,
 		    szAdditionalAirspaceFile, MAX_PATH);
+  _tcscpy(temptext,szAdditionalAirspaceFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpAdditionalAirspaceFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.txt"));
-    dfe->Lookup(szAdditionalAirspaceFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
   TCHAR szWaypointFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
+  _tcscpy(temptext,szWaypointFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpWaypointFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.dat"));
-    dfe->Lookup(szWaypointFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
   TCHAR szAdditionalWaypointFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryAdditionalWayPointFile,
 		    szAdditionalWaypointFile, MAX_PATH);
+  _tcscpy(temptext,szAdditionalWaypointFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpAdditionalWaypointFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.dat"));
-    dfe->Lookup(szAdditionalWaypointFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
   TCHAR szTerrainFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryTerrainFile, szTerrainFile, MAX_PATH);
+  _tcscpy(temptext,szTerrainFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.dat"));
-    dfe->Lookup(szTerrainFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
   TCHAR szTopologyFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryTopologyFile, szTopologyFile, MAX_PATH);
+  _tcscpy(temptext,szTopologyFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpTopologyFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.tpl"));
-    dfe->Lookup(szTopologyFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
   TCHAR szAirfieldFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryAirfieldFile, szAirfieldFile, MAX_PATH);
+  _tcscpy(temptext,szAirfieldFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirfieldFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.txt"));
-    dfe->Lookup(szAirfieldFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
   TCHAR szLanguageFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryLanguageFile, szLanguageFile, MAX_PATH);
+  _tcscpy(temptext,szLanguageFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpLanguageFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.xcl"));
-    dfe->Lookup(szLanguageFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
   TCHAR szStatusFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryStatusFile, szStatusFile, MAX_PATH);
+  _tcscpy(temptext,szStatusFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpStatusFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.xcs"));
-    dfe->Lookup(szStatusFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
   TCHAR szInputFile[MAX_PATH] = TEXT("\0");
   GetRegistryString(szRegistryInputFile, szInputFile, MAX_PATH);
+  _tcscpy(temptext,szInputFile);
+  ExpandLocalPath(temptext);
   wp = (WndProperty*)wf->FindByName(TEXT("prpInputFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.xci"));
-    dfe->Lookup(szInputFile);
+    dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
 
@@ -2013,14 +2037,12 @@ void dlgConfigurationShowModal(void){
     }
   }
 
-
-  TCHAR* temptext = 0;
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpPolarFile"));
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szPolarFile)) {
       SetRegistryString(szRegistryPolarFile, temptext);
       POLARFILECHANGED = true;
@@ -2033,7 +2055,8 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szWaypointFile)) {
       SetRegistryString(szRegistryWayPointFile, temptext);
       WAYPOINTFILECHANGED= true;
@@ -2045,7 +2068,8 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAdditionalWaypointFile)) {
       SetRegistryString(szRegistryAdditionalWayPointFile, temptext);
       WAYPOINTFILECHANGED= true;
@@ -2057,7 +2081,8 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAirspaceFile)) {
       SetRegistryString(szRegistryAirspaceFile, temptext);
       AIRSPACEFILECHANGED= true;
@@ -2069,7 +2094,8 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAdditionalAirspaceFile)) {
       SetRegistryString(szRegistryAdditionalAirspaceFile, temptext);
       AIRSPACEFILECHANGED= true;
@@ -2081,7 +2107,8 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szTerrainFile)) {
       SetRegistryString(szRegistryTerrainFile, temptext);
       TERRAINFILECHANGED= true;
@@ -2093,7 +2120,8 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szTopologyFile)) {
       SetRegistryString(szRegistryTopologyFile, temptext);
       TOPOLOGYFILECHANGED= true;
@@ -2105,7 +2133,8 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szAirfieldFile)) {
       SetRegistryString(szRegistryAirfieldFile, temptext);
       AIRFIELDFILECHANGED= true;
@@ -2117,7 +2146,8 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szLanguageFile)) {
       SetRegistryString(szRegistryLanguageFile, temptext);
       requirerestart = true;
@@ -2129,7 +2159,8 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szStatusFile)) {
       SetRegistryString(szRegistryStatusFile, temptext);
       requirerestart = true;
@@ -2141,7 +2172,8 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
-    temptext = dfe->GetPathFile();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
     if (_tcscmp(temptext,szInputFile)) {
       SetRegistryString(szRegistryInputFile, temptext);
       requirerestart = true;

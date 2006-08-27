@@ -358,7 +358,9 @@ void dlgTaskOverviewShowModal(void){
   wTaskList->SetBorderKind(BORDERLEFT);
   wTaskList->SetEnterCallback(OnTaskListEnter);
 
-  wTaskListEntry = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmTaskListEntry"));
+  wTaskListEntry = (WndOwnerDrawFrame*)wf->
+    FindByName(TEXT("frmTaskListEntry"));
+
   ASSERT(wTaskListEntry!=NULL);
   wTaskListEntry->SetCanFocus(true);
 

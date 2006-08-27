@@ -254,6 +254,9 @@ TCHAR* StringMallocParse(TCHAR* old_string);
 TCHAR* LocalPath(TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
 char* LocalPathS(TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
 
+void ExpandLocalPath(TCHAR* filein);
+void ContractLocalPath(TCHAR* filein);
+
 void ConvertTToC(CHAR* pszDest, const TCHAR* pszSrc);
 void ConvertCToT(TCHAR* pszDest, const CHAR* pszSrc);
 
