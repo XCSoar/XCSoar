@@ -324,6 +324,7 @@ void RasterTerrain::OpenTerrain(void)
   static TCHAR  szFile[MAX_PATH] = TEXT("\0");
 
   GetRegistryString(szRegistryTerrainFile, szFile, MAX_PATH);
+  ExpandLocalPath(szFile);
   SetRegistryString(szRegistryTerrainFile, TEXT("\0"));
 
   unsigned long filesize;
@@ -380,6 +381,7 @@ void RasterTerrain::OpenTerrain(void)
   // TODO: sanity check of terrain info, to check validity of file
   // this can be done by checking the bounds compute correctly and
   // that we can seek to the end of the file
+  ContractLocalPath(szFile);
   SetRegistryString(szRegistryTerrainFile, szFile);
 
   InitializeCriticalSection(&CritSec_TerrainFile);

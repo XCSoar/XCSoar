@@ -16,7 +16,7 @@ void ThermalLocator_Point::Drift(double t_0,
 
   // convert to flat earth coordinates, then drift by wind and delta t  
   double dt = t_0-t;
-  weight = 1.0/(exp(-3.0*decay*dt/TLOCATOR_NMAX));
+  weight = (exp(-1.5*decay*dt/TLOCATOR_NMAX));
   x = (longitude+drift_lon*dt-longitude_0)*fastcosine(latitude_0);
   y = (latitude+drift_lat*dt-latitude_0);
 
@@ -52,7 +52,7 @@ void ThermalLocator::AddPoint(double t, double longitude, double latitude, doubl
   points[nindex].latitude = latitude;
   points[nindex].t = t;
   points[nindex].w = w;
-  points[nindex].iw = iround(w*10);
+  points[nindex].iw = iround(max(w,-0.1)*10);
   //  points[nindex].logw = log(max(w,0.1)*10.0);
   points[nindex].valid = true;
   nindex++;

@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.19 2006/08/05 13:31:24 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.20 2006/08/27 17:09:40 jwharington Exp $
 
 
 Copyright_License {
@@ -57,6 +57,7 @@ static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
 void OpenAirfieldDetails() {
 
   GetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
+  ExpandLocalPath(szAirfieldDetailsFile);
   SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
 
   hAirfieldDetails = INVALID_HANDLE_VALUE;
@@ -76,6 +77,7 @@ void CloseAirfieldDetails() {
   }
   if (hAirfieldDetails != INVALID_HANDLE_VALUE) {
     // file was OK, so save the registry
+    ContractLocalPath(szAirfieldDetailsFile);
     SetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile);
 
     CloseHandle(hAirfieldDetails);

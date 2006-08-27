@@ -159,13 +159,15 @@ double GlidePolar::SinkRate(double V, double n) {
 }
 
 
-double GlidePolar::MacCreadyAltitude(double emcready, 
-                                    double Distance, double Bearing, 
-                                    double WindSpeed, double WindBearing, 
-		       double *BestCruiseTrack,
-		       double *VMacCready, 
-		       bool isFinalGlide,
-                       double *TimeToGo)
+double GlidePolar::MacCreadyAltitude_internal(double emcready, 
+                                              double Distance, 
+                                              double Bearing, 
+                                              double WindSpeed, 
+                                              double WindBearing, 
+                                              double *BestCruiseTrack,
+                                              double *VMacCready, 
+                                              bool isFinalGlide,
+                                              double *TimeToGo)
 {
 
   int i;
@@ -201,18 +203,14 @@ double GlidePolar::MacCreadyAltitude(double emcready,
   BestGlide = 10000;
   BestTime = 1e6;
 
-  bool effectivefinalglide = isFinalGlide;
-
-  if (emcready<=0.0) {
-    effectivefinalglide = true;
-  }
+  emcready = max(0.0,emcready);
 
   double vtot;
   if (Distance<1.0) {
     Distance = 1;
   }
 
-  double TimeToDestTotal = -1; // initialise to error value
+  double TimeToDestTotal = 1e5; // initialise to error value
   double tcruise, tclimb;
   TimeToDestCruise = -1; // initialise to error value
 
@@ -223,19 +221,20 @@ double GlidePolar::MacCreadyAltitude(double emcready,
     // need to work out best velocity along path given wind vector
     // need to work out percent time spent cruising
     // SinkRate function returns negative value for sink
-    
-    if (effectivefinalglide) {
+
+    if (isFinalGlide) {
       sinkrate = -SinkRateFast(emcready, i);
       tc = 1.0; // assume no circling, e.g. final glide at best LD
       // with no climbs
     } else {
       sinkrate = -SinkRateFast(0, i);
       tc = max(0.0,min(1.0,emcready/(sinkrate+emcready)));
+      vtot = (vtrack*vtrack*tc*tc-CrossWindSqd);
     }
-    
+
     // calculate average speed along track relative to wind
     vtot = (vtrack*vtrack*tc*tc-CrossWindSqd);
-    
+        
     // if able to advance against crosswind
     if (vtot>0) {
       // if able to advance against headwind
@@ -255,7 +254,7 @@ double GlidePolar::MacCreadyAltitude(double emcready,
     
     bool bestfound = false;
 
-    if (effectivefinalglide) {
+    if (isFinalGlide) {
       tclimb = 0.0;
       // inverse glide ratio relative to ground
       Glide = sinkrate/vtot;
@@ -339,4 +338,48 @@ double GlidePolar::FindSpeedForSinkRate(double w) {
     }
   }
   return vbest;
+}
+
+
+double GlidePolar::MacCreadyAltitude(double emcready, 
+                                     double Distance, double Bearing, 
+                                     double WindSpeed, double WindBearing, 
+                                     double *BestCruiseTrack,
+                                     double *VMacCready, 
+                                     bool isFinalGlide,
+                                     double *TimeToGo) {
+
+  double TTG;
+  double Altitude;
+  bool effectiveFinalGlide = (emcready<=0.01) || isFinalGlide;
+  
+  Altitude = MacCreadyAltitude_internal(emcready,
+                                        Distance, Bearing,
+                                        WindSpeed, WindBearing,
+                                        BestCruiseTrack,
+                                        VMacCready,
+                                        effectiveFinalGlide,
+                                        &TTG);
+
+  if (!isFinalGlide && effectiveFinalGlide) {
+    TTG = 1e5;
+  }
+
+  if (TimeToGo) {
+    *TimeToGo = TTG;
+  }
+
+  if ((TTG>=1e5)&&(!isFinalGlide)) {
+
+    Altitude = MacCreadyAltitude_internal(emcready,
+                                          Distance, Bearing,
+                                          WindSpeed, WindBearing,
+                                          BestCruiseTrack,
+                                          VMacCready,
+                                          true,
+                                          &TTG);
+  }
+
+  return Altitude;
+
 }

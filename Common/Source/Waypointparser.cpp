@@ -521,7 +521,10 @@ void ReadWayPoints(void)
 
     LockTaskData();
     CloseWayPoints();
+
     GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
+    ExpandLocalPath(szFile1);
+
     #ifndef HAVEEXCEPTIONS
     SetRegistryString(szRegistryWayPointFile, TEXT("\0"));  
     #endif
@@ -535,6 +538,7 @@ void ReadWayPoints(void)
         fclose(fp);
         // read OK, so set the registry to the actual file name
         #ifndef HAVEEXCEPTIONS
+        ContractLocalPath(szFile1);
         SetRegistryString(szRegistryWayPointFile, szFile1);  
         #endif
       }
@@ -556,6 +560,8 @@ void ReadWayPoints(void)
 #endif
 
     GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
+    ExpandLocalPath(szFile2);
+
     //SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));  
 
     if (_tcslen(szFile2)>0)      

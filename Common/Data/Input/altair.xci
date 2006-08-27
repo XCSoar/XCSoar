@@ -3,6 +3,16 @@
 # -------------------
 mode=default
 type=gce
+data=TASK_START
+event=StatusMessage Task start
+
+mode=default
+type=gce
+data=TASK_FINISH
+event=StatusMessage Task finish
+
+mode=default
+type=gce
 data=GPS_CONNECTION_WAIT
 event=StatusMessage Waiting for GPS Connection
 
@@ -20,12 +30,12 @@ mode=default
 type=gce
 data=STARTUP_SIMULATOR
 event=StatusMessage Simulation\r\nNothing is real!
-event=TaskLoad /NOR Flash/Default.tsk
+event=TaskLoad Default.tsk
 
 mode=default
 type=gce
 data=STARTUP_REAL
-event=TaskLoad /NOR Flash/Default.tsk
+event=TaskLoad Default.tsk
 event=DLLExecute AltairPlatform.dll WakeUp
 
 mode=default
@@ -431,7 +441,7 @@ mode=Nav2
 type=key
 data=7
 event=StatusMessage Task saved
-event=TaskSave /NOR Flash/Default.tsk
+event=TaskSave Default.tsk
 label=Task\nSave
 location=6
 

@@ -1591,14 +1591,15 @@ void MapWindow::DrawThermalEstimate(HDC hdc, RECT rc) {
         */
     }
   } else {
-    for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
-      if (DerivedDrawInfo.ThermalSources[i].Visible) {
-        DrawBitmapIn(hdc, 
-                     DerivedDrawInfo.ThermalSources[i].Screen, 
-                     hBmpThermalSource);
+    if (MapScale <= 4) {
+      for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
+        if (DerivedDrawInfo.ThermalSources[i].Visible) {
+          DrawBitmapIn(hdc, 
+                       DerivedDrawInfo.ThermalSources[i].Screen, 
+                       hBmpThermalSource);
+        }
       }
     }
-
   }
 }
 
@@ -2150,15 +2151,14 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
   static double LastTime = 0;
   bool drawlogger = true;
   static bool lastLoggerActive=false;
-  int offset = -3;
+  int offset = -1;
 
   if (!Appearance.DontShowLoggerIndicator){
 
     // has GPS time advanced?
-    if(DrawInfo.Time <= LastTime)
-      {
+    if(DrawInfo.Time <= LastTime) {
         LastTime = DrawInfo.Time;
-      } else {
+    } else {
       flip = !flip;
 
       // don't bother drawing logger if not active for more than one second
@@ -2167,7 +2167,6 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
       }
       lastLoggerActive = LoggerActive;
     }
-
 
     if (drawlogger) {
       offset -= 7;
@@ -2179,15 +2178,15 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
       }
       //changed draw mode & icon for higher opacity 12aug -st
       DrawBitmapX(hdc,
-                  rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
-                  rc.bottom+IBLSCALE(-7-3+Appearance.FlightModeOffset.y),
+                  rc.right+IBLSCALE(offset+Appearance.FlightModeOffset.x),
+                  rc.bottom+IBLSCALE(-7+Appearance.FlightModeOffset.y),
                   7,7,
                   hDCTemp,
                   0,0,SRCPAINT);
 
       DrawBitmapX(hdc,
-                  rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
-                  rc.bottom+IBLSCALE(-7-3+Appearance.FlightModeOffset.y),
+                  rc.right+IBLSCALE(offset+Appearance.FlightModeOffset.x),
+                  rc.bottom+IBLSCALE(-7+Appearance.FlightModeOffset.y),
                   7,7,
                   hDCTemp,
                   7,0,SRCAND);
@@ -2217,19 +2216,19 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
 
     offset -= 24;
 
-      DrawBitmapX(hdc,
-                  rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
-                  rc.bottom+IBLSCALE(-20-3+Appearance.FlightModeOffset.y),
-                  24,20,
-                  hDCTemp,
-                  0,0,SRCPAINT);
-
-      DrawBitmapX(hdc,
-                  rc.right+IBLSCALE(offset-3+Appearance.FlightModeOffset.x),
-                  rc.bottom+IBLSCALE(-20-3+Appearance.FlightModeOffset.y),
-                  24,20,
-                  hDCTemp,
-                  24,0,SRCAND);
+    DrawBitmapX(hdc,
+                rc.right+IBLSCALE(offset-1+Appearance.FlightModeOffset.x),
+                rc.bottom+IBLSCALE(-20-1+Appearance.FlightModeOffset.y),
+                24,20,
+                hDCTemp,
+                0,0,SRCPAINT);
+    
+    DrawBitmapX(hdc,
+                rc.right+IBLSCALE(offset-1+Appearance.FlightModeOffset.x),
+                rc.bottom+IBLSCALE(-20-1+Appearance.FlightModeOffset.y),
+                24,20,
+                hDCTemp,
+                24,0,SRCAND);
 
   } else if (Appearance.FlightModeIcon == apFlightModeIconAltA){
 
@@ -2397,7 +2396,9 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           
           DisplayMode.AsFlag.Border = 1;
           DisplayMode.AsFlag.Reachable = 1;
-          
+
+          intask = true;
+
           if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
             SelectObject(hDCTemp,hBmpAirportReachable);
           else
@@ -3137,29 +3138,27 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 }
 
 
-// TODO: Optimise
 // RETURNS Longitude, Latitude!
-/* Now moved to inline function
+
 void MapWindow::Screen2LatLon(const int &x, const int &y, 
                               double &X, double &Y) 
 {
-  X=(double)(x-Orig_Screen.x); 
-  Y=(double)(y-Orig_Screen.y);
-  rotatescale(X,Y,DisplayAngle, InvDrawScale);
-  Y = PanLatitude-Y;
-  X = PanLongitude + X*invfastcosine(Y);
+  int sx= x-Orig_Screen.x;
+  int sy= y-Orig_Screen.y;
+  irotate(sx, sy, DisplayAngle);
+  Y= PanLatitude-sy*InvDrawScale;
+  X = PanLongitude + sx*InvDrawScale*invfastcosine(Y);
 }
 
 void MapWindow::Screen2LatLon(const int &x, const int &y,
                               float &X, float &Y) 
 {
-  X=(float)(x-Orig_Screen.x); 
-  Y=(float)(y-Orig_Screen.y);
-  frotatescale(X,Y,(float)DisplayAngle,(float)InvDrawScale);
-  Y = (float)PanLatitude-Y;
-  X = (float)PanLongitude + X*(float)invfastcosine(Y);
+  int sx= x-Orig_Screen.x;
+  int sy= y-Orig_Screen.y;
+  irotate(sx, sy, DisplayAngle);
+  Y= (float)(PanLatitude-sy*InvDrawScale);
+  X = (float)(PanLongitude+sx*InvDrawScale*invfastcosine(Y));
 }
-*/
 
 double MapWindow::GetApproxScreenRange() {
   return (MapScale * max(MapRectBig.right-MapRectBig.left,
@@ -3179,15 +3178,15 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
     HPEN hpOld;
     hpOld = (HPEN)SelectObject(hDC, hpMapScale);
 
-    Start.x = rc.right-6; End.x = rc.right-6;
-    Start.y = rc.bottom-30; End.y = Start.y - 30;
+    Start.x = rc.right-IBLSCALE(6); End.x = rc.right-IBLSCALE(6);
+    Start.y = rc.bottom-IBLSCALE(30); End.y = Start.y - IBLSCALE(30);
     DrawSolidLine(hDC,Start,End);
 
-    Start.x = rc.right-11; End.x = rc.right-6;
+    Start.x = rc.right-IBLSCALE(11); End.x = rc.right-IBLSCALE(6);
     End.y = Start.y;
     DrawSolidLine(hDC,Start,End);
 
-    Start.y = Start.y - 30; End.y = Start.y;
+    Start.y = Start.y - IBLSCALE(30); End.y = Start.y;
     DrawSolidLine(hDC,Start,End);
 
     SelectObject(hDC, hpOld);
@@ -3247,10 +3246,12 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
     COLORREF origcolor = SetTextColor(hDC, whitecolor);
 
     SetTextColor(hDC, whitecolor);
-    ExtTextOut(hDC, rc.right-11-tsize.cx, End.y+8, 0, NULL, Scale, _tcslen(Scale), NULL);
+    ExtTextOut(hDC, rc.right-IBLSCALE(11)-tsize.cx, End.y+IBLSCALE(8), 0, 
+               NULL, Scale, _tcslen(Scale), NULL);
 
     SetTextColor(hDC, blackcolor);
-    ExtTextOut(hDC, rc.right-10-tsize.cx, End.y+7, 0, NULL, Scale, _tcslen(Scale), NULL);
+    ExtTextOut(hDC, rc.right-IBLSCALE(10)-tsize.cx, End.y+IBLSCALE(7), 0, 
+               NULL, Scale, _tcslen(Scale), NULL);
 
     #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
@@ -3322,14 +3323,15 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
         HBITMAP oldBitMap = (HBITMAP)SelectObject(hDCTemp, Bmp);
 
         DrawBitmapX(hDC, 
-                    IBLSCALE(7)+TextSize.cx, rc.bottom-Height, 
+                    IBLSCALE(8)+TextSize.cx, rc.bottom-Height, 
                     BmpSize.x, BmpSize.y, 
                     hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
         SelectObject(hDCTemp, oldBitMap);
       }
     }
 
-    int y = rc.bottom-Height-(Appearance.TitleWindowFont.AscentHeight+IBLSCALE(1));
+    int y = rc.bottom-Height-
+      (Appearance.TitleWindowFont.AscentHeight+IBLSCALE(2));
     if (!ScaleChangeFeedback){
       // bool FontSelected = false;
       ScaleInfo[0] = 0;
@@ -3348,7 +3350,8 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
       if (ScaleInfo[0]) {
         SelectObject(hDC, TitleWindowFont);
         // FontSelected = true;
-        ExtTextOut(hDC, IBLSCALE(1), y, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
+        ExtTextOut(hDC, IBLSCALE(1), y, 0, NULL, ScaleInfo, 
+                   _tcslen(ScaleInfo), NULL);
         y -= (Appearance.TitleWindowFont.CapitalHeight+IBLSCALE(1));
       }
     }
@@ -3356,7 +3359,8 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
     #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
     wsprintf(ScaleInfo,TEXT("           %d ms"), timestats_av);
-    ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo, _tcslen(ScaleInfo), NULL);
+    ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo, 
+               _tcslen(ScaleInfo), NULL);
     #endif
 
     SetTextColor(hDC, oldTextColor);
@@ -3708,7 +3712,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   double Wt[NUMTHERMALBUCKETS];
   double ht[NUMTHERMALBUCKETS];
   double Wtot=0.0;
-  int TBSCALEY = ( (rc.bottom - rc.top )/2)-30;
+  int TBSCALEY = ( (rc.bottom - rc.top )/2)-IBLSCALE(30);
 #define TBSCALEX 20
   
   // calculate height above safety altitude
@@ -4252,41 +4256,38 @@ void MapWindow::DisplayAirspaceWarning(int Type, TCHAR *Name ,
 ////////////////////////////////////////////////////////////////////
 
 // TODO Optimise
-/*
+
 void MapWindow::LatLon2Screen(const float &lon, const float &lat, int &scX, int &scY) {
-  float X, Y;
-  X = ((float)PanLongitude-lon)*ffastcosine(lat);
-  Y = ((float)PanLatitude-lat);
+  int X = iround((PanLongitude-lon)*ffastcosine(lat)*DrawScale);
+  int Y = iround((PanLatitude-lat)*DrawScale);
+    
+  irotate(X, Y, DisplayAngle);
   
-  frotatescale(X, Y, (float)DisplayAngle, (float)DrawScale);
-  
-  scX = Orig_Screen.x - iround(X);
-  scY = Orig_Screen.y + iround(Y);
+  scX = Orig_Screen.x - X;
+  scY = Orig_Screen.y + Y;
 }
 
 
 // TODO Optimise
 void MapWindow::LatLon2Screen(const double &lon, const double &lat, int &scX, int &scY) {
-  double X, Y;
-  X = (PanLongitude-lon)*fastcosine(lat);
-  Y = (PanLatitude-lat);
+  int X = iround((PanLongitude-lon)*fastcosine(lat)*DrawScale);
+  int Y = iround((PanLatitude-lat)*DrawScale);
   
-  rotatescale(X, Y, DisplayAngle, DrawScale);
-  
-  scX = Orig_Screen.x - iround(X);
-  scY = Orig_Screen.y + iround(Y);
+  irotate(X, Y, DisplayAngle);
+    
+  scX = Orig_Screen.x - X;
+  scY = Orig_Screen.y + Y;
 }
 
 void MapWindow::LatLon2Screen(const double &lon, const double &lat, POINT &sc) {
-  double X = (PanLongitude-lon)*fastcosine(lat);
-  double Y = (PanLatitude-lat);
-  
-  rotatescale(X, Y, DisplayAngle, DrawScale );
-  
-  sc.x = Orig_Screen.x - iround(X);
-  sc.y = Orig_Screen.y + iround(Y);
+  int X = (int)((PanLongitude-lon)*fastcosine(lat)*DrawScale);
+  int Y = (int)((PanLatitude-lat)*DrawScale);
+    
+  irotate(X, Y, DisplayAngle);
+    
+  sc.x = Orig_Screen.x - X;
+  sc.y = Orig_Screen.y + Y;
 }
-*/
 
 ////////////////////////////////////////////////////////////////////////
 

@@ -140,47 +140,13 @@ class MapWindow {
   static void RequestOnFullScreen();
   static void RequestOffFullScreen();
 
-  inline static void Screen2LatLon(const int &x, const int &y, double &X, double &Y) {
-    int sx= x-Orig_Screen.x;
-    int sy= y-Orig_Screen.y;
-    irotate(sx, sy, DisplayAngle);
-    Y= PanLatitude-sy*InvDrawScale;
-    X = PanLongitude + sx*InvDrawScale*invfastcosine(Y);
-  }
-  inline static void Screen2LatLon(const int &x, const int &y, float &X, float &Y) {
-    int sx= x-Orig_Screen.x;
-    int sy= y-Orig_Screen.y;
-    irotate(sx, sy, DisplayAngle);
-    Y= (float)(PanLatitude-sy*InvDrawScale);
-    X = (float)(PanLongitude+sx*InvDrawScale*invfastcosine(Y));
-  }
-  inline static void LatLon2Screen(const float &lon, const float &lat, int &scX, int &scY) {
-    int X = iround((PanLongitude-lon)*ffastcosine(lat)*DrawScale);
-    int Y = iround((PanLatitude-lat)*DrawScale);
-    
-    irotate(X, Y, DisplayAngle);
-    
-    scX = Orig_Screen.x - X;
-    scY = Orig_Screen.y + Y;
-  }
-  inline static void LatLon2Screen(const double &lon, const double &lat, int &scX, int &scY) {
-    int X = iround((PanLongitude-lon)*fastcosine(lat)*DrawScale);
-    int Y = iround((PanLatitude-lat)*DrawScale);
-  
-    irotate(X, Y, DisplayAngle);
-    
-    scX = Orig_Screen.x - X;
-    scY = Orig_Screen.y + Y;
-  }
-  inline static void LatLon2Screen(const double &lon, const double &lat, POINT &sc) {
-    int X = (int)((PanLongitude-lon)*fastcosine(lat)*DrawScale);
-    int Y = (int)((PanLatitude-lat)*DrawScale);
-    
-    irotate(X, Y, DisplayAngle);
-    
-    sc.x = Orig_Screen.x - X;
-    sc.y = Orig_Screen.y + Y;
-  }
+  static void Screen2LatLon(const int &x, const int &y, double &X, double &Y);
+  static void Screen2LatLon(const int &x, const int &y, float &X, float &Y);
+  static void LatLon2Screen(const float &lon, const float &lat, 
+                            int &scX, int &scY);
+  static void LatLon2Screen(const double &lon, const double &lat, 
+                            int &scX, int &scY);
+  static void LatLon2Screen(const double &lon, const double &lat, POINT &sc);
 
   static void CloseDrawingThread(void);
   static void CreateDrawingThread(void);

@@ -1412,6 +1412,8 @@ bool ReadWinPilotPolar(void) {
     POLARW[2]= -3.4;
 
     GetRegistryString(szRegistryPolarFile, szFile, MAX_PATH);
+    ExpandLocalPath(szFile);
+
     #ifndef HAVEEXCEPTIONS
     SetRegistryString(szRegistryPolarFile, TEXT("\0"));
     #endif
@@ -1459,6 +1461,7 @@ bool ReadWinPilotPolar(void) {
 
         // file was OK, so save it
         if (foundline) {
+          ContractLocalPath(szFile);
           SetRegistryString(szRegistryPolarFile, szFile);
         }
 #ifdef HAVEEXCEPTIONS
@@ -2776,6 +2779,8 @@ void ReadLanguageFile() {
 
 	// Open file from registry
 	GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
+        ExpandLocalPath(szFile1);
+
 	SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
 	if (_tcslen(szFile1)>0)
 		fp  = _tfopen(szFile1, TEXT("rt"));
@@ -2806,6 +2811,7 @@ void ReadLanguageFile() {
 	}
 
 	// file was OK, so save registry
+        ContractLocalPath(szFile1);
 	SetRegistryString(szRegistryLanguageFile, szFile1);
 
 	fclose(fp);
@@ -2836,6 +2842,8 @@ void ReadStatusFile() {
   
   // Open file from registry
   GetRegistryString(szRegistryStatusFile, szFile1, MAX_PATH);
+  ExpandLocalPath(szFile1);
+
   SetRegistryString(szRegistryStatusFile, TEXT("\0"));
   
   if (_tcslen(szFile1)>0)
@@ -2910,6 +2918,7 @@ void ReadStatusFile() {
   _init_Status(StatusMessageData_Size);
   
   // file was ok, so save it to registry
+  ContractLocalPath(szFile1);
   SetRegistryString(szRegistryStatusFile, szFile1);
   
   fclose(fp);
@@ -3081,14 +3090,11 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 
 */
 	static TCHAR buffer[MAX_PATH];
-#if (WINDOWSPC>0)
-	_tcscpy(buffer,TEXT("C:\\XCSoar\\NOR Flash"));
-#else
 #ifdef GNAV
 	_tcscpy(buffer,TEXT("\\NOR Flash"));
 #else
 	SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
-#endif
+        _tcscat(buffer,TEXT("\\XCSoar"));
 #endif
 	wcsncat(buffer, TEXT("\\"), MAX_PATH);    
 	wcsncat(buffer, file, MAX_PATH);
@@ -3098,8 +3104,48 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 
 char* LocalPathS(TCHAR* file, int loc) {
   static char buffer[MAX_PATH];
+  char jbuffer[MAX_PATH];
   sprintf(buffer,"%S",LocalPath(file,loc));
+  sprintf(jbuffer,"%S",LocalPath(file,loc));
   return buffer;
+}
+
+void ExpandLocalPath(TCHAR* filein) {
+  // Convert %LOCALPATH% to Local Path
+
+  TCHAR lpath[MAX_PATH];
+  TCHAR code[] = TEXT("%LOCAL_PATH%\\");
+  TCHAR output[MAX_PATH];
+  _tcscpy(lpath,LocalPath());
+
+  TCHAR* ptr;
+  ptr = _tcsstr(filein, code);
+  if (!ptr) return;
+
+  ptr += _tcslen(code);
+  if (_tcslen(ptr)>0) {
+    _stprintf(output,TEXT("%s%s"),lpath, ptr);
+    _tcscpy(filein, output);
+  }
+}
+
+void ContractLocalPath(TCHAR* filein) {
+  // Convert Local Path part to %LOCALPATH%
+
+  TCHAR lpath[MAX_PATH];
+  TCHAR code[] = TEXT("%LOCAL_PATH%\\");
+  TCHAR output[MAX_PATH];
+  _tcscpy(lpath,LocalPath());
+
+  TCHAR* ptr;
+  ptr = _tcsstr(filein, lpath);
+  if (!ptr) return;
+
+  ptr += _tcslen(lpath);
+  if (_tcslen(ptr)>0) {
+    _stprintf(output,TEXT("%s%s"),code, ptr);
+    _tcscpy(filein, output);
+  }
 }
 
 
@@ -3197,22 +3243,22 @@ int propGetScaleList(double *List, size_t Size){
   ASSERT(List != NULL);
   ASSERT(Size > 0);
 
-	if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){
+  if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){
 
     pToken = strtok_r(Buffer, TEXT(","), &pWClast);
-
+    
     while(Idx < (int)Size && pToken != NULL){
       List[Idx] = _tcstod(pToken, NULL);
       Idx++;
       pToken = strtok_r(NULL, TEXT(","), &pWClast);
     }
-
+    
     return(Idx);
-
+    
   } else {
     return(0);
   }
-
+  
 }
 
 
@@ -3297,13 +3343,8 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
 
 // SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 
-#if (WINDOWSPC>0)
-  _tcscpy(defaultProfileFile, 
-	  TEXT("C:\\XCSoar\\NOR Flash\\xcsoar-registry.prf"));
-#else
   _tcscpy(defaultProfileFile, 
 	  LocalPath(TEXT("xcsoar-registry.prf")));
-#endif
   _tcscpy(startProfileFile, defaultProfileFile);
 
   if (CommandLine != NULL){

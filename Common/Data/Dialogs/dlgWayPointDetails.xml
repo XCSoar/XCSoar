@@ -23,7 +23,7 @@
     <WndProperty Name="prpDistance"  Caption="Distance"      X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
     <WndProperty Name="prpBearing"   Caption="Bearing"       X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
     <WndProperty Name="prpMc0"       Caption="Alt diff Mc 0" X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpMc1"       Caption="Alt diff Mc safety" X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <aWndProperty Name="prpMc1"       Caption="Alt diff Mc safety" X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
     <WndProperty Name="prpMc2"       Caption="Alt diff Mc current" X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
 
   </WndFrame>

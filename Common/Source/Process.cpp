@@ -323,10 +323,13 @@ void FormatterLowWarning::AssignValue(int i) {
   switch (i) {
   case 1:
     minimum = ALTITUDEMODIFY*SAFETYALTITUDETERRAIN;
+    break;
+  case 2:
+    minimum = 0.5*LIFTMODIFY*MACCREADY;
+    break;
   default:
     break;
   }
-
 }
 
 
@@ -595,12 +598,18 @@ void InfoBoxFormatter::AssignValue(int i) {
     } else {
       Valid = false;
     }
+    if (CALCULATED_INFO.AATTimeToGo<1) {
+      Valid = false;
+    }
     break;
   case 31:
     Value = TASKSPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
     if (ActiveWayPoint>=0) {
       Valid = AATEnabled;
     } else {
+      Valid = false;
+    }
+    if (CALCULATED_INFO.AATTimeToGo<1) {
       Valid = false;
     }
     break;
@@ -660,6 +669,9 @@ void InfoBoxFormatter::AssignValue(int i) {
     if (ActiveWayPoint>=0) {
       Valid = AATEnabled;
     } else {
+      Valid = false;
+    }
+    if (CALCULATED_INFO.AATTimeToGo<1) {
       Valid = false;
     }
     break;
@@ -755,10 +767,8 @@ TCHAR *FormatterTime::Render(int *color) {
 }
 
 TCHAR *FormatterWaypoint::Render(int *color) {
-
   if((ActiveWayPoint >=0)&&(WayPointList))
     {
-
       if (WayPointList[Task[ActiveWayPoint].Index].Reachable) {
 	*color = 2; // blue text
       } else {

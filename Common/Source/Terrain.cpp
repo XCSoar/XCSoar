@@ -921,6 +921,8 @@ void OpenTopology() {
   }
  
   GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
+  ExpandLocalPath(szFile);
+
   SetRegistryString(szRegistryTopologyFile, TEXT("\0"));
 
   if (_tcslen(szFile)==0) {
@@ -1023,10 +1025,13 @@ void OpenTopology() {
               numtopo++;
             }
         }
-      // file was OK, so save it
-      SetRegistryString(szRegistryTopologyFile, szFile);
 
       CloseHandle (hFile);
+
+      // file was OK, so save it
+      ContractLocalPath(szFile);
+      SetRegistryString(szRegistryTopologyFile, szFile);
+
     }
   UnlockTerrainDataGraphics();
 

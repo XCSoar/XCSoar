@@ -41,6 +41,17 @@ class GlidePolar {
   static double SinkRate(double a,double b, double c, 
                          double MC, double HW, double V);
   static double FindSpeedForSinkRate(double w);
+ private:
+  static double MacCreadyAltitude_internal(double MCREADY, 
+                                           double Distance, 
+                                           double Bearing, 
+                                           double WindSpeed, 
+                                           double WindBearing, 
+                                           double *BestCruiseTrack, 
+                                           double *VMacCready, 
+                                           bool isFinalGlide, 
+                                           double *timetogo);
+
 };
 
 #endif

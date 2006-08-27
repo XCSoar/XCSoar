@@ -528,16 +528,18 @@ void CalculateAATTaskSectors(void)
 	  }
 	  */
 
-	  Task[i].AATTargetLat = 
-	    FindLatitude (WayPointList[Task[i].Index].Latitude,
-			  WayPointList[Task[i].Index].Longitude, 
-			  targetbearing, 
-			  targetrange);
-	  Task[i].AATTargetLon = 
-	    FindLongitude (WayPointList[Task[i].Index].Latitude,
-			   WayPointList[Task[i].Index].Longitude, 
-			   targetbearing, 
-			   targetrange);
+          if (i>= ActiveWayPoint) {
+            Task[i].AATTargetLat = 
+              FindLatitude (WayPointList[Task[i].Index].Latitude,
+                            WayPointList[Task[i].Index].Longitude, 
+                            targetbearing, 
+                            targetrange);
+            Task[i].AATTargetLon = 
+              FindLongitude (WayPointList[Task[i].Index].Latitude,
+                             WayPointList[Task[i].Index].Longitude, 
+                             targetbearing, 
+                             targetrange);
+          }
 
 	  if(Task[i].AATType == SECTOR)
 	    {

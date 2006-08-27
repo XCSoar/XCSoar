@@ -269,6 +269,7 @@ void dlgWayPointDetailsShowModal(void){
   if (!wf) return;
 
   GetRegistryString(szRegistryWayPointFile, szWaypointFile, MAX_PATH);
+  ExpandLocalPath(szWaypointFile);
   ExtractDirectory(Directory, szWaypointFile);
 
   _stprintf(path_modis,TEXT("%s\\modis-%03d.jpg"),
@@ -334,13 +335,14 @@ void dlgWayPointDetailsShowModal(void){
 				  CALCULATED_INFO.WindSpeed, 
 				  CALCULATED_INFO.WindBearing, 
 				  0, 0, true,
-				  0)-SAFETYALTITUDEARRIVAL;
+				  0)-SAFETYALTITUDEARRIVAL-
+    WayPointList[SelectedWaypoint].Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
 	    Units::GetAltitudeName());
 
-  ((WndProperty *)wf->FindByName(TEXT("prpMc0")))
-    ->SetText(sTmp);
+  wp = ((WndProperty *)wf->FindByName(TEXT("prpMc0")));
+  if (wp) wp->SetText(sTmp);
 
   // alt reqd at safety mc
 
@@ -351,10 +353,11 @@ void dlgWayPointDetailsShowModal(void){
 				  CALCULATED_INFO.WindSpeed, 
 				  CALCULATED_INFO.WindBearing, 
 				  0, 0, true,
-				  0)-SAFETYALTITUDEARRIVAL;
+				  0)-SAFETYALTITUDEARRIVAL-
+    WayPointList[SelectedWaypoint].Altitude;
 
-  ((WndProperty *)wf->FindByName(TEXT("prpMc1")))
-    ->SetText(sTmp);
+  wp = ((WndProperty *)wf->FindByName(TEXT("prpMc1")));
+  if (wp) wp->SetText(sTmp);
 
   // alt reqd at current mc
 
@@ -365,13 +368,16 @@ void dlgWayPointDetailsShowModal(void){
 				  CALCULATED_INFO.WindSpeed, 
 				  CALCULATED_INFO.WindBearing, 
 				  0, 0, true,
-				  0)-SAFETYALTITUDEARRIVAL;
+				  0)-SAFETYALTITUDEARRIVAL-
+    WayPointList[SelectedWaypoint].Altitude;
 
   _stprintf(sTmp, TEXT("%.0f %s"), alt*ALTITUDEMODIFY,
 	    Units::GetAltitudeName());
 
-  ((WndProperty *)wf->FindByName(TEXT("prpMc2")))
-    ->SetText(sTmp);
+  wp = ((WndProperty *)wf->FindByName(TEXT("prpMc2")));
+  if (wp) wp->SetText(sTmp);
+
+  /////
 
   wf->SetKeyDownNotify(FormKeyDown);
 

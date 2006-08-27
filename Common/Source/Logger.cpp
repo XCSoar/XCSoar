@@ -671,77 +671,130 @@ bool ReplayLogger::IsEnabled(void) {
 }
 
 
-class ReplayLoggerInterpolator {
+typedef struct _LOGGER_INTERP_POINT
+{
+  double lat;
+  double lon;
+  double alt;
+  double t;
+} LOGGER_INTERP_POINT;
+
+/*
+  ps = (1 u u^2 u^3)[0  1 0 0] p0
+                    [-t 0 t 0] p1
+                    [2t t-3 3-2t -t] p2
+                    [-t 2-t t-2 t] p3
+
+*/
+
+class CatmullRomInterpolator {
 public:
-  void Reset() {
-    x0=0; x1=0; x2=0;
-    t0=0; t1=0; t2=0;
-    a=0; b=0; c=0;
-    num = 0;
-    tzero = 0;
+  CatmullRomInterpolator() {
+    Reset();
   }
-  void Update(double t, double x) {
-    if (num==0) {
-      tzero = t;
+  void Reset() {
+    num=0;
+    for (int i=0; i<4; i++) {
+      p[i].t= 0;
     }
-    t0=t1; x0=x1;
-    t1=t2; x1=x2;
-    t2=t-tzero; x2=x;
-    if (num<3) {
-      num++;
-    } else {
-      UpdateInterpolator();
+  }
+
+  LOGGER_INTERP_POINT p[4];
+
+  void Update(double t, double lon, double lat, double alt) {
+    if (num<4) { num++; }
+    for (int i=0; i<3; i++) {
+      p[i].lat = p[i+1].lat;
+      p[i].lon = p[i+1].lon;
+      p[i].alt = p[i+1].alt;
+      p[i].t   = p[i+1].t;
     }
+    p[3].lat = lat;
+    p[3].lon = lon;
+    p[3].alt = alt;
+    p[3].t   = t;
   }
   bool Ready() {
-    return (num==3);
+    return (num==4);
   }
-  double Interpolate(double t) {
-    if (!Ready()) {
-      return x0;
+  double GetSpeed(double time) {
+    if (Ready()) {
+      double u= (time-p[1].t)/(p[2].t-p[1].t);
+      double s0 = Distance(p[0].lat, p[0].lon, 
+                           p[1].lat, p[1].lon)/(p[1].t-p[0].t);
+      double s1 = Distance(p[1].lat, p[1].lon, 
+                           p[2].lat, p[2].lon)/(p[2].t-p[1].t);
+      u = max(0.0,min(1.0,u));
+      return s1*u+s0*(1.0-u);
+    } else {
+      return 0.0;
     }
-    double tz= t-tzero;
-    return a*tz*tz+b*tz+c;
+  }
+  void Interpolate(double time, double *lon, double *lat, double *alt) {
+    if (!Ready()) {
+      *lon = p[num].lon;
+      *lat = p[num].lat;
+      *alt = p[num].alt;
+      return;
+    }
+    double t=0.98;
+    double u= (time-p[1].t)/(p[2].t-p[1].t);
+    
+    if (u<0.0) {
+      *lat = p[1].lat;
+      *lon = p[1].lon;
+      *alt = p[1].alt;
+      return;
+    }
+    if (u>1.0) {
+      *lat = p[2].lat;
+      *lon = p[2].lon;
+      *alt = p[2].alt;
+      return;
+    }
+
+    double u2 = u*u;
+    double u3 = u2*u;
+    double c[4]= {-t*u3+2*t*u2-t*u,
+                  (2-t)*u3+(t-3)*u2+1,
+                  (t-2)*u3+(3-2*t)*u2+t*u,
+                  t*u3-t*u2};
+    /*
+    double c[4] = {-t*u+2*t*u2-t*u3,
+                   1+(t-3)*u2+(2-t)*u3,
+                   t*u+(3-2*t)*u2+(t-2)*u3,
+                   -t*u2+t*u3};
+    */
+
+    *lat = (p[0].lat*c[0] + p[1].lat*c[1] + p[2].lat*c[2] + p[3].lat*c[3]);
+    *lon = (p[0].lon*c[0] + p[1].lon*c[1] + p[2].lon*c[2] + p[3].lon*c[3]);
+    *alt = (p[0].alt*c[0] + p[1].alt*c[1] + p[2].alt*c[2] + p[3].alt*c[3]);
+
   }
   double GetMinTime(void) {
-    return t0+tzero;
+    return p[0].t;
   }
   double GetMaxTime(void) {
-    return t2+tzero;
+    return max(0,max(p[0].t, max(p[1].t, max(p[2].t, p[3].t))));
   }
   double GetAverageTime(void) {
-    return (t0+t1+t2)/3+tzero;
+    double tav= 0;
+    if (num>0) {
+      for (int i=0; i<num; i++) {
+        tav += p[i].t/num;
+      }
+    }
+    return tav;
+  }
+  bool NeedData(double tthis) {
+    return (!Ready())||(p[2].t<=tthis+0.1);
   }
 private:
-  double t0, t1, t2;
-  double x0, x1, x2;
-  double a, b, c;
   int num;
-  bool first;
   double tzero;
-
-  void UpdateInterpolator() {
-    double d = t0*t0*(t1-t2)+t1*t1*(t2-t0)+t2*t2*(t0-t1);
-    if (d == 0.0)
-      {
-	a=0;
-      }
-    else
-      {
-	a=((t1-t2)*(x0-x2)+(t2-t0)*(x1-x2))/d;
-      }
-    d = t1-t2;
-    if (d == 0.0)
-      {
-	b=0;
-      }
-    else
-      {
-	b = (x1-x2-a*(t1*t1-t2*t2))/d;
-      }
-    c = (x2 - a*t2*t2 - b*t2);
-  }
 };
+
+
 
 
 bool ReplayLogger::UpdateInternal(void) {
@@ -753,9 +806,7 @@ bool ReplayLogger::UpdateInternal(void) {
     Enabled = true;
   }
 
-  static ReplayLoggerInterpolator li_lat;
-  static ReplayLoggerInterpolator li_lon;
-  static ReplayLoggerInterpolator li_alt;
+  static CatmullRomInterpolator cli;
 
   SYSTEMTIME st;
   GetLocalTime(&st);
@@ -781,61 +832,41 @@ bool ReplayLogger::UpdateInternal(void) {
     deltatimereal = 0;
     tthis = 0;
     tlast = tthis;
-
-    li_lat.Reset();
-    li_lon.Reset();
-    li_alt.Reset();
+    cli.Reset();
   }
 
   tthis += TimeScale*deltatimereal;
 
-  double mintime = li_lat.GetMinTime();
+  double mintime = cli.GetMinTime(); // li_lat.GetMinTime();
   if (tthis<mintime) { tthis = mintime; }
-  /*
-  if (tlast>tthis) {
-    tlast = tthis;
-  }
-  if ((int)tthis-(int)tlast<1) {
-    return true;
-  }
-  tlast = tthis;
-  */
 
   // if need a new point
-  while (
-	 (!li_lat.Ready()||(li_lat.GetAverageTime()< tthis))
-	 &&(!finished)) {
+  while (cli.NeedData(tthis)&&(!finished)) {
 
     double t1, Lat1, Lon1, Alt1;
     finished = !ReadPoint(&t1,&Lat1,&Lon1,&Alt1);
 
-    if (!finished) {
-      li_lat.Update(t1,Lat1);
-      li_lon.Update(t1,Lon1);
-      li_alt.Update(t1,Alt1);
+    if (!finished && (t1>0)) {
+      cli.Update(t1,Lon1,Lat1,Alt1);
     }
   }
 
   if (!finished) {
 
     double LatX, LonX, AltX, SpeedX, BearingX;
-    double LatX1, LonX1;
-    
-    AltX = li_alt.Interpolate(tthis);
+    double LatX1, LonX1, AltX1;
 
-    LatX = li_lat.Interpolate(tthis);
-    LonX = li_lon.Interpolate(tthis);
+    cli.Interpolate(tthis, &LonX, &LatX, &AltX);
+    cli.Interpolate(tthis+0.1, &LonX1, &LatX1, &AltX1);
 
-    LatX1 = li_lat.Interpolate(tthis+1);
-    LonX1 = li_lon.Interpolate(tthis+1);
-
-    SpeedX = Distance(LatX, LonX, LatX1, LonX1);
+    SpeedX = cli.GetSpeed(tthis);
     BearingX = Bearing(LatX, LonX, LatX1, LonX1);
 
     if (SpeedX>0) {
+
       LockFlightData();
       if (init) {
-	flightstats.Reset();
+        flightstats.Reset();
       }
       GPS_INFO.Latitude = LatX;
       GPS_INFO.Longitude = LonX;
@@ -846,7 +877,9 @@ bool ReplayLogger::UpdateInternal(void) {
       GPS_INFO.Time = tthis;
       UnlockFlightData();
     } else {
-      tthis=li_lat.GetMaxTime();      
+      // This is required in case the integrator fails,
+      // which can occur due to parsing faults
+      tthis = cli.GetMaxTime();
     }
   }
   
@@ -862,6 +895,12 @@ bool ReplayLogger::UpdateInternal(void) {
 
 void ReplayLogger::Stop(void) {
   ReadLine(NULL); // close the file
+  if (Enabled) {
+    LockFlightData();
+    GPS_INFO.Speed = 0;
+    GPS_INFO.Time = 0;
+    UnlockFlightData();
+  }
   Enabled = false;
 }
 
