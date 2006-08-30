@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=XCSoarPC - Win32 Sim
+CFG=XCSoarPC - Win32 SimRelease
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,13 +13,14 @@ CFG=XCSoarPC - Win32 Sim
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "XCSoarPC.mak" CFG="XCSoarPC - Win32 Sim"
+!MESSAGE NMAKE /f "XCSoarPC.mak" CFG="XCSoarPC - Win32 SimRelease"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "XCSoarPC - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "XCSoarPC - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE "XCSoarPC - Win32 Sim" (based on "Win32 (x86) Application")
+!MESSAGE "XCSoarPC - Win32 SimRelease" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -113,6 +114,36 @@ LINK32=link.exe
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib comctl32.lib msimg32.lib /nologo /subsystem:windows /debug /machine:I386 /out:"XCSoarPC___Win32_Sim/XCSoarPCSim.exe"
 # SUBTRACT LINK32 /profile
 
+!ELSEIF  "$(CFG)" == "XCSoarPC - Win32 SimRelease"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "XCSoarPC___Win32_SimRelease"
+# PROP BASE Intermediate_Dir "XCSoarPC___Win32_SimRelease"
+# PROP BASE Ignore_Export_Lib 0
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "XCSoarPC___Win32_SimRelease"
+# PROP Intermediate_Dir "XCSoarPC___Win32_SimRelease"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W3 /WX /vd0 /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D NEWINFOBOX=1 /D "_SIM_" /D "DEBUG" /FD /c
+# ADD CPP /nologo /MT /W3 /WX /vd0 /GX /O2 /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D "_SIM_" /D UNDER_CE=300 /FD /c
+# SUBTRACT CPP /Z<none>
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
+# ADD BASE RSC /l 0x409 /i "..\..\..\Common\Header" /i "..\..\..\Common\Source" /d "_DEBUG" /d "WINDOWSPC"
+# ADD RSC /l 0x409 /i "..\..\..\Common\Header" /i "..\..\..\Common\Source" /d "_DEBUG" /d "WINDOWSPC"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib comctl32.lib msimg32.lib /nologo /subsystem:windows /debug /machine:I386 /out:"XCSoarPC___Win32_Sim/XCSoarPCSim.exe"
+# SUBTRACT BASE LINK32 /profile
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib comctl32.lib msimg32.lib /nologo /subsystem:windows /machine:I386 /out:"XCSoarPC___Win32_SimRelease/XCSoarPCSim.exe"
+# SUBTRACT LINK32 /profile /debug
+
 !ENDIF 
 
 # Begin Target
@@ -120,9 +151,14 @@ LINK32=link.exe
 # Name "XCSoarPC - Win32 Release"
 # Name "XCSoarPC - Win32 Debug"
 # Name "XCSoarPC - Win32 Sim"
+# Name "XCSoarPC - Win32 SimRelease"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\AATDistance.cpp
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\AirfieldDetails.cpp
