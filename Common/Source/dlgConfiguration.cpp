@@ -47,6 +47,7 @@ Copyright_License {
 #include "Process.h"
 #include "McReady.h"
 #include "Utils.h"
+#include "InfoBoxLayout.h"
 
 extern int UTCOffset;
 
@@ -626,6 +627,14 @@ void dlgConfigurationShowModal(void){
 
   WndProperty *wp;
 
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable,
+                        LocalPathS(TEXT("dlgConfiguration_L.xml")),
+                        hWndMainWindow,
+                        TEXT("IDR_XML_CONFIGURATION_L"));
+  } else
+#endif
   wf = dlgLoadFromXML(CallBackTable,
 		      LocalPathS(TEXT("dlgConfiguration.xml")),
 		      hWndMainWindow,
@@ -1041,7 +1050,10 @@ void dlgConfigurationShowModal(void){
   DWORD Lift = 0;
   DWORD Altitude = 0; //default ft
 
-  GetFromRegistry(szRegistrySpeedUnitsValue,&Speed);
+  if(GetFromRegistry(szRegistrySpeedUnitsValue,&Speed)!=ERROR_SUCCESS) {
+    SetToRegistry(szRegistrySpeedUnitsValue, Speed);
+    changed = true;
+  }
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsSpeed"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1053,7 +1065,10 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
-  GetFromRegistry(szRegistryTaskSpeedUnitsValue,&TaskSpeed);
+  if(GetFromRegistry(szRegistryTaskSpeedUnitsValue,&TaskSpeed)!=ERROR_SUCCESS) {
+    SetToRegistry(szRegistryTaskSpeedUnitsValue, TaskSpeed);
+    changed = true;
+  }
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsTaskSpeed"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1065,7 +1080,10 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
-  GetFromRegistry(szRegistryDistanceUnitsValue,&Distance);
+  if(GetFromRegistry(szRegistryDistanceUnitsValue,&Distance)!=ERROR_SUCCESS) {
+    SetToRegistry(szRegistryDistanceUnitsValue, Distance);
+    changed = true;
+  }
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsDistance"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1077,7 +1095,10 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
-  GetFromRegistry(szRegistryAltitudeUnitsValue,&Altitude);
+  if(GetFromRegistry(szRegistryAltitudeUnitsValue,&Altitude)!=ERROR_SUCCESS) {
+    SetToRegistry(szRegistryAltitudeUnitsValue, Altitude);
+    changed = true;
+  }
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsAltitude"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -1088,7 +1109,10 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
-  GetFromRegistry(szRegistryLiftUnitsValue,&Lift);
+  if(GetFromRegistry(szRegistryLiftUnitsValue,&Lift)!=ERROR_SUCCESS) {
+    SetToRegistry(szRegistryLiftUnitsValue, Lift);
+    changed = true;
+  }
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsLift"));
   if (wp) {
     DataFieldEnum* dfe;

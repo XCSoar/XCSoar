@@ -41,6 +41,7 @@ Copyright_License {
 #include "McReady.h"
 #include "dlgTools.h"
 #include "Logger.h"
+#include "InfoBoxLayout.h"
 
 static int twItemIndex= 0;
 static WndForm *wf=NULL;
@@ -311,10 +312,20 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 void dlgTaskWaypointShowModal(int itemindex, int tasktype){
+  wf = NULL;
 
-  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgTaskWaypoint.xml")),
-		      hWndMainWindow,
-		      TEXT("IDR_XML_TASKWAYPOINT"));
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable,
+                        LocalPathS(TEXT("dlgTaskWaypoint_L.xml")),
+                        hWndMainWindow,
+                        TEXT("IDR_XML_TASKWAYPOINT_L"));
+  } else
+#endif
+    wf = dlgLoadFromXML(CallBackTable,
+                        LocalPathS(TEXT("dlgTaskWaypoint.xml")),
+                        hWndMainWindow,
+                        TEXT("IDR_XML_TASKWAYPOINT"));
 
   twItemIndex = itemindex;
   twType = tasktype;

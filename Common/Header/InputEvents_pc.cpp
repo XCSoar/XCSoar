@@ -107,6 +107,9 @@ Key2Event[mode_id][VK_ESCAPE] = event_id;
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 Key2Event[mode_id][VK_ESCAPE] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+Key2Event[mode_id][VK_ESCAPE] = event_id;
+
 mode_id = InputEvents::mode2int(TEXT("Vario1"), true);
 Key2Event[mode_id][VK_ESCAPE] = event_id;
 
@@ -155,6 +158,10 @@ mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),1,event_id);
+Key2Event[mode_id][VK_APP1] = event_id;
+
 mode_id = InputEvents::mode2int(TEXT("Vario1"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
@@ -200,6 +207,10 @@ mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),2,event_id);
+Key2Event[mode_id][VK_APP2] = event_id;
+
 mode_id = InputEvents::mode2int(TEXT("Vario1"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
@@ -242,6 +253,10 @@ makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
+makeLabel(mode_id,TEXT(""),3,event_id);
+Key2Event[mode_id][VK_APP3] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
 makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
@@ -883,7 +898,7 @@ makeLabel(mode_id,TEXT("Analysis"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("Info3"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT("/Info"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
@@ -916,5 +931,38 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventRepeatStatusMessage, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT("Message\nRepeat"),9,event_id);
+Key2Event[mode_id]['0'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT("/Info"),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventExit, TEXT("system"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT("Exit"),5,event_id);
+Key2Event[mode_id]['6'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),6,event_id);
+Key2Event[mode_id]['7'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),7,event_id);
+Key2Event[mode_id]['8'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),8,event_id);
+Key2Event[mode_id]['9'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 

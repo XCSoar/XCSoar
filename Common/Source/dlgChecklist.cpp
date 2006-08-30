@@ -259,10 +259,19 @@ void dlgChecklistShowModal(void){
 
   //  WndProperty *wp;
 
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable,
+                        LocalPathS(TEXT("dlgChecklist_L.xml")),
+                        hWndMainWindow,
+                        TEXT("IDR_XML_CHECKLIST_L"));
+  } else
+#endif
   wf = dlgLoadFromXML(CallBackTable,
 		      LocalPathS(TEXT("dlgChecklist.xml")),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_CHECKLIST"));
+
 
   nTextLines = 0;
 

@@ -118,7 +118,16 @@ int dlgAirspacePatternsShowModal(void){
 
   ItemIndex = -1;
 
-  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgAirspacePatterns.xml")),
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable,
+                        LocalPathS(TEXT("dlgAirspacePatterns_L.xml")),
+                        hWndMainWindow,
+                        TEXT("IDR_XML_AIRSPACEPATTERNS_L"));
+  } else
+#endif
+  wf = dlgLoadFromXML(CallBackTable,
+                      LocalPathS(TEXT("dlgAirspacePatterns.xml")),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_AIRSPACEPATTERNS"));
 

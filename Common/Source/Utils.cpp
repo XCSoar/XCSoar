@@ -3094,7 +3094,7 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 	_tcscpy(buffer,TEXT("\\NOR Flash"));
 #else
 	SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
-        _tcscat(buffer,TEXT("\\XCSoar"));
+        _tcscat(buffer,TEXT("\\XCSoarData"));
 #endif
 	wcsncat(buffer, TEXT("\\"), MAX_PATH);
 	wcsncat(buffer, file, MAX_PATH);

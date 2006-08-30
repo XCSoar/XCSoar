@@ -2326,11 +2326,20 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
           double delta_d2 = (v2*t1-v2last*t1last);
           double vdiff = delta_d2/(Basic->Time-LastTime);
           Calculated->TaskSpeedInstantaneous =
-            Calculated->TaskSpeedInstantaneous*0.95+0.05*vdiff;
+            Calculated->TaskSpeedInstantaneous*0.98+0.02*vdiff;
           v2last = v2;
           t1last = t1;
           LastTime = Basic->Time;
-        }
+          /*
+#ifdef DEBUG
+          char buffer[100];
+          sprintf(buffer,"%g %g # taskspeed\r\n",
+                  Calculated->TaskSpeed,
+                  Calculated->TaskSpeedInstantaneous);
+          DebugStore(buffer);
+#endif
+          */
+       }
       }
     }
   }

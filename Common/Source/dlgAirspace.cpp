@@ -236,6 +236,13 @@ void dlgAirspaceShowModal(bool coloredit){
 
   ItemIndex = -1;
 
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgAirspace_L.xml")),
+                        hWndMainWindow,
+                        TEXT("IDR_XML_AIRSPACE_L"));
+  } else
+#endif
   wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgAirspace.xml")),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_AIRSPACE"));

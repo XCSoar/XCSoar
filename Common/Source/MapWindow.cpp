@@ -1681,9 +1681,12 @@ void MapWindow::RenderMapWindow(  RECT rc)
     DrawAirSpace(hdcDrawWindowBg, rc);
 
     if(TrailActive) {
-      if (!EnableTerrain) {
+      if (!EnableTerrain || !InfoBoxLayout::landscape) {
+        // TODO: For some reason, the shadow drawing of the
+        // trail doesn't work in portrait mode.  No idea why.
         DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
       } else {
+
         // clear background bitmap
         SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
         Rectangle(hDCTemp, rc.left, rc.top, rc.right, rc.bottom);
@@ -1710,6 +1713,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
                hDCMask, rc.left+1, rc.top+1, SRCAND);
         BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
                hDCTemp, rc.left, rc.top, SRCINVERT);
+
       }
     }
 
@@ -1752,9 +1756,9 @@ void MapWindow::RenderMapWindow(  RECT rc)
     if (extGPSCONNECT) {
       DrawAircraft(hdcDrawWindowBg, Orig_Aircraft);
     }
-
     // marks on top...
     DrawMarks(hdcDrawWindowBg, rc);
+
   }
 
   BitBlt(hdcDrawWindow, 0, 0, MapRectBig.right, MapRectBig.bottom,
@@ -1766,6 +1770,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
   hfOld = (HFONT)SelectObject(hdcDrawWindow, MapWindowFont);
 
   DrawMapScale(hdcDrawWindow,rc, BigZoom);
+
   DrawMapScale2(hdcDrawWindow,rc, Orig_Aircraft);
 
   DrawCompass(hdcDrawWindow, rc);
@@ -1774,9 +1779,9 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
   DrawFinalGlide(hdcDrawWindow,rc);
 
-  DrawSpeedToFly(hdcDrawWindow, rc);
-
   DrawThermalBand(hdcDrawWindow, rc);
+
+  DrawSpeedToFly(hdcDrawWindow, rc);
 
   DrawGPSStatus(hdcDrawWindow, rc);
 
@@ -2397,7 +2402,11 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           DisplayMode.AsFlag.Border = 1;
           DisplayMode.AsFlag.Reachable = 1;
 
-          intask = true;
+          if (!DeclutterLabels) {
+            // show all reachable landing fields unless we want a decluttered
+            // screen.
+            intask = true;
+          }
 
           if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
             SelectObject(hDCTemp,hBmpAirportReachable);

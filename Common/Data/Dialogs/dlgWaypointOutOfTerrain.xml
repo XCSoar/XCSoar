@@ -7,7 +7,7 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmWaypointOutOfTerrain" Type="Dialog" X=60 Y=45 Width=200 Height=120 Caption="Waypoint Parser" Font=2 BackColor=0xDADBAB>
+<WndForm Name="frmWaypointOutOfTerrain" Type="Dialog" X=30 Y=55 Width=200 Height=120 Caption="Waypoint Parser" Font=2 BackColor=0xDADBAB>
   <WndFrame Name="frmWaypointOutOfTerrainText" X=0 Y=0 Width=200 Height=80 Font=2 />
 
   <WndButton   Caption="Yes"      X=4   Y=74 width=35 height=22 Font=2 OnClickNotify="OnYesClicked"/>

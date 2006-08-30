@@ -11,6 +11,7 @@
 #include "resource.h"
 #include "sizes.h"
 #include "units.h"
+#include "compatibility.h"
 
 
 class InfoBoxFormatter {

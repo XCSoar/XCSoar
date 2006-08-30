@@ -1108,7 +1108,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   wcscat(XCSoar_Version, TEXT("4.7.8 Beta "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 #else
-  wcscat(XCSoar_Version, TEXT("Alpha "));
+  wcscat(XCSoar_Version, TEXT("4.7.8 Beta "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 #endif
   // (future/next version) wcscat(XCSoar_Version, TEXT("BETA 4.6.1"));
@@ -1198,11 +1198,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   GaugeCDI::Create();
   GaugeVario::Create();
-  if (EnableVarioGauge) {
-    ShowWindow(hWndVarioWindow,SW_SHOW);
-  } else {
-    ShowWindow(hWndVarioWindow,SW_HIDE);
-  }
 
   GPS_INFO.SwitchState.AirbrakeLocked = false;
   GPS_INFO.SwitchState.FlapPositive = false;
@@ -1819,13 +1814,18 @@ void Shutdown(void) {
 
   // Clear data
 
-  StartupStore(TEXT("Clear task data\r\n"));
-  LockTaskData();
+  StartupStore(TEXT("Save default task\r\n"));
 
+  LockTaskData();
+  ResumeAbortTask(-1); // turn off abort if it was on.
   TCHAR tfile[MAX_PATH];
   _stprintf(tfile,TEXT("%sDefault.tsk"),LocalPath());
   SaveTask(tfile);
+  UnlockTaskData();
 
+  StartupStore(TEXT("Clear task data\r\n"));
+
+  LockTaskData();
   Task[0].Index = -1;  ActiveWayPoint = -1;
   AATEnabled = FALSE;
   NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0;

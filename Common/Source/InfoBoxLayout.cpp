@@ -208,7 +208,7 @@ void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
 void InfoBoxLayout::ScreenGeometry(RECT rc) {
 
   TCHAR szRegistryInfoBoxGeometry[]=  TEXT("InfoBoxGeometry");
-  DWORD Temp;
+  DWORD Temp=0;
   GetFromRegistry(szRegistryInfoBoxGeometry,&Temp);
   InfoBoxGeometry = Temp;
 
@@ -259,6 +259,7 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   if (InfoBoxGeometry==6) {
     gnav = true;
   }
+
   if (gnav) {
     numInfoWindows = 9;
   } else if (square) {
@@ -472,13 +473,21 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
       if (i==0) {
 	*sizex = IBLSCALE(52);
 	*sizey = IBLSCALE(37);
-	*x = rc.left+3+hwidth*3-3;
-	*y = (rc.bottom-(*sizey)-3-InfoBoxLayout::ControlHeight);
+	*x = rc.left-(*sizex); // JMW make it offscreen for now
+	*y = (rc.bottom-(*sizey));
       } else {
-	*sizex = IBLSCALE(52);
-	*sizey = IBLSCALE(37);
-	*x = rc.left+3+hwidth*(i-1);
-	*y = (rc.bottom-(*sizey)-InfoBoxLayout::ControlHeight);
+        if (i<5) {
+          *sizex = IBLSCALE(52);
+          *sizey = IBLSCALE(40);
+          *x = rc.left+3+hwidth*(i-1);
+          *y = (rc.bottom-(*sizey));
+        } else {
+          *sizex = IBLSCALE(80);
+          *sizey = IBLSCALE(40);
+          *x = rc.right-(*sizex);
+          int k = (rc.bottom-rc.top-IBLSCALE(40)-IBLSCALE(6));
+          *y = (rc.top+(i-5)*k/6+(*sizey/2+IBLSCALE(3)));
+        }
       }
       break;
 
@@ -489,7 +498,7 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
       if (i==0) {
 	*sizex = IBLSCALE(52);
 	*sizey = IBLSCALE(20);
-	*x = rc.left+3-(*sizex); // JMW make it offscreen for now
+	*x = rc.left-(*sizex); // JMW make it offscreen for now
 	*y = (rc.top);
       } else {
 	if (i<5) {

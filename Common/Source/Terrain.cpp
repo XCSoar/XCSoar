@@ -465,14 +465,6 @@ public:
     // more obvious
 
     int pval = 0; // y*ixs+x;
-    if (rc.top>0) {
-      pval = ixs*(rc.top/dtquant-1);
-      myhbuf+= pval;
-      Y0 += rc.top-dtquant;
-      Y1 -= rc.top-dtquant;
-       // this is a cheat since we don't really know how
-       // far the bottom goes down
-    }
 
     // JMW attempting to remove wobbling terrain
     x = ((X0+X1)/2);
@@ -836,7 +828,8 @@ void OptimizeTerrainCache()
 }
 
 
-void DrawTerrain( const HDC hdc, const RECT rc, const double sunazimuth, const double sunelevation)
+void DrawTerrain( const HDC hdc, const RECT rc,
+                  const double sunazimuth, const double sunelevation)
 {
 
   DWORD tm, tmstart;

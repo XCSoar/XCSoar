@@ -460,7 +460,17 @@ int dlgWayPointSelect(void){
   LowLimit = 0;
   ItemIndex = -1;
 
-  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgWayPointSelect.xml")), hWndMainWindow,
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable,
+                        LocalPathS(TEXT("dlgWayPointSelect_L.xml")),
+                        hWndMainWindow,
+                        TEXT("IDR_XML_WAYPOINTSELECT_L"));
+  } else
+#endif
+  wf = dlgLoadFromXML(CallBackTable,
+                      LocalPathS(TEXT("dlgWayPointSelect.xml")),
+                      hWndMainWindow,
 		      TEXT("IDR_XML_WAYPOINTSELECT"));
 
   if (!wf) return -1;

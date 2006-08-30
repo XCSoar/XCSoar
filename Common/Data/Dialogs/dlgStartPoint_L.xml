@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmStartPoint" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Alternate Start Points" Font=2  BackColor=0xDADBAB>
+
+  <WndFrame X=0 Y=0 Width=0 Height=10 Font=2 />
+
+  <WndButton   Name="cmdClose" Caption="Close"    X=2 Y=240 Width=98  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
+
+  <WndButton   Name="cmdClear" Caption="Clear"    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnClearClicked"/>
+
+  <WndListFrame Name="frmStartPointList" X=102 Y=0 Width=230 Height=230 Font=2 OnListInfo="OnStartPointListInfo">
+    <WndOwnerDrawFrame Name="frmStartPointListEntry" X=2 Y=2 Width=230 Height=18 Font=2  OnPaint="OnStartPointPaintListItem"/>
+  </WndListFrame>
+
+</WndForm>
+
+</PMML>

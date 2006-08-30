@@ -259,6 +259,15 @@ void dlgWayPointDetailsShowModal(void){
   int sunsetmins;
   WndProperty *wp;
 
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable,
+                        LocalPathS(TEXT("dlgWayPointDetails_L.xml")),
+                        hWndMainWindow,
+                        TEXT("IDR_XML_WAYPOINTDETAILS_L"));
+
+  } else
+#endif
   wf = dlgLoadFromXML(CallBackTable,
 		      LocalPathS(TEXT("dlgWayPointDetails.xml")),
 		      hWndMainWindow,

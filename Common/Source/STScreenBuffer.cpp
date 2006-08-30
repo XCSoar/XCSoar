@@ -265,10 +265,18 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest, int cx, int cy)
 
   HBITMAP m_hOldBitmap = (HBITMAP)::SelectObject(memDc, m_hBitmap);
 
-  int cropsize = m_nHeight*cx/cy;
+  int cropsize;
+  if (cy<m_nWidth) {
+    cropsize = m_nHeight*cx/cy;
+  } else {
+    // NOT TESTED!
+    cropsize = m_nWidth;
+  }
 
-  bResult = StretchBlt(*pDC, ptDest.x, ptDest.y,
-		       cx, cy, memDc,
+  bResult = StretchBlt(*pDC,
+                       ptDest.x, ptDest.y,
+		       cx, cy,
+                       memDc,
 		       Origin.x, Origin.y,
 		       cropsize, m_nHeight, SRCCOPY);
 

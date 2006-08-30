@@ -58,28 +58,28 @@ event=Logger stop
 # clear main entry buttons
 
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Bugs Ballast Wind Vario VarioTest
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Info3 Bugs Ballast Wind Vario VarioTest pan
 type=key
 data=APP1
 label=
 event=Null
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Bugs Ballast Wind Vario VarioTest
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Info3 Bugs Ballast Wind Vario VarioTest pan
 type=key
 data=APP2
 label=
 event=Null
 location=2
 
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Info3 pan
 type=key
 data=APP3
 label=
 event=Null
 location=3
 
-mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Bugs Ballast Wind Vario VarioTest
+mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Bugs Ballast Wind Vario VarioTest pan
 type=key
 data=APP4
 label=
@@ -121,6 +121,61 @@ label=
 event=Null
 location=9
 
+###### pan mode
+
+mode=pan
+type=key
+data=DOWN
+event=Pan down
+
+mode=pan
+type=key
+data=UP
+event=Pan up
+
+mode=pan
+type=key
+data=LEFT
+event=Pan left
+
+mode=pan
+type=key
+data=RIGHT
+event=Pan right
+
+mode=pan
+type=key
+data=6
+event=Pan supertoggle
+label=Pan\nOff
+location=5
+
+mode=pan
+type=key
+data=7
+event=Zoom in
+label=Zoom\nin
+location=6
+
+mode=pan
+type=key
+data=8
+event=Zoom out
+label=Zoom\nout
+location=7
+
+mode=pan
+type=key
+data=9
+event=NearestWaypointDetails pan
+label=Nearest\nWaypoint
+location=8
+
+mode=pan
+type=key
+data=0
+label=
+location=9
 
 ###### main entry buttons
 
@@ -359,7 +414,8 @@ location=7
 mode=Nav2
 type=key
 data=9
-label=
+event=FlightMode finalglide toggle
+label=Force\nFinal
 location=8
 
 mode=Nav2
@@ -419,7 +475,7 @@ type=key
 data=0
 event=Pan show
 event=Pan supertoggle
-label=Pan
+label=Pan\nOn
 location=9
 
 mode=Display1
@@ -708,7 +764,7 @@ location=5
 mode=Info1
 type=key
 data=7
-event=NearestWaypointDetails pan
+event=NearestWaypointDetails aircraft
 event=Mode default
 label=Nearest\nWaypoint
 location=6
@@ -743,7 +799,7 @@ location=9
 mode=Info2
 type=key
 data=APP4
-event=Mode default
+event=Mode Info3
 label=/Info
 location=4
 
@@ -783,5 +839,45 @@ event=RepeatStatusMessage
 label=Message\nRepeat
 location=9
 
-# -----------------------------------------------------------------------
+# -------------
+# mode=Info3
+# -------------
+mode=Info3
+type=key
+data=APP4
+event=Mode default
+label=/Info
+location=4
+
+mode=Info3
+type=key
+data=6
+event=Exit system
+event=Mode default
+label=Exit
+location=5
+
+mode=Info3
+type=key
+data=7
+label=
+location=6
+
+mode=Info3
+type=key
+data=8
+label=
+location=7
+
+mode=Info3
+type=key
+data=9
+label=
+location=8
+
+mode=Info3
+type=key
+data=0
+label=
+location=9
 

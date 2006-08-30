@@ -68,6 +68,9 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
   TCHAR sTmp[120];
   LockTaskData();
 
+  int p1 = 125;
+  int p2 = 175;
+
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
 
@@ -81,14 +84,14 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 		Task[i].Leg*DISTANCEMODIFY,
 		Units::GetDistanceName());
 
-      ExtTextOut(hDC, 125*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-      ETO_OPAQUE, NULL,
-      sTmp, _tcslen(sTmp), NULL);
+      ExtTextOut(hDC, p1*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+                 ETO_OPAQUE, NULL,
+                 sTmp, _tcslen(sTmp), NULL);
 
-    _stprintf(sTmp, TEXT("%d°"),  iround(Task[i].InBound));
-    ExtTextOut(hDC, 175*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-      ETO_OPAQUE, NULL,
-      sTmp, _tcslen(sTmp), NULL);
+      _stprintf(sTmp, TEXT("%d°"),  iround(Task[i].InBound));
+      ExtTextOut(hDC, p2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+                 ETO_OPAQUE, NULL,
+                 sTmp, _tcslen(sTmp), NULL);
 
     }
 
@@ -113,7 +116,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 	  _stprintf(sTmp, TEXT("%.0f %s"), lengthtotal*DISTANCEMODIFY,
 		    Units::GetDistanceName());
 	}
-	ExtTextOut(hDC, 125*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+	ExtTextOut(hDC, p1*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		   ETO_OPAQUE, NULL,
 		   sTmp, _tcslen(sTmp), NULL);
 
@@ -132,7 +135,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 		  DISTANCEMODIFY*lengthtotal,
 		  DISTANCEMODIFY*d1,
 		  Units::GetDistanceName());
-	ExtTextOut(hDC, 125*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+	ExtTextOut(hDC, p1*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		   ETO_OPAQUE, NULL,
 		   sTmp, _tcslen(sTmp), NULL);
       }
@@ -342,6 +345,16 @@ void dlgTaskOverviewShowModal(void){
 
   showAdvanced = false;
 
+  wf = NULL;
+
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable,
+                        LocalPathS(TEXT("dlgTaskOverview_L.xml")),
+                        hWndMainWindow,
+                        TEXT("IDR_XML_TASKOVERVIEW_L"));
+  } else
+#endif
   wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgTaskOverview.xml")),
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TASKOVERVIEW"));

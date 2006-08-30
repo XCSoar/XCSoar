@@ -298,7 +298,6 @@ void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
 
   /*
 
-
   // this ensures that if a repeated message is played,
   // and another message from XCSoar interrupts it,
   // and then it returns to this message type, it will
@@ -319,7 +318,6 @@ void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
       }
     }
   }
-
 
   */
 
