@@ -2043,6 +2043,12 @@ void InputEvents::eventBrightness(TCHAR *misc) {
   dlgBrightnessShowModal();
 }
 
+
+void InputEvents::eventExit(TCHAR *misc) {
+  SendMessage(hWndMainWindow, WM_CLOSE,
+	      NULL, NULL);
+}
+
 // JMW TODO: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.
 // this allows the buttons to indicate whether things are enabled/disabled

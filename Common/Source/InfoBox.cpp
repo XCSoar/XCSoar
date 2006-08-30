@@ -459,6 +459,8 @@ void InfoBox::PaintSelector(void){
   if (mHasFocus){
     HPEN oldPen = (HPEN)SelectObject(mHdc, hPenSelector);
 
+#ifndef NOLINETO
+
     MoveToEx(mHdc, mWidth-SELECTORWIDTH-1, 0, NULL);
     LineTo(mHdc, mWidth-1, 0);
     LineTo(mHdc, mWidth-1, SELECTORWIDTH+1);
@@ -474,6 +476,46 @@ void InfoBox::PaintSelector(void){
     MoveToEx(mHdc, 0, SELECTORWIDTH+1, NULL);
     LineTo(mHdc, 0, 0);
     LineTo(mHdc, SELECTORWIDTH+1, 0);
+
+#else
+    POINT p[2];
+    p[1].x = mWidth-SELECTORWIDTH-1;
+    p[1].y = 0;
+    p[2].x = mWidth-1;
+    p[2].y = 0;
+    Polyline(mHdc, p, 2);
+    p[1].x = mWidth-1;
+    p[1].y = SELECTORWIDTH+1;
+    Polyline(mHdc, p, 2);
+
+    p[1].x = mWidth-1;
+    p[1].y = mHeight-SELECTORWIDTH-2;
+    p[2].x = mWidth-1;
+    p[2].y = mHeight-1;
+    Polyline(mHdc, p, 2);
+    p[1].x = mWidth-SELECTORWIDTH-1;
+    p[1].y = mHeight-1;
+    Polyline(mHdc, p, 2);
+    
+    p[1].x = SELECTORWIDTH+1;
+    p[1].y = mHeight-1;
+    p[2].x = 0;
+    p[2].y = mHeight-1;
+    Polyline(mHdc, p, 2);
+    p[1].x = 0;
+    p[1].y = mHeight-SELECTORWIDTH-2;
+    Polyline(mHdc, p, 2);
+
+    p[1].x = 0;
+    p[1].y = SELECTORWIDTH+1;
+    p[2].x = 0;
+    p[2].y = 0;
+    Polyline(mHdc, p, 2);
+    p[1].x = SELECTORWIDTH+1;
+    p[1].y = 0;
+    Polyline(mHdc, p, 2);
+
+#endif
 
     SelectObject(mHdc,oldPen);
   }
@@ -509,6 +551,8 @@ void InfoBox::Paint(void){
   if (mBorderKind != 0){
 
     HPEN oldPen = (HPEN)SelectObject(mHdcBuf, mhPenBorder);
+#ifndef NOLINETO
+
     if (mBorderKind & BORDERTOP){
       MoveToEx(mHdcBuf, 0, 0, NULL);
       LineTo(mHdcBuf, mWidth, 0);
@@ -525,6 +569,31 @@ void InfoBox::Paint(void){
       MoveToEx(mHdcBuf, 0, mHeight-DEFAULTBORDERPENWIDTH, NULL);
       LineTo(mHdcBuf, 0, -DEFAULTBORDERPENWIDTH);
     }
+#else
+    POINT p[2];
+    if (mBorderKind & BORDERTOP){
+      p[1].x = 0; p[1].y= 0;
+      p[2].x = mWidth; p[2].y= 0;
+      Polyline(mHdcBuf, p, 2);
+    }
+    if (mBorderKind & BORDERRIGHT){
+      p[1].x = mWidth-DEFAULTBORDERPENWIDTH; p[1].y= 0;
+      p[2].x = mWidth-DEFAULTBORDERPENWIDTH; p[2].y= mHeight;
+      Polyline(mHdcBuf, p, 2);
+    }
+    if (mBorderKind & BORDERBOTTOM){
+      p[1].x = mWidth-DEFAULTBORDERPENWIDTH; p[1].y= mHeight-DEFAULTBORDERPENWIDTH;
+      p[2].x = -DEFAULTBORDERPENWIDTH; p[2].y= mHeight-DEFAULTBORDERPENWIDTH;
+      Polyline(mHdcBuf, p, 2);
+    }
+    if (mBorderKind & BORDERLEFT){
+      p[1].x = 0; p[1].y= mHeight-DEFAULTBORDERPENWIDTH;
+      p[2].x = 0; p[2].y= -DEFAULTBORDERPENWIDTH;
+      Polyline(mHdcBuf, p, 2);
+    }
+
+#endif
+
     SelectObject(mHdcBuf,oldPen);
   }
 

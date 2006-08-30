@@ -35,6 +35,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "Externs.h"
 #include "dlgTools.h"
+#include "InfoBoxLayout.h"
 
 
 static int page=0;
@@ -78,6 +79,13 @@ void dlgStartupShowModal(void){
   WndProperty* wp;
   StartupStore(TEXT("Startup dialog\r\n"));
 
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgStartup_L.xml")), 
+                        hWndMainWindow,
+                        TEXT("IDR_XML_STARTUP_L"));
+  } else
+#endif
   wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgStartup.xml")), 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_STARTUP"));

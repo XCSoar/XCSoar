@@ -49,15 +49,12 @@
 	// Pocket PC 2002
 
 //#define ASSERT(x) 0
-
 		#ifndef NOCLEARTYPE
 		#define NOCLEARTYPE
 		#endif
-
   	#ifndef NOLINETO
-    #define NOLINETO
+        #define NOLINETO
 		#endif
-
 
 	#elif (WIN32_PLATFORM_PSPC == 400)
 	// Pocket PC 2003

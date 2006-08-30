@@ -32,7 +32,7 @@ Copyright_License {
 
 #include "stdafx.h"
 #include "XCSoar.h"
-
+#include "InfoBoxLayout.h"
 #include "WindowControls.h"
 #include "Statistics.h"
 #include "Externs.h"
@@ -1548,6 +1548,14 @@ void dlgAnalysisShowModal(void){
   olcvalid = false;
   olcfinished = false;
   
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable, 
+                        LocalPathS(TEXT("dlgAnalysis_L.xml")), 
+                        hWndMainWindow,
+                        TEXT("IDR_XML_ANALYSIS_L"));
+  } else 
+#endif
   wf = dlgLoadFromXML(CallBackTable, 
 		      LocalPathS(TEXT("dlgAnalysis.xml")), 
 		      hWndMainWindow,

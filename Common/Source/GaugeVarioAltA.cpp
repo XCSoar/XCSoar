@@ -160,18 +160,26 @@ void GaugeVario::Create() {
 
   Render();
 
+  ShowWindow(hWndVarioWindow, SW_HIDE);
+  Show(true);
+
 }
 
 void GaugeVario::Show(bool doshow) {
-  EnableVarioGauge = doshow;
-  static bool lastvisible = true;
-  if (EnableVarioGauge && !lastvisible) {
-    ShowWindow(hWndVarioWindow, SW_SHOW);
+
+  if (InfoBoxLayout::landscape) {
+    EnableVarioGauge = doshow;
+
+    static bool lastvisible = false;
+    if (EnableVarioGauge && !lastvisible) {
+      ShowWindow(hWndVarioWindow, SW_SHOW);
+    }
+    if (!EnableVarioGauge && lastvisible) {
+      ShowWindow(hWndVarioWindow, SW_HIDE);
+    }
+    lastvisible = EnableVarioGauge;
   }
-  if (!EnableVarioGauge && lastvisible) {
-    ShowWindow(hWndVarioWindow, SW_HIDE);
-  }
-  lastvisible = EnableVarioGauge;
+
 }
 
 

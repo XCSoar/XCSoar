@@ -272,6 +272,9 @@ unsigned char audio_sound_beep(unsigned short i) {
 // Retrieve the next sound byte
 //
 unsigned char audio_get_sound_byte(void) {
+
+  return 0x80;
+
   unsigned char beepthis;
   bool makebeepsound;
 

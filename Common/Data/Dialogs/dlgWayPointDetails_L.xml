@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmWayPointInfo" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Waypoint Info" Font=2  BackColor=0xDADBAB>
+
+  <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
+  <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=240 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
+  <WndButton Name="cmdClose" Caption="Close" X=5 Y=270 Width=60  Height=28 Font=2 Tag=3 />
+  
+  <WndFrame Name="frmInfos" X=0 Y=0 Width=240 Height=220 Font=2>
+    
+    <WndProperty Name="prpWpComment" Caption="Comment"       X=2 Y=2  Width=230 Height=40 CaptionWidth=100 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpLatitude"  Caption="Latitude"      X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpLongitude" Caption="Longitude"     X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpAltitude"  Caption="Elevation"     X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpSunset"    Caption="Sunset"        X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpDistance"  Caption="Distance"      X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpBearing"   Caption="Bearing"       X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpMc0"       Caption="Alt diff Mc 0" X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <aWndProperty Name="prpMc1"       Caption="Alt diff Mc safety" X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpMc2"       Caption="Alt diff Mc current" X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+
+  </WndFrame>
+
+  <WndListFrame Name=frmDetails X=0 Y=0 Width=240 Height=220 Font=3 
+    OnListInfo="OnDetailsListInfo">
+    <WndOwnerDrawFrame Name=frmDetailsEntry X=2 Y=2 Width=235 Height=18 Font=3  OnPaint="OnPaintDetailsListItem"/>
+  </WndListFrame>
+
+  <WndFrame Name="frmCommands" X=0 Y=0 Width=240 Height=220 Font=2 Visible=0>
+    
+    <WndButton Name="cmdGoto"        Caption="Goto (and clear task)" X=50 Y=10 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdReplace"     Caption="Replace in task"       X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdInserInTask" Caption="Insert in task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdAppendInTask" Caption="Append to task"        X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdRemoveFromTask" Caption="Remove from task"      X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdNewHome"     Caption="Set as new home"       X=50 Y=-1 Width=150  Height=30 Font=2 />
+    <WndButton Name="cmdTeamCode"     Caption="Set teamcode"       X=50 Y=-1 Width=150  Height=30 Font=2 />
+
+  </WndFrame>
+
+  <WndOwnerDrawFrame Name="frmImage" X=0 Y=0 Width=240 Height=220 Font=2 Visible=0>
+  </WndOwnerDrawFrame>
+
+</WndForm>    
+
+</PMML>

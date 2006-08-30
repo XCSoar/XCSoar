@@ -36,6 +36,7 @@ Copyright_License {
 #include "InputEvents.h"
 #include "WindowControls.h"
 #include "dlgTools.h"
+#include "InfoBoxLayout.h"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
@@ -63,6 +64,13 @@ void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText) {
     return;
   }
 
+#ifndef GNAV
+  if (!InfoBoxLayout::landscape) {
+    wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgHelp_L.xml")),
+                        hWndMainWindow,
+                        TEXT("IDR_XML_HELP_L"));
+  } else
+#endif
   wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgHelp.xml")), 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_HELP"));

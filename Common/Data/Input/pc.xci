@@ -167,7 +167,7 @@ event=StatusMessage Task finished
 # mode=default
 # ------------
 
-mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2 Preview
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Info3 Vario1 Vario2 Preview
 type=key
 data=ESCAPE
 event=Mode default
@@ -184,19 +184,19 @@ event=Pan supertoggle
 
 # clear main entry buttons
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2 pan Preview
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Info3 Vario1 Vario2 pan Preview
 type=key
 data=APP1
 label= 
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Vario1 Vario2 pan Preview
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Info3 Vario1 Vario2 pan Preview
 type=key
 data=APP2
 label= 
 location=2
 
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 pan Preview
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Info3 pan Preview
 type=key
 data=APP3
 label= 
@@ -933,7 +933,7 @@ location=9
 mode=Info2
 type=key
 data=APP4
-event=Mode default
+event=Mode Info3
 label=/Info
 location=4
 
@@ -973,4 +973,45 @@ event=RepeatStatusMessage
 label=Message\nRepeat
 location=9
 
-# =============================
+# -------------
+# mode=Info3
+# -------------
+mode=Info3
+type=key
+data=APP4
+event=Mode default
+label=/Info
+location=4
+
+mode=Info3
+type=key
+data=6
+event=Exit system
+event=Mode default
+label=Exit
+location=5
+
+mode=Info3
+type=key
+data=7
+label=
+location=6
+
+mode=Info3
+type=key
+data=8
+label=
+location=7
+
+mode=Info3
+type=key
+data=9
+label=
+location=8
+
+mode=Info3
+type=key
+data=0
+label=
+location=9
+

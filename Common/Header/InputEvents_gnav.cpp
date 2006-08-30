@@ -81,6 +81,10 @@ mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),1,event_id);
+Key2Event[mode_id][VK_APP1] = event_id;
+
 mode_id = InputEvents::mode2int(TEXT("Bugs"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
@@ -98,6 +102,10 @@ makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("VarioTest"), true);
+makeLabel(mode_id,TEXT(""),1,event_id);
+Key2Event[mode_id][VK_APP1] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
@@ -131,6 +139,10 @@ mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),2,event_id);
+Key2Event[mode_id][VK_APP2] = event_id;
+
 mode_id = InputEvents::mode2int(TEXT("Bugs"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
@@ -148,6 +160,10 @@ makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("VarioTest"), true);
+makeLabel(mode_id,TEXT(""),2,event_id);
+Key2Event[mode_id][VK_APP2] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
@@ -178,6 +194,14 @@ makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
+makeLabel(mode_id,TEXT(""),3,event_id);
+Key2Event[mode_id][VK_APP3] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),3,event_id);
+Key2Event[mode_id][VK_APP3] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
@@ -228,6 +252,10 @@ makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("VarioTest"), true);
+makeLabel(mode_id,TEXT(""),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
+
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
@@ -258,6 +286,55 @@ Key2Event[mode_id]['9'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
+makeLabel(mode_id,TEXT(""),9,event_id);
+Key2Event[mode_id]['0'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("down"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_DOWN] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("up"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_UP] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("left"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_LEFT] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("right"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+Key2Event[mode_id][VK_RIGHT] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT("Pan\nOff"),5,event_id);
+Key2Event[mode_id]['6'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("in"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT("Zoom\nin"),6,event_id);
+Key2Event[mode_id]['7'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("out"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT("Zoom\nout"),7,event_id);
+Key2Event[mode_id]['8'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventNearestWaypointDetails, TEXT("pan"), event_id);
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
+makeLabel(mode_id,TEXT("Nearest\nWaypoint "),8,event_id);
+Key2Event[mode_id]['9'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
@@ -453,8 +530,9 @@ makeLabel(mode_id,TEXT("Task\nAbort"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventFlightMode, TEXT("finalglide toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT(""),8,event_id);
+makeLabel(mode_id,TEXT("Force\nFinal"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
@@ -502,7 +580,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventPan, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Pan"),9,event_id);
+makeLabel(mode_id,TEXT("Pan\nOn"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -733,7 +811,7 @@ makeLabel(mode_id,TEXT("Waypoint\nDetails"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNearestWaypointDetails, TEXT("pan"), event_id);
+event_id = InputEvents::makeEvent(&eventNearestWaypointDetails, TEXT("aircraft"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
 makeLabel(mode_id,TEXT("Nearest\nWaypoint"),6,event_id);
@@ -761,7 +839,7 @@ makeLabel(mode_id,TEXT("Analysis\nShow"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("Info3"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT("/Info"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
@@ -794,5 +872,38 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventRepeatStatusMessage, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT("Message\nRepeat"),9,event_id);
+Key2Event[mode_id]['0'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT("/Info"),4,event_id);
+Key2Event[mode_id][VK_APP4] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventExit, TEXT("system"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT("Exit"),5,event_id);
+Key2Event[mode_id]['6'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),6,event_id);
+Key2Event[mode_id]['7'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),7,event_id);
+Key2Event[mode_id]['8'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),8,event_id);
+Key2Event[mode_id]['9'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Info3"), true);
+makeLabel(mode_id,TEXT(""),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
