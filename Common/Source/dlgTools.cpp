@@ -265,6 +265,8 @@ void GetDefaultWindowControlProps(XMLNode *Node, TCHAR *Name, int *X, int *Y, in
   *Font = StringToIntDflt(Node->getAttribute(TEXT("Font")), -1);
   _tcscpy(Name, StringToStringDflt(Node->getAttribute(TEXT("Name")), TEXT("")));
   _tcscpy(Caption, StringToStringDflt(Node->getAttribute(TEXT("Caption")), TEXT("")));
+  /* TODO - Temporary double handling to fix "const unsigned short *" to "unsigned short *" problem */
+  _tcscpy(Caption,gettext(Caption));
 
 }
 
@@ -611,7 +613,7 @@ void LoadChildsFromXML(WindowControl *Parent,
       MultiLine =
         StringToIntDflt(childNode.getAttribute(TEXT("MultiLine")),
                         0);
-      ReadOnly =
+      ReadOnly = \
         StringToIntDflt(childNode.getAttribute(TEXT("ReadOnly")),
                         0);
 
@@ -623,9 +625,12 @@ void LoadChildsFromXML(WindowControl *Parent,
               StringToStringDflt(childNode.getAttribute(TEXT("OnHelp")),
                                  TEXT("")));
 
-      _tcscpy(Caption,
-              StringToStringDflt(childNode.getAttribute(TEXT("Caption")),
-                                 TEXT("")));
+      _tcscpy(
+		  Caption,
+			StringToStringDflt(childNode.getAttribute(TEXT("Caption")), TEXT(""))
+		);
+		/* TODO - Temporary double handling to fix "const unsigned short *" to "unsigned short *" problem */
+	  _tcscpy(Caption, gettext(Caption));
 
       WC = W =
         new WndProperty(Parent, Name, Caption, X, Y,
