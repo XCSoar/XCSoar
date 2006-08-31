@@ -1,151 +1,137 @@
+
 # -------------------
 # GlideComputerEvents
 # -------------------
 mode=default
 type=gce
+data=TASK_START
+event=StatusMessage Task start
+
+mode=default
+type=gce
+data=TASK_FINISH
+event=StatusMessage Task finish
+
+mode=default
+type=gce
 data=GPS_CONNECTION_WAIT
 event=StatusMessage Waiting for GPS Connection
-title=Waiting for GPS Connection
 
 mode=default
 type=gce
 data=COMMPORT_RESTART
 event=StatusMessage Restarting Comm Ports
-title=Waiting for COMM Port
 
 mode=default
 type=gce
 data=GPS_FIX_WAIT
 event=StatusMessage Waiting for GPS Fix
-title=Waiting for GPS Fix
 
 mode=default
 type=gce
 data=STARTUP_SIMULATOR
 event=StatusMessage Simulation\r\nNothing is real!
-title=The simulator has started
+event=TaskLoad Default.tsk
 
 mode=default
 type=gce
 data=STARTUP_REAL
 event=StatusMessage Maintain effective\r\nLOOKOUT at all times
-title=The real XCS has started
+event=TaskLoad Default.tsk
 
 mode=default
 type=gce
 data=TAKEOFF
-event=StatusMessage TAKEOFF\r\nLog Started
 event=Logger start
-title=Takeoff
-note=This event could be useful for automatically starting the logger.
+event=StatusMessage Takeoff
 
 mode=default
 type=gce
 data=LANDING
-event=StatusMessage LANDING\r\nLog Stopped
+event=StatusMessage Landing
 event=Logger stop
-title=Landing
-
-mode=default
-type=gce
-data=FLIGHTMODE_FINALGLIDE_ABOVE
-event=StatusMessage Above Final Glide
-
-mode=default
-type=gce
-data=FLIGHTMODE_FINALGLIDE_BELOW
-event=StatusMessage Below Final Glide
-
-mode=default
-type=gce
-data=FLIGHTMODE_FINALGLIDE_TERRAIN
-event=StatusMessage Final Glide Through Terrain
-
-mode=default
-type=gce
-data=TASK_FINISH
-event=StatusMessage Task finished
 
 # ------------
 # mode=default
 # ------------
 
-mode=default
+# clear main entry buttons
+
+
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Info3 Bugs Ballast Wind Vario VarioTest pan
 type=key
 data=APP1
-event=Mode Menu1
 label= 
+event=Null
 location=1
-title=Display main menu buttons
 
-mode=default
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Info3 Bugs Ballast Wind Vario VarioTest pan
 type=key
 data=APP2
-event=SnailTrail show
-event=SnailTrail toggle
 label= 
+event=Null
 location=2
-title=Toggle snail trail (where was I)
 
-mode=default
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Info3 pan
 type=key
 data=APP3
-event=ScreenModes toggle
 label= 
+event=Null
 location=3
-title=Toggle the screen modes (full, navboxes)
 
-mode=default
+mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Bugs Ballast Wind Vario VarioTest pan
 type=key
 data=APP4
-event=StatusMessage Dropped marker
-event=MarkLocation
 label= 
+event=Null
 location=4
-title=Mark the current location into a file
 
 mode=default
 type=key
-data=LEFT
-event=Zoom auto show
-event=Zoom auto toggle
-title=Toggle the automatic zoom
+data=6
+label= 
+event=Null
+location=5
 
 mode=default
 type=key
-data=RIGHT
-event=Pan show
-event=Pan supertoggle
-title=Toggle between Pan mode and normal
+data=7
+label= 
+event=Null
+location=6
 
 mode=default
 type=key
-data=DOWN
-event=Zoom out
-title=Zoom out
+data=8
+label= 
+event=Null
+location=7
 
 mode=default
 type=key
-data=UP
-event=Zoom in
-title=Zoom in
+data=9
+label= 
+event=Null
+location=8
 
 mode=default
 type=key
-data=RETURN
-event=ClearWarningsOrTerrainTopology
-title=Acknowledge messages OR Toggle Terrain/Topology
+data=0
+label= 
+event=Null
+location=9
 
-
-# Pan mode
+###### pan mode
 
 mode=pan
 type=key
-data=RETURN
-event=Pan supertoggle
-label=Pan
-location=1
+data=DOWN
+event=Pan down
 
+mode=pan
+type=key
+data=UP
+event=Pan up
 
 mode=pan
 type=key
@@ -159,13 +145,96 @@ event=Pan right
 
 mode=pan
 type=key
-data=UP
-event=Pan up
+data=6
+event=Pan supertoggle
+label=Pan\nOff
+location=5
 
 mode=pan
 type=key
+data=7
+event=Zoom in
+label=Zoom\nin
+location=6
+
+mode=pan
+type=key
+data=8
+event=Zoom out
+label=Zoom\nout
+location=7
+
+mode=pan
+type=key
+data=9
+event=NearestWaypointDetails pan
+label=Nearest\nWaypoint 
+location=8
+
+mode=pan
+type=key
+data=0
+label= 
+location=9
+
+###### main entry buttons (extra mode entries allow menu to change easily)
+
+mode=default Display1 Display2 Display3 Config1 Config2 Config3 Info1 Info2 Info3
+type=key
+data=APP1
+event=Mode Nav1
+label= 
+location=1
+
+mode=default Nav1 Nav2 Nav3 Config1 Config2 Config3 Info1 Info2 Info3
+type=key
+data=APP2
+event=Mode Display1
+label= 
+location=2
+
+mode=default Nav1 Nav2 Nav3 Display1 Display2 Display3 Info1 Info2 Info3
+type=key
+data=APP3
+event=Mode Config1
+label= 
+location=3
+
+mode=default Nav1 Nav2 Nav3 Display1 Display2 Display3 Config1 Config2 Config3
+type=key
+data=APP4
+event=Mode Info1
+label= 
+location=4
+
+# Always active buttons. (unless over-written)
+
+mode=default
+type=key
 data=DOWN
-event=Pan down
+event=Zoom out
+
+mode=default
+type=key
+data=UP
+event=Zoom in
+
+mode=default
+type=key
+data=RETURN
+event=ClearAirspaceWarnings
+event=ClearStatusMessages
+
+mode=default
+type=key
+data=l
+event=MarkLocation
+
+mode=default
+type=key
+data=r
+event=ScreenModes toggle
+
 
 # ------------
 # mode=infobox
@@ -224,67 +293,41 @@ type=key
 data=RETURN
 event=DoInfoKey return
 
-#==============
-# Mode Menu1
-#==============
-
-mode=Menu1
+mode=infobox
 type=key
-data=APP1
-event=Mode Nav1
-label=Nav/
-location=1
+data=6
+label= 
+location=5
 
-mode=Menu1
+mode=infobox
 type=key
-data=APP2
-event=Mode Display1
-label=Display/
-location=2
+data=7
+label= 
+location=6
 
-mode=Menu1
+mode=infobox
 type=key
-data=APP3
-event=Mode Config1
-label=Config/
-location=3
+data=8
+label= 
+location=7
 
-mode=Menu1
+mode=infobox
 type=key
-data=APP4
-event=Mode Info1
-label=Info/
-location=4
+data=9
+label= 
+location=8
 
-#==============
-# Mode Nav1
-#==============
-
-mode=Nav1
+mode=infobox
 type=key
-data=APP4
-event=StatusMessage Dropped marker
-event=MarkLocation
-label=Mark
-location=4
-title=Mark the current location
+data=0
+label= 
+location=9
 
-mode=Nav1
-type=key
-data=APP2
-#event=Mode default
-event=WaypointDetails current
-label=Waypt detail
-location=2
-title=Details on the next waypoint
+# -----------------------------------------------------------------------
 
-mode=Nav1
-type=key
-data=APP3
-event=AbortTask toggle
-label=Abort task
-location=3
-title=Toggle between abort and resume task
+# -------------
+# mode=Nav1
+# -------------
 
 mode=Nav1
 type=key
@@ -293,35 +336,48 @@ event=Mode Nav2
 label=Nav/
 location=1
 
-
-#==============
-# Mode Nav2
-#==============
-
-mode=Nav2
+mode=Nav1
 type=key
-data=APP4
-event=Logger show
-event=Logger toggle ask
-label=Log
-location=4
-title=Turn on logger ?
+data=6
+event=Calculator
+event=Mode default
+label=Task\nCalc
+location=5
 
-mode=Nav2
+mode=Nav1
 type=key
-data=APP2
+data=7
+event=ArmAdvance show
+event=ArmAdvance on
+event=Mode default
+label=Arm\nAdvance
+location=6
+
+mode=Nav1
+type=key
+data=8
 event=AdjustWaypoint previous
-label=Waypt prev
-location=2
-title=Switch to previous waypoint
+label=Waypoint\nPrevious
+location=7
 
-mode=Nav2
+mode=Nav1
 type=key
-data=APP3
+data=9
 event=AdjustWaypoint next
-label=Waypt next
-location=3
-title=Switch to next waypoint
+label=Waypoint\nNext
+location=8
+
+mode=Nav1
+type=key
+data=0
+event=Mode default
+event=WaypointDetails select
+label=Waypoint\nLookup
+location=9
+
+# -------------
+# mode=Nav2
+# -------------
 
 mode=Nav2
 type=key
@@ -331,32 +387,48 @@ label=/Nav
 location=1
 
 
-#==============
-# Mode Display1
-#==============
-
-mode=Display1
+mode=Nav2
 type=key
-data=APP1
-event=TerrainTopology show
-event=TerrainTopology toggle
-label=Terrain
-location=1
+data=6
+event=Setup Task
+event=Mode default
+label=Task\nEdit
+location=5
 
-mode=Display1
+mode=Nav2
 type=key
-data=APP4
-event=ScreenModes togglefull
-label=Full screen
-location=4
+data=7
+event=StatusMessage Task saved
+event=TaskSave Default.tsk
+label=Task\nSave
+location=6
 
-mode=Display1
+mode=Nav2
 type=key
-data=APP3
-event=Pan show
-event=Pan supertoggle
-label=Pan
-location=3
+data=8
+event=Mode default
+event=AbortTask toggle
+label=Task\nAbort
+location=7
+
+mode=Nav2
+type=key
+data=9
+event=FlightMode finalglide toggle
+label=Force\nFinal
+location=8
+
+mode=Nav2
+type=key
+data=0
+event=Setup Teamcode
+event=Mode default
+label=Team\nCode
+location=9
+
+# -------------
+# mode=Display1
+# -------------
 
 mode=Display1
 type=key
@@ -364,6 +436,47 @@ data=APP2
 event=Mode Display2
 label=Display/
 location=2
+
+
+mode=Display1
+type=key
+data=6
+event=Zoom in
+label=Zoom\nIn
+location=5
+
+mode=Display1
+type=key
+data=7
+event=Zoom out
+label=Zoom\nOut
+location=6
+
+mode=Display1
+type=key
+data=8
+event=Mode default
+event=StatusMessage Dropped marker
+event=Logger note Mark
+event=MarkLocation
+label=Mark\nDrop
+location=7
+
+mode=Display1
+type=key
+data=9
+event=ScreenModes togglefull
+event=Mode default
+label=Full Scrn\nToggle
+location=8
+
+mode=Display1
+type=key
+data=0
+event=Pan show
+event=Pan supertoggle
+label=Pan\nOn
+location=9
 
 mode=Display1
 type=key
@@ -385,32 +498,9 @@ type=key
 data=RIGHT
 event=Pan right
 
-
-#==============
-# Mode Display2
-#==============
-
-mode=Display2
-type=key
-data=APP1
-event=Zoom auto show
-event=Zoom auto toggle
-label=Auto Zoom
-location=1
-
-mode=Display2
-type=key
-data=APP4
-event=SnailTrail show
-event=SnailTrail toggle
-label=Snail
-location=4
-
-mode=Display2
-type=key
-data=APP3
-label= 
-location=3
+# -------------
+# mode=Display2
+# -------------
 
 mode=Display2
 type=key
@@ -419,33 +509,49 @@ event=Mode default
 label=/Display
 location=2
 
-
-#==============
-# Mode Config1
-#==============
-
-mode=Config1
+mode=Display2
 type=key
-data=APP1
-event=MacCready up
-label=MacCready +
-location=1
+data=6
+event=Zoom auto show
+event=Zoom auto toggle
+label=Zoom\nAuto
+location=5
 
-mode=Config1
+mode=Display2
 type=key
-data=APP2
-event=MacCready down
-label=MacCready -
-location=2
+data=7
+event=SnailTrail show
+event=SnailTrail toggle
+label=Snail Trail\nToggle
+location=6
 
-mode=Config1
+mode=Display2
 type=key
-data=APP4
-event=MacCready auto show
-event=MacCready auto toggle
-label=MacCready Auto
-location=4
+data=8
+event=TerrainTopology show
+event=TerrainTopology toggle
+label=Terrain\nToggle
+location=7
 
+mode=Display2
+type=key
+data=9
+event=Brightness
+label=Bright
+location=8
+
+mode=Display2
+type=key
+data=0
+event=DeclutterLabels show
+event=DeclutterLabels toggle
+label=Declutter\nLabels
+location=9
+
+
+# -------------
+# mode=Config1
+# -------------
 mode=Config1
 type=key
 data=APP3
@@ -454,33 +560,47 @@ label=Config/
 location=3
 
 
-#==============
-# Mode Config2
-#==============
-
-mode=Config2
+mode=Config1
 type=key
-data=APP1
-event=Mode Bugs
-label=Bugs/
-location=1
+data=6
+event=MacCready up
+label=MacCready\n+
+location=5
 
-mode=Config2
+mode=Config1
 type=key
-data=APP2
-event=Mode Ballast
-label=Ballast/
-location=2
+data=7
+event=MacCready down
+label=MacCready\n-
+location=6
 
-mode=Config2
+mode=Config1
 type=key
-data=APP4
-event=Sounds show
-event=Sounds toggle
-label=Audio
-location=4
-title=Vario Sound Toggle
+data=8
+event=MacCready auto show
+event=MacCready auto toggle
+label=MacCready\nAuto
+location=7
 
+mode=Config1
+type=key
+data=9
+event=Setup Basic
+event=Mode default
+label=Setup\nBasic
+location=8
+
+mode=Config1
+type=key
+data=0
+event=Setup Wind
+event=Mode default
+label=Setup\nWind
+location=9
+
+# -------------
+# mode=Config2
+# -------------
 mode=Config2
 type=key
 data=APP3
@@ -488,109 +608,276 @@ event=Mode default
 label=/Config
 location=3
 
+mode=Config2
+type=key
+data=6
+event=Mode Vario1
+label=Vario/
+location=5
+
+mode=Config2
+type=key
+data=7
+event=Setup System
+event=Mode default
+label=Setup\nSystem
+location=6
+
+mode=Config2
+type=key
+data=8
+event=Setup Airspace
+event=Mode default
+label=Settings\nAirspace
+location=7
+
+mode=Config2
+type=key
+data=9
+event=Logger show
+event=Logger toggle ask
+label=Logger
+location=8
+
+mode=Config2
+type=key
+data=0
+event=Setup Replay
+event=Mode default
+label=Logger\nReplay
+location=9
+
+
+# -------------
+# mode=Vario1
+# -------------
+
+mode=Vario1
+type=key
+data=APP3
+event=Mode Vario2
+label=Vario/
+location=3
+
+mode=Vario1
+type=key
+data=6
+event=Setup Switches
+event=Mode default
+label=Airframe\nSwitches
+location=5
+
+mode=Vario1
+type=key
+data=7
+event=Setup Audio
+label=Setup Audio
+location=6
+
+mode=Vario1
+type=key
+data=8
+event=AdjustVarioFilter xdemo
+label=Manual\nDemo
+location=7
+
+mode=Vario1
+type=key
+data=9
+event=AdjustVarioFilter zero
+event=StatusMessage Not yet implemented
+label=Setup\nStall
+location=8
+
+mode=Vario1
+type=key
+data=0
+label=
+location=9
+
+# -------------
+# mode=Vario2
+# -------------
+
+mode=Vario2
+type=key
+data=APP3
+event=Mode default
+label=/Vario
+location=3
+
+mode=Vario2
+type=key
+data=6
+event=AdjustVarioFilter zero
+event=StatusMessage Vario ASI zeroed
+label=ASI\nZero
+location=5
+
+mode=Vario2
+type=key
+data=7
+event=StatusMessage Accelerometer leveled
+label=Accel\nZero
+location=6
+
+mode=Vario2
+type=key
+data=8
+event=AdjustVarioFilter save
+event=StatusMessage Stored to EEPROM
+label=Store
+location=7
+
+mode=Vario2
+type=key
+data=9
+event=AdjustVarioFilter demostf
+label=Cruise\nDemo
+location=8
+
+mode=Vario2
+type=key
+data=0
+event=AdjustVarioFilter democlimb
+label=Climb\nDemo
+location=9
+
 # -------------
 # mode=Info1
 # -------------
+mode=Info1
+type=key
+data=APP4
+event=Mode Info2
+label=Info/
+location=4
 
 mode=Info1
 type=key
-data=APP1
-event=ScreenModes toggleauxiliary
-label=Aux Info
-location=1
+data=6
+event=WaypointDetails current
+event=Mode default
+label=Waypoint\nDetails
+location=5
 
 mode=Info1
 type=key
-data=APP2
-#event=Mode default
-event=Status
-label=Status
-location=2
+data=7
+event=NearestWaypointDetails aircraft
+event=Mode default
+label=Nearest\nWaypoint
+location=6
 
 mode=Info1
 type=key
-data=APP3
-#event=Mode default
+data=8
+event=NearestAirspaceDetails aircraft
+event=Mode default
+label=Nearest\nAirspace
+location=7
+
+mode=Info1
+type=key
+data=9
+event=Checklist
+event=Mode default
+label=Check\nlist
+location=8
+
+mode=Info1
+type=key
+data=0
 event=Analysis
-label=Analysis
-location=3
+event=Mode default
+label=Analysis\nShow
+location=9
 
-mode=Info1
+# -------------
+# mode=Info2
+# -------------
+mode=Info2
+type=key
+data=APP4
+event=Mode Info3
+label=/Info
+location=4
+
+
+mode=Info2
+type=key
+data=6
+event=Status system
+label=Status\nSystem
+location=5
+
+mode=Info2
+type=key
+data=7
+event=Status Aircraft
+label=Status\nAircraft
+location=6
+
+mode=Info2
+type=key
+data=8
+event=Status task
+label=Status\nTask
+location=7
+
+mode=Info2
+type=key
+data=9
+event=ScreenModes toggleauxiliary
+label=Aux\nInfobox
+location=8
+
+mode=Info2
+type=key
+data=0
+event=RepeatStatusMessage
+label=Message\nRepeat
+location=9
+
+# -------------
+# mode=Info3
+# -------------
+mode=Info3
 type=key
 data=APP4
 event=Mode default
 label=/Info
 location=4
 
-
-# -------------
-# mode=Bugs
-# -------------
-
-mode=Bugs
+mode=Info3
 type=key
-data=APP1
-event=Bugs show
-event=Bugs max
-label=Clean
-location=1
-
-mode=Bugs
-type=key
-data=APP2
-event=Bugs show
-event=Bugs up
-label=Bugs -
-location=2
-
-mode=Bugs
-type=key
-data=APP3
-event=Bugs show
-event=Bugs down
-label=Bugs +
-location=3
-
-mode=Bugs
-type=key
-data=APP4
+data=6
+event=Exit system
 event=Mode default
-label=/Bugs
-location=4
+label=Exit
+location=5
 
-
-# -------------
-# mode=Ballast
-# -------------
-
-mode=Ballast
+mode=Info3
 type=key
-data=APP1
-event=Ballast show
-event=Ballast min
-label=Empty
-location=1
+data=7
+label=
+location=6
 
-mode=Ballast
+mode=Info3
 type=key
-data=APP2
-event=Ballast show
-event=Ballast down
-label=Ballast -
-location=2
+data=8
+label=
+location=7
 
-mode=Ballast
+mode=Info3
 type=key
-data=APP3
-event=Ballast show
-event=Ballast up
-label=Ballast +
-location=3
+data=9
+label=
+location=8
 
-mode=Ballast
+mode=Info3
 type=key
-data=APP4
-event=Mode default
-label=/Ballast
-location=4
+data=0
+label=
+location=9
 
