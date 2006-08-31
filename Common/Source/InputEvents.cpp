@@ -191,7 +191,7 @@ void InputEvents::readFile() {
 #ifdef GNAV
 #include "InputEvents_altair.cpp"
 #else
-#include "InputEvents_gnav.cpp"
+#include "InputEvents_defaults.cpp"
 #endif
 #endif
 

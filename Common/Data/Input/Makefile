@@ -19,9 +19,6 @@ build: $(FILES)
 ../../Header/InputEvents_altair.cpp : altair.xci xci2cpp.pl
 	perl xci2cpp.pl altair.xci > $@
 
-../../Header/InputEvents_gnav.cpp : gnav.xci xci2cpp.pl
-	perl xci2cpp.pl gnav.xci > $@
-
 ../../Header/InputEvents_Text2Event.cpp : ../../Header/InputEvents.h h2cpp.pl
 	perl h2cpp.pl > $@
 
