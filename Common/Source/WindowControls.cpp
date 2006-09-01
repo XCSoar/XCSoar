@@ -136,7 +136,9 @@ int DataFieldFileReader::SetAsInteger(int Value){
 
 #ifndef ALTAIRSYNC
 #ifndef GNAV
+#if (WINDOWSPC<1)
 #include "projects.h"
+#endif
 #endif
 #endif
 
@@ -146,6 +148,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 #else
   ScanDirectories(LocalPath(),filter);
 #ifndef GNAV
+#if (WINDOWSPC<1)
 
   BOOL bContinue = TRUE;     // If TRUE, continue searching
                              // If FALSE, stop searching.
@@ -170,6 +173,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   }
   FindClose (hFlashCard);          // Close the search handle.
 
+#endif
 #endif
 #endif
 

@@ -246,6 +246,7 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, RECT rcDest)
   return DrawStretch(pDC, ptDest, cx, cy);
 }
 
+#include "InfoBoxLayout.h"
 
 BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest, int cx, int cy)
 {
@@ -266,7 +267,7 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest, int cx, int cy)
   HBITMAP m_hOldBitmap = (HBITMAP)::SelectObject(memDc, m_hBitmap);
 
   int cropsize;
-  if (cy<m_nWidth) {
+  if ((cy<m_nWidth)||(InfoBoxLayout::landscape)) {
     cropsize = m_nHeight*cx/cy;
   } else {
     // NOT TESTED!
