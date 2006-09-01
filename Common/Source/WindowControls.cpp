@@ -134,13 +134,46 @@ int DataFieldFileReader::SetAsInteger(int Value){
   return mValue;
 }
 
+#ifndef ALTAIRSYNC
+#ifndef GNAV
+#include "projects.h"
+#endif
+#endif
 
 void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 #ifdef ALTAIRSYNC
   ScanDirectories(TEXT("\\NOR Flash"),filter);
 #else
   ScanDirectories(LocalPath(),filter);
+#ifndef GNAV
+
+  BOOL bContinue = TRUE;     // If TRUE, continue searching
+                             // If FALSE, stop searching.
+  HANDLE hFlashCard;         // Search handle for storage cards
+  WIN32_FIND_DATA FlashCardTmp; // Structure for storing card
+                                      // information temporarily
+  TCHAR FlashPath[MAX_PATH];
+
+  hFlashCard = FindFirstFlashCard (&FlashCardTmp);
+  if (hFlashCard == INVALID_HANDLE_VALUE) {
+    return;
+  }
+  _stprintf(FlashPath,TEXT("\\%s\\XCSoarData"),FlashCardTmp.cFileName);
+  ScanDirectories(FlashPath,filter);
+  while (bContinue) {
+      // Search for the next storage card.
+      bContinue = FindNextFlashCard (hFlashCard, &FlashCardTmp);
+      if (bContinue) {
+        _stprintf(FlashPath,TEXT("\\%s\\XCSoarData"),FlashCardTmp.cFileName);
+        ScanDirectories(FlashPath,filter);
+      }
+  }
+  FindClose (hFlashCard);          // Close the search handle.
+
 #endif
+#endif
+
+
 }
 
 

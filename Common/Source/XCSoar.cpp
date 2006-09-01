@@ -582,8 +582,12 @@ void HideMenu() {
 }
 
 void ShowMenu() {
+#ifndef GNAV
+  InputEvents::setMode(TEXT("Exit"));
+#endif
   MenuTimeOut = 0;
   DisplayTimeOut = 0;
+  // TODO: Popup exit button?
 }
 
 
@@ -2137,9 +2141,11 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       FullScreen();
       
       InfoBoxFocusTimeOut = 0;
+      /*
       if (!InfoWindowActive) {
         ShowMenu();
       }
+      */
       
       for(i=0;i<numInfoWindows;i++) {
         if(wmControl == InfoBoxes[i]->GetHandle()) {

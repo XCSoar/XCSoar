@@ -167,7 +167,7 @@ event=StatusMessage Task finished
 # mode=default
 # ------------
 
-mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Info3 Vario1 Vario2 Preview
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Exit Vario1 Vario2 Preview
 type=key
 data=ESCAPE
 event=Mode default
@@ -184,19 +184,19 @@ event=Pan supertoggle
 
 # clear main entry buttons
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Info3 Vario1 Vario2 pan Preview
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Exit Vario1 Vario2 pan Preview
 type=key
 data=APP1
 label= 
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Info3 Vario1 Vario2 pan Preview
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Exit Vario1 Vario2 pan Preview
 type=key
 data=APP2
 label= 
 location=2
 
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Info3 pan Preview
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Exit pan Preview
 type=key
 data=APP3
 label= 
@@ -933,7 +933,7 @@ location=9
 mode=Info2
 type=key
 data=APP4
-event=Mode Info3
+event=Mode Exit
 label=/Info
 location=4
 
@@ -974,44 +974,67 @@ label=Message\nRepeat
 location=9
 
 # -------------
-# mode=Info3
+# mode=Exit
 # -------------
-mode=Info3
+
+mode=Exit
+type=key
+data=APP1
+event=Mode Nav1
+label=Nav/
+location=1
+
+mode=Exit
+type=key
+data=APP2
+event=Mode Display1
+label=Display/
+location=2
+
+mode=Exit
+type=key
+data=APP3
+event=Mode Config1
+label=Config/
+location=3
+
+mode=Exit
 type=key
 data=APP4
-event=Mode default
-label=/Info
+event=Mode Info1
+label=Info/
 location=4
 
-mode=Info3
+mode=Exit
 type=key
 data=6
+label= 
+location=5
+
+mode=Exit
+type=key
+data=7
+label= 
+location=6
+
+mode=Exit
+type=key
+data=8
+label= 
+location=7
+
+mode=Exit
+type=key
+data=9
+event=Mode default
+label=Cancel
+location=8
+
+mode=Exit
+type=key
+data=0
 event=Exit system
 event=Mode default
 label=Exit
-location=5
-
-mode=Info3
-type=key
-data=7
-label=
-location=6
-
-mode=Info3
-type=key
-data=8
-label=
-location=7
-
-mode=Info3
-type=key
-data=9
-label=
-location=8
-
-mode=Info3
-type=key
-data=0
-label=
 location=9
 
