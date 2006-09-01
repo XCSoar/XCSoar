@@ -1822,9 +1822,7 @@ void Shutdown(void) {
 
   LockTaskData();
   ResumeAbortTask(-1); // turn off abort if it was on.
-  TCHAR tfile[MAX_PATH];
-  _stprintf(tfile,TEXT("%sDefault.tsk"),LocalPath());
-  SaveTask(tfile);
+  SaveTask(LocalPath(TEXT("Default.tsk")));
   UnlockTaskData();
 
   StartupStore(TEXT("Clear task data\r\n"));
@@ -2815,7 +2813,7 @@ void StartupStore(TCHAR *Str)
   static TCHAR szFileName[MAX_PATH];
   static bool initialised = false;
   if (!initialised) {
-    _stprintf(szFileName,TEXT("%s%s"),LocalPath(),TEXT("xcsoar-startup.log"));
+    _tcscpy(szFileName,LocalPath(TEXT("xcsoar-startup.log")));
     hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
                        NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
     initialised = true;

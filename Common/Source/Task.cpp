@@ -831,7 +831,7 @@ void LoadNewTask(TCHAR *szFileName)
     TaskInvalid = true;
   }
 
-  if (TaskInvalid) {
+  if (TaskInvalid || (Task[0].Index==-1)) {
     for(i=0;i<MAXTASKPOINTS;i++)
       {
 	Task[i].Index = -1;

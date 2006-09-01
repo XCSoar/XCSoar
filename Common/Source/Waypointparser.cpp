@@ -603,11 +603,16 @@ void SetHome(void)
 
   StartupStore(TEXT("SetHome\r\n"));
 
-  TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
   unsigned int i;
 
-  if (NumberOfWayPoints==0) {
+  if ((NumberOfWayPoints==0)||(!WayPointList)) {
+
     HomeWaypoint = -1;
+    TeamCodeRefWaypoint = -1;
+
+    SetToRegistry(szRegistryHomeWaypoint,HomeWaypoint);
+    SetToRegistry(szRegistryTeamcodeRefWaypoint,TeamCodeRefWaypoint);
+
     return;
   }
 
@@ -650,7 +655,6 @@ void SetHome(void)
   // Assume here we have a home now...
   GPS_INFO.Latitude = WayPointList[HomeWaypoint].Latitude;
   GPS_INFO.Longitude = WayPointList[HomeWaypoint].Longitude;
-
 
   //
   // Save the home waypoint number in the resgistry

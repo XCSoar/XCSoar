@@ -3998,10 +3998,8 @@ void DeleteCalculationsPersist(void) {
 
 void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
   if (szCalculationsPersistFileName[0]==0) {
-    _stprintf(szCalculationsPersistFileName,
-              TEXT("%s%s"),
-              LocalPath(),
-              TEXT("xcsoar-persist.log"));
+    _tcscpy(szCalculationsPersistFileName,
+            LocalPath(TEXT("xcsoar-persist.log")));
   }
 
   StartupStore(TEXT("LoadCalculationsPersist\r\n"));

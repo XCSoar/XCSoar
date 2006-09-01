@@ -29,7 +29,9 @@
 #if (GNAV)
 #define DISABLEAUDIOVARIO
 // use exception handling
+#ifndef ALTAIRPROTOTYPE
 #define HAVEEXCEPTIONS
+#endif
 // disable internally generated sounds
 #define DISABLEAUDIO
 #else
@@ -42,6 +44,5 @@
 #else
 #define IBLSCALE(x) (x)
 #endif
-
 
 #endif
