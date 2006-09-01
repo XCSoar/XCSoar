@@ -10,7 +10,6 @@ Dialogs changed:
  dlgTextEntry.xml
  dlgWayPointDetails.xml
 
-
 Changes from 4.7.7:
 - Make terrain file loader check file size, to improve robustness if
   bad file.
@@ -36,6 +35,34 @@ Changes from 4.7.7:
 - Removed unused/default processor definitions, 
   NEWINFOBOX, NEWAIRSPACEWARNING as this is default now.
 - Added support for alternate start points
+-  All file paths are now converted to/from local path for that machine
+  so registry files can be transferred between PC and PDA/Altair.
+-  PC and PDA version all data files now in "My Documents/XCSoarData".
+- Thermal locator improvements
+- UI change: All reachable landable points arrival heights are shown on map in
+   all waypoint label display modes
+- Average task speed improvements: compensation for altitude,
+      now computes task speed accurately for achieved scorable AAT distance.
+- Task page on analysis dialog shows in thick red dashed line the scorable
+  AAT paths.
+- Bug fix, task finish detection was previously disabled
+- Bug fix, stats for finished task after reset were not displayed correctly
+- Bug fix, waypoint details dialog arrival height was relative to sea
+  level not ground.
+- Waypoint details altitude arrival, removed "alt diff mc safety"
+- Removed unused menu and dialogs from PC version.
+- CatMul-Rom interpolator used for logger replay now, provides better
+  reconstructed paths and wind estimates when used with low logging rate.
+- Thermal markers shown in cruise mode only at close zoom scales,
+  to avoid clutter. 
+- When infobox colors are enabled, the thermal last 30 second average
+  is red when the average is less than 0.5*MACCREADY.  This can be used
+  to clearly show when it is time to leave a thermal.
+- AAT max/min/target speeds in infoboxes show '---' if minimum time
+  remaining is zero.
+- Minimum zoom level in autozoom set to reasonable level (1.5km) to
+  prevent zooming in too close when going past a turnpoint.
+
 
 Dialogs changed:
  ALL dialogs
@@ -100,7 +127,12 @@ Changes from 4.7.5:
 - Thread locking improvements to reduce latency
 - Computed arrival height AGL at Mc0 Mc safety Mc current
 - Startup/shutdown messages saved in xcsoar-startup.log
-
+- Fixed bug, short task duration estimates when Mc=0 or unreachable
+  in cruise at current Mc setting due to drift.
+- Fixed bug, spurious touchscreen detect when pressing menu buttons
+- (Feature request 1463308) Auto-mark thermal
+- (Feature request 1444335) configurable max/min zoom --> better zoom
+   levels available now.
 
 Dialogs changed:
  dlgConfiguration.xml

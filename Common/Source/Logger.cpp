@@ -151,7 +151,7 @@ void StartLogger(TCHAR *strAssetNumber)
       // 2003-12-31-XXX-987-01.IGC
       // long filename form of IGC file.
       // XXX represents manufacturer code
-       wsprintf(szLoggerFileName,TEXT("%s%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
+       wsprintf(szLoggerFileName,TEXT("%s\\%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
 		LocalPath(),
 		st.wYear, 
 		st.wMonth, 

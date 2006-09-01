@@ -800,10 +800,16 @@ void MapWindow::Event_Pan(int vswitch) {
 
 
 double MapWindow::LimitMapScale(double value) {
+
+  double minreasonable = 0.05;
+  if (AutoZoom && !DerivedDrawInfo.Circling) {
+    minreasonable = 0.22;
+  }
+
   if (ScaleListCount>0) {
-    return FindMapScale(max(0.05,min(160.0,value)));
+    return FindMapScale(max(minreasonable,min(160.0,value)));
   } else {
-    return max(0.05,min(160.0,value));
+    return max(minreasonable,min(160.0,value));
   }
 }
 
