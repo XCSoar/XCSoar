@@ -212,10 +212,9 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   GetFromRegistry(szRegistryInfoBoxGeometry,&Temp);
   InfoBoxGeometry = Temp;
 
-#if (WINDOWSPC>0)
   // JMW testing only
   geometrychanged = true;
-#endif
+
   int maxsize=0;
   maxsize = max(rc.right-rc.left,rc.bottom-rc.top);
   scale = max(1,maxsize/320);

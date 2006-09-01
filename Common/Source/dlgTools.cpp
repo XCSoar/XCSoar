@@ -105,7 +105,7 @@ int WINAPI MessageBoxX(HWND hWnd, LPCTSTR lpText, LPCTSTR lpCaption, UINT uType)
   Height = 160*ISCALE;
 #else
   Width = 200*ISCALE;
-  Height = 150*ISCALE;
+  Height = 160*ISCALE;
 #endif
 
   X = ((rc.right-rc.left) - Width)/2;

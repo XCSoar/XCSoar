@@ -2220,6 +2220,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (FinishLine != wp->GetDataField()->GetAsInteger()) {
       FinishLine = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryFinishLine,FinishLine);
       changed = true;
       taskchanged = true;
     }
@@ -2229,6 +2230,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)FinishRadius != wp->GetDataField()->GetAsInteger()) {
       FinishRadius = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryFinishRadius,FinishRadius);
       changed = true;
       taskchanged = true;
     }

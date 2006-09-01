@@ -58,21 +58,21 @@ event=Logger stop
 # clear main entry buttons
 
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Info3 Bugs Ballast Wind Vario VarioTest pan
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Exit Bugs Ballast Wind Vario VarioTest pan
 type=key
 data=APP1
 label=
 event=Null
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Info3 Bugs Ballast Wind Vario VarioTest pan
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Exit Bugs Ballast Wind Vario VarioTest pan
 type=key
 data=APP2
 label=
 event=Null
 location=2
 
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Info3 pan
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Exit pan
 type=key
 data=APP3
 label=
@@ -177,30 +177,30 @@ data=0
 label=
 location=9
 
-###### main entry buttons (extra mode entries allow menu to change easily)
+###### main entry buttons
 
-mode=default Display1 Display2 Display3 Config1 Config2 Config3 Info1 Info2 Info3
+mode=default
 type=key
 data=APP1
 event=Mode Nav1
 label=
 location=1
 
-mode=default Nav1 Nav2 Nav3 Config1 Config2 Config3 Info1 Info2 Info3
+mode=default
 type=key
 data=APP2
 event=Mode Display1
 label=
 location=2
 
-mode=default Nav1 Nav2 Nav3 Display1 Display2 Display3 Info1 Info2 Info3
+mode=default
 type=key
 data=APP3
 event=Mode Config1
 label=
 location=3
 
-mode=default Nav1 Nav2 Nav3 Display1 Display2 Display3 Config1 Config2 Config3
+mode=default
 type=key
 data=APP4
 event=Mode Info1
@@ -243,30 +243,30 @@ event=ScreenModes toggle
 mode=infobox
 type=key
 data=APP1
-event=SelectInfoBox previous
-label=<<
+event=Null
+label=
 location=1
 
 mode=infobox
 type=key
-data=APP4
-event=SelectInfoBox next
-label=>>
-location=4
-
-mode=infobox
-type=key
 data=APP2
-event=ChangeInfoBoxType previous
-label=<type
+event=Null
+label=
 location=2
 
 mode=infobox
 type=key
 data=APP3
-event=ChangeInfoBoxType next
-label=type>
+event=Null
+label=
 location=3
+
+mode=infobox
+type=key
+data=APP4
+event=Null
+label=
+location=4
 
 mode=infobox
 type=key
@@ -799,7 +799,7 @@ location=9
 mode=Info2
 type=key
 data=APP4
-event=Mode Info3
+event=Mode Exit
 label=/Info
 location=4
 
@@ -840,44 +840,66 @@ label=Message\nRepeat
 location=9
 
 # -------------
-# mode=Info3
+# mode=Exit
 # -------------
-mode=Info3
+mode=Exit
+type=key
+data=APP1
+event=Mode Nav1
+label=Nav
+location=1
+
+mode=Exit
+type=key
+data=APP2
+event=Mode Display1
+label=Display
+location=2
+
+mode=Exit
+type=key
+data=APP3
+event=Mode Config1
+label=Config
+location=3
+
+mode=Exit
 type=key
 data=APP4
-event=Mode default
-label=/Info
+event=Mode Info1
+label=Info
 location=4
 
-mode=Info3
+mode=Exit
 type=key
 data=6
-event=Exit system
-event=Mode default
-label=Exit
+label=
 location=5
 
-mode=Info3
+mode=Exit
 type=key
 data=7
 label=
 location=6
 
-mode=Info3
+mode=Exit
 type=key
 data=8
 label=
 location=7
 
-mode=Info3
+mode=Exit
 type=key
 data=9
-label=
+event=Mode default
+label=Cancel
 location=8
 
-mode=Info3
+mode=Exit
 type=key
 data=0
-label=
+event=Exit system
+event=Mode default
+label=Exit
 location=9
 

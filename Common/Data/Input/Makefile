@@ -4,7 +4,6 @@ FILES = \
 	../../Header/InputEvents_defaults.cpp \
 	../../Header/InputEvents_altair.cpp \
 	../../Header/InputEvents_pc.cpp \
-	../../Header/InputEvents_gnav.cpp \
 	../../Header/InputEvents_Text2Event.cpp
 
 # ==============================================================================

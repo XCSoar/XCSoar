@@ -961,7 +961,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   int width = (int) LOWORD(lParam);
   int height = (int) HIWORD(lParam);
 
-  static DWORD dwDownTime=0, dwUpTime=0;
+  static DWORD dwDownTime=-1, dwUpTime=-1;
 
   switch (uMsg)
   {
@@ -1281,12 +1281,15 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     X = LOWORD(lParam); Y = HIWORD(lParam);
     if(InfoWindowActive)
     {
+      dwDownTime= -1;
       DefocusInfoBox();
       SetFocus(hWnd);
       break;
     }
-    dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
+    if (dwDownTime==-1)
+      break;
 
+    dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
 
     distance = isqrt4((long)((XstartScreen-X)*(XstartScreen-X)+
                              (YstartScreen-Y)*(YstartScreen-Y)))
@@ -1313,12 +1316,14 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     if(dwDownTime < 1000)
     {
       if (Event_NearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
+        dwDownTime= -1;
         break;
       }
     }
     else
     {
       if (Event_InteriorAirspaceDetails(Xstart, Ystart)) {
+        dwDownTime= -1;
         break;
       }
     }
@@ -1359,16 +1364,20 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
         }
       #endif
 
+        dwDownTime=-1;
+
     if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
       if (InputEvents::processKey(wParam)) {
         // TODO - change to debugging DoStatusMessage(TEXT("Event in default"));
       }
       // XXX Should we only do this if it IS processed above ?
+      dwDownTime=-1;
       return TRUE; // don't go to default handler
     } else {
       // TODO - debugging DoStatusMessage(TEXT("Event in dialog"));
       if (InputEvents::processKey(wParam)) {
       }
+      dwDownTime=-1;
       return TRUE; // don't go to default handler
     }
     // break; unreachable!
