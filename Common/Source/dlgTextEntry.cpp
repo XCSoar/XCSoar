@@ -183,8 +183,11 @@ void dlgTextEntryShowModal(TCHAR *text) {
   wf = NULL;
   wGrid = NULL;
 
+  char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgTextEntry.xml"));
   wf = dlgLoadFromXML(CallBackTable, 
-		      LocalPathS(TEXT("dlgTextEntry.xml")), 
+		      
+                      filename, 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TEXTENTRY"));
   if (!wf) return;

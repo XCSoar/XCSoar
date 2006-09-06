@@ -37,6 +37,8 @@ Copyright_License {
 #include "Utils.h"
 #include "WindowControls.h"
 
+#include "Geoid.h"
+
 #include "RasterTerrain.h"
 
 #include <windows.h>
@@ -46,6 +48,11 @@ Copyright_License {
 #include <tchar.h>
 
 #include "xmlParser.h"
+
+#ifdef DEBUG
+double TALT_error = 0;
+int TALT_num = 0;
+#endif
 
 
 TCHAR *strtok_r(TCHAR *s, TCHAR *delim, TCHAR **lasts);
@@ -275,6 +282,9 @@ int ParseWayPointString(TCHAR *String,WAYPOINT *Temp)
 
   _tcscpy(TempString, String);  // 20060513:sgi added wor on a copy of the string, do not modify the source string, needed on error messages
 
+  Temp->Visible = true; // default all waypoints visible at start
+  Temp->FarVisible = true;
+
   // ExtractParameter(TempString,ctemp,0);
   if ((pToken = strtok_r(TempString, TEXT(","), &pWClast)) == NULL)
     return FALSE;
@@ -354,17 +364,31 @@ int ParseWayPointString(TCHAR *String,WAYPOINT *Temp)
     Temp->Zoom = 0;
   }
 
-  if(Temp->Altitude == 0){
+  double myalt;
+
+  if(Temp->Altitude == 0) {
 
     LockTerrainDataGraphics();
     terrain_dem_graphics.SetTerrainRounding(0.0,0.0);
-    double myalt =
-      terrain_dem_graphics.GetTerrainHeight(Temp->Latitude , Temp->Longitude);
+    myalt =
+      terrain_dem_graphics.GetTerrainHeight(Temp->Latitude,
+                                            Temp->Longitude);
     UnlockTerrainDataGraphics();
 
     Temp->Altitude = myalt;
-
+  } 
+#ifdef DEBUG
+  else {
+    LockTerrainDataGraphics();
+    terrain_dem_graphics.SetTerrainRounding(0.0,0.0);
+    myalt =
+      terrain_dem_graphics.GetTerrainHeight(Temp->Latitude, 
+                                            Temp->Longitude);
+    TALT_error += (myalt-Temp->Altitude)*(myalt-Temp->Altitude);
+    TALT_num ++;
+    UnlockTerrainDataGraphics();
   }
+#endif
 
   if (Temp->Details) {
     free(Temp->Details);
@@ -507,9 +531,15 @@ static double ReadAltitude(TCHAR *temp)
 extern TCHAR szRegistryWayPointFile[];  
 extern TCHAR szRegistryAdditionalWayPointFile[];  
 
+
 void ReadWayPoints(void)
 {
   StartupStore(TEXT("ReadWayPoints\r\n"));
+
+#ifdef DEBUG
+  TALT_error = 0;
+  TALT_num = 0;
+#endif
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
@@ -595,6 +625,12 @@ void ReadWayPoints(void)
 
   UnlockTaskData();
 
+#ifdef DEBUG
+  if (TALT_num>0) {
+    TALT_error /= TALT_num;
+    TALT_error = sqrt(TALT_error);
+  }
+#endif
 }
 
 
@@ -678,22 +714,24 @@ int FindNearestWayPoint(double X, double Y, double MaxRange)
   // 20060504/sgi was NearestDistance = Distance(Y,X,WayPointList[0].Latitude, WayPointList[0].Longitude);
 
   NearestDistance = MaxRange;
-  for(i=1;i<NumberOfWayPoints;i++)
-    {
-      if (((WayPointList[i].Zoom >= MapWindow::MapScale*10)||
-           (WayPointList[i].Zoom == 0))
-          &&(MapWindow::MapScale <= 10)) {
+  for(i=0;i<NumberOfWayPoints;i++) {
 
-            // only look for visible waypoints
-            // feature added by Samuel Gisiger
-            Dist = Distance(Y,X,WayPointList[i].Latitude, WayPointList[i].Longitude);
-            if(Dist < NearestDistance)
-              {
-                NearestIndex = i;
-                NearestDistance = Dist;
-              }
-          }
+    if (WayPointList[i].Visible) {
+
+      if (MapWindow::WaypointInRange(i)) {
+
+        // only look for visible waypoints
+        // feature added by Samuel Gisiger
+        DistanceBearing(Y,X,
+                        WayPointList[i].Latitude, 
+                        WayPointList[i].Longitude, &Dist, NULL);
+        if(Dist < NearestDistance) {
+          NearestIndex = i;
+          NearestDistance = Dist;
+        }
+      }
     }
+  }
   if(NearestDistance < MaxRange)
     return NearestIndex;
   else

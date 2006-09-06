@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.20 2006/08/27 17:09:40 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.21 2006/09/06 07:51:58 jwharington Exp $
 
 
 Copyright_License {
@@ -174,9 +174,10 @@ void ParseAirfieldDetails() {
 
       } else {
 	// append text to details string
-	wcscat(Details,TempString);
-	wcscat(Details,TEXT("\r\n"));
-
+        if (_tcslen(Details)+_tcslen(TempString)+3<5000) {
+          wcscat(Details,TempString);
+          wcscat(Details,TEXT("\r\n"));
+        }
 	// TODO: check the string is not too long
       }
     }

@@ -668,25 +668,24 @@ void RefreshTaskWaypoint(int i) {
     }
   else
     {
-      Task[i].Leg = Distance(WayPointList[Task[i].Index].Latitude,   
-                             WayPointList[Task[i].Index].Longitude,
-                             WayPointList[Task[i-1].Index].Latitude, 
-                             WayPointList[Task[i-1].Index].Longitude);
-      Task[i].InBound = Bearing(WayPointList[Task[i-1].Index].Latitude,   
-				WayPointList[Task[i-1].Index].Longitude,
-                                WayPointList[Task[i].Index].Latitude, 
-				WayPointList[Task[i].Index].Longitude);
+      DistanceBearing(WayPointList[Task[i-1].Index].Latitude, 
+                      WayPointList[Task[i-1].Index].Longitude,
+                      WayPointList[Task[i].Index].Latitude,   
+                      WayPointList[Task[i].Index].Longitude,
+                      &Task[i].Leg,
+                      &Task[i].InBound);
+
       Task[i-1].OutBound = Task[i].InBound;
       Task[i-1].Bisector = BiSector(Task[i-1].InBound,Task[i-1].OutBound);
       if (i==1) {
         if (EnableMultipleStartPoints) {
           for (int j=0; j<MAXSTARTPOINTS; j++) {
             if ((StartPoints[j].Index != -1)&&(StartPoints[j].Active)) {
-              StartPoints[j].OutBound = 
-                Bearing(WayPointList[StartPoints[j].Index].Latitude,   
-                        WayPointList[StartPoints[j].Index].Longitude,
-                        WayPointList[Task[i].Index].Latitude, 
-                        WayPointList[Task[i].Index].Longitude);
+              DistanceBearing(WayPointList[StartPoints[j].Index].Latitude,   
+                              WayPointList[StartPoints[j].Index].Longitude,
+                              WayPointList[Task[i].Index].Latitude, 
+                              WayPointList[Task[i].Index].Longitude,
+                              NULL, &StartPoints[j].OutBound);
             }
           }
         }
@@ -831,13 +830,8 @@ void LoadNewTask(TCHAR *szFileName)
     TaskInvalid = true;
   }
 
-  if (TaskInvalid || (Task[0].Index==-1)) {
-    for(i=0;i<MAXTASKPOINTS;i++)
-      {
-	Task[i].Index = -1;
-      }
-    ActiveWayPoint = -1;
-    DefaultTask();
+  if (TaskInvalid) {
+    ClearTask();
   }
   
   RefreshTask();
@@ -849,6 +843,16 @@ void LoadNewTask(TCHAR *szFileName)
 
 }
 
+
+void ClearTask(void) {
+  LockTaskData();
+  ActiveWayPoint = -1;
+  for(int i=0;i<MAXTASKPOINTS;i++)
+    {
+      Task[i].Index = -1;
+    }
+  UnlockTaskData();
+}
 
 void SaveTask(TCHAR *szFileName)
 {

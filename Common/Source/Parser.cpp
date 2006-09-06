@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.56 2006/07/24 10:59:17 jwharington Exp $
+  $Id: Parser.cpp,v 1.57 2006/09/06 07:51:59 jwharington Exp $
 
 Copyright_License {
 
@@ -547,8 +547,24 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 	  sysTime.wHour = hours;
 	  sysTime.wMinute = mins;
 	  sysTime.wSecond = secs;
+	  sysTime.wMilliseconds = 0;
 	  ::SetSystemTime(&sysTime);
+
+#ifdef GNAV
+          TIME_ZONE_INFORMATION tzi;
+          tzi.Bias = -UTCOffset/60;
+          _tcscpy(tzi.StandardName,TEXT("Altair"));
+          tzi.StandardDate.wMonth= 0; // disable daylight savings
+          tzi.StandardBias = 0;
+          _tcscpy(tzi.DaylightName,TEXT("Altair"));
+          tzi.DaylightDate.wMonth= 0; // disable daylight savings
+          tzi.DaylightBias = 0;
+
+          SetTimeZoneInformation(&tzi);
+#endif
+
 	  sysTimeInitialised =true;
+
 	}
       }
     }
@@ -885,10 +901,14 @@ BOOL NMEAParser::PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
   double delta_lat = 0.01;
   double delta_lon = 0.01;
 
-  double dlat = Distance(GPS_INFO->Latitude, GPS_INFO->Longitude,
-			 GPS_INFO->Latitude+delta_lat, GPS_INFO->Longitude);
-  double dlon = Distance(GPS_INFO->Latitude, GPS_INFO->Longitude,
-			 GPS_INFO->Latitude, GPS_INFO->Longitude+delta_lon);
+  double dlat;
+  DistanceBearing(GPS_INFO->Latitude, GPS_INFO->Longitude,
+                  GPS_INFO->Latitude+delta_lat, GPS_INFO->Longitude,
+                  &dlat, NULL);
+  double dlon;
+  DistanceBearing(GPS_INFO->Latitude, GPS_INFO->Longitude,
+                  GPS_INFO->Latitude, GPS_INFO->Longitude+delta_lon,
+                  &dlon, NULL);
 
   if ((fabs(dlat)>0.0)&&(fabs(dlon)>0.0)) {
     FLARM_NorthingToLatitude = delta_lat / dlat;

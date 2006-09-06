@@ -81,12 +81,12 @@
       <DataField name="" DataType="boolean"/>
     </WndProperty>
 
-  <WndProperty Name="prpEnableTerrain" Caption="Terrain"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Draws digital elevation terrain on the map.  
+  <WndProperty Name="prpEnableTerrain" Caption="Terrain display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Draws digital elevation terrain on the map.  
 This is shaded by the wind direction: upwind is brighter, downwind darker.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpEnableTopology" Caption="Topology"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topology file to be specified.">
+  <WndProperty Name="prpEnableTopology" Caption="Topology display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topology file to be specified.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
@@ -113,9 +113,11 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 
-    <WndProperty Name="prpThermalLocator" Caption="Lift center"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=100 Font=2>
-      <DataField name="" DataType="enum" Min=0 Max=2 Step=1/>
-    </WndProperty>
+
+  <WndProperty Name="prpSnailWidthScale" Caption="Trail width"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 
+  Help="Sets the width of the snail trail display.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=2 Max=50 Step=1/>
+  </WndProperty>
 
   </WndFrame>
 
@@ -341,6 +343,10 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   <WndProperty Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise" X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2>
     <DataField name="" DataType="boolean"/>
   </WndProperty>
+
+    <WndProperty Name="prpThermalLocator" Caption="Lift center"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=100 Font=2>
+      <DataField name="" DataType="enum" Min=0 Max=2 Step=1/>
+    </WndProperty>
 
   </WndFrame>
 

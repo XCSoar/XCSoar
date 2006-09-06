@@ -1023,9 +1023,10 @@ static void CalculateArc(TCHAR *Text)
 
   ReadCoords(&Comma[1],&EndLon , &EndLat);
 
-  Radius = Distance(CenterY, CenterX, StartLat, StartLon);
-  StartBearing = Bearing(CenterY, CenterX, StartLat, StartLon);
-  EndBearing = Bearing(CenterY, CenterX, EndLat, EndLon);
+  DistanceBearing(CenterY, CenterX, StartLat, StartLon, 
+                  &Radius, &StartBearing);
+  DistanceBearing(CenterY, CenterX, EndLat, EndLon, 
+                  NULL, &EndBearing);
   TempPoint.Latitude  = StartLat;
   TempPoint.Longitude = StartLon;
   AddPoint(&TempPoint, &TempArea.NumPoints);
@@ -1202,10 +1203,12 @@ void ReadAirspace(void)
 double RangeAirspaceCircle(const double &longitude,
 			   const double &latitude,
 			   int i) {
-  return Distance(latitude,longitude,
-		  AirspaceCircle[i].Latitude, 
-		  AirspaceCircle[i].Longitude)
-    -AirspaceCircle[i].Radius;
+  double distance;
+  DistanceBearing(latitude,longitude,
+                  AirspaceCircle[i].Latitude, 
+                  AirspaceCircle[i].Longitude,
+                  &distance, NULL);
+  return distance-AirspaceCircle[i].Radius;
 }
 
 
@@ -1487,10 +1490,11 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
       
       if(Dist < *nearestdistance ) {
 	  *nearestdistance = Dist;
-	  *nearestbearing = Bearing(latitude,
-				    longitude,
-				    AirspaceCircle[i].Latitude, 
-				    AirspaceCircle[i].Longitude);
+          DistanceBearing(latitude,
+                          longitude,
+                          AirspaceCircle[i].Latitude, 
+                          AirspaceCircle[i].Longitude,
+                          NULL, nearestbearing);
 	  if (Dist<0) {
 	    // no need to continue search, inside
 	    return i;
@@ -1551,12 +1555,13 @@ double CrossTrackError(double lon1, double lat1,
 		     double lon3, double lat3,
 		     double *lon4, double *lat4) {
 
-  double dist_AD = 
-    Distance(lat1, lon1, lat3, lon3)/(RAD_TO_DEG * 111194.9267);
-  double dist_AB = 
-    Distance(lat1, lon1, lat2, lon2)/(RAD_TO_DEG * 111194.9267);
-  double crs_AD = Bearing(lat1, lon1, lat3, lon3)*DEG_TO_RAD;
-  double crs_AB = Bearing(lat1, lon1, lat2, lon2)*DEG_TO_RAD;
+  double dist_AD, crs_AD;
+  DistanceBearing(lat1, lon1, lat3, lon3, &dist_AD, &crs_AD);
+  dist_AD/= (RAD_TO_DEG * 111194.9267); crs_AD*= DEG_TO_RAD;
+
+  double dist_AB, crs_AB;
+  DistanceBearing(lat1, lon1, lat2, lon2, &dist_AB, &crs_AB);
+  dist_AB/= (RAD_TO_DEG * 111194.9267); crs_AB*= DEG_TO_RAD;
 
   lat1 *= DEG_TO_RAD;
   lat2 *= DEG_TO_RAD;
@@ -1629,7 +1634,9 @@ double ScreenCrossTrackError(double lon1, double lat1,
   }
   
   // compute accurate distance
-  return Distance(lat3, lon3, *lat4, *lon4); 
+  double tmpd;
+  DistanceBearing(lat3, lon3, *lat4, *lon4, &tmpd, NULL); 
+  return tmpd;
 }
 
 
@@ -1643,7 +1650,9 @@ double ProjectedDistance(double lon1, double lat1,
                   lon2, lat2,
                   lon3, lat3,
                    &lon4, &lat4);
-  return Distance(lat1, lon1, lat4, lon4);
+  double tmpd;
+  DistanceBearing(lat1, lon1, lat4, lon4, &tmpd, NULL);
+  return tmpd;
 }
 
 
@@ -1671,8 +1680,10 @@ double RangeAirspaceArea(const double &longitude,
 				 &lon4, &lat4);
     if (dist<nearestdistance) {
       nearestdistance = dist;
-      nearestbearing = Bearing(latitude, longitude,
-			       lat4, lon4);
+      
+      DistanceBearing(latitude, longitude,
+                      lat4, lon4, NULL, 
+                      &nearestbearing);
     }
   }
   *bearing = nearestbearing;
@@ -1866,9 +1877,10 @@ void ScanAirspaceLine(double *lats, double *lons, double *heights,
 	  (longitude> AirspaceCircle[k].bounds.minx)&&
 	  (longitude< AirspaceCircle[k].bounds.maxx)) {
 	
-	Dist = Distance(latitude,longitude,
-			AirspaceCircle[k].Latitude, 
-			AirspaceCircle[k].Longitude)-AirspaceCircle[k].Radius;
+        DistanceBearing(latitude,longitude,
+                        AirspaceCircle[k].Latitude, 
+                        AirspaceCircle[k].Longitude, &Dist, NULL);
+	Dist -= AirspaceCircle[k].Radius;
 	
 	if(Dist < 0) {
 	  for (j=0; j<AIRSPACE_SCANSIZE_H; j++) {

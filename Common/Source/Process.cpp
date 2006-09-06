@@ -265,18 +265,24 @@ void NextUpDown(int UpDown)
 	CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
       }
       // No more, try first
-      else if((UpDown == 2) && (Task[0].Index >= 0)) {
-	if(ActiveWayPoint == 0)	{
-	  // JMW: TODO allow restart
-	  // JMW: make this work only for manual
-	  if (CALCULATED_INFO.TaskStartTime==0) {
-	    CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
-	  }
-	}
-	AdvanceArmed = false;
-	ActiveWayPoint = 0;
-	CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
-      }
+      else 
+        if((UpDown == 2) && (Task[0].Index >= 0)) {
+          /* ****DISABLED****
+          if(ActiveWayPoint == 0)	{
+            // JMW: TODO allow restart
+            // JMW: make this work only for manual
+            
+            // TODO: This should trigger reset of flight stats, but 
+            // should ask first...
+            if (CALCULATED_INFO.TaskStartTime==0) {
+              CALCULATED_INFO.TaskStartTime = GPS_INFO.Time ;
+            }            
+          }
+          */
+          AdvanceArmed = false;
+          ActiveWayPoint = 0;
+          CALCULATED_INFO.LegStartTime = GPS_INFO.Time ;
+        }
     }
   }
   else if (UpDown<0){
@@ -767,27 +773,29 @@ TCHAR *FormatterTime::Render(int *color) {
 }
 
 TCHAR *FormatterWaypoint::Render(int *color) {
-  if((ActiveWayPoint >=0)&&(WayPointList))
+  int thewaypoint = ActiveWayPoint;
+  if((thewaypoint >=0)&&(WayPointList))
     {
-      if (WayPointList[Task[ActiveWayPoint].Index].Reachable) {
+      int index = Task[thewaypoint].Index;
+      if ((index>=0) && (WayPointList[index].Reachable)) {
 	*color = 2; // blue text
       } else {
 	*color = 0; // black text
       }
-
       if ( DisplayTextType == DISPLAYFIRSTTHREE)
         {
-          _tcsncpy(Text,WayPointList[ Task[ActiveWayPoint].Index ].Name,3);
+          _tcsncpy(Text,WayPointList[index].Name,3);
           Text[3] = '\0';
         }
       else if( DisplayTextType == DISPLAYNUMBER)
         {
           _stprintf(Text,TEXT("%d"),
-		    WayPointList[ Task[ActiveWayPoint].Index ].Number );
+		    WayPointList[index].Number );
         }
       else
         {
-          _tcsncpy(Text,WayPointList[ Task[ActiveWayPoint].Index ].Name,(sizeof(Text)/sizeof(TCHAR))-1);
+          _tcsncpy(Text,WayPointList[index].Name,
+                   (sizeof(Text)/sizeof(TCHAR))-1);
           Text[(sizeof(Text)/sizeof(TCHAR))-1] = '\0';
         }
     }

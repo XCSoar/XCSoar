@@ -104,13 +104,17 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgWindSettingsShowModal(void){
 
+  char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgWindSettings.xml"));
   wf = dlgLoadFromXML(CallBackTable, 
-		      LocalPathS(TEXT("dlgWindSettings.xml")), 
+		      
+                      filename, 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_WINDSETTINGS"));
 
   if (wf) {
     WndProperty* wp;
+
     wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
     if (wp) {
       wp->GetDataField()->SetUnits(Units::GetHorizontalSpeedName());
@@ -127,6 +131,12 @@ void dlgWindSettingsShowModal(void){
       dfe->addEnumText(TEXT("Both"));
       wp->GetDataField()->Set(AutoWindMode);
       wp->RefreshDisplay();
+
+      wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
+      if (wp) {
+        wp->GetDataField()->Set(MapWindow::EnableTrailDrift);
+        wp->RefreshDisplay();
+      }
     }
 
     wf->ShowModal();
@@ -136,6 +146,13 @@ void dlgWindSettingsShowModal(void){
       if (AutoWindMode != wp->GetDataField()->GetAsInteger()) {
 	AutoWindMode = wp->GetDataField()->GetAsInteger();
 	SetToRegistry(szRegistryAutoWind, AutoWindMode);
+      }
+    }
+    wp = (WndProperty*)wf->FindByName(TEXT("prpTrailDrift"));
+    if (wp) {
+      if (MapWindow::EnableTrailDrift != wp->GetDataField()->GetAsBoolean()) {
+        MapWindow::EnableTrailDrift = wp->GetDataField()->GetAsBoolean();
+        // SetToRegistry(szRegistryTrailDrift, MapWindow::EnableTrailDrift);
       }
     }
     

@@ -133,7 +133,7 @@ event=TaskLoad Default.tsk
 mode=default
 type=gce
 data=TAKEOFF
-#event=Logger start
+event=Logger start
 #event=DLLExecute XCSoarExamplePlugin.dll DemoSound \My Documents\Sample2.wav
 event=StatusMessage Takeoff
 
@@ -167,7 +167,7 @@ event=StatusMessage Task finished
 # mode=default
 # ------------
 
-mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Exit Vario1 Vario2 Preview
+mode=Nav1 Nav2 Display1 Display2 Config1 Config2 Info1 Info2 Exit Menu Vario1 Vario2 Preview
 type=key
 data=ESCAPE
 event=Mode default
@@ -184,19 +184,19 @@ event=Pan supertoggle
 
 # clear main entry buttons
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Exit Vario1 Vario2 pan Preview
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Exit Menu Vario1 Vario2 pan Preview
 type=key
 data=APP1
 label= 
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Exit Vario1 Vario2 pan Preview
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Exit Menu Vario1 Vario2 pan Preview
 type=key
 data=APP2
 label= 
 location=2
 
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Exit pan Preview
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Exit Menu pan Preview
 type=key
 data=APP3
 label= 
@@ -933,10 +933,9 @@ location=9
 mode=Info2
 type=key
 data=APP4
-event=Mode Exit
+event=Mode default
 label=/Info
 location=4
-
 
 mode=Info2
 type=key
@@ -980,57 +979,64 @@ location=9
 mode=Exit
 type=key
 data=APP1
+event=Mode Menu
+label=Menu
+location=1
+
+mode=Menu
+type=key
+data=APP1
 event=Mode Nav1
 label=Nav/
 location=1
 
-mode=Exit
+mode=Menu
 type=key
 data=APP2
 event=Mode Display1
 label=Display/
 location=2
 
-mode=Exit
+mode=Menu
 type=key
 data=APP3
 event=Mode Config1
 label=Config/
 location=3
 
-mode=Exit
+mode=Menu
 type=key
 data=APP4
 event=Mode Info1
 label=Info/
 location=4
 
-mode=Exit
+mode=Menu
 type=key
 data=6
 label= 
 location=5
 
-mode=Exit
+mode=Menu
 type=key
 data=7
 label= 
 location=6
 
-mode=Exit
+mode=Menu
 type=key
 data=8
 label= 
 location=7
 
-mode=Exit
+mode=Menu
 type=key
 data=9
 event=Mode default
 label=Cancel
 location=8
 
-mode=Exit
+mode=Menu
 type=key
 data=0
 event=Exit system

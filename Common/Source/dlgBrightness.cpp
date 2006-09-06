@@ -117,7 +117,10 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgBrightnessShowModal(void){
 
-  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgBrightness.xml")), 
+  char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgBrightness.xml"));
+  wf = dlgLoadFromXML(CallBackTable, 
+                      filename, 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_BRIGHTNESS"));
 

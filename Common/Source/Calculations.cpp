@@ -277,7 +277,14 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   if (Basic->Time - LogLastTime >= dtLog) {
     if(LoggerActive) {
-      LogPoint(Basic->Latitude , Basic->Longitude , Basic->Altitude );
+      double balt = -1;
+      if (Basic->BaroAltitudeAvailable) {
+        balt = Basic->BaroAltitude;
+      } else {
+        balt = Basic->Altitude;
+      }
+      LogPoint(Basic->Latitude , Basic->Longitude , Basic->Altitude,
+               balt);
     }
     LogLastTime += dtLog;
     if (LogLastTime< Basic->Time-dtLog) {
@@ -953,7 +960,8 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if(Basic->Time - LastTime >20)
     {
-      DistanceFlown = Distance(Basic->Latitude, Basic->Longitude, LastLat, LastLon);
+      DistanceBearing(Basic->Latitude, Basic->Longitude, LastLat, LastLon,
+                      &DistanceFlown, NULL);
       AltLost = LastAlt - Calculated->NavAltitude;
       if(AltLost > 0)
         {
@@ -1012,7 +1020,9 @@ void CruiseLD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if(!Calculated->Circling)
     {
 
-      DistanceFlown = Distance(Basic->Latitude, Basic->Longitude, Calculated->CruiseStartLat, Calculated->CruiseStartLong);
+       DistanceBearing(Basic->Latitude, Basic->Longitude, 
+                       Calculated->CruiseStartLat, 
+                       Calculated->CruiseStartLong, &DistanceFlown, NULL);
       AltLost = Calculated->CruiseStartAlt - Calculated->NavAltitude;
       if(AltLost > 0)
         {
@@ -1367,21 +1377,12 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static int LastCircling = FALSE;
   double ThermalGain;
   double ThermalTime;
-  //  double ThermalDrift;
-  //  double DriftAngle;
 
   if((Calculated->Circling == FALSE) && (LastCircling == TRUE))
     {
       ThermalGain = Calculated->CruiseStartAlt - Calculated->ClimbStartAlt;
       ThermalTime = Calculated->CruiseStartTime - Calculated->ClimbStartTime;
-                        
-      /* Thermal drift calculations now done internally
-         to wind analyser
-
-      ThermalDrift = Distance(Calculated->CruiseStartLat,  Calculated->CruiseStartLong, Calculated->ClimbStartLat,  Calculated->ClimbStartLong);
-      DriftAngle = Bearing(Calculated->ClimbStartLat,  Calculated->ClimbStartLong,Calculated->CruiseStartLat, Calculated->CruiseStartLong);
-      */
-                        
+                                      
       if(ThermalTime >0)
         {
           Calculated->LastThermalAverage = ThermalGain/ThermalTime;
@@ -1426,19 +1427,11 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       } else {
 	wlat = WayPointList[Task[ActiveWayPoint].Index].Latitude; 
 	wlon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
-
       }
-      Calculated->WaypointDistance = 
-	Distance(Basic->Latitude, Basic->Longitude,
-		 wlat, wlon); 
-      if (Calculated->WaypointDistance > 0.5)
-	Calculated->WaypointBearing = 
-	  Bearing(Basic->Latitude, Basic->Longitude,
-		  wlat, wlon);
-      else {
-	Calculated->WaypointDistance = 0;
-	Calculated->WaypointBearing = 360;
-      }
+      DistanceBearing(Basic->Latitude, Basic->Longitude,
+                      wlat, wlon,
+                      &Calculated->WaypointDistance,
+                      &Calculated->WaypointBearing);
     }
   else
     {
@@ -1499,11 +1492,11 @@ int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   if (SectorType>0)
     {
-      AircraftBearing = 
-        Bearing(WayPointList[Task[ActiveWayPoint].Index].Latitude,   
-                WayPointList[Task[ActiveWayPoint].Index].Longitude,
-                Basic->Latitude , 
-                Basic->Longitude);
+      DistanceBearing(WayPointList[Task[ActiveWayPoint].Index].Latitude,   
+                      WayPointList[Task[ActiveWayPoint].Index].Longitude,
+                      Basic->Latitude , 
+                      Basic->Longitude,
+                      NULL, &AircraftBearing);
       
       AircraftBearing = AircraftBearing - Task[ActiveWayPoint].Bisector ;
       while (AircraftBearing<-180) {
@@ -1545,10 +1538,12 @@ int InAATTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   if (!WayPointList) return FALSE;
 
-  double distance = Distance(Basic->Latitude,
-                             Basic->Longitude,
-                             WayPointList[Task[thepoint].Index].Latitude,
-                             WayPointList[Task[thepoint].Index].Longitude);
+  double distance;
+  DistanceBearing(WayPointList[Task[thepoint].Index].Latitude,
+                  WayPointList[Task[thepoint].Index].Longitude,
+                  Basic->Latitude,
+                  Basic->Longitude,
+                  &distance, &AircraftBearing);
 
   if(Task[thepoint].AATType ==  CIRCLE) {
     if(distance < Task[thepoint].AATCircleRadius)
@@ -1557,12 +1552,6 @@ int InAATTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       }
   } else if(distance < Task[thepoint].AATSectorRadius) {
 
-    AircraftBearing = 
-      Bearing(WayPointList[Task[thepoint].Index].Latitude,   
-              WayPointList[Task[thepoint].Index].Longitude,
-              Basic->Latitude , 
-              Basic->Longitude);
-    
     if(Task[thepoint].AATStartRadial 
        < Task[thepoint].AATFinishRadial ) {
       if(
@@ -1615,10 +1604,12 @@ int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     }
 
   // distance from aircraft to start point
-  FirstPointDistance = Distance(Basic->Latitude,
-                                Basic->Longitude,
-                                WayPointList[Task[i].Index].Latitude, 
-                                WayPointList[Task[i].Index].Longitude);
+  DistanceBearing(Basic->Latitude,
+                  Basic->Longitude,
+                  WayPointList[Task[i].Index].Latitude, 
+                  WayPointList[Task[i].Index].Longitude,
+                  &FirstPointDistance,
+                  &AircraftBearing);
   bool inrange = false;
   inrange = (FirstPointDistance<FinishRadius);
   if (!inrange) {
@@ -1631,11 +1622,6 @@ int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     }
         
   // Start Line
-  AircraftBearing = Bearing(Basic->Latitude , 
-                            Basic->Longitude,
-                            WayPointList[Task[i].Index].Latitude,   
-                            WayPointList[Task[i].Index].Longitude);
-
   AircraftBearing = AircraftBearing - Task[i].InBound ;
   while (AircraftBearing<-180) {
     AircraftBearing+= 360;
@@ -1693,10 +1679,13 @@ bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   double FirstPointDistance;
 
   // distance from aircraft to start point
-  FirstPointDistance = Distance(Basic->Latitude,
-                                Basic->Longitude,
-                                WayPointList[Index].Latitude, 
-                                WayPointList[Index].Longitude);
+  DistanceBearing(Basic->Latitude,
+                  Basic->Longitude,
+                  WayPointList[Index].Latitude, 
+                  WayPointList[Index].Longitude,
+                  &FirstPointDistance,
+                  &AircraftBearing);
+
   bool inrange = false;
   inrange = (FirstPointDistance<StartRadius);
   if (!inrange) {
@@ -1712,11 +1701,6 @@ bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
         
   // Start Line
-  AircraftBearing = Bearing(Basic->Latitude , 
-                            Basic->Longitude,
-                            WayPointList[Index].Latitude,   
-                            WayPointList[Index].Longitude);
-
   AircraftBearing = AircraftBearing - OutBound ;
   while (AircraftBearing<-180) {
     AircraftBearing+= 360;
@@ -2195,18 +2179,11 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
       w0lon = Task[i+1].AATTargetLon;
     }
     
-    LegDistance = 
-      Distance(w1lat, 
-               w1lon,
-               w0lat, 
-               w0lon);
+    DistanceBearing(w1lat, w1lon,
+                    w0lat, w0lon,
+                    &LegDistance, &LegBearing);
 
     TotalDistance += LegDistance;
-    
-    LegBearing = Bearing(w1lat, 
-                         w1lon, 
-                         w0lat, 
-                         w0lon);
     
     LegAltitude += 
       GlidePolar::MacCreadyAltitude(maccready, 
@@ -2396,17 +2373,17 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
       }
 
-      LegDistance = 
-        Distance(w1lat, 
-                 w1lon,
-                 w0lat, 
-                 w0lon);
+      DistanceBearing(w1lat, 
+                      w1lon,
+                      w0lat, 
+                      w0lon,
+                      &LegDistance, NULL);
       
-      LegToGo = 
-        Distance(Basic->Latitude, 
-                 Basic->Longitude, 
-                 w1lat, 
-                 w1lon);
+      DistanceBearing(Basic->Latitude, 
+                      Basic->Longitude, 
+                      w1lat, 
+                      w1lon, 
+                      &LegToGo, NULL);
 
       // LegCovered = max(0,LegDistance - LegToGo);
       LegCovered = ProjectedDistance(w0lon, w0lat,
@@ -2452,11 +2429,11 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
             w0lon = Task[i+1].AATTargetLon;
           }
 
-          LegDistance = 
-            Distance(w1lat, 
-                     w1lon,
-                     w0lat, 
-                     w0lon);
+          DistanceBearing(w1lat, 
+                          w1lon,
+                          w0lat, 
+                          w0lon,
+                          &LegDistance, NULL);
 
           Calculated->TaskDistanceCovered += LegDistance;
         }
@@ -2511,28 +2488,21 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
       if (AATEnabled) {
 
-        LegBearing = Bearing(Basic->Latitude , 
-                             Basic->Longitude , 
-                             Task[i].AATTargetLat, 
-                             Task[i].AATTargetLon);
+        DistanceBearing(Basic->Latitude , 
+                        Basic->Longitude , 
+                        Task[i].AATTargetLat, 
+                        Task[i].AATTargetLon,
+                        &LegToGo, &LegBearing);
         
-        LegToGo = Distance(Basic->Latitude , 
-                           Basic->Longitude , 
-                             Task[i].AATTargetLat, 
-                             Task[i].AATTargetLon);
       } else {
 
         if (Task[i].Index>=0) {
 
-          LegBearing = Bearing(Basic->Latitude , 
-                               Basic->Longitude , 
-                               WayPointList[Task[i].Index].Latitude, 
-                               WayPointList[Task[i].Index].Longitude);
-          
-          LegToGo = Distance(Basic->Latitude , 
-                             Basic->Longitude , 
-                             WayPointList[Task[i].Index].Latitude, 
-                             WayPointList[Task[i].Index].Longitude);
+          DistanceBearing(Basic->Latitude , 
+                          Basic->Longitude , 
+                          WayPointList[Task[i].Index].Latitude, 
+                          WayPointList[Task[i].Index].Longitude,
+                          &LegToGo, &LegBearing);
         }
       }
 
@@ -2624,15 +2594,11 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
             w0lon = Task[i-1].AATTargetLon;
           }
 
-          LegDistance = Distance(w0lat, 
-                                 w0lon,
-                                 w1lat, 
-                                 w1lon);
-
-          LegBearing = Bearing(w0lat, 
-                               w0lon,
-                               w1lat, 
-                               w1lon);
+          DistanceBearing(w0lat, 
+                          w0lon,
+                          w1lat, 
+                          w1lon,
+                          &LegDistance, &LegBearing);
 
           LegAltitude = GlidePolar::
             MacCreadyAltitude(maccready, 
@@ -2874,22 +2840,26 @@ bool ClearAirspaceWarnings(bool ack, bool allday) {
   unsigned int i;
   if (ack) {
     GlobalClearAirspaceWarnings = true;
-    for (i=0; i<NumberOfAirspaceCircles; i++) {
-      if (AirspaceCircle[i].WarningLevel>0) {
-              AirspaceCircle[i].Ack.AcknowledgementTime = GPS_INFO.Time;
-              if (allday) {
-                AirspaceCircle[i].Ack.AcknowledgedToday = true;
-              }
-              AirspaceCircle[i].WarningLevel = 0;
+    if (AirspaceCircle) {
+      for (i=0; i<NumberOfAirspaceCircles; i++) {
+        if (AirspaceCircle[i].WarningLevel>0) {
+          AirspaceCircle[i].Ack.AcknowledgementTime = GPS_INFO.Time;
+          if (allday) {
+            AirspaceCircle[i].Ack.AcknowledgedToday = true;
+          }
+          AirspaceCircle[i].WarningLevel = 0;
+        }
       }
     }
-    for (i=0; i<NumberOfAirspaceAreas; i++) {
-      if (AirspaceArea[i].WarningLevel>0) {
-              AirspaceArea[i].Ack.AcknowledgementTime = GPS_INFO.Time;
-              if (allday) {
-                AirspaceArea[i].Ack.AcknowledgedToday = true;
-              }
-              AirspaceArea[i].WarningLevel = 0;
+    if (AirspaceArea) {
+      for (i=0; i<NumberOfAirspaceAreas; i++) {
+        if (AirspaceArea[i].WarningLevel>0) {
+          AirspaceArea[i].Ack.AcknowledgementTime = GPS_INFO.Time;
+          if (allday) {
+            AirspaceArea[i].Ack.AcknowledgedToday = true;
+          }
+          AirspaceArea[i].WarningLevel = 0;
+        }
       }
     }
     return Message::Acknowledge(MSG_AIRSPACE);
@@ -2953,35 +2923,39 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
   // JMW TODO: FindAirspaceCircle etc should sort results, return 
   // the most critical or closest. 
 
-  for (i=0; i<NumberOfAirspaceCircles; i++) {
-    inside = false;
-
-    if ((alt >= AirspaceCircle[i].Base.Altitude ) 
-	&& (alt < AirspaceCircle[i].Top.Altitude)) {
-
+  if (AirspaceCircle) {
+    for (i=0; i<NumberOfAirspaceCircles; i++) {
+      inside = false;
       
-      if (InsideAirspaceCircle(lon, lat, i) 
-	  && (MapWindow::iAirspaceMode[AirspaceCircle[i].Type] >= 2)){
-        AirspaceWarnListAdd(Basic, UpdateSequence, predicted, 1, i);
+      if ((alt >= AirspaceCircle[i].Base.Altitude ) 
+          && (alt < AirspaceCircle[i].Top.Altitude)) {
+        
+        
+        if (InsideAirspaceCircle(lon, lat, i) 
+            && (MapWindow::iAirspaceMode[AirspaceCircle[i].Type] >= 2)){
+          AirspaceWarnListAdd(Basic, UpdateSequence, predicted, 1, i);
+        }
+        
       }
-
+      
     }
-
   }
 
   // repeat process for areas
 
-  for (i=0; i<NumberOfAirspaceAreas; i++) {
-    inside = false;
-
-    if ((alt >= AirspaceArea[i].Base.Altitude ) 
-              && (alt < AirspaceArea[i].Top.Altitude)) {
-
-      if ((MapWindow::iAirspaceMode[AirspaceArea[i].Type] >= 2) 
-	  && InsideAirspaceArea(lon, lat, i)){
-        AirspaceWarnListAdd(Basic, UpdateSequence, predicted, 0, i);
+  if (AirspaceArea) {
+    for (i=0; i<NumberOfAirspaceAreas; i++) {
+      inside = false;
+      
+      if ((alt >= AirspaceArea[i].Base.Altitude ) 
+          && (alt < AirspaceArea[i].Top.Altitude)) {
+        
+        if ((MapWindow::iAirspaceMode[AirspaceArea[i].Type] >= 2) 
+            && InsideAirspaceArea(lon, lat, i)){
+          AirspaceWarnListAdd(Basic, UpdateSequence, predicted, 0, i);
+        }
+        
       }
-
     }
   }
 
@@ -3038,13 +3012,15 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     {
       i=ActiveWayPoint;
                 
-      LegToGo = Distance(Basic->Latitude , Basic->Longitude , 
-                         WayPointList[Task[i].Index].Latitude, 
-                         WayPointList[Task[i].Index].Longitude);
+      DistanceBearing(Basic->Latitude , Basic->Longitude , 
+                      WayPointList[Task[i].Index].Latitude, 
+                      WayPointList[Task[i].Index].Longitude,
+                      &LegToGo, NULL);
 
-      TargetLegToGo = Distance(Basic->Latitude , Basic->Longitude , 
-                               Task[i].AATTargetLat, 
-                               Task[i].AATTargetLon);
+      DistanceBearing(Basic->Latitude , Basic->Longitude , 
+                      Task[i].AATTargetLat, 
+                      Task[i].AATTargetLon,
+                      &TargetLegToGo, NULL);
 
       if(Task[ActiveWayPoint].AATType == CIRCLE)
         {
@@ -3062,15 +3038,17 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       i++;
       while((Task[i].Index != -1) && (i<MAXTASKPOINTS))
         {
-          LegDistance = Distance(WayPointList[Task[i].Index].Latitude, 
-                                 WayPointList[Task[i].Index].Longitude,
-                                 WayPointList[Task[i-1].Index].Latitude, 
-                                 WayPointList[Task[i-1].Index].Longitude);
-
-          TargetLegDistance = Distance(Task[i].AATTargetLat,
-                                       Task[i].AATTargetLon,
-                                       Task[i-1].AATTargetLat,
-                                       Task[i-1].AATTargetLon);
+          DistanceBearing(WayPointList[Task[i].Index].Latitude, 
+                          WayPointList[Task[i].Index].Longitude,
+                          WayPointList[Task[i-1].Index].Latitude, 
+                          WayPointList[Task[i-1].Index].Longitude,
+                          &LegDistance, NULL);
+          
+          DistanceBearing(Task[i].AATTargetLat,
+                          Task[i].AATTargetLon,
+                          Task[i-1].AATTargetLat,
+                          Task[i-1].AATTargetLon,
+                          &TargetLegDistance, NULL);
 
           if(Task[ActiveWayPoint].AATType == CIRCLE)
             {
@@ -3304,7 +3282,10 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
         *retlon = lonlast*(1.0-f)+lon*f;
       }
       ExitFinalGlideThroughTerrain();
-      return Distance(Basic->Latitude, Basic->Longitude, lat, lon);
+      double distance;
+      DistanceBearing(Basic->Latitude, Basic->Longitude, lat, lon,
+                      &distance, NULL);
+      return distance;
     }
     dhlast = dh;
     latlast = lat;
@@ -3347,15 +3328,11 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
   double AltReqd;
   double wDistance, wBearing;
 
-  wDistance = Distance(Basic->Latitude, 
-                       Basic->Longitude,
-                       WayPointList[i].Latitude, 
-                       WayPointList[i].Longitude);
-  
-  wBearing = Bearing(Basic->Latitude, 
-                     Basic->Longitude,
-                     WayPointList[i].Latitude, 
-                     WayPointList[i].Longitude); 
+  DistanceBearing(Basic->Latitude, 
+                  Basic->Longitude,
+                  WayPointList[i].Latitude, 
+                  WayPointList[i].Longitude,
+                  &wDistance, &wBearing);
   
   AltReqd = GlidePolar::MacCreadyAltitude
     (GlidePolar::AbortSafetyMacCready(), 
@@ -3396,11 +3373,10 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
   int scx_aircraft, scy_aircraft;
   LatLon2Flat(Basic->Longitude, Basic->Latitude, &scx_aircraft, &scy_aircraft);
 
-  for (i=0; i<MAXTASKPOINTS*2; i++)
-    {
+  for (i=0; i<MAXTASKPOINTS*2; i++) {
       SortedApproxIndex[i]= -1;
       SortedApproxDistance[i] = 0;
-    }
+  }
 
   for (i=0; i<(int)NumberOfWayPoints; i++)
     {
@@ -3415,9 +3391,11 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
       // see if this fits into slot
       for (k=0; k< MAXTASKPOINTS*2; k++)
       {
-        if (((ai < SortedApproxDistance[k]) ||  // closer than this one
-             (SortedApproxIndex[k]== -1))       &&              // or this one isn't filled
-            (SortedApproxIndex[k]!= i))                                 // and not replacing with same
+        bool closer = (ai < SortedApproxDistance[k]);
+
+        if ((closer ||  // closer than this one
+             (SortedApproxIndex[k]== -1)) &&  // or this one isn't filled
+            (SortedApproxIndex[k]!= i)) // and not replacing with same
         {
             // ok, got new biggest, put it into the slot.
           for (l=MAXTASKPOINTS*2-1; l>k; l--)
@@ -3469,7 +3447,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
 
           aa = CalculateWaypointArrivalAltitude(Basic,
                                                 Calculated,
-                                       SortedApproxIndex[i]);
+                                                SortedApproxIndex[i]);
 
           if (scanairportsfirst==0)
             {
@@ -3493,14 +3471,11 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
                   (SortedLandableIndex[k]!= i))                         // and not replacing with same
                 {
 
-                  double LegBearing =
-                    Bearing(Basic->Latitude , Basic->Longitude ,
-                            WayPointList[SortedApproxIndex[i]].Latitude,
-                            WayPointList[SortedApproxIndex[i]].Longitude);
-                  double LegToGo =
-                    Distance(Basic->Latitude , Basic->Longitude ,
-                             WayPointList[SortedApproxIndex[i]].Latitude,
-                             WayPointList[SortedApproxIndex[i]].Longitude);
+                  double LegToGo, LegBearing;
+                  DistanceBearing(Basic->Latitude , Basic->Longitude ,
+                                  WayPointList[SortedApproxIndex[i]].Latitude,
+                                  WayPointList[SortedApproxIndex[i]].Longitude,
+                                  &LegToGo, &LegBearing);
 
 		  bool outofrange;
                   double distancesoarable =
@@ -3536,8 +3511,9 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
     }
 
   // now we have a sorted list.
-  // check if current waypoint is in the sorted list
+  // check if current waypoint or home waypoint is in the sorted list
   int foundActiveWayPoint = -1;
+  int foundHomeWaypoint = -1;
   for (i=0; i<MAXTASKPOINTS; i++)
     {
       if (ActiveWayPoint>=0)
@@ -3547,7 +3523,23 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
               foundActiveWayPoint = i;
             }
         }
+      if ((SortedLandableIndex[i] = HomeWaypoint)&&(HomeWaypoint>=0)) {
+        foundHomeWaypoint = i;
+      }
     }
+
+
+  if ((foundHomeWaypoint == -1)&&(HomeWaypoint>=0)) {
+    // home not found in top list, so see if we can sneak it in
+
+    aa = CalculateWaypointArrivalAltitude(Basic,
+                                          Calculated,
+                                          HomeWaypoint);
+    if (aa>0) {
+      // only put it in if reachable
+      SortedLandableIndex[MAXTASKPOINTS-2] = HomeWaypoint;
+    }
+  }
 
   if (foundActiveWayPoint != -1)
     {
@@ -3565,7 +3557,9 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
       if (aa <= 0){   // last active is no more reachable, switch to new closest
         DoStatusMessage(gettext(TEXT("Closest Airfield Changed!")));
         ActiveWayPoint = 0;
-      } else {        // last active is reachable but not in list, add to end of list (or overwrite laste one)
+      } else {  
+        // last active is reachable but not in list, add to end of
+        // list (or overwrite laste one)
         if (ActiveWayPoint>=0){
           for (i=0; (i<MAXTASKPOINTS-1); i++){    // find free slot
             if (SortedLandableIndex[i] == -1)     // free slot found (if not, i index the last entry of the list)
@@ -3998,8 +3992,8 @@ void DeleteCalculationsPersist(void) {
 
 void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
   if (szCalculationsPersistFileName[0]==0) {
-    _tcscpy(szCalculationsPersistFileName,
-            LocalPath(TEXT("xcsoar-persist.log")));    
+    LocalPath(szCalculationsPersistFileName,
+              TEXT("xcsoar-persist.log"));    
   }
 
   StartupStore(TEXT("LoadCalculationsPersist\r\n"));

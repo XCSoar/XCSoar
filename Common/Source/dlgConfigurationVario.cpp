@@ -985,8 +985,11 @@ bool dlgConfigurationVarioShowModal(void){
   }
 #endif
 
+  char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgVario.xml"));
   wf = dlgLoadFromXML(CallBackTable, 
-		      LocalPathS(TEXT("dlgVario.xml")), 
+		      
+                      filename, 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_VARIO"));
 

@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.23 2006/08/15 02:14:34 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.24 2006/09/06 07:52:02 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -219,15 +219,17 @@ void WindAnalyser::calcThermalDrift() {
   return; // disabled as this causes problems
 
   if (ThermalTime>300) {
-    double ThermalDrift= Distance(climbstartpos.y,
-                                  climbstartpos.x,
-                                  climbendpos.y,
-                                  climbendpos.x);
-    double DriftAngle = Bearing(climbstartpos.y,
-                                climbstartpos.x,
-                                climbendpos.y,
-                                climbendpos.x);
-    
+
+    double ThermalDrift;
+    double DriftAngle;
+      
+    DistanceBearing(climbstartpos.y,
+                    climbstartpos.x,
+                    climbendpos.y,
+                    climbendpos.x,
+                    &ThermalDrift,
+                    &DriftAngle
+                    );
     Vector v;
     v.x = -ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
     v.y = -ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);

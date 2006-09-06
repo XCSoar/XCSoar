@@ -222,7 +222,9 @@ void MarkLocation(const double lon, const double lat)
   sprintf(message,"Lon:%f Lat:%f\r\n", lon, lat);
 
   FILE *stream;
-  stream = _wfopen(LocalPath(TEXT("xcsoar-marks.txt")),TEXT("a+"));
+  TCHAR fname[MAX_PATH];
+  LocalPath(fname,TEXT("xcsoar-marks.txt"));
+  stream = _wfopen(fname,TEXT("a+"));
   if (stream != NULL){
     fwrite(message,strlen(message),1,stream);
     fclose(stream);

@@ -45,6 +45,8 @@ AATDistance::AATDistance() {
 void AATDistance::Reset() {
   int i, j;
 
+  max_achieved_distance=0;
+
   for (i=0; i<MAXTASKPOINTS; i++) {
     imax[i]= 0;
     distancethreshold[i]= DISTANCETHRESHOLD;
@@ -72,10 +74,10 @@ void AATDistance::AddPoint(double longitude, double latitude,
 
     if (n>1) {
       double dist;
-      dist = Distance(lat_points[taskwaypoint][n-2], 
+      DistanceBearing(lat_points[taskwaypoint][n-2], 
                       lon_points[taskwaypoint][n-2],
                       latitude,
-                      longitude); 
+                      longitude, &dist, NULL); 
       if ((dist>distancethreshold[taskwaypoint])||(n==1)) {
         new_point = true;
       }
@@ -101,7 +103,8 @@ void AATDistance::AddPoint(double longitude, double latitude,
 
     // rescan max so can adjust targets as required
     DistanceCovered_internal(longitude, latitude, 
-                             taskwaypoint, true);
+                             taskwaypoint, 
+                             (ActiveWayPoint==taskwaypoint));
 
     if (taskwaypoint>0) {
       for (int i=taskwaypoint; i<MAXTASKPOINTS-1; i++) {
@@ -124,61 +127,106 @@ double AATDistance::DistanceCovered_internal(double longitude,
     return 0.0;
   }
 
-  double dist, distbest, ibest, actdist, actdistbest;
-  distbest = 0;
-  actdistbest = 0;
+  double target_distance, best_target_distance;
+  double projected_distance, achieved_distance, best_achieved_distance;
+  bool best_update_target = false;
+
+  best_target_distance = 0;
+  best_achieved_distance = 0;
+  achieved_distance = 0;
 
   if (taskwaypoint>0) {
     int nlast = num_points[taskwaypoint-1];
-    ibest = 0;
 
     double w1lat = Task[taskwaypoint].AATTargetLat;
     double w1lon = Task[taskwaypoint].AATTargetLon;
 
     for (int j=0; j<nlast; j++) {
 
+      bool update_target = false;
+
       double w0lon = lon_points[taskwaypoint-1][j];
       double w0lat = lat_points[taskwaypoint-1][j];
 
-      double d01 = Distance(w0lat, w0lon,
-                            w1lat, w1lon);
+      double d01;
+      DistanceBearing(w0lat, w0lon,
+                      w1lat, w1lon, &d01, NULL);
 
-      dist = Dmax[taskwaypoint-1][j] + d01;
+      target_distance = Dmax[taskwaypoint-1][j] + d01;
 
-      actdist = Dmax[taskwaypoint-1][j] + ProjectedDistance(w0lon, w0lat, 
-                                                         w1lon, w1lat, 
-                                                         longitude,
-                                                         latitude);
+      projected_distance = Dmax[taskwaypoint-1][j] 
+        + ProjectedDistance(w0lon, w0lat, 
+                            w1lon, w1lat, 
+                            longitude,
+                            latitude);
 
+      if (insector) {
 
-      if (insector && (dist>actdist)) {
-        // If inside this sector and the aircraft is further
-        // than the target, move this target to the aircraft
+        double dtmp;
+        DistanceBearing(w0lat, w0lon, latitude, longitude, &dtmp, NULL);
+        achieved_distance = Dmax[taskwaypoint-1][j] + dtmp;
 
-        if ((taskwaypoint<MAXTASKPOINTS-1)
-            &&(Task[taskwaypoint+1].Index>=0)) {
-          Task[taskwaypoint].AATTargetLat= latitude;
-          Task[taskwaypoint].AATTargetLon= longitude;
-          if (ActiveWayPoint>taskwaypoint) 
-            CalculateAATTaskSectors();
+        if (achieved_distance>target_distance) {
+          update_target = true;
+          target_distance = achieved_distance;
         }
-        actdist = dist;
+
+      } else {
+        achieved_distance = projected_distance;
       }
 
-      if (dist>distbest) {
-        distbest = dist;
-        actdistbest = actdist;
+      if (target_distance> best_target_distance) {
+        best_target_distance = target_distance;
+        best_achieved_distance = achieved_distance;
+        best_update_target = update_target;
+
         if (taskwaypoint>1) {
-          // Move previous target to location that yields longest distance
+          // Move previous target to location that yields longest distance,
+          // plus a little so optimal path vector points to next waypoint.
+
           Task[taskwaypoint-1].AATTargetLat= w0lat;
           Task[taskwaypoint-1].AATTargetLon= w0lon;
+
           if (ActiveWayPoint>taskwaypoint-1) 
             CalculateAATTaskSectors();
         }
       }
     }
   }
-  return actdistbest;
+
+  if (insector) {
+    if (best_achieved_distance<max_achieved_distance) {
+      // best is decreasing, so move target in direction of
+      // next waypoint.
+      best_update_target = true;
+    }
+  }
+
+  if (best_update_target) {
+    if ((taskwaypoint<MAXTASKPOINTS-1)
+        &&(Task[taskwaypoint+1].Index>=0)) {
+      
+      double bearing;
+        DistanceBearing(latitude,
+                        longitude,
+                        WayPointList[Task[taskwaypoint+1].Index].Latitude,
+                        WayPointList[Task[taskwaypoint+1].Index].Longitude,
+                        NULL, &bearing);
+      
+      Task[taskwaypoint].AATTargetLat= 
+        FindLatitude(latitude, longitude, 
+                     bearing, 1.0);
+      Task[taskwaypoint].AATTargetLon= 
+        FindLongitude(latitude, longitude, 
+                      bearing, 1.0);
+      
+      if (ActiveWayPoint>taskwaypoint) 
+        CalculateAATTaskSectors();
+    }
+  }
+  
+  max_achieved_distance = max(best_achieved_distance, max_achieved_distance);
+  return best_achieved_distance;
 }
 
 
@@ -211,11 +259,13 @@ void AATDistance::UpdateSearch(int taskwaypoint) {
     ibest = 0;
 
     for (k=0; k<nlast; k++) {
-      dist = Dmax[taskwaypoint-1][k]+
-        Distance(lat_points[taskwaypoint-1][k], 
-                 lon_points[taskwaypoint-1][k],
-                 lat_points[taskwaypoint][j], 
-                 lon_points[taskwaypoint][j]);
+      double dtmp;
+      DistanceBearing(lat_points[taskwaypoint-1][k], 
+                      lon_points[taskwaypoint-1][k],
+                      lat_points[taskwaypoint][j], 
+                      lon_points[taskwaypoint][j], &dtmp, NULL);
+
+      dist = Dmax[taskwaypoint-1][k]+dtmp;
 
       if (dist>distbest) {
         distbest = dist;
@@ -241,10 +291,12 @@ void AATDistance::ThinData(int taskwaypoint) {
     distancethreshold[taskwaypoint] /= contractfactor;
 
     for (i= num_points[taskwaypoint]-1; i>0; i--) {
-      double d = Distance(lat_points[taskwaypoint][i], 
-                          lon_points[taskwaypoint][i],
-                          lat_points[taskwaypoint][i-1], 
-                          lon_points[taskwaypoint][i-1]);
+      
+      double d; 
+      DistanceBearing(lat_points[taskwaypoint][i], 
+                      lon_points[taskwaypoint][i],
+                      lat_points[taskwaypoint][i-1], 
+                      lon_points[taskwaypoint][i-1], &d, NULL);
       if (d<distancethreshold[taskwaypoint]) {
 	do_delete[i] = true; // mark it for deletion
       }

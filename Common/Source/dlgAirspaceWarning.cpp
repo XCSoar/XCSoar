@@ -266,9 +266,9 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
 
     CopyRect(&rc, Sender->GetBoundRect());
     CopyRect(&rcTextClip, Sender->GetBoundRect());
-    rcTextClip.right = Col1Left - 2;
+    rcTextClip.right = IBLSCALE(Col1Left - 2);
 
-    InflateRect(&rc, -2, -2);
+    InflateRect(&rc, IBLSCALE(-2), IBLSCALE(-2));
 
     if (!AirspaceWarnGetItem(i, pAS)) return;
 
@@ -301,11 +301,12 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
         hBrushBk = hBrushInsideAckBk;
       else
         hBrushBk = hBrushInsideBk;
-    } else { if ((pAS.hDistance < 2500) && (abs(pAS.vDistance) < 250))
-      if (pAS.Acknowledge >= 1)
-        hBrushBk = hBrushNearAckBk;
-      else
-        hBrushBk = hBrushNearBk;
+    } else { 
+      if ((pAS.hDistance < 2500) && (abs(pAS.vDistance) < 250))
+        if (pAS.Acknowledge >= 1)
+          hBrushBk = hBrushNearAckBk;
+        else
+          hBrushBk = hBrushNearBk;
     }
 
     
@@ -326,45 +327,74 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
     wsprintf(sTmp, TEXT("%-20s"), sName);
     #endif
 
-    ExtTextOut(hDC, Col0Left*InfoBoxLayout::scale, TextTop*InfoBoxLayout::scale,
+    ExtTextOut(hDC, IBLSCALE(Col0Left), IBLSCALE(TextTop),
       ETO_CLIPPED, &rcTextClip, sTmp, _tcslen(sTmp), NULL);
 
     wsprintf(sTmp, TEXT("%-20s"), sTop);
 
-    ExtTextOut(hDC, Col1Left*InfoBoxLayout::scale, TextTop*InfoBoxLayout::scale,
+    ExtTextOut(hDC, IBLSCALE(Col1Left), IBLSCALE(TextTop),
       ETO_OPAQUE, NULL, sTmp, _tcslen(sTmp), NULL);
 
     wsprintf(sTmp, TEXT("%-20s"), sBase);
 
-    ExtTextOut(hDC, Col1Left*InfoBoxLayout::scale, (TextTop+TextHeight)*InfoBoxLayout::scale,
+    ExtTextOut(hDC, IBLSCALE(Col1Left), IBLSCALE(TextTop+TextHeight),
       ETO_OPAQUE, NULL, sTmp, _tcslen(sTmp), NULL);
 
     if (pAS.Inside){
       wsprintf(sTmp, TEXT("> %c %s"), sAckIndicator[pAS.Acknowledge], sType);
     } else {
-      if (pAS.hDistance == 0 && pAS.vDistance > 0){
-        wsprintf(sTmp, TEXT("< %c %s ab %d%s"), sAckIndicator[pAS.Acknowledge], sType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
-      }
-      else if (pAS.hDistance == 0 && pAS.vDistance < 0){
-        wsprintf(sTmp, TEXT("< %c %s bl %d%s"), sAckIndicator[pAS.Acknowledge], sType, (int)Units::ToUserDistance(-pAS.vDistance), Units::GetDistanceName());
+      TCHAR DistanceText[MAX_PATH];
+      if (pAS.hDistance == 0) {
+
+        // Directly above or below airspace
+
+        Units::FormatUserAltitude(fabs(pAS.vDistance),DistanceText, 7);
+        if (pAS.vDistance > 0) {
+          wsprintf(sTmp, TEXT("< %c %s ab %s"), 
+                   sAckIndicator[pAS.Acknowledge], 
+                   sType, DistanceText);
+        }
+        if (pAS.vDistance < 0) {
+          Units::FormatUserAltitude(fabs(pAS.vDistance),DistanceText, 7);
+          wsprintf(sTmp, TEXT("< %c %s bl %s"), 
+                   sAckIndicator[pAS.Acknowledge], 
+                   sType, DistanceText);
+        }
       } else {
-        if ((pAS.vDistance == 0) || (pAS.hDistance < (abs(pAS.vDistance)*30)))
-          wsprintf(sTmp, TEXT("< %c %s H %d%s"), sAckIndicator[pAS.Acknowledge], sType, (int)Units::ToUserDistance(pAS.hDistance),Units::GetDistanceName());
-        else
-          if (pAS.vDistance > 0)
-            wsprintf(sTmp, TEXT("< %c %s ab %d%s"), sAckIndicator[pAS.Acknowledge], sType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
-          else
-            wsprintf(sTmp, TEXT("< %c %s bl %d%s"), sAckIndicator[pAS.Acknowledge], sType, (int)Units::ToUserDistance(pAS.vDistance), Units::GetDistanceName());
+        if ((pAS.vDistance == 0) || 
+            (pAS.hDistance < abs(pAS.vDistance)*30 )) {
+
+          // Close to airspace altitude, horizontally separated
+
+          Units::FormatUserDistance(fabs(pAS.hDistance),DistanceText, 7);
+          wsprintf(sTmp, TEXT("< %c %s H %s"), sAckIndicator[pAS.Acknowledge],
+                   sType, DistanceText);
+        } else {
+
+          // Effectively above or below airspace, steep climb or descent 
+          // necessary to enter
+
+          Units::FormatUserAltitude(fabs(pAS.vDistance),DistanceText, 7);
+          if (pAS.vDistance > 0) {
+            wsprintf(sTmp, TEXT("< %c %s ab %s"), 
+                     sAckIndicator[pAS.Acknowledge], 
+                     sType, DistanceText); 
+          } else {
+            wsprintf(sTmp, TEXT("< %c %s bl %s"), 
+                     sAckIndicator[pAS.Acknowledge], sType, 
+                     DistanceText);
+          }
+        }
       }
     }
-
-    ExtTextOut(hDC, Col0Left*InfoBoxLayout::scale, (TextTop+TextHeight)*InfoBoxLayout::scale,
+  
+    ExtTextOut(hDC, IBLSCALE(Col0Left), IBLSCALE(TextTop+TextHeight),
       ETO_CLIPPED, &rcTextClip, sTmp, _tcslen(sTmp), NULL);
 
   } else {
     if (DrawListIndex == 0){
       _stprintf(sTmp, TEXT("%s"), gettext(TEXT("No Warnings")));
-      ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+      ExtTextOut(hDC, IBLSCALE(2), IBLSCALE(2),
         ETO_OPAQUE, NULL,
         sTmp, _tcslen(sTmp), NULL);
     }
@@ -510,7 +540,6 @@ bool dlgAirspaceWarningShow(void){
     return(false);
   actShow = true;
   PostMessage(wf->GetHandle(), WM_USER+1, 0, 0);
-
   return(true);
 }
 */
@@ -523,12 +552,15 @@ bool dlgAirspaceWarningIsEmpty(void) {
 // JMW this is now called from ProcessCommon (main GUI loop)
 bool dlgAirspaceWarningShowDlg(bool Force){
 
-  if (!actShow && !Force || fDialogOpen)
+  if (fDialogOpen)
     return(false);
+
+  if (!actShow && !Force)
+    return false;
 
   Count = AirspaceWarnGetItemCount();
 
-  if (!Force && (Count == 0))
+  if (Count == 0)
     return(false);
 
   ASSERT(wf != NULL);
@@ -565,8 +597,10 @@ int dlgAirspaceWarningInit(void){
 
 //    hActiveWindow = GetActiveWindow();
 
-    wf = dlgLoadFromXML(CallBackTable,
-		        LocalPathS(TEXT("dlgAirspaceWarning.xml")),
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgAirspaceWarning.xml"));
+    wf = dlgLoadFromXML(CallBackTable,		        
+                        filename,
 		        hWndMainWindow,
 		        TEXT("IDR_XML_AIRSPACEWARNING"));
 

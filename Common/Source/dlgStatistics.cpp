@@ -1315,16 +1315,29 @@ static void Update(void){
     case 3:
       _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Glide Polar")));
       wf->SetCaption(sTmp);
-      _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
-             gettext(TEXT("Best LD")),
-             GlidePolar::bestld,
-             GlidePolar::Vbestld*SPEEDMODIFY,
-             Units::GetHorizontalSpeedName(),
-             gettext(TEXT("Min sink")),
-             GlidePolar::minsink*LIFTMODIFY,
-             Units::GetVerticalSpeedName(),
-             GlidePolar::Vminsink*SPEEDMODIFY,
-             Units::GetHorizontalSpeedName());
+      if (InfoBoxLayout::landscape) {
+        _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
+                  gettext(TEXT("Best LD")),
+                  GlidePolar::bestld,
+                  GlidePolar::Vbestld*SPEEDMODIFY,
+                  Units::GetHorizontalSpeedName(),
+                  gettext(TEXT("Min sink")),
+                  GlidePolar::minsink*LIFTMODIFY,
+                  Units::GetVerticalSpeedName(),
+                  GlidePolar::Vminsink*SPEEDMODIFY,
+                  Units::GetHorizontalSpeedName());
+      } else {
+        _stprintf(sTmp, TEXT("%s:\r\n  %3.0f at %3.0f %s\r\n%s:\r\n  %3.2f %s at %3.0f %s"),
+                  gettext(TEXT("Best LD")),
+                  GlidePolar::bestld,
+                  GlidePolar::Vbestld*SPEEDMODIFY,
+                  Units::GetHorizontalSpeedName(),
+                  gettext(TEXT("Min sink")),
+                  GlidePolar::minsink*LIFTMODIFY,
+                  Units::GetVerticalSpeedName(),
+                  GlidePolar::Vminsink*SPEEDMODIFY,
+                  Units::GetHorizontalSpeedName());
+      }
 
       wInfo->SetCaption(sTmp);
     break;
@@ -1354,15 +1367,26 @@ static void Update(void){
       Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
       Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
 
-      _stprintf(sTmp, TEXT("Task to go:\r\n  %s\r\nAAT to go:\r\n  %s\r\nDistance to go:\r\n  %5.0f %s\r\nTarget speed:\r\n  %5.0f %s\r\n"),
+      if (InfoBoxLayout::landscape) {
+        _stprintf(sTmp, TEXT("Task to go:\r\n  %s\r\nAAT to go:\r\n  %s\r\nDistance to go:\r\n  %5.0f %s\r\nTarget speed:\r\n  %5.0f %s\r\n"),
 
-		timetext1,
-		timetext2,
-		DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
-		Units::GetDistanceName(),
-		TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
-		Units::GetTaskSpeedName()		
-		);
+                  timetext1,
+                  timetext2,
+                  DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
+                  Units::GetDistanceName(),
+                  TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
+                  Units::GetTaskSpeedName()		
+                  );
+      } else {
+        _stprintf(sTmp, TEXT("Task to go: %s\r\nAAT to go: %s\r\nDistance to go: %5.0f %s\r\nTarget speed: %5.0f %s\r\n"),
+                  timetext1,
+                  timetext2,
+                  DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
+                  Units::GetDistanceName(),
+                  TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
+                  Units::GetTaskSpeedName()		
+                  );
+      }
     } else {
       Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
       _stprintf(sTmp, TEXT("Time to go: %s\r\nDistance to go: %5.0f %s\r\n"),
@@ -1422,15 +1446,27 @@ static void Update(void){
     if (olcvalid) {
       TCHAR timetext1[100];
       Units::TimeToText(timetext1, dt);
-      _stprintf(sTmp, TEXT("Rules: %s\r\n%s\r\nDistance:\r\n  %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\nScore: %.2f\r\n"),
-		sRules,
-		sFinished,
-		DISTANCEMODIFY*d,
-		Units::GetDistanceName(),
-		timetext1,
-		TASKSPEEDMODIFY*d/dt,
-		Units::GetTaskSpeedName(),
-		score);
+      if (InfoBoxLayout::landscape) {
+        _stprintf(sTmp, TEXT("Rules: %s\r\n%s\r\nDistance:\r\n  %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\nScore: %.2f\r\n"),
+                  sRules,
+                  sFinished,
+                  DISTANCEMODIFY*d,
+                  Units::GetDistanceName(),
+                  timetext1,
+                  TASKSPEEDMODIFY*d/dt,
+                  Units::GetTaskSpeedName(),
+                  score);
+      } else {
+_stprintf(sTmp, TEXT("%s %s\r\nDistance: %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\nScore: %.2f\r\n"),
+                  sRules,
+                  sFinished,
+                  DISTANCEMODIFY*d,
+                  Units::GetDistanceName(),
+                  timetext1,
+                  TASKSPEEDMODIFY*d/dt,
+                  Units::GetTaskSpeedName(),
+                  score);
+      }
     } else {
       _stprintf(sTmp, TEXT("Rules: %s\r\nNo valid path\r\n"),
 		sRules);
@@ -1550,16 +1586,25 @@ void dlgAnalysisShowModal(void){
   
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgAnalysis_L.xml"));
     wf = dlgLoadFromXML(CallBackTable, 
-                        LocalPathS(TEXT("dlgAnalysis_L.xml")), 
+                        
+                        filename, 
                         hWndMainWindow,
                         TEXT("IDR_XML_ANALYSIS_L"));
   } else 
 #endif
+    {
+    char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgAnalysis.xml"));
   wf = dlgLoadFromXML(CallBackTable, 
-		      LocalPathS(TEXT("dlgAnalysis.xml")), 
+		      
+                      filename, 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_ANALYSIS"));
+    }
+
   if (!wf) return;
 
   penThinSignal = CreatePen(PS_SOLID, 1 , RGB(50,243,45));

@@ -81,14 +81,22 @@ void dlgStartupShowModal(void){
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgStartup_L.xml")), 
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgStartup_L.xml"));
+    wf = dlgLoadFromXML(CallBackTable, 
+                        filename, 
                         hWndMainWindow,
                         TEXT("IDR_XML_STARTUP_L"));
   } else
 #endif
-  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgStartup.xml")), 
+    {
+    char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgStartup.xml"));
+  wf = dlgLoadFromXML(CallBackTable, 
+                      filename, 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_STARTUP"));
+    }
   if (!wf) return;
 
   wSplash = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmSplash"));

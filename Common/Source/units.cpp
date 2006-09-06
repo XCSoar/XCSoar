@@ -419,13 +419,18 @@ bool Units::FormatUserDistance(double Distance, TCHAR *Buffer, size_t size){
       pU = &UnitDescriptors[unMeter];
       value = Distance * pU->ToUserFact;
     }
-    /* dont know what to do on miles ....
-    if (UserDistanceUnit == unNauticalMiles || UserDistanceUnit == unStauteMiles){
-      prec = 0;
+    if (UserDistanceUnit == unNauticalMiles 
+        || UserDistanceUnit == unStatuteMiles) {
       pU = &UnitDescriptors[unFeet];
       value = Distance * pU->ToUserFact;
+      if (value<1000) {
+        prec = 0;
+      } else {
+        prec = 1;
+        pU = &UnitDescriptors[UserDistanceUnit];
+        value = Distance* pU->ToUserFact;
+      }
     }
-    */
   }
 
   _stprintf(sTmp, TEXT("%.*f%s"), prec, value, pU->Name);
@@ -466,7 +471,8 @@ bool Units::FormatUserMapScale(Units_t *Unit, double Distance, TCHAR *Buffer, si
       pU = &UnitDescriptors[unMeter];
       value = Distance * pU->ToUserFact;
     }
-    if (UserDistanceUnit == unNauticalMiles || UserDistanceUnit == unStatuteMiles){
+    if (UserDistanceUnit == unNauticalMiles 
+        || UserDistanceUnit == unStatuteMiles){
       prec = 0;
       if (Unit != NULL)
         *Unit = unFeet;

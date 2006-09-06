@@ -271,6 +271,7 @@ TCHAR szRegistryWaypointsOutOfRange[] = TEXT("WaypointsOutOfRange");
 TCHAR szRegistryEnableExternalTriggerCruise[] = TEXT("EnableExternalTriggerCruise");
 TCHAR szRegistryOLCRules[] = TEXT("OLCRules");
 TCHAR szRegistryHandicap[] = TEXT("Handicap");
+TCHAR szRegistrySnailWidthScale[] = TEXT("SnailWidthScale");
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -591,8 +592,15 @@ void ReadRegistrySettings(void)
   WindUpdateMode = Temp;
 
   Temp = HomeWaypoint;
-  GetFromRegistry(szRegistryHomeWaypoint,&Temp);
-  HomeWaypoint = Temp;
+  if (GetFromRegistry(szRegistryHomeWaypoint,&Temp)==ERROR_SUCCESS) {
+    HomeWaypoint = Temp;
+  } else {
+    HomeWaypoint = -1;
+  }
+
+  Temp = MapWindow::SnailWidthScale;
+  GetFromRegistry(szRegistrySnailWidthScale,&Temp);
+  MapWindow::SnailWidthScale = Temp;
 
   Temp = TeamCodeRefWaypoint;
   GetFromRegistry(szRegistryTeamcodeRefWaypoint,&Temp);
@@ -1174,15 +1182,69 @@ void frotatescale(float &xin, float &yin, const float &angle, const float &scale
   yin = y*cost + x*sint;
 }
 
-
-double Distance(double lat1, double lon1, double lat2, double lon2)
-{
-  double distance, dTmp;
+void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
+                     double *Distance, double *Bearing) {
 
   lat1 *= DEG_TO_RAD;
   lat2 *= DEG_TO_RAD;
   lon1 *= DEG_TO_RAD;
   lon2 *= DEG_TO_RAD;
+
+  double clat1 = cos(lat1);
+  double clat2 = cos(lat2);
+  double dlat = lat2-lat1;
+  double dlon = lon2-lon1;
+
+  if (Distance) {
+    double s1 = sin(dlat/2);
+    double s2 = sin(dlon/2);
+    double a= max(0.0,min(1.0,s1*s1+clat1*clat2*s2*s2));
+    double c= 2.0*atan2(sqrt(a),sqrt(1.0-a));
+    *Distance = 6371000.0*c;
+  }
+  if (Bearing) {
+    double slat1 = sin(lat1);
+    double slat2 = sin(lat2);
+    double theta = 
+      atan2(sin(dlon)*clat2,
+            clat1*slat2-slat1*clat2*cos(dlon))*RAD_TO_DEG;
+    
+    while (theta>360.0) {
+      theta-= 360.0;
+    }
+    while (theta<0.0) {
+      theta+= 360.0;
+    }
+    *Bearing = theta;
+  }
+}
+
+
+  /*
+double Distance(double lat1, double lon1, double lat2, double lon2)
+{
+    R = earth's radius = 6371000
+    dlat = lat2-lat1;
+    dlon = long2-long1
+    a= sin^2(dlat/2)+cos(lat1)*cos(lat2)*sin^2(dlong/2)
+    c= 2*atan2(sqrt(a),sqrt(1.0-a));
+    d = R.c
+
+  lat1 *= DEG_TO_RAD;
+  lat2 *= DEG_TO_RAD;
+  lon1 *= DEG_TO_RAD;
+  lon2 *= DEG_TO_RAD;
+
+  double dlat = lat2-lat1;
+  double dlon = lon2-lon1;
+  double s1 = sin(dlat/2);
+  double s2 = sin(dlon/2);
+  double a= s1*s1+cos(lat1)*cos(lat2)*s2*s2;
+  double c= 2.0*atan2(sqrt(a),sqrt(1.0-a));
+  return 6371000.0*c;
+
+  // Old code... broken
+  double distance, dTmp;
 
   dTmp =  sin(lat1)*sin(lat2) +
 			cos(lat1)*cos(lat2) * cos(lon1-lon2);
@@ -1191,15 +1253,15 @@ double Distance(double lat1, double lon1, double lat2, double lon2)
     distance = 0;         // values greater than 1 (like 1.0000000000001)
   else
     distance = (double)acos(dTmp) * (double)(RAD_TO_DEG * 111194.9267);
-
   return (double)(distance);
 }
+  */
 
-
+/*
 double Bearing(double lat1, double lon1, double lat2, double lon2)
 {
-  double angle;
-  double d;
+//    theta = atan2(sin(dlong)*cos(lat2),
+  //    cos(lat1)*sin(lat2)-sin(lat1)*cos(lat2)*cos(dlong));
 
   lat1 *= DEG_TO_RAD;
   lat2 *= DEG_TO_RAD;
@@ -1210,10 +1272,27 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
   double clat2 = cos(lat2);
   double slat1 = sin(lat1);
   double slat2 = sin(lat2);
+  double dlat = lat2-lat1;
+  double dlon = lon2-lon1;
 
+  double theta = 
+    atan2(sin(dlon)*clat2,
+          clat1*slat2-slat1*clat2*cos(dlon))*RAD_TO_DEG;
+  while (theta>360.0) {
+    theta-= 360.0;
+  }
+  while (theta<0.0) {
+    theta+= 360.0;
+  }
+  return theta;
+
+  // old code
   #ifdef HAVEEXCEPTIONS
   __try{
   #endif
+
+  double angle;
+  double d;
 
   d = (slat1*slat2 +  clat1*clat2 * cos(lon1-lon2) );
   if(d>1) d = 0.99999999999999;
@@ -1229,12 +1308,12 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
       if(angle<-1) angle = -1;
       angle = acos(angle);
 
-      /* JMW Redundant code?
-      if(lat1>lat2)
-	angle = angle * (180/pi);
-      else
-	angle = angle * (180/pi);
-      */
+      // JMW Redundant code?
+      //if(lat1>lat2)
+//	angle = angle * (180/pi);
+  //    else
+	//angle = angle * (180/pi);
+      //
       angle *= RAD_TO_DEG;
     }
   else
@@ -1257,7 +1336,9 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
   #endif
 
   return (double)angle;
+  
 }
+*/
 
 
 double Reciprocal(double InBound)
@@ -1607,12 +1688,12 @@ void StartArc(HDC hdc,
 	      double longitude0, double latitude0,
 	      double longitude1, double latitude1, 
 	      double arclength) {
-//  int scx, scy;
 
-  double radius = Distance(latitude0, longitude0, 
-			   latitude1, longitude1);
-  double bearing = Bearing(latitude0, longitude0,
-			   latitude1, longitude1);
+  double radius, bearing;
+  DistanceBearing(latitude0, longitude0, 
+                  latitude1, longitude1,
+                  &radius,
+                  &bearing);
   double angle = 360*min(1, arclength/(2.0*3.1415926*radius));
   int i0 = (int)(bearing+angle/2);
   int i1 = (int)(bearing-angle/2);
@@ -1657,7 +1738,7 @@ void StartArc(HDC hdc,
 }
 
 
-int Circle(HDC hdc, long x, long y, int radius, RECT rc)
+int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip)
 {
   POINT pt[65];
   int i;
@@ -1694,7 +1775,11 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc)
   pt[j].x = x + (long) (radius * xcoords[0]);
   pt[j].y = y + (long) (radius * ycoords[0]);
 
-  Polygon(hdc,pt,j+1);
+  if (clip) {
+    ClipPolygon(hdc,pt,j+1,rc);
+  } else {
+    Polygon(hdc,pt,j+1);
+  }
   return TRUE;
 }
 
@@ -3072,9 +3157,7 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
 }
 
 // Get local My Documents path - optionally include file to add and location
-//	(Warning - static buffer returned, use immediately 
-//       - not thread safe !!!)
-TCHAR* LocalPath(TCHAR* file, int loc) {
+void LocalPath(TCHAR* buffer, TCHAR* file, int loc) {
 /*
 
 loc = CSIDL_PROGRAMS
@@ -3089,7 +3172,6 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 
 
 */
-  static TCHAR buffer[MAX_PATH];
 #ifdef GNAV
   _tcscpy(buffer,TEXT("\\NOR Flash"));
 #else
@@ -3100,17 +3182,15 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
     wcsncat(buffer, TEXT("\\"), MAX_PATH);    
     wcsncat(buffer, file, MAX_PATH);
   }
-  return buffer;
 }
 
 
-char* LocalPathS(TCHAR* file, int loc) {
-  static char buffer[MAX_PATH];
-  char jbuffer[MAX_PATH];
-  sprintf(buffer,"%S",LocalPath(file,loc));
-  sprintf(jbuffer,"%S",LocalPath(file,loc));
-  return buffer;
+void LocalPathS(char *buffer, TCHAR* file, int loc) {
+  TCHAR wbuffer[MAX_PATH];
+  LocalPath(wbuffer,file,loc);
+  sprintf(buffer,"%S",wbuffer);
 }
+
 
 void ExpandLocalPath(TCHAR* filein) {
   // Convert %LOCALPATH% to Local Path
@@ -3118,7 +3198,7 @@ void ExpandLocalPath(TCHAR* filein) {
   TCHAR lpath[MAX_PATH];
   TCHAR code[] = TEXT("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
-  _tcscpy(lpath,LocalPath());
+  LocalPath(lpath);
 
   TCHAR* ptr;
   ptr = _tcsstr(filein, code);
@@ -3137,7 +3217,7 @@ void ContractLocalPath(TCHAR* filein) {
   TCHAR lpath[MAX_PATH];
   TCHAR code[] = TEXT("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
-  _tcscpy(lpath,LocalPath());
+  LocalPath(lpath);
 
   TCHAR* ptr;
   ptr = _tcsstr(filein, lpath);
@@ -3345,8 +3425,7 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
 
 // SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 
-  _tcscpy(defaultProfileFile, 
-	  LocalPath(TEXT("xcsoar-registry.prf")));
+  LocalPath(defaultProfileFile,TEXT("xcsoar-registry.prf"));
   _tcscpy(startProfileFile, defaultProfileFile);
 
   if (CommandLine != NULL){
@@ -3690,7 +3769,8 @@ void OpenFLARMDetails() {
     CloseFLARMDetails();
   }
 
-  TCHAR *filename=LocalPath(TEXT("xcsoar-flarm.txt"));
+  TCHAR filename[MAX_PATH];
+  LocalPath(filename,TEXT("xcsoar-flarm.txt"));
   
   HANDLE hFile = CreateFile(filename,GENERIC_READ,0,NULL,
 			    OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);

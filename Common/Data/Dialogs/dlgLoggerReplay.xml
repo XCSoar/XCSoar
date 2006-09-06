@@ -7,22 +7,22 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmLoggerReplay" Type="Dialog" X=5 Y=5 Width=250 Height=72 Caption="Logger Replay" Font=2 BackColor=0xDADBAB>
+<WndForm Name="frmLoggerReplay" Type="Dialog" X=5 Y=5 Width=240 Height=96 Caption="Logger Replay" Font=2 BackColor=0xDADBAB>
 
   <WndButton   Caption="Close"    X=2 Y=2 Width=66  Height=22 Font=2 OnClickNotify="OnCloseClicked">
   </WndButton> 
 
-  <WndProperty Name="prpIGCFile" Caption="File"      X=70 Y=2   Width=180 Height=22 CaptionWidth=60 Font=2 Help="Name of IGC file to replay.">
+  <WndProperty Name="prpIGCFile" Caption="File"      X=2 Y=26   Width=235 Height=22 CaptionWidth=60 Font=2 Help="Name of IGC file to replay.">
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 
-  <WndButton   Caption="Start"    X=2 Y=26 Width=68  Height=22 Font=2 OnClickNotify="OnStartClicked">
+  <WndButton   Caption="Start"    X=2 Y=50 Width=68  Height=22 Font=2 OnClickNotify="OnStartClicked">
   </WndButton> 
 
-  <WndButton   Caption="Stop"    X=70 Y=26 Width=68  Height=22 Font=2 OnClickNotify="OnStopClicked">
+  <WndButton   Caption="Stop"    X=70 Y=50 Width=68  Height=22 Font=2 OnClickNotify="OnStopClicked">
   </WndButton> 
 
-  <WndProperty Name="prpRate" Caption="Rate"  X=140 Y=26  Width=110 Height=22 CaptionWidth=60 Font=2 Help="Time acceleration of replay.  
+  <WndProperty Name="prpRate" Caption="Rate"  X=140 Y=50  Width=110 Height=22 CaptionWidth=60 Font=2 Help="Time acceleration of replay.  
 Set to 0 for pause, 1 for normal real-time replay.">
     <DataField name="" DataType="double" DisplayFormat="%.0f x" EditFormat="%.0f" Min=0 Max=10 Step=1  OnDataAccess="OnRateData"/>
   </WndProperty>

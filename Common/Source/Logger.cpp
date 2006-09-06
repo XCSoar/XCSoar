@@ -83,7 +83,8 @@ static TCHAR szLoggerFileName[MAX_PATH];
 int EW_count = 0;
 
 
-void LogPoint(double Latitude, double Longitude, double Altitude)
+void LogPoint(double Latitude, double Longitude, double Altitude,
+              double BaroAltitude)
 {
   HANDLE hFile;// = INVALID_HANDLE_VALUE; 
   DWORD dwBytesRead;   
@@ -94,7 +95,6 @@ void LogPoint(double Latitude, double Longitude, double Altitude)
   int DegLat, DegLon;
   double MinLat, MinLon;
   char NoS, EoW;
-	
 
   DegLat = (int)Latitude;
   MinLat = Latitude - DegLat;
@@ -124,10 +124,10 @@ void LogPoint(double Latitude, double Longitude, double Altitude)
   hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, 
 		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
 	
-  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d0AA\r\n", 
-	  st.wHour, st.wMinute, st.wSecond, 
-	  DegLat, MinLat, NoS, DegLon, MinLon, EoW, 
-	  (int)Altitude,(int)Altitude);
+  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n", 
+          st.wHour, st.wMinute, st.wSecond, 
+          DegLat, MinLat, NoS, DegLon, MinLon, EoW, 
+          (int)Altitude,(int)BaroAltitude);
 
   SetFilePointer(hFile, 0, NULL, FILE_END); 
   WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead, 
@@ -145,6 +145,8 @@ void StartLogger(TCHAR *strAssetNumber)
   int i;
 
   GetLocalTime(&st);
+  TCHAR path[MAX_PATH];
+  LocalPath(path);
 
   for(i=1;i<99;i++)
     {
@@ -152,7 +154,7 @@ void StartLogger(TCHAR *strAssetNumber)
       // long filename form of IGC file.
       // XXX represents manufacturer code
        wsprintf(szLoggerFileName,TEXT("%s\\%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
-		LocalPath(),
+		path,
 		st.wYear, 
 		st.wMonth, 
 		st.wDay, 
@@ -180,7 +182,7 @@ extern TCHAR szRegistryAircraftRego[];
 
 void LoggerHeader(void)
 {
-
+  char datum[]= "HFDTM100Datum: WGS-84\r\n";
   char temp[100];
   HANDLE hFile;
   DWORD dwBytesRead;
@@ -214,7 +216,7 @@ void LoggerHeader(void)
   GetRegistryString(szRegistryPilotName, PilotName, 100);
   sprintf(temp,"HFPLTPILOT:%S\r\n", PilotName);
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
-  
+
   GetRegistryString(szRegistryAircraftType, AircraftType, 100);
   sprintf(temp,"HFGTYGLIDERTYPE:%S\r\n", AircraftType);
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
@@ -224,6 +226,10 @@ void LoggerHeader(void)
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
   sprintf(temp,"HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_Version);
+  WriteFile(hFile, temp, strlen(temp), &dwBytesRead,(OVERLAPPED *)NULL);
+
+  WriteFile(hFile, datum, strlen(datum), &dwBytesRead,(OVERLAPPED *)NULL);
+
   FlushFileBuffers(hFile);
   CloseHandle(hFile);			
 
@@ -234,7 +240,7 @@ void StartDeclaration(int ntp)
 {
   // JMW TODO: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
-  char start[] = "C0000000N00000000ETAKEOFF (not defined)\r\n";
+  char start[] = "C0000000N00000000ETAKEOFF\r\n";
   HANDLE hFile;
   DWORD dwBytesRead;
   char temp[100];
@@ -245,34 +251,37 @@ void StartDeclaration(int ntp)
 
   // JMW added task start declaration line
 
-  SYSTEMTIME st;
+  SYSTEMTIME stUTC, stLocal;
 
-  GetLocalTime(&st);
+  GetSystemTime(&stUTC);
+  // Note these are in UTC
+  GetLocalTime(&stLocal);
+
+  // LGCSTKF013945TAKEOFF DETECTED
 
   // IGC GNSS specification 3.6.1
   sprintf(temp,
-	  "C%02d%02d%02d%02d%02d%02d%02d%02d%02d0000%02d (not defined)\r\n",
-	  // DD  MM  YY  HH  MM  SS  DD  MM  YYIIII  TT
-	  // JMW TODO these should be UTC time and date!
-	  st.wDay,
-	  st.wMonth, 
-	  st.wYear % 100, 
-	  st.wHour, 
-	  st.wMinute, 
-	  st.wSecond, 
+	  "C%02d%02d%02d%02d%02d%02d%02d%02d%02d0000%02d\r\n",
+	  // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
+	  stUTC.wDay,
+	  stUTC.wMonth, 
+	  stUTC.wYear % 100, 
+	  stUTC.wHour, 
+	  stUTC.wMinute, 
+	  stUTC.wSecond, 
 
 	  // these should be local date
-	  st.wDay,
-	  st.wMonth, 
-	  st.wYear % 100, 
-	  ntp);
+	  stLocal.wDay,
+	  stLocal.wMonth, 
+	  stLocal.wYear % 100, 
+	  ntp-2);
 
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
   // takeoff line
   // IGC GNSS specification 3.6.3
   WriteFile(hFile, start, strlen(start), &dwBytesRead, (OVERLAPPED *)NULL);
-	
+
   FlushFileBuffers(hFile);
 
   CloseHandle(hFile);			
@@ -283,9 +292,9 @@ void EndDeclaration(void)
 {
   // JMW TODO: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
-  char start[] = "C0000000N00000000ELANDING (not defined)\r\n";
+  char start[] = "C0000000N00000000ELANDING\r\n";
   HANDLE hFile;
-  DWORD dwBytesRead;
+  DWORD dwBytesRead=0;
 
   hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, 
 		     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
@@ -305,16 +314,19 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
   SYSTEMTIME st;
   char szCRecord[500];
 
-  char IDString[100];
+  char IDString[MAX_PATH];
   int i;
 	
   int DegLat, DegLon;
   double MinLat, MinLon;
   char NoS, EoW;
-	
-  for(i=0;i<(int)_tcslen(ID);i++)
+
+  TCHAR tmpstring[MAX_PATH];
+  _tcscpy(tmpstring, ID);
+  _tcsupr(tmpstring);
+  for(i=0;i<(int)_tcslen(tmpstring);i++)
     {
-      IDString[i] = (char)ID[i];
+      IDString[i] = (char)tmpstring[i];
     }
   IDString[i] = '\0';
 
@@ -720,10 +732,14 @@ public:
   double GetSpeed(double time) {
     if (Ready()) {
       double u= (time-p[1].t)/(p[2].t-p[1].t);
-      double s0 = Distance(p[0].lat, p[0].lon, 
-                           p[1].lat, p[1].lon)/(p[1].t-p[0].t);
-      double s1 = Distance(p[1].lat, p[1].lon, 
-                           p[2].lat, p[2].lon)/(p[2].t-p[1].t);
+      double s0;
+      DistanceBearing(p[0].lat, p[0].lon, 
+                      p[1].lat, p[1].lon, &s0, NULL);
+      s0/= (p[1].t-p[0].t);
+      double s1;
+      DistanceBearing(p[1].lat, p[1].lon, 
+                      p[2].lat, p[2].lon, &s1, NULL);
+      s1/= (p[2].t-p[1].t);
       u = max(0.0,min(1.0,u));
       return s1*u+s0*(1.0-u);
     } else {
@@ -860,7 +876,7 @@ bool ReplayLogger::UpdateInternal(void) {
     cli.Interpolate(tthis+0.1, &LonX1, &LatX1, &AltX1);
 
     SpeedX = cli.GetSpeed(tthis);
-    BearingX = Bearing(LatX, LonX, LatX1, LonX1);
+    DistanceBearing(LatX, LonX, LatX1, LonX1, NULL, &BearingX);
 
     if (SpeedX>0) {
 
@@ -1037,7 +1053,7 @@ bool LoggerClearFreeSpace(void) {
   unsigned long kbfree;
   TCHAR pathname[MAX_PATH];
   int numtries = 0;
-  _tcscpy(pathname,LocalPath());
+  LocalPath(pathname);
 
   while (found && ((kbfree = FindFreeSpace(pathname))<MINFREESTORAGE)
 	 && (numtries<100)) {

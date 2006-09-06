@@ -77,7 +77,10 @@ void dlgStatusShowModal(void){
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-  wf = dlgLoadFromXML(NULL, LocalPathS(TEXT("dlgStatusAircraft.xml")), 
+  char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgStatusAircraft.xml"));
+  wf = dlgLoadFromXML(NULL, 
+                      filename, 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_STATUSAIRCRAFT"));
 
@@ -128,15 +131,12 @@ void dlgStatusShowModal(void){
                                   100000.0); // big range limit
   if (iwaypoint>=0) {
 
-    bearing = Bearing(GPS_INFO.Latitude,
-                      GPS_INFO.Longitude,
-                      WayPointList[iwaypoint].Latitude,
-                      WayPointList[iwaypoint].Longitude);
-
-    distance = Distance(GPS_INFO.Latitude,
-                        GPS_INFO.Longitude,
-                        WayPointList[iwaypoint].Latitude,
-                        WayPointList[iwaypoint].Longitude)*DISTANCEMODIFY;
+    DistanceBearing(GPS_INFO.Latitude,
+                    GPS_INFO.Longitude,
+                    WayPointList[iwaypoint].Latitude,
+                    WayPointList[iwaypoint].Longitude,
+                    &distance,
+                    &bearing);
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpNear"));
     if (wp) {
@@ -145,14 +145,15 @@ void dlgStatusShowModal(void){
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpBearing"));
     if (wp) {
-      _stprintf(Temp, TEXT("%d"), (int)(bearing+0.5));
+      _stprintf(Temp, TEXT("%d°"), iround(bearing));
       wp->SetText(Temp);
     }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpDistance"));
     if (wp) {
-      _stprintf(Temp, TEXT("%.1f %s"), distance, Units::GetDistanceName());
-      wp->SetText(Temp);
+      TCHAR DistanceText[MAX_PATH];
+      Units::FormatUserDistance(distance,DistanceText, 10);
+      wp->SetText(DistanceText);
     }
 
   } else {
