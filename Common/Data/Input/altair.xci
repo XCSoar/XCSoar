@@ -829,6 +829,7 @@ mode=Info2
 type=key
 data=6
 event=Status system
+event=Mode default
 label=Status\nSystem
 location=5
 
@@ -836,6 +837,7 @@ mode=Info2
 type=key
 data=7
 event=Status Aircraft
+event=Mode default
 label=Status\nAircraft
 location=6
 
@@ -843,6 +845,7 @@ mode=Info2
 type=key
 data=8
 event=Status task
+event=Mode default
 label=Status\nTask
 location=7
 

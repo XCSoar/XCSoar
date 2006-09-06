@@ -181,6 +181,7 @@ int                                     InfoType[MAXINFOWINDOWS] =
 #endif
 
 bool RequestAirspaceWarningDialog= false;
+bool RequestAirspaceWarningForce=false;
 bool                                    DisplayLocked = true;
 bool                                    InfoWindowActive = true;
 bool                                    EnableAuxiliaryInfo = false;
@@ -615,6 +616,8 @@ void SettingsEnter() {
 
 
 void SettingsLeave() {
+  if (!GlobalRunning) return;
+
   SwitchToMapWindow();
   LockFlightData();
   LockTaskData();
@@ -1079,8 +1082,11 @@ void AfterStartup() {
 void StartupLogFreeRamAndStorage() {
   TCHAR temp[100];
   int freeram = CheckFreeRam()/1024;
-  int freestorage = FindFreeSpace(LocalPath());
-  _stprintf(temp,TEXT("Free ram %d\r\nFree storage %d\r\n"), freeram, freestorage);
+  TCHAR buffer[MAX_PATH];
+  LocalPath(buffer);
+  int freestorage = FindFreeSpace(buffer);
+  _stprintf(temp,TEXT("Free ram %d\r\nFree storage %d\r\n"),
+            freeram, freestorage);
   StartupStore(temp);
 }
 
@@ -1321,7 +1327,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ProgramStarted = 1;
 
   // Main message loop:
-  while (GetMessage(&msg, NULL, 0, 0))
+  while (GlobalRunning && GetMessage(&msg, NULL, 0, 0))
     {
       if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
         {
@@ -1822,7 +1828,9 @@ void Shutdown(void) {
 
   LockTaskData();
   ResumeAbortTask(-1); // turn off abort if it was on.
-  SaveTask(LocalPath(TEXT("Default.tsk")));
+  TCHAR buffer[MAX_PATH];
+  LocalPath(buffer, TEXT("Default.tsk"));
+  SaveTask(buffer);
   UnlockTaskData();
 
   StartupStore(TEXT("Clear task data\r\n"));
@@ -2344,10 +2352,12 @@ void DisplayText(void)
 
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i])||first);
 
+    int theactive = ActiveWayPoint;
+
     // set values, title
     switch (DisplayType[i]) {
     case 14: // Next waypoint
-      if (ActiveWayPoint != -1){
+      if (theactive != -1){
 	InfoBoxes[i]->
 	  SetTitle(Data_Options[DisplayType[i]].Formatter->
 		   Render(&color));
@@ -2381,12 +2391,17 @@ void DisplayText(void)
 
     switch (DisplayType[i]) {
     case 14: // Next waypoint
-      if (ActiveWayPoint != -1){
-	InfoBoxes[i]->
-	  SetComment(WayPointList[ Task[ActiveWayPoint].Index ].Comment);
-      }else{
-	InfoBoxes[i]->SetComment(TEXT(""));
+
+      if (theactive != -1){
+        int index;
+        index = Task[theactive].Index;
+        if (index>=0) {
+          InfoBoxes[i]->
+            SetComment(WayPointList[index].Comment);
+        }
+        break;
       }
+      InfoBoxes[i]->SetComment(TEXT(""));
       break;
     case 10:
       if (CALCULATED_INFO.AutoMacCready)
@@ -2447,7 +2462,8 @@ void CommonProcessTimer()
   if (ProgramStarted==3) {
     if (RequestAirspaceWarningDialog) {
       RequestAirspaceWarningDialog= false;
-      dlgAirspaceWarningShowDlg(false);
+      dlgAirspaceWarningShowDlg(RequestAirspaceWarningForce);
+      RequestAirspaceWarningForce = false;
     }
   }
 
@@ -2813,7 +2829,7 @@ void StartupStore(TCHAR *Str)
   static TCHAR szFileName[MAX_PATH];
   static bool initialised = false;
   if (!initialised) {
-    _tcscpy(szFileName,LocalPath(TEXT("xcsoar-startup.log")));
+    LocalPath(szFileName, TEXT("xcsoar-startup.log"));
     hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
                        NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
     initialised = true;

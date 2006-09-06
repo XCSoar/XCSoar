@@ -122,6 +122,7 @@ extern TCHAR szRegistryWaypointsOutOfRange[];
 extern TCHAR szRegistryEnableExternalTriggerCruise[];
 extern TCHAR szRegistryOLCRules[];
 extern TCHAR szRegistryHandicap[];
+extern TCHAR szRegistrySnailWidthScale[];
 
 extern bool LockSettingsInFlight;
 
@@ -146,8 +147,9 @@ void frotate(float &xin, float &yin, const float &angle);
 void rotatescale(double &xin, double &yin, const double &angle, const double &scale);
 void frotatescale(float &xin, float &yin, const float &angle, const float &scale);
 
-double Distance(double lat1, double lon1, double lat2, double lon2);
-double Bearing(double lat1, double lon1, double lat2, double lon2);
+void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
+                     double *Distance, double *Bearing);
+
 double Reciprocal(double InBound);
 double BiSector(double InBound, double OutBound);
 void SectorEndPoint(double StartLat, double StartLon, double  Radial, double Dist, double *EndLat, double *EndLon);
@@ -160,7 +162,7 @@ void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex);
 void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
-int  Circle(HDC hdc, long x, long y, int radius, RECT rc);
+int  Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip=false);
 int Segment(HDC hdc, long x, long y, int radius, RECT rc,
 	    double start,
 	    double end);
@@ -251,8 +253,8 @@ typedef struct {
 // Parse string (new lines etc) and malloc the string
 TCHAR* StringMallocParse(TCHAR* old_string);
 
-TCHAR* LocalPath(TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
-char* LocalPathS(TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
+void LocalPath(TCHAR* buf, TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
+void LocalPathS(char* buf, TCHAR* file = TEXT(""), int loc = CSIDL_PERSONAL);
 
 void ExpandLocalPath(TCHAR* filein);
 void ContractLocalPath(TCHAR* filein);

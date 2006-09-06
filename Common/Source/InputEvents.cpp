@@ -1723,6 +1723,8 @@ void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
 
 bool dlgAirspaceWarningIsEmpty(void);
 
+extern bool RequestAirspaceWarningForce;
+
 void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   double nearestdistance=0;
   double nearestbearing=0;
@@ -1736,6 +1738,7 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   TCHAR text[1024];
 
   if (!dlgAirspaceWarningIsEmpty()) {
+    RequestAirspaceWarningForce = true;
     RequestAirspaceWarningDialog= true;
     return;
   }
@@ -1770,19 +1773,23 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
     nearestdistance = -nearestdistance;
   }
 
+  TCHAR DistanceText[MAX_PATH];
+  Units::FormatUserDistance(nearestdistance, DistanceText, 10);
+
   if (inside) {
-    _stprintf(text,TEXT("Inside airspace: %s\r\n%s\r\nExit: %.1f %s\r\nBearing %d\r\n"),
+    _stprintf(text,
+    TEXT("Inside airspace: %s\r\n%s\r\nExit: %s\r\nBearing %d°\r\n"),
 	      szTitleBuffer,
 	      szMessageBuffer,
 	      nearestdistance*DISTANCEMODIFY,
-	      Units::GetDistanceName(),
+	      DistanceText,
 	      (int)nearestbearing);
   } else {
-    _stprintf(text,TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %.1f %s\r\nBearing %d\r\n"),
+    _stprintf(text,
+    TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %s\r\nBearing %d°\r\n"),
 	      szTitleBuffer,
 	      szMessageBuffer,
-	      nearestdistance*DISTANCEMODIFY,
-	      Units::GetDistanceName(),
+	      DistanceText,
 	      (int)nearestbearing);
   }
 
@@ -1825,7 +1832,9 @@ void InputEvents::eventNull(TCHAR *misc) {
 // Loads the task of the specified filename
 void InputEvents::eventTaskLoad(TCHAR *misc) {
   LockTaskData();
-  LoadNewTask(LocalPath(misc));
+  TCHAR buffer[MAX_PATH];
+  LocalPath(buffer,misc);
+  LoadNewTask(buffer);
   UnlockTaskData();
 }
 

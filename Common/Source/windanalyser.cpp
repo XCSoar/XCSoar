@@ -219,15 +219,17 @@ void WindAnalyser::calcThermalDrift() {
   return; // disabled as this causes problems
 
   if (ThermalTime>300) {
-    double ThermalDrift= Distance(climbstartpos.y,
-                                  climbstartpos.x,
-                                  climbendpos.y,
-                                  climbendpos.x);
-    double DriftAngle = Bearing(climbstartpos.y,
-                                climbstartpos.x,
-                                climbendpos.y,
-                                climbendpos.x);
 
+    double ThermalDrift;
+    double DriftAngle;
+
+    DistanceBearing(climbstartpos.y,
+                    climbstartpos.x,
+                    climbendpos.y,
+                    climbendpos.x,
+                    &ThermalDrift,
+                    &DriftAngle
+                    );
     Vector v;
     v.x = -ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
     v.y = -ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);

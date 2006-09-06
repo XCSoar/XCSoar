@@ -91,6 +91,7 @@ static void Update() {
     wp->GetDataField()->SetAsFloat(teammateRange*DISTANCEMODIFY);
     wp->RefreshDisplay();
   }
+
   TCHAR Text[100];
   wp = (WndProperty*)wf->FindByName(TEXT("prpCode"));
   if (wp) {
@@ -112,8 +113,6 @@ static void OnCodeClicked(WindowControl *Sender) {
   if (_tcslen(TeammateCode)>0) {
     TeammateCodeValid = true;
   }
-  Sleep(1000);
-  Update();
 }
 
 
@@ -121,8 +120,14 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
+static int OnTimerNotify(WindowControl * Sender) {
+  Update();
+  return 0;
+}
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnCloseClicked),
+  DeclearCallBackEntry(OnTimerNotify),
   DeclearCallBackEntry(NULL)
 };
 
@@ -130,8 +135,11 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgTeamCodeShowModal(void) {
 
   wf = NULL;
+  char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgTeamCode.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-		      LocalPathS(TEXT("dlgTeamCode.xml")),
+
+                      filename,
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TEAMCODE"));
   if (!wf) return;
@@ -149,6 +157,8 @@ void dlgTeamCodeShowModal(void) {
   }
 
   Update();
+
+  wf->SetTimerNotify(OnTimerNotify);
 
   wf->ShowModal();
 

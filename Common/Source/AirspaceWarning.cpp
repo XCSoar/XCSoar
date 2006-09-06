@@ -52,25 +52,41 @@ static void UnLockList(void){
 }
 
 static bool UpdateAirspaceAckBrush(AirspaceInfo_c *Item, int Force){
-  bool res;
+  bool res=false;
 
   if (Force == 0){
     if (Item->IsCircle){
-      res = AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush;
-      AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush =
-         (Item->WarnLevel > 0) && (Item->WarnLevel <= Item->Acknowledge);
+      if (AirspaceCircle) {
+        res = AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush;
+        AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush =
+          (Item->WarnLevel > 0) && (Item->WarnLevel <= Item->Acknowledge);
+      } else {
+        res = false;
+      }
     } else {
-      res = AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush;
-      AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush =
-         (Item->WarnLevel > 0) && (Item->WarnLevel <= Item->Acknowledge);
+      if (AirspaceArea) {
+        res = AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush;
+        AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush =
+          (Item->WarnLevel > 0) && (Item->WarnLevel <= Item->Acknowledge);
+      } else {
+        res = false;
+      }
     }
   } else {
     if (Item->IsCircle){
-      res = AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush;
-      AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush = (Force == 1);
+      if (AirspaceCircle) {
+        res = AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush;
+        AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush = (Force == 1);
+      } else {
+        res = false;
+      }
     } else {
-      res = AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush;
-      AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush = (Force == 1);
+      if (AirspaceArea) {
+        res = AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush;
+        AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush = (Force == 1);
+      } else {
+        res = false;
+      }
     }
   }
   return(res);
@@ -159,7 +175,9 @@ static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, bool IsCircle, int As
   }
 
   if (IsCircle){
-    *hDistance = (int)RangeAirspaceCircle(Basic->Longitude, Basic->Latitude, AsIdx);
+    *hDistance = (int)RangeAirspaceCircle(Basic->Longitude,
+                                          Basic->Latitude,
+                                          AsIdx);
     if (*hDistance < 0)
       *hDistance = 0;
     vDistanceBase = (int)AirspaceCircle[AsIdx].Base.Altitude - alt;

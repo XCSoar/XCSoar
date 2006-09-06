@@ -29,6 +29,9 @@ extern HINSTANCE hInst;
 extern int ProgramStarted;
 
 
+extern int UTCOffset;
+
+
 // comms data
 extern HANDLE hPort1;            // Serial port handle
 extern HANDLE hPort2;            // Serial port handle

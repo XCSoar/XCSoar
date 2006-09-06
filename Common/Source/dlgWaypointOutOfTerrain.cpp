@@ -76,8 +76,11 @@ int dlgWaypointOutOfTerrain(TCHAR *Message){
   __try{
 #endif
 
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgWaypointOutOfTerrain.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-		        LocalPathS(TEXT("dlgWaypointOutOfTerrain.xml")),
+
+                        filename,
 		        hWndMainWindow,
 		        TEXT("IDR_XML_WAYPOINTTERRAIN"));
 

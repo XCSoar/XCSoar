@@ -261,18 +261,25 @@ void dlgWayPointDetailsShowModal(void){
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgWayPointDetails_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        LocalPathS(TEXT("dlgWayPointDetails_L.xml")),
+
+                        filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTDETAILS_L"));
 
   } else
 #endif
-  wf = dlgLoadFromXML(CallBackTable,
-		      LocalPathS(TEXT("dlgWayPointDetails.xml")),
-		      hWndMainWindow,
-		      TEXT("IDR_XML_WAYPOINTDETAILS"));
+    {
+      char filename[MAX_PATH];
+      LocalPathS(filename, TEXT("dlgWayPointDetails.xml"));
+      wf = dlgLoadFromXML(CallBackTable,
 
+                          filename,
+                          hWndMainWindow,
+                          TEXT("IDR_XML_WAYPOINTDETAILS"));
+    }
   nTextLines = 0;
 
   if (!wf) return;
@@ -314,22 +321,20 @@ void dlgWayPointDetailsShowModal(void){
   ((WndProperty *)wf->FindByName(TEXT("prpSunset")))
     ->SetText(sTmp);
 
-  double distance = Distance(GPS_INFO.Latitude,
-			 GPS_INFO.Longitude,
-			 WayPointList[SelectedWaypoint].Latitude,
-			 WayPointList[SelectedWaypoint].Longitude);
+  double distance, bearing;
+  DistanceBearing(GPS_INFO.Latitude,
+                  GPS_INFO.Longitude,
+                  WayPointList[SelectedWaypoint].Latitude,
+                  WayPointList[SelectedWaypoint].Longitude,
+                  &distance,
+                  &bearing);
 
-  _stprintf(sTmp, TEXT("%.0f %s"), distance*DISTANCEMODIFY,
-	    Units::GetDistanceName());
+  TCHAR DistanceText[MAX_PATH];
+  Units::FormatUserDistance(distance, DistanceText, 10);
   ((WndProperty *)wf->FindByName(TEXT("prpDistance")))
-    ->SetText(sTmp);
+    ->SetText(DistanceText);
 
-  double bearing = Bearing(GPS_INFO.Latitude,
-			   GPS_INFO.Longitude,
-			   WayPointList[SelectedWaypoint].Latitude,
-			   WayPointList[SelectedWaypoint].Longitude);
   _stprintf(sTmp, TEXT("%d°"), iround(bearing));
-
   ((WndProperty *)wf->FindByName(TEXT("prpBearing")))
     ->SetText(sTmp);
 

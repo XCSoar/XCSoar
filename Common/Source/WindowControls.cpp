@@ -146,7 +146,9 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 #ifdef ALTAIRSYNC
   ScanDirectories(TEXT("\\NOR Flash"),filter);
 #else
-  ScanDirectories(LocalPath(),filter);
+  TCHAR buffer[MAX_PATH];
+  LocalPath(buffer);
+  ScanDirectories(buffer,filter);
 #ifndef GNAV
 #if (WINDOWSPC<1)
 
@@ -1560,6 +1562,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
     case WM_LBUTTONDOWN:
       if (!OnLButtonDown(wParam, lParam)) return(0);
+      // JMW TODO: need to be able to focus list items here...
     break;
 
     case WM_LBUTTONUP:
@@ -2559,7 +2562,8 @@ int WndProperty::SetButtonSize(int Value){
 
     SetWindowPos(mhEdit, 0, 0, 0,
       mEditSize.x, mEditSize.y,
-      SWP_NOMOVE | SWP_NOREPOSITION | SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOZORDER
+      SWP_NOMOVE | SWP_NOREPOSITION | SWP_NOACTIVATE
+                 | SWP_NOOWNERZORDER | SWP_NOZORDER
     );
 
     if (GetVisible()){
@@ -2571,7 +2575,8 @@ int WndProperty::SetButtonSize(int Value){
 };
 
 
-int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
+int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
+                                    WPARAM wParam, LPARAM lParam) {
 
   switch (uMsg){
 
@@ -3000,8 +3005,11 @@ UINT WndFrame::SetCaptionStyle(UINT Value){
 }
 
 
-WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y, int Width, int Height, void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo)):
-   WndFrame(Owner, Name, X, Y, Width, Height)
+WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
+                           int Width, int Height,
+                           void (*OnListCallback)(WindowControl * Sender,
+                                                  ListInfo_t *ListInfo)):
+  WndFrame(Owner, Name, X, Y, Width, Height)
 {
 
   mListInfo.ItemIndex = 0;
@@ -3145,7 +3153,10 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
 }
 
 
-void WndListFrame::SetEnterCallback(void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo)) {
+void WndListFrame::SetEnterCallback(void
+                                    (*OnListCallback)(WindowControl *Sender,
+                                                      ListInfo_t *ListInfo))
+{
   mOnListEnterCallback = OnListCallback;
 }
 
@@ -3159,7 +3170,6 @@ void WndListFrame::RedrawScrolled(bool all) {
       mOnListCallback(this, &mListInfo);
       mClients[0]->SetTop(mClients[0]->GetHeight() * (i));
       mClients[0]->Redraw();
-
     }
   }
 
@@ -3277,7 +3287,7 @@ void WndListFrame::ResetList(void){
     }
   }
 
-  mClients[0]->SetTop(0);                                   // move item windoe to the top
+  mClients[0]->SetTop(0);     // move item window to the top
   mClients[0]->Redraw();
 }
 
@@ -3286,6 +3296,61 @@ int WndListFrame::PrepareItemDraw(void){
     mOnListCallback(this, &mListInfo);
   return(1);
 }
+
+static bool isselect = false;
+
+// JMW needed to support mouse/touchscreen
+int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
+  if (mIsListItem && GetOwner()!=NULL) {
+
+    if (!GetFocused()) {
+      SetFocus(GetHandle());
+      return(1);
+    } else {
+      InvalidateRect(GetHandle(), GetBoundRect(), false);
+      UpdateWindow(GetHandle());
+    }
+
+    int xPos = LOWORD(lParam);  // horizontal position of cursor
+    int yPos = HIWORD(lParam);  // vertical position of cursor
+    WndListFrame* wlf = ((WndListFrame*)GetOwner());
+    RECT mRc;
+    GetWindowRect(GetHandle(), &mRc);
+    wlf->SelectItemFromScreen(xPos, yPos, &mRc);
+  }
+  isselect = false;
+  return(1);
+}
+
+
+void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
+                                        RECT *rect) {
+  int index;
+  GetClientRect(GetHandle(), rect);
+  index = yPos/mClients[0]->GetHeight();
+
+  if ((index>=0)&&(index<mListInfo.BottomIndex)) {
+    if (!isselect) {
+      if (mOnListEnterCallback) {
+        mOnListEnterCallback(this, &mListInfo);
+      }
+      RedrawScrolled(false);
+    } else {
+      mListInfo.ItemIndex = index;
+      RecalculateIndices(false);
+    }
+  }
+}
+
+
+int WndListFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
+  if (mClientCount > 0){
+    isselect = true;
+    ((WndFrame *)mClients[0])->OnLButtonDown(wParam, lParam);
+  }
+  return(1);
+}
+
 
 #ifndef ALTAIRSYNC
 #include "InputEvents.h"

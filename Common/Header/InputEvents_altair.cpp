@@ -861,18 +861,21 @@ Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatus, TEXT("system"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT("Status\nSystem"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatus, TEXT("Aircraft"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT("Status\nAircraft"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatus, TEXT("task"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
 makeLabel(mode_id,TEXT("Status\nTask"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;

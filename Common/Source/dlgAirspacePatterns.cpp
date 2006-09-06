@@ -120,16 +120,24 @@ int dlgAirspacePatternsShowModal(void){
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgAirspacePatterns_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        LocalPathS(TEXT("dlgAirspacePatterns_L.xml")),
+
+                        filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACEPATTERNS_L"));
   } else
 #endif
-  wf = dlgLoadFromXML(CallBackTable,
-                      LocalPathS(TEXT("dlgAirspacePatterns.xml")),
-		      hWndMainWindow,
-		      TEXT("IDR_XML_AIRSPACEPATTERNS"));
+    {
+      char filename[MAX_PATH];
+      LocalPathS(filename, TEXT("dlgAirspacePatterns.xml"));
+      wf = dlgLoadFromXML(CallBackTable,
+
+                          filename,
+                          hWndMainWindow,
+                          TEXT("IDR_XML_AIRSPACEPATTERNS"));
+    }
 
   if (!wf) return -1;
 

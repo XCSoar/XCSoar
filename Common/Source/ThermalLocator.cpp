@@ -131,8 +131,11 @@ void ThermalLocator::Update(double t_0,
 
   if ((Thermal_W0>0)&&(*Thermal_W>0)) {
 
-    double d = Distance(*Thermal_Latitude, *Thermal_Longitude,
-                        Thermal_Latitude0, Thermal_Longitude0);
+    double d;
+    DistanceBearing(*Thermal_Latitude, *Thermal_Longitude,
+                    Thermal_Latitude0, Thermal_Longitude0,
+                    &d, NULL);
+
     //    if (d>200.0) {
     // big shift detected
 

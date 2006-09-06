@@ -121,16 +121,24 @@ int dlgAirspaceColoursShowModal(void){
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgAirspaceColours_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        LocalPathS(TEXT("dlgAirspaceColours_L.xml")),
+
+                        filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACECOLOURS_L"));
   } else
 #endif
-  wf = dlgLoadFromXML(CallBackTable,
-	          LocalPathS(TEXT("dlgAirspaceColours.xml")),
-		      hWndMainWindow,
-		      TEXT("IDR_XML_AIRSPACECOLOURS"));
+    {
+      char filename[MAX_PATH];
+      LocalPathS(filename, TEXT("dlgAirspaceColours.xml"));
+      wf = dlgLoadFromXML(CallBackTable,
+
+                          filename,
+                          hWndMainWindow,
+                          TEXT("IDR_XML_AIRSPACECOLOURS"));
+    }
 
   if (!wf) return -1;
 

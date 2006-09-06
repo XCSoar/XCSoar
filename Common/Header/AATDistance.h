@@ -54,6 +54,8 @@ private:
   void UpdateSearch(int taskwaypoint);
   void ThinData(int taskwaypoint);
 
+  double max_achieved_distance;
+
   int imax[MAXTASKPOINTS];
   double distancethreshold[MAXTASKPOINTS];
   // index to max distance sample to task point n

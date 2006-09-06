@@ -26,6 +26,8 @@
 #endif
 #endif
 
+#define DISABLEAUDIOVARIO
+
 #if (GNAV)
 #define DISABLEAUDIOVARIO
 // use exception handling

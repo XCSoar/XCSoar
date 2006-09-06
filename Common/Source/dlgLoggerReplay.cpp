@@ -95,7 +95,10 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgLoggerReplayShowModal(void){
 
-  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgLoggerReplay.xml")),
+  char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgLoggerReplay.xml"));
+  wf = dlgLoadFromXML(CallBackTable,
+                      filename,
 		      hWndMainWindow,
 		      TEXT("IDR_XML_LOGGERREPLAY"));
 

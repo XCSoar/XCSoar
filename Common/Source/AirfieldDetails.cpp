@@ -174,9 +174,10 @@ void ParseAirfieldDetails() {
 
       } else {
 	// append text to details string
-	wcscat(Details,TempString);
-	wcscat(Details,TEXT("\r\n"));
-
+        if (_tcslen(Details)+_tcslen(TempString)+3<5000) {
+          wcscat(Details,TempString);
+          wcscat(Details,TEXT("\r\n"));
+        }
 	// TODO: check the string is not too long
       }
     }

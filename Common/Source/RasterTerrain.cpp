@@ -271,6 +271,10 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
     lx/= 256;
     ly/= 256;
 
+    // ADJUST
+    lx--;
+    ly--;
+
     if ((lx<1)
 	||(ly<1)
 	||(ly>=TerrainInfo.Rows-2)

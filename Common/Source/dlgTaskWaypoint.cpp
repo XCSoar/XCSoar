@@ -316,16 +316,25 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgTaskWaypoint_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        LocalPathS(TEXT("dlgTaskWaypoint_L.xml")),
+
+                        filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_TASKWAYPOINT_L"));
   } else
 #endif
+    {
+    char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgTaskWaypoint.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        LocalPathS(TEXT("dlgTaskWaypoint.xml")),
+
+                        filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_TASKWAYPOINT"));
+
+    }
 
   twItemIndex = itemindex;
   twType = tasktype;

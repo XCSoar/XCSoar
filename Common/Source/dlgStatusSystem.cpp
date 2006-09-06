@@ -189,8 +189,11 @@ void dlgStatusSystemShowModal(void){
 
   first = true;
 
+  char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgStatusSystem.xml"));
   wf = dlgLoadFromXML(NULL,
-		      LocalPathS(TEXT("dlgStatusSystem.xml")),
+
+                      filename,
 		      hWndMainWindow,
 		      TEXT("IDR_XML_STATUSSYSTEM"));
   if (!wf) return;

@@ -74,9 +74,6 @@ class Topology {
   void flushCache();
 
   bool in_scale;
-  int getQuad(double x, double y, RECT rc);
-  bool checkInside(int x, int y, int quad, RECT rc);
-  int getCorner(int n, int n2);
   HPEN hPen;
   HBRUSH hbBrush;
   HBITMAP hBitmap;
@@ -105,6 +102,8 @@ class TopologyLabel: public Topology {
   int field;
 
 };
+
+void ClipPolygon(HDC hdc, POINT *ptin, int n, RECT rc);
 
 
 #endif

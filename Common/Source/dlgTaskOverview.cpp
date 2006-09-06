@@ -211,7 +211,7 @@ static void OnTaskListEnter(WindowControl * Sender,
 		     WndListFrame::ListInfo_t *ListInfo) {
 
   ItemIndex = ListInfo->ItemIndex;
-  if ((ItemIndex>= UpLimit) || (UpLimit==1)) {
+  if ((ItemIndex>= UpLimit) || (UpLimit==0)) {
     if (ItemIndex>=UpLimit) {
       ItemIndex= UpLimit;
     }
@@ -265,7 +265,14 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-
+  if (MessageBoxX(hWndMapWindow,TEXT("Clear the task?"),
+                  TEXT("Clear task"),
+                  MB_YESNO|MB_ICONQUESTION) == IDYES) {
+    if (CheckDeclaration()) {
+      ClearTask();
+      OverviewRefreshTask();
+    }
+  }
 }
 
 static void OnCalcClicked(WindowControl * Sender,
@@ -297,7 +304,7 @@ static void GetTaskFileName(TCHAR *filename) {
   TCHAR sTmp[MAX_PATH];
 
   _stprintf(sTmp,TEXT("%02d.tsk"), TaskFileNumber);
-  _tcscpy(filename, LocalPath(sTmp));
+  LocalPath(filename, sTmp);
 
 }
 
@@ -349,15 +356,23 @@ void dlgTaskOverviewShowModal(void){
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgTaskOverview_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        LocalPathS(TEXT("dlgTaskOverview_L.xml")),
+
+                        filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_TASKOVERVIEW_L"));
   } else
 #endif
-  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgTaskOverview.xml")),
+    {
+    char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgTaskOverview.xml"));
+  wf = dlgLoadFromXML(CallBackTable,
+                      filename,
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TASKOVERVIEW"));
+    }
 
   if (!wf) return;
 

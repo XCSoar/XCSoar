@@ -185,7 +185,8 @@ void LoadChecklist(void) {
     ChecklistTitle[0]= NULL;
   }
 
-  TCHAR *filename = LocalPath(TEXT("xcsoar-checklist.txt"));
+  TCHAR filename[MAX_PATH];
+  LocalPath(filename, TEXT("xcsoar-checklist.txt"));
 
   hChecklist = INVALID_HANDLE_VALUE;
   hChecklist = CreateFile(filename,
@@ -261,17 +262,24 @@ void dlgChecklistShowModal(void){
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgChecklist_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        LocalPathS(TEXT("dlgChecklist_L.xml")),
+
+                        filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_CHECKLIST_L"));
   } else
 #endif
+    {
+    char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgChecklist.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-		      LocalPathS(TEXT("dlgChecklist.xml")),
+
+                      filename,
 		      hWndMainWindow,
 		      TEXT("IDR_XML_CHECKLIST"));
-
+    }
 
   nTextLines = 0;
 

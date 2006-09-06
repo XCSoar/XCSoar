@@ -258,7 +258,10 @@ void OLCOptimizer::thin_data() {
     data.distancethreshold /= contractfactor;
     // don't erase last point and don't erase up to start
     for (i= data.pnts_in-3; i>nistart+1; i--) {
-      double d = Distance(data.latpnts[i], data.lonpnts[i], data.latpnts[i-1], data.lonpnts[i-1]);
+      double d;
+      DistanceBearing(data.latpnts[i], data.lonpnts[i],
+                      data.latpnts[i-1], data.lonpnts[i-1],
+                      &d, NULL);
       if (d<data.distancethreshold) {
 	data.timepnts[i] = -1; // mark it for deletion
       }
@@ -339,7 +342,9 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
   alt2= alt1;
   alt1= ialt;
 
-  if ((Distance(lat, lon, latlast, lonlast)>data.distancethreshold)
+  double tmpd;
+  DistanceBearing(lat, lon, latlast, lonlast, &tmpd, NULL);
+  if ((tmpd>data.distancethreshold)
       || (data.pnts_in==0) || (isminimum)) {
 
     latlast = lat;

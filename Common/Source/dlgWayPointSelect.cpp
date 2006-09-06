@@ -138,17 +138,15 @@ static void PrepareData(void){
 
   for (int i=0; i<(int)NumberOfWayPoints; i++){
     WayPointSelectInfo[i].Index = i;
-    WayPointSelectInfo[i].Distance
-                    = Distance(GPS_INFO.Latitude,
-                        GPS_INFO.Longitude,
-                        WayPointList[i].Latitude,
-                        WayPointList[i].Longitude)*DISTANCEMODIFY;
 
-    WayPointSelectInfo[i].Direction
-                    = Bearing(GPS_INFO.Latitude,
-                      GPS_INFO.Longitude,
-                      WayPointList[i].Latitude,
-                      WayPointList[i].Longitude);
+
+    DistanceBearing(GPS_INFO.Latitude,
+                    GPS_INFO.Longitude,
+                    WayPointList[i].Latitude,
+                    WayPointList[i].Longitude,
+                    &(WayPointSelectInfo[i].Distance),
+                    &(WayPointSelectInfo[i].Direction));
+    WayPointSelectInfo[i].Distance *= DISTANCEMODIFY;
 
     _tcsncpy(sTmp, WayPointList[i].Name, 4);
     sTmp[4] = '\0';
@@ -462,16 +460,24 @@ int dlgWayPointSelect(void){
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgWayPointSelect_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        LocalPathS(TEXT("dlgWayPointSelect_L.xml")),
+
+                        filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTSELECT_L"));
   } else
 #endif
+    {
+    char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgWayPointSelect.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-                      LocalPathS(TEXT("dlgWayPointSelect.xml")),
+
+                      filename,
                       hWndMainWindow,
 		      TEXT("IDR_XML_WAYPOINTSELECT"));
+    }
 
   if (!wf) return -1;
 

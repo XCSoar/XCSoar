@@ -49,7 +49,6 @@ Copyright_License {
 #include "Utils.h"
 #include "InfoBoxLayout.h"
 
-extern int UTCOffset;
 
 static bool changed = false;
 static bool taskchanged = false;
@@ -629,16 +628,24 @@ void dlgConfigurationShowModal(void){
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgConfiguration_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-                        LocalPathS(TEXT("dlgConfiguration_L.xml")),
+
+                        filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_CONFIGURATION_L"));
   } else
 #endif
+    {
+    char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgConfiguration.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-		      LocalPathS(TEXT("dlgConfiguration.xml")),
+
+                      filename,
 		      hWndMainWindow,
 		      TEXT("IDR_XML_CONFIGURATION"));
+    }
 
   if (!wf) return;
 
@@ -1569,6 +1576,12 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpLoggerTimeStepCircling"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(LoggerTimeStepCircling);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSnailWidthScale"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(MapWindow::SnailWidthScale);
     wp->RefreshDisplay();
   }
 
@@ -2574,6 +2587,16 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSnailWidthScale"));
+  if (wp) {
+    if (MapWindow::SnailWidthScale != wp->GetDataField()->GetAsInteger()) {
+      MapWindow::SnailWidthScale = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistrySnailWidthScale,MapWindow::SnailWidthScale);
+      changed = true;
+      requirerestart = true;
+    }
+  }
+
   if (COMPORTCHANGED) {
     WritePort1Settings(dwPortIndex1,dwSpeedIndex1);
     WritePort2Settings(dwPortIndex2,dwSpeedIndex2);
@@ -2639,7 +2662,7 @@ void dlgConfigurationShowModal(void){
     } else {
 
       MessageBoxX (hWndMainWindow,
-		   gettext(TEXT("Changes to configuration saved.  Restart XCSoar.")),
+		   gettext(TEXT("Changes to configuration saved.  Restart XCSoar to apply changes.")),
 		   TEXT(""), MB_OK);
     }
   }

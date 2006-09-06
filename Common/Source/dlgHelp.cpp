@@ -66,15 +66,22 @@ void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText) {
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
-    wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgHelp_L.xml")),
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgHelp_L.xml"));
+    wf = dlgLoadFromXML(CallBackTable,
+                        filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_HELP_L"));
   } else
 #endif
-  wf = dlgLoadFromXML(CallBackTable, LocalPathS(TEXT("dlgHelp.xml")),
+    {
+    char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgHelp.xml"));
+  wf = dlgLoadFromXML(CallBackTable,
+                      filename,
 		      hWndMainWindow,
 		      TEXT("IDR_XML_HELP"));
-
+    }
   WndProperty* wp;
 
   if (wf) {

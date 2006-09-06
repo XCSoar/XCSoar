@@ -56,8 +56,11 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgVoiceShowModal(void){
 
+  char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgVoice.xml"));
   wf = dlgLoadFromXML(CallBackTable,
-		      LocalPathS(TEXT("dlgVoice.xml")),
+
+                      filename,
 		      hWndMainWindow,
 		      TEXT("IDR_XML_VOICE"));
 

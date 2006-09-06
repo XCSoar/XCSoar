@@ -251,6 +251,8 @@ class MapWindow {
 
   static double LimitMapScale(double value);
 
+  static bool WaypointInRange(int i);
+
  private:
   static HBITMAP hLandable, hReachable,
     hTurnPoint, hSmall, hCruise, hClimb,
@@ -349,6 +351,7 @@ class MapWindow {
   static bool checkLabelBlock(RECT rc);
   static bool RenderTimeAvailable();
   static bool BigZoom;
+  static int SnailWidthScale;
 };
 
 

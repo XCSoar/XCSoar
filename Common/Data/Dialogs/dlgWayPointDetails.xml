@@ -16,15 +16,15 @@
   <WndFrame Name="frmInfos" X=70 Y=0 Width=246 Height=222 Font=2>
 
     <WndProperty Name="prpWpComment" Caption="Comment"       X=2 Y=2  Width=242 Height=40 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpLatitude"  Caption="Latitude"      X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpLongitude" Caption="Longitude"     X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpAltitude"  Caption="Elevation"     X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpSunset"    Caption="Sunset"        X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpDistance"  Caption="Distance"      X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpBearing"   Caption="Bearing"       X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpMc0"       Caption="Alt diff Mc 0" X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
-    <aWndProperty Name="prpMc1"       Caption="Alt diff Mc safety" X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpMc2"       Caption="Alt diff Mc current" X=2 Y=-1 Width=242 Height=19 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpLatitude"  Caption="Latitude"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpLongitude" Caption="Longitude"     X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpAltitude"  Caption="Elevation"     X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpSunset"    Caption="Sunset"        X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpDistance"  Caption="Distance"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpBearing"   Caption="Bearing"       X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpMc0"       Caption="Alt diff Mc 0" X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <aWndProperty Name="prpMc1"       Caption="Alt diff Mc safety" X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpMc2"       Caption="Alt diff Mc current" X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
 
   </WndFrame>
 

@@ -215,8 +215,13 @@ bool Topology::checkVisible(shapeObj* shape, rectObj *screenRect) {
   return (msRectOverlap(&shape->bounds, screenRect) == MS_TRUE);
 }
 
+///////////
 
-int Topology::getQuad(double x, double y, RECT rc) {
+
+
+
+
+static int getQuad(double x, double y, RECT rc) {
   int quad;
 
   double eq1, eq2, xOffs, yOffs;
@@ -253,7 +258,7 @@ int Topology::getQuad(double x, double y, RECT rc) {
   return quad;
 }
 
-bool Topology::checkInside(int x, int y, int quad, RECT rc) {
+static bool checkInside(int x, int y, int quad, RECT rc) {
   bool inside=false;
 
   //rc.bottom = rc.bottom - 30;
@@ -277,7 +282,7 @@ bool Topology::checkInside(int x, int y, int quad, RECT rc) {
   return inside;
 }
 
-int Topology::getCorner(int n, int n2) {
+static int getCorner(int n, int n2) {
   //nb - tidy this up
 
   if (n==1){
@@ -307,6 +312,96 @@ int Topology::getCorner(int n, int n2) {
   return 0;
 }
 
+
+///////////////
+
+void ClipPolygon(HDC hdc, POINT *ptin, int n, RECT rc) {
+  POINT pt[5000];
+
+  int skipped=0,keypoints=0,stcnr=0,endcnr=0,quad1=0,quad2=0,xprev=0,yprev=0;
+  bool leftscreen=false;
+
+  //  pt = (POINT*)SfRealloc(pt, n*sizeof(POINT));
+
+  //Uh-oh.. chance of running out of array space here, since
+  //the number of points is dynamic. Can anyone help?
+
+  if (!pt) return;
+
+
+  // JMW, well this at least is graceful
+  // to failure
+
+  for (int jj=0; jj< n; jj++) {
+    int x, y, quad;
+    bool inside;
+
+    x = ptin[jj].x;
+    y = ptin[jj].y;
+
+    //Screen is split into four quadrants:  \ 2 /
+    //									   \ /
+    //When a point outside screen crosses   1 x 3
+    //from one quadrant to another,a corner  /                \
+        //is drawn to prevent polygon clipping. / 4           \
+
+    quad = getQuad(x,y,rc);
+    inside = checkInside(x,y,quad,rc);
+
+    if (!inside){
+      if ((!leftscreen)||(quad != quad1)){
+        if(!leftscreen){
+          //Polygon has just left the screen
+          //Point is still drawn, which prevents clipped corners
+          pt[(jj-skipped)+keypoints].x = x;
+          pt[(jj-skipped)+keypoints].y = y;
+        }
+        else{
+          //Point has taken polygon to a new quadrant;
+          //draw a line between the two points (Just in case the line
+          //intersects the screen)
+          //(01FEB06 code simplification - sjt)
+
+          pt[(jj-skipped)+keypoints].x = xprev;
+          pt[(jj-skipped)+keypoints].y = yprev;
+
+          keypoints++;
+
+          pt[(jj-skipped)+keypoints].x = x;
+          pt[(jj-skipped)+keypoints].y = y;
+
+        }
+      }
+      else skipped++; //Don't draw this point...
+
+      xprev=x;
+      yprev=y;
+
+      leftscreen=true;
+      if (quad != quad1) quad1=quad;
+    } else{
+      //If current point is inside the screen...
+
+      //... and we've just returned from outside the screen,
+      // we draw one point outside the screen (prevents clipping)
+      if (leftscreen){
+        pt[(jj-skipped)+keypoints].x = xprev;
+        pt[(jj-skipped)+keypoints].y = yprev;
+        keypoints++;
+      }
+
+      leftscreen = false;
+
+      pt[(jj-skipped)+keypoints].x = x;
+      pt[(jj-skipped)+keypoints].y = y;
+
+    }
+  }
+  Polygon(hdc, pt,
+          n+keypoints-skipped);
+}
+
+///////////////
 
 void Topology::Paint(HDC hdc, RECT rc) {
 
@@ -415,8 +510,9 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
 	  if (checkVisible(shape, &screenRect))
 	  for (int tt = 0; tt < shape->numlines; tt ++) {
-		int skipped=0,keypoints=0,stcnr=0,endcnr=0,quad1=0,quad2=0,xprev=0,yprev=0;
-		bool leftscreen=false;
+
+            int skipped=0,keypoints=0,stcnr=0,endcnr=0,quad1=0,quad2=0,xprev=0,yprev=0;
+            bool leftscreen=false;
 
 	    pt = (POINT*)SfRealloc(pt,
 				   int((sizeof(POINT)
@@ -425,7 +521,8 @@ void Topology::Paint(HDC hdc, RECT rc) {
 	    //Uh-oh.. chance of running out of array space here, since
 	    //the number of points is dynamic. Can anyone help?
 
-	    if (!pt) continue; // JMW, well this at least is graceful to failure
+	    if (!pt) continue; // JMW, well this at least is graceful
+                               // to failure
 
 	    for (int jj=0; jj< shape->line[tt].numpoints/iskip; jj++) {
 	      int x, y, quad;

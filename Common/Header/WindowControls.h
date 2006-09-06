@@ -623,7 +623,8 @@ class WndFrame:public WindowControl{
 
   public:
 
-    WndFrame(WindowControl *Owner, TCHAR *Name, int X, int Y, int Width, int Height):
+    WndFrame(WindowControl *Owner, TCHAR *Name,
+             int X, int Y, int Width, int Height):
       WindowControl(Owner, NULL, Name, X, Y, Width, Height)
     {
 
@@ -649,6 +650,9 @@ class WndFrame:public WindowControl{
     int GetLastDrawTextHeight(void){return(mLastDrawTextHeight);};
 
     void SetIsListItem(bool Value){mIsListItem = Value;};
+
+
+    int OnLButtonDown(WPARAM wParam, LPARAM lParam);
 
   protected:
 
@@ -681,12 +685,15 @@ class WndListFrame:public WndFrame{
 
     typedef void (*OnListCallback_t)(WindowControl * Sender, ListInfo_t *ListInfo);
 
-    WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y, int Width, int Height, void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo));
+    WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
+                 int Width, int Height,
+                 void (*OnListCallback)(WindowControl * Sender,
+                                        ListInfo_t *ListInfo));
 
     virtual void Destroy(void);
 
     int OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam);
-    int WndListFrame::PrepareItemDraw(void);
+    int PrepareItemDraw(void);
     void ResetList(void);
     void SetEnterCallback(void (*OnListCallback)(WindowControl * Sender, ListInfo_t *ListInfo));
     void RedrawScrolled(bool all);
@@ -694,8 +701,11 @@ class WndListFrame:public WndFrame{
     int RecalculateIndices(bool bigscroll);
     void Redraw(void);
     int GetItemIndex(void){return(mListInfo.ItemIndex);}
+    void SelectItemFromScreen(int xPos, int yPos, RECT *rect);
 
   protected:
+
+    int OnLButtonDown(WPARAM wParam, LPARAM lParam);
 
     OnListCallback_t mOnListCallback;
     OnListCallback_t mOnListEnterCallback;

@@ -69,7 +69,10 @@ void dlgStatusTaskShowModal(void){
 
   TCHAR Temp[1000];
 
-  wf = dlgLoadFromXML(NULL, LocalPathS(TEXT("dlgStatusTask.xml")), hWndMainWindow,
+  char filename[MAX_PATH];
+  LocalPathS(filename, TEXT("dlgStatusTask.xml"));
+  wf = dlgLoadFromXML(NULL,
+                      filename, hWndMainWindow,
 		      TEXT("IDR_XML_STATUSTASK"));
   if (!wf) return;
 
