@@ -420,6 +420,13 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
           Border |= BORDERRIGHT;
         InfoBoxes[i]->SetBorderKind(Border);
       }
+	  // Add top border if we are portrait - for 4..
+	  else if (! landscape & (i > 3)) {
+          int Border;
+		  Border = InfoBoxes[i]->GetBorderKind() | BORDERTOP;
+          InfoBoxes[i]->SetBorderKind(Border);
+	  }
+
 
     }
 
