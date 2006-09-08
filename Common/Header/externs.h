@@ -235,6 +235,11 @@ extern bool RequestAirspaceWarningDialog;
 extern BlueDialupSMS bsms;
 #endif
 
+#if (WINDOWSPC>0)
+extern int SCREENWIDTH;
+extern int SCREENHEIGHT;
+#endif
+
 #endif
 
 #endif

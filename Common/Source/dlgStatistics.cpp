@@ -713,12 +713,10 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 	for (int j=0; j<4; j++) {
 	  bearing = j*360.0/4;
 
-	  aatlat = FindLatitude(WayPointList[Task[i].Index].Latitude,
-				WayPointList[Task[i].Index].Longitude,
-				bearing, radius);
-	  aatlon = FindLongitude(WayPointList[Task[i].Index].Latitude,
-				 WayPointList[Task[i].Index].Longitude,
-				 bearing, radius);
+          FindLatitudeLongitude(WayPointList[Task[i].Index].Latitude,
+                                WayPointList[Task[i].Index].Longitude,
+                                bearing, radius,
+                                &aatlat, &aatlon);
 	  x1 = (aatlon-lon_c)*fastcosine(aatlat);
 	  y1 = (aatlat-lat_c);
 	  ScaleXFromValue(rc, x1);
@@ -1135,8 +1133,8 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
 
   for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
     fj = j*1.0/(AIRSPACE_SCANSIZE_X);
-    d_lat[j]= FindLatitude(aclat, aclon, acb, range*fj);
-    d_lon[j]= FindLongitude(aclat, aclon, acb, range*fj);
+    FindLatitudeLongitude(aclat, aclon, acb, range*fj,
+                          &d_lat[j], &d_lon[j]);
   }
   for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
     fi = i*1.0/(AIRSPACE_SCANSIZE_H);

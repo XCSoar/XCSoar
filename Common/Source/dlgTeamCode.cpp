@@ -110,6 +110,15 @@ static void OnCodeClicked(WindowControl *Sender) {
   if (buttonCode) {
     dlgTextEntryShowModal(TeammateCode);
   }
+  int i= _tcslen(TeammateCode)-1;
+  while (i>=0) {
+    if (TeammateCode[i]!=_T(' ')) {
+      break;
+    }
+    TeammateCode[i]=0;
+    i--;
+  };
+
   if (_tcslen(TeammateCode)>0) {
     TeammateCodeValid = true;
   }

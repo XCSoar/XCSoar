@@ -81,6 +81,7 @@ class InputEvents {
   static void eventBrightness(TCHAR *misc);
   static void eventDeclutterLabels(TCHAR *misc);
   static void eventExit(TCHAR *misc);
+  static void eventFLARMRadar(TCHAR *misc);
   // -------
 
 #ifdef _SIM_

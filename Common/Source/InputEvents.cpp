@@ -56,7 +56,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "InputEvents.h"
 #include "Utils.h"
 #include "Dialogs.h"
-#include "VarioSound.h"
 #include "Terrain.h"
 #include "compatibility.h"
 #include <commctrl.h>
@@ -69,6 +68,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Units.h"
 #include "MapWindow.h"
 #include "Atmosphere.h"
+#include "GaugeFLARM.h"
 
 // Sensible maximums
 #define MAX_MODE 100
@@ -899,10 +899,11 @@ void InputEvents::eventSounds(TCHAR *misc) {
     else
       DoStatusMessage(TEXT("Vario Sounds OFF"));
   }
-
+  /*
   if (EnableSoundVario != OldEnableSoundVario) {
     VarioSound_EnableSound(EnableSoundVario);
   }
+  */
 }
 
 void InputEvents::eventSnailTrail(TCHAR *misc) {
@@ -1113,9 +1114,13 @@ void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("day")) == 0)
     // JMW clear airspace warnings for entire day (for selected airspace)
     ClearAirspaceWarnings(true,true);
-  else
+  else {
+
     // default, clear airspace for short acknowledgement time
-    ClearAirspaceWarnings(true,false);
+    if (ClearAirspaceWarnings(true,false)) {
+
+    }
+  }
 }
 
 // ClearStatusMessages
@@ -1125,6 +1130,14 @@ void InputEvents::eventClearStatusMessages(TCHAR *misc) {
   // TODO: allow selection of specific messages (here we are acknowledging all)
   Message::Acknowledge(0);
 }
+
+void InputEvents::eventFLARMRadar(TCHAR *misc) {
+  //  if (_tcscmp(misc, TEXT("on")) == 0) {
+
+  GaugeFLARM::Suppress = !GaugeFLARM::Suppress;
+  // the result of this will get triggered by refreshslots
+}
+
 
 // SelectInfoBox
 // Selects the next or previous infobox
@@ -1524,7 +1537,9 @@ void InputEvents::eventAudioDeadband(TCHAR *misc) {
     SoundDeadband--;
   }
   SoundDeadband = min(40,max(SoundDeadband,0));
+  /*
   VarioSound_SetVdead(SoundDeadband);
+  */
   SaveSoundSettings(); // save to registry
 
   // JMW TODO send to vario if available

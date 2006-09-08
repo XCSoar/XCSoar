@@ -52,7 +52,6 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_LANDING] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
@@ -114,7 +113,6 @@ makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
@@ -176,7 +174,6 @@ makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
@@ -218,7 +215,6 @@ makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
@@ -385,6 +381,7 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_UP] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventFLARMRadar, TEXT("toggle"), event_id);
 event_id = InputEvents::makeEvent(&eventClearAirspaceWarnings, TEXT(""), event_id);
 event_id = InputEvents::makeEvent(&eventClearStatusMessages, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
@@ -477,7 +474,7 @@ Key2Event[mode_id]['0'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Nav2"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Nav/"),1,event_id);
+makeLabel(mode_id,TEXT("Nav"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
@@ -517,7 +514,7 @@ Key2Event[mode_id]['0'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("/Nav"),1,event_id);
+makeLabel(mode_id,TEXT("Nav"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
@@ -557,7 +554,7 @@ Key2Event[mode_id]['0'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Display2"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Display/"),2,event_id);
+makeLabel(mode_id,TEXT("Display"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
@@ -618,7 +615,7 @@ Key2Event[mode_id][VK_RIGHT] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
-makeLabel(mode_id,TEXT("/Display"),2,event_id);
+makeLabel(mode_id,TEXT("Display"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
@@ -658,7 +655,7 @@ Key2Event[mode_id]['0'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Config2"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config1"), true);
-makeLabel(mode_id,TEXT("Config/"),3,event_id);
+makeLabel(mode_id,TEXT("Config"),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
@@ -697,7 +694,7 @@ Key2Event[mode_id]['0'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config2"), true);
-makeLabel(mode_id,TEXT("/Config"),3,event_id);
+makeLabel(mode_id,TEXT("Config"),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
@@ -737,7 +734,7 @@ Key2Event[mode_id]['0'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Vario2"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Vario1"), true);
-makeLabel(mode_id,TEXT("Vario/"),3,event_id);
+makeLabel(mode_id,TEXT("Vario"),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
@@ -774,7 +771,7 @@ Key2Event[mode_id]['0'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Vario2"), true);
-makeLabel(mode_id,TEXT("/Vario"),3,event_id);
+makeLabel(mode_id,TEXT("Vario"),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
@@ -812,26 +809,26 @@ Key2Event[mode_id]['0'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Info2"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
-makeLabel(mode_id,TEXT("Info/"),4,event_id);
+makeLabel(mode_id,TEXT("Info"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventWaypointDetails, TEXT("current"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+event_id = InputEvents::makeEvent(&eventWaypointDetails, TEXT("current"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
 makeLabel(mode_id,TEXT("Waypoint\nDetails"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNearestWaypointDetails, TEXT("aircraft"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+event_id = InputEvents::makeEvent(&eventNearestWaypointDetails, TEXT("aircraft"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
 makeLabel(mode_id,TEXT("Nearest\nWaypoint"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNearestAirspaceDetails, TEXT("aircraft "), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+event_id = InputEvents::makeEvent(&eventNearestAirspaceDetails, TEXT("aircraft "), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
 makeLabel(mode_id,TEXT("Nearest\nAirspace"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
@@ -853,7 +850,7 @@ Key2Event[mode_id]['0'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
-makeLabel(mode_id,TEXT("/Info"),4,event_id);
+makeLabel(mode_id,TEXT("Info"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
@@ -895,25 +892,25 @@ Key2Event[mode_id][VK_APP1] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Nav1"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Menu"), true);
-makeLabel(mode_id,TEXT("Nav/"),1,event_id);
+makeLabel(mode_id,TEXT("Nav"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Display1"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Menu"), true);
-makeLabel(mode_id,TEXT("Display/"),2,event_id);
+makeLabel(mode_id,TEXT("Display"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Config1"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Menu"), true);
-makeLabel(mode_id,TEXT("Config/"),3,event_id);
+makeLabel(mode_id,TEXT("Config"),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("Info1"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Menu"), true);
-makeLabel(mode_id,TEXT("Info/"),4,event_id);
+makeLabel(mode_id,TEXT("Info"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;

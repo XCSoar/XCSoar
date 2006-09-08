@@ -1099,10 +1099,23 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     /* JMW created all re-used pens here */
 
-    hpAircraft = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
-                                 RGB(0xf0,0xf0,0xf0));
-    hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-                                       RGB(0x00,0x00,0x00));
+    hpCompassBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
+                                      RGB(0xff,0xff,0xff));
+
+    // testing only    Appearance.InverseAircraft = true;
+
+    if (Appearance.InverseAircraft) {
+      hpAircraft = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
+                                   RGB(0x00,0x00,0x00));
+      hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
+                                         RGB(0xff,0xff,0xff));
+    } else {
+      hpAircraft = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
+                                   RGB(0xff,0xff,0xff));
+      hpAircraftBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
+                                         RGB(0x00,0x00,0x00));
+    }
+
     #if (MONOCHROME_SCREEN > 0)
     hpWind = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0,0,0));
     #else
@@ -1168,8 +1181,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     hBmpMapScale = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_MAPSCALE_A));
 
-    hpCompassBorder = (HPEN)CreatePen(PS_SOLID, IBLSCALE(3),
-                                      RGB(0xff,0xff,0xff));
     hBrushFlyingModeAbort = (HBRUSH)CreateSolidBrush(RGB(0xff,0x00,0x00));
 
     if (Appearance.IndLandable == wpLandableDefault){
@@ -1901,7 +1912,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     ResetEvent(drawTriggerEvent);
     if (CLOSETHREAD) break; // drop out without drawing
 
-    if (!THREADRUNNING || !GlobalRunning) {
+    if ((!THREADRUNNING) || (!GlobalRunning)) {
       Sleep(100);
       continue;
     }
@@ -2016,8 +2027,17 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
 
     int i;
     HPEN hpOld;
-    HBRUSH hbAircraftSolid = (HBRUSH) CreateSolidBrush(RGB(0x00,0x00,0x00));
-    HBRUSH hbAircraftSolidBg = (HBRUSH) CreateSolidBrush(RGB(0xff,0xff,0xff));
+    HBRUSH hbAircraftSolid;
+    HBRUSH hbAircraftSolidBg;
+
+    if (Appearance.InverseAircraft) {
+      hbAircraftSolid = (HBRUSH) CreateSolidBrush(RGB(0xff,0xff,0xff));
+      hbAircraftSolidBg = (HBRUSH) CreateSolidBrush(RGB(0x00,0x00,0x00));
+    } else {
+      hbAircraftSolid = (HBRUSH) CreateSolidBrush(RGB(0x00,0x00,0x00));
+      hbAircraftSolidBg = (HBRUSH) CreateSolidBrush(RGB(0xff,0xff,0xff));
+    }
+
     HBRUSH hbOld = (HBRUSH)SelectObject(hdc, hbAircraftSolidBg);
     hpOld = (HPEN)SelectObject(hdc, hpAircraft);
 
@@ -2077,11 +2097,15 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
     PolygonRotateShift(Aircraft, n,
                        Orig.x-1, Orig.y, angle);
 
-    oldPen = (HPEN)SelectObject(hdc, hpCompassBorder);
+    oldPen = (HPEN)SelectObject(hdc, hpAircraft);
     Polygon(hdc, Aircraft, n);
 
     HBRUSH hbOld;
-    hbOld = (HBRUSH)SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+    if (Appearance.InverseAircraft) {
+      hbOld = (HBRUSH)SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+    } else {
+      hbOld = (HBRUSH)SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+    }
     SelectObject(hdc, hpAircraftBorder); // hpBearing
     Polygon(hdc, Aircraft, n);
 
@@ -2657,7 +2681,7 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
       DrawDashLine(hdc, 1,
         WayPointList[index].Screen,
         me,
-        RGB(0,255,0));
+        taskcolor);
     }
     }
   #ifdef HAVEEXCEPTIONS
@@ -3137,35 +3161,87 @@ void MapWindow::DrawWind(HDC hdc, POINT Orig, RECT rc)
 
 void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 {
-  POINT Start, End;
   HPEN hpOld;
 
   if (!WayPointList) return;
 
+  int awp = ActiveWayPoint;
+  if (awp<0) return;
+  int index = Task[awp].Index;
+
+  double distance=0;
+  double distanceTotal=0;
+  double Bearing;
+  double startLat = DrawInfo.Latitude;
+  double startLon = DrawInfo.Longitude;
+  double targetLat;
+  double targetLon;
+
+  if (AATEnabled) {
+    targetLat = Task[awp].AATTargetLat;
+    targetLon = Task[awp].AATTargetLon;
+  } else {
+    targetLat = WayPointList[index].Latitude;
+    targetLon = WayPointList[index].Longitude;
+  }
+
+  DistanceBearing(startLat,
+                  startLon,
+                  targetLat,
+                  targetLon,
+                  &distanceTotal,
+                  &Bearing);
+
+  distance = distanceTotal;
+
+  if (distanceTotal==0.0) return;
+
+  double d_distance = max(5000.0,distanceTotal/10);
+
   hpOld = (HPEN)SelectObject(hdc, hpBearing);
 
-  LockTaskData();  // protect from external task changes
-  #ifdef HAVEEXCEPTIONS
-  __try{
-  #endif
-  if(ActiveWayPoint >= 0)
-  {
-    if (AATEnabled) {
-      Start.x = Task[ActiveWayPoint].Target.x;
-      Start.y = Task[ActiveWayPoint].Target.y;
-    } else {
-      Start.x = WayPointList[Task[ActiveWayPoint].Index].Screen.x;
-      Start.y = WayPointList[Task[ActiveWayPoint].Index].Screen.y;
+  POINT StartP;
+  POINT EndP;
+  LatLon2Screen(startLon,
+                startLat,
+                StartP);
+  LatLon2Screen(targetLon,
+                targetLat,
+                EndP);
+  if (d_distance>distanceTotal) {
+    DrawSolidLine(hdc, StartP, EndP);
+  } else {
+    for (int i=0; i<= 10; i++) {
+
+      double tlat1, tlon1;
+
+      FindLatitudeLongitude(startLat,
+                            startLon,
+                            Bearing,
+                            min(distance,d_distance),
+                            &tlat1,
+                            &tlon1);
+
+      DistanceBearing(tlat1,
+                      tlon1,
+                      targetLat,
+                      targetLon,
+                      &distance,
+                      &Bearing);
+
+      LatLon2Screen(tlon1,
+                    tlat1,
+                    EndP);
+
+      DrawSolidLine(hdc, StartP, EndP);
+
+      StartP.x = EndP.x;
+      StartP.y = EndP.y;
+
+      startLat = tlat1;
+      startLon = tlon1;
+
     }
-    End.x = Orig.x;
-    End.y = Orig.y;
-    DrawSolidLine(hdc, Start, End);
-  }
-  #ifdef HAVEEXCEPTIONS
-  }__finally
-  #endif
-  {
-    UnlockTaskData();  // protect from external task changes
   }
 
   SelectObject(hdc, hpOld);
@@ -4070,17 +4146,15 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   P1 = NULL; P2 = NULL;
 
   if (dotraildrift) {
+    double tlat1, tlon1;
 
-    traildrift_lat = (DrawInfo.Latitude
-                      -FindLatitude(DrawInfo.Latitude,
-                                    DrawInfo.Longitude,
-                                    DerivedDrawInfo.WindBearing,
-                                    DerivedDrawInfo.WindSpeed));
-    traildrift_lon = (DrawInfo.Longitude
-                      -FindLongitude(DrawInfo.Latitude,
-                                     DrawInfo.Longitude,
-                                     DerivedDrawInfo.WindBearing,
-                                     DerivedDrawInfo.WindSpeed));
+    FindLatitudeLongitude(DrawInfo.Latitude,
+                          DrawInfo.Longitude,
+                          DerivedDrawInfo.WindBearing,
+                          DerivedDrawInfo.WindSpeed,
+                          &tlat1, &tlon1);
+    traildrift_lat = (DrawInfo.Latitude-tlat1);
+    traildrift_lon = (DrawInfo.Longitude-tlon1);
   }
 
   // JMW don't draw first bit from home airport
@@ -4347,14 +4421,12 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
         continue;
       }
       double t = dh/DerivedDrawInfo.ThermalSources[i].LiftRate;
-      double lat = FindLatitude(DerivedDrawInfo.ThermalSources[i].Latitude,
-                                DerivedDrawInfo.ThermalSources[i].Longitude,
-                                DerivedDrawInfo.WindBearing,
-                                -DerivedDrawInfo.WindSpeed*t);
-      double lon = FindLongitude(DerivedDrawInfo.ThermalSources[i].Latitude,
-                                 DerivedDrawInfo.ThermalSources[i].Longitude,
-                                 DerivedDrawInfo.WindBearing,
-                                 -DerivedDrawInfo.WindSpeed*t);
+      double lat, lon;
+      FindLatitudeLongitude(DerivedDrawInfo.ThermalSources[i].Latitude,
+                            DerivedDrawInfo.ThermalSources[i].Longitude,
+                            DerivedDrawInfo.WindBearing,
+                            -DerivedDrawInfo.WindSpeed*t,
+                            &lat, &lon);
       if (PointVisible(lon,lat)) {
         LatLon2Screen(lon,
                       lat,

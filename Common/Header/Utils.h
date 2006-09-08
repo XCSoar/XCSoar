@@ -154,8 +154,9 @@ double Reciprocal(double InBound);
 double BiSector(double InBound, double OutBound);
 void SectorEndPoint(double StartLat, double StartLon, double  Radial, double Dist, double *EndLat, double *EndLon);
 void CalculateNewPolarCoef(void);
-double FindLatitude(double Lat, double Lon, double Bearing, double Distance);
-double FindLongitude(double Lat, double Lon, double Bearing, double Distance);
+void FindLatitudeLongitude(double Lat, double Lon,
+                           double Bearing, double Distance,
+                           double *lat_out, double *lon_out);
 void ConvertFlightLevels(void);
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
@@ -296,5 +297,6 @@ void MemLeakCheck();
 void MyCompactHeaps();
 unsigned long FindFreeSpace(TCHAR *path);
 bool MatchesExtension(TCHAR *filename, TCHAR* extension);
+BOOL PlayResource (LPTSTR lpName);
 
 #endif

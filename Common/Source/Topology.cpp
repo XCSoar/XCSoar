@@ -328,11 +328,16 @@ void ClipPolygon(HDC hdc, POINT *ptin, int n, RECT rc) {
 
   if (!pt) return;
 
-
   // JMW, well this at least is graceful
   // to failure
 
-  for (int jj=0; jj< n; jj++) {
+  int iskip=1;
+  int index=0;
+
+  while (n/iskip>4000) {
+    iskip++;
+  }
+  for (int jj=0; jj< n; jj+= iskip) {
     int x, y, quad;
     bool inside;
 
@@ -350,11 +355,12 @@ void ClipPolygon(HDC hdc, POINT *ptin, int n, RECT rc) {
 
     if (!inside){
       if ((!leftscreen)||(quad != quad1)){
+        index = jj-skipped+keypoints;
         if(!leftscreen){
           //Polygon has just left the screen
           //Point is still drawn, which prevents clipped corners
-          pt[(jj-skipped)+keypoints].x = x;
-          pt[(jj-skipped)+keypoints].y = y;
+          pt[index].x = x;
+          pt[index].y = y;
         }
         else{
           //Point has taken polygon to a new quadrant;
@@ -362,38 +368,42 @@ void ClipPolygon(HDC hdc, POINT *ptin, int n, RECT rc) {
           //intersects the screen)
           //(01FEB06 code simplification - sjt)
 
-          pt[(jj-skipped)+keypoints].x = xprev;
-          pt[(jj-skipped)+keypoints].y = yprev;
+          pt[index].x = xprev;
+          pt[index].y = yprev;
 
-          keypoints++;
+          keypoints++; index++;
 
-          pt[(jj-skipped)+keypoints].x = x;
-          pt[(jj-skipped)+keypoints].y = y;
+          pt[index].x = x;
+          pt[index].y = y;
 
         }
+      } else {
+        skipped++; //Don't draw this point...
       }
-      else skipped++; //Don't draw this point...
 
       xprev=x;
       yprev=y;
 
       leftscreen=true;
-      if (quad != quad1) quad1=quad;
+      if (quad != quad1)
+        quad1=quad;
     } else{
       //If current point is inside the screen...
+
+      index = jj-skipped+keypoints;
 
       //... and we've just returned from outside the screen,
       // we draw one point outside the screen (prevents clipping)
       if (leftscreen){
-        pt[(jj-skipped)+keypoints].x = xprev;
-        pt[(jj-skipped)+keypoints].y = yprev;
-        keypoints++;
+        pt[index].x = xprev;
+        pt[index].y = yprev;
+        keypoints++; index++;
       }
 
       leftscreen = false;
 
-      pt[(jj-skipped)+keypoints].x = x;
-      pt[(jj-skipped)+keypoints].y = y;
+      pt[index].x = x;
+      pt[index].y = y;
 
     }
   }
@@ -511,12 +521,14 @@ void Topology::Paint(HDC hdc, RECT rc) {
 	  if (checkVisible(shape, &screenRect))
 	  for (int tt = 0; tt < shape->numlines; tt ++) {
 
-            int skipped=0,keypoints=0,stcnr=0,endcnr=0,quad1=0,quad2=0,xprev=0,yprev=0;
+            int skipped=0,keypoints=0,stcnr=0,endcnr=0,
+              quad1=0,quad2=0,xprev=0,yprev=0;
             bool leftscreen=false;
 
-	    pt = (POINT*)SfRealloc(pt,
-				   int((sizeof(POINT)
-					*shape->line[tt].numpoints/iskip)*1.3));
+	    pt = (POINT*)
+              SfRealloc(pt,
+                        int((sizeof(POINT)
+                             *shape->line[tt].numpoints/iskip)*1.3));
 
 	    //Uh-oh.. chance of running out of array space here, since
 	    //the number of points is dynamic. Can anyone help?
@@ -538,63 +550,71 @@ void Topology::Paint(HDC hdc, RECT rc) {
 	      //from one quadrant to another,a corner  /      \
 		  //is drawn to prevent polygon clipping. / 4 \
 
-		quad = getQuad(x,y,rc);
-		inside = checkInside(x,y,quad,rc);
+              quad = getQuad(x,y,rc);
+              inside = checkInside(x,y,quad,rc);
 
-		if (!inside){
-		  if ((!leftscreen)||(quad != quad1)){
-		    if(!leftscreen){
-		      //Polygon has just left the screen
-		      //Point is still drawn, which prevents clipped corners
-		      pt[(jj-skipped)+keypoints].x = x;
-		      pt[(jj-skipped)+keypoints].y = y;
-		    }
-		    else{
-		      //Point has taken polygon to a new quadrant;
-		      //draw a line between the two points (Just in case the line
-		      //intersects the screen)
-		      //(01FEB06 code simplification - sjt)
+              int index;
 
-		      pt[(jj-skipped)+keypoints].x = xprev;
-		      pt[(jj-skipped)+keypoints].y = yprev;
+              if (!inside){
+                index = jj-skipped+keypoints;
+                if ((!leftscreen)||(quad != quad1)){
+                  if(!leftscreen){
+                    //Polygon has just left the screen
+                    //Point is still drawn, which prevents clipped corners
+                    pt[index].x = x;
+                    pt[index].y = y;
+                  }
+                  else{
+                    //Point has taken polygon to a new quadrant;
+                    //draw a line between the two points (Just in case the line
+                    //intersects the screen)
+                    //(01FEB06 code simplification - sjt)
 
-		      keypoints++;
+                    pt[index].x = xprev;
+                    pt[index].y = yprev;
 
-		      pt[(jj-skipped)+keypoints].x = x;
-		      pt[(jj-skipped)+keypoints].y = y;
+                    keypoints++; index++;
 
-		    }
-		  }
-		  else skipped++; //Don't draw this point...
+                    pt[index].x = x;
+                    pt[index].y = y;
 
-		  xprev=x;
-		  yprev=y;
+                  }
+                } else {
+                  skipped++; //Don't draw this point...
+                }
 
-		  leftscreen=true;
-		  if (quad != quad1) quad1=quad;
-		}
-		else{
-		  //If current point is inside the screen...
+                xprev=x;
+                yprev=y;
 
-		  //... and we've just returned from outside the screen,
-		  // we draw one point outside the screen (prevents clipping)
-		  if (leftscreen){
-		    pt[(jj-skipped)+keypoints].x = xprev;
-		    pt[(jj-skipped)+keypoints].y = yprev;
-		    keypoints++;
-		  }
+                leftscreen=true;
+                if (quad != quad1) quad1=quad;
 
-		  leftscreen = false;
+              } else{
 
-		  pt[(jj-skipped)+keypoints].x = x;
-		  pt[(jj-skipped)+keypoints].y = y;
+                //If current point is inside the screen...
 
-		  // find leftmost visible point for display of label
-		  if ((x<=minx)&&(x>=rc.left)&&(y>=rc.top)&&(y<=rc.bottom)) {
-		    minx = x;
-		    miny = y;
-		  }
-		}
+                index = jj-skipped+keypoints;
+
+                //... and we've just returned from outside the screen,
+                // we draw one point outside the screen (prevents clipping)
+                if (leftscreen){
+                  pt[index].x = xprev;
+                  pt[index].y = yprev;
+                  keypoints++; index++;
+                }
+
+                leftscreen = false;
+
+                pt[index].x = x;
+                pt[index].y = y;
+
+                // find leftmost visible point for display of label
+                if ((x<=minx)&&(x>=rc.left)
+                    &&(y>=rc.top)&&(y<=rc.bottom)) {
+                  minx = x;
+                  miny = y;
+                }
+              }
 	    }
 
 	    Polygon(hdc, pt,

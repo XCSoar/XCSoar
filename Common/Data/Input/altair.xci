@@ -236,6 +236,7 @@ location=9
 mode=default
 type=key
 data=RETURN
+event=FLARMRadar toggle
 event=ClearAirspaceWarnings
 event=ClearStatusMessages
 
@@ -375,7 +376,7 @@ mode=Nav1
 type=key
 data=APP1
 event=Mode Nav2
-label=Nav/
+label=Nav
 location=1
 
 mode=Nav1
@@ -425,7 +426,7 @@ mode=Nav2
 type=key
 data=APP1
 event=Mode default
-label=/Nav
+label=Nav
 location=1
 
 
@@ -476,7 +477,7 @@ mode=Display1
 type=key
 data=APP2
 event=Mode Display2
-label=Display/
+label=Display
 location=2
 
 mode=Display1
@@ -527,7 +528,7 @@ mode=Display2
 type=key
 data=APP2
 event=Mode default
-label=/Display
+label=Display
 location=2
 
 mode=Display2
@@ -577,7 +578,7 @@ mode=Config1
 type=key
 data=APP3
 event=Mode Config2
-label=Config/
+label=Config
 location=3
 
 
@@ -626,7 +627,7 @@ mode=Config2
 type=key
 data=APP3
 event=Mode default
-label=/Config
+label=Config
 location=3
 
 mode=Config2
@@ -677,7 +678,7 @@ mode=Vario1
 type=key
 data=APP3
 event=Mode Vario2
-label=Vario/
+label=Vario
 location=3
 
 mode=Vario1
@@ -724,7 +725,7 @@ mode=Vario2
 type=key
 data=APP3
 event=Mode default
-label=/Vario
+label=Vario
 location=3
 
 mode=Vario2
@@ -771,7 +772,7 @@ mode=Info1
 type=key
 data=APP4
 event=Mode Info2
-label=Info/
+label=Info
 location=4
 
 mode=Info1
@@ -785,16 +786,16 @@ location=5
 mode=Info1
 type=key
 data=7
-event=NearestWaypointDetails aircraft
 event=Mode default
+event=NearestWaypointDetails aircraft
 label=Nearest\nWaypoint
 location=6
 
 mode=Info1
 type=key
 data=8
-event=NearestAirspaceDetails
 event=Mode default
+event=NearestAirspaceDetails
 label=Nearest\nAirspace
 location=7
 
@@ -821,7 +822,7 @@ mode=Info2
 type=key
 data=APP4
 event=Mode default
-label=/Info
+label=Info
 location=4
 
 

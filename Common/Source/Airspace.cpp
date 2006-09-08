@@ -983,16 +983,17 @@ static void CalculateSector(TCHAR *Text)
 
   while(fabs(EndBearing-StartBearing) > 7.5)
   {
-	  if(StartBearing >= 360)
-		  StartBearing -= 360;
-	  if(StartBearing < 0)
-		  StartBearing += 360;
+    if(StartBearing >= 360)
+      StartBearing -= 360;
+    if(StartBearing < 0)
+      StartBearing += 360;
 
-//	  if (bFillMode)	// Trig calcs not needed on first pass
-	  {
-		  TempPoint.Latitude =  FindLatitude(CenterY, CenterX, StartBearing, Radius);
-		  TempPoint.Longitude = FindLongitude(CenterY, CenterX, StartBearing, Radius);
-	  }
+    //	  if (bFillMode)	// Trig calcs not needed on first pass
+    {
+      FindLatitudeLongitude(CenterY, CenterX, StartBearing, Radius,
+                            &TempPoint.Latitude,
+                            &TempPoint.Longitude);
+    }
     AddPoint(&TempPoint, &TempArea.NumPoints);
 
     StartBearing += Rotation *5 ;
@@ -1000,8 +1001,9 @@ static void CalculateSector(TCHAR *Text)
 
 //  if (bFillMode)	// Trig calcs not needed on first pass
   {
-	  TempPoint.Latitude =  FindLatitude(CenterY, CenterX, EndBearing, Radius);
-	  TempPoint.Longitude = FindLongitude(CenterY, CenterX, EndBearing, Radius);
+    FindLatitudeLongitude(CenterY, CenterX, EndBearing, Radius,
+                          &TempPoint.Latitude,
+                          &TempPoint.Longitude);
   }
   AddPoint(&TempPoint, &TempArea.NumPoints);
 }
@@ -1042,8 +1044,9 @@ static void CalculateArc(TCHAR *Text)
 
 	  if (bFillMode)	// Trig calcs not needed on first pass
 	  {
-		  TempPoint.Latitude =  FindLatitude(CenterY, CenterX, StartBearing, Radius);
-		  TempPoint.Longitude = FindLongitude(CenterY, CenterX, StartBearing, Radius);
+            FindLatitudeLongitude(CenterY, CenterX, StartBearing, Radius,
+                                  &TempPoint.Latitude,
+                                  &TempPoint.Longitude);
 	  }
     AddPoint(&TempPoint, &TempArea.NumPoints);
   }
@@ -1055,12 +1058,10 @@ static void CalculateArc(TCHAR *Text)
 
 static void ScanAirspaceCircleBounds(int i, double bearing) {
   double lat, lon;
-  lat =
-    FindLatitude(AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude,
-		 bearing, AirspaceCircle[i].Radius );
-  lon =
-    FindLongitude(AirspaceCircle[i].Latitude, AirspaceCircle[i].Longitude,
-		  bearing, AirspaceCircle[i].Radius);
+  FindLatitudeLongitude(AirspaceCircle[i].Latitude,
+                        AirspaceCircle[i].Longitude,
+                        bearing, AirspaceCircle[i].Radius,
+                        &lat, &lon);
 
   AirspaceCircle[i].bounds.minx = min(lon, AirspaceCircle[i].bounds.minx);
   AirspaceCircle[i].bounds.maxx = max(lon, AirspaceCircle[i].bounds.maxx);

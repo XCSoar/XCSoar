@@ -101,6 +101,8 @@ Text2Event[49].text = TEXT("DeclutterLabels");
 Text2Event[49].event = &eventDeclutterLabels;
 Text2Event[50].text = TEXT("Exit");
 Text2Event[50].event = &eventExit;
+Text2Event[51].text = TEXT("FLARMRadar");
+Text2Event[51].event = &eventFLARMRadar;
 Text2GCE[0] = TEXT("AIRSPACE_ENTER");
 Text2GCE[1] = TEXT("AIRSPACE_LEAVE");
 Text2GCE[2] = TEXT("COMMPORT_RESTART");
@@ -255,7 +257,7 @@ Text2NE[127] = TEXT("UNUSED_55");
 Text2NE[128] = TEXT("UNUSED_56");
 Text2NE[129] = TEXT("UNUSED_57");
 Text2NE[130] = TEXT("COUNT");
-Text2Event_count = 51;
+Text2Event_count = 52;
 // Check no array overrun
 ASSERT(130 <= NE_COUNT);
 // Check no array overrun

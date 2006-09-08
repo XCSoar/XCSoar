@@ -15,7 +15,7 @@
 #define VARIOSOUND_API
 #endif
 
-BOOL PlayResource (LPTSTR lpName);
+//BOOL PlayResource (LPTSTR lpName);
 
 
 extern "C" {
