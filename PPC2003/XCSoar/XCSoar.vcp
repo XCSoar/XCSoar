@@ -118,7 +118,7 @@ RSC=rc.exe
 # ADD RSC /l 0x409 /i "..\..\Common\Header" /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "NDEBUG" /d "UNICODE" /d "_UNICODE" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /d "ARMV4" /r
 CPP="C:\Program Files\Microsoft eMbedded C++ 4.0\EVC\WCE500\bin\xicle44"
 # ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /Yu"stdafx.h" /O2 /M$(CECrtMT) /c
-# ADD CPP /nologo /W3 /Oxt /I "..\..\Common\Header" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D NEWINFOBOX=1 /FR /YX"stdafx.h" /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /Oxt /I "..\..\Common\Header" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /FR /YX"stdafx.h" /M$(CECrtMT) /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
@@ -151,7 +151,7 @@ RSC=rc.exe
 # ADD RSC /l 0x409 /i "..\..\Common\Header" /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "DEBUG" /d "UNICODE" /d "_UNICODE" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /d "ARMV4" /r
 CPP="C:\Program Files\Microsoft eMbedded C++ 4.0\EVC\WCE500\bin\xicle44"
 # ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /M$(CECrtMTDebug) /c
-# ADD CPP /nologo /W3 /Zi  /Ot /Ob2 /Gy /I "..\..\Common\Header" /D "DEBUG" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D NEWINFOBOX=1 /YX"stdafx.h" /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /Zi  /Ot /Ob2 /Gy /I "..\..\Common\Header" /D "DEBUG" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX"stdafx.h" /M$(CECrtMTDebug) /c
 # SUBTRACT CPP /Ox /Oa /Ow /Og /Oi
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
@@ -242,6 +242,7 @@ DEP_CPP_AATDI=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -270,6 +271,7 @@ DEP_CPP_AATDI=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -367,6 +369,7 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -386,11 +389,9 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRFI=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -401,6 +402,7 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -420,11 +422,9 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRFI=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -502,6 +502,7 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -521,11 +522,9 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRSP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -535,6 +534,7 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -554,11 +554,9 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRSP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -657,11 +655,9 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRSPA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -691,11 +687,9 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRSPA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -771,6 +765,7 @@ DEP_CPP_AIRSPAC=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -800,6 +795,7 @@ DEP_CPP_AIRSPAC=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -894,6 +890,7 @@ DEP_CPP_ATMOS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -923,6 +920,7 @@ DEP_CPP_ATMOS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -1039,6 +1037,7 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -1065,7 +1064,6 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\ThermalLocator.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\windanalyser.h"\
@@ -1085,6 +1083,7 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -1111,7 +1110,6 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\ThermalLocator.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\windanalyser.h"\
@@ -1196,6 +1194,7 @@ DEP_CPP_DEVAL=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devAltairPro.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -1226,6 +1225,7 @@ DEP_CPP_DEVAL=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devAltairPro.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -1319,6 +1319,7 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -1349,6 +1350,7 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devCAI302.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -1447,6 +1449,7 @@ DEP_CPP_DEVCAI=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devCaiGpsNav.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -1477,6 +1480,7 @@ DEP_CPP_DEVCAI=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devCaiGpsNav.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -1570,6 +1574,7 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -1600,6 +1605,7 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -1691,6 +1697,7 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -1720,6 +1727,7 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -1820,6 +1828,7 @@ DEP_CPP_DEVVE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\devVega.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -1852,6 +1861,7 @@ DEP_CPP_DEVVE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\devVega.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -2005,11 +2015,9 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DIALO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -2049,11 +2057,9 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DIALO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -2140,6 +2146,7 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -2161,11 +2168,9 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAI=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -2175,6 +2180,7 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -2196,11 +2202,9 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAI=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -2287,6 +2291,7 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -2308,11 +2313,9 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIR=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -2322,6 +2325,7 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -2343,11 +2347,9 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIR=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -2434,6 +2436,7 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -2455,11 +2458,9 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIRS=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -2469,6 +2470,7 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -2490,11 +2492,9 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIRS=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -2580,6 +2580,7 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -2600,11 +2601,9 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIRSP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -2614,6 +2613,7 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -2634,11 +2634,9 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIRSP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -2718,6 +2716,7 @@ DEP_CPP_DLGBA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -2749,6 +2748,7 @@ DEP_CPP_DLGBA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -2846,6 +2846,7 @@ DEP_CPP_DLGBR=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -2875,6 +2876,7 @@ DEP_CPP_DLGBR=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -2979,6 +2981,7 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -2999,11 +3002,9 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCH=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -3013,6 +3014,7 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -3033,11 +3035,9 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCH=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -3127,6 +3127,7 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -3134,6 +3135,7 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\GaugeFLARM.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3151,11 +3153,9 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -3165,6 +3165,7 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -3172,6 +3173,7 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\GaugeFLARM.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3189,11 +3191,9 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -3282,6 +3282,7 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -3304,11 +3305,9 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCON=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -3318,6 +3317,7 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -3340,11 +3340,9 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCON=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -3420,12 +3418,14 @@ DEP_CPP_DLGHE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -3449,12 +3449,14 @@ DEP_CPP_DLGHE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -3550,6 +3552,7 @@ DEP_CPP_DLGLO=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -3581,6 +3584,7 @@ DEP_CPP_DLGLO=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -3689,6 +3693,7 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -3710,11 +3715,9 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGST=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -3724,6 +3727,7 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -3745,11 +3749,9 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGST=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -3822,11 +3824,13 @@ DEP_CPP_DLGSTA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3849,11 +3853,13 @@ DEP_CPP_DLGSTA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3954,11 +3960,13 @@ DEP_CPP_DLGSTAT=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -3988,11 +3996,13 @@ DEP_CPP_DLGSTAT=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -4086,6 +4096,7 @@ DEP_CPP_DLGSTATU=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -4114,6 +4125,7 @@ DEP_CPP_DLGSTATU=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -4208,6 +4220,7 @@ DEP_CPP_DLGSTATUS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -4237,6 +4250,7 @@ DEP_CPP_DLGSTATUS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -4331,6 +4345,7 @@ DEP_CPP_DLGSTATUST=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -4359,6 +4374,7 @@ DEP_CPP_DLGSTATUST=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -4452,6 +4468,7 @@ DEP_CPP_DLGSW=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -4481,6 +4498,7 @@ DEP_CPP_DLGSW=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -4579,6 +4597,7 @@ DEP_CPP_DLGTA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -4609,6 +4628,7 @@ DEP_CPP_DLGTA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -4716,6 +4736,7 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -4738,11 +4759,9 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGTAS=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -4752,6 +4771,7 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -4774,11 +4794,9 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGTAS=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -4864,11 +4882,13 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -4885,11 +4905,9 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGTASK=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -4899,11 +4917,13 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\Logger.h"\
 	"..\..\Common\Header\mapprimitive.h"\
@@ -4920,11 +4940,9 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGTASK=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -4997,6 +5015,7 @@ DEP_CPP_DLGTE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -5025,6 +5044,7 @@ DEP_CPP_DLGTE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -5114,6 +5134,7 @@ DEP_CPP_DLGTEX=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -5141,6 +5162,7 @@ DEP_CPP_DLGTEX=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -5199,6 +5221,7 @@ DEP_CPP_DLGTO=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DLGTO=\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
@@ -5214,6 +5237,7 @@ DEP_CPP_DLGTO=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_DLGTO=\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
@@ -5302,6 +5326,7 @@ DEP_CPP_DLGVE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -5332,6 +5357,7 @@ DEP_CPP_DLGVE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -5429,6 +5455,7 @@ DEP_CPP_DLGVO=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -5459,6 +5486,7 @@ DEP_CPP_DLGVO=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -5571,6 +5599,7 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -5595,11 +5624,9 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -5609,6 +5636,7 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -5633,11 +5661,9 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -5711,6 +5737,7 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -5739,6 +5766,7 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -5843,6 +5871,7 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -5864,11 +5893,9 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWAYP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -5878,6 +5905,7 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -5899,11 +5927,9 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWAYP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -5980,6 +6006,7 @@ DEP_CPP_DLGWI=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -6009,6 +6036,7 @@ DEP_CPP_DLGWI=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -6063,6 +6091,7 @@ DEP_CPP_GAUGE=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_GAUGE=\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\GaugeCDI.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\options.h"\
@@ -6075,6 +6104,7 @@ DEP_CPP_GAUGE=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_GAUGE=\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\GaugeCDI.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\options.h"\
@@ -6148,6 +6178,7 @@ DEP_CPP_GAUGEF=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -6177,6 +6208,7 @@ DEP_CPP_GAUGEF=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -6272,6 +6304,7 @@ DEP_CPP_GAUGEV=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -6302,6 +6335,7 @@ DEP_CPP_GAUGEV=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -6458,6 +6492,7 @@ DEP_CPP_INFOB=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -6487,6 +6522,7 @@ DEP_CPP_INFOB=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -6578,6 +6614,7 @@ DEP_CPP_INFOBO=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -6608,6 +6645,7 @@ DEP_CPP_INFOBO=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -6695,7 +6733,6 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\InputEvents_altair.cpp"\
-	"..\..\Common\Header\InputEvents_gnav.cpp"\
 	"..\..\Common\Header\InputEvents_pc.cpp"\
 	"..\..\Common\Header\InputEvents_Text2Event.cpp"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -6721,6 +6758,7 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_INPUT=\
+	"..\..\Common\Header\InputEvents_gnav.cpp"\
 	".\inuserm.h"\
 	".\ipapi.h"\
 	".\ygshell.h"\
@@ -6744,7 +6782,7 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\InputEvents_altair.cpp"\
-	"..\..\Common\Header\InputEvents_gnav.cpp"\
+	"..\..\Common\Header\InputEvents_defaults.cpp"\
 	"..\..\Common\Header\InputEvents_pc.cpp"\
 	"..\..\Common\Header\InputEvents_Text2Event.cpp"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -6764,15 +6802,12 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_INPUT=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -6788,12 +6823,13 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\GaugeFLARM.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\InputEvents_altair.cpp"\
-	"..\..\Common\Header\InputEvents_gnav.cpp"\
+	"..\..\Common\Header\InputEvents_defaults.cpp"\
 	"..\..\Common\Header\InputEvents_pc.cpp"\
 	"..\..\Common\Header\InputEvents_Text2Event.cpp"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -6813,15 +6849,12 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_INPUT=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -6931,6 +6964,7 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -6962,6 +6996,7 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -7512,6 +7547,7 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -7541,6 +7577,7 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -7619,6 +7656,7 @@ DEP_CPP_MESSA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -7648,6 +7686,7 @@ DEP_CPP_MESSA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -7754,6 +7793,7 @@ DEP_CPP_ONLIN=\
 
 DEP_CPP_ONLIN=\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\McReady.h"\
@@ -7771,6 +7811,7 @@ DEP_CPP_ONLIN=\
 
 DEP_CPP_ONLIN=\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\McReady.h"\
@@ -7855,6 +7896,7 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -7888,6 +7930,7 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -7980,6 +8023,7 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8008,6 +8052,7 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8095,6 +8140,7 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8123,6 +8169,7 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8214,6 +8261,7 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -8244,6 +8292,7 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -8308,6 +8357,7 @@ DEP_CPP_RASTE=\
 
 DEP_CPP_RASTE=\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\options.h"\
@@ -8324,6 +8374,7 @@ DEP_CPP_RASTE=\
 
 DEP_CPP_RASTE=\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\options.h"\
@@ -8400,6 +8451,7 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8427,6 +8479,7 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8508,7 +8561,9 @@ DEP_CPP_STSCR=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_STSCR=\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	
@@ -8516,7 +8571,9 @@ DEP_CPP_STSCR=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_STSCR=\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\STScreenBuffer.h"\
 	
@@ -8587,6 +8644,7 @@ DEP_CPP_TASK_=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8615,6 +8673,7 @@ DEP_CPP_TASK_=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8749,6 +8808,7 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8782,6 +8842,7 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8859,6 +8920,7 @@ DEP_CPP_THERM=\
 DEP_CPP_THERM=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -8878,6 +8940,7 @@ DEP_CPP_THERM=\
 DEP_CPP_THERM=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -8958,6 +9021,7 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8986,6 +9050,7 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -9072,6 +9137,7 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -9099,6 +9165,7 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -9195,6 +9262,7 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -9230,6 +9298,7 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -9254,111 +9323,6 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\VegaVoice.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\VarioSound.cpp
-
-!IF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Release"
-
-DEP_CPP_VARIO=\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\VarioSound.h"\
-	"..\..\Common\Header\WaveThread.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Debug"
-
-DEP_CPP_VARIO=\
-	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VarioSound.h"\
-	"..\..\Common\Header\WaveThread.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
-
-DEP_CPP_VARIO=\
-	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VarioSound.h"\
-	"..\..\Common\Header\WaveThread.h"\
-	"..\..\Common\Header\WindowControls.h"\
-	"..\..\Common\Header\XCSoar.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
-
-DEP_CPP_VARIO=\
-	"..\..\Common\Header\Airspace.h"\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\Calculations.h"\
-	"..\..\Common\Header\Dialogs.h"\
-	"..\..\Common\Header\dlgTools.h"\
-	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\leastsqs.h"\
-	"..\..\Common\Header\mapprimitive.h"\
-	"..\..\Common\Header\mapshape.h"\
-	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Sizes.h"\
-	"..\..\Common\Header\Statistics.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Units.h"\
-	"..\..\Common\Header\Utils.h"\
-	"..\..\Common\Header\VarioSound.h"\
-	"..\..\Common\Header\WaveThread.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
@@ -9435,6 +9399,7 @@ DEP_CPP_VEGAV=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -9465,6 +9430,7 @@ DEP_CPP_VEGAV=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -9533,45 +9499,6 @@ DEP_CPP_VOIMA=\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdafx.h"\
 	"..\..\Common\Header\VOIMAGE.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\WaveThread.cpp
-
-!IF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Release"
-
-DEP_CPP_WAVET=\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\WaveThread.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Debug"
-
-DEP_CPP_WAVET=\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\WaveThread.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
-
-DEP_CPP_WAVET=\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\WaveThread.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
-
-DEP_CPP_WAVET=\
-	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\stdafx.h"\
-	"..\..\Common\Header\WaveThread.h"\
 	
 
 !ENDIF 
@@ -9652,9 +9579,11 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\Geoid.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -9674,11 +9603,9 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	"..\..\Common\Header\xmlParser.h"\
-	
-NODEP_CPP_WAYPO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -9688,9 +9615,11 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\Geoid.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -9710,11 +9639,9 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	"..\..\Common\Header\xmlParser.h"\
-	
-NODEP_CPP_WAYPO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 
@@ -9769,6 +9696,7 @@ DEP_CPP_WINDA=\
 DEP_CPP_WINDA=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\options.h"\
@@ -9789,6 +9717,7 @@ DEP_CPP_WINDA=\
 DEP_CPP_WINDA=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\options.h"\
@@ -9942,6 +9871,7 @@ DEP_CPP_WINDO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"projects.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -9973,6 +9903,7 @@ DEP_CPP_WINDO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	{$(INCLUDE)}"projects.h"\
 	
 
 !ENDIF 
@@ -10021,6 +9952,7 @@ DEP_CPP_WINDS=\
 
 DEP_CPP_WINDS=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\options.h"\
@@ -10037,6 +9969,7 @@ DEP_CPP_WINDS=\
 
 DEP_CPP_WINDS=\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\options.h"\
@@ -10096,6 +10029,7 @@ DEP_CPP_WINDZ=\
 DEP_CPP_WINDZ=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -10113,6 +10047,7 @@ DEP_CPP_WINDZ=\
 DEP_CPP_WINDZ=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
@@ -10285,11 +10220,9 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_XCSOA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -10342,11 +10275,9 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_XCSOA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ENDIF 

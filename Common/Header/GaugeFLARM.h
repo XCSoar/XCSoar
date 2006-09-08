@@ -14,8 +14,10 @@ class GaugeFLARM {
   static void RenderTraffic(NMEA_INFO *gps_info);
   static void RenderBg();
   static void Repaint(HDC hDC);
-  static void Show(bool doshow);
+  static void Show();
   static bool Enable;
+  static bool Suppress;
+  static void TrafficPresent(bool traffic);
  private:
   static HDC hdcScreen;
   static HDC hdcDrawWindow;
@@ -25,6 +27,7 @@ class GaugeFLARM {
   static RECT rc;
   static int radius; 
   static POINT center;
+  static bool Traffic;
   static int RangeScale(double d);
 };
 

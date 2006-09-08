@@ -838,15 +838,12 @@ int OLCOptimizer::scan_sprint_inprogress() {
 
   if (bestdist>0) {
 
-    lat_proj = FindLatitude(latend, 
-			    lonend, 
-			    data.waypointbearing, 
-			    dfurther*DISTANCEUNITS);
-    
-    lon_proj = FindLongitude(latend, 
-			     lonend, 
-			     data.waypointbearing, 
-			     dfurther*DISTANCEUNITS);
+    FindLatitudeLongitude(latend, 
+                          lonend, 
+                          data.waypointbearing, 
+                          dfurther*DISTANCEUNITS,
+                          &lat_proj,
+                          &lon_proj);
 
     double score = bestdist*100/(Handicap*2.5)/(1000.0/DISTANCEUNITS);
     int t = data.timepnts[(i5best)]+dt-data.timepnts[(i1best)];
@@ -929,15 +926,11 @@ int OLCOptimizer::scan_classic() {
     if (!finished) {
       t += (int)(dfurtherbest*DISTANCEUNITS/GlidePolar::Vbestld);
 
-      lat_proj = FindLatitude(data.latpnts[i7best], 
-			      data.lonpnts[i7best], 
-			      data.waypointbearing, 
-			      dfurther*DISTANCEUNITS);
-      
-      lon_proj = FindLongitude(data.latpnts[i7best], 
-			       data.lonpnts[i7best], 
-			       data.waypointbearing, 
-			       dfurther*DISTANCEUNITS);
+      FindLatitudeLongitude(data.latpnts[i7best], 
+                            data.lonpnts[i7best], 
+                            data.waypointbearing, 
+                            dfurther*DISTANCEUNITS,
+                            &lat_proj, &lon_proj);
     }
     UpdateSolution(bestdist, t, i1best, i2best, i3best, i4best, 
                    i5best, i6best, i7best,

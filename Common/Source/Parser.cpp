@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.57 2006/09/06 07:51:59 jwharington Exp $
+  $Id: Parser.cpp,v 1.58 2006/09/08 18:14:43 jwharington Exp $
 
 Copyright_License {
 
@@ -880,7 +880,7 @@ void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO) {
       }
     }
   }
-  GaugeFLARM::Show(present);
+  GaugeFLARM::TrafficPresent(present);
 }
 
 
@@ -931,6 +931,10 @@ BOOL NMEAParser::PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO)
     // traffic has appeared..
     InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
   }
+  if (GPS_INFO->FLARM_RX > old_flarm_rx) {
+    // re-set suppression of gauge, as new traffic has arrived
+    //    GaugeFLARM::Suppress = false;
+  }
   if ((GPS_INFO->FLARM_RX==0) && (old_flarm_rx)) {
     // traffic has disappeared..
     InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
@@ -959,6 +963,8 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
   // not found, so try to find an empty slot
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (GPS_INFO->FLARM_Traffic[i].ID==0) {
+      // this is a new target
+      GaugeFLARM::Suppress = false;
       return i;
     }
   }

@@ -62,28 +62,24 @@ mode=default Display1 Display2 Config1 Config2 Info1 Info2 Exit Menu Bugs Ballas
 type=key
 data=APP1
 label= 
-event=Null
 location=1
 
 mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Exit Menu Bugs Ballast Wind Vario VarioTest pan
 type=key
 data=APP2
 label= 
-event=Null
 location=2
 
 mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Exit Menu pan
 type=key
 data=APP3
 label= 
-event=Null
 location=3
 
 mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Bugs Ballast Wind Vario VarioTest pan
 type=key
 data=APP4
 label= 
-event=Null
 location=4
 
 mode=default
@@ -222,6 +218,7 @@ event=Zoom in
 mode=default
 type=key
 data=RETURN
+event=FLARMRadar toggle
 event=ClearAirspaceWarnings
 event=ClearStatusMessages
 
@@ -333,7 +330,7 @@ mode=Nav1
 type=key
 data=APP1
 event=Mode Nav2
-label=Nav/
+label=Nav
 location=1
 
 mode=Nav1
@@ -383,7 +380,7 @@ mode=Nav2
 type=key
 data=APP1
 event=Mode default
-label=/Nav
+label=Nav
 location=1
 
 
@@ -434,7 +431,7 @@ mode=Display1
 type=key
 data=APP2
 event=Mode Display2
-label=Display/
+label=Display
 location=2
 
 
@@ -506,7 +503,7 @@ mode=Display2
 type=key
 data=APP2
 event=Mode default
-label=/Display
+label=Display
 location=2
 
 mode=Display2
@@ -556,7 +553,7 @@ mode=Config1
 type=key
 data=APP3
 event=Mode Config2
-label=Config/
+label=Config
 location=3
 
 
@@ -605,7 +602,7 @@ mode=Config2
 type=key
 data=APP3
 event=Mode default
-label=/Config
+label=Config
 location=3
 
 mode=Config2
@@ -656,7 +653,7 @@ mode=Vario1
 type=key
 data=APP3
 event=Mode Vario2
-label=Vario/
+label=Vario
 location=3
 
 mode=Vario1
@@ -703,7 +700,7 @@ mode=Vario2
 type=key
 data=APP3
 event=Mode default
-label=/Vario
+label=Vario
 location=3
 
 mode=Vario2
@@ -750,30 +747,30 @@ mode=Info1
 type=key
 data=APP4
 event=Mode Info2
-label=Info/
+label=Info
 location=4
 
 mode=Info1
 type=key
 data=6
-event=WaypointDetails current
 event=Mode default
+event=WaypointDetails current
 label=Waypoint\nDetails
 location=5
 
 mode=Info1
 type=key
 data=7
-event=NearestWaypointDetails aircraft
 event=Mode default
+event=NearestWaypointDetails aircraft
 label=Nearest\nWaypoint
 location=6
 
 mode=Info1
 type=key
 data=8
-event=NearestAirspaceDetails aircraft 
 event=Mode default
+event=NearestAirspaceDetails aircraft 
 label=Nearest\nAirspace
 location=7
 
@@ -800,7 +797,7 @@ mode=Info2
 type=key
 data=APP4
 event=Mode default
-label=/Info
+label=Info
 location=4
 
 mode=Info2
@@ -854,28 +851,28 @@ mode=Menu
 type=key
 data=APP1
 event=Mode Nav1
-label=Nav/
+label=Nav
 location=1
 
 mode=Menu
 type=key
 data=APP2
 event=Mode Display1
-label=Display/
+label=Display
 location=2
 
 mode=Menu
 type=key
 data=APP3
 event=Mode Config1
-label=Config/
+label=Config
 location=3
 
 mode=Menu
 type=key
 data=APP4
 event=Mode Info1
-label=Info/
+label=Info
 location=4
 
 mode=Menu

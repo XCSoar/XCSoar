@@ -366,7 +366,7 @@ int ParseWayPointString(TCHAR *String,WAYPOINT *Temp)
 
   double myalt;
 
-  if(Temp->Altitude == 0) {
+  if(Temp->Altitude <= 0) {
 
     LockTerrainDataGraphics();
     terrain_dem_graphics.SetTerrainRounding(0.0,0.0);
@@ -384,8 +384,10 @@ int ParseWayPointString(TCHAR *String,WAYPOINT *Temp)
     myalt =
       terrain_dem_graphics.GetTerrainHeight(Temp->Latitude, 
                                             Temp->Longitude);
-    TALT_error += (myalt-Temp->Altitude)*(myalt-Temp->Altitude);
-    TALT_num ++;
+    if (myalt>0) {
+      TALT_error += (myalt-Temp->Altitude)*(myalt-Temp->Altitude);
+      TALT_num ++;
+    }
     UnlockTerrainDataGraphics();
   }
 #endif

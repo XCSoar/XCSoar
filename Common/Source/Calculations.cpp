@@ -38,7 +38,6 @@ Copyright_License {
 #include "McReady.h"
 #include "Airspace.h"
 #include "Logger.h"
-#include "VarioSound.h"
 #include <windows.h>
 #include <math.h>
 #include "InputEvents.h"
@@ -150,10 +149,10 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
                                         Calculated, &lat, &lon,
                                         mymaxrange, &outofrange);
     if (outofrange) {
-      lat = FindLatitude(Basic->Latitude, Basic->Longitude, bearing, 
-			  mymaxrange*20);
-      lon = FindLongitude(Basic->Latitude, Basic->Longitude, bearing, 
-			  mymaxrange*20);
+      FindLatitudeLongitude(Basic->Latitude, Basic->Longitude, 
+                            bearing, 
+                            mymaxrange*20,
+                            &lat, &lon);
     }
     Calculated->GlideFootPrint[i].x = lon;
     Calculated->GlideFootPrint[i].y = lat;
@@ -451,13 +450,13 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       ) {
     // TODO: slow/smooth switching between netto and not
 
-    VarioSound_SetV((short)((Calculated->NettoVario-GlidePolar::minsink)*AUDIOSCALE));
+    //    VarioSound_SetV((short)((Calculated->NettoVario-GlidePolar::minsink)*AUDIOSCALE));
 
   } else {
     if (Basic->VarioAvailable && !ReplayLogger::IsEnabled()) {
-      VarioSound_SetV((short)(Basic->Vario*AUDIOSCALE));
+      //      VarioSound_SetV((short)(Basic->Vario*AUDIOSCALE));
     } else {
-      VarioSound_SetV((short)(Calculated->Vario*AUDIOSCALE));
+      //      VarioSound_SetV((short)(Calculated->Vario*AUDIOSCALE));
     }
   }
 
@@ -469,10 +468,10 @@ void AudioVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     } else {
       vdiff = 100*(1.0-Calculated->VOpt/(Basic->Speed+0.01));
     }
-    VarioSound_SetVAlt((short)(vdiff));
+    //    VarioSound_SetVAlt((short)(vdiff));
   }
 
-  VarioSound_SoundParam();
+  //  VarioSound_SoundParam();
 
 }
 
@@ -2811,22 +2810,24 @@ void CalculateNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     {
       Calculated->NextLatitude = Basic->Latitude;
       Calculated->NextLongitude = Basic->Longitude;
-      Calculated->NextAltitude = Calculated->NavAltitude + Calculated->Average30s * 30;
+      Calculated->NextAltitude = 
+        Calculated->NavAltitude + Calculated->Average30s * 30;
     }
   else
     {
-      Calculated->NextLatitude = FindLatitude(Basic->Latitude, 
-                                              Basic->Longitude, 
-                                              Basic->TrackBearing, 
-                                              Basic->Speed*WarningTime );
-      Calculated->NextLongitude = FindLongitude(Basic->Latitude, 
-                                                Basic->Longitude, 
-                                                Basic->TrackBearing, 
-                                                Basic->Speed*WarningTime);
+      FindLatitudeLongitude(Basic->Latitude, 
+                            Basic->Longitude, 
+                            Basic->TrackBearing, 
+                            Basic->Speed*WarningTime,
+                            &Calculated->NextLatitude,
+                            &Calculated->NextLongitude);
+
       if (Basic->BaroAltitudeAvailable) {
-        Calculated->NextAltitude = Basic->BaroAltitude + Calculated->Average30s * WarningTime;
+        Calculated->NextAltitude = 
+          Basic->BaroAltitude + Calculated->Average30s * WarningTime;
       } else {
-        Calculated->NextAltitude = Calculated->NavAltitude + Calculated->Average30s * WarningTime;
+        Calculated->NextAltitude = 
+          Calculated->NavAltitude + Calculated->Average30s * WarningTime;
       }
     }
 }
@@ -3222,10 +3223,9 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   // calculate terrain rounding factor
 
 
-  lat = FindLatitude(Basic->Latitude, Basic->Longitude, 0, 
-		     glidemaxrange/NUMFINALGLIDETERRAIN);
-  lon = FindLongitude(Basic->Latitude, Basic->Longitude, 90, 
-		      glidemaxrange/NUMFINALGLIDETERRAIN);
+  FindLatitudeLongitude(Basic->Latitude, Basic->Longitude, 0, 
+                        glidemaxrange/NUMFINALGLIDETERRAIN, &lat, &lon);
+
   double Xrounding = fabs(lon-Basic->Longitude)/2;
   double Yrounding = fabs(lat-Basic->Latitude)/2;
   terrain_dem_calculations.SetTerrainRounding(Xrounding, Yrounding);
@@ -3242,10 +3242,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   lonlast = Basic->Longitude;
 
   // find grid
-  double dlat = FindLatitude(Basic->Latitude, Basic->Longitude, bearing, 
-                                glidemaxrange)-Basic->Latitude;
-  double dlon = FindLongitude(Basic->Latitude, Basic->Longitude, bearing, 
-                                 glidemaxrange)-Basic->Longitude;
+  double dlat, dlon;
+  FindLatitudeLongitude(Basic->Latitude, Basic->Longitude, bearing, 
+                        glidemaxrange, &dlat, &dlon);
+  dlat -= Basic->Latitude;
+  dlon -= Basic->Longitude;
 
   for (int i=0; i<=NUMFINALGLIDETERRAIN; i++) {
     double fi = (i*1.0)/NUMFINALGLIDETERRAIN;
@@ -3485,7 +3486,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
                                              LegToGo,
 					     &outofrange);
 
-                  if ((distancesoarable>= LegToGo)||(aa<0)||(outofrange)) {
+                  if ((distancesoarable>= LegToGo)||(aa<0)) {
                     // only put this in the index if it is reachable
                     // and doesn't go through terrain, OR, if it is unreachable
                     // it doesn't matter if it goes through terrain because
@@ -3523,11 +3524,10 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
               foundActiveWayPoint = i;
             }
         }
-      if ((SortedLandableIndex[i] = HomeWaypoint)&&(HomeWaypoint>=0)) {
+      if ((SortedLandableIndex[i] == HomeWaypoint)&&(HomeWaypoint>=0)) {
         foundHomeWaypoint = i;
       }
     }
-
 
   if ((foundHomeWaypoint == -1)&&(HomeWaypoint>=0)) {
     // home not found in top list, so see if we can sneak it in
@@ -3554,7 +3554,8 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
       } else {
         aa = 0;
       }
-      if (aa <= 0){   // last active is no more reachable, switch to new closest
+      if (aa <= 0){   // last active is no more reachable, switch to
+                      // new closest
         DoStatusMessage(gettext(TEXT("Closest Airfield Changed!")));
         ActiveWayPoint = 0;
       } else {  
@@ -3956,15 +3957,12 @@ void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Calculated->TeammateBearing = mateBearing;
       Calculated->TeammateRange = mateDistance;
 
-      TeammateLatitude = FindLatitude(Basic->Latitude, 
-                                      Basic->Longitude,
-                                      mateBearing,
-                                      mateDistance);
-
-      TeammateLongitude = FindLongitude(Basic->Latitude, 
-                                        Basic->Longitude,
-                                        mateBearing,
-                                        mateDistance);
+      FindLatitudeLongitude(Basic->Latitude, 
+                            Basic->Longitude,
+                            mateBearing,
+                            mateDistance, 
+                            &TeammateLatitude,
+                            &TeammateLongitude);
 
       if (mateDistance < 100 && InTeamSector==false)
         {

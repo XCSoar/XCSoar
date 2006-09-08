@@ -105,7 +105,8 @@ Appearance_t Appearance = {
   true,
   gvnsDefault, 
   false,
-  apIbBox
+  apIbBox,
+  false
 };
 #else
 
@@ -139,7 +140,8 @@ Appearance_t Appearance = {
   false,
   gvnsLongNeedle,
   true,
-  apIbBox
+  apIbBox,
+  false
 };
 
 #endif
@@ -1262,11 +1264,13 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   OpenFLARMDetails();
 
 #ifndef DISABLEAUDIOVARIO
+  /*
   VarioSound_Init();
   VarioSound_EnableSound(EnableSoundVario);
   VarioSound_SetVdead(SoundDeadband);
   VarioSound_SetV(0);
   VarioSound_SetSoundVolume(SoundVolume);
+  */
 #endif
 
   // ... register all supported devices
@@ -1327,7 +1331,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ProgramStarted = 1;
 
   // Main message loop:
-  while (GlobalRunning && GetMessage(&msg, NULL, 0, 0))
+  while (GlobalRunning && 
+         GetMessage(&msg, NULL, 0, 0))
     {
       if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
         {
@@ -1548,6 +1553,11 @@ static void InitialiseFonts(RECT rc) {
 
 }
 
+#if (WINDOWSPC>0) 
+int SCREENWIDTH=640;
+int SCREENHEIGHT=480;
+#endif
+
 //
 //  FUNCTION: InitInstance(HANDLE, int)
 //
@@ -1587,14 +1597,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   WindowSize.right = GetSystemMetrics(SM_CXSCREEN);
   WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
 
-  #ifdef SCREENWIDTH
-    WindowSize.right = SCREENWIDTH + 2*GetSystemMetrics( SM_CXFIXEDFRAME);
-    WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;
-  #endif
-  #ifdef SCREENHEIGHT
-    WindowSize.bottom = SCREENHEIGHT + 2*GetSystemMetrics( SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION);
-    WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
-  #endif
+#if (WINDOWSPC>0)
+  WindowSize.right = SCREENWIDTH 
+    + 2*GetSystemMetrics( SM_CXFIXEDFRAME);
+  WindowSize.left = (GetSystemMetrics(SM_CXSCREEN) - WindowSize.right) / 2;
+  WindowSize.bottom = SCREENHEIGHT 
+    + 2*GetSystemMetrics( SM_CYFIXEDFRAME) + GetSystemMetrics(SM_CYCAPTION);
+  WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
+#endif
 
   StartupStore(TEXT("Create main window\r\n"));
 
@@ -2465,6 +2475,8 @@ void CommonProcessTimer()
       dlgAirspaceWarningShowDlg(RequestAirspaceWarningForce);
       RequestAirspaceWarningForce = false;
     }
+    // update FLARM display (show/hide)
+    GaugeFLARM::Show();
   }
 
 
@@ -2725,12 +2737,10 @@ void SIMProcessTimer(void)
 
     GPS_INFO.NAVWarning = FALSE;
     GPS_INFO.SatellitesUsed = 6;
-    GPS_INFO.Latitude = 
-      FindLatitude(GPS_INFO.Latitude, GPS_INFO.Longitude, 
-		   GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0 );
-    GPS_INFO.Longitude = 
-      FindLongitude(GPS_INFO.Latitude, GPS_INFO.Longitude, 
-		    GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0);
+    FindLatitudeLongitude(GPS_INFO.Latitude, GPS_INFO.Longitude, 
+                          GPS_INFO.TrackBearing, GPS_INFO.Speed*1.0,
+                          &GPS_INFO.Latitude,
+                          &GPS_INFO.Longitude);
     GPS_INFO.Time+= 1.0;
 
     UnlockFlightData();

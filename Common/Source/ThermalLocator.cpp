@@ -90,16 +90,15 @@ void ThermalLocator::Update(double t_0,
     return; // nothing to do.
   }
 
-  double traildrift_lat = (latitude_0
-			   -FindLatitude(latitude_0, 
-					 longitude_0, 
-					 wind_bearing, 
-					 wind_speed));
-  double traildrift_lon = (longitude_0
-			   -FindLongitude(latitude_0, 
-					  longitude_0, 
-					  wind_bearing, 
-					  wind_speed));
+  double dlat1, dlon1;
+
+  FindLatitudeLongitude(latitude_0, 
+                        longitude_0, 
+                        wind_bearing, 
+                        wind_speed, &dlat1, &dlon1);
+
+  double traildrift_lat = (latitude_0-dlat1);
+  double traildrift_lon = (longitude_0-dlon1);
 
   // drift estimate from previous time step
   double dt = t_0-est_t;
@@ -270,12 +269,11 @@ void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
 
   LockTerrainDataCalculations();
 
-  double lat = FindLatitude(Thermal_Latitude, Thermal_Longitude, 
-			    wind_bearing, 
-			    wind_speed*dt);
-  double lon = FindLongitude(Thermal_Latitude, Thermal_Longitude, 
-			     wind_bearing, 
-			     wind_speed*dt);
+  double lat, lon;
+  FindLatitudeLongitude(Thermal_Latitude, Thermal_Longitude, 
+                        wind_bearing, 
+                        wind_speed*dt,
+                        &lat, &lon);
   double Xrounding = fabs(lon-Thermal_Longitude)/2;
   double Yrounding = fabs(lat-Thermal_Latitude)/2;
   terrain_dem_calculations.SetTerrainRounding(Xrounding, Yrounding);
@@ -286,24 +284,18 @@ void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
 
   for (double t = 0; t<=Tmax; t+= dt) {
 
-    lat = FindLatitude(Thermal_Latitude, Thermal_Longitude, 
-		       wind_bearing, 
-		       wind_speed*t);
-    lon = FindLongitude(Thermal_Latitude, Thermal_Longitude, 
-			wind_bearing, 
-			wind_speed*t);
-
+    FindLatitudeLongitude(Thermal_Latitude, Thermal_Longitude, 
+                          wind_bearing, 
+                          wind_speed*t, &lat, &lon);
+    
     double hthermal = altitude-wthermal*t;
     hground = terrain_dem_calculations.GetTerrainHeight(lat, lon);
     double dh = hthermal-hground;
     if (dh<0) {
       t = t+dh/wthermal;
-      lat = FindLatitude(Thermal_Latitude, Thermal_Longitude, 
-			 wind_bearing, 
-			 wind_speed*t);
-      lon = FindLongitude(Thermal_Latitude, Thermal_Longitude, 
-			  wind_bearing, 
-			  wind_speed*t);
+      FindLatitudeLongitude(Thermal_Latitude, Thermal_Longitude, 
+                            wind_bearing, 
+                            wind_speed*t, &lat, &lon);
       break;
     }
   }

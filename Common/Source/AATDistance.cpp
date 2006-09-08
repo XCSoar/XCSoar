@@ -207,18 +207,16 @@ double AATDistance::DistanceCovered_internal(double longitude,
         &&(Task[taskwaypoint+1].Index>=0)) {
       
       double bearing;
-        DistanceBearing(latitude,
-                        longitude,
-                        WayPointList[Task[taskwaypoint+1].Index].Latitude,
-                        WayPointList[Task[taskwaypoint+1].Index].Longitude,
-                        NULL, &bearing);
+      DistanceBearing(latitude,
+                      longitude,
+                      WayPointList[Task[taskwaypoint+1].Index].Latitude,
+                      WayPointList[Task[taskwaypoint+1].Index].Longitude,
+                      NULL, &bearing);
       
-      Task[taskwaypoint].AATTargetLat= 
-        FindLatitude(latitude, longitude, 
-                     bearing, 1.0);
-      Task[taskwaypoint].AATTargetLon= 
-        FindLongitude(latitude, longitude, 
-                      bearing, 1.0);
+      FindLatitudeLongitude(latitude, longitude, 
+                            bearing, 1.0,
+                            &Task[taskwaypoint].AATTargetLat,
+                            &Task[taskwaypoint].AATTargetLon);
       
       if (ActiveWayPoint>taskwaypoint) 
         CalculateAATTaskSectors();

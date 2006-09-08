@@ -1624,40 +1624,37 @@ void CalculateNewPolarCoef(void)
 
 
 
-double FindLatitude(double Lat, double Lon, double Bearing, double Distance)
+void FindLatitudeLongitude(double Lat, double Lon, 
+                           double Bearing, double Distance,
+                           double *lat_out, double *lon_out)
 {
   double result;
 
   Lat *= DEG_TO_RAD;
   Lon *= DEG_TO_RAD;
   Bearing *= DEG_TO_RAD;
-
   Distance = Distance/6371000;
 
-  result = (double)asin(sin(Lat)*cos(Distance)+cos(Lat)*sin(Distance)*cos(Bearing));
-  result *= RAD_TO_DEG;
-  return result;
-}
+  double sinDistance = sin(Distance);
+  double cosLat = cos(Lat);
 
-double FindLongitude(double Lat, double Lon, double Bearing, double Distance)
-{
-  double result;
-
-  Lat *= DEG_TO_RAD;
-  Lon *= DEG_TO_RAD;
-  Bearing *= DEG_TO_RAD;
-
-  Distance = Distance/6371000;
-
-  if(cos(Lat)==0)
-    result = Lon;
-  else
-    {
-      result = Lon+(double)asin(sin(Bearing)*sin(Distance)/cos(Lat));
+  if (lat_out) {
+    result = (double)asin(sin(Lat)*cos(Distance)
+                          +cosLat*sinDistance*cos(Bearing));
+    result *= RAD_TO_DEG;
+    *lat_out = result;
+  }
+  if (lon_out) {
+    if(cosLat==0)
+      result = Lon;
+    else {
+      result = Lon+(double)asin(sin(Bearing)*sinDistance/cosLat);
       result = (double)fmod((result+M_PI),(M_2PI));
       result = result - M_PI;
     }
-  return result * RAD_TO_DEG;
+    result *= RAD_TO_DEG;
+    *lon_out = result;
+  }
 }
 
 
@@ -3254,7 +3251,14 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf) {
   ASSERT(Name[0] != '\0');
   ASSERT(lplf != NULL);
 
-  if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0) {
+  bool pc = false;
+
+#if (WINDOWSPC>0)
+  pc = true;
+#endif
+
+  if (pc || 
+      GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0) {
 
     // typical font entry
     // 26,0,0,0,700,1,0,0,0,0,0,4,2,<fontname>
@@ -3428,10 +3432,20 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
   LocalPath(defaultProfileFile,TEXT("xcsoar-registry.prf"));
   _tcscpy(startProfileFile, defaultProfileFile);
 
-  if (CommandLine != NULL){
+#if (WINDOWSPC>0) 
+  SCREENWIDTH=640;
+  SCREENHEIGHT=480;
+
+#else
+  return; // don't do anything for PDA platforms
+#endif
+
+  TCHAR *MyCommandLine = GetCommandLine();
+
+  if (MyCommandLine != NULL){
     TCHAR *pC, *pCe;
 
-    pC = _tcsstr(CommandLine, TEXT("-profile="));
+    pC = _tcsstr(MyCommandLine, TEXT("-profile="));
     if (pC != NULL){
       pC += strlen("-profile=");
       if (*pC == '"'){
@@ -3448,6 +3462,13 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
         startProfileFile[pCe-pC] = '\0';
       }
     }
+#if (WINDOWSPC>0) 
+    pC = _tcsstr(MyCommandLine, TEXT("-portrait"));
+    if (pC != NULL){
+      SCREENWIDTH=480;
+      SCREENHEIGHT=640;
+    }
+#endif
   }
 }
 
@@ -3968,3 +3989,51 @@ bool MatchesExtension(TCHAR *filename, TCHAR* extension) {
     return true;
   }
 }
+
+
+#include "mmsystem.h"
+
+extern HINSTANCE                       hInst; // The current instance
+
+BOOL PlayResource (LPTSTR lpName)
+{
+  BOOL bRtn;
+  LPTSTR lpRes;
+  HANDLE hResInfo, hRes;
+
+#ifdef DISABLEAUDIO
+  return false;
+#endif
+
+  // TODO Modify to allow use of WAV Files and/or Embedded files
+
+  if (wcsstr(lpName, TEXT(".wav"))) {
+    bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT ); 
+
+  } else {
+    
+    // Find the wave resource.
+    hResInfo = FindResource (hInst, lpName, TEXT("WAVE")); 
+    
+    if (hResInfo == NULL) 
+      return FALSE; 
+    
+    // Load the wave resource. 
+    hRes = LoadResource (hInst, (HRSRC)hResInfo); 
+    
+    if (hRes == NULL) 
+      return FALSE; 
+    
+    // Lock the wave resource and play it. 
+    lpRes = (LPTSTR)LockResource ((HGLOBAL)hRes);
+    
+    if (lpRes != NULL) 
+      { 
+	bRtn = sndPlaySound (lpRes, SND_MEMORY | SND_ASYNC | SND_NODEFAULT ); 
+      } 
+    else 
+      bRtn = 0;
+  }
+  return bRtn; 
+}
+

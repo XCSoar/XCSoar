@@ -275,6 +275,7 @@ typedef struct{
   GaugeVarioNeedleStyle_t GaugeVarioNeedleStyle;
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
+  bool InverseAircraft;
 } Appearance_t;
 
 extern Appearance_t Appearance;

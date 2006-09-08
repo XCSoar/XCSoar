@@ -345,22 +345,17 @@ void CalculateTaskSectors(void)
         SectorSize = StartRadius;
         SectorBearing = StartPoints[i].OutBound;
 
-        StartPoints[i].SectorStartLat = 
-          FindLatitude(WayPointList[StartPoints[i].Index].Latitude,
-                       WayPointList[StartPoints[i].Index].Longitude, 
-                       SectorBearing + SectorAngle, SectorSize);
-        StartPoints[i].SectorStartLon = 
-          FindLongitude(WayPointList[StartPoints[i].Index].Latitude,
-                        WayPointList[StartPoints[i].Index].Longitude, 
-                        SectorBearing + SectorAngle, SectorSize);
-        StartPoints[i].SectorEndLat   = 
-          FindLatitude(WayPointList[StartPoints[i].Index].Latitude,
-                       WayPointList[StartPoints[i].Index].Longitude,	
-                       SectorBearing - SectorAngle, SectorSize);
-        StartPoints[i].SectorEndLon   = 
-          FindLongitude(WayPointList[StartPoints[i].Index].Latitude,
-                        WayPointList[StartPoints[i].Index].Longitude,	
-                        SectorBearing - SectorAngle, SectorSize);
+        FindLatitudeLongitude(WayPointList[StartPoints[i].Index].Latitude,
+                              WayPointList[StartPoints[i].Index].Longitude, 
+                              SectorBearing + SectorAngle, SectorSize,
+                              &StartPoints[i].SectorStartLat,
+                              &StartPoints[i].SectorStartLon);
+
+        FindLatitudeLongitude(WayPointList[StartPoints[i].Index].Latitude,
+                              WayPointList[StartPoints[i].Index].Longitude,
+                              SectorBearing - SectorAngle, SectorSize,
+                              &StartPoints[i].SectorEndLat,
+                              &StartPoints[i].SectorEndLon);
       }
     }
   }
@@ -404,22 +399,18 @@ void CalculateTaskSectors(void)
 	    SectorBearing = Task[i].InBound;
 	  }
 
-	  Task[i].SectorStartLat = 
-	    FindLatitude(WayPointList[Task[i].Index].Latitude,
-			 WayPointList[Task[i].Index].Longitude, 
-			 SectorBearing + SectorAngle, SectorSize);
-	  Task[i].SectorStartLon = 
-	    FindLongitude(WayPointList[Task[i].Index].Latitude,
-			  WayPointList[Task[i].Index].Longitude, 
-			  SectorBearing + SectorAngle, SectorSize);
-	  Task[i].SectorEndLat   = 
-	    FindLatitude(WayPointList[Task[i].Index].Latitude,
-			 WayPointList[Task[i].Index].Longitude,	
-			 SectorBearing - SectorAngle, SectorSize);
-	  Task[i].SectorEndLon   = 
-	    FindLongitude(WayPointList[Task[i].Index].Latitude,
-			  WayPointList[Task[i].Index].Longitude,	
-			  SectorBearing - SectorAngle, SectorSize);
+
+          FindLatitudeLongitude(WayPointList[Task[i].Index].Latitude,
+                                WayPointList[Task[i].Index].Longitude, 
+                                SectorBearing + SectorAngle, SectorSize,
+                                &Task[i].SectorStartLat,
+                                &Task[i].SectorStartLon);
+
+          FindLatitudeLongitude(WayPointList[Task[i].Index].Latitude,
+                                WayPointList[Task[i].Index].Longitude,	
+                                SectorBearing - SectorAngle, SectorSize,
+                                &Task[i].SectorEndLat,
+                                &Task[i].SectorEndLon);
 	}
     }
 }
@@ -529,40 +520,29 @@ void CalculateAATTaskSectors(void)
 	  */
 
           if (i>= ActiveWayPoint) {
-            Task[i].AATTargetLat = 
-              FindLatitude (WayPointList[Task[i].Index].Latitude,
-                            WayPointList[Task[i].Index].Longitude, 
-                            targetbearing, 
-                            targetrange);
-            Task[i].AATTargetLon = 
-              FindLongitude (WayPointList[Task[i].Index].Latitude,
-                             WayPointList[Task[i].Index].Longitude, 
-                             targetbearing, 
-                             targetrange);
+            FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
+                                   WayPointList[Task[i].Index].Longitude, 
+                                   targetbearing, 
+                                   targetrange,
+                                   &Task[i].AATTargetLat,
+                                   &Task[i].AATTargetLon);
           }
 
 	  if(Task[i].AATType == SECTOR)
 	    {
-	      Task[i].AATStartLat = 
-		FindLatitude (WayPointList[Task[i].Index].Latitude,
-			      WayPointList[Task[i].Index].Longitude, 
-			      Task[i].AATStartRadial , 
-			      Task[i].AATSectorRadius );
-	      Task[i].AATStartLon = 
-		FindLongitude(WayPointList[Task[i].Index].Latitude,
-			      WayPointList[Task[i].Index].Longitude, 
-			      Task[i].AATStartRadial , 
-			      Task[i].AATSectorRadius );
-	      Task[i].AATFinishLat= 
-		FindLatitude (WayPointList[Task[i].Index].Latitude,
-			      WayPointList[Task[i].Index].Longitude,	
-			      Task[i].AATFinishRadial , 
-			      Task[i].AATSectorRadius );
-	      Task[i].AATFinishLon= 
-		FindLongitude(WayPointList[Task[i].Index].Latitude,
-			      WayPointList[Task[i].Index].Longitude,	
-			      Task[i].AATFinishRadial , 
-			      Task[i].AATSectorRadius );
+              FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
+                                     WayPointList[Task[i].Index].Longitude, 
+                                     Task[i].AATStartRadial , 
+                                     Task[i].AATSectorRadius ,
+                                     &Task[i].AATStartLat,
+                                     &Task[i].AATStartLon);
+              
+              FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
+                                     WayPointList[Task[i].Index].Longitude,
+                                     Task[i].AATFinishRadial , 
+                                     Task[i].AATSectorRadius,
+                                     &Task[i].AATFinishLat,
+                                     &Task[i].AATFinishLon);
 	    }
 	}
     }

@@ -412,22 +412,24 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 
       InfoBoxes[i] = new InfoBox(hWndMainWindow, xoff, yoff, sizex, sizey);
 
+      int Border=0;
       if (gnav){
-        int Border=0;
         if (i>0)
           Border |= BORDERTOP;
         if (i<6)
           Border |= BORDERRIGHT;
         InfoBoxes[i]->SetBorderKind(Border);
+      } else
+      if (!landscape) {
+        Border = 0;
+        if (i<4) {
+          Border |= BORDERBOTTOM;
+        } else {
+          Border |= BORDERTOP;
+        }
+        Border |= BORDERRIGHT;
+        InfoBoxes[i]->SetBorderKind(Border);
       }
-	  // Add top border if we are portrait - for 4.. 
-	  else if (! landscape & (i > 3)) {
-          int Border;
-		  Border = InfoBoxes[i]->GetBorderKind() | BORDERTOP;
-          InfoBoxes[i]->SetBorderKind(Border);
-	  }
-
-
     }
 
 }

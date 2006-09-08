@@ -45,7 +45,9 @@ HDC GaugeFLARM::hdcScreen = NULL;
 HDC GaugeFLARM::hdcTemp = NULL;
 HDC GaugeFLARM::hdcDrawWindow = NULL;
 bool GaugeFLARM::Enable;
+bool GaugeFLARM::Traffic= false;
 RECT GaugeFLARM::rc;
+bool GaugeFLARM::Suppress= false;
 
 #include "InfoBoxLayout.h"
 #include "XCSoar.h"
@@ -226,15 +228,28 @@ void GaugeFLARM::Create() {
 
   // end of new code for drawing FLARM window (see below for destruction of objects)
 
+  // turn off suppression
+  Suppress = false;
+
   SetWindowLong(hWndFLARMWindow, GWL_WNDPROC, (LONG) GaugeFLARMWndProc);
   ShowWindow(hWndFLARMWindow, SW_HIDE);
-  Show(false);
+
+  RenderBg();
+  BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
+
   Enable = false;
+  Traffic = false;
+  Show();
 }
 
 
-void GaugeFLARM::Show(bool doshow) {
-  Enable = doshow && EnableFLARMDisplay;
+void GaugeFLARM::TrafficPresent(bool present) {
+  Traffic = present;  
+}
+
+
+void GaugeFLARM::Show() {
+  Enable = Traffic && EnableFLARMDisplay && !Suppress;
   static bool lastvisible = true;
   if (Enable && !lastvisible) {
     ShowWindow(hWndFLARMWindow, SW_SHOW);
