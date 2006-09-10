@@ -716,6 +716,14 @@ void InfoBoxFormatter::AssignValue(int i) {
       Valid = false;
     }
     break;
+  case 60:
+    Value = DISTANCEMODIFY*CALCULATED_INFO.HomeDistance ;
+    if (HomeWaypoint>=0) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
+    break;
   default:
     break;
 

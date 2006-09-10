@@ -224,12 +224,12 @@ event=ClearStatusMessages
 
 mode=default
 type=key
-data=l
+data=LEFT
 event=MarkLocation
 
 mode=default
 type=key
-data=r
+data=RIGHT
 event=ScreenModes toggle
 
 

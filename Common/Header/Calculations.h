@@ -154,6 +154,8 @@ typedef struct _DERIVED_INFO
 
   double AverageClimbRate[200];
   long AverageClimbRateN[200];
+
+  double HomeDistance;
 } DERIVED_INFO;
 
 

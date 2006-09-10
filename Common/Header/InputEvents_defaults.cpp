@@ -390,12 +390,12 @@ Key2Event[mode_id][VK_RETURN] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-Key2Event[mode_id]['L'] = event_id;
+Key2Event[mode_id][VK_LEFT] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-Key2Event[mode_id]['R'] = event_id;
+Key2Event[mode_id][VK_RIGHT] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);

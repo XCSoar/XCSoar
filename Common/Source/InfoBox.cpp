@@ -454,6 +454,7 @@ void InfoBox::PaintComment(void){
 
 }
 
+
 void InfoBox::PaintSelector(void){
 
   if (mHasFocus){
@@ -479,40 +480,40 @@ void InfoBox::PaintSelector(void){
 
 #else
     POINT p[2];
-    p[1].x = mWidth-SELECTORWIDTH-1;
-    p[1].y = 0;
-    p[2].x = mWidth-1;
-    p[2].y = 0;
-    Polyline(mHdc, p, 2);
+    p[0].x = mWidth-SELECTORWIDTH-1;
+    p[0].y = 0;
     p[1].x = mWidth-1;
-    p[1].y = SELECTORWIDTH+1;
+    p[1].y = 0;
+    Polyline(mHdc, p, 2);
+    p[0].x = mWidth-1;
+    p[0].y = SELECTORWIDTH+1;
     Polyline(mHdc, p, 2);
 
+    p[0].x = mWidth-1;
+    p[0].y = mHeight-SELECTORWIDTH-2;
     p[1].x = mWidth-1;
-    p[1].y = mHeight-SELECTORWIDTH-2;
-    p[2].x = mWidth-1;
-    p[2].y = mHeight-1;
-    Polyline(mHdc, p, 2);
-    p[1].x = mWidth-SELECTORWIDTH-1;
     p[1].y = mHeight-1;
     Polyline(mHdc, p, 2);
+    p[0].x = mWidth-SELECTORWIDTH-1;
+    p[0].y = mHeight-1;
+    Polyline(mHdc, p, 2);
 
-    p[1].x = SELECTORWIDTH+1;
+    p[0].x = SELECTORWIDTH+1;
+    p[0].y = mHeight-1;
+    p[1].x = 0;
     p[1].y = mHeight-1;
-    p[2].x = 0;
-    p[2].y = mHeight-1;
     Polyline(mHdc, p, 2);
-    p[1].x = 0;
-    p[1].y = mHeight-SELECTORWIDTH-2;
+    p[0].x = 0;
+    p[0].y = mHeight-SELECTORWIDTH-2;
     Polyline(mHdc, p, 2);
 
+    p[0].x = 0;
+    p[0].y = SELECTORWIDTH+1;
     p[1].x = 0;
-    p[1].y = SELECTORWIDTH+1;
-    p[2].x = 0;
-    p[2].y = 0;
-    Polyline(mHdc, p, 2);
-    p[1].x = SELECTORWIDTH+1;
     p[1].y = 0;
+    Polyline(mHdc, p, 2);
+    p[0].x = SELECTORWIDTH+1;
+    p[0].y = 0;
     Polyline(mHdc, p, 2);
 
 #endif
