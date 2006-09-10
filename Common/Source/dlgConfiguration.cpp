@@ -515,6 +515,9 @@ static void OnInfoBoxHelp(WindowControl * Sender){
   case 59:
     dlgHelpShowModal(caption, TEXT("[Speed Task Instantaneous]\r\nInstantaneous cross country speed while on current task, compensated for altitude."));
     break;
+  case 60:
+    dlgHelpShowModal(caption, TEXT("[Distance Home]\r\nDistance to home waypoint (if defined)."));
+    break;
   };
 }
 

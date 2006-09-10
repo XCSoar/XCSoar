@@ -535,8 +535,10 @@ SCREEN_INFO Data_Options[] = {
 	  {ugNone,            TEXT("Team Range"), TEXT("Team Dis"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 55, 57},
           // 59
 	  {ugTaskSpeed, TEXT("Speed Task Instantaneous"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+          // 60
+	  {ugDistance, TEXT("Distance Home"), TEXT("Home Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
 	};
-int NUMSELECTSTRINGS = 60;
+int NUMSELECTSTRINGS = 61;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -1102,25 +1104,13 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   HACCEL hAccelTable;
   INITCOMMONCONTROLSEX icc;
 
-  // JMW we need a global version string!
-
   // Version String
 #ifdef GNAV
   wcscat(XCSoar_Version, TEXT("Altair "));
-#endif
-  /* NEWINFOBOX is now always on in HEAD - non NEWINFOBOX code should be removed 
-   * 
-  * PLEASE NOTE - BETA of 4.7 would be 4.6.1, not 4.7.1 !!! *
-  * NOTE: 4.7 is not in beta but currently in ALPHA, use entry below *
-  wcscat(XCSoar_Version, TEXT("4.6.5 "));
-   */
-#ifdef GNAV
-  // HEAD 4.7 (series) is NOT necessarily alpha, as it is in production
-  // use in Altair, and there are already several stable versions of 4.7 out.
-  wcscat(XCSoar_Version, TEXT("4.7.8 Beta "));
+  wcscat(XCSoar_Version, TEXT("4.7.9 RC6 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 #else
-  wcscat(XCSoar_Version, TEXT("4.7.8 Beta "));
+  wcscat(XCSoar_Version, TEXT("4.7.9 RC6 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 #endif
   // (future/next version) wcscat(XCSoar_Version, TEXT("BETA 4.6.1"));
@@ -1853,6 +1843,8 @@ void Shutdown(void) {
   CloseWayPoints();
   UnlockTaskData();
 
+  StartupStore(TEXT("CloseTerrainTopology\r\n"));
+
   CloseTerrain();
   CloseTopology();
   CloseTerrainRenderer();
@@ -1873,27 +1865,36 @@ void Shutdown(void) {
   #endif
 
 #if (WINDOWSPC<1)
+#ifndef _SIM_
   if(Port1Available)
     Port1Close();
   if (Port2Available)
     Port2Close();
+#endif
 #endif
 
   CloseFLARMDetails();
 
   // Kill windows
 
+  StartupStore(TEXT("Close Gauges\r\n"));
+
   GaugeCDI::Destroy();
   GaugeVario::Destroy();
   GaugeFLARM::Destroy();
   
+  StartupStore(TEXT("Close Messages\r\n"));
   Message::Destroy();
   
   Units::UnLoadUnitBitmap();
   
+  StartupStore(TEXT("Destroy Info Boxes\r\n"));
   InfoBoxLayout::DestroyInfoBoxes();
   
+  StartupStore(TEXT("Destroy Button Labels\r\n"));
   ButtonLabel::Destroy();
+
+  StartupStore(TEXT("Delete Objects\r\n"));
   
   CommandBar_Destroy(hWndCB);
   for (i=0; i<NUMSELECTSTRINGS; i++) {
@@ -1918,6 +1919,8 @@ void Shutdown(void) {
   if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
   if(AirspaceScreenPoint != NULL)  LocalFree((HLOCAL)AirspaceScreenPoint);
   if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
+
+  StartupStore(TEXT("Delete Critical Sections\r\n"));
   
   DeleteCriticalSection(&CritSec_EventQueue);
   csEventQueueInitialized = false;
@@ -1934,18 +1937,25 @@ void Shutdown(void) {
   DeleteCriticalSection(&CritSec_TerrainDataGraphics);
   csTerrainDataCalculationsInitialized = false;
 
+  StartupStore(TEXT("Close Progress Dialog\r\n"));
+
   CloseProgressDialog();
 
+  StartupStore(TEXT("Close Calculations\r\n"));
   CloseCalculations();
 
   CloseGeoid();
 
+  StartupStore(TEXT("Close Windows\r\n"));
   DestroyWindow(hWndMapWindow);
   DestroyWindow(hWndMainWindow);
       
+  StartupStore(TEXT("Close Event Handles\r\n"));
   CloseHandle(drawTriggerEvent);
   CloseHandle(dataTriggerEvent);
   CloseHandle(varioTriggerEvent);
+
+  StartupStore(TEXT("Finished shutdown\r\n"));
 
 #if (WINDOWSPC>0)
 #if _DEBUG

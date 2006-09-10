@@ -29,7 +29,7 @@
   </WndProperty>
 
   <WndProperty Name="prpRange" Caption="Range"      X=2 Y=-1   Width=238 Height=22 CaptionWidth=150 Font=2 Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=-100 Max=100 Step=1 OnDataAccess="OnRangeData"/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=-100 Max=100 Step=5 OnDataAccess="OnRangeData"/>
   </WndProperty>
 
 </WndForm>    

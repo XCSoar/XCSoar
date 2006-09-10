@@ -79,7 +79,7 @@
   <WndFrame Name="frmAATTurnpoint" X=80 Y=0 Width=240 Height=222 Font=2>
 
   <WndProperty Name="prpAATOffsetRadius" Caption="Target distance"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Target distance adjusts the location of the target within the observation area.  Large values increases the distance (moves the target further away from the previous turnpoint), low values decreases the distance." >
-    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=10/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=5/>
     </WndProperty>
 
     <WndProperty Name="prpAATType" Caption="Type"     X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 Help="Type of the AAT observation area:

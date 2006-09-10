@@ -313,6 +313,16 @@ event=FLARMRadar toggle
 event=ClearAirspaceWarnings
 event=ClearStatusMessages
 
+mode=default
+type=key
+data=LEFT
+event=MarkLocation
+
+mode=default
+type=key
+data=RIGHT
+event=ScreenModes toggle
+
 ### 
 
 mode=default

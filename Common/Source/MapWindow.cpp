@@ -4007,26 +4007,36 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
       GlideBar0[1].y -= Offset0;
       GlideBar0[2].y -= Offset0;
 
-      if ((Offset<0)&&(Offset0<0)&&(Offset0-Offset>IBLSCALE(3))) {
+      if ((Offset<0)&&(Offset0<0)) {
         // both below
-        int dy = (GlideBar0[0].y-GlideBar[0].y)
-          +(GlideBar0[0].y-GlideBar0[3].y);
-        GlideBar[3].y = GlideBar0[0].y-dy;
-        GlideBar[4].y = GlideBar0[1].y-dy;
-        GlideBar[5].y = GlideBar0[2].y-dy;
+        if (Offset0!= Offset) {
+          int dy = (GlideBar0[0].y-GlideBar[0].y)
+            +(GlideBar0[0].y-GlideBar0[3].y);
+          dy = max(IBLSCALE(3), dy);
+          GlideBar[3].y = GlideBar0[0].y-dy;
+          GlideBar[4].y = GlideBar0[1].y-dy;
+          GlideBar[5].y = GlideBar0[2].y-dy;
+          
+          GlideBar0[0].y = GlideBar[3].y;
+          GlideBar0[1].y = GlideBar[4].y;
+          GlideBar0[2].y = GlideBar[5].y;
+        } else {
+          Offset0 = 0;
+        }
 
-        GlideBar0[0].y = GlideBar[3].y;
-        GlideBar0[1].y = GlideBar[4].y;
-        GlideBar0[2].y = GlideBar[5].y;
-      }
-      if ((Offset>0)&&(Offset0>0)) {
+      } else if ((Offset>0)&&(Offset0>0)) {
+        // both above
         GlideBar0[3].y = GlideBar[0].y;
         GlideBar0[4].y = GlideBar[1].y;
         GlideBar0[5].y = GlideBar[2].y;
+
+        if (abs(Offset0-Offset)<IBLSCALE(4)) {
+          Offset= Offset0;
+        } 
       }
 
       // draw actual glide bar
-      if (Offset<0) {
+      if (Offset<=0) {
         hpOld = (HPEN)SelectObject(hDC, hpFinalGlideBelow);
         hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideBelow);
       } else {
@@ -4036,7 +4046,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
       Polygon(hDC,GlideBar,6);
 
       // draw glide bar at mc 0
-      if (Offset0<0) {
+      if (Offset0<=0) {
         SelectObject(hDC, hpFinalGlideBelow);
         SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
       } else {
