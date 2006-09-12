@@ -63,6 +63,7 @@ extern int numInfoWindows;
 // waypoint data
 extern int HomeWaypoint;
 extern WAYPOINT *WayPointList;
+extern WAYPOINT TempWayPointList[MAXTEMPWAYPOINTS];
 extern unsigned int NumberOfWayPoints;
 extern int WaypointsOutOfRange;
 

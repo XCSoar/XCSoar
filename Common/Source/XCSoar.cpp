@@ -290,6 +290,7 @@ bool TeammateCodeValid = false;
 
 // Waypoint Database
 WAYPOINT *WayPointList = NULL;
+WAYPOINT TempWayPointList[MAXTEMPWAYPOINTS];
 unsigned int NumberOfWayPoints = 0;
 int SectorType = 1; // FAI sector
 DWORD SectorRadius = 500;
@@ -1107,10 +1108,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // Version String
 #ifdef GNAV
   wcscat(XCSoar_Version, TEXT("Altair "));
-  wcscat(XCSoar_Version, TEXT("4.7.9 RC6 "));
+  wcscat(XCSoar_Version, TEXT("4.7.9 RC7 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 #else
-  wcscat(XCSoar_Version, TEXT("4.7.9 RC6 "));
+  wcscat(XCSoar_Version, TEXT("4.7.9 RC7 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 #endif
   // (future/next version) wcscat(XCSoar_Version, TEXT("BETA 4.6.1"));
@@ -1189,10 +1190,12 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   InitCalculations(&GPS_INFO,&CALCULATED_INFO);
 
-  // display start up screen
-  //  StartupScreen();
-  // not working very well at all
+  // clear temporary waypoints
 
+  for (i=0; i<MAXTEMPWAYPOINTS; i++) {
+    TempWayPointList[i].FileNum = -1;
+    TempWayPointList[i].Details = NULL;
+  }
 
   OpenGeoid();
 
@@ -1780,6 +1783,9 @@ bool Debounce(void) {
 
 void Shutdown(void) {
   int i;
+#ifdef DEBUG
+  WaypointWriteFiles();
+#endif
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 

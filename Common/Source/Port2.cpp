@@ -113,7 +113,10 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   if (!SetCommState (hPort2, &PortDCB))
   {
     // Could not create the read thread.
-		CloseHandle (hPort2);
+    CloseHandle (hPort2);
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
     MessageBoxX (hWndMainWindow, gettext(TEXT("Unable to Change the Vario Serial Port Settings")),
 		 gettext(TEXT("Error")), MB_OK);
     dwError = GetLastError ();
@@ -136,7 +139,10 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   if (!SetCommTimeouts (hPort2, &CommTimeouts))
   {
     // Could not create the read thread.
-		CloseHandle (hPort2);
+    CloseHandle (hPort2);
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
     MessageBoxX (hWndMainWindow, gettext(TEXT("Unable to Set Serial Port Timers")),
                 gettext(TEXT("Error")), MB_OK);
     dwError = GetLastError ();
@@ -165,6 +171,9 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   {
     // Could not create the read thread.
     CloseHandle (hPort2);
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
     MessageBoxX (hWndMainWindow,
 		 gettext(TEXT("Unable to Start Vario Serial Port Handler")),
 		 gettext(TEXT("Error")), MB_OK);
@@ -274,6 +283,9 @@ DWORD Port2ReadThread (LPVOID lpvoid)
   PurgeComm(hPort2,
             PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
   CloseHandle (hPort2);
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
   hPort2 = INVALID_HANDLE_VALUE;
 
   return 0;
@@ -301,8 +313,12 @@ BOOL Port2StopRxThread(void){
   CloseHandle(hRead2Thread);
   UnlockFlightData();
 
-  if (hPort2 != INVALID_HANDLE_VALUE)
+  if (hPort2 != INVALID_HANDLE_VALUE) {
     CloseHandle (hPort2);
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
+  }
 
 #else
   PurgeComm(hPort2,
@@ -361,6 +377,9 @@ BOOL Port2Close ()
     }
     else
     {
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
       hPort2 = INVALID_HANDLE_VALUE;
       return TRUE;
     }

@@ -109,6 +109,17 @@ public:
 
   static const Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
 
+  static void LongitudeToDMS(double Longitude,
+                             int *dd,
+                             int *mm,
+                             int *ss,
+                             bool *east);
+  static void LatitudeToDMS(double Latitude,
+                            int *dd,
+                            int *mm,
+                            int *ss,
+                            bool *north);
+
   static bool LongitudeToString(double Longitude, TCHAR *Buffer, size_t size);
   static bool LatitudeToString(double Latitude, TCHAR *Buffer, size_t size);
 

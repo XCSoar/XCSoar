@@ -87,5 +87,7 @@ void dlgWayPointDetailsShowModal(void);
 void dlgTextEntryShowModal(TCHAR *text);
 void dlgTeamCodeShowModal(void);
 void dlgStartPointShowModal(void);
+#include "MapWindow.h"
+void dlgWaypointEditShowModal(WAYPOINT *wpt);
 
 #endif

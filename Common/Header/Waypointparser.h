@@ -7,6 +7,8 @@
 
 #include <windows.h>
 
+#include "MapWindow.h"
+
 #define wpTerrainBoundsYes    100
 #define wpTerrainBoundsYesAll 101
 #define wpTerrainBoundsNo     102
@@ -18,6 +20,8 @@ void SetHome(void);
 int FindNearestWayPoint(double X, double Y, double MaxRange);
 void CloseWayPoints(void);
 int dlgWaypointOutOfTerrain(TCHAR *Message);
+void WaypointWriteFiles(void);
+void WaypointAltitudeFromTerrain(WAYPOINT* wpt);
 
 #endif
 

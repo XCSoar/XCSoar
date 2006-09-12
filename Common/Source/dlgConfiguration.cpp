@@ -48,12 +48,14 @@ Copyright_License {
 #include "McReady.h"
 #include "Utils.h"
 #include "InfoBoxLayout.h"
+#include "Waypointparser.h"
 
 
 static bool changed = false;
 static bool taskchanged = false;
 static bool requirerestart = false;
 static bool utcchanged = false;
+static bool waypointneedsave = false;
 static int page=0;
 static WndForm *wf=NULL;
 static WndFrame *wConfig1=NULL;
@@ -73,9 +75,12 @@ static WndFrame *wConfig14=NULL;
 static WndFrame *wConfig15=NULL;
 static WndFrame *wConfig16=NULL;
 static WndFrame *wConfig17=NULL;
+static WndFrame *wConfig18=NULL;
 static WndButton *buttonPilotName=NULL;
 static WndButton *buttonAircraftType=NULL;
 static WndButton *buttonAircraftRego=NULL;
+
+#define NUMPAGES 18
 
 
 
@@ -113,7 +118,6 @@ static void UpdateButtons(void) {
 
 extern bool EnableAnimation;
 
-#define NUMPAGES 17
 
 static void NextPage(int Step){
   page += Step;
@@ -171,6 +175,9 @@ static void NextPage(int Step){
   case 16:
     wf->SetCaption(TEXT("17 Logger"));
     break;
+  case 17:
+    wf->SetCaption(TEXT("18 Waypoint Edit"));
+    break;
   }
   wConfig1->SetVisible(page == 0);
   wConfig2->SetVisible(page == 1);
@@ -189,6 +196,7 @@ static void NextPage(int Step){
   wConfig15->SetVisible(page == 14);
   wConfig16->SetVisible(page == 15);
   wConfig17->SetVisible(page == 16);
+  wConfig18->SetVisible(page == 17);
 }
 
 
@@ -522,6 +530,75 @@ static void OnInfoBoxHelp(WindowControl * Sender){
 }
 
 
+static void OnWaypointNewClicked(WindowControl * Sender){
+  // TODO: Create new waypoint,
+  // then edit it.
+  int i;
+
+  LockTaskData();
+  for (i=0; i<MAXTEMPWAYPOINTS; i++) {
+    if (TempWayPointList[i].FileNum == -1) {
+      break;
+    }
+  }
+  UnlockTaskData();
+  if (i<MAXTEMPWAYPOINTS) {
+    LockTaskData();
+    TempWayPointList[i].Latitude = GPS_INFO.Latitude;
+    TempWayPointList[i].Longitude = GPS_INFO.Longitude;
+    TempWayPointList[i].FileNum = 0;
+    TempWayPointList[i].Flags = 0;
+    TempWayPointList[i].Comment[0] = 0;
+    TempWayPointList[i].Name[0] = 0;
+    UnlockTaskData();
+    dlgWaypointEditShowModal(&TempWayPointList[i]);
+    if (_tcslen(TempWayPointList[i].Name)>0) {
+      waypointneedsave = true;
+    } else {
+      TempWayPointList[i].FileNum = -1;
+    }
+  } else {
+    // no more slots left
+  }
+}
+
+
+static void OnWaypointEditClicked(WindowControl * Sender){
+  int res;
+  res = dlgWayPointSelect();
+  if (res != -1){
+    dlgWaypointEditShowModal(&WayPointList[res]);
+    waypointneedsave = true;
+  }
+}
+
+
+static void OnWaypointSaveClicked(WindowControl * Sender){
+  WaypointWriteFiles();
+  waypointneedsave = false;
+  WAYPOINTFILECHANGED= true;
+  changed = true;
+}
+
+
+static void OnWaypointDeleteClicked(WindowControl * Sender){
+  int res;
+  res = dlgWayPointSelect();
+  if (res != -1){
+    if(MessageBoxX(hWndMapWindow,
+                   WayPointList[res].Name,
+                   gettext(TEXT("Delete Waypoint?")),
+                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
+
+      LockTaskData();
+      WayPointList[res].FileNum = -1;
+      UnlockTaskData();
+      waypointneedsave = true;
+    }
+  }
+}
+
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnAirspaceColoursClicked),
   DeclearCallBackEntry(OnAirspaceModeClicked),
@@ -530,6 +607,10 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnPrevClicked),
   DeclearCallBackEntry(OnVarioClicked),
   DeclearCallBackEntry(OnInfoBoxHelp),
+  DeclearCallBackEntry(OnWaypointNewClicked),
+  DeclearCallBackEntry(OnWaypointDeleteClicked),
+  DeclearCallBackEntry(OnWaypointEditClicked),
+  DeclearCallBackEntry(OnWaypointSaveClicked),
   DeclearCallBackEntry(NULL)
 };
 
@@ -673,6 +754,7 @@ void dlgConfigurationShowModal(void){
   wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
   wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
   wConfig17    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
+  wConfig18    = ((WndFrame *)wf->FindByName(TEXT("frmWaypointEdit")));
 
   ASSERT(wConfig1!=NULL);
   ASSERT(wConfig2!=NULL);
@@ -691,6 +773,7 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig15!=NULL);
   ASSERT(wConfig16!=NULL);
   ASSERT(wConfig17!=NULL);
+  ASSERT(wConfig18!=NULL);
 
   buttonPilotName = ((WndButton *)wf->FindByName(TEXT("cmdPilotName")));
   if (buttonPilotName) {
@@ -1640,10 +1723,26 @@ void dlgConfigurationShowModal(void){
   taskchanged = false;
   requirerestart = false;
   utcchanged = false;
+  waypointneedsave = false;
 
   wf->ShowModal();
 
   // TODO: implement a cancel button that skips all this below after exit.
+
+
+  if (waypointneedsave) {
+    if(MessageBoxX(hWndMapWindow,
+                   gettext(TEXT("Save changes to waypoint file?")),
+                   gettext(TEXT("Waypoints edited")),
+                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
+
+      WaypointWriteFiles();
+
+      WAYPOINTFILECHANGED= true;
+      changed = true;
+
+    }
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAbortSafetyUseCurrent"));
   if (wp) {
