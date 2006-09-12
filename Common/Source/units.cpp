@@ -79,6 +79,59 @@ Units_t Units::UserVerticalSpeedUnit = unMeterPerSecond;
 Units_t Units::UserWindSpeedUnit = unKiloMeterPerHour;
 Units_t Units::UserTaskSpeedUnit = unKiloMeterPerHour;
 
+void Units::LongitudeToDMS(double Longitude,
+                           int *dd,
+                           int *mm,
+                           int *ss,
+                           bool *east) {
+
+  int sign = Longitude<0 ? 0 : 1;
+  Longitude = fabs(Longitude);
+
+  *dd = (int)Longitude;
+  Longitude = (Longitude - (*dd)) * 60.0;
+  *mm = (int)(Longitude);
+  Longitude = (Longitude - (*mm)) * 60.0;
+  *ss = (int)(Longitude + 0.5);
+  if (*ss >= 60)
+    {
+      (*mm)++;
+      (*ss) -= 60;
+    }
+  if ((*mm) >= 60)
+    {
+      (*dd)++;
+      (*mm)-= 60;
+    }
+  *east = (sign==1);
+}
+
+
+void Units::LatitudeToDMS(double Latitude, 
+                          int *dd,
+                          int *mm,
+                          int *ss,
+                          bool *north) {
+
+  int sign = Latitude<0 ? 0 : 1;
+  Latitude = fabs(Latitude);
+
+  *dd = (int)Latitude;
+  Latitude = (Latitude - (*dd)) * 60.0;
+  *mm = (int)(Latitude);
+  Latitude = (Latitude - (*mm)) * 60.0;
+  *ss = (int)(Latitude + 0.5);
+  if (*ss >= 60) {
+    (*mm)++;
+    (*ss) -= 60;
+  }
+  if ((*mm) >= 60) {
+    (*dd)++;
+    (*mm) -= 60;
+  }
+  *north = (sign==1);
+}
+
 bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
 
   TCHAR EW[] = TEXT("WE");
@@ -96,15 +149,15 @@ bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
       Longitude = (Longitude - mm) * 60.0;
       ss = (int)(Longitude + 0.5);
       if (ss >= 60)
-			{
-        mm++;
-				ss -= 60;
-			}
+        {
+          mm++;
+          ss -= 60;
+        }
       if (mm >= 60)
-			{
-        dd++;
-				mm -= 60;
-			}
+        {
+          dd++;
+          mm -= 60;
+        }
       _stprintf(Buffer, TEXT("%c%03d°%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:
@@ -140,7 +193,6 @@ bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
   int sign = Latitude<0 ? 0 : 1;
   Latitude = fabs(Latitude);
 
-
   switch(CoordinateFormat){
     case cfDDMMSS:
       dd = (int)Latitude;
@@ -148,16 +200,14 @@ bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
       mm = (int)(Latitude);
       Latitude = (Latitude - mm) * 60.0;
       ss = (int)(Latitude + 0.5);
-      if (ss >= 60)
-			{
+      if (ss >= 60) {
         mm++;
-				ss -= 60;
-			}
-      if (mm >= 60)
-			{
+        ss -= 60;
+      }
+      if (mm >= 60) {
         dd++;
-				mm -= 60;
-			}
+        mm -= 60;
+      }
       _stprintf(Buffer, TEXT("%c%02d°%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:

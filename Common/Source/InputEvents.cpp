@@ -1903,6 +1903,9 @@ void InputEvents::eventSetup(TCHAR *misc) {
   if (_tcscmp(misc,TEXT("Replay"))==0){
     dlgLoggerReplayShowModal();
   }
+  //  if (_tcscmp(misc,TEXT("Waypoint"))==0){
+  //    dlgWaypointEditShowModal();
+  //  }
   if (_tcscmp(misc,TEXT("Switches"))==0){
     dlgSwitchesShowModal();
   }

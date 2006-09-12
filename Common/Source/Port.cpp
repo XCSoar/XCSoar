@@ -118,6 +118,9 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
   {
     // Could not create the read thread.
     CloseHandle (hPort1);
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
     // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
     _stprintf(sTmp, TEXT("Unable to Change Settings on Port %s"), sPortName),
@@ -136,6 +139,9 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 
   if (!Port1StartRxThread()){
     CloseHandle (hPort1);
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
     return(FALSE);
   }
 
@@ -242,6 +248,9 @@ DWORD Port1ReadThread (LPVOID lpvoid)
   PurgeComm(hPort1, 
             PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
   CloseHandle (hPort1);
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
   hPort1 = INVALID_HANDLE_VALUE;
   return 0;
 }
@@ -275,6 +284,9 @@ BOOL Port1Close ()
     }
     else
     {
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
       hPort1 = INVALID_HANDLE_VALUE;
       return TRUE;
     }
@@ -319,8 +331,12 @@ BOOL Port1StopRxThread(void){
   TerminateThread(hRead1Thread, 0);
   CloseHandle(hRead1Thread);
   UnlockFlightData();
-  if (hPort1 != INVALID_HANDLE_VALUE)
+  if (hPort1 != INVALID_HANDLE_VALUE) {
     CloseHandle (hPort1);
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
+  }
 
 #else
   PurgeComm(hPort1, 
@@ -419,12 +435,16 @@ int Port1SetRxTimeout(int Timeout){
   CommTimeouts.WriteTotalTimeoutMultiplier = 10;  
   CommTimeouts.WriteTotalTimeoutConstant = 1000;    
 
-                                        // Set the time-out parameters for all read and write operations
-                                        // on the port. 
+                                        // Set the time-out parameters
+                                        // for all read and write
+                                        // operations on the port.
   if (!SetCommTimeouts (hPort1, &CommTimeouts))
   {
                                         // Could not create the read thread.
     CloseHandle (hPort1);
+#if (WINDOWSPC>0)
+    Sleep(2000); // needed for windows bug
+#endif
     MessageBoxX (hWndMainWindow, gettext(TEXT("Unable to Set Serial Port Timers")),
 		 TEXT("Error"), MB_OK);
     dwError = GetLastError ();

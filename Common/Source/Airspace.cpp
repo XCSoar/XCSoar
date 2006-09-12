@@ -233,16 +233,16 @@ void ReadAirspace(FILE *fp)
     }
   }
 
-	// Process final area (if any). bFillMode is false.  JG 10-Nov-2005
-	if (!bWaiting)
-		NumberOfAirspaceAreas++;    // ????
+  // Process final area (if any). bFillMode is false.  JG 10-Nov-2005
+  if (!bWaiting)
+    NumberOfAirspaceAreas++;    // ????
 
-    NumberOfAirspacePointsPass[0] = NumberOfAirspacePoints - OldNumberOfAirspacePoints;
-    NumberOfAirspaceAreasPass[0] = NumberOfAirspaceAreas - OldNumberOfAirspaceAreas;
-    NumberOfAirspaceCirclesPass[0] = NumberOfAirspaceCircles - OldNumberOfAirspaceCircles;
-
+  NumberOfAirspacePointsPass[0] = NumberOfAirspacePoints - OldNumberOfAirspacePoints;
+  NumberOfAirspaceAreasPass[0] = NumberOfAirspaceAreas - OldNumberOfAirspaceAreas;
+  NumberOfAirspaceCirclesPass[0] = NumberOfAirspaceCircles - OldNumberOfAirspaceCircles;
+  
   // initialise the areas
-
+  
   // old pointers, in case we have multiple airspace files
   AIRSPACE_CIRCLE* OldAirspaceCircle = AirspaceCircle;
   AIRSPACE_POINT*  OldAirspacePoint = AirspacePoint;
@@ -254,8 +254,9 @@ void ReadAirspace(FILE *fp)
                     NumberOfAirspaceCircles * sizeof(AIRSPACE_CIRCLE));
 
   AirspacePoint  = (AIRSPACE_POINT *)LocalAlloc(LMEM_FIXED,
-						        (NumberOfAirspacePoints)  * sizeof(AIRSPACE_POINT));
-
+                                                (NumberOfAirspacePoints)  
+                                                * sizeof(AIRSPACE_POINT));
+  
   AirspacePointSize = NumberOfAirspacePoints;//  * sizeof(AIRSPACE_POINT);
 
   AirspaceScreenPoint  = (POINT *)LocalAlloc(LMEM_FIXED,
@@ -264,12 +265,15 @@ void ReadAirspace(FILE *fp)
 
 
   AirspaceArea   = (AIRSPACE_AREA *)  LocalAlloc(LMEM_FIXED,
-						NumberOfAirspaceAreas   * sizeof(AIRSPACE_AREA));
+                                                 NumberOfAirspaceAreas   
+                                                 * sizeof(AIRSPACE_AREA));
 
   // can't allocate memory, so delete everything
-  if(( AirspaceCircle == NULL) || (AirspacePoint == NULL) || (AirspaceArea == NULL) || (AirspaceScreenPoint == NULL))
+  if(( AirspaceCircle == NULL) || (AirspacePoint == NULL) 
+     || (AirspaceArea == NULL) || (AirspaceScreenPoint == NULL))
     {
-      NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; NumberOfAirspaceCircles = 0;
+      NumberOfAirspacePoints = 0; NumberOfAirspaceAreas = 0; 
+      NumberOfAirspaceCircles = 0;
       if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
       if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
       if(AirspaceScreenPoint != NULL)  LocalFree((HLOCAL)AirspaceScreenPoint);

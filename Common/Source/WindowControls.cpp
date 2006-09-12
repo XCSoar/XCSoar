@@ -580,7 +580,7 @@ int DataFieldEnum::GetAsInteger(void){
 }
 
 void DataFieldEnum::addEnumText(TCHAR *Text) {
-  if (nEnums<DFE_MAX_ENUMS) {
+  if (nEnums<DFE_MAX_ENUMS-1) {
     mTextEnum[nEnums] = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
     _tcscpy(mTextEnum[nEnums], Text);
     nEnums++;

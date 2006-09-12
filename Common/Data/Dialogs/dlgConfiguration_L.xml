@@ -708,6 +708,18 @@ other languages.  If this field is left blank, then XCSoar uses English.
 
   </WndFrame>
 
+  <WndFrame Name="frmWaypointEdit" X=0 Y=0 Width=235 Height=222 Font=2>
+
+  <WndButton Name="cmdWaypointNew" Caption="New" X=50 Y=-1 Width=150  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointNewClicked" />
+
+  <WndButton Name="cmdWaypointEdit" Caption="Edit" X=50 Y=-1 Width=150  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointEditClicked" />
+
+  <WndButton Name="cmdWaypointSave" Caption="Save" X=50 Y=-1 Width=150  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointSaveClicked" />
+
+  <WndButton Name="cmdWaypointDelete" Caption="Delete" X=50 Y=-1 Width=150  Height=28 Font=2 Tag=4 OnClickNotify="OnWaypointDeleteClicked" />
+
+  </WndFrame>
+
 </WndForm>    
 
 </PMML>

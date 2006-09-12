@@ -5,6 +5,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+// maximum number of temporary waypoints
+#define MAXTEMPWAYPOINTS 50
 
 // max length airspace and waypoint names
 #define NAME_SIZE 50

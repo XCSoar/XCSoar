@@ -804,6 +804,7 @@ IDR_XML_TEXTENTRY            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgText
 
 IDR_XML_TEAMCODE            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTeamCode.xml"
 IDR_XML_STARTPOINT            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartPoint.xml"
+IDR_XML_WAYPOINTEDIT         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointEdit.xml"
 
 #ifndef GNAV
 IDR_XML_CHECKLIST_L       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgChecklist_L.xml"
@@ -819,6 +820,7 @@ IDR_XML_WAYPOINTSELECT_L  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWayPoin
 IDR_XML_TASKOVERVIEW_L    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskOverview_L.xml"
 IDR_XML_TASKWAYPOINT_L    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskWaypoint_L.xml"
 IDR_XML_STARTUP_L         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartup_L.xml"
+IDR_XML_WAYPOINTEDIT_L         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointEdit_L.xml"
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

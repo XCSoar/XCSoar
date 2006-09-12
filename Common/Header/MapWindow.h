@@ -36,20 +36,21 @@
 typedef struct _WAYPOINT_INFO
 {
   int Number;
-	double Latitude;
-	double Longitude;
-	double Altitude;
-	int Flags;
-	TCHAR Name[NAME_SIZE + 1];
-	TCHAR Comment[COMMENT_SIZE + 1];
-	POINT	Screen;
-	int Zoom;
-	BOOL Reachable;
-	double AltArivalAGL;
-	BOOL Visible;
+  double Latitude;
+  double Longitude;
+  double Altitude;
+  int Flags;
+  TCHAR Name[NAME_SIZE + 1];
+  TCHAR Comment[COMMENT_SIZE + 1];
+  POINT	Screen;
+  int Zoom;
+  BOOL Reachable;
+  double AltArivalAGL;
+  BOOL Visible;
   bool InTask;
   TCHAR *Details;
   bool FarVisible;
+  int FileNum; // which file it is in, or -1 to delete
 } WAYPOINT;
 
 
