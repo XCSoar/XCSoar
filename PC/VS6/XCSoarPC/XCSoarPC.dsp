@@ -45,7 +45,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D NEWINFOBOX=1 /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -72,7 +72,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D NEWINFOBOX=1 /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /FD /GZ /c
 # SUBTRACT CPP /X /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -101,7 +101,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D NEWINFOBOX=1 /FD /GZ /c
 # SUBTRACT BASE CPP /X /YX /Yc /Yu
-# ADD CPP /nologo /W3 /WX /vd0 /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D NEWINFOBOX=1 /D "_SIM_" /D "DEBUG" /FD /c
+# ADD CPP /nologo /W3 /WX /vd0 /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D "_SIM_" /D "DEBUG" /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /i "..\..\..\Common\Header" /i "..\..\..\Common\Source" /d "_DEBUG" /d "WINDOWSPC"
@@ -129,8 +129,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /WX /vd0 /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D NEWINFOBOX=1 /D "_SIM_" /D "DEBUG" /FD /c
-# ADD CPP /nologo /MT /W3 /WX /vd0 /GX /O2 /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D "_SIM_" /D UNDER_CE=300 /FD /c
-# SUBTRACT CPP /Z<none>
+# ADD CPP /nologo /MT /W3 /WX /vd0 /GX /O2 /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D "_SIM_" /D UNDER_CE=300 /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /i "..\..\..\Common\Header" /i "..\..\..\Common\Source" /d "_DEBUG" /d "WINDOWSPC"
@@ -325,6 +324,10 @@ SOURCE=..\..\..\Common\Source\dlgWayPointDetails.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Common\Source\dlgWaypointEdit.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Common\Source\dlgWaypointOutOfTerrain.cpp
 # End Source File
 # Begin Source File
@@ -490,19 +493,11 @@ SOURCE=..\..\..\Common\Source\Utils.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Common\Source\VarioSound.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\Common\Source\VegaVoice.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\VOIMAGE.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Common\Source\WaveThread.cpp
 # End Source File
 # Begin Source File
 
