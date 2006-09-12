@@ -1639,7 +1639,7 @@ int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       return inrange;
     }
         
-  // Start Line
+  // Finish line
   AircraftBearing = AircraftBearing - Task[i].InBound ;
   while (AircraftBearing<-180) {
     AircraftBearing+= 360;
@@ -1654,7 +1654,7 @@ int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     approaching = ((AircraftBearing >= -90) && (AircraftBearing <= 90));
   } else {
     // FAI 90 degree
-    approaching = ((AircraftBearing >= -45) && (AircraftBearing <= 45));
+    approaching = !((AircraftBearing >= 135) || (AircraftBearing <= -135));
   }
 
   if (inrange) {

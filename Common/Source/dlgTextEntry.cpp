@@ -43,6 +43,7 @@ static WndOwnerDrawFrame *wGrid=NULL;
 #define MAX_TEXTENTRY 40
 static unsigned int cursor = 0;
 static int lettercursor=0;
+static int max_width = MAX_TEXTENTRY;
 
 static TCHAR edittext[MAX_TEXTENTRY];
 
@@ -146,7 +147,7 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam) {
       MoveCursor();
       return(0);
     case VK_RIGHT:
-      if (cursor>=MAX_TEXTENTRY-2)
+      if ((int)cursor>=(max_width-2))
         return(0); // max width
       cursor++;
       MoveCursor();
@@ -178,10 +179,15 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
-void dlgTextEntryShowModal(TCHAR *text) {
+void dlgTextEntryShowModal(TCHAR *text, int width) {
 
   wf = NULL;
   wGrid = NULL;
+
+  if (width==0) {
+    width = MAX_TEXTENTRY;
+  }
+  max_width = min(MAX_TEXTENTRY, width);
 
   char filename[MAX_PATH];
   LocalPathS(filename, TEXT("dlgTextEntry.xml"));
@@ -199,8 +205,8 @@ void dlgTextEntryShowModal(TCHAR *text) {
   edittext[1]= 0;
   if (_tcslen(text)>0) {
     _tcsupr(text);
-    _tcsncpy(edittext, text, MAX_TEXTENTRY-1);
-    edittext[MAX_TEXTENTRY-1]= 0;
+    _tcsncpy(edittext, text, max_width-1);
+    edittext[max_width-1]= 0;
   }
   MoveCursor();
 
@@ -208,7 +214,8 @@ void dlgTextEntryShowModal(TCHAR *text) {
 
   wf->ShowModal();
 
-  _tcscpy(text, edittext);
+  _tcsncpy(text, edittext, max_width);
+  text[max_width-1]=0;
 
   delete wf;
 

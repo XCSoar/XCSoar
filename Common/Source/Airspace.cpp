@@ -82,7 +82,7 @@ static int GetNextLine(FILE *fp, TCHAR *Text);
 static bool bFillMode = false;
 static bool	bWaiting = true;
 
-static TCHAR TempString[200];
+static TCHAR TempString[300];
 
 static AIRSPACE_AREA TempArea;
 static AIRSPACE_POINT TempPoint;
@@ -529,7 +529,7 @@ static int GetNextLine(FILE *fp, TCHAR *Text)
 	int		nLineType = -1;
   TCHAR sTmp[128];
 
-	while (ReadStringX(fp, 200, Text)){
+	while (ReadStringX(fp, 300, Text)){
 
 		LineCount++;
 

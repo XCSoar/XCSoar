@@ -658,6 +658,10 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryNettoSpeed,&Temp);
   NettoSpeed = Temp;
 
+  EnableCDICruise = 0;
+  EnableCDICircling = 0;
+
+  /* JMW temporarily disabled these because they are not updated for 4.7+
   Temp = 0;
   GetFromRegistry(szRegistryCDICruise,&Temp);
   EnableCDICruise = (Temp == 1);
@@ -665,6 +669,7 @@ void ReadRegistrySettings(void)
   Temp = 0;
   GetFromRegistry(szRegistryCDICircling,&Temp);
   EnableCDICircling = (Temp == 1);
+  */
 
   Temp = 0;
   GetFromRegistry(szRegistryAutoBlank,&Temp);
