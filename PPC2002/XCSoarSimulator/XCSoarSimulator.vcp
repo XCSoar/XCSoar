@@ -5459,11 +5459,146 @@ NODEP_CPP_DLGWA=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Common\Source\dlgWaypointOutOfTerrain.cpp
+SOURCE=..\..\Common\Source\dlgWaypointEdit.cpp
 
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
 
 DEP_CPP_DLGWAY=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Waypointparser.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+DEP_CPP_DLGWAY=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Waypointparser.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
+
+DEP_CPP_DLGWAY=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Waypointparser.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
+
+DEP_CPP_DLGWAY=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Waypointparser.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\dlgWaypointOutOfTerrain.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
@@ -5492,7 +5627,7 @@ DEP_CPP_DLGWAY=\
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
 
-DEP_CPP_DLGWAY=\
+DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
@@ -5521,7 +5656,7 @@ DEP_CPP_DLGWAY=\
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
 
-DEP_CPP_DLGWAY=\
+DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
@@ -5550,7 +5685,7 @@ DEP_CPP_DLGWAY=\
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
 
-DEP_CPP_DLGWAY=\
+DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
@@ -5586,7 +5721,7 @@ SOURCE=..\..\Common\Source\dlgWayPointSelect.cpp
 
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
 
-DEP_CPP_DLGWAYP=\
+DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -5609,7 +5744,7 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
-NODEP_CPP_DLGWAYP=\
+NODEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\BlueSMS.h"\
 	".\ipapi.h"\
 	".\ygshell.h"\
@@ -5617,7 +5752,7 @@ NODEP_CPP_DLGWAYP=\
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
 
-DEP_CPP_DLGWAYP=\
+DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\BlueDialupPort.h"\
 	"..\..\Common\Header\BlueSMS.h"\
@@ -5644,14 +5779,14 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
-NODEP_CPP_DLGWAYP=\
+NODEP_CPP_DLGWAYPO=\
 	".\ipapi.h"\
 	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Release"
 
-DEP_CPP_DLGWAYP=\
+DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -5674,7 +5809,7 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
-NODEP_CPP_DLGWAYP=\
+NODEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\BlueSMS.h"\
 	".\ipapi.h"\
 	".\ygshell.h"\
@@ -5682,7 +5817,7 @@ NODEP_CPP_DLGWAYP=\
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE x86) Debug"
 
-DEP_CPP_DLGWAYP=\
+DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -5705,7 +5840,7 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
-NODEP_CPP_DLGWAYP=\
+NODEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\BlueSMS.h"\
 	".\ipapi.h"\
 	".\ygshell.h"\
@@ -6508,7 +6643,6 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\InputEvents_altair.cpp"\
-	"..\..\Common\Header\InputEvents_gnav.cpp"\
 	"..\..\Common\Header\InputEvents_pc.cpp"\
 	"..\..\Common\Header\InputEvents_Text2Event.cpp"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -6533,6 +6667,7 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\XCSoar.h"\
 	
 NODEP_CPP_INPUT=\
+	"..\..\Common\Header\InputEvents_gnav.cpp"\
 	".\ipapi.h"\
 	".\ygshell.h"\
 	
@@ -6591,7 +6726,6 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\InputEvents.h"\
 	"..\..\Common\Header\InputEvents_altair.cpp"\
 	"..\..\Common\Header\InputEvents_defaults.cpp"\
-	"..\..\Common\Header\InputEvents_gnav.cpp"\
 	"..\..\Common\Header\InputEvents_pc.cpp"\
 	"..\..\Common\Header\InputEvents_Text2Event.cpp"\
 	"..\..\Common\Header\leastsqs.h"\
@@ -6618,6 +6752,7 @@ DEP_CPP_INPUT=\
 	
 NODEP_CPP_INPUT=\
 	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\InputEvents_gnav.cpp"\
 	".\ipapi.h"\
 	".\ygshell.h"\
 	
