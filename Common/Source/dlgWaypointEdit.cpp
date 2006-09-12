@@ -69,7 +69,7 @@ static void UpdateButtons(void) {
 
 static void OnNameClicked(WindowControl *Sender) {
   if (buttonName) {
-    dlgTextEntryShowModal(global_wpt->Name);
+    dlgTextEntryShowModal(global_wpt->Name, NAME_SIZE);
   }
   UpdateButtons();
 }
@@ -77,7 +77,7 @@ static void OnNameClicked(WindowControl *Sender) {
 
 static void OnCommentClicked(WindowControl *Sender) {
   if (buttonComment) {
-    dlgTextEntryShowModal(global_wpt->Comment);
+    dlgTextEntryShowModal(global_wpt->Comment, COMMENT_SIZE);
   }
   UpdateButtons();
 }

@@ -108,7 +108,7 @@ static void Update() {
 
 static void OnCodeClicked(WindowControl *Sender) {
   if (buttonCode) {
-    dlgTextEntryShowModal(TeammateCode);
+    dlgTextEntryShowModal(TeammateCode, 7);
   }
   int i= _tcslen(TeammateCode)-1;
   while (i>=0) {

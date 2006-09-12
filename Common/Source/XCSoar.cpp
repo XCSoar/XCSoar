@@ -1109,9 +1109,12 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #ifdef GNAV
   wcscat(XCSoar_Version, TEXT("Altair "));
 #else
+#if (WINDOWSPC>0)
+  wcscat(XCSoar_Version, TEXT("PC "));
+#else
   wcscat(XCSoar_Version, TEXT("PPC "));
-  // TODO detect PC version and add that
   // TODO consider adding PPC, 2002, 2003
+#endif
 #endif
 
   wcscat(XCSoar_Version, TEXT("4.7.9 RC7 "));
