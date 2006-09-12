@@ -1108,13 +1108,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // Version String
 #ifdef GNAV
   wcscat(XCSoar_Version, TEXT("Altair "));
-  wcscat(XCSoar_Version, TEXT("4.7.9 RC7 "));
-  wcscat(XCSoar_Version, TEXT(__DATE__));
 #else
+  wcscat(XCSoar_Version, TEXT("PPC "));
+  // TODO detect PC version and add that
+  // TODO consider adding PPC, 2002, 2003
+#endif
+ 
   wcscat(XCSoar_Version, TEXT("4.7.9 RC7 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
-#endif
-  // (future/next version) wcscat(XCSoar_Version, TEXT("BETA 4.6.1"));
 
   StartupStore(TEXT("Starting XCSoar "));
   StartupStore(XCSoar_Version);
