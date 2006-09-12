@@ -9,6 +9,7 @@ Dialogs changed:
  dlgTeamCode.xml
  dlgTextEntry.xml
  dlgWayPointDetails.xml
+ dlgWindSettings.xml
 
 Changes from 4.7.7:
 - Make terrain file loader check file size, to improve robustness if
@@ -17,14 +18,14 @@ Changes from 4.7.7:
 - Added pilot name, aircraft type and rego to configuration dialog
 - Added support for team code
 - Map zoom improvements
-- Waypoints label in abort fix
-- Default task at startup fix
+- Fixed bug: Waypoints label in abort
+- Fixed bug: Default task at startup if no task defined
+- Fixed bug in altair.xci, nearest waypoint details were pan-relative
 - Minor UI cleanups (cosmetics)
 - Logger inactive when in IGC replay mode
 - Circling wind estimator won't update if less than one fix every 2
   seconds.
 - Zigzag wind estimate inactive when in IGC replay mode
-- Fixed bug in altair.xci, nearest waypoint details were pan-relative
 - Analysis dialog: base/ceiling estimation improvements
 - Task speed now altitude compensated
 - New task speed instantaneous
@@ -45,9 +46,9 @@ Changes from 4.7.7:
       now computes task speed accurately for achieved scorable AAT distance.
 - Task page on analysis dialog shows in thick red dashed line the scorable
   AAT paths.
-- Bug fix, task finish detection was previously disabled
-- Bug fix, stats for finished task after reset were not displayed correctly
-- Bug fix, waypoint details dialog arrival height was relative to sea
+- Fixed bug, task finish detection was previously disabled
+- Fixed bug, stats for finished task after reset were not displayed correctly
+- Fixed bug, waypoint details dialog arrival height was relative to sea
   level not ground.
 - Waypoint details altitude arrival, removed "alt diff mc safety"
 - Removed unused menu and dialogs from PC version.
@@ -62,6 +63,41 @@ Changes from 4.7.7:
   remaining is zero.
 - Minimum zoom level in autozoom set to reasonable level (1.5km) to
   prevent zooming in too close when going past a turnpoint.
+- List items in dialog can be selected with mouse/touchscreen.  Touch twice
+  to emulate return key.
+- Added configuration option to adjust snail trail width
+- Fixed bug, made airfield details parser robust to wrong files.
+- Fixed bug, nearest waypoint details did not work for first waypoint
+- Fixed bug, airspace warning dialog was not shown from
+  'nearest airspace' menu when there was an active acknowledgement
+- Fixed bug, PC version crashed if exit via close button and a dialog was
+   still open
+- Home waypoint always added to abort task list if reachable
+- 'Clear' button added to task dialog in landscape mode
+- Team Code dialog updates dynamically
+- Fixed bug, range/bearing was incorrect sometimes
+- Improved rendering of distance to airspace in airspace warning dialog
+- Fixed bug, portrait mode text in analysis dialog (some items were cropped)
+- Infobox border fixup in portrait mode
+- Fixed bug, hang on nearest airspace
+- Bearing to target shown in great circle arc
+- Fixed bug, in abort mode (introduced just 2 days ago)
+- Fixed bug, sound volume was set to zero
+- Updates to menu, default.xci for PDA
+- Return key now toggles suppression of FLARM radar.  If new traffic appears,
+   the suppression is turned off again.
+- Fixed bug in PPC2002 infobox selector graphics
+- Fixed bug in abort mode (possible cause of crash/hang)
+- Task calculator range increments in 5%
+- Added infobox for 'Home Distance'
+- Auto QNH only activated when not flying for more than 10 seconds
+- Button menu fixes for PDA, PC
+- (Feature request 1281639) Editing/saving waypoints
+- Protected task edit from buffer overruns
+- Fixed bug, increased text size for airspace parser
+- Disabled CDI gauge as it has no control in the configuration settings and hasn't
+  been updated
+- Fixed bug, FAI finish sector was incorrect
 
 
 Dialogs changed:
@@ -426,7 +462,7 @@ Changes from 4.22 to 4.5
 - Miscellaneous dialog cleanups
 - Snail trail colour scales to visible range to make colors more vibrant
 - Safe recovery from critical errors when loading files
-- Bug fix of polar loading on multiple lines
+- Fixed bug of polar loading on multiple lines
 - Fixed ordering of Menu buttons when using cursor to navigate
 - Blanking improvements (prevent timeout advancing when any dialog is active)
 - Added Auxiliary infobox display, accessible from APP_KEY1, which now
@@ -529,7 +565,7 @@ Summary of new features since v4.0
 - Added infoboxes: Time to next waypoint, time to task completion
 
 
-Bug fixes and code improvements
+Fixed buges and code improvements
 
 - Sound files are now in the code as resources, so no need for Audio directory
 - Filtering of files:
@@ -550,7 +586,7 @@ Bug fixes and code improvements
 - Minor improvements to thread safety
 - Larger Menu page buttons
 - Fixed McReady speed calculation with zero distance
-- Bug fixes by Samuel Gisiger (Airspace not displaying, extraneous
+- Fixed bugs: Samuel Gisiger (Airspace not displaying, extraneous
   selection of waypoints at zoom levels)
 - Improved map window responsiveness (only re-drawn when necessary, avoiding
   CPU waste of unnecessary re-draws).

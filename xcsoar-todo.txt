@@ -1,40 +1,39 @@
 Work To Do, Outstanding Items:
 
-ccrtrtti.lib
+Altair autoshutdown on no activity for 15 minutes
+Incorporate Lar's snail trail work, teamcode position
 
-Sam:
-- New firmware for TR-DVVS (stall sensor, voice commands)
-- Modify Vega/DVS to output switch logic for vario circling with
-   PDA circling forced false
+Dynamic label: Abort task, Arm Start/Sector
+Check terrain model
+
+Set home/teamcode in configuration settings?
+Check key repeat, hardware dependent?
+Logger timestamp, logger on landing
+Altairsync updates -- copy from/to deep ToAltair
+
+- Try to fit wind speed/direction in one infobox?
+- Maybe have different fonts in infoboxes
+- Document online contest
+- Document thermal locator
 
 - Detect when `circling' but not in thermal (e.g. ridge, wave), in order
   to disable trail drift and thermal centering drift calculations.
 - When wind changes, de-value older wind estimates so they don't
    affect the new conditions.
 - Warble sounds
-- Improved snail trail shading
 - Profile selector not getting in before everything is initialised!
   --> inverse infoboxes
 - Auto Mc not updating when final glide forced early
   --> due to pirker function not working across more than one point to go
-- Spurious airspace warning when leaving airspace
-- Vario gauge needle doesn't follow bitmap exactly
-- mc alt required sometimes decreases with mc, why?
-  --> could be due to final glide switching if low mc in strong wind
 - AAT segment line for targets bug, not always in sector, and range not
   always going to be increasing.  Need better logic here.
-- Distance/bearing great circle calculations?
-- Stop IGC on full disk, memory check at startup
-  --> memory check at startup potentially buggy
-- Spurious touchscreen detect when pressing menu buttons
 - Arm advance:
     if press again after advance and still in sector,
     restart that waypoint; or if on waypoint 1, restart the task
     Also display green button with "Arm Advance" if task isn't started
 - Task details dialog: start details and details on each waypoint
-- Alternate start locations
 
-John Buchannon feedback:
+John Buchanan feedback:
  - Tie circling mode to vario
    -- Need extra flag to indicate to Vega that XCSoar is getting
       its mode from it, not the other way around?
@@ -53,6 +52,12 @@ Documentation:
 - Better description of auto mc
 - Better description of how to add new tasks
 
+Waypoint editing:
+- Create new waypoint at current location or pan location
+- Create waypoints for major/minor towns (particular ones or all)
+- Scan waypoints for duplicates (close within a range), don't remove
+  duplicates if they are different types (airfield vs non-airfield)
+
 ===========
 TASK SYSTEM
 ===========
@@ -61,30 +66,18 @@ TASK SYSTEM
   - File save/load to contain all info
   - XML based task file
   - Have separate Arm modes for AAT and non-AAT modes?
-  - Display start speed/altitude/time
+  - Display start speed/altitude/time in task status dialog
   - Different ways of calculating average speed
-  - Based on manual input or task average
-  - Add 'Append' waypoint function, so users can create a task by selecting
-    waypoints from the map in sequence
+    - Based on manual input or task average
   - Add 'PanTo' waypoint function, to pan towards the selected waypoint
-  - Task waypoint move up/down
-  - Online Contest optimisation (related also to AAT optimisation)
   - (Feature request 1237800) Preserve TPs in tasks when waypoint file changed
-  - Allow for alternate start points, or alternate tasks
 - AAT support:
   - More accurate calculation of ETA etc with respect to final glide fraction
   - Calculator, What if I leave now?
-- TeamCode
-  - Port teamcode to new dialog system
-- (Idea) Tour mode: home waypoint entered twice in task, so allows non-final
-  glide cruise around, then by advancing waypoint, it turns to final glide
-  mode.
 - Additional waypoint info:
   - Info from ERSA or other sources for airfields
     -- Runways (preferred runway given wind)
-    -- Runway diagram?
-  - Info for all waypoints
-    -- Computed arrival height AGL at Mc0 Mc1 Mc2
+    -- Runway diagram?  --> get from DAFIF data.
 - Task statistics
   - Need to track average speed and time spent on each leg for statistics
     review after flight.
@@ -120,7 +113,6 @@ GLIDE COMPUTER
   - (Feature request 1459280) user-commanded flight modes
   - Externally (vario or switch) forced climb/cruise
   - In climb stats page, show direction of circling
-  - Drop marker automatically conditional on significant climb
 - Pirker analysis:
   - Given a height available, what maccready gives zero arrival altitude?
   - This can be used to make automc more efficient
@@ -136,6 +128,7 @@ GLIDE COMPUTER
   - Scale MC value to allow for risk of not encountering thermal with low
     altitude (and take into account wind factor here?)
   - Allow user to adjust optimism/pessimism
+  - Scale MC value with thermal profile?
 - Calculations for cloud streets
   - draw rough lines for streets and to indicate traversal track
 - Density altitude correction factors for speeds, climb rates etc
@@ -154,16 +147,8 @@ MARKS AND WAYPOINTS
 
 - Marker system
    - (Feature request 1281642) Mark to waypoint, mark to waypointfile
-   - (Feature request 1463308) Auto-mark thermal
-   - Display of encountered thermals in map
-     -- projected to location of expected arrival to compensate for wind
    - Allow users to toggle whether marked points get deleted on startup
-- Thermal markers:
-   - Implemented as normal markers, but with position offset to estimated
-     source of thermal.
-   - When rendering, estimate position of thermal at glider's height.
 - Waypoints
-  - (Feature request 1281639) Editing/saving waypoints
   - Generate waypoints from towns (builtupa, miscpopp)
   - Cursor keys to allow moving to next waypoints in direction of cursor.
 
@@ -172,13 +157,12 @@ MAP, GAUGE AND ICON DISPLAY
 ===========================
 
 - Info icons/symbols
-  - GPS signal strength?
+  - GPS signal strength --> could be good for status dialog.
   - FLARM traffic (use FLARM logo?)
 - Display elements
   - Add (optional) track line particularly if not in north up mode
   - Speed to fly bars visibility in fullscreen
   - (Feature request 1281820) configurable glider icon
-  - (Feature request 1444335) configurable max/min zoom
 - Terrain rendering
   - (Feature request 1370830) display satellite weather imagery on map
   - Predefined brightness/contrast settings
@@ -193,8 +177,6 @@ CONFIGURATION
 =============
 
 - Dialogs:
-  - Config: vario gauge, other optional display items,
-      hide vario on fullscreen
   - Config: display blanking, other missing items?
   - Configuration option for checklist and flarm filename
 - Fonts
@@ -206,7 +188,6 @@ USER INTERFACE
 ==============
 
 - Status messages
-  - Status messages now block if in dialogs, they appear on exit.
   - Colored status messages?
 - Miscellaneous UI
   - (Bug 1368752) Infoboxes cropped on square displays
@@ -229,9 +210,7 @@ SYSTEM/INFRASTRUCTURE
 
 - Robustness
   - Revert to default aircraft type if polar file doesn't exist or invalid
-  - Free memory check at startup, ask to delete old IGC files?
   - Log file to report errors, include file and line number
-  - SetFontInfo not reliable
   - Fix LocalPath so it is thread safe
 - Miscellaneous
   - (Bug 1428871) PPC2002 installer chooses wrong CAB
@@ -250,7 +229,7 @@ SYSTEM/INFRASTRUCTURE
   - Proper filename extensions
   - ** (Feature request 1379262) Configurable output file path
 - Profiles:
-  - Need profile load/save page
+  - Need profile save page
   - Filtering, so user can load any of:
     -- Aircraft settings
     -- Competition/task settings
