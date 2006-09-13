@@ -1117,7 +1117,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 #endif
  
-  wcscat(XCSoar_Version, TEXT("4.7.9 RC7 "));
+  wcscat(XCSoar_Version, TEXT("5.0.0 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   StartupStore(TEXT("Starting XCSoar "));

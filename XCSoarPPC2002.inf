@@ -43,6 +43,16 @@ VersionMax = 32767.0
 7 = ,"Language Files",,Common\Data\Language
 8 = ,"Polar Files",,Common\Data\Polar
 
+[SourceDisksNames.mips]           ; CPU-dependent files
+1 = ,"MIPS Files",,PPC2002\XCSoar\MIPSRel
+2 = ,"MIPS Files",,PPC2002\XCSoarSimulator\MIPSRel
+3 = ,"MIPS Files",,PPC2002\XCSoarLaunch\MIPSRel
+4 = ,"MIPS Files",,PPC2002\XCSoarSetup\MIPSRel
+5 = ,"Font Files",,Common\Data\Fonts
+6 = ,"Input Files",,Common\Data\Input
+7 = ,"Language Files",,Common\Data\Language
+8 = ,"Polar Files",,Common\Data\Polar
+
 [SourceDisksNames.x86]
 1 = ,"PPC30 X86 Files",,X86EMDbg
 
