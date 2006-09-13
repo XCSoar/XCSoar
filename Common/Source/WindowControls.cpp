@@ -40,6 +40,7 @@ Copyright_License {
 #endif
 #include "Utils.h"
 #include "compatibility.h"
+#include <projects.h>
 
 
 #ifdef ALTAIRSYNC
