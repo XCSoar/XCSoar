@@ -28,7 +28,6 @@ foreach my $e (keys %execs) {
 
 # List projects here... (note: we build all of these for each platform)
 my @projects = qw/XCSoar XCSoarSimulator XCSoarLaunch XCSoarSetup/;
-my @projects = qw/XCSoarSimulator/;
 
 my %platforms = (
 	'PPC2003' => {
@@ -46,7 +45,9 @@ my %platforms = (
 #	},
 );
 my @platforms_all = keys %platforms;
-push @platforms_all, "ALL";
+
+# XXX ALL currently not being supported
+# push @platforms_all, "ALL";
 
 # ------------------------------------------------------------------------------
 # User Input (primative)
@@ -90,7 +91,7 @@ foreach my $platform (keys %platforms) {
 				. qq{$platform/$project/$project.vcp /MAKE "$project - Win32 (WCE $proc) Release" /REBUILD};
 			print STDERR "Building $project for $platform/$proc\n";
 			print STDERR "\t$cmd\n" if ($debug);
-			system($cmd) and error("Executing Command - $?\n\t$cmd\n");
+			# XXX system($cmd) and error("Executing Command - $?\n\t$cmd\n");
 		}
 	}
 }
