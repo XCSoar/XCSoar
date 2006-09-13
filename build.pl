@@ -28,6 +28,7 @@ foreach my $e (keys %execs) {
 
 # List projects here... (note: we build all of these for each platform)
 my @projects = qw/XCSoar XCSoarSimulator XCSoarLaunch XCSoarSetup/;
+my @projects = qw/XCSoarSimulator/;
 
 my %platforms = (
 	'PPC2003' => {
@@ -36,12 +37,13 @@ my %platforms = (
 	},
 	'PPC2002' => {
 		'exec' => "EVC3",
-		'proc' => [qw/ARM/],
+		'proc' => [qw/ARM MIPS/],
 	},
-	'PPC' => {	# Also known as PPC 2000
-		'exec' => "EVC3",
-		'proc' => [qw/MIPS ARM/],
-	},
+	# XXX adding MIPS ARM for PPC but using PPC2002 project files !
+#	'PPC' => {	# Also known as PPC 2000
+#		'exec' => "EVC3",
+#		'proc' => [qw/MIPS ARM/],
+#	},
 );
 my @platforms_all = keys %platforms;
 push @platforms_all, "ALL";
