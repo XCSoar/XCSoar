@@ -45,6 +45,8 @@ Copyright_License {
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
+static double emc= 0.0;
+
 static void OnCancelClicked(WindowControl * Sender){
   wf->SetModalResult(mrCancle);
 }
@@ -98,10 +100,40 @@ static void RefreshCalculator(void) {
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
     wp->RefreshDisplay();
   }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpEffectiveMacCready"));
+  if (wp) {
+    wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
+    wp->GetDataField()->SetAsFloat(emc*LIFTMODIFY);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
   if (wp) {
     wp->RefreshDisplay();
     wp->GetDataField()->SetAsFloat(Range*100.0);
+  }
+
+  double v1;
+  if (CALCULATED_INFO.TaskTimeToGo>0) {
+    v1 = CALCULATED_INFO.TaskDistanceToGo/
+      CALCULATED_INFO.TaskTimeToGo;
+  } else {
+    v1 = 0;
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedRemaining"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(v1*TASKSPEEDMODIFY);
+    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedAchieved"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(CALCULATED_INFO.TaskSpeed*TASKSPEEDMODIFY);
+    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
+    wp->RefreshDisplay();
   }
 
 }
@@ -158,13 +190,18 @@ void dlgTaskCalculatorShowModal(void){
 
   if (!wf) return;
 
+  emc = EffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
+
   // find start value for range
   Range = AdjustAATTargets(2.0);
 
   RefreshCalculator();
 
+  double MACCREADYenter = MACCREADY;
+
   if (wf->ShowModal() == mrCancle) {
     // todo: restore task settings.
+    MACCREADY = MACCREADYenter;
   }
   delete wf;
   wf = NULL;

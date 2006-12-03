@@ -522,8 +522,12 @@ other languages.  If this field is left blank, then XCSoar uses English.
 
   <WndProperty Name="prpEnableFLARMDisplay" Caption="FLARM display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
   Help="This enables the display of FLARM traffic on the map window as well as the pop-up radar-like display.
+[OFF] FLARM radar and map display disabled
+[ON/Fixed] FLARM radar enabled, map display enabled with fixed scale.
+[ON/Scaled] FLARM radar enabled, map display enabled and auto scaled.
+When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.
 ">
-    <DataField name="" DataType="boolean"/>
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpAppStatusMessageAlignment" Caption="Msg window"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
@@ -616,6 +620,11 @@ other languages.  If this field is left blank, then XCSoar uses English.
 
   <WndProperty Name="prpAppGaugeVarioBallast" Caption="Show ballast"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="Whether to show the ballast percentage.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppGaugeVarioGross" Caption="Show gross"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Whether to show the gross climb rate.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 

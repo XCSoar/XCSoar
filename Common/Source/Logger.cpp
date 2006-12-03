@@ -146,7 +146,7 @@ void StartLogger(TCHAR *strAssetNumber)
 
   GetLocalTime(&st);
   TCHAR path[MAX_PATH];
-  LocalPath(path);
+  LocalPath(path,TEXT("logs"));
 
   for(i=1;i<99;i++)
     {
@@ -245,7 +245,9 @@ void StartDeclaration(int ntp)
   DWORD dwBytesRead;
   char temp[100];
 
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
+                     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
+                     FILE_ATTRIBUTE_NORMAL, 0);
 
   SetFilePointer(hFile, 0, NULL, FILE_END);
 
@@ -297,7 +299,8 @@ void EndDeclaration(void)
   DWORD dwBytesRead=0;
 
   hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
-		     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+		     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
+                     FILE_ATTRIBUTE_NORMAL, 0);
 
   SetFilePointer(hFile, 0, NULL, FILE_END);
   WriteFile(hFile, start, strlen(start), &dwBytesRead,(OVERLAPPED *)NULL);
@@ -1052,8 +1055,11 @@ bool LoggerClearFreeSpace(void) {
   bool found = true;
   unsigned long kbfree;
   TCHAR pathname[MAX_PATH];
+  TCHAR subpathname[MAX_PATH];
   int numtries = 0;
+
   LocalPath(pathname);
+  LocalPath(subpathname,TEXT("logs/"));
 
   while (found && ((kbfree = FindFreeSpace(pathname))<MINFREESTORAGE)
 	 && (numtries<100)) {
@@ -1066,7 +1072,11 @@ bool LoggerClearFreeSpace(void) {
 
     // search for IGC files, and delete the oldest one
     found = DeleteOldIGCFile(pathname);
+    if (!found) {
+      found = DeleteOldIGCFile(subpathname);
+    }
     numtries++;
   }
   return (kbfree>MINFREESTORAGE);
 }
+

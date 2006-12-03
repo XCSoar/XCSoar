@@ -363,6 +363,7 @@ BOOL NMEAParser::GLL(TCHAR *String, NMEA_INFO *GPS_INFO)
 
     if (ReplayLogger::IsEnabled()) {
       // block actual GPS signal
+      InterfaceTimeoutReset();
       return TRUE;
     }
 
@@ -529,7 +530,7 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
     // system clock to the GPS time.
     static bool sysTimeInitialised = false;
 
-    if (!GPS_INFO->NAVWarning) {
+    if (!GPS_INFO->NAVWarning && (GPS_INFO->SatellitesUsed>3)) {
 #ifdef GNAV
       SetSystemTimeFromGPS = true;
 #endif
@@ -548,7 +549,7 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 	  sysTime.wMinute = mins;
 	  sysTime.wSecond = secs;
 	  sysTime.wMilliseconds = 0;
-	  ::SetSystemTime(&sysTime);
+	  sysTimeInitialised = (::SetSystemTime(&sysTime)==TRUE);
 
 #ifdef GNAV
           TIME_ZONE_INFORMATION tzi;

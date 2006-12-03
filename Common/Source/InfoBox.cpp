@@ -49,8 +49,8 @@ extern HFONT  InfoWindowFont;
 extern HFONT  CDIWindowFont;
 
 //static ATOM atmWndClass;
-static COLORREF redColor = RGB(0xff,0x0,0x0);
-static COLORREF blueColor = RGB(0x0,0x0,0xff);
+static COLORREF redColor = RGB(0xff,0x20,0x20);
+static COLORREF blueColor = RGB(0x20,0x20,0xff);
 static COLORREF fgColor = RGB(0x0,0x0,0x0);
 static COLORREF bkColor = RGB(0xff,0xff,0xff);
 static COLORREF bkColorSel = RGB(150,0x0,0x0);
@@ -573,26 +573,25 @@ void InfoBox::Paint(void){
 #else
     POINT p[2];
     if (mBorderKind & BORDERTOP){
-      p[1].x = 0; p[1].y= 0;
-      p[2].x = mWidth; p[2].y= 0;
+      p[0].x = 0; p[0].y= 0;
+      p[1].x = mWidth; p[1].y= 0;
       Polyline(mHdcBuf, p, 2);
     }
     if (mBorderKind & BORDERRIGHT){
-      p[1].x = mWidth-DEFAULTBORDERPENWIDTH; p[1].y= 0;
-      p[2].x = mWidth-DEFAULTBORDERPENWIDTH; p[2].y= mHeight;
+      p[0].x = mWidth-DEFAULTBORDERPENWIDTH; p[0].y= 0;
+      p[1].x = mWidth-DEFAULTBORDERPENWIDTH; p[1].y= mHeight;
       Polyline(mHdcBuf, p, 2);
     }
     if (mBorderKind & BORDERBOTTOM){
-      p[1].x = mWidth-DEFAULTBORDERPENWIDTH; p[1].y= mHeight-DEFAULTBORDERPENWIDTH;
-      p[2].x = -DEFAULTBORDERPENWIDTH; p[2].y= mHeight-DEFAULTBORDERPENWIDTH;
+      p[0].x = mWidth-DEFAULTBORDERPENWIDTH; p[0].y= mHeight-DEFAULTBORDERPENWIDTH;
+      p[1].x = -DEFAULTBORDERPENWIDTH; p[1].y= mHeight-DEFAULTBORDERPENWIDTH;
       Polyline(mHdcBuf, p, 2);
     }
     if (mBorderKind & BORDERLEFT){
-      p[1].x = 0; p[1].y= mHeight-DEFAULTBORDERPENWIDTH;
-      p[2].x = 0; p[2].y= -DEFAULTBORDERPENWIDTH;
+      p[0].x = 0; p[0].y= mHeight-DEFAULTBORDERPENWIDTH;
+      p[1].x = 0; p[1].y= -DEFAULTBORDERPENWIDTH;
       Polyline(mHdcBuf, p, 2);
     }
-
 #endif
 
     SelectObject(mHdcBuf,oldPen);

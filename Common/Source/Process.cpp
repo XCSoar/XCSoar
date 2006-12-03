@@ -296,6 +296,9 @@ void NextUpDown(int UpDown)
       */
     } else {
       if (ActiveWayPoint==0) {
+
+        RotateStartPoints();
+
 	// restarted task..
 	// JMW TODO: ask if user wants to restart task?
 	//	CALCULATED_INFO.TaskStartTime = 0;
@@ -719,6 +722,14 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 60:
     Value = DISTANCEMODIFY*CALCULATED_INFO.HomeDistance ;
     if (HomeWaypoint>=0) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
+    break;
+  case 61:
+    Value = TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeedAchieved;
+    if (ActiveWayPoint>=1) {
       Valid = true;
     } else {
       Valid = false;

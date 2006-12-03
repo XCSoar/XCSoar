@@ -68,6 +68,10 @@ HBITMAP GaugeVario::hBitmapUnit;
 HBITMAP GaugeVario::hBitmapClimb;
 POINT GaugeVario::BitmapUnitPos;
 POINT GaugeVario::BitmapUnitSize;
+HBRUSH GaugeVario::redBrush;
+HBRUSH GaugeVario::blueBrush;
+HPEN GaugeVario::redPen;
+HPEN GaugeVario::bluePen;
 
 
 DrawInfo_t GaugeVario::diValueTop = {false};
@@ -80,6 +84,9 @@ DrawInfo_t GaugeVario::diLabelBottom = {false};
 #define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
 #define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
 
+static COLORREF redColor = RGB(0xff,0x20,0x20);
+static COLORREF blueColor = RGB(0x20,0x20,0xff);
+
 static COLORREF colTextGray;
 static COLORREF colText;
 static COLORREF colTextBackgnd;
@@ -87,7 +94,7 @@ static COLORREF colTextBackgnd;
 
 #define NARROWS 3
 #define ARROWYSIZE IBLSCALE(3)
-#define ARROWXSIZE IBLSCALE(5)
+#define ARROWXSIZE IBLSCALE(7)
 
 
 LRESULT CALLBACK GaugeVarioWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -129,6 +136,14 @@ void GaugeVario::Create() {
   } else {
     hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEA));
   }
+
+  redBrush = CreateSolidBrush(redColor);
+  blueBrush = CreateSolidBrush(blueColor);
+
+  redPen = CreatePen(PS_SOLID, 1,
+                     redColor);
+  bluePen = CreatePen(PS_SOLID, 1,
+                      blueColor);
 
   if (Appearance.InverseInfoBox){
     colText = RGB(0xff, 0xff, 0xff);
@@ -308,9 +323,12 @@ void GaugeVario::Render() {
   dirty = false;
   RenderNeedle(vval);
 
-  RenderValue(orgMiddle.x, orgMiddle.y, &diValueMiddle, &diLabelMiddle,
-	      vvaldisplay,
-	      TEXT("Gross"));
+  if (Appearance.GaugeVarioGross) {
+    RenderValue(orgMiddle.x, orgMiddle.y,
+                &diValueMiddle, &diLabelMiddle,
+                vvaldisplay,
+                TEXT("Gross"));
+  }
 
   BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
 
@@ -637,7 +655,7 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
   ybottom -= IBLSCALE(14);
   // JMW
   //  x = rc.left+IBLSCALE(1);
-  x = rc.right-2*ARROWYSIZE-IBLSCALE(6);
+  x = rc.right-2*ARROWXSIZE;
 
   // only draw speed command if flying and vario is not circling
   //
@@ -670,21 +688,37 @@ void GaugeVario::RenderSpeedToFly(int x, int y){
     // bottom (too slow)
     Rectangle(hdcDrawWindow,
 	      x, (ybottom+YOFFSET),
-	      x+ARROWXSIZE*2+1, (ybottom+YOFFSET)+nary+ARROWYSIZE+InfoBoxLayout::scale*2);
+	      x+ARROWXSIZE*2+1,
+              (ybottom+YOFFSET)+nary+ARROWYSIZE+InfoBoxLayout::scale*2);
 
     // top (too fast)
     Rectangle(hdcDrawWindow,
 	      x, (ytop-YOFFSET)+1,
-	      x+ARROWXSIZE*2+1, (ytop-YOFFSET)-nary+1-ARROWYSIZE-InfoBoxLayout::scale*2);
+	      x+ARROWXSIZE*2+1,
+              (ytop-YOFFSET)-nary+1-ARROWYSIZE-InfoBoxLayout::scale*2);
 
     RenderClimb();
 
     if (Appearance.InverseInfoBox){
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
       SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
     } else {
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
       SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    }
+
+    if (Appearance.InfoBoxColors) {
+      if (vdiff>0) { // too slow
+        SelectObject(hdcDrawWindow, redBrush);
+        SelectObject(hdcDrawWindow, redPen);
+      } else {
+        SelectObject(hdcDrawWindow, blueBrush);
+        SelectObject(hdcDrawWindow, bluePen);
+      }
+    } else {
+      if (Appearance.InverseInfoBox){
+        SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+      } else {
+        SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+      }
     }
 
     if (vdiff > 0){ // too slow

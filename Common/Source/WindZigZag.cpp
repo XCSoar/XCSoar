@@ -477,17 +477,13 @@ int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
 
   // TODO: also reject if accelerating (|n-1|>0.1 ?)
   // TODO: correct TAS for vertical speed
-  if (fabs(Calculated->TurnRate)>10.0) {
-    return 0;
-  }
-  if (fabs(Basic->TrueAirspeed)<10.0) {
-    return 0;
-  }
 
-  if (Basic->AccelerationAvailable) {
-    if (fabs(Basic->Gload-1.0)>0.2) {
-      return 0;
-    }
+  if ((!Calculated->Flying)
+      ||(fabs(Calculated->TurnRate)>10.0)
+      ||(fabs(Basic->TrueAirspeed)<10.0)
+      ||(fabs(Basic->Speed)<2.5)
+      ||(Basic->AccelerationAvailable && (fabs(Basic->Gload-1.0)>0.2))) {
+    return 0;
   }
 
   static double tLast = -1;

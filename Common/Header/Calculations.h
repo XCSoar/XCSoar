@@ -156,6 +156,10 @@ typedef struct _DERIVED_INFO
   long AverageClimbRateN[200];
 
   double HomeDistance;
+
+  double ZoomDistance;
+  double TaskSpeedAchieved;
+
 } DERIVED_INFO;
 
 
@@ -191,5 +195,9 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 void SaveCalculationsPersist(DERIVED_INFO *Calculated);
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DeleteCalculationsPersist(void);
+
+double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+int  InAATTurnSector(double longitude, double latitude, int thepoint);
 
 #endif

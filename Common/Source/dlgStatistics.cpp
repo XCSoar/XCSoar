@@ -1311,7 +1311,9 @@ static void Update(void){
       wInfo->SetCaption(sTmp);
     break;
     case 3:
-      _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Glide Polar")));
+      _stprintf(sTmp, TEXT("Analysis: %s (%3.0f kg)"),
+                gettext(TEXT("Glide Polar")),
+                GlidePolar::GetAUW());
       wf->SetCaption(sTmp);
       if (InfoBoxLayout::landscape) {
         _stprintf(sTmp, TEXT("%s:\r\n  %3.0f\r\n  at %3.0f %s\r\n\r\n%s:\r\n%3.2f %s\r\n  at %3.0f %s"),
@@ -1323,7 +1325,8 @@ static void Update(void){
                   GlidePolar::minsink*LIFTMODIFY,
                   Units::GetVerticalSpeedName(),
                   GlidePolar::Vminsink*SPEEDMODIFY,
-                  Units::GetHorizontalSpeedName());
+                  Units::GetHorizontalSpeedName()
+                  );
       } else {
         _stprintf(sTmp, TEXT("%s:\r\n  %3.0f at %3.0f %s\r\n%s:\r\n  %3.2f %s at %3.0f %s"),
                   gettext(TEXT("Best LD")),

@@ -227,6 +227,7 @@ TCHAR szRegistryAppGaugeVarioAvgText[] = TEXT("AppGaugeVarioAvgText");
 TCHAR szRegistryAppGaugeVarioMc[] = TEXT("AppGaugeVarioMc");
 TCHAR szRegistryAppGaugeVarioBugs[] = TEXT("AppGaugeVarioBugs");
 TCHAR szRegistryAppGaugeVarioBallast[] = TEXT("AppGaugeVarioBallast");
+TCHAR szRegistryAppGaugeVarioGross[] = TEXT("AppGaugeVarioGross");
 TCHAR szRegistryAppCompassAppearance[] = TEXT("AppCompassAppearance");
 TCHAR szRegistryAppStatusMessageAlignment[] = TEXT("AppStatusMessageAlignment");
 TCHAR szRegistryAppInfoBoxColors[] = TEXT("AppInfoBoxColors");
@@ -361,7 +362,6 @@ void DefaultRegistrySettingsAltair(void)
   SetRegistryStringIfAbsent(TEXT("AirspaceColourDlgFont"),
    TEXT("14,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
 #if 0
-  // TODO: Fixe scale bug
   SetRegistryStringIfAbsent(TEXT("ScaleList"),
    TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
 #endif
@@ -732,6 +732,10 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryAppGaugeVarioBallast, &Temp);
   Appearance.GaugeVarioBallast = (Temp != 0);
 
+  Temp = Appearance.GaugeVarioGross;
+  GetFromRegistry(szRegistryAppGaugeVarioGross, &Temp);
+  Appearance.GaugeVarioGross = (Temp != 0);
+
   Temp = Appearance.CompassAppearance;
   GetFromRegistry(szRegistryAppCompassAppearance, &Temp);
   Appearance.CompassAppearance = (CompassAppearance_t)Temp;
@@ -815,7 +819,7 @@ void ReadRegistrySettings(void)
 
   Temp = EnableFLARMDisplay;
   GetFromRegistry(szRegistryEnableFLARMDisplay,&Temp);
-  EnableFLARMDisplay = (Temp == 1);
+  EnableFLARMDisplay = Temp;
 
   Temp = TerrainContrast;
   GetFromRegistry(szRegistryTerrainContrast,&Temp);
@@ -3176,6 +3180,7 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 */
 #ifdef GNAV
   _tcscpy(buffer,TEXT("\\NOR Flash"));
+  //  _tcscpy(buffer,TEXT("\\USB HD\\Altair"));
 #else
   SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
   _tcscat(buffer,TEXT("\\XCSoarData"));
@@ -3330,17 +3335,28 @@ int propGetScaleList(double *List, size_t Size){
   TCHAR Name[] = TEXT("ScaleList");
   TCHAR *pWClast, *pToken;
   int   Idx = 0;
+  double vlast=0;
+  double val;
 
   ASSERT(List != NULL);
   ASSERT(Size > 0);
+
+  SetRegistryString(TEXT("ScaleList"),
+   TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));
 
   if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0){
 
     pToken = strtok_r(Buffer, TEXT(","), &pWClast);
 
     while(Idx < (int)Size && pToken != NULL){
-      List[Idx] = _tcstod(pToken, NULL);
+      val = _tcstod(pToken, NULL);
+      if (Idx>0) {
+        List[Idx] = (val+vlast)/2;
+        Idx++;
+      }
+      List[Idx] = val;
       Idx++;
+      vlast = val;
       pToken = strtok_r(NULL, TEXT(","), &pWClast);
     }
 
@@ -3416,10 +3432,12 @@ int TextToLineOffsets(TCHAR* text, int* LineOffsets, int maxLines) {
 
 TCHAR startProfileFile[MAX_PATH];
 TCHAR defaultProfileFile[MAX_PATH];
+TCHAR failsafeProfileFile[MAX_PATH];
 
 void RestoreRegistry(void) {
   StartupStore(TEXT("Restore registry\r\n"));
   // load registry backup if it exists
+  LoadRegistryFromFile(failsafeProfileFile);
   LoadRegistryFromFile(startProfileFile);
 }
 
@@ -3434,7 +3452,8 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
 
 // SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 
-  LocalPath(defaultProfileFile,TEXT("xcsoar-registry.prf"));
+  LocalPath(defaultProfileFile,TEXT("config/xcsoar-registry.prf"));
+  LocalPath(failsafeProfileFile,TEXT("xcsoar-registry.prf"));
   _tcscpy(startProfileFile, defaultProfileFile);
 
 #if (WINDOWSPC>0)
@@ -3472,6 +3491,11 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
     if (pC != NULL){
       SCREENWIDTH=480;
       SCREENHEIGHT=640;
+    }
+    pC = _tcsstr(MyCommandLine, TEXT("-square"));
+    if (pC != NULL){
+      SCREENWIDTH=480;
+      SCREENHEIGHT=480;
     }
 #endif
   }
@@ -3637,7 +3661,7 @@ WinPilotPolarInternal WinPilotPolars[] =
   {TEXT("SZD-55-1"), 336, 201, 98.3, -0.67, 176.76, -2.27, 216.04, -4.3},
   {TEXT("Ventus A/B (16.6m)"), 358, 151, 100.17, -0.64, 159.69, -1.47, 239.54, -4.3},
   {TEXT("Ventus B (15m)"), 341, 151, 97.69, -0.68, 156.3, -1.46, 234.45, -3.9},
-  {TEXT("Ventus 2C"), 400, 165, 80.0, -0.5, 120.0, -0.73, 180.0, -2.0},
+  {TEXT("Ventus 2C (18m)"), 385, 180, 80.0, -0.5, 120.0, -0.73, 180.0, -2.0},
   {TEXT("Zuni II"), 358, 182, 110, -0.88, 167, -2.21, 203.72, -3.6}
 };
 
@@ -4040,5 +4064,40 @@ BOOL PlayResource (LPTSTR lpName)
       bRtn = 0;
   }
   return bRtn;
+}
+
+void CreateDirectoryIfAbsent(TCHAR *filename) {
+  TCHAR fullname[MAX_PATH];
+
+  LocalPath(fullname, filename);
+
+  DWORD fattr = GetFileAttributes(fullname);
+
+  if ((fattr != 0xFFFFFFFF) &&
+      (fattr & FILE_ATTRIBUTE_DIRECTORY)) {
+    // directory exists
+  } else {
+    CreateDirectory(fullname, NULL);
+  }
+
+}
+
+//////////
+
+static interface_timeout;
+
+void InterfaceTimeoutReset(void) {
+  interface_timeout = 0;
+}
+
+
+bool InterfaceTimeoutCheck(void) {
+  if (interface_timeout > 60*10) {
+    interface_timeout = 0;
+    return true;
+  } else {
+    interface_timeout++;
+    return false;
+  }
 }
 

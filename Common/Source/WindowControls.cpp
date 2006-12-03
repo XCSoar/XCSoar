@@ -40,8 +40,14 @@ Copyright_License {
 #endif
 #include "Utils.h"
 #include "compatibility.h"
-#include <projects.h>
 
+#ifndef ALTAIRSYNC
+#ifndef GNAV
+#if (WINDOWSPC<1)
+#include <projects.h>
+#endif
+#endif
+#endif
 
 #ifdef ALTAIRSYNC
 #define ISCALE 1
@@ -135,13 +141,6 @@ int DataFieldFileReader::SetAsInteger(int Value){
   return mValue;
 }
 
-#ifndef ALTAIRSYNC
-#ifndef GNAV
-#if (WINDOWSPC<1)
-#include "projects.h"
-#endif
-#endif
-#endif
 
 void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 #ifdef ALTAIRSYNC
@@ -1558,20 +1557,24 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
     break;
 
     case WM_LBUTTONDBLCLK:
+      InterfaceTimeoutReset();
       if (!OnLButtonDoubleClick(wParam, lParam)) return(0);
     break;
 
     case WM_LBUTTONDOWN:
+      InterfaceTimeoutReset();
       if (!OnLButtonDown(wParam, lParam)) return(0);
       // JMW TODO: need to be able to focus list items here...
     break;
 
     case WM_LBUTTONUP:
+      InterfaceTimeoutReset();
       if (!OnLButtonUp(wParam, lParam)) return(0);
     break;
 
     case WM_KEYDOWN:
       // JMW: HELP
+      InterfaceTimeoutReset();
       KeyTimer(true, wParam & 0xffff);
 
       // return(OnKeyDown(wParam, lParam));
@@ -1580,6 +1583,7 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
       break;
 
     case WM_KEYUP:
+      InterfaceTimeoutReset();
       // JMW: detect long enter release
 	if (KeyTimer(false, wParam & 0xffff)) {
 	  // activate tool tips if hit return for long time
@@ -1807,6 +1811,10 @@ int WndForm::ShowModal(void){
     }
     */
 
+    if (msg.message == WM_KEYDOWN) {
+      InterfaceTimeoutReset();
+    }
+
     if ((msg.message == WM_KEYDOWN) && ((msg.wParam & 0xffff) == VK_ESCAPE))
       mModalResult = mrCancle;
 
@@ -1816,7 +1824,8 @@ int WndForm::ShowModal(void){
         || msg.message == WM_LBUTTONDOWN
         || msg.message == WM_LBUTTONUP
         || msg.message == WM_LBUTTONDBLCLK
-        ) && (msg.hwnd != GetHandle() && !IsChild(GetHandle(), msg.hwnd))) continue;   // make it modal
+        ) && (msg.hwnd != GetHandle() && !IsChild(GetHandle(), msg.hwnd)))
+      continue;   // make it modal
 
     if (!TranslateAccelerator(GetHandle(), mhAccelTable, &msg)){
 
@@ -2102,6 +2111,7 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   if (msg.message == WM_KEYUP){
   }
   if (msg.message == WM_KEYDOWN){
+    InterfaceTimeoutReset();
     if (mOnKeyDownNotify != NULL)
       if (!(mOnKeyDownNotify)(this, msg.wParam, msg.lParam))
         return(0);
@@ -2113,6 +2123,7 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         return(0);
   }
   if (msg.message == WM_LBUTTONUP){
+    InterfaceTimeoutReset();
     if (mOnLButtonUpNotify != NULL)
       if (!(mOnLButtonUpNotify)(this, msg.wParam, msg.lParam))
         return(0);
@@ -2128,6 +2139,7 @@ int WndForm::OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   }
 
   if (uMsg == WM_KEYDOWN){
+    InterfaceTimeoutReset();
     if (ActiveControl != NULL){
       switch(wParam & 0xffff){
         case VK_UP:
@@ -2223,6 +2235,7 @@ int WndButton::OnLButtonUp(WPARAM wParam, LPARAM lParam){
 
   return(1);
 };
+
 
 int WndButton::OnKeyDown(WPARAM wParam, LPARAM lParam){
   switch (wParam){

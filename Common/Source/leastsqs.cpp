@@ -90,6 +90,7 @@ void LeastSquares::Reset() {
   y_min = 0;
   x_min = 0;
   x_max = 0;
+  y_ave = 0;
 }
 
 
