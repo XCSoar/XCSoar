@@ -33,7 +33,7 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "Utils.h"
 
-bool EnableFLARMDisplay = true;
+DWORD EnableFLARMDisplay = 1;
 
 HWND hWndFLARMWindow = NULL; //FLARM Window
 

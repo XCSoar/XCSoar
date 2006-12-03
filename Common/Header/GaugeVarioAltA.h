@@ -53,6 +53,10 @@ class GaugeVario {
   static HBITMAP hBitmapClimb;
   static POINT BitmapUnitPos;
   static POINT BitmapUnitSize;
+  static HBRUSH redBrush;
+  static HBRUSH blueBrush;
+  static HPEN redPen;
+  static HPEN bluePen;
 
 };
 

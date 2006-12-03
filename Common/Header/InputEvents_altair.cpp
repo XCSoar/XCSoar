@@ -29,12 +29,12 @@ GC2Event[mode_id][GCE_GPS_FIX_WAIT] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Simulation\r\nNothing is real!"), event_id);
-event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("Default.tsk"), event_id);
+event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("persist/Default.tsk"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_SIMULATOR] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("Default.tsk"), event_id);
+event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("persist/Default.tsk"), event_id);
 event_id = InputEvents::makeEvent(&eventDLLExecute, TEXT("AltairPlatform.dll WakeUp"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
@@ -342,12 +342,12 @@ makeLabel(mode_id,TEXT(""),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventZoom, TEXT("out"), event_id);
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("slowout"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_DOWN] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventZoom, TEXT("in"), event_id);
+event_id = InputEvents::makeEvent(&eventZoom, TEXT("slowin"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_UP] = event_id;
 
@@ -553,7 +553,7 @@ Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task saved"), event_id);
-event_id = InputEvents::makeEvent(&eventTaskSave, TEXT("Default.tsk"), event_id);
+event_id = InputEvents::makeEvent(&eventTaskSave, TEXT("persist/Default.tsk"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
 makeLabel(mode_id,TEXT("Task\nSave"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;

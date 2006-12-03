@@ -668,6 +668,8 @@ bool InputEvents::processButton(int bindex) {
 bool InputEvents::processKey(int dWord) {
   if (!ProgramStarted) return false;
 
+  InterfaceTimeoutReset();
+
   int event_id;
 
   // Valid input ?
@@ -726,6 +728,8 @@ bool InputEvents::processNmea(int ne_id) {
 bool InputEvents::processNmea_real(int ne_id) {
   if (!ProgramStarted) return false;
   int event_id = 0;
+
+  InterfaceTimeoutReset();
 
   // Valid input ?
   if ((ne_id < 0) || (ne_id >= NE_COUNT))
@@ -1013,6 +1017,10 @@ void InputEvents::eventZoom(TCHAR* misc) {
     else
       DoStatusMessage(TEXT("AutoZoom OFF"));
   }
+  else if (_tcscmp(misc, TEXT("slowout")) == 0)
+    MapWindow::Event_ScaleZoom(-4);
+  else if (_tcscmp(misc, TEXT("slowin")) == 0)
+    MapWindow::Event_ScaleZoom(4);
   else if (_tcscmp(misc, TEXT("out")) == 0)
     MapWindow::Event_ScaleZoom(-1);
   else if (_tcscmp(misc, TEXT("in")) == 0)
@@ -1178,10 +1186,33 @@ void InputEvents::eventArmAdvance(TCHAR *misc) {
     AdvanceArmed = !AdvanceArmed;
   }
   if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (AdvanceArmed) {
-      DoStatusMessage(TEXT("Auto Advance ARMED"));
-    } else {
-      DoStatusMessage(TEXT("Auto Advance DISARMED"));
+    switch (AutoAdvance) {
+    case 0:
+      DoStatusMessage(TEXT("Auto Advance: Manual"));
+      break;
+    case 1:
+      DoStatusMessage(TEXT("Auto Advance: Automatic"));
+      break;
+    case 2:
+      if (AdvanceArmed) {
+        DoStatusMessage(TEXT("Auto Advance: ARMED"));
+      } else {
+        DoStatusMessage(TEXT("Auto Advance: DISARMED"));
+      }
+      break;
+    case 3:
+      if (ActiveWayPoint==0) { // past start
+        if (AdvanceArmed) {
+          DoStatusMessage(TEXT("Auto Advance: ARMED"));
+        } else {
+          DoStatusMessage(TEXT("Auto Advance: DISARMED"));
+        }
+      } else {
+        DoStatusMessage(TEXT("Auto Advance: Automatic"));
+      }
+      break;    
+    default:
+      break;
     }
   }
 }

@@ -31,8 +31,10 @@ Copyright_License {
 
 #include "stdafx.h"
 #include "AATDistance.h"
+#include "Task.h"
 #include "Airspace.h"
 #include "XCSoar.h"
+#include "Calculations.h"
 #include "externs.h"
 
 #define DISTANCETHRESHOLD 500
@@ -162,17 +164,50 @@ double AATDistance::DistanceCovered_internal(double longitude,
 
       if (insector) {
 
-        double dtmp;
-        DistanceBearing(w0lat, w0lon, latitude, longitude, &dtmp, NULL);
-        achieved_distance = Dmax[taskwaypoint-1][j] + dtmp;
+        int nthis = num_points[taskwaypoint];
 
-        if (achieved_distance>target_distance) {
-          update_target = true;
-          target_distance = achieved_distance;
+        // TODO: check all points in this sector as some existing
+        // ones may be better than the current target
+
+        for (int k=-1; k<nthis; k++) {
+
+          double lat0;
+          double lon0;
+
+          if (k== -1) {
+            lat0 = latitude;
+            lon0 = longitude;
+          } else {
+            lat0 = lat_points[taskwaypoint][k];
+            lon0 = lon_points[taskwaypoint][k];
+          }
+
+          double dtmp, bearing;
+          DistanceBearing(w0lat, w0lon, lat0, lon0, &dtmp, &bearing);
+          achieved_distance = Dmax[taskwaypoint-1][j] + dtmp;
+
+          if (achieved_distance>target_distance) {
+            update_target = true;
+            target_distance = achieved_distance;
+            
+            // move current target to obtain best distance 
+            // (this is new minimum)
+            // TODO: shuffle following targets to maintain current
+            // distance setting
+            
+            Task[taskwaypoint].AATTargetLat = lat0;
+            Task[taskwaypoint].AATTargetLon = lon0;
+            Task[taskwaypoint].AATTargetOffsetRadial = bearing;
+            w1lat = Task[taskwaypoint].AATTargetLat;
+            w1lon = Task[taskwaypoint].AATTargetLon;
+
+          }
         }
 
       } else {
+
         achieved_distance = projected_distance;
+
       }
 
       if (target_distance> best_target_distance) {
@@ -181,46 +216,148 @@ double AATDistance::DistanceCovered_internal(double longitude,
         best_update_target = update_target;
 
         if (taskwaypoint>1) {
-          // Move previous target to location that yields longest distance,
-          // plus a little so optimal path vector points to next waypoint.
 
+          // move previous target to obtain best distance
           Task[taskwaypoint-1].AATTargetLat= w0lat;
           Task[taskwaypoint-1].AATTargetLon= w0lon;
 
-          if (ActiveWayPoint>taskwaypoint-1) 
-            CalculateAATTaskSectors();
+          //          CalculateAATTaskSectors(taskwaypoint);
         }
       }
     }
   }
 
-  if (insector) {
-    if (best_achieved_distance<max_achieved_distance) {
-      // best is decreasing, so move target in direction of
-      // next waypoint.
-      best_update_target = true;
-    }
-  }
+  if ((taskwaypoint<MAXTASKPOINTS-1)
+      &&(Task[taskwaypoint+1].Index>=0)) {
 
-  if (best_update_target) {
-    if ((taskwaypoint<MAXTASKPOINTS-1)
-        &&(Task[taskwaypoint+1].Index>=0)) {
-      
+    if (insector && (taskwaypoint==ActiveWayPoint)) {
+
       double bearing;
-      DistanceBearing(latitude,
-                      longitude,
-                      WayPointList[Task[taskwaypoint+1].Index].Latitude,
-                      WayPointList[Task[taskwaypoint+1].Index].Longitude,
-                      NULL, &bearing);
+
+      if ((best_achieved_distance<max_achieved_distance)
+          || (num_points[taskwaypoint]==1) || 1) {
+        // best is decreasing, so project target in direction of improvement
+        // or first entry into sector
+
+        double d_tar;
+        double d_this;
+
+        DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
+                        Task[taskwaypoint-1].AATTargetLon,
+                        Task[taskwaypoint].AATTargetLat,
+                        Task[taskwaypoint].AATTargetLon,
+                        &d_tar, NULL);
+
+        DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
+                        Task[taskwaypoint-1].AATTargetLon,
+                        latitude,
+                        longitude,
+                        &d_this, &bearing);
+
+        double d_diff = d_tar-d_this;
+
+        if (d_diff>0) {
+
+          // move target in line with previous target along track
+          // at an offset to improve on max distance
+
+          Task[taskwaypoint].AATTargetOffsetRadial = bearing;
+
+          do {
+
+            FindLatitudeLongitude(latitude, longitude, 
+                                  bearing, d_diff,
+                                  &Task[taskwaypoint].AATTargetLat,
+                                  &Task[taskwaypoint].AATTargetLon);
+
+            d_diff -= 100.0;
+
+          } while ((!InAATTurnSector(Task[taskwaypoint].AATTargetLon,
+                                     Task[taskwaypoint].AATTargetLat,
+                                     taskwaypoint)) && (d_diff>0.0));
+
+          // check if this point is inside sector, if not,
+          // vector the aircraft to the next waypoint since no improvement
+          // is possible
+
+          if (d_diff<0.0) {
+
+            DistanceBearing(latitude,
+                            longitude,
+                            WayPointList[Task[taskwaypoint+1].Index].Latitude,
+                            WayPointList[Task[taskwaypoint+1].Index].Longitude,
+                            NULL, &bearing);
+
+            FindLatitudeLongitude(latitude, longitude, 
+                                  bearing, 100.0,
+                                  &Task[taskwaypoint].AATTargetLat,
+                                  &Task[taskwaypoint].AATTargetLon);
+          }
+
+          // Also update Task range for this waypoint based on percentage
+          // to edge of sector.  In AdjustAAT, if in sector, adjust target
+          // from current aircraft position (-100%) to the extremity (100%)
+          // but must be careful not to move target behind what is already
+          // achieved.
+
+        } else {
+
+          // ERROR!
+          d_diff = 0;
+
+        }
+        
+      } else if (best_achieved_distance>= best_target_distance) {
       
-      FindLatitudeLongitude(latitude, longitude, 
-                            bearing, 1.0,
-                            &Task[taskwaypoint].AATTargetLat,
-                            &Task[taskwaypoint].AATTargetLon);
+        // this point is in sector and is improved
+
+        // JMW, now moves target to in line with previous target whenever
+        // you are in AAT sector and improving on the target distance
+
+        DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
+                        Task[taskwaypoint-1].AATTargetLon,
+                        latitude,
+                        longitude,
+                        NULL, &bearing);
+
+        FindLatitudeLongitude(latitude, longitude, 
+                              bearing, 100.0,
+                              &Task[taskwaypoint].AATTargetLat,
+                              &Task[taskwaypoint].AATTargetLon);
+
+        Task[taskwaypoint].AATTargetOffsetRadial = bearing;
+
+      } 
+      /* if no improvement possible, vector to outside
+        {
+
+        DistanceBearing(latitude,
+                        longitude,
+                        WayPointList[Task[taskwaypoint+1].Index].Latitude,
+                        WayPointList[Task[taskwaypoint+1].Index].Longitude,
+                        NULL, &bearing);
+
+        FindLatitudeLongitude(latitude, longitude, 
+                              bearing, 100.0,
+                              &Task[taskwaypoint].AATTargetLat,
+                              &Task[taskwaypoint].AATTargetLon);
+
+        Task[taskwaypoint].AATTargetOffsetRadial = bearing;
+
+        // Move previous target to location that yields longest distance,
+        // plus a little so optimal path vector points to next waypoint.
+
+        }
+      */
       
-      if (ActiveWayPoint>taskwaypoint) 
-        CalculateAATTaskSectors();
-    }
+    } /* else if (best_update_target) {
+
+      redundant code 
+
+      Task[taskwaypoint].AATTargetLat= latitude;
+      Task[taskwaypoint].AATTargetLon= longitude;
+
+      }  */
   }
   
   max_achieved_distance = max(best_achieved_distance, max_achieved_distance);

@@ -27,7 +27,7 @@
   </WndProperty>
 
   <WndProperty Name="prpTaskStartRadius" Caption="Start radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Radius of the start cylinder/sector or half-length of the start line.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=100000 Step=500/>
 
   </WndProperty>
 
@@ -39,7 +39,7 @@
   </WndProperty>
 
   <WndProperty Name="prpTaskSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Radius of the turnpoint observation area for non-AAT tasks.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=100000 Step=500/>
 
   </WndProperty>
 
@@ -90,11 +90,11 @@
     </WndProperty>
 
   <WndProperty Name="prpAATCircleRadius" Caption="Circle radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2  Help="Radius of the AAT observation area for cylindrical type.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=100000 Step=500/>
     </WndProperty>
 
   <WndProperty Name="prpAATSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Radius of the AAT observation area for sector type.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=100000 Step=500/>
     </WndProperty>
 
   <WndProperty Name="prpAATStartRadial" Caption="Start radial"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Start radial of the AAT observation area for sector type.">
@@ -117,7 +117,7 @@
   </WndProperty>
 
   <WndProperty Name="prpTaskFinishRadius" Caption="Finish radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Radius of the finish cylinder or half length of the finish line.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=50000 Step=500/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min=0 Max=100000 Step=500/>
 
   </WndProperty>
 

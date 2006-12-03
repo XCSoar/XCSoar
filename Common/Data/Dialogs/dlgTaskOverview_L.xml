@@ -19,7 +19,8 @@
 
   <WndFrame Name="frmAdvanced" X=100 Y=0 Width=130 Height=75 Font=2 >
 
-  <WndButton  Name="cmdCalc"  Caption="Calc" X=2 Y=0 Width=98  Height=22 Font=2 OnClickNotify="OnCalcClicked" Tag=4 />
+  <WndButton  Name="cmdCalc"  Caption="Calc" X=2 Y=0 Width=60  Height=22 Font=2 OnClickNotify="OnCalcClicked" Tag=4 />
+  <WndButton  Name="cmdDeclare" Caption="Declare"    X=65 Y=0 Width=60  Height=22 Font=2 OnClickNotify="OnDeclareClicked"/>
 
   <WndProperty Name="prpFile" Caption="File"   X=2 Y=25  Width=98 Height=22 CaptionWidth=30 Font=2 Help="The file number sets the number of the task to be loaded/saved.  Up to 20 tasks may be defined.   These files are stored under the filename XX.tsk where XX is the file number.">
   <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=20 Step=1/>

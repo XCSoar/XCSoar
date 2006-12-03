@@ -66,13 +66,16 @@ double GlidePolar::AbortSafetyMacCready() {
   }
 }
 
+double GlidePolar::GetAUW() {
+  return BallastLitres + WEIGHTS[0] + WEIGHTS[1];
+}
 
 void GlidePolar::SetBallast() {
 
   LockFlightData();
   double BallastWeight;
   BallastLitres = WEIGHTS[2] * BALLAST;
-  BallastWeight = BallastLitres + WEIGHTS[0] + WEIGHTS[1];
+  BallastWeight = GetAUW();
   BallastWeight = (double)sqrt(BallastWeight);
   double bugfactor = 1.0/BUGS;
   polar_a = POLAR[0] / BallastWeight*bugfactor;

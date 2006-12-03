@@ -347,7 +347,7 @@ bool MapWindow::Event_InteriorAirspaceDetails(double lon, double lat) {
 }
 
 bool MapWindow::isAutoZoom() {
-        return AutoZoom;
+  return AutoZoom;
 }
 
 bool TextInBoxMoveInView(POINT *offset, RECT *brect){
@@ -807,7 +807,11 @@ double MapWindow::LimitMapScale(double value) {
 
   double minreasonable = 0.05;
   if (AutoZoom && !DerivedDrawInfo.Circling) {
-    minreasonable = 0.22;
+    if (AATEnabled && (ActiveWayPoint>0)) {
+      minreasonable = 0.88;
+    } else {
+      minreasonable = 0.44; // was 0.22
+    }
   }
 
   if (ScaleListCount>0) {
@@ -835,6 +839,7 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
 
   static double lastRequestMapScale = RequestMapScale;
   double value = RequestMapScale;
+  static int nslow=0;
 
   // For best results, zooms should be multiples or roots of 2
 
@@ -843,6 +848,18 @@ void MapWindow::Event_ScaleZoom(int vswitch) {
     value = StepMapScale(-vswitch);
   } else {
 
+    if (abs(vswitch)>=4) {
+      nslow++;
+      if (nslow %2 != 0) {
+        // JMW disabled        return;
+      }
+      if (vswitch==4) {
+        vswitch = 1;
+      }
+      if (vswitch==-4) {
+        vswitch = -1;
+      }
+    }
     if (vswitch==1) { // zoom in a little
       value /= 1.414;
     }
@@ -875,7 +892,15 @@ int MapWindow::GetMapResolutionFactor(void) {
 }
 
 double MapWindow::StepMapScale(int Step){
-  ScaleCurrent += Step;
+  static int nslow=0;
+  if (abs(Step)>=4) {
+    nslow++;
+    if (nslow %2 == 0) {
+      ScaleCurrent += Step/4;
+    }
+  } else {
+    ScaleCurrent += Step;
+  }
   ScaleCurrent = max(0,min(ScaleListCount-1, ScaleCurrent));
   return((ScaleList[ScaleCurrent]*GetMapResolutionFactor())
          /(IBLSCALE(/*Appearance.DefaultMapWidth*/ MapRect.right)));
@@ -1442,9 +1467,11 @@ void MapWindow::UpdateMapScale()
     ModifyMapScale();
     useraskedforchange = true;
   }
+
+  double wpd = DerivedDrawInfo.ZoomDistance;
   
   if (AutoZoom) {
-    if(DerivedDrawInfo.WaypointDistance > 0)
+    if(wpd > 0)
     {
       
       if(
@@ -1463,8 +1490,7 @@ void MapWindow::UpdateMapScale()
       }
       
       if(
-         (DerivedDrawInfo.WaypointDistance 
-          < ( AutoZoomFactor * MapScaleOverDistanceModify))
+         (wpd < ( AutoZoomFactor * MapScaleOverDistanceModify))
          || 
          (StartingAutoMapScale==0.0))
       {
@@ -1480,7 +1506,7 @@ void MapWindow::UpdateMapScale()
 
         // set scale exactly so that waypoint distance is the zoom factor
         // across the screen
-        RequestMapScale = LimitMapScale(DerivedDrawInfo.WaypointDistance
+        RequestMapScale = LimitMapScale(wpd
                                         *DISTANCEMODIFY/ AutoZoomFactor);
         ModifyMapScale();
 
@@ -1766,8 +1792,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     DrawWaypoints(hdcDrawWindowBg,rc);
 
-    if (EnableFLARMDisplay)
-      DrawFLARMTraffic(hdcDrawWindowBg, rc);
+    DrawFLARMTraffic(hdcDrawWindowBg, rc);
 
     if (extGPSCONNECT) {
       DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
@@ -2868,7 +2893,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
   SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
   Rectangle(hDCTemp,rc.left,rc.top,rc.right,rc.bottom);
     
-  for(i=1;i<MAXTASKPOINTS-1;i++)
+  for(i=MAXTASKPOINTS-2;i>0;i--)
   {
     if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
     {
@@ -2883,8 +2908,12 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
           // this color is the transparent bit
           SetBkColor(hDCTemp, 
                      whitecolor);
-          
-          SelectObject(hDCTemp, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+
+          if (i<ActiveWayPoint) {
+            SelectObject(hDCTemp, GetStockObject(HOLLOW_BRUSH));
+          } else {
+            SelectObject(hDCTemp, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+          }
           SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
           
           Circle(hDCTemp,
@@ -2903,7 +2932,11 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
           SetBkColor(hDCTemp, 
                      whitecolor);
           
-          SelectObject(hDCTemp, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+          if (i<ActiveWayPoint) {
+            SelectObject(hDCTemp, GetStockObject(HOLLOW_BRUSH));
+          } else {
+            SelectObject(hDCTemp, hAirspaceBrushes[iAirspaceBrush[AATASK]]);
+          }
           SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
           
           tmp = Task[i].AATSectorRadius*ResMapScaleOverDistanceModify;
@@ -5000,6 +5033,9 @@ void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
 
 
 void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
+
+  if (!EnableFLARMDisplay) return;
+
   if (!DrawInfo.FLARM_Available) return;
 
   HPEN hpOld;
@@ -5012,13 +5048,42 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
   TextInBoxMode_t displaymode;
   displaymode.AsInt = 0;
 
+  double screenrange = GetApproxScreenRange();
+  double scalefact = screenrange/6000.0;
+
   for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (DrawInfo.FLARM_Traffic[i].ID!=0) {
+
+      double target_lon;
+      double target_lat;
+
+      target_lon = DrawInfo.FLARM_Traffic[i].Longitude;
+      target_lat = DrawInfo.FLARM_Traffic[i].Latitude;
+
+      if ((EnableFLARMDisplay==2)&&(scalefact>1.0)) {
+        double distance;
+        double bearing;
+
+        DistanceBearing(DrawInfo.Latitude,
+                        DrawInfo.Longitude,
+                        target_lat,
+                        target_lon,
+                        &distance,
+                        &bearing);
+
+        FindLatitudeLongitude(DrawInfo.Latitude, 
+                              DrawInfo.Longitude, 
+                              bearing,
+                              distance*scalefact, 
+                              &target_lat, 
+                              &target_lon);
+
+      }
       
       // TODO: draw direction, height?
       POINT sc;
-      LatLon2Screen(DrawInfo.FLARM_Traffic[i].Longitude, 
-                    DrawInfo.FLARM_Traffic[i].Latitude, 
+      LatLon2Screen(target_lon, 
+                    target_lat, 
                     sc);
       if (DrawInfo.FLARM_Traffic[i].Name) {
         TextInBox(hDC, DrawInfo.FLARM_Traffic[i].Name, sc.x+IBLSCALE(3),

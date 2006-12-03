@@ -31,6 +31,6 @@ class GaugeFLARM {
   static int RangeScale(double d);
 };
 
-extern bool EnableFLARMDisplay;
+extern DWORD EnableFLARMDisplay;
 
 #endif

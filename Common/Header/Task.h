@@ -78,8 +78,7 @@ double AdjustAATTargets(double desired);
 void RefreshTaskWaypoint(int i);
 void RefreshTask(void);
 void CalculateTaskSectors(void);
-void CalculateAATTaskSectors(void);
-
+void CalculateAATTaskSectors(int awp= -1);
 
 void guiStartLogger(bool noAsk = false);
 void guiStopLogger(bool noAsk = false);
@@ -90,6 +89,6 @@ void LoadTask(TCHAR *FileName,HWND hDlg);
 void SaveTask(TCHAR *FileName);
 void DefaultTask(void);
 void ClearTask(void);
-
+void RotateStartPoints(void);
 
 #endif

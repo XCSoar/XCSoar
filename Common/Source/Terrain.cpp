@@ -428,7 +428,7 @@ public:
 
 #define TERRAIN_ANTIALIASING 1
 
-  void Height(RECT rc) {
+  void Height() {
     double X, Y;
     int x, y; 
     short X0, Y0;
@@ -854,7 +854,7 @@ void DrawTerrain( const HDC hdc, const RECT rc,
   // step 2: fill height buffer
   tmstart = GetTickCount();
 
-  trenderer->Height(rc); // 106ms
+  trenderer->Height(); // 106ms
 
   tm = GetTickCount();
   tm = tm-tmstart;
@@ -887,7 +887,7 @@ void DrawTerrain( const HDC hdc, const RECT rc,
   tmstart = GetTickCount();
 
   // step 6: draw // 128 ms
-  trenderer->Draw(hdc, MapWindow::MapRect); 
+  trenderer->Draw(hdc, MapWindow::MapRectBig); 
 
   tm = GetTickCount();
   tm = tm-tmstart;

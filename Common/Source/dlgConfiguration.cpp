@@ -526,6 +526,9 @@ static void OnInfoBoxHelp(WindowControl * Sender){
   case 60:
     dlgHelpShowModal(caption, TEXT("[Distance Home]\r\nDistance to home waypoint (if defined)."));
     break;
+  case 61:
+    dlgHelpShowModal(caption, TEXT("[Speed Task Achieved]\r\nAchieved cross country speed while on current task, compensated for altitude."));
+    break;
   };
 }
 
@@ -964,7 +967,12 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMDisplay"));
   if (wp) {
-    wp->GetDataField()->Set(EnableFLARMDisplay);
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("OFF"));
+    dfe->addEnumText(TEXT("ON/Fixed"));
+    dfe->addEnumText(TEXT("ON/Scaled"));
+    dfe->Set(EnableFLARMDisplay);
     wp->RefreshDisplay();
   }
 
@@ -1551,6 +1559,12 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioGross"));
+  if (wp) {
+    wp->GetDataField()->Set(Appearance.GaugeVarioGross);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioMc"));
   if (wp) {
     wp->GetDataField()->Set(Appearance.GaugeVarioMc);
@@ -1846,9 +1860,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableFLARMDisplay"));
   if (wp) {
-    if (EnableFLARMDisplay != 
-	wp->GetDataField()->GetAsBoolean()) {
-      EnableFLARMDisplay = wp->GetDataField()->GetAsBoolean();
+    if ((int)EnableFLARMDisplay != 
+	wp->GetDataField()->GetAsInteger()) {
+      EnableFLARMDisplay = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryEnableFLARMDisplay,
 		    EnableFLARMDisplay);
       changed = true;
@@ -2522,6 +2536,16 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioGross"));
+  if (wp) {
+    if ((int)Appearance.GaugeVarioGross != wp->GetDataField()->GetAsInteger()) {
+      Appearance.GaugeVarioGross = (wp->GetDataField()->GetAsInteger() != 0);
+      SetToRegistry(szRegistryAppGaugeVarioGross,Appearance.GaugeVarioGross);
+      changed = true;
+      requirerestart = true;
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioMc"));
   if (wp) {
     if ((int)Appearance.GaugeVarioMc != wp->GetDataField()->GetAsInteger()) {
@@ -2599,7 +2623,6 @@ void dlgConfigurationShowModal(void){
       changed = true;
     }
   }
-
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
   if (wp) {

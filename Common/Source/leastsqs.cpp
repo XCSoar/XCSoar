@@ -19,7 +19,7 @@
 // Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 // Boston, MA  02111-1307, USA.
 //
-// $Id: leastsqs.cpp,v 1.8 2006/08/15 02:14:34 jwharington Exp $
+// $Id: leastsqs.cpp,v 1.9 2006/12/03 15:01:41 jwharington Exp $
 //
 /*
 NOTE: Sompe portions copyright as above
@@ -90,6 +90,7 @@ void LeastSquares::Reset() {
   y_min = 0;
   x_min = 0;
   x_max = 0;
+  y_ave = 0;
 }
 
 

@@ -77,6 +77,7 @@ extern TCHAR szRegistryAppGaugeVarioAvgText[];
 extern TCHAR szRegistryAppGaugeVarioMc[];
 extern TCHAR szRegistryAppGaugeVarioBugs[];
 extern TCHAR szRegistryAppGaugeVarioBallast[];
+extern TCHAR szRegistryAppGaugeVarioGross[];
 extern TCHAR szRegistryAppCompassAppearance[];
 extern TCHAR szRegistryAppStatusMessageAlignment[];
 extern TCHAR szRegistryAppInfoBoxBorder[];
@@ -298,5 +299,9 @@ void MyCompactHeaps();
 unsigned long FindFreeSpace(TCHAR *path);
 bool MatchesExtension(TCHAR *filename, TCHAR* extension);
 BOOL PlayResource (LPTSTR lpName);
+void CreateDirectoryIfAbsent(TCHAR *filename);
+
+void InterfaceTimeoutReset(void);
+bool InterfaceTimeoutCheck(void);
 
 #endif

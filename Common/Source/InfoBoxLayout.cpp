@@ -216,8 +216,14 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
   geometrychanged = true;
 
   int maxsize=0;
+  int minsize=0;
   maxsize = max(rc.right-rc.left,rc.bottom-rc.top);
-  scale = max(1,maxsize/320);
+  minsize = min(rc.right-rc.left,rc.bottom-rc.top);
+  if (maxsize==minsize) {
+    scale = max(1,minsize/240);
+  } else {
+    scale = max(1,maxsize/320);
+  }
 
   if (rc.bottom<rc.right) {
     // landscape mode

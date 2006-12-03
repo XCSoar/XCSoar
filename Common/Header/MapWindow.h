@@ -308,7 +308,7 @@ class MapWindow {
   static void UpdateCaches(bool force=false);
   static double findMapScaleBarSize(RECT rc);
 
-  #define SCALELISTSIZE  20
+  #define SCALELISTSIZE  30
   static int ScaleListCount;
   static int ScaleCurrent;
   static double ScaleList[SCALELISTSIZE];

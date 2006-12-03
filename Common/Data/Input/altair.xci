@@ -30,12 +30,12 @@ mode=default
 type=gce
 data=STARTUP_SIMULATOR
 event=StatusMessage Simulation\r\nNothing is real!
-event=TaskLoad Default.tsk
+event=TaskLoad persist/Default.tsk
 
 mode=default
 type=gce
 data=STARTUP_REAL
-event=TaskLoad Default.tsk
+event=TaskLoad persist/Default.tsk
 event=DLLExecute AltairPlatform.dll WakeUp
 
 mode=default
@@ -188,12 +188,12 @@ location=9
 mode=default
 type=key
 data=DOWN
-event=Zoom out
+event=Zoom slowout
 
 mode=default
 type=key
 data=UP
-event=Zoom in
+event=Zoom slowin
 
 mode=default
 type=key
@@ -442,7 +442,7 @@ mode=Nav2
 type=key
 data=7
 event=StatusMessage Task saved
-event=TaskSave Default.tsk
+event=TaskSave persist/Default.tsk
 label=Task\nSave
 location=6
 

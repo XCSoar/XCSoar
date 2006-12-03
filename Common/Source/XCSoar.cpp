@@ -106,7 +106,8 @@ Appearance_t Appearance = {
   gvnsDefault, 
   false,
   apIbBox,
-  false
+  false,
+  true
 };
 #else
 
@@ -141,7 +142,8 @@ Appearance_t Appearance = {
   gvnsLongNeedle,
   true,
   apIbBox,
-  false
+  false,
+  true
 };
 
 #endif
@@ -538,8 +540,10 @@ SCREEN_INFO Data_Options[] = {
 	  {ugTaskSpeed, TEXT("Speed Task Instantaneous"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
           // 60
 	  {ugDistance, TEXT("Distance Home"), TEXT("Home Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+	  // 61
+	  {ugTaskSpeed, TEXT("Speed Task Achieved"), TEXT("V Tsk Ach"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
 	};
-int NUMSELECTSTRINGS = 61;
+int NUMSELECTSTRINGS = 62;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -1117,8 +1121,12 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 #endif
  
-  wcscat(XCSoar_Version, TEXT("5.0.0 "));
+  wcscat(XCSoar_Version, TEXT("5.0.4 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
+
+  CreateDirectoryIfAbsent(TEXT("persist"));
+  CreateDirectoryIfAbsent(TEXT("logs"));
+  CreateDirectoryIfAbsent(TEXT("config"));
 
   StartupStore(TEXT("Starting XCSoar "));
   StartupStore(XCSoar_Version);
@@ -1271,7 +1279,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 
   // ... register all supported devices
-  // ADD NEW ONES TO BOTTOM OF THIS LIST
+  // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
   StartupStore(TEXT("Register serial devices\r\n"));
   cai302Register();
   ewRegister();
@@ -1769,6 +1777,7 @@ bool Debounce(void) {
   DWORD dT = fpsTimeThis-fpsTimeLast;
 
   DisplayTimeOut = 0;
+  InterfaceTimeoutReset();
 
   if (ScreenBlanked) {
     // prevent key presses working if screen is blanked,
@@ -1803,6 +1812,9 @@ void Shutdown(void) {
   dlgAirspaceWarningDeInit();
   StartupStore(TEXT("AirspaceWarnListDeInit\r\n"));
   AirspaceWarnListDeInit();
+
+  // stop logger
+  LoggerActive = false;
 
   // Save settings
   StoreRegistry();
@@ -1839,7 +1851,7 @@ void Shutdown(void) {
   LockTaskData();
   ResumeAbortTask(-1); // turn off abort if it was on.
   TCHAR buffer[MAX_PATH];
-  LocalPath(buffer, TEXT("Default.tsk"));
+  LocalPath(buffer, TEXT("persist/Default.tsk"));
   SaveTask(buffer);
   UnlockTaskData();
 
@@ -1863,7 +1875,10 @@ void Shutdown(void) {
   StartupStore(TEXT("Stop COM devices\r\n"));
   devCloseAll();
 
+#if !defined(GNAV)
+  // JMW disabled for GNAV currently
   SaveCalculationsPersist(&CALCULATED_INFO);
+#endif
 
   #if defined(GNAV)
     StartupStore(TEXT("Altair shutdown\r\n"));
@@ -2499,7 +2514,6 @@ void CommonProcessTimer()
     GaugeFLARM::Show();
   }
 
-
 #if (WINDOWSPC<1)
   SystemIdleTimerReset();
 #endif
@@ -2608,9 +2622,6 @@ void ProcessTimer(void)
   }
   
   if (itimeout % 10 != 0) {
-
-
-
     // timeout if no new data in 5 seconds
     return;
   }
@@ -2635,6 +2646,17 @@ void ProcessTimer(void)
 
   GPSCONNECT = FALSE;
   BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
+
+  if (gpsconnect && navwarning) {
+    // If GPS connected but no lock, must be in hangar 
+    if (InterfaceTimeoutCheck()) {
+#ifdef GNAV
+      // TODO: ask question about shutdown or give warning
+      // then shutdown if no activity.
+      //     Shutdown();
+#endif
+    }
+  }
 
   if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
     {
@@ -2768,9 +2790,9 @@ void SIMProcessTimer(void)
 
   if (i%2==0) return;
 
-  //  #ifdef DEBUG
-  //  NMEAParser::TestRoutine(&GPS_INFO);
-  //  #endif
+    #ifdef DEBUG
+    NMEAParser::TestRoutine(&GPS_INFO);
+    #endif
 
   NMEAParser::GpsUpdated = TRUE;
   SetEvent(dataTriggerEvent);
@@ -2859,7 +2881,7 @@ void StartupStore(TCHAR *Str)
   static TCHAR szFileName[MAX_PATH];
   static bool initialised = false;
   if (!initialised) {
-    LocalPath(szFileName, TEXT("xcsoar-startup.log"));
+    LocalPath(szFileName, TEXT("persist/xcsoar-startup.log"));
     hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
                        NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
     initialised = true;
