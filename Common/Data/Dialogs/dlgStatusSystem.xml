@@ -7,9 +7,9 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Type="Dialog" X=5 Y=5 Width=251 Height=231 Caption="Status" Font=2 BackColor=0xDADBAB>
+<WndForm Type="Dialog" X=5 Y=5 Width=251 Height=231 Caption="System Status" Font=2 BackColor=0xDADBAB>
 
-  <WndProperty Name="prpGPS"       Caption="GPS"       X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpGPS"       Caption="GPS lock"       X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpNumSat"    Caption="Satellites in view"   X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpVario"     Caption="Vario"     X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpFLARM"       Caption="FLARM"       X=2 Y=-1 Width=242 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />

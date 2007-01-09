@@ -36,11 +36,10 @@ Copyright_License {
 #include "Utils.h"
 #include "externs.h"
 #include "InfoBoxLayout.h"
+#include "InfoBox.h"
 
 extern NMEA_INFO GPS_INFO;
 extern DERIVED_INFO CALCULATED_INFO;
-
-
 
 HWND   hWndVarioWindow = NULL; // Vario Window
 extern HINSTANCE hInst;      // The current instance
@@ -84,8 +83,6 @@ DrawInfo_t GaugeVario::diLabelBottom = {false};
 #define GAUGEXSIZE (InfoBoxLayout::ControlWidth)
 #define GAUGEYSIZE (InfoBoxLayout::ControlHeight*3)
 
-static COLORREF redColor = RGB(0xff,0x20,0x20);
-static COLORREF blueColor = RGB(0x20,0x20,0xff);
 
 static COLORREF colTextGray;
 static COLORREF colText;
@@ -137,13 +134,22 @@ void GaugeVario::Create() {
     hDrawBitMap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_VARIOSCALEA));
   }
 
-  redBrush = CreateSolidBrush(redColor);
-  blueBrush = CreateSolidBrush(blueColor);
+  COLORREF theredColor;
+  COLORREF theblueColor;
+  if (Appearance.InverseInfoBox) {
+    theredColor = InfoBox::inv_redColor;
+    theblueColor = InfoBox::inv_blueColor;
+  } else {
+    theredColor = InfoBox::redColor;
+    theblueColor = InfoBox::blueColor;
+  }
+  redBrush = CreateSolidBrush(theredColor);
+  blueBrush = CreateSolidBrush(theblueColor);
 
   redPen = CreatePen(PS_SOLID, 1,
-                     redColor);
+                     theredColor);
   bluePen = CreatePen(PS_SOLID, 1,
-                      blueColor);
+                      theblueColor);
 
   if (Appearance.InverseInfoBox){
     colText = RGB(0xff, 0xff, 0xff);
@@ -321,7 +327,16 @@ void GaugeVario::Render() {
   }
 
   dirty = false;
-  RenderNeedle(vval);
+  if (Appearance.GaugeVarioAveNeedle) {
+    double aval;
+    if (!CALCULATED_INFO.Circling) {
+      aval = CALCULATED_INFO.NettoAverage30s;
+    } else {
+      aval = CALCULATED_INFO.Average30s;
+    }
+    RenderNeedle(aval, true);
+  }
+  RenderNeedle(vval, false);
 
   if (Appearance.GaugeVarioGross) {
     RenderValue(orgMiddle.x, orgMiddle.y,
@@ -368,11 +383,11 @@ void GaugeVario::MakePolygon(const int i) {
 
   dx = -xoffset+nlength0; dy = -nwidth;
   rotate(dx, dy, i);
-  bit[1].x = lround(dx)+xoffset; bit[1].y = lround(dy*ELLIPSE)+yoffset+1;
+  bit[2].x = lround(dx)+xoffset; bit[2].y = lround(dy*ELLIPSE)+yoffset+1;
 
   dx = -xoffset+nlength1; dy = 0;
   rotate(dx, dy, i);
-  bit[2].x = lround(dx)+xoffset; bit[2].y = lround(dy*ELLIPSE)+yoffset+1;
+  bit[1].x = lround(dx)+xoffset; bit[1].y = lround(dy*ELLIPSE)+yoffset+1;
 }
 
 
@@ -440,19 +455,18 @@ void GaugeVario::RenderClimb() {
   }
 }
 
-void GaugeVario::RenderNeedle(double Value){
 
-  static int lastI = -99999;
-  static int lastIv = -99999;
+void GaugeVario::RenderNeedle(double Value, bool average) {
+
   static POINT lastBit[3];
+  static POINT lastBitave[3];
   static POINT lp[2];
   static bool InitDone = false;
   static int degrees_per_unit;
-  bool dirtytime = false;
-
   POINT *bit;
   int i;
-  static DWORD fpsTimeLast =0;
+
+  dirty = true;
 
   if (!InitDone){
     degrees_per_unit =
@@ -464,27 +478,19 @@ void GaugeVario::RenderNeedle(double Value){
   }
 
   i = iround(Value*degrees_per_unit*LIFTMODIFY);
-
-  DWORD fpsTime = ::GetTickCount();
-  if (fpsTime-fpsTimeLast>500) {
-    //    if (i != lastIv) {
-    dirty = true;
-    fpsTimeLast = fpsTime;
-    lastIv = i;
-    //    }
-  }
-
   i = min(gmax,max(-gmax,i));
 
-  if (lastI != -99999){
-    if (Appearance.InverseInfoBox){
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
-    } else {
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
-    }
-
+  // clear last one
+  if (Appearance.InverseInfoBox){
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+  } else {
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+  }
+  if (average) {
+    Polygon(hdcDrawWindow, lastBitave, 3);
+  } else {
     Polygon(hdcDrawWindow, lastBit, 3);
   }
 
@@ -497,7 +503,11 @@ void GaugeVario::RenderNeedle(double Value){
   }
 
   bit = getPolygon(i);
-  Polygon(hdcDrawWindow, bit, 3);
+  if (average) {
+    Polyline(hdcDrawWindow, bit, 3);
+  } else {
+    Polygon(hdcDrawWindow, bit, 3);
+  }
 
   lp[0].x = 0; lp[0].y = yoffset+1;
   lp[1].x = IBLSCALE(17); lp[1].y = yoffset+1;
@@ -505,9 +515,11 @@ void GaugeVario::RenderNeedle(double Value){
   lp[0].y-= 1; lp[1].y-= 1;
   Polyline(hdcDrawWindow,lp,2);
 
-  memcpy(lastBit, bit, 3*sizeof(POINT));
-
-  lastI = i;
+  if (average) {
+    memcpy(lastBitave, bit, 3*sizeof(POINT));
+  } else {
+    memcpy(lastBit, bit, 3*sizeof(POINT));
+  }
 
 }
 

@@ -116,13 +116,16 @@ static BOOL PDSWC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   */
   GPS_INFO->SwitchState.VarioCircling =
     (switchoutputs & (1<<OUTPUT_BIT_CIRCLING))>0;
+  GPS_INFO->SwitchState.FlapLanding =
+    (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
   if (EnableExternalTriggerCruise) {
-    if (!GPS_INFO->SwitchState.FlapPositive) {
-      // JMW TODO: Change to OUTPUT_BIT_FLAP_LANDING
-      ExternalTriggerCruise = true;
-    } else {
+    if (GPS_INFO->SwitchState.FlapLanding) {
       ExternalTriggerCruise = false;
+      ExternalTriggerCircling = true;
+    } else {
+      ExternalTriggerCruise = true;
+      ExternalTriggerCircling = false;
     }
   } else {
     ExternalTriggerCruise = false;

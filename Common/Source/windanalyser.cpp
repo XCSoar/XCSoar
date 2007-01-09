@@ -89,17 +89,17 @@ WindAnalyser::WindAnalyser(NMEA_INFO *thenmeaInfo, DERIVED_INFO *thederivedInfo)
   nmeaInfo = thenmeaInfo;
   derivedInfo = thederivedInfo;
 
-    //initialisation
-    active=false;
-    circleLeft=false;
-    circleCount=0;
-    startmarker=0;
-    circleDeg = 0;
-    lastHeading = 0;
-    pastHalfway=false;
+  //initialisation
+  active=false;
+  circleLeft=false;
+  circleCount=0;
+  startmarker=0;
+  circleDeg = 0;
+  lastHeading = 0;
+  pastHalfway=false;
 
-    minSatCnt = 1; // JMW conf->getWindMinSatCount();
-    curModeOK=false;
+  minSatCnt = 1; // JMW conf->getWindMinSatCount();
+  curModeOK=false;
 }
 
 WindAnalyser::~WindAnalyser(){

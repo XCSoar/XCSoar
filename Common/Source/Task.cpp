@@ -32,11 +32,14 @@ Copyright_License {
 #include "Task.h"
 #include "Logger.h"
 #include "XCSoar.h"
+#include "AATDistance.h"
 #include "Utils.h"
 #include "externs.h"
 #include "Calculations.h"
 
 bool EnableMultipleStartPoints = false;
+
+extern AATDistance aatdistance;
 
 void FlyDirectTo(int index) {
   if (!CheckDeclaration())
@@ -423,6 +426,10 @@ void CalculateTaskSectors(void)
 	    }
 	    SectorSize = FinishRadius;
 	    SectorBearing = Task[i].InBound;
+
+            Task[i].AATCircleRadius = 0;
+            Task[i].AATSectorRadius = 0;
+
 	  }
 
 
@@ -486,13 +493,10 @@ double AdjustAATTargets(double desired) {
 extern NMEA_INFO GPS_INFO;
 
 
-void CalculateAATTaskSectors(int awp)
+void CalculateAATTaskSectors()
 {
   int i;
-
-  if (awp== -1) {
-    awp = ActiveWayPoint;
-  }
+  int awp = ActiveWayPoint;
 
   if(AATEnabled == FALSE)
     return;
@@ -509,6 +513,29 @@ void CalculateAATTaskSectors(int awp)
 
   for(i=1;i<MAXTASKPOINTS-1;i++) {
     if((Task[i].Index >=0)) {
+      if ((Task[i+1].Index <0)) {
+        continue;
+      }
+
+      if(Task[i].AATType == SECTOR) {
+        FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
+                                 WayPointList[Task[i].Index].Longitude,
+                               Task[i].AATStartRadial ,
+                               Task[i].AATSectorRadius ,
+                               &Task[i].AATStartLat,
+                               &Task[i].AATStartLon);
+
+        FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
+                               WayPointList[Task[i].Index].Longitude,
+                               Task[i].AATFinishRadial ,
+                               Task[i].AATSectorRadius,
+                               &Task[i].AATFinishLat,
+                               &Task[i].AATFinishLon);
+      }
+      if (i<awp) {
+        // only update targets for current/later waypoints
+        continue;
+      }
 
       Task[i].AATTargetOffsetRadius =
         min(1.0, max(Task[i].AATTargetOffsetRadius,-1.0));
@@ -549,11 +576,6 @@ void CalculateAATTaskSectors(int awp)
           *Task[i].AATCircleRadius;
       }
 
-      if ((Task[i+1].Index <0)) {
-        targetrange = 0;
-        continue;
-      }
-
       /*
         if(Task[i].AATType == SECTOR) {
         double r1 = Task[i].AATStartRadial;
@@ -564,60 +586,47 @@ void CalculateAATTaskSectors(int awp)
         }
       */
 
-      if (i>=awp) {
+      // TODO: if i=awp and in sector, range parameter needs to
+      // go from current aircraft position to projection of target
+      // out to the edge of the sector
 
-        // TODO: if i=awp and in sector, range parameter needs to
-        // go from current aircraft position to projection of target
-        // out to the edge of the sector
+      if (InAATTurnSector(longitude, latitude, i) && (awp==i)) {
 
-        if(Task[i].AATType == SECTOR) {
+        // special case, currently in AAT sector
+
+        double tor = Task[i].AATTargetOffsetRadius;
+        double dist = 100;
+        double qdist;
+        double dist_max = 0;
+        double bearing;
+
+        double target_latitude = latitude;
+        double target_longitude = longitude;
+
+        // find bearing from last target through current aircraft position
+        DistanceBearing(Task[i-1].AATTargetLat,
+                        Task[i-1].AATTargetLon,
+                        latitude,
+                        longitude,
+                        &qdist, &bearing);
+
+        // scan for maximum distance, so we can apply proportion
+        while (InAATTurnSector(target_longitude, target_latitude, i)) {
+
           FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
                                  WayPointList[Task[i].Index].Longitude,
-                                 Task[i].AATStartRadial ,
-                                 Task[i].AATSectorRadius ,
-                                 &Task[i].AATStartLat,
-                                 &Task[i].AATStartLon);
+                                 bearing,
+                                 dist,
+                                 &target_latitude,
+                                 &target_longitude);
+          dist_max = dist;
+          dist += 100;
 
-          FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
-                                 WayPointList[Task[i].Index].Longitude,
-                                 Task[i].AATFinishRadial ,
-                                 Task[i].AATSectorRadius,
-                                 &Task[i].AATFinishLat,
-                                 &Task[i].AATFinishLon);
         }
 
-        if (InAATTurnSector(longitude, latitude, i) && (awp==i) && (i>0)) {
+        dist = ((tor+1)/2.0)*dist_max;
 
-          double tor = Task[i].AATTargetOffsetRadius;
-          double dist = 100;
-          double dist_max = 0;
-          double bearing;
-
-          double target_latitude = latitude;
-          double target_longitude = longitude;
-
-          // find bearing from last target through current aircraft position
-          DistanceBearing(Task[i-1].AATTargetLat,
-                          Task[i-1].AATTargetLon,
-                          latitude,
-                          longitude,
-                          NULL, &bearing);
-
-          // scan for maximum distance, so we can apply proportion
-          while (InAATTurnSector(target_longitude, target_latitude, i)) {
-
-            FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
-                                   WayPointList[Task[i].Index].Longitude,
-                                   bearing,
-                                   dist,
-                                   &target_latitude,
-                                   &target_longitude);
-            dist_max = dist;
-            dist += 100;
-
-          }
-
-          dist = ((tor+1)/2.0)*dist_max;
+        if (dist+qdist>aatdistance.LegDistanceAchieved(awp)) {
 
           FindLatitudeLongitude (latitude,
                                  longitude,
@@ -625,21 +634,16 @@ void CalculateAATTaskSectors(int awp)
                                  dist,
                                  &Task[i].AATTargetLat,
                                  &Task[i].AATTargetLon);
-
-        } else {
-
-          FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
-                                 WayPointList[Task[i].Index].Longitude,
-                                 targetbearing,
-                                 targetrange,
-                                 &Task[i].AATTargetLat,
-                                 &Task[i].AATTargetLon);
-
         }
 
-        if (awp<ActiveWayPoint) {
-          return;
-        }
+      } else {
+
+        FindLatitudeLongitude (WayPointList[Task[i].Index].Latitude,
+                               WayPointList[Task[i].Index].Longitude,
+                               targetbearing,
+                               targetrange,
+                               &Task[i].AATTargetLat,
+                               &Task[i].AATTargetLon);
 
       }
 
@@ -720,9 +724,12 @@ void guiStopLogger(bool noAsk) {
     if(noAsk ||
        (MessageBoxX(hWndMapWindow,gettext(TEXT("Stop Logger")),
 		    gettext(TEXT("Stop Logger")),
-		    MB_YESNO|MB_ICONQUESTION) == IDYES))
-      LoggerActive = false;
-    FullScreen();
+		    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
+      StopLogger();
+      if (!noAsk) {
+        FullScreen();
+      }
+    }
   }
 }
 

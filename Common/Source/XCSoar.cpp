@@ -107,7 +107,8 @@ Appearance_t Appearance = {
   false,
   apIbBox,
   false,
-  true
+  true,
+  false
 };
 #else
 
@@ -143,7 +144,8 @@ Appearance_t Appearance = {
   true,
   apIbBox,
   false,
-  true
+  true,
+  false
 };
 
 #endif
@@ -1229,14 +1231,17 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   GPS_INFO.SwitchState.UserSwitchDown = false;
   GPS_INFO.SwitchState.VarioCircling = false;
 
-#ifdef _SIM_
   SYSTEMTIME pda_time;
   GetSystemTime(&pda_time);
-
   GPS_INFO.Time  = pda_time.wHour*3600+pda_time.wMinute*60+pda_time.wSecond;
   GPS_INFO.Year  = pda_time.wYear;
   GPS_INFO.Month = pda_time.wMonth;
   GPS_INFO.Day	 = pda_time.wDay;
+  GPS_INFO.Hour  = pda_time.wHour;
+  GPS_INFO.Minute = pda_time.wMinute;
+  GPS_INFO.Second = pda_time.wSecond;
+
+#ifdef _SIM_
   #if _SIM_STARTUPSPEED
   GPS_INFO.Speed = _SIM_STARTUPSPEED;
   #endif
@@ -1376,7 +1381,11 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.cbWndExtra                 = dc.cbWndExtra ;
 #endif
   wc.hInstance                  = hInstance;
+#ifdef GNAV
+  wc.hIcon = NULL;
+#else
   wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
+#endif
   wc.hCursor                    = 0;
   wc.hbrBackground              = (HBRUSH) GetStockObject(WHITE_BRUSH);
   wc.lpszMenuName               = 0;
@@ -1626,10 +1635,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
     }
 
+#ifndef GNAV
   SendMessage(hWndMainWindow, WM_SETICON,
 	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOARSWIFT);
   SendMessage(hWndMainWindow, WM_SETICON,
 	      (WPARAM)ICON_SMALL, (LPARAM)IDI_XCSOARSWIFT);
+#endif
 
   hBrushSelected = (HBRUSH)CreateSolidBrush(ColorSelected);
   hBrushUnselected = (HBRUSH)CreateSolidBrush(ColorUnselected);
@@ -1814,7 +1825,7 @@ void Shutdown(void) {
   AirspaceWarnListDeInit();
 
   // stop logger
-  LoggerActive = false;
+  guiStopLogger(true);
 
   // Save settings
   StoreRegistry();
@@ -1851,7 +1862,11 @@ void Shutdown(void) {
   LockTaskData();
   ResumeAbortTask(-1); // turn off abort if it was on.
   TCHAR buffer[MAX_PATH];
+#ifdef GNAV
   LocalPath(buffer, TEXT("persist/Default.tsk"));
+#else
+  LocalPath(buffer, TEXT("Default.tsk"));
+#endif
   SaveTask(buffer);
   UnlockTaskData();
 
@@ -1988,8 +2003,8 @@ void Shutdown(void) {
   _CrtCheckMemory();
 #endif
 #endif
-
 }
+
 
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -2644,6 +2659,14 @@ void ProcessTimer(void)
     extGPSCONNECT = TRUE;
   }
 
+  if (!extGPSCONNECT) {
+    // if gps is not connected, set navwarning to true so
+    // calculations flight timers don't get updated
+    LockFlightData();
+    GPS_INFO.NAVWarning = true;
+    UnlockFlightData();
+  }
+
   GPSCONNECT = FALSE;
   BOOL navwarning = (BOOL)(GPS_INFO.NAVWarning);
 
@@ -2784,15 +2807,19 @@ void SIMProcessTimer(void)
                           &GPS_INFO.Latitude,
                           &GPS_INFO.Longitude);
     GPS_INFO.Time+= 1.0;
+    long tsec = (long)GPS_INFO.Time;
+    GPS_INFO.Hour = tsec/3600;
+    GPS_INFO.Minute = (tsec-GPS_INFO.Hour*3600)/60;
+    GPS_INFO.Second = (tsec-GPS_INFO.Hour*3600-GPS_INFO.Minute*60);
 
     UnlockFlightData();
   }
 
   if (i%2==0) return;
 
-    #ifdef DEBUG
-    NMEAParser::TestRoutine(&GPS_INFO);
-    #endif
+#ifdef DEBUG
+  //    NMEAParser::TestRoutine(&GPS_INFO);
+#endif
 
   NMEAParser::GpsUpdated = TRUE;
   SetEvent(dataTriggerEvent);
@@ -2881,7 +2908,11 @@ void StartupStore(TCHAR *Str)
   static TCHAR szFileName[MAX_PATH];
   static bool initialised = false;
   if (!initialised) {
+#ifdef GNAV
     LocalPath(szFileName, TEXT("persist/xcsoar-startup.log"));
+#else
+    LocalPath(szFileName, TEXT("xcsoar-startup.log"));
+#endif
     hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
                        NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
     initialised = true;
@@ -3065,6 +3096,9 @@ void BlankDisplay(bool doblank) {
   static bool oldblank = false;
 
 #if (WINDOWSPC>0)
+  return;
+#endif
+#ifdef GNAV
   return;
 #endif
 

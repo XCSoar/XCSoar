@@ -541,6 +541,11 @@ CWaveOutThread::CWaveOutThread()
   InitializeCriticalSection(&m_critSecRtp);
 
   m_hEventKill = CreateEvent(NULL, FALSE, FALSE, NULL);
+
+  // save volume setting so it can be restored on exit.
+  waveOutGetVolume(0,&dwVolume_restore);
+  // set maximum volume for XCSoar
+  waveOutSetVolume(0,0xFFFF);
 }
 
 
@@ -618,9 +623,6 @@ BOOL CWaveOutThread::Init(cbWaveOut pcbWaveOut,          // Callback function fo
   m_dwBufferSize = wBufferCount * dwSingleBufferSize;
 
   m_bInitialized = TRUE;
-
-  // save volume setting so it can be restored on exit.
-  waveOutGetVolume(0,&dwVolume_restore);
 
   return TRUE;
 }

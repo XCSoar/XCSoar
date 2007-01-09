@@ -12,6 +12,7 @@
 #include "Parser.h"
 #include "Calculations.h"
 
+#define NORTHTRACK 4
 #define TRACKCIRCLE 3
 #define NORTHCIRCLE 2
 #define NORTHUP 1

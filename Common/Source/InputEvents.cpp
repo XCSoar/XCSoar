@@ -1474,7 +1474,9 @@ void InputEvents::eventSendNMEAPort2(TCHAR *misc) {
 // Other arguments control vario setup:
 //     save: saves the vario configuration to nonvolatile memory on the instrument
 //     zero: Zero's the airspeed indicator's offset
+//
 void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
+  static int naccel=0;
   if (_tcscmp(misc, TEXT("slow")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,3"));
     return;
@@ -1513,6 +1515,30 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("demostf"))==0) {
     VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,1"));
     jmw_demo=1;
+    return;
+  }
+  if (_tcscmp(misc, TEXT("accel")) == 0) {
+    switch(naccel) {
+    case 0:
+      VarioWriteNMEA(TEXT("PDVSC,R,AccelerometerSlopeX"));
+      break;
+    case 1:
+      VarioWriteNMEA(TEXT("PDVSC,R,AccelerometerSlopeY"));
+      break;
+    case 2:
+      VarioWriteNMEA(TEXT("PDVSC,R,AccelerometerOffsetX"));
+      break;
+    case 3:
+      VarioWriteNMEA(TEXT("PDVSC,R,AccelerometerOffsetY"));
+      break;
+    default:
+      naccel=0;
+      break;
+    }
+    naccel++;
+    if (naccel>3) {
+      naccel=0;
+    }
     return;
   }
   if (_tcscmp(misc, TEXT("xdemo")) == 0) {

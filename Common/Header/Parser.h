@@ -57,6 +57,7 @@ typedef struct _SWITCH_INFO
   bool UserSwitchMiddle;
   bool UserSwitchDown;
   bool VarioCircling;
+  bool FlapLanding;
   // bool Stall;
 } SWITCH_INFO;
 
@@ -75,10 +76,13 @@ typedef struct _NMEA_INFO
   //  double WaypointSpeed; IGNORED NOW
   double CrossTrackError;
   double Time;
-  int		Month;
-  int		Day;
-  int		Year;
-  int   NAVWarning;
+  int Hour;
+  int Minute;
+  int Second;
+  int Month;
+  int Day;
+  int Year;
+  int NAVWarning;
   double IndicatedAirspeed;
   double TrueAirspeed;
   double BaroAltitude;

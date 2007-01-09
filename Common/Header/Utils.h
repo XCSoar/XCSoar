@@ -81,6 +81,7 @@ extern TCHAR szRegistryAppGaugeVarioGross[];
 extern TCHAR szRegistryAppCompassAppearance[];
 extern TCHAR szRegistryAppStatusMessageAlignment[];
 extern TCHAR szRegistryAppInfoBoxBorder[];
+extern TCHAR szRegistryAppAveNeedle[];
 extern TCHAR szRegistryAutoAdvance[];
 extern TCHAR szRegistryUTCOffset[];
 extern TCHAR szRegistryBlockSTF[];
@@ -124,6 +125,7 @@ extern TCHAR szRegistryEnableExternalTriggerCruise[];
 extern TCHAR szRegistryOLCRules[];
 extern TCHAR szRegistryHandicap[];
 extern TCHAR szRegistrySnailWidthScale[];
+extern TCHAR szRegistryLatLonUnits[];
 
 extern bool LockSettingsInFlight;
 

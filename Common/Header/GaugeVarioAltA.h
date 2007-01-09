@@ -20,16 +20,17 @@ class GaugeVario {
   static void Destroy();
   static void Render();
   static void RenderBg();
-  static void RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, TCHAR *Label);
-  static void RenderSpeedToFly(int x, int y);
-  static void RenderBallast(void);
-  static void RenderBugs(void);
-  static void RenderNeedle(double Value);
-  static void RenderClimb(void);
   static void Repaint(HDC hDC);
   static void Show(bool doshow);
 
  private:
+  static void RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, TCHAR *Label);
+  static void RenderSpeedToFly(int x, int y);
+  static void RenderBallast(void);
+  static void RenderBugs(void);
+  static void RenderNeedle(double Value, bool average);
+  static void RenderClimb(void);
+
   static int xoffset;
   static int yoffset;
   static int gmax;

@@ -78,7 +78,7 @@ double AdjustAATTargets(double desired);
 void RefreshTaskWaypoint(int i);
 void RefreshTask(void);
 void CalculateTaskSectors(void);
-void CalculateAATTaskSectors(int awp= -1);
+void CalculateAATTaskSectors(void);
 
 void guiStartLogger(bool noAsk = false);
 void guiStopLogger(bool noAsk = false);

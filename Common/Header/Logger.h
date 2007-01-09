@@ -45,6 +45,7 @@ class ReplayLogger {
 };
 
 bool LoggerClearFreeSpace();
+void StopLogger(void);
 
 #endif
 

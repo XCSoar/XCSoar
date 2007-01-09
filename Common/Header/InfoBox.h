@@ -45,7 +45,11 @@ Copyright_License {
 
 
 class InfoBox{
-
+ public:
+    static COLORREF redColor;
+    static COLORREF blueColor;
+    static COLORREF inv_redColor;
+    static COLORREF inv_blueColor;
   private:
 
     int mX;

@@ -77,6 +77,7 @@ int AutoWindMode= 1;
 bool EnableNavBaroAltitude=false;
 bool EnableExternalTriggerCruise=false;
 bool ExternalTriggerCruise= false;
+bool ExternalTriggerCircling= false;
 bool ForceFinalGlide= false;
 bool AutoForceFinalGlide= false;
 
@@ -89,8 +90,11 @@ int    AutoMcMode = 0;
 
 #include "WindZigZag.h"
 
+static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
 static void LoadCalculationsPersist(DERIVED_INFO *Calculated);
-static void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                      bool doadvance, bool doannounce);
 static void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -130,6 +134,16 @@ static void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 
 //////////////////
+
+static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  if (Calculated->TaskDistanceToGo<=0) {
+    return 0;
+  }
+  double hs = Calculated->TaskDistanceCovered/
+    (Calculated->TaskDistanceCovered+Calculated->TaskDistanceToGo);
+  double hx = (Calculated->NavAltitude-Calculated->TaskStartAltitude)*(1.0-hs);
+  return hx;
+}
 
 
 void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
@@ -217,7 +231,7 @@ int LoggerTimeStepCruise=5;
 int LoggerTimeStepCircling=1;
 
 
-void AnnounceWayPointSwitch(DERIVED_INFO *Calculated) {
+void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool doadvance) {
   if (ActiveWayPoint == 0) {
     InputEvents::processGlideComputer(GCE_TASK_START);
     // JMW cleared thermal climb average on task start
@@ -228,7 +242,12 @@ void AnnounceWayPointSwitch(DERIVED_INFO *Calculated) {
     InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
   }
 
-  SelectedWaypoint = ActiveWayPoint;  // set waypoint detail to active task WP
+  if (doadvance) {
+    ActiveWayPoint++;
+  }
+
+  SelectedWaypoint = ActiveWayPoint;
+  // set waypoint detail to active task WP
 
   // start logging data at faster rate
   FastLogNum = 5;
@@ -322,9 +341,8 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
       if (restart && EnableOLC) {
 	Calculated->ValidFinish = false;
-	StartTask(Basic, Calculated);
+	StartTask(Basic, Calculated, false, false);
 	Calculated->ValidStart = true;
-	AnnounceWayPointSwitch(Calculated);
       }
       OLCLastTime += dtOLC;
     }
@@ -673,13 +691,24 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
 }
 
-void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated, bool doadvance,
+               bool doannounce) {
   Calculated->ValidFinish = false;
   Calculated->TaskStartTime = Basic->Time ;
   Calculated->TaskStartSpeed = Basic->Speed;
   Calculated->TaskStartAltitude = Calculated->NavAltitude;
   Calculated->LegStartTime = Basic->Time;
+
+  if (doannounce) {
+    AnnounceWayPointSwitch(Calculated, doadvance);
+  } else {
+    if (doadvance) {
+      ActiveWayPoint++;
+      SelectedWaypoint = ActiveWayPoint;
+    }
+  }
 }
+
 
 void CloseCalculations() {
   if (windanalyser) {
@@ -687,6 +716,7 @@ void CloseCalculations() {
     windanalyser = NULL;
   }
 }
+
 
 
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
@@ -753,9 +783,9 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     // 20060519:sgi added (Basic->Time != 0) dueto alwas return here if no GPS time available
     {
 
-      if (Basic->Time<LastTime) {
+      if ((Basic->Time<LastTime) && (!Basic->NAVWarning)) {
 	// Reset statistics.. (probably due to being in IGC replay mode)
-	ResetFlightStats(Basic, Calculated);
+        ResetFlightStats(Basic, Calculated);
       }
 
       LastTime = Basic->Time;
@@ -1238,27 +1268,37 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   double temp = StartTime;
 
   bool forcecruise = false;
-  if (EnableExternalTriggerCruise && ExternalTriggerCruise) {
-    forcecruise = true;
+  bool forcecircling = false;
+  if (EnableExternalTriggerCruise && !(ReplayLogger::IsEnabled())) {
+    if (ExternalTriggerCruise && ExternalTriggerCircling) {
+      // this should never happen
+      ExternalTriggerCircling = false;
+    }
+    forcecruise = ExternalTriggerCruise;
+    forcecircling = ExternalTriggerCircling;
   }
 
   switch(MODE) {
   case CRUISE:
-    if(Rate >= MinTurnRate) {
+    if((Rate >= MinTurnRate)||(forcecircling)) {
       StartTime = Basic->Time;
       StartLong = Basic->Longitude;
       StartLat  = Basic->Latitude;
       StartAlt  = Calculated->NavAltitude;
       MODE = WAITCLIMB;
     }
-    break;
+    if (forcecircling) {
+      MODE = WAITCLIMB;
+    } else {
+      break;
+    }
   case WAITCLIMB:
     if (forcecruise) {
       MODE = CRUISE;
       break;
     }
-    if(Rate >= MinTurnRate) {
-      if( (Basic->Time  - StartTime) > CruiseClimbSwitch) {
+    if((Rate >= MinTurnRate)||(forcecircling)) {
+      if( ((Basic->Time  - StartTime) > CruiseClimbSwitch)|| forcecircling) {
         Calculated->Circling = TRUE;
         // JMW Transition to climb
         MODE = CLIMB;
@@ -1294,7 +1334,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       windanalyser->slot_newSample();
     }
 
-    if(Rate < MinTurnRate) {
+    if((Rate < MinTurnRate)||(forcecruise)) {
       StartTime = Basic->Time;
       StartLong = Basic->Longitude;
       StartLat  = Basic->Latitude;
@@ -1308,6 +1348,10 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       break;
     }
   case WAITCRUISE:
+    if (forcecircling) {
+      MODE = CLIMB;
+      break;
+    }
     if((Rate < MinTurnRate) || forcecruise) {
       if( ((Basic->Time  - StartTime) > ClimbCruiseSwitch) || forcecruise) {
         Calculated->Circling = FALSE;
@@ -1630,12 +1674,13 @@ int InAATTurnSector(double longitude, double latitude,
 
 
 bool ValidFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-  bool valid = true;
-  if ((FinishMinHeight!=0)&&(Calculated->TerrainValid)) {
-    if (Calculated->AltitudeAGL<FinishMinHeight)
-      valid = false;
+  if ((FinishMinHeight>0)
+      &&(Calculated->TerrainValid)
+      &&(Calculated->AltitudeAGL<FinishMinHeight)) {
+    return false;
+  } else {
+    return true;
   }
-  return valid;
 }
 
 
@@ -1943,9 +1988,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	  if(Task[ActiveWayPoint+1].Index >= 0) {
 	    Calculated->ValidStart = true;
 	    if (ReadyToAdvance(Calculated)) {
-	      ActiveWayPoint++;
-	      StartTask(Basic,Calculated);
-	      AnnounceWayPointSwitch(Calculated);
+	      StartTask(Basic,Calculated, true, true);
 	    }
             if (Calculated->Flying) {
               Calculated->ValidFinish = false;
@@ -1970,7 +2013,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	  AdvanceArmed = false;
 	  Calculated->TaskStartTime = 0;
 	  ActiveWayPoint = 0;
-	  AnnounceWayPointSwitch(Calculated);
+	  AnnounceWayPointSwitch(Calculated, false);
 	  StartSectorEntered = TRUE;
 	}
         if (Calculated->Flying) {
@@ -1988,7 +2031,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           }
 	  if (ReadyToAdvance(Calculated)) {
 	    ActiveWayPoint++;
-	    AnnounceWayPointSwitch(Calculated);
+	    AnnounceWayPointSwitch(Calculated, false);
 	  }
 	  UnlockTaskData();
 	  //	  UnlockFlightData();
@@ -2000,7 +2043,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	  Calculated->IsInSector = true;
 	  if (!Calculated->ValidFinish) {
             Calculated->ValidFinish = true;
-            AnnounceWayPointSwitch(Calculated);
+            AnnounceWayPointSwitch(Calculated, false);
 	  }
 	} else {
 	  //      TaskFinished = false;
@@ -2046,9 +2089,7 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
               Calculated->ValidFinish = false;
             }
             if (ReadyToAdvance(Calculated)) {
-              ActiveWayPoint++;
-              StartTask(Basic, Calculated);
-              AnnounceWayPointSwitch(Calculated);
+              StartTask(Basic, Calculated, true, true);
             }
             StartSectorEntered = FALSE;
             // JMW TODO: make sure this is valid for manual start
@@ -2066,7 +2107,7 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           AdvanceArmed = false;
           Calculated->TaskStartTime = 0;
           ActiveWayPoint = 0;
-          AnnounceWayPointSwitch(Calculated);
+          AnnounceWayPointSwitch(Calculated, false);
           StartSectorEntered = TRUE;
         }
         if (Calculated->Flying) {
@@ -2094,14 +2135,14 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           aatdistance.AddPoint(Basic->Longitude,
                                Basic->Latitude,
                                ActiveWayPoint);
-
           Calculated->IsInSector = true;
           Calculated->LegStartTime = Basic->Time;
+        }
+        if (aatdistance.HasEntered(ActiveWayPoint)) {
 
           if (ReadyToAdvance(Calculated)) {
             AdvanceArmed = false;
-            ActiveWayPoint++;
-            AnnounceWayPointSwitch(Calculated);
+            AnnounceWayPointSwitch(Calculated, true);
           }
           if (Calculated->Flying) {
             Calculated->ValidFinish = false;
@@ -2118,7 +2159,7 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                                ActiveWayPoint);
           if (!Calculated->ValidFinish) {
             Calculated->ValidFinish = true;
-            AnnounceWayPointSwitch(Calculated);
+            AnnounceWayPointSwitch(Calculated, false);
           }
         } else {
           //      TaskFinished = false;
@@ -2322,16 +2363,8 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
     // JB's task speed...
     if ((t1>0)&&(d1>0)) {
       v2 = d1/t1;
-      double hx = Calculated->NavAltitude-Calculated->TaskStartAltitude;
-      double mc = MACCREADY;
-      /* JMW, this is disabled since it penalises fast climbs!
-      if (Calculated->Circling) {
-        mc = max(MACCREADY, Calculated->AverageThermal);
-      } else {
-        mc = MACCREADY;
-      }
-      */
-      double t1mod = t1-hx/max(0.1,mc);
+      double hx = SpeedHeight(Basic, Calculated);
+      double t1mod = t1-hx/max(0.1,MACCREADY);
       // only valid if flown for 5 minutes or more
       if (t1mod>300.0) {
         Calculated->TaskSpeedAchieved = d1/t1mod;
@@ -2799,6 +2832,11 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
+static bool ActiveIsFinalWaypoint() {
+  return (ActiveWayPoint == getFinalWaypoint());
+}
+
+
 void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double tad=0.0;
@@ -2811,7 +2849,7 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   double mcnew = MACCREADY;
 
-  if (Calculated->FinalGlide && (Task[ActiveWayPoint+1].Index== -1)) {
+  if (Calculated->FinalGlide && ActiveIsFinalWaypoint()) {
     isfinalglide = true;
   }
 
@@ -3818,18 +3856,21 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     // stop system from shutting down if moving
     InterfaceTimeoutReset();
   }
-
-  if (Basic->Speed> TAKEOFFSPEEDTHRESHOLD) {
-    ntimeinflight++;
-    ntimeonground=0;
-  } else {
-    if ((Calculated->AltitudeAGL<300)&&(Calculated->TerrainValid)) {
-      ntimeinflight--;
+  if (!Basic->NAVWarning) {
+    if (Basic->Speed> TAKEOFFSPEEDTHRESHOLD) {
+      ntimeinflight++;
+      ntimeonground=0;
+    } else {
+      if ((Calculated->AltitudeAGL<300)&&(Calculated->TerrainValid)) {
+        ntimeinflight--;
+      } else if (!Calculated->TerrainValid) {
+        ntimeinflight--;
+      }
+      ntimeonground++;
     }
-    ntimeonground++;
   }
 
-  ntimeinflight = min(30, max(0,ntimeinflight));
+  ntimeinflight = min(60, max(0,ntimeinflight));
   ntimeonground = min(30, max(0,ntimeonground));
 
   // JMW logic to detect takeoff and landing is as follows:
@@ -4108,8 +4149,13 @@ void DeleteCalculationsPersist(void) {
 
 void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
   if (szCalculationsPersistFileName[0]==0) {
+#ifdef GNAV
     LocalPath(szCalculationsPersistFileName,
               TEXT("persist/xcsoar-persist.log"));
+#else
+    LocalPath(szCalculationsPersistFileName,
+              TEXT("xcsoar-persist.log"));
+#endif
   }
 
   StartupStore(TEXT("LoadCalculationsPersist\r\n"));
@@ -4189,13 +4235,15 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double mce = 0.0;
   double found_mce = 0.0;
 
-  int ifinal = getFinalWaypoint();
+  bool isfinal = ActiveIsFinalWaypoint();
 
   for (mce=0.1; mce<10.0; mce+= 0.1) {
 
     double time_total=0;
     double time_this;
     double bearing;
+
+    double total_distance= 0; // used for testing
 
     w1lat = WayPointList[Task[ActiveWayPoint].Index].Latitude;
     w1lon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
@@ -4223,14 +4271,14 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
                                    Basic->Longitude,
                                    Basic->Latitude);
 
+    total_distance += LegCovered;
+
     if ((StartLine==0) && (ActiveWayPoint==1)) {
       // Correct speed calculations for radius
       // JMW TODO: replace this with more accurate version
       // LegDistance -= StartRadius;
       LegCovered = max(0.1,LegCovered-StartRadius);
     }
-
-    bool isfinal = (ActiveWayPoint==ifinal);
 
     double altreqfinal =
       GlidePolar::MacCreadyAltitude(mce,
@@ -4245,13 +4293,13 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     if (time_this<0) continue;
 
     /*
-    if (isfinal) {
+      if (isfinal) {
       double dha = Calculated->NavAltitude -
-        altreqfinal - SAFETYALTITUDEARRIVAL;
+      altreqfinal - SAFETYALTITUDEARRIVAL;
       if (dha<0) {
-        time_this += -dha/max(0.1, mce);
+      time_this += -dha/max(0.1, mce);
       }
-    }
+      }
     */
 
     time_total = time_this;
@@ -4287,6 +4335,8 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
         LegDistance = max(0.1,LegDistance-StartRadius);
       }
 
+      total_distance += LegDistance;
+
       GlidePolar::MacCreadyAltitude(mce,
                                     LegDistance,
                                     bearing,
@@ -4312,8 +4362,7 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     // note this is similar to what is achieved on the task speed achieved
     // calculator in TaskSpeed()
 
-    double time_climb = (Calculated->NavAltitude
-                         -Calculated->TaskStartAltitude)/mce;
+    double time_climb = (SpeedHeight(Basic, Calculated))/mce;
     time_total += time_climb;
 
     if (time_total<0) continue;

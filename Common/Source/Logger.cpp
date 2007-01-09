@@ -37,6 +37,9 @@ Copyright_License {
 #include "Utils.h"
 #include "device.h"
 #include "InputEvents.h"
+#include "Parser.h"
+
+extern NMEA_INFO GPS_INFO;
 
 /*
 problems with current IGC:
@@ -51,6 +54,8 @@ Pilot Event Marker: PEV
 
 should be on for a while prior to takeoff and off for a while after
 landing, to mark the ground level.
+
+PEVs should also activate fast-fix (for how long?)
 
 add C lines at waypoint events: START, TURN, TURN AREA, FINISH
 
@@ -76,11 +81,18 @@ HFCCLCOMPETITIONCLASS:15M
 */
 
 
-
-
 static TCHAR szLoggerFileName[MAX_PATH];
+static TCHAR szFLoggerFileName[MAX_PATH];
 
 int EW_count = 0;
+
+
+void StopLogger(void) {
+	if (LoggerActive) {
+  LoggerActive = false;
+  MoveFile(szLoggerFileName, szFLoggerFileName);
+	}
+}
 
 
 void LogPoint(double Latitude, double Longitude, double Altitude,
@@ -88,13 +100,14 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
 {
   HANDLE hFile;// = INVALID_HANDLE_VALUE;
   DWORD dwBytesRead;
-
-  SYSTEMTIME st;
   char szBRecord[500];
 
   int DegLat, DegLon;
   double MinLat, MinLon;
   char NoS, EoW;
+
+  if (Altitude<=0) return;
+  if (BaroAltitude<=0) return;
 
   DegLat = (int)Latitude;
   MinLat = Latitude - DegLat;
@@ -107,7 +120,6 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
   MinLat *= 60;
   MinLat *= 1000;
 
-
   DegLon = (int)Longitude ;
   MinLon = Longitude  - DegLon;
   EoW = 'E';
@@ -119,13 +131,11 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
   MinLon *=60;
   MinLon *= 1000;
 
-  GetLocalTime(&st);
-
   hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
 		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
   sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
-          st.wHour, st.wMinute, st.wSecond,
+          GPS_INFO.Hour, GPS_INFO.Minute, GPS_INFO.Second,
           DegLat, MinLat, NoS, DegLon, MinLon, EoW,
           (int)Altitude,(int)BaroAltitude);
 
@@ -140,35 +150,43 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
 
 void StartLogger(TCHAR *strAssetNumber)
 {
-  SYSTEMTIME st;
   HANDLE hFile;
   int i;
-
-  GetLocalTime(&st);
   TCHAR path[MAX_PATH];
+#ifdef GNAV
   LocalPath(path,TEXT("logs"));
+#else
+  LocalPath(path);
+#endif
+
+  wsprintf(szLoggerFileName,
+           TEXT("\\tmp.IGC"));
+  DeleteFile(szLoggerFileName);
 
   for(i=1;i<99;i++)
     {
       // 2003-12-31-XXX-987-01.IGC
       // long filename form of IGC file.
       // XXX represents manufacturer code
-       wsprintf(szLoggerFileName,TEXT("%s\\%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
+       wsprintf(szFLoggerFileName,
+                TEXT("%s\\%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
 		path,
-		st.wYear,
-		st.wMonth,
-		st.wDay,
+		GPS_INFO.Year,
+		GPS_INFO.Month,
+		GPS_INFO.Day,
 		strAssetNumber[0],
 		strAssetNumber[1],
 		strAssetNumber[2],
 		i);
 
-      hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
+      hFile = CreateFile(szFLoggerFileName, GENERIC_WRITE,
 			 FILE_SHARE_WRITE, NULL, CREATE_NEW,
 			 FILE_ATTRIBUTE_NORMAL, 0);
       if(hFile!=INVALID_HANDLE_VALUE )
 	{
+          // file doesn't exist
 	  CloseHandle(hFile);
+          DeleteFile(szFLoggerFileName);
 	  return;
 	}
     }
@@ -204,13 +222,10 @@ void LoggerHeader(void)
 	  strAssetNumber[2]);
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
-  SYSTEMTIME st;
-  GetLocalTime(&st);
-
   sprintf(temp,"HFDTE%02d%02d%02d\r\n",
-	  st.wDay,
-	  st.wMonth,
-	  st.wYear % 100);
+	  GPS_INFO.Day,
+	  GPS_INFO.Month,
+	  GPS_INFO.Year % 100);
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
   GetRegistryString(szRegistryPilotName, PilotName, 100);
@@ -253,29 +268,18 @@ void StartDeclaration(int ntp)
 
   // JMW added task start declaration line
 
-  SYSTEMTIME stUTC, stLocal;
-
-  GetSystemTime(&stUTC);
-  // Note these are in UTC
-  GetLocalTime(&stLocal);
-
   // LGCSTKF013945TAKEOFF DETECTED
 
   // IGC GNSS specification 3.6.1
   sprintf(temp,
-	  "C%02d%02d%02d%02d%02d%02d%02d%02d%02d0000%02d\r\n",
+	  "C%02d%02d%02d%02d%02d%02d0000000000%02d\r\n",
 	  // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
-	  stUTC.wDay,
-	  stUTC.wMonth,
-	  stUTC.wYear % 100,
-	  stUTC.wHour,
-	  stUTC.wMinute,
-	  stUTC.wSecond,
-
-	  // these should be local date
-	  stLocal.wDay,
-	  stLocal.wMonth,
-	  stLocal.wYear % 100,
+	  GPS_INFO.Day,
+	  GPS_INFO.Month,
+	  GPS_INFO.Year % 100,
+	  GPS_INFO.Hour,
+	  GPS_INFO.Minute,
+	  GPS_INFO.Second,
 	  ntp-2);
 
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
@@ -313,8 +317,6 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
 {
   DWORD dwBytesRead;
   HANDLE hFile;
-
-  SYSTEMTIME st;
   char szCRecord[500];
 
   char IDString[MAX_PATH];
@@ -356,8 +358,6 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
   MinLon *=60;
   MinLon *= 1000;
 
-  GetLocalTime(&st);
-
   hFile = CreateFile(szLoggerFileName,
 		     GENERIC_WRITE, FILE_SHARE_WRITE,
 		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
@@ -397,7 +397,6 @@ void LoggerNote(TCHAR *text) {
 
 
 
-
 void DoLogger(TCHAR *strAssetNumber)
 {
   TCHAR TaskMessage[1024];
@@ -416,7 +415,7 @@ void DoLogger(TCHAR *strAssetNumber)
 		     gettext(TEXT("Stop Logger?")),
 		     MB_YESNO|MB_ICONQUESTION) == IDYES)
 	{
-	  LoggerActive = false;
+          StopLogger();
 	}
     }
   else
@@ -673,9 +672,6 @@ bool ReplayLogger::ReadPoint(double *Time,
 }
 
 
-#include "Parser.h"
-
-extern NMEA_INFO GPS_INFO;
 
 TCHAR ReplayLogger::FileName[MAX_PATH];
 bool ReplayLogger::Enabled = false;
@@ -1059,7 +1055,11 @@ bool LoggerClearFreeSpace(void) {
   int numtries = 0;
 
   LocalPath(pathname);
+#ifdef GNAV
   LocalPath(subpathname,TEXT("logs/"));
+#else
+  LocalPath(subpathname);
+#endif
 
   while (found && ((kbfree = FindFreeSpace(pathname))<MINFREESTORAGE)
 	 && (numtries<100)) {

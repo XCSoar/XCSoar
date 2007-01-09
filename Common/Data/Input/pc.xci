@@ -117,7 +117,7 @@ event=StatusMessage Key up and down to move selector in dialogs
 event=StatusMessage Keys 67890 are horizontal buttons
 event=StatusMessage Keys 1 NAV 2 DISPLAY 3 CONFIG 4 INFO
 event=StatusMessage Simulator: Drag mouse to move glider
-event=TaskLoad persist/Default.tsk
+event=TaskLoad Default.tsk
 
 mode=default
 type=gce
@@ -128,7 +128,7 @@ event=StatusMessage Key left and right to modify values in dialogs
 event=StatusMessage Key up and down to move selector in dialogs
 event=StatusMessage Keys 67890 are horizontal buttons
 event=StatusMessage Keys 1 NAV 2 DISPLAY 3 CONFIG 4 INFO
-event=TaskLoad persist/Default.tsk
+event=TaskLoad Default.tsk
 
 mode=default
 type=gce
@@ -835,7 +835,8 @@ location=8
 mode=Vario1
 type=key
 data=0
-label=
+event=AdjustVarioFilter accel
+label=Accel
 location=9
 
 # -------------
