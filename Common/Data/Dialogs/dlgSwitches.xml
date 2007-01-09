@@ -64,6 +64,10 @@
   <DataField name="" DataType="boolean" />
   </WndProperty>
 
+  <WndProperty Name="prpFlapLanding" Caption="Flap landing"      X=2 Y=-1   Width=145 Height=22 CaptionWidth=88 Font=2 Readonly=1>
+  <DataField name="" DataType="boolean" />
+  </WndProperty>
+
   </WndFrame>
 
 </WndForm>    

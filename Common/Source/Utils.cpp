@@ -156,6 +156,7 @@ TCHAR szRegistryFinalGlideTerrain[]= TEXT("FinalGlideTerrain");
 TCHAR szRegistryAutoWind[]= TEXT("AutoWind");
 TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
 TCHAR szRegistryLiftUnitsValue[] = TEXT("Lift");
+TCHAR szRegistryLatLonUnits[] = TEXT("LatLonUnits");
 TCHAR szRegistryPolarID[] = TEXT("Polar"); // pL
 TCHAR szRegistryPort1Index[]= TEXT("PortIndex");
 TCHAR szRegistryPort2Index[]= TEXT("Port2Index");
@@ -234,6 +235,7 @@ TCHAR szRegistryAppInfoBoxColors[] = TEXT("AppInfoBoxColors");
 TCHAR szRegistryAppDefaultMapWidth[] = TEXT("AppDefaultMapWidth");
 TCHAR szRegistryTeamcodeRefWaypoint[] = TEXT("TeamcodeRefWaypoint");
 TCHAR szRegistryAppInfoBoxBorder[] = TEXT("AppInfoBoxBorder");
+TCHAR szRegistryAppAveNeedle[] = TEXT("AppAveNeedle");
 
 TCHAR szRegistryAutoAdvance[] = TEXT("AutoAdvance");
 TCHAR szRegistryUTCOffset[] = TEXT("UTCOffset");
@@ -397,6 +399,10 @@ void ReadRegistrySettings(void)
     GetFromRegistry(szRegistryAirspacePriority[i], &Temp);
     AirspacePriority[i] = Temp;
   }
+
+  Temp = 0;
+  GetFromRegistry(szRegistryLatLonUnits, &Temp);
+  Units::CoordinateFormat = (CoordinateFormats_t)Temp;
 
   GetFromRegistry(szRegistrySpeedUnitsValue,&Speed);
   switch(Speed)
@@ -755,6 +761,10 @@ void ReadRegistrySettings(void)
   Temp = Appearance.InfoBoxColors;
   GetFromRegistry(szRegistryAppInfoBoxColors, &Temp);
   Appearance.InfoBoxColors = (Temp != 0);
+
+  Temp = Appearance.GaugeVarioAveNeedle;
+  GetFromRegistry(szRegistryAppAveNeedle, &Temp);
+  Appearance.GaugeVarioAveNeedle = (Temp != 0);
 
   // StateMessageAlligne : center, topleft
   // DefaultMapWidth: 206?
@@ -3452,7 +3462,11 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
 
 // SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 
+#ifdef GNAV
   LocalPath(defaultProfileFile,TEXT("config/xcsoar-registry.prf"));
+#else
+  LocalPath(defaultProfileFile,TEXT("xcsoar-registry.prf"));
+#endif
   LocalPath(failsafeProfileFile,TEXT("xcsoar-registry.prf"));
   _tcscpy(startProfileFile, defaultProfileFile);
 
@@ -3662,6 +3676,7 @@ WinPilotPolarInternal WinPilotPolars[] =
   {TEXT("Ventus A/B (16.6m)"), 358, 151, 100.17, -0.64, 159.69, -1.47, 239.54, -4.3},
   {TEXT("Ventus B (15m)"), 341, 151, 97.69, -0.68, 156.3, -1.46, 234.45, -3.9},
   {TEXT("Ventus 2C (18m)"), 385, 180, 80.0, -0.5, 120.0, -0.73, 180.0, -2.0},
+  {TEXT("Ventus 2Cx (18m)"), 385, 215, 80.0, -0.5, 120.0, -0.73, 180.0, -2.0},
   {TEXT("Zuni II"), 358, 182, 110, -0.88, 167, -2.21, 203.72, -3.6}
 };
 

@@ -35,7 +35,7 @@ event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Key up and down to 
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Keys 67890 are horizontal buttons"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Keys 1 NAV 2 DISPLAY 3 CONFIG 4 INFO"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Simulator: Drag mouse to move glider"), event_id);
-event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("persist/Default.tsk"), event_id);
+event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("Default.tsk"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_SIMULATOR] = event_id;
 
@@ -46,7 +46,7 @@ event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Key left and right 
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Key up and down to move selector in dialogs"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Keys 67890 are horizontal buttons"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Keys 1 NAV 2 DISPLAY 3 CONFIG 4 INFO"), event_id);
-event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("persist/Default.tsk"), event_id);
+event_id = InputEvents::makeEvent(&eventTaskLoad, TEXT("Default.tsk"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
 
@@ -841,8 +841,9 @@ makeLabel(mode_id,TEXT("Setup\nStall"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventAdjustVarioFilter, TEXT("accel"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Vario1"), true);
-makeLabel(mode_id,TEXT(""),9,event_id);
+makeLabel(mode_id,TEXT("Accel "),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;

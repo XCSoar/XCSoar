@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
-  Copyright (C) 2000 - 2005  
+  Copyright (C) 2000 - 2005
 
   	M Roberts (original release)
 	Robin Birch <robinb@ruffnready.co.uk>
@@ -37,8 +37,11 @@ Copyright_License {
 #include "Utils.h"
 #include "device.h"
 #include "InputEvents.h"
+#include "Parser.h"
 
-/* 
+extern NMEA_INFO GPS_INFO;
+
+/*
 problems with current IGC:
 
 must have unique serial number, make and type, version number
@@ -51,6 +54,8 @@ Pilot Event Marker: PEV
 
 should be on for a while prior to takeoff and off for a while after
 landing, to mark the ground level.
+
+PEVs should also activate fast-fix (for how long?)
 
 add C lines at waypoint events: START, TURN, TURN AREA, FINISH
 
@@ -76,25 +81,33 @@ HFCCLCOMPETITIONCLASS:15M
 */
 
 
-
-
 static TCHAR szLoggerFileName[MAX_PATH];
+static TCHAR szFLoggerFileName[MAX_PATH];
 
 int EW_count = 0;
+
+
+void StopLogger(void) {
+	if (LoggerActive) {
+  LoggerActive = false;
+  MoveFile(szLoggerFileName, szFLoggerFileName);
+	}
+}
 
 
 void LogPoint(double Latitude, double Longitude, double Altitude,
               double BaroAltitude)
 {
-  HANDLE hFile;// = INVALID_HANDLE_VALUE; 
-  DWORD dwBytesRead;   
-	
-  SYSTEMTIME st;
+  HANDLE hFile;// = INVALID_HANDLE_VALUE;
+  DWORD dwBytesRead;
   char szBRecord[500];
 
   int DegLat, DegLon;
   double MinLat, MinLon;
   char NoS, EoW;
+
+  if (Altitude<=0) return;
+  if (BaroAltitude<=0) return;
 
   DegLat = (int)Latitude;
   MinLat = Latitude - DegLat;
@@ -107,7 +120,6 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
   MinLat *= 60;
   MinLat *= 1000;
 
-
   DegLon = (int)Longitude ;
   MinLon = Longitude  - DegLon;
   EoW = 'E';
@@ -119,18 +131,16 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
   MinLon *=60;
   MinLon *= 1000;
 
-  GetLocalTime(&st);
+  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
+		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, 
-		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
-	
-  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n", 
-          st.wHour, st.wMinute, st.wSecond, 
-          DegLat, MinLat, NoS, DegLon, MinLon, EoW, 
+  sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
+          GPS_INFO.Hour, GPS_INFO.Minute, GPS_INFO.Second,
+          DegLat, MinLat, NoS, DegLon, MinLon, EoW,
           (int)Altitude,(int)BaroAltitude);
 
-  SetFilePointer(hFile, 0, NULL, FILE_END); 
-  WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead, 
+  SetFilePointer(hFile, 0, NULL, FILE_END);
+  WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead,
 	    (OVERLAPPED *)NULL);
   FlushFileBuffers(hFile);
 
@@ -140,44 +150,52 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
 
 void StartLogger(TCHAR *strAssetNumber)
 {
-  SYSTEMTIME st;
   HANDLE hFile;
   int i;
-
-  GetLocalTime(&st);
   TCHAR path[MAX_PATH];
+#ifdef GNAV
   LocalPath(path,TEXT("logs"));
+#else
+  LocalPath(path);
+#endif
+
+  wsprintf(szLoggerFileName,
+           TEXT("\\tmp.IGC"));
+  DeleteFile(szLoggerFileName);
 
   for(i=1;i<99;i++)
     {
       // 2003-12-31-XXX-987-01.IGC
       // long filename form of IGC file.
       // XXX represents manufacturer code
-       wsprintf(szLoggerFileName,TEXT("%s\\%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
+       wsprintf(szFLoggerFileName,
+                TEXT("%s\\%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
 		path,
-		st.wYear, 
-		st.wMonth, 
-		st.wDay, 
+		GPS_INFO.Year,
+		GPS_INFO.Month,
+		GPS_INFO.Day,
 		strAssetNumber[0],
 		strAssetNumber[1],
 		strAssetNumber[2],
 		i);
-		
-      hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, 
-			 FILE_SHARE_WRITE, NULL, CREATE_NEW, 
-			 FILE_ATTRIBUTE_NORMAL, 0); 
+
+      hFile = CreateFile(szFLoggerFileName, GENERIC_WRITE,
+			 FILE_SHARE_WRITE, NULL, CREATE_NEW,
+			 FILE_ATTRIBUTE_NORMAL, 0);
       if(hFile!=INVALID_HANDLE_VALUE )
 	{
+          // file doesn't exist
 	  CloseHandle(hFile);
+          DeleteFile(szFLoggerFileName);
 	  return;
 	}
     }
 }
 
 
-extern TCHAR szRegistryPilotName[];        
-extern TCHAR szRegistryAircraftType[];        
-extern TCHAR szRegistryAircraftRego[];        
+extern TCHAR szRegistryPilotName[];
+extern TCHAR szRegistryAircraftType[];
+extern TCHAR szRegistryAircraftRego[];
 
 
 void LoggerHeader(void)
@@ -189,12 +207,12 @@ void LoggerHeader(void)
   TCHAR PilotName[100];
   TCHAR AircraftType[100];
   TCHAR AircraftRego[100];
-  
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, 
-		     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, 
-		     FILE_ATTRIBUTE_NORMAL, 0); 
-  
-  SetFilePointer(hFile, 0, NULL, FILE_END); 
+
+  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
+		     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
+		     FILE_ATTRIBUTE_NORMAL, 0);
+
+  SetFilePointer(hFile, 0, NULL, FILE_END);
 
   // Flight recorder ID number MUST go first..
   sprintf(temp,
@@ -204,13 +222,10 @@ void LoggerHeader(void)
 	  strAssetNumber[2]);
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
-  SYSTEMTIME st;
-  GetLocalTime(&st);
-
-  sprintf(temp,"HFDTE%02d%02d%02d\r\n", 
-	  st.wDay,
-	  st.wMonth, 
-	  st.wYear % 100);
+  sprintf(temp,"HFDTE%02d%02d%02d\r\n",
+	  GPS_INFO.Day,
+	  GPS_INFO.Month,
+	  GPS_INFO.Year % 100);
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
 
   GetRegistryString(szRegistryPilotName, PilotName, 100);
@@ -231,7 +246,7 @@ void LoggerHeader(void)
   WriteFile(hFile, datum, strlen(datum), &dwBytesRead,(OVERLAPPED *)NULL);
 
   FlushFileBuffers(hFile);
-  CloseHandle(hFile);			
+  CloseHandle(hFile);
 
 }
 
@@ -245,37 +260,26 @@ void StartDeclaration(int ntp)
   DWORD dwBytesRead;
   char temp[100];
 
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, 
-                     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, 
-                     FILE_ATTRIBUTE_NORMAL, 0); 
-	
-  SetFilePointer(hFile, 0, NULL, FILE_END); 
+  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
+                     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
+                     FILE_ATTRIBUTE_NORMAL, 0);
+
+  SetFilePointer(hFile, 0, NULL, FILE_END);
 
   // JMW added task start declaration line
-
-  SYSTEMTIME stUTC, stLocal;
-
-  GetSystemTime(&stUTC);
-  // Note these are in UTC
-  GetLocalTime(&stLocal);
 
   // LGCSTKF013945TAKEOFF DETECTED
 
   // IGC GNSS specification 3.6.1
   sprintf(temp,
-	  "C%02d%02d%02d%02d%02d%02d%02d%02d%02d0000%02d\r\n",
+	  "C%02d%02d%02d%02d%02d%02d0000000000%02d\r\n",
 	  // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
-	  stUTC.wDay,
-	  stUTC.wMonth, 
-	  stUTC.wYear % 100, 
-	  stUTC.wHour, 
-	  stUTC.wMinute, 
-	  stUTC.wSecond, 
-
-	  // these should be local date
-	  stLocal.wDay,
-	  stLocal.wMonth, 
-	  stLocal.wYear % 100, 
+	  GPS_INFO.Day,
+	  GPS_INFO.Month,
+	  GPS_INFO.Year % 100,
+	  GPS_INFO.Hour,
+	  GPS_INFO.Minute,
+	  GPS_INFO.Second,
 	  ntp-2);
 
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
@@ -286,7 +290,7 @@ void StartDeclaration(int ntp)
 
   FlushFileBuffers(hFile);
 
-  CloseHandle(hFile);			
+  CloseHandle(hFile);
 }
 
 
@@ -298,28 +302,26 @@ void EndDeclaration(void)
   HANDLE hFile;
   DWORD dwBytesRead=0;
 
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, 
-		     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS, 
-                     FILE_ATTRIBUTE_NORMAL, 0); 
-	
-  SetFilePointer(hFile, 0, NULL, FILE_END); 
+  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
+		     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
+                     FILE_ATTRIBUTE_NORMAL, 0);
+
+  SetFilePointer(hFile, 0, NULL, FILE_END);
   WriteFile(hFile, start, strlen(start), &dwBytesRead,(OVERLAPPED *)NULL);
   FlushFileBuffers(hFile);
 
-  CloseHandle(hFile);			
+  CloseHandle(hFile);
 }
 
 void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
 {
-  DWORD dwBytesRead;   
+  DWORD dwBytesRead;
   HANDLE hFile;
-	
-  SYSTEMTIME st;
   char szCRecord[500];
 
   char IDString[MAX_PATH];
   int i;
-	
+
   int DegLat, DegLon;
   double MinLat, MinLon;
   char NoS, EoW;
@@ -356,20 +358,18 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
   MinLon *=60;
   MinLon *= 1000;
 
-  GetLocalTime(&st);
+  hFile = CreateFile(szLoggerFileName,
+		     GENERIC_WRITE, FILE_SHARE_WRITE,
+		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
-  hFile = CreateFile(szLoggerFileName, 
-		     GENERIC_WRITE, FILE_SHARE_WRITE, 
-		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
-	
-  sprintf(szCRecord,"C%02d%05.0f%c%03d%05.0f%c%s\r\n", 
+  sprintf(szCRecord,"C%02d%05.0f%c%03d%05.0f%c%s\r\n",
 	  DegLat, MinLat, NoS, DegLon, MinLon, EoW, IDString);
 
-  SetFilePointer(hFile, 0, NULL, FILE_END); 
-  WriteFile(hFile, szCRecord, strlen(szCRecord), &dwBytesRead, (OVERLAPPED *)NULL); 
+  SetFilePointer(hFile, 0, NULL, FILE_END);
+  WriteFile(hFile, szCRecord, strlen(szCRecord), &dwBytesRead, (OVERLAPPED *)NULL);
   FlushFileBuffers(hFile);
-	
-  CloseHandle(hFile);			
+
+  CloseHandle(hFile);
 }
 
 
@@ -378,15 +378,15 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
 
 void LoggerNote(TCHAR *text) {
   if (LoggerActive) {
-    HANDLE hFile;// = INVALID_HANDLE_VALUE; 
-    DWORD dwBytesRead;   
+    HANDLE hFile;// = INVALID_HANDLE_VALUE;
+    DWORD dwBytesRead;
 
     char fulltext[500];
-    hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE, 
-		       NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0); 
+    hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
+		       NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
     sprintf(fulltext, "LPLT%S\r\n", text);
-    SetFilePointer(hFile, 0, NULL, FILE_END); 
-    WriteFile(hFile, fulltext, strlen(fulltext), &dwBytesRead, 
+    SetFilePointer(hFile, 0, NULL, FILE_END);
+    WriteFile(hFile, fulltext, strlen(fulltext), &dwBytesRead,
 	      (OVERLAPPED *)NULL);
     FlushFileBuffers(hFile);
     CloseHandle(hFile);
@@ -397,15 +397,14 @@ void LoggerNote(TCHAR *text) {
 
 
 
-
 void DoLogger(TCHAR *strAssetNumber)
 {
   TCHAR TaskMessage[1024];
   int i;
 
-  if (ReplayLogger::IsEnabled()) { 
-    if (LoggerActive) 
-      guiStopLogger(true); 
+  if (ReplayLogger::IsEnabled()) {
+    if (LoggerActive)
+      guiStopLogger(true);
     return;
   }
 
@@ -416,7 +415,7 @@ void DoLogger(TCHAR *strAssetNumber)
 		     gettext(TEXT("Stop Logger?")),
 		     MB_YESNO|MB_ICONQUESTION) == IDYES)
 	{
-	  LoggerActive = false;
+          StopLogger();
 	}
     }
   else
@@ -436,7 +435,7 @@ void DoLogger(TCHAR *strAssetNumber)
 	  _tcscat(TaskMessage,WayPointList[ Task[i].Index ].Name);
 	  _tcscat(TaskMessage,TEXT("\r\n"));
 	}
-		
+
       if(MessageBoxX(hWndMapWindow,
 		     TaskMessage,
 		     gettext(TEXT("Start Logger?")),
@@ -445,11 +444,11 @@ void DoLogger(TCHAR *strAssetNumber)
 
 	  if (LoggerClearFreeSpace()) {
 	    LoggerActive = true;
-	    
+
 	    StartLogger(strAssetNumber);
 	    LoggerHeader();
 	    int ntp = 0;
-	    
+
 	    // first count the number of turnpoints
 	    for(i=0;i<MAXTASKPOINTS;i++)
 	      {
@@ -457,19 +456,19 @@ void DoLogger(TCHAR *strAssetNumber)
 		ntp++;
 	      }
 	    StartDeclaration(ntp);
-	    
+
 	    for(i=0;i<MAXTASKPOINTS;i++)
 	      {
 		if(Task[i].Index == -1) break;
-		AddDeclaration(WayPointList[Task[i].Index].Latitude, 
-			       WayPointList[Task[i].Index].Longitude, 
+		AddDeclaration(WayPointList[Task[i].Index].Latitude,
+			       WayPointList[Task[i].Index].Longitude,
 			       WayPointList[Task[i].Index].Name);
 	      }
 	    EndDeclaration();
 	  } else {
 
-	    MessageBoxX(hWndMapWindow, 
-			gettext(TEXT("Logger inactive, insufficient storage!")), 
+	    MessageBoxX(hWndMapWindow,
+			gettext(TEXT("Logger inactive, insufficient storage!")),
 			gettext(TEXT("Logger Error")), MB_OK| MB_ICONERROR);
 	  }
 	}
@@ -493,39 +492,39 @@ void LoggerDeviceDeclare() {
 
   if (devIsLogger(devA())){
     foundone = true;
-    if(MessageBoxX(hWndMapWindow, 
-		   gettext(TEXT("Declare Task?")), 
-		   devA()->Name, 
+    if(MessageBoxX(hWndMapWindow,
+		   gettext(TEXT("Declare Task?")),
+		   devA()->Name,
 		   MB_YESNO| MB_ICONQUESTION) == IDYES)
       {
-	
+
 	devDeclBegin(devA(), PilotName, AircraftType, AircraftRego);
-	
+
 	for(i=0;i<MAXTASKPOINTS;i++)
 	  {
 	    if(Task[i].Index == -1) break;
 	    devDeclAddWayPoint(devA(), &WayPointList[Task[i].Index]);
 	  }
 	if (devDeclEnd(devA())) {
-	  MessageBoxX(hWndMapWindow, 
-		      gettext(TEXT("Task Declared!")), 
+	  MessageBoxX(hWndMapWindow,
+		      gettext(TEXT("Task Declared!")),
 		      devA()->Name, MB_OK| MB_ICONINFORMATION);
 	  DeclaredToDevice = true;
 	} else
-	  MessageBoxX(hWndMapWindow, 
-		      gettext(TEXT("Error occured,\r\nTask NOT Declared!")), 
+	  MessageBoxX(hWndMapWindow,
+		      gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
 		      devA()->Name, MB_OK| MB_ICONERROR);
-	
+
       }
   }
-  
+
   if (devIsLogger(devB())){
     foundone = true;
-    
-    if(MessageBoxX(hWndMapWindow, 
-		   gettext(TEXT("Declare Task?")), 
+
+    if(MessageBoxX(hWndMapWindow,
+		   gettext(TEXT("Declare Task?")),
 		   devB()->Name, MB_YESNO| MB_ICONQUESTION) == IDYES){
-      
+
       devDeclBegin(devB(), PilotName, AircraftType, AircraftRego);
       for(i=0;i<MAXTASKPOINTS;i++)
 	{
@@ -533,18 +532,18 @@ void LoggerDeviceDeclare() {
 	  devDeclAddWayPoint(devB(), &WayPointList[Task[i].Index]);
 	}
       if (devDeclEnd(devB())) {
-	MessageBoxX(hWndMapWindow, gettext(TEXT("Task Declared!")), 
+	MessageBoxX(hWndMapWindow, gettext(TEXT("Task Declared!")),
 		    devB()->Name, MB_OK| MB_ICONINFORMATION);
 	DeclaredToDevice = true;
       } else
-	MessageBoxX(hWndMapWindow, 
-		    gettext(TEXT("Error occured,\r\nTask NOT Declared!")), 
+	MessageBoxX(hWndMapWindow,
+		    gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
 		    devB()->Name, MB_OK| MB_ICONERROR);
-      
+
     }
   }
   if (!foundone) {
-    MessageBoxX(hWndMapWindow, gettext(TEXT("No logger connected")), 
+    MessageBoxX(hWndMapWindow, gettext(TEXT("No logger connected")),
 		devB()->Name, MB_OK| MB_ICONINFORMATION);
     DeclaredToDevice = true; // testing only
   }
@@ -555,9 +554,9 @@ bool CheckDeclaration(void) {
   if (!DeclaredToDevice) {
     return true;
   } else {
-    if(MessageBoxX(hWndMapWindow, 
-		   gettext(TEXT("OK to invalidate declaration?")), 
-		   gettext(TEXT("Task declared")), 
+    if(MessageBoxX(hWndMapWindow,
+		   gettext(TEXT("OK to invalidate declaration?")),
+		   gettext(TEXT("Task declared")),
 		   MB_YESNO| MB_ICONQUESTION) == IDYES){
       DeclaredToDevice = false;
       return true;
@@ -566,7 +565,7 @@ bool CheckDeclaration(void) {
     }
   }
 }
-		     		     
+
 
 /////////////////////////
 
@@ -587,7 +586,7 @@ bool ReplayLogger::ReadLine(TCHAR *buffer) {
   }
   if (fp==NULL)
     return false;
- 
+
   if (!fgetws(buffer, 200, fp)) {
 	_tcscat(buffer,TEXT("\0"));
     return false;
@@ -605,25 +604,25 @@ bool ReplayLogger::ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
   int iAltitude;
   int Hour=0;
   int Minute=0;
-  int Second=0;  
+  int Second=0;
 
   int lfound=0;
   int found=0;
 
-  if ((lfound = 
-       swscanf(buffer, 
-	       TEXT("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05dd"), 
+  if ((lfound =
+       swscanf(buffer,
+	       TEXT("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05dd"),
 	       &Hour, &Minute, &Second,
 	       &DegLat, &MinLat, &NoS, &DegLon, &MinLon,
 	       &EoW, &iAltitude, &iAltitude
 	       )) != EOF) {
-    
+
     if (lfound==11) {
       *Latitude = DegLat+MinLat/60000.0;
       if (NoS=='S') {
 	*Latitude *= -1;
       }
-      
+
       *Longitude = DegLon+MinLon/60000.0;
       if (EoW=='W') {
 	*Longitude *= -1;
@@ -632,7 +631,7 @@ bool ReplayLogger::ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
       *Time = Hour*3600+Minute*60+Second;
     }
   }
-  
+
   TCHAR event[200];
   TCHAR misc[200];
 
@@ -656,9 +655,9 @@ bool ReplayLogger::ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
 }
 
 
-bool ReplayLogger::ReadPoint(double *Time, 
-			     double *Latitude, 
-			     double *Longitude, 
+bool ReplayLogger::ReadPoint(double *Time,
+			     double *Latitude,
+			     double *Longitude,
 			     double *Altitude)
 {
   TCHAR buffer[200];
@@ -673,12 +672,9 @@ bool ReplayLogger::ReadPoint(double *Time,
 }
 
 
-#include "Parser.h"
-
-extern NMEA_INFO GPS_INFO;
 
 TCHAR ReplayLogger::FileName[MAX_PATH];
-bool ReplayLogger::Enabled = false; 
+bool ReplayLogger::Enabled = false;
 double ReplayLogger::TimeScale = 1.0;
 
 bool ReplayLogger::IsEnabled(void) {
@@ -736,11 +732,11 @@ public:
     if (Ready()) {
       double u= (time-p[1].t)/(p[2].t-p[1].t);
       double s0;
-      DistanceBearing(p[0].lat, p[0].lon, 
+      DistanceBearing(p[0].lat, p[0].lon,
                       p[1].lat, p[1].lon, &s0, NULL);
       s0/= (p[1].t-p[0].t);
       double s1;
-      DistanceBearing(p[1].lat, p[1].lon, 
+      DistanceBearing(p[1].lat, p[1].lon,
                       p[2].lat, p[2].lon, &s1, NULL);
       s1/= (p[2].t-p[1].t);
       u = max(0.0,min(1.0,u));
@@ -758,7 +754,7 @@ public:
     }
     double t=0.98;
     double u= (time-p[1].t)/(p[2].t-p[1].t);
-    
+
     if (u<0.0) {
       *lat = p[1].lat;
       *lon = p[1].lon;
@@ -901,7 +897,7 @@ bool ReplayLogger::UpdateInternal(void) {
       tthis = cli.GetMaxTime();
     }
   }
-  
+
   // quit if finished.
   if (finished) {
     Stop();
@@ -927,13 +923,13 @@ void ReplayLogger::Stop(void) {
 void ReplayLogger::Start(void) {
   if (Enabled) {
     Stop();
-  } 
+  }
   flightstats.Reset();
   if (!UpdateInternal()) {
     // TODO couldn't start, give error dialog
-    MessageBoxX(hWndMapWindow, 
-		gettext(TEXT("Could not open IGC file!")), 
-		gettext(TEXT("Flight replay")), 
+    MessageBoxX(hWndMapWindow,
+		gettext(TEXT("Could not open IGC file!")),
+		gettext(TEXT("Flight replay")),
 		MB_OK| MB_ICONINFORMATION);
   }
 }
@@ -954,7 +950,7 @@ void ReplayLogger::SetFilename(TCHAR *name) {
 }
 
 bool ReplayLogger::Update(void) {
-  if (!Enabled) 
+  if (!Enabled)
     return false;
 
   Enabled = UpdateInternal();
@@ -966,7 +962,7 @@ bool ReplayLogger::Update(void) {
 ///////////////////////
 
 FILETIME LogFileDate(TCHAR* filename) {
-  FILETIME ft; 
+  FILETIME ft;
   ft.dwLowDateTime = 0;
   ft.dwHighDateTime = 0;
 
@@ -975,9 +971,9 @@ FILETIME LogFileDate(TCHAR* filename) {
   unsigned short year, month, day, num;
   int matches = swscanf(filename,
 			TEXT("%hu-%hu-%hu-%7s-%hu.IGC"),
-			&year, 
-			&month, 
-			&day, 
+			&year,
+			&month,
+			&day,
 			asset,
 			&num);
   if (matches==5) {
@@ -989,12 +985,12 @@ FILETIME LogFileDate(TCHAR* filename) {
     st.wSecond = 0;
     st.wMilliseconds = 0;
     SystemTimeToFileTime(&st,&ft);
-  } 
+  }
   return ft;
 }
 
 
-bool LogFileIsOlder(TCHAR *oldestname, TCHAR *thisname) { 
+bool LogFileIsOlder(TCHAR *oldestname, TCHAR *thisname) {
   FILETIME ftold = LogFileDate(oldestname);
   FILETIME ftnew = LogFileDate(thisname);
   return (CompareFileTime(&ftold, &ftnew)>0);
@@ -1010,8 +1006,8 @@ bool DeleteOldIGCFile(TCHAR *pathname) {
   _stprintf(searchpath, TEXT("%s*"),pathname);
 
   hFind = FindFirstFile(searchpath, &FindFileData); // find the first file
-  if(hFind == INVALID_HANDLE_VALUE) { 
-    return false; 
+  if(hFind == INVALID_HANDLE_VALUE) {
+    return false;
   }
   if(!(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
     if (MatchesExtension(FindFileData.cFileName, TEXT(".igc")) ||
@@ -1021,7 +1017,7 @@ bool DeleteOldIGCFile(TCHAR *pathname) {
     } else {
       return false;
     }
-  } 
+  }
   bool bSearch = true;
   while(bSearch) { // until we finds an entry
     if(FindNextFile(hFind,&FindFileData)) {
@@ -1046,7 +1042,7 @@ bool DeleteOldIGCFile(TCHAR *pathname) {
 }
 
 
-#define MINFREESTORAGE 500 
+#define MINFREESTORAGE 500
 // 500 kb must be free for logger to be active this is based on rough
 // estimate that a long flight will detailed logging is about 200k,
 // and we want to leave a little free.
@@ -1059,7 +1055,11 @@ bool LoggerClearFreeSpace(void) {
   int numtries = 0;
 
   LocalPath(pathname);
+#ifdef GNAV
   LocalPath(subpathname,TEXT("logs/"));
+#else
+  LocalPath(subpathname);
+#endif
 
   while (found && ((kbfree = FindFreeSpace(pathname))<MINFREESTORAGE)
 	 && (numtries<100)) {
@@ -1067,7 +1067,7 @@ bool LoggerClearFreeSpace(void) {
       if(MessageBoxX(hWndMapWindow,
 		     gettext(TEXT("Insufficient free storage, delete old IGC files?")),
 		     gettext(TEXT("Logger")),
-		     MB_YESNO|MB_ICONQUESTION) != IDYES) 
+		     MB_YESNO|MB_ICONQUESTION) != IDYES)
 	return false;
 
     // search for IGC files, and delete the oldest one

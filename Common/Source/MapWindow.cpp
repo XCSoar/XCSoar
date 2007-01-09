@@ -895,9 +895,9 @@ double MapWindow::StepMapScale(int Step){
   static int nslow=0;
   if (abs(Step)>=4) {
     nslow++;
-    if (nslow %2 == 0) {
+    //    if (nslow %2 == 0) {
       ScaleCurrent += Step/4;
-    }
+      //    }
   } else {
     ScaleCurrent += Step;
   }
@@ -1475,11 +1475,13 @@ void MapWindow::UpdateMapScale()
     {
       
       if(
-        (DisplayOrientation == NORTHUP) 
-        || 
-        (((DisplayOrientation == NORTHCIRCLE) 
-          || (DisplayOrientation == TRACKCIRCLE)) 
-         && (DerivedDrawInfo.Circling == TRUE) )
+         ((DisplayOrientation == NORTHTRACK)
+          &&(DerivedDrawInfo.Circling ==FALSE))
+         ||(DisplayOrientation == NORTHUP) 
+         || 
+         (((DisplayOrientation == NORTHCIRCLE) 
+           || (DisplayOrientation == TRACKCIRCLE)) 
+          && (DerivedDrawInfo.Circling == TRUE) )
         )
       {
         AutoZoomFactor = 2.5;
@@ -1578,11 +1580,14 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
   //  trackbearing = DerivedDrawInfo.NextTrackBearing;
   
   if( (DisplayOrientation == NORTHUP) 
-    || 
-    (
-    ((DisplayOrientation == NORTHCIRCLE)
-     ||(DisplayOrientation==TRACKCIRCLE))
-    && (DerivedDrawInfo.Circling == TRUE) )
+      ||
+      ((DisplayOrientation == NORTHTRACK)
+       &&(DerivedDrawInfo.Circling == FALSE))
+      || 
+      (
+       ((DisplayOrientation == NORTHCIRCLE)
+        ||(DisplayOrientation==TRACKCIRCLE))
+       && (DerivedDrawInfo.Circling == TRUE) )
     )
   {
     GliderCenter = true;

@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.24 2006/09/06 07:52:02 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.25 2007/01/09 01:53:57 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -89,17 +89,17 @@ WindAnalyser::WindAnalyser(NMEA_INFO *thenmeaInfo, DERIVED_INFO *thederivedInfo)
   nmeaInfo = thenmeaInfo;
   derivedInfo = thederivedInfo;
 
-    //initialisation
-    active=false;
-    circleLeft=false;
-    circleCount=0;
-    startmarker=0;
-    circleDeg = 0;
-    lastHeading = 0;
-    pastHalfway=false;
-
-    minSatCnt = 1; // JMW conf->getWindMinSatCount();
-    curModeOK=false;
+  //initialisation
+  active=false;
+  circleLeft=false;
+  circleCount=0;
+  startmarker=0;
+  circleDeg = 0;
+  lastHeading = 0;
+  pastHalfway=false;
+  
+  minSatCnt = 1; // JMW conf->getWindMinSatCount();
+  curModeOK=false;
 }
 
 WindAnalyser::~WindAnalyser(){

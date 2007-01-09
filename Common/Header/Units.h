@@ -27,7 +27,7 @@
 
 
 typedef enum {
-  cfDDMMSS,
+  cfDDMMSS=0,
   cfDDMMSSss,
   cfDDMMmmm,
   cfDDdddd

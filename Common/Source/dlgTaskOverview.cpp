@@ -215,7 +215,7 @@ static void OnTaskListEnter(WindowControl * Sender,
     if (ItemIndex>=UpLimit) {
       ItemIndex= UpLimit;
     }
-    // create new waypoint
+    // add new waypoint
     if (CheckDeclaration()) {
 
       if (ItemIndex>0) {
@@ -226,7 +226,12 @@ static void OnTaskListEnter(WindowControl * Sender,
 	} else {
 	  Task[ItemIndex].Index = -1;
 	}
-      }    
+      }
+      int res;
+      res = dlgWayPointSelect();
+      if (res != -1){
+        Task[ItemIndex].Index = res;
+      }
       Task[ItemIndex].AATTargetOffsetRadius = 0.0;
       Task[ItemIndex].AATTargetOffsetRadial = 0.0;
       if (ItemIndex>0) {

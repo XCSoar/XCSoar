@@ -197,6 +197,7 @@ extern int EnableThermalLocator;
 //
 
 extern bool ExternalTriggerCruise;
+extern bool ExternalTriggerCircling;
 extern bool EnableExternalTriggerCruise;
 
 // statistics

@@ -49,8 +49,11 @@ extern HFONT  InfoWindowFont;
 extern HFONT  CDIWindowFont;
 
 //static ATOM atmWndClass;
-static COLORREF redColor = RGB(0xff,0x20,0x20);
-static COLORREF blueColor = RGB(0x20,0x20,0xff);
+COLORREF InfoBox::redColor = RGB(0xff,0x00,0x00);
+COLORREF InfoBox::blueColor = RGB(0x00,0x00,0xff);
+COLORREF InfoBox::inv_redColor = RGB(0xff,0x70,0x70);
+COLORREF InfoBox::inv_blueColor = RGB(0x90,0x90,0xff);
+
 static COLORREF fgColor = RGB(0x0,0x0,0x0);
 static COLORREF bkColor = RGB(0xff,0xff,0xff);
 static COLORREF bkColorSel = RGB(150,0x0,0x0);
@@ -366,10 +369,18 @@ void InfoBox::PaintValue(void){
     SetTextColor(mHdcBuf, mColorValue);
     break;
   case 1:
-    SetTextColor(mHdcBuf, redColor);
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_redColor);
+    } else {
+      SetTextColor(mHdcBuf, redColor);
+    }
     break;
   case 2:
-    SetTextColor(mHdcBuf, blueColor);
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_blueColor);
+    } else {
+      SetTextColor(mHdcBuf, blueColor);
+    }
     break;
   }
 

@@ -1035,6 +1035,7 @@ void dlgConfigurationShowModal(void){
     dfe->addEnumText(TEXT("North up"));
     dfe->addEnumText(TEXT("North circling"));
     dfe->addEnumText(TEXT("Target circling"));
+    dfe->addEnumText(TEXT("North/track"));
     dfe->Set(DisplayOrientation);
     wp->RefreshDisplay();
   }
@@ -1163,6 +1164,18 @@ void dlgConfigurationShowModal(void){
     dfe->addEnumText(TEXT("Nautical"));
     dfe->addEnumText(TEXT("Metric"));
     dfe->Set(Speed);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsLatLon"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("DDMMSS"));
+    dfe->addEnumText(TEXT("DDMMSS.ss"));
+    dfe->addEnumText(TEXT("DDMM.mmm"));
+    dfe->addEnumText(TEXT("DD.dddd"));
+    dfe->Set(Units::CoordinateFormat);
     wp->RefreshDisplay();
   }
 
@@ -1359,6 +1372,7 @@ void dlgConfigurationShowModal(void){
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.dat"));
+    dfe->ScanDirectoryTop(TEXT("*.xcw"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
@@ -1373,6 +1387,7 @@ void dlgConfigurationShowModal(void){
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.dat"));
+    dfe->ScanDirectoryTop(TEXT("*.xcw"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
@@ -1547,6 +1562,12 @@ void dlgConfigurationShowModal(void){
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppAveNeedle"));
+  if (wp) {
+    wp->GetDataField()->Set(Appearance.GaugeVarioAveNeedle);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioSpeedToFly"));
   if (wp) {
     wp->GetDataField()->Set(Appearance.GaugeVarioSpeedToFly);
@@ -1580,6 +1601,18 @@ void dlgConfigurationShowModal(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppGaugeVarioBallast"));
   if (wp) {
     wp->GetDataField()->Set(Appearance.GaugeVarioBallast);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBlank"));
+  if (wp) {
+#ifdef GNAV
+    wp->SetVisible(false);
+#endif
+#ifdef WINDOWSPC
+    wp->SetVisible(false);
+#endif
+    wp->GetDataField()->Set(EnableAutoBlank);
     wp->RefreshDisplay();
   }
 
@@ -2126,6 +2159,18 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsLatLon"));
+  if (wp) {
+    if ((int)Units::CoordinateFormat != wp->GetDataField()->GetAsInteger()) {
+      Units::CoordinateFormat = (CoordinateFormats_t)
+        wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryLatLonUnits, Units::CoordinateFormat);
+      Units::NotifyUnitChanged();
+      requirerestart = true;
+      changed = true;
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpUnitsTaskSpeed"));
   if (wp) {
     if ((int)TaskSpeed != wp->GetDataField()->GetAsInteger()) {
@@ -2505,6 +2550,17 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAppAveNeedle"));
+  if (wp) {
+    if ((int)(Appearance.GaugeVarioAveNeedle) != 
+	wp->GetDataField()->GetAsInteger()) {
+      Appearance.GaugeVarioAveNeedle = 
+        (wp->GetDataField()->GetAsInteger() != 0);
+      SetToRegistry(szRegistryAppAveNeedle,Appearance.GaugeVarioAveNeedle);
+      changed = true;
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxColors"));
   if (wp) {
     if ((int)(Appearance.InfoBoxColors) != 
@@ -2569,6 +2625,15 @@ void dlgConfigurationShowModal(void){
     if ((int)Appearance.GaugeVarioBallast != wp->GetDataField()->GetAsInteger()) {
       Appearance.GaugeVarioBallast = (wp->GetDataField()->GetAsInteger() != 0);
       SetToRegistry(szRegistryAppGaugeVarioBallast,Appearance.GaugeVarioBallast);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAutoBlank"));
+  if (wp) {
+    if (EnableAutoBlank != (wp->GetDataField()->GetAsInteger()!=0)) {
+      EnableAutoBlank = (wp->GetDataField()->GetAsInteger() != 0);
+      SetToRegistry(szRegistryAutoBlank, EnableAutoBlank);
       changed = true;
     }
   }

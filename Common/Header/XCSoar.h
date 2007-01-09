@@ -277,6 +277,7 @@ typedef struct{
   InfoBoxBorderAppearance_t InfoBoxBorder;
   bool InverseAircraft;
   bool GaugeVarioGross;
+  bool GaugeVarioAveNeedle;
 } Appearance_t;
 
 extern Appearance_t Appearance;

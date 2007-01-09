@@ -49,7 +49,12 @@ static TCHAR edittext[MAX_TEXTENTRY];
 
 static TCHAR EntryLetters[] = TEXT(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 
-#define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
+#define MAXENTRYLETTERS (int)(sizeof(EntryLetters)/sizeof(TCHAR)-1)
+
+static void OnCloseClicked(WindowControl * Sender){
+  wf->SetModalResult(mrOK);
+}
+
 
 static void OnTextPaint(WindowControl *Sender, HDC hDC) {
   RECT  rcgfx;
@@ -107,10 +112,10 @@ static void OnTextPaint(WindowControl *Sender, HDC hDC) {
 
 
 static void UpdateCursor(void) {
-  while(lettercursor>=MAXENTRYLETTERS)
-    lettercursor -= MAXENTRYLETTERS;
-  while(lettercursor<0)
-    lettercursor += MAXENTRYLETTERS;
+  if (lettercursor>=MAXENTRYLETTERS)
+    lettercursor = 0;
+  if (lettercursor<0)
+    lettercursor = MAXENTRYLETTERS-1;
   edittext[cursor] = EntryLetters[lettercursor];
 
   if (wGrid != NULL)
@@ -153,16 +158,12 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam) {
       MoveCursor();
       return(0);
     case VK_UP:
-      if (lettercursor>0) {
-        lettercursor--;
-        UpdateCursor();
-      }
+      lettercursor--;
+      UpdateCursor();
       return(0);
     case VK_DOWN:
-      if (lettercursor<MAXENTRYLETTERS-1) {
-        lettercursor++;
-        UpdateCursor();
-      }
+      lettercursor++;
+      UpdateCursor();
       return(0);
     case VK_RETURN:
       wf->SetModalResult(mrOK);
@@ -190,15 +191,28 @@ void dlgTextEntryShowModal(TCHAR *text, int width) {
   max_width = min(MAX_TEXTENTRY, width);
 
   char filename[MAX_PATH];
+#ifndef GNAV
+  LocalPathS(filename, TEXT("dlgTextEntry_T.xml"));
+  wf = dlgLoadFromXML(CallBackTable, 
+                      filename, 
+		      hWndMainWindow,
+		      TEXT("IDR_XML_TEXTENTRY_T"));
+#else
   LocalPathS(filename, TEXT("dlgTextEntry.xml"));
   wf = dlgLoadFromXML(CallBackTable, 
-		      
                       filename, 
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TEXTENTRY"));
+#endif
   if (!wf) return;
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(TEXT("frmGrid"));
+
+  WndButton* wb;
+  wb = (WndButton *)(wf->FindByName(TEXT("cmdClose")));
+  if (wb) {
+    wb->SetOnClickNotify(OnCloseClicked);
+  }
 
   cursor = 0;
   edittext[0]= 0;

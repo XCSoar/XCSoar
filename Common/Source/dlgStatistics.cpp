@@ -1311,7 +1311,7 @@ static void Update(void){
       wInfo->SetCaption(sTmp);
     break;
     case 3:
-      _stprintf(sTmp, TEXT("Analysis: %s (%3.0f kg)"), 
+      _stprintf(sTmp, TEXT("Analysis: %s (Mass %3.0f kg)"), 
                 gettext(TEXT("Glide Polar")),
                 GlidePolar::GetAUW());
       wf->SetCaption(sTmp);

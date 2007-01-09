@@ -48,6 +48,14 @@ extern NMEA_INFO GPS_INFO;
 
 static void UpdateValues() {
   WndProperty* wp;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFlapLanding"));
+  if (wp) {
+    if (wp->GetDataField()->GetAsBoolean() !=
+	GPS_INFO.SwitchState.FlapLanding) {
+      wp->GetDataField()->Set(GPS_INFO.SwitchState.FlapLanding);
+      wp->RefreshDisplay();
+    }
+  }
   wp = (WndProperty*)wf->FindByName(TEXT("prpAirbrakeExtended"));
   if (wp) {
     if (wp->GetDataField()->GetAsBoolean() !=

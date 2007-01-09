@@ -45,20 +45,22 @@ public:
 
   void AddPoint(double longitude, double latitude, int taskwaypoint);
   double DistanceCovered(double longitude, double latitude, int taskwaypoint);
-
+  double LegDistanceAchieved(int taskwaypoint);
+  bool HasEntered(int taskwaypoint);
 private:
 
   double DistanceCovered_internal(double longitude, double latitude, 
-                                  int taskwaypoint, bool insector);
+                                  bool insector);
 
   void UpdateSearch(int taskwaypoint);
   void ThinData(int taskwaypoint);
 
   double max_achieved_distance;
 
-  int imax[MAXTASKPOINTS];
   double distancethreshold[MAXTASKPOINTS];
+  double legdistance_achieved[MAXTASKPOINTS];
   // index to max distance sample to task point n
+  int imax[MAXTASKPOINTS][MAXNUM_AATDISTANCE];
 
   double Dmax[MAXTASKPOINTS][MAXNUM_AATDISTANCE];
 

@@ -74,7 +74,7 @@
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
-    <WndProperty Name="prpTrail" Caption="Trail"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2 Help="Determines whether a snail trail is drawn behind the glider">
+    <WndProperty Name="prpTrail" Caption="Trail length"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2 Help="Determines whether and how long a snail trail is drawn behind the glider">
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
     <WndProperty Name="prpTrailDrift" Caption="Trail drift"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2 Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">
@@ -96,6 +96,7 @@ Help="Determines how the screen is rotated with the glider:
 [Track up] The moving map display will be rotated so the glider's track is oriented up.
 [North up when circling] Track-up in cruise and north-up when circling.
 [Target up when circling] Track-up in cruise and the bearing to next waypoint up when circling.
+[North/track] North-up in cruise, glider track-track up in circling
 " >
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
@@ -306,8 +307,8 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   <WndFrame Name="frmFinalGlide" X=70 Y=0 Width=246 Height=222 Font=2>
 
-  <WndProperty Name="prpFinalGlideTerrain" Caption="Glide terrain"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
-  Help="This determines whether the the glide range line is calculated and drawn on the map area.">
+  <WndProperty Name="prpFinalGlideTerrain" Caption="Glide terrain line"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
     
@@ -354,11 +355,17 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise" X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise" X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  Help="When Vega variometer is connected and this option is true, the positive flap setting switches the flight mode between circling and cruise.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpThermalLocator" Caption="Lift center"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2>
+  <WndProperty Name="prpThermalLocator" Caption="Lift center"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2 Help="The estimate of the center of lift is displayed when in circling mode.
+[OFF] Lift center locator disabled.
+[Circle at center]  A thermal marker is displayed at the center of lift.
+[Pan to center] A marker is displayed at the center of lift, 
+ and when circling, the display is panned to this lift center.
+">
       <DataField name="" DataType="enum" Min=0 Max=2 Step=1/>
   </WndProperty>
 
@@ -486,6 +493,11 @@ Help="Units used for task speeds.">
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
     </WndProperty>
 
+    <WndProperty Name="prpUnitsLatLon" Caption="Lat/Lon"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2
+Help="Units used for latitude and longitude.">
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
   <WndProperty Name="prpUTCOffset" Caption="UTC Offset"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
 Help="The UTC offset field allows the UTC local time offset to be specified.  The local time is displayed below in order to make it easier to verify the correct offset has been entered.">
     <DataField name="" DataType="double" DisplayFormat="%.1f" EditFormat="%.1f" Min=-13 Max=13 Step=0.5 OnDataAccess="OnUTCData"/>
@@ -551,6 +563,12 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
 
   <WndProperty Name="prpAnimation" Caption="Animation"  X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
   Help="Determines whether to draw window animations when dialogs open/close.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAutoBlank" Caption="Auto Blank"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
+  Help="This determines whether to blank the display after a long period of inactivity when operating on internal battery power.
+">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
@@ -639,6 +657,11 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
 
   <WndProperty Name="prpAppGaugeVarioGross" Caption="Show gross"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2  
   Help="Whether to show the gross climb rate.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppAveNeedle" Caption="Averager needle"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  Help="If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 

@@ -801,6 +801,7 @@ IDR_XML_WAYPOINTTERRAIN XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointO
 IDR_XML_AIRSPACEWARNING XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceWarning.xml"
 IDR_XML_HELP            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgHelp.xml"
 IDR_XML_TEXTENTRY            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTextEntry.xml"
+IDR_XML_TEXTENTRY_T            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTextEntry_T.xml"
 
 IDR_XML_TEAMCODE            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTeamCode.xml"
 IDR_XML_STARTPOINT            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartPoint.xml"

@@ -15,8 +15,8 @@
   <WndProperty Name="prpStartTime"    Caption="Start time"    X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
   <WndProperty Name="prpTaskDistance"      Caption="Task distance"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
   <WndProperty Name="prpRemainingDistance"      Caption="Remaining distance"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpEstimatedSpeed"      Caption="Estimated speed"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpAverageSpeed"      Caption="Average speed"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpEstimatedSpeed"      Caption="Speed remaining"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpAverageSpeed"      Caption="Speed achieved"      X=2 Y=-1 Width=242 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
 
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=-1 Width=60  Height=28 Font=2 Tag=3 />
 

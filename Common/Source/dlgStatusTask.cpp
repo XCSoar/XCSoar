@@ -131,7 +131,7 @@ void dlgStatusTaskShowModal(void){
   double d1 = 
     (CALCULATED_INFO.TaskDistanceToGo
      +CALCULATED_INFO.TaskDistanceCovered)/dd;
-  // JMW this fails for OLC
+  // JMW TODO: this fails for OLC
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEstimatedSpeed"));
   _stprintf(Temp, TEXT("%.0f %s"), 

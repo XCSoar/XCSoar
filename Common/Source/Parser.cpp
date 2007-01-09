@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.59 2006/12/03 15:01:41 jwharington Exp $
+  $Id: Parser.cpp,v 1.60 2007/01/09 01:53:56 jwharington Exp $
 
 Copyright_License {
 
@@ -51,7 +51,7 @@ static double NorthOrSouth(double in, TCHAR NoS);
 static double LeftOrRight(double in, TCHAR LoR);
 static double AltitudeModify(double Altitude, TCHAR Format);
 static double MixedFormatToDegrees(double mixed);
-static double TimeModify(double FixTime);
+static double TimeModify(double FixTime, NMEA_INFO *gps_info);
 static int NAVWarn(TCHAR c);
 
 static BOOL RMZAvailable = FALSE;
@@ -333,18 +333,21 @@ double MixedFormatToDegrees(double mixed)
   return degrees+mins;
 }
 
-double TimeModify(double FixTime)
+double TimeModify(double FixTime, NMEA_INFO* info)
 {
   double hours, mins,secs;
   
   hours = FixTime / 10000;
-  hours = (double)(int)hours;
-  mins = FixTime / 100;
-  mins = mins - (hours*100);
-  mins = (double)(int)mins;
-  secs = FixTime - (hours*10000) - (mins*100);
+  info->Hour = (int)hours;
 
-  FixTime = secs + (mins*60) + (hours*3600);
+  mins = FixTime / 100;
+  mins = mins - (info->Hour*100);
+  info->Minute = (int)mins;
+
+  secs = FixTime - (info->Hour*10000) - (info->Minute*100);
+  info->Second = (int)secs;
+
+  FixTime = secs + (info->Minute*60) + (info->Hour*3600);
 
   return FixTime;
 }
@@ -373,7 +376,7 @@ BOOL NMEAParser::GLL(TCHAR *String, NMEA_INFO *GPS_INFO)
     
     ExtractParameter(String,ctemp,4);
     ThisTime = StrToDouble(ctemp,NULL);
-    ThisTime = TimeModify(ThisTime);
+    ThisTime = TimeModify(ThisTime, GPS_INFO);
     
     if(ThisTime<=LastTime)
       {
@@ -474,7 +477,7 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 
     ExtractParameter(String,ctemp,0);
     ThisTime = StrToDouble(ctemp, NULL);
-    ThisTime = TimeModify(ThisTime);
+    ThisTime = TimeModify(ThisTime, GPS_INFO);
 
     // say we are updated every time we get this,
     // so infoboxes get refreshed if GPS connected
@@ -619,7 +622,7 @@ BOOL NMEAParser::GGA(TCHAR *String, NMEA_INFO *GPS_INFO)
       
     ExtractParameter(String,ctemp,0);
     ThisTime = StrToDouble(ctemp, NULL);
-    ThisTime = TimeModify(ThisTime);
+    ThisTime = TimeModify(ThisTime, GPS_INFO);
     
     if(ThisTime<=LastTime)
       {
