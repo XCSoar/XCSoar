@@ -1636,10 +1636,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
     }
 
 #ifndef GNAV
+  // TODO: release the handle?
+  HANDLE hTmp = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
   SendMessage(hWndMainWindow, WM_SETICON,
-	      (WPARAM)ICON_BIG, (LPARAM)IDI_XCSOARSWIFT);
+	      (WPARAM)ICON_BIG, (LPARAM)hTmp);
   SendMessage(hWndMainWindow, WM_SETICON,
-	      (WPARAM)ICON_SMALL, (LPARAM)IDI_XCSOARSWIFT);
+	      (WPARAM)ICON_SMALL, (LPARAM)hTmp);
 #endif
 
   hBrushSelected = (HBRUSH)CreateSolidBrush(ColorSelected);
