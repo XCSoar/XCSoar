@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.19 2006/05/22 08:35:03 jwharington Exp $
+// $Id: devCAI302.cpp,v 1.20 2007/01/10 06:41:31 jwharington Exp $
 
 /*
 Copyright_License {
@@ -276,7 +276,7 @@ BOOL cai302Open(PDeviceDescriptor_t d, int Port){
 }
 
 BOOL cai302Close(PDeviceDescriptor_t d){
-
+  (void)d;
   return(TRUE);
 }
 
@@ -533,11 +533,13 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
 
 
 BOOL cai302IsLogger(PDeviceDescriptor_t d){
+	 (void)d;
   return(TRUE);
 }
 
 
 BOOL cai302IsGPSSource(PDeviceDescriptor_t d){
+	(void)d;
   return(TRUE);
 }
 
@@ -586,6 +588,8 @@ $PCAIB,<1>,<2>,<CR><LF>
 */
 
 BOOL cai_PCAIB(TCHAR *String, NMEA_INFO *GPS_INFO){
+  (void)GPS_INFO;
+  (void)String;
   return TRUE;
 }
 
@@ -600,6 +604,8 @@ $PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
 */
 
 BOOL cai_PCAID(TCHAR *String, NMEA_INFO *GPS_INFO){
+	(void)GPS_INFO;
+	(void)String;
   return TRUE;
 }
 
@@ -634,9 +640,12 @@ BOOL cai_w(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
 
   NMEAParser::ExtractParameter(String,ctemp,4);
+
   if (d == pDevPrimaryBaroSource){
+
     GPS_INFO->BaroAltitudeAvailable = TRUE;
     GPS_INFO->BaroAltitude = StrToDouble(ctemp, NULL) - 1000;
+
   }
 
 //  ExtractParameter(String,ctemp,5);

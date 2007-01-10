@@ -448,7 +448,7 @@ void TestZigZag() {
 
 }
 
-
+/*
 static void ZigZagStore(char *Str)
 {
   FILE *stream;
@@ -460,7 +460,7 @@ static void ZigZagStore(char *Str)
 
   fclose(stream);
 }
-
+*/
 
 int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
 		      double *zzwindspeed, double *zzwindbearing) {
@@ -536,7 +536,7 @@ int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
        ) {
     // data is ok to make an estimate
 
-    DWORD tzero = ::GetTickCount();
+//    DWORD tzero = ::GetTickCount();
 
     if (myzigzag.Estimate(&V_wind_estimate, 
 			  &theta_wind_estimate, 
@@ -545,8 +545,8 @@ int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
 	theta_wind_estimate+= 2.0*M_PI;
       }
       theta_wind_estimate /= DEGTORAD;
-      DWORD tone = ::GetTickCount();
-      int dt = tone-tzero;
+//      DWORD tone = ::GetTickCount();
+//      int dt = tone-tzero;
       
       *zzwindspeed = V_wind_estimate;
       *zzwindbearing = theta_wind_estimate;

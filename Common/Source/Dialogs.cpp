@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.111 2006/08/27 17:09:43 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.112 2007/01/10 06:41:30 jwharington Exp $
 
 Copyright_License {
 
@@ -82,7 +82,7 @@ LRESULT CALLBACK Progress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   PAINTSTRUCT ps;            // structure for paint info
   HDC hDC;
   RECT rc;
-
+  (void)lParam;
   switch (message)
     {
     case WM_INITDIALOG:

@@ -147,8 +147,8 @@ int TerrainCacheSearch(const void *key, const void *elem2 ){
 }
 
 short RasterTerrain::LookupTerrainCache(const long &SeekPos) {
-  int ifound= -1;
-  unsigned int recencymin = 0;
+//  int ifound= -1;
+//  unsigned int recencymin = 0;
   _TERRAIN_CACHE* tcp, *tcpmin, *tcplim;
 
   if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
@@ -290,11 +290,11 @@ short RasterTerrain::GetTerrainHeight(const double &Lattitude,
     if (iy<ix) {
       // lower triangle 
       h2 = TerrainMem[SeekPos+1]; // (x+1,y)
-      return h1+((ix*(h2-h1)+iy*(h3-h2))>>8);
+      return (short)(h1+((ix*(h2-h1)+iy*(h3-h2))>>8));
     } else {
       // upper triangle
       h4 = TerrainMem[SeekPos+TerrainInfo.Columns]; // (x,y+1)
-      return h1+((ix*(h3-h4)+iy*(h4-h1))>>8);
+      return (short)(h1+((ix*(h3-h4)+iy*(h4-h1))>>8));
     }
 
   } else {

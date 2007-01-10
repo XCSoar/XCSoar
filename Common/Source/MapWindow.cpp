@@ -996,7 +996,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   int width = (int) LOWORD(lParam);
   int height = (int) HIWORD(lParam);
   
-  static DWORD dwDownTime=-1, dwUpTime=-1;
+  static DWORD dwDownTime= 0, dwUpTime= 0;
 
   switch (uMsg)
   {
@@ -1107,7 +1107,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     int minwidth;
     minwidth = max(IBLSCALE(2),IBLSCALE(SnailWidthScale)/16);
     for (i=0; i<NUMSNAILCOLORS; i++) {
-      ColorRampLookup(i*2-NUMSNAILCOLORS, 
+      ColorRampLookup((short)(i*2-NUMSNAILCOLORS), 
                       Red, Green, Blue,
                       snail_colors, NUMSNAILRAMP);      
       if (i<NUMSNAILCOLORS/2) {
@@ -1331,12 +1331,12 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     X = LOWORD(lParam); Y = HIWORD(lParam);                     
     if(InfoWindowActive)
     {
-      dwDownTime= -1;
+      dwDownTime= 0;
       DefocusInfoBox();
       SetFocus(hWnd);
       break;
     }
-    if (dwDownTime==-1) 
+    if (dwDownTime== 0) 
       break;
 
     dwUpTime = GetTickCount(); dwDownTime = dwUpTime - dwDownTime;
@@ -1367,14 +1367,14 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     if(dwDownTime < 1000)
     {
       if (Event_NearestWaypointDetails(Xstart, Ystart, 500*MapScale, false)) {
-        dwDownTime= -1;
+        dwDownTime= 0;
         break;
       }
     }
     else
     {
       if (Event_InteriorAirspaceDetails(Xstart, Ystart)) {
-        dwDownTime= -1;
+        dwDownTime= 0;
         break;
       }
     }
@@ -1415,20 +1415,20 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
         }
       #endif
 
-        dwDownTime=-1;
+        dwDownTime= 0;
 
     if (!DialogActive) { // JMW prevent keys being trapped if dialog is active
       if (InputEvents::processKey(wParam)) {
         // TODO - change to debugging DoStatusMessage(TEXT("Event in default"));
       }
       // XXX Should we only do this if it IS processed above ?
-      dwDownTime=-1;
+      dwDownTime= 0;
       return TRUE; // don't go to default handler
     } else {
       // TODO - debugging DoStatusMessage(TEXT("Event in dialog"));
       if (InputEvents::processKey(wParam)) {
       }
-      dwDownTime=-1;
+      dwDownTime= 0;
       return TRUE; // don't go to default handler
     }
     // break; unreachable!
@@ -1747,12 +1747,19 @@ void MapWindow::RenderMapWindow(  RECT rc)
     DrawAirSpace(hdcDrawWindowBg, rc);
 
     if(TrailActive) {
-      if (!EnableTerrain || !InfoBoxLayout::landscape) {
+      bool trailshadow = false;
+
+#ifndef GNAV
+      if (EnableTerrain && InfoBoxLayout::landscape) {
+        //        trailshadow = true;
+      }
+#endif
+
+      if (!trailshadow) {
         // TODO: For some reason, the shadow drawing of the 
         // trail doesn't work in portrait mode.  No idea why.
         DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
       } else {
-
         // clear background bitmap
         SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
         Rectangle(hDCTemp, rc.left, rc.top, rc.right, rc.bottom);
@@ -1768,7 +1775,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
         DrawTrail(hDCTemp, Orig_Aircraft, rc);
         
         // make mask
-        BitBlt(hDCMask, rc.left, rc.top, rc.right, rc.bottom,
+        BitBlt(hDCMask, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
                hDCTemp, rc.left, rc.top, SRCCOPY);
 
         BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
@@ -4336,7 +4343,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
         } else {
           cv /= vmax;
         }
-        P1->Colour = min(NUMSNAILCOLORS-1,
+        P1->Colour = min((short)(NUMSNAILCOLORS-1),
                          (short)((cv+1.0)/2.0*NUMSNAILCOLORS));
       }
       SelectObject(hdc,hSnailPens[max(0,min(NUMSNAILCOLORS-1,P1->Colour))]);
@@ -4497,7 +4504,8 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
   if (iAirspaceMode[circ.Type]%2 == 1) 
     if(CheckAirspaceAltitude(circ.Base.Altitude, 
                              circ.Top.Altitude)) {
-      if (msRectOverlap(&circ.bounds, &screenbounds_latlon)) {
+      if (msRectOverlap(&circ.bounds, &screenbounds_latlon) 
+          || msRectContained(&screenbounds_latlon, &circ.bounds)) {
         circ.Visible = true;
         LatLon2Screen(circ.Longitude, 
                       circ.Latitude, 
@@ -4513,7 +4521,8 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
   if (iAirspaceMode[area.Type]%2 == 1) 
     if(CheckAirspaceAltitude(area.Base.Altitude, 
                              area.Top.Altitude)) {
-      if (msRectOverlap(&area.bounds, &screenbounds_latlon)) {
+      if (msRectOverlap(&area.bounds, &screenbounds_latlon) 
+          || msRectContained(&screenbounds_latlon, &area.bounds)) {
         AIRSPACE_POINT *ap= AirspacePoint+area.FirstPoint;
         POINT* sp= AirspaceScreenPoint+area.FirstPoint;
         while (ap < AirspacePoint+area.FirstPoint+area.NumPoints) {
@@ -5250,7 +5259,9 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
     for (AIRSPACE_CIRCLE* circ = AirspaceCircle;
          circ < AirspaceCircle+NumberOfAirspaceCircles; circ++) {
       circ->FarVisible = 
-        (msRectOverlap(&circ->bounds, bounds_active) == MS_TRUE);
+        (msRectOverlap(&circ->bounds, bounds_active) == MS_TRUE) ||
+        (msRectContained(bounds_active, &circ->bounds) == MS_TRUE) ||
+        (msRectContained(&circ->bounds, bounds_active) == MS_TRUE);
     }
   }
 
@@ -5258,7 +5269,9 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
     for(AIRSPACE_AREA *area = AirspaceArea;
         area < AirspaceArea+NumberOfAirspaceAreas; area++) {
       area->FarVisible = 
-        (msRectOverlap(&area->bounds, bounds_active) == MS_TRUE);
+        (msRectOverlap(&area->bounds, bounds_active) == MS_TRUE) ||
+        (msRectContained(bounds_active, &area->bounds) == MS_TRUE) ||
+        (msRectContained(&area->bounds, bounds_active) == MS_TRUE);
     }
   }
 

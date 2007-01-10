@@ -540,8 +540,8 @@ void CalculateAATTaskSectors()
       Task[i].AATTargetOffsetRadius = 
         min(1.0, max(Task[i].AATTargetOffsetRadius,-1.0));
       
-      double limitradial = min(1.0,
-                               max(Task[i].AATTargetOffsetRadial,0.0));
+//      double limitradial = min(1.0,
+//                               max(Task[i].AATTargetOffsetRadial,0.0));
       
       double targetbearing;
       double targetrange;

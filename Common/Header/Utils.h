@@ -306,4 +306,12 @@ void CreateDirectoryIfAbsent(TCHAR *filename);
 void InterfaceTimeoutReset(void);
 bool InterfaceTimeoutCheck(void);
 
+bool FileExistsW(TCHAR *FileName);
+bool FileExistsA(char *FileName);
+#ifdef _UNICODE
+#define FileExists FileExistsW
+#else
+#define FileExists FileExistsA
+#endif
+
 #endif

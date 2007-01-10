@@ -138,7 +138,7 @@ int OLCOptimizer::initdmval() {
       dist = (int)(d_fak*acos(sli*sinlat[j] 
 			      + cli*coslat[j]*cos(lri-lonrad[j])
 			      )+0.5);  /* auf meter runden */
-      dmval[sindex(i,j)]= dist/DISTANCEUNITS;
+      dmval[sindex(i,j)]= (unsigned short)(dist/DISTANCEUNITS);
       maxdist = max(dist,maxdist);
       /* ggf. weiteste Distanz merken */
     }
@@ -156,7 +156,7 @@ int OLCOptimizer::initisplit() {
 
   for(i=0;i<pnts-1;i++) { 
 
-    isplit[sindex(i,i)]= i;
+    isplit[sindex(i,i)]= (unsigned short)i;
 
     for(j=i+1; j<pnts;j++) { 
 
@@ -170,7 +170,7 @@ int OLCOptimizer::initisplit() {
 	  ibest = k;
 	}
       }
-      isplit[sindex(i,j)]= ibest;
+      isplit[sindex(i,j)]= (unsigned short)ibest;
     }
   }
   return 0;
@@ -196,7 +196,7 @@ int OLCOptimizer::initistartsprint() {
 	altmin = alt;
       }
     }
-    istartsprint[i]= max(1,ibest);
+    istartsprint[i]= (unsigned short)max(1,ibest);
   }
   return 0;
 }
@@ -228,7 +228,7 @@ int OLCOptimizer::initibestend() {
 	  }
 	}
       }
-      ibestendclassic[sindex(i,j)]= ibestclassic;
+      ibestendclassic[sindex(i,j)]= (unsigned short)ibestclassic;
     }
   }
   return 0;
@@ -271,7 +271,7 @@ void OLCOptimizer::thin_data() {
     int j;
     i = nistart+1;
     j = i;
-    int pnts_in_new;
+    int pnts_in_new=0;
     int altlowmerge=100000;
     while (j< data.pnts_in) {
       if (data.timepnts[j]!= -1) {
@@ -584,7 +584,7 @@ int OLCOptimizer::scan_triangle() {
   int dh, d;
 
   int bestdist = 0;
-  int i2best, i3best, i4best, i5best;
+  int i2best=0, i3best=0, i4best=0, i5best=0;
 
   //  i1 is ignored
 
@@ -668,11 +668,11 @@ int OLCOptimizer::scan_triangle() {
 
 int OLCOptimizer::scan_sprint_finished() {
   int i1,i2,i3,i4,i5, d, bestdist;
-  int i1best, i2best, i3best, i4best, i5best;
+  int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0;
 
   // O(N^2)
 
-  bool taskfinished=false;
+//  bool taskfinished=false;
   bestdist = 0;
 
   // detect task end
@@ -730,7 +730,7 @@ int OLCOptimizer::scan_sprint() {
 
 int OLCOptimizer::scan_sprint_inprogress() {
   int i1,i2,i3,i4,i5, d, bestdist;
-  int i1best, i2best, i3best, i4best, i5best;
+  int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0;
 
   bestdist = 0;
 
@@ -858,7 +858,7 @@ int OLCOptimizer::scan_sprint_inprogress() {
 
 int OLCOptimizer::scan_classic() {
   int i1,i2,i3,i4,i5,i6,i7, d, bestdist, dh;
-  int i1best, i2best, i3best, i4best, i5best, i6best, i7best;
+  int i1best=0, i2best=0, i3best=0, i4best=0, i5best=0, i6best=0, i7best=0;
 
   bestdist = 0;
   bool finished = false;

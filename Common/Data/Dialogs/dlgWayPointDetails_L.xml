@@ -16,8 +16,8 @@
   <WndFrame Name="frmInfos" X=0 Y=0 Width=240 Height=220 Font=2>
     
     <WndProperty Name="prpWpComment" Caption="Comment"       X=2 Y=2  Width=230 Height=40 CaptionWidth=100 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpLatitude"  Caption="Latitude"      X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-    <WndProperty Name="prpLongitude" Caption="Longitude"     X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpLatitude"  Caption="Latitude"      X=2 Y=-1 Width=230 Height=22 CaptionWidth=100 Font=2 ReadOnly=1 />
+    <WndProperty Name="prpLongitude" Caption="Longitude"     X=2 Y=-1 Width=230 Height=22 CaptionWidth=100 Font=2 ReadOnly=1 />
     <WndProperty Name="prpAltitude"  Caption="Elevation"     X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
     <WndProperty Name="prpSunset"    Caption="Sunset"        X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
     <WndProperty Name="prpDistance"  Caption="Distance"      X=2 Y=-1 Width=230 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />

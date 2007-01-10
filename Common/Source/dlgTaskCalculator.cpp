@@ -48,10 +48,12 @@ static WndForm *wf=NULL;
 static double emc= 0.0;
 
 static void OnCancelClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrCancle);
 }
 
 static void OnOKClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 

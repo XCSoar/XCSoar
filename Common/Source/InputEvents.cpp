@@ -287,7 +287,7 @@ void InputEvents::readFile() {
 	    }
 	    InputEvents::makeLabel(mode_id, new_label, d_location, event_id);
 	  } 
-			  
+
 	  // Make key (Keyboard input)
 	  if (_tcscmp(d_type, TEXT("key")) == 0)	{	// key - Hardware key or keyboard
 	    int key = findKey(d_data);				// Get the int key (eg: APP1 vs 'a')
@@ -395,15 +395,18 @@ void InputEvents::readFile() {
 	  
 	    pt2Event event = findEvent(d_event);
 	    if (event) {
-	      event_id = makeEvent(event, StringMallocParse(d_misc), event_id);
+	      event_id = makeEvent(event, 
+                                   StringMallocParse(d_misc), event_id);
 #ifdef _INPUTDEBUG_
 	    } else  if (input_errors_count < MAX_INPUT_ERRORS) {
-	      _stprintf(input_errors[input_errors_count++], TEXT("Invalid event type: %s at %i"), d_event, line);
+	      _stprintf(input_errors[input_errors_count++], 
+                        TEXT("Invalid event type: %s at %i"), d_event, line);
 #endif
 	    }
 #ifdef _INPUTDEBUG_
 	  } else  if (input_errors_count < MAX_INPUT_ERRORS) {
-	    _stprintf(input_errors[input_errors_count++], TEXT("Invalid event type at %i"), line);
+	    _stprintf(input_errors[input_errors_count++], 
+                      TEXT("Invalid event type at %i"), line);
 #endif
 	  }
 	}
@@ -882,6 +885,7 @@ void InputEvents::processGo(int eventid) {
 
 // TODO Keep marker text for log file etc.
 void InputEvents::eventMarkLocation(TCHAR *misc) {
+	(void)misc; 
   LockFlightData();
   MarkLocation(GPS_INFO.Longitude, GPS_INFO.Latitude);
   UnlockFlightData();
@@ -889,7 +893,7 @@ void InputEvents::eventMarkLocation(TCHAR *misc) {
 
 
 void InputEvents::eventSounds(TCHAR *misc) {
-  bool OldEnableSoundVario = EnableSoundVario;
+ // bool OldEnableSoundVario = EnableSoundVario;
   
   if (_tcscmp(misc, TEXT("toggle")) == 0)
     EnableSoundVario = !EnableSoundVario;
@@ -1105,6 +1109,7 @@ void InputEvents::eventTerrainTopology(TCHAR *misc) {
 
 // Do clear warnings IF NONE Toggle Terrain/Topology
 void InputEvents::eventClearWarningsOrTerrainTopology(TCHAR *misc) {
+	(void)misc;
   if (ClearAirspaceWarnings(true,false)) {
     // airspace was active, enter was used to acknowledge
     return;
@@ -1134,12 +1139,14 @@ void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
 // ClearStatusMessages
 // Do Clear Event Warnings
 void InputEvents::eventClearStatusMessages(TCHAR *misc) {
+	(void)misc;
   ClearStatusMessages();
   // TODO: allow selection of specific messages (here we are acknowledging all)
   Message::Acknowledge(0);
 }
 
 void InputEvents::eventFLARMRadar(TCHAR *misc) {
+	(void)misc;
   //  if (_tcscmp(misc, TEXT("on")) == 0) {
 
   GaugeFLARM::Suppress = !GaugeFLARM::Suppress;
@@ -1257,6 +1264,7 @@ void InputEvents::eventMode(TCHAR *misc) {
 // MainMenu
 // Don't think we need this.
 void InputEvents::eventMainMenu(TCHAR *misc) {
+	(void)misc;
   // todo: popup main menu
 }
 
@@ -1264,6 +1272,7 @@ void InputEvents::eventMainMenu(TCHAR *misc) {
 // Displays the checklist dialog
 //  See the checklist dialog section of the reference manual for more info.
 void InputEvents::eventChecklist(TCHAR *misc) {
+	(void)misc;
   dlgChecklistShowModal();
 }
 
@@ -1271,6 +1280,7 @@ void InputEvents::eventChecklist(TCHAR *misc) {
 //  See the task calculator dialog section of the reference manual
 // for more info.
 void InputEvents::eventCalculator(TCHAR *misc) {
+	(void)misc;
   dlgTaskCalculatorShowModal();
 }
 
@@ -1298,6 +1308,7 @@ void InputEvents::eventStatus(TCHAR *misc) {
 //  See the analysis dialog section of the reference manual
 // for more info.
 void InputEvents::eventAnalysis(TCHAR *misc) {
+	(void)misc;
   PopupAnalysis();
 }
 
@@ -1779,7 +1790,8 @@ void InputEvents::eventLogger(TCHAR *misc) {
 // Repeats the last status message.  If pressed repeatedly, will
 // repeat previous status messages
 void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
-  // new interface
+  (void)misc;
+	// new interface
   // TODO: display only by type specified in misc field
   Message::Repeat(0);
 }
@@ -1798,7 +1810,8 @@ bool dlgAirspaceWarningIsEmpty(void);
 extern bool RequestAirspaceWarningForce;
 
 void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
-  double nearestdistance=0;
+  (void)misc;
+	double nearestdistance=0;
   double nearestbearing=0;
   int foundcircle = -1;
   int foundarea = -1;
@@ -1897,6 +1910,7 @@ void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
 // The null event does nothing.  This can be used to override
 // default functionality
 void InputEvents::eventNull(TCHAR *misc) {
+	(void)misc;
   // do nothing
 }
 
@@ -2124,11 +2138,13 @@ void InputEvents::eventDeclutterLabels(TCHAR *misc) {
 
 
 void InputEvents::eventBrightness(TCHAR *misc) {
+	(void)misc;
   dlgBrightnessShowModal();
 }
 
 
 void InputEvents::eventExit(TCHAR *misc) {
+	(void)misc;
   SendMessage(hWndMainWindow, WM_CLOSE,
 	      NULL, NULL);
 }

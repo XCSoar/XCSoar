@@ -63,7 +63,7 @@ static double lengthtotal = 0.0;
 static bool fai_ok = false;
 
 static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
-
+  (void)Sender;
   int n = UpLimit - LowLimit;
   TCHAR sTmp[120];
   LockTaskData();
@@ -209,7 +209,7 @@ static void UpdateAdvanced(void) {
 
 static void OnTaskListEnter(WindowControl * Sender, 
 		     WndListFrame::ListInfo_t *ListInfo) {
-
+  (void)Sender;
   ItemIndex = ListInfo->ItemIndex;
   if ((ItemIndex>= UpLimit) || (UpLimit==0)) {
     if (ItemIndex>=UpLimit) {
@@ -256,6 +256,7 @@ static void OnTaskListEnter(WindowControl * Sender,
 
 
 static void OnTaskListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+	(void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = UpLimit-LowLimit+1;
   } else {
@@ -265,11 +266,13 @@ static void OnTaskListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *Lis
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   ItemIndex = -1; // to stop FormDown bringing up task details
   wf->SetModalResult(mrOK);
 }
 
 static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+	(void)ListInfo; (void)Sender;
   if (MessageBoxX(hWndMapWindow,TEXT("Clear the task?"),
                   TEXT("Clear task"),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
@@ -282,12 +285,16 @@ static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *Lis
 
 static void OnCalcClicked(WindowControl * Sender, 
 			  WndListFrame::ListInfo_t *ListInfo){
+	(void)Sender;
+	(void)ListInfo;
   dlgTaskCalculatorShowModal();
   OverviewRefreshTask();
 }
 
 
 static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+	(void)Sender;
+	(void)ListInfo;
   RefreshTask();
 
   LoggerDeviceDeclare();
@@ -315,6 +322,7 @@ static void GetTaskFileName(TCHAR *filename) {
 
 
 static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+	(void)ListInfo; (void)Sender;
   TCHAR filename[100];
   GetTaskFileName(filename);
   SaveTask(filename);
@@ -323,6 +331,7 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
 
 
 static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+	(void)ListInfo; (void)Sender;
   TCHAR filename[100];
   GetTaskFileName(filename);
   LoadNewTask(filename);
@@ -330,6 +339,7 @@ static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
 }
 
 static void OnAdvancedClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+  (void)Sender; (void)ListInfo;
   showAdvanced = !showAdvanced;
   UpdateAdvanced();
 }

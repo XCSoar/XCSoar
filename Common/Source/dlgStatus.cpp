@@ -45,11 +45,15 @@ extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static int OnFormLButtonUp(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   static int nignore = 0;
+  (void)lParam;
+  (void)wParam;
+  (void)Sender;
 #ifndef GNAV
   if (nignore) {
     nignore = 0;

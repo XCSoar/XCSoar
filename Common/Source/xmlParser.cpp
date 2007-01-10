@@ -856,13 +856,21 @@ int XMLNode::ParseXMLElement(void *pa)
                                 d->pChild=(XMLNode*)realloc(d->pChild,d->nChild*sizeof(XMLNode));
                                 if (d->nAttribute > 0){
                                   d->pAttribute=(XMLAttribute*)realloc(d->pAttribute,d->nAttribute*sizeof(XMLAttribute));
+
                                 }
+
                                 if (d->nText > 0) {
+
                                   d->pText=(LPCTSTR*)realloc(d->pText,d->nText*sizeof(LPTSTR));
+
                                 }
+
                                 if (d->nClear > 0) {
+
                                   d->pClear=(XMLClear *)realloc(d->pClear,d->nClear*sizeof(XMLClear));
+
                                 }
+
                                 return FALSE;
                             }
                             else
@@ -1848,7 +1856,8 @@ XMLClear     XMLNode::getClear     (int i) { if (!d) return emptyXMLClear;     i
 XMLAttribute XMLNode::getAttribute (int i) { if (!d) return emptyXMLAttribute; if (i>=d->nAttribute) return emptyXMLAttribute; return d->pAttribute[i]; }
 LPCTSTR      XMLNode::getText      (int i) { if (!d) return NULL;              if (i>=d->nText     ) return NULL;              return d->pText[i];      }
 XMLNode      XMLNode::getChildNode (int i) { if (!d) return emptyXMLNode;      if (i>=d->nChild    ) return emptyXMLNode;      return d->pChild[i];     }
-char         XMLNode::isDeclaration(     ) { if (!d) return 0;                 return d->isDeclaration; }
+char         XMLNode::isDeclaration(     ) { if (!d) return (char)0;                 return d->isDeclaration; }
 char         XMLNode::isEmpty      (     ) { return (d==NULL); }
 int          XMLNode::nElement     (     ) { if (!d) return 0; return d->nChild+d->nText+d->nClear+d->nAttribute; }
+
 

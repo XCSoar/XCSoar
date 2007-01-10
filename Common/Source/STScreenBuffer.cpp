@@ -342,45 +342,45 @@ void CSTScreenBuffer::Smooth()
       i0 = m_nCorrectedWidth*iy+ix;
       i = i0;
 
-      r = m_pBuffer[i0].m_R*ic;
-      g = m_pBuffer[i0].m_G*ic;
-      b = m_pBuffer[i0].m_B*ic;
+      r = (short)(m_pBuffer[i0].m_R*ic);
+      g = (short)(m_pBuffer[i0].m_G*ic);
+      b = (short)(m_pBuffer[i0].m_B*ic);
 
       if (ix<m_nCorrectedWidth-1) {
 	i0 = i+1;
-	r += m_pBuffer[i0].m_R;
-	g += m_pBuffer[i0].m_G;
-	b += m_pBuffer[i0].m_B;
+	r += (short)(m_pBuffer[i0].m_R);
+	g += (short)(m_pBuffer[i0].m_G);
+	b += (short)(m_pBuffer[i0].m_B);
 	ic++;
       }
 
       if (ix>1) {
  	i0 = i-1;
-	r += m_pBuffer[i0].m_R;
-	g += m_pBuffer[i0].m_G;
-	b += m_pBuffer[i0].m_B;
+	r += (short)(m_pBuffer[i0].m_R);
+	g += (short)(m_pBuffer[i0].m_G);
+	b += (short)(m_pBuffer[i0].m_B);
 	ic++;
       }
 
       if (iy<m_nHeight-1) {
  	i0 = i+m_nCorrectedWidth;
-	r += m_pBuffer[i0].m_R;
-	g += m_pBuffer[i0].m_G;
-	b += m_pBuffer[i0].m_B;
+	r += (short)(m_pBuffer[i0].m_R);
+	g += (short)(m_pBuffer[i0].m_G);
+	b += (short)(m_pBuffer[i0].m_B);
 	ic++;
       }
 
       if (iy>1) {
  	i0 = i-m_nCorrectedWidth;
-	r += m_pBuffer[i0].m_R;
-	g += m_pBuffer[i0].m_G;
-	b += m_pBuffer[i0].m_B;
+	r += (short)(m_pBuffer[i0].m_R);
+	g += (short)(m_pBuffer[i0].m_G);
+	b += (short)(m_pBuffer[i0].m_B);
 	ic++;
       }
 
-      m_pBufferTmp[i].m_R = r/ic;
-      m_pBufferTmp[i].m_G = g/ic;
-      m_pBufferTmp[i].m_B = b/ic;
+      m_pBufferTmp[i].m_R = (unsigned char)(r/ic);
+      m_pBufferTmp[i].m_G = (unsigned char)(g/ic);
+      m_pBufferTmp[i].m_B = (unsigned char)(b/ic);
 
     }
   }
@@ -432,8 +432,8 @@ void CSTScreenBuffer::Smooth2()
   if (!initialised) {
     for (iiy= 0; iiy<KSIZE; iiy++) {
       for (iix= 0; iix<KSIZE; iix++) {
-	ix = iix-KOFFS;
-	iy = iiy-KOFFS;
+	ix = (short)(iix-KOFFS);
+	iy = (short)(iiy-KOFFS);
 	kdelta[i] = m_nCorrectedWidth*iy+ix;
 	i++;
       }
@@ -456,8 +456,8 @@ void CSTScreenBuffer::Smooth2()
       for (iiy= -KOFFS; iiy<=KOFFS; ++iiy) {
 	for (iix= -KOFFS; iix<=KOFFS; ++iix) {
 
-	  short dx = iix+ix;
-	  short dy = iiy+iy;
+	  short dx = (short)(iix+ix);
+	  short dy = (short)(iiy+iy);
 	  if ((dx>0)&&(dx< m_nCorrectedWidth)&&
 	      (dy>0)&&(dy< m_nHeight)) {
 
@@ -465,9 +465,9 @@ void CSTScreenBuffer::Smooth2()
 
 	    if (ik) {
 	      col = mpb_in+kdelta[i];
-	      r += ik*col->m_R;
-	      g += ik*col->m_G;
-	      b += ik*col->m_B;
+	      r += (unsigned short)(ik*col->m_R);
+	      g += (unsigned short)(ik*col->m_G);
+	      b += (unsigned short)(ik*col->m_B);
 	      ic += ik;
 	    }
 	  }
@@ -475,9 +475,9 @@ void CSTScreenBuffer::Smooth2()
 	}
       }
 
-      mpb_out->m_R = r/ic;
-      mpb_out->m_G = g/ic;
-      mpb_out->m_B = b/ic;
+      mpb_out->m_R = (unsigned char)(r/ic);
+      mpb_out->m_G = (unsigned char)(g/ic);
+      mpb_out->m_B = (unsigned char)(b/ic);
       mpb_out++;
       mpb_in++;
     }
@@ -577,9 +577,9 @@ void CSTScreenBuffer::HorizontalBlur(int boxw) {
 	  } else {
 	    mul -= (boxw-m_nCorrectedWidth+x+1);
 	  }
-	  dst->m_R=(tot_r/mul);
-	  dst->m_G=(tot_g/mul);
-	  dst->m_B=(tot_b/mul);
+	  dst->m_R=(unsigned char)(tot_r/mul);
+	  dst->m_G=(unsigned char)(tot_g/mul);
+	  dst->m_B=(unsigned char)(tot_b/mul);
 
 	  src++;
 	  dst++;
@@ -633,9 +633,9 @@ void CSTScreenBuffer::VerticalBlur(int boxh) {
 	  } else {
 	    mul -= (boxh-m_nHeight+y+1);
 	  }
-	  dst[i].m_R=(tot_r)/mul;
-	  dst[i].m_G=(tot_g)/mul;
-	  dst[i].m_B=(tot_b)/mul;
+	  dst[i].m_R=(unsigned char)(tot_r/mul);
+	  dst[i].m_G=(unsigned char)(tot_g/mul);
+	  dst[i].m_B=(unsigned char)(tot_b/mul);
 	}
     }	
 

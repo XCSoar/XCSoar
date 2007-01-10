@@ -294,7 +294,7 @@ bool VegaVoiceMessage::TimeReady(double time) {
 
 
 void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
-
+  (void)time;
 
   /*
 
@@ -468,7 +468,7 @@ TCHAR VegaVoiceMessage::last_messageText[80];
 
 
 static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace){
-
+  (void)AirSpace;
   static bool PlaySimpleWarning = false;
 
 

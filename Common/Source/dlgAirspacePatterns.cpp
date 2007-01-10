@@ -58,7 +58,7 @@ static void UpdateList(void){
 static int DrawListIndex=0;
 
 static void OnAirspacePatternsPaintListItem(WindowControl * Sender, HDC hDC){
-
+  (void)Sender;
   if ((DrawListIndex < NUMAIRSPACEBRUSHES) &&(DrawListIndex>=0)) {
     int i = DrawListIndex;
     SelectObject(hDC, GetStockObject(WHITE_BRUSH));
@@ -79,7 +79,7 @@ static void OnAirspacePatternsPaintListItem(WindowControl * Sender, HDC hDC){
 
 static void OnAirspacePatternsListEnter(WindowControl * Sender, 
 				WndListFrame::ListInfo_t *ListInfo) {
-
+  (void)Sender;
   ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
   if (ItemIndex>=NUMAIRSPACEBRUSHES) {
     ItemIndex = NUMAIRSPACEBRUSHES-1;
@@ -92,6 +92,7 @@ static void OnAirspacePatternsListEnter(WindowControl * Sender,
 
 static void OnAirspacePatternsListInfo(WindowControl * Sender, 
 			       WndListFrame::ListInfo_t *ListInfo){
+  (void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = NUMAIRSPACEBRUSHES;
   } else {
@@ -101,6 +102,7 @@ static void OnAirspacePatternsListInfo(WindowControl * Sender,
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+  (void)Sender;
   ItemIndex = -1;
   wf->SetModalResult(mrOK);
 }

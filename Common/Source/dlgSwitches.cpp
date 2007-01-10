@@ -155,11 +155,13 @@ static void UpdateValues() {
 }
 
 static int OnTimerNotify(WindowControl * Sender) {
+	(void)Sender;
   UpdateValues();
   return 0;
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 

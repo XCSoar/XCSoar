@@ -56,6 +56,7 @@ static void UpdateList(void){
 static int DrawListIndex=0;
 
 static void OnStartPointPaintListItem(WindowControl * Sender, HDC hDC){
+	(void)Sender;
 
   TCHAR label[MAX_PATH];
 
@@ -94,7 +95,7 @@ static bool changed = false;
 
 static void OnStartPointListEnter(WindowControl * Sender, 
 				WndListFrame::ListInfo_t *ListInfo) {
-
+  (void)Sender;
   ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
   if (ItemIndex>=MAXSTARTPOINTS) {
     ItemIndex = MAXSTARTPOINTS-1;
@@ -115,6 +116,7 @@ static void OnStartPointListEnter(WindowControl * Sender,
 
 static void OnStartPointListInfo(WindowControl * Sender, 
 			       WndListFrame::ListInfo_t *ListInfo){
+	(void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = MAXSTARTPOINTS;
   } else {
@@ -124,10 +126,12 @@ static void OnStartPointListInfo(WindowControl * Sender,
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static void OnClearClicked(WindowControl * Sender){
+	(void)Sender;
   LockTaskData();
   for (int i=0; i<MAXSTARTPOINTS; i++) {
     StartPoints[i].Index = -1;

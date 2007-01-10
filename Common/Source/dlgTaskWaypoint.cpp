@@ -290,6 +290,7 @@ static void ReadValues(void) {
 
 
 static void OnSelectClicked(WindowControl * Sender){
+	(void)Sender;
   int res;
   res = dlgWayPointSelect();
   if (res != -1){
@@ -304,15 +305,18 @@ static void OnSelectClicked(WindowControl * Sender){
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static void OnStartPointClicked(WindowControl * Sender){
+	(void)Sender;
   dlgStartPointShowModal();
 }
 
 
 static void OnMoveAfterClicked(WindowControl * Sender){
+	(void)Sender;
   LockTaskData();
   SwapWaypoint(twItemIndex);
   GetWaypointValues();
@@ -321,6 +325,7 @@ static void OnMoveAfterClicked(WindowControl * Sender){
 }
 
 static void OnMoveBeforeClicked(WindowControl * Sender){
+	(void)Sender;
   LockTaskData();
   SwapWaypoint(twItemIndex-1);
   GetWaypointValues();
@@ -329,11 +334,13 @@ static void OnMoveBeforeClicked(WindowControl * Sender){
 }
 
 static void OnDetailsClicked(WindowControl * Sender){
+	(void)Sender;
   SelectedWaypoint = Task[twItemIndex].Index;
   PopupWaypointDetails();
 }
 
 static void OnRemoveClicked(WindowControl * Sender) {
+	(void)Sender;
   LockTaskData();
   RemoveTaskPoint(twItemIndex);
   GetWaypointValues();

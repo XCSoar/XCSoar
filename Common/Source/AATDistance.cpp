@@ -365,6 +365,7 @@ JMW
 double AATDistance::DistanceCovered(double longitude,
                                     double latitude,
                                     int taskwaypoint) {
+	(void)taskwaypoint; // unused
   return DistanceCovered_internal(longitude, latitude, false);
 }
 
@@ -438,7 +439,7 @@ void AATDistance::ThinData(int taskwaypoint) {
     int j;
     i = 0; j = i;
 
-    int pnts_in_new;
+    int pnts_in_new=0;
     while (j< num_points[taskwaypoint]) {
       if (!do_delete[j]) {
 	lat_points[taskwaypoint][i] = lat_points[taskwaypoint][j];
@@ -448,7 +449,9 @@ void AATDistance::ThinData(int taskwaypoint) {
       }
       j++;
     }
-    num_points[taskwaypoint] = pnts_in_new;
+	if (pnts_in_new) {
+	    num_points[taskwaypoint] = pnts_in_new;
+	}
   }
   if (num_points[taskwaypoint]>=MAXNUM_AATDISTANCE) {
     // error!

@@ -65,6 +65,7 @@ static void OnSplashPaint(WindowControl * Sender, HDC hDC){
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 

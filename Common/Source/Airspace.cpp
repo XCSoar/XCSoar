@@ -1236,7 +1236,7 @@ bool InsideAirspaceCircle(const double &longitude,
 int FindAirspaceCircle(double Longitude,double Latitude, bool visibleonly)
 {
   unsigned i;
-  int NearestIndex = 0;
+ // int NearestIndex = 0;
 
   if(NumberOfAirspaceCircles == 0)
     {
@@ -1467,7 +1467,7 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
 			      double *height=NULL)
 {
   unsigned int i;
-  int NearestIndex = 0;
+//  int NearestIndex = 0;
   double Dist;
   int ifound = -1;
 
@@ -1623,7 +1623,7 @@ double ScreenCrossTrackError(double lon1, double lat1,
     int proj = (v12x*v13x+v12y*v13y)/mag12;
     
     // distance between 3 and tangent to v12
-    int dist = abs(isqrt4(v13x*v13x+v13y*v13y-proj*proj));
+//    int dist = abs(isqrt4(v13x*v13x+v13y*v13y-proj*proj));
     
     // fractional distance
     double f = min(1.0,max(0,proj*1.0/mag12));

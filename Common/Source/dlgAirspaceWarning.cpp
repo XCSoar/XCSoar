@@ -86,22 +86,27 @@ static void DoAck(int Ack){
 }
 
 static void OnAckClicked(WindowControl * Sender){
-  DoAck(3);
+  (void)Sender;
+ DoAck(3);
 }
 
 static void OnAck1Clicked(WindowControl * Sender){
-  DoAck(-1);
+  (void)Sender;
+	DoAck(-1);
 }
 
 static void OnAck2Clicked(WindowControl * Sender){
-  DoAck(4);
+   (void)Sender;
+	DoAck(4);
 }
 
 static void OnEnableClicked(WindowControl * Sender){
+	(void)Sender;
   DoAck(0);
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetVisible(false);
   MapWindow::RequestFastRefresh();
 
@@ -113,11 +118,13 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 static int OnTimer(WindowControl * Sender){
-  return(0);
+  (void)Sender;
+	return(0);
 }
 
 static int OnKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-  switch(wParam){
+  (void)lParam;
+	switch(wParam){
     case VK_RETURN:
       if (wAirspaceListEntry->GetFocused()){
         SelectedID = FocusedID;
@@ -153,7 +160,10 @@ static int OnKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   
 }
 
+
 static void OnDistroy(WindowControl * Sender){
+  (void)Sender;
+  // TODO: This currently isn't called!
 
   AirspaceWarnListRemoveNotifier(AirspaceWarningNotify);
   DeleteObject(hBrushInsideBk);
@@ -402,7 +412,8 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
 }
 
 static void OnAirspaceListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  if (ListInfo->DrawIndex == -1){
+    (void)Sender;
+	if (ListInfo->DrawIndex == -1){
     if (FocusedIdx < 0) {
       FocusedIdx = 0;
     }
@@ -495,7 +506,7 @@ extern bool RequestAirspaceWarningDialog;
 
 // WARNING: this is NOT called from the windows thread!
 void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace) {
-
+  (void)AirSpace;
   if ((Action == asaItemAdded) || (Action == asaItemRemoved) || (Action == asaWarnLevelIncreased)) {
     actShow = true;
   }
@@ -647,7 +658,6 @@ int dlgAirspaceWarningDeInit(void){
   AirspaceWarnListRemoveNotifier(AirspaceWarningNotify);
 
   delete wf;
-
   wf = NULL;
 
   return(0);

@@ -58,7 +58,7 @@ static int globalFileNum = 0;
 
 TCHAR *strtok_r(TCHAR *s, TCHAR *delim, TCHAR **lasts);
 
-static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
+//static void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 static int ParseWayPointString(TCHAR *TempString,WAYPOINT *Temp);
 static double CalculateAngle(TCHAR *temp);
 static int CheckFlags(TCHAR *temp);
@@ -409,7 +409,7 @@ int ParseWayPointString(TCHAR *String,WAYPOINT *Temp)
   return TRUE;
 }
 
-  
+  /*
 void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber)
 {
   int index = 0;
@@ -446,6 +446,7 @@ void ExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber)
     } else return;
   }
 }
+*/
 
 static double CalculateAngle(TCHAR *temp)
 {
@@ -579,6 +580,7 @@ void ReadWayPoints(void)
         globalFileNum = 0;
         ReadWayPointFile(fp, szFile1);
         fclose(fp);
+        fp = 0;
         // read OK, so set the registry to the actual file name
         #ifndef HAVEEXCEPTIONS
         ContractLocalPath(szFile1);
@@ -596,7 +598,7 @@ void ReadWayPoints(void)
 #endif
 
   // read additional waypoint file
-  int NumberOfWayPointsAfterFirstFile = NumberOfWayPoints;
+//  int NumberOfWayPointsAfterFirstFile = NumberOfWayPoints;
 
 #ifdef HAVEEXCEPTIONS
   __try{
@@ -607,16 +609,18 @@ void ReadWayPoints(void)
 
     //SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));  
 
-    if (_tcslen(szFile2)>0)      
+    if (_tcslen(szFile2)>0){
       fp = _tfopen(szFile2, TEXT("rt"));
-    if(fp != NULL)
-      {
+      if(fp != NULL){
         globalFileNum = 1;
         ReadWayPointFile(fp, szFile2);
         fclose(fp);
+        fp = NULL;
         // read OK, so set the registry to the actual file name
         // SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);  
       }
+    }
+
 #ifdef HAVEEXCEPTIONS
   }__except(EXCEPTION_EXECUTE_HANDLER){
 
@@ -929,18 +933,21 @@ void WaypointWriteFiles(void) {
     globalFileNum = 0;
     WriteWayPointFile(fp);
     fclose(fp);
+    fp = NULL;
   }
 
   GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
   ExpandLocalPath(szFile2);
 
-  if (_tcslen(szFile2)>0)      
+  if (_tcslen(szFile2)>0){
     fp = _tfopen(szFile2, TEXT("wt"));
-                        
-  if(fp != NULL) {
-    globalFileNum = 0;
-    WriteWayPointFile(fp);
-    fclose(fp);
+
+    if(fp != NULL) {
+      globalFileNum = 0;
+      WriteWayPointFile(fp);
+      fclose(fp);
+      fp = NULL;
+    }
   }
 
   UnlockTaskData();

@@ -60,9 +60,9 @@ static void UpdateList(void){
 static int DrawListIndex=0;
 
 static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
-
+  
   TCHAR label[40];
-
+  (void)Sender;
   if (DrawListIndex < AIRSPACECLASSCOUNT){
     int i = DrawListIndex;
     switch (i) {
@@ -176,7 +176,7 @@ static bool changed = false;
 
 static void OnAirspaceListEnter(WindowControl * Sender, 
 				WndListFrame::ListInfo_t *ListInfo) {
-
+  (void)Sender;
   ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
   if (ItemIndex>=AIRSPACECLASSCOUNT) {
     ItemIndex = AIRSPACECLASSCOUNT-1;
@@ -209,6 +209,7 @@ static void OnAirspaceListEnter(WindowControl * Sender,
 
 static void OnAirspaceListInfo(WindowControl * Sender, 
 			       WndListFrame::ListInfo_t *ListInfo){
+  (void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = AIRSPACECLASSCOUNT;
   } else {
@@ -218,7 +219,8 @@ static void OnAirspaceListInfo(WindowControl * Sender,
 }
 
 static void OnCloseClicked(WindowControl * Sender){
-  wf->SetModalResult(mrOK);
+    (void)Sender;
+	wf->SetModalResult(mrOK);
 }
 
 

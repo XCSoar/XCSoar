@@ -202,6 +202,7 @@ static void NextPage(int Step){
 
 
 static void OnVarioClicked(WindowControl * Sender){
+	(void)Sender;
   changed = dlgConfigurationVarioShowModal();
 
   // this is a hack to get the dialog to retain focus because
@@ -213,6 +214,7 @@ static void OnVarioClicked(WindowControl * Sender){
 
 
 static void OnAircraftRegoClicked(WindowControl *Sender) {
+	(void)Sender;
   TCHAR Temp[100];
   if (buttonAircraftRego) {
     GetRegistryString(szRegistryAircraftRego,Temp,100);
@@ -225,6 +227,7 @@ static void OnAircraftRegoClicked(WindowControl *Sender) {
 
 
 static void OnAircraftTypeClicked(WindowControl *Sender) {
+	(void)Sender;
   TCHAR Temp[100];
   if (buttonAircraftType) {
     GetRegistryString(szRegistryAircraftType,Temp,100);
@@ -237,6 +240,7 @@ static void OnAircraftTypeClicked(WindowControl *Sender) {
 
 
 static void OnPilotNameClicked(WindowControl *Sender) {
+	(void)Sender;
   TCHAR Temp[100];
   if (buttonPilotName) {
     GetRegistryString(szRegistryPilotName,Temp,100);
@@ -249,26 +253,33 @@ static void OnPilotNameClicked(WindowControl *Sender) {
 
 
 static void OnAirspaceColoursClicked(WindowControl * Sender){
+	(void)Sender;
   dlgAirspaceShowModal(true);
 }
 
 static void OnAirspaceModeClicked(WindowControl * Sender){
+	(void)Sender;
   dlgAirspaceShowModal(false);
 }
 
 static void OnNextClicked(WindowControl * Sender){
+	(void)Sender;
   NextPage(+1);
 }
 
 static void OnPrevClicked(WindowControl * Sender){
+	(void)Sender;
   NextPage(-1);
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+	(void)lParam;
+	(void)Sender;
   switch(wParam & 0xffff){
     case '6':
       SetFocus(((WndButton *)wf->FindByName(TEXT("cmdPrev")))->GetHandle());
@@ -534,6 +545,7 @@ static void OnInfoBoxHelp(WindowControl * Sender){
 
 
 static void OnWaypointNewClicked(WindowControl * Sender){
+	(void)Sender;
   // TODO: Create new waypoint,
   // then edit it.
   int i;
@@ -567,6 +579,7 @@ static void OnWaypointNewClicked(WindowControl * Sender){
 
 
 static void OnWaypointEditClicked(WindowControl * Sender){
+	(void)Sender;
   int res;
   res = dlgWayPointSelect();
   if (res != -1){
@@ -577,6 +590,7 @@ static void OnWaypointEditClicked(WindowControl * Sender){
 
 
 static void OnWaypointSaveClicked(WindowControl * Sender){
+	(void)Sender;
   WaypointWriteFiles();
   waypointneedsave = false;
   WAYPOINTFILECHANGED= true;
@@ -585,6 +599,7 @@ static void OnWaypointSaveClicked(WindowControl * Sender){
 
 
 static void OnWaypointDeleteClicked(WindowControl * Sender){
+	(void)Sender;
   int res;
   res = dlgWayPointSelect();
   if (res != -1){
@@ -813,7 +828,7 @@ void dlgConfigurationShowModal(void){
 
   TCHAR *COMMPort[] = {TEXT("COM1"),TEXT("COM2"),TEXT("COM3"),TEXT("COM4"),TEXT("COM5"),TEXT("COM6"),TEXT("COM7"),TEXT("COM8"),TEXT("COM9"),TEXT("COM10")};
   TCHAR *tSpeed[] = {TEXT("1200"),TEXT("2400"),TEXT("4800"),TEXT("9600"),TEXT("19200"),TEXT("38400"),TEXT("57600"),TEXT("115200")};
-  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
+//  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
   DWORD dwPortIndex1 = 0;
   DWORD dwSpeedIndex1 = 2;
@@ -2642,7 +2657,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (iround(TerrainContrast*100/255) != 
 	wp->GetDataField()->GetAsInteger()) {
-      TerrainContrast = iround(wp->GetDataField()->GetAsInteger()*255.0/100);
+      TerrainContrast = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
       SetToRegistry(szRegistryTerrainContrast,TerrainContrast);
       changed = true;
     }
@@ -2652,7 +2667,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if (iround(TerrainBrightness*100/255) != 
 	wp->GetDataField()->GetAsInteger()) {
-      TerrainBrightness = iround(wp->GetDataField()->GetAsInteger()*255.0/100);
+      TerrainBrightness = (short)iround(wp->GetDataField()->GetAsInteger()*255.0/100);
       SetToRegistry(szRegistryTerrainBrightness,TerrainBrightness);
       changed = true;
     }

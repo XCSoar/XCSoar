@@ -1049,7 +1049,7 @@ bool DeleteOldIGCFile(TCHAR *pathname) {
 
 bool LoggerClearFreeSpace(void) {
   bool found = true;
-  unsigned long kbfree;
+  unsigned long kbfree=0;
   TCHAR pathname[MAX_PATH];
   TCHAR subpathname[MAX_PATH];
   int numtries = 0;

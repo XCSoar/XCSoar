@@ -13,7 +13,7 @@ class XShape {
 
   virtual void load(shapefileObj* shpfile, int i);
   virtual void clear();
-  virtual void renderSpecial(HDC hdc, int x, int y) {};
+  virtual void renderSpecial(HDC hdc, int x, int y) { (void)x; (void)y; (void)hdc; };
 
   bool hide;
   shapeObj shape;

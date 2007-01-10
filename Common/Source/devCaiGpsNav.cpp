@@ -1,4 +1,4 @@
-// $Id: devCaiGpsNav.cpp,v 1.2 2006/06/30 09:42:58 aharrison24 Exp $
+// $Id: devCaiGpsNav.cpp,v 1.3 2007/01/10 06:41:31 jwharington Exp $
 
 /*
 Copyright_License {
@@ -83,7 +83,7 @@ BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
 }
 
 BOOL caiGpsNavClose(PDeviceDescriptor_t d){
-
+  (void)d;
   return(TRUE);
 }
 
@@ -93,11 +93,13 @@ BOOL caiGpsNavClose(PDeviceDescriptor_t d){
 BOOL caiGpsNavIsLogger(PDeviceDescriptor_t d){
   // There is currently no support for task declaration
   // from XCSoar
+	(void)d; // TODO
   return(FALSE);
 }
 
 
 BOOL caiGpsNavIsGPSSource(PDeviceDescriptor_t d){
+	(void)d;
   return(TRUE);
 }
 

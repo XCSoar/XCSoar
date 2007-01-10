@@ -221,6 +221,7 @@ DWORD Port2ReadThread (LPVOID lpvoid)
 {
   DWORD dwCommModemStatus, dwBytesTransferred;
   BYTE inbuf[1024];
+  (void)lpvoid;
   
   // JMW added purging of port on open to prevent overflow
   PurgeComm(hPort2, 
@@ -237,7 +238,7 @@ DWORD Port2ReadThread (LPVOID lpvoid)
 	 &&(!MapWindow::CLOSETHREAD)
 	 && (!Port2CloseThread)) 
   {
-    int i=0;
+//    int i=0;
 
     // Wait for an event to occur for the port.
     if (!WaitCommEvent (hPort2, &dwCommModemStatus, 0)) {

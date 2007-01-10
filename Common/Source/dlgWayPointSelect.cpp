@@ -71,6 +71,7 @@ static int ItemIndex = -1;
 
 static void OnWaypointListEnter(WindowControl * Sender, 
 				WndListFrame::ListInfo_t *ListInfo){
+	(void)Sender; (void)ListInfo;
   if (ItemIndex != -1) {
     wf->SetModalResult(mrOK);
   }
@@ -374,7 +375,7 @@ static void OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mod
 static int DrawListIndex=0;
 
 static void OnPaintListItem(WindowControl * Sender, HDC hDC){
-
+  (void)Sender;
   int n = UpLimit - LowLimit;
   TCHAR sTmp[12];
 
@@ -428,7 +429,8 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
 
 
 static void OnWpListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-  if (ListInfo->DrawIndex == -1){
+  (void)Sender;
+	if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = UpLimit-LowLimit;
   } else {
     DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
@@ -438,6 +440,7 @@ static void OnWpListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListI
 
 
 static void OnWPSCloseClicked(WindowControl * Sender){
+	(void)Sender;
   ItemIndex = -1;
   wf->SetModalResult(mrCancle);
 }

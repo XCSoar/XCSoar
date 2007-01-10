@@ -1224,7 +1224,7 @@ void WindowControl::SetCaption(TCHAR *Value){
 }
 
 bool WindowControl::SetFocused(bool Value, HWND FromTo){
-
+  (void)FromTo;
   bool res = mHasFocus;
 
   if (mHasFocus != Value){
@@ -1704,7 +1704,7 @@ void WndForm::Destroy(void){
   DestroyAcceleratorTable(mhAccelTable);
   DeleteObject(mhBrushTitle);
 
-  WindowControl::Destroy();  // delets all childs
+  WindowControl::Destroy();  // delete all childs
 
 }
 
@@ -1731,7 +1731,7 @@ void WndForm::AddClient(WindowControl *Client){             // add client window
 
 
 int WndForm::OnCommand(WPARAM wParam, LPARAM lParam){
-
+   (void)lParam;
    if ((wParam & 0xffff) == VK_ESCAPE){
      mModalResult = mrCancle;
      return(0);
@@ -2214,6 +2214,7 @@ void WndButton::Destroy(void){
 
 int WndButton::OnLButtonUp(WPARAM wParam, LPARAM lParam){
   POINT Pos;
+  (void)wParam;
 
   mDown = false;
   Paint(GetDeviceContext());
@@ -2238,6 +2239,7 @@ int WndButton::OnLButtonUp(WPARAM wParam, LPARAM lParam){
 
 
 int WndButton::OnKeyDown(WPARAM wParam, LPARAM lParam){
+	(void)lParam;
   switch (wParam){
 #ifdef GNAV
     // JMW added this to make data entry easier
@@ -2255,6 +2257,7 @@ int WndButton::OnKeyDown(WPARAM wParam, LPARAM lParam){
 }
 
 int WndButton::OnKeyUp(WPARAM wParam, LPARAM lParam){
+	(void)lParam;
   switch (wParam){
 #ifdef GNAV
     // JMW added this to make data entry easier
@@ -2279,6 +2282,7 @@ int WndButton::OnKeyUp(WPARAM wParam, LPARAM lParam){
 }
 
 int WndButton::OnLButtonDown(WPARAM wParam, LPARAM lParam){
+	(void)lParam; (void)wParam;
   mDown = true;
   if (!GetFocused())
     SetFocus(GetHandle());
@@ -2291,6 +2295,7 @@ int WndButton::OnLButtonDown(WPARAM wParam, LPARAM lParam){
 };
 
 int WndButton::OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
+	(void)lParam; (void)wParam;
   mDown = true;
   InvalidateRect(GetHandle(), GetBoundRect(), false);
   UpdateWindow(GetHandle());
@@ -2699,7 +2704,7 @@ bool WndProperty::SetFocused(bool Value, HWND FromTo){
 }
 
 int WndProperty::OnEditKeyDown(WPARAM wParam, LPARAM lParam){
-
+  (void)lParam; 
   switch (wParam){
     case VK_RIGHT:
       IncValue();
@@ -2713,7 +2718,7 @@ int WndProperty::OnEditKeyDown(WPARAM wParam, LPARAM lParam){
 }
 
 int WndProperty::OnKeyDown(WPARAM wParam, LPARAM lParam){
-
+  (void)lParam;
   switch (wParam){
     case VK_RIGHT:
       IncValue();
@@ -2727,7 +2732,7 @@ int WndProperty::OnKeyDown(WPARAM wParam, LPARAM lParam){
 };
 
 int WndProperty::OnLButtonDown(WPARAM wParam, LPARAM lParam){
-
+  (void)wParam;
   POINT Pos;
 
   if (!GetFocused()){
@@ -2767,6 +2772,8 @@ int WndProperty::OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
 }
 
 int WndProperty::OnLButtonUp(WPARAM wParam, LPARAM lParam){
+	(void)lParam;
+	(void)wParam;
   if (mDownDown){
     mDownDown = false;
     InvalidateRect(GetHandle(), &mHitRectDown, false);
@@ -3234,7 +3241,9 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
 }
 
 
-int WndListFrame::OnItemKeyDown(WindowControl *Swnder, WPARAM wParam, LPARAM lParam){
+int WndListFrame::OnItemKeyDown(WindowControl *Sender, WPARAM wParam, LPARAM lParam){
+	(void)Sender;
+	(void)lParam;
   switch (wParam){
 #ifdef GNAV
     // JMW added this to make data entry easier
@@ -3315,6 +3324,8 @@ static bool isselect = false;
 
 // JMW needed to support mouse/touchscreen
 int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
+	(void)wParam;
+
   if (mIsListItem && GetOwner()!=NULL) {
  
     if (!GetFocused()) {
@@ -3339,6 +3350,7 @@ int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
 
 void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
                                         RECT *rect) {
+	(void)xPos;
   int index;
   GetClientRect(GetHandle(), rect);
   index = yPos/mClients[0]->GetHeight();

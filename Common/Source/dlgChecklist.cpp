@@ -84,7 +84,7 @@ static void NextPage(int Step){
 
 
 static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
-
+  (void)Sender;
   if (DrawListIndex < nTextLines){
     TCHAR* text = ChecklistText[page];
     if (!text) return;
@@ -114,6 +114,7 @@ static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
 
 
 static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+  (void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = nTextLines-1;
   } else {
@@ -124,18 +125,23 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
 
 
 static void OnNextClicked(WindowControl * Sender){
+  (void)Sender;
   NextPage(+1);
 }
 
 static void OnPrevClicked(WindowControl * Sender){
+  (void)Sender;
   NextPage(-1);
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+	(void)lParam;
+	(void)Sender;
   switch(wParam & 0xffff){
     case VK_LEFT:
     case '6':
@@ -203,7 +209,7 @@ void LoadChecklist(void) {
   TCHAR Name[100];
   BOOL inDetails = FALSE;
   int i;
-  int k=0;
+//  int k=0;
 
   Details[0]= 0;
   Name[0]= 0;

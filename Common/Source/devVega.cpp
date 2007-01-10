@@ -73,7 +73,7 @@ static BOOL PDSWC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
-
+  (void)d;
   unsigned long uswitchinputs, uswitchoutputs;
   swscanf(String,
 	  TEXT("%lf,%lx,%lx,%lf"),
@@ -173,13 +173,14 @@ static BOOL PDSWC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 static BOOL PDAAV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
-
+  (void)GPS_INFO;
+  (void)d;
   NMEAParser::ExtractParameter(String,ctemp,0);
-  unsigned short beepfrequency = (unsigned short)StrToDouble(ctemp, NULL);
+//  unsigned short beepfrequency = (unsigned short)StrToDouble(ctemp, NULL);
   NMEAParser::ExtractParameter(String,ctemp,1);
-  unsigned short soundfrequency = (unsigned short)StrToDouble(ctemp, NULL);
+//  unsigned short soundfrequency = (unsigned short)StrToDouble(ctemp, NULL);
   NMEAParser::ExtractParameter(String,ctemp,2);
-  unsigned char soundtype = (unsigned char)StrToDouble(ctemp, NULL);
+//  unsigned char soundtype = (unsigned char)StrToDouble(ctemp, NULL);
 
   // Temporarily commented out - function as yet undefined
   //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
@@ -192,6 +193,8 @@ static BOOL PDVSC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   TCHAR ctemp[80];
   TCHAR name[80];
   TCHAR responsetype[10];
+  (void)GPS_INFO;
+  (void)d;
   NMEAParser::ExtractParameter(String,responsetype,0);
   NMEAParser::ExtractParameter(String,name,1);
   NMEAParser::ExtractParameter(String,ctemp,2);
@@ -252,7 +255,7 @@ static BOOL PDVDV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 static BOOL PDVDS(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   double flap, stallratio;
-
+  (void)d;
   int found = swscanf(String,
 	  TEXT("%lf,%lf,%lf,%lf,%lf"),
 	  &GPS_INFO->AccelX,
@@ -298,7 +301,7 @@ static BOOL PDVDS(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 static BOOL PDVVT(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
-
+  (void)d;
   NMEAParser::ExtractParameter(String,ctemp,0);
   GPS_INFO->OutsideAirTemperature = StrToDouble(ctemp,NULL)/10.0-273.0;
   GPS_INFO->TemperatureAvailable = TRUE;
@@ -316,7 +319,8 @@ static BOOL PDTSM(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
   int   duration;
   TCHAR  *pWClast = NULL;
   TCHAR  *pToken;
-
+  (void)GPS_INFO;
+  (void)d;
   if ((pToken = strtok_r(String, TEXT(","), &pWClast)) == NULL)
     return FALSE;
 
@@ -394,7 +398,7 @@ BOOL vgaOpen(PDeviceDescriptor_t d, int Port){
 
 
 BOOL vgaDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
-
+  (void)Class;
   (void) d;
   (void) PilotsName;
   (void) ID;
@@ -431,14 +435,17 @@ BOOL vgaDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
 
 BOOL vgaIsLogger(PDeviceDescriptor_t d){
 //  return(TRUE);
-  return(FALSE);
+  (void)d;
+	return(FALSE);
 }
 
 BOOL vgaIsGPSSource(PDeviceDescriptor_t d){
+	(void)d;
   return(TRUE);  // this is only true if GPS source is connected on VEGA.NmeaIn
 }
 
 BOOL vgaIsBaroSource(PDeviceDescriptor_t d){
+	(void)d;
   return(TRUE);
 }
 
@@ -466,7 +473,7 @@ static void _VarioWriteSettings(DeviceDescriptor_t *d) {
 
 
 BOOL vgaPutQNH(DeviceDescriptor_t *d, double NewQNH){
-
+  (void)NewQNH;
   // NewQNH is already stored in QNH
 
   _VarioWriteSettings(d);

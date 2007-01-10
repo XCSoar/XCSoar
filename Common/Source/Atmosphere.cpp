@@ -48,15 +48,15 @@ void CuSonde::setForecastTemperature(double val) {
   thermalHeight = -1;
 
   for (level=0; level<CUSONDE_NUMLEVELS; level++) {
-    cslevels[level].updateThermalIndex(level, false);
+    cslevels[level].updateThermalIndex((unsigned short)level, false);
     if (cslevels[level].nmeasurements) {
       zlevel = level;
     }
     if ((cslevels[level].nmeasurements==0)&&(zlevel)) break;
   }
   for (level=0; level<=zlevel; level++) {
-    findThermalHeight(level);
-    findCloudBase(level);
+    findThermalHeight((unsigned short)level);
+    findCloudBase((unsigned short)level);
   }
 
 }
@@ -75,7 +75,7 @@ void CuSonde::updateMeasurements(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 
   // find appropriate level:
-  unsigned short level = ((int)(max(Basic->Altitude,0))) / CUSONDE_HEIGHTSTEP;
+  unsigned short level = (unsigned short)(((int)(max(Basic->Altitude,0))) / CUSONDE_HEIGHTSTEP);
   if (level>=CUSONDE_NUMLEVELS) {
     return; // out of range
   }
@@ -102,14 +102,14 @@ void CuSonde::updateMeasurements(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     cslevels[level].updateThermalIndex(level);
 
     if (level>0) {
-      findThermalHeight(level-1);
-      findCloudBase(level-1);
+      findThermalHeight((unsigned short)(level-1));
+      findCloudBase((unsigned short)(level-1));
     }
   } else {
     // going down
     cslevels[level+1].updateTemps(Basic->RelativeHumidity,
 				Basic->OutsideAirTemperature);
-    cslevels[level+1].updateThermalIndex(level+1);
+    cslevels[level+1].updateThermalIndex((unsigned short)(level+1));
 
     if (level<CUSONDE_NUMLEVELS-1) {
       findThermalHeight(level);
