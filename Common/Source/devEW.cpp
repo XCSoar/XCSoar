@@ -29,8 +29,12 @@ Copyright_License {
 }
 */
 
+
 // ToDo
+
 // adding baro alt sentance paser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
+
+
 
 
 #include "stdafx.h"
@@ -61,7 +65,9 @@ static BOOL fSimMode = FALSE;
 
 
 BOOL EWParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
-
+  (void)d;
+  (void)String;
+  (void)GPS_INFO;
   // no propriatary sentence
 
   return FALSE;
@@ -82,7 +88,7 @@ void appendCheckSum(TCHAR *String){
   TCHAR sTmp[4];
 
   for(i=1; String[i] != '\0'; i++){
-    CalcCheckSum = CalcCheckSum ^ String[i];
+    CalcCheckSum = (unsigned char)(CalcCheckSum ^ (unsigned char)String[i]);
   }
 
   _stprintf(sTmp, TEXT("%02X\r\n"), CalcCheckSum);
@@ -301,7 +307,7 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
       NoS_Flag = 0x02;
     }
   //  Do the calculation
-  EW_Flags = EoW_Flag | NoS_Flag;
+  EW_Flags = (short)(EoW_Flag | NoS_Flag);
 
                                                   // setup command string
   _stprintf(EWRecord,TEXT("#STP%02X%02X%02X%02X%02X%02X%02X%02X%02X%04X%02X%04X"),
@@ -337,17 +343,19 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
 
 
 BOOL EWIsLogger(PDeviceDescriptor_t d){
-  return(TRUE);
+  (void)d;
+	return(TRUE);
 }
 
 
 BOOL EWIsGPSSource(PDeviceDescriptor_t d){
+	(void)d;
   return(TRUE);
 }
 
 
 BOOL EWLinkTimeout(PDeviceDescriptor_t d){
-
+  (void)d;
   if (!fSimMode && !fDeclarationPending)
     Port1WriteString(TEXT("NMEA\r\n"));
 

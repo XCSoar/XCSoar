@@ -133,7 +133,7 @@ void Units::LatitudeToDMS(double Latitude,
 }
 
 bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
-
+  (void)size;
   TCHAR EW[] = TEXT("WE");
   int dd, mm, ss;
 
@@ -186,7 +186,7 @@ bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
 
 
 bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
-
+  (void)size;
   TCHAR EW[] = TEXT("SN");
   int dd, mm, ss;
 

@@ -58,7 +58,7 @@ static void UpdateList(void){
 static int DrawListIndex=0;
 
 static void OnAirspaceColoursPaintListItem(WindowControl * Sender, HDC hDC){
-
+  (void)Sender;
   if ((DrawListIndex < NUMAIRSPACECOLORS) &&(DrawListIndex>=0)) {
     int i = DrawListIndex;
     SelectObject(hDC, GetStockObject(WHITE_BRUSH));
@@ -80,7 +80,7 @@ static void OnAirspaceColoursPaintListItem(WindowControl * Sender, HDC hDC){
 
 static void OnAirspaceColoursListEnter(WindowControl * Sender,
 				WndListFrame::ListInfo_t *ListInfo) {
-
+  (void)Sender;
   ItemIndex = ListInfo->ItemIndex + ListInfo->ScrollIndex;
   if (ItemIndex>=NUMAIRSPACECOLORS) {
     ItemIndex = NUMAIRSPACECOLORS-1;
@@ -93,6 +93,7 @@ static void OnAirspaceColoursListEnter(WindowControl * Sender,
 
 static void OnAirspaceColoursListInfo(WindowControl * Sender,
 			       WndListFrame::ListInfo_t *ListInfo){
+  (void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = NUMAIRSPACECOLORS;
   } else {
@@ -102,6 +103,7 @@ static void OnAirspaceColoursListInfo(WindowControl * Sender,
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+  (void)Sender;
   ItemIndex = -1;
   wf->SetModalResult(mrOK);
 }

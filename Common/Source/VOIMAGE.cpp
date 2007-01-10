@@ -277,6 +277,8 @@ DWORD CALLBACK CVOImage::GetImageResourceData(LPSTR szBuffer, DWORD dwBufferMax,
 
 void CALLBACK CVOImage::ImageProgress(IImageRender *pRender, BOOL bComplete, LPARAM lParam )
 {
+	(void)lParam;
+	(void)pRender;
 	if( bComplete )
 	{
 		;// (Optional) add code here for completion processing

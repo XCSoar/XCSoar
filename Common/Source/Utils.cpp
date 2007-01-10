@@ -49,7 +49,7 @@ Copyright_License {
 
 bool EnableAnimation=false;
 
-void ReadWinPilotPolarInternal(int i);
+bool ReadWinPilotPolarInternal(int i);
 
 TCHAR szRegistryKey[] =                TEXT("Software\\MPSR\\XCSoar");
 TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =     { TEXT("Info0"),
@@ -384,7 +384,7 @@ void ReadRegistrySettings(void)
   DWORD TaskSpeed = 0;
   DWORD Lift = 0;
   DWORD Altitude = 0;
-  DWORD DisplayUp = 0;
+//  DWORD DisplayUp = 0;
   DWORD Temp = 0;
   int i;
 
@@ -992,14 +992,21 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   }
 
   pPos[0]= '\0';
-  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_ALL_ACCESS, &hKey);
+  hRes = RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey, 0, KEY_READ /*KEY_ALL_ACCESS*/, &hKey);
   if (hRes != ERROR_SUCCESS)
     {
       RegCloseKey(hKey);
       return FALSE;
     }
 
+  dwSize *= 2;
+
   hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
+
+  if (hRes == 998){
+    hRes = 988;
+  }
+
   RegCloseKey(hKey);
   return hRes;
 }
@@ -1016,7 +1023,7 @@ HRESULT SetRegistryString(const TCHAR *szRegValue, TCHAR *Pos)
       return FALSE;
     }
 
-  hRes = RegSetValueEx(hKey, szRegValue,0,REG_SZ, (LPBYTE)Pos, _tcslen(Pos)*sizeof(TCHAR));
+  hRes = RegSetValueEx(hKey, szRegValue,0,REG_SZ, (LPBYTE)Pos, (_tcslen(Pos)+1)*sizeof(TCHAR));
   RegCloseKey(hKey);
 
   return hRes;
@@ -1224,9 +1231,16 @@ void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
   if (Bearing) {
     double slat1 = sin(lat1);
     double slat2 = sin(lat2);
-    double theta =
-      atan2(sin(dlon)*clat2,
-            clat1*slat2-slat1*clat2*cos(dlon))*RAD_TO_DEG;
+    double y = sin(dlon)*clat2;
+    double x = clat1*slat2-slat1*clat2*cos(dlon);
+
+    double theta;
+
+    if (fabs(x)>0.00000001 && fabs(y)>0.00000001){
+      theta = atan2(y,x)*RAD_TO_DEG;
+    } else {
+      theta = 0;
+    }
 
     while (theta>360.0) {
       theta-= 360.0;
@@ -1587,13 +1601,16 @@ bool ReadWinPilotPolar(void) {
 //////////////////////////////////////////////////
 
 
+typedef double PolarCoefficients_t[3];
+typedef double WeightCoefficients_t[3];
+
 
 void CalculateNewPolarCoef(void)
 {
 
   StartupStore(TEXT("Calculate New Polar Coef\r\n"));
 
-  static double Polars[7][3] =
+  static PolarCoefficients_t Polars[7] =
     {
       {-0.0538770500225782443497, 0.1323114348, -0.1273364037098239098543},
       {-0.0532456270195884696748, 0.1509454717, -0.1474304674787072275183},
@@ -1612,32 +1629,51 @@ void CalculateNewPolarCoef(void)
      2 BallastWeight
   */
 
-  static double Weights[7][3] = { {70,190,1},
-				  {70,250,100},
-				  {70,240,285},
-				  {70,287,165},  // w ok!
-				  {70,400,120},  //
-				  {70,527,303},
-				  {0,0,0}
+  static WeightCoefficients_t Weights[7] = { {70,190,1},
+                                             {70,250,100},
+                                             {70,240,285},
+                                             {70,287,165},  // w ok!
+                                             {70,400,120},  //
+                                             {70,527,303},
+                                             {0,0,0}
   };
   int i;
 
-  for(i=0;i<3;i++)
-    {
+
+  ASSERT(sizeof(Polars)/sizeof(Polars[0]) == sizeof(Weights)/sizeof(Weights[0]));
+
+  if (POLARID < sizeof(Polars)/sizeof(Polars[0])){
+    for(i=0;i<3;i++){
       POLAR[i] = Polars[POLARID][i];
       WEIGHTS[i] = Weights[POLARID][i];
     }
+  }
   if (POLARID==6) {
-    if (!ReadWinPilotPolar()){  // error reading winpilot file
-      POLARID = 2;              // do it again with default polar (LS8)
-      CalculateNewPolarCoef();
-  		MessageBoxX(NULL, gettext(TEXT("Error loading Polar file!\r\nUse LS8 Polar.")), gettext(TEXT("Warning")),
-			    MB_OK|MB_ICONERROR);
-    };
+    if (ReadWinPilotPolar())
+    // polar data gets from winpilot file
+      return;
   }
-  if (POLARID>6) {
-    ReadWinPilotPolarInternal(POLARID-7);
+
+  if (POLARID>6){
+    if (ReadWinPilotPolarInternal(POLARID-7))
+      // polar data get from build in table
+      return;
   }
+
+  if (POLARID<6){
+    // polar data get from historical table
+    return;
+  }
+
+  // ups
+  // error reading winpilot file
+
+  POLARID = 2;              // do it again with default polar (LS8)
+  CalculateNewPolarCoef();
+  MessageBoxX(NULL, gettext(TEXT("Error loading Polar file!\r\nUse LS8 Polar.")),
+       gettext(TEXT("Warning")),
+       MB_OK|MB_ICONERROR);
+
 }
 
 
@@ -1905,7 +1941,7 @@ BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc)
   BOOL Sector[9] = {FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE};
   int i;
   int Count = 0;
-
+  (void)rc;
   //return TRUE;
 
   for(i=0;i<nCount;i++)
@@ -2720,7 +2756,7 @@ WORD crcCalc(void *Buffer, size_t size){
     crc = ByteCRC16(value, crc);
   } while (--size);
 
-  return(crc);
+  return((WORD)crc);
 }
 
 ///////////
@@ -3100,7 +3136,7 @@ void SaveRegistryToFile(TCHAR *szFile)
     DWORD nType;
     DWORD nValueSize = nMaxValueValueSize;
     DWORD nNameSize = nMaxKeyNameSize;
-    DWORD nClassSize = nMaxClassSize;
+//    DWORD nClassSize = nMaxClassSize;
 
     LONG res = ::RegEnumValue(hkFrom, i, lpstrName,
 			      &nNameSize, 0,
@@ -3271,14 +3307,16 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf) {
   ASSERT(Name[0] != '\0');
   ASSERT(lplf != NULL);
 
-  bool pc = false;
-
 #if (WINDOWSPC>0)
-  pc = true;
+  // Don't load font settings from registry values for windows version
+  return;
 #endif
 
-  if (pc ||
-      GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0) {
+  DWORD dwTmp;
+  GetFromRegistry(TEXT("Brush7"), &dwTmp);
+  GetRegistryString(TEXT("DeviceA"), Buffer, sizeof(Buffer)/sizeof(TCHAR));
+
+  if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0) {
 
     // typical font entry
     // 26,0,0,0,700,1,0,0,0,0,0,4,2,<fontname>
@@ -3459,7 +3497,7 @@ void StoreRegistry(void) {
 }
 
 void XCSoarGetOpts(LPTSTR CommandLine) {
-
+  (void)CommandLine;
 // SaveRegistryToFile(TEXT("iPAQ File Store\xcsoar-registry.prf"));
 
 #ifdef GNAV
@@ -3473,6 +3511,13 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
 #if (WINDOWSPC>0)
   SCREENWIDTH=640;
   SCREENHEIGHT=480;
+
+#if defined(SCREENWIDTH_)
+  SCREENWIDTH=SCREENWIDTH_;
+#endif
+#if defined(SCREENHEIGHT_)
+  SCREENHEIGHT=SCREENHEIGHT_;
+#endif
 
 #else
   return; // don't do anything for PDA platforms
@@ -3687,14 +3732,13 @@ TCHAR* GetWinPilotPolarInternalName(int i) {
   return WinPilotPolars[i].name;
 }
 
-void ReadWinPilotPolarInternal(int i) {
-  if (i>=sizeof(WinPilotPolars)/sizeof(WinPilotPolarInternal)) {
-    ASSERT(0);
-    return; // error
-  }
+bool ReadWinPilotPolarInternal(int i) {
   double POLARV[3];
   double POLARW[3];
   double ww[2];
+
+  if (!(i < sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0])))
+    return(FALSE);
 
   ww[0] = WinPilotPolars[i].ww0;
   ww[1] = WinPilotPolars[i].ww1;
@@ -3705,6 +3749,8 @@ void ReadWinPilotPolarInternal(int i) {
   POLARW[1] = WinPilotPolars[i].w1;
   POLARW[2] = WinPilotPolars[i].w2;
   PolarWinPilot2XCSoar(POLARV, POLARW, ww);
+
+  return(TRUE);
 
 }
 
@@ -3987,7 +4033,7 @@ void MemLeakCheck() {
 
 /// This is necessary to be called periodically to get rid of
 void MyCompactHeaps() {
-#if (WINDOWSPC>0)||(GNAV)
+#if (WINDOWSPC>0)||defined(GNAV)
   HeapCompact(GetProcessHeap(),0);
 #else
   typedef DWORD (_stdcall *CompactAllHeapsFn) (void);
@@ -4116,3 +4162,38 @@ bool InterfaceTimeoutCheck(void) {
   }
 }
 
+bool FileExistsW(TCHAR *FileName){
+
+  HANDLE hFile = CreateFileW(FileName, GENERIC_READ, 0, NULL,
+                 OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+
+  if( hFile == INVALID_HANDLE_VALUE)
+    return(FALSE);
+
+  CloseHandle(hFile);
+
+  return(TRUE);
+
+}
+
+bool FileExistsA(char *FileName){
+
+#if (WINDOWSPC>0)
+  HANDLE hFile = CreateFileA(FileName, GENERIC_READ, 0, NULL,
+                 OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+  if( hFile == INVALID_HANDLE_VALUE)
+    return(FALSE);
+
+  CloseHandle(hFile);
+
+  return(TRUE);
+#else
+  FILE *file = fopen(FileName, "r");
+  if (file != NULL) {
+    fclose(file);
+    return(TRUE);
+  }
+  return FALSE;
+#endif
+
+}

@@ -83,7 +83,7 @@ BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
 }
 
 BOOL caiGpsNavClose(PDeviceDescriptor_t d){
-
+  (void)d;
   return(TRUE);
 }
 
@@ -93,11 +93,13 @@ BOOL caiGpsNavClose(PDeviceDescriptor_t d){
 BOOL caiGpsNavIsLogger(PDeviceDescriptor_t d){
   // There is currently no support for task declaration
   // from XCSoar
+	(void)d; // TODO
   return(FALSE);
 }
 
 
 BOOL caiGpsNavIsGPSSource(PDeviceDescriptor_t d){
+	(void)d;
   return(TRUE);
 }
 

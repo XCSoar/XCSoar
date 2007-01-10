@@ -68,6 +68,7 @@ static void UpdateButtons(void) {
 
 
 static void OnNameClicked(WindowControl *Sender) {
+	(void)Sender;
   if (buttonName) {
     dlgTextEntryShowModal(global_wpt->Name, NAME_SIZE);
   }
@@ -76,6 +77,7 @@ static void OnNameClicked(WindowControl *Sender) {
 
 
 static void OnCommentClicked(WindowControl *Sender) {
+	(void)Sender;
   if (buttonComment) {
     dlgTextEntryShowModal(global_wpt->Comment, COMMENT_SIZE);
   }
@@ -86,6 +88,7 @@ static void OnCommentClicked(WindowControl *Sender) {
 //
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 

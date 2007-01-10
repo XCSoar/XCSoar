@@ -102,12 +102,12 @@ BOOL atrOpen(PDeviceDescriptor_t d, int Port){
 
 
 BOOL atrDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
-
+  (void) Class;
   (void) d;
   (void) PilotsName;
   (void) ID;
 
-  // ToDo
+  // ToDo TODO
 
   return(TRUE);
 
@@ -139,20 +139,23 @@ BOOL atrDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
 
 BOOL atrIsLogger(PDeviceDescriptor_t d){
 //  return(TRUE);
+  (void)d;
   return(FALSE);
 }
 
 
 BOOL atrIsGPSSource(PDeviceDescriptor_t d){
+	(void)d;
   return(TRUE);
 }
 
 BOOL atrIsBaroSource(PDeviceDescriptor_t d){
+	(void)d;
   return(TRUE);
 }
 
 BOOL atrPutQNH(DeviceDescriptor_t *d, double NewQNH){
-
+  (void)NewQNH; // TODO JMW check this
   if (d == pDevPrimaryBaroSource){
     GPS_INFO.BaroAltitude = AltitudeToQNHAltitude(lastAlt);
   }
@@ -161,7 +164,7 @@ BOOL atrPutQNH(DeviceDescriptor_t *d, double NewQNH){
 }
 
 BOOL atrOnSysTicker(DeviceDescriptor_t *d){
-
+  (void)d;
   // Do To get IO data like temp, humid, etc
 
   return(TRUE);

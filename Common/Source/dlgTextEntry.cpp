@@ -52,6 +52,7 @@ static TCHAR EntryLetters[] = TEXT(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 #define MAXENTRYLETTERS (int)(sizeof(EntryLetters)/sizeof(TCHAR)-1)
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -144,6 +145,7 @@ static void MoveCursor(void) {
 
 
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam) {
+	(void)lParam; (void)Sender;
   switch(wParam & 0xffff){
     case VK_LEFT:
       if (cursor<1)

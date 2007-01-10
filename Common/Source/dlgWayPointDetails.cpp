@@ -76,17 +76,17 @@ static void NextPage(int Step){
     page++;
   }
 
-  if (!jpgimage1 && !jpgimage2 && page > 2)
+  if (!hasimage1 && !hasimage2 && page > 2)
     page = 0;
-  if (jpgimage1 && !jpgimage2 && page > 3)
+  if (hasimage1 && !hasimage2 && page > 3)
     page = 0;
-  if (jpgimage1 && jpgimage2 && page > 4)
+  if (hasimage1 && hasimage2 && page > 4)
     page = 0;
-  if (!jpgimage1 && !jpgimage2 && page < 0)
+  if (!hasimage1 && !hasimage2 && page < 0)
     page = 2;
-  if (jpgimage1 && !jpgimage2 && page < 0)
+  if (hasimage1 && !hasimage2 && page < 0)
     page = 3;
-  if (jpgimage1 && jpgimage2 && page < 0)
+  if (hasimage1 && hasimage2 && page < 0)
     page = 4;
 
   wInfo->SetVisible(page == 0);
@@ -103,7 +103,7 @@ static void NextPage(int Step){
 
 
 static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
-
+  (void)Sender;
   if (DrawListIndex < nTextLines){
     TCHAR* text = WayPointList[SelectedWaypoint].Details;
     int nstart = LineOffsets[DrawListIndex];
@@ -132,6 +132,7 @@ static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
 
 
 static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
+	(void)Sender;
   if (ListInfo->DrawIndex == -1){
     ListInfo->ItemCount = nTextLines-1;
   } else {
@@ -142,19 +143,22 @@ static void OnDetailsListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *
 
 
 static void OnNextClicked(WindowControl * Sender){
+	(void)Sender;
   NextPage(+1);
 }
 
 static void OnPrevClicked(WindowControl * Sender){
+	(void)Sender;
   NextPage(-1);
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-
+  (void)lParam; (void)Sender;
   switch(wParam & 0xffff){
     case VK_LEFT:
     case '6':
@@ -174,6 +178,7 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
 
 static void OnGotoClicked(WindowControl * Sender){
+	(void)Sender;
   LockTaskData();
   FlyDirectTo(SelectedWaypoint);
   UnlockTaskData();
@@ -181,6 +186,7 @@ static void OnGotoClicked(WindowControl * Sender){
 }
 
 static void OnReplaceClicked(WindowControl * Sender){
+	(void)Sender;
   LockTaskData();
   ReplaceWaypoint(SelectedWaypoint);
   RefreshTask();
@@ -189,6 +195,7 @@ static void OnReplaceClicked(WindowControl * Sender){
 }
 
 static void OnNewHomeClicked(WindowControl * Sender){
+	(void)Sender;
   LockTaskData();
   HomeWaypoint = SelectedWaypoint;
   SetToRegistry(szRegistryHomeWaypoint, HomeWaypoint);
@@ -199,6 +206,7 @@ static void OnNewHomeClicked(WindowControl * Sender){
 
 
 static void OnTeamCodeClicked(WindowControl * Sender){
+	(void)Sender;
   TeamCodeRefWaypoint = SelectedWaypoint;
   SetToRegistry(szRegistryTeamcodeRefWaypoint, TeamCodeRefWaypoint);
   wf->SetModalResult(mrOK);
@@ -206,6 +214,7 @@ static void OnTeamCodeClicked(WindowControl * Sender){
 
 
 static void OnInserInTaskClicked(WindowControl * Sender){
+	(void)Sender;
   LockTaskData();
   InsertWaypoint(SelectedWaypoint);
   RefreshTask();
@@ -214,6 +223,7 @@ static void OnInserInTaskClicked(WindowControl * Sender){
 }
 
 static void OnAppendInTaskClicked(WindowControl * Sender){
+	(void)Sender;
   LockTaskData();
   InsertWaypoint(SelectedWaypoint, true);
   RefreshTask();
@@ -223,6 +233,7 @@ static void OnAppendInTaskClicked(WindowControl * Sender){
 
 
 static void OnRemoveFromTaskClicked(WindowControl * Sender){
+	(void)Sender;
   LockTaskData();
   RemoveWaypoint(SelectedWaypoint);
   RefreshTask();
@@ -231,7 +242,7 @@ static void OnRemoveFromTaskClicked(WindowControl * Sender){
 }
 
 static void OnImagePaint(WindowControl * Sender, HDC hDC){
-
+  (void)Sender;
   if (page == 3)
     jpgimage1.Draw(hDC, 0, 0, -1, -1);
 

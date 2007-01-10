@@ -111,9 +111,13 @@ BOOL devRegisterGetName(int Index, TCHAR *Name){
   return(TRUE);
 }
 
+
 static devIsFalseReturn(PDeviceDescriptor_t d){
+  (void)d;
   return(FALSE);
+
 }
+
 
 BOOL devInit(LPTSTR CommandLine){
   int i;
@@ -137,6 +141,7 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].IsLogger = devIsFalseReturn;
     DeviceList[i].IsGPSSource = devIsFalseReturn;
     DeviceList[i].IsBaroSource = devIsFalseReturn;
+
     DeviceList[i].PutVoice = (int (*)(struct DeviceDescriptor_t *,TCHAR *))devIsFalseReturn;
     DeviceList[i].PortNumber = i;
     DeviceList[i].PutQNH = NULL;
@@ -350,7 +355,7 @@ BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
   if(String[0]=='$')  // Additional "if" to find GPS strings
     {
 
-      bool dodisplay = false;
+//      bool dodisplay = false;
 
       if(NMEAParser::ParseNMEAString(portNum, String, GPS_INFO))
         {
@@ -419,20 +424,35 @@ BOOL devLinkTimeout(PDeviceDescriptor_t d){
   return(FALSE);
 }
 
+
 BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence){
+
   if (d == NULL){
+
     for (int i=0; i<NUMDEV; i++){
+
       d = &DeviceList[i];
+
       if (d->PutVoice != NULL)
+
         (d->PutVoice)(d, Sentence);
+
     }
+
     return (TRUE);
+
   } else {
+
     if (d->PutVoice != NULL)
+
       return ((d->PutVoice)(d, Sentence));
+
   }
+
   return(FALSE);
+
 }
+
 
 BOOL devDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
   if (d != NULL && d->DeclBegin != NULL)
@@ -521,3 +541,4 @@ BOOL devOnSysTicker(DeviceDescriptor_t *d){
   }
   return(FALSE);
 }
+

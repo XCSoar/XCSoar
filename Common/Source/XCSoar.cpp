@@ -865,6 +865,8 @@ void FocusOnWindow(int i, bool selected) {
 
 void TriggerRedraws(NMEA_INFO *nmea_info,
 		    DERIVED_INFO *derived_info) {
+	(void)nmea_info;
+	(void)derived_info;
   if (MapWindow::IsDisplayRunning()) {
     if (NMEAParser::GpsUpdated) {
       MapWindow::MapDirty = true;
@@ -881,6 +883,7 @@ void TriggerRedraws(NMEA_INFO *nmea_info,
 
 
 DWORD InstrumentThread (LPVOID lpvoid) {
+	(void)lpvoid;
   // wait for proper startup signal
   while (!MapWindow::IsDisplayRunning()) {
     Sleep(100);
@@ -907,6 +910,7 @@ DWORD InstrumentThread (LPVOID lpvoid) {
 
 
 DWORD CalculationThread (LPVOID lpvoid) {
+	(void)lpvoid;
   bool needcalculationsslow;
 
   NMEA_INFO     tmp_GPS_INFO;
@@ -1110,7 +1114,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   MSG msg;
   HACCEL hAccelTable;
   INITCOMMONCONTROLSEX icc;
-
+  (void)hPrevInstance;
   // Version String
 #ifdef GNAV
   wcscat(XCSoar_Version, TEXT("Altair "));
@@ -1123,7 +1127,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 #endif
 
-  wcscat(XCSoar_Version, TEXT("5.0.5 "));
+  wcscat(XCSoar_Version, TEXT("5.0.6 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -2863,6 +2867,7 @@ void PopupWaypointDetails()
 
 void PopupBugsBallast(int UpDown)
 {
+	(void)UpDown;
   DialogActive = true;
   ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
@@ -3185,7 +3190,7 @@ void BlankDisplay(bool doblank) {
 
 
 void Event_SelectInfoBox(int i) {
-  int oldinfofocus = InfoFocus;
+//  int oldinfofocus = InfoFocus;
 
   // must do this
   InfoBoxFocusTimeOut = 0;

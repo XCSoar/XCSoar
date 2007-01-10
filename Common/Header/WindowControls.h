@@ -95,21 +95,24 @@ class DataField{
   virtual TCHAR *GetAsString(void){return(NULL);};
   virtual TCHAR *GetAsDisplayString(void){return(NULL);};
 
-  virtual bool SetAsBoolean(bool Value){return(false);};
-  virtual int SetAsInteger(int Value){return(0);};
-  virtual double SetAsFloat(double Value){return(NULL);};
-  virtual TCHAR *SetAsString(TCHAR *Value){return(NULL);};
+  virtual bool SetAsBoolean(bool Value){ (void)Value;
+	  return(false);};
+	  virtual int SetAsInteger(int Value){ (void)Value;
+	  return(0);};
+	  virtual double SetAsFloat(double Value){ (void) Value;
+	  return(NULL);};
+  virtual TCHAR *SetAsString(TCHAR *Value){(void)Value; return(NULL);};
 
-  virtual void Set(bool Value){};
-  virtual void Set(int Value){};
-  virtual void Set(double Value){};
-  virtual void Set(TCHAR *Value){};
+  virtual void Set(bool Value){ (void)Value; };
+  virtual void Set(int Value){ (void)Value;};
+  virtual void Set(double Value){ (void)Value; };
+  virtual void Set(TCHAR *Value){ (void)Value; };
 
-  virtual int SetMin(int Value){return(0);};
-  virtual double SetMin(double Value){return(false);};
+  virtual int SetMin(int Value){(void)Value; return(0);};
+  virtual double SetMin(double Value){(void)Value; return(false);};
 
-  virtual int SetMax(int Value){return(0);};
-  virtual double SetMax(double Value){return(0);};
+  virtual int SetMax(int Value){(void)Value; return(0);};
+  virtual double SetMax(double Value){(void)Value; return(0);};
   void SetUnits(const TCHAR *text) { _tcscpy(mUnits, text); }
 
   void Use(void){
@@ -517,24 +520,31 @@ class WindowControl {
     virtual int OnHelp();
 
     virtual int OnLButtonDoubleClick(WPARAM wParam, LPARAM lParam){
+		(void)wParam; (void)lParam;
       return(1);
     };
     virtual int OnLButtonDown(WPARAM wParam, LPARAM lParam){
+		(void)wParam; (void)lParam;
       return(1);
     };
     virtual int OnLButtonUp(WPARAM wParam, LPARAM lParam){
+		(void)wParam; (void)lParam;
       return(1);
     };
     virtual int OnKeyDown(WPARAM wParam, LPARAM lParam){
+		(void)wParam; (void)lParam;
       return(1);
     };
     virtual int OnKeyUp(WPARAM wParam, LPARAM lParam){
+		(void)wParam; (void)lParam;
       return(1);
     };
     virtual int OnCommand(WPARAM wParam, LPARAM lParam){
+		(void)wParam; (void)lParam;
       return(1);
     };
     virtual int OnUnhandledMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
+		(void)hwnd; (void)uMsg; (void)wParam; (void)lParam;
       return(1);
     };
     virtual void Close(void){
@@ -790,6 +800,7 @@ class WndForm:public WindowControl{
 
 
     int OnLButtonUp(WPARAM wParam, LPARAM lParam){
+		(void)wParam; (void)lParam;
       return(0);
     };
 

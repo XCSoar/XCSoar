@@ -48,7 +48,8 @@ extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 static void OnCloseClicked(WindowControl * Sender){
-  wf->SetModalResult(mrOK);
+(void)Sender;
+	wf->SetModalResult(mrOK);
 }
 
 static double INHg=0;
@@ -113,7 +114,7 @@ static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daChange:
     case DataField::daPut:
       if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
-        BALLAST = Sender->GetAsFloat()/100.0;
+        lastRead = BALLAST = Sender->GetAsFloat()/100.0;
         GlidePolar::SetBallast();
         devPutBallast(devA(), BALLAST);
         devPutBallast(devB(), BALLAST);
@@ -141,7 +142,7 @@ static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daChange:
     case DataField::daPut:
       if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
-        BUGS = Sender->GetAsFloat()/100.0;
+        lastRead = BUGS = Sender->GetAsFloat()/100.0;
         GlidePolar::SetBallast();
         devPutBugs(devA(), BUGS);
         devPutBugs(devB(), BUGS);
@@ -163,7 +164,8 @@ static void OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daChange:
     case DataField::daPut:
       if (fabs(lastRead-Sender->GetAsFloat()) >= 1.0){
-	CuSonde::setForecastTemperature(Sender->GetAsFloat());
+        lastRead = Sender->GetAsFloat();
+        CuSonde::setForecastTemperature(Sender->GetAsFloat());
       }
     break;
   }

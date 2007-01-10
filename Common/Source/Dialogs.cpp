@@ -82,7 +82,7 @@ LRESULT CALLBACK Progress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   PAINTSTRUCT ps;            // structure for paint info
   HDC hDC;
   RECT rc;
-
+  (void)lParam;
   switch (message)
     {
     case WM_INITDIALOG:

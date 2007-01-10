@@ -67,6 +67,7 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
   static rectObj bounds_active;
   static double range_active = 1.0;
   rectObj bounds_screen;
+  (void)rcin;
 
   bounds_screen = MapWindow::CalculateScreenBounds(1.0);
 
@@ -306,15 +307,15 @@ void ColorRampLookup(const short h, BYTE &r, BYTE &g, BYTE &b,
 
   for (i=numramp-2; i>=0; i--) {
     if (h>=ramp_colors[i].h) {
-      f = (h-ramp_colors[i].h)*255
-        /(ramp_colors[i+1].h-ramp_colors[i].h);
-      of = 255-f;
+      f = (short)((h-ramp_colors[i].h)*255
+        /(ramp_colors[i+1].h-ramp_colors[i].h));
+      of = (short)(255-f);
       tr = f*ramp_colors[i+1].r+of*ramp_colors[i].r;
       tg = f*ramp_colors[i+1].g+of*ramp_colors[i].g;
       tb = f*ramp_colors[i+1].b+of*ramp_colors[i].b;
-      r = tr >> 8; // was /256
-      g = tg >> 8;
-      b = tb >> 8;
+      r = (unsigned char)(tr >> 8); // was /256
+      g = (unsigned char)(tg >> 8);
+      b = (unsigned char)(tb >> 8);
       return;
     }
   }
@@ -433,10 +434,10 @@ public:
     int x, y;
     short X0, Y0;
     short X1, Y1;
-    X0 = dtquant/2;
-    Y0 = dtquant/2;
-    X1 = X0+dtquant*ixs;
-    Y1 = Y0+dtquant*iys;
+    X0 = (short)(dtquant/2);
+    Y0 = (short)(dtquant/2);
+    X1 = (short)(X0+dtquant*ixs);
+    Y1 = (short)(Y0+dtquant*iys);
     short* myhbuf = hBuf;
 
     if(!terrain_dem_graphics.isTerrainLoaded())
@@ -466,7 +467,7 @@ public:
     // magnify gradient to make it
     // more obvious
 
-    int pval = 0; // y*ixs+x;
+//    int pval = 0; // y*ixs+x;
 
     // JMW attempting to remove wobbling terrain
     x = ((X0+X1)/2);
@@ -641,7 +642,7 @@ public:
     for (i=0; i<gsize; ++i) {
 
       mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256; // 8
-      illumination = max(0,min(255,(short)mag));
+      illumination = (short)(max(0,min(255,(short)mag)));
       *tnxBuf = illumination;
 
       max_illumination = max(illumination, max_illumination);
@@ -659,7 +660,7 @@ public:
 
     short mslope=0;
     short moffset=0;
-    short bright = 128+TerrainBrightness/2;
+    short bright = (short)(128+TerrainBrightness/2);
 
     static short t_mslope = 256;
     static short t_moffset = 170;
@@ -675,20 +676,20 @@ public:
       // 255-bright = (max_ill-av_illum)*slope/256
       // slope = 256*(255-bright)/(max_illum-av_illum)
 
-      mslope = (255*256-bright*256)/(max_illumination-av_illumination);
+      mslope = (short)((255*256-bright*256)/(max_illumination-av_illumination));
     } else {
       mslope = 256;
     }
-    mslope = min(256*2,mslope);
-    moffset = 256-mslope*max_illumination/256;
+    mslope = (short)min(256*2,mslope);
+    moffset = (short)(256-mslope*max_illumination/256);
 
-    t_mslope = (4*t_mslope+4*mslope)/8;
-    t_moffset = (4*t_moffset+4*moffset)/8;
+    t_mslope = (short)((4*t_mslope+4*mslope)/8);
+    t_moffset = (short)((4*t_moffset+4*moffset)/8);
 
     // make quick tabular lookup for illumination
     short ttab[257];
     for (i=0; i<256; i++) {
-      ttab[i] = max(0,min(255,i*t_mslope/256+t_moffset));
+      ttab[i] = (short)(max(0,min(255,i*t_mslope/256+t_moffset)));
     }
     ttab[256]=ttab[255];
 
@@ -833,7 +834,8 @@ void OptimizeTerrainCache()
 void DrawTerrain( const HDC hdc, const RECT rc,
                   const double sunazimuth, const double sunelevation)
 {
-
+  (void)sunelevation; // unused TODO
+  (void)rc;
   DWORD tm, tmstart;
 
   if(!terrain_dem_graphics.isTerrainLoaded())

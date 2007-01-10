@@ -414,7 +414,8 @@ BOOL NMEAParser::GLL(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 BOOL NMEAParser::RMB(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-
+  (void)GPS_INFO;
+  (void)String;
   /* we calculate all this stuff now
   TCHAR ctemp[80];
 
@@ -545,12 +546,12 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 	  int hours = ((int)ThisTime)/3600;
 	  int mins = ((int)ThisTime-hours*60)/60;
 	  int secs = (int)ThisTime-hours*3600-mins*60;
-	  sysTime.wYear = GPS_INFO->Year;
-	  sysTime.wMonth = GPS_INFO->Month;
-	  sysTime.wDay = GPS_INFO->Day;
-	  sysTime.wHour = hours;
-	  sysTime.wMinute = mins;
-	  sysTime.wSecond = secs;
+	  sysTime.wYear = (unsigned short)GPS_INFO->Year;
+	  sysTime.wMonth = (unsigned short)GPS_INFO->Month;
+	  sysTime.wDay = (unsigned short)GPS_INFO->Day;
+	  sysTime.wHour = (unsigned short)hours;
+	  sysTime.wMinute = (unsigned short)mins;
+	  sysTime.wSecond = (unsigned short)secs;
 	  sysTime.wMilliseconds = 0;
 	  sysTimeInitialised = (::SetSystemTime(&sysTime)==TRUE);
 
@@ -711,6 +712,7 @@ BOOL NMEAParser::GGA(TCHAR *String, NMEA_INFO *GPS_INFO)
 BOOL NMEAParser::RMZ(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
+  (void)GPS_INFO;
 
   ExtractParameter(String,ctemp,0);
   RMZAltitude = StrToDouble(ctemp, NULL);
@@ -724,6 +726,7 @@ BOOL NMEAParser::RMZ(TCHAR *String, NMEA_INFO *GPS_INFO)
 BOOL NMEAParser::RMA(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
+  (void)GPS_INFO;
 
   ExtractParameter(String,ctemp,0);
   RMAAltitude = StrToDouble(ctemp, NULL);
@@ -751,6 +754,7 @@ BOOL NMEAParser::WP0(TCHAR *String, NMEA_INFO *GPS_INFO)
 BOOL NMEAParser::WP1(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
+  (void)GPS_INFO;
 
   ExtractParameter(String,ctemp,0);
   return FALSE;
@@ -760,6 +764,7 @@ BOOL NMEAParser::WP1(TCHAR *String, NMEA_INFO *GPS_INFO)
 BOOL NMEAParser::WP2(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
+  (void)GPS_INFO;
 
   ExtractParameter(String,ctemp,0);
   MACCREADY = StrToDouble(ctemp,NULL);
@@ -790,21 +795,21 @@ BOOL NMEAParser::NMEAChecksum(TCHAR *String)
   iswdigit('0');
 
   if(_istdigit(c1))
-    v1 = c1 - '0';
+    v1 = (unsigned char)(c1 - '0');
   if(_istdigit(c2))
-    v2 = c2 - '0';
+    v2 = (unsigned char)(c2 - '0');
   if(_istalpha(c1))
-    v1 = c1 - 'A' + 10;
+    v1 = (unsigned char)(c1 - 'A' + 10);
   if(_istalpha(c2))
-    v2 = c2 - 'A' + 10;
+    v2 = (unsigned char)(c2 - 'A' + 10);
 
-  ReadCheckSum = (v1<<4) + v2;
+  ReadCheckSum = (unsigned char)((v1<<4) + v2);
 
   End =(int)( pEnd - String);
 
   for(i=1;i<End;i++)
     {
-      CalcCheckSum = CalcCheckSum ^ String[i];
+      CalcCheckSum = (unsigned char)(CalcCheckSum ^ String[i]);
     }
 
   if(CalcCheckSum == ReadCheckSum)
@@ -988,7 +993,7 @@ BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
   ExtractParameter(String,ctemp,5);
   long ID;
   swscanf(ctemp,TEXT("%lx"), &ID);
-  unsigned long uID = ID;
+//  unsigned long uID = ID;
 
   flarm_slot = FLARM_FindSlot(GPS_INFO, ID);
   if (flarm_slot<0) {

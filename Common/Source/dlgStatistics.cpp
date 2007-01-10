@@ -552,7 +552,7 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
             STYLE_THINDASHPAPER);
 
   double sinkrate0, sinkrate1;
-  double v0, v1;
+  double v0=0, v1;
   bool v0valid = false;
   int i0=0;
 
@@ -634,7 +634,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
   double lon1 = 0;
   double lat2 = 0;
   double lon2 = 0;
-  double x1, y1, x2, y2;
+  double x1, y1, x2=0, y2=0;
   double lat_c, lon_c;
   double aatradius[MAXTASKPOINTS];
 
@@ -1270,6 +1270,8 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
 static void Update(void){
   TCHAR sTmp[1000];
   //  WndProperty *wp;
+  int dt=1;
+  double d=0;
 
   switch(page){
     case 0:
@@ -1405,8 +1407,6 @@ static void Update(void){
     TCHAR sRules[20];
     TCHAR sFinished[20];
     //      TCHAR timetext2[100];
-    int dt;
-    double d;
     double score;
 
     olcvalid = false;
@@ -1500,19 +1500,22 @@ static void NextPage(int Step){
 
 
 static void OnNextClicked(WindowControl * Sender){
+	(void)Sender;
   NextPage(+1);
 }
 
 static void OnPrevClicked(WindowControl * Sender){
+	(void)Sender;
   NextPage(-1);
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
-
+  (void)Sender; (void)lParam;
   if (wGrid->GetFocused())
     return(0);
 
@@ -1535,7 +1538,8 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
 static void OnCalcClicked(WindowControl * Sender,
 			  WndListFrame::ListInfo_t *ListInfo){
-
+  (void)ListInfo;
+  (void)Sender;
   if (page==0) {
     dlgBasicSettingsShowModal();
   }

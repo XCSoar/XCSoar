@@ -43,18 +43,22 @@ extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
 static void OnYesClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(wpTerrainBoundsYes);
 }
 
 static void OnYesAllClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(wpTerrainBoundsYesAll);
 }
 
 static void OnNoClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(wpTerrainBoundsNo);
 }
 
 static void OnNoAllClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(wpTerrainBoundsNoAll);
 }
 

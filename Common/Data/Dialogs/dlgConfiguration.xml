@@ -750,7 +750,7 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
 
   <WndButton Name="cmdAircraftType" Caption="Aircraft type: " X=2 Y=-1 Width=246  Height=22 Font=2 />
 
-  <WndButton Name="cmdAircraftRego" Caption="Aircraft rego: " X=2 Y=-1 Width=246  Height=22 Font=2 />
+  <WndButton Name="cmdAircraftRego" Caption="Competition Id: " X=2 Y=-1 Width=246  Height=22 Font=2 />
 
   </WndFrame>
 

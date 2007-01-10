@@ -268,7 +268,7 @@ char *msGetErrorString(char *delimiter)
 
 void msSetError(int code, const char *message_fmt, const char *routine, ...)
 {
-  char *errfile=NULL;
+//  char *errfile=NULL;
 //  FILE *errstream;
 //  time_t errtime;
   errorObj *ms_error = msInsertErrorObj();
@@ -389,6 +389,7 @@ char *msGetVersion() {
 
 void msWebDebug( const char * pszFormat, ... )
 {
+   (void)pszFormat;
 #ifndef _WIN32
     va_list args;
     struct timeval tv;
@@ -408,6 +409,7 @@ void msWebDebug( const char * pszFormat, ... )
 
 void msDebug( const char * pszFormat, ... )
 {
+	  (void)pszFormat;
 #ifdef ENABLE_STDERR_DEBUG
     va_list args;
     struct timeval tv;

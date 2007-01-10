@@ -626,22 +626,27 @@ static void NextPage(int Step){
 
 
 static void OnNextClicked(WindowControl * Sender){
+	(void)Sender;
   NextPage(+1);
 }
 
 static void OnPrevClicked(WindowControl * Sender){
+	(void)Sender;
   NextPage(-1);
 }
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static void OnSaveClicked(WindowControl * Sender){
+	(void)Sender;
   VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
 }
 
 static void OnDemoClicked(WindowControl * Sender){
+	(void)Sender;
   // retrieve changes from form
   UpdateParameters(false);
   dlgVegaDemoShowModal();
@@ -649,23 +654,28 @@ static void OnDemoClicked(WindowControl * Sender){
 
 
 static void OnSchemeVegaClicked(WindowControl * Sender){
+	(void)Sender;
   SetParametersScheme(0);
 }
 
 static void OnSchemeBorgeltClicked(WindowControl * Sender){
+	(void)Sender;
   SetParametersScheme(1);
 }
 
 static void OnSchemeCambridgeClicked(WindowControl * Sender){
+	(void)Sender;
   SetParametersScheme(2);
 }
 
 static void OnSchemeZanderClicked(WindowControl * Sender){
+	(void)Sender;
   SetParametersScheme(3);
 }
 
 
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+	(void)lParam; (void)Sender;
   switch(wParam & 0xffff){
     // JMW NO! This disables editing! ///   case VK_LEFT:
     case '6':

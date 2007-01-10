@@ -211,8 +211,8 @@ void ThermalLocator::Update_Internal(double t_0,
     int mag = isqrt4((dx*dx+dy*dy)*256*256)/256;
 
     // find magnitude of angle error
-    double g = max(-0.99,min(0.99,(dx*vx + dy*vy)/(100.0*mag)));
-    double angle = acos(g)*RAD_TO_DEG-90;
+//    double g = max(-0.99,min(0.99,(dx*vx + dy*vy)/(100.0*mag)));
+//    double angle = acos(g)*RAD_TO_DEG-90;
 
     est_x = (sx+xav)/(1.0*SFACT);
     est_y = (sy+yav)/(1.0*SFACT);
@@ -278,8 +278,8 @@ void ThermalLocator::EstimateThermalBase(double Thermal_Longitude,
   double Yrounding = fabs(lat-Thermal_Latitude)/2;
   terrain_dem_calculations.SetTerrainRounding(Xrounding, Yrounding);
 
-  double latlast = lat;
-  double lonlast = lon;
+//  double latlast = lat;
+//  double lonlast = lon;
   double hground;
 
   for (double t = 0; t<=Tmax; t+= dt) {

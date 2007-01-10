@@ -136,6 +136,7 @@ static void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 //////////////////
 
 static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  (void)Basic;
   if (Calculated->TaskDistanceToGo<=0) {
     return 0;
   }
@@ -659,6 +660,7 @@ void HomeDistance(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       bool full=true) {
   int i;
+  (void)Basic;
   if (full) {
     olc.ResetFlight();
     flightstats.Reset();
@@ -1265,7 +1267,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   LastTime = Basic->Time;
   LastTrack = Basic->TrackBearing;
 
-  double temp = StartTime;
+//  double temp = StartTime;
 
   bool forcecruise = false;
   bool forcecircling = false;
@@ -1543,6 +1545,7 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 {
   //  LockFlightData();
+  (void)Basic;
   LockTaskData();
   if((ActiveWayPoint >=0)&&(WayPointList))
     {
@@ -1674,6 +1677,7 @@ int InAATTurnSector(double longitude, double latitude,
 
 
 bool ValidFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  (void)Basic;
   if ((FinishMinHeight>0)
       &&(Calculated->TerrainValid)
       &&(Calculated->AltitudeAGL<FinishMinHeight)) {
@@ -1766,6 +1770,7 @@ bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                            double OutBound,
                            bool &LastInSector)
 {
+  (void)Calculated;
   if (!WayPointList) return false;
   if(Index == -1) {
     return false;
@@ -2247,7 +2252,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
   double w1lon;
   double w0lat;
   double w0lon;
-  double Vfinal;
+  double Vfinal=0;
 
   //  LockFlightData();
   LockTaskData();
@@ -2350,7 +2355,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
     double h0 = Calculated->TaskAltitudeRequiredFromStart;
     // total height required from start
 
-    double h2 = Calculated->TaskAltitudeRequired-Calculated->NavAltitude;
+//    double h2 = Calculated->TaskAltitudeRequired-Calculated->NavAltitude;
     // actual height required
 
     double h1 = Calculated->NavAltitude-SAFETYALTITUDEARRIVAL
@@ -2436,7 +2441,9 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                     double maccready)
 {
   int i;
-  double LegCovered, LegToGo, LegDistance, LegBearing, LegAltitude;
+  double LegCovered, LegToGo=0;
+  double LegDistance, LegBearing=0;
+  double LegAltitude;
   double TaskAltitudeRequired = 0;
   double TaskAltitudeRequired0 = 0;
   double LegAltitude0, LegTime0;
@@ -2572,7 +2579,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   Calculated->TaskDistanceToGo = 0;
   Calculated->TaskTimeToGo = 0;
 
-  double FinalAltitude = 0;
+//  double FinalAltitude = 0;
   int FinalWayPoint = getFinalWaypoint();
 
   if(ActiveWayPoint >=0)
@@ -2909,7 +2916,7 @@ void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static BOOL BelowGlide = TRUE;
   static double delayedTAD = 0.0;
-
+  (void)Basic;
   delayedTAD = 0.95*delayedTAD+0.05*Calculated->TaskAltitudeDifference;
 
   if(BelowGlide == TRUE)
@@ -3106,7 +3113,7 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   int i;
   double MaxDistance, MinDistance, TargetDistance;
   double LegToGo, LegDistance, TargetLegToGo, TargetLegDistance;
-  double TaskAltitudeRequired = 0;
+//  double TaskAltitudeRequired = 0;
 
   if (!WayPointList) return ;
 
@@ -3346,7 +3353,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   double lat, lon;
   double latlast, lonlast;
   double h=0.0, dh=0.0;
-  int imax=0;
+//  int imax=0;
   double dhlast=0;
   double altitude;
 
@@ -3695,7 +3702,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
     WayPointList[i].InTask = false;
   }
 
-  int lastclosest;
+  int lastclosest=0;
   if (newclosest) {
     lastclosest = Task[0].Index;
   }
@@ -3917,8 +3924,9 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       double bearing,
                       double GlideSlope) {
 
-  bool maxfound = false;
-  bool first = true;
+
+//  bool maxfound = false;
+//  bool first = true;
   double pmc = 0.0;
   double htarget = GlideSlope;
   double h;
@@ -3926,6 +3934,8 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   double pmclast = 5.0;
   double dhlast = -1.0;
   double pmczero = 0.0;
+
+  (void)Basic;
 
   while (pmc<10.0) {
 
@@ -3970,6 +3980,7 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			  double hfinal) {
 
   // find highest Mc to achieve greatest distance in remaining time and height
+  (void)Basic;
 
   double timetogo;
   double mc;
@@ -4280,7 +4291,7 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       LegCovered = max(0.1,LegCovered-StartRadius);
     }
 
-    double altreqfinal =
+//    double altreqfinal =
       GlidePolar::MacCreadyAltitude(mce,
                                     LegCovered,
                                     bearing,

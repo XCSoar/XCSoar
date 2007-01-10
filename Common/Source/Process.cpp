@@ -319,6 +319,7 @@ void NextUpDown(int UpDown)
 
 void NoProcessing(int UpDown)
 {
+	(void)UpDown;
 	return;
 }
 

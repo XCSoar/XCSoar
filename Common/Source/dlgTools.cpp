@@ -454,7 +454,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 
   XMLNode xMainNode;
 
-/* -> filename is still localized
+/* -> filename is allready localized
 #if (WINDOWSPC<1)
   xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
 #else
@@ -464,7 +464,11 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 #endif
 */
 
-  xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
+  if (FileExistsA(FileName))   //sgi use window API cals to check if
+                               //file exists, this will supress
+                               //CodeGurad warnings on callinf
+                               //fopen(<unexisting file>)
+    xMainNode=XMLNode::openFileHelper(FileName ,TEXT("PMML"));
 
   if (xMainNode.isEmpty()) {
     if (resource) {

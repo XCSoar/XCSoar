@@ -67,13 +67,13 @@ void NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 		if (partSize < 10)
 		{
 			rest -= partVal;
-			code[txtPos] = '0' + partSize;
+			code[txtPos] = (unsigned char)('0' + partSize);
 			curCif--;
 		}
 		else if (partSize < 36)
 		{
 			rest -= partVal;
-			code[txtPos] = 'A' + partSize - 10;
+			code[txtPos] = (unsigned char)('A' + partSize - 10);
 			curCif--;
 		}
 		else

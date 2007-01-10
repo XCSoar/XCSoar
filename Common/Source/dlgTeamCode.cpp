@@ -107,6 +107,7 @@ static void Update() {
 
 
 static void OnCodeClicked(WindowControl *Sender) {
+	(void)Sender;
   if (buttonCode) {
     dlgTextEntryShowModal(TeammateCode, 7);
   }
@@ -126,10 +127,12 @@ static void OnCodeClicked(WindowControl *Sender) {
 
 
 static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static int OnTimerNotify(WindowControl * Sender) {
+	(void)Sender;
   Update();
   return 0;
 }
