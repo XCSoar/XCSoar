@@ -59,7 +59,7 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
                       0,            // Share mode
                       NULL,         // Pointer to the security attribute
                       OPEN_EXISTING,// How to open the serial port
-                      0,            // Port attributes
+                      FILE_ATTRIBUTE_NORMAL,            // Port attributes
                       NULL);        // Handle to port with attribute
                                     // to copy
 
@@ -148,6 +148,9 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
     dwError = GetLastError ();
     return FALSE;
   }
+
+
+  SetupComm(hPort2, 1024, 1024);
 
   // Direct the port to perform extended functions SETDTR and SETRTS
   // SETDTR: Sends the DTR (data-terminal-ready) signal.
@@ -239,20 +242,25 @@ DWORD Port2ReadThread (LPVOID lpvoid)
 	 && (!Port2CloseThread))
   {
 //    int i=0;
-
+    #if (WINDOWSPC>0)
+    Sleep(50);  // ToDo rewrite the whole driver to use overlaped IO on W2K or higher
+    #else
     // Wait for an event to occur for the port.
     if (!WaitCommEvent (hPort2, &dwCommModemStatus, 0)) {
       // error reading from port
       Sleep(100);
     }
+    #endif
 
     // Re-specify the set of events to be monitored for the port.
     //    SetCommMask (hPort2, dwMask2);
 
+    #if !defined(WINDOWSPC) || (WINDOWSPC==0)
     if (
-	(dwCommModemStatus & EV_RXFLAG)
-	||(dwCommModemStatus & EV_RXCHAR)
-	)
+      (dwCommModemStatus & EV_RXFLAG)
+      ||(dwCommModemStatus & EV_RXCHAR)
+      )
+    #endif
     {
 
       // Loop for waiting for the data.

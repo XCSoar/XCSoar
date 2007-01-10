@@ -390,7 +390,7 @@ void ReadRegistrySettings(void)
 
   StartupStore(TEXT("Read registry settings\r\n"));
 
-#ifdef GNAV
+#if defined(GNAV) || defined(PCGNAV)
   DefaultRegistrySettingsAltair();
 #endif
 
@@ -687,7 +687,7 @@ void ReadRegistrySettings(void)
   EnableVarioGauge = (Temp == 1);
   */
 
-#ifdef GNAV
+#if defined(GNAV) || defined(PCGNAV)
   Temp = 0;
 #else
   Temp = 250;
@@ -1002,10 +1002,6 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   dwSize *= 2;
 
   hRes = RegQueryValueEx(hKey, szRegValue, 0, &dwType, (LPBYTE)pPos, &dwSize);
-
-  if (hRes == 998){
-    hRes = 988;
-  }
 
   RegCloseKey(hKey);
   return hRes;
@@ -3224,7 +3220,7 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 
 
 */
-#ifdef GNAV
+#if defined(GNAV) && !defined(PCGNAV)
   _tcscpy(buffer,TEXT("\\NOR Flash"));
   //  _tcscpy(buffer,TEXT("\\USB HD\\Altair"));
 #else
@@ -3307,14 +3303,10 @@ void propGetFontSettings(TCHAR *Name, LOGFONT* lplf) {
   ASSERT(Name[0] != '\0');
   ASSERT(lplf != NULL);
 
-#if (WINDOWSPC>0)
+#if (WINDOWSPC>0) && !defined(PCGNAV)
   // Don't load font settings from registry values for windows version
   return;
 #endif
-
-  DWORD dwTmp;
-  GetFromRegistry(TEXT("Brush7"), &dwTmp);
-  GetRegistryString(TEXT("DeviceA"), Buffer, sizeof(Buffer)/sizeof(TCHAR));
 
   if (GetRegistryString(Name, Buffer, sizeof(Buffer)/sizeof(TCHAR)) == 0) {
 

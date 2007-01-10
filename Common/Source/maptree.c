@@ -39,6 +39,7 @@ Copyright_License {
 #include "maptree.h"
 #include "maperror.h"
 
+int FileExistsA(char *FileName);
 /* -------------------------------------------------------------------- */
 /*      If the following is 0.5, nodes will be split in half.  If it    */
 /*      is 0.6 then each subnode will contain 60% of the parent         */
@@ -132,7 +133,12 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
   /* -------------------------------------------------------------------- */
     pszFullname = (char *) malloc(strlen(pszBasename) + 5);
     sprintf( pszFullname, "%s%s", pszBasename, MS_INDEX_EXTENSION);
-    psTree->fp = fopen(pszFullname, "rb" );
+
+    if (FileExistsA(pszFullname))  // prevent codegurad warnings (open unexisting file for reading)
+      psTree->fp = fopen(pszFullname, "rb" );
+    else
+      psTree->fp = NULL;
+
 
     msFree(pszBasename); // don't need these any more
     msFree(pszFullname);

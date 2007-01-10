@@ -637,11 +637,13 @@ static void OnPrevClicked(WindowControl * Sender){
 
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
+  UpdateParameters(false);  // 20060801:sgi make shure changes are sent to device
   wf->SetModalResult(mrOK);
 }
 
 static void OnSaveClicked(WindowControl * Sender){
 	(void)Sender;
+  UpdateParameters(false);  // 20060801:sgi make shure changes are sent to device
   VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
 }
 

@@ -192,28 +192,35 @@ DWORD Port1ReadThread (LPVOID lpvoid)
 
   dwMask1 = EV_RXFLAG | EV_CTS | EV_DSR | EV_RING | EV_RXCHAR;
 
+  #if !defined(WINDOWSPC) || (WINDOWSPC==0)
   SetCommMask(hPort1, dwMask1);
+  #endif
 
   fRxThreadTerminated = FALSE;
 
   while ((hPort1 != INVALID_HANDLE_VALUE) &&
 	 (!MapWindow::CLOSETHREAD) && (!Port1CloseThread))
   {
-//    int i=0;
 
+    #if (WINDOWSPC>0)
+    Sleep(50);  // ToDo rewrite the whole driver to use overlaped IO on W2K or higher
+    #else
     // Wait for an event to occur for the port.
     if (!WaitCommEvent (hPort1, &dwCommModemStatus, 0)) {
       // error reading from port
       Sleep(100);
     }
+    #endif
 
     // Re-specify the set of events to be monitored for the port.
     //    SetCommMask (hPort1, dwMask1);
 
+    #if !defined(WINDOWSPC) || (WINDOWSPC==0)
     if (
-	(dwCommModemStatus & EV_RXFLAG)
-	||(dwCommModemStatus & EV_RXCHAR)
-	)
+        (dwCommModemStatus & EV_RXFLAG)
+        ||(dwCommModemStatus & EV_RXCHAR)
+        )
+    #endif
     {
 
       // Loop for waiting for the data.
@@ -375,8 +382,8 @@ BOOL Port1StartRxThread(void){
 
   Port1CloseThread = FALSE;
   // Create a read thread for reading data from the communication port.
-  if (hRead1Thread = CreateThread
-      (NULL, 0, (LPTHREAD_START_ROUTINE )Port1ReadThread, 0, 0, &dwThreadID))
+  if ((hRead1Thread = CreateThread
+      (NULL, 0, (LPTHREAD_START_ROUTINE )Port1ReadThread, 0, 0, &dwThreadID)) != NULL)
   {
     SetThreadPriority(hRead1Thread, THREAD_PRIORITY_NORMAL); //THREAD_PRIORITY_ABOVE_NORMAL
     CloseHandle (hRead1Thread);

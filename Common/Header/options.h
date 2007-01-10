@@ -28,7 +28,7 @@
 
 #define DISABLEAUDIOVARIO
 
-#if (GNAV)
+#if defined(GNAV)
 #define DISABLEAUDIOVARIO
 // use exception handling
 #ifndef ALTAIRPROTOTYPE

@@ -553,10 +553,12 @@ void CSTScreenBuffer::HorizontalBlur(int boxw) {
       int tot_r=0;
       int tot_g=0;
       int tot_b=0;
-      for (int x=0;x<boxw;x++) {
-	tot_r+= src[x].m_R;
-	tot_g+= src[x].m_G;
-	tot_b+= src[x].m_B;
+      int x;
+
+      for (x=0;x<boxw;x++) {
+        tot_r+= src[x].m_R;
+        tot_g+= src[x].m_G;
+        tot_b+= src[x].m_B;
       }
       for (x=0;x< m_nCorrectedWidth; x++)
 	{
@@ -607,7 +609,9 @@ void CSTScreenBuffer::VerticalBlur(int boxh) {
       int tot_r=0;
       int tot_g=0;
       int tot_b=0;
-      for (int y=0;y<boxh;y++) {
+      int y;
+
+      for (y=0;y<boxh;y++) {
 	i = x+y*m_nCorrectedWidth;
 	tot_r+= src[i].m_R;
 	tot_g+= src[i].m_G;
