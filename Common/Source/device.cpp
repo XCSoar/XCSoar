@@ -498,7 +498,7 @@ BOOL devIsBaroSource(PDeviceDescriptor_t d){
 
 BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName){
   if (d != NULL){
-    d->fhLogFile = _tfopen(FileName, TEXT("wb"));
+    d->fhLogFile = _tfopen(FileName, TEXT("a+b"));
     return(d->fhLogFile != NULL);
   } else
     return(FALSE);

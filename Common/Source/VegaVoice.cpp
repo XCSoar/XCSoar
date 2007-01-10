@@ -472,6 +472,9 @@ static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, Airspace
   static bool PlaySimpleWarning = false;
 
 
+  if (!ProgramStarted)
+    return;
+
   switch (Action){
 
     case asaItemAdded:

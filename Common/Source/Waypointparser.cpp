@@ -598,7 +598,7 @@ void ReadWayPoints(void)
 #endif
 
   // read additional waypoint file
-//  int NumberOfWayPointsAfterFirstFile = NumberOfWayPoints;
+  int NumberOfWayPointsAfterFirstFile = NumberOfWayPoints;
 
 #ifdef HAVEEXCEPTIONS
   __try{
@@ -635,8 +635,8 @@ void ReadWayPoints(void)
       }
     }
     MessageBoxX(hWndMainWindow,
-		  gettext(TEXT("Unhandled Error in second Waypoint file\r\nNo Wp's loaded from that File!")),
-			gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
+      gettext(TEXT("Unhandled Error in second Waypoint file\r\nNo Wp's loaded from that File!")),
+      gettext(TEXT("Error")),MB_OK|MB_ICONSTOP);
     SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));  
   }
 #endif

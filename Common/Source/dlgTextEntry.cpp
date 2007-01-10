@@ -49,7 +49,7 @@ static TCHAR edittext[MAX_TEXTENTRY];
 
 static TCHAR EntryLetters[] = TEXT(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 
-#define MAXENTRYLETTERS (int)(sizeof(EntryLetters)/sizeof(TCHAR)-1)
+#define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
 
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;

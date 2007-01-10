@@ -594,7 +594,7 @@ void HideMenu() {
 }
 
 void ShowMenu() {
-#ifndef GNAV
+#if !defined(GNAV) && !defined(PCGNAV)
   InputEvents::setMode(TEXT("Exit"));
 #endif
   MenuTimeOut = 0;
@@ -998,10 +998,10 @@ void CreateCalculationThread() {
   DWORD dwCalcThreadID;
 
   // Create a read thread for performing calculations
-  if (hCalculationThread =
-      CreateThread (NULL, 0, 
-		    (LPTHREAD_START_ROUTINE )CalculationThread, 
-		    0, 0, &dwCalcThreadID))
+  if ((hCalculationThread =
+      CreateThread (NULL, 0,
+        (LPTHREAD_START_ROUTINE )CalculationThread,
+         0, 0, &dwCalcThreadID)) != NULL)
   {
     SetThreadPriority(hCalculationThread, THREAD_PRIORITY_NORMAL); 
     CloseHandle (hCalculationThread);
@@ -1012,10 +1012,10 @@ void CreateCalculationThread() {
   HANDLE hInstrumentThread;
   DWORD dwInstThreadID;
 
-  if (hInstrumentThread =
-      CreateThread (NULL, 0, 
-		    (LPTHREAD_START_ROUTINE )InstrumentThread, 
-		    0, 0, &dwInstThreadID))
+  if ((hInstrumentThread =
+      CreateThread (NULL, 0,
+       (LPTHREAD_START_ROUTINE )InstrumentThread,
+        0, 0, &dwInstThreadID)) != NULL)
   {
     SetThreadPriority(hInstrumentThread, THREAD_PRIORITY_NORMAL); 
     CloseHandle (hInstrumentThread);
@@ -1385,7 +1385,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance, LPTSTR szWindowClass)
   wc.cbWndExtra                 = dc.cbWndExtra ;
 #endif
   wc.hInstance                  = hInstance;
-#ifdef GNAV
+#if defined(GNAV) && !defined(PCGNAV)
   wc.hIcon = NULL;
 #else
   wc.hIcon                      = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
@@ -1639,7 +1639,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
     }
 
-#ifndef GNAV
+#if defined(GNAV) && !defined(PCGNAV)
   // TODO: release the handle?
   HANDLE hTmp = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_XCSOARSWIFT));
   SendMessage(hWndMainWindow, WM_SETICON,
@@ -1901,7 +1901,7 @@ void Shutdown(void) {
   SaveCalculationsPersist(&CALCULATED_INFO);
 #endif
 
-  #if defined(GNAV)
+  #if defined(GNAV) && !defined(PCGNAV)
     StartupStore(TEXT("Altair shutdown\r\n"));
     Sleep(2500);
     InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
@@ -2108,7 +2108,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       // 	  processKey to handle long events - at any length
       // 	- Not sure how to do double click... (need timer call back
       // 	process unless reset etc... tricky)
-#ifdef GNAV
+#if defined(GNAV) || defined(PCGNAV)
     case WM_KEYDOWN: // JMW was keyup
 #else
     case WM_KEYUP: // JMW was keyup
