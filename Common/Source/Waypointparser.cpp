@@ -130,10 +130,16 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
             return false;
           case wpTerrainBoundsYesAll:
             WaypointOutOfTerrainRangeDontAskAgain = 1;
+            WaypointsOutOfRange = 1;
+            SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
+            StoreRegistry();
             return true;
           case mrCancle:
           case wpTerrainBoundsNoAll:
             WaypointOutOfTerrainRangeDontAskAgain = 2;
+            WaypointsOutOfRange = 2;
+            SetToRegistry(szRegistryWaypointsOutOfRange, WaypointsOutOfRange);
+            StoreRegistry();
             return false;
         }
 
@@ -939,15 +945,14 @@ void WaypointWriteFiles(void) {
   GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
   ExpandLocalPath(szFile2);
 
-  if (_tcslen(szFile2)>0){
+  if (_tcslen(szFile2)>0)
     fp = _tfopen(szFile2, TEXT("wt"));
 
-    if(fp != NULL) {
-      globalFileNum = 0;
-      WriteWayPointFile(fp);
-      fclose(fp);
-      fp = NULL;
-    }
+  if(fp != NULL) {
+    globalFileNum = 1;
+    WriteWayPointFile(fp);
+    fclose(fp);
+    fp = NULL;
   }
 
   UnlockTaskData();

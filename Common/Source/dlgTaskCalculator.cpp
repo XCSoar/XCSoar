@@ -41,6 +41,7 @@ Copyright_License {
 #include "WindowControls.h"
 #include "dlgTools.h"
 #include "Port.h"
+#include "Calculations2.h"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
@@ -56,6 +57,8 @@ static void OnOKClicked(WindowControl * Sender){
 	(void)Sender;
   wf->SetModalResult(mrOK);
 }
+
+
 
 static double Range = 0;
 
@@ -73,7 +76,6 @@ static void RefreshCalculator(void) {
       dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
     }
     dd= min(24.0*60.0,dd/60.0);
-
     wp->GetDataField()->SetAsFloat(dd);
     wp->RefreshDisplay();
   }
@@ -168,7 +170,37 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
       RefreshCalculator();
     break;
   }
+}
 
+
+static void OnOptimiseClicked(WindowControl * Sender){
+  bool first = true;
+  double myrange= Range;
+  if (!AATEnabled) return;
+
+  do {
+    myrange = Range;
+    AdjustAATTargets(Range);
+    RefreshCalculator();
+    double dd = CALCULATED_INFO.TaskTimeToGo;
+    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
+      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    }
+    dd= min(24.0*60.0,dd/60.0);
+    if (dd<= AATTaskLength+5) {
+      if (first) {
+        Range += 0.05;
+      } else {
+        break;
+      }
+    } else {
+      first = false;
+      Range -= 0.05;
+    }
+  } while (fabs(Range)<1.0);
+  Range = myrange;
+  AdjustAATTargets(Range);
+  RefreshCalculator();
 }
 
 
@@ -177,6 +209,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnRangeData),
   DeclearCallBackEntry(OnOKClicked),
   DeclearCallBackEntry(OnCancelClicked),
+  DeclearCallBackEntry(OnOptimiseClicked),
   DeclearCallBackEntry(NULL)
 };
 

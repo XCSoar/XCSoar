@@ -4,13 +4,27 @@ int mode_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task start"), event_id);
+event_id = InputEvents::makeEvent(&eventBeep, TEXT("1"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TASK_START] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task finish"), event_id);
+event_id = InputEvents::makeEvent(&eventBeep, TEXT("1"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TASK_FINISH] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Next turnpoint"), event_id);
+event_id = InputEvents::makeEvent(&eventBeep, TEXT("1"), event_id);
+mode_id = InputEvents::mode2int(TEXT("default"), true);
+GC2Event[mode_id][GCE_TASK_NEXTWAYPOINT] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("In sector, arm advance when ready"), event_id);
+event_id = InputEvents::makeEvent(&eventBeep, TEXT("1"), event_id);
+mode_id = InputEvents::mode2int(TEXT("default"), true);
+GC2Event[mode_id][GCE_ARM_READY] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Waiting for GPS Connection"), event_id);
@@ -76,11 +90,6 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Final Glide Through Terrain"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_FLIGHTMODE_FINALGLIDE_TERRAIN] = event_id;
-
-event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task finished"), event_id);
-mode_id = InputEvents::mode2int(TEXT("default"), true);
-GC2Event[mode_id][GCE_TASK_FINISH] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);

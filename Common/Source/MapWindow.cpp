@@ -32,6 +32,7 @@ Copyright_License {
 #include "stdafx.h"
 #include "compatibility.h"
 #include "Mapwindow.h"
+#include "OnlineContest.h"
 #include "Utils.h"
 #include "Units.h"
 #include "Logger.h"
@@ -238,8 +239,8 @@ bool MapWindow::RequestFullScreen = false;
 
 extern int DisplayTimeOut;
 
-static NMEA_INFO DrawInfo;
-static DERIVED_INFO DerivedDrawInfo;
+NMEA_INFO MapWindow::DrawInfo;
+DERIVED_INFO MapWindow::DerivedDrawInfo;
 
 int SelectedWaypoint = -1;
 bool EnableCDICruise = false;
@@ -263,23 +264,29 @@ int timestats_av = 0;
 DWORD MapWindow::timestamp_newdata=0;
 int cpuload=0;
 
+bool timestats_dirty=false;
+
 void MapWindow::UpdateTimeStats(bool start) {
   static long tottime=0;
   if (start) {
     timestamp_newdata = ::GetTickCount();
+    timestats_dirty = false;
   } else {
-    DWORD time = ::GetTickCount();
-    tottime = (2*tottime+(time-timestamp_newdata))/3;
-    timestats_av = tottime;
-    cpuload=0;
+    if (!timestats_dirty) {
+      DWORD time = ::GetTickCount();
+      tottime = (2*tottime+(time-timestamp_newdata))/3;
+      timestats_av = tottime;
+      cpuload=0;
 #ifdef DEBUG
-    cpuload= MeasureCPULoad();
+      cpuload= MeasureCPULoad();
 #endif
 #ifdef DEBUG
-    char tmptext[100];
-    sprintf(tmptext,"%d # mem\n%d # latency\n", CheckFreeRam()/1024, timestats_av);
-    DebugStore(tmptext);
+      char tmptext[100];
+      sprintf(tmptext,"%d # mem\n%d # latency\n", CheckFreeRam()/1024, timestats_av);
+      DebugStore(tmptext);
 #endif
+    }
+    timestats_dirty = false;
   }
 }
 
@@ -591,6 +598,7 @@ void MapWindow::RefreshMap() {
   SetEvent(drawTriggerEvent);
   MapDirty = true;
   userasked = true;
+  timestats_dirty = true;
 }
 
 bool MapWindow::IsMapFullScreen() {
@@ -1759,6 +1767,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
         // TODO: For some reason, the shadow drawing of the
         // trail doesn't work in portrait mode.  No idea why.
         DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
+        DrawTrailFromTask(hdcDrawWindowBg, rc);
       } else {
         // clear background bitmap
         SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
@@ -1773,6 +1782,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
         // draw trail on background bitmap
         DrawTrail(hDCTemp, Orig_Aircraft, rc);
+        DrawTrailFromTask(hDCTemp, rc);
 
         // make mask
         BitBlt(hDCMask, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
@@ -2024,7 +2034,7 @@ void MapWindow::DrawCrossHairs(HDC hdc, POINT Orig)
 }
 
 
-void PolygonRotateShift(POINT* poly, int n, int x, int y, double angle) {
+void MapWindow::PolygonRotateShift(POINT* poly, int n, int x, int y, double angle) {
   for(int i=0; i<n; i++)
     {
       if (InfoBoxLayout::scale>1) {
@@ -4174,7 +4184,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
 
 static int iSnailNext=0;
-
+double MapWindow::TrailFirstTime = 0;
 
 void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 {
@@ -4215,13 +4225,23 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   // JMW don't draw first bit from home airport
 
   int ntrail;
-  if (needcolour) {
+  if (TrailActive!=2) {
+    ntrail = TRAILSIZE;
+  } else {
+    ntrail = TRAILSIZE/TRAILSHRINK;
+  }
+  if (DerivedDrawInfo.Circling) {
+    ntrail /= TRAILSHRINK;
+  }
 
+  if (needcolour) {
+    /*
     if (DerivedDrawInfo.Circling) {
       ntrail = TRAILSIZE; // scan entire trail for sink magnitude
     } else {
       ntrail = TRAILSIZE/TRAILSHRINK; // scan only recently for lift magnitude
     }
+    */
 
     float this_vmax=(float)0.1;
     float this_vmin=(float)-0.1;
@@ -4246,14 +4266,6 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     }
     needcolour = false;
   }
-
-
-  if ((TrailActive==1)&&(!DerivedDrawInfo.Circling)) {
-    ntrail = TRAILSIZE;
-  } else {
-    ntrail = TRAILSIZE/TRAILSHRINK;
-  }
-
 
   int skipdivisor = ntrail/5;
   int skipborder = skipdivisor;
@@ -4283,6 +4295,9 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     }
 
     P1 = SnailTrail+j;
+    if (i==1) {
+      TrailFirstTime = P1->Time;
+    }
 
     if (DerivedDrawInfo.Circling) {
       if ((!P1->Circling)&&( i<ntrail-60 )) {
@@ -4374,6 +4389,33 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   }
 #endif
 
+}
+
+
+extern OLCOptimizer olc;
+
+void MapWindow::DrawTrailFromTask(HDC hdc, RECT rc) {
+  static POINT ptin[MAXCLIPPOLYGON];
+
+  if((TrailActive!=3) || DerivedDrawInfo.Circling)
+    return;
+
+  olc.SetLine();
+  int n = olc.getN();
+  int i, j=0;
+  for (i=0; i<n; i++) {
+    if (olc.getTime(i)>= TrailFirstTime)
+      break;
+
+    LatLon2Screen(olc.getLongitude(i),
+                  olc.getLatitude(i),
+                  ptin[j]);
+    j++;
+  }
+  if (j>=2) {
+    SelectObject(hdc,hSnailPens[NUMSNAILCOLORS/2]);
+    ClipPolygon(hdc, ptin, j, rc, false);
+  }
 }
 
 
@@ -4824,465 +4866,3 @@ void DrawDashLine(HDC hdc, INT width,
 }
 
 
-void MapWindow::DrawCDI() {
-  bool dodrawcdi = false;
-
-  if (DerivedDrawInfo.Circling) {
-    if (EnableCDICircling) {
-      dodrawcdi = true;
-    }
-  } else {
-    if (EnableCDICruise) {
-      dodrawcdi = true;
-    }
-  }
-
-  if (dodrawcdi) {
-    ShowWindow(hWndCDIWindow, SW_SHOW);
-
-    // JMW changed layout here to fit reorganised display
-    // insert waypoint bearing ".<|>." into CDIScale string"
-
-    TCHAR CDIScale[] = TEXT("330..340..350..000..010..020..030..040..050..060..070..080..090..100..110..120..130..140..150..160..170..180..190..200..210..220..230..240..250..260..270..280..290..300..310..320..330..340..350..000..010..020..030..040.");
-    TCHAR CDIDisplay[25] = TEXT("");
-    int j;
-    int CDI_WP_Bearing = (int)DerivedDrawInfo.WaypointBearing/2;
-    CDIScale[CDI_WP_Bearing + 9] = 46;
-    CDIScale[CDI_WP_Bearing + 10] = 60;
-    CDIScale[CDI_WP_Bearing + 11] = 124; // "|" character
-    CDIScale[CDI_WP_Bearing + 12] = 62;
-    CDIScale[CDI_WP_Bearing + 13] = 46;
-    for (j=0;j<24;j++) CDIDisplay[j] = CDIScale[(j + (int)(DrawInfo.TrackBearing)/2)];
-    CDIDisplay[24] = NULL;
-    // JMW fix bug! This indicator doesn't always display correctly!
-
-    // JMW added arrows at end of CDI to point to track if way off..
-    int deltacdi = iround(DerivedDrawInfo.WaypointBearing-DrawInfo.TrackBearing);
-
-    while (deltacdi>180) {
-      deltacdi-= 360;
-    }
-    while (deltacdi<-180) {
-      deltacdi+= 360;
-    }
-    if (deltacdi>20) {
-      CDIDisplay[21]='>';
-      CDIDisplay[22]='>';
-      CDIDisplay[23]='>';
-    }
-    if (deltacdi<-20) {
-      CDIDisplay[0]='<';
-      CDIDisplay[1]='<';
-      CDIDisplay[2]='<';
-    }
-
-    SetWindowText(hWndCDIWindow,CDIDisplay);
-    // end of new code to display CDI scale
-  } else {
-    ShowWindow(hWndCDIWindow, SW_HIDE);
-  }
-}
-
-
-
-double MapWindow::findMapScaleBarSize(RECT rc) {
-
-  int range = rc.bottom-rc.top;
-//  int nbars = 0;
-//  int nscale = 1;
-  double pixelsize = MapScale/GetMapResolutionFactor(); // km/pixel
-
-  // find largest bar size that will fit in display
-
-  double displaysize = range*pixelsize/2; // km
-
-  if (displaysize>100.0) {
-    return 100.0/pixelsize;
-  }
-  if (displaysize>10.0) {
-    return 10.0/pixelsize;
-  }
-  if (displaysize>1.0) {
-    return 1.0/pixelsize;
-  }
-  if (displaysize>0.1) {
-    return 0.1/pixelsize;
-  }
-  // this is as far as is reasonable
-  return 0.1/pixelsize;
-}
-
-
-void MapWindow::DrawMapScale2(HDC hDC, RECT rc, POINT Orig_Aircraft)
-{
-
-  if (Appearance.MapScale2 == apMs2None) return;
-
-  HPEN hpOld   = (HPEN)SelectObject(hDC, hpMapScale);
-  HPEN hpWhite = (HPEN)GetStockObject(WHITE_PEN);
-  HPEN hpBlack = (HPEN)GetStockObject(BLACK_PEN);
-
-  bool color = false;
-  POINT Start, End={0,0};
-  bool first=true;
-
-  int barsize = iround(findMapScaleBarSize(rc));
-
-  Start.x = rc.right-1;
-  for (Start.y=Orig_Aircraft.y; Start.y<rc.bottom+barsize; Start.y+= barsize) {
-    if (color) {
-      SelectObject(hDC, hpWhite);
-    } else {
-      SelectObject(hDC, hpBlack);
-    }
-    if (!first) {
-      DrawSolidLine(hDC,Start,End);
-    } else {
-      first=false;
-    }
-    End = Start;
-    color = !color;
-  }
-
-  color = true;
-  first = true;
-  for (Start.y=Orig_Aircraft.y; Start.y>rc.top-barsize; Start.y-= barsize) {
-    if (color) {
-      SelectObject(hDC, hpWhite);
-    } else {
-      SelectObject(hDC, hpBlack);
-    }
-    if (!first) {
-      DrawSolidLine(hDC,Start,End);
-    } else {
-      first=false;
-    }
-    End = Start;
-    color = !color;
-  }
-
-  // draw text as before
-
-  SelectObject(hDC, hpOld);
-
-}
-
-
-void MapWindow::DrawSpeedToFly(HDC hDC, RECT rc) {
-  POINT chevron[3];
-
-  HPEN hpOld;
-  HBRUSH hbOld;
-
-  //  TCHAR Value[10];
-  int i;
-
-  if (Appearance.DontShowSpeedToFly || !DerivedDrawInfo.Flying)
-    return;
-
-#ifndef _SIM_
-  if (!(DrawInfo.AirspeedAvailable && DrawInfo.VarioAvailable)) {
-    return;
-  }
-#else
-  // cheat
-  DrawInfo.IndicatedAirspeed = DrawInfo.Speed;
-#endif
-
-  hbOld = (HBRUSH)SelectObject(hDC, GetStockObject(WHITE_BRUSH));
-  hpOld = (HPEN)SelectObject(hDC, hpBearing);
-
-  double vdiff;
-  int vsize = (rc.bottom-rc.top)/2;
-
-  vdiff = (DerivedDrawInfo.VOpt - DrawInfo.IndicatedAirspeed)/40.0;
-  // 25.0 m/s is maximum scale
-  vdiff = max(-0.5,min(0.5,vdiff)); // limit it
-
-  int yoffset=0;
-  int hyoffset=0;
-  vsize = iround(fabs(vdiff*vsize));
-  int xoffset = rc.right-IBLSCALE(25);
-  int ycenter = (rc.bottom+rc.top)/2;
-
-  int k=0;
-
-  for (k=0; k<2; k++) {
-
-    for (i=0; i< vsize; i+= 5) {
-      if (vdiff>0) {
-        yoffset = i+ycenter+k;
-        hyoffset = IBLSCALE(4);
-      } else {
-        yoffset = -i+ycenter-k;
-        hyoffset = -IBLSCALE(4);
-      }
-      chevron[0].x = xoffset;
-      chevron[0].y = yoffset;
-      chevron[1].x = xoffset+IBLSCALE(10);
-      chevron[1].y = yoffset+hyoffset;
-      chevron[2].x = xoffset+IBLSCALE(20);
-      chevron[2].y = yoffset;
-
-      Polyline(hDC, chevron, 3);
-    }
-    if (vdiff>0) {
-      hpOld = (HPEN)SelectObject(hDC, hpSpeedSlow);
-    } else {
-      hpOld = (HPEN)SelectObject(hDC, hpSpeedFast);
-    }
-  }
-
-  SelectObject(hDC, hpBearing);
-  chevron[0].x = xoffset-IBLSCALE(3);
-  chevron[0].y = ycenter;
-  chevron[1].x = xoffset+IBLSCALE(3+20);
-  chevron[1].y = ycenter;
-  Polyline(hDC, chevron, 2);
-
-  SelectObject(hDC, hbOld);
-  SelectObject(hDC, hpOld);
-
-}
-
-
-void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
-
-  if (!EnableFLARMDisplay) return;
-
-  if (!DrawInfo.FLARM_Available) return;
-
-  HPEN hpOld;
-//  POINT Arrow[2];
-
-  hpOld = (HPEN)SelectObject(hDC, hpBestCruiseTrack);
-
-  int i;
-//  double dX, dY;
-  TextInBoxMode_t displaymode;
-  displaymode.AsInt = 0;
-
-  double screenrange = GetApproxScreenRange();
-  double scalefact = screenrange/6000.0;
-
-  for (i=0; i<FLARM_MAX_TRAFFIC; i++) {
-    if (DrawInfo.FLARM_Traffic[i].ID!=0) {
-
-      double target_lon;
-      double target_lat;
-
-      target_lon = DrawInfo.FLARM_Traffic[i].Longitude;
-      target_lat = DrawInfo.FLARM_Traffic[i].Latitude;
-
-      if ((EnableFLARMDisplay==2)&&(scalefact>1.0)) {
-        double distance;
-        double bearing;
-
-        DistanceBearing(DrawInfo.Latitude,
-                        DrawInfo.Longitude,
-                        target_lat,
-                        target_lon,
-                        &distance,
-                        &bearing);
-
-        FindLatitudeLongitude(DrawInfo.Latitude,
-                              DrawInfo.Longitude,
-                              bearing,
-                              distance*scalefact,
-                              &target_lat,
-                              &target_lon);
-
-      }
-
-      // TODO: draw direction, height?
-      POINT sc;
-      LatLon2Screen(target_lon,
-                    target_lat,
-                    sc);
-      if (DrawInfo.FLARM_Traffic[i].Name) {
-        TextInBox(hDC, DrawInfo.FLARM_Traffic[i].Name, sc.x+IBLSCALE(3),
-                  sc.y, 0, displaymode,
-                  true);
-      }
-
-      /*  Direction line disabled, not working very well
-
-      Arrow[0].x = scx;
-      Arrow[0].y = scy;
-
-      double vmag = max(1.0,min(15.0,DrawInfo.FLARM_Traffic[i].Speed/5.0))*2;
-
-      dX = 0; dY = vmag;
-
-      rotate(dX, dY, -1*(DisplayAngle
-                           - DrawInfo.FLARM_Traffic[i].TrackBearing));
-
-      Arrow[1].x = iround(dX+scx);  Arrow[1].y = iround(dY+scy);
-
-      Polygon(hDC,Arrow,2);
-      */
-
-      DrawBitmapIn(hDC, sc, hFLARMTraffic);
-
-    }
-  }
-
-  SelectObject(hDC, hpOld);
-
-}
-
-
-//////////////////////
-// JMW added simple code to prevent text writing over map city names
-int MapWindow::nLabelBlocks;
-RECT MapWindow::LabelBlockCoords[MAXLABELBLOCKS];
-
-bool MapWindow::checkLabelBlock(RECT rc) {
-  bool ok = true;
-
-  for (int i=0; i<nLabelBlocks; i++) {
-    if (CheckRectOverlap(LabelBlockCoords[i],rc)) {
-      ok = false;
-      continue;
-    }
-  }
-  if (nLabelBlocks<MAXLABELBLOCKS-1) {
-    LabelBlockCoords[nLabelBlocks]= rc;
-    nLabelBlocks++;
-  }
-  return ok;
-}
-
-
-rectObj MapWindow::CalculateScreenBounds(double scale) {
-  // compute lat lon extents of visible screen
-  rectObj sb;
-
-  if (scale>= 1.0) {
-    POINT screen_center;
-    LatLon2Screen(PanLongitude,
-                  PanLatitude,
-                  screen_center);
-
-    sb.minx = sb.maxx = PanLongitude;
-    sb.miny = sb.maxy = PanLatitude;
-
-    int dx, dy;
-    unsigned int maxsc=0;
-    dx = screen_center.x-MapRect.right;
-    dy = screen_center.y-MapRect.top;
-    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
-    dx = screen_center.x-MapRect.left;
-    dy = screen_center.y-MapRect.top;
-    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
-    dx = screen_center.x-MapRect.left;
-    dy = screen_center.y-MapRect.bottom;
-    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
-    dx = screen_center.x-MapRect.right;
-    dy = screen_center.y-MapRect.bottom;
-    maxsc = max(maxsc, isqrt4(dx*dx+dy*dy));
-
-    for (int i=0; i<10; i++) {
-      double ang = i*360.0/10;
-      POINT p;
-      double X, Y;
-      p.x = screen_center.x + iround(fastcosine(ang)*maxsc*scale);
-      p.y = screen_center.y + iround(fastsine(ang)*maxsc*scale);
-      Screen2LatLon(p.x, p.y, X, Y);
-      sb.minx = min(X, sb.minx);
-      sb.miny = min(Y, sb.miny);
-      sb.maxx = max(X, sb.maxx);
-      sb.maxy = max(Y, sb.maxy);
-    }
-
-  } else {
-
-    float xmin, xmax, ymin, ymax;
-    int x, y;
-    float X, Y;
-
-    x = MapRect.left;
-    y = MapRect.top;
-    Screen2LatLon(x, y, X, Y);
-    xmin = X; xmax = X;
-    ymin = Y; ymax = Y;
-
-    x = MapRect.right;
-    y = MapRect.top;
-    Screen2LatLon(x, y, X, Y);
-    xmin = min(xmin, X); xmax = max(xmax, X);
-    ymin = min(ymin, Y); ymax = max(ymax, Y);
-
-    x = MapRect.right;
-    y = MapRect.bottom;
-    Screen2LatLon(x, y, X, Y);
-    xmin = min(xmin, X); xmax = max(xmax, X);
-    ymin = min(ymin, Y); ymax = max(ymax, Y);
-
-    x = MapRect.left;
-    y = MapRect.bottom;
-    Screen2LatLon(x, y, X, Y);
-    xmin = min(xmin, X); xmax = max(xmax, X);
-    ymin = min(ymin, Y); ymax = max(ymax, Y);
-
-    sb.minx = xmin;
-    sb.maxx = xmax;
-    sb.miny = ymin;
-    sb.maxy = ymax;
-
-  }
-
-  return sb;
-}
-
-
-
-void MapWindow::ScanVisibility(rectObj *bounds_active) {
-  // received when the SetTopoBounds determines the visibility
-  // boundary has changed.
-  // This happens rarely, so it is good pre-filtering of what is visible.
-  // (saves from having to do it every screen redraw)
-
-  int i;
-
-  // far visibility for snail trail
-
-  for (i= 0; i<TRAILSIZE; i++) {
-    SnailTrail[i].FarVisible = PointInRect(SnailTrail[i].Longitude,
-                                           SnailTrail[i].Latitude,
-                                           *bounds_active);
-  }
-
-  // far visibility for airspace
-
-  if (AirspaceCircle) {
-    for (AIRSPACE_CIRCLE* circ = AirspaceCircle;
-         circ < AirspaceCircle+NumberOfAirspaceCircles; circ++) {
-      circ->FarVisible =
-        (msRectOverlap(&circ->bounds, bounds_active) == MS_TRUE) ||
-        (msRectContained(bounds_active, &circ->bounds) == MS_TRUE) ||
-        (msRectContained(&circ->bounds, bounds_active) == MS_TRUE);
-    }
-  }
-
-  if (AirspaceArea) {
-    for(AIRSPACE_AREA *area = AirspaceArea;
-        area < AirspaceArea+NumberOfAirspaceAreas; area++) {
-      area->FarVisible =
-        (msRectOverlap(&area->bounds, bounds_active) == MS_TRUE) ||
-        (msRectContained(bounds_active, &area->bounds) == MS_TRUE) ||
-        (msRectContained(&area->bounds, bounds_active) == MS_TRUE);
-    }
-  }
-
-  // far visibility for waypoints
-
-  if (WayPointList) {
-    for(i=0;i<(int)NumberOfWayPoints;i++) {
-      WayPointList[i].FarVisible = PointInRect(WayPointList[i].Longitude,
-                                               WayPointList[i].Latitude,
-                                               *bounds_active);
-    }
-  }
-
-}

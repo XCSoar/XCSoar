@@ -807,8 +807,8 @@ void ReadRegistrySettings(void)
   Temp = 0;
   GetFromRegistry(szRegistryUTCOffset,&Temp);
   UTCOffset = Temp;
-  if (UTCOffset>12) {
-    UTCOffset-= 24;
+  if (UTCOffset>12*3600) {
+    UTCOffset-= 24*3600;
   }
 
   Temp = 0;

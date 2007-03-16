@@ -35,6 +35,7 @@ Copyright_License {
 #include "Mapwindow.h"
 #include "Parser.h"
 #include "Calculations.h"
+#include "Calculations2.h"
 #include "Task.h"
 #include "Dialogs.h"
 #include "Process.h"
@@ -1127,7 +1128,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 #endif
 
-  wcscat(XCSoar_Version, TEXT("5.0.6 "));
+  wcscat(XCSoar_Version, TEXT("5.0.8 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1813,9 +1814,6 @@ bool Debounce(void) {
 
 void Shutdown(void) {
   int i;
-#ifdef DEBUG
-  WaypointWriteFiles();
-#endif
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
 
@@ -2824,7 +2822,8 @@ void SIMProcessTimer(void)
   if (i%2==0) return;
 
 #ifdef DEBUG
-  //    NMEAParser::TestRoutine(&GPS_INFO);
+  // use this to test FLARM parsing/display
+  //  NMEAParser::TestRoutine(&GPS_INFO);
 #endif
 
   NMEAParser::GpsUpdated = TRUE;

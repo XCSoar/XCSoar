@@ -44,13 +44,14 @@ Copyright_License {
   double c = -1.141438761599;
 */
 
+
 //double GlidePolar::BallastFactor;
 double GlidePolar::polar_a;
 double GlidePolar::polar_b;
 double GlidePolar::polar_c;
 int GlidePolar::Vminsink = 2;
 int GlidePolar::Vbestld = 2;
-double GlidePolar::sinkratecache[200];
+double GlidePolar::sinkratecache[MAXSAFETYSPEED];
 double GlidePolar::bestld = 0.0;
 double GlidePolar::minsink = 10000.0;
 double GlidePolar::BallastLitres = 0.0;
@@ -92,11 +93,11 @@ void GlidePolar::SetBallast() {
   bestld = 0.0;
   int i;
 
-  if ((SAFTEYSPEED==0)||(SAFTEYSPEED>200)) {
-    SAFTEYSPEED=150;
+  if ((SAFTEYSPEED==0)||(SAFTEYSPEED>MAXSAFETYSPEED)) {
+    SAFTEYSPEED=MAXSAFETYSPEED;
   }
 
-  for(i=4;i<SAFTEYSPEED;i+=1)
+  for(i=4;i<SAFTEYSPEED;i++)
     {
       double vtrack = (double)i; // TAS along bearing in cruise
       double thesinkrate
@@ -141,7 +142,7 @@ void GlidePolar::SetBallast() {
 
 
 double GlidePolar::SinkRateFast(const double &MC, const int &v) {
-  return sinkratecache[max(4,min(v,(int)SAFTEYSPEED))]-MC;
+  return sinkratecache[max(4,min(v,(int)SAFTEYSPEED-1))]-MC;
 }
 
 
@@ -217,7 +218,7 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   double tcruise, tclimb;
   TimeToDestCruise = -1; // initialise to error value
 
-  for(i=Vminsink;i<SAFTEYSPEED;i+=1) {
+  for(i=Vminsink;i<SAFTEYSPEED;i++) {
     double vtrack = (double)i; // TAS along bearing in cruise
 
     // glide angle = velocity projected along path / sink rate
