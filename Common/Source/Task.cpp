@@ -294,7 +294,7 @@ void RefreshTask() {
       if (Task[i].Index != -1) {
 	RefreshTaskWaypoint(i);
 	TaskStats[i].LengthPercent = Task[i].Leg/lengthtotal;
-	if ((i<MAXTASKPOINTS-1) && (Task[i+1].Index == -1)) {
+	if ((i==MAXTASKPOINTS-1) || (Task[i+1].Index == -1)) {
 	  Task[i].AATTargetOffsetRadius = 0.0;
 	  Task[i].AATTargetOffsetRadial = 0.0;
 	  Task[i].AATTargetLat = WayPointList[Task[i].Index].Latitude;
