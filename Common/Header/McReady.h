@@ -5,6 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#define MAXSAFETYSPEED 200
 
 class GlidePolar {
  public:
@@ -33,7 +34,7 @@ class GlidePolar {
   static double minsink;
   static double BallastLitres;
   
-  static double sinkratecache[200];
+  static double sinkratecache[MAXSAFETYSPEED];
 
   static double SinkRateFast(const double &MC, const int &v);
   static double SinkRate(double Vias);

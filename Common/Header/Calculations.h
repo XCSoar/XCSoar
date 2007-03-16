@@ -159,7 +159,6 @@ typedef struct _DERIVED_INFO
 
   double ZoomDistance;
   double TaskSpeedAchieved;
-
 } DERIVED_INFO;
 
 
@@ -167,37 +166,21 @@ int DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 int DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-void OpenTerrain(void);
-void CloseTerrain(void);
-void AddSnailPoint(void);
-double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic, 
-				DERIVED_INFO *Calculated, double *retlat, 
-				double *retlon,
-				double maxsearchrange,
-				bool *outofrange); 
 
 bool ClearAirspaceWarnings(bool ack, bool allday=false);
 void ResumeAbortTask(int set = 0);
 void RefreshTaskStatistics(void);
 void  SetWindEstimate(double speed, double bearing, int quality=6);
 
-double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-		      double bearing,
-		      double GlideSlope);
 
 void CloseCalculations(void);
-
-double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			  double bearing,
-			  double timeremaining,
-			  double hfinal);
-
 void SaveCalculationsPersist(DERIVED_INFO *Calculated);
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DeleteCalculationsPersist(void);
 
-double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                      bool doadvance, bool doannounce);
 
-int  InAATTurnSector(double longitude, double latitude, int thepoint);
+bool  InAATTurnSector(double longitude, double latitude, int thepoint);
 
 #endif

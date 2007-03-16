@@ -45,26 +45,24 @@ Copyright_License {
 #include "RasterTerrain.h"
 #include "TeamCodeCalculation.h"
 #include "Process.h"
-
 #include <tchar.h>
-
 #include "ThermalLocator.h"
 #include "windanalyser.h"
 #include "Atmosphere.h"
-
 #include "VegaVoice.h"
-
 #include "OnLineContest.h"
 #include "AATDistance.h"
-
 #include "NavFunctions.h" // used for team code
+#include "Calculations2.h"
+#include "Port.h"
+#include "WindZigZag.h"
 
 WindAnalyser *windanalyser = NULL;
-VegaVoice vegavoice;
 OLCOptimizer olc;
-ThermalLocator thermallocator;
 AATDistance aatdistance;
-
+static DERIVED_INFO Finish_Derived_Info;
+static VegaVoice vegavoice;
+static ThermalLocator thermallocator;
 int AutoWindMode= 1; 
 #define D_AUTOWIND_CIRCLING 1
 #define D_AUTOWIND_ZIGZAG 2
@@ -80,21 +78,14 @@ bool ExternalTriggerCruise= false;
 bool ExternalTriggerCircling= false;
 bool ForceFinalGlide= false;
 bool AutoForceFinalGlide= false;
-
 int    AutoMcMode = 0;
 // 0: Final glide only
 // 1: Set to average if in climb mode
 // 2: Average if in climb mode, final glide in final glide mode
 
-#include "Port.h"
-
-#include "WindZigZag.h"
-
 static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 static void LoadCalculationsPersist(DERIVED_INFO *Calculated);
-static void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      bool doadvance, bool doannounce);
 static void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -106,25 +97,21 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void EnergyHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
+static void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
+                      double maccready);
 static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
 static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
 static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static bool  InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static int  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int i);
-static int  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static bool  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int i);
 static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void CalculateNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static int  InAATStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated) ;
 
 
 static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -176,7 +163,6 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 int FinishLine=1;
 DWORD FinishRadius=1000;
-DWORD lastTeamCodeUpdateTime = GetTickCount();
 
 
 void RefreshTaskStatistics(void) {
@@ -185,6 +171,7 @@ void RefreshTaskStatistics(void) {
   TaskStatistics(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
   AATStats(&GPS_INFO, &CALCULATED_INFO);
   TaskSpeed(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
+  EffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
   UnlockTaskData();
   UnlockFlightData();
 }
@@ -202,42 +189,24 @@ int getFinalWaypoint() {
   return i-1;
 }
 
-int FastLogNum = 0; // number of points to log at high rate
 
-
-void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  if (!Calculated->Flying) return;
-
-  SnailTrail[SnailNext].Latitude = (float)(Basic->Latitude);
-  SnailTrail[SnailNext].Longitude = (float)(Basic->Longitude);
-  SnailTrail[SnailNext].Time = Basic->Time;
-  SnailTrail[SnailNext].FarVisible = true; // hasn't been filtered out yet.
-
-  if (Basic->NettoVarioAvailable && !(ReplayLogger::IsEnabled())) {
-    SnailTrail[SnailNext].Vario = (float)(Basic->NettoVario) ;
-  } else {
-    SnailTrail[SnailNext].Vario = (float)(Calculated->Vario) ;
+static bool IsFinalWaypoint(void) {
+  if(ActiveWayPoint < MAXTASKPOINTS-1) {
+    if(Task[ActiveWayPoint+1].Index >= 0) {
+      return false;
+    }
   }
-  SnailTrail[SnailNext].Colour = -1; // need to have colour calculated
-  SnailTrail[SnailNext].Circling = Calculated->Circling;
-
-  SnailNext ++;
-  SnailNext %= TRAILSIZE;
-
+  return true;
 }
 
-
-int LoggerTimeStepCruise=5;
-int LoggerTimeStepCircling=1;
-
+extern int FastLogNum; // number of points to log at high rate
 
 void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool doadvance) {
   if (ActiveWayPoint == 0) {
     InputEvents::processGlideComputer(GCE_TASK_START);
     // JMW cleared thermal climb average on task start
     flightstats.ThermalAverage.Reset();
-  } else if (Calculated->ValidFinish) {
+  } else if (Calculated->ValidFinish && IsFinalWaypoint()) {
     InputEvents::processGlideComputer(GCE_TASK_FINISH);
   } else {
     InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
@@ -262,93 +231,6 @@ void AnnounceWayPointSwitch(DERIVED_INFO *Calculated, bool doadvance) {
 }
 
 
-void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-  static double SnailLastTime=0;
-  static double LogLastTime=0;
-  static double StatsLastTime=0;
-  static double OLCLastTime = 0;
-  double dtLog = 5.0;
-  double dtSnail = 2.0;
-  double dtStats = 60.0;
-  double dtOLC = 5.0;
-
-  if(Basic->Time <= LogLastTime) {
-    LogLastTime = Basic->Time;
-  }
-  if(Basic->Time <= SnailLastTime)  {
-    SnailLastTime = Basic->Time;
-  }
-  if(Basic->Time <= StatsLastTime) {
-    StatsLastTime = Basic->Time;
-  }
-  if(Basic->Time <= OLCLastTime) {
-    OLCLastTime = Basic->Time;
-  }
-  if (FastLogNum) {
-    dtLog = 1.0;
-  }
-
-  // draw snail points more often in circling mode
-  if (Calculated->Circling) {
-    dtSnail = LoggerTimeStepCircling*1.0;
-  } else {
-    dtSnail = LoggerTimeStepCruise*1.0;
-  }
-
-  if (Basic->Time - LogLastTime >= dtLog) {
-    if(LoggerActive) {
-      double balt = -1;
-      if (Basic->BaroAltitudeAvailable) {
-        balt = Basic->BaroAltitude;
-      } else {
-        balt = Basic->Altitude;
-      }
-      LogPoint(Basic->Latitude , Basic->Longitude , Basic->Altitude,
-               balt);
-    }
-    LogLastTime += dtLog;
-    if (LogLastTime< Basic->Time-dtLog) {
-      LogLastTime = Basic->Time-dtLog;
-    }
-    if (FastLogNum) FastLogNum--;
-  }
-
-  if (Basic->Time - SnailLastTime >= dtSnail) {
-    AddSnailPoint(Basic, Calculated);
-    SnailLastTime += dtSnail;
-    if (SnailLastTime< Basic->Time-dtSnail) {
-      SnailLastTime = Basic->Time-dtSnail;
-    }
-  }
-
-  if (Calculated->Flying) {
-    if (Basic->Time - StatsLastTime >= dtStats) {
-      flightstats.Altitude.
-        least_squares_update(Basic->Time/3600.0, 
-                             Calculated->NavAltitude);
-      StatsLastTime += dtStats;
-      if (StatsLastTime< Basic->Time-dtStats) {
-        StatsLastTime = Basic->Time-dtStats;
-      }
-    }
-
-    if (Basic->Time - OLCLastTime >= dtOLC) {
-      bool restart;
-      restart = olc.addPoint(Basic->Longitude, 
-			     Basic->Latitude, 
-			     Calculated->NavAltitude,
-			     Calculated->WaypointBearing,
-			     Basic->Time);
-      
-      if (restart && EnableOLC) {
-	Calculated->ValidFinish = false;
-	StartTask(Basic, Calculated, false, false);
-	Calculated->ValidStart = true;
-      }
-      OLCLastTime += dtOLC;
-    }
-  }
-}
 
 
 extern int jmw_demo;
@@ -700,7 +582,9 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated, bool doadvance,
   Calculated->TaskStartSpeed = Basic->Speed;
   Calculated->TaskStartAltitude = Calculated->NavAltitude;
   Calculated->LegStartTime = Basic->Time;
-  
+
+  // JMW TODO: Get time from aatdistance module since this is more accurate
+
   if (doannounce) {
     AnnounceWayPointSwitch(Calculated, doadvance);
   } else {
@@ -740,13 +624,6 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
   Calculated->TerrainWarningLatitude = 0.0;
   Calculated->TerrainWarningLongitude = 0.0;
-}
-
-
-BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  static double LastTime = 0;
-  static double maccready;
 
   if (!windanalyser) {
     windanalyser = new WindAnalyser(Basic, Calculated);
@@ -755,6 +632,13 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing, 1);
 
   }
+}
+
+
+BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+{
+  static double LastTime = 0;
+  static double maccready;
 
   // Determine which altitude to use for nav functions
   if (EnableNavBaroAltitude && Basic->BaroAltitudeAvailable) {
@@ -764,13 +648,9 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
 
   DistanceToNext(Basic, Calculated);
-
   EnergyHeight(Basic, Calculated);
-
   AltitudeRequired(Basic, Calculated, MACCREADY);
-
   Heading(Basic, Calculated);
-
   TerrainHeight(Basic, Calculated);
 
   if (TaskAborted) {
@@ -782,7 +662,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   HomeDistance(Basic, Calculated);
 
   if ((Basic->Time != 0) && (Basic->Time <= LastTime))
-    // 20060519:sgi added (Basic->Time != 0) dueto alwas return here if no GPS time available
+ // 20060519:sgi added (Basic->Time != 0) dueto alwas return here if no GPS time available
     {
 
       if ((Basic->Time<LastTime) && (!Basic->NAVWarning)) {
@@ -801,6 +681,8 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     Calculated->FlightTime = t;
   }
 
+  TakeoffLanding(Basic, Calculated);
+
   if ((Calculated->FinalGlide)
       ||(fabs(Calculated->TaskAltitudeDifference)>30)) {
     FinalGlideAlert(Basic, Calculated);
@@ -811,7 +693,6 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     DoAutoMacCready(Basic, Calculated);
   }
 
-  TakeoffLanding(Basic, Calculated);
   Turning(Basic, Calculated);
   Vario(Basic,Calculated);
   LD(Basic,Calculated);
@@ -832,11 +713,11 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   } else {
 
     InSector(Basic, Calculated);
-    InAATSector(Basic, Calculated);
 
     AATStats(Basic, Calculated);  
     TaskStatistics(Basic, Calculated, MACCREADY);
     TaskSpeed(Basic, Calculated, MACCREADY);
+    EffectiveMacCready(Basic, Calculated);
 
 #ifdef DEBUG
     if (Calculated->TaskStartTime>0) {
@@ -892,10 +773,12 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 void EnergyHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated) 
 {
-  if (Basic->AirspeedAvailable) {
+  double erat;
+  if (Basic->AirspeedAvailable && (Basic->IndicatedAirspeed>0)) {
+    erat = Basic->TrueAirspeed/Basic->IndicatedAirspeed;
     Calculated->EnergyHeight = 
-      max(0, Basic->IndicatedAirspeed*Basic->IndicatedAirspeed
-       -GlidePolar::Vbestld*GlidePolar::Vbestld)/(9.81*2.0);
+      max(0, Basic->TrueAirspeed*Basic->TrueAirspeed
+       -GlidePolar::Vbestld*GlidePolar::Vbestld*erat*erat)/(9.81*2.0);
   } else {
     Calculated->EnergyHeight = 0.0;
   }
@@ -1577,28 +1460,29 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccrea
   //  UnlockFlightData();
 }
 
-int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
+
+bool InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int thepoint)
 {
   double AircraftBearing;
 
-  if (!WayPointList) return FALSE;
+  if (!WayPointList) return false;
 
   if(SectorType==0)
     {
       if(Calculated->WaypointDistance < SectorRadius)
         {
-          return TRUE;
+          return true;
         }
     }
   if (SectorType>0)
     {
-      DistanceBearing(WayPointList[Task[ActiveWayPoint].Index].Latitude,   
-                      WayPointList[Task[ActiveWayPoint].Index].Longitude,
+      DistanceBearing(WayPointList[Task[thepoint].Index].Latitude,   
+                      WayPointList[Task[thepoint].Index].Longitude,
                       Basic->Latitude , 
                       Basic->Longitude,
                       NULL, &AircraftBearing);
       
-      AircraftBearing = AircraftBearing - Task[ActiveWayPoint].Bisector ;
+      AircraftBearing = AircraftBearing - Task[thepoint].Bisector ;
       while (AircraftBearing<-180) {
         AircraftBearing+= 360;
       }
@@ -1609,7 +1493,7 @@ int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       if (SectorType==2) {
         // JMW added german rules
         if (Calculated->WaypointDistance<500) {
-          return TRUE;
+          return true;
         }
       }
       if( (AircraftBearing >= -45) && (AircraftBearing <= 45))
@@ -1617,26 +1501,26 @@ int InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           if (SectorType==1) {
             if(Calculated->WaypointDistance < 20000)
               {
-                return TRUE;
+                return true;
               }
           } else {
             // JMW added german rules
             if(Calculated->WaypointDistance < 10000)
               {
-                return TRUE;
+                return true;
               }
           }
         }
     }       
-  return FALSE;
+  return false;
 }
 
-int InAATTurnSector(double longitude, double latitude,
+bool InAATTurnSector(double longitude, double latitude,
                     int thepoint)
 {
   double AircraftBearing;
 
-  if (!WayPointList) return FALSE;
+  if (!WayPointList) return false;
 
   double distance;
   DistanceBearing(WayPointList[Task[thepoint].Index].Latitude,
@@ -1648,7 +1532,7 @@ int InAATTurnSector(double longitude, double latitude,
   if(Task[thepoint].AATType ==  CIRCLE) {
     if(distance < Task[thepoint].AATCircleRadius)
       {
-        return TRUE;
+        return true;
       }
   } else if(distance < Task[thepoint].AATSectorRadius) {
 
@@ -1659,7 +1543,7 @@ int InAATTurnSector(double longitude, double latitude,
          &&
          (AircraftBearing < Task[thepoint].AATFinishRadial)
          )
-        return TRUE;
+        return true;
     }
                 
     if(Task[thepoint].AATStartRadial 
@@ -1669,10 +1553,10 @@ int InAATTurnSector(double longitude, double latitude,
          ||
          (AircraftBearing < Task[thepoint].AATFinishRadial)
          )
-        return TRUE;
+        return true;
     }
   }
-  return FALSE;
+  return false;
 }
 
 
@@ -1898,33 +1782,74 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
   return isInSector;
 }
 
+#define AUTOADVANCE_MANUAL 0
+#define AUTOADVANCE_AUTO 1
+#define AUTOADVANCE_ARM 2
+#define AUTOADVANCE_ARMSTART 3
 
-bool ReadyToAdvance(DERIVED_INFO *Calculated) {
+bool ReadyToStart(DERIVED_INFO *Calculated) {
+  if (!Calculated->Flying) {
+    return false;
+  }
+  if (AutoAdvance== AUTOADVANCE_AUTO) {  
+    return true;
+  }
+  if ((AutoAdvance== AUTOADVANCE_ARM) || (AutoAdvance==AUTOADVANCE_ARMSTART)) {
+    if (AdvanceArmed) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
+bool ReadyToAdvance(DERIVED_INFO *Calculated, bool reset=true) {
+  static int lastReady = -1;
+  static int lastActive = -1;
+  bool say_ready = false;
 
   // 0: Manual
   // 1: Auto
   // 2: Arm
   // 3: Arm start
 
-  if (!Calculated->Flying) 
+  if (!Calculated->Flying) {
+    lastReady = -1;
+    lastActive = -1;
     return false;
+  }
 
-  if (AutoAdvance==1) {  // auto
-    AdvanceArmed = false;
+  if (AutoAdvance== AUTOADVANCE_AUTO) {  
+    if (reset) AdvanceArmed = false;
     return true;
   }
-  if ((AutoAdvance==2)&&(AdvanceArmed)) { // arm
-    AdvanceArmed = false;
-    return true;
-  }
-  if (AutoAdvance==3) { // arm start
-    if (ActiveWayPoint>0) { // past start
-      AdvanceArmed = false;
+  if (AutoAdvance== AUTOADVANCE_ARM) {
+    if (AdvanceArmed) {
+      if (reset) AdvanceArmed = false;
       return true;
+    } else {
+      say_ready = true;
     }
-    if (AdvanceArmed) { // on start
-      AdvanceArmed = false;
+  }
+  if (AutoAdvance== AUTOADVANCE_ARMSTART) { 
+    if ((ActiveWayPoint>0)||(AdvanceArmed)) { 
+      if (reset && (ActiveWayPoint==0)) AdvanceArmed = false;
       return true;
+    } else {
+      say_ready = true;
+    }
+  }
+
+  // see if we've gone back a waypoint (e.g. restart)
+  if (ActiveWayPoint < lastActive) {
+    lastReady = -1;
+  }
+  lastActive = ActiveWayPoint;
+
+  if (say_ready) {
+    if (ActiveWayPoint != lastReady) {
+      InputEvents::processGlideComputer(GCE_ARM_READY);
+      lastReady = ActiveWayPoint;
     }
   }
   return false;
@@ -1963,6 +1888,121 @@ bool ValidStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 }
 
 
+static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                       BOOL *StartSectorEntered,
+                       int *LastStartSector) {
+  if (Calculated->Flying) {
+    Calculated->ValidFinish = false;
+  }
+  if (InStartSector(Basic,Calculated,*LastStartSector)) {
+    Calculated->IsInSector = true;
+
+    if (ReadyToStart(Calculated)) {
+      *StartSectorEntered = TRUE;
+    }
+    aatdistance.AddPoint(Basic->Longitude,
+                         Basic->Latitude,
+                         0);
+    if (ValidStart(Basic, Calculated)) {
+      ReadyToAdvance(Calculated, false);
+    }
+
+    // TODO monitor start speed throughout time in start sector
+  } else {
+    if(*StartSectorEntered == TRUE) {
+      *StartSectorEntered = FALSE;
+      if(!IsFinalWaypoint() && ValidStart(Basic, Calculated)) {
+        Calculated->ValidStart = true;
+        if (ReadyToAdvance(Calculated, true)) {
+          StartTask(Basic,Calculated, true, true);
+        }
+        if (Calculated->Flying) {
+          Calculated->ValidFinish = false;
+        }
+        // JMW TODO: This causes Vaverage to go bonkers
+        // if the user has already passed the start
+        // but selects the start
+	
+        // Note: pilot must have armed advance
+        // for the start to be registered
+      }
+    }
+  }
+}
+
+
+static BOOL CheckRestart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                         int *LastStartSector) {
+  if(InStartSector(Basic, Calculated, *LastStartSector)) {
+    Calculated->IsInSector = true;
+    
+    if(Basic->Time - Calculated->TaskStartTime < 600) {
+      // this allows restart if returned to start sector before
+      // 10 minutes after task start
+      ActiveWayPoint = 0;
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+
+static void CheckFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  if (InFinishSector(Basic,Calculated, ActiveWayPoint)) {
+    Calculated->IsInSector = true;
+    aatdistance.AddPoint(Basic->Longitude,
+                         Basic->Latitude,
+                         ActiveWayPoint);
+    if (!Calculated->ValidFinish) {
+      Calculated->ValidFinish = true;
+      AnnounceWayPointSwitch(Calculated, false);
+
+      // JMWX save calculated data
+      memcpy(&Finish_Derived_Info, Calculated, sizeof(DERIVED_INFO));
+    }
+  }
+}
+
+
+static void AddAATPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                        int taskwaypoint) {
+  bool insector = false;
+  if (taskwaypoint>0) {
+    if (AATEnabled) {
+      insector = InAATTurnSector(Basic->Longitude,
+                                 Basic->Latitude, taskwaypoint);
+    } else {
+      insector = InTurnSector(Basic, Calculated, taskwaypoint);
+    }
+    if(insector) {
+      if (taskwaypoint == ActiveWayPoint) {
+        Calculated->IsInSector = true;
+      }
+      aatdistance.AddPoint(Basic->Longitude,
+                           Basic->Latitude,
+                           taskwaypoint);
+    }
+  }
+}
+
+
+static void CheckInSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+
+  AddAATPoint(Basic, Calculated, ActiveWayPoint-1);
+  AddAATPoint(Basic, Calculated, ActiveWayPoint);
+
+  // JMW Start bug XXX
+
+  if (aatdistance.HasEntered(ActiveWayPoint)) {
+    if (ReadyToAdvance(Calculated, true)) {
+      AnnounceWayPointSwitch(Calculated, true);
+      Calculated->LegStartTime = Basic->Time;
+    }
+    if (Calculated->Flying) {
+      Calculated->ValidFinish = false;
+    }
+  }
+}
 
 
 void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
@@ -1970,217 +2010,24 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static BOOL StartSectorEntered = FALSE;
   static int LastStartSector = -1;
 
-  if(AATEnabled)
-    return;
+  if (ActiveWayPoint<0) return;
 
-  //  LockFlightData();
   LockTaskData();
 
   Calculated->IsInSector = false;
 
   if(ActiveWayPoint == 0) {
-    if (Calculated->Flying) {
-      Calculated->ValidFinish = false;
-    }
-    if (InStartSector(Basic,Calculated,LastStartSector)) {
-      Calculated->IsInSector = true;
-      StartSectorEntered = TRUE;
-      // TODO monitor start speed throughout time in start sector
+    CheckStart(Basic, Calculated, &StartSectorEntered, &LastStartSector);
+  } else {
+    if(IsFinalWaypoint()) {
+      CheckFinish(Basic, Calculated);
     } else {
-      if((StartSectorEntered == TRUE)&&
-	 (ValidStart(Basic, Calculated))) {
-	if(ActiveWayPoint < MAXTASKPOINTS) {
-	  if(Task[ActiveWayPoint+1].Index >= 0) {
-	    Calculated->ValidStart = true;
-	    if (ReadyToAdvance(Calculated)) {
-	      StartTask(Basic,Calculated, true, true);
-	    }
-            if (Calculated->Flying) {
-              Calculated->ValidFinish = false;
-            }
-	    StartSectorEntered = FALSE;
-	    // JMW TODO: This causes Vaverage to go bonkers
-	    // if the user has already passed the start
-	    // but selects the start
-	    
-	    // Note: pilot must have armed advance
-	    // for the start to be registered
-	  }
-	}
-      }
-    }
-  } else if(ActiveWayPoint >0) {
-    // This allows restart if within 10 minutes of previous start
-    if (InStartSector(Basic,Calculated,LastStartSector)) {
-      Calculated->IsInSector = true;
-      if(Basic->Time - Calculated->TaskStartTime < 600) {
-	if (ReadyToAdvance(Calculated)) {
-	  AdvanceArmed = false;   
-	  Calculated->TaskStartTime = 0;
-	  ActiveWayPoint = 0;
-	  AnnounceWayPointSwitch(Calculated, false);
-	  StartSectorEntered = TRUE;
-	}
-        if (Calculated->Flying) {
-          Calculated->ValidFinish = false;
-        }
-      }
-    } 
-    if(ActiveWayPoint < MAXTASKPOINTS) {
-      if(Task[ActiveWayPoint+1].Index >= 0) {
-	if(InTurnSector(Basic,Calculated)) {
-	  Calculated->IsInSector = true;
-	  Calculated->LegStartTime = Basic->Time;
-          if (Calculated->Flying) {
-            Calculated->ValidFinish = false;
-          }
-	  if (ReadyToAdvance(Calculated)) {
-	    ActiveWayPoint++;
-	    AnnounceWayPointSwitch(Calculated, false);
-	  }
-	  UnlockTaskData();
-	  //	  UnlockFlightData();
-	  
-	  return;
-	}
-      } else {
-	if (InFinishSector(Basic,Calculated, ActiveWayPoint)) {
-	  Calculated->IsInSector = true;
-	  if (!Calculated->ValidFinish) {
-            Calculated->ValidFinish = true;
-            AnnounceWayPointSwitch(Calculated, false);
-	  }
-	} else {
-	  //      TaskFinished = false;
-	}
-      }
+      StartSectorEntered |= CheckRestart(Basic, Calculated, &LastStartSector);
+      CheckInSector(Basic, Calculated);
     }
   }                   
   UnlockTaskData();
-  //  UnlockFlightData();
 }
-
-
-void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
-{
-  static BOOL StartSectorEntered = FALSE;
-  static int LastStartSector = -1;
-
-  if(!AATEnabled)
-    return;
-
-  //  LockFlightData();
-  LockTaskData();
-
-  Calculated->IsInSector = false;
-
-  if(ActiveWayPoint == 0) {
-    if (Calculated->Flying) {
-      Calculated->ValidFinish = false;
-    }
-    if(InStartSector(Basic, Calculated, LastStartSector)) {
-      aatdistance.AddPoint(Basic->Longitude,
-                           Basic->Latitude,
-                           0);
-      Calculated->IsInSector = true;
-      StartSectorEntered = TRUE;
-    } else {
-      if((StartSectorEntered == TRUE)&&
-         (ValidStart(Basic, Calculated))) {
-        if(ActiveWayPoint < MAXTASKPOINTS) {
-          if(Task[ActiveWayPoint+1].Index >= 0) {
-            Calculated->ValidStart = true;
-            if (Calculated->Flying) {
-              Calculated->ValidFinish = false;
-            }
-            if (ReadyToAdvance(Calculated)) {
-              StartTask(Basic, Calculated, true, true);
-            }
-            StartSectorEntered = FALSE;
-            // JMW TODO: make sure this is valid for manual start
-          }
-        }
-      } 
-    }
-  } else if(ActiveWayPoint >0) {
-    if(InStartSector(Basic, Calculated, LastStartSector)) {
-      Calculated->IsInSector = true;
-      if(Basic->Time - Calculated->TaskStartTime < 600) {
-        // this allows restart if returned to start sector before
-        // 10 minutes after task start
-        if (ReadyToAdvance(Calculated)) {
-          AdvanceArmed = false;     
-          Calculated->TaskStartTime = 0;
-          ActiveWayPoint = 0;
-          AnnounceWayPointSwitch(Calculated, false);
-          StartSectorEntered = TRUE;
-        }
-        if (Calculated->Flying) {
-          Calculated->ValidFinish = false;
-        }
-      }
-    }
-    if(ActiveWayPoint < MAXTASKPOINTS) {
-
-      if((ActiveWayPoint>1)&& (Task[ActiveWayPoint].Index >= 0)) {
-        if(InAATTurnSector(Basic->Longitude,
-                           Basic->Latitude, ActiveWayPoint-1)) {
-
-          // Still within previous sector
-          aatdistance.AddPoint(Basic->Longitude,
-                               Basic->Latitude,
-                               ActiveWayPoint-1);
-        }
-      }
-
-      if(Task[ActiveWayPoint+1].Index >= 0) {
-        if(InAATTurnSector(Basic->Longitude,
-                           Basic->Latitude, ActiveWayPoint)) {
-
-          aatdistance.AddPoint(Basic->Longitude,
-                               Basic->Latitude,
-                               ActiveWayPoint);
-          Calculated->IsInSector = true;
-          Calculated->LegStartTime = Basic->Time;
-        }
-        if (aatdistance.HasEntered(ActiveWayPoint)) {
-          
-          if (ReadyToAdvance(Calculated)) {
-            AdvanceArmed = false;             
-            AnnounceWayPointSwitch(Calculated, true);
-          }
-          if (Calculated->Flying) {
-            Calculated->ValidFinish = false;
-          }
-          UnlockTaskData();
-          //            UnlockFlightData();
-          return;
-        }
-      } else {
-        if (InFinishSector(Basic,Calculated, ActiveWayPoint)) {
-          Calculated->IsInSector = true;
-          aatdistance.AddPoint(Basic->Longitude,
-                               Basic->Latitude,
-                               ActiveWayPoint);
-          if (!Calculated->ValidFinish) {
-            Calculated->ValidFinish = true;
-            AnnounceWayPointSwitch(Calculated, false);
-          }
-        } else {
-          //      TaskFinished = false;
-        }
-      }       
-    }
-  }
-  UnlockTaskData();
-  //  UnlockFlightData();
-}
-
-
-//////////////////////////////////////////////////////
-
-
-
 
 
 ///////////////////////////////////
@@ -2189,24 +2036,8 @@ void InAATSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 RasterTerrain terrain_dem_graphics;
 RasterTerrain terrain_dem_calculations;
 
-void OpenTerrain(void) {
-  LockTerrainDataCalculations();
-  LockTerrainDataGraphics();
-  RasterTerrain::OpenTerrain();
-  terrain_dem_graphics.ClearTerrainCache();
-  terrain_dem_calculations.ClearTerrainCache();
-  UnlockTerrainDataCalculations();
-  UnlockTerrainDataGraphics();
-}
 
 
-void CloseTerrain(void) {
-  LockTerrainDataCalculations();
-  LockTerrainDataGraphics();
-  RasterTerrain::CloseTerrain();
-  UnlockTerrainDataCalculations();
-  UnlockTerrainDataGraphics();
-}
 
 
 static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
@@ -2235,36 +2066,25 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 /////////////////////////////////////////
 
-void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
+static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                                 double maccready, double *Vfinal,
+                                 double *TotalTime, double *TotalDistance,
+                                 int *ifinal)
 {
   int i;
-  double LegTime, LegDistance, LegBearing, LegAltitude, TotalTime, 
-    TotalDistance;
-  static double LastTime = 0;
-  static double v2last = 0;
-  static double t1last = 0;
-
-  if (!WayPointList) return;
-
-  if (Calculated->ValidFinish) return;
-
   double w1lat;
   double w1lon;
   double w0lat;
   double w0lon;
-  double Vfinal=0;
-
-  //  LockFlightData();
-  LockTaskData();
+  double LegTime, LegDistance, LegBearing, LegAltitude;
 
   // Calculate altitude required from start of task
 
   bool isfinal=true;
-  int ifinal=0;
   LegAltitude = 0;
   double TotalAltitude = 0;
-  TotalTime = 0; TotalDistance = 0;
-  bool invalid = false;
+  *TotalTime = 0; *TotalDistance = 0;
+  *ifinal = 0;
   for(i=MAXTASKPOINTS-2;i>=0;i--) {
     if (Task[i].Index<0) continue;
     if (Task[i+1].Index<0) continue;
@@ -2285,7 +2105,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
                     w0lat, w0lon,
                     &LegDistance, &LegBearing);
 
-    TotalDistance += LegDistance;
+    *TotalDistance += LegDistance;
     
     LegAltitude = 
       GlidePolar::MacCreadyAltitude(maccready, 
@@ -2302,74 +2122,98 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
     TotalAltitude += LegAltitude;
 
     if (LegTime<0) {
-      invalid = true;
+      return false;
     } else {
-      TotalTime += LegTime;
+      *TotalTime += LegTime;
     }
     if (isfinal) {
-      ifinal = i+1;
+      *ifinal = i+1;
       if (LegTime>0) {
-        Vfinal = LegDistance/LegTime;
+        *Vfinal = LegDistance/LegTime;
       }
     }
     isfinal = false;
   }
 
-  if ((ifinal==0)||(invalid)) {
-    UnlockTaskData();
-    return;
+  if (*ifinal==0) {
+    return false;
   }
 
   TotalAltitude += SAFETYALTITUDEARRIVAL 
-    + WayPointList[Task[ifinal].Index].Altitude;
+    + WayPointList[Task[*ifinal].Index].Altitude;
   
   Calculated->TaskAltitudeRequiredFromStart = TotalAltitude;
 
-  // now calculate the stats
+  return true;
+}
 
+
+void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
+{
+  int ifinal;
+  static double LastTime = 0;
+  static double v2last = 0;
+  static double t1last = 0;
+  double TotalTime=0, TotalDistance=0, Vfinal=0;
+
+  if (!WayPointList) return;
+
+  if (Calculated->ValidFinish) return;
+
+  // in case we leave early due to error
   Calculated->TaskSpeedAchieved = 0;
+  Calculated->TaskSpeed = 0;
+  Calculated->TaskSpeedInstantaneous = 0;
 
-  if((ActiveWayPoint >=1)&&(!invalid)) {
+  if (ActiveWayPoint==0) {
+    return;
+  }
 
+  //  LockFlightData();
+  LockTaskData();
+
+  if (TaskAltitudeRequired(Basic, Calculated, maccready, &Vfinal,
+                           &TotalTime, &TotalDistance, &ifinal)) {
+      
     double t0 = TotalTime;
     // total time expected for task
-
+    
     double t1 = Basic->Time-Calculated->TaskStartTime;
     // time elapsed since start
-
+    
     double d0 = TotalDistance;
     // total task distance
-
+    
     double d1 = Calculated->TaskDistanceCovered;
     // actual distance covered
-
+    
     double dr = Calculated->TaskDistanceToGo;
     // distance remaining
-
+    
     double t2;
     // equivalent time elapsed after final glide
-
+    
     double d2;
     // equivalent distance travelled after final glide
     
     double h0 = Calculated->TaskAltitudeRequiredFromStart;
     // total height required from start
-
-//    double h2 = Calculated->TaskAltitudeRequired-Calculated->NavAltitude;
+    
+    //    double h2 = Calculated->TaskAltitudeRequired-Calculated->NavAltitude;
     // actual height required
-
+    
     double h1 = Calculated->NavAltitude-SAFETYALTITUDEARRIVAL 
       + WayPointList[Task[ifinal].Index].Altitude;
     // height above target
-
+    
     // equivalent speed
-    double v2;
-
+    double v2, v1;
+    
     // JB's task speed...
     if ((t1>0)&&(d1>0)) {
-      v2 = d1/t1;
+      v1 = d1/t1;
       double hx = SpeedHeight(Basic, Calculated);
-      double t1mod = t1-hx/max(0.1,MACCREADY);
+      double t1mod = t1-hx/max(0.1,maccready);
       // only valid if flown for 5 minutes or more
       if (t1mod>300.0) {
         Calculated->TaskSpeedAchieved = d1/t1mod;
@@ -2377,61 +2221,58 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
         Calculated->TaskSpeedAchieved = d1/t1;
       }
     }
-
+    
     if ((t1>0)&&(d0>0)&&(t0>0)&&(h1>0)&&(h0>0)&&(Vfinal>0)) {
-
+      
       d2 = d1+min(dr, d0*(h1/h0));
       // distance that can be usefully final glided from here
-
+      
       // time at end of final glide
       t2 = t1+(d2-d1)/Vfinal;
-
+      
       // average speed to end of final glide from here
       v2 = d2/t2;
-
-      Calculated->TaskSpeed = max(d1/t1,v2);
+      
+      Calculated->TaskSpeed = max(v1,v2);
       
       if(Basic->Time <= LastTime) {
         LastTime = Basic->Time;
-      } else {
-        if (Basic->Time-LastTime >=1.0) {
-
-          // Calculate contribution to average task speed.
-          // This is equal to the change in virtual distance
-          // divided by the time step
-
-          // This is a novel concept.
-          // When climbing at the MC setting, this number should
-          // be similar to the estimated task speed.
-          // When climbing slowly or when flying off-course,
-          // this number will drop.
-          // In cruise at the optimum speed in zero lift, this
-          // number will be similar to the estimated task speed. 
-
-          // A low pass filter is applied so it doesn't jump around
-          // too much when circling.
-
-          // If this number is higher than the overall task average speed,
-          // it means that the task average speed is increasing.
-
-          // When cruising in sink, this number will decrease.
-          // When cruising in lift, this number will increase.
-
-          // Therefore, it shows well whether at any time the glider
-          // is wasting time.
+      } else if (Basic->Time-LastTime >=1.0) {
           
-          double delta_d2 = (v2*t1-v2last*t1last);
-          double vdiff = delta_d2/(Basic->Time-LastTime);
-          Calculated->TaskSpeedInstantaneous = 
-            Calculated->TaskSpeedInstantaneous*0.98+0.02*vdiff;
-          v2last = v2;
-          t1last = t1;
-          LastTime = Basic->Time;
-       } 
-      }
+        // Calculate contribution to average task speed.
+        // This is equal to the change in virtual distance
+        // divided by the time step
+        
+        // This is a novel concept.
+        // When climbing at the MC setting, this number should
+        // be similar to the estimated task speed.
+        // When climbing slowly or when flying off-course,
+        // this number will drop.
+        // In cruise at the optimum speed in zero lift, this
+        // number will be similar to the estimated task speed. 
+        
+        // A low pass filter is applied so it doesn't jump around
+        // too much when circling.
+        
+        // If this number is higher than the overall task average speed,
+        // it means that the task average speed is increasing.
+        
+        // When cruising in sink, this number will decrease.
+        // When cruising in lift, this number will increase.
+        
+        // Therefore, it shows well whether at any time the glider
+        // is wasting time.
+        
+        double delta_d2 = (v2*t1-v2last*t1last);
+        double vdiff = delta_d2/(Basic->Time-LastTime);
+        Calculated->TaskSpeedInstantaneous = 
+          Calculated->TaskSpeedInstantaneous*0.98+0.02*vdiff;
+        v2last = v2;
+        t1last = t1;
+        LastTime = Basic->Time;
+      } 
     }
   }
-
   UnlockTaskData();
 
 }
@@ -2456,8 +2297,6 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   double w1lon;
   double w0lat;
   double w0lon;
-
-  if (Calculated->ValidFinish) return;
 
   //  LockFlightData();
   LockTaskData();
@@ -2511,10 +2350,9 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         LegCovered = max(0,LegCovered-StartRadius);
       }
       
-      Calculated->LegDistanceCovered = LegCovered;
-      Calculated->TaskDistanceCovered = LegCovered;   
       Calculated->LegDistanceToGo = LegToGo;
-      
+      Calculated->LegDistanceCovered = LegCovered;
+      Calculated->TaskDistanceCovered = LegCovered;
       if(Basic->Time > Calculated->LegStartTime) {
         Calculated->LegSpeed = Calculated->LegDistanceCovered
           / (Basic->Time - Calculated->LegStartTime); 
@@ -2548,6 +2386,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                           w0lon,
                           &LegDistance, NULL);
 
+
           Calculated->TaskDistanceCovered += LegDistance;
         }
 
@@ -2573,7 +2412,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       Calculated->TaskDistanceCovered = 0;
     }
   
-  ////////////
+  //////////////////////
 
   // Calculate Final Glide To Finish
   Calculated->TaskDistanceToGo = 0;
@@ -3113,7 +2952,6 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   int i;
   double MaxDistance, MinDistance, TargetDistance;
   double LegToGo, LegDistance, TargetLegToGo, TargetLegDistance;
-//  double TaskAltitudeRequired = 0;
 
   if (!WayPointList) return ;
 
@@ -3315,127 +3153,6 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 
 
-//////////////////////////////////////////////////////////
-// Final glide through terrain and footprint calculations
-
-void ExitFinalGlideThroughTerrain() {
-  UnlockTerrainDataCalculations();
-}
-
-
-double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic, 
-                                DERIVED_INFO *Calculated,
-                                double *retlat, double *retlon,
-                                double maxrange,
-				bool *outofrange) 
-{
-  double irange = GlidePolar::MacCreadyAltitude(MACCREADY, 
-						// should this be zero?
-						1.0, bearing, 
-						Calculated->WindSpeed, 
-						Calculated->WindBearing, 
-						0, 0, true, 0);
-  if (retlat && retlon) {
-    *retlat = Basic->Latitude;
-    *retlon = Basic->Longitude;
-  }
-  *outofrange = false;
-
-  if ((irange<=0.0)||(Calculated->NavAltitude<=0)) {
-    // can't make progress in this direction at the current windspeed/mc
-    return 0;
-  }
-
-  double glidemaxrange = Calculated->NavAltitude/irange;
-
-  // returns distance one would arrive at altitude in straight glide
-  // first estimate max range at this altitude
-  double lat, lon;
-  double latlast, lonlast;
-  double h=0.0, dh=0.0;
-//  int imax=0;
-  double dhlast=0;
-  double altitude;
- 
-  LockTerrainDataCalculations();
-
-  // calculate terrain rounding factor
-
-
-  FindLatitudeLongitude(Basic->Latitude, Basic->Longitude, 0, 
-                        glidemaxrange/NUMFINALGLIDETERRAIN, &lat, &lon);
-
-  double Xrounding = fabs(lon-Basic->Longitude)/2;
-  double Yrounding = fabs(lat-Basic->Latitude)/2;
-  terrain_dem_calculations.SetTerrainRounding(Xrounding, Yrounding);
-
-  altitude = Calculated->NavAltitude;
-  h =  terrain_dem_calculations.GetTerrainHeight(lat, lon); 
-  dh = altitude - h - SAFETYALTITUDETERRAIN;
-  if (dh<0) {
-    ExitFinalGlideThroughTerrain();
-    return 0;
-  }
-
-  latlast = Basic->Latitude;
-  lonlast = Basic->Longitude;
-
-  // find grid
-  double dlat, dlon;
-  FindLatitudeLongitude(Basic->Latitude, Basic->Longitude, bearing, 
-                        glidemaxrange, &dlat, &dlon);
-  dlat -= Basic->Latitude;
-  dlon -= Basic->Longitude;
-
-  for (int i=0; i<=NUMFINALGLIDETERRAIN; i++) {
-    double fi = (i*1.0)/NUMFINALGLIDETERRAIN;
-    // fraction of glidemaxrange
-
-    if ((maxrange>0)&&(fi>maxrange/glidemaxrange)) {
-      // early exit
-      *outofrange = true;
-      ExitFinalGlideThroughTerrain();
-      return maxrange;
-    }
-
-    altitude = (1.0-fi)*Calculated->NavAltitude;
-
-    // find lat, lon of point of interest
-
-    lat = Basic->Latitude+dlat*fi;
-    lon = Basic->Longitude+dlon*fi;
-
-    // find height over terrain
-    h =  terrain_dem_calculations.GetTerrainHeight(lat, lon); 
-
-    dh = altitude - h - SAFETYALTITUDETERRAIN;
-
-    if ((dh<=0)&&(dhlast>=0)) {
-      double f;
-      if (dhlast-dh>0) {
-        f = (-dhlast)/(dh-dhlast);
-      } else {
-        f = 0.0;
-      }
-      if (retlat && retlon) {
-        *retlat = latlast*(1.0-f)+lat*f;
-        *retlon = lonlast*(1.0-f)+lon*f;
-      }
-      ExitFinalGlideThroughTerrain();
-      double distance;
-      DistanceBearing(Basic->Latitude, Basic->Longitude, lat, lon,
-                      &distance, NULL);
-      return distance;
-    }
-    dhlast = dh;
-    latlast = lat;
-    lonlast = lon;
-  }
-
-  *outofrange = true;
-  ExitFinalGlideThroughTerrain();
-  return glidemaxrange;
-}
 
 
 //////////////////////////////////////////////////////////////////
@@ -3898,9 +3615,12 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     if (ntimeinflight>10) {
       Calculated->Flying = TRUE;
       InputEvents::processGlideComputer(GCE_TAKEOFF);
-
       // reset stats on takeoff
       ResetFlightStats(Basic, Calculated);
+      
+      // save stats in case we never finish
+      memcpy(&Finish_Derived_Info, Calculated, sizeof(DERIVED_INFO));
+
     }
     if (ntimeonground>10) {
       Calculated->OnGround = TRUE;
@@ -3910,8 +3630,16 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     // detect landing
     if (ntimeinflight==0) {
       // have been stationary for a minute
-      Calculated->Flying = FALSE;
       InputEvents::processGlideComputer(GCE_LANDING);
+
+      // JMWX  restore data calculated at finish so
+      // user can review flight as at finish line
+
+      double flighttime = Calculated->FlightTime;
+      memcpy(Calculated, &Finish_Derived_Info, sizeof(DERIVED_INFO));
+      Calculated->FlightTime = flighttime;
+
+      Calculated->Flying = FALSE;
     }
 
   }
@@ -3920,237 +3648,10 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 ////////////
 
-double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      double bearing,
-                      double GlideSlope) {
-
-
-//  bool maxfound = false;
-//  bool first = true;
-  double pmc = 0.0;
-  double htarget = GlideSlope;
-  double h;
-  double dh= 1.0;
-  double pmclast = 5.0;
-  double dhlast = -1.0;
-  double pmczero = 0.0;
- 
-  (void)Basic;
-
-  while (pmc<10.0) {
-
-    h = GlidePolar::MacCreadyAltitude(pmc, 
-                                      1.0, // unit distance
-				      bearing, 
-                                      Calculated->WindSpeed, 
-                                      Calculated->WindBearing, 
-                                      0, 0, true, 0);
-
-    dh = (htarget-h); 
-    // height difference, how much we have compared to 
-    // how much we need at that speed.
-    //   dh>0, we can afford to speed up
-
-    if (dh==dhlast) {
-      // same height, must have hit max speed.
-      if (dh>0) {
-        return pmclast;
-      } else {
-        return 0.0;
-      }
-    }
-
-    if ((dh<=0)&&(dhlast>0)) {
-      double f = (-dhlast)/(dh-dhlast);
-      pmczero = pmclast*(1.0-f)+f*pmc;
-      return pmczero;
-    }
-    dhlast = dh;
-    pmclast = pmc;
-
-    pmc += 0.5;
-  }
-  return -1.0; // no solution found, unreachable without further climb
-}
-
-
-double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			  double bearing,
-			  double timeremaining,
-			  double hfinal) {
-
-  // find highest Mc to achieve greatest distance in remaining time and height
-  (void)Basic;
-
-  double timetogo;
-  double mc;
-  double mcbest = 0.0;
-  double dbest = 0.0;
-
-  for (mc=0; mc<10.0; mc+= 0.1) {
-
-    double hunit = GlidePolar::MacCreadyAltitude(mc, 
-						 1.0, // unit distance
-						 bearing, 
-						 Calculated->WindSpeed, 
-						 Calculated->WindBearing,
-						 NULL,
-						 NULL,
-						 1, // final glide
-						 &timetogo);
-    if (timetogo>0) {
-      double p = timeremaining/timetogo;    
-      double hspent = hunit*p;    
-      double dh = Calculated->NavAltitude-hspent-hfinal;    
-      double d = 1.0*p;
-      
-      if ((d>dbest) && (dh>=0)) {
-	mcbest = mc;
-      }
-    }
-  }
-  return mcbest;
-}
 
 
 
-void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated) 
-{
-  if (!WayPointList) return;
-  if (TeamCodeRefWaypoint < 0) return;
-  //if (lastTeamCodeUpdateTime + 10000 > GetTickCount()) return;
 
-	
-  double distance = 0;
-  double bearing = 0;
-  TCHAR code[10];
-	
-  lastTeamCodeUpdateTime = GetTickCount();
-
-  /*
-  distance =  Distance(WayPointList[TeamCodeRefWaypoint].Latitude, 
-  	WayPointList[TeamCodeRefWaypoint].Longitude,
-  	Basic->Latitude, 
-  	Basic->Longitude);
-  	
-  bearing = Bearing(WayPointList[TeamCodeRefWaypoint].Latitude, 
-  	WayPointList[TeamCodeRefWaypoint].Longitude,
-  	Basic->Latitude, 
-  	Basic->Longitude);
-  */
-	
-  // TODO: ask Lars why this one
-  LL_to_BearRange(WayPointList[TeamCodeRefWaypoint].Latitude, 
-                  WayPointList[TeamCodeRefWaypoint].Longitude,
-                  Basic->Latitude, 
-                  Basic->Longitude,
-                  &bearing, &distance);
-
-  GetTeamCode(code, bearing, distance);
-
-  Calculated->TeammateBearing = bearing;
-  Calculated->TeammateRange = distance;	
-
-  //// calculate lat/long for team-mate position
-  //double teammateBearing = GetTeammateBearingFromRef(TeammateCode);
-  //double teammateRange = GetTeammateRangeFromRef(TeammateCode);
-
-  //Calculated->TeammateLongitude = FindLongitude(
-
-  wcsncpy(Calculated->OwnTeamCode, code, 5);
-}
-
-
-void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated) 
-{
-  static bool InTeamSector = false;
-
-  if (!WayPointList) return;
-  if (TeamCodeRefWaypoint < 0) return;
-
-  double ownDistance = 0;
-  double ownBearing = 0;
-  double mateDistance = 0;
-  double mateBearing = 0;
-	
-  //ownBearing = Bearing(Basic->Latitude, Basic->Longitude,
-  //	WayPointList[TeamCodeRefWaypoint].Latitude, 
-  //	WayPointList[TeamCodeRefWaypoint].Longitude);	
-  //
-  //ownDistance =  Distance(Basic->Latitude, Basic->Longitude,
-  //	WayPointList[TeamCodeRefWaypoint].Latitude, 
-  //	WayPointList[TeamCodeRefWaypoint].Longitude);
-		
-  /*
-  ownBearing = Bearing(WayPointList[TeamCodeRefWaypoint].Latitude, 
-                       WayPointList[TeamCodeRefWaypoint].Longitude,
-                       Basic->Latitude, 
-                       Basic->Longitude
-                       );	
-  //
-  ownDistance =  Distance(WayPointList[TeamCodeRefWaypoint].Latitude, 
-                          WayPointList[TeamCodeRefWaypoint].Longitude,
-                          Basic->Latitude, 
-                          Basic->Longitude
-                          );	
-  */
-
-  // TODO: ask Lars why this one
-
-  LL_to_BearRange(WayPointList[TeamCodeRefWaypoint].Latitude, 
-                  WayPointList[TeamCodeRefWaypoint].Longitude,
-                  Basic->Latitude, 
-                  Basic->Longitude,
-                  &ownBearing, &ownDistance);
-
-  if (TeammateCodeValid)
-    {
-	
-      //mateBearing = Bearing(Basic->Latitude, Basic->Longitude, TeammateLatitude, TeammateLongitude);
-      //mateDistance = Distance(Basic->Latitude, Basic->Longitude, TeammateLatitude, TeammateLongitude);
-
-      CalcTeammateBearingRange(ownBearing, ownDistance, 
-                               TeammateCode, 
-                               &mateBearing, &mateDistance);
-
-      // TODO ....change the result of CalcTeammateBearingRange to do this !
-      if (mateBearing > 180)
-        {
-          mateBearing -= 180;
-        }
-      else
-        {
-          mateBearing += 180;
-        }
-
-
-      Calculated->TeammateBearing = mateBearing;
-      Calculated->TeammateRange = mateDistance;
-
-      FindLatitudeLongitude(Basic->Latitude, 
-                            Basic->Longitude,
-                            mateBearing,
-                            mateDistance, 
-                            &TeammateLatitude,
-                            &TeammateLongitude);
-
-      if (mateDistance < 100 && InTeamSector==false)
-        {
-          InTeamSector=true;
-          InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
-        }
-      else if (mateDistance > 300)
-        {
-          InTeamSector = false;
-        }
-    }
-  else
-    {
-      Calculated->TeammateBearing = 0;
-      Calculated->TeammateRange = 0;
-    }
-
-}
 
 static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
 
@@ -4233,6 +3734,7 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   if (!WayPointList) return 0;
   if (Calculated->ValidFinish) return 0;
+
   if (ActiveWayPoint <1) return 0;
   if (Calculated->TaskStartTime<0) return 0;
 
@@ -4244,7 +3746,7 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   LockTaskData();
 
   double mce = 0.0;
-  double found_mce = 0.0;
+  double found_mce = 10.0;
 
   bool isfinal = ActiveIsFinalWaypoint();
 

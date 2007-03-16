@@ -449,7 +449,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
   rectObj screenRect = MapWindow::CalculateScreenBounds(0.0);
 
-  POINT *pt= NULL;
+  POINT pt[MAXCLIPPOLYGON];
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     
@@ -492,12 +492,9 @@ void Topology::Paint(HDC hdc, RECT rc) {
         if (checkVisible(shape, &screenRect))
         for (int tt = 0; tt < shape->numlines; tt ++) {
 
-          pt = (POINT*)SfRealloc(pt,sizeof(POINT)*shape->line[tt].numpoints);
-
-          if (!pt) continue; // JMW, well this at least is graceful
-          // to failure
-
-          for (int jj=0; jj< shape->line[tt].numpoints; jj++) {
+          int jj;
+          int msize = min(shape->line[tt].numpoints, MAXCLIPPOLYGON);
+          for (jj=0; jj< msize; jj++) {
 
             tpp_x = shape->line[tt].point[jj].x;
             tpp_y = shape->line[tt].point[jj].y;
@@ -509,7 +506,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
             }
 
           }
-          Polyline(hdc, pt, shape->line[tt].numpoints);
+          ClipPolygon(hdc, pt, jj, rc, false);
           shpCache[ixshp]->renderSpecial(hdc,minx,miny);
 
         }
@@ -524,21 +521,12 @@ void Topology::Paint(HDC hdc, RECT rc) {
         for (int tt = 0; tt < shape->numlines; tt ++) {
 
             int jj;
-
-//            bool leftscreen=false;
-
-	    pt = (POINT*)
-              SfRealloc(pt,
-                        int((sizeof(POINT)
-                             *shape->line[tt].numpoints/iskip)*1.3)); 
+            int msize = min(shape->line[tt].numpoints/iskip, MAXCLIPPOLYGON);
             
 	    //Uh-oh.. chance of running out of array space here, since
 	    //the number of points is dynamic. Can anyone help?
 
-	    if (!pt) continue; // JMW, well this at least is graceful
-                               // to failure
-
-            for (jj=0; jj< shape->line[tt].numpoints/iskip; jj++) {
+            for (jj=0; jj< msize; jj++) {
               int x, y;
 	      tpp_x = shape->line[tt].point[jj*iskip].x;
 	      tpp_y = shape->line[tt].point[jj*iskip].y;
@@ -546,93 +534,8 @@ void Topology::Paint(HDC hdc, RECT rc) {
               pt[jj].x = x;
               pt[jj].y = y;
             }
-            ClipPolygon(hdc,pt,jj-1, rc);
+            ClipPolygon(hdc,pt,jj, rc);
 
-              /*
-	    for (int jj=0; jj< shape->line[tt].numpoints/iskip; jj++) {
-	      int x, y, quad;
-	      bool inside;
-
-	      tpp_x = shape->line[tt].point[jj*iskip].x;
-	      tpp_y = shape->line[tt].point[jj*iskip].y;
-	      MapWindow::LatLon2Screen(tpp_x, tpp_y, x, y);
-	      
-	      //Screen is split into four quadrants:  \ 2 /
-	      //									   \ /
-	      //When a point outside screen crosses   1 x 3
-	      //from one quadrant to another,a corner  /      \
-		  //is drawn to prevent polygon clipping. / 4 \
-		  
-              quad = getQuad(x,y,rc);
-              inside = checkInside(x,y,quad,rc);
-              
-              int index;
-
-              if (!inside){
-                index = jj-skipped+keypoints;
-                if ((!leftscreen)||(quad != quad1)){
-                  if(!leftscreen){
-                    //Polygon has just left the screen
-                    //Point is still drawn, which prevents clipped corners
-                    pt[index].x = x;
-                    pt[index].y = y;
-                  }
-                  else{
-                    //Point has taken polygon to a new quadrant; 
-                    //draw a line between the two points (Just in case the line
-                    //intersects the screen)
-                    //(01FEB06 code simplification - sjt)
-		    
-                    pt[index].x = xprev;
-                    pt[index].y = yprev;
-		    
-                    keypoints++; index++;
-		    
-                    pt[index].x = x;
-                    pt[index].y = y;
-		    
-                  }
-                } else {
-                  skipped++; //Don't draw this point...
-                }
-		
-                xprev=x;
-                yprev=y;
-		
-                leftscreen=true;
-                if (quad != quad1) quad1=quad;
-
-              } else{
-
-                //If current point is inside the screen...
-
-                index = jj-skipped+keypoints;
-		
-                //... and we've just returned from outside the screen,
-                // we draw one point outside the screen (prevents clipping)
-                if (leftscreen){					  
-                  pt[index].x = xprev;
-                  pt[index].y = yprev;
-                  keypoints++; index++;
-                }
-		
-                leftscreen = false;
-		
-                pt[index].x = x;
-                pt[index].y = y;
-		
-                // find leftmost visible point for display of label
-                if ((x<=minx)&&(x>=rc.left)
-                    &&(y>=rc.top)&&(y<=rc.bottom)) {
-                  minx = x;
-                  miny = y;
-                }
-              }
-	    }
-	    
-	    Polygon(hdc, pt, 
-		    (((shape->line[tt].numpoints/iskip)+keypoints)-skipped)); 
-              */
 	    shpCache[ixshp]->renderSpecial(hdc,minx,miny);
 	    
 	  }
@@ -643,8 +546,6 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
     }
   }
-  //   
-  if (pt) { free(pt); pt=NULL; }
         
   SelectObject(hdc, hbOld);
   SelectObject(hdc, hpOld);
@@ -821,7 +722,8 @@ void OutputToInput(int *inLength, POINT *inVertexArray, int *outLength,
     {
       inVertexArray[0].x=outVertexArray [0].x;
       inVertexArray[0].y=outVertexArray [0].y;
-      if (outVertexArray[0].x==outVertexArray[1].x) /*First two vertices 
+      if ((outVertexArray[0].x==outVertexArray[1].x) 
+          && (outVertexArray[0].y==outVertexArray[1].y)) /*First two vertices 
                                                       are same*/
         {
           inVertexArray[1].x=outVertexArray [2].x;
@@ -920,7 +822,7 @@ void SutherlandHodgmanPolygoClip (POINT* inVertexArray,
                                   POINT* outVertexArray,
                                   int inLength,
                                   int *outLength,
-                                  POINT *clipBoundary)
+                                  POINT *clipBoundary, bool fill)
 {
   POINT s,p; /*Start, end point of current polygon edge*/ 
   POINT i;   /*Intersection point with a clip boundary*/
@@ -931,51 +833,51 @@ void SutherlandHodgmanPolygoClip (POINT* inVertexArray,
   for (j=0; j < inLength; j++)
     {
       p = inVertexArray[j]; /*Now s and p correspond to the vertices*/
-      if (Inside(p,clipBoundary))      /*Cases 1 and 4*/
-        {
-          if (Inside(s, clipBoundary))
-            {
-              Output(p, outLength, outVertexArray); /*Case 1*/
-            }
-          else                            /*Case 4*/
-            {
-              Intersect(s, p, clipBoundary, &i);
-              Output(i, outLength, outVertexArray);
-              Output(p, outLength, outVertexArray);
-            }
-        }
-      else                   /*Cases 2 and 3*/
-        {
-          if (Inside(s, clipBoundary))  /*Cases 2*/
-            {
-              Intersect(s, p, clipBoundary, &i);
-              Output(i, outLength, outVertexArray);
-            }
-        }                          /*No action for case 3*/
+      if ((j!=0) || fill) {
+        if (Inside(p,clipBoundary))      /*Cases 1 and 4*/
+          {
+            if (Inside(s, clipBoundary))
+              {
+                Output(p, outLength, outVertexArray); /*Case 1*/
+              }
+            else                            /*Case 4*/
+              {
+                Intersect(s, p, clipBoundary, &i);
+                Output(i, outLength, outVertexArray);
+                Output(p, outLength, outVertexArray);
+              }
+          }
+        else                   /*Cases 2 and 3*/
+          {
+            if (Inside(s, clipBoundary))  /*Cases 2*/
+              {
+                Output(p, outLength, outVertexArray);
+              }
+          }                          /*No action for case 3*/
+      } else {
+        if (Inside(p, clipBoundary)) 
+          Output(p, outLength, outVertexArray); /*Case 1*/
+      }
       s = p;     /*Advance to next pair of vertices*/
     }
 }    
 
 
-
-void ClipPolygon(HDC hdc, POINT *mptin, int inLength, RECT rc) {
+void ClipPolygon(HDC hdc, POINT *mptin, int inLength, RECT rc, bool fill) {
   POINT edge[2];
-  POINT ptout[1000];
-  POINT ptin[1000];
+  POINT ptout[MAXCLIPPOLYGON];
+  POINT ptin[MAXCLIPPOLYGON];
   int outLength = 0;
   int i;
 
-  if (inLength>=5000) {
-    inLength=5000-1;
+  if (inLength>=MAXCLIPPOLYGON-1) {
+    inLength=MAXCLIPPOLYGON-2;
   }
 
   for (i=0; i<inLength; i++) {
     ptin[i].x = mptin[i].x;
     ptin[i].y = mptin[i].y;
   }
-  ptin[i].x = ptin[0].x;
-  ptin[i].y = ptin[0].y;
-  inLength++;
 
   rc.top--;
   rc.bottom++;
@@ -992,7 +894,7 @@ void ClipPolygon(HDC hdc, POINT *mptin, int inLength, RECT rc) {
 
   SutherlandHodgmanPolygoClip (ptin, ptout, 
                                inLength, 
-                               &outLength, edge);
+                               &outLength, edge, fill);
 
   OutputToInput(&inLength, ptin, &outLength, ptout);
 
@@ -1006,7 +908,7 @@ void ClipPolygon(HDC hdc, POINT *mptin, int inLength, RECT rc) {
 
   SutherlandHodgmanPolygoClip (ptin, ptout, 
                                inLength, 
-                               &outLength, edge);
+                               &outLength, edge, fill);
   OutputToInput(&inLength, ptin, &outLength, ptout);
 
   // RIGHT EDGE
@@ -1019,7 +921,7 @@ void ClipPolygon(HDC hdc, POINT *mptin, int inLength, RECT rc) {
 
   SutherlandHodgmanPolygoClip (ptin, ptout, 
                                inLength, 
-                               &outLength, edge);
+                               &outLength, edge, fill);
   OutputToInput(&inLength, ptin, &outLength, ptout);
 
   // TOP EDGE
@@ -1032,14 +934,19 @@ void ClipPolygon(HDC hdc, POINT *mptin, int inLength, RECT rc) {
   
   SutherlandHodgmanPolygoClip (ptin, ptout, 
                                inLength, 
-                               &outLength, edge);
+                               &outLength, edge, fill);
   
   OutputToInput(&inLength, ptin, &outLength, ptout);
-  if (outLength>2) {
-    ptout[outLength].x = ptout[0].x;
-    ptout[outLength].y = ptout[0].y;
-    Polygon(hdc, ptout, 
-            outLength+1);
+
+  if (fill) {
+    if (outLength>2) {
+      Polygon(hdc, ptout, 
+              outLength);
+    }
+  } else {
+    if (outLength>1) {
+      Polyline(hdc, ptout, outLength);
+    }
   }
 }
 

@@ -82,6 +82,7 @@ class InputEvents {
   static void eventDeclutterLabels(TCHAR *misc);
   static void eventExit(TCHAR *misc);
   static void eventFLARMRadar(TCHAR *misc);
+  static void eventBeep(TCHAR *misc);
   // -------
 
 #ifdef _SIM_
@@ -118,6 +119,7 @@ enum {
   GCE_TASK_START,
   GCE_TASK_FINISH,
   GCE_TEAM_POS_REACHED,
+  GCE_ARM_READY,
   GCE_COUNT			// How many we have for arrays etc
 };
 

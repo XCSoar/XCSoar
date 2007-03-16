@@ -920,7 +920,7 @@ void InputEvents::eventSnailTrail(TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
     TrailActive ++;
-    if (TrailActive>2) {
+    if (TrailActive>3) {
       TrailActive=0;
     }
   } 
@@ -930,6 +930,8 @@ void InputEvents::eventSnailTrail(TCHAR *misc) {
     TrailActive = 1;
   else if (_tcscmp(misc, TEXT("short")) == 0)
     TrailActive = 2;
+  else if (_tcscmp(misc, TEXT("full")) == 0)
+    TrailActive = 2;
 
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (TrailActive==0)
@@ -938,6 +940,8 @@ void InputEvents::eventSnailTrail(TCHAR *misc) {
       DoStatusMessage(TEXT("SnailTrail ON Long"));
     if (TrailActive==2) 
       DoStatusMessage(TEXT("SnailTrail ON Short"));
+    if (TrailActive==3) 
+      DoStatusMessage(TEXT("SnailTrail ON Full"));
   }  
 }
 
@@ -1944,6 +1948,15 @@ void InputEvents::eventProfileSave(TCHAR *misc) {
   WriteProfile(misc);
 }
 
+
+void InputEvents::eventBeep(TCHAR *misc) {
+#ifndef DISABLEAUDIO
+  MessageBeep(MB_ICONEXCLAMATION);
+#endif
+#if defined(GNAV)
+  InputEvents::eventDLLExecute(TEXT("altairplatform.dll DoBeep2 1"));
+#endif
+}
 
 void SystemConfiguration(void);
 

@@ -92,6 +92,7 @@ public:
   int getN();
   double getLatitude(int i);
   double getLongitude(int i);
+  double getTime(int i);
   
 private:
 

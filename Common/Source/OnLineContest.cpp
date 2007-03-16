@@ -389,6 +389,10 @@ int OLCOptimizer::getN() {
   return pnts;
 }
 
+double OLCOptimizer::getTime(int i) {
+  return data.timepnts[i];
+}
+
 double OLCOptimizer::getLatitude(int i) {
   return data.latpnts[i];
 }

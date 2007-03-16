@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.61 2007/01/10 06:41:30 jwharington Exp $
+  $Id: Parser.cpp,v 1.62 2007/03/16 11:58:12 jwharington Exp $
 
 Copyright_License {
 
@@ -838,17 +838,24 @@ BOOL NMEAParser::PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
   ExtractParameter(String,ctemp,3);
   vias = sqrt(StrToDouble(ctemp,NULL))/TOKNOTS;
 
+  // RMN: Changed bugs-calculation, swapped ballast and bugs to suit
+  // the B50-string for Borgelt, it's % degradation, for us, it is %
+  // of max performance
   ExtractParameter(String,ctemp,4);
+  GPS_INFO->Bugs = 1.0-StrToDouble(ctemp,NULL);
+  BUGS = GPS_INFO->Bugs;
+
+  /*ExtractParameter(String,ctemp,5);
   GPS_INFO->Ballast = StrToDouble(ctemp,NULL)-1.0;
-  BALLAST = GPS_INFO->Ballast;
+  BALLAST = GPS_INFO->Ballast; */
   // JMW TODO: fix this, because for Borgelt it's % of empty weight,
   // for us, it's % of ballast capacity
-
-  // for Borgelt, it's % degradation,
-  // for us, it is % of max performance
+  
+  // RMN: Borgelt ballast->XCSoar ballast
   ExtractParameter(String,ctemp,5);
-  GPS_INFO->Bugs = 1.0/(1.0+StrToDouble(ctemp,NULL));
-  BUGS = GPS_INFO->Bugs;
+  GPS_INFO->Ballast = 
+    (StrToDouble(ctemp,NULL)-1)*(WEIGHTS[0]+WEIGHTS[1])/WEIGHTS[2];
+  BALLAST = GPS_INFO->Ballast;
 
   GPS_INFO->AirspeedAvailable = TRUE;
   GPS_INFO->IndicatedAirspeed = vias;
@@ -1050,8 +1057,8 @@ BOOL NMEAParser::PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO)
 void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   static int i=90;
   static TCHAR t1[] = TEXT("1,1,1,1");
-  static TCHAR t2[] = TEXT("0,300,500,220,2,DD8F12,120,-4.5,30,-1.4,1");
-  static TCHAR t3[] = TEXT("0,0,1200,50,2,DA8B06,120,-4.5,30,-1.4,1");
+  static TCHAR t2[] = TEXT("0,300,500,220,2,DD8F12,0,-4.5,30,-1.4,1");
+  static TCHAR t3[] = TEXT("0,0,1200,50,2,DA8B06,270,-4.5,30,-1.4,1");
   //  static TCHAR t4[] = TEXT("-3,500,1024,50");
 
   QNH=1013.25;

@@ -2,12 +2,25 @@ mode=default
 type=gce
 data=TASK_START
 event=StatusMessage Task start
+event=Beep 1
 
 mode=default
 type=gce
 data=TASK_FINISH
 event=StatusMessage Task finish
+event=Beep 1
 
+mode=default
+type=gce
+data=TASK_NEXTWAYPOINT
+event=StatusMessage Next turnpoint
+event=Beep 1
+
+mode=default
+type=gce
+data=ARM_READY
+event=StatusMessage In sector, arm advance when ready
+event=Beep 1
 
 
 # -------------------
@@ -158,10 +171,6 @@ type=gce
 data=FLIGHTMODE_FINALGLIDE_TERRAIN
 event=StatusMessage Final Glide Through Terrain
 
-mode=default
-type=gce
-data=TASK_FINISH
-event=StatusMessage Task finished
 
 # ------------
 # mode=default

@@ -499,17 +499,8 @@ static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, Airspace
 
         PlaySimpleWarning = false;
 
-        #ifndef DISABLEAUDIO
+        InputEvents::eventBeep(TEXT("1"));
 
-        MessageBeep(MB_ICONEXCLAMATION);
-
-        #endif
-
-        #if defined(GNAV)
-
-        InputEvents::eventDLLExecute(TEXT("altairplatform.dll DoBeep2 1"));
-
-        #endif
       }
     break;
 

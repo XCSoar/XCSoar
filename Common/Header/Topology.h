@@ -103,7 +103,7 @@ class TopologyLabel: public Topology {
 
 };
 
-void ClipPolygon(HDC hdc, POINT *ptin, int n, RECT rc);
+void ClipPolygon(HDC hdc, POINT *ptin, int n, RECT rc, bool fill=true);
 
 
 #endif

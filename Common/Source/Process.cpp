@@ -544,7 +544,11 @@ void InfoBoxFormatter::AssignValue(int i) {
     }
     break;
   case 18:
-    Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo; 
+    if (CALCULATED_INFO.ValidFinish) {
+      Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
+    } else {
+      Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo; 
+    }
     if (ActiveWayPoint>=0) {
       Valid = true;
     } else {
@@ -556,7 +560,11 @@ void InfoBoxFormatter::AssignValue(int i) {
       Valid = false;
     } else {
       Valid = true;
-      Value = CALCULATED_INFO.LDFinish; 
+      if (CALCULATED_INFO.ValidFinish) {
+        Value = 0;
+      } else {
+        Value = CALCULATED_INFO.LDFinish; 
+      }
     }
     break;
   case 20:
