@@ -1194,6 +1194,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   dataTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("dataTriggerEvent"));
   varioTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("varioTriggerEvent"));
 
+  // Initialise main blackboard data
+
   memset( &(Task), 0, sizeof(Task_t));
   memset( &(StartPoints), 0, sizeof(Start_t));
   int i;
@@ -1326,7 +1328,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // Finally ready to go
   StartupStore(TEXT("CreateDrawingThread\r\n"));
   MapWindow::CreateDrawingThread();
-  GlobalRunning = true;
   Sleep(100);
   StartupStore(TEXT("ShowInfoBoxes\r\n"));
   ShowInfoBoxes();
@@ -1344,6 +1345,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // Da-da, start everything now
   StartupStore(TEXT("ProgramStarted=1\r\n"));
   ProgramStarted = 1;
+
+  GlobalRunning = true;
 
   // Main message loop:
   while (GlobalRunning &&
@@ -2945,18 +2948,27 @@ void LockNavBox() {
 void UnlockNavBox() {
 }
 
+static int csCount_TaskData = 0;
+static int csCount_FlightData = 0;
+static int csCount_EventQueue = 0;
+
 void LockTaskData() {
 #ifdef HAVEEXCEPTIONS
   if (!csTaskDataInitialized) throw TEXT("LockTaskData Error");
 #endif
   EnterCriticalSection(&CritSec_TaskData);
+  csCount_TaskData++;
 }
 
 void UnlockTaskData() {
 #ifdef HAVEEXCEPTIONS
   if (!csTaskDataInitialized) throw TEXT("LockTaskData Error");
 #endif
-  LeaveCriticalSection(&CritSec_TaskData);
+  if (csCount_TaskData)
+    csCount_TaskData--;
+  //  if (csCount_TaskData==0) {
+    LeaveCriticalSection(&CritSec_TaskData);
+    //  }
 }
 
 
@@ -2965,13 +2977,18 @@ void LockFlightData() {
   if (!csFlightDataInitialized) throw TEXT("LockFlightData Error");
 #endif
   EnterCriticalSection(&CritSec_FlightData);
+  csCount_FlightData++;
 }
 
 void UnlockFlightData() {
 #ifdef HAVEEXCEPTIONS
   if (!csFlightDataInitialized) throw TEXT("LockFlightData Error");
 #endif
-  LeaveCriticalSection(&CritSec_FlightData);
+  if (csCount_FlightData)
+    csCount_FlightData--;
+  //  if (csCount_FlightData==0) {
+    LeaveCriticalSection(&CritSec_FlightData);
+    //  }
 }
 
 void LockTerrainDataCalculations() {
@@ -3008,13 +3025,18 @@ void LockEventQueue() {
   if (!csEventQueueInitialized) throw TEXT("LockEventQueue Error");
 #endif
   EnterCriticalSection(&CritSec_EventQueue);
+  csCount_EventQueue++;
 }
 
 void UnlockEventQueue() {
 #ifdef HAVEEXCEPTIONS
   if (!csEventQueueInitialized) throw TEXT("LockEventQueue Error");
 #endif
-  LeaveCriticalSection(&CritSec_EventQueue);
+  if (csCount_EventQueue)
+    csCount_EventQueue--;
+  //  if (csCount_EventQueue==0) {
+    LeaveCriticalSection(&CritSec_EventQueue);
+    //  }
 }
 
 

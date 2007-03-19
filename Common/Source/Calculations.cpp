@@ -182,20 +182,25 @@ int getFinalWaypoint() {
   i=ActiveWayPoint;
 
   i++;
+  LockTaskData();
   while((Task[i].Index != -1) && (i<MAXTASKPOINTS))
     {
       i++;
     }
+  UnlockTaskData();
   return i-1;
 }
 
 
 static bool IsFinalWaypoint(void) {
+  LockTaskData();
   if(ActiveWayPoint < MAXTASKPOINTS-1) {
     if(Task[ActiveWayPoint+1].Index >= 0) {
+      UnlockTaskData();
       return false;
     }
   }
+  UnlockTaskData();
   return true;
 }
 
@@ -1476,11 +1481,13 @@ bool InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int thepoint)
     }
   if (SectorType>0)
     {
+      LockTaskData();
       DistanceBearing(WayPointList[Task[thepoint].Index].Latitude,
                       WayPointList[Task[thepoint].Index].Longitude,
                       Basic->Latitude ,
                       Basic->Longitude,
                       NULL, &AircraftBearing);
+      UnlockTaskData();
 
       AircraftBearing = AircraftBearing - Task[thepoint].Bisector ;
       while (AircraftBearing<-180) {
@@ -1523,6 +1530,7 @@ bool InAATTurnSector(double longitude, double latitude,
   if (!WayPointList) return false;
 
   double distance;
+  LockTaskData();
   DistanceBearing(WayPointList[Task[thepoint].Index].Latitude,
                   WayPointList[Task[thepoint].Index].Longitude,
                   latitude,
@@ -1532,6 +1540,7 @@ bool InAATTurnSector(double longitude, double latitude,
   if(Task[thepoint].AATType ==  CIRCLE) {
     if(distance < Task[thepoint].AATCircleRadius)
       {
+        UnlockTaskData();
         return true;
       }
   } else if(distance < Task[thepoint].AATSectorRadius) {
@@ -1542,8 +1551,10 @@ bool InAATTurnSector(double longitude, double latitude,
          (AircraftBearing > Task[thepoint].AATStartRadial)
          &&
          (AircraftBearing < Task[thepoint].AATFinishRadial)
-         )
+         ) {
+        UnlockTaskData();
         return true;
+      }
     }
 
     if(Task[thepoint].AATStartRadial
@@ -1552,10 +1563,13 @@ bool InAATTurnSector(double longitude, double latitude,
          (AircraftBearing > Task[thepoint].AATStartRadial)
          ||
          (AircraftBearing < Task[thepoint].AATFinishRadial)
-         )
+         ) {
+        UnlockTaskData();
         return true;
+      }
     }
   }
+  UnlockTaskData();
   return false;
 }
 
@@ -1584,8 +1598,10 @@ int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   if (!ValidFinish(Basic, Calculated)) return FALSE;
 
   // Finish invalid
+  LockTaskData();
   if(Task[i].Index == -1)
     {
+      UnlockTaskData();
       return FALSE;
     }
 
@@ -1604,11 +1620,14 @@ int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   if(!FinishLine) // Start Circle
     {
+      UnlockTaskData();
       return inrange;
     }
 
   // Finish line
   AircraftBearing = AircraftBearing - Task[i].InBound ;
+  UnlockTaskData();
+
   while (AircraftBearing<-180) {
     AircraftBearing+= 360;
   }
@@ -1740,9 +1759,12 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
     return false;
   }
 
+  LockTaskData();
+
   if ((ActiveWayPoint>0)
       &&(Task[ActiveWayPoint+1].Index < 0)) {
     // don't detect start if finish is selected
+    UnlockTaskData();
     return false;
   }
 
@@ -1778,7 +1800,7 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
       RefreshTask();
     }
   }
-
+  UnlockTaskData();
   return isInSector;
 }
 
@@ -2085,6 +2107,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   double TotalAltitude = 0;
   *TotalTime = 0; *TotalDistance = 0;
   *ifinal = 0;
+  LockTaskData();
   for(i=MAXTASKPOINTS-2;i>=0;i--) {
     if (Task[i].Index<0) continue;
     if (Task[i+1].Index<0) continue;
@@ -2122,6 +2145,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     TotalAltitude += LegAltitude;
 
     if (LegTime<0) {
+      UnlockTaskData();
       return false;
     } else {
       *TotalTime += LegTime;
@@ -2136,6 +2160,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
 
   if (*ifinal==0) {
+    UnlockTaskData();
     return false;
   }
 
@@ -2143,6 +2168,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     + WayPointList[Task[*ifinal].Index].Altitude;
 
   Calculated->TaskAltitudeRequiredFromStart = TotalAltitude;
+  UnlockTaskData();
 
   return true;
 }

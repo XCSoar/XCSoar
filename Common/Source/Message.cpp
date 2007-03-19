@@ -173,13 +173,19 @@ void Message::Destroy() {
 
 
 
+static int csCount_Message = 0;
 
 void Message::Lock() {
   EnterCriticalSection(&CritSec_Messages);
+  //  csCount_Message++;
 }
 
 void Message::Unlock() {
-  LeaveCriticalSection(&CritSec_Messages);
+  //  if (csCount_Message)
+  //    csCount_Message--;
+  //  if (csCount_Message==0) {
+    LeaveCriticalSection(&CritSec_Messages);
+    //  }
 }
 
 
@@ -259,7 +265,7 @@ void Message::Resize() {
 
 
 void Message::BlockRender(bool doblock) {
-  //  Lock();
+  //Lock();
   if (doblock) {
     block_ref++;
   } else {
@@ -267,13 +273,13 @@ void Message::BlockRender(bool doblock) {
   }
   // TODO: add blocked time to messages' timers so they come
   // up once unblocked.
-  //  Unlock();
+  //Unlock();
 }
 
 
 void Message::Render() {
-  if (block_ref) return;
   if (!GlobalRunning) return;
+  if (block_ref) return;
 
   Lock();
   DWORD	fpsTime = ::GetTickCount() - startTime;

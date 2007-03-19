@@ -71,9 +71,10 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
     dwError = GetLastError ();
 
     // Could not open the port.
-    _stprintf(sTmp, TEXT("Unable to Open\r\nPort %s"), sPortName),
-    MessageBoxX (hWndMainWindow, sTmp,
-		 gettext(TEXT("Error")), MB_OK|MB_ICONINFORMATION);
+    _stprintf(sTmp, TEXT("Unable to open port %s"), sPortName),
+      //    MessageBoxX (hWndMainWindow, sTmp,
+      //		 gettext(TEXT("Error")), MB_OK|MB_ICONINFORMATION);
+    DoStatusMessage(sTmp);
     return FALSE;
   }
 

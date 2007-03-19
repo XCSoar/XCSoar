@@ -802,6 +802,7 @@ TCHAR *FormatterTime::Render(int *color) {
 
 TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveWayPoint;
+  LockTaskData();
   if((thewaypoint >=0)&&(WayPointList))
     {
       int index = Task[thewaypoint].Index;
@@ -832,6 +833,7 @@ TCHAR *FormatterWaypoint::Render(int *color) {
       *color = 0;
       Text[0] = '\0';
     }
+  UnlockTaskData();
 
   return(Text);
 }

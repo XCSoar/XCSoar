@@ -75,9 +75,10 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
     // Could not open the port.
     // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    _stprintf(sTmp, TEXT("Unable to Open\r\nPort %s"), sPortName),
-    MessageBoxX (hWndMainWindow, sTmp,
-		 gettext(TEXT("Error")), MB_OK|MB_ICONINFORMATION);
+    _stprintf(sTmp, TEXT("Unable to open port %s"), sPortName),
+    DoStatusMessage(sTmp);
+    //    MessageBoxX (hWndMainWindow, sTmp,
+    //		 gettext(TEXT("Error")), MB_OK|MB_ICONINFORMATION);
     return FALSE;
   }
 
