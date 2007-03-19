@@ -449,7 +449,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
   rectObj screenRect = MapWindow::CalculateScreenBounds(0.0);
 
-  POINT pt[MAXCLIPPOLYGON];
+  static POINT pt[MAXCLIPPOLYGON];
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     
@@ -865,8 +865,8 @@ void SutherlandHodgmanPolygoClip (POINT* inVertexArray,
 
 void ClipPolygon(HDC hdc, POINT *mptin, int inLength, RECT rc, bool fill) {
   POINT edge[2];
-  POINT ptout[MAXCLIPPOLYGON];
-  POINT ptin[MAXCLIPPOLYGON];
+  static POINT ptout[MAXCLIPPOLYGON];
+  static POINT ptin[MAXCLIPPOLYGON];
   int outLength = 0;
   int i;
 

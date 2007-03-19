@@ -45,6 +45,7 @@ void FlyDirectTo(int index) {
   if (!CheckDeclaration())
     return;
 
+  LockTaskData();
   ActiveWayPoint = -1; AATEnabled = FALSE;
   for(int j=0;j<MAXTASKPOINTS;j++)
   {
@@ -55,6 +56,7 @@ void FlyDirectTo(int index) {
   Task[0].AATTargetOffsetRadius = 0.0;
   ActiveWayPoint = 0;
   RefreshTask();
+  UnlockTaskData();
 }
 
 
@@ -63,6 +65,7 @@ void SwapWaypoint(int index) {
   if (!CheckDeclaration())
     return;
 
+  LockTaskData();
   if (index<0) {
     return;
   }
@@ -76,6 +79,7 @@ void SwapWaypoint(int index) {
     Task[index+1] = tmpPoint;
   }
   RefreshTask();
+  UnlockTaskData();
 }
 
 
@@ -88,10 +92,13 @@ void InsertWaypoint(int index, bool append) {
 
   int i;
   
+  LockTaskData();
+
   if (ActiveWayPoint<0) {
     ActiveWayPoint = 0;
     Task[ActiveWayPoint].Index = index;
     Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
+    UnlockTaskData();
     return;
   }
   
@@ -102,6 +109,7 @@ void InsertWaypoint(int index, bool append) {
       gettext(TEXT("Insert Waypoint")),
       MB_OK|MB_ICONEXCLAMATION);
     
+    UnlockTaskData();
     return;
   }
 
@@ -129,11 +137,13 @@ void InsertWaypoint(int index, bool append) {
   }
   
   RefreshTask();
+  UnlockTaskData();
   
 }
 
 // Create a default task to home at startup if no task is present
 void DefaultTask(void) {
+  LockTaskData();
   if ((Task[0].Index == -1)||(ActiveWayPoint==-1)) {
     if (HomeWaypoint != -1) {
       Task[0].Index = HomeWaypoint;
@@ -141,6 +151,7 @@ void DefaultTask(void) {
     }
   }
   RefreshTask();
+  UnlockTaskData();
 }
 
 
@@ -160,7 +171,10 @@ void RemoveTaskPoint(int index) {
     return; // index out of bounds
   }
   
+  LockTaskData();
+
   if (Task[index].Index == -1) {
+    UnlockTaskData();
     return; // There's no WP at this location
   }
   
@@ -173,6 +187,7 @@ void RemoveTaskPoint(int index) {
   Task[MAXTASKPOINTS-1].AATTargetOffsetRadius= 0.0;
 
   RefreshTask();
+  UnlockTaskData();
   
 }
 
@@ -200,6 +215,8 @@ void RemoveWaypoint(int index) {
   // If they're all before the active WP then just remove
   // the nearest to the active WP
   
+  LockTaskData();
+
   // Search forward first
   i = ActiveWayPoint;
   while ((i < MAXTASKPOINTS) && (Task[i].Index != index)) {
@@ -232,10 +249,12 @@ void RemoveWaypoint(int index) {
     } else {
       // WP not found, so ask user if they want to
       // remove the active WP
+      UnlockTaskData();
       int ret = MessageBoxX(hWndMapWindow,
         gettext(TEXT("Chosen Waypoint not in current task.\nRemove active WayPoint?")),
         gettext(TEXT("Remove Waypoint")),
         MB_YESNO|MB_ICONQUESTION);
+      LockTaskData();
       
       if (ret == IDYES) {
         RemoveTaskPoint(ActiveWayPoint);
@@ -248,6 +267,7 @@ void RemoveWaypoint(int index) {
     }
   }
   RefreshTask();
+  UnlockTaskData();
 
 }
 
@@ -255,7 +275,7 @@ void RemoveWaypoint(int index) {
 void ReplaceWaypoint(int index) {
   if (!CheckDeclaration())
     return;
-  
+  LockTaskData();
   // ARH 26/06/05 Fixed array out-of-bounds bug
   if (ActiveWayPoint>=0) {	
     
@@ -270,6 +290,7 @@ void ReplaceWaypoint(int index) {
     Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
   }
   RefreshTask();
+  UnlockTaskData();
 }
 
 
@@ -277,6 +298,7 @@ void RefreshTask() {
   double lengthtotal = 0.0;
   int i;
 
+  LockTaskData();
   if ((ActiveWayPoint<0)&&(Task[0].Index>=0)) {
     ActiveWayPoint=0;
   }
@@ -329,12 +351,15 @@ void RefreshTask() {
 
   CalculateTaskSectors();
   CalculateAATTaskSectors();
+  UnlockTaskData();
 }
 
 
 void RotateStartPoints(void) {
   if (ActiveWayPoint>0) return;
   if (!EnableMultipleStartPoints) return;
+
+  LockTaskData();
   
   int found = -1;
   int imax = 0;
@@ -355,6 +380,7 @@ void RotateStartPoints(void) {
   }
 
   RefreshTask();
+  UnlockTaskData();
 }
 
 
@@ -362,6 +388,8 @@ void CalculateTaskSectors(void)
 {
   int i;
   double SectorAngle, SectorSize, SectorBearing;
+
+  LockTaskData();
 
   if (EnableMultipleStartPoints) {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
@@ -446,6 +474,7 @@ void CalculateTaskSectors(void)
                                 &Task[i].SectorEndLon);
 	}
     }
+  UnlockTaskData();
 }
 
 
@@ -455,6 +484,7 @@ double AdjustAATTargets(double desired) {
   istart = max(1,ActiveWayPoint);
   inum=0;
 
+  LockTaskData();
   for(i=istart;i<MAXTASKPOINTS-1;i++)
     {
       if((Task[i].Index >=0)&&(Task[i+1].Index >=0))
@@ -468,6 +498,7 @@ double AdjustAATTargets(double desired) {
   }
   if (fabs(desired)>1.0) {
     // don't adjust, just retrieve.
+    UnlockTaskData();
     return av;
   }
 
@@ -486,6 +517,7 @@ double AdjustAATTargets(double desired) {
                              max(desired,-1.0));
 	}
     }
+  UnlockTaskData();
   return av;
 }
 
@@ -503,6 +535,8 @@ void CalculateAATTaskSectors()
 
   double latitude = GPS_INFO.Latitude;
   double longitude = GPS_INFO.Longitude;
+
+  LockTaskData();
 
   Task[0].AATTargetOffsetRadius = 0.0;
   Task[0].AATTargetOffsetRadial = 0.0;
@@ -649,6 +683,7 @@ void CalculateAATTaskSectors()
       
     }
   }
+  UnlockTaskData();
 }
 
 

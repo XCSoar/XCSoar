@@ -591,14 +591,14 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
 bool userasked = false;
 
 void MapWindow::RequestFastRefresh() {
-  PulseEvent(drawTriggerEvent);
+  SetEvent(drawTriggerEvent);
 }
 
 void MapWindow::RefreshMap() {
-  SetEvent(drawTriggerEvent);
   MapDirty = true;
   userasked = true;
   timestats_dirty = true;
+  SetEvent(drawTriggerEvent);
 }
 
 bool MapWindow::IsMapFullScreen() {
@@ -2433,9 +2433,8 @@ typedef struct{
   bool inTask;
 }MapWaypointLabel_t;
 
-bool WaypointInTask(int ind) {
+bool MapWindow::WaypointInTask(int ind) {
   if (!WayPointList) return false;
-  
   return WayPointList[ind].InTask;
 }
 
@@ -2716,7 +2715,7 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
   int i;
   if (!WayPointList) return;
   
-  // JMW No need  LockTaskData();  // protect from external task changes
+  LockTaskData();  // protect from external task changes
   #ifdef HAVEEXCEPTIONS
   __try{
   #endif
@@ -2735,7 +2734,7 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
   }__finally
   #endif
   {
-    // JMW No need    UnlockTaskData();
+    UnlockTaskData();
   }
 }
 
@@ -3220,9 +3219,12 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 
   if (!WayPointList) return;
 
-  int awp = ActiveWayPoint;
-  if (awp<0) return;
-  int index = Task[awp].Index;
+  LockTaskData();  // protect from external task changes
+  if (ActiveWayPoint<0) {
+    UnlockTaskData(); return; 
+  }
+
+  int index = Task[ActiveWayPoint].Index;
 
   double distance=0;
   double distanceTotal=0;
@@ -3233,8 +3235,8 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
   double targetLon;
 
   if (AATEnabled) {
-    targetLat = Task[awp].AATTargetLat;
-    targetLon = Task[awp].AATTargetLon; 
+    targetLat = Task[ActiveWayPoint].AATTargetLat;
+    targetLon = Task[ActiveWayPoint].AATTargetLon; 
   } else {
     targetLat = WayPointList[index].Latitude;
     targetLon = WayPointList[index].Longitude; 
@@ -3249,7 +3251,10 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 
   distance = distanceTotal;
   
-  if (distanceTotal==0.0) return;
+  if (distanceTotal==0.0) {
+    UnlockTaskData();
+    return;
+  }
 
   double d_distance = max(5000.0,distanceTotal/10);
 
@@ -3298,7 +3303,7 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
       
     }
   }
-
+  UnlockTaskData();
   SelectObject(hdc, hpOld);
 }
 
@@ -4183,7 +4188,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
 
 
-static int iSnailNext=0;
+int MapWindow::iSnailNext=0;
 double MapWindow::TrailFirstTime = 0;
 
 void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
@@ -4195,13 +4200,13 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   static float vmin= -5.0;
   static bool needcolour = true;
 
+  if(!TrailActive)
+    return;
+
   if (DerivedDrawInfo.Circling != lastCircling) {
     needcolour = true;
   }
   lastCircling = DerivedDrawInfo.Circling;
-
-  if(!TrailActive)
-    return;
 
   double traildrift_lat;
   double traildrift_lon;
@@ -4401,7 +4406,7 @@ void MapWindow::DrawTrailFromTask(HDC hdc, RECT rc) {
     return;
 
   olc.SetLine();
-  int n = olc.getN();
+  int n = min(MAXCLIPPOLYGON,olc.getN());
   int i, j=0;
   for (i=0; i<n; i++) {
     if (olc.getTime(i)>= TrailFirstTime) 
@@ -4508,294 +4513,6 @@ void MapWindow::LatLon2Screen(const double &lon, const double &lat, POINT &sc) {
 
 ////////////////////////////////////////////////////////////////////////
 
-void MapWindow::CalculateScreenPositionsThermalSources() {
-  for (int i=0; i<MAX_THERMAL_SOURCES; i++) {
-    if (DerivedDrawInfo.ThermalSources[i].LiftRate>0) {
-      double dh = DerivedDrawInfo.NavAltitude
-        -DerivedDrawInfo.ThermalSources[i].GroundHeight;
-      if (dh<0) {
-        DerivedDrawInfo.ThermalSources[i].Visible = false;
-        continue;
-      }
-      double t = dh/DerivedDrawInfo.ThermalSources[i].LiftRate;
-      double lat, lon;
-      FindLatitudeLongitude(DerivedDrawInfo.ThermalSources[i].Latitude, 
-                            DerivedDrawInfo.ThermalSources[i].Longitude,
-                            DerivedDrawInfo.WindBearing, 
-                            -DerivedDrawInfo.WindSpeed*t,
-                            &lat, &lon);
-      if (PointVisible(lon,lat)) {
-        LatLon2Screen(lon, 
-                      lat, 
-                      DerivedDrawInfo.ThermalSources[i].Screen);
-        DerivedDrawInfo.ThermalSources[i].Visible = 
-          PointVisible(DerivedDrawInfo.ThermalSources[i].Screen);
-      } else {
-        DerivedDrawInfo.ThermalSources[i].Visible = false;
-      }
-    } else {
-      DerivedDrawInfo.ThermalSources[i].Visible = false;
-    }
-  }
-}
-
-
-void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
-  circ.Visible = false;
-  if (!circ.FarVisible) return;
-  if (iAirspaceMode[circ.Type]%2 == 1) 
-    if(CheckAirspaceAltitude(circ.Base.Altitude, 
-                             circ.Top.Altitude)) {
-      if (msRectOverlap(&circ.bounds, &screenbounds_latlon) 
-          || msRectContained(&screenbounds_latlon, &circ.bounds)) {
-        circ.Visible = true;
-        LatLon2Screen(circ.Longitude, 
-                      circ.Latitude, 
-                      circ.Screen);
-        circ.ScreenR = iround(circ.Radius*ResMapScaleOverDistanceModify);
-      }
-    }
-}
-
-void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
-  area.Visible = false;
-  if (!area.FarVisible) return;
-  if (iAirspaceMode[area.Type]%2 == 1) 
-    if(CheckAirspaceAltitude(area.Base.Altitude, 
-                             area.Top.Altitude)) {
-      if (msRectOverlap(&area.bounds, &screenbounds_latlon) 
-          || msRectContained(&screenbounds_latlon, &area.bounds)) {
-        AIRSPACE_POINT *ap= AirspacePoint+area.FirstPoint;
-        POINT* sp= AirspaceScreenPoint+area.FirstPoint;
-        while (ap < AirspacePoint+area.FirstPoint+area.NumPoints) {
-            LatLon2Screen(ap->Longitude, 
-                          ap->Latitude, 
-                          *sp);
-            ap++;
-            sp++;
-        }               
-        area.Visible = true;
-      }
-    }
-}
-
-void MapWindow::CalculateScreenPositionsAirspace() {
-  
-  
-  if (AirspaceCircle) {
-    for (AIRSPACE_CIRCLE* circ = AirspaceCircle;
-         circ < AirspaceCircle+NumberOfAirspaceCircles; circ++) {
-      CalculateScreenPositionsAirspaceCircle(*circ);
-    }
-  }
-  if (AirspaceArea) {
-    for(AIRSPACE_AREA *area = AirspaceArea;
-        area < AirspaceArea+NumberOfAirspaceAreas; area++) {
-      CalculateScreenPositionsAirspaceArea(*area);
-    }
-  }
-}
-
-
-void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc, 
-                                         POINT *Orig_Aircraft)
-{
-  unsigned int i;
-
-  Orig_Screen = Orig;
-
-  if (!EnablePan) {
-  
-    if (GliderCenter 
-        && DerivedDrawInfo.Circling 
-        && (EnableThermalLocator==2)) {
-      
-      if (DerivedDrawInfo.ThermalEstimate_R>0) {
-        PanLongitude = DerivedDrawInfo.ThermalEstimate_Longitude; 
-        PanLatitude = DerivedDrawInfo.ThermalEstimate_Latitude;
-        // JMW TODO: only pan if distance of center to aircraft is smaller 
-        // than one third screen width
-
-        POINT screen;
-        LatLon2Screen(PanLongitude, 
-                      PanLatitude, 
-                      screen);
-
-        LatLon2Screen(DrawInfo.Longitude, 
-                      DrawInfo.Latitude, 
-                      *Orig_Aircraft);
-
-        if ((fabs(Orig_Aircraft->x-screen.x)<(rc.right-rc.left)/3)
-            && (fabs(Orig_Aircraft->y-screen.y)<(rc.bottom-rc.top)/3)) {
-          
-        } else {
-          // out of bounds, center on aircraft
-          PanLongitude = DrawInfo.Longitude;
-          PanLatitude = DrawInfo.Latitude;
-        }
-      } else {
-        PanLongitude = DrawInfo.Longitude;
-        PanLatitude = DrawInfo.Latitude;
-      }
-    } else {
-      // Pan is off
-      PanLongitude = DrawInfo.Longitude;
-      PanLatitude = DrawInfo.Latitude;
-    }
-  }
-
-  LatLon2Screen(DrawInfo.Longitude, 
-                DrawInfo.Latitude, 
-                *Orig_Aircraft);
-
-  screenbounds_latlon = CalculateScreenBounds(0.0);
-
-  // get screen coordinates for all task waypoints
-
-  LockTaskData();
-
-  if (WayPointList) {
-    int index;
-    for (i=0; i<MAXTASKPOINTS; i++) {
-      index = Task[i].Index;
-      if (index>=0) {
-        
-        LatLon2Screen(WayPointList[index].Longitude, 
-                      WayPointList[index].Latitude, 
-                      WayPointList[index].Screen);
-        WayPointList[index].Visible = 
-          PointVisible(WayPointList[index].Screen);
-      }      
-    }
-    if (EnableMultipleStartPoints) {
-      for(i=0;i<MAXSTARTPOINTS-1;i++) {
-        index = StartPoints[i].Index;
-        if (StartPoints[i].Active && (index>=0)) {
-
-          LatLon2Screen(WayPointList[index].Longitude, 
-                        WayPointList[index].Latitude, 
-                        WayPointList[index].Screen);
-          WayPointList[index].Visible = 
-            PointVisible(WayPointList[index].Screen);
-        }
-      }
-    }
-  }
-
-  // only calculate screen coordinates for waypoints that are visible
-
-  for(i=0;i<NumberOfWayPoints;i++)
-  {
-    WayPointList[i].Visible = false;
-    if (!WayPointList[i].FarVisible) continue;
-    if(PointVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
-    {
-      LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude,
-                    WayPointList[i].Screen);
-      WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
-    }
-  }
-
-  if(TrailActive)
-  {
-    iSnailNext = SnailNext; 
-    // set this so that new data doesn't arrive between calculating
-    // this and the screen updates
-  }
-
-  if (EnableMultipleStartPoints) {
-    for(i=0;i<MAXSTARTPOINTS-1;i++) {
-      if (StartPoints[i].Active && (StartPoints[i].Index>=0)) {
-        LatLon2Screen(StartPoints[i].SectorEndLon, 
-                      StartPoints[i].SectorEndLat, StartPoints[i].End);
-        LatLon2Screen(StartPoints[i].SectorStartLon, 
-                      StartPoints[i].SectorStartLat, StartPoints[i].Start);
-      }
-    }
-  }
-  
-  for(i=0;i<MAXTASKPOINTS-1;i++)
-  {
-    if ((Task[i].Index >=0) && AATEnabled) {
-      LatLon2Screen(Task[i].AATTargetLon, Task[i].AATTargetLat, 
-                    Task[i].Target);
-    }
-
-    if((Task[i].Index >=0) &&  (Task[i+1].Index <0))
-    {
-      // finish
-      LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, Task[i].End);
-      LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, Task[i].Start);      
-    }
-
-    if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
-    {
-      LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, Task[i].End);
-      LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, Task[i].Start);
-
-      if((AATEnabled) && (Task[i].AATType == SECTOR))
-      {
-        LatLon2Screen(Task[i].AATStartLon, Task[i].AATStartLat, Task[i].AATStart);
-        LatLon2Screen(Task[i].AATFinishLon, Task[i].AATFinishLat, Task[i].AATFinish);
-      }
-    }
-  }
-
-  UnlockTaskData();
-
-}
-
-
-void MapWindow::CalculateWaypointReachable(void)
-{
-  unsigned int i;
-  bool intask;
-  double WaypointDistance, WaypointBearing,AltitudeRequired;
-
-  if (!WayPointList) return;
-
-  LockTaskData();
-
-  for(i=0;i<NumberOfWayPoints;i++)
-  {
-    intask = WaypointInTask(i);
-
-    if(WayPointList[i].Visible || intask)
-    {
-      if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) 
-           || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
-      {
-        DistanceBearing(DrawInfo.Latitude, 
-                        DrawInfo.Longitude, 
-                        WayPointList[i].Latitude, 
-                        WayPointList[i].Longitude,
-                        &WaypointDistance,
-                        &WaypointBearing);
-
-        AltitudeRequired = 
-          GlidePolar::MacCreadyAltitude
-          (GlidePolar::SafetyMacCready, 
-           WaypointDistance,
-           WaypointBearing, 
-           DerivedDrawInfo.WindSpeed, 
-           DerivedDrawInfo.WindBearing,
-           0,0,true,0);
-        AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL 
-          + WayPointList[i].Altitude ;
-        AltitudeRequired = DerivedDrawInfo.NavAltitude - AltitudeRequired;                                      
-        WayPointList[i].AltArivalAGL = AltitudeRequired;
-
-        if(AltitudeRequired >=0){
-          WayPointList[i].Reachable = TRUE;
-        } else {
-          WayPointList[i].Reachable = FALSE;
-        }
-      }                         
-    }
-  }
-
-  UnlockTaskData(); 
-}
 
 
 #define NUMPOINTS 2

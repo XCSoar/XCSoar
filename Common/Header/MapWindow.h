@@ -222,8 +222,10 @@ class MapWindow {
   static void TextInBox(HDC hDC, TCHAR* Value, int x, int y, int size, TextInBoxMode_t Mode, bool noOverlap=false);
   static void ToggleFullScreenStart();
   static void RefreshMap();
+  static bool WaypointInTask(int ind);
 
  private:
+  static int iSnailNext;
   static HBITMAP hDrawBitMap;
   static HBITMAP hDrawBitMapBg;
   static HBITMAP hDrawBitMapTmp;
