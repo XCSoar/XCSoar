@@ -94,6 +94,8 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
   TCHAR NameC[100];
   TCHAR NameD[100];
 
+  if (!WayPointList) return;
+
   for(i=0;i<(int)NumberOfWayPoints;i++)
     {
       if ((WayPointList[i].Flags & AIRPORT) == AIRPORT) {

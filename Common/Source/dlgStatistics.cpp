@@ -645,8 +645,9 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
     aatradius[i]=0;
   }
   bool nowaypoints = true;
+  LockTaskData();
   for (i=0; i<MAXTASKPOINTS; i++) {
-    if (Task[i].Index != -1) {
+    if (ValidTaskPoint(i)) {
       lat1 = WayPointList[Task[i].Index].Latitude;
       lon1 = WayPointList[Task[i].Index].Longitude;
       ScaleYFromValue(rc, lat1);
@@ -654,6 +655,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
       nowaypoints = false;
     }
   }
+  UnlockTaskData();
   if (nowaypoints && !olcmode) return;
 
   olc.SetLine();
@@ -689,8 +691,9 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
   ScaleXFromValue(rc, x1);
   ScaleYFromValue(rc, y1);
 
+  LockTaskData();
   for (i=0; i<MAXTASKPOINTS; i++) {
-    if (Task[i].Index != -1) {
+    if (ValidTaskPoint(i)) {
       nwps++;
       lat1 = WayPointList[Task[i].Index].Latitude;
       lon1 = WayPointList[Task[i].Index].Longitude;
@@ -728,6 +731,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
       }
     }
   }
+  UnlockTaskData();
   for (i=0; i< nolc; i++) {
     lat1 = olc.getLatitude(i);
     lon1 = olc.getLongitude(i);
@@ -740,10 +744,11 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
   ScaleMakeSquare(rc);
 
   // draw aat areas
+  LockTaskData();
   if (!olcmode) {
     if (AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
-	if (Task[i].Index != -1) {
+	if (ValidTaskPoint(i)) {
 	  lat1 = WayPointList[Task[i-1].Index].Latitude;
 	  lon1 = WayPointList[Task[i-1].Index].Longitude;
 	  lat2 = WayPointList[Task[i].Index].Latitude;
@@ -775,6 +780,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
       }
     }
   }
+  UnlockTaskData();
 
   // draw track
 
@@ -794,11 +800,11 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 
   // draw task lines and labels
 
+  LockTaskData();
   if (!olcmode) {
     for (i=MAXTASKPOINTS-1; i>0; i--) {
-      if (Task[i].Index != -1) {
-
-	lat1 = WayPointList[Task[i-1].Index].Latitude;
+      if (ValidTaskPoint(i) && ValidTaskPoint(i-1)) {
+        lat1 = WayPointList[Task[i-1].Index].Latitude;
 	lon1 = WayPointList[Task[i-1].Index].Longitude;
 	if (TaskAborted) {
 	  lat2 = GPS_INFO.Latitude;
@@ -842,7 +848,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 
     if (AATEnabled) {
       for (i=MAXTASKPOINTS-1; i>0; i--) {
-	if (Task[i].Index != -1) {
+	if (ValidTaskPoint(i) && ValidTaskPoint(i-1)) {
           if (i==1) {
             lat1 = WayPointList[Task[i-1].Index].Latitude;
             lon1 = WayPointList[Task[i-1].Index].Longitude;
@@ -872,6 +878,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
       }
     }
   }
+  UnlockTaskData();
 
   if (olcmode && olcvalid) {
     for (i=0; i< 7-1; i++) {
@@ -958,7 +965,7 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 
   int ipos = 0;
 
-  for (i=0; i<CUSONDE_NUMLEVELS; i++) {
+  for (i=0; i<CUSONDE_NUMLEVELS-1; i++) {
 
     if (CuSonde::cslevels[i].nmeasurements &&
 	CuSonde::cslevels[i+1].nmeasurements) {

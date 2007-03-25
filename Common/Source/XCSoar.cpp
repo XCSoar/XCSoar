@@ -638,7 +638,7 @@ void SettingsLeave() {
 
   if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED))
     {
-      Task[0].Index = -1;  ActiveWayPoint = -1;
+      ClearTask();
 
       // re-load terrain
       CloseTerrain();
@@ -1198,13 +1198,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   memset( &(Task), 0, sizeof(Task_t));
   memset( &(StartPoints), 0, sizeof(Start_t));
-  int i;
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    Task[i].Index = -1;
-  }
-  for (i=0; i<MAXSTARTPOINTS; i++) {
-    StartPoints[i].Index = -1;
-  }
+  ClearTask();
   memset( &(GPS_INFO), 0, sizeof(GPS_INFO));
   memset( &(CALCULATED_INFO), 0,sizeof(CALCULATED_INFO));
   memset( &SnailTrail[0],0,TRAILSIZE*sizeof(SNAIL_POINT));
@@ -1213,7 +1207,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // clear temporary waypoints
 
-  for (i=0; i<MAXTEMPWAYPOINTS; i++) {
+  for (int i=0; i<MAXTEMPWAYPOINTS; i++) {
     TempWayPointList[i].FileNum = -1;
     TempWayPointList[i].Details = NULL;
   }

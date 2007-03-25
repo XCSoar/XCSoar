@@ -1326,15 +1326,9 @@ void InputEvents::eventAnalysis(TCHAR *misc) {
 void InputEvents::eventWaypointDetails(TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
-    if (ActiveWayPoint<0) {
-      if (SelectedWaypoint<0){
-	DoStatusMessage(TEXT("No Active Waypoint!"));
-	return;
-      } else {
-	PopupWaypointDetails();
-      }
+    if (ActiveWayPoint>=0) {
+      SelectedWaypoint = Task[ActiveWayPoint].Index;
     }
-    SelectedWaypoint = Task[ActiveWayPoint].Index;
     if (SelectedWaypoint<0){
       DoStatusMessage(TEXT("No Active Waypoint!"));
       return;

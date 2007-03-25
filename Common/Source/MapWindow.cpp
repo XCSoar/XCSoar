@@ -1547,13 +1547,13 @@ void MapWindow::UpdateMapScale()
   #endif
   // if we aren't looking at a waypoint, see if we are now
   if (AutoMapScaleWaypointIndex == -1) {
-    if (ActiveWayPoint>=0) {
+    if (ValidTaskPoint(ActiveWayPoint)) {
       AutoMapScaleWaypointIndex = Task[ActiveWayPoint].Index;
     }
   }
 
   // if there is an active waypoint
-  if (ActiveWayPoint>=0) {
+  if (ValidTaskPoint(ActiveWayPoint)) {
 
     // if the current zoom focused waypoint has changed...
     if (AutoMapScaleWaypointIndex != Task[ActiveWayPoint].Index) {
@@ -2722,7 +2722,7 @@ void MapWindow::DrawAbortedTask(HDC hdc, RECT rc, POINT me)
   for(i=0;i<MAXTASKPOINTS-1;i++)
   {
     int index = Task[i].Index;
-    if(index >=0)
+    if(ValidWayPoint(index))
     {
       DrawDashLine(hdc, 1,
         WayPointList[index].Screen,
@@ -2784,19 +2784,18 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
   __try{
   #endif
 
-    int index0 = Task[0].Index;
-    int index1 = Task[1].Index;
+  int index0 = Task[0].Index;
+  int index1 = Task[1].Index;
 
-  if((index0 >=0) &&  (index1 >=0) && (ActiveWayPoint<2))
+  if(ValidTaskPoint(0) && ValidTaskPoint(1) && (ActiveWayPoint<2))
   {
-    DrawStartSector(hdc,rc, Task[0].Start, Task[0].End, index0);
+    DrawStartSector(hdc,rc, Task[0].Start, Task[0].End, Task[0].Index);
     if (EnableMultipleStartPoints) {
       for (i=0; i<MAXSTARTPOINTS; i++) {
-        int indexx = StartPoints[i].Index;
-        if (StartPoints[i].Active && (indexx>=0)) {
+        if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
           DrawStartSector(hdc,rc,
                           StartPoints[i].Start,
-                          StartPoints[i].End, indexx);
+                          StartPoints[i].End, StartPoints[i].Index);
         }
       }
     }
@@ -2804,7 +2803,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
 
   for(i=1;i<MAXTASKPOINTS-1;i++) {
 
-    if((Task[i].Index >=0) &&  (Task[i+1].Index <0)) { // final waypoint
+    if(ValidTaskPoint(i) && !ValidTaskPoint(i+1)) { // final waypoint
       if (ActiveWayPoint>1) {
         // only draw finish line when past the first
         // waypoint.
@@ -2837,7 +2836,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
         }
       }
     }
-    if((Task[i].Index >=0) &&  (Task[i+1].Index >=0)) {
+    if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
       if(AATEnabled != TRUE) {
         DrawDashLine(hdc, 2,
                      WayPointList[Task[i].Index].Screen,
@@ -2870,7 +2869,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
   }
 
   for(i=0;i<MAXTASKPOINTS-1;i++) {
-    if((Task[i].Index >=0) &&  (Task[i+1].Index >=0)) {
+    if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
       int imin = min(Task[i].Index,Task[i+1].Index);
       int imax = max(Task[i].Index,Task[i+1].Index);
       DrawDashLine(hdc, 3,
@@ -2916,8 +2915,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
 
   for(i=MAXTASKPOINTS-2;i>0;i--)
   {
-    if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
-    {
+    if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
       if(Task[i].AATType == CIRCLE)
         {
           tmp = Task[i].AATCircleRadius*ResMapScaleOverDistanceModify;
@@ -3217,12 +3215,11 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 {
   HPEN hpOld;
 
-  if (!WayPointList) return;
+  if (!ValidTaskPoint(ActiveWayPoint)) {
+    return;
+  }
 
   LockTaskData();  // protect from external task changes
-  if (ActiveWayPoint<0) {
-    UnlockTaskData(); return;
-  }
 
   int index = Task[ActiveWayPoint].Index;
 
@@ -3241,6 +3238,7 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
     targetLat = WayPointList[index].Latitude;
     targetLon = WayPointList[index].Longitude;
   }
+  UnlockTaskData();
 
   DistanceBearing(startLat,
                   startLon,
@@ -3252,7 +3250,6 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
   distance = distanceTotal;
 
   if (distanceTotal==0.0) {
-    UnlockTaskData();
     return;
   }
 
@@ -3303,7 +3300,6 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 
     }
   }
-  UnlockTaskData();
   SelectObject(hdc, hpOld);
 }
 

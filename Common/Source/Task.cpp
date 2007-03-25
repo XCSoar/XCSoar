@@ -306,17 +306,19 @@ void RefreshTask() {
   // Only need to refresh info where the removal happened
   // as the order of other taskpoints hasn't changed
   for (i=0; i<MAXTASKPOINTS; i++) {
-    if (Task[i].Index != -1) {
+    if (!ValidTaskPoint(i)) {
+      Task[i].Index = -1;
+    } else {
       RefreshTaskWaypoint(i);
       lengthtotal += Task[i].Leg;
     }
   }
   if (lengthtotal>0) {
     for (i=0; i<MAXTASKPOINTS; i++) {
-      if (Task[i].Index != -1) {
+      if (ValidTaskPoint(i)) {
 	RefreshTaskWaypoint(i);
 	TaskStats[i].LengthPercent = Task[i].Leg/lengthtotal;
-	if ((i==MAXTASKPOINTS-1) || (Task[i+1].Index == -1)) {
+	if (!ValidTaskPoint(i)) {
 	  Task[i].AATTargetOffsetRadius = 0.0;
 	  Task[i].AATTargetOffsetRadial = 0.0;
 	  Task[i].AATTargetLat = WayPointList[Task[i].Index].Latitude;
@@ -327,24 +329,26 @@ void RefreshTask() {
   }
 
   // Determine if a waypoint is in the task
-  for (i=0; i< (int)NumberOfWayPoints; i++) {
-    WayPointList[i].InTask = false;
-    if ((WayPointList[i].Flags & HOME) == HOME) {
-      WayPointList[i].InTask = true;
+  if (WayPointList) {
+    for (i=0; i< (int)NumberOfWayPoints; i++) {
+      WayPointList[i].InTask = false;
+      if ((WayPointList[i].Flags & HOME) == HOME) {
+        WayPointList[i].InTask = true;
+      }
     }
-  }
-  if (HomeWaypoint>=0) {
-    WayPointList[HomeWaypoint].InTask = true;
-  }
-  for (i=0; i<MAXTASKPOINTS; i++) {
-    if (Task[i].Index != -1) {
-      WayPointList[Task[i].Index].InTask = true;
+    if (HomeWaypoint>=0) {
+      WayPointList[HomeWaypoint].InTask = true;
     }
-  }
-  if (EnableMultipleStartPoints) {
-    for (i=0; i<MAXSTARTPOINTS; i++) {
-      if ((StartPoints[i].Index != -1)&&(StartPoints[i].Active)) {
-        WayPointList[StartPoints[i].Index].InTask = true;
+    for (i=0; i<MAXTASKPOINTS; i++) {
+      if (ValidTaskPoint(i)) {
+        WayPointList[Task[i].Index].InTask = true;
+      }
+    }
+    if (EnableMultipleStartPoints) {
+      for (i=0; i<MAXSTARTPOINTS; i++) {
+        if (ValidWayPoint(StartPoints[i].Index) && StartPoints[i].Active) {
+          WayPointList[StartPoints[i].Index].InTask = true;
+        }
       }
     }
   }
@@ -364,7 +368,7 @@ void RotateStartPoints(void) {
   int found = -1;
   int imax = 0;
   for (int i=0; i<MAXSTARTPOINTS; i++) {
-    if (StartPoints[i].Active && (StartPoints[i].Index>=0)) {
+    if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
       if (Task[0].Index == StartPoints[i].Index) {
         found = i;
       }
@@ -375,7 +379,7 @@ void RotateStartPoints(void) {
   if (found>imax) {
     found = 0;
   }
-  if (StartPoints[found].Index>=0) {
+  if (ValidWayPoint(StartPoints[found].Index)) {
     Task[0].Index = StartPoints[found].Index;
   }
 
@@ -393,7 +397,7 @@ void CalculateTaskSectors(void)
 
   if (EnableMultipleStartPoints) {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
-      if (StartPoints[i].Active && (StartPoints[i].Index>=0)) {
+      if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
 	if (StartLine==2) {
           SectorAngle = 45+90;
         } else {
@@ -895,7 +899,7 @@ void LoadNewTask(TCHAR *szFileName)
 	    Task[i].OutBound = Temp.OutBound;
 	    Task[i].AATCircleRadius = Temp */
 
-          if((Temp.Index >= (int)NumberOfWayPoints)||(Temp.Index<-1)) {
+          if(!ValidWayPoint(Temp.Index) && (Temp.Index != -1)) {
 	    TaskInvalid = true;
 	  }
 
@@ -937,7 +941,7 @@ void LoadNewTask(TCHAR *szFileName)
               break;
             }
 
-          if((STemp.Index < (int)NumberOfWayPoints) && (STemp.Index>-2))
+          if(ValidWayPoint(STemp.Index) || (STemp.Index==-1))
             {
               memcpy(&StartPoints[i],&STemp, sizeof(START_POINT));
             } else {
@@ -957,8 +961,9 @@ void LoadNewTask(TCHAR *szFileName)
 
   RefreshTask();
 
-  if(Task[0].Index != -1)
+  if (!ValidTaskPoint(0)) {
     ActiveWayPoint = 0;
+  }
 
   UnlockTaskData();
 
@@ -968,11 +973,35 @@ void LoadNewTask(TCHAR *szFileName)
 void ClearTask(void) {
   LockTaskData();
   ActiveWayPoint = -1;
-  for(int i=0;i<MAXTASKPOINTS;i++)
-    {
-      Task[i].Index = -1;
-    }
+  int i;
+  for(i=0;i<MAXTASKPOINTS;i++) {
+    Task[i].Index = -1;
+  }
+  for (i=0; i<MAXSTARTPOINTS; i++) {
+    StartPoints[i].Index = -1;
+  }
   UnlockTaskData();
+}
+
+bool ValidWayPoint(int i) {
+  bool retval = true;
+  LockTaskData();
+  if ((!WayPointList)||(i<0)||(i>=(int)NumberOfWayPoints)) {
+    retval = false;
+  }
+  UnlockTaskData();
+  return retval;
+}
+
+bool ValidTaskPoint(int i) {
+  bool retval = true;
+  LockTaskData();
+  if ((i<0) || (i>= MAXTASKPOINTS))
+    retval = false;
+  if (!ValidWayPoint(Task[i].Index))
+    retval = false;
+  UnlockTaskData();
+  return retval;
 }
 
 void SaveTask(TCHAR *szFileName)
@@ -1007,3 +1036,5 @@ void SaveTask(TCHAR *szFileName)
     }
   UnlockTaskData();
 }
+
+

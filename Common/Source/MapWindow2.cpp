@@ -710,20 +710,20 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
         }
       }
     }
-  }
 
-  // only calculate screen coordinates for waypoints that are visible
+    // only calculate screen coordinates for waypoints that are visible
 
-  for(i=0;i<NumberOfWayPoints;i++)
-  {
-    WayPointList[i].Visible = false;
-    if (!WayPointList[i].FarVisible) continue;
-    if(PointVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
-    {
-      LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude,
-                    WayPointList[i].Screen);
-      WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
-    }
+    for(i=0;i<NumberOfWayPoints;i++)
+      {
+        WayPointList[i].Visible = false;
+        if (!WayPointList[i].FarVisible) continue;
+        if(PointVisible(WayPointList[i].Longitude, WayPointList[i].Latitude) )
+          {
+            LatLon2Screen(WayPointList[i].Longitude, WayPointList[i].Latitude,
+                          WayPointList[i].Screen);
+            WayPointList[i].Visible = PointVisible(WayPointList[i].Screen);
+          }
+      }
   }
 
   if(TrailActive)
@@ -735,7 +735,7 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 
   if (EnableMultipleStartPoints) {
     for(i=0;i<MAXSTARTPOINTS-1;i++) {
-      if (StartPoints[i].Active && (StartPoints[i].Index>=0)) {
+      if (StartPoints[i].Active && ValidWayPoint(StartPoints[i].Index)) {
         LatLon2Screen(StartPoints[i].SectorEndLon,
                       StartPoints[i].SectorEndLat, StartPoints[i].End);
         LatLon2Screen(StartPoints[i].SectorStartLon,
@@ -746,19 +746,20 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
 
   for(i=0;i<MAXTASKPOINTS-1;i++)
   {
-    if ((Task[i].Index >=0) && AATEnabled) {
+    bool this_valid = ValidTaskPoint(i);
+    bool next_valid = ValidTaskPoint(i+1);
+    if (AATEnabled && this_valid) {
       LatLon2Screen(Task[i].AATTargetLon, Task[i].AATTargetLat,
                     Task[i].Target);
     }
 
-    if((Task[i].Index >=0) &&  (Task[i+1].Index <0))
+    if(this_valid && !next_valid)
     {
       // finish
       LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, Task[i].End);
       LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, Task[i].Start);
     }
-
-    if((Task[i].Index >=0) &&  (Task[i+1].Index >=0))
+    if(this_valid && next_valid)
     {
       LatLon2Screen(Task[i].SectorEndLon, Task[i].SectorEndLat, Task[i].End);
       LatLon2Screen(Task[i].SectorStartLon, Task[i].SectorStartLat, Task[i].Start);

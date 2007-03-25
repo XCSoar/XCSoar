@@ -490,60 +490,51 @@ void Topology::Paint(HDC hdc, RECT rc) {
       case(MS_SHAPE_LINE):{
 
         if (checkVisible(shape, &screenRect))
-        for (int tt = 0; tt < shape->numlines; tt ++) {
+          for (int tt = 0; tt < shape->numlines; tt ++) {
 
-          int jj;
-          int msize = min(shape->line[tt].numpoints, MAXCLIPPOLYGON);
-          for (jj=0; jj< msize; jj++) {
+            int msize = min(shape->line[tt].numpoints, MAXCLIPPOLYGON);
+            for (int jj=0; jj< msize; jj++) {
 
-            tpp_x = shape->line[tt].point[jj].x;
-            tpp_y = shape->line[tt].point[jj].y;
-            MapWindow::LatLon2Screen(tpp_x, tpp_y, pt[jj]);
+              tpp_x = shape->line[tt].point[jj].x;
+              tpp_y = shape->line[tt].point[jj].y;
+              MapWindow::LatLon2Screen(tpp_x, tpp_y, pt[jj]);
 
-            if (pt[jj].x<=minx) {
-              minx = pt[jj].x;
-              miny = pt[jj].y;
+              if (pt[jj].x<=minx) {
+                minx = pt[jj].x;
+                miny = pt[jj].y;
+              }
+
             }
-
+            ClipPolygon(hdc, pt, msize, rc, false);
+            shpCache[ixshp]->renderSpecial(hdc,minx,miny);
           }
-          ClipPolygon(hdc, pt, jj, rc, false);
-          shpCache[ixshp]->renderSpecial(hdc,minx,miny);
-
-        }
       }
       break;
 
+    case(MS_SHAPE_POLYGON):
 
-      /////////////////////////////////////////////////////
-	case(MS_SHAPE_POLYGON):{
-
-        if (checkVisible(shape, &screenRect))
+      if (checkVisible(shape, &screenRect))
         for (int tt = 0; tt < shape->numlines; tt ++) {
 
-            int jj;
-            int msize = min(shape->line[tt].numpoints/iskip, MAXCLIPPOLYGON);
+          int msize = min(shape->line[tt].numpoints/iskip, MAXCLIPPOLYGON);
 
-	    //Uh-oh.. chance of running out of array space here, since
-	    //the number of points is dynamic. Can anyone help?
+          for (int jj=0; jj< msize; jj++) {
+            int x, y;
+            tpp_x = shape->line[tt].point[jj*iskip].x;
+            tpp_y = shape->line[tt].point[jj*iskip].y;
+            MapWindow::LatLon2Screen(tpp_x, tpp_y, x, y);
+            pt[jj].x = x;
+            pt[jj].y = y;
+          }
+          ClipPolygon(hdc,pt, msize, rc);
 
-            for (jj=0; jj< msize; jj++) {
-              int x, y;
-	      tpp_x = shape->line[tt].point[jj*iskip].x;
-	      tpp_y = shape->line[tt].point[jj*iskip].y;
-	      MapWindow::LatLon2Screen(tpp_x, tpp_y, x, y);
-              pt[jj].x = x;
-              pt[jj].y = y;
-            }
-            ClipPolygon(hdc,pt,jj, rc);
+          shpCache[ixshp]->renderSpecial(hdc,minx,miny);
 
-	    shpCache[ixshp]->renderSpecial(hdc,minx,miny);
+        }
+      break;
 
-	  }
-	}
-	  break;
-
-    default:;
-
+    default:
+      break;
     }
   }
 

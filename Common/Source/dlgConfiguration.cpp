@@ -1367,7 +1367,7 @@ static void setVariables(void) {
 #ifdef GNAV
     wp->SetVisible(false);
 #endif
-#ifdef WINDOWSPC
+#if (WINDOWSPC>0)
     wp->SetVisible(false);
 #endif
     wp->GetDataField()->Set(EnableAutoBlank);

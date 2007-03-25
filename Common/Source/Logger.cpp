@@ -449,6 +449,8 @@ void DoLogger(TCHAR *strAssetNumber)
 	    LoggerHeader();
 	    int ntp = 0;
 
+            RefreshTask();
+
 	    // first count the number of turnpoints
 	    for(i=0;i<MAXTASKPOINTS;i++)
 	      {

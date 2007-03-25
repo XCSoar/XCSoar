@@ -802,8 +802,11 @@ TCHAR *FormatterTime::Render(int *color) {
 
 TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveWayPoint;
+  if (thewaypoint<0) {
+    _tcscpy(Text,TEXT("---"));
+  }
   LockTaskData();
-  if((thewaypoint >=0)&&(WayPointList))
+  if(ValidTaskPoint(thewaypoint))
     {
       int index = Task[thewaypoint].Index;
       if ((index>=0) && (WayPointList[index].Reachable)) {

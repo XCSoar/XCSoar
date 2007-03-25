@@ -135,6 +135,8 @@ static void PrepareData(void){
 
   TCHAR sTmp[5];
 
+  if (!WayPointList) return;
+
   WayPointSelectInfo = (WayPointSelectInfo_t*)malloc(sizeof(WayPointSelectInfo_t) * NumberOfWayPoints);
 
   for (int i=0; i<(int)NumberOfWayPoints; i++){
