@@ -530,9 +530,8 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 void HomeDistance(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   int hwp = HomeWaypoint;
   Calculated->HomeDistance = 0.0;
-  if ((hwp<0)|| (hwp>=(int)NumberOfWayPoints) || (!WayPointList)) {
-    return;
-  }
+  if (!ValidWayPoint(hwp)) return;
+
   double w1lat = WayPointList[hwp].Latitude;
   double w1lon = WayPointList[hwp].Longitude;
   double w0lat = Basic->Latitude;
@@ -1391,7 +1390,7 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   //  LockFlightData();
   LockTaskData();
 
-  if(ActiveWayPoint >=0)
+  if((ActiveWayPoint >=0) && ValidTaskPoint(ActiveWayPoint))
     {
       double w1lat, w1lon;
       double w0lat, w0lon;
@@ -1470,7 +1469,7 @@ bool InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int thepoint)
 {
   double AircraftBearing;
 
-  if (!WayPointList) return false;
+  if (!ValidTaskPoint(thepoint)) return false;
 
   if(SectorType==0)
     {
@@ -1527,7 +1526,9 @@ bool InAATTurnSector(double longitude, double latitude,
 {
   double AircraftBearing;
 
-  if (!WayPointList) return false;
+  if (!ValidTaskPoint(thepoint)) {
+    return false;
+  }
 
   double distance;
   LockTaskData();
@@ -1598,12 +1599,9 @@ int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   if (!ValidFinish(Basic, Calculated)) return FALSE;
 
   // Finish invalid
+  if (!ValidTaskPoint(i)) return FALSE;
+
   LockTaskData();
-  if(Task[i].Index == -1)
-    {
-      UnlockTaskData();
-      return FALSE;
-    }
 
   // distance from aircraft to start point
   DistanceBearing(Basic->Latitude,
@@ -1758,6 +1756,8 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
   if (!Calculated->Flying) {
     return false;
   }
+  if (!ValidTaskPoint(ActiveWayPoint)) 
+    return false;
 
   LockTaskData();
 
@@ -2109,8 +2109,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   *ifinal = 0;
   LockTaskData();
   for(i=MAXTASKPOINTS-2;i>=0;i--) {
-    if (Task[i].Index<0) continue;
-    if (Task[i+1].Index<0) continue;
+    if (!ValidTaskPoint(i) || !ValidTaskPoint(i+1)) continue;
     
     w1lat = WayPointList[Task[i].Index].Latitude;
     w1lon = WayPointList[Task[i].Index].Longitude;
@@ -2164,13 +2163,18 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     return false;
   }
 
-  TotalAltitude += SAFETYALTITUDEARRIVAL 
-    + WayPointList[Task[*ifinal].Index].Altitude;
-  
-  Calculated->TaskAltitudeRequiredFromStart = TotalAltitude;
-  UnlockTaskData();
+  TotalAltitude += SAFETYALTITUDEARRIVAL;
 
-  return true;
+  if (!ValidTaskPoint(*ifinal)) {
+    Calculated->TaskAltitudeRequiredFromStart = TotalAltitude;
+    UnlockTaskData();
+    return false;
+  } else {
+    TotalAltitude += WayPointList[Task[*ifinal].Index].Altitude;
+    Calculated->TaskAltitudeRequiredFromStart = TotalAltitude;
+    UnlockTaskData();
+    return true;
+  }
 }
 
 
@@ -2391,8 +2395,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
       for(i=0;i<ActiveWayPoint-1;i++)
         {
-          if (Task[i].Index<0) continue;
-          if (Task[i+1].Index<0) continue;
+          if (!ValidTaskPoint(i) || !ValidTaskPoint(i+1)) continue;
 
           w1lat = WayPointList[Task[i].Index].Latitude;
           w1lon = WayPointList[Task[i].Index].Longitude;
@@ -2447,13 +2450,13 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 //  double FinalAltitude = 0;
   int FinalWayPoint = getFinalWaypoint();
 
-  if(ActiveWayPoint >=0)
+  if(ValidTaskPoint(ActiveWayPoint))
     {
       i=ActiveWayPoint;
 
       // update final glide mode status
       if (
-          ((ActiveWayPoint == FinalWayPoint)&&(ActiveWayPoint>=0))
+          (ActiveWayPoint == FinalWayPoint)
           ||(ForceFinalGlide)
           ||(TaskAborted)) {
         // JMW on final glide
@@ -2569,7 +2572,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         }
 
       i++;
-      while((Task[i].Index != -1) && (i<MAXTASKPOINTS) && (!TaskAborted))
+      while(ValidTaskPoint(i) && (!TaskAborted))
         {
 
           w1lat = WayPointList[Task[i].Index].Latitude;
@@ -2727,7 +2730,7 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if ((AutoMcMode==0)||((AutoMcMode==2)&& isfinalglide)) {
 
-    if (Task[ActiveWayPoint].Index != -1) {
+    if (ValidTaskPoint(ActiveWayPoint)) {
 
       double timeremaining = Basic->Time-Calculated->TaskStartTime-9000;
       if (EnableOLC 
@@ -3012,7 +3015,7 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   //  Calculated->TaskDistanceToGo = 0;
   // JMW: not sure why this is here?
 
-  if(ActiveWayPoint >=0)
+  if(ValidTaskPoint(ActiveWayPoint))
     {
       i=ActiveWayPoint;
                 
@@ -3026,21 +3029,21 @@ void AATStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                       Task[i].AATTargetLon,
                       &TargetLegToGo, NULL);
 
-      if(Task[ActiveWayPoint].AATType == CIRCLE)
+      if(Task[i].AATType == CIRCLE)
         {
           MaxDistance = LegToGo + (Task[i].AATCircleRadius * 2);
           MinDistance = LegToGo - (Task[i].AATCircleRadius * 2);
         }
       else
         {
-          MaxDistance = LegToGo + (Task[ActiveWayPoint].AATSectorRadius * 2);
+          MaxDistance = LegToGo + (Task[i].AATSectorRadius * 2);
           MinDistance = LegToGo;
         }
 
       TargetDistance = TargetLegToGo;
 
       i++;
-      while((Task[i].Index != -1) && (i<MAXTASKPOINTS))
+      while(ValidTaskPoint(i))
         {
           DistanceBearing(WayPointList[Task[i].Index].Latitude, 
                           WayPointList[Task[i].Index].Longitude,
@@ -3382,11 +3385,9 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
   int foundActiveWayPoint = -1;
   int foundHomeWaypoint = -1;
   for (i=0; i<MAXTASKPOINTS; i++) {
-    if (ActiveWayPoint>=0) {
-      if (Task[ActiveWayPoint].Index>=0) {
-        if (SortedLandableIndex[i] == Task[ActiveWayPoint].Index) {
-          foundActiveWayPoint = i;
-        }
+    if (ValidTaskPoint(ActiveWayPoint)) {
+      if (SortedLandableIndex[i] == Task[ActiveWayPoint].Index) {
+        foundActiveWayPoint = i;
       }
     }
     if ((SortedLandableIndex[i] == HomeWaypoint)&&(HomeWaypoint>=0)) {
@@ -3412,7 +3413,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
     ActiveWayPoint = foundActiveWayPoint;
   } else {
     // if not found, keep on field or set active waypoint to closest
-    if (ActiveWayPoint>=0){
+    if (ValidTaskPoint(ActiveWayPoint)){
       aa = CalculateWaypointArrivalAltitude(Basic, Calculated,
                                             Task[ActiveWayPoint].Index);
     } else {
@@ -3452,13 +3453,13 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
 
   for (i=0; i<MAXTASKPOINTS; i++){
     Task[i].Index = SortedLandableIndex[i];
-    if (Task[i].Index>= 0) {
+    if (ValidTaskPoint(i)) {
       WayPointList[Task[i].Index].InTask = true;
     }
   }
 
   if (newclosest) {
-    if ((Task[0].Index != lastclosest) && (Task[0].Index>=0)) {
+    if ((Task[0].Index != lastclosest) && ValidTaskPoint(0)) {
       double distance= 10000.0;
       if (lastclosest>=0) {
         DistanceBearing(WayPointList[Task[0].Index].Latitude,
@@ -3478,7 +3479,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
 
   if (EnableMultipleStartPoints) {
     for (i=0; i<MAXSTARTPOINTS; i++) {
-      if (StartPoints[i].Active && (StartPoints[i].Index>=0)) {
+      if (StartPoints[i].Active && (ValidWayPoint(StartPoints[i].Index))) {
         WayPointList[StartPoints[i].Index].InTask = true;
       }
     }
@@ -3762,6 +3763,7 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (Calculated->ValidFinish) return 0;
 
   if (ActiveWayPoint <1) return 0;
+  if (!ValidTaskPoint(ActiveWayPoint) || !ValidTaskPoint(ActiveWayPoint-1)) return 0;
   if (Calculated->TaskStartTime<0) return 0;
 
   double w1lat;
@@ -3846,8 +3848,7 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     // Now add distances for start to previous waypoint
     
     for(i=0;i<ActiveWayPoint-1;i++) {
-      if (Task[i].Index<0) continue;
-      if (Task[i+1].Index<0) continue;
+      if (!ValidTaskPoint(i) || !ValidTaskPoint(i+1)) continue;
       
       w1lat = WayPointList[Task[i].Index].Latitude;
       w1lon = WayPointList[Task[i].Index].Longitude;

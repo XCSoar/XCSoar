@@ -135,7 +135,7 @@ double AATDistance::DistanceCovered_internal(double longitude,
 
   int taskwaypoint = ActiveWayPoint;
 
-  if (taskwaypoint==0) {
+  if (!ValidTaskPoint(taskwaypoint)) {
     return 0.0;
   }
 
@@ -224,10 +224,7 @@ double AATDistance::DistanceCovered_internal(double longitude,
     }
   }
 
-  bool notfinal = (taskwaypoint<MAXTASKPOINTS-1)
-    &&(Task[taskwaypoint+1].Index>=0);
-
-  if (insector && notfinal) {
+  if (insector && ValidTaskPoint(taskwaypoint+1)) {
 
     double bearing;
     

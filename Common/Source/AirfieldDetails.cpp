@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.21 2006/09/06 07:51:58 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.22 2007/03/25 14:37:59 jwharington Exp $
 
 
 Copyright_License {
@@ -93,6 +93,8 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
   TCHAR NameB[100];
   TCHAR NameC[100];
   TCHAR NameD[100];
+
+  if (!WayPointList) return;
 
   for(i=0;i<(int)NumberOfWayPoints;i++)
     {

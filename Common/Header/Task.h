@@ -90,5 +90,6 @@ void SaveTask(TCHAR *FileName);
 void DefaultTask(void);
 void ClearTask(void);
 void RotateStartPoints(void);
-
+bool ValidTaskPoint(int i);
+bool ValidWayPoint(int i);
 #endif
