@@ -118,7 +118,11 @@ void dlgStartupShowModal(void){
   if (wp) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
+#ifdef GNAV
     dfe->ScanDirectoryTop(TEXT("config/*.prf"));
+#else
+    dfe->ScanDirectoryTop(TEXT("*.prf"));
+#endif
     dfe->Lookup(startProfileFile);
     wp->RefreshDisplay();
     if (dfe->GetNumFiles()<=2) {

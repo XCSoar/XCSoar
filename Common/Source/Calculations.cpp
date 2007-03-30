@@ -85,7 +85,6 @@ int    AutoMcMode = 0;
 
 static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-static void LoadCalculationsPersist(DERIVED_INFO *Calculated);
 static void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -3678,78 +3677,6 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 
-
-
-static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
-
-void DeleteCalculationsPersist(void) {
-  DeleteFile(szCalculationsPersistFileName);
-}
-
-void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
-  if (szCalculationsPersistFileName[0]==0) {
-#ifdef GNAV
-    LocalPath(szCalculationsPersistFileName,
-              TEXT("persist/xcsoar-persist.log"));
-#else
-    LocalPath(szCalculationsPersistFileName,
-              TEXT("xcsoar-persist.log"));
-#endif
-  }
-
-  StartupStore(TEXT("LoadCalculationsPersist\r\n"));
-
-  HANDLE hFile;
-  DWORD dwBytesWritten;
-  DWORD size, sizein;
-  hFile = CreateFile(szCalculationsPersistFileName,
-                     GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,
-                     OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  if(hFile!=INVALID_HANDLE_VALUE ) {
-    size = sizeof(DERIVED_INFO);
-    ReadFile(hFile,&sizein,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    if (sizein != size) { CloseHandle(hFile); return; }
-    ReadFile(hFile,Calculated,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-
-    size = sizeof(Statistics);
-    ReadFile(hFile,&sizein,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    if (sizein != size) { CloseHandle(hFile); return; }
-    ReadFile(hFile,&flightstats,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-
-    size = sizeof(OLCData);
-    ReadFile(hFile,&sizein,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    if (sizein != size) { CloseHandle(hFile); return; }
-    ReadFile(hFile,&olc.data,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-
-    CloseHandle(hFile);
-  }
-}
-
-
-void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
-  HANDLE hFile;
-  DWORD dwBytesWritten;
-  DWORD size;
-
-  StartupStore(TEXT("SaveCalculationsPersist\r\n"));
-
-  hFile = CreateFile(szCalculationsPersistFileName,
-                     GENERIC_WRITE,0,(LPSECURITY_ATTRIBUTES)NULL,
-                     CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
-  if(hFile!=INVALID_HANDLE_VALUE ) {
-    size = sizeof(DERIVED_INFO);
-    WriteFile(hFile,&size,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,Calculated,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    size = sizeof(Statistics);
-    WriteFile(hFile,&size,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&flightstats,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    size = sizeof(OLCData);
-    WriteFile(hFile,&size,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    WriteFile(hFile,&olc.data,size,&dwBytesWritten,(OVERLAPPED*)NULL);
-    CloseHandle(hFile);
-  }
-
-}
 
 
 //////////

@@ -1891,10 +1891,10 @@ void Shutdown(void) {
   StartupStore(TEXT("Stop COM devices\r\n"));
   devCloseAll();
 
-#if !defined(GNAV)
+  //#if !defined(GNAV)
   // JMW disabled for GNAV currently
   SaveCalculationsPersist(&CALCULATED_INFO);
-#endif
+  //#endif
 
   #if defined(GNAV) && !defined(PCGNAV)
     StartupStore(TEXT("Altair shutdown\r\n"));
@@ -2820,7 +2820,7 @@ void SIMProcessTimer(void)
 
 #ifdef DEBUG
   // use this to test FLARM parsing/display
-  //  NMEAParser::TestRoutine(&GPS_INFO);
+  NMEAParser::TestRoutine(&GPS_INFO);
 #endif
 
   NMEAParser::GpsUpdated = TRUE;
@@ -3162,6 +3162,7 @@ void BlankDisplay(bool doblank) {
 
 	  if (BatteryInfo.acStatus==0) {
 		  if (BatteryInfo.BatteryLifePercent < BATTERY_EXIT) {
+                    StartupStore(TEXT("Battery low exit...\r\n"));
 		    // TODO - Debugging and warning message
 		    exit(0);
 		  } else if (BatteryInfo.BatteryLifePercent < BATTERY_WARNING) {

@@ -2624,6 +2624,60 @@ double StrToDouble(TCHAR *Source, TCHAR **Stop)
 }
 
 
+// RMN: Volkslogger outputs data in hex-strings.  Function copied from StrToDouble
+// Note: Decimal-point and decimals disregarded.  Assuming integer amounts only.
+double HexStrToDouble(TCHAR *Source, TCHAR **Stop)
+{
+  int index = 0;
+  int StringLength        = 0;
+  double Sum = 0;
+  double Divisor = 10;
+  int neg = 0;
+
+  StringLength = _tcslen(Source);
+
+  while((Source[index] == ' ')||(Source[index]==9))
+    // JMW added skip for tab stop
+    {
+      index ++;
+    }
+  if (Source[index]=='-') {
+    neg=1;
+    index++;
+  }
+
+  while(
+  (index < StringLength)	 &&
+	(	( (Source[index]>= '0') && (Source [index] <= '9')  ) ||
+		( (Source[index]>= 'A') && (Source [index] <= 'F')  ) ||
+		( (Source[index]>= 'a') && (Source [index] <= 'f')  )
+		)
+	)
+    {
+      if((Source[index]>= '0') && (Source [index] <= '9'))	  {
+		Sum = (Sum*16) + (Source[ index ] - '0');
+		index ++;
+	  }
+	  if((Source[index]>= 'A') && (Source [index] <= 'F'))	  {
+		Sum = (Sum*16) + (Source[ index ] - 'A' + 10);
+		index ++;
+	  }
+	  if((Source[index]>= 'a') && (Source [index] <= 'f'))	  {
+		Sum = (Sum*16) + (Source[ index ] - 'a' + 10);
+		index ++;
+	  }
+    }
+
+  if(Stop != NULL)
+    *Stop = &Source[index];
+
+  if (neg) {
+    return -Sum;
+  } else {
+    return Sum;
+  }
+}
+
 
 void SaveSoundSettings()
 {

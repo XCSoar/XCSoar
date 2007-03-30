@@ -5,6 +5,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#define MINFREESTORAGE 500
+// 500 kb must be free for logger to be active this is based on rough
+// estimate that a long flight will detailed logging is about 200k,
+// and we want to leave a little free.
+
 // maximum number of temporary waypoints
 #define MAXTEMPWAYPOINTS 50
 
