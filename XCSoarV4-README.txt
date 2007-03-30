@@ -2,14 +2,50 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+
 Todo:
 - Documentation, see if screenshots need updating
 - Documentation, add waypoint changes
 - Documentation, arm advance outside sector
-
 - Lat/lon display in portrait mode
 - Lat/lon entry methods in waypoint editor
+- thermal hotspots
+  - filter out thermals from selectors
+  - normal wpt display
+  - different icon to normal thermal marker
+- Give warning if faster than AAT time? (adjust range)
+- File names for saved/loaded tasks
+- Tasman instruments support
 
+Changes from 5.0.7:
+
+- FIXED Start arm premature
+  messages are confusing though, we don't get notification when re-entering a start
+  sector (after arming it), nor when approaching a start line.
+- New snail trail mode "Full" which displays entire flight.  In all modes,
+  the snail trail is short in circling mode in order to prevent screen clutter.
+- New feature: added 'optimise' button to task calculator.  This adjusts the 
+   range (increases or decreases) so that the estimated task time exceeds the
+   assigned task time by less than five minutes.
+- FLARM targets on the map are drawn as arrow heads pointing in their track bearing.
+- Added missing 'Auto Display Blank' to configuration settings for PDA platform
+- Fixed Borgelt B50 sentence parsing (Thanks RMN)
+- Bug fix for half hour UTC offsets
+- Total energy is calculated from difference in true airspeed to best LD in
+  true airspeed
+- Task radii expressed in user units
+- Bug fix, profile support for PC and PDA restored
+- Bug fix, protected use of message in NearestWaypoint function with thread lock
+
+Changes from 5.0.6:
+- Max manoeuvering speed set to 300 units in configuration dialog
+- System beep and message on task/waypoint advance
+- Messages given in arm modes (arm start or arm) as reminders to press arm
+  when ready to advance
+- Bug fix to waypoint editing (second waypoint file was cleared)
+- Warning added to waypoint file save when filtering for
+  waypoints outside terrain range is enabled.
+- Bug fix, task statistics were not updated after task finish.
 
 Dialogs changed:
 - dlgTaskWaypoint.xml
@@ -84,6 +120,9 @@ Changes from 5.0.0:
 - Arm advance to work outside AAT sector if already been in that sector
 - Prevent landing/takeoff detection when GPS is disconnected
 - Configuration of lat/lon units
+- Changed 'aircraft rego' to 'competition ID' to be consistent with IGC
+- Improved cropping of polygons
+- Minor bugfixes 
 
 Dialogs changed:
  dlgConfiguration.xml
