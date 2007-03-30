@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.62 2007/03/16 11:58:12 jwharington Exp $
+  $Id: Parser.cpp,v 1.63 2007/03/30 16:18:44 jwharington Exp $
 
 Copyright_License {
 
@@ -185,6 +185,12 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
       if(_tcscmp(SentanceString,TEXT("PBB50"))==0)
         {
           return PBB50(&String[7], GPS_INFO);
+        }
+
+      // RMN:  Volkslogger string
+      if(_tcscmp(SentanceString,TEXT("PGCS"))==0)
+        {
+          return PGCS(&String[7],GPS_INFO);
         }
 
       // FLARM sentences
@@ -868,6 +874,53 @@ BOOL NMEAParser::PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   return FALSE;
 }
+
+
+// RMN: Volkslogger
+// Source data from IGC Replay by Johny Johansen (www.johny.dk)
+BOOL NMEAParser::PGCS(TCHAR *String, NMEA_INFO *GPS_INFO)
+{
+    
+  TCHAR ctemp[80];
+
+  // non-used paramters commented out
+  // ExtractParameter(String,ctemp,0);  	// single character.  Always '1' in IGC-Replay
+  // ExtractParameter(String,ctemp,1);		// four characters, hex, remains constant.  Value 3707 (dec).
+  
+  ExtractParameter(String,ctemp,2);		// four characers, hex, barometric altitude
+  GPS_INFO->BaroAltitude = HexStrToDouble(ctemp,NULL);
+  
+  ExtractParameter(String,ctemp,3);		// four characters, hex, constant.  Value 1371 (dec)
+  ExtractParameter(String,ctemp,4);		// two characters, hex or dec, constant. Value 5. Probably satellite count.
+  nSatellites = (int)(min(12,HexStrToDouble(ctemp, NULL)));
+  if (nSatellites==0) {
+    gpsValid = false;
+  }
+  if (activeGPS) {
+    GPS_INFO->SatellitesUsed = (int)(min(12,StrToDouble(ctemp, NULL)));
+  }
+  
+  if (ReplayLogger::IsEnabled()) {
+    return TRUE;
+  }
+  
+  // END OF STRING
+  /*GPS_INFO->Ballast = 
+    (StrToDouble(ctemp,NULL)-1)*(WEIGHTS[0]+WEIGHTS[1])/WEIGHTS[2];
+  BALLAST = GPS_INFO->Ballast;
+
+  GPS_INFO->AirspeedAvailable = TRUE;
+  GPS_INFO->IndicatedAirspeed = vias;
+  GPS_INFO->TrueAirspeed = vtas;
+  GPS_INFO->VarioAvailable = TRUE;
+  GPS_INFO->Vario = wnet;
+
+  VarioUpdated = TRUE;
+  PulseEvent(varioTriggerEvent);
+*/
+  return FALSE;
+}
+
 
 double AccelerometerZero=100.0;
 

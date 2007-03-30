@@ -1794,7 +1794,6 @@ void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
   Message::Repeat(0);
 }
 
-
 // NearestAirspaceDetails
 // Displays details of the nearest airspace to the aircraft in a 
 // status message.  This does nothing if there is no airspace within
@@ -1809,16 +1808,16 @@ extern bool RequestAirspaceWarningForce;
 
 void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   (void)misc;
-	double nearestdistance=0;
+  double nearestdistance=0;
   double nearestbearing=0;
   int foundcircle = -1;
   int foundarea = -1;
   int i;
   bool inside = false;
 
-  TCHAR szMessageBuffer[1024];
-  TCHAR szTitleBuffer[1024];
-  TCHAR text[1024];
+  TCHAR szMessageBuffer[MAX_PATH];
+  TCHAR szTitleBuffer[MAX_PATH];
+  TCHAR text[MAX_PATH];
 
   if (!dlgAirspaceWarningIsEmpty()) {
     RequestAirspaceWarningForce = true;
@@ -1881,8 +1880,9 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
 
   // TODO No control via status data (ala DoStatusMEssage) 
   // - can we change this?
+  Message::Lock();
   Message::AddMessage(5000, MSG_AIRSPACE, text);
-  
+  Message::Unlock();
 }
 
 // NearestWaypointDetails

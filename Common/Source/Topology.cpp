@@ -220,7 +220,7 @@ bool Topology::checkVisible(shapeObj* shape, rectObj *screenRect) {
 
 
 
-
+/*
 static int getQuad(double x, double y, RECT rc) {
   int quad;
   
@@ -311,10 +311,11 @@ static int getCorner(int n, int n2) {
   }
   return 0;
 }
+*/
 
 
 ///////////////
-
+/*
 void ClipPolygon_Old(HDC hdc, POINT *ptin, int n, RECT rc) {
   POINT pt[5000];
 
@@ -409,6 +410,7 @@ void ClipPolygon_Old(HDC hdc, POINT *ptin, int n, RECT rc) {
   Polygon(hdc, pt, 
           n+keypoints-skipped); 
 }
+*/
 
 ///////////////
 
@@ -863,6 +865,9 @@ void ClipPolygon(HDC hdc, POINT *mptin, int inLength, RECT rc, bool fill) {
 
   if (inLength>=MAXCLIPPOLYGON-1) {
     inLength=MAXCLIPPOLYGON-2;
+  }
+  if (inLength<2) {
+    return;
   }
 
   for (i=0; i<inLength; i++) {

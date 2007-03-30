@@ -1387,7 +1387,8 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(FinishRadius);
+    wp->GetDataField()->SetAsFloat(lround(FinishRadius*DISTANCEMODIFY*2)/2);
+    wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
 
@@ -1404,7 +1405,8 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(StartRadius);
+    wp->GetDataField()->SetAsFloat(lround(StartRadius*DISTANCEMODIFY*2)/2);
+    wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
 
@@ -1421,7 +1423,8 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskSectorRadius"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(SectorRadius);
+    wp->GetDataField()->SetAsFloat(lround(SectorRadius*DISTANCEMODIFY*2)/2);
+    wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
   }
 
@@ -2221,8 +2224,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
   if (wp) {
-    if ((int)FinishRadius != wp->GetDataField()->GetAsInteger()) {
-      FinishRadius = wp->GetDataField()->GetAsInteger();
+    ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
+    if ((int)FinishRadius != ival) {
+      FinishRadius = ival;
       SetToRegistry(szRegistryFinishRadius,FinishRadius);
       changed = true;
       taskchanged = true;
@@ -2241,8 +2245,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
-    if ((int)StartRadius != wp->GetDataField()->GetAsInteger()) {
-      StartRadius = wp->GetDataField()->GetAsInteger();
+    ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
+    if ((int)StartRadius != ival) {
+      StartRadius = ival;
       SetToRegistry(szRegistryStartRadius,StartRadius);
       changed = true;
       taskchanged = true;
@@ -2261,8 +2266,9 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskSectorRadius"));
   if (wp) {
-    if ((int)SectorRadius != wp->GetDataField()->GetAsInteger()) {
-      SectorRadius = wp->GetDataField()->GetAsInteger();
+    ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
+    if ((int)SectorRadius != ival) {
+      SectorRadius = ival;
       SetToRegistry(szRegistrySectorRadius,SectorRadius);
       changed = true;
       taskchanged = true;

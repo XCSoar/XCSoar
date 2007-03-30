@@ -293,6 +293,8 @@ double StaticPressureToAltitude(double ps);
 double AirDensity(double altitude);
 double AirDensityRatio(double altitude);
 
+double HexStrToDouble(TCHAR *Source, TCHAR **Stop); 
+
 long CheckFreeRam(void);
 
 void MemCheckPoint();

@@ -172,11 +172,12 @@ void ResumeAbortTask(int set = 0);
 void RefreshTaskStatistics(void);
 void  SetWindEstimate(double speed, double bearing, int quality=6);
 
+void LoadCalculationsPersist(DERIVED_INFO *Calculated);
+void SaveCalculationsPersist(DERIVED_INFO *Calculated);
+void DeleteCalculationsPersist(void);
 
 void CloseCalculations(void);
-void SaveCalculationsPersist(DERIVED_INFO *Calculated);
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-void DeleteCalculationsPersist(void);
 
 void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       bool doadvance, bool doannounce);
