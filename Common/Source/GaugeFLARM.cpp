@@ -34,6 +34,7 @@ Copyright_License {
 #include "Utils.h"
 
 DWORD EnableFLARMDisplay = 1;
+DWORD FLARMGaugeBearing = 0;
 
 HWND hWndFLARMWindow = NULL; //FLARM Window
 
@@ -96,6 +97,7 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
   HBRUSH redBrush = CreateSolidBrush(RGB(0xFF,0x00,0x00));
   HBRUSH yellowBrush = CreateSolidBrush(RGB(0x00,0xFF,0xFF));
   HBRUSH greenBrush = CreateSolidBrush(RGB(0x00,0xFF,0x00));
+  // JMW TODO red/green Color blind
 
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (gps_info->FLARM_Traffic[i].ID>0) {
@@ -130,36 +132,60 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
 
       slope = max(-1.0,min(1.0,slope*2)); // scale so 45 degrees or more=90
 
-      rotate(x, y, -gps_info->TrackBearing); 	// or use .Heading?
+      double DisplayAngle = -gps_info->TrackBearing;
+      rotate(x, y, DisplayAngle); 	// or use .Heading?
       double scale = RangeScale(d);
       int targetsize = IBLSCALE(3);
 
-      POINT shape[5];
+      POINT sc;
+      sc.x = center.x + iround(x*scale);
+      sc.y = center.y + iround(y*scale);
 
-      int xs = center.x + iround(x*scale);
-      int ys = center.y + iround(y*scale);
+      if (FLARMGaugeBearing) {
+        POINT Arrow[5];
 
-      shape[0].y = ys-targetsize;
-      shape[1].y = ys-targetsize;
-      shape[2].y = ys+targetsize;
-      shape[3].y = ys+targetsize;
-      if (slope>=0) {
-	// target aircraft is higher
-	shape[0].x = xs-iround((1.0-slope)*targetsize);
-	shape[1].x = xs+iround((1.0-slope)*targetsize);
-	shape[2].x = xs+targetsize;
-	shape[3].x = xs-targetsize;
+        Arrow[0].x = -3;
+        Arrow[0].y = 4;
+        Arrow[1].x = 0;
+        Arrow[1].y = -5;
+        Arrow[2].x = 3;
+        Arrow[2].y = 4;
+        Arrow[3].x = 0;
+        Arrow[3].y = 1;
+        Arrow[4].x = -3;
+        Arrow[4].y = 4;
+
+        //      double vmag = max(1.0,min(15.0,DrawInfo.FLARM_Traffic[i].Speed/5.0))*2;
+
+        PolygonRotateShift(Arrow, 5, sc.x, sc.y,
+                           gps_info->FLARM_Traffic[i].TrackBearing + DisplayAngle);
+        Polygon(hdcDrawWindow, Arrow, 5);
+
       } else {
-	// target aircraft is lower
-	shape[0].x = xs-targetsize;
-	shape[1].x = xs+targetsize;
-	shape[2].x = xs+iround((1.0+slope)*targetsize);
-	shape[3].x = xs-iround((1.0+slope)*targetsize);
-      }
-      shape[4].x = shape[0].x;
-      shape[4].y = shape[0].y;
+        POINT shape[5];
 
-      Polygon(hdcDrawWindow, shape, 5);
+        shape[0].y = sc.y-targetsize;
+        shape[1].y = sc.y-targetsize;
+        shape[2].y = sc.y+targetsize;
+        shape[3].y = sc.y+targetsize;
+        if (slope>=0) {
+          // target aircraft is higher
+          shape[0].x = sc.x-iround((1.0-slope)*targetsize);
+          shape[1].x = sc.x+iround((1.0-slope)*targetsize);
+          shape[2].x = sc.x+targetsize;
+          shape[3].x = sc.x-targetsize;
+        } else {
+          // target aircraft is lower
+          shape[0].x = sc.x-targetsize;
+          shape[1].x = sc.x+targetsize;
+          shape[2].x = sc.x+iround((1.0+slope)*targetsize);
+          shape[3].x = sc.x-iround((1.0+slope)*targetsize);
+        }
+        shape[4].x = shape[0].x;
+        shape[4].y = shape[0].y;
+
+        Polygon(hdcDrawWindow, shape, 5);
+      }
     }
   }
   DeleteObject(greenBrush);

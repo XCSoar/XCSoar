@@ -355,8 +355,6 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
 
       DrawBitmapIn(hDC, sc, hFLARMTraffic);
 
-      // Direction line disabled, not working very well
-
       Arrow[0].x = -3;
       Arrow[0].y = 4;
       Arrow[1].x = 0;

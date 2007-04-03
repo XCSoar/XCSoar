@@ -141,11 +141,12 @@ static const int k_nAreaType[k_nAreaCount] = {
 /////////////////////////////
 
 
-void CheckAirspacePoint(int Idx){
+bool CheckAirspacePoint(int Idx){
   if (Idx < 0 || Idx >= AirspacePointSize){
-    Idx = Idx;
+    return false;
     //throw "Airspace Parser: Memory access error!";
   }
+  return true;
 }
 
 
@@ -1666,21 +1667,23 @@ double RangeAirspaceArea(const double &longitude,
 			 int i, double *bearing) {
 
   // find nearest distance to line segment
-  unsigned int j;
+  int j;
   double dist=100000;
   double nearestdistance = dist;
   double nearestbearing = *bearing;
   double lon4, lat4;
-  for (j=0; j<AirspaceArea[i].NumPoints-1; j++) {
+  for (j=0; j<(int)AirspaceArea[i].NumPoints-1; j++) {
 
-    CheckAirspacePoint(AirspaceArea[i].FirstPoint+j);
-    CheckAirspacePoint(AirspaceArea[i].FirstPoint+j+1);
+    int p1 = AirspaceArea[i].FirstPoint+j;
+    int p2 = AirspaceArea[i].FirstPoint+j+1;
+    CheckAirspacePoint(p1);
+    CheckAirspacePoint(p2);
 
     dist = ScreenCrossTrackError(
-				 AirspacePoint[AirspaceArea[i].FirstPoint+j].Longitude,
-				 AirspacePoint[AirspaceArea[i].FirstPoint+j].Latitude,
-				 AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Longitude,
-				 AirspacePoint[AirspaceArea[i].FirstPoint+j+1].Latitude,
+				 AirspacePoint[p1].Longitude,
+				 AirspacePoint[p1].Latitude,
+				 AirspacePoint[p2].Longitude,
+				 AirspacePoint[p2].Latitude,
 				 longitude, latitude,
 				 &lon4, &lat4);
     if (dist<nearestdistance) {

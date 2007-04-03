@@ -246,6 +246,7 @@ TCHAR szRegistryLockSettingsInFlight[] = TEXT("LockSettingsInFlight");
 TCHAR szRegistryTerrainContrast[] = TEXT("TerrainContrast");
 TCHAR szRegistryTerrainBrightness[] = TEXT("TerrainBrightness");
 TCHAR szRegistryEnableFLARMDisplay[] = TEXT("EnableFLARMDisplay");
+TCHAR szRegistryFLARMGaugeBearing[] = TEXT("FLARMGaugeBearing");
 TCHAR szRegistryGliderScreenPosition[] = TEXT("GliderScreenPosition");
 TCHAR szRegistrySetSystemTimeFromGPS[] = TEXT("SetSystemTimeFromGPS");
 TCHAR szRegistryAutoForceFinalGlide[] = TEXT("AutoForceFinalGlide");
@@ -830,6 +831,10 @@ void ReadRegistrySettings(void)
   Temp = EnableFLARMDisplay;
   GetFromRegistry(szRegistryEnableFLARMDisplay,&Temp);
   EnableFLARMDisplay = Temp;
+
+  Temp = FLARMGaugeBearing;
+  GetFromRegistry(szRegistryFLARMGaugeBearing,&Temp);
+  FLARMGaugeBearing = Temp;
 
   Temp = TerrainContrast;
   GetFromRegistry(szRegistryTerrainContrast,&Temp);

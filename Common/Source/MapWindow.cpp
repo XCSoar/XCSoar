@@ -1172,6 +1172,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hpThermalBandGlider = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0x00,0x00,0x30));
 
     hpFinalGlideBelow = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xFF,0xA0,0xA0));
+
+    // JMW TODO red/green Color blind
     hpFinalGlideAbove = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xA0,0xFF,0xA0));
 
     hpSpeedSlow=(HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
@@ -2034,7 +2036,7 @@ void MapWindow::DrawCrossHairs(HDC hdc, POINT Orig)
 }
 
 
-void MapWindow::PolygonRotateShift(POINT* poly, int n, int x, int y, double angle) {
+void PolygonRotateShift(POINT* poly, int n, int x, int y, double angle) {
   for(int i=0; i<n; i++)
     {
       if (InfoBoxLayout::scale>1) {

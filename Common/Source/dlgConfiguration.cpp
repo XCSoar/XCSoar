@@ -152,7 +152,7 @@ static void NextPage(int Step){
     wf->SetCaption(TEXT("9 Appearance"));
     break;
   case 9:
-    wf->SetCaption(TEXT("10 Vario Gauge"));
+    wf->SetCaption(TEXT("10 Vario Gauge and FLARM"));
     break;
   case 10:
     wf->SetCaption(TEXT("11 Task"));
@@ -749,6 +749,16 @@ static void setVariables(void) {
     dfe->addEnumText(TEXT("ON/Fixed"));
     dfe->addEnumText(TEXT("ON/Scaled"));
     dfe->Set(EnableFLARMDisplay);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFLARMGaugeBearing"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Relative Altitude"));
+    dfe->addEnumText(TEXT("Bearing"));
+    dfe->Set(FLARMGaugeBearing);
     wp->RefreshDisplay();
   }
 
@@ -1720,6 +1730,17 @@ void dlgConfigurationShowModal(void){
       EnableFLARMDisplay = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryEnableFLARMDisplay,
 		    EnableFLARMDisplay);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFLARMGaugeBearing"));
+  if (wp) {
+    if ((int)FLARMGaugeBearing !=
+	wp->GetDataField()->GetAsInteger()) {
+      FLARMGaugeBearing = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryFLARMGaugeBearing,
+		    FLARMGaugeBearing);
       changed = true;
     }
   }

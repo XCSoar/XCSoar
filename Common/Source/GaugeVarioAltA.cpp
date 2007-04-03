@@ -489,7 +489,7 @@ void GaugeVario::RenderNeedle(double Value, bool average) {
     SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
   }
   if (average) {
-    Polygon(hdcDrawWindow, lastBitave, 3);
+    Polyline(hdcDrawWindow, lastBitave, 3);
   } else {
     Polygon(hdcDrawWindow, lastBit, 3);
   }

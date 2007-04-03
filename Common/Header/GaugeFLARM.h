@@ -32,5 +32,6 @@ class GaugeFLARM {
 };
 
 extern DWORD EnableFLARMDisplay;
+extern DWORD FLARMGaugeBearing;
 
 #endif

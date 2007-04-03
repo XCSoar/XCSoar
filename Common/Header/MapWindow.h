@@ -358,16 +358,14 @@ class MapWindow {
   static bool RenderTimeAvailable();
   static bool BigZoom;
   static int SnailWidthScale;
-  static void PolygonRotateShift(POINT* poly, int n, int x, int y,
-                                 double angle);
  private:
   static NMEA_INFO DrawInfo;
   static DERIVED_INFO DerivedDrawInfo;
 
 };
 
-
-
+void PolygonRotateShift(POINT* poly, int n, int x, int y,
+                        double angle);
 
 extern void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
 

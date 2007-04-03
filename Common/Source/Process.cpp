@@ -38,6 +38,9 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Port.h"
 #include "Atmosphere.h"
+#include "AATDistance.h"
+
+extern AATDistance aatdistance;
 
 // JMW added key codes,
 // so -1 down
@@ -304,7 +307,7 @@ void NextUpDown(int UpDown)
 	//	CALCULATED_INFO.TaskStartTime = 0;
       }
     }
-
+    aatdistance.ResetEnterTrigger(ActiveWayPoint);
   }
   else if (UpDown==0) {
     SelectedWaypoint = Task[ActiveWayPoint].Index;
