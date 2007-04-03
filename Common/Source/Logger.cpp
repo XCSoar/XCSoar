@@ -88,10 +88,12 @@ int EW_count = 0;
 
 
 void StopLogger(void) {
-	if (LoggerActive) {
-  LoggerActive = false;
-  MoveFile(szLoggerFileName, szFLoggerFileName);
-	}
+  if (LoggerActive) {
+    LoggerActive = false;
+    if (LoggerClearFreeSpace()) {
+      MoveFile(szLoggerFileName, szFLoggerFileName);
+    }
+  }
 }
 
 
@@ -1044,6 +1046,9 @@ bool DeleteOldIGCFile(TCHAR *pathname) {
 }
 
 
+#define LOGGER_MINFREESTORAGE (250+MINFREESTORAGE)
+// JMW note: we want to clear up enough space to save the persistent
+// data (85 kb approx) and a new log file
 
 bool LoggerClearFreeSpace(void) {
   bool found = true;
@@ -1059,14 +1064,17 @@ bool LoggerClearFreeSpace(void) {
   LocalPath(subpathname);
 #endif
 
-  while (found && ((kbfree = FindFreeSpace(pathname))<MINFREESTORAGE)
+  while (found && ((kbfree = FindFreeSpace(pathname))<LOGGER_MINFREESTORAGE)
 	 && (numtries<100)) {
-    if (numtries==0)
+    /* JMW asking for deleting old files is disabled now --- system
+       automatically deletes old files as required
+    if (numtries==0)      
       if(MessageBoxX(hWndMapWindow,
 		     gettext(TEXT("Insufficient free storage, delete old IGC files?")),
 		     gettext(TEXT("Logger")),
 		     MB_YESNO|MB_ICONQUESTION) != IDYES)
 	return false;
+    */
 
     // search for IGC files, and delete the oldest one
     found = DeleteOldIGCFile(pathname);
@@ -1075,6 +1083,6 @@ bool LoggerClearFreeSpace(void) {
     }
     numtries++;
   }
-  return (kbfree>MINFREESTORAGE);
+  return (kbfree>=LOGGER_MINFREESTORAGE);
 }
 

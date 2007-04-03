@@ -50,6 +50,7 @@ void AATDistance::Reset() {
   max_achieved_distance=0;
 
   for (i=0; i<MAXTASKPOINTS; i++) {
+    has_entered[i]= 0;
     legdistance_achieved[i]= 0;
     distancethreshold[i]= DISTANCETHRESHOLD;
     num_points[i]=0;
@@ -64,13 +65,23 @@ void AATDistance::Reset() {
 
 
 double AATDistance::LegDistanceAchieved(int taskwaypoint) {
-  return legdistance_achieved[taskwaypoint];
+  double retval;
+  LockTaskData();
+  retval= legdistance_achieved[taskwaypoint];
+  UnlockTaskData();
+  return retval;
 }
 
-
+void AATDistance::ResetEnterTrigger(int taskwaypoint) {
+  LockTaskData();
+  has_entered[taskwaypoint] = false;
+  UnlockTaskData();
+}
 
 void AATDistance::AddPoint(double longitude, double latitude, 
                            int taskwaypoint) {
+
+  LockTaskData();
 
   // should only add ONE point to start.  
   // If restart, need to reset
@@ -80,6 +91,8 @@ void AATDistance::AddPoint(double longitude, double latitude,
     int n = num_points[taskwaypoint];
 
     bool new_point= false;
+
+    has_entered[taskwaypoint] = true;
 
     if (n>1) {
       double dist;
@@ -120,6 +133,7 @@ void AATDistance::AddPoint(double longitude, double latitude,
       DistanceCovered_internal(longitude, latitude, true);
     }
   }
+  UnlockTaskData();
 
 }
 
@@ -139,6 +153,7 @@ double AATDistance::DistanceCovered_internal(double longitude,
     return 0.0;
   }
 
+  LockTaskData();
   double target_distance, best_target_distance;
   double achieved_distance, best_achieved_distance;
 
@@ -346,6 +361,7 @@ double AATDistance::DistanceCovered_internal(double longitude,
   } 
   
   max_achieved_distance = max(best_achieved_distance, max_achieved_distance);
+  UnlockTaskData();
   return best_achieved_distance;
 }
 
@@ -362,8 +378,11 @@ JMW
 double AATDistance::DistanceCovered(double longitude,
                                     double latitude,
                                     int taskwaypoint) {
-	(void)taskwaypoint; // unused
-  return DistanceCovered_internal(longitude, latitude, false);
+  (void)taskwaypoint; // unused
+  double retval= DistanceCovered_internal(longitude, latitude, false);
+  LockTaskData();
+  return retval;
+  UnlockTaskData();
 }
 
 
@@ -405,12 +424,18 @@ void AATDistance::UpdateSearch(int taskwaypoint) {
 }
 
 bool AATDistance::HasEntered(int taskwaypoint) {
-  return num_points[taskwaypoint]>0;
+  bool retval = false;
+  LockTaskData();
+  retval = has_entered[taskwaypoint];
+  UnlockTaskData();
+  return retval;
 }
 
 void AATDistance::ThinData(int taskwaypoint) {
   double contractfactor = 0.8;
-  bool do_delete[MAXNUM_AATDISTANCE];
+  static bool do_delete[MAXNUM_AATDISTANCE];
+
+  LockTaskData();
 
   int i;
   for (i=0; i<MAXNUM_AATDISTANCE; i++) {
@@ -454,5 +479,5 @@ void AATDistance::ThinData(int taskwaypoint) {
     // error!
     num_points[taskwaypoint]=MAXNUM_AATDISTANCE-1;
   }
-
+  UnlockTaskData();
 }

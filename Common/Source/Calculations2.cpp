@@ -560,6 +560,7 @@ void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 
 static TCHAR szCalculationsPersistFileName[MAX_PATH]= TEXT("\0");
+static TCHAR szCalculationsPersistDirectory[MAX_PATH]= TEXT("\0");
 
 void DeleteCalculationsPersist(void) {
   DeleteFile(szCalculationsPersistFileName);
@@ -570,9 +571,12 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 #ifdef GNAV
     LocalPath(szCalculationsPersistFileName,
               TEXT("persist/xcsoar-persist.log"));    
+    LocalPath(szCalculationsPersistDirectory,
+              TEXT("persist"));    
 #else
     LocalPath(szCalculationsPersistFileName,
               TEXT("xcsoar-persist.log"));    
+    LocalPath(szCalculationsPersistDirectory);
 #endif
   }
 
@@ -600,6 +604,21 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
     if (sizein != size) { CloseHandle(hFile); return; }
     ReadFile(hFile,&olc.data,size,&dwBytesWritten,(OVERLAPPED*)NULL);   
 
+    size = sizeof(double);
+    ReadFile(hFile,&sizein,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
+    if (sizein != size*5) { CloseHandle(hFile); return; }
+    ReadFile(hFile,&MACCREADY,size,&dwBytesWritten,(OVERLAPPED*)NULL);   
+    ReadFile(hFile,&QNH,size,&dwBytesWritten,(OVERLAPPED*)NULL);   
+    ReadFile(hFile,&BUGS,size,&dwBytesWritten,(OVERLAPPED*)NULL);   
+    ReadFile(hFile,&BALLAST,size,&dwBytesWritten,(OVERLAPPED*)NULL);   
+    ReadFile(hFile,&CuSonde::maxGroundTemperature,
+             size,&dwBytesWritten,(OVERLAPPED*)NULL);   
+
+    MACCREADY = min(10.0,max(MACCREADY,0));
+    QNH = min(1113.2, max(QNH,913.2));
+    BUGS = min(1.0, max(BUGS,0.0));
+    BALLAST = min(1.0, max(BALLAST,0.0));
+
     CloseHandle(hFile);
   }
 }
@@ -609,8 +628,7 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
   HANDLE hFile;
   DWORD dwBytesWritten;
   DWORD size;
-
-  if (FindFreeSpace(szCalculationsPersistFileName)<MINFREESTORAGE) return;
+  if (FindFreeSpace(szCalculationsPersistDirectory)<MINFREESTORAGE) return;
 
   StartupStore(TEXT("SaveCalculationsPersist\r\n"));
 
@@ -627,6 +645,16 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
     size = sizeof(OLCData);
     WriteFile(hFile,&size,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
     WriteFile(hFile,&olc.data,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    size = sizeof(double)*5;
+    WriteFile(hFile,&size,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
+    size = sizeof(double);
+    WriteFile(hFile,&MACCREADY,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&QNH,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&BUGS,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&BALLAST,size,&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&CuSonde::maxGroundTemperature,
+              size,&dwBytesWritten,(OVERLAPPED*)NULL);
+
     CloseHandle(hFile);
   }
 

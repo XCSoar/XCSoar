@@ -91,6 +91,7 @@ extern TCHAR szRegistryLockSettingsInFlight[];
 extern TCHAR szRegistryTerrainContrast[];
 extern TCHAR szRegistryTerrainBrightness[];
 extern TCHAR szRegistryEnableFLARMDisplay[];
+extern TCHAR szRegistryFLARMGaugeBearing[];
 extern TCHAR szRegistrySnailTrail[];
 extern TCHAR szRegistryTrailDrift[];
 extern TCHAR szRegistryThermalLocator[];

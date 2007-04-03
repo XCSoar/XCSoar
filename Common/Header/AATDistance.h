@@ -47,6 +47,8 @@ public:
   double DistanceCovered(double longitude, double latitude, int taskwaypoint);
   double LegDistanceAchieved(int taskwaypoint);
   bool HasEntered(int taskwaypoint);
+  void ResetEnterTrigger(int taskwaypoint);
+
 private:
 
   double DistanceCovered_internal(double longitude, double latitude, 
@@ -57,6 +59,7 @@ private:
 
   double max_achieved_distance;
 
+  bool has_entered[MAXTASKPOINTS];
   double distancethreshold[MAXTASKPOINTS];
   double legdistance_achieved[MAXTASKPOINTS];
   // index to max distance sample to task point n

@@ -236,7 +236,6 @@ int                                             AltWarningMargin = 100;
 int                                             AutoAdvance = 1;
 bool                                            AdvanceArmed = false;
 
-double                          QNH = (double)1013.2;
 bool EnableBlockSTF = false;
 
 bool GlobalRunning = false; 
@@ -253,6 +252,10 @@ double        TASKSPEEDMODIFY = TOKPH;
 
 //Flight Data Globals
 double        MACCREADY = 0; // JMW now in SI units (m/s) for consistency
+double        QNH = (double)1013.2;
+double        BUGS = 1;
+double        BALLAST = 0;
+
 bool          AutoMacCready = false;
 
 int          NettoSpeed = 1000;
@@ -277,8 +280,6 @@ double SAFETYALTITUDETERRAIN = 200;
 double SAFTEYSPEED = 50.0;
 
 // polar info
-double BUGS = 1;
-double BALLAST = 0;
 int              POLARID = 0;
 double POLAR[POLARSIZE] = {0,0,0};
 double POLARV[POLARSIZE] = {21,27,40};
@@ -1353,6 +1354,13 @@ int WINAPI WinMain(     HINSTANCE hInstance,
         }
     }
 
+#if (WINDOWSPC>0)
+#if _DEBUG
+  _CrtCheckMemory();
+  _CrtDumpMemoryLeaks();
+#endif
+#endif
+
   return msg.wParam;
 }
 
@@ -1998,12 +2006,6 @@ void Shutdown(void) {
 
   StartupStore(TEXT("Finished shutdown\r\n"));
 
-#if (WINDOWSPC>0)
-#if _DEBUG
-  _CrtDumpMemoryLeaks();
-  _CrtCheckMemory();
-#endif
-#endif
 }
 
 
@@ -2201,7 +2203,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   wmControl = (HWND)lParam;
 
   if(wmControl != NULL) {
-    if (ProgramStarted) {
+    if (ProgramStarted==3) {
 
       DialogActive = false;
 
@@ -2253,7 +2255,7 @@ void ProcessChar1 (char c)
   static TCHAR BuildingString[100];
   static int i = 0;
 
-  if (!ProgramStarted) return; // ignore everything until started
+  if (ProgramStarted<3) return; // ignore everything until started
 
   if (i<90) {
     if(c=='\n') {
@@ -2276,7 +2278,7 @@ void ProcessChar2 (char c)
   static TCHAR BuildingString[100];
   static int i = 0;
 
-  if (!ProgramStarted) return; // ignore everything until started
+  if (ProgramStarted<=3) return; // ignore everything until started
 
   if (i<90) {
     if(c=='\n') {
@@ -2518,9 +2520,6 @@ void CommonProcessTimer()
   // service the GCE and NMEA queue
   if (ProgramStarted==3) {
     InputEvents::DoQueuedEvents();
-  }
-
-  if (ProgramStarted==3) {
     if (RequestAirspaceWarningDialog) {
       RequestAirspaceWarningDialog= false;
       dlgAirspaceWarningShowDlg(RequestAirspaceWarningForce);

@@ -546,16 +546,6 @@ other languages.  If this field is left blank, then XCSoar uses English.
     <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=0 Max=1000 Step=25/>
   </WndProperty>
 
-  <WndProperty Name="prpEnableFLARMDisplay" Caption="FLARM display"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
-  Help="This enables the display of FLARM traffic on the map window as well as the pop-up radar-like display.
-[OFF] FLARM radar and map display disabled
-[ON/Fixed] FLARM radar enabled, map display enabled with fixed scale.
-[ON/Scaled] FLARM radar enabled, map display enabled and auto scaled.
-When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.
-">
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
   <WndProperty Name="prpAppStatusMessageAlignment" Caption="Msg window"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
   Help="Defines the alignment of the status message box, either centered or in the top left corner.">
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
@@ -663,6 +653,26 @@ When auto scaling is enabled, the FLARM targets on the map display are scaled so
   <WndProperty Name="prpAppAveNeedle" Caption="Averager needle"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
   Help="If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.">
     <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpEnableFLARMDisplay" Caption="FLARM display"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
+  Help="This enables the display of FLARM traffic on the map window as well as the pop-up radar-like display.
+[OFF] FLARM radar and map display disabled
+[ON/Fixed] FLARM radar enabled, map display enabled with fixed scale.
+[ON/Scaled] FLARM radar enabled, map display enabled and auto scaled.
+When auto scaling is enabled, the FLARM targets on the map display are scaled so that when the map is at large zoom levels, targets are still visible.
+">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpFLARMGaugeBearing" Caption="FLARM symbols"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
+  Help="This controls the symbols used to display FLARM targets on the radar display.
+[Relative altitude] The relative altitude of the target is represented as a shape that becomes triangular for extreme above/below heights, square at the same altitude.  An arrow pointing up indicates the target is above the aircraft.
+[Bearing] The track bearing of the target relative to the track bearing of the aircraft
+is displayed as an arrow head.
+In all modes, the color of the target indicates the threat level.
+">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
   </WndFrame>
