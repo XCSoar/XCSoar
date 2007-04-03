@@ -7,15 +7,18 @@ Todo:
 - Documentation, see if screenshots need updating
 - Documentation, add waypoint changes
 - Documentation, arm advance outside sector
-- Lat/lon display in portrait mode
+- Documentation: all changes since 5.0.7
 - Lat/lon entry methods in waypoint editor
-- thermal hotspots
+- Thermal hotspots
   - filter out thermals from selectors
   - normal wpt display
   - different icon to normal thermal marker
-- Give warning if faster than AAT time? (adjust range)
-- File names for saved/loaded tasks
-- Tasman instruments support
+
+- Give warning if estimated arrival time is faster than AAT time
+- Full file names for saved/loaded tasks
+- Support for Tasman instruments variometer
+- Option for modified colors for red/green colorblind pilots
+  (final glide bar, flarm targets)
 
 Changes from 5.0.7:
 
@@ -35,7 +38,12 @@ Changes from 5.0.7:
   true airspeed
 - Task radii expressed in user units
 - Bug fix, profile support for PC and PDA restored
-- Bug fix, protected use of message in NearestWaypoint function with thread lock
+- Bug fix, protected use of message in NearestAirspace function with thread lock
+- Bug fix, NearestAirspace search array out of bounds due to unsigned int loop
+- QNH, Bugs, Ballast and MacCready saved at program exit and restored on startup
+- FLARM radar can be selected to display relative altitude or bearing.
+- Removed asking whether to delete old log files to make space when logger is started.
+  Deleting old log files happens automatically now.
 
 Changes from 5.0.6:
 - Max manoeuvering speed set to 300 units in configuration dialog
