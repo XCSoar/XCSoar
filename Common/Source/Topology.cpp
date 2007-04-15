@@ -434,9 +434,6 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
   // get drawing info
     
-  double tpp_x=0.0;
-  double tpp_y=0.0;
-
   int iskip = 1;
   
   if (MapWindow::MapScale>0.25*scaleThreshold) {
@@ -460,78 +457,73 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
     shapeObj *shape = &(shpCache[ixshp]->shape);
 
-    int minx = rc.right;
-    int miny = rc.bottom;
-    
     switch(shape->type) {
 
         ///////////////////////////////////////
       case(MS_SHAPE_POINT):{
 
         if (checkVisible(shape, &screenRect))
-        for (int tt = 0; tt < shape->numlines; tt++) {
+          for (int tt = 0; tt < shape->numlines; tt++) {
 
-          for (int jj=0; jj< shape->line[tt].numpoints; jj++) {
+            for (int jj=0; jj< shape->line[tt].numpoints; jj++) {
 
-            POINT sc;
-
-            tpp_x = shape->line[tt].point[jj].x;
-            tpp_y = shape->line[tt].point[jj].y;
-
-            MapWindow::LatLon2Screen(tpp_x, tpp_y, sc);
-
-            MapWindow::DrawBitmapIn(hdc, sc, hBitmap);
-
-            shpCache[ixshp]->renderSpecial(hdc, sc.x, sc.y);
+              POINT sc;
+              MapWindow::LatLon2Screen(shape->line[tt].point[jj].x, 
+                                       shape->line[tt].point[jj].y, 
+                                       sc);
+              MapWindow::DrawBitmapIn(hdc, sc, hBitmap);
+              
+              shpCache[ixshp]->renderSpecial(hdc, sc.x, sc.y);
 
           }
         }
 
       }; break;
 
-      case(MS_SHAPE_LINE):{
+    case(MS_SHAPE_LINE):
 
-        if (checkVisible(shape, &screenRect))
-          for (int tt = 0; tt < shape->numlines; tt ++) {
-
-            int msize = min(shape->line[tt].numpoints, MAXCLIPPOLYGON);
-            for (int jj=0; jj< msize; jj++) {
-              
-              tpp_x = shape->line[tt].point[jj].x;
-              tpp_y = shape->line[tt].point[jj].y;
-              MapWindow::LatLon2Screen(tpp_x, tpp_y, pt[jj]);
-              
-              if (pt[jj].x<=minx) {
-                minx = pt[jj].x;
-                miny = pt[jj].y;
-              }
-              
+      if (checkVisible(shape, &screenRect))
+        for (int tt = 0; tt < shape->numlines; tt ++) {
+          
+          int minx = rc.right;
+          int miny = rc.bottom;
+          int msize = min(shape->line[tt].numpoints, MAXCLIPPOLYGON);
+          for (int jj=0; jj< msize; jj++) {
+            
+            MapWindow::LatLon2Screen(shape->line[tt].point[jj].x, 
+                                     shape->line[tt].point[jj].y, 
+                                     pt[jj]);
+            if (pt[jj].x<=minx) {
+              minx = pt[jj].x;
+              miny = pt[jj].y;
             }
-            ClipPolygon(hdc, pt, msize, rc, false);
-            shpCache[ixshp]->renderSpecial(hdc,minx,miny);
+            
           }
-      }
+          ClipPolygon(hdc, pt, msize, rc, false);
+          shpCache[ixshp]->renderSpecial(hdc,minx,miny);
+        }
       break;
-
+      
     case(MS_SHAPE_POLYGON):
 
       if (checkVisible(shape, &screenRect))
         for (int tt = 0; tt < shape->numlines; tt ++) {
           
+          int minx = rc.right;
+          int miny = rc.bottom;
           int msize = min(shape->line[tt].numpoints/iskip, MAXCLIPPOLYGON);
           
           for (int jj=0; jj< msize; jj++) {
-            int x, y;
-            tpp_x = shape->line[tt].point[jj*iskip].x;
-            tpp_y = shape->line[tt].point[jj*iskip].y;
-            MapWindow::LatLon2Screen(tpp_x, tpp_y, x, y);
-            pt[jj].x = x;
-            pt[jj].y = y;
+            MapWindow::LatLon2Screen(shape->line[tt].point[jj*iskip].x, 
+                                     shape->line[tt].point[jj*iskip].y, 
+                                     pt[jj]);
+            if (pt[jj].x<=minx) {
+              minx = pt[jj].x;
+              miny = pt[jj].y;
+            }
           }
-          ClipPolygon(hdc,pt, msize, rc);
-          
-          shpCache[ixshp]->renderSpecial(hdc,minx,miny);
-          
+          ClipPolygon(hdc,pt, msize, rc, true);
+          shpCache[ixshp]->renderSpecial(hdc,minx,miny);          
         }
       break;
       
@@ -607,6 +599,7 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
     if (!MapWindow::checkLabelBlock(brect))
       return;
 
+    SetTextColor(hDC, RGB(0x20,0x20,0x20));
     ExtTextOut(hDC, x, y, 0, NULL, Temp, size, NULL);
 
   }
