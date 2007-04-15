@@ -447,7 +447,7 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         v.x = zzwindspeed*cos(zzwindbearing*3.1415926/180.0);
         v.y = zzwindspeed*sin(zzwindbearing*3.1415926/180.0);
         if (windanalyser) {
-	  windanalyser->slot_newEstimate(v, quality);
+	  windanalyser->slot_newEstimate(Basic, Calculated, v, quality);
         }
       }
     }
@@ -488,7 +488,7 @@ void  SetWindEstimate(double speed, double bearing, int quality) {
   v.x = speed*cos(bearing*3.1415926/180.0);
   v.y = speed*sin(bearing*3.1415926/180.0);
   if (windanalyser) {
-    windanalyser->slot_newEstimate(v, quality);
+    windanalyser->slot_newEstimate(&GPS_INFO, &CALCULATED_INFO, v, quality);
   }
 }
 
@@ -629,10 +629,10 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   Calculated->TerrainWarningLongitude = 0.0;
 
   if (!windanalyser) {
-    windanalyser = new WindAnalyser(Basic, Calculated);
+    windanalyser = new WindAnalyser();
 
     // seed initial wind store with current conditions
-    SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing, 1);
+    //JMW TODO SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing, 1);
 
   }
 }
@@ -1013,7 +1013,8 @@ double CruiseClimbSwitch = 15;
 double ClimbCruiseSwitch = 15;
 
 
-void SwitchZoomClimb(bool isclimb, bool left) {
+void SwitchZoomClimb(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                     bool isclimb, bool left) {
 
   static double CruiseMapScale = 10;
   static double ClimbMapScale = 0.25;
@@ -1049,7 +1050,7 @@ void SwitchZoomClimb(bool isclimb, bool left) {
     }
   }
   if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-    windanalyser->slot_newFlightMode(left, 0);
+    windanalyser->slot_newFlightMode(Basic, Calculated, left, 0);
   }
 
 }
@@ -1209,7 +1210,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         // into InputEvents instead?
         // JMW: NO.  Core functionality must be built into the
         // main program, unable to be overridden.
-        SwitchZoomClimb(true, LEFT);
+        SwitchZoomClimb(Basic, Calculated, true, LEFT);
         InputEvents::processGlideComputer(GCE_FLIGHTMODE_CLIMB);
       }
     } else {
@@ -1219,7 +1220,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     break;
   case CLIMB:
     if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
-      windanalyser->slot_newSample();
+      windanalyser->slot_newSample(Basic, Calculated);
     }
 
     if((Rate < MinTurnRate)||(forcecruise)) {
@@ -1255,7 +1256,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           least_squares_update(Calculated->CruiseStartTime/3600.0,
                                Calculated->CruiseStartAlt);
 
-        SwitchZoomClimb(false, LEFT);
+        SwitchZoomClimb(Basic, Calculated, false, LEFT);
         InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
       }
 
@@ -1276,7 +1277,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   // generate new wind vector if altitude changes or a new
   // estimate is available
   if (AutoWindMode>0) {
-    windanalyser->slot_Altitude();
+    windanalyser->slot_Altitude(Basic, Calculated);
   }
 
   if (EnableThermalLocator) {
@@ -1433,7 +1434,7 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccrea
   //  LockFlightData();
   (void)Basic;
   LockTaskData();
-  if((ActiveWayPoint >=0)&&(WayPointList))
+  if(ValidTaskPoint(ActiveWayPoint))
     {
       Calculated->NextAltitudeRequired =
         GlidePolar::MacCreadyAltitude(maccready,
@@ -1450,9 +1451,13 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccrea
       Calculated->NextAltitudeRequired =
         Calculated->NextAltitudeRequired + SAFETYALTITUDEARRIVAL ;
 
+      double wpAlt = 0.0f;
+      if (ValidTaskPoint(ActiveWayPoint))
+        wpAlt = WayPointList[Task[ActiveWayPoint].Index].Altitude;
       Calculated->NextAltitudeDifference =
-        Calculated->NavAltitude - (Calculated->NextAltitudeRequired
-                           + WayPointList[Task[ActiveWayPoint].Index].Altitude)         + Calculated->EnergyHeight;
+        Calculated->NavAltitude
+        - (Calculated->NextAltitudeRequired+wpAlt)
+        + Calculated->EnergyHeight;
     }
   else
     {

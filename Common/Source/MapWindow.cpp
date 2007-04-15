@@ -1681,7 +1681,7 @@ void MapWindow::DrawThermalEstimate(HDC hdc, RECT rc) {
 
 void MapWindow::RenderMapWindow(  RECT rc)
 {
-  bool drawmap;
+  bool drawmap = false;
   HFONT hfOld;
 
   DWORD fpsTime = ::GetTickCount();

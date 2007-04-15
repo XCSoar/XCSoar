@@ -112,7 +112,7 @@ BOOL devRegisterGetName(int Index, TCHAR *Name){
 }
 
 
-static devIsFalseReturn(PDeviceDescriptor_t d){
+static int devIsFalseReturn(PDeviceDescriptor_t d){
   (void)d;
   return(FALSE);
 

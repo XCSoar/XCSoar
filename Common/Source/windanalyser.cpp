@@ -83,12 +83,8 @@ Copyright_License {
   a number of windmeasurements and calculates a weighted average based on quality.
 */
 
-WindAnalyser::WindAnalyser(NMEA_INFO *thenmeaInfo, DERIVED_INFO *thederivedInfo):windstore(thenmeaInfo,
-											   thederivedInfo)
+WindAnalyser::WindAnalyser()
 {
-  nmeaInfo = thenmeaInfo;
-  derivedInfo = thederivedInfo;
-
   //initialisation
   active=false;
   circleLeft=false;
@@ -113,7 +109,8 @@ double Magnitude(Vector v) {
 
 
 /** Called if a new sample is available in the samplelist. */
-void WindAnalyser::slot_newSample(){
+void WindAnalyser::slot_newSample(NMEA_INFO *nmeaInfo,
+                                  DERIVED_INFO *derivedInfo){
 
   if (!active) return; //only work if we are in active mode
 
@@ -171,7 +168,9 @@ void WindAnalyser::slot_newSample(){
 
   if (fullCircle) { //we have completed a full circle!
     if (numwindsamples<MAXWINDSAMPLES-1) {
-      _calcWind();    //calculate the wind for this circle, only if it is valid
+      _calcWind(nmeaInfo, derivedInfo);    //calculate the wind for
+                                           //this circle, only if it
+                                           //is valid
     }
     fullCircle=false;
 
@@ -204,43 +203,21 @@ void WindAnalyser::slot_newSample(){
   }
 
   first = false;
-  windstore.slot_Altitude();
+  windstore.slot_Altitude(nmeaInfo, derivedInfo);
 }
 
 
-void WindAnalyser::slot_Altitude() {
-    windstore.slot_Altitude();
+void WindAnalyser::slot_Altitude(NMEA_INFO *nmeaInfo,
+                                 DERIVED_INFO *derivedInfo) {
+  windstore.slot_Altitude(nmeaInfo, derivedInfo);
 }
 
 
-void WindAnalyser::calcThermalDrift() {
-  double ThermalTime = climbendtime-climbstarttime;
-
-  return; // disabled as this causes problems
-
-  if (ThermalTime>300) {
-
-    double ThermalDrift;
-    double DriftAngle;
-
-    DistanceBearing(climbstartpos.y,
-                    climbstartpos.x,
-                    climbendpos.y,
-                    climbendpos.x,
-                    &ThermalDrift,
-                    &DriftAngle
-                    );
-    Vector v;
-    v.x = -ThermalDrift/ThermalTime*cos(DriftAngle*3.1415926/180.0);
-    v.y = -ThermalDrift/ThermalTime*sin(DriftAngle*3.1415926/180.0);
-
-    slot_newEstimate(v, 3);
-
-  }
-}
 
 /** Called if the flightmode changes */
-void WindAnalyser::slot_newFlightMode(bool left, int marker){
+void WindAnalyser::slot_newFlightMode(NMEA_INFO *nmeaInfo,
+                                      DERIVED_INFO *derivedInfo,
+                                      bool left, int marker){
     active=false;  //we are inactive by default
     circleCount=0; //reset the circlecounter for each flightmode
 		   //change. The important thing to measure is the
@@ -261,7 +238,7 @@ void WindAnalyser::slot_newFlightMode(bool left, int marker){
 
       // end circling?
       if (curModeOK) {
-        calcThermalDrift();
+        //        calcThermalDrift();
       }
       curModeOK=false;
 
@@ -299,7 +276,8 @@ double angleDiff(Vector a, Vector b) {
 }
 
 
-void WindAnalyser::_calcWindNew() {
+void WindAnalyser::_calcWind(NMEA_INFO *nmeaInfo,
+                             DERIVED_INFO *derivedInfo) {
   int i;
   double av=0;
   if (!numwindsamples) return;
@@ -399,76 +377,15 @@ void WindAnalyser::_calcWindNew() {
 
   if (a.x*a.x+a.y*a.y<30*30) {
     // limit to reasonable values (60 knots), reject otherwise
-    slot_newEstimate(a, quality);
+    slot_newEstimate(nmeaInfo, derivedInfo, a, quality);
   }
 
 }
 
 
-void WindAnalyser::_calcWind() {
-
-  _calcWindNew();
-
-  return;
-
-  int aDiff= iround(angleDiff(minVector, maxVector));
-  int quality;
-
-  double sp, mmax, mmin;
-  mmax = Magnitude(maxVector);
-  mmin = Magnitude(minVector);
-  sp = 0.5*(mmax-mmin);
-
-  /*deterime quality.
-    Currently, we are using the question how well the min and the max vectors
-    are on oposing sides of the circle to determine the quality. 140 degrees is
-    the minimum separation, 180 is ideal.
-    Furthermore, the first two circles are considdered to be of lesser quality.
-  */
-
-  quality=5-((180-abs(aDiff))/6);
-  if (sp<2.0) {
-    quality=5-((180-abs(aDiff))/10);
-  }
-  quality= min(quality,5);  //5 is maximum quality, make sure we honour that.
-
-  if (circleCount<3) quality--;
-  if (circleCount<2) quality--;
-  if (circleCount<1) return;
-
-  Vector a;
-
-  a.x = -sp*maxVector.x/mmax;
-  a.y = -sp*maxVector.y/mmax;
-
-  /*
-  if ((sp<2.0)&&(quality<1)) {
-    // even poor quality zero wind inputs are valid
-    slot_newEstimate(a, 1);
-    return;
-  }
-  */
-
-  if (quality<1) {
-    return;   //measurment quality too low
-  }
-
-
-  //take both directions for min and max vector into account
-  //create a vector object for the resulting wind
-  //the direction of the wind is the direction where the greatest speed occured
-
-  //the speed of the wind is half the difference between the minimum and the maximumspeeds.
-  //let the world know about our measurement!
-
-  if (a.x*a.x+a.y*a.y<30*30) {
-    // limit to reasonable values (60 knots), reject otherwise
-    slot_newEstimate(a, quality);
-  }
-}
-
-
-void WindAnalyser::slot_newEstimate(Vector a, int quality)
+void WindAnalyser::slot_newEstimate(NMEA_INFO *nmeaInfo,
+                                    DERIVED_INFO *derivedInfo,
+                                    Vector a, int quality)
 {
 
 #ifdef DEBUG
@@ -489,26 +406,7 @@ void WindAnalyser::slot_newEstimate(Vector a, int quality)
   DebugStore(Temp);
 #endif
 
-  windstore.slot_measurement(a, quality);
+  windstore.slot_measurement(nmeaInfo, derivedInfo, a, quality);
 }
 
-void WindAnalyser::slot_newConstellation() {
-  /*
-  satCnt=gps->getLastSatInfo().satCount;
-  if (active && (satCnt<minSatCnt))  //we are active, but the satcount drops below minimum
-  {
-    active=false;
-    curModeOK=true;
-    return;
-  }
 
-  if (!active && curModeOK && satCnt>=minSatCnt) { //we are not active because we had low satcount, but that has been rectified so we become active
-    //initialize analyser-parameters
-    startmarker=calculator->samplelist->at(0)->marker;
-    startheading=calculator->samplelist->at(0)->vector.getAngleDeg();
-    active=true;
-    minVector=calculator->samplelist->at(0)->vector.Clone();
-    maxVector=minVector.Clone();
-  }
-  */
-}

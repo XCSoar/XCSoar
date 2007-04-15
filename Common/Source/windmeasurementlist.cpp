@@ -52,10 +52,7 @@ Copyright_License {
 #include "windmeasurementlist.h"
 
 
-WindMeasurementList::WindMeasurementList(NMEA_INFO *thenmeaInfo,
-					 DERIVED_INFO *thederivedInfo){
-  nmeaInfo = thenmeaInfo;
-  derivedInfo = thederivedInfo;
+WindMeasurementList::WindMeasurementList(){
   nummeasurementlist = 0;
 }
 
@@ -76,7 +73,7 @@ WindMeasurementList::~WindMeasurementList(){
 extern int iround(double);
 
 
-Vector WindMeasurementList::getWind(double alt, bool *found){
+Vector WindMeasurementList::getWind(double Time, double alt, bool *found){
   //relative weight for each factor
   #define REL_FACTOR_QUALITY 100
   #define REL_FACTOR_ALTITUDE 100
@@ -90,7 +87,7 @@ Vector WindMeasurementList::getWind(double alt, bool *found){
   unsigned int quality=0, q_quality=0, a_quality=0, t_quality=0;
   Vector result;
   WindMeasurement * m;
-  int now= (int)(nmeaInfo->Time);
+  int now= (int)(Time);
   double altdiff=0;
   double timediff=0;
 
@@ -102,7 +99,7 @@ Vector WindMeasurementList::getWind(double alt, bool *found){
   for(uint i=0;i< nummeasurementlist; i++) {
     m= measurementlist[i];
     altdiff= (alt - m->altitude)*1.0/altRange;
-    timediff= fabs((now - m->time)/timeRange);
+    timediff= fabs((double)(now - m->time)/timeRange);
 
     if ((fabs(altdiff)< 1.0) && (timediff < 1.0)) {
 
@@ -140,10 +137,11 @@ Vector WindMeasurementList::getWind(double alt, bool *found){
 
 
 /** Adds the windvector vector with quality quality to the list. */
-void WindMeasurementList::addMeasurement(Vector vector, double alt, int quality){
+void WindMeasurementList::addMeasurement(double Time,
+                                         Vector vector, double alt, int quality){
   uint index;
   if (nummeasurementlist==MAX_MEASUREMENTS) {
-    index = getLeastImportantItem();
+    index = getLeastImportantItem(Time);
     delete measurementlist[index];
     nummeasurementlist--;
   } else {
@@ -154,7 +152,7 @@ void WindMeasurementList::addMeasurement(Vector vector, double alt, int quality)
   wind->vector.y = vector.y;
   wind->quality=quality;
   wind->altitude=alt;
-  wind->time= (long)nmeaInfo->Time;
+  wind->time= (long)Time;
   measurementlist[index] = wind;
   nummeasurementlist++;
 }
@@ -163,7 +161,7 @@ void WindMeasurementList::addMeasurement(Vector vector, double alt, int quality)
  * getLeastImportantItem is called to identify the item that should be
  * removed if the list is too full. Reimplemented from LimitedList.
  */
-uint WindMeasurementList::getLeastImportantItem() {
+uint WindMeasurementList::getLeastImportantItem(double Time) {
 
   int maxscore=0;
   int score=0;
@@ -177,7 +175,7 @@ uint WindMeasurementList::getLeastImportantItem() {
     //quality-point (scale: 1 to 5) is equal to 10 minutes.
 
     score=600*(6-measurementlist[i]->quality);
-    score+= (int)(nmeaInfo->Time - (double)measurementlist[i]->time);
+    score+= (int)(Time - (double)measurementlist[i]->time);
     if (score>maxscore) {
       maxscore=score;
       founditem=i;

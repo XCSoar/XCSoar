@@ -1032,7 +1032,7 @@ HRESULT SetRegistryString(const TCHAR *szRegValue, TCHAR *Pos)
 
 void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex)
 {
-  DWORD Temp;
+  DWORD Temp=0;
 
   if(GetFromRegistry(szRegistryPort1Index,&Temp)==ERROR_SUCCESS)
     (*PortIndex) = Temp;
@@ -1050,7 +1050,7 @@ void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex)
 
 void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex)
 {
-  DWORD Temp;
+  DWORD Temp=0;
 
   if(GetFromRegistry(szRegistryPort2Index,&Temp)==ERROR_SUCCESS)
     (*PortIndex) = Temp;
@@ -2235,7 +2235,7 @@ void ReadProfile(TCHAR *szFile)
 
 double ScreenAngle(int x1, int y1, int x2, int y2)
 {
-  return atan2(y2-y1, x2-x1)*RAD_TO_DEG;
+  return atan2((double)y2-y1, (double)x2-x1)*RAD_TO_DEG;
 }
 
 void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top, TCHAR *szMessageBuffer, TCHAR *szTitleBuffer )
@@ -4196,7 +4196,7 @@ void CreateDirectoryIfAbsent(TCHAR *filename) {
 
 //////////
 
-static interface_timeout;
+static int interface_timeout;
 
 void InterfaceTimeoutReset(void) {
   interface_timeout = 0;

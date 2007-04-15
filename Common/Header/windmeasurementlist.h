@@ -37,7 +37,7 @@ struct WindMeasurement {
 
 class WindMeasurementList {
 public:
-  WindMeasurementList(NMEA_INFO *thenmeaInfo, DERIVED_INFO *thederivedInfo);
+  WindMeasurementList();
   ~WindMeasurementList();
 
   /**
@@ -45,9 +45,9 @@ public:
    * if no valid vector could be calculated (for instance: too little or
    * too low quality data).
    */
-  Vector getWind(double alt, bool *found);
+  Vector getWind(double Time, double alt, bool *found);
   /** Adds the windvector vector with quality quality to the list. */
-  void addMeasurement(Vector vector, double alt, int quality);
+  void addMeasurement(double Time, Vector vector, double alt, int quality);
 
 protected:
   WindMeasurement *measurementlist[MAX_MEASUREMENTS];
@@ -57,12 +57,9 @@ protected:
    * getLeastImportantItem is called to identify the item that should be
    * removed if the list is too full. Reimplemented from LimitedList.
    */
-  virtual unsigned int getLeastImportantItem(void);
+  virtual unsigned int getLeastImportantItem(double Time);
 
  private:
-  DERIVED_INFO *derivedInfo;
-  NMEA_INFO *nmeaInfo;
-
 };
 
 #endif
