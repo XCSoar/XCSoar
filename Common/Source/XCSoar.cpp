@@ -2959,9 +2959,7 @@ void UnlockTaskData() {
 #endif
   if (csCount_TaskData)
     csCount_TaskData--;
-  //  if (csCount_TaskData==0) {
-    LeaveCriticalSection(&CritSec_TaskData);
-    //  }
+  LeaveCriticalSection(&CritSec_TaskData);
 }
 
 
@@ -2979,9 +2977,7 @@ void UnlockFlightData() {
 #endif
   if (csCount_FlightData)
     csCount_FlightData--;
-  //  if (csCount_FlightData==0) {
-    LeaveCriticalSection(&CritSec_FlightData);
-    //  }
+  LeaveCriticalSection(&CritSec_FlightData);
 }
 
 void LockTerrainDataCalculations() {
@@ -3027,9 +3023,7 @@ void UnlockEventQueue() {
 #endif
   if (csCount_EventQueue)
     csCount_EventQueue--;
-  //  if (csCount_EventQueue==0) {
-    LeaveCriticalSection(&CritSec_EventQueue);
-    //  }
+  LeaveCriticalSection(&CritSec_EventQueue);
 }
 
 

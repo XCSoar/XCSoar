@@ -379,10 +379,11 @@ double AATDistance::DistanceCovered(double longitude,
                                     double latitude,
                                     int taskwaypoint) {
   (void)taskwaypoint; // unused
-  double retval= DistanceCovered_internal(longitude, latitude, false);
+  double retval;
   LockTaskData();
-  return retval;
+  retval= DistanceCovered_internal(longitude, latitude, false);
   UnlockTaskData();
+  return retval;
 }
 
 
