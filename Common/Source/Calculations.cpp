@@ -178,11 +178,11 @@ void RefreshTaskStatistics(void) {
 
 int getFinalWaypoint() {
   int i;
-  i=ActiveWayPoint;
+  i=max(-1,min(MAXTASKPOINTS,ActiveWayPoint));
 
   i++;
   LockTaskData();
-  while((Task[i].Index != -1) && (i<MAXTASKPOINTS))
+  while((i<MAXTASKPOINTS) && (Task[i].Index != -1))
     {
       i++;
     }
@@ -192,15 +192,15 @@ int getFinalWaypoint() {
 
 
 static bool IsFinalWaypoint(void) {
+  bool retval;
   LockTaskData();
-  if(ActiveWayPoint < MAXTASKPOINTS-1) {
-    if(Task[ActiveWayPoint+1].Index >= 0) {
-      UnlockTaskData();
-      return false;
-    }
+  if (ValidTaskPoint(ActiveWayPoint) && (Task[ActiveWayPoint+1].Index >= 0)) {
+    retval = false;
+  } else {
+    retval = true;
   }
   UnlockTaskData();
-  return true;
+  return retval;
 }
 
 extern int FastLogNum; // number of points to log at high rate
@@ -1676,10 +1676,7 @@ bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                            bool &LastInSector)
 {
   (void)Calculated;
-  if (!WayPointList) return false;
-  if(Index == -1) {
-    return false;
-  }
+  if (!ValidWayPoint(Index)) return false;
 
   // No Task Loaded
 
@@ -2190,7 +2187,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
   static double t1last = 0;
   double TotalTime=0, TotalDistance=0, Vfinal=0;
 
-  if (!WayPointList) return;
+  if (!ValidTaskPoint(ActiveWayPoint)) return;
 
   if (Calculated->ValidFinish) return;
 
@@ -2199,7 +2196,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
   Calculated->TaskSpeed = 0;
   Calculated->TaskSpeedInstantaneous = 0;
 
-  if (ActiveWayPoint==0) {
+  if (ActiveWayPoint==0) { // no task speed before start
     return;
   }
 
@@ -3691,10 +3688,9 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   int i;
   double LegCovered, LegDistance;
 
-  if (!WayPointList) return 0;
   if (Calculated->ValidFinish) return 0;
 
-  if (ActiveWayPoint <1) return 0;
+  if (ActiveWayPoint==0) return 0; // no e mc before start
   if (!ValidTaskPoint(ActiveWayPoint) || !ValidTaskPoint(ActiveWayPoint-1)) return 0;
   if (Calculated->TaskStartTime<0) return 0;
 
