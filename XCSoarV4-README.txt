@@ -20,6 +20,14 @@ Todo:
 - Option for modified colors for red/green colorblind pilots
   (final glide bar, flarm targets)
 
+Changes from 5.0.8:
+- Fixed bug in wind initialisation/calculation
+- AAT start/finish radials step in 1 degree increments
+- Fixes for build on VS2005 (PC)
+- Fixed various out of bound bugs for task waypoints
+- Fixed display of topology labels
+- Fixed AAT distance thread dead lock
+
 Changes from 5.0.7:
 
 - FIXED Start arm premature
