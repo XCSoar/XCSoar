@@ -358,14 +358,14 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
 
         // Directly above or below airspace
 
-        Units::FormatUserAltitude(fabs(pAS.vDistance),DistanceText, 7);
+        Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
         if (pAS.vDistance > 0) {
           wsprintf(sTmp, TEXT("< %c %s ab %s"), 
                    sAckIndicator[pAS.Acknowledge], 
                    sType, DistanceText);
         }
         if (pAS.vDistance < 0) {
-          Units::FormatUserAltitude(fabs(pAS.vDistance),DistanceText, 7);
+          Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
           wsprintf(sTmp, TEXT("< %c %s bl %s"), 
                    sAckIndicator[pAS.Acknowledge], 
                    sType, DistanceText);
@@ -376,7 +376,7 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
 
           // Close to airspace altitude, horizontally separated
 
-          Units::FormatUserDistance(fabs(pAS.hDistance),DistanceText, 7);
+          Units::FormatUserDistance(fabs((double)pAS.hDistance),DistanceText, 7);
           wsprintf(sTmp, TEXT("< %c %s H %s"), sAckIndicator[pAS.Acknowledge],
                    sType, DistanceText);
         } else {
@@ -384,7 +384,7 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
           // Effectively above or below airspace, steep climb or descent 
           // necessary to enter
 
-          Units::FormatUserAltitude(fabs(pAS.vDistance),DistanceText, 7);
+          Units::FormatUserAltitude(fabs((double)pAS.vDistance),DistanceText, 7);
           if (pAS.vDistance > 0) {
             wsprintf(sTmp, TEXT("< %c %s ab %s"), 
                      sAckIndicator[pAS.Acknowledge], 

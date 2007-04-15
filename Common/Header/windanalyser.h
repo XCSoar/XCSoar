@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.h,v 1.5 2005/08/21 09:10:53 jwharington Exp $
+**   $Id: windanalyser.h,v 1.6 2007/04/15 20:00:01 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -41,7 +41,7 @@ class WindSample {
 class WindAnalyser  {
 
 public:
-    WindAnalyser(NMEA_INFO *thenmeaInfo, DERIVED_INFO *thederivedInfo);
+    WindAnalyser();
     ~WindAnalyser();
 
     WindStore windstore;
@@ -57,23 +57,24 @@ public:
     /**
      * Called if the flightmode changes
      */
-    void slot_newFlightMode(bool left, int);
+    void slot_newFlightMode(NMEA_INFO *nmeaInfo,
+                            DERIVED_INFO *derivedInfo,
+                            bool left, int);
     /**
      * Called if a new sample is available in the samplelist.
      */
-    void slot_newSample();
+    void slot_newSample(NMEA_INFO *nmeaInfo,
+                        DERIVED_INFO *derivedInfo);
 
     // used to update output if altitude changes
-    void slot_Altitude();
+    void slot_Altitude(NMEA_INFO *nmeaInfo,
+                       DERIVED_INFO *derivedInfo);
 
-    void slot_newEstimate(Vector v, int quality);
+    void slot_newEstimate(NMEA_INFO *nmeaInfo,
+                          DERIVED_INFO *derivedInfo,
+                          Vector v, int quality);
 
-    /**
-     * Called if a new satelite constellation has been detected.
-     */
-    void slot_newConstellation();
-
-    void calcThermalDrift();
+    //    void calcThermalDrift();
 private: // Private attributes
     int circleCount; //we are counting the number of circles, the first onces are probably not very round
     bool circleLeft; //true=left, false=right
@@ -100,11 +101,9 @@ private: // Private attributes
     int numwindsamples;
 
 private: // Private memberfunctions
-    void _calcWind();
-    void _calcWindNew();
+    void _calcWind(NMEA_INFO *nmeaInfo,
+                   DERIVED_INFO *derivedInfo);
 
-  DERIVED_INFO *derivedInfo;
-  NMEA_INFO *nmeaInfo;
 };
 
 #endif

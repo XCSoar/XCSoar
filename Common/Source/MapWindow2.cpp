@@ -653,8 +653,8 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
                       DrawInfo.Latitude, 
                       *Orig_Aircraft);
 
-        if ((fabs(Orig_Aircraft->x-screen.x)<(rc.right-rc.left)/3)
-            && (fabs(Orig_Aircraft->y-screen.y)<(rc.bottom-rc.top)/3)) {
+        if ((fabs((double)Orig_Aircraft->x-screen.x)<(rc.right-rc.left)/3)
+            && (fabs((double)Orig_Aircraft->y-screen.y)<(rc.bottom-rc.top)/3)) {
           
         } else {
           // out of bounds, center on aircraft

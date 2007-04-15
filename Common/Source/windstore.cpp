@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.13 2006/05/22 08:35:03 jwharington Exp $
+**   $Id: windstore.cpp,v 1.14 2007/04/15 20:00:11 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -52,11 +52,9 @@ Copyright_License {
 #include "windstore.h"
 #include "XCSoar.h"
 
-WindStore::WindStore(NMEA_INFO *thenmeaInfo, DERIVED_INFO *thederivedInfo) {
+WindStore::WindStore() {
   //create the lists
-  windlist = new WindMeasurementList(thenmeaInfo, thederivedInfo);
-  nmeaInfo = thenmeaInfo;
-  derivedInfo = thederivedInfo;
+  windlist = new WindMeasurementList();
   updated = true;
 }
 
@@ -71,11 +69,13 @@ WindStore::~WindStore(){
   * good the measurement is. Higher quality measurements are more
   * important in the end result and stay in the store longer.
   */
-void WindStore::slot_measurement(Vector windvector, int quality){
+void WindStore::slot_measurement(NMEA_INFO *nmeaInfo,
+                                 DERIVED_INFO *derivedInfo,
+                                 Vector windvector, int quality){
   updated = true;
-  windlist->addMeasurement(windvector, nmeaInfo->Altitude, quality);   
+  windlist->addMeasurement(nmeaInfo->Time, windvector, nmeaInfo->Altitude, quality);   
   //we may have a new wind value, so make sure it's emitted if needed!
-  recalculateWind();  
+  recalculateWind(nmeaInfo, derivedInfo);  
 }
 
 
@@ -85,11 +85,12 @@ void WindStore::slot_measurement(Vector windvector, int quality){
   * newWind signal.
   */
 
-void WindStore::slot_Altitude(){
+void WindStore::slot_Altitude(NMEA_INFO *nmeaInfo,
+                              DERIVED_INFO *derivedInfo){
 
   if ((fabs(nmeaInfo->Altitude-_lastAltitude)>100.0)||(updated)) {
     //only recalculate if there is a significant change
-    recalculateWind();
+    recalculateWind(nmeaInfo, derivedInfo);
 
     updated = false;
     _lastAltitude=nmeaInfo->Altitude;
@@ -97,16 +98,18 @@ void WindStore::slot_Altitude(){
 }
 
 
-Vector WindStore::getWind(double h, bool *found) {
-  return windlist->getWind(h, found);
+Vector WindStore::getWind(double Time, double h, bool *found) {
+  return windlist->getWind(Time, h, found);
 }
 
 /** Recalculates the wind from the stored measurements.
   * May result in a newWind signal. */
 
-void WindStore::recalculateWind() {
+void WindStore::recalculateWind(NMEA_INFO *nmeaInfo,
+                                DERIVED_INFO *derivedInfo) {
   bool found;
-  Vector CurWind= windlist->getWind(nmeaInfo->Altitude, &found);
+  Vector CurWind= windlist->getWind(nmeaInfo->Time,
+                                    nmeaInfo->Altitude, &found);
 
   if (found) {
     if ((fabs(CurWind.x-_lastWind.x)>1.0) || 
@@ -116,14 +119,15 @@ void WindStore::recalculateWind() {
       updated = false;
       _lastAltitude=nmeaInfo->Altitude;
       
-      newWind(CurWind);
+      newWind(nmeaInfo, derivedInfo, CurWind);
     }
   } // otherwise, don't change anything
 
 }
 
 
-void WindStore::newWind(Vector &wind) {
+void WindStore::newWind(NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo, 
+                        Vector &wind) {
   //
   double mag = sqrt(wind.x*wind.x+wind.y*wind.y);
   double bearing;

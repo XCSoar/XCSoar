@@ -96,11 +96,11 @@
     </WndProperty>
 
   <WndProperty Name="prpAATStartRadial" Caption="Start radial"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Start radial of the AAT observation area for sector type.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=360 Step=10/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=360 Step=1/>
     </WndProperty>
 
   <WndProperty Name="prpAATFinishRadial" Caption="Finish radial"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Finish radial of the AAT observation area for sector type.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=360 Step=10/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=360 Step=1/>
     </WndProperty>
 
   </WndFrame>

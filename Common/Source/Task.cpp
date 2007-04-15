@@ -900,6 +900,9 @@ void LoadNewTask(TCHAR *szFileName)
 	    Task[i].AATCircleRadius = Temp */
 
           if(!ValidWayPoint(Temp.Index) && (Temp.Index != -1)) {
+            // Task is only invalid here if the index is out of range
+            // of the waypoints and not equal to -1.
+            // (Because -1 indicates a null task item)
 	    TaskInvalid = true;
 	  }
 
@@ -998,7 +1001,7 @@ bool ValidTaskPoint(int i) {
   LockTaskData();
   if ((i<0) || (i>= MAXTASKPOINTS)) 
     retval = false;
-  if (!ValidWayPoint(Task[i].Index)) 
+  else if (!ValidWayPoint(Task[i].Index)) 
     retval = false;
   UnlockTaskData();
   return retval;

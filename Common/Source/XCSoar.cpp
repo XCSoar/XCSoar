@@ -1129,7 +1129,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 #endif
  
-  wcscat(XCSoar_Version, TEXT("5.0.8 "));
+  wcscat(XCSoar_Version, TEXT("5.0.9 BETA "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -2278,7 +2278,7 @@ void ProcessChar2 (char c)
   static TCHAR BuildingString[100];
   static int i = 0;
 
-  if (ProgramStarted<=3) return; // ignore everything until started
+  if (ProgramStarted<3) return; // ignore everything until started
 
   if (i<90) {
     if(c=='\n') {

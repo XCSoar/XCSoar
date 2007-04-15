@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.h,v 1.3 2005/08/21 06:52:35 jwharington Exp $
+**   $Id: windstore.h,v 1.4 2007/04/15 20:00:01 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -31,8 +31,7 @@
 class WindStore  {
 
 public: 
-  WindStore(NMEA_INFO *thenmeaInfo, DERIVED_INFO *thederivedInfo
-	    );
+  WindStore();
   ~WindStore();
   
 public: // Public slots
@@ -41,24 +40,24 @@ public: // Public slots
     * measurement is. Higher quality measurements are more important in the
     * end result and stay in the store longer.
     */
-  void slot_measurement(Vector windvector, int quality);
+  void slot_measurement(NMEA_INFO *basic, DERIVED_INFO *derived,
+                        Vector windvector, int quality);
   /** Called if the altitude changes.
     * Determines where measurements are stored and may result in a newWind
     * signal. */
-  void slot_Altitude();
+  void slot_Altitude(NMEA_INFO *basic, DERIVED_INFO *derived);
 
   // signals
   /**
     * Send if a new wind vector has been established. This may happen as
     * new measurements flow in, but also if the altitude changes.
     */
-  void newWind(Vector& wind);
+  void newWind(NMEA_INFO *basic, DERIVED_INFO *derived,
+               Vector& wind);
 
-  Vector getWind(double h, bool *found);
+  Vector getWind(double Time, double h, bool *found);
 
 private:
-  DERIVED_INFO *derivedInfo;
-  NMEA_INFO *nmeaInfo;
 
   Vector _lastWind;
   double _lastAltitude;
@@ -66,7 +65,7 @@ private:
 
   /** Recalculates the wind from the stored measurements.
     * May result in a newWind signal. */
-  void recalculateWind();
+  void recalculateWind(NMEA_INFO *basic, DERIVED_INFO *derived);
   
   bool updated;
 
