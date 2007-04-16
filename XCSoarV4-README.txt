@@ -27,6 +27,7 @@ Changes from 5.0.8:
 - Fixed various out of bound bugs for task waypoints
 - Fixed display of topology labels
 - Fixed AAT distance thread dead lock
+- Volkslogger parser fix by Rolf Muller-Nilsen
 
 Changes from 5.0.7:
 
