@@ -188,9 +188,17 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
         }
 
       // RMN:  Volkslogger string
+	  /*  This part is borked.
       if(_tcscmp(SentanceString,TEXT("PGCS"))==0)
         {
           return PGCS(&String[7],GPS_INFO);
+        }
+	    */
+
+	  // RMN: Volkslogger - fixed
+	  if(_tcscmp(SentanceString,TEXT("PGCS1"))==0)
+        {
+          return PGCS1(&String[7],GPS_INFO);
         }
 
       // FLARM sentences
@@ -848,7 +856,7 @@ BOOL NMEAParser::PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
   // the B50-string for Borgelt, it's % degradation, for us, it is %
   // of max performance
   ExtractParameter(String,ctemp,4);
-  GPS_INFO->Bugs = 1.0-StrToDouble(ctemp,NULL);
+  GPS_INFO->Bugs = 1.0-StrToDouble(ctemp,NULL)/100;
   BUGS = GPS_INFO->Bugs;
 
   /*ExtractParameter(String,ctemp,5);
@@ -878,7 +886,7 @@ BOOL NMEAParser::PBB50(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 // RMN: Volkslogger
 // Source data from IGC Replay by Johny Johansen (www.johny.dk)
-BOOL NMEAParser::PGCS(TCHAR *String, NMEA_INFO *GPS_INFO)
+BOOL NMEAParser::PGCS1(TCHAR *String, NMEA_INFO *GPS_INFO)
 {
 
   TCHAR ctemp[80];
@@ -890,34 +898,18 @@ BOOL NMEAParser::PGCS(TCHAR *String, NMEA_INFO *GPS_INFO)
   ExtractParameter(String,ctemp,2);		// four characers, hex, barometric altitude
   GPS_INFO->BaroAltitude = HexStrToDouble(ctemp,NULL);
 
-  ExtractParameter(String,ctemp,3);		// four characters, hex, constant.  Value 1371 (dec)
-  ExtractParameter(String,ctemp,4);		// two characters, hex or dec, constant. Value 5. Probably satellite count.
-  nSatellites = (int)(min(12,HexStrToDouble(ctemp, NULL)));
-  if (nSatellites==0) {
-    gpsValid = false;
-  }
-  if (activeGPS) {
-    GPS_INFO->SatellitesUsed = (int)(min(12,StrToDouble(ctemp, NULL)));
-  }
+  // ExtractParameter(String,ctemp,3);		// four characters, hex, constant.  Value 1371 (dec)
+  // ExtractParameter(String,ctemp,4);		// two characters, hex or dec, constant. Value 5. Some constant
+  // nSatellites = (int)(min(12,HexStrToDouble(ctemp, NULL)));
+  gpsValid = true;
+
+  GPS_INFO->SatellitesUsed = 4;
+  // just to make XCSoar quit complaining. VL doesn't tell how many satellites it uses.  Without this XCSoar won't do wind measurements.
+
 
   if (ReplayLogger::IsEnabled()) {
     return TRUE;
   }
-
-  // END OF STRING
-  /*GPS_INFO->Ballast =
-    (StrToDouble(ctemp,NULL)-1)*(WEIGHTS[0]+WEIGHTS[1])/WEIGHTS[2];
-  BALLAST = GPS_INFO->Ballast;
-
-  GPS_INFO->AirspeedAvailable = TRUE;
-  GPS_INFO->IndicatedAirspeed = vias;
-  GPS_INFO->TrueAirspeed = vtas;
-  GPS_INFO->VarioAvailable = TRUE;
-  GPS_INFO->Vario = wnet;
-
-  VarioUpdated = TRUE;
-  PulseEvent(varioTriggerEvent);
-*/
   return FALSE;
 }
 

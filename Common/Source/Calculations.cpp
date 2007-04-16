@@ -102,7 +102,7 @@ static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double 
 static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
 static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static bool  InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static int  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int i);
+static bool  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int i);
 static bool  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int i);
 static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void CalculateNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -1529,6 +1529,7 @@ bool InAATTurnSector(double longitude, double latitude,
                     int thepoint)
 {
   double AircraftBearing;
+  bool retval = false;
 
   if (!ValidTaskPoint(thepoint)) {
     return false;
@@ -1545,8 +1546,8 @@ bool InAATTurnSector(double longitude, double latitude,
   if(Task[thepoint].AATType ==  CIRCLE) {
     if(distance < Task[thepoint].AATCircleRadius)
       {
-        UnlockTaskData();
-        return true;
+        retval = true;
+        goto OnExit;
       }
   } else if(distance < Task[thepoint].AATSectorRadius) {
 
@@ -1557,8 +1558,8 @@ bool InAATTurnSector(double longitude, double latitude,
          &&
          (AircraftBearing < Task[thepoint].AATFinishRadial)
          ) {
-        UnlockTaskData();
-        return true;
+        retval = true;
+        goto OnExit;
       }
     }
 
@@ -1569,13 +1570,14 @@ bool InAATTurnSector(double longitude, double latitude,
          ||
          (AircraftBearing < Task[thepoint].AATFinishRadial)
          ) {
-        UnlockTaskData();
-        return true;
+        retval = true;
+        goto OnExit;
       }
     }
   }
+OnExit:
   UnlockTaskData();
-  return false;
+  return retval;
 }
 
 
@@ -1591,12 +1593,13 @@ bool ValidFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 }
 
 
-int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+bool InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                    int i)
 {
   static int LastInSector = FALSE;
   double AircraftBearing;
   double FirstPointDistance;
+  bool retval = false;
 
   if (!WayPointList) return FALSE;
 
@@ -1622,8 +1625,8 @@ int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   if(!FinishLine) // Start Circle
     {
-      UnlockTaskData();
-      return inrange;
+      retval = inrange;
+      goto OnExit;
     }
 
   // Finish line
@@ -1665,8 +1668,9 @@ int InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   } else {
     LastInSector = false;
   }
-
-  return FALSE;
+ OnExit:
+  UnlockTaskData();
+  return retval;
 }
 
 
@@ -1752,7 +1756,7 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
   static bool LastInSector = false;
 
   bool isInSector= false;
-  bool retval;
+  bool retval=false;
 
   if (!Calculated->Flying) {
     return false;
@@ -1765,8 +1769,8 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
   if ((ActiveWayPoint>0)
       &&(Task[ActiveWayPoint+1].Index < 0)) {
     // don't detect start if finish is selected
-    UnlockTaskData();
-    return false;
+    retval = false;
+    goto OnExit;
   }
 
   retval = InStartSector_Internal(Basic, Calculated,
@@ -1801,8 +1805,11 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
       RefreshTask();
     }
   }
+  retval = isInSector;
+
+ OnExit:
   UnlockTaskData();
-  return isInSector;
+  return retval;
 }
 
 #define AUTOADVANCE_MANUAL 0
@@ -2100,6 +2107,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   double w0lat;
   double w0lon;
   double LegTime, LegDistance, LegBearing, LegAltitude;
+  bool retval = false;
 
   // Calculate altitude required from start of task
 
@@ -2160,22 +2168,23 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
 
   if (*ifinal==0) {
-    UnlockTaskData();
-    return false;
+    retval = false;
+    goto OnExit;
   }
 
   TotalAltitude += SAFETYALTITUDEARRIVAL;
 
   if (!ValidTaskPoint(*ifinal)) {
     Calculated->TaskAltitudeRequiredFromStart = TotalAltitude;
-    UnlockTaskData();
-    return false;
+    retval = false;
   } else {
     TotalAltitude += WayPointList[Task[*ifinal].Index].Altitude;
     Calculated->TaskAltitudeRequiredFromStart = TotalAltitude;
-    UnlockTaskData();
-    return true;
+    retval = true;
   }
+ OnExit:
+  UnlockTaskData();
+  return retval;
 }
 
 

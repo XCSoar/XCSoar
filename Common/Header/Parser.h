@@ -166,7 +166,7 @@ class NMEAParser {
   BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO);
 
   // RMN added volkslogger support
-  BOOL PGCS(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PGCS1(TCHAR *String, NMEA_INFO *GPS_INFO);
 
   // FLARM sentances
   BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO);
