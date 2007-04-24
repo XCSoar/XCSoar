@@ -1791,7 +1791,7 @@ void StartArc(HDC hdc,
 }
 
 
-int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip)
+int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip, bool fill)
 {
   POINT pt[65];
   int i;
@@ -1829,9 +1829,13 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip)
   pt[j].y = y + (long) (radius * ycoords[0]);
 
   if (clip) {
-    ClipPolygon(hdc,pt,j+1,rc);
+    ClipPolygon(hdc,pt,j+1,rc, fill);
   } else {
-    Polygon(hdc,pt,j+1);
+    if (fill) {
+      Polygon(hdc,pt,j+1);
+    } else {
+      Polyline(hdc,pt,j+1);
+    }
   }
   return TRUE;
 }
@@ -3237,19 +3241,18 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
   for (i = 0; i < wcslen(old_string); i++) {
     if (used < 2045) {
       if (old_string[i] == '\\' ) {
-	if (old_string[i + 1] == 'r') {
-	  // Do nothing
-	  i++;
-	} else if (old_string[i + 1] == 'n') {
-	  buffer[used++] = '\r';
-	  buffer[used++] = '\n';
-	  i++;
-	} else if (old_string[i + 1] == '\\') {
-	  buffer[used++] = '\\';
-	  i++;
-	} else {
-	  buffer[used++] = old_string[i];
-	}
+        if (old_string[i + 1] == 'r') {
+          buffer[used++] = '\r';
+          i++;
+        } else if (old_string[i + 1] == 'n') {
+          buffer[used++] = '\n';
+          i++;
+        } else if (old_string[i + 1] == '\\') {
+          buffer[used++] = '\\';
+          i++;
+        } else {
+          buffer[used++] = old_string[i];
+        }
       } else {
 	buffer[used++] = old_string[i];
       }

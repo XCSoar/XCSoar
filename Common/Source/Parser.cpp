@@ -159,8 +159,6 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
       return FALSE;
     }
 
-  if(_tcslen(String)>90)
-
   if(String[0] != '$')
     {
       return FALSE;
@@ -187,18 +185,12 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
           return PBB50(&String[7], GPS_INFO);
         }
 
-      // RMN:  Volkslogger string
-	  /*  This part is borked.
-      if(_tcscmp(SentanceString,TEXT("PGCS"))==0)
+      // RMN: Volkslogger - fixed
+      // PGCS-identifier is only 4 characters (non-conforming)
+      // $PGCS,1,0EC0,FFF9,0C6E,02*61
+      if(_tcscmp(SentanceString,TEXT("PGCS,"))==0)
         {
-          return PGCS(&String[7],GPS_INFO);
-        }
-	    */
-
-	  // RMN: Volkslogger - fixed
-	  if(_tcscmp(SentanceString,TEXT("PGCS1"))==0)
-        {
-          return PGCS1(&String[7],GPS_INFO);
+          return PGCS1(&String[6],GPS_INFO);
         }
 
       // FLARM sentences

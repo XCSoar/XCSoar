@@ -929,8 +929,7 @@ void ClipPolygon(HDC hdc, POINT *mptin, int inLength, RECT rc, bool fill) {
 
   if (fill) {
     if (outLength>2) {
-      Polygon(hdc, ptout,
-              outLength);
+      Polygon(hdc, ptout, outLength);
     }
   } else {
     if (outLength>1) {

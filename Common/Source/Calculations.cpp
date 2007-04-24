@@ -83,6 +83,7 @@ int    AutoMcMode = 0;
 // 1: Set to average if in climb mode
 // 2: Average if in climb mode, final glide in final glide mode
 
+static int getFinalWaypoint(void);
 static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 static void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -126,10 +127,24 @@ static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (Calculated->TaskDistanceToGo<=0) {
     return 0;
   }
-  double hs = Calculated->TaskDistanceCovered/
+
+  // Fraction of task distance covered
+  double d_fraction = Calculated->TaskDistanceCovered/
     (Calculated->TaskDistanceCovered+Calculated->TaskDistanceToGo);
-  double hx = (Calculated->NavAltitude-Calculated->TaskStartAltitude)*(1.0-hs);
-  return hx;
+
+  // Height relative to start height
+  double dh_start = Calculated->NavAltitude-Calculated->TaskStartAltitude;
+
+  // Height relative to finish height
+  double dh_finish = Calculated->NavAltitude-SAFETYALTITUDEARRIVAL;
+
+  int FinalWayPoint = getFinalWaypoint();
+  if(ValidTaskPoint(FinalWayPoint)) {
+    dh_finish -= WayPointList[Task[FinalWayPoint].Index].Altitude;
+  }
+
+  // Excess height
+  return dh_start*(1.0-d_fraction)+dh_finish*(d_fraction);
 }
 
 
@@ -2236,83 +2251,98 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
     double d2;
     // equivalent distance travelled after final glide
 
-    double h0 = Calculated->TaskAltitudeRequiredFromStart;
-    // total height required from start
+    double hf = SAFETYALTITUDEARRIVAL +
+      WayPointList[Task[ifinal].Index].Altitude;
 
-    //    double h2 = Calculated->TaskAltitudeRequired-Calculated->NavAltitude;
-    // actual height required
+    double h0 = Calculated->TaskAltitudeRequiredFromStart-hf;
+    // total height required from start (takes safety arrival alt
+    // and finish waypoint altitude into account)
 
-    double h1 = Calculated->NavAltitude-SAFETYALTITUDEARRIVAL
-      + WayPointList[Task[ifinal].Index].Altitude;
+    double h1 = max(0,Calculated->NavAltitude-hf);
     // height above target
+
+    double dFinal;
+    // final glide distance
 
     // equivalent speed
     double v2, v1;
 
-    // JB's task speed...
-    if ((t1>0)&&(d1>0)) {
-      v1 = d1/t1;
-      double hx = SpeedHeight(Basic, Calculated);
-      double t1mod = t1-hx/max(0.1,maccready);
-      // only valid if flown for 5 minutes or more
-      if (t1mod>300.0) {
-        Calculated->TaskSpeedAchieved = d1/t1mod;
-      } else {
-        Calculated->TaskSpeedAchieved = d1/t1;
-      }
+    if ((t1<=0) || (d1<=0) || (d0<=0) || (t0<=0) || (h0<=0)) {
+      // haven't started yet or not a real task
+      goto OnExit;
     }
 
-    if ((t1>0)&&(d0>0)&&(t0>0)&&(h1>0)&&(h0>0)&&(Vfinal>0)) {
+    // JB's task speed...
+    double hx = SpeedHeight(Basic, Calculated);
+    double t1mod = t1-hx/max(0.1,maccready);
+    // only valid if flown for 5 minutes or more
+    if (t1mod>300.0) {
+      Calculated->TaskSpeedAchieved = d1/t1mod;
+    } else {
+      Calculated->TaskSpeedAchieved = d1/t1;
+    }
 
-      d2 = d1+min(dr, d0*(h1/h0));
-      // distance that can be usefully final glided from here
+    if (Vfinal<=0) {
+      // can't reach target at current mc
+      goto OnExit;
+    }
 
-      // time at end of final glide
-      t2 = t1+(d2-d1)/Vfinal;
+    // distance that can be usefully final glided from here
+    // (assumes average task glide angle of d0/h0)
+    dFinal = min(dr, d0*min(1.0,h1/h0));
 
-      // average speed to end of final glide from here
-      v2 = d2/t2;
+    // equivalent distance to end of final glide
+    d2 = d1+dFinal;
 
-      Calculated->TaskSpeed = max(v1,v2);
+    // time at end of final glide
+    t2 = t1+dFinal/Vfinal;
 
-      if(Basic->Time <= LastTime) {
-        LastTime = Basic->Time;
-      } else if (Basic->Time-LastTime >=1.0) {
+    // actual task speed achieved so far
+    v1 = d1/t1;
 
-        // Calculate contribution to average task speed.
-        // This is equal to the change in virtual distance
-        // divided by the time step
+    // average speed to end of final glide from here
+    v2 = d2/t2;
 
-        // This is a novel concept.
-        // When climbing at the MC setting, this number should
-        // be similar to the estimated task speed.
-        // When climbing slowly or when flying off-course,
-        // this number will drop.
-        // In cruise at the optimum speed in zero lift, this
-        // number will be similar to the estimated task speed.
+    Calculated->TaskSpeed = max(v1,v2);
 
-        // A low pass filter is applied so it doesn't jump around
-        // too much when circling.
+    if(Basic->Time <= LastTime) {
+      LastTime = Basic->Time;
+    } else if (Basic->Time-LastTime >=1.0) {
 
-        // If this number is higher than the overall task average speed,
-        // it means that the task average speed is increasing.
+      // Calculate contribution to average task speed.
+      // This is equal to the change in virtual distance
+      // divided by the time step
 
-        // When cruising in sink, this number will decrease.
-        // When cruising in lift, this number will increase.
+      // This is a novel concept.
+      // When climbing at the MC setting, this number should
+      // be similar to the estimated task speed.
+      // When climbing slowly or when flying off-course,
+      // this number will drop.
+      // In cruise at the optimum speed in zero lift, this
+      // number will be similar to the estimated task speed.
 
-        // Therefore, it shows well whether at any time the glider
-        // is wasting time.
+      // A low pass filter is applied so it doesn't jump around
+      // too much when circling.
 
-        double delta_d2 = (v2*t1-v2last*t1last);
-        double vdiff = delta_d2/(Basic->Time-LastTime);
-        Calculated->TaskSpeedInstantaneous =
-          Calculated->TaskSpeedInstantaneous*0.98+0.02*vdiff;
-        v2last = v2;
-        t1last = t1;
-        LastTime = Basic->Time;
-      }
+      // If this number is higher than the overall task average speed,
+      // it means that the task average speed is increasing.
+
+      // When cruising in sink, this number will decrease.
+      // When cruising in lift, this number will increase.
+
+      // Therefore, it shows well whether at any time the glider
+      // is wasting time.
+
+      double delta_d2 = (v2*t1-v2last*t1last);
+      double vdiff = delta_d2/(Basic->Time-LastTime);
+      Calculated->TaskSpeedInstantaneous =
+        Calculated->TaskSpeedInstantaneous*0.98+0.02*vdiff;
+      v2last = v2;
+      t1last = t1;
+      LastTime = Basic->Time;
     }
   }
+ OnExit:
   UnlockTaskData();
 
 }
@@ -2554,11 +2584,13 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         fgtt = false;
       }
 
+      double height_below_leg = LegAltitude - Calculated->NavAltitude +
+        SAFETYALTITUDEARRIVAL;
+
       if (Calculated->FinalGlide) {
-        double dha = Calculated->NavAltitude -
-          LegAltitude - SAFETYALTITUDEARRIVAL;
-        if (dha<0) {
-          Calculated->LegTimeToGo += -dha/max(0.1,MACCREADY);
+        if (height_below_leg>0) {
+          Calculated->LegTimeToGo += height_below_leg/max(0.1,MACCREADY);
+          // (need to stop and climb before finish)
         }
       }
 
@@ -2569,17 +2601,11 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
       double LegTimeToGo;
 
-      if((Calculated->NavAltitude - LegAltitude - SAFETYALTITUDEARRIVAL) > 0)
-        {
-          Calculated->LDNext =
-            Calculated->TaskDistanceToGo
-            / (Calculated->NavAltitude
-               - LegAltitude - SAFETYALTITUDEARRIVAL)  ;
-        }
-      else
-        {
-          Calculated->LDNext = 999;
-        }
+      if(height_below_leg < 0) {
+        Calculated->LDNext = -Calculated->TaskDistanceToGo/height_below_leg;
+      } else {
+        Calculated->LDNext = 999;
+      }
 
       i++;
       while(ValidTaskPoint(i) && (!TaskAborted))
@@ -2628,11 +2654,13 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
           TaskAltitudeRequired += LegAltitude;
           TaskAltitudeRequired0 += LegAltitude0;
 
+          double height_below_leg = LegAltitude - Calculated->NavAltitude +
+            SAFETYALTITUDEARRIVAL;
+
           if (i==FinalWayPoint) {
-            double dha = Calculated->NavAltitude -
-              LegAltitude - SAFETYALTITUDEARRIVAL;
-            if (dha<0) {
-              LegTimeToGo += -dha/max(0.1,MACCREADY);
+            if (height_below_leg>0) {
+              LegTimeToGo += height_below_leg/max(0.1,MACCREADY);
+              // (need to stop and climb before finish)
             }
           }
 
@@ -3758,27 +3786,16 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       LegCovered = max(0.1,LegCovered-StartRadius);
     }
 
-//    double altreqfinal =
-      GlidePolar::MacCreadyAltitude(mce,
-                                    LegCovered,
-                                    bearing,
-                                    Calculated->WindSpeed,
-                                    Calculated->WindBearing,
-                                    0, NULL,
-                                    isfinal,
-                                    &time_this);
+    GlidePolar::MacCreadyAltitude(mce,
+                                  LegCovered,
+                                  bearing,
+                                  Calculated->WindSpeed,
+                                  Calculated->WindBearing,
+                                  0, NULL,
+                                  isfinal,
+                                  &time_this);
 
     if (time_this<0) continue;
-
-    /*
-      if (isfinal) {
-      double dha = Calculated->NavAltitude -
-      altreqfinal - SAFETYALTITUDEARRIVAL;
-      if (dha<0) {
-      time_this += -dha/max(0.1, mce);
-      }
-      }
-    */
 
     time_total = time_this;
 

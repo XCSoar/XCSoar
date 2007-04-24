@@ -113,9 +113,9 @@ void InsertWaypoint(int index, bool append) {
     return;
   }
 
-  int indexInsert;
+  int indexInsert = max(ActiveWayPoint,0);
   if (append) {
-    for (i=ActiveWayPoint; i<MAXTASKPOINTS-2; i++) {
+    for (i=indexInsert; i<MAXTASKPOINTS-2; i++) {
       if (Task[i+1].Index<0) {
 	Task[i+1].Index = index;
 	Task[i+1].AATTargetOffsetRadius= 0.0;
@@ -123,8 +123,6 @@ void InsertWaypoint(int index, bool append) {
       }
     }
   } else {
-    indexInsert = ActiveWayPoint;
-
     // Shuffle ActiveWaypoint and all later task points
     // to the right by one position
     for (i=MAXTASKPOINTS-1; i>indexInsert; i--) {
@@ -421,11 +419,11 @@ void CalculateTaskSectors(void)
     }
   }
 
-  for(i=0;i<MAXTASKPOINTS-1;i++)
+  for(i=0;i<=MAXTASKPOINTS-1;i++)
     {
       if((Task[i].Index >=0))
 	{
-	  if (Task[i+1].Index >=0) {
+	  if ((Task[i+1].Index >=0)||(i==MAXTASKPOINTS-1)) {
 
 	    if(i == 0)
 	      {
@@ -464,7 +462,6 @@ void CalculateTaskSectors(void)
 
 	  }
 
-
           FindLatitudeLongitude(WayPointList[Task[i].Index].Latitude,
                                 WayPointList[Task[i].Index].Longitude,
                                 SectorBearing + SectorAngle, SectorSize,
@@ -502,8 +499,7 @@ double AdjustAATTargets(double desired) {
   }
   if (fabs(desired)>1.0) {
     // don't adjust, just retrieve.
-    UnlockTaskData();
-    return av;
+    goto OnExit;
   }
 
   // JMW TODO: Check here for true minimum distance between
@@ -521,6 +517,7 @@ double AdjustAATTargets(double desired) {
                              max(desired,-1.0));
 	}
     }
+ OnExit:
   UnlockTaskData();
   return av;
 }
@@ -549,9 +546,12 @@ void CalculateAATTaskSectors()
     Task[0].AATTargetLon = WayPointList[Task[0].Index].Longitude;
   }
 
-  for(i=1;i<MAXTASKPOINTS-1;i++) {
+  for(i=1;i<MAXTASKPOINTS;i++) {
     if((Task[i].Index >=0)) {
-      if ((Task[i+1].Index <0)) {
+      if ((i==MAXTASKPOINTS-1) || (Task[i+1].Index <0)) {
+        // This must be the final waypoint, so it's not an AAT OZ
+        Task[i].AATTargetLat = WayPointList[Task[i].Index].Latitude;
+        Task[i].AATTargetLon = WayPointList[Task[i].Index].Longitude;
         continue;
       }
 

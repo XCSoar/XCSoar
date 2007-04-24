@@ -2761,11 +2761,11 @@ void MapWindow::DrawStartSector(HDC hdc, RECT rc,
     SelectObject(hdc, hpStartFinishThick);
     Circle(hdc,
            WayPointList[Index].Screen.x,
-           WayPointList[Index].Screen.y,(int)tmp, rc);
+           WayPointList[Index].Screen.y,(int)tmp, rc, false, false);
     SelectObject(hdc, hpStartFinishThin);
     Circle(hdc,
            WayPointList[Index].Screen.x,
-           WayPointList[Index].Screen.y,(int)tmp, rc);
+           WayPointList[Index].Screen.y,(int)tmp, rc, false, false);
   }
 
 }
@@ -2829,12 +2829,12 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
           Circle(hdc,
                  WayPointList[Task[i].Index].Screen.x,
                  WayPointList[Task[i].Index].Screen.y,
-                 (int)tmp, rc);
+                 (int)tmp, rc, false, false);
           SelectObject(hdc, hpStartFinishThin);
           Circle(hdc,
                  WayPointList[Task[i].Index].Screen.x,
                  WayPointList[Task[i].Index].Screen.y,
-                 (int)tmp, rc);
+                 (int)tmp, rc, false, false);
         }
       }
     }
@@ -2854,7 +2854,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
           Circle(hdc,
                  WayPointList[Task[i].Index].Screen.x,
                  WayPointList[Task[i].Index].Screen.y,
-                 (int)tmp, rc);
+                 (int)tmp, rc, false, false);
         }
         if(SectorType== 2) {
           // JMW added german rules
@@ -2864,7 +2864,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
           Circle(hdc,
                  WayPointList[Task[i].Index].Screen.x,
                  WayPointList[Task[i].Index].Screen.y,
-                 (int)tmp, rc);
+                 (int)tmp, rc, false, false);
         }
       }
     }
@@ -2940,7 +2940,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
           Circle(hDCTemp,
                  WayPointList[Task[i].Index].Screen.x,
                  WayPointList[Task[i].Index].Screen.y,
-                 (int)tmp, rc, true);
+                 (int)tmp, rc, true, true);
         }
       else
         {
@@ -3727,7 +3727,8 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
     SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
     for(i=0;i<NumberOfAirspaceCircles;i++) {
       if (AirspaceCircle[i].Visible &&
-          !AirspaceCircle[i]._NewWarnAckNoBrush) {
+          !AirspaceCircle[i]._NewWarnAckNoBrush &&
+          !(iAirspaceBrush[AirspaceCircle[i].Type] == NUMAIRSPACEBRUSHES-1)) {
         found = true;
         // this color is used as the black bit
         SetTextColor(hDCTemp,
@@ -3738,14 +3739,16 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
         Circle(hDCTemp,
                AirspaceCircle[i].Screen.x ,
                AirspaceCircle[i].Screen.y ,
-               AirspaceCircle[i].ScreenR ,rc, true);
+               AirspaceCircle[i].ScreenR ,rc, true, true);
       }
     }
   }
 
   if (AirspaceArea) {
     for(i=0;i<NumberOfAirspaceAreas;i++) {
-      if(AirspaceArea[i].Visible && !AirspaceArea[i]._NewWarnAckNoBrush) {
+      if(AirspaceArea[i].Visible
+         && !AirspaceArea[i]._NewWarnAckNoBrush
+         && !(iAirspaceBrush[AirspaceArea[i].Type] == NUMAIRSPACEBRUSHES-1)) {
 
         found = true;
         // this color is used as the black bit
@@ -3755,7 +3758,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
                      hAirspaceBrushes[iAirspaceBrush[AirspaceArea[i].Type]]);
         ClipPolygon(hDCTemp,
                     AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
-                    AirspaceArea[i].NumPoints, rc);
+                    AirspaceArea[i].NumPoints, rc, true);
       }
     }
   }
@@ -3774,7 +3777,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
         Circle(hDCTemp,
                AirspaceCircle[i].Screen.x ,
                AirspaceCircle[i].Screen.y ,
-               AirspaceCircle[i].ScreenR ,rc);
+               AirspaceCircle[i].ScreenR ,rc, true, false);
       }
     }
   }
@@ -3793,7 +3796,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
         ClipPolygon(hDCTemp,
                     AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
-                    AirspaceArea[i].NumPoints, rc);
+                    AirspaceArea[i].NumPoints, rc, false);
       }
     }
   }

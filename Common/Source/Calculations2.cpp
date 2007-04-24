@@ -94,8 +94,8 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   static double LogLastTime=0;
   static double StatsLastTime=0;
   static double OLCLastTime = 0;
-  double dtLog = 5.0;
-  double dtSnail = 2.0;
+  double dtLog;
+  double dtSnail;
   double dtStats = 60.0;
   double dtOLC = 5.0;
 
@@ -111,15 +111,17 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if(Basic->Time <= OLCLastTime) {
     OLCLastTime = Basic->Time;
   }
-  if (FastLogNum) {
-    dtLog = 1.0;
-  }
 
   // draw snail points more often in circling mode
   if (Calculated->Circling) {
-    dtSnail = LoggerTimeStepCircling*1.0;
+    dtLog = LoggerTimeStepCircling;
+    dtSnail = 1.0;
   } else {
-    dtSnail = LoggerTimeStepCruise*1.0;
+    dtLog = LoggerTimeStepCruise;
+    dtSnail = 5.0;
+  }
+  if (FastLogNum) {
+    dtLog = 1.0;
   }
 
   if (Basic->Time - LogLastTime >= dtLog) {
@@ -181,9 +183,6 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 //////////////////////////////////////////////////////////
 // Final glide through terrain and footprint calculations
 
-static void ExitFinalGlideThroughTerrain() {
-  UnlockTerrainDataCalculations();
-}
 
 
 double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
@@ -221,6 +220,8 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   double altitude;
 
   LockTerrainDataCalculations();
+  double retval = 0;
+  int i=0;
 
   // calculate terrain rounding factor
 
@@ -233,11 +234,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   terrain_dem_calculations.SetTerrainRounding(Xrounding, Yrounding);
 
   altitude = Calculated->NavAltitude;
-  h =  terrain_dem_calculations.GetTerrainHeight(lat, lon);
+  h =  max(0,terrain_dem_calculations.GetTerrainHeight(lat, lon));
   dh = altitude - h - SAFETYALTITUDETERRAIN;
   if (dh<0) {
-    ExitFinalGlideThroughTerrain();
-    return 0;
+    retval = 0;
+    goto OnExit;
   }
 
   latlast = Basic->Latitude;
@@ -250,15 +251,15 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   dlat -= Basic->Latitude;
   dlon -= Basic->Longitude;
 
-  for (int i=0; i<=NUMFINALGLIDETERRAIN; i++) {
+  for (i=0; i<=NUMFINALGLIDETERRAIN; i++) {
     double fi = (i*1.0)/NUMFINALGLIDETERRAIN;
     // fraction of glidemaxrange
 
     if ((maxrange>0)&&(fi>maxrange/glidemaxrange)) {
       // early exit
       *outofrange = true;
-      ExitFinalGlideThroughTerrain();
-      return maxrange;
+      retval = maxrange;
+      goto OnExit;
     }
 
     altitude = (1.0-fi)*Calculated->NavAltitude;
@@ -269,7 +270,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     lon = Basic->Longitude+dlon*fi;
 
     // find height over terrain
-    h =  terrain_dem_calculations.GetTerrainHeight(lat, lon);
+    h =  max(0,terrain_dem_calculations.GetTerrainHeight(lat, lon));
 
     dh = altitude - h - SAFETYALTITUDETERRAIN;
 
@@ -284,11 +285,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
         *retlat = latlast*(1.0-f)+lat*f;
         *retlon = lonlast*(1.0-f)+lon*f;
       }
-      ExitFinalGlideThroughTerrain();
       double distance;
       DistanceBearing(Basic->Latitude, Basic->Longitude, lat, lon,
                       &distance, NULL);
-      return distance;
+      retval = distance;
+      goto OnExit;
     }
     dhlast = dh;
     latlast = lat;
@@ -296,8 +297,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   }
 
   *outofrange = true;
-  ExitFinalGlideThroughTerrain();
-  return glidemaxrange;
+  retval = glidemaxrange;
+
+ OnExit:
+  UnlockTerrainDataCalculations();
+  return retval;
 }
 
 

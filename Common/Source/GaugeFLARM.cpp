@@ -93,6 +93,30 @@ void GaugeFLARM::RenderBg() {
 
 #include "WindowControls.h" // just to get colors
 
+extern HFONT  TitleWindowFont;
+
+/*
+  SetBkColor(mHdcBuf, mColorTitleBk);
+  SetTextColor(mHdcBuf, mColorTitle);
+  SelectObject(mHdcBuf, *mphFontTitle);
+
+  GetTextExtentPoint(mHdcBuf, mTitle, _tcslen(mTitle), &tsize);
+
+  halftextwidth = (mWidth - tsize.cx)>>1;
+
+  x = max(1,recTitle.left + halftextwidth);
+
+  y = recTitle.top + 1 + mpFontHeightTitle->CapitalHeight
+    - mpFontHeightTitle->AscentHeight;
+
+  if (mBorderKind & BORDERLEFT)
+    x+= DEFAULTBORDERPENWIDTH;
+
+  ExtTextOut(mHdcBuf, x, y,
+    ETO_OPAQUE, &recTitle, mTitle, _tcslen(mTitle), NULL);
+*/
+
+
 void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
   HBRUSH redBrush = CreateSolidBrush(RGB(0xFF,0x00,0x00));
   HBRUSH yellowBrush = CreateSolidBrush(RGB(0x00,0xFF,0xFF));
