@@ -13,12 +13,12 @@ Todo:
   - filter out thermals from selectors
   - normal wpt display
   - different icon to normal thermal marker
-
 - Give warning if estimated arrival time is faster than AAT time
 - Full file names for saved/loaded tasks
 - Support for Tasman instruments variometer
 - Option for modified colors for red/green colorblind pilots 
   (final glide bar, flarm targets)
+- Glide range footprint fails over sea
 
 Changes from 5.0.8:
 - Fixed bug in wind initialisation/calculation
@@ -28,6 +28,9 @@ Changes from 5.0.8:
 - Fixed display of topology labels
 - Fixed AAT distance thread dead lock
 - Volkslogger parser fix by Rolf Muller-Nilsen
+- Fixed adjustable logger time steps
+- Fixed AAT distance bug for final waypoint
+- Transparent airspaces are not filled, so airspace below is visible
 
 Changes from 5.0.7:
 

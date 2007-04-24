@@ -108,9 +108,9 @@ static void UpdateButtons(void) {
   if (buttonAircraftRego) {
     GetRegistryString(szRegistryAircraftRego, val, 100);
     if (_tcslen(val)<=0) {
-      _stprintf(text,TEXT("Aircraft rego: (blank)"));
+      _stprintf(text,TEXT("Competition ID: (blank)"));
     } else {
-      _stprintf(text,TEXT("Aircraft rego: %s"),val);
+      _stprintf(text,TEXT("Competition ID: %s"),val);
     }
     buttonAircraftRego->SetCaption(text);
   }
