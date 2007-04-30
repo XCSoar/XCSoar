@@ -1989,6 +1989,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
     GaugeFLARM::Render(&DrawInfo);
 
+
     RenderMapWindow(MapRect);
     
     if (!first) {
@@ -2003,6 +2004,7 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     // we do caching after screen update, to minimise perceived delay
     UpdateCaches(first);
     first = false;
+
     if (ProgramStarted==1) {
       ProgramStarted = 2;
     }

@@ -1646,7 +1646,6 @@ bool InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         
   // Finish line
   AircraftBearing = AircraftBearing - Task[i].InBound ;
-  UnlockTaskData();
 
   while (AircraftBearing<-180) {
     AircraftBearing+= 360;
@@ -1671,7 +1670,8 @@ bool InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       if (!approaching) {
         // now moving away from finish line
         LastInSector = false;
-        return TRUE;
+        retval = TRUE;
+        goto OnExit;
       }
     } else {
       if (approaching) {
@@ -2490,6 +2490,12 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 //  double FinalAltitude = 0;
   int FinalWayPoint = getFinalWaypoint();
 
+  double height_above_finish = Calculated->NavAltitude-SAFETYALTITUDEARRIVAL;
+  if (ValidTaskPoint(FinalWayPoint)) {
+    height_above_finish -= 
+      WayPointList[Task[FinalWayPoint].Index].Altitude;
+  }
+
   if(ValidTaskPoint(ActiveWayPoint))
     {
       i=ActiveWayPoint;
@@ -2538,8 +2544,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                       &(Calculated->BestCruiseTrack),
                                       &(Calculated->VMacCready),
                                       (Calculated->FinalGlide==1),
-                                      &(Calculated->LegTimeToGo)
-                                      );
+                                      &(Calculated->LegTimeToGo),
+                                      height_above_finish);
 
       LegAltitude0 = 
         GlidePolar::MacCreadyAltitude(0, 
@@ -2549,13 +2555,16 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                       Calculated->WindBearing,
                                       0,
                                       0,
-                                      (Calculated->FinalGlide==1),
+                                      true,
                                       &LegTime0
                                       );
+      
       if (LegTime0>=1e5) {
+        // can't make it, so assume flying at current mc
         LegAltitude0 = LegAltitude;
-      }
+      }      
 
+      // Final glide through terrain updates
       if (Calculated->FinalGlide) {
 
         double lat, lon;
@@ -2587,19 +2596,20 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       double height_below_leg = LegAltitude - Calculated->NavAltitude +
         SAFETYALTITUDEARRIVAL;
 
+      /*
+
       if (Calculated->FinalGlide) {
         if (height_below_leg>0) {
           Calculated->LegTimeToGo += height_below_leg/max(0.1,MACCREADY);
           // (need to stop and climb before finish)
         }
       }
+      */
 
       TaskAltitudeRequired = LegAltitude;
       TaskAltitudeRequired0 = LegAltitude0;
       Calculated->TaskDistanceToGo = LegToGo;
       Calculated->TaskTimeToGo = Calculated->LegTimeToGo;
-
-      double LegTimeToGo;
 
       if(height_below_leg < 0) {
         Calculated->LDNext = -Calculated->TaskDistanceToGo/height_below_leg;
@@ -2610,6 +2620,9 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
       i++;
       while(ValidTaskPoint(i) && (!TaskAborted))
         {
+
+          double this_LegTimeToGo;
+          bool this_is_final = (i==FinalWayPoint);
 
           w1lat = WayPointList[Task[i].Index].Latitude;
           w1lon = WayPointList[Task[i].Index].Longitude;
@@ -2635,8 +2648,9 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                               Calculated->WindSpeed, 
                               Calculated->WindBearing, 
                               0, 0,
-                              (i==FinalWayPoint),
-                              &LegTimeToGo);
+                              this_is_final,
+                              &this_LegTimeToGo,
+                              height_above_finish);
 
           LegAltitude0 = GlidePolar::
             MacCreadyAltitude(0, 
@@ -2644,45 +2658,50 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                               Calculated->WindSpeed, 
                               Calculated->WindBearing, 
                               0, 0,
-                              (i==FinalWayPoint),
-                              &LegTime0);
+                              true,
+                              &LegTime0
+                              );
 
           if (LegTime0>=1e5) {
+            // can't make it, so assume flying at current mc
             LegAltitude0 = LegAltitude;
-          }
+          }          
 
           TaskAltitudeRequired += LegAltitude;
           TaskAltitudeRequired0 += LegAltitude0;
 
+          /*
           double height_below_leg = LegAltitude - Calculated->NavAltitude +
             SAFETYALTITUDEARRIVAL;
 
-          if (i==FinalWayPoint) {
+          if (this_is_final) {
             if (height_below_leg>0) {
-              LegTimeToGo += height_below_leg/max(0.1,MACCREADY);
+              this_LegTimeToGo += height_below_leg/max(0.1,MACCREADY);
               // (need to stop and climb before finish)
             }
           }
+          */
 
           Calculated->TaskDistanceToGo += LegDistance;
-          Calculated->TaskTimeToGo += LegTimeToGo;      
-                        
+          Calculated->TaskTimeToGo += this_LegTimeToGo;      
+
           i++;
         }
 
-      Calculated->TaskAltitudeRequired = TaskAltitudeRequired 
-        + SAFETYALTITUDEARRIVAL + WayPointList[Task[i-1].Index].Altitude;
+      double final_h = SAFETYALTITUDEARRIVAL 
+        + WayPointList[Task[FinalWayPoint].Index].Altitude;
 
-      TaskAltitudeRequired0 += SAFETYALTITUDEARRIVAL 
-        + WayPointList[Task[i-1].Index].Altitude;
+      double te_height = Calculated->NavAltitude + Calculated->EnergyHeight;
 
-      Calculated->TaskAltitudeDifference = Calculated->NavAltitude 
-        - (Calculated->TaskAltitudeRequired) 
-        + Calculated->EnergyHeight;
+      Calculated->TaskAltitudeRequired = TaskAltitudeRequired + final_h;
 
-      Calculated->TaskAltitudeDifference0 = Calculated->NavAltitude 
-        - (TaskAltitudeRequired0) 
-        + Calculated->EnergyHeight;
+      TaskAltitudeRequired0 += final_h;
+
+      Calculated->TaskAltitudeDifference = te_height
+        - Calculated->TaskAltitudeRequired; 
+
+      Calculated->TaskAltitudeDifference0 = te_height
+        - TaskAltitudeRequired0;
 
       if (Calculated->TaskAltitudeDifference>0) {
         if (!fgtt && fgttnew) {
@@ -2693,18 +2712,12 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         fgtt = false;
       }
 
-      double temp = Calculated->NavAltitude 
-        - WayPointList[Task[i-1].Index].Altitude  
-        + Calculated->EnergyHeight - SAFETYALTITUDEARRIVAL;
-
-      if(  (temp) > 0)
-        {
-          Calculated->LDFinish = Calculated->TaskDistanceToGo /(temp);
-        }
-      else
-        {
-          Calculated->LDFinish = 999;
-        }
+      double te_diff = te_height - final_h;
+      if(te_diff > 0) {
+        Calculated->LDFinish = Calculated->TaskDistanceToGo/te_diff;
+      } else {
+        Calculated->LDFinish = 999;
+      }
 
       // Auto Force Final Glide forces final glide mode
       // if above final glide...

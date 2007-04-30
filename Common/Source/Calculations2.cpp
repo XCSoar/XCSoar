@@ -375,6 +375,9 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
     pmc += 0.5;
   }
+  if (dh>0) {
+    return pmc;
+  }
   return -1.0; // no solution found, unreachable without further climb
 }
 

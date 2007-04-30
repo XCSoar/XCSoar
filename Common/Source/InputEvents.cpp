@@ -931,7 +931,7 @@ void InputEvents::eventSnailTrail(TCHAR *misc) {
   else if (_tcscmp(misc, TEXT("short")) == 0)
     TrailActive = 2;
   else if (_tcscmp(misc, TEXT("full")) == 0)
-    TrailActive = 2;
+    TrailActive = 3;
 
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (TrailActive==0)
