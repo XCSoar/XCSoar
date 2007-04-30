@@ -20,6 +20,11 @@ Todo:
   (final glide bar, flarm targets)
 - Glide range footprint fails over sea
 
+Changes from 5.0.9 release 1:
+- Fixed ETE and final glide calculations for Mc=0, proper compensation
+  for wind and unreachable at current Mc etc.
+- Fixed task distance rounding to nearest 0.1 units
+
 Changes from 5.0.8:
 - Fixed bug in wind initialisation/calculation
 - AAT start/finish radials step in 1 degree increments
