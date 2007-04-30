@@ -261,33 +261,33 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 void DoStatusMessage(TCHAR* text, TCHAR *data) {
   Message::Lock();
 
-	StatusMessageSTRUCT LocalMessage;
-	LocalMessage = StatusMessageData[0];
+  StatusMessageSTRUCT LocalMessage;
+  LocalMessage = StatusMessageData[0];
 
-	int i;
-	// Search from end of list (allow overwrites by user)
-	for (i=StatusMessageData_Size - 1; i>0; i--) {
-		if (wcscmp(text, StatusMessageData[i].key) == 0) {
-			LocalMessage = StatusMessageData[i];
-			break;
-		}
-	}
+  int i;
+  // Search from end of list (allow overwrites by user)
+  for (i=StatusMessageData_Size - 1; i>0; i--) {
+    if (wcscmp(text, StatusMessageData[i].key) == 0) {
+      LocalMessage = StatusMessageData[i];
+      break;
+    }
+  }
 
-	if (EnableSoundModes && LocalMessage.doSound)
-		PlayResource(LocalMessage.sound);
+  if (EnableSoundModes && LocalMessage.doSound)
+    PlayResource(LocalMessage.sound);
 
-	// TODO consider what is a sensible size?
-	TCHAR msgcache[1024];
-	if (LocalMessage.doStatus) {
+  // TODO consider what is a sensible size?
+  TCHAR msgcache[1024];
+  if (LocalMessage.doStatus) {
 
-	  wcscpy(msgcache, gettext(text));
-	  if (data != NULL) {
-	    wcscat(msgcache, TEXT(" "));
-	    wcscat(msgcache, data);
-	  }
+    wcscpy(msgcache, gettext(text));
+    if (data != NULL) {
+      wcscat(msgcache, TEXT(" "));
+      wcscat(msgcache, data);
+    }
 
-	  Message::AddMessage(LocalMessage.delay_ms, 1, msgcache);
-	}
+    Message::AddMessage(LocalMessage.delay_ms, 1, msgcache);
+  }
 
   Message::Unlock();
 }

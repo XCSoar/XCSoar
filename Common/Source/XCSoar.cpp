@@ -1065,6 +1065,7 @@ int ProgramStarted = 0;
 // 3: normal operation
 
 void AfterStartup() {
+
   StartupStore(TEXT("CloseProgressDialog\r\n"));
 
   CloseProgressDialog();

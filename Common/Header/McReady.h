@@ -14,7 +14,8 @@ class GlidePolar {
                                   double Bearing, double WindSpeed,
                                   double WindBearing, double *BestCruiseTrack,
                                   double *VMacCready, bool isFinalGlide,
-                                  double *timetogo);
+                                  double *timetogo,
+                                  double AltitudeAboveTarget=1.0e6);
 
 
   static void SetBallast();
@@ -53,6 +54,17 @@ class GlidePolar {
                                            double *VMacCready,
                                            bool isFinalGlide,
                                            double *timetogo);
+
+  static double MacCreadyAltitude_heightadjust(double MCREADY,
+                                               double Distance,
+                                               double Bearing,
+                                               double WindSpeed,
+                                               double WindBearing,
+                                               double *BestCruiseTrack,
+                                               double *VMacCready,
+                                               bool isFinalGlide,
+                                               double *timetogo,
+                                               double AltitudeAboveTarget);
 
 };
 

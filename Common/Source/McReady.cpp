@@ -153,15 +153,18 @@ double GlidePolar::SinkRate(double V) {
 }
 
 
+#define MIN_MACCREADY 0.01
+#define ERROR_TIME 1.0e5
+
+
 double GlidePolar::SinkRate(double V, double n) {
-  if (n<0.01) {
-    n=0.01;
+  if (n<MIN_MACCREADY) {
+    n=MIN_MACCREADY;
   }
   double sqrtn = (double)isqrt4((unsigned long)(n*10000))/100.0;
   return SinkRate(polar_a/sqrtn,polar_b,polar_c*sqrtn,0.0,0.0,V);
 
 }
-
 
 double GlidePolar::MacCreadyAltitude_internal(double emcready,
                                               double Distance,
@@ -207,14 +210,14 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   BestGlide = 10000;
   BestTime = 1e6;
 
-  emcready = max(0.0,emcready);
+  emcready = max(MIN_MACCREADY,emcready);
 
   double vtot;
   if (Distance<1.0) {
     Distance = 1;
   }
 
-  double TimeToDestTotal = 1e5; // initialise to error value
+  double TimeToDestTotal = ERROR_TIME; // initialise to error value
   double tcruise, tclimb;
   TimeToDestCruise = -1; // initialise to error value
 
@@ -345,43 +348,151 @@ double GlidePolar::FindSpeedForSinkRate(double w) {
 }
 
 
-double GlidePolar::MacCreadyAltitude(double emcready,
-                                     double Distance, double Bearing,
-                                     double WindSpeed, double WindBearing,
-                                     double *BestCruiseTrack,
-                                     double *VMacCready,
-                                     bool isFinalGlide,
-                                     double *TimeToGo) {
-
-  double TTG;
+double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
+                                              double Distance,
+                                              double Bearing,
+                                              double WindSpeed,
+                                              double WindBearing,
+                                              double *BestCruiseTrack,
+                                              double *VMacCready,
+                                              bool isFinalGlide,
+                                                  double *TimeToGo,
+                                                  double AltitudeAboveTarget)
+{
   double Altitude;
-  bool effectiveFinalGlide = (emcready<=0.01) || isFinalGlide;
+  double TTG = 0;
 
-  Altitude = MacCreadyAltitude_internal(emcready,
-                                        Distance, Bearing,
-                                        WindSpeed, WindBearing,
-                                        BestCruiseTrack,
-                                        VMacCready,
-                                        effectiveFinalGlide,
-                                        &TTG);
+  if (!isFinalGlide || (AltitudeAboveTarget<=0)) {
 
-  if (!isFinalGlide && effectiveFinalGlide) {
-    TTG = 1e5;
-  }
-
-  if (TimeToGo) {
-    *TimeToGo = TTG;
-  }
-
-  if ((TTG>=1e5)&&(!isFinalGlide)) {
+    // if not in final glide or below target altitude, need to
+    // climb-cruise the whole way
 
     Altitude = MacCreadyAltitude_internal(emcready,
                                           Distance, Bearing,
                                           WindSpeed, WindBearing,
                                           BestCruiseTrack,
                                           VMacCready,
-                                          true,
+                                          false,
                                           &TTG);
+  } else {
+
+    // if final glide mode and can final glide part way
+
+    double t_t;
+    double h_t = MacCreadyAltitude_internal(emcready,
+                                            Distance, Bearing,
+                                            WindSpeed, WindBearing,
+                                            BestCruiseTrack,
+                                            VMacCready,
+                                            true,
+                                            &t_t);
+
+    if (h_t<=0) {
+      // error condition, no distance to travel
+      TTG = t_t;
+
+    } else {
+      double h_f = min(h_t, AltitudeAboveTarget);
+      // fraction of leg that can be final glided
+      double f = min(1.0,max(0.0,h_f/h_t));
+      double d_f = Distance*f;
+      double d_c = Distance - d_f;
+
+      if (f<1.0) {
+
+        // if need to climb-cruise part of the way
+
+        double t_c;
+        double h_c = MacCreadyAltitude_internal(emcready,
+                                                d_c, Bearing,
+                                                WindSpeed, WindBearing,
+                                                BestCruiseTrack,
+                                                VMacCready,
+                                                false,
+                                                &t_c);
+        if (h_c<0) {
+          // impossible at this Mc, so must be final glided
+          Altitude = -1;
+          TTG = ERROR_TIME;
+        } else {
+          Altitude = h_c+h_f;
+          TTG = f*t_t + t_c;
+        }
+
+      } else {
+
+        // can final glide the whole way
+
+        Altitude = h_t;
+        TTG = t_t;
+      }
+    }
+  }
+
+  if (TimeToGo) {
+    *TimeToGo = TTG;
+  }
+  return Altitude;
+
+
+}
+
+
+double GlidePolar::MacCreadyAltitude(double emcready,
+                                     double Distance, double Bearing,
+                                     double WindSpeed, double WindBearing,
+                                     double *BestCruiseTrack,
+                                     double *VMacCready,
+                                     bool isFinalGlide,
+                                     double *TimeToGo,
+                                     double AltitudeAboveTarget) {
+
+  double TTG = ERROR_TIME;
+  double Altitude = -1;
+  bool invalidMc = (emcready<MIN_MACCREADY);
+  bool invalidAltitude = false;
+
+  if (!invalidMc || isFinalGlide) {
+    Altitude = MacCreadyAltitude_heightadjust(emcready,
+                                              Distance, Bearing,
+                                              WindSpeed, WindBearing,
+                                              BestCruiseTrack,
+                                              VMacCready,
+                                              isFinalGlide,
+                                              &TTG,
+                                              AltitudeAboveTarget);
+    if (Altitude<0) {
+      invalidAltitude = true;
+    } else {
+      // All ok
+      if (TTG<ERROR_TIME) {
+        goto onExit;
+      }
+    }
+  }
+
+  // Never going to make it at this rate, so assume final glide
+  // with no climb
+  // This can occur if can't make progress against headwind,
+  // or if Mc is too small
+
+  Altitude = MacCreadyAltitude_heightadjust(emcready,
+                                            Distance, Bearing,
+                                            WindSpeed, WindBearing,
+                                            BestCruiseTrack,
+                                            VMacCready,
+                                            true,
+                                            &TTG, 1.0e6);
+
+  if (invalidAltitude) {
+    TTG += ERROR_TIME;
+    // if it failed due to invalid Mc, need to increase estimated
+    // time and the glider better find that lift magically
+  }
+
+ onExit:
+  if (TimeToGo) {
+    *TimeToGo = TTG;
   }
 
   return Altitude;

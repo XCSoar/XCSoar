@@ -5,6 +5,11 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+
+#define DISTANCE_ROUNDING 10.0
+// Rounding of task distances for entry (sector radius etc)
+// 10.0 means rounding to 0.1 user units
+
 #define MINFREESTORAGE 500
 // 500 kb must be free for logger to be active this is based on rough
 // estimate that a long flight will detailed logging is about 200k,
