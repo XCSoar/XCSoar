@@ -30,6 +30,8 @@
 #define AUTO 2
 #define ALLBELOW 3
 #define INSIDE 4
+#define ALLOFF 5
+
 
 typedef struct _AIRSPACE_ACK
 {

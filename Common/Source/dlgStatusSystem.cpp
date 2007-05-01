@@ -109,22 +109,26 @@ static void UpdateValues() {
   if (wp) {
     if (extGPSCONNECT) {
       if (GPS_INFO.NAVWarning) {
-	wp->SetText(gettext(TEXT("Fix invalid")));
+        wp->SetText(gettext(TEXT("Fix invalid")));
       } else {
-	if (GPS_INFO.SatellitesUsed==0) {
-	  wp->SetText(gettext(TEXT("No fix")));
+        if (GPS_INFO.SatellitesUsed==0) {
+          wp->SetText(gettext(TEXT("No fix")));
 
-	} else {
-	  wp->SetText(gettext(TEXT("3D fix")));
-	}
+        } else {
+          wp->SetText(gettext(TEXT("3D fix")));
+        }
       }
       wp->RefreshDisplay();
 
       wp = (WndProperty*)wf->FindByName(TEXT("prpNumSat"));
       if (wp) {
-	_stprintf(Temp,TEXT("%d"),GPS_INFO.SatellitesUsed);
-	wp->SetText(Temp);
-	wp->RefreshDisplay();
+        if (GPS_INFO.SatellitesUsed >= 0) {  // known numer of sats
+          _stprintf(Temp,TEXT("%d"),GPS_INFO.SatellitesUsed);
+        } else {                             // valid but unknown number of sats
+          _stprintf(Temp,TEXT(">3"));
+        }
+        wp->SetText(Temp);
+        wp->RefreshDisplay();
       }
     } else {
       wp->SetText(gettext(TEXT("Disconnected")));
@@ -174,7 +178,11 @@ static void UpdateValues() {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpBattery"));
   if (wp) {
-    _stprintf(Temp,TEXT("%.1f V"),GPS_INFO.SupplyBatteryVoltage);
+    if (GPS_INFO.SupplyBatteryVoltage == 0) {
+      _stprintf(Temp,TEXT("-"));
+    } else {
+      _stprintf(Temp,TEXT("%.1f V"),GPS_INFO.SupplyBatteryVoltage);
+    }
     wp->SetText(Temp);
     wp->RefreshDisplay();
   }

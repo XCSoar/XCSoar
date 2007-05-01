@@ -82,6 +82,7 @@ void CloseWayPoints() {
     }
   }
   NumberOfWayPoints = 0;
+
   if(WayPointList != NULL) {
     LocalFree((HLOCAL)WayPointList);
     WayPointList = NULL;

@@ -18,6 +18,7 @@ class GaugeFLARM {
   static bool Enable;
   static bool Suppress;
   static void TrafficPresent(bool traffic);
+  static bool ForceVisible;
  private:
   static HDC hdcScreen;
   static HDC hdcDrawWindow;

@@ -46,9 +46,14 @@ typedef struct{
   int Index;
   double Distance;
   double Direction;
-  int DirectionErr;
+  int    DirectionErr;
+  int    Type;
+  int    FileIdx;
   unsigned int FourChars;
 }WayPointSelectInfo_t;
+
+static double Latitude;
+static double Longitude;
 
 static WndForm *wf=NULL;
 static WndListFrame *wWayPointList=NULL;
@@ -60,13 +65,22 @@ static int NameFilterIdx=0;
 static double DistanceFilter[] = {0.0, 25.0, 50.0, 75.0, 100.0, 150.0, 250.0, 500.0, 1000.0};
 static int DistanceFilterIdx=0;
 
-static int DirectionFilter[] = {0, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
+#define DirHDG -1
+
+static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330};
 static int DirectionFilterIdx=0;
+static int lastHeading=0;
+
+static TCHAR *TypeFilter[] = {TEXT("*"), TEXT("Airport"), TEXT("Landable"),
+                              TEXT("Turnpoint"), TEXT("File 1"), TEXT("File 2")};
+static int TypeFilterIdx=0;
 
 static int UpLimit=0;
 static int LowLimit=0;
 
 static int ItemIndex = -1;
+
+static int SelectedWayPointFileIdx = 0;
 
 
 static void OnWaypointListEnter(WindowControl * Sender,
@@ -98,12 +112,42 @@ static int _cdecl WaypointDistanceCompare(const void *elem1, const void *elem2 )
   return (0);
 }
 
+static int _cdecl WaypointAirportCompare(const void *elem1, const void *elem2 ){
+  if (((WayPointSelectInfo_t *)elem1)->Type & (AIRPORT))
+    return (-1);
+  return (+1);
+}
+
+static int _cdecl WaypointLandableCompare(const void *elem1, const void *elem2 ){
+  if (((WayPointSelectInfo_t *)elem1)->Type & (AIRPORT | LANDPOINT))
+    return (-1);
+  return (+1);
+}
+
+static int _cdecl WaypointWayPointCompare(const void *elem1, const void *elem2 ){
+  if (((WayPointSelectInfo_t *)elem1)->Type & (TURNPOINT))
+    return (+1);
+  return (+1);
+}
+
+static int _cdecl WaypointFileIdxCompare(const void *elem1, const void *elem2 ){
+  if (((WayPointSelectInfo_t *)elem1)->FileIdx != SelectedWayPointFileIdx)
+    return (+1);
+  return (-1);
+}
+
 static int _cdecl WaypointDirectionCompare(const void *elem1, const void *elem2 ){
 
-  int a1, a2;
+  int a, a1, a2;
 
-  a1 = (int)(((WayPointSelectInfo_t *)elem1)->Direction - DirectionFilter[DirectionFilterIdx]);
-  a2 = (int)(((WayPointSelectInfo_t *)elem2)->Direction - DirectionFilter[DirectionFilterIdx]);
+  a = DirectionFilter[DirectionFilterIdx];
+  if (a == DirHDG){
+    a = iround(CALCULATED_INFO.Heading);
+    lastHeading = a;
+  }
+
+  a1 = (int)(((WayPointSelectInfo_t *)elem1)->Direction - a);
+  a2 = (int)(((WayPointSelectInfo_t *)elem2)->Direction - a);
 
   if (a1 > 180)
     a1 -=360;
@@ -143,8 +187,8 @@ static void PrepareData(void){
     WayPointSelectInfo[i].Index = i;
 
 
-    DistanceBearing(GPS_INFO.Latitude,
-                    GPS_INFO.Longitude,
+    DistanceBearing(Latitude,
+                    Longitude,
                     WayPointList[i].Latitude,
                     WayPointList[i].Longitude,
                     &(WayPointSelectInfo[i].Distance),
@@ -160,6 +204,11 @@ static void PrepareData(void){
                   + (((DWORD)sTmp[1] & 0xff) << 16)
                   + (((DWORD)sTmp[2] & 0xff) << 8)
                   + (((DWORD)sTmp[3] & 0xff) );
+
+    WayPointSelectInfo[i].Type = WayPointList[i].Flags;
+
+    WayPointSelectInfo[i].FileIdx = WayPointList[i].FileNum;
+
   }
 
   qsort(WayPointSelectInfo, UpLimit,
@@ -179,11 +228,57 @@ static void UpdateList(void){
   UpLimit=NumberOfWayPoints;
   LowLimit =0;
 
+  if (TypeFilterIdx == 1){
+    qsort(WayPointSelectInfo, NumberOfWayPoints,
+        sizeof(WayPointSelectInfo_t), WaypointAirportCompare);
+    for (i=0; i<(int)NumberOfWayPoints; i++){
+      if (!(WayPointSelectInfo[i].Type & (AIRPORT))){
+        UpLimit = i;
+        break;
+      }
+    }
+  }
+
+  if (TypeFilterIdx == 2){
+    qsort(WayPointSelectInfo, NumberOfWayPoints,
+        sizeof(WayPointSelectInfo_t), WaypointLandableCompare);
+    for (i=0; i<(int)NumberOfWayPoints; i++){
+      if (!(WayPointSelectInfo[i].Type & (AIRPORT | LANDPOINT))){
+        UpLimit = i;
+        break;
+      }
+    }
+  }
+
+  if (TypeFilterIdx == 3){
+    qsort(WayPointSelectInfo, NumberOfWayPoints,
+        sizeof(WayPointSelectInfo_t), WaypointWayPointCompare);
+    for (i=0; i<(int)NumberOfWayPoints; i++){
+      if (!(WayPointSelectInfo[i].Type & (TURNPOINT))){
+        UpLimit = i;
+        break;
+      }
+    }
+  }
+
+  if (TypeFilterIdx == 4 || TypeFilterIdx == 5){
+    // distancemode = true;
+    SelectedWayPointFileIdx = TypeFilterIdx-4;
+    qsort(WayPointSelectInfo, NumberOfWayPoints,
+        sizeof(WayPointSelectInfo_t), WaypointFileIdxCompare);
+    for (i=0; i<(int)NumberOfWayPoints; i++){
+      if (WayPointSelectInfo[i].FileIdx != SelectedWayPointFileIdx){
+        UpLimit = i;
+        break;
+      }
+    }
+  }
+
   if (DistanceFilterIdx != 0){
     distancemode = true;
-    qsort(WayPointSelectInfo, NumberOfWayPoints,
+    qsort(WayPointSelectInfo, UpLimit,
         sizeof(WayPointSelectInfo_t), WaypointDistanceCompare);
-    for (i=0; i<(int)NumberOfWayPoints; i++){
+    for (i=0; i<(int)UpLimit; i++){
       if (WayPointSelectInfo[i].Distance > DistanceFilter[DistanceFilterIdx]){
         UpLimit = i;
         break;
@@ -338,9 +433,29 @@ static void OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode
 
 }
 
-static void OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode){
+static void SetDirectionData(DataField *Sender){
 
   TCHAR sTmp[12];
+
+  if (Sender == NULL){
+    Sender = wpDirection->GetDataField();
+  }
+
+  if (DirectionFilterIdx == 0)
+    _stprintf(sTmp, TEXT("%c"), '*');
+  else if (DirectionFilterIdx == 1){
+    int a = iround(CALCULATED_INFO.Heading);
+    if (a <=0)
+      a += 360;
+    _stprintf(sTmp, TEXT("HDG(%d°)"), a);
+  }else
+    _stprintf(sTmp, TEXT("%d°"), DirectionFilter[DirectionFilterIdx]);
+
+  Sender->Set(sTmp);
+
+}
+
+static void OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode){
 
   switch(Mode){
     case DataField::daGet:
@@ -366,10 +481,40 @@ static void OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mod
     break;
   }
 
-  if (DirectionFilterIdx == 0)
-    _stprintf(sTmp, TEXT("%c"), '*');
-  else
-    _stprintf(sTmp, TEXT("%d°"), DirectionFilter[DirectionFilterIdx]);
+  SetDirectionData(Sender);
+
+}
+
+static void OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode){
+
+  TCHAR sTmp[12];
+
+  switch(Mode){
+    case DataField::daGet:
+      Sender->Set(TEXT("*"));
+    break;
+    case DataField::daPut:
+    break;
+    case DataField::daChange:
+    break;
+    case DataField::daInc:
+      TypeFilterIdx++;
+      if (TypeFilterIdx > sizeof(TypeFilter)/sizeof(TypeFilter[0])-1)
+        TypeFilterIdx = 0;
+      FilterMode(false);
+      UpdateList();
+    break;
+    case DataField::daDec:
+      TypeFilterIdx--;
+      if (TypeFilterIdx < 0)
+        TypeFilterIdx = sizeof(TypeFilter)/sizeof(TypeFilter[0])-1;
+      FilterMode(false);
+      UpdateList();
+    break;
+  }
+
+  _stprintf(sTmp, TEXT("%s"), TypeFilter[TypeFilterIdx]);
+
   Sender->Set(sTmp);
 
 }
@@ -385,10 +530,16 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
 
     int i = LowLimit + DrawListIndex;
 
+// Sleep(100);
+
     ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       WayPointList[WayPointSelectInfo[i].Index].Name,
       _tcslen(WayPointList[WayPointSelectInfo[i].Index].Name), NULL);
+
+    sTmp[0] = '\0';
+    sTmp[1] = '\0';
+    sTmp[2] = '\0';
 
     if (WayPointList[WayPointSelectInfo[i].Index].Flags & HOME){
       sTmp[0] = 'H';
@@ -398,20 +549,26 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
     }else
     if (WayPointList[WayPointSelectInfo[i].Index].Flags & LANDPOINT){
       sTmp[0] = 'L';
-    }else
-      sTmp[0] = 'T';
+    }
 
-    ExtTextOut(hDC, 135*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+    if (WayPointList[WayPointSelectInfo[i].Index].Flags & TURNPOINT){
+      if (sTmp[0] == '\0')
+        sTmp[0] = 'T';
+      else
+        sTmp[1] = 'T';
+    }
+
+    ExtTextOut(hDC, 125*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
-      sTmp, 1, NULL);
+      sTmp, _tcslen(sTmp), NULL);
                            //todo user unit
     _stprintf(sTmp, TEXT("%.0fkm"), WayPointSelectInfo[i].Distance);
-    ExtTextOut(hDC, 146*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+    ExtTextOut(hDC, 141*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       sTmp, _tcslen(sTmp), NULL);
 
     _stprintf(sTmp, TEXT("%d°"),  iround(WayPointSelectInfo[i].Direction));
-    ExtTextOut(hDC, 185*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+    ExtTextOut(hDC, 180*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       sTmp, _tcslen(sTmp), NULL);
 
@@ -447,21 +604,82 @@ static void OnWPSCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrCancle);
 }
 
+static int OnTimerNotify(WindowControl * Sender) {
+  (void)Sender;
+  if (DirectionFilterIdx == 1){
+    int a;
+    a = (lastHeading - iround(CALCULATED_INFO.Heading));
+    if (abs(a) > 0){
+      UpdateList();
+      SetDirectionData(NULL);
+      wpDirection->RefreshDisplay();
+    }
+  }
+  return 0;
+}
+
+static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+
+  WndProperty* wp;
+  int NewIndex = TypeFilterIdx;
+
+  (void)lParam;
+  (void)Sender;
+
+  wp = ((WndProperty *)wf->FindByName(TEXT("prpFltType")));
+
+  switch(wParam & 0xffff){
+    case VK_F1:
+      NewIndex = 0;
+    break;
+    case VK_F2:
+      NewIndex = 2;
+    break;
+    case VK_F3:
+      NewIndex = 3;
+    break;
+  }
+
+  if (TypeFilterIdx != NewIndex){
+    TypeFilterIdx = NewIndex;
+    FilterMode(false);
+    UpdateList();
+    wp->GetDataField()->SetAsString(TypeFilter[TypeFilterIdx]);
+    wp->RefreshDisplay();
+  }
+
+  return(1);
+}
 
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnFilterName),
   DeclearCallBackEntry(OnFilterDistance),
   DeclearCallBackEntry(OnFilterDirection),
+  DeclearCallBackEntry(OnFilterType),
   DeclearCallBackEntry(OnPaintListItem),
   DeclearCallBackEntry(OnWpListInfo),
   DeclearCallBackEntry(NULL)
 };
 
-int dlgWayPointSelect(void){
+int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
 
   UpLimit = 0;
   LowLimit = 0;
   ItemIndex = -1;
+
+  if (lon==0.0 && lat==90.0) {
+    Latitude = GPS_INFO.Latitude;
+    Longitude = GPS_INFO.Longitude;
+  } else {
+    Latitude = lat;
+    Longitude = lon;
+  }
+  if (type > -1){
+    TypeFilterIdx = type;
+  }
+  if (FilterNear){
+    DistanceFilterIdx = 1;
+  }
 
 #ifndef GNAV
   if (!InfoBoxLayout::landscape) {
@@ -488,6 +706,8 @@ int dlgWayPointSelect(void){
 
   ASSERT(wf!=NULL);
 
+  wf->SetKeyDownNotify(FormKeyDown);
+
   ((WndButton *)wf->
    FindByName(TEXT("cmdClose")))->
     SetOnClickNotify(OnWPSCloseClicked);
@@ -507,6 +727,8 @@ int dlgWayPointSelect(void){
 
   PrepareData();
   UpdateList();
+
+  wf->SetTimerNotify(OnTimerNotify);
 
   if ((wf->ShowModal() == mrOK) && (UpLimit - LowLimit > 0) &&
       (ItemIndex >= 0)  // JMW fixed bug, was >0

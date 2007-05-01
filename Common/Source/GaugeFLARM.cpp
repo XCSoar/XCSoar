@@ -47,6 +47,7 @@ HDC GaugeFLARM::hdcTemp = NULL;
 HDC GaugeFLARM::hdcDrawWindow = NULL;
 bool GaugeFLARM::Enable;
 bool GaugeFLARM::Traffic= false;
+bool GaugeFLARM::ForceVisible= false;
 RECT GaugeFLARM::rc;
 bool GaugeFLARM::Suppress= false;
 
@@ -79,43 +80,19 @@ void GaugeFLARM::RenderBg() {
   SelectObject(hdcTemp, hRoseBitMap);
 #if (WINDOWSPC>0)
   StretchBlt(hdcDrawWindow, 0, 0,
-	     IBLSCALE(114),
-	     IBLSCALE(79),
+	     IBLSCALE(InfoBoxLayout::ControlWidth*2),
+	     IBLSCALE(InfoBoxLayout::ControlHeight*2-1),
 	     hdcTemp,
-	     0, 0, 114, 79,
+	     0, 0, InfoBoxLayout::ControlWidth*2, InfoBoxLayout::ControlHeight*2-1,
 	     SRCCOPY);
 #else
-  BitBlt(hdcDrawWindow, 0, 0, 114, 79,
+  BitBlt(hdcDrawWindow, 0, 0, InfoBoxLayout::ControlWidth*2, InfoBoxLayout::ControlHeight*2-1,
 	 hdcTemp, 0, 0, SRCCOPY);
 #endif
 
 }
 
 #include "WindowControls.h" // just to get colors
-
-extern HFONT  TitleWindowFont;
-
-/*
-  SetBkColor(mHdcBuf, mColorTitleBk);
-  SetTextColor(mHdcBuf, mColorTitle);
-  SelectObject(mHdcBuf, *mphFontTitle);
-
-  GetTextExtentPoint(mHdcBuf, mTitle, _tcslen(mTitle), &tsize);
-
-  halftextwidth = (mWidth - tsize.cx)>>1;
-
-  x = max(1,recTitle.left + halftextwidth);
-
-  y = recTitle.top + 1 + mpFontHeightTitle->CapitalHeight
-    - mpFontHeightTitle->AscentHeight;
-
-  if (mBorderKind & BORDERLEFT)
-    x+= DEFAULTBORDERPENWIDTH;
-
-  ExtTextOut(mHdcBuf, x, y,
-    ETO_OPAQUE, &recTitle, mTitle, _tcslen(mTitle), NULL);
-*/
-
 
 void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
   HBRUSH redBrush = CreateSolidBrush(RGB(0xFF,0x00,0x00));
@@ -299,7 +276,7 @@ void GaugeFLARM::TrafficPresent(bool present) {
 
 
 void GaugeFLARM::Show() {
-  Enable = Traffic && EnableFLARMDisplay && !Suppress;
+  Enable = ForceVisible || (Traffic && EnableFLARMDisplay && !Suppress);
   static bool lastvisible = true;
   if (Enable && !lastvisible) {
     ShowWindow(hWndFLARMWindow, SW_SHOW);

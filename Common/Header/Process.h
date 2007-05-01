@@ -5,6 +5,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "externs.h"
+
 void				NoProcessing(int UpDown);
 void				WindSpeedProcessing(int UpDown);
 void				WindDirectionProcessing(int UpDown);
@@ -16,7 +18,7 @@ void				DirectionProcessing(int UpDown);
 void				AltitudeProcessing(int UpDown);
 void				AirspeedProcessing(int UpDown);
 void				ForecastTemperatureProcessing(int UpDown);
-int DetectStartTime(void);
+int DetectStartTime(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 int DetectCurrentTime(void);
 int TimeLocal(int d);
 

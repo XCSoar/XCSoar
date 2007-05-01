@@ -81,6 +81,10 @@ void AATDistance::ResetEnterTrigger(int taskwaypoint) {
 void AATDistance::AddPoint(double longitude, double latitude,
                            int taskwaypoint) {
 
+  has_entered[taskwaypoint] = true;
+
+  if (!AATEnabled) return; // nothing else to do for non-AAT tasks
+
   LockTaskData();
 
   // should only add ONE point to start.
@@ -91,8 +95,6 @@ void AATDistance::AddPoint(double longitude, double latitude,
     int n = num_points[taskwaypoint];
 
     bool new_point= false;
-
-    has_entered[taskwaypoint] = true;
 
     if (n>1) {
       double dist;

@@ -241,7 +241,7 @@ static BOOL PDVDV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 
   if (d == pDevPrimaryBaroSource){
     GPS_INFO->BaroAltitudeAvailable = TRUE;
-    GPS_INFO->BaroAltitude = alt;
+    GPS_INFO->BaroAltitude = alt;    // ToDo check if QNH correction is needed!
   }
 
   NMEAParser::VarioUpdated = TRUE;

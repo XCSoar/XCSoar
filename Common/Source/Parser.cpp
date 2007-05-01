@@ -540,28 +540,29 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
     // system clock to the GPS time.
     static bool sysTimeInitialised = false;
 
-    if (!GPS_INFO->NAVWarning && (GPS_INFO->SatellitesUsed>3)) {
-#ifdef GNAV
+//    if (!GPS_INFO->NAVWarning && (GPS_INFO->SatellitesUsed>3)) {  -> wrong SatellitesUsed is not set by RMC
+    if (!GPS_INFO->NAVWarning && (gpsValid)) {
+#if defined(GNAV) && (!defined(WINDOWSPC) || (WINDOWSPC==0))
       SetSystemTimeFromGPS = true;
 #endif
       if (SetSystemTimeFromGPS) {
-	if (!sysTimeInitialised) {
+        if (!sysTimeInitialised) {
 
-	  SYSTEMTIME sysTime;
-	  ::GetSystemTime(&sysTime);
-	  int hours = ((int)ThisTime)/3600;
-	  int mins = ((int)ThisTime-hours*60)/60;
-	  int secs = (int)ThisTime-hours*3600-mins*60;
-	  sysTime.wYear = (unsigned short)GPS_INFO->Year;
-	  sysTime.wMonth = (unsigned short)GPS_INFO->Month;
-	  sysTime.wDay = (unsigned short)GPS_INFO->Day;
-	  sysTime.wHour = (unsigned short)hours;
-	  sysTime.wMinute = (unsigned short)mins;
-	  sysTime.wSecond = (unsigned short)secs;
-	  sysTime.wMilliseconds = 0;
-	  sysTimeInitialised = (::SetSystemTime(&sysTime)==TRUE);
+          SYSTEMTIME sysTime;
+          ::GetSystemTime(&sysTime);
+          int hours = ((int)ThisTime)/3600;
+          int mins = ((int)ThisTime-hours*60)/60;
+          int secs = (int)ThisTime-hours*3600-mins*60;
+          sysTime.wYear = (unsigned short)GPS_INFO->Year;
+          sysTime.wMonth = (unsigned short)GPS_INFO->Month;
+          sysTime.wDay = (unsigned short)GPS_INFO->Day;
+          sysTime.wHour = (unsigned short)hours;
+          sysTime.wMinute = (unsigned short)mins;
+          sysTime.wSecond = (unsigned short)secs;
+          sysTime.wMilliseconds = 0;
+          sysTimeInitialised = (::SetSystemTime(&sysTime)==TRUE);
 
-#ifdef GNAV
+#if defined(GNAV) && (!defined(WINDOWSPC) || (WINDOWSPC==0))
           TIME_ZONE_INFORMATION tzi;
           tzi.Bias = -UTCOffset/60;
           _tcscpy(tzi.StandardName,TEXT("Altair"));
@@ -601,6 +602,14 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 	}
 
     LastTime = ThisTime;
+
+    if (!gpsValid) { // update SatInUse, some GPS receiver dont emmit GGA sentance
+      GPS_INFO->SatellitesUsed = 0;
+    } else {
+      GPS_INFO->SatellitesUsed = -1;
+    }
+
+
   }
 
   return TRUE;
@@ -619,13 +628,13 @@ BOOL NMEAParser::GGA(TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
   ExtractParameter(String,ctemp,6);
-  nSatellites = (int)(min(12,StrToDouble(ctemp, NULL)));
+  nSatellites = (int)(min(16,StrToDouble(ctemp, NULL)));
   if (nSatellites==0) {
     gpsValid = false;
   }
 
   if (activeGPS) {
-    GPS_INFO->SatellitesUsed = (int)(min(12,StrToDouble(ctemp, NULL)));
+    GPS_INFO->SatellitesUsed = (int)(min(16,StrToDouble(ctemp, NULL)));
 
     ExtractParameter(String,ctemp,0);
     ThisTime = StrToDouble(ctemp, NULL);

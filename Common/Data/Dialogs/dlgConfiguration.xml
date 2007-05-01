@@ -376,12 +376,12 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
     <WndProperty Name="prpPolarType" Caption="Type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=70 Font=2
   Help="This contains a selection of gliders of different performance classes, as well as a special entry for WinPilot File.
 ">
-      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1  OnDataAccess="OnPolarTypeData"/>
     </WndProperty>
 
   <WndProperty Name="prpPolarFile" Caption="Polar file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2
   Help="When WinPilot File is the polar type, this is the name of the file containing the glide polar data.">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1 OnDataAccess="OnPolarFileData"/>
   </WndProperty>
 
   <WndProperty Name="prpMaxManoeuveringSpeed" Caption="V rough air"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2
@@ -399,43 +399,49 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   <WndFrame Name="frmComm" X=70 Y=0 Width=246 Height=222 Font=2>
 
-    <WndProperty Name="prpComDevice1" Caption="Com A device"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Type of primary device. The primary device should be the most reliable GPS data source.">
-      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
-    </WndProperty>
+    <WndFrame Name="frmComm" Caption="Device A" X=0 Y=0 Width=246 Height=68 Font=2 Border=30>
 
-    <WndProperty Name="prpComPort1" Caption="Com A port"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2
-Help="Altair Pro users should set this to Port 3">
-      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
-    </WndProperty>
+      <WndProperty Name="prpComDevice1" Caption="Name"   X=72 Y=1  Width=173 Height=22 CaptionWidth=80 Font=2 Help="Type of primary device. The primary device should be the most reliable GPS data source.">
+        <DataField name="" DataType="enum"  Min=0 Max=50 Step=1 OnDataAccess="OnDeviceAData"/>
+      </WndProperty>
 
-    <WndProperty Name="prpComSpeed1" Caption="Com A speed"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2
-Help="Altair Pro or Vega users should set this to 38400."
->
-      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
-    </WndProperty>
+      <WndProperty Name="prpComPort1" Caption="Port"     X=72 Y=-1  Width=173 Height=22 CaptionWidth=80 Font=2 Help="Altair Pro users should set this to Port 3">
+        <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+      </WndProperty>
 
-    <WndProperty Name="prpComDevice2" Caption="Com B device"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Type of secondary device.
-  The secondary device may be used as backup GPS data or other data e.g. from an intelligent variometer.
-  Generic can be used for GPS sources including FLARM.">
-      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
-    </WndProperty>
+      <WndProperty Name="prpComSpeed1" Caption="Baudrate"  X=72 Y=-1  Width=173 Height=22 CaptionWidth=80 Font=2 Help="Altair Pro or Vega users should set this to 38400.">
+        <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+      </WndProperty>
 
-    <WndProperty Name="prpComPort2" Caption="Com B port"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Altair Pro users should set this to Port 1.">
-      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
-    </WndProperty>
+      <WndButton Name="cmdSetupDeviceA" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 Tag=4 OnClickNotify="OnSetupDeviceAClicked" />
 
-    <WndProperty Name="prpComSpeed2" Caption="Com B speed "     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2
-Help="Altair Pro or Vega users should set this to 38400."
->
-      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
-    </WndProperty>
+    </WndFrame>
+
+    <WndFrame Name="frmComm" Caption="Device B" X=0 Y=69 Width=246 Height=68 Font=2 Border=30>
+      <WndProperty Name="prpComDevice2" Caption="Name"     X=72 Y=1  Width=173 Height=22 CaptionWidth=80 Font=2 Help="Type of secondary device.
+          The secondary device may be used as backup GPS data or other data e.g. from an intelligent variometer.
+          Generic can be used for GPS sources including FLARM.">
+        <DataField name="" DataType="enum"  Min=0 Max=50 Step=1 OnDataAccess="OnDeviceBData"/>
+      </WndProperty>
+
+      <WndProperty Name="prpComPort2" Caption="Port"     X=72 Y=-1  Width=173 Height=22 CaptionWidth=80 Font=2 Help="Altair Pro users should set this to Port 1.">
+        <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+      </WndProperty>
+
+      <WndProperty Name="prpComSpeed2" Caption="Baudrate"     X=72 Y=-1  Width=173 Height=22 CaptionWidth=80 Font=2
+          Help="Altair Pro or Vega users should set this to 38400.">
+        <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+      </WndProperty>
+
+      <WndButton Name="cmdSetupDeviceB" Caption="Setup ..." X=1 Y=43 Width=70  Height=24 Font=2 Tag=4 OnClickNotify="OnSetupDeviceBClicked" />
+
+    </WndFrame>
 
   <WndProperty Name="prpSetSystemTimeFromGPS" Caption="Use GPS time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
   Help="option, if enabled sets the clock of the computer to the GPS time once a fix is set.  This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndButton Name="cmdVario" Caption="Vega vario config" X=50 Y=-1 Width=100  Height=28 Font=2 Tag=4 OnClickNotify="OnVarioClicked" />
 
   </WndFrame>
 

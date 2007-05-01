@@ -570,6 +570,7 @@ void LoadChildsFromXML(WindowControl *Parent,
   COLORREF BackColor;
   COLORREF ForeColor;
   bool Visible;
+  int Border;
 
   int Count = Node->nChildNode();
 
@@ -601,6 +602,8 @@ void LoadChildsFromXML(WindowControl *Parent,
                       (ForeColor>>0)&0xff);
     }
     Font = StringToIntDflt(childNode.getAttribute(TEXT("Font")), ParentFont);
+
+    Border = StringToIntDflt(childNode.getAttribute(TEXT("Border")), 0);
 
     if (_tcscmp(childNode.getName(), TEXT("WndProperty")) == 0){
 
@@ -830,6 +833,11 @@ void LoadChildsFromXML(WindowControl *Parent,
       if (Caption[0] != '\0'){
         WC->SetCaption(Caption);
       }
+
+      if (Border != 0){
+        WC->SetBorderKind(Border);
+      }
+
     }
 
   }

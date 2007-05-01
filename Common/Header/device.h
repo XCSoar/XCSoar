@@ -14,7 +14,7 @@
 #define	devB()	    (&DeviceList[1])
 #define devAll()    (NULL)
 
-typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice} DeviceFlags_t;
+typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut} DeviceFlags_t;
 
 typedef struct{
   void (*WriteString)(TCHAR *Text);
@@ -49,6 +49,8 @@ typedef	struct DeviceDescriptor_t{
 	BOOL (*PutQNH)(DeviceDescriptor_t *d, double NewQNH);
 	BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
   BOOL (*PutVoice)(DeviceDescriptor_t *d, TCHAR *Sentence);
+  DeviceDescriptor_t *pDevPipeTo;
+
   int PortNumber;
 }DeviceDescriptor_t;
 

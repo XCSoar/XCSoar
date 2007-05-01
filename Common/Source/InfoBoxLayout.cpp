@@ -613,7 +613,14 @@ void ButtonLabel::SetLabelText(int index, TCHAR *text) {
     ShowWindow(hWndButtonWindow[index], SW_HIDE);
     ButtonVisible[index]= false;
   } else {
-    SetWindowText(hWndButtonWindow[index], gettext(text));
+
+    TCHAR s[100];
+
+    ExpandMacros(text, s, sizeof(s)/sizeof(s[0]));
+
+    SetWindowText(hWndButtonWindow[index], gettext(s));
+
+    // SetWindowText(hWndButtonWindow[index], gettext(text));
     ShowWindow(hWndButtonWindow[index], SW_SHOW);
     ButtonVisible[index]= true;
   }

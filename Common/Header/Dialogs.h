@@ -59,7 +59,8 @@ extern void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
 #include "dlgTools.h"
 
 bool dlgAirspaceWarningShowDlg(bool force);
-int dlgWayPointSelect(void);
+// int dlgWayPointSelect(void);
+int dlgWayPointSelect(double lon=0.0, double lat=90.0, int type=-1, int FilterNear=0);
 int dlgAirspaceColoursShowModal(void);
 int dlgAirspacePatternsShowModal(void);
 void dlgAirspaceShowModal(bool colored);
