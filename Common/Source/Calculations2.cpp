@@ -94,8 +94,8 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   static double LogLastTime=0;
   static double StatsLastTime=0;
   static double OLCLastTime = 0;
-  double dtLog;
-  double dtSnail;
+  double dtLog = 5.0;
+  double dtSnail = 2.0;
   double dtStats = 60.0;
   double dtOLC = 5.0;
 

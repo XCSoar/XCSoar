@@ -375,7 +375,7 @@ int DetectCurrentTime() {
 }
 
 
-int DetectStartTime() {
+int DetectStartTime(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   // JMW added restart ability
   //
   // we want this to display landing time until next takeoff 
@@ -383,12 +383,12 @@ int DetectStartTime() {
   static int starttime = -1;
   static int lastflighttime = -1;
 
-  if (CALCULATED_INFO.Flying) {
+  if (Calculated->Flying) {
     if (starttime == -1) {
       // hasn't been started yet
       
       starttime = (int)GPS_INFO.Time;
-      
+
       lastflighttime = -1;
     }
     return (int)GPS_INFO.Time-starttime;
@@ -398,7 +398,7 @@ int DetectStartTime() {
     if (lastflighttime == -1) {
       // hasn't been stopped yet
       if (starttime>=0) {
-	lastflighttime = (int)GPS_INFO.Time-starttime;
+	lastflighttime = (int)Basic->Time-starttime;
       } else {
 	return 0; // no last flight time
       }

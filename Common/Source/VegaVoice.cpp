@@ -472,7 +472,7 @@ static void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, Airspace
   static bool PlaySimpleWarning = false;
 
 
-  if (!(ProgramStarted==3))
+  if (!(ProgramStarted==psNormalOp))
     return;
 
   switch (Action){

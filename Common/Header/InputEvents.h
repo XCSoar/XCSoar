@@ -28,6 +28,9 @@ class InputEvents {
   static int  makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next = 0);
   static void makeLabel(int mode_id, TCHAR *label, int location, int event_id);
 
+  static void drawButtons(int Mode);
+
+
   // -------
 
   static void eventAbortTask(TCHAR *misc);
@@ -83,6 +86,8 @@ class InputEvents {
   static void eventExit(TCHAR *misc);
   static void eventFLARMRadar(TCHAR *misc);
   static void eventBeep(TCHAR *misc);
+  static void eventUserDisplayModeForce(TCHAR *misc);
+  static void eventAirspaceDisplayMode(TCHAR *misc);
   // -------
 
 #ifdef _SIM_

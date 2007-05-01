@@ -11,6 +11,8 @@
 #include "task.h"
 #include "Airspace.h"
 
+#define  POLARUSEWINPILOTFILE  6    // if this polat is selected use the winpilot file
+
 extern TCHAR szRegistryKey[];
 extern TCHAR szRegistrySpeedUnitsValue[];
 extern TCHAR szRegistryDistanceUnitsValue[];

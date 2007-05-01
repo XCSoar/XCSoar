@@ -82,6 +82,9 @@ COLORRAMP snail_colors[] = {
 
 ///////////////////////////////// Initialisation
 
+DisplayMode_t UserForceDisplayMode = dmNone;
+DisplayMode_t DisplayMode = dmCruise;
+
 HBITMAP MapWindow::hBmpAirportReachable;
 HBITMAP MapWindow::hBmpAirportUnReachable;
 HBITMAP MapWindow::hBmpFieldReachable;
@@ -297,6 +300,14 @@ void MapWindow::UpdateTimeStats(bool start) {
 bool MapWindow::Event_NearestWaypointDetails(double lon, double lat, 
                                              double range,
                                              bool pan) {
+/*
+if (!pan) {
+  dlgWayPointSelect(lon, lat, 0, 1);
+} else {
+  dlgWayPointSelect(PanLongitude, PanLatitude, 0, 1);
+}
+*/
+
   int i;
   if (!pan || !EnablePan) {
     i=FindNearestWayPoint(lon, lat, range);
@@ -310,6 +321,7 @@ bool MapWindow::Event_NearestWaypointDetails(double lon, double lat,
       PopupWaypointDetails();
       return true;
     }
+
   return false;
 }
 
@@ -351,6 +363,37 @@ bool MapWindow::Event_InteriorAirspaceDetails(double lon, double lat) {
   }
 
   return found; // nothing found..
+}
+
+
+void MapWindow::SwitchZoomClimb(bool isclimb) {
+
+  static double CruiseMapScale = 10;
+  static double ClimbMapScale = 0.25;
+  static bool last_isclimb = false;
+
+  if (CircleZoom) {
+    if (isclimb != last_isclimb) {
+      if (isclimb) {
+        // save cruise scale
+        CruiseMapScale = MapWindow::MapScale;
+        // switch to climb scale
+        MapWindow::RequestMapScale = MapWindow::LimitMapScale(ClimbMapScale);
+        MapWindow::BigZoom = true;
+      } else {
+        // leaving climb
+        // save cruise scale
+        ClimbMapScale = MapWindow::MapScale;
+        MapWindow::RequestMapScale = MapWindow::LimitMapScale(CruiseMapScale);
+        // switch to climb scale
+        MapWindow::BigZoom = true;
+      }
+      last_isclimb = isclimb;
+    } else {
+      // nothing to do.
+    }
+  }
+
 }
 
 bool MapWindow::isAutoZoom() {
@@ -814,7 +857,7 @@ void MapWindow::Event_Pan(int vswitch) {
 double MapWindow::LimitMapScale(double value) {
 
   double minreasonable = 0.05;
-  if (AutoZoom && !DerivedDrawInfo.Circling) {
+  if (AutoZoom && DisplayMode != dmCircling) {
     if (AATEnabled && (ActiveWayPoint>0)) {
       minreasonable = 0.88;
     } else {
@@ -1486,12 +1529,12 @@ void MapWindow::UpdateMapScale()
       
       if(
          ((DisplayOrientation == NORTHTRACK)
-          &&(DerivedDrawInfo.Circling ==FALSE))
+          &&(DisplayMode != dmCircling))
          ||(DisplayOrientation == NORTHUP) 
          || 
          (((DisplayOrientation == NORTHCIRCLE) 
            || (DisplayOrientation == TRACKCIRCLE)) 
-          && (DerivedDrawInfo.Circling == TRUE) )
+          && (DisplayMode == dmCircling) )
         )
       {
         AutoZoomFactor = 2.5;
@@ -1592,12 +1635,12 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
   if( (DisplayOrientation == NORTHUP) 
       ||
       ((DisplayOrientation == NORTHTRACK)
-       &&(DerivedDrawInfo.Circling == FALSE))
+       &&(DisplayMode != dmCircling))
       || 
       (
        ((DisplayOrientation == NORTHCIRCLE)
         ||(DisplayOrientation==TRACKCIRCLE))
-       && (DerivedDrawInfo.Circling == TRUE) )
+       && (DisplayMode == dmCircling) )
     )
   {
     GliderCenter = true;
@@ -1650,7 +1693,7 @@ void MapWindow::DrawThermalEstimate(HDC hdc, RECT rc) {
   if (!EnableThermalLocator) 
     return;
 
-  if (DerivedDrawInfo.Circling) {
+  if (DisplayMode == dmCircling) {
     if (DerivedDrawInfo.ThermalEstimate_R>0) {
       LatLon2Screen(DerivedDrawInfo.ThermalEstimate_Longitude, 
                     DerivedDrawInfo.ThermalEstimate_Latitude, 
@@ -1989,7 +2032,6 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
 
     GaugeFLARM::Render(&DrawInfo);
 
-
     RenderMapWindow(MapRect);
     
     if (!first) {
@@ -2004,9 +2046,8 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     // we do caching after screen update, to minimise perceived delay
     UpdateCaches(first);
     first = false;
-
-    if (ProgramStarted==1) {
-      ProgramStarted = 2;
+    if (ProgramStarted==psInitDone) {
+      ProgramStarted = psFirstDrwaDone;
     }
     
   }
@@ -2206,7 +2247,7 @@ void MapWindow::DrawBitmapIn(const HDC hdc, const POINT &sc, const HBITMAP h) {
 void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
 {
 
-  if (extGPSCONNECT && !(DrawInfo.NAVWarning) && (DrawInfo.SatellitesUsed>0)) 
+  if (extGPSCONNECT && !(DrawInfo.NAVWarning) && (DrawInfo.SatellitesUsed != 0)) 
     // nothing to do
     return;
 
@@ -2229,7 +2270,7 @@ void MapWindow::DrawGPSStatus(HDC hDC, RECT rc)
               0, TextInBoxMode);
 
   } else
-    if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed==0)) {
+    if (DrawInfo.NAVWarning || (DrawInfo.SatellitesUsed == 0)) {
       SelectObject(hDCTemp,hGPSStatus1);
 
       DrawBitmapX(hDC, 
@@ -2302,9 +2343,9 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
     if (TaskAborted) {
       SelectObject(hDCTemp,hAbort);
     } else {
-      if (DerivedDrawInfo.Circling) {
+      if (DisplayMode == dmCircling) {
         SelectObject(hDCTemp,hClimb);
-      } else if (DerivedDrawInfo.FinalGlide) {
+      } else if (DisplayMode == dmFinalGlide) {
         SelectObject(hDCTemp,hFinalGlide);
       } else {
         SelectObject(hDCTemp,hCruise);
@@ -2346,10 +2387,10 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
     Center.x = rc.right-10;
     Center.y = rc.bottom-10;
 
-    if (DerivedDrawInfo.Circling) {
+    if (DisplayMode == dmCircling) {
 
       SetPoint(0, 
-               Center.x, 
+               Center.x,
                Center.y-IBLSCALE(4));
       SetPoint(1, 
                Center.x-IBLSCALE(8), 
@@ -2358,7 +2399,7 @@ void MapWindow::DrawFlightMode(HDC hdc, RECT rc)
                Center.x+IBLSCALE(8), 
                Center.y+IBLSCALE(4));
 
-    } else if (DerivedDrawInfo.FinalGlide) {
+    } else if (DisplayMode == dmFinalGlide) {
 
       SetPoint(0, 
                Center.x, 
@@ -3886,7 +3927,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   POINT GliderBand[5] = { {0,0},{23,0},{22,0},{24,0},{0,0} };
   
   if ((DerivedDrawInfo.TaskAltitudeDifference>50)
-      &&(DerivedDrawInfo.FinalGlide)) {
+      &&(DisplayMode == dmFinalGlide)) {
     return;
   }
   
@@ -4032,7 +4073,8 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
   __try{
   #endif
 
-    if (ActiveWayPoint >= 0) {
+    if (ValidTaskPoint(ActiveWayPoint)){
+    // if (ActiveWayPoint >= 0) {
 
       Offset = ((int)DerivedDrawInfo.TaskAltitudeDifference)>>4; 
       Offset0 = ((int)DerivedDrawInfo.TaskAltitudeDifference0)>>4; 
@@ -4206,15 +4248,15 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   if(!TrailActive)
     return;
 
-  if (DerivedDrawInfo.Circling != lastCircling) {
+  if ((DisplayMode == dmCircling) != lastCircling) {
     needcolour = true;
   }
-  lastCircling = DerivedDrawInfo.Circling;
+  lastCircling = (DisplayMode == dmCircling);
 
   double traildrift_lat;
   double traildrift_lon;
   
-  bool dotraildrift = EnableTrailDrift && DerivedDrawInfo.Circling;
+  bool dotraildrift = EnableTrailDrift && (DisplayMode == dmCircling);
 
   P1 = NULL; P2 = NULL;
 
@@ -4238,7 +4280,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   } else {
     ntrail = TRAILSIZE/TRAILSHRINK;
   }
-  if (DerivedDrawInfo.Circling) {
+  if ((DisplayMode == dmCircling)) {
     ntrail /= TRAILSHRINK;
   }
 
@@ -4265,7 +4307,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       }
       P1->Colour = -1; // force recalculation of colour
     }
-    if (DerivedDrawInfo.Circling) {
+    if (DisplayMode == dmCircling) {
       // scan only for sink after exiting cruise
       vmin = (float)(min(this_vmin,-5));
     } else {
@@ -4307,7 +4349,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       TrailFirstTime = P1->Time;
     }
 
-    if (DerivedDrawInfo.Circling) {
+    if (DisplayMode == dmCircling) {
       if ((!P1->Circling)&&( i<ntrail-60 )) {
         // ignore cruise mode lines unless very recent
         
@@ -4405,7 +4447,7 @@ extern OLCOptimizer olc;
 void MapWindow::DrawTrailFromTask(HDC hdc, RECT rc) {
   static POINT ptin[MAXCLIPPOLYGON];
 
-  if((TrailActive!=3) || DerivedDrawInfo.Circling)
+  if((TrailActive!=3) || (DisplayMode == dmCircling))
     return;
 
   olc.SetLine();

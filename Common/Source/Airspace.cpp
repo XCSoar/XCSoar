@@ -1297,7 +1297,8 @@ BOOL CheckAirspaceAltitude(const double &Base, const double &Top)
       if( ( alt >= (Base) ) && ( alt < (Top) ))
 	return TRUE;
       else
-	return FALSE;
+        return FALSE;
+    case ALLOFF : return FALSE;
     }
   return TRUE;
 }

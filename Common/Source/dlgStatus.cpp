@@ -177,7 +177,31 @@ void dlgStatusShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFlightTime"));
   if (wp) {
-    Units::TimeToText(Temp, (int)CALCULATED_INFO.FlightTime);
+
+    TCHAR sTakeOff[32];
+    TCHAR sLanding[32];
+    TCHAR sFlight[32];
+
+    if (CALCULATED_INFO.FlightTime > 0){
+      Units::TimeToText(sTakeOff, (int)TimeLocal((long)CALCULATED_INFO.TakeOffTime));
+      Units::TimeToText(sLanding, (int)TimeLocal((long)(CALCULATED_INFO.TakeOffTime + CALCULATED_INFO.FlightTime)));
+      Units::TimeToText(sFlight, (int)CALCULATED_INFO.FlightTime);
+
+      _tcscpy(Temp, sTakeOff);
+
+      if (!CALCULATED_INFO.Flying){
+        _tcscat(Temp, TEXT("-"));
+        _tcscat(Temp, sLanding);
+      }
+
+      _tcscat(Temp, TEXT("("));
+      _tcscat(Temp, sFlight);
+      _tcscat(Temp, TEXT(")"));
+
+    } else {
+      _stprintf(Temp, TEXT("-"));
+    }
+
     wp->SetText(Temp);
   }
 

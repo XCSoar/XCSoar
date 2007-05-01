@@ -23,10 +23,18 @@ extern TCHAR XCSoar_Version[256];
 #include "BlueSMS.h"
 #endif
 
+
+typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrwaDone=2, psNormalOp=3} StartupState_t;
+// 0: not started at all
+// 1: everything is alive
+// 2: done first draw
+// 3: normal operation
+
+
 // instance of main program
 extern HINSTANCE hInst;
 
-extern int ProgramStarted;
+extern StartupState_t ProgramStarted;
 
 
 extern int UTCOffset;

@@ -60,6 +60,8 @@ Copyright_License {
 #include "devEW.h"
 #include "devAltairPro.h"
 #include "devVega.h"
+#include "devNmeaOut.h"
+#include "devPosiGraph.h"
 #include "Externs.h"
 #include "units.h"
 #include "InputEvents.h"
@@ -262,6 +264,7 @@ int          NettoSpeed = 1000;
 
 NMEA_INFO     GPS_INFO;
 DERIVED_INFO  CALCULATED_INFO;
+
 BOOL GPSCONNECT = FALSE;
 BOOL extGPSCONNECT = FALSE; // this one used by external functions
 
@@ -943,6 +946,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
     }
     memcpy(&tmp_GPS_INFO,&GPS_INFO,sizeof(NMEA_INFO));
     memcpy(&tmp_CALCULATED_INFO,&CALCULATED_INFO,sizeof(DERIVED_INFO));
+
     UnlockFlightData();
 
     // Do vario first to reduce audio latency
@@ -966,11 +970,38 @@ DWORD CalculationThread (LPVOID lpvoid) {
     }
     
     if (NMEAParser::GpsUpdated) {
-      if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO))
-	{
-	  MapWindow::MapDirty = true;
-	  needcalculationsslow = true;
-	}
+      if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)){
+
+        DisplayMode_t lastDisplayMode = DisplayMode;
+
+        MapWindow::MapDirty = true;
+        needcalculationsslow = true;
+
+        switch (UserForceDisplayMode){
+          case dmCircling:
+            DisplayMode = dmCircling;
+          break;
+          case dmCruise:
+            DisplayMode = dmCruise;
+          break;
+          case dmFinalGlide:
+            DisplayMode = dmFinalGlide;
+          break;
+          case dmNone:
+            if (tmp_CALCULATED_INFO.Circling){
+              DisplayMode = dmCircling;
+            } else if (tmp_CALCULATED_INFO.FinalGlide){
+              DisplayMode = dmFinalGlide;
+            } else
+              DisplayMode = dmCruise;
+          break;
+        }
+
+        if (lastDisplayMode != DisplayMode){
+          MapWindow::SwitchZoomClimb(DisplayMode == dmCircling);
+        }
+
+      }
       InfoBoxesDirty = true;
     }
         
@@ -1058,7 +1089,7 @@ HANDLE drawTriggerEvent;
 HANDLE dataTriggerEvent;
 HANDLE varioTriggerEvent;
 
-int ProgramStarted = 0; 
+StartupState_t ProgramStarted = psInitInProgress; 
 // 0: not started at all
 // 1: everything is alive
 // 2: done first draw
@@ -1130,7 +1161,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 #endif
  
-  wcscat(XCSoar_Version, TEXT("5.0.9 "));
+  wcscat(XCSoar_Version, TEXT("5.0.13 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1294,6 +1325,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   atrRegister();
   vgaRegister();
   caiGpsNavRegister();
+  nmoRegister();
+  pgRegister();
 
   //JMW disabled  devInit(lpCmdLine);
 
@@ -1340,7 +1373,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // Da-da, start everything now
   StartupStore(TEXT("ProgramStarted=1\r\n"));
-  ProgramStarted = 1;
+  ProgramStarted = psInitDone;
 
   GlobalRunning = true;
 
@@ -1730,9 +1763,9 @@ int getInfoType(int i) {
   if (EnableAuxiliaryInfo) {
     return (InfoType[i] >> 24) & 0xff; // auxiliary
   } else {
-    if (CALCULATED_INFO.Circling == TRUE)
+    if (DisplayMode == dmCircling)
       return InfoType[i] & 0xff; // climb
-    else if (CALCULATED_INFO.FinalGlide == TRUE) {
+    else if (DisplayMode == dmFinalGlide) {
       return (InfoType[i] >> 16) & 0xff; //final glide
     } else {
       return (InfoType[i] >> 8) & 0xff; // cruise
@@ -1748,10 +1781,10 @@ void setInfoType(int i, char j) {
     InfoType[i] &= 0x00ffffff;
     InfoType[i] += (j<<24);
   } else {
-    if (CALCULATED_INFO.Circling == TRUE) {
+    if (DisplayMode == dmCircling) {
       InfoType[i] &= 0xffffff00;
       InfoType[i] += (j);
-    } else if (CALCULATED_INFO.FinalGlide == TRUE) {
+    } else if (DisplayMode == dmFinalGlide) {
       InfoType[i] &= 0xff00ffff;
       InfoType[i] += (j<<16);
     } else {
@@ -2084,7 +2117,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     case WM_SETFOCUS:
       // JMW not sure this ever does anything useful..
-      if (ProgramStarted) {
+      if (ProgramStarted > psInitInProgress) {
 
 	if(InfoWindowActive) {
 	  
@@ -2115,15 +2148,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
     case WM_TIMER:
       //      ASSERT(hWnd==hWndMainWindow);
-      if (ProgramStarted) {
+      if (ProgramStarted > psInitInProgress) {
 #ifdef _SIM_
 	SIMProcessTimer();
 #else
 	ProcessTimer();
 #endif
-	if (ProgramStarted==2) {
+	if (ProgramStarted==psFirstDrwaDone) {
 	  AfterStartup();
-	  ProgramStarted= 3;
+	  ProgramStarted = psNormalOp;
           StartupStore(TEXT("ProgramStarted=3\r\n"));
           StartupLogFreeRamAndStorage();
 	}
@@ -2131,7 +2164,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
 
     case WM_INITMENUPOPUP:
-      if (ProgramStarted) {
+      if (ProgramStarted > psInitInProgress) {
 	if(DisplayLocked)
 	  CheckMenuItem((HMENU) wParam,IDM_FILE_LOCK,MF_CHECKED|MF_BYCOMMAND);
 	else
@@ -2204,7 +2237,7 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
   wmControl = (HWND)lParam;
 
   if(wmControl != NULL) {
-    if (ProgramStarted==3) {
+    if (ProgramStarted==psNormalOp) {
 
       DialogActive = false;
 
@@ -2256,16 +2289,18 @@ void ProcessChar1 (char c)
   static TCHAR BuildingString[100];
   static int i = 0;
 
-  if (ProgramStarted<3) return; // ignore everything until started
+  if (ProgramStarted < psNormalOp) return; // ignore everything until started
 
   if (i<90) {
+
+    BuildingString[i++] = c;
+
     if(c=='\n') {
       BuildingString[i] = '\0';
       LockFlightData();
       devParseNMEA(0, BuildingString, &GPS_INFO);
       UnlockFlightData();
     } else {
-      BuildingString[i++] = c;
       return;
     }
   }
@@ -2279,16 +2314,19 @@ void ProcessChar2 (char c)
   static TCHAR BuildingString[100];
   static int i = 0;
 
-  if (ProgramStarted<3) return; // ignore everything until started
+  if (ProgramStarted < psNormalOp) return; // ignore everything until started
+
 
   if (i<90) {
+
+    BuildingString[i++] = c;
+
     if(c=='\n') {
       BuildingString[i] = '\0';
       LockFlightData();
       devParseNMEA(1, BuildingString, &GPS_INFO);
       UnlockFlightData();
     } else {
-      BuildingString[i++] = c;
       return;
     }
   }
@@ -2399,9 +2437,9 @@ void DisplayText(void)
     if (EnableAuxiliaryInfo) {
       DisplayType[i] = (InfoType[i] >> 24) & 0xff;
     } else {
-      if (CALCULATED_INFO.Circling == TRUE)
+      if (DisplayMode == dmCircling)
 	DisplayType[i] = InfoType[i] & 0xff;
-      else if (CALCULATED_INFO.FinalGlide == TRUE) {
+      else if (DisplayMode == dmFinalGlide) {
 	DisplayType[i] = (InfoType[i] >> 16) & 0xff;
       } else {
 	DisplayType[i] = (InfoType[i] >> 8) & 0xff;
@@ -2420,37 +2458,39 @@ void DisplayText(void)
 
     // set values, title
     switch (DisplayType[i]) {
-    case 14: // Next waypoint
-      if (theactive != -1){
-	InfoBoxes[i]->
-	  SetTitle(Data_Options[DisplayType[i]].Formatter->
-		   Render(&color));	  
-	InfoBoxes[i]->SetColor(color);
-	InfoBoxes[i]->
-	  SetValue(Data_Options[47].Formatter->Render(&color));
-      }else{
-	InfoBoxes[i]->SetTitle(TEXT("Next"));
-	InfoBoxes[i]->SetValue(TEXT("---"));
-	InfoBoxes[i]->SetColor(0);
-      }
-      if (needupdate)
-       InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
-		       Data_Options[DisplayType[i]].UnitGroup));
-	break;
-    default:
-      if (needupdate)
-	InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
+      case 14: // Next waypoint
+        if (theactive != -1){
+          InfoBoxes[i]->
+            SetTitle(Data_Options[DisplayType[i]].Formatter->
+            Render(&color));
+          InfoBoxes[i]->SetColor(color);
+          InfoBoxes[i]->
+            SetValue(Data_Options[47].Formatter->Render(&color));
+        }else{
+          InfoBoxes[i]->SetTitle(TEXT("Next"));
+          InfoBoxes[i]->SetValue(TEXT("---"));
+          InfoBoxes[i]->SetColor(0);
+        }
+        if (needupdate)
+          InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
+           Data_Options[DisplayType[i]].UnitGroup)
+          );
+        break;
+      default:
+        if (needupdate)
+          InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
 
-      InfoBoxes[i]->
-	SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
-      
-      // to be optimized!
-      if (needupdate)
-	InfoBoxes[i]->
-	  SetValueUnit(Units::GetUserUnitByGroup(
-		       Data_Options[DisplayType[i]].UnitGroup));
-      
-      InfoBoxes[i]->SetColor(color);
+        InfoBoxes[i]->
+          SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
+
+        // to be optimized!
+        if (needupdate)
+          InfoBoxes[i]->
+            SetValueUnit(Units::GetUserUnitByGroup(
+              Data_Options[DisplayType[i]].UnitGroup)
+            );
+
+        InfoBoxes[i]->SetColor(color);
     };
     
     switch (DisplayType[i]) {
@@ -2519,7 +2559,7 @@ void CommonProcessTimer()
 {
 
   // service the GCE and NMEA queue
-  if (ProgramStarted==3) {
+  if (ProgramStarted==psNormalOp) {
     InputEvents::DoQueuedEvents();
     if (RequestAirspaceWarningDialog) {
       RequestAirspaceWarningDialog= false;
@@ -3249,6 +3289,96 @@ void Event_ChangeInfoBoxType(int i) {
 
   setInfoType(InfoFocus, j);
   DisplayText();
+
+}
+
+
+static void ReplaceInString(TCHAR *String, TCHAR *ToReplace, TCHAR *ReplaceWith, size_t Size){
+  int   iR, iW, iDiff;
+  TCHAR *pC;
+
+  pC = _tcsstr(String, ToReplace);
+  iR = _tcsclen(ToReplace);
+  iW = _tcsclen(ReplaceWith);
+
+  iDiff = iW-iR;
+
+  while((pC = _tcsstr(String, ToReplace)) != NULL){
+
+    if( _tcsclen(String) + (iDiff) >= Size){
+      return;
+    }
+
+    memmove(pC + iW, pC + iR, _tcsclen(pC + iR) + sizeof(TCHAR));
+    _tcsncpy(pC, ReplaceWith, iW);
+
+  }
+
+}
+
+static void CondReplaceInString(bool Condition, TCHAR *Buffer, TCHAR *Macro, TCHAR *TrueText, TCHAR *FalseText, size_t Size){
+  if (Condition)
+    ReplaceInString(Buffer, Macro, TrueText, Size);
+  else
+    ReplaceInString(Buffer, Macro, FalseText, Size);
+}
+
+TCHAR *ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
+  // ToDo, check Buffer Size
+  _tcsncpy(OutBuffer, In, Size);
+  OutBuffer[Size-1] = '\0';
+
+  if (_tcsstr(OutBuffer, TEXT("$(")) == NULL) return(OutBuffer);
+
+  switch (AutoAdvance) {
+  case 0:
+    ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(manual)"), Size);
+    break;
+  case 1:
+    ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(auto)"), Size);
+    break;
+  case 2:
+    if (ActiveWayPoint>0) {
+      CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("Cancel"), TEXT("TURN"), Size);
+    }
+  case 3:
+    if (ActiveWayPoint==0) {
+      CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("Cancel"), TEXT("START"), Size);
+    }
+  default:
+    break;
+  }
+
+  CondReplaceInString(LoggerActive, OutBuffer, TEXT("$(LoggerActive)"), TEXT("Stop"), TEXT("Start"), Size);
+  CondReplaceInString(TaskAborted, OutBuffer, TEXT("$(TaskAbortToggelActionName)"), TEXT("Resume"), TEXT("Abort"), Size);
+  CondReplaceInString(ForceFinalGlide, OutBuffer, TEXT("$(FinalForceToggelActionName)"), TEXT("Unforce"), TEXT("Force"), Size);
+  CondReplaceInString(MapWindow::IsMapFullScreen(), OutBuffer, TEXT("$(FullScreenToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(MapWindow::isAutoZoom(), OutBuffer, TEXT("$(ZoomAutoToggelActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
+  CondReplaceInString(EnableTopology, OutBuffer, TEXT("$(TopologyToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(EnableTerrain, OutBuffer, TEXT("$(TerrainToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(MapWindow::DeclutterLabels, OutBuffer, TEXT("$(MapLabelsToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(CALCULATED_INFO.AutoMacCready != 0, OutBuffer, TEXT("$(MacCreadyToggelActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
+  CondReplaceInString(EnableAuxiliaryInfo, OutBuffer, TEXT("$(AuxInfoToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
+
+  CondReplaceInString(UserForceDisplayMode == dmCircling, OutBuffer, TEXT("$(DispModeClimbShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(UserForceDisplayMode == dmCruise, OutBuffer, TEXT("$(DispModeCruiseShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(UserForceDisplayMode == dmNone, OutBuffer, TEXT("$(DispModeAutoShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(UserForceDisplayMode == dmFinalGlide, OutBuffer, TEXT("$(DispModeFinalShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+
+  CondReplaceInString(AltitudeMode == ALLON, OutBuffer, TEXT("$(AirspaceModeAllShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(AltitudeMode == CLIP,  OutBuffer, TEXT("$(AirspaceModeClipShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(AltitudeMode == AUTO,  OutBuffer, TEXT("$(AirspaceModeAutoShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(AltitudeMode == ALLBELOW, OutBuffer, TEXT("$(AirspaceModeBelowShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(AltitudeMode == ALLOFF, OutBuffer, TEXT("$(AirspaceModeAllOffIndicator)"), TEXT("(*)"), TEXT(""), Size);
+
+  CondReplaceInString(TrailActive == 0, OutBuffer, TEXT("$(SnailTrailOffShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(TrailActive == 2, OutBuffer, TEXT("$(SnailTrailShortShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(TrailActive == 1, OutBuffer, TEXT("$(SnailTrailLongShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+  CondReplaceInString(TrailActive == 3, OutBuffer, TEXT("$(SnailTrailFullShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
+
+  CondReplaceInString(EnableFLARMDisplay != 0, OutBuffer, TEXT("$(FlarmDispToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
+
+  return(OutBuffer);
 
 }
 

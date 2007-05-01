@@ -201,16 +201,102 @@ static void NextPage(int Step){
 
 
 
-static void OnVarioClicked(WindowControl * Sender){
-	(void)Sender;
-  changed = dlgConfigurationVarioShowModal();
+static void OnSetupDeviceAClicked(WindowControl * Sender){
+  (void)Sender;
 
-  // this is a hack to get the dialog to retain focus because
-  // the progress dialog in the vario configuration somehow causes
-  // focus problems
-  wf->FocusNext(NULL);
+  #if (ToDo)
+    devA()->DoSetup();
+    wf->FocusNext(NULL);
+  #endif
+
+// this is a hack, devices dont jet support device dependant setup dialogs
+
+  if (devA() != NULL && _tcscmp(devA()->Name,TEXT("Vega")) == 0) {
+
+    changed = dlgConfigurationVarioShowModal();
+
+    // this is a hack to get the dialog to retain focus because
+    // the progress dialog in the vario configuration somehow causes
+    // focus problems
+    wf->FocusNext(NULL);
+  }
 
 }
+
+static void OnSetupDeviceBClicked(WindowControl * Sender){
+  (void)Sender;
+
+  #if (ToDo)
+    devB()->DoSetup();
+    wf->FocusNext(NULL);
+  #endif
+
+// this is a hack, devices dont jet support device dependant setup dialogs
+
+  if (devB() != NULL && _tcscmp(devB()->Name,TEXT("Vega")) == 0) {
+
+    changed = dlgConfigurationVarioShowModal();
+
+    // this is a hack to get the dialog to retain focus because
+    // the progress dialog in the vario configuration somehow causes
+    // focus problems
+    wf->FocusNext(NULL);
+  }
+
+}
+
+static void UpdateDeviceSetupButton(int DeviceIdx, TCHAR *Name){
+
+  WndButton *wb;
+
+  if (DeviceIdx == 0){
+
+    wb = ((WndButton *)wf->FindByName(TEXT("cmdSetupDeviceA")));
+    if ((wb != NULL) && (_tcscmp(Name, TEXT("Vega")) == 0))
+      wb->SetVisible(true);
+    else
+      wb->SetVisible(false);
+
+  }
+
+  if (DeviceIdx == 1){
+
+    wb = ((WndButton *)wf->FindByName(TEXT("cmdSetupDeviceB")));
+    if ((wb != NULL) && (_tcscmp(Name, TEXT("Vega")) == 0))
+      wb->SetVisible(true);
+    else
+      wb->SetVisible(false);
+
+  }
+
+}
+
+static void OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode){
+
+  switch(Mode){
+    case DataField::daGet:
+    break;
+    case DataField::daPut:
+    case DataField::daChange:
+      UpdateDeviceSetupButton(0, Sender->GetAsString());
+    break;
+  }
+
+}
+
+static void OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode){
+
+  switch(Mode){
+    case DataField::daGet:
+    break;
+    case DataField::daPut:
+    case DataField::daChange:
+      UpdateDeviceSetupButton(1, Sender->GetAsString());
+    break;
+  }
+
+}
+
 
 
 static void OnAircraftRegoClicked(WindowControl *Sender) {
@@ -328,6 +414,64 @@ static void OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 }
 
+static int lastSelectedPolarFile = -1;
+
+static void OnPolarFileData(DataField *Sender, DataField::DataAccessKind_t Mode){
+  WndProperty* wp;
+
+  switch(Mode){
+    case DataField::daGet:
+    break;
+    case DataField::daPut:
+    case DataField::daChange:
+      if (Sender->GetAsString() != NULL && _tcscmp(Sender->GetAsString(), TEXT("")) != 0){
+        // then ... set Polar Tape to Winpilot
+
+        wp = (WndProperty *)wf->FindByName(TEXT("prpPolarType"));
+
+        if (wp != NULL){
+          wp->GetDataField()->SetAsInteger(POLARUSEWINPILOTFILE);
+          wp->RefreshDisplay();
+        }
+
+      }
+    break;
+  }
+
+}
+
+
+static void OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode){
+  WndProperty* wp;
+
+  switch(Mode){
+    case DataField::daGet:
+    break;
+    case DataField::daPut:
+    case DataField::daChange:
+      wp = (WndProperty *)wf->FindByName(TEXT("prpPolarFile"));
+
+      if (Sender->GetAsInteger() != POLARUSEWINPILOTFILE){
+        // then ... clear Winpilot File if Polat Type is not WinpilotFile
+
+        if (wp != NULL && wp->GetDataField()->GetAsInteger() > 0){
+          lastSelectedPolarFile = wp->GetDataField()->GetAsInteger();
+          wp->GetDataField()->SetAsInteger(-1);
+          wp->RefreshDisplay();
+        }
+
+      } else {
+        if (wp != NULL && wp->GetDataField()->GetAsInteger() <= 0 && lastSelectedPolarFile > 0){
+          wp->GetDataField()->SetAsInteger(lastSelectedPolarFile);
+          wp->RefreshDisplay();
+        }
+
+      }
+    break;
+  }
+
+}
+
 
 extern void OnInfoBoxHelp(WindowControl * Sender);
 
@@ -432,12 +576,20 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnUTCData),
   DeclearCallBackEntry(OnNextClicked),
   DeclearCallBackEntry(OnPrevClicked),
-  DeclearCallBackEntry(OnVarioClicked),
+  DeclearCallBackEntry(OnSetupDeviceAClicked),
+  DeclearCallBackEntry(OnSetupDeviceBClicked),
   DeclearCallBackEntry(OnInfoBoxHelp),
   DeclearCallBackEntry(OnWaypointNewClicked),
   DeclearCallBackEntry(OnWaypointDeleteClicked),
   DeclearCallBackEntry(OnWaypointEditClicked),
   DeclearCallBackEntry(OnWaypointSaveClicked),
+
+  DeclearCallBackEntry(OnPolarFileData),
+  DeclearCallBackEntry(OnPolarTypeData),
+
+  DeclearCallBackEntry(OnDeviceAData),
+  DeclearCallBackEntry(OnDeviceBData),
+
   DeclearCallBackEntry(NULL)
 };
 
@@ -1605,6 +1757,9 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig18!=NULL);
 
   setVariables();
+
+  UpdateDeviceSetupButton(0, devA()->Name);
+  UpdateDeviceSetupButton(1, devB()->Name);
 
   ////////
   // TODO: configuration of Appearance

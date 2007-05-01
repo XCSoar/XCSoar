@@ -432,13 +432,15 @@ void DataFieldFileReader::Set(int Value){
 void DataFieldFileReader::Inc(void){
   if (mValue<nFiles-1) {
     mValue++;
+    (mOnDataAccess)(this, daChange);
   }
 }
 
 void DataFieldFileReader::Dec(void){
   if (mValue>0) {
     mValue--;
-  } 
+    (mOnDataAccess)(this, daChange);
+  }
 }
 
 /////////
@@ -598,12 +600,18 @@ TCHAR *DataFieldEnum::GetAsString(void){
 
 
 void DataFieldEnum::Set(int Value){
+  int lastValue = Value;
   if (Value<=(int)nEnums) {
     mValue = Value;
   }
   if (Value<0) {
     mValue = 0;
   }
+
+  if (Value != lastValue){
+    (mOnDataAccess)(this, daChange);
+  }
+
 }
 
 int DataFieldEnum::SetAsInteger(int Value){
@@ -614,13 +622,15 @@ int DataFieldEnum::SetAsInteger(int Value){
 void DataFieldEnum::Inc(void){
   if (mValue<nEnums-1) {
     mValue++;
+   (mOnDataAccess)(this, daChange);
   }
 }
 
 void DataFieldEnum::Dec(void){
   if (mValue>0) {
     mValue--;
-  } 
+   (mOnDataAccess)(this, daChange);
+  }
 }
 
 
@@ -3127,50 +3137,105 @@ void WndListFrame::Redraw(void){
 }
 
 void WndListFrame::DrawScrollBar(HDC hDC) {
+
+  RECT rc;
+  HPEN hP;
+  HBRUSH hB;
+  int w = 1+GetWidth()- 2*SELECTORWIDTH;
+  int h = GetHeight()- SELECTORWIDTH;
+
+  rc.left = w;
+  rc.top = 0;
+  rc.right = w + 2*SELECTORWIDTH - 2;
+  rc.bottom = h;
+
+  if (mListInfo.ItemCount <= mListInfo.ItemInViewCount){
+    hB = (HBRUSH)CreateSolidBrush(GetBackColor());
+    FillRect(hDC, &rc, hB);
+    DeleteObject(hB);
+    return;
+  }
+
+  hP = (HPEN)CreatePen(PS_SOLID, DEFAULTBORDERPENWIDTH, GetForeColor());
+
+  SelectObject(hDC, hP);
+  SelectObject(hDC, GetBackBrush());
+
+  Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
+
+  DeleteObject(hP);
+
+  hB = (HBRUSH)CreateSolidBrush(GetForeColor());
+
+  rc.left = 1+w;
+  rc.top = 1+(h * mListInfo.ScrollIndex) / mListInfo.ItemCount;
+  rc.right = w + 2*SELECTORWIDTH - 1;
+  rc.bottom = rc.top + iround((h * mListInfo.ItemInViewCount) / mListInfo.ItemCount) -1;
+
+  if (rc.bottom >= h){
+    int d;
+    d= (h - rc.bottom) - 1;
+    rc.bottom += d;
+    rc.top += d;
+  }
+
+  FillRect(hDC, &rc, hB);
+
+  DeleteObject(hB);
+
+  /*
+
   // Draw scroll line if necessary
-  int w = GetWidth()-SELECTORWIDTH;
-  int h = GetHeight()-SELECTORWIDTH;
   int l = SELECTORWIDTH*2;
 
-  int bottom_percent = 
-    min(h,
-	h*(mListInfo.BottomIndex+mListInfo.ScrollIndex+1)
-	/max(1,mListInfo.ItemCount));
-  int top_percent = 
-    h*(mListInfo.ScrollIndex)/max(1,mListInfo.ItemCount);
+  int bottom_percent = min(h, h*(mListInfo.BottomIndex + mListInfo.ScrollIndex + 1) / max(1,mListInfo.ItemCount));
+  int top_percent = h*(mListInfo.ScrollIndex)/max(1,mListInfo.ItemCount);
 
   if ((top_percent==0)&&(bottom_percent==h)) {
     return;
   }
+
   HPEN oldPen = (HPEN)SelectObject(hDC, GetSelectorPen());
 
   DrawLine(hDC,
-	   w, top_percent+SELECTORWIDTH,
-	   w, bottom_percent-SELECTORWIDTH);
+    w, top_percent+SELECTORWIDTH,
+    w, bottom_percent-SELECTORWIDTH);
+
   if (top_percent>0) {
+
     DrawLine2(hDC,
-	      w, l, 
-	      w-l, 0,
-	      w-l, l);
+       w, l,
+       w-l, 0,
+       w-l, l);
+
   } else {
+
     DrawLine2(hDC,
-	      w-2*l, 0, 
-	      w, 0,
-	      w, l);
+        w-2*l, 0,
+        w, 0,
+        w, l);
+
   }
   if (bottom_percent<h) {
+
     DrawLine2(hDC,
-	      w, h-l, 
-	      w-l, h,
-	      w-l, h-l);
+        w, h-l,
+        w-l, h,
+        w-l, h-l);
+
   } else {
+
     DrawLine2(hDC,
-	      w-2*l, h, 
-	      w, h,
-	      w, h-l);
+       w-2*l, h,
+       w, h,
+       w, h-l);
+
   }
 
   SelectObject(hDC,oldPen);
+
+  */
+
 }
 
 
@@ -3183,7 +3248,10 @@ void WndListFrame::SetEnterCallback(void
 
 
 void WndListFrame::RedrawScrolled(bool all) {
-  
+
+  int newTop;
+
+  /*       -> inefficient and flickering draws the list twice
   if (all) {
     int i;
     for (i=0; i<= mListInfo.ItemInViewCount; i++) {
@@ -3192,14 +3260,22 @@ void WndListFrame::RedrawScrolled(bool all) {
       mClients[0]->SetTop(mClients[0]->GetHeight() * (i));
       mClients[0]->Redraw();
     }
-  } 
-  
+  }
+  */
+
   mListInfo.DrawIndex = mListInfo.ItemIndex;
   mOnListCallback(this, &mListInfo);
-  mClients[0]->SetTop(mClients[0]->GetHeight() * (mListInfo.ItemIndex
-						  -mListInfo.TopIndex));
-  mClients[0]->Redraw();
-  //  Redraw();
+  newTop = mClients[0]->GetHeight() * (mListInfo.ItemIndex - mListInfo.TopIndex);
+  if (newTop == mClients[0]->GetTop()){
+    Redraw();                     // non moving the helper window force redraw
+  } else {
+    mClients[0]->SetTop(newTop);  // moving the helper window invalidate the list window
+    mClients[0]->Redraw();
+
+    // to be optimized: after SetTop Paint redraw all list items
+
+  }
+
 }
 
 
@@ -3209,9 +3285,9 @@ int WndListFrame::RecalculateIndices(bool bigscroll) {
 				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
   if (mListInfo.ItemIndex >= mListInfo.BottomIndex){
     
-    if ((mListInfo.ItemIndex+mListInfo.ScrollIndex<
-	 mListInfo.ItemCount)
-	&&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
+    if ((mListInfo.ItemIndex+mListInfo.ScrollIndex <
+          mListInfo.ItemCount)
+          &&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
       
       mListInfo.ScrollIndex++;
       mListInfo.ItemIndex = mListInfo.BottomIndex-1;

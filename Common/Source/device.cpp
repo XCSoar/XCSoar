@@ -29,6 +29,8 @@ Copyright_License {
 }
 */
 
+// 20070413:sgi add NmeaOut support, allow nmea chaining an double port platforms
+
 #include "stdafx.h"
 
 #include "options.h"
@@ -122,6 +124,7 @@ static int devIsFalseReturn(PDeviceDescriptor_t d){
 BOOL devInit(LPTSTR CommandLine){
   int i;
   TCHAR DeviceName[DEVNAMESIZE];
+  PDeviceDescriptor_t pDevNmeaOut = NULL;
 
   for (i=0; i<NUMDEV; i++){
     DeviceList[i].Port = -1;
@@ -146,6 +149,8 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].PortNumber = i;
     DeviceList[i].PutQNH = NULL;
     DeviceList[i].OnSysTicker = NULL;
+
+    DeviceList[i].pDevPipeTo = NULL;
   }
 
   pDevPrimaryBaroSource = NULL;
@@ -157,6 +162,10 @@ BOOL devInit(LPTSTR CommandLine){
     if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
 
       DeviceRegister[i].Installer(devA());
+
+      if ((pDevNmeaOut == NULL) && (DeviceRegister[i].Flags & (1l << dfNmeaOut))){
+        pDevNmeaOut = devA();
+      }
 
       // remember: Port1 is the port used by device A, port1 may be Com3 or Com1 etc
       devA()->Com.WriteString = Port1WriteString;
@@ -189,9 +198,13 @@ BOOL devInit(LPTSTR CommandLine){
 
   for (i=0; i<DeviceRegisterCount; i++){
     if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
+
       DeviceRegister[i].Installer(devB());
 
-      
+      if ((pDevNmeaOut == NULL) && (DeviceRegister[i].Flags & (1l << dfNmeaOut))){
+        pDevNmeaOut = devB();
+      }
+
       devB()->Com.WriteString = Port2WriteString;
       devB()->Com.WriteNMEAString = Port2WriteNMEA;
       devB()->Com.StopRxThread = Port2StopRxThread;
@@ -288,6 +301,15 @@ BOOL devInit(LPTSTR CommandLine){
 
   }
 
+  if (pDevNmeaOut != NULL){
+    if (pDevNmeaOut == devA()){
+      devB()->pDevPipeTo = devA();
+    }
+    if (pDevNmeaOut == devB()){
+      devA()->pDevPipeTo = devB();
+    }
+  }
+
   return(TRUE);
 }
 
@@ -346,11 +368,19 @@ BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
     fputs(sTmp, d->fhLogFile);
     
   }
+
   
-  
-  if (d != NULL && d->ParseNMEA != NULL)
-    if ((d->ParseNMEA)(d, String, GPS_INFO))
-      return(TRUE);
+  if (d != NULL){
+
+    if (d->pDevPipeTo){                       // stream pipe, pass nmea to other device (NmeaOut)
+      // ToDo check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
+      d->pDevPipeTo->Com.WriteString(String);
+    }
+
+    if (d->ParseNMEA != NULL)
+      if ((d->ParseNMEA)(d, String, GPS_INFO))
+        return(TRUE);
+  }
 
   if(String[0]=='$')  // Additional "if" to find GPS strings
     {
@@ -360,10 +390,12 @@ BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
       if(NMEAParser::ParseNMEAString(portNum, String, GPS_INFO))
         {
           GPSCONNECT  = TRUE;
-	  return(TRUE);
+          return(TRUE);
         } 
     }
+
   return(FALSE);
+
 }
 
 

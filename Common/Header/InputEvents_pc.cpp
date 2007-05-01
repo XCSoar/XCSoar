@@ -501,7 +501,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT("Arm\nAdvance"),9,event_id);
+makeLabel(mode_id,TEXT("Advance\n$(AdvanceArmed)"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -593,10 +593,10 @@ Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
-event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("on"), event_id);
+event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Arm\nAdvance"),6,event_id);
+makeLabel(mode_id,TEXT("Advance\n$(AdvanceArmed)"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
@@ -642,13 +642,13 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventAbortTask, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("Task\nAbort"),7,event_id);
+makeLabel(mode_id,TEXT("Task\n$(TaskAbortToggelActionName)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventFlightMode, TEXT("finalglide toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("Force\nFinal"),8,event_id);
+makeLabel(mode_id,TEXT("Final\n$(FinalForceToggelActionName)"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
@@ -696,7 +696,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("togglefull"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Full Scrn\nToggle"),9,event_id);
+makeLabel(mode_id,TEXT("Full Scrn\n$(FullScreenToggelActionName)"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -709,14 +709,14 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("auto show"), event_id);
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("auto toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
-makeLabel(mode_id,TEXT("Zoom\nAuto"),5,event_id);
+makeLabel(mode_id,TEXT("Zoom\n$(ZoomAutoToggelActionName)"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
-makeLabel(mode_id,TEXT("Snail Trail\nToggle"),6,event_id);
+makeLabel(mode_id,TEXT("Snail Trail\ntoggle"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
@@ -736,7 +736,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventDeclutterLabels, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventDeclutterLabels, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
-makeLabel(mode_id,TEXT("Declutter\nLabels"),9,event_id);
+makeLabel(mode_id,TEXT("Labels\n$(MapLabelsToggelActionName)"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -761,7 +761,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventMacCready, TEXT("auto show"), event_id);
 event_id = InputEvents::makeEvent(&eventMacCready, TEXT("auto toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config1"), true);
-makeLabel(mode_id,TEXT("MacCready\nAuto"),7,event_id);
+makeLabel(mode_id,TEXT("MacCready\n$(MacCreadyToggelActionName)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -808,7 +808,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventLogger, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventLogger, TEXT("toggle ask"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config2"), true);
-makeLabel(mode_id,TEXT("Logger\nRecord"),8,event_id);
+makeLabel(mode_id,TEXT("Logger\n$(LoggerActive)"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
@@ -961,7 +961,7 @@ Key2Event[mode_id]['8'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggleauxiliary"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
-makeLabel(mode_id,TEXT("Aux\nInfobox"),8,event_id);
+makeLabel(mode_id,TEXT("Aux Info\n$(AuxInfoToggelActionName)"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;

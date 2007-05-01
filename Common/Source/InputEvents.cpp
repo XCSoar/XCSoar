@@ -245,6 +245,17 @@ void InputEvents::readFile() {
 	 ) {
     line++;
 
+    // experimental: if the first line is "#CLEAR" then the whole default config is cleared
+    //               and can be overwritten by file  
+    if ((line == 1) && (_tcsstr(buffer, TEXT("#CLEAR")))){
+      memset(&Key2Event, 0, sizeof(Key2Event));
+      memset(&GC2Event, 0, sizeof(GC2Event));
+      memset(&Events, 0, sizeof(Events));
+      memset(&ModeLabel, 0, sizeof(ModeLabel));
+      memset(&ModeLabel_count, 0, sizeof(ModeLabel_count));
+      Events_count = 0;
+    }
+
     // Check valid line? If not valid, assume next record (primative, but works ok!)
     if ((buffer[0] == '\r') || (buffer[0] == '\n') || (buffer[0] == NULL)) {
       // General checks before continue...
@@ -526,8 +537,10 @@ int InputEvents::findNE(TCHAR *data) {
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
 int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next) {
-  if (Events_count >= MAX_EVENTS)
+  if (Events_count >= MAX_EVENTS){
+    ASSERT(0);
     return 0;
+  }
   Events_count++;	// NOTE - Starts at 1 - 0 is a noop
   Events[Events_count].event = event;
   Events[Events_count].misc = misc;
@@ -541,11 +554,32 @@ int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next) {
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
 void InputEvents::makeLabel(int mode_id, TCHAR* label, int location, int event_id) {
+
+//  int i;
+
+/*
+  // experimental, dont work becuase after loaded default strings are static, after laoding
+  //               from file some strings are static some not
+  // add code for overwrite existing mode,location label
+  for (i=0; i<ModeLabel_count[mode_id]; i++){
+    if (ModeLabel[mode_id][i].location == location && ModeLabel[mode_id][i].event == event_id){
+      if (ModeLabel[mode_id][i].label != NULL && ModeLabel[mode_id][i].label != label){
+        TCHAR *pC;
+        pC = ModeLabel[mode_id][i].label;
+        free(ModeLabel[mode_id][i].label);
+      }
+      ModeLabel[mode_id][i].label = label;
+      return;
+    }
+  }
+*/
   if ((mode_id >= 0) && (mode_id < MAX_MODE) && (ModeLabel_count[mode_id] < MAX_LABEL)) {
     ModeLabel[mode_id][ModeLabel_count[mode_id]].label = label;
     ModeLabel[mode_id][ModeLabel_count[mode_id]].location = location;
     ModeLabel[mode_id][ModeLabel_count[mode_id]].event = event_id;
     ModeLabel_count[mode_id]++;
+  } else {
+    ASSERT(0);
   }
 }
 
@@ -602,6 +636,8 @@ void InputEvents::setMode(TCHAR *mode) {
   */
   ButtonLabel::SetLabelText(0,NULL);
 
+  drawButtons(thismode);
+  /*
   // Set button labels
   int i;
   for (i = 0; i < ModeLabel_count[thismode]; i++) {
@@ -616,11 +652,29 @@ void InputEvents::setMode(TCHAR *mode) {
     }
   }
   MapWindow::RequestFastRefresh();
+  */
 
   lastmode = thismode;
 
 }
 
+void InputEvents::drawButtons(int Mode){
+  int i;
+
+  for (i = 0; i < ModeLabel_count[Mode]; i++) {
+    if ((ModeLabel[Mode][i].location > 0)) {
+
+      ButtonLabel::SetLabelText(
+        ModeLabel[Mode][i].location,
+        ModeLabel[Mode][i].label
+      );
+
+    }
+  }
+
+  MapWindow::RequestFastRefresh();
+
+}
 
 TCHAR* InputEvents::getMode() {
   return mode_current;
@@ -649,11 +703,18 @@ bool InputEvents::processButton(int bindex) {
 	// JMW removed requirement of having a label!
 	) {
 
+      int lastMode = thismode;
+
       // JMW need a debounce method here..
       if (!Debounce()) return true;
 
       ButtonLabel::AnimateButton(bindex);
       processGo(ModeLabel[thismode][i].event);
+
+      // experimental: update button text, macro may change the label
+      if (lastMode == getModeID() && ModeLabel[thismode][i].label != NULL && ButtonLabel::ButtonVisible[bindex]){
+        drawButtons(thismode);
+      }
 
       return true;
     }
@@ -690,19 +751,31 @@ bool InputEvents::processKey(int dWord) {
   }
 
   if (event_id > 0) {
+
+    int bindex = -1;
+    int lastMode = mode;
+    TCHAR *pLabelText = NULL;
+
     if (!Debounce()) return true;
 
     int i;
     for (i = ModeLabel_count[mode]; i >= 0; i--) {
       if ((ModeLabel[mode][i].event == event_id)) {
-	int bindex = ModeLabel[mode][i].location;
-	if (bindex>0) {
-	  ButtonLabel::AnimateButton(bindex);
-	}
+        bindex = ModeLabel[mode][i].location;
+        pLabelText = ModeLabel[mode][i].label;
+        if (bindex>0) {
+          ButtonLabel::AnimateButton(bindex);
+        }
       }
     }
 
     InputEvents::processGo(event_id);
+
+    // experimental: update button text, macro may change the value
+    if (lastMode == getModeID() && bindex > 0 && pLabelText != NULL && ButtonLabel::ButtonVisible[bindex]) {
+      drawButtons(lastMode);
+    }
+
     return true;
   }
   
@@ -915,8 +988,8 @@ void InputEvents::eventSounds(TCHAR *misc) {
 }
 
 void InputEvents::eventSnailTrail(TCHAR *misc) {
-  int OldTrailActive;
-  OldTrailActive = TrailActive;
+//  int OldTrailActive;
+//  OldTrailActive = TrailActive;
 
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
     TrailActive ++;
@@ -1153,6 +1226,11 @@ void InputEvents::eventFLARMRadar(TCHAR *misc) {
 	(void)misc;
   //  if (_tcscmp(misc, TEXT("on")) == 0) {
 
+  if (_tcscmp(misc, TEXT("ForceToggle")) == 0) {
+    GaugeFLARM::ForceVisible = !GaugeFLARM::ForceVisible;
+    EnableFLARMDisplay = GaugeFLARM::ForceVisible;
+  } else
+
   GaugeFLARM::Suppress = !GaugeFLARM::Suppress;
   // the result of this will get triggered by refreshslots
 }
@@ -1187,14 +1265,16 @@ void InputEvents::eventChangeInfoBoxType(TCHAR *misc) {
 //   toggle: Toggles between armed and disarmed.
 //   show: Shows current armed state
 void InputEvents::eventArmAdvance(TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("on")) == 0) {
-    AdvanceArmed = true;
-  }
-  if (_tcscmp(misc, TEXT("off")) == 0) {
-    AdvanceArmed = false;
-  }
-  if (_tcscmp(misc, TEXT("toggle")) == 0) {
-    AdvanceArmed = !AdvanceArmed;
+  if (AutoAdvance>=2) {
+    if (_tcscmp(misc, TEXT("on")) == 0) {
+      AdvanceArmed = true;
+    }
+    if (_tcscmp(misc, TEXT("off")) == 0) {
+      AdvanceArmed = false;
+    }
+    if (_tcscmp(misc, TEXT("toggle")) == 0) {
+      AdvanceArmed = !AdvanceArmed;
+    }
   }
   if (_tcscmp(misc, TEXT("show")) == 0) {
     switch (AutoAdvance) {
@@ -2154,6 +2234,46 @@ void InputEvents::eventExit(TCHAR *misc) {
 	(void)misc;
   SendMessage(hWndMainWindow, WM_CLOSE,
 	      NULL, NULL);
+}
+
+void InputEvents::eventUserDisplayModeForce(TCHAR *misc){
+
+  if (_tcscmp(misc, TEXT("unforce")) == 0){
+    UserForceDisplayMode = dmNone;
+  }
+  else if (_tcscmp(misc, TEXT("forceclimb")) == 0){
+    UserForceDisplayMode = dmCircling;
+  }
+  else if (_tcscmp(misc, TEXT("forcecruise")) == 0){
+    UserForceDisplayMode = dmCruise;
+  }
+  else if (_tcscmp(misc, TEXT("forcefinal")) == 0){
+    UserForceDisplayMode = dmFinalGlide;
+  }
+  else if (_tcscmp(misc, TEXT("show")) == 0){
+    DoStatusMessage(TEXT("Map labels ON"));
+  }
+
+}
+
+void InputEvents::eventAirspaceDisplayMode(TCHAR *misc){
+
+  if (_tcscmp(misc, TEXT("all")) == 0){
+    AltitudeMode = ALLON;
+  }
+  else if (_tcscmp(misc, TEXT("clip")) == 0){
+    AltitudeMode = CLIP;
+  }
+  else if (_tcscmp(misc, TEXT("auto")) == 0){
+    AltitudeMode = AUTO;
+  }
+  else if (_tcscmp(misc, TEXT("below")) == 0){
+    AltitudeMode = ALLBELOW;
+  }
+  else if (_tcscmp(misc, TEXT("off")) == 0){
+    AltitudeMode = ALLOFF;
+  }
+
 }
 
 // JMW TODO: have all inputevents return bool, indicating whether

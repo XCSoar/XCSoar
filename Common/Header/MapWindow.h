@@ -32,7 +32,13 @@
 #define START					0x10
 #define FINISH				0x20
 #define RESTRICTED		0x40
-#define WAYPOINTFLAG	0x80		
+#define WAYPOINTFLAG	0x80
+
+typedef enum {dmNone, dmCircling, dmCruise, dmFinalGlide} DisplayMode_t;
+
+extern DisplayMode_t UserForceDisplayMode;
+extern DisplayMode_t DisplayMode;
+
 
 typedef struct _WAYPOINT_INFO
 {
@@ -173,6 +179,8 @@ class MapWindow {
 			 DERIVED_INFO *derived_info);
   static rectObj CalculateScreenBounds(double scale);
   static void ScanVisibility(rectObj *bounds_active);
+
+  static void SwitchZoomClimb(bool isclimb);
 
  private:
   static void CalculateScreenPositions(POINT Orig, RECT rc, 

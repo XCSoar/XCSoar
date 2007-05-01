@@ -566,7 +566,8 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     flightstats.Reset();
     aatdistance.Reset();
     Calculated->FlightTime = 0;
-    
+    Calculated->TakeOffTime = 0;
+
     for (i=0; i<200; i++) {
       Calculated->AverageClimbRate[i]= 0;
       Calculated->AverageClimbRateN[i]= 0;
@@ -694,7 +695,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   LastTime = Basic->Time;
 
-  double t = DetectStartTime();
+  double t = DetectStartTime(Basic, Calculated);
   if (t>0) {
     Calculated->FlightTime = t;
   }
@@ -1043,6 +1044,8 @@ void SwitchZoomClimb(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
   */
 
+  /* this is data reprenentation stuff move it to mapsindow.cpp
+
   if (CircleZoom) {
     if (isclimb != last_isclimb) {
       if (isclimb) {
@@ -1063,7 +1066,10 @@ void SwitchZoomClimb(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     } else {
       // nothing to do.
     }
-  }
+  } */
+
+  // this is calculation stuff, leave it there
+
   if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
     windanalyser->slot_newFlightMode(Basic, Calculated, left, 0);
   }
@@ -3696,6 +3702,8 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       // reset stats on takeoff
       ResetFlightStats(Basic, Calculated);
       
+      Calculated->TakeOffTime= Basic->Time;
+
       // save stats in case we never finish
       memcpy(&Finish_Derived_Info, Calculated, sizeof(DERIVED_INFO));
 
@@ -3714,8 +3722,10 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       // user can review flight as at finish line
 
       double flighttime = Calculated->FlightTime;
+      double takeofftime = Calculated->TakeOffTime;
       memcpy(Calculated, &Finish_Derived_Info, sizeof(DERIVED_INFO));
       Calculated->FlightTime = flighttime;
+      Calculated->TakeOffTime = takeofftime;
 
       Calculated->Flying = FALSE;
     }
@@ -3741,8 +3751,10 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (Calculated->ValidFinish) return 0;
 
   if (ActiveWayPoint==0) return 0; // no e mc before start
-  if (!ValidTaskPoint(ActiveWayPoint) || !ValidTaskPoint(ActiveWayPoint-1)) return 0;
+  if (!Calculated->ValidStart) return 0;
   if (Calculated->TaskStartTime<0) return 0;
+
+  if (!ValidTaskPoint(ActiveWayPoint) || !ValidTaskPoint(ActiveWayPoint-1)) return 0;
 
   double w1lat;
   double w1lon;

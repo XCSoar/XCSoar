@@ -12,7 +12,6 @@
 #define NUMTHERMALBUCKETS 10
 #define MAX_THERMAL_SOURCES 20
 
-
 typedef struct _THERMAL_SOURCE_INFO
 {
   POINT Screen;
@@ -151,6 +150,7 @@ typedef struct _DERIVED_INFO
   double TeammateLatetude;
   double TeammateLongitude;
   double FlightTime;
+  double TakeOffTime;
 
   double AverageClimbRate[200];
   long AverageClimbRateN[200];
