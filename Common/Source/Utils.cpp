@@ -3019,7 +3019,7 @@ void StatusFileInit() {
   // DEFAULT - 0 is loaded as default, and assumed to exist
   StatusMessageData[0].key = TEXT("DEFAULT");
   StatusMessageData[0].doStatus = true;
-  StatusMessageData[0].doSound = true;
+  StatusMessageData[0].doSound = true; 
   StatusMessageData[0].sound = TEXT("IDR_WAV_DRIP");
   StatusMessageData[0].delay_ms = 1500; // 1.5 s
   StatusMessageData_Size=1;

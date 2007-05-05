@@ -24,7 +24,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      int       nShowCmd)
 {
  	// TODO: Place code here.
-
+  (void)lpCmdLine;
   xcsoarWinMain(hInstance, hPrevInstance, NULL, nShowCmd);
 
   /*

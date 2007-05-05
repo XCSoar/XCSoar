@@ -119,6 +119,8 @@ typedef struct _NMEA_INFO
 
   SWITCH_INFO SwitchState;
 
+  BOOL MovementDetected;
+
 } NMEA_INFO;
 
 

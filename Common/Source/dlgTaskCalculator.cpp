@@ -83,8 +83,12 @@ static void RefreshCalculator(void) {
   // update outputs
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATTime"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(AATTaskLength);
-    wp->RefreshDisplay();
+    if (!AATEnabled) {
+      wp->SetVisible(false);
+    } else {
+      wp->GetDataField()->SetAsFloat(AATTaskLength);
+    }
+      wp->RefreshDisplay();    
   }
 
   double d1 = (CALCULATED_INFO.TaskDistanceToGo
@@ -115,6 +119,9 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
   if (wp) {
     wp->RefreshDisplay();
+    if (!AATEnabled) {
+      wp->SetVisible(false);
+    }
     wp->GetDataField()->SetAsFloat(Range*100.0);
   }
 
@@ -233,6 +240,10 @@ void dlgTaskCalculatorShowModal(void){
   RefreshCalculator();
 
   double MACCREADYenter = MACCREADY;
+
+  if (!AATEnabled) {
+    ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);
+  }
 
   if (wf->ShowModal() == mrCancle) {
     // todo: restore task settings.

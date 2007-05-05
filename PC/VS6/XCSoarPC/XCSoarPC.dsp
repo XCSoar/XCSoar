@@ -101,7 +101,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D NEWINFOBOX=1 /FD /GZ /c
 # SUBTRACT BASE CPP /X /YX /Yc /Yu
-# ADD CPP /nologo /W3 /WX /vd0 /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D "_SIM_" /D "DEBUG" /FD /c
+# ADD CPP /nologo /MTd /W3 /WX /vd0 /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D "_SIM_" /D "DEBUG" /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /i "..\..\..\Common\Header" /i "..\..\..\Common\Source" /d "_DEBUG" /d "WINDOWSPC"
@@ -184,6 +184,10 @@ SOURCE=..\..\..\Common\Source\Calculations.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Common\Source\Calculations2.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Common\Source\DebugLog.cpp
 # End Source File
 # Begin Source File
@@ -245,6 +249,10 @@ SOURCE=..\..\..\Common\Source\dlgChecklist.cpp
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\dlgConfiguration.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\dlgConfiguration2.cpp
 # End Source File
 # Begin Source File
 
@@ -401,6 +409,10 @@ SOURCE=..\..\..\Common\Source\maptree.c
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\MapWindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\MapWindow2.cpp
 # End Source File
 # Begin Source File
 

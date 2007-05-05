@@ -84,7 +84,13 @@ void dlgStatusTaskShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskTime"));
   Units::TimeToText(Temp, (int)AATTaskLength*60);
-  wp->SetText(Temp);
+  if (wp) {
+    if (!AATEnabled) {
+      wp->SetVisible(false);
+    } else {
+      wp->SetText(Temp);
+    }
+  }
 
   double dd = CALCULATED_INFO.TaskTimeToGo;
   if (CALCULATED_INFO.TaskStartTime>0.0) {
@@ -92,43 +98,53 @@ void dlgStatusTaskShowModal(void){
   }
   
   wp = (WndProperty*)wf->FindByName(TEXT("prpETETime"));
-  Units::TimeToText(Temp, (int)dd);
-  wp->SetText(Temp);
+  if (wp) {
+    Units::TimeToText(Temp, (int)dd);
+    wp->SetText(Temp);
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpRemainingTime"));
-  Units::TimeToText(Temp, (int)CALCULATED_INFO.TaskTimeToGo);
-  wp->SetText(Temp);
+  if (wp) {
+    Units::TimeToText(Temp, (int)CALCULATED_INFO.TaskTimeToGo);
+    wp->SetText(Temp);
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartTime"));
-  if (CALCULATED_INFO.ValidStart) {
-    if (CALCULATED_INFO.TaskStartTime>0) {
-      Units::TimeToText(Temp, (int)TimeLocal((int)(CALCULATED_INFO.TaskStartTime)));
+  if (wp) {
+    if (CALCULATED_INFO.ValidStart) {
+      if (CALCULATED_INFO.TaskStartTime>0) {
+        Units::TimeToText(Temp, (int)TimeLocal((int)(CALCULATED_INFO.TaskStartTime)));
+      } else {
+        Units::TimeToText(Temp, 0);
+      }
+      wp->SetText(Temp);
     } else {
-      Units::TimeToText(Temp, 0);
+      wp->SetText(TEXT("INVALID"));
     }
-    wp->SetText(Temp);
-  } else {
-    wp->SetText(TEXT("INVALID"));
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskDistance"));
-  _stprintf(Temp, TEXT("%.0f %s"), DISTANCEMODIFY*
-	    (CALCULATED_INFO.TaskDistanceToGo
-	    +CALCULATED_INFO.TaskDistanceCovered), 
-	    Units::GetDistanceName());
-  wp->SetText(Temp);
+  if (wp) {
+    _stprintf(Temp, TEXT("%.0f %s"), DISTANCEMODIFY*
+              (CALCULATED_INFO.TaskDistanceToGo
+               +CALCULATED_INFO.TaskDistanceCovered), 
+              Units::GetDistanceName());
+    wp->SetText(Temp);
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpRemainingDistance"));
-  if (AATEnabled) {
-    _stprintf(Temp, TEXT("%.0f %s"), 
-	      DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance, 
-	      Units::GetDistanceName());
-  } else {
-    _stprintf(Temp, TEXT("%.0f %s"), 
-	      DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo, 
-	      Units::GetDistanceName());
+  if (wp) {
+    if (AATEnabled) {
+      _stprintf(Temp, TEXT("%.0f %s"), 
+                DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance, 
+                Units::GetDistanceName());
+    } else {
+      _stprintf(Temp, TEXT("%.0f %s"), 
+                DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo, 
+                Units::GetDistanceName());
+    }
+    wp->SetText(Temp);
   }
-  wp->SetText(Temp);
 
   double d1 = 
     (CALCULATED_INFO.TaskDistanceToGo
@@ -136,15 +152,19 @@ void dlgStatusTaskShowModal(void){
   // JMW TODO: this fails for OLC
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEstimatedSpeed"));
-  _stprintf(Temp, TEXT("%.0f %s"), 
-	    TASKSPEEDMODIFY*d1, Units::GetTaskSpeedName());
-  wp->SetText(Temp);
+  if (wp) {
+    _stprintf(Temp, TEXT("%.0f %s"), 
+              TASKSPEEDMODIFY*d1, Units::GetTaskSpeedName());
+    wp->SetText(Temp);
+  }
   
   wp = (WndProperty*)wf->FindByName(TEXT("prpAverageSpeed"));
-  _stprintf(Temp, TEXT("%.0f %s"), 
-	    TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeed, 
-	    Units::GetTaskSpeedName());
-  wp->SetText(Temp);
+  if (wp) {
+    _stprintf(Temp, TEXT("%.0f %s"), 
+              TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeed, 
+              Units::GetTaskSpeedName());
+    wp->SetText(Temp);
+  }
 
   wf->ShowModal();
 

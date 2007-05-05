@@ -708,11 +708,15 @@ bool InputEvents::processButton(int bindex) {
       // JMW need a debounce method here..
       if (!Debounce()) return true;
 
-      ButtonLabel::AnimateButton(bindex);
-      processGo(ModeLabel[thismode][i].event);
+      if (!ButtonLabel::ButtonDisabled[bindex]) {
+        ButtonLabel::AnimateButton(bindex);
+        processGo(ModeLabel[thismode][i].event);
+      }
 
       // experimental: update button text, macro may change the label
-      if (lastMode == getModeID() && ModeLabel[thismode][i].label != NULL && ButtonLabel::ButtonVisible[bindex]){
+      if ((lastMode == getModeID()) 
+          && (ModeLabel[thismode][i].label != NULL)
+          && (ButtonLabel::ButtonVisible[bindex])){
         drawButtons(thismode);
       }
 
@@ -769,7 +773,9 @@ bool InputEvents::processKey(int dWord) {
       }
     }
 
-    InputEvents::processGo(event_id);
+    if (!ButtonLabel::ButtonDisabled[bindex]) {
+      InputEvents::processGo(event_id);
+    }
 
     // experimental: update button text, macro may change the value
     if (lastMode == getModeID() && bindex > 0 && pLabelText != NULL && ButtonLabel::ButtonVisible[bindex]) {
@@ -1292,7 +1298,7 @@ void InputEvents::eventArmAdvance(TCHAR *misc) {
       }
       break;
     case 3:
-      if (ActiveWayPoint==0) { // past start
+      if (ActiveWayPoint<2) { // past start (but can re-start)
         if (AdvanceArmed) {
           DoStatusMessage(TEXT("Auto Advance: ARMED"));
         } else {
@@ -2059,7 +2065,9 @@ void InputEvents::eventSetup(TCHAR *misc) {
 	    dlgAirspaceShowModal(false);
 	  }
   if (_tcscmp(misc,TEXT("Replay"))==0){
-    dlgLoggerReplayShowModal();
+    if (!GPS_INFO.MovementDetected) {     
+      dlgLoggerReplayShowModal();
+    }
   }
   //  if (_tcscmp(misc,TEXT("Waypoint"))==0){
   //    dlgWaypointEditShowModal();

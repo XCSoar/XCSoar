@@ -180,4 +180,6 @@ double ProjectedDistance(double lon1, double lat1,
                          double lon2, double lat2,
                          double lon3, double lat3);
 
+bool ValidAirspace(void);
+
 #endif

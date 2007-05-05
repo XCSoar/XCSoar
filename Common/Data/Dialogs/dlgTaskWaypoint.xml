@@ -30,6 +30,10 @@
     <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=100 Step="0.5"/>
   </WndProperty>
 
+  <WndProperty Name="prpAATEnabled" Caption="AAT" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables AAT tasks.  When enabled, the AAT observation parameters can be set for each turnpoint.">
+    <DataField name="" DataType="boolean" ReadOnly=0 OnDataAccess="OnAATEnabled"/>
+  </WndProperty>
+
   <WndProperty Name="prpTaskFAISector" Caption="Sector type"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2   Help="Type of sectors used for non-AAT tasks.
 [Cylinder]  Barrel cylinder of specified radius.
 [FAI sector]  90 degree sector centered at bisector, at specified range
@@ -40,10 +44,6 @@
   <WndProperty Name="prpTaskSectorRadius" Caption="Sector radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Radius of the turnpoint observation area for non-AAT tasks.">
     <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=100 Step="0.5"/>
 
-  </WndProperty>
-
-  <WndProperty Name="prpAATEnabled" Caption="AAT" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables AAT tasks.  When enabled, the AAT observation parameters can be set for each turnpoint.">
-    <DataField name="" DataType="boolean" ReadOnly=0/>
   </WndProperty>
 
   <WndProperty Name="prpMinTime" Caption="AAT min time" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 min=0 max=600 step=10 Help="Minimum AAT task time in minutes.">
@@ -64,10 +64,10 @@
   </WndProperty>
 
   <WndProperty Name="prpEnableMultipleStartPoints" Caption="Alternate start points" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables alternate start points.">
-    <DataField name="" DataType="boolean" ReadOnly=0/>
+    <DataField name="" DataType="boolean" ReadOnly=0 OnDataAccess="OnAATEnabled"/>
   </WndProperty>
 
-  <WndButton   Caption="Edit start points"    X=20 Y=-1 Width=200  Height=22 Font=2 OnClickNotify="OnStartPointClicked"/>
+  <WndButton  Name="EditStartPoints" Caption="Edit start points"    X=20 Y=-1 Width=200  Height=22 Font=2 OnClickNotify="OnStartPointClicked"/>
 
   </WndFrame>
 
@@ -84,7 +84,7 @@
     <WndProperty Name="prpAATType" Caption="Type"     X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 Help="Type of the AAT observation area:
 [Cylinder]: Defines a cylindrical AAT area, radius is defined by the 'Circle radius' properties.
 [Sector]: Defines a sector AAT area, radius is defined by the 'Sector radius' parameter, and the sector is bounded by the 'Start radial' and 'End radial' properties.">
-      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1 OnDataAccess="OnAATEnabled"/>
     </WndProperty>
 
   <WndProperty Name="prpAATCircleRadius" Caption="Circle radius"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2  Help="Radius of the AAT observation area for cylindrical type.">

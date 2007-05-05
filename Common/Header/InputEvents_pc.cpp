@@ -3,26 +3,26 @@ int event_id;
 int mode_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task start"), event_id);
 event_id = InputEvents::makeEvent(&eventBeep, TEXT("1"), event_id);
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task start"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TASK_START] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task finish"), event_id);
 event_id = InputEvents::makeEvent(&eventBeep, TEXT("1"), event_id);
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task finish"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TASK_FINISH] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Next turnpoint"), event_id);
 event_id = InputEvents::makeEvent(&eventBeep, TEXT("1"), event_id);
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Next turnpoint"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TASK_NEXTWAYPOINT] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("In sector, arm advance when ready"), event_id);
 event_id = InputEvents::makeEvent(&eventBeep, TEXT("1"), event_id);
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("In sector, arm advance when ready"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_ARM_READY] = event_id;
 
@@ -383,6 +383,7 @@ makeLabel(mode_id,TEXT("Nearest\nWaypoint "),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
@@ -448,14 +449,14 @@ Key2Event[mode_id]['6'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventCalculator, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT(""),6,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask) "),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT(""),7,event_id);
+makeLabel(mode_id,TEXT("$(CheckWaypointFile)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -468,7 +469,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT(""),9,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask) "),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -481,14 +482,14 @@ Key2Event[mode_id]['6'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventCalculator, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT("Task\nCalc"),6,event_id);
+makeLabel(mode_id,TEXT("Task\nCalc$(CheckTask)"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT("Task\nEdit"),7,event_id);
+makeLabel(mode_id,TEXT("Task\nEdit$(CheckWaypointFile)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -501,7 +502,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT("Advance\n$(AdvanceArmed)"),9,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask)Advance\n$(AdvanceArmed)"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -588,7 +589,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventCalculator, TEXT(""), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Task\nCalc"),5,event_id);
+makeLabel(mode_id,TEXT("Task\nCalc$(CheckTask)"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
@@ -596,26 +597,26 @@ event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Advance\n$(AdvanceArmed)"),6,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask)Advance\n$(AdvanceArmed)"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventAdjustWaypoint, TEXT("previous"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Waypoint\nPrevious"),7,event_id);
+makeLabel(mode_id,TEXT("$(WaypointPrevious)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventAdjustWaypoint, TEXT("next"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Waypoint\nNext"),8,event_id);
+makeLabel(mode_id,TEXT("$(WaypointNext)"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventWaypointDetails, TEXT("select"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Waypoint\nLookup"),9,event_id);
+makeLabel(mode_id,TEXT("Waypoint\nLookup$(CheckWaypointFile)"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -628,7 +629,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("Task\nEdit"),5,event_id);
+makeLabel(mode_id,TEXT("Task\nEdit$(CheckWaypointFile)"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
@@ -642,13 +643,13 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventAbortTask, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("Task\n$(TaskAbortToggelActionName)"),7,event_id);
+makeLabel(mode_id,TEXT("Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventFlightMode, TEXT("finalglide toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("Final\n$(FinalForceToggelActionName)"),8,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask)Final\n$(FinalForceToggleActionName)"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
@@ -665,23 +666,16 @@ makeLabel(mode_id,TEXT("Display"),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventPan, TEXT("show"), event_id);
-event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
-mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Pan\nOn"),5,event_id);
-Key2Event[mode_id]['6'] = event_id;
-
-event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("in"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Zoom\nIn"),6,event_id);
-Key2Event[mode_id]['7'] = event_id;
+makeLabel(mode_id,TEXT("Zoom\nIn"),5,event_id);
+Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("out"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Zoom\nOut"),7,event_id);
-Key2Event[mode_id]['8'] = event_id;
+makeLabel(mode_id,TEXT("Zoom\nOut"),6,event_id);
+Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
@@ -689,14 +683,21 @@ event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Dropped marker"), e
 event_id = InputEvents::makeEvent(&eventLogger, TEXT("note Mark"), event_id);
 event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Mark\nDrop"),8,event_id);
-Key2Event[mode_id]['9'] = event_id;
+makeLabel(mode_id,TEXT("Mark\nDrop"),7,event_id);
+Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("togglefull"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Full Scrn\n$(FullScreenToggelActionName)"),9,event_id);
+makeLabel(mode_id,TEXT("Full Scrn\nToggle"),8,event_id);
+Key2Event[mode_id]['9'] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventPan, TEXT("show"), event_id);
+event_id = InputEvents::makeEvent(&eventPan, TEXT("supertoggle"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Display1"), true);
+makeLabel(mode_id,TEXT("Pan\nOn"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -709,21 +710,21 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("auto show"), event_id);
 event_id = InputEvents::makeEvent(&eventZoom, TEXT("auto toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
-makeLabel(mode_id,TEXT("Zoom\n$(ZoomAutoToggelActionName)"),5,event_id);
+makeLabel(mode_id,TEXT("Zoom\n$(ZoomAutoToggleActionName)"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventSnailTrail, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
-makeLabel(mode_id,TEXT("Snail Trail\ntoggle"),6,event_id);
+makeLabel(mode_id,TEXT("Trail\n$(SnailTrailToggleName)"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventTerrainTopology, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventTerrainTopology, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
-makeLabel(mode_id,TEXT("Terrain\nToggle"),7,event_id);
+makeLabel(mode_id,TEXT("$(TerrainTopologyToggleName)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -736,7 +737,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventDeclutterLabels, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventDeclutterLabels, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display2"), true);
-makeLabel(mode_id,TEXT("Labels\n$(MapLabelsToggelActionName)"),9,event_id);
+makeLabel(mode_id,TEXT("Labels\n$(MapLabelsToggleActionName)"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -761,7 +762,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventMacCready, TEXT("auto show"), event_id);
 event_id = InputEvents::makeEvent(&eventMacCready, TEXT("auto toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config1"), true);
-makeLabel(mode_id,TEXT("MacCready\n$(MacCreadyToggelActionName)"),7,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask)MacCready\n$(MacCreadyToggleActionName)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -794,14 +795,14 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("System"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config2"), true);
-makeLabel(mode_id,TEXT("Setup\nSystem"),6,event_id);
+makeLabel(mode_id,TEXT("Setup\nSystem$(CheckSettingsLockout)"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Airspace"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config2"), true);
-makeLabel(mode_id,TEXT("Settings\nAirspace"),7,event_id);
+makeLabel(mode_id,TEXT("Settings\nAirspace$(CheckAirspace)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -815,7 +816,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Replay"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config2"), true);
-makeLabel(mode_id,TEXT("Logger\nReplay"),9,event_id);
+makeLabel(mode_id,TEXT("Logger\nReplay$(CheckReplay)"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -900,24 +901,25 @@ makeLabel(mode_id,TEXT("Info"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventWaypointDetails, TEXT("current"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
-makeLabel(mode_id,TEXT("Waypoint\nDetails"),5,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask)Waypoint\nDetails"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventNearestWaypointDetails, TEXT("aircraft"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
-makeLabel(mode_id,TEXT("Nearest\nWaypoint"),6,event_id);
+makeLabel(mode_id,TEXT("$(CheckWaypointFile)Nearest\nWaypoint"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 event_id = InputEvents::makeEvent(&eventNearestAirspaceDetails, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info1"), true);
-makeLabel(mode_id,TEXT("Nearest\nAirspace"),7,event_id);
+makeLabel(mode_id,TEXT("Nearest\nAirspace$(CheckAirspace)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -955,13 +957,13 @@ Key2Event[mode_id]['7'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatus, TEXT("task"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
-makeLabel(mode_id,TEXT("Status\nTask"),7,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask)Status\nTask"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("toggleauxiliary"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
-makeLabel(mode_id,TEXT("Aux Info\n$(AuxInfoToggelActionName)"),8,event_id);
+makeLabel(mode_id,TEXT("Aux Info\n$(AuxInfoToggleActionName)"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;

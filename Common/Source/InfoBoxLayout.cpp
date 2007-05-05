@@ -452,6 +452,7 @@ void InfoBoxLayout::DestroyInfoBoxes(void){
 
 HWND ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
+bool ButtonLabel::ButtonDisabled[NUMBUTTONLABELS];
 
 int ButtonLabel::ButtonLabelGeometry = 0; // unused currently
 
@@ -572,6 +573,7 @@ void ButtonLabel::CreateButtonLabels(RECT rc) {
 		 x, y,
 		 xsize, ysize, SWP_SHOWWINDOW);
     ButtonVisible[i]= true;
+    ButtonDisabled[i]= false;
 
     SetLabelText(i,NULL);
     SetWindowLong(hWndButtonWindow[i], GWL_USERDATA, 4);	  
@@ -616,13 +618,27 @@ void ButtonLabel::SetLabelText(int index, TCHAR *text) {
 
     TCHAR s[100];
 
-    ExpandMacros(text, s, sizeof(s)/sizeof(s[0]));
+    bool greyed = ExpandMacros(text, s, sizeof(s)/sizeof(s[0]));
 
-    SetWindowText(hWndButtonWindow[index], gettext(s));
+    if (greyed) {
+      SetWindowLong(hWndButtonWindow[index], GWL_USERDATA, 5);
+      ButtonDisabled[index]= true;
+    } else {
+      SetWindowLong(hWndButtonWindow[index], GWL_USERDATA, 4);
+      ButtonDisabled[index]= false;
+    }
 
-    // SetWindowText(hWndButtonWindow[index], gettext(text));
-    ShowWindow(hWndButtonWindow[index], SW_SHOW);
-    ButtonVisible[index]= true;
+    if ((s[0]==_T('\0'))||(s[0]==_T(' '))) {
+      ShowWindow(hWndButtonWindow[index], SW_HIDE);
+      ButtonVisible[index]= false;
+    } else {
+      
+      SetWindowText(hWndButtonWindow[index], gettext(s));
+      
+      // SetWindowText(hWndButtonWindow[index], gettext(text));
+      ShowWindow(hWndButtonWindow[index], SW_SHOW);
+      ButtonVisible[index]= true;
+    }
   }
 
 }
@@ -633,8 +649,13 @@ bool ButtonLabel::CheckButtonPress(HWND pressedwindow) {
   int i;
   for (i=0; i<NUMBUTTONLABELS; i++) {
     if (hWndButtonWindow[i]== pressedwindow) {
-      InputEvents::processButton(i);
-      return TRUE;
+      if (!ButtonDisabled[i]) {
+        InputEvents::processButton(i);
+        return TRUE;
+      } else {
+        return FALSE;
+      }
+      return FALSE;
     }
   }
   return FALSE;

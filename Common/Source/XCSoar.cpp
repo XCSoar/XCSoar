@@ -1005,12 +1005,18 @@ DWORD CalculationThread (LPVOID lpvoid) {
       InfoBoxesDirty = true;
     }
         
+    if (MapWindow::CLOSETHREAD) break; // drop out on exit
+
     TriggerRedraws(&tmp_GPS_INFO, &tmp_CALCULATED_INFO);
+
+    if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
     if (needcalculationsslow) {
       DoCalculationsSlow(&tmp_GPS_INFO,&tmp_CALCULATED_INFO);
       needcalculationsslow = false;
     }
+
+    if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
     // values changed, so copy them back now: ONLY CALCULATED INFO
     // should be changed in DoCalculations, so we only need to write
@@ -2060,30 +2066,32 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
     case WM_CTLCOLORSTATIC:
       wdata = GetWindowLong((HWND)lParam, GWL_USERDATA);
-      if (wdata==1) {
-        SetBkColor((HDC)wParam, ColorSelected);
-        SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
-        return (LRESULT)hBrushSelected;
-      }
-      if (wdata==0) {
+      switch(wdata) {
+      case 0:
         SetBkColor((HDC)wParam, ColorUnselected);
         SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
         return (LRESULT)hBrushUnselected;
-      }
-      if (wdata==2) {
+      case 1:
+        SetBkColor((HDC)wParam, ColorSelected);
+        SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
+        return (LRESULT)hBrushSelected;
+      case 2:
 	SetBkColor((HDC)wParam, ColorUnselected);
         SetTextColor((HDC)wParam, ColorWarning);
 	return (LRESULT)hBrushUnselected;
-      }
-      if (wdata==3) {
+      case 3:
 	SetBkColor((HDC)wParam, ColorUnselected);
         SetTextColor((HDC)wParam, ColorOK);
 	return (LRESULT)hBrushUnselected;
-      }
-      if (wdata==4) { // this one used for buttons
+      case 4:
 	// black on light green
 	SetBkColor((HDC)wParam, ColorButton);
         SetTextColor((HDC)wParam, RGB(0x00,0x00,0x00));
+	return (LRESULT)hBrushButton;
+      case 5:
+	// grey on light green
+	SetBkColor((HDC)wParam, ColorButton);
+        SetTextColor((HDC)wParam, RGB(0x80,0x80,0x80));
 	return (LRESULT)hBrushButton;
       }
       break;
@@ -2860,7 +2868,7 @@ void SIMProcessTimer(void)
 
 #ifdef DEBUG
   // use this to test FLARM parsing/display
-  NMEAParser::TestRoutine(&GPS_INFO);
+  //  NMEAParser::TestRoutine(&GPS_INFO);
 #endif
 
   NMEAParser::GpsUpdated = TRUE;
@@ -3293,25 +3301,18 @@ void Event_ChangeInfoBoxType(int i) {
 }
 
 
+
 static void ReplaceInString(TCHAR *String, TCHAR *ToReplace, TCHAR *ReplaceWith, size_t Size){
-  int   iR, iW, iDiff;
+  TCHAR TmpBuf[MAX_PATH];
+  int   iR, iW;
   TCHAR *pC;
 
-  pC = _tcsstr(String, ToReplace);
-  iR = _tcsclen(ToReplace);
-  iW = _tcsclen(ReplaceWith);
-
-  iDiff = iW-iR;
-
   while((pC = _tcsstr(String, ToReplace)) != NULL){
-
-    if( _tcsclen(String) + (iDiff) >= Size){
-      return;
-    }
-
-    memmove(pC + iW, pC + iR, _tcsclen(pC + iR) + sizeof(TCHAR));
-    _tcsncpy(pC, ReplaceWith, iW);
-
+    iR = _tcsclen(ToReplace);
+    iW = _tcsclen(ReplaceWith);
+    _tcscpy(TmpBuf, pC + iR);
+    _tcscpy(pC, ReplaceWith);
+    _tcscat(pC, TmpBuf);
   }
 
 }
@@ -3323,42 +3324,171 @@ static void CondReplaceInString(bool Condition, TCHAR *Buffer, TCHAR *Macro, TCH
     ReplaceInString(Buffer, Macro, FalseText, Size);
 }
 
-TCHAR *ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
+bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
   // ToDo, check Buffer Size
+  bool invalid = false;
   _tcsncpy(OutBuffer, In, Size);
   OutBuffer[Size-1] = '\0';
 
-  if (_tcsstr(OutBuffer, TEXT("$(")) == NULL) return(OutBuffer);
+  if (_tcsstr(OutBuffer, TEXT("$(")) == NULL) return false;
 
-  switch (AutoAdvance) {
-  case 0:
-    ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(manual)"), Size);
-    break;
-  case 1:
-    ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(auto)"), Size);
-    break;
-  case 2:
-    if (ActiveWayPoint>0) {
-      CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("Cancel"), TEXT("TURN"), Size);
+  if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
+    // Waypoint\nNext
+    invalid = !ValidTaskPoint(ActiveWayPoint+1);
+    CondReplaceInString(!ValidTaskPoint(ActiveWayPoint+2), 
+                        OutBuffer,
+                        TEXT("$(WaypointNext)"), 
+                        TEXT("Waypoint\nFinish"), TEXT("Waypoint\nNext"), Size);
+
+  }
+  if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
+    if (ActiveWayPoint==1) {
+      ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nStart"), Size);
+    } else if (EnableMultipleStartPoints) {
+      CondReplaceInString((ActiveWayPoint==0), 
+                          OutBuffer, 
+                          TEXT("$(WaypointPrevious)"), 
+                          TEXT("StartPoint\nCycle"), TEXT("Waypoint\nPrevious"), Size);
+    } else {
+      invalid = (ActiveWayPoint==0);
+      ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
     }
-  case 3:
-    if (ActiveWayPoint==0) {
-      CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("Cancel"), TEXT("START"), Size);
+  }
+
+  if (_tcsstr(OutBuffer, TEXT("$(AdvanceArmed)"))) {
+    switch (AutoAdvance) {
+    case 0:
+      ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(manual)"), Size);
+      invalid = true;
+      break;
+    case 1:
+      ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(auto)"), Size);
+      invalid = true;
+      break;
+    case 2:
+      if (ActiveWayPoint>0) {
+        CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), 
+                            TEXT("Cancel"), TEXT("TURN"), Size);
+      } else {
+        CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), 
+                            TEXT("Cancel"), TEXT("START"), Size);
+      }
+      break;
+    case 3:
+      if (ActiveWayPoint==0) {
+        CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), 
+                            TEXT("Cancel"), TEXT("START"), Size);
+      } else if (ActiveWayPoint==1) {
+        CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), 
+                            TEXT("Cancel"), TEXT("RESTART"), Size);
+      } else {
+        ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), TEXT("(auto)"), Size);
+        invalid = true;
+      }
+      // JMW TODO: no need to arm finish
+    default:
+      break;
     }
-  default:
-    break;
+  }
+
+  if (_tcsstr(OutBuffer, TEXT("$(CheckReplay)"))) {
+    if (!ReplayLogger::IsEnabled() && GPS_INFO.MovementDetected) {
+      invalid = true;
+    } 
+    ReplaceInString(OutBuffer, TEXT("$(CheckReplay)"), TEXT(""), Size);
+  }
+
+  if (_tcsstr(OutBuffer, TEXT("$(CheckWaypointFile)"))) {
+    if (!ValidWayPoint(0)) {
+      invalid = true;
+    }
+    ReplaceInString(OutBuffer, TEXT("$(CheckWaypointFile)"), TEXT(""), Size);
+  }
+  if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
+    if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
+      invalid = true;
+    }
+    ReplaceInString(OutBuffer, TEXT("$(CheckSettingsLockout)"), TEXT(""), Size);
+  }
+  if (_tcsstr(OutBuffer, TEXT("$(CheckTask)"))) {
+    if (!ValidTaskPoint(ActiveWayPoint)) {
+      invalid = true;
+    }
+    ReplaceInString(OutBuffer, TEXT("$(CheckTask)"), TEXT(""), Size);
+  }
+  if (_tcsstr(OutBuffer, TEXT("$(CheckAirspace)"))) {
+    if (!ValidAirspace()) {
+      invalid = true;
+    }
+    ReplaceInString(OutBuffer, TEXT("$(CheckAirspace)"), TEXT(""), Size);
+  }
+  if (_tcsstr(OutBuffer, TEXT("$(CheckFLARM)"))) {
+    if (!GPS_INFO.FLARM_Available) {
+      invalid = true;
+    }
+    ReplaceInString(OutBuffer, TEXT("$(CheckFLARM)"), TEXT(""), Size);
+  }
+  if (_tcsstr(OutBuffer, TEXT("$(CheckTerrain)"))) {
+    if (!CALCULATED_INFO.TerrainValid) {
+      invalid = true;
+    }
+    ReplaceInString(OutBuffer, TEXT("$(CheckTerrain)"), TEXT(""), Size);
   }
 
   CondReplaceInString(LoggerActive, OutBuffer, TEXT("$(LoggerActive)"), TEXT("Stop"), TEXT("Start"), Size);
-  CondReplaceInString(TaskAborted, OutBuffer, TEXT("$(TaskAbortToggelActionName)"), TEXT("Resume"), TEXT("Abort"), Size);
-  CondReplaceInString(ForceFinalGlide, OutBuffer, TEXT("$(FinalForceToggelActionName)"), TEXT("Unforce"), TEXT("Force"), Size);
-  CondReplaceInString(MapWindow::IsMapFullScreen(), OutBuffer, TEXT("$(FullScreenToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
-  CondReplaceInString(MapWindow::isAutoZoom(), OutBuffer, TEXT("$(ZoomAutoToggelActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
-  CondReplaceInString(EnableTopology, OutBuffer, TEXT("$(TopologyToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
-  CondReplaceInString(EnableTerrain, OutBuffer, TEXT("$(TerrainToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
-  CondReplaceInString(MapWindow::DeclutterLabels, OutBuffer, TEXT("$(MapLabelsToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
-  CondReplaceInString(CALCULATED_INFO.AutoMacCready != 0, OutBuffer, TEXT("$(MacCreadyToggelActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
-  CondReplaceInString(EnableAuxiliaryInfo, OutBuffer, TEXT("$(AuxInfoToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
+
+  if (_tcsstr(OutBuffer, TEXT("$(SnailTrailToggleName)"))) {
+    switch(TrailActive) {
+    case 0:
+      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"), TEXT("Long"), Size);
+      break;
+    case 1:
+      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"), TEXT("Short"), Size);
+      break;
+    case 2:
+      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"), TEXT("Full"), Size);
+      break;
+    case 3:
+      ReplaceInString(OutBuffer, TEXT("$(SnailTrailToggleName)"), TEXT("Off"), Size);
+      break;
+    }
+  }
+  if (_tcsstr(OutBuffer, TEXT("$(TerrainTopologyToggleName)"))) {
+    char val;
+    val = 0;
+    if (EnableTopology) val++;
+    if (EnableTerrain) val += (char)2;
+    switch(val) {
+    case 0:
+      ReplaceInString(OutBuffer, TEXT("$(TerrainTopologyToggleName)"), 
+                      TEXT("Topology\nOn"), Size);
+      break;
+    case 1:
+      ReplaceInString(OutBuffer, TEXT("$(TerrainTopologyToggleName)"), 
+                      TEXT("Terrain\nOn"), Size);
+      break;
+    case 2:
+      ReplaceInString(OutBuffer, TEXT("$(TerrainTopologyToggleName)"), 
+                      TEXT("Terrain\nTopology"), Size);
+      break;
+    case 3:
+      ReplaceInString(OutBuffer, TEXT("$(TerrainTopologyToggleName)"), 
+                      TEXT("Terrain\nOff"), Size);
+      break;
+    }
+  }
+
+  //////
+
+  CondReplaceInString(TaskAborted, OutBuffer, TEXT("$(TaskAbortToggleActionName)"), TEXT("Resume"), TEXT("Abort"), Size);
+  CondReplaceInString(ForceFinalGlide, OutBuffer, TEXT("$(FinalForceToggleActionName)"), TEXT("Unforce"), TEXT("Force"), Size);
+  CondReplaceInString(MapWindow::IsMapFullScreen(), OutBuffer, TEXT("$(FullScreenToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(MapWindow::isAutoZoom(), OutBuffer, TEXT("$(ZoomAutoToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
+  CondReplaceInString(EnableTopology, OutBuffer, TEXT("$(TopologyToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(EnableTerrain, OutBuffer, TEXT("$(TerrainToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(MapWindow::DeclutterLabels, OutBuffer, TEXT("$(MapLabelsToggleActionName)"), TEXT("On"), TEXT("Off"), Size);
+  CondReplaceInString(CALCULATED_INFO.AutoMacCready != 0, OutBuffer, TEXT("$(MacCreadyToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
+  CondReplaceInString(EnableAuxiliaryInfo, OutBuffer, TEXT("$(AuxInfoToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
 
   CondReplaceInString(UserForceDisplayMode == dmCircling, OutBuffer, TEXT("$(DispModeClimbShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
   CondReplaceInString(UserForceDisplayMode == dmCruise, OutBuffer, TEXT("$(DispModeCruiseShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
@@ -3376,10 +3506,9 @@ TCHAR *ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
   CondReplaceInString(TrailActive == 1, OutBuffer, TEXT("$(SnailTrailLongShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
   CondReplaceInString(TrailActive == 3, OutBuffer, TEXT("$(SnailTrailFullShortIndicator)"), TEXT("(*)"), TEXT(""), Size);
 
-  CondReplaceInString(EnableFLARMDisplay != 0, OutBuffer, TEXT("$(FlarmDispToggelActionName)"), TEXT("Off"), TEXT("On"), Size);
+  CondReplaceInString(EnableFLARMDisplay != 0, OutBuffer, TEXT("$(FlarmDispToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
 
-  return(OutBuffer);
-
+  return invalid;
 }
 
 
