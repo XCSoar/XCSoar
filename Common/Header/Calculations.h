@@ -184,4 +184,6 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 bool  InAATTurnSector(double longitude, double latitude, int thepoint);
 
+void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
 #endif

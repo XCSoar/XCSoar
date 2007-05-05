@@ -124,6 +124,7 @@ class MapWindow {
   static void ModifyMapScale();
 
   static bool MapDirty;
+  static bool LandableReachable;
 
   static bool DeclutterLabels;
   static bool EnableTrailDrift;
@@ -288,6 +289,7 @@ class MapWindow {
   static      HPEN hpThermalBandGlider;
   static      HPEN hpFinalGlideAbove;
   static      HPEN hpFinalGlideBelow;
+  static      HPEN hpFinalGlideBelowLandable;
   static      HPEN hpMapScale;
   static      HPEN hpTerrainLine;
   static      HPEN hpTerrainLineBg;
@@ -300,6 +302,7 @@ class MapWindow {
   static      HBRUSH hbThermalBand;
   static      HBRUSH hbBestCruiseTrack;
   static      HBRUSH hbFinalGlideBelow;
+  static      HBRUSH hbFinalGlideBelowLandable;
   static      HBRUSH hbFinalGlideAbove;
   static      HBRUSH hbWind;
 

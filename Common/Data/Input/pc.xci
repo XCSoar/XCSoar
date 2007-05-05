@@ -1,26 +1,31 @@
+
+# -------------------
+# GlideComputerEvents
+# -------------------
+
 mode=default
 type=gce
 data=TASK_START
-event=StatusMessage Task start
 event=Beep 1
+event=StatusMessage Task start
 
 mode=default
 type=gce
 data=TASK_FINISH
-event=StatusMessage Task finish
 event=Beep 1
+event=StatusMessage Task finish
 
 mode=default
 type=gce
 data=TASK_NEXTWAYPOINT
-event=StatusMessage Next turnpoint
 event=Beep 1
+event=StatusMessage Next turnpoint
 
 mode=default
 type=gce
 data=ARM_READY
-event=StatusMessage In sector, arm advance when ready
 event=Beep 1
+event=StatusMessage In sector, arm advance when ready
 
 
 # -------------------
@@ -270,6 +275,7 @@ location=8
 mode=pan
 type=key
 data=0
+event=Null
 label=
 location=9
 
@@ -346,7 +352,7 @@ mode=default
 type=key
 data=7
 event=Calculator
-label=
+label=$(CheckTask)
 location=6
 
 mode=default
@@ -354,7 +360,7 @@ type=key
 data=8
 event=Setup Task
 event=Mode default
-label=
+label=$(CheckWaypointFile)
 location=7
 
 mode=default
@@ -369,7 +375,7 @@ type=key
 data=0
 event=ArmAdvance show
 event=ArmAdvance toggle
-label=
+label=$(CheckTask)
 location=9
 
 mode=Preview
@@ -384,7 +390,7 @@ mode=Preview
 type=key
 data=7
 event=Calculator
-label=Task\nCalc
+label=Task\nCalc$(CheckTask)
 location=6
 
 mode=Preview
@@ -392,7 +398,7 @@ type=key
 data=8
 event=Setup Task
 event=Mode default
-label=Task\nEdit
+label=Task\nEdit$(CheckWaypointFile)
 location=7
 
 mode=Preview
@@ -407,7 +413,7 @@ type=key
 data=0
 event=ArmAdvance show
 event=ArmAdvance toggle
-label=Advance\n$(AdvanceArmed)
+label=$(CheckTask)Advance\n$(AdvanceArmed)
 location=9
 
 
@@ -515,7 +521,7 @@ type=key
 data=6
 event=Calculator
 event=Mode default
-label=Task\nCalc
+label=Task\nCalc$(CheckTask)
 location=5
 
 mode=Nav1
@@ -524,21 +530,21 @@ data=7
 event=ArmAdvance show
 event=ArmAdvance toggle
 event=Mode default
-label=Advance\n$(AdvanceArmed)
+label=$(CheckTask)Advance\n$(AdvanceArmed)
 location=6
 
 mode=Nav1
 type=key
 data=8
 event=AdjustWaypoint previous
-label=Waypoint\nPrevious
+label=$(WaypointPrevious)
 location=7
 
 mode=Nav1
 type=key
 data=9
 event=AdjustWaypoint next
-label=Waypoint\nNext
+label=$(WaypointNext)
 location=8
 
 mode=Nav1
@@ -546,7 +552,7 @@ type=key
 data=0
 event=Mode default
 event=WaypointDetails select
-label=Waypoint\nLookup
+label=Waypoint\nLookup$(CheckWaypointFile)
 location=9
 
 # -------------
@@ -566,7 +572,7 @@ type=key
 data=6
 event=Setup Task
 event=Mode default
-label=Task\nEdit
+label=Task\nEdit$(CheckWaypointFile)
 location=5
 
 mode=Nav2
@@ -582,14 +588,14 @@ type=key
 data=8
 event=Mode default
 event=AbortTask toggle
-label=Task\n$(TaskAbortToggelActionName)
+label=Task\n$(TaskAbortToggleActionName)$(CheckWaypointFile)
 location=7
 
 mode=Nav2
 type=key
 data=9
 event=FlightMode finalglide toggle
-label=Final\n$(FinalForceToggelActionName)
+label=$(CheckTask)Final\n$(FinalForceToggleActionName)
 location=8
 
 mode=Nav2
@@ -614,43 +620,42 @@ location=2
 mode=Display1
 type=key
 data=6
-event=Pan show
-event=Pan supertoggle
-label=Pan\nOn
+event=Zoom in
+label=Zoom\nIn
 location=5
 
 mode=Display1
 type=key
 data=7
-event=Zoom in
-label=Zoom\nIn
+event=Zoom out
+label=Zoom\nOut
 location=6
 
 mode=Display1
 type=key
 data=8
-event=Zoom out
-label=Zoom\nOut
-location=7
-
-mode=Display1
-type=key
-data=9
 event=Mode default
 event=StatusMessage Dropped marker
 event=Logger note Mark
 event=MarkLocation
 label=Mark\nDrop
+location=7
+
+mode=Display1
+type=key
+data=9
+event=ScreenModes togglefull
+event=Mode default
+label=Full Scrn\nToggle
 location=8
 
 mode=Display1
 type=key
 data=0
-event=ScreenModes togglefull
-event=Mode default
-label=Full Scrn\n$(FullScreenToggelActionName)
+event=Pan show
+event=Pan supertoggle
+label=Pan\nOn
 location=9
-
 
 # -------------
 # mode=Display2
@@ -668,7 +673,7 @@ type=key
 data=6
 event=Zoom auto show
 event=Zoom auto toggle
-label=Zoom\n$(ZoomAutoToggelActionName)
+label=Zoom\n$(ZoomAutoToggleActionName)
 location=5
 
 mode=Display2
@@ -676,7 +681,7 @@ type=key
 data=7
 event=SnailTrail show
 event=SnailTrail toggle
-label=Snail Trail\ntoggle
+label=Trail\n$(SnailTrailToggleName)
 location=6
 
 mode=Display2
@@ -684,7 +689,7 @@ type=key
 data=8
 event=TerrainTopology show
 event=TerrainTopology toggle
-label=Terrain\nToggle
+label=$(TerrainTopologyToggleName)
 location=7
 
 mode=Display2
@@ -699,7 +704,7 @@ type=key
 data=0
 event=DeclutterLabels show
 event=DeclutterLabels toggle
-label=Labels\n$(MapLabelsToggelActionName)
+label=Labels\n$(MapLabelsToggleActionName)
 location=9
 
 
@@ -733,7 +738,7 @@ type=key
 data=8
 event=MacCready auto show
 event=MacCready auto toggle
-label=MacCready\n$(MacCreadyToggelActionName)
+label=$(CheckTask)MacCready\n$(MacCreadyToggleActionName)
 location=7
 
 mode=Config1
@@ -774,7 +779,7 @@ type=key
 data=7
 event=Setup System
 event=Mode default
-label=Setup\nSystem
+label=Setup\nSystem$(CheckSettingsLockout)
 location=6
 
 mode=Config2
@@ -782,7 +787,7 @@ type=key
 data=8
 event=Setup Airspace
 event=Mode default
-label=Settings\nAirspace
+label=Settings\nAirspace$(CheckAirspace)
 location=7
 
 mode=Config2
@@ -798,7 +803,7 @@ type=key
 data=0
 event=Setup Replay
 event=Mode default
-label=Logger\nReplay
+label=Logger\nReplay$(CheckReplay)
 location=9
 
 
@@ -911,9 +916,10 @@ location=4
 mode=Info1
 type=key
 data=6
+event=Mode default
 event=WaypointDetails current
 event=Mode default
-label=Waypoint\nDetails
+label=$(CheckTask)Waypoint\nDetails
 location=5
 
 mode=Info1
@@ -921,7 +927,7 @@ type=key
 data=7
 event=Mode default
 event=NearestWaypointDetails aircraft
-label=Nearest\nWaypoint
+label=$(CheckWaypointFile)Nearest\nWaypoint
 location=6
 
 mode=Info1
@@ -929,7 +935,7 @@ type=key
 data=8
 event=Mode default
 event=NearestAirspaceDetails
-label=Nearest\nAirspace
+label=Nearest\nAirspace$(CheckAirspace)
 location=7
 
 mode=Info1
@@ -976,14 +982,14 @@ mode=Info2
 type=key
 data=8
 event=Status task
-label=Status\nTask
+label=$(CheckTask)Status\nTask
 location=7
 
 mode=Info2
 type=key
 data=9
 event=ScreenModes toggleauxiliary
-label=Aux Info\n$(AuxInfoToggelActionName)
+label=Aux Info\n$(AuxInfoToggleActionName)
 location=8
 
 mode=Info2

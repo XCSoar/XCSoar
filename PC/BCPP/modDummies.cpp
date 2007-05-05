@@ -6,6 +6,7 @@
 #undef GetProcAddress
 
 HRESULT DecompressImageIndirect(DecompressImageInfo *pParams){
+	(void)pParams;
   return (TRUE);
 }
 //BOOL SHGetSpecialFolderPathW(HWND hwndOwner, LPTSTR lpszPath, int nFolder, BOOL fCreate);

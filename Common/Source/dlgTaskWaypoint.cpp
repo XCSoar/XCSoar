@@ -77,16 +77,20 @@ static void UpdateCaption(void) {
 
 
 
-static void SetValues(void) {
+
+
+static void SetValues(bool first=false) {
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Cylinder"));
-    dfe->addEnumText(TEXT("Line"));
-    dfe->addEnumText(TEXT("FAI Sector"));
+    if (first) {
+      dfe->addEnumText(TEXT("Cylinder"));
+      dfe->addEnumText(TEXT("Line"));
+      dfe->addEnumText(TEXT("FAI Sector"));
+    }
     dfe->Set(FinishLine);
     wp->RefreshDisplay();
   }
@@ -102,9 +106,11 @@ static void SetValues(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Cylinder"));
-    dfe->addEnumText(TEXT("Line"));
-    dfe->addEnumText(TEXT("FAI Sector"));
+    if (first) {
+      dfe->addEnumText(TEXT("Cylinder"));
+      dfe->addEnumText(TEXT("Line"));
+      dfe->addEnumText(TEXT("FAI Sector"));
+    }
     dfe->Set(StartLine);
     wp->RefreshDisplay();
   }
@@ -118,17 +124,21 @@ static void SetValues(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
   if (wp) {
+    wp->SetVisible(AATEnabled==0);
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Cylinder"));
-    dfe->addEnumText(TEXT("FAI Sector"));
-    dfe->addEnumText(TEXT("DAe 0.5/10"));
+    if (first) {
+      dfe->addEnumText(TEXT("Cylinder"));
+      dfe->addEnumText(TEXT("FAI Sector"));
+      dfe->addEnumText(TEXT("DAe 0.5/10"));
+    }
     dfe->Set(SectorType);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskSectorRadius"));
   if (wp) {
+    wp->SetVisible(AATEnabled==0);
     wp->GetDataField()->SetAsFloat(lround(SectorRadius*DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
     wp->RefreshDisplay();
@@ -138,16 +148,19 @@ static void SetValues(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Manual"));
-    dfe->addEnumText(TEXT("Auto"));
-    dfe->addEnumText(TEXT("Arm"));
-    dfe->addEnumText(TEXT("Arm start"));
+    if (first) {
+      dfe->addEnumText(TEXT("Manual"));
+      dfe->addEnumText(TEXT("Auto"));
+      dfe->addEnumText(TEXT("Arm"));
+      dfe->addEnumText(TEXT("Arm start"));
+    }
     dfe->Set(AutoAdvance);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
   if (wp) {
+    wp->SetVisible(AATEnabled>0);
     wp->GetDataField()->SetAsFloat(AATTaskLength);
     wp->RefreshDisplay();
   }
@@ -170,9 +183,58 @@ static void SetValues(void) {
     wp->GetDataField()->Set(EnableOLC);
     wp->RefreshDisplay();
   }
+
+  WndButton* wb;
+  wb = (WndButton *)wf->FindByName(TEXT("EditStartPoints"));
+  if (wb) {
+    wb->SetVisible(EnableMultipleStartPoints!=0);
+  }
+
 }
 
 static void GetWaypointValues(void) {
+  WndProperty* wp;
+  if ((twItemIndex<MAXTASKPOINTS)&&(twItemIndex>=0)) {
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAATType"));
+    if (wp) {
+      Task[twItemIndex].AATType = wp->GetDataField()->GetAsInteger();
+    }
+
+    int ival;
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAATCircleRadius"));
+    if (wp) {
+      ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
+      Task[twItemIndex].AATCircleRadius = ival;
+    }
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAATSectorRadius"));
+    if (wp) {
+      ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
+      Task[twItemIndex].AATSectorRadius = ival;
+    }
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAATStartRadial"));
+    if (wp) {
+      Task[twItemIndex].AATStartRadial = wp->GetDataField()->GetAsInteger();
+    }
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAATFinishRadial"));
+    if (wp) {
+      Task[twItemIndex].AATFinishRadial = wp->GetDataField()->GetAsInteger();
+    }
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAATOffsetRadius"));
+    if (wp) {
+      Task[twItemIndex].AATTargetOffsetRadius =
+        wp->GetDataField()->GetAsInteger()/100.0;
+    }
+  }
+}
+
+
+static void SetWaypointValues(bool first=false) {
   WndProperty* wp;
 
   // TODO: handle change
@@ -180,8 +242,10 @@ static void GetWaypointValues(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Cylinder"));
-    dfe->addEnumText(TEXT("Sector"));
+    if (first) {
+      dfe->addEnumText(TEXT("Cylinder"));
+      dfe->addEnumText(TEXT("Sector"));
+    }
     dfe->Set(Task[twItemIndex].AATType);
     wp->RefreshDisplay();
   }
@@ -191,6 +255,7 @@ static void GetWaypointValues(void) {
     wp->GetDataField()->SetAsFloat(lround(Task[twItemIndex].AATCircleRadius
                                           *DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
+    wp->SetVisible(Task[twItemIndex].AATType==0);
     wp->RefreshDisplay();
   }
 
@@ -199,18 +264,21 @@ static void GetWaypointValues(void) {
     wp->GetDataField()->SetAsFloat(lround(Task[twItemIndex].AATSectorRadius
                                           *DISTANCEMODIFY*DISTANCE_ROUNDING)/DISTANCE_ROUNDING);
     wp->GetDataField()->SetUnits(Units::GetDistanceName());
+    wp->SetVisible(Task[twItemIndex].AATType>0);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATStartRadial"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(Task[twItemIndex].AATStartRadial);
+    wp->SetVisible(Task[twItemIndex].AATType>0);
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATFinishRadial"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(Task[twItemIndex].AATFinishRadial);
+    wp->SetVisible(Task[twItemIndex].AATType>0);
     wp->RefreshDisplay();
   }
 
@@ -301,6 +369,21 @@ static void ReadValues(void) {
 
 }
 
+static void OnAATEnabled(DataField *Sender, DataField::DataAccessKind_t Mode) {
+  switch(Mode){
+    case DataField::daGet:
+    break;
+    case DataField::daPut:
+    case DataField::daChange:
+      ReadValues();
+      SetValues();
+      GetWaypointValues();
+      SetWaypointValues();
+    break;
+  }
+}
+
+
 
 static void OnSelectClicked(WindowControl * Sender){
 	(void)Sender;
@@ -332,7 +415,7 @@ static void OnMoveAfterClicked(WindowControl * Sender){
 	(void)Sender;
   LockTaskData();
   SwapWaypoint(twItemIndex);
-  GetWaypointValues();
+  SetWaypointValues();
   UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
@@ -341,7 +424,7 @@ static void OnMoveBeforeClicked(WindowControl * Sender){
 	(void)Sender;
   LockTaskData();
   SwapWaypoint(twItemIndex-1);
-  GetWaypointValues();
+  SetWaypointValues();
   UnlockTaskData();
   wf->SetModalResult(mrOK);
 }
@@ -356,7 +439,7 @@ static void OnRemoveClicked(WindowControl * Sender) {
 	(void)Sender;
   LockTaskData();
   RemoveTaskPoint(twItemIndex);
-  GetWaypointValues();
+  SetWaypointValues();
   if (ActiveWayPoint>=twItemIndex) {
     ActiveWayPoint--;
   }
@@ -375,6 +458,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnStartPointClicked),
   DeclearCallBackEntry(OnMoveAfterClicked),
   DeclearCallBackEntry(OnMoveBeforeClicked),
+  DeclearCallBackEntry(OnAATEnabled),
   DeclearCallBackEntry(NULL)
 };
 
@@ -422,9 +506,7 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
   ASSERT(wAATTurnpoint!=NULL);
   ASSERT(wFinish!=NULL);
 
-  WndProperty* wp;
-
-  GetWaypointValues();
+  SetWaypointValues(true);
 
   switch (twType) {
     case 0:
@@ -454,7 +536,7 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
 
   // set properties...
 
-  SetValues();
+  SetValues(true);
 
   UpdateCaption();
 
@@ -464,43 +546,7 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
 
   // TODO: handle change
 
-  if ((twItemIndex<MAXTASKPOINTS)&&(twItemIndex>=0)) {
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAATType"));
-    if (wp) {
-      Task[twItemIndex].AATType = wp->GetDataField()->GetAsInteger();
-    }
-
-    int ival;
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAATCircleRadius"));
-    if (wp) {
-      ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
-      Task[twItemIndex].AATCircleRadius = ival;
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAATSectorRadius"));
-    if (wp) {
-      ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
-      Task[twItemIndex].AATSectorRadius = ival;
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAATStartRadial"));
-    if (wp) {
-      Task[twItemIndex].AATStartRadial = wp->GetDataField()->GetAsInteger();
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAATFinishRadial"));
-    if (wp) {
-      Task[twItemIndex].AATFinishRadial = wp->GetDataField()->GetAsInteger();
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAATOffsetRadius"));
-    if (wp) {
-      Task[twItemIndex].AATTargetOffsetRadius =
-        wp->GetDataField()->GetAsInteger()/100.0;
-    }
-  }
+  GetWaypointValues();
 
   ReadValues();
 

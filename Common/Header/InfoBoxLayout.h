@@ -27,6 +27,7 @@ class ButtonLabel {
   static int ButtonLabelGeometry;
   static HWND hWndButtonWindow[NUMBUTTONLABELS];
   static bool ButtonVisible[NUMBUTTONLABELS];
+  static bool ButtonDisabled[NUMBUTTONLABELS];
   static void CreateButtonLabels(RECT rc);
   static void AnimateButton(int i);
   static void SetFont(HFONT Font);

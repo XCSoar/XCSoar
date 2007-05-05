@@ -470,14 +470,18 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
     ExtractParameter(String,ctemp,6);
     double speed = StrToDouble(ctemp, NULL);
 
-    if (ReplayLogger::IsEnabled()) {
-      if (speed>2.0) {
-	// stop logger replay if aircraft is actually moving.
+    if (speed>2.0) {
+      GPS_INFO->MovementDetected = TRUE;
+      if (ReplayLogger::IsEnabled()) {
+        // stop logger replay if aircraft is actually moving.
 	ReplayLogger::Stop();
-      } else {
-	// block actual GPS signal
       }
-      return TRUE;
+    } else {
+      GPS_INFO->MovementDetected = FALSE;
+      if (ReplayLogger::IsEnabled()) {
+        // block actual GPS signal if not moving and a log is being replayed
+        return TRUE;
+      }
     }
 
     GPS_INFO->NAVWarning = !gpsValid;

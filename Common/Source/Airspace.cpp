@@ -150,6 +150,9 @@ bool CheckAirspacePoint(int Idx){
 }
 
 
+bool ValidAirspace(void) {
+  return (NumberOfAirspacePoints>0)||(NumberOfAirspaceAreas>0)||(NumberOfAirspaceCircles>0);
+}
 
 ///////////////////////////////
 

@@ -252,20 +252,24 @@ static void UpdateDeviceSetupButton(int DeviceIdx, TCHAR *Name){
   if (DeviceIdx == 0){
 
     wb = ((WndButton *)wf->FindByName(TEXT("cmdSetupDeviceA")));
-    if ((wb != NULL) && (_tcscmp(Name, TEXT("Vega")) == 0))
-      wb->SetVisible(true);
-    else
-      wb->SetVisible(false);
+    if (wb != NULL) {
+      if (_tcscmp(Name, TEXT("Vega")) == 0)
+        wb->SetVisible(true);
+      else
+        wb->SetVisible(false);
+    }
 
   }
 
   if (DeviceIdx == 1){
 
     wb = ((WndButton *)wf->FindByName(TEXT("cmdSetupDeviceB")));
-    if ((wb != NULL) && (_tcscmp(Name, TEXT("Vega")) == 0))
-      wb->SetVisible(true);
-    else
-      wb->SetVisible(false);
+    if (wb != NULL) {
+      if (_tcscmp(Name, TEXT("Vega")) == 0)
+        wb->SetVisible(true);
+      else
+        wb->SetVisible(false);
+    }
 
   }
 

@@ -155,6 +155,7 @@ double MapWindow::DrawScale;
 double MapWindow::InvDrawScale;
 
 bool MapWindow::AutoZoom = false;
+bool MapWindow::LandableReachable = false;
 
 int MapWindow::dTDisplay=0;
 
@@ -207,6 +208,7 @@ HBRUSH MapWindow::hbCompass;
 HBRUSH MapWindow::hbThermalBand;
 HBRUSH MapWindow::hbBestCruiseTrack;
 HBRUSH MapWindow::hbFinalGlideBelow;
+HBRUSH MapWindow::hbFinalGlideBelowLandable;
 HBRUSH MapWindow::hbFinalGlideAbove;
 HBRUSH MapWindow::hbWind;
 
@@ -222,6 +224,7 @@ HPEN MapWindow::hpThermalBand;
 HPEN MapWindow::hpThermalBandGlider;
 HPEN MapWindow::hpFinalGlideAbove;
 HPEN MapWindow::hpFinalGlideBelow;
+HPEN MapWindow::hpFinalGlideBelowLandable;
 HPEN MapWindow::hpMapScale;
 HPEN MapWindow::hpTerrainLine;
 HPEN MapWindow::hpTerrainLineBg;
@@ -749,14 +752,14 @@ void MapWindow::Event_TerrainTopology(int vswitch) {
   char val;
 
   if (vswitch== -1) { // toggle through 4 possible options
-          val = 0;
-          if (EnableTopology) val++;
-          if (EnableTerrain) val += (char)2;
-          val++;
-          if (val>3) val=0;
-          EnableTopology = ((val & 0x01) == 0x01);
-          EnableTerrain  = ((val & 0x02) == 0x02);
-          RefreshMap();
+    val = 0;
+    if (EnableTopology) val++;
+    if (EnableTerrain) val += (char)2;
+    val++;
+    if (val>3) val=0;
+    EnableTopology = ((val & 0x01) == 0x01);
+    EnableTerrain  = ((val & 0x02) == 0x02);
+    RefreshMap();
 
   } else if (vswitch == -2) { // toggle terrain
           EnableTerrain = !EnableTerrain;
@@ -783,19 +786,19 @@ void MapWindow::Event_TerrainTopology(int vswitch) {
           RefreshMap();
 
   } else if (vswitch == 0) { // Show terrain/Topology
-          // ARH Let user know what's happening
-          TCHAR buf[128];
+    // ARH Let user know what's happening
+    TCHAR buf[128];
 
-          if (EnableTopology)
-                _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("ON")));
-          else
-                _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("OFF")));
+    if (EnableTopology)
+      _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("ON")));
+    else
+      _stprintf(buf, TEXT("\r\n%s / "), gettext(TEXT("OFF")));
 
-          if (EnableTerrain)
-                _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("ON")));
-          else
-                _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
-          DoStatusMessage(TEXT("Topology / Terrain"), buf);
+    if (EnableTerrain)
+      _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("ON")));
+    else
+      _stprintf(buf+_tcslen(buf), TEXT("%s"), gettext(TEXT("OFF")));
+    DoStatusMessage(TEXT("Topology / Terrain"), buf);
   }
 }
 
@@ -1215,6 +1218,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hpThermalBandGlider = (HPEN)CreatePen(PS_SOLID, IBLSCALE(2), RGB(0x00,0x00,0x30));
 
     hpFinalGlideBelow = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xFF,0xA0,0xA0));
+    hpFinalGlideBelowLandable = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(255,196,0));
 
     // JMW TODO red/green Color blind
     hpFinalGlideAbove = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1), RGB(0xA0,0xFF,0xA0));
@@ -1245,6 +1249,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hbThermalBand=(HBRUSH)CreateSolidBrush(RGB(0x80,0x80,0xFF));
     hbBestCruiseTrack=(HBRUSH)CreateSolidBrush(RGB(0x0,0x0,0xFF));
     hbFinalGlideBelow=(HBRUSH)CreateSolidBrush(RGB(0xFF,0x00,0x00));
+    hbFinalGlideBelowLandable=(HBRUSH)CreateSolidBrush(RGB(0xFF,180,0x00));
     hbFinalGlideAbove=(HBRUSH)CreateSolidBrush(RGB(0x00,0xFF,0x00));
 
 
@@ -1319,6 +1324,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject((HPEN)hpThermalBandGlider);
     DeleteObject((HPEN)hpFinalGlideAbove);
     DeleteObject((HPEN)hpFinalGlideBelow);
+    DeleteObject((HPEN)hpFinalGlideBelowLandable);
     DeleteObject((HPEN)hpMapScale);
     DeleteObject((HPEN)hpTerrainLine);
     DeleteObject((HPEN)hpTerrainLineBg);
@@ -1331,6 +1337,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject((HBRUSH)hbThermalBand);
     DeleteObject((HBRUSH)hbBestCruiseTrack);
     DeleteObject((HBRUSH)hbFinalGlideBelow);
+    DeleteObject((HBRUSH)hbFinalGlideBelowLandable);
     DeleteObject((HBRUSH)hbFinalGlideAbove);
     DeleteObject((HBRUSH)hbWind);
 
@@ -1770,7 +1777,11 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     // ground first...
 
-    if (EnableTerrain) {
+    if (BigZoom) {
+      BigZoom = false;
+    }
+
+    if (EnableTerrain && (DerivedDrawInfo.TerrainValid)) {
       double sunelevation = 40.0;
       double sunazimuth = DisplayAngle-DerivedDrawInfo.WindBearing;
 
@@ -1779,10 +1790,6 @@ void MapWindow::RenderMapWindow(  RECT rc)
         BigZoom = true;
       }
       DrawTerrain(hdcDrawWindowBg, rc, sunazimuth, sunelevation);
-    } else {
-      if (BigZoom) {
-        BigZoom = false;
-      }
     }
 
     if (EnableTopology) {
@@ -4142,8 +4149,13 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
       // draw actual glide bar
       if (Offset<=0) {
-        hpOld = (HPEN)SelectObject(hDC, hpFinalGlideBelow);
-        hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideBelow);
+        if (LandableReachable) {
+          hpOld = (HPEN)SelectObject(hDC, hpFinalGlideBelowLandable);
+          hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideBelowLandable);
+        } else {
+          hpOld = (HPEN)SelectObject(hDC, hpFinalGlideBelow);
+          hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideBelow);
+        }
       } else {
         hpOld = (HPEN)SelectObject(hDC, hpFinalGlideAbove);
         hbOld = (HBRUSH)SelectObject(hDC, hbFinalGlideAbove);
@@ -4152,8 +4164,13 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
       // draw glide bar at mc 0
       if (Offset0<=0) {
-        SelectObject(hDC, hpFinalGlideBelow);
-        SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
+        if (LandableReachable) {
+          SelectObject(hDC, hpFinalGlideBelowLandable);
+          SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
+        } else {
+          SelectObject(hDC, hpFinalGlideBelow);
+          SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));
+        }
       } else {
         SelectObject(hDC, hpFinalGlideAbove);
         SelectObject(hDC, GetStockObject(HOLLOW_BRUSH));

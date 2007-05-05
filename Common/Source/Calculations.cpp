@@ -102,7 +102,7 @@ static void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
 static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
 static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static bool  InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static bool  InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, BOOL* CrossedStart);
 static bool  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int i);
 static bool  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int i);
 static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -185,7 +185,7 @@ void RefreshTaskStatistics(void) {
   TaskStatistics(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
   AATStats(&GPS_INFO, &CALCULATED_INFO);
   TaskSpeed(&GPS_INFO, &CALCULATED_INFO, MACCREADY);
-  EffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
+  IterateEffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
   UnlockTaskData();
   UnlockFlightData();
 }
@@ -608,7 +608,7 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated, bool doadvance,
     AnnounceWayPointSwitch(Calculated, doadvance);
   } else {
     if (doadvance) {
-      ActiveWayPoint++;
+      ActiveWayPoint=1;
       SelectedWaypoint = ActiveWayPoint;
     }
   }
@@ -736,9 +736,9 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     AATStats(Basic, Calculated);
     TaskStatistics(Basic, Calculated, MACCREADY);
     TaskSpeed(Basic, Calculated, MACCREADY);
-    EffectiveMacCready(Basic, Calculated);
+    IterateEffectiveMacCready(Basic, Calculated);
 
-#ifdef DEBUG
+#ifdef DEBUGFULL
     if (Calculated->TaskStartTime>0) {
       char buffer[200];
 
@@ -1718,15 +1718,9 @@ bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   bool inrange = false;
   inrange = (FirstPointDistance<StartRadius);
-  if (!inrange) {
-    LastInSector = false;
-  }
 
   if(StartLine==0) {
     // Start Circle
-    if (inrange) {
-      LastInSector = true;
-    }
     return inrange;
   }
 
@@ -1749,22 +1743,9 @@ bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
 
   if (inrange) {
-
-    if (LastInSector) {
-      // previously approaching the start line
-      if (!approaching) {
-        // now moving away from start line
-        LastInSector = false;
-        return true;
-      }
-    } else {
-      if (approaching) {
-        // now approaching the start line
-        LastInSector = true;
-      }
-    }
-
+    return approaching;
   } else {
+    // cheat fail of last because exited from side
     LastInSector = false;
   }
 
@@ -1772,9 +1753,11 @@ bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
-bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
+bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index,
+                   BOOL *CrossedStart)
 {
   static bool LastInSector = false;
+  static int EntryStartSector = index;
 
   bool isInSector= false;
   bool retval=false;
@@ -1784,22 +1767,31 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
   }
   if (!ValidTaskPoint(ActiveWayPoint))
     return false;
+  if (!ValidTaskPoint(0))
+    return false;
 
   LockTaskData();
 
   if ((ActiveWayPoint>0)
-      &&(Task[ActiveWayPoint+1].Index < 0)) {
+      && !ValidTaskPoint(ActiveWayPoint+1)) {
     // don't detect start if finish is selected
     retval = false;
     goto OnExit;
   }
 
-  retval = InStartSector_Internal(Basic, Calculated,
-                                  Task[0].Index, Task[0].OutBound,
-                                  LastInSector);
-  isInSector = retval;
-  if (retval) {
-    index = Task[0].Index;
+  if ((Task[0].Index != EntryStartSector) && (EntryStartSector>=0)) {
+    LastInSector = false;
+    EntryStartSector = Task[0].Index;
+  }
+
+  isInSector = InStartSector_Internal(Basic, Calculated,
+                                      Task[0].Index, Task[0].OutBound,
+                                      LastInSector);
+
+  *CrossedStart = LastInSector && !isInSector;
+  LastInSector = isInSector;
+  if (*CrossedStart) {
+    goto OnExit;
   }
 
   if (EnableMultipleStartPoints) {
@@ -1812,25 +1804,27 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index)
                                         StartPoints[i].OutBound,
                                         StartPoints[i].InSector);
         isInSector |= retval;
-        if (retval) {
-          index = StartPoints[i].Index;
+        index = StartPoints[i].Index;
+        *CrossedStart = StartPoints[i].InSector && !retval;
+        StartPoints[i].InSector = retval;
+        if (*CrossedStart) {
+          if (Task[0].Index != index) {
+            Task[0].Index = index;
+            LastInSector = false;
+            EntryStartSector = index;
+            RefreshTask();
+          }
+          goto OnExit;
         }
+
       }
     }
   }
 
-  if (isInSector) {
-    // change start waypoint to the one we are in the sector of
-    if (Task[0].Index != index) {
-      Task[0].Index = index;
-      RefreshTask();
-    }
-  }
-  retval = isInSector;
-
  OnExit:
+
   UnlockTaskData();
-  return retval;
+  return isInSector;
 }
 
 #define AUTOADVANCE_MANUAL 0
@@ -1854,7 +1848,7 @@ bool ReadyToStart(DERIVED_INFO *Calculated) {
 }
 
 
-bool ReadyToAdvance(DERIVED_INFO *Calculated, bool reset=true) {
+bool ReadyToAdvance(DERIVED_INFO *Calculated, bool reset=true, bool restart=false) {
   static int lastReady = -1;
   static int lastActive = -1;
   bool say_ready = false;
@@ -1883,11 +1877,13 @@ bool ReadyToAdvance(DERIVED_INFO *Calculated, bool reset=true) {
     }
   }
   if (AutoAdvance== AUTOADVANCE_ARMSTART) {
-    if ((ActiveWayPoint>0)||(AdvanceArmed)) {
-      if (reset && (ActiveWayPoint==0)) AdvanceArmed = false;
-      return true;
-    } else {
-      say_ready = true;
+	  if ((ActiveWayPoint == 0) || restart) {
+      if (!AdvanceArmed) {
+        say_ready = true;
+      } else if (reset) {
+        AdvanceArmed = false;
+        return true;
+      }
     }
   }
 
@@ -1940,43 +1936,38 @@ bool ValidStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                       BOOL *StartSectorEntered,
                        int *LastStartSector) {
-  if (Calculated->Flying) {
-    Calculated->ValidFinish = false;
-  }
-  if (InStartSector(Basic,Calculated,*LastStartSector)) {
+  BOOL StartCrossed;
+
+  if (InStartSector(Basic,Calculated,*LastStartSector, &StartCrossed)) {
     Calculated->IsInSector = true;
 
     if (ReadyToStart(Calculated)) {
-      *StartSectorEntered = TRUE;
+      aatdistance.AddPoint(Basic->Longitude,
+                           Basic->Latitude,
+                           0);
     }
-    aatdistance.AddPoint(Basic->Longitude,
-                         Basic->Latitude,
-                         0);
     if (ValidStart(Basic, Calculated)) {
-      ReadyToAdvance(Calculated, false);
+      ReadyToAdvance(Calculated, false, true);
     }
-
     // TODO monitor start speed throughout time in start sector
-  } else {
-    if(*StartSectorEntered == TRUE) {
-      *StartSectorEntered = FALSE;
-      if(!IsFinalWaypoint() && ValidStart(Basic, Calculated)) {
-        Calculated->ValidStart = true;
-        if (ReadyToAdvance(Calculated, true)) {
-          StartTask(Basic,Calculated, true, true);
-        }
-        if (Calculated->Flying) {
-          Calculated->ValidFinish = false;
-        }
-        // JMW TODO: This causes Vaverage to go bonkers
-        // if the user has already passed the start
-        // but selects the start
-
-        // Note: pilot must have armed advance
-        // for the start to be registered
+  }
+  if (StartCrossed) {
+    if(!IsFinalWaypoint() && ValidStart(Basic, Calculated)) {
+      Calculated->ValidStart = true;
+      if (ReadyToAdvance(Calculated, true, true)) {
+        ActiveWayPoint=0; // enforce this since it may be 1
+        StartTask(Basic,Calculated, true, true);
       }
+      if (Calculated->Flying) {
+        Calculated->ValidFinish = false;
+      }
+      // JMW TODO: This causes Vaverage to go bonkers
+      // if the user has already passed the start
+      // but selects the start
+
+      // Note: pilot must have armed advance
+      // for the start to be registered
     }
   }
 }
@@ -1984,15 +1975,20 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 static BOOL CheckRestart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                          int *LastStartSector) {
-  if(InStartSector(Basic, Calculated, *LastStartSector)) {
-    Calculated->IsInSector = true;
+  if((Basic->Time - Calculated->TaskStartTime < 600)
+     &&(ActiveWayPoint<=1)) {
+    /*
+    BOOL StartCrossed;
+    if(InStartSector(Basic, Calculated, *LastStartSector, &StartCrossed)) {
+      Calculated->IsInSector = true;
 
-    if(Basic->Time - Calculated->TaskStartTime < 600) {
       // this allows restart if returned to start sector before
       // 10 minutes after task start
       ActiveWayPoint = 0;
       return TRUE;
     }
+    */
+    CheckStart(Basic, Calculated, LastStartSector);
   }
   return FALSE;
 }
@@ -2039,13 +2035,15 @@ static void AddAATPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 static void CheckInSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
-  AddAATPoint(Basic, Calculated, ActiveWayPoint-1);
+  if (ActiveWayPoint>0) {
+    AddAATPoint(Basic, Calculated, ActiveWayPoint-1);
+  }
   AddAATPoint(Basic, Calculated, ActiveWayPoint);
 
   // JMW Start bug XXX
 
   if (aatdistance.HasEntered(ActiveWayPoint)) {
-    if (ReadyToAdvance(Calculated, true)) {
+    if (ReadyToAdvance(Calculated, true, false)) {
       AnnounceWayPointSwitch(Calculated, true);
       Calculated->LegStartTime = Basic->Time;
     }
@@ -2058,7 +2056,6 @@ static void CheckInSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
-  static BOOL StartSectorEntered = FALSE;
   static int LastStartSector = -1;
 
   if (ActiveWayPoint<0) return;
@@ -2068,13 +2065,17 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   Calculated->IsInSector = false;
 
   if(ActiveWayPoint == 0) {
-    CheckStart(Basic, Calculated, &StartSectorEntered, &LastStartSector);
+    CheckStart(Basic, Calculated, &LastStartSector);
   } else {
     if(IsFinalWaypoint()) {
+      LastStartSector = -1;
       CheckFinish(Basic, Calculated);
     } else {
-      StartSectorEntered |= CheckRestart(Basic, Calculated, &LastStartSector);
-      CheckInSector(Basic, Calculated);
+      CheckRestart(Basic, Calculated, &LastStartSector);
+      if (ActiveWayPoint>0) {
+        CheckInSector(Basic, Calculated);
+        LastStartSector = -1;
+      }
     }
   }
   UnlockTaskData();
@@ -2654,7 +2655,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                               Calculated->WindSpeed,
                               Calculated->WindBearing,
                               0, 0,
-                              this_is_final,
+                              this_is_final || ForceFinalGlide,
                               &this_LegTimeToGo,
                               height_above_finish);
 
@@ -3742,6 +3743,10 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 //////////
+
+void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  // nothing yet.
+}
 
 double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 

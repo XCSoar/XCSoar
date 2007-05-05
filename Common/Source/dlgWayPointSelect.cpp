@@ -126,7 +126,7 @@ static int _cdecl WaypointLandableCompare(const void *elem1, const void *elem2 )
 
 static int _cdecl WaypointWayPointCompare(const void *elem1, const void *elem2 ){
   if (((WayPointSelectInfo_t *)elem1)->Type & (TURNPOINT))
-    return (+1);
+    return (-1);
   return (+1);
 }
 
@@ -558,19 +558,32 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
         sTmp[1] = 'T';
     }
 
-    ExtTextOut(hDC, 125*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-      ETO_OPAQUE, NULL,
-      sTmp, _tcslen(sTmp), NULL);
+    int x1, x2, x3;
+    if (InfoBoxLayout::landscape) {
+      x1 = 125;
+      x2 = x1+16;
+      x3 = x1+55;
+    } else {
+      x2 = 135-16*3;
+    }
+
+    if (InfoBoxLayout::landscape) {
+      ExtTextOut(hDC, x1*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+                 ETO_OPAQUE, NULL,
+                 sTmp, _tcslen(sTmp), NULL);
+    }
                            //todo user unit
     _stprintf(sTmp, TEXT("%.0fkm"), WayPointSelectInfo[i].Distance);
-    ExtTextOut(hDC, 141*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+    ExtTextOut(hDC, x2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       sTmp, _tcslen(sTmp), NULL);
 
-    _stprintf(sTmp, TEXT("%d°"),  iround(WayPointSelectInfo[i].Direction));
-    ExtTextOut(hDC, 180*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-      ETO_OPAQUE, NULL,
-      sTmp, _tcslen(sTmp), NULL);
+    if (InfoBoxLayout::landscape) {
+      _stprintf(sTmp, TEXT("%d°"),  iround(WayPointSelectInfo[i].Direction));
+      ExtTextOut(hDC, x3*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+                 ETO_OPAQUE, NULL,
+                 sTmp, _tcslen(sTmp), NULL);
+    }
 
   } else {
     if (DrawListIndex == 0){
