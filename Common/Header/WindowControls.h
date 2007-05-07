@@ -627,6 +627,8 @@ class WindowControl {
 
     WindowControl *FindByName(TCHAR *Name);
 
+    void FilterAdvanced(bool advanced);
+
 };
 
 class WndFrame:public WindowControl{

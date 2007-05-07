@@ -646,7 +646,7 @@ type=key
 data=9
 event=ScreenModes togglefull
 event=Mode default
-label=Full Scrn\nToggle
+label=Full Scrn\n$(FullScreenToggleActionName)
 location=8
 
 mode=Display1

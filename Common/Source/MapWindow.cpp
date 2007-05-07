@@ -3640,6 +3640,9 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, POINT Orig)
   if (ActiveWayPoint<0) {
     return; // nothing to draw..
   }
+  if (!ValidTaskPoint(ActiveWayPoint)) {
+    return;
+  }
 
   if (DerivedDrawInfo.WaypointDistance < 0.010)
     return;

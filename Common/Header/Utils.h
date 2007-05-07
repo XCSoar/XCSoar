@@ -129,6 +129,7 @@ extern TCHAR szRegistryOLCRules[];
 extern TCHAR szRegistryHandicap[];
 extern TCHAR szRegistrySnailWidthScale[];
 extern TCHAR szRegistryLatLonUnits[];
+extern TCHAR szRegistryUserLevel[];
 
 extern bool LockSettingsInFlight;
 

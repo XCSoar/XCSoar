@@ -1163,6 +1163,19 @@ void WindowControl::AddClient(WindowControl *Client){
   */
 }
 
+void WindowControl::FilterAdvanced(bool advanced){
+  if (_tcsstr(mCaption, TEXT("*")) != NULL) {
+    if (advanced) {
+      SetVisible(true);
+    } else {
+      SetVisible(false);
+    }
+  }
+  for (int i=0; i<mClientCount; i++){
+    mClients[i]->FilterAdvanced(advanced);
+  }
+}
+
 WindowControl *WindowControl::FindByName(TCHAR *Name){
   if (_tcscmp(mName, Name)==0)
     return(this);
