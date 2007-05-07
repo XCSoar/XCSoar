@@ -50,6 +50,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Waypointparser.h"
 
+int UserLevel = 0;
 
 static bool changed = false;
 static bool taskchanged = false;
@@ -76,11 +77,12 @@ static WndFrame *wConfig15=NULL;
 static WndFrame *wConfig16=NULL;
 static WndFrame *wConfig17=NULL;
 static WndFrame *wConfig18=NULL;
+static WndFrame *wConfig19=NULL;
 static WndButton *buttonPilotName=NULL;
 static WndButton *buttonAircraftType=NULL;
 static WndButton *buttonAircraftRego=NULL;
 
-#define NUMPAGES 18
+#define NUMPAGES 19
 
 
 
@@ -125,58 +127,61 @@ static void NextPage(int Step){
   if (config_page<0) { config_page=NUMPAGES-1; }
   switch(config_page) {
   case 0:
-    wf->SetCaption(TEXT("1 Airspace"));
+    wf->SetCaption(TEXT("1 Site"));
     break;
   case 1:
-    wf->SetCaption(TEXT("2 Map Display"));
+    wf->SetCaption(TEXT("2 Airspace"));
     break;
   case 2:
-    wf->SetCaption(TEXT("3 Glide Computer"));
+    wf->SetCaption(TEXT("3 Map Display"));
     break;
   case 3:
-    wf->SetCaption(TEXT("4 Safety factors"));
+    wf->SetCaption(TEXT("4 Glide Computer"));
     break;
   case 4:
-    wf->SetCaption(TEXT("5 Polar"));
+    wf->SetCaption(TEXT("5 Safety factors"));
     break;
   case 5:
-    wf->SetCaption(TEXT("6 Devices"));
+    wf->SetCaption(TEXT("6 Polar"));
     break;
   case 6:
-    wf->SetCaption(TEXT("7 Units"));
+    wf->SetCaption(TEXT("7 Devices"));
     break;
   case 7:
-    wf->SetCaption(TEXT("8 Interface"));
+    wf->SetCaption(TEXT("8 Units"));
     break;
   case 8:
-    wf->SetCaption(TEXT("9 Appearance"));
+    wf->SetCaption(TEXT("9 Interface"));
     break;
   case 9:
-    wf->SetCaption(TEXT("10 Vario Gauge and FLARM"));
+    wf->SetCaption(TEXT("10 Appearance"));
     break;
   case 10:
-    wf->SetCaption(TEXT("11 Task"));
+    wf->SetCaption(TEXT("11 Vario Gauge and FLARM"));
     break;
   case 11:
-    wf->SetCaption(TEXT("12 Task rules"));
+    wf->SetCaption(TEXT("12 Task"));
     break;
   case 12:
-    wf->SetCaption(TEXT("13 InfoBox Circling"));
+    wf->SetCaption(TEXT("13 Task rules"));
     break;
   case 13:
-    wf->SetCaption(TEXT("14 InfoBox Cruise"));
+    wf->SetCaption(TEXT("14 InfoBox Circling"));
     break;
   case 14:
-    wf->SetCaption(TEXT("15 InfoBox Final Glide"));
+    wf->SetCaption(TEXT("15 InfoBox Cruise"));
     break;
   case 15:
-    wf->SetCaption(TEXT("16 InfoBox Auxiliary"));
+    wf->SetCaption(TEXT("16 InfoBox Final Glide"));
     break;
   case 16:
-    wf->SetCaption(TEXT("17 Logger"));
+    wf->SetCaption(TEXT("17 InfoBox Auxiliary"));
     break;
   case 17:
-    wf->SetCaption(TEXT("18 Waypoint Edit"));
+    wf->SetCaption(TEXT("18 Logger"));
+    break;
+  case 18:
+    wf->SetCaption(TEXT("19 Waypoint Edit"));
     break;
   }
   wConfig1->SetVisible(config_page == 0);
@@ -197,6 +202,7 @@ static void NextPage(int Step){
   wConfig16->SetVisible(config_page == 15); 
   wConfig17->SetVisible(config_page == 16); 
   wConfig18->SetVisible(config_page == 17); 
+  wConfig19->SetVisible(config_page == 18); 
 }
 
 
@@ -274,6 +280,29 @@ static void UpdateDeviceSetupButton(int DeviceIdx, TCHAR *Name){
   }
 
 }
+
+
+static void OnUserLevel(DataField *Sender, DataField::DataAccessKind_t Mode){
+  WndProperty* wp;
+
+  switch(Mode){
+    case DataField::daGet:
+    break;
+    case DataField::daPut:
+    case DataField::daChange:
+      wp = (WndProperty*)wf->FindByName(TEXT("prpUserLevel"));
+      if (wp) {
+        if (wp->GetDataField()->GetAsInteger() != UserLevel) {
+          UserLevel = wp->GetDataField()->GetAsInteger();
+          changed = true;
+          SetToRegistry(szRegistryUserLevel,UserLevel);
+          wf->FilterAdvanced(UserLevel>0);
+        }
+      }
+    break;
+  }
+}
+
 
 static void OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
@@ -594,6 +623,8 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnDeviceAData),
   DeclearCallBackEntry(OnDeviceBData),
 
+  DeclearCallBackEntry(OnUserLevel),
+
   DeclearCallBackEntry(NULL)
 };
 
@@ -747,6 +778,19 @@ static void setVariables(void) {
 
   return; 
   */
+
+  ///////////////////
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpUserLevel"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(TEXT("Basic"));
+    dfe->addEnumText(TEXT("Expert"));
+    dfe->Set(UserLevel);
+    wp->RefreshDisplay();
+  }
+
   ///////////////////
   
   // TODO: all appearance variables
@@ -781,6 +825,13 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+#ifdef _SIM_
+  TCHAR deviceName1[MAX_PATH];
+  TCHAR deviceName2[MAX_PATH];
+  ReadDeviceSettings(0, deviceName1);
+  ReadDeviceSettings(1, deviceName2);
+#endif
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpComDevice1"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -789,10 +840,15 @@ static void setVariables(void) {
     for (i=0; i<DeviceRegisterCount; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText(DeviceName);
+#ifndef _SIM_
       if (devA() != NULL){
 	if (_tcscmp(DeviceName, devA()->Name) == 0)
 	  dwDeviceIndex1 = i+1;
       }
+#else
+      if (_tcscmp(DeviceName, deviceName1) == 0)
+        dwDeviceIndex1 = i+1;
+#endif
     }
     dfe->Set(dwDeviceIndex1);
     wp->RefreshDisplay();
@@ -822,6 +878,7 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpComDevice2"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -830,10 +887,15 @@ static void setVariables(void) {
     for (i=0; i<DeviceRegisterCount; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText(DeviceName);
+#ifndef _SIM_
       if (devB() != NULL){
 	if (_tcscmp(DeviceName, devB()->Name) == 0)
 	  dwDeviceIndex2 = i+1;
       }
+#else
+      if (_tcscmp(DeviceName, deviceName2) == 0)
+        dwDeviceIndex2 = i+1;
+#endif
     }
     dfe->Set(dwDeviceIndex2);
     wp->RefreshDisplay();
@@ -1722,24 +1784,25 @@ void dlgConfigurationShowModal(void){
 
   ((WndButton *)wf->FindByName(TEXT("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  wConfig1    = ((WndFrame *)wf->FindByName(TEXT("frmAirspace")));
-  wConfig2    = ((WndFrame *)wf->FindByName(TEXT("frmDisplay")));
-  wConfig3    = ((WndFrame *)wf->FindByName(TEXT("frmFinalGlide")));
-  wConfig4    = ((WndFrame *)wf->FindByName(TEXT("frmSafety")));
-  wConfig5    = ((WndFrame *)wf->FindByName(TEXT("frmPolar")));
-  wConfig6    = ((WndFrame *)wf->FindByName(TEXT("frmComm")));
-  wConfig7    = ((WndFrame *)wf->FindByName(TEXT("frmUnits")));
-  wConfig8    = ((WndFrame *)wf->FindByName(TEXT("frmInterface")));
-  wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmAppearance")));
-  wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
-  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
-  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmTaskRules")));
-  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
-  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
-  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
-  wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
-  wConfig17    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
-  wConfig18    = ((WndFrame *)wf->FindByName(TEXT("frmWaypointEdit")));
+  wConfig1    = ((WndFrame *)wf->FindByName(TEXT("frmSite")));
+  wConfig2    = ((WndFrame *)wf->FindByName(TEXT("frmAirspace")));
+  wConfig3    = ((WndFrame *)wf->FindByName(TEXT("frmDisplay")));
+  wConfig4    = ((WndFrame *)wf->FindByName(TEXT("frmFinalGlide")));
+  wConfig5    = ((WndFrame *)wf->FindByName(TEXT("frmSafety")));
+  wConfig6    = ((WndFrame *)wf->FindByName(TEXT("frmPolar")));
+  wConfig7    = ((WndFrame *)wf->FindByName(TEXT("frmComm")));
+  wConfig8    = ((WndFrame *)wf->FindByName(TEXT("frmUnits")));
+  wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmInterface")));
+  wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmAppearance")));
+  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
+  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
+  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmTaskRules")));
+  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
+  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
+  wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
+  wConfig17    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
+  wConfig18    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
+  wConfig19    = ((WndFrame *)wf->FindByName(TEXT("frmWaypointEdit")));
 
   ASSERT(wConfig1!=NULL);
   ASSERT(wConfig2!=NULL);
@@ -1759,6 +1822,9 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig16!=NULL);
   ASSERT(wConfig17!=NULL);
   ASSERT(wConfig18!=NULL);
+  ASSERT(wConfig19!=NULL);
+
+  wf->FilterAdvanced(UserLevel>0);
 
   setVariables();
 
@@ -1780,7 +1846,6 @@ void dlgConfigurationShowModal(void){
   wf->ShowModal();
 
   // TODO: implement a cancel button that skips all this below after exit.
-
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAbortSafetyUseCurrent"));
   if (wp) {

@@ -241,6 +241,8 @@ extern int StatusMessageData_Size;
 
 extern bool RequestAirspaceWarningDialog;
 
+extern int UserLevel;
+
 #if (EXPERIMENTAL > 0)
 extern BlueDialupSMS bsms;
 #endif

@@ -12,6 +12,53 @@
   <WndButton Name="cmdNext"  Caption="&gt;" X=35 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
   <WndButton Name="cmdPrev"  Caption="&lt;" X=0 Y=160 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
   <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />
+
+  <WndProperty Name="prpUserLevel" Caption="" X=0 Y=5  Width=70 Height=28 CaptionWidth=15 Font=2 Help="Sets the level of detail of the configuration settings.
+[Basic]: Only basic settings are shown.
+[Expert]: Basic and advanced settings are shown.">
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1 OnDataAccess="OnUserLevel"/>
+    </WndProperty>
+
+  <WndFrame Name="frmSite" X=70 Y=0 Width=246 Height=222 Font=2>
+
+  <WndProperty Name="prpWaypointFile" Caption="Waypoints 1"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
+  Help="Primary waypoints file.  File must be in Cambridge format (.dat extension).">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAdditionalWaypointFile" Caption="Waypoints 2"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
+  Help="Secondary waypoints file.  This may be used to add waypoints for a competition.  File must be in Cambridge format (.dat extension).">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAirspaceFile" Caption="Airspace 1"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="The file name of the primary airspace file.">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAdditionalAirspaceFile" Caption="Airspace 2"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="The file name of the secondary airspace file.">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainFile" Caption="Terrain file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
+  Help="The name of the file containing digital elevation terrain data.">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpTopologyFile" Caption="Topology file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="Specifies the file defining the topological features.">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAirfieldFile" Caption="Airfields file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2   
+  Help="The airfields file may contain extracts from Enroute Supplements or other contributed information about individual airfields.">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpWaypointsOutOfRange" Caption="Wpt outside terrain*" X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  Help="This option defines how waypoints outside the terrain range are handled: the user can be asked when this occurs, or they can be always included or excluded.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
   
   <WndFrame Name="frmAirspace" X=70 Y=0 Width=246 Height=222 Font=2>
 
@@ -35,28 +82,20 @@
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
   </WndProperty>
 
-  <WndProperty Name="prpAirspaceOutline" Caption="Use black outline"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Draw a black outline around each airspace rather than the airspace color">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
   <WndProperty Name="prpAirspaceWarnings" Caption="Warnings"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Enable/disable all airspace warnings.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpWarningTime" Caption="Warning time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot." >
+  <WndProperty Name="prpWarningTime" Caption="Warning time*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot." >
     <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=0 Max=1000 Step=5/>
   </WndProperty>
 
-  <WndProperty Name="prpAcknowledgementTime" Caption="Acknowledge time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="This is the time period in which an acknowledged airspace warning will not be repeated.">
+  <WndProperty Name="prpAcknowledgementTime" Caption="Acknowledge time*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="This is the time period in which an acknowledged airspace warning will not be repeated.">
     <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=0 Max=1000 Step=5/>
   </WndProperty>
 
-  <WndProperty Name="prpAirspaceFile" Caption="Airspace 1"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="The file name of the primary airspace file.">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpAdditionalAirspaceFile" Caption="Airspace 2"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="The file name of the secondary airspace file.">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  <WndProperty Name="prpAirspaceOutline" Caption="Use black outline*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Draw a black outline around each airspace rather than the airspace color">
+    <DataField name="" DataType="boolean"/>
   </WndProperty>
 
   </WndFrame>
@@ -76,9 +115,6 @@
 
     <WndProperty Name="prpTrail" Caption="Trail length"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2 Help="Determines whether and how long a snail trail is drawn behind the glider">
       <DataField name="" DataType="enum"  Min=0 Max=3 Step=1/>
-    </WndProperty>
-    <WndProperty Name="prpTrailDrift" Caption="Trail drift"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2 Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">
-      <DataField name="" DataType="boolean"/>
     </WndProperty>
 
   <WndProperty Name="prpEnableTerrain" Caption="Terrain display"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="Draws digital elevation terrain on the map.  
@@ -110,11 +146,11 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpTopologyFile" Caption="Topology file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 Help="Specifies the file defining the topological features.">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
+    <WndProperty Name="prpTrailDrift" Caption="Trail drift*"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2 Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">
+      <DataField name="" DataType="boolean"/>
+    </WndProperty>
 
-  <WndProperty Name="prpSnailWidthScale" Caption="Trail width"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
+  <WndProperty Name="prpSnailWidthScale" Caption="Trail width*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
   Help="Sets the width of the snail trail display.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=2 Max=50 Step=1/>
   </WndProperty>
@@ -292,13 +328,13 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   </WndProperty>
 
   <WndProperty Name="prpAbortSafetyUseCurrent" 
-    Caption="Abort use current Mc"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2  
+    Caption="Abort use current Mc*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2  
   Help="When enabled, the current MacCready setting is used for determining arrival altitude during task abort mode.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
   <WndProperty Name="prpSafetyMacCready" 
-    Caption="Safety Mc" X=2 Y=-1 Width=246 Height=22 CaptionWidth=150 Font=2 
+    Caption="Safety Mc*" X=2 Y=-1 Width=246 Height=22 CaptionWidth=150 Font=2 
   Help="The MacCready setting used in task abort mode and for determining arrival altitude at airfields. ">
     <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=10 Step=0.1/>
   </WndProperty>
@@ -312,32 +348,12 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
     <DataField name="" DataType="boolean"/>
   </WndProperty>
     
-  <WndProperty Name="prpBlockSTF" Caption="Block speed to fly"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
-  Help="If enabled, the command speed in cruise is set to the MacCready speed to fly in no vertical air-mass movement. If disabled, the command speed in cruise is set to the dolphin speed to fly, equivalent to the MacCready speed with vertical air-mass movement.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpTerrainFile" Caption="Terrain file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=120 Font=2 
-  Help="The name of the file containing digital elevation terrain data.">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
-
   <WndProperty Name="prpAutoWind" Caption="Auto wind"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
   Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.  
 [Circling] Requires only a GPS source
 [ZigZag] requires an intelligent vario with airspeed output.
 [Both] Use ZigZag and circling.">
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpAutoForceFinalGlide" Caption="Auto Force Final Glide"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2  
-  Help="This option enables automatic forcing of final glide mode if the aircraft is above final glide prior to reaching the penultimate waypoint.  Forcing final glide early can also be performed manually from the task menu.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpEnableNavBaroAltitude" Caption="Nav by baro altitude"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
-  Help="When enabled and if connected to a barometric altimeter, barometric altitude is used for all navigation functions. Otherwise GPS altitude is used.">
-    <DataField name="" DataType="boolean"/>
   </WndProperty>
 
   <WndProperty Name="prpAutoMcMode" Caption="Auto Mc mode"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
@@ -350,16 +366,6 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpWaypointsOutOfRange" Caption="Wpt outside terrain" X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
-  Help="This option defines how waypoints outside the terrain range are handled: the user can be asked when this occurs, or they can be always included or excluded.">
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise" X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
-  Help="When Vega variometer is connected and this option is true, the positive flap setting switches the flight mode between circling and cruise.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
   <WndProperty Name="prpThermalLocator" Caption="Lift center"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=100 Font=2 Help="The estimate of the center of lift is displayed when in circling mode.
 [OFF] Lift center locator disabled.
 [Circle at center]  A thermal marker is displayed at the center of lift.
@@ -367,6 +373,26 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
  and when circling, the display is panned to this lift center.
 ">
       <DataField name="" DataType="enum" Min=0 Max=2 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpBlockSTF" Caption="Block speed to fly*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  Help="If enabled, the command speed in cruise is set to the MacCready speed to fly in no vertical air-mass movement. If disabled, the command speed in cruise is set to the dolphin speed to fly, equivalent to the MacCready speed with vertical air-mass movement.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAutoForceFinalGlide" Caption="Auto Force Final Glide*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2  
+  Help="This option enables automatic forcing of final glide mode if the aircraft is above final glide prior to reaching the penultimate waypoint.  Forcing final glide early can also be performed manually from the task menu.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpEnableNavBaroAltitude" Caption="Nav by baro altitude*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  Help="When enabled and if connected to a barometric altimeter, barometric altitude is used for all navigation functions. Otherwise GPS altitude is used.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise*" X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
+  Help="When Vega variometer is connected and this option is true, the positive flap setting switches the flight mode between circling and cruise.">
+    <DataField name="" DataType="boolean"/>
   </WndProperty>
 
   </WndFrame>
@@ -515,49 +541,49 @@ Help="The UTC offset field allows the UTC local time offset to be specified.  Th
 
   <WndFrame Name="frmInterface" X=70 Y=0 Width=246 Height=222 Font=2>
 
-  <WndProperty Name="prpInputFile" Caption="Events"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
-Help="The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices.
-">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpLanguageFile" Caption="Language"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
-  Help="The language file defines translations for XCSoar text in English to
-other languages.  If this field is left blank, then XCSoar uses English.
-">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpStatusFile" Caption="Status message"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
-  Help="The status file can be used to define sounds to be played when certain events occur, and how long various status messages will appear on screen.
-">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpMenuTimeout" Caption="Menu timeout"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
-  Help="This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer.
-">
-    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=1 Max=60 Step=1/>
-  </WndProperty>
-
   <WndProperty Name="prpLockSettingsInFlight" Caption="Safety lock"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
   Help="This determines whether the configuration settings dialog is accessible during flight.
 ">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpDebounceTimeout" Caption="Debounce time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
+  <WndProperty Name="prpAppStatusMessageAlignment" Caption="Msg window*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
+  Help="Defines the alignment of the status message box, either centered or in the top left corner.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpInputFile" Caption="Events*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
+Help="The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices.
+">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpLanguageFile" Caption="Language*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
+  Help="The language file defines translations for XCSoar text in English to
+other languages.  If this field is left blank, then XCSoar uses English.
+">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpStatusFile" Caption="Status message*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
+  Help="The status file can be used to define sounds to be played when certain events occur, and how long various status messages will appear on screen.
+">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpMenuTimeout" Caption="Menu timeout*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
+  Help="This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer.
+">
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=1 Max=60 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpDebounceTimeout" Caption="Debounce time*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
   Help="This is the minimum interval between the system recognising key presses. Set this to a low value for a more responsive user interface; if it is too low, then accidental multiple key presses can occur.
 ">
     <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=0 Max=1000 Step=25/>
   </WndProperty>
 
-  <WndProperty Name="prpAppStatusMessageAlignment" Caption="Msg window"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
-  Help="Defines the alignment of the status message box, either centered or in the top left corner.">
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpAnimation" Caption="Animation"  X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
+  <WndProperty Name="prpAnimation" Caption="Animation*"  X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2 
   Help="Determines whether to draw window animations when dialogs open/close.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
@@ -572,41 +598,6 @@ other languages.  If this field is left blank, then XCSoar uses English.
 
   <WndFrame Name="frmAppearance" X=70 Y=0 Width=246 Height=222 Font=2>
 
-  <WndProperty Name="prpAppDefaultMapWidth" Caption="Default map zoom"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=100 Max=400 Step=5/>
-  </WndProperty>
-
-  <WndProperty Name="prpAppIndFinalGlide" Caption="Final glide bar"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpAppIndLandable" Caption="Landable fields"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
-  Help="Two styles are available: WinPilot style (green and purple circles) or a high visibility (monochrome) style.">
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpAppCompassAppearance" Caption="North arrow"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
-  Help="Two styles are available.  Normal, or with a white outline.">
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpAppInverseInfoBox" Caption="Inverse infoboxes"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
-  Help="If true, the InfoBoxes are white on black, otherwise black on white.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpAppInfoBoxColors" Caption="Color infoboxes"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
-  Help="If true, certain InfoBoxes will have coloured text.  For example, the active waypoint infobox will be blue when the glider is above final glide.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpAppInfoBoxBorder" Caption="Infobox border"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
-  Help="Two styles for infobox borders are available:
-[Box]  Draws boxes around each infobox.
-[Tab]  Draws a tab at the top of the infobox across the title.">
-    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
-  </WndProperty>
-
   <WndProperty Name="prpTerrainContrast" Caption="Terrain contrast"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
   Help="Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
     <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
@@ -620,6 +611,41 @@ other languages.  If this field is left blank, then XCSoar uses English.
   <WndProperty Name="prpGliderScreenPosition" Caption="Glider position"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
   Help="Defines the location of the glider drawn on the screen in percent from the bottom.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=10 Max=50 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppIndFinalGlide" Caption="Final glide bar"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppIndLandable" Caption="Landable fields"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  Help="Two styles are available: WinPilot style (green and purple circles) or a high visibility (monochrome) style.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppDefaultMapWidth" Caption="Default map zoom*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=100 Max=400 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppCompassAppearance" Caption="North arrow*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  Help="Two styles are available.  Normal, or with a white outline.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppInverseInfoBox" Caption="Inverse infoboxes*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  Help="If true, the InfoBoxes are white on black, otherwise black on white.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppInfoBoxColors" Caption="Color infoboxes*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  Help="If true, certain InfoBoxes will have coloured text.  For example, the active waypoint infobox will be blue when the glider is above final glide.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAppInfoBoxBorder" Caption="Infobox border*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  Help="Two styles for infobox borders are available:
+[Box]  Draws boxes around each infobox.
+[Tab]  Draws a tab at the top of the infobox across the title.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
   </WndFrame>
@@ -641,22 +667,22 @@ other languages.  If this field is left blank, then XCSoar uses English.
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpAppGaugeVarioBugs" Caption="Show bugs"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  <WndProperty Name="prpAppGaugeVarioBugs" Caption="Show bugs*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
   Help="Whether to show the bugs percentage.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpAppGaugeVarioBallast" Caption="Show ballast"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  <WndProperty Name="prpAppGaugeVarioBallast" Caption="Show ballast*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
   Help="Whether to show the ballast percentage.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpAppGaugeVarioGross" Caption="Show gross"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2  
+  <WndProperty Name="prpAppGaugeVarioGross" Caption="Show gross*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2  
   Help="Whether to show the gross climb rate.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpAppAveNeedle" Caption="Averager needle"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  <WndProperty Name="prpAppAveNeedle" Caption="Averager needle*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
   Help="If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
@@ -732,31 +758,16 @@ In all modes, the color of the target indicates the threat level.
 
   </WndProperty>
 
-  <WndProperty Name="prpWaypointFile" Caption="Waypoints 1"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
-  Help="Primary waypoints file.  File must be in Cambridge format (.dat extension).">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpAdditionalWaypointFile" Caption="Waypoints 2"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2  
-  Help="Secondary waypoints file.  This may be used to add waypoints for a competition.  File must be in Cambridge format (.dat extension).">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
-
-  <WndProperty Name="prpAirfieldFile" Caption="Airfields file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2   
-  Help="The airfields file may contain extracts from Enroute Supplements or other contributed information about individual airfields.">
-    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
-  </WndProperty>
-
   </WndFrame>
 
   <WndFrame Name="frmLogger" X=70 Y=0 Width=246 Height=222 Font=2>
 
-  <WndProperty Name="prpLoggerTimeStepCruise" Caption="Time step cruise"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2  
+  <WndProperty Name="prpLoggerTimeStepCruise" Caption="Time step cruise*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2  
   Help="This is the time interval between logged points when not circling. ">
     <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=1 Max=30 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpLoggerTimeStepCircling" Caption="Time step circling"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
+  <WndProperty Name="prpLoggerTimeStepCircling" Caption="Time step circling*"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 
   Help="This is the time interval between logged points when circling. ">
     <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=1 Max=30 Step=1/>
   </WndProperty>

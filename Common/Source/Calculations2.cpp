@@ -192,7 +192,6 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 				bool *outofrange) 
 {
   double irange = GlidePolar::MacCreadyAltitude(MACCREADY, 
-						// should this be zero?
 						1.0, bearing, 
 						Calculated->WindSpeed, 
 						Calculated->WindBearing, 

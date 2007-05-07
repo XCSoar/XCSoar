@@ -276,6 +276,7 @@ TCHAR szRegistryEnableExternalTriggerCruise[] = TEXT("EnableExternalTriggerCruis
 TCHAR szRegistryOLCRules[] = TEXT("OLCRules");
 TCHAR szRegistryHandicap[] = TEXT("Handicap");
 TCHAR szRegistrySnailWidthScale[] = TEXT("SnailWidthScale");
+TCHAR szRegistryUserLevel[] = TEXT("UserLevel");
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -922,6 +923,10 @@ void ReadRegistrySettings(void)
   Temp = iround(GlidePolar::SafetyMacCready*10);
   GetFromRegistry(szRegistrySafetyMacCready,&Temp);
   GlidePolar::SafetyMacCready = Temp/10.0;
+
+  Temp  = UserLevel;
+  GetFromRegistry(szRegistryUserLevel,&Temp);
+  UserLevel = Temp;
 
 }
 

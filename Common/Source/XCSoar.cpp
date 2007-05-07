@@ -1167,7 +1167,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 #endif
  
-  wcscat(XCSoar_Version, TEXT("5.0.13 "));
+  wcscat(XCSoar_Version, TEXT("5.0.14 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));

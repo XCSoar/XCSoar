@@ -690,7 +690,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("togglefull"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Display1"), true);
-makeLabel(mode_id,TEXT("Full Scrn\nToggle"),8,event_id);
+makeLabel(mode_id,TEXT("Full Scrn\n$(FullScreenToggleActionName)"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
