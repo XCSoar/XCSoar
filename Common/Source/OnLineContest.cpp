@@ -423,7 +423,7 @@ bool OLCOptimizer::Optimize(bool isflying) {
   Clear();
 
   if (retval) {
-#ifdef DEBUG
+#ifdef DEBUG_OLC
     char tmptext[100];
     sprintf(tmptext,"%d %d # OLC\n", pnts, GetTickCount()-tm);
     DebugStore(tmptext);

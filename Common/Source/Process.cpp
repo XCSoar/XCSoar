@@ -134,6 +134,8 @@ void	WindDirectionProcessing(int UpDown)
 			CALCULATED_INFO.WindBearing  += 360;
 		}
 	} else if (UpDown == 0) {
+          SetWindEstimate(CALCULATED_INFO.WindSpeed,
+                          CALCULATED_INFO.WindBearing);
 	  SaveWindToRegistry();
 	}
 	return;
@@ -156,6 +158,8 @@ void	WindSpeedProcessing(int UpDown)
 	} else if (UpDown== 2) {
 		WindDirectionProcessing(1);
 	} else if (UpDown == 0) {
+          SetWindEstimate(CALCULATED_INFO.WindSpeed,
+                          CALCULATED_INFO.WindBearing);
 	  SaveWindToRegistry();
 	}
 	return;
@@ -419,6 +423,7 @@ void FormatterTime::AssignValue(int i) {
     break;
   case 27:
     SecsToDisplayTime((int)CALCULATED_INFO.AATTimeToGo);
+    Valid = (ValidTaskPoint(ActiveWayPoint) && AATEnabled);
     break;
   case 36:
     SecsToDisplayTime((int)CALCULATED_INFO.FlightTime);
@@ -431,15 +436,19 @@ void FormatterTime::AssignValue(int i) {
     break;
   case 41:
     SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo));
+    Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 42:
     SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo));
+    Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 45:
     SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo+DetectCurrentTime()));
+    Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 46:
     SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo+DetectCurrentTime()));
+    Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   default:
     break;
@@ -759,10 +768,11 @@ TCHAR *InfoBoxFormatter::Render(int *color) {
     _stprintf(Text,
               Format,
               Value );
+    *color = 0;
   } else {
     _stprintf(Text,TEXT("---"));
+    *color = -1;
   }
-  *color = 0;
   return(Text);
 }
 
@@ -772,13 +782,14 @@ TCHAR *FormatterLowWarning::Render(int *color) {
     _stprintf(Text,
               Format,
               Value );
+    if (Value<minimum) {
+      *color = 1; // red
+    } else {
+      *color = 0;
+    }
   } else {
     _stprintf(Text,TEXT("---"));
-  }
-  if (Value<minimum) {
-    *color = 1; // red
-  } else {
-    *color = 0;
+    *color = -1;
   }
   return(Text);
 }
@@ -787,6 +798,7 @@ TCHAR *FormatterLowWarning::Render(int *color) {
 TCHAR *FormatterTime::Render(int *color) {
   if (Valid==FALSE) {
     _stprintf(Text,TEXT("--:--"));
+    *color = -1;
   } else {
     if (hours<1) {
       _stprintf(Text,
@@ -798,16 +810,13 @@ TCHAR *FormatterTime::Render(int *color) {
                 hours, mins );
 
     }
+    *color = 0;
   }
-  *color = 0;
   return(Text);
 }
 
 TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveWayPoint;
-  if (thewaypoint<0) {
-    _tcscpy(Text,TEXT("---"));
-  }
   LockTaskData();
   if(ValidTaskPoint(thewaypoint))
     {
@@ -836,8 +845,9 @@ TCHAR *FormatterWaypoint::Render(int *color) {
     }
   else
     {
-      *color = 0;
-      Text[0] = '\0';
+      _tcscpy(Text,TEXT("---"));
+      Valid = false;
+      *color = -1;
     }
   UnlockTaskData();
 
@@ -846,7 +856,8 @@ TCHAR *FormatterWaypoint::Render(int *color) {
 
 TCHAR *FormatterDiffBearing::Render(int *color) {
 
-  if (ActiveWayPoint>=0 && CALCULATED_INFO.WaypointDistance > 10.0) {
+  if (ValidTaskPoint(ActiveWayPoint)
+      && CALCULATED_INFO.WaypointDistance > 10.0) {
     Valid = true;
 
     Value = CALCULATED_INFO.WaypointBearing -  GPS_INFO.TrackBearing;
@@ -863,13 +874,13 @@ TCHAR *FormatterDiffBearing::Render(int *color) {
       _stprintf(Text, TEXT("«%2.0f°"), -Value);
     else
       _tcscpy(Text, TEXT("«»"));
-
+    *color = 0;
   } else {
     Valid = false;
     _tcscpy(Text, TEXT("---"));
+    *color = -1;
   }
 
-  *color = 0;
   return(Text);
 }
 
@@ -888,7 +899,7 @@ TCHAR *FormatterTeamCode::Render(int *color) {
   else
     {
       // no waypoint selected
-      *color = 0;
+      *color = -1;
       Text[0] = '\0';
     }
 
@@ -916,12 +927,13 @@ TCHAR *FormatterDiffTeamBearing::Render(int *color) {
         _stprintf(Text, TEXT("«%2.0f°"), -Value);
       else
         _tcscpy(Text, TEXT("«»"));
+      *color = 0;
 
     } else {
     Valid = false;
+    *color = -1;
     _tcscpy(Text, TEXT("---"));
   }
 
-  *color = 0;
   return(Text);
 }

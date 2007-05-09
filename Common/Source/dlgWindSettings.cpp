@@ -50,11 +50,35 @@ static void OnCloseClicked(WindowControl * Sender){
   wf->SetModalResult(mrOK);
 }
 
+static void UpdateWind(bool set) {
+  WndProperty *wp;
+  double ws, wb;
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
+  if (wp) {
+    ws = wp->GetDataField()->GetAsFloat()/SPEEDMODIFY;
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpDirection"));
+  if (wp) {
+    wb = wp->GetDataField()->GetAsFloat();
+  }
+  if ((ws != CALCULATED_INFO.WindSpeed)
+      ||(wb != CALCULATED_INFO.WindBearing)) {
+    if (set) {
+      SetWindEstimate(ws, wb);
+    }
+    CALCULATED_INFO.WindSpeed = ws;
+    CALCULATED_INFO.WindBearing = wb;
+  }
+}
+
+
 static void OnSaveClicked(WindowControl * Sender){
 	(void)Sender;
+        UpdateWind(true);
   SaveWindToRegistry();
   wf->SetModalResult(mrOK);
 }
+
 
 static void OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
@@ -64,7 +88,7 @@ static void OnWindSpeedData(DataField *Sender, DataField::DataAccessKind_t Mode)
       Sender->Set(SPEEDMODIFY*CALCULATED_INFO.WindSpeed);
     break;
     case DataField::daPut:
-      CALCULATED_INFO.WindSpeed = Sender->GetAsFloat()/SPEEDMODIFY;
+      UpdateWind(false);
     break;
     case DataField::daChange:
       // calc alt...
@@ -84,7 +108,7 @@ static void OnWindDirectionData(DataField *Sender, DataField::DataAccessKind_t M
       Sender->Set(lastWind);
     break;
     case DataField::daPut:
-      CALCULATED_INFO.WindBearing = Sender->GetAsFloat();
+      UpdateWind(false);
     break;
     case DataField::daChange:
       lastWind = Sender->GetAsFloat();

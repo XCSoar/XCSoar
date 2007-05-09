@@ -89,25 +89,25 @@ event=StatusMessage Final Glide Through Terrain
 # clear main entry buttons
 
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Exit Menu Bugs Ballast Wind Vario VarioTest pan
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Menu Bugs Ballast Wind Vario VarioTest pan Exit
 type=key
 data=APP1
 label=
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Exit Menu Bugs Ballast Wind Vario VarioTest pan
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Menu Bugs Ballast Wind Vario VarioTest pan Exit
 type=key
 data=APP2
 label=
 location=2
 
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Exit Menu pan
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Menu pan Exit
 type=key
 data=APP3
 label=
 location=3
 
-mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Bugs Ballast Wind Vario VarioTest pan
+mode=default Nav1 Nav2 Display1 Display2 Config1 Config2 Bugs Ballast Wind Vario VarioTest pan Exit
 type=key
 data=APP4
 label=
@@ -887,36 +887,51 @@ event=Mode Info1
 label=Info
 location=4
 
-mode=Menu
+mode=Exit
 type=key
 data=6
 label=
 location=5
 
-mode=Menu
+mode=Exit
 type=key
 data=7
 label=
 location=6
 
-mode=Menu
+mode=Exit
 type=key
 data=8
 label=
 location=7
 
-mode=Menu
+mode=Exit
 type=key
 data=9
 event=Mode default
 label=Cancel
 location=8
 
-mode=Menu
+mode=Exit
 type=key
 data=0
 event=Exit system
 event=Mode default
 label=Exit
+location=9
+
+
+mode=Menu
+type=key
+data=9
+event=Null
+label=
+location=8
+
+mode=Menu
+type=key
+data=0
+event=Null
+label=
 location=9
 

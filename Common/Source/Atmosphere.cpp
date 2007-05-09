@@ -153,10 +153,12 @@ void CuSonde::findThermalHeight(unsigned short level) {
     // set the overall thermal height to this value
     thermalHeight = dthermalheight;
 
+#ifdef DEBUG_CUSONDE
     char buffer[200];
     sprintf(buffer, "%g # thermal height \r\n",
 	    thermalHeight);
     DebugStore(buffer);
+#endif
   }
 
 }
@@ -193,10 +195,12 @@ void CuSonde::findCloudBase(unsigned short level) {
     // set the overall cloudbase to this value
     cloudBase = dcloudbase;
 
+#ifdef DEBUG_CUSONDE
     char buffer[200];
     sprintf(buffer, "%g # cloud base \r\n",
 	    cloudBase);
     DebugStore(buffer);
+#endif
 
   }
 
@@ -243,12 +247,14 @@ void CuSondeLevel::updateThermalIndex(unsigned short level,
   // thermal index is difference in dry temp and environmental temp
   thermalIndex = airTemp-tempDry;
 
+#ifdef DEBUG_CUSONDE
   if (newdata) {
     char buffer[200];
     sprintf(buffer, "%g %g %g %g # temp measurement \r\n",
 	    hlevel, airTemp, dewpoint, thermalIndex);
     DebugStore(buffer);
   }
+#endif
 
 }
 

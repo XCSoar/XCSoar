@@ -101,7 +101,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
       ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		 ETO_OPAQUE, NULL,
 		 sTmp, _tcslen(sTmp), NULL);
-    } else if (DrawListIndex==n+1) {
+    } else if ((DrawListIndex==n+1) && ValidTaskPoint(0)) {
 
       if (!AATEnabled) {
 	_stprintf(sTmp, TEXT("Total:"));

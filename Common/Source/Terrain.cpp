@@ -147,7 +147,7 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
 	total_shapes_visible += TopoStore[z]->shapes_visible_count;
       }
     }
-#ifdef DEBUG
+#ifdef DEBUG_GRAPHICS
     char tmptext[100];
     sprintf(tmptext,"%d # shapes\n", total_shapes_visible);
     DebugStore(tmptext);

@@ -1045,12 +1045,14 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
   ResetScale();
 
-  ScaleXFromValue(rc, 0);
   ScaleXFromData(rc, &windstats_mag);
+  ScaleXFromValue(rc, 0);
+  ScaleXFromValue(rc, 10.0);
+
   ScaleYFromData(rc, &windstats_mag);
 
   DrawYGrid(hdc, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER);
-  DrawXGrid(hdc, rc, 5/LIFTMODIFY, 0, STYLE_THINDASHPAPER);
+  DrawXGrid(hdc, rc, 5/SPEEDMODIFY, 0, STYLE_THINDASHPAPER);
 
   DrawLineGraph(hdc, rc, &windstats_mag,
                 STYLE_MEDIUMBLACK);
@@ -1302,7 +1304,7 @@ static void Update(void){
       wf->SetCaption(sTmp);
 
       _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
-             gettext(TEXT("Av climb rate")),
+             gettext(TEXT("Av climb")),
              flightstats.ThermalAverage.y_ave*LIFTMODIFY,
              Units::GetVerticalSpeedName(),
              gettext(TEXT("Climb trend")),
@@ -1446,16 +1448,16 @@ static void Update(void){
       break;
     }
     if (olcfinished) {
-      _tcscpy(sFinished,TEXT(" (Finished)"));
+      _tcscpy(sFinished,TEXT(" finished"));
     } else {
-      _tcscpy(sFinished,TEXT(" (In progress)"));
+      _tcscpy(sFinished,TEXT("..."));
     }
 
     if (olcvalid) {
       TCHAR timetext1[100];
       Units::TimeToText(timetext1, dt);
       if (InfoBoxLayout::landscape) {
-        _stprintf(sTmp, TEXT("Rules: %s\r\n%s\r\nDistance:\r\n  %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\nScore: %.2f\r\n"),
+        _stprintf(sTmp, TEXT("%s%s\r\nDistance:\r\n  %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\nScore: %.2f\r\n"),
                   sRules,
                   sFinished,
                   DISTANCEMODIFY*d,

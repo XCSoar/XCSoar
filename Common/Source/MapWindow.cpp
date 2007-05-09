@@ -283,10 +283,8 @@ void MapWindow::UpdateTimeStats(bool start) {
       tottime = (2*tottime+(time-timestamp_newdata))/3;
       timestats_av = tottime;
       cpuload=0;
-#ifdef DEBUG
+#ifdef DEBUG_MEM
       cpuload= MeasureCPULoad();
-#endif
-#ifdef DEBUG
       char tmptext[100];
       sprintf(tmptext,"%d # mem\n%d # latency\n", CheckFreeRam()/1024, timestats_av);
       DebugStore(tmptext);
@@ -3614,7 +3612,7 @@ void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
     Groundline[0].y= Groundline[1].y;
   }
 
-  if (DerivedDrawInfo.Flying) {
+  if (DerivedDrawInfo.Flying && ValidTaskPoint(ActiveWayPoint)) {
     if ((DerivedDrawInfo.TerrainWarningLatitude != 0.0)
         &&(DerivedDrawInfo.TerrainWarningLongitude != 0.0)) {
 

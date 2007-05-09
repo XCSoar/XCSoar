@@ -147,9 +147,9 @@ void WindStore::newWind(NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
     // JMW TODO: give warning
   }
 
-#ifdef DEBUG
+#ifdef DEBUG_WIND
   char Temp[100];
-  sprintf(Temp,"%f %f 0 # estimate\n",wind.x,wind.y);
+  sprintf(Temp,"%f %f 0 # wind estimate\n",wind.x,wind.y);
   DebugStore(Temp);
 #endif
 
