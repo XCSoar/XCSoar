@@ -524,6 +524,12 @@ Help="The UTC offset field allows the UTC local time offset to be specified.  Th
 
   <WndFrame Name="frmInterface" X=0 Y=0 Width=235 Height=222 Font=2>
 
+  <WndProperty Name="prpAutoBlank" Caption="Auto Blank"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 
+  Help="This determines whether to blank the display after a long period of inactivity when operating on internal battery power.
+">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
   <WndProperty Name="prpLockSettingsInFlight" Caption="Safety lock"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 
   Help="This determines whether the configuration settings dialog is accessible during flight.
 ">
@@ -568,12 +574,6 @@ other languages.  If this field is left blank, then XCSoar uses English.
 
   <WndProperty Name="prpAnimation" Caption="Animation*"  X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 
   Help="Determines whether to draw window animations when dialogs open/close.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpAutoBlank" Caption="Auto Blank"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 
-  Help="This determines whether to blank the display after a long period of inactivity when operating on internal battery power.
-">
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 

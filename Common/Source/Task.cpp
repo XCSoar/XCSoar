@@ -986,6 +986,7 @@ void ClearTask(void) {
   UnlockTaskData();
 }
 
+
 bool ValidWayPoint(int i) {
   bool retval = true;
   LockTaskData();

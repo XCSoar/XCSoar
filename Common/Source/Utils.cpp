@@ -3615,6 +3615,11 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
       SCREENWIDTH=480;
       SCREENHEIGHT=480;
     }
+    pC = _tcsstr(MyCommandLine, TEXT("-small"));
+    if (pC != NULL){
+      SCREENWIDTH/= 2;
+      SCREENHEIGHT/= 2;
+    }
 #endif
   }
 }

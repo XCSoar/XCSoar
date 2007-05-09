@@ -1167,7 +1167,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 #endif
  
-  wcscat(XCSoar_Version, TEXT("5.0.14 "));
+  wcscat(XCSoar_Version, TEXT("5.1.0 BETA "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1673,7 +1673,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   StartupStore(TEXT("Create main window\r\n"));
 
   hWndMainWindow = CreateWindow(szWindowClass, szTitle,
-				WS_SYSMENU|WS_CLIPCHILDREN
+                                WS_SYSMENU
+                                | WS_CLIPCHILDREN
 				| WS_CLIPSIBLINGS,
                                 WindowSize.left, WindowSize.top,
 				WindowSize.right, WindowSize.bottom,
@@ -2463,6 +2464,9 @@ void DisplayText(void)
     bool needupdate = ((DisplayType[i] != DisplayTypeLast[i])||first);
     
     int theactive = ActiveWayPoint;
+    if (!ValidTaskPoint(theactive)) {
+      theactive = -1;
+    }
 
     // set values, title
     switch (DisplayType[i]) {
@@ -2477,7 +2481,7 @@ void DisplayText(void)
         }else{
           InfoBoxes[i]->SetTitle(TEXT("Next"));
           InfoBoxes[i]->SetValue(TEXT("---"));
-          InfoBoxes[i]->SetColor(0);
+          InfoBoxes[i]->SetColor(-1);
         }
         if (needupdate)
           InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
@@ -3405,9 +3409,11 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
     ReplaceInString(OutBuffer, TEXT("$(CheckWaypointFile)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckSettingsLockout)"))) {
+#ifndef _SIM_
     if (LockSettingsInFlight && CALCULATED_INFO.Flying) {
       invalid = true;
     }
+#endif
     ReplaceInString(OutBuffer, TEXT("$(CheckSettingsLockout)"), TEXT(""), Size);
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTask)"))) {

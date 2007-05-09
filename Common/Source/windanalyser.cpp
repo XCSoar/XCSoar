@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.26 2007/04/15 20:00:10 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.27 2007/05/09 15:32:18 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -388,21 +388,20 @@ void WindAnalyser::slot_newEstimate(NMEA_INFO *nmeaInfo,
                                     Vector a, int quality)
 {
 
-#ifdef DEBUG
+#ifdef DEBUG_WIND
   char Temp[100];
 #endif
 
   if (quality>=6) {
-#ifdef DEBUG
-    sprintf(Temp,"%f %f %d # external\n",a.x,a.y, quality);
+#ifdef DEBUG_WIND
+    sprintf(Temp,"%f %f %d # external wind\n",a.x,a.y, quality);
 #endif
-    quality = 3; // provided externally
   } else {
-#ifdef DEBUG
-    sprintf(Temp,"%f %f %d # circling\n",a.x,a.y, quality);
+#ifdef DEBUG_WIND
+    sprintf(Temp,"%f %f %d # wind circling\n",a.x,a.y, quality);
 #endif
   }
-#ifdef DEBUG
+#ifdef DEBUG_WIND
   DebugStore(Temp);
 #endif
 

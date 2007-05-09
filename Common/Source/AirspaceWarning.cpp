@@ -474,7 +474,7 @@ void AirspaceWarnListProcess(NMEA_INFO *Basic){
 
     AirspaceWarnListSort();
 
-#ifdef DEBUG
+#ifdef DEBUG_AIRSPACE
     char text[100];
     sprintf(text,"%d # airspace\n", AirspaceWarnGetItemCount());
     DebugStore(text);

@@ -365,6 +365,9 @@ void InfoBox::PaintValue(void){
   SetBkColor(mHdcBuf, mColorValueBk);
 
   switch (color) {
+  case -1:
+    SetTextColor(mHdcBuf, bdColor);
+    break;
   case 0:
     SetTextColor(mHdcBuf, mColorValue);
     break;

@@ -355,16 +355,16 @@ void MapWindow::DrawFLARMTraffic(HDC hDC, RECT rc) {
 
       DrawBitmapIn(hDC, sc, hFLARMTraffic);
 
-      Arrow[0].x = -3;
-      Arrow[0].y = 4;
+      Arrow[0].x = -4;
+      Arrow[0].y = 5;
       Arrow[1].x = 0;
-      Arrow[1].y = -5;
-      Arrow[2].x = 3;
-      Arrow[2].y = 4;
+      Arrow[1].y = -6;
+      Arrow[2].x = 4;
+      Arrow[2].y = 5;
       Arrow[3].x = 0;
-      Arrow[3].y = 1;
-      Arrow[4].x = -3;
-      Arrow[4].y = 4;
+      Arrow[3].y = 2;
+      Arrow[4].x = -4;
+      Arrow[4].y = 5;
 
       //      double vmag = max(1.0,min(15.0,DrawInfo.FLARM_Traffic[i].Speed/5.0))*2;
 

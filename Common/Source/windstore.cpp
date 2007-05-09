@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.14 2007/04/15 20:00:11 jwharington Exp $
+**   $Id: windstore.cpp,v 1.15 2007/05/09 15:32:18 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -147,9 +147,9 @@ void WindStore::newWind(NMEA_INFO *nmeaInfo, DERIVED_INFO *derivedInfo,
     // JMW TODO: give warning
   }
 
-#ifdef DEBUG
+#ifdef DEBUG_WIND
   char Temp[100];
-  sprintf(Temp,"%f %f 0 # estimate\n",wind.x,wind.y);
+  sprintf(Temp,"%f %f 0 # wind estimate\n",wind.x,wind.y);
   DebugStore(Temp);
 #endif
 

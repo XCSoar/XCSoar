@@ -461,9 +461,11 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       if (quality>0) {
         v.x = zzwindspeed*cos(zzwindbearing*3.1415926/180.0);
         v.y = zzwindspeed*sin(zzwindbearing*3.1415926/180.0);
+        LockFlightData();
         if (windanalyser) {
 	  windanalyser->slot_newEstimate(Basic, Calculated, v, quality);
         }
+        UnlockFlightData();
       }
     }
 
@@ -502,9 +504,11 @@ void  SetWindEstimate(double speed, double bearing, int quality) {
   Vector v;
   v.x = speed*cos(bearing*3.1415926/180.0);
   v.y = speed*sin(bearing*3.1415926/180.0);
+  LockFlightData();
   if (windanalyser) {
     windanalyser->slot_newEstimate(&GPS_INFO, &CALCULATED_INFO, v, quality);
   }
+  UnlockFlightData();
 }
 
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
@@ -644,13 +648,17 @@ void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   Calculated->TerrainWarningLatitude = 0.0;
   Calculated->TerrainWarningLongitude = 0.0;
 
+  LockFlightData();
+
   if (!windanalyser) {
     windanalyser = new WindAnalyser();
-
+    
     // seed initial wind store with current conditions
     //JMW TODO SetWindEstimate(Calculated->WindSpeed,Calculated->WindBearing, 1);
 
   }
+  UnlockFlightData();
+
 }
 
 
@@ -1071,7 +1079,9 @@ void SwitchZoomClimb(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   // this is calculation stuff, leave it there
 
   if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
+    LockFlightData();
     windanalyser->slot_newFlightMode(Basic, Calculated, left, 0);
+    UnlockFlightData();
   }
   
 }
@@ -1241,7 +1251,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     break;
   case CLIMB:
     if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
+      LockFlightData();
       windanalyser->slot_newSample(Basic, Calculated);
+      UnlockFlightData();
     }
     
     if((Rate < MinTurnRate)||(forcecruise)) {
@@ -1298,7 +1310,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   // generate new wind vector if altitude changes or a new
   // estimate is available
   if (AutoWindMode>0) {
+    LockFlightData();
     windanalyser->slot_Altitude(Basic, Calculated);
+    UnlockFlightData();
   }
 
   if (EnableThermalLocator) {
@@ -1387,7 +1401,7 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
             flightstats.ThermalAverage.
               least_squares_update(Calculated->LastThermalAverage);
 
-#ifdef DEBUG
+#ifdef DEBUG_STATS
             char Temp[100];
             sprintf(Temp,"%f %f # thermal stats\n", 
                     flightstats.ThermalAverage.m,
@@ -3652,8 +3666,6 @@ void DoAutoQNH(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     QNH = FindQNH(Basic->BaroAltitude, fixaltitude);
     AirspaceQnhChangeNotify(QNH);
   }
-  // TODO: Save last QNH setting, so it gets restored if 
-  // program is re-started in flight?
 }
 
 

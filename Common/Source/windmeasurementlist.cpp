@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windmeasurementlist.cpp,v 1.10 2007/04/15 20:00:10 jwharington Exp $
+**   $Id: windmeasurementlist.cpp,v 1.11 2007/05/09 15:32:18 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -78,7 +78,7 @@ Vector WindMeasurementList::getWind(double Time, double alt, bool *found){
   #define REL_FACTOR_QUALITY 100
   #define REL_FACTOR_ALTITUDE 100
   #define REL_FACTOR_TIME 200
-#define TIME_RANGE 36 // one hour
+  #define TIME_RANGE 36 // one hour
 
   int altRange  = 1000; //conf->getWindAltitudeRange();
   int timeRange = TIME_RANGE*100; //conf->getWindTimeRange();
@@ -95,6 +95,8 @@ Vector WindMeasurementList::getWind(double Time, double alt, bool *found){
 
   result.x = 0;
   result.y = 0;
+  double override_time = 1.1;
+  bool overridden = false;
  
   for(uint i=0;i< nummeasurementlist; i++) {
     m= measurementlist[i];
@@ -103,24 +105,49 @@ Vector WindMeasurementList::getWind(double Time, double alt, bool *found){
 
     if ((fabs(altdiff)< 1.0) && (timediff < 1.0)) {
 
-      q_quality = m->quality* REL_FACTOR_QUALITY / 5; 
+      q_quality = min(5,m->quality)* REL_FACTOR_QUALITY / 5; 
       //measurement quality
       
       a_quality = iround(((2.0/
-			   (altdiff*altdiff+1.0))
-			  -1.0)
-			 * REL_FACTOR_ALTITUDE); 
+                           (altdiff*altdiff+1.0))
+                          -1.0)
+                         * REL_FACTOR_ALTITUDE); 
       //factor in altitude difference between current altitude and
       //measurement.  Maximum alt difference is 1000 m.
-
+      
       double k=0.0025;
-
+      
       t_quality = iround(k*(1.0-timediff)/(timediff*timediff+k)
-			 * REL_FACTOR_TIME);
+                         * REL_FACTOR_TIME);
       //factor in timedifference. Maximum difference is 1 hours.
-
+      
+      if (m->quality == 6) {
+        if (timediff< override_time) {
+          // over-ride happened, so re-set accumulator
+          override_time = timediff;
+          total_quality = 0;
+          result.x = 0;
+          result.y = 0;
+          overridden = true;
+        } else {
+          // this isn't the latest over-ride or obtained fix, so ignore
+          continue;
+        }
+      } else {
+        if (timediff< override_time) {
+          // a more recent fix was obtained than the over-ride, so start using
+          // that one
+          override_time = timediff;
+          if (overridden) {
+            // re-set accumulators
+            overridden = false;
+            total_quality = 0;
+            result.x = 0;
+            result.y = 0;
+          }
+        }
+      }
       quality= q_quality * (a_quality * t_quality);
-
       result.x += m->vector.x * quality;
       result.y += m->vector.y * quality;
       total_quality+= quality;
