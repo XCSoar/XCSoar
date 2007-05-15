@@ -20,6 +20,51 @@ Todo:
   (final glide bar, flarm targets)
 - Glide range footprint fails over sea
 
+Others
+- Terrain/topology on (if no terrain/topology available)
+- Mc - (if already at zero)
+- Logger replay if no IGC on disk
+- message repeate (if queue is empty) --> always sometthing
+- mark location if not flying  --> sometimes want to put marker on launch point
+
+Changes from 5.0.9:
+- Added NMEAOut, PosiGraph devices
+- Input events for forced cruise/climb displays (etc?)
+  (FLARM display forcing)
+- Waypoint selection filter by type, and by heading 360 deg
+- Smoother scrolling of lists
+- Setup dialog for NMEA devices changed.
+- If any landable point is visible and reachable, final glide bar goes orange
+  if below final glide.
+- Menu label macros added: WaypointNext, WaypointPrevious, AdvanceArmed, LoggerActive,
+     TerrainTopologyToggleName, SnailTrailToggleName, CheckAirspace, CheckTask, 
+     CheckWaypointFile, CheckSettingsLockout, CheckReplay, CheckFLARM, CheckTerrain
+- Menu labels grey out if actions are unavailable
+- Dialog details for AAT vs non-AAT are visible only when AAT is set or not,
+  in task calculator, task status, and task waypoint editor
+- Fixed restart problems where >10 minutes, still was restarting
+- Start/restart now more user friendly.  Auto restart only happens up to first turnpoint
+- Fixed bug in ETE calculations when force final glide is on.
+- Terrain not rendered in not valid at aircraft
+- Fixed bug in waypoint lookup (search by turnpoint)
+- Moved some config parameters to "Site" configuration page
+- Added advanced vs basic configuration settings
+- Added -small startup option for PC
+- Fixed bugs in ZigZag wind algorithm, and improved accuracy and response
+- Don't draw final glide through terrain icon if no task
+- Wind estimate set by user in wind settings dialog (with SAVE button) 
+  overrides the internal estimate until a new estimate is obtained.
+- Minor cleanups of text in dialogs
+- Invalid infobox data is greyed out so it doesn't distract user
+
+- Speed to fly compensated for risk
+- Logger buffered for 60 seconds
+- Energy height uses estimated true air speed if no IAS is available
+- Support (read-only) for Zander variometer and Tasman Instruments variometer
+- Changed scale on final glide bar to +/- 500 meters (was +/- 2000 meters)
+- Attempt to resolve slow response with in FLY mode on older PDAs
+- Fixed bad line in default.xci
+
 Changes from 5.0.9 release 1:
 - Fixed ETE and final glide calculations for Mc=0, proper compensation
   for wind and unreachable at current Mc etc.
