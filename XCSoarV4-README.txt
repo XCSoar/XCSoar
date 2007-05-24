@@ -27,6 +27,21 @@ Others
 - message repeate (if queue is empty) --> always sometthing
 - mark location if not flying  --> sometimes want to put marker on launch point
 
+Changes from 5.1.0 beta 2:
+- Added code to generate missing translations file on windows PC debug builds
+- Grey out of some task specific menu items if in abort mode.
+- Style option to draw an arrow body alongwith the arrow head
+  under option "Wind Arrow" in Settings->Map Display(Expert)
+
+Changes from 5.1.0 beta 1:
+- Speed to fly compensated for risk
+- Logger buffered for 60 seconds
+- Energy height uses estimated true air speed if no IAS is available
+- Support (read-only) for Zander variometer and Tasman Instruments variometer
+- Changed scale on final glide bar to +/- 500 meters (was +/- 2000 meters)
+- Attempt to resolve slow response with in FLY mode on older PDAs
+- Fixed bad line in default.xci
+
 Changes from 5.0.9:
 - Added NMEAOut, PosiGraph devices
 - Input events for forced cruise/climb displays (etc?)
@@ -56,14 +71,6 @@ Changes from 5.0.9:
   overrides the internal estimate until a new estimate is obtained.
 - Minor cleanups of text in dialogs
 - Invalid infobox data is greyed out so it doesn't distract user
-
-- Speed to fly compensated for risk
-- Logger buffered for 60 seconds
-- Energy height uses estimated true air speed if no IAS is available
-- Support (read-only) for Zander variometer and Tasman Instruments variometer
-- Changed scale on final glide bar to +/- 500 meters (was +/- 2000 meters)
-- Attempt to resolve slow response with in FLY mode on older PDAs
-- Fixed bad line in default.xci
 
 Changes from 5.0.9 release 1:
 - Fixed ETE and final glide calculations for Mc=0, proper compensation
