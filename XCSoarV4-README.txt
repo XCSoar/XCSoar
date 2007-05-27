@@ -15,10 +15,10 @@ Todo:
   - different icon to normal thermal marker
 - Give warning if estimated arrival time is faster than AAT time
 - Full file names for saved/loaded tasks
-- Support for Tasman instruments variometer
 - Option for modified colors for red/green colorblind pilots 
   (final glide bar, flarm targets)
 - Glide range footprint fails over sea
+- Proper dialog for airspace queries, with buttons to ack day/now etc.
 
 Others
 - Terrain/topology on (if no terrain/topology available)
@@ -32,6 +32,8 @@ Changes from 5.1.0 beta 2:
 - Grey out of some task specific menu items if in abort mode.
 - Style option to draw an arrow body alongwith the arrow head
   under option "Wind Arrow" in Settings->Map Display(Expert) 
+- Fixed bug in query airspace if inside airspace
+- Added gettext() to enumerated parameters
 
 Changes from 5.1.0 beta 1:
 - Speed to fly compensated for risk
