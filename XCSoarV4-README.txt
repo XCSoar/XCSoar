@@ -27,6 +27,14 @@ Others
 - message repeate (if queue is empty) --> always sometthing
 - mark location if not flying  --> sometimes want to put marker on launch point
 
+bug: append when no task doesn't work (ends up with blank entry on first item)
+
+Changes from 5.1.0 beta 3:
+- AAT target in sector fixes
+- AAT sector/circle radius default value is 500 meters
+- AppendTo function bug fix
+- Mc Risk bug fix
+
 Changes from 5.1.0 beta 2:
 - Added code to generate missing translations file on windows PC debug builds
 - Grey out of some task specific menu items if in abort mode.
@@ -34,6 +42,10 @@ Changes from 5.1.0 beta 2:
   under option "Wind Arrow" in Settings->Map Display(Expert) 
 - Fixed bug in query airspace if inside airspace
 - Added gettext() to enumerated parameters
+
+- New notifications: AAT too early, arrival past sunset,  
+     significant wind change
+- Fixed bug in Arm start mode (wasn't advancing)
 
 Changes from 5.1.0 beta 1:
 - Speed to fly compensated for risk
