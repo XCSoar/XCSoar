@@ -876,7 +876,7 @@ location=2
 mode=Menu
 type=key
 data=APP3
-event=Mode Config1 
+event=Mode Config1
 label=Config
 location=3
 
