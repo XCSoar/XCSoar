@@ -379,7 +379,7 @@ Key2Event[mode_id]['8'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventNearestWaypointDetails, TEXT("pan"), event_id);
 mode_id = InputEvents::mode2int(TEXT("pan"), true);
-makeLabel(mode_id,TEXT("Nearest\nWaypoint "),8,event_id);
+makeLabel(mode_id,TEXT("Nearest\nWaypoint"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
@@ -449,7 +449,7 @@ Key2Event[mode_id]['6'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventCalculator, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT("$(CheckTask) "),6,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask)"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
@@ -469,7 +469,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT("$(CheckTask) "),9,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask)"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -853,7 +853,7 @@ Key2Event[mode_id]['9'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventAdjustVarioFilter, TEXT("accel"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Vario1"), true);
-makeLabel(mode_id,TEXT("Accel "),9,event_id);
+makeLabel(mode_id,TEXT("Accel"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
