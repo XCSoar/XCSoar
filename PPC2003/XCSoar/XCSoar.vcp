@@ -389,11 +389,9 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRFI=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -424,9 +422,11 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_AIRFI=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -524,11 +524,9 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRSP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -558,9 +556,11 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_AIRSP=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -659,11 +659,9 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRSPA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -693,9 +691,11 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_AIRSPA=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -2591,11 +2591,9 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DIALO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -2635,9 +2633,11 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DIALO=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -2746,11 +2746,9 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAI=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -2782,9 +2780,11 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGAI=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -2893,11 +2893,9 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIR=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -2929,9 +2927,11 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGAIR=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -3040,11 +3040,9 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIRS=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -3076,9 +3074,11 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGAIRS=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -3185,11 +3185,9 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIRSP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -3220,9 +3218,11 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGAIRSP=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -3588,11 +3588,9 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCH=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -3623,9 +3621,11 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGCH=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -3742,11 +3742,9 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -3783,9 +3781,11 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGCO=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -3911,11 +3911,9 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCON=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -3952,9 +3950,11 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGCON=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -4066,11 +4066,9 @@ DEP_CPP_DLGCONF=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCONF=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -4103,9 +4101,11 @@ DEP_CPP_DLGCONF=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGCONF=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -4478,11 +4478,9 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGST=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -4514,9 +4512,11 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGST=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -5526,11 +5526,9 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGTAS=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -5563,9 +5561,11 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGTAS=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -5674,11 +5674,9 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGTASK=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -5711,9 +5709,11 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGTASK=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -6409,11 +6409,9 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -6448,9 +6446,11 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGWA=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -6815,11 +6815,9 @@ DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWAYPO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -6851,9 +6849,11 @@ DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGWAYPO=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -7732,11 +7732,9 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_INPUT=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -7781,9 +7779,11 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_INPUT=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -8309,6 +8309,7 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\OnLineContest.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdafx.h"\
@@ -9354,6 +9355,7 @@ DEP_CPP_PROCE=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_PROCE=\
+	"..\..\Common\Header\AATDistance.h"\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Atmosphere.h"\
 	"..\..\Common\Header\BlueDialupPort.h"\
@@ -9456,9 +9458,33 @@ DEP_CPP_RASTE=\
 
 DEP_CPP_RASTE=\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_getopt.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	"..\..\Common\Header\jasper\jasper.h"\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -9466,7 +9492,12 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+NODEP_CPP_RASTE=\
+	"..\..\..\local\src\memalloc.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -10728,11 +10759,9 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	"..\..\Common\Header\xmlParser.h"\
-	
-NODEP_CPP_WAYPO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -10766,9 +10795,11 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	"..\..\Common\Header\xmlParser.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_WAYPO=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -10998,9 +11029,7 @@ DEP_CPP_WINDO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_WINDO=\
-	".\rojects.h"\
+	{$(INCLUDE)}"projects.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -11032,7 +11061,9 @@ DEP_CPP_WINDO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"projects.h"\
+	
+NODEP_CPP_WINDO=\
+	".\rojects.h"\
 	
 
 !ENDIF 
@@ -11162,6 +11193,7 @@ DEP_CPP_WINDZ=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdafx.h"\
@@ -11316,6 +11348,8 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\devCaiGpsNav.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devNmeaOut.h"\
+	"..\..\Common\Header\devPosiGraph.h"\
 	"..\..\Common\Header\devVega.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
@@ -11338,6 +11372,7 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Message.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdafx.h"\
@@ -11351,11 +11386,9 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_XCSOA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -11411,9 +11444,11 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	{$(INCLUDE)}"aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_XCSOA=\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -15054,7 +15089,15 @@ DEP_CPP_RASTER=\
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_RASTER=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\jasper\RasterTile.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdafx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
@@ -15181,52 +15224,6 @@ SOURCE=..\..\Common\Source\wcecompat\stdlib_extras.cpp
 # Begin Source File
 
 SOURCE=..\..\Common\Source\wcecompat\string_extras.cpp
-
-!IF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Release"
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Debug"
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\wcecompat\time.cpp
-
-!IF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Release"
-
-DEP_CPP_TIME_=\
-	"..\..\Common\Source\wcecompat\internal.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Debug"
-
-DEP_CPP_TIME_=\
-	"..\..\Common\Source\wcecompat\internal.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Release"
-
-DEP_CPP_TIME_=\
-	"..\..\Common\Source\wcecompat\internal.h"\
-	
-
-!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARMV4) Debug"
-
-DEP_CPP_TIME_=\
-	"..\..\Common\Source\wcecompat\internal.h"\
-	
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\wcecompat\timeb.cpp
 
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE emulator) Release"
 

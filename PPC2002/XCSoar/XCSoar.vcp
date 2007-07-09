@@ -54,7 +54,7 @@ RSC=rc.exe
 # ADD RSC /l 0x809 /i "..\..\Common\Header" /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
 CPP=clarm.exe
 # ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /Yu"stdafx.h" /Oxs /M$(CECrtMT) /c
-# ADD CPP /nologo /W3 /I "..\..\Common\Header" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /FR /YX /Oxs /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /I "..\..\Common\Header" /I "..\..\Common\Header\wcecompat" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /FR /YX /Oxs /M$(CECrtMT) /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
@@ -87,7 +87,7 @@ RSC=rc.exe
 # ADD RSC /l 0x409 /i "..\..\Common\Header" /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
 CPP=clarm.exe
 # ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /M$(CECrtMTDebug) /c
-# ADD CPP /nologo /W3 /Zi /Od /I "..\..\Common\Header" /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /Zi /Od /I "..\..\Common\Header" /I "..\..\Common\Header\wcecompat" /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /M$(CECrtMTDebug) /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
@@ -187,7 +187,7 @@ RSC=rc.exe
 # ADD RSC /l 0x809 /i "..\..\Common\Header" /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "MIPS" /d "_MIPS_" /r
 CPP=clmips.exe
 # ADD BASE CPP /nologo /W3 /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "MIPS" /D "_MIPS_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /FR /YX /Oxs /M$(CECrtMT) /c
-# ADD CPP /nologo /W3 /I "..\..\Common\Header" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "MIPS" /D "_MIPS_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /FR /YX /Oxs /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /I "..\..\Common\Header" /I "..\..\Common\Header\wcecompat" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "MIPS" /D "_MIPS_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /FR /YX /Oxs /M$(CECrtMT) /c
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
@@ -1549,6 +1549,158 @@ DEP_CPP_CALCUL=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\windstore.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\ConditionMonitor.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_CONDI=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_CONDI=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_CONDI=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_CONDI=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_CONDI=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\InputEvents.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	
 
@@ -14110,6 +14262,3401 @@ SOURCE=..\..\Common\Source\XCSoar.ico
 # Begin Source File
 
 SOURCE=.\XCSoar.ico
+# End Source File
+# End Group
+# Begin Group "jasper"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\args.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_ARGS_=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_ARGS_=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_ARGS_=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_ARGS_=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_ARGS_=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\assert.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_ASSER=\
+	"..\..\Common\Header\wcecompat\stdlib_extras.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_ASSER=\
+	"..\..\Common\Header\wcecompat\stdlib_extras.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_ASSER=\
+	"..\..\Common\Header\wcecompat\stdlib_extras.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\ChildData.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_CHILD=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ChildData.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_CHILD=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ChildData.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_CHILD=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ChildData.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_CHILD=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ChildData.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_CHILD=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ChildData.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\env.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_ENV_C=\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\redir.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_ENV_C=\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\redir.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_ENV_C=\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\redir.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_ENV_C=\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\redir.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_ENV_C=\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\redir.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\errno.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\io.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_cm.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_C=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_C=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_C=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_C=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_C=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_debug.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_D=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_D=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_D=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_D=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_D=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_getopt.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_G=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_getopt.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_G=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_getopt.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_G=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_getopt.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_G=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_getopt.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_G=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_getopt.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_icc.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_I=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_I=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_I=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_I=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_I=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_I=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_I=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_I=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_I=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_I=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_iccdata.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_IC=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_IC=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_IC=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_IC=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_IC=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_image.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_IM=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_IM=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_IM=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_IM=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_IM=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_IM=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_IM=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_IM=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_IM=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_IM=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_init.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_IN=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_IN=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_IN=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_IN=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_IN=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_init.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_malloc.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_M=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	
+NODEP_CPP_JAS_M=\
+	"..\..\..\local\src\memalloc.h"\
+	"..\..\Common\local\src\memalloc.c"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_M=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	
+NODEP_CPP_JAS_M=\
+	"..\..\..\local\src\memalloc.h"\
+	"..\..\Common\local\src\memalloc.c"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_M=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	
+NODEP_CPP_JAS_M=\
+	"..\..\..\local\src\memalloc.h"\
+	"..\..\Common\local\src\memalloc.c"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_M=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	
+NODEP_CPP_JAS_M=\
+	"..\..\..\local\src\memalloc.h"\
+	"..\..\Common\local\src\memalloc.c"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_M=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	
+NODEP_CPP_JAS_M=\
+	"..\..\..\local\src\memalloc.h"\
+	"..\..\Common\local\src\memalloc.c"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_seq.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_S=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_S=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_S=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_S=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_S=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_S=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_S=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_S=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_S=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_S=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_stream.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_ST=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_ST=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_ST=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_ST=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_ST=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_ST=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_ST=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_ST=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_ST=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	
+NODEP_CPP_JAS_ST=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_string.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_STR=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	
+NODEP_CPP_JAS_STR=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_STR=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	
+NODEP_CPP_JAS_STR=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_STR=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	
+NODEP_CPP_JAS_STR=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_STR=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	
+NODEP_CPP_JAS_STR=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_STR=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	
+NODEP_CPP_JAS_STR=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_tvp.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_T=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	
+NODEP_CPP_JAS_T=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_T=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	
+NODEP_CPP_JAS_T=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_T=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	
+NODEP_CPP_JAS_T=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_T=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	
+NODEP_CPP_JAS_T=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_T=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_string.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	
+NODEP_CPP_JAS_T=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\base\jas_version.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JAS_V=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JAS_V=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JAS_V=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JAS_V=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JAS_V=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jp2\jp2_cod.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JP2_C=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
+	
+NODEP_CPP_JP2_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JP2_C=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
+	
+NODEP_CPP_JP2_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JP2_C=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
+	
+NODEP_CPP_JP2_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JP2_C=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
+	
+NODEP_CPP_JP2_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JP2_C=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
+	
+NODEP_CPP_JP2_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jp2\jp2_dec.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JP2_D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_dec.h"\
+	
+NODEP_CPP_JP2_D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JP2_D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_dec.h"\
+	
+NODEP_CPP_JP2_D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JP2_D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_dec.h"\
+	
+NODEP_CPP_JP2_D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JP2_D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_dec.h"\
+	
+NODEP_CPP_JP2_D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JP2_D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jas_version.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
+	"..\..\Common\Source\jasper\jp2\jp2_dec.h"\
+	
+NODEP_CPP_JP2_D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_bs.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_B=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	
+NODEP_CPP_JPC_B=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_B=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	
+NODEP_CPP_JPC_B=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_B=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	
+NODEP_CPP_JPC_B=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_B=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	
+NODEP_CPP_JPC_B=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_B=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	
+NODEP_CPP_JPC_B=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_cs.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_C=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	
+NODEP_CPP_JPC_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_C=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	
+NODEP_CPP_JPC_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_C=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	
+NODEP_CPP_JPC_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_C=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	
+NODEP_CPP_JPC_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_C=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	
+NODEP_CPP_JPC_C=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_dec.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_tvp.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_math.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_M=\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_M=\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_M=\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_M=\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_M=\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_mct.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_MC=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_MC=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_MC=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_MC=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_MC=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_mqcod.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_MQ=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	
+NODEP_CPP_JPC_MQ=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_MQ=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	
+NODEP_CPP_JPC_MQ=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_MQ=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	
+NODEP_CPP_JPC_MQ=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_MQ=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	
+NODEP_CPP_JPC_MQ=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_MQ=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	
+NODEP_CPP_JPC_MQ=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_mqdec.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_MQD=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	
+NODEP_CPP_JPC_MQD=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_MQD=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	
+NODEP_CPP_JPC_MQD=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_MQD=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	
+NODEP_CPP_JPC_MQD=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_MQD=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	
+NODEP_CPP_JPC_MQD=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_MQD=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	
+NODEP_CPP_JPC_MQD=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_qmfb.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_Q=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_Q=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_Q=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_Q=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_Q=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_Q=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_Q=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_Q=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_Q=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_Q=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_rtc.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_R=\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_R=\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_R=\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_R=\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_R=\
+	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_t1cod.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_T=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_T=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_T=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_T=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_T=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_t1dec.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_T1=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_T1=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_T1=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_T1=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_T1=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_t2cod.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_T2=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	
+NODEP_CPP_JPC_T2=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_T2=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	
+NODEP_CPP_JPC_T2=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_T2=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	
+NODEP_CPP_JPC_T2=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_T2=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	
+NODEP_CPP_JPC_T2=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_T2=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	
+NODEP_CPP_JPC_T2=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_t2dec.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_T2D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_T2D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_T2D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_T2D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_T2D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_T2D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_T2D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_T2D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_T2D=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_debug.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t1cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_t2dec.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	
+NODEP_CPP_JPC_T2D=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_tagtree.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_TA=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	
+NODEP_CPP_JPC_TA=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_TA=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	
+NODEP_CPP_JPC_TA=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_TA=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	
+NODEP_CPP_JPC_TA=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_TA=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	
+NODEP_CPP_JPC_TA=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_TA=\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
+	
+NODEP_CPP_JPC_TA=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_tsfb.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_TS=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_util.h"\
+	
+NODEP_CPP_JPC_TS=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_TS=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_util.h"\
+	
+NODEP_CPP_JPC_TS=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_TS=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_util.h"\
+	
+NODEP_CPP_JPC_TS=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_TS=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_util.h"\
+	
+NODEP_CPP_JPC_TS=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_TS=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_tsfb.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_util.h"\
+	
+NODEP_CPP_JPC_TS=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\jpc_util.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_JPC_U=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_flt.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_util.h"\
+	
+NODEP_CPP_JPC_U=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_JPC_U=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_flt.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_util.h"\
+	
+NODEP_CPP_JPC_U=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_JPC_U=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_flt.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_util.h"\
+	
+NODEP_CPP_JPC_U=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_JPC_U=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_flt.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_util.h"\
+	
+NODEP_CPP_JPC_U=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_JPC_U=\
+	"..\..\Common\Header\jasper\jas_cm.h"\
+	"..\..\Common\Header\jasper\jas_config.h"\
+	"..\..\Common\Header\jasper\jas_config2.h"\
+	"..\..\Common\Header\jasper\jas_fix.h"\
+	"..\..\Common\Header\jasper\jas_icc.h"\
+	"..\..\Common\Header\jasper\jas_image.h"\
+	"..\..\Common\Header\jasper\jas_malloc.h"\
+	"..\..\Common\Header\jasper\jas_math.h"\
+	"..\..\Common\Header\jasper\jas_seq.h"\
+	"..\..\Common\Header\jasper\jas_stream.h"\
+	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_flt.h"\
+	"..\..\Common\Source\jasper\jpc\jpc_util.h"\
+	
+NODEP_CPP_JPC_U=\
+	"..\..\..\local\src\memalloc.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\pipe.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_PIPE_=\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_PIPE_=\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_PIPE_=\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_PIPE_=\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_PIPE_=\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\jasper\jpc\RasterTile.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_RASTER=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_RASTER=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_RASTER=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_RASTER=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_RASTER=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\redir.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_REDIR=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ChildData.h"\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\redir.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_REDIR=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ChildData.h"\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\redir.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_REDIR=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ChildData.h"\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\redir.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_REDIR=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ChildData.h"\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\redir.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_REDIR=\
+	"..\..\Common\Source\wcecompat\args.h"\
+	"..\..\Common\Source\wcecompat\ChildData.h"\
+	"..\..\Common\Source\wcecompat\pipe.h"\
+	"..\..\Common\Source\wcecompat\redir.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\stat.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_STAT_=\
+	"..\..\Common\Source\wcecompat\internal.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_STAT_=\
+	"..\..\Common\Source\wcecompat\internal.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_STAT_=\
+	"..\..\Common\Source\wcecompat\internal.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_STAT_=\
+	"..\..\Common\Source\wcecompat\internal.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_STAT_=\
+	"..\..\Common\Source\wcecompat\internal.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\stdio_extras.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\stdlib_extras.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\string_extras.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\ts_string.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_TS_ST=\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_TS_ST=\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_TS_ST=\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_TS_ST=\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_TS_ST=\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\wcecompat\winsock_extras.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_WINSO=\
+	"..\..\Common\Header\wcecompat\winsock_extras.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_WINSO=\
+	"..\..\Common\Header\wcecompat\winsock_extras.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_WINSO=\
+	"..\..\Common\Header\wcecompat\winsock_extras.h"\
+	
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Source File

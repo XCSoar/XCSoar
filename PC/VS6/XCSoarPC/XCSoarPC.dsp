@@ -45,7 +45,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -56,7 +56,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib comctl32.lib msimg32.lib /nologo /subsystem:windows /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib comctl32.lib msimg32.lib /nologo /subsystem:windows /machine:I386 /libpath:"jasper\\"
 
 !ELSEIF  "$(CFG)" == "XCSoarPC - Win32 Debug"
 
@@ -83,7 +83,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib comctl32.lib msimg32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib comctl32.lib msimg32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept /libpath:"jasper\Debug"
 
 !ELSEIF  "$(CFG)" == "XCSoarPC - Win32 Sim"
 
@@ -101,7 +101,8 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D NEWINFOBOX=1 /FD /GZ /c
 # SUBTRACT BASE CPP /X /YX /Yc /Yu
-# ADD CPP /nologo /MTd /W3 /WX /vd0 /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D "_SIM_" /D "DEBUG" /FD /c
+# ADD CPP /nologo /MTd /W3 /vd0 /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D "_SIM_" /D "DEBUG" /FD /c
+# SUBTRACT CPP /WX
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /i "..\..\..\Common\Header" /i "..\..\..\Common\Source" /d "_DEBUG" /d "WINDOWSPC"
@@ -111,7 +112,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib comctl32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib comctl32.lib msimg32.lib /nologo /subsystem:windows /debug /machine:I386 /out:"XCSoarPC___Win32_Sim/XCSoarPCSim.exe"
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib comctl32.lib msimg32.lib /nologo /subsystem:windows /debug /machine:I386 /out:"XCSoarPC___Win32_Sim/XCSoarPCSim.exe" /libpath:"jasper\Debug"
 # SUBTRACT LINK32 /profile
 
 !ELSEIF  "$(CFG)" == "XCSoarPC - Win32 SimRelease"
@@ -129,7 +130,8 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /WX /vd0 /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /D SCREENWIDTH=640 /D SCREENHEIGHT=480 /D "DISABLEAUDIO" /D NEWINFOBOX=1 /D "_SIM_" /D "DEBUG" /FD /c
-# ADD CPP /nologo /MT /W3 /WX /vd0 /GX /O2 /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D "_SIM_" /D UNDER_CE=300 /FD /c
+# ADD CPP /nologo /MT /W3 /vd0 /GX /O2 /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D "_SIM_" /FD /c
+# SUBTRACT CPP /WX
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /i "..\..\..\Common\Header" /i "..\..\..\Common\Source" /d "_DEBUG" /d "WINDOWSPC"
@@ -188,6 +190,10 @@ SOURCE=..\..\..\Common\Source\Calculations2.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Common\Source\ConditionMonitor.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Common\Source\DebugLog.cpp
 # End Source File
 # Begin Source File
@@ -209,6 +215,14 @@ SOURCE=..\..\..\Common\Source\devEW.cpp
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\device.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\devNmeaOut.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\devPosiGraph.cpp
 # End Source File
 # Begin Source File
 
@@ -594,6 +608,162 @@ SOURCE=..\..\..\Common\Source\Bitmaps\xcsoars.ico
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\Bitmaps\xcsoarswift.ico
+# End Source File
+# End Group
+# Begin Group "jasper"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_cm.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_debug.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_getopt.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_icc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_iccdata.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_image.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_init.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_malloc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_seq.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_stream.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_string.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_tvp.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\base\jas_version.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jp2\jp2_cod.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jp2\jp2_dec.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jp2\jp2_enc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_bs.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_cs.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_dec.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_enc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_math.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_mct.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_mqcod.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_mqdec.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_mqenc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_qmfb.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_rtc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t1cod.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t1dec.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t1enc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t2cod.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t2dec.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t2enc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_tagtree.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_tsfb.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_util.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\jasper\jpc\RasterTile.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\wcecompat\ts_string.cpp
 # End Source File
 # End Group
 # Begin Source File
