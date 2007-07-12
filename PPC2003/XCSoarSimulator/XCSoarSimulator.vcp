@@ -155,7 +155,8 @@ RSC=rc.exe
 # ADD RSC /l 0x409 /i "..\..\Common\Header" /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "DEBUG" /d "UNICODE" /d "_UNICODE" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /d "ARMV4" /r
 CPP="C:\Program Files\Microsoft eMbedded C++ 4.0\EVC\WCE500\bin\xicle44"
 # ADD BASE CPP /nologo /W3 /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D "ARMV4" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /Yu"stdafx.h" /M$(CECrtMTDebug) /c
-# ADD CPP /nologo /W3 /Zi /Od /Ob2 /Gy /I "..\..\Common\Header" /I "..\..\Common\Header\wcecompat" /D "DEBUG" /D "ARM" /D "_ARM_" /D "ARMV4" /D "_SIM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "WIN32" /FR /YX"stdafx.h" /Zp16 /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /Zi /Od /Ob2 /Gy /I "..\..\Common\Header" /I "..\..\Common\Header\wcecompat" /D "DEBUG" /D "ARM" /D "_ARM_" /D "ARMV4" /D "_SIM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "WIN32" /FR /Zp16 /M$(CECrtMTDebug) /c
+# SUBTRACT CPP /YX
 MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
@@ -373,6 +374,14 @@ DEP_CPP_AATDI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -402,6 +411,14 @@ DEP_CPP_AATDI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -542,11 +559,18 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRFI=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -577,11 +601,17 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRFI=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -725,11 +755,17 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRSP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -759,11 +795,17 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRSP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -906,11 +948,17 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRSPA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -940,11 +988,17 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_AIRSPA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -1080,6 +1134,14 @@ DEP_CPP_AIRSPAC=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -1110,6 +1172,14 @@ DEP_CPP_AIRSPAC=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -1241,6 +1311,14 @@ DEP_CPP_ATMOS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -1271,6 +1349,14 @@ DEP_CPP_ATMOS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -1453,6 +1539,14 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\WindZigZag.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -1500,6 +1594,14 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\WindZigZag.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -1690,6 +1792,14 @@ DEP_CPP_CALCUL=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -1734,6 +1844,14 @@ DEP_CPP_CALCUL=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -1876,6 +1994,14 @@ DEP_CPP_CONDI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -1905,6 +2031,14 @@ DEP_CPP_CONDI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -2038,6 +2172,14 @@ DEP_CPP_DEVAL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2069,6 +2211,14 @@ DEP_CPP_DEVAL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -2204,6 +2354,14 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2235,6 +2393,14 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -2370,6 +2536,14 @@ DEP_CPP_DEVCAI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2401,6 +2575,14 @@ DEP_CPP_DEVCAI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -2536,6 +2718,14 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2567,6 +2757,14 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -2699,6 +2897,14 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2729,6 +2935,14 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -2863,6 +3077,14 @@ DEP_CPP_DEVNM=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2894,6 +3116,14 @@ DEP_CPP_DEVNM=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -3029,6 +3259,14 @@ DEP_CPP_DEVPO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -3060,6 +3298,14 @@ DEP_CPP_DEVPO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -3201,6 +3447,14 @@ DEP_CPP_DEVVE=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -3234,6 +3488,14 @@ DEP_CPP_DEVVE=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -3405,11 +3667,17 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DIALO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -3449,11 +3717,17 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DIALO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -3612,11 +3886,17 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAI=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -3648,11 +3928,17 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAI=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -3803,11 +4089,17 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIR=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -3839,11 +4131,17 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIR=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -3994,11 +4292,17 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIRS=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4030,11 +4334,17 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIRS=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -4182,11 +4492,17 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIRSP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4217,11 +4533,17 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGAIRSP=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -4364,6 +4686,14 @@ DEP_CPP_DLGBA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4396,6 +4726,14 @@ DEP_CPP_DLGBA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -4529,6 +4867,14 @@ DEP_CPP_DLGBR=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4559,6 +4905,14 @@ DEP_CPP_DLGBR=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -4700,11 +5054,17 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCH=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4735,11 +5095,17 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCH=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -4902,11 +5268,17 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4943,11 +5315,17 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -5118,11 +5496,17 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCON=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5159,11 +5543,17 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCON=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -5322,11 +5712,17 @@ DEP_CPP_DLGCONF=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCONF=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5359,11 +5755,17 @@ DEP_CPP_DLGCONF=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGCONF=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -5505,6 +5907,14 @@ DEP_CPP_DLGHE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5536,6 +5946,14 @@ DEP_CPP_DLGHE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -5674,6 +6092,14 @@ DEP_CPP_DLGLO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5706,6 +6132,14 @@ DEP_CPP_DLGLO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -5852,11 +6286,17 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGST=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5888,11 +6328,17 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGST=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -6027,6 +6473,14 @@ DEP_CPP_DLGSTA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6056,6 +6510,14 @@ DEP_CPP_DLGSTA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -6204,6 +6666,14 @@ DEP_CPP_DLGSTAT=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6240,6 +6710,14 @@ DEP_CPP_DLGSTAT=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -6374,6 +6852,14 @@ DEP_CPP_DLGSTATU=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6403,6 +6889,14 @@ DEP_CPP_DLGSTATU=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -6533,6 +7027,14 @@ DEP_CPP_DLGSTATUS=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6563,6 +7065,14 @@ DEP_CPP_DLGSTATUS=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -6691,6 +7201,14 @@ DEP_CPP_DLGSTATUST=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6720,6 +7238,14 @@ DEP_CPP_DLGSTATUST=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -6850,6 +7376,14 @@ DEP_CPP_DLGSW=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6880,6 +7414,14 @@ DEP_CPP_DLGSW=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -7015,6 +7557,14 @@ DEP_CPP_DLGTA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7047,6 +7597,14 @@ DEP_CPP_DLGTA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -7196,11 +7754,17 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGTAS=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7233,11 +7797,17 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGTAS=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -7392,11 +7962,17 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGTASK=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7429,11 +8005,17 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGTASK=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -7569,6 +8151,14 @@ DEP_CPP_DLGTE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7598,6 +8188,14 @@ DEP_CPP_DLGTE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -7722,6 +8320,14 @@ DEP_CPP_DLGTEX=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7750,6 +8356,14 @@ DEP_CPP_DLGTEX=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -7844,6 +8458,14 @@ DEP_CPP_DLGTO=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	"..\..\Common\Header\xmlParser.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7867,6 +8489,14 @@ DEP_CPP_DLGTO=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	"..\..\Common\Header\xmlParser.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -7994,6 +8624,14 @@ DEP_CPP_DLGVE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8025,6 +8663,14 @@ DEP_CPP_DLGVE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -8160,6 +8806,14 @@ DEP_CPP_DLGVO=\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8191,6 +8845,14 @@ DEP_CPP_DLGVO=\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -8345,11 +9007,17 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8384,11 +9052,17 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -8535,6 +9209,14 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8567,6 +9249,14 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -8697,6 +9387,14 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8726,6 +9424,14 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -8869,11 +9575,17 @@ DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWAYPO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8905,11 +9617,17 @@ DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_DLGWAYPO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -9047,6 +9765,14 @@ DEP_CPP_DLGWI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9077,6 +9803,14 @@ DEP_CPP_DLGWI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -9284,6 +10018,14 @@ DEP_CPP_GAUGEF=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9314,6 +10056,14 @@ DEP_CPP_GAUGEF=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -9449,6 +10199,14 @@ DEP_CPP_GAUGEV=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9481,6 +10239,14 @@ DEP_CPP_GAUGEV=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -9563,6 +10329,14 @@ DEP_CPP_GEOID=\
 	"..\..\Common\Header\stdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9576,6 +10350,14 @@ DEP_CPP_GEOID=\
 	"..\..\Common\Header\stdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -9690,6 +10472,14 @@ DEP_CPP_INFOB=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9720,6 +10510,14 @@ DEP_CPP_INFOB=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -9854,6 +10652,14 @@ DEP_CPP_INFOBO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9885,6 +10691,14 @@ DEP_CPP_INFOBO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -10069,11 +10883,17 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_INPUT=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10118,11 +10938,17 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\vibrate.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_INPUT=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -10330,6 +11156,14 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10362,6 +11196,14 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -10483,6 +11325,14 @@ DEP_CPP_MAPER=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10492,6 +11342,14 @@ DEP_CPP_MAPER=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -10539,6 +11397,14 @@ DEP_CPP_MAPPR=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10548,6 +11414,14 @@ DEP_CPP_MAPPR=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -10592,6 +11466,14 @@ DEP_CPP_MAPSE=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10600,6 +11482,14 @@ DEP_CPP_MAPSE=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -10652,6 +11542,14 @@ DEP_CPP_MAPSH=\
 	"..\..\Common\Header\maptree.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10663,6 +11561,14 @@ DEP_CPP_MAPSH=\
 	"..\..\Common\Header\maptree.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -10712,6 +11618,14 @@ DEP_CPP_MAPTR=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\maptree.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10721,6 +11635,14 @@ DEP_CPP_MAPTR=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\maptree.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -10860,6 +11782,14 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10901,6 +11831,14 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -11073,6 +12011,14 @@ DEP_CPP_MAPWIN=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11113,6 +12059,14 @@ DEP_CPP_MAPWIN=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -11194,6 +12148,14 @@ DEP_CPP_MAPXB=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11204,6 +12166,14 @@ DEP_CPP_MAPXB=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -11315,6 +12285,14 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11345,6 +12323,14 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -11476,6 +12462,14 @@ DEP_CPP_MESSA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11506,6 +12500,14 @@ DEP_CPP_MESSA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -11652,6 +12654,14 @@ DEP_CPP_ONLIN=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11670,6 +12680,14 @@ DEP_CPP_ONLIN=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -11801,6 +12819,14 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11835,6 +12861,14 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -11967,6 +13001,14 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11996,6 +13038,14 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -12123,6 +13173,14 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -12152,6 +13210,14 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -12286,6 +13352,14 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -12318,6 +13392,14 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -12437,6 +13519,14 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\wcecompat\ts_string.h"\
 	
 NODEP_CPP_RASTE=\
@@ -12483,6 +13573,14 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\wcecompat\ts_string.h"\
 	
 NODEP_CPP_RASTE=\
@@ -12628,6 +13726,14 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -12656,6 +13762,14 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -12895,6 +14009,14 @@ DEP_CPP_TASK_=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -12925,6 +14047,14 @@ DEP_CPP_TASK_=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -13119,6 +14249,15 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	"..\..\Common\Source\wcecompat\ts_string.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -13153,6 +14292,14 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -13258,6 +14405,14 @@ DEP_CPP_THERM=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -13278,6 +14433,14 @@ DEP_CPP_THERM=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -13396,6 +14559,14 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -13425,6 +14596,14 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -13549,6 +14728,14 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -13577,6 +14764,14 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -13724,6 +14919,14 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -13760,6 +14963,14 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -13900,6 +15111,14 @@ DEP_CPP_VEGAV=\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -13931,6 +15150,14 @@ DEP_CPP_VEGAV=\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -14141,11 +15368,17 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	"..\..\Common\Header\xmlParser.h"\
-	
-NODEP_CPP_WAYPO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14179,11 +15412,17 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	"..\..\Common\Header\xmlParser.h"\
-	
-NODEP_CPP_WAYPO=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -14296,6 +15535,14 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14317,6 +15564,14 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -14385,6 +15640,14 @@ DEP_CPP_WINDM=\
 	"..\..\Common\Header\stdAfx.h"\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14397,6 +15660,14 @@ DEP_CPP_WINDM=\
 	"..\..\Common\Header\stdAfx.h"\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -14519,9 +15790,15 @@ DEP_CPP_WINDO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_WINDO=\
-	".\rojects.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"projects.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14553,9 +15830,15 @@ DEP_CPP_WINDO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_WINDO=\
-	".\rojects.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"projects.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -14652,6 +15935,14 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14669,6 +15960,14 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -14752,6 +16051,14 @@ DEP_CPP_WINDZ=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14771,6 +16078,14 @@ DEP_CPP_WINDZ=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -14971,11 +16286,17 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_XCSOA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -15032,11 +16353,17 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
-	
-NODEP_CPP_XCSOA=\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -15881,6 +17208,14 @@ DEP_CPP_JAS_C=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_JAS_C=\
 	"..\..\..\local\src\memalloc.h"\
@@ -15898,6 +17233,14 @@ DEP_CPP_JAS_C=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_JAS_C=\
 	"..\..\..\local\src\memalloc.h"\
@@ -16086,6 +17429,14 @@ DEP_CPP_JAS_I=\
 	"..\..\Common\Header\jasper\jas_malloc.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_JAS_I=\
 	"..\..\..\local\src\memalloc.h"\
@@ -16102,6 +17453,14 @@ DEP_CPP_JAS_I=\
 	"..\..\Common\Header\jasper\jas_malloc.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_JAS_I=\
 	"..\..\..\local\src\memalloc.h"\
@@ -16237,6 +17596,14 @@ DEP_CPP_JAS_IM=\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_string.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_JAS_IM=\
 	"..\..\..\local\src\memalloc.h"\
@@ -16256,6 +17623,14 @@ DEP_CPP_JAS_IM=\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_string.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_JAS_IM=\
 	"..\..\..\local\src\memalloc.h"\
@@ -16331,6 +17706,14 @@ DEP_CPP_JAS_IN=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -16345,6 +17728,14 @@ DEP_CPP_JAS_IN=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -16483,6 +17874,14 @@ DEP_CPP_JAS_S=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_JAS_S=\
 	"..\..\..\local\src\memalloc.h"\
@@ -16498,6 +17897,14 @@ DEP_CPP_JAS_S=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_JAS_S=\
 	"..\..\..\local\src\memalloc.h"\
@@ -16566,6 +17973,14 @@ DEP_CPP_JAS_ST=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_JAS_ST=\
 	"..\..\..\local\src\memalloc.h"\
@@ -16580,6 +17995,14 @@ DEP_CPP_JAS_ST=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 NODEP_CPP_JAS_ST=\
 	"..\..\..\local\src\memalloc.h"\
@@ -16847,6 +18270,14 @@ DEP_CPP_JP2_C=\
 	"..\..\Common\Header\jasper\jas_malloc.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
 	
 NODEP_CPP_JP2_C=\
@@ -16862,6 +18293,14 @@ DEP_CPP_JP2_C=\
 	"..\..\Common\Header\jasper\jas_malloc.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
 	
 NODEP_CPP_JP2_C=\
@@ -16953,6 +18392,14 @@ DEP_CPP_JP2_D=\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
 	"..\..\Common\Header\jasper\jas_version.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
 	"..\..\Common\Source\jasper\jp2\jp2_dec.h"\
 	
@@ -16975,6 +18422,14 @@ DEP_CPP_JP2_D=\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
 	"..\..\Common\Header\jasper\jas_version.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jp2\jp2_cod.h"\
 	"..\..\Common\Source\jasper\jp2\jp2_dec.h"\
 	
@@ -17057,6 +18512,14 @@ DEP_CPP_JPC_B=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	
 NODEP_CPP_JPC_B=\
@@ -17073,6 +18536,14 @@ DEP_CPP_JPC_B=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	
 NODEP_CPP_JPC_B=\
@@ -17159,6 +18630,14 @@ DEP_CPP_JPC_C=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
 	
@@ -17179,6 +18658,14 @@ DEP_CPP_JPC_C=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
 	
@@ -17310,6 +18797,14 @@ DEP_CPP_JPC_D=\
 	"..\..\Common\Header\jasper\jas_tvp.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
 	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
@@ -17348,6 +18843,14 @@ DEP_CPP_JPC_D=\
 	"..\..\Common\Header\jasper\jas_tvp.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
 	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
@@ -17494,6 +18997,14 @@ DEP_CPP_JPC_MC=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
 	
@@ -17507,6 +19018,14 @@ DEP_CPP_JPC_MC=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_mct.h"\
 	
@@ -17655,6 +19174,14 @@ DEP_CPP_JPC_MQD=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
 	
@@ -17672,6 +19199,14 @@ DEP_CPP_JPC_MQD=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_mqcod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_mqdec.h"\
 	
@@ -17758,6 +19293,14 @@ DEP_CPP_JPC_Q=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
@@ -17778,6 +19321,14 @@ DEP_CPP_JPC_Q=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_qmfb.h"\
@@ -17931,6 +19482,14 @@ DEP_CPP_JPC_T=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
@@ -17958,6 +19517,14 @@ DEP_CPP_JPC_T=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
@@ -18082,6 +19649,14 @@ DEP_CPP_JPC_T1=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
@@ -18111,6 +19686,14 @@ DEP_CPP_JPC_T1=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
@@ -18223,6 +19806,14 @@ DEP_CPP_JPC_T2=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
@@ -18245,6 +19836,14 @@ DEP_CPP_JPC_T2=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_math.h"\
@@ -18370,6 +19969,14 @@ DEP_CPP_JPC_T2D=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
@@ -18404,6 +20011,14 @@ DEP_CPP_JPC_T2D=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
@@ -18506,6 +20121,14 @@ DEP_CPP_JPC_TA=\
 	"..\..\Common\Header\jasper\jas_malloc.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
 	
@@ -18521,6 +20144,14 @@ DEP_CPP_JPC_TA=\
 	"..\..\Common\Header\jasper\jas_malloc.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_bs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_tagtree.h"\
 	
@@ -18615,6 +20246,14 @@ DEP_CPP_JPC_TS=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
@@ -18639,6 +20278,14 @@ DEP_CPP_JPC_TS=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
@@ -18747,6 +20394,14 @@ DEP_CPP_JPC_U=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
@@ -18771,6 +20426,14 @@ DEP_CPP_JPC_U=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cod.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_cs.h"\
 	"..\..\Common\Source\jasper\jpc\jpc_fix.h"\
@@ -18886,12 +20549,36 @@ DEP_CPP_RASTER=\
 	"..\..\Common\Header\stdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
 
 DEP_CPP_RASTER=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\jasper\RasterTile.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -19120,48 +20807,6 @@ DEP_CPP_TS_ST=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\Common\Source\wcecompat\wce211_ctype.c
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\Common\Source\wcecompat\wce211_string.c
-
-!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
-
-!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\Common\Source\wcecompat\winsock_extras.cpp
 
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
@@ -19184,6 +20829,1364 @@ DEP_CPP_WINSO=\
 
 DEP_CPP_WINSO=\
 	"..\..\Common\Header\wcecompat\winsock_extras.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# End Group
+# Begin Group "zzip"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\adler32.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_ADLER=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_ADLER=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_ADLER=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_ADLER=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_ADLER=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\compress.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_COMPR=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_COMPR=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_COMPR=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_COMPR=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_COMPR=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\crc32.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_CRC32=\
+	"..\..\Common\Header\zzip\crc32.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_CRC32=\
+	"..\..\Common\Header\zzip\crc32.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_CRC32=\
+	"..\..\Common\Header\zzip\crc32.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_CRC32=\
+	"..\..\Common\Header\zzip\crc32.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_CRC32=\
+	"..\..\Common\Header\zzip\crc32.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\deflate.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_DEFLA=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_DEFLA=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_DEFLA=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_DEFLA=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_DEFLA=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\err.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\fetch.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\file.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_FILE_=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_FILE_=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_FILE_=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_FILE_=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_FILE_=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\gzio.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_GZIO_=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_GZIO_=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_GZIO_=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_GZIO_=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_GZIO_=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\infback.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_INFBA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_INFBA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_INFBA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_INFBA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_INFBA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\inffast.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_INFFA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_INFFA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_INFFA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_INFFA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_INFFA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\inflate.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_INFLA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_INFLA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_INFLA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_INFLA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_INFLA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\info.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\inftrees.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_INFTR=\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_INFTR=\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_INFTR=\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_INFTR=\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_INFTR=\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\plugin.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\trees.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_TREES=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\trees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_TREES=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\trees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_TREES=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\trees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_TREES=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\trees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_TREES=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\trees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\uncompr.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_UNCOM=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_UNCOM=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_UNCOM=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_UNCOM=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_UNCOM=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\zip.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_ZIP_C=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_ZIP_C=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_ZIP_C=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_ZIP_C=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_ZIP_C=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\zstat.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\info.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\info.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\info.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\info.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\info.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\zutil.c
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_ZUTIL=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_ZUTIL=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_ZUTIL=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_ZUTIL=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_ZUTIL=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
