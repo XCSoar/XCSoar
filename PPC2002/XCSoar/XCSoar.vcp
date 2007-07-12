@@ -17659,6 +17659,1288 @@ DEP_CPP_WINSO=\
 
 # End Source File
 # End Group
+# Begin Group "zzip"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\adler32.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_ADLER=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_ADLER=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_ADLER=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_ADLER=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_ADLER=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\compress.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_COMPR=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_COMPR=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_COMPR=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_COMPR=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_COMPR=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\crc32.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_CRC32=\
+	"..\..\Common\Header\zzip\crc32.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_CRC32=\
+	"..\..\Common\Header\zzip\crc32.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_CRC32=\
+	"..\..\Common\Header\zzip\crc32.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_CRC32=\
+	"..\..\Common\Header\zzip\crc32.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_CRC32=\
+	"..\..\Common\Header\zzip\crc32.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\deflate.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_DEFLA=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_DEFLA=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_DEFLA=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_DEFLA=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_DEFLA=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\err.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\fetch.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\file.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_FILE_=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_FILE_=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_FILE_=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_FILE_=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_FILE_=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\gzio.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_GZIO_=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_GZIO_=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_GZIO_=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_GZIO_=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_GZIO_=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\infback.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_INFBA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_INFBA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_INFBA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_INFBA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_INFBA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\inffast.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_INFFA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_INFFA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_INFFA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_INFFA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_INFFA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\inflate.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_INFLA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_INFLA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_INFLA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_INFLA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_INFLA=\
+	"..\..\Common\Header\zzip\inffast.h"\
+	"..\..\Common\Header\zzip\inffixed.h"\
+	"..\..\Common\Header\zzip\inflate.h"\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\info.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\inftrees.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_INFTR=\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_INFTR=\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_INFTR=\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_INFTR=\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_INFTR=\
+	"..\..\Common\Header\zzip\inftrees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\plugin.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\trees.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_TREES=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\trees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_TREES=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\trees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_TREES=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\trees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_TREES=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\trees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_TREES=\
+	"..\..\Common\Header\zzip\deflate.h"\
+	"..\..\Common\Header\zzip\trees.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\uncompr.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_UNCOM=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_UNCOM=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_UNCOM=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_UNCOM=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_UNCOM=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\zip.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_ZIP_C=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_ZIP_C=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_ZIP_C=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_ZIP_C=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_ZIP_C=\
+	"..\..\Common\Header\zzip\__debug.h"\
+	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\fetch.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\format.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\zstat.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\info.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\info.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\info.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\info.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_config.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\file.h"\
+	"..\..\Common\Header\zzip\info.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\zzip\zutil.c
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_ZUTIL=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_ZUTIL=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_ZUTIL=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_ZUTIL=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_ZUTIL=\
+	"..\..\Common\Header\zzip\zconf.h"\
+	"..\..\Common\Header\zzip\zlib.h"\
+	"..\..\Common\Header\zzip\zutil.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\ReadMe.txt
