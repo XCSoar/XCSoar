@@ -65,14 +65,14 @@ mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_STARTUP_REAL] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventLogger, TEXT("start"), event_id);
+event_id = InputEvents::makeEvent(&eventAutoLogger, TEXT("start"), event_id);
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Takeoff"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_TAKEOFF] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Landing"), event_id);
-event_id = InputEvents::makeEvent(&eventLogger, TEXT("stop"), event_id);
+event_id = InputEvents::makeEvent(&eventAutoLogger, TEXT("stop"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 GC2Event[mode_id][GCE_LANDING] = event_id;
 
@@ -175,10 +175,6 @@ mode_id = InputEvents::mode2int(TEXT("Exit"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
-mode_id = InputEvents::mode2int(TEXT("Menu"), true);
-makeLabel(mode_id,TEXT(""),1,event_id);
-Key2Event[mode_id][VK_APP1] = event_id;
-
 mode_id = InputEvents::mode2int(TEXT("Vario1"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
@@ -228,10 +224,6 @@ mode_id = InputEvents::mode2int(TEXT("Exit"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
 
-mode_id = InputEvents::mode2int(TEXT("Menu"), true);
-makeLabel(mode_id,TEXT(""),2,event_id);
-Key2Event[mode_id][VK_APP2] = event_id;
-
 mode_id = InputEvents::mode2int(TEXT("Vario1"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
 Key2Event[mode_id][VK_APP2] = event_id;
@@ -278,10 +270,6 @@ makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
 mode_id = InputEvents::mode2int(TEXT("Exit"), true);
-makeLabel(mode_id,TEXT(""),3,event_id);
-Key2Event[mode_id][VK_APP3] = event_id;
-
-mode_id = InputEvents::mode2int(TEXT("Menu"), true);
 makeLabel(mode_id,TEXT(""),3,event_id);
 Key2Event[mode_id][VK_APP3] = event_id;
 
@@ -449,14 +437,14 @@ Key2Event[mode_id]['6'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventCalculator, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT("$(CheckTask)"),6,event_id);
+makeLabel(mode_id,TEXT("$(CheckTaskResumed)$(CheckTask)"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT("$(CheckWaypointFile)"),7,event_id);
+makeLabel(mode_id,TEXT("$(CheckTaskResumed)$(CheckWaypointFile)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -469,7 +457,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
-makeLabel(mode_id,TEXT("$(CheckTask)"),9,event_id);
+makeLabel(mode_id,TEXT("$(CheckTaskResumed)$(CheckTask)"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -482,14 +470,14 @@ Key2Event[mode_id]['6'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventCalculator, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT("Task\nCalc$(CheckTask)"),6,event_id);
+makeLabel(mode_id,TEXT("Task\nCalc$(CheckTaskResumed)$(CheckTask)"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT("Task\nEdit$(CheckWaypointFile)"),7,event_id);
+makeLabel(mode_id,TEXT("$(CheckTaskResumed)Task\nEdit$(CheckWaypointFile)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -502,7 +490,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT("$(CheckTask)Advance\n$(AdvanceArmed)"),9,event_id);
+makeLabel(mode_id,TEXT("$(CheckTaskResumed)$(CheckTask)Advance\n$(AdvanceArmed)"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -589,7 +577,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventCalculator, TEXT(""), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("Task\nCalc$(CheckTask)"),5,event_id);
+makeLabel(mode_id,TEXT("Task\nCalc$(CheckTaskResumed)$(CheckTask)"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
@@ -597,7 +585,7 @@ event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("show"), event_id);
 event_id = InputEvents::makeEvent(&eventArmAdvance, TEXT("toggle"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav1"), true);
-makeLabel(mode_id,TEXT("$(CheckTask)Advance\n$(AdvanceArmed)"),6,event_id);
+makeLabel(mode_id,TEXT("$(CheckTaskResumed)$(CheckTask)Advance\n$(AdvanceArmed)"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
@@ -629,14 +617,14 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Task"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("Task\nEdit$(CheckWaypointFile)"),5,event_id);
+makeLabel(mode_id,TEXT("$(CheckTaskResumed)Task\nEdit$(CheckWaypointFile)"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Task saved"), event_id);
 event_id = InputEvents::makeEvent(&eventTaskSave, TEXT("persist/Default.tsk"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("Task\nSave"),6,event_id);
+makeLabel(mode_id,TEXT("$(CheckTaskResumed)Task\nSave"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
@@ -649,7 +637,7 @@ Key2Event[mode_id]['8'] = event_id;
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventFlightMode, TEXT("finalglide toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("$(CheckTask)Final\n$(FinalForceToggleActionName)"),8,event_id);
+makeLabel(mode_id,TEXT("$(CheckTaskResumed)$(CheckTask)Final\n$(FinalForceToggleActionName)"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
@@ -762,7 +750,7 @@ event_id = 0;
 event_id = InputEvents::makeEvent(&eventMacCready, TEXT("auto show"), event_id);
 event_id = InputEvents::makeEvent(&eventMacCready, TEXT("auto toggle"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Config1"), true);
-makeLabel(mode_id,TEXT("$(CheckTask)MacCready\n$(MacCreadyToggleActionName)"),7,event_id);
+makeLabel(mode_id,TEXT("$(CheckAutoMc)MacCready\n$(MacCreadyToggleActionName)"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -943,21 +931,23 @@ makeLabel(mode_id,TEXT("Info"),4,event_id);
 Key2Event[mode_id][VK_APP4] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatus, TEXT("system"), event_id);
+event_id = InputEvents::makeEvent(&eventStatus, TEXT("all"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
-makeLabel(mode_id,TEXT("Status\nSystem"),5,event_id);
+makeLabel(mode_id,TEXT("Status"),5,event_id);
 Key2Event[mode_id]['6'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatus, TEXT("Aircraft"), event_id);
+event_id = InputEvents::makeEvent(&eventSetup, TEXT("Weather"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
-makeLabel(mode_id,TEXT("Status\nAircraft"),6,event_id);
+makeLabel(mode_id,TEXT("Weather"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventStatus, TEXT("task"), event_id);
+event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
-makeLabel(mode_id,TEXT("$(CheckTask)Status\nTask"),7,event_id);
+makeLabel(mode_id,TEXT(""),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;
@@ -1029,4 +1019,24 @@ event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Menu"), true);
 makeLabel(mode_id,TEXT("Exit"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Exit"), true);
+makeLabel(mode_id,TEXT(""),5,event_id);
+Key2Event[mode_id]['6'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Exit"), true);
+makeLabel(mode_id,TEXT(""),6,event_id);
+Key2Event[mode_id]['7'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Exit"), true);
+makeLabel(mode_id,TEXT(""),7,event_id);
+Key2Event[mode_id]['8'] = event_id;
+
+event_id = 0;
+mode_id = InputEvents::mode2int(TEXT("Exit"), true);
+makeLabel(mode_id,TEXT(""),8,event_id);
+Key2Event[mode_id]['9'] = event_id;
 
