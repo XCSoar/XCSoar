@@ -50,17 +50,21 @@ static void UpdateButtons(void) {
   TCHAR text[MAX_PATH];
   if (buttonName) {
     if (_tcslen(global_wpt->Name)<=0) {
-      _stprintf(text,TEXT("Name: (blank)"));
+      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Name")),
+                gettext(TEXT("(blank)")));
     } else {
-      _stprintf(text,TEXT("Name: %s"),global_wpt->Name);
+      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Name")),
+                global_wpt->Name);
     }
     buttonName->SetCaption(text);
   }
   if (buttonComment) {
     if (_tcslen(global_wpt->Comment)<=0) {
-      _stprintf(text,TEXT("Comment: (blank)"));
+      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Comment")),
+                gettext(TEXT("(blank)")));
     } else {
-      _stprintf(text,TEXT("Comment: %s"),global_wpt->Comment);
+      _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Comment")),
+                global_wpt->Comment);
     }
     buttonComment->SetCaption(text);
   }
@@ -107,7 +111,6 @@ void dlgWaypointEditShowModal(WAYPOINT *wpt) {
 
   global_wpt = wpt;
 
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgWaypointEdit_L.xml"));
@@ -115,16 +118,14 @@ void dlgWaypointEditShowModal(WAYPOINT *wpt) {
                         filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTEDIT_L"));
-  } else
-#endif
-    {
+  } else {
     char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgWaypointEdit.xml"));
-  wf = dlgLoadFromXML(CallBackTable, 
-                      filename, 
-		      hWndMainWindow,
-		      TEXT("IDR_XML_WAYPOINTEDIT"));
-    }
+    LocalPathS(filename, TEXT("dlgWaypointEdit.xml"));
+    wf = dlgLoadFromXML(CallBackTable, 
+                        filename, 
+                        hWndMainWindow,
+                        TEXT("IDR_XML_WAYPOINTEDIT"));
+  }
 
   if (wf) {
 

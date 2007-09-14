@@ -520,7 +520,14 @@ VegaVoice::VegaVoice() {
   }
 }
 
+bool VegaVoice::AirspaceNotifierInstalled = false;
+
 VegaVoice::~VegaVoice() {
+  if (AirspaceNotifierInstalled) {
+    AirspaceNotifierInstalled = false;
+    AirspaceWarnListRemoveNotifier(AirspaceWarningNotify);
+  }
+
   DeleteCriticalSection(&CritSec_Voice);
 }
 
@@ -534,14 +541,13 @@ void VegaVoice::UnLock() {
 
 void VegaVoice::Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
-  static bool AirspaceNotivierInstalled = false;
+  if (!AirspaceNotifierInstalled){
+    AirspaceNotifierInstalled = true;
 
-  if (!AirspaceNotivierInstalled){
-    AirspaceNotivierInstalled = true;
+    // note this isn't removed yet on destruction, so it is a very small
+    // memory leak
     AirspaceWarnListAddNotifier(AirspaceWarningNotify);
-
   }
-
 
   Lock();
   // update values in each message to determine whether

@@ -148,8 +148,15 @@ static void writeHeader( SHPHandle psSHP )
   /* -------------------------------------------------------------------- */
   /*      Write .shp file header.                                         */
   /* -------------------------------------------------------------------- */
-  fseek( psSHP->fpSHP, 0, 0 );
-  fwrite( abyHeader, 100, 1, psSHP->fpSHP );
+  if (psSHP->fpSHP) {
+    fseek( psSHP->fpSHP, 0, 0 );
+    fwrite( abyHeader, 100, 1, psSHP->fpSHP );
+  } else if (psSHP->zfpSHP) {
+    if (zzip_file_real(psSHP->zfpSHP)) {
+      zzip_seek(psSHP->zfpSHP, 0, 0);
+      write (zzip_realfd (psSHP->zfpSHP), abyHeader, 100);
+    }
+  }
   
   /* -------------------------------------------------------------------- */
   /*      Prepare, and write .shx file header.                            */
@@ -158,8 +165,15 @@ static void writeHeader( SHPHandle psSHP )
   ByteCopy( &i32, abyHeader+24, 4 );
   if( !bBigEndian ) SwapWord( 4, abyHeader+24 );
   
-  fseek( psSHP->fpSHX, 0, 0 );
-  fwrite( abyHeader, 100, 1, psSHP->fpSHX );
+  if (psSHP->fpSHX) {
+    fseek( psSHP->fpSHX, 0, 0 );
+    fwrite( abyHeader, 100, 1, psSHP->fpSHX );
+  } else if (psSHP->zfpSHX) {
+    if (zzip_file_real(psSHP->zfpSHX)) {
+      zzip_seek(psSHP->zfpSHX, 0, 0);
+      write (zzip_realfd (psSHP->zfpSHX), abyHeader, 100);
+    }
+  }
   
   /* -------------------------------------------------------------------- */
   /*      Write out the .shx contents.                                    */
@@ -173,7 +187,13 @@ static void writeHeader( SHPHandle psSHP )
     if( !bBigEndian ) SwapWord( 4, panSHX+i*2+1 );
   }
   
-  fwrite( panSHX, sizeof(int32) * 2, psSHP->nRecords, psSHP->fpSHX );
+  if (psSHP->fpSHX) {
+    fwrite( panSHX, sizeof(int32) * 2, psSHP->nRecords, psSHP->fpSHX );
+  } else if (psSHP->zfpSHX) {
+    if (zzip_file_real(psSHP->zfpSHX)) {
+      write (zzip_realfd (psSHP->zfpSHX), panSHX, psSHP->nRecords*sizeof(int32)*2);
+    }
+  }
   
   free( panSHX );
 }
@@ -198,7 +218,9 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   /*      ensure the result string indicates binary to avoid common       */
   /*      problems on Windows.                                            */
   /* -------------------------------------------------------------------- */
-  if( strcmp(pszAccess,"rb+") == 0 || strcmp(pszAccess,"r+b") == 0 || strcmp(pszAccess,"r+") == 0 )
+  if( strcmp(pszAccess,"rb+") == 0 
+      || strcmp(pszAccess,"r+b") == 0 
+      || strcmp(pszAccess,"r+") == 0 )
     pszAccess = "r+b";
   else
     pszAccess = "rb";
@@ -243,16 +265,18 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   /* -------------------------------------------------------------------- */
   pszFullname = (char *) malloc(strlen(pszBasename) + 5);
   sprintf( pszFullname, "%s.shp", pszBasename );
-  psSHP->fpSHP = ppc_fopen(pszFullname, pszAccess );
-  if( psSHP->fpSHP == NULL ) {
+  psSHP->zfpSHP = ppc_fopen(pszFullname, pszAccess );
+  psSHP->fpSHP = NULL;
+  if( psSHP->zfpSHP == NULL ) {
     free(psSHP);
     free(pszFullname);
     return( NULL );
   }
   
   sprintf( pszFullname, "%s.shx", pszBasename );
-  psSHP->fpSHX = ppc_fopen(pszFullname, pszAccess );
-  if( psSHP->fpSHX == NULL ) {
+  psSHP->zfpSHX = ppc_fopen(pszFullname, pszAccess );
+  psSHP->fpSHX = NULL;
+  if( psSHP->zfpSHX == NULL ) {
     free(psSHP);
     free(pszFullname);
     return( NULL );
@@ -270,7 +294,7 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
     free(psSHP);
     return NULL;
   }
-  if (fread( pabyBuf, 1, 100, psSHP->fpSHP )<100) {
+  if (zzip_fread( pabyBuf, 1, 100, psSHP->zfpSHP )<100) {
     free(psSHP);
     return NULL;
   }
@@ -283,15 +307,15 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   /* -------------------------------------------------------------------- */
   /*  Read SHX file Header info                                           */
   /* -------------------------------------------------------------------- */
-  fread( pabyBuf, 100, 1, psSHP->fpSHX );
+  zzip_fread( pabyBuf, 100, 1, psSHP->zfpSHX );
   
   if( pabyBuf[0] != 0 
       || pabyBuf[1] != 0 
       || pabyBuf[2] != 0x27 
       || (pabyBuf[3] != 0x0a && pabyBuf[3] != 0x0d) )
     {
-      fclose( psSHP->fpSHP );
-      fclose( psSHP->fpSHX );
+      zzip_fclose( psSHP->zfpSHP );
+      zzip_fclose( psSHP->zfpSHX );
       free( psSHP );
       
       return( NULL );
@@ -338,7 +362,7 @@ SHPHandle msSHPOpen( const char * pszLayer, const char * pszAccess )
   psSHP->panRecSize = (int *) malloc(sizeof(int) * (psSHP->nMaxRecords) );
   
   pabyBuf = (uchar *) malloc(8 * psSHP->nRecords );
-  fread( pabyBuf, 8, psSHP->nRecords, psSHP->fpSHX );
+  zzip_fread( pabyBuf, 8, psSHP->nRecords, psSHP->zfpSHX );
   
   for( i = 0; i < psSHP->nRecords; i++ ) {
     int32 nOffset, nLength;
@@ -367,8 +391,9 @@ void msSHPClose(SHPHandle psSHP )
   /* -------------------------------------------------------------------- */
   /*	Update the header if we have modified anything.		    	  */
   /* -------------------------------------------------------------------- */
-  if( psSHP->bUpdated )
+  if( psSHP->bUpdated)
     writeHeader( psSHP );
+  // JMW, only for write files!
   
   /* -------------------------------------------------------------------- */
   /*      Free all resources, and close files.                            */
@@ -379,8 +404,14 @@ void msSHPClose(SHPHandle psSHP )
   if(psSHP->pabyRec) free(psSHP->pabyRec);
   if(psSHP->panParts) free(psSHP->panParts);
 
-  fclose( psSHP->fpSHX );
-  fclose( psSHP->fpSHP );
+  if (psSHP->zfpSHX) 
+    zzip_fclose( psSHP->zfpSHX );
+  if (psSHP->zfpSHP)
+    zzip_fclose( psSHP->zfpSHP );
+  if (psSHP->fpSHX)
+    fclose( psSHP->fpSHX );
+  if (psSHP->fpSHP)
+    fclose( psSHP->fpSHP );
   
   free( psSHP );
 }
@@ -442,14 +473,14 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   /* -------------------------------------------------------------------- */
   pszFullname = (char *) malloc(strlen(pszBasename) + 5);
   sprintf( pszFullname, "%s.shp", pszBasename );
-  fpSHP = ppc_fopen(pszFullname, "wb" );
+  fpSHP = fopen(pszFullname, "wb" );
   sprintf( pszFullname, "%s.shx", pszBasename );
 
   free( pszBasename );
 
   if( fpSHP == NULL ) 
     return( NULL );
-  fpSHX = ppc_fopen(pszFullname, "wb" );
+  fpSHX = fopen(pszFullname, "wb" );
   if( fpSHX == NULL )
     return( NULL );
   
@@ -499,8 +530,12 @@ SHPHandle msSHPCreate( const char * pszLayer, int nShapeType )
   /* -------------------------------------------------------------------- */
   /*      Close the files, and then open them as regular existing files.  */
   /* -------------------------------------------------------------------- */
-  fclose( fpSHP );
-  fclose( fpSHX );
+  if (fpSHP)
+    fclose( fpSHP );
+  fpSHP= NULL;
+  if (fpSHX)
+    fclose( fpSHX );
+  fpSHX= NULL;
   
   return( msSHPOpen( pszLayer, "rb+" ) );
 }
@@ -612,8 +647,14 @@ int msSHPWritePoint(SHPHandle psSHP, pointObj *point )
   /* -------------------------------------------------------------------- */
   /*      Write out record.                                               */
   /* -------------------------------------------------------------------- */
-  fseek( psSHP->fpSHP, nRecordOffset, 0 );
-  fwrite( pabyRec, nRecordSize+8, 1, psSHP->fpSHP );
+  if (psSHP->fpSHP) {
+    fseek( psSHP->fpSHP, nRecordOffset, 0 );
+    fwrite( pabyRec, nRecordSize+8, 1, psSHP->fpSHP );
+  } else if (psSHP->zfpSHP) {
+      zzip_seek(psSHP->zfpSHP, nRecordOffset, 0);
+      write (zzip_realfd (psSHP->zfpSHP), pabyRec, nRecordSize+8);
+  }
+
   free( pabyRec );
   
   psSHP->panRecSize[psSHP->nRecords-1] = nRecordSize;
@@ -634,6 +675,7 @@ int msSHPWritePoint(SHPHandle psSHP, pointObj *point )
   
   return( psSHP->nRecords - 1 );
 }
+
 
 int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
 {
@@ -842,8 +884,19 @@ int msSHPWriteShape(SHPHandle psSHP, shapeObj *shape )
   /* -------------------------------------------------------------------- */
   /*      Write out record.                                               */
   /* -------------------------------------------------------------------- */
-  fseek( psSHP->fpSHP, nRecordOffset, 0 );
-  fwrite( pabyRec, nRecordSize+8, 1, psSHP->fpSHP );
+
+  // JMW here
+  //     if (zzip_file_real(file))
+  //        return write (zzip_realfd (file), ptr, len);
+
+  if (psSHP->fpSHP) {
+    fseek( psSHP->fpSHP, nRecordOffset, 0 );
+    fwrite( pabyRec, nRecordSize+8, 1, psSHP->fpSHP );
+  } else if (psSHP->zfpSHP) {
+    zzip_seek(psSHP->zfpSHP, nRecordOffset, 0);
+    write (zzip_realfd (psSHP->zfpSHP), pabyRec, nRecordSize+8);
+  }
+
   free( pabyRec );
   
   psSHP->panRecSize[psSHP->nRecords-1] = nRecordSize;
@@ -910,8 +963,8 @@ int msSHPReadPoint( SHPHandle psSHP, int hEntity, pointObj *point )
     /* -------------------------------------------------------------------- */
     /*      Read the record.                                                */
     /* -------------------------------------------------------------------- */
-    fseek( psSHP->fpSHP, psSHP->panRecOffset[hEntity], 0 );
-    fread( psSHP->pabyRec, psSHP->panRecSize[hEntity]+8, 1, psSHP->fpSHP );
+    zzip_seek( psSHP->zfpSHP, psSHP->panRecOffset[hEntity], 0 );
+    zzip_fread( psSHP->pabyRec, psSHP->panRecSize[hEntity]+8, 1, psSHP->zfpSHP );
       
     memcpy( &(point->x), psSHP->pabyRec + 12, 8 );
     memcpy( &(point->y), psSHP->pabyRec + 20, 8 );
@@ -958,8 +1011,8 @@ void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape )
     /* -------------------------------------------------------------------- */
     /*      Read the record.                                                */
     /* -------------------------------------------------------------------- */
-    fseek( psSHP->fpSHP, psSHP->panRecOffset[hEntity], 0 );
-    fread( psSHP->pabyRec, psSHP->panRecSize[hEntity]+8, 1, psSHP->fpSHP );
+    zzip_seek( psSHP->zfpSHP, psSHP->panRecOffset[hEntity], 0 );
+    zzip_fread( psSHP->pabyRec, psSHP->panRecSize[hEntity]+8, 1, psSHP->zfpSHP );
 
     /* -------------------------------------------------------------------- */
     /*  Extract vertices for a Polygon or Arc.				    */
@@ -1201,8 +1254,8 @@ int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds)
     } 
     
     if( psSHP->nShapeType != SHP_POINT ) {
-      fseek( psSHP->fpSHP, psSHP->panRecOffset[hEntity]+12, 0 );
-      fread( padBounds, sizeof(double)*4, 1, psSHP->fpSHP );
+      zzip_seek( psSHP->zfpSHP, psSHP->panRecOffset[hEntity]+12, 0 );
+      zzip_fread( padBounds, sizeof(double)*4, 1, psSHP->zfpSHP );
       
       if( bBigEndian ) {
 	SwapWord( 8, &(padBounds->minx) );
@@ -1216,8 +1269,8 @@ int msSHPReadBounds( SHPHandle psSHP, int hEntity, rectObj *padBounds)
       /*      minimum and maximum bound.                                      */
       /* -------------------------------------------------------------------- */
       
-      fseek( psSHP->fpSHP, psSHP->panRecOffset[hEntity]+12, 0 );
-      fread( padBounds, sizeof(double)*2, 1, psSHP->fpSHP );
+      zzip_seek( psSHP->zfpSHP, psSHP->panRecOffset[hEntity]+12, 0 );
+      zzip_fread( padBounds, sizeof(double)*2, 1, psSHP->zfpSHP );
       
       if( bBigEndian ) {
 	SwapWord( 8, &(padBounds->minx) );

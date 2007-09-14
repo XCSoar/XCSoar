@@ -381,6 +381,16 @@ void Units::NotifyUnitChanged(void){
     SetUserVerticalSpeedUnit(unMeterPerSecond);
   }
 
+  if (TASKSPEEDMODIFY==TOMPH) {
+    SetUserTaskSpeedUnit(unStatuteMilesPerHour);
+  }
+  if (TASKSPEEDMODIFY==TOKNOTS) {
+    SetUserTaskSpeedUnit(unKnots);
+  }
+  if (TASKSPEEDMODIFY==TOKPH) {
+    SetUserTaskSpeedUnit(unKiloMeterPerHour);
+  }
+
 }
 
 const TCHAR *Units::GetHorizontalSpeedName(){

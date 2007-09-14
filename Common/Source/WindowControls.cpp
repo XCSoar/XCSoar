@@ -151,6 +151,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   ScanDirectories(buffer,filter);
 #ifndef GNAV
 #if (WINDOWSPC<1)
+#ifndef OLDPPC
 
   BOOL bContinue = TRUE;     // If TRUE, continue searching
                              // If FALSE, stop searching.
@@ -175,6 +176,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   }
   FindClose (hFlashCard);          // Close the search handle.
 
+#endif
 #endif
 #endif
 #endif
@@ -387,7 +389,7 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
   return false;
 }
 
-   
+
 void DataFieldFileReader::addFile(TCHAR *Text, 
 				  TCHAR *PText) {
   if (nFiles<DFE_MAX_FILES) {

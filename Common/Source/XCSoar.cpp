@@ -38,7 +38,13 @@ Copyright_License {
 #include "Calculations2.h"
 #include "Task.h"
 #include "Dialogs.h"
+
+#ifdef OLDPPC
+#include "XCSoarProcess.h"
+#else
 #include "Process.h"
+#endif
+
 #include "Utils.h"
 #include "Port.h"
 #include "Waypointparser.h"
@@ -62,6 +68,8 @@ Copyright_License {
 #include "devVega.h"
 #include "devNmeaOut.h"
 #include "devPosiGraph.h"
+#include "devBorgeltB50.h"
+#include "devVolkslogger.h"
 #include "Externs.h"
 #include "units.h"
 #include "InputEvents.h"
@@ -70,7 +78,12 @@ Copyright_License {
 #include "Geoid.h"
 
 #include "InfoBox.h"
+#include "RasterTerrain.h"
 
+#ifdef DEBUG_TRANSLATIONS
+#include <map>
+static std::map<TCHAR*, TCHAR*> unusedTranslations;
+#endif
 
 #if !defined(MapScale2)
   #define MapScale2  apMs2Default
@@ -299,7 +312,6 @@ bool TeammateCodeValid = false;
 
 // Waypoint Database
 WAYPOINT *WayPointList = NULL;
-WAYPOINT TempWayPointList[MAXTEMPWAYPOINTS];
 unsigned int NumberOfWayPoints = 0;
 int SectorType = 1; // FAI sector
 DWORD SectorRadius = 500;
@@ -360,6 +372,7 @@ bool LoggerActive = false;
 BOOL TopWindow = TRUE;
 
 BOOL COMPORTCHANGED = FALSE;
+BOOL MAPFILECHANGED = FALSE;
 BOOL AIRSPACEFILECHANGED = FALSE;
 BOOL AIRFIELDFILECHANGED = FALSE;
 BOOL WAYPOINTFILECHANGED = FALSE;
@@ -388,11 +401,11 @@ DWORD StartMaxSpeed = 0;
 // Statistics
 Statistics flightstats;
 
-#if UNDER_CE >= 300
+#if (UNDER_CE >= 300) || (WINDOWSPC>0)
 static SHACTIVATEINFO s_sai;
 #endif
 
-static  TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:")};
+static  TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:"),TEXT("COM0:")};
 static  DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 static  DWORD PortIndex1 = 0;
 static  DWORD SpeedIndex1 = 2;
@@ -615,8 +628,12 @@ BlueDialupSMS bsms;
 
 void SettingsEnter() {
   MenuActive = true;
-  MapWindow::SuspendDrawingThread();
 
+  MapWindow::SuspendDrawingThread();
+  // This prevents the map and calculation threads from doing anything
+  // with shared data while it is being changed.
+
+  MAPFILECHANGED = FALSE;
   AIRSPACEFILECHANGED = FALSE;
   AIRFIELDFILECHANGED = FALSE;
   WAYPOINTFILECHANGED = FALSE;
@@ -635,10 +652,23 @@ void SettingsLeave() {
   if (!GlobalRunning) return; 
 
   SwitchToMapWindow();
+
+  // Locking everything here prevents the calculation thread from running,
+  // while shared data is potentially reloaded.
+ 
   LockFlightData();
   LockTaskData();
   LockNavBox();
+
   MenuActive = false;
+
+  if(MAPFILECHANGED) {
+    AIRSPACEFILECHANGED = TRUE;
+    AIRFIELDFILECHANGED = TRUE;
+    WAYPOINTFILECHANGED = TRUE;
+    TERRAINFILECHANGED = TRUE;
+    TOPOLOGYFILECHANGED = TRUE;
+  }
     
   if((WAYPOINTFILECHANGED) || (TERRAINFILECHANGED) || (AIRFIELDFILECHANGED))
     {
@@ -653,9 +683,10 @@ void SettingsLeave() {
       ReadAirfieldFile();
       
       // re-set home
-      if (WAYPOINTFILECHANGED) {
-	SetHome();
+      if (WAYPOINTFILECHANGED || TERRAINFILECHANGED) {
+	SetHome(WAYPOINTFILECHANGED==TRUE);
       }
+      MapWindow::ForceVisibilityScan = true;
     }
   
   if (TOPOLOGYFILECHANGED)
@@ -663,6 +694,7 @@ void SettingsLeave() {
       CloseTopology();
       OpenTopology();
       ReadTopology();
+      MapWindow::ForceVisibilityScan = true;
     }
   
   if(AIRSPACEFILECHANGED)
@@ -670,6 +702,7 @@ void SettingsLeave() {
       CloseAirspace();
       ReadAirspace();
       SortAirspace();
+      MapWindow::ForceVisibilityScan = true;
     }  
   
   if (POLARFILECHANGED) {
@@ -700,9 +733,8 @@ void SettingsLeave() {
 #endif
 
   MapWindow::ResumeDrawingThread();
-
+  // allow map and calculations threads to continue on their merry way
 }
-
 
 
 void SystemConfiguration(void) {
@@ -718,17 +750,6 @@ void SystemConfiguration(void) {
   SettingsLeave();
 }
 
-void ShowStatus(void){
-  dlgStatusShowModal();
-}
-
-void ShowStatusSystem(void){
-  dlgStatusSystemShowModal();
-}
-
-void ShowStatusTask(void){
-  dlgStatusTaskShowModal();
-}
 
 
 void FullScreen() {
@@ -894,7 +915,6 @@ DWORD InstrumentThread (LPVOID lpvoid) {
     Sleep(100);
   }
 
-
   while (!MapWindow::CLOSETHREAD) {
 
     WaitForSingleObject(varioTriggerEvent, 5000);
@@ -905,7 +925,7 @@ DWORD InstrumentThread (LPVOID lpvoid) {
       NMEAParser::VarioUpdated = false;
       if (MapWindow::IsDisplayRunning()) {
         if (EnableVarioGauge) {
-	        GaugeVario::Render();
+          GaugeVario::Render();
         }
       }
     }
@@ -1068,12 +1088,19 @@ void CreateCalculationThread() {
 void PreloadInitialisation(bool ask) {
   SetToRegistry(TEXT("XCV"), 1);
 
+#ifdef DEBUG_TRANSLATIONS
+  ReadLanguageFile();
+#endif
+
   // Registery (early)
 
   if (ask) {
     RestoreRegistry();
     ReadRegistrySettings();
     StatusFileInit();
+
+    //    CreateProgressDialog(gettext(TEXT("Initialising")));
+
   } else {
     dlgStartupShowModal();
     RestoreRegistry();
@@ -1084,7 +1111,9 @@ void PreloadInitialisation(bool ask) {
 
   // Interface (before interface)
   if (!ask) {
+#ifndef DEBUG_TRANSLATIONS
     ReadLanguageFile();
+#endif
     ReadStatusFile();
     InputEvents::readFile();
   }
@@ -1134,6 +1163,8 @@ void AfterStartup() {
 }
 
 
+extern int testmain();
+
 void StartupLogFreeRamAndStorage() {
   TCHAR temp[100];
   int freeram = CheckFreeRam()/1024;
@@ -1155,6 +1186,12 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   HACCEL hAccelTable;
   INITCOMMONCONTROLSEX icc;
   (void)hPrevInstance;
+
+  //#ifdef DEBUG
+  // JMW testing only
+  //  RotateScreen();
+  //#endif
+
   // Version String
 #ifdef GNAV
   wcscat(XCSoar_Version, TEXT("Altair "));
@@ -1166,8 +1203,10 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // TODO consider adding PPC, 2002, 2003
 #endif
 #endif
- 
-  wcscat(XCSoar_Version, TEXT("5.1.0 BETA "));
+
+  // experimental CVS 
+
+  wcscat(XCSoar_Version, TEXT("5.1.2 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1229,6 +1268,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   csTerrainDataGraphicsInitialized = true;
   InitializeCriticalSection(&CritSec_TerrainDataCalculations);
   csTerrainDataCalculationsInitialized = true;
+
   drawTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("drawTriggerEvent"));
   dataTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("dataTriggerEvent"));
   varioTriggerEvent = CreateEvent(NULL, TRUE, FALSE, TEXT("varioTriggerEvent"));
@@ -1244,19 +1284,14 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   InitCalculations(&GPS_INFO,&CALCULATED_INFO);
 
-  // clear temporary waypoints
-
-  for (int i=0; i<MAXTEMPWAYPOINTS; i++) {
-    TempWayPointList[i].FileNum = -1;
-    TempWayPointList[i].Details = NULL;
-  }
-
   OpenGeoid();
 
   PreloadInitialisation(false);
 
   GaugeCDI::Create();
   GaugeVario::Create();
+
+  GPS_INFO.NAVWarning = true; // default, no gps at all!
 
   GPS_INFO.SwitchState.AirbrakeLocked = false;
   GPS_INFO.SwitchState.FlapPositive = false;
@@ -1301,10 +1336,17 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   OpenTerrain();
 
-  ReadWayPoints();
-  SetHome();
+  CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
+  StartupStore(TEXT("RASP load\r\n"));
+  RASP.Reload(GPS_INFO.Latitude, GPS_INFO.Longitude, true);
 
+  ReadWayPoints();
   ReadAirfieldFile();
+  SetHome(false);
+
+  RasterTerrain::ServiceFullReload(GPS_INFO.Latitude, 
+                                   GPS_INFO.Longitude);
+
   ReadAirspace();
   SortAirspace();
 
@@ -1325,6 +1367,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // ... register all supported devices
   // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
+  CreateProgressDialog(gettext(TEXT("Starting devices")));
   StartupStore(TEXT("Register serial devices\r\n"));
   cai302Register();
   ewRegister();
@@ -1333,6 +1376,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   caiGpsNavRegister();
   nmoRegister();
   pgRegister();
+  b50Register();
+  vlRegister();
 
   //JMW disabled  devInit(lpCmdLine);
 
@@ -1382,6 +1427,11 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ProgramStarted = psInitDone;
 
   GlobalRunning = true;
+
+#if _DEBUG
+  _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
+                           // break on a memory leak
+#endif
 
   // Main message loop:
   while (GlobalRunning && 
@@ -1639,6 +1689,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   RECT rc;
 
   hInst = hInstance;            // Store instance handle in our global variable
+
   LoadString(hInstance, IDC_XCSOAR, szWindowClass, MAX_LOADSTRING);
   LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 
@@ -1933,6 +1984,8 @@ void Shutdown(void) {
   StartupStore(TEXT("CloseTerrainTopology\r\n"));
 
   CloseTerrain();
+  RASP.Close();
+
   CloseTopology();
   CloseTerrainRenderer();
 
@@ -2044,6 +2097,11 @@ void Shutdown(void) {
   CloseHandle(drawTriggerEvent);
   CloseHandle(dataTriggerEvent);
   CloseHandle(varioTriggerEvent);
+
+#ifdef DEBUG_TRANSLATIONS
+  StartupStore(TEXT("Writing missing translations\r\n"));
+  WriteMissingTranslations();
+#endif
 
   StartupStore(TEXT("Finished shutdown\r\n"));
 
@@ -2574,6 +2632,7 @@ void CommonProcessTimer()
   if (ProgramStarted==psNormalOp) {
     InputEvents::DoQueuedEvents();
     if (RequestAirspaceWarningDialog) {
+      DisplayTimeOut=0;
       RequestAirspaceWarningDialog= false;
       dlgAirspaceWarningShowDlg(RequestAirspaceWarningForce);
       RequestAirspaceWarningForce = false;
@@ -2631,8 +2690,11 @@ void CommonProcessTimer()
 
   //
   // maybe block/delay this if a dialog is active?
-  //
-  Message::Render();
+  // JMW: is done in the message function now.
+  if (Message::Render()) {
+    // turn screen on if blanked and receive a new message 
+    DisplayTimeOut=0;
+  }
 
 #if (EXPERIMENTAL > 0)
 
@@ -2872,7 +2934,7 @@ void SIMProcessTimer(void)
 
 #ifdef DEBUG
   // use this to test FLARM parsing/display
-  //  NMEAParser::TestRoutine(&GPS_INFO);
+  //    NMEAParser::TestRoutine(&GPS_INFO);
 #endif
 
   NMEAParser::GpsUpdated = TRUE;
@@ -3306,7 +3368,8 @@ void Event_ChangeInfoBoxType(int i) {
 
 
 
-static void ReplaceInString(TCHAR *String, TCHAR *ToReplace, TCHAR *ReplaceWith, size_t Size){
+static void ReplaceInString(TCHAR *String, TCHAR *ToReplace, 
+                            TCHAR *ReplaceWith, size_t Size){
   TCHAR TmpBuf[MAX_PATH];
   int   iR, iW;
   TCHAR *pC;
@@ -3321,7 +3384,9 @@ static void ReplaceInString(TCHAR *String, TCHAR *ToReplace, TCHAR *ReplaceWith,
 
 }
 
-static void CondReplaceInString(bool Condition, TCHAR *Buffer, TCHAR *Macro, TCHAR *TrueText, TCHAR *FalseText, size_t Size){
+static void CondReplaceInString(bool Condition, TCHAR *Buffer, 
+                                TCHAR *Macro, TCHAR *TrueText, 
+                                TCHAR *FalseText, size_t Size){
   if (Condition)
     ReplaceInString(Buffer, Macro, TrueText, Size);
   else
@@ -3336,26 +3401,50 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
 
   if (_tcsstr(OutBuffer, TEXT("$(")) == NULL) return false;
 
-  if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
-    // Waypoint\nNext
-    invalid = !ValidTaskPoint(ActiveWayPoint+1);
-    CondReplaceInString(!ValidTaskPoint(ActiveWayPoint+2), 
-                        OutBuffer,
-                        TEXT("$(WaypointNext)"), 
-                        TEXT("Waypoint\nFinish"), TEXT("Waypoint\nNext"), Size);
-
-  }
-  if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
-    if (ActiveWayPoint==1) {
-      ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nStart"), Size);
-    } else if (EnableMultipleStartPoints) {
-      CondReplaceInString((ActiveWayPoint==0), 
-                          OutBuffer, 
+  if (TaskAborted) {
+    if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
+      // Waypoint\nNext
+      invalid = !ValidTaskPoint(ActiveWayPoint+1);
+      CondReplaceInString(!ValidTaskPoint(ActiveWayPoint+2), 
+                          OutBuffer,
+                          TEXT("$(WaypointNext)"), 
+                          TEXT("Landpoint\nFurthest"), 
+                          TEXT("Landpoint\nNext"), Size);
+      
+    } else
+    if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
+      // Waypoint\nNext
+      invalid = !ValidTaskPoint(ActiveWayPoint-1);
+      CondReplaceInString(!ValidTaskPoint(ActiveWayPoint-2), 
+                          OutBuffer,
                           TEXT("$(WaypointPrevious)"), 
-                          TEXT("StartPoint\nCycle"), TEXT("Waypoint\nPrevious"), Size);
-    } else {
-      invalid = (ActiveWayPoint==0);
-      ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
+                          TEXT("Landpoint\nClosest"), 
+                          TEXT("Landpoint\nPrevious"), Size);
+    }
+  } else {
+    if (_tcsstr(OutBuffer, TEXT("$(WaypointNext)"))) {
+      // Waypoint\nNext
+      invalid = !ValidTaskPoint(ActiveWayPoint+1);
+      CondReplaceInString(!ValidTaskPoint(ActiveWayPoint+2), 
+                          OutBuffer,
+                          TEXT("$(WaypointNext)"), 
+                          TEXT("Waypoint\nFinish"), 
+                          TEXT("Waypoint\nNext"), Size);
+      
+    } else
+    if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
+      if (ActiveWayPoint==1) {
+        ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), 
+                        TEXT("Waypoint\nStart"), Size);
+      } else if (EnableMultipleStartPoints) {
+        CondReplaceInString((ActiveWayPoint==0), 
+                            OutBuffer, 
+                            TEXT("$(WaypointPrevious)"), 
+                            TEXT("StartPoint\nCycle"), TEXT("Waypoint\nPrevious"), Size);
+      } else {
+        invalid = (ActiveWayPoint==0);
+        ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), TEXT("Waypoint\nPrevious"), Size);
+      }
     }
   }
 
@@ -3371,8 +3460,14 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
       break;
     case 2:
       if (ActiveWayPoint>0) {
-        CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), 
-                            TEXT("Cancel"), TEXT("TURN"), Size);
+        if (ValidTaskPoint(ActiveWayPoint+1)) {
+          CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), 
+                              TEXT("Cancel"), TEXT("TURN"), Size);
+        } else {
+          ReplaceInString(OutBuffer, TEXT("$(AdvanceArmed)"), 
+                          TEXT("(finish)"), Size);
+          invalid = true;
+        }
       } else {
         CondReplaceInString(AdvanceArmed, OutBuffer, TEXT("$(AdvanceArmed)"), 
                             TEXT("Cancel"), TEXT("START"), Size);
@@ -3416,6 +3511,12 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
 #endif
     ReplaceInString(OutBuffer, TEXT("$(CheckSettingsLockout)"), TEXT(""), Size);
   }
+  if (_tcsstr(OutBuffer, TEXT("$(CheckTaskResumed)"))) {
+    if (TaskAborted) {
+      invalid = true;
+    }
+    ReplaceInString(OutBuffer, TEXT("$(CheckTaskResumed)"), TEXT(""), Size);
+  }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTask)"))) {
     if (!ValidTaskPoint(ActiveWayPoint)) {
       invalid = true;
@@ -3439,6 +3540,14 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTerrain)"), TEXT(""), Size);
+  }
+  if (_tcsstr(OutBuffer, TEXT("$(CheckAutoMc)"))) {
+    if (!ValidTaskPoint(ActiveWayPoint) 
+        && (AutoMcMode==0)
+        && (AutoMcMode==2)) {
+      invalid = true;
+    }
+    ReplaceInString(OutBuffer, TEXT("$(CheckAutoMc)"), TEXT(""), Size);
   }
 
   CondReplaceInString(LoggerActive, OutBuffer, TEXT("$(LoggerActive)"), TEXT("Stop"), TEXT("Start"), Size);
@@ -3479,7 +3588,7 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
       break;
     case 3:
       ReplaceInString(OutBuffer, TEXT("$(TerrainTopologyToggleName)"), 
-                      TEXT("Terrain\nOff"), Size);
+                      gettext(TEXT("Terrain\nOff")), Size);
       break;
     }
   }
@@ -3487,7 +3596,15 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
   //////
 
   CondReplaceInString(TaskAborted, OutBuffer, TEXT("$(TaskAbortToggleActionName)"), TEXT("Resume"), TEXT("Abort"), Size);
-  CondReplaceInString(ForceFinalGlide, OutBuffer, TEXT("$(FinalForceToggleActionName)"), TEXT("Unforce"), TEXT("Force"), Size);
+
+  if (_tcsstr(OutBuffer, TEXT("$(FinalForceToggleActionName)"))) {
+    CondReplaceInString(ForceFinalGlide, OutBuffer, 
+                        TEXT("$(FinalForceToggleActionName)"), 
+                        TEXT("Unforce"), 
+                        TEXT("Force"), Size);
+    invalid = AutoForceFinalGlide;
+  }
+
   CondReplaceInString(MapWindow::IsMapFullScreen(), OutBuffer, TEXT("$(FullScreenToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
   CondReplaceInString(MapWindow::isAutoZoom(), OutBuffer, TEXT("$(ZoomAutoToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
   CondReplaceInString(EnableTopology, OutBuffer, TEXT("$(TopologyToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
@@ -3517,62 +3634,3 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
   return invalid;
 }
 
-
-
-///////////////////
-
-/* Memory checking 
-
-void GlobalMemoryStatus( 
-  LPMEMORYSTATUS lpBuffer 
-);
-
-
-typedef struct _MEMORYSTATUS { 
-  DWORD dwLength; 
-  DWORD dwMemoryLoad; 
-  DWORD dwTotalPhys; 
-  DWORD dwAvailPhys; 
-  DWORD dwTotalPageFile; 
-  DWORD dwAvailPageFile; 
-  DWORD dwTotalVirtual; 
-  DWORD dwAvailVirtual; 
-} MEMORYSTATUS, *LPMEMORYSTATUS; 
-Members
-dwLength 
-Specifies the size, in bytes, of the MEMORYSTATUS structure. 
-Set this member to sizeof(MEMORYSTATUS) when passing it to the GlobalMemoryStatus function. 
-
-dwMemoryLoad 
-Specifies a number between zero and 100 that gives a general idea of current memory use, in which zero indicates no memory use and 100 indicates full memory use. 
-dwTotalPhys 
-Indicates the total number of bytes of physical memory. 
-dwAvailPhys 
-Indicates the number of bytes of physical memory available. 
-dwTotalPageFile 
-Indicates the total number of bytes that can be stored in the paging file. 
-This number does not represent the physical size of the paging file on disk. 
-
-dwAvailPageFile 
-Indicates the number of bytes available in the paging file. 
-dwTotalVirtual 
-Indicates the total number of bytes that can be described in the user mode portion of the virtual address space of the calling process. 
-dwAvailVirtual 
-Indicates the number of bytes of unreserved and uncommitted memory in the user mode portion of the virtual address space of the calling process. 
-Requirements
-OS Versions: Windows CE 1.0 and later.
-Header: Winbase.h.
-
-See Also
-GlobalMemoryStatus 
-
-
-/////
-
-Files: 
-  CopyFile
-  GetFileSize
-GetDiskFreeSpaceEx
-
-
-*/

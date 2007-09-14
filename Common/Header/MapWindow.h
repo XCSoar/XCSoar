@@ -122,6 +122,7 @@ class MapWindow {
   static double ResMapScaleOverDistanceModify; // speedup
   static double RequestMapScale;
   static void ModifyMapScale();
+  static bool ForceVisibilityScan;
 
   static bool MapDirty;
   static bool LandableReachable;
@@ -149,12 +150,10 @@ class MapWindow {
   static void RequestOnFullScreen();
   static void RequestOffFullScreen();
 
+  static void OrigScreen2LatLon(const int &x, const int &y, 
+                                double &X, double &Y);
   static void Screen2LatLon(const int &x, const int &y, double &X, double &Y);
-  static void Screen2LatLon(const int &x, const int &y, float &X, float &Y);
-  static void LatLon2Screen(const float &lon, const float &lat, 
-                            int &scX, int &scY);
-  static void LatLon2Screen(const double &lon, const double &lat, 
-                            int &scX, int &scY);
+
   static void LatLon2Screen(const double &lon, const double &lat, POINT &sc);
 
   static void CloseDrawingThread(void);
@@ -201,8 +200,8 @@ class MapWindow {
   static void DrawCrossHairs(HDC hdc, POINT Orig);
   static void DrawBestCruiseTrack(HDC hdc, POINT Orig);
   static void DrawCompass(HDC hdc, RECT rc);
-  static void DrawWind(HDC hdc, POINT Orig, RECT rc);
-  static void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc);
+  //  static void DrawWind(HDC hdc, POINT Orig, RECT rc);
+  //  static void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc);
   static void DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc);
   static void DrawAirSpace(HDC hdc, RECT rc);
   static void DrawWaypoints(HDC hdc, RECT rc);
@@ -267,6 +266,11 @@ class MapWindow {
   static double LimitMapScale(double value);
 
   static bool WaypointInRange(int i);
+
+  static double GetPanLatitude() { return PanLatitude; }
+  static double GetPanLongitude() { return PanLongitude; }
+  static double GetInvDrawScale() { return InvDrawScale; }
+  static double GetDisplayAngle() { return DisplayAngle; }
 
  private:
   static HBITMAP hLandable, hReachable, 
@@ -350,6 +354,8 @@ class MapWindow {
   static double GetApproxScreenRange(void);
   static int GetMapResolutionFactor();
 
+  static POINT GetOrigScreen(void) { return Orig_Screen; }
+
  private:
   static POINT Orig_Screen;
   static HBITMAP hBmpMapScale;
@@ -369,6 +375,7 @@ class MapWindow {
   static bool RenderTimeAvailable();
   static bool BigZoom;
   static int SnailWidthScale; 
+  static int WindArrowStyle;
  private:
   static NMEA_INFO DrawInfo;
   static DERIVED_INFO DerivedDrawInfo;

@@ -182,4 +182,12 @@ double ProjectedDistance(double lon1, double lat1,
 
 bool ValidAirspace(void);
 
+double RangeAirspaceCircle(const double &longitude,
+			   const double &latitude,
+			   int i);
+
+double RangeAirspaceArea(const double &longitude,
+			 const double &latitude,
+			 int i, double *bearing);
+
 #endif

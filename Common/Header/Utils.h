@@ -10,6 +10,7 @@
 #include <math.h>
 #include "task.h"
 #include "Airspace.h"
+#include <zzip/lib.h>
 
 #define  POLARUSEWINPILOTFILE  6    // if this polat is selected use the winpilot file
 
@@ -92,6 +93,7 @@ extern TCHAR szRegistryMenuTimeout[];
 extern TCHAR szRegistryLockSettingsInFlight[];
 extern TCHAR szRegistryTerrainContrast[];
 extern TCHAR szRegistryTerrainBrightness[];
+extern TCHAR szRegistryTerrainRamp[];
 extern TCHAR szRegistryEnableFLARMDisplay[];
 extern TCHAR szRegistryFLARMGaugeBearing[];
 extern TCHAR szRegistrySnailTrail[];
@@ -125,11 +127,16 @@ extern TCHAR szRegistryAbortSafetyUseCurrent[];
 extern TCHAR szRegistryAutoMcMode[];
 extern TCHAR szRegistryWaypointsOutOfRange[];
 extern TCHAR szRegistryEnableExternalTriggerCruise[];
+extern TCHAR szRegistryFAIFinishHeight[];
 extern TCHAR szRegistryOLCRules[];
 extern TCHAR szRegistryHandicap[];
 extern TCHAR szRegistrySnailWidthScale[];
 extern TCHAR szRegistryLatLonUnits[];
 extern TCHAR szRegistryUserLevel[];
+extern TCHAR szRegistryRiskGamma[];
+extern TCHAR szRegistryWindArrowStyle[];
+extern TCHAR szRegistryDisableAutoLogger[];
+extern TCHAR szRegistryMapFile[];
 
 extern bool LockSettingsInFlight;
 
@@ -147,6 +154,8 @@ void SetRegistryAirspaceMode(int i);
 int GetRegistryAirspaceMode(int i);
 void StoreType(int Index,int InfoType);
 void irotate(int &xin, int &yin, const double &angle);
+void irotatescale(int &xin, int &yin, const double &angle, const double &scale,
+                  double &x, double &y);
 void protate(POINT &pin, const double &angle);
 void protateshift(POINT &pin, const double &angle, const int &x, const int &y);
 void rotate(double &xin, double &yin, const double &angle);
@@ -159,6 +168,7 @@ void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
 
 double Reciprocal(double InBound);
 double BiSector(double InBound, double OutBound);
+double HalfAngle(double Angle0, double Angle1);
 void SectorEndPoint(double StartLat, double StartLon, double  Radial, double Dist, double *EndLat, double *EndLon);
 void CalculateNewPolarCoef(void);
 void FindLatitudeLongitude(double Lat, double Lon, 
@@ -182,16 +192,27 @@ double ScreenAngle(int x1, int y1, int x2, int y2);
 void ReadCompaqID(void);
 void ReadUUID(void);
 void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT Top, TCHAR *szMessageBuffer, TCHAR *TileBuffer );
+BOOL ReadString(ZZIP_FILE* zFile, int Max, TCHAR *String);
 BOOL ReadString(HANDLE hFile, int Max, TCHAR *String);
 BOOL ReadStringX(FILE *fp, int Max, TCHAR *String);
+
+// Fast trig functions
 void InitSineTable(void);
-double fastcosine(const double &x);
-double fastsine(const double &x);
-int ifastcosine(const double &x);
-int ifastsine(const double &x);
-float ffastcosine(const float &x);
-float ffastsine(const float &x);
-double invfastcosine(const double &x);
+
+extern double COSTABLE[4096];
+extern double SINETABLE[4096];
+extern double INVCOSINETABLE[4096];
+extern int ISINETABLE[4096];
+extern int ICOSTABLE[4096];
+
+#define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4
+
+#define invfastcosine(x) INVCOSINETABLE[DEG_TO_INT(x)]
+#define ifastcosine(x) ICOSTABLE[DEG_TO_INT(x)]
+#define ifastsine(x) ISINETABLE[DEG_TO_INT(x)]
+#define fastcosine(x) COSTABLE[DEG_TO_INT(x)]
+#define fastsine(x) SINETABLE[DEG_TO_INT(x)]
+
 double StrToDouble(TCHAR *Source, TCHAR **Stop);
 void PExtractParameter(TCHAR *Source, TCHAR *Destination, int DesiredFieldNumber);
 void SaveWindToRegistry();
@@ -202,13 +223,6 @@ void WriteDeviceSettings(int devIdx, TCHAR *Name);
 
 unsigned int isqrt4(unsigned long val);
 
-inline int iround(double i) {
-    return (int)(floor(i+0.5));
-}
-
-inline long lround(double i) {
-    return (long)(floor(i+0.5));
-}
 
 WORD crcCalc(void *Buffer, size_t size);
 void ExtractDirectory(TCHAR *Dest, TCHAR *Source);
@@ -252,12 +266,6 @@ typedef struct {
 } GetTextSTRUCT;
 
 
-// Size of Status message cache - Note 1000 messages may not be enough...
-// TODO If we continue with the reading one at a time - then consider using
-// a pointer structure and build on the fly, thus no limit, but also only
-// RAM used as required - easy to do with struct above - just point to next.
-// (NOTE: This is used for all the caches for now - temporary)
-#define MAXSTATUSMESSAGECACHE 1000
 
 // Parse string (new lines etc) and malloc the string
 TCHAR* StringMallocParse(TCHAR* old_string);
@@ -329,5 +337,59 @@ bool FileExistsA(char *FileName);
 #ifdef __cplusplus
 }
 #endif
+
+
+//2^36 * 1.5,  (52-_shiftamt=36) uses limited precisicion to floor
+//16.16 fixed point representation,
+
+// =================================================================================
+// Real2Int
+// =================================================================================
+inline int Real2Int(double val)
+{
+#if (WINDOWS_PC>0)
+  val += 68719476736.0*1.5;
+  return *((long*)&val) >> 16; 
+#else
+  return (int)val;
+#endif
+}
+
+
+// =================================================================================
+// Real2Int
+// =================================================================================
+inline int Real2Int(float val)
+{
+#if (WINDOWS_PC>0)
+  return Real2Int ((double)val);
+#else
+  return (int)val;
+#endif
+}
+
+
+inline int iround(double i) {
+    return Real2Int(floor(i+0.5));
+}
+
+inline long lround(double i) {
+    return (long)(floor(i+0.5));
+}
+
+inline unsigned int CombinedDivAndMod(unsigned int &lx) {
+  unsigned int ox = lx & 0xff;
+  // JMW no need to check max since overflow will result in 
+  // beyond max dimensions
+  lx = lx>>8;
+  return ox;
+}
+
+bool RotateScreen(void);
+
+bool AngleInRange(double Angle0, double Angle1, double x);
+double AngleLimit180(double theta);
+double AngleLimit360(double theta);
+
 
 #endif

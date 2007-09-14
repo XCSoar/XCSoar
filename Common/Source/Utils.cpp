@@ -245,6 +245,7 @@ TCHAR szRegistryMenuTimeout[] = TEXT("MenuTimeout");
 TCHAR szRegistryLockSettingsInFlight[] = TEXT("LockSettingsInFlight");
 TCHAR szRegistryTerrainContrast[] = TEXT("TerrainContrast");
 TCHAR szRegistryTerrainBrightness[] = TEXT("TerrainBrightness");
+TCHAR szRegistryTerrainRamp[] = TEXT("TerrainRamp");
 TCHAR szRegistryEnableFLARMDisplay[] = TEXT("EnableFLARMDisplay");
 TCHAR szRegistryFLARMGaugeBearing[] = TEXT("FLARMGaugeBearing");
 TCHAR szRegistryGliderScreenPosition[] = TEXT("GliderScreenPosition");
@@ -273,18 +274,24 @@ TCHAR szRegistryAbortSafetyUseCurrent[] = TEXT("AbortSafetyUseCurrent");
 TCHAR szRegistryAutoMcMode[] = TEXT("AutoMcMode");
 TCHAR szRegistryWaypointsOutOfRange[] = TEXT("WaypointsOutOfRange");
 TCHAR szRegistryEnableExternalTriggerCruise[] = TEXT("EnableExternalTriggerCruise");
+TCHAR szRegistryFAIFinishHeight[] = TEXT("FAIFinishHeight");
 TCHAR szRegistryOLCRules[] = TEXT("OLCRules");
 TCHAR szRegistryHandicap[] = TEXT("Handicap");
 TCHAR szRegistrySnailWidthScale[] = TEXT("SnailWidthScale");
 TCHAR szRegistryUserLevel[] = TEXT("UserLevel");
+TCHAR szRegistryRiskGamma[] = TEXT("RiskGamma");
+TCHAR szRegistryWindArrowStyle[] = TEXT("WindArrowStyle");
+TCHAR szRegistryDisableAutoLogger[] = TEXT("DisableAutoLogger");
+TCHAR szRegistryMapFile[]=	 TEXT("MapFile"); // pL
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
 
-static double SINETABLE[910];
-static float FSINETABLE[910];
-static double INVCOSINETABLE[910];
-static int ISINETABLE[910];
+double COSTABLE[4096];
+double SINETABLE[4096];
+double INVCOSINETABLE[4096];
+int ISINETABLE[4096];
+int ICOSTABLE[4096];
 
 void StoreType(int Index,int InfoType)
 {
@@ -798,6 +805,10 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryOLCRules,&Temp);
   OLCRules = Temp;
 
+  Temp = EnableFAIFinishHeight;
+  GetFromRegistry(szRegistryFAIFinishHeight,&Temp);
+  EnableFAIFinishHeight = (Temp==1);
+
   Temp = Handicap;
   GetFromRegistry(szRegistryHandicap,&Temp);
   Handicap = Temp;
@@ -844,6 +855,10 @@ void ReadRegistrySettings(void)
   Temp = TerrainBrightness;
   GetFromRegistry(szRegistryTerrainBrightness,&Temp);
   TerrainBrightness = (short)Temp;
+
+  Temp = TerrainRamp;
+  GetFromRegistry(szRegistryTerrainRamp,&Temp);
+  TerrainRamp = (short)Temp;
 
   Temp = MapWindow::GliderScreenPosition;
   GetFromRegistry(szRegistryGliderScreenPosition,&Temp);
@@ -928,6 +943,20 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryUserLevel,&Temp);
   UserLevel = Temp;
 
+  Temp  = iround(GlidePolar::RiskGamma*10);
+  GetFromRegistry(szRegistryRiskGamma,&Temp);
+  GlidePolar::RiskGamma = Temp/10.0;
+
+  Temp = MapWindow::WindArrowStyle;
+  GetFromRegistry(szRegistryWindArrowStyle,&Temp);
+  MapWindow::WindArrowStyle = Temp;
+
+  Temp = DisableAutoLogger;
+  GetFromRegistry(szRegistryDisableAutoLogger,&Temp);
+  if (Temp) 
+    DisableAutoLogger = true;
+  else 
+    DisableAutoLogger = false;
 }
 
 //
@@ -1101,8 +1130,8 @@ void frotate(float &xin, float &yin, const float &angle)
   if(angle != lastangle)
     {
       lastangle = angle;
-      cost = ffastcosine(angle);
-      sint = ffastsine(angle);
+      cost = (float)fastcosine(angle);
+      sint = (float)fastsine(angle);
     }
   xin = x*cost - y*sint;
   yin = y*cost + x*sint;
@@ -1122,8 +1151,8 @@ void protate(POINT &pin, const double &angle)
       cost = ifastcosine(angle);
       sint = ifastsine(angle);
     }
-  pin.x = (x*cost - y*sint + 512)/1024;
-  pin.y = (y*cost + x*sint + 512)/1024;
+  pin.x = (x*cost - y*sint + 512 )/1024;
+  pin.y = (y*cost + x*sint + 512 )/1024;
 
   // round (x/b) = (x+b/2)/b;
   // b = 2; x = 10 -> (10+1)/2=5
@@ -1146,13 +1175,27 @@ void protateshift(POINT &pin, const double &angle,
       cost = ifastcosine(angle);
       sint = ifastsine(angle);
     }
-  pin.x = (x*cost - y*sint + 512 + xs*1024)/1024;
-  pin.y = (y*cost + x*sint + 512 + ys*1024)/1024;
+  pin.x = (x*cost - y*sint + 512 + (xs*1024))/1024;
+  pin.y = (y*cost + x*sint + 512 + (ys*1024))/1024;
 
-  // round (x/b) = (x+b/2)/b;
-  // b = 2; x = 10 -> (10+1)/2=5
-  // b = 2; x = 11 -> (11+1)/2=6
-  // b = 2; x = -10 -> (-10+1)/2=4
+}
+
+
+void irotatescale(int &xin, int &yin, const double &angle,
+                  const double &scale, double &x, double &y)
+{
+  static double lastangle = 0;
+  static double lastscale = 0;
+  static int cost=1024,sint=0;
+  if((angle != lastangle)||(scale != lastscale))
+    {
+      lastscale = scale/1024;
+      lastangle = angle;
+      cost = ifastcosine(angle);
+      sint = ifastsine(angle);
+    }
+  x = (xin*cost - yin*sint + 512)*lastscale;
+  y = (yin*cost + xin*sint + 512)*lastscale;
 }
 
 
@@ -1207,12 +1250,35 @@ void frotatescale(float &xin, float &yin, const float &angle, const float &scale
     {
       lastangle = angle;
       lastscale = scale;
-      cost = ffastcosine(angle)*scale;
-      sint = ffastsine(angle)*scale;
+      cost = (float)fastcosine(angle)*scale;
+      sint = (float)fastsine(angle)*scale;
     }
   xin = x*cost - y*sint;
   yin = y*cost + x*sint;
 }
+
+
+double AngleLimit360(double theta) {
+  while (theta>=360.0) {
+    theta-= 360.0;
+  }
+  while (theta<0.0) {
+    theta+= 360.0;
+  }
+  return theta;
+}
+
+
+double AngleLimit180(double theta) {
+  while (theta>180.0) {
+    theta-= 360.0;
+  }
+  while (theta<-180.0) {
+    theta+= 360.0;
+  }
+  return theta;
+}
+
 
 void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
                      double *Distance, double *Bearing) {
@@ -1248,18 +1314,12 @@ void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
       theta = 0;
     }
 
-    while (theta>360.0) {
-      theta-= 360.0;
-    }
-    while (theta<0.0) {
-      theta+= 360.0;
-    }
-    *Bearing = theta;
+    *Bearing = AngleLimit360(theta);
   }
 }
 
 
-  /*
+/*
 double Distance(double lat1, double lon1, double lat2, double lon2)
 {
     R = earth's radius = 6371000
@@ -1382,16 +1442,42 @@ double Bearing(double lat1, double lon1, double lat2, double lon2)
 
 double Reciprocal(double InBound)
 {
-  if(InBound >= 180)
-    return InBound - 180;
-  else
-    return InBound + 180;
+  return AngleLimit360(InBound+180);
 }
+
+
+bool AngleInRange(double Angle0, double Angle1, double x) {
+  Angle0 = AngleLimit360(Angle0);
+  Angle1 = AngleLimit360(Angle1);
+  x = AngleLimit360(x);
+
+  if (Angle1>= Angle0) {
+    if ((x>=Angle0) && (x<= Angle1)) {
+      return true;
+    }
+  } else {
+    if ((x<=Angle0) || (x>= Angle1)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+double HalfAngle(double Angle0, double Angle1) {
+  Angle0 = AngleLimit360(Angle0);
+  Angle1 = AngleLimit360(Angle1);
+
+  if (Angle1>= Angle0) {
+    return (Angle0+Angle1)/2;
+  } else {
+    return (Angle0+Angle1+360)/2;
+  }
+}
+
 
 double BiSector(double InBound, double OutBound)
 {
   double result;
-
 
   InBound = Reciprocal(InBound);
 
@@ -1510,7 +1596,7 @@ bool ReadWinPilotPolar(void) {
 
   TCHAR	szFile[MAX_PATH] = TEXT("\0");
   TCHAR ctemp[80];
-  TCHAR TempString[200];
+  TCHAR TempString[READLINE_LENGTH+1];
   HANDLE hFile;
 
   double POLARV[3];
@@ -1548,7 +1634,7 @@ bool ReadWinPilotPolar(void) {
       int *p=NULL; // test, force an exception
       p=0;
 
-        while(ReadString(hFile,200,TempString) && (!foundline)){
+        while(ReadString(hFile,READLINE_LENGTH,TempString) && (!foundline)){
 
           if(_tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
             {
@@ -1676,9 +1762,10 @@ void CalculateNewPolarCoef(void)
 
   POLARID = 2;              // do it again with default polar (LS8)
   CalculateNewPolarCoef();
-  MessageBoxX(NULL, gettext(TEXT("Error loading Polar file!\r\nUse LS8 Polar.")),
-       gettext(TEXT("Warning")),
-       MB_OK|MB_ICONERROR);
+  MessageBoxX(NULL, 
+              gettext(TEXT("Error loading Polar file!\r\nUse LS8 Polar.")),
+              gettext(TEXT("Warning")),
+              MB_OK|MB_ICONERROR);
 
 }
 
@@ -1799,7 +1886,7 @@ void StartArc(HDC hdc,
 int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip, bool fill)
 {
   POINT pt[65];
-  int i;
+  unsigned int i;
 
   rectObj rect;
   rect.minx = x-radius;
@@ -1815,31 +1902,27 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip, bool fill)
   if (msRectOverlap(&rect, &rcrect)!=MS_TRUE) {
     return FALSE;
   }
-
   // JMW added faster checking...
 
-  int j=0;
-  int step=1;
+  unsigned int step = 1;
   if (radius<20) {
     step = 2;
   }
-
-  for(i=0;i<64;i+= step)
-    {
-      pt[j].x = x + (long) (radius * xcoords[i]);
-      pt[j].y = y + (long) (radius * ycoords[i]);
-      j++;
-    }
-  pt[j].x = x + (long) (radius * xcoords[0]);
-  pt[j].y = y + (long) (radius * ycoords[0]);
+  for(i=64/step;i--;) {
+    pt[i].x = x + (long) (radius * xcoords[i*step]);
+    pt[i].y = y + (long) (radius * ycoords[i*step]);
+  }
+  step = 64/step;
+  pt[step].x = x + (long) (radius * xcoords[0]);
+  pt[step].y = y + (long) (radius * ycoords[0]);
 
   if (clip) {
-    ClipPolygon(hdc,pt,j+1,rc, fill);
+    ClipPolygon(hdc,pt,step+1,rc, fill);
   } else {
     if (fill) {
-      Polygon(hdc,pt,j+1);
+      Polygon(hdc,pt,step+1);
     } else {
-      Polyline(hdc,pt,j+1);
+      Polyline(hdc,pt,step+1);
     }
   }
   return TRUE;
@@ -1895,14 +1978,13 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
   }
 
   pt[0].x = x; pt[0].y = y; npoly=1;
-  for(i=0;i<64;i++)
-    {
-      if (i<=iend-istart) {
-	pt[npoly].x = x + (long) (radius * xcoords[(i+istart)%64]);
-	pt[npoly].y = y - (long) (radius * ycoords[(i+istart)%64]);
-	npoly++;
-      }
+  for(i=0;i<64;i++) {
+    if (i<=iend-istart) {
+      pt[npoly].x = x + (long) (radius * xcoords[(i+istart)%64]);
+      pt[npoly].y = y - (long) (radius * ycoords[(i+istart)%64]);
+      npoly++;
     }
+  }
   pt[npoly].x = x; pt[npoly].y = y; npoly++;
   Polygon(hdc,pt,npoly);
   
@@ -2255,39 +2337,41 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
   switch (Type)
     {
     case RESTRICT:	  
-      _tcscpy(szTitleBuffer,TEXT("Restricted")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("Restricted"))); break;
     case PROHIBITED:	  
-      _tcscpy(szTitleBuffer,TEXT("Prohibited")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("Prohibited"))); break;
     case DANGER:          
-      _tcscpy(szTitleBuffer,TEXT("Danger Area")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("Danger Area"))); break;
     case CLASSA:          
-      _tcscpy(szTitleBuffer,TEXT("Class A")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("Class A"))); break;
     case CLASSB:          
-      _tcscpy(szTitleBuffer,TEXT("Class B")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("Class B"))); break;
     case CLASSC:          
-      _tcscpy(szTitleBuffer,TEXT("Class C")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("Class C"))); break;
     case CLASSD:          
-      _tcscpy(szTitleBuffer,TEXT("Class D")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("Class D"))); break;
     case CLASSE:			
-      _tcscpy(szTitleBuffer,TEXT("Class E")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("Class E"))); break;
     case CLASSF:			
-      _tcscpy(szTitleBuffer,TEXT("Class F")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("Class F"))); break;
     case NOGLIDER:		
-      _tcscpy(szTitleBuffer,TEXT("No Glider")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("No Glider"))); break;
     case CTR:					
-      _tcscpy(szTitleBuffer,TEXT("CTR")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("CTR"))); break;
     case WAVE:				
-      _tcscpy(szTitleBuffer,TEXT("Wave")); break;
+      _tcscpy(szTitleBuffer,gettext(TEXT("Wave"))); break;
     default:					
-      _tcscpy(szTitleBuffer,TEXT("Unknown"));
+      _tcscpy(szTitleBuffer,gettext(TEXT("Unknown")));
     }
 
   if(Base.FL == 0)
     {
       if (Base.Altitude > 0)
-        _stprintf(BaseStr,TEXT("%1.0f%s Alt"), ALTITUDEMODIFY * Base.Altitude, Units::GetUnitName(Units::GetUserAltitudeUnit()));
+        _stprintf(BaseStr,TEXT("%1.0f%s %s"), 
+                  ALTITUDEMODIFY * Base.Altitude, Units::GetUnitName(Units::GetUserAltitudeUnit()),
+                  gettext(TEXT("Alt")));
       else
-        _stprintf(BaseStr,TEXT("GND"));
+        _stprintf(BaseStr,gettext(TEXT("GND")));
     }
   else
     {
@@ -2296,53 +2380,55 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 
   if(Top.FL == 0)
     {
-      _stprintf(TopStr,TEXT("%1.0f%s Alt"), ALTITUDEMODIFY * Top.Altitude, Units::GetUnitName(Units::GetUserAltitudeUnit()));
+      _stprintf(TopStr,TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Top.Altitude, Units::GetUnitName(Units::GetUserAltitudeUnit()),
+                gettext(TEXT("Alt")));
     }
   else
     {
       _stprintf(TopStr,TEXT("FL %1.0f"),Top.FL );
     }
 
-  _stprintf(szMessageBuffer,TEXT("%s: %s\r\nBase: %s\r\nTop: %s\r\n"),szTitleBuffer, Name, BaseStr, TopStr);
+  _stprintf(szMessageBuffer,TEXT("%s: %s\r\n%s: %s\r\n%s: %s\r\n"),
+            szTitleBuffer, 
+            Name, 
+            gettext(TEXT("Base")),
+            BaseStr, 
+            gettext(TEXT("Top")),
+            TopStr);
 }
 
-// read string from file
-// support national codepage
-// hFile:  file handle
-// Max:    max chars to fit in Buffer
-// String: pointer to string buffer
-// return: True if at least one byte was read from file
-//         False Max > MAX_PATH or EOF or read error
-BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
+
+// JMW added support for zzip files
+
+BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
 {
-  int i,j;
-  char c;
-  char sTmp[MAX_PATH+1];
-  DWORD dwNumBytesRead=0;
-  DWORD dwTotalNumBytesRead=0;
-  char  FileBuffer[MAX_PATH+1];
-  DWORD dwFilePos;
+  char sTmp[READLINE_LENGTH+1];
+  long dwNumBytesRead=0;
+  long dwTotalNumBytesRead=0;
+  char  FileBuffer[READLINE_LENGTH+1];
+  long dwFilePos;
 
   String[0] = '\0';
   sTmp[0] = 0;
 
+  ASSERT(Max<sizeof(sTmp));
+
   if (Max >= sizeof(sTmp))
     return(FALSE);
-
-
-  dwFilePos = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
-
-  if (hFile == INVALID_HANDLE_VALUE)
+  if (!zFile)
     return(FALSE);
 
-  if (ReadFile(hFile, FileBuffer, sizeof(FileBuffer), &dwNumBytesRead, (OVERLAPPED *)NULL) == 0)
+  dwFilePos = zzip_seek(zFile, 0, SEEK_CUR);
+
+  dwNumBytesRead = zzip_fread(FileBuffer, 1, sizeof(FileBuffer), zFile);
+  if (dwNumBytesRead <= 0)
     return(FALSE);
 
-  i = 0;
-  j = 0;
+  int i = 0;
+  int j = 0;
   while(i<Max && j<(int)dwNumBytesRead){
 
-    c = FileBuffer[j];
+    char c = FileBuffer[j];
     j++;
     dwTotalNumBytesRead++;
 
@@ -2356,31 +2442,85 @@ BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
   }
 
   sTmp[i] = 0;
-
-  SetFilePointer(hFile, dwFilePos+j, NULL, FILE_BEGIN);
-
+  zzip_seek(zFile, dwFilePos+j, SEEK_SET);
   sTmp[Max-1] = '\0';
-
   mbstowcs(String, sTmp, strlen(sTmp)+1);
+  return (dwTotalNumBytesRead>0);
+}
 
+
+// read string from file
+// support national codepage
+// hFile:  file handle
+// Max:    max chars to fit in Buffer
+// String: pointer to string buffer
+// return: True if at least one byte was read from file
+//         False Max > MAX_PATH or EOF or read error
+BOOL ReadString(HANDLE hFile, int Max, TCHAR *String)
+{
+  char sTmp[READLINE_LENGTH+1];
+  DWORD dwNumBytesRead=0;
+  DWORD dwTotalNumBytesRead=0;
+  char  FileBuffer[READLINE_LENGTH+1];
+  DWORD dwFilePos;
+
+  String[0] = '\0';
+  sTmp[0] = 0;
+
+  ASSERT(Max<sizeof(sTmp));
+
+  if (Max >= sizeof(sTmp))
+    return(FALSE);
+
+  dwFilePos = SetFilePointer(hFile, 0, NULL, FILE_CURRENT);
+
+  if (hFile == INVALID_HANDLE_VALUE)
+    return(FALSE);
+
+  if (ReadFile(hFile, FileBuffer, sizeof(FileBuffer), &dwNumBytesRead, (OVERLAPPED *)NULL) == 0)
+    return(FALSE);
+
+  int i = 0;
+  int j = 0;
+  while(i<Max && j<(int)dwNumBytesRead){
+
+    char c = FileBuffer[j];
+    j++;
+    dwTotalNumBytesRead++;
+
+    if((c == '\n')){
+      break;
+    }
+
+    sTmp[i] = c;
+    i++;
+    continue;
+  }
+
+  sTmp[i] = 0;
+  SetFilePointer(hFile, dwFilePos+j, NULL, FILE_BEGIN);
+  sTmp[Max-1] = '\0';
+  mbstowcs(String, sTmp, strlen(sTmp)+1);
   return (dwTotalNumBytesRead>0);
 
 }
 
 BOOL ReadStringX(FILE *fp, int Max, TCHAR *String){
-
-  if (fp == NULL || Max < 1 || String == NULL)
+  if (fp == NULL || Max < 1 || String == NULL) {
+    if (String) {
+      String[0]= '\0';
+    }
     return (0);
+  }
 
   if (_fgetts(String, Max, fp) != NULL){     // 20060512/sgi change 200 to max
 
-
     String[Max-1] = '\0';                    // 20060512/sgi added make shure the  string is terminated
-    TCHAR *pWC = &String[_tcslen(String)-1]; // 20060512/sgi change add -1 to set pWC at the end of the string
+    TCHAR *pWC = &String[max(0,_tcslen(String)-1)]; 
+    // 20060512/sgi change add -1 to set pWC at the end of the string
 
     while (pWC > String && (*pWC == '\r' || *pWC == '\n')){
       *pWC = '\0';
-
       pWC--;
     }
 
@@ -2397,188 +2537,24 @@ void InitSineTable(void)
 {
   int i;
   double angle;
+  double cosa, sina;
 
-  for(i=0;i<910;i++)
+  for(i=0;i<4096; i++)
     {
-      angle = 0.1 * (double)i;
-      angle *= DEG_TO_RAD;
-      SINETABLE[i] = (double)sin(angle);
-      FSINETABLE[i] = (float)sin(angle);
-      ISINETABLE[i] = iround(sin(angle)*1024);
-      double cs = cos(angle);
-      if ((cs>0) && (cs<1.0e-8)) {
-	cs = 1.0e-8;
+      angle = DEG_TO_RAD*((double)i*360)/4096;
+      cosa = cos(angle);
+      sina = sin(angle);
+      SINETABLE[i] = sina;
+      COSTABLE[i] = cosa;
+      ISINETABLE[i] = iround(sina*1024);
+      ICOSTABLE[i] = iround(cosa*1024);
+      if ((cosa>0) && (cosa<1.0e-8)) {
+	cosa = 1.0e-8;
       }
-      if ((cs<0) && (cs>-1.0e-8)) {
-	cs = -1.0e-8;
+      if ((cosa<0) && (cosa>-1.0e-8)) {
+	cosa = -1.0e-8;
       }
-      INVCOSINETABLE[i] = 1.0/cs;
-    }
-}
-
-double invfastcosine(const double &x)
-{
-  int index;
-  double xi = x;
-
-  while(xi<0)
-    {
-      xi += 360;
-    }
-  while(xi>=360)
-    {
-      xi -= 360;
-    }
-  index = (int)(xi*10);
-  if((index>=0 )&&(index<=900))
-    {
-      return INVCOSINETABLE[index];
-    }
-  else if((index>900)&&(index<=1800))
-    {
-      return -INVCOSINETABLE[1800 - index];
-    }
-  else if((index>1800)&&(index<=2700))
-    {
-      return -INVCOSINETABLE[index-1800];
-    }
-  else if((index>2700)&&(index<=3600))
-    {
-      index = index - 1800;
-      return INVCOSINETABLE[1800-index];
-    }
-  else
-    {
-      return 0;
-    }
-}
-
-int ifastcosine(const double &x)
-{
-  return ifastsine(x+90);
-}
-
-
-float ffastcosine(const float &x)
-{
-  return ffastsine(x+90);
-}
-
-double fastcosine(const double &x)
-{
-  return fastsine(x+90);
-}
-
-double fastsine(const double &x)
-{
-  int index;
-  double xi = x;
-
-  while(xi<0)
-    {
-      xi += 360;
-    }
-  while(xi>=360)
-    {
-      xi -= 360;
-    }
-  index = (int)(xi*10);
-  if((index>=0 )&&(index<=900))
-    {
-      return SINETABLE[index];
-    }
-  else if((index>900)&&(index<=1800))
-    {
-      return SINETABLE[1800 - index];
-    }
-  else if((index>1800)&&(index<=2700))
-    {
-      return -SINETABLE[index-1800];
-    }
-  else if((index>2700)&&(index<=3600))
-    {
-      index = index - 1800;
-      return -SINETABLE[1800-index];
-    }
-  else
-    {
-      return 0;
-    }
-}
-
-
-float ffastsine(const float &x)
-{
-  int index;
-  float xi = x;
-
-  while(xi<0)
-    {
-      xi += 360;
-    }
-  while(xi>=360)
-    {
-      xi -= 360;
-    }
-  index = (int)(xi*10);
-  if((index>=0 )&&(index<=900))
-    {
-      return FSINETABLE[index];
-    }
-  else if((index>900)&&(index<=1800))
-    {
-      return FSINETABLE[1800 - index];
-    }
-  else if((index>1800)&&(index<=2700))
-    {
-      return -FSINETABLE[index-1800];
-    }
-  else if((index>2700)&&(index<=3600))
-    {
-      index = index - 1800;
-      return -FSINETABLE[1800-index];
-    }
-  else
-    {
-      return 0;
-    }
-}
-
-
-int ifastsine(const double &x)
-{
-  int index;
-  double xi = x;
-
-  while(xi<0)
-    {
-      xi += 360;
-    }
-  while(xi>=360)
-    {
-      xi -= 360;
-    }
-  index = (int)(xi*10);
-  if((index>=0 )&&(index<=900))
-    {
-      return ISINETABLE[index];
-    }
-  else if((index>900)&&(index<=1800))
-    {
-      return ISINETABLE[1800 - index];
-    }
-  else if((index>1800)&&(index<=2700))
-    {
-      return -ISINETABLE[index-1800];
-    }
-  else if((index>2700)&&(index<=3600))
-    {
-      index = index - 1800;
-      return -ISINETABLE[1800-index];
-    }
-  else
-    {
-      return 0;
+      INVCOSINETABLE[i] = 1.0/cosa;
     }
 }
 
@@ -2973,50 +2949,56 @@ cont:
 
 
 void ReadLanguageFile() {
-    StartupStore(TEXT("Loading language file\r\n"));
+  StartupStore(TEXT("Loading language file\r\n"));
 
-	TCHAR szFile1[MAX_PATH] = TEXT("\0");
-	FILE *fp=NULL;
+  TCHAR szFile1[MAX_PATH] = TEXT("\0");
+  FILE *fp=NULL;
+  
+  // Open file from registry
+  GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
+  ExpandLocalPath(szFile1);
+  
+  SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
 
-	// Open file from registry
-	GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
-        ExpandLocalPath(szFile1);
+  if (_tcslen(szFile1)==0) {
+    // JMW set default language file if none present
+    _tcscpy(szFile1,TEXT("default.xcl"));
+  }
 
-	SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
-	if (_tcslen(szFile1)>0)
-		fp  = _tfopen(szFile1, TEXT("rt"));
-
-	if (fp == NULL)
-		return;
-
-	// TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
-	TCHAR buffer[2049];	// key from scanf
-	TCHAR key[2049];	// key from scanf
-	TCHAR value[2049];	// value from scanf
-	int found;			// Entries found from scanf
-
-	/* Read from the file */
-	while (
+  fp  = _tfopen(szFile1, TEXT("rt"));
+  
+  if (fp == NULL)
+    return;
+  
+  // TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
+  TCHAR buffer[2049];	// key from scanf
+  TCHAR key[2049];	// key from scanf
+  TCHAR value[2049];	// value from scanf
+  int found;            // Entries found from scanf
+  
+  /* Read from the file */
+  while (
   	 (GetTextData_Size < MAXSTATUSMESSAGECACHE)
 	 && fgetws(buffer, 2048, fp)
 	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
-	) {
-		// Check valid line?
-		if ((found != 2) || !key || !value) continue;
-
-		GetTextData[GetTextData_Size].key = StringMallocParse(key);
-		GetTextData[GetTextData_Size].text = StringMallocParse(value);
-
-		// Global counter
-		GetTextData_Size++;
-	}
-
-	// file was OK, so save registry
-        ContractLocalPath(szFile1);
-	SetRegistryString(szRegistryLanguageFile, szFile1);
-
-	fclose(fp);
+         ) {
+    // Check valid line?
+    if ((found != 2) || !key || !value) continue;
+    
+    GetTextData[GetTextData_Size].key = StringMallocParse(key);
+    GetTextData[GetTextData_Size].text = StringMallocParse(value);
+    
+    // Global counter
+    GetTextData_Size++;
+  }
+  
+  // file was OK, so save registry
+  ContractLocalPath(szFile1);
+  SetRegistryString(szRegistryLanguageFile, szFile1);
+  
+  fclose(fp);
 }
+
 
 void StatusFileInit() {
   StartupStore(TEXT("StatusFileInit\r\n"));
@@ -3635,30 +3617,6 @@ bool CheckRectOverlap(RECT rc1, RECT rc2) {
 }
 
 
-/*
-
- MEMORYSTATUS    memInfo;
- STORE_INFORMATION  si;
- TCHAR        szBuf[MAX_PATH];
-
- // Program memory
- memInfo.dwLength = sizeof(memInfo);
- GlobalMemoryStatus(&memInfo);
-
- wsprintf(szBuf, __TEXT("Total RAM: %d bytes\n Free: %d \nUsed: %d"), memInfo.dwTotalPhys, memInfo.dwAvailPhys, memInfo.dwTotalPhys — memInfo.dwAvailPhys);
- MessageBox(hwnd, szBuf, __TEXT("Program Memory"), MB_OK);
-
- // Storage memory
- GetStoreInformation(&si);
-  
- // dwStoreSize isn't exact due to compression. 
- wsprintf(szBuf, __TEXT("Free: %d"), si.dwFreeSize);
- MessageBox(hwnd, szBuf, __TEXT("Storage Memory"), MB_OK);
-
-
-
-*/
-
 #if !defined(GNAV) || (WINDOWSPC>0)
 typedef DWORD (_stdcall *GetIdleTimeProc) (void);
 GetIdleTimeProc GetIdleTime;
@@ -3714,6 +3672,8 @@ typedef struct WinPilotPolarInternal {
   double v2;
   double w2;
 } WinPilotPolarInternal;
+
+
 
 WinPilotPolarInternal WinPilotPolars[] = 
 {
@@ -3786,7 +3746,28 @@ WinPilotPolarInternal WinPilotPolars[] =
   {TEXT("Ventus B (15m)"), 341, 151, 97.69, -0.68, 156.3, -1.46, 234.45, -3.9},
   {TEXT("Ventus 2C (18m)"), 385, 180, 80.0, -0.5, 120.0, -0.73, 180.0, -2.0},
   {TEXT("Ventus 2Cx (18m)"), 385, 215, 80.0, -0.5, 120.0, -0.73, 180.0, -2.0},
-  {TEXT("Zuni II"), 358, 182, 110, -0.88, 167, -2.21, 203.72, -3.6}
+  {TEXT("Zuni II"), 358, 182, 110, -0.88, 167, -2.21, 203.72, -3.6},
+
+  {TEXT("Speed Astir"),351,  90,  90, -0.63, 105, -0.72, 157, -2.00},   // BestLD40@105
+  {TEXT("LS-6-18W"),   330, 140,  90, -0.51, 100, -0.57, 183, -2.00},   // BestLD48@100
+  {TEXT("LS-8-15"),    325, 185,  70, -0.51, 115, -0.85, 173, -2.00},   // BestLD42.5@97kph
+  {TEXT("LS-8-18"),    325, 185,  80, -0.51,  94, -0.56, 173, -2.00},   // BestLD48
+  {TEXT("ASH-26E"),    435,  90,  90, -0.51,  96, -0.53, 185, -2.00},   // BestLD50@96kph
+  {TEXT("ASG29-18"),   355, 225,  85, -0.47,  90, -0.48, 185, -2.00},   // BestLD52@90kph
+  {TEXT("ASW28-18"),   345, 190,  65, -0.47, 107, -0.67, 165, -2.00},   // BestLD48@90kph
+
+  // {TEXT("LS-6 (15m)"), 325, 140,  90, -0.59, 100, -0.66, 212.72, -3.4}, // BestLD42
+  // {TEXT("H304cz"), 310, 115,    115.03, -0.86, 174.04, -1.76, 212.72, -3.4}, // BestLD42@102
+  // {TEXT("ASG29-15"), 340, 170,  115.03, -0.86, 174.04, -1.76, 212.72, -3.4}, // BestLD50@100kph
+  // {TEXT("ASW28-15"), 333, 190,  115.03, -0.86, 174.04, -1.76, 212.72, -3.4}, // BestLD45@90kph
+
+// MassDryGross[kg], MaxWaterBallast[liters], 
+//  Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
+
+// LS8, LS8-18
+// LS6, LS6-18
+// Mosi/H-304
+
 };
 
 TCHAR* GetWinPilotPolarInternalName(int i) {
@@ -3951,8 +3932,8 @@ void OpenFLARMDetails() {
 			    OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
   if( hFile == INVALID_HANDLE_VALUE) return;
 
-  TCHAR line[MAX_PATH];
-  while (ReadString(hFile,MAX_PATH, line)) {
+  TCHAR line[READLINE_LENGTH];
+  while (ReadString(hFile,READLINE_LENGTH, line)) {
     long id;
     TCHAR Name[MAX_PATH];
 
@@ -4037,6 +4018,7 @@ double AirDensity(double altitude) {
 }
 
 
+// divide TAS by this number to get IAS
 double AirDensityRatio(double altitude) {
   double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
   double rho_rat = sqrt(1.225/rho);
@@ -4258,6 +4240,36 @@ bool FileExistsA(char *FileName){
     return(TRUE);
   }
   return FALSE;
+#endif
+
+}
+
+
+
+bool RotateScreen() {
+#if (WINDOWSPC>0)
+  return false;
+#else 
+  //
+  // Change the orientation of the screen
+  //
+#ifdef GNAV  
+  DEVMODE DeviceMode;
+    
+  memset(&DeviceMode, NULL, sizeof(DeviceMode));
+  DeviceMode.dmSize=sizeof(DeviceMode);
+  DeviceMode.dmFields = DM_DISPLAYORIENTATION;
+  DeviceMode.dmDisplayOrientation = DMDO_90; 
+  //Put your desired position right here.
+
+  if (DISP_CHANGE_SUCCESSFUL == 
+      ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL, CDS_RESET, NULL))
+    return true;
+  else
+    return false;
+#else
+  return false;
+#endif
 #endif
 
 }

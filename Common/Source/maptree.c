@@ -135,20 +135,20 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
     sprintf( pszFullname, "%s%s", pszBasename, MS_INDEX_EXTENSION); 
 
     if (FileExistsA(pszFullname))  // prevent codegurad warnings (open unexisting file for reading)
-      psTree->fp = fopen(pszFullname, "rb" );
+      psTree->zfp = zzip_fopen(pszFullname, "rb" );
     else
-      psTree->fp = NULL;
+      psTree->zfp = NULL;
 
 
     msFree(pszBasename); // don't need these any more
     msFree(pszFullname);    
 
-    if( psTree->fp == NULL ) {      
+    if( psTree->zfp == NULL ) {      
       msFree(psTree);
       return( NULL );
     }
     
-    fread( pabyBuf, 8, 1, psTree->fp );
+    zzip_fread( pabyBuf, 8, 1, psTree->zfp );
 
     memcpy( &psTree->signature, pabyBuf, 3 );
     if( strncmp(psTree->signature,"SQT",3) )
@@ -191,7 +191,7 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
       memcpy( &psTree->version, pabyBuf+4, 1 );
       memcpy( &psTree->flags, pabyBuf+5, 3 );
 
-      fread( pabyBuf, 8, 1, psTree->fp );
+      zzip_fread( pabyBuf, 8, 1, psTree->zfp );
     }
 
     if( psTree->needswap ) SwapWord( 4, pabyBuf );
@@ -206,7 +206,7 @@ SHPTreeHandle msSHPDiskTreeOpen(const char * pszTree, int debug)
 
 void msSHPDiskTreeClose(SHPTreeHandle disktree)
 {
-    fclose( disktree->fp );  
+    zzip_fclose( disktree->zfp );
     free( disktree );
 }
 
@@ -473,16 +473,16 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
 
   int *ids=NULL;
 
-  fread( &offset, 4, 1, disktree->fp );
+  zzip_fread( &offset, 4, 1, disktree->zfp );
   if ( disktree->needswap ) SwapWord ( 4, &offset );
 
-  fread( &rect, sizeof(rectObj), 1, disktree->fp );
+  zzip_fread( &rect, sizeof(rectObj), 1, disktree->zfp );
   if ( disktree->needswap ) SwapWord ( 8, &rect.minx );
   if ( disktree->needswap ) SwapWord ( 8, &rect.miny );
   if ( disktree->needswap ) SwapWord ( 8, &rect.maxx );
   if ( disktree->needswap ) SwapWord ( 8, &rect.maxy );
       
-  fread( &numshapes, 4, 1, disktree->fp );
+  zzip_fread( &numshapes, 4, 1, disktree->zfp );
   if ( disktree->needswap ) SwapWord ( 4, &numshapes );
 
   if(!msRectOverlap(&rect, &aoi)) { // skip rest of this node and sub-nodes
@@ -493,7 +493,7 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
   if(numshapes > 0) {
     ids = (int *)malloc(numshapes*sizeof(int));
 
-    fread( ids, numshapes*sizeof(int), 1, disktree->fp );
+    zzip_fread( ids, numshapes*sizeof(int), 1, disktree->zfp );
     if (disktree->needswap )
     {
       for( i=0; i<numshapes; i++ )
@@ -510,7 +510,7 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
     free(ids);
   }
 
-  fread( &numsubnodes, 4, 1, disktree->fp );
+  zzip_fread( &numsubnodes, 4, 1, disktree->zfp );
   if ( disktree->needswap ) SwapWord ( 4, &numsubnodes );
 
   for(i=0; i<numsubnodes; i++)
@@ -555,29 +555,29 @@ treeNodeObj *readTreeNode( SHPTreeHandle disktree )
   node = (treeNodeObj *) malloc(sizeof(treeNodeObj));
   node->ids = NULL;
 
-  res = fread( &offset, 4, 1, disktree->fp );
+  res = zzip_fread( &offset, 4, 1, disktree->zfp );
   if ( !res ) 
       return NULL;
 
   if ( disktree->needswap ) SwapWord ( 4, &offset );
    
-  fread( &node->rect, sizeof(rectObj), 1, disktree->fp );
+  zzip_fread( &node->rect, sizeof(rectObj), 1, disktree->zfp );
   if ( disktree->needswap ) SwapWord ( 8, &node->rect.minx );
   if ( disktree->needswap ) SwapWord ( 8, &node->rect.miny );
   if ( disktree->needswap ) SwapWord ( 8, &node->rect.maxx );
   if ( disktree->needswap ) SwapWord ( 8, &node->rect.maxy );
       
-  fread( &node->numshapes, 4, 1, disktree->fp );
+  zzip_fread( &node->numshapes, 4, 1, disktree->zfp );
   if ( disktree->needswap ) SwapWord ( 4, &node->numshapes );
   if( node->numshapes > 0 )
     node->ids = (int *)malloc(sizeof(int)*node->numshapes);
-  fread( node->ids, node->numshapes*4, 1, disktree->fp );
+  zzip_fread( node->ids, node->numshapes*4, 1, disktree->zfp );
   for( i=0; i < node->numshapes; i++ )
   {
     if ( disktree->needswap ) SwapWord ( 4, &node->ids[i] );    
   }
 
-  fread( &node->numsubnodes, 4, 1, disktree->fp );
+  zzip_fread( &node->numsubnodes, 4, 1, disktree->zfp );
   if ( disktree->needswap ) SwapWord ( 4, &node->numsubnodes );
   
   return node;

@@ -277,9 +277,9 @@ void Message::BlockRender(bool doblock) {
 }
 
 
-void Message::Render() {
-  if (!GlobalRunning) return;
-  if (block_ref) return;
+bool Message::Render() {
+  if (!GlobalRunning) return false;
+  if (block_ref) return false;
 
   Lock();
   DWORD	fpsTime = ::GetTickCount() - startTime;
@@ -324,7 +324,7 @@ void Message::Render() {
       // the text (workaround bug in getlinecount)
       Resize();
     }
-    Unlock(); return; 
+    Unlock(); return false; 
   }
 
   // ok, we've changed the visible messages, so need to regenerate the
@@ -350,6 +350,7 @@ void Message::Render() {
   Resize();
 
   Unlock();
+  return true;
 }
 
 

@@ -8,7 +8,7 @@
 
 #define DEVNAMESIZE  32
 #define	NUMDEV		 2
-#define	NUMREGDEV	 10
+#define	NUMREGDEV	 15
 
 #define	devA()	    (&DeviceList[0])
 #define	devB()	    (&DeviceList[1])
@@ -25,29 +25,31 @@ typedef struct{
   int  (*SetRxTimeout)(int Timeout);
   unsigned long (*SetBaudrate)(unsigned long BaudRate);
   int  (*Read)(void *Buffer, size_t Size);
-}ComPortDriver_t;
+  void (*Flush)(void);
+  void  (*PutChar)(BYTE);
+} ComPortDriver_t;
 
 typedef	struct DeviceDescriptor_t{
-	int	Port;	 
+  int	Port;	 
   FILE  *fhLogFile;
   ComPortDriver_t Com;
-	TCHAR	Name[DEVNAMESIZE+1];
-	BOOL (*ParseNMEA)(DeviceDescriptor_t *d, TCHAR *String,	NMEA_INFO	*GPS_INFO);
-	BOOL (*PutMacCready)(DeviceDescriptor_t	*d,	double McReady);
-	BOOL (*PutBugs)(DeviceDescriptor_t *d, double	Bugs);
-	BOOL (*PutBallast)(DeviceDescriptor_t	*d,	double Ballast);
-	BOOL (*Open)(DeviceDescriptor_t	*d,	int	Port);
-	BOOL (*Close)(DeviceDescriptor_t *d);
-	BOOL (*Init)(DeviceDescriptor_t	*d);
-	BOOL (*LinkTimeout)(DeviceDescriptor_t *d);
-	BOOL (*DeclBegin)(DeviceDescriptor_t *d, TCHAR *PilotsName,	TCHAR	*Class,	TCHAR	*ID);
-	BOOL (*DeclEnd)(DeviceDescriptor_t *d);
-	BOOL (*DeclAddWayPoint)(DeviceDescriptor_t *d, WAYPOINT	*wp);
-	BOOL (*IsLogger)(DeviceDescriptor_t	*d);
-	BOOL (*IsGPSSource)(DeviceDescriptor_t *d);
-	BOOL (*IsBaroSource)(DeviceDescriptor_t *d);
-	BOOL (*PutQNH)(DeviceDescriptor_t *d, double NewQNH);
-	BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
+  TCHAR	Name[DEVNAMESIZE+1];
+  BOOL (*ParseNMEA)(DeviceDescriptor_t *d, TCHAR *String,	NMEA_INFO	*GPS_INFO);
+  BOOL (*PutMacCready)(DeviceDescriptor_t	*d,	double McReady);
+  BOOL (*PutBugs)(DeviceDescriptor_t *d, double	Bugs);
+  BOOL (*PutBallast)(DeviceDescriptor_t	*d,	double Ballast);
+  BOOL (*Open)(DeviceDescriptor_t	*d,	int	Port);
+  BOOL (*Close)(DeviceDescriptor_t *d);
+  BOOL (*Init)(DeviceDescriptor_t	*d);
+  BOOL (*LinkTimeout)(DeviceDescriptor_t *d);
+  BOOL (*DeclBegin)(DeviceDescriptor_t *d, TCHAR *PilotsName,	TCHAR	*Class,	TCHAR	*ID);
+  BOOL (*DeclEnd)(DeviceDescriptor_t *d);
+  BOOL (*DeclAddWayPoint)(DeviceDescriptor_t *d, WAYPOINT	*wp);
+  BOOL (*IsLogger)(DeviceDescriptor_t	*d);
+  BOOL (*IsGPSSource)(DeviceDescriptor_t *d);
+  BOOL (*IsBaroSource)(DeviceDescriptor_t *d);
+  BOOL (*PutQNH)(DeviceDescriptor_t *d, double NewQNH);
+  BOOL (*OnSysTicker)(DeviceDescriptor_t *d);
   BOOL (*PutVoice)(DeviceDescriptor_t *d, TCHAR *Sentence);
   DeviceDescriptor_t *pDevPipeTo;
 
@@ -77,6 +79,7 @@ BOOL devInit(LPTSTR CommandLine);
 BOOL devCloseAll(void);
 PDeviceDescriptor_t devGetDeviceOnPort(int Port);
 BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token);
+BOOL devHasBaroSource(void);
 
 BOOL devParseNMEA(int portNum, TCHAR *String,	NMEA_INFO	*GPS_INFO);
 BOOL devPutMacCready(PDeviceDescriptor_t d,	double MacCready);
@@ -92,7 +95,6 @@ BOOL devDeclAddWayPoint(PDeviceDescriptor_t	d, WAYPOINT	*wp);
 BOOL devIsLogger(PDeviceDescriptor_t d);
 BOOL devIsGPSSource(PDeviceDescriptor_t	d);
 BOOL devIsBaroSource(PDeviceDescriptor_t d);
-
 
 BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName);
 BOOL devCloseLog(PDeviceDescriptor_t d);

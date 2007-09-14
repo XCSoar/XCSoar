@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windanalyser.cpp,v 1.27 2007/05/09 15:32:18 jwharington Exp $
+**   $Id: windanalyser.cpp,v 1.28 2007/09/14 17:10:11 jwharington Exp $
 **
 ***********************************************************************/
 /*
@@ -82,6 +82,11 @@ Copyright_License {
   Some of the errors made here will be averaged-out by the WindStore, wich keeps
   a number of windmeasurements and calculates a weighted average based on quality.
 */
+
+#ifdef DEBUG
+#define DEBUG_WIND
+#endif
+
 
 WindAnalyser::WindAnalyser()
 {

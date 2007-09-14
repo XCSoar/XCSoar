@@ -53,6 +53,9 @@ TopologyWriter *topo_marks;
 
 #define MINRANGE 0.2
 
+bool reset_marks = false;
+
+
 bool RectangleIsInside(rectObj r_exterior, rectObj r_interior) {
   if ((r_interior.minx >= r_exterior.minx)&&
       (r_interior.maxx <= r_exterior.maxx)&&
@@ -109,7 +112,9 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
 	TopoStore[z]->triggerUpdateCache=true;          
       }
     }
-    topo_marks->triggerUpdateCache = true;
+    if (topo_marks) {
+      topo_marks->triggerUpdateCache = true;
+    }
 
     // now update visibility of objects in the map window
     MapWindow::ScanVisibility(&bounds_active);
@@ -124,8 +129,10 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
   }
 
   // ok, now update the caches
-
-  topo_marks->updateCache(bounds_active);    
+  
+  if (topo_marks) {
+    topo_marks->updateCache(bounds_active);
+  }
   
   if (EnableTopology) {
     // check if any needs to have cache updates because wasnt 
@@ -177,10 +184,10 @@ void ReadTopology() {
 
   topo_marks = 
 	  new TopologyWriter("xcsoar-marks", RGB(0xD0,0xD0,0xD0));
-
-  topo_marks->scaleThreshold = 30.0;
-
-  topo_marks->loadBitmap(IDB_MARK);
+  if (topo_marks) {
+    topo_marks->scaleThreshold = 30.0;
+    topo_marks->loadBitmap(IDB_MARK);
+  }
   UnlockTerrainDataGraphics();
 }
 
@@ -211,9 +218,10 @@ void MarkLocation(const double lon, const double lat)
     PlayResource(TEXT("IDR_WAV_CLEAR"));
   }
 #endif 
-
-  topo_marks->addPoint(lon, lat);
-  topo_marks->triggerUpdateCache = true;
+  if (topo_marks) {
+    topo_marks->addPoint(lon, lat);
+    topo_marks->triggerUpdateCache = true;
+  }
   UnlockTerrainDataGraphics();
 
   //////////
@@ -241,7 +249,13 @@ void DrawMarks (const HDC hdc, const RECT rc)
 {
 
   LockTerrainDataGraphics();
-  topo_marks->Paint(hdc, rc);
+  if (topo_marks) {
+    if (reset_marks) {
+      topo_marks->Reset();
+      reset_marks = false;
+    }
+    topo_marks->Paint(hdc, rc);
+  }
   UnlockTerrainDataGraphics();
 
 }
@@ -262,33 +276,239 @@ void DrawTopology(const HDC hdc, const RECT rc)
 
 }
 
-////////
+///////////////////////////////////////////////////
+
+#define NUM_COLOR_RAMP_LEVELS 13
 
 
-#define NUMTERRAINRAMP 12
-
-COLORRAMP terrain_colors[] = {
-  {-1,          0xff, 0xff, 0xff},
-  {0,           0x70, 0xc0, 0xa7},
-  {250,         0xca, 0xe7, 0xb9},
-  {500,        0xf4, 0xea, 0xaf},
-  {750,        0xdc, 0xb2, 0x82},
-  {1000,        0xca, 0x8e, 0x72},
-  {1250,        0xde, 0xc8, 0xbd},
-  {1500,        0xe3, 0xe4, 0xe9},
-  {1750,        0xdb, 0xd9, 0xef},
-  {2000,        0xce, 0xcd, 0xf5},
-  {2250,        0xc2, 0xc1, 0xfa},
-  {2500,        0xb7, 0xb9, 0xff}
+const COLORRAMP weather_colors[5][NUM_COLOR_RAMP_LEVELS] = {
+  { // Blue to red       // vertical speed
+    {   0,       0,     0,     255}, // -200   
+    { 100,       0,     195,   255}, // -100
+    { 200,     52,      192,    11}, // 0
+    { 240,     182,     233,     4}, // 40
+    { 280,     255,     233,     0}, // 80
+    { 320,     255,     209,     0}, // 120
+    { 360,     255,     155,     0}, // 160
+    { 400,     255,     109,     0}, // 200
+    { 440,     255,     35,      0}, // 240
+    { 500,     255,     00,      0}, // 300
+    {1000,         0xFF, 0x00, 0x00},
+    {8000,         0xFF, 0x00, 0x00},
+    {9000,         0xFF, 0x00, 0x00}
+  },
+  {
+    {0,            0xFF, 0xFF, 0xFF},
+    {250,          0x80, 0x80, 0xFF},
+    {500,          0x80, 0xFF, 0xFF},
+    {750,          0xFF, 0xFF, 0x80},
+    {1000,         0xFF, 0x80, 0x80},
+    {1250,         0xFF, 0x80, 0x80},
+    {2000,         0xFF, 0xA0, 0xA0},
+    {3000,         0xFF, 0xA0, 0xA0},
+    {4000,         0xFF, 0x00, 0x00},
+    {5000,         0xFF, 0x00, 0x00},
+    {6000,         0xFF, 0x00, 0x00},
+    {7000,         0xFF, 0x00, 0x00},
+    {8000,         0xFF, 0x00, 0x00}
+  },
+  {
+    {0,            0xFF, 0xFF, 0xFF},
+    {750,          0x80, 0x80, 0xFF},
+    {1500,          0x80, 0xFF, 0xFF},
+    {2250,          0xFF, 0xFF, 0x80},
+    {3000,          0xFF, 0x80, 0x80},
+    {3500,         0xFF, 0x80, 0x80},
+    {6000,         0xFF, 0xA0, 0xA0},
+    {8000,         0xFF, 0xA0, 0xA0},
+    {9000,         0xFF, 0x00, 0x00},
+    {9500,         0xFF, 0x00, 0x00},
+    {9600,         0xFF, 0x00, 0x00},
+    {9700,         0xFF, 0x00, 0x00},
+    {20000,         0xFF, 0x00, 0x00}
+  },
+  { // Blue to Gray, 8 steps
+    {   0,       0,     153,     204},
+    {  12,     102,     229,     255},
+    {  25,     153,     255,     255},
+    {  37,     204,     255,     255},
+    {  50,     229,     229,     229},
+    {  62,     173,     173,     173},
+    {  75,     122,     122,     122},
+    { 100,      81,      81,      81},
+    {5000,      71,      71,      71},
+    {6000,         0xFF, 0x00, 0x00},
+    {7000,         0xFF, 0x00, 0x00},
+    {8000,         0xFF, 0x00, 0x00},
+    {9000,         0xFF, 0x00, 0x00}
+  },
+  { // sfctemp, blue to orange to red
+    {   0,       7,      90,     255},
+    {  24,      50,     118,     255},
+    {  30,      89,     144,     255},
+    {  36,     140,     178,     255},
+    {  42,     191,     212,     255},
+    {  48,     229,     238,     255},
+    {  54,     247,     249,     255},
+    {  60,     255,     255,     204},
+    {  66,     255,     255,     153},
+    {  72,     255,     255,       0},
+    {  78,     255,     204,       0},
+    {  84,     255,     153,       0},
+    {  90,     255,       0,       0}
+  }
 };
 
 
-void ColorRampLookup(const short h, BYTE &r, BYTE &g, BYTE &b,
-		     COLORRAMP* ramp_colors, const int numramp) {
+const COLORRAMP terrain_colors[7][NUM_COLOR_RAMP_LEVELS] = { 
+  {
+    {0,           0x70, 0xc0, 0xa7},
+    {250,         0xca, 0xe7, 0xb9},
+    {500,         0xf4, 0xea, 0xaf},
+    {750,         0xdc, 0xb2, 0x82},
+    {1000,        0xca, 0x8e, 0x72},
+    {1250,        0xde, 0xc8, 0xbd},
+    {1500,        0xe3, 0xe4, 0xe9},
+    {1750,        0xdb, 0xd9, 0xef},
+    {2000,        0xce, 0xcd, 0xf5},
+    {2250,        0xc2, 0xc1, 0xfa},
+    {2500,        0xb7, 0xb9, 0xff},
+    {5000,        0xb7, 0xb9, 0xff},
+    {6000,        0xb7, 0xb9, 0xff}
+  },
+  {
+    {0,           0x70, 0xc0, 0xa7},
+    {500,         0xca, 0xe7, 0xb9},
+    {1000,        0xf4, 0xea, 0xaf},
+    {1500,        0xdc, 0xb2, 0x82},
+    {2000,        0xca, 0x8e, 0x72},
+    {2500,        0xde, 0xc8, 0xbd},
+    {3000,        0xe3, 0xe4, 0xe9},
+    {3500,        0xdb, 0xd9, 0xef},
+    {4000,        0xce, 0xcd, 0xf5},
+    {4500,        0xc2, 0xc1, 0xfa},
+    {5000,        0xb7, 0xb9, 0xff},
+    {6000,        0xb7, 0xb9, 0xff},
+    {7000,        0xb7, 0xb9, 0xff}
+  },
+  { // Imhof Type 7, geomteric 1.35 9
+    {0,    153, 178, 169},
+    {368,  180, 205, 181},
+    {496,  225, 233, 192},
+    {670,  255, 249, 196},
+    {905,  255, 249, 196},
+    {1222, 255, 219, 173},
+    {1650, 254, 170, 136},
+    {2227, 253, 107, 100},
+    {3007, 255, 255, 255},
+    {5000, 255, 255, 255},
+    {6000, 255, 255, 255},
+    {7000, 255, 255, 255},
+    {8000, 255, 255, 255}
+  },
+  { // Imhof Type 4, geomteric 1.5 8
+    {0,    175, 224, 203},
+    {264,  211, 237, 211},
+    {396,  254, 254, 234},
+    {594,  252, 243, 210},
+    {891,  237, 221, 195},
+    {1336, 221, 199, 175},
+    {2004, 215, 170, 148},
+    {3007, 255, 255, 255},
+    {4000, 255, 255, 255},
+    {5000, 255, 255, 255},
+    {6000, 255, 255, 255},
+    {7000, 255, 255, 255},
+    {8000, 255, 255, 255}
+  },
+  { // Imhof Type 12, geomteric  1.5 8
+    {0,    165, 220, 201},
+    {399,  219, 239, 212},
+    {558,  254, 253, 230},
+    {782,  254, 247, 211},
+    {1094,  254, 237, 202},
+    {1532, 254, 226, 207},
+    {2145, 254, 209, 204},
+    {3004, 255, 255, 255},
+    {4000, 255, 255, 255},
+    {5000, 255, 255, 255},
+    {6000, 255, 255, 255},
+    {7000, 255, 255, 255},
+    {8000, 255, 255, 255}
+  },
+  { // Imhof Atlas der Schweiz
+    {0,     47, 101, 147},
+    {368,   58, 129, 152},
+    {496,  117, 148, 153},
+    {670,  155, 178, 140},
+    {905,  192, 190, 139},
+    {1222, 215, 199, 137},
+    {1650, 229, 203, 171},
+    {2227, 246, 206, 171},
+    {3007, 252, 246, 244},
+    {5001, 252, 246, 244},
+    {7000, 252, 246, 244},
+    {8000, 252, 246, 244},
+    {9000, 252, 246, 244}
+  },
+  { // ICAO
+    {0,           180, 205, 181},
+    {199,         180, 205, 181},
+    {200,         225, 233, 192},
+    {499,         225, 233, 192},
+    {500,         255, 249, 196},
+    {999,         255, 249, 196},
+    {1000,        255, 219, 173},
+    {1499,        255, 219, 173},
+    {1500,        254, 170, 136},
+    {1999,        254, 170, 136},
+    {2000,        253, 107, 100},
+    {2499,        253, 107, 100},
+    {2500,        255, 255, 255} 
+  }
+};
 
-  int i;
-  int tr, tg, tb;
-  short f, of;
+
+void ColorRampLookup(const short h, 
+                     BYTE &r, BYTE &g, BYTE &b,
+		     const COLORRAMP* ramp_colors, 
+                     const int numramp,
+                     const unsigned char interp_levels) {
+
+  unsigned short f, of;
+  unsigned short is = 1<<interp_levels;
+
+  /* Monochrome
+
+#ifdef DEBUG
+  r = 0xDA;
+  g = 0xDA;
+  b = 0xDA;
+  return;
+#endif
+
+  */
+
+
+  // gone past end, so use last color
+  if (h>=ramp_colors[numramp-1].h) {
+    r = ramp_colors[numramp-1].r;
+    g = ramp_colors[numramp-1].g;
+    b = ramp_colors[numramp-1].b;
+    return;
+  }
+  for (unsigned int i=numramp-2; i--; ) {
+    if (h>=ramp_colors[i].h) {
+      f = (unsigned short)(h-ramp_colors[i].h)*is/
+        (unsigned short)(ramp_colors[i+1].h-ramp_colors[i].h);
+      of = is-f;
+      
+      r = (f*ramp_colors[i+1].r+of*ramp_colors[i].r) >> interp_levels;
+      g = (f*ramp_colors[i+1].g+of*ramp_colors[i].g) >> interp_levels;
+      b = (f*ramp_colors[i+1].b+of*ramp_colors[i].b) >> interp_levels;
+      return;
+    }
+  }
 
   // check if h lower than lowest
   if (h<=ramp_colors[0].h) {
@@ -297,64 +517,32 @@ void ColorRampLookup(const short h, BYTE &r, BYTE &g, BYTE &b,
     b = ramp_colors[0].b;
     return;
   }
-  // gone past end, so use last color
-  if (h>=ramp_colors[numramp-1].h) {
-    r = ramp_colors[numramp-1].r;
-    g = ramp_colors[numramp-1].g;
-    b = ramp_colors[numramp-1].b;
-    return;
-  }
-
-  for (i=numramp-2; i>=0; i--) {
-    if (h>=ramp_colors[i].h) {
-      f = (short)((h-ramp_colors[i].h)*255
-        /(ramp_colors[i+1].h-ramp_colors[i].h));
-      of = (short)(255-f);
-      tr = f*ramp_colors[i+1].r+of*ramp_colors[i].r;
-      tg = f*ramp_colors[i+1].g+of*ramp_colors[i].g;
-      tb = f*ramp_colors[i+1].b+of*ramp_colors[i].b;
-      r = (unsigned char)(tr >> 8); // was /256
-      g = (unsigned char)(tg >> 8);
-      b = (unsigned char)(tb >> 8);
-      return;
-    }
-  }
-
 }
 
 
-void TerrainColorMap(const short h, BYTE &r, BYTE &g, BYTE &b) {
-  ColorRampLookup(h, r, g, b, terrain_colors, NUMTERRAINRAMP);
-}
-
-static short ContrastPos;
-static short ContrastNeg;
 short TerrainContrast = 150; 
 short TerrainBrightness = 36;
-short TerrainWhiteness = 0;
-
-static void UpdateContrast(void) {
-  TerrainWhiteness = TerrainBrightness;
-  int tb = (255-TerrainWhiteness);
-  int tc = (tb*(int)TerrainContrast)/256;
-  ContrastPos = (short)(tc);
-  ContrastNeg = (short)(tb-tc);
-}
+short TerrainRamp = 0;
 
 
-void TerrainIllumination(const short illum, BYTE &r, BYTE &g, BYTE &b)
+
+#define MIX(x,y,i) (BYTE)((x*i+y*((1<<7)-i))>>7)
+
+inline void TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
 {
-  /*
-  short il = (illum*ContrastPos)/256+ContrastNeg;
-  r = (BYTE)((r*il>>8)+TerrainWhiteness);
-  g = (BYTE)((g*il>>8)+TerrainWhiteness);
-  b = (BYTE)((b*il>>8)+TerrainWhiteness);
-  */
-  r = (BYTE)((r*illum>>8));
-  g = (BYTE)((g*illum>>8));
-  b = (BYTE)((b*illum>>8));
+  char x;
+  if (illum<0) {           // shadow to blue
+    x = min(63,-illum);
+    r = MIX(0,r,x);
+    g = MIX(0,g,x);
+    b = MIX(64,b,x);
+  } else if (illum>0) {    // highlight to yellow
+    x = min(32,illum/2);
+    r = MIX(255,r,x);
+    g = MIX(255,g,x);
+    b = MIX(16,b,x);
+  }
 }
-
 
 
 // map scale is approximately 2 points on the grid
@@ -369,427 +557,531 @@ void TerrainIllumination(const short illum, BYTE &r, BYTE &g, BYTE &b)
 // 
 // this is for TerrainInfo.StepSize = 0.0025;
 
+extern int misc_tick_count;
+
 
 class TerrainRenderer {
 public:
   TerrainRenderer(RECT rc) {
 
-    dtquant = DTQUANT;
-    if (RasterTerrain::DirectAccess) {
-      dtquant -= 2;
+    if (!RasterTerrain::IsDirectAccess()) {
+      dtquant = 6;
+    } else {
+      // SAM: experiment with dtquant between 2 and 4
+      dtquant = 2;
+
+      // on my PDA (600MhZ, 320x240 screen):
+      // dtquant=2, latency=170 ms
+      // dtquant=3, latency=136 ms
+      // dtquant=4, latency= 93 ms
+    }
+    blursize = max(0, (dtquant-1)/2);
+    oversampling = max(1,(blursize+1)/2+1);
+    if (blursize==0) {
+      oversampling = 1; // no point in oversampling, just let stretchblt do the scaling
     }
 
-    // scale dtquant so resolution is not too high (slow) on large PDA displays
-#if (WINDOWSPC<1) 
-    dtquant *= InfoBoxLayout::scale;
-#endif
+    /*
+      dtq  ovs  blur  res_x  res_y   sx  sy  terrain_loads  pixels
+       1    1    0    320    240    320 240    76800        76800
+       2    1    0    160    120    160 120    19200        19200
+       3    2    1    213    160    107  80     8560        34080
+       4    2    1    160    120     80  60     4800        19200
+       5    3    2    192    144     64  48     3072        27648
+    */
 
-    ixs = iround((rc.right-rc.left)/dtquant);
-    iys = iround((rc.bottom-rc.top)/dtquant);
+    // scale dtquant so resolution is not too high on large displays
+    dtquant *= InfoBoxLayout::scale;
+
+    int res_x = iround((rc.right-rc.left)*oversampling/dtquant);
+    int res_y = iround((rc.bottom-rc.top)*oversampling/dtquant);
 
     sbuf = new CSTScreenBuffer();
-    sbuf->Create(ixs*OVS,iys*OVS,RGB(0xff,0xff,0xff));
-    ixs = sbuf->GetCorrectedWidth()/OVS;
+    sbuf->Create(res_x, res_y, RGB(0xff,0xff,0xff));
+    ixs = sbuf->GetCorrectedWidth()/oversampling;
+    iys = sbuf->GetHeight()/oversampling;
 
-    hBuf = (short*)malloc(sizeof(short)*ixs*iys);
-    nxBuf = (short*)malloc(sizeof(short)*ixs*iys);
-    nyBuf = (short*)malloc(sizeof(short)*ixs*iys);
-    nzBuf = (short*)malloc(sizeof(short)*ixs*iys);
-    ilBuf = (short*)malloc(sizeof(short)*ixs*iys);
+    hBuf = (unsigned short*)malloc(sizeof(unsigned short)*ixs*iys);
 
-    pixelsize = (float)(MapWindow::MapScale/MapWindow::GetMapResolutionFactor()
-			*dtquant);
+    colorBuf = (BGRColor*)malloc(256*128*sizeof(BGRColor));
 
   }
+
   ~TerrainRenderer() {
-	if (hBuf) free(hBuf);
-	if (nxBuf) free(nxBuf);
-	if (nyBuf) free(nyBuf);
-	if (nzBuf) free(nzBuf);
-	if (ilBuf) free(ilBuf);
-	if (sbuf) delete sbuf;
+    if (hBuf) free(hBuf);
+    if (colorBuf) free(colorBuf);
+    if (sbuf) delete sbuf;
   }
 
-  int ixs, iys; // screen dimensions in coarse pixels
-  int dtquant;
-  int epx; // step size used for slope calculations
+public:
+  POINT spot_max_pt;
+  POINT spot_min_pt;
+  short spot_max_val;
+  short spot_min_val;
+
+private:
+
+  unsigned int ixs, iys; // screen dimensions in coarse pixels
+  unsigned int dtquant;
+  unsigned int epx; // step size used for slope calculations
+
+  RECT rect_visible;
 
   CSTScreenBuffer *sbuf;
 
-  float pixelsize;
+  double pixelsize_d;
 
-  short *hBuf;
-  short *nxBuf;
-  short *nyBuf;
-  short *nzBuf;
-  short *ilBuf;
+  int oversampling;
+  int blursize;
 
-  float Xrounding;
-  float Yrounding;
+  unsigned short *hBuf;
+  BGRColor *colorBuf;
+  bool do_shading;
+  bool do_water;
+  RasterMap *DisplayMap;
+  bool is_terrain;
+  int interp_levels;
+  COLORRAMP* color_ramp;
+  unsigned int height_scale;
 
-#define TERRAIN_ANTIALIASING 1
+public:
+  bool SetMap() {
+    if (RasterTerrain::render_weather) {
+      RASP.Reload(GPS_INFO.Latitude, GPS_INFO.Longitude);
+    }
+    interp_levels = 5;
+    switch (RasterTerrain::render_weather) {
+    case 1: // wstar
+      is_terrain = false;
+      do_water = false;
+      height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
+      DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+      color_ramp = (COLORRAMP*)&weather_colors[0][0];
+      break;
+    case 2: // bl wind spd
+      is_terrain = false;
+      do_water = false;
+      height_scale = 3;
+      DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+      color_ramp = (COLORRAMP*)&weather_colors[1][0];
+      break;
+    case 3: // hbl
+      is_terrain = false;
+      do_water = false;
+      height_scale = 4;
+      DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+      color_ramp = (COLORRAMP*)&weather_colors[2][0];
+      break;
+    case 4: // dwcrit
+      is_terrain = false;
+      do_water = false;
+      height_scale = 4;
+      DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+      color_ramp = (COLORRAMP*)&weather_colors[2][0];
+      break;
+    case 5: // blcloudpct
+      is_terrain = false;
+      do_water = false;
+      height_scale = 0;
+      DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+      color_ramp = (COLORRAMP*)&weather_colors[3][0];
+      break;
+    case 6: // sfctemp
+      is_terrain = false;
+      do_water = false;
+      height_scale = 0;
+      DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+      color_ramp = (COLORRAMP*)&weather_colors[4][0];
+      break;
+    case 7: // hwcrit
+      is_terrain = false;
+      do_water = false;
+      height_scale = 4;
+      DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+      color_ramp = (COLORRAMP*)&weather_colors[2][0];
+      break;
+    case 8: // wblmaxmin
+      is_terrain = false;
+      do_water = false;
+      height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
+      DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+      color_ramp = (COLORRAMP*)&weather_colors[0][0];
+      break;
+    default:
+    case 0:
+      interp_levels = 2;
+      is_terrain = true;
+      do_water = true;
+      height_scale = 4;
+      DisplayMap = RasterTerrain::TerrainMap;
+      color_ramp = (COLORRAMP*)&terrain_colors[TerrainRamp][0];
+      break;
+    }
+
+    /////////////////////////
+
+    if (is_terrain) {
+      do_shading = true;
+    } else {
+      do_shading = false;
+    }
+
+    if (DisplayMap) 
+      return true;
+    else 
+      return false;
+
+  }
 
   void Height() {
     double X, Y;
     int x, y; 
-    short X0, Y0;
-    short X1, Y1;
-    X0 = (short)(dtquant/2); 
-    Y0 = (short)(dtquant/2);
-    X1 = (short)(X0+dtquant*ixs);
-    Y1 = (short)(Y0+dtquant*iys);
-    short* myhbuf = hBuf;
+    int X0 = (unsigned int)(dtquant/2); 
+    int Y0 = (unsigned int)(dtquant/2);
+    int X1 = (unsigned int)(X0+dtquant*ixs);
+    int Y1 = (unsigned int)(Y0+dtquant*iys);
 
-    if(!terrain_dem_graphics.isTerrainLoaded())
-      return;
-
-    DWORD tm, tmstart;
-    tmstart = GetTickCount();
-
-    LockTerrainDataGraphics();
-
-    terrain_dem_graphics.SetCacheTime();
-
-    // grid spacing = 250*rounding; in meters (dependent on resolution)
-
-    int rfact=1;
+    unsigned int rfact=1;
 
     if (MapWindow::BigZoom) {
       MapWindow::BigZoom = false;
-      rfact = 2;
-    } else {
-      rfact = 1;
+      if (!RasterTerrain::IsDirectAccess()) {
+        // first time displaying this data, so do it at half resolution
+        // to avoid too many cache misses
+        rfact = 2;
+      }
     }
-    if (RasterTerrain::DirectAccess) {
-      rfact = 1;
-    }
 
-    // magnify gradient to make it
-    // more obvious
+    double pixelDX, pixelDY;
 
-//    int pval = 0; // y*ixs+x;
-
-    // JMW attempting to remove wobbling terrain
-    x = ((X0+X1)/2);
-    y = ((Y0+Y1)/2);
+    x = (X0+X1)/2;
+    y = (Y0+Y1)/2;
     MapWindow::Screen2LatLon(x, y, X, Y);
     double xmiddle = X;
     double ymiddle = Y;
+    int dd = (int)lround(dtquant*rfact);
 
-    x = ((X0+X1)/2+dtquant*TERRAIN_ANTIALIASING*rfact);
-    y = ((Y0+Y1)/2);
+    x = (X0+X1)/2+dd;
+    y = (Y0+Y1)/2;
     MapWindow::Screen2LatLon(x, y, X, Y);
-    Xrounding = (float)fabs(X-xmiddle);
+    float Xrounding = (float)fabs(X-xmiddle);
+    DistanceBearing(ymiddle, xmiddle, Y, X, &pixelDX, NULL);
 
-    x = ((X0+X1)/2);
-    y = ((Y0+Y1)/2+dtquant*TERRAIN_ANTIALIASING*rfact);
+    x = (X0+X1)/2;
+    y = (Y0+Y1)/2+dd;
     MapWindow::Screen2LatLon(x, y, X, Y);
-    Yrounding = (float)fabs(Y-ymiddle);
+    float Yrounding = (float)fabs(Y-ymiddle);
+    DistanceBearing(ymiddle, xmiddle, Y, X, &pixelDY, NULL);
+
+    pixelsize_d = sqrt((pixelDX*pixelDX+pixelDY*pixelDY)/2.0);
+
+    // OK, ready to start loading height
+
+    DisplayMap->Lock();
+
+    misc_tick_count = GetTickCount();
+
+    //JMW TODO    RasterTerrain::SetCacheTime();
 
     // set resolution
 
-    terrain_dem_graphics.SetTerrainRounding(Xrounding,Yrounding);
-
-    pixelsize = (float)(MapWindow::MapScale/MapWindow::GetMapResolutionFactor()
-			*dtquant);
-
-    epx = max(terrain_dem_graphics.GetEffectivePixelSize(pixelsize)/2,1);
-    epx = min(min(ixs,iys)/2, epx); 
-    if (!RasterTerrain::DirectAccess) {
-      epx = min(100,epx);
-    }
-
-    tm = GetTickCount();
-    tm = tm-tmstart;
-    tmstart = GetTickCount();
-
-    // fill the buffer
-
-    for (y = Y0; y<Y1; y+= dtquant) {
-      for (x = X0; x<X1; x+= dtquant) {
-        MapWindow::Screen2LatLon(x, y, X, Y);
-        *myhbuf = terrain_dem_graphics.GetTerrainHeight(Y, X);
-        ++myhbuf;
-      }
-    }
-
-    tm = GetTickCount();
-    tm = tm-tmstart;
-    tmstart = GetTickCount();
-
-    UnlockTerrainDataGraphics();
-
-  }
-
-  void Slope() {
-    int mag;
-
-    if(!terrain_dem_graphics.isTerrainLoaded())
-      return;
-
-    int ixsepx = ixs*epx;
-
-    int tss = (int)(epx*pixelsize*1024);
-
-    int ixsright = ixs-epx;
-    int iysbottom = iys-epx;
-
-    short *tnxBuf = nxBuf;
-    short *tnyBuf = nyBuf;
-    short *tnzBuf = nzBuf;
-    short *thBuf = hBuf;
-
-    for (int y = 0; y<iys; y++) {
-      for (int x = 0; x<ixs; x++) {
-
-	// JMW: if zoomed right in (e.g. one unit
-	// is larger than terrain grid), then increase the
-	// step size to be equal to the terrain grid
-	// for purposes of calculating slope, to avoid
-	// shading problems (gridding of display)
-	// This is why epx is used instead of 1 previously.
-	// for large zoom levels, epx=1
-
-	int p20, p22, p31, p32;
-	if (x>=ixsright) {
-	  int itss = (ixs-x)-1;
-	  p20= tss*itss/epx;
-	  p22= thBuf[itss];
-	} else {
-	  p20= tss;
-	  p22= thBuf[epx];
-	}
-	if (x<epx) {
-	  int itss = x;
-	  p20+= tss*itss/epx;
-	  p22-= thBuf[-itss];
-	} else {
-	  p20+= tss;
-	  p22-= thBuf[-epx];
-	}
-
-	if (y>=iysbottom) {
-	  int itss = (iys-y)-1;
-	  p31= tss*itss/epx;
-	  p32= thBuf[itss*ixs];
-	} else {
-	  p31= tss;
-	  p32= thBuf[ixsepx];
-	}
-	if (y<epx) {
-	  int itss = y;
-	  p31+= tss*itss/epx;
-       	  p32-= thBuf[-itss*ixs];
-	} else {
-	  p31+= tss;
-	  p32-= thBuf[-ixsepx]; 
-	}
-	
-	int dp210, dp212;
-	int dp311, dp312;
-	
-	dp210= p20;
-	dp212= p22*2; // magnify slope
-	
-	dp311= p31;
-	dp312= p32*2; // magnify slope 
-	
-	int dd0, dd1, dd2;
-	dd0 = (-dp212*dp311)/tss;
-	dd1 = (-dp210*dp312)/tss;
-	dd2 = (dp210*dp311)/tss;
-	mag = isqrt4(dd0*dd0+dd1*dd1+dd2*dd2);
-	if (mag>0) {
-	  dd0= (dd0<<8)/mag;
-	  dd1= (dd1<<8)/mag;
-	  dd2= (dd2<<8)/mag;
-	} else {
-	  dd0= 0;
-	  dd1= 0;
-	  dd2= 255;
-	}
-	*tnxBuf = (short)dd0;
-	*tnyBuf = (short)dd1;
-	*tnzBuf = (short)dd2;
-
-	thBuf++;
-	tnxBuf++;
-	tnyBuf++;
-	tnzBuf++;
-
-      }
-    }
-  }
-
-  void Illumination(short sx, short sy, short sz) {
-    short *tnxBuf = nxBuf;
-    short *tnyBuf = nyBuf;
-    short *tnzBuf = nzBuf;
-    short *tilBuf = ilBuf;
-    int mag;
-
-    if(!terrain_dem_graphics.isTerrainLoaded())
-      return;
-
-    UpdateContrast();
-
-    int gsize = ixs*iys;
-    short min_illumination = 1000;
-    short max_illumination = 0;
-    short illumination;
-    int av_illumination = 0;
-    int i;
-    for (i=0; i<gsize; ++i) {
-      
-      mag = (*tnxBuf*sx+*tnyBuf*sy+*tnzBuf*sz)/256; // 8
-      illumination = (short)(max(0,min(255,(short)mag)));
-      *tnxBuf = illumination;
-
-      max_illumination = max(illumination, max_illumination);
-      min_illumination = min(illumination, min_illumination);
-      av_illumination += illumination;
-
-      ++tnxBuf;
-      ++tnyBuf;
-      ++tnzBuf;
-
-    }
-    av_illumination /= gsize;
-
-    // rescale illumination to improve contrast
-
-    short mslope=0;
-    short moffset=0;
-    short bright = (short)(128+TerrainBrightness/2);
-
-    static short t_mslope = 256;
-    static short t_moffset = 170;
-
-    if (max_illumination-av_illumination > 0) {
-      // we want max illumination to be 255
-      // we want average illumination to equal bright
-
-      // bright = av_illumination*slope/256+offset
-      // 255 = max_illumination*slope/256+offset
-      // 
-      // offset = 255-max_illum*slope/256 = bright-av_illum*slope/256
-      // 255-bright = (max_ill-av_illum)*slope/256
-      // slope = 256*(255-bright)/(max_illum-av_illum)
-
-      mslope = (short)((255*256-bright*256)/(max_illumination-av_illumination));
+    if (DisplayMap->DirectAccess) {
+      DisplayMap->SetFieldRounding(0,0);
     } else {
-      mslope = 256;
+      DisplayMap->SetFieldRounding(Xrounding,Yrounding);
     }
-    mslope = (short)min(256*2,mslope);
-    moffset = (short)(256-mslope*max_illumination/256);
 
-    t_mslope = (short)((4*t_mslope+4*mslope)/8);
-    t_moffset = (short)((4*t_moffset+4*moffset)/8);
+    epx = DisplayMap->GetEffectivePixelSize(&pixelsize_d,
+                                            ymiddle, xmiddle);
 
-    // make quick tabular lookup for illumination
-    short ttab[257];
-    for (i=0; i<256; i++) {
-      ttab[i] = (short)(max(0,min(255,i*t_mslope/256+t_moffset)));
-    }
-    ttab[256]=ttab[255];
-
-    // smooth shading buffer
-
-#ifndef NEWSMOOTH
-    tilBuf = ilBuf;
-    tnxBuf = nxBuf;
-    for (i=0; i<gsize; ++i) {
-      *tilBuf = ttab[*tnxBuf];
-      tilBuf++;
-      tnxBuf++;
-    }
-#else
-    int index = 0;
-    tilBuf = ilBuf;
-    for (int y = 0; y<iys; y++) {
-      for (int x = 0; x<ixs; x++) {
-	
-	  short ff;
-	  short vv;
-
-	  vv = 3;
-	  ff = 3*nxBuf[index];
-	  if (x>0) {
-	  ++vv;
-	  ff += nxBuf[index-1];
-	  }
-	if (x<ixs-1) {
-	  ++vv;
-	  ff += nxBuf[index+1];
-	}
-	if (y>0) {
-	  ++vv;
-	  ff += nxBuf[index-ixs];
-	}
-	if (y<iys-1) {
-	  ++vv;
-	  ff += nxBuf[index+ixs];
-	}
-	ff/= vv;
-	
-
-	// *tilBuf= ttab[min(255,max(0,ff))];
-	ilBuf[index] = ttab[nxBuf[index]];
-
-	//	++tilBuf;
-	index++;
-      }
+    if (epx> min(ixs,iys)/4) {
+      do_shading = false;
     } 
+
+    POINT orig = MapWindow::GetOrigScreen();
+    rect_visible.left = max((long)MapWindow::MapRectBig.left,
+                            (long)(MapWindow::MapRect.left-(long)epx*dtquant))-orig.x;
+    rect_visible.right = min((long)MapWindow::MapRectBig.right,
+                             (long)(MapWindow::MapRect.right+(long)epx*dtquant))-orig.x;
+    rect_visible.top = max((long)MapWindow::MapRectBig.top,
+                           (long)(MapWindow::MapRect.top-(long)epx*dtquant))-orig.y;
+    rect_visible.bottom = min((long)MapWindow::MapRectBig.bottom,
+                              (long)(MapWindow::MapRect.bottom+(long)epx*dtquant))-orig.y;
+
+    FillHeightBuffer(X0-orig.x, Y0-orig.y, X1-orig.x, Y1-orig.y);
+
+    DisplayMap->Unlock();
+
+    if (RasterTerrain::render_weather) {
+      ScanSpotHeights(X0-orig.x, Y0-orig.y, X1-orig.x, Y1-orig.y);
+    }
+  }
+
+  void ScanSpotHeights(const int X0, const int Y0, const int X1, const int Y1) {
+    unsigned short* myhbuf = hBuf;
+    unsigned short* hBufTop = hBuf+ixs*iys;
+
+    spot_max_pt.x = -1;
+    spot_max_pt.y = -1;
+    spot_min_pt.x = -1;
+    spot_min_pt.y = -1;
+    spot_max_val = -1;
+    spot_min_val = 32767;
+
+    RECT rect_spot;
+    rect_spot.left =   rect_visible.left+IBLSCALE(30);
+    rect_spot.right =  rect_visible.right-IBLSCALE(30);
+    rect_spot.top =    rect_visible.top+IBLSCALE(30);
+    rect_spot.bottom = rect_visible.bottom-IBLSCALE(30);
+
+    for (int y = Y0; y<Y1; y+= dtquant) {
+      for (int x = X0; x<X1; x+= dtquant, myhbuf++) {
+        if ((x>= rect_spot.left) &&
+            (x<= rect_spot.right) &&
+            (y>= rect_spot.top) &&
+            (y<= rect_spot.bottom)) {
+          ASSERT(myhbuf<hBufTop);
+
+          short val = *myhbuf;
+          if (val>spot_max_val) {
+            spot_max_val = val;
+            spot_max_pt.x = x;
+            spot_max_pt.y = y;
+          }
+          if (val<spot_min_val) {
+            spot_min_val = val;
+            spot_min_pt.x = x;
+            spot_min_pt.y = y;
+          }
+        }
+      }
+    }
+  }
+
+  void FillHeightBuffer(const int X0, const int Y0, const int X1, const int Y1) {
+    // fill the buffer
+    unsigned short* myhbuf = hBuf;
+    unsigned short* hBufTop = hBuf+ixs*iys;
+
+#ifndef SLOW_STUFF
+
+    // This code is quickest but not so readable
+    
+    const double PanLatitude =  MapWindow::GetPanLatitude();
+    const double PanLongitude = MapWindow::GetPanLongitude();
+    const double InvDrawScale = MapWindow::GetInvDrawScale()/1024.0;
+    const double DisplayAngle = MapWindow::GetDisplayAngle();
+    const int cost = ifastcosine(DisplayAngle);
+    const int sint = ifastsine(DisplayAngle);
+
+    for (int y = Y0; y<Y1; y+= dtquant) {
+      for (int x = X0; x<X1; x+= dtquant, myhbuf++) {
+        if ((x>= rect_visible.left) &&
+            (x<= rect_visible.right) &&
+            (y>= rect_visible.top) &&
+            (y<= rect_visible.bottom)) {
+          ASSERT(myhbuf<hBufTop);
+
+          double Y = PanLatitude - (y*cost+x*sint)*InvDrawScale;
+          double X = PanLongitude + (x*cost-y*sint)*invfastcosine(Y)*InvDrawScale;
+          *myhbuf = max(0, DisplayMap->GetField(Y,X));
+        } else {
+          *myhbuf = 0;
+        }
+      }
+    }
+
+#else
+
+    // This code is marginally slower but readable
+    double X, Y;
+    for (int y = Y0; y<Y1; y+= dtquant) {
+      for (int x = X0; x<X1; x+= dtquant) {
+        MapWindow::Screen2LatLon(x,y,X,Y);
+        *myhbuf++ = max(0, DisplayMap->GetField(Y, X));
+      }
+    }
+
 #endif
 
   }
 
-  void FillColorBuffer() {
-    BYTE r=0xff,g=0xff,b=0xff;
-    int pval = 0; 
+  // JMW: if zoomed right in (e.g. one unit is larger than terrain
+  // grid), then increase the step size to be equal to the terrain
+  // grid for purposes of calculating slope, to avoid shading problems
+  // (gridding of display) This is why epx is used instead of 1
+  // previously.  for large zoom levels, epx=1
 
-    if(!terrain_dem_graphics.isTerrainLoaded())
-      return;
+  void Slope(const int sx, const int sy, const int sz) {
 
-    int gsize = iys*ixs;
-    for (pval=0; pval< gsize; pval++) {
-      if (hBuf[pval]<=0) {
-	// water color
-	r = 64;
-	g = 96;
-	b = 240;
+    const int iepx = (int)epx;
+    const unsigned int ixsepx = ixs*epx;
+    const unsigned int ixsright = ixs-1-epx;
+    const unsigned int iysbottom = iys-epx;
+    const int hscale = max(1,(int)(pixelsize_d)); 
+    int itss_x;
+    int p20, p22, p31, p32, p31s;
+
+    unsigned short *thBuf = hBuf;
+
+    const BGRColor* oColorBuf = colorBuf+64*256;
+    BGRColor* imageBuf = sbuf->GetBuffer();
+    if (!imageBuf) return;
+
+    short h;
+
+    unsigned short* hBufTop = hBuf+ixs*iys;
+
+    for (unsigned int y = 0; y< iys; y++) {
+      int itss_y = iys-1-y;
+      int itss_y_ixs = itss_y*ixs;
+      int yixs = y*ixs;
+      bool ybottom=false;
+      bool ytop=false;
+
+      if (y<iysbottom) {
+        p31= epx;
+        ybottom = true;
       } else {
-	TerrainColorMap(hBuf[pval],r,g,b);
-	TerrainIllumination(ilBuf[pval], r,g,b);
+        p31= itss_y;
       }
-      sbuf->SetPoint(pval, r, g, b);
+
+      if (y<epx) {
+        p31+= y;
+        ytop = true;
+      } else {
+        p31+= epx;
+      }
+      p31s = p31*hscale;
+
+      for (unsigned int x = 0 ; x<ixs; x++, thBuf++, imageBuf++) {
+
+        ASSERT(thBuf< hBufTop);
+
+        if ((h = *thBuf)>0) {
+
+          h = min(255, h>>height_scale);
+          // no need to calculate slope if undefined height or sea level
+
+          if (do_shading) {
+            if (x<ixsright) {
+              p20= epx;
+              p22= *(thBuf+epx);
+              ASSERT(thBuf+epx< hBufTop);
+            } else {
+              itss_x = ixs-x-2;
+              p20= itss_x;
+              p22= *(thBuf+itss_x);
+              ASSERT(thBuf+itss_x< hBufTop);
+              ASSERT(thBuf+itss_x>= hBuf);
+            } 
+            
+            if (x<epx) {
+              p20+= x;
+              p22-= *(thBuf-x);
+              ASSERT(thBuf-x>= hBuf);
+            } else {
+              p20+= epx;
+              p22-= *(thBuf-epx);
+              ASSERT(thBuf-epx>= hBuf);
+            }
+            
+            if (ybottom) {
+              p32 = *(thBuf+ixsepx);
+              ASSERT(thBuf+ixsepx<hBufTop);
+            } else {
+              p32 = *(thBuf+itss_y_ixs);
+              ASSERT(thBuf+itss_y_ixs<hBufTop);
+            }
+            if (ytop) {
+              p32 -= *(thBuf-yixs);
+              ASSERT(thBuf-yixs>=hBuf);
+            } else {
+              p32 -= *(thBuf-ixsepx);
+              ASSERT(thBuf-ixsepx>=hBuf);
+            }
+            
+            if ((p22!=0) || (p32!=0)) {
+              
+              // p20 and p31 are never 0... so only p22 or p32 can be zero
+              // if both are zero, the vector is 0,0,1 so there is no need
+              // to normalise the vector
+              int dd0 = p22*p31;
+              int dd1 = p20*p32;
+              int dd2 = p20*p31s;
+              
+              while (dd2>512) {
+                // prevent overflow of magnitude calculation
+                dd0 /= 2;
+                dd1 /= 2;
+                dd2 /= 2;
+              }
+              int mag = isqrt4(dd0*dd0+dd1*dd1+dd2*dd2);
+              if (mag>0) {
+                mag = (dd2*sz+dd0*sx+dd1*sy)/mag;
+                mag = max(-64,min(63,(mag-sz)*TerrainContrast/128));
+                *imageBuf = oColorBuf[h+mag*256];
+              } else {
+                *imageBuf = oColorBuf[h];
+              }
+            } else {
+              // slope is zero, so just look up the color
+              *imageBuf = oColorBuf[h];
+            }
+          } else {
+            // slope is zero, so just look up the color
+            *imageBuf = oColorBuf[h];
+          }
+        } else {
+          // we're in the water, so look up the color for water
+          *imageBuf = oColorBuf[255];
+        }
+      }
     }
-    sbuf->Zoom(OVS);
+  };
+
+  void ColorTable() {
+    static COLORRAMP* lastColorRamp = NULL;
+    if (color_ramp == lastColorRamp) {
+      // no need to update the color table
+      return;
+    }
+    lastColorRamp = color_ramp;
+    
+    for (int i=0; i<256; i++) {
+      for (int mag= -64; mag<64; mag++) {
+        BYTE r, g, b; 
+        if (i == 255) {
+          if (do_water) {
+            // water colours
+            r = 85;
+            g = 160;
+            b = 255;
+          } else {
+            ColorRampLookup(0, r, g, b, 
+                            color_ramp, NUM_COLOR_RAMP_LEVELS, interp_levels);
+          }
+        } else {
+          ColorRampLookup(i<<height_scale, r, g, b, 
+                          color_ramp, NUM_COLOR_RAMP_LEVELS, interp_levels);
+          TerrainShading(mag, r, g, b);
+        }
+        colorBuf[i+(mag+64)*256] = BGRColor(r,g,b);
+      }
+    }
   }
 
   void Draw(HDC hdc, RECT rc) {
 
-    if(!terrain_dem_graphics.isTerrainLoaded())
-      return;
+    sbuf->Zoom(oversampling);
 
-    DWORD tm, tmstart;
+    if (blursize>0) {
 
-    tmstart = GetTickCount();
+      sbuf->HorizontalBlur(blursize); 
+      sbuf->VerticalBlur(blursize);
 
-    sbuf->HorizontalBlur(3); // now 51 ms!
-    sbuf->VerticalBlur(3);
-
-    tm = GetTickCount();
-    tm = tm-tmstart;
-    tmstart = GetTickCount();
-
-    //    sbuf->Quantise();
-
-    sbuf->DrawStretch(&hdc, rc); // 84 ms
-
-    tm = GetTickCount();
-    tm = tm-tmstart;
-    tmstart = GetTickCount();
+    }
+    sbuf->DrawStretch(&hdc, rc);
 
   }
 
@@ -801,7 +1093,6 @@ public:
 
 TerrainRenderer *trenderer = NULL;
 
-int CacheEfficiency = 0;
 int Performance = 0;
 
 void CloseTerrainRenderer() {
@@ -810,25 +1101,6 @@ void CloseTerrainRenderer() {
   }
 }
 
-void OptimizeTerrainCache() 
-{
-  if (terrain_dem_graphics.DirectAccess)
-    return;
-
-  LockTerrainDataGraphics();
-
-  if(!terrain_dem_graphics.isTerrainLoaded()) {
-    UnlockTerrainDataGraphics();
-    return;
-  }
-  if (terrain_dem_graphics.terraincachemisses > 0){
-    DWORD tm =GetTickCount();
-    terrain_dem_graphics.OptimizeCash();
-    tm =GetTickCount()-tm;
-  }
-  
-  UnlockTerrainDataGraphics();
-}
 
 
 void DrawTerrain( const HDC hdc, const RECT rc, 
@@ -836,79 +1108,102 @@ void DrawTerrain( const HDC hdc, const RECT rc,
 {
   (void)sunelevation; // unused TODO
   (void)rc;
-  DWORD tm, tmstart;
 
-  if(!terrain_dem_graphics.isTerrainLoaded())
+  if (!RasterTerrain::isTerrainLoaded()) {
     return;
+  }
 
   if (!trenderer) {
     trenderer = new TerrainRenderer(MapWindow::MapRectBig);
   }
 
+  if (!trenderer->SetMap()) {
+    return;
+  }
+  
   // step 1: calculate sunlight vector
-  short sx, sy, sz;
-  double fudgeelevation = (90.0-80.0*TerrainContrast/255.0);
+  int sx, sy, sz;
+  double fudgeelevation = (10.0+80.0*TerrainBrightness/255.0);
 
-  sx = (short)(-256*(fastcosine(fudgeelevation)*fastsine(sunazimuth)));
-  sy = (short)(-256*(fastcosine(fudgeelevation)*fastcosine(sunazimuth)));
-  sz = (short)(256*fastsine(fudgeelevation));
+  sx = (int)(255*(fastcosine(fudgeelevation)*fastsine(sunazimuth)));
+  sy = (int)(255*(fastcosine(fudgeelevation)*fastcosine(sunazimuth)));
+  sz = (int)(255*fastsine(fudgeelevation));
+
+  trenderer->ColorTable();
 
   // step 2: fill height buffer
-  tmstart = GetTickCount();
 
-  trenderer->Height(); // 106ms
-
-  tm = GetTickCount();
-  tm = tm-tmstart;
-  tmstart = GetTickCount();
-
-  CacheEfficiency = terrain_dem_graphics.terraincacheefficiency;
-  //  Performance = tm;
+  trenderer->Height(); 
 
   // step 3: calculate derivatives of height buffer
-  trenderer->Slope(); // 15ms
+  // step 4: calculate illumination and colors
+  trenderer->Slope(sx, sy, sz); 
+  
+  // step 5: draw
+  trenderer->Draw(hdc, MapWindow::MapRectBig);
 
-  tm = GetTickCount();
-  tm = tm-tmstart;
-  tmstart = GetTickCount(); 
-
-  // step 4: calculate illumination
-
-  trenderer->Illumination(sx, sy, sz); // 4ms
-
-  tm = GetTickCount();
-  tm = tm-tmstart;
-  tmstart = GetTickCount();
-
-  // step 5: calculate colors
-
-  trenderer->FillColorBuffer(); // 16 ms
-
-  tm = GetTickCount();
-  tm = tm-tmstart;
-  tmstart = GetTickCount();
-
-  // step 6: draw // 128 ms
-  trenderer->Draw(hdc, MapWindow::MapRectBig); 
-
-  tm = GetTickCount();
-  tm = tm-tmstart;
-  tmstart = GetTickCount();
-
+  misc_tick_count = GetTickCount()-misc_tick_count;
 }
 
+
+static void DrawSpotHeight_Internal(const HDC hdc, TCHAR *Buffer, POINT pt) {
+  int size = _tcslen(Buffer);
+  if (size==0) {
+    return;
+  }
+  POINT orig = MapWindow::GetOrigScreen();
+  SIZE tsize;
+  RECT brect;
+  GetTextExtentPoint(hdc, Buffer, size, &tsize);
+  
+  pt.x+= 2+orig.x;
+  pt.y+= 2+orig.y;
+  brect.left = pt.x;
+  brect.right = brect.left+tsize.cx;
+  brect.top = pt.y;
+  brect.bottom = brect.top+tsize.cy;
+
+  if (!MapWindow::checkLabelBlock(brect))
+    return;
+  
+  ExtTextOut(hdc, pt.x, pt.y, 0, NULL,
+             Buffer, size, NULL);
+}
+
+void DrawSpotHeights(const HDC hdc) {
+  // JMW testing, display of spot max/min
+  if (!RasterTerrain::render_weather) 
+    return;
+  if (!trenderer) 
+    return;
+
+  extern HFONT  TitleWindowFont;
+  HFONT old_font = (HFONT)SelectObject(hdc, TitleWindowFont);
+
+  TCHAR Buffer[20];
+
+  RASP.ValueToText(Buffer, trenderer->spot_max_val);
+  DrawSpotHeight_Internal(hdc, Buffer, trenderer->spot_max_pt);
+
+  RASP.ValueToText(Buffer, trenderer->spot_min_val);
+  DrawSpotHeight_Internal(hdc, Buffer, trenderer->spot_min_pt);
+
+  SelectObject(hdc, old_font);
+}
 
 ///////////////
 
 extern TCHAR szRegistryTopologyFile[];
 
-
+#include "wcecompat/ts_string.h"
+// JMW TODO: check ts_string does the right thing
 
 void OpenTopology() {
   StartupStore(TEXT("OpenTopology\r\n"));
 
+  // Start off by getting the names and paths
+  static TCHAR  szOrigFile[MAX_PATH] = TEXT("\0");
   static TCHAR  szFile[MAX_PATH] = TEXT("\0");
-  static HANDLE hFile;
   static  TCHAR Directory[MAX_PATH];
 
   LockTerrainDataGraphics();
@@ -919,117 +1214,144 @@ void OpenTopology() {
  
   GetRegistryString(szRegistryTopologyFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
+  _tcscpy(szOrigFile,szFile); // make copy of original
+  ContractLocalPath(szOrigFile);
 
+  // remove it in case it causes a crash (will restore later)
   SetRegistryString(szRegistryTopologyFile, TEXT("\0"));
 
   if (_tcslen(szFile)==0) {
-    UnlockTerrainDataGraphics();
-    return;
-  }
 
-  ExtractDirectory(Directory,szFile);
-
-  hFile = NULL;
-  hFile = CreateFile(szFile,GENERIC_READ,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  if( hFile == NULL)
-    {
+    static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
+    GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
+    ExpandLocalPath(szMapFile);
+    if (_tcslen(szMapFile)==0) {
       UnlockTerrainDataGraphics();
       return;
     }
 
+    // Look for the file within the map zip file...
+    _tcscpy(Directory,szMapFile);
+    wcscat(Directory,TEXT("/"));
+    szFile[0]=0;
+    wcscat(szFile,Directory);
+    wcscat(szFile,TEXT("topology.tpl"));
+
+  } else {
+    ExtractDirectory(Directory,szFile);
+  }
+
+  // Ready to open the file now..
+
+  static ZZIP_FILE* zFile;
+  char zfilename[MAX_PATH];
+  unicode2ascii(szFile, zfilename, MAX_PATH);
+  zFile = zzip_fopen(zfilename, "rb");
+  if (!zFile) {
+    UnlockTerrainDataGraphics();
+    return;
+  }
+
   TCHAR ctemp[80];
-  TCHAR TempString[200];
+  TCHAR TempString[READLINE_LENGTH+1];
   TCHAR ShapeName[50];
   double ShapeRange;
   long ShapeIcon;
   long ShapeField;
-  TCHAR wShapeFilename[200];
+  TCHAR wShapeFilename[MAX_PATH];
   TCHAR *Stop;
   int numtopo = 0;
-  char ShapeFilename[200];
+  char ShapeFilename[MAX_PATH];
 
-  if(hFile != INVALID_HANDLE_VALUE )
-    {
+  while(ReadString(zFile,READLINE_LENGTH,TempString)) {
       
-      while(ReadString(hFile,200,TempString))
-        {
-          
-          if(_tcslen(TempString) > 0 && _tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
-            {
+    if(_tcslen(TempString) > 0 && _tcsstr(TempString,TEXT("*")) != TempString) // Look For Comment
+      {
+        
+        BYTE red, green, blue;
+        // filename,range,icon,field
+        
+        // File name
+        PExtractParameter(TempString, ctemp, 0);
+        _tcscpy(ShapeName, ctemp);
+        
+        _tcscpy(wShapeFilename, Directory);
 
-              BYTE red, green, blue;
-              // filename,range,icon,field
-
-              // File name
-              PExtractParameter(TempString, ctemp, 0);
-              _tcscpy(ShapeName, ctemp);
-
-              _tcscpy(wShapeFilename, Directory);
-              wcscat(wShapeFilename,ShapeName);
-              wcscat(wShapeFilename,TEXT(".shp"));
-
-              WideCharToMultiByte( CP_ACP, 0, wShapeFilename,
-                                   _tcslen(wShapeFilename)+1, 
-                                   ShapeFilename,   
-                                   200, NULL, NULL);
-
-              // Shape range
-              PExtractParameter(TempString, ctemp, 1);
-              ShapeRange = StrToDouble(ctemp,NULL);
-
-              // Shape icon
-              PExtractParameter(TempString, ctemp, 2);
-              ShapeIcon = _tcstol(ctemp, &Stop, 10);
-
-              // Shape field for text display
-
-	      // sjt 02NOV05 - field parameter enabled
-              PExtractParameter(TempString, ctemp, 3);
-              if (iswalnum(ctemp[0])) {
-		ShapeField = _tcstol(ctemp, &Stop, 10);
-	        ShapeField--;
-	      } else
-		ShapeField = -1;
-
-              // Red component of line / shading colour
-              PExtractParameter(TempString, ctemp, 4);
-              red = (BYTE)_tcstol(ctemp, &Stop, 10);
-
-              // Green component of line / shading colour
-              PExtractParameter(TempString, ctemp, 5);
-              green = (BYTE)_tcstol(ctemp, &Stop, 10);
-
-              // Blue component of line / shading colour
-              PExtractParameter(TempString, ctemp, 6);
-    		  blue = (BYTE)_tcstol(ctemp, &Stop, 10);
-  
-              if (ShapeField<0) {
-                Topology* newtopo;
-                newtopo = new Topology(ShapeFilename, RGB(red,green,blue));
-                TopoStore[numtopo] = newtopo;
-              } else {
-                TopologyLabel *newtopol;
-                newtopol = new TopologyLabel(ShapeFilename, 
-					     RGB(red,green,blue),
-					     ShapeField);
-                TopoStore[numtopo] = newtopol;
-              }
-              if (ShapeIcon!=0) 
-                TopoStore[numtopo]->loadBitmap(ShapeIcon);
-
-              TopoStore[numtopo]->scaleThreshold = ShapeRange;
-
-              numtopo++;
-            }
+        wcscat(wShapeFilename,ShapeName);
+        wcscat(wShapeFilename,TEXT(".shp"));
+        
+        WideCharToMultiByte( CP_ACP, 0, wShapeFilename,
+                             _tcslen(wShapeFilename)+1, 
+                             ShapeFilename,   
+                             200, NULL, NULL);
+        
+        // Shape range
+        PExtractParameter(TempString, ctemp, 1);
+        ShapeRange = StrToDouble(ctemp,NULL);
+        
+        // Shape icon
+        PExtractParameter(TempString, ctemp, 2);
+        ShapeIcon = _tcstol(ctemp, &Stop, 10);
+        
+        // Shape field for text display
+        
+        // sjt 02NOV05 - field parameter enabled
+        PExtractParameter(TempString, ctemp, 3);
+        if (iswalnum(ctemp[0])) {
+          ShapeField = _tcstol(ctemp, &Stop, 10);
+          ShapeField--;
+        } else
+          ShapeField = -1;
+        
+        // Red component of line / shading colour
+        PExtractParameter(TempString, ctemp, 4);
+        red = (BYTE)_tcstol(ctemp, &Stop, 10);
+        
+        // Green component of line / shading colour
+        PExtractParameter(TempString, ctemp, 5);
+        green = (BYTE)_tcstol(ctemp, &Stop, 10);
+        
+        // Blue component of line / shading colour
+        PExtractParameter(TempString, ctemp, 6);
+        blue = (BYTE)_tcstol(ctemp, &Stop, 10);
+        
+        if ((red==64) 
+            && (green==96) 
+            && (blue==240)) {
+          // JMW update colours to ICAO standard
+          red =    85; // water colours
+          green = 160;
+          blue =  255;
         }
+        
+        if (ShapeField<0) {
+          Topology* newtopo;
+          newtopo = new Topology(ShapeFilename, RGB(red,green,blue));
+          TopoStore[numtopo] = newtopo;
+        } else {
+          TopologyLabel *newtopol;
+          newtopol = new TopologyLabel(ShapeFilename, 
+                                       RGB(red,green,blue),
+                                       ShapeField);
+          TopoStore[numtopo] = newtopol;
+        }
+        if (ShapeIcon!=0) 
+          TopoStore[numtopo]->loadBitmap(ShapeIcon);
+        
+        TopoStore[numtopo]->scaleThreshold = ShapeRange;
+        
+        numtopo++;
+      }
+  }
+  
+  //  CloseHandle (hFile);
+  zzip_fclose(zFile);
 
-      CloseHandle (hFile);
+  // file was OK, so save it
+  SetRegistryString(szRegistryTopologyFile, szOrigFile);
 
-      // file was OK, so save it
-      ContractLocalPath(szFile);
-      SetRegistryString(szRegistryTopologyFile, szFile);
-
-    }
   UnlockTerrainDataGraphics();
 
 }
+
+

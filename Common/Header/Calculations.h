@@ -159,6 +159,14 @@ typedef struct _DERIVED_INFO
 
   double ZoomDistance;
   double TaskSpeedAchieved;
+  double TrueAirspeedEstimated;
+
+  double timeCruising;
+  double timeCircling;
+
+  double MinAltitude;
+  double MaxHeightGain;
+
 } DERIVED_INFO;
 
 
@@ -185,5 +193,8 @@ void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 bool  InAATTurnSector(double longitude, double latitude, int thepoint);
 
 void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
+double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp);
+int getFinalWaypoint(void);
 
 #endif

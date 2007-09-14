@@ -167,12 +167,17 @@ void Statistics::ScaleXFromValue(RECT rc, double value)
 
 void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
                            int Style) {
+  int minwidth = 1;
+#ifndef GNAV
+  minwidth = 2;
+#endif  
   POINT line[2];
   line[0] = l1;
   line[1] = l2;
   switch (Style) {
   case STYLE_BLUETHIN:
-    DrawDashLine(hdc, 1, 
+    DrawDashLine(hdc, 
+                 minwidth, 
                  l1, 
                  l2, 
                  RGB(0,50,255));
@@ -209,6 +214,7 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
 
 void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text, 
 			   double xv, double yv) {
+
   SIZE tsize;
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
   int x = (int)((xv-x_min)*xscale)+rc.left-tsize.cx/2;
@@ -216,26 +222,30 @@ void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text,
   SetBkMode(hdc, OPAQUE);
   ExtTextOut(hdc, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
   SetBkMode(hdc, TRANSPARENT);
-
 }
+
+extern HFONT MapLabelFont;
 
 
 void Statistics::DrawXLabel(HDC hdc, RECT rc, TCHAR *text) {
   SIZE tsize;
+  HFONT hfOld = (HFONT)SelectObject(hdc, MapLabelFont);
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
-  int x = rc.right-tsize.cx;
+  int x = rc.right-tsize.cx-IBLSCALE(3);
   int y = rc.bottom-tsize.cy;
-
   ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
+  SelectObject(hdc, hfOld);
 }
 
 
 void Statistics::DrawYLabel(HDC hdc, RECT rc, TCHAR *text) {
   SIZE tsize;
+  HFONT hfOld = (HFONT)SelectObject(hdc, MapLabelFont);
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
   int x = max(2,rc.left-tsize.cx);
   int y = rc.top;
   ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
+  SelectObject(hdc, hfOld);
 }
 
 
@@ -337,10 +347,10 @@ void Statistics::DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata) {
 
   int xmin, ymin, xmax, ymax;
 
-  for (i=0; i<lsdata->sum_n; i++) {
-    xmin = (int)((i+0.2)*xscale)+rc.left;
+  for (i= 0; i<lsdata->sum_n; i++) {
+    xmin = (int)((i+1+0.2)*xscale)+rc.left;
     ymin = (int)((y_max-y_min)*yscale)+rc.top;
-    xmax = (int)((i+0.8)*xscale)+rc.left;
+    xmax = (int)((i+1+0.8)*xscale)+rc.left;
     ymax = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
     Rectangle(hdc, 
               xmin, 
@@ -357,20 +367,11 @@ void Statistics::DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
 
   POINT line[2];
 
-  int i;
-
-
-  int xmin, ymin, xmax, ymax;
-
-  for (i=0; i<lsdata->sum_n-1; i++) {
-    xmin = (int)((lsdata->xstore[i]-x_min)*xscale)+rc.left;
-    ymin = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
-    xmax = (int)((lsdata->xstore[i+1]-x_min)*xscale)+rc.left;
-    ymax = (int)((y_max-lsdata->ystore[i+1])*yscale)+rc.top;
-    line[0].x = xmin;
-    line[0].y = ymin;
-    line[1].x = xmax;
-    line[1].y = ymax;
+  for (int i=0; i<lsdata->sum_n-1; i++) {
+    line[0].x = (int)((lsdata->xstore[i]-x_min)*xscale)+rc.left;
+    line[0].y = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
+    line[1].x = (int)((lsdata->xstore[i+1]-x_min)*xscale)+rc.left;
+    line[1].y = (int)((y_max-lsdata->ystore[i+1])*yscale)+rc.top;
 
     // STYLE_DASHGREEN
     // STYLE_MEDIUMBLACK
@@ -379,17 +380,28 @@ void Statistics::DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
 }
 
 
-void Statistics::DrawXGrid(HDC hdc, RECT rc, double ticstep, double zero,
-                           int Style) {
+void Statistics::FormatTicText(TCHAR *text, double val, double step) {
+  if (step<1.0) {
+    _stprintf(text, TEXT("%.1f"), val);
+  } else {
+    _stprintf(text, TEXT("%.0f"), val);
+  }
+}
+
+
+void Statistics::DrawXGrid(HDC hdc, RECT rc, double tic_step, double zero,
+                           int Style, double unit_step, bool draw_units) {
 
   POINT line[2];
 
   double xval;
 
   int xmin, ymin, xmax, ymax;
-  if (!ticstep) return;
+  if (!tic_step) return;
 
-  for (xval=zero; xval<= x_max; xval+= ticstep) {
+  //  bool do_units = ((x_max-zero)/tic_step)<10;
+
+  for (xval=zero; xval<= x_max; xval+= tic_step) {
 
     xmin = (int)((xval-x_min)*xscale)+rc.left;
     ymin = rc.top;
@@ -402,9 +414,20 @@ void Statistics::DrawXGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
     // STYLE_THINDASHPAPER
     StyleLine(hdc, line[0], line[1], Style);
+
+    if (draw_units && (xval< x_max) 
+        && (xmin>=rc.left) && (xmin<=rc.right)) {
+      TCHAR unit_text[MAX_PATH];
+      FormatTicText(unit_text, xval*unit_step/tic_step, unit_step);
+      SetBkMode(hdc, OPAQUE);
+      ExtTextOut(hdc, xmin, ymax-IBLSCALE(17), 
+                 ETO_OPAQUE, NULL, unit_text, _tcslen(unit_text), NULL);
+      SetBkMode(hdc, TRANSPARENT);
+    }
+
   }
 
-  for (xval=zero; xval>= x_min; xval-= ticstep) {
+  for (xval=zero-tic_step; xval>= x_min; xval-= tic_step) {
 
     xmin = (int)((xval-x_min)*xscale)+rc.left;
     ymin = rc.top;
@@ -417,12 +440,23 @@ void Statistics::DrawXGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
     // STYLE_THINDASHPAPER
     StyleLine(hdc, line[0], line[1], Style);
+
+    if (draw_units && (xval> x_min) 
+        && (xmin>=rc.left) && (xmin<=rc.right)) {
+      TCHAR unit_text[MAX_PATH];
+      FormatTicText(unit_text, xval*unit_step/tic_step, unit_step);
+      SetBkMode(hdc, OPAQUE);
+      ExtTextOut(hdc, xmin, ymax-IBLSCALE(17), 
+                 ETO_OPAQUE, NULL, unit_text, _tcslen(unit_text), NULL);
+      SetBkMode(hdc, TRANSPARENT);
+    }
+
   }
 
 }
 
-void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
-                           int Style) {
+void Statistics::DrawYGrid(HDC hdc, RECT rc, double tic_step, double zero,
+                           int Style, double unit_step, bool draw_units) {
 
   POINT line[2];
 
@@ -430,9 +464,9 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
   int xmin, ymin, xmax, ymax;
 
-  if (!ticstep) return;
+  if (!tic_step) return;
 
-  for (yval=zero; yval<= y_max; yval+= ticstep) {
+  for (yval=zero; yval<= y_max; yval+= tic_step) {
 
     xmin = rc.left;
     ymin = (int)((y_max-yval)*yscale)+rc.top;
@@ -445,9 +479,19 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
     // STYLE_THINDASHPAPER
     StyleLine(hdc, line[0], line[1], Style);
+
+    if (draw_units && (yval< y_max) && 
+        (ymin>=rc.top) && (ymin<=rc.bottom)) {
+      TCHAR unit_text[MAX_PATH];
+      FormatTicText(unit_text, yval*unit_step/tic_step, unit_step);
+      SetBkMode(hdc, OPAQUE);
+      ExtTextOut(hdc, xmin+IBLSCALE(8), ymin, 
+                 ETO_OPAQUE, NULL, unit_text, _tcslen(unit_text), NULL);
+      SetBkMode(hdc, TRANSPARENT);
+    }
   }
 
-  for (yval=zero; yval>= y_min; yval-= ticstep) {
+  for (yval=zero-tic_step; yval>= y_min; yval-= tic_step) {
 
     xmin = rc.left;
     ymin = (int)((y_max-yval)*yscale)+rc.top;
@@ -460,6 +504,17 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
     // STYLE_THINDASHPAPER
     StyleLine(hdc, line[0], line[1], Style);
+
+    if (draw_units && (yval> y_min) &&
+        (ymin>=rc.top) && (ymin<=rc.bottom)) {
+      TCHAR unit_text[MAX_PATH];
+      FormatTicText(unit_text, yval*unit_step/tic_step, unit_step);
+      SetBkMode(hdc, OPAQUE);
+      ExtTextOut(hdc, xmin+IBLSCALE(8), ymin, 
+                 ETO_OPAQUE, NULL, unit_text, _tcslen(unit_text), NULL);
+      SetBkMode(hdc, TRANSPARENT);
+    }
+
   }
 }
 
@@ -478,12 +533,15 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
 
   ScaleXFromData(rc, &flightstats.Altitude);
   ScaleYFromData(rc, &flightstats.Altitude);
+  ScaleYFromValue(rc, 0);
+  ScaleXFromValue(rc, flightstats.Altitude.x_min+1.0);
 
   DrawXGrid(hdc, rc, 
-            0.25, flightstats.Altitude.x_min,
-            STYLE_THINDASHPAPER);
+            0.5, flightstats.Altitude.x_min,
+            STYLE_THINDASHPAPER, 0.5, true);
 
-  DrawYGrid(hdc, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER);
+  DrawYGrid(hdc, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER,
+            1000, true);
 
   DrawLineGraph(hdc, rc, &flightstats.Altitude,
                 STYLE_MEDIUMBLACK);
@@ -504,17 +562,19 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
   ScaleYFromData(rc, &flightstats.ThermalAverage);
   ScaleYFromValue(rc, MACCREADY+0.5);
   ScaleYFromValue(rc, 0);
-  ScaleXFromValue(rc, 0);
+
+  ScaleXFromValue(rc, -1);
   ScaleXFromValue(rc, flightstats.ThermalAverage.sum_n+1);
 
   DrawYGrid(hdc, rc, 
             1.0/LIFTMODIFY, 0,
-            STYLE_THINDASHPAPER);
+            STYLE_THINDASHPAPER, 1.0, true);
 
   if (flightstats.ThermalAverage.sum_n<1) return;
   
   DrawBarChart(hdc, rc,
                &flightstats.ThermalAverage);
+
   DrawLine(hdc, rc,
            0, MACCREADY, 
            flightstats.ThermalAverage.sum_n+1,
@@ -546,10 +606,10 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 
   DrawXGrid(hdc, rc, 
             10.0/SPEEDMODIFY, 0,
-            STYLE_THINDASHPAPER);
+            STYLE_THINDASHPAPER, 10.0, true);
   DrawYGrid(hdc, rc, 
             1.0/LIFTMODIFY, 0,
-            STYLE_THINDASHPAPER);
+            STYLE_THINDASHPAPER, 1.0, true);
   
   double sinkrate0, sinkrate1;
   double v0=0, v1;
@@ -637,6 +697,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
   double x1, y1, x2=0, y2=0;
   double lat_c, lon_c;
   double aatradius[MAXTASKPOINTS];
+  bool olcvalid_this = olcvalid;
 
   // find center
   ResetScale();
@@ -661,7 +722,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
   olc.SetLine();
   int nolc = olc.getN();
 
-  if (olcvalid) {    
+  if (olcvalid_this) {    
     for (i=0; i< nolc; i++) {
       lat1 = olc.getLatitude(i);
       lon1 = olc.getLongitude(i);
@@ -708,26 +769,30 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 	double bearing;
 	double radius;
 
-	if (Task[i].AATType == SECTOR) {
-	  radius = Task[i].AATSectorRadius;
-	} else {
-	  radius = Task[i].AATCircleRadius;
-	}
-	for (int j=0; j<4; j++) {
-	  bearing = j*360.0/4;
-
-          FindLatitudeLongitude(WayPointList[Task[i].Index].Latitude,
-                                WayPointList[Task[i].Index].Longitude, 
-                                bearing, radius,
-                                &aatlat, &aatlon);
-	  x1 = (aatlon-lon_c)*fastcosine(aatlat);
-	  y1 = (aatlat-lat_c);
-	  ScaleXFromValue(rc, x1);
-	  ScaleYFromValue(rc, y1);
-	  if (j==0) {
-	    aatradius[i] = fabs(aatlat-WayPointList[Task[i].Index].Latitude);
-	  }
-	}
+        if (ValidTaskPoint(i+1)) {
+          if (Task[i].AATType == SECTOR) {
+            radius = Task[i].AATSectorRadius;
+          } else {
+            radius = Task[i].AATCircleRadius;
+          }
+          for (int j=0; j<4; j++) {
+            bearing = j*360.0/4;
+            
+            FindLatitudeLongitude(WayPointList[Task[i].Index].Latitude,
+                                  WayPointList[Task[i].Index].Longitude, 
+                                  bearing, radius,
+                                  &aatlat, &aatlon);
+            x1 = (aatlon-lon_c)*fastcosine(aatlat);
+            y1 = (aatlat-lat_c);
+            ScaleXFromValue(rc, x1);
+            ScaleYFromValue(rc, y1);
+            if (j==0) {
+              aatradius[i] = fabs(aatlat-WayPointList[Task[i].Index].Latitude);
+            }
+          }
+        } else {
+          aatradius[i] = 0;
+        }
       }
     }
   }
@@ -880,7 +945,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
   }
   UnlockTaskData();
   
-  if (olcmode && olcvalid) {
+  if (olcmode && olcvalid_this) {
     for (i=0; i< 7-1; i++) {
       switch(OLCRules) {
       case 0:
@@ -1051,8 +1116,9 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
   ScaleYFromData(rc, &windstats_mag);
 
-  DrawYGrid(hdc, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER);
-  DrawXGrid(hdc, rc, 5/SPEEDMODIFY, 0, STYLE_THINDASHPAPER);
+  DrawXGrid(hdc, rc, 5/SPEEDMODIFY, 0, STYLE_THINDASHPAPER, 5.0, true);
+  DrawYGrid(hdc, rc, 1000/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER,
+            1000.0, true);
 
   DrawLineGraph(hdc, rc, &windstats_mag,
                 STYLE_MEDIUMBLACK);
@@ -1214,7 +1280,7 @@ static WndButton *wCalc=NULL;
 
 static void SetCalcCaption(TCHAR* caption) {
   if (wCalc) {
-    wCalc->SetCaption(caption);
+    wCalc->SetCaption(gettext(caption));
   }
 }
 
@@ -1266,7 +1332,7 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
     UnlockTaskData();
   }
   if (page==7) {
-    SetCalcCaption(TEXT("Nearest"));
+    SetCalcCaption(TEXT("Warnings"));
     Statistics::RenderAirspace(hDC, rcgfx);
   }
 
@@ -1284,7 +1350,9 @@ static void Update(void){
 
   switch(page){
     case 0:
-      _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Barograph")));
+      _stprintf(sTmp, TEXT("%s: %s"),
+                gettext(TEXT("Analysis")), 
+                gettext(TEXT("Barograph")));
       wf->SetCaption(sTmp);
 
       _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
@@ -1300,7 +1368,9 @@ static void Update(void){
 
     break;
     case 1:
-      _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Climb")));
+      _stprintf(sTmp, TEXT("%s: %s"), 
+                gettext(TEXT("Analysis")),
+                gettext(TEXT("Climb")));
       wf->SetCaption(sTmp);
 
       _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
@@ -1316,13 +1386,16 @@ static void Update(void){
 
     break;
     case 2:
-      _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Wind at Altitude")));
+      _stprintf(sTmp, TEXT("%s: %s"), 
+                gettext(TEXT("Analysis")),
+                gettext(TEXT("Wind at Altitude")));
       wf->SetCaption(sTmp);
       _stprintf(sTmp, TEXT(" "));
       wInfo->SetCaption(sTmp);
     break;
     case 3:
-      _stprintf(sTmp, TEXT("Analysis: %s (Mass %3.0f kg)"), 
+      _stprintf(sTmp, TEXT("%s: %s (Mass %3.0f kg)"), 
+                gettext(TEXT("Analysis")),
                 gettext(TEXT("Glide Polar")),
                 GlidePolar::GetAUW());
       wf->SetCaption(sTmp);
@@ -1354,7 +1427,9 @@ static void Update(void){
       wInfo->SetCaption(sTmp);
     break;
   case 4:
-    _stprintf(sTmp, TEXT("Analysis: %s"), gettext(TEXT("Temp trace")));
+    _stprintf(sTmp, TEXT("%s: %s"), 
+              gettext(TEXT("Analysis")),
+              gettext(TEXT("Temp trace")));
     wf->SetCaption(sTmp);
 
     _stprintf(sTmp, TEXT("%s:\r\n  %5.0f %s\r\n\r\n%s:\r\n  %5.0f %s\r\n"),
@@ -1368,7 +1443,9 @@ static void Update(void){
     wInfo->SetCaption(sTmp);
     break;
   case 5:
-    _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Task"));
+    _stprintf(sTmp, TEXT("%s: %s"), 
+              gettext(TEXT("Analysis")),
+              gettext(TEXT("Task")));
     wf->SetCaption(sTmp);
 
     RefreshTaskStatistics();
@@ -1380,29 +1457,40 @@ static void Update(void){
       Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
 
       if (InfoBoxLayout::landscape) {
-        _stprintf(sTmp, TEXT("Task to go:\r\n  %s\r\nAAT to go:\r\n  %s\r\nDistance to go:\r\n  %5.0f %s\r\nTarget speed:\r\n  %5.0f %s\r\n"),
-
+        _stprintf(sTmp, 
+                  TEXT("%s:\r\n  %s\r\n%s:\r\n  %s\r\n%s:\r\n  %5.0f %s\r\n%s:\r\n  %5.0f %s\r\n"),
+                  gettext(TEXT("Task to go")),
                   timetext1,
+                  gettext(TEXT("AAT to go")),
                   timetext2,
+                  gettext(TEXT("Distance to go")),
                   DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
                   Units::GetDistanceName(),
+                  gettext(TEXT("Target speed")),
                   TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
                   Units::GetTaskSpeedName()		
                   );
       } else {
-        _stprintf(sTmp, TEXT("Task to go: %s\r\nAAT to go: %s\r\nDistance to go: %5.0f %s\r\nTarget speed: %5.0f %s\r\n"),
+        _stprintf(sTmp, 
+                  TEXT("%s: %s\r\n%s: %s\r\n%s: %5.0f %s\r\n%s: %5.0f %s\r\n"),
+                  gettext(TEXT("Task to go")),
                   timetext1,
+                  gettext(TEXT("AAT to go")),
                   timetext2,
+                  gettext(TEXT("Distance to go")),
                   DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
                   Units::GetDistanceName(),
+                  gettext(TEXT("Target speed")),
                   TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
                   Units::GetTaskSpeedName()		
                   );
       }
     } else {
       Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
-      _stprintf(sTmp, TEXT("Time to go: %s\r\nDistance to go: %5.0f %s\r\n"),
+      _stprintf(sTmp, TEXT("%s: %s\r\n%s: %5.0f %s\r\n"),
+                gettext(TEXT("Task to go")),
 		timetext1,
+                gettext(TEXT("Distance to go")),
 		DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo,
 		Units::GetDistanceName());
     }
@@ -1410,17 +1498,15 @@ static void Update(void){
     wInfo->SetCaption(sTmp);
     break;
   case 6:
-    _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("OnLine Contest"));
+    _stprintf(sTmp, TEXT("%s: %s"), 
+              gettext(TEXT("Analysis")),
+              gettext(TEXT("OnLine Contest")));
     wf->SetCaption(sTmp);
 
     TCHAR sRules[20];
     TCHAR sFinished[20];
-    //      TCHAR timetext2[100];
     double score;
 
-    olcvalid = false;
-    olcfinished = false;
-    score = 0;
     switch(OLCRules) {
     case 0:
       _stprintf(sRules,TEXT("Sprint"));
@@ -1446,6 +1532,12 @@ static void Update(void){
       score = olc.data.solution_FAI_classic.score;
       olcfinished = olc.data.solution_FAI_classic.finished;
       break;
+    default:
+      olcvalid = false;
+      olcfinished = false;
+      score = 0;
+      d = 0;
+      dt = 0;
     }
     if (olcfinished) {
       _tcscpy(sFinished,TEXT(" finished"));
@@ -1457,35 +1549,49 @@ static void Update(void){
       TCHAR timetext1[100];
       Units::TimeToText(timetext1, dt);
       if (InfoBoxLayout::landscape) {
-        _stprintf(sTmp, TEXT("%s%s\r\nDistance:\r\n  %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\nScore: %.2f\r\n"),
+        _stprintf(sTmp, 
+                  TEXT("%s%s\r\n%s:\r\n  %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),
                   sRules,
                   sFinished,
+                  gettext(TEXT("Distance")),
                   DISTANCEMODIFY*d,
                   Units::GetDistanceName(),
+                  gettext(TEXT("Time")),
                   timetext1,
+                  gettext(TEXT("Speed")),
                   TASKSPEEDMODIFY*d/dt,
                   Units::GetTaskSpeedName(),
+                  gettext(TEXT("Score")),
                   score);
       } else {
-_stprintf(sTmp, TEXT("%s %s\r\nDistance: %5.0f %s\r\nTime: %s\r\nSpeed: %3.0f %s\r\nScore: %.2f\r\n"),
+        _stprintf(sTmp, 
+                  TEXT("%s %s\r\n%s: %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),
                   sRules,
                   sFinished,
+                  gettext(TEXT("Distance")),
                   DISTANCEMODIFY*d,
                   Units::GetDistanceName(),
+                  gettext(TEXT("Time")),
                   timetext1,
+                  gettext(TEXT("Speed")),
                   TASKSPEEDMODIFY*d/dt,
                   Units::GetTaskSpeedName(),
+                  gettext(TEXT("Score")),
                   score);
       }
     } else {
-      _stprintf(sTmp, TEXT("Rules: %s\r\nNo valid path\r\n"),
-		sRules);
+      _stprintf(sTmp, TEXT("%s: %s\r\n%s\r\n"),
+                gettext(TEXT("Rules")),
+		sRules,
+                gettext(TEXT("No valid path")));
     }
     wInfo->SetCaption(sTmp);
 
     break;
   case 7:
-    _stprintf(sTmp, TEXT("Analysis: %s"), TEXT("Airspace"));
+    _stprintf(sTmp, TEXT("%s: %s"), 
+              gettext(TEXT("Analysis")),
+              gettext(TEXT("Airspace")));
     wf->SetCaption(sTmp);
     wInfo->SetCaption(TEXT(" "));
     break;
@@ -1589,8 +1695,6 @@ static CallBackTableEntry_t CallBackTable[]={
 
 void dlgAnalysisShowModal(void){
 
-  //  MemCheckPoint();
-
   wf=NULL;
   wGrid=NULL;
   wInfo=NULL;
@@ -1598,7 +1702,6 @@ void dlgAnalysisShowModal(void){
   olcvalid = false;
   olcfinished = false;
   
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgAnalysis_L.xml"));
@@ -1607,21 +1710,22 @@ void dlgAnalysisShowModal(void){
                         filename, 
                         hWndMainWindow,
                         TEXT("IDR_XML_ANALYSIS_L"));
-  } else 
-#endif
-    {
+  } else  {
     char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgAnalysis.xml"));
-  wf = dlgLoadFromXML(CallBackTable, 
-		      
-                      filename, 
-		      hWndMainWindow,
-		      TEXT("IDR_XML_ANALYSIS"));
-    }
+    LocalPathS(filename, TEXT("dlgAnalysis.xml"));
+    wf = dlgLoadFromXML(CallBackTable, 
+                        filename, 
+                        hWndMainWindow,
+                        TEXT("IDR_XML_ANALYSIS"));
+  }
 
   if (!wf) return;
 
+#ifndef GNAV
+  penThinSignal = CreatePen(PS_SOLID, 2 , RGB(50,243,45));
+#else
   penThinSignal = CreatePen(PS_SOLID, 1 , RGB(50,243,45));
+#endif
 
   wf->SetKeyDownNotify(FormKeyDown);
 
@@ -1636,8 +1740,6 @@ void dlgAnalysisShowModal(void){
   wf->ShowModal();
 
   delete wf;
-
-  //  MemLeakCheck();
 
   wf = NULL;
 

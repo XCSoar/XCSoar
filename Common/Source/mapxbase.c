@@ -175,8 +175,8 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
     /*      Open the file.                                                  */
     /* -------------------------------------------------------------------- */
     psDBF = (DBFHandle) calloc( 1, sizeof(DBFInfo) );
-    psDBF->fp = ppc_fopen( pszDBFFilename, pszAccess );
-    if( psDBF->fp == NULL )
+    psDBF->zfp = ppc_fopen( pszDBFFilename, pszAccess );
+    if( psDBF->zfp == NULL )
         return( NULL );
 
     psDBF->bNoHeader = MS_FALSE;
@@ -192,7 +192,7 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
     /*  Read Table Header info                                              */
     /* -------------------------------------------------------------------- */
     pabyBuf = (uchar *) malloc(500);
-    fread( pabyBuf, 32, 1, psDBF->fp );
+    zzip_fread( pabyBuf, 32, 1, psDBF->zfp );
 
     psDBF->nRecords = nRecords = 
      pabyBuf[4] + pabyBuf[5]*256 + pabyBuf[6]*256*256 + pabyBuf[7]*256*256*256;
@@ -210,8 +210,8 @@ DBFHandle msDBFOpen( const char * pszFilename, const char * pszAccess )
     pabyBuf = (uchar *) SfRealloc(pabyBuf,nHeadLen);
     psDBF->pszHeader = (char *) pabyBuf;
 
-    fseek( psDBF->fp, 32, 0 );
-    fread( pabyBuf, nHeadLen, 1, psDBF->fp );
+    zzip_seek( psDBF->zfp, 32, 0 );
+    zzip_fread( pabyBuf, nHeadLen, 1, psDBF->zfp );
 
     psDBF->panFieldOffset = (int *) malloc(sizeof(int) * nFields);
     psDBF->panFieldSize = (int *) malloc(sizeof(int) * nFields);
@@ -264,7 +264,7 @@ void  msDBFClose(DBFHandle psDBF)
     /*      Update last access date, and number of records if we have       */
     /*	write access.                					    */ 
     /* -------------------------------------------------------------------- */
-    if( psDBF->bUpdated )
+    if( psDBF->bUpdated && psDBF->fp)
     {
 	uchar		abyFileHeader[32];
 
@@ -287,7 +287,14 @@ void  msDBFClose(DBFHandle psDBF)
     /* -------------------------------------------------------------------- */
     /*      Close, and free resources.                                      */
     /* -------------------------------------------------------------------- */
-    fclose( psDBF->fp );
+    if (psDBF->fp) {
+      fclose( psDBF->fp );
+      psDBF->fp = 0;
+    }
+    if (psDBF->zfp) {
+      zzip_fclose( psDBF->zfp );
+      psDBF->zfp = 0;
+    }
 
     if( psDBF->panFieldOffset != NULL )
     {
@@ -319,14 +326,14 @@ DBFHandle msDBFCreate( const char * pszFilename )
     /* -------------------------------------------------------------------- */
     /*      Create the file.                                                */
     /* -------------------------------------------------------------------- */
-    fp = ppc_fopen( pszFilename, "wb" );
+    fp = fopen( pszFilename, "wb" );
     if( fp == NULL )
         return( NULL );
 
     fputc( 0, fp );
     fclose( fp );
 
-    fp = ppc_fopen( pszFilename, "rb+" );
+    fp = fopen( pszFilename, "rb+" );
     if( fp == NULL )
         return( NULL );
 
@@ -336,6 +343,7 @@ DBFHandle msDBFCreate( const char * pszFilename )
     psDBF = (DBFHandle) malloc(sizeof(DBFInfo));
 
     psDBF->fp = fp;
+    psDBF->zfp = NULL;
     psDBF->nRecords = 0;
     psDBF->nFields = 0;
     psDBF->nRecordLength = 1;
@@ -492,8 +500,8 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
 
 	nRecordOffset = psDBF->nRecordLength * hEntity + psDBF->nHeaderLength;
 
-	fseek( psDBF->fp, nRecordOffset, 0 );
-	fread( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp );
+	zzip_seek( psDBF->zfp, nRecordOffset, 0 );
+	zzip_fread( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->zfp );
 
 	psDBF->nCurrentRecord = hEntity;
     }

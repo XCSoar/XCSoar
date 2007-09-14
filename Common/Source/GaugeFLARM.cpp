@@ -69,10 +69,8 @@ POINT GaugeFLARM::center;
 #include "Utils.h"
 
 int GaugeFLARM::RangeScale(double d) {
-  int rad;
-  double drad = 1.0-min(1.0,d/FLARMMAXRANGE);
-  rad = iround(radius*(1.0-drad*drad));
-  return rad;
+  double drad = max(0.0,1.0-d/FLARMMAXRANGE);
+  return iround(radius*(1.0-drad*drad));
 }
 
 void GaugeFLARM::RenderBg() {
@@ -96,7 +94,7 @@ void GaugeFLARM::RenderBg() {
 
 void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
   HBRUSH redBrush = CreateSolidBrush(RGB(0xFF,0x00,0x00));
-  HBRUSH yellowBrush = CreateSolidBrush(RGB(0x00,0xFF,0xFF));
+  HBRUSH yellowBrush = CreateSolidBrush(RGB(0xFF,0xFF,0x00));
   HBRUSH greenBrush = CreateSolidBrush(RGB(0x00,0xFF,0x00));
   // JMW TODO red/green Color blind
 
@@ -142,6 +140,15 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       sc.x = center.x + iround(x*scale);
       sc.y = center.y + iround(y*scale);
         
+      if (gps_info->FLARM_Traffic[i].AlarmLevel>0) {
+        POINT tl[2];
+        tl[0].x = sc.x;
+        tl[0].y = sc.y;
+        tl[1].x = center.x + iround(radius*x);
+        tl[1].y = center.y + iround(radius*y);
+        Polygon(hdcDrawWindow, tl, 2);
+      }
+
       if (FLARMGaugeBearing) {
         POINT Arrow[5];
 

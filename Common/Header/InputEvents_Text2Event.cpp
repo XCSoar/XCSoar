@@ -109,6 +109,8 @@ Text2Event[53].text = TEXT("UserDisplayModeForce");
 Text2Event[53].event = &eventUserDisplayModeForce;
 Text2Event[54].text = TEXT("AirspaceDisplayMode");
 Text2Event[54].event = &eventAirspaceDisplayMode;
+Text2Event[55].text = TEXT("AutoLogger");
+Text2Event[55].event = &eventAutoLogger;
 Text2GCE[0] = TEXT("AIRSPACE_ENTER");
 Text2GCE[1] = TEXT("AIRSPACE_LEAVE");
 Text2GCE[2] = TEXT("COMMPORT_RESTART");
@@ -264,7 +266,7 @@ Text2NE[127] = TEXT("UNUSED_55");
 Text2NE[128] = TEXT("UNUSED_56");
 Text2NE[129] = TEXT("UNUSED_57");
 Text2NE[130] = TEXT("COUNT");
-Text2Event_count = 55;
+Text2Event_count = 56;
 // Check no array overrun
 ASSERT(130 <= NE_COUNT);
 // Check no array overrun

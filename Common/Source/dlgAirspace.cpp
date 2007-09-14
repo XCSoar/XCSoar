@@ -67,46 +67,46 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
     int i = DrawListIndex;
     switch (i) {
     case CLASSA: 
-      _tcscpy(label, TEXT("Class A"));
+      _tcscpy(label, gettext(TEXT("Class A")));
       break;
     case CLASSB: 
-      _tcscpy(label, TEXT("Class B"));
+      _tcscpy(label, gettext(TEXT("Class B")));
       break;
     case CLASSC: 
-      _tcscpy(label, TEXT("Class C"));
+      _tcscpy(label, gettext(TEXT("Class C")));
       break;
     case CLASSD: 
-      _tcscpy(label, TEXT("Class D"));
+      _tcscpy(label, gettext(TEXT("Class D")));
       break;
     case CLASSE: 
-      _tcscpy(label, TEXT("Class E"));
+      _tcscpy(label, gettext(TEXT("Class E")));
       break;
     case CLASSF: 
-      _tcscpy(label, TEXT("Class F"));
+      _tcscpy(label, gettext(TEXT("Class F")));
       break;
     case PROHIBITED: 
-      _tcscpy(label, TEXT("Prohibited areas"));
+      _tcscpy(label, gettext(TEXT("Prohibited areas")));
       break;
     case DANGER: 
-      _tcscpy(label, TEXT("Danger areas"));
+      _tcscpy(label, gettext(TEXT("Danger areas")));
       break;
     case RESTRICT: 
-      _tcscpy(label, TEXT("Restricted areas"));
+      _tcscpy(label, gettext(TEXT("Restricted areas")));
       break;
     case CTR: 
-      _tcscpy(label, TEXT("CTR"));
+      _tcscpy(label, gettext(TEXT("CTR")));
       break;
     case NOGLIDER: 
-      _tcscpy(label, TEXT("No gliders"));
+      _tcscpy(label, gettext(TEXT("No gliders")));
       break;
     case WAVE:
-      _tcscpy(label, TEXT("Wave"));
+      _tcscpy(label, gettext(TEXT("Wave")));
       break;
     case OTHER:
-      _tcscpy(label, TEXT("Other"));
+      _tcscpy(label, gettext(TEXT("Other")));
       break;
     case AATASK:
-      _tcscpy(label, TEXT("AAT"));
+      _tcscpy(label, gettext(TEXT("AAT")));
       break;
     };
     ExtTextOut(hDC,
@@ -146,7 +146,7 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
       iswarn = (MapWindow::iAirspaceMode[i]>=2);
       isdisplay = ((MapWindow::iAirspaceMode[i]%2)>0);
       if (iswarn) {
-        _tcscpy(label, TEXT("Warn"));
+        _tcscpy(label, gettext(TEXT("Warn")));
         ExtTextOut(hDC,
              90*InfoBoxLayout::scale,
              2*InfoBoxLayout::scale,
@@ -156,7 +156,7 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
              NULL);
       }
       if (isdisplay) {
-        _tcscpy(label, TEXT("Display"));
+        _tcscpy(label, gettext(TEXT("Display")));
         ExtTextOut(hDC,
              150*InfoBoxLayout::scale,
              2*InfoBoxLayout::scale,
@@ -224,10 +224,17 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 
+static void OnLookupClicked(WindowControl * Sender){
+  (void)Sender;
+  dlgAirspaceSelect();
+}
+
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnAirspacePaintListItem),
   DeclearCallBackEntry(OnAirspaceListInfo),
   DeclearCallBackEntry(OnCloseClicked),
+  DeclearCallBackEntry(OnLookupClicked),
   DeclearCallBackEntry(NULL)
 };
 
@@ -238,7 +245,6 @@ void dlgAirspaceShowModal(bool coloredit){
 
   ItemIndex = -1;
 
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgAirspace_L.xml"));
@@ -246,16 +252,14 @@ void dlgAirspaceShowModal(bool coloredit){
                         filename, 
                         hWndMainWindow,
                         TEXT("IDR_XML_AIRSPACE_L"));
-  } else 
-#endif
-    {
-  char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgAirspace.xml"));
-  wf = dlgLoadFromXML(CallBackTable, 
-                      filename, 
-		      hWndMainWindow,
-		      TEXT("IDR_XML_AIRSPACE"));
-    }
+  } else {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgAirspace.xml"));
+    wf = dlgLoadFromXML(CallBackTable, 
+                        filename, 
+                        hWndMainWindow,
+                        TEXT("IDR_XML_AIRSPACE"));
+  }
   if (!wf) return;
 
   ASSERT(wf!=NULL);

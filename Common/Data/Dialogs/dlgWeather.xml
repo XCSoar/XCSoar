@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmWeather" Type="Dialog" X=5 Y=5 Width=230 Height=96 Caption="Weather Forecast" Font=2 BackColor=0xDADBAB>
+
+  <WndButton   Caption="Close"    X=2 Y=2 Width=66  Height=22 Font=2 OnClickNotify="OnCloseClicked">
+  </WndButton> 
+
+  <WndProperty Name="prpDisplayItem" Caption="Field"  X=-1 Y=25  Width=135 Height=22 CaptionWidth=45 Font=2 OnHelp="OnWeatherHelp">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1 OnDataAccess="OnDisplayItemData"/>
+  </WndProperty>
+
+  <WndProperty Name="prpTime" Caption="Time" X=135 Y=25  Width=95 Height=22 CaptionWidth=45 Font=2 Help="TODO">
+    <DataField name="" DataType="double" DisplayFormat="%02.f00" EditFormat="%02.f" OnDataAccess="OnTimeData" max="24" min="0"/>
+  </WndProperty>
+
+</WndForm>    
+
+</PMML>

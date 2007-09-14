@@ -65,7 +65,6 @@ void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText) {
     return;
   }
 
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgHelp_L.xml"));
@@ -73,16 +72,14 @@ void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText) {
                         filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_HELP_L"));
-  } else
-#endif
-    {
+  } else {
     char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgHelp.xml"));
-  wf = dlgLoadFromXML(CallBackTable, 
-                      filename, 
-		      hWndMainWindow,
-		      TEXT("IDR_XML_HELP"));
-    }
+    LocalPathS(filename, TEXT("dlgHelp.xml"));
+    wf = dlgLoadFromXML(CallBackTable, 
+                        filename, 
+                        hWndMainWindow,
+                        TEXT("IDR_XML_HELP"));
+  }
   WndProperty* wp;
 
   if (wf) {

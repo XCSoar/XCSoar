@@ -22,6 +22,7 @@
 
 	#if (_WIN32_WCE == 300)
 	// Pocket PC 2000
+                #define OLDPPC
 
 //#define ASSERT(x) 0
 
@@ -44,6 +45,8 @@
 		#ifndef NOLINETO
 		#define NOLINETO
 		#endif
+
+                #define NOTIME_H
 
 	#elif (WIN32_PLATFORM_PSPC == 310)
 	// Pocket PC 2002

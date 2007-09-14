@@ -109,11 +109,19 @@ void GaugeVario::Create() {
 			       | WS_CLIPSIBLINGS,
                                0,0,0,0,
 			       hWndMainWindow,NULL,hInst,NULL);
-  SetWindowPos(hWndVarioWindow, HWND_TOP,
-               bigrc.right+InfoBoxLayout::ControlWidth,
-	       bigrc.top,
-               GAUGEXSIZE,GAUGEYSIZE,
-	       SWP_HIDEWINDOW);
+  if (InfoBoxLayout::landscape) {
+    SetWindowPos(hWndVarioWindow, HWND_TOP,
+                 bigrc.right+InfoBoxLayout::ControlWidth,
+                 bigrc.top,
+                 GAUGEXSIZE,GAUGEYSIZE,
+                 SWP_HIDEWINDOW);
+  } else {
+    SetWindowPos(hWndVarioWindow, HWND_TOP,
+                 bigrc.right-GAUGEXSIZE,
+                 bigrc.top,
+                 GAUGEXSIZE,GAUGEYSIZE,
+                 SWP_HIDEWINDOW);
+  }
 
   GetClientRect(hWndVarioWindow, &rc);
 
@@ -187,8 +195,12 @@ void GaugeVario::Create() {
 }
 
 void GaugeVario::Show(bool doshow) {
+  bool gaugeVarioInPortrait = false;
+#ifdef GNAV
+  gaugeVarioInPortrait = true;
+#endif
 
-  if (InfoBoxLayout::landscape) {
+  if (gaugeVarioInPortrait || InfoBoxLayout::landscape) {
     EnableVarioGauge = doshow;
 
     static bool lastvisible = false;
@@ -344,6 +356,7 @@ void GaugeVario::Render() {
                 vvaldisplay, 
                 TEXT("Gross"));
   }
+  RenderZero();
 
   BitBlt(hdcScreen, 0, 0, rc.right, rc.bottom, hdcDrawWindow, 0, 0, SRCCOPY);
 
@@ -456,6 +469,23 @@ void GaugeVario::RenderClimb() {
 }
 
 
+void GaugeVario::RenderZero(void) {
+  static POINT lp[2];
+  if (Appearance.InverseInfoBox){
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+  } else {
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+  }
+  lp[0].x = 0; lp[0].y = yoffset+1;
+  lp[1].x = IBLSCALE(17); lp[1].y = yoffset+1;
+  Polyline(hdcDrawWindow,lp,2);
+  lp[0].y-= 1; lp[1].y-= 1;
+  Polyline(hdcDrawWindow,lp,2);
+}
+
+
 void GaugeVario::RenderNeedle(double Value, bool average) {
 
   static POINT lastBit[3];
@@ -508,12 +538,6 @@ void GaugeVario::RenderNeedle(double Value, bool average) {
   } else {
     Polygon(hdcDrawWindow, bit, 3);
   }
-
-  lp[0].x = 0; lp[0].y = yoffset+1;
-  lp[1].x = IBLSCALE(17); lp[1].y = yoffset+1;
-  Polyline(hdcDrawWindow,lp,2);
-  lp[0].y-= 1; lp[1].y-= 1;
-  Polyline(hdcDrawWindow,lp,2);
 
   if (average) {
     memcpy(lastBitave, bit, 3*sizeof(POINT));

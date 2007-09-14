@@ -11,7 +11,7 @@
 
   <WndButton   Caption="OK"    X=2 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
   <WndButton   Caption="Cancel"    X=65 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCancelClicked" Tag=2/>
-  <WndButton  Name="Optimise" Caption="Optimise"    X=128 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnOptimiseClicked" Tag=3/>
+  <WndButton  Name="Optimise" Caption="Optimise"    X=128 Y=2 Width=65  Height=22 Font=2 OnClickNotify="OnOptimiseClicked" Tag=3/>
 
   <WndProperty Name="prpAATTime" Caption="Assigned task time" X=2 Y=-1  Width=238 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 min=0 max=600 step=10>
     <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly=1/>

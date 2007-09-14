@@ -151,7 +151,7 @@ event=TaskLoad Default.tsk
 mode=default
 type=gce
 data=TAKEOFF
-event=Logger start
+event=AutoLogger start
 #event=DLLExecute XCSoarExamplePlugin.dll DemoSound \My Documents\Sample2.wav
 event=StatusMessage Takeoff
 
@@ -159,7 +159,7 @@ mode=default
 type=gce
 data=LANDING
 event=StatusMessage Landing
-event=Logger stop
+event=AutoLogger stop
 
 mode=default
 type=gce
@@ -198,19 +198,19 @@ event=Pan supertoggle
 
 # clear main entry buttons
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Exit Menu Vario1 Vario2 pan Preview
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Exit Vario1 Vario2 pan Preview
 type=key
 data=APP1
 label= 
 location=1
 
-mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Exit Menu Vario1 Vario2 pan Preview
+mode=default Nav1 Nav2 Config1 Config2 Info1 Info2 Exit Vario1 Vario2 pan Preview
 type=key
 data=APP2
 label= 
 location=2
 
-mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Exit Menu pan Preview
+mode=default Nav1 Nav2 Display1 Display2 Info1 Info2 Exit pan Preview
 type=key
 data=APP3
 label= 
@@ -276,7 +276,7 @@ mode=pan
 type=key
 data=0
 event=Null 
-label= 
+label=
 location=9
 
 ###### main entry buttons
@@ -352,7 +352,7 @@ mode=default
 type=key
 data=7
 event=Calculator
-label=$(CheckTask) 
+label=$(CheckTaskResumed)$(CheckTask) 
 location=6
 
 mode=default
@@ -360,7 +360,7 @@ type=key
 data=8
 event=Setup Task
 event=Mode default
-label=$(CheckWaypointFile)
+label=$(CheckTaskResumed)$(CheckWaypointFile)
 location=7
 
 mode=default
@@ -375,7 +375,7 @@ type=key
 data=0
 event=ArmAdvance show
 event=ArmAdvance toggle
-label=$(CheckTask) 
+label=$(CheckTaskResumed)$(CheckTask) 
 location=9
 
 mode=Preview
@@ -390,7 +390,7 @@ mode=Preview
 type=key
 data=7
 event=Calculator
-label=Task\nCalc$(CheckTask)
+label=Task\nCalc$(CheckTaskResumed)$(CheckTask)
 location=6
 
 mode=Preview
@@ -398,7 +398,7 @@ type=key
 data=8
 event=Setup Task
 event=Mode default
-label=Task\nEdit$(CheckWaypointFile)
+label=$(CheckTaskResumed)Task\nEdit$(CheckWaypointFile)
 location=7
 
 mode=Preview
@@ -413,7 +413,7 @@ type=key
 data=0
 event=ArmAdvance show
 event=ArmAdvance toggle
-label=$(CheckTask)Advance\n$(AdvanceArmed)
+label=$(CheckTaskResumed)$(CheckTask)Advance\n$(AdvanceArmed)
 location=9
 
 
@@ -521,7 +521,7 @@ type=key
 data=6
 event=Calculator
 event=Mode default
-label=Task\nCalc$(CheckTask)
+label=Task\nCalc$(CheckTaskResumed)$(CheckTask)
 location=5
 
 mode=Nav1
@@ -530,7 +530,7 @@ data=7
 event=ArmAdvance show
 event=ArmAdvance toggle
 event=Mode default
-label=$(CheckTask)Advance\n$(AdvanceArmed)
+label=$(CheckTaskResumed)$(CheckTask)Advance\n$(AdvanceArmed)
 location=6
 
 mode=Nav1
@@ -572,7 +572,7 @@ type=key
 data=6
 event=Setup Task
 event=Mode default
-label=Task\nEdit$(CheckWaypointFile)
+label=$(CheckTaskResumed)Task\nEdit$(CheckWaypointFile)
 location=5
 
 mode=Nav2
@@ -580,7 +580,7 @@ type=key
 data=7
 event=StatusMessage Task saved
 event=TaskSave persist/Default.tsk
-label=Task\nSave
+label=$(CheckTaskResumed)Task\nSave
 location=6
 
 mode=Nav2
@@ -595,7 +595,7 @@ mode=Nav2
 type=key
 data=9
 event=FlightMode finalglide toggle
-label=$(CheckTask)Final\n$(FinalForceToggleActionName)
+label=$(CheckTaskResumed)$(CheckTask)Final\n$(FinalForceToggleActionName)
 location=8
 
 mode=Nav2
@@ -738,7 +738,7 @@ type=key
 data=8
 event=MacCready auto show
 event=MacCready auto toggle
-label=$(CheckTask)MacCready\n$(MacCreadyToggleActionName)
+label=$(CheckAutoMc)MacCready\n$(MacCreadyToggleActionName)
 location=7
 
 mode=Config1
@@ -967,22 +967,24 @@ location=4
 mode=Info2
 type=key
 data=6
-event=Status system
-label=Status\nSystem
+event=Status all
+event=Mode default
+label=Status
 location=5
 
 mode=Info2
 type=key
 data=7
-event=Status Aircraft
-label=Status\nAircraft
+event=Setup Weather
+event=Mode default
+label=Weather
 location=6
 
 mode=Info2
 type=key
 data=8
-event=Status task
-label=$(CheckTask)Status\nTask
+event=Null
+label= 
 location=7
 
 mode=Info2
@@ -1071,3 +1073,32 @@ event=Mode default
 label=Exit
 location=9
 
+mode=Exit
+type=key
+data=6
+label= 
+location=5
+
+mode=Exit
+type=key
+data=7
+label= 
+location=6
+
+mode=Exit
+type=key
+data=8
+label= 
+location=7
+
+mode=Exit
+type=key
+data=9
+label= 
+location=8
+
+mode=Exit
+type=key
+data=0
+label= 
+location=9

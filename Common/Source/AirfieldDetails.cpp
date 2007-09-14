@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.22 2007/03/25 14:37:59 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.23 2007/09/14 17:10:09 jwharington Exp $
 
 
 Copyright_License {
@@ -46,43 +46,50 @@ Copyright_License {
 #include <aygshell.h>
 
 #include "AirfieldDetails.h"
+#include <zzip/lib.h>
+#include "wcecompat/ts_string.h"
 
-
-HANDLE hAirfieldDetails;
+ZZIP_FILE* zAirfieldDetails = NULL;
 
 extern TCHAR szRegistryAirfieldFile[];
 
 static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
 
 void OpenAirfieldDetails() {
+  char zfilename[MAX_PATH] = "\0";
+
+  zAirfieldDetails = NULL;
 
   GetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
   ExpandLocalPath(szAirfieldDetailsFile);
+  unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
   SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
 
-  hAirfieldDetails = INVALID_HANDLE_VALUE;
-  hAirfieldDetails = CreateFile(szAirfieldDetailsFile,GENERIC_READ,0,NULL,
-				OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
-  if( hAirfieldDetails == INVALID_HANDLE_VALUE)
-    {
-      return;
-    }
-
+  if (strlen(zfilename)==0) {
+    static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
+    static TCHAR szFile[MAX_PATH] = TEXT("\0");
+    GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
+    ExpandLocalPath(szMapFile);
+    _tcscpy(szFile,szMapFile);
+    wcscat(szFile,TEXT("/airfields.txt"));
+    unicode2ascii(szFile, zfilename, MAX_PATH);
+  }
+  if (strlen(zfilename)>0) {
+    zAirfieldDetails = zzip_fopen(zfilename,"rb");
+  }
 };
 
 
 void CloseAirfieldDetails() {
-  if (hAirfieldDetails == NULL) {
+  if (zAirfieldDetails == NULL) {
     return;
   }
-  if (hAirfieldDetails != INVALID_HANDLE_VALUE) {
-    // file was OK, so save the registry
-    ContractLocalPath(szAirfieldDetailsFile);
-    SetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile);
+  // file was OK, so save the registry
+  ContractLocalPath(szAirfieldDetailsFile);
+  SetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile);
 
-    CloseHandle(hAirfieldDetails);
-    hAirfieldDetails = NULL;
-  }
+  zzip_fclose(zAirfieldDetails);
+  zAirfieldDetails = NULL;
 };
 
 
@@ -130,10 +137,10 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
 
 
 void ParseAirfieldDetails() {
-  if(hAirfieldDetails == NULL)
+  if(zAirfieldDetails == NULL)
     return;
 
-  TCHAR TempString[200];
+  TCHAR TempString[READLINE_LENGTH+1];
   TCHAR Details[5000];
   TCHAR Name[100];
 
@@ -145,10 +152,10 @@ void ParseAirfieldDetails() {
   int i;
   int k=0;
 
-  if (hAirfieldDetails == INVALID_HANDLE_VALUE)
+  if (zAirfieldDetails == NULL)
     return;
 
-  while(ReadString(hAirfieldDetails,200,TempString))
+  while(ReadString(zAirfieldDetails,READLINE_LENGTH,TempString))
     {
       if(TempString[0]=='[') { // Look for start
 

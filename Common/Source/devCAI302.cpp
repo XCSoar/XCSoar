@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.20 2007/01/10 06:41:31 jwharington Exp $
+// $Id: devCAI302.cpp,v 1.21 2007/09/14 17:10:09 jwharington Exp $
 
 /*
 Copyright_License {
@@ -247,7 +247,8 @@ void test(void){
 
     if (Buffer[0] != '\0'){
 
-      RegDeleteKey(HKEY_LOCAL_MACHINE, TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar")); 
+      RegDeleteKey(HKEY_LOCAL_MACHINE, 
+                   TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar")); 
 
       for (retries=0; retries < 10 && DeleteFile(Buffer) == 0; retries++){
         SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
@@ -285,7 +286,8 @@ static int DeclIndex = 128;
 static int nDeclErrorCode; 
 
 
-BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
+BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, 
+                     TCHAR *ID){
 
   TCHAR PilotName[25];
   TCHAR GliderType[13];
@@ -299,7 +301,8 @@ BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCH
 
     (d->Com.SetRxTimeout)(500);
     (d->Com.WriteString)(TEXT("\x03"));
-    ExpectString(d, TEXT("$$$"));            // empty rx buffer (searching for pattern that never occure)
+    ExpectString(d, TEXT("$$$"));  // empty rx buffer (searching for
+                                   // pattern that never occure)
 
     (d->Com.WriteString)(TEXT("\x03"));
     if (!ExpectString(d, TEXT("cmd>"))){

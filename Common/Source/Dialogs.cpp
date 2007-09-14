@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.113 2007/04/30 12:06:38 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.114 2007/09/14 17:10:09 jwharington Exp $
 
 Copyright_License {
 
@@ -57,6 +57,9 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Message.h"
 
+#ifdef DEBUG_TRANSLATIONS
+#include <map>
+#endif
 
 void ReadWayPoints(void);
 void ReadAirspace(void);
@@ -77,7 +80,8 @@ TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
 			TEXT("WinPilot File")};
 
 
-LRESULT CALLBACK Progress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK Progress(HWND hDlg, UINT message, 
+                          WPARAM wParam, LPARAM lParam)
 {
   PAINTSTRUCT ps;            // structure for paint info
   HDC hDC;
@@ -86,6 +90,10 @@ LRESULT CALLBACK Progress(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
   switch (message)
     {
     case WM_INITDIALOG:
+#if (WINDOWSPC>0)
+      GetClientRect(hDlg, &rc);
+      MoveWindow(hDlg, 0, 0, rc.right-rc.left, rc.bottom-rc.top, TRUE);
+#endif
       return TRUE;
     case WM_ERASEBKGND:
       hDC = BeginPaint(hDlg, &ps);
@@ -292,6 +300,60 @@ void DoStatusMessage(TCHAR* text, TCHAR *data) {
   Message::Unlock();
 }
 
+
+#ifdef DEBUG_TRANSLATIONS
+/*
+
+  WriteMissingTranslations - write all missing translations found
+  during runtime to a lanuage file in data dir
+
+*/
+template<class _Ty> 
+struct lessTCHAR: public std::binary_function<_Ty, _Ty, bool>
+{	// functor for operator<
+  bool operator()(const _Ty& _Left, const _Ty& _Right) const
+  {	// apply operator< to operands
+    return (_tcscmp(_Left, _Right) < 0);
+  }
+};
+
+std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> > unusedTranslations;
+
+void WriteMissingTranslations() {
+  std::map<TCHAR*, TCHAR*, lessTCHAR<TCHAR*> >::iterator 
+    s=unusedTranslations.begin(),e=unusedTranslations.end();
+
+  TCHAR szFile1[MAX_PATH] = TEXT("%LOCAL_PATH%\\\\localization_todo.xcl\0");
+  FILE *fp=NULL;
+
+  ExpandLocalPath(szFile1);
+  fp  = _tfopen(szFile1, TEXT("w+"));
+  
+  if (fp != NULL) {
+    while (s != e) {
+      TCHAR* p = (s->second);
+      if (p) {
+        while (*p) {
+          if (*p != _T('\n')) {
+            fwprintf(fp, TEXT("%c"), *p);
+          } else {
+            fwprintf(fp, TEXT("\\n"));
+          }
+          p++;
+        }
+        fwprintf(fp, TEXT("=\n"));
+      }
+      s++;
+    }
+    fclose(fp);
+  }
+}
+
+#endif
+
+
+
+
 /*
 
   gettext - look up a string of text for the current language
@@ -310,11 +372,23 @@ void DoStatusMessage(TCHAR* text, TCHAR *data) {
 
 TCHAR* gettext(TCHAR* text) {
   int i;
+  // return if nothing to do
+  if (wcscmp(text, L"") == 0) return text;
+
+  //find a translation
   for (i=0; i<GetTextData_Size; i++) {
     if (!text || !GetTextData[i].key) continue;
     if (wcscmp(text, GetTextData[i].key) == 0)
       return GetTextData[i].text;
   }
+
+  // return untranslated text if no translation is found.
+  // Set a breakpoint here to find untranslated strings
+
+#ifdef DEBUG_TRANSLATIONS
+  TCHAR *tmp = _tcsdup(text);
+  unusedTranslations[tmp] = tmp;
+#endif
   return text;
 }
 
@@ -342,12 +416,11 @@ void CloseProgressDialog() {
   }
 }
 
-BOOL StepProgressDialog(void) {
+void StepProgressDialog(void) {
   if (hProgress) {
     SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT, 0, 0);
     UpdateWindow(hProgress);
   }
-  return(TRUE);
 }
 
 BOOL SetProgressStepSize(int nSize) {
@@ -385,10 +458,10 @@ HWND CreateProgressDialog(TCHAR* text) {
     _stprintf(Temp,TEXT("%s %s"),gettext(TEXT("Version")),XCSoar_Version);
     SetWindowText(GetDlgItem(hProgress,IDC_VERSION),Temp);
 
-    ShowWindow(hProgress,SW_SHOW);
-
     RECT rc;
     GetClientRect(hWndMainWindow, &rc);
+
+#if (WINDOWSPC<1)
     hWndCurtain = CreateWindow(TEXT("STATIC"), TEXT(" "),
 			       WS_VISIBLE | WS_CHILD,
                                0, 0, (rc.right - rc.left),
@@ -399,12 +472,14 @@ HWND CreateProgressDialog(TCHAR* text) {
     ShowWindow(hWndCurtain,SW_SHOW);
     SetForegroundWindow(hWndCurtain);
     UpdateWindow(hWndCurtain);
-
-    SetForegroundWindow(hProgress);
+#endif
 
 #if (WINDOWSPC>0)
+    RECT rcp;
+    GetClientRect(hProgress, &rcp);
+    GetWindowRect(hWndMainWindow, &rc);
     SetWindowPos(hProgress,HWND_TOPMOST,
-                 0, 0, 0, 0,
+                 rc.left, rc.top, (rcp.right - rcp.left), (rcp.bottom-rcp.top),
                  SWP_SHOWWINDOW);
 #else
     SHFullScreen(hProgress,
@@ -414,7 +489,9 @@ HWND CreateProgressDialog(TCHAR* text) {
     SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
 #endif
-    
+
+    SetForegroundWindow(hProgress);
+    UpdateWindow(hProgress);    
   }
   
   SetDlgItemText(hProgress,IDC_MESSAGE, text);

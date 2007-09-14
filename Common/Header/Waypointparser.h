@@ -16,12 +16,14 @@
 
 void ReadWayPointFile(HANDLE hFile);
 void ReadWayPoints(void);
-void SetHome(void);
+void SetHome(bool reset);
 int FindNearestWayPoint(double X, double Y, double MaxRange);
 void CloseWayPoints(void);
 int dlgWaypointOutOfTerrain(TCHAR *Message);
 void WaypointWriteFiles(void);
 void WaypointAltitudeFromTerrain(WAYPOINT* wpt);
+WAYPOINT* GrowWaypointList();
+int FindMatchingWaypoint(WAYPOINT *waypoint);
 
 #endif
 

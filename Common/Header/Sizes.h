@@ -15,9 +15,6 @@
 // estimate that a long flight will detailed logging is about 200k,
 // and we want to leave a little free.
 
-// maximum number of temporary waypoints
-#define MAXTEMPWAYPOINTS 50
-
 // max length airspace and waypoint names
 #define NAME_SIZE 50
 
@@ -131,6 +128,13 @@
 
 #define NUMBUTTONLABELS 16
 
+#define READLINE_LENGTH 300
 
+// Size of Status message cache - Note 1000 messages may not be enough...
+// TODO If we continue with the reading one at a time - then consider using
+// a pointer structure and build on the fly, thus no limit, but also only
+// RAM used as required - easy to do with struct above - just point to next.
+// (NOTE: This is used for all the caches for now - temporary)
+#define MAXSTATUSMESSAGECACHE 1000
 
 #endif

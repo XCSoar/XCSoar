@@ -32,10 +32,7 @@ Copyright_License {
 
 // ToDo
 
-// adding baro alt sentance paser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
-
-
-
+// adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
 #include "stdafx.h"
 
@@ -96,7 +93,8 @@ void appendCheckSum(TCHAR *String){
 
 }
 
-BOOL EWDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
+BOOL EWDeclBegin(PDeviceDescriptor_t d, 
+                 TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
 
   int retries=10;
   TCHAR sTmp[72];
@@ -104,7 +102,6 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *
   TCHAR sGliderType[9];
   TCHAR sGliderID[9];
 
-  
   nDeclErrorCode = 0;
   ewDecelTpIndex = 0;
   fDeclarationPending = TRUE;
@@ -113,6 +110,7 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *
     return(TRUE);
 
   (d->Com.StopRxThread)();
+
   lLastBaudrate = (d->Com.SetBaudrate)(9600L);    // change to IO Mode baudrate
 
   (d->Com.SetRxTimeout)(500);                     // set RX timeout to 500[ms]
@@ -143,14 +141,18 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *
   sGliderType[8] = '\0';
   _tcsncpy(sGliderID, ID, 8);
   sGliderID[8] = '\0';
-                                                  // build string (field 4-5 are GPS info, no idea what to write)
+ 
+  // build string (field 4-5 are GPS info, no idea what to write)
   _stprintf(sTmp, TEXT("%-12s%-8s%-8s%-12s%-12s%-6s\r"), 
            sPilot, 
            sGliderType, 
            sGliderID, 
            TEXT(""),                              // GPS Model
            TEXT(""),                              // GPS Serial No.
-           TEXT("")                               // Flight Date, format unknown, left blank (GPS has a RTC)
+           TEXT("")                               // Flight Date,
+                                                  // format unknown,
+                                                  // left blank (GPS
+                                                  // has a RTC)
   );
   (d->Com.WriteString)(sTmp);
 
@@ -242,7 +244,6 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
   char NoS, EoW;
   short EoW_Flag, NoS_Flag, EW_Flags;	
 
-
   if (nDeclErrorCode != 0)                        // check for error
     return(FALSE);
 
@@ -250,7 +251,7 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
     return(FALSE);
   }
 
-	_tcsncpy(IDString, wp->Name, 6);                // copy at least 6 chars
+  _tcsncpy(IDString, wp->Name, 6);                // copy at least 6 chars
 
   while (_tcslen(IDString) < 6)                   // fill up with spaces
     _tcscat(IDString, TEXT(" "));
@@ -344,12 +345,12 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
 
 BOOL EWIsLogger(PDeviceDescriptor_t d){
   (void)d;
-	return(TRUE);
+  return(TRUE);
 }
 
 
 BOOL EWIsGPSSource(PDeviceDescriptor_t d){
-	(void)d;
+  (void)d;
   return(TRUE);
 }
 
@@ -357,7 +358,7 @@ BOOL EWIsGPSSource(PDeviceDescriptor_t d){
 BOOL EWLinkTimeout(PDeviceDescriptor_t d){
   (void)d;
   if (!fSimMode && !fDeclarationPending)
-    Port1WriteString(TEXT("NMEA\r\n"));
+    d->Com.WriteString(TEXT("NMEA\r\n"));
 
   return(TRUE);
 }

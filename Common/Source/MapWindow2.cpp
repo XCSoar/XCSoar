@@ -445,16 +445,16 @@ rectObj MapWindow::CalculateScreenBounds(double scale) {
 
   } else {
 
-    float xmin, xmax, ymin, ymax;
+    double xmin, xmax, ymin, ymax;
     int x, y;
-    float X, Y;
+    double X, Y;
     
     x = MapRect.left; 
     y = MapRect.top; 
     Screen2LatLon(x, y, X, Y);
     xmin = X; xmax = X;
     ymin = Y; ymax = Y;
-  
+
     x = MapRect.right; 
     y = MapRect.top; 
     Screen2LatLon(x, y, X, Y);
@@ -473,6 +473,7 @@ rectObj MapWindow::CalculateScreenBounds(double scale) {
     xmin = min(xmin, X); xmax = max(xmax, X);
     ymin = min(ymin, Y); ymax = max(ymax, Y);
   
+
     sb.minx = xmin;
     sb.maxx = xmax;
     sb.miny = ymin;
@@ -545,6 +546,7 @@ void MapWindow::CalculateScreenPositionsThermalSources() {
         DerivedDrawInfo.ThermalSources[i].Visible = false;
         continue;
       }
+
       double t = dh/DerivedDrawInfo.ThermalSources[i].LiftRate;
       double lat, lon;
       FindLatitudeLongitude(DerivedDrawInfo.ThermalSources[i].Latitude, 

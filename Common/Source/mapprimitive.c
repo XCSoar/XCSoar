@@ -925,8 +925,9 @@ int msPolylineLabelPoint(shapeObj *p, pointObj *lp, int min_length, double *angl
 }
 
 
-FILE *ppc_fopen(const char *filename, const char *mode)
+ZZIP_FILE *ppc_fopen(const char *filename, const char *mode)
 {
+  /*
   WCHAR wszFileName[256];          // Unicode user name
   WCHAR wszMode[10];
 
@@ -937,5 +938,6 @@ FILE *ppc_fopen(const char *filename, const char *mode)
         strlen(mode)+1, wszMode,   
      sizeof(wszMode)/sizeof(wszMode[0]) );
   return _tfopen(wszFileName, wszMode);
+  */
+  return zzip_fopen(filename, mode);
 }
-

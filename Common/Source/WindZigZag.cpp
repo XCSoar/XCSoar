@@ -571,11 +571,9 @@ int WindZigZagUpdate(NMEA_INFO* Basic, DERIVED_INFO* Calculated,
 		      double *zzwindspeed, double *zzwindbearing) {
   static double tLastEstimate = -1;
 
-#ifndef _SIM_
   if (!Basic->AirspeedAvailable) {
     return 0;
   }
-#endif
 
 #if (WINDOWSPC>0)
 #ifdef DEBUG_ZIGZAG

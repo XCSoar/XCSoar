@@ -95,6 +95,7 @@ public:
 public:
 
   bool Update(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+
 };
 
 
@@ -114,6 +115,8 @@ private:
   CRITICAL_SECTION  CritSec_Voice;
   void Lock();
   void UnLock();
+ private:
+  static bool AirspaceNotifierInstalled;
 };
 
 #endif
