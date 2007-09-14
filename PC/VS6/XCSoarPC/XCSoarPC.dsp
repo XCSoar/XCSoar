@@ -72,7 +72,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D UNDER_CE=300 /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "include" /I "..\..\..\Common\Header" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /D WINDOWSPC=1 /D "DEBUG" /FD /GZ /c
 # SUBTRACT CPP /X /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -202,6 +202,10 @@ SOURCE=..\..\..\Common\Source\devAltairPro.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Common\Source\devBorgeltB50.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Common\Source\devCAI302.cpp
 # End Source File
 # Begin Source File
@@ -230,6 +234,10 @@ SOURCE=..\..\..\Common\Source\devVega.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Common\Source\devVolkslogger.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Common\Source\Dialogs.cpp
 # End Source File
 # Begin Source File
@@ -243,6 +251,10 @@ SOURCE=..\..\..\Common\Source\dlgAirspaceColours.cpp
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\dlgAirspacePatterns.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\dlgAirspaceSelect.cpp
 # End Source File
 # Begin Source File
 
@@ -355,6 +367,10 @@ SOURCE=..\..\..\Common\Source\dlgWaypointOutOfTerrain.cpp
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\dlgWayPointSelect.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\dlgWeather.cpp
 # End Source File
 # Begin Source File
 
@@ -675,10 +691,6 @@ SOURCE=..\..\..\Common\Source\jasper\jp2\jp2_dec.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Common\Source\jasper\jp2\jp2_enc.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_bs.c
 # End Source File
 # Begin Source File
@@ -688,10 +700,6 @@ SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_cs.c
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_dec.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_enc.c
 # End Source File
 # Begin Source File
 
@@ -711,10 +719,6 @@ SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_mqdec.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_mqenc.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_qmfb.c
 # End Source File
 # Begin Source File
@@ -731,19 +735,11 @@ SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t1dec.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t1enc.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t2cod.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t2dec.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Common\Source\jasper\jpc\jpc_t2enc.c
 # End Source File
 # Begin Source File
 
@@ -764,6 +760,114 @@ SOURCE=..\..\..\Common\Source\jasper\jpc\RasterTile.cpp
 # Begin Source File
 
 SOURCE=..\..\..\Common\Source\wcecompat\ts_string.cpp
+# End Source File
+# End Group
+# Begin Group "zzip"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\adler32.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\compress.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\crc32.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\deflate.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\err.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\fetch.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\file.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\gzio.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\infback.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\inffast.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\inflate.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\info.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\inftrees.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\plugin.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\trees.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\uncompr.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\zip.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\zzip\zutil.c
+# End Source File
+# End Group
+# Begin Group "Volkslogger"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\Volkslogger\dbbconv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\Volkslogger\grecord.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\Volkslogger\vlapi2.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\Volkslogger\vlapihlp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\Volkslogger\vlapisys_win.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\Volkslogger\vlconv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\Volkslogger\vlutils.cpp
 # End Source File
 # End Group
 # Begin Source File
