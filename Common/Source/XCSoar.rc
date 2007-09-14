@@ -783,9 +783,7 @@ IDR_XML_CHECKLIST       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgChecklist
 IDR_XML_CONFIGURATION   XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgConfiguration.xml"
 IDR_XML_LOGGERREPLAY    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgLoggerReplay.xml"
 IDR_XML_STARTUP         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartup.xml"
-IDR_XML_STATUSAIRCRAFT  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStatusAircraft.xml"
-IDR_XML_STATUSSYSTEM    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStatusSystem.xml"
-IDR_XML_STATUSTASK      XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStatusTask.xml"
+IDR_XML_STATUS          XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStatus.xml"
 IDR_XML_TASKCALCULATOR  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskCalculator.xml"
 IDR_XML_TASKOVERVIEW    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskOverview.xml"
 IDR_XML_TASKWAYPOINT    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskWaypoint.xml"
@@ -806,8 +804,11 @@ IDR_XML_TEXTENTRY_T            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTe
 IDR_XML_TEAMCODE            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTeamCode.xml"
 IDR_XML_STARTPOINT            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartPoint.xml"
 IDR_XML_WAYPOINTEDIT         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointEdit.xml"
+IDR_XML_WEATHER    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWeather.xml"
 
-#ifndef GNAV
+IDR_XML_AIRSPACESELECT  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceSelect.xml"
+
+
 IDR_XML_CHECKLIST_L       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgChecklist_L.xml"
 IDR_XML_WAYPOINTDETAILS_L XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWayPointDetails_L.xml"
 IDR_XML_ANALYSIS_L        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAnalysis_L.xml"
@@ -822,7 +823,7 @@ IDR_XML_TASKOVERVIEW_L    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskOve
 IDR_XML_TASKWAYPOINT_L    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskWaypoint_L.xml"
 IDR_XML_STARTUP_L         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartup_L.xml"
 IDR_XML_WAYPOINTEDIT_L         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointEdit_L.xml"
-#endif
+IDR_XML_AIRSPACESELECT_L  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceSelect_L.xml"
 
 /////////////////////////////////////////////////////////////////////////////
 //

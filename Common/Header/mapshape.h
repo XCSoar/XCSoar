@@ -40,6 +40,9 @@ typedef	struct {
     FILE        *fpSHP;
     FILE	*fpSHX;
 
+  ZZIP_FILE     *zfpSHP; // JMW Zip
+  ZZIP_FILE	*zfpSHX; // JMW Zip
+
     int		nShapeType;				/* SHPT_* */
     int		nFileSize;				/* SHP file */
 
@@ -68,6 +71,7 @@ typedef	struct
 %immutable;
 #endif
     FILE	*fp;
+  ZZIP_FILE	*zfp; // JMW Zip
 
     int         nRecords;
 

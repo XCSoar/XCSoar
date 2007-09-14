@@ -28,7 +28,7 @@ class Message {
  public:
   static void Initialize(RECT rc);
   static void Destroy();
-  static void Render();
+  static bool Render(); // returns true if messages have changed
 
   static void AddMessage(DWORD tshow, int type, TCHAR *Text);
 

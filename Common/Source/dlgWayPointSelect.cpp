@@ -186,7 +186,6 @@ static void PrepareData(void){
   for (int i=0; i<(int)NumberOfWayPoints; i++){
     WayPointSelectInfo[i].Index = i;
 
-
     DistanceBearing(Latitude,
                     Longitude,
                     WayPointList[i].Latitude,
@@ -336,9 +335,9 @@ static void UpdateList(void){
 }
 
 
-WndProperty *wpName;
-WndProperty *wpDistance;
-WndProperty *wpDirection;
+static WndProperty *wpName;
+static WndProperty *wpDistance;
+static WndProperty *wpDirection;
 
 static void FilterMode(bool direction) {
   if (direction) {
@@ -427,11 +426,13 @@ static void OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode
 
   if (DistanceFilterIdx == 0)
     _stprintf(sTmp, TEXT("%c"), '*');
-  else                      // TODO todo user unit
-    _stprintf(sTmp, TEXT("%.0fkm"), DistanceFilter[DistanceFilterIdx]);
+  else
+    _stprintf(sTmp, TEXT("%.0f%s"),
+              DistanceFilter[DistanceFilterIdx],
+              Units::GetDistanceName());
   Sender->Set(sTmp);
-
 }
+
 
 static void SetDirectionData(DataField *Sender){
 
@@ -572,8 +573,9 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
                  ETO_OPAQUE, NULL,
                  sTmp, _tcslen(sTmp), NULL);
     }
-                           //todo user unit
-    _stprintf(sTmp, TEXT("%.0fkm"), WayPointSelectInfo[i].Distance);
+    _stprintf(sTmp, TEXT("%.0f%s"),
+              WayPointSelectInfo[i].Distance,
+              Units::GetDistanceName());
     ExtTextOut(hDC, x2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       sTmp, _tcslen(sTmp), NULL);
@@ -694,7 +696,6 @@ int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
     DistanceFilterIdx = 1;
   }
 
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgWayPointSelect_L.xml"));
@@ -703,17 +704,14 @@ int dlgWayPointSelect(double lon, double lat, int type, int FilterNear){
                         filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTSELECT_L"));
-  } else
-#endif
-    {
+  } else {
     char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgWayPointSelect.xml"));
-  wf = dlgLoadFromXML(CallBackTable,
-
-                      filename,
-                      hWndMainWindow,
-		      TEXT("IDR_XML_WAYPOINTSELECT"));
-    }
+    LocalPathS(filename, TEXT("dlgWayPointSelect.xml"));
+    wf = dlgLoadFromXML(CallBackTable,
+                        filename,
+                        hWndMainWindow,
+                        TEXT("IDR_XML_WAYPOINTSELECT"));
+  }
 
   if (!wf) return -1;
 

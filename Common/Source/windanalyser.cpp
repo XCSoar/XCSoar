@@ -83,6 +83,11 @@ Copyright_License {
   a number of windmeasurements and calculates a weighted average based on quality.
 */
 
+#ifdef DEBUG
+#define DEBUG_WIND
+#endif
+
+
 WindAnalyser::WindAnalyser()
 {
   //initialisation

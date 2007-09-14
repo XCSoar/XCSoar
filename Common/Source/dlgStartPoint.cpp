@@ -158,7 +158,6 @@ void dlgStartPointShowModal(void) {
 
   ItemIndex = -1;
 
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgStartPoint_L.xml"));
@@ -166,16 +165,14 @@ void dlgStartPointShowModal(void) {
                         filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_STARTPOINT_L"));
-  } else
-#endif
-    {
+  } else {
     char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgStartPoint.xml"));
+    LocalPathS(filename, TEXT("dlgStartPoint.xml"));
     wf = dlgLoadFromXML(CallBackTable,
                         filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_STARTPOINT"));
-    }
+  }
   if (!wf) return;
 
   ASSERT(wf!=NULL);

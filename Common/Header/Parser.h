@@ -132,16 +132,17 @@ class NMEAParser {
 			      TCHAR *String, NMEA_INFO *GPS_INFO);
   static int FindVegaPort(void);
   static void Reset(void);
+  void _Reset(void);
 
   BOOL ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO);
   bool gpsValid;
-  //bool hasVega;
   int nSatellites;
 
   bool activeGPS;
 
   static BOOL GpsUpdated;
   static BOOL VarioUpdated;
+  static int StartDay;
 
  public:
   static void TestRoutine(NMEA_INFO *GPS_INFO);
@@ -153,6 +154,15 @@ class NMEAParser {
 			       int DesiredFieldNumber);
 
  private:
+  BOOL GGAAvailable;
+  BOOL RMZAvailable;
+  BOOL RMAAvailable;
+  double RMZAltitude;
+  double RMAAltitude;
+  double LastTime;
+
+  bool TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO);
+  static double TimeModify(double FixTime, NMEA_INFO* info);
 
   BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO);
   BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO);
@@ -164,11 +174,10 @@ class NMEAParser {
   BOOL WP1(TCHAR *String, NMEA_INFO *GPS_INFO);
   BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO);
 
-  // Additional sentances added by JMW
-  BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO);
-
-  // RMN added volkslogger support
-  BOOL PGCS1(TCHAR *String, NMEA_INFO *GPS_INFO);
+  // Additional sentances
+  BOOL PZAN1(TCHAR *String, NMEA_INFO *GPS_INFO);  // RMN: Zander variometer. QNE-altitude
+  BOOL PZAN2(TCHAR *String, NMEA_INFO *GPS_INFO);  // RMN: Zander variometer.  TAS, Vario
+  BOOL PTAS1(TCHAR *String, NMEA_INFO *GPS_INFO);  // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentances
   BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO);

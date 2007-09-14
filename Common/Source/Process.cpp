@@ -31,7 +31,12 @@ Copyright_License {
 #include "stdafx.h"
 #include <windows.h>
 
+#include "compatibility.h"
+#ifdef OLDPPC
+#include "XCSoarProcess.h"
+#else
 #include "Process.h"
+#endif
 #include "externs.h"
 #include "Utils.h"
 #include "device.h"
@@ -506,51 +511,31 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 11:
     Value = DISTANCEMODIFY*CALCULATED_INFO.WaypointDistance;
-    if (ActiveWayPoint>=0) {
-      Valid = true;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 12:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeDifference;
-    if (ActiveWayPoint>=0) {
-      Valid = true;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 13:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.NextAltitudeRequired;
-    if (ActiveWayPoint>=0) {
-      Valid = true;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 14:
     Value = 0; // Next Waypoint Text
     break;
   case 15:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeDifference;
-    if (ActiveWayPoint>=0) {
-      Valid = true;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 16:
     Value = ALTITUDEMODIFY*CALCULATED_INFO.TaskAltitudeRequired;
-    if (ActiveWayPoint>=0) {
-      Valid = true;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 17:
     Value = TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeed;
     if (ActiveWayPoint>=1) {
-      Valid = true;
+      Valid = ValidTaskPoint(ActiveWayPoint);
     } else {
       Valid = false;
     }
@@ -561,17 +546,13 @@ void InfoBoxFormatter::AssignValue(int i) {
     } else {
       Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo;
     }
-    if (ActiveWayPoint>=0) {
-      Valid = true;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint);
     break;
   case 19:
     if (CALCULATED_INFO.LDFinish== 999) {
       Valid = false;
     } else {
-      Valid = true;
+      Valid = ValidTaskPoint(ActiveWayPoint);
       if (CALCULATED_INFO.ValidFinish) {
         Value = 0;
       } else {
@@ -607,38 +588,22 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 28:
     Value = DISTANCEMODIFY*CALCULATED_INFO.AATMaxDistance ;
-    if (ActiveWayPoint>=0) {
-      Valid = AATEnabled;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
     break;
   case 29:
     Value = DISTANCEMODIFY*CALCULATED_INFO.AATMinDistance ;
-    if (ActiveWayPoint>=0) {
-      Valid = AATEnabled;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
     break;
   case 30:
     Value = TASKSPEEDMODIFY*CALCULATED_INFO.AATMaxSpeed;
-    if (ActiveWayPoint>=0) {
-      Valid = AATEnabled;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
     if (CALCULATED_INFO.AATTimeToGo<1) {
       Valid = false;
     }
     break;
   case 31:
     Value = TASKSPEEDMODIFY*CALCULATED_INFO.AATMinSpeed;
-    if (ActiveWayPoint>=0) {
-      Valid = AATEnabled;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
     if (CALCULATED_INFO.AATTimeToGo<1) {
       Valid = false;
     }
@@ -665,7 +630,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     if (CALCULATED_INFO.LDNext== 999) {
       Valid = false;
     } else {
-      Valid = true;
+      Valid = ValidTaskPoint(ActiveWayPoint);
       Value = CALCULATED_INFO.LDNext;
     }
     break;
@@ -688,19 +653,11 @@ void InfoBoxFormatter::AssignValue(int i) {
     break;
   case 51:
     Value = DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance ;
-    if (ActiveWayPoint>=0) {
-      Valid = AATEnabled;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
     break;
   case 52:
     Value = TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed;
-    if (ActiveWayPoint>=0) {
-      Valid = AATEnabled;
-    } else {
-      Valid = false;
-    }
+    Valid = ValidTaskPoint(ActiveWayPoint) && AATEnabled;
     if (CALCULATED_INFO.AATTimeToGo<1) {
       Valid = false;
     }
@@ -709,7 +666,7 @@ void InfoBoxFormatter::AssignValue(int i) {
     if (CALCULATED_INFO.LDvario== 999) {
       Valid = false;
     } else {
-      Valid = true;
+      Valid = GPS_INFO.VarioAvailable && GPS_INFO.AirspeedAvailable;
       Value = CALCULATED_INFO.LDvario;
     }
     break;
@@ -735,7 +692,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 59:
     Value = TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeedInstantaneous;
     if (ActiveWayPoint>=1) {
-      Valid = true;
+      Valid = ValidTaskPoint(ActiveWayPoint);
     } else {
       Valid = false;
     }
@@ -743,7 +700,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 60:
     Value = DISTANCEMODIFY*CALCULATED_INFO.HomeDistance ;
     if (HomeWaypoint>=0) {
-      Valid = true;
+      Valid = ValidWayPoint(HomeWaypoint);
     } else {
       Valid = false;
     }
@@ -751,7 +708,7 @@ void InfoBoxFormatter::AssignValue(int i) {
   case 61:
     Value = TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeedAchieved;
     if (ActiveWayPoint>=1) {
-      Valid = true;
+      Valid = ValidTaskPoint(ActiveWayPoint);
     } else {
       Valid = false;
     }
@@ -889,7 +846,7 @@ TCHAR *FormatterDiffBearing::Render(int *color) {
 
 TCHAR *FormatterTeamCode::Render(int *color) {
 
-  if((TeamCodeRefWaypoint >=0)&&(WayPointList))
+  if(ValidWayPoint(TeamCodeRefWaypoint))
     {
 
       *color = 0; // black text
@@ -909,7 +866,7 @@ TCHAR *FormatterTeamCode::Render(int *color) {
 
 TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 
-  if((TeamCodeRefWaypoint >=0)&&(WayPointList))
+  if(ValidWayPoint(TeamCodeRefWaypoint))
     {
       Valid = true;
 

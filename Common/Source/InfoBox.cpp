@@ -361,6 +361,7 @@ void InfoBox::PaintValue(void){
 
   SIZE tsize;
   int x,y;
+  unsigned int len = _tcslen(mValue);
 
   SetBkColor(mHdcBuf, mColorValueBk);
 
@@ -389,7 +390,7 @@ void InfoBox::PaintValue(void){
 
   SelectObject(mHdcBuf, *mphFontValue);
 
-  GetTextExtentPoint(mHdcBuf, mValue, _tcslen(mValue), &tsize);
+  GetTextExtentPoint(mHdcBuf, mValue, len, &tsize);
 
   x = max(1,recValue.left +
           (mWidth - tsize.cx - mBitmapUnitSize.x*InfoBoxLayout::scale) / 2);
@@ -397,15 +398,12 @@ void InfoBox::PaintValue(void){
   if (mBorderKind & BORDERLEFT)
     x+= DEFAULTBORDERPENWIDTH;
 
-  y = recValue.top +
-    (recValue.bottom - recValue.top+1)/2;
-  y += ((mpFontHeightValue->CapitalHeight+1)/2)
-    - mpFontHeightValue->AscentHeight;
+  y = recValue.top + 1 - mpFontHeightValue->AscentHeight +
+    (recValue.bottom - recValue.top + mpFontHeightValue->CapitalHeight)/2;
 
-  ExtTextOut(mHdcBuf, x, y,
-    ETO_OPAQUE, &recValue, mValue, _tcslen(mValue), NULL);
+  ExtTextOut(mHdcBuf, x, y, ETO_OPAQUE, &recValue, mValue, len, NULL);
 
-  if (mValueUnit != unUndef){
+  if ((mValueUnit != unUndef) && (color>=0)){
     if (mhBitmapUnit != NULL){
       HBITMAP oldBmp;
       oldBmp = (HBITMAP)SelectObject(mHdcTemp, mhBitmapUnit);
@@ -443,8 +441,9 @@ void InfoBox::PaintComment(void){
 
   SIZE tsize;
   int x,y;
+  unsigned int len = _tcslen(mComment);
 
-  if (_tcslen(mComment)==0) return; // nothing to paint
+  if (len==0) return; // nothing to paint
 
   SetBkColor(mHdcBuf, mColorCommentBk);
 
@@ -452,19 +451,18 @@ void InfoBox::PaintComment(void){
 
   SelectObject(mHdcBuf, *mphFontComment);
 
-  GetTextExtentPoint(mHdcBuf, mComment, _tcslen(mComment), &tsize);
+  GetTextExtentPoint(mHdcBuf, mComment, len, &tsize);
 
-  x = recComment.left + (mWidth - tsize.cx) / 2;
-  if (x < 1)
-    x = 1;
-
+  x = max(1,recComment.left + (mWidth - tsize.cx) / 2);
   if (mBorderKind & BORDERLEFT)
     x+= DEFAULTBORDERPENWIDTH;
 
-  y = recComment.top + 1 + mpFontHeightComment->CapitalHeight - mpFontHeightComment->AscentHeight;
+  y = recComment.top + 1
+    + mpFontHeightComment->CapitalHeight
+    - mpFontHeightComment->AscentHeight;
 
   ExtTextOut(mHdcBuf, x, y,
-    ETO_OPAQUE, &recComment, mComment, _tcslen(mComment), NULL);
+    ETO_OPAQUE, &recComment, mComment, len, NULL);
 
 }
 

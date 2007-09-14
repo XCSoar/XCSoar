@@ -278,7 +278,7 @@ void InfoBoxLayout::ScreenGeometry(RECT rc) {
 void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 
   switch (InfoBoxGeometry) {
-  case 0:
+  case 0: // portrait
     // calculate control dimensions
 
     ControlWidth = 2*(rc.right - rc.left) / numInfoWindows;
@@ -368,7 +368,7 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
     MapWindow::MapRect.right = rc.right-ControlWidth*2;
     break;
 
-  case 6:
+  case 6: // landscape
     // calculate control dimensions
 
     ControlWidth = (int)((rc.right - rc.left)*0.18);
@@ -454,7 +454,7 @@ HWND ButtonLabel::hWndButtonWindow[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonVisible[NUMBUTTONLABELS];
 bool ButtonLabel::ButtonDisabled[NUMBUTTONLABELS];
 
-int ButtonLabel::ButtonLabelGeometry = 0; // unused currently
+int ButtonLabel::ButtonLabelGeometry = 0;
 
 
 void ButtonLabel::GetButtonPosition(int i, RECT rc,
@@ -484,7 +484,7 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
     int hheight = (rc.bottom-rc.top)/4;
 
     switch (ButtonLabelGeometry) {
-    case 0:
+    case 0: // portrait
       if (i==0) {
 	*sizex = IBLSCALE(52);
 	*sizey = IBLSCALE(37);
@@ -500,13 +500,19 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
           *sizex = IBLSCALE(80);
           *sizey = IBLSCALE(40);
           *x = rc.right-(*sizex);
-          int k = (rc.bottom-rc.top-IBLSCALE(40)-IBLSCALE(6));
+          int k = rc.bottom-rc.top-IBLSCALE(46);
+#ifdef GNAV
+          k = rc.bottom-rc.top;
+          // JMW need upside down button order for rotated Altair
+          *y = rc.bottom-(i-5)*k/5-(*sizey)-IBLSCALE(20);
+#else
           *y = (rc.top+(i-5)*k/6+(*sizey/2+IBLSCALE(3)));
+#endif
         }
       }
       break;
 
-    case 1:
+    case 1: // landscape
       hwidth = (rc.right-rc.left)/5;
       hheight = (rc.bottom-rc.top)/(4+1);
 
@@ -518,12 +524,20 @@ void ButtonLabel::GetButtonPosition(int i, RECT rc,
       } else {
 	if (i<5) {
 	  *sizex = IBLSCALE(52);
+#ifdef GNAV
 	  *sizey = IBLSCALE(20);
+#else
+	  *sizey = IBLSCALE(35);
+#endif
 	  *x = rc.left+3;
-	  *y = (rc.top+hheight*(i-1+1)-(*sizey)/2);
+	  *y = (rc.top+hheight*i-(*sizey)/2);
 	} else {
 	  *sizex = IBLSCALE(60);
+#ifdef GNAV
 	  *sizey = IBLSCALE(40);
+#else
+	  *sizey = IBLSCALE(35);
+#endif
 	  *x = rc.left+hwidth*(i-5);
 	  *y = (rc.bottom-(*sizey));
 	}
@@ -635,7 +649,9 @@ void ButtonLabel::SetLabelText(int index, TCHAR *text) {
 
       SetWindowText(hWndButtonWindow[index], gettext(s));
 
-      // SetWindowText(hWndButtonWindow[index], gettext(text));
+      SetWindowPos(hWndButtonWindow[index], HWND_TOP, 0,0,0,0,
+                   SWP_NOMOVE | SWP_NOSIZE);
+
       ShowWindow(hWndButtonWindow[index], SW_SHOW);
       ButtonVisible[index]= true;
     }

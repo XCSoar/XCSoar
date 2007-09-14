@@ -48,6 +48,7 @@ Copyright_License {
 #include <ctype.h>
 
 #include "resource.h"
+#include "wcecompat/ts_string.h"
 
 
 #define  BINFILEMAGICNUMBER     0x4ab199f0
@@ -77,12 +78,12 @@ static void CalculateSector(TCHAR *Text);
 static bool ParseLine(int nLineType);
 
 
-static int GetNextLine(FILE *fp, TCHAR *Text);
+static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text);
 
 static bool bFillMode = false;
 static bool	bWaiting = true;
 
-static TCHAR TempString[300];
+static TCHAR TempString[READLINE_LENGTH];
 
 static AIRSPACE_AREA TempArea;
 static AIRSPACE_POINT TempPoint;
@@ -184,7 +185,7 @@ void CloseAirspace() {
 // this can now be called multiple times to load several airspaces.
 // to start afresh, call CloseAirspace()
 
-void ReadAirspace(FILE *fp)
+void ReadAirspace(ZZIP_FILE *fp)
 {
   StartupStore(TEXT("ReadAirspace\r\n"));
 
@@ -210,7 +211,7 @@ void ReadAirspace(FILE *fp)
   hProgress=CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
   // Need step size finer than default 10
   SetProgressStepSize(5);
-  dwStep = GetFileSize((void *)_fileno(fp), NULL) / 10L;
+  dwStep = zzip_file_size(fp) / 10L;
 
   TempArea.FirstPoint = NumberOfAirspacePoints;	// JG 10-Nov-2005
 
@@ -219,19 +220,19 @@ void ReadAirspace(FILE *fp)
   StepProgressDialog();
   while((nLineType = GetNextLine(fp, TempString)) >= 0)
   {
-	  Tock++;
-	  Tock %= 50;
-	  if(Tock == 0)
-	  {
-		  dwPos = ftell(fp);
-		  if ((dwPos - dwOldPos) >= dwStep)
-		  {
-			  StepProgressDialog();
-			  dwOldPos = dwPos;
-		  }
-	  }
+    Tock++;
+    Tock %= 50;
+    if(Tock == 0)
+      {
+        dwPos = zzip_tell(fp);
+        if ((dwPos - dwOldPos) >= dwStep)
+          {
+            StepProgressDialog();
+            dwOldPos = dwPos;
+          }
+      }
 
-	  if (!ParseLine(nLineType)){
+    if (!ParseLine(nLineType)){
       CloseAirspace();
       return;
     }
@@ -328,7 +329,7 @@ void ReadAirspace(FILE *fp)
   NumberOfAirspaceCircles = OldNumberOfAirspaceCircles;
 
   TempArea.FirstPoint = NumberOfAirspacePoints;	// JG 10-Nov-2005
-  fseek(fp, 0, SEEK_SET );
+  zzip_seek(fp, 0, SEEK_SET );
   LineCount = -1;
 
   bFillMode = true;
@@ -340,19 +341,19 @@ void ReadAirspace(FILE *fp)
 
   while((nLineType = GetNextLine(fp, TempString)) >= 0)
   {
-	  Tock++;
-	  Tock %= 50;
-	  if(Tock == 0)
-	  {
-		  dwPos = ftell(fp);
-		  if ((dwPos - dwOldPos) >= dwStep)
-		  {
-			  StepProgressDialog();
-			  dwOldPos = dwPos;
-		  }
-	  }
+    Tock++;
+    Tock %= 50;
+    if(Tock == 0)
+      {
+        dwPos = zzip_tell(fp);
+        if ((dwPos - dwOldPos) >= dwStep)
+          {
+            StepProgressDialog();
+            dwOldPos = dwPos;
+          }
+      }
 
-	  ParseLine(nLineType);
+    ParseLine(nLineType);
   }
 
   // Process final area (if any). bFillMode is true.  JG 10-Nov-2005
@@ -367,7 +368,9 @@ void ReadAirspace(FILE *fp)
       || NumberOfAirspaceAreasPass[0] != NumberOfAirspaceAreasPass[1]
       || NumberOfAirspaceCirclesPass[0] != NumberOfAirspaceCirclesPass[1]){
 
-    if (MessageBoxX(NULL, gettext(TEXT("Internal Airspace Parser Error!\r\nPlease send this Airspacefile to Support")), gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL){
+    if (MessageBoxX(NULL,
+                    gettext(TEXT("Internal Airspace Parser Error!\r\nPlease send this Airspacefile to Support")),
+                    gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL) {
     }
 
   }
@@ -383,91 +386,91 @@ void ReadAirspace(FILE *fp)
 
 static bool ParseLine(int nLineType)
 {
-	int		nIndex;
+  int		nIndex;
 
-	switch (nLineType)
-	{
-	case k_nLtAC:
-		if (bFillMode)
-		{
-			if (!bWaiting)
-				AddArea(&TempArea);
-			TempArea.NumPoints = 0;
-			TempArea.Type = OTHER;
-			for (nIndex = 0; nIndex < k_nAreaCount; nIndex++)
-			{
-				if (StartsWith(&TempString[3], k_strAreaStart[nIndex]))
-				{
-					TempArea.Type = k_nAreaType[nIndex];
-					break;
-				}
-			}
-    	Rotation = +1;
-		}
-		else if (!bWaiting)							// Don't count circles JG 10-Nov-2005
-			NumberOfAirspaceAreas++;
+  switch (nLineType)
+    {
+    case k_nLtAC:
+      if (bFillMode)
+        {
+          if (!bWaiting)
+            AddArea(&TempArea);
+          TempArea.NumPoints = 0;
+          TempArea.Type = OTHER;
+          for (nIndex = 0; nIndex < k_nAreaCount; nIndex++)
+            {
+              if (StartsWith(&TempString[3], k_strAreaStart[nIndex]))
+                {
+                  TempArea.Type = k_nAreaType[nIndex];
+                  break;
+                }
+            }
+          Rotation = +1;
+        }
+      else if (!bWaiting)   // Don't count circles JG 10-Nov-2005
+        NumberOfAirspaceAreas++;
 
-  	Rotation = +1;
-		bWaiting = false;
-		break;
-
-	case k_nLtAN:
-		if (bFillMode)
-		{
-			TempString[NAME_SIZE] = '\0';
-			_tcscpy(TempArea.Name, &TempString[3]);
-		}
-		break;
-
-	case k_nLtAL:
-		if (bFillMode)
-			ReadAltitude(&TempString[3], &TempArea.Base);
-		break;
-
-	case k_nLtAH:
-		if (bFillMode)
-			ReadAltitude(&TempString[3],&TempArea.Top);
-		break;
-
-	case k_nLtV:
-		// Need to set these while in count mode, or DB/DA will crash
-		if(StartsWith(&TempString[2], TEXT("X=")) || StartsWith(&TempString[2], TEXT("x=")))
-		{
-			if (ReadCoords(&TempString[4],&CenterX, &CenterY))
-        break;
-		}
-		else if(StartsWith(&TempString[2],TEXT("D=-")) || StartsWith(&TempString[2],TEXT("d=-")))
-		{
-			Rotation = -1;
+      Rotation = +1;
+      bWaiting = false;
       break;
-		}
-		else if(StartsWith(&TempString[2],TEXT("D=+")) || StartsWith(&TempString[2],TEXT("d=+")))
-		{
-			Rotation = +1;
-      break;
-		}
-		else if(StartsWith(&TempString[2],TEXT("Z")) || StartsWith(&TempString[2],TEXT("z")))
-		{
-      // ToDo Display Zool Level
-      break;
-		}
-		else if(StartsWith(&TempString[2],TEXT("W")) || StartsWith(&TempString[2],TEXT("w")))
-		{
-      // ToDo width of an airway
-		  break;
-		}
-		else if(StartsWith(&TempString[2],TEXT("T")) || StartsWith(&TempString[2],TEXT("t")))
-		{
-      // ----- JMW THIS IS REQUIRED FOR LEGACY FILES
-      break;
-		}
 
-		goto OnError;
+    case k_nLtAN:
+      if (bFillMode)
+        {
+          TempString[NAME_SIZE] = '\0';
+          _tcscpy(TempArea.Name, &TempString[3]);
+        }
+      break;
 
-	case k_nLtDP:
-    /*
-		if (bFillMode)
-		{
+    case k_nLtAL:
+      if (bFillMode)
+        ReadAltitude(&TempString[3], &TempArea.Base);
+      break;
+
+    case k_nLtAH:
+      if (bFillMode)
+        ReadAltitude(&TempString[3],&TempArea.Top);
+      break;
+
+    case k_nLtV:
+      // Need to set these while in count mode, or DB/DA will crash
+      if(StartsWith(&TempString[2], TEXT("X=")) || StartsWith(&TempString[2], TEXT("x=")))
+        {
+          if (ReadCoords(&TempString[4],&CenterX, &CenterY))
+            break;
+        }
+      else if(StartsWith(&TempString[2],TEXT("D=-")) || StartsWith(&TempString[2],TEXT("d=-")))
+        {
+          Rotation = -1;
+          break;
+        }
+      else if(StartsWith(&TempString[2],TEXT("D=+")) || StartsWith(&TempString[2],TEXT("d=+")))
+        {
+          Rotation = +1;
+          break;
+        }
+      else if(StartsWith(&TempString[2],TEXT("Z")) || StartsWith(&TempString[2],TEXT("z")))
+        {
+          // ToDo Display Zool Level
+          break;
+        }
+      else if(StartsWith(&TempString[2],TEXT("W")) || StartsWith(&TempString[2],TEXT("w")))
+        {
+          // ToDo width of an airway
+          break;
+        }
+      else if(StartsWith(&TempString[2],TEXT("T")) || StartsWith(&TempString[2],TEXT("t")))
+        {
+          // ----- JMW THIS IS REQUIRED FOR LEGACY FILES
+          break;
+        }
+
+      goto OnError;
+
+    case k_nLtDP:
+      /*
+        if (bFillMode)
+        {
 			ReadCoords(&TempString[3],&TempPoint.Longitude ,
                                    &TempPoint.Latitude );
 			AddPoint(&TempPoint);
@@ -476,46 +479,50 @@ static bool ParseLine(int nLineType)
 			NumberOfAirspacePoints++;
     */
 //		if (bFillMode)
-    if (!ReadCoords(&TempString[3],&TempPoint.Longitude ,
-		    &TempPoint.Latitude))
-      goto OnError;
-  	AddPoint(&TempPoint, &TempArea.NumPoints);
-		// TempArea.NumPoints++;
-		break;
+      if (!ReadCoords(&TempString[3],&TempPoint.Longitude ,
+                      &TempPoint.Latitude))
+        goto OnError;
+      AddPoint(&TempPoint, &TempArea.NumPoints);
+      // TempArea.NumPoints++;
+      break;
 
-	case k_nLtDB:
-		CalculateArc(TempString);
-		break;
+    case k_nLtDB:
+      CalculateArc(TempString);
+      break;
 
-	case k_nLtDA:
-		CalculateSector(TempString);
-		break;
+    case k_nLtDA:
+      CalculateSector(TempString);
+      break;
 
-	case k_nLtDC:
-		if (bFillMode)
-		{
-			Radius = (float)StrToDouble(&TempString[2],NULL);
-			Radius = (float)(Radius * NAUTICALMILESTOMETRES);
-			AddAirspaceCircle(&TempArea, CenterX, CenterY, Radius);
-		}
-		else
-			NumberOfAirspaceCircles++;
+    case k_nLtDC:
+      if (bFillMode)
+        {
+          Radius = (float)StrToDouble(&TempString[2],NULL);
+          Radius = (float)(Radius * NAUTICALMILESTOMETRES);
+          AddAirspaceCircle(&TempArea, CenterX, CenterY, Radius);
+        }
+      else
+        NumberOfAirspaceCircles++;
 
-		bWaiting = true;
-		break;
+      bWaiting = true;
+      break;
 
-	default:
-		break;
-	}
+    default:
+      break;
+    }
 
   return(true);
 
 OnError:
 
   if (!bFillMode){
-    TCHAR sTmp[128];
-    wsprintf(sTmp, gettext(TEXT("Parse Error at Line: %d\r\n\"%s\"\r\nLine skiped.")), LineCount, TempString);
-    if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL){
+    TCHAR sTmp[MAX_PATH];
+    wsprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
+             gettext(TEXT("Parse Error at Line")),
+             LineCount, TempString,
+             gettext(TEXT("Line skipped.")));
+    if (MessageBoxX(hWndMainWindow, sTmp, gettext(TEXT("Airspace")),
+                    MB_OKCANCEL) == IDCANCEL){
       return(false);
     }
 
@@ -525,141 +532,158 @@ OnError:
 
 }
 
+
 // Returns index of line type found, or -1 if end of file reached
-static int GetNextLine(FILE *fp, TCHAR *Text)
+static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
 {
-	TCHAR	*Comment;
-	int		nSize;
-	int		nLineType = -1;
-  TCHAR sTmp[128];
+  TCHAR	*Comment;
+  int		nSize;
+  int		nLineType = -1;
+  TCHAR sTmp[MAX_PATH];
 
-	while (ReadStringX(fp, 300, Text)){
+  while (ReadString(fp, READLINE_LENGTH, Text)){
+    // JMW was ReadStringX
 
-		LineCount++;
+    LineCount++;
 
-		nSize = _tcsclen(Text);
+    nSize = _tcsclen(Text);
 
     // build a upercase copy of the tags
     _tcsncpy(sTmp, Text, sizeof(sTmp)/sizeof(sTmp[0]));
     sTmp[sizeof(sTmp)/sizeof(sTmp[0])-1] = '\0';
     _tcsupr(sTmp);
 
-		// Ignore lines less than 3 characters
-		// or starting with comment char
-		if((nSize < 3) || (sTmp[0] == _T('*')))
-			continue;
+    // Ignore lines less than 3 characters
+    // or starting with comment char
+    if((nSize < 3) || (sTmp[0] == _T('*')))
+      continue;
 
-		// Only return expected lines
-		switch (sTmp[0])
-		{
-		case _T('A'):
-			switch (sTmp[1])
-			{
-			case _T('C'):
-				nLineType = k_nLtAC;
-				break;
+    // Only return expected lines
+    switch (sTmp[0])
+      {
+      case _T('A'):
+        switch (sTmp[1])
+          {
+          case _T('C'):
+            nLineType = k_nLtAC;
+            break;
 
-			case _T('N'):
-				nLineType = k_nLtAN;
-				break;
+          case _T('N'):
+            nLineType = k_nLtAN;
+            break;
 
-			case _T('L'):
-				nLineType = k_nLtAL;
-				break;
+          case _T('L'):
+            nLineType = k_nLtAL;
+            break;
 
-			case _T('H'):
-				nLineType = k_nLtAH;
-				break;
+          case _T('H'):
+            nLineType = k_nLtAH;
+            break;
 
-			case _T('T'): // ignore airspace lables
-			              // ToDo: adding airspace labels
-			  continue;
+          case _T('T'): // ignore airspace lables
+            // ToDo: adding airspace labels
+            continue;
 
-			default:
-			  if (bFillMode){
-			    wsprintf(sTmp, gettext(TEXT("Parse Error at Line: %d\r\n\"%s\"\r\nLine skiped.")), LineCount, TempString);
-			    if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
-			      return(-1);
-			  }
-			  continue;
-			}
+          default:
+            if (bFillMode){
+              wsprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
+                       gettext(TEXT("Parse Error at Line")),
+                       LineCount, TempString,
+                       gettext(TEXT("Line skipped.")));
+              if (MessageBoxX(NULL, sTmp,
+                              gettext(TEXT("Airspace")),
+                              MB_OKCANCEL) == IDCANCEL)
+                return(-1);
+            }
+            continue;
+          }
 
-			break;
+        break;
 
-		case _T('D'):
-			switch (sTmp[1])
-			{
-			case _T('A'):
-				nLineType = k_nLtDA;
-				break;
+      case _T('D'):
+        switch (sTmp[1])
+          {
+          case _T('A'):
+            nLineType = k_nLtDA;
+            break;
 
-			case _T('B'):
-				nLineType = k_nLtDB;
-				break;
+          case _T('B'):
+            nLineType = k_nLtDB;
+            break;
 
-			case _T('C'):
-				nLineType = k_nLtDC;
-				break;
+          case _T('C'):
+            nLineType = k_nLtDC;
+            break;
 
-			case _T('P'):
-				nLineType = k_nLtDP;
-				break;
+          case _T('P'):
+            nLineType = k_nLtDP;
+            break;
 
-      // todo DY airway segment
-				// what about 'V T=' ?
+            // todo DY airway segment
+            // what about 'V T=' ?
 
-			default:
-			  if (bFillMode){
-			    wsprintf(sTmp, gettext(TEXT("Parse Error at Line: %d\r\n\"%s\"\r\nLine skiped.")), LineCount, TempString);
-			    if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
-			      return(-1);
-			  }
-			  continue;
-			}
+          default:
+            if (bFillMode){
+              wsprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
+                       gettext(TEXT("Parse Error at Line")),
+                       LineCount, TempString,
+                       gettext(TEXT("Line skipped.")));
+              if (MessageBoxX(NULL, sTmp,
+                              gettext(TEXT("Airspace")),
+                              MB_OKCANCEL) == IDCANCEL)
+                return(-1);
+            }
+            continue;
+          }
 
-			break;
+        break;
 
-		case _T('V'):
-		  nLineType = k_nLtV;
-		  break;
+      case _T('V'):
+        nLineType = k_nLtV;
+        break;
 
-		case _T('S'):  // ignore the SB,SP ...
-		  if (sTmp[1] == _T('B'))
-		    continue;
-		  if (sTmp[1] == _T('P'))
-		    continue;
+      case _T('S'):  // ignore the SB,SP ...
+        if (sTmp[1] == _T('B'))
+          continue;
+        if (sTmp[1] == _T('P'))
+          continue;
 
-		default:
-		  if (bFillMode){
-		    wsprintf(sTmp, gettext(TEXT("Parse Error at Line: %d\r\n\"%s\"\r\nLine skiped.")), LineCount, TempString);
-		    if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")), MB_OKCANCEL) == IDCANCEL)
-		      return(-1);
-		  }
-		  continue;
-		}
+      default:
+        if (bFillMode){
+          wsprintf(sTmp, TEXT("%s: %d\r\n\"%s\"\r\n%s."),
+                   gettext(TEXT("Parse Error at Line")),
+                   LineCount, TempString,
+                   gettext(TEXT("Line skipped.")));
+          if (MessageBoxX(NULL, sTmp, gettext(TEXT("Airspace")),
+                          MB_OKCANCEL) == IDCANCEL)
+            return(-1);
+        }
+        continue;
+      }
 
-		if (nLineType >= 0)		// Valid line found
-		{
-			// Strip comments and newline chars from end of line
-			Comment = _tcschr(Text, _T('*'));
-			if(Comment != NULL)
-			{
-				*Comment = _T('\0');		// Truncate line
-				nSize = Comment - Text;		// Reset size
-				if (nSize < 3)
-					continue;				// Ensure newline removal won't fail
-			}
-			if(Text[nSize-1] == _T('\n'))
-				Text[--nSize] = _T('\0');
-			if(Text[nSize-1] == _T('\r'))
-				Text[--nSize] = _T('\0');
+    if (nLineType >= 0)		// Valid line found
+      {
+        // Strip comments and newline chars from end of line
+        Comment = _tcschr(Text, _T('*'));
+        if(Comment != NULL)
+          {
+            *Comment = _T('\0');		// Truncate line
+            nSize = Comment - Text;		// Reset size
+            if (nSize < 3)
+              continue;				// Ensure newline removal won't fail
+          }
+        if(Text[nSize-1] == _T('\n'))
+          Text[--nSize] = _T('\0');
+        if(Text[nSize-1] == _T('\r'))
+          Text[--nSize] = _T('\0');
 
-			break;
-		}
-    }
+        break;
+      }
+  }
 
   return nLineType;
 }
+
 
 static bool StartsWith(TCHAR *Text, const TCHAR *LookFor)
 {
@@ -692,21 +716,25 @@ static bool ReadCoords(TCHAR *Text, double *X, double *Y)
   if ((Text == Stop) || (*Stop =='\0')) goto OnError;
   Stop++;
   Ymin = (double)StrToDouble(Stop, &Stop);
-  if (Ymin<0 || Ymin >=60) {
+  if (Ymin<0 || Ymin >=60){
+    // ToDo
   }
   if (*Stop =='\0') goto OnError;
-  if(*Stop == ':')
-    {
-      Stop++;
-      if (*Stop =='\0') goto OnError;
-      Ysec = (double)StrToDouble(Stop, &Stop);
-      if (Ysec<0 || Ysec >=60) {
-      }
+  if(*Stop == ':'){
+    Stop++;
+    if (*Stop =='\0')
+      goto OnError;
+    Ysec = (double)StrToDouble(Stop, &Stop);
+    if (Ysec<0 || Ysec >=60) {
+      // ToDo
     }
+  }
 
   *Y = Ysec/3600 + Ymin/60 + Ydeg;
 
-  Stop++;
+  if (*Stop == ' ')
+    Stop++;
+
   if (*Stop =='\0') goto OnError;
   if((*Stop == 'S') || (*Stop == 's'))
     {
@@ -718,21 +746,29 @@ static bool ReadCoords(TCHAR *Text, double *X, double *Y)
   Xdeg = (double)StrToDouble(Stop, &Stop);
   Stop++;
   Xmin = (double)StrToDouble(Stop, &Stop);
-  if(*Stop == ':')
-    {
-      Stop++;
-      if (*Stop =='\0') goto OnError;
-      Xsec = (double)StrToDouble(Stop, &Stop);
-    }
+  if(*Stop == ':'){
+    Stop++;
+    if (*Stop =='\0')
+      goto OnError;
+    Xsec = (double)StrToDouble(Stop, &Stop);
+  }
 
   *X = Xsec/3600 + Xmin/60 + Xdeg;
 
-  Stop ++;
+  if (*Stop == ' ')
+    Stop++;
   if (*Stop =='\0') goto OnError;
   if((*Stop == 'W') || (*Stop == 'w'))
     {
       *X = *X * -1;
     }
+
+  if (*X<-180) {
+    *X+= 360;
+  }
+  if (*X>180) {
+    *X-= 360;
+  }
 
   return(true);
 
@@ -1090,6 +1126,13 @@ static void FindAirspaceCircleBounds() {
     ScanAirspaceCircleBounds(i,180);
     ScanAirspaceCircleBounds(i,270);
     AirspaceCircle[i].WarningLevel = 0; // clear warnings to initialise
+
+    // JMW detect airspace that wraps across 180
+    if ((AirspaceCircle[i].bounds.minx< -90) && (AirspaceCircle[i].bounds.maxx>90)) {
+      double tmp = AirspaceCircle[i].bounds.minx;
+      AirspaceCircle[i].bounds.minx = AirspaceCircle[i].bounds.maxx;
+      AirspaceCircle[i].bounds.maxx = tmp;
+    }
   }
 }
 
@@ -1121,6 +1164,20 @@ static void FindAirspaceAreaBounds() {
                                           AirspaceArea[i].bounds.maxy);
       }
     }
+
+    // JMW detect airspace that wraps across 180
+    if ((AirspaceArea[i].bounds.minx< -90) && (AirspaceArea[i].bounds.maxx>90)) {
+      double tmp = AirspaceArea[i].bounds.minx;
+      AirspaceArea[i].bounds.minx = AirspaceArea[i].bounds.maxx;
+      AirspaceArea[i].bounds.maxx = tmp;
+      for(j= AirspaceArea[i].FirstPoint;
+          j< AirspaceArea[i].FirstPoint+AirspaceArea[i].NumPoints; j++) {
+        if (AirspacePoint[i].Longitude<0) {
+          AirspacePoint[i].Longitude += 360;
+        }
+      }
+    }
+
     AirspaceArea[i].WarningLevel = 0; // clear warnings to initialise
   }
 }
@@ -1135,69 +1192,62 @@ void ReadAirspace(void)
 {
   TCHAR	szFile1[MAX_PATH] = TEXT("\0");
   TCHAR	szFile2[MAX_PATH] = TEXT("\0");
+  char zfilename[MAX_PATH];
 
-  FILE *fp=NULL;
-  FILE *fp2=NULL;
+  ZZIP_FILE *fp=NULL;
+  ZZIP_FILE *fp2=NULL;
+
+#if AIRSPACEUSEBINFILE > 0
   FILETIME LastWriteTime;
   FILETIME LastWriteTime2;
+#endif
 
   GetRegistryString(szRegistryAirspaceFile, szFile1, MAX_PATH);
   ExpandLocalPath(szFile1);
   GetRegistryString(szRegistryAdditionalAirspaceFile, szFile2, MAX_PATH);
   ExpandLocalPath(szFile2);
 
-  if (_tcslen(szFile1)>0)
-    fp  = _tfopen(szFile1, TEXT("rt"));
-  if (_tcslen(szFile2)>0)
-    fp2 = _tfopen(szFile2, TEXT("rt"));
+  if (_tcslen(szFile1)>0) {
+    unicode2ascii(szFile1, zfilename, MAX_PATH);
+    fp  = zzip_fopen(zfilename, "rt");
+  } else {
+    /*
+    static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
+    GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
+    ExpandLocalPath(szMapFile);
+    wcscat(szMapFile,TEXT("/"));
+    wcscat(szMapFile,TEXT("airspace.txt"));
+    unicode2ascii(szMapFile, zfilename, MAX_PATH);
+    fp  = zzip_fopen(zfilename, "rt");
+    */
+  }
+
+  if (_tcslen(szFile2)>0) {
+    unicode2ascii(szFile2, zfilename, MAX_PATH);
+    fp2 = zzip_fopen(zfilename, "rt");
+  }
 
   SetRegistryString(szRegistryAirspaceFile, TEXT("\0"));
   SetRegistryString(szRegistryAdditionalAirspaceFile, TEXT("\0"));
 
   if (fp != NULL){
 
-    GetFileTime((void *)_fileno(fp), NULL, NULL, &LastWriteTime);
+    ReadAirspace(fp);
+    zzip_fclose(fp);
 
+    // file 1 was OK, so save it
+    ContractLocalPath(szFile1);
+    SetRegistryString(szRegistryAirspaceFile, szFile1);
+
+    // also read any additional airspace
     if (fp2 != NULL) {
-      GetFileTime((void *)_fileno(fp2), NULL, NULL, &LastWriteTime2);
-      if (LastWriteTime2.dwHighDateTime>
-          LastWriteTime.dwHighDateTime) {
-        // this file is newer, so use it as the time stamp
-        LastWriteTime = LastWriteTime2;
-      }
+      ReadAirspace(fp2);
+      zzip_fclose(fp2);
+
+      // file 2 was OK, so save it
+      ContractLocalPath(szFile2);
+      SetRegistryString(szRegistryAdditionalAirspaceFile, szFile2);
     }
-
-    if (AIRSPACEFILECHANGED
-        #if AIRSPACEUSEBINFILE > 0
-        ||!LoadAirspaceBinary(LastWriteTime)
-        #else
-        || (true)
-        #endif
-      ) {
-
-      ReadAirspace(fp);
-      // file 1 was OK, so save it
-      ContractLocalPath(szFile1);
-      SetRegistryString(szRegistryAirspaceFile, szFile1);
-
-      // also read any additional airspace
-      if (fp2 != NULL) {
-        ReadAirspace(fp2);
-	// file 2 was OK, so save it
-        ContractLocalPath(szFile2);
-	SetRegistryString(szRegistryAdditionalAirspaceFile, szFile2);
-      }
-      #if AIRSPACEUSEBINFILE > 0
-      SaveAirspaceBinary(LastWriteTime);
-      #endif
-    }
-
-    fclose(fp);
-
-  }
-
-  if (fp2 != NULL) {
-    fclose(fp2);
   }
 
   FindAirspaceAreaBounds();
@@ -1221,13 +1271,26 @@ double RangeAirspaceCircle(const double &longitude,
 }
 
 
+bool CheckInsideLongitude(double longitude,
+                         const double lon_min, const double lon_max) {
+  if (lon_min<=lon_max) {
+    // normal case
+    return ((longitude>lon_min) && (longitude<lon_max));
+  } else {
+    // area goes across 180 degree boundary, so lon_min is +ve, lon_max is -ve (flipped)
+    return ((longitude>lon_min) || (longitude<lon_max));
+  }
+}
+
+
 bool InsideAirspaceCircle(const double &longitude,
 			    const double &latitude,
 			    int i) {
-  if ((latitude> AirspaceCircle[i].bounds.miny)&&
-      (latitude< AirspaceCircle[i].bounds.maxy)&&
-      (longitude> AirspaceCircle[i].bounds.minx)&&
-      (longitude< AirspaceCircle[i].bounds.maxx)) {
+
+  if ((latitude> AirspaceCircle[i].bounds.miny) &&
+      (latitude< AirspaceCircle[i].bounds.maxy) &&
+      CheckInsideLongitude(longitude, AirspaceCircle[i].bounds.minx,
+                           AirspaceCircle[i].bounds.maxx)) {
 
     if (RangeAirspaceCircle(longitude, latitude, i)<0) {
       return true;
@@ -1416,9 +1479,9 @@ bool InsideAirspaceArea(const double &longitude,
   if (
       (latitude> AirspaceArea[i].bounds.miny)&&
       (latitude< AirspaceArea[i].bounds.maxy)&&
-      (longitude> AirspaceArea[i].bounds.minx)&&
-      (longitude< AirspaceArea[i].bounds.maxx)
-      ) {
+      CheckInsideLongitude(longitude,
+                           AirspaceArea[i].bounds.minx,
+                           AirspaceArea[i].bounds.maxx)) {
 
     CheckAirspacePoint(AirspaceArea[i].FirstPoint);
 
@@ -1536,6 +1599,15 @@ void IntermediatePoint(double lon1, double lat1,
   lon2 *= DEG_TO_RAD;
   */
 
+  ASSERT(lat3 != NULL);
+  ASSERT(lon3 != NULL);
+
+  if ((lon1 == lon2) && (lat1 == lat2)){
+    *lat3 = lat1;
+    *lon3 = lon1;
+    return;
+  }
+
   if (dtotal>0) {
     f = dthis/dtotal;
     d = dtotal;
@@ -1561,9 +1633,9 @@ void IntermediatePoint(double lon1, double lat1,
 // desired track p1-p2.
 // very slow function!
 double CrossTrackError(double lon1, double lat1,
-		     double lon2, double lat2,
-		     double lon3, double lat3,
-		     double *lon4, double *lat4) {
+                       double lon2, double lat2,
+                       double lon3, double lat3,
+                       double *lon4, double *lat4) {
 
   double dist_AD, crs_AD;
   DistanceBearing(lat1, lon1, lat3, lon3, &dist_AD, &crs_AD);
@@ -1610,16 +1682,16 @@ double ScreenCrossTrackError(double lon1, double lat1,
 		     double lon2, double lat2,
 		     double lon3, double lat3,
 		     double *lon4, double *lat4) {
-  int x1, y1, x2, y2, x3, y3;
+  POINT p1, p2, p3;
 
-  MapWindow::LatLon2Screen(lon1, lat1, x1, y1);
-  MapWindow::LatLon2Screen(lon2, lat2, x2, y2);
-  MapWindow::LatLon2Screen(lon3, lat3, x3, y3);
+  MapWindow::LatLon2Screen(lon1, lat1, p1);
+  MapWindow::LatLon2Screen(lon2, lat2, p2);
+  MapWindow::LatLon2Screen(lon3, lat3, p3);
 
   int v12x, v12y, v13x, v13y;
 
-  v12x = x2-x1; v12y = y2-y1;
-  v13x = x3-x1; v13y = y3-y1;
+  v12x = p2.x-p1.x; v12y = p2.y-p1.y;
+  v13x = p3.x-p1.x; v13y = p3.y-p1.y;
 
   int mag12 = isqrt4(v12x*v12x+v12y*v12y);
   if (mag12>1) {
@@ -1635,8 +1707,8 @@ double ScreenCrossTrackError(double lon1, double lat1,
 
     // location of 'closest' point
     int x, y;
-    x = (int)((v12x)*f+x1);
-    y = (int)((v12y)*f+y1);
+    x = (int)((v12x)*f+p1.x);
+    y = (int)((v12y)*f+p1.y);
     MapWindow::Screen2LatLon(x, y, *lon4, *lat4);
   } else {
     *lon4 = lon1;
@@ -1672,7 +1744,7 @@ double RangeAirspaceArea(const double &longitude,
 
   // find nearest distance to line segment
   int j;
-  double dist=100000;
+  double dist= 0;
   double nearestdistance = dist;
   double nearestbearing = *bearing;
   double lon4, lat4;
@@ -1690,7 +1762,7 @@ double RangeAirspaceArea(const double &longitude,
 				 AirspacePoint[p2].Latitude,
 				 longitude, latitude,
 				 &lon4, &lat4);
-    if (dist<nearestdistance) {
+    if ((dist<nearestdistance)||(j==0)) {
       nearestdistance = dist;
 
       DistanceBearing(latitude, longitude,
@@ -1886,8 +1958,9 @@ void ScanAirspaceLine(double *lats, double *lons, double *heights,
       longitude = lons[i];
       if ((latitude> AirspaceCircle[k].bounds.miny)&&
 	  (latitude< AirspaceCircle[k].bounds.maxy)&&
-	  (longitude> AirspaceCircle[k].bounds.minx)&&
-	  (longitude< AirspaceCircle[k].bounds.maxx)) {
+          CheckInsideLongitude(longitude,
+                               AirspaceCircle[k].bounds.minx,
+                               AirspaceCircle[k].bounds.maxx)) {
 
         DistanceBearing(latitude,longitude,
                         AirspaceCircle[k].Latitude,
@@ -1914,13 +1987,14 @@ void ScanAirspaceLine(double *lats, double *lons, double *heights,
 
       if ((latitude> AirspaceArea[k].bounds.miny)&&
 	  (latitude< AirspaceArea[k].bounds.maxy)&&
-	  (longitude> AirspaceArea[k].bounds.minx)&&
-	  (longitude< AirspaceArea[k].bounds.maxx)) {
+          CheckInsideLongitude(longitude,
+                               AirspaceArea[k].bounds.minx,
+                               AirspaceArea[k].bounds.maxx)) {
 	AIRSPACE_POINT thispoint;
 	thispoint.Longitude = longitude;
 	thispoint.Latitude = latitude;
 
-  CheckAirspacePoint(AirspaceArea[k].FirstPoint);
+        CheckAirspacePoint(AirspaceArea[k].FirstPoint);
 
 	if (wn_PnPoly(thispoint,
 		      &AirspacePoint[AirspaceArea[k].FirstPoint],
@@ -1939,6 +2013,7 @@ void ScanAirspaceLine(double *lats, double *lons, double *heights,
 
 }
 
+#ifdef DEBUG
 void DumpAirspaceFile(void){
 
   FILE * fp;
@@ -2086,7 +2161,7 @@ void DumpAirspaceFile(void){
   fclose(fp);
 
 }
-
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 

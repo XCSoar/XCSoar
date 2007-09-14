@@ -71,7 +71,6 @@ extern int numInfoWindows;
 // waypoint data
 extern int HomeWaypoint;
 extern WAYPOINT *WayPointList;
-extern WAYPOINT TempWayPointList[MAXTEMPWAYPOINTS];
 extern unsigned int NumberOfWayPoints;
 extern int WaypointsOutOfRange;
 
@@ -103,6 +102,7 @@ extern int FinishLine;
 extern DWORD FinishRadius;
 extern double AATTaskLength;
 extern BOOL AATEnabled;
+extern bool EnableFAIFinishHeight;
 extern DWORD FinishMinHeight;
 extern DWORD StartMaxHeight;
 extern DWORD StartMaxSpeed;
@@ -222,6 +222,7 @@ extern BOOL POLARFILECHANGED;
 extern BOOL LANGUAGEFILECHANGED;
 extern BOOL STATUSFILECHANGED;
 extern BOOL INPUTFILECHANGED;
+extern BOOL MAPFILECHANGED;
 
 bool Debounce();
 
@@ -232,6 +233,7 @@ extern double TeammateLatitude;
 extern double TeammateLongitude;
 extern bool TeammateCodeValid;
 
+extern bool DisableAutoLogger;
 
 // Interface Globals
 extern GetTextSTRUCT GetTextData[];

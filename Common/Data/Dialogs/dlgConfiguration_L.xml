@@ -21,6 +21,11 @@
 
   <WndFrame Name="frmSite" X=0 Y=0 Width=235 Height=222 Font=2>
 
+  <WndProperty Name="prpMapFile" Caption="Map file"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
+  Help="The name of the file containing terrain, topology, and optionally waypoints, airfield details and airspace.">
+    <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
+  </WndProperty>
+
   <WndProperty Name="prpWaypointFile" Caption="Waypoints 1"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
   Help="Primary waypoints file.  File must be in Cambridge format (.dat extension).">
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
@@ -39,16 +44,16 @@
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpTerrainFile" Caption="Terrain file"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
+  <WndProperty Name="prpTerrainFile" Caption="Terrain file*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
   Help="The name of the file containing digital elevation terrain data.">
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpTopologyFile" Caption="Topology file"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Specifies the file defining the topological features.">
+  <WndProperty Name="prpTopologyFile" Caption="Topology file*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Specifies the file defining the topological features.">
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpAirfieldFile" Caption="Airfields file"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
+  <WndProperty Name="prpAirfieldFile" Caption="Airfields file*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2
   Help="The airfields file may contain extracts from Enroute Supplements or other contributed information about individual airfields.">
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1/>
   </WndProperty>
@@ -100,6 +105,34 @@
 
   </WndFrame>
 
+  <WndFrame Name="frmTerrain" X=0 Y=0 Width=235 Height=222 Font=2>
+
+  <WndProperty Name="prpEnableTerrain" Caption="Terrain display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="Draws digital elevation terrain on the map.
+This is shaded by the wind direction: upwind is brighter, downwind darker.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpEnableTopology" Caption="Topology display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topology file to be specified.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainContrast" Caption="Terrain contrast"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainBrightness" Caption="Terrain brightness"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpTerrainRamp" Caption="Terrain colors"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Defines the color ramp used in terrain rendering.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
+  </WndProperty>
+
+  </WndFrame>
+
   <WndFrame Name="frmDisplay" X=0 Y=0 Width=235 Height=222 Font=2>
 
     <WndProperty Name="prpWaypointLabels" Caption="Labels"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=100 Font=2 Help="Determines how labels are displayed with each waypoint:
@@ -116,15 +149,6 @@
     <WndProperty Name="prpTrail" Caption="Trail length"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=100 Font=2 Help="Determines whether and how long a snail trail is drawn behind the glider">
       <DataField name="" DataType="enum"  Min=0 Max=3 Step=1/>
     </WndProperty>
-
-  <WndProperty Name="prpEnableTerrain" Caption="Terrain display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Draws digital elevation terrain on the map.
-This is shaded by the wind direction: upwind is brighter, downwind darker.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
-
-  <WndProperty Name="prpEnableTopology" Caption="Topology display"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=100 Font=2 Help="Draw topological features (roads, rivers, lakes etc) on the map.  Requires the topology file to be specified.">
-    <DataField name="" DataType="boolean"/>
-  </WndProperty>
 
     <WndProperty Name="prpOrientation" Caption="Orientation"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=100 Font=2
 Help="Determines how the screen is rotated with the glider:
@@ -153,6 +177,14 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   <WndProperty Name="prpSnailWidthScale" Caption="Trail width*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="Sets the width of the snail trail display.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=2 Max=50 Step=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpWindArrowStyle" Caption="Wind arrow*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="Determines the way the wind arrow is drawn on the map.
+[Arrow head] Draws an arrow head only
+[Full arrow] Draws an arrow head with a dashed arrow line
+">
+    <DataField name="" DataType="enum" Min=0 Max=1 Step=1/>
   </WndProperty>
 
   </WndFrame>
@@ -379,6 +411,11 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
+  <WndProperty Name="prpRiskGamma" Caption="STF risk factor*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="The STF risk factor reduces the MacCready setting used to calculate speed to fly
+ as the glider gets low, in order to compensate for risk.  Set to 0.0 for no compensation, 1.0 scales Mc linearly with height.">
+    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=1 Step=0.1/>
+  </WndProperty>
 
   </WndFrame>
 
@@ -405,6 +442,11 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=1 Max=200 Step=1/>
   </WndProperty>
 
+  <WndProperty Name="prpDisableAutoLogger" Caption="Auto logger*" X=2 Y=-1   Width=235 Height=22 CaptionWidth=70 Font=2
+  Help="Enables the automatic starting and stopping of logger on takeoff and landing respectively.
+Disable when flying paragliders.">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
 
   </WndFrame>
 
@@ -470,6 +512,11 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   Help="Minimum height above ground while finishing the task.  Set to 0 for no limit.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
   </WndProperty>
+
+    <WndProperty Name="prpFAIFinishHeight" Caption="FAI finish height"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2
+Help="If enabled, this option requires the minimum height above ground for finish to be greater than 1000m below the start height.">
+    <DataField name="" DataType="boolean"/>
+    </WndProperty>
 
     <WndProperty Name="prpOLCRules" Caption="Online contest"     X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2
 Help="Rules used for calculating optimal points for OnLine Contest.
@@ -580,16 +627,6 @@ other languages.  If this field is left blank, then XCSoar uses English.
   </WndFrame>
 
   <WndFrame Name="frmAppearance" X=0 Y=0 Width=235 Height=222 Font=2>
-
-  <WndProperty Name="prpTerrainContrast" Caption="Terrain contrast"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
-  </WndProperty>
-
-  <WndProperty Name="prpTerrainBrightness" Caption="Terrain brightness"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=100 Step=5/>
-  </WndProperty>
 
   <WndProperty Name="prpGliderScreenPosition" Caption="Glider position"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
   Help="Defines the location of the glider drawn on the screen in percent from the bottom.">

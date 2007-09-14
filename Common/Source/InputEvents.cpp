@@ -62,7 +62,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <aygshell.h>
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
+#ifdef OLDPPC
+#include "XCSoarProcess.h"
+#else
 #include "Process.h"
+#endif
 #include "Port.h"
 #include "Message.h"
 #include "Units.h"
@@ -964,10 +968,13 @@ void InputEvents::processGo(int eventid) {
 
 // TODO Keep marker text for log file etc.
 void InputEvents::eventMarkLocation(TCHAR *misc) {
-	(void)misc;
-  LockFlightData();
-  MarkLocation(GPS_INFO.Longitude, GPS_INFO.Latitude);
-  UnlockFlightData();
+  if (_tcscmp(misc, TEXT("reset")) == 0) {
+    reset_marks = true;
+  } else {
+    LockFlightData();
+    MarkLocation(GPS_INFO.Longitude, GPS_INFO.Latitude);
+    UnlockFlightData();
+  }
 }
 
 
@@ -994,8 +1001,6 @@ void InputEvents::eventSounds(TCHAR *misc) {
 }
 
 void InputEvents::eventSnailTrail(TCHAR *misc) {
-//  int OldTrailActive;
-//  OldTrailActive = TrailActive;
 
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
     TrailActive ++;
@@ -1383,14 +1388,14 @@ void InputEvents::eventCalculator(TCHAR *misc) {
 //  on these.
 void InputEvents::eventStatus(TCHAR *misc) {
   if (_tcscmp(misc, TEXT("system")) == 0) {
-    ShowStatusSystem();
-  } else
-    if (_tcscmp(misc, TEXT("task")) == 0) {
-      ShowStatusTask();
-    } else
-      {
-	ShowStatus();
-      }
+    dlgStatusShowModal(1);
+  } else if (_tcscmp(misc, TEXT("task")) == 0) {
+    dlgStatusShowModal(2);
+  } else if (_tcscmp(misc, TEXT("Aircraft")) == 0) {
+    dlgStatusShowModal(0);
+  } else {
+    dlgStatusShowModal(-1);
+  }
 }
 
 // Analysis
@@ -1818,6 +1823,13 @@ void InputEvents::eventBallast(TCHAR *misc) {
 #include "Task.h"
 #include "Logger.h"
 
+
+void InputEvents::eventAutoLogger(TCHAR *misc) {
+  if (!DisableAutoLogger) {
+    eventLogger(misc);
+  }
+}
+
 // Logger
 // Activates the internal IGC logger
 //  start: starts the logger
@@ -1949,7 +1961,6 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
     TEXT("Inside airspace: %s\r\n%s\r\nExit: %s\r\nBearing %d°\r\n"),
 	      szTitleBuffer,
 	      szMessageBuffer,
-	      nearestdistance*DISTANCEMODIFY,
 	      DistanceText,
 	      (int)nearestbearing);
   } else {
@@ -2051,34 +2062,25 @@ void InputEvents::eventSetup(TCHAR *misc) {
 
   if (_tcscmp(misc,TEXT("Basic"))==0){
     dlgBasicSettingsShowModal();
-  } else
-    if (_tcscmp(misc,TEXT("Wind"))==0){
-      dlgWindSettingsShowModal();
-    } else
-      if (_tcscmp(misc,TEXT("System"))==0){
-	SystemConfiguration();
-      } else
-	if (_tcscmp(misc,TEXT("Task"))==0){
-	  dlgTaskOverviewShowModal();
-	} else
-	  if (_tcscmp(misc,TEXT("Airspace"))==0){
-	    dlgAirspaceShowModal(false);
-	  }
-  if (_tcscmp(misc,TEXT("Replay"))==0){
+  } else if (_tcscmp(misc,TEXT("Wind"))==0){
+    dlgWindSettingsShowModal();
+  } else if (_tcscmp(misc,TEXT("System"))==0){
+    SystemConfiguration();
+  } else if (_tcscmp(misc,TEXT("Task"))==0){
+    dlgTaskOverviewShowModal();
+  } else if (_tcscmp(misc,TEXT("Airspace"))==0){
+    dlgAirspaceShowModal(false);
+  } else if (_tcscmp(misc,TEXT("Weather"))==0){
+    dlgWeatherShowModal();
+  } else if (_tcscmp(misc,TEXT("Replay"))==0){
     if (!GPS_INFO.MovementDetected) {
       dlgLoggerReplayShowModal();
     }
-  }
-  //  if (_tcscmp(misc,TEXT("Waypoint"))==0){
-  //    dlgWaypointEditShowModal();
-  //  }
-  if (_tcscmp(misc,TEXT("Switches"))==0){
+  } else if (_tcscmp(misc,TEXT("Switches"))==0){
     dlgSwitchesShowModal();
-  }
-  if (_tcscmp(misc,TEXT("Voice"))==0){
+  } else if (_tcscmp(misc,TEXT("Voice"))==0){
     dlgVoiceShowModal();
-  }
-  if (_tcscmp(misc,TEXT("Teamcode"))==0){
+  } else if (_tcscmp(misc,TEXT("Teamcode"))==0){
     dlgTeamCodeShowModal();
   }
 }
@@ -2103,7 +2105,8 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
   pdest = _tcsstr(data, TEXT(" "));
   if (pdest == NULL) {
 #ifdef _INPUTDEBUG_
-    _stprintf(input_errors[input_errors_count++], TEXT("Invalid DLLExecute string - no DLL"));
+    _stprintf(input_errors[input_errors_count++],
+              TEXT("Invalid DLLExecute string - no DLL"));
     InputEvents::showErrors();
 #endif
     return;

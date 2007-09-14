@@ -33,6 +33,7 @@ typedef struct {
 typedef struct
 {
     FILE        *fp;
+  ZZIP_FILE     *zfp;
     char        signature[3];
     char	LSB_order;
     char        needswap;

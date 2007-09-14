@@ -992,7 +992,7 @@ bool dlgConfigurationVarioShowModal(void){
   if (NMEAParser::FindVegaPort()== -1) {
     MessageBoxX (hWndMainWindow,
 		 gettext(TEXT("No communication with Vega.")),
-		 TEXT("Vega Error"), MB_OK);
+		 gettext(TEXT("Vega error")), MB_OK);
     return false;
   }
 #endif

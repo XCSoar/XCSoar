@@ -48,7 +48,7 @@ void StartupScreen();
 
 HWND CreateProgressDialog(TCHAR *text);
 void CloseProgressDialog();
-BOOL StepProgressDialog();
+void StepProgressDialog();
 BOOL SetProgressStepSize(int nSize);
 
 
@@ -77,9 +77,7 @@ void dlgStartupShowModal(void);
 void dlgTaskCalculatorShowModal(void);
 void dlgWindSettingsShowModal(void);
 void dlgAnalysisShowModal(void);
-void dlgStatusShowModal(void);
-void dlgStatusSystemShowModal(void);
-void dlgStatusTaskShowModal(void);
+void dlgStatusShowModal(int page);
 void dlgSwitchesShowModal(void);
 void dlgTaskWaypointShowModal(int itemindex, int type);
 void dlgTaskOverviewShowModal(void);
@@ -90,5 +88,16 @@ void dlgTeamCodeShowModal(void);
 void dlgStartPointShowModal(void);
 #include "MapWindow.h"
 void dlgWaypointEditShowModal(WAYPOINT *wpt);
+void dlgWeatherShowModal(void);
+void dlgAirspaceSelect(void);
+
+#if (WINDOWSPC>0)
+#ifdef DEBUG
+//#define DEBUG_TRANSLATIONS
+#pragma warning( disable : 4786 )
+#endif
+#endif
+
+void WriteMissingTranslations(void);
 
 #endif

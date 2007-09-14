@@ -90,10 +90,10 @@ void CuSonde::updateMeasurements(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     return; // nothing to do, wait until level transition
   }
 
-  LockTerrainDataCalculations();
-  hGround = terrain_dem_calculations.
-    GetTerrainHeight(Basic->Latitude, Basic->Longitude);
-  UnlockTerrainDataCalculations();
+  RasterTerrain::Lock();
+  hGround =
+    RasterTerrain::GetTerrainHeight(Basic->Latitude, Basic->Longitude);
+  RasterTerrain::Unlock();
 
   if (level>last_level) {
     // going up

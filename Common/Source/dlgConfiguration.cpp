@@ -44,7 +44,14 @@ Copyright_License {
 #include "McReady.h"
 #include "dlgTools.h"
 #include "device.h"
+
+#include "compatibility.h"
+#ifdef OLDPPC
+#include "XCSoarProcess.h"
+#else
 #include "Process.h"
+#endif
+
 #include "McReady.h"
 #include "Utils.h"
 #include "InfoBoxLayout.h"
@@ -78,11 +85,12 @@ static WndFrame *wConfig16=NULL;
 static WndFrame *wConfig17=NULL;
 static WndFrame *wConfig18=NULL;
 static WndFrame *wConfig19=NULL;
+static WndFrame *wConfig20=NULL;
 static WndButton *buttonPilotName=NULL;
 static WndButton *buttonAircraftType=NULL;
 static WndButton *buttonAircraftRego=NULL;
 
-#define NUMPAGES 19
+#define NUMPAGES 20
 
 
 
@@ -92,28 +100,25 @@ static void UpdateButtons(void) {
   if (buttonPilotName) {
     GetRegistryString(szRegistryPilotName, val, 100);
     if (_tcslen(val)<=0) {
-      _stprintf(text,TEXT("Pilot name: (blank)"));
-    } else {
-      _stprintf(text,TEXT("Pilot name: %s"),val);
+      _stprintf(val, gettext(TEXT("(blank)")));
     }
+    _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Pilot name")), val);
     buttonPilotName->SetCaption(text);
   }
   if (buttonAircraftType) {
     GetRegistryString(szRegistryAircraftType, val, 100);
     if (_tcslen(val)<=0) {
-      _stprintf(text,TEXT("Aircraft type: (blank)"));
-    } else {
-      _stprintf(text,TEXT("Aircraft type: %s"),val);
+      _stprintf(val, gettext(TEXT("(blank)")));
     }
+    _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Aircraft type")), val);
     buttonAircraftType->SetCaption(text);
   }
   if (buttonAircraftRego) {
     GetRegistryString(szRegistryAircraftRego, val, 100);
     if (_tcslen(val)<=0) {
-      _stprintf(text,TEXT("Competition ID: (blank)"));
-    } else {
-      _stprintf(text,TEXT("Competition ID: %s"),val);
+      _stprintf(val, gettext(TEXT("(blank)")));
     }
+    _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Competition ID")), val);
     buttonAircraftRego->SetCaption(text);
   }
 }
@@ -127,61 +132,64 @@ static void NextPage(int Step){
   if (config_page<0) { config_page=NUMPAGES-1; }
   switch(config_page) {
   case 0:
-    wf->SetCaption(TEXT("1 Site"));
+    wf->SetCaption(gettext(TEXT("1 Site")));
     break;
   case 1:
-    wf->SetCaption(TEXT("2 Airspace"));
+    wf->SetCaption(gettext(TEXT("2 Airspace")));
     break;
   case 2:
-    wf->SetCaption(TEXT("3 Map Display"));
+    wf->SetCaption(gettext(TEXT("3 Map Display")));
     break;
   case 3:
-    wf->SetCaption(TEXT("4 Glide Computer"));
+    wf->SetCaption(gettext(TEXT("4 Terrain Display")));
     break;
   case 4:
-    wf->SetCaption(TEXT("5 Safety factors"));
+    wf->SetCaption(gettext(TEXT("5 Glide Computer")));
     break;
   case 5:
-    wf->SetCaption(TEXT("6 Polar"));
+    wf->SetCaption(gettext(TEXT("6 Safety factors")));
     break;
   case 6:
-    wf->SetCaption(TEXT("7 Devices"));
+    wf->SetCaption(gettext(TEXT("7 Polar")));
     break;
   case 7:
-    wf->SetCaption(TEXT("8 Units"));
+    wf->SetCaption(gettext(TEXT("8 Devices")));
     break;
   case 8:
-    wf->SetCaption(TEXT("9 Interface"));
+    wf->SetCaption(gettext(TEXT("9 Units")));
     break;
   case 9:
-    wf->SetCaption(TEXT("10 Appearance"));
+    wf->SetCaption(gettext(TEXT("10 Interface")));
     break;
   case 10:
-    wf->SetCaption(TEXT("11 Vario Gauge and FLARM"));
+    wf->SetCaption(gettext(TEXT("11 Appearance")));
     break;
   case 11:
-    wf->SetCaption(TEXT("12 Task"));
+    wf->SetCaption(gettext(TEXT("12 Vario Gauge and FLARM")));
     break;
   case 12:
-    wf->SetCaption(TEXT("13 Task rules"));
+    wf->SetCaption(gettext(TEXT("13 Task")));
     break;
   case 13:
-    wf->SetCaption(TEXT("14 InfoBox Circling"));
+    wf->SetCaption(gettext(TEXT("14 Task rules")));
     break;
   case 14:
-    wf->SetCaption(TEXT("15 InfoBox Cruise"));
+    wf->SetCaption(gettext(TEXT("15 InfoBox Circling")));
     break;
   case 15:
-    wf->SetCaption(TEXT("16 InfoBox Final Glide"));
+    wf->SetCaption(gettext(TEXT("16 InfoBox Cruise")));
     break;
   case 16:
-    wf->SetCaption(TEXT("17 InfoBox Auxiliary"));
+    wf->SetCaption(gettext(TEXT("17 InfoBox Final Glide")));
     break;
   case 17:
-    wf->SetCaption(TEXT("18 Logger"));
+    wf->SetCaption(gettext(TEXT("18 InfoBox Auxiliary")));
     break;
   case 18:
-    wf->SetCaption(TEXT("19 Waypoint Edit"));
+    wf->SetCaption(gettext(TEXT("19 Logger")));
+    break;
+  case 19:
+    wf->SetCaption(gettext(TEXT("20 Waypoint Edit")));
     break;
   }
   wConfig1->SetVisible(config_page == 0);
@@ -203,6 +211,7 @@ static void NextPage(int Step){
   wConfig17->SetVisible(config_page == 16);
   wConfig18->SetVisible(config_page == 17);
   wConfig19->SetVisible(config_page == 18);
+  wConfig20->SetVisible(config_page == 19);
 }
 
 
@@ -509,35 +518,26 @@ static void OnPolarTypeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 extern void OnInfoBoxHelp(WindowControl * Sender);
 
 static void OnWaypointNewClicked(WindowControl * Sender){
-	(void)Sender;
-  // TODO: Create new waypoint,
-  // then edit it.
-  int i;
+  (void)Sender;
 
-  LockTaskData();
-  for (i=0; i<MAXTEMPWAYPOINTS; i++) {
-    if (TempWayPointList[i].FileNum == -1) {
-      break;
-    }
-  }
-  UnlockTaskData();
-  if (i<MAXTEMPWAYPOINTS) {
+  WAYPOINT edit_waypoint;
+  edit_waypoint.Latitude = GPS_INFO.Latitude;
+  edit_waypoint.Longitude = GPS_INFO.Longitude;
+  edit_waypoint.FileNum = 0; // default, put into primary waypoint file
+  edit_waypoint.Flags = 0;
+  edit_waypoint.Comment[0] = 0;
+  edit_waypoint.Name[0] = 0;
+  edit_waypoint.Details = 0;
+  dlgWaypointEditShowModal(&edit_waypoint);
+  if (_tcslen(edit_waypoint.Name)>0) {
     LockTaskData();
-    TempWayPointList[i].Latitude = GPS_INFO.Latitude;
-    TempWayPointList[i].Longitude = GPS_INFO.Longitude;
-    TempWayPointList[i].FileNum = 0;
-    TempWayPointList[i].Flags = 0;
-    TempWayPointList[i].Comment[0] = 0;
-    TempWayPointList[i].Name[0] = 0;
-    UnlockTaskData();
-    dlgWaypointEditShowModal(&TempWayPointList[i]);
-    if (_tcslen(TempWayPointList[i].Name)>0) {
+    WAYPOINT *new_waypoint = GrowWaypointList();
+    if (new_waypoint) {
+      memcpy(new_waypoint,&edit_waypoint,sizeof(WAYPOINT));
+      new_waypoint->Details= 0;
       waypointneedsave = true;
-    } else {
-      TempWayPointList[i].FileNum = -1;
     }
-  } else {
-    // no more slots left
+    UnlockTaskData();
   }
 }
 
@@ -641,7 +641,7 @@ static void SetInfoBoxSelector(TCHAR *name, int item, int mode)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     for (int i=0; i<NUMSELECTSTRINGS; i++) {
-      dfe->addEnumText(Data_Options[i].Description);
+      dfe->addEnumText(gettext(Data_Options[i].Description));
     }
     int it=0;
 
@@ -730,6 +730,7 @@ static  TCHAR szAirfieldFile[MAX_PATH] = TEXT("\0");
 static  TCHAR szLanguageFile[MAX_PATH] = TEXT("\0");
 static  TCHAR szStatusFile[MAX_PATH] = TEXT("\0");
 static  TCHAR szInputFile[MAX_PATH] = TEXT("\0");
+static  TCHAR szMapFile[MAX_PATH] = TEXT("\0");
 static  DWORD dwPortIndex1 = 0;
 static  DWORD dwSpeedIndex1 = 2;
 static  DWORD dwPortIndex2 = 0;
@@ -785,8 +786,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Basic"));
-    dfe->addEnumText(TEXT("Expert"));
+    dfe->addEnumText(gettext(TEXT("Basic")));
+    dfe->addEnumText(gettext(TEXT("Expert")));
     dfe->Set(UserLevel);
     wp->RefreshDisplay();
   }
@@ -795,7 +796,7 @@ static void setVariables(void) {
 
   // TODO: all appearance variables
 
-  TCHAR *COMMPort[] = {TEXT("COM1"),TEXT("COM2"),TEXT("COM3"),TEXT("COM4"),TEXT("COM5"),TEXT("COM6"),TEXT("COM7"),TEXT("COM8"),TEXT("COM9"),TEXT("COM10")};
+    TCHAR *COMMPort[] = {TEXT("COM1"),TEXT("COM2"),TEXT("COM3"),TEXT("COM4"),TEXT("COM5"),TEXT("COM6"),TEXT("COM7"),TEXT("COM8"),TEXT("COM9"),TEXT("COM10"),TEXT("COM0")};
   TCHAR *tSpeed[] = {TEXT("1200"),TEXT("2400"),TEXT("4800"),TEXT("9600"),TEXT("19200"),TEXT("38400"),TEXT("57600"),TEXT("115200")};
 //  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
@@ -807,8 +808,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (i=0; i<10; i++) {
-      dfe->addEnumText(COMMPort[i]);
+    for (i=0; i<11; i++) {
+      dfe->addEnumText((COMMPort[i]));
     }
     dfe->Set(dwPortIndex1);
     wp->RefreshDisplay();
@@ -819,7 +820,7 @@ static void setVariables(void) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     for (i=0; i<8; i++) {
-      dfe->addEnumText(tSpeed[i]);
+      dfe->addEnumText((tSpeed[i]));
     }
     dfe->Set(dwSpeedIndex1);
     wp->RefreshDisplay();
@@ -836,10 +837,10 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Generic"));
+    dfe->addEnumText((TEXT("Generic")));
     for (i=0; i<DeviceRegisterCount; i++) {
       devRegisterGetName(i, DeviceName);
-      dfe->addEnumText(DeviceName);
+      dfe->addEnumText((DeviceName));
 #ifndef _SIM_
       if (devA() != NULL){
 	if (_tcscmp(DeviceName, devA()->Name) == 0)
@@ -860,8 +861,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    for (i=0; i<10; i++) {
-      dfe->addEnumText(COMMPort[i]);
+    for (i=0; i<11; i++) {
+      dfe->addEnumText((COMMPort[i]));
     }
     dfe->Set(dwPortIndex2);
     wp->RefreshDisplay();
@@ -872,7 +873,7 @@ static void setVariables(void) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     for (i=0; i<8; i++) {
-      dfe->addEnumText(tSpeed[i]);
+      dfe->addEnumText((tSpeed[i]));
     }
     dfe->Set(dwSpeedIndex2);
     wp->RefreshDisplay();
@@ -883,10 +884,10 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Generic"));
+    dfe->addEnumText((TEXT("Generic")));
     for (i=0; i<DeviceRegisterCount; i++) {
       devRegisterGetName(i, DeviceName);
-      dfe->addEnumText(DeviceName);
+      dfe->addEnumText((DeviceName));
 #ifndef _SIM_
       if (devB() != NULL){
 	if (_tcscmp(DeviceName, devB()->Name) == 0)
@@ -905,10 +906,10 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("All on"));
-    dfe->addEnumText(TEXT("Clip"));
-    dfe->addEnumText(TEXT("Auto"));
-    dfe->addEnumText(TEXT("All below"));
+    dfe->addEnumText(gettext(TEXT("All on")));
+    dfe->addEnumText(gettext(TEXT("Clip")));
+    dfe->addEnumText(gettext(TEXT("Auto")));
+    dfe->addEnumText(gettext(TEXT("All below")));
     dfe->Set(AltitudeMode);
     wp->RefreshDisplay();
   }
@@ -963,9 +964,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("OFF"));
-    dfe->addEnumText(TEXT("ON/Fixed"));
-    dfe->addEnumText(TEXT("ON/Scaled"));
+    dfe->addEnumText(gettext(TEXT("OFF")));
+    dfe->addEnumText(gettext(TEXT("ON/Fixed")));
+    dfe->addEnumText(gettext(TEXT("ON/Scaled")));
     dfe->Set(EnableFLARMDisplay);
     wp->RefreshDisplay();
   }
@@ -974,8 +975,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Relative Altitude"));
-    dfe->addEnumText(TEXT("Bearing"));
+    dfe->addEnumText(gettext(TEXT("Relative Altitude")));
+    dfe->addEnumText(gettext(TEXT("Bearing")));
     dfe->Set(FLARMGaugeBearing);
     wp->RefreshDisplay();
   }
@@ -1003,12 +1004,12 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Names"));
-    dfe->addEnumText(TEXT("Numbers"));
-    dfe->addEnumText(TEXT("First 5"));
-    dfe->addEnumText(TEXT("None"));
-    dfe->addEnumText(TEXT("First 3"));
-    dfe->addEnumText(TEXT("Names in task"));
+    dfe->addEnumText(gettext(TEXT("Names")));
+    dfe->addEnumText(gettext(TEXT("Numbers")));
+    dfe->addEnumText(gettext(TEXT("First 5")));
+    dfe->addEnumText(gettext(TEXT("None")));
+    dfe->addEnumText(gettext(TEXT("First 3")));
+    dfe->addEnumText(gettext(TEXT("Names in task")));
     dfe->Set(DisplayTextType);
     wp->RefreshDisplay();
   }
@@ -1035,11 +1036,11 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Track up"));
-    dfe->addEnumText(TEXT("North up"));
-    dfe->addEnumText(TEXT("North circling"));
-    dfe->addEnumText(TEXT("Target circling"));
-    dfe->addEnumText(TEXT("North/track"));
+    dfe->addEnumText(gettext(TEXT("Track up")));
+    dfe->addEnumText(gettext(TEXT("North up")));
+    dfe->addEnumText(gettext(TEXT("North circling")));
+    dfe->addEnumText(gettext(TEXT("Target circling")));
+    dfe->addEnumText(gettext(TEXT("North/track")));
     dfe->Set(DisplayOrientation);
     wp->RefreshDisplay();
   }
@@ -1083,14 +1084,24 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpWindArrowStyle"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Arrow head")));
+    dfe->addEnumText(gettext(TEXT("Full arrow")));
+    wp->GetDataField()->Set(MapWindow::WindArrowStyle);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoWind"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Manual"));
-    dfe->addEnumText(TEXT("Circling"));
-    dfe->addEnumText(TEXT("ZigZag"));
-    dfe->addEnumText(TEXT("Both"));
+    dfe->addEnumText(gettext(TEXT("Manual")));
+    dfe->addEnumText(gettext(TEXT("Circling")));
+    dfe->addEnumText(gettext(TEXT("ZigZag")));
+    dfe->addEnumText(gettext(TEXT("Both")));
     wp->GetDataField()->Set(AutoWindMode);
     wp->RefreshDisplay();
   }
@@ -1099,9 +1110,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Final glide"));
-    dfe->addEnumText(TEXT("Average climb"));
-    dfe->addEnumText(TEXT("Both"));
+    dfe->addEnumText(gettext(TEXT("Final glide")));
+    dfe->addEnumText(gettext(TEXT("Average climb")));
+    dfe->addEnumText(gettext(TEXT("Both")));
     wp->GetDataField()->Set(AutoMcMode);
     wp->RefreshDisplay();
   }
@@ -1110,9 +1121,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Ask"));
-    dfe->addEnumText(TEXT("Include"));
-    dfe->addEnumText(TEXT("Exclude"));
+    dfe->addEnumText(gettext(TEXT("Ask")));
+    dfe->addEnumText(gettext(TEXT("Include")));
+    dfe->addEnumText(gettext(TEXT("Exclude")));
     wp->GetDataField()->Set(WaypointsOutOfRange);
     wp->RefreshDisplay();
   }
@@ -1131,13 +1142,19 @@ static void setVariables(void) {
 
   ////
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFAIFinishHeight"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableFAIFinishHeight);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Sprint"));
-    dfe->addEnumText(TEXT("Triangle"));
-    dfe->addEnumText(TEXT("Classic"));
+    dfe->addEnumText(gettext(TEXT("Sprint")));
+    dfe->addEnumText(gettext(TEXT("Triangle")));
+    dfe->addEnumText(gettext(TEXT("Classic")));
     dfe->Set(OLCRules);
     wp->RefreshDisplay();
   }
@@ -1158,9 +1175,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Statue"));
-    dfe->addEnumText(TEXT("Nautical"));
-    dfe->addEnumText(TEXT("Metric"));
+    dfe->addEnumText(gettext(TEXT("Statue")));
+    dfe->addEnumText(gettext(TEXT("Nautical")));
+    dfe->addEnumText(gettext(TEXT("Metric")));
     dfe->Set(Speed);
     wp->RefreshDisplay();
   }
@@ -1185,9 +1202,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Statue"));
-    dfe->addEnumText(TEXT("Nautical"));
-    dfe->addEnumText(TEXT("Metric"));
+    dfe->addEnumText(gettext(TEXT("Statute")));
+    dfe->addEnumText(gettext(TEXT("Nautical")));
+    dfe->addEnumText(gettext(TEXT("Metric")));
     dfe->Set(TaskSpeed);
     wp->RefreshDisplay();
   }
@@ -1200,9 +1217,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Statute"));
-    dfe->addEnumText(TEXT("Nautical"));
-    dfe->addEnumText(TEXT("Metric"));
+    dfe->addEnumText(gettext(TEXT("Statute")));
+    dfe->addEnumText(gettext(TEXT("Nautical")));
+    dfe->addEnumText(gettext(TEXT("Metric")));
     dfe->Set(Distance);
     wp->RefreshDisplay();
   }
@@ -1215,8 +1232,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Feet"));
-    dfe->addEnumText(TEXT("Meters"));
+    dfe->addEnumText(gettext(TEXT("Feet")));
+    dfe->addEnumText(gettext(TEXT("Meters")));
     dfe->Set(Altitude);
     wp->RefreshDisplay();
   }
@@ -1229,8 +1246,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Knots"));
-    dfe->addEnumText(TEXT("M/s"));
+    dfe->addEnumText(gettext(TEXT("Knots")));
+    dfe->addEnumText(gettext(TEXT("M/s")));
     dfe->Set(Lift);
     wp->RefreshDisplay();
   }
@@ -1245,9 +1262,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("OFF"));
-    dfe->addEnumText(TEXT("Circle at center"));
-    dfe->addEnumText(TEXT("Pan to center"));
+    dfe->addEnumText(gettext(TEXT("OFF")));
+    dfe->addEnumText(gettext(TEXT("Circle at center")));
+    dfe->addEnumText(gettext(TEXT("Pan to center")));
     dfe->Set(EnableThermalLocator);
     wp->RefreshDisplay();
   }
@@ -1265,10 +1282,23 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpDisableAutoLogger"));
+  if (wp) {
+    wp->GetDataField()->Set(!DisableAutoLogger);
+    wp->RefreshDisplay();
+  }
+
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyMacCready"));
   if (wp) {
     wp->GetDataField()->Set(GlidePolar::SafetyMacCready*LIFTMODIFY);
     wp->GetDataField()->SetUnits(Units::GetVerticalSpeedName());
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpRiskGamma"));
+  if (wp) {
+    wp->GetDataField()->Set(GlidePolar::RiskGamma);
     wp->RefreshDisplay();
   }
 
@@ -1282,10 +1312,10 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Off"));
-    dfe->addEnumText(TEXT("Long"));
-    dfe->addEnumText(TEXT("Short"));
-    dfe->addEnumText(TEXT("Full"));
+    dfe->addEnumText(gettext(TEXT("Off")));
+    dfe->addEnumText(gettext(TEXT("Long")));
+    dfe->addEnumText(gettext(TEXT("Short")));
+    dfe->addEnumText(gettext(TEXT("Full")));
     dfe->Set(TrailActive);
     wp->RefreshDisplay();
   }
@@ -1384,6 +1414,18 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
+  _tcscpy(temptext,szMapFile);
+  ExpandLocalPath(temptext);
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMapFile"));
+  if (wp) {
+    DataFieldFileReader* dfe;
+    dfe = (DataFieldFileReader*)wp->GetDataField();
+    dfe->ScanDirectoryTop(TEXT("*.xcm"));
+    dfe->Lookup(temptext);
+    wp->RefreshDisplay();
+  }
+
   GetRegistryString(szRegistryTerrainFile, szTerrainFile, MAX_PATH);
   _tcscpy(temptext,szTerrainFile);
   ExpandLocalPath(temptext);
@@ -1392,6 +1434,7 @@ static void setVariables(void) {
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.dat"));
+    dfe->ScanDirectoryTop(TEXT("*.jp2"));
     dfe->Lookup(temptext);
     wp->RefreshDisplay();
   }
@@ -1460,8 +1503,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Center"));
-    dfe->addEnumText(TEXT("Topleft"));
+    dfe->addEnumText(gettext(TEXT("Center")));
+    dfe->addEnumText(gettext(TEXT("Topleft")));
     dfe->Set(Appearance.StateMessageAlligne);
     wp->RefreshDisplay();
   }
@@ -1470,8 +1513,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Box"));
-    dfe->addEnumText(TEXT("Tab"));
+    dfe->addEnumText(gettext(TEXT("Box")));
+    dfe->addEnumText(gettext(TEXT("Tab")));
     dfe->Set(Appearance.InfoBoxBorder);
     wp->RefreshDisplay();
   }
@@ -1480,8 +1523,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Normal"));
-    dfe->addEnumText(TEXT("White outline"));
+    dfe->addEnumText(gettext(TEXT("Normal")));
+    dfe->addEnumText(gettext(TEXT("White outline")));
     dfe->Set(Appearance.CompassAppearance);
     wp->RefreshDisplay();
   }
@@ -1490,8 +1533,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Default"));
-    dfe->addEnumText(TEXT("Alternate"));
+    dfe->addEnumText(gettext(TEXT("Default")));
+    dfe->addEnumText(gettext(TEXT("Alternate")));
     dfe->Set(Appearance.IndFinalGlide);
     wp->RefreshDisplay();
   }
@@ -1500,8 +1543,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Winpilot"));
-    dfe->addEnumText(TEXT("Alternate"));
+    dfe->addEnumText(gettext(TEXT("Winpilot")));
+    dfe->addEnumText(gettext(TEXT("Alternate")));
     dfe->Set(Appearance.IndLandable);
     wp->RefreshDisplay();
   }
@@ -1539,6 +1582,21 @@ static void setVariables(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainBrightness"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(TerrainBrightness*100/255));
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainRamp"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("Low lands")));
+    dfe->addEnumText(gettext(TEXT("Mountainous")));
+    dfe->addEnumText(gettext(TEXT("Imhof 7")));
+    dfe->addEnumText(gettext(TEXT("Imhof 4")));
+    dfe->addEnumText(gettext(TEXT("Imhof 12")));
+    dfe->addEnumText(gettext(TEXT("Imhof Atlas")));
+    dfe->addEnumText(gettext(TEXT("ICAO")));
+    dfe->Set(TerrainRamp);
     wp->RefreshDisplay();
   }
 
@@ -1606,9 +1664,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Cylinder"));
-    dfe->addEnumText(TEXT("Line"));
-    dfe->addEnumText(TEXT("FAI Sector"));
+    dfe->addEnumText(gettext(TEXT("Cylinder")));
+    dfe->addEnumText(gettext(TEXT("Line")));
+    dfe->addEnumText(gettext(TEXT("FAI Sector")));
     dfe->Set(FinishLine);
     wp->RefreshDisplay();
   }
@@ -1624,9 +1682,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Cylinder"));
-    dfe->addEnumText(TEXT("Line"));
-    dfe->addEnumText(TEXT("FAI Sector"));
+    dfe->addEnumText(gettext(TEXT("Cylinder")));
+    dfe->addEnumText(gettext(TEXT("Line")));
+    dfe->addEnumText(gettext(TEXT("FAI Sector")));
     dfe->Set(StartLine);
     wp->RefreshDisplay();
   }
@@ -1642,9 +1700,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Cylinder"));
-    dfe->addEnumText(TEXT("FAI Sector"));
-    dfe->addEnumText(TEXT("DAe 0.5/10"));
+    dfe->addEnumText(gettext(TEXT("Cylinder")));
+    dfe->addEnumText(gettext(TEXT("FAI Sector")));
+    dfe->addEnumText(gettext(TEXT("DAe 0.5/10")));
     dfe->Set(SectorType);
     wp->RefreshDisplay();
   }
@@ -1660,10 +1718,10 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(TEXT("Manual"));
-    dfe->addEnumText(TEXT("Auto"));
-    dfe->addEnumText(TEXT("Arm"));
-    dfe->addEnumText(TEXT("Arm start"));
+    dfe->addEnumText(gettext(TEXT("Manual")));
+    dfe->addEnumText(gettext(TEXT("Auto")));
+    dfe->addEnumText(gettext(TEXT("Arm")));
+    dfe->addEnumText(gettext(TEXT("Arm start")));
     dfe->Set(AutoAdvance);
     wp->RefreshDisplay();
   }
@@ -1757,7 +1815,6 @@ void dlgConfigurationShowModal(void){
 
   WndProperty *wp;
 
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgConfiguration_L.xml"));
@@ -1766,17 +1823,14 @@ void dlgConfigurationShowModal(void){
                         filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_CONFIGURATION_L"));
-  } else
-#endif
-    {
+  } else {
     char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgConfiguration.xml"));
-  wf = dlgLoadFromXML(CallBackTable,
-
-                      filename,
-		      hWndMainWindow,
-		      TEXT("IDR_XML_CONFIGURATION"));
-    }
+    LocalPathS(filename, TEXT("dlgConfiguration.xml"));
+    wf = dlgLoadFromXML(CallBackTable,
+                        filename,
+                        hWndMainWindow,
+                        TEXT("IDR_XML_CONFIGURATION"));
+  }
 
   if (!wf) return;
 
@@ -1787,22 +1841,23 @@ void dlgConfigurationShowModal(void){
   wConfig1    = ((WndFrame *)wf->FindByName(TEXT("frmSite")));
   wConfig2    = ((WndFrame *)wf->FindByName(TEXT("frmAirspace")));
   wConfig3    = ((WndFrame *)wf->FindByName(TEXT("frmDisplay")));
-  wConfig4    = ((WndFrame *)wf->FindByName(TEXT("frmFinalGlide")));
-  wConfig5    = ((WndFrame *)wf->FindByName(TEXT("frmSafety")));
-  wConfig6    = ((WndFrame *)wf->FindByName(TEXT("frmPolar")));
-  wConfig7    = ((WndFrame *)wf->FindByName(TEXT("frmComm")));
-  wConfig8    = ((WndFrame *)wf->FindByName(TEXT("frmUnits")));
-  wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmInterface")));
-  wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmAppearance")));
-  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
-  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
-  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmTaskRules")));
-  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
-  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
-  wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
-  wConfig17    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
-  wConfig18    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
-  wConfig19    = ((WndFrame *)wf->FindByName(TEXT("frmWaypointEdit")));
+  wConfig4    = ((WndFrame *)wf->FindByName(TEXT("frmTerrain")));
+  wConfig5    = ((WndFrame *)wf->FindByName(TEXT("frmFinalGlide")));
+  wConfig6    = ((WndFrame *)wf->FindByName(TEXT("frmSafety")));
+  wConfig7    = ((WndFrame *)wf->FindByName(TEXT("frmPolar")));
+  wConfig8    = ((WndFrame *)wf->FindByName(TEXT("frmComm")));
+  wConfig9    = ((WndFrame *)wf->FindByName(TEXT("frmUnits")));
+  wConfig10    = ((WndFrame *)wf->FindByName(TEXT("frmInterface")));
+  wConfig11    = ((WndFrame *)wf->FindByName(TEXT("frmAppearance")));
+  wConfig12    = ((WndFrame *)wf->FindByName(TEXT("frmVarioAppearance")));
+  wConfig13    = ((WndFrame *)wf->FindByName(TEXT("frmTask")));
+  wConfig14    = ((WndFrame *)wf->FindByName(TEXT("frmTaskRules")));
+  wConfig15    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCircling")));
+  wConfig16    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxCruise")));
+  wConfig17    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxFinalGlide")));
+  wConfig18    = ((WndFrame *)wf->FindByName(TEXT("frmInfoBoxAuxiliary")));
+  wConfig19    = ((WndFrame *)wf->FindByName(TEXT("frmLogger")));
+  wConfig20    = ((WndFrame *)wf->FindByName(TEXT("frmWaypointEdit")));
 
   ASSERT(wConfig1!=NULL);
   ASSERT(wConfig2!=NULL);
@@ -1823,6 +1878,7 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig17!=NULL);
   ASSERT(wConfig18!=NULL);
   ASSERT(wConfig19!=NULL);
+  ASSERT(wConfig20!=NULL);
 
   wf->FilterAdvanced(UserLevel>0);
 
@@ -1835,7 +1891,7 @@ void dlgConfigurationShowModal(void){
   // TODO: configuration of Appearance
   ////////
 
-  NextPage(0); // JMW just to turn proper pages on/off
+  NextPage(0); // just to turn proper pages on/off
 
   changed = false;
   taskchanged = false;
@@ -1859,6 +1915,18 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpDisableAutoLogger"));
+  if (wp) {
+    if (!DisableAutoLogger
+	!= wp->GetDataField()->GetAsBoolean()) {
+      DisableAutoLogger =
+	!(wp->GetDataField()->GetAsBoolean());
+      SetToRegistry(szRegistryDisableAutoLogger,
+		    DisableAutoLogger);
+      changed = true;
+    }
+  }
+
   double val;
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSafetyMacCready"));
@@ -1872,6 +1940,16 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpRiskGamma"));
+  if (wp) {
+    val = wp->GetDataField()->GetAsFloat();
+    if (GlidePolar::RiskGamma != val) {
+      GlidePolar::RiskGamma = val;
+      SetToRegistry(szRegistryRiskGamma,
+		    iround(GlidePolar::RiskGamma*10));
+      changed = true;
+    }
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpSetSystemTimeFromGPS"));
   if (wp) {
@@ -2162,6 +2240,15 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpWindArrowStyle"));
+  if (wp) {
+    if (MapWindow::WindArrowStyle != wp->GetDataField()->GetAsInteger()) {
+      MapWindow::WindArrowStyle = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryWindArrowStyle, MapWindow::WindArrowStyle);
+      changed = true;
+    }
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoMcMode"));
   if (wp) {
     if (AutoMcMode != wp->GetDataField()->GetAsInteger()) {
@@ -2284,6 +2371,14 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFAIFinishHeight"));
+  if (wp) {
+    if (EnableFAIFinishHeight != (wp->GetDataField()->GetAsInteger()>0)) {
+      EnableFAIFinishHeight = (wp->GetDataField()->GetAsInteger()>0);
+      SetToRegistry(szRegistryFAIFinishHeight, EnableFAIFinishHeight);
+      changed = true;
+    }
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
   if (wp) {
@@ -2366,6 +2461,19 @@ void dlgConfigurationShowModal(void){
     if (_tcscmp(temptext,szAdditionalAirspaceFile)) {
       SetRegistryString(szRegistryAdditionalAirspaceFile, temptext);
       AIRSPACEFILECHANGED= true;
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMapFile"));
+  if (wp) {
+    DataFieldFileReader* dfe;
+    dfe = (DataFieldFileReader*)wp->GetDataField();
+    _tcscpy(temptext, dfe->GetPathFile());
+    ContractLocalPath(temptext);
+    if (_tcscmp(temptext,szMapFile)) {
+      SetRegistryString(szRegistryMapFile, temptext);
+      MAPFILECHANGED= true;
       changed = true;
     }
   }
@@ -2730,6 +2838,14 @@ void dlgConfigurationShowModal(void){
     }
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTerrainRamp"));
+  if (wp) {
+    if (TerrainRamp != wp->GetDataField()->GetAsInteger()) {
+      TerrainRamp = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryTerrainRamp, TerrainRamp);
+      changed = true;
+    }
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinishMinHeight"));
   if (wp) {
@@ -2945,27 +3061,4 @@ void dlgConfigurationShowModal(void){
   wf = NULL;
 
 }
-
-// extern TCHAR szRegistryAirspaceBlackOutline[];
-// NUMAIRSPACECOLORS
-// AIRSPACECLASSCOUNT
-// SetRegistryColour(CTR, NewColor);
-/*
- AIRSPACECLASSCOUNT
-
-  { CLASSA,     _T("Class A")},
-  { CLASSB,     _T("Class B")},
-  { CLASSC,     _T("Class C")},
-  { CLASSD,     _T("Class D")},
-  { CLASSE,     _T("Class E")},
-  { CLASSF,     _T("Class F")},
-  { PROHIBITED, _T("Prohibited areas")},
-  { DANGER,     _T("Danger areas")},
-  { RESTRICT,   _T("Restricted areas")},
-  { CTR,        _T("CTR")},
-  { NOGLIDER,   _T("No Gliders")},
-  { WAVE,       _T("Wave")},
-  { OTHER,      _T("Other")},
-  { AATASK,     _T("AAT")}
-*/
 

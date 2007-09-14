@@ -54,24 +54,24 @@ static WndFrame *wFinish=NULL;
 
 static void UpdateCaption(void) {
   TCHAR sTmp[128];
+  TCHAR title[128];
   if (ValidTaskPoint(twItemIndex)) {
     switch (twType) {
     case 0:
-      _stprintf(sTmp, TEXT("Start: %s"),
-		WayPointList[Task[twItemIndex].Index].Name);
+      _stprintf(title, gettext(TEXT("Start")));
       break;
     case 1:
-      _stprintf(sTmp, TEXT("Turnpoint: %s"),
-		WayPointList[Task[twItemIndex].Index].Name);
+      _stprintf(title, gettext(TEXT("Turnpoint")));
       break;
     case 2:
-      _stprintf(sTmp, TEXT("Finish: %s"),
-		WayPointList[Task[twItemIndex].Index].Name);
+      _stprintf(title, gettext(TEXT("Finish")));
       break;
     };
+    _stprintf(sTmp, TEXT("%s: %s"), title,
+              WayPointList[Task[twItemIndex].Index].Name);
     wf->SetCaption(sTmp);
   } else {
-    wf->SetCaption(TEXT("(invalid)"));
+    wf->SetCaption(gettext(TEXT("(invalid)")));
   }
 }
 
@@ -87,9 +87,9 @@ static void SetValues(bool first=false) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     if (first) {
-      dfe->addEnumText(TEXT("Cylinder"));
-      dfe->addEnumText(TEXT("Line"));
-      dfe->addEnumText(TEXT("FAI Sector"));
+      dfe->addEnumText(gettext(TEXT("Cylinder")));
+      dfe->addEnumText(gettext(TEXT("Line")));
+      dfe->addEnumText(gettext(TEXT("FAI Sector")));
     }
     dfe->Set(FinishLine);
     wp->RefreshDisplay();
@@ -107,9 +107,9 @@ static void SetValues(bool first=false) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     if (first) {
-      dfe->addEnumText(TEXT("Cylinder"));
-      dfe->addEnumText(TEXT("Line"));
-      dfe->addEnumText(TEXT("FAI Sector"));
+      dfe->addEnumText(gettext(TEXT("Cylinder")));
+      dfe->addEnumText(gettext(TEXT("Line")));
+      dfe->addEnumText(gettext(TEXT("FAI Sector")));
     }
     dfe->Set(StartLine);
     wp->RefreshDisplay();
@@ -128,9 +128,9 @@ static void SetValues(bool first=false) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     if (first) {
-      dfe->addEnumText(TEXT("Cylinder"));
-      dfe->addEnumText(TEXT("FAI Sector"));
-      dfe->addEnumText(TEXT("DAe 0.5/10"));
+      dfe->addEnumText(gettext(TEXT("Cylinder")));
+      dfe->addEnumText(gettext(TEXT("FAI Sector")));
+      dfe->addEnumText(gettext(TEXT("DAe 0.5/10")));
     }
     dfe->Set(SectorType);
     wp->RefreshDisplay();
@@ -149,10 +149,10 @@ static void SetValues(bool first=false) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     if (first) {
-      dfe->addEnumText(TEXT("Manual"));
-      dfe->addEnumText(TEXT("Auto"));
-      dfe->addEnumText(TEXT("Arm"));
-      dfe->addEnumText(TEXT("Arm start"));
+      dfe->addEnumText(gettext(TEXT("Manual")));
+      dfe->addEnumText(gettext(TEXT("Auto")));
+      dfe->addEnumText(gettext(TEXT("Arm")));
+      dfe->addEnumText(gettext(TEXT("Arm start")));
     }
     dfe->Set(AutoAdvance);
     wp->RefreshDisplay();
@@ -243,8 +243,8 @@ static void SetWaypointValues(bool first=false) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     if (first) {
-      dfe->addEnumText(TEXT("Cylinder"));
-      dfe->addEnumText(TEXT("Sector"));
+      dfe->addEnumText(gettext(TEXT("Cylinder")));
+      dfe->addEnumText(gettext(TEXT("Sector")));
     }
     dfe->Set(Task[twItemIndex].AATType);
     wp->RefreshDisplay();
@@ -466,7 +466,6 @@ static CallBackTableEntry_t CallBackTable[]={
 void dlgTaskWaypointShowModal(int itemindex, int tasktype){
   wf = NULL;
 
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgTaskWaypoint_L.xml"));
@@ -475,18 +474,14 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
                         filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_TASKWAYPOINT_L"));
-  } else
-#endif
-    {
+  } else {
     char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgTaskWaypoint.xml"));
+    LocalPathS(filename, TEXT("dlgTaskWaypoint.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
                         filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_TASKWAYPOINT"));
-
-    }
+  }
 
   twItemIndex = itemindex;
   twType = tasktype;

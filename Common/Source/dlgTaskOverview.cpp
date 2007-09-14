@@ -97,14 +97,14 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 
   } else {
     if (DrawListIndex==n) {
-      _stprintf(sTmp, TEXT("%s"), TEXT("   (add waypoint)"));
+      _stprintf(sTmp, TEXT("  (%s)"), gettext(TEXT("add waypoint")));
       ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		 ETO_OPAQUE, NULL,
 		 sTmp, _tcslen(sTmp), NULL);
     } else if ((DrawListIndex==n+1) && ValidTaskPoint(0)) {
 
       if (!AATEnabled) {
-	_stprintf(sTmp, TEXT("Total:"));
+	_stprintf(sTmp, gettext(TEXT("Total:")));
 	ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		   ETO_OPAQUE, NULL,
 		   sTmp, _tcslen(sTmp), NULL);
@@ -121,7 +121,8 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 		   sTmp, _tcslen(sTmp), NULL);
 
       } else {
-	_stprintf(sTmp, TEXT("Total: %.0f min"), AATTaskLength*1.0);
+	_stprintf(sTmp, TEXT("%s %.0f min"), gettext(TEXT("Total:")),
+                  AATTaskLength*1.0);
 	ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		   ETO_OPAQUE, NULL,
 		   sTmp, _tcslen(sTmp), NULL);
@@ -221,7 +222,7 @@ static void OnTaskListEnter(WindowControl * Sender,
       if (ItemIndex>0) {
 	Task[ItemIndex].Index = Task[0].Index;
       } else {
-	if (HomeWaypoint>=0) {
+	if (ValidWayPoint(HomeWaypoint)) {
 	  Task[ItemIndex].Index = HomeWaypoint;
 	} else {
 	  Task[ItemIndex].Index = -1;
@@ -273,8 +274,9 @@ static void OnCloseClicked(WindowControl * Sender){
 
 static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
 	(void)ListInfo; (void)Sender;
-  if (MessageBoxX(hWndMapWindow,TEXT("Clear the task?"),
-                  TEXT("Clear task"),
+  if (MessageBoxX(hWndMapWindow,
+                  gettext(TEXT("Clear the task?")),
+                  gettext(TEXT("Clear task")),
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
     if (CheckDeclaration()) {
       ClearTask();
@@ -302,41 +304,86 @@ static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *L
   // do something here.
 }
 
-static int TaskFileNumber = 0;
 
-static void GetTaskFileName(TCHAR *filename) {
-  WndProperty* wp;
-  wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
-  if (wp) {
-    TaskFileNumber = wp->GetDataField()->GetAsInteger();
-  }
-
-// ToDo: review by JW
-
-  TCHAR sTmp[MAX_PATH];
-
-  _stprintf(sTmp,TEXT("%02d.tsk"), TaskFileNumber);
-  LocalPath(filename, sTmp);
-
-}
 
 
 static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-	(void)ListInfo; (void)Sender;
-  TCHAR filename[100];
-  GetTaskFileName(filename);
-  SaveTask(filename);
+  (void)ListInfo; (void)Sender;
+
+  int file_index;
+  TCHAR task_name[MAX_PATH];
+  TCHAR file_name[MAX_PATH];
+  WndProperty* wp;
+  DataFieldFileReader *dfe;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
+  if (!wp) return;
+  dfe = (DataFieldFileReader*)wp->GetDataField();
+
+  file_index = dfe->GetAsInteger();
+
+  if (file_index==0) {
+
+    // new file... TODO: find a good name not already in the list
+    _tcscpy(task_name,TEXT("0"));
+    dlgTextEntryShowModal(task_name, 10); // max length
+
+    if (_tcslen(task_name)>0) {
+
+      _tcscat(task_name, TEXT(".tsk"));
+      LocalPath(file_name, task_name);
+
+      dfe->Lookup(file_name);
+      file_index = dfe->GetAsInteger();
+
+      if (file_index==0) {
+        // good, this file is unique..
+        dfe->addFile(task_name, file_name);
+        dfe->Lookup(file_name);
+        wp->RefreshDisplay();
+      }
+
+    } else {
+      // TODO error, task not saved since no name was given
+      return;
+    }
+  }
+
+  if (file_index>0) {
+    // file already exists! ask if want to overwrite
+
+    _stprintf(file_name, TEXT("%s: '%s'"), gettext(TEXT("Task file already exists")),
+              dfe->GetAsString());
+    if(MessageBoxX(hWndMapWindow,
+                   file_name,
+                   gettext(TEXT("Overwrite?")),
+                   MB_YESNO|MB_ICONQUESTION) != IDYES) {
+      return;
+    }
+  }
+
+  SaveTask(dfe->GetPathFile());
   DoStatusMessage(TEXT("Task saved"));
 }
 
 
 static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-	(void)ListInfo; (void)Sender;
-  TCHAR filename[100];
-  GetTaskFileName(filename);
-  LoadNewTask(filename);
-  OverviewRefreshTask();
+  (void)ListInfo; (void)Sender;
+
+  WndProperty* wp;
+  DataFieldFileReader *dfe;
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
+  if (!wp) return;
+  dfe = (DataFieldFileReader*) wp->GetDataField();
+  int file_index = dfe->GetAsInteger();
+
+  if (file_index>0) {
+    LoadNewTask(dfe->GetPathFile());
+    OverviewRefreshTask();
+  }
 }
+
 
 static void OnAdvancedClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   (void)Sender; (void)ListInfo;
@@ -369,7 +416,6 @@ void dlgTaskOverviewShowModal(void){
 
   wf = NULL;
 
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgTaskOverview_L.xml"));
@@ -378,16 +424,14 @@ void dlgTaskOverviewShowModal(void){
                         filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_TASKOVERVIEW_L"));
-  } else
-#endif
-    {
+  } else {
     char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgTaskOverview.xml"));
-  wf = dlgLoadFromXML(CallBackTable,
-                      filename,
-		      hWndMainWindow,
-		      TEXT("IDR_XML_TASKOVERVIEW"));
-    }
+    LocalPathS(filename, TEXT("dlgTaskOverview.xml"));
+    wf = dlgLoadFromXML(CallBackTable,
+                        filename,
+                        hWndMainWindow,
+                        TEXT("IDR_XML_TASKOVERVIEW"));
+  }
 
   if (!wf) return;
 
@@ -413,7 +457,10 @@ void dlgTaskOverviewShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
   if (wp) {
-    wp->GetDataField()->SetAsFloat(TaskFileNumber);
+    DataFieldFileReader* dfe;
+    dfe = (DataFieldFileReader*)wp->GetDataField();
+    dfe->ScanDirectoryTop(TEXT("*.tsk"));
+    // JMW TODO on entry to form:       wp->GetDataField()->Lookup(TaskFileName);  (global)
     wp->RefreshDisplay();
   }
 

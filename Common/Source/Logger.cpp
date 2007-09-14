@@ -40,6 +40,7 @@ Copyright_License {
 #include "Parser.h"
 
 extern NMEA_INFO GPS_INFO;
+bool DisableAutoLogger = false;
 
 /*
 problems with current IGC:
@@ -85,6 +86,25 @@ static TCHAR szLoggerFileName[MAX_PATH];
 static TCHAR szFLoggerFileName[MAX_PATH];
 
 int EW_count = 0;
+int NumLoggerBuffered = 0;
+
+#define MAX_LOGGER_BUFFER 60
+
+typedef struct LoggerBuffer {
+  double Latitude;
+  double Longitude;
+  double Altitude;
+  double BaroAltitude;
+  short Day;
+  short Month;
+  short Year;
+  short Hour;
+  short Minute;
+  short Second;
+} LoggerBuffer_T;
+
+LoggerBuffer_T FirstPoint;
+LoggerBuffer_T LoggerBuffer[MAX_LOGGER_BUFFER];
 
 
 void StopLogger(void) {
@@ -93,12 +113,40 @@ void StopLogger(void) {
     if (LoggerClearFreeSpace()) {
       MoveFile(szLoggerFileName, szFLoggerFileName);
     }
+    NumLoggerBuffered = 0;
   }
 }
 
 
-void LogPoint(double Latitude, double Longitude, double Altitude,
-              double BaroAltitude)
+void LogPointToBuffer(double Latitude, double Longitude, double Altitude,
+                      double BaroAltitude, short Hour, short Minute, short Second) {
+
+  if (NumLoggerBuffered== MAX_LOGGER_BUFFER) {
+    for (int i= 0; i< NumLoggerBuffered-1; i++) {
+      LoggerBuffer[i]= LoggerBuffer[i+1];
+    }
+  } else {
+    NumLoggerBuffered++;
+  }
+  LoggerBuffer[NumLoggerBuffered-1].Latitude = Latitude;
+  LoggerBuffer[NumLoggerBuffered-1].Longitude = Longitude;
+  LoggerBuffer[NumLoggerBuffered-1].Altitude = Altitude;
+  LoggerBuffer[NumLoggerBuffered-1].BaroAltitude = BaroAltitude;
+  LoggerBuffer[NumLoggerBuffered-1].Hour = Hour;
+  LoggerBuffer[NumLoggerBuffered-1].Minute = Minute;
+  LoggerBuffer[NumLoggerBuffered-1].Second = Second;
+  LoggerBuffer[NumLoggerBuffered-1].Year = GPS_INFO.Year;
+  LoggerBuffer[NumLoggerBuffered-1].Month = GPS_INFO.Month;
+  LoggerBuffer[NumLoggerBuffered-1].Day = GPS_INFO.Day;
+
+  // This is the first point that will be output to file.
+  // Declaration must happen before this, so must save this time.
+  FirstPoint = LoggerBuffer[0];
+}
+
+
+void LogPointToFile(double Latitude, double Longitude, double Altitude,
+                    double BaroAltitude, short Hour, short Minute, short Second)
 {
   HANDLE hFile;// = INVALID_HANDLE_VALUE;
   DWORD dwBytesRead;
@@ -108,8 +156,8 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
   double MinLat, MinLon;
   char NoS, EoW;
 
-  if (Altitude<=0) return;
-  if (BaroAltitude<=0) return;
+  if (Altitude<0) return;
+  if (BaroAltitude<0) return;
 
   DegLat = (int)Latitude;
   MinLat = Latitude - DegLat;
@@ -137,7 +185,7 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
 		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 
   sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
-          GPS_INFO.Hour, GPS_INFO.Minute, GPS_INFO.Second,
+          Hour, Minute, Second,
           DegLat, MinLat, NoS, DegLon, MinLon, EoW,
           (int)Altitude,(int)BaroAltitude);
 
@@ -147,6 +195,32 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
   FlushFileBuffers(hFile);
 
   CloseHandle(hFile);
+}
+
+
+void LogPoint(double Latitude, double Longitude, double Altitude,
+              double BaroAltitude) {
+  if (!LoggerActive) {
+    if (!GPS_INFO.NAVWarning) {
+      LogPointToBuffer(Latitude, Longitude, Altitude, BaroAltitude,
+                       GPS_INFO.Hour, GPS_INFO.Minute, GPS_INFO.Second);
+    }
+  } else if (NumLoggerBuffered) {
+    for (int i=0; i<NumLoggerBuffered; i++) {
+      LogPointToFile(LoggerBuffer[i].Latitude,
+                     LoggerBuffer[i].Longitude,
+                     LoggerBuffer[i].Altitude,
+                     LoggerBuffer[i].BaroAltitude,
+                     LoggerBuffer[i].Hour,
+                     LoggerBuffer[i].Minute,
+                     LoggerBuffer[i].Second);
+    }
+    NumLoggerBuffered = 0;
+  }
+  if (LoggerActive) {
+    LogPointToFile(Latitude, Longitude, Altitude, BaroAltitude,
+                   GPS_INFO.Hour, GPS_INFO.Minute, GPS_INFO.Second);
+  }
 }
 
 
@@ -268,6 +342,15 @@ void StartDeclaration(int ntp)
 
   SetFilePointer(hFile, 0, NULL, FILE_END);
 
+  if (NumLoggerBuffered==0) {
+     FirstPoint.Year = GPS_INFO.Year;
+     FirstPoint.Month = GPS_INFO.Month;
+     FirstPoint.Day = GPS_INFO.Day;
+     FirstPoint.Hour = GPS_INFO.Hour;
+     FirstPoint.Minute = GPS_INFO.Minute;
+     FirstPoint.Second = GPS_INFO.Second;
+  }
+
   // JMW added task start declaration line
 
   // LGCSTKF013945TAKEOFF DETECTED
@@ -276,12 +359,12 @@ void StartDeclaration(int ntp)
   sprintf(temp,
 	  "C%02d%02d%02d%02d%02d%02d0000000000%02d\r\n",
 	  // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
-	  GPS_INFO.Day,
-	  GPS_INFO.Month,
-	  GPS_INFO.Year % 100,
-	  GPS_INFO.Hour,
-	  GPS_INFO.Minute,
-	  GPS_INFO.Second,
+	  FirstPoint.Day,
+	  FirstPoint.Month,
+	  FirstPoint.Year % 100,
+	  FirstPoint.Hour,
+	  FirstPoint.Minute,
+	  FirstPoint.Second,
 	  ntp-2);
 
   WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
@@ -488,19 +571,24 @@ void LoggerDeviceDeclare() {
   WCHAR PilotName[64];
   WCHAR AircraftType[32];
   WCHAR AircraftRego[32];
-  bool foundone = false;
+  bool found_logger = false;
 
   GetRegistryString(szRegistryPilotName, PilotName, 64);
   GetRegistryString(szRegistryAircraftType, AircraftType, 32);
   GetRegistryString(szRegistryAircraftRego, AircraftRego, 32);
 
   if (devIsLogger(devA())){
-    foundone = true;
+    found_logger = true;
+    DeclaredToDevice = false;
+
     if(MessageBoxX(hWndMapWindow,
 		   gettext(TEXT("Declare Task?")),
 		   devA()->Name,
 		   MB_YESNO| MB_ICONQUESTION) == IDYES)
       {
+
+        // Must lock comms for entire declaration
+        LockComm();
 
 	devDeclBegin(devA(), PilotName, AircraftType, AircraftRego);
 
@@ -514,20 +602,29 @@ void LoggerDeviceDeclare() {
 		      gettext(TEXT("Task Declared!")),
 		      devA()->Name, MB_OK| MB_ICONINFORMATION);
 	  DeclaredToDevice = true;
-	} else
+	} else {
 	  MessageBoxX(hWndMapWindow,
 		      gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
 		      devA()->Name, MB_OK| MB_ICONERROR);
+          DeclaredToDevice = false;
+        }
 
+        UnlockComm();
       }
   }
 
   if (devIsLogger(devB())){
-    foundone = true;
+    if (!found_logger) {
+      DeclaredToDevice = false;
+    }
+    found_logger = true;
 
     if(MessageBoxX(hWndMapWindow,
 		   gettext(TEXT("Declare Task?")),
 		   devB()->Name, MB_YESNO| MB_ICONQUESTION) == IDYES){
+
+      // Must lock comms for entire declaration
+      LockComm();
 
       devDeclBegin(devB(), PilotName, AircraftType, AircraftRego);
       for(i=0;i<MAXTASKPOINTS;i++)
@@ -539,18 +636,24 @@ void LoggerDeviceDeclare() {
 	MessageBoxX(hWndMapWindow, gettext(TEXT("Task Declared!")),
 		    devB()->Name, MB_OK| MB_ICONINFORMATION);
 	DeclaredToDevice = true;
-      } else
+      } else {
 	MessageBoxX(hWndMapWindow,
 		    gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
 		    devB()->Name, MB_OK| MB_ICONERROR);
+        DeclaredToDevice = false;
+      }
+
+      UnlockComm();
 
     }
   }
-  if (!foundone) {
+
+  if (!found_logger) {
     MessageBoxX(hWndMapWindow, gettext(TEXT("No logger connected")),
 		devB()->Name, MB_OK| MB_ICONINFORMATION);
     DeclaredToDevice = true; // testing only
   }
+
 }
 
 
@@ -881,7 +984,7 @@ bool ReplayLogger::UpdateInternal(void) {
     SpeedX = cli.GetSpeed(tthis);
     DistanceBearing(LatX, LonX, LatX1, LonX1, NULL, &BearingX);
 
-    if (SpeedX>0) {
+    if ((SpeedX>0) && (LatX != LatX1) && (LonX != LonX1)) {
 
       LockFlightData();
       if (init) {
@@ -917,7 +1020,8 @@ void ReplayLogger::Stop(void) {
   if (Enabled) {
     LockFlightData();
     GPS_INFO.Speed = 0;
-    GPS_INFO.Time = 0;
+    //    GPS_INFO.Time = 0;
+    NumLoggerBuffered = 0;
     UnlockFlightData();
   }
   Enabled = false;
@@ -928,6 +1032,7 @@ void ReplayLogger::Start(void) {
   if (Enabled) {
     Stop();
   }
+  NumLoggerBuffered = 0;
   flightstats.Reset();
   if (!UpdateInternal()) {
     // TODO couldn't start, give error dialog

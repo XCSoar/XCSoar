@@ -88,6 +88,7 @@ class InputEvents {
   static void eventBeep(TCHAR *misc);
   static void eventUserDisplayModeForce(TCHAR *misc);
   static void eventAirspaceDisplayMode(TCHAR *misc);
+  static void eventAutoLogger(TCHAR *misc);
   // -------
 
 #ifdef _SIM_

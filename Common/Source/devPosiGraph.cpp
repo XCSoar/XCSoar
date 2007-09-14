@@ -84,7 +84,8 @@ BOOL PGOpen(PDeviceDescriptor_t d, int Port){
   return(TRUE);
 }
 
-BOOL PGDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
+BOOL PGDeclBegin(PDeviceDescriptor_t d,
+                 TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
 
   (void)d;
   (void)PilotsName;
@@ -96,7 +97,8 @@ BOOL PGDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *
 }
 
 
-BOOL PGDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
+BOOL PGDeclAddWayPoint(PDeviceDescriptor_t d,
+                       WAYPOINT *wp){
 
   (void)d;
   (void)wp;

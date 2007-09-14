@@ -52,6 +52,16 @@ DeviceDescriptor_t *pDevSecondaryBaroSource=NULL;
 
 int DeviceRegisterCount = 0;
 
+// This function is used to determine whether a generic
+// baro source needs to be used if available
+BOOL devHasBaroSource(void) {
+  if (pDevPrimaryBaroSource || pDevSecondaryBaroSource) {
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
+
 
 BOOL devGetBaroAltitude(double *Value){
   // hack, just return GPS_INFO->BaroAltitude
@@ -74,6 +84,9 @@ BOOL devGetBaroAltitude(double *Value){
 BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token){
 
   int i=0, ch;
+  if (!(d->Com.GetChar)) {
+    return (FALSE);
+  }
 
   while ((ch = (d->Com.GetChar)()) != EOF){
 
@@ -95,7 +108,8 @@ BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token){
 }
 
 
-BOOL devRegister(TCHAR *Name, int Flags, BOOL (*Installer)(PDeviceDescriptor_t d)){
+BOOL devRegister(TCHAR *Name, int Flags,
+                 BOOL (*Installer)(PDeviceDescriptor_t d)) {
   if (DeviceRegisterCount >= NUMREGDEV)
     return(FALSE);
   DeviceRegister[DeviceRegisterCount].Name = Name;
@@ -173,14 +187,16 @@ BOOL devInit(LPTSTR CommandLine){
       devA()->Com.StopRxThread = Port1StopRxThread;
       devA()->Com.StartRxThread = Port1StartRxThread;
       devA()->Com.GetChar = Port1GetChar;
+      devA()->Com.PutChar = Port1Write;
       devA()->Com.SetRxTimeout = Port1SetRxTimeout;
       devA()->Com.SetBaudrate = Port1SetBaudrate;
       devA()->Com.Read = Port1Read;
+      devA()->Com.Flush = Port1Flush;
 
       devInit(devA());
       devOpen(devA(), 0);
 
-      if (devA()->IsBaroSource(devA())){
+      if (devIsBaroSource(devA())) {
         if (pDevPrimaryBaroSource == NULL){
           pDevPrimaryBaroSource = devA();
         } else
@@ -188,7 +204,6 @@ BOOL devInit(LPTSTR CommandLine){
           pDevSecondaryBaroSource = devA();
         }
       }
-
       break;
     }
   }
@@ -201,25 +216,26 @@ BOOL devInit(LPTSTR CommandLine){
 
       DeviceRegister[i].Installer(devB());
 
-      if ((pDevNmeaOut == NULL) && (DeviceRegister[i].Flags & (1l << dfNmeaOut))){
+      if ((pDevNmeaOut == NULL) &&
+          (DeviceRegister[i].Flags & (1l << dfNmeaOut))){
         pDevNmeaOut = devB();
       }
 
       devB()->Com.WriteString = Port2WriteString;
       devB()->Com.WriteNMEAString = Port2WriteNMEA;
       devB()->Com.StopRxThread = Port2StopRxThread;
-      /* following methodes are not jet suppoerted
       devB()->Com.StartRxThread = Port2StartRxThread;
       devB()->Com.GetChar = Port2GetChar;
+      devB()->Com.PutChar = Port2Write;
       devB()->Com.SetRxTimeout = Port2SetRxTimeout;
       devB()->Com.SetBaudrate = Port2SetBaudrate;
       devB()->Com.Read = Port2Read;
-      */
+      devB()->Com.Flush = Port2Flush;
 
       devInit(devB());
       devOpen(devB(), 1);
 
-      if (devB()->IsBaroSource(devB())){
+      if (devIsBaroSource(devB())) {
         if (pDevPrimaryBaroSource == NULL){
           pDevPrimaryBaroSource = devB();
         } else
@@ -256,13 +272,16 @@ BOOL devInit(LPTSTR CommandLine){
         wcLogFileName[pCe-pC] = '\0';
 
         if (devOpenLog(devA(), wcLogFileName)){
-          _stprintf(sTmp, TEXT("Device A Loggs to\r\n%s"), wcLogFileName),
+          _stprintf(sTmp, TEXT("Device A logs to\r\n%s"), wcLogFileName);
           MessageBox (hWndMainWindow, sTmp,
-                TEXT("Information"), MB_OK|MB_ICONINFORMATION);
+                      gettext(TEXT("Information")),
+                      MB_OK|MB_ICONINFORMATION);
         } else {
-          _stprintf(sTmp, TEXT("Unable to Open Log\r\non Device A\r\n%s"), wcLogFileName),
+          _stprintf(sTmp,
+                    TEXT("Unable to open log\r\non device A\r\n%s"), wcLogFileName);
           MessageBox (hWndMainWindow, sTmp,
-                TEXT("Error"), MB_OK|MB_ICONWARNING);
+                      gettext(TEXT("Error")),
+                      MB_OK|MB_ICONWARNING);
         }
 
       }
@@ -286,13 +305,16 @@ BOOL devInit(LPTSTR CommandLine){
         wcLogFileName[pCe-pC] = '\0';
 
         if (devOpenLog(devB(), wcLogFileName)){
-          _stprintf(sTmp, TEXT("Device B Loggs to\r\n%s"), wcLogFileName),
+          _stprintf(sTmp, TEXT("Device B logs to\r\n%s"), wcLogFileName);
           MessageBox (hWndMainWindow, sTmp,
-                TEXT("Information"), MB_OK|MB_ICONINFORMATION);
+                      gettext(TEXT("Information")),
+                      MB_OK|MB_ICONINFORMATION);
         } else {
-          _stprintf(sTmp, TEXT("Unable to Open Log\r\non Device B\r\n%s"), wcLogFileName),
+          _stprintf(sTmp, TEXT("Unable to open log\r\non device B\r\n%s"),
+                    wcLogFileName);
           MessageBox (hWndMainWindow, sTmp,
-                TEXT("Error"), MB_OK|MB_ICONWARNING);
+                      gettext(TEXT("Error")),
+                      MB_OK|MB_ICONWARNING);
         }
 
       }
@@ -487,42 +509,42 @@ BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence){
 
 
 BOOL devDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
-  if (d != NULL && d->DeclBegin != NULL)
+  if ((d != NULL) && (d->DeclBegin != NULL))
     return ((d->DeclBegin)(d, PilotsName, Class, ID));
   else
     return(FALSE);
 }
 
 BOOL devDeclEnd(PDeviceDescriptor_t d){
-  if (d != NULL && d->DeclEnd != NULL)
+  if ((d != NULL) && (d->DeclEnd != NULL))
     return ((d->DeclEnd)(d));
   else
     return(FALSE);
 }
 
 BOOL devDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
-  if (d != NULL && d->DeclAddWayPoint != NULL)
+  if ((d != NULL) && (d->DeclAddWayPoint != NULL))
     return ((d->DeclAddWayPoint)(d, wp));
   else
     return(FALSE);
 }
 
 BOOL devIsLogger(PDeviceDescriptor_t d){
-  if (d != NULL && d->IsLogger != NULL)
+  if ((d != NULL) && (d->IsLogger != NULL))
     return ((d->IsLogger)(d));
   else
     return(FALSE);
 }
 
 BOOL devIsGPSSource(PDeviceDescriptor_t d){
-  if (d != NULL && d->IsGPSSource != NULL)
+  if ((d != NULL) && (d->IsGPSSource != NULL))
     return ((d->IsGPSSource)(d));
   else
     return(FALSE);
 }
 
 BOOL devIsBaroSource(PDeviceDescriptor_t d){
-  if (d != NULL && d->IsBaroSource != NULL)
+  if ((d != NULL) && (d->IsBaroSource != NULL))
     return ((d->IsBaroSource)(d));
   else
     return(FALSE);

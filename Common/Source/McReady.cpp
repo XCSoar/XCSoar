@@ -46,6 +46,7 @@ Copyright_License {
 
 
 //double GlidePolar::BallastFactor;
+double GlidePolar::RiskGamma = 0.0;
 double GlidePolar::polar_a;
 double GlidePolar::polar_b;
 double GlidePolar::polar_c;
@@ -158,8 +159,8 @@ double GlidePolar::SinkRate(double V) {
 
 
 double GlidePolar::SinkRate(double V, double n) {
-  if (n<MIN_MACCREADY) {
-    n=MIN_MACCREADY;
+  if (n<0.1) {
+    n=0.1;
   }
   double sqrtn = (double)isqrt4((unsigned long)(n*10000))/100.0;
   return SinkRate(polar_a/sqrtn,polar_b,polar_c*sqrtn,0.0,0.0,V);
@@ -210,8 +211,6 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   BestGlide = 10000;
   BestTime = 1e6;
 
-  emcready = max(MIN_MACCREADY,emcready);
-
   double vtot;
   if (Distance<1.0) {
     Distance = 1;
@@ -230,10 +229,11 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
     // SinkRate function returns negative value for sink
 
     if (isFinalGlide) {
-      sinkrate = -SinkRateFast(emcready, i);
+      sinkrate = -SinkRateFast(max(0.0,emcready), i);
       tc = 1.0; // assume no circling, e.g. final glide at best LD
       // with no climbs
     } else {
+      emcready = max(MIN_MACCREADY,emcready);
       sinkrate = -SinkRateFast(0, i);
       tc = max(0.0,min(1.0,emcready/(sinkrate+emcready)));
       vtot = (vtrack*vtrack*tc*tc-CrossWindSqd);
@@ -497,4 +497,32 @@ double GlidePolar::MacCreadyAltitude(double emcready,
 
   return Altitude;
 
+}
+
+static double FRiskFunction(double x, double k) {
+  return 2.0/(1.0+exp(-x*k))-1.0;
+}
+
+double GlidePolar::MacCreadyRisk(double HeightAboveTerrain,
+                                 double MaxThermalHeight,
+                                 double MC) {
+  double riskmc = MC;
+
+  double hthis = max(1.0, HeightAboveTerrain);
+  double hmax = max(hthis, MaxThermalHeight);
+  double x = hthis/hmax;
+  double f;
+
+  if (RiskGamma<0.1) {
+    return MC;
+  } else if (RiskGamma>0.9) {
+    f = x;
+  } else {
+    double k;
+    k = 1.0/(RiskGamma*RiskGamma)-1.0;
+    f = FRiskFunction(x, k)/FRiskFunction(1.0, k);
+  }
+  double mmin = 0; // min(MC,AbortSafetyMacCready());
+  riskmc = f*riskmc+(1-f)*mmin;
+  return riskmc;
 }

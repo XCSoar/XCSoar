@@ -151,10 +151,10 @@ void dlgWindSettingsShowModal(void){
     if (wp) {
       DataFieldEnum* dfe;
       dfe = (DataFieldEnum*)wp->GetDataField();
-      dfe->addEnumText(TEXT("Manual"));
-      dfe->addEnumText(TEXT("Circling"));
-      dfe->addEnumText(TEXT("ZigZag"));
-      dfe->addEnumText(TEXT("Both"));
+      dfe->addEnumText(gettext(TEXT("Manual")));
+      dfe->addEnumText(gettext(TEXT("Circling")));
+      dfe->addEnumText(gettext(TEXT("ZigZag")));
+      dfe->addEnumText(gettext(TEXT("Both")));
       wp->GetDataField()->Set(AutoWindMode);
       wp->RefreshDisplay();
 

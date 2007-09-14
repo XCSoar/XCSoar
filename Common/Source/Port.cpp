@@ -47,16 +47,18 @@ static TCHAR sPortName[8];
 
 static DWORD dwMask1;
 
-BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
+BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed)
 {
   DWORD dwError;
   DCB PortDCB;
   TCHAR sTmp[127];
 
-  _tcscpy(sPortName, lpszPortName);
+  if (lpszPortName) {
+    _tcscpy(sPortName, lpszPortName);
+  }
 
   // Open the serial port.
-  hPort1 = CreateFile (lpszPortName, // Pointer to the name of the port
+  hPort1 = CreateFile (sPortName, // Pointer to the name of the port
                       GENERIC_READ | GENERIC_WRITE,
                                     // Access (read-write) mode
                       0,            // Share mode
@@ -75,7 +77,8 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
     // Could not open the port.
     // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    _stprintf(sTmp, TEXT("Unable to open port %s"), sPortName),
+    _stprintf(sTmp, TEXT("%s %s"), gettext(TEXT("Unable to open port")),
+              sPortName),
     DoStatusMessage(sTmp);
     //    MessageBoxX (hWndMainWindow, sTmp,
     //		 gettext(TEXT("Error")), MB_OK|MB_ICONINFORMATION);
@@ -124,12 +127,14 @@ BOOL Port1Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed )
 #endif
     // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
     // gettext(), port added on new line
-    _stprintf(sTmp, TEXT("Unable to Change Settings on Port %s"), sPortName),
-      MessageBoxX (hWndMainWindow, sTmp, gettext(TEXT("Error")), MB_OK);
+    _stprintf(sTmp, TEXT("%s %s"),
+              gettext(TEXT("Unable to Change Settings on Port")), sPortName);
+    MessageBoxX (hWndMainWindow, sTmp, gettext(TEXT("Error")), MB_OK);
     // dwError = GetLastError ();
     return FALSE;
   }
 
+  //  Port1SetRxTimeout(10); // JMW20070515 wait a maximum of 10ms
   Port1SetRxTimeout(0);
 
   // Direct the port to perform extended functions SETDTR and SETRTS
@@ -175,6 +180,12 @@ void Port1Write (BYTE Byte)
   }
 }
 
+
+void Port1Flush(void) {
+  PurgeComm(hPort1,
+            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+}
+
 /***********************************************************************
 
   PortReadThread (LPVOID lpvoid)
@@ -184,10 +195,9 @@ DWORD Port1ReadThread (LPVOID lpvoid)
 {
   DWORD dwCommModemStatus, dwBytesTransferred;
   BYTE inbuf[1024];
-	(void)lpvoid;
+  (void)lpvoid;
   // JMW added purging of port on open to prevent overflow initially
-  PurgeComm(hPort1,
-            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+  Port1Flush();
 
   // Specify a set of events to be monitored for the port.
 
@@ -204,7 +214,8 @@ DWORD Port1ReadThread (LPVOID lpvoid)
   {
 
     #if (WINDOWSPC>0)
-    Sleep(50);  // ToDo rewrite the whole driver to use overlaped IO on W2K or higher
+    Sleep(50);  // ToDo rewrite the whole driver to use overlaped IO
+                // on W2K or higher
     #else
     // Wait for an event to occur for the port.
     if (!WaitCommEvent (hPort1, &dwCommModemStatus, 0)) {
@@ -232,13 +243,16 @@ DWORD Port1ReadThread (LPVOID lpvoid)
         if (ReadFile (hPort1, inbuf, 1024, &dwBytesTransferred,
 		      (OVERLAPPED *)NULL)) {
 
-	        for (unsigned int j=0; j<dwBytesTransferred; j++) {
-	          ProcessChar1 (inbuf[j]);
-	        }
+          for (unsigned int j=0; j<dwBytesTransferred; j++) {
+            ProcessChar1 (inbuf[j]);
+          }
 
         } else {
-	        dwBytesTransferred = 0;
+          dwBytesTransferred = 0;
         }
+        Sleep(50); // JMW20070515: give port some time to
+                   // fill... prevents ReadFile from causing the
+                   // thread to take up too much CPU
 
 	if (Port1CloseThread)
 	  dwBytesTransferred = 0;
@@ -251,15 +265,10 @@ DWORD Port1ReadThread (LPVOID lpvoid)
     GetCommModemStatus (hPort1, &dwCommModemStatus);
 
   }
-  fRxThreadTerminated = TRUE;
 
-  PurgeComm(hPort1,
-            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
-  CloseHandle (hPort1);
-#if (WINDOWSPC>0)
-    Sleep(2000); // needed for windows bug
-#endif
-  hPort1 = INVALID_HANDLE_VALUE;
+  Port1Flush();
+
+  fRxThreadTerminated = TRUE;
   return 0;
 }
 
@@ -279,26 +288,19 @@ BOOL Port1Close ()
     Port1StopRxThread();
     Sleep(100);  // todo ...
 
-#if (WINDOWSPC>0)
     dwError = 0;
-    hPort1 = INVALID_HANDLE_VALUE;
-    return TRUE;
-#else
+
     // Close the communication port.
-    if (!CloseHandle (hPort1))
-    {
+    if (!CloseHandle (hPort1)) {
       dwError = GetLastError ();
       return FALSE;
-    }
-    else
-    {
+    } else {
 #if (WINDOWSPC>0)
-    Sleep(2000); // needed for windows bug
+      Sleep(2000); // needed for windows bug
 #endif
       hPort1 = INVALID_HANDLE_VALUE;
       return TRUE;
     }
-#endif
   }
 
   return FALSE;
@@ -322,47 +324,40 @@ void Port1WriteString(TCHAR *Text)
 
 // Stop Rx Thread
 // return: TRUE on success, FALSE on error
-BOOL Port1StopRxThread(void){
+BOOL Port1StopRxThread(){
 
   if (hPort1 == INVALID_HANDLE_VALUE) return(FALSE);
+  if (fRxThreadTerminated) return (TRUE);
 
   Port1CloseThread = TRUE;
 
   DWORD tm = GetTickCount()+20000l;
 #if (WINDOWSPC>0)
-  /*
   while (!fRxThreadTerminated && (long)(tm-GetTickCount()) > 0){
     Sleep(10);
   }
-  */
-  LockFlightData();
-  TerminateThread(hRead1Thread, 0);
-  CloseHandle(hRead1Thread);
-  UnlockFlightData();
-  if (hPort1 != INVALID_HANDLE_VALUE) {
-    CloseHandle (hPort1);
-#if (WINDOWSPC>0)
-    Sleep(2000); // needed for windows bug
-#endif
+  if (!fRxThreadTerminated) {
+    TerminateThread(hRead1Thread, 0);
+  } else {
+    CloseHandle(hRead1Thread);
   }
-
 #else
-  PurgeComm(hPort1,
-            PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+
+  Port1Flush();
   // setting the comm event mask with the same value
   //  GetCommMask(hPort1, &dwMask1);
   SetCommMask(hPort1, dwMask1);         // will cancel any
                                         // WaitCommEvent!  this is a
                                         // documented CE trick to
                                         // cancel the WaitCommEvent
-  while (!fRxThreadTerminated && (long)(GetTickCount()-tm) < 100){
+  while (!fRxThreadTerminated && (long)(GetTickCount()-tm) < 1000){
     Sleep(10);
   }
   if (!fRxThreadTerminated) {
     //  #if COMMDEBUG > 0
     MessageBoxX (hWndMainWindow,
 		 gettext(TEXT("Port1 RX Thread not Terminated!")),
-		 TEXT("Error"), MB_OK);
+		 gettext(TEXT("Error")), MB_OK);
     //  #endif
   } else {
     CloseHandle(hRead1Thread);
@@ -374,8 +369,8 @@ BOOL Port1StopRxThread(void){
 
 }
 
-                                        // Restart Rx Thread
-                                        // return: TRUE on success, FALSE on error
+// Restart Rx Thread
+// return: TRUE on success, FALSE on error
 BOOL Port1StartRxThread(void){
 
   DWORD dwThreadID, dwError;
@@ -384,17 +379,20 @@ BOOL Port1StartRxThread(void){
   Port1CloseThread = FALSE;
   // Create a read thread for reading data from the communication port.
   if ((hRead1Thread = CreateThread
-      (NULL, 0, (LPTHREAD_START_ROUTINE )Port1ReadThread, 0, 0, &dwThreadID)) != NULL)
+      (NULL, 0, (LPTHREAD_START_ROUTINE )Port1ReadThread,
+       0, 0, &dwThreadID)) != NULL)
   {
-    SetThreadPriority(hRead1Thread, THREAD_PRIORITY_NORMAL); //THREAD_PRIORITY_ABOVE_NORMAL
-    CloseHandle (hRead1Thread);
+    SetThreadPriority(hRead1Thread,
+                      THREAD_PRIORITY_NORMAL); //THREAD_PRIORITY_ABOVE_NORMAL
+
+    //???? JMW Why close it here?    CloseHandle (hRead1Thread);
   }
   else                                  // Could not create the read thread.
   {
-    // TODO SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
-    // gettext(), port added on new line
-    _stprintf(sTmp, TEXT("Unable to Start RX Thread on Port %s"), sPortName),
-      MessageBoxX (hWndMainWindow, sTmp, gettext(TEXT("Error")), MB_OK);
+    _stprintf(sTmp, TEXT("%s %s"),
+              gettext(TEXT("Unable to Start RX Thread on Port")), sPortName);
+    MessageBoxX (hWndMainWindow, sTmp,
+                 gettext(TEXT("Error")), MB_OK);
     dwError = GetLastError ();
     return FALSE;
   }
@@ -405,10 +403,10 @@ BOOL Port1StartRxThread(void){
                                         // return: char readed or EOF on error
 int Port1GetChar(void){
 
-  char  inbuf[2];
+  BYTE  inbuf[2];
   DWORD dwBytesTransferred;
 
-  if (hPort1 == INVALID_HANDLE_VALUE || !Port1CloseThread) return(-1);
+  if (hPort1 == INVALID_HANDLE_VALUE || !Port1CloseThread) return(EOF);
 
   if (ReadFile(hPort1, inbuf, 1, &dwBytesTransferred, (OVERLAPPED *)NULL)) {
 
@@ -421,9 +419,9 @@ int Port1GetChar(void){
 
 }
 
-                                        // Set Rx Timeout in ms
-                                        // Timeout: Rx receive timeout in ms
-                                        // return: last set Rx timeout or -1 on error
+// Set Rx Timeout in ms
+// Timeout: Rx receive timeout in ms
+// return: last set Rx timeout or -1 on error
 int Port1SetRxTimeout(int Timeout){
 
   COMMTIMEOUTS CommTimeouts;
@@ -436,10 +434,20 @@ int Port1SetRxTimeout(int Timeout){
 
   result = CommTimeouts.ReadTotalTimeoutConstant;
 
-                                        // Change the COMMTIMEOUTS structure settings.
+  // Change the COMMTIMEOUTS structure settings.
   CommTimeouts.ReadIntervalTimeout = MAXDWORD;
-  CommTimeouts.ReadTotalTimeoutMultiplier = 0;
-  CommTimeouts.ReadTotalTimeoutConstant = Timeout;
+
+  // JMW 20070515
+  if (Timeout==0) {
+    // no total timeouts used
+    CommTimeouts.ReadTotalTimeoutMultiplier = 0;
+    CommTimeouts.ReadTotalTimeoutConstant = 0;
+  } else {
+    // only total timeout used
+    CommTimeouts.ReadTotalTimeoutMultiplier = MAXDWORD;
+    CommTimeouts.ReadTotalTimeoutConstant = Timeout;
+  }
+
   CommTimeouts.WriteTotalTimeoutMultiplier = 10;
   CommTimeouts.WriteTotalTimeoutConstant = 1000;
 
@@ -453,8 +461,9 @@ int Port1SetRxTimeout(int Timeout){
 #if (WINDOWSPC>0)
     Sleep(2000); // needed for windows bug
 #endif
-    MessageBoxX (hWndMainWindow, gettext(TEXT("Unable to Set Serial Port Timers")),
-		 TEXT("Error"), MB_OK);
+    MessageBoxX (hWndMainWindow,
+                 gettext(TEXT("Unable to Set Serial Port Timers")),
+		 gettext(TEXT("Error")), MB_OK);
     dwError = GetLastError ();
     return(-1);
   }
@@ -472,7 +481,7 @@ unsigned long Port1SetBaudrate(unsigned long BaudRate){
 
   do{
     ClearCommError(hPort1, &dwErrors, &ComStat);
-  } while(ComStat.cbOutQue > 0);
+  } while (ComStat.cbOutQue > 0);
 
   Sleep(10);
 
@@ -491,12 +500,12 @@ unsigned long Port1SetBaudrate(unsigned long BaudRate){
 
 int Port1Read(void *Buffer, size_t Size){
 
-
   DWORD dwBytesTransferred;
 
   if (hPort1 == INVALID_HANDLE_VALUE) return(-1);
 
-  if (ReadFile (hPort1, Buffer, Size, &dwBytesTransferred, (OVERLAPPED *)NULL)){
+  if (ReadFile (hPort1, Buffer, Size, &dwBytesTransferred,
+                (OVERLAPPED *)NULL)) {
 
     return(dwBytesTransferred);
 

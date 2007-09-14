@@ -125,16 +125,14 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
 
   if (Basic->Time - LogLastTime >= dtLog) {
-    if(LoggerActive) {
-      double balt = -1;
-      if (Basic->BaroAltitudeAvailable) {
-        balt = Basic->BaroAltitude;
-      } else {
-        balt = Basic->Altitude;
-      }
-      LogPoint(Basic->Latitude , Basic->Longitude , Basic->Altitude,
-               balt);
+    double balt = -1;
+    if (Basic->BaroAltitudeAvailable) {
+      balt = Basic->BaroAltitude;
+    } else {
+      balt = Basic->Altitude;
     }
+    LogPoint(Basic->Latitude , Basic->Longitude , Basic->Altitude,
+             balt);
     LogLastTime += dtLog;
     if (LogLastTime< Basic->Time-dtLog) {
       LogLastTime = Basic->Time-dtLog;
@@ -161,7 +159,7 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       }
     }
 
-    if (Basic->Time - OLCLastTime >= dtOLC) {
+    if (Calculated->Flying && (Basic->Time - OLCLastTime >= dtOLC)) {
       bool restart;
       restart = olc.addPoint(Basic->Longitude,
 			     Basic->Latitude,
@@ -218,7 +216,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   double dhlast=0;
   double altitude;
 
-  LockTerrainDataCalculations();
+  RasterTerrain::Lock();
   double retval = 0;
   int i=0;
 
@@ -230,10 +228,10 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 
   double Xrounding = fabs(lon-Basic->Longitude)/2;
   double Yrounding = fabs(lat-Basic->Latitude)/2;
-  terrain_dem_calculations.SetTerrainRounding(Xrounding, Yrounding);
+  RasterTerrain::SetTerrainRounding(Xrounding, Yrounding);
 
   altitude = Calculated->NavAltitude;
-  h =  max(0,terrain_dem_calculations.GetTerrainHeight(lat, lon));
+  h =  max(0, RasterTerrain::GetTerrainHeight(lat, lon));
   dh = altitude - h - SAFETYALTITUDETERRAIN;
   if (dh<0) {
     retval = 0;
@@ -269,7 +267,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     lon = Basic->Longitude+dlon*fi;
 
     // find height over terrain
-    h =  max(0,terrain_dem_calculations.GetTerrainHeight(lat, lon));
+    h =  max(0,RasterTerrain::GetTerrainHeight(lat, lon));
 
     dh = altitude - h - SAFETYALTITUDETERRAIN;
 
@@ -299,28 +297,18 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   retval = glidemaxrange;
 
  OnExit:
-  UnlockTerrainDataCalculations();
+  RasterTerrain::Unlock();
   return retval;
 }
 
 
 void CloseTerrain(void) {
-  LockTerrainDataCalculations();
-  LockTerrainDataGraphics();
   RasterTerrain::CloseTerrain();
-  UnlockTerrainDataCalculations();
-  UnlockTerrainDataGraphics();
 }
 
 
 void OpenTerrain(void) {
-  LockTerrainDataCalculations();
-  LockTerrainDataGraphics();
   RasterTerrain::OpenTerrain();
-  terrain_dem_graphics.ClearTerrainCache();
-  terrain_dem_calculations.ClearTerrainCache();
-  UnlockTerrainDataCalculations();
-  UnlockTerrainDataGraphics();
 }
 
 

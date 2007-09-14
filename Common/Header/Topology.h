@@ -89,6 +89,7 @@ class TopologyWriter: public Topology {
   ~TopologyWriter();
 
   void addPoint(double x, double y);
+  void Reset(void);
 };
 
 
@@ -103,7 +104,8 @@ class TopologyLabel: public Topology {
 
 };
 
-void ClipPolygon(HDC hdc, POINT *ptin, int n, RECT rc, bool fill=true);
+void ClipPolygon(HDC hdc, POINT *ptin, unsigned int n,
+                 RECT rc, bool fill=true);
 
 
 #endif

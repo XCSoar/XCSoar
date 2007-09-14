@@ -242,6 +242,8 @@ void OLCOptimizer::thin_data() {
     return;
   }
 
+  LockFlightData();
+
   int i;
   int nistart = 5;
   for (i=0; i<data.pnts_in; i++) {
@@ -294,6 +296,7 @@ void OLCOptimizer::thin_data() {
     // error!
     data.pnts_in = MAX_OLC_POINTS-1;
   }
+  UnlockFlightData();
 }
 
 
@@ -313,6 +316,8 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
   }
 
   if (busy) return false; // don't add data while in analysis
+
+  LockFlightData();
 
   data.waypointbearing = bearing;
 
@@ -377,6 +382,8 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
     }
   }
 
+  UnlockFlightData();
+
   return isminimum;
   // detect new start and return true if start detected
   // maybe make start above safety arrival height?
@@ -386,6 +393,7 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
 
 
 int OLCOptimizer::getN() {
+  if (busy) return 0; // Inhibit display if busy optimising
   return pnts;
 }
 
@@ -406,7 +414,7 @@ void OLCOptimizer::SetLine() {
 
   LockFlightData();
   pnts = data.pnts_in; // save value in case we get new data while
-		  // performing the analysis/display
+                       // performing the analysis/display
   UnlockFlightData();
 
 }
@@ -417,7 +425,9 @@ bool OLCOptimizer::Optimize(bool isflying) {
 
   flying = isflying;
 
+#ifdef DEBUG_OLC
   DWORD tm =GetTickCount();
+#endif
 
   bool retval = (optimize_internal() == 0);
   Clear();

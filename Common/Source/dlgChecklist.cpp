@@ -74,7 +74,7 @@ static void NextPage(int Step){
       _tcslen(ChecklistTitle[page])>0) {
     wf->SetCaption(ChecklistTitle[page]);
   } else {
-    wf->SetCaption(TEXT("Checklist"));
+    wf->SetCaption(gettext(TEXT("Checklist")));
   }
 
   wDetails->ResetList();
@@ -96,10 +96,10 @@ static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
     } else {
       nlen = _tcslen(text+nstart);
     }
-    if (_tcscmp(text+nstart+nlen-1,TEXT("\r"))==0) {
+    while (_tcscmp(text+nstart+nlen-1,TEXT("\r"))==0) {
       nlen--;
     }
-    if (_tcscmp(text+nstart+nlen-1,TEXT("\n"))==0) {
+    while (_tcscmp(text+nstart+nlen-1,TEXT("\n"))==0) {
       nlen--;
     }
     if (nlen>0) {
@@ -266,26 +266,21 @@ void dlgChecklistShowModal(void){
 
   //  WndProperty *wp;
 
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgChecklist_L.xml"));
     wf = dlgLoadFromXML(CallBackTable,
-
                         filename,
                         hWndMainWindow,
                         TEXT("IDR_XML_CHECKLIST_L"));
-  } else
-#endif
-    {
+  } else {
     char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgChecklist.xml"));
-  wf = dlgLoadFromXML(CallBackTable,
-
-                      filename,
-		      hWndMainWindow,
-		      TEXT("IDR_XML_CHECKLIST"));
-    }
+    LocalPathS(filename, TEXT("dlgChecklist.xml"));
+    wf = dlgLoadFromXML(CallBackTable,
+                        filename,
+                        hWndMainWindow,
+                        TEXT("IDR_XML_CHECKLIST"));
+  }
 
   nTextLines = 0;
 

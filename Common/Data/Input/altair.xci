@@ -55,14 +55,14 @@ event=DLLExecute AltairPlatform.dll WakeUp
 mode=default
 type=gce
 data=TAKEOFF
-event=Logger start
+event=AutoLogger start
 event=StatusMessage Takeoff
 
 mode=default
 type=gce
 data=LANDING
 event=StatusMessage Landing
-event=Logger stop
+event=AutoLogger stop
 
 # ------------
 # mode=default
@@ -222,7 +222,7 @@ mode=default
 type=key
 data=7
 event=Calculator
-label=$(CheckTask)
+label=$(CheckTaskResumed)$(CheckTask)
 location=6
 
 mode=default
@@ -230,7 +230,7 @@ type=key
 data=8
 event=Setup Task
 event=Mode default
-label=$(CheckWaypointFile)
+label=$(CheckTaskResumed)$(CheckWaypointFile)
 location=7
 
 mode=default
@@ -245,7 +245,7 @@ type=key
 data=0
 event=ArmAdvance show
 event=ArmAdvance toggle
-label=$(CheckTask)
+label=$(CheckTaskResumed)$(CheckTask)
 location=9
 
 mode=default
@@ -268,7 +268,7 @@ mode=Preview
 type=key
 data=7
 event=Calculator
-label=Task\nCalc$(CheckTask)
+label=Task\nCalc$(CheckTaskResumed)$(CheckTask)
 location=6
 
 mode=Preview
@@ -276,7 +276,7 @@ type=key
 data=8
 event=Setup Task
 event=Mode default
-label=Task\nEdit$(CheckWaypointFile)
+label=$(CheckTaskResumed)Task\nEdit$(CheckWaypointFile)
 location=7
 
 mode=Preview
@@ -291,7 +291,7 @@ type=key
 data=0
 event=ArmAdvance show
 event=ArmAdvance toggle
-label=$(CheckTask)Advance\n$(AdvanceArmed)
+label=$(CheckTaskResumed)$(CheckTask)Advance\n$(AdvanceArmed)
 location=9
 
 
@@ -399,7 +399,7 @@ type=key
 data=6
 event=Calculator
 event=Mode default
-label=Task\nCalc$(CheckTask)
+label=Task\nCalc$(CheckTaskResumed)$(CheckTask)
 location=5
 
 mode=Nav1
@@ -408,7 +408,7 @@ data=7
 event=ArmAdvance show
 event=ArmAdvance on
 event=Mode default
-label=$(CheckTask)Advance\n$(AdvanceArmed)
+label=$(CheckTaskResumed)$(CheckTask)Advance\n$(AdvanceArmed)
 location=6
 
 mode=Nav1
@@ -450,7 +450,7 @@ type=key
 data=6
 event=Setup Task
 event=Mode default
-label=Task\nEdit$(CheckWaypointFile)
+label=$(CheckTaskResumed)Task\nEdit$(CheckWaypointFile)
 location=5
 
 mode=Nav2
@@ -458,7 +458,7 @@ type=key
 data=7
 event=StatusMessage Task saved
 event=TaskSave persist/Default.tsk
-label=Task\nSave
+label=$(CheckTaskResumed)Task\nSave
 location=6
 
 mode=Nav2
@@ -473,7 +473,7 @@ mode=Nav2
 type=key
 data=9
 event=FlightMode finalglide toggle
-label=$(CheckTask)Final\n$(FinalForceToggleActionName)
+label=$(CheckTaskResumed)$(CheckTask)Final\n$(FinalForceToggleActionName)
 location=8
 
 mode=Nav2
@@ -616,7 +616,7 @@ type=key
 data=8
 event=MacCready auto show
 event=MacCready auto toggle
-label=$(CheckTask)MacCready\n$(MacCreadyToggleActionName)
+label=$(CheckAutoMc)MacCready\n$(MacCreadyToggleActionName)
 location=7
 
 mode=Config1
@@ -844,25 +844,24 @@ location=4
 mode=Info2
 type=key
 data=6
-event=Status system
+event=Status all
 event=Mode default
-label=Status\nSystem
+label=Status
 location=5
 
 mode=Info2
 type=key
 data=7
-event=Status Aircraft
+event=Setup Weather
 event=Mode default
-label=Status\nAircraft
+label=Weather
 location=6
 
 mode=Info2
 type=key
 data=8
-event=Status task
-event=Mode default
-label=$(CheckTask)Status\nTask
+event=Null
+label=
 location=7
 
 mode=Info2

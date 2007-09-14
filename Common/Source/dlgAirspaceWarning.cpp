@@ -87,21 +87,21 @@ static void DoAck(int Ack){
 
 static void OnAckClicked(WindowControl * Sender){
   (void)Sender;
- DoAck(3);
+  DoAck(3);
 }
 
 static void OnAck1Clicked(WindowControl * Sender){
   (void)Sender;
-	DoAck(-1);
+  DoAck(-1);
 }
 
 static void OnAck2Clicked(WindowControl * Sender){
-   (void)Sender;
-	DoAck(4);
+  (void)Sender;
+  DoAck(4);
 }
 
 static void OnEnableClicked(WindowControl * Sender){
-	(void)Sender;
+  (void)Sender;
   DoAck(0);
 }
 
@@ -505,13 +505,16 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
 extern bool RequestAirspaceWarningDialog;
 
 // WARNING: this is NOT called from the windows thread!
-void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action, AirspaceInfo_c *AirSpace) {
+void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action,
+                           AirspaceInfo_c *AirSpace) {
   (void)AirSpace;
-  if ((Action == asaItemAdded) || (Action == asaItemRemoved) || (Action == asaWarnLevelIncreased)) {
+  if ((Action == asaItemAdded) || (Action == asaItemRemoved)
+      || (Action == asaWarnLevelIncreased)) {
     actShow = true;
   }
 
-  if ((Action == asaItemAdded) || (Action == asaItemRemoved) || (Action == asaClearAll)) {
+  if ((Action == asaItemAdded) || (Action == asaItemRemoved)
+      || (Action == asaClearAll)) {
     actListSizeChange = true;
   }
 

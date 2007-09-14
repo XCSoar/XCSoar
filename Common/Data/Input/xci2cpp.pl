@@ -86,10 +86,14 @@ while (<>) {
 
 	# We don't need the quotes - ignore for now
 	} elsif (/^event\s*=\s*"*([^"]*)"*$/) {
-		push @{$rec{event}}, $1;
+		my $val = $1;
+		$val =~ s/\s*$//;
+		push @{$rec{event}}, $val;
 	} elsif (/^([a-z0-9]+)\s*=\s*"*([^"]*)"*$/) {
-		$rec{$1} = $2;
-
+		my $key = $1;
+		my $val = $2;
+		$val =~ s/\s*$//;
+		$rec{$key} = $val;
 	} else {
 		print STDERR "Error on $line - $_\n";
 	}

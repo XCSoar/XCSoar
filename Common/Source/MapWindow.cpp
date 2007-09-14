@@ -57,10 +57,13 @@ Copyright_License {
 #include "GaugeCDI.h"
 #include "GaugeFLARM.h"
 #include "InfoBoxLayout.h"
+#include "RasterTerrain.h"
 
 #if (WINDOWSPC>0)
 #include <Wingdi.h>
 #endif
+
+int misc_tick_count=0;
 
 #ifdef DEBUG
 #if (WINDOWSPC<1)
@@ -74,7 +77,7 @@ int TrailActive = TRUE;
 
 static COLORREF taskcolor = RGB(0,120,0); // was 255
 
-COLORRAMP snail_colors[] = {
+const COLORRAMP snail_colors[] = {
   {-10,          0xff, 0x50, 0x50},
   {0,           0x8f, 0x8f, 0x8f},
   {10,           0x50, 0xff, 0x50}
@@ -133,6 +136,7 @@ double MapWindow::PanLongitude = 0.0;
 bool MapWindow::EnablePan = FALSE;
 bool MapWindow::EnableTrailDrift=false;
 int MapWindow::GliderScreenPosition = 20; // 20% from bottom
+int MapWindow::WindArrowStyle = 0;
 
 BOOL MapWindow::CLOSETHREAD = FALSE;
 BOOL MapWindow::THREADRUNNING = TRUE;
@@ -240,6 +244,7 @@ bool MapWindow::MapDirty = true;
 DWORD MapWindow::fpsTime0 = 0;
 bool MapWindow::MapFullScreen = false;
 bool MapWindow::RequestFullScreen = false;
+bool MapWindow::ForceVisibilityScan = false;
 
 /////////////////////////////////
 
@@ -1044,7 +1049,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
   int X,Y;
   double Xlat, Ylat;
   double distance;
-  static bool first = true;
   int width = (int) LOWORD(lParam);
   int height = (int) HIWORD(lParam);
 
@@ -1455,17 +1459,16 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       #if defined(GNAV)
         if (wParam == 0xF5){
 
-                      if (MessageBoxX(hWnd,
-                              gettext(TEXT("Shutdown?")),
-                              gettext(TEXT("Altair system message")),
-                                MB_YESNO|MB_ICONQUESTION) == IDYES
-          ) {
+          if (MessageBoxX(hWnd,
+                          gettext(TEXT("Shutdown?")),
+                          gettext(TEXT("Altair system message")),
+                          MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
             SendMessage(hWnd,
-                                WM_ACTIVATE,
-                                MAKEWPARAM(WA_INACTIVE, 0),
-                                (LPARAM)hWndMainWindow);
-                        SendMessage (hWndMainWindow, WM_CLOSE, 0, 0);
+                        WM_ACTIVATE,
+                        MAKEWPARAM(WA_INACTIVE, 0),
+                        (LPARAM)hWndMainWindow);
+            SendMessage (hWndMainWindow, WM_CLOSE, 0, 0);
           }
 
           break;
@@ -1783,11 +1786,18 @@ void MapWindow::RenderMapWindow(  RECT rc)
       double sunelevation = 40.0;
       double sunazimuth = DisplayAngle-DerivedDrawInfo.WindBearing;
 
+      // draw sun from constant angle if very low wind speed
+      if (DerivedDrawInfo.WindSpeed<0.5) {
+        sunazimuth = DisplayAngle + 45.0;
+      }
+
       if (MapDirty) {
         // map has been dirtied since we started drawing, so hurry up
         BigZoom = true;
       }
+      LockTerrainDataGraphics();
       DrawTerrain(hdcDrawWindowBg, rc, sunazimuth, sunelevation);
+      UnlockTerrainDataGraphics();
     }
 
     if (EnableTopology) {
@@ -1858,19 +1868,19 @@ void MapWindow::RenderMapWindow(  RECT rc)
       DrawTask(hdcDrawWindowBg, rc);
     }
 
+    // draw red cross on glide through terrain marker
     if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
       DrawGlideThroughTerrain(hdcDrawWindowBg, rc);
     }
 
     DrawWaypoints(hdcDrawWindowBg,rc);
 
-    DrawFLARMTraffic(hdcDrawWindowBg, rc);
-
-    if (extGPSCONNECT) {
-      DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
+    if (EnableTerrain && (DerivedDrawInfo.TerrainValid)) {
+      DrawSpotHeights(hdcDrawWindowBg);
     }
 
     if (extGPSCONNECT) {
+      DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
       DrawBearing(hdcDrawWindowBg, Orig_Aircraft);
     }
 
@@ -1878,6 +1888,9 @@ void MapWindow::RenderMapWindow(  RECT rc)
     if (!EnablePan) {
       DrawWindAtAircraft2(hdcDrawWindowBg, Orig_Aircraft, rc);
     }
+
+    // Draw traffic
+    DrawFLARMTraffic(hdcDrawWindowBg, rc);
 
     // finally, draw you!
 
@@ -1936,11 +1949,31 @@ void MapWindow::UpdateCaches(bool force) {
   // map was dirtied while we were drawing, so skip slow process
   // (unless we haven't done it for 2000 ms)
   DWORD fpsTimeThis = ::GetTickCount();
+  static double lastTime = 0;
+  static DWORD fpsTimeMapCenter;
+
+  if (MapWindow::ForceVisibilityScan) {
+    force = true;
+    MapWindow::ForceVisibilityScan = false;
+  }
 
   // have some time, do shape file cache update if necessary
   LockTerrainDataGraphics();
   SetTopologyBounds(MapRect, force);
   UnlockTerrainDataGraphics();
+
+  // JMW experimental jpeg2000 rendering/tile management
+  // Must do this even if terrain is not displayed, because
+  // raster terrain is used by terrain footprint etc.
+  if (lastTime>DrawInfo.Time) {
+    lastTime = DrawInfo.Time;
+  }
+  if (force || (fpsTimeThis - fpsTimeMapCenter > 5000)) {
+
+    fpsTimeThis = fpsTimeMapCenter;
+    RasterTerrain::ServiceTerrainCenter(DrawInfo.Latitude,
+                                        DrawInfo.Longitude);
+  }
 
   fpsTimeThis = ::GetTickCount();
   static DWORD fpsTimeLast_terrain=0;
@@ -1949,11 +1982,11 @@ void MapWindow::UpdateCaches(bool force) {
     // have some time, do graphics terrain cache update if necessary
     if (EnableTerrain) {
       fpsTimeLast_terrain = fpsTimeThis;
-
-      OptimizeTerrainCache();
+      RasterTerrain::ServiceCache();
     }
   }
 }
+
 
 DWORD MapWindow::DrawThread (LPVOID lpvoid)
 {
@@ -2185,6 +2218,17 @@ void MapWindow::DrawAircraft(HDC hdc, POINT Orig)
       {0, -5},
       {1, -5},
     };
+
+    /* Experiment, when turning show the high wing larger,
+       low wing smaller
+    if (DerivedDrawInfo.TurnRate>10) {
+      Aircraft[3].y = 0;
+      Aircraft[12].y = 2;
+    } else if (DerivedDrawInfo.TurnRate<-10) {
+      Aircraft[3].y = 2;
+      Aircraft[12].y = 0;
+    }
+    */
 
     int n = sizeof(Aircraft)/sizeof(Aircraft[0]);
 
@@ -3063,7 +3107,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
 }
 
 
-
+/* Unused!
 void MapWindow::DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
   int i, j;
   POINT Start;
@@ -3102,12 +3146,12 @@ void MapWindow::DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
     Arrow[2].x += koff;
     Arrow[3].x += koff;
 
-    /* OLD WIND
-    POINT Arrow[4] = { {0,-15}, {0,-35}, {-5,-22}, {5,-22} };
-    Start.x = Orig.x;
-    Start.y = Orig.y;
-    Arrow[1].y =(long)( -15 - 5 * DerivedDrawInfo.WindSpeed );
-    */
+    // OLD WIND
+    //POINT Arrow[4] = { {0,-15}, {0,-35}, {-5,-22}, {5,-22} };
+    //Start.x = Orig.x;
+    //Start.y = Orig.y;
+    //Arrow[1].y =(long)( -15 - 5 * DerivedDrawInfo.WindSpeed );
+    //
 
     // JMW TODO: if wind is stronger than 10 knots, draw two arrowheads
 
@@ -3134,6 +3178,7 @@ void MapWindow::DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
 
   SelectObject(hdc, hpOld);
 }
+*/
 
 void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
   int i;
@@ -3176,6 +3221,21 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
   PolygonRotateShift(Arrow, 7, Start.x, Start.y,
             DerivedDrawInfo.WindBearing-DisplayAngle);
 
+  if (WindArrowStyle==1) {
+    POINT Tail[2] = {{0,-20}, {0,-26-min(20,wmag)*3}};
+    for(i=0; i<2; i++) {
+      if (InfoBoxLayout::scale>1) {
+        Tail[i].x *= InfoBoxLayout::scale;
+        Tail[i].y *= InfoBoxLayout::scale;
+      }
+      protateshift(Tail[i], DerivedDrawInfo.WindBearing-DisplayAngle,
+                   Start.x, Start.y);
+    }
+
+    // optionally draw dashed line
+    _DrawLine(hdc, PS_DASH, 1, Tail[0], Tail[1], RGB(0,0,0));
+  }
+
   _itot(iround(DerivedDrawInfo.WindSpeed * SPEEDMODIFY), sTmp, 10);
 
   TextInBoxMode_t TextInBoxMode = { 16 | 32 }; // JMW test {2 | 16};
@@ -3191,6 +3251,7 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
   SelectObject(hdc, hpOld);
 }
 
+/* Unused!
 void MapWindow::DrawWind(HDC hdc, POINT Orig, RECT rc)
 {
   int j;
@@ -3231,16 +3292,16 @@ void MapWindow::DrawWind(HDC hdc, POINT Orig, RECT rc)
     Arrow[2].x += koff;
     Arrow[3].x += koff;
 
-    /* OLD WIND
-    POINT Arrow[4] = { {0,-15}, {0,-35}, {-5,-22}, {5,-22} };
-    Start.x = Orig.x;
-    Start.y = Orig.y;
-    Arrow[1].y =(long)( -15 - 5 * DerivedDrawInfo.WindSpeed );
-    */
+    // OLD WIND
+    //POINT Arrow[4] = { {0,-15}, {0,-35}, {-5,-22}, {5,-22} };
+    //Start.x = Orig.x;
+    //Start.y = Orig.y;
+    //Arrow[1].y =(long)( -15 - 5 * DerivedDrawInfo.WindSpeed );
+    //
 
     // JMW TODO: if wind is stronger than 10 knots, draw two arrowheads
 
-    PolygonRotateShift(Arrow, 4, Start.x, Start.y,
+    PolygonRotateShift(Arrow, 5, Start.x, Start.y,
               DerivedDrawInfo.WindBearing-DisplayAngle);
 
     SelectObject(hdc, hpWindThick);
@@ -3259,6 +3320,7 @@ void MapWindow::DrawWind(HDC hdc, POINT Orig, RECT rc)
 
   SelectObject(hdc, hpOld);
 }
+*/
 
 
 void MapWindow::DrawBearing(HDC hdc, POINT Orig)
@@ -3354,27 +3416,7 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 }
 
 
-// RETURNS Longitude, Latitude!
 
-void MapWindow::Screen2LatLon(const int &x, const int &y,
-                              double &X, double &Y)
-{
-  int sx= x-Orig_Screen.x;
-  int sy= y-Orig_Screen.y;
-  irotate(sx, sy, DisplayAngle);
-  Y= PanLatitude-sy*InvDrawScale;
-  X = PanLongitude + sx*InvDrawScale*invfastcosine(Y);
-}
-
-void MapWindow::Screen2LatLon(const int &x, const int &y,
-                              float &X, float &Y)
-{
-  int sx= x-Orig_Screen.x;
-  int sy= y-Orig_Screen.y;
-  irotate(sx, sy, DisplayAngle);
-  Y= (float)(PanLatitude-sy*InvDrawScale);
-  X = (float)(PanLongitude+sx*InvDrawScale*invfastcosine(Y));
-}
 
 double MapWindow::GetApproxScreenRange() {
   return (MapScale * max(MapRectBig.right-MapRectBig.left,
@@ -3434,6 +3476,12 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
     if (ReplayLogger::IsEnabled()) {
       _tcscat(Scale,TEXT(" REPLAY"));
     }
+    TCHAR Buffer[20];
+    RASP.ItemLabel(RasterTerrain::render_weather, Buffer);
+    if (_tcslen(Buffer)) {
+      _tcscat(Scale,TEXT(" "));
+      _tcscat(Scale, Buffer);
+    }
 
   /*
   extern int CacheEfficiency;
@@ -3471,7 +3519,8 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
 
     #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
-    wsprintf(Scale,TEXT("            %d ms"), timestats_av);
+    wsprintf(Scale,TEXT("            %d %d ms"), timestats_av,
+             misc_tick_count);
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, Scale, _tcslen(Scale), NULL);
     #endif
 
@@ -3563,6 +3612,12 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
       if (ReplayLogger::IsEnabled()) {
         _tcscat(ScaleInfo, TEXT("REPLAY "));
       }
+      TCHAR Buffer[20];
+      RASP.ItemLabel(RasterTerrain::render_weather, Buffer);
+      if (_tcslen(Buffer)) {
+        _tcscat(ScaleInfo, Buffer);
+      }
+
       if (ScaleInfo[0]) {
         SelectObject(hDC, TitleWindowFont);
         // FontSelected = true;
@@ -3574,7 +3629,8 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
 
     #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
-    wsprintf(ScaleInfo,TEXT("           %d ms"), timestats_av);
+    wsprintf(ScaleInfo,TEXT("           %d %d ms"), timestats_av,
+             misc_tick_count);
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo,
                _tcslen(ScaleInfo), NULL);
     #endif
@@ -3730,8 +3786,9 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
       Start.y = rc.top + IBLSCALE(10);
       Start.x = rc.right - IBLSCALE(11);
 
-      if (EnableVarioGauge && MapRectBig.right == rc.right)
+      if (EnableVarioGauge && MapRectBig.right == rc.right) {
         Start.x -= InfoBoxLayout::ControlWidth;
+      }
 
       PolygonRotateShift(Arrow, 5, Start.x, Start.y,
                          -DisplayAngle);
@@ -4084,8 +4141,10 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     if (ValidTaskPoint(ActiveWayPoint)){
     // if (ActiveWayPoint >= 0) {
 
-      Offset = ((int)DerivedDrawInfo.TaskAltitudeDifference)>>4;
-      Offset0 = ((int)DerivedDrawInfo.TaskAltitudeDifference0)>>4;
+      // 60 units is size, div by 8 means 60*8 = 480 meters.
+
+      Offset = ((int)DerivedDrawInfo.TaskAltitudeDifference)/8;
+      Offset0 = ((int)DerivedDrawInfo.TaskAltitudeDifference0)/8;
       // JMW TODO: should be an angle if in final glide mode
 
       if(Offset > 60) Offset = 60;
@@ -4203,7 +4262,9 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
           SIZE  TextSize;
           HFONT oldFont;
-          int y = ((rc.bottom - rc.top )/2)-rc.top-Appearance.MapWindowBoldFont.CapitalHeight/2-1;
+          int y = GlideBar[3].y;
+          // was ((rc.bottom - rc.top )/2)-rc.top-
+          //            Appearance.MapWindowBoldFont.CapitalHeight/2-1;
           int x = GlideBar[2].x+IBLSCALE(1);
           HBITMAP Bmp;
           POINT  BmpPos;
@@ -4222,7 +4283,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
                     y+Appearance.MapWindowBoldFont.CapitalHeight+IBLSCALE(2));
 
           ExtTextOut(hDC, x+IBLSCALE(1),
-                     y+rc.top+Appearance.MapWindowBoldFont.CapitalHeight
+                     y+Appearance.MapWindowBoldFont.CapitalHeight
                      -Appearance.MapWindowBoldFont.AscentHeight+IBLSCALE(1),
                      0, NULL, Value, _tcslen(Value), NULL);
 
@@ -4540,33 +4601,34 @@ void MapWindow::DisplayAirspaceWarning(int Type, TCHAR *Name ,
 
 ////////////////////////////////////////////////////////////////////
 
-// TODO Optimise
+// RETURNS Longitude, Latitude!
 
-void MapWindow::LatLon2Screen(const float &lon, const float &lat, int &scX, int &scY) {
-  int X = iround((PanLongitude-lon)*ffastcosine(lat)*DrawScale);
-  int Y = iround((PanLatitude-lat)*DrawScale);
-
-  irotate(X, Y, DisplayAngle);
-
-  scX = Orig_Screen.x - X;
-  scY = Orig_Screen.y + Y;
+void MapWindow::OrigScreen2LatLon(const int &x, const int &y,
+                                  double &X, double &Y)
+{
+  int sx = x;
+  int sy = y;
+  irotate(sx, sy, DisplayAngle);
+  Y= PanLatitude  - sy*InvDrawScale;
+  X= PanLongitude + sx*invfastcosine(Y)*InvDrawScale;
 }
 
 
-// TODO Optimise
-void MapWindow::LatLon2Screen(const double &lon, const double &lat, int &scX, int &scY) {
-  int X = iround((PanLongitude-lon)*fastcosine(lat)*DrawScale);
-  int Y = iround((PanLatitude-lat)*DrawScale);
-
-  irotate(X, Y, DisplayAngle);
-
-  scX = Orig_Screen.x - X;
-  scY = Orig_Screen.y + Y;
+void MapWindow::Screen2LatLon(const int &x, const int &y,
+                              double &X, double &Y)
+{
+  int sx = x-(int)Orig_Screen.x;
+  int sy = y-(int)Orig_Screen.y;
+  irotate(sx, sy, DisplayAngle);
+  Y= PanLatitude  - sy*InvDrawScale;
+  X= PanLongitude + sx*invfastcosine(Y)*InvDrawScale;
 }
 
-void MapWindow::LatLon2Screen(const double &lon, const double &lat, POINT &sc) {
-  int X = (int)((PanLongitude-lon)*fastcosine(lat)*DrawScale);
-  int Y = (int)((PanLatitude-lat)*DrawScale);
+void MapWindow::LatLon2Screen(const double &lon, const double &lat,
+                              POINT &sc) {
+
+  int Y = Real2Int((PanLatitude-lat)*DrawScale);
+  int X = Real2Int((PanLongitude-lon)*fastcosine(lat)*DrawScale);
 
   irotate(X, Y, DisplayAngle);
 
@@ -4579,7 +4641,8 @@ void MapWindow::LatLon2Screen(const double &lon, const double &lat, POINT &sc) {
 
 
 #define NUMPOINTS 2
-void MapWindow::DrawSolidLine(const HDC& hdc, const POINT &ptStart, const POINT &ptEnd)
+void MapWindow::DrawSolidLine(const HDC& hdc, const POINT &ptStart,
+                              const POINT &ptEnd)
 {
   POINT pt[2];
 
@@ -4590,7 +4653,8 @@ void MapWindow::DrawSolidLine(const HDC& hdc, const POINT &ptStart, const POINT 
   Polyline(hdc, pt, NUMPOINTS);
 }
 
-void _DrawLine(HDC hdc, int PenStyle, int width, POINT ptStart, POINT ptEnd, COLORREF cr){
+void _DrawLine(HDC hdc, int PenStyle, int width,
+               POINT ptStart, POINT ptEnd, COLORREF cr){
 
   HPEN hpDash,hpOld;
   POINT pt[2];

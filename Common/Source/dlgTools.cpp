@@ -357,7 +357,7 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
 
 #if defined(WIN32) || defined(UNDER_CE)
 #ifdef _UNICODE
-#if !defined(UNDER_CE)
+#if !defined(UNDER_CE) && (WINDOWSPC<1)
       if (!IsTextUnicode(buf,mmin(l,10000),NULL))
         {
 #endif
@@ -372,7 +372,7 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
           buf=(char*)b2;
           buf[l*2]= 0;
           buf[l*2+1]= 0;
-#if !defined(UNDER_CE)
+#if !defined(UNDER_CE) && (WINDOWSPC<1)
         }
 #endif
 #else

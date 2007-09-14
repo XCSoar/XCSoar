@@ -236,8 +236,8 @@ BOOL CSTScreenBuffer::Draw(HDC* pDC, POINT ptDest)
 BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, RECT rcDest)
 {
   POINT ptDest;
-  int cx;
-  int cy;
+  unsigned int cx;
+  unsigned int cy;
 
   ptDest.x = rcDest.left;
   ptDest.y = rcDest.top;
@@ -248,14 +248,14 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, RECT rcDest)
 
 #include "InfoBoxLayout.h"
 
-BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest, int cx, int cy)
+BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest,
+                                  unsigned int cx,
+                                  unsigned int cy)
 {
   ASSERT(m_hBitmap);
   ReleaseDC();
 
   POINT Origin = {0,0};
-
-  BOOL bResult = FALSE;
 
   if (!memDc) {
     memDc = CreateCompatibleDC(*pDC);
@@ -274,15 +274,19 @@ BOOL CSTScreenBuffer::DrawStretch(HDC* pDC, POINT ptDest, int cx, int cy)
     cropsize = m_nWidth;
   }
 
-  bResult = StretchBlt(*pDC,
+  BOOL bResult = StretchBlt(*pDC,
                        ptDest.x, ptDest.y,
 		       cx, cy,
                        memDc,
 		       Origin.x, Origin.y,
 		       cropsize, m_nHeight, SRCCOPY);
+  /*
+  BitBlt(*pDC,
+         ptDest.x, ptDest.y,
+         cx, cy, memDc, 0, 0, SRCCOPY);
+  */
 
   ::SelectObject(memDc, m_hOldBitmap);
-  //  DeleteDC(memDc); memDc = NULL;
 
   return bResult;
 }
@@ -324,264 +328,87 @@ void CSTScreenBuffer::ReleaseDC()
   }
 }
 
-#define getindy(x,y) m_pBuffer[m_nCorrectedWidth*(y)+x]
-
-void CSTScreenBuffer::Smooth()
-{
-  short r,g,b;
-  int i, i0;
-  int ic;
-
-  int ix, iy;
-
-  for (iy = 0; iy< m_nHeight; iy++) {
-    for (ix = 0; ix< m_nCorrectedWidth; ix++) {
-
-      ic = 2;
-
-      i0 = m_nCorrectedWidth*iy+ix;
-      i = i0;
-
-      r = (short)(m_pBuffer[i0].m_R*ic);
-      g = (short)(m_pBuffer[i0].m_G*ic);
-      b = (short)(m_pBuffer[i0].m_B*ic);
-
-      if (ix<m_nCorrectedWidth-1) {
-	i0 = i+1;
-	r += (short)(m_pBuffer[i0].m_R);
-	g += (short)(m_pBuffer[i0].m_G);
-	b += (short)(m_pBuffer[i0].m_B);
-	ic++;
-      }
-
-      if (ix>1) {
- 	i0 = i-1;
-	r += (short)(m_pBuffer[i0].m_R);
-	g += (short)(m_pBuffer[i0].m_G);
-	b += (short)(m_pBuffer[i0].m_B);
-	ic++;
-      }
-
-      if (iy<m_nHeight-1) {
- 	i0 = i+m_nCorrectedWidth;
-	r += (short)(m_pBuffer[i0].m_R);
-	g += (short)(m_pBuffer[i0].m_G);
-	b += (short)(m_pBuffer[i0].m_B);
-	ic++;
-      }
-
-      if (iy>1) {
- 	i0 = i-m_nCorrectedWidth;
-	r += (short)(m_pBuffer[i0].m_R);
-	g += (short)(m_pBuffer[i0].m_G);
-	b += (short)(m_pBuffer[i0].m_B);
-	ic++;
-      }
-
-      m_pBufferTmp[i].m_R = (unsigned char)(r/ic);
-      m_pBufferTmp[i].m_G = (unsigned char)(g/ic);
-      m_pBufferTmp[i].m_B = (unsigned char)(b/ic);
-
-    }
-  }
-
-  // copy it back to main buffer
-  for (i=0; i<m_nCorrectedWidth*m_nHeight; i++) {
-    m_pBuffer[i] = m_pBufferTmp[i];
-  }
-
-}
 
 
-void CSTScreenBuffer::Smooth2()
-{
-
-  unsigned short r,g,b;
-  unsigned short ic;
-  /*
-  unsigned short kk[5][5] = {{0,0,1,0,0},
-			     {0,2,3,2,0},
-			     {1,3,6,3,1},
-			     {0,2,3,2,0},
-			     {0,0,1,0,0}};
-  unsigned short kk[3][3] = {{1,2,1},
-			     {2,3,2},
-			     {1,2,1}};
-  */
-
-  static unsigned short kk[25] =  {0,1,2,1,0,
-				   1,2,3,2,1,
-				   2,3,4,3,2,
-				   1,2,3,2,1,
-				   0,1,2,1,0};
-  static unsigned int kdelta[25];
-#define KSIZE 5
-#define KOFFS 2
-#define KSIZE2 25
-
-  short ix, iy;
-  short iix, iiy;
-  int ik;
-
-  BGRColor *col;
-
-  static bool initialised = false;
-
-  int i=0;
-
-  if (!initialised) {
-    for (iiy= 0; iiy<KSIZE; iiy++) {
-      for (iix= 0; iix<KSIZE; iix++) {
-	ix = (short)(iix-KOFFS);
-	iy = (short)(iiy-KOFFS);
-	kdelta[i] = m_nCorrectedWidth*iy+ix;
-	i++;
-      }
-    }
-    initialised = true;
-  }
-
-  BGRColor* mpb_out = m_pBufferTmp;
-  BGRColor* mpb_in = m_pBuffer;
-
-  for (iy = 0; iy< m_nHeight; ++iy) {
-    for (ix = 0; ix< m_nCorrectedWidth; ++ix) {
-
-      r = 0;
-      g = 0;
-      b = 0;
-      ic = 0;
-
-      i=0;
-      for (iiy= -KOFFS; iiy<=KOFFS; ++iiy) {
-	for (iix= -KOFFS; iix<=KOFFS; ++iix) {
-
-	  short dx = (short)(iix+ix);
-	  short dy = (short)(iiy+iy);
-	  if ((dx>0)&&(dx< m_nCorrectedWidth)&&
-	      (dy>0)&&(dy< m_nHeight)) {
-
-	    ik = kk[i];
-
-	    if (ik) {
-	      col = mpb_in+kdelta[i];
-	      r += (unsigned short)(ik*col->m_R);
-	      g += (unsigned short)(ik*col->m_G);
-	      b += (unsigned short)(ik*col->m_B);
-	      ic += ik;
-	    }
-	  }
-	  i++;
-	}
-      }
-
-      mpb_out->m_R = (unsigned char)(r/ic);
-      mpb_out->m_G = (unsigned char)(g/ic);
-      mpb_out->m_B = (unsigned char)(b/ic);
-      mpb_out++;
-      mpb_in++;
-    }
-  }
-
-  // copy it back to main buffer
-  memcpy((char*)m_pBuffer, (char*)m_pBufferTmp,
-	 m_nCorrectedWidth*m_nHeight*sizeof(BGRColor));
-
-}
-
-
-
-void CSTScreenBuffer::Quantise()
-{
-  BGRColor* mpb = m_pBuffer;
-  BGRColor* mpbtop = m_pBuffer+m_nCorrectedWidth*m_nHeight;
-
-  for (mpb= m_pBuffer; mpb<mpbtop; mpb++) {
-    mpb->m_R |= (0x07);
-    mpb->m_G |= (0x07);
-    mpb->m_B |= (0x07);
-  }
-
-}
-
-// 1 + 2 + 4 = 7
-
-void CSTScreenBuffer::Zoom(int step) {
+void CSTScreenBuffer::Zoom(unsigned int step) {
   BGRColor* src = m_pBuffer;
   BGRColor* dst = m_pBufferTmp;
   BGRColor* dst_start = m_pBufferTmp;
 
-  int smallx = m_nCorrectedWidth/step;
-  int smally = m_nHeight/step;
-  int j, x, y;
-  int rowsize = m_nCorrectedWidth*sizeof(BGRColor);
+  const unsigned int smallx = m_nCorrectedWidth/step;
+  const unsigned int smally = m_nHeight/step;
+  const unsigned int rowsize = m_nCorrectedWidth*sizeof(BGRColor);
+  const unsigned int wstep = m_nCorrectedWidth*step;
+  const unsigned int stepmo = step-1;
+  unsigned int j, x, y;
 
-  for (y= (smally-1); y>=0; y--) {
-    dst = m_pBufferTmp+m_nCorrectedWidth*(y*step);
-    dst_start = dst;
-    for (x=0;x< smallx; x++) {
-      for (j=0; j<step; j++) {
-	*dst = *src;
-	dst++;
+  for (y= smally; y--; ) {
+    dst = dst_start = m_pBufferTmp+y*wstep;
+    for (x= smallx; x--; src++) {
+      for (j= step; j--; ) {
+	*dst++ = *src;
       }
-      src++;
     }
     // done first row, now copy each row
-    for (j=1; j<step; j++) {
+    for (j= stepmo; j--; dst+= m_nCorrectedWidth) {
       memcpy((char*)dst, (char*)dst_start, rowsize);
-      dst+= m_nCorrectedWidth;
     }
   }
 
   // copy it back to main buffer
   memcpy((char*)m_pBuffer, (char*)m_pBufferTmp,
-	 m_nCorrectedWidth*m_nHeight*sizeof(BGRColor));
+	 rowsize*m_nHeight);
 
 }
 
 
-void CSTScreenBuffer::HorizontalBlur(int boxw) {
+void CSTScreenBuffer::HorizontalBlur(unsigned int boxw) {
 
-  int muli = (boxw*2+1);
-  int mul;
+  const unsigned int muli = (boxw*2+1);
+  unsigned int acc;
   BGRColor* src = m_pBuffer;
   BGRColor* dst = m_pBufferTmp;
   BGRColor *c;
 
-  for (int y=0;y< m_nHeight;y++)
-    {
-      int tot_r=0;
-      int tot_g=0;
-      int tot_b=0;
-      int x;
+  const unsigned int off1 = boxw+1;
+  const unsigned int off2 = m_nCorrectedWidth-boxw-1;
+  const unsigned int right = m_nCorrectedWidth-boxw;
 
-      for (x=0;x<boxw;x++) {
-        tot_r+= src[x].m_R;
-        tot_g+= src[x].m_G;
-        tot_b+= src[x].m_B;
+  for (unsigned int y=m_nHeight;y--; )
+    {
+      unsigned int tot_r=0;
+      unsigned int tot_g=0;
+      unsigned int tot_b=0;
+      unsigned int x;
+
+      for (x=boxw;x--; ) {
+        c = src+x;
+        tot_r+= c->m_R;
+        tot_g+= c->m_G;
+        tot_b+= c->m_B;
       }
       for (x=0;x< m_nCorrectedWidth; x++)
 	{
-	  mul = muli;
+	  acc = muli;
 	  if (x>boxw) {
-	    c = src-boxw-1;
+	    c = src-off1;
 	    tot_r-= c->m_R;
 	    tot_g-= c->m_G;
 	    tot_b-= c->m_B;
 	  }  else {
-	    mul -= (boxw-x);
+	    acc += x-boxw;
 	  }
-	  if (x+boxw< m_nCorrectedWidth) {
+	  if (x< right) {
 	    c = src+boxw;
 	    tot_r+= c->m_R;
 	    tot_g+= c->m_G;
 	    tot_b+= c->m_B;
 	  } else {
-	    mul -= (boxw-m_nCorrectedWidth+x+1);
+	    acc += off2-x;
 	  }
-	  dst->m_R=(unsigned char)(tot_r/mul);
-	  dst->m_G=(unsigned char)(tot_g/mul);
-	  dst->m_B=(unsigned char)(tot_b/mul);
+	  dst->m_R=(unsigned char)(tot_r/acc);
+	  dst->m_G=(unsigned char)(tot_g/acc);
+	  dst->m_B=(unsigned char)(tot_b/acc);
 
 	  src++;
 	  dst++;
@@ -594,53 +421,59 @@ void CSTScreenBuffer::HorizontalBlur(int boxw) {
 
 }
 
-void CSTScreenBuffer::VerticalBlur(int boxh) {
+void CSTScreenBuffer::VerticalBlur(unsigned int boxh) {
 
-  int mul;
+  unsigned int acc;
   BGRColor* src = m_pBuffer;
   BGRColor* dst = m_pBufferTmp;
-  BGRColor *c;
+  BGRColor *c, *d, *e;
 
-  int i;
-  int muli = (boxh*2+1);
-  int iboxh = m_nCorrectedWidth*boxh;
-  for (int x=0;x< m_nCorrectedWidth; x++)
+  const unsigned int muli = (boxh*2+1);
+  const unsigned int iboxh = m_nCorrectedWidth*boxh;
+  const unsigned int off1 = iboxh+m_nCorrectedWidth;
+  const unsigned int off2 = m_nHeight-boxh-1;
+  const unsigned int bottom = m_nHeight-boxh;
+
+  for (unsigned int x= m_nCorrectedWidth; x--;)
     {
-      int tot_r=0;
-      int tot_g=0;
-      int tot_b=0;
-      int y;
+      unsigned int tot_r=0;
+      unsigned int tot_g=0;
+      unsigned int tot_b=0;
+      unsigned int y;
 
-      for (y=0;y<boxh;y++) {
-	i = x+y*m_nCorrectedWidth;
-	tot_r+= src[i].m_R;
-	tot_g+= src[i].m_G;
-	tot_b+= src[i].m_B;
+      c = d = src+x;
+      e = dst+x;
+      for (y=boxh;y--;) {
+	tot_r+= c->m_R;
+	tot_g+= c->m_G;
+	tot_b+= c->m_B;
+        c+= m_nCorrectedWidth;
       }
-      for (y=0;y< m_nHeight; y++)
-	{
-	  mul = muli;
-	  i = x+y*m_nCorrectedWidth;
-	  if (y>boxh) {
-	    c = src+i-iboxh-m_nCorrectedWidth;
-	    tot_r-= c->m_R;
-	    tot_g-= c->m_G;
-	    tot_b-= c->m_B;
-	  }  else {
-	    mul -= (boxh-y);
-	  }
-	  if (y+boxh< m_nHeight) {
-	    c = src+i+iboxh;
-	    tot_r+= c->m_R;
-	    tot_g+= c->m_G;
-	    tot_b+= c->m_B;
-	  } else {
-	    mul -= (boxh-m_nHeight+y+1);
-	  }
-	  dst[i].m_R=(unsigned char)(tot_r/mul);
-	  dst[i].m_G=(unsigned char)(tot_g/mul);
-	  dst[i].m_B=(unsigned char)(tot_b/mul);
-	}
+
+      for (y=0;y< m_nHeight; y++) {
+        acc = muli;
+        if (y>boxh) {
+          c = d-off1;
+          tot_r-= c->m_R;
+          tot_g-= c->m_G;
+          tot_b-= c->m_B;
+        }  else {
+          acc += y-boxh;
+        }
+        if (y< bottom) {
+          c = d+iboxh;
+          tot_r+= c->m_R;
+          tot_g+= c->m_G;
+          tot_b+= c->m_B;
+        } else {
+          acc += off2-y;
+        }
+        e->m_R=(unsigned char)(tot_r/acc);
+        e->m_G=(unsigned char)(tot_g/acc);
+        e->m_B=(unsigned char)(tot_b/acc);
+        d+= m_nCorrectedWidth;
+        e+= m_nCorrectedWidth;
+      }
     }
 
   // copy it back to main buffer

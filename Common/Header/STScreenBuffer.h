@@ -69,7 +69,8 @@ public:
 
 	// Draws buffer into the given device context starting from
 	// the given point (top left corner)
-	BOOL DrawStretch(HDC *pDC, POINT ptDest, int cx, int cy);
+	BOOL DrawStretch(HDC *pDC, POINT ptDest, unsigned int cx,
+                         unsigned int cy);
 
 	HDC memDc;
 
@@ -86,24 +87,21 @@ public:
 	  m_pBuffer[i] = BGRColor(R,G,B);
 	}
 
-	void HorizontalBlur(int boxw);
-	void VerticalBlur(int boxh);
-	void Zoom(int step);
-	void Smooth2();
-	void Smooth();
-	void Quantise();
+	inline void SetPoint(int i, const BGRColor& c) {
+	  m_pBuffer[i] = c;
+	}
+        BGRColor *GetBuffer(void) {
+          return m_pBuffer;
+        }
+
+	void HorizontalBlur(unsigned int boxw);
+	void VerticalBlur(unsigned int boxh);
+	void Zoom(unsigned int step);
 
 	// Returns color of the given point
 	inline BGRColor GetPoint(int nX, int nY) {
 	  //		return m_pBuffer[m_nCorrectedWidth*(m_nHeight-nY-1)+nX];
 	  return m_pBuffer[m_nCorrectedWidth*(nY)+nX];
-	}
-
-	inline int GetPointClip(int nX, int nY) {
-	  int x = min(m_nCorrectedWidth-1,max(0,nX));
-	  int y = min(m_nHeight-1,max(0,nY));
-		      //	  return m_pBuffer[m_nCorrectedWidth*(m_nHeight-y-1)+x];
-	  return m_nCorrectedWidth*y+x;
 	}
 
 	// Returns array that contains points color information. Each
@@ -156,9 +154,9 @@ protected:
 	// height properties
 	BOOL CreateBitmap(int nWidth, int nHeight);
 
-	int m_nWidth;
-	int m_nHeight;
-	int m_nCorrectedWidth;
+	unsigned int m_nWidth;
+	unsigned int m_nHeight;
+	unsigned int m_nCorrectedWidth;
 	BGRColor *m_pBuffer;
 	BGRColor *m_pBufferTmp;
 	HBITMAP m_hBitmap;

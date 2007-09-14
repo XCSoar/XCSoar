@@ -31,11 +31,19 @@ Copyright_License {
 #include "device.h"
 
 
+#ifdef HAVEEXCEPTIONS
+#define  __try     __try
+#define  __finally __finally
+#else
+#define  __try
+#define  __finally
+#endif
+
 #include "simpleList.h"
 
 static bool NewAirspaceWarnings = false;
 static CRITICAL_SECTION  csAirspaceWarnings;
-
+static bool InitDone = false;
 #define OUTSIDE_CHECK_INTERVAL 4
 
 
@@ -59,7 +67,8 @@ static bool UpdateAirspaceAckBrush(AirspaceInfo_c *Item, int Force){
       if (AirspaceCircle) {
         res = AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush;
         AirspaceCircle[Item->AirspaceIndex]._NewWarnAckNoBrush =
-          (Item->WarnLevel > 0) && (Item->WarnLevel <= Item->Acknowledge);
+          ((Item->WarnLevel > 0) && (Item->WarnLevel <= Item->Acknowledge))
+          || (Item->Acknowledge==4);
       } else {
         res = false;
       }
@@ -67,7 +76,8 @@ static bool UpdateAirspaceAckBrush(AirspaceInfo_c *Item, int Force){
       if (AirspaceArea) {
         res = AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush;
         AirspaceArea[Item->AirspaceIndex]._NewWarnAckNoBrush =
-          (Item->WarnLevel > 0) && (Item->WarnLevel <= Item->Acknowledge);
+          ((Item->WarnLevel > 0) && (Item->WarnLevel <= Item->Acknowledge))
+          || (Item->Acknowledge==4);
       } else {
         res = false;
       }
@@ -112,9 +122,7 @@ bool AirspaceWarnGetItem(int Index, AirspaceInfo_c &Item){
   bool res = false;
 
   LockList();
-#ifdef HAVEEXCEPTIONS
   __try{
-#endif
     for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it; it = it->next, Index-- ){
       if (Index == 0){
 	Item = it->data;  // make a copy!
@@ -122,10 +130,7 @@ bool AirspaceWarnGetItem(int Index, AirspaceInfo_c &Item){
 	break;
       }
     }
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-  {
+  }__finally {
     UnLockList();
   }
   return(res);
@@ -133,17 +138,15 @@ bool AirspaceWarnGetItem(int Index, AirspaceInfo_c &Item){
 
 int AirspaceWarnGetItemCount(void){
   int res=0;
+  if (!InitDone) {
+    return res;
+  }
   LockList();
-#ifdef HAVEEXCEPTIONS
   __try{
-#endif
     for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it; it = it->next ){
       res++;
     }
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-  {
+  }__finally {
     UnLockList();
   }
   return(res);
@@ -185,7 +188,7 @@ static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, bool IsCircle, int As
     // EntryTime = ToDo
   } else {
     if (!InsideAirspaceArea(Basic->Longitude, Basic->Latitude, AsIdx)){
-      // WARNING: RangeAirspaceArea dont return negative values if insige aera -> but RangeAirspaceCircle does!
+      // WARNING: RangeAirspaceArea dont return negative values if inside aera -> but RangeAirspaceCircle does!
       double fBearing;
       *hDistance = (int)RangeAirspaceArea(Basic->Longitude, Basic->Latitude, AsIdx, &fBearing);
       *Bearing = (int)fBearing;
@@ -251,78 +254,88 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, int Sequence, bool Predicted,
 				 &Bearing, &vDistance);
   }
   LockList();
-#ifdef HAVEEXCEPTIONS
   __try{
-#endif
-  for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it; it = it->next ){
-    if ((it->data.IsCircle == IsCircle)
-	&& (it->data.AirspaceIndex == AsIdx)){   // check if already in list
+    for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin();
+         it; it = it->next ){
+      if ((it->data.IsCircle == IsCircle)
+           && (it->data.AirspaceIndex == AsIdx)){ // check if already in list
 
-      if ((it->data.Sequence == Sequence)){
-	// still updated in real pos calculation
-      } else {
-	it->data.Sequence = Sequence;
-	it->data.TimeOut = 3;
-	it->data.hDistance = hDistance;
-	it->data.vDistance = vDistance;
-	it->data.Bearing = Bearing;
-	it->data.PredictedEntryTime = EntryTime;
-	it->data.Inside = !Predicted;
-	it->data.Predicted = Predicted;
+        if ((it->data.Sequence == Sequence) && (it->data.Sequence>=0)){
+          // still updated in real pos calculation
+        } else {
 
-	if (calcWarnLevel(&it->data))
-	  AirspaceWarnListDoNotify(asaWarnLevelIncreased, &it->data);
-	else
-	  AirspaceWarnListDoNotify(asaItemChanged, &it->data);
+          it->data.Sequence = Sequence;
+          it->data.TimeOut = 3;
+          it->data.hDistance = hDistance;
+          it->data.vDistance = vDistance;
+          it->data.Bearing = Bearing;
+          it->data.PredictedEntryTime = EntryTime;
+
+          if (Sequence<0) {
+            it->data.Acknowledge = 4;
+            it->data.Inside = 0;
+            it->data.Predicted = 0;
+          } else {
+            it->data.Inside = !Predicted;
+            it->data.Predicted = Predicted;
+          }
+
+          if (calcWarnLevel(&it->data))
+            AirspaceWarnListDoNotify(asaWarnLevelIncreased, &it->data);
+          else
+            AirspaceWarnListDoNotify(asaItemChanged, &it->data);
+
+        }
+
+        it->data.InsideAckTimeOut = 20 / OUTSIDE_CHECK_INTERVAL;
+        it->data.TimeOut = OUTSIDE_CHECK_INTERVAL;
+
+        FoundInList = true;
+        break;
 
       }
-
-      it->data.InsideAckTimeOut = 20 / OUTSIDE_CHECK_INTERVAL;
-      it->data.TimeOut = OUTSIDE_CHECK_INTERVAL;
-
-      FoundInList = true;
-      break;
-
     }
+
+    if (!FoundInList){
+
+      AirspaceInfo_c asi; // not in list, add new
+
+      asi.TimeOut = OUTSIDE_CHECK_INTERVAL;
+      asi.InsideAckTimeOut = 20 / OUTSIDE_CHECK_INTERVAL;
+      asi.Sequence = Sequence;
+
+      asi.hDistance = hDistance;
+      asi.vDistance = vDistance;
+      asi.Bearing = Bearing;
+      asi.PredictedEntryTime = EntryTime;  // ETE, ToDo
+
+      if (Sequence<0) {
+        asi.Acknowledge = 4;
+        asi.Inside = 0;
+        asi.Predicted = 0;
+      } else {
+        asi.Acknowledge = 0;
+        asi.Inside = !Predicted;
+        asi.Predicted = Predicted;
+      }
+      asi.IsCircle = IsCircle;
+      asi.AirspaceIndex = AsIdx;
+      asi.SortKey = 0;
+
+      calcWarnLevel(&asi);
+
+      asi.ID = AsIdx + (IsCircle ? 10000 : 0);
+
+      AirspaceWarnings.push_front(asi);
+      UpdateAirspaceAckBrush(&asi, 0);
+
+      NewAirspaceWarnings = true;
+
+      AirspaceWarnListDoNotify(asaItemAdded, &AirspaceWarnings.begin()->data);
+    }
+  }__finally {
+    UnLockList();
   }
-
-  if (!FoundInList){
-
-    AirspaceInfo_c asi; // not in list, add new
-
-    asi.TimeOut = OUTSIDE_CHECK_INTERVAL;
-    asi.InsideAckTimeOut = 20 / OUTSIDE_CHECK_INTERVAL;
-    asi.Sequence = Sequence;
-
-    asi.hDistance = hDistance;
-    asi.vDistance = vDistance;
-    asi.Bearing = Bearing;
-    asi.PredictedEntryTime = EntryTime;  // ETE, ToDo
-
-    asi.Acknowledge = 0;
-    asi.Inside = !Predicted;
-    asi.Predicted = Predicted;
-    asi.IsCircle = IsCircle;
-    asi.AirspaceIndex = AsIdx;
-    asi.SortKey = 0;
-
-    calcWarnLevel(&asi);
-
-    asi.ID = AsIdx + (IsCircle ? 10000 : 0);
-
-    AirspaceWarnings.push_front(asi);
-    UpdateAirspaceAckBrush(&asi, 0);
-
-    NewAirspaceWarnings = true;
-
-    AirspaceWarnListDoNotify(asaItemAdded, &AirspaceWarnings.begin()->data);
-  }
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-     {
-       UnLockList();
-     }
 
 }
 
@@ -371,12 +384,13 @@ void AirspaceWarnListSort(void){
 
 }
 
+
 void AirspaceWarnListProcess(NMEA_INFO *Basic){
 
+  if (!InitDone) return;
+
   LockList();
-#ifdef HAVEEXCEPTIONS
   __try{
-#endif
 
     for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it;){
 
@@ -397,17 +411,17 @@ void AirspaceWarnListProcess(NMEA_INFO *Basic){
 				     it->data.AirspaceIndex,
 				     &hDistance, &Bearing, &vDistance);
 
-        it->data.hDistance = hDistance;                    // for all: update data
+        it->data.hDistance = hDistance; // for all: update data
         it->data.vDistance = vDistance;
         it->data.Bearing = Bearing;
-        it->data.TimeOut = OUTSIDE_CHECK_INTERVAL;         // retrigger checktimeout
+        it->data.TimeOut = OUTSIDE_CHECK_INTERVAL; // retrigger checktimeout
 
         if (calcWarnLevel(&it->data))
           AirspaceWarnListDoNotify(asaWarnLevelIncreased, &it->data);
 
         UpdateAirspaceAckBrush(&it->data, 0);
 
-        if (it->data.Acknowledge == 4){                 // whole day achnowledged
+        if (it->data.Acknowledge == 4){ // whole day achnowledged
           if (it->data.SortKey > 25000) {
             it->data.TimeOut = 60;
           }
@@ -482,10 +496,7 @@ void AirspaceWarnListProcess(NMEA_INFO *Basic){
 
     AirspaceWarnListDoNotify(asaProcessEnd, NULL);
 
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-  {
+  }__finally {
     UnLockList();
   }
 
@@ -493,9 +504,7 @@ void AirspaceWarnListProcess(NMEA_INFO *Basic){
 
 void AirspaceWarnDoAck(int ID, int Ack){
   LockList();
-#ifdef HAVEEXCEPTIONS
   __try{
-#endif
     for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it; it = it->next ){
       if (it->data.ID == ID){
 
@@ -513,29 +522,26 @@ void AirspaceWarnDoAck(int ID, int Ack){
 
       }
     }
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-  {
+  }__finally{
     UnLockList();
   }
 }
 
 
 void AirspaceWarnListClear(void){
+
+  if (!InitDone)     // called by airspace parser during init, prevent
+                     // working on unitialized data
+    return;
+
   LockList();
-#ifdef HAVEEXCEPTIONS
   __try{
-#endif
     for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it; it = it->next ){
       UpdateAirspaceAckBrush(&it->data, -1);
     }
     AirspaceWarnings.clear();
     AirspaceWarnListDoNotify(asaClearAll ,NULL);
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-  {
+  }__finally {
     UnLockList();
   }
 }
@@ -543,19 +549,23 @@ void AirspaceWarnListClear(void){
 
 void AirspaceWarnListInit(void){
   InitializeCriticalSection(&csAirspaceWarnings);
+  InitDone = true;
 }
 
 void AirspaceWarnListDeInit(void){
   DeleteCriticalSection(&csAirspaceWarnings);
+  InitDone = false;
 }
 
 int AirspaceWarnFindIndexByID(int ID){
   int idx=0;
   int res = -1;
+  if (!InitDone) {
+    return res;
+  }
+
   LockList();
-#ifdef HAVEEXCEPTIONS
   __try{
-#endif
     for (List<AirspaceInfo_c>::Node* it = AirspaceWarnings.begin(); it; it = it->next ){
       if (it->data.ID == ID){
         res = idx;
@@ -563,10 +573,7 @@ int AirspaceWarnFindIndexByID(int ID){
       }
       idx++;
     }
-#ifdef HAVEEXCEPTIONS
-  }__finally
-#endif
-  {
+  }__finally {
     UnLockList();
   }
   return(res);

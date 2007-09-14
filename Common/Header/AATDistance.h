@@ -53,6 +53,10 @@ private:
 
   double DistanceCovered_internal(double longitude, double latitude,
                                   bool insector);
+  double DistanceCovered_inside(double longitude, double latitude);
+  double DistanceCovered_outside(double longitude, double latitude);
+  double distance_achieved(int taskwaypoint, int jbest,
+                           double longitude, double latitude);
 
   void UpdateSearch(int taskwaypoint);
   void ThinData(int taskwaypoint);
@@ -69,8 +73,15 @@ private:
 
   double lat_points[MAXTASKPOINTS][MAXNUM_AATDISTANCE];
   double lon_points[MAXTASKPOINTS][MAXNUM_AATDISTANCE];
+  int best[MAXTASKPOINTS];
   int num_points[MAXTASKPOINTS];
 
+  void ShiftTargetFromBehind(double longitude, double latitude,
+                             int taskwaypoint);
+  void ShiftTargetFromInFront(double longitude, double latitude,
+                              int taskwaypoint);
+  void ShiftTargetOutside(double longitude, double latitude,
+                          int taskwaypoint);
 };
 
 #endif

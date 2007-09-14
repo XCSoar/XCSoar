@@ -59,8 +59,8 @@ static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
 static CVOImage jpgimage1;
 static CVOImage jpgimage2;
-static TCHAR path_modis[100];
-static TCHAR path_fname2[] = TEXT("\\Program Files\\omap\\ersa-benalla.jpg");
+static TCHAR path_modis[MAX_PATH];
+static TCHAR path_google[MAX_PATH];
 static TCHAR szWaypointFile[MAX_PATH] = TEXT("\0");
 static TCHAR Directory[MAX_PATH];
 
@@ -70,29 +70,55 @@ static int DrawListIndex=0;
 static int nTextLines=0;
 
 static void NextPage(int Step){
+  bool page_ok=false;
   page += Step;
-
-  if ((!WayPointList[SelectedWaypoint].Details)&&(page==1)) {
-    page++;
-  }
-
-  if (!hasimage1 && !hasimage2 && page > 2)
-    page = 0;
-  if (hasimage1 && !hasimage2 && page > 3)
-    page = 0;
-  if (hasimage1 && hasimage2 && page > 4)
-    page = 0;
-  if (!hasimage1 && !hasimage2 && page < 0)
-    page = 2;
-  if (hasimage1 && !hasimage2 && page < 0)
-    page = 3;
-  if (hasimage1 && hasimage2 && page < 0)
-    page = 4;
+  do {
+    if (page<0) {
+      page = 4;
+    }
+    if (page>4) {
+      page = 0;
+    }
+    switch(page) {
+    case 0:
+      page_ok = true;
+      break;
+    case 1:
+      if (!WayPointList[SelectedWaypoint].Details) {
+        page += Step;
+      } else {
+        page_ok = true;
+      }
+      break;
+    case 2:
+      page_ok = true;
+      break;
+    case 3:
+      if (!hasimage1) {
+        page += Step;
+      } else {
+        page_ok = true;
+      }
+      break;
+    case 4:
+      if (!hasimage2) {
+        page += Step;
+      } else {
+        page_ok = true;
+      }
+      break;
+    default:
+      page_ok = true;
+      page = 0;
+      break;
+      // error!
+    }
+  } while (!page_ok);
 
   wInfo->SetVisible(page == 0);
   wDetails->SetVisible(page == 1);
   wCommand->SetVisible(page == 2);
-  wImage->SetVisible(page > 2);
+  wImage->SetVisible(page > 3);
 
   if (page==1) {
     wDetails->ResetList();
@@ -114,10 +140,10 @@ static void OnPaintDetailsListItem(WindowControl * Sender, HDC hDC){
     } else {
       nlen = _tcslen(text+nstart);
     }
-    if (_tcscmp(text+nstart+nlen-1,TEXT("\r"))==0) {
+    while (_tcscmp(text+nstart+nlen-1,TEXT("\r"))==0) {
       nlen--;
     }
-    if (_tcscmp(text+nstart+nlen-1,TEXT("\n"))==0) {
+    while (_tcscmp(text+nstart+nlen-1,TEXT("\n"))==0) {
       nlen--;
     }
     if (nlen>0) {
@@ -270,7 +296,6 @@ void dlgWayPointDetailsShowModal(void){
   int sunsetmins;
   WndProperty *wp;
 
-#ifndef GNAV
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgWayPointDetails_L.xml"));
@@ -280,17 +305,14 @@ void dlgWayPointDetailsShowModal(void){
                         hWndMainWindow,
                         TEXT("IDR_XML_WAYPOINTDETAILS_L"));
 
-  } else
-#endif
-    {
-      char filename[MAX_PATH];
-      LocalPathS(filename, TEXT("dlgWayPointDetails.xml"));
-      wf = dlgLoadFromXML(CallBackTable,
-
-                          filename,
-                          hWndMainWindow,
-                          TEXT("IDR_XML_WAYPOINTDETAILS"));
-    }
+  } else {
+    char filename[MAX_PATH];
+    LocalPathS(filename, TEXT("dlgWayPointDetails.xml"));
+    wf = dlgLoadFromXML(CallBackTable,
+                        filename,
+                        hWndMainWindow,
+                        TEXT("IDR_XML_WAYPOINTDETAILS"));
+  }
   nTextLines = 0;
 
   if (!wf) return;
@@ -300,6 +322,9 @@ void dlgWayPointDetailsShowModal(void){
   ExtractDirectory(Directory, szWaypointFile);
 
   _stprintf(path_modis,TEXT("%s\\modis-%03d.jpg"),
+           Directory,
+           SelectedWaypoint+1);
+  _stprintf(path_google,TEXT("%s\\google-%03d.jpg"),
            Directory,
            SelectedWaypoint+1);
 
@@ -438,7 +463,7 @@ void dlgWayPointDetailsShowModal(void){
   wDetails->SetBorderKind(BORDERLEFT);
 
   wCommand->SetVisible(false);
-  wImage->SetCaption(TEXT("Blank!"));
+  wImage->SetCaption(gettext(TEXT("Blank!")));
   wImage->SetOnPaintNotify(OnImagePaint);
 
   WndButton *wb;
@@ -472,7 +497,7 @@ void dlgWayPointDetailsShowModal(void){
     wb->SetOnClickNotify(OnRemoveFromTaskClicked);
 
   hasimage1 = jpgimage1.Load(wImage->GetDeviceContext() ,path_modis );
-  hasimage2 = jpgimage2.Load(wImage->GetDeviceContext() ,path_fname2 );
+  hasimage2 = jpgimage2.Load(wImage->GetDeviceContext() ,path_google );
 
   page = 0;
 

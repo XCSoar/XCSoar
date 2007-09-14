@@ -55,10 +55,11 @@ class Statistics {
   static bool unscaled_y;
   static void ResetScale();
 
-  static void DrawXGrid(HDC hdc, RECT rc, double ticstep, double zero,
-                        int Style);
-  static void DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
-                        int Style);
+  static void FormatTicText(TCHAR *text, double val, double step);
+  static void DrawXGrid(HDC hdc, RECT rc, double tic_step, double zero,
+                        int Style, double unit_step, bool draw_units=false);
+  static void DrawYGrid(HDC hdc, RECT rc, double tic_step, double zero,
+                        int Style, double unit_step, bool draw_units=false);
 
   static void DrawXLabel(HDC hdc, RECT rc, TCHAR *text);
   static void DrawYLabel(HDC hdc, RECT rc, TCHAR *text);
