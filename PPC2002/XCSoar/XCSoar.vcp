@@ -3177,6 +3177,238 @@ NODEP_CPP_DEVVE=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Source\devVolkslogger.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_DEVVO=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devVolkslogger.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapi2.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_DEVVO=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devVolkslogger.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapi2.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_DEVVO=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devVolkslogger.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapi2.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_DEVVO=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devVolkslogger.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapi2.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_DEVVO=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\BlueDialupPort.h"\
+	"..\..\Common\Header\BlueSMS.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devVolkslogger.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\gsm_pduconv.h"\
+	"..\..\Common\Header\gsm_sms.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapi2.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Source\Dialogs.cpp
 
 !IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
@@ -3931,8 +4163,10 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_DLGAIRSP=\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
@@ -3970,8 +4204,10 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_DLGAIRSP=\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
@@ -4009,8 +4245,10 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_DLGAIRSP=\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
@@ -4048,8 +4286,10 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_DLGAIRSP=\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
@@ -4087,8 +4327,10 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
+	
+NODEP_CPP_DLGAIRSP=\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ENDIF 
@@ -19537,6 +19779,514 @@ DEP_CPP_ZUTIL=\
 	"..\..\Common\Header\zzip\zlib.h"\
 	"..\..\Common\Header\zzip\zutil.h"\
 	
+
+!ENDIF 
+
+# End Source File
+# End Group
+# Begin Group "Volkslogger"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\Common\Source\Volkslogger\dbbconv.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_DBBCO=\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_DBBCO=\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_DBBCO=\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_DBBCO=\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_DBBCO=\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\Volkslogger\grecord.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_GRECO=\
+	"..\..\Common\Header\Volkslogger\grecord.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_GRECO=\
+	"..\..\Common\Header\Volkslogger\grecord.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_GRECO=\
+	"..\..\Common\Header\Volkslogger\grecord.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_GRECO=\
+	"..\..\Common\Header\Volkslogger\grecord.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_GRECO=\
+	"..\..\Common\Header\Volkslogger\grecord.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\Volkslogger\vlapi2.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_VLAPI=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\grecord.h"\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapi2.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_VLAPI=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\grecord.h"\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapi2.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_VLAPI=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\grecord.h"\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapi2.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_VLAPI=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\grecord.h"\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapi2.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_VLAPI=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\dbbconv.h"\
+	"..\..\Common\Header\Volkslogger\grecord.h"\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapi2.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\Volkslogger\vlapihlp.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_VLAPIH=\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_VLAPIH=\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_VLAPIH=\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_VLAPIH=\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_VLAPIH=\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\Volkslogger\vlapisys_win.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_VLAPIS=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_VLAPIS=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_VLAPIS=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_VLAPIS=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_VLAPIS=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\StdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Volkslogger\vla_support.h"\
+	"..\..\Common\Header\Volkslogger\vlapierr.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\Volkslogger\vlconv.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+DEP_CPP_VLCON=\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+DEP_CPP_VLCON=\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+DEP_CPP_VLCON=\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+DEP_CPP_VLCON=\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
+
+DEP_CPP_VLCON=\
+	"..\..\Common\Header\Volkslogger\utils.h"\
+	"..\..\Common\Header\Volkslogger\vlapihlp.h"\
+	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\Volkslogger\vlutils.cpp
+
+!IF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Release"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE x86) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoar - Win32 (WCE MIPS) Release"
 
 !ENDIF 
 
