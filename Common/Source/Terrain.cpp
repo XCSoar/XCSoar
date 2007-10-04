@@ -281,18 +281,18 @@ void DrawTopology(const HDC hdc, const RECT rc)
 #define NUM_COLOR_RAMP_LEVELS 13
 
 
-const COLORRAMP weather_colors[5][NUM_COLOR_RAMP_LEVELS] = {
+const COLORRAMP weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   { // Blue to red       // vertical speed
     {   0,       0,     0,     255}, // -200
     { 100,       0,     195,   255}, // -100
     { 200,     52,      192,    11}, // 0
-    { 240,     182,     233,     4}, // 40
-    { 280,     255,     233,     0}, // 80
-    { 320,     255,     209,     0}, // 120
-    { 360,     255,     155,     0}, // 160
-    { 400,     255,     109,     0}, // 200
-    { 440,     255,     35,      0}, // 240
-    { 500,     255,     00,      0}, // 300
+    { 250,     182,     233,     4}, // 40
+    { 300,     255,     233,     0}, // 80
+    { 360,     255,     209,     0}, // 120
+    { 420,     255,     155,     0}, // 160
+    { 480,     255,     109,     0}, // 200
+    { 540,     255,     35,      0}, // 240
+    { 600,     255,     00,      0}, // 300
     {1000,         0xFF, 0x00, 0x00},
     {8000,         0xFF, 0x00, 0x00},
     {9000,         0xFF, 0x00, 0x00}
@@ -344,19 +344,34 @@ const COLORRAMP weather_colors[5][NUM_COLOR_RAMP_LEVELS] = {
   },
   { // sfctemp, blue to orange to red
     {   0,       7,      90,     255},
-    {  24,      50,     118,     255},
-    {  30,      89,     144,     255},
-    {  36,     140,     178,     255},
-    {  42,     191,     212,     255},
-    {  48,     229,     238,     255},
-    {  54,     247,     249,     255},
-    {  60,     255,     255,     204},
-    {  66,     255,     255,     153},
-    {  72,     255,     255,       0},
-    {  78,     255,     204,       0},
-    {  84,     255,     153,       0},
-    {  90,     255,       0,       0}
-  }
+    {  30,      50,     118,     255},
+    {  70,      89,     144,     255},
+    {  73,     140,     178,     255},
+    {  76,     191,     212,     255},
+    {  79,     229,     238,     255},
+    {  82,     247,     249,     255},
+    {  85,     255,     255,     204},
+    {  88,     255,     255,     153},
+    {  91,     255,     255,       0},
+    {  95,     255,     204,       0},
+    { 100,     255,     153,       0},
+    { 120,     255,       0,       0}
+  },
+  { // Blue to white to red       // vertical speed (convergence)
+    {   0,       7,      90,     255},
+    { 100,      50,     118,     255},
+    { 140,      89,     144,     255},
+    { 160,     140,     178,     255},
+    { 180,     191,     212,     255},
+    { 190,     229,     238,     255},
+    { 200,     247,     249,     255},
+    { 210,     255,     255,     204},
+    { 220,     255,     255,     153},
+    { 240,     255,     255,       0},
+    { 260,     255,     204,       0},
+    { 300,     255,     153,       0},
+    {1000,     255,     102,       0},
+  },
 };
 
 
@@ -703,9 +718,16 @@ public:
     case 8: // wblmaxmin
       is_terrain = false;
       do_water = false;
-      height_scale = 2; // max range 256*(2**2) = 1024 cm/s = 10 m/s
+      height_scale = 1; // max range 256*(1**2) = 512 cm/s = 5.0 m/s
       DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
-      color_ramp = (COLORRAMP*)&weather_colors[0][0];
+      color_ramp = (COLORRAMP*)&weather_colors[5][0];
+      break;
+    case 9: // blcwbase
+      is_terrain = false;
+      do_water = false;
+      height_scale = 4;
+      DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
+      color_ramp = (COLORRAMP*)&weather_colors[2][0];
       break;
     default:
     case 0:
@@ -1058,8 +1080,13 @@ public:
             g = 160;
             b = 255;
           } else {
+            r = 255;
+            g = 255;
+            b = 255;
+            /*
             ColorRampLookup(0, r, g, b,
                             color_ramp, NUM_COLOR_RAMP_LEVELS, interp_levels);
+            */
           }
         } else {
           ColorRampLookup(i<<height_scale, r, g, b,

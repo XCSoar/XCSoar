@@ -643,11 +643,11 @@ void ReadRegistrySettings(void)
 
   Temp = 30;
   GetFromRegistry(szRegistryWarningTime,&Temp);
-  WarningTime = Temp;
+  WarningTime = max(10,Temp);
 
   Temp = 30;
   GetFromRegistry(szRegistryAcknowledgementTime,&Temp);
-  AcknowledgementTime = Temp;
+  AcknowledgementTime = max(10,Temp);
 
   Temp = 80;
   GetFromRegistry(szRegistrySoundVolume,&Temp);
@@ -2368,7 +2368,8 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
     {
       if (Base.Altitude > 0)
         _stprintf(BaseStr,TEXT("%1.0f%s %s"),
-                  ALTITUDEMODIFY * Base.Altitude, Units::GetUnitName(Units::GetUserAltitudeUnit()),
+                  ALTITUDEMODIFY * Base.Altitude,
+                  Units::GetUnitName(Units::GetUserAltitudeUnit()),
                   gettext(TEXT("Alt")));
       else
         _stprintf(BaseStr,gettext(TEXT("GND")));
@@ -2380,7 +2381,8 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 
   if(Top.FL == 0)
     {
-      _stprintf(TopStr,TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Top.Altitude, Units::GetUnitName(Units::GetUserAltitudeUnit()),
+      _stprintf(TopStr,TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Top.Altitude,
+                Units::GetUnitName(Units::GetUserAltitudeUnit()),
                 gettext(TEXT("Alt")));
     }
   else
@@ -2391,10 +2393,11 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
   _stprintf(szMessageBuffer,TEXT("%s: %s\r\n%s: %s\r\n%s: %s\r\n"),
             szTitleBuffer,
             Name,
-            gettext(TEXT("Base")),
-            BaseStr,
             gettext(TEXT("Top")),
-            TopStr);
+            TopStr,
+            gettext(TEXT("Base")),
+            BaseStr
+            );
 }
 
 
@@ -3293,6 +3296,10 @@ void LocalPathS(char *buffer, TCHAR* file, int loc) {
 void ExpandLocalPath(TCHAR* filein) {
   // Convert %LOCALPATH% to Local Path
 
+  if (_tcslen(filein)==0) {
+    return;
+  }
+
   TCHAR lpath[MAX_PATH];
   TCHAR code[] = TEXT("%LOCAL_PATH%\\");
   TCHAR output[MAX_PATH];
@@ -3309,8 +3316,13 @@ void ExpandLocalPath(TCHAR* filein) {
   }
 }
 
+
 void ContractLocalPath(TCHAR* filein) {
   // Convert Local Path part to %LOCALPATH%
+
+  if (_tcslen(filein)==0) {
+    return;
+  }
 
   TCHAR lpath[MAX_PATH];
   TCHAR code[] = TEXT("%LOCAL_PATH%\\");

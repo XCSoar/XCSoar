@@ -23,10 +23,17 @@
 #include <string.h>
 #include <windows.h>
 #include "ts_string.h"
+#include "stdafx.h"
 
 
 void ascii2unicode(const char* ascii, WCHAR* unicode)
 {
+  if (strlen(ascii)==0) {
+    unicode[0]=0;
+    unicode[1]=0;
+    return;
+  }
+
 	if (((unsigned int)unicode & 1) == 0)
 	{	// word-aligned
 		while (*ascii != '\0')
@@ -48,6 +55,11 @@ void ascii2unicode(const char* ascii, WCHAR* unicode)
 
 void unicode2ascii(const WCHAR* unicode, char* ascii)
 {
+  if (_tcslen(unicode)==0) {
+    ascii[0] = 0;
+    return;
+  }
+
 	if (((unsigned int)unicode & 1) == 0)
 	{	// word-aligned
 		while (*unicode != '\0')
@@ -64,6 +76,12 @@ void unicode2ascii(const WCHAR* unicode, char* ascii)
 
 void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars)
 {
+  if (strlen(ascii)==0) {
+    unicode[0]=0;
+    unicode[1]=0;
+    return;
+  }
+
 	if (((unsigned int)unicode & 1) == 0)
 	{	// word-aligned
 		for (int i=0; ascii[i] != 0 && i<maxChars; i++)
@@ -85,6 +103,11 @@ void ascii2unicode(const char* ascii, WCHAR* unicode, int maxChars)
 
 void unicode2ascii(const WCHAR* unicode, char* ascii, int maxChars)
 {
+  if (_tcslen(unicode)==0) {
+    ascii[0] = 0;
+    return;
+  }
+
 	if (((unsigned int)unicode & 1) == 0)
 	{	// word-aligned
 		for (int i=0; unicode[i] != 0 && i<maxChars; i++)

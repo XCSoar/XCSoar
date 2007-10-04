@@ -92,11 +92,11 @@
   </WndProperty>
 
   <WndProperty Name="prpWarningTime" Caption="Warning time*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot." >
-    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=0 Max=1000 Step=5/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=10 Max=1000 Step=5/>
   </WndProperty>
 
   <WndProperty Name="prpAcknowledgementTime" Caption="Acknowledge time*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="This is the time period in which an acknowledged airspace warning will not be repeated.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=0 Max=1000 Step=5/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=10 Max=1000 Step=5/>
   </WndProperty>
 
   <WndProperty Name="prpAirspaceOutline" Caption="Use black outline*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2 Help="Draw a black outline around each airspace rather than the airspace color">

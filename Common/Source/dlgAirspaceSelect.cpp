@@ -43,7 +43,6 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
 
-void AirspaceWarnListAdd(NMEA_INFO *Basic, int Sequence, bool Predicted, bool IsCircle, int AsIdx);
 
 typedef struct{
   int Index_Circle;
@@ -134,11 +133,11 @@ static void OnAirspaceListEnter(WindowControl * Sender,
                          MB_YESNO|MB_ICONQUESTION) == IDYES) {
 
             if (index_circle>=0) {
-              AirspaceWarnListAdd(&GPS_INFO, -1, false, true,
-                                  index_circle);
+              AirspaceWarnListAdd(&GPS_INFO, false, true,
+                                  index_circle, true);
             } else if (index_area>=0) {
-              AirspaceWarnListAdd(&GPS_INFO, -1, false, false,
-                                  index_area);
+              AirspaceWarnListAdd(&GPS_INFO, false, false,
+                                  index_area, true);
             }
           }
         }
@@ -632,7 +631,7 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
       }
 
       int x1, x2, x3;
-      if (InfoBoxLayout::landscape) {
+      if (InfoBoxLayout::landscape || 1) {
         x1 = 115;
         x2 = x1+16;
         x3 = x1+55;
@@ -640,7 +639,7 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
         x2 = 135-16*3;
       }
 
-      if (InfoBoxLayout::landscape) {
+      if (InfoBoxLayout::landscape || 1) {
         ExtTextOut(hDC, x1*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
                    ETO_OPAQUE, NULL,
                    sTmp, _tcslen(sTmp), NULL);
@@ -652,7 +651,7 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
                  ETO_OPAQUE, NULL,
                  sTmp, _tcslen(sTmp), NULL);
 
-      if (InfoBoxLayout::landscape) {
+      if (InfoBoxLayout::landscape || 1) {
         _stprintf(sTmp, TEXT("%d°"),  iround(AirspaceSelectInfo[i].Direction));
         ExtTextOut(hDC, x3*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
                    ETO_OPAQUE, NULL,

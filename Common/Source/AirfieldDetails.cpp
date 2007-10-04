@@ -61,18 +61,23 @@ void OpenAirfieldDetails() {
   zAirfieldDetails = NULL;
 
   GetRegistryString(szRegistryAirfieldFile, szAirfieldDetailsFile, MAX_PATH);
-  ExpandLocalPath(szAirfieldDetailsFile);
-  unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
-  SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
 
-  if (strlen(zfilename)==0) {
-    static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
+  if (_tcslen(szAirfieldDetailsFile)>0) {
+    ExpandLocalPath(szAirfieldDetailsFile);
+    unicode2ascii(szAirfieldDetailsFile, zfilename, MAX_PATH);
+    SetRegistryString(szRegistryAirfieldFile, TEXT("\0"));
+  } else {
+    static TCHAR szMapFile[MAX_PATH] = TEXT("\0");
     static TCHAR szFile[MAX_PATH] = TEXT("\0");
     GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
-    ExpandLocalPath(szMapFile);
-    _tcscpy(szFile,szMapFile);
-    wcscat(szFile,TEXT("/airfields.txt"));
-    unicode2ascii(szFile, zfilename, MAX_PATH);
+    if (_tcslen(szMapFile)>0) {
+      ExpandLocalPath(szMapFile);
+      _tcscpy(szFile,szMapFile);
+      wcscat(szFile,TEXT("/airfields.txt"));
+      unicode2ascii(szFile, zfilename, MAX_PATH);
+    } else {
+      zfilename[0]= 0;
+    }
   }
   if (strlen(zfilename)>0) {
     zAirfieldDetails = zzip_fopen(zfilename,"rb");

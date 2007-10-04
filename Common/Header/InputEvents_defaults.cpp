@@ -363,9 +363,10 @@ makeLabel(mode_id,TEXT("Nearest\nWaypoint"),8,event_id);
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
+event_id = InputEvents::makeEvent(&eventStatusMessage, TEXT("Marks cleared"), event_id);
+event_id = InputEvents::makeEvent(&eventMarkLocation, TEXT("reset"), event_id);
 mode_id = InputEvents::mode2int(TEXT("pan"), true);
-makeLabel(mode_id,TEXT(""),9,event_id);
+makeLabel(mode_id,TEXT("Marks\nclear"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;

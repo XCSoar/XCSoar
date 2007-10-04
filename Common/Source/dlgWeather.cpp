@@ -67,16 +67,42 @@ static void OnDisplayItemData(DataField *Sender,
 }
 
 
+static void RASPGetTime(DataField *Sender) {
+  DataFieldEnum* dfe;
+  dfe = (DataFieldEnum*)Sender;
+  int index=0;
+  for (int i=0; i<MAX_WEATHER_TIMES; i++) {
+    if (RASP.weather_available[i]) {
+      if (RASP.weather_time == i) {
+        Sender->Set(index);
+      }
+      index++;
+    }
+  }
+}
+
+static void RASPSetTime(DataField *Sender) {
+  int index = 0;
+  for (int i=0; i<MAX_WEATHER_TIMES; i++) {
+    if (RASP.weather_available[i]) {
+      if (index == Sender->GetAsInteger()) {
+        RASP.weather_time = i;
+      }
+      index++;
+    }
+  }
+}
+
 static void OnTimeData(DataField *Sender,
                        DataField::DataAccessKind_t Mode){
 
   switch(Mode){
     case DataField::daGet:
-      Sender->Set(RASP.weather_time);
+      RASPGetTime(Sender);
     break;
     case DataField::daPut:
     case DataField::daChange:
-      RASP.weather_time = max(0,min(23,Sender->GetAsInteger()));
+      RASPSetTime(Sender);
     break;
   }
 
@@ -143,20 +169,27 @@ void dlgWeatherShowModal(void){
 
   if (wf) {
 
-    int dsecs = (int)TimeLocal((long)GPS_INFO.Time);
-    int dd = dsecs % (3600*24);
-    int hours = (dd/3600);
-    RASP.weather_time = max(RASP.weather_time, hours);
-
     wp = (WndProperty*)wf->FindByName(TEXT("prpTime"));
     if (wp) {
-      wp->GetDataField()->Set(RASP.weather_time);
+      DataFieldEnum* dfe;
+      dfe = (DataFieldEnum*)wp->GetDataField();
+      dfe->addEnumText(TEXT("Now"));
+      for (int i=1; i<MAX_WEATHER_TIMES; i++) {
+        if (RASP.weather_available[i]) {
+          TCHAR timetext[10];
+          _stprintf(timetext,TEXT("%04d"), RASP.IndexToTime(i));
+          dfe->addEnumText(timetext);
+        }
+      }
+
+      RASPGetTime(dfe);
+
       wp->RefreshDisplay();
     }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpDisplayItem"));
+    DataFieldEnum* dfe;
     if (wp) {
-      DataFieldEnum* dfe;
       dfe = (DataFieldEnum*)wp->GetDataField();
       dfe->addEnumText(gettext(TEXT("Terrain")));
 
@@ -175,9 +208,11 @@ void dlgWeatherShowModal(void){
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpTime"));
     if (wp) {
-      RASP.weather_time =
-        max(0,min(23,wp->GetDataField()->GetAsInteger()));
+      DataFieldEnum* dfe;
+      dfe = (DataFieldEnum*)wp->GetDataField();
+      RASPSetTime(dfe);
     }
+
     wp = (WndProperty*)wf->FindByName(TEXT("prpDisplayItem"));
     if (wp) {
       RasterTerrain::render_weather =
@@ -189,9 +224,10 @@ void dlgWeatherShowModal(void){
   wf = NULL;
 }
 
+
 /*
-  Todo: units conversion in routine
-  - pack into zip file
+  Todo:
+  - units conversion in routine
   - load on demand
   - time based search
   - fix dialog

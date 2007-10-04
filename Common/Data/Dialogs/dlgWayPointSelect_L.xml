@@ -10,22 +10,23 @@
 <WndForm Name="frmWayPointSelect" Type="Dialog" X=0 Y=0 Width=240 Height=320 Caption="Select Waypoint" Font=2  BackColor=0xDADBAB>
 
   <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 Caption="Filter..." />
-  <WndProperty Name="prpFltName"      Caption="Name"      X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
+  <WndButton Name="cmdClose" Caption="Close" X=100 Y=0 Width=60  Height=28 Font=2 Tag=3 />
+
+  <WndProperty Name="prpFltName"      Caption="Name"      X=2 Y=30  Width=98 Height=30 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
   </WndProperty>
-  <WndProperty Name="prpFltDistance"  Caption="Distance"  X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
-    <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
-  </WndProperty>
-  <WndProperty Name="prpFltDirection" Caption="Direction" X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
-    <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
-  </WndProperty>
-  <WndProperty Name="prpFltType" Caption="Type" X=2 Y=-1  Width=98 Height=36 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltType" Caption="Type" X=100 Y=30  Width=98 Height=30 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
   </WndProperty>
-  <WndButton Name="cmdClose" Caption="Close" X=5 Y=190 Width=60  Height=28 Font=2 Tag=3 />
+  <WndProperty Name="prpFltDistance"  Caption="Distance"  X=2 Y=60  Width=98 Height=30 CaptionWidth=0 Font=2 >
+    <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
+  </WndProperty>
+  <WndProperty Name="prpFltDirection" Caption="Direction" X=100 Y=60  Width=98 Height=30 CaptionWidth=0 Font=2 >
+    <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
+  </WndProperty>
 
-  <WndListFrame Name=frmWayPointList X=102 Y=0 Width=135 Height=300 Font=2 OnListInfo="OnWpListInfo">
-    <WndOwnerDrawFrame Name=frmWayPointListEntry X=2 Y=2 Width=155 Height=18 Font=2  OnPaint="OnPaintListItem"/>
+  <WndListFrame Name=frmWayPointList X=0 Y=90 Width=240 Height=230 Font=2 OnListInfo="OnWpListInfo">
+    <WndOwnerDrawFrame Name=frmWayPointListEntry X=2 Y=2 Width=235 Height=18 Font=2  OnPaint="OnPaintListItem"/>
   </WndListFrame>
 
 

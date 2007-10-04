@@ -233,12 +233,18 @@ public:
 };
 
 #define MAX_WEATHER_MAP 16
+#define MAX_WEATHER_TIMES 48
 
 class RasterWeather {
 public:
   RasterWeather() {
-    for (int i=0; i<MAX_WEATHER_MAP; i++) {
+    int i;
+    bsratio = false;
+    for (i=0; i<MAX_WEATHER_MAP; i++) {
       weather_map[i]= 0;
+    }
+    for (i=0; i<MAX_WEATHER_TIMES; i++) {
+      weather_available[i]= false;
     }
     weather_time = 0;
   }
@@ -247,7 +253,7 @@ public:
   }
  public:
   void Close();
-  void Reload(double lat, double lon, bool force=false);
+  void Reload(double lat, double lon);
   int weather_time;
   RasterMap* weather_map[MAX_WEATHER_MAP];
   void RASP_filename(char* rasp_filename, const TCHAR* name);
@@ -256,6 +262,11 @@ public:
   void ServiceFullReload(double lat, double lon);
   void ValueToText(TCHAR* Buffer, short val);
   void ItemLabel(int i, TCHAR* Buffer);
+  void Scan(double lat, double lon);
+  bool weather_available[MAX_WEATHER_TIMES];
+  int IndexToTime(int x);
+ private:
+  bool bsratio;
 };
 
 extern RasterWeather RASP;

@@ -183,7 +183,7 @@ void OnInfoBoxHelp(WindowControl * Sender){
     dlgHelpShowModal(caption, TEXT("[Speed MacReady]\r\nThe MacCready speed-to-fly for optimal flight to the next waypoint. In cruise flight mode, this speed-to-fly is calculated for maintaining altitude.  In final glide mode, this speed-to-fly is calculated for descent."));
     break;
   case 35:
-    dlgHelpShowModal(caption, TEXT("[Percentage climb]\r\nPercentage of time spent in climb mode."));
+    dlgHelpShowModal(caption, TEXT("[Percentage climb]\r\nPercentage of time spent in climb mode.  These statistics are reset upon starting the task."));
     break;
   case 36:
     dlgHelpShowModal(caption, TEXT("[Time of flight]\r\nTime elapsed since takeoff was detected."));

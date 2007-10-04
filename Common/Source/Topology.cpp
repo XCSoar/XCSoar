@@ -449,41 +449,24 @@ void XShapeLabel::clear() {
 /////////////////////////////////////////////////////////
 
 TopologyWriter::~TopologyWriter() {
-  if (shapefileopen)
+  if (shapefileopen) {
     Close();
+    DeleteFiles();
+  }
 }
 
 
 TopologyWriter::TopologyWriter(char* shpname, COLORREF thecolor):
   Topology(shpname, thecolor) {
-  char dbfname[100];
-
-  strcpy(dbfname, shpname );
-  strcat(dbfname, ".dbf");
-  strcpy(filename, shpname );
 
   append= true;
+  strcpy(filename, shpname );
 
-  if (shapefileopen) {
-    Close();
-  }
-  // by default, now, this overwrites previous contents
-  if (msSHPCreateFile(&shpfile, shpname, SHP_POINT) == -1) {
-  } else {
-    shpfile.hDBF = msDBFCreate(dbfname);
-    shapefileopen=true;
-    Close();
-  }
-  Open();
+  Reset();
 }
 
 
-void TopologyWriter::Reset(void) {
-  if (shapefileopen) {
-    Close();
-  }
-  append = false;
-
+void TopologyWriter::DeleteFiles(void) {
   // Delete all files, since zziplib interface doesn't handle file modes
   // properly
   if (strlen(filename)>0) {
@@ -498,12 +481,32 @@ void TopologyWriter::Reset(void) {
     _tcscat(fname, TEXT(".dbf"));
     DeleteFile(fname);
   }
+}
 
-  Open();
+
+void TopologyWriter::CreateFiles(void) {
+  // by default, now, this overwrites previous contents
+  if (msSHPCreateFile(&shpfile, filename, SHP_POINT) == -1) {
+  } else {
+    char dbfname[100];
+    strcpy(dbfname, filename );
+    strcat(dbfname, ".dbf");
+    shpfile.hDBF = msDBFCreate(dbfname);
+
+    shapefileopen=true;
+    Close();
+  }
+}
+
+
+void TopologyWriter::Reset(void) {
   if (shapefileopen) {
     Close();
   }
-  append = true;
+
+  DeleteFiles();
+  CreateFiles();
+
   Open();
 }
 
