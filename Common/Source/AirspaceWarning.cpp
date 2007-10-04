@@ -46,6 +46,7 @@ static CRITICAL_SECTION  csAirspaceWarnings;
 static bool InitDone = false;
 #define OUTSIDE_CHECK_INTERVAL 4
 
+extern int AcknowledgementTime;
 
 List<AirspaceWarningNotifier_t> AirspaceWarningNotifierList;
 
@@ -188,9 +189,11 @@ static void AirspaceWarnListCalcDistance(NMEA_INFO *Basic, bool IsCircle, int As
     // EntryTime = ToDo
   } else {
     if (!InsideAirspaceArea(Basic->Longitude, Basic->Latitude, AsIdx)){
-      // WARNING: RangeAirspaceArea dont return negative values if inside aera -> but RangeAirspaceCircle does!
+      // WARNING: RangeAirspaceArea dont return negative values if
+      // inside aera -> but RangeAirspaceCircle does!
       double fBearing;
-      *hDistance = (int)RangeAirspaceArea(Basic->Longitude, Basic->Latitude, AsIdx, &fBearing);
+      *hDistance = (int)RangeAirspaceArea(Basic->Longitude, Basic->Latitude, 
+                                          AsIdx, &fBearing);
       *Bearing = (int)fBearing;
     } else {
       *hDistance = 0;
@@ -222,7 +225,7 @@ static bool calcWarnLevel(AirspaceInfo_c *asi){
   LastWarnLevel = asi->WarnLevel;
 
   if (!asi->Inside && asi->Predicted){
-    if ((dh < 500) && (dv < 100)) {
+    if ((dh < 500) && (dv < 100)) { // JMW hardwired! 
       asi->WarnLevel = 2;
     } else
       asi->WarnLevel = 1;
@@ -240,8 +243,15 @@ static bool calcWarnLevel(AirspaceInfo_c *asi){
 
 }
 
-void AirspaceWarnListAdd(NMEA_INFO *Basic, int Sequence, bool Predicted, 
-			 bool IsCircle, int AsIdx){
+void AirspaceWarnListAdd(NMEA_INFO *Basic, bool Predicted, 
+			 bool IsCircle, int AsIdx, bool ackDay){
+
+  static int  Sequence = 0;
+
+  if (!Predicted){
+    if (++Sequence > 1000)
+      Sequence = 1;
+  }
 
   int   hDistance = 0;
   int   vDistance = 0;
@@ -271,7 +281,7 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, int Sequence, bool Predicted,
           it->data.Bearing = Bearing;
           it->data.PredictedEntryTime = EntryTime;
 
-          if (Sequence<0) {
+          if (ackDay) {
             it->data.Acknowledge = 4;
             it->data.Inside = 0;
             it->data.Predicted = 0;
@@ -287,7 +297,7 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, int Sequence, bool Predicted,
 
         }
         
-        it->data.InsideAckTimeOut = 20 / OUTSIDE_CHECK_INTERVAL;
+        it->data.InsideAckTimeOut = AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
         it->data.TimeOut = OUTSIDE_CHECK_INTERVAL;
 
         FoundInList = true;
@@ -301,7 +311,9 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, int Sequence, bool Predicted,
       AirspaceInfo_c asi; // not in list, add new
 
       asi.TimeOut = OUTSIDE_CHECK_INTERVAL;
-      asi.InsideAckTimeOut = 20 / OUTSIDE_CHECK_INTERVAL;
+
+      asi.InsideAckTimeOut = AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
+
       asi.Sequence = Sequence;
 
       asi.hDistance = hDistance;
@@ -309,7 +321,7 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, int Sequence, bool Predicted,
       asi.Bearing = Bearing;
       asi.PredictedEntryTime = EntryTime;  // ETE, ToDo
 
-      if (Sequence<0) {
+      if (ackDay) {
         asi.Acknowledge = 4;
         asi.Inside = 0;
         asi.Predicted = 0;
@@ -423,7 +435,7 @@ void AirspaceWarnListProcess(NMEA_INFO *Basic){
 
         if (it->data.Acknowledge == 4){ // whole day achnowledged
           if (it->data.SortKey > 25000) {
-            it->data.TimeOut = 60;
+            it->data.TimeOut = 60; // JMW hardwired why?
           }
           continue;
         }
@@ -447,7 +459,7 @@ void AirspaceWarnListProcess(NMEA_INFO *Basic){
               }
 
           } else { // very close, just update ack timer
-            it->data.InsideAckTimeOut = 20 / OUTSIDE_CHECK_INTERVAL; 
+            it->data.InsideAckTimeOut = AcknowledgementTime / OUTSIDE_CHECK_INTERVAL;
 	    // 20sec outside check interval prevent down ACK on circling
           }
         }

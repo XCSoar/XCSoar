@@ -557,7 +557,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 58
 	  {ugNone,            TEXT("Team Range"), TEXT("Team Dis"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 55, 57},
           // 59
-	  {ugTaskSpeed, TEXT("Speed Task Instantaneous"), TEXT("V Task"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+	  {ugTaskSpeed, TEXT("Speed Task Instantaneous"), TEXT("V Tsk Ins"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
           // 60
 	  {ugDistance, TEXT("Distance Home"), TEXT("Home Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
 	  // 61
@@ -681,11 +681,16 @@ void SettingsLeave() {
       // re-load waypoints
       ReadWayPoints();
       ReadAirfieldFile();
-      
+     
       // re-set home
       if (WAYPOINTFILECHANGED || TERRAINFILECHANGED) {
 	SetHome(WAYPOINTFILECHANGED==TRUE);
       }
+
+      // 
+      RasterTerrain::ServiceFullReload(GPS_INFO.Latitude, 
+                                       GPS_INFO.Longitude);
+
       MapWindow::ForceVisibilityScan = true;
     }
   
@@ -1206,7 +1211,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // experimental CVS 
 
-  wcscat(XCSoar_Version, TEXT("5.1.2 "));
+  wcscat(XCSoar_Version, TEXT("5.1.3 Beta2 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1336,16 +1341,16 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   OpenTerrain();
 
-  CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
-  StartupStore(TEXT("RASP load\r\n"));
-  RASP.Reload(GPS_INFO.Latitude, GPS_INFO.Longitude, true);
-
   ReadWayPoints();
   ReadAirfieldFile();
   SetHome(false);
 
   RasterTerrain::ServiceFullReload(GPS_INFO.Latitude, 
                                    GPS_INFO.Longitude);
+
+  CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
+  StartupStore(TEXT("RASP load\r\n"));
+  RASP.Scan(GPS_INFO.Latitude, GPS_INFO.Longitude);
 
   ReadAirspace();
   SortAirspace();
@@ -1983,8 +1988,8 @@ void Shutdown(void) {
 
   StartupStore(TEXT("CloseTerrainTopology\r\n"));
 
-  CloseTerrain();
   RASP.Close();
+  CloseTerrain();
 
   CloseTopology();
   CloseTerrainRenderer();
@@ -1993,10 +1998,7 @@ void Shutdown(void) {
   StartupStore(TEXT("Stop COM devices\r\n"));
   devCloseAll();
 
-  //#if !defined(GNAV)
-  // JMW disabled for GNAV currently
   SaveCalculationsPersist(&CALCULATED_INFO);
-  //#endif
 
   #if defined(GNAV) && !defined(PCGNAV)
     StartupStore(TEXT("Altair shutdown\r\n"));

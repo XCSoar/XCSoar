@@ -1631,6 +1631,7 @@ static void OnCloseClicked(WindowControl * Sender){
 
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   (void)Sender; (void)lParam;
+
   if (wGrid->GetFocused())
     return(0);
   

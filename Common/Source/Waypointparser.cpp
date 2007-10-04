@@ -64,7 +64,7 @@ static double ReadAltitude(TCHAR *temp);
 
 static TCHAR TempString[READLINE_LENGTH];
 
-int WaypointsOutOfRange = 0; // ask
+int WaypointsOutOfRange = 1; // include
 static int WaypointOutOfTerrainRangeDontAskAgain = -1;
 
 
@@ -100,6 +100,10 @@ static bool WaypointInTerrainRange(WAYPOINT *List) {
   */
 
   if (WaypointOutOfTerrainRangeDontAskAgain == 1){
+    return(true);
+  }
+
+  if (!RasterTerrain::isTerrainLoaded()) {
     return(true);
   }
 
@@ -577,7 +581,7 @@ void ReadWayPoints(void)
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
-  char zfilename[MAX_PATH];
+  char zfilename[MAX_PATH] = "\0";
         
   ZZIP_FILE *fp=NULL;
 #ifdef HAVEEXCEPTIONS
@@ -588,13 +592,13 @@ void ReadWayPoints(void)
     CloseWayPoints();
 
     GetRegistryString(szRegistryWayPointFile, szFile1, MAX_PATH);
-    ExpandLocalPath(szFile1);
 
     #ifndef HAVEEXCEPTIONS
     SetRegistryString(szRegistryWayPointFile, TEXT("\0"));  
     #endif
       
     if (_tcslen(szFile1)>0) {
+      ExpandLocalPath(szFile1);
       unicode2ascii(szFile1, zfilename, MAX_PATH);
       fp = zzip_fopen(zfilename, "rt");
     } else {
@@ -606,7 +610,7 @@ void ReadWayPoints(void)
       unicode2ascii(szMapFile, zfilename, MAX_PATH);
       fp  = zzip_fopen(zfilename, "rt");
     }
-                        
+
     if(fp != NULL)
       {
         globalFileNum = 0;
@@ -638,11 +642,11 @@ void ReadWayPoints(void)
 #endif
 
     GetRegistryString(szRegistryAdditionalWayPointFile, szFile2, MAX_PATH);
-    ExpandLocalPath(szFile2);
 
-    //SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));  
+    SetRegistryString(szRegistryAdditionalWayPointFile, TEXT("\0"));  
 
     if (_tcslen(szFile2)>0){
+      ExpandLocalPath(szFile2);
       unicode2ascii(szFile2, zfilename, MAX_PATH);
       fp = zzip_fopen(zfilename, "rt");
       if(fp != NULL){
@@ -651,7 +655,8 @@ void ReadWayPoints(void)
         zzip_fclose(fp);
         fp = NULL;
         // read OK, so set the registry to the actual file name
-        // SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);  
+        ContractLocalPath(szFile2);
+        SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);  
       }
     }
 

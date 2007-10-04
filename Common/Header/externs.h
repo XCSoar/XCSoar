@@ -256,4 +256,10 @@ extern int SCREENHEIGHT;
 
 #endif
 
+extern void AirspaceWarnListAdd(NMEA_INFO *Basic, 
+                                bool Predicted, bool IsCircle, int AsIdx,
+                                bool ackDay=false);
+
+extern void AirspaceWarnListProcess(NMEA_INFO *Basic);
+
 #endif

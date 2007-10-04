@@ -319,14 +319,46 @@ private:
 };
 
 
+class ConditionMonitorStartRules: public ConditionMonitor {
+public:
+  ConditionMonitorStartRules() {
+    Interval_Notification = 60;
+    Interval_Check = 10;
+  }
+protected:
+
+  bool CheckCondition(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {    
+    if (!ValidTaskPoint(ActiveWayPoint) || !Calculated->Flying
+        || (ActiveWayPoint>0) || !ValidTaskPoint(ActiveWayPoint+1)) {
+      return false;
+    }
+    if (Calculated->LegDistanceToGo>StartRadius) {
+      return false;
+    }
+    return !ValidStart(Basic, Calculated);
+  };
+
+  void Notify(void) {
+    DoStatusMessage(TEXT("Start rules violated"));
+  };
+
+  void SaveLast(void) {
+  };
+
+private:
+};
+
+
 ConditionMonitorWind       cm_wind;
 ConditionMonitorFinalGlide cm_finalglide;
 ConditionMonitorSunset     cm_sunset;
 ConditionMonitorAATTime    cm_aattime;
+ConditionMonitorStartRules cm_startrules;
 
 void ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   cm_wind.Update(Basic, Calculated);
   cm_finalglide.Update(Basic, Calculated);
   cm_sunset.Update(Basic, Calculated);
   cm_aattime.Update(Basic, Calculated);  
+  cm_startrules.Update(Basic, Calculated);  
 }

@@ -1513,20 +1513,22 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           Calculated->LastThermalTime = ThermalTime;
 
           if (Calculated->LastThermalAverage>0) {
-            flightstats.ThermalAverage.
-              least_squares_update(Calculated->LastThermalAverage);
+            if (ThermalTime>60.0) {
+              flightstats.ThermalAverage.
+                least_squares_update(Calculated->LastThermalAverage);
 
 #ifdef DEBUG_STATS
-            char Temp[100];
-            sprintf(Temp,"%f %f # thermal stats\n", 
-                    flightstats.ThermalAverage.m,
-                    flightstats.ThermalAverage.b
-                    );
-            DebugStore(Temp);
+              char Temp[100];
+              sprintf(Temp,"%f %f # thermal stats\n", 
+                      flightstats.ThermalAverage.m,
+                      flightstats.ThermalAverage.b
+                      );
+              DebugStore(Temp);
 #endif
-	    if (EnableThermalLocator && (ThermalTime>60)) {
-	      ThermalSources(Basic, Calculated);
-	    }
+              if (EnableThermalLocator) {
+                ThermalSources(Basic, Calculated);
+              }
+            }
 	  }
 	}
     }
@@ -2034,7 +2036,7 @@ bool ValidStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                        int *LastStartSector) {
-  BOOL StartCrossed;
+  BOOL StartCrossed= false;
 
   if (InStartSector(Basic,Calculated,*LastStartSector, &StartCrossed)) {
     Calculated->IsInSector = true;
@@ -2051,6 +2053,9 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   }
   if (StartCrossed) {
     if(!IsFinalWaypoint() && ValidStart(Basic, Calculated)) {
+
+      // This is set whether ready to advance or not, because it will
+      // appear in the flight log, so if it's valid, it's valid.
       Calculated->ValidStart = true;
 
       if (ReadyToAdvance(Calculated, true, true)) {
@@ -2070,7 +2075,8 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     
       if ((ActiveWayPoint<=1) 
           && !IsFinalWaypoint()
-          && (Calculated->ValidStart==false)) {
+          && (Calculated->ValidStart==false)
+          && (Calculated->Flying)) {
         
         // need to detect bad starts, just to get the statistics
         // in case the bad start is the best available, or the user
@@ -2312,6 +2318,36 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
+double MacCreadyOrAvClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated, 
+                              double maccready)
+{
+  double mc_val = maccready;
+  bool is_final_glide = false;
+
+  if (Calculated->FinalGlide) {
+    is_final_glide = true;
+  }
+
+  // when calculating 'achieved' task speed, need to use Mc if
+  // not in final glide, or if in final glide mode and using 
+  // auto Mc, use the average climb rate achieved so far.
+
+  if ((mc_val<0.1) || 
+      (Calculated->AutoMacCready && 
+       ((AutoMcMode==0) ||
+        ((AutoMcMode==2)&&(is_final_glide))
+        ))
+      ) {
+
+    if (flightstats.ThermalAverage.y_ave>0) {
+      mc_val = flightstats.ThermalAverage.y_ave;
+    }
+  }
+  return max(0.1, mc_val);
+
+}
+
+
 void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 {
   int ifinal;
@@ -2321,8 +2357,9 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
   double TotalTime=0, TotalDistance=0, Vfinal=0;
 
   if (!ValidTaskPoint(ActiveWayPoint)) return;
-
+  if (TaskAborted) return;
   if (Calculated->ValidFinish) return;
+  if (!Calculated->Flying) return;
 
   // in case we leave early due to error
   Calculated->TaskSpeedAchieved = 0;
@@ -2382,7 +2419,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 
     // JB's task speed...
     double hx = SpeedHeight(Basic, Calculated);
-    double t1mod = t1-hx/max(0.1,maccready);
+    double t1mod = t1-hx/MacCreadyOrAvClimbRate(Basic, Calculated, maccready);
     // only valid if flown for 5 minutes or more
     if (t1mod>300.0) {
       Calculated->TaskSpeedAchieved = d1/t1mod;
@@ -2398,6 +2435,10 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
     // distance that can be usefully final glided from here
     // (assumes average task glide angle of d0/h0)
     dFinal = min(dr, d0*min(1.0,h1/h0));
+
+    if (Calculated->ValidFinish) {
+      dFinal = 0;
+    }
     
     // equivalent distance to end of final glide
     d2 = d1+dFinal;
@@ -2518,7 +2559,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     Calculated->LegDistanceCovered = 0;
     Calculated->LegTimeToGo = 0;
 
-    Calculated->TaskSpeed = 0;
+    //    Calculated->TaskSpeed = 0;
+
     Calculated->TaskDistanceToGo = 0;
     Calculated->TaskDistanceCovered = 0;
     Calculated->TaskTimeToGo = 0;
@@ -2623,10 +2665,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   ///////////////////////////////////////////////////
   // Now add distances for start to previous waypoint
   
-  if (TaskAborted) {
-    // nothing to do to task distance covered here
-    Calculated->TaskSpeed = 0;
-  } else {
+  if (!TaskAborted) {
 
     if (!AATEnabled) {
       for(int i=0;i< ActiveWayPoint-1; i++)
@@ -2651,13 +2690,6 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         aatdistance.DistanceCovered(Basic->Longitude,
                                     Basic->Latitude,
                                     ActiveWayPoint);
-    }
-  
-    if(Basic->Time > Calculated->TaskStartTime) {
-      Calculated->TaskSpeed = 
-        Calculated->TaskDistanceCovered 
-        / (Basic->Time - Calculated->TaskStartTime); 
-      // note this is refined later in TaskSpeed()
     }
   }
   
@@ -2901,7 +2933,7 @@ void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       Calculated->NextLatitude = Basic->Latitude;
       Calculated->NextLongitude = Basic->Longitude;
       Calculated->NextAltitude = 
-        Calculated->NavAltitude + Calculated->Average30s * 30;
+        Calculated->NavAltitude + Calculated->Average30s * WarningTime;
     }
   else
     {
@@ -2927,6 +2959,7 @@ void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 bool GlobalClearAirspaceWarnings = false;
 
+// JMW this code is deprecated
 bool ClearAirspaceWarnings(bool acknowledge, bool ack_all_day) {
   unsigned int i;
   if (acknowledge) {
@@ -2958,12 +2991,6 @@ bool ClearAirspaceWarnings(bool acknowledge, bool ack_all_day) {
   return false;
 }
 
-// new style airspace warnings
-// defined in AirspaceWarning.cpp
-
-void AirspaceWarnListAdd(NMEA_INFO *Basic, int Sequence, bool Predicted, bool IsCircle, int AsIdx);
-void AirspaceWarnListProcess(NMEA_INFO *Basic);
-
 
 void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
   unsigned int i;
@@ -2972,7 +2999,6 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
       return;
 
   static bool position_is_predicted = false;
-  static int  UpdateSequence = 0;
 
   //  LockFlightData(); Not necessary, airspace stuff has its own locking
 
@@ -2984,11 +3010,6 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
   position_is_predicted = !position_is_predicted; 
   // every second time step, do predicted position rather than
   // current position
-
-  if (!position_is_predicted){
-    if (++UpdateSequence > 1000)
-      UpdateSequence = 1;
-  }
 
   double alt;
   double lat;
@@ -3021,8 +3042,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
         if (InsideAirspaceCircle(lon, lat, i) 
             && (MapWindow::iAirspaceMode[AirspaceCircle[i].Type] >= 2)){
 
-          AirspaceWarnListAdd(Basic, UpdateSequence, 
-                              position_is_predicted, 1, i);
+          AirspaceWarnListAdd(Basic, position_is_predicted, 1, i, false);
         }
         
       }
@@ -3041,8 +3061,7 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
         if ((MapWindow::iAirspaceMode[AirspaceArea[i].Type] >= 2) 
             && InsideAirspaceArea(lon, lat, i)){
 
-          AirspaceWarnListAdd(Basic, UpdateSequence, 
-                              position_is_predicted, 0, i);
+          AirspaceWarnListAdd(Basic, position_is_predicted, 0, i, false);
         }
         
       }

@@ -777,7 +777,8 @@ OnError:
 
 }
 
-static void AddAirspaceCircle(AIRSPACE_AREA *Temp, double CenterX, double CenterY, double Radius)
+static void AddAirspaceCircle(AIRSPACE_AREA *Temp, 
+                              double CenterX, double CenterY, double Radius)
 {
   AIRSPACE_CIRCLE *NewCircle = NULL;
 

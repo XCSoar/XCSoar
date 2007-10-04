@@ -196,5 +196,6 @@ void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp);
 int getFinalWaypoint(void);
+bool ValidStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 #endif

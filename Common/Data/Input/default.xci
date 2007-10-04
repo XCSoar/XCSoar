@@ -201,8 +201,9 @@ location=8
 mode=pan
 type=key
 data=0
-event=Null
-label= 
+event=StatusMessage Marks cleared
+event=MarkLocation reset
+label=Marks\nclear 
 location=9
 
 ###### main entry buttons

@@ -35,6 +35,7 @@ Copyright_License {
 #include "XCSoar.h"
 #include "Dialogs.h"
 #include "Units.h"
+#include "Process.h"
 #include "externs.h"
 
 
@@ -550,10 +551,12 @@ void RasterTerrain::OpenTerrain(void)
   SetProgressStepSize(2);
 
   TCHAR  szFile[MAX_PATH] = TEXT("\0");
+
+  GetRegistryString(szRegistryTerrainFile, szFile, MAX_PATH);
+
   TCHAR szOrigFile[MAX_PATH] = TEXT("\0");
   char zfilename[MAX_PATH];
 
-  GetRegistryString(szRegistryTerrainFile, szFile, MAX_PATH);
   ExpandLocalPath(szFile);
   _tcscpy(szOrigFile, szFile);
   ContractLocalPath(szOrigFile);
@@ -850,8 +853,10 @@ void RasterTerrain::ServiceTerrainCenter(double lat, double lon) {
 
 
 void RasterTerrain::ServiceFullReload(double lat, double lon) {
+
   Lock();
   if (TerrainMap) {
+    CreateProgressDialog(gettext(TEXT("Loading terrain tiles...")));
     TerrainMap->ServiceFullReload(lat, lon);
   }
   Unlock();
@@ -901,13 +906,21 @@ bool RasterTerrain::GetTerrainCenter(double *latitude,
 
 ////////// Weather map ////////////////////////////////////////////
 
+int RasterWeather::IndexToTime(int x) {
+  if (x % 2 == 0) {
+    return (x/2)*100;
+  } else {
+    return (x/2)*100+30;
+  }
+}
+
 
 void RasterWeather::RASP_filename(char* rasp_filename,
                                   const TCHAR* name) {
   TCHAR fname[MAX_PATH];
   _stprintf(fname,
-            TEXT("xcsoar-rasp.dat/%s.curr.%02d00lst.d2.jp2"),
-            name, weather_time);
+            TEXT("xcsoar-rasp.dat/%s.curr.%04dlst.d2.jp2"),
+            name, IndexToTime(weather_time));
   LocalPathS(rasp_filename, fname);
 }
 
@@ -926,32 +939,58 @@ bool RasterWeather::LoadItem(int item, const TCHAR* name) {
 };
 
 
-void RasterWeather::Reload(double lat, double lon, bool force) {
-  static last_weather_time = -1;
-  if (!force) {
-    if (RasterTerrain::render_weather==0) {
-      return;
+void RasterWeather::Scan(double lat, double lon) {
+  int i;
+  for (i=0; i<MAX_WEATHER_TIMES; i++) {
+    weather_time = i;   
+    weather_available[i] = LoadItem(0,TEXT("wstar"));
+    if (!weather_available[i]) {
+      weather_available[i] = LoadItem(0,TEXT("wstar_bsratio"));
+      if (weather_available[i]) {
+        bsratio = true;
+      }
     }
+    Close();
   }
-  if (weather_time<6) {
-    weather_time = 6;
+}
+
+
+void RasterWeather::Reload(double lat, double lon) {
+  static last_weather_time = -1;
+  bool found = false;
+  bool now = false;
+
+  if (RasterTerrain::render_weather == 0) {
+    return;
   }
-  if (weather_time>21) {
-    weather_time = 21;
+
+  if (weather_time== 0) {
+    int dsecs = (int)TimeLocal((long)GPS_INFO.Time);
+    int dd = dsecs % (1800*48);
+    int half_hours = (dd/1800);
+    weather_time = max(weather_time, half_hours);
+    now = true;
   }
+
   if (weather_time == last_weather_time) {
     return;
   }
   last_weather_time = weather_time;
 
-  Close();
+  weather_time = min(MAX_WEATHER_TIMES-1, max(0, weather_time));
 
-  bool found= false;
-  while ((weather_time<24) && (!found)) {
-    if (!LoadItem(0,TEXT("wstar"))) {
+  while ((weather_time<MAX_WEATHER_TIMES) && (!found)) {
+    if (!weather_available[weather_time]) {
       weather_time++;
     } else {
       found = true;
+
+      Close();
+      if (bsratio) {
+        LoadItem(0,TEXT("wstar_bsratio"));
+      } else {
+        LoadItem(0,TEXT("wstar"));
+      }
       LoadItem(1,TEXT("blwindspd"));
       LoadItem(2,TEXT("hbl"));
       LoadItem(3,TEXT("dwcrit"));
@@ -959,8 +998,16 @@ void RasterWeather::Reload(double lat, double lon, bool force) {
       LoadItem(5,TEXT("sfctemp"));
       LoadItem(6,TEXT("hwcrit"));
       LoadItem(7,TEXT("wblmaxmin"));
+      LoadItem(8,TEXT("blcwbase"));
     }
   }
+  if (!found) {
+    weather_time = 0;
+  }
+  if (now) {
+    weather_time = 0;
+  }
+
   SetViewCenter(lat, lon);
   ServiceFullReload(lat, lon);
 }
@@ -968,7 +1015,8 @@ void RasterWeather::Reload(double lat, double lon, bool force) {
 
 void RasterWeather::Close() {
   // todo: locking!
-  for (int i=0; i<MAX_WEATHER_MAP; i++) {
+  int i;
+  for (i=0; i<MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
       weather_map[i]->Close();
       delete weather_map[i];
@@ -976,6 +1024,7 @@ void RasterWeather::Close() {
     }
   }
 }
+
 
 void RasterWeather::SetViewCenter(double lat, double lon) {
   for (int i=0; i<MAX_WEATHER_MAP; i++) {
@@ -985,6 +1034,7 @@ void RasterWeather::SetViewCenter(double lat, double lon) {
   }
 }
 
+
 void RasterWeather::ServiceFullReload(double lat, double lon) {
   for (int i=0; i<MAX_WEATHER_MAP; i++) {
     if (weather_map[i]) {
@@ -993,8 +1043,10 @@ void RasterWeather::ServiceFullReload(double lat, double lon) {
   }
 }
 
+
 void RasterWeather::ItemLabel(int i, TCHAR* Buffer) {
-  Buffer[0]=0;
+  _stprintf(Buffer, TEXT("\0"));
+
   switch (i) {
   case 0:
     return;
@@ -1021,6 +1073,9 @@ void RasterWeather::ItemLabel(int i, TCHAR* Buffer) {
     return;
   case 8: // wblmaxmin
     _stprintf(Buffer, gettext(TEXT("wblmaxmin")));
+    return;
+  case 9: // blcwbase
+    _stprintf(Buffer, gettext(TEXT("blcwbase")));
     return;
   default:
     // error!
@@ -1050,7 +1105,7 @@ void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
     _stprintf(Buffer, TEXT("%d%%"), max(0,min(100,val)));
     return;
   case 6: // sfctemp
-    _stprintf(Buffer, TEXT("%d°"), val-50);
+    _stprintf(Buffer, TEXT("%d°"), iround(val*0.5-20.0));
     return;
   case 7: // hwcrit
     _stprintf(Buffer, TEXT("%.0f%s"), val*ALTITUDEMODIFY, Units::GetAltitudeName());
@@ -1058,12 +1113,17 @@ void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
   case 8: // wblmaxmin
     _stprintf(Buffer, TEXT("%.1f%s"), ((val-200)/100.0)*LIFTMODIFY, Units::GetVerticalSpeedName());
     return;
+  case 9: // blcwbase
+    _stprintf(Buffer, TEXT("%.0f%s"), val*ALTITUDEMODIFY, Units::GetAltitudeName());
+    return;
   default:
     // error!
     break;
   }
 }
 
+
+///////////
 
 RasterWeather RASP;
 

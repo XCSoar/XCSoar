@@ -90,6 +90,8 @@ class TopologyWriter: public Topology {
   
   void addPoint(double x, double y);
   void Reset(void);
+  void CreateFiles(void);
+  void DeleteFiles(void);
 };
 
 
