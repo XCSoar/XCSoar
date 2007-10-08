@@ -151,7 +151,7 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (Calculated->Flying) {
     if (Basic->Time - StatsLastTime >= dtStats) {
       flightstats.Altitude.
-        least_squares_update(Basic->Time/3600.0, 
+        least_squares_update(DetectStartTime(Basic, Calculated)/3600.0, 
                              Calculated->NavAltitude);
       StatsLastTime += dtStats;
       if (StatsLastTime< Basic->Time-dtStats) {

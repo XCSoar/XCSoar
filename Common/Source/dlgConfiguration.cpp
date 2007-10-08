@@ -1815,6 +1815,8 @@ void dlgConfigurationShowModal(void){
 
   WndProperty *wp;
 
+  StartHourglassCursor();
+
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
     LocalPathS(filename, TEXT("dlgConfiguration_L.xml"));
@@ -1899,6 +1901,7 @@ void dlgConfigurationShowModal(void){
   utcchanged = false;
   waypointneedsave = false;
 
+  StopHourglassCursor();
   wf->ShowModal();
 
   // TODO: implement a cancel button that skips all this below after exit.

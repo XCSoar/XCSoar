@@ -1346,7 +1346,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           // we will catch the takeoff height as the base.
 
           flightstats.Altitude_Base.
-            least_squares_update(Calculated->ClimbStartTime/3600.0,
+            least_squares_update(max(0,Calculated->ClimbStartTime/3600.0
+                                     - flightstats.Altitude.xstore[0]),
                                  Calculated->ClimbStartAlt);
         }
         
@@ -1400,7 +1401,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         Calculated->CruiseStartTime = StartTime;
         
         flightstats.Altitude_Ceiling.
-          least_squares_update(Calculated->CruiseStartTime/3600.0,
+          least_squares_update(max(0,Calculated->CruiseStartTime/3600.0
+                                   - flightstats.Altitude.xstore[0]),
                                Calculated->CruiseStartAlt);
         
         SwitchZoomClimb(Basic, Calculated, false, LEFT);
@@ -1485,7 +1487,8 @@ static void ThermalSources(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 	ibest = i;
       }
     }
-    Calculated->ThermalSources[ibest].LiftRate = Calculated->LastThermalAverage;
+    Calculated->ThermalSources[ibest].LiftRate = 
+      Calculated->LastThermalAverage;
     Calculated->ThermalSources[ibest].Latitude = ground_latitude;
     Calculated->ThermalSources[ibest].Longitude = ground_longitude;
     Calculated->ThermalSources[ibest].GroundHeight = ground_altitude;

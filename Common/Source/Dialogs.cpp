@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.114 2007/09/14 17:10:09 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.115 2007/10/08 07:57:43 jwharington Exp $
 
 Copyright_License {
 
@@ -405,6 +405,18 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 static HWND hProgress = NULL;
 static HWND hWndCurtain = NULL;
 
+static HCURSOR oldCursor = NULL;
+
+void StartHourglassCursor(void) {
+  HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
+  oldCursor = (HCURSOR)SetCursor(newc);
+}
+
+void StopHourglassCursor(void) {
+  SetCursor(oldCursor);
+  oldCursor = NULL;
+}
+
 void CloseProgressDialog() {
   if (hProgress) {
     DestroyWindow(hProgress);
@@ -430,6 +442,7 @@ BOOL SetProgressStepSize(int nSize) {
 		  PBM_SETSTEP, (WPARAM)nSize, 0);
   return(TRUE);
 }
+
 
 HWND CreateProgressDialog(TCHAR* text) {
 #if (WINDOWSPC>2)

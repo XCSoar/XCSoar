@@ -83,6 +83,10 @@ static void RASPGetTime(DataField *Sender) {
 
 static void RASPSetTime(DataField *Sender) {
   int index = 0;
+  if (Sender->GetAsInteger()==0) {
+    RASP.weather_time = 0;
+    return;
+  }
   for (int i=0; i<MAX_WEATHER_TIMES; i++) {
     if (RASP.weather_available[i]) {
       if (index == Sender->GetAsInteger()) {

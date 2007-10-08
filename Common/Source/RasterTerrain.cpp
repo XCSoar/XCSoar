@@ -952,6 +952,7 @@ void RasterWeather::Scan(double lat, double lon) {
     }
     Close();
   }
+  weather_time = 0;
 }
 
 
@@ -961,24 +962,33 @@ void RasterWeather::Reload(double lat, double lon) {
   bool now = false;
 
   if (RasterTerrain::render_weather == 0) {
+    // will be drawing terrain
     return;
   }
 
   if (weather_time== 0) {
+    // "Now" time, so find time in half hours
     int dsecs = (int)TimeLocal((long)GPS_INFO.Time);
-    int dd = dsecs % (1800*48);
-    int half_hours = (dd/1800);
+    int half_hours = (dsecs/1800) % 48;
     weather_time = max(weather_time, half_hours);
     now = true;
   }
 
-  if (weather_time == last_weather_time) {
-    return;
-  }
-  last_weather_time = weather_time;
-
+  // limit values, for safety
   weather_time = min(MAX_WEATHER_TIMES-1, max(0, weather_time));
 
+  if (weather_time == last_weather_time) {
+    // no change, quick exit.
+    if (now) {
+      // must return to 0 = Now time on exit
+      weather_time = 0;
+    }
+    return;
+  } else {
+    last_weather_time = weather_time;
+  }
+
+  // scan forward to next valid time
   while ((weather_time<MAX_WEATHER_TIMES) && (!found)) {
     if (!weather_available[weather_time]) {
       weather_time++;
@@ -1001,10 +1011,9 @@ void RasterWeather::Reload(double lat, double lon) {
       LoadItem(8,TEXT("blcwbase"));
     }
   }
-  if (!found) {
-    weather_time = 0;
-  }
-  if (now) {
+
+  // can't find valid time, so reset to zero
+  if (!found || now) {
     weather_time = 0;
   }
 
