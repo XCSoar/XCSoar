@@ -405,6 +405,18 @@ void SetWindowText_gettext(HWND hDlg, int entry) {
 static HWND hProgress = NULL;
 static HWND hWndCurtain = NULL;
 
+static HCURSOR oldCursor = NULL;
+
+void StartHourglassCursor(void) {
+  HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
+  oldCursor = (HCURSOR)SetCursor(newc);
+}
+
+void StopHourglassCursor(void) {
+  SetCursor(oldCursor);
+  oldCursor = NULL;
+}
+
 void CloseProgressDialog() {
   if (hProgress) {
     DestroyWindow(hProgress);
@@ -430,6 +442,7 @@ BOOL SetProgressStepSize(int nSize) {
 		  PBM_SETSTEP, (WPARAM)nSize, 0);
   return(TRUE);
 }
+
 
 HWND CreateProgressDialog(TCHAR* text) {
 #if (WINDOWSPC>2)

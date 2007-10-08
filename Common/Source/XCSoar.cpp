@@ -1918,6 +1918,7 @@ void Shutdown(void) {
   int i;
 
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
+  StartHourglassCursor();
 
   StartupStore(TEXT("Entering shutdown...\r\n"));
   StartupLogFreeRamAndStorage();
@@ -2001,6 +2002,7 @@ void Shutdown(void) {
   SaveCalculationsPersist(&CALCULATED_INFO);
 
   #if defined(GNAV) && !defined(PCGNAV)
+    StopHourglassCursor();
     StartupStore(TEXT("Altair shutdown\r\n"));
     Sleep(2500);
     InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
@@ -2106,6 +2108,7 @@ void Shutdown(void) {
 #endif
 
   StartupStore(TEXT("Finished shutdown\r\n"));
+  StopHourglassCursor();
 
 }
 

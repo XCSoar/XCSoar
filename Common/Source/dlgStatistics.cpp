@@ -1284,6 +1284,14 @@ static void SetCalcCaption(TCHAR* caption) {
   }
 }
 
+#define ANALYSIS_PAGE_BAROGRAPH    0
+#define ANALYSIS_PAGE_CLIMB        1
+#define ANALYSIS_PAGE_WIND         2
+#define ANALYSIS_PAGE_POLAR        3
+#define ANALYSIS_PAGE_TEMPTRACE    4
+#define ANALYSIS_PAGE_TASK         5
+#define ANALYSIS_PAGE_OLC          6
+#define ANALYSIS_PAGE_AIRSPACE     7
 
 static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
 
@@ -1299,43 +1307,47 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
   SetBkMode(hDC, TRANSPARENT);
   SetTextColor(hDC, Sender->GetForeColor());
 
-  if (page==0) {
+  switch (page) {
+  case ANALYSIS_PAGE_BAROGRAPH:
     SetCalcCaption(TEXT("Settings"));
     Statistics::RenderBarograph(hDC, rcgfx);
-  }
-  if (page==1) {
+    break;
+  case ANALYSIS_PAGE_CLIMB:
     SetCalcCaption(TEXT("Task calc"));
     Statistics::RenderClimb(hDC, rcgfx);
-  }
-  if (page==2) {
+    break;
+  case ANALYSIS_PAGE_WIND:
     SetCalcCaption(TEXT("Set wind"));
     Statistics::RenderWind(hDC, rcgfx);
-  }
-  if (page==3) {
+    break;
+  case ANALYSIS_PAGE_POLAR:
     SetCalcCaption(TEXT("Settings"));
     Statistics::RenderGlidePolar(hDC, rcgfx);
-  }
-  if (page==4) {
+    break;
+  case ANALYSIS_PAGE_TEMPTRACE:
     SetCalcCaption(TEXT("Settings"));
     Statistics::RenderTemperature(hDC, rcgfx);
-  }
-  if (page==5) {
+    break;
+  case ANALYSIS_PAGE_TASK:
     SetCalcCaption(TEXT("Task calc"));
     LockTaskData();
     Statistics::RenderTask(hDC, rcgfx, false);
     UnlockTaskData();
-  }
-  if (page==6) {
+    break;
+  case ANALYSIS_PAGE_OLC:
     SetCalcCaption(TEXT("Optimise"));
     LockTaskData();
     Statistics::RenderTask(hDC, rcgfx, true);
     UnlockTaskData();
-  }
-  if (page==7) {
+    break;
+  case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(TEXT("Warnings"));
     Statistics::RenderAirspace(hDC, rcgfx);
+    break;
+  default:
+    // should never get here!
+    break;
   }
-
   SelectObject(hDC, hfOld);
 
 }
@@ -1349,43 +1361,63 @@ static void Update(void){
   double d=0;
 
   switch(page){
-    case 0:
+    case ANALYSIS_PAGE_BAROGRAPH:
       _stprintf(sTmp, TEXT("%s: %s"),
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Barograph")));
       wf->SetCaption(sTmp);
+      if (flightstats.Altitude_Ceiling.sum_n<2) {
+        _stprintf(sTmp, TEXT("\0"));
+      } else if (flightstats.Altitude_Ceiling.sum_n<4) {
+        _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:"),
+                  gettext(TEXT("Working band")),
+                  flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
+                  flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
+                  Units::GetAltitudeName());
 
-      _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
-             gettext(TEXT("Working band")),
-             flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
-             flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
-             Units::GetAltitudeName(),
-             gettext(TEXT("Ceiling trend")),
-             flightstats.Altitude_Ceiling.m*ALTITUDEMODIFY,
-             Units::GetAltitudeName());
+      } else {
 
+        _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:\r\n  %.0f %s/hr"),
+                  gettext(TEXT("Working band")),
+                  flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
+                  flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
+                  Units::GetAltitudeName(),
+                  gettext(TEXT("Ceiling trend")),
+                  flightstats.Altitude_Ceiling.m*ALTITUDEMODIFY,
+                  Units::GetAltitudeName());
+      }
       wInfo->SetCaption(sTmp);
 
     break;
-    case 1:
+    case ANALYSIS_PAGE_CLIMB:
       _stprintf(sTmp, TEXT("%s: %s"),
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Climb")));
       wf->SetCaption(sTmp);
 
-      _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
-             gettext(TEXT("Av climb")),
-             flightstats.ThermalAverage.y_ave*LIFTMODIFY,
-             Units::GetVerticalSpeedName(),
-             gettext(TEXT("Climb trend")),
-             flightstats.ThermalAverage.m*LIFTMODIFY,
-             Units::GetVerticalSpeedName()
-             );
+      if (flightstats.ThermalAverage.sum_n==0) {
+        _stprintf(sTmp, TEXT("\0"));
+      } else if (flightstats.ThermalAverage.sum_n==1) {
+        _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s"),
+                  gettext(TEXT("Av climb")),
+                  flightstats.ThermalAverage.y_ave*LIFTMODIFY,
+                  Units::GetVerticalSpeedName()
+                  );
+      } else {
+        _stprintf(sTmp, TEXT("%s:\r\n  %3.1f %s\r\n\r\n%s:\r\n  %3.2f %s"),
+                  gettext(TEXT("Av climb")),
+                  flightstats.ThermalAverage.y_ave*LIFTMODIFY,
+                  Units::GetVerticalSpeedName(),
+                  gettext(TEXT("Climb trend")),
+                  flightstats.ThermalAverage.m*LIFTMODIFY,
+                  Units::GetVerticalSpeedName()
+                  );
+      }
 
       wInfo->SetCaption(sTmp);
 
     break;
-    case 2:
+    case ANALYSIS_PAGE_WIND:
       _stprintf(sTmp, TEXT("%s: %s"),
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Wind at Altitude")));
@@ -1393,7 +1425,7 @@ static void Update(void){
       _stprintf(sTmp, TEXT(" "));
       wInfo->SetCaption(sTmp);
     break;
-    case 3:
+    case ANALYSIS_PAGE_POLAR:
       _stprintf(sTmp, TEXT("%s: %s (Mass %3.0f kg)"),
                 gettext(TEXT("Analysis")),
                 gettext(TEXT("Glide Polar")),
@@ -1426,7 +1458,7 @@ static void Update(void){
 
       wInfo->SetCaption(sTmp);
     break;
-  case 4:
+  case ANALYSIS_PAGE_TEMPTRACE:
     _stprintf(sTmp, TEXT("%s: %s"),
               gettext(TEXT("Analysis")),
               gettext(TEXT("Temp trace")));
@@ -1442,7 +1474,7 @@ static void Update(void){
 
     wInfo->SetCaption(sTmp);
     break;
-  case 5:
+  case ANALYSIS_PAGE_TASK:
     _stprintf(sTmp, TEXT("%s: %s"),
               gettext(TEXT("Analysis")),
               gettext(TEXT("Task")));
@@ -1450,54 +1482,57 @@ static void Update(void){
 
     RefreshTaskStatistics();
 
-    TCHAR timetext1[100];
-    TCHAR timetext2[100];
-    if (AATEnabled) {
-      Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
-      Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
-
-      if (InfoBoxLayout::landscape) {
-        _stprintf(sTmp,
-                  TEXT("%s:\r\n  %s\r\n%s:\r\n  %s\r\n%s:\r\n  %5.0f %s\r\n%s:\r\n  %5.0f %s\r\n"),
-                  gettext(TEXT("Task to go")),
-                  timetext1,
-                  gettext(TEXT("AAT to go")),
-                  timetext2,
-                  gettext(TEXT("Distance to go")),
-                  DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
-                  Units::GetDistanceName(),
-                  gettext(TEXT("Target speed")),
-                  TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
-                  Units::GetTaskSpeedName()
-                  );
-      } else {
-        _stprintf(sTmp,
-                  TEXT("%s: %s\r\n%s: %s\r\n%s: %5.0f %s\r\n%s: %5.0f %s\r\n"),
-                  gettext(TEXT("Task to go")),
-                  timetext1,
-                  gettext(TEXT("AAT to go")),
-                  timetext2,
-                  gettext(TEXT("Distance to go")),
-                  DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
-                  Units::GetDistanceName(),
-                  gettext(TEXT("Target speed")),
-                  TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
-                  Units::GetTaskSpeedName()
-                  );
-      }
+    if (!ValidTaskPoint(ActiveWayPoint)) {
+      _stprintf(sTmp, gettext(TEXT("No task")));
     } else {
-      Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
-      _stprintf(sTmp, TEXT("%s: %s\r\n%s: %5.0f %s\r\n"),
-                gettext(TEXT("Task to go")),
-		timetext1,
-                gettext(TEXT("Distance to go")),
-		DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo,
-		Units::GetDistanceName());
-    }
+      TCHAR timetext1[100];
+      TCHAR timetext2[100];
+      if (AATEnabled) {
+        Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+        Units::TimeToText(timetext2, (int)CALCULATED_INFO.AATTimeToGo);
 
+        if (InfoBoxLayout::landscape) {
+          _stprintf(sTmp,
+                    TEXT("%s:\r\n  %s\r\n%s:\r\n  %s\r\n%s:\r\n  %5.0f %s\r\n%s:\r\n  %5.0f %s\r\n"),
+                    gettext(TEXT("Task to go")),
+                    timetext1,
+                    gettext(TEXT("AAT to go")),
+                    timetext2,
+                    gettext(TEXT("Distance to go")),
+                    DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
+                    Units::GetDistanceName(),
+                    gettext(TEXT("Target speed")),
+                    TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
+                    Units::GetTaskSpeedName()
+                    );
+        } else {
+          _stprintf(sTmp,
+                    TEXT("%s: %s\r\n%s: %s\r\n%s: %5.0f %s\r\n%s: %5.0f %s\r\n"),
+                    gettext(TEXT("Task to go")),
+                    timetext1,
+                    gettext(TEXT("AAT to go")),
+                    timetext2,
+                    gettext(TEXT("Distance to go")),
+                    DISTANCEMODIFY*CALCULATED_INFO.AATTargetDistance,
+                    Units::GetDistanceName(),
+                    gettext(TEXT("Target speed")),
+                    TASKSPEEDMODIFY*CALCULATED_INFO.AATTargetSpeed,
+                    Units::GetTaskSpeedName()
+                    );
+        }
+      } else {
+        Units::TimeToText(timetext1, (int)CALCULATED_INFO.TaskTimeToGo);
+        _stprintf(sTmp, TEXT("%s: %s\r\n%s: %5.0f %s\r\n"),
+                  gettext(TEXT("Task to go")),
+                  timetext1,
+                  gettext(TEXT("Distance to go")),
+                  DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceToGo,
+                  Units::GetDistanceName());
+      }
+    }
     wInfo->SetCaption(sTmp);
     break;
-  case 6:
+  case ANALYSIS_PAGE_OLC:
     _stprintf(sTmp, TEXT("%s: %s"),
               gettext(TEXT("Analysis")),
               gettext(TEXT("OnLine Contest")));
@@ -1588,7 +1623,7 @@ static void Update(void){
     wInfo->SetCaption(sTmp);
 
     break;
-  case 7:
+  case ANALYSIS_PAGE_AIRSPACE:
     _stprintf(sTmp, TEXT("%s: %s"),
               gettext(TEXT("Analysis")),
               gettext(TEXT("Airspace")));
@@ -1656,28 +1691,30 @@ static void OnCalcClicked(WindowControl * Sender,
 			  WndListFrame::ListInfo_t *ListInfo){
   (void)ListInfo;
   (void)Sender;
-  if (page==0) {
+  if (page==ANALYSIS_PAGE_BAROGRAPH) {
     dlgBasicSettingsShowModal();
   }
-  if (page==1) {
+  if (page==ANALYSIS_PAGE_CLIMB) {
     dlgTaskCalculatorShowModal();
   }
-  if (page==2) {
+  if (page==ANALYSIS_PAGE_WIND) {
     dlgWindSettingsShowModal();
   }
-  if (page==3) {
+  if (page==ANALYSIS_PAGE_POLAR) {
     dlgBasicSettingsShowModal();
   }
-  if (page==4) {
+  if (page==ANALYSIS_PAGE_TEMPTRACE) {
     dlgBasicSettingsShowModal();
   }
-  if (page==5) {
+  if (page==ANALYSIS_PAGE_TASK) {
     dlgTaskCalculatorShowModal();
   }
-  if (page==6) {
+  if (page==ANALYSIS_PAGE_OLC) {
+    StartHourglassCursor();
     olc.Optimize((CALCULATED_INFO.Flying==1));
+    StopHourglassCursor();
   }
-  if (page==7) {
+  if (page==ANALYSIS_PAGE_AIRSPACE) {
     dlgAirspaceWarningShowDlg(true);
   }
   Update();

@@ -1782,7 +1782,8 @@ void MapWindow::RenderMapWindow(  RECT rc)
       BigZoom = false;
     }
 
-    if (EnableTerrain && (DerivedDrawInfo.TerrainValid)) {
+    if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
+        || RasterTerrain::render_weather) {
       double sunelevation = 40.0;
       double sunazimuth = DisplayAngle-DerivedDrawInfo.WindBearing;
 
@@ -1875,7 +1876,8 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     DrawWaypoints(hdcDrawWindowBg,rc);
 
-    if (EnableTerrain && (DerivedDrawInfo.TerrainValid)) {
+    if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
+        || RasterTerrain::render_weather) {
       DrawSpotHeights(hdcDrawWindowBg);
     }
 

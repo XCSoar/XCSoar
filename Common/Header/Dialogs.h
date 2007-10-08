@@ -50,7 +50,8 @@ HWND CreateProgressDialog(TCHAR *text);
 void CloseProgressDialog();
 void StepProgressDialog();
 BOOL SetProgressStepSize(int nSize);
-
+void StartHourglassCursor();
+void StopHourglassCursor();
 
 extern void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
 
