@@ -239,14 +239,17 @@ class DataFieldEnum: public DataField {
 
 #define DFE_MAX_FILES 100
 
+typedef struct {
+  TCHAR *mTextFile;
+  TCHAR *mTextPathFile;
+} DataFieldFileReaderEntry;
 
 class DataFieldFileReader: public DataField {
 
  private:
   unsigned int nFiles;
   unsigned int mValue;
-  TCHAR *mTextFile[DFE_MAX_FILES];
-  TCHAR *mTextPathFile[DFE_MAX_FILES];
+  DataFieldFileReaderEntry fields[DFE_MAX_FILES];
 
   public:
   DataFieldFileReader(TCHAR *EditFormat,
@@ -254,8 +257,8 @@ class DataFieldFileReader: public DataField {
 		      void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
       mValue = 0;
-      mTextFile[0]= NULL;
-      mTextPathFile[0]= NULL; // first entry always exists and is blank
+      fields[0].mTextFile= NULL;
+      fields[0].mTextPathFile= NULL; // first entry always exists and is blank
       nFiles = 1;
 
       (mOnDataAccess)(this, daGet);
@@ -263,18 +266,17 @@ class DataFieldFileReader: public DataField {
     };
     ~DataFieldFileReader() {
 	for (unsigned int i=1; i<nFiles; i++) {
-	  if (mTextFile[i]) {
-	    free(mTextFile[i]);
-	    mTextFile[i]= NULL;
+	  if (fields[i].mTextFile) {
+	    free(fields[i].mTextFile);
+	    fields[i].mTextFile= NULL;
 	  }
-	  if (mTextPathFile[i]) {
-	    free(mTextPathFile[i]);
-	    mTextPathFile[i]= NULL;
+	  if (fields[i].mTextPathFile) {
+	    free(fields[i].mTextPathFile);
+	    fields[i].mTextPathFile= NULL;
 	  }
 	}
 	nFiles = 1;
-
-      }
+    }
 
   void Inc(void);
   void Dec(void);
@@ -298,6 +300,7 @@ class DataFieldFileReader: public DataField {
   #endif
   int SetAsInteger(int Value);
 
+  void Sort();
   void ScanDirectoryTop(const TCHAR *filter);
 
  protected:
@@ -594,7 +597,7 @@ class WindowControl {
     void SetHelpText(const TCHAR *Value);
 
     HWND GetHandle(void){return(mHWnd);};
-    virtual HWND GetClientAeraHandle(void){return(mHWnd);};
+    virtual HWND GetClientAreaHandle(void){return(mHWnd);};
     HWND GetParent(void){return(mParent);};
     HDC  GetDeviceContext(void){return(mHdc);};
     HDC  GetTempDeviceContext(void){return(mHdcTemp);};
@@ -795,7 +798,7 @@ class WndForm:public WindowControl{
     ~WndForm(void);
     virtual void Destroy(void);
 
-    HWND GetClientAeraHandle(void);
+    HWND GetClientAreaHandle(void);
     void AddClient(WindowControl *Client);
 
     virtual bool SetFocused(bool Value, HWND FromTo);

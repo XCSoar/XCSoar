@@ -81,6 +81,10 @@
 
     </WndProperty>
 
+  <WndProperty Name="prpAATTargetLocked" Caption="Target locked" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="When enabled, targets placed within the AAT area are not adjusted automatically.">
+    <DataField name="" DataType="boolean" ReadOnly=0/>
+  </WndProperty>
+
     <WndProperty Name="prpAATType" Caption="Type"     X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 Help="Type of the AAT observation area:
 [Cylinder]: Defines a cylindrical AAT area, radius is defined by the 'Circle radius' properties.
 [Sector]: Defines a sector AAT area, radius is defined by the 'Sector radius' parameter, and the sector is bounded by the 'Start radial' and 'End radial' properties.">

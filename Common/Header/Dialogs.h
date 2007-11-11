@@ -91,6 +91,7 @@ void dlgStartPointShowModal(void);
 void dlgWaypointEditShowModal(WAYPOINT *wpt);
 void dlgWeatherShowModal(void);
 void dlgAirspaceSelect(void);
+void dlgTarget(void);
 
 #if (WINDOWSPC>0)
 #ifdef DEBUG

@@ -230,6 +230,12 @@ static void GetWaypointValues(void) {
       Task[twItemIndex].AATTargetOffsetRadius =
         wp->GetDataField()->GetAsInteger()/100.0;
     }
+
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAATTargetLocked"));
+    if (wp) {
+      Task[twItemIndex].AATTargetLocked = wp->GetDataField()->GetAsBoolean();
+    }
+
   }
 }
 
@@ -287,6 +293,13 @@ static void SetWaypointValues(bool first=false) {
     wp->GetDataField()->SetAsFloat(iround(Task[twItemIndex].AATTargetOffsetRadius*100.0));
     wp->RefreshDisplay();
   }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATTargetLocked"));
+  if (wp) {
+    wp->GetDataField()->Set(Task[twItemIndex].AATTargetLocked);
+    wp->RefreshDisplay();
+  }
+
 }
 
 

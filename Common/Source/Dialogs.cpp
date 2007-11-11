@@ -410,6 +410,9 @@ static HCURSOR oldCursor = NULL;
 void StartHourglassCursor(void) {
   HCURSOR newc = LoadCursor(NULL, IDC_WAIT);
   oldCursor = (HCURSOR)SetCursor(newc);
+#ifdef GNAV
+  SetCursorPos(160,120);
+#endif
 }
 
 void StopHourglassCursor(void) {

@@ -205,7 +205,7 @@ void ParseAirfieldDetails() {
 
 void ReadAirfieldFile() {
 
-  StartupStore(TEXT("ReadAirfieldFile\r\n"));
+  StartupStore(TEXT("ReadAirfieldFile\n"));
 
   HWND hProgress;
 

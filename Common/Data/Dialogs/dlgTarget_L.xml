@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmTarget" Type="Dialog" X=1 Y=1 Width=240 Height=70 Caption="Target" Font=2  BackColor=0xDADBAB>
+
+  <WndButton   Caption="OK"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
+
+  <WndProperty Name="prpTaskPoint" Caption="Task Point" X=55 Y=2   Width=180 Height=22 CaptionWidth=80 Font=2
+  Help="This sets the task point for review.">
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1 OnDataAccess="OnTaskPointData"/>
+  </WndProperty>
+
+  <WndProperty Name="prpRange" Caption="Range"      X=2 Y=25   Width=115 Height=22 CaptionWidth=65 Font=2 Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=-100 Max=100 Step=5 OnDataAccess="OnRangeData"/>
+  </WndProperty>
+
+  <WndProperty Name="prpRadial" Caption="Radial"      X=120 Y=25   Width=115 Height=22 CaptionWidth=65 Font=2 Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=-90 Max=90 Step=5 OnDataAccess="OnRadialData"/>
+  </WndProperty>
+
+</WndForm>
+
+</PMML>

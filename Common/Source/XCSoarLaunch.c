@@ -925,6 +925,8 @@ static BOOL ShellOpen(TCHAR *FileName, TCHAR *CommandLine)
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 {
+  static int is_running = 0;
+
 
 	HDC hdc;
 
@@ -1092,7 +1094,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 		if(i != -1 && i == SelItem){
 
-			ShellOpen((FileList + i)->FileName, (FileList + i)->CommandLine);
+                  if (!is_running) {
+                    is_running = 1;
+                    ShellOpen((FileList + i)->FileName, (FileList + i)->CommandLine);
+                    Sleep(1000);
+                    is_running = 0;
+                  }
 
 		}
 

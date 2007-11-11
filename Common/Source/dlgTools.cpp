@@ -40,6 +40,8 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
 
+
+
 #ifdef ALTAIRSYNC
 #define ISCALE 1
 #else

@@ -875,3 +875,210 @@ void MapWindow::CalculateWaypointReachable(void)
 
   UnlockTaskData();
 }
+
+
+void MapWindow::DrawHorizon(HDC hDC,RECT rc)
+{
+  POINT Start;
+
+  Start.y = IBLSCALE(55)+rc.top;
+  Start.x = rc.right - IBLSCALE(19);
+  if (EnableVarioGauge && MapRectBig.right == rc.right)
+    Start.x -= InfoBoxLayout::ControlWidth;
+
+  HPEN   hpHorizonSky;
+  HBRUSH hbHorizonSky;
+  HPEN   hpHorizonGround;
+  HBRUSH hbHorizonGround;
+  HPEN   hpOld;
+  HBRUSH hbOld;
+
+  hpHorizonSky = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
+                                 RGB(0x40,0x40,0xff));
+  hbHorizonSky = (HBRUSH)CreateSolidBrush(RGB(0xA0,0xA0,0xff));
+
+  hpHorizonGround = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
+                                    RGB(106,55,12));
+  hbHorizonGround = (HBRUSH)CreateSolidBrush(
+                                             RGB(157,101,60));
+
+  int radius = IBLSCALE(17);
+  double phi = max(-89,min(89,DerivedDrawInfo.BankAngle));
+  double alpha = RAD_TO_DEG
+    *acos(max(-1.0,min(1.0,DerivedDrawInfo.PitchAngle/50.0)));
+  double alpha1 = 180-alpha-phi;
+  double alpha2 = 180+alpha-phi;
+
+  hpOld = (HPEN)SelectObject(hDC, hpHorizonSky);
+  hbOld = (HBRUSH)SelectObject(hDC, hbHorizonSky);
+
+  Segment(hDC, Start.x, Start.y, radius, rc,
+          alpha2, alpha1, true);
+
+  SelectObject(hDC, hpHorizonGround);
+  SelectObject(hDC, hbHorizonGround);
+
+  Segment(hDC, Start.x, Start.y, radius, rc,
+          alpha1, alpha2, true);
+
+  POINT a1, a2;
+
+  /*
+  a1.x = Start.x + fastsine(alpha1)*radius;
+  a1.y = Start.y - fastcosine(alpha1)*radius;
+  a2.x = Start.x + fastsine(alpha2)*radius;
+  a2.y = Start.y - fastcosine(alpha2)*radius;
+
+  _DrawLine(hDC, PS_SOLID, IBLSCALE(1),
+            a1, a2, RGB(0,0,0));
+  */
+
+  a1.x = Start.x+radius/2;
+  a1.y = Start.y;
+  a2.x = Start.x-radius/2;
+  a2.y = Start.y;
+  _DrawLine(hDC, PS_SOLID, IBLSCALE(2),
+            a1, a2, RGB(0,0,0));
+
+  a1.x = Start.x;
+  a1.y = Start.y-radius/4;
+  _DrawLine(hDC, PS_SOLID, IBLSCALE(2),
+            a1, Start, RGB(0,0,0));
+
+  // JMW experimental, display stall sensor
+  double s = max(0.0,min(1.0,DrawInfo.StallRatio));
+  long m = (long)((rc.bottom-rc.top)*s*s);
+  a1.x = rc.right-1;
+  a1.y = rc.bottom-m;
+  a2.x = a1.x-10;
+  a2.y = a1.y;
+  _DrawLine(hDC, PS_SOLID, IBLSCALE(2),
+            a1, a2, RGB(0xff,0,0));
+
+  SelectObject(hDC, hbOld);
+  SelectObject(hDC, hpOld);
+  DeleteObject((HPEN)hpHorizonSky);
+  DeleteObject((HBRUSH)hbHorizonSky);
+  DeleteObject((HPEN)hpHorizonGround);
+  DeleteObject((HBRUSH)hbHorizonGround);
+}
+
+
+// JMW to be used for target preview
+bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
+  static double old_latitude;
+  static double old_longitude;
+  static bool old_pan=false;
+
+  if (do_pan && !TargetPan) {
+    old_latitude = PanLatitude;
+    old_longitude = PanLongitude;
+    old_pan = EnablePan;
+    EnablePan = true;
+    TargetPan = do_pan;
+    SwitchZoomClimb();
+  }
+  if (do_pan) {
+    LockTaskData();
+    if (ValidTaskPoint(target_point)) {
+      PanLongitude = WayPointList[Task[target_point].Index].Longitude;
+      PanLatitude = WayPointList[Task[target_point].Index].Latitude;
+      if (target_point==0) {
+        TargetZoomDistance = max(2e3, StartRadius*2);
+      } else if (!ValidTaskPoint(target_point+1)) {
+        TargetZoomDistance = max(2e3, FinishRadius*2);
+      } else if (AATEnabled) {
+        if (Task[target_point].AATType == SECTOR) {
+          TargetZoomDistance = max(2e3, Task[target_point].AATSectorRadius*2);
+        } else {
+          TargetZoomDistance = max(2e3, Task[target_point].AATCircleRadius*2);
+        }
+      } else {
+        TargetZoomDistance = max(2e3, SectorRadius*2);
+      }
+    }
+    UnlockTaskData();
+  } else if (TargetPan) {
+    PanLongitude = old_longitude;
+    PanLatitude = old_latitude;
+    EnablePan = old_pan;
+    TargetPan = do_pan;
+    SwitchZoomClimb();
+  }
+  TargetPan = do_pan;
+  return old_pan;
+};
+
+
+void MapWindow::DrawGreatCircle(HDC hdc,
+                                double startLon, double startLat,
+                                double targetLon, double targetLat) {
+
+  double distance=0;
+  double distanceTotal=0;
+  double Bearing;
+
+  DistanceBearing(startLat,
+                  startLon,
+                  targetLat,
+                  targetLon,
+                  &distanceTotal,
+                  &Bearing);
+
+  distance = distanceTotal;
+
+  if (distanceTotal==0.0) {
+    return;
+  }
+
+  double d_distance = max(5000.0,distanceTotal/10);
+
+  HPEN hpOld = (HPEN)SelectObject(hdc, hpBearing);
+
+  POINT StartP;
+  POINT EndP;
+  LatLon2Screen(startLon,
+                startLat,
+                StartP);
+  LatLon2Screen(targetLon,
+                targetLat,
+                EndP);
+
+  if (d_distance>distanceTotal) {
+    DrawSolidLine(hdc, StartP, EndP);
+  } else {
+
+    for (int i=0; i<= 10; i++) {
+
+      double tlat1, tlon1;
+
+      FindLatitudeLongitude(startLat,
+                            startLon,
+                            Bearing,
+                            min(distance,d_distance),
+                            &tlat1,
+                            &tlon1);
+
+      DistanceBearing(tlat1,
+                      tlon1,
+                      targetLat,
+                      targetLon,
+                      &distance,
+                      &Bearing);
+
+      LatLon2Screen(tlon1,
+                    tlat1,
+                    EndP);
+
+      DrawSolidLine(hdc, StartP, EndP);
+
+      StartP.x = EndP.x;
+      StartP.y = EndP.y;
+
+      startLat = tlat1;
+      startLon = tlon1;
+
+    }
+  }
+  SelectObject(hdc, hpOld);
+}

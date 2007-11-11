@@ -69,7 +69,7 @@ static int WaypointOutOfTerrainRangeDontAskAgain = -1;
 
 
 void CloseWayPoints() {
-  StartupStore(TEXT("Close waypoints\r\n"));
+  StartupStore(TEXT("Close waypoints\n"));
   unsigned int i;
   if (NumberOfWayPoints) {
     for (i=0; i<NumberOfWayPoints; i++) {
@@ -577,7 +577,7 @@ extern TCHAR szRegistryAdditionalWayPointFile[];
 
 void ReadWayPoints(void)
 {
-  StartupStore(TEXT("ReadWayPoints\r\n"));
+  StartupStore(TEXT("ReadWayPoints\n"));
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   TCHAR szFile2[MAX_PATH] = TEXT("\0");
@@ -689,7 +689,7 @@ void ReadWayPoints(void)
 void SetHome(bool reset)
 {
 
-  StartupStore(TEXT("SetHome\r\n"));
+  StartupStore(TEXT("SetHome\n"));
 
   unsigned int i;
 
@@ -744,18 +744,17 @@ void SetHome(bool reset)
 }
 
 
-int FindNearestWayPoint(double X, double Y, double MaxRange)
+int FindNearestWayPoint(double X, double Y, double MaxRange,
+                        bool exhaustive)
 {
   unsigned int i;
-  int NearestIndex = -1;  // 20060504/sgi was 0
+  int NearestIndex = -1;
   double NearestDistance, Dist;
 
   if(NumberOfWayPoints ==0)
     {
       return -1;
     }
-
-  // 20060504/sgi was NearestDistance = Distance(Y,X,WayPointList[0].Latitude, WayPointList[0].Longitude);
 
   NearestDistance = MaxRange;
   for(i=0;i<NumberOfWayPoints;i++) {
@@ -776,6 +775,20 @@ int FindNearestWayPoint(double X, double Y, double MaxRange)
       }
     }
   }
+
+  // JMW allow exhaustive check for when looking up in status dialog
+  if (exhaustive && (NearestIndex == -1)) {
+    for(i=0;i<NumberOfWayPoints;i++) {
+      DistanceBearing(Y,X,
+                      WayPointList[i].Latitude,
+                      WayPointList[i].Longitude, &Dist, NULL);
+      if(Dist < NearestDistance) {
+        NearestIndex = i;
+        NearestDistance = Dist;
+      }
+    }
+  }
+
   if(NearestDistance < MaxRange)
     return NearestIndex;
   else

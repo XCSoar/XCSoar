@@ -187,7 +187,7 @@ void CloseAirspace() {
 
 void ReadAirspace(ZZIP_FILE *fp)
 {
-  StartupStore(TEXT("ReadAirspace\r\n"));
+  StartupStore(TEXT("ReadAirspace\n"));
 
   int	Tock = 0;
   DWORD	dwStep;
@@ -1925,7 +1925,7 @@ static int _cdecl SortAirspaceCircleCompare(const void *elem1, const void *elem2
 
 
 void SortAirspace(void) {
-  StartupStore(TEXT("SortAirspace\r\n"));
+  StartupStore(TEXT("SortAirspace\n"));
 
   // force acknowledgement before sorting
   ClearAirspaceWarnings(true, false);

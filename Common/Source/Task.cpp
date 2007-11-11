@@ -52,6 +52,8 @@ void FlyDirectTo(int index) {
   {
     Task[j].Index = -1;
     Task[j].AATTargetOffsetRadius = 0.0;
+    Task[j].AATTargetOffsetRadial = 0.0;
+    Task[j].AATTargetLocked = false;
   }
   Task[0].Index = index;
   Task[0].AATTargetOffsetRadius = 0.0;
@@ -99,6 +101,9 @@ void InsertWaypoint(int index, bool append) {
     ActiveWayPoint = 0;
     Task[ActiveWayPoint].Index = index;
     Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
+    Task[ActiveWayPoint].AATTargetOffsetRadial = 0.0;
+    Task[ActiveWayPoint].AATTargetLocked = false;
+
     UnlockTaskData();
     return;
   }
@@ -120,6 +125,8 @@ void InsertWaypoint(int index, bool append) {
       if (Task[i+1].Index<0) {
 	Task[i+1].Index = index;
 	Task[i+1].AATTargetOffsetRadius= 0.0;
+	Task[i+1].AATTargetOffsetRadial= 0.0;
+	Task[i+1].AATTargetLocked= false;
 	break;
       }
     }
@@ -127,12 +134,13 @@ void InsertWaypoint(int index, bool append) {
     // Shuffle ActiveWaypoint and all later task points
     // to the right by one position
     for (i=MAXTASKPOINTS-1; i>indexInsert; i--) {
-      Task[i].Index = Task[i-1].Index;
-      Task[i].AATTargetOffsetRadius= Task[i-1].AATTargetOffsetRadius;
+      Task[i] = Task[i-1];
     }
     // Insert new point and update task details
     Task[indexInsert].Index = index;
     Task[indexInsert].AATTargetOffsetRadius= 0.0;
+    Task[indexInsert].AATTargetOffsetRadial= 0.0;
+    Task[indexInsert].AATTargetLocked= false;
   }
 
   RefreshTask();
@@ -317,7 +325,8 @@ void RefreshTask() {
       if (ValidTaskPoint(i)) {
 	RefreshTaskWaypoint(i);
 	TaskStats[i].LengthPercent = Task[i].Leg/lengthtotal;
-	if (!ValidTaskPoint(i)) {
+	if (!ValidTaskPoint(i+1)) {
+          // this is the finish waypoint
 	  Task[i].AATTargetOffsetRadius = 0.0;
 	  Task[i].AATTargetOffsetRadial = 0.0;
 	  Task[i].AATTargetLat = WayPointList[Task[i].Index].Latitude;
@@ -492,6 +501,8 @@ double AdjustAATTargets(double desired) {
     {
       if(ValidTaskPoint(i)&&ValidTaskPoint(i+1))
 	{
+          Task[i].AATTargetOffsetRadius = max(-1,min(1,
+                                          Task[i].AATTargetOffsetRadius));
 	  av += Task[i].AATTargetOffsetRadius;
 	  inum++;
 	}
@@ -509,14 +520,23 @@ double AdjustAATTargets(double desired) {
 
   // Do this with intersection tests
 
+  desired = (desired+1.0)/2.0; // scale to 0,1
+  av = (av+1.0)/2.0; // scale to 0,1
+
   for(i=istart;i<MAXTASKPOINTS-1;i++)
     {
-      if((Task[i].Index >=0)&&(Task[i+1].Index >=0))
+      if((Task[i].Index >=0)&&(Task[i+1].Index >=0) && !Task[i].AATTargetLocked)
 	{
-	  double d = Task[i].AATTargetOffsetRadius;
-	  d = (desired-av)*(1.0-d)-1.0;
-	  Task[i].AATTargetOffsetRadius = min(1.0,
-                             max(desired,-1.0));
+	  double d = (Task[i].AATTargetOffsetRadius+1.0)/2.0;
+          // scale to 0,1
+
+          if (av>0.01) {
+            d = (desired/av)*d;
+          } else {
+            d = desired;
+          }
+          d = min(1.0, max(d, 0))*2.0-1.0;
+          Task[i].AATTargetOffsetRadius = d;
 	}
     }
  OnExit:
@@ -572,6 +592,8 @@ void CalculateAATTaskSectors()
                                &Task[i].AATFinishLat,
                                &Task[i].AATFinishLon);
       }
+
+      // JMWAAT: if locked, don't move it
       if (i<awp) {
         // only update targets for current/later waypoints
         continue;
@@ -580,10 +602,13 @@ void CalculateAATTaskSectors()
       Task[i].AATTargetOffsetRadius =
         min(1.0, max(Task[i].AATTargetOffsetRadius,-1.0));
 
+      Task[i].AATTargetOffsetRadial =
+        min(90, max(-90, Task[i].AATTargetOffsetRadial));
+
       double targetbearing;
       double targetrange;
 
-      targetbearing = Task[i].Bisector;
+      targetbearing = AngleLimit360(Task[i].Bisector+Task[i].AATTargetOffsetRadial);
 
       if(Task[i].AATType == SECTOR) {
 
@@ -593,7 +618,7 @@ void CalculateAATTaskSectors()
         targetrange = ((Task[i].AATTargetOffsetRadius+1.0)/2.0);
 
         double aatbisector = HalfAngle(Task[i].AATStartRadial,
-                                      Task[i].AATFinishRadial);
+                                       Task[i].AATFinishRadial);
 
         if (fabs(AngleLimit180(aatbisector-targetbearing))>90) {
           // bisector is going away from sector
@@ -626,7 +651,8 @@ void CalculateAATTaskSectors()
       // go from current aircraft position to projection of target
       // out to the edge of the sector
 
-      if (InAATTurnSector(longitude, latitude, i) && (awp==i)) {
+      if (InAATTurnSector(longitude, latitude, i) && (awp==i) &&
+          !Task[i].AATTargetLocked) {
 
         // special case, currently in AAT sector
 
@@ -645,6 +671,9 @@ void CalculateAATTaskSectors()
                         latitude,
                         longitude,
                         &qdist, &bearing);
+
+        // JMWAAT, adjust bearing here for TargetOffsetRadial?
+        bearing = AngleLimit360(bearing+Task[i].AATTargetOffsetRadial);
 
         // scan for maximum distance, so we can apply proportion
         // (-100 is closest to current aircraft,
@@ -1036,6 +1065,9 @@ void ClearTask(void) {
     Task[i].Index = -1;
     Task[i].AATSectorRadius = 500; // JMW added default
     Task[i].AATCircleRadius = 500; // JMW added default
+    Task[i].AATTargetOffsetRadial = 0;
+    Task[i].AATTargetOffsetRadius = 0;
+    Task[i].AATTargetLocked = false;
   }
   for (i=0; i<MAXSTARTPOINTS; i++) {
     StartPoints[i].Index = -1;

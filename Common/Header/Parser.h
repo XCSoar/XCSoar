@@ -121,6 +121,8 @@ typedef struct _NMEA_INFO
 
   BOOL MovementDetected;
 
+  double StallRatio;
+
 } NMEA_INFO;
 
 

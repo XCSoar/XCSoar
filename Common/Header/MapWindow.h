@@ -180,7 +180,7 @@ class MapWindow {
   static rectObj CalculateScreenBounds(double scale);
   static void ScanVisibility(rectObj *bounds_active);
 
-  static void SwitchZoomClimb(bool isclimb);
+  static void SwitchZoomClimb(void);
 
  private:
   static void CalculateScreenPositions(POINT Orig, RECT rc,
@@ -200,6 +200,7 @@ class MapWindow {
   static void DrawCrossHairs(HDC hdc, POINT Orig);
   static void DrawBestCruiseTrack(HDC hdc, POINT Orig);
   static void DrawCompass(HDC hdc, RECT rc);
+  static void DrawHorizon(HDC hdc, RECT rc);
   //  static void DrawWind(HDC hdc, POINT Orig, RECT rc);
   //  static void DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc);
   static void DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc);
@@ -215,7 +216,10 @@ class MapWindow {
   static void DrawThermalEstimate(HDC hdc, RECT rc);
   static void DrawTaskAAT(HDC hdc, RECT rc);
   static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);
-  static void DrawBearing(HDC hdc, POINT Orig);
+  static void DrawBearing(HDC hdc);
+  static void DrawGreatCircle(HDC hdc,
+                              double lon_start, double lat_start,
+                              double lon_end, double lat_end);
   // static void DrawMapScale(HDC hDC,RECT rc);
   static void DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/ , bool ScaleChangeFeedback);
   static void DrawMapScale2(HDC hDC,RECT rc, POINT Orig_Aircraft);
@@ -266,6 +270,8 @@ class MapWindow {
   static double LimitMapScale(double value);
 
   static bool WaypointInRange(int i);
+
+  static bool SetTargetPan(bool dopan, int task_index);
 
   static double GetPanLatitude() { return PanLatitude; }
   static double GetPanLongitude() { return PanLongitude; }
@@ -368,8 +374,11 @@ class MapWindow {
   static HBITMAP hBmpUnitFt;
   static HBITMAP hBmpUnitMpS;
 
+  static bool TargetPan;
+  static double TargetZoomDistance;
 
  public:
+  static bool isTargetPan(void);
   static bool AutoZoom;
   static bool checkLabelBlock(RECT rc);
   static bool RenderTimeAvailable();

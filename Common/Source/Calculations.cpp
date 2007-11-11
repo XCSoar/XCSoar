@@ -100,7 +100,8 @@ static void CruiseLD(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void AverageThermal(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static void PercentCircling(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+static void PercentCircling(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                            double Rate);
 static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void MaxHeightGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -520,6 +521,8 @@ bool EnableCalibration = false;
 void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   double x0, y0, mag;
+  static double LastTime = 0;
+  static double lastHeading = 0;
 
   if ((Basic->Speed>0)||(Calculated->WindSpeed>0)) {
 
@@ -528,19 +531,39 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     x0 += fastsine(Calculated->WindBearing)*Calculated->WindSpeed;
     y0 += fastcosine(Calculated->WindBearing)*Calculated->WindSpeed;
 
-    Calculated->Heading = atan2(x0,y0)*RAD_TO_DEG;
-    if (Calculated->Heading<0) {
-      Calculated->Heading += 360;
-    }
+    Calculated->Heading = AngleLimit360(atan2(x0,y0)*RAD_TO_DEG);
 
     if (!Calculated->Flying) {
       // don't take wind into account when on ground
       Calculated->Heading = Basic->TrackBearing;
     }
 
+    // calculate turn rate in wind coordinates
+    if(Basic->Time > LastTime) {
+      double dT = Basic->Time - LastTime;
+
+      Calculated->TurnRateWind = AngleLimit180(Calculated->Heading
+                                               - lastHeading)/dT;
+
+      lastHeading = Calculated->Heading;
+    }
+    LastTime = Basic->Time;
+
+    // calculate estimated true airspeed
     mag = isqrt4((unsigned long)(x0*x0*100+y0*y0*100))/10.0;
     Calculated->TrueAirspeedEstimated = mag;
 
+    // estimate bank angle (assuming balanced turn)
+    Calculated->BankAngle = RAD_TO_DEG*
+      atan(DEG_TO_RAD*Calculated->TurnRateWind*
+           Calculated->TrueAirspeedEstimated/9.81);
+
+    // estimate pitch angle (assuming balanced turn)
+    Calculated->PitchAngle = RAD_TO_DEG*
+      atan2(Calculated->GPSVario-Calculated->Vario,
+           Calculated->TrueAirspeedEstimated);
+
+    // update zigzag wind
     if (((AutoWindMode & D_AUTOWIND_ZIGZAG)==D_AUTOWIND_ZIGZAG)
         && (!ReplayLogger::IsEnabled())) {
       double zz_wind_speed;
@@ -778,7 +801,7 @@ void CloseCalculations() {
 
 
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-  StartupStore(TEXT("InitCalculations\r\n"));
+  StartupStore(TEXT("InitCalculations\n"));
   ResetFlightStats(Basic, Calculated, true);
   LoadCalculationsPersist(Calculated);
   DeleteCalculationsPersist();
@@ -949,16 +972,18 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static double LastTime = 0;
   static double LastAlt = 0;
 
+  if(Basic->Time <= LastTime) {
+    LastTime = Basic->Time;
+  } else {
+    double Gain = Calculated->NavAltitude - LastAlt;
+    // estimate value from GPS
+    Calculated->GPSVario = Gain / (Basic->Time - LastTime);
+    LastAlt = Calculated->NavAltitude;
+    LastTime = Basic->Time;
+  }
+
   if (!Basic->VarioAvailable || ReplayLogger::IsEnabled()) {
-    if(Basic->Time <= LastTime) {
-      LastTime = Basic->Time;
-    } else {
-      double Gain = Calculated->NavAltitude - LastAlt;
-      // estimate value from GPS
-      Calculated->Vario = Gain / (Basic->Time - LastTime);
-      LastAlt = Calculated->NavAltitude;
-      LastTime = Basic->Time;
-    }
+    Calculated->Vario = Calculated->GPSVario;
   } else {
     // get value from instrument
     Calculated->Vario = Basic->Vario;
@@ -1040,7 +1065,8 @@ void AverageThermal(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     if(Basic->Time > Calculated->ClimbStartTime)
       {
         double Gain =
-          Calculated->NavAltitude - Calculated->ClimbStartAlt;
+          Calculated->NavAltitude+Calculated->EnergyHeight
+            - Calculated->ClimbStartAlt;
         Calculated->AverageThermal  =
           Gain / (Basic->Time - Calculated->ClimbStartTime);
       }
@@ -1067,7 +1093,8 @@ void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     if(Basic->Time >= Calculated->ClimbStartTime)
       {
         Calculated->ThermalGain =
-          Calculated->NavAltitude - Calculated->ClimbStartAlt;
+          Calculated->NavAltitude + Calculated->EnergyHeight
+          - Calculated->ClimbStartAlt;
       }
   }
 }
@@ -1139,7 +1166,7 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   if (Basic->VarioAvailable && Basic->AirspeedAvailable) {
     Calculated->LDvario = UpdateLD(Calculated->LDvario,
                                    Basic->IndicatedAirspeed,
-                                   Basic->Vario,
+                                   -Basic->Vario,
                                    0.3);
   }
 }
@@ -1177,17 +1204,13 @@ void CruiseLD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 #define WAITCRUISE 3
 
 
-double MinTurnRate = 4 ; //10;
-double CruiseClimbSwitch = 15;
-double ClimbCruiseSwitch = 15;
+#define MinTurnRate  4
+#define CruiseClimbSwitch 15
+#define ClimbCruiseSwitch 15
 
 
 void SwitchZoomClimb(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                      bool isclimb, bool left) {
-
-  static double CruiseMapScale = 10;
-  static double ClimbMapScale = 0.25;
-  static bool last_isclimb = false;
 
   // this is calculation stuff, leave it there
   if ((AutoWindMode & D_AUTOWIND_CIRCLING)==D_AUTOWIND_CIRCLING) {
@@ -1199,8 +1222,12 @@ void SwitchZoomClimb(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
-void PercentCircling(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-  if (Calculated->Circling) {
+void PercentCircling(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+                     double Rate) {
+  // JMW circling % only when really circling,
+  // to prevent bad stats due to flap switches and dolphin soaring
+
+  if (Calculated->Circling && (Rate>MinTurnRate)) {
     //    timeCircling += (Basic->Time-LastTime);
     Calculated->timeCircling+= 1.0;
   } else {
@@ -1241,14 +1268,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   }
   dT = Basic->Time - LastTime;
   LastTime = Basic->Time;
-  Rate = Basic->TrackBearing-LastTrack;
-  while (Rate>180) {
-    Rate-= 360;
-  }
-  while (Rate<-180) {
-    Rate+= 360;
-  }
-  Rate = Rate / dT;
+
+  Rate = AngleLimit180(Basic->TrackBearing-LastTrack)/dT;
 
   if (dT<2.0) {
     // time step ok
@@ -1262,12 +1283,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       + dtlead*(Rate+0.5*dtlead*dRate);
     // s = u.t+ 0.5*a*t*t
 
-    if (Calculated->NextTrackBearing<0) {
-      Calculated->NextTrackBearing+= 360;
-    }
-    if (Calculated->NextTrackBearing>=360) {
-      Calculated->NextTrackBearing-= 360;
-    }
+    Calculated->NextTrackBearing =
+      AngleLimit360(Calculated->NextTrackBearing);
 
   } else {
     // time step too big, so just take it at last measurement
@@ -1295,11 +1312,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
   }
 
-  PercentCircling(Basic, Calculated);
+  PercentCircling(Basic, Calculated, Rate);
 
   LastTrack = Basic->TrackBearing;
-
-//  double temp = StartTime;
 
   bool forcecruise = false;
   bool forcecircling = false;
@@ -1338,7 +1353,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         MODE = CLIMB;
         Calculated->ClimbStartLat = StartLat;
         Calculated->ClimbStartLong = StartLong;
-        Calculated->ClimbStartAlt = StartAlt;
+        Calculated->ClimbStartAlt = StartAlt+Calculated->EnergyHeight;
         Calculated->ClimbStartTime = StartTime;
 
         if (flightstats.Altitude_Ceiling.sum_n>0) {
@@ -1346,9 +1361,9 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
           // we will catch the takeoff height as the base.
 
           flightstats.Altitude_Base.
-            least_squares_update(max(0,Calculated->ClimbStartTime/3600.0
-                                     - flightstats.Altitude.xstore[0]),
-                                 Calculated->ClimbStartAlt);
+            least_squares_update(max(0,Calculated->ClimbStartTime
+                                     - Calculated->TakeOffTime)/3600.0,
+                                 StartAlt);
         }
 
         // TODO InputEvents GCE - Move this to InputEvents
@@ -1401,8 +1416,8 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         Calculated->CruiseStartTime = StartTime;
 
         flightstats.Altitude_Ceiling.
-          least_squares_update(max(0,Calculated->CruiseStartTime/3600.0
-                                   - flightstats.Altitude.xstore[0]),
+          least_squares_update(max(0,Calculated->CruiseStartTime
+                                   - Calculated->TakeOffTime)/3600.0,
                                Calculated->CruiseStartAlt);
 
         SwitchZoomClimb(Basic, Calculated, false, LEFT);
@@ -1509,7 +1524,7 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       if(ThermalTime >0)
         {
-          double ThermalGain = Calculated->CruiseStartAlt
+          double ThermalGain = Calculated->CruiseStartAlt + Calculated->EnergyHeight
             - Calculated->ClimbStartAlt;
           Calculated->LastThermalAverage = ThermalGain/ThermalTime;
           Calculated->LastThermalGain = ThermalGain;
@@ -1558,7 +1573,7 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       Calculated->ZoomDistance = Calculated->WaypointDistance;
 
-      if (AATEnabled && !TaskAborted) {
+      if (AATEnabled && !TaskAborted && (ActiveWayPoint>0)) {
         w1lat = Task[ActiveWayPoint].AATTargetLat;
         w1lon = Task[ActiveWayPoint].AATTargetLon;
 

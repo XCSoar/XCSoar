@@ -147,19 +147,29 @@ bool RasterTile::VisibilityChanged(int view_x, int view_y) {
 
 
 short* RasterTileCache::GetImageBuffer(int index) {
-  return tiles[index].GetImageBuffer();
+  if (index< MAX_RTC_TILES) {
+    return tiles[index].GetImageBuffer();
+  } else {
+    return NULL;
+  }
 }
 
 
-void RasterTileCache::SetTile(int i,
+void RasterTileCache::SetTile(int index,
                               int xstart, int ystart,
                               int xend, int yend) {
-  tiles[i].xstart = xstart;
-  tiles[i].ystart = ystart;
-  tiles[i].xend = xend;
-  tiles[i].yend = yend;
-  tiles[i].width = tiles[i].xend-tiles[i].xstart;
-  tiles[i].height = tiles[i].yend-tiles[i].ystart;
+  if (index<MAX_RTC_TILES) {
+    tiles[index].xstart = xstart;
+    tiles[index].ystart = ystart;
+    tiles[index].xend = xend;
+    tiles[index].yend = yend;
+    tiles[index].width = tiles[index].xend-tiles[index].xstart;
+    tiles[index].height = tiles[index].yend-tiles[index].ystart;
+  } else {
+    int j=index;
+    j++;
+    // error!
+  }
 }
 
 

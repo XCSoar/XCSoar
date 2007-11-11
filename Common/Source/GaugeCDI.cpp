@@ -42,7 +42,7 @@ extern HINSTANCE hInst;      // The current instance
 
 void GaugeCDI::Create() {
   // start of new code for displaying CDI window
-  StartupStore(TEXT("Create CDI\r\n"));
+  StartupStore(TEXT("Create CDI\n"));
 
   RECT rc;
 

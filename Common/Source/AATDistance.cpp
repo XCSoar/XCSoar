@@ -83,6 +83,7 @@ void AATDistance::AddPoint(double longitude, double latitude,
                            int taskwaypoint) {
   if (taskwaypoint<0) return;
 
+  bool was_entered = has_entered[taskwaypoint];
   has_entered[taskwaypoint] = true;
 
   if (!AATEnabled) return; // nothing else to do for non-AAT tasks
@@ -104,11 +105,30 @@ void AATDistance::AddPoint(double longitude, double latitude,
                       lon_points[taskwaypoint][n-2],
                       latitude,
                       longitude, &dist, NULL);
-      if ((dist>distancethreshold[taskwaypoint])||(n==1)) {
+      if (dist>distancethreshold[taskwaypoint]) {
         new_point = true;
       }
     } else {
+      // first point in sector
       new_point = true;
+
+      if ((!was_entered) && (taskwaypoint>0) &&
+          !Task[taskwaypoint].AATTargetLocked) {
+        double qdist, bearing0, bearing1;
+        DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
+                        Task[taskwaypoint-1].AATTargetLon,
+                        latitude,
+                        longitude,
+                        &qdist, &bearing0);
+        DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
+                        Task[taskwaypoint-1].AATTargetLon,
+                        Task[taskwaypoint].AATTargetLat,
+                        Task[taskwaypoint].AATTargetLon,
+                        &qdist, &bearing1);
+        // JMWAAT
+        Task[taskwaypoint].AATTargetOffsetRadial = AngleLimit180(bearing1-bearing0);
+      }
+
     }
     if (taskwaypoint==0) {
       // force updating of start point
@@ -187,7 +207,7 @@ void AATDistance::ShiftTargetOutside(double longitude, double latitude,
                         &Task[taskwaypoint].AATTargetLat,
                         &Task[taskwaypoint].AATTargetLon);
 
-  Task[taskwaypoint].AATTargetOffsetRadial = bearing;
+  //JMWAAT  Task[taskwaypoint].AATTargetOffsetRadial = bearing;
 
   // Move previous target to location that yields longest distance,
   // plus a little so optimal path vector points to next waypoint.
@@ -204,20 +224,29 @@ void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
   // JMW, now moves target to in line with previous target whenever
   // you are in AAT sector and improving on the target distance
 
-  Task[taskwaypoint].AATTargetOffsetRadial = -1.0;
+  //JMWAAT  Task[taskwaypoint].AATTargetOffsetRadial = -1.0;
+
+  if (Task[taskwaypoint].AATTargetLocked) {
+    // have improved on the locked value, so unlock it in case user wants to move
+    // it.
+    Task[taskwaypoint].AATTargetOffsetRadius = -1.0;
+    Task[taskwaypoint].AATTargetOffsetRadial = 0;
+    Task[taskwaypoint].AATTargetLocked = false;
+  }
 
   DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
                   Task[taskwaypoint-1].AATTargetLon,
                   latitude,
                   longitude,
                   NULL, &course_bearing);
+  course_bearing = AngleLimit360(course_bearing+
+                                 Task[taskwaypoint].AATTargetOffsetRadial);
 
   FindLatitudeLongitude(latitude, longitude,
                         course_bearing, 100.0,
                         &Task[taskwaypoint].AATTargetLat,
                         &Task[taskwaypoint].AATTargetLon);
 
-  Task[taskwaypoint].AATTargetOffsetRadial = course_bearing;
 }
 
 
@@ -245,11 +274,20 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
     return;
   }
 
+  // JMWAAT if locked, don't move it
+  if (Task[taskwaypoint].AATTargetLocked) {
+    return;
+  }
+
   DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
                   Task[taskwaypoint-1].AATTargetLon,
                   latitude,
                   longitude,
                   NULL, &course_bearing);
+
+  course_bearing = AngleLimit360(course_bearing+
+                                 Task[taskwaypoint].AATTargetOffsetRadial);
+  //JMWAAT  Task[taskwaypoint].AATTargetOffsetRadial = course_bearing;
 
   // total distance of legs from previous through this to next target
 
@@ -258,8 +296,6 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
 
   // move target in line with previous target along track
   // at an offset to improve on max distance
-
-  Task[taskwaypoint].AATTargetOffsetRadial = course_bearing;
 
   double t_distance = 0;
   bool updated = false;

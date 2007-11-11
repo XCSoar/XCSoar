@@ -270,8 +270,9 @@ static BOOL PDVDS(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
   GPS_INFO->Gload = mag/100.0;
 
-//#pragma message( "----------------->>>> Experimantal remove later! <<<<----------------------")
-//GPS_INFO->Gload = stallratio/100.0;
+//#pragma message( "----------------->>>> Experimental remove later! <<<<----------------------")
+
+  GPS_INFO->StallRatio = stallratio/100.0;
 
   GPS_INFO->AccelerationAvailable = TRUE;
   if (found==5) {
