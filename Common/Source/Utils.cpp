@@ -397,7 +397,7 @@ void ReadRegistrySettings(void)
   DWORD Temp = 0;
   int i;
 
-  StartupStore(TEXT("Read registry settings\r\n"));
+  StartupStore(TEXT("Read registry settings\n"));
 
 #if defined(GNAV) || defined(PCGNAV)
   DefaultRegistrySettingsAltair();
@@ -1700,7 +1700,7 @@ typedef double WeightCoefficients_t[3];
 void CalculateNewPolarCoef(void)
 {
 
-  StartupStore(TEXT("Calculate New Polar Coef\r\n"));
+  StartupStore(TEXT("Calculate New Polar Coef\n"));
 
   static PolarCoefficients_t Polars[7] =
     {
@@ -1931,7 +1931,8 @@ int Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip, bool fill)
 
 int Segment(HDC hdc, long x, long y, int radius, RECT rc, 
 	    double start,
-	    double end)
+	    double end,
+            bool horizon)
 {
   POINT pt[66];
   int i;
@@ -1955,18 +1956,8 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
 
   // JMW added faster checking...
 
-  while (start>=360.0) {
-    start -= 360.0;
-  }
-  while (end<=0.0) {
-    end += 360.0;
-  }
-  while (start<0.0) {
-    start += 360.0;
-  }
-  while (end>360.0) {
-    end -= 360.0;
-  }
+  start = AngleLimit360(start);
+  end = AngleLimit360(end);
 
   istart = iround(start/360.0*64);
   iend = iround(end/360.0*64);
@@ -1977,7 +1968,9 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
     iend+= 64;
   }
 
-  pt[0].x = x; pt[0].y = y; npoly=1;
+  if (!horizon) {
+    pt[0].x = x; pt[0].y = y; npoly=1;
+  }
   for(i=0;i<64;i++) {
     if (i<=iend-istart) {
       pt[npoly].x = x + (long) (radius * xcoords[(i+istart)%64]);
@@ -1985,8 +1978,17 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
       npoly++;
     }
   }
-  pt[npoly].x = x; pt[npoly].y = y; npoly++;
-  Polygon(hdc,pt,npoly);
+  if (!horizon) {
+    pt[npoly].x = x; 
+    pt[npoly].y = y; npoly++;
+  } else {
+    pt[npoly].x = pt[0].x;
+    pt[npoly].y = pt[0].y;
+    npoly++;
+  }
+  if (npoly) {
+    Polygon(hdc,pt,npoly);
+  }
   
   return TRUE;
 }
@@ -2694,7 +2696,7 @@ void SaveWindToRegistry() {
 
 
 void LoadWindFromRegistry() {
-  StartupStore(TEXT("Load wind from registry\r\n"));
+  StartupStore(TEXT("Load wind from registry\n"));
 
   DWORD Temp;
   Temp=0;
@@ -2952,7 +2954,7 @@ cont:
 
 
 void ReadLanguageFile() {
-  StartupStore(TEXT("Loading language file\r\n"));
+  StartupStore(TEXT("Loading language file\n"));
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   FILE *fp=NULL;
@@ -3004,7 +3006,7 @@ void ReadLanguageFile() {
 
 
 void StatusFileInit() {
-  StartupStore(TEXT("StatusFileInit\r\n"));
+  StartupStore(TEXT("StatusFileInit\n"));
 
   // DEFAULT - 0 is loaded as default, and assumed to exist
   StatusMessageData[0].key = TEXT("DEFAULT");
@@ -3021,7 +3023,7 @@ void StatusFileInit() {
 
 void ReadStatusFile() {
   
-  StartupStore(TEXT("Loading status file\r\n"));
+  StartupStore(TEXT("Loading status file\n"));
 
   TCHAR szFile1[MAX_PATH] = TEXT("\0");
   FILE *fp=NULL;
@@ -3536,14 +3538,14 @@ TCHAR defaultProfileFile[MAX_PATH];
 TCHAR failsafeProfileFile[MAX_PATH];
 
 void RestoreRegistry(void) {
-  StartupStore(TEXT("Restore registry\r\n"));
+  StartupStore(TEXT("Restore registry\n"));
   // load registry backup if it exists
   LoadRegistryFromFile(failsafeProfileFile);
   LoadRegistryFromFile(startProfileFile);
 }
 
 void StoreRegistry(void) {
-  StartupStore(TEXT("Store registry\r\n"));
+  StartupStore(TEXT("Store registry\n"));
   // save registry backup first (try a few places)
   SaveRegistryToFile(startProfileFile);
   SaveRegistryToFile(defaultProfileFile);
@@ -3931,7 +3933,7 @@ void CloseFLARMDetails() {
 }
 
 void OpenFLARMDetails() {
-  StartupStore(TEXT("OpenFLARMDetails\r\n"));
+  StartupStore(TEXT("OpenFLARMDetails\n"));
 
   if (NumberOfFLARMNames) {
     CloseFLARMDetails();

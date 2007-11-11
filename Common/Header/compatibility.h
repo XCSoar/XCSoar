@@ -4,7 +4,7 @@
 // ARH 20/06/2005
 // Compatibility.h
 // Used to ensure that XCSoar builds properly under versions of
-// PocketPC OS which are older than PPC2003
+// PocketPC OS which are older than PPC2003/PPC2002
 
 
 #if defined(WIN32_PLATFORM_HPC2000)

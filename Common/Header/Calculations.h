@@ -50,7 +50,7 @@ typedef struct _DERIVED_INFO
   double WindBearing;
   double Bearing;
   double TerrainAlt;
-  bool TerrainValid;
+  bool   TerrainValid;
   double Heading;
   double AltitudeAGL;
   int    Circling;
@@ -118,6 +118,7 @@ typedef struct _DERIVED_INFO
   // JMW energy height excess to slow to best glide speed
   double EnergyHeight;
 
+  // Turn rate in global coordinates
   double TurnRate;
   
   // reflects whether aircraft is in a start/finish/aat/turn sector
@@ -167,6 +168,11 @@ typedef struct _DERIVED_INFO
   double MinAltitude;
   double MaxHeightGain;
 
+  // Turn rate in wind coordinates
+  double GPSVario;
+  double TurnRateWind;
+  double BankAngle;
+  double PitchAngle;
 } DERIVED_INFO;
 
 

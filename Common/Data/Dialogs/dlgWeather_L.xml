@@ -7,16 +7,16 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmWeather" Type="Dialog" X=200 Y=0 Width=119 Height=240 Caption="Weather Forecast" Font=2 BackColor=0xDADBAB>
+<WndForm Name="frmWeather" Type="Dialog" X=5 Y=5 Width=230 Height=72 Caption="Weather Forecast" Font=2 BackColor=0xDADBAB>
 
   <WndButton   Caption="Close"    X=2 Y=2 Width=66  Height=22 Font=2 OnClickNotify="OnCloseClicked">
   </WndButton> 
 
-  <WndProperty Name="prpDisplayItem" Caption="Field"  X=2 Y=-1  Width=115 Height=22 CaptionWidth=45 Font=2 OnHelp="OnWeatherHelp">
+  <WndProperty Name="prpDisplayItem" Caption="Field"  X=-1 Y=25  Width=135 Height=22 CaptionWidth=45 Font=2 OnHelp="OnWeatherHelp">
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1 OnDataAccess="OnDisplayItemData"/>
   </WndProperty>
 
-  <WndProperty Name="prpTime" Caption="Time" X=2 Y=-1  Width=115 Height=22 CaptionWidth=45 Font=2 Help="TODO">
+  <WndProperty Name="prpTime" Caption="Time" X=135 Y=25  Width=95 Height=22 CaptionWidth=45 Font=2 Help="TODO">
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1 OnDataAccess="OnTimeData"/>
   </WndProperty>
 

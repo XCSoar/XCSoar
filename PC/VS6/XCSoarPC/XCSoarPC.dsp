@@ -322,6 +322,10 @@ SOURCE=..\..\..\Common\Source\dlgSwitches.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Common\Source\dlgTarget.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Common\Source\dlgTaskCalculator.cpp
 # End Source File
 # Begin Source File

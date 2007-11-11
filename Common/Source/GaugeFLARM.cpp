@@ -33,6 +33,8 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "Utils.h"
 
+extern HFONT  TitleWindowFont;
+
 DWORD EnableFLARMDisplay = 1;
 DWORD FLARMGaugeBearing = 0;
 
@@ -98,6 +100,10 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
   HBRUSH greenBrush = CreateSolidBrush(RGB(0x00,0xFF,0x00));
   // JMW TODO red/green Color blind
 
+  SelectObject(hdcDrawWindow, TitleWindowFont);
+  SetTextColor(hdcDrawWindow, RGB(0x0,0x0,0x0));
+  SetBkColor(hdcDrawWindow, RGB(0xff,0xff,0xff));
+
   for (int i=0; i<FLARM_MAX_TRAFFIC; i++) {
     if (gps_info->FLARM_Traffic[i].ID>0) {
 
@@ -141,6 +147,7 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       sc.y = center.y + iround(y*scale);
         
       if (gps_info->FLARM_Traffic[i].AlarmLevel>0) {
+        // Draw line through target
         POINT tl[2];
         tl[0].x = sc.x;
         tl[0].y = sc.y;
@@ -150,6 +157,7 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
       }
 
       if (FLARMGaugeBearing) {
+
         POINT Arrow[5];
 
         Arrow[0].x = -3;
@@ -162,11 +170,48 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
         Arrow[3].y = 1;
         Arrow[4].x = -3;
         Arrow[4].y = 4;
-        
-        //      double vmag = max(1.0,min(15.0,DrawInfo.FLARM_Traffic[i].Speed/5.0))*2;
-        
+
+        short relalt = 
+          iround(gps_info->FLARM_Traffic[i].RelativeAltitude*ALTITUDEMODIFY/100);
+
+        if (relalt != 0) {
+          TCHAR Buffer[10];
+          _stprintf(Buffer, TEXT("%d"), abs(relalt));
+          short size = _tcslen(Buffer);
+          SIZE tsize;
+          GetTextExtentPoint(hdcDrawWindow, Buffer, size, &tsize);
+          tsize.cx = (tsize.cx+IBLSCALE(4))/2;
+          ExtTextOut(hdcDrawWindow, sc.x-tsize.cx+IBLSCALE(5), 
+                     sc.y-tsize.cy-IBLSCALE(5),
+                     ETO_OPAQUE, NULL, Buffer, size, NULL);
+          HBRUSH oldBrush = (HBRUSH)SelectObject(hdcDrawWindow, 
+                                                 GetStockObject(BLACK_BRUSH));
+          POINT triangle[4];
+          triangle[0].x = 2;
+          triangle[0].y = -2;
+          triangle[1].x = 4;
+          triangle[1].y = 1;
+          triangle[2].x = 0;
+          triangle[2].y = 1;
+          short flip = 1;
+          if (relalt<0) {
+            flip = -1;
+          }
+          for (int j=0; j<3; j++) {
+            triangle[j].x = sc.x+IBLSCALE(triangle[j].x)-tsize.cx;
+            triangle[j].y = sc.y+flip*IBLSCALE(triangle[j].y)
+              -tsize.cy/2-IBLSCALE(5);
+          }
+          triangle[3].x = triangle[0].x;
+          triangle[3].y = triangle[0].y;
+          Polygon(hdcDrawWindow, triangle, 4);
+          SelectObject(hdcDrawWindow, oldBrush);
+
+        }
+
         PolygonRotateShift(Arrow, 5, sc.x, sc.y, 
-                           gps_info->FLARM_Traffic[i].TrackBearing + DisplayAngle);
+                           gps_info->FLARM_Traffic[i].TrackBearing 
+                           + DisplayAngle);
         Polygon(hdcDrawWindow, Arrow, 5);
 
       } else {

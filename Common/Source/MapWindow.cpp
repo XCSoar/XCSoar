@@ -66,9 +66,7 @@ Copyright_License {
 int misc_tick_count=0;
 
 #ifdef DEBUG
-#if (WINDOWSPC<1)
 #define DRAWLOAD
-#endif
 #endif
 
 int TrailActive = TRUE;
@@ -133,7 +131,9 @@ rectObj MapWindow::screenbounds_latlon;
 double MapWindow::PanLatitude = 0.0;
 double MapWindow::PanLongitude = 0.0;
 
-bool MapWindow::EnablePan = FALSE;
+bool MapWindow::EnablePan = false;
+bool MapWindow::TargetPan = false;
+double MapWindow::TargetZoomDistance = 500.0;
 bool MapWindow::EnableTrailDrift=false;
 int MapWindow::GliderScreenPosition = 20; // 20% from bottom
 int MapWindow::WindArrowStyle = 0;
@@ -372,28 +372,49 @@ bool MapWindow::Event_InteriorAirspaceDetails(double lon, double lat) {
 }
 
 
-void MapWindow::SwitchZoomClimb(bool isclimb) {
+void MapWindow::SwitchZoomClimb(void) {
 
   static double CruiseMapScale = 10;
   static double ClimbMapScale = 0.25;
   static bool last_isclimb = false;
+  static bool last_targetpan = false;
+  bool isclimb = (DisplayMode == dmCircling);
 
-  if (CircleZoom) {
+  if (TargetPan != last_targetpan) {
+    if (TargetPan) {
+      // save starting values
+      if (isclimb) {
+        ClimbMapScale = MapScale;
+      } else {
+        CruiseMapScale = MapScale;
+      }
+    } else {
+      // restore scales
+      if (isclimb) {
+        RequestMapScale = LimitMapScale(ClimbMapScale);
+      } else {
+        RequestMapScale = LimitMapScale(CruiseMapScale);
+      }
+      BigZoom = true;
+    }
+    last_targetpan = TargetPan;
+    return;
+  }
+  if (!TargetPan && CircleZoom) {
     if (isclimb != last_isclimb) {
       if (isclimb) {
         // save cruise scale
-        CruiseMapScale = MapWindow::MapScale;
+        CruiseMapScale = MapScale;
         // switch to climb scale
-        MapWindow::RequestMapScale = MapWindow::LimitMapScale(ClimbMapScale);
-        MapWindow::BigZoom = true;
+        RequestMapScale = LimitMapScale(ClimbMapScale);
       } else {
         // leaving climb
         // save cruise scale
-        ClimbMapScale = MapWindow::MapScale;
-        MapWindow::RequestMapScale = MapWindow::LimitMapScale(CruiseMapScale);
+        ClimbMapScale = MapScale;
+        RequestMapScale = LimitMapScale(CruiseMapScale);
         // switch to climb scale
-        MapWindow::BigZoom = true;
       }
+      BigZoom = true;
       last_isclimb = isclimb;
     } else {
       // nothing to do.
@@ -1513,6 +1534,11 @@ void MapWindow::ModifyMapScale(void) {
 }
 
 
+bool MapWindow::isTargetPan(void) {
+  return TargetPan;
+}
+
+
 void MapWindow::UpdateMapScale()
 {
   static double AutoMapScale= RequestMapScale;
@@ -1529,7 +1555,20 @@ void MapWindow::UpdateMapScale()
     useraskedforchange = true;
   }
 
-  double wpd = DerivedDrawInfo.ZoomDistance;
+  double wpd;
+  if (TargetPan) {
+    wpd = TargetZoomDistance;
+  } else {
+    wpd = DerivedDrawInfo.ZoomDistance;
+  }
+  if (TargetPan) {
+    // set scale exactly so that waypoint distance is the zoom factor
+    // across the screen
+    RequestMapScale = LimitMapScale(wpd
+                                    *DISTANCEMODIFY/ 4.0);
+    ModifyMapScale();
+    return;
+  } 
   
   if (AutoZoom) {
     if(wpd > 0)
@@ -1593,6 +1632,9 @@ void MapWindow::UpdateMapScale()
     //    StartingAutoMapScale = RequestMapScale;
   }
 
+  if (TargetPan) {
+    return;
+  }
 
   LockTaskData();  // protect from external task changes
   #ifdef HAVEEXCEPTIONS
@@ -1621,7 +1663,7 @@ void MapWindow::UpdateMapScale()
       StartingAutoMapScale = 0.0;
     }
 
-    }
+  }
   #ifdef HAVEEXCEPTIONS
   }__finally
   #endif
@@ -1883,12 +1925,14 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     if (extGPSCONNECT) {
       DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
-      DrawBearing(hdcDrawWindowBg, Orig_Aircraft);
+      DrawBearing(hdcDrawWindowBg);
     }
 
     // draw wind vector at aircraft
     if (!EnablePan) {
       DrawWindAtAircraft2(hdcDrawWindowBg, Orig_Aircraft, rc);
+    } else if (TargetPan) {
+      DrawWindAtAircraft2(hdcDrawWindowBg, Orig, rc);
     }
 
     // Draw traffic
@@ -1896,7 +1940,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     // finally, draw you!
 
-    if (EnablePan) {
+    if (EnablePan && !TargetPan) {
       DrawCrossHairs(hdcDrawWindowBg, Orig);
     }
 
@@ -1921,6 +1965,12 @@ void MapWindow::RenderMapWindow(  RECT rc)
   DrawMapScale2(hdcDrawWindow,rc, Orig_Aircraft);
   
   DrawCompass(hdcDrawWindow, rc);
+
+  /* JMW Experimental only!
+  if (EnableAuxiliaryInfo) {
+    DrawHorizon(hdcDrawWindow, rc);
+  }
+  */
 
   DrawFlightMode(hdcDrawWindow, rc);
 
@@ -3109,79 +3159,6 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
 }
 
 
-/* Unused!
-void MapWindow::DrawWindAtAircraft(HDC hdc, POINT Orig, RECT rc) {
-  int i, j;
-  POINT Start;
-  HPEN hpOld;
-  int iwind;
-  int koff;
-  
-  if (DerivedDrawInfo.WindSpeed<0.5) {
-    return; // JMW don't bother drawing it if not significant
-  }
-  
-  hpOld = (HPEN)SelectObject(hdc, hpWind);
-  
-  int wmag = iround(10.0*DerivedDrawInfo.WindSpeed);
-  int numvecs;
-  
-  numvecs = (wmag/52)+1;
-  for (j=0; j<numvecs; j++) {
-    if (j== numvecs-1) {
-      iwind = wmag % 52;
-    } else {
-      iwind = 52;
-    }
-    
-    Start.y = Orig.y;
-    Start.x = Orig.x;
-    POINT Arrow[4] = { {0,7}, {0,0}, {-5,0}, {5,0} };
-    
-    koff = 5*(2*j-(numvecs-1));
-    Arrow[0].y += iwind/2;
-    Arrow[1].y -= 0;
-    Arrow[2].y += iwind/2;
-    Arrow[3].y += iwind/2;
-    Arrow[0].x += koff;
-    Arrow[1].x += koff;
-    Arrow[2].x += koff;
-    Arrow[3].x += koff;
-    
-    // OLD WIND
-    //POINT Arrow[4] = { {0,-15}, {0,-35}, {-5,-22}, {5,-22} };
-    //Start.x = Orig.x;
-    //Start.y = Orig.y;
-    //Arrow[1].y =(long)( -15 - 5 * DerivedDrawInfo.WindSpeed );
-    //
-    
-    // JMW TODO: if wind is stronger than 10 knots, draw two arrowheads
-    
-    for(i=0;i<4;i++)
-    {
-      Arrow[i].y -= iwind/2-25;
-    }
-    PolygonRotateShift(Arrow, 4, Start.x, Start.y, 
-                       DerivedDrawInfo.WindBearing-DisplayAngle);
-
-    SelectObject(hdc, hpWindThick);
-    
-    DrawSolidLine(hdc,Arrow[0],Arrow[1]);
-    DrawSolidLine(hdc,Arrow[0],Arrow[2]);
-    DrawSolidLine(hdc,Arrow[0],Arrow[3]);
-
-    SelectObject(hdc, hpWind);
-
-    DrawSolidLine(hdc,Arrow[0],Arrow[1]);
-    DrawSolidLine(hdc,Arrow[0],Arrow[2]);
-    DrawSolidLine(hdc,Arrow[0],Arrow[3]);
-    
-  }
-  
-  SelectObject(hdc, hpOld);
-}
-*/
-
 void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
   int i;
   POINT Start;
@@ -3253,81 +3230,9 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
   SelectObject(hdc, hpOld);
 }
 
-/* Unused!
-void MapWindow::DrawWind(HDC hdc, POINT Orig, RECT rc)
+
+void MapWindow::DrawBearing(HDC hdc)
 {
-  int j;
-  POINT Start;
-  HPEN hpOld;
-  int iwind;
-  int koff;
-  
-  if (DerivedDrawInfo.WindSpeed<0.5) {
-    return; // JMW don't bother drawing it if not significant
-  }
-  
-  hpOld = (HPEN)SelectObject(hdc, hpWind);
-  
-  int wmag = iround(10.0*DerivedDrawInfo.WindSpeed);
-  int numvecs;
-  
-  numvecs = (wmag/52)+1;
-  for (j=0; j<numvecs; j++) {
-    if (j== numvecs-1) {
-      iwind = wmag % 52;
-    } else {
-      iwind = 52;
-    }
-    
-    Start.y = 19+rc.top;
-    Start.x = rc.right - 19;
-    POINT Arrow[4] = { {0,7}, {0,0}, {-5,0}, {5,0} };
-    
-    koff = 5*(2*j-(numvecs-1));
-
-    Arrow[0].y += iwind/2;
-    Arrow[1].y -= 0;
-    Arrow[2].y += iwind/2;
-    Arrow[3].y += iwind/2;
-    Arrow[0].x += koff;
-    Arrow[1].x += koff;
-    Arrow[2].x += koff;
-    Arrow[3].x += koff;
-
-    // OLD WIND
-    //POINT Arrow[4] = { {0,-15}, {0,-35}, {-5,-22}, {5,-22} };
-    //Start.x = Orig.x;
-    //Start.y = Orig.y;
-    //Arrow[1].y =(long)( -15 - 5 * DerivedDrawInfo.WindSpeed );
-    //
-    
-    // JMW TODO: if wind is stronger than 10 knots, draw two arrowheads
-
-    PolygonRotateShift(Arrow, 5, Start.x, Start.y, 
-              DerivedDrawInfo.WindBearing-DisplayAngle);
-    
-    SelectObject(hdc, hpWindThick);
-    
-    DrawSolidLine(hdc,Arrow[0],Arrow[1]);
-    DrawSolidLine(hdc,Arrow[0],Arrow[2]);
-    DrawSolidLine(hdc,Arrow[0],Arrow[3]);
-
-    SelectObject(hdc, hpWind);
-
-    DrawSolidLine(hdc,Arrow[0],Arrow[1]);
-    DrawSolidLine(hdc,Arrow[0],Arrow[2]);
-    DrawSolidLine(hdc,Arrow[0],Arrow[3]);
-
-  }
-  
-  SelectObject(hdc, hpOld);
-}
-*/
-
-
-void MapWindow::DrawBearing(HDC hdc, POINT Orig)
-{
-  HPEN hpOld;
 
   if (!ValidTaskPoint(ActiveWayPoint)) {
     return; 
@@ -3335,11 +3240,6 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
 
   LockTaskData();  // protect from external task changes
 
-  int index = Task[ActiveWayPoint].Index;
-  
-  double distance=0;
-  double distanceTotal=0;
-  double Bearing;
   double startLat = DrawInfo.Latitude;
   double startLon = DrawInfo.Longitude;
   double targetLat;
@@ -3349,75 +3249,42 @@ void MapWindow::DrawBearing(HDC hdc, POINT Orig)
     targetLat = Task[ActiveWayPoint].AATTargetLat;
     targetLon = Task[ActiveWayPoint].AATTargetLon; 
   } else {
-    targetLat = WayPointList[index].Latitude;
-    targetLon = WayPointList[index].Longitude; 
+    targetLat = WayPointList[Task[ActiveWayPoint].Index].Latitude;
+    targetLon = WayPointList[Task[ActiveWayPoint].Index].Longitude; 
   }
   UnlockTaskData();
 
-  DistanceBearing(startLat,
-                  startLon,
-                  targetLat,
-                  targetLon,
-                  &distanceTotal,
-                  &Bearing);
+  DrawGreatCircle(hdc, startLon, startLat,
+                  targetLon, targetLat);
 
-  distance = distanceTotal;
-  
-  if (distanceTotal==0.0) {
-    return;
-  }
+  if (TargetPan) {
+    // Draw all of task if in target pan mode
+    // TODO: draw inbound/outbound arrows?
+    startLat = targetLat;
+    startLon = targetLon;
 
-  double d_distance = max(5000.0,distanceTotal/10);
+    LockTaskData();
+    for (int i=ActiveWayPoint+1; i<MAXTASKPOINTS; i++) {
+      if (ValidTaskPoint(i)) {
 
-  hpOld = (HPEN)SelectObject(hdc, hpBearing);
+        if (AATEnabled && ValidTaskPoint(i+1)) {
+          targetLat = Task[i].AATTargetLat;
+          targetLon = Task[i].AATTargetLon; 
+        } else {
+          targetLat = WayPointList[Task[i].Index].Latitude;
+          targetLon = WayPointList[Task[i].Index].Longitude; 
+        }
+       
+        DrawGreatCircle(hdc, startLon, startLat,
+                        targetLon, targetLat);
 
-  POINT StartP;
-  POINT EndP;
-  LatLon2Screen(startLon, 
-                startLat,
-                StartP);
-  LatLon2Screen(targetLon, 
-                targetLat,
-                EndP);
-  if (d_distance>distanceTotal) {
-    DrawSolidLine(hdc, StartP, EndP);
-  } else {
-    for (int i=0; i<= 10; i++) {
-
-      double tlat1, tlon1;
-
-      FindLatitudeLongitude(startLat, 
-                            startLon, 
-                            Bearing,
-                            min(distance,d_distance), 
-                            &tlat1, 
-                            &tlon1);
-      
-      DistanceBearing(tlat1,
-                      tlon1,
-                      targetLat,
-                      targetLon,
-                      &distance,
-                      &Bearing);
-      
-      LatLon2Screen(tlon1, 
-                    tlat1,
-                    EndP);
-      
-      DrawSolidLine(hdc, StartP, EndP);
-      
-      StartP.x = EndP.x;
-      StartP.y = EndP.y;
-
-      startLat = tlat1;
-      startLon = tlon1;
-      
+        startLat = targetLat;
+        startLon = targetLon;
+      }
     }
+    UnlockTaskData();
   }
-  SelectObject(hdc, hpOld);
 }
-
-
 
 
 double MapWindow::GetApproxScreenRange() {
@@ -3484,25 +3351,6 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
       _tcscat(Scale,TEXT(" "));
       _tcscat(Scale, Buffer);
     }
-    
-  /*
-  extern int CacheEfficiency;
-  extern int Performance;
-
-    hpOld = (HPEN)SelectObject(hDC, hpMapScale);
-    Start.x = rc.right-6; End.x = rc.right-6;
-    Start.y = rc.bottom-30; End.y = Start.y - 30;
-    DrawSolidLine(hDC,Start,End);
-
-    Start.x = rc.right-11; End.x = rc.right-6;
-    End.y = Start.y;
-    DrawSolidLine(hDC,Start,End);
-
-    Start.y = Start.y - 30; End.y = Start.y;
-    DrawSolidLine(hDC,Start,End);
-
-    SelectObject(hDC, hpOld);
-  */
 
     SIZE tsize;
     GetTextExtentPoint(hDC, Scale, _tcslen(Scale), &tsize);
@@ -3601,11 +3449,14 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
       (Appearance.TitleWindowFont.AscentHeight+IBLSCALE(2));
     if (!ScaleChangeFeedback){
       // bool FontSelected = false;
+      // JMW TODO gettext these
       ScaleInfo[0] = 0;
       if (AutoZoom) {
         _tcscat(ScaleInfo, TEXT("AUTO "));
       }
-      if (EnablePan) {
+      if (TargetPan) {
+        _tcscat(ScaleInfo, TEXT("TARGET "));
+      } else if (EnablePan) {
         _tcscat(ScaleInfo, TEXT("PAN "));
       }
       if (EnableAuxiliaryInfo) {
@@ -3631,8 +3482,13 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
 
     #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
-    wsprintf(ScaleInfo,TEXT("           %d %d ms"), timestats_av,
-             misc_tick_count);
+    wsprintf(ScaleInfo,TEXT("    %d %d ms %d  %d  %d"), 
+             timestats_av,
+             misc_tick_count, 
+             iround(DerivedDrawInfo.TurnRateWind),
+             iround(DrawInfo.StallRatio*100),
+             iround(DerivedDrawInfo.PitchAngle));
+
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo, 
                _tcslen(ScaleInfo), NULL);
     #endif

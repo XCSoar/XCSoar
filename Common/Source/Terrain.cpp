@@ -193,7 +193,7 @@ void ReadTopology() {
 
 
 void CloseTopology() {
-  StartupStore(TEXT("CloseTopology\r\n"));
+  StartupStore(TEXT("CloseTopology\n"));
 
   LockTerrainDataGraphics();
   for (int z=0; z<MAXTOPOLOGY; z++) {
@@ -202,6 +202,7 @@ void CloseTopology() {
     }
   }
   if (topo_marks) {
+    topo_marks->DeleteFiles();
     delete topo_marks;
     topo_marks = NULL;
   }
@@ -696,7 +697,7 @@ public:
       break;
     case 5: // blcloudpct
       is_terrain = false;
-      do_water = false;
+      do_water = true;
       height_scale = 0;
       DisplayMap = RASP.weather_map[RasterTerrain::render_weather-1];
       color_ramp = (COLORRAMP*)&weather_colors[3][0];
@@ -1226,7 +1227,7 @@ extern TCHAR szRegistryTopologyFile[];
 // JMW TODO: check ts_string does the right thing
 
 void OpenTopology() {
-  StartupStore(TEXT("OpenTopology\r\n"));
+  StartupStore(TEXT("OpenTopology\n"));
 
   // Start off by getting the names and paths
   static TCHAR  szOrigFile[MAX_PATH] = TEXT("\0");

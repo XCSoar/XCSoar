@@ -50,7 +50,7 @@ typedef struct{
   int    Type;
   int    FileIdx;
   unsigned int FourChars;
-}WayPointSelectInfo_t;
+} WayPointSelectInfo_t;
 
 static double Latitude;
 static double Longitude;

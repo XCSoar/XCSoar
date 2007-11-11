@@ -422,12 +422,14 @@ void PopupBugsBallast(int updown);
 
 // Battery status for SIMULATOR mode
 //	30% reminder, 20% exit, 30 second reminders on warnings
-#ifdef _SIM_
+
+#ifndef GNAV
 #define BATTERY_WARNING 30
 #define BATTERY_EXIT 20
 #define BATTERY_REMINDER 30000
 DWORD BatteryWarningTime = 0;
 #endif
+
 // Groups:
 //   Altitude 0,1,20,33
 //   Aircraft info 3,6,23,32,37,47,54
@@ -600,7 +602,7 @@ HWND                                                    CreateRpCommandBar(HWND 
 #ifdef DEBUG
 void                                            DebugStore(char *Str);
 #endif
-void StartupStore(char *Str);
+void StartupStore(TCHAR *Str);
 
 
 void HideMenu() {
@@ -797,7 +799,7 @@ void UnlockComm() {
 
 void RestartCommPorts() {
   static bool first = true;
-  StartupStore(TEXT("RestartCommPorts\r\n"));
+  StartupStore(TEXT("RestartCommPorts\n"));
 
   LockComm();
 #if (WINDOWSPC>0)
@@ -874,7 +876,7 @@ void RestartCommPorts() {
 void DefocusInfoBox() {
   FocusOnWindow(InfoFocus,false);
   InfoFocus = -1;
-  if (MapWindow::isPan()) {
+  if (MapWindow::isPan() && !MapWindow::isTargetPan()) {
     InputEvents::setMode(TEXT("pan"));
   } else {
     InputEvents::setMode(TEXT("default"));
@@ -1023,7 +1025,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
         }
 
         if (lastDisplayMode != DisplayMode){
-          MapWindow::SwitchZoomClimb(DisplayMode == dmCircling);
+          MapWindow::SwitchZoomClimb();
         }
 
       }
@@ -1137,7 +1139,7 @@ StartupState_t ProgramStarted = psInitInProgress;
 
 void AfterStartup() {
 
-  StartupStore(TEXT("CloseProgressDialog\r\n"));
+  StartupStore(TEXT("CloseProgressDialog\n"));
 
   CloseProgressDialog();
 
@@ -1146,10 +1148,10 @@ void AfterStartup() {
   StatusMessageData[0].delay_ms = 20000; // 20 seconds
 
 #ifdef _SIM_
-  StartupStore(TEXT("GCE_STARTUP_SIMULATOR\r\n"));
+  StartupStore(TEXT("GCE_STARTUP_SIMULATOR\n"));
   InputEvents::processGlideComputer(GCE_STARTUP_SIMULATOR);
 #else
-  StartupStore(TEXT("GCE_STARTUP_REAL\r\n"));
+  StartupStore(TEXT("GCE_STARTUP_REAL\n"));
   InputEvents::processGlideComputer(GCE_STARTUP_REAL);
 #endif
   StatusMessageData[0].delay_ms = olddelay; 
@@ -1159,7 +1161,7 @@ void AfterStartup() {
 #endif
 
   // Create default task if none exists
-  StartupStore(TEXT("Create default task\r\n"));
+  StartupStore(TEXT("Create default task\n"));
   DefaultTask();
 
   NMEAParser::GpsUpdated = true;
@@ -1176,7 +1178,7 @@ void StartupLogFreeRamAndStorage() {
   TCHAR buffer[MAX_PATH];
   LocalPath(buffer);
   int freestorage = FindFreeSpace(buffer);
-  _stprintf(temp,TEXT("Free ram %d\r\nFree storage %d\r\n"), 
+  _stprintf(temp,TEXT("Free ram %d\nFree storage %d\n"), 
             freeram, freestorage);
   StartupStore(temp);
 }
@@ -1211,7 +1213,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // experimental CVS 
 
-  wcscat(XCSoar_Version, TEXT("5.1.3 Beta2 "));
+  wcscat(XCSoar_Version, TEXT("5.1.3 Beta5 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1220,7 +1222,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   StartupStore(TEXT("Starting XCSoar "));
   StartupStore(XCSoar_Version);
-  StartupStore(TEXT("\r\n"));
+  StartupStore(TEXT("\n"));
 
   // 
   StartupLogFreeRamAndStorage();
@@ -1232,7 +1234,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   InitCommonControls();
   InitSineTable();
 
-  StartupStore(TEXT("Initialise application instance\r\n"));
+  StartupStore(TEXT("Initialise application instance\n"));
 
   // Perform application initialization:
   if (!InitInstance (hInstance, nCmdShow))
@@ -1257,7 +1259,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
 
-  StartupStore(TEXT("Initialising critical sections and events\r\n"));
+  StartupStore(TEXT("Initialising critical sections and events\n"));
 
   InitializeCriticalSection(&CritSec_EventQueue);
   csEventQueueInitialized = true;
@@ -1336,7 +1338,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   LoadWindFromRegistry();
   CalculateNewPolarCoef();
-  StartupStore(TEXT("GlidePolar::SetBallast\r\n"));
+  StartupStore(TEXT("GlidePolar::SetBallast\n"));
   GlidePolar::SetBallast();
 
   OpenTerrain();
@@ -1349,7 +1351,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
                                    GPS_INFO.Longitude);
 
   CreateProgressDialog(gettext(TEXT("Scanning weather forecast")));
-  StartupStore(TEXT("RASP load\r\n"));
+  StartupStore(TEXT("RASP load\n"));
   RASP.Scan(GPS_INFO.Latitude, GPS_INFO.Longitude);
 
   ReadAirspace();
@@ -1373,7 +1375,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // ... register all supported devices
   // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
   CreateProgressDialog(gettext(TEXT("Starting devices")));
-  StartupStore(TEXT("Register serial devices\r\n"));
+  StartupStore(TEXT("Register serial devices\n"));
   cai302Register();
   ewRegister();
   atrRegister();
@@ -1387,7 +1389,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   //JMW disabled  devInit(lpCmdLine);
 
 #ifndef _SIM_
-  StartupStore(TEXT("RestartCommPorts\r\n"));
+  StartupStore(TEXT("RestartCommPorts\n"));
   RestartCommPorts();
 #endif
 #if (WINDOWSPC>0)
@@ -1396,7 +1398,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
 
   // re-set polar in case devices need the data
-  StartupStore(TEXT("GlidePolar::SetBallast\r\n"));
+  StartupStore(TEXT("GlidePolar::SetBallast\n"));
   GlidePolar::SetBallast();
 
 #if (EXPERIMENTAL > 0)
@@ -1411,24 +1413,24 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   DoSunEphemeris(147.0,-36.0);
 
   // Finally ready to go
-  StartupStore(TEXT("CreateDrawingThread\r\n"));
+  StartupStore(TEXT("CreateDrawingThread\n"));
   MapWindow::CreateDrawingThread();
   Sleep(100);
-  StartupStore(TEXT("ShowInfoBoxes\r\n"));
+  StartupStore(TEXT("ShowInfoBoxes\n"));
   ShowInfoBoxes();
 
   SwitchToMapWindow();
-  StartupStore(TEXT("CreateCalculationThread\r\n"));
+  StartupStore(TEXT("CreateCalculationThread\n"));
   CreateCalculationThread();
   Sleep(500);
 
-  StartupStore(TEXT("AirspaceWarnListInit\r\n"));
+  StartupStore(TEXT("AirspaceWarnListInit\n"));
   AirspaceWarnListInit();
-  StartupStore(TEXT("dlgAirspaceWarningInit\r\n"));
+  StartupStore(TEXT("dlgAirspaceWarningInit\n"));
   dlgAirspaceWarningInit();
 
   // Da-da, start everything now
-  StartupStore(TEXT("ProgramStarted=1\r\n"));
+  StartupStore(TEXT("ProgramStarted=1\n"));
   ProgramStarted = psInitDone;
 
   GlobalRunning = true;
@@ -1726,7 +1728,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   WindowSize.top = (GetSystemMetrics(SM_CYSCREEN) - WindowSize.bottom) / 2;
 #endif
 
-  StartupStore(TEXT("Create main window\r\n"));
+  StartupStore(TEXT("Create main window\n"));
 
   hWndMainWindow = CreateWindow(szWindowClass, szTitle,
                                 WS_SYSMENU
@@ -1764,34 +1766,34 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   rc.bottom = SCREENHEIGHT;
 #endif
 
-  StartupStore(TEXT("InfoBox geometry\r\n"));
+  StartupStore(TEXT("InfoBox geometry\n"));
 
   InfoBoxLayout::ScreenGeometry(rc);
 
   ///////////////////////////////////////// create infoboxes
 
-  StartupStore(TEXT("Load unit bitmaps\r\n"));
+  StartupStore(TEXT("Load unit bitmaps\n"));
 
   Units::LoadUnitBitmap(hInstance);
 
-  StartupStore(TEXT("Create info boxes\r\n"));
+  StartupStore(TEXT("Create info boxes\n"));
 
   InfoBoxLayout::CreateInfoBoxes(rc);
 
-  StartupStore(TEXT("Create FLARM gauge\r\n"));
+  StartupStore(TEXT("Create FLARM gauge\n"));
   GaugeFLARM::Create();
 
-  StartupStore(TEXT("Create button labels\r\n"));
+  StartupStore(TEXT("Create button labels\n"));
   ButtonLabel::CreateButtonLabels(rc);
   ButtonLabel::SetLabelText(0,TEXT("MODE"));
 
   ////////////////// do fonts
-  StartupStore(TEXT("Initialise fonts\r\n"));
+  StartupStore(TEXT("Initialise fonts\n"));
   InitialiseFonts(rc);
 
   ButtonLabel::SetFont(MapWindowBoldFont);
 
-  StartupStore(TEXT("Initialise message system\r\n"));
+  StartupStore(TEXT("Initialise message system\n"));
   Message::Initialize(rc); // creates window, sets fonts
 
   ShowWindow(hWndMainWindow, SW_SHOW);
@@ -1799,7 +1801,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   ///////////////////////////////////////////////////////
   //// create map window
 
-  StartupStore(TEXT("Create map window\r\n"));
+  StartupStore(TEXT("Create map window\n"));
 
   hWndMapWindow = CreateWindow(TEXT("MapWindowClass"),NULL,
 			       WS_VISIBLE | WS_CHILD
@@ -1920,15 +1922,15 @@ void Shutdown(void) {
   CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
   StartHourglassCursor();
 
-  StartupStore(TEXT("Entering shutdown...\r\n"));
+  StartupStore(TEXT("Entering shutdown...\n"));
   StartupLogFreeRamAndStorage();
 
   // turn off all displays
   GlobalRunning = false;
 
-  StartupStore(TEXT("dlgAirspaceWarningDeInit\r\n"));
+  StartupStore(TEXT("dlgAirspaceWarningDeInit\n"));
   dlgAirspaceWarningDeInit();
-  StartupStore(TEXT("AirspaceWarnListDeInit\r\n"));
+  StartupStore(TEXT("AirspaceWarnListDeInit\n"));
   AirspaceWarnListDeInit();
 
   // stop logger
@@ -1939,7 +1941,7 @@ void Shutdown(void) {
 
   // Stop sound
 
-  StartupStore(TEXT("SaveSoundSettings\r\n"));
+  StartupStore(TEXT("SaveSoundSettings\n"));
   SaveSoundSettings();
 
 #ifndef DISABLEAUDIOVARIO  
@@ -1954,7 +1956,7 @@ void Shutdown(void) {
   
   // Stop drawing
   
-  StartupStore(TEXT("CloseDrawingThread\r\n"));
+  StartupStore(TEXT("CloseDrawingThread\n"));
   MapWindow::CloseDrawingThread();
 
   // Stop calculating too (wake up)
@@ -1964,7 +1966,7 @@ void Shutdown(void) {
 
   // Clear data
 
-  StartupStore(TEXT("Save default task\r\n"));
+  StartupStore(TEXT("Save default task\n"));
 
   LockTaskData();
   ResumeAbortTask(-1); // turn off abort if it was on.
@@ -1977,7 +1979,7 @@ void Shutdown(void) {
   SaveTask(buffer);
   UnlockTaskData();
 
-  StartupStore(TEXT("Clear task data\r\n"));
+  StartupStore(TEXT("Clear task data\n"));
 
   LockTaskData();
   Task[0].Index = -1;  ActiveWayPoint = -1; 
@@ -1987,7 +1989,7 @@ void Shutdown(void) {
   CloseWayPoints();
   UnlockTaskData();
 
-  StartupStore(TEXT("CloseTerrainTopology\r\n"));
+  StartupStore(TEXT("CloseTerrainTopology\n"));
 
   RASP.Close();
   CloseTerrain();
@@ -1996,14 +1998,14 @@ void Shutdown(void) {
   CloseTerrainRenderer();
 
   // Stop COM devices
-  StartupStore(TEXT("Stop COM devices\r\n"));
+  StartupStore(TEXT("Stop COM devices\n"));
   devCloseAll();
 
   SaveCalculationsPersist(&CALCULATED_INFO);
 
   #if defined(GNAV) && !defined(PCGNAV)
     StopHourglassCursor();
-    StartupStore(TEXT("Altair shutdown\r\n"));
+    StartupStore(TEXT("Altair shutdown\n"));
     Sleep(2500);
     InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
     while(1) {
@@ -2024,24 +2026,24 @@ void Shutdown(void) {
 
   // Kill windows
 
-  StartupStore(TEXT("Close Gauges\r\n"));
+  StartupStore(TEXT("Close Gauges\n"));
 
   GaugeCDI::Destroy();
   GaugeVario::Destroy();
   GaugeFLARM::Destroy();
   
-  StartupStore(TEXT("Close Messages\r\n"));
+  StartupStore(TEXT("Close Messages\n"));
   Message::Destroy();
   
   Units::UnLoadUnitBitmap();
   
-  StartupStore(TEXT("Destroy Info Boxes\r\n"));
+  StartupStore(TEXT("Destroy Info Boxes\n"));
   InfoBoxLayout::DestroyInfoBoxes();
   
-  StartupStore(TEXT("Destroy Button Labels\r\n"));
+  StartupStore(TEXT("Destroy Button Labels\n"));
   ButtonLabel::Destroy();
 
-  StartupStore(TEXT("Delete Objects\r\n"));
+  StartupStore(TEXT("Delete Objects\n"));
   
   CommandBar_Destroy(hWndCB);
   for (i=0; i<NUMSELECTSTRINGS; i++) {
@@ -2067,7 +2069,7 @@ void Shutdown(void) {
   if(AirspaceScreenPoint != NULL)  LocalFree((HLOCAL)AirspaceScreenPoint);
   if(AirspaceCircle != NULL) LocalFree((HLOCAL)AirspaceCircle);
 
-  StartupStore(TEXT("Delete Critical Sections\r\n"));
+  StartupStore(TEXT("Delete Critical Sections\n"));
   
   DeleteCriticalSection(&CritSec_EventQueue);
   csEventQueueInitialized = false;
@@ -2084,30 +2086,30 @@ void Shutdown(void) {
   DeleteCriticalSection(&CritSec_TerrainDataGraphics);
   csTerrainDataCalculationsInitialized = false;
 
-  StartupStore(TEXT("Close Progress Dialog\r\n"));
+  StartupStore(TEXT("Close Progress Dialog\n"));
 
   CloseProgressDialog();
 
-  StartupStore(TEXT("Close Calculations\r\n"));
+  StartupStore(TEXT("Close Calculations\n"));
   CloseCalculations();
 
   CloseGeoid();
 
-  StartupStore(TEXT("Close Windows\r\n"));
+  StartupStore(TEXT("Close Windows\n"));
   DestroyWindow(hWndMapWindow);
   DestroyWindow(hWndMainWindow);
       
-  StartupStore(TEXT("Close Event Handles\r\n"));
+  StartupStore(TEXT("Close Event Handles\n"));
   CloseHandle(drawTriggerEvent);
   CloseHandle(dataTriggerEvent);
   CloseHandle(varioTriggerEvent);
 
 #ifdef DEBUG_TRANSLATIONS
-  StartupStore(TEXT("Writing missing translations\r\n"));
+  StartupStore(TEXT("Writing missing translations\n"));
   WriteMissingTranslations();
 #endif
 
-  StartupStore(TEXT("Finished shutdown\r\n"));
+  StartupStore(TEXT("Finished shutdown\n"));
   StopHourglassCursor();
 
 }
@@ -2229,7 +2231,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (ProgramStarted==psFirstDrwaDone) {
 	  AfterStartup();
 	  ProgramStarted = psNormalOp;
-          StartupStore(TEXT("ProgramStarted=3\r\n"));
+          StartupStore(TEXT("ProgramStarted=3\n"));
           StartupLogFreeRamAndStorage();
 	}
       }
@@ -2939,7 +2941,7 @@ void SIMProcessTimer(void)
 
 #ifdef DEBUG
   // use this to test FLARM parsing/display
-  //    NMEAParser::TestRoutine(&GPS_INFO);
+  //      NMEAParser::TestRoutine(&GPS_INFO);
 #endif
 
   NMEAParser::GpsUpdated = TRUE;
@@ -3026,7 +3028,7 @@ void StartupStore(TCHAR *Str)
   if (csFlightDataInitialized) {
     LockFlightData();
   }
-  HANDLE hFile = INVALID_HANDLE_VALUE;
+  FILE *startupStoreFile = NULL;
   static TCHAR szFileName[MAX_PATH];
   static bool initialised = false;
   if (!initialised) {
@@ -3035,19 +3037,16 @@ void StartupStore(TCHAR *Str)
 #else
     LocalPath(szFileName, TEXT("xcsoar-startup.log"));
 #endif
-    hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
-                       NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+    startupStoreFile = _tfopen(szFileName, TEXT("w"));
+    if (startupStoreFile) {
+      fclose(startupStoreFile);
+    }
     initialised = true;
-  } else {
-    hFile = CreateFile(szFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
-                       NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-    SetFilePointer(hFile, 0, NULL, FILE_END); 
-  }
-  if (hFile != INVALID_HANDLE_VALUE) {
-    DWORD dwBytesRead;
-    WriteFile(hFile, Str, _tcslen(Str)*sizeof(TCHAR), &dwBytesRead, 
-	    (OVERLAPPED *)NULL);
-    CloseHandle(hFile);
+  } 
+  startupStoreFile = _tfopen(szFileName, TEXT("a+"));
+  if (startupStoreFile != NULL) {
+    _ftprintf(startupStoreFile, Str);
+    fclose(startupStoreFile);
   }
   if (csFlightDataInitialized) {
     UnlockFlightData();
@@ -3169,7 +3168,8 @@ void ShowInfoBoxes() {
 
 /////////////////////
 
-
+#if (WINDOWSPC<1)
+#ifndef GNAV
 DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo)
 {
     // set default return value
@@ -3181,7 +3181,6 @@ DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo)
         return 0;
     }
 
-#if (WINDOWSPC<1)
     SYSTEM_POWER_STATUS_EX2 sps;
 
     // request the power status
@@ -3194,11 +3193,11 @@ DWORD GetBatteryInfo(BATTERYINFO* pBatteryInfo)
         pBatteryInfo->chargeStatus = sps.BatteryFlag;
         pBatteryInfo->BatteryLifePercent = sps.BatteryLifePercent;
     }
-#endif
 
     return result;
 }
-
+#endif
+#endif
 
 //////////////
 
@@ -3226,16 +3225,22 @@ typedef struct _VIDEO_POWER_MANAGEMENT {
     ULONG PowerState;
 } VIDEO_POWER_MANAGEMENT, *PVIDEO_POWER_MANAGEMENT;
 
+int PDABatteryPercent = 100;
 
 void BlankDisplay(bool doblank) {
   static bool oldblank = false;
 
 #if (WINDOWSPC>0)
   return;
-#endif
+#else
 #ifdef GNAV
   return;
-#endif
+#else
+
+  BATTERYINFO BatteryInfo;
+  if (GetBatteryInfo(&BatteryInfo)) {
+    PDABatteryPercent = BatteryInfo.BatteryLifePercent;
+  } 
 
   if (!EnableAutoBlank) {
     return;
@@ -3257,38 +3262,40 @@ void BlankDisplay(bool doblank) {
     vpm.Length = sizeof(VIDEO_POWER_MANAGEMENT);
     vpm.DPMSVersion = 0x0001;
 
-	// TODO - Trigger a GCE (Glide Computer Event) when switching to battery mode
-	//	This can be used to warn users that power has been lost and you are now
-	//	on battery power - ie: something else is wrong
+    // TODO - Trigger a GCE (Glide Computer Event) when switching
+	// to battery mode // This can be used to warn users that
+	// power has been lost and you are now // on battery power -
+	// ie: something else is wrong
 
     if (doblank) {
-      BATTERYINFO BatteryInfo;
-      GetBatteryInfo(&BatteryInfo);
 
-	  /* Battery status - simulator only - for safety of battery data
-		note: Simulator only - more important to keep running in your plane
-	  */
+      /* Battery status - simulator only - for safety of battery data
+         note: Simulator only - more important to keep running in your plane
+      */
 
-#ifdef _SIM_
       // JMW, maybe this should be active always...
       // we don't want the PDA to be completely depleted.
 
-	  if (BatteryInfo.acStatus==0) {
-		  if (BatteryInfo.BatteryLifePercent < BATTERY_EXIT) {
-                    StartupStore(TEXT("Battery low exit...\r\n"));
-		    // TODO - Debugging and warning message
-		    exit(0);
-		  } else if (BatteryInfo.BatteryLifePercent < BATTERY_WARNING) {
-		    DWORD LocalWarningTime = ::GetTickCount();
-		    if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
-		      BatteryWarningTime = LocalWarningTime;
-		      // TODO - Show the user what the status is.
-		      DoStatusMessage(TEXT("Organiser Battery Low"));
-		    }
-		  }
-	  }
-
+      if (BatteryInfo.acStatus==0) {
+#ifdef _SIM_
+        if (PDABatteryPercent < BATTERY_EXIT) {
+          StartupStore(TEXT("Battery low exit...\n"));
+          // TODO - Debugging and warning message
+          Shutdown();
+          exit(0);
+        } else
 #endif
+          if (PDABatteryPercent < BATTERY_WARNING) {
+            DWORD LocalWarningTime = ::GetTickCount();
+            if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
+              BatteryWarningTime = LocalWarningTime;
+              // TODO - Show the user what the status is.
+              DoStatusMessage(TEXT("Organiser Battery Low"));
+            }
+          } else {
+            BatteryWarningTime = 0;
+          }
+      }
 
       if (BatteryInfo.acStatus==0) {
 
@@ -3314,6 +3321,8 @@ void BlankDisplay(bool doblank) {
 
   }
   ::ReleaseDC(NULL, gdc);
+#endif
+#endif
 }
 
 

@@ -473,6 +473,11 @@ static void UpdateParameters(bool first) {
   VegaConfigurationUpdated(TEXT("CalibrationTEStatic"), first);
   VegaConfigurationUpdated(TEXT("CalibrationTEDynamic"), first);
 
+  VegaConfigurationUpdated(TEXT("AccelerometerSlopeX"), first);
+  VegaConfigurationUpdated(TEXT("AccelerometerSlopeY"), first);
+  VegaConfigurationUpdated(TEXT("AccelerometerOffsetX"), first);
+  VegaConfigurationUpdated(TEXT("AccelerometerOffsetY"), first);
+
   //  VegaConfigurationUpdated(TEXT("PDAPower"), first);
   VegaConfigurationUpdated(TEXT("ToneAveragerVarioTimeScale"), first);
   VegaConfigurationUpdated(TEXT("ToneAveragerCruiseTimeScale"), first);

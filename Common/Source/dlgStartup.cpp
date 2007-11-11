@@ -78,7 +78,7 @@ extern TCHAR startProfileFile[];
 
 void dlgStartupShowModal(void){
   WndProperty* wp;
-  StartupStore(TEXT("Startup dialog\r\n"));
+  StartupStore(TEXT("Startup dialog\n"));
 
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];

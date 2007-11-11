@@ -151,7 +151,8 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (Calculated->Flying) {
     if (Basic->Time - StatsLastTime >= dtStats) {
       flightstats.Altitude.
-        least_squares_update(DetectStartTime(Basic, Calculated)/3600.0, 
+        least_squares_update(max(0,
+                                 Basic->Time-Calculated->TakeOffTime)/3600.0, 
                              Calculated->NavAltitude);
       StatsLastTime += dtStats;
       if (StatsLastTime< Basic->Time-dtStats) {
@@ -574,7 +575,7 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 #endif
   }
 
-  StartupStore(TEXT("LoadCalculationsPersist\r\n"));
+  StartupStore(TEXT("LoadCalculationsPersist\n"));
 
   HANDLE hFile;
   DWORD dwBytesWritten;
@@ -624,7 +625,7 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
   DWORD size;
   if (FindFreeSpace(szCalculationsPersistDirectory)<MINFREESTORAGE) return;
 
-  StartupStore(TEXT("SaveCalculationsPersist\r\n"));
+  StartupStore(TEXT("SaveCalculationsPersist\n"));
 
   hFile = CreateFile(szCalculationsPersistFileName,
                      GENERIC_WRITE,0,(LPSECURITY_ATTRIBUTES)NULL,

@@ -184,7 +184,8 @@ int  Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip=false,
             bool fill=true);
 int Segment(HDC hdc, long x, long y, int radius, RECT rc, 
 	    double start,
-	    double end);
+	    double end,
+            bool horizon= false);
 void ReadAssetNumber(void);
 void WriteProfile(TCHAR *szFile);
 void ReadProfile(TCHAR *szFile);

@@ -174,7 +174,7 @@ int DLLCache_Count = 0;
 
 // Read the data files
 void InputEvents::readFile() {
-  StartupStore(TEXT("Loading input events file\r\n"));
+  StartupStore(TEXT("Loading input events file\n"));
 
   // clear the GCE and NMEA queues
   LockEventQueue();
@@ -2092,6 +2092,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
   // LoadLibrary(TEXT("test.dll"));
 
   StartupStore(misc);
+  StartupStore(TEXT("\n"));
 	
   TCHAR data[MAX_PATH];
   TCHAR* dll_name;

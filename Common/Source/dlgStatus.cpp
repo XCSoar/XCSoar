@@ -135,6 +135,7 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 static bool first = true;
+extern int PDABatteryPercent;
 
 static void UpdateValuesSystem() {
   static int extGPSCONNECT_last = extGPSCONNECT;
@@ -145,7 +146,8 @@ static void UpdateValuesSystem() {
   static bool LoggerActive_last = LoggerActive;
   static bool DeclaredToDevice_last = DeclaredToDevice;
   static double SupplyBatteryVoltage_last = GPS_INFO.SupplyBatteryVoltage;
-  
+  static int PDABatteryPercent_last = PDABatteryPercent;
+
   if (first ||
       (extGPSCONNECT_last != extGPSCONNECT) ||
       (NAVWarning_last != GPS_INFO.NAVWarning) ||
@@ -154,7 +156,8 @@ static void UpdateValuesSystem() {
       (FLARM_Available_last != GPS_INFO.FLARM_Available) ||
       (LoggerActive_last != LoggerActive) ||
       (DeclaredToDevice_last != DeclaredToDevice) ||
-      (SupplyBatteryVoltage_last != GPS_INFO.SupplyBatteryVoltage)) {
+      (SupplyBatteryVoltage_last != GPS_INFO.SupplyBatteryVoltage) ||
+      (PDABatteryPercent_last != PDABatteryPercent)) {
     first = false;
 
     extGPSCONNECT_last = extGPSCONNECT;
@@ -165,12 +168,14 @@ static void UpdateValuesSystem() {
     LoggerActive_last = LoggerActive;
     DeclaredToDevice_last = DeclaredToDevice;
     SupplyBatteryVoltage_last = GPS_INFO.SupplyBatteryVoltage;
+    PDABatteryPercent_last = PDABatteryPercent;
 
   } else {
     return;
   }
   
   TCHAR Temp[80];
+  TCHAR Temp2[80];
 
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(TEXT("prpGPS"));
@@ -245,11 +250,20 @@ static void UpdateValuesSystem() {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpBattery"));
   if (wp) {
+    _stprintf(Temp,TEXT("\0"));
+#if (WINDOWSPC<1)
+#ifndef GNAV
+    _stprintf(Temp2,TEXT("%d%% "), PDABatteryPercent);
+    _tcscat(Temp, Temp2);
+#endif
+#endif
     if (GPS_INFO.SupplyBatteryVoltage == 0) {
-      _stprintf(Temp,TEXT("-"));
+      _stprintf(Temp2,TEXT("\0"));
     } else {
-      _stprintf(Temp,TEXT("%.1f V"),GPS_INFO.SupplyBatteryVoltage);
+      _stprintf(Temp2,TEXT("%.1f V"),GPS_INFO.SupplyBatteryVoltage);
     }
+    _tcscat(Temp, Temp2);
+
     wp->SetText(Temp);
     wp->RefreshDisplay();
   }
@@ -315,10 +329,12 @@ static void UpdateValuesTimes(void) {
 
 }
 
+static int nearest_waypoint= -1;
+
+
 static void UpdateValuesFlight(void) {
   WndProperty *wp;
   TCHAR Temp[1000];
-  int iwaypoint= -1;
   double bearing;
   double distance;
   TCHAR sLongitude[16];
@@ -353,21 +369,18 @@ static void UpdateValuesFlight(void) {
     wp->SetText(Temp);
   }
 
-  iwaypoint = FindNearestWayPoint(GPS_INFO.Longitude,
-                                  GPS_INFO.Latitude,
-                                  100000.0); // big range limit
-  if (iwaypoint>=0) {
+  if (nearest_waypoint>=0) {
 
     DistanceBearing(GPS_INFO.Latitude,
                     GPS_INFO.Longitude,
-                    WayPointList[iwaypoint].Latitude,
-                    WayPointList[iwaypoint].Longitude,
+                    WayPointList[nearest_waypoint].Latitude,
+                    WayPointList[nearest_waypoint].Longitude,
                     &distance,
                     &bearing);
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpNear"));
     if (wp) {
-      wp->SetText(WayPointList[iwaypoint].Name);
+      wp->SetText(WayPointList[nearest_waypoint].Name);
     }
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpBearing"));
@@ -624,6 +637,10 @@ void dlgStatusShowModal(int start_page){
       wb->SetVisible(false);
     }
   }
+
+  nearest_waypoint = FindNearestWayPoint(GPS_INFO.Longitude,
+                                         GPS_INFO.Latitude,
+                                         100000.0, true); // big range limit
 
   UpdateValuesSystem();
   UpdateValuesFlight();

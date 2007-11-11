@@ -127,14 +127,19 @@ static bool KeyTimer(bool isdown, DWORD thekey) {
 }
 
 
+//////////////////////
+
+
 BOOL IsDots(const TCHAR* str) {
   if(_tcscmp(str,TEXT(".")) && _tcscmp(str,TEXT(".."))) return FALSE;
   return TRUE;
 }
 
+
 int DataFieldFileReader::GetAsInteger(void){
   return mValue;
 }
+
 
 int DataFieldFileReader::SetAsInteger(int Value){
   Set(Value);
@@ -143,44 +148,55 @@ int DataFieldFileReader::SetAsInteger(int Value){
 
 
 void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
+  
 #ifdef ALTAIRSYNC
   ScanDirectories(TEXT("\\NOR Flash"),filter);
 #else
-  TCHAR buffer[MAX_PATH];
+  TCHAR buffer[MAX_PATH] = TEXT("\0");
   LocalPath(buffer);
   ScanDirectories(buffer,filter);
 #ifndef GNAV
 #if (WINDOWSPC<1)
 #ifndef OLDPPC
+  static bool first = true;
 
   BOOL bContinue = TRUE;     // If TRUE, continue searching
                              // If FALSE, stop searching.
   HANDLE hFlashCard;         // Search handle for storage cards
   WIN32_FIND_DATA FlashCardTmp; // Structure for storing card
                                       // information temporarily
-  TCHAR FlashPath[MAX_PATH];
+  TCHAR FlashPath[MAX_PATH] = TEXT("\0");
 
   hFlashCard = FindFirstFlashCard (&FlashCardTmp);
   if (hFlashCard == INVALID_HANDLE_VALUE) {
     return;
   }
-  _stprintf(FlashPath,TEXT("\\%s\\XCSoarData"),FlashCardTmp.cFileName);
+  _stprintf(FlashPath,TEXT("/%s/XCSoarData"),FlashCardTmp.cFileName);
   ScanDirectories(FlashPath,filter);
+  if (first) {
+    StartupStore(FlashPath);
+    StartupStore(TEXT("\n"));
+  }
   while (bContinue) {
       // Search for the next storage card.
       bContinue = FindNextFlashCard (hFlashCard, &FlashCardTmp);
       if (bContinue) {
-        _stprintf(FlashPath,TEXT("\\%s\\XCSoarData"),FlashCardTmp.cFileName);
+        _stprintf(FlashPath,TEXT("/%s/XCSoarData"),FlashCardTmp.cFileName);
         ScanDirectories(FlashPath,filter);
+        if (first) {
+          StartupStore(FlashPath);
+          StartupStore(TEXT("\n"));
+        }
       }
   }
   FindClose (hFlashCard);          // Close the search handle.
 
+  first = false;
 #endif
 #endif
 #endif
 #endif
-
+  Sort();
 
 }
 
@@ -339,7 +355,7 @@ void DataFieldFileReader::Lookup(TCHAR *Text) {
   int i=0;
   mValue = 0;
   for (i=1; i<(int)nFiles; i++) {    
-    if (_tcscmp(Text,mTextPathFile[i])==0) {
+    if (_tcscmp(Text,fields[i].mTextPathFile)==0) {
       mValue = i;
     }
   }
@@ -351,7 +367,7 @@ int DataFieldFileReader::GetNumFiles(void) {
 
 TCHAR* DataFieldFileReader::GetPathFile(void) {
   if ((mValue<=nFiles)&&(mValue)) {
-    return mTextPathFile[mValue];
+    return fields[mValue].mTextPathFile;
   }
   return TEXT("\0");
 }
@@ -392,12 +408,13 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
 
 void DataFieldFileReader::addFile(TCHAR *Text, 
 				  TCHAR *PText) {
+  // TODO remove duplicates?
   if (nFiles<DFE_MAX_FILES) {
-    mTextFile[nFiles] = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
-    _tcscpy(mTextFile[nFiles], Text);
+    fields[nFiles].mTextFile = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
+    _tcscpy(fields[nFiles].mTextFile, Text);
 
-    mTextPathFile[nFiles] = (TCHAR*)malloc((_tcslen(PText)+1)*sizeof(TCHAR));
-    _tcscpy(mTextPathFile[nFiles], PText);
+    fields[nFiles].mTextPathFile = (TCHAR*)malloc((_tcslen(PText)+1)*sizeof(TCHAR));
+    _tcscpy(fields[nFiles].mTextPathFile, PText);
 
     nFiles++;
   }
@@ -406,7 +423,7 @@ void DataFieldFileReader::addFile(TCHAR *Text,
 
 TCHAR *DataFieldFileReader::GetAsString(void){
   if (mValue<nFiles) {
-    return(mTextFile[mValue]);
+    return(fields[mValue].mTextFile);
   } else {
     return NULL;
   }
@@ -415,7 +432,7 @@ TCHAR *DataFieldFileReader::GetAsString(void){
 
 TCHAR *DataFieldFileReader::GetAsDisplayString(void){
   if (mValue<nFiles) {
-    return(mTextFile[mValue]);
+    return(fields[mValue].mTextFile);
   } else {
     return NULL;
   }
@@ -431,6 +448,7 @@ void DataFieldFileReader::Set(int Value){
   }
 }
 
+
 void DataFieldFileReader::Inc(void){
   if (mValue<nFiles-1) {
     mValue++;
@@ -438,12 +456,26 @@ void DataFieldFileReader::Inc(void){
   }
 }
 
+
 void DataFieldFileReader::Dec(void){
   if (mValue>0) {
     mValue--;
     (mOnDataAccess)(this, daChange);
   }
 }
+
+static int _cdecl DataFieldFileReaderCompare(const void *elem1, 
+                                             const void *elem2 ){
+  return _tcscmp(((DataFieldFileReaderEntry*)elem1)->mTextFile,
+                 ((DataFieldFileReaderEntry*)elem2)->mTextFile);
+}
+
+
+void DataFieldFileReader::Sort(void){
+  qsort(fields+1, nFiles-1, sizeof(DataFieldFileReaderEntry), 
+        DataFieldFileReaderCompare);
+}
+
 
 /////////
 
@@ -899,7 +931,8 @@ WindowControl *LastFocusControl = NULL;
 
 
 void InitWindowControlModule(void);
-LRESULT CALLBACK WindowControlWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK WindowControlWndProc(HWND hwnd, UINT uMsg, 
+                                      WPARAM wParam, LPARAM lParam);
 
 static COLORREF bkColor = clWhite;
 static COLORREF fgColor = clBlack;
@@ -948,7 +981,7 @@ WindowControl::WindowControl(WindowControl *Owner,
   mDontPaintSelector = false;
 
   if ((mParent == NULL) && (mOwner != NULL))
-    mParent = mOwner->GetClientAeraHandle();
+    mParent = mOwner->GetClientAreaHandle();
 
   if (Name != NULL)
     _tcscpy(mName, Name);  // todo size check
@@ -1677,8 +1710,9 @@ ACCEL  WndForm::mAccel[] = {
   {0, VK_RETURN,  VK_RETURN},
 };
 
-WndForm::WndForm(HWND Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height):
-      WindowControl(NULL, Parent, Name, X, Y, Width, Height, false){
+WndForm::WndForm(HWND Parent, TCHAR *Name, TCHAR *Caption, 
+                 int X, int Y, int Width, int Height):
+  WindowControl(NULL, Parent, Name, X, Y, Width, Height, false) {
 
   mClientWindow = NULL;
   mOnKeyDownNotify = NULL;
@@ -1734,7 +1768,7 @@ void WndForm::Destroy(void){
 }
 
 
-HWND WndForm::GetClientAeraHandle(void){
+HWND WndForm::GetClientAreaHandle(void){
 
   if (mClientWindow != NULL)
 
@@ -1747,9 +1781,9 @@ HWND WndForm::GetClientAeraHandle(void){
 };
 
 
-void WndForm::AddClient(WindowControl *Client){             // add client window
+void WndForm::AddClient(WindowControl *Client){      // add client window
   if (mClientWindow != NULL){
-    mClientWindow->AddClient(Client);                       // add it to the clientarea window
+    mClientWindow->AddClient(Client); // add it to the clientarea window
   } else
     WindowControl::AddClient(Client);
 }
@@ -2017,6 +2051,8 @@ void WndForm::Paint(HDC hDC){
   SelectObject(hDC, mhTitleFont);
   GetTextExtentPoint(hDC, mCaption, _tcslen(mCaption), &tsize);
 
+  // JMW todo add here icons?
+
   CopyRect(&mTitleRect, &rcClient);
   mTitleRect.bottom = mTitleRect.top + tsize.cy;
 
@@ -2033,7 +2069,7 @@ void WndForm::Paint(HDC hDC){
   }
 
   ExtTextOut(hDC, mTitleRect.left+1, mTitleRect.top-2,
-  ETO_OPAQUE, &mTitleRect, mCaption, _tcslen(mCaption), NULL);
+             ETO_OPAQUE, &mTitleRect, mCaption, _tcslen(mCaption), NULL);
 
 //  FillRect(hDC, &rc, GetBackBrush());
 
@@ -2339,6 +2375,8 @@ void WndButton::Paint(HDC hDC){
 
   CopyRect(&rc, GetBoundRect());
   InflateRect(&rc, -2, -2); // todo border width
+
+  // JMW todo: add icons?
 
   if (mDown){
     DrawFrameControl(hDC, &rc, DFC_BUTTON, DFCS_BUTTONPUSH | DFCS_PUSHED);

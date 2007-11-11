@@ -807,6 +807,7 @@ IDR_XML_WAYPOINTEDIT         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWayp
 IDR_XML_WEATHER    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWeather.xml"
 
 IDR_XML_AIRSPACESELECT  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceSelect.xml"
+IDR_XML_TARGET  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTarget.xml"
 
 
 IDR_XML_CHECKLIST_L       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgChecklist_L.xml"
@@ -824,6 +825,8 @@ IDR_XML_TASKWAYPOINT_L    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTaskWay
 IDR_XML_STARTUP_L         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartup_L.xml"
 IDR_XML_WAYPOINTEDIT_L         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointEdit_L.xml"
 IDR_XML_AIRSPACESELECT_L  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceSelect_L.xml"
+IDR_XML_TARGET_L  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTarget_L.xml"
+IDR_XML_WEATHER_L    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWeather_L.xml"
 
 /////////////////////////////////////////////////////////////////////////////
 //

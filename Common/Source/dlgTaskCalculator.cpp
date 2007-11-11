@@ -42,6 +42,7 @@ Copyright_License {
 #include "dlgTools.h"
 #include "Port.h"
 #include "Calculations2.h"
+#include "Dialogs.h"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
@@ -57,8 +58,6 @@ static void OnOKClicked(WindowControl * Sender){
 	(void)Sender;
   wf->SetModalResult(mrOK);
 }
-
-
 
 static double Range = 0;
 
@@ -123,6 +122,7 @@ static void RefreshCalculator(void) {
       wp->SetVisible(false);
     }
     wp->GetDataField()->SetAsFloat(Range*100.0);
+    wp->RefreshDisplay();
   }
 
   double v1;
@@ -149,6 +149,16 @@ static void RefreshCalculator(void) {
 
 }
 
+static void OnTargetClicked(WindowControl * Sender){
+  (void)Sender;
+  wf->SetVisible(false);
+  dlgTarget();
+  // find start value for range (it may have changed)
+  Range = AdjustAATTargets(2.0);
+  RefreshCalculator();
+  wf->SetVisible(true);
+}
+
 
 static void OnMacCreadyData(DataField *Sender, 
 			    DataField::DataAccessKind_t Mode){
@@ -166,15 +176,19 @@ static void OnMacCreadyData(DataField *Sender,
 
 
 static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
+  double rthis;
   switch(Mode){
     case DataField::daGet:
       //      Sender->Set(Range*100.0);
     break;
     case DataField::daPut: 
     case DataField::daChange:
-      Range = Sender->GetAsFloat()/100.0;
-      AdjustAATTargets(Range);
-      RefreshCalculator();
+      rthis = Sender->GetAsFloat()/100.0;
+      if (fabs(Range-rthis)>0.01) {
+        Range = rthis;
+        AdjustAATTargets(Range);
+        RefreshCalculator();
+      }
     break;
   }
 }
@@ -217,6 +231,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnOKClicked),
   DeclearCallBackEntry(OnCancelClicked),
   DeclearCallBackEntry(OnOptimiseClicked),
+  DeclearCallBackEntry(OnTargetClicked),
   DeclearCallBackEntry(NULL)
 };
 
@@ -243,6 +258,9 @@ void dlgTaskCalculatorShowModal(void){
 
   if (!AATEnabled) {
     ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);
+  }
+  if (!ValidTaskPoint(ActiveWayPoint)) {
+    ((WndButton *)wf->FindByName(TEXT("Target")))->SetVisible(false);
   }
 
   if (wf->ShowModal() == mrCancle) {

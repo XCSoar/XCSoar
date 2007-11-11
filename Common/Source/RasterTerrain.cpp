@@ -546,7 +546,7 @@ void RasterTerrain::OpenTerrain(void)
   render_weather = 0;
   terrain_initialised = false;
 
-  StartupStore(TEXT("OpenTerrain\r\n"));
+  StartupStore(TEXT("OpenTerrain\n"));
   CreateProgressDialog(gettext(TEXT("Loading Terrain File...")));
   SetProgressStepSize(2);
 
@@ -767,7 +767,7 @@ void RasterMapCache::Close(void) {
 
 void RasterTerrain::CloseTerrain(void)
 {
-  StartupStore(TEXT("CloseTerrain\r\n"));
+  StartupStore(TEXT("CloseTerrain\n"));
 
   render_weather = 0;
 
