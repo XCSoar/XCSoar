@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.116 2007/11/11 14:13:52 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.117 2007/11/14 08:10:23 jwharington Exp $
 
 Copyright_License {
 
@@ -483,7 +483,7 @@ HWND CreateProgressDialog(TCHAR* text) {
                                0, 0, (rc.right - rc.left),
 			       (rc.bottom-rc.top),
                                hWndMainWindow, NULL, hInst, NULL);
-    SetWindowPos(hWndCurtain,HWND_TOPMOST,0,0,0,0,
+    SetWindowPos(hWndCurtain,HWND_TOP,0,0,0,0,
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
     ShowWindow(hWndCurtain,SW_SHOW);
     SetForegroundWindow(hWndCurtain);
@@ -494,7 +494,7 @@ HWND CreateProgressDialog(TCHAR* text) {
     RECT rcp;
     GetClientRect(hProgress, &rcp);
     GetWindowRect(hWndMainWindow, &rc);
-    SetWindowPos(hProgress,HWND_TOPMOST,
+    SetWindowPos(hProgress,HWND_TOP,
                  rc.left, rc.top, (rcp.right - rcp.left), (rcp.bottom-rcp.top),
                  SWP_SHOWWINDOW);
 #else
@@ -502,7 +502,7 @@ HWND CreateProgressDialog(TCHAR* text) {
 		 SHFS_HIDETASKBAR
 		 |SHFS_HIDESIPBUTTON
 		 |SHFS_HIDESTARTICON);
-    SetWindowPos(hProgress,HWND_TOPMOST,0,0,0,0,
+    SetWindowPos(hProgress,HWND_TOP,0,0,0,0,
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
 #endif
 

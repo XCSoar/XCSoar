@@ -970,6 +970,8 @@ bool MapWindow::SetTargetPan(bool do_pan, int target_point) {
   static double old_longitude;
   static bool old_pan=false;
 
+  TargetPanIndex = target_point;
+
   if (do_pan && !TargetPan) {
     old_latitude = PanLatitude;
     old_longitude = PanLongitude;

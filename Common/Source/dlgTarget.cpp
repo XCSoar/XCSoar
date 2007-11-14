@@ -88,6 +88,40 @@ static void RefreshCalculator(void) {
     wp->GetDataField()->SetAsFloat(Radial);
   }
 
+  // update outputs
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
+  if (wp) {
+    double dd = CALCULATED_INFO.TaskTimeToGo;
+    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
+      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    }
+    dd= min(24.0*60.0,dd/60.0);
+    wp->GetDataField()->SetAsFloat(dd);
+    wp->RefreshDisplay();
+  }
+
+  double v1;
+  if (CALCULATED_INFO.TaskTimeToGo>0) {
+    v1 = CALCULATED_INFO.TaskDistanceToGo/
+      CALCULATED_INFO.TaskTimeToGo;
+  } else {
+    v1 = 0;
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedRemaining"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(v1*TASKSPEEDMODIFY);
+    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpSpeedAchieved"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(CALCULATED_INFO.TaskSpeed*TASKSPEEDMODIFY);
+    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
+    wp->RefreshDisplay();
+  }
+
 }
 
 
@@ -164,6 +198,10 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 void dlgTarget(void) {
+
+  if (!ValidTaskPoint(ActiveWayPoint)) {
+    return;
+  }
 
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];

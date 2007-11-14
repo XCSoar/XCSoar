@@ -224,6 +224,21 @@ void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text,
   SetBkMode(hdc, TRANSPARENT);
 }
 
+
+void Statistics::DrawNoData(HDC hdc, RECT rc) {
+
+  SIZE tsize;
+  TCHAR text[80];
+  _stprintf(text,TEXT("%s"), gettext(TEXT("No data")));
+  GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
+  int x = (int)(rc.left+rc.right-tsize.cx)/2;
+  int y = (int)(rc.top+rc.bottom-tsize.cy)/2;
+  SetBkMode(hdc, OPAQUE);
+  ExtTextOut(hdc, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
+  SetBkMode(hdc, TRANSPARENT);
+}
+
+
 extern HFONT MapLabelFont;
 
 
@@ -527,9 +542,12 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double tic_step, double zero,
 void Statistics::RenderBarograph(HDC hdc, RECT rc)
 {
 
-  ResetScale();
+  if (flightstats.Altitude.sum_n<2) {
+    DrawNoData(hdc, rc);
+    return;
+  }
 
-  if (flightstats.Altitude.sum_n<2) return;
+  ResetScale();
 
   ScaleXFromData(rc, &flightstats.Altitude);
   ScaleYFromData(rc, &flightstats.Altitude);
@@ -558,9 +576,15 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
 
 void Statistics::RenderClimb(HDC hdc, RECT rc) 
 {
+
+  if (flightstats.ThermalAverage.sum_n<=1) {
+    DrawNoData(hdc, rc);
+    return;
+  }
+
   ResetScale();
   ScaleYFromData(rc, &flightstats.ThermalAverage);
-  ScaleYFromValue(rc, MACCREADY+0.5);
+  ScaleYFromValue(rc, (MACCREADY+0.5));
   ScaleYFromValue(rc, 0);
 
   ScaleXFromValue(rc, -1);
@@ -570,8 +594,6 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
             1.0/LIFTMODIFY, 0,
             STYLE_THINDASHPAPER, 1.0, true);
 
-  if (flightstats.ThermalAverage.sum_n<1) return;
-  
   DrawBarChart(hdc, rc,
                &flightstats.ThermalAverage);
 
@@ -717,7 +739,10 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
     }
   }
   UnlockTaskData();
-  if (nowaypoints && !olcmode) return;
+  if (nowaypoints && !olcmode) {
+    DrawNoData(hdc, rc);
+    return;
+  }
 
   olc.SetLine();
   int nolc = olc.getN();
@@ -1018,6 +1043,10 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
 			       CuSonde::cslevels[i].dewpoint)));
     }
   }
+  if (hmin>= hmax) {
+    DrawNoData(hdc, rc);
+    return;
+  }
 
   ScaleYFromValue(rc, hmin);
   ScaleYFromValue(rc, hmax);
@@ -1093,6 +1122,12 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
   double mag;
 
   LeastSquares windstats_mag;
+
+  if (flightstats.Altitude_Ceiling.y_max
+      -flightstats.Altitude_Ceiling.y_min<=10) {
+    DrawNoData(hdc, rc);
+    return;
+  }
 
   for (i=0; i<numsteps ; i++) {
 

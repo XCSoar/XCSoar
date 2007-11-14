@@ -528,6 +528,7 @@ static void OnWaypointNewClicked(WindowControl * Sender){
   edit_waypoint.Comment[0] = 0;
   edit_waypoint.Name[0] = 0;
   edit_waypoint.Details = 0;
+  edit_waypoint.Number = NumberOfWayPoints;
   dlgWaypointEditShowModal(&edit_waypoint);
   if (_tcslen(edit_waypoint.Name)>0) {
     LockTaskData();

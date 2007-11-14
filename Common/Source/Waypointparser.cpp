@@ -976,9 +976,9 @@ void WaypointWriteFiles(void) {
   if (_tcslen(szFile1)>0) {
     fp = _tfopen(szFile1, TEXT("wt"));
   } else {
-    _tcscpy(szFile2,TEXT("waypoints1.dat"));
-    ExpandLocalPath(szFile2);
-    fp = _tfopen(szFile2, TEXT("wt"));
+    LocalPath(szFile1);
+    _tcscat(szFile1,TEXT("\\waypoints1.dat"));
+    fp = _tfopen(szFile1, TEXT("wt"));
   }
 
   if(fp != NULL) {
@@ -994,8 +994,8 @@ void WaypointWriteFiles(void) {
   if (_tcslen(szFile2)>0) {
     fp = _tfopen(szFile2, TEXT("wt"));
   } else {
-    _tcscpy(szFile2,TEXT("waypoints2.dat"));
-    ExpandLocalPath(szFile2);
+    LocalPath(szFile2);
+    _tcscat(szFile2,TEXT("\\waypoints2.dat"));
     fp = _tfopen(szFile2, TEXT("wt"));
   }
   
