@@ -2082,7 +2082,10 @@ void InputEvents::eventSetup(TCHAR *misc) {
     dlgVoiceShowModal();
   } else if (_tcscmp(misc,TEXT("Teamcode"))==0){
     dlgTeamCodeShowModal();
+  } else if (_tcscmp(misc,TEXT("Target"))==0){
+    dlgTarget();
   }
+
 }
 
 

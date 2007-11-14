@@ -601,9 +601,9 @@ location=8
 mode=Nav2
 type=key
 data=0
-event=Setup Teamcode
+event=Setup Target
 event=Mode default
-label=Team\nCode
+label=$(CheckTask)Target
 location=9
 
 # -------------
@@ -983,8 +983,9 @@ location=6
 mode=Info2
 type=key
 data=8
-event=Null
-label=
+event=Setup Teamcode
+event=Mode default
+label=Team\nCode
 location=7
 
 mode=Info2

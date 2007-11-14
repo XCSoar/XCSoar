@@ -568,10 +568,10 @@ makeLabel(mode_id,TEXT("$(CheckTaskResumed)$(CheckTask)Final\n$(FinalForceToggle
 Key2Event[mode_id]['9'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventSetup, TEXT("Teamcode"), event_id);
+event_id = InputEvents::makeEvent(&eventSetup, TEXT("Target"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Nav2"), true);
-makeLabel(mode_id,TEXT("Team\nCode"),9,event_id);
+makeLabel(mode_id,TEXT("$(CheckTask)Target"),9,event_id);
 Key2Event[mode_id]['0'] = event_id;
 
 event_id = 0;
@@ -871,9 +871,10 @@ makeLabel(mode_id,TEXT("Weather"),6,event_id);
 Key2Event[mode_id]['7'] = event_id;
 
 event_id = 0;
-event_id = InputEvents::makeEvent(&eventNull, TEXT(""), event_id);
+event_id = InputEvents::makeEvent(&eventSetup, TEXT("Teamcode"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Info2"), true);
-makeLabel(mode_id,TEXT(""),7,event_id);
+makeLabel(mode_id,TEXT("Team\nCode"),7,event_id);
 Key2Event[mode_id]['8'] = event_id;
 
 event_id = 0;

@@ -133,6 +133,7 @@ double MapWindow::PanLongitude = 0.0;
 
 bool MapWindow::EnablePan = false;
 bool MapWindow::TargetPan = false;
+int MapWindow::TargetPanIndex = 0;
 double MapWindow::TargetZoomDistance = 500.0;
 bool MapWindow::EnableTrailDrift=false;
 int MapWindow::GliderScreenPosition = 20; // 20% from bottom
@@ -1709,6 +1710,20 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
     DisplayAngle = trackbearing;
     DisplayAircraftAngle = 0.0;
 
+  }
+
+  if (TargetPan) {
+    // Target pan mode, show track up when looking at current task point,
+    // otherwise north up
+    if (ActiveWayPoint==TargetPanIndex) {
+      GliderCenter = true;
+      DisplayAngle = trackbearing;
+      DisplayAircraftAngle = 0.0;
+    } else {
+      GliderCenter = true;
+      DisplayAngle = 0.0;
+      DisplayAircraftAngle = trackbearing;
+    }
   }
 
   if(GliderCenter || EnablePan) {

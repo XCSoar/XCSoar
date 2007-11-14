@@ -64,6 +64,7 @@ class Statistics {
   static void DrawXLabel(HDC hdc, RECT rc, TCHAR *text);
   static void DrawYLabel(HDC hdc, RECT rc, TCHAR *text);
   static void DrawLabel(HDC hdc, RECT rc, TCHAR *text, double xv, double yv);
+  static void DrawNoData(HDC hdc, RECT rc);
 
   ///
 

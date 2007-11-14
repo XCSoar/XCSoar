@@ -376,6 +376,7 @@ class MapWindow {
 
   static bool TargetPan;
   static double TargetZoomDistance;
+  static int TargetPanIndex;
 
  public:
   static bool isTargetPan(void);
