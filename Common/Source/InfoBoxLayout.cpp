@@ -86,6 +86,7 @@ bool geometrychanged = false;
 
 bool InfoBoxLayout::landscape = false;
 bool InfoBoxLayout::square = false;
+bool InfoBoxLayout::fullscreen = false;
 
 void InfoBoxLayout::GetInfoBoxPosition(int i, RECT rc,
 				       int *x, int *y,
@@ -404,11 +405,73 @@ void InfoBoxLayout::GetInfoBoxSizes(RECT rc) {
 }
 
 
+void InfoBoxLayout::Paint(void) {
+  int i;
+  for (i=0; i<numInfoWindows; i++)
+    InfoBoxes[i]->Paint();
+
+  if (!fullscreen) {
+    InfoBoxes[numInfoWindows]->SetVisible(false);
+    for (i=0; i<numInfoWindows; i++)
+      InfoBoxes[i]->PaintFast();
+  } else {
+    InfoBoxes[numInfoWindows]->SetVisible(true);
+    for (i=0; i<numInfoWindows; i++) {
+      int x, y;
+      int rx, ry;
+      int rw;
+      int rh;
+      double fw, fh;
+      if (landscape) {
+        rw = 84;
+        rh = 68;
+      } else {
+        rw = 120;
+        rh = 80;
+      }
+      fw = rw/(double)ControlWidth;
+      fh = rh/(double)ControlHeight;
+      double f = min(fw, fh);
+      rw = (int)(f*ControlWidth);
+      rh = (int)(f*ControlHeight);
+
+      if (landscape) {
+        rx = i % 3;
+        ry = i / 3;
+
+        x = (rw+4)*rx;
+        y = (rh+3)*ry;
+
+      } else {
+        rx = i % 2;
+        ry = i / 4;
+
+        x = (rw)*rx;
+        y = (rh)*ry;
+
+      }
+      InfoBoxes[i]->PaintInto(InfoBoxes[numInfoWindows]->GetHdcBuf(),
+                              IBLSCALE(x), IBLSCALE(y), IBLSCALE(rw), IBLSCALE(rh));
+    }
+    InfoBoxes[numInfoWindows]->PaintFast();
+  }
+}
+
+
 void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
   int i;
   int xoff, yoff, sizex, sizey;
 
   GetInfoBoxSizes(rc);
+
+  // JMW created full screen infobox mode
+  xoff=0;
+  yoff=0;
+  sizex=rc.right-rc.left;
+  sizey=rc.bottom-rc.top;
+
+  InfoBoxes[numInfoWindows] = new InfoBox(hWndMainWindow, xoff, yoff, sizex, sizey);
+  InfoBoxes[numInfoWindows]->SetBorderKind(0);
 
   // create infobox windows
 
@@ -442,7 +505,7 @@ void InfoBoxLayout::CreateInfoBoxes(RECT rc) {
 
 void InfoBoxLayout::DestroyInfoBoxes(void){
   int i;
-  for(i=0; i<numInfoWindows; i++){
+  for(i=0; i<numInfoWindows+1; i++){
     delete (InfoBoxes[i]);
   }
 

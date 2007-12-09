@@ -58,16 +58,16 @@ void OnInfoBoxHelp(WindowControl * Sender){
   TCHAR caption[100];
   TCHAR mode[100];
   switch (config_page) {
-  case 12:
+  case 14:
     _tcscpy(mode,gettext(TEXT("circling")));
     break;
-  case 13:
+  case 15:
     _tcscpy(mode,gettext(TEXT("cruise")));
     break;
-  case 14:
+  case 16:
     _tcscpy(mode,gettext(TEXT("final glide")));
     break;
-  case 15:
+  case 17:
     _tcscpy(mode,gettext(TEXT("auxiliary")));
     break;
   default:

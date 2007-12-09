@@ -1477,6 +1477,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
+    DisplayTimeOut = 0;
+    InterfaceTimeoutReset();
 
       #if defined(GNAV)
         if (wParam == 0xF5){
@@ -1715,12 +1717,11 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
   if (TargetPan) {
     // Target pan mode, show track up when looking at current task point,
     // otherwise north up
+    GliderCenter = true;
     if (ActiveWayPoint==TargetPanIndex) {
-      GliderCenter = true;
       DisplayAngle = trackbearing;
       DisplayAircraftAngle = 0.0;
     } else {
-      GliderCenter = true;
       DisplayAngle = 0.0;
       DisplayAircraftAngle = trackbearing;
     }
@@ -1939,6 +1940,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
     }
 
     if (extGPSCONNECT) {
+      DrawTrack(hdcDrawWindowBg, Orig_Aircraft);
       DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
       DrawBearing(hdcDrawWindowBg);
     }
@@ -1981,11 +1983,12 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
   DrawCompass(hdcDrawWindow, rc);
 
-  /* JMW Experimental only!
+  // JMW Experimental only!
+#ifdef EXPERIMENTAL
   if (EnableAuxiliaryInfo) {
     DrawHorizon(hdcDrawWindow, rc);
   }
-  */
+#endif
 
   DrawFlightMode(hdcDrawWindow, rc);
 
@@ -4583,3 +4586,43 @@ void DrawDashLine(HDC hdc, INT width,
 }
 
 
+void DrawDotLine(HDC hdc, POINT ptStart, POINT ptEnd, COLORREF cr)
+{
+  /*
+  HPEN hpDot, hpOld;
+  LOGPEN dashLogPen;
+  POINT pt[2];
+  //Create a dot pen
+  dashLogPen.lopnColor = cr;
+  dashLogPen.lopnStyle = PS_DOT;
+  dashLogPen.lopnWidth.x = 0;
+  dashLogPen.lopnWidth.y = 0;
+
+  hpDot = (HPEN)CreatePenIndirect(&dashLogPen);
+  hpOld = (HPEN)SelectObject(hdc, hpDot);
+
+  pt[0].x = ptStart.x;
+  pt[0].y = ptStart.y;
+  pt[1].x = ptEnd.x;
+  pt[1].y = ptEnd.y;
+
+  Polyline(hdc, pt, NUMPOINTS);
+
+  SelectObject(hdc, hpOld);
+  DeleteObject((HPEN)hpDot);
+  */
+}
+
+
+void MapWindow::DrawTrack(HDC hdc, POINT Orig)
+{
+  POINT TrackLine[2] = {{0, -20},
+                        {0, -80}};
+
+  /*
+  PolygonRotateShift(TrackLine, 2, Orig.x, Orig.y,
+                     DisplayAircraftAngle);
+
+  DrawDotLine(hdc, TrackLine[0], TrackLine[1], RGB(0x40,0x40,0x40));
+  */
+}

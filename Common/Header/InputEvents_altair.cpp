@@ -151,10 +151,6 @@ mode_id = InputEvents::mode2int(TEXT("pan"), true);
 makeLabel(mode_id,TEXT(""),1,event_id);
 Key2Event[mode_id][VK_F1] = event_id;
 
-mode_id = InputEvents::mode2int(TEXT("Preview"), true);
-makeLabel(mode_id,TEXT(""),1,event_id);
-Key2Event[mode_id][VK_F1] = event_id;
-
 event_id = 0;
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 makeLabel(mode_id,TEXT(""),2,event_id);
@@ -405,6 +401,13 @@ event_id = InputEvents::makeEvent(&eventClearAirspaceWarnings, TEXT(""), event_i
 event_id = InputEvents::makeEvent(&eventClearStatusMessages, TEXT(""), event_id);
 mode_id = InputEvents::mode2int(TEXT("default"), true);
 Key2Event[mode_id][VK_RETURN] = event_id;
+
+event_id = 0;
+event_id = InputEvents::makeEvent(&eventScreenModes, TEXT("togglebiginfo"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
+makeLabel(mode_id,TEXT("Big Info"),1,event_id);
+Key2Event[mode_id][VK_F1] = event_id;
 
 event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Basic"), event_id);

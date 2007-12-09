@@ -198,7 +198,7 @@ event=Pan supertoggle
 
 # clear main entry buttons
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Exit Vario1 Vario2 pan Preview
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Exit Vario1 Vario2 pan
 type=key
 data=APP1
 label=
@@ -377,6 +377,14 @@ event=ArmAdvance show
 event=ArmAdvance toggle
 label=$(CheckTaskResumed)$(CheckTask)
 location=9
+
+mode=Preview
+type=key
+data=APP1
+event=ScreenModes togglebiginfo
+event=Mode default
+label=Big Info
+location=1
 
 mode=Preview
 type=key

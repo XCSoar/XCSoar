@@ -511,6 +511,7 @@ class WindowControl {
     virtual void PaintSelector(HDC hDC);
     virtual WindowControl *SetOwner(WindowControl *Value);
     void UpdatePosSize(void);
+    bool HasFocus(void) { return mHasFocus; };
 
   public:
 

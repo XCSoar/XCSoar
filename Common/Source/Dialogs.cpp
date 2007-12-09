@@ -417,6 +417,9 @@ void StartHourglassCursor(void) {
 
 void StopHourglassCursor(void) {
   SetCursor(oldCursor);
+#ifdef GNAV
+  SetCursorPos(640,480);
+#endif
   oldCursor = NULL;
 }
 

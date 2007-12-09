@@ -71,6 +71,7 @@ static void VegaWriteDemo(void) {
 };
 
 
+
 static void OnVegaDemoW(DataField *Sender,
 			 DataField::DataAccessKind_t Mode){
   switch(Mode){
@@ -134,6 +135,9 @@ void dlgVegaDemoShowModal(void){
   WndProperty* wp;
 
   if (!wf) return;
+
+  VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,0"));
+  VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,3"));
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpVegaDemoW"));
   if (wp) {

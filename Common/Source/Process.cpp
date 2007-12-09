@@ -360,7 +360,7 @@ void FormatterTime::SecsToDisplayTime(int d) {
 
   hours = (dd/3600);
   mins = (dd/60-hours*60);
-  seconds = (dd-mins*60+hours*3600);
+  seconds = (dd-mins*60-hours*3600);
   hours = hours % 24;
   if (dd<0) {
     Valid = FALSE;
@@ -458,7 +458,6 @@ void FormatterTime::AssignValue(int i) {
   default:
     break;
   }
-
 }
 
 // TODO crop long text or provide alternate
@@ -720,6 +719,21 @@ void InfoBoxFormatter::AssignValue(int i) {
 }
 
 
+TCHAR *InfoBoxFormatter::GetCommentText(void) {
+  return CommentText;
+}
+
+BOOL InfoBoxFormatter::isValid(void) {
+  return Valid;
+}
+
+void InfoBoxFormatter::RenderInvalid(int *color) {
+  _stprintf(CommentText,TEXT(""));
+  _stprintf(Text,TEXT("---"));
+  *color = -1;
+}
+
+
 TCHAR *InfoBoxFormatter::Render(int *color) {
   if (Valid) {
     _stprintf(Text,
@@ -727,8 +741,7 @@ TCHAR *InfoBoxFormatter::Render(int *color) {
               Value );
     *color = 0;
   } else {
-    _stprintf(Text,TEXT("---"));
-    *color = -1;
+    RenderInvalid(color);
   }
   return(Text);
 }
@@ -745,32 +758,36 @@ TCHAR *FormatterLowWarning::Render(int *color) {
       *color = 0;
     }
   } else {
-    _stprintf(Text,TEXT("---"));
-    *color = -1;
+    RenderInvalid(color);
   }
   return(Text);
 }
 
 
 TCHAR *FormatterTime::Render(int *color) {
-  if (Valid==FALSE) {
+  if (!Valid) {
+    RenderInvalid(color);
     _stprintf(Text,TEXT("--:--"));
-    *color = -1;
   } else {
     if (hours<1) {
       _stprintf(Text,
                 TEXT("%02d:%02d"),
                 mins, seconds );
+      _stprintf(CommentText,
+                TEXT(""));
     } else {
       _stprintf(Text,
                 TEXT("%02d:%02d"),
                 hours, mins );
-
+      _stprintf(CommentText,
+                TEXT("%02d"),
+                seconds);
     }
     *color = 0;
   }
   return(Text);
 }
+
 
 TCHAR *FormatterWaypoint::Render(int *color) {
   int thewaypoint = ActiveWayPoint;
@@ -802,14 +819,14 @@ TCHAR *FormatterWaypoint::Render(int *color) {
     }
   else
     {
-      _tcscpy(Text,TEXT("---"));
       Valid = false;
-      *color = -1;
+      RenderInvalid(color);
     }
   UnlockTaskData();
 
   return(Text);
 }
+
 
 TCHAR *FormatterDiffBearing::Render(int *color) {
 
@@ -834,8 +851,7 @@ TCHAR *FormatterDiffBearing::Render(int *color) {
     *color = 0;
   } else {
     Valid = false;
-    _tcscpy(Text, TEXT("---"));
-    *color = -1;
+    RenderInvalid(color);
   }
 
   return(Text);
@@ -848,16 +864,13 @@ TCHAR *FormatterTeamCode::Render(int *color) {
 
   if(ValidWayPoint(TeamCodeRefWaypoint))
     {
-
       *color = 0; // black text
        _tcsncpy(Text,CALCULATED_INFO.OwnTeamCode,5);
        Text[5] = '\0';
     }
   else
     {
-      // no waypoint selected
-      *color = -1;
-      Text[0] = '\0';
+      RenderInvalid(color);
     }
 
   return(Text);
@@ -866,30 +879,28 @@ TCHAR *FormatterTeamCode::Render(int *color) {
 
 TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 
-  if(ValidWayPoint(TeamCodeRefWaypoint))
-    {
-      Valid = true;
+  if(ValidWayPoint(TeamCodeRefWaypoint)) {
+    Valid = true;
 
-      Value = CALCULATED_INFO.TeammateBearing -  GPS_INFO.TrackBearing;
+    Value = CALCULATED_INFO.TeammateBearing -  GPS_INFO.TrackBearing;
 
-      if (Value < -180.0)
-        Value += 360.0;
-      else
-        if (Value > 180.0)
-          Value -= 360.0;
+    if (Value < -180.0)
+      Value += 360.0;
+    else
+      if (Value > 180.0)
+        Value -= 360.0;
 
-      if (Value > 1)
-        _stprintf(Text, TEXT("%2.0f°»"), Value);
-      else if (Value < -1)
-        _stprintf(Text, TEXT("«%2.0f°"), -Value);
-      else
-        _tcscpy(Text, TEXT("«»"));
-      *color = 0;
+    if (Value > 1)
+      _stprintf(Text, TEXT("%2.0f°»"), Value);
+    else if (Value < -1)
+      _stprintf(Text, TEXT("«%2.0f°"), -Value);
+    else
+      _tcscpy(Text, TEXT("«»"));
+    *color = 0;
 
-    } else {
+  } else {
     Valid = false;
-    *color = -1;
-    _tcscpy(Text, TEXT("---"));
+    RenderInvalid(color);
   }
 
   return(Text);

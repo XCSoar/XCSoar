@@ -95,9 +95,9 @@ int NMEAParser::FindVegaPort(void) {
 
   // hack, should be removed later if vega device driver is fully implemented
 
-  if (_tcscmp(devA()->Name, TEXT("Vega")) == 0)
+  if (devA() && (_tcscmp(devA()->Name, TEXT("Vega")) == 0))
     return 0;
-  if (_tcscmp(devB()->Name, TEXT("Vega")) == 0)
+  if (devB() && (_tcscmp(devB()->Name, TEXT("Vega")) == 0))
     return 1;
 
   return -1;
@@ -257,6 +257,8 @@ void NMEAParser::ExtractParameter(TCHAR *Source,
   TCHAR *sptr = Source;
   TCHAR *eptr = Source+StringLength;
 
+  if (!Destination) return;
+
   while( (CurrentFieldNumber < DesiredFieldNumber) && (sptr<eptr) )
     {
       if (*sptr == ',' || *sptr == '*' )
@@ -265,6 +267,8 @@ void NMEAParser::ExtractParameter(TCHAR *Source,
         }
       ++sptr;
     }
+
+  Destination[0] = '\0'; // set to blank in case it's not found..
 
   if ( CurrentFieldNumber == DesiredFieldNumber )
     {

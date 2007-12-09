@@ -42,6 +42,7 @@ Copyright_License {
 #include "compatibility.h"
 
 #ifndef ALTAIRSYNC
+extern int DisplayTimeOut;
 #ifndef GNAV
 #if (WINDOWSPC<1)
 #include <projects.h>
@@ -1415,6 +1416,7 @@ COLORREF WindowControl::SetBackColor(COLORREF Value){
   return(res);
 }
 
+
 void WindowControl::PaintSelector(HDC hDC){
 
   if (!mDontPaintSelector && mCanFocus && mHasFocus){
@@ -1489,6 +1491,18 @@ void WindowControl::Paint(HDC hDC){
   if (!mVisible) return;
 
   FillRect(hDC, &rc, mhBrushBk);
+
+  // JMW added highlighting, useful for lists
+  if (!mDontPaintSelector && mCanFocus && mHasFocus){
+    COLORREF ff = (GetBackColor()+0x00ffffff*3)/4;
+    HBRUSH hB = (HBRUSH)CreateSolidBrush(ff);
+    rc.left += 0;
+    rc.right -= 2;
+    rc.top += 0;
+    rc.bottom -= 2;
+    FillRect(hDC, &rc, hB);
+    DeleteObject(hB);
+  }
 
   if (mBorderKind != 0){
 
@@ -1579,6 +1593,7 @@ LRESULT CALLBACK WindowControlWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 }
 
 
+
 int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
   PAINTSTRUCT ps;            // structure for paint info
@@ -1616,31 +1631,45 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 
     case WM_LBUTTONDBLCLK:
       InterfaceTimeoutReset();
-      if (!OnLButtonDoubleClick(wParam, lParam)) return(0);
+      if (!OnLButtonDoubleClick(wParam, lParam)) {
+        DisplayTimeOut = 0;
+        return(0);
+      }
     break;
 
     case WM_LBUTTONDOWN:
       InterfaceTimeoutReset();
-      if (!OnLButtonDown(wParam, lParam)) return(0);
+      if (!OnLButtonDown(wParam, lParam)) {
+        DisplayTimeOut = 0;
+        return(0);
+      }
       // JMW TODO: need to be able to focus list items here...
     break;
 
     case WM_LBUTTONUP:
       InterfaceTimeoutReset();
-      if (!OnLButtonUp(wParam, lParam)) return(0);
+      if (!OnLButtonUp(wParam, lParam)) {
+        DisplayTimeOut = 0;
+        return(0);
+      }
     break;
 
     case WM_KEYDOWN:
-      // JMW: HELP
       InterfaceTimeoutReset();
+
+      // JMW: HELP
       KeyTimer(true, wParam & 0xffff);
 
       // return(OnKeyDown(wParam, lParam));
       // experimental 20060516:sgi
-      if (!OnKeyDown(wParam, lParam)) return(0);
+      if (!OnKeyDown(wParam, lParam)) {
+        DisplayTimeOut = 0;
+        return(0);
+      }
       break;
 
     case WM_KEYUP:
+      DisplayTimeOut = 0;
       InterfaceTimeoutReset();
       // JMW: detect long enter release
 	if (KeyTimer(false, wParam & 0xffff)) {
@@ -1651,7 +1680,10 @@ int WindowControl::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
 	}
       // return(OnKeyUp(wParam, lParam));
       // experimental 20060516:sgi
-      if (!OnKeyUp(wParam, lParam)) return(0);
+        if (!OnKeyUp(wParam, lParam)) {
+          DisplayTimeOut = 0;
+          return(0);
+        }
       break;
 
     case WM_SETFOCUS:
@@ -2387,6 +2419,7 @@ void WndButton::Paint(HDC hDC){
   if (mCaption != NULL && mCaption[0] != '\0'){
 
     SetTextColor(hDC, GetForeColor());
+
     SetBkColor(hDC, GetBackColor());
     SetBkMode(hDC, TRANSPARENT);
 
@@ -3113,6 +3146,7 @@ WndListFrame::WndListFrame(WindowControl *Owner, TCHAR *Name, int X, int Y,
 
 };
 
+
 void WndListFrame::Destroy(void){
 
   WndFrame::Destroy();
@@ -3185,7 +3219,7 @@ void WndListFrame::Paint(HDC hDC){
 }
 
 void WndListFrame::Redraw(void){
-  WindowControl::Redraw();  // redraw all but nor the current
+  WindowControl::Redraw();  // redraw all but not the current
   mClients[0]->Redraw();    // redraw the current
 }
 

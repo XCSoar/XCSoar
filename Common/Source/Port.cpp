@@ -544,8 +544,7 @@ void VarioWriteNMEA(TCHAR *Text) {
   int i =  NMEAParser::FindVegaPort();
   if (i==0) {
     Port1WriteNMEA(Text);
-  }
-  if (i==1) {
+  } else if (i==1) {
     Port2WriteNMEA(Text);
   }
 }

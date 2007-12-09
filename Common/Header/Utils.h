@@ -319,6 +319,7 @@ bool MatchesExtension(TCHAR *filename, TCHAR* extension);
 BOOL PlayResource (LPTSTR lpName);
 void CreateDirectoryIfAbsent(TCHAR *filename);
 
+bool InterfaceTimeoutZero(void);
 void InterfaceTimeoutReset(void);
 bool InterfaceTimeoutCheck(void);
 

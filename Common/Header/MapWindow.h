@@ -75,6 +75,7 @@ typedef struct _SNAIL_POINT
 
 
 void DrawDashLine(HDC , INT ,POINT , POINT , COLORREF );
+void DrawDotLine(HDC, POINT , POINT , COLORREF );
 void _DrawLine(HDC hdc, int PenStyle, int width, POINT ptStart, POINT ptEnd, COLORREF cr);
 
 typedef union{
@@ -198,6 +199,7 @@ class MapWindow {
 
   static void DrawAircraft(HDC hdc, POINT Orig);
   static void DrawCrossHairs(HDC hdc, POINT Orig);
+  static void DrawTrack(HDC hdc, POINT Orig);
   static void DrawBestCruiseTrack(HDC hdc, POINT Orig);
   static void DrawCompass(HDC hdc, RECT rc);
   static void DrawHorizon(HDC hdc, RECT rc);
