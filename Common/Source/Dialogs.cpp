@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.117 2007/11/14 08:10:23 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.118 2007/12/09 10:45:08 jwharington Exp $
 
 Copyright_License {
 
@@ -417,6 +417,9 @@ void StartHourglassCursor(void) {
 
 void StopHourglassCursor(void) {
   SetCursor(oldCursor);
+#ifdef GNAV
+  SetCursorPos(640,480);
+#endif
   oldCursor = NULL;
 }
 

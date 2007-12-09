@@ -197,22 +197,30 @@ static BOOL PDVSC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   (void)d;
   NMEAParser::ExtractParameter(String,responsetype,0);
   NMEAParser::ExtractParameter(String,name,1);
+
+  if (_tcscmp(name, TEXT("ERROR")) == 0){
+    // ignore error responses...
+    return FALSE;
+  }
+
   NMEAParser::ExtractParameter(String,ctemp,2);
   long value =  (long)StrToDouble(ctemp,NULL);
   DWORD dwvalue;
+  
+  if (_tcscmp(name, TEXT("ToneDeadbandCruiseLow"))==0) {
+    value = max(value, -value);
+  }
+  if (_tcscmp(name, TEXT("ToneDeadbandCirclingLow"))==0) {
+    value = max(value, -value);
+  }
 
-  TCHAR updatename[100];
-  TCHAR fullname[100];
-  _stprintf(updatename, TEXT("Vega%sUpdated"), name);
-  _stprintf(fullname, TEXT("Vega%s"), name);
-  SetToRegistry(updatename, 1);
+  TCHAR regname[100];
+  _stprintf(regname, TEXT("Vega%sUpdated"), name);
+  SetToRegistry(regname, 1);
+  _stprintf(regname, TEXT("Vega%s"), name);
   dwvalue = *((DWORD*)&value);
-  SetToRegistry(fullname, dwvalue);
+  SetToRegistry(regname, dwvalue);
 
-  /*
-  wsprintf(ctemp,TEXT("%s"), &String[0]);
-  DoStatusMessage(ctemp);
-  */
   return FALSE;
 }
 
@@ -221,25 +229,25 @@ static BOOL PDVSC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 
 static BOOL PDVDV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  
+  TCHAR ctemp[80];
   double alt;
-  
-  swscanf(String,
-	  TEXT("%lf,%lf,%lf,%lf"),
-	  &GPS_INFO->Vario, //
-	  &GPS_INFO->IndicatedAirspeed,
-	  &GPS_INFO->TrueAirspeed,
-	  &alt);
 
-  GPS_INFO->Vario /= 10.0;
-  GPS_INFO->VarioAvailable = TRUE;
+  NMEAParser::ExtractParameter(String,ctemp,0);
+  GPS_INFO->Vario = StrToDouble(ctemp,NULL)/10.0;
+
+  NMEAParser::ExtractParameter(String,ctemp,1);
+  GPS_INFO->IndicatedAirspeed = StrToDouble(ctemp,NULL)/10.0;
+
+  NMEAParser::ExtractParameter(String,ctemp,2);
+  GPS_INFO->TrueAirspeed = StrToDouble(ctemp,NULL)*GPS_INFO->IndicatedAirspeed/1024.0;
+
   //hasVega = true;
-
-  GPS_INFO->IndicatedAirspeed /= 10.0;
+  GPS_INFO->VarioAvailable = TRUE;
   GPS_INFO->AirspeedAvailable = TRUE;
-  GPS_INFO->TrueAirspeed *= GPS_INFO->IndicatedAirspeed/1024.0;
 
   if (d == pDevPrimaryBaroSource){
+    NMEAParser::ExtractParameter(String,ctemp,3);
+    alt = StrToDouble(ctemp,NULL);
     GPS_INFO->BaroAltitudeAvailable = TRUE;
     GPS_INFO->BaroAltitude = alt;    // ToDo check if QNH correction is needed!
   }
@@ -254,33 +262,33 @@ static BOOL PDVDV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 // $PDVDS,nx,nz,flap,stallratio,netto
 static BOOL PDVDS(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 {
-  double flap, stallratio;
+  double flap;
+  TCHAR ctemp[80];
   (void)d;
-  int found = swscanf(String,
-	  TEXT("%lf,%lf,%lf,%lf,%lf"),
-	  &GPS_INFO->AccelX,
-	  &GPS_INFO->AccelZ,
-	  &flap,
-	  &stallratio,
-	  &GPS_INFO->NettoVario);
 
-  GPS_INFO->AccelX /= AccelerometerZero;
-  GPS_INFO->AccelZ /= AccelerometerZero;
+  NMEAParser::ExtractParameter(String,ctemp,0);
+  GPS_INFO->AccelX = StrToDouble(ctemp,NULL)/AccelerometerZero;
+  NMEAParser::ExtractParameter(String,ctemp,1);
+  GPS_INFO->AccelZ = StrToDouble(ctemp,NULL)/AccelerometerZero;
+
   int mag = isqrt4((int)((GPS_INFO->AccelX*GPS_INFO->AccelX
 			  +GPS_INFO->AccelZ*GPS_INFO->AccelZ)*10000));
   GPS_INFO->Gload = mag/100.0;
-
-//#pragma message( "----------------->>>> Experimental remove later! <<<<----------------------") 
-
-  GPS_INFO->StallRatio = stallratio/100.0;
-
   GPS_INFO->AccelerationAvailable = TRUE;
-  if (found==5) {
-	  GPS_INFO->NettoVarioAvailable = TRUE; 
+
+  NMEAParser::ExtractParameter(String,ctemp,2);
+  flap = StrToDouble(ctemp,NULL);
+
+  NMEAParser::ExtractParameter(String,ctemp,3);
+  GPS_INFO->StallRatio = StrToDouble(ctemp,NULL)/100.0;
+
+  NMEAParser::ExtractParameter(String,ctemp,4);
+  if (ctemp[0] != '\0') {
+    GPS_INFO->NettoVarioAvailable = TRUE; 
+    GPS_INFO->NettoVario = StrToDouble(ctemp,NULL)/10.0;
   } else {
-	  GPS_INFO->NettoVarioAvailable = FALSE; 
+    GPS_INFO->NettoVarioAvailable = FALSE; 
   }
-  GPS_INFO->NettoVario /= 10.0;
 
   if (EnableCalibration) {
     char buffer[200];
@@ -340,8 +348,6 @@ static BOOL PDTSM(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
 
 BOOL vgaParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
-
-
 
   if(_tcsncmp(TEXT("$PDSWC"), String, 6)==0)
     {

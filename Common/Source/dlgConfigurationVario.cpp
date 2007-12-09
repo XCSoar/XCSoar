@@ -71,7 +71,9 @@ static WndFrame *wConfig19=NULL;
 #define NUMPAGES 19
 
 
-static bool VegaConfigurationUpdated(TCHAR *name, bool first, bool setvalue=false, long ext_setvalue=0) {
+static bool VegaConfigurationUpdated(TCHAR *name, bool first, 
+                                     bool setvalue=false, 
+                                     long ext_setvalue=0) {
   TCHAR updatename[100];
   TCHAR fullname[100];
   TCHAR propname[100];
@@ -154,9 +156,7 @@ static bool VegaConfigurationUpdated(TCHAR *name, bool first, bool setvalue=fals
 	wp->GetDataField()->Set((int)lvalue);
 	wp->RefreshDisplay();
       }
-    } 
-
-    if (updated==2) {
+    } else if (updated==2) {
       wp = (WndProperty*)wf->FindByName(propname);
       if (wp) {
 	newval = (long)(wp->GetDataField()->GetAsInteger());
@@ -484,6 +484,7 @@ static void UpdateParameters(bool first) {
   VegaConfigurationUpdated(TEXT("ToneMeanVolumeCircling"), first);
   VegaConfigurationUpdated(TEXT("ToneMeanVolumeCruise"), first);
   VegaConfigurationUpdated(TEXT("ToneBaseFrequencyOffset"), first);
+  VegaConfigurationUpdated(TEXT("TonePitchScale"), first);
 
   VegaConfigurationUpdated(TEXT("ToneDeadbandCirclingType"), first);
   VegaConfigurationUpdated(TEXT("ToneDeadbandCirclingHigh"), first);
@@ -498,7 +499,7 @@ static void UpdateParameters(bool first) {
   VegaConfigurationUpdated(TEXT("VarioTimeConstantCruise"), first);
 
   VegaConfigurationUpdated(TEXT("UTCOffset"), first);
-  VegaConfigurationUpdated(TEXT("LogIGC"), first);
+  VegaConfigurationUpdated(TEXT("IGCLoging"), first);
   VegaConfigurationUpdated(TEXT("IGCLoggerInterval"), first);
   VegaConfigurationUpdated(TEXT("MuteVarioOnPlay"), first);
   VegaConfigurationUpdated(TEXT("MuteVarioOnCom"), first);
@@ -511,7 +512,7 @@ static void UpdateParameters(bool first) {
   VegaConfigurationUpdated(TEXT("FlarmMaxObjectsReportedOnCircling"), first);
   VegaConfigurationUpdated(TEXT("FlarmUserInterface"), first);
   VegaConfigurationUpdated(TEXT("KeepOnStraightFlightMode"), first);
-  VegaConfigurationUpdated(TEXT("DontReportTrafficModeChanges"), first);
+  VegaConfigurationUpdated(TEXT("DontReportTraficModeChanges"), first);
   VegaConfigurationUpdated(TEXT("DontReportGliderType"), first);
   VegaConfigurationUpdated(TEXT("FlarmPrivacyFlag"), first);
   VegaConfigurationUpdated(TEXT("FlarmAircraftType"), first);
@@ -642,14 +643,19 @@ static void OnPrevClicked(WindowControl * Sender){
 
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
-  UpdateParameters(false);  // 20060801:sgi make shure changes are sent to device
+  UpdateParameters(false);  // 20060801:sgi make shure changes are
+                            // sent to device
   wf->SetModalResult(mrOK);
 }
 
 static void OnSaveClicked(WindowControl * Sender){
 	(void)Sender;
-  UpdateParameters(false);  // 20060801:sgi make shure changes are sent to device
+  UpdateParameters(false);  // 20060801:sgi make shure changes are
+                            // sent to device
   VarioWriteNMEA(TEXT("PDVSC,S,StoreToEeprom,2"));
+#ifndef _SIM_
+  Sleep(500);
+#endif
 }
 
 static void OnDemoClicked(WindowControl * Sender){
@@ -1064,17 +1070,13 @@ bool dlgConfigurationVarioShowModal(void){
 
   /////////
 
-#if (WINDOWSPC<1)
   CreateProgressDialog(gettext(TEXT("Reading vario settings...")));
   // Need step size finer than default 10
   SetProgressStepSize(2);
-#endif
 
   UpdateParameters(true);
 
-#if (WINDOWSPC<1)
   CloseProgressDialog();
-#endif
 
   /////////
 

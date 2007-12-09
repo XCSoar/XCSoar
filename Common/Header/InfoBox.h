@@ -115,6 +115,7 @@ class InfoBox{
   public:
     void Paint(void);
     void PaintFast(void);
+    void PaintInto(HDC mHdcDest, int xoff, int yoff, int width, int height);
 
     Units_t SetValueUnit(Units_t Value);
     void SetTitle(TCHAR *Value);
@@ -134,5 +135,7 @@ class InfoBox{
 
     InfoBox(HWND Parent, int X, int Y, int Width, int Height);
     ~InfoBox(void);
+
+    HDC GetHdcBuf(void);
 
 };

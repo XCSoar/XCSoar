@@ -170,7 +170,7 @@ extern TCHAR XCSoar_Version[256] = TEXT("");
 
 
 HINSTANCE hInst; // The current instance
-HWND hWndCB; // The command bar handle
+//HWND hWndCB; // The command bar handle
 HWND hWndMainWindow; // Main Windows
 HWND hWndMapWindow;  // MapWindow
 
@@ -382,7 +382,7 @@ BOOL POLARFILECHANGED = FALSE;
 BOOL LANGUAGEFILECHANGED = FALSE;
 BOOL STATUSFILECHANGED = FALSE;
 BOOL INPUTFILECHANGED = FALSE;
-bool MenuActive = false;
+static bool MenuActive = false;
 
 //Task Information
 Task_t Task = {{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0},{-1,0,0,0,0,0,0,0,0}};
@@ -593,11 +593,14 @@ void                                                    AssignValues(void);
 void                                                    DisplayText(void);
 
 void CommonProcessTimer    (void);
-void ProcessTimer    (void);
+#ifdef _SIM_
 void SIMProcessTimer(void);
-
+#else
+void ProcessTimer    (void);
+#endif
 void                                                    PopUpSelect(int i);
-HWND                                                    CreateRpCommandBar(HWND hwnd);
+
+//HWND CreateRpCommandBar(HWND hwnd);
 
 #ifdef DEBUG
 void                                            DebugStore(char *Str);
@@ -799,41 +802,35 @@ void UnlockComm() {
 
 void RestartCommPorts() {
   static bool first = true;
+  /*
+#if (WINDOWSPC>0)
+  if (!first) {
+    NMEAParser::Reset();
+    return;
+  }
+#endif
+  */
   StartupStore(TEXT("RestartCommPorts\n"));
 
   LockComm();
-#if (WINDOWSPC>0)
-#else
   devClose(devA());
   devClose(devB());
-#endif
 
   // Close both first!
   if(Port1Available)
     {
-#if (WINDOWSPC>0)
-#else
       Port1Available = FALSE; 
       Port1Close ();
-#endif
     }
   if(Port2Available)
     {
-#if (WINDOWSPC>0)
-#else
       Port2Available = FALSE; 
       Port2Close ();
-#endif
     }
 
-#if (WINDOWSPC<1)
   NMEAParser::Reset();
-#endif
 
-#if (WINDOWSPC>0)
-#else
   first = true;
-#endif
   if (first) {
     if (!Port1Available) {
 #ifdef GNAV
@@ -863,9 +860,7 @@ void RestartCommPorts() {
     first = false;
   }
 
-#if (WINDOWSPC<1)
   devInit(TEXT(""));      
-#endif
 
   UnlockComm();
 
@@ -1213,7 +1208,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // experimental CVS 
 
-  wcscat(XCSoar_Version, TEXT("5.1.3 Beta5 "));
+  wcscat(XCSoar_Version, TEXT("5.1.3 Beta6 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1441,7 +1436,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #endif
 
   // Main message loop:
-  while (GlobalRunning && 
+  while (/* GlobalRunning && */
          GetMessage(&msg, NULL, 0, 0))
     {
       if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -2045,7 +2040,7 @@ void Shutdown(void) {
 
   StartupStore(TEXT("Delete Objects\n"));
   
-  CommandBar_Destroy(hWndCB);
+  //  CommandBar_Destroy(hWndCB);
   for (i=0; i<NUMSELECTSTRINGS; i++) {
     delete Data_Options[i].Formatter;
   }
@@ -2111,7 +2106,7 @@ void Shutdown(void) {
 
   StartupStore(TEXT("Finished shutdown\n"));
   StopHourglassCursor();
-
+  PostQuitMessage(0);
 }
 
 
@@ -2167,7 +2162,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       iTimerID = SetTimer(hWnd,1000,500,NULL); // 2 times per second
 
-      hWndCB = CreateRpCommandBar(hWnd);
+      //      hWndCB = CreateRpCommandBar(hWnd);
 
       break;
 
@@ -2207,7 +2202,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
       }
       break;
-
       // TODO Capture KEYDOWN time
       // 	- Pass that (otpionally) to processKey, allowing
       // 	  processKey to handle long events - at any length
@@ -2218,6 +2212,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #else
     case WM_KEYUP: // JMW was keyup
 #endif
+      InterfaceTimeoutReset();
+
       /* DON'T PROCESS KEYS HERE WITH NEWINFOBOX, IT CAUSES CRASHES! */
       break;
     case WM_TIMER:
@@ -2268,8 +2264,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       break;
 
     case WM_DESTROY:
-      CommandBar_Destroy(hWndCB);
-      PostQuitMessage(0);
       break;
 
     default:
@@ -2279,7 +2273,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-
+/* JMW no longer needed
 HWND CreateRpCommandBar(HWND hwnd)
 {
   SHMENUBARINFO mbi;
@@ -2298,7 +2292,7 @@ HWND CreateRpCommandBar(HWND hwnd)
 
   return mbi.hwndMB;
 }
-
+*/
 
 LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -2487,7 +2481,6 @@ void DisplayText(void)
     return;
 
   int i;
-  static TCHAR Caption[MAXINFOWINDOWS][100];
   static int DisplayType[MAXINFOWINDOWS];
   static bool first=true;
   static int InfoFocusLast = -1;
@@ -2506,7 +2499,6 @@ void DisplayText(void)
   InfoFocusLast = InfoFocus;
 
   for(i=0;i<numInfoWindows;i++) {
-    Caption[i][0]= 0;
     
     if (EnableAuxiliaryInfo) {
       DisplayType[i] = (InfoType[i] >> 24) & 0xff;
@@ -2605,6 +2597,22 @@ void DisplayText(void)
 					 sTmp, sizeof(sTmp)/sizeof(sTmp[0]));
       InfoBoxes[i]->SetComment(sTmp);
       break;
+    case 27: // AAT time to go
+    case 36: // flight time
+    case 39: // current time
+    case 40: // gps time
+    case 41: // task time to go
+    case 42: // task time to go
+    case 45: // ete 
+    case 46: // leg ete 
+      if (Data_Options[DisplayType[i]].Formatter->isValid()) {
+        InfoBoxes[i]->
+          SetComment(Data_Options[DisplayType[i]].Formatter->GetCommentText());
+      } else {
+        InfoBoxes[i]->
+          SetComment(TEXT(""));
+      }
+      break;
     case 43:
       if (EnableBlockSTF) {
 	InfoBoxes[i]->SetComment(TEXT("BLOCK"));
@@ -2619,10 +2627,7 @@ void DisplayText(void)
     DisplayTypeLast[i] = DisplayType[i];
     
   }
-  for (i=0; i<numInfoWindows; i++) 
-    InfoBoxes[i]->Paint();
-  for (i=0; i<numInfoWindows; i++) 
-    InfoBoxes[i]->PaintFast();
+  InfoBoxLayout::Paint();
 
   first = false;
 
@@ -2679,7 +2684,11 @@ void CommonProcessTimer()
   if (!DialogActive) {
     DisplayTimeOut++;
   } else {
-    DisplayTimeOut=0;
+    // JMW don't let display timeout while a dialog is active,
+    // but allow button presses to trigger redisplay
+    if (DisplayTimeOut>1) {
+      DisplayTimeOut=1;
+    }
   }
 
   if (MapWindow::IsDisplayRunning()) {
@@ -2724,45 +2733,7 @@ void CommonProcessTimer()
 ////////////////
 
 
-void ProcessTimer(void)
-{
-#ifndef _SIM_
-
-  CommonProcessTimer();
-
-  // processing moved to its own thread
-
-  // now check GPS status
-
-  static int itimeout = -1;
-  itimeout++;
-  
-  // write settings to vario every second
-  if (itimeout %2==0) {
-    VarioWriteSettings();
-  }
-    
-  // also service replay logger
-  ReplayLogger::Update();
-  if (ReplayLogger::IsEnabled()) {
-    static double timeLast = 0;
-    if (GPS_INFO.Time-timeLast>=1.0) {
-      NMEAParser::GpsUpdated = TRUE;
-      SetEvent(dataTriggerEvent);
-    }
-    timeLast = GPS_INFO.Time;
-    GPSCONNECT = TRUE;
-    extGPSCONNECT = TRUE;
-    GPS_INFO.NAVWarning = FALSE;
-    GPS_INFO.SatellitesUsed = 6;
-    return;
-  }
-  
-  if (itimeout % 10 != 0) {
-    // timeout if no new data in 5 seconds
-    return;
-  }
-  
+int ConnectionProcessTimer(int itimeout) {
   LockComm();
   NMEAParser::UpdateMonitor();
   UnlockComm();
@@ -2899,15 +2870,62 @@ void ProcessTimer(void)
     }
   
   LastGPSCONNECT = gpsconnect;
-  
-#endif // end processing of non-simulation mode
-  
+  return itimeout;
 }
 
 
+#ifndef _SIM_
+void ProcessTimer(void)
+{
+
+  if (!GPSCONNECT && (DisplayTimeOut==0)) {
+    // JMW 20071207
+    // re-draw screen every five seconds even if no GPS
+    // this prevents sluggish screen when inside hangar..
+    NMEAParser::GpsUpdated = true;
+    SetEvent(dataTriggerEvent);
+    DisplayTimeOut=1;
+  }
+
+  CommonProcessTimer();
+
+  // now check GPS status
+
+  static int itimeout = -1;
+  itimeout++;
+  
+  // write settings to vario every second
+  if (itimeout % 2==0) {
+    VarioWriteSettings();
+  }
+    
+  // also service replay logger
+  ReplayLogger::Update();
+  if (ReplayLogger::IsEnabled()) {
+    static double timeLast = 0;
+    if (GPS_INFO.Time-timeLast>=1.0) {
+      NMEAParser::GpsUpdated = TRUE;
+      SetEvent(dataTriggerEvent);
+    }
+    timeLast = GPS_INFO.Time;
+    GPSCONNECT = TRUE;
+    extGPSCONNECT = TRUE;
+    GPS_INFO.NAVWarning = FALSE;
+    GPS_INFO.SatellitesUsed = 6;
+    return;
+  }
+  
+  if (itimeout % 10 == 0) {
+    // check connection status every 5 seconds
+    itimeout = ConnectionProcessTimer(itimeout);
+  }
+}
+#endif // end processing of non-simulation mode
+
+
+#ifdef _SIM_
 void SIMProcessTimer(void)
 {
-#ifdef _SIM_
 
   CommonProcessTimer();
 
@@ -2948,10 +2966,8 @@ void SIMProcessTimer(void)
   SetEvent(dataTriggerEvent);
 
   VarioWriteSettings();
-#endif
 }
-
-
+#endif
 
 
 void SwitchToMapWindow(void)
@@ -2986,7 +3002,7 @@ void PopupBugsBallast(int UpDown)
 {
 	(void)UpDown;
   DialogActive = true;
-  ShowWindow(hWndCB,SW_HIDE);
+  //  ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
   SwitchToMapWindow();
   DialogActive = false;
@@ -2998,7 +3014,7 @@ void PopUpSelect(int Index)
   DialogActive = true;
   CurrentInfoType = InfoType[Index];
   StoreType(Index, InfoType[Index]);
-  ShowWindow(hWndCB,SW_HIDE);
+  //  ShowWindow(hWndCB,SW_HIDE);
   FullScreen();
   SwitchToMapWindow();
   DialogActive = false;
@@ -3150,7 +3166,7 @@ void UnlockEventQueue() {
 void HideInfoBoxes() {
   int i;
   InfoBoxesHidden = true;
-  for (i=0; i<numInfoWindows; i++) {
+  for (i=0; i<numInfoWindows+1; i++) {
     InfoBoxes[i]->SetVisible(false);
   }
 }

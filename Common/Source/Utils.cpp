@@ -2574,11 +2574,14 @@ double StrToDouble(TCHAR *Source, TCHAR **Stop)
 
   StringLength = _tcslen(Source);
 
-  while((Source[index] == ' ')||(Source[index]==9))
+  while(((Source[index] == ' ')||(Source[index]==9)) && (index<StringLength))
     // JMW added skip for tab stop
     {
       index ++;
     }
+  if (index>= StringLength) {
+    return 0.0; // error!
+  }
   if (Source[index]=='-') {
     neg=1;
     index++;
@@ -4206,6 +4209,10 @@ void CreateDirectoryIfAbsent(TCHAR *filename) {
 //////////
 
 static int interface_timeout;
+
+bool InterfaceTimeoutZero(void) {
+  return (interface_timeout==0);
+}
 
 void InterfaceTimeoutReset(void) {
   interface_timeout = 0;

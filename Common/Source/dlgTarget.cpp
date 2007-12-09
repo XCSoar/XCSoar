@@ -48,6 +48,8 @@ Copyright_License {
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
+static int ActiveWayPointOnEntry = 0;
+
 
 static void OnOKClicked(WindowControl * Sender){
 	(void)Sender;
@@ -65,6 +67,7 @@ static void RefreshCalculator(void) {
 
   RefreshTask();
   RefreshTaskStatistics();
+  target_point = max(target_point,ActiveWayPoint);
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
   if (wp) {
@@ -132,9 +135,11 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     break;
     case DataField::daPut: 
     case DataField::daChange:
-      Range = Sender->GetAsFloat()/100.0;
       LockTaskData();
-      Task[target_point].AATTargetOffsetRadius = Range;
+      if (target_point>=ActiveWayPoint) {
+        Range = Sender->GetAsFloat()/100.0;
+        Task[target_point].AATTargetOffsetRadius = Range;
+      }
       UnlockTaskData();
       RefreshCalculator();
     break;
@@ -149,9 +154,11 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     break;
     case DataField::daPut: 
     case DataField::daChange:
-      Radial = Sender->GetAsFloat();
       LockTaskData();
-      Task[target_point].AATTargetOffsetRadial = Radial;
+      if (target_point>=ActiveWayPoint) {
+        Radial = Sender->GetAsFloat();
+        Task[target_point].AATTargetOffsetRadial = Radial;
+      }
       UnlockTaskData();
       RefreshCalculator();
     break;
@@ -161,6 +168,7 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
 
 static void RefreshTargetPoint(void) {
   LockTaskData();
+  target_point = max(target_point, ActiveWayPoint);
   if (ValidTaskPoint(target_point)) {
     MapWindow::SetTargetPan(true, target_point);
     Range = Task[target_point].AATTargetOffsetRadius;
@@ -177,11 +185,11 @@ static void RefreshTargetPoint(void) {
 static void OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode) {
   switch(Mode){
     case DataField::daGet:
-      //      Sender->Set(Range*100.0);
     break;
     case DataField::daPut: 
     case DataField::daChange:
-      target_point = Sender->GetAsInteger() + ActiveWayPoint;
+      target_point = Sender->GetAsInteger() + ActiveWayPointOnEntry;
+      target_point = max(target_point,ActiveWayPoint);
       RefreshTargetPoint();
     break;
   }
@@ -202,6 +210,7 @@ void dlgTarget(void) {
   if (!ValidTaskPoint(ActiveWayPoint)) {
     return;
   }
+  ActiveWayPointOnEntry = ActiveWayPoint;
 
   if (!InfoBoxLayout::landscape) {
     char filename[MAX_PATH];
@@ -221,12 +230,6 @@ void dlgTarget(void) {
 
   if (!wf) return;
 
-  /*
-  if (!AATEnabled) {
-    ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);
-  }
-  */
-
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskPoint"));
   DataFieldEnum* dfe;
@@ -235,11 +238,11 @@ void dlgTarget(void) {
   TCHAR tp_short[21];
   LockTaskData();
   if (!ValidTaskPoint(target_point)) {
-    target_point = ActiveWayPoint;
+    target_point = ActiveWayPointOnEntry;
   } else {
-    target_point = max(target_point, ActiveWayPoint);
+    target_point = max(target_point, ActiveWayPointOnEntry);
   }
-  for (int i=ActiveWayPoint; i<MAXTASKPOINTS; i++) {
+  for (int i=ActiveWayPointOnEntry; i<MAXTASKPOINTS; i++) {
     if (ValidTaskPoint(i)) {
       _tcsncpy(tp_short, WayPointList[Task[i].Index].Name, 20);
       tp_short[20] = 0;
@@ -247,11 +250,11 @@ void dlgTarget(void) {
       dfe->addEnumText(tp_label);
     } else {
       if (target_point>= i) {
-        target_point= ActiveWayPoint;
+        target_point= ActiveWayPointOnEntry;
       }
     }
   }
-  dfe->Set(target_point-ActiveWayPoint);
+  dfe->Set(max(0,target_point-ActiveWayPointOnEntry));
   UnlockTaskData();
   wp->RefreshDisplay();
 

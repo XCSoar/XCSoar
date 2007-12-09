@@ -85,7 +85,7 @@ event=Pan supertoggle
 
 # clear main entry buttons
 
-mode=default Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2 pan Preview
+mode=default Display1 Display2 Config1 Config2 Info1 Info2 Vario1 Vario2 pan
 type=key
 data=F1
 label= 
@@ -255,6 +255,13 @@ event=FLARMRadar toggle
 event=ClearAirspaceWarnings
 event=ClearStatusMessages
 
+mode=Preview
+type=key
+data=F1
+event=ScreenModes togglebiginfo
+event=Mode default
+label=Big Info
+location=1
 
 mode=Preview
 type=key

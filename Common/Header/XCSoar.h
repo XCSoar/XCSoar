@@ -19,17 +19,22 @@ class InfoBoxFormatter {
   InfoBoxFormatter(TCHAR *theformat) {
     _tcscpy(Format, theformat);
     Valid = TRUE;
-    Value = 0.0;    
+    Value = 0.0;
+    Text[0] = 0;
+    CommentText[0] = 0;
   }
 
   virtual TCHAR *Render(int *color);
+  void RenderInvalid(int *color);
   BOOL Valid;
   double Value;
   TCHAR Format[FORMAT_SIZE+1];
   TCHAR Text[100];
+  TCHAR CommentText[100];
 
   virtual void AssignValue(int i);
-
+  TCHAR *GetCommentText();
+  BOOL isValid();
 };
 
 

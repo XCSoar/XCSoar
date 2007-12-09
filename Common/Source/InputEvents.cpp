@@ -1060,6 +1060,8 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
       DoStatusMessage(TEXT("Screen Mode Auxiliary"));
     else 
       DoStatusMessage(TEXT("Screen Mode Normal"));
+  } else if (_tcscmp(misc, TEXT("togglebiginfo")) == 0) {
+    InfoBoxLayout::fullscreen = !InfoBoxLayout::fullscreen;
   } else {
     // toggle?
     if (EnableAuxiliaryInfo) {
@@ -1608,11 +1610,13 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
     return;
   }
   if (_tcscmp(misc, TEXT("democlimb"))==0) {
+    VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,0"));
     VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,2"));
     jmw_demo=2;
     return;
   }
   if (_tcscmp(misc, TEXT("demostf"))==0) {
+    VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,0"));
     VarioWriteNMEA(TEXT("PDVSC,S,DemoMode,1"));
     jmw_demo=1;
     return;

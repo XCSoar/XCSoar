@@ -622,6 +622,15 @@ void InfoBox::PaintFast(void) {
 }
 
 
+void InfoBox::PaintInto(HDC mHdcDest, int xoff, int yoff, int width, int height) {
+  StretchBlt(mHdcDest, xoff, yoff, width, height,
+          mHdcBuf, 0, 0, mWidth, mHeight, SRCCOPY);
+}
+
+HDC InfoBox::GetHdcBuf(void) {
+  return mHdcBuf;
+}
+
 void InfoBox::InitializeDrawHelpers(void){
 
   recTitle.left = 0;
@@ -665,6 +674,7 @@ void InfoBox::InitializeDrawHelpers(void){
 
 }
 
+extern void ShowMenu();
 
 LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam){
   InfoBox *ib;
@@ -703,7 +713,11 @@ LRESULT CALLBACK InfoBoxWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
     case WM_LBUTTONDBLCLK:
-    break;
+#ifndef GNAV
+      // JMW capture double click, so infoboxes double clicked also bring up menu
+      ShowMenu();
+      break;
+#endif
 
     case WM_LBUTTONDOWN:
       ib = (InfoBox *)GetWindowLong(hwnd, GWL_USERDATA);

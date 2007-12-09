@@ -124,6 +124,10 @@
       <DataField name="" DataType="enum"  Min=0 Max=10 Step=1/>
     </WndProperty>
 
+  <WndProperty Name="prpTonePitchScale" Caption="Tone pitch scale"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Adjustment to base pitch scale of tones in all modes.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=32 Max=100 Step=1/>
+  </WndProperty>
+
   </WndFrame>
 
   <WndFrame Name="frmAudioDeadband" X=70 Y=0 Width=246 Height=222 Font=2>
@@ -133,11 +137,11 @@
     </WndProperty>
 
   <WndProperty Name="prpToneDeadbandCirclingHigh" Caption="Circling hi cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="High limit of circling dead band">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=1/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpToneDeadbandCirclingLow" Caption="Circling low cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Low limit of circling dead band">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=1/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpToneDeadbandCruiseType" Caption="Cruise deadband type"     X=2 Y=-1  Width=246 Height=22 CaptionWidth=150 Font=2 Help="Type of dead band used in cruise mode.">
@@ -145,11 +149,11 @@
   </WndProperty>
 
   <WndProperty Name="prpToneDeadbandCruiseHigh" Caption="Cruise hi cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="High limit of cruise dead band">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=1/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpToneDeadbandCruiseLow" Caption="Cruise low cutoff"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Low limit of cruise dead band">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=1/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=0 Max=100 Step=1/>
   </WndProperty>
 
   </WndFrame>
@@ -304,7 +308,7 @@
     <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=-13 Max=13 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpLogIGC" Caption="IGC logging"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpIGCLoging" Caption="IGC logging"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
@@ -364,7 +368,7 @@
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
-  <WndProperty Name="prpDontReportTrafficModeChanges" Caption="No mode reports"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
+  <WndProperty Name="prpDontReportTraficModeChanges" Caption="No mode reports"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
