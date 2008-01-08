@@ -82,7 +82,7 @@
 #endif
 #include <string.h>
 #if defined(HAVE_UNISTD_H)
-#include <unistd.h>
+//JMW#include <unistd.h>
 #endif
 #include <jasper/jas_types.h>
 

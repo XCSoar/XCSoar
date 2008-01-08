@@ -484,6 +484,7 @@ void ReadRegistrySettings(void)
     case NORTHUP : DisplayOrientation = NORTHUP;break;
     case NORTHCIRCLE : DisplayOrientation = NORTHCIRCLE;break;
     case TRACKCIRCLE : DisplayOrientation = TRACKCIRCLE;break;
+    case NORTHTRACK : DisplayOrientation = NORTHTRACK;break;
     }
 
   Temp=0;
@@ -1687,7 +1688,7 @@ bool ReadWinPilotPolar(void) {
 }
 
 // *LS-3	WinPilot POLAR file: MassDryGross[kg], MaxWaterBallast[liters], Speed1[km/h], Sink1[m/s], Speed2, Sink2, Speed3, Sink3
-//								403,				101,					115.03,		  -0.86,	174.04,	 -1.76,	212.72,	-3.4
+// 403, 101, 115.03, -0.86, 174.04, -1.76, 212.72,	-3.4
 
 
 //////////////////////////////////////////////////
@@ -2408,9 +2409,9 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
 {
   char sTmp[READLINE_LENGTH+1];
+  char FileBuffer[READLINE_LENGTH+1];
   long dwNumBytesRead=0;
   long dwTotalNumBytesRead=0;
-  char  FileBuffer[READLINE_LENGTH+1];
   long dwFilePos;
 
   String[0] = '\0';
@@ -2423,15 +2424,15 @@ BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
   if (!zFile)
     return(FALSE);
 
-  dwFilePos = zzip_seek(zFile, 0, SEEK_CUR);
+  dwFilePos = zzip_tell(zFile);
 
-  dwNumBytesRead = zzip_fread(FileBuffer, 1, sizeof(FileBuffer), zFile);
+  dwNumBytesRead = zzip_fread(FileBuffer, 1, Max, zFile);
   if (dwNumBytesRead <= 0)
     return(FALSE);
 
   int i = 0;
   int j = 0;
-  while(i<Max && j<(int)dwNumBytesRead){
+  while((i<Max) && (j<(int)dwNumBytesRead)) {
 
     char c = FileBuffer[j];
     j++;
@@ -2443,7 +2444,6 @@ BOOL ReadString(ZZIP_FILE *zFile, int Max, TCHAR *String)
 
     sTmp[i] = c;
     i++;
-    continue;
   }
 
   sTmp[i] = 0;
@@ -2574,8 +2574,10 @@ double StrToDouble(TCHAR *Source, TCHAR **Stop)
 
   StringLength = _tcslen(Source);
 
-  while(((Source[index] == ' ')||(Source[index]==9)) && (index<StringLength))
+  while(((Source[index] == ' ')||(Source[index]=='+')||(Source[index]==9))
+        && (index<StringLength))
     // JMW added skip for tab stop
+    // JMW added skip for "+"
     {
       index ++;
     }
@@ -2813,6 +2815,10 @@ void ExtractDirectory(TCHAR *Dest, TCHAR *Source) {
   int len = _tcslen(Source);
   int found = -1;
   int i;
+  if (len==0) {
+    Dest[0]= 0;
+    return;
+  }
   for (i=0; i<len; i++) {
     if ((Source[i]=='/')||(Source[i]=='\\')) {
       found = i;
@@ -3016,7 +3022,7 @@ void StatusFileInit() {
   StatusMessageData[0].doStatus = true;
   StatusMessageData[0].doSound = true;
   StatusMessageData[0].sound = TEXT("IDR_WAV_DRIP");
-  StatusMessageData[0].delay_ms = 1500; // 1.5 s
+  StatusMessageData[0].delay_ms = 2500; // 2.5 s
   StatusMessageData_Size=1;
 
   // Load up other defaults - allow overwrite in config file
@@ -3736,8 +3742,8 @@ WinPilotPolarInternal WinPilotPolars[] =
   {TEXT("Ka-6CR"), 310, 0, 87.35, -0.81, 141.92, -2.03, 174.68, -3.5},
   {TEXT("L-33 SOLO"), 330, 0, 87.2, -0.8, 135.64, -1.73, 174.4, -3.4},
   {TEXT("LS-1C"), 350, 91, 115.87, -1.02, 154.49, -1.84, 193.12, -3.3},
-  {TEXT("LS-3"), 383, 121, 115.03, -0.86, 174.04, -1.76, 212.72, -3.4},
-  {TEXT("LS-4a"), 361, 121, 114.87, -0.8, 172.3, -2.33, 210.59, -4.5},
+  {TEXT("LS-3"),  383, 121, 93.0, -0.64, 127.0, -0.93, 148.2, -1.28},
+  {TEXT("LS-4a"), 361, 121, 114.9, -0.80, 172.3, -2.33, 210.59, -4.5},
   {TEXT("LS7wl"), 350, 150, 103.77, -0.73, 155.65, -1.47, 180.00, -2.66},
   {TEXT("Nimbus 2 (20.3m)"), 493, 159, 119.83, -0.75, 179.75, -2.14, 219.69, -3.8},
   {TEXT("Nimbus 3DM (24.6m PAS)"), 820, 168, 114.97, -0.57, 157.42, -0.98, 222.24, -2.3},
@@ -4293,4 +4299,29 @@ bool RotateScreen() {
 #endif
 #endif
 
+}
+
+
+int GetTextWidth(HDC hDC, TCHAR *text) {
+  SIZE tsize;
+  GetTextExtentPoint(hDC, text, _tcslen(text), &tsize);
+  return tsize.cx;
+}
+
+
+void ExtTextOutClip(HDC hDC, int x, int y, TCHAR *text, int width) {
+  int len = _tcslen(text);
+  if (len <=0 ) {
+    return;
+  }
+  SIZE tsize;
+  GetTextExtentPoint(hDC, text, len, &tsize);
+  RECT rc;
+  rc.left = x;
+  rc.top = y;
+  rc.right = x + min(width,tsize.cx);
+  rc.bottom = y + tsize.cy;
+
+  ExtTextOut(hDC, x, y, /* ETO_OPAQUE | */ ETO_CLIPPED, &rc,
+             text, len, NULL);
 }

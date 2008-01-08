@@ -109,23 +109,27 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
       _tcscpy(label, gettext(TEXT("AAT")));
       break;
     };
-    ExtTextOut(hDC,
-	       2*InfoBoxLayout::scale,
-	       2*InfoBoxLayout::scale,
-	       ETO_OPAQUE, NULL,
-	       label,
-	       _tcslen(label),
-	       NULL);
+
+    int w0, w1, w2, x0;
+    if (InfoBoxLayout::landscape) {
+      w0 = 202*InfoBoxLayout::scale;
+    } else {
+      w0 = 225*InfoBoxLayout::scale;
+    }
+    w1 = GetTextWidth(hDC, gettext(TEXT("Warn")))+InfoBoxLayout::scale*10;
+    w2 = GetTextWidth(hDC, gettext(TEXT("Display")))+InfoBoxLayout::scale*10;
+    x0 = w0-w1-w2;
+
+    ExtTextOutClip(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+                   label, x0-InfoBoxLayout::scale*10);
 
     if (colormode) {
 
       SelectObject(hDC, GetStockObject(WHITE_PEN));
       SelectObject(hDC, GetStockObject(WHITE_BRUSH));
       Rectangle(hDC,
-          100*InfoBoxLayout::scale,
-          2*InfoBoxLayout::scale,
-          180*InfoBoxLayout::scale,
-          22*InfoBoxLayout::scale);
+          x0, 2*InfoBoxLayout::scale,
+          w0, 22*InfoBoxLayout::scale);
       SetTextColor(hDC,
          MapWindow::Colours[MapWindow::iAirspaceColour[i]]);
          SetBkColor(hDC,
@@ -133,10 +137,8 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
       SelectObject(hDC,
         MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[i]]);
         Rectangle(hDC,
-        100*InfoBoxLayout::scale,
-        2*InfoBoxLayout::scale,
-        180*InfoBoxLayout::scale,
-        22*InfoBoxLayout::scale);
+        x0, 2*InfoBoxLayout::scale,
+        w0, 22*InfoBoxLayout::scale);
 
     } else {
 
@@ -148,22 +150,22 @@ static void OnAirspacePaintListItem(WindowControl * Sender, HDC hDC){
       if (iswarn) {
         _tcscpy(label, gettext(TEXT("Warn")));
         ExtTextOut(hDC,
-             90*InfoBoxLayout::scale,
-             2*InfoBoxLayout::scale,
-             ETO_OPAQUE, NULL,
-             label,
-             _tcslen(label),
-             NULL);
+                   w0-w1-w2,
+                   2*InfoBoxLayout::scale,
+                   ETO_OPAQUE, NULL,
+                   label,
+                   _tcslen(label),
+                   NULL);
       }
       if (isdisplay) {
         _tcscpy(label, gettext(TEXT("Display")));
         ExtTextOut(hDC,
-             150*InfoBoxLayout::scale,
-             2*InfoBoxLayout::scale,
-             ETO_OPAQUE, NULL,
-             label,
-             _tcslen(label),
-             NULL);
+                   w0-w2,
+                   2*InfoBoxLayout::scale,
+                   ETO_OPAQUE, NULL,
+                   label,
+                   _tcslen(label),
+                   NULL);
       }
 
     }

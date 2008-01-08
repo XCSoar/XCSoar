@@ -22,7 +22,8 @@ void ColorRampLookup(short h, BYTE &r, BYTE &g, BYTE &b,
                      const unsigned char interp_bits=6);
 
 void SetTopologyBounds(const RECT rcin, const bool force=false);
-void ReadTopology();
+void TopologyInitialiseMarks();
+void TopologyCloseMarks();
 void OpenTopology();
 void CloseTopology();
 void DrawTopology(const HDC hdc, const RECT rc);

@@ -345,7 +345,7 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double n;
   // get load factor
   if (Basic->AccelerationAvailable) {
-    n = Basic->Gload;
+    n = fabs(Basic->Gload);
   } else {
     n = 1.0;
   }
@@ -368,6 +368,7 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
                                 Calculated->MaxThermalHeight,
                                 MACCREADY);
   }
+  Calculated->MacCreadyRisk = risk_mc;
 
   if (EnableBlockSTF) {
     delta_mc = risk_mc;
@@ -425,7 +426,7 @@ void NettoVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double n;
   // get load factor
   if (Basic->AccelerationAvailable) {
-    n = Basic->Gload;
+    n = fabs(Basic->Gload);
   } else {
     n = 1.0;
   }
@@ -440,10 +441,13 @@ void NettoVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
     double glider_sink_rate;
     if (Basic->AirspeedAvailable && replay_disabled) {
-      glider_sink_rate= GlidePolar::SinkRate(Basic->IndicatedAirspeed, n);
+      glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
+                                                 Basic->IndicatedAirspeed), n);
     } else {
       // assume zero wind (Speed=Airspeed, very bad I know)
-      glider_sink_rate= GlidePolar::SinkRate(Basic->Speed, n);
+      // JMW TODO: adjust for estimated airspeed
+      glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
+                                                 Basic->Speed), n);
     }
     if (Basic->VarioAvailable && replay_disabled) {
       Calculated->NettoVario = Basic->Vario - glider_sink_rate;
@@ -802,6 +806,7 @@ void CloseCalculations() {
 
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   StartupStore(TEXT("InitCalculations\n"));
+  CalibrationInit();
   ResetFlightStats(Basic, Calculated, true);
   LoadCalculationsPersist(Calculated);
   DeleteCalculationsPersist();
@@ -845,7 +850,7 @@ void AverageClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       return;
     }
     if (Basic->AccelerationAvailable) {
-      if (fabs(Basic->Gload-1.0)>0.25) {
+      if (fabs(fabs(Basic->Gload)-1.0)>0.25) {
         // G factor too high
         return;
       }
@@ -867,11 +872,12 @@ void AverageClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 void DebugTaskCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
 #ifdef DEBUGTASKSPEED
-    if (Calculated->TaskStartTime>0) {
+  if ((Calculated->TaskStartTime>0)
+      && (Basic->Time-Calculated->TaskStartTime>0)) {
       char buffer[200];
 
       double effective_mc = EffectiveMacCready(Basic, Calculated);
-      sprintf(buffer,"%g %g %g %g %g %g %g %g %g %d # taskspeed\r\n",
+      sprintf(buffer,"%g %g %g %g %g %g %g %g %g %g %d # taskspeed\r\n",
               Basic->Time-Calculated->TaskStartTime,
               Calculated->TaskDistanceCovered,
               Calculated->TaskDistanceToGo,
@@ -879,6 +885,7 @@ void DebugTaskCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
               Calculated->NavAltitude,
               Calculated->TaskSpeedAchieved,
               Calculated->TaskSpeed,
+              Calculated->TaskSpeedInstantaneous,
               MACCREADY,
               effective_mc,
               ActiveWayPoint);
@@ -920,7 +927,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   AverageClimbRate(Basic,Calculated);
   ThermalGain(Basic,Calculated);
   LastThermalStats(Basic, Calculated);
-  ThermalBand(Basic, Calculated);
+  //  ThermalBand(Basic, Calculated); moved to % circling function
   MaxHeightGain(Basic,Calculated);
 
   PredictNextPosition(Basic, Calculated);
@@ -967,28 +974,38 @@ void EnergyHeightNavAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
+
 void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   static double LastTime = 0;
   static double LastAlt = 0;
+  static double LastAltTE = 0;
+  double GPSVarioTE=0;
 
   if(Basic->Time <= LastTime) {
     LastTime = Basic->Time;
   } else {
     double Gain = Calculated->NavAltitude - LastAlt;
+    double GainTE = Calculated->EnergyHeight+Basic->Altitude - LastAltTE;
+    double dT = (Basic->Time - LastTime);
     // estimate value from GPS
-    Calculated->GPSVario = Gain / (Basic->Time - LastTime);
+    Calculated->GPSVario = Gain / dT;
+    Calculated->GPSVarioTE = GainTE / dT;
     LastAlt = Calculated->NavAltitude;
+    LastAltTE = Calculated->EnergyHeight+Basic->Altitude;
     LastTime = Basic->Time;
   }
 
   if (!Basic->VarioAvailable || ReplayLogger::IsEnabled()) {
     Calculated->Vario = Calculated->GPSVario;
+
   } else {
     // get value from instrument
     Calculated->Vario = Basic->Vario;
     // we don't bother with sound here as it is polled at a
     // faster rate in the DoVarioCalcs methods
+
+    CalibrationUpdate(Basic, Calculated);
   }
 }
 
@@ -1230,6 +1247,7 @@ void PercentCircling(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   if (Calculated->Circling && (Rate>MinTurnRate)) {
     //    timeCircling += (Basic->Time-LastTime);
     Calculated->timeCircling+= 1.0;
+    ThermalBand(Basic, Calculated);
   } else {
     //    timeCruising += (Basic->Time-LastTime);
     Calculated->timeCruising+= 1.0;
@@ -2205,6 +2223,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   } else {
     if(IsFinalWaypoint()) {
       LastStartSector = -1;
+      AddAATPoint(Basic, Calculated, ActiveWayPoint-1);
       CheckFinish(Basic, Calculated);
     } else {
       CheckRestart(Basic, Calculated, &LastStartSector);
@@ -2277,8 +2296,10 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     if (AATEnabled) {
       w1lat = Task[i].AATTargetLat;
       w1lon = Task[i].AATTargetLon;
-      w0lat = Task[i+1].AATTargetLat;
-      w0lon = Task[i+1].AATTargetLon;
+      if (!isfinal) {
+        w0lat = Task[i+1].AATTargetLat;
+        w0lon = Task[i+1].AATTargetLon;
+      }
     }
 
     DistanceBearing(w1lat, w1lon,
@@ -2321,7 +2342,7 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     goto OnExit;
   }
 
-  TotalAltitude += FAIFinishHeight(Basic, Calculated, getFinalWaypoint());
+  TotalAltitude += FAIFinishHeight(Basic, Calculated, -1);
 
   if (!ValidTaskPoint(*ifinal)) {
     Calculated->TaskAltitudeRequiredFromStart = TotalAltitude;
@@ -2359,6 +2380,9 @@ double MacCreadyOrAvClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
     if (flightstats.ThermalAverage.y_ave>0) {
       mc_val = flightstats.ThermalAverage.y_ave;
+    } else if (Calculated->AverageThermal>0) {
+      // insufficient stats, so use this/last thermal's average
+      mc_val = Calculated->AverageThermal;
     }
   }
   return max(0.1, mc_val);
@@ -2370,8 +2394,9 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 {
   int ifinal;
   static double LastTime = 0;
+  static double LastTimeStats = 0;
   static double v2last = 0;
-  static double t1last = 0;
+  static double t2last = 0;
   double TotalTime=0, TotalDistance=0, Vfinal=0;
 
   if (!ValidTaskPoint(ActiveWayPoint)) return;
@@ -2382,9 +2407,9 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
   // in case we leave early due to error
   Calculated->TaskSpeedAchieved = 0;
   Calculated->TaskSpeed = 0;
-  Calculated->TaskSpeedInstantaneous = 0;
 
   if (ActiveWayPoint<=0) { // no task speed before start
+    Calculated->TaskSpeedInstantaneous = 0;
     return;
   }
 
@@ -2432,11 +2457,12 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 
     if ((t1<=0) || (d1<=0) || (d0<=0) || (t0<=0) || (h0<=0)) {
       // haven't started yet or not a real task
+      Calculated->TaskSpeedInstantaneous = 0;
       goto OnExit;
     }
 
     // JB's task speed...
-    double hx = SpeedHeight(Basic, Calculated);
+    double hx = max(0,SpeedHeight(Basic, Calculated));
     double t1mod = t1-hx/MacCreadyOrAvClimbRate(Basic, Calculated, maccready);
     // only valid if flown for 5 minutes or more
     if (t1mod>300.0) {
@@ -2474,7 +2500,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 
     if(Basic->Time < LastTime) {
       LastTime = Basic->Time;
-    } else if (Basic->Time-LastTime >=1.0) {
+    } else if (Basic->Time-LastTime >=10.0) {
 
       // Calculate contribution to average task speed.
       // This is equal to the change in virtual distance
@@ -2500,15 +2526,35 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
       // Therefore, it shows well whether at any time the glider
       // is wasting time.
 
-      double delta_d2 = (v2*t1-v2last*t1last);
+      double delta_d2 = (v2*t1-v2last*t2last);
       double vdiff = delta_d2/(Basic->Time-LastTime);
 
-      Calculated->TaskSpeedInstantaneous =
-        LowPassFilter(Calculated->TaskSpeedInstantaneous, vdiff, 0.02);
-
       v2last = v2;
-      t1last = t1;
+      t2last = t1;
       LastTime = Basic->Time;
+
+      if (t1<60) {
+        Calculated->TaskSpeedInstantaneous = vdiff;
+        // initialise
+      } else {
+
+        Calculated->TaskSpeedInstantaneous =
+          LowPassFilter(Calculated->TaskSpeedInstantaneous, vdiff, 0.1);
+
+        // update stats
+        if(Basic->Time < LastTimeStats) {
+          LastTimeStats = Basic->Time;
+        } else if ((Basic->Time-LastTimeStats >= 60.0) && (t1>60)) {
+          // every minute
+
+          flightstats.Task_Speed.
+            least_squares_update(
+                                 max(0,
+                                     Basic->Time-Calculated->TaskStartTime)/3600.0,
+                                 Calculated->TaskSpeedInstantaneous);
+          LastTimeStats = Basic->Time;
+        }
+      }
     }
   }
  OnExit:
@@ -2927,6 +2973,9 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
     if (flightstats.ThermalAverage.y_ave>0) {
       mc_new = flightstats.ThermalAverage.y_ave;
+    } else if (Calculated->AverageThermal>0) {
+      // insufficient stats, so use this/last thermal's average
+      mc_new = Calculated->AverageThermal;
     }
 
   }
@@ -3100,14 +3149,12 @@ void AATStats_Time(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double aat_tasktime_elapsed = Basic->Time - Calculated->TaskStartTime;
   double aat_tasklength_seconds = AATTaskLength*60;
 
-  if ((ActiveWayPoint==0)&&(Calculated->AATTimeToGo==0)) {
-    Calculated->AATTimeToGo = aat_tasklength_seconds;
-  }
-
-  if((aat_tasktime_elapsed>=0) && (ActiveWayPoint >0)) {
-    Calculated->AATTimeToGo =
-      min(aat_tasklength_seconds,
-          max(0,aat_tasklength_seconds - aat_tasktime_elapsed));
+  if (ActiveWayPoint==0) {
+    if (Calculated->AATTimeToGo==0) {
+      Calculated->AATTimeToGo = aat_tasklength_seconds;
+    }
+  } else if (aat_tasktime_elapsed>=0) {
+    Calculated->AATTimeToGo = aat_tasklength_seconds - aat_tasktime_elapsed;
   }
 
   if(ValidTaskPoint(ActiveWayPoint) && (Calculated->AATTimeToGo>0)) {
@@ -3938,7 +3985,7 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     // note this is similar to what is achieved on the task speed achieved
     // calculator in TaskSpeed()
 
-    double time_climb = (SpeedHeight(Basic, Calculated))/mc_effective;
+    double time_climb = (max(0,SpeedHeight(Basic, Calculated)))/mc_effective;
     time_total += time_climb;
 
     if (time_total<0) continue;

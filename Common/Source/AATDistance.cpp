@@ -227,8 +227,8 @@ void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
   //JMWAAT  Task[taskwaypoint].AATTargetOffsetRadial = -1.0;
 
   if (Task[taskwaypoint].AATTargetLocked) {
-    // have improved on the locked value, so unlock it in case user wants to move
-    // it.
+    // have improved on the locked value, so unlock it in case user
+    // wants to move it.
     Task[taskwaypoint].AATTargetOffsetRadius = -1.0;
     Task[taskwaypoint].AATTargetOffsetRadial = 0;
     Task[taskwaypoint].AATTargetLocked = false;
@@ -250,6 +250,9 @@ void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
 }
 
 
+extern bool TargetDialogOpen;
+
+
 void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
                               int taskwaypoint) {
 
@@ -257,6 +260,7 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
   // target in direction of improvement or first entry into sector
 
   double course_bearing;
+  double course_bearing_orig;
   double d_total_orig;
   double d_total_this;
 
@@ -279,11 +283,27 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
     return;
   }
 
+  // JMWAAT if being externally updated e.g. from task dialog, don't move it
+  if (TargetDialogOpen) return;
+
   DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
                   Task[taskwaypoint-1].AATTargetLon,
                   latitude,
                   longitude,
                   NULL, &course_bearing);
+
+  DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
+                  Task[taskwaypoint-1].AATTargetLon,
+                  Task[taskwaypoint].AATTargetLat,
+                  Task[taskwaypoint].AATTargetLon,
+                  NULL, &course_bearing_orig);
+
+  if (fabs(AngleLimit180(course_bearing-course_bearing_orig))<5.0) {
+    // don't update it if course deviation is less than 5 degrees,
+    // otherwise we end up wasting a lot of CPU in recalculating, and also
+    // the target ends up drifting.
+    return;
+  }
 
   course_bearing = AngleLimit360(course_bearing+
                                  Task[taskwaypoint].AATTargetOffsetRadial);
@@ -300,13 +320,14 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
   double t_distance = 0;
   bool updated = false;
   double p_found;
-  double delta;
+  double delta, delta_raw;
   double inv_slope= 0.4;
   double d_total_last;
 
   do {
 
-    delta = max(5.0,min(fabs(d_diff_total*inv_slope),250.0));
+    delta_raw = fabs(d_diff_total*inv_slope);
+    delta = max(50.0,min(delta_raw,1000.0));
     t_distance += delta;
 
     double t_lat, t_lon;
@@ -325,26 +346,53 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
                                   t_lat,
                                   taskwaypoint);
 
-    d_total_last = d_total_this;
-    d_total_this = DoubleLegDistance(taskwaypoint,
-                                     t_lon,
-                                     t_lat);
+    if (t_in_sector) {
+      d_total_last = d_total_this;
+      d_total_this = DoubleLegDistance(taskwaypoint,
+                                       t_lon,
+                                       t_lat);
 
-    d_diff_total = d_total_orig - d_total_this;
+      d_diff_total = d_total_orig - d_total_this;
 
-    if (t_in_sector && (d_diff_total>0.0)) {
-      updated = true;
-      Task[taskwaypoint].AATTargetLon = t_lon;
-      Task[taskwaypoint].AATTargetLat = t_lat;
-      p_found = t_distance;
-      if (d_total_this-d_total_last>1.0) {
-        inv_slope = delta/(d_total_this-d_total_last)*0.8;
+      if (d_diff_total>0.0) {
+        updated = true;
+        Task[taskwaypoint].AATTargetLon = t_lon;
+        Task[taskwaypoint].AATTargetLat = t_lat;
+        p_found = t_distance;
+        if (d_total_this-d_total_last>1.0) {
+          inv_slope = delta/(d_total_this-d_total_last)*0.8;
+        }
       }
     }
 
   } while (t_in_sector);
 
+  // now scan to edge of sector to find approximate range %
   if ((updated) && (t_distance>0.0)) {
+
+    if(Task[taskwaypoint].AATType == SECTOR) {
+      delta = Task[taskwaypoint].AATSectorRadius/40.0;
+    } else {
+      delta = Task[taskwaypoint].AATCircleRadius/40.0;
+    }
+    delta = max(250.0, delta);
+
+    do {
+      double t_lat, t_lon;
+
+      t_distance += delta;
+
+      FindLatitudeLongitude(latitude, longitude,
+                            course_bearing, t_distance,
+                            &t_lat,
+                            &t_lon);
+
+      t_in_sector = InAATTurnSector(t_lon,
+                                    t_lat,
+                                    taskwaypoint);
+
+    } while (t_in_sector);
+
     Task[taskwaypoint].AATTargetOffsetRadius = (p_found / t_distance)*2-1;
   }
 

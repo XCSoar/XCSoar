@@ -59,6 +59,10 @@
 
   <WndFrame Name="frmCalibration" X=70 Y=0 Width=246 Height=222 Font=2>
 
+  <WndProperty Name="prpCalibrationTEProbe" Caption="TE probe cal"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Calibration factor applied to total energy probe to obtain TE vario.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=50 Max=150 Step=1/>
+  </WndProperty>
+
   <WndProperty Name="prpTotalEnergyMixingRatio" Caption="TE mixing"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="Proportion of TE probe value used in total energy mixing with pitot/static total energy.">
     <DataField name="" DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min=0 Max=8 Step=1/>
   </WndProperty>
@@ -393,15 +397,15 @@
   <WndFrame Name="frmFlarmRepeats" X=70 Y=0 Width=246 Height=222 Font=2>
 
   <WndProperty Name="prpFlarmInfoRepeatTime" Caption="Interval, Info"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=1 Max=2000 Step=100/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=1 Max=2000 Step=100/>
   </WndProperty>
 
   <WndProperty Name="prpFlarmCautionRepeatTime" Caption="Interval, Caution"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=1 Max=2000 Step=100/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=1 Max=2000 Step=100/>
   </WndProperty>
 
   <WndProperty Name="prpFlarmWarningRepeatTime" Caption="Interval, Warning"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2>
-    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=1 Max=2000 Step=100/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min=1 Max=2000 Step=100/>
   </WndProperty>
 
   </WndFrame>

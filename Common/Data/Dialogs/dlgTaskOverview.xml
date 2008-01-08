@@ -32,7 +32,7 @@
   <WndButton  Name="cmdLoad" Caption="Load"    X=2 Y=60 Width=45  Height=22 Font=2 OnClickNotify="OnLoadClicked"/>
   <WndButton  Name="cmdSave" Caption="Save"    X=47 Y=60 Width=45  Height=22 Font=2 OnClickNotify="OnSaveClicked"/>
   <WndButton  Name="cmdDeclare" Caption="Declare"    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnDeclareClicked"/>
-  <WndEventButton  Name="cmdAnalysis" Caption="Analysis"    X=2 Y=-1 Width=98  Height=22 Font=2 InputEvent="Analysis" Parameters=""/>
+  <WndButton  Name="cmdAnalysis" Caption="Analysis"    X=2 Y=-1 Width=98  Height=22 Font=2 OnClickNotify="OnAnalysisClicked"/>
   </WndFrame>
 
   <WndListFrame Name="frmTaskList" X=102 Y=0 Width=215 Height=222 Font=2 OnListInfo="OnTaskListInfo">

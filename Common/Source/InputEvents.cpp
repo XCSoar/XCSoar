@@ -665,6 +665,8 @@ void InputEvents::setMode(TCHAR *mode) {
 void InputEvents::drawButtons(int Mode){
   int i;
 
+  if (!(ProgramStarted==3)) return;
+
   for (i = 0; i < ModeLabel_count[Mode]; i++) {
     if ((ModeLabel[Mode][i].location > 0)) {
 
@@ -1960,13 +1962,15 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   TCHAR DistanceText[MAX_PATH];
   Units::FormatUserDistance(nearestdistance, DistanceText, 10);
 
-  if (inside) {
+  if (inside && (CALCULATED_INFO.NavAltitude <= AirspaceArea[i].Top.Altitude)
+      && (CALCULATED_INFO.NavAltitude >= AirspaceArea[i].Base.Altitude)) {
+
     _stprintf(text,
-    TEXT("Inside airspace: %s\r\n%s\r\nExit: %s\r\nBearing %d°\r\n"),
-	      szTitleBuffer,
-	      szMessageBuffer,
-	      DistanceText,
-	      (int)nearestbearing);
+              TEXT("Inside airspace: %s\r\n%s\r\nExit: %s\r\nBearing %d°\r\n"),
+              szTitleBuffer,
+              szMessageBuffer,
+              DistanceText,
+              (int)nearestbearing);
   } else {
     _stprintf(text,
     TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %s\r\nBearing %d°\r\n"),

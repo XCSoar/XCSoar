@@ -61,6 +61,7 @@ static double Range = 0;
 static double Radial = 0;
 static int target_point = 0;
 
+bool TargetDialogOpen = false;
 
 static void RefreshCalculator(void) {
   WndProperty* wp;
@@ -71,35 +72,45 @@ static void RefreshCalculator(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
   if (wp) {
+    wp->GetDataField()->SetAsFloat(Range*100.0);
     wp->RefreshDisplay();
     if (!AATEnabled || (target_point==0) || !ValidTaskPoint(target_point+1)) {
       wp->SetVisible(false);
     } else {
       wp->SetVisible(true);
     }
-    wp->GetDataField()->SetAsFloat(Range*100.0);
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpRadial"));
   if (wp) {
+    wp->GetDataField()->SetAsFloat(Radial);
     wp->RefreshDisplay();
     if (!AATEnabled || (target_point==0) || !ValidTaskPoint(target_point+1)) {
       wp->SetVisible(false);
     } else {
       wp->SetVisible(true);
     }
-    wp->GetDataField()->SetAsFloat(Radial);
   }
 
   // update outputs
+  double dd = CALCULATED_INFO.TaskTimeToGo;
+  if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
+    dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+  }
+  dd= min(24.0*60.0,dd/60.0);
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEst"));
   if (wp) {
-    double dd = CALCULATED_INFO.TaskTimeToGo;
-    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
-      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
-    }
-    dd= min(24.0*60.0,dd/60.0);
     wp->GetDataField()->SetAsFloat(dd);
+    wp->RefreshDisplay();
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATDelta"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(dd-AATTaskLength);
+    if (AATEnabled) {
+      wp->SetVisible(true);
+    } else {
+      wp->SetVisible(false);
+    }
     wp->RefreshDisplay();
   }
 
@@ -129,6 +140,8 @@ static void RefreshCalculator(void) {
 
 
 static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
+  double RangeNew;
+  bool updated = false;
   switch(Mode){
     case DataField::daGet:
       //      Sender->Set(Range*100.0);
@@ -137,17 +150,25 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     case DataField::daChange:
       LockTaskData();
       if (target_point>=ActiveWayPoint) {
-        Range = Sender->GetAsFloat()/100.0;
-        Task[target_point].AATTargetOffsetRadius = Range;
+        RangeNew = Sender->GetAsFloat()/100.0;
+        if (RangeNew != Range) {
+          Task[target_point].AATTargetOffsetRadius = RangeNew;
+          Range = RangeNew;
+          updated = true;
+        }
       }
       UnlockTaskData();
-      RefreshCalculator();
+      if (updated) {
+        RefreshCalculator();
+      }
     break;
   }
 }
 
 
 static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
+  double RadialNew;
+  bool updated = false;
   switch(Mode){
     case DataField::daGet:
       //      Sender->Set(Range*100.0);
@@ -156,11 +177,17 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     case DataField::daChange:
       LockTaskData();
       if (target_point>=ActiveWayPoint) {
-        Radial = Sender->GetAsFloat();
-        Task[target_point].AATTargetOffsetRadial = Radial;
+        RadialNew = Sender->GetAsFloat();
+        if (RadialNew != Radial) {
+          Task[target_point].AATTargetOffsetRadial = RadialNew;
+          Radial = RadialNew;
+          updated = true;
+        }
       }
       UnlockTaskData();
-      RefreshCalculator();
+      if (updated) {
+        RefreshCalculator();
+      }
     break;
   }
 }
@@ -183,6 +210,7 @@ static void RefreshTargetPoint(void) {
 
 
 static void OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode) {
+  int old_target_point = target_point;
   switch(Mode){
     case DataField::daGet:
     break;
@@ -190,7 +218,9 @@ static void OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode)
     case DataField::daChange:
       target_point = Sender->GetAsInteger() + ActiveWayPointOnEntry;
       target_point = max(target_point,ActiveWayPoint);
-      RefreshTargetPoint();
+      if (target_point != old_target_point) {
+        RefreshTargetPoint();
+      }
     break;
   }
 }
@@ -230,6 +260,8 @@ void dlgTarget(void) {
 
   if (!wf) return;
 
+  TargetDialogOpen = true;
+
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskPoint"));
   DataFieldEnum* dfe;
@@ -263,6 +295,8 @@ void dlgTarget(void) {
   wf->ShowModal();
 
   MapWindow::SetTargetPan(false, 0);
+
+  TargetDialogOpen = false;
 
   delete wf;
   wf = NULL;

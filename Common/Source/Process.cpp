@@ -347,7 +347,10 @@ void FormatterLowWarning::AssignValue(int i) {
     minimum = ALTITUDEMODIFY*SAFETYALTITUDETERRAIN;
     break;
   case 2:
-    minimum = 0.5*LIFTMODIFY*MACCREADY;
+    minimum = 0.5*LIFTMODIFY*CALCULATED_INFO.MacCreadyRisk;
+    break;
+  case 21:
+    minimum = 0.667*LIFTMODIFY*CALCULATED_INFO.MacCreadyRisk;
     break;
   default:
     break;
@@ -356,17 +359,25 @@ void FormatterLowWarning::AssignValue(int i) {
 
 
 void FormatterTime::SecsToDisplayTime(int d) {
-  int dd = d % (3600*24);
+  bool negative = (d<0);
+  int dd = abs(d) % (3600*24);
 
   hours = (dd/3600);
   mins = (dd/60-hours*60);
   seconds = (dd-mins*60-hours*3600);
   hours = hours % 24;
-  if (dd<0) {
-    Valid = FALSE;
-  } else {
-    Valid = TRUE;
+  if (negative) {
+    if (hours>0) {
+      hours = -hours;
+    } else {
+      if (mins>0) {
+        mins = -mins;
+      } else {
+        seconds = -seconds;
+      }
+    }
   }
+  Valid = TRUE;
 }
 
 
@@ -422,6 +433,7 @@ int DetectStartTime(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 void FormatterTime::AssignValue(int i) {
+  double dd;
   switch (i) {
   case 9:
     SecsToDisplayTime((int)CALCULATED_INFO.LastThermalTime);
@@ -454,6 +466,15 @@ void FormatterTime::AssignValue(int i) {
   case 46:
     SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo+DetectCurrentTime()));
     Valid = ValidTaskPoint(ActiveWayPoint);
+    break;
+  case 62:
+    dd = CALCULATED_INFO.TaskTimeToGo;
+    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
+      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    }
+    dd= max(0,min(24.0*60.0*60.0,dd));
+    SecsToDisplayTime((int)dd-(int)(AATTaskLength*60));
+    Valid = (ValidTaskPoint(ActiveWayPoint) && AATEnabled);
     break;
   default:
     break;
@@ -769,10 +790,16 @@ TCHAR *FormatterTime::Render(int *color) {
     RenderInvalid(color);
     _stprintf(Text,TEXT("--:--"));
   } else {
-    if (hours<1) {
-      _stprintf(Text,
-                TEXT("%02d:%02d"),
-                mins, seconds );
+    if (abs(hours)<1) {
+      if (seconds<0) {
+        _stprintf(Text,
+                  TEXT("-00:%02d"),
+                  abs(seconds));
+      } else {
+        _stprintf(Text,
+                  TEXT("%02d:%02d"),
+                  mins, seconds );
+      }
       _stprintf(CommentText,
                 TEXT(""));
     } else {

@@ -2,38 +2,253 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Changes from 5.1.3 beta9:
+- Cleaned up portrait waypoint select and airspace select/control dialogs.
+- When circling and in target dialog, orient towards waypoint
+- Cleaned up compilation warnings for include files that aren't used
+- Added display of 30s average glide angle to airspace page of analysis dialog
+- Added labels "h" and "D" to airspace page of analysis dialog
+- Added E/W, N/S fields to waypoint edit dialog
+- Task editor asks whether added waypoints are the finish points,
+  means user doesn't need to go back into AAT turnpoints after adding them
+- Reorganised fields in task editor waypoint properties for more intuitive
+  ordering.
+- When adding waypoints from task editor, don't show misc buttons in turnpoint
+  dialog (e.g. details, move up/down, select, remove) since they're not
+  required here.
+- Task editor, removed move down/up buttons when at extremities of task
+- Added 2 more airspace patterns
+- Added AA delta T infobox
+- Fixed bug where North/Track method was not being saved
+- Increased status message delay time for default messages to 2.5 seconds
 
-Todo:
-- Documentation, see if screenshots need updating
-- Documentation, add waypoint changes
-- Documentation, arm advance outside sector
-- Documentation: all changes since 5.0.7
-- Lat/lon entry methods in waypoint editor
-- Thermal hotspots
-  - filter out thermals from selectors
-  - normal wpt display
-  - different icon to normal thermal marker
-- Give warning if estimated arrival time is faster than AAT time
-- Full file names for saved/loaded tasks
-- Option for modified colors for red/green colorblind pilots
-  (final glide bar, flarm targets)
-- Glide range footprint fails over sea
-- Proper dialog for airspace queries, with buttons to ack day/now etc.
+Changes from 5.1.3 beta8:
+- Added support for declaration to EW MicroRecorder
+- Added instantaneous task speed to analysis dialog
+- Fixed instantaneous task speed calc
 
-Others
-- Terrain/topology on (if no terrain/topology available)
-- Mc - (if already at zero)
-- Logger replay if no IGC on disk
-- message repeate (if queue is empty) --> always sometthing
-- mark location if not flying  --> sometimes want to put marker on launch point
 
-bug: append when no task doesn't work (ends up with blank entry on first item)
+Changes from 5.1.3 beta7:
+- Cleaner startup and shutdown
+- Task calculator and target pages from analysis dialog hides analysis dialog
+- Fixed some ranges and units in configuration dialogs
+- Fixed greying out of previous waypoint menu
+- Fixed hang on exit on PPC2000/PPC2002 platforms
+- Cleaned up display of waypoint and task list columns
+- Fixed netto vario calculation when not flying or very slow
+- Added TE probe calibration to vega configuration
+- OLC handicap factor limited to values between 50 and 150 %
+- Task overview dialog hides when launching calculator and analysis dialog
+  so target display works from there.
+- Fixed acceleration compensation for netto vario calculation when used
+  with a vario that doesn't supply netto but does supply acceleration
+- Auto positioning of targets when behind target inside AAT sector is disabled
+  when target dialog is open
+- TC Avg infobox now shown in red if value < 2/3 of Mc
+- Risk Mc used in colored info boxes (TC 30s, TC av) instead of absolute Mc
+- Allow negative times in infoboxes and dialogs (in particular for AAT
+  time to go)
+- AAT time to go infobox can be negative (e.g. in excess of min time)
+
+Changes from 5.1.3 beta6:
+- G load factoring for polar etc take absolute value of G, in case
+   meter (or aircraft!) is upside down
+- Fixed airspace query message when inside airspace area but below/above it
+
+Changes from 5.1.3 beta5:
+- Fix to target dialog when active waypoint changes while dialog is active
+- Fixed help on infoboxes final glide and auxiliary page
+- Added highlighting of selected item in lists etc, to improve
+  readability
+- Added seconds to infoboxes in comment line
+- Added big infobox display mode, activated in Altair/PC via escape then F1.
+- Added ASSERTs to xml parsing to check for memory problems
+- Fixed some aspects of Vega demo handling
+- Cleaned up program exit
+- Changes to vega vario config dialog
+
+Changes from beta4:
+- Fixed waypoint save when using xcm files
+- Added estimated achieved speed and ETE to target dialog
+- Moved teamcode button to Info page 2, replaced with target dialog
+- Write "No data" on analysis dialog when no data available to display
+- Changed progress dialog from TOPMOST to TOP so other dialogs (e.g. error
+  dialogs) don't get obscured by it.
+
+Changes from beta3 to beta 4:
+- Added delay/protection in launcher to try to prevent XCSoar being
+  started twice.
+- LD vario was wrong sign (negative down), now fixed.
+- Prevent crash on start with xcm files that have oversized tiles
+- Circling % takes turn rate into account to prevent bad stats due
+  to flap switches and dolphin soaring
+- Added relative altitude arrows to FLARM gauge in Bearing mode
+- Nearest waypoint in status dialog now working even if waypoint is not
+  visible on map
+- Climb stats are now calculated relative to total energy height
+- File properties are now sorted alphabetically
+- Added locking of targets, and target dialog (from task calculator) to
+  allow preview of task points and to move targets
+
+Changes from 5.1.2 stable to 5.1.3 beta2
+- Fixed bug in waypoint parsing of second file
+- Waypoints outside terrain are always loaded if no terrain file
+- Marks reset bug fix
+- Added condition monitor for start rules
+- Changed "V Task" instantaneous to "V Tsk Ins"
+- Changed "Speed achieved" to "Speed average" label in status dialog
+- Task speed value preserved over reset
+- Status dialog allows left/right cursor to change pages
+- RASP: Changed wstar color scale, better for strong conditions
+- RASP: Sfctemp colour/offset fix
+- RASP: only available times are displayed in dialog, half hour times
+    supported
+- RASP: weather dialog allows "Now" time (auto updated) or set time
+- RASP: fixed white-out of display outside RASP range
+- RASP: added wblmaxmin (convergence) and blcwbase (Cu cloudbase) to RASP
+- Added progress dialog text for initialising terrain tiles (jpg2000)
+- "acknowledgment Time" setting was ignored, now correctly used by airspace
+  warning manager
+- In airspace query status message, top now drawn above base (was the
+  other way around)
+- Reorganised airspace select and waypoint select dialogs in portrait
+  orientation for greater readibility
+- Barograph in analysis dialog time axis starts from zero.
+- Analysis dialog: sensible output when not valid; remove display of data
+   which might be confusing
+- Added hourglass cursor for slow events (configuration, airspace lookup,
+  OLC optimise, shutdown)
+- File xcsoar-startup.log is now proper text file
+- Marks files deleted on exit
+- Enabled display of battery % for PDAs in status dialog,
+  and warning on low battery
+
+Changes from 5.1.1 beta 7
+- Allow for new or edited waypoints if the primary waypoint file is
+  in the xcm file or blank ---> generated files become waypoints1.dat
+  and waypoints2.dat
+- Fixed marks reset
+- Start height in status dialog (task rules) is represented as altitude
+- Changed "nearest" button in analysis dialog to "warnings"
+- Day-acknowledged airspace is always unshaded (outline still drawn)
+- Bigger/italic font of labels on analysis page
+- Airspace lookup dialog doesn't exit immediately after acknowledging an
+  airspace.
+- Added dwcrit and wblmaxmin to RASP parameters
+- Added "Times" page to status dialog, with separate landing/takeoff/flight times
+- Added "Max Height Gain" to status dialog
+- Fixed alternate glide bar style in portrait mode
+
+Changes from 5.1.1 beta 6
+- Ensure FLARM becomes visible if suppressed and alert level >0
+- Added missing port functions for second port
+- Prevent 2d fixes from being added to logger buffer
+- Bug fixes to port handlers, now task Declaration to external loggers
+  stands a chance of working
+- Added Volkslogger device
+- Added FAI 1000m start rules option
+- Thickened green lines in Analysis dialog
+- Added display of grid values in Analysis dialog
+- Merged status pages into single dialog, and moved weather button to
+   where status aircraft used to be.
+- New status page "Rules" showing start/finish details
+- Fixed minor memory leak in RASP weather loading
+- Splash screen on PC works now
+- Added COM0 to available ports
+
+Changes from 5.1.1 beta 5
+- Preliminary support for RASP overlays
+- Task waypoints preserved even if waypoint file is changed
+- B50 bug fixes, support now for external cruise/climb switch
+- Loads default language file "default.xcl" if it exists and no language
+  file is specified.
+- Added several missing translations
+- Fixed terrain cache method for PDAs with low memory
+- Added new polars: Speed Astir, LS-6-18W, LS-8-15, LS-8-18, ASH-26E, ASG29-18, ASW28-18
+- Added named tasks
+- Added ability to lookup airspaces by name/distance/direction/type
+  and acknowledge for whole day.  Access via "Airspace Settings" menu,
+  "Lookup" button.
+
+Changes from 5.1.1 beta 4
+- Minor bug fix to ballast calculation in B50 vario support
+- Fixed baro altitude parser bugs
+- Fixed time wrapover with end of month and midnight
+- Cleanups of LD limiting functions and filter
+- Cleanup of calculation time limits
+- Cleanup of calculation code for readability
+- Menu translations for waypoint next/previous in abort mode
+- Fixed display of FLARM targets beyond 2.5 km
+- Display final glide through terrain crosshair on top of everything
+  except aircraft.
+- Fixed rendering errors at edge of jpg2000 tiles
+- Separated Borgelt B50 series devices into their own device (no longer Generic)
+- Fixed AAT sector bug
+- Force/unforce final glide menu item is hidden if AutoForceFinalGlide is on
+- Added some missing translations
+- Fixed previous page button bug in waypoint details
+- Line drawn from FLARM target to edge of radar display for alert targets,
+  makes it easier to see direction to search for traffic.
+- Code fixes to device.cpp to prevent crashes with badly written device drivers
+
+Changes from 5.1.1 beta 3:
+- Force visibility scan after loading new airspace/topology/waypoints
+- Progress bar for jpg2000 loading enabled
+- Baro altitude from RMZ/RMA sentences only used if no primary
+  baro source from a non-generic device
+- Increased string length for parsing waypoints and airspace to 300
+- Set GPS position to map center on startup if no home waypoint
+- Fixed bug in rendering at very small zoom errors (could lead to crash)
+- Rendering is smooth now even for jpg2000 terrain from overview
+- Added reset function to MarkLocation event
+
+Changes from 5.1.1 beta 2:
+- Consolidated validity checks for info boxes
+
+Changes from 5.1.1 beta 1:
+- Fixed terrain shading bands in portrait mode
+- Fixed terrain shading near coast boundaries
+- Enabled portrait mode for Altair
+- Enabled gauge vario in portrait mode for Altair
+- Added file size method to zzip
+- Added support for loading waypoint files from XCM
+- Added support for loading airspace files from XCM (disabled, because too slow)
+- Consolidated sizes of strings in ReadString methods
+- Airspace parser and bounds fix when airspace goes past 180E
 
 Changes from 5.1.0 beta 3:
 - AAT target in sector fixes
 - AAT sector/circle radius default value is 500 meters
 - AppendTo function bug fix
 - Mc Risk bug fix
+- Replay finish stats bug fix
+- Airspace parser more robust to syntax errors
+- % Circling resets on valid start
+- Screen unblanked if status message appears
+- Terrain color ramp is user configurable (Low lands or mountainous)
+- Terrain rendering speedups
+- Polygon rendering speedups
+- Replay logger bug fix (sometimes gave heading=0)
+- New experimental jpeg2000 tiled terrrain loading
+- Terrain rendering speedups and improvements
+- Task speed unit bitmap fixes
+- Fixed problem with declaration time occurring after takeoff time
+  due to buffering of pre-takeoff data
+- Bigger buttons in landscape mode for non-Altair versions to allow
+  room for German translations
+- User distance units in waypoint select dialog
+- Memory leak in JPG2000 fixed
+- Fast sine/cosine speedups
+- Terrain rendering speedups
+- Additional terrain ramps added (Imhof, ICAO)
+- Option in expert configuration to disable the auto start/stop of logger on
+  takeoff and landing
+- Zip container code added
+- "XCM" (XCSoar Map) file format support added
+- fixed top line of terrain
+- bumped version to 5.1.1beta1
+- fixed airspace parser dialog bug
+
 
 Changes from 5.1.0 beta 2:
 - Added code to generate missing translations file on windows PC debug builds
@@ -812,3 +1027,13 @@ Fixed buges and code improvements
 
 
 
+/////////////
+Random notes
+Others
+- Terrain/topology on (if no terrain/topology available)
+- Mc - (if already at zero)
+- Logger replay if no IGC on disk
+- message repeate (if queue is empty) --> always sometthing
+- mark location if not flying  --> sometimes want to put marker on launch point
+
+    zip -u -n jp2 -n shx test.xcm topology.tpl terrain.jp2 *.shx *.shp *.dbf *.prj airfields.txt

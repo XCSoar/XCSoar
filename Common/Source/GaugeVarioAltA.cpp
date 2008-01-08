@@ -187,10 +187,10 @@ void GaugeVario::Create() {
 
   SetWindowLong(hWndVarioWindow, GWL_WNDPROC, (LONG) GaugeVarioWndProc);
 
-  Render();
+  //  Render();
 
   ShowWindow(hWndVarioWindow, SW_HIDE);
-  Show(true);
+  //  Show(true);
 
 }
 

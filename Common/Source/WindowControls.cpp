@@ -3257,7 +3257,7 @@ void WndListFrame::DrawScrollBar(HDC hDC) {
   rc.left = 1+w;
   rc.top = 1+(h * mListInfo.ScrollIndex) / mListInfo.ItemCount;
   rc.right = w + 2*SELECTORWIDTH - 1;
-  rc.bottom = rc.top + iround((h * mListInfo.ItemInViewCount) / mListInfo.ItemCount) -1;
+  rc.bottom = rc.top + iround((h * mListInfo.ItemInViewCount) / mListInfo.ItemCount)-1;
 
   if (rc.bottom >= h){
     int d;

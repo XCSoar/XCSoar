@@ -83,7 +83,7 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text);
 static bool bFillMode = false;
 static bool	bWaiting = true;
 
-static TCHAR TempString[READLINE_LENGTH];
+static TCHAR TempString[READLINE_LENGTH+1];
 
 static AIRSPACE_AREA TempArea;
 static AIRSPACE_POINT TempPoint;
@@ -204,11 +204,10 @@ void ReadAirspace(ZZIP_FILE *fp)
   int	NumberOfAirspaceCirclesPass[2];
 
   LineCount = 0;
-  HWND hProgress;
 
   lastQNH = QNH;
 
-  hProgress=CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
+  CreateProgressDialog(gettext(TEXT("Loading Airspace File...")));
   // Need step size finer than default 10
   SetProgressStepSize(5);
   dwStep = zzip_file_size(fp) / 10L;
@@ -539,7 +538,7 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
   TCHAR	*Comment;
   int		nSize;
   int		nLineType = -1;
-  TCHAR sTmp[MAX_PATH];
+  TCHAR sTmp[READLINE_LENGTH];
 
   while (ReadString(fp, READLINE_LENGTH, Text)){
     // JMW was ReadStringX
@@ -548,15 +547,15 @@ static int GetNextLine(ZZIP_FILE *fp, TCHAR *Text)
 
     nSize = _tcsclen(Text);
 
+    // Ignore lines less than 3 characters
+    // or starting with comment char
+    if((nSize < 3) || (Text[0] == _T('*')))
+      continue;
+
     // build a upercase copy of the tags
     _tcsncpy(sTmp, Text, sizeof(sTmp)/sizeof(sTmp[0]));
     sTmp[sizeof(sTmp)/sizeof(sTmp[0])-1] = '\0';
     _tcsupr(sTmp);
-
-    // Ignore lines less than 3 characters
-    // or starting with comment char
-    if((nSize < 3) || (sTmp[0] == _T('*')))
-      continue;
 
     // Only return expected lines
     switch (sTmp[0])

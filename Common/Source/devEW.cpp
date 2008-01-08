@@ -93,10 +93,26 @@ void appendCheckSum(TCHAR *String){
 
 }
 
+
+BOOL EWTryConnect(PDeviceDescriptor_t d) {
+  int retries=10;
+  while (--retries){
+
+    (d->Com.WriteString)(TEXT("##\r\n"));         // send IO Mode command
+    if (ExpectString(d, TEXT("IO Mode.\r")))
+      return TRUE;
+
+    ExpectString(d, TEXT("$$$"));                 // empty imput buffer
+  }
+
+  nDeclErrorCode = 1;
+  return(FALSE);
+}
+
+
 BOOL EWDeclBegin(PDeviceDescriptor_t d,
                  TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
 
-  int retries=10;
   TCHAR sTmp[72];
   TCHAR sPilot[13];
   TCHAR sGliderType[9];
@@ -115,20 +131,9 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
 
   (d->Com.SetRxTimeout)(500);                     // set RX timeout to 500[ms]
 
-  while (--retries){
-
-    (d->Com.WriteString)(TEXT("##\r\n"));         // send IO Mode command
-    if (ExpectString(d, TEXT("IO Mode.\r")))
-      break;
-
-    ExpectString(d, TEXT("$$$"));                 // empty imput buffer
-
+  if (!EWTryConnect(d)) {
+    return FALSE;
   }
-
-  if (retries <= 0){                              // to many retries
-    nDeclErrorCode = 1;
-    return(FALSE);
-  };
 
   _stprintf(sTmp, TEXT("#SPI"));                  // send SetPilotInfo
   appendCheckSum(sTmp);
@@ -289,7 +294,6 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
   EoW_Flag = 0;                                   // prepare flags
   NoS_Flag = 0;
   EW_Flags = 0;
-
 
   if (EoW == 'W')
     {

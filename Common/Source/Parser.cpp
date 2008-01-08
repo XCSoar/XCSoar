@@ -1089,6 +1089,10 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   static TCHAR b50[] = TEXT("0,.1,.0,0,0,1.06,0,-222");
   //  static TCHAR t4[] = TEXT("-3,500,1024,50");
 
+  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
+  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$GPRMC,082430.00,A,3744.09096,S,14426.16069,E,0.520294.90,301207,,,A*77"), GPS_INFO);
+  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$GPGGA,082430.00,3744.09096,S,1426.16069,E,1,08,1.37,157.6,M,-4.9,M,,*5B"), GPS_INFO);
+
   QNH=1013.25;
   double h;
   double altraw= 5.0;

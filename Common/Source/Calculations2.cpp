@@ -303,16 +303,6 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 }
 
 
-void CloseTerrain(void) {
-  RasterTerrain::CloseTerrain();
-}
-
-
-void OpenTerrain(void) {
-  RasterTerrain::OpenTerrain();
-}
-
-
 double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       double bearing,
                       double GlideSlope) {
@@ -655,3 +645,95 @@ void SaveCalculationsPersist(DERIVED_INFO *Calculated) {
 
 }
 
+/////////////////////////////////////////////////////////////////////
+
+#define NUM_CAL_SPEED 25
+#define NUM_CAL_VARIO 101
+#define NUM_CAL_VSPEED 50
+
+static double calibration_tevario_val[NUM_CAL_SPEED][NUM_CAL_VARIO];
+static unsigned int calibration_tevario_num[NUM_CAL_SPEED][NUM_CAL_VARIO];
+static double calibration_speed_val[NUM_CAL_VSPEED];
+static unsigned int calibration_speed_num[NUM_CAL_VSPEED];
+
+
+void CalibrationInit(void) {
+  int i, j;
+  for (i=0; i< NUM_CAL_SPEED; i++) {
+    for (j=0; j< NUM_CAL_VARIO; j++) {
+      calibration_tevario_val[i][j] = 0;
+      calibration_tevario_num[i][j] = 0;
+    }
+  }
+  for (i=0; i< NUM_CAL_VSPEED; i++) {
+    calibration_speed_val[i] = 0;
+    calibration_speed_num[i] = 0;
+  }
+}
+
+
+void CalibrationSave(void) {
+  TCHAR sTmp[MAX_PATH];
+  int i, j;
+  double v, w, wav;
+  StartupStore(TEXT("Calibration data for TE vario\n"));
+  for (i=0; i< NUM_CAL_SPEED; i++) {
+    for (j=0; j< NUM_CAL_VARIO; j++) {
+      if (calibration_tevario_num[i][j]>0) {
+        v = i*2.0+20.0;
+        w = (j-50.0)/10.0;
+        wav = calibration_tevario_val[i][j]/calibration_tevario_num[i][j];
+        _stprintf(sTmp, TEXT("%g %g %g %d\n"), v, w, wav,
+                  calibration_tevario_num[i][j]);
+        StartupStore(sTmp);
+      }
+    }
+  }
+  StartupStore(TEXT("Calibration data for ASI\n"));
+  for (i=0; i< NUM_CAL_VSPEED; i++) {
+    if (calibration_speed_num[i]>0) {
+      v = i+20.0;
+      wav = calibration_speed_val[i]/calibration_speed_num[i];
+      _stprintf(sTmp, TEXT("%g %g %g %d\n"), v, w, wav,
+                calibration_speed_num[i]);
+      StartupStore(sTmp);
+    }
+  }
+}
+
+
+void CalibrationUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  if (!Calculated->Flying) return;
+  if ((!Basic->AirspeedAvailable) || (Basic->TrueAirspeed<=0)) {
+    return;
+  }
+  double ias_to_tas = Basic->TrueAirspeed/
+    max(1.0,Basic->IndicatedAirspeed);
+
+  // Vario calibration info
+  int index_te_vario = lround(Calculated->GPSVarioTE*10)+50;
+  int index_speed = lround((Basic->TrueAirspeed-20)/2);
+  if (index_te_vario < 0)
+    return;
+  if (index_te_vario >= NUM_CAL_VARIO)
+    return;
+  if (index_speed<0)
+    return;
+  if (index_speed>= NUM_CAL_SPEED)
+    return;
+
+  calibration_tevario_val[index_speed][index_te_vario] +=
+    Basic->Vario*ias_to_tas;
+  calibration_tevario_num[index_speed][index_te_vario] ++;
+
+  // ASI calibration info
+  int index_vspeed = lround((Basic->TrueAirspeed-20));
+  if (index_vspeed<0)
+    return;
+  if (index_vspeed>= NUM_CAL_VSPEED)
+    return;
+
+  calibration_speed_val[index_vspeed] += Calculated->TrueAirspeedEstimated;
+  calibration_speed_num[index_vspeed] ++;
+
+}

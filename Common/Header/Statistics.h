@@ -25,6 +25,7 @@ class Statistics {
   LeastSquares Altitude;
   LeastSquares Altitude_Base;
   LeastSquares Altitude_Ceiling;
+  LeastSquares Task_Speed;
   void Reset();
 
   static void DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata);
@@ -75,6 +76,7 @@ class Statistics {
     static void RenderWind(HDC hdc, RECT rc);
     static void RenderTemperature(HDC hdc, RECT rc);
     static void RenderTask(HDC hdc, RECT rc, bool olcmode);
+    static void RenderSpeed(HDC hdc, RECT rc);
 
 };
 

@@ -11,11 +11,11 @@
 
   <WndFrame X=0 Y=0 Width=75 Height=20 Font=2 />
   <WndButton   Caption="Close"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
-  <WndButton   Caption="Select"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnSelectClicked"/>
-  <WndButton   Caption="Remove"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnRemoveClicked"/>
-  <WndButton   Caption="Details"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnDetailsClicked"/>
-  <WndButton   Caption="Move down"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnMoveAfterClicked"/>
-  <WndButton   Caption="Move up"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnMoveBeforeClicked"/>
+  <WndButton  Name="butSelect"   Caption="Select"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnSelectClicked"/>
+  <WndButton  Name="butRemove" Caption="Remove"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnRemoveClicked"/>
+  <WndButton  Name="butDetails" Caption="Details"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnDetailsClicked"/>
+  <WndButton  Name="butDown" Caption="Move down"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnMoveAfterClicked"/>
+  <WndButton  Name="butUp" Caption="Move up"    X=2 Y=-1 Width=70  Height=22 Font=2 OnClickNotify="OnMoveBeforeClicked"/>
 
   <WndFrame Name="frmStart" X=80 Y=0 Width=246 Height=222 Font=2>
 
@@ -30,8 +30,18 @@
     <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=0 Max=100 Step="0.5"/>
   </WndProperty>
 
+  <WndProperty Name="prpEnableMultipleStartPoints" Caption="Alternate start points" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables alternate start points.">
+    <DataField name="" DataType="boolean" ReadOnly=0 OnDataAccess="OnAATEnabled"/>
+  </WndProperty>
+
+  <WndButton  Name="EditStartPoints" Caption="Edit start points"    X=20 Y=-1 Width=200  Height=22 Font=2 OnClickNotify="OnStartPointClicked"/>
+
   <WndProperty Name="prpAATEnabled" Caption="AAT" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables AAT tasks.  When enabled, the AAT observation parameters can be set for each turnpoint.">
     <DataField name="" DataType="boolean" ReadOnly=0 OnDataAccess="OnAATEnabled"/>
+  </WndProperty>
+
+  <WndProperty Name="prpMinTime" Caption="AAT min time" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 min=0 max=600 step=10 Help="Minimum AAT task time in minutes.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
   </WndProperty>
 
   <WndProperty Name="prpTaskFAISector" Caption="Sector type"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2   Help="Type of sectors used for non-AAT tasks.
@@ -46,14 +56,6 @@
 
   </WndProperty>
 
-  <WndProperty Name="prpMinTime" Caption="AAT min time" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 min=0 max=600 step=10 Help="Minimum AAT task time in minutes.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
-  </WndProperty>
-
-  <WndProperty Name="prpOLCEnabled" Caption="OnLine Contest" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables OLC tasks.  When enabled, OLC style task start is detected automatically (lowest point of flight after initial climb).  Auto MacCready in final glide sets MacCready to obtain greatest distance in remaining height and time for OLC sprint tasks.">
-    <DataField name="" DataType="boolean" ReadOnly=0/>
-  </WndProperty>
-
   <WndProperty Name="prpAutoAdvance" Caption="Auto advance"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2   Help="Determines how waypoints are advanced through the task.
 [Manual] Fully manual task waypoint advancing
 [Auto] Fully automatic task waypoint advancing
@@ -63,11 +65,9 @@
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpEnableMultipleStartPoints" Caption="Alternate start points" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables alternate start points.">
-    <DataField name="" DataType="boolean" ReadOnly=0 OnDataAccess="OnAATEnabled"/>
+  <WndProperty Name="prpOLCEnabled" Caption="OnLine Contest" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables OLC tasks.  When enabled, OLC style task start is detected automatically (lowest point of flight after initial climb).  Auto MacCready in final glide sets MacCready to obtain greatest distance in remaining height and time for OLC sprint tasks.">
+    <DataField name="" DataType="boolean" ReadOnly=0/>
   </WndProperty>
-
-  <WndButton  Name="EditStartPoints" Caption="Edit start points"    X=20 Y=-1 Width=200  Height=22 Font=2 OnClickNotify="OnStartPointClicked"/>
 
   </WndFrame>
 
@@ -76,14 +76,6 @@
   </WndFrame>
 
   <WndFrame Name="frmAATTurnpoint" X=80 Y=0 Width=240 Height=222 Font=2>
-
-  <WndProperty Name="prpAATOffsetRadius" Caption="Target distance"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Target distance adjusts the location of the target within the observation area.  Large values increases the distance (moves the target further away from the previous turnpoint), low values decreases the distance." >
-    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=5/>
-    </WndProperty>
-
-  <WndProperty Name="prpAATTargetLocked" Caption="Target locked" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="When enabled, targets placed within the AAT area are not adjusted automatically.">
-    <DataField name="" DataType="boolean" ReadOnly=0/>
-  </WndProperty>
 
     <WndProperty Name="prpAATType" Caption="Type"     X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 Help="Type of the AAT observation area:
 [Cylinder]: Defines a cylindrical AAT area, radius is defined by the 'Circle radius' properties.
@@ -106,6 +98,14 @@
   <WndProperty Name="prpAATFinishRadial" Caption="Finish radial"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Finish radial of the AAT observation area for sector type.">
     <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=0 Max=360 Step=1/>
     </WndProperty>
+
+  <WndProperty Name="prpAATOffsetRadius" Caption="Target distance"      X=2 Y=-1   Width=240 Height=22 CaptionWidth=150 Font=2 Help="Target distance adjusts the location of the target within the observation area.  Large values increases the distance (moves the target further away from the previous turnpoint), low values decreases the distance." >
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=-100 Max=100 Step=5/>
+    </WndProperty>
+
+  <WndProperty Name="prpAATTargetLocked" Caption="Target locked" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="When enabled, targets placed within the AAT area are not adjusted automatically.">
+    <DataField name="" DataType="boolean" ReadOnly=0/>
+  </WndProperty>
 
   </WndFrame>
 

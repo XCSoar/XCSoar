@@ -172,7 +172,7 @@ _init_Status(StatusMessageData_Size);
 StatusMessageData[StatusMessageData_Size].key = TEXT("Toppology / Terrain");
 StatusMessageData[StatusMessageData_Size].sound = TEXT("IDR_INSERT");
 StatusMessageData[StatusMessageData_Size].doSound = true;
-StatusMessageData[StatusMessageData_Size].delay_ms = 2500;
+StatusMessageData[StatusMessageData_Size].delay_ms = 1500;
 StatusMessageData_Size++;
 _init_Status(StatusMessageData_Size);
 StatusMessageData[StatusMessageData_Size].key = TEXT("Status");

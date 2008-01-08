@@ -42,7 +42,7 @@ Copyright_License {
 
 extern HFONT                                   StatisticsFont;
 
-#define MAXPAGE 7
+#define MAXPAGE 8
 
 double Statistics::yscale;
 double Statistics::xscale;
@@ -69,6 +69,7 @@ void Statistics::Reset() {
   Altitude.Reset();
   Altitude_Base.Reset();
   Altitude_Ceiling.Reset();
+  Task_Speed.Reset();
 }
 
 
@@ -574,10 +575,45 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
 }
 
 
+void Statistics::RenderSpeed(HDC hdc, RECT rc)
+{
+
+  if ((flightstats.Task_Speed.sum_n<2)
+      || !ValidTaskPoint(ActiveWayPoint)) {
+    DrawNoData(hdc, rc);
+    return;
+  }
+
+  ResetScale();
+
+  ScaleXFromData(rc, &flightstats.Task_Speed);
+  ScaleYFromData(rc, &flightstats.Task_Speed);
+  ScaleYFromValue(rc, 0);
+  ScaleXFromValue(rc, flightstats.Task_Speed.x_min+1.0);
+
+  DrawXGrid(hdc, rc,
+            0.5, flightstats.Task_Speed.x_min,
+            STYLE_THINDASHPAPER, 0.5, true);
+
+  DrawYGrid(hdc, rc, 10/TASKSPEEDMODIFY, 0, STYLE_THINDASHPAPER,
+            10, true);
+
+  DrawLineGraph(hdc, rc, &flightstats.Task_Speed,
+                STYLE_MEDIUMBLACK);
+
+  DrawTrend(hdc, rc, &flightstats.Task_Speed, STYLE_BLUETHIN);
+
+  DrawXLabel(hdc, rc, TEXT("t"));
+  DrawYLabel(hdc, rc, TEXT("V"));
+
+}
+
+
+
 void Statistics::RenderClimb(HDC hdc, RECT rc)
 {
 
-  if (flightstats.ThermalAverage.sum_n<=1) {
+  if (flightstats.ThermalAverage.sum_n<1) {
     DrawNoData(hdc, rc);
     return;
   }
@@ -588,7 +624,7 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
   ScaleYFromValue(rc, 0);
 
   ScaleXFromValue(rc, -1);
-  ScaleXFromValue(rc, flightstats.ThermalAverage.sum_n+1);
+  ScaleXFromValue(rc, flightstats.ThermalAverage.sum_n);
 
   DrawYGrid(hdc, rc,
             1.0/LIFTMODIFY, 0,
@@ -599,12 +635,12 @@ void Statistics::RenderClimb(HDC hdc, RECT rc)
 
   DrawLine(hdc, rc,
            0, MACCREADY,
-           flightstats.ThermalAverage.sum_n+1,
+           flightstats.ThermalAverage.sum_n,
            MACCREADY,
            STYLE_REDTHICK);
 
   DrawLabel(hdc, rc, TEXT("MC"),
-	    1, MACCREADY);
+	    max(0.5, flightstats.ThermalAverage.sum_n-1), MACCREADY);
 
   DrawTrendN(hdc, rc,
              &flightstats.ThermalAverage,
@@ -1233,6 +1269,9 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   double hmax = max(4000,GPS_INFO.Altitude+2000);
   RECT rcd;
 
+  DrawXLabel(hdc, rc, TEXT("D"));
+  DrawYLabel(hdc, rc, TEXT("h"));
+
   double fh = (ach-hmin)/(hmax-hmin);
 
   double d_lat[AIRSPACE_SCANSIZE_X];
@@ -1299,8 +1338,20 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   line[3].x = (line[1].x+line[0].x)/2;
   line[3].y = line[0].y;
   Polygon(hdc, line, 4);
+
+  if (GPS_INFO.Speed>10.0) {
+    double t = range/GPS_INFO.Speed;
+    double gfh = (ach+CALCULATED_INFO.Average30s*t-hmin)/(hmax-hmin);
+    line[0].x = rc.left;
+    line[0].y = (int)(fh*(rc.top-rc.bottom)+rc.bottom)-1;
+    line[1].x = rc.right;
+    line[1].y = (int)(gfh*(rc.top-rc.bottom)+rc.bottom)-1;
+    StyleLine(hdc, line[0], line[1], STYLE_BLUETHIN);
+  }
+
   SelectObject(hdc, (HPEN)oldpen);
   DeleteObject(mpen);
+
 }
 
 
@@ -1319,14 +1370,16 @@ static void SetCalcCaption(TCHAR* caption) {
   }
 }
 
+
 #define ANALYSIS_PAGE_BAROGRAPH    0
 #define ANALYSIS_PAGE_CLIMB        1
-#define ANALYSIS_PAGE_WIND         2
-#define ANALYSIS_PAGE_POLAR        3
-#define ANALYSIS_PAGE_TEMPTRACE    4
-#define ANALYSIS_PAGE_TASK         5
-#define ANALYSIS_PAGE_OLC          6
-#define ANALYSIS_PAGE_AIRSPACE     7
+#define ANALYSIS_PAGE_TASK_SPEED   2
+#define ANALYSIS_PAGE_WIND         3
+#define ANALYSIS_PAGE_POLAR        4
+#define ANALYSIS_PAGE_TEMPTRACE    5
+#define ANALYSIS_PAGE_TASK         6
+#define ANALYSIS_PAGE_OLC          7
+#define ANALYSIS_PAGE_AIRSPACE     8
 
 static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
 
@@ -1378,6 +1431,12 @@ static void OnAnalysisPaint(WindowControl * Sender, HDC hDC){
   case ANALYSIS_PAGE_AIRSPACE:
     SetCalcCaption(TEXT("Warnings"));
     Statistics::RenderAirspace(hDC, rcgfx);
+    break;
+  case ANALYSIS_PAGE_TASK_SPEED:
+    SetCalcCaption(TEXT("Task calc"));
+    LockTaskData();
+    Statistics::RenderSpeed(hDC, rcgfx);
+    UnlockTaskData();
     break;
   default:
     // should never get here!
@@ -1508,6 +1567,13 @@ static void Update(void){
 	      Units::GetAltitudeName());
 
     wInfo->SetCaption(sTmp);
+    break;
+  case ANALYSIS_PAGE_TASK_SPEED:
+    _stprintf(sTmp, TEXT("%s: %s"),
+              gettext(TEXT("Analysis")),
+              gettext(TEXT("Task speed")));
+    wf->SetCaption(sTmp);
+    wInfo->SetCaption(TEXT(""));
     break;
   case ANALYSIS_PAGE_TASK:
     _stprintf(sTmp, TEXT("%s: %s"),
@@ -1667,7 +1733,7 @@ static void Update(void){
     break;
   }
 
-  wGrid->SetVisible(page<8);
+  wGrid->SetVisible(page<MAXPAGE+1);
 
   if (wGrid != NULL)
     wGrid->Redraw();
@@ -1698,6 +1764,7 @@ static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
   wf->SetModalResult(mrOK);
 }
+
 
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
   (void)Sender; (void)lParam;
@@ -1730,7 +1797,9 @@ static void OnCalcClicked(WindowControl * Sender,
     dlgBasicSettingsShowModal();
   }
   if (page==ANALYSIS_PAGE_CLIMB) {
+    wf->SetVisible(false);
     dlgTaskCalculatorShowModal();
+    wf->SetVisible(true);
   }
   if (page==ANALYSIS_PAGE_WIND) {
     dlgWindSettingsShowModal();
@@ -1742,7 +1811,9 @@ static void OnCalcClicked(WindowControl * Sender,
     dlgBasicSettingsShowModal();
   }
   if (page==ANALYSIS_PAGE_TASK) {
+    wf->SetVisible(false);
     dlgTaskCalculatorShowModal();
+    wf->SetVisible(true);
   }
   if (page==ANALYSIS_PAGE_OLC) {
     StartHourglassCursor();

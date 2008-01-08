@@ -90,7 +90,7 @@ extern "C" {
 #if defined(DEBUG_MEMALLOC)
 /* This is somewhat of a hack, but it's a useful hack. :-) */
 /* Use my own custom memory allocator for debugging. */
-#include "../../../../local/src/memalloc.h"
+//JMW#include "../../../../local/src/memalloc.h"
 #define jas_malloc	MEMALLOC
 #define	jas_free	MEMFREE
 #define	jas_realloc	MEMREALLOC

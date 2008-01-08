@@ -285,10 +285,10 @@ typedef uLong FAR uLongf;
 #endif
 
 #if 0           /* HAVE_UNISTD_H -- this line is updated by ./configure */
-#  include <sys/types.h> /* for off_t */
-#  include <unistd.h>    /* for SEEK_* and off_t */
+//JMW#  include <sys/types.h> /* for off_t */
+//JMW#  include <unistd.h>    /* for SEEK_* and off_t */
 #  ifdef VMS
-#    include <unixio.h>   /* for off_t */
+//JMW#    include <unixio.h>   /* for off_t */
 #  endif
 #  define z_off_t off_t
 #endif

@@ -442,6 +442,7 @@ void StepProgressDialog(void) {
 }
 
 BOOL SetProgressStepSize(int nSize) {
+  nSize = 5;
   if (hProgress)
     if (nSize < 100)
       SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1),

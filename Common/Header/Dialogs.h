@@ -80,7 +80,7 @@ void dlgWindSettingsShowModal(void);
 void dlgAnalysisShowModal(void);
 void dlgStatusShowModal(int page);
 void dlgSwitchesShowModal(void);
-void dlgTaskWaypointShowModal(int itemindex, int type);
+void dlgTaskWaypointShowModal(int itemindex, int type, bool addonly=false);
 void dlgTaskOverviewShowModal(void);
 void dlgVoiceShowModal(void);
 void dlgWayPointDetailsShowModal(void);

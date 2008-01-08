@@ -37,7 +37,7 @@ class XShapeLabel: public XShape {
 class Topology {
 
  public:
-  Topology(char* shpname, COLORREF thecolor);
+  Topology(char* shpname, COLORREF thecolor, bool doappend=false);
   Topology() {};
 
   ~Topology();
@@ -64,7 +64,7 @@ class Topology {
 
   void loadBitmap(int);
 
-  char* filename;
+  char filename[MAX_PATH];
 
   virtual void removeShape(int i);
   virtual XShape* addShape(int i);

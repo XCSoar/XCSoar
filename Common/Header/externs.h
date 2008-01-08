@@ -24,7 +24,7 @@ extern TCHAR XCSoar_Version[256];
 #endif
 
 
-typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrwaDone=2, psNormalOp=3} StartupState_t;
+typedef enum {psInitInProgress=0, psInitDone=1, psFirstDrawDone=2, psNormalOp=3} StartupState_t;
 // 0: not started at all
 // 1: everything is alive
 // 2: done first draw
