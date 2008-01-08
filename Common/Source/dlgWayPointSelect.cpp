@@ -533,10 +533,21 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
 
 // Sleep(100);
 
-    ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-      ETO_OPAQUE, NULL,
-      WayPointList[WayPointSelectInfo[i].Index].Name,
-      _tcslen(WayPointList[WayPointSelectInfo[i].Index].Name), NULL);
+    int w0, w1, w2, w3, x1, x2, x3;
+    if (InfoBoxLayout::landscape) {
+      w0 = 202*InfoBoxLayout::scale;
+    } else {
+      w0 = 225*InfoBoxLayout::scale;
+    }
+    w1 = GetTextWidth(hDC, TEXT("XXX"));
+    w2 = GetTextWidth(hDC, TEXT(" 000km"));
+    w3 = GetTextWidth(hDC, TEXT(" 000°"));
+
+    x1 = w0-w1-w2-w3;
+
+    ExtTextOutClip(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+                   WayPointList[WayPointSelectInfo[i].Index].Name,
+                   x1-InfoBoxLayout::scale*5);
 
     sTmp[0] = '\0';
     sTmp[1] = '\0';
@@ -559,33 +570,26 @@ static void OnPaintListItem(WindowControl * Sender, HDC hDC){
         sTmp[1] = 'T';
     }
 
-    int x1, x2, x3;
-    if (InfoBoxLayout::landscape || 1) {
-      x1 = 125;
-      x2 = x1+16;
-      x3 = x1+55;
-    } else {
-      x2 = 135-16*3;
-    }
+    // left justified
+    ExtTextOut(hDC, x1, 2*InfoBoxLayout::scale,
+               ETO_OPAQUE, NULL,
+               sTmp, _tcslen(sTmp), NULL);
 
-    if (InfoBoxLayout::landscape || 1) {
-      ExtTextOut(hDC, x1*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-                 ETO_OPAQUE, NULL,
-                 sTmp, _tcslen(sTmp), NULL);
-    }
+    // right justified after waypoint flags
     _stprintf(sTmp, TEXT("%.0f%s"), 
               WayPointSelectInfo[i].Distance,
               Units::GetDistanceName());
-    ExtTextOut(hDC, x2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+    x2 = w0-w3-GetTextWidth(hDC, sTmp);
+    ExtTextOut(hDC, x2, 2*InfoBoxLayout::scale,
       ETO_OPAQUE, NULL,
       sTmp, _tcslen(sTmp), NULL);
 
-    if (InfoBoxLayout::landscape || 1) {
-      _stprintf(sTmp, TEXT("%d°"),  iround(WayPointSelectInfo[i].Direction));
-      ExtTextOut(hDC, x3*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-                 ETO_OPAQUE, NULL,
-                 sTmp, _tcslen(sTmp), NULL);
-    }
+    // right justified after distance
+    _stprintf(sTmp, TEXT("%d°"),  iround(WayPointSelectInfo[i].Direction));
+    x3 = w0-GetTextWidth(hDC, sTmp);
+    ExtTextOut(hDC, x3, 2*InfoBoxLayout::scale,
+               ETO_OPAQUE, NULL,
+               sTmp, _tcslen(sTmp), NULL);
 
   } else {
     if (DrawListIndex == 0){

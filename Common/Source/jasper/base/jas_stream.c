@@ -64,7 +64,7 @@
 /*
  * I/O Stream Library
  *
- * $Id: jas_stream.c,v 1.2 2007/09/14 17:11:15 jwharington Exp $
+ * $Id: jas_stream.c,v 1.3 2008/01/08 07:43:31 jwharington Exp $
  */
 
 /******************************************************************************\
@@ -80,7 +80,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #if defined(HAVE_UNISTD_H)
-#include <unistd.h>
+//JMW#include <unistd.h>
 #endif
 
 #include "jasper/jas_types.h"
@@ -432,9 +432,11 @@ jas_stream_t *jas_stream_fdopen(int fd, const char *mode)
 	  files in text mode.  For example, in the Cygwin environment,
 	  shells often open files in text mode when I/O redirection is
 	  used.  Grr... */
+#if (WINDOWSPC>0)
 	if (stream->openmode_ & JAS_STREAM_BINARY) {
 		_setmode(fd, O_BINARY);
 	}
+#endif
 #endif
 
 	/* Allocate space for the underlying file stream object. */

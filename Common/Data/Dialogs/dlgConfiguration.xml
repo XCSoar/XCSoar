@@ -80,7 +80,7 @@
 
   <WndProperty Name="prpClipAltitude" Caption="Clip altitude"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2
    Help="For clip airspace mode, this is the altitude below which airspace is displayed.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=100/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=20000 Step=100/>
   </WndProperty>
 
   <WndProperty Name="prpAltWarningMargin" Caption="Margin"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=150 Font=2 Help="For auto airspace mode, this is the altitude above/below which airspace is included.">
@@ -455,7 +455,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
 
   <WndProperty Name="prpHandicap" Caption="Handicap"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2 
   Help="The handicap factor used for OnLine Contest scoring.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=1 Max=200 Step=1/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=50 Max=150 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpDisableAutoLogger" Caption="Auto logger*" X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2

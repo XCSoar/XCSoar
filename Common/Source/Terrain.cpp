@@ -49,7 +49,7 @@ Copyright_License {
 
 Topology* TopoStore[MAXTOPOLOGY];
 
-TopologyWriter *topo_marks;
+TopologyWriter *topo_marks = NULL;
 
 #define MINRANGE 0.2
 
@@ -164,10 +164,9 @@ void SetTopologyBounds(const RECT rcin, const bool force) {
 }
 
 
-#include "MapWindow.h"
+void TopologyInitialiseMarks() {
 
-
-void ReadTopology() {
+  StartupStore(TEXT("Initialise marks\n"));
 
   LockTerrainDataGraphics();
 	  
@@ -179,6 +178,7 @@ void ReadTopology() {
   // JMW localpath does NOT work for the shapefile renderer!
 
   if (topo_marks) {
+    topo_marks->DeleteFiles();
     delete topo_marks;
   }
 
@@ -201,6 +201,13 @@ void CloseTopology() {
       delete TopoStore[z];
     }
   }
+  UnlockTerrainDataGraphics();
+}
+
+
+void TopologyCloseMarks() {
+  StartupStore(TEXT("CloseMarks\n"));
+  LockTerrainDataGraphics();
   if (topo_marks) {
     topo_marks->DeleteFiles();
     delete topo_marks;
@@ -1228,11 +1235,12 @@ extern TCHAR szRegistryTopologyFile[];
 
 void OpenTopology() {
   StartupStore(TEXT("OpenTopology\n"));
+  CreateProgressDialog(gettext(TEXT("Loading Topology File...")));
 
   // Start off by getting the names and paths
   static TCHAR  szOrigFile[MAX_PATH] = TEXT("\0");
   static TCHAR  szFile[MAX_PATH] = TEXT("\0");
-  static  TCHAR Directory[MAX_PATH];
+  static  TCHAR Directory[MAX_PATH] = TEXT("\0");
 
   LockTerrainDataGraphics();
 
@@ -1250,13 +1258,14 @@ void OpenTopology() {
 
   if (_tcslen(szFile)==0) {
 
+    // file is blank, so look for it in a map file
     static TCHAR  szMapFile[MAX_PATH] = TEXT("\0");
     GetRegistryString(szRegistryMapFile, szMapFile, MAX_PATH);
-    ExpandLocalPath(szMapFile);
     if (_tcslen(szMapFile)==0) {
       UnlockTerrainDataGraphics();
       return;
     }
+    ExpandLocalPath(szMapFile);
 
     // Look for the file within the map zip file...
     _tcscpy(Directory,szMapFile);

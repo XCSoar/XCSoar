@@ -122,7 +122,7 @@
 ///////////////////////
 
 #define NUMAIRSPACECOLORS 16
-#define NUMAIRSPACEBRUSHES 6
+#define NUMAIRSPACEBRUSHES 8
 
 ////////////////////////
 

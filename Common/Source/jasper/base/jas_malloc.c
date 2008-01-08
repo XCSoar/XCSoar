@@ -64,7 +64,7 @@
 /*
  * Memory Allocator
  *
- * $Id: jas_malloc.c,v 1.2 2007/09/14 17:11:15 jwharington Exp $
+ * $Id: jas_malloc.c,v 1.3 2008/01/08 07:43:31 jwharington Exp $
  */
 
 /******************************************************************************\
@@ -83,7 +83,7 @@
 \******************************************************************************/
 
 #if defined(DEBUG_MEMALLOC)
-#include "../../../local/src/memalloc.c"
+//JMW#include "../../../local/src/memalloc.c"
 #endif
 
 #if !defined(DEBUG_MEMALLOC)

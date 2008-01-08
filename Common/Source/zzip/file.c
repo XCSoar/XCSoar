@@ -438,7 +438,8 @@ zzip_read(ZZIP_FILE * fp, void * buf, zzip_size_t len)
     if (! fp->dir) 
       { return fp->io->fd.read(fp->fd, buf, len); } /* stat fd */
     else
-    {   register zzip_ssize_t v;
+    {   
+        zzip_ssize_t v;
         v = zzip_file_read(fp, buf, len);
         if (v == -1) { errno = zzip_errno(fp->dir->errcode); }
         return v;
@@ -727,6 +728,7 @@ zzip_open_shared_io (ZZIP_FILE* stream,
             ZZIP_FILE* fp = calloc (1, sizeof(ZZIP_FILE));
             if (! fp) { os->fd.close(fd); return 0; } /* io->fd.close */
 
+            fp->dir = NULL;
             fp->fd = fd; 
             fp->io = os;
 

@@ -39,7 +39,6 @@ class ButtonLabel {
   static void GetButtonPosition(int i, RECT rc, 
 				int *x, int *y,
 				int *sizex, int *sizey);
-
 };
 
 #endif

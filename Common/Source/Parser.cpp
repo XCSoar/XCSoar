@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.69 2007/12/09 10:45:09 jwharington Exp $
+  $Id: Parser.cpp,v 1.70 2008/01/08 07:41:26 jwharington Exp $
 
 Copyright_License {
 
@@ -1088,6 +1088,10 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
   static TCHAR t3[] = TEXT("0,0,1200,50,2,DA8B06,270,-4.5,30,-1.4,1");
   static TCHAR b50[] = TEXT("0,.1,.0,0,0,1.06,0,-222");
   //  static TCHAR t4[] = TEXT("-3,500,1024,50");
+
+  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
+  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$GPRMC,082430.00,A,3744.09096,S,14426.16069,E,0.520294.90,301207,,,A*77"), GPS_INFO);
+  //  nmeaParser1.ParseNMEAString_Internal(TEXT("$GPGGA,082430.00,3744.09096,S,1426.16069,E,1,08,1.37,157.6,M,-4.9,M,,*5B"), GPS_INFO);
 
   QNH=1013.25;
   double h;

@@ -64,7 +64,7 @@
 /*
  * Memory Allocator
  *
- * $Id: jas_malloc.h,v 1.2 2007/09/14 17:10:17 jwharington Exp $
+ * $Id: jas_malloc.h,v 1.3 2008/01/08 07:41:24 jwharington Exp $
  */
 
 #ifndef JAS_MALLOC_H
@@ -90,7 +90,7 @@ extern "C" {
 #if defined(DEBUG_MEMALLOC)
 /* This is somewhat of a hack, but it's a useful hack. :-) */
 /* Use my own custom memory allocator for debugging. */
-#include "../../../../local/src/memalloc.h"
+//JMW#include "../../../../local/src/memalloc.h"
 #define jas_malloc	MEMALLOC
 #define	jas_free	MEMFREE
 #define	jas_realloc	MEMREALLOC

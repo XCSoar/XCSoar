@@ -173,6 +173,8 @@ typedef struct _DERIVED_INFO
   double TurnRateWind;
   double BankAngle;
   double PitchAngle;
+  double GPSVarioTE;
+  double MacCreadyRisk;
 } DERIVED_INFO;
 
 

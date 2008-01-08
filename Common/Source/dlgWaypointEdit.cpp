@@ -147,8 +147,16 @@ void dlgWaypointEditShowModal(WAYPOINT *wpt) {
 
     Units::LongitudeToDMS(wpt->Longitude,
                           &dd, &mm, &ss, &sign);
-    if (!sign) { dd = -dd; }
 
+    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeSign"));
+    if (wp) {
+      DataFieldEnum* dfe;
+      dfe = (DataFieldEnum*)wp->GetDataField();
+      dfe->addEnumText((TEXT("W")));
+      dfe->addEnumText((TEXT("E")));
+      dfe->Set(sign);
+      wp->RefreshDisplay();
+    }
     wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeD"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(dd);
@@ -167,8 +175,16 @@ void dlgWaypointEditShowModal(WAYPOINT *wpt) {
 
     Units::LatitudeToDMS(wpt->Latitude,
                          &dd, &mm, &ss, &sign);
-    if (!sign) { dd = -dd; }
 
+    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeSign"));
+    if (wp) {
+      DataFieldEnum* dfe;
+      dfe = (DataFieldEnum*)wp->GetDataField();
+      dfe->addEnumText((TEXT("S")));
+      dfe->addEnumText((TEXT("N")));
+      dfe->Set(sign);
+      wp->RefreshDisplay();
+    }
     wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeD"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(dd);
@@ -220,16 +236,14 @@ void dlgWaypointEditShowModal(WAYPOINT *wpt) {
       ////
       
       double num=0;
-      
+
+      wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeSign"));
+      if (wp) {
+        sign = (wp->GetDataField()->GetAsInteger()==1);
+      }
       wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeD"));
       if (wp) {
         dd = wp->GetDataField()->GetAsInteger();
-        if (dd<0) {
-          sign = 0;
-          dd = -dd;
-        } else {
-          sign = 1;
-        }
       }
       wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeM"));
       if (wp) {
@@ -246,15 +260,13 @@ void dlgWaypointEditShowModal(WAYPOINT *wpt) {
       
       wpt->Longitude = num;
       
+      wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeSign"));
+      if (wp) {
+        sign = (wp->GetDataField()->GetAsInteger()==1);
+      }
       wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeD"));
       if (wp) {
         dd = wp->GetDataField()->GetAsInteger();
-        if (dd<0) {
-          sign = 0;
-          dd = -dd;
-        } else {
-          sign = 1;
-        }
       }
       wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudeM"));
       if (wp) {

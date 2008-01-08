@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.118 2007/12/09 10:45:08 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.119 2008/01/08 07:41:26 jwharington Exp $
 
 Copyright_License {
 
@@ -442,6 +442,7 @@ void StepProgressDialog(void) {
 }
 
 BOOL SetProgressStepSize(int nSize) {
+  nSize = 5;
   if (hProgress)
     if (nSize < 100)
       SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), 

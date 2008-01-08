@@ -12,23 +12,22 @@
   <WndFrame X=0 Y=0 Width=100 Height=20 Font=2 Caption="Filter..." />
   <WndButton Name="cmdClose" Caption="Close" X=100 Y=0 Width=60  Height=28 Font=2 Tag=3 />
 
-  <WndProperty Name="prpFltName"      Caption="Name"      X=2 Y=30  Width=98 Height=30 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltName"      Caption="Name"      X=2 Y=32  Width=98 Height=40 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
   </WndProperty>
-  <WndProperty Name="prpFltType" Caption="Type" X=100 Y=30  Width=98 Height=30 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltType" Caption="Type" X=100 Y=32  Width=98 Height=40 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
   </WndProperty>
-  <WndProperty Name="prpFltDistance"  Caption="Distance"  X=2 Y=60  Width=98 Height=30 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltDistance"  Caption="Distance"  X=2 Y=74  Width=98 Height=40 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
   </WndProperty>
-  <WndProperty Name="prpFltDirection" Caption="Direction" X=100 Y=60  Width=98 Height=30 CaptionWidth=0 Font=2 >
+  <WndProperty Name="prpFltDirection" Caption="Direction" X=100 Y=74  Width=98 Height=40 CaptionWidth=0 Font=2 >
     <DataField name="" DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </WndProperty>
 
-  <WndListFrame Name=frmWayPointList X=0 Y=90 Width=240 Height=230 Font=2 OnListInfo="OnWpListInfo">
-    <WndOwnerDrawFrame Name=frmWayPointListEntry X=2 Y=2 Width=235 Height=18 Font=2  OnPaint="OnPaintListItem"/>
+  <WndListFrame Name=frmWayPointList X=0 Y=116 Width=238 Height=190 Font=2 OnListInfo="OnWpListInfo">
+    <WndOwnerDrawFrame Name=frmWayPointListEntry X=2 Y=2 Width=226 Height=18 Font=2  OnPaint="OnPaintListItem"/>
   </WndListFrame>
-
 
 </WndForm>    
 

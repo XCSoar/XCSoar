@@ -4,8 +4,6 @@
 
 void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-void OpenTerrain(void);
-void CloseTerrain(void);
 void AddSnailPoint(void);
 
 double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic, 
@@ -27,5 +25,9 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated) ;
+
+void CalibrationInit(void);
+void CalibrationUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+void CalibrationSave(void);
 
 #endif

@@ -64,7 +64,7 @@
 /*
  * I/O Stream Class
  *
- * $Id: jas_stream.h,v 1.2 2007/09/14 17:10:17 jwharington Exp $
+ * $Id: jas_stream.h,v 1.3 2008/01/08 07:41:24 jwharington Exp $
  */
 
 #ifndef JAS_STREAM_H
@@ -82,7 +82,7 @@
 #endif
 #include <string.h>
 #if defined(HAVE_UNISTD_H)
-#include <unistd.h>
+//JMW#include <unistd.h>
 #endif
 #include <jasper/jas_types.h>
 

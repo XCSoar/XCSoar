@@ -639,12 +639,18 @@ bool Units::UnLoadUnitBitmap(void){
 
 void Units::TimeToText(TCHAR* text, int d) {
   int hours, mins;
-  int dd = d % (3600*24);
+  bool negative = (d<0);
+  int dd = abs(d) % (3600*24);
   hours = (dd/3600);
   mins = (dd/60-hours*60);
   hours = hours % 24;
-  _stprintf(text, TEXT("%02d:%02d"),		  
-	    hours, mins);
+  if (negative) {
+    _stprintf(text, TEXT("-%02d:%02d"),		  
+              hours, mins);
+  } else {
+    _stprintf(text, TEXT("%02d:%02d"),		  
+              hours, mins);
+  }
 }
 
 

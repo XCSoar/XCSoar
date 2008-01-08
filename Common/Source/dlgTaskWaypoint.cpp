@@ -476,7 +476,7 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
-void dlgTaskWaypointShowModal(int itemindex, int tasktype){
+void dlgTaskWaypointShowModal(int itemindex, int tasktype, bool addonly){
   wf = NULL;
   
   if (!InfoBoxLayout::landscape) {
@@ -513,6 +513,43 @@ void dlgTaskWaypointShowModal(int itemindex, int tasktype){
   ASSERT(wTurnpoint!=NULL);
   ASSERT(wAATTurnpoint!=NULL);
   ASSERT(wFinish!=NULL);
+
+  WndButton* wb;
+  if (addonly) {
+    wb = (WndButton *)wf->FindByName(TEXT("butSelect"));
+    if (wb) {
+      wb->SetVisible(false);
+    }
+    wb = (WndButton *)wf->FindByName(TEXT("butRemove"));
+    if (wb) {
+      wb->SetVisible(false);
+    }
+    wb = (WndButton *)wf->FindByName(TEXT("butDetails"));
+    if (wb) {
+      wb->SetVisible(false);
+    }
+    wb = (WndButton *)wf->FindByName(TEXT("butDown"));
+    if (wb) {
+      wb->SetVisible(false);
+    }
+    wb = (WndButton *)wf->FindByName(TEXT("butUp"));
+    if (wb) {
+      wb->SetVisible(false);
+    }
+  } else {
+    if (!ValidTaskPoint(twItemIndex-1)) {
+      wb = (WndButton *)wf->FindByName(TEXT("butUp"));
+      if (wb) {
+        wb->SetVisible(false);
+      }
+    }
+    if (!ValidTaskPoint(twItemIndex+1)) {
+      wb = (WndButton *)wf->FindByName(TEXT("butDown"));
+      if (wb) {
+        wb->SetVisible(false);
+      }
+    }
+  }
 
   SetWaypointValues(true);
 

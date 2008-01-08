@@ -64,7 +64,7 @@
 /*
  * Primitive Types
  *
- * $Id: jas_types.h,v 1.2 2007/09/14 17:10:17 jwharington Exp $
+ * $Id: jas_types.h,v 1.3 2008/01/08 07:41:24 jwharington Exp $
  */
 
 #ifndef JAS_TYPES_H
@@ -108,7 +108,7 @@
  * The C language implementation does correctly provide the standard header
  * file "stdbool.h".
  */
-#include <stdbool.h>
+//JMW#include <stdbool.h>
 #else
 
 /*
@@ -134,7 +134,7 @@
  * The C language implementation does correctly provide the standard header
  * file "stdint.h".
  */
-#include <stdint.h>
+// JMW #include <stdint.h>
 #else
 /*
  * The C language implementation does not provide the standard header file

@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-/* @(#) $Id: zconf.h,v 1.2 2007/09/14 17:10:27 jwharington Exp $ */
+/* @(#) $Id: zconf.h,v 1.3 2008/01/08 07:41:25 jwharington Exp $ */
 
 #ifndef ZCONF_H
 #define ZCONF_H
@@ -285,10 +285,10 @@ typedef uLong FAR uLongf;
 #endif
 
 #if 0           /* HAVE_UNISTD_H -- this line is updated by ./configure */
-#  include <sys/types.h> /* for off_t */
-#  include <unistd.h>    /* for SEEK_* and off_t */
+//JMW#  include <sys/types.h> /* for off_t */
+//JMW#  include <unistd.h>    /* for SEEK_* and off_t */
 #  ifdef VMS
-#    include <unixio.h>   /* for off_t */
+//JMW#    include <unixio.h>   /* for off_t */
 #  endif
 #  define z_off_t off_t
 #endif

@@ -64,18 +64,18 @@ void Topology::loadBitmap(int xx) {
 }
 
 
-Topology::Topology(char* shpname, COLORREF thecolor):append(FALSE) {
+Topology::Topology(char* shpname, COLORREF thecolor, bool doappend) {
 
+  append = doappend;
   memset((void*)&shpfile, 0 ,sizeof(shpfile));
   shapefileopen = false;
   triggerUpdateCache = false;
   scaleThreshold = 0;
-  shpCache=NULL;
+  shpCache= NULL;
   hBitmap = NULL;
 
   in_scale = false;
 
-  filename = (char *) malloc(strlen(shpname)+1);
   strcpy( filename, shpname );
   hPen = (HPEN)CreatePen(PS_SOLID, 1, thecolor);
   hbBrush=(HBRUSH)CreateSolidBrush(thecolor);
@@ -85,28 +85,25 @@ Topology::Topology(char* shpname, COLORREF thecolor):append(FALSE) {
 
 void Topology::Open() {
 
-  int i;
+  shapefileopen = false;
+
   if (append) {
     if (msSHPOpenFile(&shpfile, "rb+", filename) == -1) {
-      shapefileopen = false;
       return;
     }
   } else {
     if (msSHPOpenFile(&shpfile, "rb", filename) == -1) {
-      shapefileopen = false;
       return;
     }
   }
 
-  shapefileopen = true;
   scaleThreshold = 1000.0;
   shpCache = (XShape**)malloc(sizeof(XShape*)*shpfile.numshapes);
   if (shpCache) {
-    for (i=0; i<shpfile.numshapes; i++) {
+    shapefileopen = true;
+    for (int i=0; i<shpfile.numshapes; i++) {
       shpCache[i] = NULL;
     }
-  } else {
-    shapefileopen = false;
   }
 }
 
@@ -127,7 +124,6 @@ Topology::~Topology() {
   Close();
   DeleteObject((HPEN)hPen);
   DeleteObject((HBRUSH)hbBrush);    
-  if (filename) { free(filename); }
   if (hBitmap) {
     DeleteObject(hBitmap);
   }
@@ -410,7 +406,7 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
 
 
 void XShapeLabel::setlabel(const char* src) {
-  if (
+  if (src && 
       (strcmp(src,"UNK") != 0) &&
       (strcmp(src,"RAILWAY STATION") != 0) &&
       (strcmp(src,"RAILROAD STATION") != 0)
@@ -422,15 +418,20 @@ void XShapeLabel::setlabel(const char* src) {
     }
     hide=false;
   } else {
-    if (label) free(label);
-    label= NULL;
+    if (label) {
+      free(label);
+      label= NULL;
+    }
     hide=true;
   }
 }
 
+
 XShapeLabel::~XShapeLabel() {
-  if (label) free(label);
-  label= NULL;
+  if (label) {
+    free(label);
+    label= NULL;
+  }
 }
 
 
@@ -457,10 +458,7 @@ TopologyWriter::~TopologyWriter() {
 
 
 TopologyWriter::TopologyWriter(char* shpname, COLORREF thecolor):
-  Topology(shpname, thecolor) {
-
-  append= true;
-  strcpy(filename, shpname );
+  Topology(shpname, thecolor, true) {
 
   Reset();
 }
@@ -510,6 +508,7 @@ void TopologyWriter::Reset(void) {
   Open();
 }
 
+
 void TopologyWriter::addPoint(double x, double y) {
   pointObj p = {x,y};
 
@@ -517,7 +516,6 @@ void TopologyWriter::addPoint(double x, double y) {
     msSHPWritePoint(shpfile.hSHP, &p);
     Close();
   }
-  append = true;
   Open();
 
 }

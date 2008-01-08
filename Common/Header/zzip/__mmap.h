@@ -19,7 +19,7 @@
 
 #ifdef _USE_MMAP
 #if    defined ZZIP_HAVE_SYS_MMAN_H
-#include <sys/mman.h>
+//JMW#include <sys/mman.h>
 #define USE_POSIX_MMAP 1
 #elif defined ZZIP_HAVE_WINBASE_H || defined WIN32
 #include <windows.h>

@@ -422,6 +422,8 @@ static void shutdownIo()
 // returns true only if pipes have been initialised successfully
 bool initStdHandles()
 {
+  return true; // JMWBUG
+
 	if (initialisedStdHandles)
 		return true;
 
@@ -773,6 +775,7 @@ static inline bool initStdHandlesInline()
 	return initStdHandles();
 }
 
+#if 0
 // returns non-zero if data is available on stdin
 int _kbhit(void)
 {
@@ -791,6 +794,7 @@ int _kbhit(void)
 	else
 		return 0;
 }
+#endif
 
 int _open(const char* filename, int flags, int mode)
 {

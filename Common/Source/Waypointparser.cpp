@@ -75,6 +75,7 @@ void CloseWayPoints() {
     for (i=0; i<NumberOfWayPoints; i++) {
       if (WayPointList[i].Details) {
         free(WayPointList[i].Details);
+        WayPointList[i].Details = NULL;
       }
     }
   }

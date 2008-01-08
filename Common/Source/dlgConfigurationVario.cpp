@@ -472,6 +472,7 @@ static void UpdateParameters(bool first) {
   VegaConfigurationUpdated(TEXT("CalibrationAirSpeed"), first);
   VegaConfigurationUpdated(TEXT("CalibrationTEStatic"), first);
   VegaConfigurationUpdated(TEXT("CalibrationTEDynamic"), first);
+  VegaConfigurationUpdated(TEXT("CalibrationTEProbe"), first);
 
   VegaConfigurationUpdated(TEXT("AccelerometerSlopeX"), first);
   VegaConfigurationUpdated(TEXT("AccelerometerSlopeY"), first);

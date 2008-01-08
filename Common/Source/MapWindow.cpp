@@ -1175,6 +1175,8 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hAirspaceBitmap[3]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE3));
     hAirspaceBitmap[4]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE4));
     hAirspaceBitmap[5]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE5));
+    hAirspaceBitmap[6]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE6));
+    hAirspaceBitmap[7]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE7));
 
     for (i=0; i<NUMAIRSPACEBRUSHES; i++) {
       hAirspaceBrushes[i] =
@@ -1578,13 +1580,14 @@ void MapWindow::UpdateMapScale()
     {
       
       if(
-         ((DisplayOrientation == NORTHTRACK)
+         (((DisplayOrientation == NORTHTRACK)
           &&(DisplayMode != dmCircling))
          ||(DisplayOrientation == NORTHUP) 
          || 
          (((DisplayOrientation == NORTHCIRCLE) 
            || (DisplayOrientation == TRACKCIRCLE)) 
-          && (DisplayMode == dmCircling) )
+          && (DisplayMode == dmCircling) ))
+         && !TargetPan
         )
       {
         AutoZoomFactor = 2.5;
@@ -1679,12 +1682,10 @@ void MapWindow::UpdateMapScale()
 
 bool MapWindow::GliderCenter=false;
 
-void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
-{
-  double trackbearing = DrawInfo.TrackBearing;
 
+void MapWindow::CalculateOrientationNormal(void) {
+  double trackbearing = DrawInfo.TrackBearing;
   //  trackbearing = DerivedDrawInfo.NextTrackBearing;
-  
   if( (DisplayOrientation == NORTHUP) 
       ||
       ((DisplayOrientation == NORTHTRACK)
@@ -1694,8 +1695,7 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
        ((DisplayOrientation == NORTHCIRCLE)
         ||(DisplayOrientation==TRACKCIRCLE))
        && (DisplayMode == dmCircling) )
-    )
-  {
+      ) {
     GliderCenter = true;
     
     if (DisplayOrientation == TRACKCIRCLE) {
@@ -1710,32 +1710,49 @@ void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
     // normal, glider forward
     GliderCenter = false;
     DisplayAngle = trackbearing;
-    DisplayAircraftAngle = 0.0;
-    
+    DisplayAircraftAngle = 0.0;    
   }
+}
 
-  if (TargetPan) {
-    // Target pan mode, show track up when looking at current task point,
-    // otherwise north up
-    GliderCenter = true;
-    if (ActiveWayPoint==TargetPanIndex) {
-      DisplayAngle = trackbearing;
-      DisplayAircraftAngle = 0.0;
+
+void MapWindow::CalculateOrientationTargetPan(void) {
+  // Target pan mode, show track up when looking at current task point,
+  // otherwise north up.  If circling, orient towards target.
+  GliderCenter = true;
+  if (ActiveWayPoint==TargetPanIndex) {
+    if (DisplayMode == dmCircling) {
+      // target-up
+      DisplayAngle = DerivedDrawInfo.WaypointBearing;
+      DisplayAircraftAngle = 
+        DrawInfo.TrackBearing-DisplayAngle;
     } else {
-      DisplayAngle = 0.0;
-      DisplayAircraftAngle = trackbearing;
+      // track up
+      DisplayAngle = DrawInfo.TrackBearing;
+      DisplayAircraftAngle = 0.0;
     }
+  } else {
+    // North up
+    DisplayAngle = 0.0;
+    DisplayAircraftAngle = DrawInfo.TrackBearing;
+  }
+ 
+}
+
+
+void MapWindow::CalculateOrigin(RECT rc, POINT *Orig)
+{
+  if (TargetPan) {
+    CalculateOrientationTargetPan();
+  } else {
+    CalculateOrientationNormal();
   }
   
-  if(GliderCenter || EnablePan) {
-    Orig->x = iround((rc.left + rc.right ) /2.0);
-    Orig->y = iround((rc.bottom - rc.top) /2.0+rc.top);
-  }
-  else
-  {
-    Orig->x = iround((rc.left + rc.right ) /2.0);
-    Orig->y = iround((rc.bottom - rc.top) 
-                     -((rc.bottom - rc.top )*GliderScreenPosition/100)+rc.top);
+  if (GliderCenter || EnablePan) {
+    Orig->x = (rc.left + rc.right)/2;
+    Orig->y = (rc.bottom + rc.top)/2;
+  } else {
+    Orig->x = (rc.left + rc.right)/2;
+    Orig->y = ((rc.top - rc.bottom )*GliderScreenPosition/100)+rc.bottom;
   }
 }
 
@@ -1984,10 +2001,12 @@ void MapWindow::RenderMapWindow(  RECT rc)
   DrawCompass(hdcDrawWindow, rc);
 
   // JMW Experimental only!
-#ifdef EXPERIMENTAL
+#if 0
+  #ifdef GNAV
   if (EnableAuxiliaryInfo) {
     DrawHorizon(hdcDrawWindow, rc);
   }
+  #endif
 #endif
 
   DrawFlightMode(hdcDrawWindow, rc);
@@ -2155,7 +2174,8 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
     UpdateCaches(first);
     first = false;
     if (ProgramStarted==psInitDone) {
-      ProgramStarted = psFirstDrwaDone;
+      ProgramStarted = psFirstDrawDone;
+      GaugeVario::Show(!MapFullScreen);
     }
     
   }
@@ -2619,7 +2639,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
   TCHAR Buffer[32];
   TCHAR Buffer2[32];
   TCHAR sAltUnit[4];
-  TextInBoxMode_t DisplayMode;
+  TextInBoxMode_t TextDisplayMode;
 
   // if pan mode, show full names
   int pDisplayTextType = DisplayTextType;
@@ -2648,7 +2668,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 
       intask = WaypointInTask(i);
 
-      DisplayMode.AsInt = 0;
+      TextDisplayMode.AsInt = 0;
 
       irange = WaypointInRange(i);
 
@@ -2659,8 +2679,8 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         islandable = true; // so we can always draw them
         if(WayPointList[i].Reachable){
           
-          DisplayMode.AsFlag.Border = 1;
-          DisplayMode.AsFlag.Reachable = 1;
+          TextDisplayMode.AsFlag.Border = 1;
+          TextDisplayMode.AsFlag.Reachable = 1;
 
           if (!DeclutterLabels) {
             // show all reachable landing fields unless we want a decluttered
@@ -2707,7 +2727,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         case DISPLAYNAMEIFINTASK:
           dowrite = intask;
           if (intask) {
-            if (DisplayMode.AsInt)
+            if (TextDisplayMode.AsInt)
               wsprintf(Buffer, TEXT("%s:%d%s"),
                        WayPointList[i].Name, 
                        (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
@@ -2717,7 +2737,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           }
           break;
         case DISPLAYNAME:
-          if (DisplayMode.AsInt)
+          if (TextDisplayMode.AsInt)
             wsprintf(Buffer, TEXT("%s:%d%s"),
                      WayPointList[i].Name, 
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
@@ -2727,7 +2747,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           
           break;
         case DISPLAYNUMBER:
-          if (DisplayMode.AsInt)
+          if (TextDisplayMode.AsInt)
             wsprintf(Buffer, TEXT("%d:%d%s"),
                      WayPointList[i].Number, 
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
@@ -2739,7 +2759,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         case DISPLAYFIRSTFIVE:
           _tcsncpy(Buffer2, WayPointList[i].Name, 5);
           Buffer2[5] = '\0';
-          if (DisplayMode.AsInt)
+          if (TextDisplayMode.AsInt)
             wsprintf(Buffer, TEXT("%s:%d%s"),
                      Buffer2, 
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
@@ -2751,7 +2771,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         case DISPLAYFIRSTTHREE:
           _tcsncpy(Buffer2, WayPointList[i].Name, 3);
           Buffer2[3] = '\0';
-          if (DisplayMode.AsInt)
+          if (TextDisplayMode.AsInt)
             wsprintf(Buffer, TEXT("%s:%d%s"),
                      Buffer2, 
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
@@ -2761,7 +2781,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           
           break;
         case DISPLAYNONE:
-          if (DisplayMode.AsInt)
+          if (TextDisplayMode.AsInt)
             wsprintf(Buffer, TEXT("%d%s"), 
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
                      sAltUnit);
@@ -2779,7 +2799,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
                               Buffer,
                               WayPointList[i].Screen.x+5,
                               WayPointList[i].Screen.y,
-                              DisplayMode,
+                              TextDisplayMode,
                               (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
                               intask);
         }
@@ -3900,6 +3920,8 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   if (maxh-minh<=0) {
     return;
   }
+
+  double hglider = ((h-minh)/(maxh-minh));
   
   // calculate averages
   int numtherm = 0;
@@ -3908,24 +3930,22 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   Wmax = max(0.5,mc);
 
   for (i=0; i<NUMTHERMALBUCKETS; i++) {
-    double wthis;
-    if (DerivedDrawInfo.ThermalProfileN[i]>10) {
+    double wthis = 0;
+    // height of this thermal point [0,mth]
+    double hi = i*mth/NUMTHERMALBUCKETS;
+    double hp = ((hi-minh)/(maxh-minh));
+
+    if (DerivedDrawInfo.ThermalProfileN[i]>5) {
       // now requires 10 items in bucket before displaying,
       // to eliminate kinks
       wthis = DerivedDrawInfo.ThermalProfileW[i]
                  /DerivedDrawInfo.ThermalProfileN[i];
-      if (wthis>0.0) {
-
-        // height of this thermal point [0,mth]
-        double hi = i*mth/NUMTHERMALBUCKETS;
-
-        double hp = ((hi-minh)/(maxh-minh));
-
-        ht[numtherm]= hp;
-        Wt[numtherm]= wthis;
-        Wmax = max(Wmax,wthis/1.5);
-        numtherm++;
-      }
+    }
+    if (wthis>0.0) {
+      ht[numtherm]= hp;
+      Wt[numtherm]= wthis;
+      Wmax = max(Wmax,wthis/1.5);
+      numtherm++;
     }
   }
 
@@ -3947,8 +3967,6 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   ThermalProfile[numtherm+1].y = ThermalProfile[numtherm].y;
     
   // position of thermal band
-
-  double hglider = ((h-minh)/(maxh-minh));
 
   GliderBand[0].y = IBLSCALE(4)+iround(TBSCALEY*(1.0-hglider))+rc.top;
   GliderBand[1].y = GliderBand[0].y;

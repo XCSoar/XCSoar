@@ -392,6 +392,9 @@ class MapWindow {
   static NMEA_INFO DrawInfo;
   static DERIVED_INFO DerivedDrawInfo;
 
+  static void CalculateOrientationTargetPan(void);
+  static void CalculateOrientationNormal(void);
+
 };
 
 void PolygonRotateShift(POINT* poly, int n, int x, int y, 

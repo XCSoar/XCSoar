@@ -8,7 +8,7 @@
    subject to change. Applications should only use zlib.h.
  */
 
-/* @(#) $Id: zutil.h,v 1.2 2007/09/14 17:10:27 jwharington Exp $ */
+/* @(#) $Id: zutil.h,v 1.3 2008/01/08 07:41:25 jwharington Exp $ */
 
 #ifndef ZUTIL_H
 #define ZUTIL_H
@@ -94,7 +94,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
        void _Cdecl farfree( void *block );
        void *_Cdecl farmalloc( unsigned long nbytes );
 #    else
-#      include <alloc.h>
+//JMW#      include <alloc.h>
 #    endif
 #  else /* MSC or DJGPP */
 #    include <malloc.h>
@@ -125,7 +125,7 @@ extern const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #if defined(MACOS) || defined(TARGET_OS_MAC)
 #  define OS_CODE  0x07
 #  if defined(__MWERKS__) && __dest_os != __be_os && __dest_os != __win32_os
-#    include <unix.h> /* for fdopen */
+//JMW#    include <unix.h> /* for fdopen */
 #  else
 #    ifndef fdopen
 #      define fdopen(fd,mode) NULL /* No fdopen() */

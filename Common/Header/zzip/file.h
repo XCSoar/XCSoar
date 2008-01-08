@@ -34,7 +34,7 @@
 #include <zzip/zlib.h>
 
 #ifdef ZZIP_HAVE_UNISTD_H
-#include <unistd.h>
+//JMW#include <unistd.h>
 #else
 #include <stdio.h>
 # ifdef ZZIP_HAVE_SYS_TYPES_H
@@ -43,7 +43,7 @@
 #endif
 
 #ifdef ZZIP_HAVE_SYS_PARAM_H
-#include <sys/param.h> /* PATH_MAX */
+//JMW#include <sys/param.h> /* PATH_MAX */
 #endif
 
 #ifndef PATH_MAX

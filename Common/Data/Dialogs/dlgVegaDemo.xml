@@ -13,7 +13,7 @@
   </WndButton> 
 
   <WndProperty name="prpVegaDemoW" Caption="TE vario"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 Help="This produces a fake TE vario gross vertical velocity.  It can be used when in circling mode to demonstrate the lift tones.  When not in circling mode, set this to a realistic negative value so speed command tones are produced.">
-    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=-10 Max=10 Step=0.1  OnDataAccess="OnVegaDemoW"/>
+    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min=-20 Max=20 Step=0.1  OnDataAccess="OnVegaDemoW"/>
   </WndProperty>
 
   <WndProperty name="prpVegaDemoV" Caption="Airspeed"  X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2  Help="This produces a fake airspeed.  It can be used when not in circling mode to demonstrate the speed command tones.">

@@ -68,8 +68,17 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
   TCHAR sTmp[120];
   LockTaskData();
 
-  int p1 = 125;
-  int p2 = 175;
+  int w0;
+  if (InfoBoxLayout::landscape) {
+    w0 = 200*InfoBoxLayout::scale;
+  } else {
+    w0 = 210*InfoBoxLayout::scale;
+  }
+  int w1 = GetTextWidth(hDC, TEXT(" 000km"));
+  int w2 = GetTextWidth(hDC, TEXT("  000°"));
+
+  int p1 = w0-w1-w2; // 125*InfoBoxLayout::scale;
+  int p2 = w0-w2;    // 175*InfoBoxLayout::scale;
 
   if (DrawListIndex < n){
     int i = LowLimit + DrawListIndex;
@@ -83,13 +92,14 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
       _stprintf(sTmp, TEXT("%.0f %s"), 
 		Task[i].Leg*DISTANCEMODIFY,
 		Units::GetDistanceName());
-
-      ExtTextOut(hDC, p1*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+      ExtTextOut(hDC, p1+w1-GetTextWidth(hDC, sTmp), 
+                 2*InfoBoxLayout::scale,
                  ETO_OPAQUE, NULL,
                  sTmp, _tcslen(sTmp), NULL);
-    
+
       _stprintf(sTmp, TEXT("%d°"),  iround(Task[i].InBound));
-      ExtTextOut(hDC, p2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+      ExtTextOut(hDC, p2+w2-GetTextWidth(hDC, sTmp), 
+                 2*InfoBoxLayout::scale,
                  ETO_OPAQUE, NULL,
                  sTmp, _tcslen(sTmp), NULL);
     
@@ -116,27 +126,26 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
 	  _stprintf(sTmp, TEXT("%.0f %s"), lengthtotal*DISTANCEMODIFY,
 		    Units::GetDistanceName());
 	}
-	ExtTextOut(hDC, p1*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+	ExtTextOut(hDC, p1+w1-GetTextWidth(hDC, sTmp), 
+                   2*InfoBoxLayout::scale,
 		   ETO_OPAQUE, NULL,
 		   sTmp, _tcslen(sTmp), NULL);
 
       } else {
-	_stprintf(sTmp, TEXT("%s %.0f min"), gettext(TEXT("Total:")),
-                  AATTaskLength*1.0);
-	ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-		   ETO_OPAQUE, NULL,
-		   sTmp, _tcslen(sTmp), NULL);
 
 	double d1 = (CALCULATED_INFO.TaskDistanceToGo
 		     +CALCULATED_INFO.TaskDistanceCovered);
 	if (d1==0.0) {
 	  d1 = CALCULATED_INFO.AATTargetDistance;
 	}
-	_stprintf(sTmp, TEXT("%.0f (%.0f) %s"), 
+
+	_stprintf(sTmp, TEXT("%s %.0f min %.0f (%.0f) %s"), 
+                  gettext(TEXT("Total:")),
+                  AATTaskLength*1.0,
 		  DISTANCEMODIFY*lengthtotal,
 		  DISTANCEMODIFY*d1,
 		  Units::GetDistanceName());
-	ExtTextOut(hDC, p1*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
+	ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		   ETO_OPAQUE, NULL,
 		   sTmp, _tcslen(sTmp), NULL);
       } 
@@ -211,6 +220,7 @@ static void UpdateAdvanced(void) {
 static void OnTaskListEnter(WindowControl * Sender, 
 		     WndListFrame::ListInfo_t *ListInfo) {
   (void)Sender;
+  bool isfinish = false;
   ItemIndex = ListInfo->ItemIndex;
   if ((ItemIndex>= UpLimit) || (UpLimit==0)) {
     if (ItemIndex>=UpLimit) {
@@ -218,6 +228,17 @@ static void OnTaskListEnter(WindowControl * Sender,
     }
     // add new waypoint
     if (CheckDeclaration()) {
+
+      if (ItemIndex>0) {
+        if (MessageBoxX(hWndMapWindow,
+                        gettext(TEXT("Will this be the finish?")),
+                        gettext(TEXT("Add Waypoint")),
+                        MB_YESNO|MB_ICONQUESTION) == IDYES) {
+          isfinish = true;
+        } else {
+          isfinish = false;
+        }
+      }
 
       if (ItemIndex>0) {
 	Task[ItemIndex].Index = Task[0].Index;
@@ -235,10 +256,16 @@ static void OnTaskListEnter(WindowControl * Sender,
       }
       Task[ItemIndex].AATTargetOffsetRadius = 0.0;
       Task[ItemIndex].AATTargetOffsetRadial = 0.0;
-      if (ItemIndex>0) {
-	dlgTaskWaypointShowModal(ItemIndex, 2); // finish waypoint
+
+      if (ItemIndex==0) {
+	dlgTaskWaypointShowModal(ItemIndex, 0, true); // start waypoint
+      } else if (isfinish) {
+        dlgTaskWaypointShowModal(ItemIndex, 2, true); // finish waypoint
       } else {
-	dlgTaskWaypointShowModal(ItemIndex, 0); // start waypoint
+        if (AATEnabled) {
+          // only need to set properties for finish
+          dlgTaskWaypointShowModal(ItemIndex, 1, true); // normal waypoint
+        }
       }
       OverviewRefreshTask();
     }
@@ -287,10 +314,24 @@ static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *Lis
 
 static void OnCalcClicked(WindowControl * Sender, 
 			  WndListFrame::ListInfo_t *ListInfo){
-	(void)Sender;
-	(void)ListInfo;
+  (void)Sender;
+  (void)ListInfo;
+
+  wf->SetVisible(false);
   dlgTaskCalculatorShowModal();
   OverviewRefreshTask();
+  wf->SetVisible(true);
+}
+
+
+static void OnAnalysisClicked(WindowControl * Sender, 
+                              WndListFrame::ListInfo_t *ListInfo){
+  (void)Sender;
+  (void)ListInfo;
+
+  wf->SetVisible(false);
+  dlgAnalysisShowModal();
+  wf->SetVisible(true);
 }
 
 
@@ -401,6 +442,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnAdvancedClicked),
   DeclearCallBackEntry(OnSaveClicked),
   DeclearCallBackEntry(OnLoadClicked),
+  DeclearCallBackEntry(OnAnalysisClicked),
   DeclearCallBackEntry(NULL)
 };
 

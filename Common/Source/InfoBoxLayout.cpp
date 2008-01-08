@@ -679,6 +679,11 @@ void ButtonLabel::Destroy() {
   int i;
   for (i=0; i<NUMBUTTONLABELS; i++) {
     DestroyWindow(hWndButtonWindow[i]);
+
+    // prevent setting of button details if it's been destroyed
+    hWndButtonWindow[i] = NULL;
+    ButtonVisible[i]= false;
+    ButtonDisabled[i] = true;
   }
 }
 
@@ -686,6 +691,10 @@ void ButtonLabel::Destroy() {
 void ButtonLabel::SetLabelText(int index, TCHAR *text) {
   // error! TODO Add debugging
   if (index>= NUMBUTTONLABELS) 
+    return;
+
+  // don't try to draw if window isn't initialised
+  if (hWndButtonWindow[index] == NULL)
     return;
 
   if ((text==NULL) || (*text==_T('\0'))||(*text==_T(' '))) {

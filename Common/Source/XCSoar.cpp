@@ -70,6 +70,7 @@ Copyright_License {
 #include "devPosiGraph.h"
 #include "devBorgeltB50.h"
 #include "devVolkslogger.h"
+#include "devEWMicroRecorder.h"
 #include "Externs.h"
 #include "units.h"
 #include "InputEvents.h"
@@ -287,7 +288,7 @@ bool InfoBoxesDirty= false;
 bool DialogActive = false;
 
 //Local Static data
-static int iTimerID;
+static int iTimerID= 0;
 
 // Final Glide Data
 double SAFETYALTITUDEARRIVAL = 500;
@@ -402,6 +403,7 @@ DWORD StartMaxSpeed = 0;
 Statistics flightstats;
 
 #if (UNDER_CE >= 300) || (WINDOWSPC>0)
+#define HAVE_ACTIVATE_INFO
 static SHACTIVATEINFO s_sai;
 #endif
 
@@ -483,7 +485,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 20
 	  {ugAltitude,        TEXT("Terrain Elevation"), TEXT("H Gnd"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 33, 1},
 	  // 21
-	  {ugVerticalSpeed,   TEXT("Thermal Average"), TEXT("TC Avg"), new InfoBoxFormatter(TEXT("%2.1f")), NoProcessing, 22, 9},
+	  {ugVerticalSpeed,   TEXT("Thermal Average"), TEXT("TC Avg"), new FormatterLowWarning(TEXT("%-2.1f"),0.0), NoProcessing, 22, 9},
 	  // 22
 	  {ugAltitude,        TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
 	  // 23
@@ -564,8 +566,10 @@ SCREEN_INFO Data_Options[] = {
 	  {ugDistance, TEXT("Distance Home"), TEXT("Home Dis"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
 	  // 61
 	  {ugTaskSpeed, TEXT("Speed Task Achieved"), TEXT("V Tsk Ach"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
+          // 62
+	  {ugNone,            TEXT("AA Delta Time"), TEXT("AA dT"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
 	};
-int NUMSELECTSTRINGS = 62;
+int NUMSELECTSTRINGS = 63;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -680,8 +684,8 @@ void SettingsLeave() {
       ClearTask();
 
       // re-load terrain
-      CloseTerrain();
-      OpenTerrain();
+      RasterTerrain::CloseTerrain();
+      RasterTerrain::OpenTerrain();
 
       // re-load waypoints
       ReadWayPoints();
@@ -703,7 +707,6 @@ void SettingsLeave() {
     {
       CloseTopology();
       OpenTopology();
-      ReadTopology();
       MapWindow::ForceVisibilityScan = true;
     }
   
@@ -724,6 +727,7 @@ void SettingsLeave() {
       || AIRSPACEFILECHANGED
       || WAYPOINTFILECHANGED
       || TERRAINFILECHANGED
+      || TOPOLOGYFILECHANGED
       ) {
     CloseProgressDialog();
     SetFocus(hWndMapWindow);
@@ -1135,7 +1139,6 @@ StartupState_t ProgramStarted = psInitInProgress;
 void AfterStartup() {
 
   StartupStore(TEXT("CloseProgressDialog\n"));
-
   CloseProgressDialog();
 
   // NOTE: Must show errors AFTER all windows ready
@@ -1159,8 +1162,10 @@ void AfterStartup() {
   StartupStore(TEXT("Create default task\n"));
   DefaultTask();
 
+  // Trigger first redraw
   NMEAParser::GpsUpdated = true;
   MapWindow::MapDirty = true;
+  FullScreen();
   SetEvent(drawTriggerEvent);
 }
 
@@ -1208,7 +1213,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // experimental CVS 
 
-  wcscat(XCSoar_Version, TEXT("5.1.3 Beta6 "));
+  wcscat(XCSoar_Version, TEXT("5.1.4 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1336,7 +1341,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   StartupStore(TEXT("GlidePolar::SetBallast\n"));
   GlidePolar::SetBallast();
 
-  OpenTerrain();
+  RasterTerrain::OpenTerrain();
 
   ReadWayPoints();
   ReadAirfieldFile();
@@ -1353,7 +1358,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   SortAirspace();
 
   OpenTopology();
-  ReadTopology();
+  TopologyInitialiseMarks();
 
   OpenFLARMDetails();
 
@@ -1380,6 +1385,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   pgRegister();
   b50Register();
   vlRegister();
+  ewMicroRecorderRegister();
 
   //JMW disabled  devInit(lpCmdLine);
 
@@ -1390,7 +1396,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 #if (WINDOWSPC>0)
   devInit(TEXT(""));      
 #endif
-
 
   // re-set polar in case devices need the data
   StartupStore(TEXT("GlidePolar::SetBallast\n"));
@@ -1405,7 +1410,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // just about done....
 
-  DoSunEphemeris(147.0,-36.0);
+  DoSunEphemeris(GPS_INFO.Longitude, GPS_INFO.Latitude);
 
   // Finally ready to go
   StartupStore(TEXT("CreateDrawingThread\n"));
@@ -1811,8 +1816,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   UpdateWindow(hWndMainWindow);
     
-  FullScreen();
-
   return TRUE;
 }
 
@@ -1987,9 +1990,12 @@ void Shutdown(void) {
   StartupStore(TEXT("CloseTerrainTopology\n"));
 
   RASP.Close();
-  CloseTerrain();
+  RasterTerrain::CloseTerrain();
 
   CloseTopology();
+
+  TopologyCloseMarks();
+
   CloseTerrainRenderer();
 
   // Stop COM devices
@@ -1997,11 +2003,14 @@ void Shutdown(void) {
   devCloseAll();
 
   SaveCalculationsPersist(&CALCULATED_INFO);
+#ifdef EXPERIMENTAL
+  CalibrationSave();
+#endif
 
   #if defined(GNAV) && !defined(PCGNAV)
-    StopHourglassCursor();
     StartupStore(TEXT("Altair shutdown\n"));
     Sleep(2500);
+    StopHourglassCursor();
     InputEvents::eventDLLExecute(TEXT("altairplatform.dll SetShutdown 1"));
     while(1) {
       Sleep(100); // free time up for processor to perform shutdown
@@ -2018,6 +2027,8 @@ void Shutdown(void) {
 #endif
 
   CloseFLARMDetails();
+
+  ProgramStarted = psInitInProgress;
 
   // Kill windows
 
@@ -2104,9 +2115,9 @@ void Shutdown(void) {
   WriteMissingTranslations();
 #endif
 
+  StartupLogFreeRamAndStorage();
   StartupStore(TEXT("Finished shutdown\n"));
   StopHourglassCursor();
-  PostQuitMessage(0);
 }
 
 
@@ -2157,10 +2168,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       }
       break;
     case WM_CREATE:
+#ifdef HAVE_ACTIVATE_INFO
       memset (&s_sai, 0, sizeof (s_sai));
       s_sai.cbSize = sizeof (s_sai);
-
-      iTimerID = SetTimer(hWnd,1000,500,NULL); // 2 times per second
+#endif
+      //if (hWnd==hWndMainWindow) {
+      if (iTimerID == 0) {
+        iTimerID = SetTimer(hWnd,1000,500,NULL); // 2 times per second
+      }
 
       //      hWndCB = CreateRpCommandBar(hWnd);
 
@@ -2177,11 +2192,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           else
             SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR|SHFS_SHOWSIPBUTTON|SHFS_SHOWSTARTICON);
         }
+#ifdef HAVE_ACTIVATE_INFO
       SHHandleWMActivate(hWnd, wParam, lParam, &s_sai, FALSE);
+#endif
       break;
 
     case WM_SETTINGCHANGE:
+#ifdef HAVE_ACTIVATE_INFO
       SHHandleWMSettingChange(hWnd, wParam, lParam, &s_sai);
+#endif
       break;
 
     case WM_SETFOCUS:
@@ -2224,7 +2243,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #else
 	ProcessTimer();
 #endif
-	if (ProgramStarted==psFirstDrwaDone) {
+	if (ProgramStarted==psFirstDrawDone) {
 	  AfterStartup();
 	  ProgramStarted = psNormalOp;
           StartupStore(TEXT("ProgramStarted=3\n"));
@@ -2250,20 +2269,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_CLOSE:
 
 #ifndef GNAV
-      if(MessageBoxX(hWndMapWindow,
-		     gettext(TEXT("Quit program?")),
-		     gettext(TEXT("XCSoar")),
-		     MB_YESNO|MB_ICONQUESTION) == IDYES) 
+      ASSERT(hWnd==hWndMainWindow);
+      if((hWnd==hWndMainWindow) && 
+         (MessageBoxX(hWndMainWindow,
+                      gettext(TEXT("Quit program?")),
+                      gettext(TEXT("XCSoar")),
+                      MB_YESNO|MB_ICONQUESTION) == IDYES)) 
 #endif
         {
-          if(iTimerID)
+          if(iTimerID) {
             KillTimer(hWnd,iTimerID);
+            iTimerID = NULL;
+          }
           
           Shutdown();
         }
       break;
 
     case WM_DESTROY:
+      if (hWnd==hWndMainWindow) {
+        PostQuitMessage(0);
+      }
       break;
 
     default:
@@ -2605,6 +2631,7 @@ void DisplayText(void)
     case 42: // task time to go
     case 45: // ete 
     case 46: // leg ete 
+    case 62: // ete 
       if (Data_Options[DisplayType[i]].Formatter->isValid()) {
         InfoBoxes[i]->
           SetComment(Data_Options[DisplayType[i]].Formatter->GetCommentText());
@@ -2959,7 +2986,7 @@ void SIMProcessTimer(void)
 
 #ifdef DEBUG
   // use this to test FLARM parsing/display
-  //      NMEAParser::TestRoutine(&GPS_INFO);
+  //  NMEAParser::TestRoutine(&GPS_INFO);
 #endif
 
   NMEAParser::GpsUpdated = TRUE;
@@ -3297,8 +3324,8 @@ void BlankDisplay(bool doblank) {
         if (PDABatteryPercent < BATTERY_EXIT) {
           StartupStore(TEXT("Battery low exit...\n"));
           // TODO - Debugging and warning message
-          Shutdown();
-          exit(0);
+          SendMessage(hWndMainWindow, WM_CLOSE,
+                      NULL, NULL);
         } else
 #endif
           if (PDABatteryPercent < BATTERY_WARNING) {
@@ -3464,9 +3491,11 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
     } else
     if (_tcsstr(OutBuffer, TEXT("$(WaypointPrevious)"))) {
       if (ActiveWayPoint==1) {
+        invalid = !ValidTaskPoint(ActiveWayPoint-1);
         ReplaceInString(OutBuffer, TEXT("$(WaypointPrevious)"), 
                         TEXT("Waypoint\nStart"), Size);
       } else if (EnableMultipleStartPoints) {
+        invalid = !ValidTaskPoint(0);
         CondReplaceInString((ActiveWayPoint==0), 
                             OutBuffer, 
                             TEXT("$(WaypointPrevious)"), 

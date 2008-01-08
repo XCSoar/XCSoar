@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.25 2007/11/11 14:13:52 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.26 2008/01/08 07:41:25 jwharington Exp $
 
 
 Copyright_License {
@@ -141,13 +141,16 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
 }
 
 
+#define DETAILS_LENGTH 5000
+
 void ParseAirfieldDetails() {
+
   if(zAirfieldDetails == NULL)
     return;
 
   TCHAR TempString[READLINE_LENGTH+1];
-  TCHAR Details[5000];
-  TCHAR Name[100];
+  TCHAR Details[DETAILS_LENGTH+1];
+  TCHAR Name[201];
 
   Details[0]= 0;
   Name[0]= 0;
@@ -156,9 +159,6 @@ void ParseAirfieldDetails() {
   BOOL inDetails = FALSE;
   int i;
   int k=0;
-
-  if (zAirfieldDetails == NULL)
-    return;
 
   while(ReadString(zAirfieldDetails,READLINE_LENGTH,TempString))
     {
@@ -188,7 +188,7 @@ void ParseAirfieldDetails() {
 
       } else {
 	// append text to details string
-        if (_tcslen(Details)+_tcslen(TempString)+3<5000) {
+        if (_tcslen(Details)+_tcslen(TempString)+3<DETAILS_LENGTH) {
           wcscat(Details,TempString);
           wcscat(Details,TEXT("\r\n"));
         }
@@ -207,9 +207,7 @@ void ReadAirfieldFile() {
 
   StartupStore(TEXT("ReadAirfieldFile\n"));
 
-  HWND hProgress;
-
-  hProgress=CreateProgressDialog(gettext(TEXT("Loading Airfield Details File...")));
+  CreateProgressDialog(gettext(TEXT("Loading Airfield Details File...")));
 
   {
     OpenAirfieldDetails();

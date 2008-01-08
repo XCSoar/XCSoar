@@ -263,5 +263,8 @@ void OnInfoBoxHelp(WindowControl * Sender){
   case 61:
     dlgHelpShowModal(caption, TEXT("[Speed Task Achieved]\r\nAchieved cross country speed while on current task, compensated for altitude."));
     break;
+  case 62:
+    dlgHelpShowModal(caption, TEXT("[AA Delta Time]\r\nDifference between estimated task time and AAT minimum time."));
+    break;
   };
 }

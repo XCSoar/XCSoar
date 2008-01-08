@@ -193,11 +193,14 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
   }
 }
 
+extern bool TargetDialogOpen;
 
 static void OnOptimiseClicked(WindowControl * Sender){
   bool first = true;
   double myrange= Range;
   if (!AATEnabled) return;
+
+  TargetDialogOpen = true;
 
   do {
     myrange = Range;
@@ -222,6 +225,8 @@ static void OnOptimiseClicked(WindowControl * Sender){
   Range = myrange;
   AdjustAATTargets(Range);
   RefreshCalculator();
+
+  TargetDialogOpen = false;
 }
 
 
