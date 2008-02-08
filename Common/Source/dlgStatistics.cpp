@@ -70,6 +70,9 @@ void Statistics::Reset() {
   Altitude_Base.Reset();
   Altitude_Ceiling.Reset();
   Task_Speed.Reset();
+  for(int j=0;j<MAXTASKPOINTS;j++) {
+    LegStartTime[j] = -1;
+  }
 }
 
 
@@ -555,6 +558,21 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
   ScaleYFromValue(rc, 0);
   ScaleXFromValue(rc, flightstats.Altitude.x_min+1.0);
 
+  LockTaskData();
+  for(int j=0;j<MAXTASKPOINTS;j++) {
+    if (ValidTaskPoint(j) && (flightstats.LegStartTime[j]>=0)) {
+      double xx =
+        (flightstats.LegStartTime[j]-CALCULATED_INFO.TakeOffTime)/3600.0;
+      if (xx>=0) {
+        DrawLine(hdc, rc,
+                 xx, y_min,
+                 xx, y_max,
+                 STYLE_REDTHICK);
+      }
+    }
+  }
+  UnlockTaskData();
+
   DrawXGrid(hdc, rc,
             0.5, flightstats.Altitude.x_min,
             STYLE_THINDASHPAPER, 0.5, true);
@@ -590,6 +608,21 @@ void Statistics::RenderSpeed(HDC hdc, RECT rc)
   ScaleYFromData(rc, &flightstats.Task_Speed);
   ScaleYFromValue(rc, 0);
   ScaleXFromValue(rc, flightstats.Task_Speed.x_min+1.0);
+
+  LockTaskData();
+  for(int j=0;j<MAXTASKPOINTS;j++) {
+    if (ValidTaskPoint(j) && (flightstats.LegStartTime[j]>=0)) {
+      double xx =
+        (flightstats.LegStartTime[j]-CALCULATED_INFO.TaskStartTime)/3600.0;
+      if (xx>=0) {
+        DrawLine(hdc, rc,
+                 xx, y_min,
+                 xx, y_max,
+                 STYLE_REDTHICK);
+      }
+    }
+  }
+  UnlockTaskData();
 
   DrawXGrid(hdc, rc,
             0.5, flightstats.Task_Speed.x_min,

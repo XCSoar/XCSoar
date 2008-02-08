@@ -175,6 +175,9 @@ typedef struct _DERIVED_INFO
   double PitchAngle;
   double GPSVarioTE;
   double MacCreadyRisk;
+  double TaskTimeToGoTurningNow;
+  double TotalHeightClimb;
+  double DistanceVario;
 } DERIVED_INFO;
 
 

@@ -119,8 +119,17 @@ static BOOL PDSWC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->SwitchState.FlapLanding =
     (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
-  if (EnableExternalTriggerCruise) {
-    if (GPS_INFO->SwitchState.FlapLanding) {
+  if (EnableExternalTriggerCruise != 0) {
+    bool is_circling = false;
+    switch (EnableExternalTriggerCruise) {
+    case 1:
+      is_circling = GPS_INFO->SwitchState.FlapLanding;
+      break;
+    case 2:
+      is_circling = GPS_INFO->SwitchState.SpeedCommand;
+      break;
+    }
+    if (is_circling) {
       ExternalTriggerCruise = false;
       ExternalTriggerCircling = true;
     } else {

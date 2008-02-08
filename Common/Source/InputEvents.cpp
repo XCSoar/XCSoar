@@ -2020,31 +2020,41 @@ void InputEvents::eventNull(TCHAR *misc) {
 // TaskLoad
 // Loads the task of the specified filename
 void InputEvents::eventTaskLoad(TCHAR *misc) {
-  LockTaskData();
   TCHAR buffer[MAX_PATH];
-  LocalPath(buffer,misc);
-  LoadNewTask(buffer);
-  UnlockTaskData();
+  if (_tcslen(misc)>0) {
+    LockTaskData();
+    LocalPath(buffer,misc);
+    LoadNewTask(buffer);
+    UnlockTaskData();
+  }
 }
 
 // TaskSave
 // Saves the task to the specified filename
 void InputEvents::eventTaskSave(TCHAR *misc) {
-  LockTaskData();
-  SaveTask(misc);
-  UnlockTaskData();
+  TCHAR buffer[MAX_PATH];
+  if (_tcslen(misc)>0) {
+    LockTaskData();
+    LocalPath(buffer, misc);
+    SaveTask(buffer);
+    UnlockTaskData();
+  }
 }
 
 // ProfileLoad
 // Loads the profile of the specified filename
 void InputEvents::eventProfileLoad(TCHAR *misc) {
-  ReadProfile(misc);
+  if (_tcslen(misc)>0) {
+    ReadProfile(misc);
+  }
 }
 
 // ProfileSave
 // Saves the profile to the specified filename
 void InputEvents::eventProfileSave(TCHAR *misc) {
-  WriteProfile(misc);
+  if (_tcslen(misc)>0) {
+    WriteProfile(misc);
+  }
 }
 
 

@@ -193,7 +193,6 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   HeadWindSqd = HeadWind*HeadWind;
   CrossWindSqd = CrossWind*CrossWind;
 
-  // JMW TODO: Calculate best cruise bearing
   double sinkrate;
   double tc; // time spent in cruise
 
@@ -203,7 +202,6 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   // - mcready ring changes with height allowing for risk and decreased rate
   // - cloud streets
   // - sink rate between thermals
-  // - check these equations allow for bugs
   // - modify Vtrack for IAS
 
   //Calculate Best Glide Speed
@@ -390,9 +388,10 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
     if (h_t<=0) {
       // error condition, no distance to travel
       TTG = t_t;
+      Altitude = 0;
 
     } else {
-      double h_f = min(h_t, AltitudeAboveTarget);
+      double h_f = AltitudeAboveTarget;
       // fraction of leg that can be final glided
       double f = min(1.0,max(0.0,h_f/h_t));
       double d_f = Distance*f;
@@ -415,7 +414,7 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
           Altitude = -1;
           TTG = ERROR_TIME;
         } else {
-          Altitude = h_c+h_f;
+          Altitude = f*h_t + h_c;
           TTG = f*t_t + t_c;
         }
 

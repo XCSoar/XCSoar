@@ -118,8 +118,10 @@ static void RefreshCalculator(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
   if (wp) {
     wp->RefreshDisplay();
-    if (!AATEnabled) {
+    if (!AATEnabled || !ValidTaskPoint(ActiveWayPoint+1)) {
       wp->SetVisible(false);
+    } else {
+      wp->SetVisible(true);
     }
     wp->GetDataField()->SetAsFloat(Range*100.0);
     wp->RefreshDisplay();
@@ -196,37 +198,62 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
 extern bool TargetDialogOpen;
 
 static void OnOptimiseClicked(WindowControl * Sender){
-  bool first = true;
+  bool ok = true;
   double myrange= Range;
+  double RangeLast= Range;
+  double deltaTlast = 0;
+  int steps = 0;
   if (!AATEnabled) return;
 
+  LockFlightData();
+  LockTaskData();
   TargetDialogOpen = true;
-
   do {
     myrange = Range;
     AdjustAATTargets(Range);
-    RefreshCalculator();
-    double dd = CALCULATED_INFO.TaskTimeToGo;
+    RefreshTask();
+    RefreshTaskStatistics();
+    double deltaT = CALCULATED_INFO.TaskTimeToGo;
     if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
-      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+      deltaT += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
     }
-    dd= min(24.0*60.0,dd/60.0);
-    if (dd<= AATTaskLength+5) {
-      if (first) {
-        Range += 0.05;
+    deltaT= min(24.0*60.0,deltaT/60.0)-AATTaskLength-5;
+
+    double dRdT = 0.001;
+    if (steps>0) {
+      if (fabs(deltaT-deltaTlast)>0.01) {
+        dRdT = min(0.5,(Range-RangeLast)/(deltaT-deltaTlast));
+        if (dRdT<=0.0) {
+          // error, time decreases with increasing range!
+          // or, no effect on time possible
+          break;
+        }
       } else {
+        // minimal change for whatever reason
+        // or, no effect on time possible, e.g. targets locked
         break;
       }
-    } else {
-      first = false;
-      Range -= 0.05;
     }
-  } while (fabs(Range)<1.0);
+    RangeLast = Range;
+    deltaTlast = deltaT;
+
+    if (fabs(deltaT)>0.25) {
+      // more than 15 seconds error
+      Range -= dRdT*deltaT;
+      Range = max(-1.0, min(Range,1.0));
+    } else {
+      break;
+    }
+
+  } while (steps++<25);
+
   Range = myrange;
   AdjustAATTargets(Range);
   RefreshCalculator();
 
   TargetDialogOpen = false;
+  UnlockTaskData();
+  UnlockFlightData();
 }
 
 
@@ -261,7 +288,7 @@ void dlgTaskCalculatorShowModal(void){
 
   double MACCREADYenter = MACCREADY;
 
-  if (!AATEnabled) {
+  if (!AATEnabled || !ValidTaskPoint(ActiveWayPoint+1)) {
     ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);
   }
   if (!ValidTaskPoint(ActiveWayPoint)) {

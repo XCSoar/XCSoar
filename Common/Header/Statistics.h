@@ -7,6 +7,7 @@
 
 #include <windows.h>
 #include "leastsqs.h"
+#include "Task.h"
 
 class Statistics {
  public:
@@ -26,6 +27,8 @@ class Statistics {
   LeastSquares Altitude_Base;
   LeastSquares Altitude_Ceiling;
   LeastSquares Task_Speed;
+  double LegStartTime[MAXTASKPOINTS];
+
   void Reset();
 
   static void DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata);

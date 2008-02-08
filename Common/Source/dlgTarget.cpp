@@ -51,10 +51,6 @@ static WndForm *wf=NULL;
 static int ActiveWayPointOnEntry = 0;
 
 
-static void OnOKClicked(WindowControl * Sender){
-	(void)Sender;
-  wf->SetModalResult(mrOK);
-}
 
 
 static double Range = 0;
@@ -63,12 +59,143 @@ static int target_point = 0;
 
 bool TargetDialogOpen = false;
 
+
+
+static void OnOKClicked(WindowControl * Sender){
+  (void)Sender;
+  wf->SetModalResult(mrOK);
+}
+
+
+static void MoveTarget(double adjust_angle) {
+  if (!AATEnabled) return;
+  if (target_point==0) return;
+  if (!ValidTaskPoint(target_point)) return;
+  if (!ValidTaskPoint(target_point+1)) return;
+  if (target_point < ActiveWayPoint) return;
+
+  LockTaskData();
+
+  double target_latitude, target_longitude;
+  double bearing, distance;
+  distance = 500;
+  if(Task[target_point].AATType == SECTOR) {
+    distance = max(Task[target_point].AATSectorRadius/20.0,distance);
+  } else {
+    distance = max(Task[target_point].AATCircleRadius/20.0,distance);
+  }
+
+  bearing = AngleLimit360(MapWindow::GetDisplayAngle() + adjust_angle);
+  FindLatitudeLongitude (Task[target_point].AATTargetLat,
+                         Task[target_point].AATTargetLon,
+                         bearing,
+                         distance,
+                         &target_latitude,
+                         &target_longitude);
+
+  if (InAATTurnSector(target_longitude, target_latitude, target_point)) {
+    if (CALCULATED_INFO.IsInSector && (target_point == ActiveWayPoint)) {
+      // TODO set range/radial for inside sector
+      double course_bearing, target_bearing;
+      DistanceBearing(Task[target_point-1].AATTargetLat,
+                      Task[target_point-1].AATTargetLon,
+                      GPS_INFO.Latitude,
+                      GPS_INFO.Longitude,
+                      NULL, &course_bearing);
+
+      DistanceBearing(GPS_INFO.Latitude,
+                      GPS_INFO.Longitude,
+                      target_latitude,
+                      target_longitude,
+                      &distance, &target_bearing);
+      bearing = AngleLimit180(target_bearing-course_bearing);
+
+      if (fabs(bearing)<90.0) {
+        Task[target_point].AATTargetLat = target_latitude;
+        Task[target_point].AATTargetLon = target_longitude;
+        Radial = bearing;
+        Task[target_point].AATTargetOffsetRadial = Radial;
+        Range =
+          FindInsideAATSectorRange(GPS_INFO.Latitude,
+                                   GPS_INFO.Longitude,
+                                   target_point,
+                                   target_bearing,
+                                   distance);
+        Task[target_point].AATTargetOffsetRadius = Range;
+        TaskModified = true;
+        TargetModified = true;
+      }
+    } else {
+      // OK to change it..
+      Task[target_point].AATTargetLat = target_latitude;
+      Task[target_point].AATTargetLon = target_longitude;
+
+      // TODO set range/radial for outside sector
+      DistanceBearing(WayPointList[Task[target_point].Index].Latitude,
+                      WayPointList[Task[target_point].Index].Longitude,
+                      Task[target_point].AATTargetLat,
+                      Task[target_point].AATTargetLon,
+                      &distance, &bearing);
+      bearing = AngleLimit180(bearing-Task[target_point].Bisector);
+      if(Task[target_point].AATType == SECTOR) {
+        Range = (fabs(distance)/Task[target_point].AATSectorRadius)*2-1;
+      } else {
+        if (fabs(bearing)>90.0) {
+          distance = -distance;
+          bearing = AngleLimit180(bearing+180);
+        }
+        Range = distance/Task[target_point].AATCircleRadius;
+      }
+      Task[target_point].AATTargetOffsetRadius = Range;
+      Task[target_point].AATTargetOffsetRadial = bearing;
+      Radial = bearing;
+      TaskModified = true;
+      TargetModified = true;
+    }
+  }
+  UnlockTaskData();
+}
+
+
+static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
+	(void)lParam;
+	(void)Sender;
+  switch(wParam & 0xffff){
+    case '2':
+      MoveTarget(0);
+    return(0);
+    case '3':
+      MoveTarget(180);
+    return(0);
+    case '6':
+      MoveTarget(270);
+    return(0);
+    case '7':
+      MoveTarget(90);
+    return(0);
+  }
+  return(1);
+}
+
+
+
 static void RefreshCalculator(void) {
   WndProperty* wp;
 
   RefreshTask();
   RefreshTaskStatistics();
   target_point = max(target_point,ActiveWayPoint);
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpAATTargetLocked"));
+  if (wp) {
+    wp->GetDataField()->Set(Task[target_point].AATTargetLocked);
+    wp->RefreshDisplay();
+    if (!AATEnabled || (target_point==0) || !ValidTaskPoint(target_point+1)) {
+      wp->SetVisible(false);
+    } else {
+      wp->SetVisible(true);
+    }
+  }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
   if (wp) {
@@ -139,6 +266,17 @@ static void RefreshCalculator(void) {
 }
 
 
+
+static int OnTimerNotify(WindowControl * Sender) {
+  (void)Sender;
+  if (TargetModified) {
+    RefreshCalculator();
+    TargetModified = false;
+  }
+  return 0;
+}
+
+
 static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
   double RangeNew;
   bool updated = false;
@@ -159,7 +297,9 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
       }
       UnlockTaskData();
       if (updated) {
-        RefreshCalculator();
+        TaskModified = true;
+        TargetModified = true;
+        // done by timer now        RefreshCalculator();
       }
     break;
   }
@@ -169,6 +309,7 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode) {
 static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
   double RadialNew;
   bool updated = false;
+  bool dowrap = false;
   switch(Mode){
     case DataField::daGet:
       //      Sender->Set(Range*100.0);
@@ -177,7 +318,23 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
     case DataField::daChange:
       LockTaskData();
       if (target_point>=ActiveWayPoint) {
+        if (!CALCULATED_INFO.IsInSector || (target_point != ActiveWayPoint)) {
+          dowrap = true;
+        }
         RadialNew = Sender->GetAsFloat();
+        if (fabs(RadialNew)>90) {
+          if (dowrap) {
+            RadialNew = AngleLimit180(RadialNew+180);
+            // flip!
+            Range = -Range;
+            Task[target_point].AATTargetOffsetRadius =
+              -Task[target_point].AATTargetOffsetRadius;
+            updated = true;
+          } else {
+            RadialNew = max(-90,min(90,RadialNew));
+            updated = true;
+          }
+        }
         if (RadialNew != Radial) {
           Task[target_point].AATTargetOffsetRadial = RadialNew;
           Radial = RadialNew;
@@ -186,7 +343,9 @@ static void OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode) {
       }
       UnlockTaskData();
       if (updated) {
-        RefreshCalculator();
+        TaskModified = true;
+        TargetModified = true;
+        // done by timer now        RefreshCalculator();
       }
     break;
   }
@@ -206,6 +365,26 @@ static void RefreshTargetPoint(void) {
   }
   UnlockTaskData();
   RefreshCalculator();
+}
+
+
+static void OnLockedData(DataField *Sender, DataField::DataAccessKind_t Mode) {
+  switch(Mode){
+    case DataField::daGet:
+    break;
+    case DataField::daPut:
+    case DataField::daChange:
+      bool lockedthis = Sender->GetAsBoolean();
+      if (ValidTaskPoint(target_point)) {
+        if (Task[target_point].AATTargetLocked !=
+            lockedthis) {
+          TaskModified = true;
+          TargetModified = true;
+          Task[target_point].AATTargetLocked = lockedthis;
+        }
+      }
+    break;
+  }
 }
 
 
@@ -230,6 +409,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnTaskPointData),
   DeclearCallBackEntry(OnRangeData),
   DeclearCallBackEntry(OnRadialData),
+  DeclearCallBackEntry(OnLockedData),
   DeclearCallBackEntry(OnOKClicked),
   DeclearCallBackEntry(NULL)
 };
@@ -262,6 +442,8 @@ void dlgTarget(void) {
 
   TargetDialogOpen = true;
 
+  wf->SetKeyDownNotify(FormKeyDown);
+
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskPoint"));
   DataFieldEnum* dfe;
@@ -291,6 +473,8 @@ void dlgTarget(void) {
   wp->RefreshDisplay();
 
   RefreshTargetPoint();
+
+  wf->SetTimerNotify(OnTimerNotify);
 
   wf->ShowModal();
 

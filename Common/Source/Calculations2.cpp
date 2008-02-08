@@ -72,10 +72,10 @@ void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   SnailTrail[SnailNext].Time = Basic->Time;
   SnailTrail[SnailNext].FarVisible = true; // hasn't been filtered out yet.
 
-  if (Basic->NettoVarioAvailable && !(ReplayLogger::IsEnabled())) {
-    SnailTrail[SnailNext].Vario = (float)(Basic->NettoVario) ;
+  if (Calculated->Circling) {
+    SnailTrail[SnailNext].Vario = (float)(Calculated->NettoVario) ;
   } else {
-    SnailTrail[SnailNext].Vario = (float)(Calculated->Vario) ;
+    SnailTrail[SnailNext].Vario = (float)(Calculated->NettoVario) ;
   }
   SnailTrail[SnailNext].Colour = -1; // need to have colour calculated
   SnailTrail[SnailNext].Circling = Calculated->Circling;
@@ -428,7 +428,6 @@ void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   	Basic->Longitude);
   */
 
-  // TODO: ask Lars why this one
   LL_to_BearRange(WayPointList[TeamCodeRefWaypoint].Latitude,
                   WayPointList[TeamCodeRefWaypoint].Longitude,
                   Basic->Latitude,
@@ -483,8 +482,6 @@ void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                           Basic->Longitude
                           );
   */
-
-  // TODO: ask Lars why this one
 
   LL_to_BearRange(WayPointList[TeamCodeRefWaypoint].Latitude,
                   WayPointList[TeamCodeRefWaypoint].Longitude,

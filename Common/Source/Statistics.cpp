@@ -433,15 +433,6 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double ticstep, double zero,
 
 /////////////////
 
-//void Statistics::Reset() {		// duplicate declaration
- // ThermalAverage.Reset();
-//  Wind_x.Reset();
-//  Wind_y.Reset();
-//  Altitude.Reset();
-//  Altitude_Base.Reset();
-//  Altitude_Ceiling.Reset();
-//}
-
 
 void Statistics::Reset() {
   ThermalAverage.Reset();
@@ -450,7 +441,13 @@ void Statistics::Reset() {
   Altitude.Reset();
   Altitude_Base.Reset();
   Altitude_Ceiling.Reset();
+  Task_Speed.Reset();
+  for(int j=0;j<MAXTASKPOINTS;j++) {
+    LegStartTime[j] = -1;
+  }
+
 }
+
 
 void Statistics::RenderAirspace(HDC hdc, RECT rc)
 {
@@ -476,6 +473,20 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
 
   DrawLineGraph(hdc, rc, &flightstats.Altitude,
                 STYLE_MEDIUMBLACK);
+
+  LockTaskData();
+  for(int j=0;j<MAXTASKPOINTS;j++) {
+    if (ValidTaskPoint(j) && (LegStartTime[j]>=0)) {
+      double xx = (LegStartTime[j]-Calculated->TakeOffTime)/3600;
+      if (xx>=0) {
+        DrawLine(hdc, rc,
+                 xx, flightstats.Altitude.y_min,
+                 xx, flightstats.Altitude.y_max,
+                 STYLE_THINDASHPAPER);
+      }
+    }
+  }
+  UnlockTaskData();
 
   DrawTrend(hdc, rc, &flightstats.Altitude_Base, STYLE_BLUETHIN);
 

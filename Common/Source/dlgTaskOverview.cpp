@@ -62,6 +62,59 @@ static int DrawListIndex=0;
 static double lengthtotal = 0.0;
 static bool fai_ok = false;
 
+static void UpdateFilePointer(void) {
+  WndProperty *wp = (WndProperty*)wf->FindByName(TEXT("prpFile"));
+  if (wp) {
+    DataFieldFileReader* dfe;
+    dfe = (DataFieldFileReader*)wp->GetDataField();
+    if (_tcslen(LastTaskFileName)>0) {
+      dfe->Lookup(LastTaskFileName);
+    } else {
+      dfe->Set(0);
+    }
+    wp->RefreshDisplay();
+  }
+}
+
+
+static void UpdateCaption (void) {
+  TCHAR title[MAX_PATH];
+  TCHAR name[MAX_PATH] = TEXT("\0");
+  LockTaskData();
+  int len = _tcslen(LastTaskFileName);
+  if (len>0) {
+    int index = 0;
+    TCHAR *src = LastTaskFileName;
+    while ((*src != _T('\0')) && (*src != _T('.'))) {
+      if ((*src == _T('\\')) || (*src == _T('/'))) {
+        index = 0;
+      } else {
+        name[index] = *src;
+        index++;
+      }
+      src++;
+    }
+    name[index]= _T('\0');
+  }
+  UnlockTaskData();
+
+  if (_tcslen(name)>0) {
+    _stprintf(title, TEXT("%s: %s"),
+              gettext(TEXT("Task Overview")),
+              name);
+  } else {
+    _stprintf(title, TEXT("%s"),
+              gettext(TEXT("Task Overview")));
+  }
+
+  if (TaskModified) {
+    _tcscat(title, TEXT(" *"));
+  }
+
+  wf->SetCaption(title);
+}
+
+
 static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
   (void)Sender;
   int n = UpLimit - LowLimit;
@@ -84,10 +137,26 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
     int i = LowLimit + DrawListIndex;
 
     if (Task[i].Index>=0) {
+      if (InfoBoxLayout::landscape &&
+          AATEnabled && ValidTaskPoint(i+1) && (i>0)) {
+        if (Task[i].AATType==0) {
+          _stprintf(sTmp, TEXT("%s %.1f"),
+                    WayPointList[Task[i].Index].Name,
+                    Task[i].AATCircleRadius*DISTANCEMODIFY);
+        } else {
+          _stprintf(sTmp, TEXT("%s %.1f"),
+                    WayPointList[Task[i].Index].Name,
+                    Task[i].AATSectorRadius*DISTANCEMODIFY);
+        }
+      } else {
+        _stprintf(sTmp, TEXT("%s"),
+                  WayPointList[Task[i].Index].Name);
+      }
+
       ExtTextOut(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
 		 ETO_OPAQUE, NULL,
-		 WayPointList[Task[i].Index].Name,
-		 _tcslen(WayPointList[Task[i].Index].Name), NULL);
+		 sTmp,
+		 _tcslen(sTmp), NULL);
 
       _stprintf(sTmp, TEXT("%.0f %s"),
 		Task[i].Leg*DISTANCEMODIFY,
@@ -204,6 +273,8 @@ static void OverviewRefreshTask(void) {
   LowLimit =0;
   wTaskList->ResetList();
   wTaskList->Redraw();
+
+  UpdateCaption();
   UnlockTaskData();
 
 }
@@ -240,6 +311,7 @@ static void OnTaskListEnter(WindowControl * Sender,
         }
       }
 
+      LockTaskData();
       if (ItemIndex>0) {
 	Task[ItemIndex].Index = Task[0].Index;
       } else {
@@ -249,13 +321,20 @@ static void OnTaskListEnter(WindowControl * Sender,
 	  Task[ItemIndex].Index = -1;
 	}
       }
+      UnlockTaskData();
+
       int res;
       res = dlgWayPointSelect();
+      LockTaskData();
       if (res != -1){
         Task[ItemIndex].Index = res;
       }
       Task[ItemIndex].AATTargetOffsetRadius = 0.0;
       Task[ItemIndex].AATTargetOffsetRadial = 0.0;
+      Task[ItemIndex].AATSectorRadius = SectorRadius;
+      Task[ItemIndex].AATCircleRadius = SectorRadius;
+      Task[ItemIndex].AATTargetLocked = false;
+      UnlockTaskData();
 
       if (ItemIndex==0) {
 	dlgTaskWaypointShowModal(ItemIndex, 0, true); // start waypoint
@@ -307,7 +386,9 @@ static void OnClearClicked(WindowControl * Sender, WndListFrame::ListInfo_t *Lis
                   MB_YESNO|MB_ICONQUESTION) == IDYES) {
     if (CheckDeclaration()) {
       ClearTask();
+      UpdateFilePointer();
       OverviewRefreshTask();
+      UpdateCaption();
     }
   }
 }
@@ -346,8 +427,6 @@ static void OnDeclareClicked(WindowControl * Sender, WndListFrame::ListInfo_t *L
 }
 
 
-
-
 static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
   (void)ListInfo; (void)Sender;
 
@@ -372,6 +451,7 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
     if (_tcslen(task_name)>0) {
 
       _tcscat(task_name, TEXT(".tsk"));
+
       LocalPath(file_name, task_name);
 
       dfe->Lookup(file_name);
@@ -393,7 +473,8 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   if (file_index>0) {
     // file already exists! ask if want to overwrite
 
-    _stprintf(file_name, TEXT("%s: '%s'"), gettext(TEXT("Task file already exists")),
+    _stprintf(file_name, TEXT("%s: '%s'"),
+              gettext(TEXT("Task file already exists")),
               dfe->GetAsString());
     if(MessageBoxX(hWndMapWindow,
                    file_name,
@@ -404,7 +485,7 @@ static void OnSaveClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   }
 
   SaveTask(dfe->GetPathFile());
-  DoStatusMessage(TEXT("Task saved"));
+  UpdateCaption();
 }
 
 
@@ -422,6 +503,8 @@ static void OnLoadClicked(WindowControl * Sender, WndListFrame::ListInfo_t *List
   if (file_index>0) {
     LoadNewTask(dfe->GetPathFile());
     OverviewRefreshTask();
+    UpdateFilePointer();
+    UpdateCaption();
   }
 }
 
@@ -445,7 +528,6 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnAnalysisClicked),
   DeclearCallBackEntry(NULL)
 };
-
 
 
 void dlgTaskOverviewShowModal(void){
@@ -479,6 +561,8 @@ void dlgTaskOverviewShowModal(void){
 
   ASSERT(wf!=NULL);
 
+  UpdateCaption();
+
   wfAdvanced = ((WndFrame *)wf->FindByName(TEXT("frmAdvanced")));
   ASSERT(wfAdvanced!=NULL);
 
@@ -502,9 +586,9 @@ void dlgTaskOverviewShowModal(void){
     DataFieldFileReader* dfe;
     dfe = (DataFieldFileReader*)wp->GetDataField();
     dfe->ScanDirectoryTop(TEXT("*.tsk"));
-    // JMW TODO on entry to form:       wp->GetDataField()->Lookup(TaskFileName);  (global)
     wp->RefreshDisplay();
   }
+  UpdateFilePointer();
 
   // CALCULATED_INFO.AATTimeToGo
   //

@@ -192,7 +192,6 @@ void ParseAirfieldDetails() {
           wcscat(Details,TempString);
           wcscat(Details,TEXT("\r\n"));
         }
-	// TODO: check the string is not too long
       }
     }
 

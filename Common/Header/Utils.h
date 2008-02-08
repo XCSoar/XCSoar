@@ -64,6 +64,8 @@ extern TCHAR szRegistryTeamcodeRefWaypoint[];
 extern TCHAR szRegistryPilotName[];
 extern TCHAR szRegistryAircraftType[];
 extern TCHAR szRegistryAircraftRego[];
+extern TCHAR szRegistryLoggerID[];
+extern TCHAR szRegistryLoggerShort[];
 extern TCHAR szRegistryNettoSpeed[];
 extern TCHAR szRegistryCDICruise[];
 extern TCHAR szRegistryCDICircling[];
@@ -139,6 +141,7 @@ extern TCHAR szRegistryDisableAutoLogger[];
 extern TCHAR szRegistryMapFile[];
 
 extern bool LockSettingsInFlight;
+extern bool LoggerShortName;
 
 BOOL GetFromRegistry(const TCHAR *szRegValue, DWORD *pPos);
 HRESULT SetToRegistry(const TCHAR *szRegValue, DWORD Pos);
@@ -389,7 +392,7 @@ inline unsigned int CombinedDivAndMod(unsigned int &lx) {
 
 bool RotateScreen(void);
 
-bool AngleInRange(double Angle0, double Angle1, double x);
+bool AngleInRange(double Angle0, double Angle1, double x, bool is_signed=false);
 double AngleLimit180(double theta);
 double AngleLimit360(double theta);
 int GetTextWidth(HDC hDC, TCHAR *text);

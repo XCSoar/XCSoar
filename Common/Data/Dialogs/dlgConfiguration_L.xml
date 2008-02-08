@@ -408,7 +408,7 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   </WndProperty>
 
   <WndProperty Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise*" X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2   Help="When Vega variometer is connected and this option is true, the positive flap setting switches the flight mode between circling and cruise.">
-    <DataField name="" DataType="boolean"/>
+    <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpRiskGamma" Caption="STF risk factor*"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
@@ -797,6 +797,15 @@ In all modes, the color of the target indicates the threat level.
   <WndButton Name="cmdAircraftType" Caption="Aircraft type: " X=2 Y=-1 Width=235  Height=22 Font=2 />
 
   <WndButton Name="cmdAircraftRego" Caption="Competition Id: " X=2 Y=-1 Width=235  Height=22 Font=2 />
+
+  <WndButton Name="cmdLoggerID" Caption="Logger ID: " X=2 Y=-1 Width=235  Height=22 Font=2 />
+
+  <WndProperty Name="prpLoggerShortName" Caption="Short file name"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
+  Help="This determines whether the logger uses the short IGC file name or the long IGC file name.
+Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).
+">
+    <DataField name="" DataType="boolean"/>
+  </WndProperty>
 
   </WndFrame>
 

@@ -88,6 +88,17 @@ class FormatterTime: public InfoBoxFormatter {
   void SecsToDisplayTime(int i);
 };
 
+
+class FormatterAATTime: public FormatterTime {
+ public:
+  FormatterAATTime(TCHAR *theformat):FormatterTime(theformat) {};
+
+  virtual TCHAR *Render(int *color);
+  virtual void AssignValue(int i);
+  int status;
+};
+
+
 class FormatterDiffBearing: public InfoBoxFormatter {
  public:
   FormatterDiffBearing(TCHAR *theformat):InfoBoxFormatter(theformat) {};

@@ -7,7 +7,7 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmTarget" Type="Dialog" X=1 Y=1 Width=240 Height=70 Caption="Target" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmTarget" Type="Dialog" X=1 Y=1 Width=240 Height=90 Caption="Target" Font=2  BackColor=0xDADBAB>
 
   <WndButton   Caption="OK"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
 
@@ -21,7 +21,11 @@
   </WndProperty>
 
   <WndProperty Name="prpRadial" Caption="Radial"      X=120 Y=25   Width=115 Height=22 CaptionWidth=65 Font=2 Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=-90 Max=90 Step=5 OnDataAccess="OnRadialData"/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min=-92 Max=92 Step=5 OnDataAccess="OnRadialData"/>
+  </WndProperty>
+
+  <WndProperty Name="prpAATTargetLocked" Caption="Target locked" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="When enabled, targets placed within the AAT area are not adjusted automatically.">
+    <DataField name="" DataType="boolean" ReadOnly=0/>
   </WndProperty>
 
 </WndForm>

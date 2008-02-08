@@ -91,6 +91,7 @@ HBITMAP MapWindow::hBmpAirportUnReachable;
 HBITMAP MapWindow::hBmpFieldReachable;
 HBITMAP MapWindow::hBmpFieldUnReachable;
 HBITMAP MapWindow::hBmpThermalSource;
+HBITMAP MapWindow::hBmpTarget;
 
 HPEN    MapWindow::hpCompassBorder;
 HBRUSH  MapWindow::hBrushFlyingModeAbort;
@@ -164,8 +165,6 @@ bool MapWindow::LandableReachable = false;
 
 int MapWindow::dTDisplay=0;
 
-HBITMAP MapWindow::hLandable;
-HBITMAP MapWindow::hReachable;
 HBITMAP MapWindow::hTurnPoint;
 HBITMAP MapWindow::hSmall;
 HBITMAP MapWindow::hCruise;
@@ -1048,7 +1047,7 @@ static void SetFontInfo(HDC hDC, FontHeightInfo_t *FontHeightInfo){
   }
 
 #ifdef GNAV
-  // TODO: don't know why we need this in GNAV
+  // JMW: don't know why we need this in GNAV, but we do.
   if (FontHeightInfo->CapitalHeight<y)
     FontHeightInfo->CapitalHeight = bottom - top + 1;
 #endif
@@ -1141,8 +1140,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     hFLARMTraffic=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_FLARMTRAFFIC));
     hTerrainWarning=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TERRAINWARNING));
-    hLandable=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_LANDABLE));
-    hReachable=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_REACHABLE));
     hTurnPoint=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TURNPOINT));
     hSmall=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SMALL));
     hAutoMacCready=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AUTOMCREADY));
@@ -1306,6 +1303,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     }
 
     hBmpThermalSource = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_THERMALSOURCE));
+    hBmpTarget = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_TARGET));
 
     // Signal that draw thread can run now
     Initialised = TRUE;
@@ -1323,8 +1321,6 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject(hDrawBitMapBg);
     DeleteObject(hMaskBitMap);
 
-    DeleteObject(hLandable);
-    DeleteObject(hReachable);
     DeleteObject(hTurnPoint);
     DeleteObject(hSmall);
     DeleteObject(hCruise);
@@ -1380,6 +1376,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     DeleteObject(hBmpFieldReachable);
     DeleteObject(hBmpFieldUnReachable);
     DeleteObject(hBmpThermalSource);
+    DeleteObject(hBmpTarget);
 
     for(i=0;i<NUMAIRSPACEBRUSHES;i++)
     {
@@ -1719,7 +1716,10 @@ void MapWindow::CalculateOrientationTargetPan(void) {
   // Target pan mode, show track up when looking at current task point,
   // otherwise north up.  If circling, orient towards target.
   GliderCenter = true;
-  if (ActiveWayPoint==TargetPanIndex) {
+  if ((ActiveWayPoint==TargetPanIndex)
+      &&(DisplayOrientation != NORTHUP)
+      &&(DisplayOrientation != NORTHTRACK)
+      )    {
     if (DisplayMode == dmCircling) {
       // target-up
       DisplayAngle = DerivedDrawInfo.WaypointBearing;
@@ -1891,49 +1891,10 @@ void MapWindow::RenderMapWindow(  RECT rc)
     DrawAirSpace(hdcDrawWindowBg, rc);
 
     if(TrailActive) {
-      bool trailshadow = false;
-
-#ifndef GNAV
-      if (EnableTerrain && InfoBoxLayout::landscape) {
-        //        trailshadow = true;
-      }
-#endif
-
-      if (!trailshadow) {
         // TODO: For some reason, the shadow drawing of the
         // trail doesn't work in portrait mode.  No idea why.
         DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
         DrawTrailFromTask(hdcDrawWindowBg, rc);
-      } else {
-        // clear background bitmap
-        SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
-        Rectangle(hDCTemp, rc.left, rc.top, rc.right, rc.bottom);
-        SelectObject(hDCMask, GetStockObject(WHITE_BRUSH));
-        Rectangle(hDCMask, rc.left, rc.top, rc.right+1, rc.bottom+1);
-
-        SetTextColor(hDCMask,
-                     RGB(0x00,0x00,0x00));
-        SetBkColor(hDCMask,
-                   RGB(0xff,0xff,0xff));
-
-        // draw trail on background bitmap
-        DrawTrail(hDCTemp, Orig_Aircraft, rc);
-        DrawTrailFromTask(hDCTemp, rc);
-
-        // make mask
-        BitBlt(hDCMask, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
-               hDCTemp, rc.left, rc.top, SRCCOPY);
-
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
-               hDCTemp, rc.left, rc.top, SRCINVERT);
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
-               hDCMask, 0, 0, SRCAND);
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right-1, rc.bottom-1,
-               hDCMask, rc.left+1, rc.top+1, SRCAND);
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
-               hDCTemp, rc.left, rc.top, SRCINVERT);
-
-      }
     }
 
     DrawThermalEstimate(hdcDrawWindowBg, rc);
@@ -2000,13 +1961,13 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
   DrawCompass(hdcDrawWindow, rc);
 
-  // JMW Experimental only!
+  // JMW Experimental only! EXPERIMENTAL
 #if 0
-  #ifdef GNAV
+  //  #ifdef GNAV
   if (EnableAuxiliaryInfo) {
     DrawHorizon(hdcDrawWindow, rc);
   }
-  #endif
+  //  #endif
 #endif
 
   DrawFlightMode(hdcDrawWindow, rc);
@@ -3020,7 +2981,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
         }
       }
     }
-    if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
+    if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) { // normal sector
       if(AATEnabled != TRUE) {
         DrawDashLine(hdc, 2,
                      WayPointList[Task[i].Index].Screen,
@@ -3029,24 +2990,50 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
                      WayPointList[Task[i].Index].Screen,
                      Task[i].End, RGB(127,127,127));
 
+        SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
+        SelectObject(hdc, GetStockObject(BLACK_PEN));
         if(SectorType== 0) {
           tmp = SectorRadius*ResMapScaleOverDistanceModify;
-          SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-          SelectObject(hdc, GetStockObject(BLACK_PEN));
           Circle(hdc,
                  WayPointList[Task[i].Index].Screen.x,
                  WayPointList[Task[i].Index].Screen.y,
                  (int)tmp, rc, false, false);
         }
+        if(SectorType==1) {
+          tmp = SectorRadius*ResMapScaleOverDistanceModify;
+          Segment(hdc,
+                  WayPointList[Task[i].Index].Screen.x,
+                  WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
+                  Task[i].AATStartRadial-DisplayAngle,
+                  Task[i].AATFinishRadial-DisplayAngle);
+        }
         if(SectorType== 2) {
           // JMW added german rules
           tmp = 500*ResMapScaleOverDistanceModify;
-          SelectObject(hdc, GetStockObject(HOLLOW_BRUSH));
-          SelectObject(hdc, GetStockObject(BLACK_PEN));
           Circle(hdc,
                  WayPointList[Task[i].Index].Screen.x,
                  WayPointList[Task[i].Index].Screen.y,
                  (int)tmp, rc, false, false);
+
+          tmp = 10e3*ResMapScaleOverDistanceModify;
+
+          Segment(hdc,
+                  WayPointList[Task[i].Index].Screen.x,
+                  WayPointList[Task[i].Index].Screen.y,(int)tmp, rc,
+                  Task[i].AATStartRadial-DisplayAngle,
+                  Task[i].AATFinishRadial-DisplayAngle);
+
+        }
+      } else {
+        // JMW added iso lines
+        if ((i==ActiveWayPoint) || (TargetPan && (i==TargetPanIndex))) {
+          for (int j=0; j<MAXISOLINES-1; j++) {
+            if (TaskStats[i].IsoLine_valid[j] && TaskStats[i].IsoLine_valid[j+1]) {
+              _DrawLine(hdc, PS_SOLID, IBLSCALE(2),
+                        TaskStats[i].IsoLine_Screen[j], TaskStats[i].IsoLine_Screen[j+1],
+                        RGB(0,0,255));
+            }
+          }
         }
       }
     }
@@ -3056,10 +3043,33 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
     if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
       int imin = min(Task[i].Index,Task[i+1].Index);
       int imax = max(Task[i].Index,Task[i+1].Index);
-      DrawDashLine(hdc, 3,
-                   WayPointList[imin].Screen,
-                   WayPointList[imax].Screen,
-                   taskcolor);
+      // JMW AAT!
+      if (AATEnabled && !TargetPan) {
+        POINT sct1, sct2;
+        if (i>0) {
+          LatLon2Screen(Task[i].AATTargetLon,
+                        Task[i].AATTargetLat,
+                        sct1);
+        } else {
+          sct1 = WayPointList[Task[i].Index].Screen;
+        }
+        LatLon2Screen(Task[i+1].AATTargetLon,
+                      Task[i+1].AATTargetLat,
+                      sct2);
+        DrawDashLine(hdc, 3,
+                     sct1,
+                     sct2,
+                     taskcolor);
+        DrawDashLine(hdc, 1,
+                     WayPointList[imin].Screen,
+                     WayPointList[imax].Screen,
+                     taskcolor);
+      } else {
+        DrawDashLine(hdc, 3,
+                     WayPointList[imin].Screen,
+                     WayPointList[imax].Screen,
+                     taskcolor);
+      }
     }
   }
 #ifdef HAVEEXCEPTIONS
@@ -3154,7 +3164,9 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
                         WayPointList[Task[i].Index].Screen, Task[i].AATStart);
           DrawSolidLine(hDCTemp,
                         WayPointList[Task[i].Index].Screen, Task[i].AATFinish);
+
         }
+
     }
   }
 
@@ -3283,7 +3295,7 @@ void MapWindow::DrawBearing(HDC hdc)
   double targetLat;
   double targetLon;
 
-  if (AATEnabled) {
+  if (AATEnabled && ValidTaskPoint(ActiveWayPoint+1)) {
     targetLat = Task[ActiveWayPoint].AATTargetLat;
     targetLon = Task[ActiveWayPoint].AATTargetLon;
   } else {
@@ -3319,6 +3331,36 @@ void MapWindow::DrawBearing(HDC hdc)
         startLat = targetLat;
         startLon = targetLon;
       }
+    }
+
+    // JMW draw symbol at target, makes it easier to see
+
+    if (AATEnabled) {
+      for (int i=ActiveWayPoint+1; i<MAXTASKPOINTS; i++) {
+        if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
+          if (i>= ActiveWayPoint) {
+            POINT sct;
+            LatLon2Screen(Task[i].AATTargetLon,
+                          Task[i].AATTargetLat,
+                          sct);
+            DrawBitmapIn(hdc, sct, hBmpTarget);
+          }
+        }
+      }
+    }
+
+    UnlockTaskData();
+
+  }
+
+  if (AATEnabled) {
+    LockTaskData();
+    if (ValidTaskPoint(ActiveWayPoint+1) && (ActiveWayPoint>0)) {
+      POINT sct;
+      LatLon2Screen(Task[ActiveWayPoint].AATTargetLon,
+                    Task[ActiveWayPoint].AATTargetLat,
+                    sct);
+      DrawBitmapIn(hdc, sct, hBmpTarget);
     }
     UnlockTaskData();
   }
@@ -3520,12 +3562,9 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
 
     #ifdef DRAWLOAD
     SelectObject(hDC, MapWindowFont);
-    wsprintf(ScaleInfo,TEXT("    %d %d ms %d  %d  %d"),
+    wsprintf(ScaleInfo,TEXT("    %d %d ms"),
              timestats_av,
-             misc_tick_count,
-             iround(DerivedDrawInfo.TurnRateWind),
-             iround(DrawInfo.StallRatio*100),
-             iround(DerivedDrawInfo.PitchAngle));
+             misc_tick_count);
 
     ExtTextOut(hDC, rc.left, rc.top, 0, NULL, ScaleInfo,
                _tcslen(ScaleInfo), NULL);
@@ -4257,7 +4296,9 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     ntrail /= TRAILSHRINK;
   }
 
-  if (needcolour) {
+#if 0
+  if (needcolour && 0) {
+    // NOT NECESSARY THIS CODE!
     /*
     if (DerivedDrawInfo.Circling) {
       ntrail = TRAILSIZE; // scan entire trail for sink magnitude
@@ -4289,32 +4330,53 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     }
     needcolour = false;
   }
+#endif
+
+  float this_vmax = (1.5*min(5.0, max(MACCREADY,0.5)));
+  float this_vmin = (-1.5*min(5.0, max(MACCREADY,2.0)));
+  vmax = this_vmax;
+  vmin = this_vmin;
 
   int skipdivisor = ntrail/5;
   int skipborder = skipdivisor;
-  int skiplevel= 3;
+  int skiplevel= 3; // JMW TODO, try lower level?
   bool lastbroken = true; // force last one to skip
   POINT lastdrawn;
 
   lastdrawn.x = 0;
   lastdrawn.y = 0;
   int kd = TRAILSIZE+iSnailNext-ntrail;
+  while (kd>= TRAILSIZE) {
+    kd -= TRAILSIZE;
+  }
+  while (kd< 0) {
+    kd += TRAILSIZE;
+  }
+  int zerooffset = (TRAILSIZE-kd);
+  skipborder += zerooffset % skiplevel;
+  // TODO: Divide by time step cruise/circling for zerooffset
+
+  bool thisvisible = true;
 
   int is = ((int)DrawInfo.Time)%skiplevel;
   for(i=1;i< ntrail; ++i)
   {
-    j= kd+i;
-    while (j>=TRAILSIZE) {
-      j-= TRAILSIZE;
+    if (i>=skipborder) {
+      skiplevel=max(1,skiplevel-1);
+      skipborder= i+skipdivisor + 2*(zerooffset % skiplevel);
+      is = skiplevel;
     }
+
     is++;
     if (is < skiplevel) {
       continue;
+    } else {
+      is=0;
     }
-    is=0;
-    if (i>skipborder) {
-      skiplevel=max(1,skiplevel-1);
-      skipborder+= skipdivisor;
+
+    j= kd+i;
+    while (j>=TRAILSIZE) {
+      j-= TRAILSIZE;
     }
 
     P1 = SnailTrail+j;
@@ -4327,10 +4389,12 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
         // ignore cruise mode lines unless very recent
 
         lastbroken = true;
+        P2 = NULL;
         continue;
       }
     } else {
       if ((P1->Circling)&&( j%5 != 0 )) {
+        // JMW TODO: This won't work properly!
         // draw only every 5 points from circling when in cruise mode
         continue;
       }
@@ -4338,14 +4402,22 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
     if (!P1->FarVisible) {
       lastbroken = true;
+      P2 = NULL;
       continue;
     }
 
     if (!PointVisible(P1->Longitude ,
                       P1->Latitude)) {
-      // the line is invalid
-      lastbroken = true;
-      continue;
+      if (lastbroken) {
+        // the line is invalid
+        P2 = P1;
+        continue;
+      } else {
+        thisvisible = false;
+        // this one is not visible but last was
+      }
+    } else {
+      thisvisible = true;
     }
 
     // now we know both points are visible, better get screen coords
@@ -4364,45 +4436,63 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     }
 
     if (abs(P1->Screen.y-lastdrawn.y)
-        +abs(P1->Screen.x-lastdrawn.x)<IBLSCALE(5)) {
+        +abs(P1->Screen.x-lastdrawn.x)<IBLSCALE(4)) {
       continue;
       // don't draw if very short line
     }
-    lastdrawn = P1->Screen;
 
     // ok, we got this far, so draw the line
 
-    if (!lastbroken) {
-      // get the colour
-      if (P1->Colour == -1) {
-        float cv = P1->Vario;
-        if (cv<0) {
-          cv /= (-vmin); // JMW fixed bug here
-        } else {
-          cv /= vmax;
-        }
-        P1->Colour = min((short)(NUMSNAILCOLORS-1),
-                         (short)((cv+1.0)/2.0*NUMSNAILCOLORS));
+    // get the colour if it doesn't exist
+    if ((P1->Colour<0)||(P1->Colour>=NUMSNAILCOLORS)) {
+      float cv = P1->Vario;
+      if (cv<0) {
+        cv /= (-vmin); // JMW fixed bug here
+      } else {
+        cv /= vmax;
       }
-      SelectObject(hdc,hSnailPens[max(0,min(NUMSNAILCOLORS-1,P1->Colour))]);
+      P1->Colour = max(0,min((short)(NUMSNAILCOLORS-1),
+                             (short)((cv+1.0)/2.0*NUMSNAILCOLORS)));
     }
+    SelectObject(hdc, hSnailPens[P1->Colour]);
+
+    if (lastbroken && P2) { // draw set cursor at P1
+      if (dotraildrift) {
+        double dt;
+        dt = max(0,(DrawInfo.Time-P2->Time));
+        LatLon2Screen(P2->Longitude+traildrift_lon*dt,
+                      P2->Latitude+traildrift_lat*dt,
+                      P2->Screen);
+      } else {
+        LatLon2Screen(P2->Longitude,
+                      P2->Latitude,
+                      P2->Screen);
+      }
+    }
+
 #ifndef NOLINETO
     if (lastbroken) { // draw set cursor at P1
-      MoveToEx(hdc, P1->Screen.x, P1->Screen.y, NULL);
+      if (P2) {
+        MoveToEx(hdc, P2->Screen.x, P2->Screen.y, NULL);
+        LineTo(hdc, P1->Screen.x, P1->Screen.y);
+      } else {
+        MoveToEx(hdc, P1->Screen.x, P1->Screen.y, NULL);
+      }
     } else {
       LineTo(hdc, P1->Screen.x, P1->Screen.y);
     }
 #else
-    if (!lastbroken) {
-      if (P2) {
-        DrawSolidLine(hdc, P1->Screen, P2->Screen);
-      }
-      P2 = P1;
-    } else {
-      P2 = NULL;
+    if (P2) {
+      DrawSolidLine(hdc, P1->Screen, P2->Screen);
     }
 #endif
-    lastbroken = false;
+    lastdrawn = P1->Screen;
+    P2 = P1;
+    if (thisvisible) {
+      lastbroken = false;
+    } else {
+      lastbroken = true;
+    }
   }
 
   // draw final point to glider
@@ -4644,3 +4734,40 @@ void MapWindow::DrawTrack(HDC hdc, POINT Orig)
   DrawDotLine(hdc, TrackLine[0], TrackLine[1], RGB(0x40,0x40,0x40));
   */
 }
+
+
+/*
+
+  Draw trail with white outline --- very slow!
+
+        // clear background bitmap
+        SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
+        Rectangle(hDCTemp, rc.left, rc.top, rc.right, rc.bottom);
+        SelectObject(hDCMask, GetStockObject(WHITE_BRUSH));
+        Rectangle(hDCMask, 0, 0, rc.right-rc.left+1, rc.bottom-rc.top+1);
+
+        SetTextColor(hDCMask,
+                     RGB(0x00,0x00,0x00));
+        SetBkColor(hDCMask,
+                   RGB(0xff,0xff,0xff));
+
+        // draw trail on background bitmap
+        DrawTrail(hDCTemp, Orig_Aircraft, rc);
+        DrawTrailFromTask(hDCTemp, rc);
+
+        // make mask
+        BitBlt(hDCMask, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
+               hDCTemp, rc.left, rc.top, SRCCOPY);
+
+        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+               hDCTemp, rc.left, rc.top, SRCINVERT);
+        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+               hDCMask, 0, 0, SRCAND);
+        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+               hDCMask, 1, 1, SRCAND);
+        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+               hDCTemp, rc.left, rc.top, SRCINVERT);
+
+      }
+    }
+*/

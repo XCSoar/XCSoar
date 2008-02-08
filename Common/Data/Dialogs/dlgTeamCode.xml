@@ -12,7 +12,7 @@
   <WndButton   Caption="Close"    X=5 Y=2 Width=70  Height=22 Font=2 OnClickNotify="OnCloseClicked">
   </WndButton>
 
-  <WndProperty Name="prpCode" Caption="Own code:" X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpCode" Caption="Own code" X=2 Y=-1  Width=155 Height=22 CaptionWidth=78 Font=2 ReadOnly=1 />
 
   <WndButton Name="cmdCode" Caption="Mate code: " X=5 Y=-1 Width=135  Height=22 Font=2 />
 
