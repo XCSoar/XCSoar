@@ -42,6 +42,26 @@ Copyright_License {
 extern NMEA_INFO GPS_INFO;
 bool DisableAutoLogger = false;
 
+TCHAR NumToIGCChar(int n) {
+  if (n<10) {
+    return _T('1') + (n-1);
+  } else {
+    return _T('A') + (n-10);
+  }
+}
+
+
+int IGCCharToNum(TCHAR c) {
+  if ((c >= _T('1')) && (c<= _T('9'))) {
+    return c- _T('1') + 1;
+  } else if ((c >= _T('A')) && (c<= _T('Z'))) {
+    return c- _T('A') + 10;
+  } else {
+    return 0; // Error!
+  }
+}
+
+
 /*
 problems with current IGC:
 
@@ -82,8 +102,8 @@ HFCCLCOMPETITIONCLASS:15M
 */
 
 
-static TCHAR szLoggerFileName[MAX_PATH];
-static TCHAR szFLoggerFileName[MAX_PATH];
+static TCHAR szLoggerFileName[MAX_PATH] = TEXT("\0");
+static TCHAR szFLoggerFileName[MAX_PATH] = TEXT("\0");
 
 int EW_count = 0;
 int NumLoggerBuffered = 0;
@@ -244,23 +264,44 @@ void StartLogger(TCHAR *strAssetNumber)
       // 2003-12-31-XXX-987-01.IGC
       // long filename form of IGC file.
       // XXX represents manufacturer code
-       wsprintf(szFLoggerFileName,
-                TEXT("%s\\%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
-		path,
-		GPS_INFO.Year,
-		GPS_INFO.Month,
-		GPS_INFO.Day,
-		strAssetNumber[0],
-		strAssetNumber[1],
-		strAssetNumber[2],
-		i);
+
+      if (!LoggerShortName) {
+        // Long file name
+        wsprintf(szFLoggerFileName,
+                 TEXT("%s\\%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
+                 path,
+                 GPS_INFO.Year,
+                 GPS_INFO.Month,
+                 GPS_INFO.Day,
+                 strAssetNumber[0],
+                 strAssetNumber[1],
+                 strAssetNumber[2],
+                 i);
+      } else {
+        // Short file name
+        TCHAR cyear, cmonth, cday, cflight;
+        cyear = NumToIGCChar((int)GPS_INFO.Year % 10);
+        cmonth = NumToIGCChar(GPS_INFO.Month);
+        cday = NumToIGCChar(GPS_INFO.Day);
+        cflight = NumToIGCChar(i);
+        wsprintf(szFLoggerFileName,
+                 TEXT("%s\\%c%c%cX%c%c%c%c.IGC"),
+                 path,
+                 cyear,
+                 cmonth,
+                 cday,
+                 strAssetNumber[0],
+                 strAssetNumber[1],
+                 strAssetNumber[2],
+                 cflight);
+      }
 
       hFile = CreateFile(szFLoggerFileName, GENERIC_WRITE,
 			 FILE_SHARE_WRITE, NULL, CREATE_NEW,
 			 FILE_ATTRIBUTE_NORMAL, 0);
       if(hFile!=INVALID_HANDLE_VALUE )
 	{
-          // file doesn't exist
+          // file already exists
 	  CloseHandle(hFile);
           DeleteFile(szFLoggerFileName);
 	  return;
@@ -1070,6 +1111,7 @@ bool ReplayLogger::Update(void) {
 
 ///////////////////////
 
+
 FILETIME LogFileDate(TCHAR* filename) {
   FILETIME ft;
   ft.dwLowDateTime = 0;
@@ -1078,13 +1120,14 @@ FILETIME LogFileDate(TCHAR* filename) {
   TCHAR asset[MAX_PATH];
   SYSTEMTIME st;
   unsigned short year, month, day, num;
-  int matches = swscanf(filename,
-			TEXT("%hu-%hu-%hu-%7s-%hu.IGC"),
-			&year,
-			&month,
-			&day,
-			asset,
-			&num);
+  int matches;
+  matches = swscanf(filename,
+                    TEXT("%hu-%hu-%hu-%7s-%hu.IGC"),
+                    &year,
+                    &month,
+                    &day,
+                    asset,
+                    &num);
   if (matches==5) {
     st.wYear = year;
     st.wMonth = month;
@@ -1094,6 +1137,44 @@ FILETIME LogFileDate(TCHAR* filename) {
     st.wSecond = 0;
     st.wMilliseconds = 0;
     SystemTimeToFileTime(&st,&ft);
+    return ft;
+  }
+
+  TCHAR cyear, cmonth, cday, cflight;
+  matches = _stscanf(filename,
+                    TEXT("%c%c%c%4s%c.IGC"),
+                    &cyear,
+                    &cmonth,
+                    &cday,
+                    asset,
+                    &cflight);
+  if (matches==5) {
+    int iyear = (int)GPS_INFO.Year;
+    int syear = iyear % 10;
+    int yearzero = iyear - syear;
+    int yearthis = IGCCharToNum(cyear) + yearzero;
+    if (yearthis > iyear) {
+      yearthis -= 10;
+    }
+    st.wYear = yearthis;
+    st.wMonth = IGCCharToNum(cmonth);
+    st.wDay = IGCCharToNum(cday);
+    st.wHour = IGCCharToNum(cflight);
+    st.wMinute = 0;
+    st.wSecond = 0;
+    st.wMilliseconds = 0;
+    SystemTimeToFileTime(&st,&ft);
+    return ft;
+    // JMW TODO: scan for short filename 
+    /*
+      YMDCXXXF.IGC
+      Y: Year, 0 to 9 cycling every 10 years
+      M: Month, 1 to 9 then A for 10, B=11, C=12
+      D: Day, 1 to 9 then A for 10, B=....
+      C: Manuf. code = X
+      XXX: Logger ID Alphanum
+      F: Flight of day, 1 to 9 then A through Z
+    */
   }
   return ft;
 }
@@ -1155,6 +1236,16 @@ bool DeleteOldIGCFile(TCHAR *pathname) {
 // JMW note: we want to clear up enough space to save the persistent
 // data (85 kb approx) and a new log file
 
+#ifdef DEBUG_IGCFILENAME
+TCHAR testtext1[] = TEXT("2007-11-05-XXX-AAA-01.IGC");
+TCHAR testtext2[] = TEXT("2007-11-05-XXX-AAA-02.IGC");
+TCHAR testtext3[] = TEXT("3BOA1VX2.IGC");
+TCHAR testtext4[] = TEXT("5BDX7B31.IGC");
+TCHAR testtext5[] = TEXT("3BOA1VX2.IGC");
+TCHAR testtext6[] = TEXT("9BDX7B31.IGC");
+TCHAR testtext7[] = TEXT("2008-01-05-XXX-AAA-01.IGC");
+#endif
+
 bool LoggerClearFreeSpace(void) {
   bool found = true;
   unsigned long kbfree=0;
@@ -1164,21 +1255,27 @@ bool LoggerClearFreeSpace(void) {
 
   LocalPath(pathname);
 #ifdef GNAV
-  LocalPath(subpathname,TEXT("logs/"));
+  LocalPath(subpathname,TEXT("logs"));
 #else
   LocalPath(subpathname);
 #endif
 
+#ifdef DEBUG_IGCFILENAME
+  bool retval;
+  retval = LogFileIsOlder(testtext1,
+                          testtext2);
+  retval = LogFileIsOlder(testtext1,
+                          testtext3);
+  retval = LogFileIsOlder(testtext4,
+                          testtext5);
+  retval = LogFileIsOlder(testtext6,
+                          testtext7);
+#endif
+
   while (found && ((kbfree = FindFreeSpace(pathname))<LOGGER_MINFREESTORAGE)
-	 && (numtries<100)) {
+	 && (numtries++ <100)) {
     /* JMW asking for deleting old files is disabled now --- system
        automatically deletes old files as required
-    if (numtries==0)      
-      if(MessageBoxX(hWndMapWindow,
-		     gettext(TEXT("Insufficient free storage, delete old IGC files?")),
-		     gettext(TEXT("Logger")),
-		     MB_YESNO|MB_ICONQUESTION) != IDYES)
-	return false;
     */
 
     // search for IGC files, and delete the oldest one
@@ -1186,7 +1283,6 @@ bool LoggerClearFreeSpace(void) {
     if (!found) {
       found = DeleteOldIGCFile(subpathname);
     }
-    numtries++;
   }
   return (kbfree>=LOGGER_MINFREESTORAGE);
 }

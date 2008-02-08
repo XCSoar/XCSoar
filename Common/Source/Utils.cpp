@@ -200,6 +200,8 @@ TCHAR szRegistryInputFile[]=  TEXT("InputFile"); // pL
 TCHAR szRegistryPilotName[]=  TEXT("PilotName");
 TCHAR szRegistryAircraftType[]=  TEXT("AircraftType");
 TCHAR szRegistryAircraftRego[]=  TEXT("AircraftRego");
+TCHAR szRegistryLoggerID[]=  TEXT("LoggerID");
+TCHAR szRegistryLoggerShort[]=  TEXT("LoggerShortName");
 
 TCHAR szRegistrySoundVolume[]=  TEXT("SoundVolume");
 TCHAR szRegistrySoundDeadband[]=  TEXT("SoundDeadband");
@@ -286,6 +288,7 @@ TCHAR szRegistryMapFile[]=	 TEXT("MapFile"); // pL
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
+bool LoggerShortName = false;
 
 double COSTABLE[4096];
 double SINETABLE[4096];
@@ -531,6 +534,7 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryFAISector,&Temp);
   SectorType = Temp;
 
+  SectorRadius = 10e3;
   GetFromRegistry(szRegistrySectorRadius,
 		  &SectorRadius);
 
@@ -816,7 +820,7 @@ void ReadRegistrySettings(void)
 
   Temp = EnableExternalTriggerCruise;
   GetFromRegistry(szRegistryEnableExternalTriggerCruise,&Temp);
-  EnableExternalTriggerCruise = (Temp==1);
+  EnableExternalTriggerCruise = Temp;
 
   Temp = 0;
   GetFromRegistry(szRegistryUTCOffset,&Temp);
@@ -840,6 +844,10 @@ void ReadRegistrySettings(void)
   Temp = 1;
   GetFromRegistry(szRegistryLockSettingsInFlight,&Temp);
   LockSettingsInFlight = (Temp == 1);
+
+  Temp = 0;
+  GetFromRegistry(szRegistryLoggerShort,&Temp);
+  LoggerShortName = (Temp == 1);
 
   Temp = EnableFLARMDisplay;
   GetFromRegistry(szRegistryEnableFLARMDisplay,&Temp);
@@ -1447,7 +1455,7 @@ double Reciprocal(double InBound)
 }
 
 
-bool AngleInRange(double Angle0, double Angle1, double x) {
+bool AngleInRange(double Angle0, double Angle1, double x, bool is_signed) {
   Angle0 = AngleLimit360(Angle0);
   Angle1 = AngleLimit360(Angle1);
   x = AngleLimit360(x);
@@ -1457,8 +1465,14 @@ bool AngleInRange(double Angle0, double Angle1, double x) {
       return true;
     }
   } else {
-    if ((x<=Angle0) || (x>= Angle1)) {
-      return true;
+    if (is_signed) {
+      if ((x>=Angle0) || (x<= Angle1)) {
+        return true;
+      }
+    } else {
+      if ((x<=Angle0) || (x>= Angle1)) {
+        return true;
+      }
     }
   }
   return false;
@@ -2151,9 +2165,25 @@ int GetRegistryAirspaceMode(int i) {
 
 void ReadAssetNumber(void)
 {
-  strAssetNumber[0]= _T('A');
-  strAssetNumber[1]= _T('A');
-  strAssetNumber[2]= _T('A');
+  TCHAR val[MAX_PATH];
+  GetRegistryString(szRegistryLoggerID, val, 100);
+  int ifound=0;
+  int len = _tcslen(val);
+  for (int i=0; i< len; i++) {
+    if (((val[i] >= _T('A'))&&(val[i] <= _T('Z')))
+        ||((val[i] >= _T('0'))&&(val[i] <= _T('9')))) {
+      strAssetNumber[ifound]= val[i];
+      ifound++;
+    }
+    if (ifound==3) return;
+  }
+
+  if (ifound<3) {
+    strAssetNumber[0]= _T('A');
+    strAssetNumber[1]= _T('A');
+    strAssetNumber[2]= _T('A');
+  }
+
   /*
   if(strAssetNumber[0] != '\0')
     {
@@ -4100,7 +4130,9 @@ void MemLeakCheck() {
 
 ///////////////
 
-/// This is necessary to be called periodically to get rid of 
+// This is necessary to be called periodically to get rid of 
+// memory defragmentation, since on pocket pc platforms there is no
+// automatic defragmentation.
 void MyCompactHeaps() {
 #if (WINDOWSPC>0)||defined(GNAV)
   HeapCompact(GetProcessHeap(),0);

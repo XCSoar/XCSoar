@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.70 2008/01/08 07:41:26 jwharington Exp $
+  $Id: Parser.cpp,v 1.71 2008/02/08 07:10:21 jwharington Exp $
 
 Copyright_License {
 
@@ -842,10 +842,10 @@ BOOL NMEAParser::PTAS1(TCHAR *String, NMEA_INFO *GPS_INFO)
   double wnet,baralt,vtas;
   TCHAR ctemp[80];
   ExtractParameter(String,ctemp,0);
-  wnet = (StrToDouble(ctemp,NULL)-200)/TOKNOTS;
+  wnet = (StrToDouble(ctemp,NULL)-200)/(10*TOKNOTS);
   
   ExtractParameter(String,ctemp,2);
-  baralt = StrToDouble(ctemp,NULL)/TOFEET;
+  baralt = max(0,(StrToDouble(ctemp,NULL)-2000)/TOFEET);
   
   ExtractParameter(String,ctemp,3);
   vtas = StrToDouble(ctemp,NULL)/TOKNOTS;

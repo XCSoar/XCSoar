@@ -369,12 +369,10 @@ void FormatterTime::SecsToDisplayTime(int d) {
   if (negative) {
     if (hours>0) {
       hours = -hours;
+    } else if (mins>0) {
+      mins = -mins;
     } else {
-      if (mins>0) {
-        mins = -mins;
-      } else {
-        seconds = -seconds;
-      }
+      seconds = -seconds;
     }
   }
   Valid = TRUE;
@@ -433,14 +431,9 @@ int DetectStartTime(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 void FormatterTime::AssignValue(int i) {
-  double dd;
   switch (i) {
   case 9:
     SecsToDisplayTime((int)CALCULATED_INFO.LastThermalTime);
-    break;
-  case 27:
-    SecsToDisplayTime((int)CALCULATED_INFO.AATTimeToGo);
-    Valid = (ValidTaskPoint(ActiveWayPoint) && AATEnabled);
     break;
   case 36:
     SecsToDisplayTime((int)CALCULATED_INFO.FlightTime);
@@ -450,6 +443,44 @@ void FormatterTime::AssignValue(int i) {
     break;
   case 40:
     SecsToDisplayTime((int)(GPS_INFO.Time));
+    break;
+  case 46:
+    SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo+DetectCurrentTime()));
+    Valid = ValidTaskPoint(ActiveWayPoint);
+    break;
+  default:
+    break;
+  }
+}
+
+
+void FormatterAATTime::AssignValue(int i) {
+  double dd;
+  if (AATEnabled && ValidTaskPoint(ActiveWayPoint)) {
+    dd = CALCULATED_INFO.TaskTimeToGo;
+    if ((CALCULATED_INFO.TaskStartTime>0.0) && (CALCULATED_INFO.Flying)
+        &&(ActiveWayPoint>0)) {
+      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    }
+    dd= max(0,min(24.0*3600.0,dd))-AATTaskLength*60;
+    if (dd<0) {
+      status = 1; // red
+    } else {
+      if (CALCULATED_INFO.TaskTimeToGoTurningNow > (AATTaskLength+5)*60) {
+        status = 2; // blue
+      } else {
+        status = 0;  // black
+      }
+    }
+  } else {
+    dd = 0;
+    status = 0; // black
+  }
+
+  switch (i) {
+  case 27:
+    SecsToDisplayTime((int)CALCULATED_INFO.AATTimeToGo);
+    Valid = (ValidTaskPoint(ActiveWayPoint) && AATEnabled);
     break;
   case 41:
     SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo));
@@ -463,18 +494,14 @@ void FormatterTime::AssignValue(int i) {
     SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo+DetectCurrentTime()));
     Valid = ValidTaskPoint(ActiveWayPoint);
     break;
-  case 46:
-    SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo+DetectCurrentTime()));
-    Valid = ValidTaskPoint(ActiveWayPoint);
-    break;
   case 62:
-    dd = CALCULATED_INFO.TaskTimeToGo;
-    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
-      dd += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    if (AATEnabled && ValidTaskPoint(ActiveWayPoint)) {
+      SecsToDisplayTime((int)dd);
+      Valid = true;
+    } else {
+      SecsToDisplayTime(0);
+      Valid = false;
     }
-    dd= max(0,min(24.0*60.0*60.0,dd));
-    SecsToDisplayTime((int)dd-(int)(AATTaskLength*60));
-    Valid = (ValidTaskPoint(ActiveWayPoint) && AATEnabled);
     break;
   default:
     break;
@@ -733,6 +760,16 @@ void InfoBoxFormatter::AssignValue(int i) {
       Valid = false;
     }
     break;
+  case 63:
+    if (CALCULATED_INFO.timeCircling>0) {
+      Value = LIFTMODIFY*CALCULATED_INFO.TotalHeightClimb
+        /CALCULATED_INFO.timeCircling;
+      Valid = true;
+    } else {
+      Value = 0.0;
+      Valid = false;
+    }
+    break;
   default:
     break;
 
@@ -790,27 +827,99 @@ TCHAR *FormatterTime::Render(int *color) {
     RenderInvalid(color);
     _stprintf(Text,TEXT("--:--"));
   } else {
-    if (abs(hours)<1) {
-      if (seconds<0) {
+    if ((hours<0) || (mins<0) || (seconds<0)) {
+      // Time is negative
+      *color = 1; // red!
+      if (hours<0) { // hh:mm, ss
         _stprintf(Text,
-                  TEXT("-00:%02d"),
-                  abs(seconds));
-      } else {
+                  TEXT("%02d:%02d"),
+                  hours, mins );
+        _stprintf(CommentText,
+                  TEXT("%02d"),
+                  seconds);
+      } else if (mins<0) { // mm:ss
         _stprintf(Text,
                   TEXT("%02d:%02d"),
                   mins, seconds );
+        _stprintf(CommentText,
+                  TEXT(""));
+      } else {
+        _stprintf(Text,
+                  TEXT("-00:%02d"),
+                  abs(seconds));
+        _stprintf(CommentText,
+                  TEXT(""));
       }
-      _stprintf(CommentText,
-                TEXT(""));
     } else {
-      _stprintf(Text,
-                TEXT("%02d:%02d"),
-                hours, mins );
-      _stprintf(CommentText,
-                TEXT("%02d"),
-                seconds);
+      // Time is positive
+      *color = 0; // black
+      if (hours>0) { // hh:mm, ss
+        _stprintf(Text,
+                  TEXT("%02d:%02d"),
+                  hours, mins );
+        _stprintf(CommentText,
+                  TEXT("%02d"),
+                  seconds);
+      } else { // mm:ss
+        _stprintf(Text,
+                  TEXT("%02d:%02d"),
+                  mins, seconds );
+        _stprintf(CommentText,
+                  TEXT(""));
+      }
     }
-    *color = 0;
+  }
+  return(Text);
+}
+
+
+TCHAR *FormatterAATTime::Render(int *color) {
+  if (!Valid) {
+    RenderInvalid(color);
+    _stprintf(Text,TEXT("--:--"));
+  } else {
+
+    *color = status;
+
+    if ((hours<0) || (mins<0) || (seconds<0)) {
+      // Time is negative
+      if (hours<0) { // hh:mm, ss
+        _stprintf(Text,
+                  TEXT("%02d:%02d"),
+                  hours, mins );
+        _stprintf(CommentText,
+                  TEXT("%02d"),
+                  seconds);
+      } else if (mins<0) { // mm:ss
+        _stprintf(Text,
+                  TEXT("%02d:%02d"),
+                  mins, seconds );
+        _stprintf(CommentText,
+                  TEXT(""));
+      } else {
+        _stprintf(Text,
+                  TEXT("-00:%02d"),
+                  abs(seconds));
+        _stprintf(CommentText,
+                  TEXT(""));
+      }
+    } else {
+      // Time is positive
+      if (hours>0) { // hh:mm, ss
+        _stprintf(Text,
+                  TEXT("%02d:%02d"),
+                  hours, mins );
+        _stprintf(CommentText,
+                  TEXT("%02d"),
+                  seconds);
+      } else { // mm:ss
+        _stprintf(Text,
+                  TEXT("%02d:%02d"),
+                  mins, seconds );
+        _stprintf(CommentText,
+                  TEXT(""));
+      }
+    }
   }
   return(Text);
 }

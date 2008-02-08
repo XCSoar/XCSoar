@@ -196,6 +196,7 @@ void dlgStartPointShowModal(void) {
   // now retrieve back the properties...
   if (changed) {
     LockTaskData();
+    TaskModified = true;
     RefreshTask();
     UnlockTaskData();
     /// TODO do something...

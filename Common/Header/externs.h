@@ -206,7 +206,7 @@ extern int EnableThermalLocator;
 
 extern bool ExternalTriggerCruise;
 extern bool ExternalTriggerCircling;
-extern bool EnableExternalTriggerCruise;
+extern int EnableExternalTriggerCruise;
 
 // statistics
 extern Statistics flightstats;

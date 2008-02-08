@@ -253,19 +253,47 @@ void OLCOptimizer::thin_data() {
     }
   }
 
-  nistart = 5;
+  nistart = 5; // JMW check this!
   double contractfactor = 0.8;
+  int num_to_prune = (int)((1.0-contractfactor)*MAX_OLC_POINTS);
+  int num_pruned = 0;
+  bool prune_from_end = true;
 
-  while (data.pnts_in> MAX_OLC_POINTS*contractfactor) {
-    data.distancethreshold /= contractfactor;
+  while (num_pruned < num_to_prune) {
     // don't erase last point and don't erase up to start
-    for (i= data.pnts_in-3; i>nistart+1; i--) {
-      double d;
-      DistanceBearing(data.latpnts[i], data.lonpnts[i], 
-                      data.latpnts[i-1], data.lonpnts[i-1],
-                      &d, NULL);
-      if (d<data.distancethreshold) {
-	data.timepnts[i] = -1; // mark it for deletion
+    if (prune_from_end) {
+      prune_from_end = false; // on second pass (if necessary) prune from start
+      for (i= data.pnts_in-3; i>nistart+1; i--) {
+        // prune from end since at current distance threshold we won't have
+        // pruned later ones.
+        // 
+        // by the time the buffer fills at the current distance threshold,
+        // pruning will have occurred or been checked on all points
+        // going back to the start, 
+        double d;
+        DistanceBearing(data.latpnts[i], data.lonpnts[i], 
+                        data.latpnts[i-1], data.lonpnts[i-1],
+                        &d, NULL);
+        if (d<data.distancethreshold) {
+          data.timepnts[i] = -1; // mark it for deletion
+          i--;                   // but not the next one
+          num_pruned++;
+        }
+      }
+    } else {
+      for (i= nistart+2; i<data.pnts_in-4; i++) {
+        // prune from start on second pass since this takes decrease
+        // in resolution from start of flight;
+        // what's more, it will prune all the points in the buffer
+        double d;
+        DistanceBearing(data.latpnts[i], data.lonpnts[i], 
+                        data.latpnts[i-1], data.lonpnts[i-1],
+                        &d, NULL);
+        if (d<data.distancethreshold) {
+          data.timepnts[i] = -1; // mark it for deletion
+          i++;                   // but not the next one
+          num_pruned++;
+        }
       }
     }
 
@@ -290,7 +318,12 @@ void OLCOptimizer::thin_data() {
       }
       j++;
     }
+
     data.pnts_in = pnts_in_new;
+    if (num_pruned < num_to_prune) {
+      // can't prune any more at this distance threshold, so need to increase it
+      data.distancethreshold /= contractfactor;
+    }
   }
   if (data.pnts_in>=MAX_OLC_POINTS) {
     // error!
@@ -339,7 +372,7 @@ bool OLCOptimizer::addPoint(double lon, double lat, double alt,
     isminimum &= (ialt<data.altminimum-1000);
     break;
   }
-  if (isminimum) {
+  if (isminimum && EnableOLC) {
     data.altminimum = min(ialt,data.altminimum);
     data.tsprintstart = (long)time;
   }

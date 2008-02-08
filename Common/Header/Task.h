@@ -64,10 +64,17 @@ typedef START_POINT Start_t[MAXSTARTPOINTS +1];
 typedef struct _TASKSTATS_POINT
 {
   double LengthPercent;
+  double IsoLine_Latitude[MAXISOLINES];
+  double IsoLine_Longitude[MAXISOLINES];
+  bool IsoLine_valid[MAXISOLINES];
+  POINT IsoLine_Screen[MAXISOLINES];
 }TASKSTATS_POINT;
 
 typedef TASKSTATS_POINT TaskStats_t[MAXTASKPOINTS +1];
 
+extern bool TaskModified;
+extern bool TargetModified;
+extern TCHAR LastTaskFileName[MAX_PATH];
 
 void ReplaceWaypoint(int index);
 void InsertWaypoint(int index, bool append=false);
@@ -93,4 +100,22 @@ void ClearTask(void);
 void RotateStartPoints(void);
 bool ValidTaskPoint(int i);
 bool ValidWayPoint(int i);
+
+double FindInsideAATSectorRange(double latitude,
+                                double longitude,
+                                int taskwaypoint, 
+                                double course_bearing,
+                                double p_found);
+double FindInsideAATSectorDistance(double latitude,
+                                double longitude,
+                                int taskwaypoint, 
+                                double course_bearing,
+                                double p_found=0.0);
+
+double DoubleLegDistance(int taskwaypoint,
+                         double longitude,
+                         double latitude);
+
+void CalculateAATIsoLines(void);
+
 #endif

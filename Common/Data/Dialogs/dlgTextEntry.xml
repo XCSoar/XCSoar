@@ -9,7 +9,7 @@
 
 <WndForm Name="frmTextEntry" Type="Dialog" X=5 Y=5 Width=200 Height=70 Caption="Edit text" Font=2 BackColor=0xDADBAB>
 
-  <WndOwnerDrawFrame Name="frmGrid" X=0 Y=-1 Width=199 Height=60 Font=2 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnTextPaint" />
+  <WndOwnerDrawFrame Name="frmGrid" X=0 Y=-1 Width=199 Height=60 Font=3 BackColor=0x404000 ForeColor=0xFFFFFF OnPaint="OnTextPaint" />
   
 </WndForm>    
 

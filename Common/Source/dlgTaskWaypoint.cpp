@@ -192,49 +192,51 @@ static void SetValues(bool first=false) {
 
 }
 
+#define CHECK_CHANGED(a,b) if (a != b) { changed = true; a = b; }
+
 static void GetWaypointValues(void) {
   WndProperty* wp;
-  if ((twItemIndex<MAXTASKPOINTS)&&(twItemIndex>=0)) {
+  bool changed = false;
 
+  if (!AATEnabled) {
+    return;
+  }
+
+  if ((twItemIndex<MAXTASKPOINTS)&&(twItemIndex>=0)) {
+    LockTaskData();
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATType"));
     if (wp) {
-      Task[twItemIndex].AATType = wp->GetDataField()->GetAsInteger();
+      CHECK_CHANGED(Task[twItemIndex].AATType, 
+                    wp->GetDataField()->GetAsInteger());
     }
 
-    int ival;
-    
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATCircleRadius"));
     if (wp) {
-      ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
-      Task[twItemIndex].AATCircleRadius = ival;
+      CHECK_CHANGED(Task[twItemIndex].AATCircleRadius,
+                    iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY));
     }
     
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATSectorRadius"));
     if (wp) {
-      ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
-      Task[twItemIndex].AATSectorRadius = ival;
+      CHECK_CHANGED(Task[twItemIndex].AATSectorRadius,
+                    iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY));
     }
     
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATStartRadial"));
     if (wp) {
-      Task[twItemIndex].AATStartRadial = wp->GetDataField()->GetAsInteger();
+      CHECK_CHANGED(Task[twItemIndex].AATStartRadial,
+                    wp->GetDataField()->GetAsInteger());
     }
     
     wp = (WndProperty*)wf->FindByName(TEXT("prpAATFinishRadial"));
     if (wp) {
-      Task[twItemIndex].AATFinishRadial = wp->GetDataField()->GetAsInteger();
+      CHECK_CHANGED(Task[twItemIndex].AATFinishRadial, 
+                    wp->GetDataField()->GetAsInteger());
+    }  
+    if (changed) {
+      TaskModified = true;
     }
-    
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAATOffsetRadius"));
-    if (wp) {
-      Task[twItemIndex].AATTargetOffsetRadius = 
-        wp->GetDataField()->GetAsInteger()/100.0;
-    }
-
-    wp = (WndProperty*)wf->FindByName(TEXT("prpAATTargetLocked"));
-    if (wp) {
-      Task[twItemIndex].AATTargetLocked = wp->GetDataField()->GetAsBoolean();
-    }
+    UnlockTaskData();
 
   }
 }
@@ -288,97 +290,84 @@ static void SetWaypointValues(bool first=false) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATOffsetRadius"));
-  if (wp) {
-    wp->GetDataField()->SetAsFloat(iround(Task[twItemIndex].AATTargetOffsetRadius*100.0));
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpAATTargetLocked"));
-  if (wp) {
-    wp->GetDataField()->Set(Task[twItemIndex].AATTargetLocked);
-    wp->RefreshDisplay();
-  }
-
 }
 
 
 static void ReadValues(void) {
   WndProperty* wp;
+  bool changed = false;
 
+  LockTaskData();
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableMultipleStartPoints"));
   if (wp) {
-    EnableMultipleStartPoints = wp->GetDataField()->GetAsBoolean();
+    CHECK_CHANGED(EnableMultipleStartPoints,
+                  wp->GetDataField()->GetAsBoolean());
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAATEnabled"));
   if (wp) {
-    AATEnabled = wp->GetDataField()->GetAsInteger();
+    CHECK_CHANGED(AATEnabled,
+                  wp->GetDataField()->GetAsInteger());
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
   if (wp) {
-    EnableOLC = wp->GetDataField()->GetAsBoolean();
+    CHECK_CHANGED(EnableOLC,
+                  wp->GetDataField()->GetAsBoolean());
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
   if (wp) {
-    if (FinishLine != wp->GetDataField()->GetAsInteger()) {
-      FinishLine = wp->GetDataField()->GetAsInteger();
-    }
+    CHECK_CHANGED(FinishLine,
+                  wp->GetDataField()->GetAsInteger());
   }
   
-  int ival;
-
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishRadius"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
-    if ((int)FinishRadius != ival) {
-      FinishRadius = ival;
-    }
+    CHECK_CHANGED(FinishRadius,
+                  iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY));
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartLine"));
   if (wp) {
-    if (StartLine != wp->GetDataField()->GetAsInteger()) {
-      StartLine = wp->GetDataField()->GetAsInteger();
-    }
+    CHECK_CHANGED(StartLine, 
+                  wp->GetDataField()->GetAsInteger());
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskStartRadius"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
-    if ((int)StartRadius != ival) {
-      StartRadius = ival;
-    }
+    CHECK_CHANGED(StartRadius,
+                  iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY));
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFAISector"));
   if (wp) {
-    if ((int)SectorType != wp->GetDataField()->GetAsInteger()) {
-      SectorType = wp->GetDataField()->GetAsInteger();
-    }
+    CHECK_CHANGED(SectorType,
+                  wp->GetDataField()->GetAsInteger());
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskSectorRadius"));
   if (wp) {
-    ival = iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY);
-    if ((int)SectorRadius != ival) {
-      SectorRadius = ival;
-    }
+    CHECK_CHANGED(SectorRadius,
+                  iround(wp->GetDataField()->GetAsFloat()/DISTANCEMODIFY));
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAutoAdvance"));
   if (wp) {
-    if (AutoAdvance != wp->GetDataField()->GetAsInteger()) {
-      AutoAdvance = wp->GetDataField()->GetAsInteger();
-    }
+    CHECK_CHANGED(AutoAdvance, 
+                  wp->GetDataField()->GetAsInteger());
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpMinTime"));
   if (wp) {
-    AATTaskLength = wp->GetDataField()->GetAsInteger();
+    CHECK_CHANGED(AATTaskLength, 
+                  wp->GetDataField()->GetAsInteger());
   }
+  if (changed) {
+    TaskModified = true;
+  }
+
+  UnlockTaskData();
 
 }
 
@@ -406,7 +395,15 @@ static void OnSelectClicked(WindowControl * Sender){
     SelectedWaypoint = res;    
     if (Task[twItemIndex].Index != res) {
       if (CheckDeclaration()) {
+        LockTaskData();
 	Task[twItemIndex].Index = res;
+        Task[twItemIndex].AATTargetOffsetRadius = 0.0;
+        Task[twItemIndex].AATTargetOffsetRadial = 0.0;
+        Task[twItemIndex].AATSectorRadius = SectorRadius;
+        Task[twItemIndex].AATCircleRadius = SectorRadius;
+        Task[twItemIndex].AATTargetLocked = false;
+        TaskModified = true;
+        UnlockTaskData();
       }
     }
     UpdateCaption();

@@ -497,7 +497,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 26
 	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f°T")), WindDirectionProcessing, 48, 25},
 	  // 27
-	  {ugNone,            TEXT("AA Time"), TEXT("AA Time"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
+	  {ugNone,            TEXT("AA Time"), TEXT("AA Time"), new FormatterAATTime(TEXT("%2.0f")), NoProcessing, 28, 18},
 	  // 28
 	  {ugDistance,        TEXT("AA Distance Max"), TEXT("AA Dmax"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 29, 27},
 	  // 29
@@ -525,15 +525,15 @@ SCREEN_INFO Data_Options[] = {
 	  // 40
 	  {ugNone,            TEXT("Time UTC"), TEXT("Time UTC"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 41, 39},
 	  // 41
-	  {ugNone,            TEXT("Task Time To Go"), TEXT("Fin ETE"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 42, 40},
+	  {ugNone,            TEXT("Task Time To Go"), TEXT("Fin ETE"), new FormatterAATTime(TEXT("%04.0f")), NoProcessing, 42, 40},
 	  // 42
-	  {ugNone,            TEXT("Next Time To Go"), TEXT("WP ETE"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 45, 41},
+	  {ugNone,            TEXT("Next Time To Go"), TEXT("WP ETE"), new FormatterAATTime(TEXT("%04.0f")), NoProcessing, 45, 41},
 	  // 43
 	  {ugHorizontalSpeed, TEXT("Speed Dolphin"), TEXT("V Opt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 10, 35},
 	  // 44
 	  {ugVerticalSpeed,   TEXT("Netto Vario"), TEXT("Netto"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 2, 24},
 	  // 45
-	  {ugNone,            TEXT("Task Arrival Time"), TEXT("Fin ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 46, 42},
+	  {ugNone,            TEXT("Task Arrival Time"), TEXT("Fin ETA"), new FormatterAATTime(TEXT("%04.0f")), NoProcessing, 46, 42},
 	  // 46
 	  {ugNone,            TEXT("Next Arrival Time"), TEXT("WP ETA"), new FormatterTime(TEXT("%04.0f")), NoProcessing, 14, 45},
 	  // 47
@@ -567,9 +567,12 @@ SCREEN_INFO Data_Options[] = {
 	  // 61
 	  {ugTaskSpeed, TEXT("Speed Task Achieved"), TEXT("V Tsk Ach"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 18, 16},
           // 62
-	  {ugNone,            TEXT("AA Delta Time"), TEXT("AA dT"), new FormatterTime(TEXT("%2.0f")), NoProcessing, 28, 18},
+	  {ugNone,            TEXT("AA Delta Time"), TEXT("AA dT"), new FormatterAATTime(TEXT("%2.0f")), NoProcessing, 28, 18},
+          // 63
+	  {ugVerticalSpeed,   TEXT("Thermal All"), TEXT("TC All"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+
 	};
-int NUMSELECTSTRINGS = 63;
+int NUMSELECTSTRINGS = 64;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -1195,8 +1198,8 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   (void)hPrevInstance;
 
   //#ifdef DEBUG
-  // JMW testing only
-  //  RotateScreen();
+  // JMW testing only for portrait mode of Altair
+  //RotateScreen();
   //#endif
 
   // Version String
@@ -1213,7 +1216,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // experimental CVS 
 
-  wcscat(XCSoar_Version, TEXT("5.1.4 "));
+  wcscat(XCSoar_Version, TEXT("5.1.6 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1241,9 +1244,6 @@ int WINAPI WinMain(     HINSTANCE hInstance,
     {
       return FALSE;
     }
-
-  // find unique ID of this PDA
-  ReadAssetNumber();
 
   hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
@@ -1428,6 +1428,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   AirspaceWarnListInit();
   StartupStore(TEXT("dlgAirspaceWarningInit\n"));
   dlgAirspaceWarningInit();
+
+  // find unique ID of this PDA
+  ReadAssetNumber();
 
   // Da-da, start everything now
   StartupStore(TEXT("ProgramStarted=1\n"));
@@ -1931,9 +1934,11 @@ void Shutdown(void) {
   StartupStore(TEXT("AirspaceWarnListDeInit\n"));
   AirspaceWarnListDeInit();
 
+  CreateProgressDialog(gettext(TEXT("Shutdown, saving logs...")));
   // stop logger
   guiStopLogger(true);
 
+  CreateProgressDialog(gettext(TEXT("Shutdown, saving profile...")));
   // Save settings
   StoreRegistry();
 
@@ -1943,8 +1948,8 @@ void Shutdown(void) {
   SaveSoundSettings();
 
 #ifndef DISABLEAUDIOVARIO  
-  VarioSound_EnableSound(false);
-  VarioSound_Close();
+  //  VarioSound_EnableSound(false);
+  //  VarioSound_Close();
 #endif
 
   // Stop SMS device
@@ -1953,6 +1958,7 @@ void Shutdown(void) {
 #endif
   
   // Stop drawing
+  CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
   
   StartupStore(TEXT("CloseDrawingThread\n"));
   MapWindow::CloseDrawingThread();
@@ -1964,6 +1970,7 @@ void Shutdown(void) {
 
   // Clear data
 
+  CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
   StartupStore(TEXT("Save default task\n"));
 
   LockTaskData();
@@ -1987,6 +1994,7 @@ void Shutdown(void) {
   CloseWayPoints();
   UnlockTaskData();
 
+  CreateProgressDialog(gettext(TEXT("Shutdown, please wait...")));
   StartupStore(TEXT("CloseTerrainTopology\n"));
 
   RASP.Close();
@@ -2003,8 +2011,8 @@ void Shutdown(void) {
   devCloseAll();
 
   SaveCalculationsPersist(&CALCULATED_INFO);
-#ifdef EXPERIMENTAL
-  CalibrationSave();
+#if (EXPERIMENTAL > 0)
+  //  CalibrationSave();
 #endif
 
   #if defined(GNAV) && !defined(PCGNAV)
@@ -2751,10 +2759,10 @@ void CommonProcessTimer()
   static int iheapcompact = 0;
   // called 2 times per second, compact heap every minute.
   iheapcompact++;
-  if (iheapcompact % 120==0) {
+  if (iheapcompact == 120) {
     MyCompactHeaps();
+    iheapcompact = 0;
   }
-
 }
 
 ////////////////
@@ -2986,7 +2994,7 @@ void SIMProcessTimer(void)
 
 #ifdef DEBUG
   // use this to test FLARM parsing/display
-  //  NMEAParser::TestRoutine(&GPS_INFO);
+  //    NMEAParser::TestRoutine(&GPS_INFO);
 #endif
 
   NMEAParser::GpsUpdated = TRUE;
@@ -3054,9 +3062,14 @@ void DebugStore(char *Str)
 #ifdef DEBUG
   LockFlightData();
   FILE *stream;
-  static TCHAR szFileName[] = TEXT("\\xcsoar-debug.log");
-
-  stream = _wfopen(szFileName,TEXT("a+"));
+  TCHAR szFileName[] = TEXT("\\xcsoar-debug.log");
+  static bool initialised = false;
+  if (!initialised) {
+    initialised = true;
+    stream = _wfopen(szFileName,TEXT("w"));
+  } else {
+    stream = _wfopen(szFileName,TEXT("a+"));
+  }
 
   fwrite(Str,strlen(Str),1,stream);
 

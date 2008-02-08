@@ -89,6 +89,7 @@ static WndFrame *wConfig20=NULL;
 static WndButton *buttonPilotName=NULL;
 static WndButton *buttonAircraftType=NULL;
 static WndButton *buttonAircraftRego=NULL;
+static WndButton *buttonLoggerID=NULL;
 
 #define NUMPAGES 20
 
@@ -120,6 +121,14 @@ static void UpdateButtons(void) {
     }
     _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Competition ID")), val);
     buttonAircraftRego->SetCaption(text);
+  }
+  if (buttonLoggerID) {
+    GetRegistryString(szRegistryLoggerID, val, 100);
+    if (_tcslen(val)<=0) {
+      _stprintf(val, gettext(TEXT("(blank)")));
+    }
+    _stprintf(text,TEXT("%s: %s"), gettext(TEXT("Logger ID")), val);
+    buttonLoggerID->SetCaption(text);
   }
 }
 
@@ -340,7 +349,6 @@ static void OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t Mode){
 }
 
 
-
 static void OnAircraftRegoClicked(WindowControl *Sender) {
 	(void)Sender;
   TCHAR Temp[100];
@@ -375,6 +383,20 @@ static void OnPilotNameClicked(WindowControl *Sender) {
     dlgTextEntryShowModal(Temp,100);
     SetRegistryString(szRegistryPilotName,Temp);
     changed = true;
+  }
+  UpdateButtons();
+}
+
+
+static void OnLoggerIDClicked(WindowControl *Sender) {
+	(void)Sender;
+  TCHAR Temp[100];
+  if (buttonLoggerID) {
+    GetRegistryString(szRegistryLoggerID,Temp,100);
+    dlgTextEntryShowModal(Temp,100);
+    SetRegistryString(szRegistryLoggerID,Temp);
+    changed = true;
+    ReadAssetNumber();
   }
   UpdateButtons();
 }
@@ -763,6 +785,10 @@ static void setVariables(void) {
   if (buttonAircraftRego) {
     buttonAircraftRego->SetOnClickNotify(OnAircraftRegoClicked);
   }
+  buttonLoggerID = ((WndButton *)wf->FindByName(TEXT("cmdLoggerID")));
+  if (buttonLoggerID) {
+    buttonLoggerID->SetOnClickNotify(OnLoggerIDClicked);
+  }
 
   UpdateButtons();
 
@@ -952,6 +978,12 @@ static void setVariables(void) {
   wp = (WndProperty*)wf->FindByName(TEXT("prpLockSettingsInFlight"));
   if (wp) {
     wp->GetDataField()->Set(LockSettingsInFlight);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLoggerShortName"));
+  if (wp) {
+    wp->GetDataField()->Set(LoggerShortName);
     wp->RefreshDisplay();
   }
 
@@ -1552,7 +1584,12 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpEnableExternalTriggerCruise"));
   if (wp) {
-    wp->GetDataField()->Set(EnableExternalTriggerCruise);
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("OFF")));
+    dfe->addEnumText(gettext(TEXT("Flap")));
+    dfe->addEnumText(gettext(TEXT("SC")));
+    dfe->Set(EnableExternalTriggerCruise);
     wp->RefreshDisplay();
   }
 
@@ -2027,6 +2064,17 @@ void dlgConfigurationShowModal(void){
       LockSettingsInFlight = wp->GetDataField()->GetAsBoolean();
       SetToRegistry(szRegistryLockSettingsInFlight,
 		    LockSettingsInFlight);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpLoggerShortName"));
+  if (wp) {
+    if (LoggerShortName != 
+	wp->GetDataField()->GetAsBoolean()) {
+      LoggerShortName = wp->GetDataField()->GetAsBoolean();
+      SetToRegistry(szRegistryLoggerShort,
+		    LoggerShortName);
       changed = true;
     }
   }
@@ -2695,7 +2743,7 @@ void dlgConfigurationShowModal(void){
   if (wp) {
     if ((int)(EnableExternalTriggerCruise) != 
 	wp->GetDataField()->GetAsInteger()) {
-      EnableExternalTriggerCruise = (wp->GetDataField()->GetAsInteger() != 0);
+      EnableExternalTriggerCruise = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryEnableExternalTriggerCruise,
 		    EnableExternalTriggerCruise);
       changed = true;

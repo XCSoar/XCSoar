@@ -44,7 +44,7 @@
   <WndProperty Name="prpRemainingTime"  Caption="Remaining time"  X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
   <WndProperty Name="prpTaskDistance"      Caption="Task distance"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
   <WndProperty Name="prpRemainingDistance"      Caption="Remaining distance"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
-  <WndProperty Name="prpEstimatedSpeed"      Caption="Speed remaining"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
+  <WndProperty Name="prpEstimatedSpeed"      Caption="Speed estimated"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
   <WndProperty Name="prpAverageSpeed"      Caption="Speed average"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
 
   </WndFrame>

@@ -233,6 +233,13 @@ void dlgTextEntryShowModal(TCHAR *text, int width) {
   _tcsncpy(text, edittext, max_width);
   text[max_width-1]=0;
 
+  // strip trailing spaces
+  int len = _tcslen(text)-1;
+  while ((len>0) && (text[len] == _T(' '))) {
+    text[len] = 0;
+    len--;
+  }
+
   delete wf;
 
 }

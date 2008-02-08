@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.26 2008/01/08 07:41:25 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.27 2008/02/08 07:10:17 jwharington Exp $
 
 
 Copyright_License {
@@ -192,7 +192,6 @@ void ParseAirfieldDetails() {
           wcscat(Details,TempString);
           wcscat(Details,TEXT("\r\n"));
         }
-	// TODO: check the string is not too long
       }
     }
 

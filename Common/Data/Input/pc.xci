@@ -366,7 +366,7 @@ location=7
 mode=default
 type=key
 data=9
-event=MarkLocation
+event=Setup Target
 label= 
 location=8
 
@@ -412,8 +412,8 @@ location=7
 mode=Preview
 type=key
 data=9
-event=MarkLocation
-label=Mark\nLocation
+event=Setup Target
+label=$(CheckTask)Target
 location=8
 
 mode=Preview

@@ -769,6 +769,14 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
         LatLon2Screen(Task[i].AATStartLon, Task[i].AATStartLat, Task[i].AATStart);
         LatLon2Screen(Task[i].AATFinishLon, Task[i].AATFinishLat, Task[i].AATFinish);
       }
+      if (AATEnabled && ((i==ActiveWayPoint) || (TargetPan && (i==TargetPanIndex)))) {
+        for (int j=0; j<MAXISOLINES; j++) {
+          if (TaskStats[i].IsoLine_valid[j]) {
+            LatLon2Screen(TaskStats[i].IsoLine_Longitude[j], TaskStats[i].IsoLine_Latitude[j], 
+                          TaskStats[i].IsoLine_Screen[j]);
+          }
+        }
+      }
     }
   }
 
@@ -944,6 +952,29 @@ void MapWindow::DrawHorizon(HDC hDC,RECT rc)
   a1.y = Start.y-radius/4;
   _DrawLine(hDC, PS_SOLID, IBLSCALE(2), 
             a1, Start, RGB(0,0,0));
+
+  //
+
+#define ROOT2 0.70711
+
+  int rr2p = radius*ROOT2+IBLSCALE(1);
+  int rr2n = radius*ROOT2;
+
+  a1.x = Start.x+rr2p;
+  a1.y = Start.y-rr2p;
+  a2.x = Start.x+rr2n;
+  a2.y = Start.y-rr2n;
+
+  _DrawLine(hDC, PS_SOLID, IBLSCALE(1), 
+            a1, a2, RGB(0,0,0));
+
+  a1.x = Start.x-rr2p;
+  a1.y = Start.y-rr2p;
+  a2.x = Start.x-rr2n;
+  a2.y = Start.y-rr2n;
+
+  _DrawLine(hDC, PS_SOLID, IBLSCALE(1), 
+            a1, a2, RGB(0,0,0));
 
   // JMW experimental, display stall sensor
   double s = max(0.0,min(1.0,DrawInfo.StallRatio));

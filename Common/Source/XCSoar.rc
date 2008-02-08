@@ -769,6 +769,7 @@ IDB_CLIMBSMALLINV       BITMAP  DISCARDABLE     "Bitmaps\\climb_12inv.bmp"
 IDB_THERMALSOURCE       BITMAP  DISCARDABLE     "Bitmaps\\thermalsource.bmp"
 IDB_AIRSPACE6           BITMAP  DISCARDABLE     "bitmaps\\airspace6.bmp"
 IDB_AIRSPACE7           BITMAP  DISCARDABLE     "bitmaps\\airspace7.bmp"
+IDB_TARGET              BITMAP  DISCARDABLE     "Bitmaps\\target.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

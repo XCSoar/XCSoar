@@ -281,7 +281,7 @@ class MapWindow {
   static double GetDisplayAngle() { return DisplayAngle; }
 
  private:
-  static HBITMAP hLandable, hReachable, 
+  static HBITMAP 
     hTurnPoint, hSmall, hCruise, hClimb,
     hFinalGlide, hAutoMacCready, hTerrainWarning, hGPSStatus1, hGPSStatus2,
     hAbort, hLogger, hLoggerOff, hFLARMTraffic;
@@ -351,6 +351,7 @@ class MapWindow {
   static HBITMAP hBmpFieldReachable;
   static HBITMAP hBmpFieldUnReachable;
   static HBITMAP hBmpThermalSource;
+  static HBITMAP hBmpTarget;
 
 #define MAXLABELBLOCKS 100
   static int nLabelBlocks;

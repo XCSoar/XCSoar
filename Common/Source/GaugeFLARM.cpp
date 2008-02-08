@@ -120,7 +120,6 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
 	  break;
       }
    
-      // TODO: draw direction, height?
       double x, y;
       x = gps_info->FLARM_Traffic[i].RelativeEast;
       y = -gps_info->FLARM_Traffic[i].RelativeNorth;
@@ -180,16 +179,16 @@ void GaugeFLARM::RenderTraffic(NMEA_INFO  *gps_info) {
           short size = _tcslen(Buffer);
           SIZE tsize;
           GetTextExtentPoint(hdcDrawWindow, Buffer, size, &tsize);
-          tsize.cx = (tsize.cx+IBLSCALE(4))/2;
-          ExtTextOut(hdcDrawWindow, sc.x-tsize.cx+IBLSCALE(5), 
+          tsize.cx = (tsize.cx+IBLSCALE(6))/2;
+          ExtTextOut(hdcDrawWindow, sc.x-tsize.cx+IBLSCALE(7), 
                      sc.y-tsize.cy-IBLSCALE(5),
                      ETO_OPAQUE, NULL, Buffer, size, NULL);
           HBRUSH oldBrush = (HBRUSH)SelectObject(hdcDrawWindow, 
                                                  GetStockObject(BLACK_BRUSH));
           POINT triangle[4];
-          triangle[0].x = 2;
-          triangle[0].y = -2;
-          triangle[1].x = 4;
+          triangle[0].x = 3;  // was  2
+          triangle[0].y = -3; // was -2
+          triangle[1].x = 6;  // was 4
           triangle[1].y = 1;
           triangle[2].x = 0;
           triangle[2].y = 1;

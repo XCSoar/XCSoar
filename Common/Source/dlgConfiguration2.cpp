@@ -159,7 +159,7 @@ void OnInfoBoxHelp(WindowControl * Sender){
     dlgHelpShowModal(caption, TEXT("[Wind Bearing]\r\nWind bearing estimated by XCSoar.  (Touchscreen/PC only) Manual adjustment is possible by pressing the up/down cursor keys to adjust bearing when the infobox is active."));
     break;
   case 27:
-    dlgHelpShowModal(caption, TEXT("[AA Time]\r\nAssigned Area Task time remaining."));
+    dlgHelpShowModal(caption, TEXT("[AA Time]\r\nAssigned Area Task time remaining.  Goes red when time remaining has expired."));
     break;
   case 28:
     dlgHelpShowModal(caption, TEXT("[AA Distance Max]\r\nAssigned Area Task maximum distance possible for remainder of task."));
@@ -264,7 +264,7 @@ void OnInfoBoxHelp(WindowControl * Sender){
     dlgHelpShowModal(caption, TEXT("[Speed Task Achieved]\r\nAchieved cross country speed while on current task, compensated for altitude."));
     break;
   case 62:
-    dlgHelpShowModal(caption, TEXT("[AA Delta Time]\r\nDifference between estimated task time and AAT minimum time."));
+    dlgHelpShowModal(caption, TEXT("[AA Delta Time]\r\nDifference between estimated task time and AAT minimum time.  Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes."));
     break;
   };
 }

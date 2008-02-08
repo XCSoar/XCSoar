@@ -137,4 +137,6 @@
 // (NOTE: This is used for all the caches for now - temporary)
 #define MAXSTATUSMESSAGECACHE 1000
 
+#define MAXISOLINES 32
+
 #endif

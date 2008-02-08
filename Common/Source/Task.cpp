@@ -39,6 +39,10 @@ Copyright_License {
 #include "Waypointparser.h"
 
 bool EnableMultipleStartPoints = false;
+bool TaskModified = false;
+bool TargetModified = false;
+TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
+extern bool TargetDialogOpen;
 
 extern AATDistance aatdistance;
 
@@ -47,6 +51,8 @@ void FlyDirectTo(int index) {
     return;
 
   LockTaskData();
+  TaskModified = true;
+  TargetModified = true;
   ActiveWayPoint = -1; AATEnabled = FALSE;
   for(int j=0;j<MAXTASKPOINTS;j++)
   {
@@ -69,6 +75,8 @@ void SwapWaypoint(int index) {
     return;
 
   LockTaskData();
+  TaskModified = true;
+  TargetModified = true;
   if (index<0) {
     return;
   }
@@ -96,6 +104,8 @@ void InsertWaypoint(int index, bool append) {
   int i;
   
   LockTaskData();
+  TaskModified = true;
+  TargetModified = true;
 
   if ((ActiveWayPoint<0) || !ValidTaskPoint(0)) {
     ActiveWayPoint = 0;
@@ -151,6 +161,8 @@ void InsertWaypoint(int index, bool append) {
 // Create a default task to home at startup if no task is present
 void DefaultTask(void) {
   LockTaskData();
+  TaskModified = true;
+  TargetModified = true;
   if ((Task[0].Index == -1)||(ActiveWayPoint==-1)) {
     if (HomeWaypoint != -1) {
       Task[0].Index = HomeWaypoint;
@@ -179,6 +191,8 @@ void RemoveTaskPoint(int index) {
   }
   
   LockTaskData();
+  TaskModified = true;
+  TargetModified = true;
 
   if (Task[index].Index == -1) {
     UnlockTaskData();
@@ -223,6 +237,8 @@ void RemoveWaypoint(int index) {
   // the nearest to the active WP
   
   LockTaskData();
+  TaskModified = true;
+  TargetModified = true;
 
   // Search forward first
   i = ActiveWayPoint;
@@ -282,7 +298,11 @@ void RemoveWaypoint(int index) {
 void ReplaceWaypoint(int index) {
   if (!CheckDeclaration())
     return;
+
   LockTaskData();
+  TaskModified = true;
+  TargetModified = true;
+
   // ARH 26/06/05 Fixed array out-of-bounds bug
   if (ActiveWayPoint>=0) {	
     
@@ -453,7 +473,7 @@ void CalculateTaskSectors(void)
 		if (SectorType == 2) {
 		  SectorSize = 10000; // German DAe 0.5/10
 		} else {
-		  SectorSize = 5000;  // FAI sector
+		  SectorSize = SectorRadius;  // FAI sector
 		}
 		SectorBearing = Task[i].Bisector;
 	      }
@@ -484,6 +504,14 @@ void CalculateTaskSectors(void)
                                 SectorBearing - SectorAngle, SectorSize,
                                 &Task[i].SectorEndLat,
                                 &Task[i].SectorEndLon);
+
+          if (!AATEnabled) {
+            Task[i].AATStartRadial  = 
+              AngleLimit360(SectorBearing - SectorAngle);
+            Task[i].AATFinishRadial = 
+              AngleLimit360(SectorBearing + SectorAngle);
+          }
+
 	}
     }
   UnlockTaskData();
@@ -499,7 +527,7 @@ double AdjustAATTargets(double desired) {
   LockTaskData();
   for(i=istart;i<MAXTASKPOINTS-1;i++)
     {
-      if(ValidTaskPoint(i)&&ValidTaskPoint(i+1))
+      if(ValidTaskPoint(i)&&ValidTaskPoint(i+1) && !Task[i].AATTargetLocked)
 	{
           Task[i].AATTargetOffsetRadius = max(-1,min(1,
                                           Task[i].AATTargetOffsetRadius));
@@ -546,6 +574,7 @@ double AdjustAATTargets(double desired) {
 
 
 extern NMEA_INFO GPS_INFO;
+extern DERIVED_INFO CALCULATED_INFO;
 
 
 void CalculateAATTaskSectors()
@@ -627,7 +656,7 @@ void CalculateAATTaskSectors()
         }
         if (!AngleInRange(Task[i].AATStartRadial,
                           Task[i].AATFinishRadial,
-                          targetbearing)) {
+                          targetbearing,true)) {
 
           // Bisector is not within AAT sector, so
           // choose the closest radial as the target line
@@ -654,43 +683,23 @@ void CalculateAATTaskSectors()
       if (InAATTurnSector(longitude, latitude, i) && (awp==i) &&
           !Task[i].AATTargetLocked) {
 
-        // special case, currently in AAT sector
+        // special case, currently in AAT sector/cylinder
         
-        double tor = Task[i].AATTargetOffsetRadius;
-        double dist = 100;
+        double dist;
         double qdist;
-        double dist_max = 0;
         double bearing;
         
-        double target_latitude = latitude;
-        double target_longitude = longitude;
-        
-        // find bearing from last target through current aircraft position
+        // find bearing from last target through current aircraft position with offset
         DistanceBearing(Task[i-1].AATTargetLat,
                         Task[i-1].AATTargetLon,
                         latitude,
                         longitude,
                         &qdist, &bearing);
 
-        // JMWAAT, adjust bearing here for TargetOffsetRadial?
         bearing = AngleLimit360(bearing+Task[i].AATTargetOffsetRadial);
 
-        // scan for maximum distance, so we can apply proportion
-        // (-100 is closest to current aircraft,
-        //  +100 is furthest in sector)
-        while (InAATTurnSector(target_longitude, target_latitude, i)) {
-          
-          FindLatitudeLongitude (latitude,
-                                 longitude, 
-                                 bearing, 
-                                 dist,
-                                 &target_latitude,
-                                 &target_longitude);
-          dist_max = dist;
-          dist += 100;
-          
-        }
-        dist = ((tor+1)/2.0)*dist_max;
+        dist = ((Task[i].AATTargetOffsetRadius+1)/2.0)*
+          FindInsideAATSectorDistance(latitude, longitude, i, bearing);
         
         // if (dist+qdist>aatdistance.LegDistanceAchieved(awp)) {
         // JMW: don't prevent target from being closer to the aircraft
@@ -702,7 +711,10 @@ void CalculateAATTaskSectors()
                                dist,
                                &Task[i].AATTargetLat,
                                &Task[i].AATTargetLon);
-        //        }
+
+        TargetModified = true;
+
+        // }
         
       } else {
         
@@ -712,11 +724,18 @@ void CalculateAATTaskSectors()
                                targetrange,
                                &Task[i].AATTargetLat,
                                &Task[i].AATTargetLon);
+        TargetModified = true;
         
       }
-      
     }
   }
+
+  CalculateAATIsoLines();
+  if (!TargetDialogOpen) {
+    TargetModified = false;
+    // allow target dialog to detect externally changed targets
+  }
+
   UnlockTaskData();
 }
 
@@ -963,11 +982,25 @@ void LoadNewTask(TCHAR *szFileName)
       Task[i].Index = -1;
     }
   
-  hFile = CreateFile(szFileName,GENERIC_READ,0,(LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,
+  hFile = CreateFile(szFileName,GENERIC_READ,0,
+                     (LPSECURITY_ATTRIBUTES)NULL,OPEN_EXISTING,
                      FILE_ATTRIBUTE_NORMAL,NULL);
   
   if(hFile!= INVALID_HANDLE_VALUE )
     {
+
+      // Defaults
+      int   old_StartLine    = StartLine;
+      int   old_SectorType   = SectorType;
+      DWORD old_SectorRadius = SectorRadius;
+      DWORD old_StartRadius  = StartRadius;
+      int   old_AutoAdvance  = AutoAdvance;
+      double old_AATTaskLength = AATTaskLength;
+      BOOL   old_AATEnabled  = AATEnabled;
+      DWORD  old_FinishRadius = FinishRadius;
+      int    old_FinishLine = FinishLine;
+      bool   old_EnableMultipleStartPoints = EnableMultipleStartPoints;
+
       for(i=0;i<MAXTASKPOINTS;i++)
         {
           if(!ReadFile(hFile,&Temp,sizeof(TASK_POINT),&dwBytesRead, (OVERLAPPED *)NULL))
@@ -988,31 +1021,41 @@ void LoadNewTask(TCHAR *szFileName)
 
       if (!TaskInvalid) {
 
-	if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL))
-	  AATEnabled = FALSE;
-	if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL))
-	  AATTaskLength = 0;
+	if (!ReadFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesRead,(OVERLAPPED*)NULL)) {
+          TaskInvalid = true;
+        }
+	if (!ReadFile(hFile,&AATTaskLength,sizeof(double),&dwBytesRead,(OVERLAPPED*)NULL)) {
+          TaskInvalid = true;
+        }
 	
 	// ToDo review by JW
 	
 	// 20060521:sgi added additional task parameters
-	if (!ReadFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);  // todo set default values
-	if (!ReadFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
-	if (!ReadFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
-	if (!ReadFile(hFile,&StartLine,sizeof(StartLine),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
-	if (!ReadFile(hFile,&SectorType,sizeof(SectorType),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
-	if (!ReadFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
-	if (!ReadFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesRead,(OVERLAPPED*)NULL))
-	  void(0);
+	if (!ReadFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesRead,(OVERLAPPED*)NULL)) {
+          TaskInvalid = true;
+        }
+	if (!ReadFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesRead,(OVERLAPPED*)NULL)) {
+          TaskInvalid = true;
+        }
+	if (!ReadFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesRead,(OVERLAPPED*)NULL)) {
+          TaskInvalid = true;
+        }
+	if (!ReadFile(hFile,&StartLine,sizeof(StartLine),&dwBytesRead,(OVERLAPPED*)NULL)) {
+          TaskInvalid = true;
+        }
+	if (!ReadFile(hFile,&SectorType,sizeof(SectorType),&dwBytesRead,(OVERLAPPED*)NULL)) {
+          TaskInvalid = true;
+        }
+	if (!ReadFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesRead,(OVERLAPPED*)NULL)) {
+          TaskInvalid = true;
+        }
+	if (!ReadFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesRead,(OVERLAPPED*)NULL)) {
+          TaskInvalid = true;
+        }
 
-        if (!ReadFile(hFile,&EnableMultipleStartPoints,sizeof(bool),&dwBytesRead,(OVERLAPPED*)NULL)) 
-          void(0);
+        if (!ReadFile(hFile,&EnableMultipleStartPoints,sizeof(bool),&dwBytesRead,(OVERLAPPED*)NULL)) {
+          TaskInvalid = true;
+        }
 
         for(i=0;i<MAXSTARTPOINTS;i++)
         {
@@ -1038,14 +1081,28 @@ void LoadNewTask(TCHAR *szFileName)
 
       }
       CloseHandle(hFile);
+
+      if (TaskInvalid) {
+        StartLine = old_StartLine;
+        SectorType = old_SectorType;
+        SectorRadius = old_SectorRadius;
+        StartRadius = old_StartRadius;
+        AutoAdvance = old_AutoAdvance;
+        AATTaskLength = old_AATTaskLength;
+        AATEnabled = old_AATEnabled;
+        FinishRadius = old_FinishRadius;
+        FinishLine = old_FinishLine;
+        EnableMultipleStartPoints = old_EnableMultipleStartPoints;
+      }
+
   } else {
     TaskInvalid = true;
   }
-
+  
   if (TaskInvalid) {
     ClearTask();
-  }
-  
+  } 
+
   RefreshTask();
   
   if (!ValidTaskPoint(0)) {
@@ -1054,20 +1111,38 @@ void LoadNewTask(TCHAR *szFileName)
 
   UnlockTaskData();
 
+  if (TaskInvalid) {
+    MessageBoxX(hWndMapWindow,
+      gettext(TEXT("Error in task file!")),
+      gettext(TEXT("Load task")),
+      MB_OK|MB_ICONEXCLAMATION);
+  } else {
+    TaskModified = false; 
+    TargetModified = false;
+    _tcscpy(LastTaskFileName, szFileName);
+  }
+
 }
 
 
 void ClearTask(void) {
   LockTaskData();
+  TaskModified = true; 
+  TargetModified = true;
+  LastTaskFileName[0] = _T('\0');
   ActiveWayPoint = -1;
   int i;
   for(i=0;i<MAXTASKPOINTS;i++) {
     Task[i].Index = -1;
-    Task[i].AATSectorRadius = 500; // JMW added default
-    Task[i].AATCircleRadius = 500; // JMW added default
+    Task[i].AATSectorRadius = SectorRadius; // JMW added default
+    Task[i].AATCircleRadius = SectorRadius; // JMW added default
     Task[i].AATTargetOffsetRadial = 0;
     Task[i].AATTargetOffsetRadius = 0;
     Task[i].AATTargetLocked = false;
+    int j;
+    for (j=0; j<MAXISOLINES; j++) {
+      TaskStats[i].IsoLine_valid[j] = false;
+    }
   }
   for (i=0; i<MAXSTARTPOINTS; i++) {
     StartPoints[i].Index = -1;
@@ -1106,53 +1181,299 @@ void SaveTask(TCHAR *szFileName)
 
   LockTaskData();
         
-  hFile = CreateFile(szFileName,GENERIC_WRITE,0,(LPSECURITY_ATTRIBUTES)NULL,CREATE_ALWAYS,
+  hFile = CreateFile(szFileName,GENERIC_WRITE,0,
+                     (LPSECURITY_ATTRIBUTES)NULL,CREATE_ALWAYS,
                      FILE_ATTRIBUTE_NORMAL,NULL);
         
-  if(hFile!=INVALID_HANDLE_VALUE )
-    {
-      WriteFile(hFile,&Task[0],sizeof(TASK_POINT)*MAXTASKPOINTS,&dwBytesWritten,(OVERLAPPED *)NULL);
-      WriteFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesWritten,(OVERLAPPED*)NULL);
-      WriteFile(hFile,&AATTaskLength,sizeof(double),&dwBytesWritten,(OVERLAPPED*)NULL);
-
-      // 20060521:sgi added additional task parameters
-      WriteFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesWritten,(OVERLAPPED*)NULL);
-      WriteFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesWritten,(OVERLAPPED*)NULL);
-      WriteFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesWritten,(OVERLAPPED*)NULL);
-      WriteFile(hFile,&StartLine,sizeof(StartLine),&dwBytesWritten,(OVERLAPPED*)NULL);
-      WriteFile(hFile,&SectorType,sizeof(SectorType),&dwBytesWritten,(OVERLAPPED*)NULL);
-      WriteFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesWritten,(OVERLAPPED*)NULL);
-      WriteFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesWritten,(OVERLAPPED*)NULL);
-
-      WriteFile(hFile,&EnableMultipleStartPoints,sizeof(bool),&dwBytesWritten,(OVERLAPPED*)NULL);
-      WriteFile(hFile,&StartPoints[0],sizeof(START_POINT)*MAXSTARTPOINTS,&dwBytesWritten,(OVERLAPPED*)NULL);
-
-      // JMW added writing of waypoint data, in case it's missing
-      int i;
-      for(i=0;i<MAXTASKPOINTS;i++) {
-        if (ValidWayPoint(Task[i].Index)) {
-          WriteFile(hFile,&WayPointList[Task[i].Index],
-                    sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
-        } else {
-          // dummy data..
-          WriteFile(hFile,&WayPointList[0],
-                    sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
-        }
+  if(hFile!=INVALID_HANDLE_VALUE ) {
+    WriteFile(hFile,&Task[0],sizeof(TASK_POINT)*MAXTASKPOINTS,&dwBytesWritten,(OVERLAPPED *)NULL);
+    WriteFile(hFile,&AATEnabled,sizeof(BOOL),&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&AATTaskLength,sizeof(double),&dwBytesWritten,(OVERLAPPED*)NULL);
+    
+    // 20060521:sgi added additional task parameters
+    WriteFile(hFile,&FinishRadius,sizeof(FinishRadius),&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&FinishLine,sizeof(FinishLine),&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&StartRadius,sizeof(StartRadius),&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&StartLine,sizeof(StartLine),&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&SectorType,sizeof(SectorType),&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&SectorRadius,sizeof(SectorRadius),&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&AutoAdvance,sizeof(AutoAdvance),&dwBytesWritten,(OVERLAPPED*)NULL);
+    
+    WriteFile(hFile,&EnableMultipleStartPoints,sizeof(bool),&dwBytesWritten,(OVERLAPPED*)NULL);
+    WriteFile(hFile,&StartPoints[0],sizeof(START_POINT)*MAXSTARTPOINTS,&dwBytesWritten,(OVERLAPPED*)NULL);
+    
+    // JMW added writing of waypoint data, in case it's missing
+    int i;
+    for(i=0;i<MAXTASKPOINTS;i++) {
+      if (ValidWayPoint(Task[i].Index)) {
+        WriteFile(hFile,&WayPointList[Task[i].Index],
+                  sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
+      } else {
+        // dummy data..
+        WriteFile(hFile,&WayPointList[0],
+                  sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
       }
-      for(i=0;i<MAXSTARTPOINTS;i++) {
-        if (ValidWayPoint(StartPoints[i].Index)) {
-          WriteFile(hFile,&WayPointList[StartPoints[i].Index],
-                    sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
-        } else {
-          // dummy data..
-          WriteFile(hFile,&WayPointList[0],
-                    sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
-        }
-      }
-
-      CloseHandle(hFile);
     }
+    for(i=0;i<MAXSTARTPOINTS;i++) {
+      if (ValidWayPoint(StartPoints[i].Index)) {
+        WriteFile(hFile,&WayPointList[StartPoints[i].Index],
+                  sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
+      } else {
+        // dummy data..
+        WriteFile(hFile,&WayPointList[0],
+                  sizeof(WAYPOINT), &dwBytesWritten, (OVERLAPPED*)NULL);
+      }
+    }
+    
+    CloseHandle(hFile);
+    TaskModified = false; // task successfully saved
+    TargetModified = false;
+    _tcscpy(LastTaskFileName, szFileName);
+
+  } else {
+    
+    MessageBoxX(hWndMapWindow,
+                gettext(TEXT("Error in saving task!")),
+                gettext(TEXT("Save task")),
+                MB_OK|MB_ICONEXCLAMATION);
+  }
   UnlockTaskData();
 }
 
 
+double FindInsideAATSectorDistance_old(double latitude,
+                                       double longitude,
+                                       int taskwaypoint, 
+                                       double course_bearing,
+                                       double p_found) {
+  bool t_in_sector;
+  double delta;
+  double max_distance;
+  if(Task[taskwaypoint].AATType == SECTOR) {
+    max_distance = Task[taskwaypoint].AATSectorRadius*2;
+  } else {
+    max_distance = Task[taskwaypoint].AATCircleRadius*2;
+  }
+  delta = max(250.0, max_distance/40.0);
+
+  double t_distance = p_found;
+  double t_distance_inside;
+
+  do {
+    double t_lat, t_lon;
+    t_distance_inside = t_distance;
+    t_distance += delta;
+
+    FindLatitudeLongitude(latitude, longitude, 
+                          course_bearing, t_distance,
+                          &t_lat,
+                          &t_lon);
+    
+    t_in_sector = InAATTurnSector(t_lon,
+                                  t_lat,
+                                  taskwaypoint);
+
+  } while (t_in_sector);
+
+  return t_distance_inside;
+}
+
+/////////////////
+
+
+double FindInsideAATSectorDistance(double latitude,
+                                   double longitude,
+                                   int taskwaypoint, 
+                                   double course_bearing,
+                                   double p_found) {
+
+  double max_distance;
+  if(Task[taskwaypoint].AATType == SECTOR) {
+    max_distance = Task[taskwaypoint].AATSectorRadius;
+  } else {
+    max_distance = Task[taskwaypoint].AATCircleRadius;
+  }
+
+  // Do binary bounds search for longest distance within sector
+
+  double delta = max_distance;
+  double t_distance_lower = p_found;
+  double t_distance = p_found+delta*2;
+  int steps = 0;
+  do {
+
+    double t_lat, t_lon;
+    FindLatitudeLongitude(latitude, longitude, 
+                          course_bearing, t_distance,
+                          &t_lat, &t_lon);
+
+    if (InAATTurnSector(t_lon, t_lat, taskwaypoint)) {
+      t_distance_lower = t_distance;
+      // ok, can go further
+      t_distance += delta;
+    } else {
+      t_distance -= delta;
+    }
+    delta /= 2.0;
+  } while ((delta>5.0)&&(steps++<20));
+
+  return t_distance_lower;
+}
+
+
+double FindInsideAATSectorRange(double latitude,
+                                double longitude,
+                                int taskwaypoint, 
+                                double course_bearing,
+                                double p_found) {
+
+  double t_distance = FindInsideAATSectorDistance(latitude, longitude, taskwaypoint,
+                                                  course_bearing, p_found);
+  return (p_found / 
+          max(1,t_distance))*2-1;
+}
+
+
+/////////////////
+
+double DoubleLegDistance(int taskwaypoint,
+                         double longitude,
+                         double latitude) {
+
+  double d0;
+  double d1;
+  if (taskwaypoint>0) {
+    DistanceBearing(Task[taskwaypoint-1].AATTargetLat,
+                    Task[taskwaypoint-1].AATTargetLon,
+                    latitude,
+                    longitude,
+                    &d0, NULL);
+  } else {
+    d0 = 0;
+  }
+  
+  DistanceBearing(latitude,
+                  longitude,
+                  Task[taskwaypoint+1].AATTargetLat,
+                  Task[taskwaypoint+1].AATTargetLon,
+                  &d1, NULL);
+  return d0 + d1;
+}
+
+
+void CalculateAATIsoLines(void) {
+  int i;
+  int awp = ActiveWayPoint;
+  double stepsize = 25.0;
+
+  if(AATEnabled == FALSE)
+    return;
+
+  LockTaskData();
+
+  for(i=1;i<MAXTASKPOINTS;i++) {
+
+    if(ValidTaskPoint(i)) {
+      if (!ValidTaskPoint(i+1)) {
+        // This must be the final waypoint, so it's not an AAT OZ
+        continue;
+      }
+      // JMWAAT: if locked, don't move it
+      if (i<awp) {
+        // only update targets for current/later waypoints 
+        continue;
+      }
+
+      int j;
+      for (j=0; j<MAXISOLINES; j++) {
+        TaskStats[i].IsoLine_valid[j] = false;
+      }
+
+      double latitude = Task[i].AATTargetLat;
+      double longitude = Task[i].AATTargetLon;
+      double dist_0, dist_north, dist_east;
+      bool in_sector = true;
+
+      double max_distance, delta;
+      if(Task[i].AATType == SECTOR) {
+        max_distance = Task[i].AATSectorRadius;
+      } else {
+        max_distance = Task[i].AATCircleRadius;
+      }
+      delta = max_distance*2.4 / (MAXISOLINES);
+      bool left = false;
+
+      /*
+      double distance_glider=0;
+      if ((i==ActiveWayPoint) && (CALCULATED_INFO.IsInSector)) {
+        distance_glider = DoubleLegDistance(i, GPS_INFO.Longitude, GPS_INFO.Latitude);
+      }
+      */
+
+      // fill
+      j=0;
+      // insert start point
+      TaskStats[i].IsoLine_Latitude[j] = latitude;
+      TaskStats[i].IsoLine_Longitude[j] = longitude;
+      TaskStats[i].IsoLine_valid[j] = true;
+      j++;
+
+      do {
+        dist_0 = DoubleLegDistance(i, longitude, latitude);
+
+        double latitude_north, longitude_north;
+        FindLatitudeLongitude(latitude, longitude, 
+                              0, stepsize,
+                              &latitude_north,
+                              &longitude_north);
+        dist_north = DoubleLegDistance(i, longitude_north, latitude_north);
+        
+        double latitude_east, longitude_east;
+        FindLatitudeLongitude(latitude, longitude, 
+                              90, stepsize,
+                              &latitude_east,
+                              &longitude_east);
+        dist_east = DoubleLegDistance(i, longitude_east, latitude_east);
+        
+        double angle = AngleLimit360(RAD_TO_DEG*atan2(dist_east-dist_0, dist_north-dist_0)+90);
+        if (left) {
+          angle += 180;
+        }
+        
+        FindLatitudeLongitude(latitude, longitude, 
+                              angle, delta,
+                              &latitude,
+                              &longitude);
+        
+        in_sector = InAATTurnSector(longitude, latitude, i);
+        /*
+        if (dist_0 < distance_glider) {
+          in_sector = false;
+        }
+        */
+        if (in_sector) {
+          TaskStats[i].IsoLine_Latitude[j] = latitude;
+          TaskStats[i].IsoLine_Longitude[j] = longitude;
+          TaskStats[i].IsoLine_valid[j] = true;
+          j++;
+        } else {
+          j++;
+          if (!left && (j<MAXISOLINES-2))  {
+            left = true;
+            latitude = Task[i].AATTargetLat;
+            longitude = Task[i].AATTargetLon;
+            in_sector = true; // cheat to prevent early exit
+
+            // insert start point (again)
+            TaskStats[i].IsoLine_Latitude[j] = latitude;
+            TaskStats[i].IsoLine_Longitude[j] = longitude;
+            TaskStats[i].IsoLine_valid[j] = true;
+            j++;
+          }
+        }
+      } while (in_sector && (j<MAXISOLINES));
+
+    }
+  }
+  UnlockTaskData();
+}
