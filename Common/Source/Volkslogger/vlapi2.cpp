@@ -28,7 +28,6 @@
 
 #include "Volkslogger/utils.h"
 
-
 extern int noninteractive;
 
 // sizes of VL memory regions

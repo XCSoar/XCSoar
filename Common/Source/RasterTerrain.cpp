@@ -633,7 +633,7 @@ bool RasterMapCache::Open(char* zfilename) {
     if (!zzip_file_real(fpTerrain)) {
       // don't allow cache mode on files in zip, because way too slow
       zzip_fclose(fpTerrain);
-      fpTerrain = false;
+      fpTerrain = NULL;   // was false
       return false;
     };
   }

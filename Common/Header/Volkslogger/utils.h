@@ -15,6 +15,12 @@
 **
 ***********************************************************************/
 
+#if defined(__BORLANDC__)
+
+#include <stdlib.h>
+
+#else
+
 char *utoa(unsigned value, char *digits, int base);
 
 char *itoa(int value, char *digits, int base);
@@ -22,3 +28,7 @@ char *itoa(int value, char *digits, int base);
 char *ltoa(long value, char *digits, int base);
 
 char *strupr(char *str);
+
+#endif
+
+

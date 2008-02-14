@@ -212,6 +212,9 @@
 #define _zzip_ssize_t  int
 #endif
 
-#define strdup _strdup
+#if defined(__BORLANDC__)
+#else
+  #define strdup _strdup
+#endif
 /* once: _ZZIP__MSVC_H */
 #endif

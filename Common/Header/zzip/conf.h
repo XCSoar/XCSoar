@@ -95,7 +95,11 @@ JMW something wrong
 #ifdef   ZZIP___int64
 #define _zzip___int64 ZZIP___int64
 #else
-#define _zzip___int64 _int64     // JMW
+  #if defined(__BORLANDC__)
+#define _zzip___int64 __int64
+#else
+  #define _zzip___int64 _int64     // JMW
+#endif
 #endif
 #endif
 

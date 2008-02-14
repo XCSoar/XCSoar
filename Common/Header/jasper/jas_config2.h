@@ -118,7 +118,7 @@
  * Try to compensate for this here, by specifying the preprocessor symbols
  * normally defined by configure.
  */
-#if !defined(UNDER_CE)
+#if !defined(UNDER_CE) || defined(__BORLANDC__)
  #define	uchar		unsigned char
  #define	ushort		unsigned short
  #define	uint		unsigned int

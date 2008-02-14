@@ -18,6 +18,9 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <stdlib.h>
+#if defined(__BORLANDC__)
+#include <io.h>
+#endif
 #ifdef DEBUG
 #include <stdio.h>
 #endif
