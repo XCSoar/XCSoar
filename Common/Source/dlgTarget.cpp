@@ -162,9 +162,15 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 	(void)Sender;
   switch(wParam & 0xffff){
     case '2':
+#ifdef GNAV
+    case VK_F2:
+#endif
       MoveTarget(0);
     return(0);
     case '3':
+#ifdef GNAV
+    case VK_F3:
+#endif
       MoveTarget(180);
     return(0);
     case '6':

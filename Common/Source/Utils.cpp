@@ -4073,7 +4073,7 @@ double AirDensity(double altitude) {
 
 // divide TAS by this number to get IAS
 double AirDensityRatio(double altitude) {
-  double rho = pow((44330.8-altitude)/42266.5,1.0/0.234969);
+  double rho = AirDensity(altitude);
   double rho_rat = sqrt(1.225/rho);
   return rho_rat;
 }

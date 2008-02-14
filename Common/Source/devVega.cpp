@@ -194,7 +194,7 @@ static BOOL PDAAV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   // Temporarily commented out - function as yet undefined
   //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
   
-  return FALSE;
+  return TRUE;
 }
 
 static BOOL PDVSC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
@@ -209,7 +209,7 @@ static BOOL PDVSC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 
   if (_tcscmp(name, TEXT("ERROR")) == 0){
     // ignore error responses...
-    return FALSE;
+    return TRUE;
   }
 
   NMEAParser::ExtractParameter(String,ctemp,2);
@@ -230,7 +230,7 @@ static BOOL PDVSC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   dwvalue = *((DWORD*)&value);
   SetToRegistry(regname, dwvalue);
 
-  return FALSE;
+  return TRUE;
 }
 
 
@@ -264,7 +264,7 @@ static BOOL PDVDV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   NMEAParser::VarioUpdated = TRUE;
   PulseEvent(varioTriggerEvent);
 
-  return FALSE;
+  return TRUE;
 }
 
 
@@ -313,7 +313,7 @@ static BOOL PDVDS(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->VarioAvailable = TRUE;
   //hasVega = true;
 
-  return FALSE;
+  return TRUE;
 }
 
 static BOOL PDVVT(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
@@ -328,7 +328,7 @@ static BOOL PDVVT(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->RelativeHumidity = StrToDouble(ctemp,NULL); // %
   GPS_INFO->HumidityAvailable = TRUE;
 
-  return FALSE;
+  return TRUE;
 }
 
 // PDTSM,duration_ms,"free text"
@@ -350,7 +350,7 @@ static BOOL PDTSM(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
   // todo duration handling
   DoStatusMessage(TEXT("VEGA:"), pToken);
 
-  return FALSE;
+  return TRUE;
 
 }
 
@@ -399,7 +399,6 @@ BOOL vgaParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
       return PDTSM(d, &String[7], GPS_INFO);
     }
 
-  
   return FALSE;
 
 }
