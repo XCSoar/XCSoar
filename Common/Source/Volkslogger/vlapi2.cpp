@@ -11,7 +11,7 @@
  **   This file is distributed under the terms of the General Public
  **   Licence. See the file COPYING for more information.
  **
- **   $Id: vlapi2.cpp,v 1.1 2007/09/14 17:13:24 jwharington Exp $
+ **   $Id: vlapi2.cpp,v 1.2 2008/02/14 14:22:49 samgi Exp $
  **
  ***********************************************************************/
 
@@ -27,7 +27,6 @@
 #include "Volkslogger/grecord.h"
 
 #include "Volkslogger/utils.h"
-
 
 extern int noninteractive;
 

@@ -25,6 +25,9 @@
 #define ZZIP_USE_INTERNAL
 #include <zzip/info.h>
 
+#if defined(__BORLANDC__)
+  #define strcasecmp stricmp
+#endif
 /**
  * obtain information about a filename in an opened zip-archive without 
  * opening that file first. Mostly used to obtain the uncompressed 
