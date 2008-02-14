@@ -734,3 +734,130 @@ void CalibrationUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   calibration_speed_num[index_vspeed] ++;
 
 }
+
+
+
+
+double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+
+  if (Calculated->ValidFinish) return 0;
+  if (ActiveWayPoint<=0) return 0; // no e mc before start
+  if (!Calculated->ValidStart) return 0;
+  if (Calculated->TaskStartTime<0) return 0;
+
+  if (!ValidTaskPoint(ActiveWayPoint)
+      || !ValidTaskPoint(ActiveWayPoint-1)) return 0;
+  if (Calculated->TaskDistanceToGo<=0) {
+    return 0;
+  }
+
+  LockTaskData();
+
+  double telapsed = Basic->Time-Calculated->TaskStartTime;
+  double height_below_start = Calculated->TaskStartAltitude
+    -Calculated->NavAltitude;
+
+  double LegDistances[MAXTASKPOINTS];
+  double LegBearings[MAXTASKPOINTS];
+
+  for (int i=0; i<ActiveWayPoint; i++) {
+    double w1lat = WayPointList[Task[i+1].Index].Latitude;
+    double w1lon = WayPointList[Task[i+1].Index].Longitude;
+    double w0lat = WayPointList[Task[i].Index].Latitude;
+    double w0lon = WayPointList[Task[i].Index].Longitude;
+    if (AATEnabled) {
+      if (ValidTaskPoint(i+1)) {
+        w1lat = Task[i+1].AATTargetLat;
+        w1lon = Task[i+1].AATTargetLon;
+      }
+      if (i>0) {
+        w0lat = Task[i].AATTargetLat;
+        w0lon = Task[i].AATTargetLon;
+      }
+    }
+    DistanceBearing(w0lat,
+                    w0lon,
+                    w1lat,
+                    w1lon,
+                    &LegDistances[i], &LegBearings[i]);
+
+    if (i==ActiveWayPoint-1) {
+
+      double leg_covered = ProjectedDistance(w0lon, w0lat,
+                                             w1lon, w1lat,
+                                             Basic->Longitude,
+                                             Basic->Latitude);
+      LegDistances[i] = leg_covered;
+    }
+    if ((StartLine==0) && (i==0)) {
+      // Correct speed calculations for radius
+      // JMW TODO: replace this with more accurate version
+      // leg_distance -= StartRadius;
+      LegDistances[0] = max(0.1,LegDistances[0]-StartRadius);
+    }
+  }
+
+  // OK, distance/bearings calculated, now search for Mc
+
+  double mc_effective_found = 10.0;
+
+  for (double mc_effective=0.1; mc_effective<10.0; mc_effective+= 0.1) {
+
+    double height_remaining = height_below_start;
+    double time_total=0;
+
+    // Now add times from start to this waypoint,
+    // allowing for final glide where possible if aircraft height is below
+    // start
+
+    for(int i=ActiveWayPoint-1;i>=0; i--) {
+
+      double time_this;
+
+      double height_used_this =
+        GlidePolar::MacCreadyAltitude(mc_effective,
+                                      LegDistances[i],
+                                      LegBearings[i],
+                                      Calculated->WindSpeed,
+                                      Calculated->WindBearing,
+                                      0, NULL,
+                                      (height_remaining>0),
+                                      &time_this,
+                                      height_remaining);
+      height_remaining -= height_used_this;
+
+      if (time_this>=0) {
+        time_total += time_this;
+      } else {
+        // invalid! break out of loop early
+        time_total= time_this;
+        i= -1;
+        continue;
+      }
+    }
+
+    if (time_total<0) {
+      // invalid
+      continue;
+    }
+    if (time_total>telapsed) {
+      // already too slow
+      continue;
+    }
+
+    // add time for climb from start height to height above start
+    if (height_below_start<0) {
+      time_total -= height_below_start/mc_effective;
+    }
+    // now check time..
+    if (time_total<telapsed) {
+      mc_effective_found = mc_effective;
+      break;
+    }
+
+  }
+
+  UnlockTaskData();
+
+  return mc_effective_found;
+}

@@ -209,4 +209,10 @@ double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp);
 int getFinalWaypoint(void);
 bool ValidStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
+double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
+                                DERIVED_INFO *Calculated,
+                                double *retlat, double *retlon,
+                                double maxrange,
+				bool *outofrange);
+
 #endif

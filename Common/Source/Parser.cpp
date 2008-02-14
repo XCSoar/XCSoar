@@ -232,18 +232,6 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
     {
       return RMZ(&String[7], GPS_INFO);
     }
-  if(_tcscmp(SentanceString,TEXT("WP0"))==0)
-    {
-      return WP0(&String[7], GPS_INFO);
-    }
-  if(_tcscmp(SentanceString,TEXT("WP1"))==0)
-    {
-      return WP1(&String[7], GPS_INFO);
-    }
- if(_tcscmp(SentanceString,TEXT("WP2"))==0)
-    {
-      return WP2(&String[7], GPS_INFO);
-    }
   return FALSE;
 }
 
@@ -751,43 +739,6 @@ BOOL NMEAParser::RMA(TCHAR *String, NMEA_INFO *GPS_INFO)
 }
 
 
-BOOL NMEAParser::WP0(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  TCHAR ctemp[80];
-
-  GPS_INFO->BaroAltitudeAvailable = TRUE;
-  ExtractParameter(String,ctemp,2);
-  GPS_INFO->BaroAltitude = StrToDouble(ctemp, NULL);
-  ExtractParameter(String,ctemp,1);
-  GPS_INFO->IndicatedAirspeed = StrToDouble(ctemp, NULL)/TOKPH;
-  // JMW TODO check, is this indicated or true airspeed?
-
-  return FALSE;
-}
-
-
-BOOL NMEAParser::WP1(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  TCHAR ctemp[80];
-  (void)GPS_INFO;
-
-  ExtractParameter(String,ctemp,0);
-  return FALSE;
-}
-
-
-BOOL NMEAParser::WP2(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  TCHAR ctemp[80];
-  (void)GPS_INFO;
-
-  ExtractParameter(String,ctemp,0);
-  MACCREADY = StrToDouble(ctemp,NULL);
-  return FALSE;
-}
-
-
-
 BOOL NMEAParser::NMEAChecksum(TCHAR *String)
 {
   unsigned char CalcCheckSum = 0;
@@ -860,6 +811,7 @@ BOOL NMEAParser::PTAS1(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   return FALSE;
 }
+
 
 BOOL NMEAParser::PZAN1(TCHAR *String, NMEA_INFO *GPS_INFO)
 {

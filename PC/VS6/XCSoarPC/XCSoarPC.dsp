@@ -218,7 +218,15 @@ SOURCE=..\..\..\Common\Source\devEW.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Common\Source\devEWMicroRecorder.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Common\Source\device.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Common\Source\devLX.cpp
 # End Source File
 # Begin Source File
 

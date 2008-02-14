@@ -71,6 +71,7 @@ Copyright_License {
 #include "devBorgeltB50.h"
 #include "devVolkslogger.h"
 #include "devEWMicroRecorder.h"
+#include "devLX.h"
 #include "Externs.h"
 #include "units.h"
 #include "InputEvents.h"
@@ -1199,7 +1200,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   //#ifdef DEBUG
   // JMW testing only for portrait mode of Altair
-  //RotateScreen();
+  //    RotateScreen();
   //#endif
 
   // Version String
@@ -1386,6 +1387,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   b50Register();
   vlRegister();
   ewMicroRecorderRegister();
+  lxRegister();
 
   //JMW disabled  devInit(lpCmdLine);
 
@@ -2995,6 +2997,8 @@ void SIMProcessTimer(void)
 #ifdef DEBUG
   // use this to test FLARM parsing/display
   //    NMEAParser::TestRoutine(&GPS_INFO);
+  //  double testadr = AirDensityRatio(1562.0);
+  //  testadr = AirDensityRatio(0);
 #endif
 
   NMEAParser::GpsUpdated = TRUE;

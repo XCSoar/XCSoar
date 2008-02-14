@@ -172,9 +172,6 @@ class NMEAParser {
   BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO);
   BOOL RMA(TCHAR *String, NMEA_INFO *GPS_INFO);
   BOOL RMZ(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL WP0(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL WP1(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO);
 
   // Additional sentances
   BOOL PZAN1(TCHAR *String, NMEA_INFO *GPS_INFO);  // RMN: Zander variometer. QNE-altitude

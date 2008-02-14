@@ -229,7 +229,7 @@ class MapWindow {
   static void DrawThermalBand(HDC hDC,RECT rc);
   static void DrawGlideThroughTerrain(HDC hDC, RECT rc);
   static void DrawCDI();
-  static void DrawSpeedToFly(HDC hDC, RECT rc);
+  //  static void DrawSpeedToFly(HDC hDC, RECT rc);
   static void DrawFLARMTraffic(HDC hDC, RECT rc);
 
   static void DrawSolidLine(const HDC&hdc , const POINT&start , const POINT&end );

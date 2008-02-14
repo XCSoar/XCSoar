@@ -1893,8 +1893,35 @@ void MapWindow::RenderMapWindow(  RECT rc)
     if(TrailActive) {
         // TODO: For some reason, the shadow drawing of the
         // trail doesn't work in portrait mode.  No idea why.
+      if (1) {
         DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
         DrawTrailFromTask(hdcDrawWindowBg, rc);
+      } else {
+        /*
+        //  Draw trail with white outline --- very slow!
+        // clear background bitmap
+        SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
+        Rectangle(hDCTemp, rc.left, rc.top, rc.right, rc.bottom);
+
+        SetBkColor(hDCMask, RGB(0xff,0xff,0xff));
+
+        // draw trail on background bitmap
+        DrawTrail(hDCTemp, Orig_Aircraft, rc);
+        DrawTrailFromTask(hDCTemp, rc);
+
+        // make mask
+        BitBlt(hDCMask, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
+               hDCTemp, rc.left, rc.top, SRCCOPY);
+
+        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+               hDCMask, 1, 1, SRCAND);
+        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+               hDCTemp, rc.left, rc.top, SRCPAINT);
+        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+               hDCTemp, rc.left, rc.top, SRCAND);
+        */
+      }
+
     }
 
     DrawThermalEstimate(hdcDrawWindowBg, rc);
@@ -1976,7 +2003,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
   DrawFinalGlide(hdcDrawWindow,rc);
 
-  DrawSpeedToFly(hdcDrawWindow, rc);
+  //  DrawSpeedToFly(hdcDrawWindow, rc);
 
   DrawGPSStatus(hdcDrawWindow, rc);
 
@@ -4245,291 +4272,6 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
 
 
-int MapWindow::iSnailNext=0;
-double MapWindow::TrailFirstTime = 0;
-
-void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
-{
-  int i, j;
-  SNAIL_POINT *P1,*P2;
-  static BOOL lastCircling = FALSE;
-  static float vmax= 5.0;
-  static float vmin= -5.0;
-  static bool needcolour = true;
-
-  if(!TrailActive)
-    return;
-
-  if ((DisplayMode == dmCircling) != lastCircling) {
-    needcolour = true;
-  }
-  lastCircling = (DisplayMode == dmCircling);
-
-  double traildrift_lat;
-  double traildrift_lon;
-
-  bool dotraildrift = EnableTrailDrift && (DisplayMode == dmCircling);
-
-  P1 = NULL; P2 = NULL;
-
-  if (dotraildrift) {
-    double tlat1, tlon1;
-
-    FindLatitudeLongitude(DrawInfo.Latitude,
-                          DrawInfo.Longitude,
-                          DerivedDrawInfo.WindBearing,
-                          DerivedDrawInfo.WindSpeed,
-                          &tlat1, &tlon1);
-    traildrift_lat = (DrawInfo.Latitude-tlat1);
-    traildrift_lon = (DrawInfo.Longitude-tlon1);
-  }
-
-  // JMW don't draw first bit from home airport
-
-  int ntrail;
-  if (TrailActive!=2) {
-    ntrail = TRAILSIZE;
-  } else {
-    ntrail = TRAILSIZE/TRAILSHRINK;
-  }
-  if ((DisplayMode == dmCircling)) {
-    ntrail /= TRAILSHRINK;
-  }
-
-#if 0
-  if (needcolour && 0) {
-    // NOT NECESSARY THIS CODE!
-    /*
-    if (DerivedDrawInfo.Circling) {
-      ntrail = TRAILSIZE; // scan entire trail for sink magnitude
-    } else {
-      ntrail = TRAILSIZE/TRAILSHRINK; // scan only recently for lift magnitude
-    }
-    */
-
-    float this_vmax=(float)0.1;
-    float this_vmin=(float)-0.1;
-    for(i=1;i< ntrail; i++) {
-      j= (TRAILSIZE+iSnailNext-ntrail+i)% TRAILSIZE;
-      P1 = SnailTrail+j;
-      float cv = P1->Vario;
-      if (cv<this_vmin) {
-        this_vmin = cv;
-      }
-      if (cv>this_vmax) {
-        this_vmax = cv;
-      }
-      P1->Colour = -1; // force recalculation of colour
-    }
-    if (DisplayMode == dmCircling) {
-      // scan only for sink after exiting cruise
-      vmin = (float)(min(this_vmin,-5));
-    } else {
-      // scan only for lift after exiting climb
-      vmax = (float)(max(this_vmax,5));
-    }
-    needcolour = false;
-  }
-#endif
-
-  float this_vmax = (1.5*min(5.0, max(MACCREADY,0.5)));
-  float this_vmin = (-1.5*min(5.0, max(MACCREADY,2.0)));
-  vmax = this_vmax;
-  vmin = this_vmin;
-
-  int skipdivisor = ntrail/5;
-  int skipborder = skipdivisor;
-  int skiplevel= 3; // JMW TODO, try lower level?
-  bool lastbroken = true; // force last one to skip
-  POINT lastdrawn;
-
-  lastdrawn.x = 0;
-  lastdrawn.y = 0;
-  int kd = TRAILSIZE+iSnailNext-ntrail;
-  while (kd>= TRAILSIZE) {
-    kd -= TRAILSIZE;
-  }
-  while (kd< 0) {
-    kd += TRAILSIZE;
-  }
-  int zerooffset = (TRAILSIZE-kd);
-  skipborder += zerooffset % skiplevel;
-  // TODO: Divide by time step cruise/circling for zerooffset
-
-  bool thisvisible = true;
-
-  int is = ((int)DrawInfo.Time)%skiplevel;
-  for(i=1;i< ntrail; ++i)
-  {
-    if (i>=skipborder) {
-      skiplevel=max(1,skiplevel-1);
-      skipborder= i+skipdivisor + 2*(zerooffset % skiplevel);
-      is = skiplevel;
-    }
-
-    is++;
-    if (is < skiplevel) {
-      continue;
-    } else {
-      is=0;
-    }
-
-    j= kd+i;
-    while (j>=TRAILSIZE) {
-      j-= TRAILSIZE;
-    }
-
-    P1 = SnailTrail+j;
-    if (i==1) {
-      TrailFirstTime = P1->Time;
-    }
-
-    if (DisplayMode == dmCircling) {
-      if ((!P1->Circling)&&( i<ntrail-60 )) {
-        // ignore cruise mode lines unless very recent
-
-        lastbroken = true;
-        P2 = NULL;
-        continue;
-      }
-    } else {
-      if ((P1->Circling)&&( j%5 != 0 )) {
-        // JMW TODO: This won't work properly!
-        // draw only every 5 points from circling when in cruise mode
-        continue;
-      }
-    }
-
-    if (!P1->FarVisible) {
-      lastbroken = true;
-      P2 = NULL;
-      continue;
-    }
-
-    if (!PointVisible(P1->Longitude ,
-                      P1->Latitude)) {
-      if (lastbroken) {
-        // the line is invalid
-        P2 = P1;
-        continue;
-      } else {
-        thisvisible = false;
-        // this one is not visible but last was
-      }
-    } else {
-      thisvisible = true;
-    }
-
-    // now we know both points are visible, better get screen coords
-    // if we don't already.
-
-    if (dotraildrift) {
-      double dt;
-      dt = max(0,(DrawInfo.Time-P1->Time));
-      LatLon2Screen(P1->Longitude+traildrift_lon*dt,
-                    P1->Latitude+traildrift_lat*dt,
-                    P1->Screen);
-    } else {
-      LatLon2Screen(P1->Longitude,
-                    P1->Latitude,
-                    P1->Screen);
-    }
-
-    if (abs(P1->Screen.y-lastdrawn.y)
-        +abs(P1->Screen.x-lastdrawn.x)<IBLSCALE(4)) {
-      continue;
-      // don't draw if very short line
-    }
-
-    // ok, we got this far, so draw the line
-
-    // get the colour if it doesn't exist
-    if ((P1->Colour<0)||(P1->Colour>=NUMSNAILCOLORS)) {
-      float cv = P1->Vario;
-      if (cv<0) {
-        cv /= (-vmin); // JMW fixed bug here
-      } else {
-        cv /= vmax;
-      }
-      P1->Colour = max(0,min((short)(NUMSNAILCOLORS-1),
-                             (short)((cv+1.0)/2.0*NUMSNAILCOLORS)));
-    }
-    SelectObject(hdc, hSnailPens[P1->Colour]);
-
-    if (lastbroken && P2) { // draw set cursor at P1
-      if (dotraildrift) {
-        double dt;
-        dt = max(0,(DrawInfo.Time-P2->Time));
-        LatLon2Screen(P2->Longitude+traildrift_lon*dt,
-                      P2->Latitude+traildrift_lat*dt,
-                      P2->Screen);
-      } else {
-        LatLon2Screen(P2->Longitude,
-                      P2->Latitude,
-                      P2->Screen);
-      }
-    }
-
-#ifndef NOLINETO
-    if (lastbroken) { // draw set cursor at P1
-      if (P2) {
-        MoveToEx(hdc, P2->Screen.x, P2->Screen.y, NULL);
-        LineTo(hdc, P1->Screen.x, P1->Screen.y);
-      } else {
-        MoveToEx(hdc, P1->Screen.x, P1->Screen.y, NULL);
-      }
-    } else {
-      LineTo(hdc, P1->Screen.x, P1->Screen.y);
-    }
-#else
-    if (P2) {
-      DrawSolidLine(hdc, P1->Screen, P2->Screen);
-    }
-#endif
-    lastdrawn = P1->Screen;
-    P2 = P1;
-    if (thisvisible) {
-      lastbroken = false;
-    } else {
-      lastbroken = true;
-    }
-  }
-
-  // draw final point to glider
-#ifndef NOLINETO
-  if (!lastbroken) {
-    LineTo(hdc, Orig.x, Orig.y);
-  }
-#endif
-
-}
-
-
-extern OLCOptimizer olc;
-
-void MapWindow::DrawTrailFromTask(HDC hdc, RECT rc) {
-  static POINT ptin[MAXCLIPPOLYGON];
-
-  if((TrailActive!=3) || (DisplayMode == dmCircling))
-    return;
-
-  olc.SetLine();
-  int n = min(MAXCLIPPOLYGON,olc.getN());
-  int i, j=0;
-  for (i=0; i<n; i++) {
-    if (olc.getTime(i)>= TrailFirstTime)
-      break;
-
-    LatLon2Screen(olc.getLongitude(i),
-                  olc.getLatitude(i),
-                  ptin[j]);
-    j++;
-  }
-  if (j>=2) {
-    SelectObject(hdc,hSnailPens[NUMSNAILCOLORS/2]);
-    ClipPolygon(hdc, ptin, j, rc, false);
-  }
-}
 
 
 bool MapWindow::PointInRect(const double &lon, const double &lat,
@@ -4736,38 +4478,4 @@ void MapWindow::DrawTrack(HDC hdc, POINT Orig)
 }
 
 
-/*
 
-  Draw trail with white outline --- very slow!
-
-        // clear background bitmap
-        SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
-        Rectangle(hDCTemp, rc.left, rc.top, rc.right, rc.bottom);
-        SelectObject(hDCMask, GetStockObject(WHITE_BRUSH));
-        Rectangle(hDCMask, 0, 0, rc.right-rc.left+1, rc.bottom-rc.top+1);
-
-        SetTextColor(hDCMask,
-                     RGB(0x00,0x00,0x00));
-        SetBkColor(hDCMask,
-                   RGB(0xff,0xff,0xff));
-
-        // draw trail on background bitmap
-        DrawTrail(hDCTemp, Orig_Aircraft, rc);
-        DrawTrailFromTask(hDCTemp, rc);
-
-        // make mask
-        BitBlt(hDCMask, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
-               hDCTemp, rc.left, rc.top, SRCCOPY);
-
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
-               hDCTemp, rc.left, rc.top, SRCINVERT);
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
-               hDCMask, 0, 0, SRCAND);
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
-               hDCMask, 1, 1, SRCAND);
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
-               hDCTemp, rc.left, rc.top, SRCINVERT);
-
-      }
-    }
-*/
