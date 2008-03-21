@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.27 2008/02/08 07:10:17 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.28 2008/03/21 07:20:34 jwharington Exp $
 
 
 Copyright_License {
@@ -110,7 +110,8 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
 
   for(i=0;i<(int)NumberOfWayPoints;i++)
     {
-      if ((WayPointList[i].Flags & AIRPORT) == AIRPORT) {
+      if (((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
+	  ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)) {
 	_tcscpy(UName, WayPointList[i].Name);
 	CharUpper(UName);
 

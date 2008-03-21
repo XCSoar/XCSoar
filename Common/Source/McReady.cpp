@@ -175,7 +175,8 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
                                               double *BestCruiseTrack,
                                               double *VMacCready, 
                                               bool isFinalGlide,
-                                              double *TimeToGo)
+                                              double *TimeToGo,
+					      double cruise_efficiency)
 {
 
   int i;
@@ -219,7 +220,7 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   TimeToDestCruise = -1; // initialise to error value
 
   for(i=Vminsink;i<SAFTEYSPEED;i++) {
-    double vtrack = (double)i; // TAS along bearing in cruise
+    double vtrack = ((double)i)*cruise_efficiency; // TAS along bearing in cruise
 	    
     // glide angle = velocity projected along path / sink rate
     // need to work out best velocity along path given wind vector
@@ -347,15 +348,16 @@ double GlidePolar::FindSpeedForSinkRate(double w) {
 
 
 double GlidePolar::MacCreadyAltitude_heightadjust(double emcready, 
-                                              double Distance, 
-                                              double Bearing, 
-                                              double WindSpeed, 
-                                              double WindBearing, 
-                                              double *BestCruiseTrack,
-                                              double *VMacCready, 
-                                              bool isFinalGlide,
+						  double Distance, 
+						  double Bearing, 
+						  double WindSpeed, 
+						  double WindBearing, 
+						  double *BestCruiseTrack,
+						  double *VMacCready, 
+						  bool isFinalGlide,
                                                   double *TimeToGo,
-                                                  double AltitudeAboveTarget)
+                                                  double AltitudeAboveTarget,
+						  double cruise_efficiency)
 {
   double Altitude;
   double TTG = 0;
@@ -371,7 +373,8 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
                                           BestCruiseTrack,
                                           VMacCready,
                                           false,
-                                          &TTG);
+                                          &TTG,
+					  cruise_efficiency);
   } else {
 
     // if final glide mode and can final glide part way
@@ -383,7 +386,8 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
                                             BestCruiseTrack,
                                             VMacCready,
                                             true,
-                                            &t_t);
+                                            &t_t,
+					    cruise_efficiency);
 
     if (h_t<=0) {
       // error condition, no distance to travel
@@ -408,7 +412,8 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
                                                 BestCruiseTrack,
                                                 VMacCready,
                                                 false,
-                                                &t_c);
+                                                &t_c,
+						cruise_efficiency);
         if (h_c<0) {
           // impossible at this Mc, so must be final glided
           Altitude = -1;
@@ -444,7 +449,8 @@ double GlidePolar::MacCreadyAltitude(double emcready,
                                      double *VMacCready, 
                                      bool isFinalGlide,
                                      double *TimeToGo,
-                                     double AltitudeAboveTarget) {
+                                     double AltitudeAboveTarget,
+				     double cruise_efficiency) {
 
   double TTG = ERROR_TIME;
   double Altitude = -1;
@@ -459,7 +465,8 @@ double GlidePolar::MacCreadyAltitude(double emcready,
                                               VMacCready,
                                               isFinalGlide,
                                               &TTG,
-                                              AltitudeAboveTarget);
+                                              AltitudeAboveTarget,
+					      cruise_efficiency);
     if (Altitude<0) {
       invalidAltitude = true;
     } else {
@@ -481,7 +488,8 @@ double GlidePolar::MacCreadyAltitude(double emcready,
                                             BestCruiseTrack,
                                             VMacCready,
                                             true,
-                                            &TTG, 1.0e6);
+                                            &TTG, 1.0e6,
+					    cruise_efficiency);
 
   if (invalidAltitude) {
     TTG += ERROR_TIME;

@@ -118,4 +118,6 @@ double DoubleLegDistance(int taskwaypoint,
 
 void CalculateAATIsoLines(void);
 
+void SaveDefaultTask(void);
+
 #endif

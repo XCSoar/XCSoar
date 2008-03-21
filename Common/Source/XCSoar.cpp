@@ -571,9 +571,10 @@ SCREEN_INFO Data_Options[] = {
 	  {ugNone,            TEXT("AA Delta Time"), TEXT("AA dT"), new FormatterAATTime(TEXT("%2.0f")), NoProcessing, 28, 18},
           // 63
 	  {ugVerticalSpeed,   TEXT("Thermal All"), TEXT("TC All"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
-
+          // 64
+	  {ugVerticalSpeed,   TEXT("Distance Vario"), TEXT("D Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
 	};
-int NUMSELECTSTRINGS = 64;
+int NUMSELECTSTRINGS = 65;
 
 
 CRITICAL_SECTION  CritSec_FlightData;
@@ -1217,7 +1218,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // experimental CVS 
 
-  wcscat(XCSoar_Version, TEXT("5.1.6 "));
+  wcscat(XCSoar_Version, TEXT("5.1.7 Beta3 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1826,19 +1827,21 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 
 int getInfoType(int i) {
+  int retval = 0;
   if (i<0) return 0; // error
 
   if (EnableAuxiliaryInfo) {
-    return (InfoType[i] >> 24) & 0xff; // auxiliary
+    retval = (InfoType[i] >> 24) & 0xff; // auxiliary
   } else {
     if (DisplayMode == dmCircling)
-      return InfoType[i] & 0xff; // climb
+      retval = InfoType[i] & 0xff; // climb
     else if (DisplayMode == dmFinalGlide) {
-      return (InfoType[i] >> 16) & 0xff; //final glide
+      retval = (InfoType[i] >> 16) & 0xff; //final glide
     } else {
-      return (InfoType[i] >> 8) & 0xff; // cruise
+      retval = (InfoType[i] >> 8) & 0xff; // cruise
     }
   }
+  return min(NUMSELECTSTRINGS-1,retval);
 }
 
 
@@ -1876,7 +1879,7 @@ void DoInfoKey(int keycode) {
   // XXX This could crash if MapWindow does not capture
 
   LockFlightData();
-  Data_Options[i].Process(keycode);
+  Data_Options[min(NUMSELECTSTRINGS-1,i)].Process(keycode);
   UnlockFlightData();
 
   UnlockNavBox();
@@ -1974,17 +1977,10 @@ void Shutdown(void) {
 
   CreateProgressDialog(gettext(TEXT("Shutdown, saving task...")));
   StartupStore(TEXT("Save default task\n"));
-
   LockTaskData();
   ResumeAbortTask(-1); // turn off abort if it was on.
-  TCHAR buffer[MAX_PATH];
-#ifdef GNAV
-  LocalPath(buffer, TEXT("persist/Default.tsk"));
-#else
-  LocalPath(buffer, TEXT("Default.tsk"));
-#endif
-  SaveTask(buffer);
   UnlockTaskData();
+  SaveDefaultTask();
 
   StartupStore(TEXT("Clear task data\n"));
 
@@ -2536,18 +2532,7 @@ void DisplayText(void)
 
   for(i=0;i<numInfoWindows;i++) {
     
-    if (EnableAuxiliaryInfo) {
-      DisplayType[i] = (InfoType[i] >> 24) & 0xff;
-    } else {
-      if (DisplayMode == dmCircling)
-	DisplayType[i] = InfoType[i] & 0xff;
-      else if (DisplayMode == dmFinalGlide) {
-	DisplayType[i] = (InfoType[i] >> 16) & 0xff;
-      } else {
-	DisplayType[i] = (InfoType[i] >> 8) & 0xff;
-      }
-    }
-    
+    DisplayType[i] = getInfoType(i);
     Data_Options[DisplayType[i]].Formatter->AssignValue(DisplayType[i]);
     
     TCHAR sTmp[32];

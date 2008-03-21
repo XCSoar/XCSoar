@@ -178,6 +178,8 @@ typedef struct _DERIVED_INFO
   double TaskTimeToGoTurningNow;
   double TotalHeightClimb;
   double DistanceVario;
+  double GliderSinkRate;
+  double Gload;
 } DERIVED_INFO;
 
 

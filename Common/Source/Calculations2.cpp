@@ -735,10 +735,11 @@ void CalibrationUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 }
 
+//////////////////////
 
 
-
-double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+					  bool cruise_efficiency_mode) {
 
   if (Calculated->ValidFinish) return 0;
   if (ActiveWayPoint<=0) return 0; // no e mc before start
@@ -799,12 +800,32 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   // OK, distance/bearings calculated, now search for Mc
 
-  double mc_effective_found = 10.0;
+  double value_found;
+  if (cruise_efficiency_mode) {
+    value_found = 1.0;
+  } else {
+    value_found = 10.0;
+  }
 
-  for (double mc_effective=0.1; mc_effective<10.0; mc_effective+= 0.1) {
+  for (double value_scan=0.01; value_scan<1.0; value_scan+= 0.01) {
 
     double height_remaining = height_below_start;
     double time_total=0;
+
+    double mc_effective;
+    double cruise_efficiency;
+
+    if (cruise_efficiency_mode) {
+      mc_effective = MACCREADY;
+      if (Calculated->FinalGlide && (Calculated->timeCircling>0)) {
+	mc_effective = min(mc_effective, LIFTMODIFY*CALCULATED_INFO.TotalHeightClimb
+			   /CALCULATED_INFO.timeCircling);
+      }
+      cruise_efficiency = 0.5+value_scan;
+    } else {
+      mc_effective = value_scan*100.0;
+      cruise_efficiency = 1.0;
+    }
 
     // Now add times from start to this waypoint,
     // allowing for final glide where possible if aircraft height is below
@@ -823,7 +844,9 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
                                       0, NULL, 
                                       (height_remaining>0), 
                                       &time_this,
-                                      height_remaining);
+                                      height_remaining, 
+				      cruise_efficiency);
+
       height_remaining -= height_used_this;
             
       if (time_this>=0) { 
@@ -851,7 +874,11 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     }
     // now check time..
     if (time_total<telapsed) {       
-      mc_effective_found = mc_effective;
+      if (cruise_efficiency_mode) {
+	value_found = cruise_efficiency;
+      } else {
+	value_found = mc_effective;
+      }
       break;
     }
 
@@ -859,5 +886,19 @@ double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   UnlockTaskData();
 
-  return mc_effective_found;
+  return value_found;
+}
+
+
+double EffectiveCruiseEfficiency(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  double value = EffectiveMacCready_internal(Basic, Calculated, true);
+  if (value<0.5) {
+    return 1.0;
+  }
+  return value;
+}
+
+
+double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  return EffectiveMacCready_internal(Basic, Calculated, false);
 }

@@ -29,7 +29,9 @@ class GaugeVario {
   static void RenderSpeedToFly(int x, int y);
   static void RenderBallast(void);
   static void RenderBugs(void);
-  static void RenderNeedle(double Value, bool average);
+  static int  ValueToNeedlePos(double Value);
+  static void RenderNeedle(int i, bool average, bool clear);
+  static void RenderVarioLine(int i, int sink, bool clear);
   static void RenderClimb(void);
 
   static int xoffset;
@@ -39,6 +41,7 @@ class GaugeVario {
   static void MakeAllPolygons();
   static POINT* getPolygon(const int i);
   static POINT *polys;
+  static POINT *lines;
   static bool dirty;
   static HDC hdcScreen;
   static HDC hdcDrawWindow;
@@ -59,6 +62,9 @@ class GaugeVario {
   static HBRUSH blueBrush;
   static HPEN redPen;
   static HPEN bluePen;
+  static HPEN redThickPen;
+  static HPEN blueThickPen;
+  static HPEN blankThickPen;
 
 };
 

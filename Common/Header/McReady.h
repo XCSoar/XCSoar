@@ -15,7 +15,8 @@ class GlidePolar {
                                   double WindBearing, double *BestCruiseTrack, 
                                   double *VMacCready, bool isFinalGlide, 
                                   double *timetogo, 
-                                  double AltitudeAboveTarget=1.0e6);
+                                  double AltitudeAboveTarget=1.0e6,
+				  double cruise_efficiency=1.0);
 
   static double MacCreadyRisk(double HeightAboveTerrain, double MaxThermalHeight,
                               double MCREADY);
@@ -56,7 +57,8 @@ class GlidePolar {
                                            double *BestCruiseTrack, 
                                            double *VMacCready, 
                                            bool isFinalGlide, 
-                                           double *timetogo);
+                                           double *timetogo,
+					   double cruise_efficiency);
 
   static double MacCreadyAltitude_heightadjust(double MCREADY, 
                                                double Distance, 
@@ -67,7 +69,8 @@ class GlidePolar {
                                                double *VMacCready, 
                                                bool isFinalGlide, 
                                                double *timetogo,
-                                               double AltitudeAboveTarget);
+                                               double AltitudeAboveTarget,
+					       double cruise_efficiency);
 
 };
 

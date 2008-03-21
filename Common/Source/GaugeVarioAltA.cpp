@@ -62,6 +62,7 @@ int GaugeVario::xoffset;
 int GaugeVario::yoffset;
 int GaugeVario::gmax;
 POINT* GaugeVario::polys=NULL;
+POINT* GaugeVario::lines=NULL;
 
 HBITMAP GaugeVario::hBitmapUnit;
 HBITMAP GaugeVario::hBitmapClimb;
@@ -71,7 +72,9 @@ HBRUSH GaugeVario::redBrush;
 HBRUSH GaugeVario::blueBrush;
 HPEN GaugeVario::redPen;
 HPEN GaugeVario::bluePen;
-
+HPEN GaugeVario::redThickPen;
+HPEN GaugeVario::blueThickPen;
+HPEN GaugeVario::blankThickPen;
 
 DrawInfo_t GaugeVario::diValueTop = {false};
 DrawInfo_t GaugeVario::diValueMiddle = {false};
@@ -158,6 +161,10 @@ void GaugeVario::Create() {
                      theredColor);
   bluePen = CreatePen(PS_SOLID, 1,
                       theblueColor);
+  redThickPen = CreatePen(PS_SOLID, IBLSCALE(5),
+                     theredColor);
+  blueThickPen = CreatePen(PS_SOLID, IBLSCALE(5),
+			   theblueColor);
 
   if (Appearance.InverseInfoBox){
     colText = RGB(0xff, 0xff, 0xff);
@@ -170,6 +177,9 @@ void GaugeVario::Create() {
     colTextGray = RGB(~0xa0, ~0xa0, ~0xa0);
     hBitmapClimb = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_CLIMBSMALL));
   }
+
+  blankThickPen = CreatePen(PS_SOLID, IBLSCALE(5),
+			    colTextBackgnd);
 
   SetTextColor(hdcDrawWindow, colText);
   SetBkColor(hdcDrawWindow, colTextBackgnd);
@@ -220,6 +230,10 @@ void GaugeVario::Destroy() {
   if (polys) {
     free(polys);
     polys=NULL;
+  }
+  if (lines) {
+    free(lines);
+    lines=NULL;
   }
   ReleaseDC(hWndVarioWindow, hdcScreen);
   DeleteDC(hdcDrawWindow);
@@ -339,16 +353,46 @@ void GaugeVario::Render() {
   }
 
   dirty = false;
+  int ival, sval, ival_av;
+  static int vval_last = 0;
+  static int sval_last = 0;
+  static int ival_last = 0;
+
+  ival = ValueToNeedlePos(vval);
+  sval = ValueToNeedlePos(CALCULATED_INFO.GliderSinkRate);
   if (Appearance.GaugeVarioAveNeedle) {
-    double aval;
     if (!CALCULATED_INFO.Circling) {
-      aval = CALCULATED_INFO.NettoAverage30s;
+      ival_av = ValueToNeedlePos(CALCULATED_INFO.NettoAverage30s);
     } else {
-      aval = CALCULATED_INFO.Average30s;
+      ival_av = ValueToNeedlePos(CALCULATED_INFO.Average30s);
     }
-    RenderNeedle(aval, true);
   }
-  RenderNeedle(vval, false);
+
+  // clear items first
+
+  if (Appearance.GaugeVarioAveNeedle) {
+    if (ival_av != ival_last) {
+      RenderNeedle(ival_last, true, true);
+    }
+    ival_last = ival_av;
+  }
+
+  if ((sval != sval_last) || (ival != vval_last)) {
+    RenderVarioLine(vval_last, sval_last, true);
+  }
+  sval_last = sval;
+
+  if (ival != vval_last) {
+    RenderNeedle(vval_last, false, true);
+  }
+  vval_last = ival;
+
+  // now draw items
+  RenderVarioLine(ival, sval, false);
+  if (Appearance.GaugeVarioAveNeedle) {
+    RenderNeedle(ival_av, true, false);
+  }
+  RenderNeedle(ival, false, false);
 
   if (Appearance.GaugeVarioGross) {
     RenderValue(orgMiddle.x, orgMiddle.y, 
@@ -371,19 +415,22 @@ void GaugeVario::RenderBg() {
 
 void GaugeVario::MakePolygon(const int i) {
   static bool InitDone = false;
-  static int nlength0, nlength1, nwidth;
+  static int nlength0, nlength1, nwidth, nline;
   double dx, dy;
   POINT *bit = getPolygon(i); 
+  POINT *bline = &lines[i+gmax];
 
   if (!InitDone){
     if (Appearance.GaugeVarioNeedleStyle == gvnsLongNeedle) {
       nlength0 = IBLSCALE(15); // was 18
       nlength1 = IBLSCALE(6);
       nwidth = IBLSCALE(4);  // was 3
+      nline = IBLSCALE(8);
     } else {
       nlength0 = IBLSCALE(13);
       nlength1 = IBLSCALE(6);
       nwidth = IBLSCALE(4);
+      nline = IBLSCALE(8);
     }    
     InitDone = true;
   }
@@ -401,6 +448,10 @@ void GaugeVario::MakePolygon(const int i) {
   dx = -xoffset+nlength1; dy = 0;
   rotate(dx, dy, i);
   bit[1].x = lround(dx)+xoffset; bit[1].y = lround(dy*ELLIPSE)+yoffset+1;
+
+  dx = -xoffset+nline; dy = 0;
+  rotate(dx, dy, i);
+  bline->x = lround(dx)+xoffset; bline->y = lround(dy*ELLIPSE)+yoffset+1;
 }
 
 
@@ -410,8 +461,10 @@ POINT *GaugeVario::getPolygon(int i) {
 
 void GaugeVario::MakeAllPolygons() {
   polys = (POINT*)malloc((gmax*2+1)*3*sizeof(POINT));
+  lines = (POINT*)malloc((gmax*2+1)*sizeof(POINT));
   ASSERT(polys);
-  if (polys) {
+  ASSERT(lines);
+  if (polys && lines) {
     for (int i= -gmax; i<= gmax; i++) {
       MakePolygon(i);
     }
@@ -485,19 +538,10 @@ void GaugeVario::RenderZero(void) {
   Polyline(hdcDrawWindow,lp,2);
 }
 
-
-void GaugeVario::RenderNeedle(double Value, bool average) {
-
-  static POINT lastBit[3];
-  static POINT lastBitave[3];
-  static POINT lp[2];
+int  GaugeVario::ValueToNeedlePos(double Value) {
   static bool InitDone = false;
   static int degrees_per_unit;
-  POINT *bit;
   int i;
-
-  dirty = true;
-
   if (!InitDone){
     degrees_per_unit = 
       (int)((GAUGEVARIOSWEEP/2.0)/(GAUGEVARIORANGE*LIFTMODIFY));
@@ -505,46 +549,51 @@ void GaugeVario::RenderNeedle(double Value, bool average) {
       max(80,(int)(degrees_per_unit*(GAUGEVARIORANGE*LIFTMODIFY))+2);
     MakeAllPolygons();
     InitDone = true;
-  }
-
+  };
   i = iround(Value*degrees_per_unit*LIFTMODIFY);
   i = min(gmax,max(-gmax,i));
+  return i;
+}
 
-  // clear last one
-  if (Appearance.InverseInfoBox){
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+
+void GaugeVario::RenderVarioLine(int i, int sink, bool clear) {
+  dirty = true;
+  if (i==sink) return; // nothing to do
+
+  if (clear){
+    SelectObject(hdcDrawWindow, blankThickPen);
   } else {
+    if (i>sink) {
+      SelectObject(hdcDrawWindow, blueThickPen);
+    } else {
+      SelectObject(hdcDrawWindow, redThickPen);
+    }
+  }
+  if (i>sink) {
+    Polyline(hdcDrawWindow, lines+gmax+sink, i-sink);
+  } else {
+    Polyline(hdcDrawWindow, lines+gmax+i, sink-i);
+  }
+}
+
+
+void GaugeVario::RenderNeedle(int i, bool average, bool clear) {
+  POINT *bit;
+  dirty = true;
+
+  if (clear ^ Appearance.InverseInfoBox) {
     SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
     SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+  } else {
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
   }    
-  if (average) {
-    Polyline(hdcDrawWindow, lastBitave, 3);
-  } else {
-    Polygon(hdcDrawWindow, lastBit, 3);
-  }
-  
-  if (Appearance.InverseInfoBox){
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
-  } else {
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
-    SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
-  }
-
   bit = getPolygon(i);
   if (average) {
     Polyline(hdcDrawWindow, bit, 3);
   } else {
     Polygon(hdcDrawWindow, bit, 3);
   }
-
-  if (average) {
-    memcpy(lastBitave, bit, 3*sizeof(POINT));
-  } else {
-    memcpy(lastBit, bit, 3*sizeof(POINT));
-  }
-
 }
 
 
