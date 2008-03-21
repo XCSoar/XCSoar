@@ -46,6 +46,18 @@ extern bool TargetDialogOpen;
 
 extern AATDistance aatdistance;
 
+void ResetTaskWaypoint(int j) {
+  Task[j].Index = -1;
+  Task[j].AATTargetOffsetRadius = 0.0;
+  Task[j].AATTargetOffsetRadial = 0.0;
+  Task[j].AATTargetLocked = false;
+  Task[j].AATSectorRadius = SectorRadius;
+  Task[j].AATCircleRadius = SectorRadius;
+  Task[j].AATStartRadial = 0;
+  Task[j].AATFinishRadial = 360;
+}
+
+
 void FlyDirectTo(int index) {
   if (!CheckDeclaration())
     return;
@@ -56,13 +68,9 @@ void FlyDirectTo(int index) {
   ActiveWayPoint = -1; AATEnabled = FALSE;
   for(int j=0;j<MAXTASKPOINTS;j++)
   {
-    Task[j].Index = -1;
-    Task[j].AATTargetOffsetRadius = 0.0;
-    Task[j].AATTargetOffsetRadial = 0.0;
-    Task[j].AATTargetLocked = false;
+    ResetTaskWaypoint(j);
   }
   Task[0].Index = index;
-  Task[0].AATTargetOffsetRadius = 0.0;
   ActiveWayPoint = 0;
   RefreshTask();
   UnlockTaskData();
@@ -109,10 +117,8 @@ void InsertWaypoint(int index, bool append) {
 
   if ((ActiveWayPoint<0) || !ValidTaskPoint(0)) {
     ActiveWayPoint = 0;
+    ResetTaskWaypoint(ActiveWayPoint);
     Task[ActiveWayPoint].Index = index;
-    Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
-    Task[ActiveWayPoint].AATTargetOffsetRadial = 0.0;
-    Task[ActiveWayPoint].AATTargetLocked = false;
 
     UnlockTaskData();
     return;
@@ -133,10 +139,8 @@ void InsertWaypoint(int index, bool append) {
   if (append) {
     for (i=indexInsert; i<MAXTASKPOINTS-2; i++) {
       if (Task[i+1].Index<0) {
+	ResetTaskWaypoint(i+1);
 	Task[i+1].Index = index;
-	Task[i+1].AATTargetOffsetRadius= 0.0;
-	Task[i+1].AATTargetOffsetRadial= 0.0;
-	Task[i+1].AATTargetLocked= false;
 	break;
       }
     }
@@ -147,10 +151,8 @@ void InsertWaypoint(int index, bool append) {
       Task[i] = Task[i-1];
     }
     // Insert new point and update task details
+    ResetTaskWaypoint(indexInsert);
     Task[indexInsert].Index = index;
-    Task[indexInsert].AATTargetOffsetRadius= 0.0;
-    Task[indexInsert].AATTargetOffsetRadial= 0.0;
-    Task[indexInsert].AATTargetLocked= false;
   }
 
   RefreshTask();
@@ -305,16 +307,15 @@ void ReplaceWaypoint(int index) {
 
   // ARH 26/06/05 Fixed array out-of-bounds bug
   if (ActiveWayPoint>=0) {
-
+    ResetTaskWaypoint(ActiveWayPoint);
     Task[ActiveWayPoint].Index = index;
-    Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
   } else {
 
     // Insert a new waypoint since there's
     // nothing to replace
     ActiveWayPoint=0;
+    ResetTaskWaypoint(ActiveWayPoint);
     Task[ActiveWayPoint].Index = index;
-    Task[ActiveWayPoint].AATTargetOffsetRadius= 0.0;
   }
   RefreshTask();
   UnlockTaskData();
@@ -1474,6 +1475,21 @@ void CalculateAATIsoLines(void) {
       } while (in_sector && (j<MAXISOLINES));
 
     }
+  }
+  UnlockTaskData();
+}
+
+
+void SaveDefaultTask(void) {
+  LockTaskData();
+  if (!TaskAborted) {
+    TCHAR buffer[MAX_PATH];
+#ifdef GNAV
+    LocalPath(buffer, TEXT("persist/Default.tsk"));
+#else
+    LocalPath(buffer, TEXT("Default.tsk"));
+#endif
+    SaveTask(buffer);
   }
   UnlockTaskData();
 }

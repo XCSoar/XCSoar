@@ -770,9 +770,15 @@ void InfoBoxFormatter::AssignValue(int i) {
       Valid = false;
     }
     break;
+  case 64:
+    Value = LIFTMODIFY*CALCULATED_INFO.DistanceVario;
+    if (ActiveWayPoint>=1) {
+      Valid = ValidTaskPoint(ActiveWayPoint);
+    } else {
+      Valid = false;
+    }
   default:
     break;
-
   };
 }
 

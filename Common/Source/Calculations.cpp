@@ -90,6 +90,9 @@ bool EnableFAIFinishHeight = false;
 // 1: Set to average if in climb mode
 // 2: Average if in climb mode, final glide in final glide mode
 
+#define THERMAL_TIME_MIN 45.0
+
+double CRUISE_EFFICIENCY = 1.0;
 
 static double SpeedHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
@@ -341,7 +344,7 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (Basic->AccelerationAvailable) {
     n = fabs(Basic->Gload);
   } else {
-    n = 1.0;
+    n = fabs(Calculated->Gload);
   }
 
   // calculate optimum cruise speed in current track direction
@@ -380,13 +383,12 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       GlidePolar::MacCreadyAltitude(delta_mc,
                                     100.0, // dummy value
                                     Basic->TrackBearing,
-                                    0,
-                                    0,
-                                    0,
+                                    0.0,
+                                    0.0,
+                                    NULL,
                                     &VOptnew,
                                     false,
-                                    0,
-                                    0);
+                                    NULL, 0, CRUISE_EFFICIENCY);
     } else {
       GlidePolar::MacCreadyAltitude(delta_mc,
                                     100.0, // dummy value
@@ -396,8 +398,7 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
                                     0,
                                     &VOptnew,
                                     true,
-                                    0
-                                    );
+                                    NULL, 1.0e6, CRUISE_EFFICIENCY);
     }
 
     // put low pass filter on VOpt so display doesn't jump around
@@ -422,27 +423,28 @@ void NettoVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if (Basic->AccelerationAvailable) {
     n = fabs(Basic->Gload);
   } else {
-    n = 1.0;
+    n = fabs(Calculated->Gload);
   }
 
   // calculate sink rate of glider for calculating netto vario
 
   bool replay_disabled = !ReplayLogger::IsEnabled();
 
+  double glider_sink_rate;
+  if (Basic->AirspeedAvailable && replay_disabled) {
+    glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
+					       Basic->IndicatedAirspeed), n);
+  } else {
+    // assume zero wind (Speed=Airspeed, very bad I know)
+    // JMW TODO: adjust for estimated airspeed
+    glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
+					       Basic->Speed), n);
+  }
+  Calculated->GliderSinkRate = glider_sink_rate;
+
   if (Basic->NettoVarioAvailable && replay_disabled) {
     Calculated->NettoVario = Basic->NettoVario;
   } else {
-
-    double glider_sink_rate;
-    if (Basic->AirspeedAvailable && replay_disabled) {
-      glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
-                                                 Basic->IndicatedAirspeed), n);
-    } else {
-      // assume zero wind (Speed=Airspeed, very bad I know)
-      // JMW TODO: adjust for estimated airspeed
-      glider_sink_rate= GlidePolar::SinkRate(max(GlidePolar::Vminsink,
-                                                 Basic->Speed), n);
-    }
     if (Basic->VarioAvailable && replay_disabled) {
       Calculated->NettoVario = Basic->Vario - glider_sink_rate;
     } else {
@@ -551,9 +553,11 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     Calculated->TrueAirspeedEstimated = mag;
 
     // estimate bank angle (assuming balanced turn)
-    Calculated->BankAngle = RAD_TO_DEG*
-      atan(DEG_TO_RAD*Calculated->TurnRateWind*
-           Calculated->TrueAirspeedEstimated/9.81);
+    double angle = atan(DEG_TO_RAD*Calculated->TurnRateWind*
+			Calculated->TrueAirspeedEstimated/9.81);
+
+    Calculated->BankAngle = RAD_TO_DEG*angle;
+    Calculated->Gload = 1.0/max(0.001,fabs(cos(angle)));
 
     // estimate pitch angle (assuming balanced turn)
     Calculated->PitchAngle = RAD_TO_DEG*
@@ -649,10 +653,14 @@ void ResetFlightStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                       bool full=true) {
   int i;
   (void)Basic;
+
+  CRUISE_EFFICIENCY = 1.0;
+
   if (full) {
     olc.ResetFlight();
     flightstats.Reset();
     aatdistance.Reset();
+    CRUISE_EFFICIENCY = 1.0;
     Calculated->FlightTime = 0;
     Calculated->TakeOffTime = 0;
     Calculated->timeCruising = 0;
@@ -976,12 +984,12 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     Calculated->GPSVario = Gain / dT;
     Calculated->GPSVarioTE = GainTE / dT;
 
-    double dv = (Calculated->TaskAltitudeDifference0-h0last)
+    double dv = (Calculated->TaskAltitudeDifference-h0last)
       /(Basic->Time-LastTime);
     Calculated->DistanceVario = LowPassFilter(Calculated->DistanceVario,
                                               dv, 0.2);
 
-    h0last = Calculated->TaskAltitudeDifference0;
+    h0last = Calculated->TaskAltitudeDifference;
 
     LastAlt = Calculated->NavAltitude;
     LastAltTE = Calculated->EnergyHeight+Basic->Altitude;
@@ -1583,12 +1591,14 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         {
           double ThermalGain = Calculated->CruiseStartAlt + Calculated->EnergyHeight
             - Calculated->ClimbStartAlt;
-          Calculated->LastThermalAverage = ThermalGain/ThermalTime;
-          Calculated->LastThermalGain = ThermalGain;
-          Calculated->LastThermalTime = ThermalTime;
 
-          if (Calculated->LastThermalAverage>0) {
-            if (ThermalTime>60.0) {
+          if (ThermalGain>0) {
+            if (ThermalTime>THERMAL_TIME_MIN) {
+
+	      Calculated->LastThermalAverage = ThermalGain/ThermalTime;
+	      Calculated->LastThermalGain = ThermalGain;
+	      Calculated->LastThermalTime = ThermalTime;
+
               flightstats.ThermalAverage.
                 least_squares_update(Calculated->LastThermalAverage);
 
@@ -1703,7 +1713,7 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                         Calculated->WaypointBearing,
                         Calculated->WindSpeed, Calculated->WindBearing,
                         0, 0, (ActiveWayPoint == getFinalWaypoint()),
-                        0
+				      NULL, 1.0e6, CRUISE_EFFICIENCY
                         // ||
                         // (Calculated->TaskAltitudeDifference>30)
                         // JMW TODO!!!!!!!!!
@@ -2391,7 +2401,8 @@ static bool TaskAltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                     0,
                                     0,
                                     isfinal,
-                                    &LegTime
+                                    &LegTime,
+				    1.0e6, CRUISE_EFFICIENCY
                                     );
 
     TotalAltitude += LegAltitude;
@@ -2574,7 +2585,10 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 
     if(Basic->Time < LastTime) {
       LastTime = Basic->Time;
-    } else if (Basic->Time-LastTime >=10.0) {
+    } else if (Basic->Time-LastTime >=5.0) {
+
+      double dt = Basic->Time-LastTime;
+      LastTime = Basic->Time;
 
       // Calculate contribution to average task speed.
       // This is equal to the change in virtual distance
@@ -2600,10 +2614,21 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
       // Therefore, it shows well whether at any time the glider
       // is wasting time.
 
-      double delta_d2 = (v2*t1-v2last*t2last);
-      double vdiff = delta_d2/(Basic->Time-LastTime);
+      static double dr_last = dr;
+      double Vstar = max(1.0,Calculated->VMacCready);
+      double vthis = -(dr-dr_last)/dt;
+      double Vav = d0/t0;
+      double rho_climb = min(1.0,max(0,h0/(max(0.1,MACCREADY)*t0)));
+      double rho_cruise = 1.0-rho_climb;
 
-      if (t1<60) {
+      double delta_d2 = (v2*t1-v2last*t2last);
+      double vdiff = delta_d2/dt;
+
+      vdiff = Vav*(vthis/Vstar + (Calculated->Vario/max(0.1,MACCREADY))*rho_cruise
+		   + rho_climb);
+      dr_last = dr;
+
+      if (t1<10) {
         Calculated->TaskSpeedInstantaneous = v2;
         // initialise
       } else {
@@ -2611,7 +2636,6 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
         if (ActiveWayPoint==lastActiveWayPoint) {
           v2last = v2;
           t2last = t1;
-          LastTime = Basic->Time;
 
           Calculated->TaskSpeedInstantaneous =
             LowPassFilter(Calculated->TaskSpeedInstantaneous, vdiff, 0.1);
@@ -2747,7 +2771,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                   &(Calculated->BestCruiseTrack),
                                   &(Calculated->VMacCready),
                                   (Calculated->FinalGlide==1),
-                                  0);
+                                  NULL, 1.0e6, CRUISE_EFFICIENCY);
 
     return;
   }
@@ -2896,7 +2920,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                   &(Calculated->VMacCready),
                                   (Calculated->FinalGlide==1),
                                   &(Calculated->LegTimeToGo),
-                                  height_above_finish);
+                                  height_above_finish, CRUISE_EFFICIENCY);
 
   double LegTime0;
   double LegAltitude0 =
@@ -2908,7 +2932,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                                   0,
                                   0,
                                   true,
-                                  &LegTime0
+                                  &LegTime0, 1.0e6, CRUISE_EFFICIENCY
                                   );
   // JMW XXX TODO: Use safetymc
 
@@ -2964,7 +2988,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                         0, 0,
                         this_is_final,
                         &this_LegTimeToGo,
-                        height_above_finish);
+                        height_above_finish, CRUISE_EFFICIENCY);
 
     LegAltitude0 = GlidePolar::
       MacCreadyAltitude(0,
@@ -2973,7 +2997,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                         Calculated->WindBearing,
                         0, 0,
                         true,
-                        &LegTime0
+                        &LegTime0, 1.0e6, CRUISE_EFFICIENCY
                         );
 
     if (LegTime0>=1e5) {
@@ -3014,7 +3038,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                             0, 0,
                             this_is_final,
                             &this_LegTimeToGo_turningnow,
-                            height_above_finish);
+                            height_above_finish, CRUISE_EFFICIENCY);
         Calculated->TaskTimeToGoTurningNow += this_LegTimeToGo_turningnow;
       } else {
         Calculated->TaskTimeToGoTurningNow += this_LegTimeToGo;
@@ -3120,7 +3144,7 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
     if (flightstats.ThermalAverage.y_ave>0) {
       mc_new = flightstats.ThermalAverage.y_ave;
-    } else if (Calculated->AverageThermal>0) {
+    } else if (Calculated->Circling && (Calculated->AverageThermal>0)) {
       // insufficient stats, so use this/last thermal's average
       mc_new = Calculated->AverageThermal;
     }
@@ -3542,7 +3566,7 @@ double CalculateWaypointArrivalAltitude(NMEA_INFO *Basic,
      0,
      0,
      true,
-     0);
+     NULL);
 
   return ((Calculated->NavAltitude) - AltReqd
           - WayPointList[i].Altitude - SAFETYALTITUDEARRIVAL);

@@ -87,6 +87,7 @@ typedef union{
     unsigned Reachable:1;
     unsigned AlligneCenter:1;
     unsigned WhiteBorder:1;
+    unsigned WhiteBold:1;
   }AsFlag;
 }TextInBoxMode_t;
   // mode are flags

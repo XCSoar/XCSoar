@@ -110,7 +110,8 @@ void LookupAirfieldDetail(TCHAR *Name, TCHAR *Details) {
 
   for(i=0;i<(int)NumberOfWayPoints;i++)
     {
-      if ((WayPointList[i].Flags & AIRPORT) == AIRPORT) {
+      if (((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
+	  ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)) {
 	_tcscpy(UName, WayPointList[i].Name);
 	CharUpper(UName);
 

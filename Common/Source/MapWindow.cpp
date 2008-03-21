@@ -604,7 +604,7 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
     }
 
 
-  } else if (Mode.AsFlag.FillBackground){
+  } else if (Mode.AsFlag.FillBackground) {
 
     POINT offset;
 
@@ -629,16 +629,27 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
       SetBkColor(hDC, oldColor);
     }
 
-  } else {
+  } else if (Mode.AsFlag.WhiteBold) {
 
-//    POINT offset;
+    brect.left = x-2;
+    brect.right = brect.left+tsize.cx+4;
+    brect.top = y+((tsize.cy+4)>>3)-2;
+    brect.bottom = brect.top+3+tsize.cy-((tsize.cy+4)>>3);
 
-    /*
-    if (TextInBoxMoveInView(&offset, &brect)){
-      x += offset.x;
-      y += offset.y;
+    notoverlapping = checkLabelBlock(brect);
+
+    if (!noOverlap || notoverlapping) {
+      SetTextColor(hDC,RGB(0xff,0xff,0xff));
+      ExtTextOut(hDC, x+2, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x+1, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x-1, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x, y+1, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x, y-1, ETO_OPAQUE, NULL, Value, size, NULL);
+      SetTextColor(hDC,RGB(0x00,0x00,0x00));
+      ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
     }
-    */
+
+  } else {
 
     brect.left = x-2;
     brect.right = brect.left+tsize.cx+4;
@@ -2694,6 +2705,10 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         }
       }
 
+      if (intask) {
+	TextDisplayMode.AsFlag.WhiteBold = 1;
+      }
+
       if(irange || intask || islandable) {
 
         DrawBitmapX(hdc,
@@ -2715,7 +2730,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         case DISPLAYNAMEIFINTASK:
           dowrite = intask;
           if (intask) {
-            if (TextDisplayMode.AsInt)
+            if (TextDisplayMode.AsFlag.Reachable)
               wsprintf(Buffer, TEXT("%s:%d%s"),
                        WayPointList[i].Name,
                        (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
@@ -2725,7 +2740,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           }
           break;
         case DISPLAYNAME:
-          if (TextDisplayMode.AsInt)
+          if (TextDisplayMode.AsFlag.Reachable)
             wsprintf(Buffer, TEXT("%s:%d%s"),
                      WayPointList[i].Name,
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
@@ -2735,7 +2750,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 
           break;
         case DISPLAYNUMBER:
-          if (TextDisplayMode.AsInt)
+          if (TextDisplayMode.AsFlag.Reachable)
             wsprintf(Buffer, TEXT("%d:%d%s"),
                      WayPointList[i].Number,
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
@@ -2747,7 +2762,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         case DISPLAYFIRSTFIVE:
           _tcsncpy(Buffer2, WayPointList[i].Name, 5);
           Buffer2[5] = '\0';
-          if (TextDisplayMode.AsInt)
+          if (TextDisplayMode.AsFlag.Reachable)
             wsprintf(Buffer, TEXT("%s:%d%s"),
                      Buffer2,
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
@@ -2759,7 +2774,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         case DISPLAYFIRSTTHREE:
           _tcsncpy(Buffer2, WayPointList[i].Name, 3);
           Buffer2[3] = '\0';
-          if (TextDisplayMode.AsInt)
+          if (TextDisplayMode.AsFlag.Reachable)
             wsprintf(Buffer, TEXT("%s:%d%s"),
                      Buffer2,
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
@@ -2769,7 +2784,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 
           break;
         case DISPLAYNONE:
-          if (TextDisplayMode.AsInt)
+          if (TextDisplayMode.AsFlag.Reachable)
             wsprintf(Buffer, TEXT("%d%s"),
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
                      sAltUnit);
@@ -3503,9 +3518,9 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
     Units_t        Unit;
 
     if (ScaleChangeFeedback)
-      MapWidth = (RequestMapScale * rc.right)*1000.0/GetMapResolutionFactor();
+      MapWidth = (RequestMapScale * rc.right)/DISTANCEMODIFY/GetMapResolutionFactor();
     else
-      MapWidth = (MapScale * rc.right)*1000.0/GetMapResolutionFactor();
+      MapWidth = (MapScale * rc.right)/DISTANCEMODIFY/GetMapResolutionFactor();
 
     oldFont = (HFONT)SelectObject(hDC, MapWindowBoldFont);
     Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,

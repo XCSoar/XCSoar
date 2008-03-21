@@ -255,6 +255,10 @@ void StartLogger(TCHAR *strAssetNumber)
   LocalPath(path);
 #endif
 
+  if (TaskModified) {
+    SaveDefaultTask();
+  }
+
   wsprintf(szLoggerFileName,
            TEXT("\\tmp.IGC"));
   DeleteFile(szLoggerFileName);

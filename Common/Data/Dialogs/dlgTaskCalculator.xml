@@ -7,7 +7,7 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmTaskCalculator" Type="Dialog" X=5 Y=5 Width=240 Height=225 Caption="Task Calculator" Font=2  BackColor=0xDADBAB>
+<WndForm Name="frmTaskCalculator" Type="Dialog" X=5 Y=0 Width=240 Height=240 Caption="Task Calculator" Font=2  BackColor=0xDADBAB>
 
   <WndButton   Caption="OK"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
   <WndButton   Caption="Cancel"    X=55 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnCancelClicked" Tag=2/>
@@ -44,6 +44,10 @@
 
   <WndProperty Name="prpSpeedAchieved" Caption="Achieved Speed" X=2 Y=-1  Width=238 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 min=0 max=2000 step=10 >
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly=1/>
+  </WndProperty>
+
+  <WndProperty Name="prpCruiseEfficiency" Caption="Cruise efficiency"      X=2 Y=-1   Width=238 Height=22 CaptionWidth=150 Font=2 Help="todo">
+    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=50 Max=150 Step=2 OnDataAccess="OnCruiseEfficiencyData"/>
   </WndProperty>
 
 </WndForm>

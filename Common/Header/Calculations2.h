@@ -17,6 +17,7 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 		      double GlideSlope);
 
 double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+double EffectiveCruiseEfficiency(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 			  double bearing,

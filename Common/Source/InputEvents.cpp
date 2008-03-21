@@ -1442,6 +1442,14 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
 }
 
 
+void InputEvents::eventGotoLookup(TCHAR *misc) {
+  int res = dlgWayPointSelect();
+  if (res != -1){
+    FlyDirectTo(res);
+  };
+}
+
+
 // StatusMessage
 // Displays a user defined status message.
 //    The argument is the text to be displayed.
@@ -1929,9 +1937,11 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
     return;
   }
 
+  StartHourglassCursor();
   FindNearestAirspace(GPS_INFO.Longitude, GPS_INFO.Latitude,
 		      &nearestdistance, &nearestbearing,
 		      &foundcircle, &foundarea);
+  StopHourglassCursor();
 
   if ((foundcircle == -1)&&(foundarea == -1)) {
     // nothing to display!

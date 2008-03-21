@@ -47,7 +47,11 @@ Copyright_License {
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
+extern double CRUISE_EFFICIENCY;
+
 static double emc= 0.0;
+static double cruise_efficiency= 1.0;
+
 
 static void OnCancelClicked(WindowControl * Sender){
 	(void)Sender;
@@ -149,7 +153,13 @@ static void RefreshCalculator(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpCruiseEfficiency"));
+  if (wp) {
+    wp->GetDataField()->SetAsFloat(cruise_efficiency*100.0);
+    wp->RefreshDisplay();
+  }
 }
+
 
 static void OnTargetClicked(WindowControl * Sender){
   (void)Sender;
@@ -194,6 +204,26 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
     break;
   }
 }
+
+
+static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode) {
+  double clast = CRUISE_EFFICIENCY;
+  switch(Mode){
+    case DataField::daGet:
+    //      Sender->Set(Range*100.0);
+    break;
+    case DataField::daPut:
+    case DataField::daChange:
+      cruise_efficiency = Sender->GetAsFloat()/100.0;
+      CRUISE_EFFICIENCY = cruise_efficiency;
+      // JMW TODO: allow setting!
+      if (fabs(cruise_efficiency-clast)>0.01) {
+        RefreshCalculator();
+      }
+    break;
+  }
+}
+
 
 extern bool TargetDialogOpen;
 
@@ -264,6 +294,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnCancelClicked),
   DeclearCallBackEntry(OnOptimiseClicked),
   DeclearCallBackEntry(OnTargetClicked),
+  DeclearCallBackEntry(OnCruiseEfficiencyData),
   DeclearCallBackEntry(NULL)
 };
 
@@ -279,14 +310,20 @@ void dlgTaskCalculatorShowModal(void){
 
   if (!wf) return;
 
+  double MACCREADY_enter = MACCREADY;
+  double CRUISE_EFFICIENCY_enter = CRUISE_EFFICIENCY;
+
   emc = EffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
+  if ((CALCULATED_INFO.Flying) && (CALCULATED_INFO.TaskStartTime>0)) {
+    cruise_efficiency = EffectiveCruiseEfficiency(&GPS_INFO, &CALCULATED_INFO);
+  } else {
+    cruise_efficiency = CRUISE_EFFICIENCY;
+  }
 
   // find start value for range
   Range = AdjustAATTargets(2.0);
 
   RefreshCalculator();
-
-  double MACCREADYenter = MACCREADY;
 
   if (!AATEnabled || !ValidTaskPoint(ActiveWayPoint+1)) {
     ((WndButton *)wf->FindByName(TEXT("Optimise")))->SetVisible(false);
@@ -297,9 +334,10 @@ void dlgTaskCalculatorShowModal(void){
 
   if (wf->ShowModal() == mrCancle) {
     // todo: restore task settings.
-    MACCREADY = MACCREADYenter;
+    MACCREADY = MACCREADY_enter;
+    CRUISE_EFFICIENCY = CRUISE_EFFICIENCY_enter;
   }
   delete wf;
   wf = NULL;
-
 }
+
