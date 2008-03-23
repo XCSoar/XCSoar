@@ -1358,9 +1358,24 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     Rate = -50;
   }
 
+  // average rate, to detect essing
+  static double rate_history[60];
+  double rate_ave=0;
+  for (int i=59; i>0; i--) {
+    rate_history[i] = rate_history[i-1];
+    rate_ave += rate_history[i];
+  }
+  rate_history[0] = Rate;
+  rate_ave /= 60;
+  
+  Calculated->Essing = fabs(rate_ave)*100/MinTurnRate;
+  if (fabs(rate_ave)< MinTurnRate*2) {
+    //    Calculated->Essing = rate_ave;
+  }
+
   Rate = LowPassFilter(LastRate,Rate,0.3);
   LastRate = Rate;
-  
+
   if(Rate <0)
     {
       if (LEFT) {
@@ -3107,45 +3122,44 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     is_final_glide = true;
   }
 
-  if (((AutoMcMode==0)||(AutoMcMode==2)) && is_final_glide) {
+  if (((AutoMcMode==0)||(AutoMcMode==2)) && is_final_glide 
+      && ValidTaskPoint(ActiveWayPoint)) {
 
-    if (ValidTaskPoint(ActiveWayPoint)) {
-
-      double time_remaining = Basic->Time-Calculated->TaskStartTime-9000;
-      if (EnableOLC 
-	  && (OLCRules==0) 
-	  && (Calculated->NavAltitude>Calculated->TaskStartAltitude)
-	  && (time_remaining>0)) {
+    double time_remaining = Basic->Time-Calculated->TaskStartTime-9000;
+    if (EnableOLC 
+	&& (OLCRules==0) 
+	&& (Calculated->NavAltitude>Calculated->TaskStartAltitude)
+	&& (time_remaining>0)) {
+      
+      mc_new = MacCreadyTimeLimit(Basic, Calculated,
+				  Calculated->WaypointBearing,
+				  time_remaining,
+				  Calculated->TaskStartAltitude);
+      
+    } else {
+      if (Calculated->TaskAltitudeDifference0>0) {
 	
-	mc_new = MacCreadyTimeLimit(Basic, Calculated,
-				   Calculated->WaypointBearing,
-				   time_remaining,
-				   Calculated->TaskStartAltitude);
-
-      } else {
-        if (Calculated->TaskAltitudeDifference0>0) {
-
-          // only change if above final glide with zero Mc
-          // otherwise when we are well below, it will wind Mc back to
-          // zero
-
-          double slope = 
-            (Calculated->NavAltitude 
-             - FAIFinishHeight(Basic, Calculated, ActiveWayPoint))/
-            (Calculated->WaypointDistance+1);
-          
-          double mc_pirker = PirkerAnalysis(Basic, Calculated,
-                                            Calculated->WaypointBearing,
-                                            slope);
-          if (mc_pirker>0) {
-            mc_new = mc_pirker;
-          } else {
-            mc_new = 0.0;
-          }
-        }
+	// only change if above final glide with zero Mc
+	// otherwise when we are well below, it will wind Mc back to
+	// zero
+	
+	double slope = 
+	  (Calculated->NavAltitude 
+	   - FAIFinishHeight(Basic, Calculated, ActiveWayPoint))/
+	  (Calculated->WaypointDistance+1);
+	
+	double mc_pirker = PirkerAnalysis(Basic, Calculated,
+					  Calculated->WaypointBearing,
+					  slope);
+	if (mc_pirker>0) {
+	  mc_new = mc_pirker;
+	} else {
+	  mc_new = 0.0;
+	}
       }
     }
-  } else if ((AutoMcMode==1)||((AutoMcMode==2)&&(!is_final_glide))) {
+  } else if (((AutoMcMode==1)||((AutoMcMode==2)&&(!is_final_glide)))
+	     || !ValidTaskPoint(ActiveWayPoint)) {
 
     if (flightstats.ThermalAverage.y_ave>0) {
       mc_new = flightstats.ThermalAverage.y_ave;

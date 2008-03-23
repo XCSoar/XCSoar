@@ -71,6 +71,7 @@ typedef struct _SNAIL_POINT
   short Colour;
   BOOL Circling;
   bool FarVisible;
+  double DriftFactor;
 } SNAIL_POINT;
 
 

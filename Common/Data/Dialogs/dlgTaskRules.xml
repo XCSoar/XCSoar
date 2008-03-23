@@ -9,7 +9,7 @@
 
 <WndForm Name="frmTaskRules" Type="Dialog" X=0 Y=0 Width=240 Height=240 Caption="Task Rules" Font=2  BackColor=0xDADBAB>
 
-  <WndButton   Caption="OK"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
+  <WndButton   Caption="Close"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnCloseClicked" Tag=1/>
 
   <WndProperty Name="prpStartMaxSpeed" Caption="Start max speed"      X=2 Y=-1   Width=236 Height=22 CaptionWidth=150 Font=2  
   Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">

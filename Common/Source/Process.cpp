@@ -777,6 +777,10 @@ void InfoBoxFormatter::AssignValue(int i) {
     } else {
       Valid = false;
     }
+  case 65:
+    Value = CALCULATED_INFO.Essing;
+    Valid = true;
+    break;
   default:
     break;
   };

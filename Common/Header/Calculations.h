@@ -180,6 +180,7 @@ typedef struct _DERIVED_INFO
   double DistanceVario;
   double GliderSinkRate;
   double Gload;
+  double Essing;
 } DERIVED_INFO;
 
 

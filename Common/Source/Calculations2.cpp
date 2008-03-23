@@ -71,6 +71,12 @@ void AddSnailPoint(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   SnailTrail[SnailNext].Longitude = (float)(Basic->Longitude);
   SnailTrail[SnailNext].Time = Basic->Time;
   SnailTrail[SnailNext].FarVisible = true; // hasn't been filtered out yet.
+  if (Calculated->TerrainValid) {
+    double hr = max(0,Calculated->AltitudeAGL)/100.0;
+    SnailTrail[SnailNext].DriftFactor = 2.0/(1.0+exp(-hr))-1.0;
+  } else {
+    SnailTrail[SnailNext].DriftFactor = 1.0;
+  }
 
   if (Calculated->Circling) {
     SnailTrail[SnailNext].Vario = (float)(Calculated->NettoVario) ;
@@ -253,7 +259,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     double fi = (i*1.0)/NUMFINALGLIDETERRAIN;
     // fraction of glidemaxrange
 
-    if ((maxrange>0)&&(fi>maxrange/glidemaxrange)) {
+    if ((maxrange>0) && (maxrange<glidemaxrange)) {
+      fi *= maxrange/glidemaxrange;
+    }
+
+    if ((maxrange>0)&&(fi>=1.0)) {
       // early exit
       *outofrange = true;
       retval = maxrange;
@@ -334,6 +344,7 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     // how much we need at that speed.
     //   dh>0, we can afford to speed up
 
+    /* JMW disabled this because we want the HIGHEST mc that will give dh=0
     if (dh==dhlast) {
       // same height, must have hit max speed.
       if (dh>0) {
@@ -342,10 +353,15 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         return 0.0;
       }
     }
+    */
 
     if ((dh<=0)&&(dhlast>0)) {
-      double f = (-dhlast)/(dh-dhlast);
-      pmczero = pmclast*(1.0-f)+f*pmc;
+      if (dh-dhlast < 0) {
+	double f = (-dhlast)/(dh-dhlast);
+	pmczero = pmclast*(1.0-f)+f*pmc;	
+      } else {
+	pmczero = pmc;
+      }
       return pmczero;
     }
     dhlast = dh;
@@ -353,7 +369,7 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
     pmc += 0.5;
   }
-  if (dh>0) {
+  if (dh>=0) {
     return pmc;
   }
   return -1.0; // no solution found, unreachable without further climb

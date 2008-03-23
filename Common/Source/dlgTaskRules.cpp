@@ -69,8 +69,15 @@ static void OnRulesActiveData(DataField *Sender,
 }
 
 
+static void OnCloseClicked(WindowControl * Sender){
+	(void)Sender;
+  wf->SetModalResult(mrOK);
+}
+
+
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnUTCData),
+  DeclearCallBackEntry(OnRulesActiveData),
+  DeclearCallBackEntry(OnCloseClicked),
   DeclearCallBackEntry(NULL)
 };
 
@@ -156,6 +163,8 @@ bool dlgTaskRules(void){
 
   // TODO: implement a cancel button that skips all this below after exit.
 
+  int ival;
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpFAIFinishHeight"));
   if (wp) {
     if (EnableFAIFinishHeight != (wp->GetDataField()->GetAsInteger()>0)) {
@@ -167,7 +176,7 @@ bool dlgTaskRules(void){
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeightRef"));
   if (wp) {
     CHECK_CHANGED(StartHeightRef,
-                  wp->GetDataField()->GetAsBoolean());
+                  wp->GetDataField()->GetAsInteger());
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
