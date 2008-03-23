@@ -118,6 +118,7 @@ extern TCHAR szRegistryVoiceAirspace[];
 extern TCHAR szRegistryFinishMinHeight[];
 extern TCHAR szRegistryStartMaxHeight[];
 extern TCHAR szRegistryStartMaxSpeed[];
+extern TCHAR szRegistryStartHeightRef[];
 
 extern TCHAR szRegistryEnableNavBaroAltitude[];
 

@@ -2137,8 +2137,13 @@ bool ReadyToAdvance(DERIVED_INFO *Calculated, bool reset=true, bool restart=fals
 bool ValidStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   bool valid = true;
   if ((StartMaxHeight!=0)&&(Calculated->TerrainValid)) {
-    if (Calculated->AltitudeAGL>StartMaxHeight)
-      valid = false;
+    if (StartHeightRef == 0) {
+      if (Calculated->AltitudeAGL>StartMaxHeight)
+	valid = false;
+    } else {
+      if (Calculated->NavAltitude>StartMaxHeight)
+	valid = false;
+    }
   }
   if (StartMaxSpeed!=0) {
     if (Basic->AirspeedAvailable) {

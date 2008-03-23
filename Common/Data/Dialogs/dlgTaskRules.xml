@@ -17,9 +17,16 @@
   </WndProperty>
 
   <WndProperty Name="prpStartMaxHeight" Caption="Start max height"      X=2 Y=-1   Width=236 Height=22 CaptionWidth=150 Font=2 
-   Help="Maximum height above ground while starting the task.  Set to 0 for no limit.">
+   Help="Maximum height while starting the task.  Set to 0 for no limit.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
   </WndProperty>
+
+    <WndProperty Name="prpStartHeightRef" Caption="Online contest"     X=2 Y=-1  Width=236 Height=22 CaptionWidth=150 Font=2
+Help="Reference used for start max height rule
+[MSL] Reference is altitude above mean sea level
+[AGL] Reference is the height above the start point">
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
 
   <WndProperty Name="prpFinishMinHeight" Caption="Finish min height"      X=2 Y=-1   Width=236 Height=22 CaptionWidth=150 Font=2  
   Help="Minimum height above ground while finishing the task.  Set to 0 for no limit.">
@@ -30,6 +37,10 @@
 Help="If enabled, this option requires the minimum height above ground for finish to be greater than 1000m below the start height.">
     <DataField name="" DataType="boolean"/>
     </WndProperty>
+
+  <WndProperty Name="prpOLCEnabled" Caption="OnLine Contest" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables OLC tasks.  When enabled, OLC style task start is detected automatically (lowest point of flight after initial climb).  Auto MacCready in final glide sets MacCready to obtain greatest distance in remaining height and time for OLC sprint tasks.">
+    <DataField name="" DataType="boolean" ReadOnly=0/>
+  </WndProperty>
 
     <WndProperty Name="prpOLCRules" Caption="Online contest"     X=2 Y=-1  Width=236 Height=22 CaptionWidth=150 Font=2
 Help="Rules used for calculating optimal points for OnLine Contest.
