@@ -643,6 +643,7 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
       ExtTextOut(hDC, x+2, y, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x+1, y, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x-1, y, ETO_OPAQUE, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x-2, y, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x, y+1, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x, y-1, ETO_OPAQUE, NULL, Value, size, NULL);
       SetTextColor(hDC,RGB(0x00,0x00,0x00));

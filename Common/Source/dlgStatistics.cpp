@@ -253,7 +253,7 @@ void Statistics::DrawXLabel(HDC hdc, RECT rc, TCHAR *text) {
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
   int x = rc.right-tsize.cx-IBLSCALE(3);
   int y = rc.bottom-tsize.cy;
-  ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
+  ExtTextOut(hdc, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
   SelectObject(hdc, hfOld);
 }
 
@@ -264,7 +264,7 @@ void Statistics::DrawYLabel(HDC hdc, RECT rc, TCHAR *text) {
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
   int x = max(2,rc.left-tsize.cx);
   int y = rc.top;
-  ExtTextOut(hdc, x, y, 0, NULL, text, _tcslen(text), NULL);
+  ExtTextOut(hdc, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
   SelectObject(hdc, hfOld);
 }
 
@@ -557,7 +557,8 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
   ScaleXFromData(rc, &flightstats.Altitude);
   ScaleYFromData(rc, &flightstats.Altitude);
   ScaleYFromValue(rc, 0);
-  ScaleXFromValue(rc, flightstats.Altitude.x_min+1.0);
+  ScaleXFromValue(rc, flightstats.Altitude.x_min+1.0); // in case no data
+  ScaleXFromValue(rc, flightstats.Altitude.x_min-0.15); // room for labels
 
   LockTaskData();
   for(int j=0;j<MAXTASKPOINTS;j++) {
@@ -608,7 +609,8 @@ void Statistics::RenderSpeed(HDC hdc, RECT rc)
   ScaleXFromData(rc, &flightstats.Task_Speed);
   ScaleYFromData(rc, &flightstats.Task_Speed);
   ScaleYFromValue(rc, 0);
-  ScaleXFromValue(rc, flightstats.Task_Speed.x_min+1.0);
+  ScaleXFromValue(rc, flightstats.Task_Speed.x_min+1.0); // in case no data
+  ScaleXFromValue(rc, flightstats.Task_Speed.x_min-0.15); // room for labels
 
   LockTaskData();
   for(int j=0;j<MAXTASKPOINTS;j++) {
@@ -692,8 +694,8 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 
   ResetScale();
   ScaleYFromValue(rc, 0);
-  ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1)));
-  ScaleXFromValue(rc, GlidePolar::Vminsink-2); // GlidePolar::Vminsink);
+  ScaleYFromValue(rc, GlidePolar::SinkRateFast(0,(int)(SAFTEYSPEED-1))*1.1);
+  ScaleXFromValue(rc, GlidePolar::Vminsink*0.8);
   ScaleXFromValue(rc, SAFTEYSPEED+2);
 
   DrawXGrid(hdc, rc,
@@ -739,10 +741,12 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
   }
 
   double ff = SAFTEYSPEED/max(1.0, CALCULATED_INFO.VMacCready);
+  double sb = GlidePolar::SinkRate(CALCULATED_INFO.VMacCready);
+  ff= (sb-MACCREADY)/max(1.0, CALCULATED_INFO.VMacCready);
   DrawLine(hdc, rc,
            0, MACCREADY,
-           CALCULATED_INFO.VMacCready*ff,
-           GlidePolar::SinkRate(CALCULATED_INFO.VMacCready)*ff,
+           SAFTEYSPEED,
+           MACCREADY+ff*SAFTEYSPEED,
            STYLE_REDTHICK);
 
   DrawXLabel(hdc, rc, TEXT("V"));
@@ -910,6 +914,13 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
   }
 
   ScaleMakeSquare(rc);
+
+  DrawXGrid(hdc, rc,
+            1.0, 0,
+            STYLE_THINDASHPAPER, 1.0, false);
+  DrawYGrid(hdc, rc,
+            1.0, 0,
+            STYLE_THINDASHPAPER, 1.0, false);
 
   // draw aat areas
   LockTaskData();
@@ -1733,13 +1744,11 @@ static void Update(void){
               gettext(TEXT("OnLine Contest")));
     wf->SetCaption(sTmp);
 
-    TCHAR sRules[20];
     TCHAR sFinished[20];
     double score;
 
     switch(OLCRules) {
     case 0:
-      _stprintf(sRules,TEXT("Sprint"));
       dt = olc.data.solution_FAI_sprint.time;
       d = olc.data.solution_FAI_sprint.distance;
       olcvalid = olc.data.solution_FAI_sprint.valid;
@@ -1747,7 +1756,6 @@ static void Update(void){
       olcfinished = olc.data.solution_FAI_sprint.finished;
       break;
     case 1:
-      _stprintf(sRules,TEXT("Triangle"));
       dt = olc.data.solution_FAI_triangle.time;
       d = olc.data.solution_FAI_triangle.distance;
       olcvalid = olc.data.solution_FAI_triangle.valid;
@@ -1755,7 +1763,6 @@ static void Update(void){
       olcfinished = olc.data.solution_FAI_triangle.finished;
       break;
     case 2:
-      _stprintf(sRules,TEXT("Classic"));
       dt = olc.data.solution_FAI_classic.time;
       d = olc.data.solution_FAI_classic.distance;
       olcvalid = olc.data.solution_FAI_classic.valid;
@@ -1770,7 +1777,7 @@ static void Update(void){
       dt = 0;
     }
     if (olcfinished) {
-      _tcscpy(sFinished,TEXT(" finished"));
+      _tcscpy(sFinished,TEXT("Finished"));
     } else {
       _tcscpy(sFinished,TEXT("..."));
     }
@@ -1780,8 +1787,7 @@ static void Update(void){
       Units::TimeToText(timetext1, dt);
       if (InfoBoxLayout::landscape) {
         _stprintf(sTmp,
-                  TEXT("%s%s\r\n%s:\r\n  %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),
-                  sRules,
+                  TEXT("%s\r\n%s:\r\n  %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),
                   sFinished,
                   gettext(TEXT("Distance")),
                   DISTANCEMODIFY*d,
@@ -1795,8 +1801,7 @@ static void Update(void){
                   score);
       } else {
         _stprintf(sTmp,
-                  TEXT("%s %s\r\n%s: %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),
-                  sRules,
+                  TEXT("%s\r\n%s: %5.0f %s\r\n%s: %s\r\n%s: %3.0f %s\r\n%s: %.2f\r\n"),
                   sFinished,
                   gettext(TEXT("Distance")),
                   DISTANCEMODIFY*d,
@@ -1810,9 +1815,7 @@ static void Update(void){
                   score);
       }
     } else {
-      _stprintf(sTmp, TEXT("%s: %s\r\n%s\r\n"),
-                gettext(TEXT("Rules")),
-		sRules,
+      _stprintf(sTmp, TEXT("%s\r\n"),
                 gettext(TEXT("No valid path")));
     }
     wInfo->SetCaption(sTmp);
@@ -1988,3 +1991,5 @@ void dlgAnalysisShowModal(void){
   FullScreen();
 
 }
+
+
