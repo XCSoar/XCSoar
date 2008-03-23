@@ -573,8 +573,10 @@ SCREEN_INFO Data_Options[] = {
 	  {ugVerticalSpeed,   TEXT("Thermal All"), TEXT("TC All"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
           // 64
 	  {ugVerticalSpeed,   TEXT("Distance Vario"), TEXT("D Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
+          // 65
+	  {ugNone,   TEXT("Experimental"), TEXT("Exp"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
 	};
-int NUMSELECTSTRINGS = 65;
+int NUMSELECTSTRINGS = 66;
 
 
 CRITICAL_SECTION  CritSec_FlightData;

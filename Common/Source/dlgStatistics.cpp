@@ -39,6 +39,7 @@ Copyright_License {
 #include "McReady.h"
 #include "dlgTools.h"
 #include "Atmosphere.h"
+#include "RasterTerrain.h"
 
 extern HFONT                                   StatisticsFont;
 
@@ -736,6 +737,14 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
     }
 
   }
+
+  double ff = SAFTEYSPEED/max(1.0, CALCULATED_INFO.VMacCready);
+  DrawLine(hdc, rc,
+           0, MACCREADY,
+           CALCULATED_INFO.VMacCready*ff,
+           GlidePolar::SinkRate(CALCULATED_INFO.VMacCready)*ff,
+           STYLE_REDTHICK);
+
   DrawXLabel(hdc, rc, TEXT("V"));
   DrawYLabel(hdc, rc, TEXT("w"));
 }
@@ -1290,8 +1299,6 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
 void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   double range = 50.0*1000; // km
-  int airspace_scansize_i=16;
-  int airspace_scansize_j=16;
   double aclat, aclon, ach, acb;
   double fi, fj;
   aclat = GPS_INFO.Latitude;
@@ -1299,25 +1306,38 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   ach = GPS_INFO.Altitude;
   acb = GPS_INFO.TrackBearing;
   double hmin = max(0,GPS_INFO.Altitude-3300);
-  double hmax = max(4000,GPS_INFO.Altitude+2000);
+  double hmax = max(3300,GPS_INFO.Altitude+1000);
   RECT rcd;
-
-  DrawXLabel(hdc, rc, TEXT("D"));
-  DrawYLabel(hdc, rc, TEXT("h"));
-
-  double fh = (ach-hmin)/(hmax-hmin);
 
   double d_lat[AIRSPACE_SCANSIZE_X];
   double d_lon[AIRSPACE_SCANSIZE_X];
+  double d_alt[AIRSPACE_SCANSIZE_X];
   double d_h[AIRSPACE_SCANSIZE_H];
   int d_airspace[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X];
   int i,j;
+
+  RasterTerrain::Lock();
+  // want most accurate rounding here
+  RasterTerrain::SetTerrainRounding(0,0);
 
   for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
     fj = j*1.0/(AIRSPACE_SCANSIZE_X);
     FindLatitudeLongitude(aclat, aclon, acb, range*fj,
                           &d_lat[j], &d_lon[j]);
+    d_alt[j] = RasterTerrain::GetTerrainHeight(d_lat[j],
+					       d_lon[j]);
+    hmax = max(hmax, d_alt[j]);
   }
+  RasterTerrain::Unlock();
+
+  double fh = (ach-hmin)/(hmax-hmin);
+
+  ResetScale();
+  ScaleXFromValue(rc, 0);
+  ScaleXFromValue(rc, range);
+  ScaleYFromValue(rc, hmin);
+  ScaleYFromValue(rc, hmax);
+
   for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
     fi = i*1.0/(AIRSPACE_SCANSIZE_H);
     d_h[i] = (hmax-hmin)*fi+hmin;
@@ -1347,30 +1367,43 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
 		     MapWindow::Colours[MapWindow::iAirspaceColour[type]]);
 
 	rcd.left = iround(fj*(rc.right-rc.left)+rc.left);
-	rcd.right = iround(rcd.left+(rc.right-rc.left)/airspace_scansize_j);
+	rcd.right = iround(rcd.left+(rc.right-rc.left)/AIRSPACE_SCANSIZE_X);
 	rcd.bottom = iround(fi*(rc.top-rc.bottom)+rc.bottom);
-	rcd.top = iround(rcd.bottom+(rc.top-rc.bottom)/airspace_scansize_i);
+	rcd.top = iround(rcd.bottom+(rc.top-rc.bottom)/AIRSPACE_SCANSIZE_H);
 
 	Rectangle(hdc,rcd.left,rcd.top,rcd.right,rcd.bottom);
 
       }
     }
   }
+  // draw ground
+  POINT ground[4];
+  HPEN   hpHorizonGround;
+  HBRUSH hbHorizonGround;
+  hpHorizonGround = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
+                                    RGB(157,101,60));
+  hbHorizonGround = (HBRUSH)CreateSolidBrush(RGB(157,101,60));
+  SelectObject(hdc, hpHorizonGround);
+  SelectObject(hdc, hbHorizonGround);
+  for (j=1; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
+
+    ground[0].x = iround((j-1)*1.0/(AIRSPACE_SCANSIZE_X)
+			 *(rc.right-rc.left)+rc.left);
+    ground[1].x = ground[0].x;
+    ground[2].x = iround((j)*1.0/(AIRSPACE_SCANSIZE_X)
+			 *(rc.right-rc.left)+rc.left);
+    ground[3].x = ground[2].x;
+    ground[0].y = rc.bottom;
+    ground[1].y = iround((d_alt[j-1]-hmin)/(hmax-hmin)
+			 *(rc.top-rc.bottom)+rc.bottom);
+    ground[2].y = iround((d_alt[j]-hmin)/(hmax-hmin)
+			 *(rc.top-rc.bottom)+rc.bottom);
+    ground[3].y = rc.bottom;
+    Polygon(hdc, ground, 4);
+  }
+
   //
   POINT line[4];
-  int delta;
-  SelectObject(hdc, GetStockObject(WHITE_PEN));
-  SelectObject(hdc, GetStockObject(WHITE_BRUSH));
-  line[0].x = (int)(rc.left+(rc.right-rc.left)/airspace_scansize_j);
-  line[0].y = (int)(fh*(rc.top-rc.bottom)+rc.bottom)-1;
-  line[1].x = rc.left;
-  line[1].y = line[0].y;
-  delta = (line[0].x-line[1].x);
-  line[2].x = line[1].x;
-  line[2].y = line[0].y-delta/2;
-  line[3].x = (line[1].x+line[0].x)/2;
-  line[3].y = line[0].y;
-  Polygon(hdc, line, 4);
 
   if (GPS_INFO.Speed>10.0) {
     double t = range/GPS_INFO.Speed;
@@ -1382,9 +1415,37 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
     StyleLine(hdc, line[0], line[1], STYLE_BLUETHIN);
   }
 
+  SelectObject(hdc, GetStockObject(WHITE_PEN));
+  SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+
+  DrawXGrid(hdc, rc,
+            5.0/DISTANCEMODIFY, 0,
+            STYLE_THINDASHPAPER, 5.0, true);
+  DrawYGrid(hdc, rc, 1000.0/ALTITUDEMODIFY, 0, STYLE_THINDASHPAPER,
+            1000.0, true);
+
+  // draw aircraft
+  int delta;
+  SelectObject(hdc, GetStockObject(WHITE_PEN));
+  SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+  line[0].x = (int)(rc.left+(rc.right-rc.left)/AIRSPACE_SCANSIZE_X);
+  line[0].y = (int)(fh*(rc.top-rc.bottom)+rc.bottom)-1;
+  line[1].x = rc.left;
+  line[1].y = line[0].y;
+  delta = (line[0].x-line[1].x);
+  line[2].x = line[1].x;
+  line[2].y = line[0].y-delta/2;
+  line[3].x = (line[1].x+line[0].x)/2;
+  line[3].y = line[0].y;
+  Polygon(hdc, line, 4);
+
+  DrawXLabel(hdc, rc, TEXT("D"));
+  DrawYLabel(hdc, rc, TEXT("h"));
+
   SelectObject(hdc, (HPEN)oldpen);
   DeleteObject(mpen);
-
+  DeleteObject(hpHorizonGround);
+  DeleteObject(hbHorizonGround);
 }
 
 

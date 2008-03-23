@@ -435,7 +435,7 @@ void GaugeVario::MakePolygon(const int i) {
     InitDone = true;
   }
 
-#define ELLIPSE 1.095
+#define ELLIPSE 1.1
 
   dx = -xoffset+nlength0; dy = nwidth;
   rotate(dx, dy, i);
@@ -574,11 +574,22 @@ void GaugeVario::RenderVarioLine(int i, int sink, bool clear) {
   } else {
     Polyline(hdcDrawWindow, lines+gmax+i, sink-i);
   }
+  if (!clear) {
+    // clear up naked (sink) edge of polygon, this gives it a nice
+    // taper look
+    if (Appearance.InverseInfoBox) {
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
+    } else {
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_BRUSH));
+      SelectObject(hdcDrawWindow, GetStockObject(WHITE_PEN));
+    }
+    Polygon(hdcDrawWindow, getPolygon(sink), 3);
+  }
 }
 
 
 void GaugeVario::RenderNeedle(int i, bool average, bool clear) {
-  POINT *bit;
   dirty = true;
 
   if (clear ^ Appearance.InverseInfoBox) {
@@ -588,11 +599,10 @@ void GaugeVario::RenderNeedle(int i, bool average, bool clear) {
     SelectObject(hdcDrawWindow, GetStockObject(BLACK_BRUSH));
     SelectObject(hdcDrawWindow, GetStockObject(BLACK_PEN));
   }
-  bit = getPolygon(i);
   if (average) {
-    Polyline(hdcDrawWindow, bit, 3);
+    Polyline(hdcDrawWindow, getPolygon(i), 3);
   } else {
-    Polygon(hdcDrawWindow, bit, 3);
+    Polygon(hdcDrawWindow, getPolygon(i), 3);
   }
 }
 

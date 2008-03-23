@@ -810,7 +810,6 @@ static bool CheckLandableReachableTerrain(NMEA_INFO *Basic,
 void MapWindow::CalculateWaypointReachable(void)
 {
   unsigned int i;
-  bool intask;
   double WaypointDistance, WaypointBearing,AltitudeRequired,AltitudeDifference;
 
   LandableReachable = false;
@@ -821,52 +820,54 @@ void MapWindow::CalculateWaypointReachable(void)
 
   for(i=0;i<NumberOfWayPoints;i++)
   {
-    intask = WaypointInTask(i);
+    if ((WayPointList[i].Visible &&
+	 (
+	  ((WayPointList[i].Flags & AIRPORT) == AIRPORT) ||
+	  ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT)
+	  ))
+	|| WaypointInTask(i) ) {
 
-    if(WayPointList[i].Visible || intask)
-    {
-      if(  ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
-           || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) )
-      {
-        DistanceBearing(DrawInfo.Latitude,
-                        DrawInfo.Longitude,
-                        WayPointList[i].Latitude,
-                        WayPointList[i].Longitude,
-                        &WaypointDistance,
-                        &WaypointBearing);
+      DistanceBearing(DrawInfo.Latitude,
+		      DrawInfo.Longitude,
+		      WayPointList[i].Latitude,
+		      WayPointList[i].Longitude,
+		      &WaypointDistance,
+		      &WaypointBearing);
 
-        AltitudeRequired =
-          GlidePolar::MacCreadyAltitude
-          (GlidePolar::SafetyMacCready,
-           WaypointDistance,
-           WaypointBearing,
-           DerivedDrawInfo.WindSpeed,
-           DerivedDrawInfo.WindBearing,
-           0,0,true,0);
-        AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL
-          + WayPointList[i].Altitude ;
-        AltitudeDifference = DerivedDrawInfo.NavAltitude - AltitudeRequired;
-        WayPointList[i].AltArivalAGL = AltitudeDifference;
+      AltitudeRequired =
+	GlidePolar::MacCreadyAltitude
+	(GlidePolar::SafetyMacCready,
+	 WaypointDistance,
+	 WaypointBearing,
+	 DerivedDrawInfo.WindSpeed,
+	 DerivedDrawInfo.WindBearing,
+	 0,0,true,0);
+      AltitudeRequired = AltitudeRequired + SAFETYALTITUDEARRIVAL
+	+ WayPointList[i].Altitude ;
+      AltitudeDifference = DerivedDrawInfo.NavAltitude - AltitudeRequired;
+      WayPointList[i].AltArivalAGL = AltitudeDifference;
 
-        if(AltitudeDifference >=0){
-          WayPointList[i].Reachable = TRUE;
-          if (!LandableReachable) {
-            if (CheckLandableReachableTerrain(&DrawInfo,
-                                              &DerivedDrawInfo,
-                                              WaypointDistance,
-                                              WaypointBearing)) {
-              LandableReachable = true;
-            }
-          }
-        } else {
-          WayPointList[i].Reachable = FALSE;
-        }
+      if(AltitudeDifference >=0){
+	WayPointList[i].Reachable = TRUE;
+	if (!LandableReachable || (i==ActiveWayPoint)) {
+	  if (CheckLandableReachableTerrain(&DrawInfo,
+					    &DerivedDrawInfo,
+					    WaypointDistance,
+					    WaypointBearing)) {
+	    LandableReachable = true;
+	  } else if (i==ActiveWayPoint) {
+	    WayPointList[i].Reachable = FALSE;
+	  }
+	}
+      } else {
+	WayPointList[i].Reachable = FALSE;
       }
     }
   }
 
   if (!LandableReachable) {
-    // widen search to far visible waypoints (only do this if can't see one at present)
+    // widen search to far visible waypoints
+    // (only do this if can't see one at present)
 
     for(i=0;i<NumberOfWayPoints;i++)
       {
@@ -908,8 +909,6 @@ void MapWindow::CalculateWaypointReachable(void)
                         LandableReachable = true;
                       }
                     }
-
-                    LandableReachable = true;
                   } else {
                     WayPointList[i].Reachable = FALSE;
                   }
@@ -995,8 +994,8 @@ void MapWindow::DrawHorizon(HDC hDC,RECT rc)
 
 #define ROOT2 0.70711
 
-  int rr2p = radius*ROOT2+IBLSCALE(1);
-  int rr2n = radius*ROOT2;
+  int rr2p = lround(radius*ROOT2+IBLSCALE(1));
+  int rr2n = lround(radius*ROOT2);
 
   a1.x = Start.x+rr2p;
   a1.y = Start.y-rr2p;
@@ -1347,7 +1346,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
     if (dotraildrift) {
       double dt;
-      dt = max(0,(DrawInfo.Time-P1->Time));
+      dt = max(0,(DrawInfo.Time-P1->Time)*P1->DriftFactor);
       LatLon2Screen(P1->Longitude+traildrift_lon*dt,
                     P1->Latitude+traildrift_lat*dt,
                     P1->Screen);
