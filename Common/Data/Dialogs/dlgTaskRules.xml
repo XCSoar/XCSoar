@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmTaskRules" Type="Dialog" X=0 Y=0 Width=240 Height=240 Caption="Task Rules" Font=2  BackColor=0xDADBAB>
+
+  <WndButton   Caption="OK"    X=2 Y=2 Width=50  Height=22 Font=2 OnClickNotify="OnOKClicked" Tag=1/>
+
+  <WndProperty Name="prpStartMaxSpeed" Caption="Start max speed"      X=2 Y=-1   Width=236 Height=22 CaptionWidth=150 Font=2
+  Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=300 Step=5/>
+  </WndProperty>
+
+  <WndProperty Name="prpStartMaxHeight" Caption="Start max height"      X=2 Y=-1   Width=236 Height=22 CaptionWidth=150 Font=2
+   Help="Maximum height above ground while starting the task.  Set to 0 for no limit.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
+  </WndProperty>
+
+  <WndProperty Name="prpFinishMinHeight" Caption="Finish min height"      X=2 Y=-1   Width=236 Height=22 CaptionWidth=150 Font=2
+  Help="Minimum height above ground while finishing the task.  Set to 0 for no limit.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
+  </WndProperty>
+
+    <WndProperty Name="prpFAIFinishHeight" Caption="FAI finish height"     X=2 Y=-1  Width=236 Height=22 CaptionWidth=150 Font=2
+Help="If enabled, this option requires the minimum height above ground for finish to be greater than 1000m below the start height.">
+    <DataField name="" DataType="boolean"/>
+    </WndProperty>
+
+    <WndProperty Name="prpOLCRules" Caption="Online contest"     X=2 Y=-1  Width=236 Height=22 CaptionWidth=150 Font=2
+Help="Rules used for calculating optimal points for OnLine Contest.
+[Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
+[Triangle]: Conforms to FAI OLC triangle rules.  Four points with common start and finish.  For tasks longer than 500km, no leg less than 25% or larger than 45%; otherwise no leg less than 28% of total.  Finish height must not be lower than start height less 1000 meters.
+[Classic]: Conforms to OLC classic rules.  Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.  Points awarded 80% on second last leg and 60% on last leg.
+">
+      <DataField name="" DataType="enum"  Min=0 Max=50 Step=1/>
+    </WndProperty>
+
+</WndForm>
+
+</PMML>
