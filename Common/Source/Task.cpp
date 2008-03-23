@@ -41,6 +41,8 @@ Copyright_License {
 bool EnableMultipleStartPoints = false;
 bool TaskModified = false;
 bool TargetModified = false;
+int StartHeightRef = 0; // MSL
+
 TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
 extern bool TargetDialogOpen;
 

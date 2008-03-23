@@ -178,12 +178,6 @@ static void SetValues(bool first=false) {
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
-  if (wp) {
-    wp->GetDataField()->Set(EnableOLC);
-    wp->RefreshDisplay();
-  }
-
   WndButton* wb;
   wb = (WndButton *)wf->FindByName(TEXT("EditStartPoints"));
   if (wb) {
@@ -308,12 +302,6 @@ static void ReadValues(void) {
   if (wp) {
     CHECK_CHANGED(AATEnabled,
                   wp->GetDataField()->GetAsInteger());
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
-  if (wp) {
-    CHECK_CHANGED(EnableOLC,
-                  wp->GetDataField()->GetAsBoolean());
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpTaskFinishLine"));
@@ -460,6 +448,15 @@ static void OnRemoveClicked(WindowControl * Sender) {
   wf->SetModalResult(mrOK);
 }
 
+
+static void OnTaskRulesClicked(WindowControl * Sender){
+  (void)Sender;
+  if (dlgTaskRules()) {
+    TaskModified = true;
+  }
+}
+
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnSelectClicked),
   DeclearCallBackEntry(OnDetailsClicked),
@@ -469,6 +466,7 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnMoveAfterClicked),
   DeclearCallBackEntry(OnMoveBeforeClicked),
   DeclearCallBackEntry(OnAATEnabled),
+  DeclearCallBackEntry(OnTaskRulesClicked),
   DeclearCallBackEntry(NULL)
 };
 

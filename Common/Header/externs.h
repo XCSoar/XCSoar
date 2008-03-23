@@ -106,6 +106,7 @@ extern bool EnableFAIFinishHeight;
 extern DWORD FinishMinHeight;
 extern DWORD StartMaxHeight;
 extern DWORD StartMaxSpeed;
+extern int StartHeightRef;
 extern int OLCRules;
 extern int Handicap;
 extern bool EnableOLC;

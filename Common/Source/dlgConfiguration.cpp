@@ -1778,6 +1778,16 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeightRef"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("MSL")));
+    dfe->addEnumText(gettext(TEXT("AGL")));
+    dfe->Set(StartHeightRef);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartMaxSpeed"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(iround(StartMaxSpeed*SPEEDMODIFY));
@@ -2915,6 +2925,15 @@ void dlgConfigurationShowModal(void){
     if ((int)StartMaxHeight != ival) {
       StartMaxHeight = ival;
       SetToRegistry(szRegistryStartMaxHeight,StartMaxHeight);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeightRef"));
+  if (wp) {
+    if (StartHeightRef != wp->GetDataField()->GetAsInteger()) {
+      StartHeightRef = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryStartHeightRef, StartHeightRef);
       changed = true;
     }
   }

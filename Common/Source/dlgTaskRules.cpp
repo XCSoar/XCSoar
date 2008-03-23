@@ -49,6 +49,8 @@ Copyright_License {
 
 #include "Utils.h"
 
+#define CHECK_CHANGED(a,b) if (a != b) { changed = true; a = b; }
+
 static bool changed = false;
 static WndForm *wf=NULL;
 
@@ -77,9 +79,25 @@ static CallBackTableEntry_t CallBackTable[]={
 static void setVariables(void) {
   WndProperty *wp;
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
+  if (wp) {
+    wp->GetDataField()->Set(EnableOLC);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpFAIFinishHeight"));
   if (wp) {
     wp->GetDataField()->Set(EnableFAIFinishHeight);
+    wp->RefreshDisplay();
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeightRef"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("MSL")));
+    dfe->addEnumText(gettext(TEXT("AGL")));
+    dfe->Set(StartHeightRef);
     wp->RefreshDisplay();
   }
 
@@ -117,7 +135,7 @@ static void setVariables(void) {
 }
 
 
-void dlgTaskRulesShowModal(void){
+bool dlgTaskRules(void){
 
   WndProperty *wp;
 
@@ -128,7 +146,7 @@ void dlgTaskRulesShowModal(void){
 		      hWndMainWindow,
 		      TEXT("IDR_XML_TASKRULES"));
 
-  if (!wf) return;
+  if (!wf) return false;
 
   setVariables();
 
@@ -142,7 +160,20 @@ void dlgTaskRulesShowModal(void){
   if (wp) {
     if (EnableFAIFinishHeight != (wp->GetDataField()->GetAsInteger()>0)) {
       EnableFAIFinishHeight = (wp->GetDataField()->GetAsInteger()>0);
-      SetToRegistry(szRegistryFAIFinishHeight, EnableFAIFinishHeight);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeightRef"));
+  if (wp) {
+    CHECK_CHANGED(StartHeightRef,
+                  wp->GetDataField()->GetAsBoolean());
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
+  if (wp) {
+    if (OLCRules != wp->GetDataField()->GetAsInteger()) {
+      OLCRules = wp->GetDataField()->GetAsInteger();
       changed = true;
     }
   }
@@ -151,7 +182,6 @@ void dlgTaskRulesShowModal(void){
   if (wp) {
     if (OLCRules != wp->GetDataField()->GetAsInteger()) {
       OLCRules = wp->GetDataField()->GetAsInteger();
-      SetToRegistry(szRegistryOLCRules, OLCRules);
       changed = true;
     }
   }
@@ -161,7 +191,6 @@ void dlgTaskRulesShowModal(void){
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
     if ((int)FinishMinHeight != ival) {
       FinishMinHeight = ival;
-      SetToRegistry(szRegistryFinishMinHeight,FinishMinHeight);
       changed = true;
     }
   }
@@ -171,7 +200,6 @@ void dlgTaskRulesShowModal(void){
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
     if ((int)StartMaxHeight != ival) {
       StartMaxHeight = ival;
-      SetToRegistry(szRegistryStartMaxHeight,StartMaxHeight);
       changed = true;
     }
   }
@@ -181,20 +209,13 @@ void dlgTaskRulesShowModal(void){
     ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
     if ((int)StartMaxSpeed != ival) {
       StartMaxSpeed = ival;
-      SetToRegistry(szRegistryStartMaxSpeed,StartMaxSpeed);
       changed = true;
     }
   }
 
-  if (changed && 0) { // JMW temporarily disabled saving of config..
-    StoreRegistry();
-
-    MessageBoxX (hWndMainWindow,
-		 gettext(TEXT("Changes to configuration saved.")),
-		 TEXT(""), MB_OK);
-  }
-
   delete wf;
+
+  return changed;
 
   wf = NULL;
 

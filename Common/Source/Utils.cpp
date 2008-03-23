@@ -266,6 +266,7 @@ TCHAR szRegistryVoiceAirspace[]= TEXT("VoiceAirspace");
 TCHAR szRegistryFinishMinHeight[]= TEXT("FinishMinHeight");
 TCHAR szRegistryStartMaxHeight[]= TEXT("StartMaxHeight");
 TCHAR szRegistryStartMaxSpeed[]= TEXT("StartMaxSpeed");
+TCHAR szRegistryStartHeightRef[] = TEXT("StartHeightRef");
 TCHAR szRegistryEnableNavBaroAltitude[] = TEXT("EnableNavBaroAltitude");
 
 TCHAR szRegistryLoggerTimeStepCruise[]= TEXT("LoggerTimeStepCruise");
@@ -918,6 +919,10 @@ void ReadRegistrySettings(void)
   Temp = FinishMinHeight;
   GetFromRegistry(szRegistryFinishMinHeight,&Temp);
   FinishMinHeight = Temp;
+
+  Temp = StartHeightRef;
+  GetFromRegistry(szRegistryStartHeightRef,&Temp);
+  StartHeightRef = Temp;
 
   Temp = StartMaxHeight;
   GetFromRegistry(szRegistryStartMaxHeight,&Temp);

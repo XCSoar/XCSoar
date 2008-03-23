@@ -65,9 +65,7 @@
     <DataField name="" DataType="enum" Min=0 Max=50 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpOLCEnabled" Caption="OnLine Contest" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables OLC tasks.  When enabled, OLC style task start is detected automatically (lowest point of flight after initial climb).  Auto MacCready in final glide sets MacCready to obtain greatest distance in remaining height and time for OLC sprint tasks.">
-    <DataField name="" DataType="boolean" ReadOnly=0/>
-  </WndProperty>
+  <WndButton  Name="butRules" Caption="Task Rules"    X=150 Y=-1 Width=80  Height=22 Font=2 OnClickNotify="OnTaskRulesClicked"/>
 
   </WndFrame>
 
