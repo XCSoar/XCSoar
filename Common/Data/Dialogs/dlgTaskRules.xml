@@ -38,7 +38,7 @@ Help="If enabled, this option requires the minimum height above ground for finis
     <DataField name="" DataType="boolean"/>
     </WndProperty>
 
-  <WndProperty Name="prpOLCEnabled" Caption="OnLine Contest" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables OLC tasks.  When enabled, OLC style task start is detected automatically (lowest point of flight after initial climb).  Auto MacCready in final glide sets MacCready to obtain greatest distance in remaining height and time for OLC sprint tasks.">
+  <WndProperty Name="prpOLCEnabled" Caption="OnLine Contest" X=2 Y=-1  Width=236 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="Enables OLC tasks.  When enabled, OLC style task start is detected automatically (lowest point of flight after initial climb).  Auto MacCready in final glide sets MacCready to obtain greatest distance in remaining height and time for OLC sprint tasks.">
     <DataField name="" DataType="boolean" ReadOnly=0/>
   </WndProperty>
 

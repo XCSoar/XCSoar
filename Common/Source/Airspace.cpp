@@ -38,7 +38,7 @@ Copyright_License {
 #include "Utils.h"
 #include "XCSoar.h"
 #include "MapWindow.h"
-
+#include "RasterTerrain.h"
 #include <windows.h>
 #include <Commctrl.h>
 #include <math.h>
@@ -879,7 +879,6 @@ static void AddArea(AIRSPACE_AREA *Temp)
       NewArea->Ack.AcknowledgementTime = 0;
       NewArea->_NewWarnAckNoBrush = false;
 
-
       Temp->FirstPoint = Temp->FirstPoint + Temp->NumPoints ;
 
       if (Temp->NumPoints > 0) {
@@ -904,6 +903,28 @@ static void AddArea(AIRSPACE_AREA *Temp)
           if(PointList[i].Longitude  < NewArea->MinLongitude)
             NewArea->MinLongitude  = PointList[i].Longitude ;
         }
+
+	if (((NewArea->Base.Base == abAGL) || (NewArea->Top.Base == abAGL))) {
+	  
+	  RasterTerrain::Lock();
+	  // want most accurate rounding here
+	  RasterTerrain::SetTerrainRounding(0,0);
+	  double av_lat = (NewArea->MaxLatitude+NewArea->MinLatitude)/2;
+	  double av_lon = (NewArea->MaxLongitude+NewArea->MinLongitude)/2;
+
+	  double th = 
+	    RasterTerrain::GetTerrainHeight(av_lat, av_lon);
+
+	  if (NewArea->Base.Base == abAGL) {
+	    NewArea->Base.Altitude += th;
+	  }
+	  if (NewArea->Top.Base == abAGL) {
+	    NewArea->Top.Altitude += th;
+	  }
+	  // JMW TODO: complain if out of terrain range
+	  RasterTerrain::Unlock();
+	}
+
       } else {
 
         NewArea->MaxLatitude = 0;
@@ -2164,5 +2185,3 @@ void DumpAirspaceFile(void){
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-
-
