@@ -210,6 +210,10 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   BestGlide = 10000;
   BestTime = 1e6;
 
+  if (BestCruiseTrack) {
+    *BestCruiseTrack = Bearing;
+  }
+
   double vtot;
   if (Distance<1.0) {
     Distance = 1;
@@ -292,7 +296,7 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
 		+HeadWind*(1-tc))*RAD_TO_DEG+Bearing;
       }
       if (VMacCready) {
-	*VMacCready = vtrack;
+	*VMacCready = min(SAFTEYSPEED,vtrack);
       }
 
       // speed along track during cruise component

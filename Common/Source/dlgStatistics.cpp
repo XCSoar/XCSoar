@@ -1332,7 +1332,7 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   RasterTerrain::SetTerrainRounding(0,0);
 
   for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
-    fj = j*1.0/(AIRSPACE_SCANSIZE_X);
+    fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
     FindLatitudeLongitude(aclat, aclon, acb, range*fj,
                           &d_lat[j], &d_lon[j]);
     d_alt[j] = RasterTerrain::GetTerrainHeight(d_lat[j],
@@ -1350,7 +1350,7 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   ScaleYFromValue(rc, hmax);
 
   for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
-    fi = i*1.0/(AIRSPACE_SCANSIZE_H);
+    fi = i*1.0/(AIRSPACE_SCANSIZE_H-1);
     d_h[i] = (hmax-hmin)*fi+hmin;
   }
   for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
@@ -1366,9 +1366,9 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   HPEN oldpen = (HPEN)SelectObject(hdc, (HPEN)mpen);
 
   for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
-    fi = i*1.0/(AIRSPACE_SCANSIZE_H);
+    fi = i*1.0/(AIRSPACE_SCANSIZE_H-1);
     for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
-      fj = j*1.0/(AIRSPACE_SCANSIZE_X);
+      fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
 
       type = d_airspace[i][j];
       if (type>=0) {
@@ -1378,9 +1378,9 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
 		     MapWindow::Colours[MapWindow::iAirspaceColour[type]]);
 
 	rcd.left = iround(fj*(rc.right-rc.left)+rc.left);
-	rcd.right = iround(rcd.left+(rc.right-rc.left)/AIRSPACE_SCANSIZE_X);
+	rcd.right = iround(rcd.left+(rc.right-rc.left)/(AIRSPACE_SCANSIZE_X-1));
 	rcd.bottom = iround(fi*(rc.top-rc.bottom)+rc.bottom);
-	rcd.top = iround(rcd.bottom+(rc.top-rc.bottom)/AIRSPACE_SCANSIZE_H);
+	rcd.top = iround(rcd.bottom+(rc.top-rc.bottom)/(AIRSPACE_SCANSIZE_H-1));
 
 	Rectangle(hdc,rcd.left,rcd.top,rcd.right,rcd.bottom);
 
@@ -1398,10 +1398,10 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   SelectObject(hdc, hbHorizonGround);
   for (j=1; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
 
-    ground[0].x = iround((j-1)*1.0/(AIRSPACE_SCANSIZE_X)
+    ground[0].x = iround((j-1)*1.0/(AIRSPACE_SCANSIZE_X-1)
 			 *(rc.right-rc.left)+rc.left);
     ground[1].x = ground[0].x;
-    ground[2].x = iround((j)*1.0/(AIRSPACE_SCANSIZE_X)
+    ground[2].x = iround((j)*1.0/(AIRSPACE_SCANSIZE_X-1)
 			 *(rc.right-rc.left)+rc.left);
     ground[3].x = ground[2].x;
     ground[0].y = rc.bottom;
@@ -1439,7 +1439,7 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   int delta;
   SelectObject(hdc, GetStockObject(WHITE_PEN));
   SelectObject(hdc, GetStockObject(WHITE_BRUSH));
-  line[0].x = (int)(rc.left+(rc.right-rc.left)/AIRSPACE_SCANSIZE_X);
+  line[0].x = (int)(rc.left+(rc.right-rc.left)/AIRSPACE_SCANSIZE_X-1);
   line[0].y = (int)(fh*(rc.top-rc.bottom)+rc.bottom)-1;
   line[1].x = rc.left;
   line[1].y = line[0].y;
@@ -1907,7 +1907,7 @@ static void OnCalcClicked(WindowControl * Sender,
   if (page==ANALYSIS_PAGE_TEMPTRACE) {
     dlgBasicSettingsShowModal();
   }
-  if (page==ANALYSIS_PAGE_TASK) {
+  if ((page==ANALYSIS_PAGE_TASK) || (page==ANALYSIS_PAGE_TASK_SPEED)) {
     wf->SetVisible(false);
     dlgTaskCalculatorShowModal();
     wf->SetVisible(true);

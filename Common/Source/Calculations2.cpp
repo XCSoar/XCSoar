@@ -344,7 +344,6 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     // how much we need at that speed.
     //   dh>0, we can afford to speed up
 
-    /* JMW disabled this because we want the HIGHEST mc that will give dh=0
     if (dh==dhlast) {
       // same height, must have hit max speed.
       if (dh>0) {
@@ -353,7 +352,6 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
         return 0.0;
       }
     }
-    */
 
     if ((dh<=0)&&(dhlast>0)) {
       if (dh-dhlast < 0) {
@@ -834,12 +832,12 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
     if (cruise_efficiency_mode) {
       mc_effective = MACCREADY;
       if (Calculated->FinalGlide && (Calculated->timeCircling>0)) {
-	mc_effective = min(mc_effective, LIFTMODIFY*CALCULATED_INFO.TotalHeightClimb
-			   /CALCULATED_INFO.timeCircling);
+	mc_effective = LIFTMODIFY*CALCULATED_INFO.TotalHeightClimb
+			   /CALCULATED_INFO.timeCircling;
       }
       cruise_efficiency = 0.5+value_scan;
     } else {
-      mc_effective = value_scan*100.0;
+      mc_effective = value_scan*10.0;
       cruise_efficiency = 1.0;
     }
 

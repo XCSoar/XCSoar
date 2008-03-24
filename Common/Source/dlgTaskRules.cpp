@@ -49,7 +49,6 @@ Copyright_License {
 
 #include "Utils.h"
 
-#define CHECK_CHANGED(a,b) if (a != b) { changed = true; a = b; }
 
 static bool changed = false;
 static WndForm *wf=NULL;
@@ -169,20 +168,16 @@ bool dlgTaskRules(void){
   if (wp) {
     if (EnableFAIFinishHeight != (wp->GetDataField()->GetAsInteger()>0)) {
       EnableFAIFinishHeight = (wp->GetDataField()->GetAsInteger()>0);
+      SetToRegistry(szRegistryFAIFinishHeight, EnableFAIFinishHeight);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpStartHeightRef"));
   if (wp) {
-    CHECK_CHANGED(StartHeightRef,
-                  wp->GetDataField()->GetAsInteger());
-  }
-
-  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCRules"));
-  if (wp) {
-    if (OLCRules != wp->GetDataField()->GetAsInteger()) {
-      OLCRules = wp->GetDataField()->GetAsInteger();
+    if (StartHeightRef != wp->GetDataField()->GetAsInteger()) {
+      StartHeightRef = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryStartHeightRef, StartHeightRef);
       changed = true;
     }
   }
@@ -191,6 +186,15 @@ bool dlgTaskRules(void){
   if (wp) {
     if (OLCRules != wp->GetDataField()->GetAsInteger()) {
       OLCRules = wp->GetDataField()->GetAsInteger();
+      SetToRegistry(szRegistryOLCRules, OLCRules);
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
+  if (wp) {
+    if (EnableOLC != wp->GetDataField()->GetAsInteger()) {
+      EnableOLC = wp->GetDataField()->GetAsInteger();
       changed = true;
     }
   }
@@ -200,6 +204,7 @@ bool dlgTaskRules(void){
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
     if ((int)FinishMinHeight != ival) {
       FinishMinHeight = ival;
+      SetToRegistry(szRegistryFinishMinHeight,FinishMinHeight);
       changed = true;
     }
   }
@@ -209,6 +214,7 @@ bool dlgTaskRules(void){
     ival = iround(wp->GetDataField()->GetAsInteger()/ALTITUDEMODIFY);
     if ((int)StartMaxHeight != ival) {
       StartMaxHeight = ival;
+      SetToRegistry(szRegistryStartMaxHeight,StartMaxHeight);
       changed = true;
     }
   }
@@ -218,11 +224,20 @@ bool dlgTaskRules(void){
     ival = iround(wp->GetDataField()->GetAsInteger()/SPEEDMODIFY);
     if ((int)StartMaxSpeed != ival) {
       StartMaxSpeed = ival;
+      SetToRegistry(szRegistryStartMaxSpeed,StartMaxSpeed);
       changed = true;
     }
   }
 
   delete wf;
+
+  if (changed) {
+    StoreRegistry();
+
+    MessageBoxX (hWndMainWindow,
+		 gettext(TEXT("Changes to configuration saved.")),
+		 TEXT(""), MB_OK);
+  }
 
   return changed;
 

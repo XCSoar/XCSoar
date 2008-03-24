@@ -451,9 +451,11 @@ static void OnRemoveClicked(WindowControl * Sender) {
 
 static void OnTaskRulesClicked(WindowControl * Sender){
   (void)Sender;
+  wf->SetVisible(false);
   if (dlgTaskRules()) {
     TaskModified = true;
   }
+  wf->SetVisible(true);
 }
 
 
