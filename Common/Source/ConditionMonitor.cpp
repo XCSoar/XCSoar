@@ -323,7 +323,7 @@ class ConditionMonitorStartRules: public ConditionMonitor {
 public:
   ConditionMonitorStartRules() {
     Interval_Notification = 60;
-    Interval_Check = 10;
+    Interval_Check = 1;
   }
 protected:
 

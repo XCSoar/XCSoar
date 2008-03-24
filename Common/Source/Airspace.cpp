@@ -921,7 +921,7 @@ static void AddArea(AIRSPACE_AREA *Temp)
 	  if (NewArea->Top.Base == abAGL) {
 	    NewArea->Top.Altitude += th;
 	  }
-	  // JMW TODO: complain if out of terrain range
+	  // JMW TODO: complain if out of terrain range (th<0)
 	  RasterTerrain::Unlock();
 	}
 

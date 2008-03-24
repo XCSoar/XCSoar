@@ -1308,6 +1308,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static double StartLong = 0;
   static double StartLat = 0;
   static double StartAlt = 0;
+  static double StartEnergyHeight = 0;
   static double LastTime = 0;
   static int MODE = CRUISE;
   static bool LEFT = FALSE;
@@ -1414,6 +1415,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       StartLong = Basic->Longitude;
       StartLat  = Basic->Latitude;
       StartAlt  = Calculated->NavAltitude;
+      StartEnergyHeight  = Calculated->EnergyHeight;
       MODE = WAITCLIMB;
     }
     if (forcecircling) {
@@ -1433,7 +1435,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         MODE = CLIMB;
         Calculated->ClimbStartLat = StartLat;
         Calculated->ClimbStartLong = StartLong;
-        Calculated->ClimbStartAlt = StartAlt+Calculated->EnergyHeight;
+        Calculated->ClimbStartAlt = StartAlt+StartEnergyHeight;
         Calculated->ClimbStartTime = StartTime;
         
         if (flightstats.Altitude_Ceiling.sum_n>0) {
@@ -1471,6 +1473,7 @@ void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
       StartLong = Basic->Longitude;
       StartLat  = Basic->Latitude;
       StartAlt  = Calculated->NavAltitude;
+      StartEnergyHeight  = Calculated->EnergyHeight;
       // JMW Transition to cruise, due to not properly turning
       MODE = WAITCRUISE;
     }
@@ -2605,7 +2608,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 
     if(Basic->Time < LastTime) {
       LastTime = Basic->Time;
-    } else if (Basic->Time-LastTime >=5.0) {
+    } else if (Basic->Time-LastTime >=1.0) {
 
       double dt = Basic->Time-LastTime;
       LastTime = Basic->Time;
@@ -2636,16 +2639,26 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 
       static double dr_last = dr;
       double Vstar = max(1.0,Calculated->VMacCready);
-      double vthis = -(dr-dr_last)/dt;
+      double vthis = (dr_last-dr)/dt;
       double Vav = d0/t0;
-      double rho_climb = min(1.0,max(0,h0/(max(0.1,MACCREADY)*t0)));
-      double rho_cruise = 1.0-rho_climb;
+      double sr = -GlidePolar::SinkRate(Vstar);
 
+      double mc_safe = max(0.1,MACCREADY);
+      if (Calculated->timeCircling>30) {
+	mc_safe = max(MACCREADY, Calculated->TotalHeightClimb/Calculated->timeCircling);
+      }
+      double rho_cruise = max(0.0,min(1.0,mc_safe/(sr+mc_safe)));
+      double rho_climb = 1.0-rho_cruise;
       double delta_d2 = (v2*t1-v2last*t2last);
       double vdiff = delta_d2/dt;
+      double w_comp = min(3.0,max(-3.0,Calculated->Vario/mc_safe));
 
-      vdiff = Vav*(vthis/Vstar + (Calculated->Vario/max(0.1,MACCREADY))*rho_cruise
-		   + rho_climb);
+      vdiff = Vav*(vthis/Vstar + w_comp*rho_cruise + rho_climb);
+
+      if (vthis > SAFTEYSPEED*2) {
+	vdiff = Vav;
+	// prevent funny numbers when starting mid-track
+      }
       dr_last = dr;
       
       if (t1<10) {
