@@ -1451,3 +1451,87 @@ void MapWindow::DrawTrailFromTask(HDC hdc, RECT rc) {
     ClipPolygon(hdc, ptin, j, rc, false);
   }
 }
+
+
+///////
+extern HFONT  TitleWindowFont;
+
+void MapWindow::DrawOffTrackIndicator(HDC hdc) {
+  if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint)) {
+    return;
+  }
+  if (fabs(DrawInfo.TrackBearing-DerivedDrawInfo.WaypointBearing)<10) {
+    // insignificant error
+    return;
+  }
+  if (DerivedDrawInfo.Circling || TaskAborted || TargetPan) {
+    // don't display in various modes
+    return;
+  }
+
+  double distance_max = min(DerivedDrawInfo.WaypointDistance,
+			    GetApproxScreenRange());
+  if (distance_max < 5000.0) {
+    // too short to bother
+    return();
+  }
+
+  LockTaskData();  // protect from external task changes
+
+  double startLat = DrawInfo.Latitude;
+  double startLon = DrawInfo.Longitude;
+  double targetLat;
+  double targetLon;
+  double dLat, dLon;
+
+  if (AATEnabled && ValidTaskPoint(ActiveWayPoint+1)) {
+    targetLat = Task[ActiveWayPoint].AATTargetLat;
+    targetLon = Task[ActiveWayPoint].AATTargetLon;
+  } else {
+    targetLat = WayPointList[Task[ActiveWayPoint].Index].Latitude;
+    targetLon = WayPointList[Task[ActiveWayPoint].Index].Longitude;
+  }
+  UnlockTaskData();
+
+  HFONT oldFont = (HFONT)SelectObject(hdc, TitleWindowFont);
+  SetTextColor(hdc, RGB(0x0,0x0,0x0));
+
+  int ilast = 0;
+  for (double d=0.25; d<=1.0; d+= 0.25) {
+    double distance0, distance1;
+
+    FindLatitudeLongitude(startLat, startLon,
+			  DrawInfo.TrackBearing,
+			  distance_max*d,
+			  &dLat, &dLon);
+
+    DistanceBearing(startLat, startLon,
+		    dLat, dLon,
+		    &distance0,
+		    NULL);
+    DistanceBearing(dLat, dLon,
+		    targetLat, targetLon,
+		    &distance1,
+		    NULL);
+
+    double distance = (distance0+distance1)/DerivedDrawInfo.WaypointDistance;
+    int idist = iround((distance-1.0)*100);
+
+    if ((idist != ilast) && (idist>0) && (idist<1000)) {
+
+      TCHAR Buffer[5];
+      _stprintf(Buffer, TEXT("%d"), idist);
+      short size = _tcslen(Buffer);
+      SIZE tsize;
+      POINT sc;
+      LatLon2Screen(dLon, dLat, sc);
+      GetTextExtentPoint(hdc, Buffer, size, &tsize);
+      ExtTextOut(hdc, sc.x-tsize.cx/2, sc.y-tsize.cy/2,
+		 NULL, NULL, Buffer, size, NULL);
+    }
+    ilast = idist;
+
+  }
+
+  SelectObject(hdc, oldFont);
+}
