@@ -1470,10 +1470,10 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc) {
   }
 
   double distance_max = min(DerivedDrawInfo.WaypointDistance,
-			    GetApproxScreenRange());
+			    GetApproxScreenRange()*0.7);
   if (distance_max < 5000.0) {
     // too short to bother
-    return();
+    return;
   }
 
   LockTaskData();  // protect from external task changes
@@ -1524,12 +1524,21 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc) {
       short size = _tcslen(Buffer);
       SIZE tsize;
       POINT sc;
+      RECT brect;
       LatLon2Screen(dLon, dLat, sc);
       GetTextExtentPoint(hdc, Buffer, size, &tsize);
-      ExtTextOut(hdc, sc.x-tsize.cx/2, sc.y-tsize.cy/2, 
-		 NULL, NULL, Buffer, size, NULL);
+
+      brect.left = sc.x-4;
+      brect.right = brect.left+tsize.cx+4;
+      brect.top = sc.y-4;
+      brect.bottom = brect.top+tsize.cy+4;
+
+      if (checkLabelBlock(brect)) {
+	ExtTextOut(hdc, sc.x-tsize.cx/2, sc.y-tsize.cy/2, 
+		   NULL, NULL, Buffer, size, NULL);
+	ilast = idist;
+      }
     }
-    ilast = idist;
 
   }
 

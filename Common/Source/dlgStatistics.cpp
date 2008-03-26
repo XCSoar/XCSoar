@@ -561,7 +561,7 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
   ScaleXFromValue(rc, flightstats.Altitude.x_min-0.15); // room for labels
 
   LockTaskData();
-  for(int j=0;j<MAXTASKPOINTS;j++) {
+  for(int j=1;j<MAXTASKPOINTS;j++) {
     if (ValidTaskPoint(j) && (flightstats.LegStartTime[j]>=0)) {
       double xx = 
         (flightstats.LegStartTime[j]-CALCULATED_INFO.TakeOffTime)/3600.0;
@@ -613,7 +613,7 @@ void Statistics::RenderSpeed(HDC hdc, RECT rc)
   ScaleXFromValue(rc, flightstats.Task_Speed.x_min-0.15); // room for labels
 
   LockTaskData();
-  for(int j=0;j<MAXTASKPOINTS;j++) {
+  for(int j=1;j<MAXTASKPOINTS;j++) {
     if (ValidTaskPoint(j) && (flightstats.LegStartTime[j]>=0)) {
       double xx = 
         (flightstats.LegStartTime[j]-CALCULATED_INFO.TaskStartTime)/3600.0;

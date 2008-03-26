@@ -2637,9 +2637,9 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
       // Therefore, it shows well whether at any time the glider
       // is wasting time.
 
-      static double dr_last = dr;
+      static double dr_last = d1;
       double Vstar = max(1.0,Calculated->VMacCready);
-      double vthis = (dr_last-dr)/dt;
+      double vthis = (d1-dr_last)/dt;
       double Vav = d0/t0;
       double sr = -GlidePolar::SinkRate(Vstar);
 
@@ -2659,7 +2659,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 	vdiff = Vav;
 	// prevent funny numbers when starting mid-track
       }
-      dr_last = dr;
+      dr_last = d1;
       
       if (t1<10) {
         Calculated->TaskSpeedInstantaneous = v2;
@@ -3130,9 +3130,12 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   LockTaskData();
 
   double mc_new = MACCREADY;
+  bool first_mc = true;
 
   if (Calculated->FinalGlide && ActiveIsFinalWaypoint()) {
     is_final_glide = true;
+  } else {
+    first_mc = true;
   }
 
   if (((AutoMcMode==0)||(AutoMcMode==2)) && is_final_glide 
@@ -3164,10 +3167,16 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 	double mc_pirker = PirkerAnalysis(Basic, Calculated,
 					  Calculated->WaypointBearing,
 					  slope);
-	if (mc_pirker>0) {
-	  mc_new = mc_pirker;
+	mc_pirker = max(0.0, mc_pirker);
+	if (first_mc) {
+	  // don't allow Mc to wind down to zero when first achieving
+	  // final glide; but do allow it to wind down after that
+	  if (mc_pirker >= mc_new) {
+	    mc_new = mc_pirker;
+	    first_mc = false;
+	  }
 	} else {
-	  mc_new = 0.0;
+	  mc_new = mc_pirker;
 	}
       }
     }

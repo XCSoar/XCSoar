@@ -1954,12 +1954,11 @@ void MapWindow::RenderMapWindow(  RECT rc)
     if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
         || RasterTerrain::render_weather) {
       DrawSpotHeights(hdcDrawWindowBg);
-    } else if (extGPSCONNECT) {
-      // don't draw offtrack indicator if showing spot heights
-      DrawOffTrackIndicator(hdcDrawWindowBg);
-    }
+    } 
 
     if (extGPSCONNECT) {
+      // TODO don't draw offtrack indicator if showing spot heights
+      DrawOffTrackIndicator(hdcDrawWindowBg);
       DrawTrack(hdcDrawWindowBg, Orig_Aircraft);
       DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
       DrawBearing(hdcDrawWindowBg);
