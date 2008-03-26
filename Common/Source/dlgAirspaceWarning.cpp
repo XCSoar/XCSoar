@@ -239,8 +239,13 @@ static TCHAR *fmtAirspaceAlt(TCHAR *Buffer, AIRSPACE_ALT *alt){
     case abAGL:
       if (alt->Altitude == 0)
         _stprintf(Buffer, TEXT("SFC"));
-      else
+      else {
+	Units::FormatUserAltitude(alt->AGL, sUnitBuffer,
+				  sizeof(sUnitBuffer)/sizeof(sUnitBuffer[0]));
+	Units::FormatAlternateUserAltitude(alt->AGL, sAltUnitBuffer,
+			    sizeof(sAltUnitBuffer)/sizeof(sAltUnitBuffer[0]));
         _stprintf(Buffer, TEXT("%s %s AGL"), sUnitBuffer, sAltUnitBuffer);
+      }
     break;
     case abFL:
       _stprintf(Buffer, TEXT("FL %.0f %s"), alt->FL, sUnitBuffer/*AltitudeToQNHAltitude(alt->Altitude)*/);
