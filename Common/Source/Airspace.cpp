@@ -798,9 +798,11 @@ static void AddAirspaceCircle(AIRSPACE_AREA *Temp,
       NewCircle->Top.Altitude  = Temp->Top.Altitude ;
       NewCircle->Top.FL   = Temp->Top.FL;
       NewCircle->Top.Base   = Temp->Top.Base;
+      NewCircle->Top.AGL = Temp->Top.AGL;
       NewCircle->Base.Altitude  = Temp->Base.Altitude;
       NewCircle->Base.FL   = Temp->Base.FL;
       NewCircle->Base.Base   = Temp->Base.Base;
+      NewCircle->Base.AGL = Temp->Base.AGL;
       NewCircle->Ack.AcknowledgedToday = false;
       NewCircle->Ack.AcknowledgementTime = 0;
       NewCircle->_NewWarnAckNoBrush = false;
@@ -870,10 +872,12 @@ static void AddArea(AIRSPACE_AREA *Temp)
       NewArea->Base.Altitude  = Temp->Base.Altitude ;
       NewArea->Base.FL   = Temp->Base.FL  ;
       NewArea->Base.Base   = Temp->Base.Base;
+      NewArea->Base.AGL   = Temp->Base.AGL  ;
       NewArea->NumPoints = Temp->NumPoints;
       NewArea->Top.Altitude  = Temp->Top.Altitude ;
       NewArea->Top.FL = Temp->Top.FL;
       NewArea->Top.Base   = Temp->Top.Base;
+      NewArea->Top.AGL  = Temp->Top.AGL ;
       NewArea->FirstPoint = Temp->FirstPoint;
       NewArea->Ack.AcknowledgedToday = false;
       NewArea->Ack.AcknowledgementTime = 0;
@@ -916,10 +920,24 @@ static void AddArea(AIRSPACE_AREA *Temp)
 	    RasterTerrain::GetTerrainHeight(av_lat, av_lon);
 
 	  if (NewArea->Base.Base == abAGL) {
-	    NewArea->Base.Altitude += th;
+	    if (NewArea->Base.AGL>=0) {
+	      NewArea->Base.AGL = NewArea->Base.Altitude;
+	      NewArea->Base.Altitude += th;
+	    } else {
+	      // surface, set to zero
+	      NewArea->Base.AGL = 0;
+	      NewArea->Base.Altitude = 0;
+	    }
 	  }
 	  if (NewArea->Top.Base == abAGL) {
-	    NewArea->Top.Altitude += th;
+	    if (NewArea->Top.AGL>=0) {
+	      NewArea->Top.AGL = NewArea->Top.Altitude;
+	      NewArea->Top.Altitude += th;
+	    } else {
+	      // surface, set to zero
+	      NewArea->Top.AGL = 0;
+	      NewArea->Top.Altitude = 0;
+	    }
 	  }
 	  // JMW TODO: complain if out of terrain range (th<0)
 	  RasterTerrain::Unlock();
@@ -953,9 +971,10 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
 
   Alt->Altitude = 0;
   Alt->FL = 0;
+  Alt->AGL = 0;
   Alt->Base = abUndef;
 
-  while(pToken != NULL && *pToken != '\0'){
+  while((pToken != NULL) && (*pToken != '\0')){
 
     if (isdigit(*pToken)) {
       double d = (double)StrToDouble(pToken, &Stop);;
@@ -977,6 +996,7 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
       Alt->Base = abAGL;
       Alt->FL = 0;
       Alt->Altitude = 0;
+      Alt->AGL = -1;
       fHasUnit = true;
     }
 
@@ -2085,7 +2105,7 @@ void DumpAirspaceFile(void){
         _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
       break;
       case abAGL:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
+        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceArea[i].Top.AGL, AirspaceArea[i].Top.AGL*TOFEET);
       break;
       case abFL:
         _ftprintf(fp, TEXT("  Top  : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceArea[i].Top.FL, AirspaceArea[i].Top.Altitude, AirspaceArea[i].Top.Altitude*TOFEET);
@@ -2100,7 +2120,7 @@ void DumpAirspaceFile(void){
         _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
       break;
       case abAGL:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
+        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceArea[i].Base.AGL, AirspaceArea[i].Base.AGL*TOFEET);
       break;
       case abFL:
         _ftprintf(fp, TEXT("  Base : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceArea[i].Base.FL, AirspaceArea[i].Base.Altitude, AirspaceArea[i].Base.Altitude*TOFEET);
@@ -2153,7 +2173,7 @@ void DumpAirspaceFile(void){
         _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
       break;
       case abAGL:
-        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
+        _ftprintf(fp, TEXT("  Top  : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceCircle[i].Top.AGL, AirspaceCircle[i].Top.AGL*TOFEET);
       break;
       case abFL:
         _ftprintf(fp, TEXT("  Top  : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceCircle[i].Top.FL, AirspaceCircle[i].Top.Altitude, AirspaceCircle[i].Top.Altitude*TOFEET);
@@ -2168,7 +2188,7 @@ void DumpAirspaceFile(void){
         _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [MSL]\r\n"), AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);
       break;
       case abAGL:
-        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);
+        _ftprintf(fp, TEXT("  Base : %.0f[m] %.0f[ft] [AGL]\r\n"), AirspaceCircle[i].Base.AGL, AirspaceCircle[i].Base.AGL*TOFEET);
       break;
       case abFL:
         _ftprintf(fp, TEXT("  Base : FL %.0f (%.0f[m] %.0f[ft])\r\n"), AirspaceCircle[i].Base.FL, AirspaceCircle[i].Base.Altitude, AirspaceCircle[i].Base.Altitude*TOFEET);

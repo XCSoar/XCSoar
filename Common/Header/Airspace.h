@@ -43,8 +43,9 @@ typedef enum {abUndef, abMSL, abAGL, abFL} AirspaceAltBase_t;
 
 typedef struct _AIRSPACE_ALT
 {
-	double Altitude;
-	double FL;
+  double Altitude;
+  double FL;
+  double AGL;
   AirspaceAltBase_t Base;  
 } AIRSPACE_ALT;
 
