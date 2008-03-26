@@ -56,6 +56,9 @@ bool   Statistics::unscaled_y;
 
 static HPEN penThinSignal = NULL;
 
+#define BORDER_X 10
+#define BORDER_Y 10
+
 void Statistics::ResetScale() {
   unscaled_y = true;  
   unscaled_x = true;  
@@ -104,7 +107,7 @@ void Statistics::ScaleYFromData(RECT rc, LeastSquares* lsdata)
   if (fabs(y_max - y_min) > 50){
     yscale = (y_max - y_min);
     if (yscale>0) {
-      yscale = (rc.bottom-rc.top)/yscale;
+      yscale = (rc.bottom-rc.top-BORDER_Y)/yscale;
     }
   } else {
     yscale = 2000;
@@ -128,7 +131,7 @@ void Statistics::ScaleXFromData(RECT rc, LeastSquares* lsdata)
 
   xscale = (x_max-x_min);
   if (xscale>0) {
-    xscale = (rc.right-rc.left)/xscale;
+    xscale = (rc.right-rc.left-BORDER_X)/xscale;
   }
 }
 
@@ -146,7 +149,7 @@ void Statistics::ScaleYFromValue(RECT rc, double value)
 
   yscale = (y_max - y_min);
   if (yscale>0) {
-    yscale = (rc.bottom-rc.top)/yscale;
+    yscale = (rc.bottom-rc.top-BORDER_Y)/yscale;
   }
 }
 
@@ -164,7 +167,7 @@ void Statistics::ScaleXFromValue(RECT rc, double value)
 
   xscale = (x_max-x_min);
   if (xscale>0) {
-    xscale = (rc.right-rc.left)/xscale;
+    xscale = (rc.right-rc.left-BORDER_X)/xscale;
   }
 
 }
@@ -222,7 +225,7 @@ void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text,
 
   SIZE tsize;
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
-  int x = (int)((xv-x_min)*xscale)+rc.left-tsize.cx/2;
+  int x = (int)((xv-x_min)*xscale)+rc.left-tsize.cx/2+X_BORDER;
   int y = (int)((y_max-yv)*yscale)+rc.top-tsize.cy/2;
   SetBkMode(hdc, OPAQUE);
   ExtTextOut(hdc, x, y, ETO_OPAQUE, NULL, text, _tcslen(text), NULL);
@@ -285,8 +288,8 @@ void Statistics::DrawTrend(HDC hdc, RECT rc, LeastSquares* lsdata, int Style)
   ymin = lsdata->x_min*lsdata->m+lsdata->b;
   ymax = lsdata->x_max*lsdata->m+lsdata->b;
   
-  xmin = (int)((xmin-x_min)*xscale)+rc.left;
-  xmax = (int)((xmax-x_min)*xscale)+rc.left;
+  xmin = (int)((xmin-x_min)*xscale)+rc.left+X_BORDER;
+  xmax = (int)((xmax-x_min)*xscale)+rc.left+X_BORDER;
   ymin = (int)((y_max-ymin)*yscale)+rc.top;
   ymax = (int)((y_max-ymax)*yscale)+rc.top;
   POINT line[2];
@@ -317,8 +320,8 @@ void Statistics::DrawTrendN(HDC hdc, RECT rc, LeastSquares* lsdata,
   ymin = lsdata->x_min*lsdata->m+lsdata->b;
   ymax = lsdata->x_max*lsdata->m+lsdata->b;
   
-  xmin = (int)((xmin)*xscale)+rc.left;
-  xmax = (int)((xmax)*xscale)+rc.left;
+  xmin = (int)((xmin)*xscale)+rc.left+X_BORDER;
+  xmax = (int)((xmax)*xscale)+rc.left+X_BORDER;
   ymin = (int)((y_max-ymin)*yscale)+rc.top;
   ymax = (int)((y_max-ymax)*yscale)+rc.top;
   POINT line[2];
@@ -340,8 +343,8 @@ void Statistics::DrawLine(HDC hdc, RECT rc, double xmin, double ymin,
     return;
   }
   
-  xmin = (int)((xmin-x_min)*xscale)+rc.left;
-  xmax = (int)((xmax-x_min)*xscale)+rc.left;
+  xmin = (int)((xmin-x_min)*xscale)+rc.left+X_BORDER;
+  xmax = (int)((xmax-x_min)*xscale)+rc.left+X_BORDER;
   ymin = (int)((y_max-ymin)*yscale)+rc.top;
   ymax = (int)((y_max-ymax)*yscale)+rc.top;
   POINT line[2];
@@ -368,9 +371,9 @@ void Statistics::DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata) {
   int xmin, ymin, xmax, ymax;
 
   for (i= 0; i<lsdata->sum_n; i++) {
-    xmin = (int)((i+1+0.2)*xscale)+rc.left;
+    xmin = (int)((i+1+0.2)*xscale)+rc.left+X_BORDER;
     ymin = (int)((y_max-y_min)*yscale)+rc.top;
-    xmax = (int)((i+1+0.8)*xscale)+rc.left;
+    xmax = (int)((i+1+0.8)*xscale)+rc.left+X_BORDER;
     ymax = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
     Rectangle(hdc, 
               xmin, 
@@ -388,9 +391,9 @@ void Statistics::DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
   POINT line[2];
 
   for (int i=0; i<lsdata->sum_n-1; i++) {
-    line[0].x = (int)((lsdata->xstore[i]-x_min)*xscale)+rc.left;
+    line[0].x = (int)((lsdata->xstore[i]-x_min)*xscale)+rc.left+X_BORDER;
     line[0].y = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
-    line[1].x = (int)((lsdata->xstore[i+1]-x_min)*xscale)+rc.left;
+    line[1].x = (int)((lsdata->xstore[i+1]-x_min)*xscale)+rc.left+X_BORDER;
     line[1].y = (int)((y_max-lsdata->ystore[i+1])*yscale)+rc.top;
 
     // STYLE_DASHGREEN
@@ -423,7 +426,7 @@ void Statistics::DrawXGrid(HDC hdc, RECT rc, double tic_step, double zero,
 
   for (xval=zero; xval<= x_max; xval+= tic_step) {
 
-    xmin = (int)((xval-x_min)*xscale)+rc.left;
+    xmin = (int)((xval-x_min)*xscale)+rc.left+X_BORDER;
     ymin = rc.top;
     xmax = xmin;
     ymax = rc.bottom;
@@ -449,7 +452,7 @@ void Statistics::DrawXGrid(HDC hdc, RECT rc, double tic_step, double zero,
 
   for (xval=zero-tic_step; xval>= x_min; xval-= tic_step) {
 
-    xmin = (int)((xval-x_min)*xscale)+rc.left;
+    xmin = (int)((xval-x_min)*xscale)+rc.left+X_BORDER;
     ymin = rc.top;
     xmax = xmin;
     ymax = rc.bottom;
@@ -488,7 +491,7 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double tic_step, double zero,
 
   for (yval=zero; yval<= y_max; yval+= tic_step) {
 
-    xmin = rc.left;
+    xmin = rc.left+X_BORDER;
     ymin = (int)((y_max-yval)*yscale)+rc.top;
     xmax = rc.right;
     ymax = ymin;
@@ -558,7 +561,7 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
   ScaleYFromData(rc, &flightstats.Altitude);
   ScaleYFromValue(rc, 0);
   ScaleXFromValue(rc, flightstats.Altitude.x_min+1.0); // in case no data
-  ScaleXFromValue(rc, flightstats.Altitude.x_min-0.15); // room for labels
+  ScaleXFromValue(rc, flightstats.Altitude.x_min); 
 
   LockTaskData();
   for(int j=1;j<MAXTASKPOINTS;j++) {
@@ -610,7 +613,7 @@ void Statistics::RenderSpeed(HDC hdc, RECT rc)
   ScaleYFromData(rc, &flightstats.Task_Speed);
   ScaleYFromValue(rc, 0);
   ScaleXFromValue(rc, flightstats.Task_Speed.x_min+1.0); // in case no data
-  ScaleXFromValue(rc, flightstats.Task_Speed.x_min-0.15); // room for labels
+  ScaleXFromValue(rc, flightstats.Task_Speed.x_min); 
 
   LockTaskData();
   for(int j=1;j<MAXTASKPOINTS;j++) {
@@ -756,8 +759,9 @@ void Statistics::RenderGlidePolar(HDC hdc, RECT rc)
 
 void Statistics::ScaleMakeSquare(RECT rc) {
   if (y_max-y_min<=0) return;
-  if (rc.bottom-rc.top<=0) return;
-  double ar = ((double)(rc.right-rc.left))/(rc.bottom-rc.top);
+  if (rc.bottom-rc.top-Y_BORDER<=0) return;
+  double ar = ((double)(rc.right-rc.left-X_BORDER))
+    /(rc.bottom-rc.top-Y_BORDER);
   double ard = (x_max-x_min)/(y_max-y_min);
   double armod = ard/ar;
   double delta;
@@ -781,8 +785,8 @@ void Statistics::ScaleMakeSquare(RECT rc) {
   y_max += delta/2.0;
   y_min -= delta/2.0;
 
-  yscale = (rc.bottom-rc.top)/(y_max-y_min);
-  xscale = (rc.right-rc.left)/(x_max-x_min);
+  yscale = (rc.bottom-rc.top-Y_BORDER)/(y_max-y_min);
+  xscale = (rc.right-rc.left-X_BORDER)/(x_max-x_min);
 }
 
 #include "OnLineContest.h"
@@ -942,7 +946,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 	  SelectObject(hdc, GetStockObject(WHITE_PEN));
 	  if (Task[i].AATType == SECTOR) {
 	    Segment(hdc,
-		    (long)((x2-x_min)*xscale+rc.left),
+		    (long)((x2-x_min)*xscale+rc.left+X_BORDER),
 		    (long)((y_max-y2)*yscale+rc.top),
 		    (long)(aatradius[i]*yscale), 
 		    rc, 
@@ -950,7 +954,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 		    Task[i].AATFinishRadial); 
 	  } else {
 	    Circle(hdc,
-		   (long)((x2-x_min)*xscale+rc.left),
+		   (long)((x2-x_min)*xscale+rc.left+X_BORDER),
 		   (long)((y_max-y2)*yscale+rc.top),
 		   (long)(aatradius[i]*yscale), 
 		   rc);
@@ -1272,8 +1276,8 @@ void Statistics::RenderWind(HDC hdc, RECT rc)
 
     angle = atan2(wind.x,-wind.y)*RAD_TO_DEG;
 
-    wv[0].y = (int)((1-hfact)*(rc.bottom-rc.top))+rc.top;
-    wv[0].x = (rc.right+rc.left)/2;
+    wv[0].y = (int)((1-hfact)*(rc.bottom-rc.top-Y_BORDER))+rc.top;
+    wv[0].x = (rc.right+rc.left-X_BORDER)/2+X_BORDER;
 
     dX = (mag*WINDVECTORMAG);
     dY = 0;
@@ -1377,10 +1381,10 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
 	SetTextColor(hdc, 
 		     MapWindow::Colours[MapWindow::iAirspaceColour[type]]);
 	
-	rcd.left = iround(fj*(rc.right-rc.left)+rc.left);
-	rcd.right = iround(rcd.left+(rc.right-rc.left)/(AIRSPACE_SCANSIZE_X-1));
-	rcd.bottom = iround(fi*(rc.top-rc.bottom)+rc.bottom);
-	rcd.top = iround(rcd.bottom+(rc.top-rc.bottom)/(AIRSPACE_SCANSIZE_H-1));
+	rcd.left = iround(fj*(rc.right-rc.left-X_BORDER)+rc.left);
+	rcd.right = iround(rcd.left+X_BORDER+(rc.right-rc.left-X_BORDER)/(AIRSPACE_SCANSIZE_X-1));
+	rcd.bottom = iround(fi*(rc.top-rc.bottom-Y_BORDER)+rc.bottom-Y_BORDER);
+	rcd.top = iround(rcd.bottom-Y_BORDER+(rc.top-rc.bottom)/(AIRSPACE_SCANSIZE_H-1));
 	
 	Rectangle(hdc,rcd.left,rcd.top,rcd.right,rcd.bottom);
 	
@@ -1399,16 +1403,16 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   for (j=1; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
     
     ground[0].x = iround((j-1)*1.0/(AIRSPACE_SCANSIZE_X-1)
-			 *(rc.right-rc.left)+rc.left);
+			 *(rc.right-rc.left-X_BORDER)+rc.left+X_BORDER);
     ground[1].x = ground[0].x;
     ground[2].x = iround((j)*1.0/(AIRSPACE_SCANSIZE_X-1)
-			 *(rc.right-rc.left)+rc.left);
+			 *(rc.right-rc.left-X_BORDER)+rc.left+X_BORDER);
     ground[3].x = ground[2].x;
     ground[0].y = rc.bottom;
     ground[1].y = iround((d_alt[j-1]-hmin)/(hmax-hmin)
-			 *(rc.top-rc.bottom)+rc.bottom);
+			 *(rc.top-rc.bottom+Y_BORDER)+rc.bottom-Y_BORDER);
     ground[2].y = iround((d_alt[j]-hmin)/(hmax-hmin)
-			 *(rc.top-rc.bottom)+rc.bottom);
+			 *(rc.top-rc.bottom+Y_BORDER)+rc.bottom-Y_BORDER);
     ground[3].y = rc.bottom;
     Polygon(hdc, ground, 4);
   }
@@ -1420,9 +1424,9 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
     double t = range/GPS_INFO.Speed;
     double gfh = (ach+CALCULATED_INFO.Average30s*t-hmin)/(hmax-hmin);
     line[0].x = rc.left;
-    line[0].y = (int)(fh*(rc.top-rc.bottom)+rc.bottom)-1;
+    line[0].y = (int)(fh*(rc.top-rc.bottom+Y_BORDER)+rc.bottom-Y_BORDER)-1;
     line[1].x = rc.right;
-    line[1].y = (int)(gfh*(rc.top-rc.bottom)+rc.bottom)-1;
+    line[1].y = (int)(gfh*(rc.top-rc.bottom+Y_BORDER)+rc.bottom-Y_BORDER)-1;
     StyleLine(hdc, line[0], line[1], STYLE_BLUETHIN);
   }
 
@@ -1439,9 +1443,9 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   int delta;
   SelectObject(hdc, GetStockObject(WHITE_PEN));
   SelectObject(hdc, GetStockObject(WHITE_BRUSH));
-  line[0].x = (int)(rc.left+(rc.right-rc.left)/AIRSPACE_SCANSIZE_X-1);
-  line[0].y = (int)(fh*(rc.top-rc.bottom)+rc.bottom)-1;
-  line[1].x = rc.left;
+  line[0].x = (int)(rc.left+X_BORDER+(rc.right-rc.left-X_BORDER)/AIRSPACE_SCANSIZE_X-1);
+  line[0].y = (int)(fh*(rc.top-rc.bottom+Y_BORDER)+rc.bottom-Y_BORDER)-1;
+  line[1].x = rc.left+X_BORDER;
   line[1].y = line[0].y;
   delta = (line[0].x-line[1].x);
   line[2].x = line[1].x;
