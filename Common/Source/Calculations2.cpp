@@ -768,9 +768,15 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
 
   LockTaskData();
 
+  double start_speed = Calculated->TaskStartSpeed;
+  double V_bestld = GlidePolar::Vbestld;
+  double energy_height_start =
+    max(0, start_speed*start_speed-V_bestld*V_bestld)/(9.81*2.0);
+
   double telapsed = Basic->Time-Calculated->TaskStartTime;
-  double height_below_start = Calculated->TaskStartAltitude
-    -Calculated->NavAltitude;
+  double height_below_start =
+    Calculated->TaskStartAltitude + energy_height_start
+    - Calculated->NavAltitude - Calculated->EnergyHeight;
 
   double LegDistances[MAXTASKPOINTS];
   double LegBearings[MAXTASKPOINTS];
@@ -816,9 +822,9 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
 
   double value_found;
   if (cruise_efficiency_mode) {
-    value_found = 1.0;
+    value_found = 1.5; // max
   } else {
-    value_found = 10.0;
+    value_found = 10.0; // max
   }
 
   for (double value_scan=0.01; value_scan<1.0; value_scan+= 0.01) {
@@ -832,8 +838,8 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
     if (cruise_efficiency_mode) {
       mc_effective = MACCREADY;
       if (Calculated->FinalGlide && (Calculated->timeCircling>0)) {
-	mc_effective = LIFTMODIFY*CALCULATED_INFO.TotalHeightClimb
-			   /CALCULATED_INFO.timeCircling;
+	mc_effective = CALCULATED_INFO.TotalHeightClimb
+	  /CALCULATED_INFO.timeCircling;
       }
       cruise_efficiency = 0.5+value_scan;
     } else {
@@ -907,7 +913,7 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
 double EffectiveCruiseEfficiency(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double value = EffectiveMacCready_internal(Basic, Calculated, true);
   if (value<0.5) {
-    return 1.0;
+    return 0.5;
   }
   return value;
 }

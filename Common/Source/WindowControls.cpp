@@ -480,7 +480,9 @@ void DataFieldFileReader::Sort(void){
 
 /////////
 
-
+void DataField::Special(void){
+  (mOnDataAccess)(this, daSpecial);
+}
 
 void DataField::Inc(void){
   (mOnDataAccess)(this, daInc);
@@ -2720,6 +2722,8 @@ int WndProperty::WndProcEditControl(HWND hwnd, UINT uMsg,
 	  if ((wParam & 0xffff) == VK_RETURN) {
 	    if (OnHelp()) return (0);
 	  }
+	} else if ((wParam & 0xffff) == VK_RETURN) {
+	  if (CallSpecial()) return (0);
 	}
     break;
 
@@ -2886,6 +2890,14 @@ int WndProperty::OnLButtonUp(WPARAM wParam, LPARAM lParam){
   return(0);
 }
 
+
+int WndProperty::CallSpecial(void){
+  if (mDataField != NULL){
+    mDataField->Special();
+    SetWindowText(mhEdit, mDataField->GetAsString());
+  }
+  return(0);
+}
 
 int WndProperty::IncValue(void){
   if (mDataField != NULL){

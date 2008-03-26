@@ -75,7 +75,8 @@ class DataField{
      daPut,
      daChange,
      daInc,
-     daDec
+     daDec,
+     daSpecial,
     }DataAccessKind_t;
 
     typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
@@ -83,6 +84,7 @@ class DataField{
     DataField(TCHAR *EditFormat, TCHAR *DisplayFormat, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)=NULL);
     virtual ~DataField(void){};
 
+  virtual void Special(void);
   virtual void Inc(void);
   virtual void Dec(void);
 
@@ -908,6 +910,7 @@ class WndProperty:public WindowControl{
 
     int (*mOnDataChangeNotify)(WindowControl * Sender, int Mode, int Value);
 
+    int CallSpecial(void);
     int IncValue(void);
     int DecValue(void);
     WNDPROC mEditWindowProcedure;

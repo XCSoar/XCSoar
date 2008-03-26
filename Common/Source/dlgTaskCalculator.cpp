@@ -65,6 +65,78 @@ static void OnOKClicked(WindowControl * Sender){
 
 static double Range = 0;
 
+
+void DoOptimise(void) {
+  bool ok = true;
+  double myrange= Range;
+  double RangeLast= Range;
+  double deltaTlast = 0;
+  int steps = 0;
+  if (!AATEnabled) return;
+
+  LockFlightData();
+  LockTaskData();
+  TargetDialogOpen = true;
+  do {
+    myrange = Range;
+    AdjustAATTargets(Range);
+    RefreshTask();
+    RefreshTaskStatistics();
+    double deltaT = CALCULATED_INFO.TaskTimeToGo;
+    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
+      deltaT += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    }
+    deltaT= min(24.0*60.0,deltaT/60.0)-AATTaskLength-5;
+
+    double dRdT = 0.001;
+    if (steps>0) {
+      if (fabs(deltaT-deltaTlast)>0.01) {
+        dRdT = min(0.5,(Range-RangeLast)/(deltaT-deltaTlast));
+        if (dRdT<=0.0) {
+          // error, time decreases with increasing range!
+          // or, no effect on time possible
+          break;
+        }
+      } else {
+        // minimal change for whatever reason
+        // or, no effect on time possible, e.g. targets locked
+        break;
+      }
+    }
+    RangeLast = Range;
+    deltaTlast = deltaT;
+
+    if (fabs(deltaT)>0.25) {
+      // more than 15 seconds error
+      Range -= dRdT*deltaT;
+      Range = max(-1.0, min(Range,1.0));
+    } else {
+      break;
+    }
+
+  } while (steps++<25);
+
+  Range = myrange;
+  AdjustAATTargets(Range);
+  RefreshCalculator();
+
+  TargetDialogOpen = false;
+  UnlockTaskData();
+  UnlockFlightData();
+}
+
+
+static void GetCruiseEfficiency(void) {
+  if ((CALCULATED_INFO.Flying) && (CALCULATED_INFO.TaskStartTime>0) &&
+      !(CALCULATED_INFO.FinalGlide &&
+	(CALCULATED_INFO.TaskAltitudeDifference>0))) {
+
+    cruise_efficiency = EffectiveCruiseEfficiency(&GPS_INFO, &CALCULATED_INFO);
+  } else {
+    cruise_efficiency = CRUISE_EFFICIENCY;
+  }
+}
+
 static void RefreshCalculator(void) {
   WndProperty* wp;
 
@@ -190,17 +262,20 @@ static void OnMacCreadyData(DataField *Sender,
 static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
   double rthis;
   switch(Mode){
-    case DataField::daGet:
-      //      Sender->Set(Range*100.0);
+  case DataField::daSpecial:
+    DoOptimise();
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      rthis = Sender->GetAsFloat()/100.0;
-      if (fabs(Range-rthis)>0.01) {
-        Range = rthis;
-        AdjustAATTargets(Range);
-        RefreshCalculator();
-      }
+  case DataField::daGet:
+    //      Sender->Set(Range*100.0);
+    break;
+  case DataField::daPut:
+  case DataField::daChange:
+    rthis = Sender->GetAsFloat()/100.0;
+    if (fabs(Range-rthis)>0.01) {
+      Range = rthis;
+      AdjustAATTargets(Range);
+      RefreshCalculator();
+    }
     break;
   }
 }
@@ -209,17 +284,23 @@ static void OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode){
 static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_t Mode) {
   double clast = CRUISE_EFFICIENCY;
   switch(Mode){
-    case DataField::daGet:
-    //      Sender->Set(Range*100.0);
+  case DataField::daGet:
     break;
-    case DataField::daPut:
-    case DataField::daChange:
-      cruise_efficiency = Sender->GetAsFloat()/100.0;
-      CRUISE_EFFICIENCY = cruise_efficiency;
-      // JMW TODO: allow setting!
-      if (fabs(cruise_efficiency-clast)>0.01) {
-        RefreshCalculator();
-      }
+  case DataField::daSpecial:
+    GetCruiseEfficiency();
+    CRUISE_EFFICIENCY = cruise_efficiency;
+    if (fabs(cruise_efficiency-clast)>0.01) {
+      RefreshCalculator();
+    }
+    break;
+  case DataField::daPut:
+  case DataField::daChange:
+    cruise_efficiency = Sender->GetAsFloat()/100.0;
+    CRUISE_EFFICIENCY = cruise_efficiency;
+    // JMW TODO: allow setting!
+    if (fabs(cruise_efficiency-clast)>0.01) {
+      RefreshCalculator();
+    }
     break;
   }
 }
@@ -228,62 +309,7 @@ static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_
 extern bool TargetDialogOpen;
 
 static void OnOptimiseClicked(WindowControl * Sender){
-  bool ok = true;
-  double myrange= Range;
-  double RangeLast= Range;
-  double deltaTlast = 0;
-  int steps = 0;
-  if (!AATEnabled) return;
-
-  LockFlightData();
-  LockTaskData();
-  TargetDialogOpen = true;
-  do {
-    myrange = Range;
-    AdjustAATTargets(Range);
-    RefreshTask();
-    RefreshTaskStatistics();
-    double deltaT = CALCULATED_INFO.TaskTimeToGo;
-    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
-      deltaT += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
-    }
-    deltaT= min(24.0*60.0,deltaT/60.0)-AATTaskLength-5;
-
-    double dRdT = 0.001;
-    if (steps>0) {
-      if (fabs(deltaT-deltaTlast)>0.01) {
-        dRdT = min(0.5,(Range-RangeLast)/(deltaT-deltaTlast));
-        if (dRdT<=0.0) {
-          // error, time decreases with increasing range!
-          // or, no effect on time possible
-          break;
-        }
-      } else {
-        // minimal change for whatever reason
-        // or, no effect on time possible, e.g. targets locked
-        break;
-      }
-    }
-    RangeLast = Range;
-    deltaTlast = deltaT;
-
-    if (fabs(deltaT)>0.25) {
-      // more than 15 seconds error
-      Range -= dRdT*deltaT;
-      Range = max(-1.0, min(Range,1.0));
-    } else {
-      break;
-    }
-
-  } while (steps++<25);
-
-  Range = myrange;
-  AdjustAATTargets(Range);
-  RefreshCalculator();
-
-  TargetDialogOpen = false;
-  UnlockTaskData();
-  UnlockFlightData();
+  DoOptimise();
 }
 
 
@@ -314,11 +340,8 @@ void dlgTaskCalculatorShowModal(void){
   double CRUISE_EFFICIENCY_enter = CRUISE_EFFICIENCY;
 
   emc = EffectiveMacCready(&GPS_INFO, &CALCULATED_INFO);
-  if ((CALCULATED_INFO.Flying) && (CALCULATED_INFO.TaskStartTime>0)) {
-    cruise_efficiency = EffectiveCruiseEfficiency(&GPS_INFO, &CALCULATED_INFO);
-  } else {
-    cruise_efficiency = CRUISE_EFFICIENCY;
-  }
+
+  cruise_efficiency = CRUISE_EFFICIENCY;
 
   // find start value for range
   Range = AdjustAATTargets(2.0);
