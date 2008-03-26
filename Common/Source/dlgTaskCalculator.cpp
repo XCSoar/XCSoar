@@ -66,66 +66,6 @@ static void OnOKClicked(WindowControl * Sender){
 static double Range = 0;
 
 
-void DoOptimise(void) {
-  bool ok = true;
-  double myrange= Range;
-  double RangeLast= Range;
-  double deltaTlast = 0;
-  int steps = 0;
-  if (!AATEnabled) return;
-
-  LockFlightData();
-  LockTaskData();
-  TargetDialogOpen = true;
-  do {
-    myrange = Range;
-    AdjustAATTargets(Range);
-    RefreshTask();
-    RefreshTaskStatistics();
-    double deltaT = CALCULATED_INFO.TaskTimeToGo;
-    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
-      deltaT += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
-    }
-    deltaT= min(24.0*60.0,deltaT/60.0)-AATTaskLength-5;
-
-    double dRdT = 0.001;
-    if (steps>0) {
-      if (fabs(deltaT-deltaTlast)>0.01) {
-        dRdT = min(0.5,(Range-RangeLast)/(deltaT-deltaTlast));
-        if (dRdT<=0.0) {
-          // error, time decreases with increasing range!
-          // or, no effect on time possible
-          break;
-        }
-      } else {
-        // minimal change for whatever reason
-        // or, no effect on time possible, e.g. targets locked
-        break;
-      }
-    }
-    RangeLast = Range;
-    deltaTlast = deltaT;
-
-    if (fabs(deltaT)>0.25) {
-      // more than 15 seconds error
-      Range -= dRdT*deltaT;
-      Range = max(-1.0, min(Range,1.0));
-    } else {
-      break;
-    }
-
-  } while (steps++<25);
-
-  Range = myrange;
-  AdjustAATTargets(Range);
-  RefreshCalculator();
-
-  TargetDialogOpen = false;
-  UnlockTaskData();
-  UnlockFlightData();
-}
-
-
 static void GetCruiseEfficiency(void) {
   if ((CALCULATED_INFO.Flying) && (CALCULATED_INFO.TaskStartTime>0) && 
       !(CALCULATED_INFO.FinalGlide && 
@@ -233,6 +173,68 @@ static void RefreshCalculator(void) {
 }
 
 
+extern bool TargetDialogOpen;
+
+static void DoOptimise(void) {
+  bool ok = true;
+  double myrange= Range;
+  double RangeLast= Range;
+  double deltaTlast = 0;
+  int steps = 0;
+  if (!AATEnabled) return;
+
+  LockFlightData();
+  LockTaskData();
+  TargetDialogOpen = true;
+  do {
+    myrange = Range;
+    AdjustAATTargets(Range);
+    RefreshTask();
+    RefreshTaskStatistics();
+    double deltaT = CALCULATED_INFO.TaskTimeToGo;
+    if ((CALCULATED_INFO.TaskStartTime>0.0)&&(CALCULATED_INFO.Flying)) {
+      deltaT += GPS_INFO.Time-CALCULATED_INFO.TaskStartTime;
+    }
+    deltaT= min(24.0*60.0,deltaT/60.0)-AATTaskLength-5;
+
+    double dRdT = 0.001;
+    if (steps>0) {
+      if (fabs(deltaT-deltaTlast)>0.01) {
+        dRdT = min(0.5,(Range-RangeLast)/(deltaT-deltaTlast));
+        if (dRdT<=0.0) {
+          // error, time decreases with increasing range!
+          // or, no effect on time possible
+          break;
+        }
+      } else {
+        // minimal change for whatever reason
+        // or, no effect on time possible, e.g. targets locked
+        break;
+      }
+    }
+    RangeLast = Range;
+    deltaTlast = deltaT;
+
+    if (fabs(deltaT)>0.25) {
+      // more than 15 seconds error
+      Range -= dRdT*deltaT;
+      Range = max(-1.0, min(Range,1.0));
+    } else {
+      break;
+    }
+
+  } while (steps++<25);
+
+  Range = myrange;
+  AdjustAATTargets(Range);
+  RefreshCalculator();
+
+  TargetDialogOpen = false;
+  UnlockTaskData();
+  UnlockFlightData();
+}
+
+
 static void OnTargetClicked(WindowControl * Sender){
   (void)Sender;
   wf->SetVisible(false);
@@ -306,7 +308,6 @@ static void OnCruiseEfficiencyData(DataField *Sender, DataField::DataAccessKind_
 }
 
 
-extern bool TargetDialogOpen;
 
 static void OnOptimiseClicked(WindowControl * Sender){
   DoOptimise();
