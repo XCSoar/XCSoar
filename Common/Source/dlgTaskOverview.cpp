@@ -154,7 +154,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
       }
 
       ExtTextOutClip(hDC, 2*InfoBoxLayout::scale, 2*InfoBoxLayout::scale,
-		     sTmp, p1-2*InfoBoxLayout::scale);
+		     sTmp, p1-4*InfoBoxLayout::scale);
 
       _stprintf(sTmp, TEXT("%.0f %s"), 
 		Task[i].Leg*DISTANCEMODIFY,

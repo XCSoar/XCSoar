@@ -2404,7 +2404,12 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 
   if(Base.FL == 0)
     {
-      if (Base.Altitude > 0)
+      if (Base.AGL > 0) {
+        _stprintf(BaseStr,TEXT("%1.0f%s %s"), 
+                  ALTITUDEMODIFY * Base.AGL, 
+                  Units::GetUnitName(Units::GetUserAltitudeUnit()),
+                  gettext(TEXT("AGL")));
+      } else if (Base.Altitude > 0)
         _stprintf(BaseStr,TEXT("%1.0f%s %s"), 
                   ALTITUDEMODIFY * Base.Altitude, 
                   Units::GetUnitName(Units::GetUserAltitudeUnit()),
@@ -2419,9 +2424,16 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
 
   if(Top.FL == 0)
     {
-      _stprintf(TopStr,TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Top.Altitude, 
-                Units::GetUnitName(Units::GetUserAltitudeUnit()),
-                gettext(TEXT("Alt")));
+      if (Top.AGL > 0) {
+        _stprintf(TopStr,TEXT("%1.0f%s %s"), 
+                  ALTITUDEMODIFY * Top.AGL, 
+                  Units::GetUnitName(Units::GetUserAltitudeUnit()),
+                  gettext(TEXT("AGL")));
+      } else {
+	_stprintf(TopStr,TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Top.Altitude, 
+		  Units::GetUnitName(Units::GetUserAltitudeUnit()),
+		  gettext(TEXT("Alt")));
+      }
     }
   else
     {
