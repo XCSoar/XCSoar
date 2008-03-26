@@ -776,6 +776,42 @@ OnError:
 
 }
 
+
+static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
+			      double av_lat, double av_lon) {
+  if (((Base->Base == abAGL) || (Top->Base == abAGL))) {
+
+    RasterTerrain::Lock();
+    // want most accurate rounding here
+    RasterTerrain::SetTerrainRounding(0,0);
+
+    double th =
+      RasterTerrain::GetTerrainHeight(av_lat, av_lon);
+
+    if (Base->Base == abAGL) {
+      if (Base->AGL>=0) {
+	Base->Altitude = Base->AGL+th;
+      } else {
+	// surface, set to zero
+	Base->AGL = 0;
+	Base->Altitude = 0;
+      }
+    }
+    if (Top->Base == abAGL) {
+      if (Top->AGL>=0) {
+	Top->Altitude = Top->AGL+th;
+      } else {
+	// surface, set to zero
+	Top->AGL = 0;
+	Top->Altitude = 0;
+      }
+    }
+    // JMW TODO: complain if out of terrain range (th<0)
+    RasterTerrain::Unlock();
+  }
+}
+
+
 static void AddAirspaceCircle(AIRSPACE_AREA *Temp,
                               double CenterX, double CenterY, double Radius)
 {
@@ -806,10 +842,15 @@ static void AddAirspaceCircle(AIRSPACE_AREA *Temp,
       NewCircle->Ack.AcknowledgedToday = false;
       NewCircle->Ack.AcknowledgementTime = 0;
       NewCircle->_NewWarnAckNoBrush = false;
+
+      AirspaceAGLLookup(&NewCircle->Base, &NewCircle->Top,
+			NewCircle->Latitude,
+			NewCircle->Longitude);
+
     }
 }
 
-static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AeraPointCount)
+static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AreaPointCount)
 {
   AIRSPACE_POINT *NewPoint = NULL;
 
@@ -832,7 +873,7 @@ static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AeraPointCount)
   */
 
   ASSERT(Temp != NULL);
-  ASSERT(AeraPointCount != NULL);
+  ASSERT(AreaPointCount != NULL);
 
   if(bFillMode){
 
@@ -843,7 +884,7 @@ static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AeraPointCount)
     NewPoint->Latitude  = Temp->Latitude;
     NewPoint->Longitude = Temp->Longitude;
 
-    (*AeraPointCount)++;
+    (*AreaPointCount)++;
 
   }
 
@@ -907,41 +948,9 @@ static void AddArea(AIRSPACE_AREA *Temp)
           if(PointList[i].Longitude  < NewArea->MinLongitude)
             NewArea->MinLongitude  = PointList[i].Longitude ;
         }
-
-	if (((NewArea->Base.Base == abAGL) || (NewArea->Top.Base == abAGL))) {
-
-	  RasterTerrain::Lock();
-	  // want most accurate rounding here
-	  RasterTerrain::SetTerrainRounding(0,0);
-	  double av_lat = (NewArea->MaxLatitude+NewArea->MinLatitude)/2;
-	  double av_lon = (NewArea->MaxLongitude+NewArea->MinLongitude)/2;
-
-	  double th =
-	    RasterTerrain::GetTerrainHeight(av_lat, av_lon);
-
-	  if (NewArea->Base.Base == abAGL) {
-	    if (NewArea->Base.AGL>=0) {
-	      NewArea->Base.AGL = NewArea->Base.Altitude;
-	      NewArea->Base.Altitude += th;
-	    } else {
-	      // surface, set to zero
-	      NewArea->Base.AGL = 0;
-	      NewArea->Base.Altitude = 0;
-	    }
-	  }
-	  if (NewArea->Top.Base == abAGL) {
-	    if (NewArea->Top.AGL>=0) {
-	      NewArea->Top.AGL = NewArea->Top.Altitude;
-	      NewArea->Top.Altitude += th;
-	    } else {
-	      // surface, set to zero
-	      NewArea->Top.AGL = 0;
-	      NewArea->Top.Altitude = 0;
-	    }
-	  }
-	  // JMW TODO: complain if out of terrain range (th<0)
-	  RasterTerrain::Unlock();
-	}
+	AirspaceAGLLookup(&NewArea->Base, &NewArea->Top,
+			  (NewArea->MaxLatitude+NewArea->MinLatitude)/2,
+			  (NewArea->MaxLongitude+NewArea->MinLongitude)/2);
 
       } else {
 
@@ -977,10 +986,12 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
   while((pToken != NULL) && (*pToken != '\0')){
 
     if (isdigit(*pToken)) {
-      double d = (double)StrToDouble(pToken, &Stop);;
+      double d = (double)StrToDouble(pToken, &Stop);
       if (Alt->Base == abFL){
         Alt->FL = d;
         Alt->Altitude = AltitudeToQNHAltitude((Alt->FL * 100)/TOFEET);
+      } else if (Alt->Base == abAGL) {
+	Alt->AGL = d;
       } else {
         Alt->Altitude = d;
       }
@@ -991,8 +1002,21 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
 
     }
 
-    else if ((_tcscmp(pToken, TEXT("SFC")) == 0)
-        || (_tcscmp(pToken, TEXT("GND")) == 0)) {
+    else if (_tcscmp(pToken, TEXT("GND")) == 0) {
+      // JMW support XXXGND as valid, equivalent to XXXAGL
+      Alt->Base = abAGL;
+      if (Alt->Altitude>0) {
+	Alt->AGL = Alt->Altitude;
+	Alt->Altitude = 0;
+      } else {
+	Alt->FL = 0;
+	Alt->Altitude = 0;
+	Alt->AGL = -1;
+	fHasUnit = true;
+      }
+    }
+
+    else if (_tcscmp(pToken, TEXT("SFC")) == 0) {
       Alt->Base = abAGL;
       Alt->FL = 0;
       Alt->Altitude = 0;
@@ -1016,16 +1040,19 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
       fHasUnit = true;
     }
 
-    else if (_tcscmp(pToken, TEXT("M")) == 0){
-      fHasUnit = true;
-    }
-
     else if (_tcscmp(pToken, TEXT("MSL")) == 0){
       Alt->Base = abMSL;
     }
 
+    else if (_tcscmp(pToken, TEXT("M")) == 0){
+      // JMW must scan for MSL before scanning for M
+      fHasUnit = true;
+    }
+
     else if (_tcscmp(pToken, TEXT("AGL")) == 0){
       Alt->Base = abAGL;
+      Alt->AGL = Alt->Altitude;
+      Alt->Altitude = 0;
     }
 
     else if (_tcscmp(pToken, TEXT("STD")) == 0){
@@ -1042,10 +1069,11 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
 
   }
 
-  if (!fHasUnit && Alt->Base != abFL) {
+  if (!fHasUnit && (Alt->Base != abFL)) {
     // ToDo warning! no unit defined use feet or user alt unit
     // Alt->Altitude = Units::ToSysAltitude(Alt->Altitude);
     Alt->Altitude = Alt->Altitude/TOFEET;
+    Alt->AGL = Alt->AGL/TOFEET;
   }
 
   if (Alt->Base == abUndef) {
