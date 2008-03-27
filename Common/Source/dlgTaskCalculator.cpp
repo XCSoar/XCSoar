@@ -249,13 +249,21 @@ static void OnTargetClicked(WindowControl * Sender){
 static void OnMacCreadyData(DataField *Sender, 
 			    DataField::DataAccessKind_t Mode){
   switch(Mode){
-    case DataField::daGet:
+  case DataField::daSpecial:
+    if (CALCULATED_INFO.timeCircling>0) {
+      MACCREADY = CALCULATED_INFO.TotalHeightClimb
+	/CALCULATED_INFO.timeCircling;
       Sender->Set(MACCREADY*LIFTMODIFY);
-    break;
-    case DataField::daPut: 
-    case DataField::daChange:
-      MACCREADY = Sender->GetAsFloat()/LIFTMODIFY;
       RefreshCalculator();
+    }
+    break;
+  case DataField::daGet:
+    Sender->Set(MACCREADY*LIFTMODIFY);
+    break;
+  case DataField::daPut: 
+  case DataField::daChange:
+    MACCREADY = Sender->GetAsFloat()/LIFTMODIFY;
+    RefreshCalculator();
     break;
   }
 }
