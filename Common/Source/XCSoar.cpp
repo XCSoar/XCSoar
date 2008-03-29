@@ -638,7 +638,6 @@ void ShowMenu() {
 
 
 #if (EXPERIMENTAL > 0)
-#include "BlueSMS.h"
 BlueDialupSMS bsms;
 #endif
 

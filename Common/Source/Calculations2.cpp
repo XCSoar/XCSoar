@@ -156,6 +156,12 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
   if (Calculated->Flying) {
     if (Basic->Time - StatsLastTime >= dtStats) {
+
+      flightstats.Altitude_Terrain.
+        least_squares_update(max(0,
+                                 Basic->Time-Calculated->TakeOffTime)/3600.0, 
+                             Calculated->TerrainAlt);
+
       flightstats.Altitude.
         least_squares_update(max(0,
                                  Basic->Time-Calculated->TakeOffTime)/3600.0, 
@@ -172,7 +178,7 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 			     Basic->Latitude, 
 			     Calculated->NavAltitude,
 			     Calculated->WaypointBearing,
-			     Basic->Time);
+			     Basic->Time-Calculated->TakeOffTime);
       
       if (restart && EnableOLC) {
 	Calculated->ValidFinish = false;
@@ -592,12 +598,12 @@ void LoadCalculationsPersist(DERIVED_INFO *Calculated) {
 
     size = sizeof(Statistics);
     ReadFile(hFile,&sizein,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    if (sizein != size) { CloseHandle(hFile); return; }
+    if (sizein != size) { flightstats.Reset(); CloseHandle(hFile); return; }
     ReadFile(hFile,&flightstats,size,&dwBytesWritten,(OVERLAPPED*)NULL);
 
     size = sizeof(OLCData);
     ReadFile(hFile,&sizein,sizeof(DWORD),&dwBytesWritten,(OVERLAPPED*)NULL);
-    if (sizein != size) { CloseHandle(hFile); return; }
+    if (sizein != size) { olc.ResetFlight(); CloseHandle(hFile); return; }
     ReadFile(hFile,&olc.data,size,&dwBytesWritten,(OVERLAPPED*)NULL);   
 
     size = sizeof(double);
@@ -912,8 +918,8 @@ static double EffectiveMacCready_internal(NMEA_INFO *Basic, DERIVED_INFO *Calcul
 
 double EffectiveCruiseEfficiency(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   double value = EffectiveMacCready_internal(Basic, Calculated, true);
-  if (value<0.5) {
-    return 0.5;
+  if (value<0.75) {
+    return 0.75;
   }
   return value;
 }

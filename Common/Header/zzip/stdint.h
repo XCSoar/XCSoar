@@ -12,11 +12,11 @@
 
 #ifdef ZZIP_HAVE_STDINT_H
     /* ISO C 9X: 7.18 Integer types <stdint.h> */
-#include <stdint.h>
+//JMW#include <stdint.h>
 #elif defined ZZIP_HAVE_SYS_INT_TYPES_H /*solaris*/
-#include <sys/int_types.h>
+//JMW#include <sys/int_types.h>
 #elif defined ZZIP_HAVE_INTTYPES_H /*freebsd*/
-#include <inttypes.h>
+//JMW#include <inttypes.h>
 #else
     typedef unsigned char uint8_t;      typedef signed char int8_t;
 

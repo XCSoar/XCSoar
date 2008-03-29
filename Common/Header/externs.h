@@ -20,7 +20,7 @@ extern TCHAR XCSoar_Version[256];
 #include "Dialogs.h"
 
 #if (EXPERIMENTAL > 0)
-#include "BlueSMS.h"
+//JMW#include "BlueSMS.h"
 #endif
 
 

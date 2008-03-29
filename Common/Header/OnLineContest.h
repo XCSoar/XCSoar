@@ -93,6 +93,7 @@ public:
   double getLatitude(int i);
   double getLongitude(int i);
   double getTime(int i);
+  double getAltitudeHigh(int i);
   
 private:
 

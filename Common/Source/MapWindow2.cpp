@@ -770,7 +770,8 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
         LatLon2Screen(Task[i].AATStartLon, Task[i].AATStartLat, Task[i].AATStart);
         LatLon2Screen(Task[i].AATFinishLon, Task[i].AATFinishLat, Task[i].AATFinish);
       }
-      if (AATEnabled && ((i==ActiveWayPoint) || (TargetPan && (i==TargetPanIndex)))) {
+      if (AATEnabled && (((int)i==ActiveWayPoint) || 
+			 (TargetPan && ((int)i==TargetPanIndex)))) {
         for (int j=0; j<MAXISOLINES; j++) {
           if (TaskStats[i].IsoLine_valid[j]) {
             LatLon2Screen(TaskStats[i].IsoLine_Longitude[j], TaskStats[i].IsoLine_Latitude[j], 
@@ -849,13 +850,13 @@ void MapWindow::CalculateWaypointReachable(void)
       
       if(AltitudeDifference >=0){
 	WayPointList[i].Reachable = TRUE;
-	if (!LandableReachable || (i==ActiveWayPoint)) {
+	if (!LandableReachable || ((int)i==ActiveWayPoint)) {
 	  if (CheckLandableReachableTerrain(&DrawInfo, 
 					    &DerivedDrawInfo,
 					    WaypointDistance, 
 					    WaypointBearing)) {
 	    LandableReachable = true;
-	  } else if (i==ActiveWayPoint) {
+	  } else if ((int)i==ActiveWayPoint) {
 	    WayPointList[i].Reachable = FALSE;
 	  }
 	}

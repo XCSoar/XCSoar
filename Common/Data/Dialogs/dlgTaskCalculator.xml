@@ -47,7 +47,7 @@
   </WndProperty>
 
   <WndProperty Name="prpCruiseEfficiency" Caption="Cruise efficiency"      X=2 Y=-1   Width=238 Height=22 CaptionWidth=150 Font=2 Help="todo">
-    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=50 Max=150 Step=2 OnDataAccess="OnCruiseEfficiencyData"/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min=75 Max=150 Step=2 OnDataAccess="OnCruiseEfficiencyData"/>
   </WndProperty>
 
 </WndForm>    

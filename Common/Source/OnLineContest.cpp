@@ -430,6 +430,10 @@ int OLCOptimizer::getN() {
   return pnts;
 }
 
+double OLCOptimizer::getAltitudeHigh(int i) {
+  return data.altpntshigh[i];
+}
+
 double OLCOptimizer::getTime(int i) {
   return data.timepnts[i];
 }

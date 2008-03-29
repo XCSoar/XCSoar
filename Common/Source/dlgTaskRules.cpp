@@ -101,8 +101,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("MSL")));
     dfe->addEnumText(gettext(TEXT("AGL")));
+    dfe->addEnumText(gettext(TEXT("MSL")));
     dfe->Set(StartHeightRef);
     wp->RefreshDisplay();
   }
@@ -193,8 +193,8 @@ bool dlgTaskRules(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpOLCEnabled"));
   if (wp) {
-    if (EnableOLC != wp->GetDataField()->GetAsInteger()) {
-      EnableOLC = wp->GetDataField()->GetAsInteger();
+    if (EnableOLC != (wp->GetDataField()->GetAsInteger()==1)) {
+      EnableOLC = (wp->GetDataField()->GetAsInteger()==1);
       changed = true;
     }
   }

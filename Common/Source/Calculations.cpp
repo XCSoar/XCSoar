@@ -987,7 +987,7 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     double dv = (Calculated->TaskAltitudeDifference-h0last)
       /(Basic->Time-LastTime);
     Calculated->DistanceVario = LowPassFilter(Calculated->DistanceVario, 
-                                              dv, 0.2);
+                                              dv, 0.1);
 
     h0last = Calculated->TaskAltitudeDifference;
 
@@ -2503,8 +2503,6 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
   int ifinal;
   static double LastTime = 0;
   static double LastTimeStats = 0;
-  static double v2last = 0;
-  static double t2last = 0;
   double TotalTime=0, TotalDistance=0, Vfinal=0;
 
   if (!ValidTaskPoint(ActiveWayPoint)) return;
@@ -2638,37 +2636,62 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
       // is wasting time.
 
       static double dr_last = d1;
+
+      double mc_safe = max(0.1,maccready);
       double Vstar = max(1.0,Calculated->VMacCready);
       double vthis = (d1-dr_last)/dt;
-      double Vav = d0/t0;
+      dr_last = d1;
+      double ttg = max(1,Calculated->TaskTimeToGo);
+      double Vav = d0/max(1.0,t0); 
+      double Vrem = dr/ttg;
+      double Vref = Vav;
       double sr = -GlidePolar::SinkRate(Vstar);
-
-      double mc_safe = max(0.1,MACCREADY);
+      double height_diff = max(0,-Calculated->TaskAltitudeDifference);
+      
       if (Calculated->timeCircling>30) {
-	mc_safe = max(MACCREADY, Calculated->TotalHeightClimb/Calculated->timeCircling);
+	mc_safe = max(maccready, 
+		      Calculated->TotalHeightClimb/Calculated->timeCircling);
       }
+      // circling percentage during cruise/climb
       double rho_cruise = max(0.0,min(1.0,mc_safe/(sr+mc_safe)));
       double rho_climb = 1.0-rho_cruise;
-      double delta_d2 = (v2*t1-v2last*t2last);
-      double vdiff = delta_d2/dt;
-      double w_comp = min(3.0,max(-3.0,Calculated->Vario/mc_safe));
+      double time_climb = height_diff/mc_safe;
 
-      vdiff = Vav*(vthis/Vstar + w_comp*rho_cruise + rho_climb);
+      // calculate amount of time in cruise/climb glide
+      double rho_c = max(0,min(1,time_climb/ttg));
+
+      if (Calculated->FinalGlide) {
+	if (rho_climb>0) {
+	  rho_c = max(0,min(1,rho_c/rho_climb));
+	}
+	if (!Calculated->Circling) {
+	  if (Calculated->TaskAltitudeDifference>0) {
+	    rho_climb *= rho_c;
+	    rho_cruise *= rho_c;
+	    Vref = Vrem;
+	  }
+	}
+      }
+
+      double w_comp = min(6.0,max(-6.0,Calculated->Vario/mc_safe));
+      double vdiff = vthis/Vstar + w_comp*rho_cruise + rho_climb;
 
       if (vthis > SAFTEYSPEED*2) {
-	vdiff = Vav;
+	vdiff = 1.0;
 	// prevent funny numbers when starting mid-track
       }
-      dr_last = d1;
+      Calculated->Experimental = vdiff*100.0;
+
+      vdiff *= Vref;
       
-      if (t1<10) {
-        Calculated->TaskSpeedInstantaneous = v2;
+      if (t1<5) {
+        Calculated->TaskSpeedInstantaneous = vdiff;
         // initialise
       } else {
         static int lastActiveWayPoint = 0;
+	static double tsi_av = 0;
+	static int n_av = 0;
         if (ActiveWayPoint==lastActiveWayPoint) {
-          v2last = v2;
-          t2last = t1;
           
           Calculated->TaskSpeedInstantaneous = 
             LowPassFilter(Calculated->TaskSpeedInstantaneous, vdiff, 0.1);
@@ -2676,17 +2699,28 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
           // update stats
           if(Basic->Time < LastTimeStats) {
             LastTimeStats = Basic->Time;
-          } else if ((Basic->Time-LastTimeStats >= 60.0) && (t1>60)) { 
-            // every minute
-            
+	    tsi_av = 0;
+	    n_av = 0;
+          } else if (n_av>=60) { 
+	    tsi_av/= n_av;
             flightstats.Task_Speed.
               least_squares_update(
                                    max(0,
                                        Basic->Time-Calculated->TaskStartTime)/3600.0,
-                                   max(0,min(100.0,Calculated->TaskSpeedInstantaneous)));
+                                   max(0,min(100.0,tsi_av)));
             LastTimeStats = Basic->Time;
-          }
-        }
+	    tsi_av = 0;
+	    n_av = 0;
+          } 
+	  tsi_av += Calculated->TaskSpeedInstantaneous;
+	  n_av ++;
+
+        } else {
+
+	  Calculated->TaskSpeedInstantaneous = vdiff;
+	  tsi_av = 0;
+	  n_av = 0;
+	}
         lastActiveWayPoint = ActiveWayPoint;
       }
     }

@@ -535,7 +535,7 @@ void ReadRegistrySettings(void)
   GetFromRegistry(szRegistryFAISector,&Temp);
   SectorType = Temp;
 
-  SectorRadius = 10e3;
+  SectorRadius = 10000;
   GetFromRegistry(szRegistrySectorRadius,
 		  &SectorRadius);
 
