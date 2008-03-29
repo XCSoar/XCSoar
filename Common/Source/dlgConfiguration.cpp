@@ -1782,8 +1782,8 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(gettext(TEXT("MSL")));
     dfe->addEnumText(gettext(TEXT("AGL")));
+    dfe->addEnumText(gettext(TEXT("MSL")));
     dfe->Set(StartHeightRef);
     wp->RefreshDisplay();
   }

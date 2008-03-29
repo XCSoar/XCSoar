@@ -777,8 +777,9 @@ void InfoBoxFormatter::AssignValue(int i) {
     } else {
       Valid = false;
     }
+    break;
   case 65:
-    Value = CALCULATED_INFO.Essing;
+    Value = CALCULATED_INFO.Experimental;
     Valid = true;
     break;
   default:
@@ -1051,3 +1052,10 @@ TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 
   return(Text);
 }
+
+
+/*
+
+if ((Calculated->FinalGlide) && (Calculated->Circling) && (Calculated->AverageThermal>0)) {
+}
+*/

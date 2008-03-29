@@ -181,6 +181,7 @@ typedef struct _DERIVED_INFO
   double GliderSinkRate;
   double Gload;
   double Essing;
+  double Experimental;
 } DERIVED_INFO;
 
 

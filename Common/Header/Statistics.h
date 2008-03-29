@@ -28,10 +28,14 @@ class Statistics {
   LeastSquares Altitude_Ceiling;
   LeastSquares Task_Speed;
   double LegStartTime[MAXTASKPOINTS];
+  LeastSquares Altitude_Terrain;
 
   void Reset();
 
   static void DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata);
+
+  static void DrawFilledLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
+				  COLORREF thecolor);
 
   static void DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
                             int Style);

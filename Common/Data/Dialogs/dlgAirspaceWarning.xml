@@ -7,7 +7,7 @@
   </Header>
   <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
 
-<WndForm Name="frmAirspaceWarning" Type="Dialog" X=10 Y=10 Width=228 Height=160 Caption="Airspace Warnings" Font=2 BackColor=0xDADBAB>
+<WndForm Name="frmAirspaceWarning" Type="Dialog" X=10 Y=10 Width=228 Height=164 Caption="Airspace Warnings" Font=2 BackColor=0xDADBAB>
 
   <WndListFrame Name=frmAirspaceWarningList X=0 Y=1 Width=228 Height=110 Font=2 OnListInfo="OnAirspaceListInfo">
     <WndOwnerDrawFrame Name=frmAirspaceWarningListEntry X=0 Y=0 Width=224 Height=30 Font=2 OnPaint="OnAirspaceListItemPaint"/>

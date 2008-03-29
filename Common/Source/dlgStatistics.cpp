@@ -41,6 +41,8 @@ Copyright_License {
 #include "Atmosphere.h"
 #include "RasterTerrain.h"
 
+#define GROUND_COLOUR RGB(157,101,60)
+
 extern HFONT                                   StatisticsFont;
 
 #define MAXPAGE 8
@@ -74,6 +76,7 @@ void Statistics::Reset() {
   Altitude_Base.Reset();
   Altitude_Ceiling.Reset();
   Task_Speed.Reset();
+  Altitude_Terrain.Reset();
   for(int j=0;j<MAXTASKPOINTS;j++) {
     LegStartTime[j] = -1;
   }
@@ -385,6 +388,26 @@ void Statistics::DrawBarChart(HDC hdc, RECT rc, LeastSquares* lsdata) {
 }
 
 
+void Statistics::DrawFilledLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
+				     COLORREF color) {
+
+  POINT line[4];
+
+  for (int i=0; i<lsdata->sum_n-1; i++) {
+    line[0].x = (int)((lsdata->xstore[i]-x_min)*xscale)+rc.left+BORDER_X;
+    line[0].y = (int)((y_max-lsdata->ystore[i])*yscale)+rc.top;
+    line[1].x = (int)((lsdata->xstore[i+1]-x_min)*xscale)+rc.left+BORDER_X;
+    line[1].y = (int)((y_max-lsdata->ystore[i+1])*yscale)+rc.top;
+    line[2].x = line[1].x;
+    line[2].y = rc.bottom-BORDER_Y;
+    line[3].x = line[0].x;
+    line[3].y = rc.bottom-BORDER_Y;
+    Polygon(hdc, line, 4);
+  }
+}
+
+
+
 void Statistics::DrawLineGraph(HDC hdc, RECT rc, LeastSquares* lsdata,
                                int Style) {
 
@@ -557,6 +580,10 @@ void Statistics::DrawYGrid(HDC hdc, RECT rc, double tic_step, double zero,
 
 /////////////////
 
+#include "OnLineContest.h"
+extern OLCOptimizer olc;
+static bool olcvalid=false;
+static bool olcfinished=false;
 
 void Statistics::RenderBarograph(HDC hdc, RECT rc)
 {
@@ -588,6 +615,22 @@ void Statistics::RenderBarograph(HDC hdc, RECT rc)
     }
   }
   UnlockTaskData();
+
+  HPEN   hpHorizonGround;
+  HBRUSH hbHorizonGround;
+  hpHorizonGround = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
+                                    GROUND_COLOUR);
+  hbHorizonGround = (HBRUSH)CreateSolidBrush(GROUND_COLOUR);
+  SelectObject(hdc, hpHorizonGround);
+  SelectObject(hdc, hbHorizonGround);
+
+  DrawFilledLineGraph(hdc, rc, &flightstats.Altitude_Terrain,
+                GROUND_COLOUR);
+
+  SelectObject(hdc, GetStockObject(WHITE_PEN));
+  SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+  DeleteObject(hpHorizonGround);
+  DeleteObject(hbHorizonGround);
 
   DrawXGrid(hdc, rc,
             0.5, flightstats.Altitude.x_min,
@@ -800,10 +843,6 @@ void Statistics::ScaleMakeSquare(RECT rc) {
   xscale = (rc.right-rc.left-BORDER_X)/(x_max-x_min);
 }
 
-#include "OnLineContest.h"
-extern OLCOptimizer olc;
-static bool olcvalid=false;
-static bool olcfinished=false;
 
 void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 {
@@ -1407,8 +1446,8 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   HPEN   hpHorizonGround;
   HBRUSH hbHorizonGround;
   hpHorizonGround = (HPEN)CreatePen(PS_SOLID, IBLSCALE(1),
-                                    RGB(157,101,60));
-  hbHorizonGround = (HBRUSH)CreateSolidBrush(RGB(157,101,60));
+                                    GROUND_COLOUR);
+  hbHorizonGround = (HBRUSH)CreateSolidBrush(GROUND_COLOUR);
   SelectObject(hdc, hpHorizonGround);
   SelectObject(hdc, hbHorizonGround);
   for (j=1; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
@@ -1584,7 +1623,7 @@ static void Update(void){
       if (flightstats.Altitude_Ceiling.sum_n<2) {
         _stprintf(sTmp, TEXT("\0"));
       } else if (flightstats.Altitude_Ceiling.sum_n<4) {
-        _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s\r\n\r\n%s:"),
+        _stprintf(sTmp, TEXT("%s:\r\n  %.0f-%.0f %s"),
                   gettext(TEXT("Working band")),
                   flightstats.Altitude_Base.y_ave*ALTITUDEMODIFY,
                   flightstats.Altitude_Ceiling.y_ave*ALTITUDEMODIFY,
