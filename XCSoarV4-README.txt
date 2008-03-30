@@ -2,6 +2,161 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Todo:
+- Allow start through top of start sector
+- Quick fgtt by polygon interior fit from airspace (possible performance improvement)
+
+
+Changes from 5.1.7 beta2:
+
+- Task speed instantaneous improvements
+- Fixed bug in start height reference in dialogs
+- Added terrain height to barograph in analysis dialog
+- Pressing ENTER on Mc value in task calculator sets it to time-averaged
+  climb rate from circling
+- Support for AGL airspace, now tested
+- Bug fix in parsing airspace "M"/"MSL"
+- Some graphical cleanups
+- Pressing ENTER on range value in task calculator does optimise
+- Auto Mc (final glide) won't wind down to zero the first time final
+  glide is achieved.  It will wind down to zero after that though.
+- Energy height used in achieved speed, cruise efficiency calcs
+- When off-course by more than 10 degrees, shows distance penalty
+  in % for that leg along track line on map.
+- Cruise efficiency stays at user-set value; if the field is selected and press ENTER, then the value will be calculated (and set to that value). 
+- Fixed minor bug in energy height compensation of thermal stats
+- Minor improvements to analysis dialog
+- Improvements to task speed instantaneous (new, more robust algorithm)
+- Airspace AGL supported (not tested), will add terrain height at center of airspace to base.
+- Analysis dialog shows mc speed, sink rate on glide polar page
+- Analysis dialog shows terrain height in airspace page
+- Allow auto mc to function when no task defined
+- Added task rules dialog from task start point 
+- Added height reference for Start max height rule (allows MSL or AGL)
+- Increased accuracy of terrain footprint
+- Added LS6-15 polar
+- Cruise efficiency displayed and adjustable in task calculator.  The cruise efficiency
+  is the increased average speed of the glider in cruise, due to dolphining or flying in 
+  rising air.  It is calculated and displayed in the task calculator.  
+  If the value is edited, then it will be used subsequently in arrival time calculations.
+- Added g load estimation when acceleromter not connected
+- Added experimental distance vario infobox.  
+  This is the the difference in height required to complete the task divided by the time step.
+- Improved task speed instantaneous
+- Hour glass used in nearestairspace input event, since this can take a few
+  seconds.
+- White bold (a la Google maps) on task waypoint labels
+- Added input event "GotoLookup" which allows a single menu item to bring up the waypoint select
+  dialog, and if a waypoint is selected, it will Goto and clear task.
+  See pc.xci for example (it replaces the "Task Save" button) 
+- Fixed situation where auto Mc can wind down after task start due to manoeuvering near start
+- When logger is started, if the task hasn't been saved, it is saved to the default task.
+
+Changes from 5.1.7 beta1:
+- Vario gauge shows thick red/blue line for sink/lift
+- Last thermal stats only used if thermal gain > 0 and 
+  thermal time > 45 seconds.  This prevents spurious entries for ignored
+  thermals, or for quick pullups in thermals without sustained turns.
+- Not just airports but landpoints can now have "airfield" details
+
+Changes from 5.1.6:
+- Map scale display for non-metric units
+- Fixed initialisation of AAT properties when adding waypoints from
+  waypoint dialog
+
+-----------------------
+
+Changes from 5.1.5 beta 6:
+- Snail trail rendering improvements:
+  -- removed 'wobble' of snail trail from long time ago
+  -- don't crop partially visible lines
+- Bug fix in AAT sector detection when start angle > end angle
+- "Speed remaining" in status dialog renamed to "Speed estimated" as
+  it gives the estimated final speed of the task
+- Increased size of up/down arrows in FLARM gauge
+- In target dialog, can move target up/down/left/right on Altair with
+    DISP/CFG/F5/F6 keys, on PC with 2/3/6/7 keys
+- Added blue line of constant distance arc in AAT sectors
+- Fixed bug in LD vario and LD GPS calculations
+- Added LX sentance (LXWP0) to support Condor
+- Fixed bug in auto mc
+- Task speed stats reset on task start/restart.
+
+Changes from 5.1.5 beta 5:
+- In target dialog, north up and north track modes cause screen orientation
+  to be north-up
+- Calculations in the target dialog is based on a timer now rather than triggered
+  on change, to prevent calculations slowing down the refresh.
+
+Changes from 5.1.5 beta 4:
+- Infoboxes (AA Time, Task Time To Go, Next Time To Go,
+             Task Arrival Time, AA Delta Time) 
+  now use consistent color format:
+     black/white: AAT est > min time
+     blue: AAT est turning now > min time
+     red: AAT est < min time
+- Task editor/overview page shows file name of task in caption, and shows '*'
+   if task is edited and not saved.
+- Bug fixes to tasman instruments vario
+- Text entry dialog uses larger font
+- Flight logger can use short file name, if "Logger short file" is true.
+- Flight logger gets ID from 3-letter logger ID 
+  in System config, if not set this defaults to 'AAA'.
+- AAT zero range (nominal) task is displayed thin green dashed, 
+  target task is displayed in thick green dashed
+- Added new infobox "Thermal All / TC All" for gps vario averaged across
+  all time spent in circling mode.
+- Speedups and bug fixes to effective/achieved Mc calculations.
+  achieved Mc is no longer influenced by gliding off high starts.
+- AAT optimiser more accurate for setting range to 5 mins over min time,
+  faster, and more robust.
+- Prevented re-start of snail trail on minimum height if OLC disabled
+- Full snail trail (OLC) data thinning bug fixes
+
+Changes from 5.1.5 beta 3:
+- "Smart averager", averager resets on cruise/climb transition
+- Display AAT sizes next to waypoints in task edit
+- Set AAT default size from sector size setting
+- Target radial setting can wrap around
+- "Target locked" is in target dialog now
+- Improved robustness of AAT optimise buttons etc
+- "Target" instead of "Mark Location" on default menu of Altair/PC
+- Snail trail color scale fixes
+- Target details cleared when changing a turnpoint
+- AAT nominal task is displayed thick green dashed, 
+  target task is displayed in thin green dashed
+
+Changes from 5.1.5 beta 2:
+- Task speed statistics reset on task restart 
+- Draw vertical lines on analysis dialog barograph and task speed 
+  where legs started
+- Locked targets are unlocked as soon as the AAT area is entered
+
+Changes from 5.1.5 beta 1:
+- Changed ExternalTriggerCruise to enum, so it can be off,
+    "flap", or "SC" (speed command).  
+  Existing value of true is equivalent to "flap".
+- Draw centroid/'bmw' symbol at targets in AAT task
+- Calculate AAT time to go if turning now while in sector, then 
+   going to remaining targets after this.
+- AA dT infobox goes blue if task time > AAT time + 5 minutes when in sector
+   and pilot turns now.
+  Therefore, particularly in last AAT sector, when AA dT is blue,
+  it is reasonably safe to turn now, even if the target is deeper in the
+  sector.  (only if color infoboxes are on)
+- Set waypoint bearing and best cruise track to first leg bearing 
+  when in start sector, so blue arrow points to first target, and 
+  so does screen orientation.
+
+Changes from 5.1.4:
+- Target dialog steps in 2% and 2 degrees instead of 5.
+- AAT target direction and best cruise track arrow (blue) extends
+  towards task line from previous target through aircraft when advancing
+  the target (aircraft is going past target)
+- Less wandering of AAT target while in sector due to shift along track
+- AAT delta T goes red when going under time
+- Failure to load a task keeps old start/finish/aat properties
+
 Changes from 5.1.3 beta9:
 - Cleaned up portrait waypoint select and airspace select/control dialogs.
 - When circling and in target dialog, orient towards waypoint
