@@ -232,9 +232,9 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   RasterTerrain::Lock();
   double retval = 0;
   int i=0;
+  bool start_under = false;
 
   // calculate terrain rounding factor
-
 
   FindLatitudeLongitude(Basic->Latitude, Basic->Longitude, 0,
                         glidemaxrange/NUMFINALGLIDETERRAIN, &lat, &lon);
@@ -243,31 +243,44 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   double Yrounding = fabs(lat-Basic->Latitude)/2;
   RasterTerrain::SetTerrainRounding(Xrounding, Yrounding);
 
+  lat = Basic->Latitude;
+  lon = Basic->Longitude;
+  latlast = lat;
+  lonlast = lon;
+
   altitude = Calculated->NavAltitude;
   h =  max(0, RasterTerrain::GetTerrainHeight(lat, lon));
   dh = altitude - h - SAFETYALTITUDETERRAIN;
+  dhlast = dh;
   if (dh<0) {
-    retval = 0;
-    goto OnExit;
+    start_under = true;
+    // already below safety terrain height
+    //    retval = 0;
+    //    goto OnExit;
   }
-
-  latlast = Basic->Latitude;
-  lonlast = Basic->Longitude;
 
   // find grid
   double dlat, dlon;
-  FindLatitudeLongitude(Basic->Latitude, Basic->Longitude, bearing,
-                        glidemaxrange, &dlat, &dlon);
+
+  FindLatitudeLongitude(lat, lon, bearing, glidemaxrange, &dlat, &dlon);
   dlat -= Basic->Latitude;
   dlon -= Basic->Longitude;
 
-  for (i=0; i<=NUMFINALGLIDETERRAIN; i++) {
-    double fi = (i*1.0)/NUMFINALGLIDETERRAIN;
-    // fraction of glidemaxrange
+  double f_scale = 1.0/NUMFINALGLIDETERRAIN;
+  if ((maxrange>0) && (maxrange<glidemaxrange)) {
+    f_scale *= maxrange/glidemaxrange;
+  }
 
-    if ((maxrange>0) && (maxrange<glidemaxrange)) {
-      fi *= maxrange/glidemaxrange;
-    }
+  double delta_alt = -f_scale*Calculated->NavAltitude;
+
+  dlat *= f_scale;
+  dlon *= f_scale;
+
+  for (i=1; i<=NUMFINALGLIDETERRAIN; i++) {
+    double f;
+    bool solution_found = false;
+    double fi = i*f_scale;
+    // fraction of glidemaxrange
 
     if ((maxrange>0)&&(fi>=1.0)) {
       // early exit
@@ -276,30 +289,50 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
       goto OnExit;
     }
 
-    altitude = (1.0-fi)*Calculated->NavAltitude;
+    if (start_under) {
+      altitude += 2.0*delta_alt;
+    } else {
+      altitude += delta_alt;
+    }
 
     // find lat, lon of point of interest
 
-    lat = Basic->Latitude+dlat*fi;
-    lon = Basic->Longitude+dlon*fi;
+    lat += dlat;
+    lon += dlon;
 
     // find height over terrain
     h =  max(0,RasterTerrain::GetTerrainHeight(lat, lon));
 
     dh = altitude - h - SAFETYALTITUDETERRAIN;
 
-    if ((dh<=0)&&(dhlast>=0)) {
-      double f;
-      if (dhlast-dh>0) {
-        f = (-dhlast)/(dh-dhlast);
+    if (start_under) {
+      if (dh>dhlast) {
+	// better solution found, ok to continue...
+	if (dh>0) {
+	  // we've now found a terrain point above safety altitude,
+	  // so consider rest of track to search for safety altitude
+	  start_under = false;
+	}
       } else {
-        f = 0.0;
+	f= 0.0;
+	solution_found = true;
       }
-      if (retlat && retlon) {
-        *retlat = latlast*(1.0-f)+lat*f;
-        *retlon = lonlast*(1.0-f)+lon*f;
+    } else if (dh<=0) {
+      if ((dh<dhlast) && (dhlast>0)) {
+        f = max(0,min(1,(-dhlast)/(dh-dhlast)));
+      } else {
+	f = 0.0;
       }
+      solution_found = true;
+    }
+    if (solution_found) {
       double distance;
+      lat = latlast*(1.0-f)+lat*f;
+      lon = lonlast*(1.0-f)+lon*f;
+      if (retlat && retlon) {
+        *retlat = lat;
+        *retlon = lon;
+      }
       DistanceBearing(Basic->Latitude, Basic->Longitude, lat, lon,
                       &distance, NULL);
       retval = distance;
