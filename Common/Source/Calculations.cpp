@@ -2635,16 +2635,19 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
       // Therefore, it shows well whether at any time the glider
       // is wasting time.
 
-      static double dr_last = d1;
+      static double dr_last = 0;
 
       double mc_safe = max(0.1,maccready);
       double Vstar = max(1.0,Calculated->VMacCready);
-      double vthis = (d1-dr_last)/dt;
-      dr_last = d1;
-      double ttg = max(1,Calculated->TaskTimeToGo);
+      double vthis = (Calculated->LegDistanceCovered-dr_last)/dt;
+      vthis /= AirDensityRatio(Calculated->NavAltitude);
+      
+      dr_last = Calculated->LegDistanceCovered;
+      double ttg = max(1,Calculated->LegTimeToGo);
       double Vav = d0/max(1.0,t0); 
-      double Vrem = dr/ttg;
-      double Vref = Vav;
+      double Vrem = Calculated->LegDistanceToGo/ttg;
+      double Vref = // Vav;
+	Vrem;
       double sr = -GlidePolar::SinkRate(Vstar);
       double height_diff = max(0,-Calculated->TaskAltitudeDifference);
       
@@ -2668,12 +2671,12 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 	  if (Calculated->TaskAltitudeDifference>0) {
 	    rho_climb *= rho_c;
 	    rho_cruise *= rho_c;
-	    Vref = Vrem;
+	    // Vref = Vrem;
 	  }
 	}
       }
 
-      double w_comp = min(6.0,max(-6.0,Calculated->Vario/mc_safe));
+      double w_comp = min(10.0,max(-10.0,Calculated->Vario/mc_safe));
       double vdiff = vthis/Vstar + w_comp*rho_cruise + rho_climb;
 
       if (vthis > SAFTEYSPEED*2) {
@@ -2691,7 +2694,9 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
         static int lastActiveWayPoint = 0;
 	static double tsi_av = 0;
 	static int n_av = 0;
-        if (ActiveWayPoint==lastActiveWayPoint) {
+        if ((ActiveWayPoint==lastActiveWayPoint) 
+	    && (Calculated->LegDistanceToGo>1000.0) 
+	    && (Calculated->LegDistanceCovered>1000.0)) {
           
           Calculated->TaskSpeedInstantaneous = 
             LowPassFilter(Calculated->TaskSpeedInstantaneous, vdiff, 0.1);
@@ -2717,7 +2722,10 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 
         } else {
 
-	  Calculated->TaskSpeedInstantaneous = vdiff;
+          Calculated->TaskSpeedInstantaneous = 
+            LowPassFilter(Calculated->TaskSpeedInstantaneous, vdiff, 0.5);
+
+	  //	  Calculated->TaskSpeedInstantaneous = vdiff;
 	  tsi_av = 0;
 	  n_av = 0;
 	}
@@ -2976,7 +2984,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     }
   }
 
-  // JMW TODO: use mc based on risk?
+  // JMW TODO: use mc based on risk? no!
   double LegAltitude = 
     GlidePolar::MacCreadyAltitude(maccready, 
                                   LegToGo, 
