@@ -6,6 +6,9 @@ Todo:
 - Allow start through top of start sector
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
 
+Changes from 5.1.7 beta4:
+- Airspace display in analysis dialog sped up slightly
+- Airspace queries report MSL referenced height as MSL instead of "Alt"
 
 Changes from 5.1.7 beta2:
 

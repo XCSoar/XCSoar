@@ -403,7 +403,7 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     
     // put low pass filter on VOpt so display doesn't jump around
     // too much
-    Calculated->VOpt = LowPassFilter(Calculated->VOpt,VOptnew, 0.4);
+    Calculated->VOpt = LowPassFilter(Calculated->VOpt,VOptnew, 0.6);
     
   } else {
     // this thermal is better than maccready, so fly at minimum sink
