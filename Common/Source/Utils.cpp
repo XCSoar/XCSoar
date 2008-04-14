@@ -2413,7 +2413,7 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
         _stprintf(BaseStr,TEXT("%1.0f%s %s"), 
                   ALTITUDEMODIFY * Base.Altitude, 
                   Units::GetUnitName(Units::GetUserAltitudeUnit()),
-                  gettext(TEXT("Alt")));
+                  gettext(TEXT("MSL")));
       else
         _stprintf(BaseStr,gettext(TEXT("GND")));
     }
@@ -2432,7 +2432,7 @@ void FormatWarningString(int Type, TCHAR *Name , AIRSPACE_ALT Base, AIRSPACE_ALT
       } else {
 	_stprintf(TopStr,TEXT("%1.0f%s %s"), ALTITUDEMODIFY * Top.Altitude, 
 		  Units::GetUnitName(Units::GetUserAltitudeUnit()),
-		  gettext(TEXT("Alt")));
+		  gettext(TEXT("MSL")));
       }
     }
   else
