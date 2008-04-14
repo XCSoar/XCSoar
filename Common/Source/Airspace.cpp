@@ -2013,7 +2013,182 @@ void SortAirspace(void) {
 
 /////////////
 
+
+int line_line_intersection (const double x1, const double y1,
+			    const double dx, const double dy,
+			    const double x3, const double y3,
+			    const double x4, const double y4,
+			    double *u) {
+  /*
+  double a = sqr(dx)+sqr(dy);
+  if (a <= 0) {
+    return 0;
+  }
+  */
+  double denom = (y4-y3)*dx-(x4-x3)*dy;
+  if (denom == 0) {
+    // lines are parallel
+    return 0;
+  }
+  double ua = ((x4-x3)*(y1-y3)-(y4-y3)*(x1-x3))/denom;
+  if ((ua<0) || (ua>1.0)) {
+    // outside first line
+    return 0;
+  } else {
+    double ub = (dx*(y1-y3)-dy*(x1-x3))/denom;
+    if ((ub<0) || (ub>1.0)) {
+      // outside second line
+      return 0;
+    } else {
+      // inside both lines
+      u[0] = ua;
+      return 1;
+    }
+  }
+}
+
+
+bool line_rect_intersection (const double x1,
+			     const double y1,
+			     const double dx,
+			     const double dy,
+			     rectObj *bounds) {
+  double u;
+
+  // bottom line
+  if (line_line_intersection(x1, y1, dx, dy,
+			     bounds->minx, bounds->miny,
+			     bounds->maxx, bounds->miny,
+			     &u)) return true;
+
+  // left line
+  if (line_line_intersection(x1, y1, dx, dy,
+			     bounds->minx, bounds->miny,
+			     bounds->minx, bounds->maxy,
+			     &u)) return true;
+
+  // top line
+  if (line_line_intersection(x1, y1, dx, dy,
+			     bounds->minx, bounds->maxy,
+			     bounds->maxx, bounds->maxy,
+			     &u)) return true;
+
+  // right line
+  if (line_line_intersection(x1, y1, dx, dy,
+			     bounds->maxx, bounds->miny,
+			     bounds->maxx, bounds->maxy,
+			     &u)) return true;
+  return false;
+}
+
+
 void ScanAirspaceLine(double *lats, double *lons, double *heights,
+		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X])
+{
+
+  int i,j;
+  unsigned int k;
+  double latitude, longitude, Dist;
+  double x1 = lons[0];
+  double dx = lons[AIRSPACE_SCANSIZE_X-1]-x1;
+  double y1 = lats[0];
+  double dy = lats[AIRSPACE_SCANSIZE_X-1]-y1;
+  double h_min = heights[0];
+  double h_max = heights[AIRSPACE_SCANSIZE_H-1];
+
+  rectObj lineRect;
+
+  lineRect.minx = min(x1, x1+dx);
+  lineRect.maxx = max(x1, x1+dx);
+  lineRect.miny = min(y1, y1+dy);
+  lineRect.maxy = max(y1, y1+dy);
+
+  for(k=0;k<NumberOfAirspaceCircles;k++) {
+
+    // ignore if outside scan height
+    if (!((h_max<=AirspaceCircle[k].Base.Altitude)||
+	  (h_min>=AirspaceCircle[k].Top.Altitude))) {
+
+      // ignore if scan line doesn't intersect bounds
+      if (msRectOverlap(&lineRect, &AirspaceCircle[k].bounds) &&
+	  line_rect_intersection (x1, y1, dx, dy,
+				  &AirspaceCircle[k].bounds)) {
+
+	for (i=0; i<AIRSPACE_SCANSIZE_X; i++) {
+	  latitude = lats[i];
+	  longitude = lons[i];
+	  if ((latitude> AirspaceCircle[k].bounds.miny)&&
+	      (latitude< AirspaceCircle[k].bounds.maxy)&&
+	      CheckInsideLongitude(longitude,
+				   AirspaceCircle[k].bounds.minx,
+				   AirspaceCircle[k].bounds.maxx)) {
+
+	    DistanceBearing(latitude,longitude,
+			    AirspaceCircle[k].Latitude,
+			    AirspaceCircle[k].Longitude, &Dist, NULL);
+	    Dist -= AirspaceCircle[k].Radius;
+
+	    if(Dist < 0) {
+	      for (j=0; j<AIRSPACE_SCANSIZE_H; j++) {
+		if ((heights[j]>AirspaceCircle[k].Base.Altitude)&&
+		    (heights[j]<AirspaceCircle[k].Top.Altitude)) {
+		  airspacetype[j][i] = AirspaceCircle[k].Type;
+		} // inside height
+	      } // finished scanning height
+	    } // inside
+	  } // in bound
+	} // finished scanning range
+      } // line intersects
+    } // within height
+  } // finished scanning circles
+
+  for(k=0;k<NumberOfAirspaceAreas;k++) {
+
+    // ignore if outside scan height
+    if (!((h_max<=AirspaceArea[k].Base.Altitude)||
+	  (h_min>=AirspaceArea[k].Top.Altitude))) {
+
+      // ignore if scan line doesn't intersect bounds
+      if (msRectOverlap(&lineRect, &AirspaceArea[k].bounds) &&
+	  line_rect_intersection (x1, y1, dx, dy,
+				  &AirspaceArea[k].bounds)) {
+
+	for (i=0; i<AIRSPACE_SCANSIZE_X; i++) {
+	  latitude = lats[i];
+	  longitude = lons[i];
+
+	  if ((latitude> AirspaceArea[k].bounds.miny)&&
+	      (latitude< AirspaceArea[k].bounds.maxy)&&
+	      CheckInsideLongitude(longitude,
+				   AirspaceArea[k].bounds.minx,
+				   AirspaceArea[k].bounds.maxx)) {
+	    AIRSPACE_POINT thispoint;
+	    thispoint.Longitude = longitude;
+	    thispoint.Latitude = latitude;
+
+	    CheckAirspacePoint(AirspaceArea[k].FirstPoint);
+
+	    if (wn_PnPoly(thispoint,
+			  &AirspacePoint[AirspaceArea[k].FirstPoint],
+			  AirspaceArea[k].NumPoints-1) != 0) {
+	      for (j=0; j<AIRSPACE_SCANSIZE_H; j++) {
+		if ((heights[j]>AirspaceArea[k].Base.Altitude)&&
+		    (heights[j]<AirspaceArea[k].Top.Altitude)) {
+		  airspacetype[j][i] = AirspaceArea[k].Type;
+		} // inside height
+	      } // finished scanning height
+	    } // inside
+	  } // in bound
+	} // finished scanning range
+      } // line intersects
+    } // within height
+  } // finished scanning areas
+}
+
+
+#if 0
+// old...
+void ScanAirspaceLine_old(double *lats, double *lons, double *heights,
 		      int airspacetype[AIRSPACE_SCANSIZE_H][AIRSPACE_SCANSIZE_X])
 {
 
@@ -2081,6 +2256,8 @@ void ScanAirspaceLine(double *lats, double *lons, double *heights,
   } // finished scanning areas
 
 }
+#endif
+
 
 #ifdef DEBUG
 void DumpAirspaceFile(void){
