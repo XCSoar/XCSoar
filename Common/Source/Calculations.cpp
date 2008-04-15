@@ -3172,7 +3172,7 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   LockTaskData();
 
   double mc_new = MACCREADY;
-  bool first_mc = true;
+  static bool first_mc = true;
 
   if (Calculated->FinalGlide && ActiveIsFinalWaypoint()) {
     is_final_glide = true;
