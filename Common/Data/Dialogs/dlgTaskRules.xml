@@ -42,7 +42,7 @@ Help="If enabled, this option requires the minimum height above ground for finis
     <DataField name="" DataType="boolean" ReadOnly=0/>
   </WndProperty>
 
-    <WndProperty Name="prpOLCRules" Caption="Online contest"     X=2 Y=-1  Width=236 Height=22 CaptionWidth=150 Font=2
+    <WndProperty Name="prpOLCRules" Caption="OLC Rules"     X=2 Y=-1  Width=236 Height=22 CaptionWidth=150 Font=2
 Help="Rules used for calculating optimal points for OnLine Contest.
 [Sprint]: Conforms to FAI IGC League rules.  Up to 5 points including start and finish, maximum duration 2.5 hours, finish height must not be below start height.
 [Triangle]: Conforms to FAI OLC triangle rules.  Four points with common start and finish.  For tasks longer than 500km, no leg less than 25% or larger than 45%; otherwise no leg less than 28% of total.  Finish height must not be lower than start height less 1000 meters.
