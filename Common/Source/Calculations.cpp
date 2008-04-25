@@ -960,8 +960,11 @@ void EnergyHeightNavAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     V_tas = Calculated->TrueAirspeedEstimated;
   }
   double V_bestld_tas = GlidePolar::Vbestld*ias_to_tas;
+  double V_mc_tas = Calculated->VMacCready*ias_to_tas;
+  V_tas = max(V_tas, V_bestld_tas);
+  double V_target = max(V_bestld_tas, V_mc_tas);
   Calculated->EnergyHeight =
-    max(0, V_tas*V_tas-V_bestld_tas*V_bestld_tas)/(9.81*2.0);
+    (V_tas*V_tas-V_target*V_target)/(9.81*2.0);
 }
 
 
@@ -3180,8 +3183,26 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     first_mc = true;
   }
 
-  if (((AutoMcMode==0)||(AutoMcMode==2)) && is_final_glide
-      && ValidTaskPoint(ActiveWayPoint)) {
+  double av_thermal = -1;
+  if (flightstats.ThermalAverage.y_ave>0) {
+    if (Calculated->Circling && (Calculated->AverageThermal>0)) {
+      av_thermal = (flightstats.ThermalAverage.y_ave
+		*flightstats.ThermalAverage.sum_n
+		+ Calculated->AverageThermal)/
+	(flightstats.ThermalAverage.sum_n+1);
+    } else {
+      av_thermal = flightstats.ThermalAverage.y_ave;
+    }
+  } else if (Calculated->Circling && (Calculated->AverageThermal>0)) {
+    // insufficient stats, so use this/last thermal's average
+    av_thermal = Calculated->AverageThermal;
+  }
+
+  if (!ValidTaskPoint(ActiveWayPoint)) {
+    if (av_thermal>0) {
+      mc_new = av_thermal;
+    }
+  } else if ( ((AutoMcMode==0)||(AutoMcMode==2)) && is_final_glide) {
 
     double time_remaining = Basic->Time-Calculated->TaskStartTime-9000;
     if (EnableOLC
@@ -3194,44 +3215,48 @@ void DoAutoMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 				  time_remaining,
 				  Calculated->TaskStartAltitude);
 
-    } else {
-      if (Calculated->TaskAltitudeDifference0>0) {
+    } else if (Calculated->TaskAltitudeDifference0>0) {
 
-	// only change if above final glide with zero Mc
-	// otherwise when we are well below, it will wind Mc back to
-	// zero
+      // only change if above final glide with zero Mc
+      // otherwise when we are well below, it will wind Mc back to
+      // zero
 
-	double slope =
-	  (Calculated->NavAltitude
-	   - FAIFinishHeight(Basic, Calculated, ActiveWayPoint))/
-	  (Calculated->WaypointDistance+1);
+      double slope =
+	(Calculated->NavAltitude + Calculated->EnergyHeight
+	 - FAIFinishHeight(Basic, Calculated, ActiveWayPoint))/
+	(Calculated->WaypointDistance+1);
 
-	double mc_pirker = PirkerAnalysis(Basic, Calculated,
-					  Calculated->WaypointBearing,
-					  slope);
-	mc_pirker = max(0.0, mc_pirker);
-	if (first_mc) {
-	  // don't allow Mc to wind down to zero when first achieving
-	  // final glide; but do allow it to wind down after that
-	  if (mc_pirker >= mc_new) {
-	    mc_new = mc_pirker;
-	    first_mc = false;
-	  }
-	} else {
+      double mc_pirker = PirkerAnalysis(Basic, Calculated,
+					Calculated->WaypointBearing,
+					slope);
+      mc_pirker = max(0.0, mc_pirker);
+      if (first_mc) {
+	// don't allow Mc to wind down to zero when first achieving
+	// final glide; but do allow it to wind down after that
+	if (mc_pirker >= mc_new) {
 	  mc_new = mc_pirker;
+	  first_mc = false;
+	} else if (AutoMcMode==2) {
+	  // revert to averager based auto Mc
+	  if (av_thermal>0) {
+	    mc_new = av_thermal;
+	  }
+	}
+      } else {
+	mc_new = mc_pirker;
+      }
+    } else { // below final glide at zero Mc, never achieved final glide
+      if (first_mc && (AutoMcMode==2)) {
+	// revert to averager based auto Mc
+	if (av_thermal>0) {
+	  mc_new = av_thermal;
 	}
       }
     }
-  } else if (((AutoMcMode==1)||((AutoMcMode==2)&&(!is_final_glide)))
-	     || !ValidTaskPoint(ActiveWayPoint)) {
-
-    if (flightstats.ThermalAverage.y_ave>0) {
-      mc_new = flightstats.ThermalAverage.y_ave;
-    } else if (Calculated->Circling && (Calculated->AverageThermal>0)) {
-      // insufficient stats, so use this/last thermal's average
-      mc_new = Calculated->AverageThermal;
+  } else if ( (AutoMcMode==1) || ((AutoMcMode==2)&& !is_final_glide) ) {
+    if (av_thermal>0) {
+      mc_new = av_thermal;
     }
-
   }
 
   MACCREADY = LowPassFilter(MACCREADY,mc_new,0.15);

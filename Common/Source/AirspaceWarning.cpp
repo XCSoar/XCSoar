@@ -286,7 +286,9 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, bool Predicted,
             it->data.Inside = 0;
             it->data.Predicted = 0;
           } else {
-            it->data.Inside = !Predicted;
+	    if (!Predicted) {
+	      it->data.Inside = true;
+	    }
             it->data.Predicted = Predicted;
           }
 
@@ -572,7 +574,7 @@ void AirspaceWarnListDeInit(void){
 int AirspaceWarnFindIndexByID(int ID){
   int idx=0;
   int res = -1;
-  if (!InitDone) {
+  if (!InitDone || (ID<0)) {
     return res;
   }
 

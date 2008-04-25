@@ -58,6 +58,7 @@ static TCHAR *ChecklistText[MAXLISTS];
 static TCHAR *ChecklistTitle[MAXLISTS];
 
 static void NextPage(int Step){
+  TCHAR buffer[80];
   page += Step;
   if (page>=nLists) {
     page=0;
@@ -70,12 +71,15 @@ static void NextPage(int Step){
 				 LineOffsets,
 				 MAXLINES);
 
+  _stprintf(buffer, gettext(TEXT("Checklist")));
+
   if (ChecklistTitle[page] &&
-      _tcslen(ChecklistTitle[page])>0) {
-    wf->SetCaption(ChecklistTitle[page]);
-  } else {
-    wf->SetCaption(gettext(TEXT("Checklist")));
+      (_tcslen(ChecklistTitle[page])>0)
+      && (_tcslen(ChecklistTitle[page])<60)) {
+    _tcscat(buffer, TEXT(": "));
+    _tcscat(buffer, ChecklistTitle[page]);
   }
+  wf->SetCaption(buffer);
 
   wDetails->ResetList();
   wDetails->Redraw();

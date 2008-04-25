@@ -3379,15 +3379,25 @@ void WndListFrame::RedrawScrolled(bool all) {
 
 
 int WndListFrame::RecalculateIndices(bool bigscroll) {
+
+  mListInfo.ScrollIndex = max(0,min(mListInfo.ScrollIndex,
+				    mListInfo.ItemCount-mListInfo.ItemInPageCount));
+
+  if (mListInfo.ItemIndex+mListInfo.ScrollIndex >= mListInfo.ItemCount) {
+    mListInfo.ItemIndex = max(0,mListInfo.ItemCount-mListInfo.ScrollIndex-1);
+    mListInfo.ScrollIndex = max(0,
+			      min(mListInfo.ScrollIndex,
+				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
+    return(1);
+  }
+
   mListInfo.ScrollIndex = max(0,
 			      min(mListInfo.ScrollIndex,
 				  mListInfo.ItemCount-mListInfo.ItemIndex-1));
+
   if (mListInfo.ItemIndex >= mListInfo.BottomIndex){
-
-    if ((mListInfo.ItemIndex+mListInfo.ScrollIndex <
-          mListInfo.ItemCount)
-          &&(mListInfo.ItemCount>mListInfo.ItemInPageCount)) {
-
+    if ((mListInfo.ItemCount>mListInfo.ItemInPageCount)
+	&& (mListInfo.ItemIndex+mListInfo.ScrollIndex < mListInfo.ItemCount)) {
       mListInfo.ScrollIndex++;
       mListInfo.ItemIndex = mListInfo.BottomIndex-1;
       // JMW scroll

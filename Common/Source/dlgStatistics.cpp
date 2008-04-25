@@ -1403,9 +1403,11 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   ScaleYFromValue(rc, hmin);
   ScaleYFromValue(rc, hmax);
 
+  double dfi = 1.0/(AIRSPACE_SCANSIZE_H-1);
+  double dfj = 1.0/(AIRSPACE_SCANSIZE_X-1);
+
   for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
-    fi = i*1.0/(AIRSPACE_SCANSIZE_H-1);
-    d_h[i] = (hmax-hmin)*fi+hmin;
+    d_h[i] = (hmax-hmin)*i*dfi+hmin;
   }
   for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
     for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
@@ -1418,11 +1420,15 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
 
   HPEN mpen = (HPEN)CreatePen(PS_NULL, 0, RGB(0xf0,0xf0,0xb0));
   HPEN oldpen = (HPEN)SelectObject(hdc, (HPEN)mpen);
+  double dx = dfj*(rc.right-rc.left-BORDER_X);
+  int x0 = rc.left+BORDER_X;
+  double dy = dfi*(rc.top-rc.bottom+BORDER_Y);
+  int y0 = rc.bottom-BORDER_Y;
 
   for (i=0; i< AIRSPACE_SCANSIZE_H; i++) { // scan height
-    fi = i*1.0/(AIRSPACE_SCANSIZE_H-1);
+    fi = i*dfi;
     for (j=0; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
-      fj = j*1.0/(AIRSPACE_SCANSIZE_X-1);
+      fj = j*dfj;
 
       type = d_airspace[i][j];
       if (type>=0) {
@@ -1431,10 +1437,10 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
 	SetTextColor(hdc,
 		     MapWindow::Colours[MapWindow::iAirspaceColour[type]]);
 
-	rcd.left = iround(fj*(rc.right-rc.left-BORDER_X)+rc.left+BORDER_X);
-	rcd.right = iround(rcd.left+BORDER_X+(rc.right-rc.left-BORDER_X)/(AIRSPACE_SCANSIZE_X-1));
-	rcd.bottom = iround(fi*(rc.top-rc.bottom+BORDER_Y)+rc.bottom-BORDER_Y);
-	rcd.top = iround(rcd.bottom-BORDER_Y+(rc.top-rc.bottom+BORDER_Y)/(AIRSPACE_SCANSIZE_H-1));
+	rcd.left = iround((j-0.5)*dx)+x0;
+	rcd.right = iround((j+0.5)*dx)+x0;
+	rcd.bottom = iround((i+0.5)*dy)+y0;
+	rcd.top = iround((i-0.5)*dy)+y0;
 
 	Rectangle(hdc,rcd.left,rcd.top,rcd.right,rcd.bottom);
 
@@ -1452,18 +1458,16 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
   SelectObject(hdc, hbHorizonGround);
   for (j=1; j< AIRSPACE_SCANSIZE_X; j++) { // scan range
 
-    ground[0].x = iround((j-1)*1.0/(AIRSPACE_SCANSIZE_X-1)
-			 *(rc.right-rc.left-BORDER_X)+rc.left+BORDER_X);
+    ground[0].x = iround((j-1)*dx)+x0;
     ground[1].x = ground[0].x;
-    ground[2].x = iround((j)*1.0/(AIRSPACE_SCANSIZE_X-1)
-			 *(rc.right-rc.left-BORDER_X)+rc.left+BORDER_X);
+    ground[2].x = iround(j*dx)+x0;
     ground[3].x = ground[2].x;
-    ground[0].y = rc.bottom-BORDER_Y;
+    ground[0].y = y0;
     ground[1].y = iround((d_alt[j-1]-hmin)/(hmax-hmin)
-			 *(rc.top-rc.bottom+BORDER_Y)+rc.bottom-BORDER_Y);
+			 *(rc.top-rc.bottom+BORDER_Y))+y0;
     ground[2].y = iround((d_alt[j]-hmin)/(hmax-hmin)
-			 *(rc.top-rc.bottom+BORDER_Y)+rc.bottom-BORDER_Y);
-    ground[3].y = rc.bottom-BORDER_Y;
+			 *(rc.top-rc.bottom+BORDER_Y))+y0;
+    ground[3].y = y0;
     Polygon(hdc, ground, 4);
   }
 
@@ -1474,9 +1478,9 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
     double t = range/GPS_INFO.Speed;
     double gfh = (ach+CALCULATED_INFO.Average30s*t-hmin)/(hmax-hmin);
     line[0].x = rc.left;
-    line[0].y = (int)(fh*(rc.top-rc.bottom+BORDER_Y)+rc.bottom-BORDER_Y)-1;
+    line[0].y = (int)(fh*(rc.top-rc.bottom+BORDER_Y)+y0)-1;
     line[1].x = rc.right;
-    line[1].y = (int)(gfh*(rc.top-rc.bottom+BORDER_Y)+rc.bottom-BORDER_Y)-1;
+    line[1].y = (int)(gfh*(rc.top-rc.bottom+BORDER_Y)+y0)-1;
     StyleLine(hdc, line[0], line[1], STYLE_BLUETHIN);
   }
 

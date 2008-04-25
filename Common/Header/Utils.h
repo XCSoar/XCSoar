@@ -140,6 +140,7 @@ extern TCHAR szRegistryRiskGamma[];
 extern TCHAR szRegistryWindArrowStyle[];
 extern TCHAR szRegistryDisableAutoLogger[];
 extern TCHAR szRegistryMapFile[];
+extern TCHAR szRegistryBallastSecsToEmpty[];
 
 extern bool LockSettingsInFlight;
 extern bool LoggerShortName;

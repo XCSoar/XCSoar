@@ -329,8 +329,9 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
       InflateRect(&rc, 1, 1);
       SelectObject(hDC, (HPEN)GetStockObject(BLACK_PEN));
       Rectangle(hDC, rc.left, rc.top, rc.right, rc.bottom);
-    } else
+    } else {
       FillRect(hDC, &rc, hBrushBk);
+    }
 
     if ((pAS.Acknowledge > 0) && (pAS.Acknowledge >= pAS.WarnLevel)){
       SetTextColor(hDC, clGray);
@@ -417,16 +418,17 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
 }
 
 static void OnAirspaceListInfo(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo){
-    (void)Sender;
-	if (ListInfo->DrawIndex == -1){
+  (void)Sender;
+  if (ListInfo->DrawIndex == -1){
     if (FocusedIdx < 0) {
       FocusedIdx = 0;
     }
     ListInfo->ItemIndex = FocusedIdx;
-    if (Count == 0)
-      ListInfo->ItemCount = 1;
-    else
-      ListInfo->ItemCount = Count;
+    ListInfo->ItemCount = max(1,Count);
+
+    ListInfo->DrawIndex = 0;
+    ListInfo->ScrollIndex = 0; // JMW bug fix
+    DrawListIndex = 0;
 
   } else {
     DrawListIndex = ListInfo->DrawIndex+ListInfo->ScrollIndex;
@@ -440,53 +442,44 @@ bool actShow = false;
 bool actListSizeChange = false;
 bool actListChange = false;
 
+static bool FindFocus() {
+  bool do_refocus = false;
+
+  FocusedIdx = 0;
+  FocusedIdx = AirspaceWarnFindIndexByID(FocusedID);
+  if (FocusedIdx < 0) {
+    FocusedIdx = 0;
+    FocusedID = -1; // JMW bug fix
+
+    if (wAirspaceListEntry->GetFocused()) {
+      // JMW attempt to find fix...
+      do_refocus = true;
+    }
+  }
+  SelectedIdx = AirspaceWarnFindIndexByID(SelectedID);
+  if (SelectedIdx < 0){
+    SelectedID = -1;
+  }
+  return do_refocus;
+}
+
+
 int UserMsgNotify(WindowControl *Sender, MSG *msg){
 
   if (msg->message != WM_USER+1)
     return(1);
 
-  if (actShow){
-    actShow = false;
-    /*
-    if (!wf->GetVisible()){
-
-      Count = AirspaceWarnGetItemCount();
-      wAirspaceList->ResetList();
-
-      FocusedIdx = 0;
-      FocusedID = -1;
-      wf->Show();
-      SetFocus(wAirspaceListEntry->GetHandle());
-
-    } else {
-
-      SetFocus(wAirspaceListEntry->GetHandle());
-
-    }
-    */
-    return(0);
-  }
-
   if (!wf->GetVisible())
     return(0);
 
-  if (actListSizeChange){
+  bool do_refocus = false;
 
+  if (actListSizeChange){
     actListSizeChange = false;
 
     Count = AirspaceWarnGetItemCount();
 
-    FocusedIdx = 0;
-    if (FocusedID >= 0){
-      FocusedIdx = AirspaceWarnFindIndexByID(FocusedID);
-      if (FocusedIdx < 0)
-        FocusedIdx = 0;
-      SelectedIdx = AirspaceWarnFindIndexByID(SelectedID);
-      if (SelectedIdx < 0){
-        SelectedID = -1;
-      }
-
-    }
+    do_refocus = FindFocus();
 
     wAirspaceList->ResetList();
 
@@ -496,10 +489,34 @@ int UserMsgNotify(WindowControl *Sender, MSG *msg){
     }
   }
 
-  if (actListChange){
-    actListChange = false;
+  if (actShow){
+    actShow = false;
+    if (!do_refocus) {
+      do_refocus = FindFocus();
+    }
 
+    /*
+    if (!wf->GetVisible()){
+      Count = AirspaceWarnGetItemCount();
+      wAirspaceList->ResetList();
+      FocusedIdx = 0;
+      FocusedID = -1;
+      wf->Show();
+      SetFocus(wAirspaceListEntry->GetHandle());
+    } else {
+      SetFocus(wAirspaceListEntry->GetHandle());
+    }
+    */
+    //    return(0);
+  }
+
+  if (actListChange) {
+    actListChange = false;
     wAirspaceList->Redraw();
+  }
+
+  if (do_refocus) {
+    SetFocus(wAirspaceListEntry->GetHandle());
   }
 
   // this is our message, we have handled it.
@@ -569,6 +586,11 @@ bool dlgAirspaceWarningIsEmpty(void) {
 
 // WARING: may only be called from MapWindow event loop!
 // JMW this is now called from ProcessCommon (main GUI loop)
+
+bool dlgAirspaceWarningVisible(void) {
+  return fDialogOpen;
+}
+
 bool dlgAirspaceWarningShowDlg(bool Force){
 
   if (fDialogOpen)
@@ -596,6 +618,12 @@ bool dlgAirspaceWarningShowDlg(bool Force){
     }
 
     fDialogOpen = false;
+
+    // JMW need to deselect everything on new reopening of dialog
+    SelectedID = -1;
+    SelectedIdx = -1;
+    FocusedID = -1;
+    FocusedIdx = -1;
 
     //    SetFocus(hWndMapWindow);
     // JMW why do this? --- not necessary?

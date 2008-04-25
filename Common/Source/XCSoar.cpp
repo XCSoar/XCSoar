@@ -1200,10 +1200,12 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   INITCOMMONCONTROLSEX icc;
   (void)hPrevInstance;
 
-  //#ifdef DEBUG
+#ifdef GNAV
+#ifdef FORCEPORTRAIT
   // JMW testing only for portrait mode of Altair
-  //    RotateScreen();
-  //#endif
+  RotateScreen();
+#endif
+#endif
 
   // Version String
 #ifdef GNAV
@@ -1219,7 +1221,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // experimental CVS
 
-  wcscat(XCSoar_Version, TEXT("5.1.7 Beta6 "));
+  wcscat(XCSoar_Version, TEXT("5.1.7 Beta7 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -2660,6 +2662,7 @@ void DisplayText(void)
 
 #include "Winbase.h"
 
+
 void CommonProcessTimer()
 {
 
@@ -2682,12 +2685,15 @@ void CommonProcessTimer()
 
   if(InfoWindowActive)
     {
-      if(InfoBoxFocusTimeOut == FOCUSTIMEOUTMAX)
-        {
-          SwitchToMapWindow();
-        }
-      InfoBoxFocusTimeOut ++;
+      if (!dlgAirspaceWarningVisible()) {
+	// JMW prevent switching to map window if in airspace warning dialog
 
+	if(InfoBoxFocusTimeOut >= FOCUSTIMEOUTMAX)
+	  {
+	    SwitchToMapWindow();
+	  }
+	InfoBoxFocusTimeOut ++;
+      }
     }
 
   if (DisplayLocked) {
@@ -2730,9 +2736,11 @@ void CommonProcessTimer()
   //
   // maybe block/delay this if a dialog is active?
   // JMW: is done in the message function now.
-  if (Message::Render()) {
-    // turn screen on if blanked and receive a new message
-    DisplayTimeOut=0;
+  if (!dlgAirspaceWarningVisible()) {
+    if (Message::Render()) {
+      // turn screen on if blanked and receive a new message
+      DisplayTimeOut=0;
+    }
   }
 
 #if (EXPERIMENTAL > 0)

@@ -93,6 +93,8 @@ void dlgWeatherShowModal(void);
 void dlgAirspaceSelect(void);
 void dlgTarget(void);
 bool dlgTaskRules(void);
+void dlgAirspaceDetails(int the_circle, int the_area);
+bool dlgAirspaceWarningVisible(void);
 
 #if (WINDOWSPC>0)
 #ifdef DEBUG

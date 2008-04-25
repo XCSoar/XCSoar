@@ -344,10 +344,14 @@ bool MapWindow::Event_InteriorAirspaceDetails(double lon, double lat) {
         inside = InsideAirspaceCircle(lon, lat, i);
       }
       if (inside) {
+	dlgAirspaceDetails(i, -1);
+
+	/*
         DisplayAirspaceWarning(AirspaceCircle[i].Type ,
                                AirspaceCircle[i].Name ,
                                AirspaceCircle[i].Base,
                                AirspaceCircle[i].Top );
+	*/
         found = true;
       }
     }
@@ -359,10 +363,14 @@ bool MapWindow::Event_InteriorAirspaceDetails(double lon, double lat) {
         inside = InsideAirspaceArea(lon, lat, i);
       }
       if (inside) {
+	dlgAirspaceDetails(-1, i);
+
+	/*
         DisplayAirspaceWarning(AirspaceArea[i].Type ,
                                AirspaceArea[i].Name ,
                                AirspaceArea[i].Base,
                                AirspaceArea[i].Top );
+	*/
         found = true;
       }
     }
@@ -1941,7 +1949,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
     if (TaskAborted) {
       DrawAbortedTask(hdcDrawWindowBg, rc, Orig_Aircraft);
     } else {
-      DrawTask(hdcDrawWindowBg, rc);
+      DrawTask(hdcDrawWindowBg, rc, Orig_Aircraft);
     }
 
     // draw red cross on glide through terrain marker
@@ -2959,7 +2967,7 @@ void MapWindow::DrawStartSector(HDC hdc, RECT rc,
 }
 
 
-void MapWindow::DrawTask(HDC hdc, RECT rc)
+void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 {
   int i;
   double tmp;
@@ -3086,11 +3094,12 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
 
   for(i=0;i<MAXTASKPOINTS-1;i++) {
     if(ValidTaskPoint(i) && ValidTaskPoint(i+1)) {
+      bool is_first = (Task[i].Index < Task[i+1].Index);
       int imin = min(Task[i].Index,Task[i+1].Index);
       int imax = max(Task[i].Index,Task[i+1].Index);
       // JMW AAT!
+      POINT sct1, sct2;
       if (AATEnabled && !TargetPan) {
-        POINT sct1, sct2;
         if (i>0) {
           LatLon2Screen(Task[i].AATTargetLon,
                         Task[i].AATTargetLat,
@@ -3101,20 +3110,38 @@ void MapWindow::DrawTask(HDC hdc, RECT rc)
         LatLon2Screen(Task[i+1].AATTargetLon,
                       Task[i+1].AATTargetLat,
                       sct2);
-        DrawDashLine(hdc, 3,
-                     sct1,
-                     sct2,
-                     taskcolor);
+
         DrawDashLine(hdc, 1,
                      WayPointList[imin].Screen,
                      WayPointList[imax].Screen,
                      taskcolor);
       } else {
-        DrawDashLine(hdc, 3,
-                     WayPointList[imin].Screen,
-                     WayPointList[imax].Screen,
-                     taskcolor);
+	sct1 = WayPointList[Task[i].Index].Screen;
+	sct2 = WayPointList[Task[i+1].Index].Screen;
       }
+
+      if (is_first) {
+	DrawDashLine(hdc, 3,
+		     sct1,
+		     sct2,
+		     taskcolor);
+      } else {
+	DrawDashLine(hdc, 3,
+		     sct2,
+		     sct1,
+		     taskcolor);
+      }
+
+      // draw small arrow along task direction
+      POINT p_p;
+      POINT Arrow[2] = { {6,6}, {-6,6} };
+      ScreenClosestPoint(sct1, sct2,
+			 Orig_Aircraft, &p_p, IBLSCALE(25));
+      PolygonRotateShift(Arrow, 2, p_p.x, p_p.y,
+            Task[i].OutBound-DisplayAngle);
+
+      _DrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[0], p_p, taskcolor);
+      _DrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[1], p_p, taskcolor);
     }
   }
 #ifdef HAVEEXCEPTIONS

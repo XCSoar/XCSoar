@@ -9,11 +9,11 @@
 
 <WndForm Type="Dialog" X=5 Y=5 Width=240 Height=231 Caption="Status" Font=2 BackColor=0xDADBAB>
 
-  <WndButton Name="cmdNext"  Caption="&gt;" X=105 Y=0 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
-  <WndButton Name="cmdPrev"  Caption="&lt;" X=70 Y=0 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
-  <WndButton Name="cmdClose" Caption="Close" X=5 Y=0 Width=60  Height=28 Font=2 Tag=3 />
+  <WndButton Name="cmdNext"  Caption="&gt;" X=202 Y=2 Width=35  Height=28 Font=3 OnClickNotify="OnNextClicked" Tag=1 />
+  <WndButton Name="cmdPrev"  Caption="&lt;" X=165 Y=2 Width=35  Height=28 Font=3 OnClickNotify="OnPrevClicked" Tag=0/>
+  <WndButton Name="cmdClose" Caption="Close" X=2 Y=2 Width=60  Height=28 Font=2 Tag=3 />
 
-  <WndFrame Name="frmStatusFlight" X=0 Y=30 Width=230 Height=200 Font=2>
+  <WndFrame Name="frmStatusFlight" X=0 Y=32 Width=230 Height=200 Font=2>
 
   <WndProperty Name="prpLongitude" Caption="Longitude" X=2 Y=-1  Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpLatitude"  Caption="Latitude"  X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
@@ -25,7 +25,7 @@
 
   </WndFrame>
 
-  <WndFrame Name="frmStatusSystem" X=0 Y=30 Width=230 Height=200 Font=2>
+  <WndFrame Name="frmStatusSystem" X=0 Y=32 Width=230 Height=200 Font=2>
 
   <WndProperty Name="prpGPS"       Caption="GPS lock"       X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpNumSat"    Caption="Satellites in view"   X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
@@ -37,7 +37,7 @@
 
   </WndFrame>
 
-  <WndFrame Name="frmStatusTask" X=0 Y=30 Width=230 Height=200 Font=2>
+  <WndFrame Name="frmStatusTask" X=0 Y=32 Width=230 Height=200 Font=2>
 
   <WndProperty Name="prpTaskTime" Caption="Assigned task time" X=2 Y=-1  Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
   <WndProperty Name="prpETETime"  Caption="Estimated task time"  X=2 Y=-1 Width=235 Height=22 CaptionWidth=150 Font=2 ReadOnly=1 />
@@ -49,7 +49,7 @@
 
   </WndFrame>
 
-  <WndFrame Name="frmStatusRules" X=0 Y=30 Width=230 Height=200 Font=2>
+  <WndFrame Name="frmStatusRules" X=0 Y=32 Width=230 Height=200 Font=2>
 
   <WndProperty Name="prpValidStart"      Caption="Valid start"      X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpStartTime"    Caption="Start time"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
@@ -61,7 +61,7 @@
 
   </WndFrame>
 
-  <WndFrame Name="frmStatusTimes" X=0 Y=30 Width=230 Height=200 Font=2>
+  <WndFrame Name="frmStatusTimes" X=0 Y=32 Width=230 Height=200 Font=2>
   <WndProperty Name="prpLocalTime"    Caption="Local time"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpFlightTime"    Caption="Flight time"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />
   <WndProperty Name="prpTakeoffTime"    Caption="Takeoff time"    X=2 Y=-1 Width=235 Height=22 CaptionWidth=120 Font=2 ReadOnly=1 />

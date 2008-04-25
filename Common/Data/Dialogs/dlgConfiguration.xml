@@ -448,20 +448,25 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
     <DataField name="" DataType="filereader" Min=0 Max=200 Step=1 OnDataAccess="OnPolarFileData"/>
   </WndProperty>
 
-  <WndProperty Name="prpMaxManoeuveringSpeed" Caption="V rough air"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2
+  <WndProperty Name="prpMaxManoeuveringSpeed" Caption="V rough air"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=90 Font=2
   Help="The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=300 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpHandicap" Caption="Handicap"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2
+  <WndProperty Name="prpHandicap" Caption="Handicap"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=90 Font=2
   Help="The handicap factor used for OnLine Contest scoring.">
     <DataField name="" DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min=50 Max=150 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpDisableAutoLogger" Caption="Auto logger*" X=2 Y=-1   Width=246 Height=22 CaptionWidth=70 Font=2
+  <WndProperty Name="prpDisableAutoLogger" Caption="Auto logger*" X=2 Y=-1   Width=246 Height=22 CaptionWidth=90 Font=2
   Help="Enables the automatic starting and stopping of logger on takeoff and landing respectively.
 Disable when flying paragliders.">
     <DataField name="" DataType="boolean"/>
+  </WndProperty>
+
+  <WndProperty Name="prpBallastSecsToEmpty" Caption="Dump time"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=90 Font=2
+   Help="The time in seconds to dump full ballast.">
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=10 Max=240 Step=5/>
   </WndProperty>
 
   </WndFrame>
