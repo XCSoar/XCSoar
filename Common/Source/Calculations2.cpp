@@ -130,6 +130,21 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     dtLog = 1.0;
   }
 
+  // prevent bad fixes from being logged or added to OLC store
+  static double Longitude_last = 10;
+  static double Latitude_last = 10;
+  double distance;
+
+  DistanceBearing(Basic->Latitude, Basic->Longitude, 
+		  Latitude_last, Longitude_last,
+		  &distance, NULL);
+  Latitude_last = Basic->Latitude;
+  Longitude_last = Basic->Longitude;
+
+  if (distance>200.0) {
+    return;
+  }
+
   if (Basic->Time - LogLastTime >= dtLog) {
     double balt = -1;
     if (Basic->BaroAltitudeAvailable) {

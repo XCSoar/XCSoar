@@ -286,6 +286,7 @@ TCHAR szRegistryRiskGamma[] = TEXT("RiskGamma");
 TCHAR szRegistryWindArrowStyle[] = TEXT("WindArrowStyle");
 TCHAR szRegistryDisableAutoLogger[] = TEXT("DisableAutoLogger");
 TCHAR szRegistryMapFile[]=	 TEXT("MapFile"); // pL
+TCHAR szRegistryBallastSecsToEmpty[]=	 TEXT("BallastSecsToEmpty"); 
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -873,6 +874,10 @@ void ReadRegistrySettings(void)
   Temp = MapWindow::GliderScreenPosition;
   GetFromRegistry(szRegistryGliderScreenPosition,&Temp);
   MapWindow::GliderScreenPosition = (int)Temp;
+
+  Temp = BallastSecsToEmpty;
+  GetFromRegistry(szRegistryBallastSecsToEmpty,&Temp);
+  BallastSecsToEmpty = Temp;
 
   Temp = SetSystemTimeFromGPS;
   GetFromRegistry(szRegistrySetSystemTimeFromGPS,&Temp);
@@ -1987,10 +1992,16 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
   if (istart>iend) {
     iend+= 64;
   }
+  istart++;
+  iend--;
 
   if (!horizon) {
     pt[0].x = x; pt[0].y = y; npoly=1;
   }
+  pt[npoly].x = x + (long) (radius * fastsine(start));
+  pt[npoly].y = y - (long) (radius * fastcosine(start));
+  npoly++;
+
   for(i=0;i<64;i++) {
     if (i<=iend-istart) {
       pt[npoly].x = x + (long) (radius * xcoords[(i+istart)%64]);
@@ -1998,6 +2009,10 @@ int Segment(HDC hdc, long x, long y, int radius, RECT rc,
       npoly++;
     }
   }
+  pt[npoly].x = x + (long) (radius * fastsine(end));
+  pt[npoly].y = y - (long) (radius * fastcosine(end));
+  npoly++;
+
   if (!horizon) {
     pt[npoly].x = x; 
     pt[npoly].y = y; npoly++;

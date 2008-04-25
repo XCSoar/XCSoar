@@ -1360,6 +1360,12 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpBallastSecsToEmpty"));
+  if (wp) {
+    wp->GetDataField()->Set(BallastSecsToEmpty);
+    wp->RefreshDisplay();
+  }
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpPolarType"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2614,6 +2620,16 @@ void dlgConfigurationShowModal(void){
     if (_tcscmp(temptext,szInputFile)) {
       SetRegistryString(szRegistryInputFile, temptext);
       requirerestart = true;
+      changed = true;
+    }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpBallastSecsToEmpty"));
+  if (wp) {
+    ival = wp->GetDataField()->GetAsInteger();
+    if (BallastSecsToEmpty != ival) {
+      BallastSecsToEmpty = ival;
+      SetToRegistry(szRegistryBallastSecsToEmpty,(DWORD)BallastSecsToEmpty);
       changed = true;
     }
   }

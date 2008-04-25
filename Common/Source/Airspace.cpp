@@ -1745,17 +1745,8 @@ double CrossTrackError(double lon1, double lat1,
 }
 
 
-// this one uses screen coordinates to avoid as many trig functions
-// as possible.. it means it is approximate but for our use it is ok.
-double ScreenCrossTrackError(double lon1, double lat1,
-		     double lon2, double lat2,
-		     double lon3, double lat3,
-		     double *lon4, double *lat4) {
-  POINT p1, p2, p3;
-  
-  MapWindow::LatLon2Screen(lon1, lat1, p1);
-  MapWindow::LatLon2Screen(lon2, lat2, p2);
-  MapWindow::LatLon2Screen(lon3, lat3, p3);
+void ScreenClosestPoint(const POINT &p1, const POINT &p2, 
+			const POINT &p3, POINT *p4, int offset) {
 
   int v12x, v12y, v13x, v13y;
 
@@ -1764,25 +1755,45 @@ double ScreenCrossTrackError(double lon1, double lat1,
 
   int mag12 = isqrt4(v12x*v12x+v12y*v12y);
   if (mag12>1) {
-
     // projection of v13 along v12 = v12.v13/|v12|
     int proj = (v12x*v13x+v12y*v13y)/mag12;
-    
-    // distance between 3 and tangent to v12
-//    int dist = abs(isqrt4(v13x*v13x+v13y*v13y-proj*proj));
-    
     // fractional distance
-    double f = min(1.0,max(0,proj*1.0/mag12));
-    
+    double f;
+    if (offset>0) {
+      if (offset*2<mag12) {
+	proj = max(0, min(proj, mag12));
+	proj = max(offset, min(mag12-offset, proj+offset));
+      } else {
+	proj = mag12/2;
+      }
+    } 
+    f = min(1.0,max(0.0,(double)proj/mag12));
+
     // location of 'closest' point 
-    int x, y;
-    x = (int)((v12x)*f+p1.x);
-    y = (int)((v12y)*f+p1.y);
-    MapWindow::Screen2LatLon(x, y, *lon4, *lat4);
+    p4->x = lround(v12x*f)+p1.x;
+    p4->y = lround(v12y*f)+p1.y;
   } else {
-    *lon4 = lon1;
-    *lat4 = lat1;
+    p4->x = p1.x;
+    p4->y = p1.y;
   }
+}
+
+
+// this one uses screen coordinates to avoid as many trig functions
+// as possible.. it means it is approximate but for our use it is ok.
+double ScreenCrossTrackError(double lon1, double lat1,
+		     double lon2, double lat2,
+		     double lon3, double lat3,
+		     double *lon4, double *lat4) {
+  POINT p1, p2, p3, p4;
+  
+  MapWindow::LatLon2Screen(lon1, lat1, p1);
+  MapWindow::LatLon2Screen(lon2, lat2, p2);
+  MapWindow::LatLon2Screen(lon3, lat3, p3);
+
+  ScreenClosestPoint(p1, p2, p3, &p4, 0);
+
+  MapWindow::Screen2LatLon(p4.x, p4.y, *lon4, *lat4);
   
   // compute accurate distance
   double tmpd;

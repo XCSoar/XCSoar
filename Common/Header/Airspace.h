@@ -191,4 +191,7 @@ double RangeAirspaceArea(const double &longitude,
 			 const double &latitude,
 			 int i, double *bearing);
 
+void ScreenClosestPoint(const POINT &p1, const POINT &p2, 
+			const POINT &p3, POINT *p4, int offset = 0);
+
 #endif

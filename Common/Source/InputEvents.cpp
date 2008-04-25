@@ -1951,18 +1951,25 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
   if (foundcircle != -1) {
     i = foundcircle;
 
+    dlgAirspaceDetails(i, -1);
+    /*
     FormatWarningString(AirspaceCircle[i].Type , AirspaceCircle[i].Name , 
 			AirspaceCircle[i].Base, AirspaceCircle[i].Top, 
 			szMessageBuffer, szTitleBuffer );
-
+    */
   } else if (foundarea != -1) {
 
     i = foundarea;
+    dlgAirspaceDetails(-1, i);
 
+    /*
     FormatWarningString(AirspaceArea[i].Type , AirspaceArea[i].Name , 
 			AirspaceArea[i].Base, AirspaceArea[i].Top, 
 			szMessageBuffer, szTitleBuffer );
+    */
   }
+
+  return; /// JMW testing only
 
   if (nearestdistance<0) {
     inside = true;

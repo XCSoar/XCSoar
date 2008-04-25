@@ -217,7 +217,7 @@ class MapWindow {
   static void DrawOffTrackIndicator(HDC hdc);
   static void DrawStartSector(HDC hdc, RECT rc, POINT &Start,
                               POINT &End, int Index);
-  static void DrawTask(HDC hdc, RECT rc);
+  static void DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft);
   static void DrawThermalEstimate(HDC hdc, RECT rc);
   static void DrawTaskAAT(HDC hdc, RECT rc);
   static void DrawAbortedTask(HDC hdc, RECT rc, POINT Orig);

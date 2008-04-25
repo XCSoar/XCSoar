@@ -132,6 +132,7 @@ extern double BALLAST;
 extern int POLARID;
 extern double POLAR[POLARSIZE];
 extern double WEIGHTS[POLARSIZE];
+extern int BallastSecsToEmpty;
 
 extern bool InfoWindowActive;
 extern int iAirspaceBrush[];

@@ -47,6 +47,8 @@ Copyright_License {
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
 
+static bool BallastTimerActive = false;
+
 static void OnCloseClicked(WindowControl * Sender){
 (void)Sender;
 	wf->SetModalResult(mrOK);
@@ -72,12 +74,11 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
       // VarioWriteSettings();
 
-
       wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
       if (wp) {
-	      wp->GetDataField()->
-	        SetAsFloat(Units::ToUserAltitude(GPS_INFO.BaroAltitude));
-	      wp->RefreshDisplay();
+	wp->GetDataField()->
+	  SetAsFloat(Units::ToUserAltitude(GPS_INFO.BaroAltitude));
+	wp->RefreshDisplay();
       }
     break;
   }
@@ -87,7 +88,6 @@ static void OnQnhData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 // TODO: This isn't updating properly...
 static void OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode){
-
   switch(Mode){
     case DataField::daGet:
       LockFlightData();
@@ -99,35 +99,92 @@ static void OnAltitudeData(DataField *Sender, DataField::DataAccessKind_t Mode){
     case DataField::daChange:
     break;
   }
-
 }
 
-static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
+
+static void SetBallast(void) {
   WndProperty* wp;
+
+  GlidePolar::SetBallast();
+  devPutBallast(devA(), BALLAST);
+  devPutBallast(devB(), BALLAST);
+  wp = (WndProperty*)wf->FindByName(TEXT("prpBallastPercent"));
+  if (wp) {
+    wp->GetDataField()->Set(BALLAST*100);
+    wp->RefreshDisplay();
+  }
+  wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
+  if (wp) {
+    wp->GetDataField()->
+      SetAsFloat(GlidePolar::BallastLitres);
+    wp->RefreshDisplay();
+  }
+}
+
+int BallastSecsToEmpty = 120;
+
+static int OnTimerNotify(WindowControl * Sender) {
+  (void)Sender;
+  static double BallastTimeLast = -1;
+
+  if (BallastTimerActive) {
+    if (GPS_INFO.Time > BallastTimeLast) {
+      double BALLAST_last = BALLAST;
+      double dt = GPS_INFO.Time - BallastTimeLast;
+      double percent_per_second = 1.0/max(10.0, BallastSecsToEmpty);
+      BALLAST -= dt*percent_per_second;
+      if (BALLAST<0) {
+	BallastTimerActive = false;
+	BALLAST = 0.0;
+      }
+      if (fabs(BALLAST-BALLAST_last)>0.001) {
+	SetBallast();
+      }      
+    }
+    BallastTimeLast = GPS_INFO.Time;
+  } else {
+    BallastTimeLast = GPS_INFO.Time;
+  }
+
+  static double altlast = GPS_INFO.BaroAltitude;
+  if (fabs(GPS_INFO.BaroAltitude-altlast)>1) {
+    WndProperty* wp;
+    wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
+    if (wp) {
+      wp->GetDataField()->
+	SetAsFloat(Units::ToUserAltitude(GPS_INFO.BaroAltitude));
+      wp->RefreshDisplay();
+    }
+  }
+  altlast = GPS_INFO.BaroAltitude;
+
+  return 0;
+}
+
+
+static void OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode){
   static double lastRead = -1;
 
   switch(Mode){
-    case DataField::daGet:
-      lastRead = BALLAST;
-      Sender->Set(BALLAST*100);
+  case DataField::daSpecial:
+    if (BALLAST>0.01) {
+      BallastTimerActive = !BallastTimerActive;
+    } else {
+      BallastTimerActive = false;
+    }
     break;
-    case DataField::daChange:
-    case DataField::daPut:
-      if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
-        lastRead = BALLAST = Sender->GetAsFloat()/100.0;
-        GlidePolar::SetBallast();
-        devPutBallast(devA(), BALLAST);
-        devPutBallast(devB(), BALLAST);
-	wp = (WndProperty*)wf->FindByName(TEXT("prpBallastLitres"));
-	if (wp) {
-	  wp->GetDataField()->
-	    SetAsFloat(GlidePolar::BallastLitres);
-	  wp->RefreshDisplay();
-	}
-      }
+  case DataField::daGet:
+    lastRead = BALLAST;
+    Sender->Set(BALLAST*100);
+    break;
+  case DataField::daChange:
+  case DataField::daPut:
+    if (fabs(lastRead-Sender->GetAsFloat()/100.0) >= 0.005){
+      lastRead = BALLAST = Sender->GetAsFloat()/100.0;
+      SetBallast();
+    }
     break;
   }
-
 }
 
 static void OnBugsData(DataField *Sender, DataField::DataAccessKind_t Mode){
@@ -171,6 +228,7 @@ static void OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode){
   }
 }
 
+
 static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(OnBugsData),
   DeclearCallBackEntry(OnTempData),
@@ -193,12 +251,16 @@ void dlgBasicSettingsShowModal(void){
 
   WndProperty* wp;
 
+  BallastTimerActive = false;
+
   if (wf) {
+
+    wf->SetTimerNotify(OnTimerNotify);
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpAltitude"));
     if (wp) {
       wp->GetDataField()->SetAsFloat(
-				     Units::ToUserAltitude(GPS_INFO.BaroAltitude));
+	       Units::ToUserAltitude(GPS_INFO.BaroAltitude));
       wp->GetDataField()->SetUnits(Units::GetAltitudeName());
       wp->RefreshDisplay();
     }
