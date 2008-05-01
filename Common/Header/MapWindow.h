@@ -112,6 +112,8 @@ class MapWindow {
   static bool bAirspaceBlackOutline;
   static HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
   static HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
+  static HBITMAP hAboveTerrainBitmap;
+  static HBRUSH hAboveTerrainBrush;
   static COLORREF Colours[NUMAIRSPACECOLORS];
 
   static BOOL CLOSETHREAD;
@@ -188,6 +190,7 @@ class MapWindow {
  private:
   static void CalculateScreenPositions(POINT Orig, RECT rc, 
                                        POINT *Orig_Aircraft);
+  static void CalculateScreenPositionsGroundline();
   static void CalculateScreenPositionsAirspace();
   static void CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE& circ);
   static void CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA& area);
@@ -231,6 +234,7 @@ class MapWindow {
   static void DrawFinalGlide(HDC hDC,RECT rc);
   static void DrawThermalBand(HDC hDC,RECT rc);
   static void DrawGlideThroughTerrain(HDC hDC, RECT rc);
+  static void DrawTerrainAbove(HDC hDC, RECT rc);
   static void DrawCDI();
   //  static void DrawSpeedToFly(HDC hDC, RECT rc);
   static void DrawFLARMTraffic(HDC hDC, RECT rc);
@@ -399,6 +403,7 @@ class MapWindow {
   static void CalculateOrientationTargetPan(void);
   static void CalculateOrientationNormal(void);
 
+  static POINT Groundline[NUMTERRAINSWEEPS+1];
 };
 
 void PolygonRotateShift(POINT* poly, int n, int x, int y, 

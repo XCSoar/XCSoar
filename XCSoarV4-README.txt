@@ -6,6 +6,26 @@ Todo:
 - Allow start through top of start sector
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
 
+
+Changes from 5.1.7 beta6:
+- Energy height referenced to Mc speed to fly
+- Fixes to airspace rendering in analysis dialog
+- DMS/DMmmm/DDdddd units in waypoint edit
+- Added proper dialog for airspace queries
+- Prevent log points > 500 m from being added to snail trail or OLC store
+- Minor Auto Mc improvements
+- Ballast in basic settings has a timer, activated/deactivated
+  by pressing ENTER, which progressively reduces ballast according to 
+  the rate set in the configuration settings (dump time).  Timer is only
+  active while the basic settings dialog is open.
+- AAT/FAI Sector rendering on screen now more accurate
+- Bug fixes and cosmetic cleanups to airspace warning dialog
+
+- Final glide through terrain status message warning logic improved
+- Enhancements to thermal profile band and risk MC with respect to flying in
+  mountains
+- Added option for final glide terrain line to shade terrain outside glide range
+
 Changes from 5.1.7 beta4:
 - Airspace display in analysis dialog sped up slightly
 - Airspace queries report MSL referenced height as MSL instead of "Alt"

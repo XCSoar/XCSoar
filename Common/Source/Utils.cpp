@@ -599,7 +599,7 @@ void ReadRegistrySettings(void)
 
   Temp  = FinalGlideTerrain;
   GetFromRegistry(szRegistryFinalGlideTerrain,&Temp);
-  FinalGlideTerrain = (Temp == 1);
+  FinalGlideTerrain = Temp;
 
   Temp  = AutoWindMode;
   GetFromRegistry(szRegistryAutoWind,&Temp);
