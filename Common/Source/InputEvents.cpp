@@ -1,24 +1,4 @@
 /*
-
-InputEvents
-
-This class is used to control all user and external InputEvents.
-This includes some Nmea strings, virtual events (Glide Computer
-Evnets) and Keyboard.
-
-What it does not cover is Glide Computer normal processing - this
-includes GPS and Vario processing.
-
-What it does include is what to do when an automatic event (switch
-to Climb mode) and user events are entered.
-
-It also covers the configuration side of on screen labels.
-
-For further information on config file formats see
-
-source/Common/Data/Input/ALL
-doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
-
 Copyright_License {
 
 XCSoar Glide Computer - http://xcsoar.sourceforge.net/
@@ -47,6 +27,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 }
+*/
+
+/*
+
+InputEvents
+
+This class is used to control all user and external InputEvents.
+This includes some Nmea strings, virtual events (Glide Computer
+Evnets) and Keyboard.
+
+What it does not cover is Glide Computer normal processing - this
+includes GPS and Vario processing.
+
+What it does include is what to do when an automatic event (switch
+to Climb mode) and user events are entered.
+
+It also covers the configuration side of on screen labels.
+
+For further information on config file formats see
+
+source/Common/Data/Input/ALL
+doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 
 */
 

@@ -1107,7 +1107,12 @@ static void setVariables(void) {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinalGlideTerrain"));
   if (wp) {
-    wp->GetDataField()->Set(FinalGlideTerrain);
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("OFF")));
+    dfe->addEnumText(gettext(TEXT("Line")));
+    dfe->addEnumText(gettext(TEXT("Shade")));
+    dfe->Set(FinalGlideTerrain);
     wp->RefreshDisplay();
   }
 
@@ -2356,8 +2361,8 @@ void dlgConfigurationShowModal(void){
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpFinalGlideTerrain"));
   if (wp) {
-    if (FinalGlideTerrain != wp->GetDataField()->GetAsBoolean()) {
-      FinalGlideTerrain = wp->GetDataField()->GetAsBoolean();
+    if (FinalGlideTerrain != wp->GetDataField()->GetAsInteger()) {
+      FinalGlideTerrain = wp->GetDataField()->GetAsInteger();
       SetToRegistry(szRegistryFinalGlideTerrain, FinalGlideTerrain);
       changed = true;
     }

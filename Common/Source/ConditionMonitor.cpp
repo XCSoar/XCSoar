@@ -204,7 +204,8 @@ protected:
         }
         if ((last_tad> 1) && (tad< -50)) {
           // dropped well below final glide, previously above
-          return true;
+	  last_tad = tad;
+          return true; // JMW this was true before
         }
       }
     }
@@ -222,14 +223,11 @@ protected:
 
   void SaveLast(void) {
     last_tad = tad;
-    delayedTAD = tad;
   };
 
 private:
   double tad;
   double last_tad;
-  double delayedTAD;
-
 };
 
 
@@ -342,11 +340,55 @@ private:
 };
 
 
+class ConditionMonitorGlideTerrain: public ConditionMonitor {
+public:
+  ConditionMonitorGlideTerrain() {
+    Interval_Notification = 60*5;
+    Interval_Check = 1;
+    fgtt = 0;
+    fgtt_last = false;
+  }
+
+protected:
+
+  bool CheckCondition(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+    if (!Calculated->Flying || !ValidTaskPoint(ActiveWayPoint)) {
+      return false;
+    }
+
+    fgtt = !((Calculated->TerrainWarningLatitude == 0.0) &&
+	     (Calculated->TerrainWarningLongitude == 0.0));
+
+    if (!Calculated->FinalGlide || (Calculated->TaskAltitudeDifference<-50)) {
+      fgtt_last = false;
+    } else if ((fgtt) && (!fgtt_last)) {
+      // just reached final glide, previously well below
+      return true;
+    }
+    return false;
+  };
+
+  void Notify(void) {
+    InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_TERRAIN);
+  };
+
+  void SaveLast(void) {
+    fgtt_last = fgtt;
+  };
+
+private:
+  bool fgtt;
+  bool fgtt_last;
+};
+
+
+
 ConditionMonitorWind       cm_wind;
 ConditionMonitorFinalGlide cm_finalglide;
 ConditionMonitorSunset     cm_sunset;
 ConditionMonitorAATTime    cm_aattime;
 ConditionMonitorStartRules cm_startrules;
+ConditionMonitorGlideTerrain cm_glideterrain;
 
 void ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   cm_wind.Update(Basic, Calculated);
@@ -354,4 +396,5 @@ void ConditionMonitorsUpdate(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   cm_sunset.Update(Basic, Calculated);
   cm_aattime.Update(Basic, Calculated);
   cm_startrules.Update(Basic, Calculated);
+  cm_glideterrain.Update(Basic, Calculated);
 }

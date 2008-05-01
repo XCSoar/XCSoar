@@ -182,6 +182,8 @@ typedef struct _DERIVED_INFO
   double Gload;
   double Essing;
   double Experimental;
+
+  double TerrainBase; // lowest height within glide range
 } DERIVED_INFO;
 
 
@@ -217,6 +219,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
                                 DERIVED_INFO *Calculated,
                                 double *retlat, double *retlon,
                                 double maxrange,
-				bool *outofrange);
+				bool *outofrange,
+				double *TerrainBase = NULL);
 
 #endif

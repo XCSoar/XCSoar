@@ -261,7 +261,10 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   bool out_of_range;
 
   // estimate max range (only interested in at most one screen distance away)
-  double mymaxrange = MapWindow::GetApproxScreenRange();
+  // except we need to scan for terrain base, so 20km search minimum is required
+  double mymaxrange = max(20000.0, MapWindow::GetApproxScreenRange());
+
+  Calculated->TerrainBase = Calculated->TerrainAlt;
 
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
     //    bearing = -90+i*180/NUMTERRAINSWEEPS+Basic->TrackBearing;
@@ -269,7 +272,8 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     distance = FinalGlideThroughTerrain(bearing,
                                         Basic,
                                         Calculated, &lat, &lon,
-                                        mymaxrange, &out_of_range);
+                                        mymaxrange, &out_of_range,
+					&Calculated->TerrainBase);
     if (out_of_range) {
       FindLatitudeLongitude(Basic->Latitude, Basic->Longitude,
                             bearing,
@@ -279,6 +283,7 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     Calculated->GlideFootPrint[i].x = lon;
     Calculated->GlideFootPrint[i].y = lat;
   }
+  Calculated->Experimental = Calculated->TerrainBase;
 }
 
 
@@ -360,8 +365,8 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     risk_mc = MACCREADY;
   } else {
     risk_mc =
-      GlidePolar::MacCreadyRisk(Calculated->NavAltitude
-                                -SAFETYALTITUDEBREAKOFF-Calculated->TerrainAlt,
+      GlidePolar::MacCreadyRisk(Calculated->NavAltitude+Calculated->EnergyHeight
+                                -SAFETYALTITUDEBREAKOFF-Calculated->TerrainBase,
                                 Calculated->MaxThermalHeight,
                                 MACCREADY);
   }
@@ -373,7 +378,7 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     delta_mc = risk_mc-Calculated->NettoVario;
   }
 
-  if (Calculated->Vario <= risk_mc) {
+  if (1 || (Calculated->Vario <= risk_mc)) {
     // thermal is worse than mc threshold, so find opt cruise speed
 
     double VOptnew;
@@ -403,6 +408,13 @@ void SpeedToFly(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
     // put low pass filter on VOpt so display doesn't jump around
     // too much
+    if (Calculated->Vario <= risk_mc) {
+      Calculated->VOpt = max(Calculated->VOpt,
+			     GlidePolar::Vminsink*sqrt(n));
+    } else {
+      Calculated->VOpt = max(Calculated->VOpt,
+			     GlidePolar::Vminsink);
+    }
     Calculated->VOpt = LowPassFilter(Calculated->VOpt,VOptnew, 0.6);
 
   } else {
@@ -2368,7 +2380,9 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     Calculated->TerrainAlt = Alt;
   }
   Calculated->AltitudeAGL = Calculated->NavAltitude - Calculated->TerrainAlt;
-
+  if (!FinalGlideTerrain) {
+    Calculated->TerrainBase = Calculated->TerrainAlt;
+  }
 }
 
 
@@ -2686,7 +2700,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
 	vdiff = 1.0;
 	// prevent funny numbers when starting mid-track
       }
-      Calculated->Experimental = vdiff*100.0;
+      //      Calculated->Experimental = vdiff*100.0;
 
       vdiff *= Vref;
 
@@ -2747,7 +2761,6 @@ static void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
                                           double LegToGo,
                                           double LegBearing) {
 
-  static bool glide_through_terrain_last = false;
   bool glide_through_terrain_now = false;
   // Final glide through terrain updates
   if (Calculated->FinalGlide) {
@@ -2759,33 +2772,18 @@ static void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
                                Basic, Calculated,
                                &lat,
                                &lon,
-                               LegToGo, &out_of_range);
+                               LegToGo, &out_of_range, NULL);
 
     if ((!out_of_range)&&(distance_soarable< LegToGo)) {
-      // JMW TODO issue terrain warning (audio?)
       Calculated->TerrainWarningLatitude = lat;
       Calculated->TerrainWarningLongitude = lon;
-
-      glide_through_terrain_now = true;
     } else {
       Calculated->TerrainWarningLatitude = 0.0;
       Calculated->TerrainWarningLongitude = 0.0;
-      glide_through_terrain_last = false;
     }
-
   } else {
     Calculated->TerrainWarningLatitude = 0.0;
     Calculated->TerrainWarningLongitude = 0.0;
-    glide_through_terrain_last = false;
-  }
-
-  if (Calculated->TaskAltitudeDifference>0) {
-    if (!glide_through_terrain_last && glide_through_terrain_now) {
-      InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_TERRAIN);
-      glide_through_terrain_last = true;
-    }
-  } else {
-    glide_through_terrain_last = false;
   }
 }
 
@@ -3557,7 +3555,7 @@ void ThermalBand(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   //           but i'm assuming constant time steps
   double dheight = Calculated->NavAltitude
     -SAFETYALTITUDEBREAKOFF
-    -Calculated->TerrainAlt;
+    -Calculated->TerrainBase; // JMW EXPERIMENTAL
 
   int index, i, j;
 
@@ -3805,7 +3803,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
                                        NULL,
                                        NULL,
                                        wp_distance,
-                                       &out_of_range);
+                                       &out_of_range, NULL);
 
             if ((distance_soarable>= wp_distance)||(arrival_altitude<0)) {
               // only put this in the index if it is reachable

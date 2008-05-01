@@ -6,12 +6,6 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 void AddSnailPoint(void);
 
-double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
-				DERIVED_INFO *Calculated, double *retlat,
-				double *retlon,
-				double maxsearchrange,
-				bool *outofrange);
-
 double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 		      double bearing,
 		      double GlideSlope);

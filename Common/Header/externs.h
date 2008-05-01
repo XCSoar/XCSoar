@@ -180,7 +180,7 @@ extern int TrailActive;
 extern bool CircleZoom;
 extern bool EnableTopology;
 extern bool EnableTerrain;
-extern bool FinalGlideTerrain;
+extern int FinalGlideTerrain;
 extern int AutoWindMode;
 extern bool EnableNavBaroAltitude;
 extern bool EnableSoundVario;

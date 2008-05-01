@@ -361,8 +361,11 @@ Help="Auto-zoom changes the zoom level during flight so that the map zooms in as
   <WndFrame Name="frmFinalGlide" X=0 Y=0 Width=235 Height=222 Font=2>
 
   <WndProperty Name="prpFinalGlideTerrain" Caption="Glide terrain line"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2
-  Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area.">
-    <DataField name="" DataType="boolean"/>
+  Help="This determines whether the the glide terrain range is calculated and drawn as a line on the map area:
+[OFF] Disables display
+[Line] Draws a dashed line at the glide range
+[Shade] Shades terrain outside glide range">
+    <DataField name="" DataType="enum" Min=0 Max=2 Step=1/>
   </WndProperty>
 
   <WndProperty Name="prpAutoWind" Caption="Auto wind"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=150 Font=2

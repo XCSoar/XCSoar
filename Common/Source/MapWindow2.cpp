@@ -798,7 +798,7 @@ static bool CheckLandableReachableTerrain(NMEA_INFO *Basic,
                              Basic, Calculated,
                              &lat,
                              &lon,
-                             LegToGo, &out_of_range);
+                             LegToGo, &out_of_range, NULL);
 
   if ((out_of_range)||(distance_soarable> LegToGo)) {
     return true;
@@ -1544,4 +1544,67 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc) {
   }
 
   SelectObject(hdc, oldFont);
+}
+
+
+void MapWindow::CalculateScreenPositionsGroundline(void) {
+  if (FinalGlideTerrain) {
+    for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
+      LatLon2Screen(DerivedDrawInfo.GlideFootPrint[i].x,
+		    DerivedDrawInfo.GlideFootPrint[i].y,
+		    Groundline[i]);
+    }
+  }
+}
+
+
+void MapWindow::DrawTerrainAbove(HDC hDC, RECT rc) {
+
+  if (!DerivedDrawInfo.Flying) return;
+
+  COLORREF whitecolor = RGB(0xff,0xff,0xff);
+  COLORREF graycolor = RGB(0xf0,0xf0,0xf0);
+  COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
+
+  SetBkMode(hDCTemp, TRANSPARENT);
+
+  SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
+  SetBkColor(hDCTemp, whitecolor);
+
+  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  SetTextColor(hDCTemp, graycolor);
+  SelectObject(hDCTemp, hAboveTerrainBrush); // hAirspaceBrushes[3] or 6
+  Rectangle(hDCTemp,rc.left,rc.top,rc.right,rc.bottom);
+
+  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
+  Polygon(hDCTemp,Groundline,NUMTERRAINSWEEPS+1);
+
+  // need to do this to prevent drawing of colored outline
+  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+#if (WINDOWSPC<1)
+    TransparentImage(hdcDrawWindowBg,
+                     rc.left, rc.top,
+                     rc.right-rc.left,rc.bottom-rc.top,
+                     hDCTemp,
+                     rc.left, rc.top,
+                     rc.right-rc.left,rc.bottom-rc.top,
+                     whitecolor
+                     );
+
+#else
+    TransparentBlt(hdcDrawWindowBg,
+                   rc.left,rc.top,
+                   rc.right-rc.left,rc.bottom-rc.top,
+                   hDCTemp,
+                   rc.left,rc.top,
+                   rc.right-rc.left,rc.bottom-rc.top,
+                   whitecolor
+                   );
+  #endif
+
+  // restore original color
+  SetTextColor(hDCTemp, origcolor);
+  SetBkMode(hDCTemp,OPAQUE);
+
 }

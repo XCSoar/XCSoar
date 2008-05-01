@@ -215,7 +215,8 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
                                 DERIVED_INFO *Calculated,
                                 double *retlat, double *retlon,
                                 double maxrange,
-				bool *outofrange)
+				bool *outofrange,
+				double *TerrainBase)
 {
   double irange = GlidePolar::MacCreadyAltitude(MACCREADY,
 						1.0, bearing,
@@ -319,6 +320,10 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     h =  max(0,RasterTerrain::GetTerrainHeight(lat, lon));
 
     dh = altitude - h - SAFETYALTITUDETERRAIN;
+
+    if (TerrainBase && (dh>0) && (h>0)) {
+      *TerrainBase = min(*TerrainBase, h);
+    }
 
     if (start_under) {
       if (dh>dhlast) {

@@ -92,6 +92,8 @@ HBITMAP MapWindow::hBmpFieldReachable;
 HBITMAP MapWindow::hBmpFieldUnReachable;
 HBITMAP MapWindow::hBmpThermalSource;
 HBITMAP MapWindow::hBmpTarget;
+HBITMAP MapWindow::hAboveTerrainBitmap;
+HBRUSH  MapWindow::hAboveTerrainBrush;
 
 HPEN    MapWindow::hpCompassBorder;
 HBRUSH  MapWindow::hBrushFlyingModeAbort;
@@ -180,6 +182,8 @@ HBITMAP MapWindow::hLogger;
 HBITMAP MapWindow::hLoggerOff;
 
 HPEN MapWindow::hSnailPens[NUMSNAILCOLORS];
+
+POINT MapWindow::Groundline[NUMTERRAINSWEEPS+1];
 
   // 12 is number of airspace types
 int      MapWindow::iAirspaceBrush[AIRSPACECLASSCOUNT] =
@@ -1195,10 +1199,14 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hAirspaceBitmap[6]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE6));
     hAirspaceBitmap[7]=LoadBitmap(hInst, MAKEINTRESOURCE(IDB_AIRSPACE7));
 
+    hAboveTerrainBitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_ABOVETERRAIN));
+
     for (i=0; i<NUMAIRSPACEBRUSHES; i++) {
       hAirspaceBrushes[i] =
         CreatePatternBrush((HBITMAP)hAirspaceBitmap[i]);
     }
+    hAboveTerrainBrush = CreatePatternBrush((HBITMAP)hAboveTerrainBitmap);
+
     BYTE Red,Green,Blue;
     int width;
     int minwidth;
@@ -1403,6 +1411,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       DeleteObject(hAirspaceBrushes[i]);
       DeleteObject(hAirspaceBitmap[i]);
     }
+
+    DeleteObject(hAboveTerrainBitmap);
+    DeleteObject(hAboveTerrainBrush);
 
     for (i=0; i<AIRSPACECLASSCOUNT; i++) {
       DeleteObject(hAirspacePens[i]);
@@ -1852,6 +1863,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
     CalculateWaypointReachable();
     CalculateScreenPositionsAirspace();
     CalculateScreenPositionsThermalSources();
+    CalculateScreenPositionsGroundline();
 
     // display border and fill background..
 
@@ -1893,6 +1905,9 @@ void MapWindow::RenderMapWindow(  RECT rc)
       }
       LockTerrainDataGraphics();
       DrawTerrain(hdcDrawWindowBg, rc, sunazimuth, sunelevation);
+      if ((FinalGlideTerrain==2) && DerivedDrawInfo.TerrainValid) {
+	DrawTerrainAbove(hdcDrawWindowBg, rc);
+      }
       UnlockTerrainDataGraphics();
     }
 
@@ -3653,26 +3668,18 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
 }
 
 
-
 void MapWindow::DrawGlideThroughTerrain(HDC hDC, RECT rc) {
-  POINT Groundline[2];
   HPEN hpOld;
 
   hpOld = (HPEN)SelectObject(hDC,
                              hpTerrainLineBg);  //sjt 02feb06 added bg line
 
-  for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-    LatLon2Screen(DerivedDrawInfo.GlideFootPrint[i].x,
-                  DerivedDrawInfo.GlideFootPrint[i].y,
-                  Groundline[1]);
-    if (i>0) {
-      SelectObject(hDC,hpTerrainLineBg);
-      Polyline(hDC,Groundline,2);
-      SelectObject(hDC,hpTerrainLine);
-      Polyline(hDC,Groundline,2);
-    }
-    Groundline[0].x= Groundline[1].x;
-    Groundline[0].y= Groundline[1].y;
+  SelectObject(hDC,hpTerrainLineBg);
+  Polyline(hDC,Groundline,NUMTERRAINSWEEPS+1);
+  if ((FinalGlideTerrain==1) ||
+      ((!EnableTerrain || !DerivedDrawInfo.Flying) && (FinalGlideTerrain==2))) {
+    SelectObject(hDC,hpTerrainLine);
+    Polyline(hDC,Groundline,NUMTERRAINSWEEPS+1);
   }
 
   if (DerivedDrawInfo.Flying && ValidTaskPoint(ActiveWayPoint)) {
@@ -4018,7 +4025,7 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   // calculate height above safety altitude
   h = DerivedDrawInfo.NavAltitude
     -SAFETYALTITUDEBREAKOFF
-    -DerivedDrawInfo.TerrainAlt;
+    -DerivedDrawInfo.TerrainBase;
 
   // calculate top height
   maxh = max(h, mth);
