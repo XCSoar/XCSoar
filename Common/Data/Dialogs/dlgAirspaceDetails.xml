@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For you" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Type="Dialog" X=5 Y=5 Width=240 Height=200 Caption="Airspace Details" Font=2 BackColor=0xDADBAB>
+
+  <WndButton Name="cmdClose" Caption="Close" X=2 Y=2 Width=60  Height=28 Font=2 Tag=0 OnClickNotify="OnCloseClicked" />
+
+  <WndButton Name="cmdAcknowledge" Caption="Ack Day" X=167 Y=2 Width=70  Height=28 Font=2 Tag=0 OnClickNotify="OnAcknowledgeClicked" />
+
+  <WndProperty Name="prpName" Caption="Name" X=2 Y=40  Width=238 Height=22 CaptionWidth=50 Font=2 ReadOnly=1 />
+
+  <WndProperty Name="prpType" Caption="Type" X=2 Y=-1  Width=238 Height=22 CaptionWidth=50 Font=2 ReadOnly=1 />
+
+  <WndProperty Name="prpTop" Caption="Top" X=2 Y=-1  Width=238 Height=22 CaptionWidth=50 Font=2 ReadOnly=1 />
+
+  <WndProperty Name="prpBase" Caption="Base" X=2 Y=-1  Width=238 Height=22 CaptionWidth=50 Font=2 ReadOnly=1 />
+
+  <WndProperty Name="prpRange" Caption="Range" X=2 Y=-1  Width=238 Height=22 CaptionWidth=50 Font=2 ReadOnly=1 />
+
+</WndForm>
+
+</PMML>
