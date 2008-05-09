@@ -11,7 +11,7 @@ my $pf = $ENV{ProgramFiles};
 my %execs = (
 	'EVC3' => {
 		'evc' => "$pf\\Microsoft eMbedded Tools\\Common\\EVC\\Bin\\EVC.EXE",
-		'cabwiz' => "$pf\\Windows CE Tools\\wce300\\MS Pocket PC\\support\\ActiveSync\\windows ce application installation\\cabwiz\\Cabwiz.exe",
+		'cabwiz' => "\\Windows CE Tools\\wce300\\Pocket PC 2002\\support\\ActiveSync\\windows ce application installation\\cabwiz\\Cabwiz.exe",
 	},
 	'EVC4' => {
 		'evc' => "$pf\\Microsoft eMbedded C++ 4.0\\Common\\EVC\\Bin\\EVC.EXE",
@@ -80,6 +80,7 @@ my $month = qw/Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec/[$mon];
 $version =~ s/__DATE__/$month $mday $year/g;
 my $version_file = $version;
 $version_file =~ s/ /_/g;
+print STDERR "Version = ",$version_file, "\n";
 
 # ------------------------------------------------------------------------------
 # BUILD ALL via EVC3&4
@@ -91,7 +92,7 @@ foreach my $platform (keys %platforms) {
 				. qq{$platform/$project/$project.vcp /MAKE "$project - Win32 (WCE $proc) Release" /REBUILD};
 			print STDERR "Building $project for $platform/$proc\n";
 			print STDERR "\t$cmd\n" if ($debug);
-			# XXX system($cmd) and error("Executing Command - $?\n\t$cmd\n");
+			system($cmd) and error("Executing Command - $?\n\t$cmd\n");
 		}
 	}
 }
