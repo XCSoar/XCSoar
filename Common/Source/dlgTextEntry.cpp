@@ -182,6 +182,27 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
+static void OnLeftClicked(WindowControl * Sender){
+  (void)Sender;
+  FormKeyDown(Sender, VK_LEFT, 0);
+}
+
+static void OnRightClicked(WindowControl * Sender){
+  (void)Sender;
+  FormKeyDown(Sender, VK_RIGHT, 0);
+}
+
+static void OnUpClicked(WindowControl * Sender){
+  (void)Sender;
+  FormKeyDown(Sender, VK_UP, 0);
+}
+
+static void OnDownClicked(WindowControl * Sender){
+  (void)Sender;
+  FormKeyDown(Sender, VK_DOWN, 0);
+}
+
+
 void dlgTextEntryShowModal(TCHAR *text, int width) {
 
   wf = NULL;
@@ -215,6 +236,27 @@ void dlgTextEntryShowModal(TCHAR *text, int width) {
   if (wb) {
     wb->SetOnClickNotify(OnCloseClicked);
   }
+
+  wb = (WndButton *)(wf->FindByName(TEXT("cmdLeft")));
+  if (wb) {
+    wb->SetOnClickNotify(OnLeftClicked);
+  }
+
+  wb = (WndButton *)(wf->FindByName(TEXT("cmdRight")));
+  if (wb) {
+    wb->SetOnClickNotify(OnRightClicked);
+  }
+
+  wb = (WndButton *)(wf->FindByName(TEXT("cmdUp")));
+  if (wb) {
+    wb->SetOnClickNotify(OnUpClicked);
+  }
+
+  wb = (WndButton *)(wf->FindByName(TEXT("cmdDown")));
+  if (wb) {
+    wb->SetOnClickNotify(OnDownClicked);
+  }
+
 
   cursor = 0;
   edittext[0]= 0;

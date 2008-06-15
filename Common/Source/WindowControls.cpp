@@ -859,10 +859,26 @@ TCHAR *DataFieldFloat::SetAsString(TCHAR *Value){
 }
 
 void DataFieldFloat::Inc(void){
-  SetAsFloat(mValue + mStep*SpeedUp(true));
+#if defined(CECORE)
+  // no keypad, allow user to scroll small values
+  if(mValue < 0.95)
+    {
+      SetAsFloat(mValue + 0.1);
+    }
+  else
+#endif
+    SetAsFloat(mValue + mStep*SpeedUp(true));
 }
 
 void DataFieldFloat::Dec(void){
+#if defined(CECORE)
+  // no keypad, allow user to scroll small values
+  if(mValue <= 1.0)
+    {
+      SetAsFloat(mValue - 0.1);
+    }
+  else
+#endif
   SetAsFloat(mValue - mStep*SpeedUp(false));
 }
 
