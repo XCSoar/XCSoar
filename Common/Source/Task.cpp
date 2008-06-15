@@ -562,7 +562,10 @@ double AdjustAATTargets(double desired) {
           // scale to 0,1
 
           if (av>0.01) {
-            d = (desired/av)*d;
+            d = d;
+	    // 20080615 JMW
+	    // was (desired/av)*d;
+	    // now, we don't want it to be proportional
           } else {
             d = desired;
           }

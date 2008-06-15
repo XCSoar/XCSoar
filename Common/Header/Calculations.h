@@ -222,4 +222,6 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 				bool *outofrange,
 				double *TerrainBase = NULL);
 
+#define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
+
 #endif

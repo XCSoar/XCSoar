@@ -4010,7 +4010,6 @@ void ResumeAbortTask(int set) {
 }
 
 
-#define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 
 void DoAutoQNH(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   static int done_autoqnh = 0;
