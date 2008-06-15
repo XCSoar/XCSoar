@@ -126,8 +126,11 @@ void AATDistance::AddPoint(double longitude, double latitude,
                         Task[taskwaypoint].AATTargetLon,
                         &qdist, &bearing1);
         // JMWAAT
-        Task[taskwaypoint].AATTargetOffsetRadial = 
-          AngleLimit180(bearing1-bearing0);
+        Task[taskwaypoint].AATTargetOffsetRadial = 0.0;
+        // 20080615 JMW
+	// was AngleLimit180(bearing1-bearing0);
+	// now project along track line
+	// target will be moved by ShiftTargetFromBehind
       }
 
     }
@@ -266,7 +269,8 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
 
   // JMWAAT if locked, don't move it
   if (Task[taskwaypoint].AATTargetLocked) {
-    Task[taskwaypoint].AATTargetLocked = false; // JMWAAT JB
+    // 20080615 JMW don't do this; locked stays locked
+    // Task[taskwaypoint].AATTargetLocked = false; // JMWAAT JB
     return;
   }
 
