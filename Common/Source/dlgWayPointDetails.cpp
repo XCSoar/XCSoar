@@ -43,7 +43,10 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 
 extern void DrawJPG(HDC hdc, RECT rc);
+
+#ifndef CECORE
 #include "VOIMAGE.h"
+#endif
 
 extern TCHAR szRegistryHomeWaypoint[];
 extern TCHAR szRegistryWayPointFile[];
@@ -57,8 +60,12 @@ static WndFrame *wCommand=NULL;
 static WndOwnerDrawFrame *wImage=NULL;
 static BOOL hasimage1 = false;
 static BOOL hasimage2 = false;
+
+#ifndef CECORE
 static CVOImage jpgimage1;
 static CVOImage jpgimage2;
+#endif
+
 static TCHAR path_modis[MAX_PATH];
 static TCHAR path_google[MAX_PATH];
 static TCHAR szWaypointFile[MAX_PATH] = TEXT("\0");
@@ -269,12 +276,15 @@ static void OnRemoveFromTaskClicked(WindowControl * Sender){
 
 static void OnImagePaint(WindowControl * Sender, HDC hDC){
   (void)Sender;
+
+#ifndef CECORE
   if (page == 3)
     jpgimage1.Draw(hDC, 0, 0, -1, -1);
 
   if (page == 4)
     jpgimage2.Draw(hDC, 0, 0, -1, -1);
 
+#endif
 }
 
 
@@ -496,8 +506,10 @@ void dlgWayPointDetailsShowModal(void){
   if (wb)
     wb->SetOnClickNotify(OnRemoveFromTaskClicked);
 
+#ifndef CECORE
   hasimage1 = jpgimage1.Load(wImage->GetDeviceContext() ,path_modis );
   hasimage2 = jpgimage2.Load(wImage->GetDeviceContext() ,path_google );
+#endif
 
   page = 0;
 

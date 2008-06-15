@@ -31,6 +31,11 @@ Copyright_License {
 
 #include "stdafx.h"
 
+#if defined(CECORE)
+#include "Winbase.h"
+#include "projects.h"
+#endif
+
 #include "Utils.h"
 
 #include "resource.h"
@@ -3348,6 +3353,44 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 #if defined(GNAV) && !defined(PCGNAV)
   _tcscpy(buffer,TEXT("\\NOR Flash"));
   //  _tcscpy(buffer,TEXT("\\USB HD\\Altair"));
+#elif defined(CECORE)
+  // return the first flash card with a XCSoarData directory on it
+  // code copied from DataFieldFileReader::ScanDirectoryTop and adapted
+
+  BOOL bContinue = TRUE;
+  BOOL bfoundDir = FALSE;
+  HANDLE hFlashCard;         // Search handle for storage cards
+  WIN32_FIND_DATA FlashCardTmp; // Structure for storing card
+                                      // information temporarily
+
+  hFlashCard = FindFirstFlashCard (&FlashCardTmp);
+  if (hFlashCard != INVALID_HANDLE_VALUE) {
+	  _stprintf(buffer,TEXT("/%s/XCSoarData"),FlashCardTmp.cFileName);
+	  DWORD fa = GetFileAttributes(buffer);
+	  if((fa != 0xFFFFFFFF) && (fa | FILE_ATTRIBUTE_DIRECTORY)){
+		bContinue = FALSE;
+		bfoundDir = TRUE;
+	  }
+
+	  while (bContinue) {
+		// Search for the next storage card.
+		bContinue = FindNextFlashCard (hFlashCard, &FlashCardTmp);
+		if (bContinue) {
+		  _stprintf(buffer,TEXT("/%s/XCSoarData"),FlashCardTmp.cFileName);
+		  fa = GetFileAttributes(buffer);
+		  if((fa != 0xFFFFFFFF) && (fa | FILE_ATTRIBUTE_DIRECTORY)){
+		    bContinue = FALSE;
+		    bfoundDir = TRUE;
+		  }
+		}
+	  }
+    FindClose (hFlashCard);          // Close the search handle.
+  }
+
+  if(!bfoundDir) {  // best guess
+    SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
+    _tcscat(buffer,TEXT("\\XCSoarData"));
+  }
 #else
   SHGetSpecialFolderPath(hWndMainWindow, buffer, loc, false);
   _tcscat(buffer,TEXT("\\XCSoarData"));
