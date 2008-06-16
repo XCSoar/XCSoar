@@ -39,6 +39,8 @@ Copyright_License {
 
 #define DISTANCETHRESHOLD 500
 
+extern NMEA_INFO GPS_INFO;
+
 AATDistance::AATDistance() {
   Reset();
 }
