@@ -1473,7 +1473,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
         double newbearing;
         DistanceBearing(Ystart, Xstart, Ylat, Xlat, NULL, &newbearing);
         GPS_INFO.TrackBearing = newbearing;
-        GPS_INFO.Speed = min(100.0,max(1.1*TAKEOFFSPEEDTHRESHOLD,distance/3));
+        GPS_INFO.Speed = min(100.0,max(1.1*GlidePolar::Vminsink,distance/3));
 	// 20080815 JMW prevent dragging to stop glider
         break;
       }
