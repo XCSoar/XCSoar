@@ -3688,11 +3688,11 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
       break;
     case 1:
       ReplaceInString(OutBuffer, TEXT("$(MapLabelsToggleActionName)"),
-                      TEXT("ON"), Size);
+                      TEXT("OFF"), Size);
       break;
     case 2:
       ReplaceInString(OutBuffer, TEXT("$(MapLabelsToggleActionName)"),
-                      TEXT("OFF"), Size);
+                      TEXT("ON"), Size);
       break;
     }
   }
