@@ -148,7 +148,7 @@ BOOL MapWindow::THREADEXIT = FALSE;
 BOOL MapWindow::Initialised = FALSE;
 
 bool MapWindow::BigZoom = true;
-bool MapWindow::DeclutterLabels = false;
+unsigned char MapWindow::DeclutterLabels = 0;
 
 DWORD  MapWindow::dwDrawThreadID;
 HANDLE MapWindow::hDrawThread;
@@ -2692,8 +2692,10 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
       bool irange = false;
       bool intask = false;
       bool islandable = false;
+      bool dowrite;
 
       intask = WaypointInTask(i);
+      dowrite = intask;
 
       TextDisplayMode.AsInt = 0;
 
@@ -2709,10 +2711,10 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           TextDisplayMode.AsFlag.Border = 1;
           TextDisplayMode.AsFlag.Reachable = 1;
 
-          if (!DeclutterLabels) {
+          if (DeclutterLabels<2) {
             // show all reachable landing fields unless we want a decluttered
             // screen.
-            intask = true;
+            dowrite = true;
           }
 
           if ((WayPointList[i].Flags & AIRPORT) == AIRPORT)
@@ -2737,7 +2739,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 	TextDisplayMode.AsFlag.WhiteBold = 1;
       }
 
-      if(irange || intask || islandable) {
+      if(irange || intask || islandable || dowrite) {
 
         DrawBitmapX(hdc,
                     WayPointList[i].Screen.x-IBLSCALE(10),
@@ -2752,13 +2754,15 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
                     hDCTemp,20,0,SRCAND);
       }
 
-      if(intask || irange) {
-        bool dowrite = (intask || !DeclutterLabels);
+      if(intask || irange || dowrite) {
+	bool draw_alt = TextDisplayMode.AsFlag.Reachable
+	  && (DeclutterLabels<1);
+
         switch(pDisplayTextType) {
         case DISPLAYNAMEIFINTASK:
-          dowrite = intask;
+	  dowrite = intask;
           if (intask) {
-            if (TextDisplayMode.AsFlag.Reachable)
+            if (draw_alt)
               wsprintf(Buffer, TEXT("%s:%d%s"),
                        WayPointList[i].Name,
                        (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
@@ -2768,7 +2772,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           }
           break;
         case DISPLAYNAME:
-          if (TextDisplayMode.AsFlag.Reachable)
+          if (draw_alt)
             wsprintf(Buffer, TEXT("%s:%d%s"),
                      WayPointList[i].Name,
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
@@ -2778,7 +2782,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 
           break;
         case DISPLAYNUMBER:
-          if (TextDisplayMode.AsFlag.Reachable)
+          if (draw_alt)
             wsprintf(Buffer, TEXT("%d:%d%s"),
                      WayPointList[i].Number,
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
@@ -2790,7 +2794,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         case DISPLAYFIRSTFIVE:
           _tcsncpy(Buffer2, WayPointList[i].Name, 5);
           Buffer2[5] = '\0';
-          if (TextDisplayMode.AsFlag.Reachable)
+          if (draw_alt)
             wsprintf(Buffer, TEXT("%s:%d%s"),
                      Buffer2,
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
@@ -2802,7 +2806,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
         case DISPLAYFIRSTTHREE:
           _tcsncpy(Buffer2, WayPointList[i].Name, 3);
           Buffer2[3] = '\0';
-          if (TextDisplayMode.AsFlag.Reachable)
+          if (draw_alt)
             wsprintf(Buffer, TEXT("%s:%d%s"),
                      Buffer2,
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
@@ -2812,7 +2816,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 
           break;
         case DISPLAYNONE:
-          if (TextDisplayMode.AsFlag.Reachable)
+          if (draw_alt)
             wsprintf(Buffer, TEXT("%d%s"),
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY),
                      sAltUnit);
