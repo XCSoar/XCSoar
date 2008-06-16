@@ -772,12 +772,14 @@ void MapWindow::CalculateScreenPositions(POINT Orig, RECT rc,
       }
       if (AATEnabled && (((int)i==ActiveWayPoint) ||
 			 (TargetPan && ((int)i==TargetPanIndex)))) {
-        for (int j=0; j<MAXISOLINES; j++) {
-          if (TaskStats[i].IsoLine_valid[j]) {
-            LatLon2Screen(TaskStats[i].IsoLine_Longitude[j], TaskStats[i].IsoLine_Latitude[j],
-                          TaskStats[i].IsoLine_Screen[j]);
-          }
-        }
+
+	for (int j=0; j<MAXISOLINES; j++) {
+	  if (TaskStats[i].IsoLine_valid[j]) {
+	    LatLon2Screen(TaskStats[i].IsoLine_Longitude[j],
+			  TaskStats[i].IsoLine_Latitude[j],
+			  TaskStats[i].IsoLine_Screen[j]);
+	  }
+	}
       }
     }
   }
