@@ -3101,12 +3101,24 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
       } else {
         // JMW added iso lines
         if ((i==ActiveWayPoint) || (TargetPan && (i==TargetPanIndex))) {
-          for (int j=0; j<MAXISOLINES-1; j++) {
-            if (TaskStats[i].IsoLine_valid[j] && TaskStats[i].IsoLine_valid[j+1]) {
-              _DrawLine(hdc, PS_SOLID, IBLSCALE(2), 
-                        TaskStats[i].IsoLine_Screen[j], TaskStats[i].IsoLine_Screen[j+1],
-                        RGB(0,0,255));
-            }
+	  // JMW 20080616 flash arc line if very close to target
+	  static bool flip = false;
+	  
+	  if (DerivedDrawInfo.WaypointDistance<DrawInfo.Speed*5.0) {
+	    flip = !flip;
+	  } else {
+	    flip = true;
+	  }
+	  if (flip) {
+	    for (int j=0; j<MAXISOLINES-1; j++) {
+	      if (TaskStats[i].IsoLine_valid[j] 
+		  && TaskStats[i].IsoLine_valid[j+1]) {
+		_DrawLine(hdc, PS_SOLID, IBLSCALE(2), 
+			  TaskStats[i].IsoLine_Screen[j], 
+			  TaskStats[i].IsoLine_Screen[j+1],
+			  RGB(0,0,255));
+	      }
+	    }
           }
         }
       }
