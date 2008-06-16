@@ -2707,11 +2707,14 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
                  || ((WayPointList[i].Flags & LANDPOINT) == LANDPOINT) ) {
         islandable = true; // so we can always draw them
         if(WayPointList[i].Reachable){
-          
-          TextDisplayMode.AsFlag.Border = 1;
-          TextDisplayMode.AsFlag.Reachable = 1;
 
-          if (DeclutterLabels<2) {
+	  TextDisplayMode.AsFlag.Reachable = 1;
+
+	  if ((DeclutterLabels<2)||intask) {
+
+	    if (intask || (DeclutterLabels<1)) {
+	      TextDisplayMode.AsFlag.Border = 1;
+	    }
             // show all reachable landing fields unless we want a decluttered
             // screen.
             dowrite = true;
@@ -2756,7 +2759,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
 
       if(intask || irange || dowrite) {
 	bool draw_alt = TextDisplayMode.AsFlag.Reachable 
-	  && (DeclutterLabels<1);
+	  && ((DeclutterLabels<1) || intask);
 
         switch(pDisplayTextType) {
         case DISPLAYNAMEIFINTASK:
@@ -2772,6 +2775,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           }
           break;
         case DISPLAYNAME:
+	  dowrite = (DeclutterLabels<2) || intask;
           if (draw_alt)
             wsprintf(Buffer, TEXT("%s:%d%s"),
                      WayPointList[i].Name, 
@@ -2782,6 +2786,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           
           break;
         case DISPLAYNUMBER:
+	  dowrite = (DeclutterLabels<2) || intask;
           if (draw_alt)
             wsprintf(Buffer, TEXT("%d:%d%s"),
                      WayPointList[i].Number, 
@@ -2792,6 +2797,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           
           break;
         case DISPLAYFIRSTFIVE:
+	  dowrite = (DeclutterLabels<2) || intask;
           _tcsncpy(Buffer2, WayPointList[i].Name, 5);
           Buffer2[5] = '\0';
           if (draw_alt)
@@ -2804,6 +2810,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           
           break;
         case DISPLAYFIRSTTHREE:
+	  dowrite = (DeclutterLabels<2) || intask;
           _tcsncpy(Buffer2, WayPointList[i].Name, 3);
           Buffer2[3] = '\0';
           if (draw_alt)
@@ -2816,6 +2823,7 @@ void MapWindow::DrawWaypoints(HDC hdc, RECT rc)
           
           break;
         case DISPLAYNONE:
+	  dowrite = (DeclutterLabels<2) || intask;
           if (draw_alt)
             wsprintf(Buffer, TEXT("%d%s"), 
                      (int)(WayPointList[i].AltArivalAGL*ALTITUDEMODIFY), 
