@@ -226,9 +226,10 @@ void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
                                  Task[taskwaypoint].AATTargetOffsetRadial);
 
   FindLatitudeLongitude(latitude, longitude,
-                        course_bearing, 100.0,
+                        course_bearing, max(100,GPS_INFO.Speed*1.5),
                         &Task[taskwaypoint].AATTargetLat,
                         &Task[taskwaypoint].AATTargetLon);
+  // JMW, distance here was 100m, now changed to speed * 2
 
   TargetModified = true;
   CalculateAATIsoLines();
