@@ -2259,17 +2259,22 @@ void InputEvents::eventRun(TCHAR *misc) {
 
 
 void InputEvents::eventDeclutterLabels(TCHAR *misc) {
-  if (_tcscmp(misc, TEXT("toggle")) == 0)
-    MapWindow::DeclutterLabels = !MapWindow::DeclutterLabels;
-  else if (_tcscmp(misc, TEXT("on")) == 0)
-    MapWindow::DeclutterLabels = true;
+  if (_tcscmp(misc, TEXT("toggle")) == 0) {
+    MapWindow::DeclutterLabels ++;
+    MapWindow::DeclutterLabels = MapWindow::DeclutterLabels % 3;
+  } else if (_tcscmp(misc, TEXT("on")) == 0)
+    MapWindow::DeclutterLabels = 2;
   else if (_tcscmp(misc, TEXT("off")) == 0)
-    MapWindow::DeclutterLabels = false;
+    MapWindow::DeclutterLabels = 0;
+  else if (_tcscmp(misc, TEXT("mid")) == 0)
+    MapWindow::DeclutterLabels = 1;
   else if (_tcscmp(misc, TEXT("show")) == 0) {
-    if (MapWindow::DeclutterLabels)
-      DoStatusMessage(TEXT("Map labels OFF"));
-    else
-      DoStatusMessage(TEXT("Map labels ON"));  
+    if (MapWindow::DeclutterLabels==0)
+      DoStatusMessage(TEXT("Map labels ON"));
+    else if (MapWindow::DeclutterLabels==1)
+      DoStatusMessage(TEXT("Map labels MID"));  
+    else 
+      DoStatusMessage(TEXT("Map labels OFF"));  
   }
 }
 

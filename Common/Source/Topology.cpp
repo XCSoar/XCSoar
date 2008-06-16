@@ -367,7 +367,7 @@ XShape* TopologyLabel::addShape(int i) {
 
 
 void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
-  if (label && !MapWindow::DeclutterLabels) {
+  if (label && (MapWindow::DeclutterLabels<2)) {
 
     TCHAR Temp[100];
     wsprintf(Temp,TEXT("%S"),label);

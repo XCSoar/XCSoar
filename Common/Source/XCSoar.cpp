@@ -3679,7 +3679,24 @@ bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
   CondReplaceInString(MapWindow::isAutoZoom(), OutBuffer, TEXT("$(ZoomAutoToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
   CondReplaceInString(EnableTopology, OutBuffer, TEXT("$(TopologyToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
   CondReplaceInString(EnableTerrain, OutBuffer, TEXT("$(TerrainToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
-  CondReplaceInString(MapWindow::DeclutterLabels, OutBuffer, TEXT("$(MapLabelsToggleActionName)"), TEXT("On"), TEXT("Off"), Size);
+
+  if (_tcsstr(OutBuffer, TEXT("$(MapLabelsToggleActionName)"))) {
+    switch(MapWindow::DeclutterLabels) {
+    case 0:
+      ReplaceInString(OutBuffer, TEXT("$(MapLabelsToggleActionName)"), 
+                      TEXT("MID"), Size);
+      break;
+    case 1:
+      ReplaceInString(OutBuffer, TEXT("$(MapLabelsToggleActionName)"), 
+                      TEXT("ON"), Size);
+      break;
+    case 2:
+      ReplaceInString(OutBuffer, TEXT("$(MapLabelsToggleActionName)"), 
+                      TEXT("OFF"), Size);
+      break;
+    }
+  }
+
   CondReplaceInString(CALCULATED_INFO.AutoMacCready != 0, OutBuffer, TEXT("$(MacCreadyToggleActionName)"), TEXT("Manual"), TEXT("Auto"), Size);
   CondReplaceInString(EnableAuxiliaryInfo, OutBuffer, TEXT("$(AuxInfoToggleActionName)"), TEXT("Off"), TEXT("On"), Size);
 

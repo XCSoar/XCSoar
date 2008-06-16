@@ -132,7 +132,7 @@ class MapWindow {
   static bool MapDirty;
   static bool LandableReachable;
 
-  static bool DeclutterLabels;
+  static unsigned char DeclutterLabels;
   static bool EnableTrailDrift;
   static int GliderScreenPosition;
 
