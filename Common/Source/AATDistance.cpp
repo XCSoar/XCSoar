@@ -224,6 +224,7 @@ void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
                   latitude,
                   longitude,
                   NULL, &course_bearing);
+
   course_bearing = AngleLimit360(course_bearing+
                                  Task[taskwaypoint].AATTargetOffsetRadial);
 
