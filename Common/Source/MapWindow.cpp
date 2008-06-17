@@ -52,6 +52,7 @@ Copyright_License {
 #include "Terrain.h"
 #include "options.h"
 #include "Task.h"
+#include "AATDistance.h"
 
 #include "GaugeVarioAltA.h"
 #include "GaugeCDI.h"
@@ -1471,9 +1472,16 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
       if (distance>IBLSCALE(36)) {
 	// This drag moves the aircraft (changes speed and direction)
         double newbearing;
+	double oldbearing = GPS_INFO.TrackBearing;
+	double minspeed = 1.1*GlidePolar::Vminsink;
         DistanceBearing(Ystart, Xstart, Ylat, Xlat, NULL, &newbearing);
-        GPS_INFO.TrackBearing = newbearing;
-        GPS_INFO.Speed = min(100.0,max(1.1*GlidePolar::Vminsink,distance/3));
+	if ((fabs(AngleLimit180(newbearing-oldbearing))<30)
+	    || (GPS_INFO.Speed<minspeed)) {
+	  GPS_INFO.Speed = min(100.0,max(minspeed,distance/3));
+	  // 20080817 JMW change speed only if in direction
+	}
+	GPS_INFO.TrackBearing = newbearing;
+	// change bearing without changing speed if direction change > 30
 	// 20080815 JMW prevent dragging to stop glider
         break;
       }
@@ -3112,7 +3120,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
 	  // JMW 20080616 flash arc line if very close to target
 	  static bool flip = false;
 
-	  if (DerivedDrawInfo.WaypointDistance<DrawInfo.Speed*5.0) {
+	  if (DerivedDrawInfo.WaypointDistance<AATCloseDistance()*2.0) {
 	    flip = !flip;
 	  } else {
 	    flip = true;

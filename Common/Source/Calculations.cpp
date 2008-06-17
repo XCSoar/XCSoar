@@ -1664,7 +1664,7 @@ double AATCloseBearing(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 		  NULL, &course_bearing);
 
   course_bearing = AngleLimit360(course_bearing+
-				 Task[taskwaypoint].AATTargetOffsetRadial);
+				 Task[ActiveWayPoint].AATTargetOffsetRadial);
   return course_bearing;
 }
 
@@ -1698,7 +1698,7 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                         &Calculated->WaypointDistance,
                         &Calculated->WaypointBearing);
 
-        if (Calculated->WaypointDistance>max(100,Basic->Speed*1.5)) {
+        if (Calculated->WaypointDistance>AATCloseDistance()*3.0) {
           Calculated->ZoomDistance = max(Calculated->WaypointDistance,
                                          Calculated->ZoomDistance);
         } else {
@@ -2982,7 +2982,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   if (AATEnabled && !TaskAborted && (ActiveWayPoint>0) &&
       ValidTaskPoint(ActiveWayPoint+1) && Calculated->IsInSector) {
-    if (Calculated->WaypointDistance<max(100,Basic->Speed*1.5)) {
+    if (Calculated->WaypointDistance<AATCloseDistance()*3.0) {
       LegBearing = AATCloseBearing(Basic, Calculated);
     }
   }

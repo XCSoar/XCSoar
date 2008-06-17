@@ -229,7 +229,7 @@ void AATDistance::ShiftTargetFromInFront(double longitude, double latitude,
                                  Task[taskwaypoint].AATTargetOffsetRadial);
 
   FindLatitudeLongitude(latitude, longitude,
-                        course_bearing, max(100,GPS_INFO.Speed*1.5),
+                        course_bearing, AATCloseDistance(),
                         &Task[taskwaypoint].AATTargetLat,
                         &Task[taskwaypoint].AATTargetLon);
   // JMW, distance here was 100m, now changed to speed * 2
@@ -265,7 +265,7 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
                                    Task[taskwaypoint].AATTargetLon,
                                    Task[taskwaypoint].AATTargetLat);
 
-  if (d_total_this>d_total_orig-2.0*max(100,GPS_INFO.Speed*1.5)) {
+  if (d_total_this>d_total_orig-2.0*AATCloseDistance()) {
     // this is better than the previous best! (or very close)
     ShiftTargetFromInFront(longitude, latitude, taskwaypoint);
     return;
@@ -661,4 +661,9 @@ void AATDistance::ThinData(int taskwaypoint) {
     num_points[taskwaypoint]=MAXNUM_AATDISTANCE-1;
   }
   UnlockTaskData();
+}
+
+
+double AATCloseDistance(void) {
+  return max(100,GPS_INFO.Speed*1.5);
 }
