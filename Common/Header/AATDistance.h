@@ -84,5 +84,7 @@ private:
                           int taskwaypoint);
 };
 
+double AATCloseDistance(void);
+
 #endif
 
