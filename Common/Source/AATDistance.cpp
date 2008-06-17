@@ -265,8 +265,8 @@ void AATDistance::ShiftTargetFromBehind(double longitude, double latitude,
                                    Task[taskwaypoint].AATTargetLon,
                                    Task[taskwaypoint].AATTargetLat);
 
-  if (d_total_this>d_total_orig) {
-    // this is better than the previous best!
+  if (d_total_this>d_total_orig-2.0*max(100,GPS_INFO.Speed*1.5)) {
+    // this is better than the previous best! (or very close)
     ShiftTargetFromInFront(longitude, latitude, taskwaypoint);
     return;
   }
