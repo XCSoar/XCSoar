@@ -1654,6 +1654,20 @@ static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
+double AATCloseBearing(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  // ensure waypoint goes in direction of track if very close
+  double course_bearing;
+  DistanceBearing(Task[ActiveWayPoint-1].AATTargetLat,
+		  Task[ActiveWayPoint-1].AATTargetLon,
+		  Basic->Latitude,
+		  Basic->Longitude,
+		  NULL, &course_bearing);
+  
+  course_bearing = AngleLimit360(course_bearing+
+				 Task[taskwaypoint].AATTargetOffsetRadial);
+  return course_bearing;
+}
+
 void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
   //  LockFlightData();
@@ -1684,22 +1698,11 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
                         &Calculated->WaypointDistance,
                         &Calculated->WaypointBearing);
 
-        if (Calculated->WaypointDistance>100.0) {
+        if (Calculated->WaypointDistance>max(100,Basic->Speed*1.5)) {
           Calculated->ZoomDistance = max(Calculated->WaypointDistance,
                                          Calculated->ZoomDistance);
         } else {
-
-          // ensure waypoint goes in direction of track if very close
-          double course_bearing;
-          DistanceBearing(Task[ActiveWayPoint-1].AATTargetLat,
-                          Task[ActiveWayPoint-1].AATTargetLon,
-                          Basic->Latitude,
-                          Basic->Longitude,
-                          NULL, &course_bearing);
-          course_bearing = AngleLimit360(course_bearing+
-                        Task[ActiveWayPoint].AATTargetOffsetRadial);
-          Calculated->WaypointBearing = course_bearing;
-
+	  Calculated->WaypointBearing = AATCloseBearing(Basic, Calculated);
         }
 
       } else if ((ActiveWayPoint==0) && (ValidTaskPoint(ActiveWayPoint+1))
@@ -2977,11 +2980,10 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   CheckTransitionFinalGlide(Basic, Calculated);
 
-  // ensure waypoint goes in direction of track if very close
   if (AATEnabled && !TaskAborted && (ActiveWayPoint>0) && 
-      ValidTaskPoint(ActiveWayPoint+1)) {
-    if (Calculated->WaypointDistance<=100.0) {
-      LegBearing = Calculated->WaypointBearing;
+      ValidTaskPoint(ActiveWayPoint+1) && Calculated->IsInSector) {
+    if (Calculated->WaypointDistance<max(100,Basic->Speed*1.5)) {
+      LegBearing = AATCloseBearing(Basic, Calculated);
     }
   }
 
