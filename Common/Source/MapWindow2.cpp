@@ -1610,3 +1610,63 @@ void MapWindow::DrawTerrainAbove(HDC hDC, RECT rc) {
   SetBkMode(hDCTemp,OPAQUE);
 
 }
+
+
+void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
+  if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint) || !AATEnabled) {
+    return;
+  }
+  if (DerivedDrawInfo.Circling || TaskAborted || TargetPan) {
+    // don't display in various modes
+    return;
+  }
+
+  // TODO: maybe have this work even if no task?
+
+  LockTaskData();  // protect from external task changes
+
+  double startLat = DrawInfo.Latitude;
+  double startLon = DrawInfo.Longitude;
+  double previousLat;
+  double previousLon;
+  if (AATEnabled && (ActiveWayPoint>0)) {
+    previousLat = Task[max(0,ActiveWayPoint-1)].AATTargetLat;
+    previousLon = Task[max(0,ActiveWayPoint-1)].AATTargetLon;
+  } else {
+    previousLat = WayPointList[Task[max(0,ActiveWayPoint-1)].Index].Latitude;
+    previousLon = WayPointList[Task[max(0,ActiveWayPoint-1)].Index].Longitude;
+  }
+  UnlockTaskData();
+
+  double distance_from_previous;
+  DistanceBearing(previousLat, previousLon,
+		  startLat, startLon,
+		  &distance_from_previous,
+		  &bearing);
+
+  double screen_range = GetApproxScreenRange();
+
+  if (fabs(bearing-DerivedDrawInfo.WaypointBearing)<10) {
+    // too small an error to bother
+    return;
+  }
+  if (distance_from_previous < 500.0) {
+    // too short to have valid data
+    return;
+  }
+  double p1Lat;
+  double p1Lon;
+  double p2Lat;
+  double p2Lon;
+  FindLatitudeLongitude(startLat, startLon,
+			bearing, 0.5*screen_range,
+			&p1Lat, &p1Lon);
+  FindLatitudeLongitude(startLat, startLon,
+			bearing, 1.5*screen_range,
+			&p2Lat, &p2Lon);
+  POINT pt1, pt2;
+  LatLon2Screen(p1Lon, p1Lon, pt1);
+  LatLon2Screen(p2Lon, p2Lon, pt2);
+  DrawDashLine(hdc, 1, pt1, pt2, RGB(30,30,30));
+
+}
