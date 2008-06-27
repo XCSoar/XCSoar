@@ -54,6 +54,8 @@ Copyright_License {
 }
 
 */
+
+#ifndef CECORE
 #include "stdafx.h"
 
 #include "VOImage.h"
@@ -316,3 +318,5 @@ BOOL CVOResource::IsLoaded()
 {
 	return (m_pData != NULL);
 }
+
+#endif
