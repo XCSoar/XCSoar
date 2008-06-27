@@ -1991,6 +1991,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
     if (extGPSCONNECT) {
       // TODO don't draw offtrack indicator if showing spot heights
+      DrawProjectedTrack(hdcDrawWindowBg, Orig_Aircraft);
       DrawOffTrackIndicator(hdcDrawWindowBg);
       DrawTrack(hdcDrawWindowBg, Orig_Aircraft);
       DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
