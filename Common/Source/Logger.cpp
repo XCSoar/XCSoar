@@ -182,7 +182,7 @@ void LogPointToFile(double Latitude, double Longitude, double Altitude,
   DegLat = (int)Latitude;
   MinLat = Latitude - DegLat;
   NoS = 'N';
-  if(MinLat<0)
+  if((MinLat<0) || ((MinLat-DegLat==0) && (DegLat<0)))
     {
       NoS = 'S';
       DegLat *= -1; MinLat *= -1;
@@ -193,7 +193,7 @@ void LogPointToFile(double Latitude, double Longitude, double Altitude,
   DegLon = (int)Longitude ;
   MinLon = Longitude  - DegLon;
   EoW = 'E';
-  if(MinLon<0)
+  if((MinLon<0) || ((MinLon-DegLon==0) && (DegLon<0)))
     {
       EoW = 'W';
       DegLon *= -1; MinLon *= -1;
@@ -468,7 +468,7 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
   DegLat = (int)Latitude;
   MinLat = Latitude - DegLat;
   NoS = 'N';
-  if(MinLat<0)
+  if((MinLat<0) || ((MinLat-DegLat==0) && (DegLat<0)))
     {
       NoS = 'S';
       DegLat *= -1; MinLat *= -1;
@@ -476,11 +476,10 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
   MinLat *= 60;
   MinLat *= 1000;
 
-
   DegLon = (int)Longitude ;
   MinLon = Longitude  - DegLon;
   EoW = 'E';
-  if(MinLon<0)
+  if((MinLon<0) || ((MinLon-DegLon==0) && (DegLon<0)))
     {
       EoW = 'W';
       DegLon *= -1; MinLon *= -1;

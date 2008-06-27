@@ -1629,7 +1629,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
   double startLon = DrawInfo.Longitude;
   double previousLat;
   double previousLon;
-  if (AATEnabled && (ActiveWayPoint>0)) {
+  if (AATEnabled && (ActiveWayPoint>1)) {
     previousLat = Task[max(0,ActiveWayPoint-1)].AATTargetLat;
     previousLon = Task[max(0,ActiveWayPoint-1)].AATTargetLon; 
   } else {
@@ -1638,7 +1638,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
   }
   UnlockTaskData();
 
-  double distance_from_previous;
+  double distance_from_previous, bearing;
   DistanceBearing(previousLat, previousLon,
 		  startLat, startLon,
 		  &distance_from_previous,
@@ -1659,14 +1659,14 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
   double p2Lat;
   double p2Lon;
   FindLatitudeLongitude(startLat, startLon, 
-			bearing, 0.5*screen_range,
+			bearing, 0.1*screen_range,
 			&p1Lat, &p1Lon);
   FindLatitudeLongitude(startLat, startLon, 
 			bearing, 1.5*screen_range,
 			&p2Lat, &p2Lon);
   POINT pt1, pt2;
-  LatLon2Screen(p1Lon, p1Lon, pt1);
-  LatLon2Screen(p2Lon, p2Lon, pt2);
-  DrawDashLine(hdc, 1, pt1, pt2, RGB(30,30,30));
+  LatLon2Screen(p1Lon, p1Lat, pt1);
+  LatLon2Screen(p2Lon, p2Lat, pt2);
+  DrawDashLine(hdc, 2, pt1, pt2, RGB(0,0,0xFF));
 
 }
