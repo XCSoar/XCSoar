@@ -1622,6 +1622,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
   }
 
   // TODO: maybe have this work even if no task?
+  // TODO: draw this also when in target pan mode
 
   LockTaskData();  // protect from external task changes
 
@@ -1646,12 +1647,12 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
 
   double screen_range = GetApproxScreenRange();
 
+  if (distance_from_previous < 100.0) {
+    bearing = DrawInfo.TrackBearing;
+    // too short to have valid data
+  }
   if (fabs(bearing-DerivedDrawInfo.WaypointBearing)<10) {
     // too small an error to bother
-    return;
-  }
-  if (distance_from_previous < 500.0) {
-    // too short to have valid data
     return;
   }
   double p1Lat;
@@ -1659,7 +1660,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
   double p2Lat;
   double p2Lon;
   FindLatitudeLongitude(startLat, startLon,
-			bearing, 0.1*screen_range,
+			bearing, 0.4*screen_range,
 			&p1Lat, &p1Lon);
   FindLatitudeLongitude(startLat, startLon,
 			bearing, 1.5*screen_range,
