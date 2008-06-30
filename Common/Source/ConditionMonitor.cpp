@@ -326,7 +326,8 @@ protected:
     if (Calculated->LegDistanceToGo>StartRadius) {
       return false;
     }
-    return !ValidStart(Basic, Calculated);
+    return !(ValidStartSpeed(Basic, Calculated)
+	     && InsideStartHeight(Basic, Calculated));
   };
 
   void Notify(void) {

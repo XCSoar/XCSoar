@@ -213,7 +213,8 @@ void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp);
 int getFinalWaypoint(void);
-bool ValidStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
+bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
                                 DERIVED_INFO *Calculated,
