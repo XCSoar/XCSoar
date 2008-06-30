@@ -1172,7 +1172,10 @@ double MapWindow::TrailFirstTime = 0;
 void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 {
   int i, j;
-  SNAIL_POINT *P1,*P2;
+  SNAIL_POINT *P1;
+#ifdef NOLINETO
+  SNAIL_POINT *P2;
+#endif
   static BOOL lastCircling = FALSE;
   static float vmax= 5.0;
   static float vmin= -5.0;
@@ -1191,7 +1194,10 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
   bool dotraildrift = EnableTrailDrift && (DisplayMode == dmCircling);
 
-  P1 = NULL; P2 = NULL;
+  P1 = NULL;
+#ifdef NOLINETO
+  P2 = NULL;
+#endif
 
   if (dotraildrift) {
     double tlat1, tlon1;
@@ -1217,42 +1223,6 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     ntrail /= TRAILSHRINK;
   }
 
-#if 0
-  if (needcolour && 0) {
-    // NOT NECESSARY THIS CODE!
-    /*
-    if (DerivedDrawInfo.Circling) {
-      ntrail = TRAILSIZE; // scan entire trail for sink magnitude
-    } else {
-      ntrail = TRAILSIZE/TRAILSHRINK; // scan only recently for lift magnitude
-    }
-    */
-
-    float this_vmax=(float)0.1;
-    float this_vmin=(float)-0.1;
-    for(i=1;i< ntrail; i++) {
-      j= (TRAILSIZE+iSnailNext-ntrail+i)% TRAILSIZE;
-      P1 = SnailTrail+j;
-      float cv = P1->Vario;
-      if (cv<this_vmin) {
-        this_vmin = cv;
-      }
-      if (cv>this_vmax) {
-        this_vmax = cv;
-      }
-      P1->Colour = -1; // force recalculation of colour
-    }
-    if (DisplayMode == dmCircling) {
-      // scan only for sink after exiting cruise
-      vmin = (float)(min(this_vmin,-5));
-    } else {
-      // scan only for lift after exiting climb
-      vmax = (float)(max(this_vmax,5));
-    }
-    needcolour = false;
-  }
-#endif
-
   float this_vmax = (float)(1.5*min(5.0, max(MACCREADY,0.5)));
   float this_vmin = (float)(-1.5*min(5.0, max(MACCREADY,2.0)));
   vmax = this_vmax;
@@ -1261,7 +1231,6 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   int skipdivisor = ntrail/5;
   int skipborder = skipdivisor;
   int skiplevel= 3; // JMW TODO, try lower level?
-  bool lastbroken = true; // force last one to skip
   POINT lastdrawn;
 
   lastdrawn.x = 0;
@@ -1278,6 +1247,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   // TODO: Divide by time step cruise/circling for zerooffset
 
   bool thisvisible = true;
+  bool lastvisible = false;
 
   int is = ((int)DrawInfo.Time)%skiplevel;
 
@@ -1286,7 +1256,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   for(i=1;i< ntrail; ++i)
   {
     if (i>=skipborder) {
-      skiplevel=max(1,skiplevel-1);
+      skiplevel= max(1,skiplevel-1);
       skipborder= i+skipdivisor + 2*(zerooffset % skiplevel);
       is = skiplevel;
     }
@@ -1312,37 +1282,29 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       if ((!P1->Circling)&&( i<ntrail-60 )) {
         // ignore cruise mode lines unless very recent
 
-        lastbroken = true;
+#ifdef NOLINETO
         P2 = NULL;
+#endif
+	lastvisible = false;
         continue;
       }
     } else {
       if ((P1->Circling)&&( j%5 != 0 )) {
         // JMW TODO: This won't work properly!
         // draw only every 5 points from circling when in cruise mode
-        continue;
+	//        continue;
       }
     }
 
-    if (!P1->FarVisible) {
-      lastbroken = true;
+    if (!P1->FarVisible && !lastvisible) {
+#ifdef NOLINETO
       P2 = NULL;
+#endif
+      lastvisible = false;
       continue;
     }
 
-    if (!PointVisible(P1->Longitude ,
-                      P1->Latitude)) {
-      if (lastbroken) {
-        // the line is invalid
-        P2 = P1;
-        continue;
-      } else {
-        thisvisible = false;
-        // this one is not visible but last was
-      }
-    } else {
-      thisvisible = true;
-    }
+    thisvisible = PointVisible(P1->Longitude, P1->Latitude);
 
     // now we know both points are visible, better get screen coords
     // if we don't already.
@@ -1359,28 +1321,33 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
                     P1->Screen);
     }
 
-    if (abs(P1->Screen.y-lastdrawn.y)
-        +abs(P1->Screen.x-lastdrawn.x)<IBLSCALE(4)) {
-      continue;
-      // don't draw if very short line
+    if (lastvisible && thisvisible) {
+      if (abs(P1->Screen.y-lastdrawn.y)
+	  +abs(P1->Screen.x-lastdrawn.x)<IBLSCALE(4)) {
+	continue;
+	// don't draw if very short line
+      }
     }
 
     // ok, we got this far, so draw the line
-
     // get the colour if it doesn't exist
-    if ((P1->Colour<0)||(P1->Colour>=NUMSNAILCOLORS)) {
-      float cv = P1->Vario;
-      if (cv<0) {
-        cv /= (-vmin); // JMW fixed bug here
-      } else {
-        cv /= vmax;
-      }
-      P1->Colour = max(0,min((short)(NUMSNAILCOLORS-1),
-                             (short)((cv+1.0)/2.0*NUMSNAILCOLORS)));
-    }
-    SelectObject(hdc, hSnailPens[P1->Colour]);
 
-    if (lastbroken && P2) { // draw set cursor at P1
+    if (thisvisible || lastvisible) {
+      if ((P1->Colour<0)||(P1->Colour>=NUMSNAILCOLORS)) {
+	float cv = P1->Vario;
+	if (cv<0) {
+	  cv /= (-vmin); // JMW fixed bug here
+	} else {
+	  cv /= vmax;
+	}
+	P1->Colour = max(0,min((short)(NUMSNAILCOLORS-1),
+			       (short)((cv+1.0)/2.0*NUMSNAILCOLORS)));
+      }
+      SelectObject(hdc, hSnailPens[P1->Colour]);
+    }
+
+#ifdef NOLINETO
+    if (lastvisible) {     // draw set cursor at P1
       if (dotraildrift) {
         double dt;
         dt = max(0,(DrawInfo.Time-P2->Time));
@@ -1393,35 +1360,25 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
                       P2->Screen);
       }
     }
-
-#ifndef NOLINETO
-    if (lastbroken) { // draw set cursor at P1
-      if (P2) {
-        MoveToEx(hdc, P2->Screen.x, P2->Screen.y, NULL);
-        LineTo(hdc, P1->Screen.x, P1->Screen.y);
-      } else {
-        MoveToEx(hdc, P1->Screen.x, P1->Screen.y, NULL);
-      }
-    } else {
-      LineTo(hdc, P1->Screen.x, P1->Screen.y);
-    }
-#else
     if (P2) {
       DrawSolidLine(hdc, P1->Screen, P2->Screen);
+      lastdrawn = P1->Screen;
+    }
+    P2 = P1;
+#else
+    if (!lastvisible) { // draw set cursor at P1
+      MoveToEx(hdc, P1->Screen.x, P1->Screen.y, NULL);
+    } else {
+      LineTo(hdc, P1->Screen.x, P1->Screen.y);
+      lastdrawn = P1->Screen;
     }
 #endif
-    lastdrawn = P1->Screen;
-    P2 = P1;
-    if (thisvisible) {
-      lastbroken = false;
-    } else {
-      lastbroken = true;
-    }
+    lastvisible = thisvisible;
   }
 
   // draw final point to glider
 #ifndef NOLINETO
-  if (!lastbroken) {
+  if (lastvisible) {
     LineTo(hdc, Orig.x, Orig.y);
   }
 #endif
@@ -1654,7 +1611,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
     // too short to have valid data
   }
   if (TargetPan) {
-    screen_range = DerivedDrawInfo.WaypointDistance;
+    screen_range = max(screen_range, DerivedDrawInfo.WaypointDistance);
     flow = 0.0;
     fhigh = 1.2;
   } else if (fabs(bearing-DerivedDrawInfo.WaypointBearing)<10) {
