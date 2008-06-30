@@ -1951,6 +1951,48 @@ bool InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
+/*
+
+  Track 'TaskStarted' in Calculated info, so it can be
+  displayed in the task status dialog.
+
+  Must be reset at start of flight.
+
+  For multiple starts, after start has been passed, need
+  to set the first waypoint to the start waypoint and
+  then recalculate task stats.
+
+*/
+
+bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  bool valid = true;
+  if (StartMaxSpeed!=0) {
+    if (Basic->AirspeedAvailable) {
+      if (Basic->IndicatedAirspeed>StartMaxSpeed) 
+        valid = false;
+    } else {
+      if (Basic->Speed>StartMaxSpeed) 
+        valid = false;
+    }
+  }
+  return valid;
+}
+
+bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
+  bool valid = true;
+  if ((StartMaxHeight!=0)&&(Calculated->TerrainValid)) {
+    if (StartHeightRef == 0) {
+      if (Calculated->AltitudeAGL>StartMaxHeight)
+	valid = false;
+    } else {
+      if (Calculated->NavAltitude>StartMaxHeight)
+	valid = false;
+    }
+  }
+  return valid;
+}
+
+
 bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                            int Index, 
                            double OutBound, 
@@ -2020,12 +2062,16 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index,
 
   LockTaskData();
 
+  bool in_height = true;
+
   if ((ActiveWayPoint>0) 
       && !ValidTaskPoint(ActiveWayPoint+1)) {
     // don't detect start if finish is selected
     retval = false;
     goto OnExit;
   }
+
+  in_height = InsideStartHeight(Basic, Calculated);
 
   if ((Task[0].Index != EntryStartSector) && (EntryStartSector>=0)) {
     LastInSector = false;
@@ -2035,6 +2081,7 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index,
   isInSector = InStartSector_Internal(Basic, Calculated, 
                                       Task[0].Index, Task[0].OutBound,
                                       LastInSector);
+  isInSector &= in_height;
 
   *CrossedStart = LastInSector && !isInSector;
   LastInSector = isInSector;
@@ -2051,7 +2098,9 @@ bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index,
                                         StartPoints[i].Index, 
                                         StartPoints[i].OutBound,
                                         StartPoints[i].InSector);
+	retval &= in_height;
         isInSector |= retval;
+
         index = StartPoints[i].Index;
         *CrossedStart = StartPoints[i].InSector && !retval;
         StartPoints[i].InSector = retval;
@@ -2157,41 +2206,6 @@ bool ReadyToAdvance(DERIVED_INFO *Calculated, bool reset=true, bool restart=fals
 }
 
 
-/*
-
-  Track 'TaskStarted' in Calculated info, so it can be
-  displayed in the task status dialog.
-
-  Must be reset at start of flight.
-
-  For multiple starts, after start has been passed, need
-  to set the first waypoint to the start waypoint and
-  then recalculate task stats.
-
-*/
-
-bool ValidStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-  bool valid = true;
-  if ((StartMaxHeight!=0)&&(Calculated->TerrainValid)) {
-    if (StartHeightRef == 0) {
-      if (Calculated->AltitudeAGL>StartMaxHeight)
-	valid = false;
-    } else {
-      if (Calculated->NavAltitude>StartMaxHeight)
-	valid = false;
-    }
-  }
-  if (StartMaxSpeed!=0) {
-    if (Basic->AirspeedAvailable) {
-      if (Basic->IndicatedAirspeed>StartMaxSpeed) 
-        valid = false;
-    } else {
-      if (Basic->Speed>StartMaxSpeed) 
-        valid = false;
-    }
-  }
-  return valid;
-}
 
 
 static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
@@ -2206,13 +2220,13 @@ static void CheckStart(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                            Basic->Latitude,
                            0);
     }
-    if (ValidStart(Basic, Calculated)) {
+    if (ValidStartSpeed(Basic, Calculated)) {
       ReadyToAdvance(Calculated, false, true);
     }
     // TODO monitor start speed throughout time in start sector
   }
   if (StartCrossed) {
-    if(!IsFinalWaypoint() && ValidStart(Basic, Calculated)) {
+    if(!IsFinalWaypoint() && ValidStartSpeed(Basic, Calculated)) {
 
       // This is set whether ready to advance or not, because it will
       // appear in the flight log, so if it's valid, it's valid.

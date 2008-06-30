@@ -1616,7 +1616,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
   if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint) || !AATEnabled) {
     return;
   }
-  if (DerivedDrawInfo.Circling || TaskAborted || TargetPan) {
+  if (DerivedDrawInfo.Circling || TaskAborted) {
     // don't display in various modes
     return;
   }
@@ -1646,12 +1646,18 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
 		  &bearing);
 
   double screen_range = GetApproxScreenRange();
+  double flow = 0.4;
+  double fhigh = 1.5;
 
   if (distance_from_previous < 100.0) {
     bearing = DrawInfo.TrackBearing;
     // too short to have valid data
   }
-  if (fabs(bearing-DerivedDrawInfo.WaypointBearing)<10) {
+  if (TargetPan) {
+    screen_range = DerivedDrawInfo.WaypointDistance;
+    flow = 0.0;
+    fhigh = 1.2;
+  } else if (fabs(bearing-DerivedDrawInfo.WaypointBearing)<10) {
     // too small an error to bother
     return;
   }
@@ -1660,10 +1666,10 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
   double p2Lat;
   double p2Lon;
   FindLatitudeLongitude(startLat, startLon, 
-			bearing, 0.4*screen_range,
+			bearing, flow*screen_range,
 			&p1Lat, &p1Lon);
   FindLatitudeLongitude(startLat, startLon, 
-			bearing, 1.5*screen_range,
+			bearing, fhigh*screen_range,
 			&p2Lat, &p2Lon);
   POINT pt1, pt2;
   LatLon2Screen(p1Lon, p1Lat, pt1);
