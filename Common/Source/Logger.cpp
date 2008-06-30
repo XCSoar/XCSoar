@@ -207,7 +207,7 @@ void LogPointToFile(double Latitude, double Longitude, double Altitude,
   sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
           Hour, Minute, Second,
           DegLat, MinLat, NoS, DegLon, MinLon, EoW,
-          (int)Altitude,(int)BaroAltitude);
+          (int)BaroAltitude,(int)Altitude);
 
   SetFilePointer(hFile, 0, NULL, FILE_END);
   WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead,
