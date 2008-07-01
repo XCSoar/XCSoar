@@ -1587,7 +1587,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
   double startLon = DrawInfo.Longitude;
   double previousLat;
   double previousLon;
-  if (AATEnabled && (ActiveWayPoint>1)) {
+  if (AATEnabled) {
     previousLat = Task[max(0,ActiveWayPoint-1)].AATTargetLat;
     previousLon = Task[max(0,ActiveWayPoint-1)].AATTargetLon;
   } else {
