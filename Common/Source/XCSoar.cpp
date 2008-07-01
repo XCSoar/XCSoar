@@ -170,6 +170,7 @@ Appearance_t Appearance = {
 
 extern TCHAR XCSoar_Version[256] = TEXT("");
 
+bool ForceShutdown = false;
 
 HINSTANCE hInst; // The current instance
 //HWND hWndCB; // The command bar handle
@@ -2279,11 +2280,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 #ifndef GNAV
       ASSERT(hWnd==hWndMainWindow);
-      if((hWnd==hWndMainWindow) && 
+      if(ForceShutdown || ((hWnd==hWndMainWindow) && 
          (MessageBoxX(hWndMainWindow,
                       gettext(TEXT("Quit program?")),
                       gettext(TEXT("XCSoar")),
-                      MB_YESNO|MB_ICONQUESTION) == IDYES)) 
+                      MB_YESNO|MB_ICONQUESTION) == IDYES))) 
 #endif
         {
           if(iTimerID) {
@@ -3332,9 +3333,10 @@ void BlankDisplay(bool doblank) {
 
       if (BatteryInfo.acStatus==0) {
 #ifdef _SIM_
-        if (PDABatteryPercent < BATTERY_EXIT) {
+        if ((PDABatteryPercent < BATTERY_EXIT) && !ForceShutdown) {
           StartupStore(TEXT("Battery low exit...\n"));
-          // TODO - Debugging and warning message
+          // TODO - Debugging and warning message	  
+	  ForceShutdown = true;
           SendMessage(hWndMainWindow, WM_CLOSE,
                       NULL, NULL);
         } else
