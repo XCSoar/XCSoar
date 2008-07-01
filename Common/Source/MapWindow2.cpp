@@ -1248,7 +1248,8 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 
   bool thisvisible = true;
   bool lastvisible = false;
-
+  float vclose = 0;
+  int nclose = 0;
   int is = ((int)DrawInfo.Time)%skiplevel;
 
   TrailFirstTime = -1;
@@ -1274,7 +1275,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     }
 
     P1 = SnailTrail+j;
-    if ((TrailFirstTime<0) && (P1->Time>=0)) {
+    if (((TrailFirstTime<0) || (P1->Time<TrailFirstTime)) && (P1->Time>=0)) {
       TrailFirstTime = P1->Time;
     }
 
@@ -1324,6 +1325,8 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     if (lastvisible && thisvisible) {
       if (abs(P1->Screen.y-lastdrawn.y)
 	  +abs(P1->Screen.x-lastdrawn.x)<IBLSCALE(4)) {
+	vclose += P1->Vario;
+	nclose ++;
 	continue;
 	// don't draw if very short line
       }
@@ -1335,6 +1338,12 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     if (thisvisible || lastvisible) {
       if ((P1->Colour<0)||(P1->Colour>=NUMSNAILCOLORS)) {
 	float cv = P1->Vario;
+	if (nclose) {
+	  // set color to average if skipped
+	  cv = (cv+vclose)/(nclose+1);
+	  nclose= 0;
+	  vclose= 0;
+	}
 	if (cv<0) {
 	  cv /= (-vmin); // JMW fixed bug here
 	} else {

@@ -72,14 +72,16 @@ int misc_tick_count=0;
 
 int TrailActive = TRUE;
 
-#define NUMSNAILRAMP 3
+#define NUMSNAILRAMP 5
 
 static COLORREF taskcolor = RGB(0,120,0); // was 255
 
 const COLORRAMP snail_colors[] = {
-  {-10,          0xff, 0x50, 0x50},
+  {-10,         0xff, 0x3e, 0x00},
+  {-5,          0xcd, 0x4f, 0x27},
   {0,           0x8f, 0x8f, 0x8f},
-  {10,           0x50, 0xff, 0x50}
+  {5,           0x27, 0xcd, 0x4f},
+  {10,          0x00, 0xff, 0x3e}
 };
 
 ///////////////////////////////// Initialisation
@@ -1213,9 +1215,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     int minwidth;
     minwidth = max(IBLSCALE(2),IBLSCALE(SnailWidthScale)/16);
     for (i=0; i<NUMSNAILCOLORS; i++) {
-      ColorRampLookup((short)(i*2-NUMSNAILCOLORS),
+      short ih = i*(snail_colors[NUMSNAILRAMP-1].h-snail_colors[0].h)
+		  /(NUMSNAILCOLORS-1)+snail_colors[0].h;
+      ColorRampLookup(ih,
                       Red, Green, Blue,
-                      snail_colors, NUMSNAILRAMP);
+                      snail_colors, NUMSNAILRAMP, 0);
       if (i<NUMSNAILCOLORS/2) {
         width= minwidth;
       } else {
