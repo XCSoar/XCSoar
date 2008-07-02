@@ -703,12 +703,12 @@ void ClipPolygon(HDC hdc, POINT *m_ptin, unsigned int inLength,
 
   memcpy((void*)clip_ptin, (void*)m_ptin, inLength*sizeof(POINT));
 
+  // add extra point for final point if it doesn't equal the first
+  // this is required to close some airspace areas that have missing
+  // final point
   if (fill) {
-    // add extra point for final point if it doesn't equal the first
-    // this is required to close some airspace areas that have missing
-    // final point
     if ((m_ptin[inLength-1].x != m_ptin[0].x) &&
-        (m_ptin[inLength-1].y != m_ptin[0].y)) {
+	(m_ptin[inLength-1].y != m_ptin[0].y)) {
       clip_ptin[inLength] = clip_ptin[0];
       inLength++;
     }

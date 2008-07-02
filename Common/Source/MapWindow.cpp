@@ -72,16 +72,17 @@ int misc_tick_count=0;
 
 int TrailActive = TRUE;
 
-#define NUMSNAILRAMP 5
+#define NUMSNAILRAMP 6
 
 static COLORREF taskcolor = RGB(0,120,0); // was 255
 
 const COLORRAMP snail_colors[] = {
-  {-10,         0xff, 0x3e, 0x00},
-  {-5,          0xcd, 0x4f, 0x27},
-  {0,           0x8f, 0x8f, 0x8f},
-  {5,           0x27, 0xcd, 0x4f},
-  {10,          0x00, 0xff, 0x3e}
+  {0,         0xff, 0x3e, 0x00},
+  {50,        0xcd, 0x4f, 0x27},
+  {100,       0x8f, 0x8f, 0x8f},
+  {150,       0x27, 0xcd, 0x4f},
+  {201,       0x00, 0xff, 0x3e},
+  {501,       0x00, 0xff, 0x3e}
 };
 
 ///////////////////////////////// Initialisation
@@ -1215,11 +1216,10 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     int minwidth;
     minwidth = max(IBLSCALE(2),IBLSCALE(SnailWidthScale)/16);
     for (i=0; i<NUMSNAILCOLORS; i++) {
-      short ih = i*(snail_colors[NUMSNAILRAMP-1].h-snail_colors[0].h)
-		  /(NUMSNAILCOLORS-1)+snail_colors[0].h;
+      short ih = i*200/(NUMSNAILCOLORS-1);
       ColorRampLookup(ih, 
                       Red, Green, Blue,
-                      snail_colors, NUMSNAILRAMP, 0);      
+                      snail_colors, NUMSNAILRAMP, 6);      
       if (i<NUMSNAILCOLORS/2) {
         width= minwidth;
       } else {
@@ -3955,9 +3955,21 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
           SelectObject(hDCTemp, hAirspacePens[AirspaceArea[i].Type]);
         }
 
-        ClipPolygon(hDCTemp,
-                    AirspaceScreenPoint+AirspaceArea[i].FirstPoint,
+	POINT *pstart = AirspaceScreenPoint+AirspaceArea[i].FirstPoint;
+        ClipPolygon(hDCTemp, pstart,
                     AirspaceArea[i].NumPoints, rc, false);
+
+	if (AirspaceArea[i].NumPoints>2) {
+	  // JMW close if open
+	  if ((pstart[0].x != pstart[AirspaceArea[i].NumPoints-1].x) ||
+	      (pstart[0].y != pstart[AirspaceArea[i].NumPoints-1].y)) {
+	    POINT ps[2];
+	    ps[0] = pstart[0];
+	    ps[1] = pstart[AirspaceArea[i].NumPoints-1];
+	    Polyline(hDCTemp, ps, 2);
+	  }
+	}
+
       }      
     }
   }
