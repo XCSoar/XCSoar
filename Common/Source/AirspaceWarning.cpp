@@ -270,8 +270,10 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, bool Predicted,
       if ((it->data.IsCircle == IsCircle)
            && (it->data.AirspaceIndex == AsIdx)){ // check if already in list
 
-        if ((it->data.Sequence == Sequence) && (it->data.Sequence>=0)){
+        if ((it->data.Sequence == Sequence) && (it->data.Sequence>=0)
+	    && !ackDay){
           // still updated in real pos calculation
+	  // JMW: need to be able to override if ack day
         } else {
 
           it->data.Sequence = Sequence;
@@ -282,14 +284,21 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, bool Predicted,
           it->data.PredictedEntryTime = EntryTime;
 
           if (ackDay) {
-            it->data.Acknowledge = 4;
+	    if (!Predicted) {
+	      it->data.Acknowledge = 4;
+	    } else {
+	      // code for cancel daily ack
+	      if (it->data.Acknowledge == 4) {
+		it->data.Acknowledge = 0;
+	      }
+	    }
             it->data.Inside = 0;
             it->data.Predicted = 0;
           } else {
 	    if (!Predicted) {
 	      it->data.Inside = true;
 	    }
-            it->data.Predicted = Predicted;
+	    it->data.Predicted = Predicted;
           }
 
           if (calcWarnLevel(&it->data))
@@ -308,7 +317,8 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, bool Predicted,
       }
     }
 
-    if (!FoundInList){
+    if (!FoundInList && !(Predicted && ackDay)) {
+      // JMW Predicted & ackDay means cancel a daily ack
 
       AirspaceInfo_c asi; // not in list, add new
 

@@ -18,7 +18,7 @@
 // max length airspace and waypoint names
 #define NAME_SIZE 50
 
-#define NUMSNAILCOLORS 10
+#define NUMSNAILCOLORS 15
 
 // max length of waypoint comment names
 #define COMMENT_SIZE 50

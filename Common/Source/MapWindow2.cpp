@@ -1297,7 +1297,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       }
     }
 
-    if (!P1->FarVisible && !lastvisible) {
+    if (!P1->FarVisible) {
 #ifdef NOLINETO
       P2 = NULL;
 #endif
@@ -1402,6 +1402,9 @@ void MapWindow::DrawTrailFromTask(HDC hdc, RECT rc) {
 
   if((TrailActive!=3) || (DisplayMode == dmCircling) || (TrailFirstTime<0))
     return;
+
+  TrailFirstTime -= DerivedDrawInfo.TakeOffTime;
+  // since olc keeps track of time wrt takeoff
 
   olc.SetLine();
   int n = min(MAXCLIPPOLYGON,olc.getN());

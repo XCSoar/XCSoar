@@ -127,19 +127,29 @@ static void OnAirspaceListEnter(WindowControl * Sender,
           Name = AirspaceArea[index_area].Name;
         }
         if (Name) {
-          if(MessageBoxX(hWndMapWindow,
-                         Name,
-                         gettext(TEXT("Acknowledge for day?")),
-                         MB_YESNO|MB_ICONQUESTION) == IDYES) {
-
-            if (index_circle>=0) {
+	  UINT answer;
+          answer = MessageBoxX(hWndMapWindow,
+			       Name,
+			       gettext(TEXT("Acknowledge for day?")),
+			       MB_YESNOCANCEL|MB_ICONQUESTION);
+	  if (answer == IDYES) {
+	    if (index_circle>=0) {
               AirspaceWarnListAdd(&GPS_INFO, false, true,
                                   index_circle, true);
             } else if (index_area>=0) {
               AirspaceWarnListAdd(&GPS_INFO, false, false,
                                   index_area, true);
             }
-          }
+          } else if (answer == IDNO) {
+	    // this will cancel a daily ack
+	    if (index_circle>=0) {
+              AirspaceWarnListAdd(&GPS_INFO, true, true,
+                                  index_circle, true);
+            } else if (index_area>=0) {
+              AirspaceWarnListAdd(&GPS_INFO, true, false,
+                                  index_area, true);
+            }
+	  }
         }
       }
     }
