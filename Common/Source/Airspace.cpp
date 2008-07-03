@@ -1065,6 +1065,13 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
 
     }
 
+    else if (_tcscmp(pToken, TEXT("UNL")) == 0) {
+      // JMW added Unlimited (used by WGC2008)
+      Alt->Base = abMSL;
+      Alt->AGL = -1;
+      Alt->Altitude = 50000;
+    }
+
     pToken = strtok_r(NULL, TEXT(" \t"), &pWClast);
 
   }
