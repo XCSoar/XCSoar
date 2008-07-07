@@ -1614,35 +1614,37 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
 		  &distance_from_previous,
 		  &bearing);
 
-  double screen_range = GetApproxScreenRange();
-  double flow = 0.4;
-  double fhigh = 1.5;
-
   if (distance_from_previous < 100.0) {
     bearing = DrawInfo.TrackBearing;
     // too short to have valid data
   }
+  POINT pt[2] = {{0,-75},{0,-400}};
   if (TargetPan) {
+    double screen_range = GetApproxScreenRange();
+    double flow = 0.4;
+    double fhigh = 1.5;
     screen_range = max(screen_range, DerivedDrawInfo.WaypointDistance);
-    flow = 0.0;
-    fhigh = 1.2;
+
+    double p1Lat;
+    double p1Lon;
+    double p2Lat;
+    double p2Lon;
+    FindLatitudeLongitude(startLat, startLon,
+			  bearing, flow*screen_range,
+			  &p1Lat, &p1Lon);
+    FindLatitudeLongitude(startLat, startLon,
+			  bearing, fhigh*screen_range,
+			  &p2Lat, &p2Lon);
+    LatLon2Screen(p1Lon, p1Lat, pt[0]);
+    LatLon2Screen(p2Lon, p2Lat, pt[1]);
   } else if (fabs(bearing-DerivedDrawInfo.WaypointBearing)<10) {
     // too small an error to bother
     return;
+  } else {
+    pt[1].y = -max(MapRectBig.right-MapRectBig.left,
+		   MapRectBig.bottom-MapRectBig.top)*1.2;
+    PolygonRotateShift(pt, 2, Orig.x, Orig.y,
+		       bearing-DisplayAngle);
   }
-  double p1Lat;
-  double p1Lon;
-  double p2Lat;
-  double p2Lon;
-  FindLatitudeLongitude(startLat, startLon,
-			bearing, flow*screen_range,
-			&p1Lat, &p1Lon);
-  FindLatitudeLongitude(startLat, startLon,
-			bearing, fhigh*screen_range,
-			&p2Lat, &p2Lon);
-  POINT pt1, pt2;
-  LatLon2Screen(p1Lon, p1Lat, pt1);
-  LatLon2Screen(p2Lon, p2Lat, pt2);
-  DrawDashLine(hdc, 2, pt1, pt2, RGB(0,0,0xFF));
-
+  DrawDashLine(hdc, 2, pt[0], pt[1], RGB(0,0,0));
 }

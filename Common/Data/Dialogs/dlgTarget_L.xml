@@ -25,7 +25,7 @@
   </WndProperty>
 
   <WndProperty Name="prpAATTargetLocked" Caption="Target locked" X=2 Y=-1  Width=240 Height=22 CaptionWidth=150 Font=2 ReadOnly=0 Help="When enabled, targets placed within the AAT area are not adjusted automatically.">
-    <DataField name="" DataType="boolean" ReadOnly=0/>
+    <DataField name="" DataType="boolean" ReadOnly=0 OnDataAccess="OnLockedData"/>
   </WndProperty>
 
 </WndForm>

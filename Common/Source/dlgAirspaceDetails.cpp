@@ -67,6 +67,7 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
 	AirspaceWarnListAdd(&GPS_INFO, false, false,
 			    index_area, true);
       }
+      wf->SetModalResult(mrOK);
     } else if (answer == IDNO) {
       // this will cancel a daily ack
       if (index_circle>=0) {
@@ -76,6 +77,7 @@ static void OnAcknowledgeClicked(WindowControl * Sender){
 	AirspaceWarnListAdd(&GPS_INFO, true, false,
 			    index_area, true);
       }
+      wf->SetModalResult(mrOK);
     }
   }
 }
