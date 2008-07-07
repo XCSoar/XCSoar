@@ -3759,7 +3759,7 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, POINT Orig)
 
   if (Appearance.BestCruiseTrack == ctBestCruiseTrackDefault){
 
-    int dy = (long)(70); //  DerivedDrawInfo.WindSpeed );
+    int dy = (long)(70); 
     POINT Arrow[7] = { {-1,-40}, {1,-40}, {1,0}, {6,8}, {-6,8}, {-1,0}, {-1,-40}};
 
     Arrow[2].y -= dy;
