@@ -3152,19 +3152,22 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
       int imin = min(Task[i].Index,Task[i+1].Index);
       int imax = max(Task[i].Index,Task[i+1].Index);
       // JMW AAT!
+      double bearing = Task[i].OutBound;
       POINT sct1, sct2;
       if (AATEnabled && !TargetPan) {
-        if (i>0) {
-          LatLon2Screen(Task[i].AATTargetLon, 
-                        Task[i].AATTargetLat, 
-                        sct1);
-        } else {
-          sct1 = WayPointList[Task[i].Index].Screen;
-        }
+	LatLon2Screen(Task[i].AATTargetLon, 
+		      Task[i].AATTargetLat, 
+		      sct1);
         LatLon2Screen(Task[i+1].AATTargetLon, 
                       Task[i+1].AATTargetLat, 
                       sct2);
+	DistanceBearing(Task[i].AATTargetLat,
+			Task[i].AATTargetLon,
+			Task[i+1].AATTargetLat,
+			Task[i+1].AATTargetLon,
+			NULL, &bearing);
 
+	// draw nominal track line
         DrawDashLine(hdc, 1, 
                      WayPointList[imin].Screen, 
                      WayPointList[imax].Screen, 
@@ -3192,7 +3195,7 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
       ScreenClosestPoint(sct1, sct2, 
 			 Orig_Aircraft, &p_p, IBLSCALE(25));
       PolygonRotateShift(Arrow, 2, p_p.x, p_p.y, 
-            Task[i].OutBound-DisplayAngle);
+            bearing-DisplayAngle);
 
       _DrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[0], p_p, taskcolor);
       _DrawLine(hdc, PS_SOLID, IBLSCALE(2), Arrow[1], p_p, taskcolor);
