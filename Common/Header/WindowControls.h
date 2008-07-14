@@ -729,8 +729,6 @@ class WndListFrame:public WndFrame{
     OnListCallback_t mOnListEnterCallback;
     ListInfo_t mListInfo;
     void Paint(HDC hDC);
-
-
 };
 
 class WndOwnerDrawFrame:public WndFrame{
