@@ -4056,14 +4056,13 @@ void MapWindow::CloseDrawingThread(void)
 
 void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 {
-  POINT ThermalProfile[NUMTHERMALBUCKETS+2];
   POINT GliderBand[5] = { {0,0},{23,0},{22,0},{24,0},{0,0} };
   
   if ((DerivedDrawInfo.TaskAltitudeDifference>50)
       &&(DisplayMode == dmFinalGlide)) {
     return;
   }
-  
+
   // JMW TODO: gather proper statistics
   // note these should/may also be relative to ground
   int i;
@@ -4077,13 +4076,30 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
 #define TBSCALEX 20
   
   // calculate height above safety altitude
-  h = DerivedDrawInfo.NavAltitude
-    -SAFETYALTITUDEBREAKOFF
-    -DerivedDrawInfo.TerrainBase;
+  double hoffset = SAFETYALTITUDEBREAKOFF+DerivedDrawInfo.TerrainBase;
+  h = DerivedDrawInfo.NavAltitude-hoffset;
 
-  // calculate top height
+  bool draw_start_height = ((ActiveWayPoint==0) && (ValidTaskPoint(0)) 
+			    && (StartMaxHeight!=0)
+			    && (DerivedDrawInfo.TerrainValid));
+  double hstart=0;
+  if (draw_start_height) {
+    if (StartHeightRef == 0) {
+      hstart = StartMaxHeight+DerivedDrawInfo.TerrainAlt;
+    } else {
+      hstart = StartMaxHeight;
+    }
+    hstart -= hoffset;
+  }
+
+  // calculate top/bottom height
   maxh = max(h, mth);
   minh = min(h, 0);
+
+  if (draw_start_height) {
+    maxh = max(maxh, hstart);
+    minh = min(minh, hstart);
+  }
   
   // no thermalling has been done above safety altitude
   if (mth<=1) {
@@ -4093,8 +4109,10 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
     return;
   }
 
-  double hglider = ((h-minh)/(maxh-minh));
-  
+  // normalised heights
+  double hglider = (h-minh)/(maxh-minh);
+  hstart = (hstart-minh)/(maxh-minh);
+
   // calculate averages
   int numtherm = 0;
 
@@ -4121,22 +4139,35 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
     }
   }
 
-  if (numtherm<=1) {
+  if ((!draw_start_height) && (numtherm<=1)) {
     return; // don't display if insufficient statistics
+    // but do draw if start height needs to be drawn
   }
-    
+  
+  // drawing info
+  HPEN hpOld;
+  
   // position of thermal band
-  for (i=0; i<numtherm; i++) {    
-    ThermalProfile[1+i].x = 
-      (iround((Wt[i]/Wmax)*IBLSCALE(TBSCALEX)))+rc.left;
+  if (numtherm>1) {
+    hpOld = (HPEN)SelectObject(hDC, hpThermalBand);
+    HBRUSH hbOld = (HBRUSH)SelectObject(hDC, hbThermalBand);
+  
+    POINT ThermalProfile[NUMTHERMALBUCKETS+2];
+    for (i=0; i<numtherm; i++) {    
+      ThermalProfile[1+i].x = 
+	(iround((Wt[i]/Wmax)*IBLSCALE(TBSCALEX)))+rc.left;
+      
+      ThermalProfile[1+i].y = 
+	IBLSCALE(4)+iround(TBSCALEY*(1.0-ht[i]))+rc.top;
+    }
+    ThermalProfile[0].x = rc.left;
+    ThermalProfile[0].y = ThermalProfile[1].y;
+    ThermalProfile[numtherm+1].x = rc.left;
+    ThermalProfile[numtherm+1].y = ThermalProfile[numtherm].y;
 
-    ThermalProfile[1+i].y = 
-      IBLSCALE(4)+iround(TBSCALEY*(1.0-ht[i]))+rc.top;
+    Polygon(hDC,ThermalProfile,numtherm+2);
+    SelectObject(hDC, hbOld);
   }
-  ThermalProfile[0].x = rc.left;
-  ThermalProfile[0].y = ThermalProfile[1].y;
-  ThermalProfile[numtherm+1].x = rc.left;
-  ThermalProfile[numtherm+1].y = ThermalProfile[numtherm].y;
     
   // position of thermal band
 
@@ -4151,22 +4182,19 @@ void MapWindow::DrawThermalBand(HDC hDC,RECT rc)
   GliderBand[3].y = GliderBand[1].y;
   GliderBand[4].x = GliderBand[1].x-IBLSCALE(4);
   GliderBand[4].y = GliderBand[0].y+IBLSCALE(4);
-  
-  // drawing info
-  HPEN hpOld;
-  HBRUSH hbOld; 
-  
-  hpOld = (HPEN)SelectObject(hDC, hpThermalBand);
-  hbOld = (HBRUSH)SelectObject(hDC, hbThermalBand);
-  
-  Polygon(hDC,ThermalProfile,numtherm+2);
 
-  (HPEN)SelectObject(hDC, hpThermalBandGlider);
+  hpOld = (HPEN)SelectObject(hDC, hpThermalBandGlider);
   
   Polyline(hDC,GliderBand, 2);
-  Polyline(hDC,GliderBand+2, 3);
-  
-  SelectObject(hDC, hbOld);
+  Polyline(hDC,GliderBand+2, 3); // arrow head
+
+  if (draw_start_height) {
+    SelectObject(hDC, hpFinalGlideBelow);
+    GliderBand[0].y = IBLSCALE(4)+iround(TBSCALEY*(1.0-hstart))+rc.top;
+    GliderBand[1].y = GliderBand[0].y;
+    Polyline(hDC, GliderBand, 2);
+  }
+
   SelectObject(hDC, hpOld);
   
 }

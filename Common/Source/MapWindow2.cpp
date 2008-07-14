@@ -1641,8 +1641,8 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
     // too small an error to bother
     return;
   } else {
-    pt[1].y = -max(MapRectBig.right-MapRectBig.left,
-		   MapRectBig.bottom-MapRectBig.top)*1.2;
+    pt[1].y = (long)(-max(MapRectBig.right-MapRectBig.left,
+			  MapRectBig.bottom-MapRectBig.top)*1.2);
     PolygonRotateShift(pt, 2, Orig.x, Orig.y, 
 		       bearing-DisplayAngle);
   }

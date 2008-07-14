@@ -3551,7 +3551,20 @@ int WndFrame::OnLButtonDown(WPARAM wParam, LPARAM lParam) {
 
 void WndListFrame::SelectItemFromScreen(int xPos, int yPos,
                                         RECT *rect) {
-	(void)xPos;
+  (void)xPos;
+  int w = GetWidth()- 4*SELECTORWIDTH;
+  int h = GetHeight()- SELECTORWIDTH;
+
+  if ((xPos>= w) && (mListInfo.ItemCount > mListInfo.ItemInViewCount)
+      && (mListInfo.ItemCount>0)) {
+    // JMW TODO: scroll!
+
+    mListInfo.ScrollIndex = mListInfo.ItemCount*yPos/h;
+    RecalculateIndices(true);
+
+    return;
+  }
+
   int index;
   GetClientRect(GetHandle(), rect);
   index = yPos/mClients[0]->GetHeight();
