@@ -94,6 +94,10 @@ static CallBackTableEntry_t CallBackTable[]={
   DeclearCallBackEntry(NULL)
 };
 
+static double FLAltRounded(double alt) {
+  int f = iround(alt/10)*10;
+  return (double)f;
+}
 
 static void SetValues(void) {
   int atype;
@@ -186,20 +190,42 @@ static void SetValues(void) {
   if (wp) {
     switch (top->Base){
     case abUndef:
-      _stprintf(buffer, TEXT("%.0f[m] %.0f[ft] [?]"), 
-		top->Altitude, top->Altitude*TOFEET);
+      if (Units::GetUserAltitudeUnit() == unMeter) {
+	_stprintf(buffer, TEXT("%.0f[m] %.0f[ft] [?]"), 
+		  (top->Altitude), 
+		  (top->Altitude*TOFEET));
+      } else {
+	_stprintf(buffer, TEXT("%.0f ft [?]"), 
+		  (top->Altitude*TOFEET));
+      }
       break;
     case abMSL:
-      _stprintf(buffer, TEXT("%.0f[m] %.0f[ft] MSL"), 
-		top->Altitude, top->Altitude*TOFEET);
+      if (Units::GetUserAltitudeUnit() == unMeter) {
+	_stprintf(buffer, TEXT("%.0f[m] %.0f[ft] MSL"), 
+		  top->Altitude, top->Altitude*TOFEET);
+      } else {
+	_stprintf(buffer, TEXT("%.0f ft MSL"), 
+		  top->Altitude*TOFEET);
+      }
       break;
     case abAGL:
-      _stprintf(buffer, TEXT("%.0f[m] %.0f[ft] AGL"), 
-		top->AGL, top->AGL*TOFEET);
+      if (Units::GetUserAltitudeUnit() == unMeter) {
+	_stprintf(buffer, TEXT("%.0f[m] %.0f[ft] AGL"), 
+		  top->AGL, top->AGL*TOFEET);
+      } else {
+	_stprintf(buffer, TEXT("%.0f ft AGL"), 
+		  top->AGL*TOFEET);
+      }
       break;
     case abFL:
-      _stprintf(buffer, TEXT("FL %.0f (%.0f[m] %.0f[ft])"), 
-		top->FL, top->Altitude, top->Altitude*TOFEET);
+      if (Units::GetUserAltitudeUnit() == unMeter) {
+	_stprintf(buffer, TEXT("FL%.0f (%.0f[m] %.0f[ft])"), 
+		  top->FL, FLAltRounded(top->Altitude), 
+		  FLAltRounded(top->Altitude*TOFEET));
+      } else {
+	_stprintf(buffer, TEXT("FL%.0f (%.0f ft)"), 
+		  top->FL, FLAltRounded(top->Altitude*TOFEET));
+      }
       break;
     }
     wp->SetText(buffer);
@@ -210,20 +236,45 @@ static void SetValues(void) {
   if (wp) {
     switch (base->Base){
     case abUndef:
-      _stprintf(buffer, TEXT("%.0f[m] %.0f[ft] [?]"), 
-		base->Altitude, base->Altitude*TOFEET);
+      if (Units::GetUserAltitudeUnit() == unMeter) {
+	_stprintf(buffer, TEXT("%.0f[m] %.0f[ft] [?]"), 
+		  base->Altitude, base->Altitude*TOFEET);
+      } else {
+	_stprintf(buffer, TEXT("%.0f ft [?]"), 
+		  base->Altitude*TOFEET);
+      }
       break;
     case abMSL:
-      _stprintf(buffer, TEXT("%.0f[m] %.0f[ft] MSL"), 
-		base->Altitude, base->Altitude*TOFEET);
+      if (Units::GetUserAltitudeUnit() == unMeter) {
+	_stprintf(buffer, TEXT("%.0f[m] %.0f[ft] MSL"), 
+		  base->Altitude, base->Altitude*TOFEET);
+      } else {
+	_stprintf(buffer, TEXT("%.0f ft MSL"), 
+		  base->Altitude*TOFEET);
+      }
       break;
     case abAGL:
-      _stprintf(buffer, TEXT("%.0f[m] %.0f[ft] AGL"), 
-		base->AGL, base->AGL*TOFEET);
+      if (base->Altitude == 0) {
+        _stprintf(buffer, TEXT("SFC"));
+      } else {
+	if (Units::GetUserAltitudeUnit() == unMeter) {
+	  _stprintf(buffer, TEXT("%.0f[m] %.0f[ft] AGL"), 
+		    base->AGL, base->AGL*TOFEET);
+	} else {
+	  _stprintf(buffer, TEXT("%.0f ft AGL"), 
+		    base->AGL*TOFEET);
+	}
+      }
       break;
     case abFL:
-      _stprintf(buffer, TEXT("FL %.0f (%.0f[m] %.0f[ft])"), 
-		base->FL, base->Altitude, base->Altitude*TOFEET);
+      if (Units::GetUserAltitudeUnit() == unMeter) {
+	_stprintf(buffer, TEXT("FL %.0f (%.0f[m] %.0f[ft])"), 
+		  base->FL, FLAltRounded(base->Altitude), 
+		  FLAltRounded(base->Altitude*TOFEET));
+      } else {
+	_stprintf(buffer, TEXT("FL%.0f (%.0f ft)"), 
+		  base->FL, FLAltRounded(base->Altitude*TOFEET));
+      }
       break;
     }
     wp->SetText(buffer);
