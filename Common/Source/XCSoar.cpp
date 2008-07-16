@@ -1222,7 +1222,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // experimental CVS
 
-  wcscat(XCSoar_Version, TEXT("5.1.8 "));
+  wcscat(XCSoar_Version, TEXT("5.1.9 Beta1 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));

@@ -221,20 +221,37 @@ static void getAirspaceType(TCHAR *buf, int Type){
     }
 }
 
+static double FLAltRounded(double alt) {
+  int f = iround(alt/10)*10;
+  return (double)f;
+}
+
+
 static TCHAR *fmtAirspaceAlt(TCHAR *Buffer, AIRSPACE_ALT *alt){
 
   TCHAR sUnitBuffer[24];
   TCHAR sAltUnitBuffer[24];
 
-  Units::FormatUserAltitude(alt->Altitude, sUnitBuffer, sizeof(sUnitBuffer)/sizeof(sUnitBuffer[0]));
-  Units::FormatAlternateUserAltitude(alt->Altitude, sAltUnitBuffer, sizeof(sAltUnitBuffer)/sizeof(sAltUnitBuffer[0]));
+  Units::FormatUserAltitude(alt->Altitude, sUnitBuffer,
+			    sizeof(sUnitBuffer)/sizeof(sUnitBuffer[0]));
+  Units::FormatAlternateUserAltitude(alt->Altitude,
+				     sAltUnitBuffer,
+		       sizeof(sAltUnitBuffer)/sizeof(sAltUnitBuffer[0]));
 
   switch (alt->Base){
     case abUndef:
-      _stprintf(Buffer, TEXT("%s %s"), sUnitBuffer, sAltUnitBuffer);
+      if (Units::GetUserAltitudeUnit() == unMeter) {
+	_stprintf(Buffer, TEXT("%s %s"), sUnitBuffer, sAltUnitBuffer);
+      } else {
+	_stprintf(Buffer, TEXT("%s"), sUnitBuffer);
+      }
     break;
     case abMSL:
-      _stprintf(Buffer, TEXT("%s %s MSL"), sUnitBuffer, sAltUnitBuffer);
+      if (Units::GetUserAltitudeUnit() == unMeter) {
+	_stprintf(Buffer, TEXT("%s %s MSL"), sUnitBuffer, sAltUnitBuffer);
+      } else {
+	_stprintf(Buffer, TEXT("%s MSL"), sUnitBuffer);
+      }
     break;
     case abAGL:
       if (alt->Altitude == 0)
@@ -244,11 +261,23 @@ static TCHAR *fmtAirspaceAlt(TCHAR *Buffer, AIRSPACE_ALT *alt){
 				  sizeof(sUnitBuffer)/sizeof(sUnitBuffer[0]));
 	Units::FormatAlternateUserAltitude(alt->AGL, sAltUnitBuffer,
 			    sizeof(sAltUnitBuffer)/sizeof(sAltUnitBuffer[0]));
-        _stprintf(Buffer, TEXT("%s %s AGL"), sUnitBuffer, sAltUnitBuffer);
+	if (Units::GetUserAltitudeUnit() == unMeter) {
+	  _stprintf(Buffer, TEXT("%s %s AGL"), sUnitBuffer, sAltUnitBuffer);
+	} else {
+	  _stprintf(Buffer, TEXT("%s AGL"), sUnitBuffer);
+	}
       }
     break;
     case abFL:
-      _stprintf(Buffer, TEXT("FL %.0f %s"), alt->FL, sUnitBuffer/*AltitudeToQNHAltitude(alt->Altitude)*/);
+      /*AltitudeToQNHAltitude(alt->Altitude)*/
+      if (Units::GetUserAltitudeUnit() == unMeter) {
+	_stprintf(Buffer, TEXT("FL%.0f %.0f m %.0f ft"),
+		  alt->FL, FLAltRounded(alt->Altitude),
+		  FLAltRounded(alt->Altitude*TOFEET));
+      } else {
+	_stprintf(Buffer, TEXT("FL%.0f %.0f ft"),
+		  alt->FL, FLAltRounded(alt->Altitude*TOFEET));
+      }
     break;
   }
   return(Buffer);
