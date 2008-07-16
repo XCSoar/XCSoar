@@ -3,9 +3,30 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Todo:
-- Allow start through top of start sector
+- Start status message
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
+- Next wpt infobox
 
+Changes from 5.1.8:
+- Draw red line on thermal band at start height when there's a start
+  height limit and on start waypoint
+- Touching list forms in the scrollbar area moves to that position in the list
+- Don't display meters in airspace altitudes as well as feet unless meters is
+  the user altitude unit.
+- FL altitudes rounded to nearest 10 units to ease readability
+
+Changes from 5.1.7 beta6:
+- Projected track line in AAT mode when track from last turn >10 degrees off target
+- Allow start through top of start sector
+- Bug fix, baro and GNSS altitude in log files swapped
+- Fixed lockup on auto shutdown in simulator mode when out of batteries
+- Higher colour contrast snail trail
+- Changed "Ack for day?" to YES/NO/CANCEL
+  (NO unacknowledges for day)
+- Airspaces drawn closed if open
+- Added UNL (unlimited) airspace top as used in wgc08
+- Fixed lock/unlocking of targets in portrait mode
+- Fixed direction of arrows on task line in AAT mode
 
 Changes from 5.1.7 beta6:
 - Energy height referenced to Mc speed to fly
@@ -20,7 +41,6 @@ Changes from 5.1.7 beta6:
   active while the basic settings dialog is open.
 - AAT/FAI Sector rendering on screen now more accurate
 - Bug fixes and cosmetic cleanups to airspace warning dialog
-
 - Final glide through terrain status message warning logic improved
 - Enhancements to thermal profile band and risk MC with respect to flying in
   mountains
