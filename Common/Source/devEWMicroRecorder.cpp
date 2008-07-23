@@ -227,14 +227,14 @@ static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
       EoW = _T('W');
       DegLon *= -1; MinLon *= -1;
     }
-  MinLon *=60;
+  MinLon *= 60;
   MinLon *= 1000;
 
   _stprintf(EWRecord,
             TEXT("%s%02d%05d%c%03d%05d%c %s\r\n"),
             EWType,
-            DegLat, (int)MinLat/10, NoS, 
-            DegLon, (int)MinLon/10, EoW, 
+            DegLat, (int)MinLat, NoS, 
+            DegLon, (int)MinLon, EoW, 
             wp->Name);
   if (!fSimMode){
     (d->Com.WriteString)(EWRecord);                 // put it to the logger

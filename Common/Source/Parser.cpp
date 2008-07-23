@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.72 2008/02/14 11:55:45 jwharington Exp $
+  $Id: Parser.cpp,v 1.73 2008/07/23 12:18:54 jwharington Exp $
 
 Copyright_License {
 
@@ -178,16 +178,6 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
           return PTAS1(&String[7],GPS_INFO);
         }
 
-      if(_tcscmp(SentanceString,TEXT("PZAN1"))==0)
-        {
-          return PZAN1(&String[7],GPS_INFO);
-        }
-		
-      if(_tcscmp(SentanceString,TEXT("PZAN2"))==0)
-        {
-          return PZAN2(&String[7],GPS_INFO);
-        }
-		
       // FLARM sentences
       if(_tcscmp(SentanceString,TEXT("PFLAA"))==0)
         {
@@ -812,42 +802,6 @@ BOOL NMEAParser::PTAS1(TCHAR *String, NMEA_INFO *GPS_INFO)
   return FALSE;
 }
 
-
-BOOL NMEAParser::PZAN1(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  TCHAR ctemp[80];
-  GPS_INFO->BaroAltitudeAvailable = TRUE;
-  ExtractParameter(String,ctemp,0);
-  GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(StrToDouble(ctemp,NULL));
-  return FALSE;
-}
-
-
-BOOL NMEAParser::PZAN2(TCHAR *String, NMEA_INFO *GPS_INFO)
-{
-  TCHAR ctemp[80];
-  double vtas, wnet, vias;
-  ExtractParameter(String,ctemp,0);
-  vtas = StrToDouble(ctemp,NULL);
-  
-  ExtractParameter(String,ctemp,1);
-  wnet = (StrToDouble(ctemp,NULL)-10000)/100; // cm/s
-  GPS_INFO->Vario = wnet;
-
-  if (GPS_INFO->BaroAltitudeAvailable) {
-    vias = vtas/AirDensityRatio(GPS_INFO->BaroAltitude);
-  } else {
-    vias = 0.0;
-  }
-
-  VarioUpdated = TRUE;
-  PulseEvent(varioTriggerEvent);
-  GPS_INFO->AirspeedAvailable = TRUE;
-  GPS_INFO->TrueAirspeed = vtas;
-  GPS_INFO->IndicatedAirspeed = vias;
-  GPS_INFO->VarioAvailable = TRUE;
-  return FALSE;
-}  
 
 double AccelerometerZero=100.0;
 

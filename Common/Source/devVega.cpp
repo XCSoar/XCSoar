@@ -258,7 +258,9 @@ static BOOL PDVDV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
     NMEAParser::ExtractParameter(String,ctemp,3);
     alt = StrToDouble(ctemp,NULL);
     GPS_INFO->BaroAltitudeAvailable = TRUE;
-    GPS_INFO->BaroAltitude = alt;    // ToDo check if QNH correction is needed!
+    GPS_INFO->BaroAltitude = // JMW 20080716 bug
+      AltitudeToQNHAltitude(alt);
+      // was alt;    // ToDo check if QNH correction is needed!
   }
 
   NMEAParser::VarioUpdated = TRUE;
@@ -478,8 +480,8 @@ static void _VarioWriteSettings(DeviceDescriptor_t *d) {
 	     iround(CALCULATED_INFO.VOpt*10),
 	     CALCULATED_INFO.Circling,
 	     iround(CALCULATED_INFO.TerrainAlt),
-	     iround(QNH*10));
-
+	     10132); // JMW 20080716 bug
+	     //	     iround(QNH*10));
     
     (d->Com.WriteNMEAString)(mcbuf);
 

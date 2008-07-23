@@ -176,8 +176,9 @@ void LogPointToFile(double Latitude, double Longitude, double Altitude,
   double MinLat, MinLon;
   char NoS, EoW;
 
-  if (Altitude<0) return;
-  if (BaroAltitude<0) return;
+  if ((Altitude<0) && (BaroAltitude<0)) return;
+  Altitude = max(0,Altitude);
+  BaroAltitude = max(0,BaroAltitude);
 
   DegLat = (int)Latitude;
   MinLat = Latitude - DegLat;
@@ -753,6 +754,7 @@ bool ReplayLogger::ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
   int MinLat, MinLon;
   char NoS, EoW;
   int iAltitude;
+  int bAltitude;
   int Hour=0;
   int Minute=0;
   int Second=0;
@@ -765,7 +767,7 @@ bool ReplayLogger::ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
 	       TEXT("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05dd"),
 	       &Hour, &Minute, &Second,
 	       &DegLat, &MinLat, &NoS, &DegLon, &MinLon,
-	       &EoW, &iAltitude, &iAltitude
+	       &EoW, &iAltitude, &bAltitude
 	       )) != EOF) {
 
     if (lfound==11) {

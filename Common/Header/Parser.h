@@ -174,8 +174,6 @@ class NMEAParser {
   BOOL RMZ(TCHAR *String, NMEA_INFO *GPS_INFO);
   
   // Additional sentances
-  BOOL PZAN1(TCHAR *String, NMEA_INFO *GPS_INFO);  // RMN: Zander variometer. QNE-altitude
-  BOOL PZAN2(TCHAR *String, NMEA_INFO *GPS_INFO);  // RMN: Zander variometer.  TAS, Vario
   BOOL PTAS1(TCHAR *String, NMEA_INFO *GPS_INFO);  // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
   
   // FLARM sentances
