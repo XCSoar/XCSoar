@@ -72,6 +72,7 @@ Copyright_License {
 #include "devVolkslogger.h"
 #include "devEWMicroRecorder.h"
 #include "devLX.h"
+#include "devZander.h"
 #include "Externs.h"
 #include "units.h"
 #include "InputEvents.h"
@@ -824,6 +825,7 @@ void RestartCommPorts() {
   StartupStore(TEXT("RestartCommPorts\n"));
 
   LockComm();
+
   devClose(devA());
   devClose(devB());
 
@@ -1393,6 +1395,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   vlRegister();
   ewMicroRecorderRegister();
   lxRegister();
+  zanderRegister();
 
   //JMW disabled  devInit(lpCmdLine);
 

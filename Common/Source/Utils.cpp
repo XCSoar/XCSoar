@@ -3884,6 +3884,7 @@ WinPilotPolarInternal WinPilotPolars[] =
   {TEXT("ASG29-18"),   355, 225,  85, -0.47,  90, -0.48, 185, -2.00},   // BestLD52@90kph
   {TEXT("ASW28-18"),   345, 190,  65, -0.47, 107, -0.67, 165, -2.00},   // BestLD48@90kph
   {TEXT("LS-6-15"),    327, 160,  90, -0.6,  100, -0.658, 183, -1.965},   // BestLD42@?
+  {TEXT("ASG29E18"),   400, 200,  90, -0.499,  95.5, -0.510, 196.4, -2.12},   // BestLD52@90kph
 
   // {TEXT("LS-6 (15m)"), 325, 140,  90, -0.59, 100, -0.66, 212.72, -3.4}, // BestLD42
   // {TEXT("H304cz"), 310, 115,    115.03, -0.86, 174.04, -1.76, 212.72, -3.4}, // BestLD42@102
@@ -4091,11 +4092,13 @@ TCHAR* LookupFLARMDetails(long id) {
 
 
 double StaticPressureToAltitude(double ps) {
-  double altitude;
   // http://wahiduddin.net/calc/density_altitude.htm
 
   const double k1=0.190263;
   const double k2=8.417286e-5;
+
+  /* JMW bug 20080716
+  double altitude;
   double h_gps0 = 0;
 
   double Pa = pow(
@@ -4104,8 +4107,9 @@ double StaticPressureToAltitude(double ps) {
                   ,(1.0/k1));
 
   altitude = 44330.8-4946.54*pow(Pa,k1);
-  return altitude;
+  */
 
+  return (pow(QNH,k1) - pow(ps/100.0, k1))/k2;
 }
 
 
@@ -4128,15 +4132,23 @@ double FindQNH(double alt_raw, double alt_known) {
   // alt_known value.
 
   const double k1=0.190263;
+  const double k2=8.417286e-5;
 
+  // step 1, find static pressure from device assuming it's QNH=1013.25
+  double psraw = pow((44330.8-alt_raw)/4946.54,1.0/k1);
+
+  // step 2, calculate QNH so that reported alt will be known alt
+  return pow(pow(psraw/100.0,k1) + k2*alt_known,1/k1);
+
+    /*
+    // JMW bug 20080716
   double psraw = pow((44330.8-alt_raw)/4946.54,1.0/k1)
     +(QNH-1013.25)*100.0;
   double psknown = pow((44330.8-alt_known)/4946.54,1.0/k1);
-
   // If alt_raw=alt_known, this function will return
   // the current QNH value
-
   return (psraw-psknown)/100.0+1013.25;
+    */
 }
 
 
