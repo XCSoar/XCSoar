@@ -73,6 +73,7 @@ Copyright_License {
 #include "devEWMicroRecorder.h"
 #include "devLX.h"
 #include "devZander.h"
+#include "devFlymasterF1.h"
 #include "Externs.h"
 #include "units.h"
 #include "InputEvents.h"
@@ -1224,7 +1225,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // experimental CVS 
 
-  wcscat(XCSoar_Version, TEXT("5.1.9 Beta1 "));
+  wcscat(XCSoar_Version, TEXT("5.1.9 Beta2 "));
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -1396,6 +1397,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   ewMicroRecorderRegister();
   lxRegister();
   zanderRegister();
+  flymasterf1Register();
 
   //JMW disabled  devInit(lpCmdLine);
 

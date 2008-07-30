@@ -1607,7 +1607,9 @@ int FindAirspaceArea(double Longitude,double Latitude, bool visibleonly)
 
 
 int FindNearestAirspaceCircle(double longitude, double latitude, 
-			      double *nearestdistance, double *nearestbearing,
+			      double *nearestdistance, 
+			      double *nearestbearing,
+			      double *nearestt,
 			      double *height=NULL)
 {
   unsigned int i;
@@ -1620,7 +1622,13 @@ int FindNearestAirspaceCircle(double longitude, double latitude,
   }
 		
   for(i=0;i<NumberOfAirspaceCircles;i++) {
-    if (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]< 2) {
+    bool iswarn;
+    bool isdisplay;
+
+    iswarn = (MapWindow::iAirspaceMode[AirspaceCircle[i].Type]>=2);
+    isdisplay = ((MapWindow::iAirspaceMode[AirspaceCircle[i].Type]%2)>0);
+
+    if (!isdisplay || !iswarn) {
       // don't want warnings for this one
       continue;
     }
@@ -1869,6 +1877,7 @@ int FindNearestAirspaceArea(double longitude,
 			    double latitude, 
 			    double *nearestdistance, 
 			    double *nearestbearing,
+			    double *nearestt,
 			    double *height=NULL)
 {
   unsigned i;
@@ -1882,10 +1891,17 @@ int FindNearestAirspaceArea(double longitude,
     }
 
   for(i=0;i<NumberOfAirspaceAreas;i++) {
-    if (MapWindow::iAirspaceMode[AirspaceArea[i].Type]< 2) {
+    bool iswarn;
+    bool isdisplay;
+
+    iswarn = (MapWindow::iAirspaceMode[AirspaceArea[i].Type]>=2);
+    isdisplay = ((MapWindow::iAirspaceMode[AirspaceArea[i].Type]%2)>0);
+
+    if (!isdisplay || !iswarn) {
       // don't want warnings for this one
       continue;
     }
+
     bool altok;
     if (!height) {
       altok = CheckAirspaceAltitude(AirspaceArea[i].Base.Altitude,
@@ -1923,8 +1939,7 @@ int FindNearestAirspaceArea(double longitude,
 //
 // Finds nearest airspace (whether circle or area) to the specified point.
 // Returns -1 in foundcircle or foundarea if circle or area is not found
-// Otherwise, returns index of the circle or area that is closest to the specified 
-// point.
+// Otherwise, returns index of the circle or area that is closest to the specified point.
 //
 // Also returns the distance and bearing to the boundary of the airspace,
 // (and the vertical separation TODO).  
@@ -1943,11 +1958,19 @@ void FindNearestAirspace(double longitude, double latitude,
   double nearestb1 = 0;
   double nearestb2 = 0;
 
+  double speed = max(1,GPS_INFO.Speed);
+  double vspeed = CALCULATED_INFO.Average30s;
+  double nearestt = 100000;
+
   *foundcircle = FindNearestAirspaceCircle(longitude, latitude,
-					   &nearestd1, &nearestb1, height);
+					   &nearestd1, &nearestb1, 
+					   &nearestt,
+					   height);
 
   *foundarea = FindNearestAirspaceArea(longitude, latitude,
-				       &nearestd2, &nearestb2, height);
+				       &nearestd2, &nearestb2, 
+				       &nearestt, 
+				       height);
 
   if ((*foundcircle>=0)&&(*foundarea<0)) {
       *nearestdistance = nearestd1;

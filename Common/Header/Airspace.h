@@ -102,6 +102,7 @@ int FindAirspaceArea(double Longditude,double Lattitude,
 		     bool visibleonly=true);
 BOOL CheckAirspaceAltitude(const double &Base, const double &Top);
 void CloseAirspace(void);
+
 void FindNearestAirspace(double longitude, 
 			 double latitude,
 			 double *nearestdistance, 
