@@ -18,7 +18,7 @@
 
   <WndProperty Name="prpStartMaxHeight" Caption="Start max height"      X=2 Y=-1   Width=236 Height=22 CaptionWidth=150 Font=2
    Help="Maximum height while starting the task.  Set to 0 for no limit.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=25/>
   </WndProperty>
 
     <WndProperty Name="prpStartHeightRef" Caption="Start height ref"     X=2 Y=-1  Width=236 Height=22 CaptionWidth=150 Font=2
@@ -30,7 +30,7 @@ Help="Reference used for start max height rule
 
   <WndProperty Name="prpFinishMinHeight" Caption="Finish min height"      X=2 Y=-1   Width=236 Height=22 CaptionWidth=150 Font=2
   Help="Minimum height above ground while finishing the task.  Set to 0 for no limit.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=50/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=10000 Step=25/>
   </WndProperty>
 
     <WndProperty Name="prpFAIFinishHeight" Caption="FAI finish height"     X=2 Y=-1  Width=236 Height=22 CaptionWidth=150 Font=2

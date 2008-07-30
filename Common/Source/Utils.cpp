@@ -4091,25 +4091,23 @@ TCHAR* LookupFLARMDetails(long id) {
 }
 
 
-double StaticPressureToAltitude(double ps) {
+double QNHAltitudeToStaticPressure(double alt) {
   // http://wahiduddin.net/calc/density_altitude.htm
-
   const double k1=0.190263;
   const double k2=8.417286e-5;
+  return 100.0*pow((pow(QNH,k1)-k2*alt),1.0/k1);
+  // example, alt= 100, QNH=1014
+  // ps = 100203 Pa
+}
 
-  /* JMW bug 20080716
-  double altitude;
-  double h_gps0 = 0;
 
-  double Pa = pow(
-                  pow(ps-(QNH-1013.25)*100.0,k1)
-                  -(k2*h_gps0)
-                  ,(1.0/k1));
-
-  altitude = 44330.8-4946.54*pow(Pa,k1);
-  */
-
+double StaticPressureToAltitude(double ps) {
+  // http://wahiduddin.net/calc/density_altitude.htm
+  const double k1=0.190263;
+  const double k2=8.417286e-5;
   return (pow(QNH,k1) - pow(ps/100.0, k1))/k2;
+  // example, QNH=1014, ps=100203
+  // alt= 100
 }
 
 
@@ -4134,21 +4132,15 @@ double FindQNH(double alt_raw, double alt_known) {
   const double k1=0.190263;
   const double k2=8.417286e-5;
 
-  // step 1, find static pressure from device assuming it's QNH=1013.25
-  double psraw = pow((44330.8-alt_raw)/4946.54,1.0/k1);
-
+  // step 1, find static pressure from device assuming it's QNH adjusted
+  double psraw = QNHAltitudeToStaticPressure(alt_raw);
   // step 2, calculate QNH so that reported alt will be known alt
   return pow(pow(psraw/100.0,k1) + k2*alt_known,1/k1);
 
-    /*
-    // JMW bug 20080716
-  double psraw = pow((44330.8-alt_raw)/4946.54,1.0/k1)
-    +(QNH-1013.25)*100.0;
-  double psknown = pow((44330.8-alt_known)/4946.54,1.0/k1);
-  // If alt_raw=alt_known, this function will return
-  // the current QNH value
-  return (psraw-psknown)/100.0+1013.25;
-    */
+  // example, QNH=1014, ps=100203
+  // alt= 100
+  // alt_known = 120
+  // qnh= 1016
 }
 
 
