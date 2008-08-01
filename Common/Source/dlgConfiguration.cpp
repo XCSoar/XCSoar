@@ -1553,6 +1553,18 @@ static void setVariables(void) {
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTextInput"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(gettext(TEXT("HighScore Style")));
+    dfe->addEnumText(gettext(TEXT("Keyboard")));
+	dfe->Set(Appearance.TextInputStyle);
+    wp->RefreshDisplay();
+  }
+
+
+
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppInfoBoxBorder"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -2758,6 +2770,17 @@ void dlgConfigurationShowModal(void){
 		    (DWORD)(Appearance.StateMessageAlligne));
       changed = true;
     }
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpTextInput"));
+  if (wp)
+  {
+		if (Appearance.TextInputStyle != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger()))
+		{
+			Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
+			SetToRegistry(szRegistryAppTextInputStyle, (DWORD)(Appearance.TextInputStyle));
+			changed = true;
+		}
   }
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpAppIndLandable"));

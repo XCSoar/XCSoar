@@ -95,6 +95,8 @@ void dlgTarget(void);
 bool dlgTaskRules(void);
 void dlgAirspaceDetails(int the_circle, int the_area);
 bool dlgAirspaceWarningVisible(void);
+void dlgFlarmTrafficShowModal(void);
+
 
 #if (WINDOWSPC>0)
 #ifdef DEBUG
@@ -104,5 +106,7 @@ bool dlgAirspaceWarningVisible(void);
 #endif
 
 void WriteMissingTranslations(void);
+void dlgTextEntryKeyboardShowModal(TCHAR *text, int width=0);
+void dlgNumberEntryKeyboardShowModal(int *value, int width=0);
 
 #endif

@@ -639,6 +639,10 @@ other languages.  If this field is left blank, then XCSoar uses English.
     <DataField name="" DataType="boolean"/>
   </WndProperty>
 
+    <WndProperty Name="prpTextInput" Caption="Text Input Style*"  X="2" Y="-1"   Width="235" Height="22" CaptionWidth="100" Font="2"
+    Help="Determines how the user is prompted for text input (filename, teamcode etc.)">
+      <DataField name="" DataType="enum" Min="0" Max="50" Step="1"/>
+    </WndProperty>
   </WndFrame>
 
   <WndFrame Name="frmAppearance" X=0 Y=0 Width=235 Height=222 Font=2>
