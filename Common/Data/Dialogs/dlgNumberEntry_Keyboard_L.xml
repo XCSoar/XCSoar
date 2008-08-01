@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+    <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys">
+    <Key name="urn"></Key>
+  </Extension>
+
+  <WndForm Name="frmTextEntry_Keyboard" Type="Dialog" X="0" Y="0" Width="320" Height="240" Caption="Enter Number" Font="2"  BackColor="0xDADBAB">
+
+    <WndProperty Name="prpText"  Caption="Number: "   X="2" Y="2" Width="200" Height="22" CaptionWidth="70" Font="2" ReadOnly="1" />
+
+    <WndButton   Caption="9"    X="40" Y="40" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="8"    X="80" Y="40" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="7"    X="120" Y="40" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+
+    <WndButton   Caption="4"    X="40" Y="80" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="5"    X="80" Y="80" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="6"    X="120" Y="80" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+
+    <WndButton   Caption="1"    X="40" Y="120" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="2"    X="80" Y="120" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+    <WndButton   Caption="3"    X="120" Y="120" Width="40"  Height="40" Font="2" OnClickNotify="OnKey"/>
+
+    <WndButton   Caption="0"    X="40" Y="160" Width="120"  Height="40" Font="2" OnClickNotify="OnKey"/>
+
+    <WndButton   Caption="Clear"X="200" Y="120" Width="60"  Height="40" Font="2" OnClickNotify="OnClear"/>
+    <WndButton   Caption="Ok"   X="200" Y="160" Width="60"  Height="40" Font="2" OnClickNotify="OnOk"/>
+
+
+
+
+  </WndForm>
+
+</PMML>
