@@ -203,8 +203,9 @@ static void OnDownClicked(WindowControl * Sender){
 }
 
 
-void dlgTextEntryShowModal(TCHAR *text, int width) {
 
+void dlgTextEntryHighscoreType(TCHAR *text, int width)
+{
   wf = NULL;
   wGrid = NULL;
 
@@ -283,5 +284,19 @@ void dlgTextEntryShowModal(TCHAR *text, int width) {
   }
 
   delete wf;
+}
+
+
+void dlgTextEntryShowModal(TCHAR *text, int width) 
+{
+	switch (Appearance.TextInputStyle)
+	{
+	case TextInputStyle_t::tiHighScore:
+		dlgTextEntryHighscoreType(text, width);
+		break;
+	case TextInputStyle_t::tiKeyboard:
+		dlgTextEntryKeyboardShowModal(text, width);	
+		break;
+	}
 
 }

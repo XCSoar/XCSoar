@@ -50,8 +50,10 @@ Copyright_License {
 #include "GaugeFLARM.h"
 #include "VegaVoice.h"
 #include "McReady.h"
+#include "NavFunctions.h"
+#include "FlarmIdFile.h"
 
-
+FlarmIdFile file;
 bool EnableAnimation=false;
 
 bool ReadWinPilotPolarInternal(int i);
@@ -238,6 +240,7 @@ TCHAR szRegistryAppGaugeVarioBallast[] = TEXT("AppGaugeVarioBallast");
 TCHAR szRegistryAppGaugeVarioGross[] = TEXT("AppGaugeVarioGross");
 TCHAR szRegistryAppCompassAppearance[] = TEXT("AppCompassAppearance");
 TCHAR szRegistryAppStatusMessageAlignment[] = TEXT("AppStatusMessageAlignment");
+TCHAR szRegistryAppTextInputStyle[] = TEXT("AppTextInputStyle");
 TCHAR szRegistryAppInfoBoxColors[] = TEXT("AppInfoBoxColors");
 TCHAR szRegistryAppDefaultMapWidth[] = TEXT("AppDefaultMapWidth");
 TCHAR szRegistryTeamcodeRefWaypoint[] = TEXT("TeamcodeRefWaypoint");
@@ -774,6 +777,10 @@ void ReadRegistrySettings(void)
   Temp = Appearance.StateMessageAlligne;
   GetFromRegistry(szRegistryAppStatusMessageAlignment, &Temp);
   Appearance.StateMessageAlligne = (StateMessageAlligne_t)Temp;
+
+  Temp = Appearance.TextInputStyle;
+  GetFromRegistry(szRegistryAppTextInputStyle, &Temp);
+  Appearance.TextInputStyle = (TextInputStyle_t)Temp;
 
   Temp = Appearance.DefaultMapWidth;
   GetFromRegistry(szRegistryAppDefaultMapWidth, &Temp);
@@ -4068,26 +4075,145 @@ void OpenFLARMDetails() {
     TCHAR Name[MAX_PATH];
 
     if (_stscanf(line, TEXT("%lx=%s"), &id, Name) == 2) {
-      FLARM_Names[NumberOfFLARMNames].ID = id;
-      _tcsncpy(FLARM_Names[NumberOfFLARMNames].Name,Name,20);
-      FLARM_Names[NumberOfFLARMNames].Name[20]=0;
-      NumberOfFLARMNames++;
-      if (NumberOfFLARMNames>=MAXFLARMNAMES)
-	break;
+      //FLARM_Names[NumberOfFLARMNames].ID = id;
+      //_tcsncpy(FLARM_Names[NumberOfFLARMNames].Name,Name,20);
+      //FLARM_Names[NumberOfFLARMNames].Name[20]=0;
+      //NumberOfFLARMNames++;
+      //if (NumberOfFLARMNames>=MAXFLARMNAMES)
+		if (AddFlarmLookupItem(id, Name, false) == false)
+		{
+			break; // cant add anymore items !
+		}
     }
   }
   CloseHandle(hFile);
 }
 
+void SaveFLARMDetails(void)
+{
+	DWORD bytesWritten;
+ TCHAR filename[MAX_PATH];
+  LocalPath(filename,TEXT("xcsoar-flarm.txt"));
+  
+  HANDLE hFile = CreateFile(filename,GENERIC_WRITE,0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
+  if( hFile == INVALID_HANDLE_VALUE) return;
+
+  TCHAR wsline[READLINE_LENGTH];
+  char cline[READLINE_LENGTH];
+
+  for (int z = 0; z < NumberOfFLARMNames; z++)
+  {   
+	  wsprintf(wsline, TEXT("%lx=%s\r\n"), FLARM_Names[z].ID,FLARM_Names[z].Name);
+
+    WideCharToMultiByte( CP_ACP, 0, wsline,
+			 _tcslen(wsline)+1,
+			 cline,
+			 READLINE_LENGTH, NULL, NULL);
+
+	WriteFile(hFile, cline, strlen(cline), &bytesWritten, NULL);
+  }
+  CloseHandle(hFile);
+}
+
+
+int LookupSecondaryFLARMId(int id)
+{
+	for (int i=0; i<NumberOfFLARMNames; i++) 
+	{
+		if (FLARM_Names[i].ID == id) 
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
+int LookupSecondaryFLARMId(TCHAR *cn)
+{
+	for (int i=0; i<NumberOfFLARMNames; i++) 
+	{
+		if (wcscmp(FLARM_Names[i].Name, cn) == 0) 
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
 
 TCHAR* LookupFLARMDetails(long id) {
   int i;
-  for (i=0; i<NumberOfFLARMNames; i++) {
-    if (FLARM_Names[i].ID == id) {
-      return FLARM_Names[i].Name;
-    }
-  }
+
+	  // try to find flarm from userFile
+	  int index = LookupSecondaryFLARMId(id);
+	  if (index != -1)
+	  {
+		  return FLARM_Names[index].Name;
+	  }
+
+	  // try to find flarm from FLARMNet.org File
+  	  FlarmId* flarmId = file.GetFlarmIdItem(id);
+	  if (flarmId != NULL)
+	  {
+		 return flarmId->cn;
+	  }
+
   return NULL;
+}
+
+
+int LookupFLARMDetails(TCHAR *cn) 
+{
+  int i;
+
+		// try to find flarm from userFile
+	  int index = LookupSecondaryFLARMId(cn);
+	  if (index != -1)
+	  {
+		  return FLARM_Names[index].ID;
+	  }
+
+	  // try to find flarm from FLARMNet.org File
+	  FlarmId* flarmId = file.GetFlarmIdItem(cn);
+	  if (flarmId != NULL)
+	  {
+		  return flarmId->GetId();
+	  }
+
+
+  return NULL;
+}
+
+bool AddFlarmLookupItem(int id, TCHAR *name, bool saveFile)
+{
+	int index = LookupSecondaryFLARMId(id);
+
+	if (index == -1)
+	{
+		if (NumberOfFLARMNames < MAXFLARMNAMES - 1)
+		{
+			// create new record
+			FLARM_Names[NumberOfFLARMNames].ID = id;
+			_tcsncpy(FLARM_Names[NumberOfFLARMNames].Name, name,20);
+			FLARM_Names[NumberOfFLARMNames].Name[20]=0;
+			NumberOfFLARMNames++;
+			SaveFLARMDetails();
+			return true;
+		}
+	}
+	else
+	{
+			// modify existing record
+			FLARM_Names[index].ID = id;
+			_tcsncpy(FLARM_Names[index].Name, name,20);
+			FLARM_Names[index].Name[20]=0;	
+			if (saveFile)
+			{
+				SaveFLARMDetails();
+			}
+			return true;
+	}
+	return false;
 }
 
 

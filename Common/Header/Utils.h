@@ -85,6 +85,7 @@ extern TCHAR szRegistryAppGaugeVarioBallast[];
 extern TCHAR szRegistryAppGaugeVarioGross[];
 extern TCHAR szRegistryAppCompassAppearance[];
 extern TCHAR szRegistryAppStatusMessageAlignment[];
+extern TCHAR szRegistryAppTextInputStyle[];
 extern TCHAR szRegistryAppInfoBoxBorder[];
 extern TCHAR szRegistryAppAveNeedle[];
 extern TCHAR szRegistryAutoAdvance[];
@@ -305,6 +306,9 @@ RECT WINAPI DrawWireRects(LPRECT lprcTo, UINT nMilliSecSpeed);
 void OpenFLARMDetails();
 void CloseFLARMDetails();
 TCHAR* LookupFLARMDetails(long id);
+int LookupFLARMDetails(TCHAR *cn);
+bool AddFlarmLookupItem(int id, TCHAR *name, bool saveFile);
+int LookupSecondaryFLARMId(int id);
 
 double FindQNH(double alt_raw, double alt_known);
 double AltitudeToQNHAltitude(double alt);

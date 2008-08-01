@@ -771,6 +771,7 @@ IDB_AIRSPACE6           BITMAP  DISCARDABLE     "bitmaps\\airspace6.bmp"
 IDB_AIRSPACE7           BITMAP  DISCARDABLE     "bitmaps\\airspace7.bmp"
 IDB_TARGET              BITMAP  DISCARDABLE     "Bitmaps\\target.bmp"
 IDB_ABOVETERRAIN        BITMAP  DISCARDABLE     "Bitmaps\\aboveterrain.bmp"
+IDB_TEAMMATE_POS        BITMAP  DISCARDABLE     "Bitmaps\\TeammatePosition.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -804,6 +805,10 @@ IDR_XML_AIRSPACEWARNING XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceW
 IDR_XML_HELP            XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgHelp.xml"
 IDR_XML_TEXTENTRY       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTextEntry.xml"
 IDR_XML_TEXTENTRY_T     XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTextEntry_T.xml"
+IDR_XML_TEXTENTRY_KEYBOARD XMLDIALOG DISCARDABLE "..\\Data\\Dialogs\\dlgTextEntry_Keyboard.xml"
+IDR_XML_TEXTENTRY_KEYBOARD_L XMLDIALOG DISCARDABLE "..\\Data\\Dialogs\\dlgTextEntry_Keyboard_L.xml"
+IDR_XML_NUMBERENTRY_KEYBOARD XMLDIALOG DISCARDABLE "..\\Data\\Dialogs\\dlgNumberEntry_Keyboard.xml"
+IDR_XML_NUMBERENTRY_KEYBOARD_L XMLDIALOG DISCARDABLE "..\\Data\\Dialogs\\dlgNumberEntry_Keyboard_L.xml"
 IDR_XML_TEAMCODE        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTeamCode.xml"
 IDR_XML_STARTPOINT      XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartPoint.xml"
 IDR_XML_WAYPOINTEDIT    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointEdit.xml"
@@ -830,6 +835,8 @@ IDR_XML_WAYPOINTEDIT_L  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointE
 IDR_XML_AIRSPACESELECT_L XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgAirspaceSelect_L.xml"
 IDR_XML_TARGET_L        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTarget_L.xml"
 IDR_XML_WEATHER_L       XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWeather_L.xml"
+IDR_XML_FLARMTRAFFIC    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgFlarmTraffic.xml"
+IDR_XML_FLARMTRAFFIC_L  XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgFlarmTraffic_L.xml"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -155,6 +155,7 @@ Appearance_t Appearance = {
   false,
   true,
   smAlligneCenter,
+  tiHighScore,
   false,
   false,
   false,
@@ -310,6 +311,9 @@ double WEIGHTS[POLARSIZE] = {250,70,100};
 // Team code info
 int TeamCodeRefWaypoint = -1;
 TCHAR TeammateCode[10];
+bool TeamFlarmTracking = false;
+TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
+int TeamFlarmIdTarget;      // FlarmId of the glider to track
 double TeammateLatitude;
 double TeammateLongitude;
 bool TeammateCodeValid = false;
@@ -1451,7 +1455,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   GlobalRunning = true;
 
 #if _DEBUG
-  _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
+ // _crtBreakAlloc = -1;     // Set this to the number in {} brackets to
                            // break on a memory leak
 #endif
 
