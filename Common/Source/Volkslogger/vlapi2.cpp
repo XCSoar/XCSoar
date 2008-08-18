@@ -211,7 +211,7 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
   int32 gcs_counter = 0;
   byte  c;
   int16 dle_r = 0;
-  word crc16;
+  word crc16 = 0;
   int16 start = 0;
   int16 ende  = 0;
 //  int32 i;

@@ -29,11 +29,11 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "XCSoar.h"
 
 #include "WindowControls.h"
-#include "Externs.h"
+#include "externs.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 

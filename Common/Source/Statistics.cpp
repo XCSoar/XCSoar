@@ -28,11 +28,11 @@ Copyright_License {
 
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <math.h>
 #include "Statistics.h"
 #include "XCSoar.h"
-#include "Externs.h"
+#include "externs.h"
 #include "McReady.h"
 #include "Units.h"
 #include "InfoBoxLayout.h"

@@ -31,14 +31,14 @@ Copyright_License {
 
 // 20070413:sgi add NmeaOut support, allow nmea chaining an double port platforms
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "options.h"
 
 #include "externs.h"
-#include "utils.h"
-#include "parser.h"
-#include "port.h"
+#include "Utils.h"
+#include "Parser.h"
+#include "Port.h"
 
 #include "device.h"
 

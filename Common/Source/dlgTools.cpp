@@ -29,14 +29,14 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <limits.h>
 
 //#include "winbase.h" // needed for resource stuff
 
 #include "WindowControls.h"
 #include "dlgTools.h"
-#include "XMLParser.h"
+#include "xmlParser.h"
 #include "InfoBoxLayout.h"
 #include "Dialogs.h"
 

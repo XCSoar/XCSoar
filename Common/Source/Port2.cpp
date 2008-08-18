@@ -29,7 +29,7 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Port.h"
 #include "externs.h"
 #include "XCSoar.h"

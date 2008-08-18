@@ -1,7 +1,7 @@
 #ifndef AIRFIELDDETAILS_H
 #define AIRFIELDDETAILS_H
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Utils.h"
 #include "Sizes.h"
 

@@ -6,7 +6,7 @@
 #endif // _MSC_VER > 1000
 
 #include <windows.h>
-#include "sizes.h"
+#include "Sizes.h"
 
 #define NAUTICALMILESTOMETRES (double)1851.96
 #define KNOTSTOMETRESSECONDS (double)0.5144
@@ -39,7 +39,7 @@ typedef struct _FLARM_TRAFFIC
   unsigned short AlarmLevel;
   double Time_Fix;
   unsigned short Type;
-
+  double Average30s;
 } FLARM_TRAFFIC;
 
 
@@ -172,6 +172,10 @@ class NMEAParser {
   BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO);
   BOOL RMA(TCHAR *String, NMEA_INFO *GPS_INFO);
   BOOL RMZ(TCHAR *String, NMEA_INFO *GPS_INFO);
+
+  BOOL WP0(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL WP1(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO);
 
   // Additional sentances
   BOOL PTAS1(TCHAR *String, NMEA_INFO *GPS_INFO);  // RMN: Tasman instruments.  TAS, Vario, QNE-altitude

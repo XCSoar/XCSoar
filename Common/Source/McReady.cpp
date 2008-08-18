@@ -28,7 +28,7 @@ Copyright_License {
 
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "McReady.h"
 #include "resource.h"
 #include "externs.h"
@@ -183,16 +183,25 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   double BestSpeed, BestGlide, Glide;
   double BestSinkRate, TimeToDestCruise;
   double AltitudeNeeded;
-  double HeadWind, CrossWind;
+  static double HeadWind, CrossWind=0.0;
+  static double CrossBearingLast= -1.0;
+  static double WindSpeedLast= -1.0;
   double CrossBearing;
   double BestTime;
-  double HeadWindSqd, CrossWindSqd;
+  static double HeadWindSqd, CrossWindSqd=0.0;
 
-  CrossBearing = Bearing - WindBearing;
-  HeadWind = WindSpeed * fastcosine(CrossBearing);
-  CrossWind = WindSpeed * fastsine(CrossBearing);
-  HeadWindSqd = HeadWind*HeadWind;
-  CrossWindSqd = CrossWind*CrossWind;
+  CrossBearing = AngleLimit360(Bearing - WindBearing);
+  if ((CrossBearing != CrossBearingLast)||(WindSpeed != WindSpeedLast)) {
+    // saves a few floating point operations
+    HeadWind = WindSpeed * fastcosine(CrossBearing);
+    CrossWind = WindSpeed * fastsine(CrossBearing);
+    HeadWindSqd = HeadWind*HeadWind;
+    CrossWindSqd = CrossWind*CrossWind;
+
+    // save old values
+    CrossBearingLast = CrossBearing;
+    WindSpeedLast = WindSpeed;
+  }
 
   double sinkrate;
   double tc; // time spent in cruise

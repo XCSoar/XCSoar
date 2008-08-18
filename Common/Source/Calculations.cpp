@@ -29,10 +29,10 @@ Copyright_License {
 
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Calculations.h"
 #include "Dialogs.h"
-#include "parser.h"
+#include "Parser.h"
 #include "compatibility.h"
 #ifdef OLDPPC
 #include "XCSoarProcess.h"
@@ -40,7 +40,7 @@ Copyright_License {
 #include "Process.h"
 #endif
 #include "Utils.h"
-#include "Externs.h"
+#include "externs.h"
 #include "McReady.h"
 #include "Airspace.h"
 #include "Logger.h"
@@ -267,8 +267,7 @@ void TerrainFootprint(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   Calculated->TerrainBase = Calculated->TerrainAlt;
 
   for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-    //    bearing = -90+i*180/NUMTERRAINSWEEPS+Basic->TrackBearing;
-    bearing = i*360/NUMTERRAINSWEEPS;
+    bearing = (i*360.0)/NUMTERRAINSWEEPS;
     distance = FinalGlideThroughTerrain(bearing,
                                         Basic,
                                         Calculated, &lat, &lon,
@@ -1033,7 +1032,7 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static double Vario[30];
   static double NettoVario[30];
   int Elapsed, i;
-  long index;
+  long index = 0; /*RMK: nn*/
   double Gain;
   static int num_samples = 0;
   static BOOL lastCircling = false;

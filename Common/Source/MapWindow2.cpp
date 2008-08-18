@@ -29,10 +29,10 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "compatibility.h"
-#include "Mapwindow.h"
-#include "OnlineContest.h"
+#include "MapWindow.h"
+#include "OnLineContest.h"
 #include "Utils.h"
 #include "Units.h"
 #include "Logger.h"
@@ -101,7 +101,7 @@ void MapWindow::DrawCDI() {
     CDIScale[CDI_WP_Bearing + 12] = 62;
     CDIScale[CDI_WP_Bearing + 13] = 46;
     for (j=0;j<24;j++) CDIDisplay[j] = CDIScale[(j + (int)(DrawInfo.TrackBearing)/2)];
-    CDIDisplay[24] = NULL;
+    CDIDisplay[24] = _T('\0');
     // JMW fix bug! This indicator doesn't always display correctly!
 
     // JMW added arrows at end of CDI to point to track if way off..
@@ -1189,8 +1189,8 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   }
   lastCircling = (DisplayMode == dmCircling);
 
-  double traildrift_lat;
-  double traildrift_lon;
+  double traildrift_lat = 0.0;
+  double traildrift_lon = 0.0;
 
   bool dotraildrift = EnableTrailDrift && (DisplayMode == dmCircling);
 
@@ -1507,7 +1507,7 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc) {
 
       if (checkLabelBlock(brect)) {
 	ExtTextOut(hdc, sc.x-tsize.cx/2, sc.y-tsize.cy/2,
-		   NULL, NULL, Buffer, size, NULL);
+		   0, NULL, Buffer, size, NULL);
 	ilast = idist;
       }
     }

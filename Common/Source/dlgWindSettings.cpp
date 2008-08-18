@@ -29,12 +29,12 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
-#include "statistics.h"
+#include "Statistics.h"
 
 #include "externs.h"
-#include "units.h"
+#include "Units.h"
 #include "McReady.h"
 #include "device.h"
 
@@ -52,7 +52,7 @@ static void OnCloseClicked(WindowControl * Sender){
 
 static void UpdateWind(bool set) {
   WndProperty *wp;
-  double ws, wb;
+  double ws = 0.0, wb = 0.0;
   wp = (WndProperty*)wf->FindByName(TEXT("prpSpeed"));
   if (wp) {
     ws = wp->GetDataField()->GetAsFloat()/SPEEDMODIFY;

@@ -1,6 +1,6 @@
 #ifndef GAUGE_FLARM_H
 #define GAUGE_FLARM_H
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Parser.h"
 
 extern HWND hWndFLARMWindow;

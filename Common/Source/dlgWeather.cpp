@@ -29,12 +29,12 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
-#include "statistics.h"
+#include "Statistics.h"
 
 #include "externs.h"
-#include "units.h"
+#include "Units.h"
 #include "Process.h"
 #include "device.h"
 #include "RasterTerrain.h"

@@ -187,8 +187,6 @@ char **msDBFGetValueList(DBFHandle dbffile, int record, int *itemindexes, int nu
 int *msDBFGetItemIndexes(DBFHandle dbffile, char **items, int numitems);
 int msDBFGetItemIndex(DBFHandle dbffile, char *name);
 
-  void * SfRealloc( void * pMem, int nNewSize );
-
 #ifdef __cplusplus
 }
 #endif

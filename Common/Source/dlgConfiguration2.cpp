@@ -30,8 +30,8 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
-#include <Aygshell.h>
+#include "StdAfx.h"
+#include <aygshell.h>
 
 #include "XCSoar.h"
 #include "MapWindow.h"
@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "WindowControls.h"
 #include "Statistics.h"
-#include "Externs.h"
+#include "externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
 #include "device.h"

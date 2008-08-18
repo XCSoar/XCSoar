@@ -22,9 +22,9 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Calculations.h"
-#include "Externs.h"
+#include "externs.h"
 #include "Dialogs.h"
 #include "Utils.h"
 #include "Airspace.h"

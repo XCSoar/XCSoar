@@ -76,7 +76,11 @@ zzip_file_close(ZZIP_FILE * fp)
     if (dir->cache.locked == &self)
 	dir->cache.locked = NULL;
 
-    if (! dir->refcount) return zzip_dir_close(dir); else return 0;
+    if (! dir->refcount) {
+	return zzip_dir_close(dir);
+    } else {
+	return 0;
+    }
 }
 
 
@@ -95,9 +99,11 @@ zzip_file_saveoffset(ZZIP_FILE * fp)
     return 0;
 }
 
+#ifndef __MINGW32__ // //RMK: removed due to build errors, 1 is the correct default.
 # ifndef ZZIP_CHECK_BACKSLASH_DIRSEPARATOR           /* NOTE: also default */
 # define ZZIP_CHECK_BACKSLASH_DIRSEPARATOR 0         /* to "NO" on win32 ! */
 # endif
+#endif
 
 # if ! defined strcasecmp && ! defined ZZIP_HAVE_STRCASECMP
 # define ZZIP_CHECK_BACKSLASH_DIRSEPARATOR 1
@@ -153,7 +159,8 @@ static int zzip_inflate_init(ZZIP_FILE *, struct zzip_dir_hdr *);
 ZZIP_FILE *
 zzip_file_open(ZZIP_DIR * dir, zzip_char_t* name, int o_mode)
 {
-    auto int self;
+    // JMW auto
+    int self;
     zzip_error_t err = 0;
     struct zzip_file * fp = 0;
     struct zzip_dir_hdr * hdr = dir->hdr0;
@@ -161,22 +168,28 @@ zzip_file_open(ZZIP_DIR * dir, zzip_char_t* name, int o_mode)
 
     cmp = (o_mode & ZZIP_CASELESS)? dirsep_casecmp: strcmp;
 
-    if (! dir) return NULL;
-    if (! dir->fd || dir->fd == -1) { dir->errcode = EBADF; return NULL; }
-    if (! hdr) { dir->errcode = ENOENT; return NULL; }
+    if (! dir) {
+	return NULL;
+    }
+    if (! dir->fd || dir->fd == -1) {
+	dir->errcode = EBADF; return NULL;
+    }
+    if (! hdr) {
+	dir->errcode = ENOENT; return NULL;
+    }
 
     if (o_mode & ZZIP_NOPATHS)
     {
-        register zzip_char_t* n = dirsep_strrchr(name, '/');
+	register zzip_char_t* n = dirsep_strrchr(name, '/');
         if (n)  name = n + 1;
     }
 
     while (1)
     {
-        register zzip_char_t* hdr_name = hdr->d_name;
+	register zzip_char_t* hdr_name = hdr->d_name;
         if (o_mode & ZZIP_NOPATHS)
         {
-            register zzip_char_t* n = dirsep_strrchr(hdr_name, '/');
+	    register zzip_char_t* n = dirsep_strrchr(hdr_name, '/');
             if (n)  hdr_name = n + 1;
         }
 
@@ -271,6 +284,7 @@ zzip_file_open(ZZIP_DIR * dir, zzip_char_t* name, int o_mode)
         }/*cmp name*/
     }/*forever*/
     dir->errcode = ZZIP_ENOENT;
+
     return NULL;
 error:
     if (fp) zzip_file_close(fp);
@@ -603,8 +617,9 @@ zzip_freopen(zzip_char_t* filename, zzip_char_t* mode, ZZIP_FILE* stream)
 	ZZIP_FILE* fp =
 	    zzip_open_shared_io (stream, filename, o_flags, o_modes, 0, 0);
 
-	if (! o_modes&ZZIP_FACTORY && stream)
+	if (! o_modes&ZZIP_FACTORY && stream) {
 	    zzip_file_close (stream);
+	}
 
 	return fp;
     }
@@ -696,10 +711,10 @@ zzip_open_ext_io(zzip_char_t* filename, int o_flags, int o_modes,
  * This function returns a new zzip-handle (use => zzip_close to return
  * it). On error this function will return null setting => errno(3).
  */
-
-#if (WINDOWSPC<1)
+#ifdef __MINGW32__
 extern char jmw_filename[1024]; // JMW
 #endif
+
 
 ZZIP_FILE*
 zzip_open_shared_io (ZZIP_FILE* stream,
@@ -726,7 +741,9 @@ zzip_open_shared_io (ZZIP_FILE* stream,
             struct stat st; // JMW
 #endif
             ZZIP_FILE* fp = calloc (1, sizeof(ZZIP_FILE));
-            if (! fp) { os->fd.close(fd); return 0; } /* io->fd.close */
+            if (! fp) {
+		os->fd.close(fd); return 0;
+	    } /* io->fd.close */
 
             fp->dir = NULL;
             fp->fd = fd;
@@ -741,13 +758,17 @@ zzip_open_shared_io (ZZIP_FILE* stream,
 
             return fp;
         }
-        if (o_modes & ZZIP_PREFERZIP) return 0;
+        if (o_modes & ZZIP_PREFERZIP) {
+	    return 0;
+	}
     }
  try_zzip:
 
     /* if the user had it in place of a normal xopen, then
      * we better defend this lib against illegal usage */
-    if (o_flags & (O_CREAT|O_WRONLY))     { errno = EINVAL; return 0; }
+    if (o_flags & (O_CREAT|O_WRONLY))     {
+	errno = EINVAL; return 0;
+    }
     if (o_flags & (O_RDWR)) { o_flags ^= O_RDWR; o_flags |= O_RDONLY; }
 
     /* this is just for backward compatibility -and strictly needed to
@@ -778,12 +799,15 @@ zzip_open_shared_io (ZZIP_FILE* stream,
 	  {
 	      ZZIP_FILE* fp =
 		  zzip_file_open (stream->dir, filename+len+1, o_modes);
-	      if (! fp) { errno = zzip_errno (stream->dir->errcode); }
+	      if (! fp) {
+		  errno = zzip_errno (stream->dir->errcode);
+	      }
 	      return fp;
 	  }
       }
 
       /* per each slash in filename, check if it there is a zzip around */
+
       while ((p = strrchr (basename, '/')) || (p = strrchr (basename, '\\')))
       {
           zzip_error_t e = 0;
@@ -793,11 +817,15 @@ zzip_open_shared_io (ZZIP_FILE* stream,
 
           *p = '\0'; /* cut at path separator == possible zipfile basename */
           fd = __zzip_try_open (basename, o_flags|O_RDONLY|O_BINARY, ext, io);
-          if (fd == -1) { continue; }
+
+          if (fd == -1) {
+	      continue;
+	  }
 /*    found: */
           /* found zip-file, now try to parse it */
           dir = zzip_dir_fdopen_ext_io(fd, &e, ext, io);
-          if (e) { errno = zzip_errno(e); io->fd.close(fd); return 0; }
+          if (e) {
+	      errno = zzip_errno(e); io->fd.close(fd); return 0; }
 
           /* (p - basename) is the lenghtof zzip_dir part of the filename */
           fp = zzip_file_open(dir, filename + (p - basename) +1, o_modes);

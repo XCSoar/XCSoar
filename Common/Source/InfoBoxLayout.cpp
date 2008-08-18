@@ -28,7 +28,7 @@ Copyright_License {
 
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Sizes.h"
 #include "MapWindow.h"
 #include "InfoBoxLayout.h"
@@ -36,7 +36,7 @@ Copyright_License {
 #include "Utils.h"
 #include "externs.h"
 
-#include "infobox.h"
+#include "InfoBox.h"
 
 extern InfoBox *InfoBoxes[MAXINFOWINDOWS];
 extern HWND hWndMainWindow; // Main Windows

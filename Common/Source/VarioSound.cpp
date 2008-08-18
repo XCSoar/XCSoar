@@ -31,7 +31,7 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "VarioSound.h"
 #include <math.h>
 #include "XCSoar.h"

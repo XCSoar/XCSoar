@@ -29,12 +29,12 @@ Copyright_License {
 
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Calculations.h"
 #include "Dialogs.h"
-#include "parser.h"
+#include "Parser.h"
 #include "Utils.h"
-#include "Externs.h"
+#include "externs.h"
 #include "McReady.h"
 #include "Airspace.h"
 #include "Logger.h"
@@ -745,7 +745,7 @@ void CalibrationInit(void) {
 void CalibrationSave(void) {
   TCHAR sTmp[MAX_PATH];
   int i, j;
-  double v, w, wav;
+  double v, w = 0, wav;
   StartupStore(TEXT("Calibration data for TE vario\n"));
   for (i=0; i< NUM_CAL_SPEED; i++) {
     for (j=0; j< NUM_CAL_VARIO; j++) {

@@ -212,10 +212,10 @@
 #define _zzip_ssize_t  int
 #endif
 
-#if defined(__BORLANDC__)
-#else
-  #define strdup _strdup
-#endif
+#define __int64 long long
+#define _int64 __int64
+
+//typedef int ptrdiff_t;
 
 /* once: _ZZIP__MSVC_H */
 #endif

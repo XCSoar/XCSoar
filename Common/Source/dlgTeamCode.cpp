@@ -30,7 +30,7 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "XCSoar.h"
 #include "Utils.h"
 #include "WindowControls.h"

@@ -47,8 +47,8 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
-#include "utils.h"
+#include "StdAfx.h"
+#include "Utils.h"
 
 #include "windmeasurementlist.h"
 

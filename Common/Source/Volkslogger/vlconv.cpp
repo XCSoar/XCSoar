@@ -472,10 +472,10 @@ long convert_gcs(int igcfile_version, FILE *Ausgabedatei, lpb bin_puffer, int oo
    word enl;
  } igcfix;
 
- int		l;
+ int		l = 0;
  int    	ende;
 
- long   	time_relative;  // relative Zeit vom Aufzeichnungsbeginn an
+ long   	time_relative = 0;  // relative Zeit vom Aufzeichnungsbeginn an
  long		temptime;
  long		decl_time;
  tm		firsttime;
@@ -979,11 +979,11 @@ int conv_dir(DIRENTRY* flights, lpb p, int countonly) {
 	byte Haupttyp,Untertyp;
 	byte l; // Länge des DS
 	lpb p2; // Zeiger auf Beginn des Inhalts eines vrb oder vrt
-	tm olddate;
+	tm olddate = { 0, };
 	int	olddate_flg = 0;
-	int	flight_of_day;
+	int	flight_of_day = 0;
 	long temptime;
-	tm timetm1;
+	tm timetm1 = { 0, };
 	int bfv = 0;
   number_of_flights = 0;
   char pilot1[17];

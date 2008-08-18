@@ -34,7 +34,7 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #define PI 3.1415926
 #define SUN_DIAMETER 0.53     // Sunradius degrees

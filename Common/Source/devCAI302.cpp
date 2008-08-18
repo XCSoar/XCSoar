@@ -47,11 +47,11 @@ Copyright_License {
 
 
 #include "externs.h"
-#include "utils.h"
-#include "parser.h"
-#include "port.h"
+#include "Utils.h"
+#include "Parser.h"
+#include "Port.h"
 
-#include "devCai302.h"
+#include "devCAI302.h"
 
 #ifdef _SIM_
 static BOOL fSimMode = TRUE;

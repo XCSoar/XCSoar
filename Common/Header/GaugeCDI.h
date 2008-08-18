@@ -1,6 +1,6 @@
 #ifndef GAUGE_CDI_H
 #define GAUGE_CDI_H
-#include "stdafx.h"
+#include "StdAfx.h"
 
 class GaugeCDI {
  public:

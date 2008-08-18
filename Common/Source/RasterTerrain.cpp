@@ -30,7 +30,7 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "RasterTerrain.h"
 #include "XCSoar.h"
 #include "Dialogs.h"
@@ -38,6 +38,10 @@ Copyright_License {
 #include "Process.h"
 #include "externs.h"
 
+
+#ifdef __MINGW32__
+#define int_fast8_t jas_int_fast8_t
+#endif
 
 // JMW experimental
 #include "jasper/jasper.h"
@@ -512,6 +516,10 @@ void RasterMapJPG2000::ReloadJPG2000(void) {
       TerrainInfo.StepSize = (raster_tile_cache.lon_max -
                               raster_tile_cache.lon_min)
         /raster_tile_cache.width;
+    } else {
+#ifdef __MINGW32__
+      //      StartupStore(TEXT("jp2 file not initialised\n"));
+#endif
     }
     Unlock();
   }
@@ -957,7 +965,7 @@ void RasterWeather::Scan(double lat, double lon) {
 
 
 void RasterWeather::Reload(double lat, double lon) {
-  static last_weather_time = -1;
+  static int last_weather_time = -1;
   bool found = false;
   bool now = false;
 
@@ -1114,7 +1122,7 @@ void RasterWeather::ValueToText(TCHAR* Buffer, short val) {
     _stprintf(Buffer, TEXT("%d%%"), max(0,min(100,val)));
     return;
   case 6: // sfctemp
-    _stprintf(Buffer, TEXT("%d°"), iround(val*0.5-20.0));
+    _stprintf(Buffer, TEXT("%d")TEXT(DEG), iround(val*0.5-20.0));
     return;
   case 7: // hwcrit
     _stprintf(Buffer, TEXT("%.0f%s"), val*ALTITUDEMODIFY, Units::GetAltitudeName());

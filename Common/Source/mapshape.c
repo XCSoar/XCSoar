@@ -35,13 +35,13 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "mapshape.h"
 #include "maperror.h"
 #include "maptree.h"
 
-typedef unsigned char uchar;
+//typedef unsigned char uchar;
 #include <limits.h>
 
 #if UINT_MAX == 65535

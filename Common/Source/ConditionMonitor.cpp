@@ -30,7 +30,7 @@ Copyright_License {
 */
 
 //#include "ConditionMonitor.h"
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Calculations.h"
 #include "Dialogs.h"
 #include "Task.h"

@@ -53,7 +53,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 */
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "XCSoar.h"
 #include "InputEvents.h"
 #include "Utils.h"
@@ -263,7 +263,7 @@ void InputEvents::readFile() {
     }
 
     // Check valid line? If not valid, assume next record (primative, but works ok!)
-    if ((buffer[0] == '\r') || (buffer[0] == '\n') || (buffer[0] == NULL)) {
+    if ((buffer[0] == '\r') || (buffer[0] == '\n') || (buffer[0] == '\0')) {
       // General checks before continue...
       if (
 	  some_data
@@ -1985,14 +1985,16 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
       && (CALCULATED_INFO.NavAltitude >= AirspaceArea[i].Base.Altitude)) {
 
     _stprintf(text,
-              TEXT("Inside airspace: %s\r\n%s\r\nExit: %s\r\nBearing %d°\r\n"),
+              TEXT("Inside airspace: %s\r\n%s\r\nExit: %s\r\nBearing %d")
+	      TEXT(DEG)TEXT("\r\n"),
               szTitleBuffer,
               szMessageBuffer,
               DistanceText,
               (int)nearestbearing);
   } else {
     _stprintf(text,
-    TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %s\r\nBearing %d°\r\n"),
+	      TEXT("Nearest airspace: %s\r\n%s\r\nDistance: %s\r\nBearing %d")
+	      TEXT(DEG)TEXT("\r\n"),
 	      szTitleBuffer,
 	      szMessageBuffer,
 	      DistanceText,
@@ -2152,7 +2154,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
 #endif
     return;
   }
-  *pdest = NULL;
+  *pdest = _T('\0');
   dll_name = data;
 
   // func_name (after first space)
@@ -2161,7 +2163,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
   // other (after next space to end of string)
   pdest = _tcsstr(func_name, TEXT(" "));
   if (pdest != NULL) {
-    *pdest = NULL;
+    *pdest = _T('\0');
     other = pdest + 1;
   } else {
     other = NULL;
@@ -2290,7 +2292,7 @@ void InputEvents::eventBrightness(TCHAR *misc) {
 void InputEvents::eventExit(TCHAR *misc) {
 	(void)misc;
   SendMessage(hWndMainWindow, WM_CLOSE,
-	      NULL, NULL);
+	      0, 0);
 }
 
 void InputEvents::eventUserDisplayModeForce(TCHAR *misc){

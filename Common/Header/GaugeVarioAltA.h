@@ -1,6 +1,6 @@
 #ifndef GAUGE_VARIO_H
 #define GAUGE_VARIO_H
-#include "stdafx.h"
+#include "StdAfx.h"
 
 extern HWND hWndVarioWindow;
 

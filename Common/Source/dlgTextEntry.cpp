@@ -30,7 +30,7 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "XCSoar.h"
 #include "Utils.h"
 #include "WindowControls.h"
@@ -289,14 +289,14 @@ void dlgTextEntryHighscoreType(TCHAR *text, int width)
 
 void dlgTextEntryShowModal(TCHAR *text, int width)
 {
-	switch (Appearance.TextInputStyle)
-	{
-	case TextInputStyle_t::tiHighScore:
-		dlgTextEntryHighscoreType(text, width);
-		break;
-	case TextInputStyle_t::tiKeyboard:
-		dlgTextEntryKeyboardShowModal(text, width);
-		break;
-	}
-
+  switch (Appearance.TextInputStyle)
+    {
+    case tiKeyboard:
+      dlgTextEntryKeyboardShowModal(text, width);
+      break;
+    case tiHighScore:
+    default:
+      dlgTextEntryHighscoreType(text, width);
+      break;
+    }
 }

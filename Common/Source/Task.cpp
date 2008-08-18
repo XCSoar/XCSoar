@@ -28,7 +28,7 @@ Copyright_License {
 
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Task.h"
 #include "Logger.h"
 #include "XCSoar.h"

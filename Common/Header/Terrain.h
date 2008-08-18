@@ -1,6 +1,6 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Topology.h"
 
 typedef struct _COLORRAMP

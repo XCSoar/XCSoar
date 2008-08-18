@@ -29,9 +29,9 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "externs.h"
-#include "units.h"
+#include "Units.h"
 #include "device.h"
 #include "InputEvents.h"
 #include "WindowControls.h"
@@ -295,8 +295,8 @@ static void SetValues(void) {
 
 static void GetValues(void) {
   WndProperty* wp;
-  bool sign;
-  int dd,mm,ss;
+  bool sign = false;
+  int dd = 0, mm = 0, ss = 0;
   double num=0;
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeSign"));

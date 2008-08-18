@@ -3,13 +3,11 @@
 
 #include <windows.h>
 
-#include "sizes.h"
+#include "Sizes.h"
 
 #include "MapWindow.h"
 
 #include "device.h"
-
-BOOL zanderInstall(PDeviceDescriptor_t d);
 
 BOOL zanderRegister(void);
 

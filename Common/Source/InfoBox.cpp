@@ -29,7 +29,7 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "XCSoar.h"
 #include "Sizes.h"
 #include "MapWindow.h"

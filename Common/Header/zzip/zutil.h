@@ -17,7 +17,7 @@
 #include "zlib.h"
 
 #ifdef STDC
-#  ifndef _WIN32_WCE
+#  if !defined(_WIN32_WCE) || defined(__MINGW32__)
 #    include <stddef.h>
 #  endif
 #  include <string.h>

@@ -108,4 +108,4 @@ private:
   int scan_classic();
 };
 
-#endif ONLINECONTEST_H
+#endif /* ONLINECONTEST_H */

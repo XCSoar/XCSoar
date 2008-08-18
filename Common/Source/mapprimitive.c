@@ -29,7 +29,7 @@ Copyright_License {
 
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "mapprimitive.h"
 #include "maperror.h"
@@ -41,6 +41,7 @@ typedef enum {CLIP_LEFT, CLIP_MIDDLE, CLIP_RIGHT} CLIP_STATE;
 #define SWAP( a, b, t) ( (t) = (a), (a) = (b), (b) = (t) )
 #define EDGE_CHECK( x0, x, x1) ((x) < MS_MIN( (x0), (x1)) ? CLIP_LEFT : ((x) > MS_MAX( (x0), (x1)) ? CLIP_RIGHT : CLIP_MIDDLE ))
 
+#undef INFINITY
 #define INFINITY	(1.0e+30)
 #define NEARZERO	(1.0e-30)	/* 1/INFINITY */
 

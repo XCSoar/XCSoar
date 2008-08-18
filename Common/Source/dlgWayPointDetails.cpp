@@ -30,14 +30,14 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
-#include <Aygshell.h>
+#include "StdAfx.h"
+#include <aygshell.h>
 
 #include "XCSoar.h"
 
 #include "WindowControls.h"
 #include "Statistics.h"
-#include "Externs.h"
+#include "externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
@@ -380,7 +380,7 @@ void dlgWayPointDetailsShowModal(void){
   ((WndProperty *)wf->FindByName(TEXT("prpDistance")))
     ->SetText(DistanceText);
 
-  _stprintf(sTmp, TEXT("%d°"), iround(bearing));
+  _stprintf(sTmp, TEXT("%d")TEXT(DEG), iround(bearing));
   ((WndProperty *)wf->FindByName(TEXT("prpBearing")))
     ->SetText(sTmp);
 

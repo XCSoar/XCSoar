@@ -35,7 +35,7 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "mapprimitive.h"
 #include "mapshape.h"

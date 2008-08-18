@@ -34,7 +34,7 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Utils.h"
 #include "Sizes.h"
 #include "externs.h"

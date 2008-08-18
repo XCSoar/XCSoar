@@ -29,7 +29,7 @@ Copyright_License {
 
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "AATDistance.h"
 #include "Task.h"
 #include "Airspace.h"

@@ -47,7 +47,7 @@ Copyright_License {
 
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "windstore.h"
 #include "XCSoar.h"

@@ -14,7 +14,7 @@ extern TCHAR XCSoar_Version[256];
 #include "XCSoar.h"
 #include "Parser.h"
 #include "Calculations.h"
-#include "Mapwindow.h"
+#include "MapWindow.h"
 #include "Task.h"
 #include "Statistics.h"
 #include "Dialogs.h"

@@ -28,7 +28,7 @@ Copyright_License {
 
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "externs.h"
 #include "GaugeFLARM.h"
 #include "Utils.h"

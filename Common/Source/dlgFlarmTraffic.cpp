@@ -30,13 +30,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
 
-#include "stdafx.h"
-#include <Aygshell.h>
+#include "StdAfx.h"
+#include <aygshell.h>
 
 #include "XCSoar.h"
 
 #include "WindowControls.h"
-#include "Externs.h"
+#include "externs.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Utils.h"

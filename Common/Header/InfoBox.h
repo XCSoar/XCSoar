@@ -29,9 +29,9 @@ Copyright_License {
 }
 */
 
-#include "units.h"
-#include "xcsoar.h"
-#include "dialogs.h"
+#include "Units.h"
+#include "XCSoar.h"
+#include "Dialogs.h"
 
 #define BORDERTOP    (1<<bkTop)
 #define BORDERRIGHT  (1<<bkRight)

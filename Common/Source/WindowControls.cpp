@@ -29,7 +29,7 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "tchar.h"
 #include <stdio.h>
 #include "WindowControls.h"
@@ -45,7 +45,9 @@ Copyright_License {
 extern int DisplayTimeOut;
 #ifndef GNAV
 #if (WINDOWSPC<1)
+#ifndef __MINGW32__
 #include <projects.h>
+#endif
 #endif
 #endif
 #endif
@@ -157,7 +159,7 @@ void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   LocalPath(buffer);
   ScanDirectories(buffer,filter);
 #ifndef GNAV
-#if (WINDOWSPC<1)
+#if (WINDOWSPC<1) && !defined(__MINGW32__)
 #ifndef OLDPPC
   static bool first = true;
 
@@ -752,7 +754,7 @@ int DataFieldInteger::SpeedUp(bool keyup){
 
 #ifdef GNAV
   return res;
-#endif;
+#endif
 
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;
@@ -859,27 +861,23 @@ TCHAR *DataFieldFloat::SetAsString(TCHAR *Value){
 }
 
 void DataFieldFloat::Inc(void){
-#if defined(CECORE)
   // no keypad, allow user to scroll small values
-  if(mValue < 0.95)
+  if((mValue < 0.95) && (mStep>=0.5))
     {
       SetAsFloat(mValue + 0.1);
     }
   else
-#endif
     SetAsFloat(mValue + mStep*SpeedUp(true));
 }
 
 void DataFieldFloat::Dec(void){
-#if defined(CECORE)
   // no keypad, allow user to scroll small values
-  if(mValue <= 1.0)
+  if((mValue <= 1.0) && (mStep>=0.5))
     {
       SetAsFloat(mValue - 0.1);
     }
   else
-#endif
-  SetAsFloat(mValue - mStep*SpeedUp(false));
+    SetAsFloat(mValue - mStep*SpeedUp(false));
 }
 
 double DataFieldFloat::SpeedUp(bool keyup){
@@ -887,7 +885,7 @@ double DataFieldFloat::SpeedUp(bool keyup){
 
 #ifdef GNAV
   return res;
-#endif;
+#endif
 
   if (keyup != DataFieldKeyUp) {
     mSpeedup = 0;

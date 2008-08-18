@@ -45,7 +45,7 @@
  ****************************************************************************
  */
 #if defined(WIN32) || defined(UNDER_CE)
-#include <Windows.h> // to have IsTextUnicode, MultiByteToWideChar, WideCharToMultiByte
+#include <windows.h> // to have IsTextUnicode, MultiByteToWideChar, WideCharToMultiByte
                      // to handle unicode files
 #endif
 
@@ -55,7 +55,7 @@
 #include <stdlib.h>
 #include "xmlParser.h"
 #include "compatibility.h"
-#include "stdAfx.h"
+#include "StdAfx.h"
 
 bool XMLNode::GlobalError = false;
 
@@ -761,7 +761,7 @@ int XMLNode::ParseXMLElement(void *pa)
     int cbToken;
     enum TokenTypeTag type;
     NextToken token;
-    LPCTSTR lpszTemp;
+    LPCTSTR lpszTemp = NULL;
     int cbTemp;
     int nDeclaration;
     LPCTSTR lpszText = NULL;

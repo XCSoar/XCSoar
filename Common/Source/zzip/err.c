@@ -45,6 +45,10 @@ errlist[] =
 
 #define errlistSIZE (sizeof(errlist)/sizeof(*errlist))
 
+#ifdef __MINGW32__
+#define strerror(x) ""
+#endif
+
 /**
  * returns the static string for the given error code. The
  * error code can be either a normal system error (a

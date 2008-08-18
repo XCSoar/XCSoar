@@ -1,10 +1,10 @@
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "XCSoar.h"
 
 #include "WindowControls.h"
 #include "Statistics.h"
-#include "Externs.h"
+#include "externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
 

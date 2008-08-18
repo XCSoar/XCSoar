@@ -28,7 +28,7 @@ Copyright_License {
 
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <windows.h>
 
 #include "compatibility.h"
@@ -989,12 +989,21 @@ TCHAR *FormatterDiffBearing::Render(int *color) {
     if (Value > 180.0)
       Value -= 360.0;
 
+#ifndef __MINGW32__
     if (Value > 1)
       _stprintf(Text, TEXT("%2.0f°»"), Value);
     else if (Value < -1)
       _stprintf(Text, TEXT("«%2.0f°"), -Value);
     else
       _tcscpy(Text, TEXT("«»"));
+#else
+    if (Value > 1)
+      _stprintf(Text, TEXT("%2.0fÂ°Â»"), Value);
+    else if (Value < -1)
+      _stprintf(Text, TEXT("Â«%2.0fÂ°"), -Value);
+    else
+      _tcscpy(Text, TEXT("Â«Â»"));
+#endif
     *color = 0;
   } else {
     Valid = false;
@@ -1037,12 +1046,21 @@ TCHAR *FormatterDiffTeamBearing::Render(int *color) {
       if (Value > 180.0)
         Value -= 360.0;
 
+#ifndef __MINGW32__
     if (Value > 1)
       _stprintf(Text, TEXT("%2.0f°»"), Value);
     else if (Value < -1)
       _stprintf(Text, TEXT("«%2.0f°"), -Value);
     else
       _tcscpy(Text, TEXT("«»"));
+#else
+    if (Value > 1)
+      _stprintf(Text, TEXT("%2.0fÂ°Â»"), Value);
+    else if (Value < -1)
+      _stprintf(Text, TEXT("Â«%2.0fÂ°"), -Value);
+    else
+      _tcscpy(Text, TEXT("Â«Â»"));
+#endif
     *color = 0;
 
   } else {
@@ -1059,3 +1077,13 @@ TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 if ((Calculated->FinalGlide) && (Calculated->Circling) && (Calculated->AverageThermal>0)) {
 }
 */
+
+
+
+InfoBoxFormatter::InfoBoxFormatter(TCHAR *theformat) {
+  _tcscpy(Format, theformat);
+  Valid = TRUE;
+  Value = 0.0;
+  Text[0] = 0;
+  CommentText[0] = 0;
+}

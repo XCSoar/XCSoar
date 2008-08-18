@@ -56,9 +56,9 @@ Copyright_License {
 */
 
 #ifndef CECORE
-#include "stdafx.h"
+#include "StdAfx.h"
 
-#include "VOImage.h"
+#include "VOIMAGE.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

@@ -1,7 +1,7 @@
 #ifndef RASTERTERRAIN_H
 #define RASTERTERRAIN_H
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Utils.h"
 #include "Sizes.h"
 #include <zzip/lib.h>
