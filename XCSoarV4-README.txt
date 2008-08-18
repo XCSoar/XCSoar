@@ -7,6 +7,18 @@ Todo:
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
 - Next wpt infobox
 
+Changes from 5.1.9beta2:
+- Alternate text entry methods
+- Can now use flarm database (disabled for now)
+- Added copy/paste to infoboxes in configuration dialog
+- Flymaster F1 bug fix (vario units)
+- Porting to cegcc
+
+Changes from 5.1.9beta1:
+- Added Flymaster F1 device
+- Fixed bug in AutoQNH
+- Finer units in task rules dialog
+
 Changes from 5.1.8:
 - Draw red line on thermal band at start height when there's a start
   height limit and on start waypoint
@@ -14,6 +26,10 @@ Changes from 5.1.8:
 - Don't display meters in airspace altitudes as well as feet unless meters is
   the user altitude unit.
 - FL altitudes rounded to nearest 10 units to ease readability
+- Zander support split off into its own device 
+- Fixed IAS of Zander (km/h -> m/s)
+- Fixed bug in declaration to EW micro
+- Added ASG29E-18 polar
 
 Changes from 5.1.7 beta6:
 - Projected track line in AAT mode when track from last turn >10 degrees off target

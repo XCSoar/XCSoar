@@ -1231,9 +1231,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // experimental CVS 
 
 #ifdef __MINGW32__
-  wcscat(XCSoar_Version, TEXT("5.1.9 gccB2 "));
+  wcscat(XCSoar_Version, TEXT("5.1.9 gccB3 "));
 #else
-  wcscat(XCSoar_Version, TEXT("5.1.9 Beta2 "));
+  wcscat(XCSoar_Version, TEXT("5.1.9 Beta3 "));
 #endif
 
   wcscat(XCSoar_Version, TEXT(__DATE__));

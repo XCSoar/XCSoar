@@ -212,8 +212,15 @@ extern double INVCOSINETABLE[4096];
 extern int ISINETABLE[4096];
 extern int ICOSTABLE[4096];
 
+bool AngleInRange(double Angle0, double Angle1, double x, bool is_signed=false);
+double AngleLimit180(double theta);
+double AngleLimit360(double theta);
 
+#ifdef __MINGW32__
+#define DEG_TO_INT(x) ((unsigned short)((AngleLimit360(x))*(65536.0/360.0)))>>4
+#else
 #define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4
+#endif
 
 #define invfastcosine(x) INVCOSINETABLE[DEG_TO_INT(x)]
 #define ifastcosine(x) ICOSTABLE[DEG_TO_INT(x)]
@@ -399,9 +406,6 @@ inline unsigned int CombinedDivAndMod(unsigned int &lx) {
 
 bool RotateScreen(void);
 
-bool AngleInRange(double Angle0, double Angle1, double x, bool is_signed=false);
-double AngleLimit180(double theta);
-double AngleLimit360(double theta);
 int GetTextWidth(HDC hDC, TCHAR *text);
 void ExtTextOutClip(HDC hDC, int x, int y, TCHAR *text, int width);
 
