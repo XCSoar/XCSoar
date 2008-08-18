@@ -1045,7 +1045,7 @@ double MapWindow::FindMapScale(double Value){
 
 static void SetFontInfo(HDC hDC, FontHeightInfo_t *FontHeightInfo){
   TEXTMETRIC tm;
-  int x,y;
+  int x,y=0;
   RECT  rec;
   int top, bottom;
 

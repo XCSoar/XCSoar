@@ -32,7 +32,9 @@
 #define DISABLEAUDIOVARIO
 // use exception handling
 #ifndef ALTAIRPROTOTYPE
+#ifndef __MINGW32__
 #define HAVEEXCEPTIONS
+#endif
 #endif
 // disable internally generated sounds
 #define DISABLEAUDIO
