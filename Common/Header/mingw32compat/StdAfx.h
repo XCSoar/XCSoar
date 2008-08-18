@@ -43,13 +43,19 @@ _CRTIMP void __cdecl	SystemIdleTimerReset(void);
 
 #define CLEARTYPE_COMPAT_QUALITY 6
 
-#if (_WIN32_WCE == 0x0310)
-#define VK_APP1 1
-#define VK_APP2 2
-#define VK_APP3 3
-#define VK_APP4 4
-#define VK_APP5 5
-#define VK_APP6 6
+#ifdef GNAV
+#undef VK_APP1
+#define VK_APP1 VK_F1 
+#undef VK_APP2
+#define VK_APP2 VK_F2 
+#undef VK_APP3
+#define VK_APP3 VK_F3 
+#undef VK_APP4
+#define VK_APP4 VK_F4
+#undef VK_APP5
+#define VK_APP5 VK_F5 
+#undef VK_APP6
+#define VK_APP6 VK_F6 
 #else
 #define VK_APP1     0xC1 
 #define VK_APP2     0xC2 
@@ -57,7 +63,6 @@ _CRTIMP void __cdecl	SystemIdleTimerReset(void);
 #define VK_APP4     0xC4
 #define VK_APP5     0xC5
 #define VK_APP6     0xC6
-
 #endif
 
 // Local Header Files

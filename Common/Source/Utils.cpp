@@ -3800,6 +3800,10 @@ int MeasureCPULoad() {
   if (!GetIdleTime) return 0;
 #endif
 
+#if defined(GNAV) && defined(__MINGW32__)
+  // JMW GetIdleTime() not defined?
+  return 100;
+#else
   if (start) {
     dwStartTick = GetTickCount();
     dwIdleSt = GetIdleTime();
@@ -3813,6 +3817,7 @@ int MeasureCPULoad() {
   start = !start;
   PercentLoad = 100-PercentIdle;
   return PercentLoad;
+#endif
 }
 
 
@@ -4358,7 +4363,7 @@ void MemLeakCheck() {
 // memory defragmentation, since on pocket pc platforms there is no
 // automatic defragmentation.
 void MyCompactHeaps() {
-#if (WINDOWSPC>0)||defined(GNAV)
+#if (WINDOWSPC>0)||(defined(GNAV) && !defined(__MINGW32__))
   HeapCompact(GetProcessHeap(),0);
 #else
   typedef DWORD (_stdcall *CompactAllHeapsFn) (void);
@@ -4539,7 +4544,7 @@ bool RotateScreen() {
 #ifdef GNAV  
   DEVMODE DeviceMode;
     
-  memset(&DeviceMode, NULL, sizeof(DeviceMode));
+  memset(&DeviceMode, 0, sizeof(DeviceMode));
   DeviceMode.dmSize=sizeof(DeviceMode);
   DeviceMode.dmFields = DM_DISPLAYORIENTATION;
   DeviceMode.dmDisplayOrientation = DMDO_90; 
