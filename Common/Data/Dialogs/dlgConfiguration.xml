@@ -19,6 +19,9 @@
       <DataField name="" DataType="enum"  Min=0 Max=50 Step=1 OnDataAccess="OnUserLevel"/>
     </WndProperty>
 
+  <WndButton Name="cmdCopy" Caption="Copy" X=5 Y=40 Width=60  Height=28 Font=2 />
+  <WndButton Name="cmdPaste" Caption="Paste" X=5 Y=70 Width=60  Height=28 Font=2 />
+
   <WndFrame Name="frmSite" X=70 Y=0 Width=246 Height=222 Font=2>
 
   <WndProperty Name="prpMapFile" Caption="Map file"      X=2 Y=-1   Width=246 Height=22 CaptionWidth=100 Font=2
