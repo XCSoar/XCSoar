@@ -1,3 +1,4 @@
+#include "StdAfx.h"
 #include "FlarmIdFile.h"
 #include "Utils.h"
 
@@ -142,3 +143,4 @@ long FlarmId::GetId()
 
 	return res;
 };
+

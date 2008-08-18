@@ -29,7 +29,7 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "GaugeVarioAltA.h"
 #include "MapWindow.h"
 #include "Logger.h"
@@ -353,7 +353,7 @@ void GaugeVario::Render() {
   }
 
   dirty = false;
-  int ival, sval, ival_av;
+  int ival, sval, ival_av = 0;
   static int vval_last = 0;
   static int sval_last = 0;
   static int ival_last = 0;

@@ -8,7 +8,7 @@
 #include <windows.h>
 #include <shlobj.h>
 #include <math.h>
-#include "task.h"
+#include "Task.h"
 #include "Airspace.h"
 #include <zzip/lib.h>
 
@@ -211,6 +211,7 @@ extern double SINETABLE[4096];
 extern double INVCOSINETABLE[4096];
 extern int ISINETABLE[4096];
 extern int ICOSTABLE[4096];
+
 
 #define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4
 

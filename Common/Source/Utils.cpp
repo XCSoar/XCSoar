@@ -29,10 +29,10 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #if defined(CECORE)
-#include "Winbase.h"
+#include "winbase.h"
 #include "projects.h"
 #endif
 
@@ -51,9 +51,19 @@ Copyright_License {
 #include "VegaVoice.h"
 #include "McReady.h"
 #include "NavFunctions.h"
-#include "FlarmIdFile.h"
 
+#ifdef NEWFLARMDB
+#include "FlarmIdFile.h"
 FlarmIdFile file;
+#endif
+
+/* JMW not required in newer systems?
+#ifdef __MINGW32__
+#define max(x, y)   (x > y ? x : y)
+#define min(x, y)   (x < y ? x : y)
+#endif
+*/
+
 bool EnableAnimation=false;
 
 bool ReadWinPilotPolarInternal(int i);
@@ -1321,31 +1331,18 @@ void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
 
   double clat1 = cos(lat1);
   double clat2 = cos(lat2);
-  double dlat = lat2-lat1;
   double dlon = lon2-lon1;
 
   if (Distance) {
-    double s1 = sin(dlat/2);
+    double s1 = sin((lat2-lat1)/2);
     double s2 = sin(dlon/2);
     double a= max(0.0,min(1.0,s1*s1+clat1*clat2*s2*s2));
-    double c= 2.0*atan2(sqrt(a),sqrt(1.0-a));
-    *Distance = 6371000.0*c;
+    *Distance = 6371000.0*2.0*atan2(sqrt(a),sqrt(1.0-a));
   }
   if (Bearing) {
-    double slat1 = sin(lat1);
-    double slat2 = sin(lat2);
     double y = sin(dlon)*clat2;
-    double x = clat1*slat2-slat1*clat2*cos(dlon);
-
-    double theta;
-
-    if (fabs(x)>0.00000001 && fabs(y)>0.00000001){
-      theta = atan2(y,x)*RAD_TO_DEG;
-    } else {
-      theta = 0;
-    }
-
-    *Bearing = AngleLimit360(theta);
+    double x = clat1*sin(lat2)-sin(lat1)*clat2*cos(dlon);
+    *Bearing = AngleLimit360(atan2(y,x)*RAD_TO_DEG);
   }
 }
 
@@ -2258,6 +2255,7 @@ void ReadCompaqID(void)
 
 void ReadUUID(void)
 {
+#ifndef __MINGW32__
   BOOL fRes;
   DWORD dwBytesReturned =0;
   DEVICE_ID DevID;
@@ -2322,6 +2320,7 @@ void ReadUUID(void)
 
   _stprintf(strAssetNumber,TEXT("%08X%08X"),Asset,Guid.Data1 );
   return;
+#endif
 }
 
 
@@ -3248,7 +3247,14 @@ void SaveRegistryToFile(TCHAR *szFile)
 {
   TCHAR lpstrName[nMaxKeyNameSize+1];
   //  TCHAR lpstrClass[nMaxClassSize+1];
+#ifdef __MINGW32__
+  union {
+    BYTE pValue[nMaxValueValueSize+4];
+    DWORD dValue;
+  } uValue;
+#else
   BYTE pValue[nMaxValueValueSize+1];
+#endif
 
   HKEY hkFrom;
   LONG res = ::RegOpenKeyEx(HKEY_CURRENT_USER, szRegistryKey,
@@ -3263,6 +3269,7 @@ void SaveRegistryToFile(TCHAR *szFile)
     fp = _tfopen(szFile, TEXT("w"));  //20060515:sgi add b
   if(fp == NULL) {
     // error
+    ::RegCloseKey(hkFrom);
     return;
   }
 
@@ -3274,33 +3281,48 @@ void SaveRegistryToFile(TCHAR *szFile)
 
     LONG res = ::RegEnumValue(hkFrom, i, lpstrName,
 			      &nNameSize, 0,
+#ifdef __MINGW32__
+			      &nType, uValue.pValue,
+#else
 			      &nType, pValue,
+#endif
 			      &nValueSize);
 
     if (ERROR_NO_MORE_ITEMS == res) {
       break;
     }
 
+    lpstrName[nNameSize] = _T('\0'); // null terminate, just in case
+
     // type 1 text
     // type 4 integer (valuesize 4)
     TCHAR outval[nMaxValueValueSize];
-    lpstrName[nNameSize]= 0; // null terminate, just in case
-
-    outval[0] = '\0';
 
     if (nType==4) { // data
+#ifdef __MINGW32__
+      _stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, uValue.dValue);
+#else
       _stprintf(outval,TEXT("%s=%d\r\n"), lpstrName, *((DWORD*)pValue));
+#endif
+      _fputts(outval, fp);
     }
 	// XXX SCOTT - Check that the output data (lpstrName and pValue) do not contain \r or \n
     if (nType==1) { // text
+#ifdef __MINGW32__
+      uValue.pValue[nValueSize]= 0; // null terminate, just in case
+      uValue.pValue[nValueSize+1]= 0; // null terminate, just in case
+      _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, uValue.pValue);
+#else
       pValue[nValueSize]= 0; // null terminate, just in case
       pValue[nValueSize+1]= 0; // null terminate, just in case
       _stprintf(outval,TEXT("%s=\"%s\"\r\n"), lpstrName, pValue);
+#endif
+      _fputts(outval, fp);
     }
 
-    if (outval[0] != '\0')
-      _fputts(outval, fp);
-
+#ifdef __MINGW32__
+    fflush(fp);
+#endif
   }
 
   fclose(fp);
@@ -3333,7 +3355,7 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
       }
     }
   };
-  buffer[used++] = NULL;
+  buffer[used++] =_T('\0');
   
   new_string = (TCHAR *)malloc((wcslen(buffer)+1)*sizeof(TCHAR));
   wcscpy(new_string, buffer);
@@ -3941,7 +3963,7 @@ bool ReadWinPilotPolarInternal(int i) {
 /////////////
 
 #if (WINDOWSPC<1)
-void GdiFlush() {};
+#define GdiFlush() do { } while (0)
 #endif
 
 ////////////////////////////////////////////////////////////////////////////
@@ -4075,146 +4097,142 @@ void OpenFLARMDetails() {
     TCHAR Name[MAX_PATH];
 
     if (_stscanf(line, TEXT("%lx=%s"), &id, Name) == 2) {
-      //FLARM_Names[NumberOfFLARMNames].ID = id;
-      //_tcsncpy(FLARM_Names[NumberOfFLARMNames].Name,Name,20);
-      //FLARM_Names[NumberOfFLARMNames].Name[20]=0;
-      //NumberOfFLARMNames++;
-      //if (NumberOfFLARMNames>=MAXFLARMNAMES)
-		if (AddFlarmLookupItem(id, Name, false) == false)
-		{
-			break; // cant add anymore items !
-		}
+      if (AddFlarmLookupItem(id, Name, false) == false)
+	{
+	  break; // cant add anymore items !
+	}
     }
   }
   CloseHandle(hFile);
 }
 
+
 void SaveFLARMDetails(void)
 {
-	DWORD bytesWritten;
- TCHAR filename[MAX_PATH];
+  DWORD bytesWritten;
+  TCHAR filename[MAX_PATH];
   LocalPath(filename,TEXT("xcsoar-flarm.txt"));
   
   HANDLE hFile = CreateFile(filename,GENERIC_WRITE,0,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
   if( hFile == INVALID_HANDLE_VALUE) return;
-
+  
   TCHAR wsline[READLINE_LENGTH];
   char cline[READLINE_LENGTH];
-
+  
   for (int z = 0; z < NumberOfFLARMNames; z++)
-  {   
-	  wsprintf(wsline, TEXT("%lx=%s\r\n"), FLARM_Names[z].ID,FLARM_Names[z].Name);
-
-    WideCharToMultiByte( CP_ACP, 0, wsline,
-			 _tcslen(wsline)+1,
-			 cline,
-			 READLINE_LENGTH, NULL, NULL);
-
-	WriteFile(hFile, cline, strlen(cline), &bytesWritten, NULL);
-  }
+    {   
+      wsprintf(wsline, TEXT("%lx=%s\r\n"), FLARM_Names[z].ID,FLARM_Names[z].Name);
+      
+      WideCharToMultiByte( CP_ACP, 0, wsline,
+			   _tcslen(wsline)+1,
+			   cline,
+			   READLINE_LENGTH, NULL, NULL);
+      
+      WriteFile(hFile, cline, strlen(cline), &bytesWritten, NULL);
+    }
   CloseHandle(hFile);
 }
 
 
 int LookupSecondaryFLARMId(int id)
 {
-	for (int i=0; i<NumberOfFLARMNames; i++) 
+  for (int i=0; i<NumberOfFLARMNames; i++) 
+    {
+      if (FLARM_Names[i].ID == id) 
 	{
-		if (FLARM_Names[i].ID == id) 
-		{
-			return i;
-		}
+	  return i;
 	}
-	return -1;
+    }
+  return -1;
 }
 
 int LookupSecondaryFLARMId(TCHAR *cn)
 {
-	for (int i=0; i<NumberOfFLARMNames; i++) 
+  for (int i=0; i<NumberOfFLARMNames; i++) 
+    {
+      if (wcscmp(FLARM_Names[i].Name, cn) == 0) 
 	{
-		if (wcscmp(FLARM_Names[i].Name, cn) == 0) 
-		{
-			return i;
-		}
+	  return i;
 	}
-	return -1;
+    }
+  return -1;
 }
 
 
 TCHAR* LookupFLARMDetails(long id) {
-  int i;
-
-	  // try to find flarm from userFile
-	  int index = LookupSecondaryFLARMId(id);
-	  if (index != -1)
-	  {
-		  return FLARM_Names[index].Name;
-	  }
-
-	  // try to find flarm from FLARMNet.org File
-  	  FlarmId* flarmId = file.GetFlarmIdItem(id);
-	  if (flarmId != NULL)
-	  {
-		 return flarmId->cn;
-	  }
-
+  
+  // try to find flarm from userFile
+  int index = LookupSecondaryFLARMId(id);
+  if (index != -1)
+    {
+      return FLARM_Names[index].Name;
+    }
+  
+#ifdef NEWFLARMDB
+  // try to find flarm from FLARMNet.org File
+  FlarmId* flarmId = file.GetFlarmIdItem(id);
+  if (flarmId != NULL)
+    {
+      return flarmId->cn;
+    }
+#endif
   return NULL;
 }
 
 
 int LookupFLARMDetails(TCHAR *cn) 
 {
-  int i;
-
-		// try to find flarm from userFile
-	  int index = LookupSecondaryFLARMId(cn);
-	  if (index != -1)
-	  {
-		  return FLARM_Names[index].ID;
-	  }
-
-	  // try to find flarm from FLARMNet.org File
-	  FlarmId* flarmId = file.GetFlarmIdItem(cn);
-	  if (flarmId != NULL)
-	  {
-		  return flarmId->GetId();
-	  }
-
-
-  return NULL;
+  // try to find flarm from userFile
+  int index = LookupSecondaryFLARMId(cn);
+  if (index != -1)
+    {
+      return FLARM_Names[index].ID;
+    }
+  
+#ifdef NEWFLARMDB
+  // try to find flarm from FLARMNet.org File
+  FlarmId* flarmId = file.GetFlarmIdItem(cn);
+  if (flarmId != NULL)
+    {
+      return flarmId->GetId();
+    }
+#endif  
+  return 0;
 }
+
 
 bool AddFlarmLookupItem(int id, TCHAR *name, bool saveFile)
 {
-	int index = LookupSecondaryFLARMId(id);
+  int index = LookupSecondaryFLARMId(id);
 
-	if (index == -1)
+  if (index == -1)
+    {
+      if (NumberOfFLARMNames < MAXFLARMNAMES - 1)
 	{
-		if (NumberOfFLARMNames < MAXFLARMNAMES - 1)
-		{
-			// create new record
-			FLARM_Names[NumberOfFLARMNames].ID = id;
-			_tcsncpy(FLARM_Names[NumberOfFLARMNames].Name, name,20);
-			FLARM_Names[NumberOfFLARMNames].Name[20]=0;
-			NumberOfFLARMNames++;
-			SaveFLARMDetails();
-			return true;
-		}
+	  // create new record
+	  FLARM_Names[NumberOfFLARMNames].ID = id;
+	  _tcsncpy(FLARM_Names[NumberOfFLARMNames].Name, name,20);
+	  FLARM_Names[NumberOfFLARMNames].Name[20]=0;
+	  NumberOfFLARMNames++;
+	  SaveFLARMDetails();
+	  return true;
 	}
-	else
+    }
+  else
+    {
+      // modify existing record
+      FLARM_Names[index].ID = id;
+      _tcsncpy(FLARM_Names[index].Name, name,20);
+      FLARM_Names[index].Name[20]=0;	
+      if (saveFile)
 	{
-			// modify existing record
-			FLARM_Names[index].ID = id;
-			_tcsncpy(FLARM_Names[index].Name, name,20);
-			FLARM_Names[index].Name[20]=0;	
-			if (saveFile)
-			{
-				SaveFLARMDetails();
-			}
-			return true;
+	  SaveFLARMDetails();
 	}
-	return false;
+      return true;
+    }
+  return false;
 }
+
 
 
 double QNHAltitudeToStaticPressure(double alt) {

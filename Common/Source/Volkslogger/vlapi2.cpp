@@ -11,7 +11,7 @@
  **   This file is distributed under the terms of the General Public
  **   Licence. See the file COPYING for more information.
  **
- **   $Id: vlapi2.cpp,v 1.2 2008/02/14 14:22:49 samgi Exp $
+ **   $Id: vlapi2.cpp,v 1.3 2008/08/18 15:01:42 jwharington Exp $
  **
  ***********************************************************************/
 
@@ -211,7 +211,7 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
   int32 gcs_counter = 0;
   byte  c;
   int16 dle_r = 0;
-  word crc16;
+  word crc16 = 0;
   int16 start = 0;
   int16 ende  = 0;
 //  int32 i;

@@ -64,7 +64,7 @@
 /*
  * Tree-Structured Filter Bank (TSFB) Library
  *
- * $Id: jpc_tsfb.c,v 1.2 2007/09/14 17:11:18 jwharington Exp $
+ * $Id: jpc_tsfb.c,v 1.3 2008/08/18 15:01:43 jwharington Exp $
  */
 
 /******************************************************************************\
@@ -302,8 +302,8 @@ static void jpc_tsfbnode_getbandstree(jpc_tsfbnode_t *node, uint_fast32_t posxst
 	int nodebandno;
 	int numnodebands;
 	jpc_tsfb_band_t *band;
-	jas_seq_t *hfilter;
-	jas_seq_t *vfilter;
+	jas_seq_t *hfilter = NULL;
+	jas_seq_t *vfilter = NULL;
 
 	qmfb2d_getbands(node->hqmfb, node->vqmfb, xstart, ystart, xend, yend,
 	  JPC_TSFB_MAXBANDSPERNODE, &numnodebands, nodebands);
@@ -372,11 +372,20 @@ assert(numnodebands == 4 || numnodebands == 3);
 					break;
 				}
 			}
+#if 0 // original code, bug fix by RMK 20080816
 			jpc_tsfbnode_getequivfilters(node, nodebandno, band->xend - band->xstart, band->yend - band->ystart, &hfilter, &vfilter);
 			band->synenergywt = jpc_fix_mul(jpc_seq_norm(hfilter),
 			  jpc_seq_norm(vfilter));
 			jas_seq_destroy(hfilter);
 			jas_seq_destroy(vfilter);
+#else
+			if (!jpc_tsfbnode_getequivfilters(node, nodebandno, band->xend - band->xstart, band->yend - band->ystart, &hfilter, &vfilter)) {
+			  band->synenergywt = jpc_fix_mul(jpc_seq_norm(hfilter),
+							  jpc_seq_norm(vfilter));
+			  jas_seq_destroy(hfilter);
+			  jas_seq_destroy(vfilter);
+			}
+#endif
 			++(*bands);
 		}
 	}

@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.28 2008/03/21 07:20:34 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.29 2008/08/18 15:01:26 jwharington Exp $
 
 
 Copyright_License {
@@ -34,7 +34,7 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Utils.h"
 #include "Sizes.h"
 #include "externs.h"

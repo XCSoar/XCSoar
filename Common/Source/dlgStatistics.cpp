@@ -30,12 +30,12 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "XCSoar.h"
 #include "InfoBoxLayout.h"
 #include "WindowControls.h"
 #include "Statistics.h"
-#include "Externs.h"
+#include "externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
 #include "Atmosphere.h"
@@ -1246,7 +1246,7 @@ void Statistics::RenderTemperature(HDC hdc, RECT rc)
     }
   }
 
-  DrawXLabel(hdc, rc, TEXT("T°"));
+  DrawXLabel(hdc, rc, TEXT("T")TEXT(DEG));
   DrawYLabel(hdc, rc, TEXT("h"));
 }
 

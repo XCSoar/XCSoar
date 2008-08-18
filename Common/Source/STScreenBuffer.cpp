@@ -30,7 +30,7 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "STScreenBuffer.h"
 
 #ifdef _DEBUG

@@ -45,15 +45,21 @@ Copyright_License {
 //distance      km   nm   ml   nm
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include <stdio.h>
 //#include <assert.h>
 
-#include "units.h"
+#include "Units.h"
 #include "externs.h"
 
 CoordinateFormats_t Units::CoordinateFormat;
+
+#ifndef __MINGW32__
+#define DEG "°"
+#else
+#define DEG "Â°"
+#endif
 
 UnitDescriptor_t Units::UnitDescriptors[] ={
   {NULL,         1,          0},
@@ -68,8 +74,8 @@ UnitDescriptor_t Units::UnitDescriptors[] ={
   {TEXT("m"),    1.0,        0},
   {TEXT("ft"),   3.281,      0},
   {TEXT("K"),    1,          0},
-  {TEXT("°C"),   1.0,       -273.15},
-  {TEXT("°F"),   1.8,       -459.67}
+  {TEXT(DEG)TEXT("C"),   1.0,       -273.15},
+  {TEXT(DEG)TEXT("F"),   1.8,       -459.67}
 };
 
 Units_t Units::UserDistanceUnit = unKiloMeter;
@@ -158,22 +164,22 @@ bool Units::LongitudeToString(double Longitude, TCHAR *Buffer, size_t size){
           dd++;
           mm -= 60;
         }
-      _stprintf(Buffer, TEXT("%c%03d°%02d'%02d\""), EW[sign], dd, mm, ss);
+      _stprintf(Buffer, TEXT("%c%03d")TEXT(DEG)TEXT("%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:
       dd = (int)Longitude;
       Longitude = (Longitude - dd) * 60.0;
       mm = (int)(Longitude);
       Longitude = (Longitude - mm) * 60.0;
-      _stprintf(Buffer, TEXT("%c%03d°%02d'%05.2f\""), EW[sign], dd, mm, Longitude);
+      _stprintf(Buffer, TEXT("%c%03d")TEXT(DEG)TEXT("%02d'%05.2f\""), EW[sign], dd, mm, Longitude);
     break;
     case cfDDMMmmm:
       dd = (int)Longitude;
       Longitude = (Longitude - dd) * 60.0;
-      _stprintf(Buffer, TEXT("%c%03d°%06.3f'"), EW[sign], dd, Longitude);
+      _stprintf(Buffer, TEXT("%c%03d")TEXT(DEG)TEXT("%06.3f'"), EW[sign], dd, Longitude);
     break;
     case cfDDdddd:
-      _stprintf(Buffer, TEXT("%c%08.4f°"), EW[sign], Longitude);
+      _stprintf(Buffer, TEXT("%c%08.4f")TEXT(DEG), EW[sign], Longitude);
     break;
     default:
 //      assert(false /* undefined coordinateformat */);
@@ -208,22 +214,22 @@ bool Units::LatitudeToString(double Latitude, TCHAR *Buffer, size_t size){
         dd++;
         mm -= 60;
       }
-      _stprintf(Buffer, TEXT("%c%02d°%02d'%02d\""), EW[sign], dd, mm, ss);
+      _stprintf(Buffer, TEXT("%c%02d")TEXT(DEG)TEXT("%02d'%02d\""), EW[sign], dd, mm, ss);
     break;
     case cfDDMMSSss:
       dd = (int)Latitude;
       Latitude = (Latitude - dd) * 60.0;
       mm = (int)(Latitude);
       Latitude = (Latitude - mm) * 60.0;
-      _stprintf(Buffer, TEXT("%c%02d°%02d'%05.2f\""), EW[sign], dd, mm, Latitude);
+      _stprintf(Buffer, TEXT("%c%02d")TEXT(DEG)TEXT("%02d'%05.2f\""), EW[sign], dd, mm, Latitude);
     break;
     case cfDDMMmmm:
       dd = (int)Latitude;
       Latitude = (Latitude - dd) * 60.0;
-      _stprintf(Buffer, TEXT("%c%02d°%06.3f'"), EW[sign], dd, Latitude);
+      _stprintf(Buffer, TEXT("%c%02d")TEXT(DEG)TEXT("%06.3f'"), EW[sign], dd, Latitude);
     break;
     case cfDDdddd:
-      _stprintf(Buffer, TEXT("%c%07.4f°"), EW[sign], Latitude);
+      _stprintf(Buffer, TEXT("%c%07.4f")TEXT(DEG), EW[sign], Latitude);
     break;
     default:
 //      assert(false /* undefined coordinateformat */);

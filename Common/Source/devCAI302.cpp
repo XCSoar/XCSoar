@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.21 2007/09/14 17:10:09 jwharington Exp $
+// $Id: devCAI302.cpp,v 1.22 2008/08/18 15:01:33 jwharington Exp $
 
 /*
 Copyright_License {
@@ -47,11 +47,11 @@ Copyright_License {
 
 
 #include "externs.h"
-#include "utils.h"
-#include "parser.h"
-#include "port.h"
+#include "Utils.h"
+#include "Parser.h"
+#include "Port.h"
 
-#include "devCai302.h"
+#include "devCAI302.h"
 
 #ifdef _SIM_
 static BOOL fSimMode = TRUE;

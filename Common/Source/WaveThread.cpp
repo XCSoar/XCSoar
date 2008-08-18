@@ -32,7 +32,7 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "WaveThread.h"
 
 

@@ -34,7 +34,7 @@ Copyright_License {
 
 #include "WindowControls.h"
 
-#define DeclearCallBackEntry(x)        {TEXT(#x), x}
+#define DeclearCallBackEntry(x)        {TEXT(#x), (void *)x}
 
 typedef struct{
   TCHAR *Name;

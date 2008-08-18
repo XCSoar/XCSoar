@@ -1,4 +1,4 @@
-/* $Id: maperror.c,v 1.6 2007/01/10 06:41:31 jwharington Exp $ */
+/* $Id: maperror.c,v 1.7 2008/08/18 15:01:39 jwharington Exp $ */
 /*
 Copyright_License {
 
@@ -30,7 +30,7 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "maperror.h"
 #include "mapprimitive.h"

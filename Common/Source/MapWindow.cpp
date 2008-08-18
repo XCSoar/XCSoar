@@ -29,10 +29,10 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "compatibility.h"
-#include "Mapwindow.h"
-#include "OnlineContest.h"
+#include "MapWindow.h"
+#include "OnLineContest.h"
 #include "Utils.h"
 #include "Units.h"
 #include "Logger.h"
@@ -69,6 +69,10 @@ int misc_tick_count=0;
 #ifdef DEBUG
 #define DRAWLOAD
 #endif
+#ifdef __MINGW32__
+#define DRAWLOAD
+#endif
+#define DRAWLOAD
 
 int TrailActive = TRUE;
 
@@ -1754,6 +1758,8 @@ void MapWindow::CalculateOrientationNormal(void) {
     DisplayAngle = trackbearing;
     DisplayAircraftAngle = 0.0;    
   }
+  DisplayAngle = AngleLimit360(DisplayAngle);
+  DisplayAircraftAngle = AngleLimit360(DisplayAircraftAngle);
 }
 
 
@@ -2247,15 +2253,23 @@ void MapWindow::DrawCrossHairs(HDC hdc, POINT Orig)
 }
 
 
-void PolygonRotateShift(POINT* poly, int n, int x, int y, double angle) {
-  for(int i=0; i<n; i++)
-    {
-      if (InfoBoxLayout::scale>1) {
-        poly[i].x *= InfoBoxLayout::scale;
-        poly[i].y *= InfoBoxLayout::scale;
-      }
-      protateshift(poly[i], angle, x, y);
-    }
+void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys, const double angle) {
+  static double lastangle = -1;
+  static int cost=1024, sint=0;
+
+  if(angle != lastangle) {
+    lastangle = angle;
+    int deg = DEG_TO_INT(AngleLimit360(angle));
+    cost = ICOSTABLE[deg]*InfoBoxLayout::scale;
+    sint = ISINETABLE[deg]*InfoBoxLayout::scale;
+  }
+
+  for(POINT *p=poly; p<poly+n; p++) {
+    int x= p->x;
+    int y= p->y;
+    p->x = (x*cost - y*sint + 512)/1024+xs;
+    p->y = (y*cost + x*sint + 512)/1024+ys;
+  }
 }
 
 
@@ -3381,13 +3395,13 @@ void MapWindow::DrawWindAtAircraft2(HDC hdc, POINT Orig, RECT rc) {
 
   if (WindArrowStyle==1) {
     POINT Tail[2] = {{0,-20}, {0,-26-min(20,wmag)*3}};
+    double angle = AngleLimit360(DerivedDrawInfo.WindBearing-DisplayAngle);
     for(i=0; i<2; i++) {
       if (InfoBoxLayout::scale>1) {
         Tail[i].x *= InfoBoxLayout::scale;
         Tail[i].y *= InfoBoxLayout::scale;
       }
-      protateshift(Tail[i], DerivedDrawInfo.WindBearing-DisplayAngle, 
-                   Start.x, Start.y);
+      protateshift(Tail[i], angle, Start.x, Start.y);
     }
 
     // optionally draw dashed line
@@ -3793,7 +3807,6 @@ void MapWindow::DrawBestCruiseTrack(HDC hdc, POINT Orig)
 
 void MapWindow::DrawCompass(HDC hDC,RECT rc)
 {
-  //    TCHAR Scale[5];
   POINT Start;
   HPEN hpOld;
   HBRUSH hbOld; 
@@ -3811,8 +3824,8 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
     hpOld = (HPEN)SelectObject(hDC, hpCompass);
     hbOld = (HBRUSH)SelectObject(hDC, hbCompass);
 
-    PolygonRotateShift(Arrow, 5, Start.x, Start.y, 
-                       -DisplayAngle);
+    // North arrow
+    PolygonRotateShift(Arrow, 5, Start.x, Start.y, -DisplayAngle);
     Polygon(hDC,Arrow,5);
 
     SelectObject(hDC, hbOld);
@@ -3846,6 +3859,7 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
         Start.x -= InfoBoxLayout::ControlWidth;
       }
 
+      // North arrow
       PolygonRotateShift(Arrow, 5, Start.x, Start.y, 
                          -DisplayAngle);
 

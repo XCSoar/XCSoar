@@ -1,4 +1,4 @@
-// $Id: devCaiGpsNav.cpp,v 1.3 2007/01/10 06:41:31 jwharington Exp $
+// $Id: devCaiGpsNav.cpp,v 1.4 2008/08/18 15:01:33 jwharington Exp $
 
 /*
 Copyright_License {
@@ -47,9 +47,9 @@ Copyright_License {
 
 
 #include "externs.h"
-#include "utils.h"
-#include "parser.h"
-#include "port.h"
+#include "Utils.h"
+#include "Parser.h"
+#include "Port.h"
 
 #include "devCaiGpsNav.h"
 

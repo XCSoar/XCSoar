@@ -32,7 +32,7 @@ Copyright_License {
 #ifndef AATDISTANCE_H
 #define AATDISTANCE_H
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Calculations.h"
 #include "Utils.h"
 

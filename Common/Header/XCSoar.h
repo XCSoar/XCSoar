@@ -6,23 +6,17 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "resource.h"
-#include "sizes.h"
-#include "units.h"
+#include "Sizes.h"
+#include "Units.h"
 #include "compatibility.h"
 
 
 class InfoBoxFormatter {
  public:
-  InfoBoxFormatter(TCHAR *theformat) {
-    _tcscpy(Format, theformat);
-    Valid = TRUE;
-    Value = 0.0;
-    Text[0] = 0;
-    CommentText[0] = 0;
-  }
+  InfoBoxFormatter(TCHAR *theformat);
 
   virtual TCHAR *Render(int *color);
   void RenderInvalid(int *color);
@@ -161,7 +155,10 @@ extern bool Debounce();
 #define M_PI 3.14159265359
 #define M_2PI 6.28318530718
 
+extern "C" {
 void DebugStore(char *Str);
+}
+
 void StartupStore(TCHAR *Str);
 
 typedef struct
@@ -307,5 +304,10 @@ extern Appearance_t Appearance;
 
 bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size);
 
+#ifndef __MINGW32__
+#define DEG "°"
+#else
+#define DEG "Â°"
+#endif
 
 #endif // !defined(AFX_XCSOAR_H__695AAC30_F401_4CFF_9BD9_FE62A2A2D0D2__INCLUDED_)

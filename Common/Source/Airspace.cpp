@@ -31,10 +31,10 @@ Copyright_License {
 
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Airspace.h"
 #include "externs.h"
-#include "dialogs.h"
+#include "Dialogs.h"
 #include "Utils.h"
 #include "XCSoar.h"
 #include "MapWindow.h"
@@ -1323,7 +1323,11 @@ void ReadAirspace(void)
       // file 2 was OK, so save it
       ContractLocalPath(szFile2);
       SetRegistryString(szRegistryAdditionalAirspaceFile, szFile2);
+    } else {
+      StartupStore(TEXT("No airspace file 2\n"));
     }
+  } else {
+    StartupStore(TEXT("No airspace file 1\n"));
   }
 
   FindAirspaceAreaBounds();
@@ -1696,7 +1700,7 @@ void IntermediatePoint(double lon1, double lat1,
     f = dthis/dtotal;
     d = dtotal;
   } else {
-    dtotal=1.0e-7;
+    d /*total*/ =1.0e-7; /* RMK */
     f = 0.0;
   }
   f = min(1.0,max(0.0,f));

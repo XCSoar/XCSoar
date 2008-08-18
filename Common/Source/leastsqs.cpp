@@ -19,7 +19,7 @@
 // Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 // Boston, MA  02111-1307, USA.
 //
-// $Id: leastsqs.cpp,v 1.9 2006/12/03 15:01:41 jwharington Exp $
+// $Id: leastsqs.cpp,v 1.10 2008/08/18 15:01:39 jwharington Exp $
 //
 /*
 NOTE: Sompe portions copyright as above
@@ -55,7 +55,7 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include <stdio.h>
 

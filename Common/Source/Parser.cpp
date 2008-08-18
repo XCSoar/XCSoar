@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.73 2008/07/23 12:18:54 jwharington Exp $
+  $Id: Parser.cpp,v 1.74 2008/08/18 15:01:30 jwharington Exp $
 
 Copyright_License {
 
@@ -32,15 +32,15 @@ Copyright_License {
 
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "externs.h"
-#include "utils.h"
+#include "Utils.h"
 #include "externs.h"
 #include "VarioSound.h"
 #include "Logger.h"
 #include "GaugeFLARM.h"
-#include "parser.h"
+#include "Parser.h"
 #include "device.h"
 #include "Geoid.h"
 
@@ -51,7 +51,6 @@ static double NorthOrSouth(double in, TCHAR NoS);
 static double LeftOrRight(double in, TCHAR LoR);
 static double AltitudeModify(double Altitude, TCHAR Format);
 static double MixedFormatToDegrees(double mixed);
-static double TimeModify(double FixTime, NMEA_INFO *gps_info);
 static int NAVWarn(TCHAR c);
 
 BOOL NMEAParser::GpsUpdated = false;
@@ -189,7 +188,7 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
           return PFLAU(&String[7], GPS_INFO);
         }
 
-      return FALSE;
+    return FALSE;
     }
 
   // basic GPS sentences
@@ -208,8 +207,8 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
   if(_tcscmp(SentanceString,TEXT("RMB"))==0)
     {
       //return RMB(&String[7], GPS_INFO);
-      return FALSE;
-    }
+          return FALSE;
+      }
   if(_tcscmp(SentanceString,TEXT("RMC"))==0)
     {
       return RMC(&String[7], GPS_INFO);
@@ -520,7 +519,7 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
   
   if (GPS_INFO->Speed>1.0) {
     // JMW don't update bearing unless we're moving
-    GPS_INFO->TrackBearing = StrToDouble(ctemp, NULL);
+    GPS_INFO->TrackBearing = AngleLimit360(StrToDouble(ctemp, NULL));
   }
     
   // Altair doesn't have a battery-backed up realtime clock,
@@ -736,7 +735,7 @@ BOOL NMEAParser::NMEAChecksum(TCHAR *String)
   int End;
   int i;
   TCHAR c1,c2;
-  unsigned char v1,v2;
+  unsigned char v1 = 0,v2 = 0;
   TCHAR *pEnd;
 
   pEnd = _tcschr(String,'*');
@@ -1019,8 +1018,6 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
     nmeaParser1.PFLAA(t2,GPS_INFO);
     nmeaParser1.PFLAA(t3,GPS_INFO);
   }
-  //  nmeaParser1.PBB50(b50,GPS_INFO);
-  //  nmeaParser1.PDVDV(t4,GPS_INFO);
 }
 
 

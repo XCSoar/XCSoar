@@ -29,7 +29,7 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "GaugeVario.h"
 #include "MapWindow.h"
 #include "Utils.h"

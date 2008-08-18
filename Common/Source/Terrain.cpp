@@ -30,7 +30,7 @@ Copyright_License {
 */
 // omaplibdemo.cpp : Defines the entry point for the application.
 //
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Terrain.h"
 #include "RasterTerrain.h"
 #include "MapWindow.h"
@@ -1283,9 +1283,12 @@ void OpenTopology() {
   static ZZIP_FILE* zFile;
   char zfilename[MAX_PATH];
   unicode2ascii(szFile, zfilename, MAX_PATH);
-  zFile = zzip_fopen(zfilename, "rb");
+  zFile = zzip_fopen(zfilename, "rt");
   if (!zFile) {
     UnlockTerrainDataGraphics();
+    StartupStore(TEXT("No topology file\n"));
+    StartupStore(szFile);
+    StartupStore(TEXT("\n"));
     return;
   }
 

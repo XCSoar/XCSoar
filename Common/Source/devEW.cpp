@@ -34,13 +34,13 @@ Copyright_License {
 
 // adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 
 #include "externs.h"
-#include "utils.h"
-#include "parser.h"
-#include "port.h"
+#include "Utils.h"
+#include "Parser.h"
+#include "Port.h"
 
 #include "devEW.h"
 

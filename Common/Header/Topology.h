@@ -1,7 +1,7 @@
 #ifndef TOPOLOGY_H
 #define TOPOLOGY_H
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "mapshape.h"
 #include "MapWindow.h"
 

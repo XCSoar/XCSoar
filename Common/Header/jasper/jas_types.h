@@ -64,7 +64,7 @@
 /*
  * Primitive Types
  *
- * $Id: jas_types.h,v 1.3 2008/01/08 07:41:24 jwharington Exp $
+ * $Id: jas_types.h,v 1.4 2008/08/18 15:01:19 jwharington Exp $
  */
 
 #ifndef JAS_TYPES_H
@@ -143,7 +143,7 @@
  */
 #include <limits.h>
 /**********/
-#if !defined(INT_FAST8_MIN)
+#if !defined(INT_FAST8_MIN) && !defined(__MINGW32__)
 typedef signed char int_fast8_t;
 #define INT_FAST8_MIN	(-127)
 #define INT_FAST8_MAX	128
@@ -173,19 +173,19 @@ typedef int int_fast32_t;
 #define INT_FAST32_MAX	INT_MAX
 #endif
 /**********/
-#if !defined(UINT_FAST32_MIN)
+#if !defined(UINT_FAST32_MIN) && !defined(UINT_FAST32_MAX)
 typedef unsigned int uint_fast32_t;
 #define UINT_FAST32_MIN	UINT_MIN
 #define UINT_FAST32_MAX	UINT_MAX
 #endif
 /**********/
-#if !defined(INT_FAST64_MIN)
+#if !defined(INT_FAST64_MIN) && !defined(INT_FAST64_MAX)
 typedef longlong int_fast64_t;
 #define INT_FAST64_MIN	LLONG_MIN
 #define INT_FAST64_MAX	LLONG_MAX
 #endif
 /**********/
-#if !defined(UINT_FAST64_MIN)
+#if !defined(UINT_FAST64_MIN) && !defined(UINT_FAST64_MAX)
 typedef ulonglong uint_fast64_t;
 #define UINT_FAST64_MIN	ULLONG_MIN
 #define UINT_FAST64_MAX	ULLONG_MAX

@@ -29,12 +29,12 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
-#include <Aygshell.h>
+#include "StdAfx.h"
+#include <aygshell.h>
 #include "XCSoar.h"
 #include "WindowControls.h"
 #include "Statistics.h"
-#include "Externs.h"
+#include "externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
@@ -47,7 +47,7 @@ static WndForm *wf=NULL;
 static void OnAcknowledgeClicked(WindowControl * Sender){
   (void)Sender;
 
-  TCHAR *Name;
+  TCHAR *Name = NULL;
   if (index_circle>=0) {
     Name = AirspaceCircle[index_circle].Name;
   } else if (index_area>=0) {
@@ -100,15 +100,15 @@ static double FLAltRounded(double alt) {
 }
 
 static void SetValues(void) {
-  int atype;
-  AIRSPACE_ALT* top;
-  AIRSPACE_ALT* base;
+  int atype = 0;
+  AIRSPACE_ALT* top = NULL;
+  AIRSPACE_ALT* base = NULL;
   TCHAR *name = 0;
   WndProperty* wp;
   TCHAR buffer[80];
   TCHAR buffer2[80];
   bool inside = false;
-  double range;
+  double range = 0.0;
   double bearing;
 
   if (index_area >=0) {
@@ -287,7 +287,7 @@ static void SetValues(void) {
       wp->SetCaption(gettext(TEXT("Inside")));
     }
     Units::FormatUserDistance(range, buffer, 20);
-    _stprintf(buffer2, TEXT(" %d°"), iround(bearing));
+    _stprintf(buffer2, TEXT(" %d")TEXT(DEG), iround(bearing));
     _tcscat(buffer, buffer2);
     wp->SetText(buffer);
     wp->RefreshDisplay();

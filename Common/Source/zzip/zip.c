@@ -496,10 +496,6 @@ static zzip_strings_t* zzip_get_default_ext(void)
     {
 	/* *INDENT-OFF* */
        ".zip", ".ZIP", /* common extension */
-#     ifdef ZZIP_USE_ZIPLIKES
-       ".pk3", ".PK3", /* ID Software's Quake3 zipfiles */
-       ".jar", ".JAR", /* Java zipfiles */ 
-#      endif
        ".xcm", ".XCM", // XCSoar map files
        "", // JMW, allow paths like fred.zip/FOO
 	/* *INDENT-OFF* */
@@ -552,13 +548,16 @@ zzip_dir_alloc (zzip_strings_t* fileext)
  * returns zero on sucess
  * returns the refcount when files are attached.
  */
+
 int 
 zzip_dir_free(ZZIP_DIR * dir)
 {
-    if (dir->refcount)
+    if (dir->refcount) {
         return (dir->refcount); /* still open files attached */
+    }
 
-    if (dir->fd >= 0)      dir->io->fd.close(dir->fd);
+    if (dir->fd != -1)      dir->io->fd.close(dir->fd);
+    // JMW fix was fd >=0
     if (dir->hdr0)         free(dir->hdr0);
     if (dir->cache.fp)     free(dir->cache.fp);
     if (dir->cache.buf32k) free(dir->cache.buf32k);
@@ -575,7 +574,7 @@ zzip_dir_free(ZZIP_DIR * dir)
 int 
 zzip_dir_close(ZZIP_DIR * dir)
 {
-    dir->refcount &=~ 0x10000000; /* explicit dir close */
+    dir->refcount &=~ 0x10000000; /* explicit dir close */ 
     return zzip_dir_free(dir);
 }
 
@@ -600,6 +599,7 @@ static zzip_error_t __zzip_dir_parse (ZZIP_DIR* dir); /* forward */
  * this function uses explicit ext and io instead of the internal 
  * defaults, setting these to zero is equivalent to => zzip_dir_fdopen
  */
+
 ZZIP_DIR * 
 zzip_dir_fdopen_ext_io(int fd, zzip_error_t * errcode_p,
                        zzip_strings_t* ext, const zzip_plugin_io_t io)
@@ -608,11 +608,13 @@ zzip_dir_fdopen_ext_io(int fd, zzip_error_t * errcode_p,
     ZZIP_DIR * dir;
 
     if ((dir = zzip_dir_alloc_ext_io (ext, io)) == NULL)
-        { rv = ZZIP_OUTOFMEM; goto error; }
+        { 
+	    rv = ZZIP_OUTOFMEM; goto error; }
 
     dir->fd = fd;
-    if ((rv = __zzip_dir_parse (dir)))
+    if ((rv = __zzip_dir_parse (dir))) {
 	goto error;
+    }
 
     dir->hdr = dir->hdr0;
     dir->refcount |= 0x10000000; 
@@ -625,7 +627,8 @@ error:
     return NULL;
 }
 
-char jmw_filename[1024]; // JMW
+char jmw_filename[1024] = "\0"; // JMW
+
 
 static zzip_error_t
 __zzip_dir_parse (ZZIP_DIR* dir)
@@ -680,6 +683,11 @@ __zzip_dir_parse (ZZIP_DIR* dir)
  * On error this function leaves the errno(3) of the underlying
  * open(2) call on the last file.
  */
+
+#ifdef __MINGW32__
+#include <share.h>
+#endif
+
 int
 __zzip_try_open(zzip_char_t* filename, int filemode, 
                 zzip_strings_t* ext, zzip_plugin_io_t io)
@@ -687,7 +695,13 @@ __zzip_try_open(zzip_char_t* filename, int filemode,
     auto char file[PATH_MAX];
     int fd;
     zzip_size_t len = strlen (filename);
-    
+
+#ifdef __MINGW32__
+//    if (filemode & O_RDONLY) {    
+	filemode = O_RDWR;
+//    }
+#endif
+
     if (len+4 >= PATH_MAX) { 
 #ifdef ENAMETOOLONG
 		errno = ENAMETOOLONG;
@@ -701,7 +715,9 @@ __zzip_try_open(zzip_char_t* filename, int filemode,
     for ( ; *ext ; ++ext)
     {
         strcpy (file+len, *ext);
-        fd = io->fd.open(file, filemode);
+
+	fd = io->fd.open(file, filemode);
+
         if (fd != -1) {
             // JMW
             strcpy(jmw_filename, file);

@@ -64,7 +64,7 @@
 /*
  * JP2 Library
  *
- * $Id: jp2_dec.c,v 1.2 2007/09/14 17:11:15 jwharington Exp $
+ * $Id: jp2_dec.c,v 1.3 2008/08/18 15:01:42 jwharington Exp $
  */
 
 /******************************************************************************\
@@ -122,6 +122,8 @@ jas_image_t *jp2_decode(jas_stream_t *in, char *optstr)
 
   jas_aux_buffer_t aux_buf;
   aux_buf.id = 0;
+  aux_buf.size = 0;
+  aux_buf.buf = NULL;
 
   dec = 0;
   box = 0;

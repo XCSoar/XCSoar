@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.119 2008/01/08 07:41:26 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.120 2008/08/18 15:01:27 jwharington Exp $
 
 Copyright_License {
 
@@ -33,7 +33,7 @@ Copyright_License {
 
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include <commdlg.h>
 #include <commctrl.h>
@@ -44,14 +44,14 @@ Copyright_License {
 #include "Dialogs.h"
 #include "Logger.h"
 #include "resource.h"
-#include "utils.h"
+#include "Utils.h"
 #include "externs.h"
 #include "Port.h"
 #include "McReady.h"
 #include "AirfieldDetails.h"
 #include "VarioSound.h"
 #include "device.h"
-#include "units.h"
+#include "Units.h"
 #include "GaugeVario.h"
 #include "InfoBoxLayout.h"
 #include "InputEvents.h"
@@ -436,7 +436,8 @@ void CloseProgressDialog() {
 
 void StepProgressDialog(void) {
   if (hProgress) {
-    SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT, 0, 0);
+    SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), PBM_STEPIT, 
+		(WPARAM)0, (LPARAM)0);
     UpdateWindow(hProgress);
   }
 }
@@ -446,7 +447,7 @@ BOOL SetProgressStepSize(int nSize) {
   if (hProgress)
     if (nSize < 100)
       SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), 
-		  PBM_SETSTEP, (WPARAM)nSize, 0);
+		  PBM_SETSTEP, (WPARAM)nSize, (LPARAM)0);
   return(TRUE);
 }
 
@@ -509,6 +510,12 @@ HWND CreateProgressDialog(TCHAR* text) {
     SetWindowPos(hProgress,HWND_TOP,0,0,0,0,
                  SWP_NOMOVE|SWP_NOSIZE|SWP_SHOWWINDOW);
 #endif
+
+    SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), 
+		PBM_SETRANGE, (WPARAM)0, 
+		(LPARAM) MAKELPARAM (0, 100));
+    SendMessage(GetDlgItem(hProgress, IDC_PROGRESS1), 
+		PBM_SETSTEP, (WPARAM)5, (LPARAM)0);
 
     SetForegroundWindow(hProgress);
     UpdateWindow(hProgress);    

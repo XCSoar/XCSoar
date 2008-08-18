@@ -15,10 +15,10 @@ class InputEvents {
   static void setMode(TCHAR *mode);
   static TCHAR* getMode();
   static int getModeID();
-  static int InputEvents::findKey(TCHAR *data);
-  static int InputEvents::findGCE(TCHAR *data);
-  static int InputEvents::findNE(TCHAR *data);
-  static pt2Event InputEvents::findEvent(TCHAR *);
+  static int findKey(TCHAR *data);
+  static int findGCE(TCHAR *data);
+  static int findNE(TCHAR *data);
+  static pt2Event findEvent(TCHAR *);
   static bool processKey(int key);
   static bool processNmea(int key);
   static bool processButton(int bindex);
@@ -93,7 +93,7 @@ class InputEvents {
   // -------
 
 #ifdef _SIM_
-  static void InputEvents::showErrors();
+  static void showErrors();
 #endif 
 
  private:

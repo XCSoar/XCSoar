@@ -31,7 +31,7 @@ Copyright_License {
 
 #include <math.h>
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "InputEvents.h"  // used for altair beep hack
 #include "VegaVoice.h"
 

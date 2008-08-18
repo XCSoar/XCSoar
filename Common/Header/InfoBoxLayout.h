@@ -1,7 +1,7 @@
 #ifndef INFOBOXLAYOUT_H
 #define INFOBOXLAYOUT_H
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Sizes.h"
 
 class InfoBoxLayout {

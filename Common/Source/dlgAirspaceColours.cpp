@@ -30,13 +30,13 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
-#include <Aygshell.h>
+#include "StdAfx.h"
+#include <aygshell.h>
 
 #include "XCSoar.h"
 
 #include "WindowControls.h"
-#include "Externs.h"
+#include "externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"

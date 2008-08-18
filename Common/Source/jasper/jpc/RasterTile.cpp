@@ -3,12 +3,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#ifndef __MINGW32__
 #define min(x, y) \
         (((x) < (y)) ? (x) : (y))
 
 /* Compute the maximum of two values. */
 #define max(x, y) \
         (((x) > (y)) ? (x) : (y))
+#endif
 
 inline unsigned int CombinedDivAndMod(unsigned int &lx) {
   unsigned int ox = lx & 0xff;
@@ -428,7 +430,6 @@ void RasterTileCache::LoadJPG2000(char* jp2_filename) {
   } else {
     jas_image_decode(in, -1, "xcsoar=1");
     jas_stream_close(in);
-    //    jas_stream_destroy(in);
   }
   if (GetInitialised()) {
     StitchTiles();

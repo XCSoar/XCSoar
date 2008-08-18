@@ -29,12 +29,12 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "externs.h"
-#include "utils.h"
-#include "parser.h"
-#include "port.h"
+#include "Utils.h"
+#include "Parser.h"
+#include "Port.h"
 
 #include "devFlymasterF1.h"
 
@@ -131,7 +131,8 @@ static BOOL VARIO(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   double ps = StrToDouble(ctemp,NULL);
   GPS_INFO->BaroAltitude = (1 - pow(fabs(ps / QNH),  0.190284)) * 44307.69;
   NMEAParser::ExtractParameter(String,ctemp,1);
-  GPS_INFO->Vario = StrToDouble(ctemp,NULL);
+  GPS_INFO->Vario = StrToDouble(ctemp,NULL)/10.0;
+  // JMW vario is in dm/s
 
   GPS_INFO->VarioAvailable = TRUE;
   GPS_INFO->BaroAltitudeAvailable = TRUE;

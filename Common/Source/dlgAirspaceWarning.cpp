@@ -30,13 +30,13 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include <aygshell.h>
 
 #include "InfoBoxLayout.h"
 
 #include "externs.h"
-#include "units.h"
+#include "Units.h"
 #include "Airspace.h"
 #include "MapWindow.h"
 
@@ -304,7 +304,7 @@ static void OnAirspaceListItemPaint(WindowControl * Sender, HDC hDC){
     int          Col1Left = 120;
     RECT         rc;
     RECT         rcTextClip;
-    HBRUSH       hBrushBk;
+    HBRUSH       hBrushBk = NULL;
 
     if (i>=Count) return;
 

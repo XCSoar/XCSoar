@@ -30,8 +30,8 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
-#include <Aygshell.h>
+#include "StdAfx.h"
+#include <aygshell.h>
 
 #include "XCSoar.h"
 #include "MapWindow.h"
@@ -40,7 +40,7 @@ Copyright_License {
 
 #include "WindowControls.h"
 #include "Statistics.h"
-#include "Externs.h"
+#include "externs.h"
 #include "McReady.h"
 #include "dlgTools.h"
 #include "device.h"
@@ -90,6 +90,8 @@ static WndButton *buttonPilotName=NULL;
 static WndButton *buttonAircraftType=NULL;
 static WndButton *buttonAircraftRego=NULL;
 static WndButton *buttonLoggerID=NULL;
+static WndButton *buttonCopy=NULL;
+static WndButton *buttonPaste=NULL;
 
 #define NUMPAGES 20
 
@@ -183,10 +185,10 @@ static void NextPage(int Step){
     wf->SetCaption(gettext(TEXT("14 Task rules")));
     break;
   case 14:
-    wf->SetCaption(gettext(TEXT("15 InfoBox Circling")));
+    wf->SetCaption(gettext(TEXT("15 InfoBox Cruise")));
     break;
   case 15:
-    wf->SetCaption(gettext(TEXT("16 InfoBox Cruise")));
+    wf->SetCaption(gettext(TEXT("16 InfoBox Circling")));
     break;
   case 16:
     wf->SetCaption(gettext(TEXT("17 InfoBox Final Glide")));
@@ -200,6 +202,21 @@ static void NextPage(int Step){
   case 19:
     wf->SetCaption(gettext(TEXT("20 Waypoint Edit")));
     break;
+  }
+  if ((config_page>=14) && (config_page<=17)) {
+    if (buttonCopy) {
+      buttonCopy->SetVisible(true);
+    }
+    if (buttonPaste) {
+      buttonPaste->SetVisible(true);
+    }
+  } else {
+    if (buttonCopy) {
+      buttonCopy->SetVisible(false);
+    }
+    if (buttonPaste) {
+      buttonPaste->SetVisible(false);
+    }
   }
   wConfig1->SetVisible(config_page == 0);
   wConfig2->SetVisible(config_page == 1); 
@@ -425,6 +442,77 @@ static void OnPrevClicked(WindowControl * Sender){
 static void OnCloseClicked(WindowControl * Sender){
 	(void)Sender;
   wf->SetModalResult(mrOK);
+}
+
+static int cpyInfoBox[10];
+
+static int page2mode(void) {
+  return config_page-14;
+}
+
+
+static void InfoBoxPropName(TCHAR *name, int item, int mode) {
+  _tcscpy(name,TEXT("prpInfoBox"));
+  switch (mode) {
+  case 0:
+    _tcscat(name,TEXT("Circling"));
+    break;
+  case 1:
+    _tcscat(name,TEXT("Cruise"));
+    break;
+  case 2:
+    _tcscat(name,TEXT("FinalGlide"));
+    break;
+  case 3:
+    _tcscat(name,TEXT("Aux"));
+    break;
+  }
+  TCHAR buf[3];
+  _stprintf(buf,TEXT("%1d"), item);
+  _tcscat(name,buf);
+}
+
+static void OnCopy(WindowControl *Sender) {
+  (void)Sender;
+  int mode = page2mode();
+  TCHAR name[80];
+  if ((mode<0)||(mode>3)) {
+    return;
+  }
+
+  for (int item=0; item<numInfoWindows; item++) {
+    InfoBoxPropName(name, item, mode);
+    WndProperty *wp;
+    wp = (WndProperty*)wf->FindByName(name);
+    if (wp) {
+      cpyInfoBox[item] = wp->GetDataField()->GetAsInteger();
+    }
+  }
+}
+
+static void OnPaste(WindowControl *Sender) {
+  (void)Sender;
+  int mode = page2mode();
+  TCHAR name[80];
+  if ((mode<0)||(mode>3)||(cpyInfoBox[0]<0)) {
+    return;
+  }
+
+  if(MessageBoxX(hWndMapWindow,
+		 gettext(TEXT("Overwrite?")),
+		 gettext(TEXT("InfoBox paste")),
+		 MB_YESNO|MB_ICONQUESTION) == IDYES) {
+
+    for (int item=0; item<numInfoWindows; item++) {
+      InfoBoxPropName(name, item, mode);
+      WndProperty *wp;
+      wp = (WndProperty*)wf->FindByName(name);
+      if (wp && (cpyInfoBox[item]>=0)&&(cpyInfoBox[item]<NUMSELECTSTRINGS)) {
+	wp->GetDataField()->Set(cpyInfoBox[item]);
+	wp->RefreshDisplay();
+      }
+    }
+  }
 }
 
 static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
@@ -656,8 +744,13 @@ extern SCREEN_INFO Data_Options[];
 extern int NUMSELECTSTRINGS;
 extern int InfoType[];
 
-static void SetInfoBoxSelector(TCHAR *name, int item, int mode)
+
+
+static void SetInfoBoxSelector(int item, int mode)
 {
+  TCHAR name[80];
+  InfoBoxPropName(name, item, mode);
+
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(name);
   if (wp) {
@@ -669,11 +762,11 @@ static void SetInfoBoxSelector(TCHAR *name, int item, int mode)
     int it=0;
     
     switch(mode) {
-    case 0: // cruise
-      it = (InfoType[item]>>8)& 0xff;
-      break;
     case 1: // climb
       it = (InfoType[item])& 0xff;
+      break;
+    case 0: // cruise
+      it = (InfoType[item]>>8)& 0xff;
       break;
     case 2: // final glide
       it = (InfoType[item]>>16)& 0xff;
@@ -688,8 +781,10 @@ static void SetInfoBoxSelector(TCHAR *name, int item, int mode)
 }
 
 
-void GetInfoBoxSelector(TCHAR *name, int item, int mode)
+static void GetInfoBoxSelector(int item, int mode)
 {
+  TCHAR name[80];
+  InfoBoxPropName(name, item, mode);
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(name);
   if (wp) {
@@ -697,11 +792,11 @@ void GetInfoBoxSelector(TCHAR *name, int item, int mode)
     int it=0;
     
     switch(mode) {
-    case 0: // cruise
-      it = (InfoType[item]>>8)& 0xff;
-      break;
     case 1: // climb
       it = (InfoType[item])& 0xff;
+      break;
+    case 0: // cruise
+      it = (InfoType[item]>>8)& 0xff;
       break;
     case 2: // final glide
       it = (InfoType[item]>>16)& 0xff;
@@ -788,6 +883,15 @@ static void setVariables(void) {
   buttonLoggerID = ((WndButton *)wf->FindByName(TEXT("cmdLoggerID")));
   if (buttonLoggerID) {
     buttonLoggerID->SetOnClickNotify(OnLoggerIDClicked);
+  }
+
+  buttonCopy = ((WndButton *)wf->FindByName(TEXT("cmdCopy")));
+  if (buttonCopy) {
+    buttonCopy->SetOnClickNotify(OnCopy);
+  }
+  buttonPaste = ((WndButton *)wf->FindByName(TEXT("cmdPaste")));
+  if (buttonPaste) {
+    buttonPaste->SetOnClickNotify(OnPaste);
   }
 
   UpdateButtons();
@@ -1837,46 +1941,11 @@ static void setVariables(void) {
   }
 
   ////
-
-  SetInfoBoxSelector(TEXT("prpInfoBoxCruise0"),0,0);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCruise1"),1,0);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCruise2"),2,0);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCruise3"),3,0);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCruise4"),4,0);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCruise5"),5,0);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCruise6"),6,0);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCruise7"),7,0);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCruise8"),8,0);
-
-  SetInfoBoxSelector(TEXT("prpInfoBoxCircling0"),0,1);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCircling1"),1,1);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCircling2"),2,1);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCircling3"),3,1);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCircling4"),4,1);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCircling5"),5,1);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCircling6"),6,1);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCircling7"),7,1);
-  SetInfoBoxSelector(TEXT("prpInfoBoxCircling8"),8,1);
-
-  SetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide0"),0,2);
-  SetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide1"),1,2);
-  SetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide2"),2,2);
-  SetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide3"),3,2);
-  SetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide4"),4,2);
-  SetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide5"),5,2);
-  SetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide6"),6,2);
-  SetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide7"),7,2);
-  SetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide8"),8,2);
-
-  SetInfoBoxSelector(TEXT("prpInfoBoxAux0"),0,3);
-  SetInfoBoxSelector(TEXT("prpInfoBoxAux1"),1,3);
-  SetInfoBoxSelector(TEXT("prpInfoBoxAux2"),2,3);
-  SetInfoBoxSelector(TEXT("prpInfoBoxAux3"),3,3);
-  SetInfoBoxSelector(TEXT("prpInfoBoxAux4"),4,3);
-  SetInfoBoxSelector(TEXT("prpInfoBoxAux5"),5,3);
-  SetInfoBoxSelector(TEXT("prpInfoBoxAux6"),6,3);
-  SetInfoBoxSelector(TEXT("prpInfoBoxAux7"),7,3);
-  SetInfoBoxSelector(TEXT("prpInfoBoxAux8"),8,3);
+  for (i=0; i<4; i++) {
+    for (int j=0; j<numInfoWindows; j++) {
+      SetInfoBoxSelector(j, i);
+    }
+  }
 }
 
 
@@ -1954,6 +2023,10 @@ void dlgConfigurationShowModal(void){
   ASSERT(wConfig20!=NULL);
 
   wf->FilterAdvanced(UserLevel>0);
+
+  for (int item=0; item<10; item++) {
+    cpyInfoBox[item] = -1;
+  }
 
   setVariables();
 
@@ -3095,45 +3168,12 @@ void dlgConfigurationShowModal(void){
     WritePort2Settings(dwPortIndex2,dwSpeedIndex2);
   }
 
-  GetInfoBoxSelector(TEXT("prpInfoBoxCruise0"),0,0);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCruise1"),1,0);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCruise2"),2,0);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCruise3"),3,0);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCruise4"),4,0);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCruise5"),5,0);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCruise6"),6,0);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCruise7"),7,0);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCruise8"),8,0);
-
-  GetInfoBoxSelector(TEXT("prpInfoBoxCircling0"),0,1);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCircling1"),1,1);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCircling2"),2,1);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCircling3"),3,1);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCircling4"),4,1);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCircling5"),5,1);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCircling6"),6,1);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCircling7"),7,1);
-  GetInfoBoxSelector(TEXT("prpInfoBoxCircling8"),8,1);
-
-  GetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide0"),0,2);
-  GetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide1"),1,2);
-  GetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide2"),2,2);
-  GetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide3"),3,2);
-  GetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide4"),4,2);
-  GetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide5"),5,2);
-  GetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide6"),6,2);
-  GetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide7"),7,2);
-  GetInfoBoxSelector(TEXT("prpInfoBoxFinalGlide8"),8,2);
-
-  GetInfoBoxSelector(TEXT("prpInfoBoxAux0"),0,3);
-  GetInfoBoxSelector(TEXT("prpInfoBoxAux1"),1,3);
-  GetInfoBoxSelector(TEXT("prpInfoBoxAux2"),2,3);
-  GetInfoBoxSelector(TEXT("prpInfoBoxAux3"),3,3);
-  GetInfoBoxSelector(TEXT("prpInfoBoxAux4"),4,3);
-  GetInfoBoxSelector(TEXT("prpInfoBoxAux5"),5,3);
-  GetInfoBoxSelector(TEXT("prpInfoBoxAux6"),6,3);
-  GetInfoBoxSelector(TEXT("prpInfoBoxAux7"),7,3);
-  GetInfoBoxSelector(TEXT("prpInfoBoxAux8"),8,3);
+  int i,j;
+  for (i=0; i<4; i++) {
+    for (j=0; j<numInfoWindows; j++) {
+      GetInfoBoxSelector(j, i);
+    }
+  }
 
   if (waypointneedsave) {
     if(MessageBoxX(hWndMapWindow,

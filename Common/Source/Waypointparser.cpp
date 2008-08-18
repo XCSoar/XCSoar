@@ -29,7 +29,7 @@ Copyright_License {
   // waypoints.xcw
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Waypointparser.h"
 #include "externs.h"
 #include "Dialogs.h"
@@ -492,7 +492,7 @@ static double CalculateAngle(TCHAR *temp)
       return -9999;
     }
 
-  *Colon =  NULL;
+  *Colon = _T('\0');
   Colon ++;
 
   Degrees = (double)_tcstol(temp, &Stop, 10);
@@ -610,6 +610,11 @@ void ReadWayPoints(void)
       wcscat(szMapFile,TEXT("waypoints.xcw"));
       unicode2ascii(szMapFile, zfilename, MAX_PATH);
       fp  = zzip_fopen(zfilename, "rt");
+      if (fp != NULL) {
+	StartupStore(TEXT("Waypoint file from xcm\n"));
+	StartupStore(szMapFile);
+	StartupStore(TEXT("\n"));
+      }
     }
 
     if(fp != NULL)
@@ -623,7 +628,9 @@ void ReadWayPoints(void)
         ContractLocalPath(szFile1);
         SetRegistryString(szRegistryWayPointFile, szFile1);  
         #endif
-      }
+      } else {
+      StartupStore(TEXT("No waypoint file 1\n"));
+    }
 #ifdef HAVEEXCEPTIONS
   }__except(EXCEPTION_EXECUTE_HANDLER){
     CloseWayPoints();
@@ -658,6 +665,8 @@ void ReadWayPoints(void)
         // read OK, so set the registry to the actual file name
         ContractLocalPath(szFile2);
         SetRegistryString(szRegistryAdditionalWayPointFile, szFile2);  
+      } else {
+	StartupStore(TEXT("No waypoint file 2\n"));
       }
     }
 

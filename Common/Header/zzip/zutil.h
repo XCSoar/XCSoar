@@ -8,7 +8,7 @@
    subject to change. Applications should only use zlib.h.
  */
 
-/* @(#) $Id: zutil.h,v 1.3 2008/01/08 07:41:25 jwharington Exp $ */
+/* @(#) $Id: zutil.h,v 1.4 2008/08/18 15:01:20 jwharington Exp $ */
 
 #ifndef ZUTIL_H
 #define ZUTIL_H
@@ -17,7 +17,7 @@
 #include "zlib.h"
 
 #ifdef STDC
-#  ifndef _WIN32_WCE
+#  if !defined(_WIN32_WCE) || defined(__MINGW32__)
 #    include <stddef.h>
 #  endif
 #  include <string.h>

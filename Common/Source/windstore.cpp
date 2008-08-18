@@ -11,7 +11,7 @@
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
 **
-**   $Id: windstore.cpp,v 1.15 2007/05/09 15:32:18 jwharington Exp $
+**   $Id: windstore.cpp,v 1.16 2008/08/18 15:01:40 jwharington Exp $
 **
 ***********************************************************************/
 
@@ -47,7 +47,7 @@ Copyright_License {
 
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "windstore.h"
 #include "XCSoar.h"

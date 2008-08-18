@@ -28,11 +28,11 @@ Copyright_License {
 
 }
 */
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "compatibility.h"
 
 #include "XCSoar.h"
-#include "Mapwindow.h"
+#include "MapWindow.h"
 #include "Parser.h"
 #include "Calculations.h"
 #include "Calculations2.h"
@@ -74,8 +74,8 @@ Copyright_License {
 #include "devLX.h"
 #include "devZander.h"
 #include "devFlymasterF1.h"
-#include "Externs.h"
-#include "units.h"
+#include "externs.h"
+#include "Units.h"
 #include "InputEvents.h"
 #include "Message.h"
 #include "Atmosphere.h"
@@ -171,7 +171,8 @@ Appearance_t Appearance = {
 
 #endif
 
-extern TCHAR XCSoar_Version[256] = TEXT("");
+
+TCHAR XCSoar_Version[256] = TEXT("");
 
 bool ForceShutdown = false;
 
@@ -457,7 +458,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 2
 	  {ugVerticalSpeed,   TEXT("Thermal last 30 sec"), TEXT("TC 30s"), new FormatterLowWarning(TEXT("%-2.1f"),0.0), NoProcessing, 7, 44},
 	  // 3
-	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f°T")), NoProcessing, 6, 54},
+	  {ugNone,            TEXT("Bearing"), TEXT("Bearing"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), NoProcessing, 6, 54},
 	  // 4
 	  {ugNone,            TEXT("L/D instantaneous"), TEXT("L/D Inst"), new InfoBoxFormatter(TEXT("%2.0f")), PopupBugsBallast, 5, 38},
 	  // 5
@@ -497,13 +498,13 @@ SCREEN_INFO Data_Options[] = {
 	  // 22
 	  {ugAltitude,        TEXT("Thermal Gain"), TEXT("TC Gain"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 24, 21},
 	  // 23
-	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f°T")), DirectionProcessing, 32, 6},
+	  {ugNone,            TEXT("Track"), TEXT("Track"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), DirectionProcessing, 32, 6},
 	  // 24
 	  {ugVerticalSpeed,   TEXT("Vario"), TEXT("Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 44, 22},
 	  // 25
 	  {ugWindSpeed,       TEXT("Wind Speed"), TEXT("Wind V"), new InfoBoxFormatter(TEXT("%2.0f")), WindSpeedProcessing, 26, 50},
 	  // 26
-	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f°T")), WindDirectionProcessing, 48, 25},
+	  {ugNone,            TEXT("Wind Bearing"), TEXT("Wind B"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), WindDirectionProcessing, 48, 25},
 	  // 27
 	  {ugNone,            TEXT("AA Time"), TEXT("AA Time"), new FormatterAATTime(TEXT("%2.0f")), NoProcessing, 28, 18},
 	  // 28
@@ -547,11 +548,11 @@ SCREEN_INFO Data_Options[] = {
 	  // 47
 	  {ugNone,            TEXT("Bearing Difference"), TEXT("Brng D"), new FormatterDiffBearing(TEXT("")), NoProcessing, 54, 37},
 	  // 48
-	  {ugNone,            TEXT("Outside Air Temperature"), TEXT("OAT"), new InfoBoxFormatter(TEXT("%2.1f°")), NoProcessing, 49, 26},
+	  {ugNone,            TEXT("Outside Air Temperature"), TEXT("OAT"), new InfoBoxFormatter(TEXT("%2.1f")TEXT(DEG)), NoProcessing, 49, 26},
 	  // 49
 	  {ugNone,            TEXT("Relative Humidity"), TEXT("RelHum"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 50, 48},
 	  // 50
-	  {ugNone,            TEXT("Forecast Temperature"), TEXT("MaxTemp"), new InfoBoxFormatter(TEXT("%2.1f°")), ForecastTemperatureProcessing, 49, 25},
+	  {ugNone,            TEXT("Forecast Temperature"), TEXT("MaxTemp"), new InfoBoxFormatter(TEXT("%2.1f")TEXT(DEG)), ForecastTemperatureProcessing, 49, 25},
 	  // 51
 	  {ugDistance,        TEXT("AA Distance Tgt"), TEXT("AA Dtgt"), new InfoBoxFormatter(TEXT("%2.0f")), NoProcessing, 52, 31},
 	  // 52
@@ -563,7 +564,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 55
 	  {ugNone,            TEXT("Own Team Code"), TEXT("TeamCode"), new FormatterTeamCode(TEXT("\0")), NoProcessing, 56, 54},
 	  // 56
-	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f°T")), NoProcessing, 57, 55},
+	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), NoProcessing, 57, 55},
 	  // 57
 	  {ugNone,            TEXT("Team Bearing Diff"), TEXT("Team Bd"), new FormatterDiffTeamBearing(TEXT("")), NoProcessing, 58, 56},	  
 	  // 58
@@ -1229,7 +1230,12 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   // experimental CVS 
 
+#ifdef __MINGW32__
+  wcscat(XCSoar_Version, TEXT("5.1.9 gccB2 "));
+#else
   wcscat(XCSoar_Version, TEXT("5.1.9 Beta2 "));
+#endif
+
   wcscat(XCSoar_Version, TEXT(__DATE__));
 
   CreateDirectoryIfAbsent(TEXT("persist"));
@@ -2298,7 +2304,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
           if(iTimerID) {
             KillTimer(hWnd,iTimerID);
-            iTimerID = NULL;
+            iTimerID = 0;
           }
           
           Shutdown();
@@ -2670,7 +2676,7 @@ void DisplayText(void)
 
 }
 
-#include "Winbase.h"
+#include "winbase.h"
 
 
 void CommonProcessTimer()
@@ -3067,7 +3073,7 @@ void PopUpSelect(int Index)
 
 void DebugStore(char *Str)
 {
-#ifdef DEBUG
+#if defined(DEBUG)||defined(__MINGW32__)
   LockFlightData();
   FILE *stream;
   TCHAR szFileName[] = TEXT("\\xcsoar-debug.log");
@@ -3346,8 +3352,7 @@ void BlankDisplay(bool doblank) {
           StartupStore(TEXT("Battery low exit...\n"));
           // TODO - Debugging and warning message	  
 	  ForceShutdown = true;
-          SendMessage(hWndMainWindow, WM_CLOSE,
-                      NULL, NULL);
+          SendMessage(hWndMainWindow, WM_CLOSE, 0, 0);
         } else
 #endif
           if (PDABatteryPercent < BATTERY_WARNING) {
@@ -3424,7 +3429,7 @@ void Event_SelectInfoBox(int i) {
 
 
 void Event_ChangeInfoBoxType(int i) {
-  int j, k;
+  int j=0, k;
 
   if (InfoFocus<0) {
     return;

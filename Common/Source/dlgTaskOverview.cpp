@@ -30,14 +30,14 @@ Copyright_License {
 */
 
 
-#include "stdafx.h"
-#include <Aygshell.h>
+#include "StdAfx.h"
+#include <aygshell.h>
 
 #include "XCSoar.h"
 
 #include "WindowControls.h"
 #include "Statistics.h"
-#include "Externs.h"
+#include "externs.h"
 #include "Dialogs.h"
 #include "Logger.h"
 #include "McReady.h"
@@ -128,7 +128,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
     w0 = 210*InfoBoxLayout::scale;
   }
   int w1 = GetTextWidth(hDC, TEXT(" 000km"));
-  int w2 = GetTextWidth(hDC, TEXT("  000°"));
+  int w2 = GetTextWidth(hDC, TEXT("  000")TEXT(DEG));
 
   int p1 = w0-w1-w2; // 125*InfoBoxLayout::scale;
   int p2 = w0-w2;    // 175*InfoBoxLayout::scale;
@@ -164,7 +164,7 @@ static void OnTaskPaintListItem(WindowControl * Sender, HDC hDC){
                  ETO_OPAQUE, NULL,
                  sTmp, _tcslen(sTmp), NULL);
 
-      _stprintf(sTmp, TEXT("%d°"),  iround(Task[i].InBound));
+      _stprintf(sTmp, TEXT("%d")TEXT(DEG),  iround(Task[i].InBound));
       ExtTextOut(hDC, p2+w2-GetTextWidth(hDC, sTmp), 
                  2*InfoBoxLayout::scale,
                  ETO_OPAQUE, NULL,

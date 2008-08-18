@@ -32,8 +32,9 @@ Copyright_License {
 #if !defined(__WINDOWSCONTROL_H)
 #define __WINDOWSCONTROL_H
 
-#include "units.h"
-#include "xcsoar.h"
+#include <malloc.h>
+#include "Units.h"
+#include "XCSoar.h"
 
 #define IsEmptyString(x)        ((x==NULL) || (x[0]=='\0'))
 
@@ -102,7 +103,7 @@ class DataField{
 	  virtual int SetAsInteger(int Value){ (void)Value;
 	  return(0);};
 	  virtual double SetAsFloat(double Value){ (void) Value;
-	  return(NULL);};
+	  return(0.0);};
   virtual TCHAR *SetAsString(TCHAR *Value){(void)Value; return(NULL);};
 
   virtual void Set(bool Value){ (void)Value; };
@@ -507,7 +508,7 @@ class WindowControl {
     TCHAR mCaption[254];
     bool mDontPaintSelector;
 
-    WindowControl *mClients[25];
+    WindowControl *mClients[50];
     int mClientCount;
 
     virtual void PaintSelector(HDC hDC);
@@ -516,7 +517,7 @@ class WindowControl {
     bool HasFocus(void) { return mHasFocus; };
 
   public:
-
+    TCHAR* GetCaption(void) { return mCaption; };
     int WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     virtual void AddClient(WindowControl *Client);

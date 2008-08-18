@@ -29,9 +29,9 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "externs.h"
-#include "units.h"
+#include "Units.h"
 #include "device.h"
 #include "InputEvents.h"
 #include "WindowControls.h"

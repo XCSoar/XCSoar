@@ -30,18 +30,18 @@ Copyright_License {
 
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "compatibility.h"
-#include "dialogs.h"
+#include "Dialogs.h"
 #include "resource.h"
-#include "utils.h"
+#include "Utils.h"
 #include "externs.h"
 
 #include <commdlg.h>
 #include <commctrl.h>
-#include <Commdlg.h>
-#include <Aygshell.h>
+#include <commdlg.h>
+#include <aygshell.h>
 
 #include <windows.h>
 

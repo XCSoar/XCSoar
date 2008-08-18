@@ -29,10 +29,10 @@ Copyright_License {
 }
 */
 
-#include "stdafx.h"
+#include "StdAfx.h"
 
 #include "externs.h"
-#include "units.h"
+#include "Units.h"
 #include "externs.h"
 #include "Waypointparser.h"
 #include "Logger.h"
@@ -385,7 +385,7 @@ static void UpdateValuesFlight(void) {
 
     wp = (WndProperty*)wf->FindByName(TEXT("prpBearing"));
     if (wp) {
-      _stprintf(Temp, TEXT("%d°"), iround(bearing));
+      _stprintf(Temp, TEXT("%d")TEXT(DEG), iround(bearing));
       wp->SetText(Temp);
     }
 
