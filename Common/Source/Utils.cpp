@@ -33,7 +33,9 @@ Copyright_License {
 
 #if defined(CECORE)
 #include "winbase.h"
+#if (WINDOWSPC<1)
 #include "projects.h"
+#endif
 #endif
 
 #include "Utils.h"
@@ -1345,6 +1347,36 @@ void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
     *Bearing = AngleLimit360(atan2(y,x)*RAD_TO_DEG);
   }
 }
+
+
+double DoubleDistance(double lat1, double lon1, double lat2, double lon2,
+		      double lat3, double lon3) {
+
+  lat1 *= DEG_TO_RAD;
+  lat2 *= DEG_TO_RAD;
+  lat3 *= DEG_TO_RAD;
+  lon1 *= DEG_TO_RAD;
+  lon2 *= DEG_TO_RAD;
+  lon3 *= DEG_TO_RAD;
+
+  double clat1 = cos(lat1);
+  double clat2 = cos(lat2);
+  double clat3 = cos(lat3);
+  double dlon21 = lon2-lon1;
+  double dlon32 = lon3-lon2;
+
+  double s21 = sin((lat2-lat1)/2);
+  double sl21 = sin(dlon21/2);
+  double s32 = sin((lat3-lat2)/2);
+  double sl32 = sin(dlon32/2);
+
+  double a12 = max(0.0,min(1.0,s21*s21+clat1*clat2*sl21*sl21));
+  double a23 = max(0.0,min(1.0,s32*s32+clat2*clat3*sl32*sl32));
+  return 6371000.0*2.0*(atan2(sqrt(a12),sqrt(1.0-a12))
+			+atan2(sqrt(a23),sqrt(1.0-a23)));
+
+}
+
 
 
 /*
@@ -3382,7 +3414,7 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 #if defined(GNAV) && !defined(PCGNAV)
   _tcscpy(buffer,TEXT("\\NOR Flash"));
   //  _tcscpy(buffer,TEXT("\\USB HD\\Altair"));
-#elif defined(CECORE)
+#elif defined(CECORE) && (WINDOWSPC<1)
   // return the first flash card with a XCSoarData directory on it
   // code copied from DataFieldFileReader::ScanDirectoryTop and adapted
 
@@ -3789,7 +3821,7 @@ int MeasureCPULoad() {
   static int PercentIdle;
   static int PercentLoad;
   static int pi;
-#if !defined(GNAV) || (WINDOWSPC>0)
+#if (!defined(GNAV) || (WINDOWSPC>0)) && !defined(JMW_MINGW)
   if (!init) {
     // get the pointer to the function
     GetIdleTime = (GetIdleTimeProc)
