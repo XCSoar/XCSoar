@@ -43,7 +43,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 
 #include <windows.h>
-#include <Commctrl.h>
+#include <commctrl.h>
 #include <aygshell.h>
 
 #include <tchar.h>

@@ -23,7 +23,7 @@
 #include <string.h>
 #include <windows.h>
 #include "ts_string.h"
-#include "stdafx.h"
+#include "StdAfx.h"
 
 
 void ascii2unicode(const char* ascii, WCHAR* unicode)

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "XCSoar.h"
 
 void StartupStore(TCHAR *Str); //rmk
