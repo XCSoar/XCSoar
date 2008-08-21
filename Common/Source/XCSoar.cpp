@@ -56,7 +56,9 @@ Copyright_License {
 
 #include <commctrl.h>
 #include <aygshell.h>
+#if (WINDOWSPC<1)
 #include <sipapi.h>
+#endif
 
 #include "Terrain.h"
 #include "VarioSound.h"
@@ -411,7 +413,7 @@ DWORD StartMaxSpeed = 0;
 // Statistics
 Statistics flightstats;
 
-#if (UNDER_CE >= 300) || (WINDOWSPC>0)
+#if (UNDER_CE >= 300) && (WINDOWSPC<1)
 #define HAVE_ACTIVATE_INFO
 static SHACTIVATEINFO s_sai;
 #endif
@@ -784,13 +786,13 @@ void FullScreen() {
 
   if (!MenuActive) {
     SetForegroundWindow(hWndMainWindow);
-    SHFullScreen(hWndMainWindow,
-                 SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #if (WINDOWSPC>0)
     SetWindowPos(hWndMainWindow,HWND_TOP,
                  0, 0, 0, 0,
                  SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
 #else
+    SHFullScreen(hWndMainWindow,
+                 SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
     SetWindowPos(hWndMainWindow,HWND_TOP,
                  0,0,
                  GetSystemMetrics(SM_CXSCREEN),
@@ -1266,6 +1268,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
 
   hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_XCSOAR);
 
+#ifdef HAVE_ACTIVATE_INFO
   SHSetAppKeyWndAssoc(VK_APP1, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP2, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP3, hWndMainWindow);
@@ -1277,6 +1280,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   //	Also APPA is record key on some systems
   SHSetAppKeyWndAssoc(VK_APP5, hWndMainWindow);
   SHSetAppKeyWndAssoc(VK_APP6, hWndMainWindow);
+#endif
 
   StartupStore(TEXT("Initialising critical sections and events\n"));
 
@@ -2212,10 +2216,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           SetWindowPos(hWndMainWindow,HWND_TOP,
                  0, 0, 0, 0,
                  SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
+
+#ifdef HAVE_ACTIVATE_INFO
           if(TopWindow)
             SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
           else
             SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR|SHFS_SHOWSIPBUTTON|SHFS_SHOWSTARTICON);
+#endif
+
         }
 #ifdef HAVE_ACTIVATE_INFO
       SHHandleWMActivate(hWnd, wParam, lParam, &s_sai, FALSE);
