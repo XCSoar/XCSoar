@@ -979,6 +979,7 @@ void LoadNewTask(TCHAR *szFileName)
   int i;
   bool TaskInvalid = false;
   bool WaypointInvalid = false;
+  bool TaskLoaded = false;
 
   LockTaskData();
 
@@ -1006,6 +1007,8 @@ void LoadNewTask(TCHAR *szFileName)
       DWORD  old_FinishRadius = FinishRadius;
       int    old_FinishLine = FinishLine;
       bool   old_EnableMultipleStartPoints = EnableMultipleStartPoints;
+
+      TaskLoaded = true;
 
       for(i=0;i<MAXTASKPOINTS;i++)
         {
@@ -1117,7 +1120,7 @@ void LoadNewTask(TCHAR *szFileName)
 
   UnlockTaskData();
 
-  if (TaskInvalid) {
+  if (TaskInvalid && TaskLoaded) {
     MessageBoxX(hWndMapWindow,
       gettext(TEXT("Error in task file!")),
       gettext(TEXT("Load task")),

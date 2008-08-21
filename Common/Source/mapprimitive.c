@@ -611,6 +611,7 @@ pointObj generateLineIntersection(pointObj a, pointObj b, pointObj c, pointObj d
 
   p.x = MS_NINT(a.x + r*(b.x-a.x));
   p.y = MS_NINT(a.y + r*(b.y-a.y));
+  p.m = 0;
 
   return(p);
 }
