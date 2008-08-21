@@ -413,7 +413,7 @@ DWORD StartMaxSpeed = 0;
 // Statistics
 Statistics flightstats;
 
-#if (UNDER_CE >= 300) && (WINDOWSPC<1)
+#if ((UNDER_CE >= 300)||(_WIN32_WCE >= 0x0300)) && (WINDOWSPC<1)
 #define HAVE_ACTIVATE_INFO
 static SHACTIVATEINFO s_sai;
 #endif
@@ -3081,10 +3081,10 @@ void PopUpSelect(int Index)
 
 void DebugStore(char *Str)
 {
-#if defined(DEBUG)||defined(__MINGW32__)
+#if (defined(DEBUG)||defined(__MINGW32__))&&!defined(GNAV)
   LockFlightData();
   FILE *stream;
-  TCHAR szFileName[] = TEXT("\\xcsoar-debug.log");
+  TCHAR szFileName[] = TEXT("xcsoar-debug.log");
   static bool initialised = false;
   if (!initialised) {
     initialised = true;
