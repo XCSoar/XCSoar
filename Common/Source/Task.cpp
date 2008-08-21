@@ -1346,6 +1346,7 @@ double DoubleLegDistance(int taskwaypoint,
                          double longitude,
                          double latitude) {
 
+#if 0
   double d0;
   double d1;
   if (taskwaypoint>0) {
@@ -1364,6 +1365,28 @@ double DoubleLegDistance(int taskwaypoint,
                   Task[taskwaypoint+1].AATTargetLon,
                   &d1, NULL);
   return d0 + d1;
+
+#else
+
+  if (taskwaypoint>0) {
+    return DoubleDistance(Task[taskwaypoint-1].AATTargetLat,
+			  Task[taskwaypoint-1].AATTargetLon,
+			  latitude,
+			  longitude,
+			  Task[taskwaypoint+1].AATTargetLat,
+			  Task[taskwaypoint+1].AATTargetLon);
+  } else {
+    double d1;
+    DistanceBearing(latitude,
+		    longitude,
+		    Task[taskwaypoint+1].AATTargetLat,
+		    Task[taskwaypoint+1].AATTargetLon,
+		    &d1, NULL);
+    return d1;
+  }
+
+
+#endif
 }
 
 
