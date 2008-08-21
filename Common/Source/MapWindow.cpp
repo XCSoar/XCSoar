@@ -2263,12 +2263,14 @@ void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys, co
     cost = ICOSTABLE[deg]*InfoBoxLayout::scale;
     sint = ISINETABLE[deg]*InfoBoxLayout::scale;
   }
+  int xxs = xs*1024+512;
+  int yys = ys*1024+512;
 
   for(POINT *p=poly; p<poly+n; p++) {
     int x= p->x;
     int y= p->y;
-    p->x = (x*cost - y*sint + 512)/1024+xs;
-    p->y = (y*cost + x*sint + 512)/1024+ys;
+    p->x = (x*cost - y*sint + xxs)/1024;
+    p->y = (y*cost + x*sint + yys)/1024;
   }
 }
 
@@ -4509,6 +4511,30 @@ void MapWindow::LatLon2Screen(const double &lon, const double &lat,
   sc.x = Orig_Screen.x - X;
   sc.y = Orig_Screen.y + Y;
 }
+
+void MapWindow::LatLon2Screen(pointObj *ptin, POINT *ptout, const int n,
+			      const int skip) {
+  static double lastangle = -1;
+  static int cost=1024, sint=0;
+
+  if(DisplayAngle != lastangle) {
+    lastangle = DisplayAngle;
+    int deg = DEG_TO_INT(AngleLimit360(DisplayAngle));
+    cost = ICOSTABLE[deg];
+    sint = ISINETABLE[deg];
+  }
+  int xxs = Orig_Screen.x*1024-512;
+  int yys = Orig_Screen.y*1024+512;
+
+  for(pointObj *p=ptin; p<ptin+n; p+= skip, ptout++) {
+    int Y = Real2Int((PanLatitude-p->y)*DrawScale);
+    int X = Real2Int((PanLongitude-p->x)*fastcosine(p->y)*DrawScale);
+    ptout->x = (xxs-X*cost + Y*sint)/1024;
+    ptout->y = (Y*cost + X*sint + yys)/1024;
+    irotate(X, Y, DisplayAngle);    
+  }
+}
+
 
 ////////////////////////////////////////////////////////////////////////
 

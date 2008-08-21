@@ -345,6 +345,8 @@ void AirspaceWarnListAdd(NMEA_INFO *Basic, bool Predicted,
       asi.IsCircle = IsCircle;
       asi.AirspaceIndex = AsIdx;
       asi.SortKey = 0;
+      asi.LastListIndex = 0; // JMW initialise
+      asi.WarnLevel = 0; // JMW initialise
 
       calcWarnLevel(&asi);
 

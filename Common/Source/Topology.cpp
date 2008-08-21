@@ -287,17 +287,16 @@ void Topology::Paint(HDC hdc, RECT rc) {
           int minx = rc.right;
           int miny = rc.bottom;
           int msize = min(shape->line[tt].numpoints, MAXCLIPPOLYGON);
+
+	  MapWindow::LatLon2Screen(shape->line[tt].point,
+				   pt, msize, 1);
           for (int jj=0; jj< msize; jj++) {
-            
-            MapWindow::LatLon2Screen(shape->line[tt].point[jj].x, 
-                                     shape->line[tt].point[jj].y, 
-                                     pt[jj]);
             if (pt[jj].x<=minx) {
               minx = pt[jj].x;
               miny = pt[jj].y;
             }
-            
-          }
+	  }
+
           ClipPolygon(hdc, pt, msize, rc, false);
           shpCache[ixshp]->renderSpecial(hdc,minx,miny);
         }
@@ -312,15 +311,15 @@ void Topology::Paint(HDC hdc, RECT rc) {
           int miny = rc.bottom;
           int msize = min(shape->line[tt].numpoints/iskip, MAXCLIPPOLYGON);
           
+	  MapWindow::LatLon2Screen(shape->line[tt].point,
+				   pt, msize*iskip, iskip);
+
           for (int jj=0; jj< msize; jj++) {
-            MapWindow::LatLon2Screen(shape->line[tt].point[jj*iskip].x, 
-                                     shape->line[tt].point[jj*iskip].y, 
-                                     pt[jj]);
             if (pt[jj].x<=minx) {
               minx = pt[jj].x;
               miny = pt[jj].y;
             }
-          }
+	  }
           ClipPolygon(hdc,pt, msize, rc, true);
           shpCache[ixshp]->renderSpecial(hdc,minx,miny);          
         }

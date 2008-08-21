@@ -160,6 +160,8 @@ class MapWindow {
   static void Screen2LatLon(const int &x, const int &y, double &X, double &Y);
 
   static void LatLon2Screen(const double &lon, const double &lat, POINT &sc);
+  static void LatLon2Screen(pointObj *ptin, POINT *ptout, const int n,
+			    const int skip);
 
   static void CloseDrawingThread(void);
   static void CreateDrawingThread(void);
