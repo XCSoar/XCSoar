@@ -61,7 +61,7 @@ Copyright_License {
 #include "RasterTerrain.h"
 
 #if (WINDOWSPC>0)
-#include <Wingdi.h>
+#include <wingdi.h>
 #endif
 
 int misc_tick_count=0;
@@ -69,10 +69,6 @@ int misc_tick_count=0;
 #ifdef DEBUG
 #define DRAWLOAD
 #endif
-#ifdef __MINGW32__
-#define DRAWLOAD
-#endif
-#define DRAWLOAD
 
 int TrailActive = TRUE;
 

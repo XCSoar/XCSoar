@@ -2170,12 +2170,14 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
   }
 
   HINSTANCE hinstLib;	// Library pointer
-  DLLFUNC_INPUTEVENT lpfnDLLProc;	// Function pointer
+  DLLFUNC_INPUTEVENT lpfnDLLProc = NULL;	// Function pointer
 
   // Load library, find function, execute, unload library
   hinstLib = _loadDLL(dll_name);
   if (hinstLib != NULL) {
+#ifndef JMW_MINGW
     lpfnDLLProc = (DLLFUNC_INPUTEVENT)GetProcAddress(hinstLib, func_name);
+#endif
     if (lpfnDLLProc != NULL) {
       (*lpfnDLLProc)(other);
 #ifdef _INPUTDEBUG_
@@ -2207,10 +2209,12 @@ HINSTANCE _loadDLL(TCHAR *name) {
       DLLCache_Count++;
       
       // First time setup... (should check version numbers etc...)
-      DLLFUNC_SETHINST lpfnDLLProc;
+      DLLFUNC_SETHINST lpfnDLLProc = NULL;
+#ifndef JMW_MINGW
       lpfnDLLProc = (DLLFUNC_SETHINST)
 	GetProcAddress(DLLCache[DLLCache_Count - 1].hinstance, 
 		       TEXT("XCSAPI_SetHInst"));
+#endif
       if (lpfnDLLProc)
 	lpfnDLLProc(GetModuleHandle(NULL));
       
