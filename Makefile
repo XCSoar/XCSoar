@@ -7,26 +7,24 @@ OPTIMIZE	:=-O2
 CONFIG_PPC2002	:=n
 CONFIG_PPC2003	:=y
 
+CPU		:=xscale
+
 ifeq ($(CONFIG_PPC2002),y)
-CPU		:=strongarm1110
 CE_MAJOR	:=3
 CE_MINOR	:=00
 CE_PLATFORM	:=310
 endif
 ifeq ($(CONFIG_PPC2003),y)
-CPU		:=xscale
 CE_MAJOR	:=4
 CE_MINOR	:=00
 CE_PLATFORM	:=400
 endif
 
-TARGET_ARCH	:=-mwin32 -mcpu=$(CPU) -mtune=$(CPU)
-
-
 EXE		:=$(findstring .exe,$(MAKE))
 AR		:=$(TCPATH)ar$(EXE)
 CXX		:=$(TCPATH)g++$(EXE)
 CC		:=$(TCPATH)gcc$(EXE)
+SIZE		:=$(TCPATH)size(EXE)
 STRIP		:=$(TCPATH)strip$(EXE)
 WINDRES		:=$(TCPATH)windres$(EXE)
 CE_VERSION	:=0x0$(CE_MAJOR)$(CE_MINOR)
@@ -34,9 +32,8 @@ ARFLAGS		:=r
 CE_DEFS		:=-D_WIN32_WCE=$(CE_VERSION) -D_WIN32_IE=$(CE_VERSION)
 CE_DEFS		+=-DWIN32_PLATFORM_PSPC=$(CE_PLATFORM)
 CPPFLAGS	:=-I$(HDR)/mingw32compat -I$(HDR) -I$(SRC) $(CE_DEFS)
-CPPFLAGS	+=-DUNICODE -D_UNICODE -DNDEBUG -D_ARM_ -Wuninitialized -Werror
-CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions 
-# JMW no exceptions required
+CPPFLAGS	+= -DUNICODE -D_UNICODE -DNDEBUG -D_ARM_ -Wuninitialized
+CXXFLAGS	:=$(OPTIMIZE) 
 CFLAGS		:=$(OPTIMIZE)
 LDFLAGS		:=-Wl,--major-subsystem-version=$(CE_MAJOR)
 LDFLAGS		+=-Wl,--minor-subsystem-version=$(CE_MINOR)
@@ -60,6 +57,8 @@ else
 NQ		:=
 endif
 endif
+
+CPPFLAGS_Common_Source_ :=-Werror
 
 DEVS	:=\
 	$(SRC)/devAltairPro.o \
@@ -208,13 +207,20 @@ COMPAT	:=\
 
 all:	xcsoar.exe xcsoarsimulator.exe
 
+install: xcsoar.exe
+	@echo Copying to device...
+	pcp xcsoar.exe ':/Program Files/XCSoar/xcsoar.exe'
+
+
 xcsoar.exe: xcsoar-ns.exe
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
+	$(Q)$(SIZE) $@
 
 xcsoarsimulator.exe: xcsoarsimulator-ns.exe
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
+	$(Q)$(SIZE) $@
 
 xcsoar-ns.exe: $(OBJS)
 	@$(NQ)echo "  LINK    $@"
@@ -255,58 +261,54 @@ $(SRC)/compat.a: $(patsubst %.cpp,%.o,$(COMPAT:.c=.o))
 	$(Q)$(WINDRES) $(WINDRESFLAGS) $<.tmp $@
 	@$(RM) $<.tmp
 
+DEPFILE                =$(dir $@).$(notdir $@).d
+DEPFLAGS       =-Wp,-MD,$(DEPFILE)
+dirtarget      =$(subst \\,_,$(subst /,_,$(dir $@)))
+cc-flags       =$(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
+cxx-flags      =$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
+
+
 #
 # Useful debugging targets - make preprocessed versions of the source
 #
 %.i: %.cpp FORCE
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -E $(OUTPUT_OPTION) $<
+	$(CXX) $(cxx-flags) -E $(OUTPUT_OPTION) $<
 
 %.s: %.cpp FORCE
-	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -S $(OUTPUT_OPTION) $<
+	$(CXX) $(cxx-flags) -S $(OUTPUT_OPTION) $<
 
 %.i: %.c FORCE
-	$(CC) $(CFLAGS) $(CPPFLAGS) -E $(OUTPUT_OPTION) $<
-
-DEPFILE	=$(dir $@).$(notdir $@).d
-DEPFLAGS=-Wp,-MD,$(DEPFILE)
-
+	$(CC) $(cc-flags) -E $(OUTPUT_OPTION) $<
+ 
 #
 # Provide our own rules for building...
 #
 %.o: %.c
 	@$(NQ)echo "  CC      $@"
-	$(Q)$(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $(OUTPUT_OPTION) $<
-	@sed -i 's,^\([^ ]\),$(dir $@)\1,' $(DEPFILE)
+	$(Q)$(CC) $(cc-flags) -c $(OUTPUT_OPTION) $<
+	@sed -i 's,^\([^ ]\),$@,' $(DEPFILE)
+
 
 %.o: %.cpp
 	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $(OUTPUT_OPTION) $<
-	@sed -i 's,^\([^ ]\),$(dir $@)\1,' $(DEPFILE)
+	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
+	@sed -i 's,^\([^ ]\),$@,' $(DEPFILE)
 
 %.os: %.c
 	@$(NQ)echo "  CC      $@"
-	$(Q)$(CC) $(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) -D_SIM_ $(TARGET_ARCH) -c $(OUTPUT_OPTION) $<
-	@sed -i 's,^\([^ ]\),$(dir $@)\1,' $(DEPFILE)
+	$(Q)$(CC) $(cc-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
+	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
 %.os: %.cpp
 	@$(NQ)echo "  CXX     $@"
-	$(Q)$(CXX) $(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) -D_SIM_ $(TARGET_ARCH) -c $(OUTPUT_OPTION) $<
-	@sed -i 's,^\([^ ]\),$(dir $@)\1,' $(DEPFILE)
-
-# sed	-e '/#include/s,Commdlg,commdlg,' \
-	-e '/#include/s,Augshell,aygshell,' \
-	-e '/#include/s,Externs,externs,' \
-	-e '/#include/s,infobox,InfoBox,' \
-	-e '/#include/s,OnlineContest,OnLineContest,' \
-	-e '/#include/s,VOImage,VOIMAGE,' \
-	-e '/#include/s,WinBase,winbase,' \
-	-e '/#include/s,Windows,windows,' \
-
+	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
+	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
+ 
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
 clean: cleani FORCE
-	find . $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' \) \
-		-type f -print | xargs -r $(RM)
+	find . $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '*.os' -o -name '.*.d' \) \
+	-type f -print | xargs -r $(RM)
 
 cleani: FORCE
 	find . $(IGNORE) \( -name '*.i' \) \
