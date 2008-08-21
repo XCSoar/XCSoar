@@ -59,7 +59,7 @@ Copyright_License {
 #include "InfoBoxLayout.h"
 
 #if (WINDOWSPC>0)
-#include <Wingdi.h>
+#include <wingdi.h>
 #endif
 
 #ifdef DEBUG
