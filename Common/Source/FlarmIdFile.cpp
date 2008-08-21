@@ -75,7 +75,7 @@ void FlarmIdFile::GetItem(HANDLE hFile, FlarmId *flarmId)
 		i++;
 	}
 
-	fseek(hFile, 1, SEEK_CUR);
+	fseek((FILE*)hFile, 1, SEEK_CUR);
 }
 
 
@@ -87,7 +87,7 @@ void FlarmIdFile::GetAsString(HANDLE hFile, int charCount, TCHAR *res)
 	//DWORD bytesRead; 
 
 	//ReadFile(hFile, bytes, bytesToRead, &bytesRead, NULL);
-	fread(bytes, 1, bytesToRead, hFile);
+	fread(bytes, 1, bytesToRead, (FILE*)hFile);
     	
 	TCHAR *curChar = res;
     for (int z = 0; z < bytesToRead; z += 2)
