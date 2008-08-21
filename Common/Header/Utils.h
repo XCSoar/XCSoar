@@ -171,6 +171,8 @@ void frotatescale(float &xin, float &yin, const float &angle, const float &scale
 
 void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
                      double *Distance, double *Bearing);
+double DoubleDistance(double lat1, double lon1, double lat2, double lon2,
+		      double lat3, double lon3);
 
 double Reciprocal(double InBound);
 double BiSector(double InBound, double OutBound);
