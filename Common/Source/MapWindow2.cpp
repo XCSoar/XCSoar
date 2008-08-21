@@ -599,6 +599,7 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
         AIRSPACE_POINT *ap= AirspacePoint+area.FirstPoint;
         POINT* sp= AirspaceScreenPoint+area.FirstPoint;
         while (ap < AirspacePoint+area.FirstPoint+area.NumPoints) {
+	  // JMW optimise!
             LatLon2Screen(ap->Longitude,
                           ap->Latitude,
                           *sp);
@@ -1412,7 +1413,6 @@ void MapWindow::DrawTrailFromTask(HDC hdc, RECT rc) {
   for (i=0; i<n; i++) {
     if (olc.getTime(i)>= TrailFirstTime)
       break;
-
     LatLon2Screen(olc.getLongitude(i),
                   olc.getLatitude(i),
                   ptin[j]);
@@ -1520,11 +1520,8 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc) {
 
 void MapWindow::CalculateScreenPositionsGroundline(void) {
   if (FinalGlideTerrain) {
-    for (int i=0; i<=NUMTERRAINSWEEPS; i++) {
-      LatLon2Screen(DerivedDrawInfo.GlideFootPrint[i].x,
-		    DerivedDrawInfo.GlideFootPrint[i].y,
-		    Groundline[i]);
-    }
+    LatLon2Screen(DerivedDrawInfo.GlideFootPrint,
+		  Groundline, NUMTERRAINSWEEPS+1, 1);
   }
 }
 

@@ -905,6 +905,8 @@ public:
     const int sint = ifastsine(DisplayAngle);
 
     for (int y = Y0; y<Y1; y+= dtquant) {
+      int ycost = y*cost;
+      int ysint = y*sint;
       for (int x = X0; x<X1; x+= dtquant, myhbuf++) {
         if ((x>= rect_visible.left) &&
             (x<= rect_visible.right) &&
@@ -912,8 +914,8 @@ public:
             (y<= rect_visible.bottom)) {
           ASSERT(myhbuf<hBufTop);
 
-          double Y = PanLatitude - (y*cost+x*sint)*InvDrawScale;
-          double X = PanLongitude + (x*cost-y*sint)*invfastcosine(Y)*InvDrawScale;
+          double Y = PanLatitude - (ycost+x*sint)*InvDrawScale;
+          double X = PanLongitude + (x*cost-ysint)*invfastcosine(Y)*InvDrawScale;
           *myhbuf = max(0, DisplayMap->GetField(Y,X));
         } else {
           *myhbuf = 0;

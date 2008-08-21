@@ -3308,6 +3308,8 @@ void BlankDisplay(bool doblank) {
 #else
 
   BATTERYINFO BatteryInfo;
+  BatteryInfo.acStatus = 0; // JMW initialise
+
   if (GetBatteryInfo(&BatteryInfo)) {
     PDABatteryPercent = BatteryInfo.BatteryLifePercent;
   }

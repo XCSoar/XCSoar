@@ -766,7 +766,7 @@ int msDBFWriteStringAttribute( DBFHandle psDBF, int iRecord, int iField, const c
   return( msDBFWriteAttribute( psDBF, iRecord, iField, (void *) pszValue ) );
 }
 
-int strcasecmp(const char *s1, const char*s2) {
+int m_strcasecmp(const char *s1, const char*s2) {
 	unsigned int i;
 
 	for (i = 0; s1[i] != 0 && s2[i] != 0; i++) {
@@ -803,7 +803,7 @@ int msDBFGetItemIndex(DBFHandle dbffile, char *name)
   /* does name exist as a field? */
   for(i=0;i<msDBFGetFieldCount(dbffile);i++) {
     dbfField = msDBFGetFieldInfo(dbffile,i,fName,&fWidth,&fnDecimals);
-    if(strcasecmp(name,fName) == 0) /* found it */
+    if(m_strcasecmp(name,fName) == 0) /* found it */
       return(i);
   }
 
