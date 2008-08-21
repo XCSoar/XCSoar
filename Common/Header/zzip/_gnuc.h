@@ -215,7 +215,5 @@
 #define __int64 long long
 #define _int64 __int64
 
-//typedef int ptrdiff_t;
-
 /* once: _ZZIP__MSVC_H */
 #endif

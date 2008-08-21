@@ -40,7 +40,7 @@ Copyright_License {
 #include "MapWindow.h"
 #include "RasterTerrain.h"
 #include <windows.h>
-#include <Commctrl.h>
+#include <commctrl.h>
 #include <math.h>
 #include <aygshell.h>
 
@@ -1700,7 +1700,7 @@ void IntermediatePoint(double lon1, double lat1,
     f = dthis/dtotal;
     d = dtotal;
   } else {
-    d /*total*/ =1.0e-7; /* RMK */
+    d = 1.0e-7;
     f = 0.0;
   }
   f = min(1.0,max(0.0,f));

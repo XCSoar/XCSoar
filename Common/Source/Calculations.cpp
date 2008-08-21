@@ -1032,7 +1032,7 @@ void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static double Vario[30];
   static double NettoVario[30];
   int Elapsed, i;
-  long index = 0; /*RMK: nn*/
+  long index = 0;
   double Gain;
   static int num_samples = 0;
   static BOOL lastCircling = false;
