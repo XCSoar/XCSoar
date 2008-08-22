@@ -4,28 +4,28 @@
 #include "XCSoar.h"
 #include "externs.h"
 
-typedef void (*pt2Event)(TCHAR *);
+typedef void (*pt2Event)(const TCHAR *);
 
 HINSTANCE _loadDLL(TCHAR *name);
 
 class InputEvents {
  public:
   static void readFile();
-  static int mode2int(TCHAR *mode, bool create);
-  static void setMode(TCHAR *mode);
+  static int mode2int(const TCHAR *mode, bool create);
+  static void setMode(const TCHAR *mode);
   static TCHAR* getMode();
   static int getModeID();
-  static int findKey(TCHAR *data);
-  static int findGCE(TCHAR *data);
-  static int findNE(TCHAR *data);
-  static pt2Event findEvent(TCHAR *);
+  static int findKey(const TCHAR *data);
+  static int findGCE(const TCHAR *data);
+  static int findNE(const TCHAR *data);
+  static pt2Event findEvent(const TCHAR *);
   static bool processKey(int key);
   static bool processNmea(int key);
   static bool processButton(int bindex);
   static bool processGlideComputer(int);
   static void DoQueuedEvents(void);
   static void processGo(int event_id);
-  static int  makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next = 0);
+  static int  makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next = 0);
   static void makeLabel(int mode_id, TCHAR *label, int location, int event_id);
 
   static void drawButtons(int Mode);
@@ -33,63 +33,63 @@ class InputEvents {
 
   // -------
 
-  static void eventAbortTask(TCHAR *misc);
-  static void eventAdjustForecastTemperature(TCHAR *misc);
-  static void eventAdjustVarioFilter(TCHAR *misc);
-  static void eventAdjustWaypoint(TCHAR *misc);
-  static void eventAnalysis(TCHAR *misc);
-  static void eventArmAdvance(TCHAR *misc);
-  static void eventAudioDeadband(TCHAR *misc);
-  static void eventBallast(TCHAR *misc);
-  static void eventBugs(TCHAR *misc);
-  static void eventCalculator(TCHAR *misc);
-  static void eventChangeInfoBoxType(TCHAR *misc);
-  static void eventChecklist(TCHAR *misc);
-  static void eventClearAirspaceWarnings(TCHAR *misc);
-  static void eventClearStatusMessages(TCHAR *misc);
-  static void eventClearWarningsOrTerrainTopology(TCHAR *misc);
-  static void eventDLLExecute(TCHAR *misc);
-  static void eventDoInfoKey(TCHAR *misc);
-  static void eventFlightMode(TCHAR *misc);
-  static void eventLogger(TCHAR *misc);
-  static void eventMacCready(TCHAR *misc);
-  static void eventMainMenu(TCHAR *misc);
-  static void eventMarkLocation(TCHAR *misc);
-  static void eventMode(TCHAR *misc);
-  static void eventNearestAirspaceDetails(TCHAR *misc);
-  static void eventNearestWaypointDetails(TCHAR *misc);
-  static void eventNull(TCHAR *misc);
-  static void eventPan(TCHAR *misc);
-  static void eventPlaySound(TCHAR *misc);
-  static void eventProfileLoad(TCHAR *misc);
-  static void eventProfileSave(TCHAR *misc);
-  static void eventRepeatStatusMessage(TCHAR *misc);
-  static void eventRun(TCHAR *misc);
-  static void eventScreenModes(TCHAR *misc);
-  static void eventSelectInfoBox(TCHAR *misc);
-  static void eventSendNMEA(TCHAR *misc);
-  static void eventSendNMEAPort1(TCHAR *misc);
-  static void eventSendNMEAPort2(TCHAR *misc);
-  static void eventSetup(TCHAR *misc);
-  static void eventSnailTrail(TCHAR *misc);
-  static void eventSounds(TCHAR *misc);
-  static void eventStatus(TCHAR *misc);
-  static void eventStatusMessage(TCHAR *misc);
-  static void eventTaskLoad(TCHAR *misc);
-  static void eventTaskSave(TCHAR *misc);
-  static void eventTerrainTopology(TCHAR *misc);
-  static void eventWaypointDetails(TCHAR *misc);
-  static void eventWind(TCHAR *misc);
-  static void eventZoom(TCHAR *misc);
-  static void eventBrightness(TCHAR *misc);
-  static void eventDeclutterLabels(TCHAR *misc);
-  static void eventExit(TCHAR *misc);
-  static void eventFLARMRadar(TCHAR *misc);
-  static void eventBeep(TCHAR *misc);
-  static void eventUserDisplayModeForce(TCHAR *misc);
-  static void eventAirspaceDisplayMode(TCHAR *misc);
-  static void eventAutoLogger(TCHAR *misc);
-  static void eventGotoLookup(TCHAR *misc);
+  static void eventAbortTask(const TCHAR *misc);
+  static void eventAdjustForecastTemperature(const TCHAR *misc);
+  static void eventAdjustVarioFilter(const TCHAR *misc);
+  static void eventAdjustWaypoint(const TCHAR *misc);
+  static void eventAnalysis(const TCHAR *misc);
+  static void eventArmAdvance(const TCHAR *misc);
+  static void eventAudioDeadband(const TCHAR *misc);
+  static void eventBallast(const TCHAR *misc);
+  static void eventBugs(const TCHAR *misc);
+  static void eventCalculator(const TCHAR *misc);
+  static void eventChangeInfoBoxType(const TCHAR *misc);
+  static void eventChecklist(const TCHAR *misc);
+  static void eventClearAirspaceWarnings(const TCHAR *misc);
+  static void eventClearStatusMessages(const TCHAR *misc);
+  static void eventClearWarningsOrTerrainTopology(const TCHAR *misc);
+  static void eventDLLExecute(const TCHAR *misc);
+  static void eventDoInfoKey(const TCHAR *misc);
+  static void eventFlightMode(const TCHAR *misc);
+  static void eventLogger(const TCHAR *misc);
+  static void eventMacCready(const TCHAR *misc);
+  static void eventMainMenu(const TCHAR *misc);
+  static void eventMarkLocation(const TCHAR *misc);
+  static void eventMode(const TCHAR *misc);
+  static void eventNearestAirspaceDetails(const TCHAR *misc);
+  static void eventNearestWaypointDetails(const TCHAR *misc);
+  static void eventNull(const TCHAR *misc);
+  static void eventPan(const TCHAR *misc);
+  static void eventPlaySound(const TCHAR *misc);
+  static void eventProfileLoad(const TCHAR *misc);
+  static void eventProfileSave(const TCHAR *misc);
+  static void eventRepeatStatusMessage(const TCHAR *misc);
+  static void eventRun(const TCHAR *misc);
+  static void eventScreenModes(const TCHAR *misc);
+  static void eventSelectInfoBox(const TCHAR *misc);
+  static void eventSendNMEA(const TCHAR *misc);
+  static void eventSendNMEAPort1(const TCHAR *misc);
+  static void eventSendNMEAPort2(const TCHAR *misc);
+  static void eventSetup(const TCHAR *misc);
+  static void eventSnailTrail(const TCHAR *misc);
+  static void eventSounds(const TCHAR *misc);
+  static void eventStatus(const TCHAR *misc);
+  static void eventStatusMessage(const TCHAR *misc);
+  static void eventTaskLoad(const TCHAR *misc);
+  static void eventTaskSave(const TCHAR *misc);
+  static void eventTerrainTopology(const TCHAR *misc);
+  static void eventWaypointDetails(const TCHAR *misc);
+  static void eventWind(const TCHAR *misc);
+  static void eventZoom(const TCHAR *misc);
+  static void eventBrightness(const TCHAR *misc);
+  static void eventDeclutterLabels(const TCHAR *misc);
+  static void eventExit(const TCHAR *misc);
+  static void eventFLARMRadar(const TCHAR *misc);
+  static void eventBeep(const TCHAR *misc);
+  static void eventUserDisplayModeForce(const TCHAR *misc);
+  static void eventAirspaceDisplayMode(const TCHAR *misc);
+  static void eventAutoLogger(const TCHAR *misc);
+  static void eventGotoLookup(const TCHAR *misc);
   // -------
 
 #ifdef _SIM_

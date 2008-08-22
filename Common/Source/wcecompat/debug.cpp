@@ -1,8 +1,6 @@
 #include "StdAfx.h"
 #include "XCSoar.h"
 
-void StartupStore(TCHAR *Str); //rmk
-
 void debug(const TCHAR *fmt, ...)
 {
   TCHAR buf[80];
@@ -14,5 +12,4 @@ void debug(const TCHAR *fmt, ...)
 
   StartupStore(buf);
 }
-
 

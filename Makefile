@@ -2,23 +2,64 @@
 SRC=Common/Source
 HDR=Common/Header
 #
-TCPATH		:=/opt/mingw32ce/bin/arm-mingw32ce-
 OPTIMIZE	:=-O2
 CONFIG_PPC2002	:=n
-CONFIG_PPC2003	:=y
+CONFIG_PPC2003	:=n
+CONFIG_ALTAIR	:=n
+CONFIG_PC	:=n
 
+ifeq ($(TARGET),PPC2002)
+  CONFIG_PPC2002	:=y
+else
+  ifeq ($(TARGET),PPC2003)
+    CONFIG_PPC2003	:=y
+  else
+    ifeq ($(TARGET),PC)
+      CONFIG_PC	:=y
+    else
+      ifeq ($(TARGET),ALTAIR)
+        CONFIG_ALTAIR	:=y
+      endif
+    endif
+  endif
+endif
+
+ifeq ($(CONFIG_PC),y)
+TCPATH		:=i586-mingw32msvc-
+CPU		:=i586
+else
+TCPATH		:=arm-mingw32ce-
 CPU		:=xscale
+endif
 
 ifeq ($(CONFIG_PPC2002),y)
 CE_MAJOR	:=3
 CE_MINOR	:=00
 CE_PLATFORM	:=310
+TARGET		:=PPC2002
 endif
 ifeq ($(CONFIG_PPC2003),y)
 CE_MAJOR	:=4
 CE_MINOR	:=00
 CE_PLATFORM	:=400
+TARGET		:=PPC2003
 endif
+ifeq ($(CONFIG_ALTAIR),y)
+# armv4i
+CE_MAJOR	:=5
+CE_MINOR	:=00
+CE_PLATFORM	:=500
+TARGET		:=Altair
+endif
+
+ifeq ($(CONFIG_PC),y)
+# armv4i
+CE_MAJOR	:=5
+CE_MINOR	:=00
+CE_PLATFORM	:=500
+TARGET		:=PC
+endif
+
 
 EXE		:=$(findstring .exe,$(MAKE))
 AR		:=$(TCPATH)ar$(EXE)
@@ -29,16 +70,49 @@ STRIP		:=$(TCPATH)strip$(EXE)
 WINDRES		:=$(TCPATH)windres$(EXE)
 CE_VERSION	:=0x0$(CE_MAJOR)$(CE_MINOR)
 ARFLAGS		:=r
+
+ifeq ($(CONFIG_PC),y)
+CE_DEFS		:=-D_WIN32_WINDOWS=$(CE_VERSION) -DWINVER=$(CE_VERSION)
+CE_DEFS		+=-D_WIN32_IE=$(CE_VERSION) -DWINDOWSPC=1
+else
 CE_DEFS		:=-D_WIN32_WCE=$(CE_VERSION) -D_WIN32_IE=$(CE_VERSION)
 CE_DEFS		+=-DWIN32_PLATFORM_PSPC=$(CE_PLATFORM)
+endif
+
 CPPFLAGS	:=-I$(HDR)/mingw32compat -I$(HDR) -I$(SRC) $(CE_DEFS)
-CPPFLAGS	+= -DUNICODE -D_UNICODE -DNDEBUG -D_ARM_ -Wuninitialized
-CXXFLAGS	:=$(OPTIMIZE)
+CPPFLAGS	+= -DUNICODE -D_UNICODE -DNDEBUG -Wuninitialized
+ifeq ($(CONFIG_PC),y)
+CPPFLAGS	+= -D_WINDOWS -D_MBCS -DWIN32 -DCECORE -DUNDER_CE=300
+else
+CPPFLAGS	+= -D_ARM_
+endif
+ifeq ($(CONFIG_ALTAIR),y)
+CPPFLAGS 	+=-IPPC2005 -DGNAV
+endif
+
+CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions
 CFLAGS		:=$(OPTIMIZE)
+
 LDFLAGS		:=-Wl,--major-subsystem-version=$(CE_MAJOR)
 LDFLAGS		+=-Wl,--minor-subsystem-version=$(CE_MINOR)
-LDLIBS		:=-laygshell -lcommctrl -limgdecmp -lstdc++
+ifeq ($(CONFIG_PC),y)
+LDFLAGS		+=-Wl,-subsystem,windows
+endif
+
+ifeq ($(CONFIG_PC),y)
+LDLIBS		:= -lmingw32 -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
+else
+LDLIBS		:= -lcommctrl -lstdc++
+ifeq ($(CONFIG_ALTAIR),n)
+LDLIBS		+= -laygshell -limgdecmp
+endif
+endif
+
+ifeq ($(CONFIG_PC),y)
+TARGET_ARCH	:=-mwindows -march=i586 -mms-bitfields
+else
 TARGET_ARCH	:=-mwin32 -mcpu=$(CPU)
+endif
 WINDRESFLAGS	:=-I$(HDR) -I$(SRC) $(CE_DEFS) -D_MINGW32_
 MAKEFLAGS	+=-r
 
@@ -58,7 +132,10 @@ NQ		:=
 endif
 endif
 
+
+ifeq ($(CONFIG_PC),n)
 CPPFLAGS_Common_Source_ :=-Werror
+endif
 
 DEVS	:=\
 	$(SRC)/devAltairPro.o \
@@ -164,6 +241,10 @@ OBJS	:=\
 	$(SRC)/zzip.a \
 	$(SRC)/compat.a
 
+ifeq ($(CONFIG_ALTAIR),y)
+OBJS += PPC2005/aygShellWrp.o
+endif
+
 XCSOARSETUP_OBJS=\
 	$(SRC)/XcSoarSetup.o
 
@@ -207,20 +288,23 @@ COMPAT	:=\
 
 all:	xcsoar.exe xcsoarsimulator.exe
 
-install: xcsoar.exe
+install: xcsoar.exe xcsoarsimulator.exe
 	@echo Copying to device...
-	pcp xcsoar.exe ':/Program Files/XCSoar/xcsoar.exe'
+	synce-pcp xcsoar.exe ':/Program Files/XCSoar/xcsoar-gcc.exe'
+	synce-pcp xcsoarsimulator.exe ':/Program Files/XCSoar/xcsoarsim-gcc.exe'
 
 
 xcsoar.exe: xcsoar-ns.exe
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
-	$(Q)$(SIZE) $@
+	cp xcsoar.exe XCSoar-$(TARGET).exe
+#	$(Q)$(SIZE) $@
 
 xcsoarsimulator.exe: xcsoarsimulator-ns.exe
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
-	$(Q)$(SIZE) $@
+	cp xcsoarsimulator.exe XCSoarSim-$(TARGET).exe
+#	$(Q)$(SIZE) $@
 
 xcsoar-ns.exe: $(OBJS)
 	@$(NQ)echo "  LINK    $@"
@@ -261,7 +345,7 @@ $(SRC)/compat.a: $(patsubst %.cpp,%.o,$(COMPAT:.c=.o))
 	$(Q)$(WINDRES) $(WINDRESFLAGS) $<.tmp $@
 	@$(RM) $<.tmp
 
-DEPFILE                =$(dir $@).$(notdir $@).d
+DEPFILE        =$(dir $@).$(notdir $@).d
 DEPFLAGS       =-Wp,-MD,$(DEPFILE)
 dirtarget      =$(subst \\,_,$(subst /,_,$(dir $@)))
 cc-flags       =$(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)

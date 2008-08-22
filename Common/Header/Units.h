@@ -63,7 +63,7 @@ typedef enum {
 } UnitGroup_t;
 
 typedef struct{
-  TCHAR   *Name;
+  const TCHAR   *Name;
   double  ToUserFact;
   double  ToUserOffset;
   HBITMAP hBitmap;

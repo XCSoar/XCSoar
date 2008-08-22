@@ -150,7 +150,7 @@ _zzip_inline static void __debug_dir_hdr (struct zzip_dir_hdr* hdr)
 #endif
 
 #ifndef ZZIP_BUFSIZ
-#define ZZIP_BUFSIZ 512
+#define ZZIP_BUFSIZ 2048
 /* #define ZZIP_BUFSIZ 64 */ /* for testing */
 #endif
 
@@ -397,10 +397,12 @@ __zzip_parse_root_directory(int fd,
 	{ d = (void*)(fd_map+zz_fd_gap+zz_offset); } /* fd_map+fd_gap==u_rootseek */
         else
         {
-            if (io->fd.seeks(fd, (long)(zz_rootseek+zz_offset), SEEK_SET) < 0)
+            if (io->fd.seeks(fd, (long)(zz_rootseek+zz_offset), SEEK_SET) < 0) {
                 return ZZIP_DIR_SEEK;
-            if (io->fd.read(fd, &dirent, sizeof(dirent)) < __sizeof(dirent))
+	    }
+            if (io->fd.read(fd, &dirent, sizeof(dirent)) < __sizeof(dirent)) {
                 return ZZIP_DIR_READ;
+	    }
             d = &dirent;
         }
 
@@ -449,7 +451,8 @@ __zzip_parse_root_directory(int fd,
         zz_offset += sizeof(*d) + u_namlen + u_extras + u_comment;
 
         if (zz_offset > zz_rootsize)
-	{ FAIL3("%li's entry stretches beyond root directory (O:%li)",
+	{
+	    FAIL3("%li's entry stretches beyond root directory (O:%li)",
 		(long)entries, (long)(zz_offset)); entries--; break; }
 
         HINT5("file %ld { compr=%d crc32=$%x offset=%d",
@@ -467,6 +470,7 @@ __zzip_parse_root_directory(int fd,
             hdr = (struct zzip_dir_hdr*) q;
         }
     }/*for*/
+
 
     if (USE_MMAP && fd_map)
     {
@@ -609,7 +613,8 @@ zzip_dir_fdopen_ext_io(int fd, zzip_error_t * errcode_p,
 
     if ((dir = zzip_dir_alloc_ext_io (ext, io)) == NULL)
         {
-	    rv = ZZIP_OUTOFMEM; goto error; }
+	    rv = ZZIP_OUTOFMEM; goto error;
+	}
 
     dir->fd = fd;
     if ((rv = __zzip_dir_parse (dir))) {
@@ -620,6 +625,7 @@ zzip_dir_fdopen_ext_io(int fd, zzip_error_t * errcode_p,
     dir->refcount |= 0x10000000;
 
     if (errcode_p) *errcode_p = rv;
+
     return dir;
 error:
     if (dir) zzip_dir_free(dir);
@@ -636,7 +642,7 @@ __zzip_dir_parse (ZZIP_DIR* dir)
     zzip_error_t rv;
     zzip_off_t filesize;
     struct _disk_trailer trailer;
-#if (WINDOWSPC<1)
+#if (WINDOWSPC<1)||defined(__MINGW32__)
     struct stat st; // JMW
 #endif
 
@@ -646,14 +652,14 @@ __zzip_dir_parse (ZZIP_DIR* dir)
 
     HINT2("------------------ fd=%i", (int) dir->fd);
 
-#if (WINDOWSPC>0)
-    if ((filesize = dir->io->fd.filesize(dir->fd)) < 0)
-        { rv = ZZIP_DIR_STAT; goto error; }
-#else
+#if (WINDOWSPC<1)||defined(__MINGW32__)
     if (stat(jmw_filename,&st) <0)
         { rv = ZZIP_DIR_STAT; goto error; }
     else
         filesize = st.st_size;
+#else
+    if ((filesize = dir->io->fd.filesize(dir->fd)) < 0)
+        { rv = ZZIP_DIR_STAT; goto error; }
 #endif
 
     HINT2("------------------ filesize=%ld", (long) filesize);
@@ -669,7 +675,8 @@ __zzip_dir_parse (ZZIP_DIR* dir)
 
     if ( (rv = __zzip_parse_root_directory(dir->fd, &trailer, &dir->hdr0,
                                            dir->io)) != 0)
-        { goto error; }
+        {
+	    goto error; }
  error:
     return rv;
 }
@@ -684,10 +691,6 @@ __zzip_dir_parse (ZZIP_DIR* dir)
  * open(2) call on the last file.
  */
 
-#ifdef __MINGW32__
-#include <share.h>
-#endif
-
 int
 __zzip_try_open(zzip_char_t* filename, int filemode,
                 zzip_strings_t* ext, zzip_plugin_io_t io)
@@ -698,8 +701,9 @@ __zzip_try_open(zzip_char_t* filename, int filemode,
 
 #ifdef __MINGW32__
 //    if (filemode & O_RDONLY) {
-	filemode = O_RDWR;
+ 	filemode = O_RDWR;
 //    }
+// JMW not sure why this is required, but it is!
 #endif
 
     if (len+4 >= PATH_MAX) {

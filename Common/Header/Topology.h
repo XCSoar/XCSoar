@@ -37,7 +37,7 @@ class XShapeLabel: public XShape {
 class Topology {
 
  public:
-  Topology(char* shpname, COLORREF thecolor, bool doappend=false);
+  Topology(const char* shpname, COLORREF thecolor, bool doappend=false);
   Topology() {};
 
   ~Topology();
@@ -85,7 +85,7 @@ class Topology {
 
 class TopologyWriter: public Topology {
  public:
-  TopologyWriter(char *shpname, COLORREF thecolor);
+  TopologyWriter(const char *shpname, COLORREF thecolor);
   ~TopologyWriter();
 
   void addPoint(double x, double y);
@@ -98,7 +98,7 @@ class TopologyWriter: public Topology {
 
 class TopologyLabel: public Topology {
  public:
-  TopologyLabel(char* shpname, COLORREF thecolor, INT field1);
+  TopologyLabel(const char* shpname, COLORREF thecolor, INT field1);
   ~TopologyLabel();
   virtual XShape* addShape(int i);
   void setField(int i);

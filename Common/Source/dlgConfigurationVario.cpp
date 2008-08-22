@@ -71,7 +71,7 @@ static WndFrame *wConfig19=NULL;
 #define NUMPAGES 19
 
 
-static bool VegaConfigurationUpdated(TCHAR *name, bool first,
+static bool VegaConfigurationUpdated(const TCHAR *name, bool first,
                                      bool setvalue=false,
                                      long ext_setvalue=0) {
   TCHAR updatename[100];
@@ -721,7 +721,7 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
-static void FillAudioEnums(TCHAR* name) {
+static void FillAudioEnums(const TCHAR* name) {
   WndProperty *wp;
   TCHAR fullname[100];
 

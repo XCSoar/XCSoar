@@ -354,7 +354,7 @@ BOOL DataFieldFileReader::ScanFiles(const TCHAR* sPath,
   return TRUE;
 }
 
-void DataFieldFileReader::Lookup(TCHAR *Text) {
+void DataFieldFileReader::Lookup(const TCHAR *Text) {
   int i=0;
   mValue = 0;
   for (i=1; i<(int)nFiles; i++) {
@@ -372,7 +372,7 @@ TCHAR* DataFieldFileReader::GetPathFile(void) {
   if ((mValue<=nFiles)&&(mValue)) {
     return fields[mValue].mTextPathFile;
   }
-  return TEXT("\0");
+  return (TCHAR*)TEXT("\0");
 }
 
 
@@ -409,8 +409,8 @@ bool DataFieldFileReader::checkFilter(const TCHAR *filename,
 }
 
 
-void DataFieldFileReader::addFile(TCHAR *Text,
-				  TCHAR *PText) {
+void DataFieldFileReader::addFile(const TCHAR *Text,
+				  const TCHAR *PText) {
   // TODO remove duplicates?
   if (nFiles<DFE_MAX_FILES) {
     fields[nFiles].mTextFile = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
@@ -507,7 +507,8 @@ void DataField::SetData(void){
     (void) Mode;
   }
 
-DataField::DataField(TCHAR *EditFormat, TCHAR *DisplayFormat, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)){
+DataField::DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
+		     void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)){
   mUsageCounter=0;
   mOnDataAccess = OnDataAccess;
   _tcscpy(mEditFormat, EditFormat);
@@ -620,7 +621,7 @@ int DataFieldEnum::GetAsInteger(void){
   return mValue;
 }
 
-void DataFieldEnum::addEnumText(TCHAR *Text) {
+void DataFieldEnum::addEnumText(const TCHAR *Text) {
   if (nEnums<DFE_MAX_ENUMS-1) {
     mTextEnum[nEnums] = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
     _tcscpy(mTextEnum[nEnums], Text);
@@ -960,7 +961,7 @@ HPEN WindowControl::hPenDefaultSelector=NULL;
 
 WindowControl::WindowControl(WindowControl *Owner,
 			     HWND Parent,
-			     TCHAR *Name,
+			     const TCHAR *Name,
 			     int X, int Y,
 			     int Width, int Height,
 			     bool Visible){
@@ -1228,7 +1229,7 @@ void WindowControl::FilterAdvanced(bool advanced){
   }
 }
 
-WindowControl *WindowControl::FindByName(TCHAR *Name){
+WindowControl *WindowControl::FindByName(const TCHAR *Name){
   if (_tcscmp(mName, Name)==0)
     return(this);
   for (int i=0; i<mClientCount; i++){
@@ -1275,7 +1276,7 @@ void WindowControl::SetHelpText(const TCHAR *Value) {
 }
 
 
-void WindowControl::SetCaption(TCHAR *Value){
+void WindowControl::SetCaption(const TCHAR *Value){
 
   if (Value == NULL && mCaption[0] != '\0'){
     mCaption[0] ='\0';
@@ -1517,6 +1518,12 @@ void WindowControl::Paint(HDC hDC){
     rc.top += 0;
     rc.bottom -= 2;
     FillRect(hDC, &rc, hB);
+
+#if (WINDOWSPC>0)
+  // JMW make it look nice on wine
+    SetBkColor(hDC, ff);
+#endif
+
     DeleteObject(hB);
   }
 
@@ -1758,7 +1765,7 @@ ACCEL  WndForm::mAccel[] = {
   {0, VK_RETURN,  VK_RETURN},
 };
 
-WndForm::WndForm(HWND Parent, TCHAR *Name, TCHAR *Caption,
+WndForm::WndForm(HWND Parent, const TCHAR *Name, const TCHAR *Caption,
                  int X, int Y, int Width, int Height):
   WindowControl(NULL, Parent, Name, X, Y, Width, Height, false) {
 
@@ -2119,14 +2126,12 @@ void WndForm::Paint(HDC hDC){
   ExtTextOut(hDC, mTitleRect.left+1, mTitleRect.top-2,
              ETO_OPAQUE, &mTitleRect, mCaption, _tcslen(mCaption), NULL);
 
-//  FillRect(hDC, &rc, GetBackBrush());
-
   SelectObject(hDC, oldBrush);
   SelectObject(hDC, oldPen);
 
 }
 
-void WndForm::SetCaption(TCHAR *Value){
+void WndForm::SetCaption(const TCHAR *Value){
 
   if (Value == NULL && mCaption[0] != '\0'){
     mCaption[0] ='\0';
@@ -2297,7 +2302,7 @@ void WndForm::Show(void){
 // WndButton
 //-----------------------------------------------------------
 
-WndButton::WndButton(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height, void(*Function)(WindowControl * Sender)):
+WndButton::WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption, int X, int Y, int Width, int Height, void(*Function)(WindowControl * Sender)):
       WindowControl(Parent, NULL /*Parent->GetHandle()*/, Name, X, Y, Width, Height){
 
   mOnClickNotify = Function;
@@ -2624,7 +2629,7 @@ void WndProperty::Destroy(void){
 
 
 
-void WndProperty::SetText(TCHAR *Value){
+void WndProperty::SetText(const TCHAR *Value){
   SetWindowText(mhEdit, Value);
 }
 
@@ -2947,8 +2952,15 @@ void WndProperty::Paint(HDC hDC){
   r.right = GetWidth();
   r.bottom = GetHeight();
 
-
   SetTextColor(hDC, GetForeColor());
+
+#if (WINDOWSPC>0)
+  // JMW make it look nice on wine
+  if (!GetFocused()) {
+    SetBkColor(hDC, GetBackColor());
+  }
+#endif
+
   SetBkMode(hDC, TRANSPARENT);
   HFONT oldFont = (HFONT)SelectObject(hDC, GetFont());
 
@@ -3116,7 +3128,7 @@ void WndFrame::Paint(HDC hDC){
 
 }
 
-void WndFrame::SetCaption(TCHAR *Value){
+void WndFrame::SetCaption(const TCHAR *Value){
 
   if (Value == NULL && mCaption[0] != '\0'){
     mCaption[0] ='\0';
@@ -3612,11 +3624,11 @@ WndEventButton::~WndEventButton() {
 }
 
 
-WndEventButton::WndEventButton(WindowControl *Parent, TCHAR *Name,
-			       TCHAR *Caption,
+WndEventButton::WndEventButton(WindowControl *Parent, const TCHAR *Name,
+			       const TCHAR *Caption,
 			       int X, int Y, int Width, int Height,
-			       TCHAR* ename,
-			       TCHAR* theparameters):
+			       const TCHAR* ename,
+			       const TCHAR* theparameters):
   WndButton(Parent,Name,Caption,X,Y,Width,Height,
 	    WndEventButton_OnClickNotify)
 {

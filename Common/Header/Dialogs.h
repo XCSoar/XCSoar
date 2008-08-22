@@ -41,7 +41,7 @@ LRESULT CALLBACK LoggerDetails 			(HWND hDlg, UINT message, WPARAM wParam, LPARA
 LRESULT CALLBACK AudioSettings					(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
 
 void SetWindowText_gettext(HWND hDlg, int entry);
-TCHAR* gettext(TCHAR* text);
+TCHAR* gettext(const TCHAR* text);
 void ClearStatusMessages(void);
 
 void StartupScreen();
@@ -53,7 +53,7 @@ BOOL SetProgressStepSize(int nSize);
 void StartHourglassCursor();
 void StopHourglassCursor();
 
-extern void DoStatusMessage(TCHAR* text, TCHAR* data = NULL);
+extern void DoStatusMessage(const TCHAR* text, const TCHAR* data = NULL);
 
 #define NUMPOLARS 7 // number of in-built polars
 

@@ -223,7 +223,7 @@ void Statistics::StyleLine(HDC hdc, POINT l1, POINT l2,
 }
 
 
-void Statistics::DrawLabel(HDC hdc, RECT rc, TCHAR *text,
+void Statistics::DrawLabel(HDC hdc, RECT rc, const TCHAR *text,
 			   double xv, double yv) {
 
   SIZE tsize;
@@ -253,7 +253,7 @@ void Statistics::DrawNoData(HDC hdc, RECT rc) {
 extern HFONT MapLabelFont;
 
 
-void Statistics::DrawXLabel(HDC hdc, RECT rc, TCHAR *text) {
+void Statistics::DrawXLabel(HDC hdc, RECT rc, const TCHAR *text) {
   SIZE tsize;
   HFONT hfOld = (HFONT)SelectObject(hdc, MapLabelFont);
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
@@ -264,7 +264,7 @@ void Statistics::DrawXLabel(HDC hdc, RECT rc, TCHAR *text) {
 }
 
 
-void Statistics::DrawYLabel(HDC hdc, RECT rc, TCHAR *text) {
+void Statistics::DrawYLabel(HDC hdc, RECT rc, const TCHAR *text) {
   SIZE tsize;
   HFONT hfOld = (HFONT)SelectObject(hdc, MapLabelFont);
   GetTextExtentPoint(hdc, text, _tcslen(text), &tsize);
@@ -1528,7 +1528,7 @@ static WndOwnerDrawFrame *wGrid=NULL;
 static WndOwnerDrawFrame *wInfo=NULL;
 static WndButton *wCalc=NULL;
 
-static void SetCalcCaption(TCHAR* caption) {
+static void SetCalcCaption(const TCHAR* caption) {
   if (wCalc) {
     wCalc->SetCaption(gettext(caption));
   }

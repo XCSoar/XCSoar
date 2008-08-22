@@ -307,7 +307,7 @@ BOOL Port1Close ()
 }
 
 
-void Port1WriteString(TCHAR *Text)
+void Port1WriteString(const TCHAR *Text)
 {
   LockComm();
 
@@ -517,7 +517,7 @@ int Port1Read(void *Buffer, size_t Size){
 
 //////
 
-void Port1WriteNMEA(TCHAR *Text)
+void Port1WriteNMEA(const TCHAR *Text)
 {
   LockComm();
   int i,len;
@@ -540,7 +540,7 @@ void Port1WriteNMEA(TCHAR *Text)
 }
 
 
-void VarioWriteNMEA(TCHAR *Text) {
+void VarioWriteNMEA(const TCHAR *Text) {
   int i =  NMEAParser::FindVegaPort();
   if (i==0) {
     Port1WriteNMEA(Text);

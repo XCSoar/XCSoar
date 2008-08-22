@@ -1258,10 +1258,6 @@ static void FindAirspaceAreaBounds() {
   }
 }
 
-
-extern TCHAR szRegistryAirspaceFile[];
-extern TCHAR szRegistryAdditionalAirspaceFile[];
-
 // ToDo add exception handler to protect parser code against chrashes
 
 void ReadAirspace(void)

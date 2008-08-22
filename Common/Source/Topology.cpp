@@ -64,7 +64,7 @@ void Topology::loadBitmap(int xx) {
 }
 
 
-Topology::Topology(char* shpname, COLORREF thecolor, bool doappend) {
+Topology::Topology(const char* shpname, COLORREF thecolor, bool doappend) {
 
   append = doappend;
   memset((void*)&shpfile, 0 ,sizeof(shpfile));
@@ -340,7 +340,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
 ///////////////////////////////////////////////////////////
 
 
-TopologyLabel::TopologyLabel(char* shpname, COLORREF thecolor, int field1):Topology(shpname, thecolor)
+TopologyLabel::TopologyLabel(const char* shpname, COLORREF thecolor, int field1):Topology(shpname, thecolor)
 {
   //sjt 02nov05 - enabled label fields
   setField(max(0,field1));
@@ -398,8 +398,8 @@ void XShapeLabel::renderSpecial(HDC hDC, int x, int y) {
       return;
 
     SetTextColor(hDC, RGB(0x20,0x20,0x20));
-    ExtTextOut(hDC, x, y, 0, NULL, Temp, size, NULL);
 
+    ExtTextOut(hDC, x, y, 0, NULL, Temp, size, NULL);
   }
 }
 
@@ -456,7 +456,7 @@ TopologyWriter::~TopologyWriter() {
 }
 
 
-TopologyWriter::TopologyWriter(char* shpname, COLORREF thecolor):
+TopologyWriter::TopologyWriter(const char* shpname, COLORREF thecolor):
   Topology(shpname, thecolor, true) {
 
   Reset();

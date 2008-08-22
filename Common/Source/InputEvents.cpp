@@ -145,7 +145,6 @@ static int NMEA_Queue[MAX_NMEA_QUEUE];
 // -----------------------------------------------------------------------
 
 bool InitONCE = false;
-extern TCHAR szRegistryInputFile[];
 
 // Mapping text names of events to the real thing
 typedef struct {
@@ -461,7 +460,7 @@ void InputEvents::showErrors() {
 }
 #endif
 
-int InputEvents::findKey(TCHAR *data) {
+int InputEvents::findKey(const TCHAR *data) {
   if (_tcscmp(data, TEXT("APP1")) == 0)
     return VK_APP1;
   else if (_tcscmp(data, TEXT("APP2")) == 0)
@@ -512,7 +511,7 @@ int InputEvents::findKey(TCHAR *data) {
     return 0;
 }
 
-pt2Event InputEvents::findEvent(TCHAR *data) {
+pt2Event InputEvents::findEvent(const TCHAR *data) {
   int i;
   for (i = 0; i < Text2Event_count; i++) {
     if (_tcscmp(data, Text2Event[i].text) == 0)
@@ -521,7 +520,7 @@ pt2Event InputEvents::findEvent(TCHAR *data) {
   return NULL;
 }
 
-int InputEvents::findGCE(TCHAR *data) {
+int InputEvents::findGCE(const TCHAR *data) {
   int i;
   for (i = 0; i < GCE_COUNT; i++) {
     if (_tcscmp(data, Text2GCE[i]) == 0)
@@ -530,7 +529,7 @@ int InputEvents::findGCE(TCHAR *data) {
   return -1;
 }
 
-int InputEvents::findNE(TCHAR *data) {
+int InputEvents::findNE(const TCHAR *data) {
   int i;
   for (i = 0; i < NE_COUNT; i++) {
     if (_tcscmp(data, Text2NE[i]) == 0)
@@ -542,14 +541,14 @@ int InputEvents::findNE(TCHAR *data) {
 // Create EVENT Entry
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
-int InputEvents::makeEvent(void (*event)(TCHAR *), TCHAR *misc, int next) {
+int InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next) {
   if (Events_count >= MAX_EVENTS){
     ASSERT(0);
     return 0;
   }
   Events_count++;	// NOTE - Starts at 1 - 0 is a noop
   Events[Events_count].event = event;
-  Events[Events_count].misc = misc;
+  Events[Events_count].misc = (TCHAR*)misc;
   Events[Events_count].next = next;
 
   return Events_count;
@@ -590,7 +589,7 @@ void InputEvents::makeLabel(int mode_id, TCHAR* label, int location, int event_i
 }
 
 // Return 0 for anything else - should probably return -1 !
-int InputEvents::mode2int(TCHAR *mode, bool create) {
+int InputEvents::mode2int(const TCHAR *mode, bool create) {
   int i = 0;
 
   // Better checks !
@@ -615,7 +614,7 @@ int InputEvents::mode2int(TCHAR *mode, bool create) {
 }
 
 
-void InputEvents::setMode(TCHAR *mode) {
+void InputEvents::setMode(const TCHAR *mode) {
   static int lastmode = -1;
   int thismode;
 
@@ -971,7 +970,7 @@ void InputEvents::processGo(int eventid) {
 // -----------------------------------------------------------------------
 
 // TODO Keep marker text for log file etc.
-void InputEvents::eventMarkLocation(TCHAR *misc) {
+void InputEvents::eventMarkLocation(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("reset")) == 0) {
     reset_marks = true;
   } else {
@@ -982,7 +981,7 @@ void InputEvents::eventMarkLocation(TCHAR *misc) {
 }
 
 
-void InputEvents::eventSounds(TCHAR *misc) {
+void InputEvents::eventSounds(const TCHAR *misc) {
  // bool OldEnableSoundVario = EnableSoundVario;
 
   if (_tcscmp(misc, TEXT("toggle")) == 0)
@@ -1004,7 +1003,7 @@ void InputEvents::eventSounds(TCHAR *misc) {
   */
 }
 
-void InputEvents::eventSnailTrail(TCHAR *misc) {
+void InputEvents::eventSnailTrail(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
     TrailActive ++;
@@ -1033,7 +1032,7 @@ void InputEvents::eventSnailTrail(TCHAR *misc) {
   }
 }
 
-void InputEvents::eventScreenModes(TCHAR *misc) {
+void InputEvents::eventScreenModes(const TCHAR *misc) {
   // toggle switches like this:
   //  -- normal infobox
   //  -- auxiliary infobox
@@ -1095,7 +1094,7 @@ void InputEvents::eventScreenModes(TCHAR *misc) {
 //	--	- Zoom out far
 //	n.n	- Zoom to a set scale
 //	show - Show current zoom scale
-void InputEvents::eventZoom(TCHAR* misc) {
+void InputEvents::eventZoom(const TCHAR* misc) {
   // JMW pass through to handler in MapWindow
   // here:
   // -1 means toggle
@@ -1146,7 +1145,7 @@ void InputEvents::eventZoom(TCHAR* misc) {
 //	TODO n,n	Go that direction - +/-
 //	TODO ???	Go to particular point
 //	TODO ???	Go to waypoint (eg: next, named)
-void InputEvents::eventPan(TCHAR *misc) {
+void InputEvents::eventPan(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("toggle")) == 0)
     MapWindow::Event_Pan(-1);
   else if (_tcscmp(misc, TEXT("supertoggle")) == 0)
@@ -1173,7 +1172,7 @@ void InputEvents::eventPan(TCHAR *misc) {
 }
 
 // Do JUST Terrain/Toplogy (toggle any, on/off any, show)
-void InputEvents::eventTerrainTopology(TCHAR *misc) {
+void InputEvents::eventTerrainTopology(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("terrain toggle")) == 0)
     MapWindow::Event_TerrainTopology(-2);
@@ -1202,7 +1201,7 @@ void InputEvents::eventTerrainTopology(TCHAR *misc) {
 }
 
 // Do clear warnings IF NONE Toggle Terrain/Topology
-void InputEvents::eventClearWarningsOrTerrainTopology(TCHAR *misc) {
+void InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc) {
 	(void)misc;
   if (ClearAirspaceWarnings(true,false)) {
     // airspace was active, enter was used to acknowledge
@@ -1217,7 +1216,7 @@ void InputEvents::eventClearWarningsOrTerrainTopology(TCHAR *misc) {
 // Clears airspace warnings for the selected airspace
 //     day: clears the warnings for the entire day
 //     ack: clears the warnings for the acknowledgement time
-void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
+void InputEvents::eventClearAirspaceWarnings(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("day")) == 0)
     // JMW clear airspace warnings for entire day (for selected airspace)
     ClearAirspaceWarnings(true,true);
@@ -1232,14 +1231,14 @@ void InputEvents::eventClearAirspaceWarnings(TCHAR *misc) {
 
 // ClearStatusMessages
 // Do Clear Event Warnings
-void InputEvents::eventClearStatusMessages(TCHAR *misc) {
+void InputEvents::eventClearStatusMessages(const TCHAR *misc) {
 	(void)misc;
   ClearStatusMessages();
   // TODO: allow selection of specific messages (here we are acknowledging all)
   Message::Acknowledge(0);
 }
 
-void InputEvents::eventFLARMRadar(TCHAR *misc) {
+void InputEvents::eventFLARMRadar(const TCHAR *misc) {
 	(void)misc;
   //  if (_tcscmp(misc, TEXT("on")) == 0) {
 
@@ -1255,7 +1254,7 @@ void InputEvents::eventFLARMRadar(TCHAR *misc) {
 
 // SelectInfoBox
 // Selects the next or previous infobox
-void InputEvents::eventSelectInfoBox(TCHAR *misc) {
+void InputEvents::eventSelectInfoBox(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("next")) == 0) {
     Event_SelectInfoBox(1);
   }
@@ -1266,7 +1265,7 @@ void InputEvents::eventSelectInfoBox(TCHAR *misc) {
 
 // ChangeInfoBoxType
 // Changes the type of the current infobox to the next/previous type
-void InputEvents::eventChangeInfoBoxType(TCHAR *misc) {
+void InputEvents::eventChangeInfoBoxType(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("next")) == 0) {
     Event_ChangeInfoBoxType(1);
   }
@@ -1281,7 +1280,7 @@ void InputEvents::eventChangeInfoBoxType(TCHAR *misc) {
 //    off: Disarms the advance trigger
 //   toggle: Toggles between armed and disarmed.
 //   show: Shows current armed state
-void InputEvents::eventArmAdvance(TCHAR *misc) {
+void InputEvents::eventArmAdvance(const TCHAR *misc) {
   if (AutoAdvance>=2) {
     if (_tcscmp(misc, TEXT("on")) == 0) {
       AdvanceArmed = true;
@@ -1331,7 +1330,7 @@ void InputEvents::eventArmAdvance(TCHAR *misc) {
 //    etc.
 //    Functions associated with the infoboxes are described in the
 //    infobox section in the reference guide
-void InputEvents::eventDoInfoKey(TCHAR *misc) {
+void InputEvents::eventDoInfoKey(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0) {
     DoInfoKey(1);
   }
@@ -1354,7 +1353,7 @@ void InputEvents::eventDoInfoKey(TCHAR *misc) {
 // Sets the current event mode.
 //  The argument is the label of the mode to activate.
 //  This is used to activate menus/submenus of buttons
-void InputEvents::eventMode(TCHAR *misc) {
+void InputEvents::eventMode(const TCHAR *misc) {
   ASSERT(misc != NULL);
   InputEvents::setMode(misc);
 
@@ -1364,7 +1363,7 @@ void InputEvents::eventMode(TCHAR *misc) {
 
 // MainMenu
 // Don't think we need this.
-void InputEvents::eventMainMenu(TCHAR *misc) {
+void InputEvents::eventMainMenu(const TCHAR *misc) {
 	(void)misc;
   // todo: popup main menu
 }
@@ -1372,7 +1371,7 @@ void InputEvents::eventMainMenu(TCHAR *misc) {
 // Checklist
 // Displays the checklist dialog
 //  See the checklist dialog section of the reference manual for more info.
-void InputEvents::eventChecklist(TCHAR *misc) {
+void InputEvents::eventChecklist(const TCHAR *misc) {
 	(void)misc;
   dlgChecklistShowModal();
 }
@@ -1380,7 +1379,7 @@ void InputEvents::eventChecklist(TCHAR *misc) {
 // Displays the task calculator dialog
 //  See the task calculator dialog section of the reference manual
 // for more info.
-void InputEvents::eventCalculator(TCHAR *misc) {
+void InputEvents::eventCalculator(const TCHAR *misc) {
 	(void)misc;
   dlgTaskCalculatorShowModal();
 }
@@ -1392,7 +1391,7 @@ void InputEvents::eventCalculator(TCHAR *misc) {
 //    task: displays the task status
 //  See the status dialog section of the reference manual for more info
 //  on these.
-void InputEvents::eventStatus(TCHAR *misc) {
+void InputEvents::eventStatus(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("system")) == 0) {
     dlgStatusShowModal(1);
   } else if (_tcscmp(misc, TEXT("task")) == 0) {
@@ -1408,7 +1407,7 @@ void InputEvents::eventStatus(TCHAR *misc) {
 // Displays the analysis/statistics dialog
 //  See the analysis dialog section of the reference manual
 // for more info.
-void InputEvents::eventAnalysis(TCHAR *misc) {
+void InputEvents::eventAnalysis(const TCHAR *misc) {
 	(void)misc;
   PopupAnalysis();
 }
@@ -1420,7 +1419,7 @@ void InputEvents::eventAnalysis(TCHAR *misc) {
 //                  selects a waypoint, then the details dialog is shown.
 //  See the waypoint dialog section of the reference manual
 // for more info.
-void InputEvents::eventWaypointDetails(TCHAR *misc) {
+void InputEvents::eventWaypointDetails(const TCHAR *misc) {
 
   if (_tcscmp(misc, TEXT("current")) == 0) {
     if (ActiveWayPoint>=0) {
@@ -1444,7 +1443,7 @@ void InputEvents::eventWaypointDetails(TCHAR *misc) {
 }
 
 
-void InputEvents::eventGotoLookup(TCHAR *misc) {
+void InputEvents::eventGotoLookup(const TCHAR *misc) {
   int res = dlgWayPointSelect();
   if (res != -1){
     FlyDirectTo(res);
@@ -1456,19 +1455,19 @@ void InputEvents::eventGotoLookup(TCHAR *misc) {
 // Displays a user defined status message.
 //    The argument is the text to be displayed.
 //    No punctuation characters are allowed.
-void InputEvents::eventStatusMessage(TCHAR *misc) {
+void InputEvents::eventStatusMessage(const TCHAR *misc) {
   DoStatusMessage(misc);
 }
 
 // Plays a sound from the filename
-void InputEvents::eventPlaySound(TCHAR *misc) {
+void InputEvents::eventPlaySound(const TCHAR *misc) {
   PlayResource(misc);
 }
 
 // MacCready
 // Adjusts MacCready settings
 // up, down, auto on, auto off, auto toggle, auto show
-void InputEvents::eventMacCready(TCHAR *misc) {
+void InputEvents::eventMacCready(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0) {
     MacCreadyProcessing(1);
   } else if (_tcscmp(misc, TEXT("down")) == 0) {
@@ -1494,7 +1493,7 @@ void InputEvents::eventMacCready(TCHAR *misc) {
 
 
 // Allows forcing of flight mode (final glide)
-void InputEvents::eventFlightMode(TCHAR *misc) {
+void InputEvents::eventFlightMode(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("finalglide on")) == 0) {
     ForceFinalGlide = true;
   }
@@ -1528,7 +1527,7 @@ void InputEvents::eventFlightMode(TCHAR *misc) {
 //
 // TODO Increase wind by larger amounts ? Set wind to specific amount ?
 //	(may sound silly - but future may get SMS event that then sets wind)
-void InputEvents::eventWind(TCHAR *misc) {
+void InputEvents::eventWind(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("up")) == 0) {
     WindSpeedProcessing(1);
   }
@@ -1555,19 +1554,19 @@ int jmw_demo=0;
 //   and appended with the checksum e.g. '*40'.  The user needs only
 //   to provide the text in between the '$' and '*'.
 //
-void InputEvents::eventSendNMEA(TCHAR *misc) {
+void InputEvents::eventSendNMEA(const TCHAR *misc) {
   if (misc) {
     VarioWriteNMEA(misc);
   }
 }
 
-void InputEvents::eventSendNMEAPort1(TCHAR *misc) {
+void InputEvents::eventSendNMEAPort1(const TCHAR *misc) {
   if (misc) {
     Port1WriteNMEA(misc);
   }
 }
 
-void InputEvents::eventSendNMEAPort2(TCHAR *misc) {
+void InputEvents::eventSendNMEAPort2(const TCHAR *misc) {
   if (misc) {
     Port2WriteNMEA(misc);
   }
@@ -1589,7 +1588,7 @@ void InputEvents::eventSendNMEAPort2(TCHAR *misc) {
 //     save: saves the vario configuration to nonvolatile memory on the instrument
 //     zero: Zero's the airspeed indicator's offset
 //
-void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
+void InputEvents::eventAdjustVarioFilter(const TCHAR *misc) {
   static int naccel=0;
   if (_tcscmp(misc, TEXT("slow")) == 0) {
     VarioWriteNMEA(TEXT("PDVSC,S,VarioTimeConstant,3"));
@@ -1702,7 +1701,7 @@ void InputEvents::eventAdjustVarioFilter(TCHAR *misc) {
 // Adjust audio deadband of internal vario sounds
 // +: increases deadband
 // -: decreases deadband
-void InputEvents::eventAudioDeadband(TCHAR *misc) {
+void InputEvents::eventAudioDeadband(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("+"))) {
     SoundDeadband++;
   }
@@ -1725,7 +1724,7 @@ void InputEvents::eventAudioDeadband(TCHAR *misc) {
 //  previous: selects the previous waypoint, stops at start waypoint
 //  nextwrap: selects the next waypoint, wrapping back to start after final
 //  previouswrap: selects the previous waypoint, wrapping to final after start
-void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
+void InputEvents::eventAdjustWaypoint(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("next")) == 0) {
     NextUpDown(1); // next
   } else if (_tcscmp(misc, TEXT("nextwrap")) == 0) {
@@ -1743,7 +1742,7 @@ void InputEvents::eventAdjustWaypoint(TCHAR *misc) {
 // resume: resumes the task if aborted
 // toggle: toggles between abort and resume
 // show: displays a status message showing the task abort status
-void InputEvents::eventAbortTask(TCHAR *misc) {
+void InputEvents::eventAbortTask(const TCHAR *misc) {
   LockTaskData();
   if (_tcscmp(misc, TEXT("abort")) == 0)
     ResumeAbortTask(1);
@@ -1769,7 +1768,7 @@ void InputEvents::eventAbortTask(TCHAR *misc) {
 // max: cleans the aircraft of bugs
 // min: selects the worst performance (50%)
 // show: shows the current bug degradation
-void InputEvents::eventBugs(TCHAR *misc) {
+void InputEvents::eventBugs(const TCHAR *misc) {
   double oldBugs = BUGS;
   LockFlightData();
 
@@ -1807,7 +1806,7 @@ void InputEvents::eventBugs(TCHAR *misc) {
 // max: selects 100% ballast
 // min: selects 0% ballast
 // show: displays a status message indicating the ballast percentage
-void InputEvents::eventBallast(TCHAR *misc) {
+void InputEvents::eventBallast(const TCHAR *misc) {
   double oldBallast= BALLAST;
   LockFlightData();
   if (_tcscmp(misc, TEXT("up")) == 0) {
@@ -1840,7 +1839,7 @@ void InputEvents::eventBallast(TCHAR *misc) {
 #include "Logger.h"
 
 
-void InputEvents::eventAutoLogger(TCHAR *misc) {
+void InputEvents::eventAutoLogger(const TCHAR *misc) {
   if (!DisableAutoLogger) {
     eventLogger(misc);
   }
@@ -1857,7 +1856,7 @@ void InputEvents::eventAutoLogger(TCHAR *misc) {
 // show: displays a status message indicating whether the logger is active
 // nmea: turns on and off NMEA logging
 // note: the text following the 'note' characters is added to the log file
-void InputEvents::eventLogger(TCHAR *misc) {
+void InputEvents::eventLogger(const TCHAR *misc) {
   // TODO - start logger without asking
   // start stop toggle addnote
   if (_tcscmp(misc, TEXT("start ask")) == 0) {
@@ -1901,7 +1900,7 @@ void InputEvents::eventLogger(TCHAR *misc) {
 // RepeatStatusMessage
 // Repeats the last status message.  If pressed repeatedly, will
 // repeat previous status messages
-void InputEvents::eventRepeatStatusMessage(TCHAR *misc) {
+void InputEvents::eventRepeatStatusMessage(const TCHAR *misc) {
   (void)misc;
 	// new interface
   // TODO: display only by type specified in misc field
@@ -1920,7 +1919,7 @@ bool dlgAirspaceWarningIsEmpty(void);
 
 extern bool RequestAirspaceWarningForce;
 
-void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
+void InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) {
   (void)misc;
   double nearestdistance=0;
   double nearestbearing=0;
@@ -2015,7 +2014,7 @@ void InputEvents::eventNearestAirspaceDetails(TCHAR *misc) {
 // Displays the waypoint details dialog
 //  aircraft: the waypoint nearest the aircraft
 //  pan: the waypoint nearest to the pan cursor
-void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
+void InputEvents::eventNearestWaypointDetails(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("aircraft")) == 0) {
     MapWindow::Event_NearestWaypointDetails(GPS_INFO.Longitude,
 					    GPS_INFO.Latitude,
@@ -2033,14 +2032,14 @@ void InputEvents::eventNearestWaypointDetails(TCHAR *misc) {
 // Null
 // The null event does nothing.  This can be used to override
 // default functionality
-void InputEvents::eventNull(TCHAR *misc) {
+void InputEvents::eventNull(const TCHAR *misc) {
 	(void)misc;
   // do nothing
 }
 
 // TaskLoad
 // Loads the task of the specified filename
-void InputEvents::eventTaskLoad(TCHAR *misc) {
+void InputEvents::eventTaskLoad(const TCHAR *misc) {
   TCHAR buffer[MAX_PATH];
   if (_tcslen(misc)>0) {
     LockTaskData();
@@ -2052,7 +2051,7 @@ void InputEvents::eventTaskLoad(TCHAR *misc) {
 
 // TaskSave
 // Saves the task to the specified filename
-void InputEvents::eventTaskSave(TCHAR *misc) {
+void InputEvents::eventTaskSave(const TCHAR *misc) {
   TCHAR buffer[MAX_PATH];
   if (_tcslen(misc)>0) {
     LockTaskData();
@@ -2064,7 +2063,7 @@ void InputEvents::eventTaskSave(TCHAR *misc) {
 
 // ProfileLoad
 // Loads the profile of the specified filename
-void InputEvents::eventProfileLoad(TCHAR *misc) {
+void InputEvents::eventProfileLoad(const TCHAR *misc) {
   if (_tcslen(misc)>0) {
     ReadProfile(misc);
   }
@@ -2072,14 +2071,14 @@ void InputEvents::eventProfileLoad(TCHAR *misc) {
 
 // ProfileSave
 // Saves the profile to the specified filename
-void InputEvents::eventProfileSave(TCHAR *misc) {
+void InputEvents::eventProfileSave(const TCHAR *misc) {
   if (_tcslen(misc)>0) {
     WriteProfile(misc);
   }
 }
 
 
-void InputEvents::eventBeep(TCHAR *misc) {
+void InputEvents::eventBeep(const TCHAR *misc) {
 #ifndef DISABLEAUDIO
   MessageBeep(MB_ICONEXCLAMATION);
 #endif
@@ -2097,7 +2096,7 @@ void SystemConfiguration(void);
 //  Task: Task editor
 //  Airspace: Airspace filter settings
 //  Replay: IGC replay dialog
-void InputEvents::eventSetup(TCHAR *misc) {
+void InputEvents::eventSetup(const TCHAR *misc) {
 
   if (_tcscmp(misc,TEXT("Basic"))==0){
     dlgBasicSettingsShowModal();
@@ -2130,7 +2129,7 @@ void InputEvents::eventSetup(TCHAR *misc) {
 
 // DLLExecute
 // Runs the plugin of the specified filename
-void InputEvents::eventDLLExecute(TCHAR *misc) {
+void InputEvents::eventDLLExecute(const TCHAR *misc) {
   // LoadLibrary(TEXT("test.dll"));
 
   StartupStore(misc);
@@ -2175,7 +2174,7 @@ void InputEvents::eventDLLExecute(TCHAR *misc) {
   // Load library, find function, execute, unload library
   hinstLib = _loadDLL(dll_name);
   if (hinstLib != NULL) {
-#ifndef JMW_MINGW
+#if !(defined(__MINGW32__)&&(WINDOWSPC>0))
     lpfnDLLProc = (DLLFUNC_INPUTEVENT)GetProcAddress(hinstLib, func_name);
 #endif
     if (lpfnDLLProc != NULL) {
@@ -2210,7 +2209,7 @@ HINSTANCE _loadDLL(TCHAR *name) {
 
       // First time setup... (should check version numbers etc...)
       DLLFUNC_SETHINST lpfnDLLProc = NULL;
-#ifndef JMW_MINGW
+#if !(defined(__MINGW32__)&&(WINDOWSPC>0))
       lpfnDLLProc = (DLLFUNC_SETHINST)
 	GetProcAddress(DLLCache[DLLCache_Count - 1].hinstance,
 		       TEXT("XCSAPI_SetHInst"));
@@ -2236,7 +2235,7 @@ HINSTANCE _loadDLL(TCHAR *name) {
 // +: increases temperature by one degree celsius
 // -: decreases temperature by one degree celsius
 // show: Shows a status message with the current forecast temperature
-void InputEvents::eventAdjustForecastTemperature(TCHAR *misc) {
+void InputEvents::eventAdjustForecastTemperature(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("+")) == 0) {
     CuSonde::adjustForecastTemperature(1.0);
   }
@@ -2253,7 +2252,7 @@ void InputEvents::eventAdjustForecastTemperature(TCHAR *misc) {
 // Run
 // Runs an external program of the specified filename.
 // Note that XCSoar will wait until this program exits.
-void InputEvents::eventRun(TCHAR *misc) {
+void InputEvents::eventRun(const TCHAR *misc) {
   PROCESS_INFORMATION pi;
   if (!::CreateProcess(misc,
 		       NULL, NULL, NULL, FALSE, 0, NULL, NULL, NULL, &pi))
@@ -2264,7 +2263,7 @@ void InputEvents::eventRun(TCHAR *misc) {
 }
 
 
-void InputEvents::eventDeclutterLabels(TCHAR *misc) {
+void InputEvents::eventDeclutterLabels(const TCHAR *misc) {
   if (_tcscmp(misc, TEXT("toggle")) == 0) {
     MapWindow::DeclutterLabels ++;
     MapWindow::DeclutterLabels = MapWindow::DeclutterLabels % 3;
@@ -2287,19 +2286,19 @@ void InputEvents::eventDeclutterLabels(TCHAR *misc) {
 
 
 
-void InputEvents::eventBrightness(TCHAR *misc) {
+void InputEvents::eventBrightness(const TCHAR *misc) {
 	(void)misc;
   dlgBrightnessShowModal();
 }
 
 
-void InputEvents::eventExit(TCHAR *misc) {
+void InputEvents::eventExit(const TCHAR *misc) {
 	(void)misc;
   SendMessage(hWndMainWindow, WM_CLOSE,
 	      0, 0);
 }
 
-void InputEvents::eventUserDisplayModeForce(TCHAR *misc){
+void InputEvents::eventUserDisplayModeForce(const TCHAR *misc){
 
   if (_tcscmp(misc, TEXT("unforce")) == 0){
     UserForceDisplayMode = dmNone;
@@ -2319,7 +2318,7 @@ void InputEvents::eventUserDisplayModeForce(TCHAR *misc){
 
 }
 
-void InputEvents::eventAirspaceDisplayMode(TCHAR *misc){
+void InputEvents::eventAirspaceDisplayMode(const TCHAR *misc){
 
   if (_tcscmp(misc, TEXT("all")) == 0){
     AltitudeMode = ALLON;

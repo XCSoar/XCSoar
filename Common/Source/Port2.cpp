@@ -401,7 +401,7 @@ BOOL Port2Close ()
 }
 
 
-void Port2WriteString(TCHAR *Text){
+void Port2WriteString(const TCHAR *Text){
   char sTmp[512];
   LockComm();
 
@@ -419,7 +419,7 @@ void Port2WriteString(TCHAR *Text){
 }
 
 
-void Port2WriteNMEA(TCHAR *Text) {
+void Port2WriteNMEA(const TCHAR *Text) {
 
   // 20060514: sgi change to block write
 

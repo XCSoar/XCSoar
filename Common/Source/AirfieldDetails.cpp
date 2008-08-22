@@ -51,8 +51,6 @@ Copyright_License {
 
 ZZIP_FILE* zAirfieldDetails = NULL;
 
-extern TCHAR szRegistryAirfieldFile[];
-
 static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
 
 void OpenAirfieldDetails() {

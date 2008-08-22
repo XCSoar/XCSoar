@@ -17,8 +17,8 @@
 typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut} DeviceFlags_t;
 
 typedef struct{
-  void (*WriteString)(TCHAR *Text);
-  void (*WriteNMEAString)(TCHAR *Text);
+  void (*WriteString)(const TCHAR *Text);
+  void (*WriteNMEAString)(const TCHAR *Text);
   BOOL (*StopRxThread)(void);
   BOOL (*StartRxThread)(void);
   int  (*GetChar)(void);

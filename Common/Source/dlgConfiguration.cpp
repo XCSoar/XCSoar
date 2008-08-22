@@ -835,7 +835,7 @@ static void GetInfoBoxSelector(int item, int mode)
 
 //////////
 
-extern TCHAR *PolarLabels[];
+extern const TCHAR *PolarLabels[];
 
 static  TCHAR szPolarFile[MAX_PATH] = TEXT("\0");
 static  TCHAR szAirspaceFile[MAX_PATH] = TEXT("\0");
@@ -927,8 +927,11 @@ static void setVariables(void) {
 
   // TODO: all appearance variables
 
-    TCHAR *COMMPort[] = {TEXT("COM1"),TEXT("COM2"),TEXT("COM3"),TEXT("COM4"),TEXT("COM5"),TEXT("COM6"),TEXT("COM7"),TEXT("COM8"),TEXT("COM9"),TEXT("COM10"),TEXT("COM0")};
-  TCHAR *tSpeed[] = {TEXT("1200"),TEXT("2400"),TEXT("4800"),TEXT("9600"),TEXT("19200"),TEXT("38400"),TEXT("57600"),TEXT("115200")};
+    const TCHAR *COMMPort[] = {TEXT("COM1"),TEXT("COM2"),TEXT("COM3"),TEXT("COM4"),
+			       TEXT("COM5"),TEXT("COM6"),TEXT("COM7"),TEXT("COM8"),
+			       TEXT("COM9"),TEXT("COM10"),TEXT("COM0")};
+    const TCHAR *tSpeed[] = {TEXT("1200"),TEXT("2400"),TEXT("4800"),TEXT("9600"),
+			     TEXT("19200"),TEXT("38400"),TEXT("57600"),TEXT("115200")};
 //  DWORD dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 
   int i;

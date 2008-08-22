@@ -57,12 +57,21 @@ _CRTIMP void __cdecl	SystemIdleTimerReset(void);
 #undef VK_APP6
 #define VK_APP6 VK_F6
 #else
+#if (WINDOWSPC>0)
+#define VK_APP1     0x31
+#define VK_APP2     0x32
+#define VK_APP3     0x33
+#define VK_APP4     0x34
+#define VK_APP5     0x35
+#define VK_APP6     0x36
+#else
 #define VK_APP1     0xC1
 #define VK_APP2     0xC2
 #define VK_APP3     0xC3
 #define VK_APP4     0xC4
 #define VK_APP5     0xC5
 #define VK_APP6     0xC6
+#endif
 #endif
 
 // Local Header Files

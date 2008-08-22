@@ -25,7 +25,7 @@ class GaugeVario {
 
  private:
   static void RenderZero(void);
-  static void RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, TCHAR *Label);
+  static void RenderValue(int x, int y, DrawInfo_t *diValue, DrawInfo_t *diLabel, double Value, const TCHAR *Label);
   static void RenderSpeedToFly(int x, int y);
   static void RenderBallast(void);
   static void RenderBugs(void);
