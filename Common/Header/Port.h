@@ -12,8 +12,8 @@ BOOL Port1Initialize (LPTSTR,DWORD);
 BOOL Port1Close (void);
 void Port1Write (BYTE);
 DWORD Port1ReadThread (LPVOID);
-void Port1WriteString(TCHAR *Text);
-void Port1WriteNMEA(TCHAR *Text);
+void Port1WriteString(const TCHAR *Text);
+void Port1WriteNMEA(const TCHAR *Text);
 int  Port1SetRxTimeout(int Timeout);
 unsigned long Port1SetBaudrate(unsigned long BaudRate);
 BOOL Port1StopRxThread(void);
@@ -27,8 +27,8 @@ BOOL Port2Initialize (LPTSTR,DWORD);
 BOOL Port2Close (void);
 void Port2Write (BYTE);
 DWORD Port2ReadThread (LPVOID);
-void Port2WriteString(TCHAR *Text);
-void Port2WriteNMEA(TCHAR *Text);
+void Port2WriteString(const TCHAR *Text);
+void Port2WriteNMEA(const TCHAR *Text);
 int  Port2SetRxTimeout(int Timeout);
 unsigned long Port2SetBaudrate(unsigned long BaudRate);
 BOOL Port2StartRxThread(void);
@@ -38,7 +38,7 @@ int  Port2GetChar(void);
 int Port2Read(void *Buffer, size_t Size);
 void Port2Flush(void);
 
-void VarioWriteNMEA(TCHAR *Text);
+void VarioWriteNMEA(const TCHAR *Text);
 void VarioWriteSettings(void);
 
 #endif

@@ -516,11 +516,7 @@ void RasterMapJPG2000::ReloadJPG2000(void) {
       TerrainInfo.StepSize = (raster_tile_cache.lon_max - 
                               raster_tile_cache.lon_min)
         /raster_tile_cache.width;
-    } else {
-#ifdef __MINGW32__
-      //      StartupStore(TEXT("jp2 file not initialised\n"));
-#endif
-    }
+    } 
     Unlock();
   }
 }
@@ -546,8 +542,6 @@ void RasterMapJPG2000::SetViewCenter(const double &Latitude,
 RasterMap* RasterTerrain::TerrainMap = NULL;
 bool RasterTerrain::terrain_initialised = false;
 int RasterTerrain::render_weather = 0;
-
-extern TCHAR szRegistryTerrainFile[];
 
 void RasterTerrain::OpenTerrain(void)
 {
@@ -679,8 +673,6 @@ bool RasterMapRaw::Open(char* zfilename) {
     return false;
   }
 
-  int filesize = zzip_file_size(fpTerrain);
-
   DWORD dwBytesRead;
   dwBytesRead = zzip_fread(&TerrainInfo, 1, sizeof(TERRAIN_INFO), 
                            fpTerrain);
@@ -691,7 +683,7 @@ bool RasterMapRaw::Open(char* zfilename) {
   }
     
   long nsize = TerrainInfo.Rows*TerrainInfo.Columns;
-  
+
   if (CheckFreeRam()>(long)(nsize*sizeof(short)+5000000)) {
     // make sure there is 5 meg of ram left after allocating space
     TerrainMem = (short*)malloc(sizeof(short)*nsize);

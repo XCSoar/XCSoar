@@ -48,9 +48,6 @@ extern void DrawJPG(HDC hdc, RECT rc);
 #include "VOIMAGE.h"
 #endif
 
-extern TCHAR szRegistryHomeWaypoint[];
-extern TCHAR szRegistryWayPointFile[];
-
 static int page=0;
 static WndForm *wf=NULL;
 static WndListFrame *wDetails=NULL;

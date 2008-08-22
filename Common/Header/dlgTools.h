@@ -37,11 +37,12 @@ Copyright_License {
 #define DeclearCallBackEntry(x)        {TEXT(#x), (void *)x}
 
 typedef struct{
-  TCHAR *Name;
+  const TCHAR *Name;
   void *Ptr;
 }CallBackTableEntry_t;
 
-WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND Parent, TCHAR *resource=NULL);
+WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName, 
+			HWND Parent, const TCHAR *resource=NULL);
 
 int
 WINAPI

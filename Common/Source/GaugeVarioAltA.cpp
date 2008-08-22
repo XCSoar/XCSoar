@@ -611,7 +611,7 @@ void GaugeVario::RenderNeedle(int i, bool average, bool clear) {
 void GaugeVario::RenderValue(int x, int y, 
 			     DrawInfo_t *diValue, 
 			     DrawInfo_t *diLabel, double Value, 
-			     TCHAR *Label) {
+			     const TCHAR *Label) {
 
   SIZE tsize;
 

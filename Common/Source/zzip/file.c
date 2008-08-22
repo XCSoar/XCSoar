@@ -24,6 +24,12 @@
 #include <zzip/fetch.h>
 #include <zzip/__debug.h>
 
+#if (WINDOWSPC>0)&&defined(__MINGW32__)
+// JMW needed otherwise seek/tell won't work!
+#undef _fmode
+int _fmode = _O_BINARY;
+#endif
+
 #if 0
 # if defined ZZIP_HAVE_IO_H
 # include <io.h> /* tell */
@@ -99,7 +105,8 @@ zzip_file_saveoffset(ZZIP_FILE * fp)
     return 0;
 }
 
-#ifndef __MINGW32__ // //RMK: removed due to build errors, 1 is the correct default.
+#if !defined(__MINGW32__)
+//RMK: removed due to build errors, 1 is the correct default.
 # ifndef ZZIP_CHECK_BACKSLASH_DIRSEPARATOR           /* NOTE: also default */
 # define ZZIP_CHECK_BACKSLASH_DIRSEPARATOR 0         /* to "NO" on win32 ! */
 # endif
@@ -450,7 +457,8 @@ zzip_read(ZZIP_FILE * fp, void * buf, zzip_size_t len)
 {
     if (! fp) return 0;
     if (! fp->dir) 
-      { return fp->io->fd.read(fp->fd, buf, len); } /* stat fd */
+      { 	
+	  return fp->io->fd.read(fp->fd, buf, len); } /* stat fd */
     else
     {   
         zzip_ssize_t v;
@@ -737,7 +745,7 @@ zzip_open_shared_io (ZZIP_FILE* stream,
 	int fd = os->fd.open(filename, o_flags); /* io->fd.open */
         if (fd != -1)
         {
-#if (WINDOWSPC<1)
+#if (WINDOWSPC<1)||defined(__MINGW32__)
             struct stat st; // JMW
 #endif
             ZZIP_FILE* fp = calloc (1, sizeof(ZZIP_FILE));
@@ -749,13 +757,12 @@ zzip_open_shared_io (ZZIP_FILE* stream,
             fp->fd = fd; 
             fp->io = os;
 
-#if (WINDOWSPC>0)
-            fp->usize = os->fd.filesize(fd);
-#else
+#if (WINDOWSPC<1)||defined(__MINGW32__)
             if (stat(filename,&st) >=0)
                 fp->usize = st.st_size;
+#else
+            fp->usize = os->fd.filesize(fd);
 #endif
-
             return fp;
         }
         if (o_modes & ZZIP_PREFERZIP) {
@@ -780,7 +787,7 @@ zzip_open_shared_io (ZZIP_FILE* stream,
     { char basename[PATH_MAX];
       char* p;
       int filename_len = strlen (filename);
-	  // JMW
+
       if (filename_len >= PATH_MAX) { 
 #ifdef ENAMETOOLONG
 		  errno = ENAMETOOLONG;
@@ -821,11 +828,13 @@ zzip_open_shared_io (ZZIP_FILE* stream,
           if (fd == -1) { 
 	      continue; 
 	  }
+
 /*    found: */
           /* found zip-file, now try to parse it */
           dir = zzip_dir_fdopen_ext_io(fd, &e, ext, io);
           if (e) { 
-	      errno = zzip_errno(e); io->fd.close(fd); return 0; }
+	      errno = zzip_errno(e); io->fd.close(fd); return 0; 
+	  }
 
           /* (p - basename) is the lenghtof zzip_dir part of the filename */
           fp = zzip_file_open(dir, filename + (p - basename) +1, o_modes);

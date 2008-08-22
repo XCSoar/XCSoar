@@ -1,5 +1,5 @@
 /*
-   $Id: AirfieldDetails.cpp,v 1.29 2008/08/18 15:01:26 jwharington Exp $
+   $Id: AirfieldDetails.cpp,v 1.30 2008/08/22 18:58:56 jwharington Exp $
 
 
 Copyright_License {
@@ -50,8 +50,6 @@ Copyright_License {
 #include "wcecompat/ts_string.h"
 
 ZZIP_FILE* zAirfieldDetails = NULL;
-
-extern TCHAR szRegistryAirfieldFile[];
 
 static TCHAR  szAirfieldDetailsFile[MAX_PATH] = TEXT("\0");
 

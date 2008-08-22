@@ -104,9 +104,6 @@ void	SpeedProcessing(int UpDown)
 }
 
 
-extern TCHAR szRegistryAccelerometerZero[];
-
-
 void	AccelerometerProcessing(int UpDown)
 {
   DWORD Temp;

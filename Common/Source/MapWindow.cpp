@@ -615,8 +615,12 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
       RoundRect(hDC, brect.left, brect.top, brect.right, brect.bottom, 
                 IBLSCALE(8), IBLSCALE(8));
       SelectObject(hDC, oldPen);
-
+#if (WINDOWSPC>0)
+      SetBkMode(hDC,TRANSPARENT);
+      ExtTextOut(hDC, x, y, 0, NULL, Value, size, NULL);
+#else
       ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+#endif
     }
 
 
@@ -656,6 +660,17 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
   
     if (!noOverlap || notoverlapping) {
       SetTextColor(hDC,RGB(0xff,0xff,0xff));
+#if (WINDOWSPC>0)
+      SetBkMode(hDC,TRANSPARENT);
+      ExtTextOut(hDC, x+2, y, 0, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x+1, y, 0, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x-1, y, 0, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x-2, y, 0, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x, y+1, 0, NULL, Value, size, NULL);
+      ExtTextOut(hDC, x, y-1, 0, NULL, Value, size, NULL);
+      SetTextColor(hDC,RGB(0x00,0x00,0x00));
+      ExtTextOut(hDC, x, y, 0, NULL, Value, size, NULL);
+#else
       ExtTextOut(hDC, x+2, y, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x+1, y, ETO_OPAQUE, NULL, Value, size, NULL);
       ExtTextOut(hDC, x-1, y, ETO_OPAQUE, NULL, Value, size, NULL);
@@ -664,6 +679,7 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
       ExtTextOut(hDC, x, y-1, ETO_OPAQUE, NULL, Value, size, NULL);
       SetTextColor(hDC,RGB(0x00,0x00,0x00));
       ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+#endif
     }
 
   } else {
@@ -676,7 +692,12 @@ void MapWindow::TextInBox(HDC hDC, TCHAR* Value, int x, int y,
     notoverlapping = checkLabelBlock(brect);
   
     if (!noOverlap || notoverlapping) {
+#if (WINDOWSPC>0)
+      SetBkMode(hDC,TRANSPARENT);
+      ExtTextOut(hDC, x, y, 0, NULL, Value, size, NULL);
+#else
       ExtTextOut(hDC, x, y, ETO_OPAQUE, NULL, Value, size, NULL);
+#endif
     }
 
   }
@@ -1487,6 +1508,11 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	GPS_INFO.TrackBearing = newbearing;
 	// change bearing without changing speed if direction change > 30
 	// 20080815 JMW prevent dragging to stop glider
+
+	// JMW trigger recalcs immediately
+	NMEAParser::GpsUpdated = TRUE;
+	SetEvent(dataTriggerEvent);
+
         break;
       }
 #endif

@@ -82,7 +82,8 @@ class DataField{
 
     typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
 
-    DataField(TCHAR *EditFormat, TCHAR *DisplayFormat, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)=NULL);
+    DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat, 
+	      void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)=NULL);
     virtual ~DataField(void){};
 
   virtual void Special(void);
@@ -149,7 +150,7 @@ class DataFieldBoolean:public DataField{
     TCHAR mTextFalse[FORMATSIZE+1];
 
   public:
-    DataFieldBoolean(TCHAR *EditFormat, TCHAR *DisplayFormat, int Default, TCHAR *TextTrue, TCHAR *TextFalse, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
+    DataFieldBoolean(const TCHAR *EditFormat, const TCHAR *DisplayFormat, int Default, TCHAR *TextTrue, TCHAR *TextFalse, void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
 		  if (Default) {mValue=true;} else {mValue=false;}
       _tcscpy(mTextTrue, TextTrue);
@@ -201,8 +202,8 @@ class DataFieldEnum: public DataField {
     TCHAR *mTextEnum[DFE_MAX_ENUMS];
 
   public:
-    DataFieldEnum(TCHAR *EditFormat, 
-		  TCHAR *DisplayFormat, 
+    DataFieldEnum(const TCHAR *EditFormat, 
+		  const TCHAR *DisplayFormat, 
 		  int Default, 
 		  void(*OnDataAccess)(DataField *Sender, 
 				      DataAccessKind_t Mode)):
@@ -221,7 +222,7 @@ class DataFieldEnum: public DataField {
   void Inc(void);
   void Dec(void);
 
-  void addEnumText(TCHAR *Text);
+  void addEnumText(const TCHAR *Text);
 
   int GetAsInteger(void);
   TCHAR *GetAsString(void);
@@ -255,8 +256,8 @@ class DataFieldFileReader: public DataField {
   DataFieldFileReaderEntry fields[DFE_MAX_FILES];
 
   public:
-  DataFieldFileReader(TCHAR *EditFormat, 
-		      TCHAR *DisplayFormat, 
+  DataFieldFileReader(const TCHAR *EditFormat, 
+		      const TCHAR *DisplayFormat, 
 		      void(*OnDataAccess)(DataField *Sender, DataAccessKind_t Mode)):
       DataField(EditFormat, DisplayFormat, OnDataAccess){
       mValue = 0;
@@ -284,14 +285,14 @@ class DataFieldFileReader: public DataField {
   void Inc(void);
   void Dec(void);
 
-  void addFile(TCHAR *fname, TCHAR *fpname);
+  void addFile(const TCHAR *fname, const TCHAR *fpname);
   bool checkFilter(const TCHAR *fname, const TCHAR* filter);
   int GetNumFiles(void);
 
   int GetAsInteger(void);
   TCHAR *GetAsString(void);
   TCHAR *GetAsDisplayString(void);
-  void Lookup(TCHAR* text);
+  void Lookup(const TCHAR* text);
   TCHAR* GetPathFile(void);
 
   #if defined(__BORLANDC__)
@@ -597,7 +598,7 @@ class WindowControl {
     HPEN     GetBorderPen(void){return(mhPenBorder);};
     HPEN     GetSelectorPen(void){return(mhPenSelector);};
 
-    virtual void SetCaption(TCHAR *Value);
+    virtual void SetCaption(const TCHAR *Value);
     void SetHelpText(const TCHAR *Value);
 
     HWND GetHandle(void){return(mHWnd);};
@@ -623,7 +624,7 @@ class WindowControl {
     WindowControl *FocusNext(WindowControl *Sender);
     WindowControl *FocusPrev(WindowControl *Sender);
 
-    WindowControl(WindowControl *Owner, HWND Parent, TCHAR *Name, int X, int Y, int Width, int Height, bool Visible=true);
+    WindowControl(WindowControl *Owner, HWND Parent, const TCHAR *Name, int X, int Y, int Width, int Height, bool Visible=true);
     virtual ~WindowControl(void);
 
     virtual void Destroy(void);
@@ -632,7 +633,7 @@ class WindowControl {
 
     void PaintSelector(bool Value){mDontPaintSelector = Value;};
 
-    WindowControl *FindByName(TCHAR *Name);
+    WindowControl *FindByName(const TCHAR *Name);
 
     void FilterAdvanced(bool advanced);
 
@@ -642,7 +643,7 @@ class WndFrame:public WindowControl{
 
   public:
 
-    WndFrame(WindowControl *Owner, TCHAR *Name, 
+    WndFrame(WindowControl *Owner, const TCHAR *Name, 
              int X, int Y, int Width, int Height):
       WindowControl(Owner, NULL, Name, X, Y, Width, Height)
     {
@@ -660,7 +661,7 @@ class WndFrame:public WindowControl{
 
     virtual void Destroy(void);
 
-    void SetCaption(TCHAR *Value);
+    void SetCaption(const TCHAR *Value);
     TCHAR *GetCaption(void){return(mCaption);};
 
     UINT GetCaptionStyle(void){return(mCaptionStyle);};
@@ -796,7 +797,7 @@ class WndForm:public WindowControl{
 
   public:
 
-    WndForm(HWND Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height);
+    WndForm(HWND Parent, const TCHAR *Name, const TCHAR *Caption, int X, int Y, int Width, int Height);
     ~WndForm(void);
     virtual void Destroy(void);
 
@@ -828,7 +829,7 @@ class WndForm:public WindowControl{
     int ShowModal(void);
     void Show(void);
 
-    void SetCaption(TCHAR *Value);
+    void SetCaption(const TCHAR *Value);
     TCHAR *GetCaption(void){return(mCaption);};
 
     virtual int OnCommand(WPARAM wParam, LPARAM lParam);
@@ -860,7 +861,7 @@ class WndButton:public WindowControl{
 
     typedef void (*ClickNotifyCallback_t)(WindowControl * Sender);
 
-    WndButton(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, int X, int Y, int Width, int Height, void(*Function)(WindowControl * Sender) = NULL);
+    WndButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption, int X, int Y, int Width, int Height, void(*Function)(WindowControl * Sender) = NULL);
     virtual void Destroy(void);
 
     int OnLButtonUp(WPARAM wParam, LPARAM lParam);
@@ -949,20 +950,21 @@ class WndProperty:public WindowControl{
 
     DataField *GetDataField(void){return(mDataField);};
     DataField *SetDataField(DataField *Value);
-    void SetText(TCHAR *Value);
+    void SetText(const TCHAR *Value);
     int SetButtonSize(int Value);
 
 };
 
 #ifndef ALTAIRSYNC
 
-typedef void (*webpt2Event)(TCHAR *);
+typedef void (*webpt2Event)(const TCHAR *);
 
 class WndEventButton:public WndButton {
  public:
-  WndEventButton(WindowControl *Parent, TCHAR *Name, TCHAR *Caption, 
-		 int X, int Y, int Width, int Height, TCHAR *ename,
-		 TCHAR *eparameters);
+  WndEventButton(WindowControl *Parent, const TCHAR *Name, const TCHAR *Caption, 
+		 int X, int Y, int Width, int Height, 
+		 const TCHAR *ename,
+		 const TCHAR *eparameters);
   ~WndEventButton();
  public:
   void CallEvent(void);

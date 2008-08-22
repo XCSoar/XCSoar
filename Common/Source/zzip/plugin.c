@@ -33,7 +33,7 @@ zzip_filesize(int fd)
 {
 
 // JMW
-#if (WINDOWSPC>0) 
+#if (WINDOWSPC>0)&&!defined(__MINGW32__)
     struct stat st;
   if (fstat(fd, &st) < 0)
     return -1;
@@ -56,13 +56,9 @@ zzip_filesize(int fd)
 
 }
 
-#ifdef __MINGW32__
-//int my_sopen(const char* filename, int mode, ...) {
-//    return _sopen(filename, mode, SH_DENYWR, S_IREAD | S_IWRITE);
-//}
+#if defined(__MINGW32__) && (WINDOWSPC<1)
 
 #include <windows.h>
-//#include <unistd.h>
 #include <fcntl.h>
 
 int mingw_open (const char *path, int oflag, ...)
@@ -140,7 +136,7 @@ int mingw_open (const char *path, int oflag, ...)
 
 static const struct zzip_plugin_io default_io =
 {
-#ifdef __MINGW32__
+#if defined(__MINGW32__) && (WINDOWSPC<1)
     &mingw_open,
 #else
     &open,

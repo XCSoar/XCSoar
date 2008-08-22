@@ -303,7 +303,7 @@ static HFONT FontMap[5] = {
 
 extern HINSTANCE hInst;
 
-XMLNode xmlLoadFromResource(LPTSTR lpName,
+XMLNode xmlLoadFromResource(const TCHAR* lpName,
                             LPCTSTR tag, 
                             XMLResults *pResults) {
   LPTSTR lpRes; 
@@ -412,7 +412,7 @@ XMLNode xmlLoadFromResource(LPTSTR lpName,
 
 
 
-XMLNode xmlOpenResourceHelper(TCHAR *lpszXML, LPCTSTR tag)
+static XMLNode xmlOpenResourceHelper(const TCHAR *lpszXML, LPCTSTR tag)
 {
     XMLResults pResults;
 
@@ -440,8 +440,8 @@ XMLNode xmlOpenResourceHelper(TCHAR *lpszXML, LPCTSTR tag)
 ///////////////////////////////////////
 
 
-WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND Parent,
-                        TCHAR* resource) {
+WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, const char *FileName, HWND Parent,
+                        const TCHAR* resource) {
 
   WndForm *theForm = NULL;
   //  TCHAR sFileName[128];
@@ -466,7 +466,7 @@ WndForm *dlgLoadFromXML(CallBackTableEntry_t *LookUpTable, char *FileName, HWND 
 #endif
 */
 
-  if (FileExistsA(FileName))   //sgi use window API cals to check if
+  if (FileExistsA((char*)FileName))   //sgi use window API cals to check if
                                //file exists, this will supress
                                //CodeGurad warnings on callinf
                                //fopen(<unexisting file>)

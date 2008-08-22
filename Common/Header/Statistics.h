@@ -69,9 +69,9 @@ class Statistics {
   static void DrawYGrid(HDC hdc, RECT rc, double tic_step, double zero,
                         int Style, double unit_step, bool draw_units=false);
 
-  static void DrawXLabel(HDC hdc, RECT rc, TCHAR *text);
-  static void DrawYLabel(HDC hdc, RECT rc, TCHAR *text);
-  static void DrawLabel(HDC hdc, RECT rc, TCHAR *text, double xv, double yv);
+  static void DrawXLabel(HDC hdc, RECT rc, const TCHAR *text);
+  static void DrawYLabel(HDC hdc, RECT rc, const TCHAR *text);
+  static void DrawLabel(HDC hdc, RECT rc, const TCHAR *text, double xv, double yv);
   static void DrawNoData(HDC hdc, RECT rc);
 
   ///

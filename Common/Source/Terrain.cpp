@@ -1230,8 +1230,6 @@ void DrawSpotHeights(const HDC hdc) {
 
 ///////////////
 
-extern TCHAR szRegistryTopologyFile[];
-
 #include "wcecompat/ts_string.h"
 // JMW TODO: check ts_string does the right thing
 

@@ -572,8 +572,6 @@ static double ReadAltitude(TCHAR *temp)
   return Altitude;
 }
 
-extern TCHAR szRegistryWayPointFile[];  
-extern TCHAR szRegistryAdditionalWayPointFile[];  
 
 
 void ReadWayPoints(void)

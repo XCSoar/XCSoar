@@ -159,7 +159,7 @@ extern "C" {
 void DebugStore(char *Str);
 }
 
-void StartupStore(TCHAR *Str);
+void StartupStore(const TCHAR *Str);
 
 typedef struct
 {

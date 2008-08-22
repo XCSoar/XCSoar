@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.120 2008/08/18 15:01:27 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.121 2008/08/22 18:58:56 jwharington Exp $
 
 Copyright_License {
 
@@ -71,13 +71,13 @@ static Task_t TaskBackup;
 static BOOL fTaskModified = FALSE;
 
 
-TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
-			TEXT("Club - ASW19"),
-			TEXT("Standard - LS8"),
-			TEXT("15M - ASW27"),
-			TEXT("18M - LS6C"),
-			TEXT("Open - ASW22"),
-			TEXT("WinPilot File")};
+const TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
+			      TEXT("Club - ASW19"),
+			      TEXT("Standard - LS8"),
+			      TEXT("15M - ASW27"),
+			      TEXT("18M - LS6C"),
+			      TEXT("Open - ASW22"),
+			      TEXT("WinPilot File")};
 
 
 LRESULT CALLBACK Progress(HWND hDlg, UINT message, 
@@ -266,7 +266,7 @@ LRESULT CALLBACK StatusMsgWndTimerProc(HWND hwnd, UINT message,
 //
 // TODO (need to discuss) Consider moving almost all this functionality into AddMessage ?
 
-void DoStatusMessage(TCHAR* text, TCHAR *data) {
+void DoStatusMessage(const TCHAR* text, const TCHAR *data) {
   Message::Lock();
 
   StatusMessageSTRUCT LocalMessage;
@@ -370,10 +370,10 @@ void WriteMissingTranslations() {
 
 */
 
-TCHAR* gettext(TCHAR* text) {
+TCHAR* gettext(const TCHAR* text) {
   int i;
   // return if nothing to do
-  if (wcscmp(text, L"") == 0) return text;
+  if (wcscmp(text, L"") == 0) return (TCHAR*)text;
 
   //find a translation
   for (i=0; i<GetTextData_Size; i++) {
@@ -389,7 +389,7 @@ TCHAR* gettext(TCHAR* text) {
   TCHAR *tmp = _tcsdup(text);
   unusedTranslations[tmp] = tmp;
 #endif
-  return text;
+  return (TCHAR*)text;
 }
 
 // Set the window text value, by passing through gettext

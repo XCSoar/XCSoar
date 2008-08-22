@@ -315,11 +315,6 @@ void StartLogger(TCHAR *strAssetNumber)
 }
 
 
-extern TCHAR szRegistryPilotName[];
-extern TCHAR szRegistryAircraftType[];
-extern TCHAR szRegistryAircraftRego[];
-
-
 void LoggerHeader(void)
 {
   char datum[]= "HFDTM100Datum: WGS-84\r\n";
@@ -506,7 +501,7 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
 // JMW TODO: make this thread-safe, since it could happen in the middle
 // of the calculations doing LogPoint or something else!
 
-void LoggerNote(TCHAR *text) {
+void LoggerNote(const TCHAR *text) {
   if (LoggerActive) {
     HANDLE hFile;// = INVALID_HANDLE_VALUE;
     DWORD dwBytesRead;

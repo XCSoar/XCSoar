@@ -70,8 +70,8 @@ bool EnableAnimation=false;
 
 bool ReadWinPilotPolarInternal(int i);
 
-TCHAR szRegistryKey[] =                TEXT("Software\\MPSR\\XCSoar");
-TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =     { TEXT("Info0"),
+const TCHAR szRegistryKey[] = TEXT("Software\\MPSR\\XCSoar");
+const TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =     { TEXT("Info0"),
 				       TEXT("Info1"),
 				       TEXT("Info2"),
 				       TEXT("Info3"),
@@ -87,7 +87,7 @@ TCHAR *szRegistryDisplayType[MAXINFOWINDOWS] =     { TEXT("Info0"),
 				       TEXT("Info13")
 }; // pL
 
-TCHAR *szRegistryColour[] =     { TEXT("Colour0"),
+const TCHAR *szRegistryColour[] =     { TEXT("Colour0"),
 				  TEXT("Colour1"),
 				  TEXT("Colour2"),
 				  TEXT("Colour3"),
@@ -105,7 +105,7 @@ TCHAR *szRegistryColour[] =     { TEXT("Colour0"),
 }; // pL
 
 
-TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
+const TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
 				  TEXT("Brush1"),
 				  TEXT("Brush2"),
 				  TEXT("Brush3"),
@@ -122,25 +122,25 @@ TCHAR *szRegistryBrush[] =     {  TEXT("Brush0"),
 				  TEXT("Brush14")
 }; // pL
 
-TCHAR *szRegistryAirspaceMode[] =     {  TEXT("AirspaceMode0"),
-					 TEXT("AirspaceMode1"),
-					 TEXT("AirspaceMode2"),
-					 TEXT("AirspaceMode3"),
-					 TEXT("AirspaceMode4"),
-					 TEXT("AirspaceMode5"),
-					 TEXT("AirspaceMode6"),
-					 TEXT("AirspaceMode7"),
-					 TEXT("AirspaceMode8"),
-					 TEXT("AirspaceMode9"),
-					 TEXT("AirspaceMode10"),
-					 TEXT("AirspaceMode11"),
-					 TEXT("AirspaceMode12"),
-					 TEXT("AirspaceMode13"),
-					 TEXT("AirspaceMode14")
+const TCHAR *szRegistryAirspaceMode[] =     {  TEXT("AirspaceMode0"),
+					       TEXT("AirspaceMode1"),
+					       TEXT("AirspaceMode2"),
+					       TEXT("AirspaceMode3"),
+					       TEXT("AirspaceMode4"),
+					       TEXT("AirspaceMode5"),
+					       TEXT("AirspaceMode6"),
+					       TEXT("AirspaceMode7"),
+					       TEXT("AirspaceMode8"),
+					       TEXT("AirspaceMode9"),
+					       TEXT("AirspaceMode10"),
+					       TEXT("AirspaceMode11"),
+					       TEXT("AirspaceMode12"),
+					       TEXT("AirspaceMode13"),
+					       TEXT("AirspaceMode14")
 }; // pL
 
 
-TCHAR *szRegistryAirspacePriority[] = {  TEXT("AirspacePriority0"),
+const TCHAR *szRegistryAirspacePriority[] = {  TEXT("AirspacePriority0"),
 					 TEXT("AirspacePriority1"),
 					 TEXT("AirspacePriority2"),
 					 TEXT("AirspacePriority3"),
@@ -158,155 +158,150 @@ TCHAR *szRegistryAirspacePriority[] = {  TEXT("AirspacePriority0"),
 }; // pL
 
 
-TCHAR szRegistryAirspaceWarning[]= TEXT("AirspaceWarn");
-TCHAR szRegistryAirspaceBlackOutline[]= TEXT("AirspaceBlackOutline");
-TCHAR szRegistryAltMargin[]=	   TEXT("AltMargin");
-TCHAR szRegistryAltMode[]=  TEXT("AltitudeMode");
-TCHAR szRegistryAltitudeUnitsValue[] = TEXT("Altitude");
-TCHAR szRegistryCircleZoom[]= TEXT("CircleZoom");
-TCHAR szRegistryClipAlt[]= TEXT("ClipAlt");
-TCHAR szRegistryDisplayText[] = TEXT("DisplayText");
-TCHAR szRegistryDisplayUpValue[] = TEXT("DisplayUp");
-TCHAR szRegistryDistanceUnitsValue[] = TEXT("Distance");
-TCHAR szRegistryDrawTerrain[]= TEXT("DrawTerrain");
-TCHAR szRegistryDrawTopology[]= TEXT("DrawTopology");
-TCHAR szRegistryFAISector[] = TEXT("FAISector");
-TCHAR szRegistryFinalGlideTerrain[]= TEXT("FinalGlideTerrain");
-TCHAR szRegistryAutoWind[]= TEXT("AutoWind");
-TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
-TCHAR szRegistryLiftUnitsValue[] = TEXT("Lift");
-TCHAR szRegistryLatLonUnits[] = TEXT("LatLonUnits");
-TCHAR szRegistryPolarID[] = TEXT("Polar"); // pL
-TCHAR szRegistryPort1Index[]= TEXT("PortIndex");
-TCHAR szRegistryPort2Index[]= TEXT("Port2Index");
-TCHAR szRegistryRegKey[]=				 TEXT("RegKey");
-TCHAR szRegistrySafetyAltitudeArrival[] =     TEXT("SafetyAltitudeArrival");
-TCHAR szRegistrySafetyAltitudeBreakOff[] =     TEXT("SafetyAltitudeBreakOff");
-TCHAR szRegistrySafetyAltitudeTerrain[] =     TEXT("SafetyAltitudeTerrain");
-TCHAR szRegistrySafteySpeed[] =          TEXT("SafteySpeed");
-TCHAR szRegistrySectorRadius[]=          TEXT("Radius");
-TCHAR szRegistrySnailTrail[]=		 TEXT("SnailTrail");
-TCHAR szRegistryTrailDrift[]=		 TEXT("TrailDrift");
-TCHAR szRegistryThermalLocator[]=	 TEXT("ThermalLocator");
-TCHAR szRegistryAnimation[]=		 TEXT("Animation");
-TCHAR szRegistrySpeed1Index[]=		 TEXT("SpeedIndex");
-TCHAR szRegistrySpeed2Index[]=		 TEXT("Speed2Index");
-TCHAR szRegistrySpeedUnitsValue[] =      TEXT("Speed");
-TCHAR szRegistryTaskSpeedUnitsValue[] =      TEXT("TaskSpeed");
-TCHAR szRegistryStartLine[]=		 TEXT("StartLine");
-TCHAR szRegistryStartRadius[]=		 TEXT("StartRadius");
-TCHAR szRegistryFinishLine[]=		 TEXT("FinishLine");
-TCHAR szRegistryFinishRadius[]=		 TEXT("FinishRadius");
-TCHAR szRegistryWarningTime[]=		 TEXT("WarnTime");
-TCHAR szRegistryAcknowledgementTime[]=	 TEXT("AcknowledgementTime");
-TCHAR szRegistryWindUpdateMode[] =       TEXT("WindUpdateMode");
-TCHAR szRegistryWindSpeed[] =            TEXT("WindSpeed");
-TCHAR szRegistryWindBearing[] =          TEXT("WindBearing");
+const TCHAR szRegistryAirspaceWarning[]= TEXT("AirspaceWarn");
+const TCHAR szRegistryAirspaceBlackOutline[]= TEXT("AirspaceBlackOutline");
+const TCHAR szRegistryAltMargin[]=	   TEXT("AltMargin");
+const TCHAR szRegistryAltMode[]=  TEXT("AltitudeMode");
+const TCHAR szRegistryAltitudeUnitsValue[] = TEXT("Altitude");
+const TCHAR szRegistryCircleZoom[]= TEXT("CircleZoom");
+const TCHAR szRegistryClipAlt[]= TEXT("ClipAlt");
+const TCHAR szRegistryDisplayText[] = TEXT("DisplayText");
+const TCHAR szRegistryDisplayUpValue[] = TEXT("DisplayUp");
+const TCHAR szRegistryDistanceUnitsValue[] = TEXT("Distance");
+const TCHAR szRegistryDrawTerrain[]= TEXT("DrawTerrain");
+const TCHAR szRegistryDrawTopology[]= TEXT("DrawTopology");
+const TCHAR szRegistryFAISector[] = TEXT("FAISector");
+const TCHAR szRegistryFinalGlideTerrain[]= TEXT("FinalGlideTerrain");
+const TCHAR szRegistryAutoWind[]= TEXT("AutoWind");
+const TCHAR szRegistryHomeWaypoint[]= TEXT("HomeWaypoint");
+const TCHAR szRegistryLiftUnitsValue[] = TEXT("Lift");
+const TCHAR szRegistryLatLonUnits[] = TEXT("LatLonUnits");
+const TCHAR szRegistryPolarID[] = TEXT("Polar"); // pL
+const TCHAR szRegistryPort1Index[]= TEXT("PortIndex");
+const TCHAR szRegistryPort2Index[]= TEXT("Port2Index");
+const TCHAR szRegistryRegKey[]=				 TEXT("RegKey");
+const TCHAR szRegistrySafetyAltitudeArrival[] =     TEXT("SafetyAltitudeArrival");
+const TCHAR szRegistrySafetyAltitudeBreakOff[] =     TEXT("SafetyAltitudeBreakOff");
+const TCHAR szRegistrySafetyAltitudeTerrain[] =     TEXT("SafetyAltitudeTerrain");
+const TCHAR szRegistrySafteySpeed[] =          TEXT("SafteySpeed");
+const TCHAR szRegistrySectorRadius[]=          TEXT("Radius");
+const TCHAR szRegistrySnailTrail[]=		 TEXT("SnailTrail");
+const TCHAR szRegistryTrailDrift[]=		 TEXT("TrailDrift");
+const TCHAR szRegistryThermalLocator[]=	 TEXT("ThermalLocator");
+const TCHAR szRegistryAnimation[]=		 TEXT("Animation");
+const TCHAR szRegistrySpeed1Index[]=		 TEXT("SpeedIndex");
+const TCHAR szRegistrySpeed2Index[]=		 TEXT("Speed2Index");
+const TCHAR szRegistrySpeedUnitsValue[] =      TEXT("Speed");
+const TCHAR szRegistryTaskSpeedUnitsValue[] =      TEXT("TaskSpeed");
+const TCHAR szRegistryStartLine[]=		 TEXT("StartLine");
+const TCHAR szRegistryStartRadius[]=		 TEXT("StartRadius");
+const TCHAR szRegistryFinishLine[]=		 TEXT("FinishLine");
+const TCHAR szRegistryFinishRadius[]=		 TEXT("FinishRadius");
+const TCHAR szRegistryWarningTime[]=		 TEXT("WarnTime");
+const TCHAR szRegistryAcknowledgementTime[]=	 TEXT("AcknowledgementTime");
+const TCHAR szRegistryWindUpdateMode[] =       TEXT("WindUpdateMode");
+const TCHAR szRegistryWindSpeed[] =            TEXT("WindSpeed");
+const TCHAR szRegistryWindBearing[] =          TEXT("WindBearing");
+const TCHAR szRegistryAirfieldFile[]=  TEXT("AirfieldFile"); // pL
+const TCHAR szRegistryAirspaceFile[]=  TEXT("AirspaceFile"); // pL
+const TCHAR szRegistryAdditionalAirspaceFile[]=  TEXT("AdditionalAirspaceFile"); // pL
+const TCHAR szRegistryPolarFile[] = TEXT("PolarFile"); // pL
+const TCHAR szRegistryTerrainFile[]=	 TEXT("TerrainFile"); // pL
+const TCHAR szRegistryTopologyFile[]=  TEXT("TopologyFile"); // pL
+const TCHAR szRegistryWayPointFile[]=  TEXT("WPFile"); // pL
+const TCHAR szRegistryAdditionalWayPointFile[]=  TEXT("AdditionalWPFile"); // pL
+const TCHAR szRegistryLanguageFile[]=  TEXT("LanguageFile"); // pL
+const TCHAR szRegistryStatusFile[]=  TEXT("StatusFile"); // pL
+const TCHAR szRegistryInputFile[]=  TEXT("InputFile"); // pL
+const TCHAR szRegistryPilotName[]=  TEXT("PilotName");
+const TCHAR szRegistryAircraftType[]=  TEXT("AircraftType");
+const TCHAR szRegistryAircraftRego[]=  TEXT("AircraftRego");
+const TCHAR szRegistryLoggerID[]=  TEXT("LoggerID");
+const TCHAR szRegistryLoggerShort[]=  TEXT("LoggerShortName");
+const TCHAR szRegistrySoundVolume[]=  TEXT("SoundVolume");
+const TCHAR szRegistrySoundDeadband[]=  TEXT("SoundDeadband");
+const TCHAR szRegistrySoundAudioVario[]=  TEXT("AudioVario");
+const TCHAR szRegistrySoundTask[]=  TEXT("SoundTask");
+const TCHAR szRegistrySoundModes[]=  TEXT("SoundModes");
+const TCHAR szRegistryNettoSpeed[]= TEXT("NettoSpeed");
+const TCHAR szRegistryAccelerometerZero[]= TEXT("AccelerometerZero");
+const TCHAR szRegistryCDICruise[]= TEXT("CDICruise");
+const TCHAR szRegistryCDICircling[]= TEXT("CDICircling");
 
-TCHAR szRegistryAirfieldFile[]=  TEXT("AirfieldFile"); // pL
-TCHAR szRegistryAirspaceFile[]=  TEXT("AirspaceFile"); // pL
-TCHAR szRegistryAdditionalAirspaceFile[]=  TEXT("AdditionalAirspaceFile"); // pL
-TCHAR szRegistryPolarFile[] = TEXT("PolarFile"); // pL
-TCHAR szRegistryTerrainFile[]=	 TEXT("TerrainFile"); // pL
-TCHAR szRegistryTopologyFile[]=  TEXT("TopologyFile"); // pL
-TCHAR szRegistryWayPointFile[]=  TEXT("WPFile"); // pL
-TCHAR szRegistryAdditionalWayPointFile[]=  TEXT("AdditionalWPFile"); // pL
+const TCHAR szRegistryDeviceA[]= TEXT("DeviceA");
+const TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
 
-TCHAR szRegistryLanguageFile[]=  TEXT("LanguageFile"); // pL
-TCHAR szRegistryStatusFile[]=  TEXT("StatusFile"); // pL
-TCHAR szRegistryInputFile[]=  TEXT("InputFile"); // pL
+const TCHAR szRegistryAutoBlank[]= TEXT("AutoBlank");
+const TCHAR szRegistryVarioGauge[]= TEXT("VarioGauge");
 
-TCHAR szRegistryPilotName[]=  TEXT("PilotName");
-TCHAR szRegistryAircraftType[]=  TEXT("AircraftType");
-TCHAR szRegistryAircraftRego[]=  TEXT("AircraftRego");
-TCHAR szRegistryLoggerID[]=  TEXT("LoggerID");
-TCHAR szRegistryLoggerShort[]=  TEXT("LoggerShortName");
+const TCHAR szRegistryDebounceTimeout[]= TEXT("DebounceTimeout");
 
-TCHAR szRegistrySoundVolume[]=  TEXT("SoundVolume");
-TCHAR szRegistrySoundDeadband[]=  TEXT("SoundDeadband");
-TCHAR szRegistrySoundAudioVario[]=  TEXT("AudioVario");
-TCHAR szRegistrySoundTask[]=  TEXT("SoundTask");
-TCHAR szRegistrySoundModes[]=  TEXT("SoundModes");
-TCHAR szRegistryNettoSpeed[]= TEXT("NettoSpeed");
-TCHAR szRegistryAccelerometerZero[]= TEXT("AccelerometerZero");
+const TCHAR szRegistryAppIndFinalGlide[] = TEXT("AppIndFinalGlide");
+const TCHAR szRegistryAppIndLandable[] = TEXT("AppIndLandable");
+const TCHAR szRegistryAppInverseInfoBox[] = TEXT("AppInverseInfoBox");
+const TCHAR szRegistryAppGaugeVarioSpeedToFly[] = TEXT("AppGaugeVarioSpeedToFly");
+const TCHAR szRegistryAppGaugeVarioAvgText[] = TEXT("AppGaugeVarioAvgText");
+const TCHAR szRegistryAppGaugeVarioMc[] = TEXT("AppGaugeVarioMc");
+const TCHAR szRegistryAppGaugeVarioBugs[] = TEXT("AppGaugeVarioBugs");
+const TCHAR szRegistryAppGaugeVarioBallast[] = TEXT("AppGaugeVarioBallast");
+const TCHAR szRegistryAppGaugeVarioGross[] = TEXT("AppGaugeVarioGross");
+const TCHAR szRegistryAppCompassAppearance[] = TEXT("AppCompassAppearance");
+const TCHAR szRegistryAppStatusMessageAlignment[] = TEXT("AppStatusMessageAlignment");
+const TCHAR szRegistryAppTextInputStyle[] = TEXT("AppTextInputStyle");
+const TCHAR szRegistryAppInfoBoxColors[] = TEXT("AppInfoBoxColors");
+const TCHAR szRegistryAppDefaultMapWidth[] = TEXT("AppDefaultMapWidth");
+const TCHAR szRegistryTeamcodeRefWaypoint[] = TEXT("TeamcodeRefWaypoint");
+const TCHAR szRegistryAppInfoBoxBorder[] = TEXT("AppInfoBoxBorder");
+const TCHAR szRegistryAppAveNeedle[] = TEXT("AppAveNeedle");
 
-TCHAR szRegistryCDICruise[]= TEXT("CDICruise");
-TCHAR szRegistryCDICircling[]= TEXT("CDICircling");
+const TCHAR szRegistryAutoAdvance[] = TEXT("AutoAdvance");
+const TCHAR szRegistryUTCOffset[] = TEXT("UTCOffset");
+const TCHAR szRegistryBlockSTF[] = TEXT("BlockSpeedToFly");
+const TCHAR szRegistryAutoZoom[] = TEXT("AutoZoom");
+const TCHAR szRegistryMenuTimeout[] = TEXT("MenuTimeout");
+const TCHAR szRegistryLockSettingsInFlight[] = TEXT("LockSettingsInFlight");
+const TCHAR szRegistryTerrainContrast[] = TEXT("TerrainContrast");
+const TCHAR szRegistryTerrainBrightness[] = TEXT("TerrainBrightness");
+const TCHAR szRegistryTerrainRamp[] = TEXT("TerrainRamp");
+const TCHAR szRegistryEnableFLARMDisplay[] = TEXT("EnableFLARMDisplay");
+const TCHAR szRegistryFLARMGaugeBearing[] = TEXT("FLARMGaugeBearing");
+const TCHAR szRegistryGliderScreenPosition[] = TEXT("GliderScreenPosition");
+const TCHAR szRegistrySetSystemTimeFromGPS[] = TEXT("SetSystemTimeFromGPS");
+const TCHAR szRegistryAutoForceFinalGlide[] = TEXT("AutoForceFinalGlide");
 
-TCHAR szRegistryDeviceA[]= TEXT("DeviceA");
-TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
+const TCHAR szRegistryVoiceClimbRate[]= TEXT("VoiceClimbRate");
+const TCHAR szRegistryVoiceTerrain[]= TEXT("VoiceTerrain");
+const TCHAR szRegistryVoiceWaypointDistance[]= TEXT("VoiceWaypointDistance");
+const TCHAR szRegistryVoiceTaskAltitudeDifference[]= TEXT("VoiceTaskAltitudeDifference");
+const TCHAR szRegistryVoiceMacCready[]= TEXT("VoiceMacCready");
+const TCHAR szRegistryVoiceNewWaypoint[]= TEXT("VoiceNewWaypoint");
+const TCHAR szRegistryVoiceInSector[]= TEXT("VoiceInSector");
+const TCHAR szRegistryVoiceAirspace[]= TEXT("VoiceAirspace");
 
-TCHAR szRegistryAutoBlank[]= TEXT("AutoBlank");
-TCHAR szRegistryVarioGauge[]= TEXT("VarioGauge");
+const TCHAR szRegistryFinishMinHeight[]= TEXT("FinishMinHeight");
+const TCHAR szRegistryStartMaxHeight[]= TEXT("StartMaxHeight");
+const TCHAR szRegistryStartMaxSpeed[]= TEXT("StartMaxSpeed");
+const TCHAR szRegistryStartHeightRef[] = TEXT("StartHeightRef");
+const TCHAR szRegistryEnableNavBaroAltitude[] = TEXT("EnableNavBaroAltitude");
 
-TCHAR szRegistryDebounceTimeout[]= TEXT("DebounceTimeout");
+const TCHAR szRegistryLoggerTimeStepCruise[]= TEXT("LoggerTimeStepCruise");
+const TCHAR szRegistryLoggerTimeStepCircling[]= TEXT("LoggerTimeStepCircling");
 
-TCHAR szRegistryAppIndFinalGlide[] = TEXT("AppIndFinalGlide");
-TCHAR szRegistryAppIndLandable[] = TEXT("AppIndLandable");
-TCHAR szRegistryAppInverseInfoBox[] = TEXT("AppInverseInfoBox");
-TCHAR szRegistryAppGaugeVarioSpeedToFly[] = TEXT("AppGaugeVarioSpeedToFly");
-TCHAR szRegistryAppGaugeVarioAvgText[] = TEXT("AppGaugeVarioAvgText");
-TCHAR szRegistryAppGaugeVarioMc[] = TEXT("AppGaugeVarioMc");
-TCHAR szRegistryAppGaugeVarioBugs[] = TEXT("AppGaugeVarioBugs");
-TCHAR szRegistryAppGaugeVarioBallast[] = TEXT("AppGaugeVarioBallast");
-TCHAR szRegistryAppGaugeVarioGross[] = TEXT("AppGaugeVarioGross");
-TCHAR szRegistryAppCompassAppearance[] = TEXT("AppCompassAppearance");
-TCHAR szRegistryAppStatusMessageAlignment[] = TEXT("AppStatusMessageAlignment");
-TCHAR szRegistryAppTextInputStyle[] = TEXT("AppTextInputStyle");
-TCHAR szRegistryAppInfoBoxColors[] = TEXT("AppInfoBoxColors");
-TCHAR szRegistryAppDefaultMapWidth[] = TEXT("AppDefaultMapWidth");
-TCHAR szRegistryTeamcodeRefWaypoint[] = TEXT("TeamcodeRefWaypoint");
-TCHAR szRegistryAppInfoBoxBorder[] = TEXT("AppInfoBoxBorder");
-TCHAR szRegistryAppAveNeedle[] = TEXT("AppAveNeedle");
-
-TCHAR szRegistryAutoAdvance[] = TEXT("AutoAdvance");
-TCHAR szRegistryUTCOffset[] = TEXT("UTCOffset");
-TCHAR szRegistryBlockSTF[] = TEXT("BlockSpeedToFly");
-TCHAR szRegistryAutoZoom[] = TEXT("AutoZoom");
-TCHAR szRegistryMenuTimeout[] = TEXT("MenuTimeout");
-TCHAR szRegistryLockSettingsInFlight[] = TEXT("LockSettingsInFlight");
-TCHAR szRegistryTerrainContrast[] = TEXT("TerrainContrast");
-TCHAR szRegistryTerrainBrightness[] = TEXT("TerrainBrightness");
-TCHAR szRegistryTerrainRamp[] = TEXT("TerrainRamp");
-TCHAR szRegistryEnableFLARMDisplay[] = TEXT("EnableFLARMDisplay");
-TCHAR szRegistryFLARMGaugeBearing[] = TEXT("FLARMGaugeBearing");
-TCHAR szRegistryGliderScreenPosition[] = TEXT("GliderScreenPosition");
-TCHAR szRegistrySetSystemTimeFromGPS[] = TEXT("SetSystemTimeFromGPS");
-TCHAR szRegistryAutoForceFinalGlide[] = TEXT("AutoForceFinalGlide");
-
-TCHAR szRegistryVoiceClimbRate[]= TEXT("VoiceClimbRate");
-TCHAR szRegistryVoiceTerrain[]= TEXT("VoiceTerrain");
-TCHAR szRegistryVoiceWaypointDistance[]= TEXT("VoiceWaypointDistance");
-TCHAR szRegistryVoiceTaskAltitudeDifference[]= TEXT("VoiceTaskAltitudeDifference");
-TCHAR szRegistryVoiceMacCready[]= TEXT("VoiceMacCready");
-TCHAR szRegistryVoiceNewWaypoint[]= TEXT("VoiceNewWaypoint");
-TCHAR szRegistryVoiceInSector[]= TEXT("VoiceInSector");
-TCHAR szRegistryVoiceAirspace[]= TEXT("VoiceAirspace");
-
-TCHAR szRegistryFinishMinHeight[]= TEXT("FinishMinHeight");
-TCHAR szRegistryStartMaxHeight[]= TEXT("StartMaxHeight");
-TCHAR szRegistryStartMaxSpeed[]= TEXT("StartMaxSpeed");
-TCHAR szRegistryStartHeightRef[] = TEXT("StartHeightRef");
-TCHAR szRegistryEnableNavBaroAltitude[] = TEXT("EnableNavBaroAltitude");
-
-TCHAR szRegistryLoggerTimeStepCruise[]= TEXT("LoggerTimeStepCruise");
-TCHAR szRegistryLoggerTimeStepCircling[]= TEXT("LoggerTimeStepCircling");
-
-TCHAR szRegistrySafetyMacCready[] = TEXT("SafetyMacCready");
-TCHAR szRegistryAbortSafetyUseCurrent[] = TEXT("AbortSafetyUseCurrent");
-TCHAR szRegistryAutoMcMode[] = TEXT("AutoMcMode");
-TCHAR szRegistryWaypointsOutOfRange[] = TEXT("WaypointsOutOfRange");
-TCHAR szRegistryEnableExternalTriggerCruise[] = TEXT("EnableExternalTriggerCruise");
-TCHAR szRegistryFAIFinishHeight[] = TEXT("FAIFinishHeight");
-TCHAR szRegistryOLCRules[] = TEXT("OLCRules");
-TCHAR szRegistryHandicap[] = TEXT("Handicap");
-TCHAR szRegistrySnailWidthScale[] = TEXT("SnailWidthScale");
-TCHAR szRegistryUserLevel[] = TEXT("UserLevel");
-TCHAR szRegistryRiskGamma[] = TEXT("RiskGamma");
-TCHAR szRegistryWindArrowStyle[] = TEXT("WindArrowStyle");
-TCHAR szRegistryDisableAutoLogger[] = TEXT("DisableAutoLogger");
-TCHAR szRegistryMapFile[]=	 TEXT("MapFile"); // pL
-TCHAR szRegistryBallastSecsToEmpty[]=	 TEXT("BallastSecsToEmpty"); 
+const TCHAR szRegistrySafetyMacCready[] = TEXT("SafetyMacCready");
+const TCHAR szRegistryAbortSafetyUseCurrent[] = TEXT("AbortSafetyUseCurrent");
+const TCHAR szRegistryAutoMcMode[] = TEXT("AutoMcMode");
+const TCHAR szRegistryWaypointsOutOfRange[] = TEXT("WaypointsOutOfRange");
+const TCHAR szRegistryEnableExternalTriggerCruise[] = TEXT("EnableExternalTriggerCruise");
+const TCHAR szRegistryFAIFinishHeight[] = TEXT("FAIFinishHeight");
+const TCHAR szRegistryOLCRules[] = TEXT("OLCRules");
+const TCHAR szRegistryHandicap[] = TEXT("Handicap");
+const TCHAR szRegistrySnailWidthScale[] = TEXT("SnailWidthScale");
+const TCHAR szRegistryUserLevel[] = TEXT("UserLevel");
+const TCHAR szRegistryRiskGamma[] = TEXT("RiskGamma");
+const TCHAR szRegistryWindArrowStyle[] = TEXT("WindArrowStyle");
+const TCHAR szRegistryDisableAutoLogger[] = TEXT("DisableAutoLogger");
+const TCHAR szRegistryMapFile[]=	 TEXT("MapFile"); // pL
+const TCHAR szRegistryBallastSecsToEmpty[]=	 TEXT("BallastSecsToEmpty"); 
 
 int UTCOffset = 0; // used for Altair
 bool LockSettingsInFlight = true;
@@ -367,8 +362,8 @@ void ResetInfoBoxes(void) {
 #endif
 }
 
-void SetRegistryStringIfAbsent(TCHAR* name,
-			       TCHAR* value) {
+void SetRegistryStringIfAbsent(const TCHAR* name,
+			       const TCHAR* value) {
   TCHAR temp[MAX_PATH];
   if (!GetRegistryString(name, temp, MAX_PATH)) {
     SetRegistryString(name, value);
@@ -1089,7 +1084,7 @@ BOOL GetRegistryString(const TCHAR *szRegValue, TCHAR *pPos, DWORD dwSize)
   return hRes;
 }
 
-HRESULT SetRegistryString(const TCHAR *szRegValue, TCHAR *Pos)
+HRESULT SetRegistryString(const TCHAR *szRegValue, const TCHAR *Pos)
 {
   HKEY    hKey;
   DWORD    Disp;
@@ -2383,7 +2378,7 @@ void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
 }
 
 
-void WriteProfile(TCHAR *szFile)
+void WriteProfile(const TCHAR *szFile)
 {
   SaveRegistryToFile(szFile);
 }
@@ -2402,7 +2397,7 @@ void ReadFileRegistryString(HANDLE hFile, TCHAR *instring) {
 }
 
 
-void ReadProfile(TCHAR *szFile)
+void ReadProfile(const TCHAR *szFile)
 {
 
   LoadRegistryFromFile(szFile);
@@ -3245,7 +3240,7 @@ const static int nMaxValueValueSize = 4096;
 const static int nMaxClassSize = MAX_PATH;
 const static int nMaxKeyNameSize = MAX_PATH;
 
-void LoadRegistryFromFile(TCHAR *szFile)
+void LoadRegistryFromFile(const TCHAR *szFile)
 {
   FILE *fp=NULL;
   if (_tcslen(szFile)>0)
@@ -3275,7 +3270,7 @@ void LoadRegistryFromFile(TCHAR *szFile)
 }
 
 
-void SaveRegistryToFile(TCHAR *szFile)
+void SaveRegistryToFile(const TCHAR *szFile)
 {
   TCHAR lpstrName[nMaxKeyNameSize+1];
   //  TCHAR lpstrClass[nMaxClassSize+1];
@@ -3396,7 +3391,7 @@ TCHAR* StringMallocParse(TCHAR* old_string) {
 }
 
 // Get local My Documents path - optionally include file to add and location
-void LocalPath(TCHAR* buffer, TCHAR* file, int loc) {
+void LocalPath(TCHAR* buffer, const TCHAR* file, int loc) {
 /*
 
 loc = CSIDL_PROGRAMS
@@ -3463,7 +3458,7 @@ CSIDL_PROGRAM_FILES 0x0026   The program files folder.
 }
 
 
-void LocalPathS(char *buffer, TCHAR* file, int loc) {
+void LocalPathS(char *buffer, const TCHAR* file, int loc) {
   TCHAR wbuffer[MAX_PATH];
   LocalPath(wbuffer,file,loc);
   sprintf(buffer,"%S",wbuffer);
@@ -3821,7 +3816,7 @@ int MeasureCPULoad() {
   static int PercentIdle;
   static int PercentLoad;
   static int pi;
-#if (!defined(GNAV) || (WINDOWSPC>0)) && !defined(JMW_MINGW)
+#if (!defined(GNAV) || (WINDOWSPC>0)) && !defined(__MINGW32__)
   if (!init) {
     // get the pointer to the function
     GetIdleTime = (GetIdleTimeProc) 
@@ -4415,7 +4410,7 @@ void MyCompactHeaps() {
 }
 
 
-unsigned long FindFreeSpace(TCHAR *path) {
+unsigned long FindFreeSpace(const TCHAR *path) {
   // returns number of kb free on destination drive
 
   ULARGE_INTEGER FreeBytesAvailableToCaller;
@@ -4432,7 +4427,7 @@ unsigned long FindFreeSpace(TCHAR *path) {
 }
 
 
-bool MatchesExtension(TCHAR *filename, TCHAR* extension) {
+bool MatchesExtension(const TCHAR *filename, const TCHAR* extension) {
   TCHAR *ptr;
   ptr = _tcsstr(filename, extension);
   if (ptr != filename+_tcslen(filename)-_tcslen(extension)) {
@@ -4447,7 +4442,7 @@ bool MatchesExtension(TCHAR *filename, TCHAR* extension) {
 
 extern HINSTANCE                       hInst; // The current instance
 
-BOOL PlayResource (LPTSTR lpName)
+BOOL PlayResource (const TCHAR* lpName)
 {
   BOOL bRtn;
   LPTSTR lpRes;

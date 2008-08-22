@@ -626,7 +626,6 @@ void                                                    PopUpSelect(int i);
 #ifdef DEBUG
 void                                            DebugStore(char *Str);
 #endif
-void StartupStore(TCHAR *Str);
 
 
 void HideMenu() {
@@ -3081,7 +3080,7 @@ void PopUpSelect(int Index)
 
 void DebugStore(char *Str)
 {
-#if (defined(DEBUG)||defined(__MINGW32__))&&!defined(GNAV)
+#if defined(DEBUG) && !defined(GNAV)
   LockFlightData();
   FILE *stream;
   TCHAR szFileName[] = TEXT("xcsoar-debug.log");
@@ -3101,7 +3100,7 @@ void DebugStore(char *Str)
 }
 
 
-void StartupStore(TCHAR *Str)
+void StartupStore(const TCHAR *Str)
 {
   if (csFlightDataInitialized) {
     LockFlightData();
