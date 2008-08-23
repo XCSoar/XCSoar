@@ -42,7 +42,25 @@ Copyright_License {
 
 #include "device.h"
 
+// A note about locking.
+//  The ComPort RX threads lock using FlightData critical section.
+//  ComPort::StopRxThread and ComPort::Close both wait for these threads to
+//  exit before returning.  Both these functions are called with the Comm
+//  critical section locked.  Therefore, there is a locking dependency upon
+//  Comm -> FlightData.
+//
+//  If someone locks FlightData and then Comm, there is a high possibility
+//  of deadlock.  So, FlightData must never be locked after Comm.  Ever.
+//  Thankfully WinCE "critical sections" are recursive locks.
+
 #define debugIGNORERESPONCE 0
+
+static  TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:"),TEXT("COM0:")};
+static  DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
+static  DWORD PortIndex1 = 0;
+static  DWORD SpeedIndex1 = 2;
+static  DWORD PortIndex2 = 0;
+static  DWORD SpeedIndex2 = 2;
 
 DeviceRegister_t   DeviceRegister[NUMREGDEV];
 DeviceDescriptor_t DeviceList[NUMDEV];
@@ -171,9 +189,22 @@ BOOL devInit(LPTSTR CommandLine){
   pDevSecondaryBaroSource=NULL;
 
   ReadDeviceSettings(0, DeviceName);
+#ifdef GNAV
+  PortIndex1 = 2; SpeedIndex1 = 5;
+#else
+  PortIndex1 = 0; SpeedIndex1 = 2;
+#endif
+  ReadPort1Settings(&PortIndex1,&SpeedIndex1);
 
   for (i=0; i<DeviceRegisterCount; i++){
     if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
+      ComPort *Com = &Port1;
+
+      // remember: Port1 is the port used by device A, port1 may be Com3 or Com1 etc
+      if (!Com->Initialize(COMMPort[PortIndex1], dwSpeed[SpeedIndex1]))
+        break;
+
+      Com->ProcessChar = ProcessChar1;
 
       DeviceRegister[i].Installer(devA());
 
@@ -181,9 +212,7 @@ BOOL devInit(LPTSTR CommandLine){
         pDevNmeaOut = devA();
       }
 
-      // remember: Port1 is the port used by device A, port1 may be Com3 or Com1 etc
-      devA()->Com = &Port1;
-      Port1.ProcessChar = ProcessChar1;
+      devA()->Com = Com;
 
       devInit(devA());
       devOpen(devA(), 0);
@@ -202,9 +231,23 @@ BOOL devInit(LPTSTR CommandLine){
 
 
   ReadDeviceSettings(1, DeviceName);
+#ifdef GNAV
+  PortIndex2 = 0; SpeedIndex2 = 5;
+#else
+  PortIndex2 = 0; SpeedIndex2 = 2;
+#endif
+  ReadPort2Settings(&PortIndex2,&SpeedIndex2);
 
   for (i=0; i<DeviceRegisterCount; i++){
     if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
+      ComPort *Com = &Port1;
+
+      if (PortIndex1 == PortIndex2)
+        break;
+      if (!Com->Initialize(COMMPort[PortIndex2], dwSpeed[SpeedIndex2]))
+        break;
+
+      Com->ProcessChar = ProcessChar2;
 
       DeviceRegister[i].Installer(devB());
 
@@ -213,8 +256,7 @@ BOOL devInit(LPTSTR CommandLine){
         pDevNmeaOut = devB();
       }
 
-      devB()->Com = &Port2;
-      Port2.ProcessChar = ProcessChar2;
+      devB()->Com = Com;
 
       devInit(devB());
       devOpen(devB(), 1);
@@ -403,27 +445,44 @@ BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready){
+BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready)
+{
+  BOOL result = TRUE;
+
+  LockComm();
   if (d != NULL && d->PutMacCready != NULL)
-    return ((d->PutMacCready)(d, MacCready));
-  else
-    return(TRUE);
+    result = d->PutMacCready(d, MacCready);
+  UnlockComm();
+
+  return result;
 }
 
-BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs){
+BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs)
+{
+  BOOL result = TRUE;
+
+  LockComm();
   if (d != NULL && d->PutBugs != NULL)
-    return ((d->PutBugs)(d, Bugs));
-  else
-    return(TRUE);
+    result = d->PutBugs(d, Bugs);
+  UnlockComm();
+
+  return result;
 }
 
-BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast){
+BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
+{
+  BOOL result = TRUE;
+
+  LockComm();
   if (d != NULL && d->PutBallast != NULL)
-    return ((d->PutBallast)(d, Ballast));
-  else
-    return(TRUE);
+    result = d->PutBallast(d, Ballast);
+  UnlockComm();
+
+  return result;
 }
 
+// Only called from devInit() above which
+// is in turn called with LockComm
 BOOL devOpen(PDeviceDescriptor_t d, int Port){
   if (d != NULL && d->Open != NULL)
     return ((d->Open)(d, Port));
@@ -431,13 +490,28 @@ BOOL devOpen(PDeviceDescriptor_t d, int Port){
     return(TRUE);
 }
 
-BOOL devClose(PDeviceDescriptor_t d){
-  if (d != NULL && d->Close != NULL)
-    return ((d->Close)(d));
-  else
-    return(TRUE);
+// Tear down methods should always succeed.
+// Called from devInit() above under LockComm
+// Also called when shutting down via devCloseAll()
+BOOL devClose(PDeviceDescriptor_t d)
+{
+  if (d != NULL) {
+    if (d->Close != NULL)
+      d->Close(d);
+
+    ComPort *Com = d->Com;
+    d->Com = NULL;
+
+    if (Com) {
+      Com->Close();
+    }
+  }
+
+  return TRUE;
 }
 
+// Only called from devInit() above which
+// is in turn called with LockComm
 BOOL devInit(PDeviceDescriptor_t d){
   if (d != NULL && d->Init != NULL)
     return ((d->Init)(d));
@@ -445,51 +519,52 @@ BOOL devInit(PDeviceDescriptor_t d){
     return(TRUE);
 }
 
-BOOL devLinkTimeout(PDeviceDescriptor_t d){
+BOOL devLinkTimeout(PDeviceDescriptor_t d)
+{
+  BOOL result = FALSE;
+
+  LockComm();
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
       d = &DeviceList[i];
       if (d->LinkTimeout != NULL)
         (d->LinkTimeout)(d);
     }
-    return (TRUE);
+    result = TRUE;
   } else {
     if (d->LinkTimeout != NULL)
-      return ((d->LinkTimeout)(d));
+      result = d->LinkTimeout(d);
   }
-  return(FALSE);
+  UnlockComm();
+
+  return FALSE;
 }
 
 
-BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence){
+BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
+{
+  BOOL result = FALSE;
 
+  LockComm();
   if (d == NULL){
-
     for (int i=0; i<NUMDEV; i++){
-
       d = &DeviceList[i];
-
       if (d->PutVoice != NULL)
-
-        (d->PutVoice)(d, Sentence);
-
+        d->PutVoice(d, Sentence);
     }
-
-    return (TRUE);
-
+    result = TRUE;
   } else {
-
     if (d->PutVoice != NULL)
-
-      return ((d->PutVoice)(d, Sentence));
-
+      result = d->PutVoice(d, Sentence);
   }
+  UnlockComm();
 
-  return(FALSE);
-
+  return FALSE;
 }
 
 
+// We rely on the caller to provide LockComm() safety across
+// the three devDecl* calls.
 BOOL devDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
   if ((d != NULL) && (d->DeclBegin != NULL))
     return ((d->DeclBegin)(d, PilotsName, Class, ID));
@@ -511,25 +586,40 @@ BOOL devDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
     return(FALSE);
 }
 
-BOOL devIsLogger(PDeviceDescriptor_t d){
+BOOL devIsLogger(PDeviceDescriptor_t d)
+{
+  BOOL result = FALSE;
+
+  LockComm();
   if ((d != NULL) && (d->IsLogger != NULL))
-    return ((d->IsLogger)(d));
-  else
-    return(FALSE);
+    result = d->IsLogger(d);
+  UnlockComm();
+
+  return result;
 }
 
-BOOL devIsGPSSource(PDeviceDescriptor_t d){
+BOOL devIsGPSSource(PDeviceDescriptor_t d)
+{
+  BOOL result = FALSE;
+
+  LockComm();
   if ((d != NULL) && (d->IsGPSSource != NULL))
-    return ((d->IsGPSSource)(d));
-  else
-    return(FALSE);
+    result = d->IsGPSSource(d);
+  UnlockComm();
+
+  return result;
 }
 
-BOOL devIsBaroSource(PDeviceDescriptor_t d){
+BOOL devIsBaroSource(PDeviceDescriptor_t d)
+{
+  BOOL result = FALSE;
+
+  LockComm();
   if ((d != NULL) && (d->IsBaroSource != NULL))
-    return ((d->IsBaroSource)(d));
-  else
-    return(FALSE);
+    result = d->IsBaroSource(d);
+  UnlockComm();
+
+  return result;
 }
 
 BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName){
@@ -548,34 +638,46 @@ BOOL devCloseLog(PDeviceDescriptor_t d){
     return(FALSE);
 }
 
-BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH){
+BOOL devPutQNH(DeviceDescriptor_t *d, double NewQNH)
+{
+  BOOL result = FALSE;
+
+  LockComm();
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
       d = &DeviceList[i];
       if (d->PutQNH != NULL)
-        (d->PutQNH)(d, NewQNH);
+        d->PutQNH(d, NewQNH);
     }
-    return(TRUE);
+    result = TRUE;
   } else {
     if (d->PutQNH != NULL)
-      return ((d->PutQNH)(d, NewQNH));
+      result = d->PutQNH(d, NewQNH);
   }
-  return(FALSE);
+  UnlockComm();
+
+  return FALSE;
 }
 
-BOOL devOnSysTicker(DeviceDescriptor_t *d){
+BOOL devOnSysTicker(DeviceDescriptor_t *d)
+{
+  BOOL result = FALSE;
+
+  LockComm();
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
       d = &DeviceList[i];
       if (d->OnSysTicker != NULL)
-        (d->OnSysTicker)(d);
+        d->OnSysTicker(d);
     }
-    return(TRUE);
+    result = TRUE;
   } else {
     if (d->OnSysTicker != NULL)
-      return ((d->OnSysTicker)(d));
+      result = d->OnSysTicker(d);
   }
-  return(FALSE);
+  UnlockComm();
+
+  return result;
 }
 
 static void devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
@@ -595,8 +697,10 @@ void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *text)
 
   devFormatNMEAString(tmp, 512, text);
 
+  LockComm();
   if (d->Com)
     d->Com->WriteString(tmp);
+  UnlockComm();
 }
 
 void VarioWriteNMEA(const TCHAR *text)
@@ -605,10 +709,12 @@ void VarioWriteNMEA(const TCHAR *text)
 
   devFormatNMEAString(tmp, 512, text);
 
+  LockComm();
   for (int i = 0; i < NUMDEV; i++)
     if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
       if (DeviceList[i].Com)
         DeviceList[i].Com->WriteString(tmp);
+  UnlockComm();
 }
 
 void VarioWriteSettings(void)

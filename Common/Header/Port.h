@@ -45,10 +45,4 @@ class ComPort {
 extern ComPort Port1;
 extern ComPort Port2;
 
-#define Port1Initialize(s,d)	Port1.Initialize(s,d)
-#define Port1Close()		Port1.Close()
-
-#define Port2Initialize(s,d)	Port2.Initialize(s,d)
-#define Port2Close()		Port2.Close()
-
 #endif

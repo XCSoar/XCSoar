@@ -1770,6 +1770,8 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
 // show: shows the current bug degradation
 void InputEvents::eventBugs(const TCHAR *misc) {
   double oldBugs = BUGS;
+
+  LockComm(); // Must LockComm to prevent deadlock
   LockFlightData();
 
   if (_tcscmp(misc, TEXT("up")) == 0) {
@@ -1797,6 +1799,7 @@ void InputEvents::eventBugs(const TCHAR *misc) {
     GlidePolar::SetBallast();
   }
   UnlockFlightData();
+  UnlockComm();
 }
 
 // Ballast
@@ -1808,6 +1811,7 @@ void InputEvents::eventBugs(const TCHAR *misc) {
 // show: displays a status message indicating the ballast percentage
 void InputEvents::eventBallast(const TCHAR *misc) {
   double oldBallast= BALLAST;
+  LockComm(); // Must LockComm to prevent deadlock
   LockFlightData();
   if (_tcscmp(misc, TEXT("up")) == 0) {
     BALLAST = iround(BALLAST*100.0+10) / 100.0;
@@ -1833,6 +1837,7 @@ void InputEvents::eventBallast(const TCHAR *misc) {
     GlidePolar::SetBallast();
   }
   UnlockFlightData();
+  UnlockComm();
 }
 
 #include "Task.h"

@@ -40,10 +40,6 @@ extern StartupState_t ProgramStarted;
 extern int UTCOffset;
 
 
-// comms data
-extern BOOL                                    Port1Available;
-extern BOOL                                    Port2Available;
-
 // asset/registration data
 extern TCHAR strAssetNumber[];
 extern TCHAR strRegKey[];
