@@ -220,7 +220,7 @@ double AngleLimit180(double theta);
 double AngleLimit360(double theta);
 
 #ifdef __MINGW32__
-#define DEG_TO_INT(x) ((unsigned short)((AngleLimit360(x))*(65536.0/360.0)))>>4
+#define DEG_TO_INT(x) ((unsigned short)(int)((x)*(65536.0/360.0)))>>4
 #else
 #define DEG_TO_INT(x) ((unsigned short)((x)*(65536.0/360.0)))>>4
 #endif
