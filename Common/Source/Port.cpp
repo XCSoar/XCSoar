@@ -263,9 +263,10 @@ DWORD ComPort::ReadThread()
               // Read the data from the serial port.
         if (ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, 
 		     (OVERLAPPED *)NULL)) {
-          for (unsigned int j = 0; j < dwBytesTransferred; j++) {
-	    ProcessChar(inbuf[j]);
-          }
+	  if (ProgramStarted >= psNormalOp)  // ignore everything until started
+	    for (unsigned int j = 0; j < dwBytesTransferred; j++) {
+	      ProcessChar(inbuf[j]);
+	    }
         } else {
           dwBytesTransferred = 0;
         }
@@ -529,8 +530,6 @@ int ComPort::Read(void *Buffer, size_t Size)
 
 
 void ComPort::ProcessChar(char c) {
-  if (ProgramStarted < psNormalOp) return; // ignore everything until started
-
   if (bi<NMEA_BUF_SIZE-1) {
 
     BuildingString[bi++] = c;
@@ -544,6 +543,6 @@ void ComPort::ProcessChar(char c) {
       return;
     }
   }
-  
+  // overflow, so reset buffer
   bi = 0;
 }

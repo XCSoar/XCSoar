@@ -63,10 +63,12 @@ Copyright_License {
 #include "Terrain.h"
 #include "VarioSound.h"
 #include "device.h"
+
 #include "devCAI302.h"
 #include "devCaiGpsNav.h"
 #include "devEW.h"
 #include "devAltairPro.h"
+#include "devGeneric.h"
 #include "devVega.h"
 #include "devNmeaOut.h"
 #include "devPosiGraph.h"
@@ -76,6 +78,7 @@ Copyright_License {
 #include "devLX.h"
 #include "devZander.h"
 #include "devFlymasterF1.h"
+
 #include "externs.h"
 #include "Units.h"
 #include "InputEvents.h"
@@ -1358,6 +1361,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // IMPORTANT: ADD NEW ONES TO BOTTOM OF THIS LIST
   CreateProgressDialog(gettext(TEXT("Starting devices")));
   StartupStore(TEXT("Register serial devices\n"));
+  genRegister(); // MUST BE FIRST
   cai302Register();
   ewRegister();
   atrRegister();

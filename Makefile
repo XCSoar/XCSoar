@@ -145,6 +145,7 @@ DEVS	:=\
 	$(SRC)/devEW.o \
 	$(SRC)/devEWMicroRecorder.o \
 	$(SRC)/devFlymasterF1.o \
+	$(SRC)/devGeneric.o \
 	$(SRC)/devLX.o \
 	$(SRC)/devNmeaOut.o \
 	$(SRC)/devPosiGraph.o \
