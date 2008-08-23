@@ -89,13 +89,23 @@ BOOL ExpectStringWait(PDeviceDescriptor_t d, TCHAR *token) {
 
 BOOL EWMicroRecorderParseNMEA(PDeviceDescriptor_t d,
                               TCHAR *String, NMEA_INFO *GPS_INFO){
-  (void)d;
-  (void)String;
-  (void)GPS_INFO;
-  // no propriatary sentence
+  TCHAR ctemp[80], *params[5];
+  int nparams = NMEAParser::ValidateAndExtract(String, ctemp, 80, params, 5);
+  if (nparams < 1)
+    return FALSE;
+
+  if (!_tcscmp(params[0], TEXT("$PGRMZ")) && nparams >= 3) {
+    if (d == pDevPrimaryBaroSource) {
+      double altitude = NMEAParser::ParseAltitude(params[1], params[2]);
+
+      GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(altitude);
+      GPS_INFO->BaroAltitudeAvailable = true;
+    }
+
+    return TRUE;
+  }
 
   return FALSE;
-
 }
 
 
@@ -231,13 +241,7 @@ BOOL EWMicroRecorderDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
 
 
 
-BOOL EWMicroRecorderIsLogger(PDeviceDescriptor_t d){
-  (void)d;
-  return(TRUE);
-}
-
-
-BOOL EWMicroRecorderIsGPSSource(PDeviceDescriptor_t d){
+BOOL EWMicroRecorderIsTrue(PDeviceDescriptor_t d){
   (void)d;
   return(TRUE);
 }
@@ -254,8 +258,9 @@ BOOL ewMicroRecorderInstall(PDeviceDescriptor_t d){
   d->Init = NULL;
   d->LinkTimeout = NULL;
   d->Declare = EWMicroRecorderDeclare;
-  d->IsLogger = EWMicroRecorderIsLogger;
-  d->IsGPSSource = EWMicroRecorderIsGPSSource;
+  d->IsLogger = EWMicroRecorderIsTrue;
+  d->IsGPSSource = EWMicroRecorderIsTrue;
+  d->IsBaroSource = EWMicroRecorderIsTrue;
 
   return(TRUE);
 
@@ -266,7 +271,8 @@ BOOL ewMicroRecorderRegister(void){
   return(devRegister(
     TEXT("EW MicroRecorder"),
     1l << dfGPS
-      | 1l << dfLogger,
+      | 1l << dfLogger
+      | 1l << dfBaroAlt,
     ewMicroRecorderInstall
   ));
 }

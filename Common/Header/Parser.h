@@ -147,7 +147,11 @@ class NMEAParser {
   static void TestRoutine(NMEA_INFO *GPS_INFO);
 
   // these routines can be used by other parsers.
-  static BOOL NMEAChecksum(TCHAR *String);
+  static double ParseAltitude(TCHAR *, const TCHAR *);
+  static size_t ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz, TCHAR **arr, size_t arrsz);
+  static size_t ExtractParameters(const TCHAR *src, TCHAR *dst, TCHAR **arr, size_t sz);
+  static BOOL NMEAChecksum(const TCHAR *String);
+
   static void ExtractParameter(const TCHAR *Source,
 			       TCHAR *Destination,
 			       int DesiredFieldNumber);
@@ -163,23 +167,23 @@ class NMEAParser {
   bool TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO);
   static double TimeModify(double FixTime, NMEA_INFO* info);
 
-  BOOL GLL(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL GGA(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL RMC(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL RMB(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL RMA(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL RMZ(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL GLL(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  BOOL GGA(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  BOOL RMC(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  BOOL RMB(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  BOOL RMA(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  BOOL RMZ(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 
-  BOOL WP0(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL WP1(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL WP2(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL WP0(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  BOOL WP1(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  BOOL WP2(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 
   // Additional sentances
-  BOOL PTAS1(TCHAR *String, NMEA_INFO *GPS_INFO);  // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
+  BOOL PTAS1(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);  // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentances
-  BOOL PFLAU(TCHAR *String, NMEA_INFO *GPS_INFO);
-  BOOL PFLAA(TCHAR *String, NMEA_INFO *GPS_INFO);
+  BOOL PFLAU(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  BOOL PFLAA(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
 };
 
 void FLARM_RefreshSlots(NMEA_INFO *GPS_INFO);

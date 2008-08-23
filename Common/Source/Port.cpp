@@ -39,9 +39,6 @@ Copyright_License {
 
 #define COMMDEBUG 0
 
-ComPort Port1;
-ComPort Port2;
-
 static void ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *fmt, ...)
 {
   TCHAR tmp[127];
