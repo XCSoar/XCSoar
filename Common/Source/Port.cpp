@@ -340,13 +340,10 @@ void ComPort::WriteString(const TCHAR *Text)
 
    len = WideCharToMultiByte(CP_ACP, 0, Text, len + 1, tmp, sizeof(tmp), NULL, NULL);
 
-    LockComm();
-
    if (!len || !WriteFile(hPort, tmp, len, &written, NULL))
      // WriteFile failed, report error
      error = GetLastError();
 
-    UnlockComm();
 }
 
 

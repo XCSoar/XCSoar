@@ -231,11 +231,6 @@ COLORREF ColorWarning = RGB(0xFF,0x00,0x00);
 COLORREF ColorOK = RGB(0x00,0x00,0xFF);
 COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
 
-// Serial Port Globals
-
-BOOL                                    Port1Available = FALSE;
-BOOL                                    Port2Available = FALSE;
-
 // Display Gobals
 HFONT                                   InfoWindowFont;
 HFONT                                   TitleWindowFont;
@@ -415,13 +410,6 @@ Statistics flightstats;
 #define HAVE_ACTIVATE_INFO
 static SHACTIVATEINFO s_sai;
 #endif
-
-static  TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:"),TEXT("COM0:")};
-static  DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
-static  DWORD PortIndex1 = 0;
-static  DWORD SpeedIndex1 = 2;
-static  DWORD PortIndex2 = 0;
-static  DWORD SpeedIndex2 = 2;
 
 BOOL InfoBoxesHidden = false;
 
@@ -851,49 +839,9 @@ void RestartCommPorts() {
   devClose(devA());
   devClose(devB());
 
-  // Close both first!
-  if(Port1Available)
-    {
-      Port1Available = FALSE;
-      Port1Close ();
-    }
-  if(Port2Available)
-    {
-      Port2Available = FALSE;
-      Port2Close ();
-    }
-
   NMEAParser::Reset();
 
-  first = true;
-  if (first) {
-    if (!Port1Available) {
-#ifdef GNAV
-      PortIndex1 = 2; SpeedIndex1 = 5;
-#else
-      PortIndex1 = 0; SpeedIndex1 = 2;
-#endif
-      ReadPort1Settings(&PortIndex1,&SpeedIndex1);
-      Port1Available =
-	Port1Initialize (COMMPort[PortIndex1],dwSpeed[SpeedIndex1]);
-    }
-
-    if (!Port2Available) {
-#ifdef GNAV
-      PortIndex2 = 0; SpeedIndex2 = 5;
-#else
-      PortIndex2 = 0; SpeedIndex2 = 2;
-#endif
-      ReadPort2Settings(&PortIndex2,&SpeedIndex2);
-      if (PortIndex1 != PortIndex2) {
-	Port2Available =
-	  Port2Initialize (COMMPort[PortIndex2],dwSpeed[SpeedIndex2]);
-      } else {
-	Port2Available = FALSE;
-      }
-    }
-    first = false;
-  }
+  first = false;
 
   devInit(TEXT(""));
 
@@ -2055,15 +2003,6 @@ void Shutdown(void) {
       Sleep(100); // free time up for processor to perform shutdown
     }
   #endif
-
-#if (WINDOWSPC<1)
-#ifndef _SIM_
-  if(Port1Available)
-    Port1Close();
-  if (Port2Available)
-    Port2Close();
-#endif
-#endif
 
   CloseFLARMDetails();
 
