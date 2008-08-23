@@ -594,7 +594,7 @@ BOOL devOnSysTicker(DeviceDescriptor_t *d){
   return(FALSE);
 }
 
-static void devFormatNMEAString(TCHAR *dst, size_t sz, TCHAR *text)
+static void devFormatNMEAString(TCHAR *dst, size_t sz, const TCHAR *text)
 {
   BYTE chk;
   int i, len = _tcslen(text);
@@ -605,7 +605,7 @@ static void devFormatNMEAString(TCHAR *dst, size_t sz, TCHAR *text)
   _sntprintf(dst, sz, TEXT("$%s*%02X\r\n"), text, chk);
 }
 
-void devWriteNMEAString(PDeviceDescriptor_t d, TCHAR *text)
+void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *text)
 {
   TCHAR tmp[512];
 
@@ -615,7 +615,7 @@ void devWriteNMEAString(PDeviceDescriptor_t d, TCHAR *text)
     d->Com.WriteString(tmp);
 }
 
-void VarioWriteNMEA(TCHAR *text)
+void VarioWriteNMEA(const TCHAR *text)
 {
   TCHAR tmp[512];
 

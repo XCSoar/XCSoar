@@ -60,8 +60,8 @@ typedef	DeviceDescriptor_t *PDeviceDescriptor_t;
 #define Port1WriteNMEA(s)	devWriteNMEAString(devA(), s)
 #define Port2WriteNMEA(s)	devWriteNMEAString(devB(), s)
 
-void devWriteNMEAString(PDeviceDescriptor_t d, TCHAR *Text);
-void VarioWriteNMEA(TCHAR *Text);
+void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *Text);
+void VarioWriteNMEA(const TCHAR *Text);
 void VarioWriteSettings(void);
 
 typedef	struct{
