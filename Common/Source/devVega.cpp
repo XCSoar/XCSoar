@@ -466,7 +466,7 @@ BOOL vgaIsBaroSource(PDeviceDescriptor_t d){
 }
 
 BOOL vgaPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence){
-  (d->Com.WriteNMEAString)(Sentence);
+  devWriteNMEAString(d, Sentence);
   return(TRUE);
 }
 
@@ -482,8 +482,7 @@ static void _VarioWriteSettings(DeviceDescriptor_t *d) {
 	     10132); // JMW 20080716 bug
 	     //	     iround(QNH*10));
     
-    (d->Com.WriteNMEAString)(mcbuf);
-
+    devWriteNMEAString(d, mcbuf);
 
 }
 

@@ -34,7 +34,7 @@ Copyright_License {
 #include "externs.h"
 
 #include "XCSoar.h"
-#include "Port.h"
+#include "device.h"
 
 #include <math.h>
 #include <windows.h>

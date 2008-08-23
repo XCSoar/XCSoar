@@ -183,7 +183,6 @@ BOOL devInit(LPTSTR CommandLine){
 
       // remember: Port1 is the port used by device A, port1 may be Com3 or Com1 etc
       devA()->Com.WriteString = Port1WriteString;
-      devA()->Com.WriteNMEAString = Port1WriteNMEA;
       devA()->Com.StopRxThread = Port1StopRxThread;
       devA()->Com.StartRxThread = Port1StartRxThread;
       devA()->Com.GetChar = Port1GetChar;
@@ -222,7 +221,6 @@ BOOL devInit(LPTSTR CommandLine){
       }
 
       devB()->Com.WriteString = Port2WriteString;
-      devB()->Com.WriteNMEAString = Port2WriteNMEA;
       devB()->Com.StopRxThread = Port2StopRxThread;
       devB()->Com.StartRxThread = Port2StartRxThread;
       devB()->Com.GetChar = Port2GetChar;
@@ -596,3 +594,50 @@ BOOL devOnSysTicker(DeviceDescriptor_t *d){
   return(FALSE);
 }
 
+static void devFormatNMEAString(TCHAR *dst, size_t sz, TCHAR *text)
+{
+  BYTE chk;
+  int i, len = _tcslen(text);
+
+  for (chk = i = 0; i < len; i++)
+    chk ^= (BYTE)text[i];
+
+  _sntprintf(dst, sz, TEXT("$%s*%02X\r\n"), text, chk);
+}
+
+void devWriteNMEAString(PDeviceDescriptor_t d, TCHAR *text)
+{
+  TCHAR tmp[512];
+
+  devFormatNMEAString(tmp, 512, text);
+
+  if (d->Com.WriteString)
+    d->Com.WriteString(tmp);
+}
+
+void VarioWriteNMEA(TCHAR *text)
+{
+  TCHAR tmp[512];
+
+  devFormatNMEAString(tmp, 512, text);
+
+  for (int i = 0; i < NUMDEV; i++)
+    if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
+      if (DeviceList[i].Com.WriteString)
+        DeviceList[i].Com.WriteString(tmp);
+}
+
+void VarioWriteSettings(void)
+{
+  if (GPS_INFO.VarioAvailable) {
+    // JMW experimental
+    TCHAR mcbuf[100];
+    wsprintf(mcbuf, TEXT("PDVMC,%d,%d,%d,%d,%d"),
+	     iround(MACCREADY*10),
+	     iround(CALCULATED_INFO.VOpt*10),
+	     CALCULATED_INFO.Circling,
+	     iround(CALCULATED_INFO.TerrainAlt),
+	     iround(QNH*10));
+    VarioWriteNMEA(mcbuf);
+  }
+}
