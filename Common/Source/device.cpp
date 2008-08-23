@@ -84,11 +84,11 @@ BOOL devGetBaroAltitude(double *Value){
 BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token){
 
   int i=0, ch;
-  if (!(d->Com.GetChar)) {
-    return (FALSE);
-  }
 
-  while ((ch = (d->Com.GetChar)()) != EOF){
+  if (!d->Com)
+    return FALSE;
+
+  while ((ch = d->Com->GetChar()) != EOF){
 
     if (token[i] == ch) 
       i++;
@@ -182,15 +182,8 @@ BOOL devInit(LPTSTR CommandLine){
       }
 
       // remember: Port1 is the port used by device A, port1 may be Com3 or Com1 etc
-      devA()->Com.WriteString = Port1WriteString;
-      devA()->Com.StopRxThread = Port1StopRxThread;
-      devA()->Com.StartRxThread = Port1StartRxThread;
-      devA()->Com.GetChar = Port1GetChar;
-      devA()->Com.PutChar = Port1Write;
-      devA()->Com.SetRxTimeout = Port1SetRxTimeout;
-      devA()->Com.SetBaudrate = Port1SetBaudrate;
-      devA()->Com.Read = Port1Read;
-      devA()->Com.Flush = Port1Flush;
+      devA()->Com = &Port1;
+      Port1.ProcessChar = ProcessChar1;
 
       devInit(devA());
       devOpen(devA(), 0);
@@ -220,15 +213,8 @@ BOOL devInit(LPTSTR CommandLine){
         pDevNmeaOut = devB();
       }
 
-      devB()->Com.WriteString = Port2WriteString;
-      devB()->Com.StopRxThread = Port2StopRxThread;
-      devB()->Com.StartRxThread = Port2StartRxThread;
-      devB()->Com.GetChar = Port2GetChar;
-      devB()->Com.PutChar = Port2Write;
-      devB()->Com.SetRxTimeout = Port2SetRxTimeout;
-      devB()->Com.SetBaudrate = Port2SetBaudrate;
-      devB()->Com.Read = Port2Read;     
-      devB()->Com.Flush = Port2Flush;
+      devB()->Com = &Port2;
+      Port2.ProcessChar = ProcessChar2;
 
       devInit(devB());
       devOpen(devB(), 1);
@@ -392,9 +378,10 @@ BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
   
   if (d != NULL){
 
-    if (d->pDevPipeTo){                       // stream pipe, pass nmea to other device (NmeaOut)
-      // ToDo check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
-      d->pDevPipeTo->Com.WriteString(String);
+    if (d->pDevPipeTo && d->pDevPipeTo->Com) {
+      // stream pipe, pass nmea to other device (NmeaOut)
+      // TODO ToDo check TX buffer usage and skip it if buffer is full (outbaudrate < inbaudrate)
+      d->pDevPipeTo->Com->WriteString(String);
     }
 
     if (d->ParseNMEA != NULL)
@@ -404,9 +391,6 @@ BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
 
   if(String[0]=='$')  // Additional "if" to find GPS strings
     {
-
-//      bool dodisplay = false;
-
       if(NMEAParser::ParseNMEAString(portNum, String, GPS_INFO))
         {
           GPSCONNECT  = TRUE;
@@ -611,8 +595,8 @@ void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *text)
 
   devFormatNMEAString(tmp, 512, text);
 
-  if (d->Com.WriteString)
-    d->Com.WriteString(tmp);
+  if (d->Com)
+    d->Com->WriteString(tmp);
 }
 
 void VarioWriteNMEA(const TCHAR *text)
@@ -623,8 +607,8 @@ void VarioWriteNMEA(const TCHAR *text)
 
   for (int i = 0; i < NUMDEV; i++)
     if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
-      if (DeviceList[i].Com.WriteString)
-        DeviceList[i].Com.WriteString(tmp);
+      if (DeviceList[i].Com)
+        DeviceList[i].Com->WriteString(tmp);
 }
 
 void VarioWriteSettings(void)

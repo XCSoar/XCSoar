@@ -233,8 +233,6 @@ COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
 
 // Serial Port Globals
 
-HANDLE                          hPort1 = INVALID_HANDLE_VALUE;    // Handle to the serial port
-HANDLE                          hPort2 = INVALID_HANDLE_VALUE;    // Handle to the serial port
 BOOL                                    Port1Available = FALSE;
 BOOL                                    Port2Available = FALSE;
 

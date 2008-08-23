@@ -41,10 +41,6 @@ extern int UTCOffset;
 
 
 // comms data
-extern HANDLE hPort1;            // Serial port handle
-extern HANDLE hPort2;            // Serial port handle
-extern HANDLE hReadThread;      // Handle to the read thread
-extern LPTSTR lpszDevName;      // Communication port name
 extern BOOL                                    Port1Available;
 extern BOOL                                    Port2Available;
 

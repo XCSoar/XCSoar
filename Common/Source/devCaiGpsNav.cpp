@@ -1,4 +1,4 @@
-// $Id: devCaiGpsNav.cpp,v 1.4 2008/08/18 15:01:33 jwharington Exp $
+// $Id: devCaiGpsNav.cpp,v 1.5 2008/08/23 05:59:03 jwharington Exp $
 
 /*
 Copyright_License {
@@ -69,9 +69,9 @@ BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
   d->Port = Port;
   
   if (!fSimMode){
-	  (d->Com.WriteString)(TEXT("\x03"));
+	  d->Com->WriteString(TEXT("\x03"));
 	  Sleep(50);
-	  (d->Com.WriteString)(TEXT("NMEA\r"));
+	  d->Com->WriteString(TEXT("NMEA\r"));
 	  
 	  // This is for a slightly different mode, that
 	  // apparently outputs pressure info too...

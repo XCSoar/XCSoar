@@ -68,13 +68,12 @@ BOOL ExpectStringWait(PDeviceDescriptor_t d, TCHAR *token) {
   int i=0, ch;
   int j=0;
 
-  if (!(d->Com.GetChar)) {
-    return (FALSE);
-  }
+  if (!d->Com)
+    return FALSE;
 
   while (j<500) {
 
-    ch = (d->Com.GetChar)();
+    ch = d->Com->GetChar();
 
     if (ch != EOF) {
 
@@ -122,18 +121,17 @@ BOOL EWMicroRecorderTryConnect(PDeviceDescriptor_t d) {
   int retries=10;
   TCHAR ch;
 
-  if (!(d->Com.GetChar)) {
-    return (FALSE);
-  }
+  if (!d->Com)
+    return FALSE;
 
   while (--retries){
 
-    (d->Com.WriteString)(TEXT("\x02"));         // send IO Mode command
+    d->Com->WriteString(TEXT("\x02"));         // send IO Mode command
 
     user_size = 0;
     bool started = false;
 
-    while ((ch = (d->Com.GetChar)()) != _TEOF) {
+    while ((ch = d->Com->GetChar()) != _TEOF) {
       if (!started) {
         if (ch == _T('-')) {
           started = true;
@@ -141,7 +139,7 @@ BOOL EWMicroRecorderTryConnect(PDeviceDescriptor_t d) {
       }
       if (started) {
         if (ch == 0x13) {
-          (d->Com.WriteString)(TEXT("\x16"));
+          d->Com->WriteString(TEXT("\x16"));
           user_data[user_size] = 0;
           // found end of file
           return TRUE;
@@ -173,15 +171,15 @@ BOOL EWMicroRecorderDeclBegin(PDeviceDescriptor_t d,
   if (fSimMode) 
     return(TRUE);
 
-  (d->Com.StopRxThread)();
+  d->Com->StopRxThread();
 
-  (d->Com.SetRxTimeout)(500);                     // set RX timeout to 500[ms]
+  d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
   if (!EWMicroRecorderTryConnect(d)) {
     return FALSE;
   }
 
-  (d->Com.WriteString)(TEXT("\x18"));         // start to upload file
+  d->Com->WriteString(TEXT("\x18"));         // start to upload file
 
   TCHAR *ptr;
   ptr = _tcsstr(user_data, TEXT("Description:      Declaration"));
@@ -189,8 +187,8 @@ BOOL EWMicroRecorderDeclBegin(PDeviceDescriptor_t d,
     *ptr = 0;
   }
 
-  (d->Com.WriteString)(user_data);
-  (d->Com.WriteString)(TEXT("Description:      Declaration\r\n"));
+  d->Com->WriteString(user_data);
+  d->Com->WriteString(TEXT("Description:      Declaration\r\n"));
 
   wpLast= NULL;
 
@@ -237,7 +235,7 @@ static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
             DegLon, (int)MinLon, EoW, 
             wp->Name);
   if (!fSimMode){
-    (d->Com.WriteString)(EWRecord);                 // put it to the logger
+    d->Com->WriteString(EWRecord);                 // put it to the logger
   }
 }
 
@@ -250,7 +248,7 @@ BOOL EWMicroRecorderDeclEnd(PDeviceDescriptor_t d){
       _stprintf(EWRecord,
                 TEXT("TP LatLon:        0000000N00000000E TURN POINT\r\n"));
       if (!fSimMode){
-        (d->Com.WriteString)(EWRecord);           // put it to the logger
+        d->Com->WriteString(EWRecord);           // put it to the logger
       }
     }
     EWMicroRecorderWriteWayPoint(d, wpLast, TEXT("Finish LatLon:    "));
@@ -259,16 +257,16 @@ BOOL EWMicroRecorderDeclEnd(PDeviceDescriptor_t d){
   }
   
   if (!fSimMode){
-    (d->Com.WriteString)(TEXT("\x03"));         // finish sending user file
+    d->Com->WriteString(TEXT("\x03"));         // finish sending user file
 
     if (!ExpectStringWait(d, TEXT("uploaded successfully"))) {
       nDeclErrorCode= 1;
       // error!
     }
-    (d->Com.WriteString)(TEXT("!!\r\n"));         // go back to NMEA mode
+    d->Com->WriteString(TEXT("!!\r\n"));         // go back to NMEA mode
 
-    (d->Com.SetRxTimeout)(0);                       // clear timeout
-    (d->Com.StartRxThread)();                       // restart RX thread
+    d->Com->SetRxTimeout(0);                       // clear timeout
+    d->Com->StartRxThread();                       // restart RX thread
   }
 
   fDeclarationPending = FALSE;                    // clear decl pending flag

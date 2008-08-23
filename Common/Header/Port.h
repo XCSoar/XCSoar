@@ -8,32 +8,47 @@
 
 #include <windows.h>
 
-BOOL Port1Initialize (LPTSTR,DWORD);
-BOOL Port1Close (void);
-void Port1Write (BYTE);
-DWORD Port1ReadThread (LPVOID);
-void Port1WriteString(const TCHAR *Text);
-int  Port1SetRxTimeout(int Timeout);
-unsigned long Port1SetBaudrate(unsigned long BaudRate);
-BOOL Port1StopRxThread(void);
-BOOL Port1StartRxThread(void);
-void Port1Flush(void);
+class ComPort {
+ public:
+	ComPort();
+	~ComPort() { };
 
-int  Port1GetChar(void);
-int Port1Read(void *Buffer, size_t Size);
+	void PutChar(BYTE);
+	void WriteString(const TCHAR *);
+	void Flush();
 
-BOOL Port2Initialize (LPTSTR,DWORD);
-BOOL Port2Close (void);
-void Port2Write (BYTE);
-DWORD Port2ReadThread (LPVOID);
-void Port2WriteString(const TCHAR *Text);
-int  Port2SetRxTimeout(int Timeout);
-unsigned long Port2SetBaudrate(unsigned long BaudRate);
-BOOL Port2StartRxThread(void);
-BOOL Port2StopRxThread(void);
+	BOOL Initialize(LPTSTR, DWORD);
+	BOOL Close();
 
-int  Port2GetChar(void);
-int Port2Read(void *Buffer, size_t Size);
-void Port2Flush(void);
+	int SetRxTimeout(int);
+	unsigned long SetBaudrate(unsigned long);
+
+	BOOL StopRxThread();
+	BOOL StartRxThread();
+	void (*ProcessChar)(char);
+
+	int GetChar();
+	int Read(void *Buffer, size_t Size);
+
+ private:
+	static DWORD WINAPI ThreadProc(LPVOID);
+	DWORD ReadThread();
+
+	HANDLE hPort;
+	HANDLE hReadThread;
+	DWORD dwMask;
+	TCHAR sPortName[8];
+	BOOL CloseThread;
+	BOOL fRxThreadTerminated;
+};
+
+extern ComPort Port1;
+extern ComPort Port2;
+
+#define Port1Initialize(s,d)	Port1.Initialize(s,d)
+#define Port1Close()		Port1.Close()
+
+#define Port2Initialize(s,d)	Port2.Initialize(s,d)
+#define Port2Close()		Port2.Close()
 
 #endif
