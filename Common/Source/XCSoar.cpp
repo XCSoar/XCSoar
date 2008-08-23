@@ -2410,65 +2410,6 @@ void ProcessChar2 (char c)
   i = 0;
 }
 
-/* I think this is redundant now, since EW is handled in the devEW code
-void ProcessChar2 (char c)
-{
-#define WAIT 0
-#define FILL 1
-  static TCHAR BuildingString[100];
-  static int i = 0;
-  static int State = WAIT;
-  int OK_Flag = 1; // Set flag to failed state
-  int IO_Flag = 1; // Set flag to failed state
-
-  if(State == WAIT)
-    {
-      if(c=='$') // we're only going to parse NMEA strings here
-        {
-          BuildingString[0] = c;
-          BuildingString[1] = '\0';
-          i=1;
-          State = FILL;
-        }
-    }
-  else
-    {
-      if(i>90)
-        {
-          State = WAIT;
-        }
-      else
-        {
-          if(c=='\n')
-            {
-              BuildingString[i] = '\0';
-              State = WAIT;
-
-              //#ifdef DEBUG
-              //              DebugStore(BuildingString);
-              //#endif
-
-              if(BuildingString[0]=='$')  // Additional "if" to find GPS strings
-                {
-                  LockFlightData();
-		  NMEAParser::ParseNMEAString(1,
-					      BuildingString,
-					      &GPS_INFO);
-                  UnlockFlightData();
-                }
-              else //   else parse EW logger string
-                if(_tcscmp(BuildingString,TEXT("OK\r"))==0)     OK_Flag = 0;
-              if(_tcscmp(BuildingString,TEXT("IO Mode.\r"))==0) IO_Flag = 0;
-            }
-          else
-            {
-              BuildingString[i++] = c;
-            }
-        }
-    }
-}
-*/
-
 
 void    AssignValues(void)
 {
