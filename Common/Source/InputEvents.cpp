@@ -126,7 +126,7 @@ static int Events_count;				// How many have we defined
 
 // Labels - defined per mode
 typedef struct {
-  TCHAR *label;
+  const TCHAR *label;
   int location;
   int event;
 } ModeLabelSTRUCT;
@@ -148,17 +148,17 @@ bool InitONCE = false;
 
 // Mapping text names of events to the real thing
 typedef struct {
-  TCHAR *text;
+  const TCHAR *text;
   pt2Event event;
 } Text2EventSTRUCT;
 Text2EventSTRUCT Text2Event[256];  // why 256?
 int Text2Event_count;
 
 // Mapping text names of events to the real thing
-TCHAR *Text2GCE[GCE_COUNT+1];
+const TCHAR *Text2GCE[GCE_COUNT+1];
 
 // Mapping text names of events to the real thing
-TCHAR *Text2NE[NE_COUNT+1];
+const TCHAR *Text2NE[NE_COUNT+1];
 
 // DLL Cache
 typedef void (CALLBACK *DLLFUNC_INPUTEVENT)(TCHAR*);
@@ -558,7 +558,7 @@ int InputEvents::makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int 
 // Make a new label (add to the end each time)
 // NOTE: String must already be copied (allows us to use literals
 // without taking up more data - but when loading from file must copy string
-void InputEvents::makeLabel(int mode_id, TCHAR* label, int location, int event_id) {
+void InputEvents::makeLabel(int mode_id, const TCHAR* label, int location, int event_id) {
 
 //  int i;
 
@@ -765,7 +765,7 @@ bool InputEvents::processKey(int dWord) {
 
     int bindex = -1;
     int lastMode = mode;
-    TCHAR *pLabelText = NULL;
+    const TCHAR *pLabelText = NULL;
 
     if (!Debounce()) return true;
 
@@ -785,7 +785,7 @@ bool InputEvents::processKey(int dWord) {
     }
 
     // experimental: update button text, macro may change the value
-    if (lastMode == getModeID() && bindex > 0 && pLabelText != NULL && ButtonLabel::ButtonVisible[bindex]) {
+    if ((lastMode == getModeID()) && (bindex > 0) && (pLabelText != NULL) && ButtonLabel::ButtonVisible[bindex]) {
       drawButtons(lastMode);
     }
 

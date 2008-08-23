@@ -207,15 +207,15 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
   return FALSE;
 }
 
-void NMEAParser::ExtractParameter(TCHAR *Source,
+void NMEAParser::ExtractParameter(const TCHAR *Source,
 				  TCHAR *Destination,
 				  int DesiredFieldNumber)
 {
   int dest_index = 0;
   int CurrentFieldNumber = 0;
   int StringLength = _tcslen(Source);
-  TCHAR *sptr = Source;
-  TCHAR *eptr = Source+StringLength;
+  TCHAR *sptr = (TCHAR*)Source;
+  const TCHAR *eptr = Source+StringLength;
 
   if (!Destination) return;
 

@@ -61,8 +61,8 @@ void VarioWriteSettings(void);
 PDeviceDescriptor_t devVarioFindVega(void);
 
 typedef	struct{
-	TCHAR	 *Name;
-	int		 Flags;
+  const TCHAR	 *Name;
+  int		 Flags;
   BOOL   (*Installer)(PDeviceDescriptor_t d);
 }DeviceRegister_t;
 
@@ -74,13 +74,13 @@ extern int DeviceRegisterCount;
 extern DeviceDescriptor_t *pDevPrimaryBaroSource;
 extern DeviceDescriptor_t *pDevSecondaryBaroSource;
 
-BOOL devRegister(TCHAR *Name,	int	Flags, BOOL (*Installer)(PDeviceDescriptor_t d));
+BOOL devRegister(const TCHAR *Name,	int	Flags, BOOL (*Installer)(PDeviceDescriptor_t d));
 BOOL devRegisterGetName(int Index, TCHAR *Name);
 
 BOOL devInit(LPTSTR CommandLine);
 BOOL devCloseAll(void);
 PDeviceDescriptor_t devGetDeviceOnPort(int Port);
-BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token);
+BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token);
 BOOL devHasBaroSource(void);
 
 BOOL devParseNMEA(int portNum, TCHAR *String,	NMEA_INFO	*GPS_INFO);

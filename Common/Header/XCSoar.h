@@ -302,7 +302,7 @@ extern Appearance_t Appearance;
 // ******************************************************************
 
 
-bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size);
+bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size);
 
 #ifndef __MINGW32__
 #define DEG "°"

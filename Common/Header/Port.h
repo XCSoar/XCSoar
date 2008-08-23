@@ -17,7 +17,7 @@ class ComPort {
 	void WriteString(const TCHAR *);
 	void Flush();
 
-	BOOL Initialize(LPTSTR, DWORD);
+	BOOL Initialize(LPCTSTR, DWORD);
 	BOOL Close();
 
 	int SetRxTimeout(int);

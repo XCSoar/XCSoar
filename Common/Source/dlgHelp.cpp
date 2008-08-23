@@ -60,7 +60,7 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 
-void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText) {
+void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText) {
   if (!Caption || !HelpText) {
     return;
   }

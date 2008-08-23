@@ -688,7 +688,7 @@ void ButtonLabel::Destroy() {
 }
 
 
-void ButtonLabel::SetLabelText(int index, TCHAR *text) {
+void ButtonLabel::SetLabelText(int index, const TCHAR *text) {
   // error! TODO Add debugging
   if (index>= NUMBUTTONLABELS)
     return;

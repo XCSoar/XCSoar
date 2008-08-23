@@ -59,7 +59,7 @@ static WndForm *wf=NULL;
 static WndListFrame *wWayPointList=NULL;
 static WndOwnerDrawFrame *wWayPointListEntry = NULL;
 
-static TCHAR NameFilter[] = TEXT("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
+static const TCHAR NameFilter[] = TEXT("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 static int NameFilterIdx=0;
 
 static double DistanceFilter[] = {0.0, 25.0, 50.0, 75.0, 100.0, 150.0, 250.0, 500.0, 1000.0};
@@ -71,8 +71,8 @@ static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 
 static int DirectionFilterIdx=0;
 static int lastHeading=0;
 
-static TCHAR *TypeFilter[] = {TEXT("*"), TEXT("Airport"), TEXT("Landable"),
-                              TEXT("Turnpoint"), TEXT("File 1"), TEXT("File 2")};
+static const TCHAR *TypeFilter[] = {TEXT("*"), TEXT("Airport"), TEXT("Landable"),
+				    TEXT("Turnpoint"), TEXT("File 1"), TEXT("File 2")};
 static int TypeFilterIdx=0;
 
 static int UpLimit=0;

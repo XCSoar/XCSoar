@@ -976,7 +976,7 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
 
   _tcsupr(Text);
 
-  pToken = strtok_r(Text, TEXT(" "), &pWClast);
+  pToken = strtok_r(Text, (TCHAR*)TEXT(" "), &pWClast);
 
   Alt->Altitude = 0;
   Alt->FL = 0;
@@ -1072,7 +1072,7 @@ static void ReadAltitude(TCHAR *Text_, AIRSPACE_ALT *Alt)
       Alt->Altitude = 50000;
     }
 
-    pToken = strtok_r(NULL, TEXT(" \t"), &pWClast);
+    pToken = strtok_r(NULL, (TCHAR*)TEXT(" \t"), &pWClast);
 
   }
 

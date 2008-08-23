@@ -67,7 +67,7 @@ int dlgAirspacePatternsShowModal(void);
 void dlgAirspaceShowModal(bool colored);
 void dlgBasicSettingsShowModal(void);
 void dlgBrightnessShowModal(void);
-void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText);
+void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText);
 void dlgChecklistShowModal(void);
 void dlgConfigurationShowModal(void);
 void dlgVegaDemoShowModal(void);
