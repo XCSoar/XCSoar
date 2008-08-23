@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.74 2008/08/18 15:01:30 jwharington Exp $
+  $Id: Parser.cpp,v 1.75 2008/08/23 05:15:27 jwharington Exp $
 
 Copyright_License {
 
@@ -53,9 +53,6 @@ static double AltitudeModify(double Altitude, TCHAR Format);
 static double MixedFormatToDegrees(double mixed);
 static int NAVWarn(TCHAR c);
 
-BOOL NMEAParser::GpsUpdated = false;
-BOOL NMEAParser::VarioUpdated = false;
-
 NMEAParser nmeaParser1;
 NMEAParser nmeaParser2;
 int NMEAParser::StartDay = -1;
@@ -83,10 +80,8 @@ void NMEAParser::Reset(void) {
   nmeaParser2._Reset();
 
   // trigger updates
-  GpsUpdated = TRUE;
-  VarioUpdated = TRUE;
-  SetEvent(dataTriggerEvent);
-  PulseEvent(varioTriggerEvent);
+  TriggerGPSUpdate();
+  TriggerVarioUpdate();
 }
 
 
@@ -478,8 +473,7 @@ BOOL NMEAParser::RMC(TCHAR *String, NMEA_INFO *GPS_INFO)
 
   // say we are updated every time we get this,
   // so infoboxes get refreshed if GPS connected
-  GpsUpdated = TRUE; 
-  SetEvent(dataTriggerEvent);
+  TriggerGPSUpdate();
 
   // JMW get date info first so TimeModify is accurate
   ExtractParameter(String,ctemp,8);

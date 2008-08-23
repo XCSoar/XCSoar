@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.22 2008/08/18 15:01:33 jwharington Exp $
+// $Id: devCAI302.cpp,v 1.23 2008/08/23 05:15:28 jwharington Exp $
 
 /*
 Copyright_License {
@@ -685,7 +685,7 @@ BOOL cai_w(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
     BugsUpdateTimeout--;
 
   // JMW update audio functions etc.
-  NMEAParser::VarioUpdated = TRUE;
+  TriggerVarioUpdate();
 
   return TRUE;
 

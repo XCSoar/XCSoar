@@ -142,8 +142,6 @@ class NMEAParser {
 
   bool activeGPS;
 
-  static BOOL GpsUpdated;
-  static BOOL VarioUpdated;
   static int StartDay;
 
  public:

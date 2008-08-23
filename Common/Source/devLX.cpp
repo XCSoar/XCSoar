@@ -193,8 +193,7 @@ static BOOL LXWP0(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO) {
   GPS_INFO->AirspeedAvailable = TRUE;
   GPS_INFO->VarioAvailable = TRUE;
 
-  NMEAParser::VarioUpdated = TRUE;
-  PulseEvent(varioTriggerEvent);
+  TriggerVarioUpdate();
 
   return TRUE;
 }

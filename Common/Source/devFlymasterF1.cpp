@@ -136,7 +136,8 @@ static BOOL VARIO(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 
   GPS_INFO->VarioAvailable = TRUE;
   GPS_INFO->BaroAltitudeAvailable = TRUE;
-  NMEAParser::VarioUpdated = TRUE;
-  PulseEvent(varioTriggerEvent);
+
+  TriggerVarioUpdate();
+
   return TRUE;
 }
