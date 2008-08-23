@@ -148,7 +148,7 @@ class NMEAParser {
 
   // these routines can be used by other parsers.
   static BOOL NMEAChecksum(TCHAR *String);
-  static void ExtractParameter(TCHAR *Source, 
+  static void ExtractParameter(const TCHAR *Source, 
 			       TCHAR *Destination, 
 			       int DesiredFieldNumber);
 

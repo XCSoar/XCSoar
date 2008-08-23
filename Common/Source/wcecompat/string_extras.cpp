@@ -22,7 +22,7 @@
 #include <string.h>
 #include <stdio.h>
 
-char* messages[] = {
+const char* messages[] = {
 /*0           */    "No error",
 /*EPERM       */    "Operation not permitted",
 /*ENOENT      */    "No such file or directory",
@@ -73,6 +73,6 @@ const int NUM_MESSAGES = sizeof(messages)/sizeof(messages[0]);
 char* strerror(int errnum)
 {
 	if (errnum < NUM_MESSAGES)
-		return messages[errnum];
+	  return (char*)(messages[errnum]);
 	return "Unknown error";
 }

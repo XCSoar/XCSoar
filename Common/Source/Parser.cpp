@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.76 2008/08/23 06:28:44 jwharington Exp $
+  $Id: Parser.cpp,v 1.77 2008/08/23 07:14:45 jwharington Exp $
 
 Copyright_License {
 
@@ -207,15 +207,15 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
   return FALSE;
 }
 
-void NMEAParser::ExtractParameter(TCHAR *Source, 
+void NMEAParser::ExtractParameter(const TCHAR *Source, 
 				  TCHAR *Destination, 
 				  int DesiredFieldNumber)
 {
   int dest_index = 0;
   int CurrentFieldNumber = 0;
   int StringLength = _tcslen(Source);
-  TCHAR *sptr = Source;
-  TCHAR *eptr = Source+StringLength;
+  TCHAR *sptr = (TCHAR*)Source;
+  const TCHAR *eptr = Source+StringLength;
 
   if (!Destination) return;
 

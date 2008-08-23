@@ -42,7 +42,7 @@ Copyright_License {
 ComPort Port1;
 ComPort Port2;
 
-static void ComPort_StatusMessage(UINT type, TCHAR *caption, TCHAR *fmt, ...)
+static void ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *fmt, ...)
 {
   TCHAR tmp[127];
   va_list ap;
@@ -69,7 +69,7 @@ ComPort::ComPort()
   hPort = INVALID_HANDLE_VALUE;
 }
 
-BOOL ComPort::Initialize(LPTSTR lpszPortName, DWORD dwPortSpeed)
+BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 {
   DWORD dwError;
   DCB PortDCB;

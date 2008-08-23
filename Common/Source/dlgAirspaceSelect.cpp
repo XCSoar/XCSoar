@@ -77,22 +77,22 @@ static int lastHeading=0;
 
 static int NumberOfAirspaces = 0;
 
-static TCHAR *TypeFilter[] = {TEXT("*"), 
-                              TEXT("Other"),
-                              TEXT("Restricted areas"),
-                              TEXT("Prohibited areas"),
-                              TEXT("Danger areas"),
-                              TEXT("Class A"), 
-                              TEXT("Class B"), 
-                              TEXT("Class C"), 
-                              TEXT("Class D"), 
-                              TEXT("No gliders"),
-                              TEXT("CTR"),
-                              TEXT("Wave"),
-                              TEXT("AAT"),
-                              TEXT("Class E"),
-                              TEXT("Class F"),
-                              };
+static const TCHAR *TypeFilter[] = {TEXT("*"), 
+				    TEXT("Other"),
+				    TEXT("Restricted areas"),
+				    TEXT("Prohibited areas"),
+				    TEXT("Danger areas"),
+				    TEXT("Class A"), 
+				    TEXT("Class B"), 
+				    TEXT("Class C"), 
+				    TEXT("Class D"), 
+				    TEXT("No gliders"),
+				    TEXT("CTR"),
+				    TEXT("Wave"),
+				    TEXT("AAT"),
+				    TEXT("Class E"),
+				    TEXT("Class F"),
+};
 
 static int TypeFilterIdx=0;
 

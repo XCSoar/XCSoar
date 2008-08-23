@@ -3429,7 +3429,7 @@ static void CondReplaceInString(bool Condition, TCHAR *Buffer,
     ReplaceInString(Buffer, Macro, FalseText, Size);
 }
 
-bool ExpandMacros(TCHAR *In, TCHAR *OutBuffer, size_t Size){
+bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   // ToDo, check Buffer Size
   bool invalid = false;
   _tcsncpy(OutBuffer, In, Size);

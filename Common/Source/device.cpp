@@ -55,7 +55,7 @@ Copyright_License {
 
 #define debugIGNORERESPONCE 0
 
-static  TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:"),TEXT("COM0:")};
+static  const TCHAR *COMMPort[] = {TEXT("COM1:"),TEXT("COM2:"),TEXT("COM3:"),TEXT("COM4:"),TEXT("COM5:"),TEXT("COM6:"),TEXT("COM7:"),TEXT("COM8:"),TEXT("COM9:"),TEXT("COM10:"),TEXT("COM0:")};
 static  DWORD   dwSpeed[] = {1200,2400,4800,9600,19200,38400,57600,115200};
 static  DWORD PortIndex1 = 0;
 static  DWORD SpeedIndex1 = 2;
@@ -105,7 +105,7 @@ BOOL devGetBaroAltitude(double *Value){
 
 }
 
-BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token){
+BOOL ExpectString(PDeviceDescriptor_t d, const TCHAR *token){
 
   int i=0, ch;
 
@@ -132,7 +132,7 @@ BOOL ExpectString(PDeviceDescriptor_t d, TCHAR *token){
 }
 
 
-BOOL devRegister(TCHAR *Name, int Flags, 
+BOOL devRegister(const TCHAR *Name, int Flags, 
                  BOOL (*Installer)(PDeviceDescriptor_t d)) {
   if (DeviceRegisterCount >= NUMREGDEV)
     return(FALSE);

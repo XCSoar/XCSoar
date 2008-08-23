@@ -26,7 +26,7 @@ class InputEvents {
   static void DoQueuedEvents(void);
   static void processGo(int event_id);
   static int  makeEvent(void (*event)(const TCHAR *), const TCHAR *misc, int next = 0);
-  static void makeLabel(int mode_id, TCHAR *label, int location, int event_id);
+  static void makeLabel(int mode_id, const TCHAR *label, int location, int event_id);
 
   static void drawButtons(int Mode);
 

@@ -61,7 +61,7 @@ Copyright_License {
 #define OUTPUT_BIT_CIRCLING                 0  // 1 if circling
 #define OUTPUT_BIT_FLAP_LANDING             7  // 1 if positive flap 
 
-static BOOL PDSWC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL PDSWC(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
@@ -171,7 +171,7 @@ static BOOL PDSWC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 
 #include "VarioSound.h"
 
-static BOOL PDAAV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL PDAAV(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)GPS_INFO;
@@ -189,7 +189,7 @@ static BOOL PDAAV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   return TRUE;
 }
 
-static BOOL PDVSC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL PDVSC(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   TCHAR name[80];
@@ -228,7 +228,7 @@ static BOOL PDVSC(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
 
-static BOOL PDVDV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL PDVDV(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   double alt;
@@ -262,7 +262,7 @@ static BOOL PDVDV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
 
 
 // $PDVDS,nx,nz,flap,stallratio,netto
-static BOOL PDVDS(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL PDVDS(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   double flap;
   TCHAR ctemp[80];
@@ -309,7 +309,7 @@ static BOOL PDVDS(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   return TRUE;
 }
 
-static BOOL PDVVT(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL PDVVT(PDeviceDescriptor_t d, const TCHAR *String, NMEA_INFO *GPS_INFO)
 {
   TCHAR ctemp[80];
   (void)d;

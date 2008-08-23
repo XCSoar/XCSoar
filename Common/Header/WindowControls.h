@@ -105,12 +105,12 @@ class DataField{
 	  return(0);};
 	  virtual double SetAsFloat(double Value){ (void) Value;
 	  return(0.0);};
-  virtual TCHAR *SetAsString(TCHAR *Value){(void)Value; return(NULL);};
+  virtual TCHAR *SetAsString(const TCHAR *Value){(void)Value; return(NULL);};
 
   virtual void Set(bool Value){ (void)Value; };
   virtual void Set(int Value){ (void)Value;};
   virtual void Set(double Value){ (void)Value; };
-  virtual void Set(TCHAR *Value){ (void)Value; };
+  virtual void Set(const TCHAR *Value){ (void)Value; };
 
   virtual int SetMin(int Value){(void)Value; return(0);};
   virtual double SetMin(double Value){(void)Value; return(false);};
@@ -188,7 +188,7 @@ class DataFieldBoolean:public DataField{
   bool SetAsBoolean(bool Value);
   int SetAsInteger(int Value);
   double SetAsFloat(double Value);
-  TCHAR *SetAsString(TCHAR *Value);
+  TCHAR *SetAsString(const TCHAR *Value);
 
 };
 
@@ -364,7 +364,7 @@ class DataFieldInteger:public DataField{
   bool SetAsBoolean(bool Value);
   int SetAsInteger(int Value);
   double SetAsFloat(double Value);
-  TCHAR *SetAsString(TCHAR *Value);
+  TCHAR *SetAsString(const TCHAR *Value);
 
 };
 
@@ -418,7 +418,7 @@ class DataFieldFloat:public DataField{
   bool SetAsBoolean(bool Value);
   int SetAsInteger(int Value);
   double SetAsFloat(double Value);
-  TCHAR *SetAsString(TCHAR *Value);
+  TCHAR *SetAsString(const TCHAR *Value);
 
 };
 
@@ -435,11 +435,11 @@ class DataFieldString:public DataField{
       _tcscpy(mValue, Default);
     };
 
-  TCHAR *SetAsString(TCHAR *Value);
+  TCHAR *SetAsString(const TCHAR *Value);
   #if defined(__BORLANDC__)
   #pragma warn -hid
   #endif
-  void Set(TCHAR *Value);
+  void Set(const TCHAR *Value);
   #if defined(__BORLANDC__)
   #pragma warn +hid
   #endif

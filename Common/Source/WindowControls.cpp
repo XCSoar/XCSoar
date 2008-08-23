@@ -586,7 +586,7 @@ double DataFieldBoolean::SetAsFloat(double Value){
   return(res);
 }
 
-TCHAR *DataFieldBoolean::SetAsString(TCHAR *Value){
+TCHAR *DataFieldBoolean::SetAsString(const TCHAR *Value){
   TCHAR *res = GetAsString();
   if (_tcscmp(res, Value) != 0){
     SetAsBoolean(_tcscmp(Value, mTextTrue) == 0);
@@ -734,7 +734,7 @@ double DataFieldInteger::SetAsFloat(double Value){
   return(res);
 }
 
-TCHAR *DataFieldInteger::SetAsString(TCHAR *Value){
+TCHAR *DataFieldInteger::SetAsString(const TCHAR *Value){
   TCHAR *res = GetAsString();
   SetAsInteger(_ttoi(Value));
   return(res);
@@ -855,7 +855,7 @@ double DataFieldFloat::SetAsFloat(double Value){
   return(res);
 }
 
-TCHAR *DataFieldFloat::SetAsString(TCHAR *Value){
+TCHAR *DataFieldFloat::SetAsString(const TCHAR *Value){
   TCHAR *res = GetAsString();
   SetAsFloat(_tcstod(Value, NULL));
   return(res);
@@ -919,12 +919,12 @@ double DataFieldFloat::SpeedUp(bool keyup){
 //----------------------------------------------------------
 
 
-TCHAR *DataFieldString::SetAsString(TCHAR *Value){
+TCHAR *DataFieldString::SetAsString(const TCHAR *Value){
   _tcscpy(mValue, Value);
   return(mValue);
 }
 
-void DataFieldString::Set(TCHAR *Value){
+void DataFieldString::Set(const TCHAR *Value){
   _tcscpy(mValue, Value);
 }
 
@@ -1474,7 +1474,7 @@ void WindowControl::Redraw(void){
 
 #ifdef ALTAIRSYNC
 #else
-extern void dlgHelpShowModal(TCHAR* Caption, TCHAR* HelpText);
+extern void dlgHelpShowModal(const TCHAR* Caption, const TCHAR* HelpText);
 #endif
 
 
