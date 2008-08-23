@@ -8,9 +8,11 @@
 
 #include <windows.h>
 
+#define NMEA_BUF_SIZE 100
+
 class ComPort {
  public:
-	ComPort();
+	ComPort(int the_devIdx);
 	~ComPort() { };
 
 	void PutChar(BYTE);
@@ -25,7 +27,7 @@ class ComPort {
 
 	BOOL StopRxThread();
 	BOOL StartRxThread();
-	void (*ProcessChar)(char);
+	void ProcessChar(char);
 
 	int GetChar();
 	int Read(void *Buffer, size_t Size);
@@ -40,9 +42,10 @@ class ComPort {
 	TCHAR sPortName[8];
 	BOOL CloseThread;
 	BOOL fRxThreadTerminated;
-};
 
-extern ComPort Port1;
-extern ComPort Port2;
+	TCHAR BuildingString[NMEA_BUF_SIZE];
+	int bi;
+	int devIdx;
+};
 
 #endif
