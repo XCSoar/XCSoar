@@ -971,18 +971,17 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText((TEXT("Generic")));
     for (i=0; i<DeviceRegisterCount; i++) {
       devRegisterGetName(i, DeviceName);
       dfe->addEnumText((DeviceName));
 #ifndef _SIM_
       if (devA() != NULL){
 	if (_tcscmp(DeviceName, devA()->Name) == 0)
-	  dwDeviceIndex1 = i+1;
+	  dwDeviceIndex1 = i;
       }
 #else
       if (_tcscmp(DeviceName, deviceName1) == 0)
-        dwDeviceIndex1 = i+1;
+        dwDeviceIndex1 = i;
 #endif
     }
     dfe->Set(dwDeviceIndex1);
@@ -1021,15 +1020,14 @@ static void setVariables(void) {
     dfe->addEnumText((TEXT("Generic")));
     for (i=0; i<DeviceRegisterCount; i++) {
       devRegisterGetName(i, DeviceName);
-      dfe->addEnumText((DeviceName));
 #ifndef _SIM_
       if (devB() != NULL){
 	if (_tcscmp(DeviceName, devB()->Name) == 0)
-	  dwDeviceIndex2 = i+1;
+	  dwDeviceIndex2 = i;
       }
 #else
       if (_tcscmp(DeviceName, deviceName2) == 0)
-        dwDeviceIndex2 = i+1;
+        dwDeviceIndex2 = i;
 #endif
     }
     dfe->Set(dwDeviceIndex2);
@@ -3122,7 +3120,7 @@ void dlgConfigurationShowModal(void){
       dwDeviceIndex1 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
-      devRegisterGetName(dwDeviceIndex1-1, DeviceName);
+      devRegisterGetName(dwDeviceIndex1, DeviceName);
       WriteDeviceSettings(0, DeviceName);
     }
   }
@@ -3151,7 +3149,7 @@ void dlgConfigurationShowModal(void){
       dwDeviceIndex2 = wp->GetDataField()->GetAsInteger();
       changed = true;
       COMPORTCHANGED = true;
-      devRegisterGetName(dwDeviceIndex2-1, DeviceName);
+      devRegisterGetName(dwDeviceIndex2, DeviceName);
       WriteDeviceSettings(1, DeviceName);
     }
   }
