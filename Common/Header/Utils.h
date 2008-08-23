@@ -187,8 +187,10 @@ void ConvertFlightLevels(void);
 BOOL PolygonVisible(const POINT *lpPoints, int nCount, RECT rc);
 void ReadPort1Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void ReadPort2Settings(DWORD *PortIndex, DWORD *SpeedIndex);
+void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex);
 void WritePort1Settings(DWORD PortIndex, DWORD SpeedIndex);
 void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex);
+void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex);
 int  Circle(HDC hdc, long x, long y, int radius, RECT rc, bool clip=false,
             bool fill=true);
 int Segment(HDC hdc, long x, long y, int radius, RECT rc, 

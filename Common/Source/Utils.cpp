@@ -179,6 +179,7 @@ const TCHAR szRegistryLatLonUnits[] = TEXT("LatLonUnits");
 const TCHAR szRegistryPolarID[] = TEXT("Polar"); // pL
 const TCHAR szRegistryPort1Index[]= TEXT("PortIndex");
 const TCHAR szRegistryPort2Index[]= TEXT("Port2Index");
+const TCHAR szRegistryPort3Index[]= TEXT("Port3Index");
 const TCHAR szRegistryRegKey[]=				 TEXT("RegKey");
 const TCHAR szRegistrySafetyAltitudeArrival[] =     TEXT("SafetyAltitudeArrival");
 const TCHAR szRegistrySafetyAltitudeBreakOff[] =     TEXT("SafetyAltitudeBreakOff");
@@ -191,6 +192,7 @@ const TCHAR szRegistryThermalLocator[]=	 TEXT("ThermalLocator");
 const TCHAR szRegistryAnimation[]=		 TEXT("Animation");
 const TCHAR szRegistrySpeed1Index[]=		 TEXT("SpeedIndex");
 const TCHAR szRegistrySpeed2Index[]=		 TEXT("Speed2Index");
+const TCHAR szRegistrySpeed3Index[]=		 TEXT("Speed3Index");
 const TCHAR szRegistrySpeedUnitsValue[] =      TEXT("Speed");
 const TCHAR szRegistryTaskSpeedUnitsValue[] =      TEXT("TaskSpeed");
 const TCHAR szRegistryStartLine[]=		 TEXT("StartLine");
@@ -229,7 +231,8 @@ const TCHAR szRegistryCDICruise[]= TEXT("CDICruise");
 const TCHAR szRegistryCDICircling[]= TEXT("CDICircling");
 
 const TCHAR szRegistryDeviceA[]= TEXT("DeviceA");
-const TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
+const TCHAR szRegistryDeviceB[]= TEXT("DeviceB")
+const TCHAR szRegistryDeviceC[]= TEXT("DeviceC");
 
 const TCHAR szRegistryAutoBlank[]= TEXT("AutoBlank");
 const TCHAR szRegistryVarioGauge[]= TEXT("VarioGauge");
@@ -1137,6 +1140,25 @@ void WritePort2Settings(DWORD PortIndex, DWORD SpeedIndex)
   SetToRegistry(szRegistryPort2Index, PortIndex);
   SetToRegistry(szRegistrySpeed2Index, SpeedIndex);
 }
+
+void ReadPort3Settings(DWORD *PortIndex, DWORD *SpeedIndex)
+{
+  DWORD Temp=0;
+
+  if(GetFromRegistry(szRegistryPort3Index,&Temp)==ERROR_SUCCESS)
+    (*PortIndex) = Temp;
+
+  if(GetFromRegistry(szRegistrySpeed3Index,&Temp)==ERROR_SUCCESS)
+    (*SpeedIndex) = Temp;
+}
+
+
+void WritePort3Settings(DWORD PortIndex, DWORD SpeedIndex)
+{
+  SetToRegistry(szRegistryPort3Index, PortIndex);
+  SetToRegistry(szRegistrySpeed3Index, SpeedIndex);
+}
+
 
 void rotate(double &xin, double &yin, const double &angle)
 {
@@ -2826,7 +2848,13 @@ void ReadDeviceSettings(int devIdx, TCHAR *Name){
     return;
   }
 
+  if (devIdx == 2){
+    GetRegistryString(szRegistryDeviceC , Name, DEVNAMESIZE);
+    return;
+  }
+
 }
+
 
 void WriteDeviceSettings(int devIdx, TCHAR *Name){
 
@@ -2835,7 +2863,11 @@ void WriteDeviceSettings(int devIdx, TCHAR *Name){
 
   if (devIdx == 1)
     SetRegistryString(szRegistryDeviceB , Name);
+
+  if (devIdx == 2)
+    SetRegistryString(szRegistryDeviceC , Name);
 }
+
 
 unsigned int isqrt4(unsigned long val) {
   unsigned int temp, g=0;
