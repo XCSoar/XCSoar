@@ -116,8 +116,10 @@ VLAPI vl;
 
 static int nturnpoints = 0;
 
-BOOL VLDeclBegin(PDeviceDescriptor_t d, 
-                 TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
+BOOL VLDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp);
+
+
+BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   CreateProgressDialog(gettext(TEXT("Comms with Volkslogger")));
 
@@ -138,13 +140,13 @@ BOOL VLDeclBegin(PDeviceDescriptor_t d,
     }
 
     char temp[100];
-    sprintf(temp, "%S", PilotsName);
+    sprintf(temp, "%S", decl->PilotName);
     strncpy(vl.declaration.flightinfo.pilot, temp, 64);
 
-    sprintf(temp, "%S", ID);
+    sprintf(temp, "%S", decl->AircraftRego);
     strncpy(vl.declaration.flightinfo.competitionid, temp, 3);
 
-    sprintf(temp, "%S", Class);
+    sprintf(temp, "%S", decl->AircraftType);
     strncpy(vl.declaration.flightinfo.competitionclass, temp, 12);
 
     if (ValidWayPoint(HomeWaypoint)) {
@@ -158,11 +160,12 @@ BOOL VLDeclBegin(PDeviceDescriptor_t d,
     }
   }
 
-  return (err == VLA_ERR_NOERR);
-}
+  if (err != VLA_ERR_NOERR)
+    return FALSE;
 
+  for (int i = 0; i < decl->num_waypoints; i++)
+    VLDeclAddWayPoint(d, decl->waypoint[i]);
 
-BOOL VLDeclEnd(PDeviceDescriptor_t d){
   vl.declaration.task.nturnpoints = max(min(nturnpoints-2, 12), 0);
 
   LockTaskData();
@@ -252,7 +255,7 @@ BOOL VLDeclEnd(PDeviceDescriptor_t d){
 }
 
 
-BOOL VLDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
+BOOL VLDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
   char temp[100];
   sprintf(temp, "%S", wp->Name);
 
@@ -310,9 +313,7 @@ BOOL vlInstall(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = VLLinkTimeout;
-  d->DeclBegin = VLDeclBegin;
-  d->DeclEnd = VLDeclEnd;
-  d->DeclAddWayPoint = VLDeclAddWayPoint;
+  d->Declare = VLDeclare;
   d->IsLogger = VLIsLogger;
   d->IsGPSSource = VLIsGPSSource;
 

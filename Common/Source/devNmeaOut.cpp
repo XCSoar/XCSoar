@@ -43,15 +43,6 @@ Copyright_License {
 #include "devVega.h"
 
 
-#ifdef _SIM_
-static BOOL fSimMode = TRUE;
-#else
-static BOOL fSimMode = FALSE;
-#endif
-
-
-
-
 BOOL nmoParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 
   (void) d;
@@ -103,9 +94,7 @@ BOOL nmoInstall(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = NULL;
-  d->DeclBegin = NULL;
-  d->DeclEnd = NULL;
-  d->DeclAddWayPoint = NULL;
+  d->Declare = NULL;
   d->IsLogger = nmoIsLogger;
   d->IsGPSSource = nmoIsGPSSource;
   d->IsBaroSource = nmoIsBaroSource;

@@ -606,87 +606,50 @@ void DoLogger(TCHAR *strAssetNumber)
 bool DeclaredToDevice = false;
 
 
-void LoggerDeviceDeclare() {
-  int i;
-  WCHAR PilotName[64];
-  WCHAR AircraftType[32];
-  WCHAR AircraftRego[32];
-  bool found_logger = false;
+static bool LoggerDeclare(PDeviceDescriptor_t dev, Declaration_t *decl)
+{
+  if (!devIsLogger(dev))
+    return FALSE;
 
-  GetRegistryString(szRegistryPilotName, PilotName, 64);
-  GetRegistryString(szRegistryAircraftType, AircraftType, 32);
-  GetRegistryString(szRegistryAircraftRego, AircraftRego, 32);
-
-  if (devIsLogger(devA())){
-    found_logger = true;
-    DeclaredToDevice = false;
-
-    if(MessageBoxX(hWndMapWindow,
-		   gettext(TEXT("Declare Task?")),
-		   devA()->Name,
-		   MB_YESNO| MB_ICONQUESTION) == IDYES)
-      {
-        
-        // Must lock comms for entire declaration
-        LockComm();
-
-	devDeclBegin(devA(), PilotName, AircraftType, AircraftRego);
-
-	for(i=0;i<MAXTASKPOINTS;i++)
-	  {
-	    if(Task[i].Index == -1) break;
-	    devDeclAddWayPoint(devA(), &WayPointList[Task[i].Index]);
-	  }
-	if (devDeclEnd(devA())) {
-	  MessageBoxX(hWndMapWindow,
-		      gettext(TEXT("Task Declared!")),
-		      devA()->Name, MB_OK| MB_ICONINFORMATION);
-	  DeclaredToDevice = true;
-	} else {
-	  MessageBoxX(hWndMapWindow,
-		      gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
-		      devA()->Name, MB_OK| MB_ICONERROR);
-          DeclaredToDevice = false;
-        }
-
-        UnlockComm();
-      }
-  }
-
-  if (devIsLogger(devB())){
-    if (!found_logger) {
+  if (MessageBoxX(hWndMapWindow, gettext(TEXT("Declare Task?")),
+                  dev->Name, MB_YESNO| MB_ICONQUESTION) == IDYES) {
+    if (devDeclare(dev, decl)) {
+      MessageBoxX(hWndMapWindow, gettext(TEXT("Task Declared!")),
+                  dev->Name, MB_OK| MB_ICONINFORMATION);
+      DeclaredToDevice = true;
+    } else {
+      MessageBoxX(hWndMapWindow,
+                  gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
+                  dev->Name, MB_OK| MB_ICONERROR);
       DeclaredToDevice = false;
     }
+  }
+  return TRUE;
+}
+
+void LoggerDeviceDeclare() {
+  bool found_logger = false;
+  Declaration_t Decl;
+  int i;
+
+  GetRegistryString(szRegistryPilotName, Decl.PilotName, 64);
+  GetRegistryString(szRegistryAircraftType, Decl.AircraftType, 32);
+  GetRegistryString(szRegistryAircraftRego, Decl.AircraftRego, 32);
+
+  for (i = 0; i < MAXTASKPOINTS; i++) {
+    if (Task[i].Index == -1)
+      break;
+    Decl.waypoint[i] = &WayPointList[Task[i].Index];
+  }
+  Decl.num_waypoints = i;
+
+  DeclaredToDevice = false;
+
+  if (LoggerDeclare(devA(), &Decl))
     found_logger = true;
 
-    if(MessageBoxX(hWndMapWindow,
-		   gettext(TEXT("Declare Task?")),
-		   devB()->Name, MB_YESNO| MB_ICONQUESTION) == IDYES){
-
-      // Must lock comms for entire declaration
-      LockComm();
-
-      devDeclBegin(devB(), PilotName, AircraftType, AircraftRego);
-      for(i=0;i<MAXTASKPOINTS;i++)
-	{
-	  if(Task[i].Index == -1) break;
-	  devDeclAddWayPoint(devB(), &WayPointList[Task[i].Index]);
-	}
-      if (devDeclEnd(devB())) {
-	MessageBoxX(hWndMapWindow, gettext(TEXT("Task Declared!")),
-		    devB()->Name, MB_OK| MB_ICONINFORMATION);
-	DeclaredToDevice = true;
-      } else {
-	MessageBoxX(hWndMapWindow,
-		    gettext(TEXT("Error occured,\r\nTask NOT Declared!")),
-		    devB()->Name, MB_OK| MB_ICONERROR);
-        DeclaredToDevice = false;
-      }
-
-      UnlockComm();
-
-    }
-  }
+  if (LoggerDeclare(devB(), &Decl))
+    found_logger = true;
 
   if (!found_logger) {
     MessageBoxX(hWndMapWindow, gettext(TEXT("No logger connected")),

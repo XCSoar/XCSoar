@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.25 2008/08/23 06:28:44 jwharington Exp $
+// $Id: devCAI302.cpp,v 1.26 2008/08/23 06:42:05 jwharington Exp $
 
 /*
 Copyright_License {
@@ -175,8 +175,7 @@ BOOL cai302PutMacCready(PDeviceDescriptor_t d, double MacCready){
 
   _stprintf(szTmp, TEXT("!g,m%d\r\n"), int(((MacCready * 10) / KNOTSTOMETRESSECONDS) + 0.5));
 
-  if (!fSimMode)
-    d->Com->WriteString(szTmp);
+  d->Com->WriteString(szTmp);
 
   MacCreadyUpdateTimeout = 2;
 
@@ -191,8 +190,7 @@ BOOL cai302PutBugs(PDeviceDescriptor_t d, double Bugs){
 
   _stprintf(szTmp, TEXT("!g,u%d\r\n"), int((Bugs * 100) + 0.5));
 
-  if (!fSimMode)
-    d->Com->WriteString(szTmp);
+  d->Com->WriteString(szTmp);
 
   BugsUpdateTimeout = 2;
 
@@ -207,8 +205,7 @@ BOOL cai302PutBallast(PDeviceDescriptor_t d, double Ballast){
 
   _stprintf(szTmp, TEXT("!g,b%d\r\n"), int((Ballast * 10) + 0.5));
 
-  if (!fSimMode)
-    d->Com->WriteString(szTmp);
+  d->Com->WriteString(szTmp);
 
   BallastUpdateTimeout = 2;
 
@@ -284,8 +281,10 @@ static int DeclIndex = 128;
 static int nDeclErrorCode; 
 
 
-BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, 
-                     TCHAR *ID){
+BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp);
+
+
+BOOL cai302Declare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   TCHAR PilotName[25];
   TCHAR GliderType[13];
@@ -293,184 +292,169 @@ BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class,
   TCHAR szTmp[255];
   nDeclErrorCode = 0;
 
-  if (!fSimMode){
+  d->Com->StopRxThread();
 
-    d->Com->StopRxThread();
+  d->Com->SetRxTimeout(500);
+  d->Com->WriteString(TEXT("\x03"));
+  ExpectString(d, TEXT("$$$"));  // empty rx buffer (searching for
+                                 // pattern that never occure)
 
-    d->Com->SetRxTimeout(500);
-    d->Com->WriteString(TEXT("\x03"));
-    ExpectString(d, TEXT("$$$"));  // empty rx buffer (searching for
-                                   // pattern that never occure)
+  d->Com->WriteString(TEXT("\x03"));
+  if (!ExpectString(d, TEXT("cmd>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
+  }
 
-    d->Com->WriteString(TEXT("\x03"));
-    if (!ExpectString(d, TEXT("cmd>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
+  d->Com->WriteString(TEXT("upl 1\r"));
+  if (!ExpectString(d, TEXT("up>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
+  }
 
-    d->Com->WriteString(TEXT("upl 1\r"));
-    if (!ExpectString(d, TEXT("up>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
+  ExpectString(d, TEXT("$$$"));
 
-    ExpectString(d, TEXT("$$$"));
+  d->Com->WriteString(TEXT("O\r"));
+  d->Com->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
+  if (!ExpectString(d, TEXT("up>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
+  }
 
-    d->Com->WriteString(TEXT("O\r"));
-    d->Com->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
-    if (!ExpectString(d, TEXT("up>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
+  d->Com->WriteString(TEXT("O 128\r"));
+  d->Com->Read(&cai302_OdataPilot, cai302_OdataNoArgs.PilotRecordSize + 3);
+  if (!ExpectString(d, TEXT("up>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
+  }
 
-    d->Com->WriteString(TEXT("O 128\r"));
-    d->Com->Read(&cai302_OdataPilot, cai302_OdataNoArgs.PilotRecordSize + 3);
-    if (!ExpectString(d, TEXT("up>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
+  swap(cai302_OdataPilot.ApproachRadius);
+  swap(cai302_OdataPilot.ArrivalRadius);
+  swap(cai302_OdataPilot.EnrouteLoggingInterval);
+  swap(cai302_OdataPilot.CloseTpLoggingInterval);
+  swap(cai302_OdataPilot.TimeBetweenFlightLogs);
+  swap(cai302_OdataPilot.MinimumSpeedToForceFlightLogging);
+  swap(cai302_OdataPilot.UnitWord);
+  swap(cai302_OdataPilot.MarginHeight);
 
-    swap(cai302_OdataPilot.ApproachRadius);
-    swap(cai302_OdataPilot.ArrivalRadius);
-    swap(cai302_OdataPilot.EnrouteLoggingInterval);
-    swap(cai302_OdataPilot.CloseTpLoggingInterval);
-    swap(cai302_OdataPilot.TimeBetweenFlightLogs);
-    swap(cai302_OdataPilot.MinimumSpeedToForceFlightLogging);
-    swap(cai302_OdataPilot.UnitWord);
-    swap(cai302_OdataPilot.MarginHeight);
+  d->Com->WriteString(TEXT("G\r"));
+  d->Com->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
+  if (!ExpectString(d, TEXT("up>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
+  }
 
-    d->Com->WriteString(TEXT("G\r"));
-    d->Com->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
-    if (!ExpectString(d, TEXT("up>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
+  d->Com->WriteString(TEXT("G 0\r"));
+  d->Com->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
+  if (!ExpectString(d, TEXT("up>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
+  }
 
-    d->Com->WriteString(TEXT("G 0\r"));
-    d->Com->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
-    if (!ExpectString(d, TEXT("up>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
+  swap(cai302_Gdata.WeightInLiters);
+  swap(cai302_Gdata.BallastCapacity);
+  swap(cai302_Gdata.ConfigWord);
 
-    swap(cai302_Gdata.WeightInLiters);
-    swap(cai302_Gdata.BallastCapacity);
-    swap(cai302_Gdata.ConfigWord);
+  d->Com->SetRxTimeout(1500);
 
-    d->Com->SetRxTimeout(1500);
+  d->Com->WriteString(TEXT("\x03"));
+  if (!ExpectString(d, TEXT("cmd>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
+  }
 
-    d->Com->WriteString(TEXT("\x03"));
-    if (!ExpectString(d, TEXT("cmd>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
+  d->Com->WriteString(TEXT("dow 1\r"));
+  if (!ExpectString(d, TEXT("dn>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
+  }
 
-    d->Com->WriteString(TEXT("dow 1\r"));
-    if (!ExpectString(d, TEXT("dn>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
+  _tcsncpy(PilotName, decl->PilotName, 24);
+  PilotName[24] = '\0';
+  _tcsncpy(GliderType, decl->AircraftType, 12);
+  GliderType[12] = '\0';
+  _tcsncpy(GliderID, decl->AircraftRego, 12);
+  GliderID[12] = '\0';
 
-    _tcsncpy(PilotName, PilotsName, 24);
-    PilotName[24] = '\0';
-    _tcsncpy(GliderType, Class, 12);
-    GliderType[12] = '\0';
-    _tcsncpy(GliderID, ID, 12);
-    GliderID[12] = '\0';
-
-    _stprintf(szTmp, TEXT("O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r"),
-      PilotName,
-      cai302_OdataPilot.OldUnit,
-      cai302_OdataPilot.OldTemperaturUnit,
-      cai302_OdataPilot.SinkTone,
-      cai302_OdataPilot.TotalEnergyFinalGlide,
-      cai302_OdataPilot.ShowFinalGlideAltitude,
-      cai302_OdataPilot.MapDatum,
-      cai302_OdataPilot.ApproachRadius,
-      cai302_OdataPilot.ArrivalRadius,
-      cai302_OdataPilot.EnrouteLoggingInterval,
-      cai302_OdataPilot.CloseTpLoggingInterval,
-      cai302_OdataPilot.TimeBetweenFlightLogs,
-      cai302_OdataPilot.MinimumSpeedToForceFlightLogging,
-      cai302_OdataPilot.StfDeadBand,
-      255,
-      cai302_OdataPilot.UnitWord,
-      cai302_OdataPilot.MarginHeight
-    );
+  _stprintf(szTmp, TEXT("O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r"),
+    PilotName,
+    cai302_OdataPilot.OldUnit,
+    cai302_OdataPilot.OldTemperaturUnit,
+    cai302_OdataPilot.SinkTone,
+    cai302_OdataPilot.TotalEnergyFinalGlide,
+    cai302_OdataPilot.ShowFinalGlideAltitude,
+    cai302_OdataPilot.MapDatum,
+    cai302_OdataPilot.ApproachRadius,
+    cai302_OdataPilot.ArrivalRadius,
+    cai302_OdataPilot.EnrouteLoggingInterval,
+    cai302_OdataPilot.CloseTpLoggingInterval,
+    cai302_OdataPilot.TimeBetweenFlightLogs,
+    cai302_OdataPilot.MinimumSpeedToForceFlightLogging,
+    cai302_OdataPilot.StfDeadBand,
+    255,
+    cai302_OdataPilot.UnitWord,
+    cai302_OdataPilot.MarginHeight
+  );
 
 
-    d->Com->WriteString(szTmp);
-    if (!ExpectString(d, TEXT("dn>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
+  d->Com->WriteString(szTmp);
+  if (!ExpectString(d, TEXT("dn>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
+  }
 
-    _stprintf(szTmp, TEXT("G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d\r"),
-      GliderType,
-      GliderID,
-      cai302_Gdata.bestLD,
-      cai302_Gdata.BestGlideSpeed,
-      cai302_Gdata.TwoMeterSinkAtSpeed,
-      cai302_Gdata.WeightInLiters,
-      cai302_Gdata.BallastCapacity,
-      0,
-      cai302_Gdata.ConfigWord
-    );
+  _stprintf(szTmp, TEXT("G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d\r"),
+    GliderType,
+    GliderID,
+    cai302_Gdata.bestLD,
+    cai302_Gdata.BestGlideSpeed,
+    cai302_Gdata.TwoMeterSinkAtSpeed,
+    cai302_Gdata.WeightInLiters,
+    cai302_Gdata.BallastCapacity,
+    0,
+    cai302_Gdata.ConfigWord
+  );
 
-    d->Com->WriteString(szTmp);
-    if (!ExpectString(d, TEXT("dn>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
-
+  d->Com->WriteString(szTmp);
+  if (!ExpectString(d, TEXT("dn>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
   }
 
   DeclIndex = 128;
 
-  return(TRUE);
+  for (int i = 0; i < decl->num_waypoints; i++)
+    cai302DeclAddWayPoint(d, decl->waypoint[i]);
 
-}
+  if (nDeclErrorCode == 0){
 
+    _stprintf(szTmp, TEXT("D,%d\r"), 255 /* end of declaration */);
+    d->Com->WriteString(szTmp);
 
-BOOL cai302DeclEnd(PDeviceDescriptor_t d){
-  
-  TCHAR  szTmp[32];
+    d->Com->SetRxTimeout(1500);            // D,255 takes more than 800ms
 
-  if (!fSimMode){
-
-    if (nDeclErrorCode == 0){
-
-      _stprintf(szTmp, TEXT("D,%d\r"), 255 /* end of declaration */);
-      d->Com->WriteString(szTmp);
-
-      d->Com->SetRxTimeout(1500);            // D,255 takes more than 800ms
-
-      if (!ExpectString(d, TEXT("dn>"))){
-        nDeclErrorCode = 1;
-      };
-
-      // todo error checking
-
+    if (!ExpectString(d, TEXT("dn>"))){
+      nDeclErrorCode = 1;
     }
 
-    d->Com->SetRxTimeout(500);
-
-    d->Com->WriteString(TEXT("\x03"));
-    ExpectString(d, TEXT("cmd>"));
-
-    d->Com->WriteString(TEXT("LOG 0\r"));
-  
-    d->Com->SetRxTimeout(0);
-    d->Com->StartRxThread();
-
+    // todo error checking
   }
+
+  d->Com->SetRxTimeout(500);
+
+  d->Com->WriteString(TEXT("\x03"));
+  ExpectString(d, TEXT("cmd>"));
+
+  d->Com->WriteString(TEXT("LOG 0\r"));
+
+  d->Com->SetRxTimeout(0);
+  d->Com->StartRxThread();
 
   return(nDeclErrorCode == 0);
 
 }
 
 
-BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
+BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
 
   TCHAR Name[13];
   TCHAR  szTmp[128];
@@ -517,15 +501,11 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
 
   DeclIndex++;
 
-  if (!fSimMode){
+  d->Com->WriteString(szTmp);
 
-    d->Com->WriteString(szTmp);
-
-    if (!ExpectString(d, TEXT("dn>"))){
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
-
+  if (!ExpectString(d, TEXT("dn>"))){
+    nDeclErrorCode = 1;
+    return(FALSE);
   }
 
   return(TRUE);
@@ -556,9 +536,7 @@ BOOL cai302Install(PDeviceDescriptor_t d){
   d->Close = cai302Close;
   d->Init = NULL;
   d->LinkTimeout = NULL;
-  d->DeclBegin = cai302DeclBegin;
-  d->DeclEnd = cai302DeclEnd;
-  d->DeclAddWayPoint = cai302DeclAddWayPoint;
+  d->Declare = cai302Declare;
   d->IsLogger = cai302IsLogger;
   d->IsGPSSource = cai302IsGPSSource;
 

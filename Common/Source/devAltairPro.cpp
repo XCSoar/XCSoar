@@ -44,12 +44,6 @@ Copyright_License {
 
 double AltitudeToQNHAltitude(double alt);
 
-#ifdef _SIM_
-static BOOL fSimMode = TRUE;
-#else
-static BOOL fSimMode = FALSE;
-#endif
-
 static double lastAlt = 0;
 
 
@@ -93,36 +87,11 @@ BOOL atrParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL atrDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
-  (void) Class;
+BOOL atrDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   (void) d;
-  (void) PilotsName;
-  (void) ID;
+  (void) decl;
 
   // ToDo TODO
-
-  return(TRUE);
-
-}
-
-
-BOOL atrDeclEnd(PDeviceDescriptor_t d){
-
-  (void) d;
-
-  // ToDo
-
-  return(TRUE);                    // return() TRUE on success
-
-}
-
-
-BOOL atrDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
-
-  (void) d;
-  (void) wp;
-
-  // ToDo
 
   return(TRUE);
 
@@ -172,9 +141,7 @@ BOOL atrInstall(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = NULL;
-  d->DeclBegin = atrDeclBegin;
-  d->DeclEnd = atrDeclEnd;
-  d->DeclAddWayPoint = atrDeclAddWayPoint;
+  d->Declare = atrDeclare;
   d->IsLogger = atrIsLogger;
   d->IsGPSSource = atrIsGPSSource;
   d->IsBaroSource = atrIsBaroSource;

@@ -1,4 +1,4 @@
-// $Id: devCaiGpsNav.cpp,v 1.6 2008/08/23 06:28:44 jwharington Exp $
+// $Id: devCaiGpsNav.cpp,v 1.7 2008/08/23 06:42:05 jwharington Exp $
 
 /*
 Copyright_License {
@@ -113,9 +113,7 @@ BOOL caiGpsNavInstall(PDeviceDescriptor_t d){
   d->Close = caiGpsNavClose;
   d->Init = NULL;
   d->LinkTimeout = NULL;
-  d->DeclBegin = NULL;
-  d->DeclEnd = NULL;
-  d->DeclAddWayPoint = NULL;
+  d->Declare = NULL;
   d->IsLogger = caiGpsNavIsLogger;
   d->IsGPSSource = caiGpsNavIsGPSSource;
 

@@ -99,9 +99,7 @@ static BOOL lxInstall(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = LXLinkTimeout;
-  d->DeclBegin = NULL;
-  d->DeclEnd = NULL;
-  d->DeclAddWayPoint = NULL;
+  d->Declare = NULL;
   d->IsGPSSource = LXIsGPSSource;
   d->IsBaroSource = LXIsBaroSource;
 

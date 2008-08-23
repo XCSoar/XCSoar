@@ -42,14 +42,6 @@ Copyright_License {
 
 #include "devVega.h"
 
-
-#ifdef _SIM_
-static BOOL fSimMode = TRUE;
-#else
-static BOOL fSimMode = FALSE;
-#endif
-
-
 #include "InputEvents.h"
 
 
@@ -405,34 +397,9 @@ BOOL vgaParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL vgaDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
-  (void)Class;
+BOOL vgaDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   (void) d;
-  (void) PilotsName;
-  (void) ID;
-
-  // ToDo
-
-  return(TRUE);
-
-}
-
-
-BOOL vgaDeclEnd(PDeviceDescriptor_t d){
-
-  (void) d;
-
-  // ToDo
-
-  return(TRUE);                    // return() TRUE on success
-
-}
-
-
-BOOL vgaDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
-
-  (void) d;
-  (void) wp;
+  (void) decl;
 
   // ToDo
 
@@ -507,9 +474,7 @@ BOOL vgaInstall(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = NULL;
-  d->DeclBegin = vgaDeclBegin;
-  d->DeclEnd = vgaDeclEnd;
-  d->DeclAddWayPoint = vgaDeclAddWayPoint;
+  d->Declare = vgaDeclare;
   d->IsLogger = vgaIsLogger;
   d->IsGPSSource = vgaIsGPSSource;
   d->IsBaroSource = vgaIsBaroSource;

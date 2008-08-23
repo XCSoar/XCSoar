@@ -62,6 +62,12 @@ static  DWORD SpeedIndex1 = 2;
 static  DWORD PortIndex2 = 0;
 static  DWORD SpeedIndex2 = 2;
 
+#ifdef _SIM_
+static BOOL fSimMode = TRUE;
+#else
+static BOOL fSimMode = FALSE;
+#endif
+
 DeviceRegister_t   DeviceRegister[NUMREGDEV];
 DeviceDescriptor_t DeviceList[NUMDEV];
 
@@ -170,9 +176,7 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].Close = NULL;
     DeviceList[i].Init = NULL;
     DeviceList[i].LinkTimeout = NULL;
-    DeviceList[i].DeclBegin = NULL;
-    DeviceList[i].DeclEnd = NULL;
-    DeviceList[i].DeclAddWayPoint = NULL;
+    DeviceList[i].Declare = NULL;
     DeviceList[i].IsLogger = devIsFalseReturn;
     DeviceList[i].IsGPSSource = devIsFalseReturn;
     DeviceList[i].IsBaroSource = devIsFalseReturn;
@@ -449,6 +453,8 @@ BOOL devPutMacCready(PDeviceDescriptor_t d, double MacCready)
 {
   BOOL result = TRUE;
 
+  if (fSimMode)
+    return TRUE;
   LockComm();
   if (d != NULL && d->PutMacCready != NULL)
     result = d->PutMacCready(d, MacCready);
@@ -461,6 +467,8 @@ BOOL devPutBugs(PDeviceDescriptor_t d, double Bugs)
 {
   BOOL result = TRUE;
 
+  if (fSimMode)
+    return TRUE;
   LockComm();
   if (d != NULL && d->PutBugs != NULL)
     result = d->PutBugs(d, Bugs);
@@ -473,6 +481,8 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
 {
   BOOL result = TRUE;
 
+  if (fSimMode)
+    return TRUE;
   LockComm();
   if (d != NULL && d->PutBallast != NULL)
     result = d->PutBallast(d, Ballast);
@@ -528,6 +538,8 @@ BOOL devLinkTimeout(PDeviceDescriptor_t d)
 {
   BOOL result = FALSE;
 
+  if (fSimMode)
+    return TRUE;
   LockComm();
   if (d == NULL){
     for (int i=0; i<NUMDEV; i++){
@@ -567,28 +579,18 @@ BOOL devPutVoice(PDeviceDescriptor_t d, TCHAR *Sentence)
   return FALSE;
 }
 
+BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
+{
+  BOOL result = FALSE;
 
-// We rely on the caller to provide LockComm() safety across
-// the three devDecl* calls.
-BOOL devDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
-  if ((d != NULL) && (d->DeclBegin != NULL))
-    return ((d->DeclBegin)(d, PilotsName, Class, ID));
-  else
-    return(FALSE);
-}
+  if (fSimMode)
+    return TRUE;
+  LockComm();
+  if (d != NULL && d->Declare != NULL)
+    result = d->Declare(d, decl);
+  UnlockComm();
 
-BOOL devDeclEnd(PDeviceDescriptor_t d){
-  if ((d != NULL) && (d->DeclEnd != NULL))
-    return ((d->DeclEnd)(d));
-  else
-    return(FALSE);
-}
-
-BOOL devDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
-  if ((d != NULL) && (d->DeclAddWayPoint != NULL))
-    return ((d->DeclAddWayPoint)(d, wp));
-  else
-    return(FALSE);
+  return result;
 }
 
 BOOL devIsLogger(PDeviceDescriptor_t d)

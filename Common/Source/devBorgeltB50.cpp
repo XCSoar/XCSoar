@@ -83,9 +83,7 @@ BOOL b50Install(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = B50LinkTimeout;
-  d->DeclBegin = NULL;
-  d->DeclEnd = NULL;
-  d->DeclAddWayPoint = NULL;
+  d->Declare = NULL;
   d->IsGPSSource = B50IsGPSSource;
 
   return(TRUE);
