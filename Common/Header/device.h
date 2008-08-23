@@ -18,7 +18,6 @@ typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfN
 
 typedef struct{
   void (*WriteString)(const TCHAR *Text);
-  void (*WriteNMEAString)(const TCHAR *Text);
   BOOL (*StopRxThread)(void);
   BOOL (*StartRxThread)(void);
   int  (*GetChar)(void);
@@ -57,6 +56,13 @@ typedef	struct DeviceDescriptor_t{
 }DeviceDescriptor_t;
 
 typedef	DeviceDescriptor_t *PDeviceDescriptor_t;
+
+#define Port1WriteNMEA(s)	devWriteNMEAString(devA(), s)
+#define Port2WriteNMEA(s)	devWriteNMEAString(devB(), s)
+
+void devWriteNMEAString(PDeviceDescriptor_t d, TCHAR *Text);
+void VarioWriteNMEA(TCHAR *Text);
+void VarioWriteSettings(void);
 
 typedef	struct{
 	TCHAR	 *Name;

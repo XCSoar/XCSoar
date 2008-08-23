@@ -419,36 +419,6 @@ void Port2WriteString(const TCHAR *Text){
 }
 
 
-void Port2WriteNMEA(const TCHAR *Text) {
-
-  // 20060514: sgi change to block write
-
-  char sTmp[512];
-  char *pC=sTmp;
-  unsigned char chk=0;
-  int i, len;
-  LockComm();
-
-  WideCharToMultiByte( CP_ACP, 0, Text,
-			 _tcslen(Text)+1,
-			 sTmp,
-			 512, NULL, NULL);
-
-  len = _tcslen(Text);
-  *pC = '$';
-  pC++;
-
-  for (i=0;i<len; i++) {
-    *pC = (BYTE)Text[i];
-    chk ^= *pC;
-    pC++;
-  }
-  sprintf(pC, "*%02X\r\n", chk);
-  Port2Write(sTmp, strlen(sTmp));
-  UnlockComm();
-}
-
-
 // Set Rx Timeout in ms
 // Timeout: Rx receive timeout in ms
 // return: last set Rx timeout or -1 on error

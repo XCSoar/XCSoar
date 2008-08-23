@@ -69,7 +69,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #else
 #include "Process.h"
 #endif
-#include "Port.h"
+#include "device.h"
 #include "Message.h"
 #include "Units.h"
 #include "MapWindow.h"
