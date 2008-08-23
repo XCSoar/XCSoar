@@ -94,9 +94,7 @@ static BOOL zanderInstall(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = ZanderLinkTimeout;
-  d->DeclBegin = NULL;
-  d->DeclEnd = NULL;
-  d->DeclAddWayPoint = NULL;
+  d->Declare = NULL;
   d->IsGPSSource = ZanderIsGPSSource;
   d->IsBaroSource = ZanderIsBaroSource;
 

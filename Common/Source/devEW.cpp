@@ -54,12 +54,6 @@ static unsigned long lLastBaudrate = 0;
 static int nDeclErrorCode = 0;
 static int ewDecelTpIndex = 0;
 
-#ifdef _SIM_
-static BOOL fSimMode = TRUE;
-#else
-static BOOL fSimMode = FALSE;
-#endif
-
 
 BOOL EWParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
   (void)d;
@@ -103,8 +97,10 @@ BOOL EWTryConnect(PDeviceDescriptor_t d) {
 }
 
 
-BOOL EWDeclBegin(PDeviceDescriptor_t d,
-                 TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
+BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp);
+
+
+BOOL EWDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   TCHAR sTmp[72];
   TCHAR sPilot[13];
@@ -114,9 +110,6 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
   nDeclErrorCode = 0;
   ewDecelTpIndex = 0;
   fDeclarationPending = TRUE;
-
-  if (fSimMode)
-    return(TRUE);
 
   d->Com->StopRxThread();
 
@@ -133,11 +126,11 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
   d->Com->WriteString(sTmp);
   Sleep(50);
 
-  _tcsncpy(sPilot, PilotsName, 12);               // copy and strip fields
+  _tcsncpy(sPilot, decl->PilotName, 12);               // copy and strip fields
   sPilot[12] = '\0';
-  _tcsncpy(sGliderType, Class, 8);
+  _tcsncpy(sGliderType, decl->AircraftType, 8);
   sGliderType[8] = '\0';
-  _tcsncpy(sGliderID, ID, 8);
+  _tcsncpy(sGliderID, decl->AircraftRego, 8);
   sGliderID[8] = '\0';
 
   // build string (field 4-5 are GPS info, no idea what to write)
@@ -208,23 +201,15 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
     };
   }
 
-  return(TRUE);
+  for (int i = 0; i < decl->num_waypoints; i++)
+    EWDeclAddWayPoint(d, decl->waypoint[i]);
 
-}
+  d->Com->WriteString(TEXT("NMEA\r\n"));         // switch to NMEA mode
 
+  d->Com->SetBaudrate(lLastBaudrate);            // restore baudrate
 
-BOOL EWDeclEnd(PDeviceDescriptor_t d){
-
-  if (!fSimMode){
-
-    d->Com->WriteString(TEXT("NMEA\r\n"));         // switch to NMEA mode
-
-    d->Com->SetBaudrate(lLastBaudrate);            // restore baudrate
-
-    d->Com->SetRxTimeout(0);                       // clear timeout
-    d->Com->StartRxThread();                       // restart RX thread
-
-  }
+  d->Com->SetRxTimeout(0);                       // clear timeout
+  d->Com->StartRxThread();                       // restart RX thread
 
   fDeclarationPending = FALSE;                    // clear decl pending flag
 
@@ -233,7 +218,7 @@ BOOL EWDeclEnd(PDeviceDescriptor_t d){
 }
 
 
-BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
+BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, const WAYPOINT *wp){
 
   TCHAR EWRecord[100];
   TCHAR IDString[12];
@@ -322,15 +307,11 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
 
   appendCheckSum(EWRecord);                       // complete package with CS and CRLF
 
-  if (!fSimMode){
+  d->Com->WriteString(EWRecord);                 // put it to the logger
 
-    d->Com->WriteString(EWRecord);                 // put it to the logger
-
-    if (!ExpectString(d, TEXT("OK\r"))){            // wait for response
-      nDeclErrorCode = 1;
-      return(FALSE);
-    };
-
+  if (!ExpectString(d, TEXT("OK\r"))){            // wait for response
+    nDeclErrorCode = 1;
+    return(FALSE);
   }
 
   ewDecelTpIndex = ewDecelTpIndex + 1;            // increase TP index
@@ -354,7 +335,7 @@ BOOL EWIsGPSSource(PDeviceDescriptor_t d){
 
 BOOL EWLinkTimeout(PDeviceDescriptor_t d){
   (void)d;
-  if (!fSimMode && !fDeclarationPending)
+  if (!fDeclarationPending)
     d->Com->WriteString(TEXT("NMEA\r\n"));
 
   return(TRUE);
@@ -371,9 +352,7 @@ BOOL ewInstall(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = EWLinkTimeout;
-  d->DeclBegin = EWDeclBegin;
-  d->DeclEnd = EWDeclEnd;
-  d->DeclAddWayPoint = EWDeclAddWayPoint;
+  d->Declare = EWDeclare;
   d->IsLogger = EWIsLogger;
   d->IsGPSSource = EWIsGPSSource;
 

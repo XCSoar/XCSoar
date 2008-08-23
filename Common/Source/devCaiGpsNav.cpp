@@ -113,9 +113,7 @@ BOOL caiGpsNavInstall(PDeviceDescriptor_t d){
   d->Close = caiGpsNavClose;
   d->Init = NULL;
   d->LinkTimeout = NULL;
-  d->DeclBegin = NULL;
-  d->DeclEnd = NULL;
-  d->DeclAddWayPoint = NULL;
+  d->Declare = NULL;
   d->IsLogger = caiGpsNavIsLogger;
   d->IsGPSSource = caiGpsNavIsGPSSource;
 

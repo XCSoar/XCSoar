@@ -47,20 +47,10 @@ Copyright_License {
 
 // Additional sentance for EW support
 
-static BOOL fDeclarationPending = FALSE;
-static unsigned long lLastBaudrate = 0;
 static int nDeclErrorCode = 0;
-static int ewDecelTpIndex = 0;
-static WAYPOINT *wpLast = NULL;
 #define MAX_USER_SIZE 2500
 static int user_size = 0;
 static TCHAR user_data[MAX_USER_SIZE];
-
-#ifdef _SIM_
-static BOOL fSimMode = TRUE;
-#else
-static BOOL fSimMode = FALSE;
-#endif
 
 
 BOOL ExpectStringWait(PDeviceDescriptor_t d, TCHAR *token) {
@@ -113,9 +103,6 @@ BOOL EWMicroRecorderTryConnect(PDeviceDescriptor_t d) {
   int retries=10;
   TCHAR ch;
 
-  if (!d->Com)
-    return FALSE;
-
   while (--retries){
 
     d->Com->WriteString(TEXT("\x02"));         // send IO Mode command
@@ -151,47 +138,8 @@ BOOL EWMicroRecorderTryConnect(PDeviceDescriptor_t d) {
 }
 
 
-BOOL EWMicroRecorderDeclBegin(PDeviceDescriptor_t d,
-                              TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
-
-  //  TCHAR sTmp[72];
-
-  nDeclErrorCode = 0;
-  ewDecelTpIndex = 0;
-  fDeclarationPending = TRUE;
-
-  if (fSimMode)
-    return(TRUE);
-
-  d->Com->StopRxThread();
-
-  d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
-
-  if (!EWMicroRecorderTryConnect(d)) {
-    return FALSE;
-  }
-
-  d->Com->WriteString(TEXT("\x18"));         // start to upload file
-
-  TCHAR *ptr;
-  ptr = _tcsstr(user_data, TEXT("Description:      Declaration"));
-  if (ptr) {
-    *ptr = 0;
-  }
-
-  d->Com->WriteString(user_data);
-  d->Com->WriteString(TEXT("Description:      Declaration\r\n"));
-
-  wpLast= NULL;
-
-  return(TRUE);
-
-}
-
-
-
 static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
-                                         WAYPOINT *wp,
+                                         const WAYPOINT *wp,
                                          TCHAR* EWType) {
   TCHAR EWRecord[128];
   int DegLat, DegLon;
@@ -226,74 +174,61 @@ static void EWMicroRecorderWriteWayPoint(PDeviceDescriptor_t d,
             DegLat, (int)MinLat, NoS,
             DegLon, (int)MinLon, EoW,
             wp->Name);
-  if (!fSimMode){
-    d->Com->WriteString(EWRecord);                 // put it to the logger
-  }
+  d->Com->WriteString(EWRecord);                 // put it to the logger
 }
 
 
-BOOL EWMicroRecorderDeclEnd(PDeviceDescriptor_t d){
+BOOL EWMicroRecorderDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
+{
+  const WAYPOINT *wp;
+  nDeclErrorCode = 0;
 
-  if (wpLast) {
-    TCHAR EWRecord[100];
-    for (int i=ewDecelTpIndex; i<12; i++) {
-      _stprintf(EWRecord,
-                TEXT("TP LatLon:        0000000N00000000E TURN POINT\r\n"));
-      if (!fSimMode){
-        d->Com->WriteString(EWRecord);           // put it to the logger
-      }
-    }
-    EWMicroRecorderWriteWayPoint(d, wpLast, TEXT("Finish LatLon:    "));
-    EWMicroRecorderWriteWayPoint(d, wpLast, TEXT("Land LatLon:      "));
-    wpLast = NULL;
+  // Must have at least two, max 12 waypoints
+  if (decl->num_waypoints < 2 || decl->num_waypoints > 12)
+    return FALSE;
+
+  d->Com->StopRxThread();
+
+  d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
+
+  if (!EWMicroRecorderTryConnect(d)) {
+    return FALSE;
   }
 
-  if (!fSimMode){
-    d->Com->WriteString(TEXT("\x03"));         // finish sending user file
+  d->Com->WriteString(TEXT("\x18"));         // start to upload file
+  d->Com->WriteString(user_data);
+  d->Com->WriteString(TEXT("Description:      Declaration\r\n"));
 
-    if (!ExpectStringWait(d, TEXT("uploaded successfully"))) {
-      nDeclErrorCode= 1;
-      // error!
+  for (int i = 0; i < 11; i++) {
+    wp = decl->waypoint[i];
+    if (i == 0) {
+      EWMicroRecorderWriteWayPoint(d, wp, TEXT("Take Off LatLong: "));
+      EWMicroRecorderWriteWayPoint(d, wp, TEXT("Start LatLon:     "));
+    } else if (i + 1 < decl->num_waypoints) {
+      EWMicroRecorderWriteWayPoint(d, wp, TEXT("TP LatLon:        "));
+    } else {
+      d->Com->WriteString(TEXT("TP LatLon:        0000000N00000000E TURN POINT\r\n"));
     }
-    d->Com->WriteString(TEXT("!!\r\n"));         // go back to NMEA mode
-
-    d->Com->SetRxTimeout(0);                       // clear timeout
-    d->Com->StartRxThread();                       // restart RX thread
   }
 
-  fDeclarationPending = FALSE;                    // clear decl pending flag
+  wp = decl->waypoint[decl->num_waypoints - 1];
+  EWMicroRecorderWriteWayPoint(d, wp, TEXT("Finish LatLon:    "));
+  EWMicroRecorderWriteWayPoint(d, wp, TEXT("Land LatLon:      "));
+
+  d->Com->WriteString(TEXT("\x03"));         // finish sending user file
+
+  if (!ExpectStringWait(d, TEXT("uploaded successfully"))) {
+    // error!
+    nDeclErrorCode = 1;
+  }
+  d->Com->WriteString(TEXT("!!\r\n"));         // go back to NMEA mode
+
+  d->Com->SetRxTimeout(0);                       // clear timeout
+  d->Com->StartRxThread();                       // restart RX thread
 
   return(nDeclErrorCode == 0);                    // return() TRUE on success
-
 }
 
-
-
-BOOL EWMicroRecorderDeclAddWayPoint(PDeviceDescriptor_t d,
-                                    WAYPOINT *wp){
-
-  if (nDeclErrorCode != 0)                        // check for error
-    return(FALSE);
-  if (ewDecelTpIndex >= 12){                        // check for max 12 TP's
-    return(FALSE);
-  }
-
-  if (ewDecelTpIndex==0) {
-    wpLast = NULL;
-    EWMicroRecorderWriteWayPoint(d, wp, TEXT("Take Off LatLong: "));
-    EWMicroRecorderWriteWayPoint(d, wp, TEXT("Start LatLon:     "));
-  } else {
-    if (wpLast) {
-      EWMicroRecorderWriteWayPoint(d, wpLast, TEXT("TP LatLon:        "));
-    }
-    wpLast = wp;
-  }
-
-  ewDecelTpIndex++;
-
-  return(TRUE);
-
-}
 
 
 BOOL EWMicroRecorderIsLogger(PDeviceDescriptor_t d){
@@ -318,9 +253,7 @@ BOOL ewMicroRecorderInstall(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = NULL;
-  d->DeclBegin = EWMicroRecorderDeclBegin;
-  d->DeclEnd = EWMicroRecorderDeclEnd;
-  d->DeclAddWayPoint = EWMicroRecorderDeclAddWayPoint;
+  d->Declare = EWMicroRecorderDeclare;
   d->IsLogger = EWMicroRecorderIsLogger;
   d->IsGPSSource = EWMicroRecorderIsGPSSource;
 

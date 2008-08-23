@@ -88,9 +88,7 @@ static BOOL flymasterf1Install(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = FlymasterF1LinkTimeout;
-  d->DeclBegin = NULL;
-  d->DeclEnd = NULL;
-  d->DeclAddWayPoint = NULL;
+  d->Declare = NULL;
   d->IsGPSSource = FlymasterF1IsGPSSource;
   d->IsBaroSource = FlymasterF1IsBaroSource;
 

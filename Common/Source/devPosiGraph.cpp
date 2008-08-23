@@ -52,12 +52,6 @@ Copyright_License {
 #include "devPosiGraph.h"
 
 
-#ifdef _SIM_
-static BOOL fSimMode = TRUE;
-#else
-static BOOL fSimMode = FALSE;
-#endif
-
 static BOOL GPWIN(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
 
 BOOL PGParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
@@ -77,31 +71,11 @@ BOOL PGParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL PGDeclBegin(PDeviceDescriptor_t d,
-                 TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
+BOOL PGDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
 
   (void)d;
-  (void)PilotsName;
-  (void)Class;
-  (void)ID;
+  (void)decl;
 
-  return(FALSE);
-
-}
-
-
-BOOL PGDeclAddWayPoint(PDeviceDescriptor_t d,
-                       WAYPOINT *wp){
-
-  (void)d;
-  (void)wp;
-
-  return(FALSE);
-
-}
-
-BOOL PGDeclEnd(PDeviceDescriptor_t d){
-  (void)d;
   return(TRUE);
 }
 
@@ -139,9 +113,7 @@ BOOL pgInstall(PDeviceDescriptor_t d){
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = PGLinkTimeout;
-  d->DeclBegin = PGDeclBegin;
-  d->DeclEnd = PGDeclEnd;
-  d->DeclAddWayPoint = PGDeclAddWayPoint;
+  d->Declare = PGDeclare;
   d->IsLogger = PGIsLogger;
   d->IsGPSSource = PGIsGPSSource;
   d->IsBaroSource = PGIsBaroSource;

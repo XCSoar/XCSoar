@@ -17,6 +17,14 @@
 
 typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut} DeviceFlags_t;
 
+typedef struct Declaration {
+  WCHAR PilotName[64];
+  WCHAR AircraftType[32];
+  WCHAR AircraftRego[32];
+  int num_waypoints;
+  const WAYPOINT *waypoint[MAXTASKPOINTS];
+} Declaration_t;
+
 typedef	struct DeviceDescriptor_t{
   int	Port;
   FILE  *fhLogFile;
@@ -30,9 +38,7 @@ typedef	struct DeviceDescriptor_t{
   BOOL (*Close)(DeviceDescriptor_t *d);
   BOOL (*Init)(DeviceDescriptor_t	*d);
   BOOL (*LinkTimeout)(DeviceDescriptor_t *d);
-  BOOL (*DeclBegin)(DeviceDescriptor_t *d, TCHAR *PilotsName,	TCHAR	*Class,	TCHAR	*ID);
-  BOOL (*DeclEnd)(DeviceDescriptor_t *d);
-  BOOL (*DeclAddWayPoint)(DeviceDescriptor_t *d, WAYPOINT	*wp);
+  BOOL (*Declare)(DeviceDescriptor_t *d, Declaration_t *decl);
   BOOL (*IsLogger)(DeviceDescriptor_t	*d);
   BOOL (*IsGPSSource)(DeviceDescriptor_t *d);
   BOOL (*IsBaroSource)(DeviceDescriptor_t *d);
@@ -85,9 +91,7 @@ BOOL devOpen(PDeviceDescriptor_t d,	int	Port);
 BOOL devClose(PDeviceDescriptor_t	d);
 BOOL devInit(PDeviceDescriptor_t d);
 BOOL devLinkTimeout(PDeviceDescriptor_t	d);
-BOOL devDeclBegin(PDeviceDescriptor_t	d, TCHAR *PilotsName,	TCHAR	*Class,	TCHAR	*ID);
-BOOL devDeclEnd(PDeviceDescriptor_t	d);
-BOOL devDeclAddWayPoint(PDeviceDescriptor_t	d, WAYPOINT	*wp);
+BOOL devDeclare(PDeviceDescriptor_t	d, Declaration_t *decl);
 BOOL devIsLogger(PDeviceDescriptor_t d);
 BOOL devIsGPSSource(PDeviceDescriptor_t	d);
 BOOL devIsBaroSource(PDeviceDescriptor_t d);
