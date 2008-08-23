@@ -2360,57 +2360,6 @@ LRESULT MainMenu(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-void ProcessChar1 (char c)
-{
-  static TCHAR BuildingString[100];
-  static int i = 0;
-
-  if (ProgramStarted < psNormalOp) return; // ignore everything until started
-
-  if (i<90) {
-
-    BuildingString[i++] = c;
-
-    if(c=='\n') {
-      BuildingString[i] = '\0';
-      LockFlightData();
-      devParseNMEA(0, BuildingString, &GPS_INFO);
-      UnlockFlightData();
-    } else {
-      return;
-    }
-  }
-  
-  i = 0;
-}
-
-
-void ProcessChar2 (char c)
-{
-  static TCHAR BuildingString[100];
-  static int i = 0;
-
-  if (ProgramStarted < psNormalOp) return; // ignore everything until started
-
-
-  if (i<90) {
-
-    BuildingString[i++] = c;
-
-    if(c=='\n') {
-      BuildingString[i] = '\0';
-      LockFlightData();
-      devParseNMEA(1, BuildingString, &GPS_INFO);
-      UnlockFlightData();
-    } else {
-      return;
-    }
-  }
-  
-  i = 0;
-}
-
-
 void    AssignValues(void)
 {
   if (InfoBoxesHidden) {

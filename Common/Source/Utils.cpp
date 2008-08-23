@@ -231,7 +231,7 @@ const TCHAR szRegistryCDICruise[]= TEXT("CDICruise");
 const TCHAR szRegistryCDICircling[]= TEXT("CDICircling");
 
 const TCHAR szRegistryDeviceA[]= TEXT("DeviceA");
-const TCHAR szRegistryDeviceB[]= TEXT("DeviceB")
+const TCHAR szRegistryDeviceB[]= TEXT("DeviceB");
 const TCHAR szRegistryDeviceC[]= TEXT("DeviceC");
 
 const TCHAR szRegistryAutoBlank[]= TEXT("AutoBlank");

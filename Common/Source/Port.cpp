@@ -33,6 +33,7 @@ Copyright_License {
 #include "Port.h"
 #include "externs.h"
 #include "XCSoar.h"
+#include "device.h"
 
 #include <windows.h>
 #include <tchar.h>
@@ -56,14 +57,16 @@ static void ComPort_StatusMessage(UINT type, const TCHAR *caption, const TCHAR *
     DoStatusMessage(tmp);
 }
 
-ComPort::ComPort()
+ComPort::ComPort(int the_dev_idx)
 {
   hReadThread = NULL;
   CloseThread = 0;
   fRxThreadTerminated = TRUE;
   dwMask = 0;
-  ProcessChar = NULL;
   hPort = INVALID_HANDLE_VALUE;
+  BuildingString[0] = 0;
+  bi = 0;
+  devIdx = the_dev_idx;
 }
 
 BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
@@ -261,8 +264,7 @@ DWORD ComPort::ReadThread()
         if (ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, 
 		     (OVERLAPPED *)NULL)) {
           for (unsigned int j = 0; j < dwBytesTransferred; j++) {
-            if (ProcessChar)
-              ProcessChar(inbuf[j]);
+	    ProcessChar(inbuf[j]);
           }
         } else {
           dwBytesTransferred = 0;
@@ -525,3 +527,23 @@ int ComPort::Read(void *Buffer, size_t Size)
   return -1;
 }
 
+
+void ComPort::ProcessChar(char c) {
+  if (ProgramStarted < psNormalOp) return; // ignore everything until started
+
+  if (bi<NMEA_BUF_SIZE-1) {
+
+    BuildingString[bi++] = c;
+
+    if(c=='\n') {
+      BuildingString[bi] = '\0';
+      LockFlightData();
+      devParseNMEA(devIdx, BuildingString, &GPS_INFO);
+      UnlockFlightData();
+    } else {
+      return;
+    }
+  }
+  
+  bi = 0;
+}

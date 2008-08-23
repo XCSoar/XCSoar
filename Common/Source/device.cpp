@@ -202,13 +202,11 @@ BOOL devInit(LPTSTR CommandLine){
 
   for (i=0; i<DeviceRegisterCount; i++){
     if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
-      ComPort *Com = new ComPort();
+      ComPort *Com = new ComPort(0);
 
       // remember: Port1 is the port used by device A, port1 may be Com3 or Com1 etc
       if (!Com->Initialize(COMMPort[PortIndex1], dwSpeed[SpeedIndex1]))
         break;
-
-      Com->ProcessChar = ProcessChar1;
 
       DeviceRegister[i].Installer(devA());
 
@@ -247,12 +245,10 @@ BOOL devInit(LPTSTR CommandLine){
       break;
 
     if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
-      ComPort *Com = new ComPort();
+      ComPort *Com = new ComPort(1);
 
       if (!Com->Initialize(COMMPort[PortIndex2], dwSpeed[SpeedIndex2]))
         break;
-
-      Com->ProcessChar = ProcessChar2;
 
       DeviceRegister[i].Installer(devB());
 
