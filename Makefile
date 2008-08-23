@@ -65,7 +65,7 @@ EXE		:=$(findstring .exe,$(MAKE))
 AR		:=$(TCPATH)ar$(EXE)
 CXX		:=$(TCPATH)g++$(EXE)
 CC		:=$(TCPATH)gcc$(EXE)
-SIZE		:=$(TCPATH)size(EXE)
+SIZE		:=$(TCPATH)size$(EXE)
 STRIP		:=$(TCPATH)strip$(EXE)
 WINDRES		:=$(TCPATH)windres$(EXE)
 CE_VERSION	:=0x0$(CE_MAJOR)$(CE_MINOR)
@@ -345,12 +345,11 @@ $(SRC)/compat.a: $(patsubst %.cpp,%.o,$(COMPAT:.c=.o))
 	$(Q)$(WINDRES) $(WINDRESFLAGS) $<.tmp $@
 	@$(RM) $<.tmp
 
-DEPFILE        =$(dir $@).$(notdir $@).d
-DEPFLAGS       =-Wp,-MD,$(DEPFILE)
-dirtarget      =$(subst \\,_,$(subst /,_,$(dir $@)))
-cc-flags       =$(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
-cxx-flags      =$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
-
+DEPFILE		=$(dir $@).$(notdir $@).d
+DEPFLAGS	=-Wp,-MD,$(DEPFILE)
+dirtarget	=$(subst \\,_,$(subst /,_,$(dir $@)))
+cc-flags	=$(DEPFLAGS) $(CFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
+cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET_ARCH)
 
 #
 # Useful debugging targets - make preprocessed versions of the source
@@ -370,13 +369,12 @@ cxx-flags      =$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(T
 %.o: %.c
 	@$(NQ)echo "  CC      $@"
 	$(Q)$(CC) $(cc-flags) -c $(OUTPUT_OPTION) $<
-	@sed -i 's,^\([^ ]\),$@,' $(DEPFILE)
-
+	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
 %.o: %.cpp
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -c $(OUTPUT_OPTION) $<
-	@sed -i 's,^\([^ ]\),$@,' $(DEPFILE)
+	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
 
 %.os: %.c
 	@$(NQ)echo "  CC      $@"
