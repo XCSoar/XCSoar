@@ -132,7 +132,6 @@ class NMEAParser {
   static void UpdateMonitor(void);
   static BOOL ParseNMEAString(int portnum,
 			      TCHAR *String, NMEA_INFO *GPS_INFO);
-  static int FindVegaPort(void);
   static void Reset(void);
   void _Reset(void);
 

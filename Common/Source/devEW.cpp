@@ -72,13 +72,6 @@ BOOL EWParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL EWOpen(PDeviceDescriptor_t d, int Port){
-
-  d->Port = Port;
-
-  return(TRUE);
-}
-
 void appendCheckSum(TCHAR *String){
   int i;
   unsigned char CalcCheckSum = 0;

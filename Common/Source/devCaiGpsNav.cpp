@@ -66,8 +66,6 @@ static BOOL fSimMode = FALSE;
 
 BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
 
-  d->Port = Port;
-
   if (!fSimMode){
 	  d->Com->WriteString(TEXT("\x03"));
 	  Sleep(50);

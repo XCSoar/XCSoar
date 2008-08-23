@@ -109,14 +109,6 @@ BOOL EWMicroRecorderParseNMEA(PDeviceDescriptor_t d,
 }
 
 
-BOOL EWMicroRecorderOpen(PDeviceDescriptor_t d, int Port){
-
-  d->Port = Port;
-
-  return(TRUE);
-}
-
-
 BOOL EWMicroRecorderTryConnect(PDeviceDescriptor_t d) {
   int retries=10;
   TCHAR ch;

@@ -64,15 +64,6 @@ static BOOL LXParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INF
 }
 
 
-static BOOL LXOpen(PDeviceDescriptor_t d, int Port){
-
-  d->Port = Port;
-
-  return(TRUE);
-}
-
-
-
 static BOOL LXIsLogger(PDeviceDescriptor_t d){
   (void)d;
   return(FALSE);
@@ -104,7 +95,7 @@ static BOOL lxInstall(PDeviceDescriptor_t d){
   d->PutMacCready = NULL;
   d->PutBugs = NULL;
   d->PutBallast = NULL;
-  d->Open = LXOpen;
+  d->Open = NULL;
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = LXLinkTimeout;

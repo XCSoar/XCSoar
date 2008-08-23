@@ -54,15 +54,6 @@ BOOL B50ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL B50Open(PDeviceDescriptor_t d, int Port){
-
-  d->Port = Port;
-
-  return(TRUE);
-}
-
-
-
 BOOL B50IsLogger(PDeviceDescriptor_t d){
   (void)d;
   return(FALSE);
@@ -88,7 +79,7 @@ BOOL b50Install(PDeviceDescriptor_t d){
   d->PutMacCready = NULL;
   d->PutBugs = NULL;
   d->PutBallast = NULL;
-  d->Open = B50Open;
+  d->Open = NULL;
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = B50LinkTimeout;

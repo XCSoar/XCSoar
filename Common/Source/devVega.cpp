@@ -405,14 +405,6 @@ BOOL vgaParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL vgaOpen(PDeviceDescriptor_t d, int Port){
-
-  d->Port = Port;
-
-  return(TRUE);
-}
-
-
 BOOL vgaDeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
   (void)Class;
   (void) d;
@@ -511,7 +503,7 @@ BOOL vgaInstall(PDeviceDescriptor_t d){
   d->PutMacCready = NULL;
   d->PutBugs = NULL;
   d->PutBallast = NULL;
-  d->Open = vgaOpen;
+  d->Open = NULL;
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = NULL;

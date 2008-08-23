@@ -85,18 +85,6 @@ void NMEAParser::Reset(void) {
 }
 
 
-int NMEAParser::FindVegaPort(void) {
-
-  // hack, should be removed later if vega device driver is fully implemented
-
-  if (devA() && (_tcscmp(devA()->Name, TEXT("Vega")) == 0))
-    return 0;
-  if (devB() && (_tcscmp(devB()->Name, TEXT("Vega")) == 0))
-    return 1;
-
-  return -1;
-}
-
 void NMEAParser::UpdateMonitor(void)
 {
   // does anyone have GPS?

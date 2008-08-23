@@ -59,15 +59,6 @@ static BOOL ZanderParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS
 }
 
 
-static BOOL ZanderOpen(PDeviceDescriptor_t d, int Port){
-
-  d->Port = Port;
-
-  return(TRUE);
-}
-
-
-
 static BOOL ZanderIsLogger(PDeviceDescriptor_t d){
   (void)d;
   return(FALSE);
@@ -99,7 +90,7 @@ static BOOL zanderInstall(PDeviceDescriptor_t d){
   d->PutMacCready = NULL;
   d->PutBugs = NULL;
   d->PutBallast = NULL;
-  d->Open = ZanderOpen;
+  d->Open = NULL;
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = ZanderLinkTimeout;

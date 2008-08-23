@@ -264,8 +264,6 @@ void test(void){
 
 BOOL cai302Open(PDeviceDescriptor_t d, int Port){
 
-  d->Port = Port;
-
 //test();
 
   if (!fSimMode){

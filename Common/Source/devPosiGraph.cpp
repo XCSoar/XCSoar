@@ -77,13 +77,6 @@ BOOL PGParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL PGOpen(PDeviceDescriptor_t d, int Port){
-
-  d->Port = Port;
-
-  return(TRUE);
-}
-
 BOOL PGDeclBegin(PDeviceDescriptor_t d,
                  TCHAR *PilotsName, TCHAR *Class, TCHAR *ID){
 
@@ -142,7 +135,7 @@ BOOL pgInstall(PDeviceDescriptor_t d){
   d->PutMacCready = NULL;
   d->PutBugs = NULL;
   d->PutBallast = NULL;
-  d->Open = PGOpen;
+  d->Open = NULL;
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = PGLinkTimeout;
