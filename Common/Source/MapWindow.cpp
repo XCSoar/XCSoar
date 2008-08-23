@@ -1510,8 +1510,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 	// 20080815 JMW prevent dragging to stop glider
 
 	// JMW trigger recalcs immediately
-	NMEAParser::GpsUpdated = TRUE;
-	SetEvent(dataTriggerEvent);
+	TriggerGPSUpdate();
 
         break;
       }

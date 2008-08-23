@@ -263,8 +263,7 @@ static BOOL PDVDV(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
       // was alt;    // ToDo check if QNH correction is needed!
   }
 
-  NMEAParser::VarioUpdated = TRUE;
-  PulseEvent(varioTriggerEvent);
+  TriggerVarioUpdate();
 
   return TRUE;
 }

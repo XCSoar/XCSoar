@@ -215,8 +215,7 @@ BOOL PBB50(TCHAR *String, NMEA_INFO *GPS_INFO) {
   GPS_INFO->VarioAvailable = TRUE;
   GPS_INFO->Vario = wnet;
 
-  NMEAParser::VarioUpdated = TRUE;
-  PulseEvent(varioTriggerEvent);
+  TriggerVarioUpdate();
 
   return FALSE;
 }

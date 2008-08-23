@@ -163,8 +163,7 @@ static BOOL PZAN2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   GPS_INFO->IndicatedAirspeed = vias;
   GPS_INFO->VarioAvailable = TRUE;
 
-  NMEAParser::VarioUpdated = TRUE;
-  PulseEvent(varioTriggerEvent);
+  TriggerVarioUpdate();
 
   return TRUE;
 }

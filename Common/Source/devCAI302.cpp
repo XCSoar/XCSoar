@@ -685,7 +685,7 @@ BOOL cai_w(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
     BugsUpdateTimeout--;
 
   // JMW update audio functions etc.
-  NMEAParser::VarioUpdated = TRUE;
+  TriggerVarioUpdate();
 
   return TRUE;
 

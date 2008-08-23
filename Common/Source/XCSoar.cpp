@@ -605,6 +605,11 @@ CRITICAL_SECTION  CritSec_TaskData;
 bool csTaskDataInitialized = false;
 
 
+static BOOL GpsUpdated;
+static HANDLE dataTriggerEvent;
+static BOOL VarioUpdated;
+static HANDLE varioTriggerEvent;
+
 // Forward declarations of functions included in this code module:
 ATOM                                                    MyRegisterClass (HINSTANCE, LPTSTR);
 BOOL                                                    InitInstance    (HINSTANCE, int);
@@ -627,6 +632,18 @@ void                                                    PopUpSelect(int i);
 void                                            DebugStore(char *Str);
 #endif
 
+
+void TriggerGPSUpdate()
+{
+  GpsUpdated = true;
+  SetEvent(dataTriggerEvent);
+}
+
+void TriggerVarioUpdate()
+{
+  VarioUpdated = true;
+  PulseEvent(varioTriggerEvent);
+}
 
 void HideMenu() {
   // ignore this if the display isn't locked -- must keep menu visible
@@ -916,7 +933,7 @@ void TriggerRedraws(NMEA_INFO *nmea_info,
 	(void)nmea_info;
 	(void)derived_info;
   if (MapWindow::IsDisplayRunning()) {
-    if (NMEAParser::GpsUpdated) {
+    if (GpsUpdated) {
       MapWindow::MapDirty = true;
       PulseEvent(drawTriggerEvent);
       // only ask for redraw if the thread was waiting,
@@ -943,8 +960,8 @@ DWORD InstrumentThread (LPVOID lpvoid) {
     ResetEvent(varioTriggerEvent);
     if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
-    if (NMEAParser::VarioUpdated) {
-      NMEAParser::VarioUpdated = false;
+    if (VarioUpdated) {
+      VarioUpdated = false;
       if (MapWindow::IsDisplayRunning()) {
         if (EnableVarioGauge) {
           GaugeVario::Render();
@@ -977,13 +994,13 @@ DWORD CalculationThread (LPVOID lpvoid) {
     if (MapWindow::CLOSETHREAD) break; // drop out on exit
 
     // set timer to determine latency (including calculations)
-    if (NMEAParser::GpsUpdated) {
+    if (GpsUpdated) {
       MapWindow::UpdateTimeStats(true);
     }
 
     // make local copy before editing...
     LockFlightData();
-    if (NMEAParser::GpsUpdated) { // timeout on FLARM objects
+    if (GpsUpdated) { // timeout on FLARM objects
       FLARM_RefreshSlots(&GPS_INFO);
     }
     memcpy(&tmp_GPS_INFO,&GPS_INFO,sizeof(NMEA_INFO));
@@ -993,7 +1010,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
     // Do vario first to reduce audio latency
     if (GPS_INFO.VarioAvailable) {
-      // if (NMEAParser::VarioUpdated) {  20060511/sgi commented out dueto asynchronus reset of VarioUpdate in InstrumentThread
+      // if (VarioUpdated) {  20060511/sgi commented out dueto asynchronus reset of VarioUpdate in InstrumentThread
       if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
 
       }
@@ -1003,15 +1020,14 @@ DWORD CalculationThread (LPVOID lpvoid) {
     } else {
       // run the function anyway, because this gives audio functions
       // if no vario connected
-      if (NMEAParser::GpsUpdated) {
+      if (GpsUpdated) {
 	if (DoCalculationsVario(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)) {
 	}
-	NMEAParser::VarioUpdated = true; // emulate vario update
-	PulseEvent(varioTriggerEvent);
+	TriggerVarioUpdate(); // emulate vario update
       }
     }
 
-    if (NMEAParser::GpsUpdated) {
+    if (GpsUpdated) {
       if(DoCalculations(&tmp_GPS_INFO,&tmp_CALCULATED_INFO)){
 
         DisplayMode_t lastDisplayMode = DisplayMode;
@@ -1067,7 +1083,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
     memcpy(&CALCULATED_INFO,&tmp_CALCULATED_INFO,sizeof(DERIVED_INFO));
     UnlockFlightData();
 
-    NMEAParser::GpsUpdated = false;
+    GpsUpdated = false;
 
   }
   return 0;
@@ -1143,8 +1159,6 @@ void PreloadInitialisation(bool ask) {
 }
 
 HANDLE drawTriggerEvent;
-HANDLE dataTriggerEvent;
-HANDLE varioTriggerEvent;
 
 StartupState_t ProgramStarted = psInitInProgress;
 // 0: not started at all
@@ -1179,7 +1193,7 @@ void AfterStartup() {
   DefaultTask();
 
   // Trigger first redraw
-  NMEAParser::GpsUpdated = true;
+  GpsUpdated = true;
   MapWindow::MapDirty = true;
   FullScreen();
   SetEvent(drawTriggerEvent);
@@ -1908,8 +1922,7 @@ void DoInfoKey(int keycode) {
 
   InfoBoxesDirty = true;
 
-  SetEvent(dataTriggerEvent);
-  NMEAParser::GpsUpdated = TRUE; // emulate update to trigger calculations
+  TriggerGPSUpdate(); // emulate update to trigger calculations
 
   InfoBoxFocusTimeOut = 0;
   DisplayTimeOut = 0;
@@ -2831,8 +2844,7 @@ int ConnectionProcessTimer(int itimeout) {
   if((gpsconnect == FALSE) && (LastGPSCONNECT == FALSE))
     {
       // re-draw screen every five seconds even if no GPS
-      NMEAParser::GpsUpdated = true;
-      SetEvent(dataTriggerEvent);
+      TriggerGPSUpdate();
 
       devLinkTimeout(devAll());
 
@@ -2893,8 +2905,7 @@ int ConnectionProcessTimer(int itimeout) {
 
       if(CONNECTWAIT)
 	{
-	  NMEAParser::GpsUpdated = true;
-	  SetEvent(dataTriggerEvent);
+	  TriggerGPSUpdate();
 	  CONNECTWAIT = FALSE;
 	}
     }
@@ -2905,8 +2916,7 @@ int ConnectionProcessTimer(int itimeout) {
 	{
 	  InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
 
-	  NMEAParser::GpsUpdated = true;
-	  SetEvent(dataTriggerEvent);
+	  TriggerGPSUpdate();
 
 	  LOCKWAIT = TRUE;
 #ifndef DISABLEAUDIO
@@ -2917,8 +2927,7 @@ int ConnectionProcessTimer(int itimeout) {
 	}
       else if((navwarning == FALSE) && (LOCKWAIT == TRUE))
 	{
-	  NMEAParser::GpsUpdated = true;
-	  SetEvent(dataTriggerEvent);
+	  TriggerGPSUpdate();
 	  LOCKWAIT = FALSE;
 	}
     }
@@ -2936,8 +2945,7 @@ void ProcessTimer(void)
     // JMW 20071207
     // re-draw screen every five seconds even if no GPS
     // this prevents sluggish screen when inside hangar..
-    NMEAParser::GpsUpdated = true;
-    SetEvent(dataTriggerEvent);
+    TriggerGPSUpdate();
     DisplayTimeOut=1;
   }
 
@@ -2958,8 +2966,7 @@ void ProcessTimer(void)
   if (ReplayLogger::IsEnabled()) {
     static double timeLast = 0;
     if (GPS_INFO.Time-timeLast>=1.0) {
-      NMEAParser::GpsUpdated = TRUE;
-      SetEvent(dataTriggerEvent);
+      TriggerGPSUpdate();
     }
     timeLast = GPS_INFO.Time;
     GPSCONNECT = TRUE;
@@ -3018,8 +3025,7 @@ void SIMProcessTimer(void)
   //  testadr = AirDensityRatio(0);
 #endif
 
-  NMEAParser::GpsUpdated = TRUE;
-  SetEvent(dataTriggerEvent);
+  TriggerGPSUpdate();
 
   VarioWriteSettings();
 }

@@ -132,9 +132,9 @@ extern void UnlockTerrainDataGraphics();
 extern void LockTerrainDataGraphics();
 extern void UnlockNavBox();
 extern void LockNavBox();
+extern void TriggerGPSUpdate();
+extern void TriggerVarioUpdate();
 extern HANDLE drawTriggerEvent;
-extern HANDLE dataTriggerEvent;
-extern HANDLE varioTriggerEvent;
 
 void FocusOnWindow(int i, bool selected);
 void FullScreen();
