@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.24 2008/08/23 05:59:03 jwharington Exp $
+// $Id: devCAI302.cpp,v 1.25 2008/08/23 06:28:44 jwharington Exp $
 
 /*
 Copyright_License {
@@ -263,8 +263,6 @@ void test(void){
 
 
 BOOL cai302Open(PDeviceDescriptor_t d, int Port){
-
-  d->Port = Port;
 
 //test();
 

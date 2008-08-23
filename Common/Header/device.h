@@ -52,6 +52,7 @@ typedef	DeviceDescriptor_t *PDeviceDescriptor_t;
 void devWriteNMEAString(PDeviceDescriptor_t d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
 void VarioWriteSettings(void);
+PDeviceDescriptor_t devVarioFindVega(void);
 
 typedef	struct{
 	TCHAR	 *Name;

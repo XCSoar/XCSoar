@@ -1001,7 +1001,7 @@ bool dlgConfigurationVarioShowModal(void){
 #ifdef _SIM_
 
 #else
-  if (NMEAParser::FindVegaPort()== -1) {
+  if (devVarioFindVega() == NULL) {
     MessageBoxX (hWndMainWindow, 
 		 gettext(TEXT("No communication with Vega.")), 
 		 gettext(TEXT("Vega error")), MB_OK);

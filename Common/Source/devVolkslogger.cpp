@@ -112,12 +112,6 @@ BOOL VLParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
 }
 
 
-BOOL VLOpen(PDeviceDescriptor_t d, int Port){
-  d->Port = Port;
-  return(TRUE);
-}
-
-
 VLAPI vl;
 
 static int nturnpoints = 0;

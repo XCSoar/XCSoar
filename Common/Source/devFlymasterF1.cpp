@@ -53,15 +53,6 @@ static BOOL FlymasterF1ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO
 }
 
 
-static BOOL FlymasterF1Open(PDeviceDescriptor_t d, int Port){
-
-  d->Port = Port;
-
-  return(TRUE);
-}
-
-
-
 static BOOL FlymasterF1IsLogger(PDeviceDescriptor_t d){
   (void)d;
   return(FALSE);
@@ -93,7 +84,7 @@ static BOOL flymasterf1Install(PDeviceDescriptor_t d){
   d->PutMacCready = NULL;
   d->PutBugs = NULL;
   d->PutBallast = NULL;
-  d->Open = FlymasterF1Open;
+  d->Open = NULL;
   d->Close = NULL;
   d->Init = NULL;
   d->LinkTimeout = FlymasterF1LinkTimeout;

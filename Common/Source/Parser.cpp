@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.75 2008/08/23 05:15:27 jwharington Exp $
+  $Id: Parser.cpp,v 1.76 2008/08/23 06:28:44 jwharington Exp $
 
 Copyright_License {
 
@@ -84,18 +84,6 @@ void NMEAParser::Reset(void) {
   TriggerVarioUpdate();
 }
 
-
-int NMEAParser::FindVegaPort(void) {
-
-  // hack, should be removed later if vega device driver is fully implemented
-
-  if (devA() && (_tcscmp(devA()->Name, TEXT("Vega")) == 0))
-    return 0;
-  if (devB() && (_tcscmp(devB()->Name, TEXT("Vega")) == 0))
-    return 1;
-
-  return -1;
-}
 
 void NMEAParser::UpdateMonitor(void) 
 {

@@ -1,4 +1,4 @@
-// $Id: devCaiGpsNav.cpp,v 1.5 2008/08/23 05:59:03 jwharington Exp $
+// $Id: devCaiGpsNav.cpp,v 1.6 2008/08/23 06:28:44 jwharington Exp $
 
 /*
 Copyright_License {
@@ -66,8 +66,6 @@ static BOOL fSimMode = FALSE;
 
 BOOL caiGpsNavOpen(PDeviceDescriptor_t d, int Port){
 
-  d->Port = Port;
-  
   if (!fSimMode){
 	  d->Com->WriteString(TEXT("\x03"));
 	  Sleep(50);

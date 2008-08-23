@@ -484,10 +484,15 @@ BOOL devPutBallast(PDeviceDescriptor_t d, double Ballast)
 // Only called from devInit() above which
 // is in turn called with LockComm
 BOOL devOpen(PDeviceDescriptor_t d, int Port){
+  BOOL res = TRUE;
+
   if (d != NULL && d->Open != NULL)
-    return ((d->Open)(d, Port));
-  else
-    return(TRUE);
+    res = d->Open(d, Port);
+
+  if (res == TRUE)
+    d->Port = Port;
+
+  return res;
 }
 
 // Tear down methods should always succeed.
@@ -730,4 +735,12 @@ void VarioWriteSettings(void)
 	     iround(QNH*10));
     VarioWriteNMEA(mcbuf);
   }
+}
+
+PDeviceDescriptor_t devVarioFindVega(void)
+{
+  for (int i = 0; i < NUMDEV; i++)
+    if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
+      return &DeviceList[i];
+  return NULL;
 }
