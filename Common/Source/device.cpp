@@ -202,7 +202,7 @@ BOOL devInit(LPTSTR CommandLine){
 
   for (i=0; i<DeviceRegisterCount; i++){
     if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
-      ComPort *Com = &Port1;
+      ComPort *Com = new ComPort();
 
       // remember: Port1 is the port used by device A, port1 may be Com3 or Com1 etc
       if (!Com->Initialize(COMMPort[PortIndex1], dwSpeed[SpeedIndex1]))
@@ -243,11 +243,12 @@ BOOL devInit(LPTSTR CommandLine){
   ReadPort2Settings(&PortIndex2,&SpeedIndex2);
 
   for (i=0; i<DeviceRegisterCount; i++){
-    if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
-      ComPort *Com = &Port1;
+    if (PortIndex1 == PortIndex2)
+      break;
 
-      if (PortIndex1 == PortIndex2)
-        break;
+    if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
+      ComPort *Com = new ComPort();
+
       if (!Com->Initialize(COMMPort[PortIndex2], dwSpeed[SpeedIndex2]))
         break;
 
@@ -519,6 +520,7 @@ BOOL devClose(PDeviceDescriptor_t d)
 
     if (Com) {
       Com->Close();
+      delete Com;
     }
   }
 
