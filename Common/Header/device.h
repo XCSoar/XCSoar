@@ -5,6 +5,7 @@
 #include <windows.h>
 #include "Sizes.h"
 #include "MapWindow.h"
+#include "Port.h"
 
 #define DEVNAMESIZE  32
 #define	NUMDEV		 2
@@ -16,22 +17,10 @@
 
 typedef	enum {dfGPS, dfLogger, dfSpeed,	dfVario, dfBaroAlt,	dfWind, dfVoice, dfNmeaOut} DeviceFlags_t;
 
-typedef struct{
-  void (*WriteString)(const TCHAR *Text);
-  BOOL (*StopRxThread)(void);
-  BOOL (*StartRxThread)(void);
-  int  (*GetChar)(void);
-  int  (*SetRxTimeout)(int Timeout);
-  unsigned long (*SetBaudrate)(unsigned long BaudRate);
-  int  (*Read)(void *Buffer, size_t Size);
-  void (*Flush)(void);
-  void  (*PutChar)(BYTE);
-} ComPortDriver_t;
-
 typedef	struct DeviceDescriptor_t{
   int	Port;
   FILE  *fhLogFile;
-  ComPortDriver_t Com;
+  ComPort *Com;
   TCHAR	Name[DEVNAMESIZE+1];
   BOOL (*ParseNMEA)(DeviceDescriptor_t *d, TCHAR *String,	NMEA_INFO	*GPS_INFO);
   BOOL (*PutMacCready)(DeviceDescriptor_t	*d,	double McReady);

@@ -37,6 +37,7 @@ Copyright_License {
 #include <windows.h>
 #include <tchar.h>
 
+/* NO LONGER REQUIRED!
 
 HANDLE hRead2Thread = NULL;              // Handle to the read thread
 static TCHAR sPortName[8];
@@ -150,12 +151,13 @@ BOOL Port2Initialize (LPTSTR lpszPortName, DWORD dwPortSpeed)
 }
 
 
-/***********************************************************************
+//**********************************************************************
+//
+//  PortWrite (BYTE Byte)
+//  20060514:sgi change to block write, writting byte by byte is very slow
+//
+//**********************************************************************
 
-  PortWrite (BYTE Byte)
-  20060514:sgi change to block write, writting byte by byte is very slow
-
-***********************************************************************/
 void Port2Write(void *Buffer, size_t Size){
 
   if (hPort2 == INVALID_HANDLE_VALUE) return;
@@ -175,18 +177,8 @@ void Port2Write(void *Buffer, size_t Size){
   }
 }
 
-/***********************************************************************
-
-  PortReadThread (LPVOID lpvoid)
-
-***********************************************************************/
 static DWORD dwMask2;
 
-/***********************************************************************
-
-  PortWrite (BYTE Byte)
-
-***********************************************************************/
 void Port2Write (BYTE Byte)
 {
 
@@ -368,11 +360,6 @@ BOOL Port2StopRxThread(void){
 }
 
 
-/***********************************************************************
-
-  PortClose ()
-
-***********************************************************************/
 BOOL Port2Close ()
 {
   DWORD dwError;
@@ -540,3 +527,5 @@ int Port2Read(void *Buffer, size_t Size) {
   return(-1);
 
 }
+
+*/

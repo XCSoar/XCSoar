@@ -59,15 +59,15 @@ static unsigned long lLastBaudrate = 0;
 VLA_ERROR VLA_SYS::serial_open_port()
 {
 
-  (device->Com.StopRxThread)();    // JMW
-  (device->Com.SetRxTimeout)(500); // set RX timeout to 500 [ms]
+  device->Com->StopRxThread();    // JMW
+  device->Com->SetRxTimeout(500); // set RX timeout to 500 [ms]
 
   ////////////////////////////////////////////////////////////////////////
   //
   // port-configuration
   //
 
-  lLastBaudrate = (device->Com.SetBaudrate)(9600L); // change to IO
+  lLastBaudrate = device->Com->SetBaudrate(9600L); // change to IO
                                                     // Mode baudrate
 
   SetProgressStepSize(1);
@@ -80,10 +80,10 @@ VLA_ERROR VLA_SYS::serial_open_port()
 VLA_ERROR VLA_SYS::serial_close_port()
 {
 
-  (device->Com.SetBaudrate)(lLastBaudrate);            // restore baudrate
+  device->Com->SetBaudrate(lLastBaudrate);            // restore baudrate
 
-  (device->Com.SetRxTimeout)(0);                       // clear timeout
-  (device->Com.StartRxThread)();                       // restart RX thread
+  device->Com->SetRxTimeout(0);                       // clear timeout
+  device->Com->StartRxThread();                       // restart RX thread
 
   return VLA_ERR_NOERR;
 }
@@ -92,7 +92,7 @@ VLA_ERROR VLA_SYS::serial_close_port()
 /** serial output of single character to the VL */
 VLA_ERROR VLA_SYS::serial_out(const byte outbyte)
 {
-  device->Com.PutChar(outbyte);
+  device->Com->PutChar(outbyte);
   return VLA_ERR_NOERR;
 }
 
@@ -104,7 +104,7 @@ VLA_ERROR VLA_SYS::serial_out(const byte outbyte)
  */
 VLA_ERROR VLA_SYS::serial_in(byte *inbyte)
 {
-  int i = device->Com.GetChar();
+  int i = device->Com->GetChar();
   if (i != EOF) {
     *inbyte = i;
     return VLA_ERR_NOERR;
@@ -117,14 +117,14 @@ VLA_ERROR VLA_SYS::serial_in(byte *inbyte)
 /** clear serial input- and output-buffers */
 VLA_ERROR VLA_SYS::serial_empty_io_buffers()
 {
-  device->Com.Flush();
+  device->Com->Flush();
   return VLA_ERR_NOERR;
 }
 
 /** set communication parameters */
 VLA_ERROR VLA_SYS::serial_set_baudrate(const int32 baudrate)
 {
-  (device->Com.SetBaudrate)(baudrate);    // change to IO Mode baudrate
+  device->Com->SetBaudrate(baudrate);    // change to IO Mode baudrate
 
   return VLA_ERR_NOERR;
 }

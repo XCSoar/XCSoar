@@ -176,7 +176,7 @@ BOOL cai302PutMacCready(PDeviceDescriptor_t d, double MacCready){
   _stprintf(szTmp, TEXT("!g,m%d\r\n"), int(((MacCready * 10) / KNOTSTOMETRESSECONDS) + 0.5));
 
   if (!fSimMode)
-    (d->Com.WriteString)(szTmp);
+    d->Com->WriteString(szTmp);
 
   MacCreadyUpdateTimeout = 2;
 
@@ -192,7 +192,7 @@ BOOL cai302PutBugs(PDeviceDescriptor_t d, double Bugs){
   _stprintf(szTmp, TEXT("!g,u%d\r\n"), int((Bugs * 100) + 0.5));
 
   if (!fSimMode)
-    (d->Com.WriteString)(szTmp);
+    d->Com->WriteString(szTmp);
 
   BugsUpdateTimeout = 2;
 
@@ -208,7 +208,7 @@ BOOL cai302PutBallast(PDeviceDescriptor_t d, double Ballast){
   _stprintf(szTmp, TEXT("!g,b%d\r\n"), int((Ballast * 10) + 0.5));
 
   if (!fSimMode)
-    (d->Com.WriteString)(szTmp);
+    d->Com->WriteString(szTmp);
 
   BallastUpdateTimeout = 2;
 
@@ -269,8 +269,8 @@ BOOL cai302Open(PDeviceDescriptor_t d, int Port){
 //test();
 
   if (!fSimMode){
-    (d->Com.WriteString)(TEXT("\x03"));
-    (d->Com.WriteString)(TEXT("LOG 0\r"));
+    d->Com->WriteString(TEXT("\x03"));
+    d->Com->WriteString(TEXT("LOG 0\r"));
   }
 
   return(TRUE);
@@ -297,20 +297,20 @@ BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class,
 
   if (!fSimMode){
 
-    (d->Com.StopRxThread)();
+    d->Com->StopRxThread();
 
-    (d->Com.SetRxTimeout)(500);
-    (d->Com.WriteString)(TEXT("\x03"));
+    d->Com->SetRxTimeout(500);
+    d->Com->WriteString(TEXT("\x03"));
     ExpectString(d, TEXT("$$$"));  // empty rx buffer (searching for
                                    // pattern that never occure)
 
-    (d->Com.WriteString)(TEXT("\x03"));
+    d->Com->WriteString(TEXT("\x03"));
     if (!ExpectString(d, TEXT("cmd>"))){
       nDeclErrorCode = 1;
       return(FALSE);
     };
 
-    (d->Com.WriteString)(TEXT("upl 1\r"));
+    d->Com->WriteString(TEXT("upl 1\r"));
     if (!ExpectString(d, TEXT("up>"))){
       nDeclErrorCode = 1;
       return(FALSE);
@@ -318,15 +318,15 @@ BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class,
 
     ExpectString(d, TEXT("$$$"));
 
-    (d->Com.WriteString)(TEXT("O\r"));
-    (d->Com.Read)(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
+    d->Com->WriteString(TEXT("O\r"));
+    d->Com->Read(&cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs));
     if (!ExpectString(d, TEXT("up>"))){
       nDeclErrorCode = 1;
       return(FALSE);
     };
 
-    (d->Com.WriteString)(TEXT("O 128\r"));
-    (d->Com.Read)(&cai302_OdataPilot, cai302_OdataNoArgs.PilotRecordSize + 3);
+    d->Com->WriteString(TEXT("O 128\r"));
+    d->Com->Read(&cai302_OdataPilot, cai302_OdataNoArgs.PilotRecordSize + 3);
     if (!ExpectString(d, TEXT("up>"))){
       nDeclErrorCode = 1;
       return(FALSE);
@@ -341,15 +341,15 @@ BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class,
     swap(cai302_OdataPilot.UnitWord);
     swap(cai302_OdataPilot.MarginHeight);
 
-    (d->Com.WriteString)(TEXT("G\r"));
-    (d->Com.Read)(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
+    d->Com->WriteString(TEXT("G\r"));
+    d->Com->Read(&cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs));
     if (!ExpectString(d, TEXT("up>"))){
       nDeclErrorCode = 1;
       return(FALSE);
     };
 
-    (d->Com.WriteString)(TEXT("G 0\r"));
-    (d->Com.Read)(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
+    d->Com->WriteString(TEXT("G 0\r"));
+    d->Com->Read(&cai302_Gdata, cai302_GdataNoArgs.GliderRecordSize + 3);
     if (!ExpectString(d, TEXT("up>"))){
       nDeclErrorCode = 1;
       return(FALSE);
@@ -359,15 +359,15 @@ BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class,
     swap(cai302_Gdata.BallastCapacity);
     swap(cai302_Gdata.ConfigWord);
 
-    (d->Com.SetRxTimeout)(1500);
+    d->Com->SetRxTimeout(1500);
 
-    (d->Com.WriteString)(TEXT("\x03"));
+    d->Com->WriteString(TEXT("\x03"));
     if (!ExpectString(d, TEXT("cmd>"))){
       nDeclErrorCode = 1;
       return(FALSE);
     };
 
-    (d->Com.WriteString)(TEXT("dow 1\r"));
+    d->Com->WriteString(TEXT("dow 1\r"));
     if (!ExpectString(d, TEXT("dn>"))){
       nDeclErrorCode = 1;
       return(FALSE);
@@ -401,7 +401,7 @@ BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class,
     );
 
 
-    (d->Com.WriteString)(szTmp);
+    d->Com->WriteString(szTmp);
     if (!ExpectString(d, TEXT("dn>"))){
       nDeclErrorCode = 1;
       return(FALSE);
@@ -419,7 +419,7 @@ BOOL cai302DeclBegin(PDeviceDescriptor_t d, TCHAR *PilotsName, TCHAR *Class,
       cai302_Gdata.ConfigWord
     );
 
-    (d->Com.WriteString)(szTmp);
+    d->Com->WriteString(szTmp);
     if (!ExpectString(d, TEXT("dn>"))){
       nDeclErrorCode = 1;
       return(FALSE);
@@ -443,9 +443,9 @@ BOOL cai302DeclEnd(PDeviceDescriptor_t d){
     if (nDeclErrorCode == 0){
 
       _stprintf(szTmp, TEXT("D,%d\r"), 255 /* end of declaration */);
-      (d->Com.WriteString)(szTmp);
+      d->Com->WriteString(szTmp);
 
-      (d->Com.SetRxTimeout)(1500);            // D,255 takes more than 800ms
+      d->Com->SetRxTimeout(1500);            // D,255 takes more than 800ms
 
       if (!ExpectString(d, TEXT("dn>"))){
         nDeclErrorCode = 1;
@@ -455,15 +455,15 @@ BOOL cai302DeclEnd(PDeviceDescriptor_t d){
 
     }
 
-    (d->Com.SetRxTimeout)(500);
+    d->Com->SetRxTimeout(500);
 
-    (d->Com.WriteString)(TEXT("\x03"));
+    d->Com->WriteString(TEXT("\x03"));
     ExpectString(d, TEXT("cmd>"));
 
-    (d->Com.WriteString)(TEXT("LOG 0\r"));
+    d->Com->WriteString(TEXT("LOG 0\r"));
 
-    (d->Com.SetRxTimeout)(0);
-    (d->Com.StartRxThread)();
+    d->Com->SetRxTimeout(0);
+    d->Com->StartRxThread();
 
   }
 
@@ -521,7 +521,7 @@ BOOL cai302DeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
 
   if (!fSimMode){
 
-    (d->Com.WriteString)(szTmp);
+    d->Com->WriteString(szTmp);
 
     if (!ExpectString(d, TEXT("dn>"))){
       nDeclErrorCode = 1;

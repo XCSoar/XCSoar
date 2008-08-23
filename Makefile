@@ -220,7 +220,7 @@ OBJS	:=\
 	$(SRC)/McReady.o 		$(SRC)/Message.o \
 	$(SRC)/NavFunctions.o		$(SRC)/OnLineContest.o \
 	$(SRC)/Parser.o			$(SRC)/Port.o \
-	$(SRC)/Port2.o			$(SRC)/Process.o \
+	$(SRC)/Process.o \
 	$(SRC)/RasterTerrain.o		$(SRC)/rscalc.o \
 	$(SRC)/StdAfx.o			$(SRC)/STScreenBuffer.o \
 	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \
@@ -298,13 +298,13 @@ xcsoar.exe: xcsoar-ns.exe
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
 	cp xcsoar.exe XCSoar-$(TARGET).exe
-#	$(Q)$(SIZE) $@
+	$(Q)$(SIZE) $@
 
 xcsoarsimulator.exe: xcsoarsimulator-ns.exe
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
 	cp xcsoarsimulator.exe XCSoarSim-$(TARGET).exe
-#	$(Q)$(SIZE) $@
+	$(Q)$(SIZE) $@
 
 xcsoar-ns.exe: $(OBJS)
 	@$(NQ)echo "  LINK    $@"

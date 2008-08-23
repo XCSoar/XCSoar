@@ -98,7 +98,7 @@ BOOL EWTryConnect(PDeviceDescriptor_t d) {
   int retries=10;
   while (--retries){
 
-    (d->Com.WriteString)(TEXT("##\r\n"));         // send IO Mode command
+    d->Com->WriteString(TEXT("##\r\n"));         // send IO Mode command
     if (ExpectString(d, TEXT("IO Mode.\r")))
       return TRUE;
 
@@ -125,11 +125,11 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
   if (fSimMode)
     return(TRUE);
 
-  (d->Com.StopRxThread)();
+  d->Com->StopRxThread();
 
-  lLastBaudrate = (d->Com.SetBaudrate)(9600L);    // change to IO Mode baudrate
+  lLastBaudrate = d->Com->SetBaudrate(9600L);    // change to IO Mode baudrate
 
-  (d->Com.SetRxTimeout)(500);                     // set RX timeout to 500[ms]
+  d->Com->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
   if (!EWTryConnect(d)) {
     return FALSE;
@@ -137,7 +137,7 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
 
   _stprintf(sTmp, TEXT("#SPI"));                  // send SetPilotInfo
   appendCheckSum(sTmp);
-  (d->Com.WriteString)(sTmp);
+  d->Com->WriteString(sTmp);
   Sleep(50);
 
   _tcsncpy(sPilot, PilotsName, 12);               // copy and strip fields
@@ -159,7 +159,7 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
                                                   // left blank (GPS
                                                   // has a RTC)
   );
-  (d->Com.WriteString)(sTmp);
+  d->Com->WriteString(sTmp);
 
   if (!ExpectString(d, TEXT("OK\r"))){
     nDeclErrorCode = 1;
@@ -170,10 +170,10 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
   /*
   _stprintf(sTmp, TEXT("#SUI%02d"), 0);           // send pilot name
   appendCheckSum(sTmp);
-  (d->Com.WriteString)(sTmp);
+  d->Com->WriteString(sTmp);
   Sleep(50);
-  (d->Com.WriteString)(PilotsName);
-  (d->Com.WriteString)(TEXT("\r"));
+  d->Com->WriteString(PilotsName);
+  d->Com->WriteString(TEXT("\r"));
 
   if (!ExpectString(d, TEXT("OK\r"))){
     nDeclErrorCode = 1;
@@ -182,10 +182,10 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
 
   _stprintf(sTmp, TEXT("#SUI%02d"), 1);           // send type of aircraft
   appendCheckSum(sTmp);
-  (d->Com.WriteString)(sTmp);
+  d->Com->WriteString(sTmp);
   Sleep(50);
-  (d->Com.WriteString)(Class);
-  (d->Com.WriteString)(TEXT("\r"));
+  d->Com->WriteString(Class);
+  d->Com->WriteString(TEXT("\r"));
 
   if (!ExpectString(d, TEXT("OK\r"))){
     nDeclErrorCode = 1;
@@ -194,10 +194,10 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
 
   _stprintf(sTmp, TEXT("#SUI%02d"), 2);           // send aircraft ID
   appendCheckSum(sTmp);
-  (d->Com.WriteString)(sTmp);
+  d->Com->WriteString(sTmp);
   Sleep(50);
-  (d->Com.WriteString)(ID);
-  (d->Com.WriteString)(TEXT("\r"));
+  d->Com->WriteString(ID);
+  d->Com->WriteString(TEXT("\r"));
 
   if (!ExpectString(d, TEXT("OK\r"))){
     nDeclErrorCode = 1;
@@ -208,7 +208,7 @@ BOOL EWDeclBegin(PDeviceDescriptor_t d,
   for (int i=0; i<6; i++){                        // clear all 6 TP's
     _stprintf(sTmp, TEXT("#CTP%02d"), i);
     appendCheckSum(sTmp);
-    (d->Com.WriteString)(sTmp);
+    d->Com->WriteString(sTmp);
     if (!ExpectString(d, TEXT("OK\r"))){
       nDeclErrorCode = 1;
       return(FALSE);
@@ -224,12 +224,12 @@ BOOL EWDeclEnd(PDeviceDescriptor_t d){
 
   if (!fSimMode){
 
-    (d->Com.WriteString)(TEXT("NMEA\r\n"));         // switch to NMEA mode
+    d->Com->WriteString(TEXT("NMEA\r\n"));         // switch to NMEA mode
 
-    (d->Com.SetBaudrate)(lLastBaudrate);            // restore baudrate
+    d->Com->SetBaudrate(lLastBaudrate);            // restore baudrate
 
-    (d->Com.SetRxTimeout)(0);                       // clear timeout
-    (d->Com.StartRxThread)();                       // restart RX thread
+    d->Com->SetRxTimeout(0);                       // clear timeout
+    d->Com->StartRxThread();                       // restart RX thread
 
   }
 
@@ -331,7 +331,7 @@ BOOL EWDeclAddWayPoint(PDeviceDescriptor_t d, WAYPOINT *wp){
 
   if (!fSimMode){
 
-    (d->Com.WriteString)(EWRecord);                 // put it to the logger
+    d->Com->WriteString(EWRecord);                 // put it to the logger
 
     if (!ExpectString(d, TEXT("OK\r"))){            // wait for response
       nDeclErrorCode = 1;
@@ -362,7 +362,7 @@ BOOL EWIsGPSSource(PDeviceDescriptor_t d){
 BOOL EWLinkTimeout(PDeviceDescriptor_t d){
   (void)d;
   if (!fSimMode && !fDeclarationPending)
-    d->Com.WriteString(TEXT("NMEA\r\n"));
+    d->Com->WriteString(TEXT("NMEA\r\n"));
 
   return(TRUE);
 }
