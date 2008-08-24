@@ -70,8 +70,8 @@ static void OnCloseClicked(WindowControl * Sender){
 }
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnSplashPaint),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnSplashPaint),
+  DeclareCallBackEntry(NULL)
 };
 
 extern TCHAR startProfileFile[];

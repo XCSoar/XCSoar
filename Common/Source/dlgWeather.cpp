@@ -153,11 +153,11 @@ void OnWeatherHelp(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnTimeData),
-  DeclearCallBackEntry(OnDisplayItemData),
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(OnWeatherHelp),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnTimeData),
+  DeclareCallBackEntry(OnDisplayItemData),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnWeatherHelp),
+  DeclareCallBackEntry(NULL)
 };
 
 

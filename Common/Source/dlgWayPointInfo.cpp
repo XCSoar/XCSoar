@@ -49,10 +49,10 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 }
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnAnalysisPaint),
-  DeclearCallBackEntry(OnNextClicked),
-  DeclearCallBackEntry(OnPrevClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnAnalysisPaint),
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 void dlgAnalysisShowModal(void){

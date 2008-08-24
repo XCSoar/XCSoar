@@ -177,8 +177,8 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam) {
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnTextPaint),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnTextPaint),
+  DeclareCallBackEntry(NULL)
 };
 
 

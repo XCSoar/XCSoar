@@ -88,11 +88,11 @@ static void OnRateData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnStopClicked),
-  DeclearCallBackEntry(OnStartClicked),
-  DeclearCallBackEntry(OnRateData),
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnStopClicked),
+  DeclareCallBackEntry(OnStartClicked),
+  DeclareCallBackEntry(OnRateData),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 

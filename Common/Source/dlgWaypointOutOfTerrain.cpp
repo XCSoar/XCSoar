@@ -64,11 +64,11 @@ static void OnNoAllClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnYesClicked),
-  DeclearCallBackEntry(OnYesAllClicked),
-  DeclearCallBackEntry(OnNoClicked),
-  DeclearCallBackEntry(OnNoAllClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnYesClicked),
+  DeclareCallBackEntry(OnYesAllClicked),
+  DeclareCallBackEntry(OnNoClicked),
+  DeclareCallBackEntry(OnNoAllClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 int dlgWaypointOutOfTerrain(TCHAR *Message){

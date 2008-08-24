@@ -709,15 +709,15 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnNextClicked),
-  DeclearCallBackEntry(OnPrevClicked),
-  DeclearCallBackEntry(OnDemoClicked),
-  DeclearCallBackEntry(OnSaveClicked),
-  DeclearCallBackEntry(OnSchemeVegaClicked),
-  DeclearCallBackEntry(OnSchemeBorgeltClicked),
-  DeclearCallBackEntry(OnSchemeCambridgeClicked),
-  DeclearCallBackEntry(OnSchemeZanderClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(OnDemoClicked),
+  DeclareCallBackEntry(OnSaveClicked),
+  DeclareCallBackEntry(OnSchemeVegaClicked),
+  DeclareCallBackEntry(OnSchemeBorgeltClicked),
+  DeclareCallBackEntry(OnSchemeCambridgeClicked),
+  DeclareCallBackEntry(OnSchemeZanderClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 

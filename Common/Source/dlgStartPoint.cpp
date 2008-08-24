@@ -146,11 +146,11 @@ static void OnClearClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnStartPointPaintListItem),
-  DeclearCallBackEntry(OnStartPointListInfo),
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(OnClearClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnStartPointPaintListItem),
+  DeclareCallBackEntry(OnStartPointListInfo),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnClearClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 

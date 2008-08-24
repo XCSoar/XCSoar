@@ -164,11 +164,11 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 }
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnNextClicked),
-  DeclearCallBackEntry(OnPrevClicked),
-  DeclearCallBackEntry(OnPaintDetailsListItem),
-  DeclearCallBackEntry(OnDetailsListInfo),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(OnPaintDetailsListItem),
+  DeclareCallBackEntry(OnDetailsListInfo),
+  DeclareCallBackEntry(NULL)
 };
 
 void addChecklist(TCHAR* name, TCHAR* details) {

@@ -1985,11 +1985,11 @@ static void OnCalcClicked(WindowControl * Sender,
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnAnalysisPaint),
-  DeclearCallBackEntry(OnNextClicked),
-  DeclearCallBackEntry(OnPrevClicked),
-  DeclearCallBackEntry(OnCalcClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnAnalysisPaint),
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(OnCalcClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 

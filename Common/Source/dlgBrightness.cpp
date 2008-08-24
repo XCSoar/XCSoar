@@ -108,10 +108,10 @@ static void OnBrightnessData(DataField *Sender,
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnAutoData),
-  DeclearCallBackEntry(OnBrightnessData),
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnAutoData),
+  DeclareCallBackEntry(OnBrightnessData),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 

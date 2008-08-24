@@ -589,14 +589,14 @@ void AirspaceWarningNotify(AirspaceWarningNotifyAction_t Action,
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnAckClicked),
-  DeclearCallBackEntry(OnAck1Clicked),
-  DeclearCallBackEntry(OnAck2Clicked),
-  DeclearCallBackEntry(OnEnableClicked),
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(OnAirspaceListInfo),
-  DeclearCallBackEntry(OnAirspaceListItemPaint),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnAckClicked),
+  DeclareCallBackEntry(OnAck1Clicked),
+  DeclareCallBackEntry(OnAck2Clicked),
+  DeclareCallBackEntry(OnEnableClicked),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnAirspaceListInfo),
+  DeclareCallBackEntry(OnAirspaceListItemPaint),
+  DeclareCallBackEntry(NULL)
 };
 
 /*

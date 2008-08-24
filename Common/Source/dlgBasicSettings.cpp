@@ -230,13 +230,13 @@ static void OnTempData(DataField *Sender, DataField::DataAccessKind_t Mode){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnBugsData),
-  DeclearCallBackEntry(OnTempData),
-  DeclearCallBackEntry(OnBallastData),
-  DeclearCallBackEntry(OnAltitudeData),
-  DeclearCallBackEntry(OnQnhData),
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnBugsData),
+  DeclareCallBackEntry(OnTempData),
+  DeclareCallBackEntry(OnBallastData),
+  DeclareCallBackEntry(OnAltitudeData),
+  DeclareCallBackEntry(OnQnhData),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 

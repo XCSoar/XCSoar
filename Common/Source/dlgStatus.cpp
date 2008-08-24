@@ -129,9 +129,9 @@ static void OnPrevClicked(WindowControl * Sender){
 //////////////
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnNextClicked),
-  DeclearCallBackEntry(OnPrevClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 static bool first = true;

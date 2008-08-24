@@ -412,12 +412,12 @@ static void OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnTaskPointData),
-  DeclearCallBackEntry(OnRangeData),
-  DeclearCallBackEntry(OnRadialData),
-  DeclearCallBackEntry(OnLockedData),
-  DeclearCallBackEntry(OnOKClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnTaskPointData),
+  DeclareCallBackEntry(OnRangeData),
+  DeclareCallBackEntry(OnRadialData),
+  DeclareCallBackEntry(OnLockedData),
+  DeclareCallBackEntry(OnOKClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 

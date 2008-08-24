@@ -115,11 +115,11 @@ static void OnVegaDemoAudioClimb(DataField *Sender,
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnVegaDemoW),
-  DeclearCallBackEntry(OnVegaDemoV),
-  DeclearCallBackEntry(OnVegaDemoAudioClimb),
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnVegaDemoW),
+  DeclareCallBackEntry(OnVegaDemoV),
+  DeclareCallBackEntry(OnVegaDemoAudioClimb),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 
