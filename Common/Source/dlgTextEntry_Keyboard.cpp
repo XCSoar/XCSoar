@@ -70,10 +70,10 @@ static void OnClear(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
 }
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnKey),
-  DeclearCallBackEntry(OnClear),
-  DeclearCallBackEntry(OnOk),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnKey),
+  DeclareCallBackEntry(OnClear),
+  DeclareCallBackEntry(OnOk),
+  DeclareCallBackEntry(NULL)
 };
 
 void dlgTextEntryKeyboardShowModal(TCHAR *text, int width) 

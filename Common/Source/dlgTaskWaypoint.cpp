@@ -463,16 +463,16 @@ static void OnTaskRulesClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnSelectClicked),
-  DeclearCallBackEntry(OnDetailsClicked),
-  DeclearCallBackEntry(OnRemoveClicked),
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(OnStartPointClicked),
-  DeclearCallBackEntry(OnMoveAfterClicked),
-  DeclearCallBackEntry(OnMoveBeforeClicked),
-  DeclearCallBackEntry(OnAATEnabled),
-  DeclearCallBackEntry(OnTaskRulesClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnSelectClicked),
+  DeclareCallBackEntry(OnDetailsClicked),
+  DeclareCallBackEntry(OnRemoveClicked),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnStartPointClicked),
+  DeclareCallBackEntry(OnMoveAfterClicked),
+  DeclareCallBackEntry(OnMoveBeforeClicked),
+  DeclareCallBackEntry(OnAATEnabled),
+  DeclareCallBackEntry(OnTaskRulesClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 

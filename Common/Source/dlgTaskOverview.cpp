@@ -514,17 +514,17 @@ static void OnAdvancedClicked(WindowControl * Sender, WndListFrame::ListInfo_t *
 }
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnTaskPaintListItem),
-  DeclearCallBackEntry(OnTaskListInfo),
-  DeclearCallBackEntry(OnDeclareClicked),
-  DeclearCallBackEntry(OnCalcClicked),
-  DeclearCallBackEntry(OnClearClicked),
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(OnAdvancedClicked),
-  DeclearCallBackEntry(OnSaveClicked),
-  DeclearCallBackEntry(OnLoadClicked),
-  DeclearCallBackEntry(OnAnalysisClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnTaskPaintListItem),
+  DeclareCallBackEntry(OnTaskListInfo),
+  DeclareCallBackEntry(OnDeclareClicked),
+  DeclareCallBackEntry(OnCalcClicked),
+  DeclareCallBackEntry(OnClearClicked),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnAdvancedClicked),
+  DeclareCallBackEntry(OnSaveClicked),
+  DeclareCallBackEntry(OnLoadClicked),
+  DeclareCallBackEntry(OnAnalysisClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 

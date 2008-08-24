@@ -233,11 +233,11 @@ static void OnLookupClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnAirspacePaintListItem),
-  DeclearCallBackEntry(OnAirspaceListInfo),
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(OnLookupClicked),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnAirspacePaintListItem),
+  DeclareCallBackEntry(OnAirspaceListInfo),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnLookupClicked),
+  DeclareCallBackEntry(NULL)
 };
 
 

@@ -138,9 +138,9 @@ static int OnTimerNotify(WindowControl * Sender) {
 }
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnCloseClicked),
-  DeclearCallBackEntry(OnTimerNotify),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnTimerNotify),
+  DeclareCallBackEntry(NULL)
 };
 
 

@@ -249,12 +249,12 @@ static void OnListEnter(WindowControl * Sender,
 }
 
 static CallBackTableEntry_t CallBackTable[]={
-	DeclearCallBackEntry(OnTrackClicked),
-	DeclearCallBackEntry(OnSetCNClicked),
-	DeclearCallBackEntry(OnPaintDetailsListItem),
-	DeclearCallBackEntry(OnDetailsListInfo),
-	DeclearCallBackEntry(OnTimerNotify),
-	DeclearCallBackEntry(NULL)
+	DeclareCallBackEntry(OnTrackClicked),
+	DeclareCallBackEntry(OnSetCNClicked),
+	DeclareCallBackEntry(OnPaintDetailsListItem),
+	DeclareCallBackEntry(OnDetailsListInfo),
+	DeclareCallBackEntry(OnTimerNotify),
+	DeclareCallBackEntry(NULL)
 };
 
 

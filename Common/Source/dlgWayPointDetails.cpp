@@ -286,11 +286,11 @@ static void OnImagePaint(WindowControl * Sender, HDC hDC){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnNextClicked),
-  DeclearCallBackEntry(OnPrevClicked),
-  DeclearCallBackEntry(OnPaintDetailsListItem),
-  DeclearCallBackEntry(OnDetailsListInfo),
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(OnPaintDetailsListItem),
+  DeclareCallBackEntry(OnDetailsListInfo),
+  DeclareCallBackEntry(NULL)
 };
 
 

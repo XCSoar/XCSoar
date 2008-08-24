@@ -715,28 +715,28 @@ static void OnWaypointDeleteClicked(WindowControl * Sender){
 
 
 static CallBackTableEntry_t CallBackTable[]={
-  DeclearCallBackEntry(OnAirspaceColoursClicked),
-  DeclearCallBackEntry(OnAirspaceModeClicked),
-  DeclearCallBackEntry(OnUTCData),
-  DeclearCallBackEntry(OnNextClicked),
-  DeclearCallBackEntry(OnPrevClicked),
-  DeclearCallBackEntry(OnSetupDeviceAClicked),
-  DeclearCallBackEntry(OnSetupDeviceBClicked),
-  DeclearCallBackEntry(OnInfoBoxHelp),
-  DeclearCallBackEntry(OnWaypointNewClicked),
-  DeclearCallBackEntry(OnWaypointDeleteClicked),
-  DeclearCallBackEntry(OnWaypointEditClicked),
-  DeclearCallBackEntry(OnWaypointSaveClicked),
+  DeclareCallBackEntry(OnAirspaceColoursClicked),
+  DeclareCallBackEntry(OnAirspaceModeClicked),
+  DeclareCallBackEntry(OnUTCData),
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(OnSetupDeviceAClicked),
+  DeclareCallBackEntry(OnSetupDeviceBClicked),
+  DeclareCallBackEntry(OnInfoBoxHelp),
+  DeclareCallBackEntry(OnWaypointNewClicked),
+  DeclareCallBackEntry(OnWaypointDeleteClicked),
+  DeclareCallBackEntry(OnWaypointEditClicked),
+  DeclareCallBackEntry(OnWaypointSaveClicked),
 
-  DeclearCallBackEntry(OnPolarFileData),
-  DeclearCallBackEntry(OnPolarTypeData),
+  DeclareCallBackEntry(OnPolarFileData),
+  DeclareCallBackEntry(OnPolarTypeData),
 
-  DeclearCallBackEntry(OnDeviceAData),
-  DeclearCallBackEntry(OnDeviceBData),
+  DeclareCallBackEntry(OnDeviceAData),
+  DeclareCallBackEntry(OnDeviceBData),
 
-  DeclearCallBackEntry(OnUserLevel),
+  DeclareCallBackEntry(OnUserLevel),
 
-  DeclearCallBackEntry(NULL)
+  DeclareCallBackEntry(NULL)
 };
 
 
