@@ -1772,7 +1772,6 @@ void MapWindow::CalculateOrientationNormal(void) {
       DisplayAngle = 0.0;
       DisplayAircraftAngle = trackbearing;
     }
-
   } else {
     // normal, glider forward
     GliderCenter = false;

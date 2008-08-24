@@ -114,6 +114,9 @@ else
 TARGET_ARCH	:=-mwin32 -mcpu=$(CPU)
 endif
 WINDRESFLAGS	:=-I$(HDR) -I$(SRC) $(CE_DEFS) -D_MINGW32_
+ifeq ($(CONFIG_ALTAIR),y)
+WINDRESFLAGS	+=-DGNAV
+endif
 MAKEFLAGS	+=-r
 
 # Internal - Control verbosity
@@ -227,9 +230,9 @@ OBJS	:=\
 	$(SRC)/Task.o			$(SRC)/TeamCodeCalculation.o \
 	$(SRC)/Terrain.o		$(SRC)/ThermalLocator.o \
 	$(SRC)/Topology.o		$(SRC)/units.o \
-	$(SRC)/Utils.o			$(SRC)/VarioSound.o \
+	$(SRC)/Utils.o			\
 	$(SRC)/VegaVoice.o		$(SRC)/VOIMAGE.o \
-	$(SRC)/WaveThread.o		$(SRC)/Waypointparser.o \
+	$(SRC)/Waypointparser.o \
 	$(SRC)/windanalyser.o		$(SRC)/windmeasurementlist.o \
 	$(SRC)/windstore.o 		$(SRC)/WindowControls.o \
 	$(SRC)/WindZigZag.o 		$(SRC)/xmlParser.o \
@@ -241,6 +244,9 @@ OBJS	:=\
 	$(SRC)/jasper.a \
 	$(SRC)/zzip.a \
 	$(SRC)/compat.a
+
+#	$(SRC)/VarioSound.o \
+#	$(SRC)/WaveThread.o \
 
 ifeq ($(CONFIG_ALTAIR),y)
 OBJS += PPC2005/aygShellWrp.o

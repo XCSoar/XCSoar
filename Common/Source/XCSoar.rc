@@ -30,10 +30,14 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
 // WAVE
 //
 
+#ifndef GNAV
 IDR_WAV_TASKTURNPOINT   WAVE    DISCARDABLE     "bitmaps\\task-turnpoint.wav"
 IDR_WAV_DRIP            WAVE    DISCARDABLE     "bitmaps\\beep-drip.wav"
 IDR_WAV_GREEN           WAVE    DISCARDABLE     "bitmaps\\green.wav"
 IDR_WAV_RED             WAVE    DISCARDABLE     "bitmaps\\red.wav"
+IDR_WAV_BEEPBWEEP       WAVE    DISCARDABLE     "bitmaps\\beep-bweep.wav"
+IDR_WAV_CLEAR           WAVE    DISCARDABLE     "bitmaps\\beep-clear.wav"
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -306,14 +310,6 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
 #endif
 #pragma code_page(1252)
 #endif //_WIN32
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// WAVE
-//
-
-IDR_WAV_BEEPBWEEP       WAVE    DISCARDABLE     "bitmaps\\beep-bweep.wav"
-IDR_WAV_CLEAR           WAVE    DISCARDABLE     "bitmaps\\beep-clear.wav"
 
 
 /////////////////////////////////////////////////////////////////////////////

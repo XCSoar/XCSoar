@@ -221,6 +221,14 @@ void LoadChecklist(void) {
 
   while(ReadString(hChecklist,MAXTITLE,TempString))
     {
+      int len = _tcslen(TempString);
+      if (len>0) {
+	// JMW strip extra \r if it exists
+	if (TempString[len-1]=='\r') {
+	  TempString[len-1]= 0;
+	}
+      }
+
       if(TempString[0]=='[') { // Look for start
 
 	if (inDetails) {
