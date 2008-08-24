@@ -4482,7 +4482,7 @@ BOOL PlayResource (const TCHAR* lpName)
 
 #ifdef DISABLEAUDIO
   return false;
-#endif
+#else
 
   // TODO Modify to allow use of WAV Files and/or Embedded files
 
@@ -4514,6 +4514,7 @@ BOOL PlayResource (const TCHAR* lpName)
       bRtn = 0;
   }
   return bRtn; 
+#endif
 }
 
 void CreateDirectoryIfAbsent(TCHAR *filename) {
