@@ -2244,6 +2244,12 @@ int GetRegistryAirspaceMode(int i) {
 void ReadAssetNumber(void)
 {
   TCHAR val[MAX_PATH];
+
+  memset(strAssetNumber, 0, MAX_LOADSTRING*sizeof(TCHAR));
+  // JMW clear this first just to be safe.
+
+  StartupStore(TEXT("Asset ID: "));
+
   GetRegistryString(szRegistryLoggerID, val, 100);
   int ifound=0;
   int len = _tcslen(val);
@@ -2253,33 +2259,44 @@ void ReadAssetNumber(void)
       strAssetNumber[ifound]= val[i];
       ifound++;
     }
-    if (ifound>=3) return;
+    if (ifound>=3) {
+      StartupStore(strAssetNumber);
+      StartupStore(TEXT("\n"));
+      return;
+    }
   }
 
-
-   if(strAssetNumber[0] != '\0')
+  if(strAssetNumber[0] != '\0')
     {
+      StartupStore(strAssetNumber);
+      StartupStore(TEXT("\n"));
       return;
     }
 
   ReadCompaqID();
   if(strAssetNumber[0] != '\0')
-	{
-	  return;
-	}
-
+    {
+      StartupStore(strAssetNumber);
+      StartupStore(TEXT("\n"));
+      return;
+    }
+  
   ReadUUID();
   if(strAssetNumber[0] != '\0')
-	{
-	  return;
-	}
-
-
-    strAssetNumber[0]= _T('A');
-    strAssetNumber[1]= _T('A');
-    strAssetNumber[2]= _T('A');
-
-	return;
+    {
+      StartupStore(strAssetNumber);
+      StartupStore(TEXT("\n"));
+      return;
+    }
+  
+  strAssetNumber[0]= _T('A');
+  strAssetNumber[1]= _T('A');
+  strAssetNumber[2]= _T('A');
+  
+  StartupStore(strAssetNumber);
+  StartupStore(TEXT("\n"));
+  
+  return;
 }
 
 void ReadCompaqID(void)
