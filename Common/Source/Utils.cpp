@@ -2261,7 +2261,7 @@ void ReadAssetNumber(void)
     }
     if (ifound>=3) {
       StartupStore(strAssetNumber);
-      StartupStore(TEXT("\n"));
+      StartupStore(TEXT(" (reg)\n"));
       return;
     }
   }
@@ -2269,7 +2269,7 @@ void ReadAssetNumber(void)
   if(strAssetNumber[0] != '\0')
     {
       StartupStore(strAssetNumber);
-      StartupStore(TEXT("\n"));
+      StartupStore(TEXT(" (?)\n"));
       return;
     }
 
@@ -2277,7 +2277,7 @@ void ReadAssetNumber(void)
   if(strAssetNumber[0] != '\0')
     {
       StartupStore(strAssetNumber);
-      StartupStore(TEXT("\n"));
+      StartupStore(TEXT(" (compaq)\n"));
       return;
     }
 
@@ -2285,7 +2285,7 @@ void ReadAssetNumber(void)
   if(strAssetNumber[0] != '\0')
     {
       StartupStore(strAssetNumber);
-      StartupStore(TEXT("\n"));
+      StartupStore(TEXT(" (uuid)\n"));
       return;
     }
 
@@ -2294,7 +2294,7 @@ void ReadAssetNumber(void)
   strAssetNumber[2]= _T('A');
 
   StartupStore(strAssetNumber);
-  StartupStore(TEXT("\n"));
+  StartupStore(TEXT(" (fallback)\n"));
 
   return;
 }
