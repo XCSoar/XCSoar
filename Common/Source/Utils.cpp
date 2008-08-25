@@ -2327,6 +2327,7 @@ void ReadCompaqID(void)
 
 void ReadUUID(void)
 {
+#ifndef __MINGW32__
   BOOL fRes;
   DWORD dwBytesReturned =0;
 
@@ -2412,7 +2413,7 @@ void ReadUUID(void)
 	  strAssetNumber[0]= '\0';
   }
 #endif
-
+#endif
   return;
 }
 
