@@ -2332,8 +2332,11 @@ void ReadUUID(void)
   // 3) take first 16 bytes of buffer and process.  Buffer returned may be any size 
   // First try exactly 16 bytes, some older PDAs require exactly 16 byte buffer
 
-    __try 
-  {
+      #ifdef HAVEEXCEPTIONS
+    __try {
+      #else
+	  strAssetNumber[0]= '\0';
+      #endif
 
 	  iBuffSizeIn=sizeof(Guid);
 	  memset(GUIDbuffer, 0, iBuffSizeIn);
@@ -2384,11 +2387,14 @@ void ReadUUID(void)
 	  Asset = Asset ^ temp;
 
 	  _stprintf(strAssetNumber,TEXT("%08X%08X"),Asset,Guid.Data1 );
+
+#ifdef HAVEEXCEPTIONS
   }
   __except(EXCEPTION_EXECUTE_HANDLER)
   {
 	  strAssetNumber[0]= '\0';
   }
+#endif
 
   return;
 }
