@@ -2327,7 +2327,7 @@ void ReadCompaqID(void)
 
 void ReadUUID(void)
 {
-#ifndef __MINGW32__
+#if !(defined(__MINGW32__) && (WINDOWSPC>0))
   BOOL fRes;
   DWORD dwBytesReturned =0;
 
