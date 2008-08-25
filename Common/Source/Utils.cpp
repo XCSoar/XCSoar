@@ -2418,7 +2418,7 @@ void ReadUUID(void)
 }
 
 
-
+#if 0
 void ReadUUIDold(void)
 {
 #ifndef __MINGW32__
@@ -2488,7 +2488,7 @@ void ReadUUIDold(void)
   return;
 #endif
 }
-
+#endif
 
 void WriteFileRegistryString(HANDLE hFile, TCHAR *instring) {
     int len;
