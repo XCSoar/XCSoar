@@ -2253,28 +2253,33 @@ void ReadAssetNumber(void)
       strAssetNumber[ifound]= val[i];
       ifound++;
     }
-    if (ifound==3) return;
+    if (ifound>=3) return;
   }
 
-  if (ifound<3) {
-    strAssetNumber[0]= _T('A');
-    strAssetNumber[1]= _T('A');
-    strAssetNumber[2]= _T('A');
-  }
 
-  /*
-  if(strAssetNumber[0] != '\0')
-    {
-      return;
-    }
-  ReadUUID();
-  if(strAssetNumber[0] != '\0')
+   if(strAssetNumber[0] != '\0')
     {
       return;
     }
 
   ReadCompaqID();
-  */
+  if(strAssetNumber[0] != '\0')
+	{
+	  return;
+	}
+
+  ReadUUID();
+  if(strAssetNumber[0] != '\0')
+	{
+	  return;
+	}
+
+
+    strAssetNumber[0]= _T('A');
+    strAssetNumber[1]= _T('A');
+    strAssetNumber[2]= _T('A');
+
+	return;
 }
 
 void ReadCompaqID(void)
@@ -2302,7 +2307,95 @@ void ReadCompaqID(void)
   CloseHandle(hInFile);
 }
 
+
 void ReadUUID(void)
+{
+  BOOL fRes;
+  DWORD dwBytesReturned =0;
+
+#define GUIDBuffsize 100
+  unsigned char GUIDbuffer[GUIDBuffsize];
+
+  int eLast=0;
+  int i;
+  unsigned long uNumReturned=0;
+  int iBuffSizeIn=0;
+  unsigned long temp, Asset;
+
+
+  GUID Guid;
+
+
+  // approach followed: http://blogs.msdn.com/jehance/archive/2004/07/12/181116.aspx
+  // 1) send 16 byte buffer - some older devices need this
+  // 2) if buffer is wrong size, resize buffer accordingly and retry
+  // 3) take first 16 bytes of buffer and process.  Buffer returned may be any size
+  // First try exactly 16 bytes, some older PDAs require exactly 16 byte buffer
+
+    __try
+  {
+
+	  iBuffSizeIn=sizeof(Guid);
+	  memset(GUIDbuffer, 0, iBuffSizeIn);
+	  fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer, iBuffSizeIn, &uNumReturned);
+	  if(fRes == FALSE)
+	  { // try larger buffer
+		  eLast = GetLastError();
+		  if (ERROR_INSUFFICIENT_BUFFER != eLast)
+		  {
+			return;
+		  }
+		  else
+		  { // wrong buffer
+			iBuffSizeIn = uNumReturned;
+			memset(GUIDbuffer, 0, iBuffSizeIn);
+			fRes = KernelIoControl(IOCTL_HAL_GET_DEVICEID, 0, 0, GUIDbuffer, iBuffSizeIn, &uNumReturned);
+  			eLast = GetLastError();
+			if(FALSE == fRes)
+				return;
+		  }
+	  }
+
+	  // here assume we have data in GUIDbuffer of length uNumReturned
+	  memcpy(&Guid,GUIDbuffer, sizeof(Guid));
+
+
+	  temp = Guid.Data2; temp = temp << 16;
+	  temp += Guid.Data3 ;
+
+	  Asset = temp ^ Guid.Data1 ;
+
+	  temp = 0;
+	  for(i=0;i<4;i++)
+		{
+		  temp = temp << 8;
+		  temp += Guid.Data4[i];
+		}
+
+	  Asset = Asset ^ temp;
+
+	  temp = 0;
+	  for(i=0;i<4;i++)
+		{
+		  temp = temp << 8;
+		  temp += Guid.Data4[i+4];
+		}
+
+	  Asset = Asset ^ temp;
+
+	  _stprintf(strAssetNumber,TEXT("%08X%08X"),Asset,Guid.Data1 );
+  }
+  __except(EXCEPTION_EXECUTE_HANDLER)
+  {
+	  strAssetNumber[0]= '\0';
+  }
+
+  return;
+}
+
+
+
+void ReadUUIDold(void)
 {
 #ifndef __MINGW32__
   BOOL fRes;
