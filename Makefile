@@ -255,6 +255,9 @@ endif
 XCSOARSETUP_OBJS=\
 	$(SRC)/XcSoarSetup.o
 
+XCSOARLAUNCH_OBJS=\
+	$(SRC)/XCSoarLaunch.o
+
 ZZIPSRC	:=$(SRC)/zzip
 ZZIP	:=\
 	$(ZZIPSRC)/adler32.c	 	$(ZZIPSRC)/compress.c \
@@ -293,36 +296,38 @@ COMPAT	:=\
 	$(COMPATSRC)/ts_string.cpp 	$(COMPATSRC)/wtoi.c \
 	$(COMPATSRC)/debug.cpp
 
-all:	xcsoar.exe xcsoarsimulator.exe
+all:	XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 
-install: xcsoar.exe xcsoarsimulator.exe
+install: XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	@echo Copying to device...
-	synce-pcp xcsoar.exe ':/Program Files/XCSoar/xcsoar-gcc.exe'
-	synce-pcp xcsoarsimulator.exe ':/Program Files/XCSoar/xcsoarsim-gcc.exe'
+	synce-pcp XCSoar-$(TARGET).exe ':/Program Files/XCSoar/XCSoar.exe'
+	synce-pcp XCSoarSimulator-$(TARGET).exe ':/Program Files/XCSoar/XCSoarSimulator.exe'
 
 
-xcsoar.exe: xcsoar-ns.exe
+XCSoar-$(TARGET).exe: XCSoar-$(TARGET)-ns.exe
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
-	cp xcsoar.exe XCSoar-$(TARGET).exe
 	$(Q)$(SIZE) $@
 
-xcsoarsimulator.exe: xcsoarsimulator-ns.exe
+XCSoarSimulator-$(TARGET).exe: XCSoarSimulator-$(TARGET)-ns.exe
 	@$(NQ)echo "  STRIP   $@"
 	$(Q)$(STRIP) $< -o $@
-	cp xcsoarsimulator.exe XCSoarSim-$(TARGET).exe
 	$(Q)$(SIZE) $@
 
-xcsoar-ns.exe: $(OBJS)
+XCSoar-$(TARGET)-ns.exe: $(OBJS)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-xcsoarsimulator-ns.exe: $(OBJS:.o=.os)
+XCSoarSimulator-$(TARGET)-ns.exe: $(OBJS:.o=.os)
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
-XCSoarSetup: $(XCSOARSETUP_OBJS)
-	$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+XCSoarSetup.dll: $(XCSOARSETUP_OBJS)
+	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+# JMW not tested yet, probably need to use dlltool?
+
+XCSoarLaunch.dll: $(XCSOARLAUNCH_OBJS)
+	$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 #
 # Create libraries for zzip, jasper and compatibility stuff
@@ -392,12 +397,13 @@ cxx-flags	=$(DEPFLAGS) $(CXXFLAGS) $(CPPFLAGS) $(CPPFLAGS_$(dirtarget)) $(TARGET
 	@$(NQ)echo "  CXX     $@"
 	$(Q)$(CXX) $(cxx-flags) -D_SIM_ -c $(OUTPUT_OPTION) $<
 	@sed -i '1s,^[^ :]*,$@,' $(DEPFILE)
- 
+
 IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
 
 clean: cleani FORCE
 	find . $(IGNORE) \( -name '*.[oa]' -o -name '*.rsc' -o -name '*.os' -o -name '.*.d' \) \
 	-type f -print | xargs -r $(RM)
+	$(RM) XCSoar-$(TARGET)-ns.exe XCSoarSimulator-$(TARGET)-ns.exe
 
 cleani: FORCE
 	find . $(IGNORE) \( -name '*.i' \) \

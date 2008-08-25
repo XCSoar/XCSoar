@@ -781,10 +781,10 @@ void guiStartLogger(bool noAsk) {
       {
 
 	if (LoggerClearFreeSpace()) {
-	  LoggerActive = true;
 	  
 	  StartLogger(strAssetNumber);
 	  LoggerHeader();
+	  LoggerActive = true; // start logger after Header is completed.  Concurrency
 	  
 	  int ntp=0;
 	  for(i=0;i<MAXTASKPOINTS;i++)

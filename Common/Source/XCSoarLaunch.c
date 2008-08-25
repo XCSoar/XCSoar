@@ -58,9 +58,9 @@ Copyright_License {
 
 #undef  _INC_OLE
 
-#include <Todaycmn.h>
+#include <todaycmn.h>
 
-#include <Commctrl.h>
+#include <commctrl.h>
 
 #include <commdlg.h>
 
@@ -932,7 +932,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 	PAINTSTRUCT ps;
 
+#ifndef __MINGW32__
 	SHRGINFO rg;
+#endif
 
 	int x, y;
 
@@ -1025,7 +1027,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 		UpdateWindow(hWnd);
 
 
-
+#ifndef __MINGW32__
 		rg.cbSize = sizeof(SHRGINFO);
 
 		rg.hwndClient = hWnd;
@@ -1043,8 +1045,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 		rg.dwFlags = SHRG_RETURNCMD;
 
 #endif
-
-
 
 		if(SelItem != -1 && SHRecognizeGesture(&rg) == GN_CONTEXTMENU){
 
@@ -1077,7 +1077,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 				0, 0, SWP_NOACTIVATE | SWP_NOSIZE | SWP_SHOWWINDOW);
 
 		}
-
+#endif
 		SetCapture(hWnd);
 
 		break;
