@@ -1,4 +1,4 @@
-// $Id: devCAI302.cpp,v 1.26 2008/08/23 06:42:05 jwharington Exp $
+// $Id: devCAI302.cpp,v 1.27 2008/08/29 17:18:38 jwharington Exp $
 
 /*
 Copyright_License {
@@ -130,7 +130,7 @@ typedef struct{
 
 #pragma pack(pop)
 
-static cai302_Wdata_t cai302_Wdata;
+//static cai302_Wdata_t cai302_Wdata;
 static cai302_OdataNoArgs_t cai302_OdataNoArgs;
 static cai302_OdataPilot_t cai302_OdataPilot;
 static cai302_GdataNoArgs_t cai302_GdataNoArgs;

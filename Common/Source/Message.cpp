@@ -172,20 +172,12 @@ void Message::Destroy() {
 }
 
 
-
-static int csCount_Message = 0;
-
 void Message::Lock() {
   EnterCriticalSection(&CritSec_Messages);
-  //  csCount_Message++;
 }
 
 void Message::Unlock() {
-  //  if (csCount_Message) 
-  //    csCount_Message--;
-  //  if (csCount_Message==0) {
-    LeaveCriticalSection(&CritSec_Messages);
-    //  }
+  LeaveCriticalSection(&CritSec_Messages);
 }
 
 

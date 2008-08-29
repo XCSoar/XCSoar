@@ -38,20 +38,20 @@ Copyright_License {
 
 #include "devZander.h"
 
-static BOOL PZAN1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
-static BOOL PZAN2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO);
+static BOOL PZAN1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO);
+static BOOL PZAN2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO);
 
 
-static BOOL ZanderParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO){
+static BOOL ZanderParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO){
   (void)d;
 
   if(_tcsncmp(TEXT("$PZAN1"), String, 6)==0)
     {
-      return PZAN1(d, &String[7], GPS_INFO);
+      return PZAN1(d, &String[7], aGPS_INFO);
     } 
   if(_tcsncmp(TEXT("$PZAN2"), String, 6)==0)
     {
-      return PZAN2(d, &String[7], GPS_INFO);
+      return PZAN2(d, &String[7], aGPS_INFO);
     } 
 
   return FALSE;
@@ -59,10 +59,12 @@ static BOOL ZanderParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS
 }
 
 
+/*
 static BOOL ZanderIsLogger(PDeviceDescriptor_t d){
   (void)d;
   return(FALSE);
 }
+*/
 
 
 static BOOL ZanderIsGPSSource(PDeviceDescriptor_t d){
@@ -118,17 +120,17 @@ BOOL zanderRegister(void){
 // *****************************************************************************
 // local stuff
 
-static BOOL PZAN1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL PZAN1(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO)
 {
   TCHAR ctemp[80];
-  GPS_INFO->BaroAltitudeAvailable = TRUE;
+  aGPS_INFO->BaroAltitudeAvailable = TRUE;
   NMEAParser::ExtractParameter(String,ctemp,0);
-  GPS_INFO->BaroAltitude = AltitudeToQNHAltitude(StrToDouble(ctemp,NULL));
+  aGPS_INFO->BaroAltitude = AltitudeToQNHAltitude(StrToDouble(ctemp,NULL));
   return TRUE;
 }
 
 
-static BOOL PZAN2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
+static BOOL PZAN2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *aGPS_INFO)
 {
   TCHAR ctemp[80];
   double vtas, wnet, vias;
@@ -139,18 +141,18 @@ static BOOL PZAN2(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INFO)
   
   NMEAParser::ExtractParameter(String,ctemp,1);
   wnet = (StrToDouble(ctemp,NULL)-10000)/100; // cm/s
-  GPS_INFO->Vario = wnet;
+  aGPS_INFO->Vario = wnet;
 
-  if (GPS_INFO->BaroAltitudeAvailable) {
-    vias = vtas/AirDensityRatio(GPS_INFO->BaroAltitude);
+  if (aGPS_INFO->BaroAltitudeAvailable) {
+    vias = vtas/AirDensityRatio(aGPS_INFO->BaroAltitude);
   } else {
     vias = 0.0;
   }
 
-  GPS_INFO->AirspeedAvailable = TRUE;
-  GPS_INFO->TrueAirspeed = vtas;
-  GPS_INFO->IndicatedAirspeed = vias;
-  GPS_INFO->VarioAvailable = TRUE;
+  aGPS_INFO->AirspeedAvailable = TRUE;
+  aGPS_INFO->TrueAirspeed = vtas;
+  aGPS_INFO->IndicatedAirspeed = vias;
+  aGPS_INFO->VarioAvailable = TRUE;
 
   TriggerVarioUpdate();
 

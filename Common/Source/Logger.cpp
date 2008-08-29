@@ -245,7 +245,7 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
 }
 
 
-void StartLogger(TCHAR *strAssetNumber)
+void StartLogger(TCHAR *astrAssetNumber)
 {
   HANDLE hFile;
   int i;
@@ -278,9 +278,9 @@ void StartLogger(TCHAR *strAssetNumber)
                  GPS_INFO.Year,
                  GPS_INFO.Month,
                  GPS_INFO.Day,
-                 strAssetNumber[0],
-                 strAssetNumber[1],
-                 strAssetNumber[2],
+                 astrAssetNumber[0],
+                 astrAssetNumber[1],
+                 astrAssetNumber[2],
                  i);
       } else {
         // Short file name
@@ -295,9 +295,9 @@ void StartLogger(TCHAR *strAssetNumber)
                  cyear,
                  cmonth,
                  cday,
-                 strAssetNumber[0],
-                 strAssetNumber[1],
-                 strAssetNumber[2],
+                 astrAssetNumber[0],
+                 astrAssetNumber[1],
+                 astrAssetNumber[2],
                  cflight);
       }
 
@@ -522,7 +522,7 @@ void LoggerNote(const TCHAR *text) {
 
 
 
-void DoLogger(TCHAR *strAssetNumber)
+void DoLogger(TCHAR *astrAssetNumber)
 {
   TCHAR TaskMessage[1024];
   int i;
@@ -570,7 +570,7 @@ void DoLogger(TCHAR *strAssetNumber)
 	  if (LoggerClearFreeSpace()) {
 	    LoggerActive = true;
 
-	    StartLogger(strAssetNumber);
+	    StartLogger(astrAssetNumber);
 	    LoggerHeader();
 	    int ntp = 0;
 

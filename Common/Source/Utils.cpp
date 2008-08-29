@@ -2329,7 +2329,6 @@ void ReadUUID(void)
 {
 #if !(defined(__MINGW32__) && (WINDOWSPC>0))
   BOOL fRes;
-  DWORD dwBytesReturned =0;
   
 #define GUIDBuffsize 100
   unsigned char GUIDbuffer[GUIDBuffsize];
@@ -2870,7 +2869,6 @@ double HexStrToDouble(TCHAR *Source, TCHAR **Stop)
   int index = 0;
   int StringLength        = 0;
   double Sum = 0;
-  double Divisor = 10;
   int neg = 0;
 
   StringLength = _tcslen(Source);
@@ -3906,16 +3904,8 @@ GetIdleTimeProc GetIdleTime;
 #endif
 
 int MeasureCPULoad() {
-  static bool init=false;
-  static bool start=true;
-  static DWORD dwStartTick;
-  static DWORD dwIdleSt;
-  static DWORD dwStopTick;
-  static DWORD dwIdleEd;
-  static int PercentIdle;
-  static int PercentLoad;
-  static int pi;
 #if (!defined(GNAV) || (WINDOWSPC>0)) && !defined(__MINGW32__)
+  static bool init=false;
   if (!init) {
     // get the pointer to the function
     GetIdleTime = (GetIdleTimeProc) 
@@ -3930,6 +3920,14 @@ int MeasureCPULoad() {
   // JMW GetIdleTime() not defined?
   return 100;
 #else
+  static int pi;
+  static int PercentIdle;
+  static int PercentLoad;
+  static bool start=true;
+  static DWORD dwStartTick;
+  static DWORD dwIdleSt;
+  static DWORD dwStopTick;
+  static DWORD dwIdleEd;
   if (start) {
     dwStartTick = GetTickCount();
     dwIdleSt = GetIdleTime();
@@ -4543,13 +4541,12 @@ extern HINSTANCE                       hInst; // The current instance
 
 BOOL PlayResource (const TCHAR* lpName)
 {
-  BOOL bRtn;
-  LPTSTR lpRes;
-  HANDLE hResInfo, hRes;
-
 #ifdef DISABLEAUDIO
   return false;
 #else
+  BOOL bRtn;
+  LPTSTR lpRes;
+  HANDLE hResInfo, hRes;
 
   // TODO Modify to allow use of WAV Files and/or Embedded files
 

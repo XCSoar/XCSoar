@@ -168,7 +168,7 @@ double GlidePolar::SinkRate(double V) {
 double GlidePolar::SinkRate(double V, double n) {
   double w0 = SinkRate(polar_a,polar_b,polar_c,0.0,0.0,V);
   n = max(0.1,fabs(n));
-  double v1 = V/max(1,Vbestld);
+  //  double v1 = V/max(1,Vbestld);
   double v2 = Vbestld/max(Vbestld/2,V);
   return w0-(V/(2*bestld))* (n*n-1)*(v2*v2);
 }

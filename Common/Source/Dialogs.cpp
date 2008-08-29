@@ -1,6 +1,6 @@
 /*
 
-  $Id: Dialogs.cpp,v 1.122 2008/08/29 16:13:34 jwharington Exp $
+  $Id: Dialogs.cpp,v 1.123 2008/08/29 17:18:35 jwharington Exp $
 
 Copyright_License {
 
@@ -67,11 +67,6 @@ void ReadWayPoints(void);
 void ReadAirspace(void);
 int FindIndex(HWND hWnd);
 void ReadNewTask(HWND hDlg);
-
-
-static Task_t TaskBackup;
-static BOOL fTaskModified = FALSE;
-
 
 const TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
 			      TEXT("Club - ASW19"),

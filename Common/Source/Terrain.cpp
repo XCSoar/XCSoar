@@ -849,7 +849,9 @@ public:
 
   void ScanSpotHeights(const int X0, const int Y0, const int X1, const int Y1) {
     unsigned short* myhbuf = hBuf;
+#ifdef DEBUG
     unsigned short* hBufTop = hBuf+ixs*iys;
+#endif
 
     spot_max_pt.x = -1;
     spot_max_pt.y = -1;
@@ -891,7 +893,9 @@ public:
   void FillHeightBuffer(const int X0, const int Y0, const int X1, const int Y1) {
     // fill the buffer
     unsigned short* myhbuf = hBuf;
+#ifdef DEBUG
     unsigned short* hBufTop = hBuf+ixs*iys;
+#endif
 
 #ifndef SLOW_STUFF
 
@@ -962,7 +966,9 @@ public:
 
     short h;
 
+#ifdef DEBUG
     unsigned short* hBufTop = hBuf+cixs*ciys;
+#endif
 
     for (unsigned int y = 0; y< iys; y++) {
       const int itss_y = ciys-1-y;

@@ -1245,7 +1245,7 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
     hAboveTerrainBrush = CreatePatternBrush((HBITMAP)hAboveTerrainBitmap);
 
     BYTE Red,Green,Blue;
-    int width;
+    int iwidth;
     int minwidth;
     minwidth = max(IBLSCALE(2),IBLSCALE(SnailWidthScale)/16);
     for (i=0; i<NUMSNAILCOLORS; i++) {
@@ -1254,14 +1254,14 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
                       Red, Green, Blue,
                       snail_colors, NUMSNAILRAMP, 6);      
       if (i<NUMSNAILCOLORS/2) {
-        width= minwidth;
+        iwidth= minwidth;
       } else {
-        width = max(minwidth,
+        iwidth = max(minwidth,
                     (i-NUMSNAILCOLORS/2)
                     *IBLSCALE(SnailWidthScale)/NUMSNAILCOLORS);
       }
 
-      hSnailPens[i] = (HPEN)CreatePen(PS_SOLID, width, 
+      hSnailPens[i] = (HPEN)CreatePen(PS_SOLID, iwidth, 
                                       RGB((BYTE)Red,(BYTE)Green,(BYTE)Blue));
     }
 
@@ -1631,7 +1631,6 @@ bool MapWindow::isTargetPan(void) {
 
 void MapWindow::UpdateMapScale()
 {
-  static double AutoMapScale= RequestMapScale;
   static int AutoMapScaleWaypointIndex = -1;
   static double StartingAutoMapScale=0.0;
   double AutoZoomFactor;
@@ -2028,7 +2027,6 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
     // TODO don't draw offtrack indicator if showing spot heights
     DrawProjectedTrack(hdc, Orig_Aircraft);
     DrawOffTrackIndicator(hdc);
-    DrawTrack(hdc, Orig_Aircraft);
     DrawBestCruiseTrack(hdc, Orig_Aircraft);
     DrawBearing(hdc);
   }
@@ -3100,9 +3098,6 @@ void MapWindow::DrawTask(HDC hdc, RECT rc, const POINT &Orig_Aircraft)
   __try{
   #endif
 
-  int index0 = Task[0].Index;
-  int index1 = Task[1].Index;
-
   if(ValidTaskPoint(0) && ValidTaskPoint(1) && (ActiveWayPoint<2))
   {
     DrawStartSector(hdc,rc, Task[0].Start, Task[0].End, Task[0].Index);
@@ -3716,13 +3711,13 @@ void MapWindow::DrawMapScale(HDC hDC, RECT rc /* the Map Rect*/,
       POINT   BmpPos, BmpSize;
 
       if (Units::GetUnitBitmap(Unit, &Bmp, &BmpPos, &BmpSize, 0)){
-        HBITMAP oldBitMap = (HBITMAP)SelectObject(hDCTemp, Bmp);
+        HBITMAP oldBitMapa = (HBITMAP)SelectObject(hDCTemp, Bmp);
 
         DrawBitmapX(hDC, 
                     IBLSCALE(8)+TextSize.cx, rc.bottom-Height, 
                     BmpSize.x, BmpSize.y, 
                     hDCTemp, BmpPos.x, BmpPos.y, SRCCOPY);
-        SelectObject(hDCTemp, oldBitMap);
+        SelectObject(hDCTemp, oldBitMapa);
       }
     }
 
@@ -3941,8 +3936,8 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
 
 void MapWindow::ClearAirSpace(bool fill) {
   COLORREF whitecolor = RGB(0xff,0xff,0xff);
-  COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
 
+  SetTextColor(hDCTemp, whitecolor);
   SetBkMode(hDCTemp, TRANSPARENT);	  
   SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
   SetBkColor(hDCTemp, whitecolor);	  
@@ -4710,20 +4705,5 @@ void DrawDotLine(HDC hdc, POINT ptStart, POINT ptEnd, COLORREF cr)
   DeleteObject((HPEN)hpDot);
   */
 } 
-
-
-void MapWindow::DrawTrack(HDC hdc, POINT Orig)
-{
-  POINT TrackLine[2] = {{0, -20},
-                        {0, -80}};
-
-  /*
-  PolygonRotateShift(TrackLine, 2, Orig.x, Orig.y, 
-                     DisplayAircraftAngle);
-
-  DrawDotLine(hdc, TrackLine[0], TrackLine[1], RGB(0x40,0x40,0x40));
-  */
-}
-
 
 
