@@ -32,17 +32,11 @@ Copyright_License {
 #include "StdAfx.h"
 #include "externs.h"
 #include "Units.h"
-#include "device.h"
 #include "InputEvents.h"
-#include "WindowControls.h"
 #include "dlgTools.h"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;
-
-
-//
-//
 
 static void OnCloseClicked(WindowControl * Sender){
 (void)Sender;

@@ -586,7 +586,11 @@ long jpc_dec_lookahead(jas_stream_t *in)
 	  jas_stream_ungetc(in, x >> 8) == EOF) {
 		return -1;
 	}
-	if (x >= JPC_MS_INMIN && x <= JPC_MS_INMAX) {
+	if ((x >= JPC_MS_INMIN)
+#ifndef __MINGW32__
+	    && (x <= JPC_MS_INMAX)
+#endif
+	    ) {
 		return x;
 	}
 	return 0;

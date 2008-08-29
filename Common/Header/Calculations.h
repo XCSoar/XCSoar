@@ -192,10 +192,10 @@ int DoCalculationsVario(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 
-bool ClearAirspaceWarnings(bool ack, bool allday=false);
+bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
 void ResumeAbortTask(int set = 0);
 void RefreshTaskStatistics(void);
-void  SetWindEstimate(double speed, double bearing, int quality=6);
+void  SetWindEstimate(const double speed, const double bearing, const int quality=6);
 
 void LoadCalculationsPersist(DERIVED_INFO *Calculated);
 void SaveCalculationsPersist(DERIVED_INFO *Calculated);
@@ -205,9 +205,9 @@ void CloseCalculations(void);
 void InitCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      bool doadvance, bool doannounce);
+                      const bool doadvance, const bool doannounce);
 
-bool  InAATTurnSector(double longitude, double latitude, int thepoint);
+bool  InAATTurnSector(const double longitude, const double latitude, const int thepoint);
 
 void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
@@ -216,10 +216,10 @@ int getFinalWaypoint(void);
 bool InsideStartHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 bool ValidStartSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
-double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
+double FinalGlideThroughTerrain(const double bearing, NMEA_INFO *Basic,
                                 DERIVED_INFO *Calculated,
                                 double *retlat, double *retlon,
-                                double maxrange,
+                                const double maxrange,
 				bool *outofrange,
 				double *TerrainBase = NULL);
 

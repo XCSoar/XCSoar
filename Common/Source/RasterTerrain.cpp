@@ -511,11 +511,11 @@ void RasterMapJPG2000::ReloadJPG2000(void) {
       TerrainInfo.Right = raster_tile_cache.lon_max;
       TerrainInfo.Top = raster_tile_cache.lat_max;
       TerrainInfo.Bottom = raster_tile_cache.lat_min;
-      TerrainInfo.Columns = raster_tile_cache.width;
-      TerrainInfo.Rows = raster_tile_cache.height;
+      TerrainInfo.Columns = raster_tile_cache.GetWidth();
+      TerrainInfo.Rows = raster_tile_cache.GetHeight();
       TerrainInfo.StepSize = (raster_tile_cache.lon_max -
                               raster_tile_cache.lon_min)
-        /raster_tile_cache.width;
+        /raster_tile_cache.GetWidth();
     }
     Unlock();
   }
@@ -810,7 +810,7 @@ short RasterTerrain::GetTerrainHeight(const double &Latitude,
 
 bool RasterTerrain::IsDirectAccess(void) {
   if (TerrainMap) {
-    return TerrainMap->DirectAccess;
+    return TerrainMap->IsDirectAccess();
   } else {
     return false;
   }
@@ -819,7 +819,7 @@ bool RasterTerrain::IsDirectAccess(void) {
 
 bool RasterTerrain::IsPaged(void) {
   if (TerrainMap) {
-    return TerrainMap->Paged;
+    return TerrainMap->IsPaged();
   } else {
     return false;
   }

@@ -36,10 +36,6 @@ void RasterTile::Enable() {
   }
 }
 
-short* RasterTile::GetImageBuffer() {
-  return ImageBuffer;
-}
-
 
 bool RasterTile::SetEdgeIfInRange(unsigned int x, unsigned int y,
                                   short val)
@@ -139,11 +135,7 @@ int RasterTile::CheckTileVisibility(int view_x, int view_y) {
 
 
 bool RasterTile::VisibilityChanged(int view_x, int view_y) {
-  if (CheckTileVisibility(view_x, view_y) && !IsEnabled()) {
-    request = true;
-  } else {
-    request = false;
-  }
+  request = (IsDisabled() && CheckTileVisibility(view_x, view_y));
   return request;
 }
 
@@ -369,7 +361,9 @@ void RasterTileCache::Reset() {
   }
   int i;
   for (i=0; i< MAX_RTC_TILES; i++) {
-    tiles[i].Disable();
+    if (tiles[i].IsEnabled()) {
+      tiles[i].Disable();
+    }
   }
   for (i= MAX_ACTIVE_TILES; i--; ) {
     ActiveTiles[i] = -1;

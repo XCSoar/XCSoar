@@ -34,8 +34,6 @@ Copyright_License {
 #include <aygshell.h>
 
 #include "XCSoar.h"
-
-#include "WindowControls.h"
 #include "externs.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"

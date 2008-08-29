@@ -492,7 +492,12 @@ int jp2_box_put(jp2_box_t *box, jas_stream_t *out)
 		box->len = jas_stream_tell(tmpstream) + JP2_BOX_HDRLEN;
 		jas_stream_rewind(tmpstream);
 	}
-	extlen = (box->len >= (((uint_fast64_t)1) << 32)) != 0;
+	extlen =
+#ifndef __MINGW32__
+	  (box->len >= (((uint_fast64_t)1) << 32)) != 0;
+#else
+	0;
+#endif
 	if (jp2_putuint32(out, extlen ? 1 : box->len)) {
 		goto error;
 	}

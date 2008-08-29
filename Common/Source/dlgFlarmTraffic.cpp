@@ -35,7 +35,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "XCSoar.h"
 
-#include "WindowControls.h"
 #include "externs.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"

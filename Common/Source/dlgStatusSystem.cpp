@@ -36,8 +36,6 @@ Copyright_License {
 #include "externs.h"
 #include "Waypointparser.h"
 #include "Logger.h"
-
-#include "WindowControls.h"
 #include "dlgTools.h"
 
 extern HWND   hWndMainWindow;

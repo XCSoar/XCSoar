@@ -127,13 +127,6 @@ extern double WEIGHTS[POLARSIZE];
 extern int BallastSecsToEmpty;
 
 extern bool InfoWindowActive;
-extern int iAirspaceBrush[];
-extern int iAirspaceColour[];
-
-// user interface triggers
-extern BOOL TopWindow;
-extern bool MapDirty;
-extern bool RequestMapDirty;
 
 // snail trail
 extern SNAIL_POINT SnailTrail[TRAILSIZE];
@@ -230,8 +223,6 @@ extern bool TeammateCodeValid;
 extern bool DisableAutoLogger;
 
 // Interface Globals
-extern GetTextSTRUCT GetTextData[];
-extern int GetTextData_Size;
 extern StatusMessageSTRUCT StatusMessageData[];
 extern int StatusMessageData_Size;
 
@@ -249,11 +240,5 @@ extern int SCREENHEIGHT;
 #endif
 
 #endif
-
-extern void AirspaceWarnListAdd(NMEA_INFO *Basic,
-                                bool Predicted, bool IsCircle, int AsIdx,
-                                bool ackDay=false);
-
-extern void AirspaceWarnListProcess(NMEA_INFO *Basic);
 
 #endif

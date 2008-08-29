@@ -35,10 +35,8 @@ Copyright_License {
 
 #include "XCSoar.h"
 
-#include "WindowControls.h"
 #include "Statistics.h"
 #include "externs.h"
-#include "McReady.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 

@@ -32,7 +32,6 @@ Copyright_License {
 #include "StdAfx.h"
 #include "XCSoar.h"
 
-#include "WindowControls.h"
 #include "externs.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"

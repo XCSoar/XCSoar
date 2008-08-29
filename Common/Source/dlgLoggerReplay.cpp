@@ -35,14 +35,8 @@ Copyright_License {
 
 #include "externs.h"
 #include "Units.h"
-#include "McReady.h"
-#include "device.h"
-
 #include "Logger.h"
-
-#include "WindowControls.h"
 #include "dlgTools.h"
-#include "Port.h"
 
 extern HWND   hWndMainWindow;
 static WndForm *wf=NULL;

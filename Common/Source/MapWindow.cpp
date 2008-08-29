@@ -70,11 +70,13 @@ int misc_tick_count=0;
 #define DRAWLOAD
 #endif
 
+#define DRAWLOAD
+
 int TrailActive = TRUE;
 
 #define NUMSNAILRAMP 6
 
-static COLORREF taskcolor = RGB(0,120,0); // was 255
+static const COLORREF taskcolor = RGB(0,120,0); // was 255
 
 const COLORRAMP snail_colors[] = {
   {0,         0xff, 0x3e, 0x00},
@@ -124,11 +126,17 @@ RECT MapWindow::MapRectBig;
 RECT MapWindow::MapRectSmall;
 
 HBITMAP MapWindow::hDrawBitMap = NULL;
+
+#ifdef BGBITMAP
 HBITMAP MapWindow::hDrawBitMapBg = NULL;
+#endif
+
 HBITMAP MapWindow::hDrawBitMapTmp = NULL;
 HBITMAP MapWindow::hMaskBitMap = NULL;
 HDC MapWindow::hdcDrawWindow = NULL;
+#ifdef BGBITMAP
 HDC MapWindow::hdcDrawWindowBg = NULL;
+#endif
 HDC MapWindow::hdcScreen = NULL;
 HDC MapWindow::hDCTemp = NULL;
 HDC MapWindow::hDCMask = NULL;
@@ -168,8 +176,6 @@ double MapWindow::InvDrawScale;
 
 bool MapWindow::AutoZoom = false;
 bool MapWindow::LandableReachable = false;
-
-int MapWindow::dTDisplay=0;
 
 HBITMAP MapWindow::hTurnPoint;
 HBITMAP MapWindow::hSmall;
@@ -1146,8 +1152,12 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     hDrawBitMap = CreateCompatibleBitmap (hdcScreen, width, height);
     SelectObject(hdcDrawWindow, (HBITMAP)hDrawBitMap);
+
+#ifdef BGBITMAP
     hDrawBitMapBg = CreateCompatibleBitmap (hdcScreen, width, height);
     SelectObject(hdcDrawWindowBg, (HBITMAP)hDrawBitMapBg);
+#endif
+
     hDrawBitMapTmp = CreateCompatibleBitmap (hdcScreen, width, height);
     SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
 
@@ -1181,7 +1191,9 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     hdcScreen = GetDC(hWnd);
     hdcDrawWindow = CreateCompatibleDC(hdcScreen);
+#ifdef BGBITMAP
     hdcDrawWindowBg = CreateCompatibleDC(hdcScreen);
+#endif
     hDCTemp = CreateCompatibleDC(hdcDrawWindow);
     hDCMask = CreateCompatibleDC(hdcDrawWindow);
 
@@ -1368,11 +1380,17 @@ LRESULT CALLBACK MapWindow::MapWndProc (HWND hWnd, UINT uMsg, WPARAM wParam,
 
     ReleaseDC(hWnd, hdcScreen);
     DeleteDC(hdcDrawWindow);
+#ifdef BGBITMAP
     DeleteDC(hdcDrawWindowBg);
+#endif
     DeleteDC(hDCTemp);
     DeleteDC(hDCMask);
     DeleteObject(hDrawBitMap);
+
+#ifdef BGBITMAP
     DeleteObject(hDrawBitMapBg);
+#endif
+
     DeleteObject(hMaskBitMap);
 
     DeleteObject(hTurnPoint);
@@ -1876,6 +1894,170 @@ void MapWindow::DrawThermalEstimate(HDC hdc, RECT rc) {
   }
 }
 
+
+void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
+				const POINT &Orig,
+				const POINT &Orig_Aircraft)
+{
+  HFONT hfOld;
+
+  // do slow calculations before clearing the screen
+  // to reduce flicker
+  CalculateWaypointReachable();
+  CalculateScreenPositionsAirspace();
+  CalculateScreenPositionsThermalSources();
+  CalculateScreenPositionsGroundline();
+
+  if (!EnableTerrain || !DerivedDrawInfo.TerrainValid) {
+    // JMW this isn't needed any more unless we're not drawing terrain
+
+    // display border and fill background..
+    if(InfoWindowActive) {
+      SelectObject(hdc, GetStockObject(WHITE_BRUSH));
+      SelectObject(hdc, GetStockObject(BLACK_PEN));
+    }
+    else {
+      // JMW added light grey background
+      SelectObject(hdc, hBackgroundBrush);
+      SelectObject(hdc, GetStockObject(WHITE_PEN));
+    }
+    Rectangle(hdc,rc.left,rc.top,rc.right,rc.bottom);
+  }
+
+  SelectObject(hdc, GetStockObject(BLACK_BRUSH));
+  SelectObject(hdc, GetStockObject(BLACK_PEN));
+  hfOld = (HFONT)SelectObject(hdc, MapWindowFont);
+
+  // ground first...
+
+  if (BigZoom) {
+    BigZoom = false;
+  }
+
+  if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
+      || RasterTerrain::render_weather) {
+    double sunelevation = 40.0;
+    double sunazimuth = DisplayAngle-DerivedDrawInfo.WindBearing;
+
+    // draw sun from constant angle if very low wind speed
+    if (DerivedDrawInfo.WindSpeed<0.5) {
+      sunazimuth = DisplayAngle + 45.0;
+    }
+
+    if (MapDirty) {
+      // map has been dirtied since we started drawing, so hurry up
+      BigZoom = true;
+    }
+    LockTerrainDataGraphics();
+    DrawTerrain(hdc, rc, sunazimuth, sunelevation);
+    if ((FinalGlideTerrain==2) && DerivedDrawInfo.TerrainValid) {
+      DrawTerrainAbove(hdc, rc);
+    }
+    UnlockTerrainDataGraphics();
+  }
+
+  if (EnableTopology) {
+    DrawTopology(hdc, rc);
+  }
+
+  // reset label over-write preventer
+  nLabelBlocks = 0;
+
+  if (!TaskAborted) {
+    DrawTaskAAT(hdc, rc);
+  }
+
+  // then airspace..
+  DrawAirSpace(hdc, rc);
+
+  if(TrailActive) {
+    // TODO: For some reason, the shadow drawing of the
+    // trail doesn't work in portrait mode.  No idea why.
+    if (1) {
+      double TrailFirstTime =
+	DrawTrail(hdc, Orig_Aircraft, rc);
+      DrawTrailFromTask(hdc, rc, TrailFirstTime);
+    } else {
+      /*
+      //  Draw trail with white outline --- very slow!
+      // clear background bitmap
+      SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
+      Rectangle(hDCTemp, rc.left, rc.top, rc.right, rc.bottom);
+
+      SetBkColor(hDCMask, RGB(0xff,0xff,0xff));
+
+      // draw trail on background bitmap
+      DrawTrail(hDCTemp, Orig_Aircraft, rc);
+      DrawTrailFromTask(hDCTemp, rc);
+
+      // make mask
+      BitBlt(hDCMask, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
+      hDCTemp, rc.left, rc.top, SRCCOPY);
+
+      BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+      hDCMask, 1, 1, SRCAND);
+      BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+      hDCTemp, rc.left, rc.top, SRCPAINT);
+      BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
+      hDCTemp, rc.left, rc.top, SRCAND);
+      */
+    }
+  }
+
+  DrawThermalEstimate(hdc, rc);
+
+  if (TaskAborted) {
+    DrawAbortedTask(hdc, rc, Orig_Aircraft);
+  } else {
+    DrawTask(hdc, rc, Orig_Aircraft);
+  }
+
+  // draw red cross on glide through terrain marker
+  if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
+    DrawGlideThroughTerrain(hdc, rc);
+  }
+
+  DrawWaypoints(hdc,rc);
+
+  if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
+      || RasterTerrain::render_weather) {
+    DrawSpotHeights(hdc);
+  }
+
+  if (extGPSCONNECT) {
+    // TODO don't draw offtrack indicator if showing spot heights
+    DrawProjectedTrack(hdc, Orig_Aircraft);
+    DrawOffTrackIndicator(hdc);
+    DrawTrack(hdc, Orig_Aircraft);
+    DrawBestCruiseTrack(hdc, Orig_Aircraft);
+    DrawBearing(hdc);
+  }
+
+  // draw wind vector at aircraft
+  if (!EnablePan) {
+    DrawWindAtAircraft2(hdc, Orig_Aircraft, rc);
+  } else if (TargetPan) {
+    DrawWindAtAircraft2(hdc, Orig, rc);
+  }
+
+  // Draw traffic
+  DrawFLARMTraffic(hdc, rc);
+
+  // finally, draw you!
+
+  if (EnablePan && !TargetPan) {
+    DrawCrossHairs(hdc, Orig);
+  }
+
+  if (extGPSCONNECT) {
+    DrawAircraft(hdc, Orig_Aircraft);
+  }
+  // marks on top...
+  DrawMarks(hdc, rc);
+  SelectObject(hdcDrawWindow, hfOld);
+
+}
+
 void MapWindow::RenderMapWindow(  RECT rc)
 {
   bool drawmap = false;
@@ -1889,6 +2071,7 @@ void MapWindow::RenderMapWindow(  RECT rc)
     drawmap = true;
     userasked = false;
   }
+      MapWindow::UpdateTimeStats(true);
 
   POINT Orig, Orig_Aircraft;
 
@@ -1896,164 +2079,16 @@ void MapWindow::RenderMapWindow(  RECT rc)
 
   CalculateScreenPositions(Orig, rc, &Orig_Aircraft);
 
+#ifdef BGBITMAP
   if (drawmap) {
-
-    // do slow calculations before clearing the screen
-    // to reduce flicker
-    CalculateWaypointReachable();
-    CalculateScreenPositionsAirspace();
-    CalculateScreenPositionsThermalSources();
-    CalculateScreenPositionsGroundline();
-
-    // display border and fill background..
-
-    if(InfoWindowActive) {
-      SelectObject(hdcDrawWindowBg, GetStockObject(WHITE_BRUSH));
-      SelectObject(hdcDrawWindowBg, GetStockObject(BLACK_PEN));
-    }
-    else {
-      // JMW added light grey background
-      SelectObject(hdcDrawWindowBg, hBackgroundBrush);
-      SelectObject(hdcDrawWindowBg, GetStockObject(WHITE_PEN));
-    }
-
-    Rectangle(hdcDrawWindowBg,rc.left,rc.top,rc.right,rc.bottom);
-
-    SelectObject(hdcDrawWindowBg, GetStockObject(BLACK_BRUSH));
-    SelectObject(hdcDrawWindowBg, GetStockObject(BLACK_PEN));
-    hfOld = (HFONT)SelectObject(hdcDrawWindowBg, MapWindowFont);
-
-    // ground first...
-
-    if (BigZoom) {
-      BigZoom = false;
-    }
-
-    if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
-        || RasterTerrain::render_weather) {
-      double sunelevation = 40.0;
-      double sunazimuth = DisplayAngle-DerivedDrawInfo.WindBearing;
-
-      // draw sun from constant angle if very low wind speed
-      if (DerivedDrawInfo.WindSpeed<0.5) {
-        sunazimuth = DisplayAngle + 45.0;
-      }
-
-      if (MapDirty) {
-        // map has been dirtied since we started drawing, so hurry up
-        BigZoom = true;
-      }
-      LockTerrainDataGraphics();
-      DrawTerrain(hdcDrawWindowBg, rc, sunazimuth, sunelevation);
-      if ((FinalGlideTerrain==2) && DerivedDrawInfo.TerrainValid) {
-	DrawTerrainAbove(hdcDrawWindowBg, rc);
-      }
-      UnlockTerrainDataGraphics();
-    }
-
-    if (EnableTopology) {
-      DrawTopology(hdcDrawWindowBg, rc);
-    }
-
-    // reset label over-write preventer
-    nLabelBlocks = 0;
-
-    if (!TaskAborted) {
-      DrawTaskAAT(hdcDrawWindowBg, rc);
-    }
-
-    // then airspace..
-    DrawAirSpace(hdcDrawWindowBg, rc);
-
-    if(TrailActive) {
-        // TODO: For some reason, the shadow drawing of the
-        // trail doesn't work in portrait mode.  No idea why.
-      if (1) {
-        DrawTrail(hdcDrawWindowBg, Orig_Aircraft, rc);
-        DrawTrailFromTask(hdcDrawWindowBg, rc);
-      } else {
-        /*
-        //  Draw trail with white outline --- very slow!
-        // clear background bitmap
-        SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
-        Rectangle(hDCTemp, rc.left, rc.top, rc.right, rc.bottom);
-
-        SetBkColor(hDCMask, RGB(0xff,0xff,0xff));
-
-        // draw trail on background bitmap
-        DrawTrail(hDCTemp, Orig_Aircraft, rc);
-        DrawTrailFromTask(hDCTemp, rc);
-
-        // make mask
-        BitBlt(hDCMask, 0, 0, rc.right-rc.left, rc.bottom-rc.top,
-               hDCTemp, rc.left, rc.top, SRCCOPY);
-
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
-               hDCMask, 1, 1, SRCAND);
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
-               hDCTemp, rc.left, rc.top, SRCPAINT);
-        BitBlt(hdcDrawWindowBg, rc.left, rc.top, rc.right, rc.bottom,
-               hDCTemp, rc.left, rc.top, SRCAND);
-        */
-      }
-
-    }
-
-    DrawThermalEstimate(hdcDrawWindowBg, rc);
-
-    if (TaskAborted) {
-      DrawAbortedTask(hdcDrawWindowBg, rc, Orig_Aircraft);
-    } else {
-      DrawTask(hdcDrawWindowBg, rc, Orig_Aircraft);
-    }
-
-    // draw red cross on glide through terrain marker
-    if (FinalGlideTerrain && DerivedDrawInfo.TerrainValid) {
-      DrawGlideThroughTerrain(hdcDrawWindowBg, rc);
-    }
-
-    DrawWaypoints(hdcDrawWindowBg,rc);
-
-    if ((EnableTerrain && (DerivedDrawInfo.TerrainValid))
-        || RasterTerrain::render_weather) {
-      DrawSpotHeights(hdcDrawWindowBg);
-    }
-
-    if (extGPSCONNECT) {
-      // TODO don't draw offtrack indicator if showing spot heights
-      DrawProjectedTrack(hdcDrawWindowBg, Orig_Aircraft);
-      DrawOffTrackIndicator(hdcDrawWindowBg);
-      DrawTrack(hdcDrawWindowBg, Orig_Aircraft);
-      DrawBestCruiseTrack(hdcDrawWindowBg, Orig_Aircraft);
-      DrawBearing(hdcDrawWindowBg);
-    }
-
-    // draw wind vector at aircraft
-    if (!EnablePan) {
-      DrawWindAtAircraft2(hdcDrawWindowBg, Orig_Aircraft, rc);
-    } else if (TargetPan) {
-      DrawWindAtAircraft2(hdcDrawWindowBg, Orig, rc);
-    }
-
-    // Draw traffic
-    DrawFLARMTraffic(hdcDrawWindowBg, rc);
-
-    // finally, draw you!
-
-    if (EnablePan && !TargetPan) {
-      DrawCrossHairs(hdcDrawWindowBg, Orig);
-    }
-
-    if (extGPSCONNECT) {
-      DrawAircraft(hdcDrawWindowBg, Orig_Aircraft);
-    }
-    // marks on top...
-    DrawMarks(hdcDrawWindowBg, rc);
-
+    RenderMapWindowBg(hdcDrawWindowBg, rc, Orig, Orig_Aircraft);
   }
 
   BitBlt(hdcDrawWindow, 0, 0, MapRectBig.right, MapRectBig.bottom,
     hdcDrawWindowBg, 0, 0, SRCCOPY);
+#else
+  RenderMapWindowBg(hdcDrawWindow, rc, Orig, Orig_Aircraft);
+#endif
 
   // overlays
   DrawCDI();
@@ -2162,7 +2197,9 @@ DWORD MapWindow::DrawThread (LPVOID lpvoid)
   MapRect = MapRectSmall;
 
   SetBkMode(hdcDrawWindow,TRANSPARENT);
+#ifdef BGBITMAP
   SetBkMode(hdcDrawWindowBg,TRANSPARENT);
+#endif
   SetBkMode(hDCTemp,OPAQUE);
   SetBkMode(hDCMask,OPAQUE);
 
@@ -2283,14 +2320,17 @@ void PolygonRotateShift(POINT* poly, const int n, const int xs, const int ys, co
     cost = ICOSTABLE[deg]*InfoBoxLayout::scale;
     sint = ISINETABLE[deg]*InfoBoxLayout::scale;
   }
-  int xxs = xs*1024+512;
-  int yys = ys*1024+512;
+  const int xxs = xs*1024+512;
+  const int yys = ys*1024+512;
+  POINT *p = poly;
+  const POINT *pe = poly+n;
 
-  for(POINT *p=poly; p<poly+n; p++) {
+  while (p<pe) {
     int x= p->x;
     int y= p->y;
     p->x = (x*cost - y*sint + xxs)/1024;
     p->y = (y*cost + x*sint + yys)/1024;
+    p++;
   }
 }
 
@@ -3341,11 +3381,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
   //////
 
   #if (WINDOWSPC<1)
-    // old version
-    //  BitBlt(hdcDrawWindowBg,rc.left,rc.top,rc.right-rc.left,rc.bottom-rc.top,
-    //     hDCTemp,rc.left,rc.top,SRCAND /*SRCAND*/);
-
-  TransparentImage(hdcDrawWindowBg,
+  TransparentImage(hdc,
                    rc.left,rc.top,
                    rc.right-rc.left,rc.bottom-rc.top,
                    hDCTemp,
@@ -3355,7 +3391,7 @@ void MapWindow::DrawTaskAAT(HDC hdc, RECT rc)
                    );
 
   #else
-  TransparentBlt(hdcDrawWindowBg,
+  TransparentBlt(hdc,
                    rc.left,rc.top,
                    rc.right-rc.left,rc.bottom-rc.top,
                    hDCTemp,
@@ -3903,33 +3939,37 @@ void MapWindow::DrawCompass(HDC hDC,RECT rc)
 
 }
 
-
-void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
-{
-  unsigned int i;
-
+void MapWindow::ClearAirSpace(bool fill) {
   COLORREF whitecolor = RGB(0xff,0xff,0xff);
   COLORREF origcolor = SetTextColor(hDCTemp, whitecolor);
 
-  bool found = false;
-
   SetBkMode(hDCTemp, TRANSPARENT);
-
   SelectObject(hDCTemp, (HBITMAP)hDrawBitMapTmp);
   SetBkColor(hDCTemp, whitecolor);
-
   SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
   SelectObject(hDCTemp, GetStockObject(WHITE_BRUSH));
-  Rectangle(hDCTemp,rc.left,rc.top,rc.right,rc.bottom);
+  Rectangle(hDCTemp,MapRect.left,MapRect.top,MapRect.right,MapRect.bottom);
+  if (fill) {
+    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  }
+}
+
+// TODO: optimise!
+void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
+{
+  COLORREF whitecolor = RGB(0xff,0xff,0xff);
+  unsigned int i;
+
+  bool found = false;
 
   if (AirspaceCircle) {
     // draw without border
-    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
     for(i=0;i<NumberOfAirspaceCircles;i++) {
-      if (AirspaceCircle[i].Visible &&
-          !AirspaceCircle[i]._NewWarnAckNoBrush &&
-          !(iAirspaceBrush[AirspaceCircle[i].Type] == NUMAIRSPACEBRUSHES-1)) {
-        found = true;
+      if (AirspaceCircle[i].Visible==2) {
+	if (!found) {
+	  ClearAirSpace(true);
+	  found = true;
+	}
         // this color is used as the black bit
         SetTextColor(hDCTemp,
                      Colours[iAirspaceColour[AirspaceCircle[i].Type]]);
@@ -3946,11 +3986,11 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
 
   if (AirspaceArea) {
     for(i=0;i<NumberOfAirspaceAreas;i++) {
-      if(AirspaceArea[i].Visible
-         && !AirspaceArea[i]._NewWarnAckNoBrush
-         && !(iAirspaceBrush[AirspaceArea[i].Type] == NUMAIRSPACEBRUSHES-1)) {
-
-        found = true;
+      if(AirspaceArea[i].Visible ==2) {
+	if (!found) {
+	  ClearAirSpace(true);
+	  found = true;
+	}
         // this color is used as the black bit
         SetTextColor(hDCTemp,
                      Colours[iAirspaceColour[AirspaceArea[i].Type]]);
@@ -3964,16 +4004,24 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
   }
 
   ////////// draw it again, just the outlines
-  SelectObject(hDCTemp, GetStockObject(HOLLOW_BRUSH));
-  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+
+  if (found) {
+    SelectObject(hDCTemp, GetStockObject(HOLLOW_BRUSH));
+    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
+  }
 
   if (AirspaceCircle) {
     for(i=0;i<NumberOfAirspaceCircles;i++) {
       if (AirspaceCircle[i].Visible) {
-
-        found = true;
-
-        SelectObject(hDCTemp, hAirspacePens[AirspaceCircle[i].Type]);
+	if (!found) {
+	  ClearAirSpace(false);
+	  found = true;
+	}
+        if (bAirspaceBlackOutline) {
+          SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
+        } else {
+          SelectObject(hDCTemp, hAirspacePens[AirspaceCircle[i].Type]);
+        }
         Circle(hDCTemp,
                AirspaceCircle[i].Screen.x ,
                AirspaceCircle[i].Screen.y ,
@@ -3985,9 +4033,10 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
   if (AirspaceArea) {
     for(i=0;i<NumberOfAirspaceAreas;i++) {
       if(AirspaceArea[i].Visible) {
-
-        found = true;
-
+	if (!found) {
+	  ClearAirSpace(false);
+	  found = true;
+	}
         if (bAirspaceBlackOutline) {
           SelectObject(hDCTemp, GetStockObject(BLACK_PEN));
         } else {
@@ -4013,12 +4062,11 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
     }
   }
 
-  // need to do this to prevent drawing of colored outline
-  SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
-
   if (found) {
+    // need to do this to prevent drawing of colored outline
+    SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
 #if (WINDOWSPC<1)
-    TransparentImage(hdcDrawWindowBg,
+    TransparentImage(hdc,
                      rc.left, rc.top,
                      rc.right-rc.left,rc.bottom-rc.top,
                      hDCTemp,
@@ -4028,7 +4076,7 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
                      );
 
 #else
-    TransparentBlt(hdcDrawWindowBg,
+    TransparentBlt(hdc,
                    rc.left,rc.top,
                    rc.right-rc.left,rc.bottom-rc.top,
                    hDCTemp,
@@ -4037,12 +4085,10 @@ void MapWindow::DrawAirSpace(HDC hdc, RECT rc)
                    whitecolor
                    );
   #endif
+    // restore original color
+    //    SetTextColor(hDCTemp, origcolor);
+    SetBkMode(hDCTemp,OPAQUE);
   }
-
-  // restore original color
-  SetTextColor(hDCTemp, origcolor);
-  SetBkMode(hDCTemp,OPAQUE);
-
 }
 
 
@@ -4532,26 +4578,34 @@ void MapWindow::LatLon2Screen(const double &lon, const double &lat,
   sc.y = Orig_Screen.y + Y;
 }
 
+// This one is optimised for long polygons
 void MapWindow::LatLon2Screen(pointObj *ptin, POINT *ptout, const int n,
 			      const int skip) {
   static double lastangle = -1;
   static int cost=1024, sint=0;
+  const double mDisplayAngle = DisplayAngle;
 
-  if(DisplayAngle != lastangle) {
-    lastangle = DisplayAngle;
-    int deg = DEG_TO_INT(AngleLimit360(DisplayAngle));
+  if(mDisplayAngle != lastangle) {
+    lastangle = mDisplayAngle;
+    int deg = DEG_TO_INT(AngleLimit360(mDisplayAngle));
     cost = ICOSTABLE[deg];
     sint = ISINETABLE[deg];
   }
-  int xxs = Orig_Screen.x*1024-512;
-  int yys = Orig_Screen.y*1024+512;
+  const int xxs = Orig_Screen.x*1024-512;
+  const int yys = Orig_Screen.y*1024+512;
+  const double mDrawScale = DrawScale;
+  const double mPanLongitude = PanLongitude;
+  const double mPanLatitude = PanLatitude;
+  pointObj* p = ptin;
+  const pointObj* ptend = ptin+n;
 
-  for(pointObj *p=ptin; p<ptin+n; p+= skip, ptout++) {
-    int Y = Real2Int((PanLatitude-p->y)*DrawScale);
-    int X = Real2Int((PanLongitude-p->x)*fastcosine(p->y)*DrawScale);
+  while (p<ptend) {
+    int Y = Real2Int((mPanLatitude-p->y)*mDrawScale);
+    int X = Real2Int((mPanLongitude-p->x)*fastcosine(p->y)*mDrawScale);
     ptout->x = (xxs-X*cost + Y*sint)/1024;
     ptout->y = (Y*cost + X*sint + yys)/1024;
-    irotate(X, Y, DisplayAngle);
+    ptout++;
+    p+= skip;
   }
 }
 

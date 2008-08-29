@@ -57,7 +57,7 @@ typedef struct _AIRSPACE_AREA
   AIRSPACE_ALT Top;
   unsigned FirstPoint;
   unsigned NumPoints;
-  int Visible;
+  unsigned char Visible;
   bool _NewWarnAckNoBrush;
   double MinLatitude;
   double MaxLatitude;
@@ -86,7 +86,7 @@ typedef struct _AIRSPACE_CIRCLE
   double Radius;
   POINT Screen;
   int ScreenR;
-  int Visible;
+  unsigned char Visible;
   bool _NewWarnAckNoBrush;
   AIRSPACE_ACK Ack;
   rectObj bounds;
@@ -194,5 +194,6 @@ double RangeAirspaceArea(const double &longitude,
 
 void ScreenClosestPoint(const POINT &p1, const POINT &p2,
 			const POINT &p3, POINT *p4, int offset = 0);
+
 
 #endif

@@ -43,8 +43,8 @@ Copyright_License {
 #include "externs.h"
 #include "McReady.h"
 #include "Airspace.h"
+#include "AirspaceWarning.h"
 #include "Logger.h"
-#include <windows.h>
 #include <math.h>
 #include "InputEvents.h"
 #include "Message.h"
@@ -104,22 +104,23 @@ static void Average30s(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void AverageThermal(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void Turning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void PercentCircling(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                            double Rate);
+                            const double Rate);
 static void LastThermalStats(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void ThermalGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void MaxHeightGain(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void EnergyHeightNavAltitude(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      double maccready);
-static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
-static void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double LegToGo, double LegAltitude);
+                      const double maccready);
+static void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+			     const double maccready);
+static void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo, const double LegAltitude);
 
-static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready);
+static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double maccready);
 static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static bool  InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, BOOL* CrossedStart);
-static bool  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int i);
-static bool  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int i);
+static bool  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int i);
+static bool  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int i);
 //static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 static void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -603,7 +604,9 @@ void Heading(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 }
 
 
-void  SetWindEstimate(double wind_speed, double wind_bearing, int quality) {
+void  SetWindEstimate(const double wind_speed,
+		      const double wind_bearing,
+		      const int quality) {
   Vector v_wind;
   v_wind.x = wind_speed*cos(wind_bearing*3.1415926/180.0);
   v_wind.y = wind_speed*sin(wind_bearing*3.1415926/180.0);
@@ -747,8 +750,9 @@ bool FlightTimes(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 }
 
 
-void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated, bool doadvance,
-               bool doannounce) {
+void StartTask(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
+	       const bool doadvance,
+               const bool doannounce) {
   Calculated->ValidFinish = false;
   Calculated->TaskStartTime = Basic->Time ;
   Calculated->TaskStartSpeed = Basic->Speed;
@@ -1291,7 +1295,7 @@ void SwitchZoomClimb(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 
 void PercentCircling(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                     double Rate) {
+                     const double Rate) {
   // JMW circling % only when really circling,
   // to prevent bad stats due to flap switches and dolphin soaring
 
@@ -1735,7 +1739,7 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 
 void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      double maccready)
+                      const double maccready)
 {
   //  LockFlightData();
   (void)Basic;
@@ -1772,7 +1776,7 @@ void AltitudeRequired(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
-bool InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int thepoint)
+bool InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int thepoint)
 {
   double AircraftBearing;
 
@@ -1828,8 +1832,8 @@ bool InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int thepoint)
   return false;
 }
 
-bool InAATTurnSector(double longitude, double latitude,
-                    int thepoint)
+bool InAATTurnSector(const double longitude, const double latitude,
+                    const int thepoint)
 {
   double AircraftBearing;
   bool retval = false;
@@ -1876,7 +1880,7 @@ bool ValidFinish(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 bool InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                   int i)
+		    const int i)
 {
   static int LastInSector = FALSE;
   double AircraftBearing;
@@ -2531,7 +2535,7 @@ double MacCreadyOrAvClimbRate(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
-void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double maccready)
+void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double maccready)
 {
   int ifinal;
   static double LastTime = 0;
@@ -2804,8 +2808,8 @@ static void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
 }
 
 
-void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double LegToGo,
-            double LegAltitude) {
+void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegToGo,
+            const double LegAltitude) {
   double height_above_leg = Calculated->NavAltitude
     - LegAltitude;
 
@@ -2822,7 +2826,7 @@ void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, double LegToGo,
 }
 
 void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                    double maccready)
+                    const double maccready)
 {
 
   if (!ValidTaskPoint(ActiveWayPoint) ||
@@ -3319,7 +3323,7 @@ void PredictNextPosition(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 bool GlobalClearAirspaceWarnings = false;
 
 // JMW this code is deprecated
-bool ClearAirspaceWarnings(bool acknowledge, bool ack_all_day) {
+bool ClearAirspaceWarnings(const bool acknowledge, const bool ack_all_day) {
   unsigned int i;
   if (acknowledge) {
     GlobalClearAirspaceWarnings = true;
@@ -3398,8 +3402,8 @@ void AirspaceWarning(NMEA_INFO *Basic, DERIVED_INFO *Calculated){
           && (alt < AirspaceCircle[i].Top.Altitude)) {
 
 
-        if (InsideAirspaceCircle(lon, lat, i)
-            && (MapWindow::iAirspaceMode[AirspaceCircle[i].Type] >= 2)){
+        if ((MapWindow::iAirspaceMode[AirspaceCircle[i].Type] >= 2) &&
+	    InsideAirspaceCircle(lon, lat, i)) {
 
           AirspaceWarnListAdd(Basic, position_is_predicted, 1, i, false);
         }
@@ -3775,8 +3779,8 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
         continue;
       }
 
-      if (((WayPointList[SortedApproxIndex[i]].Flags & AIRPORT) != AIRPORT) &&
-          (scan_airports_slot==0)) {
+      if ((scan_airports_slot==0) &&
+	  ((WayPointList[SortedApproxIndex[i]].Flags & AIRPORT) != AIRPORT)) {
         // we are in the first scan, looking for airports only
         continue;
       }
@@ -3853,7 +3857,7 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
         found_active_waypoint = i;
       }
     }
-    if ((SortedLandableIndex[i] == HomeWaypoint)&&(HomeWaypoint>=0)) {
+    if ((HomeWaypoint>=0) && (SortedLandableIndex[i] == HomeWaypoint)) {
       found_home_waypoint = i;
     }
   }

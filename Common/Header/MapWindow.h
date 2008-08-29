@@ -102,44 +102,60 @@ class MapWindow {
  public:
 
   static bool IsDisplayRunning();
+  static int iAirspaceMode[AIRSPACECLASSCOUNT];
+  static int iAirspaceBrush[AIRSPACECLASSCOUNT];
+  static int iAirspaceColour[AIRSPACECLASSCOUNT];
+  static bool bAirspaceBlackOutline;
+  static BOOL CLOSETHREAD;
 
+  static COLORREF GetAirspaceColour(int i) {
+    return Colours[i];
+  }
+  static HBRUSH GetAirspaceBrush(int i) {
+    return hAirspaceBrushes[i];
+  }
+  static COLORREF GetAirspaceColourByClass(int i) {
+    return Colours[iAirspaceColour[i]];
+  }
+  static HBRUSH GetAirspaceBrushByClass(int i) {
+    return hAirspaceBrushes[iAirspaceBrush[i]];
+  }
+
+ private:
   // 12 is number of airspace types
-  static int	iAirspaceBrush[AIRSPACECLASSCOUNT];
-  static int	iAirspaceColour[AIRSPACECLASSCOUNT];
-  static int    iAirspaceMode[AIRSPACECLASSCOUNT];
   static HPEN hAirspacePens[AIRSPACECLASSCOUNT];
   static HPEN hSnailPens[NUMSNAILCOLORS];
-  static bool bAirspaceBlackOutline;
   static HBRUSH hAirspaceBrushes[NUMAIRSPACEBRUSHES];
   static HBITMAP hAirspaceBitmap[NUMAIRSPACEBRUSHES];
   static HBITMAP hAboveTerrainBitmap;
   static HBRUSH hAboveTerrainBrush;
   static COLORREF Colours[NUMAIRSPACECOLORS];
 
-  static BOOL CLOSETHREAD;
   static BOOL Initialised;
   static bool GliderCenter;
+  static DWORD timestamp_newdata;
+  static bool RequestFullScreen;
+  static bool LandableReachable;
+  static void ModifyMapScale();
+  static double MapScaleOverDistanceModify; // speedup
+  static double ResMapScaleOverDistanceModify; // speedup
+  static double RequestMapScale;
+
+ public:
 
   static RECT MapRect;
   static RECT MapRectBig;
   static double MapScale;
-  static double MapScaleOverDistanceModify; // speedup
-  static double ResMapScaleOverDistanceModify; // speedup
-  static double RequestMapScale;
-  static void ModifyMapScale();
   static bool ForceVisibilityScan;
 
   static bool MapDirty;
-  static bool LandableReachable;
 
   static unsigned char DeclutterLabels;
   static bool EnableTrailDrift;
   static int GliderScreenPosition;
 
   static void RequestFastRefresh();
-  static bool RequestFullScreen;
 
-  static DWORD timestamp_newdata;
   static void UpdateTimeStats(bool start);
 
   static bool isAutoZoom();
@@ -217,8 +233,8 @@ class MapWindow {
   static void DrawWaypoints(HDC hdc, RECT rc);
   static void DrawFlightMode(HDC hdc, RECT rc);
   static void DrawGPSStatus(HDC hdc, RECT rc);
-  static void DrawTrail(HDC hdc, POINT Orig, RECT rc);
-  static void DrawTrailFromTask(HDC hdc, RECT rc);
+  static double DrawTrail(HDC hdc, const POINT Orig, const RECT rc);
+  static void DrawTrailFromTask(HDC hdc, const RECT rc, const double);
   static void DrawOffTrackIndicator(HDC hdc);
   static void DrawProjectedTrack(HDC hdc, POINT Orig);
   static void DrawStartSector(HDC hdc, RECT rc, POINT &Start,
@@ -251,11 +267,15 @@ class MapWindow {
  private:
   static int iSnailNext;
   static HBITMAP hDrawBitMap;
+#ifdef BGBITMAP
   static HBITMAP hDrawBitMapBg;
+#endif
   static HBITMAP hDrawBitMapTmp;
   static HBITMAP hMaskBitMap;
   static HDC hdcDrawWindow;
+#ifdef BGBITMAP
   static HDC hdcDrawWindowBg;
+#endif
   static HDC hdcScreen;
   static HDC hDCTemp;
   static HDC hDCMask;
@@ -268,8 +288,6 @@ class MapWindow {
   static double DisplayAircraftAngle;
   static double DrawScale;
   static double InvDrawScale;
-  static int dTDisplay;
-  static double TrailFirstTime;
 
  public:
   static HANDLE hRenderEvent;
@@ -343,6 +361,9 @@ class MapWindow {
   static DWORD DrawThread (LPVOID);
 
   static void RenderMapWindow(  RECT rc);
+  static void RenderMapWindowBg(HDC hdc, const RECT rc,
+				const POINT &Orig,
+				const POINT &Orig_Aircraft);
   static void UpdateCaches(bool force=false);
   static double findMapScaleBarSize(RECT rc);
 
@@ -390,6 +411,7 @@ class MapWindow {
   static bool TargetPan;
   static double TargetZoomDistance;
   static int TargetPanIndex;
+  static void ClearAirSpace(bool fill);
 
  public:
   static bool isTargetPan(void);

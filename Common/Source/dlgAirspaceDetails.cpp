@@ -32,13 +32,12 @@ Copyright_License {
 #include "StdAfx.h"
 #include <aygshell.h>
 #include "XCSoar.h"
-#include "WindowControls.h"
 #include "Statistics.h"
 #include "externs.h"
-#include "McReady.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "Airspace.h"
+#include "AirspaceWarning.h"
 
 static int index_circle = -1;
 static int index_area = -1;

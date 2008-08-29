@@ -492,15 +492,34 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
   // boundary has changed.
   // This happens rarely, so it is good pre-filtering of what is visible.
   // (saves from having to do it every screen redraw)
-
+  const rectObj bounds = *bounds_active;
   int i;
 
   // far visibility for snail trail
 
-  for (i= 0; i<TRAILSIZE; i++) {
-    SnailTrail[i].FarVisible = PointInRect(SnailTrail[i].Longitude,
-                                           SnailTrail[i].Latitude,
-                                           *bounds_active);
+  SNAIL_POINT *sv= SnailTrail;
+  const SNAIL_POINT *se = sv+TRAILSIZE;
+  while (sv<se) {
+    sv->FarVisible = ((sv->Longitude> bounds.minx) &&
+		      (sv->Longitude< bounds.maxx) &&
+		      (sv->Latitude> bounds.miny) &&
+		      (sv->Latitude< bounds.maxy));
+    sv++;
+  }
+
+  // far visibility for waypoints
+
+  if (WayPointList) {
+    WAYPOINT *wv = WayPointList;
+    const WAYPOINT *we = WayPointList+NumberOfWayPoints;
+    while (wv<we) {
+      // TODO optimise
+      wv->FarVisible = ((wv->Longitude> bounds.minx) &&
+			(wv->Longitude< bounds.maxx) &&
+			(wv->Latitude> bounds.miny) &&
+			(wv->Latitude< bounds.maxy));
+      wv++;
+    }
   }
 
   // far visibility for airspace
@@ -522,16 +541,6 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
         (msRectOverlap(&area->bounds, bounds_active) == MS_TRUE) ||
         (msRectContained(bounds_active, &area->bounds) == MS_TRUE) ||
         (msRectContained(&area->bounds, bounds_active) == MS_TRUE);
-    }
-  }
-
-  // far visibility for waypoints
-
-  if (WayPointList) {
-    for(i=0;i<(int)NumberOfWayPoints;i++) {
-      WayPointList[i].FarVisible = PointInRect(WayPointList[i].Longitude,
-                                               WayPointList[i].Latitude,
-                                               *bounds_active);
     }
   }
 
@@ -579,7 +588,14 @@ void MapWindow::CalculateScreenPositionsAirspaceCircle(AIRSPACE_CIRCLE &circ) {
                              circ.Top.Altitude)) {
       if (msRectOverlap(&circ.bounds, &screenbounds_latlon)
           || msRectContained(&screenbounds_latlon, &circ.bounds)) {
-        circ.Visible = true;
+
+	if (!circ._NewWarnAckNoBrush &&
+	    !(iAirspaceBrush[circ.Type] == NUMAIRSPACEBRUSHES-1)) {
+	  circ.Visible = 2;
+	} else {
+	  circ.Visible = 1;
+	}
+
         LatLon2Screen(circ.Longitude,
                       circ.Latitude,
                       circ.Screen);
@@ -597,8 +613,9 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
       if (msRectOverlap(&area.bounds, &screenbounds_latlon)
           || msRectContained(&screenbounds_latlon, &area.bounds)) {
         AIRSPACE_POINT *ap= AirspacePoint+area.FirstPoint;
+        const AIRSPACE_POINT *ep= ap+area.NumPoints;
         POINT* sp= AirspaceScreenPoint+area.FirstPoint;
-        while (ap < AirspacePoint+area.FirstPoint+area.NumPoints) {
+        while (ap < ep) {
 	  // JMW optimise!
             LatLon2Screen(ap->Longitude,
                           ap->Latitude,
@@ -606,7 +623,13 @@ void MapWindow::CalculateScreenPositionsAirspaceArea(AIRSPACE_AREA &area) {
             ap++;
             sp++;
         }
-        area.Visible = true;
+
+	if (!area._NewWarnAckNoBrush &&
+	    !(iAirspaceBrush[area.Type] == NUMAIRSPACEBRUSHES-1)) {
+	  area.Visible = 2;
+	} else {
+	  area.Visible = 1;
+	}
       }
     }
 }
@@ -1168,22 +1191,24 @@ void MapWindow::DrawGreatCircle(HDC hdc,
 
 
 int MapWindow::iSnailNext=0;
-double MapWindow::TrailFirstTime = 0;
 
-void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
+// This function is slow...
+double MapWindow::DrawTrail( HDC hdc, const POINT Orig, const RECT rc)
 {
   int i, j;
-  SNAIL_POINT *P1;
+  SNAIL_POINT P1;
 #ifdef NOLINETO
-  SNAIL_POINT *P2;
+  SNAIL_POINT P2;
 #endif
   static BOOL lastCircling = FALSE;
   static float vmax= 5.0;
   static float vmin= -5.0;
   static bool needcolour = true;
+  bool first = true;
+  double TrailFirstTime = -1;
 
   if(!TrailActive)
-    return;
+    return -1;
 
   if ((DisplayMode == dmCircling) != lastCircling) {
     needcolour = true;
@@ -1193,12 +1218,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   double traildrift_lat = 0.0;
   double traildrift_lon = 0.0;
 
-  bool dotraildrift = EnableTrailDrift && (DisplayMode == dmCircling);
-
-  P1 = NULL;
-#ifdef NOLINETO
-  P2 = NULL;
-#endif
+  const bool dotraildrift = EnableTrailDrift && (DisplayMode == dmCircling);
 
   if (dotraildrift) {
     double tlat1, tlon1;
@@ -1229,7 +1249,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   vmax = this_vmax;
   vmin = this_vmin;
 
-  int skipdivisor = ntrail/5;
+  const int skipdivisor = ntrail/5;
   int skipborder = skipdivisor;
   int skiplevel= 3; // JMW TODO, try lower level?
   POINT lastdrawn;
@@ -1243,7 +1263,7 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   while (kd< 0) {
     kd += TRAILSIZE;
   }
-  int zerooffset = (TRAILSIZE-kd);
+  const int zerooffset = (TRAILSIZE-kd);
   skipborder += zerooffset % skiplevel;
   // TODO: Divide by time step cruise/circling for zerooffset
 
@@ -1252,14 +1272,24 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
   float vclose = 0;
   int nclose = 0;
   int is = ((int)DrawInfo.Time)%skiplevel;
+  const bool display_circling = DisplayMode == dmCircling;
+  const double dtime = DrawInfo.Time;
+  const rectObj bounds = screenbounds_latlon;
 
-  TrailFirstTime = -1;
+  const int deg = DEG_TO_INT(AngleLimit360(DisplayAngle));
+  const int cost = ICOSTABLE[deg];
+  const int sint = ISINETABLE[deg];
+  const int xxs = Orig_Screen.x*1024-512;
+  const int yys = Orig_Screen.y*1024+512;
+  const double mDrawScale = DrawScale;
+  const double mPanLongitude = PanLongitude;
+  const double mPanLatitude = PanLatitude;
 
   for(i=1;i< ntrail; ++i)
   {
     if (i>=skipborder) {
       skiplevel= max(1,skiplevel-1);
-      skipborder= i+skipdivisor + 2*(zerooffset % skiplevel);
+      skipborder= i+2*(zerooffset % skiplevel)+skipdivisor;
       is = skiplevel;
     }
 
@@ -1275,58 +1305,68 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
       j-= TRAILSIZE;
     }
 
-    P1 = SnailTrail+j;
-    if (((TrailFirstTime<0) || (P1->Time<TrailFirstTime)) && (P1->Time>=0)) {
-      TrailFirstTime = P1->Time;
+    P1 = SnailTrail[j];
+
+    if (((TrailFirstTime<0) || (P1.Time<TrailFirstTime)) && (P1.Time>=0)) {
+      TrailFirstTime = P1.Time;
     }
 
-    if (DisplayMode == dmCircling) {
-      if ((!P1->Circling)&&( i<ntrail-60 )) {
+    if (display_circling) {
+      if ((!P1.Circling)&&( i<ntrail-60 )) {
         // ignore cruise mode lines unless very recent
 
-#ifdef NOLINETO
-        P2 = NULL;
-#endif
+	first = true;
 	lastvisible = false;
         continue;
       }
     } else {
-      if ((P1->Circling)&&( j%5 != 0 )) {
+      //  if ((P1.Circling)&&( j%5 != 0 )) {
         // JMW TODO: This won't work properly!
         // draw only every 5 points from circling when in cruise mode
 	//        continue;
-      }
+      //      }
     }
 
-    if (!P1->FarVisible) {
-#ifdef NOLINETO
-      P2 = NULL;
-#endif
+    if (!P1.FarVisible) {
+      first = true;
       lastvisible = false;
       continue;
     }
 
-    thisvisible = PointVisible(P1->Longitude, P1->Latitude);
+    thisvisible =   ((P1.Longitude> bounds.minx) &&
+		     (P1.Longitude< bounds.maxx) &&
+		     (P1.Latitude> bounds.miny) &&
+		     (P1.Latitude< bounds.maxy)) ;
 
     // now we know both points are visible, better get screen coords
     // if we don't already.
 
+    double this_lon, this_lat;
     if (dotraildrift) {
       double dt;
-      dt = max(0,(DrawInfo.Time-P1->Time)*P1->DriftFactor);
-      LatLon2Screen(P1->Longitude+traildrift_lon*dt,
-                    P1->Latitude+traildrift_lat*dt,
-                    P1->Screen);
+      dt = max(0,(dtime-P1.Time)*P1.DriftFactor);
+      this_lon = P1.Longitude+traildrift_lon*dt;
+      this_lat = P1.Latitude+traildrift_lat*dt;
     } else {
-      LatLon2Screen(P1->Longitude,
-                    P1->Latitude,
-                    P1->Screen);
+      this_lon = P1.Longitude;
+      this_lat = P1.Latitude;
     }
+#if 1
+    // this is faster since many parameters are const
+    int Y = Real2Int((mPanLatitude-this_lat)*mDrawScale);
+    int X = Real2Int((mPanLongitude-this_lon)*fastcosine(this_lat)*mDrawScale);
+    P1.Screen.x = (xxs-X*cost + Y*sint)/1024;
+    P1.Screen.y = (Y*cost + X*sint + yys)/1024;
+#else
+    LatLon2Screen(this_lon,
+		  this_lat,
+		  P1.Screen);
+#endif
 
     if (lastvisible && thisvisible) {
-      if (abs(P1->Screen.y-lastdrawn.y)
-	  +abs(P1->Screen.x-lastdrawn.x)<IBLSCALE(4)) {
-	vclose += P1->Vario;
+      if (abs(P1.Screen.y-lastdrawn.y)
+	  +abs(P1.Screen.x-lastdrawn.x)<IBLSCALE(4)) {
+	vclose += P1.Vario;
 	nclose ++;
 	continue;
 	// don't draw if very short line
@@ -1337,8 +1377,8 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     // get the colour if it doesn't exist
 
     if (thisvisible || lastvisible) {
-      if ((P1->Colour<0)||(P1->Colour>=NUMSNAILCOLORS)) {
-	float cv = P1->Vario;
+      if ((P1.Colour<0)||(P1.Colour>=NUMSNAILCOLORS)) {
+	float cv = P1.Vario;
 	if (nclose) {
 	  // set color to average if skipped
 	  cv = (cv+vclose)/(nclose+1);
@@ -1350,37 +1390,39 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
 	} else {
 	  cv /= vmax;
 	}
-	P1->Colour = max(0,min((short)(NUMSNAILCOLORS-1),
-			       (short)((cv+1.0)/2.0*NUMSNAILCOLORS)));
+	P1.Colour = max(0,min((short)(NUMSNAILCOLORS-1),
+			      (short)((cv+1.0)/2.0*NUMSNAILCOLORS)));
       }
-      SelectObject(hdc, hSnailPens[P1->Colour]);
+      SelectObject(hdc, hSnailPens[P1.Colour]);
     }
 
 #ifdef NOLINETO
     if (lastvisible) {     // draw set cursor at P1
       if (dotraildrift) {
         double dt;
-        dt = max(0,(DrawInfo.Time-P2->Time));
-        LatLon2Screen(P2->Longitude+traildrift_lon*dt,
-                      P2->Latitude+traildrift_lat*dt,
-                      P2->Screen);
+        dt = max(0,(dtime-P2.Time));
+        LatLon2Screen(P2.Longitude+traildrift_lon*dt,
+                      P2.Latitude+traildrift_lat*dt,
+                      P2.Screen);
       } else {
-        LatLon2Screen(P2->Longitude,
-                      P2->Latitude,
-                      P2->Screen);
+        LatLon2Screen(P2.Longitude,
+                      P2.Latitude,
+                      P2.Screen);
       }
     }
-    if (P2) {
-      DrawSolidLine(hdc, P1->Screen, P2->Screen);
-      lastdrawn = P1->Screen;
+    if (!first) {
+      DrawSolidLine(hdc, P1.Screen, P2.Screen);
+      lastdrawn = P1.Screen;
+    } else {
+      first = false;
     }
     P2 = P1;
 #else
     if (!lastvisible) { // draw set cursor at P1
-      MoveToEx(hdc, P1->Screen.x, P1->Screen.y, NULL);
+      MoveToEx(hdc, P1.Screen.x, P1.Screen.y, NULL);
     } else {
-      LineTo(hdc, P1->Screen.x, P1->Screen.y);
-      lastdrawn = P1->Screen;
+      LineTo(hdc, P1.Screen.x, P1.Screen.y);
+      lastdrawn = P1.Screen;
     }
 #endif
     lastvisible = thisvisible;
@@ -1392,26 +1434,27 @@ void MapWindow::DrawTrail( HDC hdc, POINT Orig, RECT rc)
     LineTo(hdc, Orig.x, Orig.y);
   }
 #endif
-
+  return TrailFirstTime;
 }
 
 
 extern OLCOptimizer olc;
 
-void MapWindow::DrawTrailFromTask(HDC hdc, RECT rc) {
+void MapWindow::DrawTrailFromTask(HDC hdc, const RECT rc,
+				  const double TrailFirstTime) {
   static POINT ptin[MAXCLIPPOLYGON];
 
   if((TrailActive!=3) || (DisplayMode == dmCircling) || (TrailFirstTime<0))
     return;
 
-  TrailFirstTime -= DerivedDrawInfo.TakeOffTime;
+  const double mTrailFirstTime = TrailFirstTime - DerivedDrawInfo.TakeOffTime;
   // since olc keeps track of time wrt takeoff
 
   olc.SetLine();
   int n = min(MAXCLIPPOLYGON,olc.getN());
   int i, j=0;
   for (i=0; i<n; i++) {
-    if (olc.getTime(i)>= TrailFirstTime)
+    if (olc.getTime(i)>= mTrailFirstTime)
       break;
     LatLon2Screen(olc.getLongitude(i),
                   olc.getLatitude(i),
@@ -1551,7 +1594,7 @@ void MapWindow::DrawTerrainAbove(HDC hDC, RECT rc) {
   // need to do this to prevent drawing of colored outline
   SelectObject(hDCTemp, GetStockObject(WHITE_PEN));
 #if (WINDOWSPC<1)
-    TransparentImage(hdcDrawWindowBg,
+    TransparentImage(hDC,
                      rc.left, rc.top,
                      rc.right-rc.left,rc.bottom-rc.top,
                      hDCTemp,
@@ -1561,7 +1604,7 @@ void MapWindow::DrawTerrainAbove(HDC hDC, RECT rc) {
                      );
 
 #else
-    TransparentBlt(hdcDrawWindowBg,
+    TransparentBlt(hDC,
                    rc.left,rc.top,
                    rc.right-rc.left,rc.bottom-rc.top,
                    hDCTemp,

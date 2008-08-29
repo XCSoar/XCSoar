@@ -33,7 +33,6 @@ Copyright_License {
 #include "StdAfx.h"
 #include "XCSoar.h"
 #include "InfoBoxLayout.h"
-#include "WindowControls.h"
 #include "Statistics.h"
 #include "externs.h"
 #include "McReady.h"
@@ -992,7 +991,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
 	  y2 = (lat2-lat_c);
 
 	  SelectObject(hdc,
-		       MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[AATASK]]);
+		       MapWindow::GetAirspaceBrushByClass(AATASK));
 	  SelectObject(hdc, GetStockObject(WHITE_PEN));
 	  if (Task[i].AATType == SECTOR) {
 	    Segment(hdc,
@@ -1433,9 +1432,9 @@ void Statistics::RenderAirspace(HDC hdc, RECT rc) {
       type = d_airspace[i][j];
       if (type>=0) {
 	SelectObject(hdc,
-		     MapWindow::hAirspaceBrushes[MapWindow::iAirspaceBrush[type]]);
+		     MapWindow::GetAirspaceBrushByClass(type));
 	SetTextColor(hdc,
-		     MapWindow::Colours[MapWindow::iAirspaceColour[type]]);
+		     MapWindow::GetAirspaceColourByClass(type));
 
 	rcd.left = iround((j-0.5)*dx)+x0;
 	rcd.right = iround((j+0.5)*dx)+x0;

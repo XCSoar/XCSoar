@@ -340,17 +340,17 @@ void CSTScreenBuffer::Zoom(unsigned int step) {
   const unsigned int rowsize = m_nCorrectedWidth*sizeof(BGRColor);
   const unsigned int wstep = m_nCorrectedWidth*step;
   const unsigned int stepmo = step-1;
-  unsigned int j, x, y;
 
-  for (y= smally; y--; ) {
-    dst = dst_start = m_pBufferTmp+y*wstep;
-    for (x= smallx; x--; src++) {
-      for (j= step; j--; ) {
+  dst_start = m_pBufferTmp+(smally-1)*wstep;
+  for (unsigned int y= smally; y--; dst_start-= wstep) {
+    dst = dst_start;
+    for (unsigned int x= smallx; x--; src++) {
+      for (unsigned int j= step; j--; ) {
 	*dst++ = *src;
       }
     }
     // done first row, now copy each row
-    for (j= stepmo; j--; dst+= m_nCorrectedWidth) {
+    for (unsigned int k= stepmo; k--; dst+= m_nCorrectedWidth) {
       memcpy((char*)dst, (char*)dst_start, rowsize);
     }
   }
@@ -365,7 +365,6 @@ void CSTScreenBuffer::Zoom(unsigned int step) {
 void CSTScreenBuffer::HorizontalBlur(unsigned int boxw) {
 
   const unsigned int muli = (boxw*2+1);
-  unsigned int acc;
   BGRColor* src = m_pBuffer;
   BGRColor* dst = m_pBufferTmp;
   BGRColor *c;
@@ -381,15 +380,15 @@ void CSTScreenBuffer::HorizontalBlur(unsigned int boxw) {
       unsigned int tot_b=0;
       unsigned int x;
 
-      for (x=boxw;x--; ) {
-        c = src+x;
+      c = src+boxw-1;
+      for (x=boxw;x--; c--) {
         tot_r+= c->m_R;
         tot_g+= c->m_G;
         tot_b+= c->m_B;
       }
       for (x=0;x< m_nCorrectedWidth; x++)
 	{
-	  acc = muli;
+	  unsigned int acc = muli;
 	  if (x>boxw) {
 	    c = src-off1;
 	    tot_r-= c->m_R;
@@ -423,7 +422,6 @@ void CSTScreenBuffer::HorizontalBlur(unsigned int boxw) {
 
 void CSTScreenBuffer::VerticalBlur(unsigned int boxh) {
 
-  unsigned int acc;
   BGRColor* src = m_pBuffer;
   BGRColor* dst = m_pBufferTmp;
   BGRColor *c, *d, *e;
@@ -443,15 +441,14 @@ void CSTScreenBuffer::VerticalBlur(unsigned int boxh) {
 
       c = d = src+x;
       e = dst+x;
-      for (y=boxh;y--;) {
+      for (y=boxh;y--; c+= m_nCorrectedWidth) {
 	tot_r+= c->m_R;
 	tot_g+= c->m_G;
 	tot_b+= c->m_B;
-        c+= m_nCorrectedWidth;
       }
 
       for (y=0;y< m_nHeight; y++) {
-        acc = muli;
+	unsigned int acc = muli;
         if (y>boxh) {
           c = d-off1;
           tot_r-= c->m_R;

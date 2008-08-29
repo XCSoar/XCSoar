@@ -50,12 +50,6 @@ class RasterMap {
 
   bool GetMapCenter(double *lon, double *lat);
 
-  double fXrounding, fYrounding;
-  double fXroundingFine, fYroundingFine;
-  int Xrounding, Yrounding;
-  int xlleft;
-  int xlltop;
-
   float GetFieldStepSize();
 
   // inaccurate method
@@ -76,13 +70,19 @@ class RasterMap {
   virtual void Unlock() = 0;
   virtual void ServiceCache() {};
   virtual void ServiceFullReload(double lat, double lon) {};
-
-  bool DirectAccess;
-  bool Paged;
+  bool IsDirectAccess(void) { return DirectAccess; };
+  bool IsPaged(void) { return Paged; };
 
  protected:
+  int xlleft;
+  int xlltop;
   bool terrain_valid;
   bool DirectFine;
+  bool Paged;
+  bool DirectAccess;
+  double fXrounding, fYrounding;
+  double fXroundingFine, fYroundingFine;
+  int Xrounding, Yrounding;
 
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly) = 0;
@@ -115,15 +115,7 @@ class RasterMapCache: public RasterMap {
   static ZZIP_FILE *fpTerrain;
   static int ref_count;
 
-  TERRAIN_CACHE TerrainCache[MAXTERRAINCACHE];
-
   void ServiceCache();
-
-  int terraincacheefficiency;
-  long terraincachehits;
-  long terraincachemisses;
-  unsigned int cachetime;
-  int SortThresold;
 
   void SetCacheTime();
   void ClearTerrainCache();
@@ -137,6 +129,13 @@ class RasterMapCache: public RasterMap {
   void Unlock();
  protected:
   static CRITICAL_SECTION CritSec_TerrainFile;
+  TERRAIN_CACHE TerrainCache[MAXTERRAINCACHE];
+
+  int terraincacheefficiency;
+  long terraincachehits;
+  long terraincachemisses;
+  unsigned int cachetime;
+  int SortThresold;
 
   short _GetFieldAtXY(unsigned int lx,
                       unsigned int ly);
@@ -172,7 +171,6 @@ class RasterMapJPG2000: public RasterMap {
   RasterMapJPG2000();
   ~RasterMapJPG2000();
 
-  char jp2_filename[MAX_PATH];
   void ReloadJPG2000(void);
   void ReloadJPG2000Full(double latitude, double longitude);
 
@@ -186,6 +184,7 @@ class RasterMapJPG2000: public RasterMap {
   void ServiceFullReload(double lat, double lon);
 
  protected:
+  char jp2_filename[MAX_PATH];
   virtual short _GetFieldAtXY(unsigned int lx,
                               unsigned int ly);
   bool TriggerJPGReload;

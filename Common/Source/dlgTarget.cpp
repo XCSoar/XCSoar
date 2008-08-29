@@ -35,10 +35,7 @@ Copyright_License {
 
 #include "externs.h"
 #include "Units.h"
-#include "McReady.h"
-#include "device.h"
 
-#include "WindowControls.h"
 #include "dlgTools.h"
 #include "Port.h"
 #include "Calculations2.h"

@@ -45,8 +45,6 @@ class Topology {
   void Open();
   void Close();
 
-  bool append;
-
   void updateCache(rectObj thebounds, bool purgeonly=false);
   void Paint(HDC hdc, RECT rc);
 
@@ -60,19 +58,20 @@ class Topology {
 
   XShape** shpCache;
 
-  bool checkVisible(shapeObj* shape, rectObj *screenRect);
+  bool checkVisible(shapeObj& shape, rectObj &screenRect);
 
-  void loadBitmap(int);
+  void loadBitmap(const int);
 
   char filename[MAX_PATH];
 
-  virtual void removeShape(int i);
-  virtual XShape* addShape(int i);
+  virtual void removeShape(const int i);
+  virtual XShape* addShape(const int i);
 
  protected:
 
   void flushCache();
 
+  bool append;
   bool in_scale;
   HPEN hPen;
   HBRUSH hbBrush;

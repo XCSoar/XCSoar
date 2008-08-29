@@ -2,11 +2,13 @@
 SRC=Common/Source
 HDR=Common/Header
 #
+PROFILE		:=
 OPTIMIZE	:=-O2
 CONFIG_PPC2002	:=n
 CONFIG_PPC2003	:=n
 CONFIG_ALTAIR	:=n
 CONFIG_PC	:=n
+CONFIG_WINE	:=n
 
 ifeq ($(TARGET),PPC2002)
   CONFIG_PPC2002	:=y
@@ -17,8 +19,12 @@ else
     ifeq ($(TARGET),PC)
       CONFIG_PC	:=y
     else
-      ifeq ($(TARGET),ALTAIR)
-        CONFIG_ALTAIR	:=y
+      ifeq ($(TARGET),WINE)
+        CONFIG_WINE :=y
+      else
+        ifeq ($(TARGET),ALTAIR)
+          CONFIG_ALTAIR	:=y
+        endif
       endif
     endif
   endif
@@ -28,8 +34,13 @@ ifeq ($(CONFIG_PC),y)
 TCPATH		:=i586-mingw32msvc-
 CPU		:=i586
 else
+ifeq ($(CONFIG_WINE),y)
+TCPATH		:=wine
+CPU		:=i586
+else
 TCPATH		:=arm-mingw32ce-
 CPU		:=xscale
+endif
 endif
 
 ifeq ($(CONFIG_PPC2002),y)
@@ -59,6 +70,14 @@ CE_MINOR	:=00
 CE_PLATFORM	:=500
 TARGET		:=PC
 endif
+ifeq ($(CONFIG_WINE),y)
+# armv4i
+CE_MAJOR	:=5
+CE_MINOR	:=00
+CE_PLATFORM	:=500
+TARGET		:=WINE
+CONFIG_PC	:=y
+endif
 
 
 EXE		:=$(findstring .exe,$(MAKE))
@@ -79,25 +98,37 @@ CE_DEFS		:=-D_WIN32_WCE=$(CE_VERSION) -D_WIN32_IE=$(CE_VERSION)
 CE_DEFS		+=-DWIN32_PLATFORM_PSPC=$(CE_PLATFORM)
 endif
 
-CPPFLAGS	:=-I$(HDR)/mingw32compat -I$(HDR) -I$(SRC) $(CE_DEFS)
-CPPFLAGS	+= -DUNICODE -D_UNICODE -DNDEBUG -Wuninitialized
+INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC)
+ifeq ($(CONFIG_WINE),y)
+INCLUDES	:= -I$(HDR)/mingw32compat -I$(HDR) -I$(SRC)
+endif
+CPPFLAGS	:= $(INCLUDES) $(CE_DEFS)
+CPPFLAGS	+= -DNDEBUG -Wuninitialized
+UNICODE		:= -DUNICODE -D_UNICODE
 ifeq ($(CONFIG_PC),y)
 CPPFLAGS	+= -D_WINDOWS -D_MBCS -DWIN32 -DCECORE -DUNDER_CE=300
+  ifeq ($(CONFIG_WINE),y)
+CPPFLAGS	+= -D__MINGW32__
+# -mno-cygwin
+  else
+CPPFLAGS	+= $(UNICODE)
+  endif
 else
-CPPFLAGS	+= -D_ARM_
-endif
-ifeq ($(CONFIG_ALTAIR),y)
+CPPFLAGS	+= -D_ARM_ $(UNICODE)
+  ifeq ($(CONFIG_ALTAIR),y)
 CPPFLAGS 	+=-IPPC2005 -DGNAV
+  endif
 endif
 
-CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions
-CFLAGS		:=$(OPTIMIZE)
+CXXFLAGS	:=$(OPTIMIZE) -fno-exceptions $(PROFILE)
+CFLAGS		:=$(OPTIMIZE) $(PROFILE)
 
 LDFLAGS		:=-Wl,--major-subsystem-version=$(CE_MAJOR)
 LDFLAGS		+=-Wl,--minor-subsystem-version=$(CE_MINOR)
 ifeq ($(CONFIG_PC),y)
 LDFLAGS		+=-Wl,-subsystem,windows
 endif
+LDFLAGS		+=$(PROFILE)
 
 ifeq ($(CONFIG_PC),y)
 LDLIBS		:= -lmingw32 -lcomctl32 -lkernel32 -luser32 -lgdi32 -ladvapi32 -lwinmm -lmsimg32 -lstdc++
@@ -216,11 +247,8 @@ OBJS	:=\
 	$(SRC)/GaugeVarioAltA.o 	$(SRC)/Geoid.o \
 	$(SRC)/InfoBox.o 		$(SRC)/InfoBoxLayout.o \
 	$(SRC)/InputEvents.o 		$(SRC)/leastsqs.o \
-	$(SRC)/Logger.o 		$(SRC)/mapbits.o \
-	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \
-	$(SRC)/mapsearch.o		$(SRC)/mapshape.o \
-	$(SRC)/maptree.o		$(SRC)/MapWindow.o \
-	$(SRC)/MapWindow2.o		$(SRC)/mapxbase.o \
+	$(SRC)/Logger.o 		\
+	$(SRC)/MapWindow.o 		$(SRC)/MapWindow2.o \
 	$(SRC)/McReady.o 		$(SRC)/Message.o \
 	$(SRC)/NavFunctions.o		$(SRC)/OnLineContest.o \
 	$(SRC)/Parser.o			$(SRC)/Port.o \
@@ -236,6 +264,12 @@ OBJS	:=\
 	$(SRC)/windanalyser.o		$(SRC)/windmeasurementlist.o \
 	$(SRC)/windstore.o 		$(SRC)/WindowControls.o \
 	$(SRC)/WindZigZag.o 		$(SRC)/xmlParser.o \
+	\
+	$(SRC)/mapbits.o \
+	$(SRC)/maperror.o 		$(SRC)/mapprimitive.o \
+	$(SRC)/mapsearch.o		$(SRC)/mapshape.o \
+	$(SRC)/maptree.o                $(SRC)/mapxbase.o \
+	\
 	$(SRC)/XCSoar.o \
 	$(DEVS) \
 	$(DLGS:.cpp=.o) \

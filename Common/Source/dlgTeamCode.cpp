@@ -33,7 +33,6 @@ Copyright_License {
 #include "StdAfx.h"
 #include "XCSoar.h"
 #include "Utils.h"
-#include "WindowControls.h"
 #include "dlgTools.h"
 #include "externs.h"
 

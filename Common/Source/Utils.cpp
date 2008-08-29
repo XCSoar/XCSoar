@@ -3211,56 +3211,6 @@ cont:
 */
 
 
-void ReadLanguageFile() {
-  StartupStore(TEXT("Loading language file\n"));
-
-  TCHAR szFile1[MAX_PATH] = TEXT("\0");
-  FILE *fp=NULL;
-
-  // Open file from registry
-  GetRegistryString(szRegistryLanguageFile, szFile1, MAX_PATH);
-  ExpandLocalPath(szFile1);
-
-  SetRegistryString(szRegistryLanguageFile, TEXT("\0"));
-
-  if (_tcslen(szFile1)==0) {
-    // JMW set default language file if none present
-    _tcscpy(szFile1,TEXT("default.xcl"));
-  }
-
-  fp  = _tfopen(szFile1, TEXT("rt"));
-
-  if (fp == NULL)
-    return;
-
-  // TODO - Safer sizes, strings etc - use C++ (can scanf restrict length?)
-  TCHAR buffer[2049];	// key from scanf
-  TCHAR key[2049];	// key from scanf
-  TCHAR value[2049];	// value from scanf
-  int found;            // Entries found from scanf
-
-  /* Read from the file */
-  while (
-  	 (GetTextData_Size < MAXSTATUSMESSAGECACHE)
-	 && fgetws(buffer, 2048, fp)
-	 && ((found = swscanf(buffer, TEXT("%[^#=]=%[^\r\n][\r\n]"), key, value)) != EOF)
-         ) {
-    // Check valid line?
-    if ((found != 2) || !key || !value) continue;
-
-    GetTextData[GetTextData_Size].key = StringMallocParse(key);
-    GetTextData[GetTextData_Size].text = StringMallocParse(value);
-
-    // Global counter
-    GetTextData_Size++;
-  }
-
-  // file was OK, so save registry
-  ContractLocalPath(szFile1);
-  SetRegistryString(szRegistryLanguageFile, szFile1);
-
-  fclose(fp);
-}
 
 
 void StatusFileInit() {

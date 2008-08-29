@@ -21,12 +21,6 @@ extern "C" {
     return raster_tile_current->TileRequest(index);
   }
 
-  /*
-  bool jas_rtc_PollTiles(int view_x, int view_y) {
-    return raster_tile_current->PollTiles(view_x, view_y);
-  }
-  */
-
   short* jas_rtc_GetImageBuffer(int index) {
     return raster_tile_current->GetImageBuffer(index);
   }
