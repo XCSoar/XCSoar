@@ -641,7 +641,9 @@ void ReadWayPoints(void)
 #endif
 
   // read additional waypoint file
+#ifdef HAVEEXCEPTIONS
   int NumberOfWayPointsAfterFirstFile = NumberOfWayPoints;
+#endif
 
 #ifdef HAVEEXCEPTIONS
   __try{

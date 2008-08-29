@@ -46,10 +46,6 @@ Copyright_License {
 #include "Volkslogger/vlapi2.h"
 #include "Volkslogger/vlapihlp.h"
 
-static BOOL fDeclarationPending = FALSE;
-static int nDeclErrorCode = 0;
-static int ewDecelTpIndex = 0;
-
 // RMN: Volkslogger
 // Source data:
 // $PGCS,1,0EC0,FFF9,0C6E,02*61

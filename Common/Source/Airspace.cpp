@@ -69,7 +69,7 @@ void DumpAirspaceFile(void);
 
 static bool StartsWith(TCHAR *Text, const TCHAR *LookFor);
 static bool ReadCoords(TCHAR *Text, double *X, double *Y);
-static void AddAirspaceCircle(AIRSPACE_AREA *Temp, double CenterX, double CenterY, double Radius);
+static void AddAirspaceCircle(AIRSPACE_AREA *Temp, double aCenterX, double aCenterY, double Radius);
 static void AddPoint(AIRSPACE_POINT *Temp, unsigned *AeraPointCount);
 static void AddArea(AIRSPACE_AREA *Temp);
 static void ReadAltitude(TCHAR *Text, AIRSPACE_ALT *Alt);
@@ -88,11 +88,9 @@ static TCHAR TempString[READLINE_LENGTH+1];
 static AIRSPACE_AREA TempArea;
 static AIRSPACE_POINT TempPoint;
 static int Rotation = 1;
+//static float Radius = 0;
 static double CenterX = 0;
 static double CenterY = 0;
-static float Radius = 0;
-static float Width = 0;
-static float Zoom = 0;
 static int LineCount;
 static double lastQNH;
 
@@ -188,7 +186,6 @@ void CloseAirspace() {
 void ReadAirspace(ZZIP_FILE *fp)
 {
   StartupStore(TEXT("ReadAirspace\n"));
-
   int	Tock = 0;
   DWORD	dwStep;
   DWORD	dwPos;
@@ -496,7 +493,7 @@ static bool ParseLine(int nLineType)
     case k_nLtDC:
       if (bFillMode)
         {
-          Radius = (float)StrToDouble(&TempString[2],NULL);
+          double Radius = (float)StrToDouble(&TempString[2],NULL);
           Radius = (float)(Radius * NAUTICALMILESTOMETRES);
           AddAirspaceCircle(&TempArea, CenterX, CenterY, Radius);
         }
@@ -813,7 +810,7 @@ static void AirspaceAGLLookup(AIRSPACE_ALT *Top, AIRSPACE_ALT *Base,
 
 
 static void AddAirspaceCircle(AIRSPACE_AREA *Temp,
-                              double CenterX, double CenterY, double Radius)
+                              double aCenterX, double aCenterY, double aRadius)
 {
   AIRSPACE_CIRCLE *NewCircle = NULL;
 
@@ -827,9 +824,9 @@ static void AddAirspaceCircle(AIRSPACE_AREA *Temp,
       NumberOfAirspaceCircles++;
 
       _tcscpy(NewCircle->Name , Temp->Name);
-      NewCircle->Latitude = CenterY;
-      NewCircle->Longitude = CenterX;
-      NewCircle->Radius = Radius;
+      NewCircle->Latitude = aCenterY;
+      NewCircle->Longitude = aCenterX;
+      NewCircle->Radius = aRadius;
       NewCircle->Type = Temp->Type;
       NewCircle->Top.Altitude  = Temp->Top.Altitude ;
       NewCircle->Top.FL   = Temp->Top.FL;
@@ -1958,8 +1955,6 @@ void FindNearestAirspace(double longitude, double latitude,
   double nearestb1 = 0;
   double nearestb2 = 0;
 
-  double speed = max(1,GPS_INFO.Speed);
-  double vspeed = CALCULATED_INFO.Average30s;
   double nearestt = 100000;
 
   *foundcircle = FindNearestAirspaceCircle(longitude, latitude,

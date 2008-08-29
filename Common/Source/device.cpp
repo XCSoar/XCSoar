@@ -397,7 +397,7 @@ BOOL devParseNMEA(int portNum, TCHAR *String, NMEA_INFO *GPS_INFO){
     char  sTmp[500];  // temp multibyte buffer
     TCHAR *pWC = String;
     char  *pC  = sTmp;
-    static DWORD lastFlush = 0;
+    //    static DWORD lastFlush = 0;
 
     sprintf(pC, "%9d <", GetTickCount());
     pC = sTmp + strlen(sTmp);

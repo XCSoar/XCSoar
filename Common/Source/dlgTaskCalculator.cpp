@@ -174,7 +174,6 @@ static void RefreshCalculator(void) {
 extern bool TargetDialogOpen;
 
 static void DoOptimise(void) {
-  bool ok = true;
   double myrange= Range;
   double RangeLast= Range;
   double deltaTlast = 0;

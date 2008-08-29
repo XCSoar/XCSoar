@@ -154,7 +154,6 @@ static void SetValues(void) {
   WndProperty* wp;
   bool sign;
   int dd,mm,ss;
-  double num=0;
 
   Units::LongitudeToDMS(global_wpt->Longitude,
 			&dd, &mm, &ss, &sign);

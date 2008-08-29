@@ -221,8 +221,8 @@ short RasterMapRaw::_GetFieldAtXY(unsigned int lx,
 short RasterMapCache::_GetFieldAtXY(unsigned int lx,
                                     unsigned int ly) {
 
-  unsigned int ix = CombinedDivAndMod(lx);
-  unsigned int iy = CombinedDivAndMod(ly);
+  //  unsigned int ix = CombinedDivAndMod(lx);
+  //  unsigned int iy = CombinedDivAndMod(ly);
 
   if ((ly>=(unsigned int)TerrainInfo.Rows)
       ||(lx>=(unsigned int)TerrainInfo.Columns)) {

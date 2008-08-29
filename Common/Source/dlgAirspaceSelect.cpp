@@ -100,7 +100,6 @@ static int LowLimit=0;
 
 static int ItemIndex = -1;
 
-static int SelectedAirspaceFileIdx = 0;
 static AirspaceSelectInfo_t *AirspaceSelectInfo=NULL;
 
 

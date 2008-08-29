@@ -160,7 +160,7 @@ static int OnKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam){
 
 }
 
-
+/*
 static void OnDistroy(WindowControl * Sender){
   (void)Sender;
   // TODO: This currently isn't called!
@@ -173,8 +173,8 @@ static void OnDistroy(WindowControl * Sender){
 
   delete wf;
   wf = NULL;
-
 }
+*/
 
 static void getAirspaceType(TCHAR *buf, int Type){
   switch (Type)

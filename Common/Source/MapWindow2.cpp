@@ -493,7 +493,6 @@ void MapWindow::ScanVisibility(rectObj *bounds_active) {
   // This happens rarely, so it is good pre-filtering of what is visible.
   // (saves from having to do it every screen redraw)
   const rectObj bounds = *bounds_active;
-  int i;
 
   // far visibility for snail trail
 

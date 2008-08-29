@@ -73,7 +73,6 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
 {
   DWORD dwError;
   DCB PortDCB;
-  TCHAR sTmp[127];
 
   if (lpszPortName) {
     _tcscpy(sPortName, lpszPortName);
@@ -397,7 +396,6 @@ BOOL ComPort::StopRxThread()
 BOOL ComPort::StartRxThread(void)
 {
   DWORD dwThreadID, dwError;
-  TCHAR sTmp[127];
 
   CloseThread = FALSE;
 

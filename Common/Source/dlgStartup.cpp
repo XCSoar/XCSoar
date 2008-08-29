@@ -36,8 +36,6 @@ Copyright_License {
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 
-
-static int page=0;
 static WndForm *wf=NULL;
 static WndOwnerDrawFrame *wSplash=NULL;
 static HBITMAP hSplash;

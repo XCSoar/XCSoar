@@ -118,7 +118,6 @@ static void LDNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double LegT
 
 static void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double maccready);
 static void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
-static bool  InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, BOOL* CrossedStart);
 static bool  InFinishSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int i);
 static bool  InTurnSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const int i);
 //static void FinalGlideAlert(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
@@ -990,7 +989,6 @@ void Vario(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   static double LastAlt = 0;
   static double LastAltTE = 0;
   static double h0last = 0;
-  double GPSVarioTE=0;
 
   if(Basic->Time <= LastTime) {
     LastTime = Basic->Time;
@@ -2049,8 +2047,8 @@ bool InStartSector_Internal(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 }
 
 
-bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index,
-                   BOOL *CrossedStart)
+static bool InStartSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int &index,
+			  BOOL *CrossedStart)
 {
   static bool LastInSector = false;
   static int EntryStartSector = index;
@@ -2681,7 +2679,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double maccread
 
       dr_last = Calculated->LegDistanceCovered;
       double ttg = max(1,Calculated->LegTimeToGo);
-      double Vav = d0/max(1.0,t0);
+      //      double Vav = d0/max(1.0,t0);
       double Vrem = Calculated->LegDistanceToGo/ttg;
       double Vref = // Vav;
 	Vrem;
@@ -2781,7 +2779,6 @@ static void CheckFinalGlideThroughTerrain(NMEA_INFO *Basic,
                                           double LegToGo,
                                           double LegBearing) {
 
-  bool glide_through_terrain_now = false;
   // Final glide through terrain updates
   if (Calculated->FinalGlide) {
 

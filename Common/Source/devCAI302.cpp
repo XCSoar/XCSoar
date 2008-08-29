@@ -130,7 +130,7 @@ typedef struct{
 
 #pragma pack(pop)
 
-static cai302_Wdata_t cai302_Wdata;
+//static cai302_Wdata_t cai302_Wdata;
 static cai302_OdataNoArgs_t cai302_OdataNoArgs;
 static cai302_OdataPilot_t cai302_OdataPilot;
 static cai302_GdataNoArgs_t cai302_GdataNoArgs;

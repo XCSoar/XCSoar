@@ -51,7 +51,7 @@ extern bool EnableCalibration;
 
 static double EastOrWest(double in, TCHAR EoW);
 static double NorthOrSouth(double in, TCHAR NoS);
-static double LeftOrRight(double in, TCHAR LoR);
+//static double LeftOrRight(double in, TCHAR LoR);
 static double MixedFormatToDegrees(double mixed);
 static int NAVWarn(TCHAR c);
 
@@ -128,7 +128,7 @@ BOOL NMEAParser::ParseNMEAString(int device,
 size_t NMEAParser::ExtractParameters(const TCHAR *src, TCHAR *dst, TCHAR **arr, size_t sz)
 {
   TCHAR c, *p;
-  size_t len, i = 0;
+  size_t i = 0;
 
   _tcscpy(dst, src);
   p = _tcschr(dst, _T('*'));
@@ -280,6 +280,7 @@ double NorthOrSouth(double in, TCHAR NoS)
     return in;
 }
 
+/*
 double LeftOrRight(double in, TCHAR LoR)
 {
   if(LoR == 'L')
@@ -287,6 +288,7 @@ double LeftOrRight(double in, TCHAR LoR)
   else
     return in;
 }
+*/
 
 int NAVWarn(TCHAR c)
 {
@@ -698,7 +700,7 @@ BOOL NMEAParser::NMEAChecksum(const TCHAR *String)
 
   c1 = pEnd[1], c2 = pEnd[2];
 
-  iswdigit('0');
+  //  iswdigit('0'); // what's this for?
 
   if(_istdigit(c1))
     v1 = (unsigned char)(c1 - '0');
@@ -931,11 +933,12 @@ BOOL NMEAParser::PFLAA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
 //////
 
 void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
+#ifdef DEBUG
   static int i=90;
   static TCHAR t1[] = TEXT("1,1,1,1");
   static TCHAR t2[] = TEXT("1,300,500,220,2,DD8F12,0,-4.5,30,-1.4,1");
   static TCHAR t3[] = TEXT("0,0,1200,50,2,DA8B06,270,-4.5,30,-1.4,1");
-  static TCHAR b50[] = TEXT("0,.1,.0,0,0,1.06,0,-222");
+  //  static TCHAR b50[] = TEXT("0,.1,.0,0,0,1.06,0,-222");
   //  static TCHAR t4[] = TEXT("-3,500,1024,50");
 
   //  nmeaParser1.ParseNMEAString_Internal(TEXT("$PTAS1,201,200,02583,000*2A"), GPS_INFO);
@@ -968,6 +971,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
     nr = nmeaParser1.ExtractParameters(t3, ctemp, params, MAX_NMEA_PARAMS);
     nmeaParser1.PFLAA(t3, params, nr, GPS_INFO);
   }
+#endif
 }
 
 

@@ -52,12 +52,12 @@ static BOOL FlymasterF1ParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO
 
 }
 
-
+/*
 static BOOL FlymasterF1IsLogger(PDeviceDescriptor_t d){
   (void)d;
   return(FALSE);
 }
-
+*/
 
 static BOOL FlymasterF1IsGPSSource(PDeviceDescriptor_t d){
   (void)d;

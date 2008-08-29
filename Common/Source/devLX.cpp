@@ -64,11 +64,12 @@ static BOOL LXParseNMEA(PDeviceDescriptor_t d, TCHAR *String, NMEA_INFO *GPS_INF
 }
 
 
+/*
 static BOOL LXIsLogger(PDeviceDescriptor_t d){
   (void)d;
   return(FALSE);
 }
-
+*/
 
 static BOOL LXIsGPSSource(PDeviceDescriptor_t d){
   (void)d;

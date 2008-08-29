@@ -204,11 +204,11 @@ void ThermalLocator::Update_Internal(double t_0,
     sx /= slogw;
     sy /= slogw;
 
-    int vx = iround(100*fastsine(trackbearing));
-    int vy = iround(100*fastcosine(trackbearing));
-    long dx = sx;
-    long dy = sy;
-    int mag = isqrt4((dx*dx+dy*dy)*256*256)/256;
+    //    int vx = iround(100*fastsine(trackbearing));
+    //    int vy = iround(100*fastcosine(trackbearing));
+    //    long dx = sx;
+    //    long dy = sy;
+    //    int mag = isqrt4((dx*dx+dy*dy)*256*256)/256;
 
     // find magnitude of angle error
 //    double g = max(-0.99,min(0.99,(dx*vx + dy*vy)/(100.0*mag)));

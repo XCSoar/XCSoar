@@ -4,6 +4,8 @@ HDR=Common/Header
 #
 PROFILE		:=
 OPTIMIZE	:=-O2
+# -Wdisabled-optimization
+# -Wunused -Wshadow -Wunreachable-code
 CONFIG_PPC2002	:=n
 CONFIG_PPC2003	:=n
 CONFIG_ALTAIR	:=n
@@ -79,6 +81,11 @@ TARGET		:=WINE
 CONFIG_PC	:=y
 endif
 
+
+OUTPUTS 	:= XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
+ifeq ($(CONFIG_ALTAIR),y)
+OUTPUTS 	:= XCSoar-$(TARGET).exe
+endif
 
 EXE		:=$(findstring .exe,$(MAKE))
 AR		:=$(TCPATH)ar$(EXE)
@@ -168,7 +175,7 @@ endif
 
 
 ifeq ($(CONFIG_PC),n)
-CPPFLAGS_Common_Source_ :=-Werror
+#CPPFLAGS_Common_Source_ :=-Werror
 endif
 
 DEVS	:=\
@@ -297,7 +304,7 @@ ZZIP	:=\
 	$(ZZIPSRC)/adler32.c	 	$(ZZIPSRC)/compress.c \
 	$(ZZIPSRC)/crc32.c 		$(ZZIPSRC)/deflate.c \
 	$(ZZIPSRC)/err.c 		$(ZZIPSRC)/fetch.c \
-	$(ZZIPSRC)/file.c 		$(ZZIPSRC)/gzio.c \
+	$(ZZIPSRC)/file.c 		\
 	$(ZZIPSRC)/infback.c 		$(ZZIPSRC)/inffast.c \
 	$(ZZIPSRC)/inflate.c 		$(ZZIPSRC)/info.c \
 	$(ZZIPSRC)/inftrees.c 		$(ZZIPSRC)/plugin.c \
@@ -317,10 +324,11 @@ JASPER	:=\
 	$(JASSRC)/jp2/jp2_dec.c 	$(JASSRC)/jpc/jpc_bs.c \
 	$(JASSRC)/jpc/jpc_cs.c 		$(JASSRC)/jpc/jpc_dec.c \
 	$(JASSRC)/jpc/jpc_math.c 	$(JASSRC)/jpc/jpc_mct.c \
-	$(JASSRC)/jpc/jpc_mqcod.c 	$(JASSRC)/jpc/jpc_mqdec.c \
+	$(JASSRC)/jpc/jpc_mqdec.c       $(JASSRC)/jpc/jpc_mqcod.c \
 	$(JASSRC)/jpc/jpc_qmfb.c 	$(JASSRC)/jpc/jpc_rtc.cpp \
-	$(JASSRC)/jpc/jpc_t1cod.c 	$(JASSRC)/jpc/jpc_t1dec.c \
-	$(JASSRC)/jpc/jpc_t2cod.c 	$(JASSRC)/jpc/jpc_t2dec.c \
+	$(JASSRC)/jpc/jpc_t1dec.c 	$(JASSRC)/jpc/jpc_t1enc.c \
+	$(JASSRC)/jpc/jpc_t1cod.c \
+	$(JASSRC)/jpc/jpc_t2dec.c 	$(JASSRC)/jpc/jpc_t2cod.c \
 	$(JASSRC)/jpc/jpc_tagtree.c	$(JASSRC)/jpc/jpc_tsfb.c \
 	$(JASSRC)/jpc/jpc_util.c 	$(JASSRC)/jpc/RasterTile.cpp
 
@@ -330,7 +338,7 @@ COMPAT	:=\
 	$(COMPATSRC)/ts_string.cpp 	$(COMPATSRC)/wtoi.c \
 	$(COMPATSRC)/debug.cpp
 
-all:	XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
+all:	$(OUTPUTS)
 
 install: XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	@echo Copying to device...

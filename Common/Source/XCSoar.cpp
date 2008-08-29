@@ -1192,9 +1192,9 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   // experimental CVS
 
 #ifdef __MINGW32__
-  wcscat(XCSoar_Version, TEXT("5.1.9 gccB3 "));
+  wcscat(XCSoar_Version, TEXT("5.1.9 gccB4 "));
 #else
-  wcscat(XCSoar_Version, TEXT("5.1.9 Beta3 "));
+  wcscat(XCSoar_Version, TEXT("5.1.9 Beta4 "));
 #endif
 
   wcscat(XCSoar_Version, TEXT(__DATE__));
@@ -2103,7 +2103,6 @@ void Shutdown(void) {
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  static bool lastpress = false;
   long wdata;
 
   switch (message)
@@ -3136,7 +3135,6 @@ typedef struct _VIDEO_POWER_MANAGEMENT {
 int PDABatteryPercent = 100;
 
 void BlankDisplay(bool doblank) {
-  static bool oldblank = false;
 
 #if (WINDOWSPC>0)
   return;
@@ -3144,6 +3142,7 @@ void BlankDisplay(bool doblank) {
 #ifdef GNAV
   return;
 #else
+  static bool oldblank = false;
 
   BATTERYINFO BatteryInfo;
   BatteryInfo.acStatus = 0; // JMW initialise

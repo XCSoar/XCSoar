@@ -68,11 +68,6 @@ void ReadAirspace(void);
 int FindIndex(HWND hWnd);
 void ReadNewTask(HWND hDlg);
 
-
-static Task_t TaskBackup;
-static BOOL fTaskModified = FALSE;
-
-
 const TCHAR *PolarLabels[] = {TEXT("Vintage - Ka6"),
 			      TEXT("Club - ASW19"),
 			      TEXT("Standard - LS8"),

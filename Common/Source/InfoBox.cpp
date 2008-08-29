@@ -58,7 +58,6 @@ static COLORREF fgColor = RGB(0x0,0x0,0x0);
 static COLORREF bkColor = RGB(0xff,0xff,0xff);
 static COLORREF bkColorSel = RGB(150,0x0,0x0);
 static COLORREF bdColor = RGB(80,80,80);
-static DWORD lastErr;
 static HBRUSH hBrushDefaultBackGround;
 static HBRUSH hBrushDefaultBackGroundSel;
 static HPEN hPenDefaultBorder;
