@@ -25,17 +25,21 @@
 typedef unsigned int uint;
 typedef unsigned char byte;
 
+#ifndef __WINE__
 #define _tcsclen(x) _tcslen(x)
+#endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#ifndef __WINE__
 _CRTIMP int __cdecl     _wtoi (const wchar_t *);
 	void __cdecl	TransparentImage(HDC, ...);
 
   // JMW _CRTIMP int __cdecl	SHSetAppKeyWndAssoc(int, HWND);
 _CRTIMP void __cdecl	SystemIdleTimerReset(void);
+#endif
 
 #ifdef __cplusplus
 }

@@ -261,7 +261,6 @@ void LoadRegistryFromFile(const TCHAR* szFile);
    Interface Files !
    ===================================================== */
 
-void ReadLanguageFile(void);
 void ReadStatusFile(void);
 void StatusFileInit(void);
 void _init_Status(int num);

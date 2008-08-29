@@ -33,10 +33,6 @@ Copyright_License {
 #include <aygshell.h>
 
 #include "XCSoar.h"
-#include "MapWindow.h"
-#include "Port.h"
-
-#include "WindowControls.h"
 #include "externs.h"
 #include "McReady.h"
 #include "Dialogs.h"

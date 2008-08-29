@@ -64,7 +64,7 @@
 /*
  * Tier 2 Decoder
  *
- * $Id: jpc_t2dec.c,v 1.2 2007/09/14 17:11:18 jwharington Exp $
+ * $Id: jpc_t2dec.c,v 1.3 2008/08/29 16:13:39 jwharington Exp $
  */
 
 /******************************************************************************\
@@ -586,7 +586,11 @@ long jpc_dec_lookahead(jas_stream_t *in)
 	  jas_stream_ungetc(in, x >> 8) == EOF) {
 		return -1;
 	}
-	if (x >= JPC_MS_INMIN && x <= JPC_MS_INMAX) {
+	if ((x >= JPC_MS_INMIN)
+#ifndef __MINGW32__
+	    && (x <= JPC_MS_INMAX)
+#endif
+	    ) {
 		return x;
 	}
 	return 0;

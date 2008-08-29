@@ -69,7 +69,7 @@
 /*
  * JP2 Library
  *
- * $Id: jp2_cod.c,v 1.2 2007/09/14 17:11:15 jwharington Exp $
+ * $Id: jp2_cod.c,v 1.3 2008/08/29 16:13:39 jwharington Exp $
  */
 
 /******************************************************************************\
@@ -492,7 +492,12 @@ int jp2_box_put(jp2_box_t *box, jas_stream_t *out)
 		box->len = jas_stream_tell(tmpstream) + JP2_BOX_HDRLEN;
 		jas_stream_rewind(tmpstream);
 	}
-	extlen = (box->len >= (((uint_fast64_t)1) << 32)) != 0;
+	extlen = 
+#ifndef __MINGW32__
+	  (box->len >= (((uint_fast64_t)1) << 32)) != 0;
+#else
+	0;
+#endif
 	if (jp2_putuint32(out, extlen ? 1 : box->len)) {
 		goto error;
 	}

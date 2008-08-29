@@ -64,7 +64,7 @@
 /*
  * JPEG-2000 Code Stream Library
  *
- * $Id: jpc_cs.c,v 1.2 2007/09/14 17:11:16 jwharington Exp $
+ * $Id: jpc_cs.c,v 1.3 2008/08/29 16:13:39 jwharington Exp $
  */
 
 /******************************************************************************\
@@ -240,8 +240,11 @@ jpc_ms_t *jpc_getms(jas_stream_t *in, jpc_cstate_t *cstate)
 	}
 
 	/* Get the marker type. */
-	if (jpc_getuint16(in, &ms->id) || ms->id < JPC_MS_MIN ||
-	  ms->id > JPC_MS_MAX) {
+	if (jpc_getuint16(in, &ms->id) || ms->id < JPC_MS_MIN 
+#ifndef __MINGW32__
+	  || ms->id > JPC_MS_MAX
+#endif
+	    ) {
 		jpc_ms_destroy(ms);
 		return 0;
 	}

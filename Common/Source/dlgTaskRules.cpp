@@ -35,10 +35,8 @@ Copyright_License {
 
 #include "XCSoar.h"
 
-#include "WindowControls.h"
 #include "externs.h"
 #include "dlgTools.h"
-#include "device.h"
 
 #include "compatibility.h"
 #ifdef OLDPPC

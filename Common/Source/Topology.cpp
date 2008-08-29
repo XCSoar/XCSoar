@@ -30,7 +30,7 @@ Copyright_License {
 */
 
 #include "StdAfx.h"
-
+#include <ctype.h> // needed for Wine
 #include "Topology.h"
 #include "options.h"
 #include "externs.h"
@@ -59,7 +59,7 @@ void XShape::load(shapefileObj* shpfile, int i) {
 }
 
 
-void Topology::loadBitmap(int xx) {
+void Topology::loadBitmap(const int xx) {
   hBitmap = LoadBitmap(hInst, MAKEINTRESOURCE(xx));
 }
 
@@ -190,14 +190,14 @@ void Topology::updateCache(rectObj thebounds, bool purgeonly) {
 }
 
 
-XShape* Topology::addShape(int i) {
+XShape* Topology::addShape(const int i) {
   XShape* theshape = new XShape();
   theshape->load(&shpfile,i);
   return theshape;
 }
 
 
-void Topology::removeShape(int i) {
+void Topology::removeShape(const int i) {
   if (shpCache[i]) {
     delete shpCache[i];
     shpCache[i]= NULL;
@@ -206,8 +206,8 @@ void Topology::removeShape(int i) {
 
 
 
-bool Topology::checkVisible(shapeObj* shape, rectObj *screenRect) {
-  return (msRectOverlap(&shape->bounds, screenRect) == MS_TRUE);
+bool Topology::checkVisible(shapeObj& shape, rectObj &screenRect) {
+  return (msRectOverlap(&shape.bounds, &screenRect) == MS_TRUE);
 }
 
 
@@ -251,17 +251,18 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
   for (int ixshp = 0; ixshp < shpfile.numshapes; ixshp++) {
     
-    if (!shpCache[ixshp]) continue;    
-    if (shpCache[ixshp]->hide) continue;
+    XShape *cshape = shpCache[ixshp];
 
-    shapeObj *shape = &(shpCache[ixshp]->shape);
+    if (!cshape || cshape->hide) continue;    
+
+    shapeObj *shape = &(cshape->shape);
 
     switch(shape->type) {
 
         ///////////////////////////////////////
       case(MS_SHAPE_POINT):{
 
-        if (checkVisible(shape, &screenRect))
+        if (checkVisible(*shape, screenRect))
           for (int tt = 0; tt < shape->numlines; tt++) {
 
             for (int jj=0; jj< shape->line[tt].numpoints; jj++) {
@@ -272,7 +273,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
                                        sc);
               MapWindow::DrawBitmapIn(hdc, sc, hBitmap);
               
-              shpCache[ixshp]->renderSpecial(hdc, sc.x, sc.y);
+              cshape->renderSpecial(hdc, sc.x, sc.y);
 
           }
         }
@@ -281,7 +282,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
 
     case(MS_SHAPE_LINE):
 
-      if (checkVisible(shape, &screenRect))
+      if (checkVisible(*shape, screenRect))
         for (int tt = 0; tt < shape->numlines; tt ++) {
           
           int minx = rc.right;
@@ -298,13 +299,13 @@ void Topology::Paint(HDC hdc, RECT rc) {
 	  }
 
           ClipPolygon(hdc, pt, msize, rc, false);
-          shpCache[ixshp]->renderSpecial(hdc,minx,miny);
+          cshape->renderSpecial(hdc,minx,miny);
         }
       break;
       
     case(MS_SHAPE_POLYGON):
 
-      if (checkVisible(shape, &screenRect))
+      if (checkVisible(*shape, screenRect))
         for (int tt = 0; tt < shape->numlines; tt ++) {
           
           int minx = rc.right;
@@ -321,7 +322,7 @@ void Topology::Paint(HDC hdc, RECT rc) {
             }
 	  }
           ClipPolygon(hdc,pt, msize, rc, true);
-          shpCache[ixshp]->renderSpecial(hdc,minx,miny);          
+          cshape->renderSpecial(hdc,minx,miny);          
         }
       break;
       
@@ -532,10 +533,10 @@ void TopologyWriter::addPoint(double x, double y) {
 // modification so that lines may be clipped as well as polygons is
 // included in this function. The code for this function is:
 
-void OutputToInput(unsigned int *inLength, 
-                   POINT *inVertexArray, 
-                   unsigned int *outLength, 
-                   POINT *outVertexArray )
+static void OutputToInput(unsigned int *inLength, 
+			  POINT *inVertexArray, 
+			  unsigned int *outLength, 
+			  POINT *outVertexArray )
 { 
   if ((*inLength==2) && (*outLength==3)) //linefix
     {
@@ -572,26 +573,34 @@ void OutputToInput(unsigned int *inLength,
 // the second vertex of the clipping boundary". The code for this
 // function is:
 
-bool Inside (const POINT *testVertex, const POINT *clipBoundary)
+/*
+static bool Inside (const POINT *testVertex, const POINT *clipBoundary)
 {
-  if (clipBoundary[1].x > clipBoundary[0].x)              /*bottom edge*/
+  if (clipBoundary[1].x > clipBoundary[0].x)              // bottom edge
     if (testVertex->y <= clipBoundary[0].y) return TRUE;
-  if (clipBoundary[1].x < clipBoundary[0].x)              /*top edge*/
+  if (clipBoundary[1].x < clipBoundary[0].x)              // top edge
    if (testVertex->y >= clipBoundary[0].y) return TRUE;
-  if (clipBoundary[1].y < clipBoundary[0].y)              /*right edge*/
+  if (clipBoundary[1].y < clipBoundary[0].y)              // right edge
     if (testVertex->x <= clipBoundary[1].x) return TRUE;
-  if (clipBoundary[1].y > clipBoundary[0].y)              /*left edge*/
+  if (clipBoundary[1].y > clipBoundary[0].y)              // left edge
     if (testVertex->x >= clipBoundary[1].x) return TRUE;
   return FALSE;
 }
+*/
+
+#define INSIDE_LEFT_EDGE(a,b)   (a->x >= b[1].x)
+#define INSIDE_BOTTOM_EDGE(a,b) (a->y <= b[0].y)
+#define INSIDE_RIGHT_EDGE(a,b)  (a->x <= b[1].x)
+#define INSIDE_TOP_EDGE(a,b)    (a->y >= b[0].y)
 
 // The "Intersect" function calculates the intersection of the polygon
 // edge (vertex s to p) with the clipping boundary. The code for this
 // function is:
 
 
-void Intersect (POINT first, POINT  second, POINT  *clipBoundary,
-                POINT *intersectPt)
+static bool Intersect (const POINT &first, const POINT &second, 
+		       const POINT *clipBoundary,
+		       POINT *intersectPt)
 {
   float f;
   if (clipBoundary[0].y==clipBoundary[1].y)     /*horizontal*/
@@ -600,26 +609,25 @@ void Intersect (POINT first, POINT  second, POINT  *clipBoundary,
      if (second.y != first.y) {
        f = ((float)(second.x-first.x))/((float)(second.y-first.y));
        intersectPt->x= first.x + (long)(((clipBoundary[0].y-first.y)*f));
-     } else {
-       intersectPt->x = first.x;
+       return true;
      }
    } else { /*Vertical*/
     intersectPt->x=clipBoundary[0].x;
     if (second.x != first.x) {
       f = ((float)(second.y-first.y))/((float)(second.x-first.x));
       intersectPt->y=first.y + (long)(((clipBoundary[0].x-first.x)*f));
-    } else {
-      intersectPt->y = first.y;
-    }
+      return true;
+    } 
   }
+  return false; // no need to add point!
 }
 
 
 // The "Output" function moves "newVertex" to "outVertexArray" and
 // updates "outLength".
 
-void Output(const POINT *newVertex, 
-            unsigned int *outLength, POINT *outVertexArray)
+static void Output(const POINT *newVertex, 
+		   unsigned int *outLength, POINT *outVertexArray)
 {
   if (*outLength) {
     if ((newVertex->x == outVertexArray[*outLength-1].x)
@@ -634,54 +642,101 @@ void Output(const POINT *newVertex,
 }
 
 
-void SutherlandHodgmanPolygoClip (POINT* inVertexArray,
-                                  POINT* outVertexArray,
-                                  unsigned int inLength,
-                                  unsigned int *outLength,
-                                  POINT *clipBoundary, bool fill)
+static bool ClipEdge(const bool &s_inside, 
+		     const bool &p_inside, 
+		     const POINT *clipBoundary, 
+		     POINT *outVertexArray, 
+		     const POINT *s,
+		     const POINT *p,
+		     unsigned int *outLength,
+		     const bool &fill) {
+
+  if (fill) {
+    if (p_inside && !s_inside) {
+      POINT i;
+      if (Intersect(*s, *p, clipBoundary, &i)) {
+	Output(&i, outLength, outVertexArray);
+      }
+    }      
+  } else if (p_inside) {
+    Output(p, outLength, outVertexArray); /*Case 1*/
+  } else {
+    return false;
+  }
+  return true;
+}
+
+static unsigned int SutherlandHodgmanPolygoClip (POINT* inVertexArray,
+						 POINT* outVertexArray,
+						 const unsigned int inLength,
+						 const POINT *clipBoundary, 
+						 const bool &fill,
+						 const int &mode)
 {
   POINT *s, *p; /*Start, end point of current polygon edge*/ 
-  POINT i;   /*Intersection point with a clip boundary*/
   unsigned int j;       /*Vertex loop counter*/
-  *outLength = 0;
+  unsigned int outLength = 0;
 
-  if (inLength<1) return;
+  if (inLength<1) return 0;
 
   s = inVertexArray + inLength-1;
   p = inVertexArray;
-  /*Start with the last vertex in inVertexArray*/
-  for (j=inLength; j--;)
-    {
+
+  bool s_inside, p_inside;
+
+  switch (mode) {
+  case 0:
+    /*Start with the last vertex in inVertexArray*/
+    s_inside = INSIDE_LEFT_EDGE(s,clipBoundary);
+    for (j=inLength; j--; ) {
+      p_inside = INSIDE_LEFT_EDGE(p,clipBoundary);
       /*Now s and p correspond to the vertices*/
-      if (fill || (p!=inVertexArray)) {
-        if (Inside(p,clipBoundary))      /*Cases 1 and 4*/
-          {
-            if (Inside(s, clipBoundary))
-              {
-                Output(p, outLength, outVertexArray); /*Case 1*/
-              }
-            else                            /*Case 4*/
-              {
-                Intersect(*s, *p, clipBoundary, &i);
-                Output(&i, outLength, outVertexArray);
-                Output(p, outLength, outVertexArray);
-              }
-          }
-        else                   /*Cases 2 and 3*/
-          {
-            if (Inside(s, clipBoundary))  /*Cases 2*/
-              {
-                Output(p, outLength, outVertexArray);
-              }
-          }                          /*No action for case 3*/
-      } else {
-        if (Inside(p, clipBoundary)) 
-          Output(p, outLength, outVertexArray); /*Case 1*/
+      if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
+		   &outLength, fill || (p != inVertexArray))) {
+	Output(p, &outLength, outVertexArray);
       }
       /*Advance to next pair of vertices*/
-      s = p;     
-      p++;
+      s = p; s_inside = p_inside; p++;
     }
+    break;
+  case 1:
+    /*Start with the last vertex in inVertexArray*/
+    s_inside = INSIDE_BOTTOM_EDGE(s,clipBoundary);
+    for (j=inLength; j--; ) {
+      p_inside = INSIDE_BOTTOM_EDGE(p,clipBoundary);
+      if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
+		   &outLength, fill || (p != inVertexArray))) {
+	Output(p, &outLength, outVertexArray);
+      }
+      s = p; s_inside = p_inside; p++;
+    }
+    break;
+  case 2:
+    /*Start with the last vertex in inVertexArray*/
+    s_inside = INSIDE_RIGHT_EDGE(s,clipBoundary);
+    for (j=inLength; j--; ) {
+      p_inside = INSIDE_RIGHT_EDGE(p,clipBoundary);
+      if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
+		   &outLength, fill || (p != inVertexArray))) {
+	Output(p, &outLength, outVertexArray);
+      }
+      s = p; s_inside = p_inside; p++;
+    }
+    break;
+  case 3:
+    /*Start with the last vertex in inVertexArray*/
+    s_inside = INSIDE_TOP_EDGE(s,clipBoundary);
+    for (j=inLength; j--; ) {
+      p_inside = INSIDE_TOP_EDGE(p,clipBoundary);
+      if (ClipEdge(s_inside, p_inside, clipBoundary, outVertexArray, s, p,
+		   &outLength, fill || (p != inVertexArray))) {
+	Output(p, &outLength, outVertexArray);
+      }
+      s = p; s_inside = p_inside; p++;
+    }
+    break;
+  }
+  return outLength;
 }    
 
 
@@ -690,7 +745,6 @@ static POINT clip_ptin[MAXCLIPPOLYGON];
 
 void ClipPolygon(HDC hdc, POINT *m_ptin, unsigned int inLength, 
                  RECT rc, bool fill) {
-  POINT edge[2];
   unsigned int outLength = 0;
 
   if (inLength>=MAXCLIPPOLYGON-1) {
@@ -718,59 +772,18 @@ void ClipPolygon(HDC hdc, POINT *m_ptin, unsigned int inLength,
   rc.left--;
   rc.right++;
 
-  // LEFT EDGE
-  // Top_Left_Vertex_of_Clipping_Window; 
-  edge[0].x = rc.left;
-  edge[0].y = rc.top;
-  // Bottom_Left_Vertex_of_Clipping_Window;
-  edge[1].x = rc.left;
-  edge[1].y = rc.bottom;
-
-  SutherlandHodgmanPolygoClip (clip_ptin, clip_ptout, 
-                               inLength, 
-                               &outLength, edge, fill);
-
-  OutputToInput(&inLength, clip_ptin, &outLength, clip_ptout);
-
-  // BOTTOM EDGE
-  // Bottom_Left_Vertex_of_Clipping_Window;        
-  edge[0].x = rc.left;
-  edge[0].y = rc.bottom;
-  // Bottom_Right_Vertex_of_Clipping_Window;
-  edge[1].x = rc.right; 
-  edge[1].y = rc.bottom;
-
-  SutherlandHodgmanPolygoClip (clip_ptin, clip_ptout, 
-                               inLength, 
-                               &outLength, edge, fill);
-  OutputToInput(&inLength, clip_ptin, &outLength, clip_ptout);
-
-  // RIGHT EDGE
-  // Bottom_Right_Vertex_of_Clipping_Window;
-  edge[0].x = rc.right;
-  edge[0].y = rc.bottom;
-  // Top_Right_Vertex_of_Clipping_Window;
-  edge[1].x = rc.right;
-  edge[1].y = rc.top;
-
-  SutherlandHodgmanPolygoClip (clip_ptin, clip_ptout, 
-                               inLength, 
-                               &outLength, edge, fill);
-  OutputToInput(&inLength, clip_ptin, &outLength, clip_ptout);
-
-  // TOP EDGE
-  // Top_Right_Vertex_of_Clipping_Window;          
-  edge[0].x = rc.right;
-  edge[0].y = rc.top;
-  // Top_Left_Vertex_of_Clipping_Window;
-  edge[1].x = rc.left;
-  edge[1].y = rc.top; 
-  
-  SutherlandHodgmanPolygoClip (clip_ptin, clip_ptout, 
-                               inLength, 
-                               &outLength, edge, fill);
-  
-  OutputToInput(&inLength, clip_ptin, &outLength, clip_ptout);
+  POINT edge[5] = {{rc.left, rc.top}, 
+		   {rc.left, rc.bottom},
+		   {rc.right, rc.bottom},
+		   {rc.right, rc.top},
+		   {rc.left, rc.top}};
+  //steps left_edge, bottom_edge, right_edge, top_edge
+  for (int step=0; step<4; step++) {
+    outLength = SutherlandHodgmanPolygoClip (clip_ptin, clip_ptout, 
+					     inLength, 
+					     edge+step, fill, step);
+    OutputToInput(&inLength, clip_ptin, &outLength, clip_ptout);
+  }
 
   if (fill) {
     if (outLength>2) {

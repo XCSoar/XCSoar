@@ -34,18 +34,9 @@ Copyright_License {
 #include <aygshell.h>
 
 #include "XCSoar.h"
-#include "MapWindow.h"
-#include "Terrain.h"
-#include "GaugeFLARM.h"
-
-#include "WindowControls.h"
 #include "Statistics.h"
 #include "externs.h"
-#include "McReady.h"
 #include "dlgTools.h"
-#include "device.h"
-#include "Process.h"
-#include "McReady.h"
 #include "Utils.h"
 #include "InfoBoxLayout.h"
 #include "Waypointparser.h"

@@ -33,7 +33,6 @@ Copyright_License {
 
 #include "externs.h"
 #include "Units.h"
-#include "externs.h"
 #include "Waypointparser.h"
 #include "Logger.h"
 #include "compatibility.h"
@@ -45,7 +44,6 @@ Copyright_License {
 
 extern BOOL extGPSCONNECT;
 
-#include "WindowControls.h"
 #include "dlgTools.h"
 
 extern HWND   hWndMainWindow;

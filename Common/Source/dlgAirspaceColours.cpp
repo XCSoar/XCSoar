@@ -35,9 +35,7 @@ Copyright_License {
 
 #include "XCSoar.h"
 
-#include "WindowControls.h"
 #include "externs.h"
-#include "McReady.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 #include "MapWindow.h"
@@ -66,9 +64,9 @@ static void OnAirspaceColoursPaintListItem(WindowControl * Sender, HDC hDC){
     SetBkColor(hDC, 
 	       RGB(0xFF, 0xFF, 0xFF));
     SelectObject(hDC, 
-		 MapWindow::hAirspaceBrushes[1]); // this is the solid brush
+		 MapWindow::GetAirspaceBrush(1)); // this is the solid brush
     SetTextColor(hDC, 
-		 MapWindow::Colours[i]);
+		 MapWindow::GetAirspaceColour(i));
     Rectangle(hDC, 
               100*InfoBoxLayout::scale, 
               2*InfoBoxLayout::scale,

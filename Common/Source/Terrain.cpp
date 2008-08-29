@@ -815,7 +815,7 @@ public:
 
     // set resolution
 
-    if (DisplayMap->DirectAccess) {
+    if (DisplayMap->IsDirectAccess()) {
       DisplayMap->SetFieldRounding(0,0);
     } else {
       DisplayMap->SetFieldRounding(Xrounding,Yrounding);
@@ -947,13 +947,13 @@ public:
   void Slope(const int sx, const int sy, const int sz) {
 
     const int iepx = (int)epx;
-    const unsigned int ixsepx = ixs*epx;
-    const unsigned int ixsright = ixs-1-epx;
-    const unsigned int iysbottom = iys-epx;
+    const unsigned int cixs = ixs;
+    const unsigned int ciys = iys;
+    const unsigned int ixsepx = cixs*epx;
+    const unsigned int ixsright = cixs-1-iepx;
+    const unsigned int iysbottom = ciys-iepx;
     const int hscale = max(1,(int)(pixelsize_d)); 
-    int itss_x;
-    int p20, p22, p31, p32, p31s;
-
+    const int tc = TerrainContrast;
     unsigned short *thBuf = hBuf;
 
     const BGRColor* oColorBuf = colorBuf+64*256;
@@ -962,60 +962,62 @@ public:
 
     short h;
 
-    unsigned short* hBufTop = hBuf+ixs*iys;
+    unsigned short* hBufTop = hBuf+cixs*ciys;
 
     for (unsigned int y = 0; y< iys; y++) {
-      int itss_y = iys-1-y;
-      int itss_y_ixs = itss_y*ixs;
-      int yixs = y*ixs;
+      const int itss_y = ciys-1-y;
+      const int itss_y_ixs = itss_y*cixs;
+      const int yixs = y*cixs;
       bool ybottom=false;
       bool ytop=false;
+      int p31, p32, p31s;
 
       if (y<iysbottom) {
-        p31= epx;
+        p31= iepx;
         ybottom = true;
       } else {
         p31= itss_y;
       }
 
-      if (y<epx) {
+      if (y>=iepx) {
+        p31+= iepx;
+      } else {
         p31+= y;
         ytop = true;
-      } else {
-        p31+= epx;
       }
       p31s = p31*hscale;
 
-      for (unsigned int x = 0 ; x<ixs; x++, thBuf++, imageBuf++) {
+      for (unsigned int x = 0 ; x<cixs; x++, thBuf++, imageBuf++) {
 
         ASSERT(thBuf< hBufTop);
 
         if ((h = *thBuf)>0) {
+	  int p20, p22;
 
           h = min(255, h>>height_scale);
           // no need to calculate slope if undefined height or sea level
 
           if (do_shading) {
             if (x<ixsright) {
-              p20= epx;
-              p22= *(thBuf+epx);
-              ASSERT(thBuf+epx< hBufTop);
+              p20= iepx;
+              p22= *(thBuf+iepx);
+              ASSERT(thBuf+iepx< hBufTop);
             } else {
-              itss_x = ixs-x-2;
+	      int itss_x = cixs-x-2;
               p20= itss_x;
               p22= *(thBuf+itss_x);
               ASSERT(thBuf+itss_x< hBufTop);
               ASSERT(thBuf+itss_x>= hBuf);
             } 
             
-            if (x<epx) {
+            if (x>=iepx) {
+              p20+= iepx;
+              p22-= *(thBuf-iepx);
+              ASSERT(thBuf-iepx>= hBuf);
+            } else {
               p20+= x;
               p22-= *(thBuf-x);
               ASSERT(thBuf-x>= hBuf);
-            } else {
-              p20+= epx;
-              p22-= *(thBuf-epx);
-              ASSERT(thBuf-epx>= hBuf);
             }
             
             if (ybottom) {
@@ -1033,8 +1035,13 @@ public:
               ASSERT(thBuf-ixsepx>=hBuf);
             }
             
-            if ((p22!=0) || (p32!=0)) {
-              
+            if ((p22==0) && (p32==0)) {
+
+              // slope is zero, so just look up the color
+              *imageBuf = oColorBuf[h];
+
+            } else {
+
               // p20 and p31 are never 0... so only p22 or p32 can be zero
               // if both are zero, the vector is 0,0,1 so there is no need
               // to normalise the vector
@@ -1048,17 +1055,14 @@ public:
                 dd1 /= 2;
                 dd2 /= 2;
               }
-              int mag = isqrt4(dd0*dd0+dd1*dd1+dd2*dd2);
+              int mag = (dd0*dd0+dd1*dd1+dd2*dd2);
               if (mag>0) {
-                mag = (dd2*sz+dd0*sx+dd1*sy)/mag;
-                mag = max(-64,min(63,(mag-sz)*TerrainContrast/128));
+                mag = (dd2*sz+dd0*sx+dd1*sy)/isqrt4(mag);
+                mag = max(-64,min(63,(mag-sz)*tc/128));
                 *imageBuf = oColorBuf[h+mag*256];
               } else {
                 *imageBuf = oColorBuf[h];
               }
-            } else {
-              // slope is zero, so just look up the color
-              *imageBuf = oColorBuf[h];
             }
           } else {
             // slope is zero, so just look up the color

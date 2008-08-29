@@ -7,16 +7,16 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void AddSnailPoint(void);
 
 double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-		      double bearing,
-		      double GlideSlope);
+		      const double bearing,
+		      const double GlideSlope);
 
 double EffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 double EffectiveCruiseEfficiency(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			  double bearing,
-			  double timeremaining,
-			  double hfinal);
+			  const double bearing,
+			  const double timeremaining,
+			  const double hfinal);
 
 void CalculateOwnTeamCode(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 void CalculateTeammateBearingRange(NMEA_INFO *Basic, DERIVED_INFO *Calculated) ;

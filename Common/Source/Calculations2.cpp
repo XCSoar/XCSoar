@@ -211,10 +211,11 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 
 
 
-double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic, 
+double FinalGlideThroughTerrain(const double bearing, 
+				NMEA_INFO *Basic, 
                                 DERIVED_INFO *Calculated,
                                 double *retlat, double *retlon,
-                                double maxrange,
+                                const double maxrange,
 				bool *outofrange,
 				double *TerrainBase) 
 {
@@ -223,9 +224,11 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 						Calculated->WindSpeed, 
 						Calculated->WindBearing, 
 						0, 0, true, 0);
+  const double mylat = Basic->Latitude;
+  const double mylon = Basic->Longitude;
   if (retlat && retlon) {
-    *retlat = Basic->Latitude;
-    *retlon = Basic->Longitude;
+    *retlat = mylat;
+    *retlon = mylon;
   }
   *outofrange = false;
 
@@ -234,7 +237,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
     return 0;
   }
 
-  double glidemaxrange = Calculated->NavAltitude/irange;
+  const double glidemaxrange = Calculated->NavAltitude/irange;
 
   // returns distance one would arrive at altitude in straight glide
   // first estimate max range at this altitude
@@ -252,17 +255,15 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 
   // calculate terrain rounding factor
 
-  FindLatitudeLongitude(Basic->Latitude, Basic->Longitude, 0, 
+  FindLatitudeLongitude(mylat, mylon, 0, 
                         glidemaxrange/NUMFINALGLIDETERRAIN, &lat, &lon);
 
-  double Xrounding = fabs(lon-Basic->Longitude)/2;
-  double Yrounding = fabs(lat-Basic->Latitude)/2;
+  double Xrounding = fabs(lon-mylon)/2;
+  double Yrounding = fabs(lat-mylat)/2;
   RasterTerrain::SetTerrainRounding(Xrounding, Yrounding);
 
-  lat = Basic->Latitude;
-  lon = Basic->Longitude;
-  latlast = lat;
-  lonlast = lon;
+  lat = latlast = mylat;
+  lon = lonlast = mylon;
 
   altitude = Calculated->NavAltitude;
   h =  max(0, RasterTerrain::GetTerrainHeight(lat, lon)); 
@@ -279,8 +280,8 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
   double dlat, dlon;
 
   FindLatitudeLongitude(lat, lon, bearing, glidemaxrange, &dlat, &dlon);
-  dlat -= Basic->Latitude;
-  dlon -= Basic->Longitude;
+  dlat -= mylat;
+  dlon -= mylon;
 
   double f_scale = 1.0/NUMFINALGLIDETERRAIN;
   if ((maxrange>0) && (maxrange<glidemaxrange)) {
@@ -353,8 +354,7 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
         *retlat = lat;
         *retlon = lon;
       }
-      DistanceBearing(Basic->Latitude, Basic->Longitude, lat, lon,
-                      &distance, NULL);
+      DistanceBearing(mylat, mylon, lat, lon, &distance, NULL);
       retval = distance;
       goto OnExit;
     }
@@ -373,8 +373,8 @@ double FinalGlideThroughTerrain(double bearing, NMEA_INFO *Basic,
 
 
 double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-                      double bearing,
-                      double GlideSlope) {
+                      const double bearing,
+                      const double GlideSlope) {
 
 
 //  bool maxfound = false;
@@ -434,9 +434,9 @@ double PirkerAnalysis(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
 
 double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
-			  double bearing,
-			  double timeremaining,
-			  double hfinal) {
+			  const double bearing,
+			  const double timeremaining,
+			  const double hfinal) {
 
   // find highest Mc to achieve greatest distance in remaining time and height
   (void)Basic;
@@ -445,14 +445,17 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   double mc;
   double mcbest = 0.0;
   double dbest = 0.0;
-
+  const double windspeed =   Calculated->WindSpeed;
+  const double windbearing = Calculated->WindBearing;
+  const double navaltitude = Calculated->NavAltitude;
+  
   for (mc=0; mc<10.0; mc+= 0.1) {
 
     double hunit = GlidePolar::MacCreadyAltitude(mc, 
 						 1.0, // unit distance
 						 bearing, 
-						 Calculated->WindSpeed, 
-						 Calculated->WindBearing,
+						 windspeed, 
+						 windbearing,
 						 NULL,
 						 NULL,
 						 1, // final glide
@@ -460,7 +463,7 @@ double MacCreadyTimeLimit(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
     if (timetogo>0) {
       double p = timeremaining/timetogo;    
       double hspent = hunit*p;    
-      double dh = Calculated->NavAltitude-hspent-hfinal;    
+      double dh = navaltitude-hspent-hfinal;    
       double d = 1.0*p;
       
       if ((d>dbest) && (dh>=0)) {

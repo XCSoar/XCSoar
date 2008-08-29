@@ -32,9 +32,7 @@ Copyright_License {
 #include "StdAfx.h"
 #include "externs.h"
 #include "Units.h"
-#include "device.h"
 #include "InputEvents.h"
-#include "WindowControls.h"
 #include "dlgTools.h"
 #include "InfoBoxLayout.h"
 

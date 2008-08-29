@@ -35,8 +35,6 @@ Copyright_License {
 #include "Units.h"
 #include "externs.h"
 #include "Waypointparser.h"
-
-#include "WindowControls.h"
 #include "dlgTools.h"
 
 #include "compatibility.h"

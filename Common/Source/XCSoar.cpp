@@ -347,8 +347,6 @@ TCHAR strAssetNumber[MAX_LOADSTRING] = TEXT(""); //4G17DW31L0HY");
 TCHAR strRegKey[MAX_LOADSTRING] = TEXT("");
 
 // Interface Files
-GetTextSTRUCT GetTextData[MAXSTATUSMESSAGECACHE];
-int GetTextData_Size = 0;
 StatusMessageSTRUCT StatusMessageData[MAXSTATUSMESSAGECACHE];
 int StatusMessageData_Size = 0;
 
@@ -377,7 +375,6 @@ bool ScreenBlanked = false;
 bool LoggerActive = false;
 
 // Others
-BOOL TopWindow = TRUE;
 
 BOOL COMPORTCHANGED = FALSE;
 BOOL MAPFILECHANGED = FALSE;
@@ -944,7 +941,7 @@ DWORD CalculationThread (LPVOID lpvoid) {
 
     // set timer to determine latency (including calculations)
     if (GpsUpdated) { 
-      MapWindow::UpdateTimeStats(true);
+      //      MapWindow::UpdateTimeStats(true);
     }
 
     // make local copy before editing...
@@ -2171,10 +2168,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                  SWP_SHOWWINDOW|SWP_NOMOVE|SWP_NOSIZE);
 
 #ifdef HAVE_ACTIVATE_INFO
-          if(TopWindow)
-            SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
-          else
-            SHFullScreen(hWndMainWindow,SHFS_SHOWTASKBAR|SHFS_SHOWSIPBUTTON|SHFS_SHOWSTARTICON);
+	  SHFullScreen(hWndMainWindow,SHFS_HIDETASKBAR|SHFS_HIDESIPBUTTON|SHFS_HIDESTARTICON);
 #endif
 
         }

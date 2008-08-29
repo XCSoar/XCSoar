@@ -31,8 +31,8 @@ enum MS_SHAPE_TYPE {MS_SHAPE_POINT, MS_SHAPE_LINE, MS_SHAPE_POLYGON, MS_SHAPE_NU
 #define MS_QUERY_EXTENSION ".qy"
 
 
-#include <ctype.h>
-#include <stdio.h>
+//#include <ctype.h>
+//#include <stdio.h>
 
 /* feature primitives */
 typedef struct {
