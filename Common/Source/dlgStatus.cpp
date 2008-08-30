@@ -228,10 +228,20 @@ static void UpdateValuesSystem() {
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLogger"));
   if (wp) {
-    if (LoggerActive) {
-      wp->SetText(gettext(TEXT("ON")));
-    } else {
-      wp->SetText(gettext(TEXT("OFF")));
+    LinkGRecordDLL();
+    if (LoggerGActive()) {
+      if (LoggerActive) {
+        wp->SetText(gettext(TEXT("ON (G)")));
+      } else {
+        wp->SetText(gettext(TEXT("OFF (G)")));
+      }
+    }
+    else { // no G Record
+      if (LoggerActive) {
+        wp->SetText(gettext(TEXT("ON (no G)")));
+      } else {
+        wp->SetText(gettext(TEXT("OFF (no G)")));
+      }
     }
     wp->RefreshDisplay();
   }
