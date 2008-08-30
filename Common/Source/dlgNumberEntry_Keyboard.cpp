@@ -36,15 +36,17 @@ static int FormKeyDown(WindowControl * Sender, WPARAM wParam, LPARAM lParam) {
     return(0);
 
 
+      /* JMW this prevents cursor buttons from being used to enter
   case VK_RETURN:
     wf->SetModalResult(mrOK);
     return(0);
+      */
   }
   return(1);
 }
 
 
-static void OnKey(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
+static void OnKey(WindowControl * Sender)
 {
   TCHAR *Caption = Sender->GetCaption();
   if (cursor < max_width-1)
@@ -56,7 +58,7 @@ static void OnKey(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
 
 
 
-static void OnOk(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
+static void OnOk(WindowControl * Sender)
 {	
   wf->SetModalResult(mrOK);
 }
@@ -72,7 +74,7 @@ static void ClearText(void)
 }
 
 
-static void OnClear(WindowControl * Sender, WndListFrame::ListInfo_t *ListInfo)
+static void OnClear(WindowControl * Sender)
 {	
   ClearText();
 }

@@ -11,11 +11,11 @@
 
   <WndButton   Caption="Close"    X=2 Y=2 Width=60  Height=22 Font=2 OnClickNotify="OnCloseClicked"/>
 
-  <WndButton Name="cmdName" Caption="Name: " X=70 Y=0 Width=170  Height=28 Font=2 Tag=4 />
+  <WndButton Name="cmdName" Caption="Name: " X=70 Y=0 Width=230  Height=28 Font=2 Tag=4 />
 
-  <WndButton Name="cmdComment" Caption="Comment: " X=70 Y=-1 Width=170  Height=28 Font=2 Tag=4 />
+  <WndButton Name="cmdComment" Caption="Comment: " X=70 Y=-1 Width=230  Height=28 Font=2 Tag=4 />
 
-  <WndProperty Name="prpLongitudeSign" Caption="Longitude" X=2 Y=70 Width=115 Height=28 CaptionWidth=80 Font=2 >
+  <WndProperty Name="prpLongitudeSign" Caption="Longitude" X=2 Y=70 Width=115 Height=28 CaptionWidth=75 Font=2 >
       <DataField name="" DataType="enum" Min=0 Max=1 Step=1/>
   </WndProperty>
 
@@ -38,7 +38,7 @@
       <DataField name="" DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min=0 Max=999 Step=1/>
   </WndProperty>
 
-  <WndProperty Name="prpLatitudeSign" Caption="Latitude" X=2 Y=100 Width=115 Height=28 CaptionWidth=80 Font=2 >
+  <WndProperty Name="prpLatitudeSign" Caption="Latitude" X=2 Y=100 Width=115 Height=28 CaptionWidth=75 Font=2 >
       <DataField name="" DataType="enum" Min=0 Max=1 Step=1/>
   </WndProperty>
   <WndProperty Name="prpLatitudeD" Caption=" " X=110 Y=100 Width=65 Height=28 CaptionWidth=10 Font=2 >
@@ -64,7 +64,7 @@
       <DataField name="" DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min=0 Max=30000 Step=5/>
   </WndProperty>
 
-  <WndProperty Name="prpFlags" Caption="Type"      X=2 Y=-1   Width=180 Height=28 CaptionWidth=90 Font=2 >
+  <WndProperty Name="prpFlags" Caption="Type"      X=2 Y=-1   Width=298 Height=28 CaptionWidth=90 Font=2 >
     <DataField name="" DataType="enum" Min=0 Max=10 Step=1 />
   </WndProperty>
 
