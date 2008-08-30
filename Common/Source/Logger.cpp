@@ -39,6 +39,45 @@ Copyright_License {
 #include "InputEvents.h"
 #include "Parser.h"
 
+
+
+HINSTANCE GRecordDLLHandle = NULL;
+
+// Procedures for explicitly loaded (optional) GRecord DLL
+typedef int (*GRRECORDGETVERSION)(TCHAR * szOut);
+GRRECORDGETVERSION GRecordGetVersion;
+
+typedef int (*GRECORDINIT)(void);
+GRECORDINIT GRecordInit;
+
+typedef int (*GRECORDGETDIGESTMAXLEN)(void);
+GRECORDGETDIGESTMAXLEN GRecordGetDigestMaxLen;
+
+typedef int (*GRECORDAPPENDRECORDTOBUFFER)(TCHAR * szIn);
+GRECORDAPPENDRECORDTOBUFFER GRecordAppendRecordToBuffer;
+
+typedef int (*GRECORDFINALIZEBUFFER)(void);
+GRECORDFINALIZEBUFFER GRecordFinalizeBuffer;
+
+typedef int (*GRECORDGETDIGEST)(TCHAR * szOut);
+GRECORDGETDIGEST GRecordGetDigest;
+
+typedef int (*GRECORDSETFILENAME)(TCHAR * szIn);
+GRECORDSETFILENAME GRecordSetFileName;
+
+typedef int (*GRECORDLOADFILETOBUFFER)(void);
+GRECORDLOADFILETOBUFFER GRecordLoadFileToBuffer;
+
+typedef int (*GRECORDAPPENDGRECORDTOFILE)(BOOL bValid);
+GRECORDAPPENDGRECORDTOFILE GRecordAppendGRecordToFile;
+
+typedef int (*GRECORDREADGRECORDFROMFILE)(TCHAR szOutput []);
+GRECORDREADGRECORDFROMFILE GRecordReadGRecordFromFile;
+
+typedef int (*GRECORDVERIFYGRECORDINFILE)(void);
+GRECORDVERIFYGRECORDINFILE GRecordVerifyGRecordInFile;
+
+
 extern NMEA_INFO GPS_INFO;
 bool DisableAutoLogger = false;
 
@@ -102,6 +141,7 @@ HFCCLCOMPETITIONCLASS:15M
 */
 
 
+
 static TCHAR szLoggerFileName[MAX_PATH] = TEXT("\0");
 static TCHAR szFLoggerFileName[MAX_PATH] = TEXT("\0");
 
@@ -131,7 +171,37 @@ void StopLogger(void) {
   if (LoggerActive) {
     LoggerActive = false;
     if (LoggerClearFreeSpace()) {
-      MoveFile(szLoggerFileName, szFLoggerFileName);
+
+
+#ifndef _SIM_
+  if (LoggerGActive())
+  {
+    BOOL bFileValid = true;
+    TCHAR OldGRecordBuff[MAX_IGC_BUFF];
+
+    TCHAR NewGRecordBuff[MAX_IGC_BUFF];
+
+    GRecordFinalizeBuffer();  // buffer is appended w/ each igc file write
+    GRecordGetDigest(OldGRecordBuff); // read record built by individual file writes
+
+    // now calc from whats in the igc file on disk
+    GRecordInit();
+    GRecordSetFileName(szLoggerFileName);
+    GRecordLoadFileToBuffer();
+    GRecordFinalizeBuffer();
+    GRecordGetDigest(NewGRecordBuff);
+
+    for (unsigned int i = 0; i < 128; i++)
+	    if (OldGRecordBuff[i] != NewGRecordBuff[i] )
+		    bFileValid = false;
+
+    GRecordAppendGRecordToFile(bFileValid); 
+  }
+
+#endif
+
+	    MoveFile(szLoggerFileName, szFLoggerFileName);
+	  
     }
     NumLoggerBuffered = 0;
   }
@@ -168,8 +238,6 @@ void LogPointToBuffer(double Latitude, double Longitude, double Altitude,
 void LogPointToFile(double Latitude, double Longitude, double Altitude,
                     double BaroAltitude, short Hour, short Minute, short Second)
 {
-  HANDLE hFile;// = INVALID_HANDLE_VALUE;
-  DWORD dwBytesRead;
   char szBRecord[500];
 
   int DegLat, DegLon;
@@ -202,20 +270,12 @@ void LogPointToFile(double Latitude, double Longitude, double Altitude,
   MinLon *=60;
   MinLon *= 1000;
 
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
-		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-
   sprintf(szBRecord,"B%02d%02d%02d%02d%05.0f%c%03d%05.0f%cA%05d%05d\r\n",
           Hour, Minute, Second,
           DegLat, MinLat, NoS, DegLon, MinLon, EoW,
           (int)BaroAltitude,(int)Altitude);
 
-  SetFilePointer(hFile, 0, NULL, FILE_END);
-  WriteFile(hFile, szBRecord, strlen(szBRecord), &dwBytesRead,
-	    (OVERLAPPED *)NULL);
-  FlushFileBuffers(hFile);
-
-  CloseHandle(hFile);
+  IGCWriteRecord(szBRecord);
 }
 
 
@@ -264,6 +324,12 @@ void StartLogger(TCHAR *astrAssetNumber)
            TEXT("\\tmp.IGC"));
   DeleteFile(szLoggerFileName);
 
+#ifndef _SIM_
+  LinkGRecordDLL(); // try to link DLL if it exists
+  if (LoggerGActive())
+	GRecordInit();
+#endif
+  
   for(i=1;i<99;i++)
     {
       // 2003-12-31-XXX-987-01.IGC
@@ -273,7 +339,7 @@ void StartLogger(TCHAR *astrAssetNumber)
       if (!LoggerShortName) {
         // Long file name
         wsprintf(szFLoggerFileName,
-                 TEXT("%s\\%04d-%02d-%02d-XXX-%c%c%c-%02d.IGC"),
+                 TEXT("%s\\%04d-%02d-%02d-XCS-%c%c%c-%02d.IGC"),
                  path,
                  GPS_INFO.Year,
                  GPS_INFO.Month,
@@ -319,51 +385,41 @@ void LoggerHeader(void)
 {
   char datum[]= "HFDTM100Datum: WGS-84\r\n";
   char temp[100];
-  HANDLE hFile;
-  DWORD dwBytesRead;
   TCHAR PilotName[100];
   TCHAR AircraftType[100];
   TCHAR AircraftRego[100];
 
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
-		     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
-		     FILE_ATTRIBUTE_NORMAL, 0);
-
-  SetFilePointer(hFile, 0, NULL, FILE_END);
 
   // Flight recorder ID number MUST go first..
   sprintf(temp,
-	  "AXXX%C%C%C\r\n",
+	  "AXCS%C%C%C\r\n",
 	  strAssetNumber[0],
 	  strAssetNumber[1],
 	  strAssetNumber[2]);
-  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
+  IGCWriteRecord(temp);
 
   sprintf(temp,"HFDTE%02d%02d%02d\r\n",
 	  GPS_INFO.Day,
 	  GPS_INFO.Month,
 	  GPS_INFO.Year % 100);
-  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
+  IGCWriteRecord(temp);
 
   GetRegistryString(szRegistryPilotName, PilotName, 100);
   sprintf(temp,"HFPLTPILOT:%S\r\n", PilotName);
-  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
+  IGCWriteRecord(temp);
 
   GetRegistryString(szRegistryAircraftType, AircraftType, 100);
   sprintf(temp,"HFGTYGLIDERTYPE:%S\r\n", AircraftType);
-  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
+  IGCWriteRecord(temp);
 
   GetRegistryString(szRegistryAircraftRego, AircraftRego, 100);
   sprintf(temp,"HFGIDGLIDERID:%S\r\n", AircraftRego);
-  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
+  IGCWriteRecord(temp);
 
   sprintf(temp,"HFFTYFR TYPE:XCSOAR,XCSOAR %S\r\n", XCSoar_Version);
-  WriteFile(hFile, temp, strlen(temp), &dwBytesRead,(OVERLAPPED *)NULL);
+  IGCWriteRecord(temp);
 
-  WriteFile(hFile, datum, strlen(datum), &dwBytesRead,(OVERLAPPED *)NULL);
-
-  FlushFileBuffers(hFile);
-  CloseHandle(hFile);
+  IGCWriteRecord(datum);
 
 }
 
@@ -373,15 +429,7 @@ void StartDeclaration(int ntp)
   // JMW TODO: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
   char start[] = "C0000000N00000000ETAKEOFF\r\n";
-  HANDLE hFile;
-  DWORD dwBytesRead;
   char temp[100];
-
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
-                     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
-                     FILE_ATTRIBUTE_NORMAL, 0);
-
-  SetFilePointer(hFile, 0, NULL, FILE_END);
 
   if (NumLoggerBuffered==0) {
      FirstPoint.Year = GPS_INFO.Year;
@@ -408,15 +456,11 @@ void StartDeclaration(int ntp)
 	  FirstPoint.Second,
 	  ntp-2);
 
-  WriteFile(hFile, temp, strlen(temp), &dwBytesRead, (OVERLAPPED *)NULL);
-
+  IGCWriteRecord(temp);
   // takeoff line
   // IGC GNSS specification 3.6.3
-  WriteFile(hFile, start, strlen(start), &dwBytesRead, (OVERLAPPED *)NULL);
+  IGCWriteRecord(start);
 
-  FlushFileBuffers(hFile);
-
-  CloseHandle(hFile);
 }
 
 
@@ -425,24 +469,11 @@ void EndDeclaration(void)
   // JMW TODO: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
   char start[] = "C0000000N00000000ELANDING\r\n";
-  HANDLE hFile;
-  DWORD dwBytesRead=0;
-
-  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE,
-		     FILE_SHARE_WRITE, NULL, OPEN_ALWAYS,
-                     FILE_ATTRIBUTE_NORMAL, 0);
-
-  SetFilePointer(hFile, 0, NULL, FILE_END);
-  WriteFile(hFile, start, strlen(start), &dwBytesRead,(OVERLAPPED *)NULL);
-  FlushFileBuffers(hFile);
-
-  CloseHandle(hFile);
+  IGCWriteRecord(start);
 }
 
 void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
 {
-  DWORD dwBytesRead;
-  HANDLE hFile;
   char szCRecord[500];
 
   char IDString[MAX_PATH];
@@ -483,18 +514,10 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
   MinLon *=60;
   MinLon *= 1000;
 
-  hFile = CreateFile(szLoggerFileName,
-		     GENERIC_WRITE, FILE_SHARE_WRITE,
-		     NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-
   sprintf(szCRecord,"C%02d%05.0f%c%03d%05.0f%c%s\r\n",
 	  DegLat, MinLat, NoS, DegLon, MinLon, EoW, IDString);
 
-  SetFilePointer(hFile, 0, NULL, FILE_END);
-  WriteFile(hFile, szCRecord, strlen(szCRecord), &dwBytesRead, (OVERLAPPED *)NULL);
-  FlushFileBuffers(hFile);
-
-  CloseHandle(hFile);
+  IGCWriteRecord(szCRecord);
 }
 
 
@@ -503,18 +526,10 @@ void AddDeclaration(double Latitude, double Longitude, TCHAR *ID)
 
 void LoggerNote(const TCHAR *text) {
   if (LoggerActive) {
-    HANDLE hFile;// = INVALID_HANDLE_VALUE;
-    DWORD dwBytesRead;
 
     char fulltext[500];
-    hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
-		       NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
     sprintf(fulltext, "LPLT%S\r\n", text);
-    SetFilePointer(hFile, 0, NULL, FILE_END);
-    WriteFile(hFile, fulltext, strlen(fulltext), &dwBytesRead,
-	      (OVERLAPPED *)NULL);
-    FlushFileBuffers(hFile);
-    CloseHandle(hFile);
+    IGCWriteRecord(fulltext);
 
   }
 }
@@ -568,10 +583,10 @@ void DoLogger(TCHAR *astrAssetNumber)
 	{
 
 	  if (LoggerClearFreeSpace()) {
-	    LoggerActive = true;
 
 	    StartLogger(astrAssetNumber);
 	    LoggerHeader();
+	    LoggerActive = true;
 	    int ntp = 0;
 
             RefreshTask();
@@ -698,7 +713,7 @@ bool ReplayLogger::ReadLine(TCHAR *buffer) {
     return false;
 
   if (!fgetws(buffer, 200, fp)) {
-	_tcscat(buffer,TEXT("\0"));
+    _tcscat(buffer,TEXT("\0"));
     return false;
   }
   return true;
@@ -1249,4 +1264,192 @@ bool LoggerClearFreeSpace(void) {
   }
   return (kbfree>=LOGGER_MINFREESTORAGE);
 }
+
+
+void IGCWriteRecord(char *szIn)
+{
+  HANDLE hFile;
+  DWORD dwBytesRead;
+  TCHAR buffer[MAX_IGC_BUFF];
+  TCHAR * pbuffer;
+  pbuffer = buffer;
+
+  int i=0, iLen=0;
+  static BOOL bWriting = false;
+
+  if ( !bWriting )
+  {
+	  bWriting = true;
+
+	  hFile = CreateFile(szLoggerFileName, GENERIC_WRITE, FILE_SHARE_WRITE,
+				 NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	  SetFilePointer(hFile, 0, NULL, FILE_END);
+
+
+	  WriteFile(hFile, szIn, strlen(szIn), &dwBytesRead,
+				(OVERLAPPED *)NULL);
+
+	  iLen = strlen(szIn);
+	  for (i = 0; (i <= iLen) && (i < MAX_IGC_BUFF); i++)
+		  buffer[i] = (TCHAR)szIn[i];
+
+#ifndef _SIM_
+      if (LoggerGActive())
+    	  GRecordAppendRecordToBuffer(pbuffer);
+#endif
+
+	  FlushFileBuffers(hFile);
+	  CloseHandle(hFile);
+	  bWriting = false;
+  }
+
+}
+
+
+void LinkGRecordDLL(void)
+{
+    static bool bFirstTime = true;
+    TCHAR szLoadResults [100];
+    TCHAR szGRecordVersion[100];
+    
+	if ((GRecordDLLHandle == NULL) && bFirstTime) // only try to load DLL once per session
+	{
+        bFirstTime=false;
+
+        StartupStore(TEXT("Searching for GRecordDLL\n"));
+        GRecordDLLHandle = LoadLibrary(TEXT("GRecordDLL.DLL"));
+        if (GRecordDLLHandle != NULL)
+        {
+            BOOL bLoadOK = true;  // if any pointers don't link, disable entire library
+
+            GRecordGetVersion = 
+	            (GRRECORDGETVERSION)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordGetVersion"));
+
+            if (!GRecordGetVersion) // read version for log
+            {
+                bLoadOK=false;
+                _tcscpy(szGRecordVersion, TEXT("version unknown"));
+            }
+            else
+            {                
+                GRecordGetVersion(szGRecordVersion);
+            }
+
+            
+            GRecordInit = 
+	            (GRECORDINIT)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordInit"));
+
+            if (!GRecordInit)
+                bLoadOK=false;
+
+            GRecordGetDigestMaxLen = 
+	            (GRECORDGETDIGESTMAXLEN)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordGetDigestMaxLen"));
+
+            if (!GRecordGetDigestMaxLen)
+                bLoadOK=false;
+
+
+            GRecordAppendRecordToBuffer = 
+	            (GRECORDAPPENDRECORDTOBUFFER)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordAppendRecordToBuffer"));
+
+            if (!GRecordAppendRecordToBuffer)
+                bLoadOK=false;
+
+
+            GRecordFinalizeBuffer = 
+	            (GRECORDFINALIZEBUFFER)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordFinalizeBuffer"));
+
+            if (!GRecordFinalizeBuffer)
+                bLoadOK=false;
+
+
+            GRecordGetDigest = 
+	            (GRECORDGETDIGEST)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordGetDigest"));
+
+            if (!GRecordGetDigest)
+                bLoadOK=false;
+
+
+            GRecordSetFileName = 
+	            (GRECORDSETFILENAME)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordSetFileName"));
+
+            if (!GRecordSetFileName)
+                bLoadOK=false;
+
+
+            GRecordLoadFileToBuffer = 
+	            (GRECORDLOADFILETOBUFFER)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordLoadFileToBuffer"));
+
+            if (!GRecordLoadFileToBuffer)
+                bLoadOK=false;
+
+
+            GRecordAppendGRecordToFile = 
+	            (GRECORDAPPENDGRECORDTOFILE)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordAppendGRecordToFile"));
+
+            if (!GRecordAppendGRecordToFile)
+                bLoadOK=false;
+
+
+            GRecordReadGRecordFromFile = 
+	            (GRECORDREADGRECORDFROMFILE)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordReadGRecordFromFile"));
+
+            if (!GRecordReadGRecordFromFile)
+                bLoadOK=false;
+
+
+            GRecordVerifyGRecordInFile = 
+	            (GRECORDVERIFYGRECORDINFILE)
+                GetProcAddress(GRecordDLLHandle, 
+                TEXT("GRecordVerifyGRecordInFile"));
+
+            if (!GRecordVerifyGRecordInFile)
+                bLoadOK=false;
+
+            if (!bLoadOK) // all need to link, or disable entire library.
+            {
+                wsprintf(szLoadResults,TEXT("Found GRecordDLL %s but incomplete\n"), szGRecordVersion);
+                FreeLibrary(GRecordDLLHandle);
+                GRecordDLLHandle = NULL;
+            }
+            else {
+                wsprintf(szLoadResults,TEXT("Loaded GRecordDLL %s \n"), szGRecordVersion);
+            }
+		}
+        else {
+            _tcscpy(szLoadResults,TEXT("Not Found GRecordDLL\n"));
+        }
+        StartupStore(szLoadResults);
+
+	}
+}
+
+bool LoggerGActive()
+{
+    if (GRecordDLLHandle)
+        return true;
+    else
+        return false;
+}
+
 

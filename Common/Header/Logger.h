@@ -46,6 +46,12 @@ class ReplayLogger {
 
 bool LoggerClearFreeSpace();
 void StopLogger(void);
+void IGCWriteRecord(char *szIn);
+void LinkGRecordDLL(void);
+bool LoggerGActive();
+#define MAX_IGC_BUFF 255
+
+
 
 #endif
 
