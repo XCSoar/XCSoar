@@ -194,12 +194,17 @@ class DataFieldBoolean:public DataField{
 
 #define DFE_MAX_ENUMS 100
 
+typedef struct {
+  TCHAR *mText;
+  unsigned int index;
+} DataFieldEnumEntry;
+
 class DataFieldEnum: public DataField {
 
   private:
     unsigned int nEnums;
     unsigned int mValue;
-    TCHAR *mTextEnum[DFE_MAX_ENUMS];
+    DataFieldEnumEntry mEntries[DFE_MAX_ENUMS];
 
   public:
     DataFieldEnum(const TCHAR *EditFormat,
@@ -238,7 +243,7 @@ class DataFieldEnum: public DataField {
   #pragma warn +hid
   #endif
   int SetAsInteger(int Value);
-
+  void Sort(int startindex=0);
 };
 
 #define DFE_MAX_FILES 100

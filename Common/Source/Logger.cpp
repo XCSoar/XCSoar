@@ -1322,6 +1322,7 @@ void LinkGRecordDLL(void)
         {
             BOOL bLoadOK = true;  // if any pointers don't link, disable entire library
 
+#if (WINDOWSPC<1)
             GRecordGetVersion =
 	            (GRRECORDGETVERSION)
                 GetProcAddress(GRecordDLLHandle,
@@ -1422,6 +1423,9 @@ void LinkGRecordDLL(void)
 	            (GRECORDVERIFYGRECORDINFILE)
                 GetProcAddress(GRecordDLLHandle,
                 TEXT("GRecordVerifyGRecordInFile"));
+#else
+	    GRecordVerifyGRecordInFile = NULL;
+#endif
 
             if (!GRecordVerifyGRecordInFile)
                 bLoadOK=false;

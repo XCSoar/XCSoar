@@ -62,7 +62,7 @@ ifeq ($(CONFIG_ALTAIR),y)
 CE_MAJOR	:=5
 CE_MINOR	:=00
 CE_PLATFORM	:=500
-TARGET		:=Altair
+TARGET		:=ALTAIR
 endif
 
 ifeq ($(CONFIG_PC),y)

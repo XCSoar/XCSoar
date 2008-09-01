@@ -74,6 +74,10 @@ BOOL ComPort::Initialize(LPCTSTR lpszPortName, DWORD dwPortSpeed)
   DWORD dwError;
   DCB PortDCB;
 
+#ifdef _SIM_
+  return FALSE;
+#endif
+
   if (lpszPortName) {
     _tcscpy(sPortName, lpszPortName);
   }
@@ -397,6 +401,9 @@ BOOL ComPort::StartRxThread(void)
 {
   DWORD dwThreadID, dwError;
 
+  if (hPort == INVALID_HANDLE_VALUE)
+    return FALSE;
+
   CloseThread = FALSE;
 
   // Create a read thread for reading data from the communication port.
@@ -493,6 +500,9 @@ unsigned long ComPort::SetBaudrate(unsigned long BaudRate)
   DCB     PortDCB;
   DWORD   dwErrors;
   unsigned long result = 0;
+
+  if (hPort == INVALID_HANDLE_VALUE)
+    return result;
 
   do {
     ClearCommError(hPort, &dwErrors, &ComStat);
