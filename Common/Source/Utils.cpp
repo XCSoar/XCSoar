@@ -2245,10 +2245,16 @@ void ReadAssetNumber(void)
 {
   TCHAR val[MAX_PATH];
 
+  val[0]= _T('\0');
+
   memset(strAssetNumber, 0, MAX_LOADSTRING*sizeof(TCHAR));
   // JMW clear this first just to be safe.
 
   StartupStore(TEXT("Asset ID: "));
+
+#if (WINDOWSPC>0)
+  return;
+#endif
 
   GetRegistryString(szRegistryLoggerID, val, 100);
   int ifound=0;
