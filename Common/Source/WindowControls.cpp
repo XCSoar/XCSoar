@@ -609,22 +609,27 @@ void DataFieldBoolean::Dec(void){
 DataFieldEnum::~DataFieldEnum()
 {
   for (unsigned int i=0; i<nEnums; i++) {
-    if (mTextEnum[i]) {
-      free(mTextEnum[i]);
-      mTextEnum[i]= NULL;
+    if (mEntries[i].mText) {
+      free(mEntries[i].mText);
+      mEntries[i].mText= NULL;
     }
   }
   nEnums = 0;      
 }
 
 int DataFieldEnum::GetAsInteger(void){
-  return mValue;
+  if (mValue<nEnums) {
+    return mEntries[mValue].index;
+  } else {
+    return 0; // JMW shouldn't get here
+  }
 }
 
 void DataFieldEnum::addEnumText(const TCHAR *Text) {
   if (nEnums<DFE_MAX_ENUMS-1) {
-    mTextEnum[nEnums] = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
-    _tcscpy(mTextEnum[nEnums], Text);
+    mEntries[nEnums].mText = (TCHAR*)malloc((_tcslen(Text)+1)*sizeof(TCHAR));
+    _tcscpy(mEntries[nEnums].mText, Text);
+    mEntries[nEnums].index = nEnums;
     nEnums++;
   }
 }
@@ -632,7 +637,7 @@ void DataFieldEnum::addEnumText(const TCHAR *Text) {
 
 TCHAR *DataFieldEnum::GetAsString(void){
   if (mValue<nEnums) {
-    return(mTextEnum[mValue]);
+    return(mEntries[mValue].mText);
   } else {
     return NULL;
   }
@@ -640,23 +645,26 @@ TCHAR *DataFieldEnum::GetAsString(void){
 
 
 void DataFieldEnum::Set(int Value){
-  int lastValue = Value;
-  if (Value<=(int)nEnums) {
-    mValue = Value;
-  }
+  // first look it up
   if (Value<0) {
-    mValue = 0;
+    Value = 0;
   }
-
-  if (Value != lastValue){
-    (mOnDataAccess)(this, daChange);
+  for (unsigned int i=0; i<nEnums; i++) {
+    if (mEntries[i].index == Value) {
+      int lastValue = mValue;
+      mValue = i;
+      if (Value != lastValue){
+	(mOnDataAccess)(this, daChange);
+      }
+      return;
+    }
   }
-
+  mValue = 0; // fallback
 }
 
 int DataFieldEnum::SetAsInteger(int Value){
   Set(Value);
-  return mValue;
+  return mEntries[Value].index;
 }
 
 void DataFieldEnum::Inc(void){
@@ -673,6 +681,16 @@ void DataFieldEnum::Dec(void){
   }
 }
 
+static int _cdecl DataFieldEnumCompare(const void *elem1, 
+                                             const void *elem2 ){
+  return _tcscmp(((DataFieldEnumEntry*)elem1)->mText,
+                 ((DataFieldEnumEntry*)elem2)->mText);
+}
+
+void DataFieldEnum::Sort(int startindex){
+  qsort(mEntries+startindex, nEnums-startindex, sizeof(DataFieldEnumEntry), 
+        DataFieldEnumCompare);
+}
 
 //----------------------------------------------------------
 // DataField Integer

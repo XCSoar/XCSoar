@@ -984,6 +984,7 @@ static void setVariables(void) {
         dwDeviceIndex1 = i;
 #endif
     }
+    dfe->Sort(1);
     dfe->Set(dwDeviceIndex1);
     wp->RefreshDisplay();
   }
@@ -1017,9 +1018,9 @@ static void setVariables(void) {
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText((TEXT("Generic")));
     for (i=0; i<DeviceRegisterCount; i++) {
       devRegisterGetName(i, DeviceName);
+      dfe->addEnumText((DeviceName));
 #ifndef _SIM_
       if (devB() != NULL){
 	if (_tcscmp(DeviceName, devB()->Name) == 0)
@@ -1030,6 +1031,7 @@ static void setVariables(void) {
         dwDeviceIndex2 = i;
 #endif
     }
+    dfe->Sort(1);
     dfe->Set(dwDeviceIndex2);
     wp->RefreshDisplay();
   }
@@ -1495,6 +1497,7 @@ static void setVariables(void) {
       }
       i++;
     }
+    dfe->Sort();
     dfe->Set(POLARID);
     wp->RefreshDisplay();
   }
