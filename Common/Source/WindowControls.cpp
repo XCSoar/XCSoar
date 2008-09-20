@@ -618,7 +618,7 @@ DataFieldEnum::~DataFieldEnum()
 }
 
 int DataFieldEnum::GetAsInteger(void){
-  if (mValue<nEnums) {
+  if ((mValue>=0) && (mValue<nEnums)) {
     return mEntries[mValue].index;
   } else {
     return 0; // JMW shouldn't get here
@@ -636,7 +636,7 @@ void DataFieldEnum::addEnumText(const TCHAR *Text) {
 
 
 TCHAR *DataFieldEnum::GetAsString(void){
-  if (mValue<nEnums) {
+  if ((mValue>=0) && (mValue<nEnums)) {
     return(mEntries[mValue].mText);
   } else {
     return NULL;
@@ -653,7 +653,7 @@ void DataFieldEnum::Set(int Value){
     if (mEntries[i].index == Value) {
       int lastValue = mValue;
       mValue = i;
-      if (Value != lastValue){
+      if (mValue != lastValue){
 	(mOnDataAccess)(this, daChange);
       }
       return;

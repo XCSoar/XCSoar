@@ -725,7 +725,7 @@ bool ReplayLogger::ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
 {
   int DegLat, DegLon;
   int MinLat, MinLon;
-  char NoS, EoW;
+  TCHAR NoS, EoW;
   int iAltitude;
   int bAltitude;
   int Hour=0;
@@ -737,7 +737,7 @@ bool ReplayLogger::ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
 
   if ((lfound =
        swscanf(buffer,
-	       TEXT("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05dd"),
+	       TEXT("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d"),
 	       &Hour, &Minute, &Second,
 	       &DegLat, &MinLat, &NoS, &DegLon, &MinLon,
 	       &EoW, &iAltitude, &bAltitude
@@ -745,12 +745,12 @@ bool ReplayLogger::ScanBuffer(TCHAR *buffer, double *Time, double *Latitude,
 
     if (lfound==11) {
       *Latitude = DegLat+MinLat/60000.0;
-      if (NoS=='S') {
+      if (NoS==_T('S')) {
 	*Latitude *= -1;
       }
 
       *Longitude = DegLon+MinLon/60000.0;
-      if (EoW=='W') {
+      if (EoW==_T('W')) {
 	*Longitude *= -1;
       }
       *Altitude = iAltitude;
