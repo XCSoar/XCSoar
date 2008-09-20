@@ -544,19 +544,20 @@ BOOL NMEAParser::RMC(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
     }
   }
 
-  if(RMZAvailable)
-    {
-      // JMW changed from Altitude to BaroAltitude
-      GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = RMZAltitude;
-    }
-  else if(RMAAvailable)
-    {
-      // JMW changed from Altitude to BaroAltitude
-      GPS_INFO->BaroAltitudeAvailable = true;
-      GPS_INFO->BaroAltitude = RMAAltitude;
-    }
-
+  if (!ReplayLogger::IsEnabled()) {
+    if(RMZAvailable)
+      {
+	// JMW changed from Altitude to BaroAltitude
+	GPS_INFO->BaroAltitudeAvailable = true;
+	GPS_INFO->BaroAltitude = RMZAltitude;
+      }
+    else if(RMAAvailable)
+      {
+	// JMW changed from Altitude to BaroAltitude
+	GPS_INFO->BaroAltitudeAvailable = true;
+	GPS_INFO->BaroAltitude = RMAAltitude;
+      }
+  }
   if (!GGAAvailable) {
     // update SatInUse, some GPS receiver dont emmit GGA sentance
     if (!gpsValid) {
@@ -654,8 +655,10 @@ BOOL NMEAParser::RMZ(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
 
   if (!devHasBaroSource()) {
     // JMW no in-built baro sources, so use this generic one
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMZAltitude;
+    if (!ReplayLogger::IsEnabled()) {
+      GPS_INFO->BaroAltitudeAvailable = true;
+      GPS_INFO->BaroAltitude = RMZAltitude;
+    }
   }
 
   return FALSE;
@@ -672,9 +675,11 @@ BOOL NMEAParser::RMA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
   GPS_INFO->BaroAltitudeAvailable = true;
 
   if (!devHasBaroSource()) {
-    // JMW no in-built baro sources, so use this generic one
-    GPS_INFO->BaroAltitudeAvailable = true;
-    GPS_INFO->BaroAltitude = RMAAltitude;
+    if (!ReplayLogger::IsEnabled()) {
+      // JMW no in-built baro sources, so use this generic one
+      GPS_INFO->BaroAltitudeAvailable = true;
+      GPS_INFO->BaroAltitude = RMAAltitude;
+    }
   }
 
   return FALSE;

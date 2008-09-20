@@ -2955,7 +2955,7 @@ void LoadWindFromRegistry() {
   CALCULATED_INFO.WindBearing = Temp;
 }
 
-void ReadDeviceSettings(int devIdx, TCHAR *Name){
+void ReadDeviceSettings(const int devIdx, TCHAR *Name){
 
   Name[0] = '\0';
 
@@ -2977,7 +2977,7 @@ void ReadDeviceSettings(int devIdx, TCHAR *Name){
 }
 
 
-void WriteDeviceSettings(int devIdx, TCHAR *Name){
+void WriteDeviceSettings(const int devIdx, const TCHAR *Name){
 
   if (devIdx == 0)
     SetRegistryString(szRegistryDeviceA , Name);
