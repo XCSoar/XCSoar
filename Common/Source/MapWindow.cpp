@@ -70,8 +70,6 @@ int misc_tick_count=0;
 #define DRAWLOAD
 #endif
 
-#define DRAWLOAD
-
 int TrailActive = TRUE;
 
 #define NUMSNAILRAMP 6

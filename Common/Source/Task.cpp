@@ -806,6 +806,7 @@ void guiStartLogger(bool noAsk) {
 			     WayPointList[Task[i].Index].Name );
 	    }
 	  EndDeclaration();
+    LogFRecord(GPS_INFO.SatelliteIDs, true);  // write F record at end of header of new file
 	}
       }
     FullScreen();

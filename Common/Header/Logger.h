@@ -46,11 +46,13 @@ class ReplayLogger {
 
 bool LoggerClearFreeSpace();
 void StopLogger(void);
-void IGCWriteRecord(char *szIn);
+bool IGCWriteRecord(char *szIn);
 void LinkGRecordDLL(void);
 bool LoggerGActive();
 #define MAX_IGC_BUFF 255
 
+bool LogFRecordToFile(int SatelliteIDs[], short Hour, short Minute, short Second, bool bAlways);
+bool LogFRecord(int SatelliteIDs[], bool bAlways ) ;
 
 
 #endif
