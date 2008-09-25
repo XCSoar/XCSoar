@@ -201,6 +201,10 @@ BOOL NMEAParser::ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO)
     return FALSE;
     }
 
+  if(_tcscmp(params[0] + 3,TEXT("GSA"))==0)
+    {
+      return GSA(&String[7], params + 1, n_params, GPS_INFO);
+    }
   if(_tcscmp(params[0] + 3,TEXT("GLL"))==0)
     {
       //    return GLL(&String[7], params + 1, n_params, GPS_INFO);
@@ -365,6 +369,30 @@ bool NMEAParser::TimeHasAdvanced(double ThisTime, NMEA_INFO *GPS_INFO) {
   }
 }
 
+BOOL NMEAParser::GSA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
+{
+  int iSatelliteCount =0;
+
+  if (ReplayLogger::IsEnabled()) {
+    return TRUE;
+  }
+
+  // satellites are in items 4-15 of GSA string,
+  // but 1st item in string is not passed, so start at item 3
+  for (int i = 0; i < MAXSATELLITES; i++)
+  {
+    if (3+i<nparams) {
+      GPS_INFO->SatelliteIDs[i] = (int)(StrToDouble(params[3+i], NULL));
+      if (GPS_INFO->SatelliteIDs[i] > 0)
+	iSatelliteCount ++;
+    }
+  }
+
+
+  GSAAvailable = TRUE;
+  return TRUE;
+
+}
 
 BOOL NMEAParser::GLL(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {

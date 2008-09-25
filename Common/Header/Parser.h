@@ -114,6 +114,7 @@ typedef struct _NMEA_INFO
   unsigned short FLARM_AlarmLevel;
   BOOL FLARM_Available;
   FLARM_TRAFFIC FLARM_Traffic[FLARM_MAX_TRAFFIC];
+  int SatelliteIDs[MAXSATELLITES];
 
   double SupplyBatteryVoltage;
 
@@ -157,6 +158,7 @@ class NMEAParser {
 			       int DesiredFieldNumber);
 
  private:
+  BOOL GSAAvailable;
   BOOL GGAAvailable;
   BOOL RMZAvailable;
   BOOL RMAAvailable;
@@ -169,6 +171,7 @@ class NMEAParser {
 
   BOOL GLL(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
   BOOL GGA(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
+  BOOL GSA(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
   BOOL RMC(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
   BOOL RMB(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);
   BOOL RMA(TCHAR *String, TCHAR **, size_t, NMEA_INFO *GPS_INFO);

@@ -100,10 +100,12 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   static double LogLastTime=0;
   static double StatsLastTime=0;
   static double OLCLastTime = 0;
+  static double FRecordLastTime=0;
   double dtLog = 5.0;
   double dtSnail = 2.0;
   double dtStats = 60.0;
   double dtOLC = 5.0;
+  double dtFRecord = 270; // 4.5 minutes (required minimum every 5)
 
   if(Basic->Time <= LogLastTime) {
     LogLastTime = Basic->Time;
@@ -116,6 +118,9 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   }
   if(Basic->Time <= OLCLastTime) {
     OLCLastTime = Basic->Time;
+  }
+  if(Basic->Time <= FRecordLastTime) {
+    FRecordLastTime = Basic->Time;
   }
 
   // draw snail points more often in circling mode
@@ -159,6 +164,22 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
       LogLastTime = Basic->Time-dtLog;
     }
     if (FastLogNum) FastLogNum--;
+  }
+
+  if (Basic->Time - FRecordLastTime >= dtFRecord)
+  {
+
+    if (Basic->SatellitesUsed > 0)
+    {
+      if (LogFRecord(Basic->SatelliteIDs,false))
+      {  // need F record every 5 minutes
+         // so if write fails, don't update timer and try again next cycle
+        FRecordLastTime += dtFRecord;
+
+        if (FRecordLastTime < Basic->Time-dtFRecord)
+          FRecordLastTime = Basic->Time-dtFRecord;
+      }
+    }
   }
 
   if (Basic->Time - SnailLastTime >= dtSnail) {
