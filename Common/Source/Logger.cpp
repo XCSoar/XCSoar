@@ -144,6 +144,25 @@ HFCCLCOMPETITIONCLASS:15M
 
 static TCHAR szLoggerFileName[MAX_PATH] = TEXT("\0");
 static TCHAR szFLoggerFileName[MAX_PATH] = TEXT("\0");
+static double FRecordLastTime = 0;
+static char szLastFRecord[MAX_IGC_BUFF];
+
+void SetFRecordLastTime(double dTime)
+{ FRecordLastTime=dTime; }
+
+double GetFRecordLastTime(void)
+{ return FRecordLastTime; }
+
+void ResetFRecord_Internal(void)
+{
+    for (int iFirst = 0; iFirst < MAX_IGC_BUFF; iFirst++)
+      szLastFRecord[iFirst]=0;
+}
+void ResetFRecord(void)
+{
+  SetFRecordLastTime(0);
+  ResetFRecord_Internal();
+}
 
 int EW_count = 0;
 int NumLoggerBuffered = 0;
@@ -161,6 +180,7 @@ typedef struct LoggerBuffer {
   short Hour;
   short Minute;
   short Second;
+  int SatelliteIDs[MAXSATELLITES];
 } LoggerBuffer_T;
 
 LoggerBuffer_T FirstPoint;
@@ -209,7 +229,8 @@ void StopLogger(void) {
 
 
 void LogPointToBuffer(double Latitude, double Longitude, double Altitude,
-                      double BaroAltitude, short Hour, short Minute, short Second) {
+                      double BaroAltitude, short Hour, short Minute, short Second,
+                      int SatelliteIDs[]) {
 
   if (NumLoggerBuffered== MAX_LOGGER_BUFFER) {
     for (int i= 0; i< NumLoggerBuffered-1; i++) {
@@ -228,6 +249,9 @@ void LogPointToBuffer(double Latitude, double Longitude, double Altitude,
   LoggerBuffer[NumLoggerBuffered-1].Year = GPS_INFO.Year;
   LoggerBuffer[NumLoggerBuffered-1].Month = GPS_INFO.Month;
   LoggerBuffer[NumLoggerBuffered-1].Day = GPS_INFO.Day;
+
+  for (int iSat=0; iSat < MAXSATELLITES; iSat++)
+    LoggerBuffer[NumLoggerBuffered-1].SatelliteIDs[iSat]=SatelliteIDs[iSat];
 
   // This is the first point that will be output to file.
   // Declaration must happen before this, so must save this time.
@@ -284,9 +308,17 @@ void LogPoint(double Latitude, double Longitude, double Altitude,
   if (!LoggerActive) {
     if (!GPS_INFO.NAVWarning) {
       LogPointToBuffer(Latitude, Longitude, Altitude, BaroAltitude,
-                       GPS_INFO.Hour, GPS_INFO.Minute, GPS_INFO.Second);
+                       GPS_INFO.Hour, GPS_INFO.Minute, GPS_INFO.Second,
+                       GPS_INFO.SatelliteIDs);
     }
   } else if (NumLoggerBuffered) {
+
+    LogFRecordToFile(LoggerBuffer[0].SatelliteIDs,  // write FRec before cached BRecs
+                   LoggerBuffer[0].Hour,
+                   LoggerBuffer[0].Minute,
+                   LoggerBuffer[0].Second,
+                   true);
+
     for (int i=0; i<NumLoggerBuffered; i++) {
       LogPointToFile(LoggerBuffer[i].Latitude,
                      LoggerBuffer[i].Longitude,
@@ -308,46 +340,63 @@ bool LogFRecordToFile(int SatelliteIDs[], short Hour, short Minute, short Second
 { // bAlways forces write when completing header for restart
   // only writes record if constallation has changed unless bAlways set
   char szFRecord[MAX_IGC_BUFF];
-  static char szLastFRecord[MAX_IGC_BUFF];
   static bool bFirst = true;
   int eof=0;
+  int iNumberSatellites=0;
   bool bRetVal = false;
 
   if (bFirst)
-    {
-      bFirst = false;
-      for (int iFirst = 0; iFirst < MAX_IGC_BUFF; iFirst++)
-	szLastFRecord[iFirst]=0;
-    }
+  {
+    bFirst = false;
+    ResetFRecord_Internal();
+  }
 
 
   sprintf(szFRecord,"F%02d%02d%02d", Hour, Minute, Second);
   eof=7;
 
   for (int i=0; i < MAXSATELLITES; i++)
+  {
+    if (SatelliteIDs[i] > 0)
     {
-      if (SatelliteIDs[i] > 0)
-	{
-	  sprintf(szFRecord+eof, "%02d",SatelliteIDs[i]);
-	  eof +=2;
-	}
+      sprintf(szFRecord+eof, "%02d",SatelliteIDs[i]);
+      eof +=2;
+      iNumberSatellites++;
     }
+  }
   sprintf(szFRecord+ eof,"\r\n");
 
   // only write F Record if it has changed since last time
   // check every 4.5 minutes to see if it's changed.  Transient changes are not tracked.
   if (!bAlways
-      && strcmp(szFRecord + 7, szLastFRecord + 7) == 0
-      && strlen(szFRecord) == strlen(szLastFRecord) )
-    bRetVal= true; // we're done for 4.5 minutes
-  else
-    {
-      bRetVal = IGCWriteRecord(szFRecord);
-      if (bRetVal)
-	strcpy(szLastFRecord, szFRecord);
+        && strcmp(szFRecord + 7, szLastFRecord + 7) == 0
+        && strlen(szFRecord) == strlen(szLastFRecord) )
+  { // constellation has not changed
+      if (iNumberSatellites >=3)
+        bRetVal=true;  // if the last FRecord had 3+ sats, then return true
+                      //  and this causes 5-minute counter to reset
       else
-	bRetVal = false;
+        bRetVal=false;  // non-2d fix, don't reset 5-minute counter so
+                        // we keep looking for changed constellations
+  }
+  else
+  { // constellation has changed
+    if (IGCWriteRecord(szFRecord))
+    {
+      strcpy(szLastFRecord, szFRecord);
+      if (iNumberSatellites >=3)
+        bRetVal=true;  // if we log an FRecord with a 3+ sats, then return true
+                      //  and this causes 5-minute counter to reset
+      else
+        bRetVal=false;  // non-2d fix, log it, and don't reset 5-minute counter so
+                        // we keep looking for changed constellations
     }
+    else
+    {  // IGCwrite failed
+      bRetVal = false;
+    }
+
+  }
   return bRetVal;
 }
 
@@ -665,7 +714,7 @@ void DoLogger(TCHAR *astrAssetNumber)
 			       WayPointList[Task[i].Index].Name);
 	      }
 	    EndDeclaration();
-	    LogFRecord(GPS_INFO.SatelliteIDs, true);  // write record at end of header
+	    ResetFRecord(); // reset timer & lastRecord string so if logger is restarted, FRec appears at top of file
 	  } else {
 
 	    MessageBoxX(hWndMapWindow,
@@ -1363,7 +1412,7 @@ bool IGCWriteRecord(char *szIn)
   TCHAR buffer[MAX_IGC_BUFF];
   TCHAR * pbuffer;
   pbuffer = buffer;
-  BOOL bRetVal = false;
+  bool bRetVal = false;
 
   int i=0, iLen=0;
   static BOOL bWriting = false;
