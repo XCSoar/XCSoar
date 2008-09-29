@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.81 2008/09/25 13:33:16 jwharington Exp $
+  $Id: Parser.cpp,v 1.82 2008/09/29 03:19:15 jwharington Exp $
 
 Copyright_License {
 
@@ -377,12 +377,12 @@ BOOL NMEAParser::GSA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
     return TRUE;
   }
 
-  // satellites are in items 4-15 of GSA string, 
+  // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
   // but 1st item in string is not passed, so start at item 3
   for (int i = 0; i < MAXSATELLITES; i++)
   {
     if (3+i<nparams) {
-      GPS_INFO->SatelliteIDs[i] = (int)(StrToDouble(params[3+i], NULL));
+      GPS_INFO->SatelliteIDs[i] = (int)(StrToDouble(params[2+i], NULL)); // 2 because params is 0-index
       if (GPS_INFO->SatelliteIDs[i] > 0)
 	iSatelliteCount ++;
     }

@@ -100,7 +100,6 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   static double LogLastTime=0;
   static double StatsLastTime=0;
   static double OLCLastTime = 0;
-  static double FRecordLastTime=0;
   double dtLog = 5.0;
   double dtSnail = 2.0;
   double dtStats = 60.0;
@@ -119,8 +118,8 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   if(Basic->Time <= OLCLastTime) {
     OLCLastTime = Basic->Time;
   }
-  if(Basic->Time <= FRecordLastTime) {
-    FRecordLastTime = Basic->Time;
+  if(Basic->Time <= GetFRecordLastTime()) {
+    SetFRecordLastTime(Basic->Time);
   }
 
   // draw snail points more often in circling mode
@@ -166,19 +165,15 @@ void DoLogging(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
     if (FastLogNum) FastLogNum--;
   }
 
-  if (Basic->Time - FRecordLastTime >= dtFRecord) 
+  if (Basic->Time - GetFRecordLastTime() >= dtFRecord) 
   { 
-
-    if (Basic->SatellitesUsed > 0)
-    {
-      if (LogFRecord(Basic->SatelliteIDs,false))
-      {  // need F record every 5 minutes
-         // so if write fails, don't update timer and try again next cycle
-        FRecordLastTime += dtFRecord;  
-
-        if (FRecordLastTime < Basic->Time-dtFRecord)
-          FRecordLastTime = Basic->Time-dtFRecord;
-      }
+    if (LogFRecord(Basic->SatelliteIDs,false))
+    {  // need F record every 5 minutes
+       // so if write fails or constellation is invalid, don't update timer and try again next cycle
+      SetFRecordLastTime(GetFRecordLastTime() + dtFRecord);  
+      // the FRecordLastTime is reset when the logger restarts so it is always at the start of the file
+      if (GetFRecordLastTime() < Basic->Time-dtFRecord)
+        SetFRecordLastTime(Basic->Time-dtFRecord);
     }
   }
 
