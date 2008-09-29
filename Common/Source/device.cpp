@@ -201,7 +201,9 @@ BOOL devInit(LPTSTR CommandLine){
   ReadPort1Settings(&PortIndex1,&SpeedIndex1);
 
   for (i=DeviceRegisterCount-1; i>=0; i--) {
-    if (_tcscmp(DeviceRegister[i].Name, DeviceName) == 0){
+
+    if ((_tcscmp(DeviceRegister[i].Name, DeviceName) == 0) || (i==0)) {
+
       ComPort *Com = new ComPort(0);
 
       // remember: Port1 is the port used by device A, port1 may be Com3 or Com1 etc
