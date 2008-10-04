@@ -1233,11 +1233,14 @@ void LD(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
     }
 
   // LD instantaneous from vario, updated every reading..
-  if (Basic->VarioAvailable && Basic->AirspeedAvailable) {
+  if (Basic->VarioAvailable && Basic->AirspeedAvailable
+      && Calculated->Flying) {
     Calculated->LDvario = UpdateLD(Calculated->LDvario,
                                    Basic->IndicatedAirspeed,
                                    -Basic->Vario,
                                    0.3);
+  } else {
+    Calculated->LDvario = 999;
   }
 }
 
