@@ -162,7 +162,6 @@ double GlidePolar::SinkRate(double V) {
 
 
 #define MIN_MACCREADY 0.01
-#define ERROR_TIME 1.0e5
 
 
 double GlidePolar::SinkRate(double V, double n) {
@@ -395,7 +394,7 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
 
     // if final glide mode and can final glide part way
 
-    double t_t;
+    double t_t = ERROR_TIME;
     double h_t = MacCreadyAltitude_internal(emcready,
                                             Distance, Bearing,
                                             WindSpeed, WindBearing,
@@ -489,7 +488,7 @@ double GlidePolar::MacCreadyAltitude(double emcready,
       invalidAltitude = true;
     } else {
       // All ok
-      if (TTG<ERROR_TIME) {
+      if (TTG<0.9*ERROR_TIME) {
         goto onExit;
       }
     }

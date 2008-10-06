@@ -150,6 +150,12 @@ int DataFieldFileReader::SetAsInteger(int Value){
 }
 
 
+// On older Ipaqs:
+// "Carte de stockage"
+// "Storage Card"
+// "SD-MMC Card"
+// "SD-Karte"
+
 void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
   
 #ifdef ALTAIRSYNC

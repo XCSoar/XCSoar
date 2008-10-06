@@ -759,6 +759,8 @@ static void SetInfoBoxSelector(int item, int mode)
     for (int i=0; i<NUMSELECTSTRINGS; i++) {
       dfe->addEnumText(gettext(Data_Options[i].Description));
     }
+    dfe->Sort(0);
+
     int it=0;
     
     switch(mode) {

@@ -453,7 +453,7 @@ Disable when flying paragliders.">
 
   <WndProperty Name="prpBallastSecsToEmpty" Caption="Dump time"      X=2 Y=-1   Width=235 Height=22 CaptionWidth=70 Font=2 
    Help="The time in seconds to empty full ballast.">
-    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=10 Max=240 Step=5/>
+    <DataField name="" DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min=10 Max=300 Step=5/>
   </WndProperty>
 
   </WndFrame>

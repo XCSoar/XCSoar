@@ -102,6 +102,7 @@ static void OnStartPointListEnter(WindowControl * Sender,
     int res;
     res = dlgWayPointSelect();
     if (res>=0) {
+      // TODO: don't add it if it's already present!
       LockTaskData();
       StartPoints[ItemIndex].Index = res;
       StartPoints[ItemIndex].Active = true;
@@ -152,6 +153,33 @@ static CallBackTableEntry_t CallBackTable[]={
 };
 
 
+static void CheckStartPointInTask(void) {
+  LockTaskData();
+  if (Task[0].Index != -1) {
+    // ensure current start point is in task
+    int index_last = 0;
+    for (int i=MAXSTARTPOINTS-1; i>=0; i--) {
+      if (StartPoints[i].Index == Task[0].Index) {
+	index_last = -1;
+	break;
+      }
+      if ((StartPoints[i].Index>=0) && (index_last==0)) {
+	index_last = i;
+      }
+    }
+    if (index_last>=0) {
+      if (StartPoints[index_last].Index>= 0) {
+	index_last = min(MAXSTARTPOINTS-1,index_last+1);
+      }
+      // it wasn't, so make sure it's added now
+      StartPoints[index_last].Index = Task[0].Index;
+      StartPoints[index_last].Active = true;
+    }
+  }
+  UnlockTaskData();
+}
+
+
 void dlgStartPointShowModal(void) {
 
   ItemIndex = -1;
@@ -174,6 +202,8 @@ void dlgStartPointShowModal(void) {
   if (!wf) return;
 
   ASSERT(wf!=NULL);
+  
+  CheckStartPointInTask();
 
   wStartPointList = (WndListFrame*)wf->FindByName(TEXT("frmStartPointList"));
   ASSERT(wStartPointList!=NULL);

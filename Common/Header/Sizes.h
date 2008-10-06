@@ -140,4 +140,6 @@
 
 #define MAXISOLINES 32
 
+#define ERROR_TIME 1.0e6
+
 #endif

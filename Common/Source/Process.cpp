@@ -443,7 +443,8 @@ void FormatterTime::AssignValue(int i) {
     break;
   case 46:
     SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo+DetectCurrentTime()));
-    Valid = ValidTaskPoint(ActiveWayPoint);
+    Valid = ValidTaskPoint(ActiveWayPoint) && 
+      (CALCULATED_INFO.LegTimeToGo< 0.9*ERROR_TIME);
     break;
   default:
     break;
@@ -477,24 +478,28 @@ void FormatterAATTime::AssignValue(int i) {
   switch (i) {
   case 27:
     SecsToDisplayTime((int)CALCULATED_INFO.AATTimeToGo);
-    Valid = (ValidTaskPoint(ActiveWayPoint) && AATEnabled);
+    Valid = (ValidTaskPoint(ActiveWayPoint) && AATEnabled
+	     && (CALCULATED_INFO.AATTimeToGo< 0.9*ERROR_TIME));
     break;
   case 41:
     SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo));
-    Valid = ValidTaskPoint(ActiveWayPoint);
+    Valid = ValidTaskPoint(ActiveWayPoint) 
+      && (CALCULATED_INFO.TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 42:
     SecsToDisplayTime((int)(CALCULATED_INFO.LegTimeToGo));
-    Valid = ValidTaskPoint(ActiveWayPoint);
+    Valid = ValidTaskPoint(ActiveWayPoint) 
+      && (CALCULATED_INFO.LegTimeToGo< 0.9*ERROR_TIME);
     break;
   case 45:
     SecsToDisplayTime((int)(CALCULATED_INFO.TaskTimeToGo+DetectCurrentTime()));
-    Valid = ValidTaskPoint(ActiveWayPoint);
+    Valid = ValidTaskPoint(ActiveWayPoint)
+      && (CALCULATED_INFO.TaskTimeToGo< 0.9*ERROR_TIME);
     break;
   case 62:
     if (AATEnabled && ValidTaskPoint(ActiveWayPoint)) {
       SecsToDisplayTime((int)dd);
-      Valid = true;
+      Valid = (dd< 0.9*ERROR_TIME);
     } else {
       SecsToDisplayTime(0);
       Valid = false;
