@@ -3033,7 +3033,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   LDNext(Basic, Calculated, LegToGo, LegAltitude);
 
-  if (LegTime0>=1e5) {
+  if (LegTime0>= 0.9*ERROR_TIME) {
     // can't make it, so assume flying at current mc
     LegAltitude0 = LegAltitude;
   }
@@ -3095,7 +3095,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                         &LegTime0, 1.0e6, CRUISE_EFFICIENCY
                         );
 
-    if (LegTime0>=1e5) {
+    if (LegTime0>=0.9*ERROR_TIME) {
       // can't make it, so assume flying at current mc
       LegAltitude0 = LegAltitude;
     }
