@@ -15,7 +15,7 @@ Changes from 5.1.9beta2:
 - Flymaster F1 bug fix (vario units)
 - Porting to cegcc
 - Task/leg times to go etc only shown if task is completeable at current Mc
-- Infobox selector has sorted items
+- Infobox selector has items sorted alphabetically
 - Multiple start points ensure the current start is in the list.
 - Draw cross in final glide bar if unreachable at current MC
 

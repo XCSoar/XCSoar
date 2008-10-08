@@ -192,6 +192,7 @@ DEVS	:=\
 	$(SRC)/devPosiGraph.o \
 	$(SRC)/devVega.o \
 	$(SRC)/devVolkslogger.o \
+	$(SRC)/devXCOM760.o \
 	$(SRC)/devZander.o
 
 DLGS	:=\
