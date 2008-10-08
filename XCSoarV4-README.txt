@@ -7,7 +7,6 @@ Todo:
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
 - Next wpt infobox
 - Marks that are reachable shown in green?
-- Multiple start points ensure the current start is in the list.
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods
@@ -15,9 +14,10 @@ Changes from 5.1.9beta2:
 - Added copy/paste to infoboxes in configuration dialog
 - Flymaster F1 bug fix (vario units)
 - Porting to cegcc
-
 - Task/leg times to go etc only shown if task is completeable at current Mc
 - Infobox selector has sorted items
+- Multiple start points ensure the current start is in the list.
+- Draw cross in final glide bar if unreachable at current MC
 
 Changes from 5.1.9beta1:
 - Added Flymaster F1 device
