@@ -180,6 +180,7 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].IsLogger = devIsFalseReturn;
     DeviceList[i].IsGPSSource = devIsFalseReturn;
     DeviceList[i].IsBaroSource = devIsFalseReturn;
+    DeviceList[i].IsRadio = devIsFalseReturn;
 
     DeviceList[i].PutVoice = (int (*)(struct DeviceDescriptor_t *,TCHAR *))devIsFalseReturn;
     DeviceList[i].PortNumber = i;
@@ -187,6 +188,9 @@ BOOL devInit(LPTSTR CommandLine){
     DeviceList[i].OnSysTicker = NULL;
 
     DeviceList[i].pDevPipeTo = NULL;
+    DeviceList[i].PutVolume = NULL;
+    DeviceList[i].PutFreqActive = NULL;
+    DeviceList[i].PutFreqStandby = NULL;
   }
 
   pDevPrimaryBaroSource = NULL;
@@ -630,6 +634,19 @@ BOOL devIsBaroSource(PDeviceDescriptor_t d)
   return result;
 }
 
+BOOL devIsRadio(PDeviceDescriptor_t d)
+{
+  BOOL result = FALSE;
+
+  LockComm();
+  if ((d != NULL) && (d->IsRadio != NULL))
+    result = d->IsRadio(d);
+  UnlockComm();
+
+  return result;
+}
+
+
 BOOL devOpenLog(PDeviceDescriptor_t d, TCHAR *FileName){
   if (d != NULL){
     d->fhLogFile = _tfopen(FileName, TEXT("a+b"));
@@ -746,4 +763,47 @@ PDeviceDescriptor_t devVarioFindVega(void)
     if (_tcscmp(DeviceList[i].Name, TEXT("Vega")) == 0)
       return &DeviceList[i];
   return NULL;
+}
+
+
+BOOL devPutVolume(PDeviceDescriptor_t d, int Volume)
+{
+  BOOL result = TRUE;
+
+  if (fSimMode)
+    return TRUE;
+  LockComm();
+  if (d != NULL && d->PutVolume != NULL)
+    result = d->PutVolume(d, Volume);
+  UnlockComm();
+
+  return result;
+}
+
+BOOL devPutFreqActive(PDeviceDescriptor_t d, double Freq)
+{
+  BOOL result = TRUE;
+
+  if (fSimMode)
+    return TRUE;
+  LockComm();
+  if (d != NULL && d->PutFreqActive != NULL)
+    result = d->PutFreqActive(d, Freq);
+  UnlockComm();
+
+  return result;
+}
+
+BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
+{
+  BOOL result = TRUE;
+
+  if (fSimMode)
+    return TRUE;
+  LockComm();
+  if (d != NULL && d->PutFreqStandby != NULL)
+    result = d->PutFreqStandby(d, Freq);
+  UnlockComm();
+
+  return result;
 }

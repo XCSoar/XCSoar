@@ -78,6 +78,7 @@ Copyright_License {
 #include "devLX.h"
 #include "devZander.h"
 #include "devFlymasterF1.h"
+#include "devXCOM760.h"
 
 #include "externs.h"
 #include "Units.h"
@@ -1372,6 +1373,7 @@ int WINAPI WinMain(     HINSTANCE hInstance,
   lxRegister();
   zanderRegister();
   flymasterf1Register();
+  xcom760Register();
 
   //JMW disabled  devInit(lpCmdLine);
 
