@@ -154,7 +154,11 @@ int DataFieldFileReader::SetAsInteger(int Value){
 // "Carte de stockage"
 // "Storage Card"
 // "SD-MMC Card"
-// "SD-Karte"
+// "SD Karte"
+// "CF Karte"
+// "SD Card"
+// "CF Card"
+// "Speicherkarte"
 
 void DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter) {
 

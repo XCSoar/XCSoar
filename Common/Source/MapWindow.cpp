@@ -4310,6 +4310,8 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
     if (ValidTaskPoint(ActiveWayPoint)){
     // if (ActiveWayPoint >= 0) {
 
+      const int y0 = ( (rc.bottom - rc.top )/2)+rc.top;
+
       // 60 units is size, div by 8 means 60*8 = 480 meters.
 
       Offset = ((int)DerivedDrawInfo.TaskAltitudeDifference)/8;
@@ -4332,7 +4334,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
       for(i=0;i<6;i++)
         {
-          GlideBar[i].y += ( (rc.bottom - rc.top )/2)+rc.top;
+          GlideBar[i].y += y0;
           GlideBar[i].x = IBLSCALE(GlideBar[i].x)+rc.left;
         }
       GlideBar[0].y -= Offset;
@@ -4341,7 +4343,7 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
       for(i=0;i<6;i++)
         {
-          GlideBar0[i].y += ( (rc.bottom - rc.top )/2)+rc.top;
+          GlideBar0[i].y += y0;
           GlideBar0[i].x = IBLSCALE(GlideBar0[i].x)+rc.left;
         }
       GlideBar0[0].y -= Offset0;
@@ -4406,6 +4408,22 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
       }
       if (Offset!=Offset0) {
         Polygon(hDC,GlideBar0,6);
+      }
+
+      // JMW draw x on final glide bar if unreachable at current Mc
+      // hpAircraftBorder
+      if (DerivedDrawInfo.TaskTimeToGo>0.9*ERROR_TIME) {
+	SelectObject(hDC, hpAircraftBorder);
+	POINT Cross[4] = { {-5, -5},
+			   { 5,  5},
+			   {-5,  5},
+			   { 5, -5} };
+	for (i=0; i<4; i++) {
+	  Cross[i].x = IBLSCALE(Cross[i].x+9);
+	  Cross[i].y = IBLSCALE(Cross[i].y+9)+y0;
+	}
+        Polygon(hDC,Cross,2);
+        Polygon(hDC,&Cross[2],2);
       }
 
       if (Appearance.IndFinalGlide == fgFinalGlideDefault){
