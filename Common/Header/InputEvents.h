@@ -90,6 +90,7 @@ class InputEvents {
   static void eventAirspaceDisplayMode(const TCHAR *misc);
   static void eventAutoLogger(const TCHAR *misc);
   static void eventGotoLookup(const TCHAR *misc);
+  static void eventAddWaypoint(const TCHAR *misc);
   // -------
 
 #ifdef _SIM_

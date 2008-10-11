@@ -75,6 +75,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MapWindow.h"
 #include "Atmosphere.h"
 #include "GaugeFLARM.h"
+#include "Waypointparser.h"
 
 // Sensible maximums
 #define MAX_MODE 100
@@ -1751,10 +1752,14 @@ void InputEvents::eventAbortTask(const TCHAR *misc) {
   else if (_tcscmp(misc, TEXT("show")) == 0) {
     if (TaskAborted)
       DoStatusMessage(TEXT("Task Aborted"));
-    else
+    else if (TaskIsTemporary()) {
+      DoStatusMessage(TEXT("Task Temporary"));
+    } else {
       DoStatusMessage(TEXT("Task Resume"));
-  } else
-    ResumeAbortTask();  // ToDo arg?
+    }
+  } else {
+    ResumeAbortTask(0);
+  }
   UnlockTaskData();
 }
 
@@ -2341,6 +2346,34 @@ void InputEvents::eventAirspaceDisplayMode(const TCHAR *misc){
     AltitudeMode = ALLOFF;
   }
 
+}
+
+
+void InputEvents::eventAddWaypoint(const TCHAR *misc) {
+  static int tmpWaypointNum = 0;
+  WAYPOINT edit_waypoint;
+  LockTaskData();
+  edit_waypoint.Latitude = GPS_INFO.Latitude;
+  edit_waypoint.Longitude = GPS_INFO.Longitude;
+  edit_waypoint.Altitude = CALCULATED_INFO.TerrainAlt;
+  edit_waypoint.FileNum = 2; // don't put into file
+  edit_waypoint.Flags = 0;
+  if (_tcscmp(misc, TEXT("landable")) == 0) {
+    edit_waypoint.Flags += LANDPOINT;
+  }
+  edit_waypoint.Comment[0] = 0;
+  edit_waypoint.Name[0] = 0;
+  edit_waypoint.Details = 0;
+  edit_waypoint.Number = NumberOfWayPoints;
+
+  WAYPOINT *new_waypoint = GrowWaypointList();
+  if (new_waypoint) {
+    tmpWaypointNum++;
+    memcpy(new_waypoint,&edit_waypoint,sizeof(WAYPOINT));
+    wsprintf(new_waypoint->Name,TEXT("_%d"), tmpWaypointNum);
+    new_waypoint->Details= 0;
+  }
+  UnlockTaskData();
 }
 
 // JMW TODO: have all inputevents return bool, indicating whether

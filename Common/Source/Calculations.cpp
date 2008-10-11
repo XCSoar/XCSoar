@@ -221,7 +221,7 @@ double FAIFinishHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated, int wp) {
     wp_alt = 0;
   }
 
-  if (!TaskAborted && (wp==FinalWayPoint)) {
+  if (!TaskIsTemporary() && (wp==FinalWayPoint)) {
     if (EnableFAIFinishHeight && !AATEnabled) {
       return max(max(FinishMinHeight, SAFETYALTITUDEARRIVAL)+ wp_alt,
                  Calculated->TaskStartAltitude-1000.0);
@@ -939,7 +939,7 @@ BOOL DoCalculations(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
   CalculateOwnTeamCode(Basic, Calculated);
   CalculateTeammateBearingRange(Basic, Calculated);
 
-  if (!TaskAborted) {
+  if (!TaskIsTemporary()) {
     InSector(Basic, Calculated);
     DoAutoMacCready(Basic, Calculated);
     IterateEffectiveMacCready(Basic, Calculated);
@@ -1691,7 +1691,8 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
       Calculated->ZoomDistance = Calculated->WaypointDistance;
 
-      if (AATEnabled && !TaskAborted && (ActiveWayPoint>0) &&
+      if (AATEnabled && !TaskIsTemporary()
+	  && (ActiveWayPoint>0) &&
           ValidTaskPoint(ActiveWayPoint+1)) {
 
         w1lat = Task[ActiveWayPoint].AATTargetLat;
@@ -1710,7 +1711,8 @@ void DistanceToNext(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
         }
 
       } else if ((ActiveWayPoint==0) && (ValidTaskPoint(ActiveWayPoint+1))
-                 && (Calculated->IsInSector) && (!TaskAborted)) {
+                 && (Calculated->IsInSector) &&
+		 !TaskIsTemporary()) {
 
         // JMW set waypoint bearing to start direction if in start sector
 
@@ -2544,7 +2546,7 @@ void TaskSpeed(NMEA_INFO *Basic, DERIVED_INFO *Calculated, const double maccread
   double TotalTime=0, TotalDistance=0, Vfinal=0;
 
   if (!ValidTaskPoint(ActiveWayPoint)) return;
-  if (TaskAborted) return;
+  if (TaskIsTemporary()) return;
   if (Calculated->ValidFinish) return;
   if (!Calculated->Flying) return;
 
@@ -2888,7 +2890,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   double w0lat;
   double w0lon;
 
-  if (AATEnabled && (ActiveWayPoint>0) && (!TaskAborted)) {
+  if (AATEnabled && (ActiveWayPoint>0) &&
+      !TaskIsTemporary()) {
     w1lat = Task[ActiveWayPoint].AATTargetLat;
     w1lon = Task[ActiveWayPoint].AATTargetLon;
   } else {
@@ -2903,13 +2906,14 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
                   &LegToGo, &LegBearing);
 
   if (AATEnabled && (ActiveWayPoint>0) && ValidTaskPoint(ActiveWayPoint+1)
-      && Calculated->IsInSector && (maccready>0.1) && (!TaskAborted)) {
+      && Calculated->IsInSector && (maccready>0.1) &&
+      !TaskIsTemporary()) {
     calc_turning_now = true;
   } else {
     calc_turning_now = false;
   }
 
-  if ((ActiveWayPoint<1) || TaskAborted) {
+  if ((ActiveWayPoint<1) || TaskIsTemporary()) {
     LegCovered = 0;
   } else {
     if (AATEnabled) {
@@ -2955,7 +2959,7 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
   ///////////////////////////////////////////////////
   // Now add distances for start to previous waypoint
 
-  if (!TaskAborted) {
+  if (!TaskIsTemporary()) {
 
     if (!AATEnabled) {
       for(int i=0;i< ActiveWayPoint-1; i++)
@@ -2997,7 +3001,8 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   CheckTransitionFinalGlide(Basic, Calculated);
 
-  if (AATEnabled && !TaskAborted && (ActiveWayPoint>0) &&
+  if (AATEnabled && !TaskIsTemporary()
+      && (ActiveWayPoint>0) &&
       ValidTaskPoint(ActiveWayPoint+1) && Calculated->IsInSector) {
     if (Calculated->WaypointDistance<AATCloseDistance()*3.0) {
       LegBearing = AATCloseBearing(Basic, Calculated);
@@ -3049,98 +3054,100 @@ void TaskStatistics(NMEA_INFO *Basic, DERIVED_INFO *Calculated,
 
   Calculated->TaskTimeToGoTurningNow = 0;
 
-  while((!TaskAborted) && ValidTaskPoint(task_index)) {
+  if (!TaskIsTemporary()) {
+    while(ValidTaskPoint(task_index)) {
 
-    double this_LegTimeToGo;
-    bool this_is_final = (task_index==FinalWayPoint)
-      || ForceFinalGlide;
+      double this_LegTimeToGo;
+      bool this_is_final = (task_index==FinalWayPoint)
+	|| ForceFinalGlide;
 
-    if (AATEnabled) {
-      w1lat = Task[task_index].AATTargetLat;
-      w1lon = Task[task_index].AATTargetLon;
-      w0lat = Task[task_index-1].AATTargetLat;
-      w0lon = Task[task_index-1].AATTargetLon;
-    } else {
-      w1lat = WayPointList[Task[task_index].Index].Latitude;
-      w1lon = WayPointList[Task[task_index].Index].Longitude;
-      w0lat = WayPointList[Task[task_index-1].Index].Latitude;
-      w0lon = WayPointList[Task[task_index-1].Index].Longitude;
-    }
-
-    double NextLegDistance, NextLegBearing;
-
-    DistanceBearing(w0lat,
-                    w0lon,
-                    w1lat,
-                    w1lon,
-                    &NextLegDistance, &NextLegBearing);
-
-    LegAltitude = GlidePolar::
-      MacCreadyAltitude(maccready,
-                        NextLegDistance, NextLegBearing,
-                        Calculated->WindSpeed,
-                        Calculated->WindBearing,
-                        0, 0,
-                        this_is_final,
-                        &this_LegTimeToGo,
-                        height_above_finish, CRUISE_EFFICIENCY);
-
-    LegAltitude0 = GlidePolar::
-      MacCreadyAltitude(0,
-                        NextLegDistance, NextLegBearing,
-                        Calculated->WindSpeed,
-                        Calculated->WindBearing,
-                        0, 0,
-                        true,
-                        &LegTime0, 1.0e6, CRUISE_EFFICIENCY
-                        );
-
-    if (LegTime0>=0.9*ERROR_TIME) {
-      // can't make it, so assume flying at current mc
-      LegAltitude0 = LegAltitude;
-    }
-
-    TaskAltitudeRequired += LegAltitude;
-    TaskAltitudeRequired0 += LegAltitude0;
-
-    Calculated->TaskDistanceToGo += NextLegDistance;
-    Calculated->TaskTimeToGo += this_LegTimeToGo;
-
-    if (Calculated->IsInSector && (ActiveWayPoint==0) && (task_index==1)) {
-      // set best cruise track to first leg bearing when in start sector
-      Calculated->BestCruiseTrack = NextLegBearing;
-    }
-
-    if (calc_turning_now) {
-      if (task_index == ActiveWayPoint+1) {
-
-        double NextLegDistanceTurningNow, NextLegBearingTurningNow;
-        double this_LegTimeToGo_turningnow=0;
-
-        DistanceBearing(Basic->Latitude,
-                        Basic->Longitude,
-                        w1lat,
-                        w1lon,
-                        &NextLegDistanceTurningNow,
-                        &NextLegBearingTurningNow);
-
-        GlidePolar::
-          MacCreadyAltitude(maccready,
-                            NextLegDistanceTurningNow,
-                            NextLegBearingTurningNow,
-                            Calculated->WindSpeed,
-                            Calculated->WindBearing,
-                            0, 0,
-                            this_is_final,
-                            &this_LegTimeToGo_turningnow,
-                            height_above_finish, CRUISE_EFFICIENCY);
-        Calculated->TaskTimeToGoTurningNow += this_LegTimeToGo_turningnow;
+      if (AATEnabled) {
+	w1lat = Task[task_index].AATTargetLat;
+	w1lon = Task[task_index].AATTargetLon;
+	w0lat = Task[task_index-1].AATTargetLat;
+	w0lon = Task[task_index-1].AATTargetLon;
       } else {
-        Calculated->TaskTimeToGoTurningNow += this_LegTimeToGo;
+	w1lat = WayPointList[Task[task_index].Index].Latitude;
+	w1lon = WayPointList[Task[task_index].Index].Longitude;
+	w0lat = WayPointList[Task[task_index-1].Index].Latitude;
+	w0lon = WayPointList[Task[task_index-1].Index].Longitude;
       }
-    }
 
-    task_index++;
+      double NextLegDistance, NextLegBearing;
+
+      DistanceBearing(w0lat,
+		      w0lon,
+		      w1lat,
+		      w1lon,
+		      &NextLegDistance, &NextLegBearing);
+
+      LegAltitude = GlidePolar::
+	MacCreadyAltitude(maccready,
+			  NextLegDistance, NextLegBearing,
+			  Calculated->WindSpeed,
+			  Calculated->WindBearing,
+			  0, 0,
+			  this_is_final,
+			  &this_LegTimeToGo,
+			  height_above_finish, CRUISE_EFFICIENCY);
+
+      LegAltitude0 = GlidePolar::
+	MacCreadyAltitude(0,
+			  NextLegDistance, NextLegBearing,
+			  Calculated->WindSpeed,
+			  Calculated->WindBearing,
+			  0, 0,
+			  true,
+			  &LegTime0, 1.0e6, CRUISE_EFFICIENCY
+			  );
+
+      if (LegTime0>=0.9*ERROR_TIME) {
+	// can't make it, so assume flying at current mc
+	LegAltitude0 = LegAltitude;
+      }
+
+      TaskAltitudeRequired += LegAltitude;
+      TaskAltitudeRequired0 += LegAltitude0;
+
+      Calculated->TaskDistanceToGo += NextLegDistance;
+      Calculated->TaskTimeToGo += this_LegTimeToGo;
+
+      if (Calculated->IsInSector && (ActiveWayPoint==0) && (task_index==1)) {
+	// set best cruise track to first leg bearing when in start sector
+	Calculated->BestCruiseTrack = NextLegBearing;
+      }
+
+      if (calc_turning_now) {
+	if (task_index == ActiveWayPoint+1) {
+
+	  double NextLegDistanceTurningNow, NextLegBearingTurningNow;
+	  double this_LegTimeToGo_turningnow=0;
+
+	  DistanceBearing(Basic->Latitude,
+			  Basic->Longitude,
+			  w1lat,
+			  w1lon,
+			  &NextLegDistanceTurningNow,
+			  &NextLegBearingTurningNow);
+
+	  GlidePolar::
+	    MacCreadyAltitude(maccready,
+			      NextLegDistanceTurningNow,
+			      NextLegBearingTurningNow,
+			      Calculated->WindSpeed,
+			      Calculated->WindBearing,
+			      0, 0,
+			      this_is_final,
+			      &this_LegTimeToGo_turningnow,
+			      height_above_finish, CRUISE_EFFICIENCY);
+	  Calculated->TaskTimeToGoTurningNow += this_LegTimeToGo_turningnow;
+	} else {
+	  Calculated->TaskTimeToGoTurningNow += this_LegTimeToGo;
+	}
+      }
+
+      task_index++;
+    }
   }
   ////////////////
 
@@ -3958,74 +3965,6 @@ void SortLandableWaypoints(NMEA_INFO *Basic,
   }
   UnlockTaskData();
   //  UnlockFlightData();
-}
-
-
-void ResumeAbortTask(int set) {
-  static int Task_saved[MAXTASKPOINTS];
-  static int active_waypoint_saved= -1;
-  static bool aat_enabled_saved= false;
-  int i;
-  int active_waypoint_on_entry;
-  bool task_aborted_on_entry = TaskAborted;
-
-  //  LockFlightData();
-  LockTaskData();
-  active_waypoint_on_entry = ActiveWayPoint;
-
-  if (set == 0)
-    TaskAborted = !TaskAborted;
-  else if (set > 0)
-    TaskAborted = true;
-  else if (set < 0)
-    TaskAborted = false;
-
-  if (task_aborted_on_entry != TaskAborted) {
-    if (TaskAborted) {
-
-      // save current task in backup
-
-      for (i=0; i<MAXTASKPOINTS; i++) {
-        Task_saved[i]= Task[i].Index;
-      }
-      active_waypoint_saved = ActiveWayPoint;
-      if (AATEnabled) {
-        aat_enabled_saved = true;
-      } else {
-        aat_enabled_saved = false;
-      }
-
-      // force new waypoint to be the closest
-      ActiveWayPoint = -1;
-
-      // force AAT off
-      AATEnabled = false;
-
-      // set MacCready
-      if (!GlidePolar::AbortSafetyUseCurrent)  // 20060520:sgi added
-        MACCREADY = min(MACCREADY,GlidePolar::AbortSafetyMacCready());
-
-    } else {
-
-      // reload backup task
-
-      for (i=0; i<MAXTASKPOINTS; i++) {
-        Task[i].Index = Task_saved[i];
-      }
-      ActiveWayPoint = active_waypoint_saved;
-      AATEnabled = aat_enabled_saved;
-
-      RefreshTask();
-    }
-  }
-
-  if (active_waypoint_on_entry != ActiveWayPoint){
-    SelectedWaypoint = ActiveWayPoint;
-  }
-
-  UnlockTaskData();
-  //  UnlockFlightData();
-
 }
 
 

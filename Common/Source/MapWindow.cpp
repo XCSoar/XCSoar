@@ -1960,7 +1960,7 @@ void MapWindow::RenderMapWindowBg(HDC hdc, const RECT rc,
   // reset label over-write preventer
   nLabelBlocks = 0;
 
-  if (!TaskAborted) {
+  if (!TaskIsTemporary()) {
     DrawTaskAAT(hdc, rc);
   }
 
@@ -4412,7 +4412,8 @@ void MapWindow::DrawFinalGlide(HDC hDC,RECT rc)
 
       // JMW draw x on final glide bar if unreachable at current Mc
       // hpAircraftBorder
-      if (DerivedDrawInfo.TaskTimeToGo>0.9*ERROR_TIME) {
+      if ((DerivedDrawInfo.TaskTimeToGo>0.9*ERROR_TIME)
+	  || ((MACCREADY<0.01) && (DerivedDrawInfo.TaskAltitudeDifference<0))) {
 	SelectObject(hDC, hpAircraftBorder);
 	POINT Cross[4] = { {-5, -5},
 			   { 5,  5},

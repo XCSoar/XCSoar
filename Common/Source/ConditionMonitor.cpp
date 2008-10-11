@@ -282,7 +282,7 @@ public:
 protected:
 
   bool CheckCondition(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
-    if (!AATEnabled || !ValidTaskPoint(ActiveWayPoint) || TaskAborted
+    if (!AATEnabled || !ValidTaskPoint(ActiveWayPoint) || TaskIsTemporary()
         || !(Calculated->ValidStart && !Calculated->ValidFinish)
         || !Calculated->Flying) {
       return false;

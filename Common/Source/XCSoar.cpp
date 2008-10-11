@@ -3440,6 +3440,7 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
   }
   if (_tcsstr(OutBuffer, TEXT("$(CheckTaskResumed)"))) {
     if (TaskAborted) {
+      // JMW TODO: does this need to be set with temporary task?
       invalid = true;
     }
     ReplaceInString(OutBuffer, TEXT("$(CheckTaskResumed)"), TEXT(""), Size);
@@ -3522,7 +3523,9 @@ bool ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size){
 
   //////
 
-  CondReplaceInString(TaskAborted, OutBuffer, TEXT("$(TaskAbortToggleActionName)"), TEXT("Resume"), TEXT("Abort"), Size);
+  CondReplaceInString(TaskIsTemporary(),
+		      OutBuffer, TEXT("$(TaskAbortToggleActionName)"),
+		      TEXT("Resume"), TEXT("Abort"), Size);
 
   if (_tcsstr(OutBuffer, TEXT("$(FinalForceToggleActionName)"))) {
     CondReplaceInString(ForceFinalGlide, OutBuffer,

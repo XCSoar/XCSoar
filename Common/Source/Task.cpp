@@ -37,6 +37,7 @@ Copyright_License {
 #include "externs.h"
 #include "Calculations.h"
 #include "Waypointparser.h"
+#include "McReady.h"
 
 bool EnableMultipleStartPoints = false;
 bool TaskModified = false;
@@ -47,6 +48,13 @@ TCHAR LastTaskFileName[MAX_PATH]= TEXT("\0");
 extern bool TargetDialogOpen;
 
 extern AATDistance aatdistance;
+
+static int Task_saved[MAXTASKPOINTS];
+static int active_waypoint_saved= -1;
+static bool aat_enabled_saved= false;
+
+static void BackupTask(void);
+
 
 void ResetTaskWaypoint(int j) {
   Task[j].Index = -1;
@@ -64,15 +72,34 @@ void FlyDirectTo(int index) {
   if (!CheckDeclaration())
     return;
 
+  // JMW TODO: unabort if aborted
+
   LockTaskData();
+
+  if (TaskAborted) {
+    // in case we GOTO while already aborted
+    ResumeAbortTask(-1);
+  }
+
+  if (!TaskIsTemporary()) {
+    BackupTask();
+  }
+
   TaskModified = true;
   TargetModified = true;
-  ActiveWayPoint = -1; AATEnabled = FALSE;
+  ActiveWayPoint = -1;
+
+  AATEnabled = FALSE;
+
+  /*  JMW disabled this so task info is preserved
   for(int j=0;j<MAXTASKPOINTS;j++)
   {
     ResetTaskWaypoint(j);
   }
+  */
+
   Task[0].Index = index;
+  Task[1].Index = -1;
   ActiveWayPoint = 0;
   RefreshTask();
   UnlockTaskData();
@@ -1149,10 +1176,10 @@ void ClearTask(void) {
     Task[i].AATTargetOffsetRadial = 0;
     Task[i].AATTargetOffsetRadius = 0;
     Task[i].AATTargetLocked = false;
-    int j;
-    for (j=0; j<MAXISOLINES; j++) {
+    for (int j=0; j<MAXISOLINES; j++) {
       TaskStats[i].IsoLine_valid[j] = false;
     }
+    Task_saved[i] = Task[i].Index;
   }
   for (i=0; i<MAXSTARTPOINTS; i++) {
     StartPoints[i].Index = -1;
@@ -1524,4 +1551,99 @@ void SaveDefaultTask(void) {
     SaveTask(buffer);
   }
   UnlockTaskData();
+}
+
+//////////////////////////////////////////////////////
+
+
+
+bool TaskIsTemporary(void) {
+  bool retval = false;
+  LockTaskData();
+  if (TaskAborted) {
+    retval = true;
+  }
+  if ((Task[0].Index>=0) && (Task[1].Index== -1)
+      && (Task_saved[0] >= 0)) {
+    retval = true;
+  };
+
+  UnlockTaskData();
+  return retval;
+}
+
+
+static void BackupTask(void) {
+  LockTaskData();
+  for (int i=0; i<MAXTASKPOINTS; i++) {
+    Task_saved[i]= Task[i].Index;
+  }
+  active_waypoint_saved = ActiveWayPoint;
+  if (AATEnabled) {
+    aat_enabled_saved = true;
+  } else {
+    aat_enabled_saved = false;
+  }
+  UnlockTaskData();
+}
+
+
+void ResumeAbortTask(int set) {
+  int i;
+  int active_waypoint_on_entry;
+  bool task_temporary_on_entry = TaskIsTemporary();
+
+  //  LockFlightData();
+  LockTaskData();
+  active_waypoint_on_entry = ActiveWayPoint;
+
+  if (set == 0) {
+    if (task_temporary_on_entry && !TaskAborted) {
+      // no toggle required, we are resuming a temporary goto
+    } else {
+      TaskAborted = !TaskAborted;
+    }
+  } else if (set > 0)
+    TaskAborted = true;
+  else if (set < 0)
+    TaskAborted = false;
+
+  if (task_temporary_on_entry != TaskAborted) {
+    if (TaskAborted) {
+
+      // save current task in backup
+      BackupTask();
+
+      // force new waypoint to be the closest
+      ActiveWayPoint = -1;
+
+      // force AAT off
+      AATEnabled = false;
+
+      // set MacCready
+      if (!GlidePolar::AbortSafetyUseCurrent)  // 20060520:sgi added
+        MACCREADY = min(MACCREADY,GlidePolar::AbortSafetyMacCready());
+
+    } else {
+
+      // reload backup task and clear it
+
+      for (i=0; i<MAXTASKPOINTS; i++) {
+        Task[i].Index = Task_saved[i];
+	Task_saved[i] = -1;
+      }
+      ActiveWayPoint = active_waypoint_saved;
+      AATEnabled = aat_enabled_saved;
+
+      RefreshTask();
+    }
+  }
+
+  if (active_waypoint_on_entry != ActiveWayPoint){
+    SelectedWaypoint = ActiveWayPoint;
+  }
+
+  UnlockTaskData();
+  //  UnlockFlightData();
+
 }
