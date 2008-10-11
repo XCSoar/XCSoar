@@ -161,7 +161,7 @@ double GlidePolar::SinkRate(double V) {
 }
 
 
-#define MIN_MACCREADY 0.01
+#define MIN_MACCREADY 0.000000000001
 
 
 double GlidePolar::SinkRate(double V, double n) {
@@ -234,7 +234,7 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
   }
 
   double TimeToDestTotal = ERROR_TIME; // initialise to error value
-  double tcruise, tclimb;
+  double Time_cruise, Time_climb;
   TimeToDestCruise = -1; // initialise to error value
 
   for(i=Vminsink;i<iSAFETYSPEED;i++) {
@@ -271,15 +271,15 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
     }
 
     // can't advance at this speed
-    if (vtot<0) continue;
+    if (vtot<=0) continue;
         
     // time spent in cruise
-    tcruise = (tc/vtot)*Distance;
+    Time_cruise = (tc/vtot)*Distance;
     
     bool bestfound = false;
 
     if (isFinalGlide) {
-      tclimb = 0.0;
+      Time_climb = 0.0;
       // inverse glide ratio relative to ground
       Glide = sinkrate/vtot;
 
@@ -287,12 +287,12 @@ double GlidePolar::MacCreadyAltitude_internal(double emcready,
       if (Glide <= BestGlide) {
 	bestfound = true;
 	BestGlide = Glide;
-	TimeToDestTotal = tcruise;
+	TimeToDestTotal = Time_cruise;
       }
     } else {
-      tclimb = sinkrate*(tcruise/emcready);
+      Time_climb = sinkrate*(Time_cruise/emcready);
       // total time to destination
-      TimeToDestTotal = max(tcruise+tclimb,0.0001);
+      TimeToDestTotal = max(Time_cruise+Time_climb,0.0001);
       // best average speed when in maintaining height mode
       if (TimeToDestTotal <= BestTime) {
 	bestfound = true;
@@ -413,12 +413,8 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
       double h_f = AltitudeAboveTarget; 
       // fraction of leg that can be final glided
       double f = min(1.0,max(0.0,h_f/h_t));
-      double d_f = Distance*f;
-      double d_c = Distance - d_f;
-
-      if (f<1.0) {
-
-        // if need to climb-cruise part of the way
+      //      double d_f = Distance*f;
+      double d_c = Distance*(1.0 - f);
 
         double t_c;
         double h_c = MacCreadyAltitude_internal(emcready,
@@ -429,13 +425,18 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
                                                 false,
                                                 &t_c,
 						cruise_efficiency);
+
+      if (f<1.0) {
+
+        // if need to climb-cruise part of the way
+
         if (h_c<0) {
           // impossible at this Mc, so must be final glided
           Altitude = -1;
           TTG = ERROR_TIME;
         } else {
           Altitude = f*h_t + h_c;
-          TTG = f*t_t + t_c;
+	  TTG = f*t_t + t_c;
         }
  
       } else {
@@ -444,6 +445,7 @@ double GlidePolar::MacCreadyAltitude_heightadjust(double emcready,
 
         Altitude = h_t;
         TTG = t_t;
+
       }
     }
   }

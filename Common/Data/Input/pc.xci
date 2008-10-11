@@ -388,6 +388,14 @@ location=1
 
 mode=Preview
 type=key
+data=APP2
+event=AddWaypoint landable
+event=Mode default
+label=Add Landpt
+location=2
+
+mode=Preview
+type=key
 data=6
 event=Setup Basic
 event=Mode default

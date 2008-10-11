@@ -464,6 +464,13 @@ makeLabel(mode_id,TEXT("Big Info"),1,event_id);
 Key2Event[mode_id][VK_APP1] = event_id;
 
 event_id = 0;
+event_id = InputEvents::makeEvent(&eventAddWaypoint, TEXT("landable"), event_id);
+event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
+mode_id = InputEvents::mode2int(TEXT("Preview"), true);
+makeLabel(mode_id,TEXT("Add Landpt"),2,event_id);
+Key2Event[mode_id][VK_APP2] = event_id;
+
+event_id = 0;
 event_id = InputEvents::makeEvent(&eventSetup, TEXT("Basic"), event_id);
 event_id = InputEvents::makeEvent(&eventMode, TEXT("default"), event_id);
 mode_id = InputEvents::mode2int(TEXT("Preview"), true);

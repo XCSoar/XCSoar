@@ -6,7 +6,6 @@ Todo:
 - Start status message
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
 - Next wpt infobox
-- Marks that are reachable shown in green?
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods
@@ -18,6 +17,9 @@ Changes from 5.1.9beta2:
 - Infobox selector has items sorted alphabetically
 - Multiple start points ensure the current start is in the list.
 - Draw cross in final glide bar if unreachable at current MC
+- Initial support for XCOM760
+
+- Added input event to add temporary landable waypoint
 
 Changes from 5.1.9beta1:
 - Added Flymaster F1 device

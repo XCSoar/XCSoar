@@ -1478,7 +1478,7 @@ void MapWindow::DrawOffTrackIndicator(HDC hdc) {
     // insignificant error
     return;
   }
-  if (DerivedDrawInfo.Circling || TaskAborted || TargetPan) {
+  if (DerivedDrawInfo.Circling || TaskIsTemporary() || TargetPan) {
     // don't display in various modes
     return;
   }
@@ -1624,7 +1624,7 @@ void MapWindow::DrawProjectedTrack(HDC hdc, POINT Orig) {
   if ((ActiveWayPoint<=0) || !ValidTaskPoint(ActiveWayPoint) || !AATEnabled) {
     return;
   }
-  if (DerivedDrawInfo.Circling || TaskAborted) {
+  if (DerivedDrawInfo.Circling || TaskIsTemporary()) {
     // don't display in various modes
     return;
   }

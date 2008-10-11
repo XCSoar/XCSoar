@@ -193,7 +193,6 @@ void DoCalculationsSlow(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 
 
 bool ClearAirspaceWarnings(const bool ack, const bool allday=false);
-void ResumeAbortTask(int set = 0);
 void RefreshTaskStatistics(void);
 void  SetWindEstimate(const double speed, const double bearing, const int quality=6);
 

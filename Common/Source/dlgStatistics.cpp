@@ -1038,7 +1038,7 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
       if (ValidTaskPoint(i) && ValidTaskPoint(i-1)) {
         lat1 = WayPointList[Task[i-1].Index].Latitude;
 	lon1 = WayPointList[Task[i-1].Index].Longitude;
-	if (TaskAborted) {
+	if (TaskIsTemporary()) {
 	  lat2 = GPS_INFO.Latitude;
 	  lon2 = GPS_INFO.Longitude;
 	} else {
