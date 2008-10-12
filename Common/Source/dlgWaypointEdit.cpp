@@ -146,6 +146,14 @@ static void SetUnits(void) {
     if (wp) {
       wp->SetVisible(false);
     }
+    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudemmm")); // hide this field for DD.dddd format
+    if (wp) {
+      wp->SetVisible(false);
+    }
+    wp = (WndProperty*)wf->FindByName(TEXT("prpLatitudemmm"));
+    if (wp) {
+      wp->SetVisible(false);
+    }
     break;
   }
 }
@@ -293,8 +301,8 @@ static void SetValues(void) {
 static void GetValues(void) {
   WndProperty* wp;
   bool sign = false;
-  int dd = 0, mm = 0, ss = 0;
-  double num=0;
+  int dd = 0;
+  double num=0, mm = 0, ss = 0; // mm,ss are numerators (division) so don't want to lose decimals
 
   wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudeSign"));
   if (wp) {
