@@ -18,8 +18,11 @@ Changes from 5.1.9beta2:
 - Multiple start points ensure the current start is in the list.
 - Draw cross in final glide bar if unreachable at current MC
 - Initial support for XCOM760
-
 - Added input event to add temporary landable waypoint
+- Goto function now allows tasks to be resumed
+- Bug fix in DD.dddd waypoint edit format
+- enabled use of flarmnet ids in flarm display (courtesy Lars H)
+
 
 Changes from 5.1.9beta1:
 - Added Flymaster F1 device

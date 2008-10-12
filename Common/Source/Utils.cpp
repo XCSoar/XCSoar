@@ -59,12 +59,11 @@ Copyright_License {
 FlarmIdFile file;
 #endif
 
-/* JMW not required in newer systems?
+// JMW not required in newer systems?
 #ifdef __MINGW32__
 #define max(x, y)   (x > y ? x : y)
 #define min(x, y)   (x < y ? x : y)
 #endif
-*/
 
 bool EnableAnimation=false;
 

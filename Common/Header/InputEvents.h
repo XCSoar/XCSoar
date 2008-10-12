@@ -91,6 +91,7 @@ class InputEvents {
   static void eventAutoLogger(const TCHAR *misc);
   static void eventGotoLookup(const TCHAR *misc);
   static void eventAddWaypoint(const TCHAR *misc);
+  static void eventOrientation(const TCHAR *misc);
   // -------
 
 #ifdef _SIM_

@@ -49,4 +49,8 @@
 #define IBLSCALE(x) (x)
 #endif
 
+#ifdef __MINGW32__
+#define NEWFLARMDB
+#endif
+
 #endif

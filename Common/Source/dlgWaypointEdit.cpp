@@ -146,7 +146,8 @@ static void SetUnits(void) {
     if (wp) {
       wp->SetVisible(false);
     }
-    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudemmm")); // hide this field for DD.dddd format
+    wp = (WndProperty*)wf->FindByName(TEXT("prpLongitudemmm")); 
+    // hide this field for DD.dddd format
     if (wp) {
       wp->SetVisible(false);
     }
