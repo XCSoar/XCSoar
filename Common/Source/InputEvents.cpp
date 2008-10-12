@@ -2345,7 +2345,6 @@ void InputEvents::eventAirspaceDisplayMode(const TCHAR *misc){
   else if (_tcscmp(misc, TEXT("off")) == 0){
     AltitudeMode = ALLOFF;
   }
-
 }
 
 
@@ -2375,6 +2374,31 @@ void InputEvents::eventAddWaypoint(const TCHAR *misc) {
   }
   UnlockTaskData();
 }
+
+
+
+void InputEvents::eventOrientation(const TCHAR *misc){
+  if (_tcscmp(misc, TEXT("northup")) == 0){
+    DisplayOrientation = NORTHUP;
+  }
+  else if (_tcscmp(misc, TEXT("northcircle")) == 0){
+    DisplayOrientation = NORTHCIRCLE;
+  }
+  else if (_tcscmp(misc, TEXT("trackcircle")) == 0){
+    DisplayOrientation = TRACKCIRCLE;
+  }
+  else if (_tcscmp(misc, TEXT("trackup")) == 0){
+    DisplayOrientation = TRACKUP;
+  }
+  else if (_tcscmp(misc, TEXT("northtrack")) == 0){
+    DisplayOrientation = NORTHTRACK;
+  }
+}
+
+
+
+
+
 
 // JMW TODO: have all inputevents return bool, indicating whether
 // the button should after processing be hilit or not.

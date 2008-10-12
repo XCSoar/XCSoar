@@ -2844,12 +2844,10 @@ void SIMProcessTimer(void)
 
   if (i%2==0) return;
 
-#ifdef DEBUG
+  //#ifdef DEBUG
   // use this to test FLARM parsing/display
-  //    NMEAParser::TestRoutine(&GPS_INFO);
-  //  double testadr = AirDensityRatio(1562.0);
-  //  testadr = AirDensityRatio(0);
-#endif
+  NMEAParser::TestRoutine(&GPS_INFO);
+  //#endif
 
   TriggerGPSUpdate();
 
