@@ -396,6 +396,14 @@ location=2
 
 mode=Preview
 type=key
+data=APP3
+event=FlarmTraffic
+event=Mode default
+label=FLARM Info
+location=3
+
+mode=Preview
+type=key
 data=6
 event=Setup Basic
 event=Mode default

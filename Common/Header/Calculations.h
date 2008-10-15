@@ -224,4 +224,8 @@ double FinalGlideThroughTerrain(const double bearing, NMEA_INFO *Basic,
 
 #define TAKEOFFSPEEDTHRESHOLD (0.5*GlidePolar::Vminsink)
 
+int FindFlarmSlot(const int flarmId);
+int FindFlarmSlot(const TCHAR *flarmCN);
+bool IsFlarmTargetCNInRange(void);
+
 #endif

@@ -87,6 +87,7 @@ class InfoBox{
     HFONT  *mphFontTitle;
     HFONT  *mphFontValue;
     HFONT  *mphFontComment;
+    HFONT  *valueFont;
     FontHeightInfo_t *mpFontHeightTitle;
     FontHeightInfo_t *mpFontHeightValue;
     FontHeightInfo_t *mpFontHeightComment;
@@ -100,9 +101,12 @@ class InfoBox{
     POINT  mBitmapUnitSize;
 
     int color;
+    int colorBottom;
+    int colorTop;
     int mBorderSize;
     int mUnitBitmapKind;
     bool mVisible;
+	bool mSmallerFont; 
 
     void InitializeDrawHelpers(void);
     void PaintTitle(void);
@@ -121,6 +125,7 @@ class InfoBox{
     void SetTitle(TCHAR *Value);
     void SetValue(TCHAR *Value);
     void SetComment(TCHAR *Value);
+	void SetSmallerFont(bool smallerFont);
 
     void SetFocus(bool Value);
     bool SetVisible(bool Value);
@@ -132,6 +137,8 @@ class InfoBox{
     HWND GetParent(void);
 
     void SetColor(int Value);
+    void SetColorBottom(int Value);
+    void SetColorTop(int Value);
 
     InfoBox(HWND Parent, int X, int Y, int Width, int Height);
     ~InfoBox(void);

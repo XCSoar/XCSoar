@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <Header copyright="VADIS">
+     <Application name="RANK For &lt;you>" version="1.99beta" />
+  </Header>
+  <Extension extender="RANKF" name="keys"><Key name="urn"></Key></Extension>
+
+<WndForm Name="frmTeamCode" Type="Dialog" X="0" Y="0" Width="206" Height="240" Caption="Team code" Font="2" BackColor="0xDADBAB">
+
+  
+  <WndProperty Name="prpOwnCode" Caption="Own code:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
+  <WndProperty Name="prpMateCode" Caption="Mate code:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
+  
+  <WndProperty Name="prpRange" Caption="Range:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1">
+    <DataField name="" DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" ReadOnly="1" />
+  </WndProperty>
+  
+  <WndProperty Name="prpBearing" Caption="Bearing:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1">
+    <DataField name="" DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" ReadOnly="1" />
+  </WndProperty>
+
+  <WndProperty Name="prpRelBearing" Caption="Rel. Bearing:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
+  <WndProperty Name="prpFlarmLock" Caption="Flarm lock:" X="2" Y="-1"  Width="200" Height="22" CaptionWidth="100" Font="2" ReadOnly="1" />
+  
+  <WndButton   Caption="Flarm Lock"    X="5" Y="140" Width="90"  Height="40" Font="2" OnClickNotify="OnFlarmLockClicked" />
+  <WndButton Name="cmdSetCode" Caption="Set Mate code" X="95" Y="140" Width="90"  Height="40" Font="2" />
+  
+  <WndButton   Caption="Close"    X="5" Y="185" Width="180"  Height="35" Font="2" OnClickNotify="OnCloseClicked" />
+
+
+</WndForm>    
+
+</PMML>

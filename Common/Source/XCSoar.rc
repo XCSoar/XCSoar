@@ -242,6 +242,7 @@ IDR_XML_TEXTENTRY_KEYBOARD_L XMLDIALOG DISCARDABLE "..\\Data\\Dialogs\\dlgTextEn
 IDR_XML_NUMBERENTRY_KEYBOARD XMLDIALOG DISCARDABLE "..\\Data\\Dialogs\\dlgNumberEntry_Keyboard.xml"
 IDR_XML_NUMBERENTRY_KEYBOARD_L XMLDIALOG DISCARDABLE "..\\Data\\Dialogs\\dlgNumberEntry_Keyboard_L.xml"
 IDR_XML_TEAMCODE        XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTeamCode.xml"
+IDR_XML_TEAMCODE_L      XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgTeamCode_L.xml"
 IDR_XML_STARTPOINT      XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgStartPoint.xml"
 IDR_XML_WAYPOINTEDIT    XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWaypointEdit.xml"
 IDR_XML_WEATHER         XMLDIALOG DISCARDABLE   "..\\Data\\Dialogs\\dlgWeather.xml"

@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.83 2008/10/12 01:51:21 jwharington Exp $
+  $Id: Parser.cpp,v 1.84 2008/10/15 11:04:35 jwharington Exp $
 
 Copyright_License {
 
@@ -966,7 +966,7 @@ BOOL NMEAParser::PFLAA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
 //////
 
 void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
-  //#ifdef DEBUG
+#ifdef DEBUG
   static int i=90;
   static TCHAR t1[] = TEXT("1,1,1,1");
   static TCHAR t2[] = TEXT("1,300,500,220,2,DD927B,0,-4.5,30,-1.4,1");
@@ -1004,7 +1004,7 @@ void NMEAParser::TestRoutine(NMEA_INFO *GPS_INFO) {
     nr = nmeaParser1.ExtractParameters(t3, ctemp, params, MAX_NMEA_PARAMS);
     nmeaParser1.PFLAA(t3, params, nr, GPS_INFO);
   }
-  //#endif
+#endif
 }
 
 

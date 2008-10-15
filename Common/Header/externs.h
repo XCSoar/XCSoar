@@ -219,6 +219,9 @@ extern TCHAR TeammateCode[10];
 extern double TeammateLatitude;
 extern double TeammateLongitude;
 extern bool TeammateCodeValid;
+extern bool TeamFlarmTracking;
+extern TCHAR TeamFlarmCNTarget[4]; // CN of the glider to track
+extern int TeamFlarmIdTarget;    // FlarmId of the glider to track
 
 extern bool DisableAutoLogger;
 

@@ -1,16 +1,16 @@
 /*
-Copyright_License {
+  Copyright_License {
 
   XCSoar Glide Computer - http://xcsoar.sourceforge.net/
   Copyright (C) 2000 - 2005
 
-  	M Roberts (original release)
-	Robin Birch <robinb@ruffnready.co.uk>
-	Samuel Gisiger <samuel.gisiger@triadis.ch>
-	Jeff Goodenough <jeff@enborne.f2s.com>
-	Alastair Harrison <aharrison@magic.force9.co.uk>
-	Scott Penrose <scottp@dd.com.au>
-	John Wharington <jwharington@bigfoot.com>
+  M Roberts (original release)
+  Robin Birch <robinb@ruffnready.co.uk>
+  Samuel Gisiger <samuel.gisiger@triadis.ch>
+  Jeff Goodenough <jeff@enborne.f2s.com>
+  Alastair Harrison <aharrison@magic.force9.co.uk>
+  Scott Penrose <scottp@dd.com.au>
+  John Wharington <jwharington@bigfoot.com>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-}
+  }
 */
 
 
@@ -35,51 +35,47 @@ Copyright_License {
 #include "Utils.h"
 #include "dlgTools.h"
 #include "externs.h"
-
-
-/*
-void dosomethingwithteamcode() {
-  if (wcslen(codeText) >= 3)
-    {
-      memset (TeammateCode, 0, sizeof(TCHAR[10]));
-      GetDlgItemText(hDlg, IDC_TEAMCODE_TEXTBOX, TeammateCode, 5);
+#include "InfoBoxLayout.h"
 
 static WndForm *wf=NULL;
-      
-      teammateBearing = GetTeammateBearingFromRef(TeammateCode);
-      teammateRange = GetTeammateRangeFromRef(TeammateCode);
-      
-      double destLat;
-      double destLong;
-      
-      xXY_to_LL(WayPointList[TeamCodeRefWaypoint].Latitude, 
-                WayPointList[TeamCodeRefWaypoint].Longitude,
-                teammateBearing,
-                teammateRange,
-                &TeammateLatitude,
-                &TeammateLongitude);
-      
-      TeammateCodeValid = true;
-    }
-  else
-    {
-      TeammateCodeValid = false;
-    }
-}    
-*/
-
-
-static WndForm *wf=NULL;
-static WndButton *buttonCode=NULL;      
+     
 
 #include "TeamCodeCalculation.h"
 
-static void Update() {
-
+static void Update() 
+{
+  WndProperty* wp;
+  TCHAR Text[100];
   double teammateBearing = CALCULATED_INFO.TeammateBearing;
   double teammateRange = CALCULATED_INFO.TeammateRange;
 
-  WndProperty* wp;
+  if((TeamCodeRefWaypoint >=0)&&(WayPointList))
+    {   
+      double Value = CALCULATED_INFO.TeammateBearing -  GPS_INFO.TrackBearing;
+      
+      if (Value < -180.0)
+        Value += 360.0;
+      else
+        if (Value > 180.0)
+          Value -= 360.0;
+      
+      if (Value > 1)
+        _stprintf(Text, TEXT("%2.0f")TEXT(DEG)TEXT(">"), Value);
+      else if (Value < -1)
+        _stprintf(Text, TEXT("<%2.0f")TEXT(DEG), -Value);
+      else
+        _tcscpy(Text, TEXT("<>"));
+      
+    } else {
+    _tcscpy(Text, TEXT("---"));
+  }
+
+  wp = (WndProperty*)wf->FindByName(TEXT("prpRelBearing"));
+  if (wp) {
+    wp->SetText(Text);
+    wp->RefreshDisplay();
+  } 
+  
   wp = (WndProperty*)wf->FindByName(TEXT("prpBearing"));
   if (wp) {
     wp->GetDataField()->SetAsFloat(teammateBearing);
@@ -91,8 +87,7 @@ static void Update() {
     wp->RefreshDisplay();
   }
 
-  TCHAR Text[100];
-  wp = (WndProperty*)wf->FindByName(TEXT("prpCode"));
+  wp = (WndProperty*)wf->FindByName(TEXT("prpOwnCode"));
   if (wp) {
     _tcsncpy(Text,CALCULATED_INFO.OwnTeamCode,5);
     Text[5] = '\0';
@@ -100,38 +95,74 @@ static void Update() {
     wp->RefreshDisplay();
   }
 
-  _stprintf(Text,TEXT("Mate code: %s"), TeammateCode);
-  buttonCode->SetCaption(Text);
+  wp = (WndProperty*)wf->FindByName(TEXT("prpMateCode"));
+  if (wp) {
+    wp->SetText(TeammateCode);
+    wp->RefreshDisplay();
+  }
 }
 
 
-static void OnCodeClicked(WindowControl *Sender) {
-	(void)Sender;
-  if (buttonCode) {
-    dlgTextEntryShowModal(TeammateCode, 7);
-  }
-  int i= _tcslen(TeammateCode)-1;
+static void OnCodeClicked(WindowControl *Sender) 
+{
+  TCHAR newTeammateCode[10];
+  _tcsncpy(newTeammateCode, TeammateCode, 10);
+  dlgTextEntryShowModal(newTeammateCode, 7);
+
+  int i= _tcslen(newTeammateCode)-1;
   while (i>=0) {
-    if (TeammateCode[i]!=_T(' ')) {
-      break;
-    }
-    TeammateCode[i]=0;
+    if (newTeammateCode[i]!=_T(' ')) 
+      {
+	break;
+      }
+    newTeammateCode[i]=0;
     i--;
   };
 
-  if (_tcslen(TeammateCode)>0) {
-    TeammateCodeValid = true;
-  }
+
+  _tcsncpy(TeammateCode, newTeammateCode, 10);
+  if (_tcslen(TeammateCode)>0) 
+    {
+      TeammateCodeValid = true;
+    }
 }
 
+static void OnFlarmLockClicked(WindowControl * Sender)
+{
+  (void)Sender;
+  
+  dlgTextEntryShowModal(TeamFlarmCNTarget, 4);
 
-static void OnCloseClicked(WindowControl * Sender){
-	(void)Sender;
+  TeammateCodeValid = false;
+
+  int flarmId = LookupFLARMDetails(TeamFlarmCNTarget);
+
+  if (flarmId == NULL)
+    {
+      MessageBoxX(hWndMapWindow,
+		  gettext(TEXT("Unknown Competition Number")),
+		  gettext(TEXT("Not Found")),
+		  MB_OK|MB_ICONINFORMATION); 
+	
+      TeamFlarmTracking = false;
+      TeamFlarmIdTarget = 0;
+      TeamFlarmCNTarget[0] = 0;
+    }
+  else
+    {
+      TeamFlarmIdTarget = flarmId;
+      TeamFlarmTracking = true;		
+    }
+}
+
+static void OnCloseClicked(WindowControl * Sender)
+{
+  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static int OnTimerNotify(WindowControl * Sender) {
-	(void)Sender;
+  (void)Sender;
   Update();
   return 0;
 }
@@ -139,29 +170,45 @@ static int OnTimerNotify(WindowControl * Sender) {
 static CallBackTableEntry_t CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnTimerNotify),
+  DeclareCallBackEntry(OnFlarmLockClicked),
   DeclareCallBackEntry(NULL)
 };
 
 
-void dlgTeamCodeShowModal(void) {
-
+void dlgTeamCodeShowModal(void) 
+{
+  WndProperty* wp = NULL;
+  WndButton *buttonCode = NULL;
   wf = NULL;
   char filename[MAX_PATH];
-  LocalPathS(filename, TEXT("dlgTeamCode.xml"));
-  wf = dlgLoadFromXML(CallBackTable, 
-		      
-                      filename, 
-		      hWndMainWindow,
-		      TEXT("IDR_XML_TEAMCODE"));
-  if (!wf) return;
+  if (InfoBoxLayout::landscape) 
+    {
+      LocalPathS(filename, TEXT("dlgTeamCode_L.xml"));
+      wf = dlgLoadFromXML(CallBackTable, 
 
-  buttonCode = ((WndButton *)wf->FindByName(TEXT("cmdCode")));
+			  filename, 
+			  hWndMainWindow,
+			  TEXT("IDR_XML_TEAMCODE_L"));
+      if (!wf) return;
+    }
+  else
+    {
+      LocalPathS(filename, TEXT("dlgTeamCode.xml"));
+      wf = dlgLoadFromXML(CallBackTable, 
+
+			  filename, 
+			  hWndMainWindow,
+			  TEXT("IDR_XML_TEAMCODE"));
+      if (!wf) return;
+    }
+
+  // set event for button
+  buttonCode = ((WndButton *)wf->FindByName(TEXT("cmdSetCode")));
   if (buttonCode) {
     buttonCode->SetOnClickNotify(OnCodeClicked);
-  }
+  }  
 
-  WndProperty* wp;
-
+  // Set unit for range
   wp = (WndProperty*)wf->FindByName(TEXT("prpRange"));
   if (wp) {
     wp->GetDataField()->SetUnits(Units::GetDistanceName());

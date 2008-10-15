@@ -92,6 +92,7 @@ class InputEvents {
   static void eventGotoLookup(const TCHAR *misc);
   static void eventAddWaypoint(const TCHAR *misc);
   static void eventOrientation(const TCHAR *misc);
+  static void eventFlarmTraffic(const TCHAR *misc);
   // -------
 
 #ifdef _SIM_

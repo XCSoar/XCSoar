@@ -208,6 +208,7 @@ DLGS	:=\
 	$(SRC)/dlgConfiguration.o \
 	$(SRC)/dlgConfiguration2.o \
 	$(SRC)/dlgConfigurationVario.o \
+	$(SRC)/dlgFlarmTraffic.o \
 	$(SRC)/dlgHelp.o \
 	$(SRC)/dlgLoggerReplay.o \
 	$(SRC)/dlgStartPoint.o \
