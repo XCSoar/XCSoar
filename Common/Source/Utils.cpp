@@ -394,6 +394,8 @@ void DefaultRegistrySettingsAltair(void)
    TEXT("24,0,0,0,750,0,0,0,0,0,0,3,2,RasterGothicTwentyFourCond"));
   SetRegistryStringIfAbsent(TEXT("AirspaceColourDlgFont"),
    TEXT("14,0,0,0,500,0,0,0,0,0,0,3,2,Tahoma"));
+  SetRegistryStringIfAbsent(TEXT("TeamCodeFont"),
+   TEXT("19,0,0,0,700,0,0,0,0,0,0,3,2,RasterGothicEighteenCond"));
 #if 0
   SetRegistryStringIfAbsent(TEXT("ScaleList"),
    TEXT("0.5,1,2,5,10,20,50,100,150,200,500,1000"));

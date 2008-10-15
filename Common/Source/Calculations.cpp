@@ -4086,3 +4086,46 @@ void TakeoffLanding(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
 void IterateEffectiveMacCready(NMEA_INFO *Basic, DERIVED_INFO *Calculated) {
   // nothing yet.
 }
+
+
+int FindFlarmSlot(int flarmId)
+{
+  for(int z = 0; z < FLARM_MAX_TRAFFIC; z++)
+    {
+      if (GPS_INFO.FLARM_Traffic[z].ID == flarmId)
+	{
+	  return z;
+	}
+    }
+  return -1;
+}
+
+int FindFlarmSlot(TCHAR *flarmCN)
+{
+  for(int z = 0; z < FLARM_MAX_TRAFFIC; z++)
+    {
+      if (wcscmp(GPS_INFO.FLARM_Traffic[z].Name, flarmCN) == 0)
+	{
+	  return z;
+	}
+    }
+  return -1;
+}
+
+bool IsFlarmTargetCNInRange()
+{
+  bool FlarmTargetContact = false;
+  for(int z = 0; z < FLARM_MAX_TRAFFIC; z++)
+    {
+      if (GPS_INFO.FLARM_Traffic[z].ID != 0)
+	{
+	  if (GPS_INFO.FLARM_Traffic[z].ID == TeamFlarmIdTarget)
+	    {
+	      TeamFlarmIdTarget = GPS_INFO.FLARM_Traffic[z].ID;
+	      FlarmTargetContact = true;
+	      break;
+	    }
+	}
+    }
+  return FlarmTargetContact;
+}

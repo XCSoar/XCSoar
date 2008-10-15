@@ -12,6 +12,7 @@ void				SpeedProcessing(int UpDown);
 void				DirectionProcessing(int UpDown);
 void				AltitudeProcessing(int UpDown);
 void				AirspeedProcessing(int UpDown);
+void				TeamCodeProcessing(int UpDown);
 void				ForecastTemperatureProcessing(int UpDown);
 int DetectStartTime(NMEA_INFO *Basic, DERIVED_INFO *Calculated);
 int DetectCurrentTime(void);

@@ -43,6 +43,7 @@ Copyright_License {
 #define SELECTORWIDTH         (DEFAULTBORDERPENWIDTH+IBLSCALE(4))
 
 extern HFONT  TitleWindowFont;
+extern HFONT  TitleSmallWindowFont;
 extern HFONT  MapWindowFont;
 extern HFONT  MapWindowBoldFont;
 extern HFONT  InfoWindowFont;
@@ -58,6 +59,7 @@ static COLORREF fgColor = RGB(0x0,0x0,0x0);
 static COLORREF bkColor = RGB(0xff,0xff,0xff);
 static COLORREF bkColorSel = RGB(150,0x0,0x0);
 static COLORREF bdColor = RGB(80,80,80);
+static DWORD lastErr;
 static HBRUSH hBrushDefaultBackGround;
 static HBRUSH hBrushDefaultBackGroundSel;
 static HPEN hPenDefaultBorder;
@@ -77,6 +79,7 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   mParent = Parent;
 
   mTitleChanged = true;
+  mSmallerFont = false;
 
   InitInfoBoxModule();
 
@@ -134,6 +137,7 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   mphFontTitle   = &TitleWindowFont;
   mphFontValue   = &InfoWindowFont;
   mphFontComment = &TitleWindowFont;
+  valueFont	     = &TitleSmallWindowFont;
 
   mpFontHeightTitle = &Appearance.TitleWindowFont;
   mpFontHeightValue = &Appearance.InfoWindowFont;
@@ -282,6 +286,21 @@ void InfoBox::SetColor(int value) {
   }
 }
 
+void InfoBox::SetColorBottom(int value) {
+  if (Appearance.InfoBoxColors) {
+    colorBottom = value;
+  } else {
+    colorBottom = 0;
+  }
+}
+
+void InfoBox::SetColorTop(int value) {
+  if (Appearance.InfoBoxColors) {
+    colorTop = value;
+  } else {
+    colorTop = 0;
+  }
+}
 void InfoBox::SetComment(TCHAR *Value){
   if (_tcscmp(mComment, Value) != 0){
     _tcsncpy(mComment, Value, COMMENTSIZE);
@@ -299,6 +318,11 @@ HWND InfoBox::GetParent(void){
   return(mParent);
 }
 
+void InfoBox::SetSmallerFont(bool smallerFont)
+{
+	this->mSmallerFont = smallerFont;
+}
+
 void InfoBox::PaintTitle(void){
 
   if (!mTitleChanged) return;
@@ -308,7 +332,30 @@ void InfoBox::PaintTitle(void){
   int halftextwidth;
 
   SetBkColor(mHdcBuf, mColorTitleBk);
-  SetTextColor(mHdcBuf, mColorTitle);
+ // SetTextColor(mHdcBuf, mColorTitle);
+  switch (colorTop) {
+  case -1:
+    SetTextColor(mHdcBuf, bdColor);
+    break;
+  case 0:
+    SetTextColor(mHdcBuf, mColorValue);
+    break;
+  case 1:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_redColor);
+    } else {
+      SetTextColor(mHdcBuf, redColor);
+    }
+    break;
+  case 2:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_blueColor);
+    } else {
+      SetTextColor(mHdcBuf, blueColor);
+    }
+    break;
+  }
+
   SelectObject(mHdcBuf, *mphFontTitle);
 
   GetTextExtentPoint(mHdcBuf, mTitle, _tcslen(mTitle), &tsize);
@@ -387,7 +434,14 @@ void InfoBox::PaintValue(void){
     break;
   }
 
-  SelectObject(mHdcBuf, *mphFontValue);
+  if (mSmallerFont)
+  {
+    SelectObject(mHdcBuf, *valueFont);
+  }
+  else
+  {
+    SelectObject(mHdcBuf, *mphFontValue);
+  }
 
   GetTextExtentPoint(mHdcBuf, mValue, len, &tsize);
 
@@ -444,9 +498,34 @@ void InfoBox::PaintComment(void){
 
   if (len==0) return; // nothing to paint
 
+
+  switch (colorBottom) {
+  case -1:
+    SetTextColor(mHdcBuf, bdColor);
+    break;
+  case 0:
+    SetTextColor(mHdcBuf, mColorValue);
+    break;
+  case 1:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_redColor);
+    } else {
+      SetTextColor(mHdcBuf, redColor);
+    }
+    break;
+  case 2:
+    if (Appearance.InverseInfoBox){
+      SetTextColor(mHdcBuf, inv_blueColor);
+    } else {
+      SetTextColor(mHdcBuf, blueColor);
+    }
+    break;
+  }
+
+
   SetBkColor(mHdcBuf, mColorCommentBk);
 
-  SetTextColor(mHdcBuf, mColorComment);
+ // SetTextColor(mHdcBuf, mColorComment);
 
   SelectObject(mHdcBuf, *mphFontComment);
 

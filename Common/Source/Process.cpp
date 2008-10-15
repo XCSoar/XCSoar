@@ -65,6 +65,74 @@ void	AirspeedProcessing(int UpDown)
 
 }
 
+void	TeamCodeProcessing(int UpDown)
+{
+	int tryCount = 0;
+	int searchSlot = FindFlarmSlot(TeamFlarmIdTarget);
+	int newFlarmSlot = -1;
+
+
+	while (tryCount < FLARM_MAX_TRAFFIC)
+	{
+		if (UpDown == 1)
+		{
+			searchSlot++;
+			if (searchSlot > FLARM_MAX_TRAFFIC - 1)
+			{
+				searchSlot = 0;
+			}
+		}
+		else if (UpDown == -1)
+		{
+			searchSlot--;
+			if (searchSlot < 0)
+			{
+				searchSlot = FLARM_MAX_TRAFFIC - 1;
+			}
+		}
+
+		if (GPS_INFO.FLARM_Traffic[searchSlot].ID != 0)
+		{
+			newFlarmSlot = searchSlot;
+			break; // a new flarmSlot with a valid flarm traffic record was found !
+		}
+		tryCount++;
+	}
+
+	if (newFlarmSlot != -1)
+	{
+		TeamFlarmIdTarget = GPS_INFO.FLARM_Traffic[newFlarmSlot].ID;
+
+		if (wcslen(GPS_INFO.FLARM_Traffic[newFlarmSlot].Name) != 0)
+		{
+			// copy the 3 first chars from the name to TeamFlarmCNTarget
+			for (int z = 0; z < 3; z++)
+			{
+				if (GPS_INFO.FLARM_Traffic[newFlarmSlot].Name[z] != 0)
+				{
+					TeamFlarmCNTarget[z] = GPS_INFO.FLARM_Traffic[newFlarmSlot].Name[z];
+				}
+				else
+				{
+					TeamFlarmCNTarget[z] = 32; // add space char
+				}
+			}
+			TeamFlarmCNTarget[3] = 0;
+		}
+		else
+		{
+			TeamFlarmCNTarget[0] = 0;
+		}
+	}
+	else
+	{
+			// no flarm traffic to select!
+			TeamFlarmIdTarget = 0;
+			TeamFlarmCNTarget[0] = 0;
+			return;
+	}
+}
+
 void	AltitudeProcessing(int UpDown)
 {
 	#ifdef _SIM_
@@ -727,6 +795,8 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = CALCULATED_INFO.TeammateBearing;
     Valid = true;
   case 58: // team range
+	  if (TeammateCodeValid)
+	  {
     Value = DISTANCEMODIFY*CALCULATED_INFO.TeammateRange;
     if (Value > 100)
       {
@@ -737,6 +807,11 @@ void InfoBoxFormatter::AssignValue(int i) {
         _tcscpy(Format, _T("%.1lf"));
       }
     Valid = true;
+	  }
+	  else
+	  {
+		  Valid = false;
+	  }
     break;
   case 59:
     Value = TASKSPEEDMODIFY*CALCULATED_INFO.TaskSpeedInstantaneous;
@@ -784,6 +859,32 @@ void InfoBoxFormatter::AssignValue(int i) {
     Value = CALCULATED_INFO.Experimental;
     Valid = true;
     break;
+    /* JMW TODO add extra infoboxes from Lars
+  case 66: // distance flown
+    if (CALCULATED_INFO.TaskDistanceCovered != 0)
+      {
+	Value = DISTANCEMODIFY*CALCULATED_INFO.TaskDistanceCovered;
+	Valid = true;
+      }
+    else
+      {
+	Value = 0.0;
+	Valid = false;
+      }
+    break;
+  case 67: // termik liga points
+    if (CALCULATED_INFO.TermikLigaPoints != 0)
+      {
+	Value = CALCULATED_INFO.TermikLigaPoints;
+	Valid = true;
+      }
+    else
+      {
+	Value = 0.0;
+	Valid = false;
+      }
+    break;
+    */
   default:
     break;
   };
@@ -1037,7 +1138,7 @@ TCHAR *FormatterTeamCode::Render(int *color) {
 
 TCHAR *FormatterDiffTeamBearing::Render(int *color) {
 
-  if(ValidWayPoint(TeamCodeRefWaypoint)) {
+  if(ValidWayPoint(TeamCodeRefWaypoint) && TeammateCodeValid) {
     Valid = true;
 
     Value = CALCULATED_INFO.TeammateBearing -  GPS_INFO.TrackBearing;

@@ -1377,6 +1377,15 @@ void InputEvents::eventChecklist(const TCHAR *misc) {
   dlgChecklistShowModal();
 }
 
+// FLARM Traffic
+// Displays the FLARM traffic dialog
+//  See the checklist dialog section of the reference manual for more info.
+void InputEvents::eventFlarmTraffic(const TCHAR *misc) {
+	(void)misc;
+  dlgFlarmTrafficShowModal();
+}
+
+
 // Displays the task calculator dialog
 //  See the task calculator dialog section of the reference manual
 // for more info.

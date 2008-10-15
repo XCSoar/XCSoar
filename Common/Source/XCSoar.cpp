@@ -239,7 +239,7 @@ COLORREF ColorButton = RGB(0xA0,0xE0,0xA0);
 HFONT                                   InfoWindowFont;
 HFONT                                   TitleWindowFont;
 HFONT                                   MapWindowFont;
-
+HFONT                                   TitleSmallWindowFont;
 HFONT                                   MapWindowBoldFont;
 
 HFONT                                   CDIWindowFont; // New
@@ -551,7 +551,7 @@ SCREEN_INFO Data_Options[] = {
 	  // 54
 	  {ugHorizontalSpeed, TEXT("Airspeed TAS"), TEXT("V TAS"), new InfoBoxFormatter(TEXT("%2.0f")), AirspeedProcessing, 3, 47},
 	  // 55
-	  {ugNone,            TEXT("Own Team Code"), TEXT("TeamCode"), new FormatterTeamCode(TEXT("\0")), NoProcessing, 56, 54},
+	  {ugNone,            TEXT("Own Team Code"), TEXT("TeamCode"), new FormatterTeamCode(TEXT("\0")), TeamCodeProcessing, 56, 54},
 	  // 56
 	  {ugNone,            TEXT("Team Bearing"), TEXT("Tm Brng"), new InfoBoxFormatter(TEXT("%2.0f")TEXT(DEG)TEXT("T")), NoProcessing, 57, 55},
 	  // 57
@@ -1663,6 +1663,18 @@ static void InitialiseFonts(RECT rc) {
   propGetFontSettings(TEXT("MapWindowBoldFont"), &logfont);
   MapWindowBoldFont = CreateFontIndirect (&logfont);
 
+  //  JMW TODO create font settings for this one...
+  memset((char *)&logfont, 0, sizeof (logfont));
+  _tcscpy(logfont.lfFaceName, _T(GLOBALFONT));
+
+  logfont.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE  ;
+  logfont.lfHeight = IBLSCALE(20);
+  logfont.lfWidth =  IBLSCALE(8);
+  logfont.lfWeight = FW_MEDIUM;
+
+  propGetFontSettings(TEXT("TeamCodeFont"), &logfont);
+  TitleSmallWindowFont = CreateFontIndirect (&logfont);
+
 }
 
 #if (WINDOWSPC>0)
@@ -2050,6 +2062,7 @@ void Shutdown(void) {
   DeleteObject(MapWindowFont);
   DeleteObject(MapWindowBoldFont);
   DeleteObject(StatisticsFont);
+  DeleteObject(TitleSmallWindowFont);
 
   if(AirspaceArea != NULL)   LocalFree((HLOCAL)AirspaceArea);
   if(AirspacePoint != NULL)  LocalFree((HLOCAL)AirspacePoint);
@@ -2413,39 +2426,57 @@ void DisplayText(void)
 
     // set values, title
     switch (DisplayType[i]) {
-      case 14: // Next waypoint
-        if (theactive != -1){
-          InfoBoxes[i]->
-            SetTitle(Data_Options[DisplayType[i]].Formatter->
-            Render(&color));
-          InfoBoxes[i]->SetColor(color);
-          InfoBoxes[i]->
-            SetValue(Data_Options[47].Formatter->Render(&color));
-        }else{
-          InfoBoxes[i]->SetTitle(TEXT("Next"));
-          InfoBoxes[i]->SetValue(TEXT("---"));
-          InfoBoxes[i]->SetColor(-1);
-        }
-        if (needupdate)
-          InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
-           Data_Options[DisplayType[i]].UnitGroup)
-          );
-        break;
-      default:
-        if (needupdate)
-          InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
+    case 55:
+      InfoBoxes[i]->SetSmallerFont(true);
+      if (needupdate)
+	InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
 
-        InfoBoxes[i]->
+      InfoBoxes[i]->
+	SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
+
+      // to be optimized!
+      if (needupdate)
+	InfoBoxes[i]->
+	  SetValueUnit(Units::GetUserUnitByGroup(
+              Data_Options[DisplayType[i]].UnitGroup)
+	  );
+      InfoBoxes[i]->SetColor(color);
+      break;
+    case 14: // Next waypoint
+      InfoBoxes[i]->SetSmallerFont(false);
+      if (theactive != -1){
+	InfoBoxes[i]->
+	  SetTitle(Data_Options[DisplayType[i]].Formatter->
+		   Render(&color));
+	InfoBoxes[i]->SetColor(color);
+	InfoBoxes[i]->
+	  SetValue(Data_Options[47].Formatter->Render(&color));
+      }else{
+	InfoBoxes[i]->SetTitle(TEXT("Next"));
+	InfoBoxes[i]->SetValue(TEXT("---"));
+	InfoBoxes[i]->SetColor(-1);
+      }
+      if (needupdate)
+	InfoBoxes[i]->SetValueUnit(Units::GetUserUnitByGroup(
+          Data_Options[DisplayType[i]].UnitGroup)
+      );
+      break;
+    default:
+      InfoBoxes[i]->SetSmallerFont(false);
+      if (needupdate)
+	InfoBoxes[i]->SetTitle(Data_Options[DisplayType[i]].Title);
+
+      InfoBoxes[i]->
           SetValue(Data_Options[DisplayType[i]].Formatter->Render(&color));
 
-        // to be optimized!
-        if (needupdate)
-          InfoBoxes[i]->
-            SetValueUnit(Units::GetUserUnitByGroup(
-              Data_Options[DisplayType[i]].UnitGroup)
-            );
+      // to be optimized!
+      if (needupdate)
+	InfoBoxes[i]->
+	  SetValueUnit(Units::GetUserUnitByGroup(
+            Data_Options[DisplayType[i]].UnitGroup)
+	  );
 
-        InfoBoxes[i]->SetColor(color);
+      InfoBoxes[i]->SetColor(color);
     };
 
     switch (DisplayType[i]) {
@@ -2506,6 +2537,106 @@ void DisplayText(void)
       } else {
 	InfoBoxes[i]->SetComment(TEXT("DOLPHIN"));
       }
+      break;
+    case 55: // own team code
+      InfoBoxes[i]->SetComment(TeammateCode);
+      if (TeamFlarmTracking)
+	{
+	  if (IsFlarmTargetCNInRange())
+	    {
+	      InfoBoxes[i]->SetColorBottom(2);
+	    }
+	  else
+	    {
+	      InfoBoxes[i]->SetColorBottom(1);
+	    }
+	}
+      else
+	{
+	  InfoBoxes[i]->SetColorBottom(0);
+	}
+      break;
+    case 56: // team bearing
+
+      if (TeamFlarmIdTarget != 0)
+	{
+	  if (wcslen(TeamFlarmCNTarget) != 0)
+	    {
+	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
+	    }
+	  else
+	    {
+	      InfoBoxes[i]->SetComment(TEXT("???"));
+	    }
+	}
+      else
+	{
+	  InfoBoxes[i]->SetComment(TEXT("---"));
+	}
+
+      if (IsFlarmTargetCNInRange())
+	{
+	  InfoBoxes[i]->SetColorBottom(2);
+	}
+      else
+	{
+	  InfoBoxes[i]->SetColorBottom(1);
+	}
+
+      break;
+    case 57: // team bearing dif
+
+      if (TeamFlarmIdTarget != 0)
+	{
+	  if (wcslen(TeamFlarmCNTarget) != 0)
+	    {
+	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
+	    }
+	  else
+	    {
+	      InfoBoxes[i]->SetComment(TEXT("???"));
+	    }
+	}
+      else
+	{
+	  InfoBoxes[i]->SetComment(TEXT("---"));
+	}
+      if (IsFlarmTargetCNInRange())
+	{
+	  InfoBoxes[i]->SetColorBottom(2);
+	}
+      else
+	{
+	  InfoBoxes[i]->SetColorBottom(1);
+	}
+
+      break;
+    case 58: // team range
+
+      if (TeamFlarmIdTarget != 0)
+	{
+	  if (wcslen(TeamFlarmCNTarget) != 0)
+	    {
+	      InfoBoxes[i]->SetComment(TeamFlarmCNTarget);
+	    }
+	  else
+	    {
+	      InfoBoxes[i]->SetComment(TEXT("???"));
+	    }
+	}
+      else
+	{
+	  InfoBoxes[i]->SetComment(TEXT("---"));
+	}
+      if (IsFlarmTargetCNInRange())
+	{
+	  InfoBoxes[i]->SetColorBottom(2);
+	}
+      else
+	{
+	  InfoBoxes[i]->SetColorBottom(1);
+	}
+
       break;
     default:
       InfoBoxes[i]->SetComment(TEXT(""));
@@ -2844,10 +2975,10 @@ void SIMProcessTimer(void)
 
   if (i%2==0) return;
 
-  //#ifdef DEBUG
+  #ifdef DEBUG
   // use this to test FLARM parsing/display
-  NMEAParser::TestRoutine(&GPS_INFO);
-  //#endif
+  //  NMEAParser::TestRoutine(&GPS_INFO);
+  #endif
 
   TriggerGPSUpdate();
 
