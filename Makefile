@@ -352,7 +352,8 @@ cab:	XCSoar-$(TARGET).exe XCSoarSimulator-$(TARGET).exe
 	cp XCSoar-$(TARGET).exe $(TARGET)/XCSoar/gcc/XCSoar.exe
 	cp XCSoarSimulator-$(TARGET).exe $(TARGET)/XCSoarSimulator/gcc/XCSoarSimulator.exe
 	wine $(TARGET)/Cabwiz.exe XCSoar$(TARGET)-gcc.inf /cpu ARMV4
-	wine ezsetup.exe XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
+	mv XCSoar$(TARGET)-gcc.ARMV4.CAB XCSoar$(TARGET).ARMV4.CAB
+	wine ezsetup.exe -l english -i XCSoar$(TARGET).ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$(TARGET).exe
 
 XCSoar-$(TARGET).exe: XCSoar-$(TARGET)-ns.exe
 	@$(NQ)echo "  STRIP   $@"
