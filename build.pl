@@ -4,27 +4,38 @@ use strict;
 my $debug = 0;
 my $errors = 0;
 
+my $exec_ezsetup = "ezsetup.exe";
+
 # ------------------------------------------------------------------------------
 # Standard Variables
 # ------------------------------------------------------------------------------
+
+my $gcc = 0;
 my $pf = $ENV{ProgramFiles};
-my %execs = (
-	'EVC3' => {
-		'evc' => "$pf\\Microsoft eMbedded Tools\\Common\\EVC\\Bin\\EVC.EXE",
-		'cabwiz' => "\\Windows CE Tools\\wce300\\Pocket PC 2002\\support\\ActiveSync\\windows ce application installation\\cabwiz\\Cabwiz.exe",
-	},
-	'EVC4' => {
-		'evc' => "$pf\\Microsoft eMbedded C++ 4.0\\Common\\EVC\\Bin\\EVC.EXE",
-		'cabwiz' => "$pf\\Windows CE Tools\\wce420\\POCKET PC 2003\\Tools\\Cabwiz.exe",
-	},
-);
-my $exec_ezsetup = "ezsetup.exe";
-foreach my $e (keys %execs) {
-	foreach my $p (qw/evc cabwiz/) {
-		error("Unable to locate $e $p\n\t" . $execs{$e}{$p} .  "\n") unless (-e $execs{$e}{$p});
-	}
+if (!length($pf)) {
+  $gcc = 1;
 }
-# TODO die "ERROR: Unable to locate EZSetup\n\t$exec_ezsetup\n" unless (-e $exec_ezsetup);
+
+
+my %execs = (
+	     'EVC3' => {
+			'evc' => "$pf/Microsoft eMbedded Tools/Common/EVC/Bin/EVC.EXE",
+			'cabwiz' => "/Windows CE Tools/wce300/Pocket PC 2002/support/ActiveSync/windows ce application installation/cabwiz/Cabwiz.exe",
+		       },
+	     'EVC4' => {
+			'evc' => "$pf/Microsoft eMbedded C++ 4.0/Common/EVC/Bin/EVC.EXE",
+			'cabwiz' => "$pf/Windows CE Tools/wce420/POCKET PC 2003/Tools/Cabwiz.exe",
+		       },
+	    );
+
+if (!$gcc) {
+  foreach my $e (keys %execs) {
+    foreach my $p (qw/evc cabwiz/) {
+      error("Unable to locate $e $p\n\t" . $execs{$e}{$p} .  "\n") unless (-e $execs{$e}{$p});
+    }
+  }
+  # TODO die "ERROR: Unable to locate EZSetup\n\t$exec_ezsetup\n" unless (-e $exec_ezsetup);
+}
 
 # List projects here... (note: we build all of these for each platform)
 my @projects = qw/XCSoar XCSoarSimulator XCSoarLaunch XCSoarSetup/;
@@ -34,10 +45,10 @@ my %platforms = (
 		'exec' => "EVC4",
 		'proc' => [qw/ARMV4/],
 	},
-	'PPC2002' => {
-		'exec' => "EVC3",
-		'proc' => [qw/ARM MIPS/],
-	},
+#	'PPC2002' => {
+#		'exec' => "EVC3",
+#		'proc' => [qw/ARM MIPS/],
+#	},
 	# XXX adding MIPS ARM for PPC but using PPC2002 project files !
 #	'PPC' => {	# Also known as PPC 2000
 #		'exec' => "EVC3",
@@ -85,38 +96,49 @@ print STDERR "Version = ",$version_file, "\n";
 # ------------------------------------------------------------------------------
 # BUILD ALL via EVC3&4
 # ------------------------------------------------------------------------------
-foreach my $platform (keys %platforms) {
-	foreach my $project (@projects) {
-		foreach my $proc (@{$platforms{$platform}{'proc'}}) {
-			my $cmd = q{"} . $execs{$platforms{$platform}{'exec'}}{evc} . q{" }
-				. qq{$platform/$project/$project.vcp /MAKE "$project - Win32 (WCE $proc) Release" /REBUILD};
-			print STDERR "Building $project for $platform/$proc\n";
-			print STDERR "\t$cmd\n" if ($debug);
-			system($cmd) and error("Executing Command - $?\n\t$cmd\n");
-		}
-	}
+
+if (!$gcc) {
+  foreach my $platform (keys %platforms) {
+    foreach my $project (@projects) {
+      foreach my $proc (@{$platforms{$platform}{'proc'}}) {
+	my $cmd = q{"} . $execs{$platforms{$platform}{'exec'}}{evc} . q{" }
+	  . qq{$platform/$project/$project.vcp /MAKE "$project - Win32 (WCE $proc) Release" /REBUILD};
+	print STDERR "Building $project for $platform/$proc\n";
+	print STDERR "\t$cmd\n" if ($debug);
+	system($cmd) and error("Executing Command - $?\n\t$cmd\n");
+      }
+    }
+  }
 }
 
 # ------------------------------------------------------------------------------
 # CABs - via ???
 # ------------------------------------------------------------------------------
-foreach my $platform (keys %platforms) {
-	my $cmd = q{"} . $execs{$platforms{$platform}{'exec'}}{cabwiz} . q{" }
-		. qq{XCSoar$platform.inf /cpu } . join(" ", @{$platforms{$platform}{'proc'}});
-	print STDERR "CABing $platform\n";
-	print STDERR "\t$cmd\n" if ($debug);
-	system($cmd) and error("Executing Command - $?\n\t$cmd\n");
+if (!$gcc) {
+  foreach my $platform (keys %platforms) {
+    my $cmd = q{"} . $execs{$platforms{$platform}{'exec'}}{cabwiz} . q{" }
+      . qq{XCSoar$platform.inf /cpu } . join(" ", @{$platforms{$platform}{'proc'}});
+    print STDERR "CABing $platform\n";
+    print STDERR "\t$cmd\n" if ($debug);
+    system($cmd) and error("Executing Command - $?\n\t$cmd\n");
+  }
 }
 
 # ------------------------------------------------------------------------------
 # EXEs - via EZSetup
 # ------------------------------------------------------------------------------
 foreach my $platform (@platforms_all) {
-	my $cmd = q{} . $exec_ezsetup . q{ -l english -i }
-		. qq{XCSoar$platform.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$platform.exe};
-	print STDERR "EZSetup for $platform\n";
-	print STDERR "\t$cmd\n" if ($debug);
-	system($cmd) and error("Executing Command - $?\n\t$cmd\n");
+  if (!$gcc) {
+    my $cmd = q{} . $exec_ezsetup . q{ -l english -i }
+      . qq{XCSoar$platform.ini -r installmsg.txt -e gpl.txt -o InstallXCSoar-$platform.exe};
+    print STDERR "EZSetup for $platform\n";
+    print STDERR "\t$cmd\n" if ($debug);
+    system($cmd) and error("Executing Command - $?\n\t$cmd\n");
+  } else {
+    print "Making cab files with gcc\n";
+    system("make -j 2 TARGET=$platform clean");
+    system("make -j 2 TARGET=$platform cab");
+  }
 }
 
 # ------------------------------------------------------------------------------
@@ -126,14 +148,14 @@ foreach my $platform (@platforms_all) {
 mkdir "dist";
 foreach my $platform (keys %platforms) {
 	foreach my $proc (@{$platforms{$platform}{'proc'}}) {
-		rename "XCSoar$platform.$proc.cab", "dist\\XCSoar$platform.$proc.$version_file.cab"
+		rename "XCSoar$platform.$proc.CAB", "dist/XCSoar$platform.$proc.$version_file.cab"
 			or error("Unable to move CAB file $!\n\tXCSoar$platform.$proc.cab\n");
 	}
 }
 
 # Rename EXE files
 foreach my $platform (@platforms_all) {
-	rename "InstallXCSoar-$platform.exe", "dist\\InstallXCSoar-$platform.$version_file.exe"
+	rename "InstallXCSoar-$platform.exe", "dist/InstallXCSoar-$platform.$version_file.exe"
 		or error("Unable to move EXE file $!\n\tInstallXCSoar-$platform.exe\n");
 }
 
