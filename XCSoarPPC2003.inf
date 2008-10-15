@@ -43,6 +43,7 @@ VersionMax = 32767.0
 6 = ,"Input Files",,Common\Data\Input
 7 = ,"Language Files",,Common\Data\Language
 8 = ,"Polar Files",,Common\Data\Polar
+9 = ,"ARM Files",,PPC2003
 
 
 [SourceDisksNames.x86]
@@ -67,6 +68,7 @@ italian.xcl = 7
 german.xcl = 7
 astircs.plr = 8
 cobra.plr = 8
+GRecordDll.dll = 9
 
 [DefaultInstall]
 CopyFiles   = TheFiles,Files.Windows,Files.Fonts,Files.Language,Files.Input,Files.Polar
@@ -89,6 +91,7 @@ Links          = 0,%CE11%           ; "\Windows\Start Menu" directory
 XCSoar.exe
 XCSoarSimulator.exe
 XCSoarSetup.dll
+GRecordDll.dll
 
 [Files.Windows]
 XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
