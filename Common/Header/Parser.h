@@ -134,6 +134,7 @@ class NMEAParser {
   static BOOL ParseNMEAString(int portnum,
 			      TCHAR *String, NMEA_INFO *GPS_INFO);
   static void Reset(void);
+  static bool PortIsFlarm(int portnum);
   void _Reset(void);
 
   BOOL ParseNMEAString_Internal(TCHAR *String, NMEA_INFO *GPS_INFO);
@@ -141,6 +142,7 @@ class NMEAParser {
   int nSatellites;
 
   bool activeGPS;
+  bool isFlarm;
 
   static int StartDay;
 

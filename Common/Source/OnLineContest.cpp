@@ -800,6 +800,8 @@ int OLCOptimizer::scan_sprint_inprogress() {
   // time remaining (to burn the height)
   //
 
+  // O(N^2)
+
   i5 = pnts-1;
   i1 = istart;
 
@@ -847,6 +849,7 @@ int OLCOptimizer::scan_sprint_inprogress() {
     dt = iround(dh/sinkrate);
   }
   dfurther = (int)(Vopt*dt/DISTANCEUNITS); // neglects wind speed!  we can correct this
+  // JMW TODO
 
   // we can calculate the optimal instantaneous
   // MC value for this given the netto velocity
@@ -867,7 +870,7 @@ int OLCOptimizer::scan_sprint_inprogress() {
     // but this is reasonable as it assumes pilot is making bearing decisions
     // independent of track so far.
 
-    for (i3=i1+2; i3<i4; i3++) {  // O(N^2)
+    for (i3=i1+2; i3<i4; i3++) {
       i2 = isplit[sindex(i1,i3)];
 
       d = dmval[sindex(i1,i2)]
@@ -920,6 +923,8 @@ int OLCOptimizer::scan_classic() {
   // there is no time penalty so earliest valid start is always best?
   int dfurther = 0;
   int dfurtherbest = 0;
+
+  // O(N^3)
 
   for (i6=i1+5; i6<pnts; i6++) {
 

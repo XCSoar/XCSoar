@@ -137,7 +137,7 @@ static void OnFlarmLockClicked(WindowControl * Sender)
 
   int flarmId = LookupFLARMDetails(TeamFlarmCNTarget);
 
-  if (flarmId == NULL)
+  if (flarmId == 0)
     {
       MessageBoxX(hWndMapWindow,
 		  gettext(TEXT("Unknown Competition Number")),
