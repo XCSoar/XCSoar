@@ -76,6 +76,9 @@ DeviceDescriptor_t *pDevSecondaryBaroSource=NULL;
 
 int DeviceRegisterCount = 0;
 
+static BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl);
+
+
 // This function is used to determine whether a generic
 // baro source needs to be used if available
 BOOL devHasBaroSource(void) {
@@ -593,6 +596,11 @@ BOOL devDeclare(PDeviceDescriptor_t d, Declaration_t *decl)
   LockComm();
   if (d != NULL && d->Declare != NULL)
     result = d->Declare(d, decl);
+
+  if (d != NULL && NMEAParser::PortIsFlarm(d->Port)) {
+    result |= FlarmDeclare(d, decl);
+  }
+
   UnlockComm();
 
   return result;
@@ -603,8 +611,12 @@ BOOL devIsLogger(PDeviceDescriptor_t d)
   BOOL result = FALSE;
 
   LockComm();
-  if ((d != NULL) && (d->IsLogger != NULL))
+  if ((d != NULL) && (d->IsLogger != NULL)) {
     result = d->IsLogger(d);
+    if (!result) {
+      result |= NMEAParser::PortIsFlarm(d->Port);
+    }
+  }
   UnlockComm();
 
   return result;
@@ -806,4 +818,91 @@ BOOL devPutFreqStandby(PDeviceDescriptor_t d, double Freq)
   UnlockComm();
 
   return result;
+}
+
+
+static BOOL 
+FlarmDeclareSetGet(PDeviceDescriptor_t d, TCHAR *Buffer) {
+  devWriteNMEAString(d, Buffer);
+  Buffer[6]= _T('A');
+  if (!ExpectString(d, Buffer)){
+    return FALSE;
+  } else {
+    return TRUE;
+  }
+};
+
+
+BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
+  TCHAR Buffer[256];
+
+  _stprintf(Buffer,TEXT("PFLAC,S,PILOT,%s"),decl->PilotName);
+  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+
+  _stprintf(Buffer,TEXT("PFLAC,S,GLIDERID,%s"),decl->AircraftRego);
+  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+
+  _stprintf(Buffer,TEXT("PFLAC,S,GLIDERTYPE,%s"),decl->AircraftType);
+  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+
+  _stprintf(Buffer,TEXT("PFLAC,S,NEWTASK,"));
+  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+
+  _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
+  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+
+  for (int i = 0; i < decl->num_waypoints; i++) {
+    int DegLat, DegLon;
+    double MinLat, MinLon;
+    char NoS, EoW;
+
+    DegLat = (int)decl->waypoint[i]->Latitude;
+    MinLat = decl->waypoint[i]->Latitude - DegLat;
+    NoS = 'N';
+    if((MinLat<0) || ((MinLat-DegLat==0) && (DegLat<0)))
+      {
+	NoS = 'S';
+	DegLat *= -1; MinLat *= -1;
+      }
+    MinLat *= 60;
+    MinLat *= 1000;
+    
+    DegLon = (int)decl->waypoint[i]->Longitude;
+    MinLon = decl->waypoint[i]->Longitude - DegLon;
+    EoW = 'E';
+    if((MinLon<0) || ((MinLon-DegLon==0) && (DegLon<0)))
+      {
+	EoW = 'W';
+	DegLon *= -1; MinLon *= -1;
+      }
+    MinLon *=60;
+    MinLon *= 1000;
+
+    _stprintf(Buffer,
+	      TEXT("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),
+	      DegLat, MinLat, NoS, DegLon, MinLon, EoW, 
+	      decl->waypoint[i]->Name);
+    if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+  }
+
+  _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
+  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+
+  // PFLAC,S,KEY,VALUE
+  // Expect
+  // PFLAC,A,blah
+  // PFLAC,,COPIL:
+  // PFLAC,,COMPID:
+  // PFLAC,,COMPCLASS:
+
+  // PFLAC,,NEWTASK:
+  // PFLAC,,ADDWP:
+
+  // JMW TODO: FLARM Declaration checks
+  // Note: FLARM must be power cycled to activate a declaration!
+  // Only works on IGC approved devices
+  // Total data size must not surpass 183 bytes
+  // probably will issue PFLAC,ERROR if a problem?
+
+  return TRUE;
 }

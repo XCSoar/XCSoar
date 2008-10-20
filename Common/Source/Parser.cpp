@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.84 2008/10/15 11:04:35 jwharington Exp $
+  $Id: Parser.cpp,v 1.85 2008/10/20 14:20:58 jwharington Exp $
 
 Copyright_License {
 
@@ -66,6 +66,7 @@ NMEAParser::NMEAParser() {
 void NMEAParser::_Reset(void) {
   nSatellites = 0;
   gpsValid = false;
+  isFlarm = false;
   activeGPS = true;
   GGAAvailable = FALSE;
   RMZAvailable = FALSE;
@@ -824,6 +825,7 @@ BOOL NMEAParser::PFLAU(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO 
   static int old_flarm_rx = 0;
 
   GPS_INFO->FLARM_Available = true;
+  isFlarm = true;
 
   // calculate relative east and north projection to lat/lon
 
@@ -907,6 +909,8 @@ int FLARM_FindSlot(NMEA_INFO *GPS_INFO, long Id)
 BOOL NMEAParser::PFLAA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *GPS_INFO)
 {
   int flarm_slot = 0;
+
+  isFlarm = true;
 
   // 5 id, 6 digit hex
   long ID;
@@ -1035,3 +1039,14 @@ void LogNMEA(TCHAR* text) {
 	    (OVERLAPPED *)NULL);
 }
 
+
+bool NMEAParser::PortIsFlarm(int device) {
+  switch (device) {
+  case 0: 
+    return nmeaParser1.isFlarm;
+  case 1:
+    return nmeaParser2.isFlarm;
+  default:
+    return false;
+  };
+}
