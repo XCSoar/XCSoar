@@ -846,7 +846,9 @@ BOOL FlarmDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
 
   _stprintf(Buffer,TEXT("PFLAC,S,NEWTASK,"));
-  if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
+  if (!FlarmDeclareSetGet(d,Buffer)) return TRUE;
+  // JMW return true on this one in case it's not an IGC approved
+  // device
 
   _stprintf(Buffer,TEXT("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
   if (!FlarmDeclareSetGet(d,Buffer)) return FALSE;
