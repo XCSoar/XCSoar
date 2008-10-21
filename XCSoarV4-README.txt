@@ -6,6 +6,8 @@ Todo:
 - Start status message
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
 - Next wpt infobox
+- circlezoom on/off in inputevents
+- battery voltage infobox
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods
@@ -22,7 +24,8 @@ Changes from 5.1.9beta2:
 - Goto function now allows tasks to be resumed
 - Bug fix in DD.dddd waypoint edit format
 - enabled use of flarmnet ids in flarm display (courtesy Lars H)
-
+- Added input event to switch orientation modes
+- added support for declarations to IGC approved FLARM devices
 
 Changes from 5.1.9beta1:
 - Added Flymaster F1 device

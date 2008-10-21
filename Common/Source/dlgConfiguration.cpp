@@ -741,7 +741,6 @@ static CallBackTableEntry_t CallBackTable[]={
 
 
 extern SCREEN_INFO Data_Options[];
-extern int NUMSELECTSTRINGS;
 extern int InfoType[];
 
 

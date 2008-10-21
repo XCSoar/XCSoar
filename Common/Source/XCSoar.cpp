@@ -570,10 +570,17 @@ SCREEN_INFO Data_Options[] = {
 	  {ugVerticalSpeed,   TEXT("Thermal All"), TEXT("TC All"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
           // 64
 	  {ugVerticalSpeed,   TEXT("Distance Vario"), TEXT("D Vario"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
-          // 65
+	  // 65
+#ifndef GNAV
+	  {ugNone,            TEXT("Battery Percent"), TEXT("Battery"), new InfoBoxFormatter(TEXT("%2.0f%%")), NoProcessing, 49, 26},
+#else
+	  {ugNone,            TEXT("Battery Voltage"), TEXT("Battery"), new InfoBoxFormatter(TEXT("%2.1fV")), NoProcessing, 49, 26},
+#endif
+          // 66
 	  {ugNone,   TEXT("Experimental"), TEXT("Exp"), new InfoBoxFormatter(TEXT("%-2.1f")), NoProcessing, 8, 2},
 	};
-int NUMSELECTSTRINGS = 66;
+
+const int NUMSELECTSTRINGS = 67;
 
 
 CRITICAL_SECTION  CritSec_FlightData;

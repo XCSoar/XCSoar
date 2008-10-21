@@ -56,7 +56,7 @@ extern HWND hWndInfoWindow[MAXINFOWINDOWS];
 extern int  InfoFocus;
 extern bool DisplayLocked; // if infoboxes are locked
 extern SCREEN_INFO Data_Options[];
-extern int NUMSELECTSTRINGS;
+extern const int NUMSELECTSTRINGS;
 extern BOOL InfoBoxesHidden;
 extern int numInfoWindows;
 

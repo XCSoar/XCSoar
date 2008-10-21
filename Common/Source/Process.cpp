@@ -47,6 +47,8 @@ Copyright_License {
 
 extern AATDistance aatdistance;
 
+extern int PDABatteryPercent;
+
 // JMW added key codes,
 // so -1 down
 //     1 up
@@ -855,10 +857,29 @@ void InfoBoxFormatter::AssignValue(int i) {
       Valid = false;
     }
     break;
-  case 65:
+  case 65: // battery voltage
+#if (WINDOWSPC<1)
+#ifndef GNAV
+    Value = PDABatteryPercent;
+    Valid = true;
+#else
+    Value = GPS_INFO.SupplyBatteryVoltage;
+    if (Value>0.0) {
+      Valid = true;
+    } else {
+      Valid = false;
+    }
+#endif
+#else
+    Value = 0.0;
+    Valid = false;
+#endif
+    break;
+  case 66:
     Value = CALCULATED_INFO.Experimental;
     Valid = true;
     break;
+  case 67:
     /* JMW TODO add extra infoboxes from Lars
   case 66: // distance flown
     if (CALCULATED_INFO.TaskDistanceCovered != 0)
