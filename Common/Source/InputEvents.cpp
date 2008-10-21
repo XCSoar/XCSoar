@@ -1103,6 +1103,9 @@ void InputEvents::eventZoom(const TCHAR* misc) {
   // 1 means on
   float zoom;
 
+  // CircleZoom,
+  //
+
   if (_tcscmp(misc, TEXT("auto toggle")) == 0)
     MapWindow::Event_AutoZoom(-1);
   else if (_tcscmp(misc, TEXT("auto on")) == 0)
@@ -1133,6 +1136,22 @@ void InputEvents::eventZoom(const TCHAR* misc) {
     MapWindow::Event_ScaleZoom(2);
   else if (_stscanf(misc, TEXT("%f"), &zoom) == 1)
     MapWindow::Event_SetZoom((double)zoom);
+  else if (_tcscmp(misc, TEXT("circlezoom toggle")) == 0) {
+    CircleZoom = !CircleZoom;
+    MapWindow::SwitchZoomClimb();
+  } else if (_tcscmp(misc, TEXT("circlezoom on")) == 0) {
+    CircleZoom = true;
+    MapWindow::SwitchZoomClimb();
+  } else if (_tcscmp(misc, TEXT("circlezoom off")) == 0) {
+    CircleZoom = false;
+    MapWindow::SwitchZoomClimb();
+  } else if (_tcscmp(misc, TEXT("circlezoom show")) == 0) {
+    if (CircleZoom)
+      DoStatusMessage(TEXT("Circling Zoom ON"));
+    else
+      DoStatusMessage(TEXT("Circling Zoom OFF"));
+  }
+
 }
 
 // Pan
