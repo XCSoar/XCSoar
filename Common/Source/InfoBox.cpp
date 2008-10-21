@@ -86,6 +86,8 @@ InfoBox::InfoBox(HWND Parent, int X, int Y, int Width, int Height){
   mColorBack = bkColor;
   mColorFore = fgColor;
   color = 0;
+  colorTop = 0;
+  colorBottom = 0;
 
   if (Count == 0){
     hBrushDefaultBackGround = (HBRUSH)CreateSolidBrush(bkColor);
