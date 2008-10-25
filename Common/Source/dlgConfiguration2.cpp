@@ -257,5 +257,13 @@ void OnInfoBoxHelp(WindowControl * Sender){
   case 62:
     dlgHelpShowModal(caption, TEXT("[AA Delta Time]\r\nDifference between estimated task time and AAT minimum time.  Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes."));
     break;
+  case 63:
+    dlgHelpShowModal(caption, TEXT("[Thermal All]\r\nTime-average climb rate in all thermals."));
+    break;
+  case 65:
+    dlgHelpShowModal(caption, TEXT("[Battery]\r\nSupply battery voltage for Altair systems, for PDA systems, this gives the percent battery capacity available."));
+    break;
+  default:
+    dlgHelpShowModal(caption, TEXT("No help available on this item!"));
   };
 }
