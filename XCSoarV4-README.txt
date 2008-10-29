@@ -11,7 +11,7 @@ Todo:
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods
-- Can now use flarm database (disabled for now)
+- Can now use flarm database
 - Added copy/paste to infoboxes in configuration dialog
 - Flymaster F1 bug fix (vario units)
 - Porting to cegcc
@@ -26,6 +26,8 @@ Changes from 5.1.9beta2:
 - enabled use of flarmnet ids in flarm display (courtesy Lars H)
 - Added input event to switch orientation modes
 - added support for declarations to IGC approved FLARM devices
+- added missing help for new infoboxes
+- added control of circling zoom to input events
 
 Changes from 5.1.9beta1:
 - Added Flymaster F1 device
