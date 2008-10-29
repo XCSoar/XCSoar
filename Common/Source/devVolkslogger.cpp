@@ -159,7 +159,8 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   if (err != VLA_ERR_NOERR)
     return FALSE;
 
-  for (int i = 0; i < decl->num_waypoints; i++)
+  int i;
+  for (i = 0; i < decl->num_waypoints; i++)
     VLDeclAddWayPoint(d, decl->waypoint[i]);
 
   vl.declaration.task.nturnpoints = max(min(nturnpoints-2, 12), 0);
@@ -190,7 +191,7 @@ BOOL VLDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
   vl.declaration.task.startpoint.ws = 360;
 
   // rest of task...
-  for (int i=0; i<nturnpoints; i++) {
+  for (i=0; i<nturnpoints; i++) {
     // note this is for non-aat only!
     switch (SectorType) {
     case 0: // cylinder

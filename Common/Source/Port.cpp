@@ -212,6 +212,7 @@ DWORD WINAPI ComPort::ThreadProc(LPVOID prt)
 {
   ComPort *port = (ComPort *)prt;
   port->ReadThread();
+  return 0;
 }
 
 /***********************************************************************

@@ -201,8 +201,8 @@ BOOL EWDeclare(PDeviceDescriptor_t d, Declaration_t *decl){
     };
   }
 
-  for (int i = 0; i < decl->num_waypoints; i++)
-    EWDeclAddWayPoint(d, decl->waypoint[i]);
+  for (int j = 0; j < decl->num_waypoints; j++)
+    EWDeclAddWayPoint(d, decl->waypoint[j]);
 
   d->Com->WriteString(TEXT("NMEA\r\n"));         // switch to NMEA mode
 
