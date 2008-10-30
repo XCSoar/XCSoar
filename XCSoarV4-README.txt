@@ -6,8 +6,6 @@ Todo:
 - Start status message
 - Quick fgtt by polygon interior fit from airspace (possible performance improvement)
 - Next wpt infobox
-- circlezoom on/off in inputevents
-- battery voltage infobox
 
 Changes from 5.1.9beta2:
 - Alternate text entry methods
@@ -28,6 +26,7 @@ Changes from 5.1.9beta2:
 - added support for declarations to IGC approved FLARM devices
 - added missing help for new infoboxes
 - added control of circling zoom to input events
+- battery voltage infobox
 
 Changes from 5.1.9beta1:
 - Added Flymaster F1 device
