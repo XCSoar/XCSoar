@@ -223,21 +223,21 @@ LINK32=link.exe
 # PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-RSC=rc.exe
-# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
-# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
-CPP=clarm.exe
-# ADD BASE CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /M$(CECrtMTDebug) /c
-# ADD CPP /nologo /W3 /GX- /Zi /Od /I "..\..\..\Header" /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "_SIM_" /YX /M$(CECrtMTDebug) /c
-MTL=midl.exe
-# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
-# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
 # ADD LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /debug /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /GX- /Zi /Od /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /YX /M$(CECrtMTDebug) /c
+# ADD CPP /nologo /W3 /GX- /Zi /Od /I "..\..\..\Header" /D "DEBUG" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "UNICODE" /D "_UNICODE" /D "_SIM_" /YX /M$(CECrtMTDebug) /c
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "DEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
 
@@ -256,21 +256,21 @@ LINK32=link.exe
 # PROP Platform_ID "{8A9A2F80-6887-11D3-842E-005004848CBA}"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-RSC=rc.exe
-# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
-# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
-CPP=clarm.exe
-# ADD BASE CPP /nologo /W3 /GX- /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /YX /Oxs /M$(CECrtMT) /c
-# ADD CPP /nologo /W3 /GX- /I "..\..\..\Header" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_SIM_" /YX /Oxs /M$(CECrtMT) /c
-MTL=midl.exe
-# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
-# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
 # ADD LINK32 commctrl.lib coredll.lib /nologo /base:"0x00010000" /stack:0x10000,0x1000 /entry:"WinMainCRTStartup" /nodefaultlib:"$(CENoDefaultLib)" /subsystem:$(CESubsystem) /align:"4096" /MACHINE:ARM
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+MTL=midl.exe
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+CPP=clarm.exe
+# ADD BASE CPP /nologo /W3 /GX- /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /YX /Oxs /M$(CECrtMT) /c
+# ADD CPP /nologo /W3 /GX- /I "..\..\..\Header" /D _WIN32_WCE=$(CEVersion) /D "$(CePlatform)" /D "ARM" /D "_ARM_" /D UNDER_CE=$(CEVersion) /D "UNICODE" /D "_UNICODE" /D "NDEBUG" /D "_SIM_" /YX /Oxs /M$(CECrtMT) /c
+RSC=rc.exe
+# ADD BASE RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
+# ADD RSC /l 0x409 /d UNDER_CE=$(CEVersion) /d _WIN32_WCE=$(CEVersion) /d "UNICODE" /d "_UNICODE" /d "NDEBUG" /d "$(CePlatform)" /d "ARM" /d "_ARM_" /r
 
 !ENDIF 
 
@@ -375,6 +375,7 @@ DEP_CPP_AATDI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -382,12 +383,6 @@ DEP_CPP_AATDI=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_AATDI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -563,6 +558,7 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -571,16 +567,12 @@ DEP_CPP_AIRFI=\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\wcecompat\ts_string.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRFI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -749,11 +741,13 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdAfx.h"\
@@ -762,6 +756,7 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -770,16 +765,12 @@ DEP_CPP_AIRSP=\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\wcecompat\ts_string.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSP=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -959,6 +950,7 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -966,16 +958,12 @@ DEP_CPP_AIRSPA=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_AIRSPA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -1143,6 +1131,7 @@ DEP_CPP_AIRSPAC=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\simpleList.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -1152,6 +1141,7 @@ DEP_CPP_AIRSPAC=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -1159,12 +1149,6 @@ DEP_CPP_AIRSPAC=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_AIRSPAC=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -1338,6 +1322,7 @@ DEP_CPP_ATMOS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -1345,12 +1330,6 @@ DEP_CPP_ATMOS=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_ATMOS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -1539,6 +1518,7 @@ NODEP_CPP_CALCU=\
 DEP_CPP_CALCU=\
 	"..\..\Common\Header\AATDistance.h"\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\AirspaceWarning.h"\
 	"..\..\Common\Header\Atmosphere.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Calculations2.h"\
@@ -1576,6 +1556,8 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\WindZigZag.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\XCSoarProcess.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -1583,13 +1565,6 @@ DEP_CPP_CALCU=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_CALCU=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\XCSoarProcess.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -1841,6 +1816,7 @@ DEP_CPP_CALCUL=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -1848,12 +1824,6 @@ DEP_CPP_CALCUL=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_CALCUL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2052,6 +2022,8 @@ DEP_CPP_CONDI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\XCSoarProcess.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -2059,13 +2031,6 @@ DEP_CPP_CONDI=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_CONDI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\XCSoarProcess.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2240,6 +2205,7 @@ DEP_CPP_DEVAL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -2247,12 +2213,6 @@ DEP_CPP_DEVAL=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2444,6 +2404,7 @@ DEP_CPP_DEVBO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -2451,12 +2412,6 @@ DEP_CPP_DEVBO=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVBO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2641,6 +2596,7 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -2648,12 +2604,6 @@ DEP_CPP_DEVCA=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVCA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -2831,6 +2781,7 @@ DEP_CPP_DEVCAI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -2838,12 +2789,6 @@ DEP_CPP_DEVCAI=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVCAI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -3021,6 +2966,7 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -3028,12 +2974,6 @@ DEP_CPP_DEVEW=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVEW=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -3225,6 +3165,7 @@ DEP_CPP_DEVEWM=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -3232,12 +3173,6 @@ DEP_CPP_DEVEWM=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVEWM=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -3318,6 +3253,378 @@ NODEP_CPP_DEVEWM=\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\devFlymasterF1.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_DEVFL=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devFlymasterF1.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_DEVFL=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devFlymasterF1.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_DEVFL=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devFlymasterF1.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_DEVFL=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devFlymasterF1.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_DEVFL=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devFlymasterF1.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\devGeneric.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_DEVGE=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devGeneric.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_DEVGE=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devGeneric.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_DEVGE=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devGeneric.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_DEVGE=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devGeneric.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_DEVGE=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\devGeneric.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
@@ -3419,6 +3726,7 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -3426,12 +3734,6 @@ DEP_CPP_DEVIC=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVIC=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -3621,6 +3923,7 @@ DEP_CPP_DEVLX=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -3628,12 +3931,6 @@ DEP_CPP_DEVLX=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVLX=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -3818,6 +4115,7 @@ DEP_CPP_DEVNM=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -3825,12 +4123,6 @@ DEP_CPP_DEVNM=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVNM=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4008,6 +4300,7 @@ DEP_CPP_DEVPO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -4015,12 +4308,6 @@ DEP_CPP_DEVPO=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVPO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4204,6 +4491,7 @@ DEP_CPP_DEVVE=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -4211,12 +4499,6 @@ DEP_CPP_DEVVE=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVVE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4433,6 +4715,7 @@ DEP_CPP_DEVVO=\
 	"..\..\Common\Header\Volkslogger\vlconv.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -4440,12 +4723,6 @@ DEP_CPP_DEVVO=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DEVVO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4540,6 +4817,378 @@ NODEP_CPP_DEVVO=\
 	"..\..\Common\Header\BlueSMS.h"\
 	"..\..\Common\Header\gsm_pduconv.h"\
 	"..\..\Common\Header\gsm_sms.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\devXCOM760.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_DEVXC=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devXCOM760.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_DEVXC=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devXCOM760.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_DEVXC=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devXCOM760.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_DEVXC=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devXCOM760.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_DEVXC=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devXCOM760.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\Common\Source\devZander.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_DEVZA=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devZander.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_DEVZA=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devZander.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_DEVZA=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devZander.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_DEVZA=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devZander.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_DEVZA=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devZander.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
@@ -4660,7 +5309,6 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\Message.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
@@ -4673,6 +5321,7 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -4680,16 +5329,12 @@ DEP_CPP_DIALO=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DIALO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -4884,7 +5529,6 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -4894,6 +5538,7 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -4901,16 +5546,12 @@ DEP_CPP_DLGAI=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5089,7 +5730,6 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -5099,6 +5739,7 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -5106,16 +5747,12 @@ DEP_CPP_DLGAIR=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIR=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5239,12 +5876,12 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRS=\
 	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
@@ -5278,18 +5915,19 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRS=\
 	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\AirspaceWarning.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -5300,7 +5938,6 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -5310,6 +5947,7 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -5317,7 +5955,7 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	{$(INCLUDE)}"winuserm.h"\
 	
@@ -5356,12 +5994,12 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRS=\
 	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -5395,12 +6033,12 @@ DEP_CPP_DLGAIRS=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRS=\
 	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
@@ -5500,7 +6138,6 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -5510,6 +6147,7 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -5517,16 +6155,12 @@ DEP_CPP_DLGAIRSP=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRSP=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5709,6 +6343,7 @@ NODEP_CPP_DLGAIRSPA=\
 
 DEP_CPP_DLGAIRSPA=\
 	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\AirspaceWarning.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
 	"..\..\Common\Header\Dialogs.h"\
@@ -5719,7 +6354,6 @@ DEP_CPP_DLGAIRSPA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -5729,6 +6363,7 @@ DEP_CPP_DLGAIRSPA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -5736,16 +6371,12 @@ DEP_CPP_DLGAIRSPA=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRSPA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -5938,6 +6569,7 @@ DEP_CPP_DLGAIRSPAC=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -5945,16 +6577,12 @@ DEP_CPP_DLGAIRSPAC=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGAIRSPAC=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6139,6 +6767,7 @@ DEP_CPP_DLGBA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -6146,12 +6775,6 @@ DEP_CPP_DLGBA=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGBA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6310,7 +6933,6 @@ DEP_CPP_DLGBR=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -6328,6 +6950,7 @@ DEP_CPP_DLGBR=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -6335,12 +6958,6 @@ DEP_CPP_DLGBR=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGBR=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6518,6 +7135,7 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -6525,16 +7143,12 @@ DEP_CPP_DLGCH=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGCH=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6723,6 +7337,7 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdAfx.h"\
@@ -6734,6 +7349,8 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\XCSoarProcess.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -6741,17 +7358,12 @@ DEP_CPP_DLGCO=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGCO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	"..\..\Common\Header\XCSoarProcess.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -6943,29 +7555,25 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
-	"..\..\Common\Header\GaugeFLARM.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdAfx.h"\
 	"..\..\Common\Header\Task.h"\
-	"..\..\Common\Header\Terrain.h"\
-	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -6973,16 +7581,12 @@ DEP_CPP_DLGCON=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGCON=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7184,6 +7788,7 @@ DEP_CPP_DLGCONF=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -7191,16 +7796,12 @@ DEP_CPP_DLGCONF=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGCONF=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7293,6 +7894,212 @@ NODEP_CPP_DLGCONF=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Source\dlgFlarmTraffic.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_DLGFL=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGFL=\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_DLGFL=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGFL=\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_DLGFL=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGFL=\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_DLGFL=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGFL=\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_DLGFL=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
+	
+NODEP_CPP_DLGFL=\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Source\dlgHelp.cpp
 
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
@@ -7367,7 +8174,6 @@ DEP_CPP_DLGHE=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -7386,6 +8192,7 @@ DEP_CPP_DLGHE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -7393,12 +8200,6 @@ DEP_CPP_DLGHE=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGHE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7559,7 +8360,6 @@ DEP_CPP_DLGLO=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -7568,9 +8368,7 @@ DEP_CPP_DLGLO=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
-	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdAfx.h"\
@@ -7579,6 +8377,7 @@ DEP_CPP_DLGLO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -7586,12 +8385,6 @@ DEP_CPP_DLGLO=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGLO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7766,7 +8559,6 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -7776,6 +8568,7 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -7783,16 +8576,12 @@ DEP_CPP_DLGST=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGST=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -7970,6 +8759,7 @@ DEP_CPP_DLGSTA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -7977,12 +8767,6 @@ DEP_CPP_DLGSTA=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGSTA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8152,6 +8936,7 @@ DEP_CPP_DLGSTAT=\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
 	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\jasper\RasterTile.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -8159,6 +8944,7 @@ DEP_CPP_DLGSTAT=\
 	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\OnLineContest.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\RasterTerrain.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdAfx.h"\
@@ -8171,6 +8957,7 @@ DEP_CPP_DLGSTAT=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -8178,12 +8965,6 @@ DEP_CPP_DLGSTAT=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGSTAT=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8366,6 +9147,8 @@ DEP_CPP_DLGSTATU=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\XCSoarProcess.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -8373,13 +9156,6 @@ DEP_CPP_DLGSTATU=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGSTATU=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\XCSoarProcess.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8552,6 +9328,7 @@ DEP_CPP_DLGSTATUS=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -8559,12 +9336,6 @@ DEP_CPP_DLGSTATUS=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGSTATUS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8734,6 +9505,8 @@ DEP_CPP_DLGSTATUST=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\XCSoarProcess.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -8741,13 +9514,6 @@ DEP_CPP_DLGSTATUST=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGSTATUST=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\XCSoarProcess.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -8901,7 +9667,6 @@ DEP_CPP_DLGSW=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -8919,6 +9684,7 @@ DEP_CPP_DLGSW=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -8926,12 +9692,6 @@ DEP_CPP_DLGSW=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGSW=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9107,7 +9867,6 @@ DEP_CPP_DLGTA=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Calculations2.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -9116,7 +9875,6 @@ DEP_CPP_DLGTA=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
@@ -9127,6 +9885,7 @@ DEP_CPP_DLGTA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -9134,12 +9893,6 @@ DEP_CPP_DLGTA=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGTA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9310,7 +10063,6 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\Calculations2.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -9329,6 +10081,7 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -9336,12 +10089,6 @@ DEP_CPP_DLGTAS=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGTAS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9529,6 +10276,7 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -9536,16 +10284,12 @@ DEP_CPP_DLGTASK=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGTASK=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9670,13 +10414,13 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGTASKR=\
 	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
 	"..\..\Common\Source\XCSoarProcess.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
@@ -9709,13 +10453,13 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGTASKR=\
 	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\emulator\vibrate.h"\
 	"..\..\Common\Source\XCSoarProcess.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
@@ -9724,7 +10468,6 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -9741,6 +10484,8 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\XCSoarProcess.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -9748,13 +10493,12 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
+	{$(INCLUDE)}"aygshell.h"\
 	{$(INCLUDE)}"sipapi.h"\
 	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGTASKR=\
 	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
-	"..\..\Common\Source\XCSoarProcess.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -9787,13 +10531,13 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGTASKR=\
 	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	"..\..\Common\Source\XCSoarProcess.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
@@ -9826,13 +10570,13 @@ DEP_CPP_DLGTASKR=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	{$(INCLUDE)}"Aygshell.h"\
-	{$(INCLUDE)}"sipapi.h"\
-	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGTASKR=\
 	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	"..\..\Common\Source\XCSoarProcess.h"\
+	".\inuserm.h"\
+	".\ipapi.h"\
+	".\ygshell.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
@@ -9935,7 +10679,6 @@ DEP_CPP_DLGTASKW=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -9945,6 +10688,7 @@ DEP_CPP_DLGTASKW=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -9952,16 +10696,12 @@ DEP_CPP_DLGTASKW=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGTASKW=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10127,6 +10867,7 @@ DEP_CPP_DLGTE=\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
@@ -10141,6 +10882,7 @@ DEP_CPP_DLGTE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -10148,12 +10890,6 @@ DEP_CPP_DLGTE=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGTE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10318,6 +11054,7 @@ DEP_CPP_DLGTEX=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -10325,12 +11062,6 @@ DEP_CPP_DLGTEX=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGTEX=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10409,6 +11140,182 @@ NODEP_CPP_DLGTEX=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\Common\Source\dlgTextEntry_Keyboard.cpp
+
+!IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
+
+DEP_CPP_DLGTEXT=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Debug"
+
+DEP_CPP_DLGTEXT=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
+
+DEP_CPP_DLGTEXT=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
+
+DEP_CPP_DLGTEXT=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Profile"
+
+DEP_CPP_DLGTEXT=\
+	"..\..\Common\Header\Airspace.h"\
+	"..\..\Common\Header\Calculations.h"\
+	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\Dialogs.h"\
+	"..\..\Common\Header\dlgTools.h"\
+	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\InfoBoxLayout.h"\
+	"..\..\Common\Header\leastsqs.h"\
+	"..\..\Common\Header\mapprimitive.h"\
+	"..\..\Common\Header\mapshape.h"\
+	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
+	"..\..\Common\Header\Statistics.h"\
+	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Units.h"\
+	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\WindowControls.h"\
+	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
+	"..\..\Common\Header\zzip\_msvc.h"\
+	"..\..\Common\Header\zzip\conf.h"\
+	"..\..\Common\Header\zzip\lib.h"\
+	"..\..\Common\Header\zzip\plugin.h"\
+	"..\..\Common\Header\zzip\stdint.h"\
+	"..\..\Common\Header\zzip\types.h"\
+	"..\..\Common\Header\zzip\zzip.h"\
+	
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Debug"
+
+!ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARM) Release"
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\Common\Source\dlgTools.cpp
 
 !IF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE emulator) Release"
@@ -10464,6 +11371,7 @@ DEP_CPP_DLGTO=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	"..\..\Common\Header\xmlParser.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -10628,6 +11536,7 @@ DEP_CPP_DLGVE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -10635,12 +11544,6 @@ DEP_CPP_DLGVE=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGVE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -10799,7 +11702,6 @@ DEP_CPP_DLGVO=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -10818,6 +11720,7 @@ DEP_CPP_DLGVO=\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -10825,12 +11728,6 @@ DEP_CPP_DLGVO=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGVO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11022,6 +11919,7 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\VOIMAGE.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -11029,16 +11927,12 @@ DEP_CPP_DLGWA=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGWA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11211,7 +12105,6 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -11231,6 +12124,7 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -11238,12 +12132,6 @@ DEP_CPP_DLGWAY=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGWAY=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11417,6 +12305,7 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -11424,12 +12313,6 @@ DEP_CPP_DLGWAYP=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGWAYP=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11598,7 +12481,6 @@ DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -11608,6 +12490,7 @@ DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -11615,16 +12498,12 @@ DEP_CPP_DLGWAYPO=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_DLGWAYPO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -11805,7 +12684,6 @@ DEP_CPP_DLGWE=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -11826,6 +12704,7 @@ DEP_CPP_DLGWE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -11833,12 +12712,6 @@ DEP_CPP_DLGWE=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGWE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -12005,7 +12878,6 @@ DEP_CPP_DLGWI=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
-	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -12013,7 +12885,6 @@ DEP_CPP_DLGWI=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
-	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -12023,6 +12894,7 @@ DEP_CPP_DLGWI=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -12030,12 +12902,6 @@ DEP_CPP_DLGWI=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_DLGWI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -12284,6 +13150,7 @@ DEP_CPP_GAUGEF=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -12291,12 +13158,6 @@ DEP_CPP_GAUGEF=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_GAUGEF=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -12473,6 +13334,7 @@ DEP_CPP_GAUGEV=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -12480,12 +13342,6 @@ DEP_CPP_GAUGEV=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_GAUGEV=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -12611,6 +13467,7 @@ DEP_CPP_GEOID=\
 	"..\..\Common\Header\stdAfx.h"\
 	"..\..\Common\Header\Task.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -12752,6 +13609,7 @@ DEP_CPP_INFOB=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -12759,12 +13617,6 @@ DEP_CPP_INFOB=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_INFOB=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -12940,6 +13792,7 @@ DEP_CPP_INFOBO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -12947,12 +13800,6 @@ DEP_CPP_INFOBO=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_INFOBO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -13172,8 +14019,11 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\Topology.h"\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
+	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\XCSoarProcess.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -13181,17 +14031,12 @@ DEP_CPP_INPUT=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_INPUT=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	"..\..\Common\Header\XCSoarProcess.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -13456,6 +14301,7 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -13463,12 +14309,6 @@ DEP_CPP_LOGGE=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_LOGGE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -13633,6 +14473,7 @@ DEP_CPP_MAPER=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -13703,6 +14544,7 @@ DEP_CPP_MAPPR=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -13770,6 +14612,7 @@ DEP_CPP_MAPSE=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -13844,6 +14687,7 @@ DEP_CPP_MAPSH=\
 	"..\..\Common\Header\maptree.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -13918,6 +14762,7 @@ DEP_CPP_MAPTR=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\maptree.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -14048,6 +14893,7 @@ NODEP_CPP_MAPWI=\
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_MAPWI=\
+	"..\..\Common\Header\AATDistance.h"\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
@@ -14081,6 +14927,7 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -14088,12 +14935,6 @@ DEP_CPP_MAPWI=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_MAPWI=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14319,6 +15160,7 @@ DEP_CPP_MAPWIN=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -14326,12 +15168,6 @@ DEP_CPP_MAPWIN=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_MAPWIN=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14464,6 +15300,7 @@ DEP_CPP_MAPXB=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -14581,6 +15418,7 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -14599,6 +15437,7 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -14606,12 +15445,6 @@ DEP_CPP_MCREA=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_MCREA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14784,6 +15617,7 @@ DEP_CPP_MESSA=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -14791,12 +15625,6 @@ DEP_CPP_MESSA=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_MESSA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -14984,6 +15812,7 @@ DEP_CPP_ONLIN=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -15138,6 +15967,7 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdAfx.h"\
@@ -15147,6 +15977,7 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -15154,12 +15985,6 @@ DEP_CPP_PARSE=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_PARSE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -15320,6 +16145,7 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\compatibility.h"\
+	"..\..\Common\Header\device.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -15337,6 +16163,7 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -15344,12 +16171,6 @@ DEP_CPP_PORT_=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_PORT_=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -15517,6 +16338,7 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -15524,12 +16346,6 @@ DEP_CPP_PORT2=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_PORT2=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -15704,6 +16520,8 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\XCSoarProcess.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -15711,13 +16529,6 @@ DEP_CPP_PROCE=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_PROCE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\XCSoarProcess.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -15884,6 +16695,7 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -15892,12 +16704,6 @@ DEP_CPP_RASTE=\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\wcecompat\ts_string.h"\
-	
-NODEP_CPP_RASTE=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -16098,6 +16904,7 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -16105,12 +16912,6 @@ DEP_CPP_RSCAL=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_RSCAL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -16380,6 +17181,7 @@ DEP_CPP_TASK_=\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
+	"..\..\Common\Header\McReady.h"\
 	"..\..\Common\Header\options.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
@@ -16390,6 +17192,7 @@ DEP_CPP_TASK_=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -16397,12 +17200,6 @@ DEP_CPP_TASK_=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_TASK_=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -16640,6 +17437,7 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\VarioSound.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -16648,12 +17446,6 @@ DEP_CPP_TERRA=\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\wcecompat\ts_string.h"\
-	
-NODEP_CPP_TERRA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -16807,6 +17599,7 @@ DEP_CPP_THERM=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -16960,6 +17753,7 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -16968,12 +17762,6 @@ DEP_CPP_TOPOL=\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\wcecompat\ts_string.h"\
-	
-NODEP_CPP_TOPOL=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -17139,6 +17927,7 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -17146,12 +17935,6 @@ DEP_CPP_UNITS=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_UNITS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -17318,13 +18101,16 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
+	"..\..\Common\Header\FlarmIdFile.h"\
 	"..\..\Common\Header\GaugeFLARM.h"\
 	"..\..\Common\Header\leastsqs.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\McReady.h"\
+	"..\..\Common\Header\NavFunctions.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\Status_defaults.cpp"\
@@ -17338,6 +18124,7 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -17345,12 +18132,7 @@ DEP_CPP_UTILS=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_UTILS=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
+	{$(INCLUDE)}"projects.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -17529,6 +18311,7 @@ DEP_CPP_VEGAV=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\Statistics.h"\
 	"..\..\Common\Header\stdAfx.h"\
@@ -17538,6 +18321,7 @@ DEP_CPP_VEGAV=\
 	"..\..\Common\Header\VegaVoice.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -17545,12 +18329,6 @@ DEP_CPP_VEGAV=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_VEGAV=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -17799,6 +18577,7 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
 	"..\..\Common\Header\xmlParser.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -17807,16 +18586,12 @@ DEP_CPP_WAYPO=\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
 	"..\..\Common\Source\wcecompat\ts_string.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_WAYPO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -17976,6 +18751,7 @@ DEP_CPP_WINDA=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -18072,13 +18848,18 @@ DEP_CPP_WINDM=\
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_WINDM=\
+	"..\..\Common\Header\Airspace.h"\
 	"..\..\Common\Header\Calculations.h"\
 	"..\..\Common\Header\mapprimitive.h"\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdAfx.h"\
+	"..\..\Common\Header\Task.h"\
+	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\vector.h"\
 	"..\..\Common\Header\windmeasurementlist.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -18223,6 +19004,7 @@ DEP_CPP_WINDO=\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -18230,13 +19012,7 @@ DEP_CPP_WINDO=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
-	
-NODEP_CPP_WINDO=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	".\rojects.h"\
+	{$(INCLUDE)}"projects.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -18374,6 +19150,7 @@ DEP_CPP_WINDS=\
 	"..\..\Common\Header\windmeasurementlist.h"\
 	"..\..\Common\Header\windstore.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -18488,6 +19265,7 @@ DEP_CPP_WINDZ=\
 	"..\..\Common\Header\Units.h"\
 	"..\..\Common\Header\Utils.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -18682,11 +19460,16 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\devCaiGpsNav.h"\
 	"..\..\Common\Header\devEW.h"\
 	"..\..\Common\Header\devEWMicroRecorder.h"\
+	"..\..\Common\Header\devFlymasterF1.h"\
+	"..\..\Common\Header\devGeneric.h"\
 	"..\..\Common\Header\device.h"\
+	"..\..\Common\Header\devLX.h"\
 	"..\..\Common\Header\devNmeaOut.h"\
 	"..\..\Common\Header\devPosiGraph.h"\
 	"..\..\Common\Header\devVega.h"\
 	"..\..\Common\Header\devVolkslogger.h"\
+	"..\..\Common\Header\devXCOM760.h"\
+	"..\..\Common\Header\devZander.h"\
 	"..\..\Common\Header\Dialogs.h"\
 	"..\..\Common\Header\dlgTools.h"\
 	"..\..\Common\Header\externs.h"\
@@ -18720,6 +19503,8 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\Waypointparser.h"\
 	"..\..\Common\Header\WindowControls.h"\
 	"..\..\Common\Header\XCSoar.h"\
+	"..\..\Common\Header\XCSoarProcess.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -18727,17 +19512,12 @@ DEP_CPP_XCSOA=\
 	"..\..\Common\Header\zzip\stdint.h"\
 	"..\..\Common\Header\zzip\types.h"\
 	"..\..\Common\Header\zzip\zzip.h"\
+	{$(INCLUDE)}"aygshell.h"\
+	{$(INCLUDE)}"sipapi.h"\
+	{$(INCLUDE)}"winuserm.h"\
 	
 NODEP_CPP_XCSOA=\
-	"..\..\Common\Header\BlueDialupPort.h"\
-	"..\..\Common\Header\BlueSMS.h"\
-	"..\..\Common\Header\gsm_pduconv.h"\
-	"..\..\Common\Header\gsm_sms.h"\
-	"..\..\Common\Header\vibrate.h"\
-	"..\..\Common\Header\XCSoarProcess.h"\
-	".\inuserm.h"\
-	".\ipapi.h"\
-	".\ygshell.h"\
+	"..\..\..\..\..\..\..\..\..\Program Files\Windows CE Tools\wce420\POCKET PC 2003\Include\ARMV4\vibrate.h"\
 	
 
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Debug"
@@ -19671,6 +20451,7 @@ DEP_CPP_JAS_C=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -19884,6 +20665,7 @@ DEP_CPP_JAS_I=\
 	"..\..\Common\Header\jasper\jas_malloc.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -20043,6 +20825,7 @@ DEP_CPP_JAS_IM=\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_string.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -20145,6 +20928,7 @@ DEP_CPP_JAS_IN=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -20303,6 +21087,7 @@ DEP_CPP_JAS_S=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -20394,6 +21179,7 @@ DEP_CPP_JAS_ST=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -20671,6 +21457,7 @@ DEP_CPP_JP2_C=\
 	"..\..\Common\Header\jasper\jas_malloc.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -20785,6 +21572,7 @@ DEP_CPP_JP2_D=\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
 	"..\..\Common\Header\jasper\jas_version.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -20897,6 +21685,7 @@ DEP_CPP_JPC_B=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -21007,6 +21796,7 @@ DEP_CPP_JPC_C=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -21166,6 +21956,7 @@ DEP_CPP_JPC_D=\
 	"..\..\Common\Header\jasper\jas_tvp.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
 	"..\..\Common\Header\jasper\jpc_rtc.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -21358,6 +22149,7 @@ DEP_CPP_JPC_MC=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -21527,6 +22319,7 @@ DEP_CPP_JPC_MQD=\
 	"..\..\Common\Header\jasper\jas_math.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -21638,6 +22431,7 @@ DEP_CPP_JPC_Q=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -21819,6 +22613,7 @@ DEP_CPP_JPC_T=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -21984,6 +22779,7 @@ DEP_CPP_JPC_T1=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -22139,6 +22935,7 @@ DEP_CPP_JPC_T2=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -22294,6 +23091,7 @@ DEP_CPP_JPC_T2D=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -22438,6 +23236,7 @@ DEP_CPP_JPC_TA=\
 	"..\..\Common\Header\jasper\jas_malloc.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -22555,6 +23354,7 @@ DEP_CPP_JPC_TS=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -22695,6 +23495,7 @@ DEP_CPP_JPC_U=\
 	"..\..\Common\Header\jasper\jas_seq.h"\
 	"..\..\Common\Header\jasper\jas_stream.h"\
 	"..\..\Common\Header\jasper\jas_types.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -22852,6 +23653,7 @@ DEP_CPP_RASTER=\
 	"..\..\Common\Header\jasper\jas_version.h"\
 	"..\..\Common\Header\jasper\jasper.h"\
 	"..\..\Common\Header\jasper\RasterTile.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -23400,6 +24202,7 @@ DEP_CPP_ERR_C=\
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_ERR_C=\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\file.h"\
@@ -23481,6 +24284,7 @@ DEP_CPP_FETCH=\
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_FETCH=\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\fetch.h"\
@@ -23568,6 +24372,7 @@ DEP_CPP_FILE_=\
 DEP_CPP_FILE_=\
 	"..\..\Common\Header\zzip\__debug.h"\
 	"..\..\Common\Header\zzip\__hints.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\fetch.h"\
@@ -23928,6 +24733,7 @@ DEP_CPP_INFO_=\
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_INFO_=\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\file.h"\
@@ -24078,6 +24884,7 @@ DEP_CPP_PLUGI=\
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_PLUGI=\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\file.h"\
@@ -24290,6 +25097,7 @@ DEP_CPP_ZIP_C=\
 	"..\..\Common\Header\zzip\__debug.h"\
 	"..\..\Common\Header\zzip\__hints.h"\
 	"..\..\Common\Header\zzip\__mmap.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\fetch.h"\
@@ -24393,6 +25201,7 @@ DEP_CPP_ZSTAT=\
 !ELSEIF  "$(CFG)" == "XCSoarSimulator - Win32 (WCE ARMV4) Release"
 
 DEP_CPP_ZSTAT=\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\file.h"\
@@ -24675,6 +25484,7 @@ DEP_CPP_VLAPI=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdAfx.h"\
 	"..\..\Common\Header\Task.h"\
@@ -24687,6 +25497,7 @@ DEP_CPP_VLAPI=\
 	"..\..\Common\Header\Volkslogger\vlapierr.h"\
 	"..\..\Common\Header\Volkslogger\vlapityp.h"\
 	"..\..\Common\Header\Volkslogger\vlconv.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
@@ -24883,6 +25694,7 @@ DEP_CPP_VLAPIS=\
 	"..\..\Common\Header\mapshape.h"\
 	"..\..\Common\Header\MapWindow.h"\
 	"..\..\Common\Header\options.h"\
+	"..\..\Common\Header\Port.h"\
 	"..\..\Common\Header\Sizes.h"\
 	"..\..\Common\Header\stdAfx.h"\
 	"..\..\Common\Header\Task.h"\
@@ -24890,6 +25702,7 @@ DEP_CPP_VLAPIS=\
 	"..\..\Common\Header\Volkslogger\vla_support.h"\
 	"..\..\Common\Header\Volkslogger\vlapierr.h"\
 	"..\..\Common\Header\Volkslogger\vlapityp.h"\
+	"..\..\Common\Header\zzip\_gnuc.h"\
 	"..\..\Common\Header\zzip\_msvc.h"\
 	"..\..\Common\Header\zzip\conf.h"\
 	"..\..\Common\Header\zzip\lib.h"\
