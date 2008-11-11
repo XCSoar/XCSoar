@@ -1,5 +1,5 @@
 /*
-  $Id: Parser.cpp,v 1.85 2008/10/20 14:20:58 jwharington Exp $
+  $Id: Parser.cpp,v 1.86 2008/11/11 22:44:48 robin-birch Exp $
 
 Copyright_License {
 
@@ -158,7 +158,7 @@ size_t NMEAParser::ValidateAndExtract(const TCHAR *src, TCHAR *dst, size_t dstsz
 {
   int len = _tcslen(src);
 
-  if (len <= 6 || len >= dstsz)
+  if (len <= 6 || len >= (int) dstsz)
     return 0;
   if (!NMEAChecksum(src))
     return 0;
@@ -382,7 +382,7 @@ BOOL NMEAParser::GSA(TCHAR *String, TCHAR **params, size_t nparams, NMEA_INFO *G
   // but 1st item in string is not passed, so start at item 3
   for (int i = 0; i < MAXSATELLITES; i++)
   {
-    if (3+i<nparams) {
+    if (3+i < (int) nparams) {
       GPS_INFO->SatelliteIDs[i] = (int)(StrToDouble(params[2+i], NULL)); // 2 because params is 0-index
       if (GPS_INFO->SatelliteIDs[i] > 0)
 	iSatelliteCount ++;

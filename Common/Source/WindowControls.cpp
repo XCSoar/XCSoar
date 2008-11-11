@@ -660,10 +660,10 @@ void DataFieldEnum::Set(int Value){
     Value = 0;
   }
   for (unsigned int i=0; i<nEnums; i++) {
-    if (mEntries[i].index == Value) {
+    if (mEntries[i].index == (unsigned int) Value) {
       int lastValue = mValue;
       mValue = i;
-      if (mValue != lastValue){
+      if (mValue != (unsigned int) lastValue){
 	(mOnDataAccess)(this, daChange);
       }
       return;
