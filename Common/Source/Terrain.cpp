@@ -985,7 +985,7 @@ public:
         p31= itss_y;
       }
 
-      if (y>=iepx) {
+      if (y >= (unsigned int) iepx) {
         p31+= iepx;
       } else {
         p31+= y;
@@ -1016,7 +1016,7 @@ public:
               ASSERT(thBuf+itss_x>= hBuf);
             }
 
-            if (x>=iepx) {
+            if (x >= (unsigned int)iepx) {
               p20+= iepx;
               p22-= *(thBuf-iepx);
               ASSERT(thBuf-iepx>= hBuf);
