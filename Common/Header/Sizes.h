@@ -120,6 +120,9 @@
 // timeout of display/battery mode in quarter seconds
 #define DISPLAYTIMEOUTMAX 60*4
 
+// invalid value for terrain
+#define TERRAIN_INVALID -1
+
 ///////////////////////
 
 #define NUMAIRSPACECOLORS 16
