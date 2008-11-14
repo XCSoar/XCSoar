@@ -2385,7 +2385,7 @@ void InSector(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
 static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 {
-  double Alt = 0;
+  short Alt = 0;
 
   RasterTerrain::Lock();
   // want most accurate rounding here
@@ -2396,7 +2396,11 @@ static void TerrainHeight(NMEA_INFO *Basic, DERIVED_INFO *Calculated)
 
   if(Alt<0) {
     Alt = 0; 
-    Calculated->TerrainValid = false; 
+    if (Alt <= TERRAIN_INVALID) {
+      Calculated->TerrainValid = false; 
+    } else {
+      Calculated->TerrainValid = true; 
+    }
     Calculated->TerrainAlt = 0;
   } else {
     Calculated->TerrainValid = true;
