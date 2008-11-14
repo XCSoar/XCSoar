@@ -1,5 +1,6 @@
 #include "jasper/jasper.h"
 #include "jasper/RasterTile.h"
+#include "Sizes.h"
 #include <stdlib.h>
 #include <stdio.h>
 

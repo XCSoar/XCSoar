@@ -121,7 +121,7 @@
 #define DISPLAYTIMEOUTMAX 60*4
 
 // invalid value for terrain
-#define TERRAIN_INVALID -1
+#define TERRAIN_INVALID -1000
 
 ///////////////////////
 
