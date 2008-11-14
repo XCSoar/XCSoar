@@ -3875,6 +3875,11 @@ void XCSoarGetOpts(LPTSTR CommandLine) {
       }
     }
 #if (WINDOWSPC>0) 
+    pC = _tcsstr(MyCommandLine, TEXT("-800x480"));
+    if (pC != NULL){
+      SCREENWIDTH=800;
+      SCREENHEIGHT=480;
+    }
     pC = _tcsstr(MyCommandLine, TEXT("-portrait"));
     if (pC != NULL){
       SCREENWIDTH=480;
@@ -4050,6 +4055,9 @@ WinPilotPolarInternal WinPilotPolars[] =
   {TEXT("ASW28-18"),   345, 190,  65, -0.47, 107, -0.67, 165, -2.00},   // BestLD48@90kph
   {TEXT("LS-6-15"),    327, 160,  90, -0.6,  100, -0.658, 183, -1.965},   // BestLD42@?
   {TEXT("ASG29E18"),   400, 200,  90, -0.499,  95.5, -0.510, 196.4, -2.12},   // BestLD52@90kph
+  {TEXT("Ventus CM (17.6m)"),   430, 0,  100.17, -0.6,  159.7, -1.32, 210.54, -2.5}, 
+  {TEXT("Duo Discus XT (PIL)"), 580,	170,	100,	-0.605,	150,	-1.271,	200,	-2.668},
+  {TEXT("Duo Discus XT (PAS)"), 700,	50,	110,	-0.664,	155,	-1.206,	200,	-2.287},
 
   // {TEXT("LS-6 (15m)"), 325, 140,  90, -0.59, 100, -0.66, 212.72, -3.4}, // BestLD42
   // {TEXT("H304cz"), 310, 115,    115.03, -0.86, 174.04, -1.76, 212.72, -3.4}, // BestLD42@102
@@ -4062,6 +4070,7 @@ WinPilotPolarInternal WinPilotPolars[] =
 // LS8, LS8-18
 // LS6, LS6-18
 // Mosi/H-304
+
 
 };
 
