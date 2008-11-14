@@ -2119,6 +2119,18 @@ void Shutdown(void) {
   StartupLogFreeRamAndStorage();
   StartupStore(TEXT("Finished shutdown\n"));
   StopHourglassCursor();
+
+#ifdef DEBUG
+  TCHAR foop[80];
+  TASK_POINT wp;
+  TASK_POINT *wpr = &wp;
+  _stprintf(foop,TEXT("Sizes %d %d %d\n"),
+	    sizeof(TASK_POINT),
+	    ((long)&wpr->AATTargetLocked)-((long)wpr),
+	    ((long)&wpr->Target)-((long)wpr)
+	    );
+  StartupStore(foop);
+#endif
 }
 
 

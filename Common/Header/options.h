@@ -50,7 +50,9 @@
 #endif
 
 #ifdef __MINGW32__
+#if (WINDOWSPC==0)
 #define NEWFLARMDB
+#endif
 #endif
 
 #endif

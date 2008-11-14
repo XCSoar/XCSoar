@@ -1157,7 +1157,6 @@ void Statistics::RenderTask(HDC hdc, RECT rc, bool olcmode)
   x1 = (lon1-lon_c)*fastcosine(lat1);
   y1 = (lat1-lat_c);
   DrawLabel(hdc, rc, TEXT("+"), x1, y1);
-
 }
 
 

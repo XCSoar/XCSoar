@@ -27,6 +27,9 @@ Changes from 5.1.9beta2:
 - added missing help for new infoboxes
 - added control of circling zoom to input events
 - battery voltage infobox
+- added Ventus CM17.6 polar
+- added duo discus XT polars courtesy Derrek Ruddock
+- added option to set 800x480 resolution for ipaq 310 testing
 
 Changes from 5.1.9beta1:
 - Added Flymaster F1 device

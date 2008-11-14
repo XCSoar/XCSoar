@@ -11,6 +11,7 @@ CONFIG_PPC2003	:=n
 CONFIG_ALTAIR	:=n
 CONFIG_PC	:=n
 CONFIG_WINE	:=n
+ALTAIR_PORTRAIT :=n
 
 ifeq ($(TARGET),PPC2002)
   CONFIG_PPC2002	:=y
@@ -26,6 +27,10 @@ else
       else
         ifeq ($(TARGET),ALTAIR)
           CONFIG_ALTAIR	:=y
+        endif
+        ifeq ($(TARGET),ALTAIRPORTRAIT)
+          CONFIG_ALTAIR	:=y
+	  ALTAIR_PORTRAIT :=y
         endif
       endif
     endif
@@ -63,6 +68,10 @@ CE_MAJOR	:=5
 CE_MINOR	:=00
 CE_PLATFORM	:=500
 TARGET		:=ALTAIR
+ifeq ($(ALTAIR_PORTRAIT),y)
+TARGET          :=ALTAIRPORTRAIT
+endif
+
 endif
 
 ifeq ($(CONFIG_PC),y)
@@ -124,6 +133,9 @@ else
 CPPFLAGS	+= -D_ARM_ $(UNICODE)
   ifeq ($(CONFIG_ALTAIR),y)
 CPPFLAGS 	+=-IPPC2005 -DGNAV
+    ifeq ($(ALTAIR_PORTRAIT),y)
+CPPFLAGS	+= -DFORCEPORTRAIT
+    endif
   endif
 endif
 
