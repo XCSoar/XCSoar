@@ -229,7 +229,7 @@ short RasterTileCache::GetField(unsigned int lx,
   if ((lx>= overview_width_fine) ||
       (ly>= overview_height_fine)) {
     // outside overall bounds
-    return -1;
+    return TERRAIN_INVALID;
   }
 
   short retval;
@@ -252,7 +252,7 @@ short RasterTileCache::GetField(unsigned int lx,
   if (Overview) {
     return GetOverviewField(lx/RTC_SUBSAMPLING, ly/RTC_SUBSAMPLING);
   } else {
-    return -1;
+    return TERRAIN_INVALID;
   }
 };
 
@@ -261,12 +261,12 @@ short RasterTileCache::GetOverviewField(unsigned int lx,
   // check x in range, and decompose fraction part
   const unsigned int ix = CombinedDivAndMod(lx);
   if (lx>=overview_width)
-    return -1;
+    return TERRAIN_INVALID;
 
   // check y in range, and decompose fraction part
   const unsigned int iy = CombinedDivAndMod(ly);
   if (ly>= overview_height)
-    return -1;
+    return TERRAIN_INVALID;
 
   // perform piecewise linear interpolation
   const unsigned int dx= (lx==overview_width-1)? 0: 1;

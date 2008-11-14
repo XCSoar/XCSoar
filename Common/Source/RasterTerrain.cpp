@@ -189,7 +189,7 @@ short RasterMapRaw::_GetFieldAtXY(unsigned int lx,
 
   if ((ly>=(unsigned int)TerrainInfo.Rows)
       ||(lx>=(unsigned int)TerrainInfo.Columns)) {
-    return -1;
+    return TERRAIN_INVALID;
   }
 
   short *tm = TerrainMem+ly*TerrainInfo.Columns+lx;
@@ -226,7 +226,7 @@ short RasterMapCache::_GetFieldAtXY(unsigned int lx,
 
   if ((ly>=(unsigned int)TerrainInfo.Rows)
       ||(lx>=(unsigned int)TerrainInfo.Columns)) {
-    return -1;
+    return TERRAIN_INVALID;
   }
   return LookupTerrainCache((ly*TerrainInfo.Columns+lx)*2
                             +sizeof(TERRAIN_INFO));
@@ -254,7 +254,7 @@ short RasterMap::GetField(const double &Lattitude,
       return _GetFieldAtXY(ix<<8, iy<<8);
     }
   } else {
-    return -1;
+    return TERRAIN_INVALID;
   }
 }
 
@@ -347,20 +347,19 @@ short RasterMapCache::LookupTerrainCacheFile(const long &SeekPos) {
   short Alt;
 
   if(!isMapLoaded())
-    return -1;
+    return TERRAIN_INVALID;
 
   Lock();
 
   SeekRes = zzip_seek(fpTerrain, SeekPos, SEEK_SET);
   if(SeekRes != SeekPos) {
     // error, not found!
-    Alt = -1;
+    Alt = TERRAIN_INVALID;
   } else {
     if (zzip_fread(&NewAlt, 1, sizeof(__int16), fpTerrain) != sizeof(__int16))
-      Alt = -1;
+      Alt = TERRAIN_INVALID;
     else {
-      Alt = NewAlt;
-      if(Alt<0) Alt = -1;
+      Alt = max(0,NewAlt);
     }
   }
   Unlock();
@@ -384,7 +383,7 @@ short RasterMapCache::LookupTerrainCache(const long &SeekPos) {
   _TERRAIN_CACHE* tcp, *tcpmin, *tcplim;
 
   if(fpTerrain == NULL || TerrainInfo.StepSize == 0)
-    return -1;
+    return TERRAIN_INVALID;
 
   // search to see if it is found in the cache
   tcp = (_TERRAIN_CACHE *)bsearch((void *)SeekPos, &TerrainCache,
@@ -804,7 +803,7 @@ short RasterTerrain::GetTerrainHeight(const double &Latitude,
   if (TerrainMap) {
     return TerrainMap->GetField(Latitude, Longitude);
   } else {
-    return -1;
+    return TERRAIN_INVALID;
   }
 }
 

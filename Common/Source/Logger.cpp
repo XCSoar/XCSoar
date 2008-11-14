@@ -804,7 +804,7 @@ bool CheckDeclaration(void) {
 
 
 bool ReplayLogger::ReadLine(TCHAR *buffer) {
-  static FILE *fp  = NULL;
+  static FILE *fp = NULL;
   if (!buffer) {
     if (fp) {
       fclose(fp);
@@ -817,10 +817,11 @@ bool ReplayLogger::ReadLine(TCHAR *buffer) {
       fp = _tfopen(FileName, TEXT("rt"));
     }
   }
-  if (fp==NULL)
+  if (fp==NULL) {
     return false;
+  }
 
-  if (!fgetws(buffer, 200, fp)) {
+  if (fgetws(buffer, 200, fp)==NULL) {
     _tcscat(buffer,TEXT("\0"));
     return false;
   }
