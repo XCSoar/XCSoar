@@ -1362,7 +1362,7 @@ void DistanceBearing(double lat1, double lon1, double lat2, double lon2,
   if (Bearing) {
     double y = sin(dlon)*clat2;
     double x = clat1*sin(lat2)-sin(lat1)*clat2*cos(dlon);
-    *Bearing = AngleLimit360(atan2(y,x)*RAD_TO_DEG);
+    *Bearing = (x==0 && y==0) ? 0:AngleLimit360(atan2(y,x)*RAD_TO_DEG);
   }
 }
 
