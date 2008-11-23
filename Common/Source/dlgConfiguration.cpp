@@ -252,7 +252,12 @@ static void OnSetupDeviceAClicked(WindowControl * Sender){
 
 // this is a hack, devices dont jet support device dependant setup dialogs
 
-  if (devA() != NULL && _tcscmp(devA()->Name,TEXT("Vega")) == 0) {
+#ifndef _SIM_
+    if ((devA() != NULL) ||
+	(_tcscmp(devA()->Name,TEXT("Vega")) != 0)) {
+      return;
+    }
+#endif
 
     changed = dlgConfigurationVarioShowModal();
 
@@ -260,9 +265,8 @@ static void OnSetupDeviceAClicked(WindowControl * Sender){
     // the progress dialog in the vario configuration somehow causes
     // focus problems
     wf->FocusNext(NULL);
-  }
-
 }
+
 
 static void OnSetupDeviceBClicked(WindowControl * Sender){
   (void)Sender;
@@ -274,7 +278,12 @@ static void OnSetupDeviceBClicked(WindowControl * Sender){
 
 // this is a hack, devices dont jet support device dependant setup dialogs
 
-  if (devB() != NULL && _tcscmp(devB()->Name,TEXT("Vega")) == 0) {
+#ifndef _SIM_
+    if ((devB() == NULL) ||
+	(_tcscmp(devB()->Name,TEXT("Vega")) != 0)) {
+      return;
+    }
+#endif
 
     changed = dlgConfigurationVarioShowModal();
 
@@ -282,8 +291,6 @@ static void OnSetupDeviceBClicked(WindowControl * Sender){
     // the progress dialog in the vario configuration somehow causes
     // focus problems
     wf->FocusNext(NULL);
-  }
-
 }
 
 static void UpdateDeviceSetupButton(int DeviceIdx, TCHAR *Name){
